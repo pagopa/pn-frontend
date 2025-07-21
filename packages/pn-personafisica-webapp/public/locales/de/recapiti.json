@@ -85,9 +85,9 @@
     "sms-added-successfully": "Handynummer erfolgreich hinzugefügt",
     "email-removed-successfully": "E-Mail-Adresse erfolgreich entfernt",
     "sms-removed-successfully": "Handynummer erfolgreich entfernt",
-    "remove-email-title": "E-Mail-Adresse entfernen",
+    "remove-email": "E-Mail-Adresse entfernen",
     "remove-email-message": "Möchtest du die E-Mail-Adresse {{value}} wirklich entfernen?",
-    "remove-sms-title": "Handynummer entfernen",
+    "remove-sms": "Handynummer entfernen",
     "remove-sms-message": "Möchtest du die Handynummer {{value}} wirklich entfernen?"
   },
   "special-contacts": {

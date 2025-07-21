@@ -37,10 +37,10 @@ import {
 import { Party } from '../../models/party';
 import {
   CONTACT_ACTIONS,
-  acceptSercqSendTosPrivacy,
+  acceptSercqSendTos,
   createOrUpdateAddress,
   getAllActivatedParties,
-  getSercqSendTosPrivacyApproval,
+  getSercqSendTosApproval,
 } from '../../redux/contact/actions';
 import { contactsSelectors } from '../../redux/contact/reducers';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
@@ -136,8 +136,7 @@ const AddSpecialContact = forwardRef<AddSpecialContactRef, Props>(
     const { IS_DOD_ENABLED } = getConfiguration();
     const [modalOpen, setModalOpen] = useState<ModalType | null>(null);
     const [isExistingContactDefault, setIsExistingContactDefault] = useState(false);
-
-    const tosPrivacy = useRef<Array<TosPrivacyConsent>>();
+    const tosConsent = useRef<Array<TosPrivacyConsent>>();
 
     const addressTypes = specialContactsAvailableAddressTypes(addressesData).filter(
       (addr) => addr.shown && (!IS_DOD_ENABLED ? addr.id !== ChannelType.SERCQ_SEND : true)
@@ -277,12 +276,12 @@ const AddSpecialContact = forwardRef<AddSpecialContactRef, Props>(
 
     const handleAssociation = () => {
       if (formik.values.channelType === ChannelType.SERCQ_SEND) {
-        dispatch(getSercqSendTosPrivacyApproval())
+        dispatch(getSercqSendTosApproval())
           .unwrap()
           .then((consent) => {
             // eslint-disable-next-line functional/immutable-data
-            tosPrivacy.current = consent;
-            handleAcceptSercqTosPrivacy();
+            tosConsent.current = consent;
+            handleAcceptSercqTos();
           })
           .catch(() => {});
         return;
@@ -346,40 +345,32 @@ const AddSpecialContact = forwardRef<AddSpecialContactRef, Props>(
       },
     }));
 
-    const handleAcceptSercqTosPrivacy = () => {
-      if (!tosPrivacy.current) {
+    const handleAcceptSercqTos = () => {
+      if (!tosConsent.current) {
         return;
       }
-      // first check tos and privacy status
-      const [tos, privacy] = tosPrivacy.current.filter(
-        (consent) =>
-          consent.consentType === ConsentType.TOS_SERCQ ||
-          consent.consentType === ConsentType.DATAPRIVACY_SERCQ
+      // first check tos status
+      const [tos] = tosConsent.current.filter(
+        (consent) => consent.consentType === ConsentType.TOS_SERCQ
       );
-      // if tos and privacy are already accepted, proceed with activation
-      if (tos.accepted && privacy.accepted) {
+      // if tos are already accepted, proceede with the activation
+      if (tos.accepted) {
         handleCodeVerification();
         return;
       }
-      // accept tos and privacy
-      const tosPrivacyBody = [];
-      if (!tos.accepted) {
-        // eslint-disable-next-line functional/immutable-data
-        tosPrivacyBody.push({
-          action: ConsentActionType.ACCEPT,
-          version: tos.consentVersion,
-          type: ConsentType.TOS_SERCQ,
-        });
-      }
-      if (!privacy.accepted) {
-        // eslint-disable-next-line functional/immutable-data
-        tosPrivacyBody.push({
-          action: ConsentActionType.ACCEPT,
-          version: privacy.consentVersion,
-          type: ConsentType.DATAPRIVACY_SERCQ,
-        });
-      }
-      dispatch(acceptSercqSendTosPrivacy(tosPrivacyBody))
+
+      // accept tos
+      const tosBody = !tos.accepted
+        ? [
+            {
+              action: ConsentActionType.ACCEPT,
+              version: tos.consentVersion,
+              type: ConsentType.TOS_SERCQ,
+            },
+          ]
+        : [];
+
+      dispatch(acceptSercqSendTos(tosBody))
         .unwrap()
         .then(() => {
           handleCodeVerification();

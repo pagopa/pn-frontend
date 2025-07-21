@@ -33,25 +33,38 @@ describe('test SmsContactItem', () => {
   it('type in an invalid number', async () => {
     // render component
     const { container, getByRole } = render(<SmsContactItem />);
+
     const addBtn = getByRole('button', { name: 'courtesy-contacts.email-sms-add' });
     fireEvent.click(addBtn);
-    expect(container).toHaveTextContent('courtesy-contacts.sms-to-add');
+
+    // check label is visible
+    const label = container.querySelector('#default_sms-custom-label');
+    expect(label).toBeInTheDocument();
+    expect(label).toHaveTextContent('courtesy-contacts.sms-to-add');
+
     const form = container.querySelector('form');
     const input = form!.querySelector(`[name="default_sms"]`);
+    expect(input).toBeInTheDocument();
+
     // add invalid values
     fireEvent.change(input!, { target: { value: INPUT_INVALID_PHONE } });
+
     await waitFor(() => {
       expect(input!).toHaveValue(INPUT_INVALID_PHONE);
     });
+
+    // check error message
     const errorMessage = form!.querySelector(`#default_sms-helper-text`);
     expect(errorMessage).toBeInTheDocument();
     expect(errorMessage).toHaveTextContent('courtesy-contacts.valid-sms');
-    const buttons = form!.querySelectorAll('button');
-    expect(buttons[0]).toBeEnabled();
+
+    // clear and verify the error is still there
     fireEvent.change(input!, { target: { value: '' } });
+
     await waitFor(() => {
       expect(input!).toHaveValue('');
     });
+
     expect(errorMessage).toBeInTheDocument();
     expect(errorMessage).toHaveTextContent('courtesy-contacts.valid-sms');
   });
@@ -87,6 +100,7 @@ describe('test SmsContactItem', () => {
 
   it('add new phone number', async () => {
     const phoneValue = '3333333333';
+
     mock
       .onPost('/bff/v1/addresses/COURTESY/default/SMS', {
         value: internationalPhonePrefix + phoneValue,
@@ -94,31 +108,42 @@ describe('test SmsContactItem', () => {
       .reply(200, {
         result: 'CODE_VERIFICATION_REQUIRED',
       });
+
     mock
       .onPost('/bff/v1/addresses/COURTESY/default/SMS', {
         value: internationalPhonePrefix + phoneValue,
         verificationCode: '01234',
       })
       .reply(204);
+
     const result = render(<SmsContactItem />);
     const addBtn = result.getByRole('button', { name: 'courtesy-contacts.email-sms-add' });
     fireEvent.click(addBtn);
+
     // insert new phone
     let form = result.container.querySelector('form');
     const input = form!.querySelector(`[name="default_sms"]`);
+    expect(input).toBeInTheDocument();
+
     fireEvent.change(input!, { target: { value: phoneValue } });
     await waitFor(() => expect(input!).toHaveValue(phoneValue));
+
     const errorMessage = form?.querySelector('#default_sms-helper-text');
     expect(errorMessage).not.toBeInTheDocument();
+
     const button = result.getByTestId('default_sms-button');
     expect(button).toBeEnabled();
+
     fireEvent.click(button);
+
     // Confirms the informative dialog
     const informativeDialog = await waitFor(() => result.getByTestId('informativeDialog'));
     expect(informativeDialog).toBeInTheDocument();
+
     const understandButton = result.getByTestId('understandButton');
     expect(understandButton).toBeInTheDocument();
     fireEvent.click(understandButton);
+
     await waitFor(() => {
       expect(informativeDialog).not.toBeVisible();
     });
@@ -128,8 +153,10 @@ describe('test SmsContactItem', () => {
         value: internationalPhonePrefix + phoneValue,
       });
     });
+
     // inser otp and confirm
     const dialog = await fillCodeDialog(result);
+
     await waitFor(() => {
       expect(mock.history.post).toHaveLength(2);
       expect(JSON.parse(mock.history.post[1].data)).toStrictEqual({
@@ -137,13 +164,15 @@ describe('test SmsContactItem', () => {
         verificationCode: '01234',
       });
     });
+
     // check that contact has been added
     await waitFor(() => expect(dialog).not.toBeInTheDocument());
-    expect(
-      testStore
-        .getState()
-        .contactsState.digitalAddresses.filter((addr) => addr.addressType === AddressType.COURTESY)
-    ).toStrictEqual([
+
+    const addresses = testStore
+      .getState()
+      .contactsState.digitalAddresses.filter((addr) => addr.addressType === AddressType.COURTESY);
+
+    expect(addresses).toStrictEqual([
       {
         ...defaultAddress,
         senderName: undefined,
@@ -167,6 +196,7 @@ describe('test SmsContactItem', () => {
 
   it('override an existing phone number with a new one', async () => {
     const phoneValue = '3333333334';
+
     mock
       .onPost('/bff/v1/addresses/COURTESY/default/SMS', {
         value: internationalPhonePrefix + phoneValue,
@@ -174,12 +204,14 @@ describe('test SmsContactItem', () => {
       .reply(200, {
         result: 'CODE_VERIFICATION_REQUIRED',
       });
+
     mock
       .onPost('/bff/v1/addresses/COURTESY/default/SMS', {
         value: internationalPhonePrefix + phoneValue,
         verificationCode: '01234',
       })
       .reply(204);
+
     // render component
     const result = render(<SmsContactItem />, {
       preloadedState: {
@@ -188,6 +220,7 @@ describe('test SmsContactItem', () => {
         },
       },
     });
+
     // edit value
     const form = result.container.querySelector('form');
     let smsValue = getById(form!, 'default_sms-typography');

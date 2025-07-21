@@ -54,8 +54,15 @@ const contactsSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
+    builder.addCase(getDigitalAddresses.pending, (state) => {
+      state.loading = true;
+    });
     builder.addCase(getDigitalAddresses.fulfilled, (state, action) => {
       state.digitalAddresses = action.payload;
+      state.loading = false;
+    });
+    builder.addCase(getDigitalAddresses.rejected, (state) => {
+      state.loading = false;
     });
     builder.addCase(createOrUpdateAddress.fulfilled, (state, action) => {
       if (action.payload) {
@@ -111,6 +118,8 @@ const digitalAddresses = createSelector(
   (contactsState) => contactsState.digitalAddresses
 );
 
+const loading = createSelector([contactState], (contactsState) => contactsState.loading);
+
 export type SelectedAddresses = {
   addresses: Array<DigitalAddress>;
   legalAddresses: Array<DigitalAddress>;
@@ -151,6 +160,7 @@ const memoizedSelectAddresses = createSelector([digitalAddresses], (digitalAddre
 
 export const contactsSelectors = {
   selectAddresses: memoizedSelectAddresses,
+  selectLoading: loading,
 };
 // END: SELECTORS
 

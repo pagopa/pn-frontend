@@ -23,6 +23,7 @@ import {
   TextField,
   TextFieldProps,
   Typography,
+  TypographyProps,
 } from '@mui/material';
 import { useIsMobile } from '@pagopa-pn/pn-commons';
 import { ButtonNaked } from '@pagopa/mui-italia';
@@ -38,13 +39,14 @@ type Props = {
   label: string;
   value: string;
   channelType: ChannelType;
+  slots?: {
+    label?: JSXElementConstructor<TypographyProps>;
+    editButton?: JSXElementConstructor<ButtonProps>;
+  };
   slotsProps?: {
     container?: CSSProperties;
     textField?: Partial<TextFieldProps>;
     button?: Partial<ButtonProps>;
-  };
-  slots?: {
-    editButton?: JSXElementConstructor<ButtonProps>;
   };
   showLabelOnEdit?: boolean;
   senderId?: string;
@@ -62,8 +64,8 @@ const DigitalContact = forwardRef<{ toggleEdit: () => void }, Props>(
       label,
       value,
       channelType,
-      slotsProps,
       slots,
+      slotsProps,
       showLabelOnEdit = false,
       senderId = 'default',
       inputProps,
@@ -74,12 +76,14 @@ const DigitalContact = forwardRef<{ toggleEdit: () => void }, Props>(
       onCancelInsert,
     },
     ref
+    // eslint-disable-next-line sonarjs/cognitive-complexity
   ) => {
     const { t } = useTranslation(['common', 'recapiti']);
     const isMobile = useIsMobile();
     const [editMode, setEditMode] = useState(false);
     const contactType = channelType.toLowerCase();
 
+    const Label = slots?.label || Typography;
     const EditButton = slots?.editButton || ButtonNaked;
 
     // value contains the prefix
@@ -146,18 +150,20 @@ const DigitalContact = forwardRef<{ toggleEdit: () => void }, Props>(
     if (!value) {
       return (
         <form onSubmit={formik.handleSubmit} data-testid={`${senderId}_${contactType}Contact`}>
-          <Typography
-            id={`${senderId}_${contactType}-label`}
+          <Label
+            id={`${senderId}_${contactType}-custom-label`}
             variant="body2"
             mb={1}
             sx={{ fontWeight: 'bold' }}
           >
             {label}
-          </Typography>
+          </Label>
+
           <Stack direction={{ xs: 'column', lg: 'row' }} spacing={2}>
             <TextField
               id={`${senderId}_${contactType}`}
               name={`${senderId}_${contactType}`}
+              label={inputProps.label}
               placeholder={inputProps.label}
               size="small"
               fullWidth={isMobile}
@@ -214,14 +220,14 @@ const DigitalContact = forwardRef<{ toggleEdit: () => void }, Props>(
         style={{ width: isMobile ? '100%' : '50%', ...slotsProps?.container }}
       >
         {showLabelOnEdit && (
-          <Typography
-            id={`${senderId}_${contactType}-label`}
+          <Label
+            id={`${senderId}_${contactType}-custom-label`}
             variant="body2"
             mb={1}
             sx={{ fontWeight: 'bold' }}
           >
             {label}
-          </Typography>
+          </Label>
         )}
         {editMode && (
           <>
@@ -284,7 +290,6 @@ const DigitalContact = forwardRef<{ toggleEdit: () => void }, Props>(
             direction={{ xs: 'column', lg: 'row' }}
             spacing={{ xs: 2, lg: 3 }}
             alignItems="start"
-            sx={{ mb: 2 }}
           >
             <Stack
               width={{ xs: '100%', lg: 'auto' }}

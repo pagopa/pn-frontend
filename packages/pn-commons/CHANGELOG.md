@@ -3,6 +3,41 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.16.2](https://github.com/pagopa/pn-frontend/compare/v2.16.2-RC.3...v2.16.2) (2025-07-16)
+
+**Note:** Version bump only for package @pagopa-pn/pn-commons
+
+
+
+
+
+## [2.16.2-RC.2](https://github.com/pagopa/pn-frontend/compare/v2.16.2-RC.1...v2.16.2-RC.2) (2025-07-15)
+
+**Note:** Version bump only for package @pagopa-pn/pn-commons
+
+
+
+
+
+## [2.16.2-RC.0](https://github.com/pagopa/pn-frontend/compare/v2.16.1...v2.16.2-RC.0) (2025-07-14)
+
+
+### Bug Fixes
+
+* **pn-15401:** update email and sms removal flow ([#1579](https://github.com/pagopa/pn-frontend/issues/1579)) ([9245bdd](https://github.com/pagopa/pn-frontend/commit/9245bdd1657b0e76a0a2742e2d5921941eef7484))
+
+
+### Features
+
+* **pn-15398:** Rework on SERCQ wizard navigation buttons ([#1573](https://github.com/pagopa/pn-frontend/issues/1573)) ([6e929bf](https://github.com/pagopa/pn-frontend/commit/6e929bfd3f3278a326adefdcd03a9c0d43617b97))
+* **pn-15399:** add email/sms confirmation modal and change feedback step ([#1576](https://github.com/pagopa/pn-frontend/issues/1576)) ([cc4e60e](https://github.com/pagopa/pn-frontend/commit/cc4e60e20c4ad1c0a0d64d8c750302077c29aebf))
+* **PN-15403:** remove DATAPRIVACY_SERCQ  ([#1587](https://github.com/pagopa/pn-frontend/issues/1587)) ([4892cce](https://github.com/pagopa/pn-frontend/commit/4892cce13671b00794868488894212c9e92c0e75))
+
+
+
+
+
+
 ## [2.16.1](https://github.com/pagopa/pn-frontend/compare/v2.16.1-RC.1...v2.16.1) (2025-06-27)
 
 **Note:** Version bump only for package @pagopa-pn/pn-commons

@@ -31,9 +31,16 @@ export const tosPrivacyConsentMock = (tosAccepted: boolean, privacyAccepted: boo
   privacyConsentMock(privacyAccepted),
 ];
 
-export const sercqSendTosPrivacyConsentMock = (tosAccepted: boolean, privacyAccepted: boolean) => [
+export const sercqSendTosConsentMock = (tosAccepted: boolean) => [
   tosConsentMock(tosAccepted, ConsentType.TOS_SERCQ),
-  privacyConsentMock(privacyAccepted, ConsentType.DATAPRIVACY_SERCQ),
+];
+
+export const acceptTosSercqSendBodyMock = [
+  {
+    action: ConsentActionType.ACCEPT,
+    version: '1',
+    type: ConsentType.TOS_SERCQ,
+  },
 ];
 
 export const acceptTosPrivacyConsentBodyMock = (
