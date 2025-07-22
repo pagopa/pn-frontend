@@ -1,5 +1,5 @@
 import { useFormik } from 'formik';
-import React, { ChangeEvent, useMemo, useRef } from 'react';
+import React, { ChangeEvent, useEffect, useMemo, useRef } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 
@@ -23,6 +23,7 @@ import {
 import {
   ConsentActionType,
   ConsentType,
+  EventAction,
   SERCQ_SEND_VALUE,
   TosPrivacyConsent,
   appStateActions,
@@ -45,6 +46,7 @@ import {
 import { contactsSelectors } from '../../redux/contact/reducers';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import PFEventStrategyFactory from '../../utility/MixpanelUtils/PFEventStrategyFactory';
+import { isPFEvent } from '../../utility/mixpanel';
 
 const redirectPrivacyLink = () => window.open(`${PRIVACY_POLICY}`, '_blank');
 const redirectToSLink = () => window.open(`${TERMS_OF_SERVICE_SERCQ_SEND}`, '_blank');
@@ -87,7 +89,6 @@ const SercqSendContactWizard: React.FC<Props> = ({ goToStep, showIOStep }) => {
 
   const formik = useFormik({
     initialValues: {
-      pec: '',
       disclaimer: false,
     },
     validationSchema,
@@ -98,6 +99,19 @@ const SercqSendContactWizard: React.FC<Props> = ({ goToStep, showIOStep }) => {
     },
   });
 
+  const handleGoToStep = (channelType: ChannelType) => {
+    if (channelType === ChannelType.IOMSG) {
+      PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SERCQ_SEND_GO_TO_APP_IO);
+      goToStep(ioStep);
+    } else {
+      const eventKey = `SEND_ADD_SERCQ_SEND_GO_TO_${channelType}`;
+      if (isPFEvent(eventKey)) {
+        PFEventStrategyFactory.triggerEvent(PFEventsType[eventKey]);
+      }
+      goToStep(emailSmsStep);
+    }
+  };
+
   const contactsRecapData: Array<ContactRecapData> = useMemo(() => {
     const contacts: Array<ContactRecapData | null> = [
       {
@@ -105,7 +119,7 @@ const SercqSendContactWizard: React.FC<Props> = ({ goToStep, showIOStep }) => {
         value: defaultEMAILAddress?.value,
         cta: {
           text: t(`${labelPrefix}.email.textDisabled`),
-          action: () => goToStep(emailSmsStep),
+          action: () => handleGoToStep(ChannelType.EMAIL),
         },
       },
       isIOInstalled
@@ -117,7 +131,7 @@ const SercqSendContactWizard: React.FC<Props> = ({ goToStep, showIOStep }) => {
                 : undefined,
             cta: {
               text: t(`${labelPrefix}.io.textDisabled`),
-              action: () => goToStep(ioStep),
+              action: () => handleGoToStep(ChannelType.IOMSG),
             },
           }
         : null,
@@ -126,7 +140,7 @@ const SercqSendContactWizard: React.FC<Props> = ({ goToStep, showIOStep }) => {
         value: defaultSMSAddress?.value,
         cta: {
           text: t(`${labelPrefix}.sms.textDisabled`),
-          action: () => goToStep(emailSmsStep),
+          action: () => handleGoToStep(ChannelType.SMS),
         },
       },
     ];
@@ -140,6 +154,20 @@ const SercqSendContactWizard: React.FC<Props> = ({ goToStep, showIOStep }) => {
     t,
   ]);
 
+  const handleSubmitForm = async () => {
+    const errors = formik.errors;
+
+    if (errors?.disclaimer) {
+      PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SERCQ_SEND_TOS_MANDATORY);
+    }
+
+    PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SERCQ_SEND_UX_CONVERSION, {
+      tos_validation: errors?.disclaimer ? 'missing' : 'valid',
+    });
+
+    await formik.submitForm();
+  };
+
   const handleActivation = () => {
     dispatch(getSercqSendTosApproval())
       .unwrap()
@@ -151,7 +179,14 @@ const SercqSendContactWizard: React.FC<Props> = ({ goToStep, showIOStep }) => {
       .catch(() => {});
   };
 
-  const handleChangeTouched = async (e: ChangeEvent) => {
+  const handleChangeTouched = async (e: ChangeEvent<HTMLInputElement>) => {
+    if (e.target.id === 'disclaimer') {
+      const event = e.target.checked
+        ? PFEventsType.SEND_ADD_SERCQ_SEND_SUMMARY_TOS_ACCEPTED
+        : PFEventsType.SEND_ADD_SERCQ_SEND_SUMMARY_TOS_DISMISSED;
+      PFEventStrategyFactory.triggerEvent(event);
+    }
+
     formik.handleChange(e);
     await formik.setFieldTouched(e.target.id, true, false);
   };
@@ -190,7 +225,6 @@ const SercqSendContactWizard: React.FC<Props> = ({ goToStep, showIOStep }) => {
   };
 
   const activateService = () => {
-    PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SERCQ_SEND_UX_CONVERSION, 'default');
     const digitalAddressParams: SaveDigitalAddressParams = {
       addressType: AddressType.LEGAL,
       senderId: 'default',
@@ -216,6 +250,13 @@ const SercqSendContactWizard: React.FC<Props> = ({ goToStep, showIOStep }) => {
       })
       .catch(() => {});
   };
+
+  useEffect(() => {
+    PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SERCQ_SEND_SUMMARY, {
+      event_type: EventAction.SCREEN_VIEW,
+      contacts: courtesyAddresses,
+    });
+  }, []);
 
   return (
     <Box data-testid="sercqSendContactWizard">
@@ -336,7 +377,7 @@ const SercqSendContactWizard: React.FC<Props> = ({ goToStep, showIOStep }) => {
         fullWidth
         variant="contained"
         color="primary"
-        onClick={() => formik.submitForm()}
+        onClick={handleSubmitForm}
         data-testid="activateButton"
       >
         {t('legal-contacts.sercq-send-wizard.step_4.enable', { ns: 'recapiti' })}
