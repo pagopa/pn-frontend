@@ -8,12 +8,12 @@ import Icon from '@mui/material/Icon';
 import Link from '@mui/material/Link';
 import Typography from '@mui/material/Typography';
 
-import SpidBig from '../../assets/spid_big.svg';
-import { PFLoginEventsType } from '../../models/PFLoginEventsType';
-import { getConfiguration } from '../../services/configuration.service';
-import { IdentityProvider, getIDPS } from '../../utility/IDPS';
-import PFLoginEventStrategyFactory from '../../utility/MixpanelUtils/PFLoginEventStrategyFactory';
-import { shuffleList } from '../../utility/utils';
+import SpidBig from '../assets/spid_big.svg';
+import { PFLoginEventsType } from '../models/PFLoginEventsType';
+import { getConfiguration } from '../services/configuration.service';
+import { IdentityProvider, getIDPS } from '../utility/IDPS';
+import PFLoginEventStrategyFactory from '../utility/MixpanelUtils/PFLoginEventStrategyFactory';
+import { shuffleList } from '../utility/utils';
 
 const SpidSelect = ({ show, onClose }: { show: boolean; onClose: () => void }) => {
   const { URL_API_LOGIN, SPID_TEST_ENV_ENABLED, SPID_VALIDATOR_ENV_ENABLED } = getConfiguration();

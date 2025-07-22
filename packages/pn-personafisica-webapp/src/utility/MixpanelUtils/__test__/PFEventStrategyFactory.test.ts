@@ -267,6 +267,7 @@ describe('Event Strategy Factory', () => {
       PFEventsType.SEND_ADD_SERCQ_SEND_CANCEL,
       PFEventsType.SEND_ADD_SERCQ_SEND_PEC_BACK,
       PFEventsType.SEND_ADD_SERCQ_SEND_PEC_TOS_ACCEPTED,
+      PFEventsType.SEND_ADD_SERCQ_SEND_PEC_TOS_DISMISSED,
       PFEventsType.SEND_ADD_SERCQ_SEND_PEC_OTP_BACK,
       PFEventsType.SEND_ADD_SERCQ_SEND_PEC_UX_CONVERSION,
       PFEventsType.SEND_ADD_SERCQ_SEND_PEC_THANK_YOU_PAGE_CLOSE,
@@ -354,11 +355,11 @@ describe('Event Strategy Factory', () => {
 
   it('should return KoErrorStrategy for KO Events', () => {
     const eventTypes = [
-      PFEventsType.SEND_ADD_SERCQ_SEND_PEC_MISSING,
+      PFEventsType.SEND_ADD_SERCQ_SEND_PEC_ERROR,
       PFEventsType.SEND_ADD_SERCQ_SEND_PEC_TOS_MANDATORY,
-      PFEventsType.SEND_ADD_SERCQ_SEND_EMAIL_MISSING,
-      PFEventsType.SEND_ADD_SERCQ_SEND_SMS_MISSING,
       PFEventsType.SEND_ADD_SERCQ_SEND_TOS_MANDATORY,
+      PFEventsType.SEND_ADD_SERCQ_SEND_EMAIL_ERROR,
+      PFEventsType.SEND_ADD_SERCQ_SEND_SMS_ERROR,
     ];
     eventTypes.forEach((eventType) => {
       expect(factory.getStrategy(eventType)).toBeInstanceOf(KoErrorStrategy);

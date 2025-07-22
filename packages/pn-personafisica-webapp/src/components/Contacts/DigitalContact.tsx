@@ -41,6 +41,7 @@ type Props = {
   channelType: ChannelType;
   slots?: {
     label?: JSXElementConstructor<TypographyProps>;
+    editButton?: JSXElementConstructor<ButtonProps>;
   };
   slotsProps?: {
     container?: CSSProperties;
@@ -87,6 +88,7 @@ const DigitalContact = forwardRef<{ toggleEdit: () => void }, Props>(
     const contactType = channelType.toLowerCase();
 
     const Label = slots?.label || Typography;
+    const EditButton = slots?.editButton || ButtonNaked;
 
     // value contains the prefix
     const contactValue = inputProps.prefix ? value.replace(inputProps.prefix, '') : value;
@@ -338,7 +340,7 @@ const DigitalContact = forwardRef<{ toggleEdit: () => void }, Props>(
               textAlign="left"
               spacing={{ xs: 2, lg: 3 }}
             >
-              <ButtonNaked
+              <EditButton
                 key="editButton"
                 color="primary"
                 onClick={toggleEdit}
@@ -348,7 +350,7 @@ const DigitalContact = forwardRef<{ toggleEdit: () => void }, Props>(
                 size="medium"
               >
                 {t('button.modifica')}
-              </ButtonNaked>
+              </EditButton>
               {onDelete && (
                 <ButtonNaked
                   id={`cancelContact-${senderId}_${contactType}`}

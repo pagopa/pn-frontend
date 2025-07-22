@@ -38,6 +38,7 @@ import DeleteDialog from './DeleteDialog';
 import DigitalContact from './DigitalContact';
 import ExistingContactDialog from './ExistingContactDialog';
 import InformativeDialog from './InformativeDialog';
+import SpecialContacts from './SpecialContacts';
 
 enum ModalType {
   EXISTING = 'existing',
@@ -249,9 +250,8 @@ const SmsContactItem: React.FC<SmsItemProps> = ({
   const { t } = useTranslation(['common', 'recapiti']);
   const dispatch = useAppDispatch();
   const location = useLocation();
-  const { defaultSERCQ_SENDAddress, defaultSMSAddress, addresses } = useAppSelector(
-    contactsSelectors.selectAddresses
-  );
+  const { defaultSERCQ_SENDAddress, defaultSMSAddress, addresses, specialSMSAddresses } =
+    useAppSelector(contactsSelectors.selectAddresses);
 
   const [modalOpen, setModalOpen] = useState<ModalType | null>(null);
   const [insertMode, setInsertMode] = useState(false);
@@ -260,11 +260,14 @@ const SmsContactItem: React.FC<SmsItemProps> = ({
   const fromSercqSend = [DIGITAL_DOMICILE_ACTIVATION, DIGITAL_DOMICILE_MANAGEMENT].includes(
     location.pathname
   );
+  const blockDelete = specialSMSAddresses.length > 0;
 
   const hasCourtesyAddresses =
     addresses.filter(
       (addr) => addr.addressType === AddressType.COURTESY && addr.value !== IOAllowedValues.DISABLED
     ).length > 0;
+
+  const showSpecialContactsSection = specialSMSAddresses.length > 0;
 
   const deleteConfirmHandler = () => {
     setModalOpen(null);
@@ -299,6 +302,9 @@ const SmsContactItem: React.FC<SmsItemProps> = ({
   };
 
   const getRemoveModalTitle = () => {
+    if (blockDelete) {
+      return t('courtesy-contacts.block-remove-sms-title', { ns: 'recapiti' });
+    }
     if (defaultSERCQ_SENDAddress) {
       return t(`courtesy-contacts.remove-sms-title-dod-enabled`, {
         ns: 'recapiti',
@@ -308,6 +314,9 @@ const SmsContactItem: React.FC<SmsItemProps> = ({
   };
 
   const getRemoveModalMessage = () => {
+    if (blockDelete) {
+      return t('courtesy-contacts.block-remove-sms-message', { ns: 'recapiti' });
+    }
     if (defaultSERCQ_SENDAddress) {
       return (
         <Trans
@@ -395,6 +404,9 @@ const SmsContactItem: React.FC<SmsItemProps> = ({
         >
           {t('courtesy-contacts.sms-description', { ns: 'recapiti' })}
         </Typography>
+        {showSpecialContactsSection && (
+          <SpecialContacts addressType={AddressType.COURTESY} channelType={ChannelType.SMS} />
+        )}
         <DeleteDialog
           showModal={modalOpen === ModalType.DELETE}
           removeModalTitle={getRemoveModalTitle()}
@@ -413,6 +425,7 @@ const SmsContactItem: React.FC<SmsItemProps> = ({
                 : undefined,
             },
           }}
+          blockDelete={blockDelete}
         />
       </PnInfoCard>
     );

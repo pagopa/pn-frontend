@@ -3,8 +3,8 @@ import { vi } from 'vitest';
 import { useMobileOS } from '@pagopa-pn/pn-commons';
 import { getByRole } from '@pagopa-pn/pn-commons/src/test-utils';
 
-import { render } from '../../../__test__/test-utils';
-import { getConfiguration } from '../../../services/configuration.service';
+import { render } from '../../__test__/test-utils';
+import { getConfiguration } from '../../services/configuration.service';
 import IOSmartAppBanner from '../IoSmartAppBanner';
 
 vi.mock('@pagopa-pn/pn-commons', async (importActual) => {

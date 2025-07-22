@@ -136,7 +136,7 @@
         "enable": "Attiva domicilio digitale"
       },
       "feedback": {
-        "title-trasfer": "Hai aggiornato il tuo domicilio digitale",
+        "title-transfer": "Hai aggiornato il tuo domicilio digitale",
         "title-pec-activation": "Hai attivato il tuo domicilio digitale su PEC",
         "title-pec-transfer": "Hai trasferito il tuo domicilio digitale su PEC",
         "title-sercq_send-activation": "Hai attivato il tuo domicilio digitale su SEND",
@@ -235,7 +235,12 @@
     "confirmation-modal-io-content": "Se non colleghi SEND a IO <strong>non riceverai in app un messaggio</strong> quando ricevi una comunicazione a valore legale su SEND.",
     "confirmation-modal-disable-io-content": "Se scolleghi SEND da IO <strong>non riceverai in app un messaggio</strong> quando ricevi una comunicazione a valore legale su SEND.",
     "confirmation-modal-io-accept": "Collega SEND a IO",
-    "confirmation-modal-email-content": "<0>Senza un indirizzo email o un altro recapito <strong>non ricevi avvisi quando c’è una comunicazione a valore legale per te su SEND.</strong></0><1>Ricorda che se non leggi in tempo una notifica SEND, potresti non essere al corrente di eventuali scadenze e incorrere in sanzioni.</1>"
+    "confirmation-modal-email-content": "<0>Senza un indirizzo email o un altro recapito <strong>non ricevi avvisi quando c’è una comunicazione a valore legale per te su SEND.</strong></0><1>Ricorda che se non leggi in tempo una notifica SEND, potresti non essere al corrente di eventuali scadenze e incorrere in sanzioni.</1>",
+    "confirmation-modal-email-accept": "Inserisci email",
+    "block-remove-email-title": "Non è possibile disattivare la email",
+    "block-remove-email-message": "Per procedere, devi prima rimuovere le email personalizzate per ente.",
+    "block-remove-sms-title": "Non è possibile disattivare il numero di cellulare",
+    "block-remove-sms-message": "Per procedere, devi prima eliminare i numeri di cellulare personalizzati per ente."
   },
   "special-contacts": {
     "select-address": "Tipologia",
@@ -256,7 +261,11 @@
     "legal-association-description": "Hai già selezionato in precedenza un recapito a valore legale per <strong>{{senderName}}</strong>. Confermi che per le notifiche inviate da <strong>{{senderName}}</strong> il tuo recapito a valore legale sarà <strong>{{newAddress}}</strong> invece che <strong>{{oldAddress}}</strong>.",
     "legal-association-title-block": "Recapito già inserito precedentemente",
     "legal-association-description-block": "Ti comunichiamo che le notifiche inviate da <strong>{{senderName}}</strong> sono già inoltrate al recapito a valore legale <strong>{{oldAddress}}</strong> inserito in precedenza.",
-    "pec-disclaimer": "Compilando il campo e premendo <strong>Conferma</strong> accetti che l’indirizzo PEC che hai scelto sia utilizzato da SEND per l’invio delle notifiche di questo specifico ente mittente, in via prioritaria rispetto al  domicilio digitale di piattaforma, a un eventuale domicilio digitale eletto presso lo stesso ente mittente o presente nei pubblici registri"
+    "pec-disclaimer": "Compilando il campo e premendo <strong>Conferma</strong> accetti che l’indirizzo PEC che hai scelto sia utilizzato da SEND per l’invio delle notifiche di questo specifico ente mittente, in via prioritaria rispetto al  domicilio digitale di piattaforma, a un eventuale domicilio digitale eletto presso lo stesso ente mittente o presente nei pubblici registri",
+    "courtesy-banner": {
+      "title": "Funzionalità dismessa",
+      "description": "Non puoi più inserire recapiti di cortesia personalizzati per ente o modificare recapiti già esistenti. Se elimini un recapito personalizzato non potrai più recuperarlo o inserirlo di nuovo. "
+    }
   },
   "common": {
     "duplicate-contact-title": "Recapito già presente",
