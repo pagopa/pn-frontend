@@ -215,7 +215,7 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
             value={selectedPayment?.pagoPa}
             onChange={handleClick}
           >
-            {paginatedPayments.map((payment) =>
+            {paginatedPayments.map((payment, index) =>
               payment.pagoPa ? (
                 <Box
                   mb={2}
@@ -231,6 +231,7 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
                     isSinglePayment={isSinglePayment}
                     isCancelled={isCancelled}
                     handleTrackEventDetailPaymentError={handleTrackEventFn}
+                    slotProps={{ radio: { id: `radioPayment_${index}` } }}
                   />
                 </Box>
               ) : null

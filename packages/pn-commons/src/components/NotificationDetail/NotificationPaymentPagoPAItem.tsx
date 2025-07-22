@@ -1,7 +1,7 @@
 import { Fragment } from 'react';
 
 import { InfoRounded, Refresh } from '@mui/icons-material';
-import { Box, Radio, Skeleton, Typography } from '@mui/material';
+import { Box, Radio, RadioProps, Skeleton, Typography } from '@mui/material';
 import { ButtonNaked, CopyToClipboardButton } from '@pagopa/mui-italia';
 
 import { useIsMobile } from '../../hooks';
@@ -11,7 +11,7 @@ import {
   PaymentInfoDetail,
   PaymentStatus,
 } from '../../models';
-import { formatEurocentToCurrency } from '../../utility';
+import { formatEurocentToCurrency, formatEurocentToCurrencyText } from '../../utility';
 import { formatDate } from '../../utility/date.utility';
 import { getLocalizedOrDefaultLabel } from '../../utility/localization.utility';
 import StatusTooltip from '../Notifications/StatusTooltip';
@@ -25,6 +25,9 @@ type Props = {
   isSinglePayment?: boolean;
   isCancelled: boolean;
   handleTrackEventDetailPaymentError?: (event: EventPaymentRecipientType, param?: object) => void;
+  slotProps?: {
+    radio?: RadioProps;
+  };
 };
 
 const SkeletonCard: React.FC = () => {
@@ -95,13 +98,34 @@ const NotificationPaymentPagoPAStatusElem: React.FC<{
   isSelected: boolean;
   handleDeselectPayment: () => void;
   isSinglePayment?: boolean;
-}> = ({ pagoPAItem, isSelected, handleDeselectPayment, isSinglePayment }) => {
+  slotProps?: Props['slotProps'];
+}> = ({ pagoPAItem, isSelected, handleDeselectPayment, isSinglePayment, slotProps }) => {
   const isMobile = useIsMobile();
   // eslint-disable-next-line functional/no-let
   let color: 'warning' | 'error' | 'success' | 'info' | 'default' | 'primary' | 'secondary' =
     'default';
   // eslint-disable-next-line functional/no-let
   let tooltip = 'unknown';
+
+  const radioId = slotProps?.radio?.id ?? `radio-${pagoPAItem.noticeCode}`;
+
+  const accessibleLabel = [
+    pagoPAItem.causaleVersamento,
+    `${getLocalizedOrDefaultLabel('notifications', 'detail.payment.notice-code')}: ${
+      pagoPAItem.noticeCode
+    }`,
+    pagoPAItem.dueDate &&
+      `${getLocalizedOrDefaultLabel(
+        'notifications',
+        'detail.payment.due',
+        'Scade il'
+      )}: ${formatDate(pagoPAItem.dueDate, false)}`,
+    pagoPAItem.amount && `${formatEurocentToCurrencyText(pagoPAItem.amount)}`,
+    pagoPAItem.applyCost &&
+      getLocalizedOrDefaultLabel('notifications', 'detail.payment.included-costs'),
+  ]
+    .filter(Boolean)
+    .join(' - ');
 
   switch (pagoPAItem.status) {
     case PaymentStatus.SUCCEEDED:
@@ -137,7 +161,13 @@ const NotificationPaymentPagoPAStatusElem: React.FC<{
           alignItems={isMobile ? 'flex-start' : 'flex-end'}
           sx={{ mr: pagoPAItem.status === PaymentStatus.SUCCEEDED ? 1 : 0 }}
         >
-          <Typography variant="h6" color="primary.main" data-testid="payment-amount">
+          <Typography
+            variant="body2"
+            fontSize="24px"
+            fontWeight={600}
+            color="primary.main"
+            data-testid="payment-amount"
+          >
             {formatEurocentToCurrency(pagoPAItem.amount)}
           </Typography>
 
@@ -157,12 +187,34 @@ const NotificationPaymentPagoPAStatusElem: React.FC<{
       {pagoPAItem.status === PaymentStatus.REQUIRED ? (
         !isSinglePayment && (
           <Box display="flex" justifyContent="center">
+            <Box
+              id={`label-${radioId}`}
+              component="label"
+              htmlFor={slotProps?.radio?.id ?? ''}
+              sx={{
+                position: 'absolute',
+                width: '1px',
+                height: '1px',
+                padding: 0,
+                margin: '-1px',
+                overflow: 'hidden',
+                clipPath: 'inset(50%)',
+                clip: 'rect(0 0 0 0)',
+                whiteSpace: 'nowrap',
+                border: 0,
+              }}
+            >
+              {accessibleLabel}
+            </Box>
+
             <Radio
-              aria-label={pagoPAItem.causaleVersamento}
+              id={radioId}
+              inputProps={{ 'aria-labelledby': `label-${radioId}` }}
               data-testid="radio-button"
               checked={isSelected}
               value={pagoPAItem.noticeCode}
               onClick={() => isSelected && handleDeselectPayment()}
+              {...slotProps?.radio}
             />
           </Box>
         )
@@ -191,6 +243,7 @@ const NotificationPaymentPagoPAItem: React.FC<Props> = ({
   isSinglePayment,
   isCancelled,
   handleTrackEventDetailPaymentError,
+  slotProps,
 }) => {
   const isMobile = useIsMobile();
 
@@ -347,6 +400,7 @@ const NotificationPaymentPagoPAItem: React.FC<Props> = ({
           isSelected={isSelected}
           handleDeselectPayment={handleDeselectPayment}
           isSinglePayment={isSinglePayment}
+          slotProps={slotProps}
         />
       )}
     </Box>
