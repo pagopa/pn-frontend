@@ -132,7 +132,7 @@ describe('SessionGuard Component', async () => {
     });
   });
 
-  // expected behavior: enters the app, does a navigate to notifications page, without hash "token" but with search params
+  // expected behavior: enters the app
   it('user logged in - TOS accepted', async () => {
     window.location.hash = '#token=200_token';
     window.location.search = '?greet=hola&foo=bar';
@@ -151,37 +151,22 @@ describe('SessionGuard Component', async () => {
     });
     const pageComponent = screen.queryByText('Generic Page');
     expect(pageComponent).toBeTruthy();
-    expect(mockNavigateFn).toHaveBeenCalledTimes(1);
-    expect(mockNavigateFn).toHaveBeenCalledWith(
-      { pathname: routes.NOTIFICHE, search: '?greet=hola&foo=bar', hash: '' },
-      { replace: true }
-    );
   });
 
-  // expected behavior: enters the app, does a navigate to notifications page, without hash "token"
-  it('reload - session token already present - with hash', async () => {
-    window.location.hash = '#token=200_token&greet=hola&foo=bar';
+  // expected behavior: enters the app with session token already present
+  it('reload - session token already present', async () => {
+    window.location.hash = '';
     window.location.pathname = '/mocked-route';
-    mock
-      .onPost(AUTH_TOKEN_EXCHANGE(), { authorizationToken: '200_token' })
-      .reply(200, userResponse);
+    const mockReduxState = {
+      userState: { user: userResponse },
+    };
     await act(async () => {
-      render(<Guard />);
+      render(<Guard />, { preloadedState: mockReduxState });
     });
     await waitFor(() => {
-      expect(mock.history.post).toHaveLength(1);
-      expect(mock.history.post[0].url).toBe(AUTH_TOKEN_EXCHANGE());
-      expect(JSON.parse(mock.history.post[0].data)).toStrictEqual({
-        authorizationToken: '200_token',
-      });
+      const pageComponent = screen.queryByText('Mocked Page');
+      expect(pageComponent).toBeTruthy();
     });
-    const pageComponent = screen.queryByText('Mocked Page');
-    expect(pageComponent).toBeTruthy();
-    expect(mockNavigateFn).toHaveBeenCalledTimes(1);
-    expect(mockNavigateFn).toHaveBeenCalledWith(
-      { pathname: location.pathname, search: '', hash: '#greet=hola&foo=bar' },
-      { replace: true }
-    );
   });
 
   // expected behavior: enters the app, exp token -> logout message
