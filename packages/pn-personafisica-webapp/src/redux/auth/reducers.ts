@@ -48,6 +48,7 @@ const userSlice = createSlice({
   name: 'userSlice',
   initialState: {
     loading: false,
+    exchangedToken: false, // api exchangeToken has been called
     user: basicInitialUserData(userDataMatcher, noLoggedUserData),
     fetchedTos: false,
     fetchedPrivacy: false,
@@ -79,10 +80,12 @@ const userSlice = createSlice({
         console.debug(e);
       } finally {
         state.loading = false;
+        state.exchangedToken = true;
       }
     });
     builder.addCase(exchangeToken.rejected, (state) => {
       state.loading = false;
+      state.exchangedToken = true;
     });
     builder.addCase(logout.fulfilled, (state, action) => {
       state.user = action.payload;
