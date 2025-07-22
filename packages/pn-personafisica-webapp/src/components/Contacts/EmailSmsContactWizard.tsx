@@ -157,16 +157,16 @@ const EmailSmsContactWizard: React.FC = () => {
     channelType: ChannelType,
     errors?: string
   ) => {
-    if (!value || errors) {
-      const eventKey = `SEND_ADD_SERCQ_SEND_${channelType}_MISSING`;
-      if (isPFEvent(eventKey)) {
-        PFEventStrategyFactory.triggerEvent(PFEventsType[eventKey]);
-      }
-    }
-
     const status = !value ? 'missing' : errors ? 'invalid' : 'valid';
     const validationKey = `${channelType.toLowerCase()}_validation`;
     const data = { [validationKey]: status };
+
+    if (!value || errors) {
+      const eventKey = `SEND_ADD_SERCQ_SEND_${channelType}_ERROR`;
+      if (isPFEvent(eventKey)) {
+        PFEventStrategyFactory.triggerEvent(PFEventsType[eventKey], data);
+      }
+    }
 
     const eventKey = `SEND_ADD_SERCQ_SEND_ADD_${channelType}_START`;
     if (isPFEvent(eventKey)) {

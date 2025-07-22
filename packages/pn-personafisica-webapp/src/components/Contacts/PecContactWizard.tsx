@@ -132,8 +132,11 @@ const PecContactWizard: React.FC<Props> = ({
 
   const handleSubmitForm = async () => {
     const errors = formik.errors;
+    const pecValidation = !formik.values.pec ? 'missing' : errors?.pec ? 'invalid' : 'valid';
     if (errors?.pec) {
-      PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SERCQ_SEND_PEC_MISSING);
+      PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SERCQ_SEND_PEC_ERROR, {
+        pec_validation: pecValidation,
+      });
     }
 
     if (errors?.disclaimer) {
@@ -141,7 +144,7 @@ const PecContactWizard: React.FC<Props> = ({
     }
 
     PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SERCQ_SEND_PEC_START_ACTIVATION, {
-      pec_validation: !formik.values.pec ? 'missing' : errors?.pec ? 'invalid' : 'valid',
+      pec_validation: pecValidation,
       tos_validation: errors?.disclaimer ? 'missing' : 'valid',
     });
 

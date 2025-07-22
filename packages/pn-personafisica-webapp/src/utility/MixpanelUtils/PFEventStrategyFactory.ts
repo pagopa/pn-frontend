@@ -181,10 +181,10 @@ const uxWithCourtesyContactListStrategy = [
 ] as const;
 
 const koErrorStrategy = [
-  PFEventsType.SEND_ADD_SERCQ_SEND_PEC_MISSING,
+  PFEventsType.SEND_ADD_SERCQ_SEND_PEC_ERROR,
   PFEventsType.SEND_ADD_SERCQ_SEND_PEC_TOS_MANDATORY,
-  PFEventsType.SEND_ADD_SERCQ_SEND_EMAIL_MISSING,
-  PFEventsType.SEND_ADD_SERCQ_SEND_SMS_MISSING,
+  PFEventsType.SEND_ADD_SERCQ_SEND_EMAIL_ERROR,
+  PFEventsType.SEND_ADD_SERCQ_SEND_SMS_ERROR,
 ] as const;
 
 type ArrayToTuple<T extends ReadonlyArray<PFEventsType>> = keyof {
