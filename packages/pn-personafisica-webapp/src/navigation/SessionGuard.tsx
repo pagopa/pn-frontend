@@ -52,8 +52,6 @@ const SessionGuard = () => {
       void performExchangeToken({ spidToken, rapidAccess });
     } else if (sessionToken) {
       sessionCheck(exp);
-      redirectToPage();
-      return;
     } else {
       goToLoginPortal(rapidAccess);
     }
@@ -88,19 +86,6 @@ const SessionGuard = () => {
       title: t('leaving-app.title'),
       message: t('leaving-app.message'),
     });
-  };
-
-  // Se sono in home "/" redirect a pagina notifiche; rimuovo solo l'hash param "token"
-  const redirectToPage = () => {
-    const pathname = location.pathname === '/' ? routes.NOTIFICHE : location.pathname;
-    const hash = new URLSearchParams(location.hash.substring(1));
-    hash.delete('token'); // TODO rimuovo tutte le hash o solo token? da selfcare arriva anche "lang"
-    const newHash = hash.toString();
-
-    navigate(
-      { pathname, search: location.search, hash: newHash ? `#${newHash}` : '' },
-      { replace: true }
-    );
   };
 
   return (

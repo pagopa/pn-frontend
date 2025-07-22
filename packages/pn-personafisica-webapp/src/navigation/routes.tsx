@@ -51,6 +51,8 @@ function Router() {
         <Route path="/" element={<SessionGuard />}>
           <Route path="/" element={<ToSGuard />}>
             <Route path="/" element={<RapidAccessGuard />}>
+              <Route index element={<Navigate to={routes.NOTIFICHE} replace />} />
+              
               <Route path={routes.NOTIFICHE} element={<Notifiche />} />
               <Route path={routes.NOTIFICHE_DELEGATO} element={<Notifiche />} />
               <Route path={routes.DETTAGLIO_NOTIFICA} element={<NotificationDetail />} />
