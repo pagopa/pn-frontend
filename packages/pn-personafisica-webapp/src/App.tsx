@@ -33,7 +33,7 @@ import {
 import { ProductEntity } from '@pagopa/mui-italia';
 
 import { PFEventsType } from './models/PFEventsType';
-import { getCurrentEventTypePage, goToLoginPortal } from './navigation/navigation.utility';
+import { getCurrentEventTypePage } from './navigation/navigation.utility';
 import Router from './navigation/routes';
 import * as routes from './navigation/routes.const';
 import { getCurrentAppStatus } from './redux/appStatus/actions';
@@ -47,6 +47,7 @@ import { PFAppErrorFactory } from './utility/AppError/PFAppErrorFactory';
 import PFEventStrategyFactory from './utility/MixpanelUtils/PFEventStrategyFactory';
 import showLayoutParts from './utility/layout.utility';
 import './utility/onetrust';
+import { resetState } from './redux/auth/reducers';
 
 // TODO: get products list from be (?)
 const productsList: Array<ProductEntity> = [
@@ -266,9 +267,7 @@ const App = () => {
 
   const performLogout = async () => {
     await dispatch(apiLogout(loggedUser.sessionToken));
-
-    sessionStorage.clear();
-    goToLoginPortal();
+    dispatch(resetState());
     setOpenModal(false);
   };
 

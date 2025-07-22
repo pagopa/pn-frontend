@@ -10,7 +10,7 @@ import {
 import { createSlice } from '@reduxjs/toolkit';
 
 import { SourceChannel, User } from '../../models/User';
-import { acceptTosPrivacy, exchangeToken, getTosPrivacyApproval, logout } from './actions';
+import { acceptTosPrivacy, exchangeToken, getTosPrivacyApproval } from './actions';
 
 const userDataMatcher = yup
   .object({
@@ -43,28 +43,35 @@ const noLoggedUserData = {
   aud: '',
 } as User;
 
+const initialState = {
+  loading: false,
+  exchangedToken: false, // api exchangeToken has been called
+  user: basicInitialUserData(userDataMatcher, noLoggedUserData),
+  fetchedTos: false,
+  fetchedPrivacy: false,
+  tosConsent: {
+    accepted: false,
+    isFirstAccept: false,
+    consentVersion: '',
+  },
+  privacyConsent: {
+    accepted: false,
+    isFirstAccept: false,
+    consentVersion: '',
+  },
+  tosPrivacyApiError: false,
+};
+
 /* eslint-disable functional/immutable-data */
 const userSlice = createSlice({
   name: 'userSlice',
-  initialState: {
-    loading: false,
-    exchangedToken: false, // api exchangeToken has been called
-    user: basicInitialUserData(userDataMatcher, noLoggedUserData),
-    fetchedTos: false,
-    fetchedPrivacy: false,
-    tosConsent: {
-      accepted: false,
-      isFirstAccept: false,
-      consentVersion: '',
+  initialState,
+  reducers: {
+    resetState: () => {
+      sessionStorage.clear();
+      return initialState;
     },
-    privacyConsent: {
-      accepted: false,
-      isFirstAccept: false,
-      consentVersion: '',
-    },
-    tosPrivacyApiError: false,
   },
-  reducers: {},
   extraReducers: (builder) => {
     builder.addCase(exchangeToken.pending, (state) => {
       state.loading = true;
@@ -86,9 +93,6 @@ const userSlice = createSlice({
     builder.addCase(exchangeToken.rejected, (state) => {
       state.loading = false;
       state.exchangedToken = true;
-    });
-    builder.addCase(logout.fulfilled, (state, action) => {
-      state.user = action.payload;
     });
     builder.addCase(getTosPrivacyApproval.fulfilled, (state, action) => {
       const [tosConsent, privacyConsent] = action.payload.filter(
@@ -124,5 +128,5 @@ const userSlice = createSlice({
     });
   },
 });
-
+export const { resetState } = userSlice.actions;
 export default userSlice;

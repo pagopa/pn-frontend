@@ -1,4 +1,4 @@
-/* eslint-disable functional/immutable-data */ 
+/* eslint-disable functional/immutable-data */
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
@@ -14,7 +14,8 @@ import {
 
 import { useRapidAccessParam } from '../hooks/useRapidAccessParam';
 import { TokenExchangeRequest } from '../models/User';
-import { exchangeToken, logout } from '../redux/auth/actions';
+import { exchangeToken } from '../redux/auth/actions';
+import { resetState } from '../redux/auth/reducers';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { RootState } from '../redux/store';
 import { getConfiguration } from '../services/configuration.service';
@@ -59,7 +60,7 @@ const SessionGuard = () => {
 
   useEffect(() => {
     if (hasAnyForbiddenError) {
-      void dispatch(logout());
+      void dispatch(resetState);
     }
   }, [hasAnyForbiddenError]);
 
