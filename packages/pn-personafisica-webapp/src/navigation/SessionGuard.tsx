@@ -28,7 +28,7 @@ const SessionGuard = () => {
   const location = useLocation();
   const dispatch = useAppDispatch();
   const rapidAccess = useRapidAccessParam();
-  const { exchangedToken, loading } = useAppSelector((state: RootState) => state.userState);
+  const { exchangedToken } = useAppSelector((state: RootState) => state.userState);
   const { sessionToken, exp } = useAppSelector((state: RootState) => state.userState.user);
   const navigate = useNavigate();
   const { WORK_IN_PROGRESS, IS_INACTIVITY_HANDLER_ENABLED } = getConfiguration();
@@ -44,25 +44,6 @@ const SessionGuard = () => {
   });
 
   const spidToken = new URLSearchParams(location.hash.substring(1)).get('token'); // https://github.com/remix-run/history/blob/main/docs/api-reference.md#location.hash
-
-  useEffect(() => {
-    if (spidToken && !exchangedToken) {
-      if (loading) {
-        return;
-      }
-      void performExchangeToken({ spidToken, rapidAccess });
-    } else if (sessionToken) {
-      sessionCheck(exp);
-    } else {
-      goToLoginPortal(rapidAccess);
-    }
-  }, [sessionToken, spidToken, loading, exchangedToken]);
-
-  useEffect(() => {
-    if (hasAnyForbiddenError) {
-      void dispatch(resetState);
-    }
-  }, [hasAnyForbiddenError]);
 
   const performExchangeToken = async (token: TokenExchangeRequest) => {
     try {
@@ -88,6 +69,22 @@ const SessionGuard = () => {
       message: t('leaving-app.message'),
     });
   };
+
+  useEffect(() => {
+    if (spidToken && !exchangedToken) {
+      void performExchangeToken({ spidToken, rapidAccess });
+    } else if (sessionToken) {
+      sessionCheck(exp);
+    } else {
+      goToLoginPortal(rapidAccess);
+    }
+  }, [sessionToken, spidToken, exchangedToken]);
+
+  useEffect(() => {
+    if (hasAnyForbiddenError) {
+      void dispatch(resetState);
+    }
+  }, [hasAnyForbiddenError]);
 
   return (
     <>
