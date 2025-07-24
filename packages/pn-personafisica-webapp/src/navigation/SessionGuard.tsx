@@ -28,7 +28,7 @@ const SessionGuard = () => {
   const location = useLocation();
   const dispatch = useAppDispatch();
   const rapidAccess = useRapidAccessParam();
-  const { exchangedToken } = useAppSelector((state: RootState) => state.userState);
+  const { loading } = useAppSelector((state: RootState) => state.userState);
   const { sessionToken, exp } = useAppSelector((state: RootState) => state.userState.user);
   const navigate = useNavigate();
   const { WORK_IN_PROGRESS, IS_INACTIVITY_HANDLER_ENABLED } = getConfiguration();
@@ -48,6 +48,7 @@ const SessionGuard = () => {
   const performExchangeToken = async (token: TokenExchangeRequest) => {
     try {
       await dispatch(exchangeToken(token)).unwrap();
+      sessionCheck(exp);
     } catch (error) {
       const adaptedError = adaptedTokenExchangeError(error);
       if (adaptedError.response.status === 451 || WORK_IN_PROGRESS) {
@@ -71,39 +72,42 @@ const SessionGuard = () => {
   };
 
   useEffect(() => {
-    if (spidToken && !exchangedToken) {
+    if (spidToken) {
       void performExchangeToken({ spidToken, rapidAccess });
     } else if (sessionToken) {
       sessionCheck(exp);
     } else {
       goToLoginPortal(rapidAccess);
     }
-  }, [sessionToken, spidToken, exchangedToken]);
+  }, []);
 
   useEffect(() => {
     if (hasAnyForbiddenError) {
-      void dispatch(resetState);
+      exit();
     }
   }, [hasAnyForbiddenError]);
 
+  const exit = () => {
+    sessionStorage.clear();
+    void dispatch(resetState());
+    goToLoginPortal();
+  };
+
   return (
     <>
-      <SessionModal {...modalData} handleClose={() => goToLoginPortal()} initTimeout />
-      {sessionToken ? (
+      <SessionModal {...modalData} handleClose={() => exit()} initTimeout />
+      {loading ? (
+        <LoadingPage renderType="whole" />
+      ) : (
         <>
           {IS_INACTIVITY_HANDLER_ENABLED && (
             <InactivityHandler
               inactivityTimer={inactivityTimer}
-              onTimerExpired={() => {
-                sessionStorage.clear();
-                goToLoginPortal();
-              }}
+              onTimerExpired={() => exit()}
             />
           )}
           <Outlet />
         </>
-      ) : (
-        <LoadingPage renderType="whole" />
       )}
     </>
   );
