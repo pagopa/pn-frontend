@@ -130,7 +130,7 @@ const FilterNotificationsFormBody = ({
                 'data-testid': 'input(start date)',
               },
               helperText: (
-                <FormHelperText error aria-live="assertive">
+                <FormHelperText sx={{ ml: 0 }} error aria-live="assertive" component="span">
                   {!!formikInstance.errors.startDate &&
                     t('filters.errors.data_a', { ns: 'notifiche' })}
                 </FormHelperText>
@@ -170,7 +170,7 @@ const FilterNotificationsFormBody = ({
                 'data-testid': 'input(end date)',
               },
               helperText: (
-                <FormHelperText sx={{ ml: 0 }} error aria-live="assertive">
+                <FormHelperText sx={{ ml: 0 }} error aria-live="assertive" component="span">
                   {!!formikInstance.errors.endDate &&
                     t('filters.errors.data_a', { ns: 'notifiche' })}
                 </FormHelperText>
