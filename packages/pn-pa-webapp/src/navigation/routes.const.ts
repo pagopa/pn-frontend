@@ -36,3 +36,6 @@ export const GROUPS = (idOrganization: string, lang: string) =>
 
 export const GET_DETTAGLIO_NOTIFICA_PATH = (id: string) => `${DASHBOARD}/${id}${NOTIFICA}`;
 export const NOT_ACCESSIBLE = '/non-accessibile';
+
+export const SELFCARE_LOGIN_PATH = '/auth/login';
+export const SELFCARE_LOGOUT_PATH = '/auth/logout';

@@ -9,12 +9,12 @@ import { currentStatusDTO } from '../__mocks__/AppStatus.mock';
 import { userResponse } from '../__mocks__/Auth.mock';
 import { tosPrivacyConsentMock } from '../__mocks__/Consents.mock';
 import { digitalAddresses } from '../__mocks__/Contacts.mock';
-import { apiClient } from '../api/apiClients';
+import { apiClient, authClient } from '../api/apiClients';
 import { DelegationStatus } from '../models/Deleghe';
 import { PNRole, PartyRole } from '../models/User';
 import { SELFCARE_LOGOUT } from '../navigation/routes.const';
 import { getConfiguration } from '../services/configuration.service';
-import { RenderResult, act, render } from './test-utils';
+import { RenderResult, act, fireEvent, getByText, render, screen, waitFor } from './test-utils';
 
 vi.mock('../pages/Notifiche.page', () => ({ default: () => <div>Generic Page</div> }));
 
@@ -46,12 +46,14 @@ const reduxInitialState = {
 
 describe('App', async () => {
   let mock: MockAdapter;
+  let mockAuth: MockAdapter;
   let result: RenderResult;
   const mockOpenFn = vi.fn();
   const originalOpen = window.open;
 
   beforeAll(() => {
     mock = new MockAdapter(apiClient);
+    mockAuth = new MockAdapter(authClient);
     // FooterPreLogin (mui-italia) component calls an api to fetch selfcare products list.
     // this causes an error, so we mock to avoid it
     global.fetch = () =>
@@ -67,11 +69,13 @@ describe('App', async () => {
 
   afterEach(() => {
     mock.reset();
+    mockAuth.reset();
     vi.clearAllMocks();
   });
 
   afterAll(() => {
     mock.restore();
+    mockAuth.restore();
     global.fetch = unmockedFetch;
     Object.defineProperty(window, 'open', { configurable: true, value: originalOpen });
   });
@@ -261,5 +265,32 @@ describe('App', async () => {
     expect(sideMenuItems).toHaveLength(5);
     const collapsibleMenu = sideMenuItems[0].querySelector('[data-testid=collapsible-menu]');
     expect(collapsibleMenu).not.toBeInTheDocument();
+  });
+
+  it('render component - user logs out', async () => {
+    mockAuth.onPost('/logout').reply(200);
+
+    const clearSpy = vi.spyOn(Storage.prototype, 'clear');
+
+    await act(async () => {
+      result = render(<Component />, { preloadedState: reduxInitialState });
+    });
+
+    const header = result.container.querySelector('header');
+    expect(header).toBeInTheDocument();
+
+    const button = getByText(header!, 'Esci');
+    fireEvent.click(button);
+
+    const modalConfirmButton = await waitFor(() => screen.queryByTestId('confirm-button'));
+    fireEvent.click(modalConfirmButton!);
+
+    await waitFor(() => {
+      expect(mockOpenFn).toHaveBeenCalledTimes(1);
+      const url = `${getConfiguration().SELFCARE_BASE_URL}${SELFCARE_LOGOUT}`;
+      expect(mockOpenFn).toHaveBeenCalledWith(url, '_self');
+      expect(clearSpy).toHaveBeenCalled();
+      expect(mockAuth.history.post.length).toBe(1);
+    });
   });
 });

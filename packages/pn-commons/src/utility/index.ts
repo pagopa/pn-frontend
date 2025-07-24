@@ -41,7 +41,13 @@ import { filtersApplied, getValidValue, sortArray } from './genericFunctions.uti
 import { IUN_regex, formatIun } from './iun.utility';
 import { lazyRetry } from './lazyRetry.utility';
 import { initLocalization } from './localization.utility';
-import { getLangCode, hashDetectorLookup, setSessionLanguage } from './multilanguage.utility';
+import {
+  getLangCode,
+  getSessionLanguage,
+  hashDetectorLookup,
+  setSessionLanguage,
+} from './multilanguage.utility';
+import { addParamToUrl } from './navigation.utility';
 import {
   getF24Payments,
   getLegalFactLabel,
@@ -72,7 +78,6 @@ import {
   basicInitialUserData,
   basicUserDataMatcherContents,
 } from './user.utility';
-import { addParamToUrl } from './navigation.utility';
 
 export {
   getNotificationAllowedStatus,
@@ -151,6 +156,7 @@ export {
   validateLegaFact,
   convertHoursToDays,
   getLangCode,
+  getSessionLanguage,
   setSessionLanguage,
   hashDetectorLookup,
   screenshot,
@@ -162,5 +168,5 @@ export {
   APP_VERSION,
   getRapidAccessParam,
   extractRootTraceId,
-  addParamToUrl
+  addParamToUrl,
 };

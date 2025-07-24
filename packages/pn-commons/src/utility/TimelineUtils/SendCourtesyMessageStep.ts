@@ -1,4 +1,5 @@
 import { DigitalDomicileType, SendCourtesyMessageDetails } from '../../models';
+import { getLocalizedOrDefaultLabel } from '../localization.utility';
 import { TimelineStep, TimelineStepInfo, TimelineStepPayload } from './TimelineStep';
 
 export class SendCourtesyMessageStep extends TimelineStep {
@@ -12,6 +13,14 @@ export class SendCourtesyMessageStep extends TimelineStep {
     if (digitalType === DigitalDomicileType.APPIO) {
       type = 'app IO';
     }
+    if (digitalType === DigitalDomicileType.TPP) {
+      type = getLocalizedOrDefaultLabel(
+        'notifications',
+        'detail.timeline.tpp-type',
+        'un canale digitale di terze parti'
+      );
+    }
+
     return {
       ...this.localizeTimelineStatus(
         `send-courtesy-message`,

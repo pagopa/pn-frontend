@@ -24,6 +24,7 @@ import DigitalContact from './DigitalContact';
 import ExistingContactDialog from './ExistingContactDialog';
 import InformativeDialog from './InformativeDialog';
 import SmsContactItem from './SmsContactItem';
+import SpecialContacts from './SpecialContacts';
 
 enum ModalType {
   EXISTING = 'existing',
@@ -39,6 +40,8 @@ const EmailContactItem: React.FC = () => {
     defaultPECAddress,
     defaultEMAILAddress,
     defaultSMSAddress,
+    specialAddresses,
+    specialEMAILAddresses,
     addresses,
   } = useAppSelector(contactsSelectors.selectAddresses);
   const digitalContactRef = useRef<{ toggleEdit: () => void; resetForm: () => Promise<void> }>({
@@ -54,6 +57,10 @@ const EmailContactItem: React.FC = () => {
       (addr) => addr.addressType === AddressType.COURTESY && addr.value !== IOAllowedValues.DISABLED
     ).length > 0;
 
+  const showSpecialContactsSection = !defaultSMSAddress
+    ? specialAddresses.filter((addr) => addr.addressType === AddressType.COURTESY).length > 0
+    : specialEMAILAddresses.length > 0;
+
   const [modalOpen, setModalOpen] = useState<ModalType | null>(null);
   // currentAddress is needed to store what address we are creating/editing/removing
   // because this variable isn't been used to render, we can use useRef
@@ -63,6 +70,7 @@ const EmailContactItem: React.FC = () => {
   const dispatch = useAppDispatch();
 
   const currentValue = defaultEMAILAddress?.value ?? '';
+  const blockDelete = specialEMAILAddresses.length > 0;
 
   const handleSubmit = (value: string) => {
     PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_EMAIL_START, {
@@ -171,6 +179,9 @@ const EmailContactItem: React.FC = () => {
   };
 
   const getRemoveModalTitle = () => {
+    if (blockDelete) {
+      return t(`courtesy-contacts.block-remove-email-title`, { ns: 'recapiti' });
+    }
     if (defaultSERCQ_SENDAddress) {
       return t(`courtesy-contacts.remove-email-title-dod-enabled`, {
         ns: 'recapiti',
@@ -180,6 +191,9 @@ const EmailContactItem: React.FC = () => {
   };
 
   const getRemoveModalMessage = () => {
+    if (blockDelete) {
+      return t(`courtesy-contacts.block-remove-email-message`, { ns: 'recapiti' });
+    }
     if (defaultSERCQ_SENDAddress) {
       return (
         <Trans
@@ -282,6 +296,12 @@ const EmailContactItem: React.FC = () => {
           <SmsContactItem />
         </>
       )}
+      {showSpecialContactsSection && (
+        <SpecialContacts
+          addressType={AddressType.COURTESY}
+          channelType={!defaultSMSAddress ? undefined : ChannelType.EMAIL}
+        />
+      )}
       <ExistingContactDialog
         open={modalOpen === ModalType.EXISTING}
         value={currentAddress.current.value}
@@ -315,6 +335,7 @@ const EmailContactItem: React.FC = () => {
               : undefined,
           },
         }}
+        blockDelete={blockDelete}
       />
       <InformativeDialog
         open={modalOpen === ModalType.INFORMATIVE}

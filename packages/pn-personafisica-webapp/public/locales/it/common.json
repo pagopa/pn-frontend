@@ -149,6 +149,10 @@
     "invalid-characters-not-inserted": "I caratteri non validi non sono stati inseriti."
   },
   "errors": {
+    "delivery_mandate_not_found": {
+      "title": "Errore",
+      "message": "Questa delega non è più attiva."
+    },
     "technical-error": {
       "title": "Informazioni errore",
       "copy-to-clipboard": "Copia informazioni errore"
@@ -174,16 +178,16 @@
       "message": "Si è verificato un errore. Si prega di riprovare più tardi."
     },
     "internal_server": {
-      "title": "Il servizio non è disponibile",
-      "message": "Per un problema temporaneo del servizio, la tua richiesta non è stata inviata. Riprova più tardi."
+      "title": "Si è verificato un errore",
+      "message": "Il servizio non è disponibile a causa di un problema tecnico. Riprova più tardi. Se l’errore si ripete, contatta l’assistenza e comunica le informazioni errore."
     },
     "unhandled": {
-      "title": "Errore generico",
-      "message": "Si è verificato un errore. Si prega di riprovare più tardi."
+      "title": "Si è verificato un errore",
+      "message": "Il servizio non è disponibile. Riprova più tardi. Se l’errore si ripete, contatta l’assistenza e comunica le informazioni errore."
     },
     "unknown": {
-      "title": "Errore",
-      "message": "Errore non previsto"
+      "title": "Si è verificato un errore",
+      "message": "Il servizio non è disponibile. Riprova più tardi. Se l’errore si ripete, contatta l’assistenza e comunica le informazioni errore."
     },
     "invalid_type_code": {
       "title": "Questo campo accetta solo valori numerici",
@@ -194,8 +198,8 @@
       "message": "Il codice che hai inserito non è completo, inserisci un codice a 5 cifre."
     },
     "invalid_body": {
-      "title": "Errore",
-      "message": "C'è stato un errore in fase di invio dei dati ai nostri server. Ricontrolla che i dati inseriti siano corretti e non siano contenuti caratteri speciali e spazi."
+      "title": "I dati non sono validi",
+      "message": "Si è verificato un errore durante l’invio dei dati. Controlla che siano corretti, senza spazi o caratteri speciali, e riprova. Se l’errore si ripete, contatta l’assistenza e comunica le informazioni errore."
     },
     "invalid_parameter": {
       "title": "Dati non validi",
