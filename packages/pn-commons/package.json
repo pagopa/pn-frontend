@@ -1,6 +1,6 @@
 {
   "name": "@pagopa-pn/pn-commons",
-  "version": "2.17.0-RC.2",
+  "version": "2.17.0",
   "private": true,
   "main": "./src/index.ts",
   "dependencies": {
