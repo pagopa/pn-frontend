@@ -83,7 +83,7 @@
   "not-logged-subtitle": "Melde dich mit SPID oder CIE an, um Zustellungen anzuzeigen oder zu verwalten.",
   "not-found": {
     "title": "404: Die gesuchte Seite existiert nicht",
-    "descpription": "Du bist versehentlich hier gelandet, benutze die Navigation."
+    "description": "Du bist versehentlich hier gelandet, benutze die Navigation."
   },
   "leaving-app": {
     "title": "Du verlässt SEND",

@@ -44,29 +44,6 @@ export const apiLogout = createAsyncThunk<void, string>(
 );
 
 /**
- * Logout action
- * Clears sessionStorage, clears state
- */
-export const logout = createAsyncThunk<User>('logout', async () => {
-  sessionStorage.clear();
-  return {
-    sessionToken: '',
-    name: '',
-    family_name: '',
-    fiscal_number: '',
-    email: '',
-    from_aa: false,
-    uid: '',
-    level: '',
-    iat: 0,
-    exp: 0,
-    iss: '',
-    jti: '',
-    aud: '',
-  } as User;
-});
-
-/**
  * Retrieves if the terms of service are already approved
  */
 export const getTosPrivacyApproval = createAsyncThunk(

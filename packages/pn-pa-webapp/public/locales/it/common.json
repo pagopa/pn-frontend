@@ -90,7 +90,7 @@
   "not-logged-subtitle": "Per usare SEND, accedi all'Area Riservata con SPID o CIE. Poi, premi \"Gestisci\" nella card corrispondente.",
   "not-found": {
     "title": "Quello che cercavi non è qui.",
-    "descpription": "La pagina che hai tentato di raggiungere non esiste o non è più disponibile.",
+    "description": "La pagina che hai tentato di raggiungere non esiste o non è più disponibile.",
     "back-to-home": "Torna alla home"
   },
   "leaving-app": {

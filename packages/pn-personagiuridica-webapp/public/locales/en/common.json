@@ -87,7 +87,7 @@
   "not-logged-subtitle": "To view and manage your notifications, log in with SPID or CIE.",
   "not-found": {
     "title": "404: The page you are looking for does not exist",
-    "descpription": "You are here by mistake, try using the navigation menu."
+    "description": "You are here by mistake, try using the navigation menu."
   },
   "leaving-app": {
     "title": "You are exiting SEND",

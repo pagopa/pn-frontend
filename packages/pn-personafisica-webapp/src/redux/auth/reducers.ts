@@ -2,7 +2,6 @@ import * as yup from 'yup';
 
 import {
   ConsentType,
-  adaptedTokenExchangeError,
   basicInitialUserData,
   basicNoLoggedUserData,
   basicUserDataMatcherContents,
@@ -11,7 +10,7 @@ import {
 import { createSlice } from '@reduxjs/toolkit';
 
 import { SourceChannel, User } from '../../models/User';
-import { acceptTosPrivacy, exchangeToken, getTosPrivacyApproval, logout } from './actions';
+import { acceptTosPrivacy, exchangeToken, getTosPrivacyApproval } from './actions';
 
 const userDataMatcher = yup
   .object({
@@ -44,33 +43,39 @@ const noLoggedUserData = {
   aud: '',
 } as User;
 
-const emptyUnauthorizedMessage = { title: '', message: '' };
+const initialState = {
+  loading: false,
+  exchangedToken: false, // api exchangeToken has been called
+  user: basicInitialUserData(userDataMatcher, noLoggedUserData),
+  fetchedTos: false,
+  fetchedPrivacy: false,
+  tosConsent: {
+    accepted: false,
+    isFirstAccept: false,
+    consentVersion: '',
+  },
+  privacyConsent: {
+    accepted: false,
+    isFirstAccept: false,
+    consentVersion: '',
+  },
+  tosPrivacyApiError: false,
+};
 
 /* eslint-disable functional/immutable-data */
 const userSlice = createSlice({
   name: 'userSlice',
-  initialState: {
-    loading: false,
-    user: basicInitialUserData(userDataMatcher, noLoggedUserData),
-    fetchedTos: false,
-    fetchedPrivacy: false,
-    isUnauthorizedUser: false,
-    messageUnauthorizedUser: emptyUnauthorizedMessage,
-    isClosedSession: false,
-    isForbiddenUser: false,
-    tosConsent: {
-      accepted: false,
-      isFirstAccept: false,
-      consentVersion: '',
-    },
-    privacyConsent: {
-      accepted: false,
-      isFirstAccept: false,
-      consentVersion: '',
+  initialState,
+  reducers: {
+    resetState: () => {
+      sessionStorage.clear();
+      return initialState;
     },
   },
-  reducers: {},
   extraReducers: (builder) => {
+    builder.addCase(exchangeToken.pending, (state) => {
+      state.loading = true;
+    });
     builder.addCase(exchangeToken.fulfilled, (state, action) => {
       const user = action.payload;
       // validate user from api before setting it in the sessionStorage
@@ -79,26 +84,15 @@ const userSlice = createSlice({
         sessionStorage.setItem('user', JSON.stringify(user));
         state.user = action.payload;
       } catch (e) {
-        state.isUnauthorizedUser = true;
-        state.messageUnauthorizedUser = emptyUnauthorizedMessage;
         console.debug(e);
+      } finally {
+        state.loading = false;
+        state.exchangedToken = true;
       }
-      state.isClosedSession = false;
-      state.isForbiddenUser = false;
     });
-    builder.addCase(exchangeToken.rejected, (state, action) => {
-      const adaptedError = adaptedTokenExchangeError(action.payload);
-      state.isUnauthorizedUser = adaptedError.isUnauthorizedUser;
-      state.messageUnauthorizedUser = adaptedError.isUnauthorizedUser
-        ? adaptedError.response.customMessage
-        : emptyUnauthorizedMessage;
-      state.isClosedSession = false;
-      state.isForbiddenUser = adaptedError.response?.status === 451;
-    });
-    builder.addCase(logout.fulfilled, (state, action) => {
-      state.user = action.payload;
-      state.isUnauthorizedUser = false;
-      state.isClosedSession = true;
+    builder.addCase(exchangeToken.rejected, (state) => {
+      state.loading = false;
+      state.exchangedToken = true;
     });
     builder.addCase(getTosPrivacyApproval.fulfilled, (state, action) => {
       const [tosConsent, privacyConsent] = action.payload.filter(
@@ -111,10 +105,12 @@ const userSlice = createSlice({
       if (privacyConsent) {
         state.privacyConsent = privacyConsent;
       }
+      state.tosPrivacyApiError = false;
       state.fetchedTos = true;
       state.fetchedPrivacy = true;
     });
     builder.addCase(getTosPrivacyApproval.rejected, (state) => {
+      state.tosPrivacyApiError = true;
       state.tosConsent.accepted = false;
       state.tosConsent.isFirstAccept = true;
       state.privacyConsent.accepted = false;
@@ -132,5 +128,5 @@ const userSlice = createSlice({
     });
   },
 });
-
+export const { resetState } = userSlice.actions;
 export default userSlice;

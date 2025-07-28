@@ -88,7 +88,7 @@
   "not-logged-subtitle": "Pour utiliser SEND, connectez-vous à l’Espace Réservé avec SPID ou CIE. Ensuite, appuyez sur « Gérer » dans la carte correspondante.",
   "not-found": {
     "title": "404 : la page que vous cherchez n’existe pas",
-    "descpription": "Vous êtes ici par erreur, essayez d’utiliser la navigation."
+    "description": "Vous êtes ici par erreur, essayez d’utiliser la navigation."
   },
   "leaving-app": {
     "title": "Vous quittez SEND",
