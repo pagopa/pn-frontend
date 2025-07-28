@@ -88,7 +88,7 @@
   "not-logged-subtitle": "To use SEND, access the Reserved Area with your SPID or CIE. Then, press \"Manage\" on the corresponding card.",
   "not-found": {
     "title": "404: The page you are looking for does not exist",
-    "descpription": "You are here by mistake, try using navigation."
+    "description": "You are here by mistake, try using navigation."
   },
   "leaving-app": {
     "title": "You are exiting SEND",

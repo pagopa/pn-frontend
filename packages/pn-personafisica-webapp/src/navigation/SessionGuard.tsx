@@ -89,22 +89,19 @@ const SessionGuard = () => {
 
   const exit = () => {
     sessionStorage.clear();
-    void dispatch(resetState());
+    dispatch(resetState());
     goToLoginPortal();
   };
 
   return (
     <>
-      <SessionModal {...modalData} handleClose={() => exit()} initTimeout />
       {loading ? (
         <LoadingPage renderType="whole" />
       ) : (
         <>
+          <SessionModal {...modalData} handleClose={() => exit()} initTimeout />
           {IS_INACTIVITY_HANDLER_ENABLED && (
-            <InactivityHandler
-              inactivityTimer={inactivityTimer}
-              onTimerExpired={() => exit()}
-            />
+            <InactivityHandler inactivityTimer={inactivityTimer} onTimerExpired={() => exit()} />
           )}
           <Outlet />
         </>

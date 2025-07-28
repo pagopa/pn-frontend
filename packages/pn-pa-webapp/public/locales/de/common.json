@@ -88,7 +88,7 @@
   "not-logged-subtitle": "Um SEND zu verwenden, logge dich mit SPID oder CIE in der Area Riservata ein. Danach „Verwalten“ in der entsprechenden Karte wählen.",
   "not-found": {
     "title": "404: Die gesuchte Seite existiert nicht",
-    "descpription": "Du bist versehentlich hier gelandet, benutze die Navigation."
+    "description": "Du bist versehentlich hier gelandet, benutze die Navigation."
   },
   "leaving-app": {
     "title": "Du verlässt SEND",
