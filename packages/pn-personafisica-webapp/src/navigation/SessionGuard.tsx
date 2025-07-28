@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 
 import {
+  AppResponsePublisher,
   InactivityHandler,
   LoadingPage,
   SessionModal,
@@ -46,6 +47,7 @@ const SessionGuard = () => {
   const spidToken = new URLSearchParams(location.hash.substring(1)).get('token'); // https://github.com/remix-run/history/blob/main/docs/api-reference.md#location.hash
 
   const performExchangeToken = async (token: TokenExchangeRequest) => {
+    AppResponsePublisher.error.subscribe('exchangeToken', manageUnforbiddenError);
     try {
       await dispatch(exchangeToken(token)).unwrap();
       sessionCheck(exp);
@@ -71,6 +73,14 @@ const SessionGuard = () => {
     });
   };
 
+  const manageUnforbiddenError = (e: any) => {
+    if (e.status === 451) {
+      // error toast must not be shown
+      return false;
+    }
+    return true;
+  };
+
   useEffect(() => {
     if (spidToken) {
       void performExchangeToken({ spidToken, rapidAccess });
@@ -79,6 +89,10 @@ const SessionGuard = () => {
     } else {
       goToLoginPortal(rapidAccess);
     }
+
+    return () => {
+      AppResponsePublisher.error.unsubscribe('exchangeToken', manageUnforbiddenError);
+    };
   }, []);
 
   useEffect(() => {
