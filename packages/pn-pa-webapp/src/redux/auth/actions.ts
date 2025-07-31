@@ -40,6 +40,20 @@ export const exchangeToken = createAsyncThunk<User, string>(
 );
 
 /**
+ * Call api logout to invalidate access token.
+ */
+export const apiLogout = createAsyncThunk<void, string>(
+  'apiLogout',
+  async (token) => {
+    try {
+      return await AuthApi.logout(token);
+    } catch (e: any) {
+      console.log('Error during logout', e);
+    }
+  }
+);
+
+/**
  * Get the list of institutions
  */
 export const getInstitutions = createAsyncThunk<

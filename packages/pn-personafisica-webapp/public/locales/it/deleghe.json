@@ -107,10 +107,6 @@
       "title": "Errore",
       "message": "Delega non trovata"
     },
-    "delivery_mandate_not_found": {
-      "title": "Errore",
-      "message": "Questa delega non è più attiva."
-    },
     "already_exists": {
       "title": "Delega già presente",
       "message": "La persona che hai indicato ha già una delega. Eliminala e creane una nuova."

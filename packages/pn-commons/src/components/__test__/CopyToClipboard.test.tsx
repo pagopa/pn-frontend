@@ -43,4 +43,44 @@ describe('CopyToClipboard component', () => {
     expect(copy_icon).toBeInTheDocument();
     expect(check_icon).not.toBeInTheDocument();
   });
+
+  it('renders text before icon when textPosition is "start"', () => {
+    const { getByRole, getByText, getByTestId } = render(
+      <CopyToClipboard getValue={() => 'copy-text'} text="Copy this" textPosition="start" />
+    );
+
+    const button = getByRole('button');
+    const icon = getByTestId('ContentCopyIcon');
+    const text = getByText('Copy this');
+
+    expect(button).toBeInTheDocument();
+    expect(icon).toBeInTheDocument();
+    expect(text).toBeInTheDocument();
+
+    // verify text appears first
+    expect(button.firstChild?.textContent).toContain('Copy this');
+  });
+
+  it('renders text after icon when textPosition is "end"', () => {
+    const { getByRole, getByText, getByTestId } = render(
+      <CopyToClipboard getValue={() => 'copy-text'} text="Copy this" textPosition="end" />
+    );
+
+    const button = getByRole('button');
+    const icon = getByTestId('ContentCopyIcon');
+    const text = getByText('Copy this');
+
+    expect(button).toBeInTheDocument();
+    expect(icon).toBeInTheDocument();
+    expect(text).toBeInTheDocument();
+
+    // verify text appears after icon
+    const iconIndex = Array.from(button.childNodes).findIndex(
+      (node) => node === icon.parentElement
+    );
+    const textIndex = Array.from(button.childNodes).findIndex(
+      (node) => node.textContent === 'Copy this'
+    );
+    expect(iconIndex).toBeLessThan(textIndex);
+  });
 });
