@@ -1,5 +1,5 @@
 import { useFormik } from 'formik';
-import React, { ChangeEvent, useState } from 'react';
+import React, { ChangeEvent, useEffect, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import * as yup from 'yup';
@@ -14,21 +14,15 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
-import { PnWizard, PnWizardStep } from '@pagopa-pn/pn-commons';
+import { EventAction, PnWizard, PnWizardStep } from '@pagopa-pn/pn-commons';
 import { ButtonNaked } from '@pagopa/mui-italia';
 
 import { PFEventsType } from '../../models/PFEventsType';
-import {
-  AddressType,
-  ChannelType,
-  ContactSource,
-  SaveDigitalAddressParams,
-} from '../../models/contacts';
+import { AddressType, ChannelType, SaveDigitalAddressParams } from '../../models/contacts';
 import { NOTIFICHE } from '../../navigation/routes.const';
 import { createOrUpdateAddress } from '../../redux/contact/actions';
 import { contactsSelectors } from '../../redux/contact/reducers';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
-import { RootState } from '../../redux/store';
 import { getConfiguration } from '../../services/configuration.service';
 import PFEventStrategyFactory from '../../utility/MixpanelUtils/PFEventStrategyFactory';
 import { pecValidationSchema } from '../../utility/contacts.utility';
@@ -49,8 +43,9 @@ const PecContactWizard: React.FC<Props> = ({
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const [activeStep, setActiveStep] = useState(0);
-  const { defaultSERCQ_SENDAddress } = useAppSelector(contactsSelectors.selectAddresses);
-  const externalEvent = useAppSelector((state: RootState) => state.contactsState.event);
+  const { defaultSERCQ_SENDAddress, courtesyAddresses } = useAppSelector(
+    contactsSelectors.selectAddresses
+  );
   const [openCodeModal, setOpenCodeModal] = useState(false);
   const { IS_DOD_ENABLED } = getConfiguration();
 
@@ -73,23 +68,25 @@ const PecContactWizard: React.FC<Props> = ({
     validateOnMount: true,
     enableReinitialize: true,
     onSubmit: () => {
-      const source = externalEvent?.source ?? ContactSource.RECAPITI;
-      PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_PEC_START, {
-        senderId: 'default',
-        source,
-      });
       handleCodeVerification();
     },
   });
 
-  const handleChangeTouched = async (e: ChangeEvent) => {
+  const handleChangeTouched = async (e: ChangeEvent<HTMLInputElement>) => {
+    if (e.target.id === 'disclaimer') {
+      const event = e.target.checked
+        ? PFEventsType.SEND_ADD_SERCQ_SEND_PEC_TOS_ACCEPTED
+        : PFEventsType.SEND_ADD_SERCQ_SEND_PEC_TOS_DISMISSED;
+      PFEventStrategyFactory.triggerEvent(event);
+    }
+
     formik.handleChange(e);
     await formik.setFieldTouched(e.target.id, true, false);
   };
 
   const handleCodeVerification = (verificationCode?: string) => {
     if (verificationCode) {
-      PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_PEC_UX_CONVERSION, 'default');
+      PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SERCQ_SEND_PEC_UX_CONVERSION);
     }
 
     const digitalAddressParams: SaveDigitalAddressParams = {
@@ -105,13 +102,14 @@ const PecContactWizard: React.FC<Props> = ({
       .then((res) => {
         // contact to verify
         if (!res) {
+          PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SERCQ_SEND_PEC_OTP);
           setOpenCodeModal(true);
           return;
         }
-        PFEventStrategyFactory.triggerEvent(
-          PFEventsType.SEND_ADD_PEC_UX_SUCCESS,
-          res.pecValid && !!defaultSERCQ_SENDAddress
-        );
+        PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SERCQ_SEND_PEC_UX_SUCCESS, {
+          sercq_type: ChannelType.PEC,
+          contacts: courtesyAddresses,
+        });
         setOpenCodeModal(false);
         return setActiveStep(activeStep + 1);
       })
@@ -119,12 +117,48 @@ const PecContactWizard: React.FC<Props> = ({
   };
 
   const handlePreviousBtnClick = () => {
+    PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SERCQ_SEND_PEC_BACK);
     if (onGoBack && isTransferring) {
       onGoBack();
     } else {
       return !IS_DOD_ENABLED ? navigate(-1) : setShowPecWizard(false);
     }
   };
+
+  const handleCloseCodeModal = () => {
+    PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SERCQ_SEND_PEC_OTP_BACK);
+    setOpenCodeModal(false);
+  };
+
+  const handleSubmitForm = async () => {
+    const errors = formik.errors;
+    const pecValidation = !formik.values.pec ? 'missing' : errors?.pec ? 'invalid' : 'valid';
+    if (errors?.pec) {
+      PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SERCQ_SEND_PEC_ERROR, {
+        pec_validation: pecValidation,
+      });
+    }
+
+    if (errors?.disclaimer) {
+      PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SERCQ_SEND_PEC_TOS_MANDATORY);
+    }
+
+    PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SERCQ_SEND_PEC_START_ACTIVATION, {
+      pec_validation: pecValidation,
+      tos_validation: errors?.disclaimer ? 'missing' : 'valid',
+    });
+
+    await formik.submitForm();
+  };
+
+  const handleCloseFeedbackStep = () => {
+    PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SERCQ_SEND_PEC_THANK_YOU_PAGE_CLOSE);
+    navigate(NOTIFICHE);
+  };
+
+  useEffect(() => {
+    PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SERCQ_SEND_PEC_ENTER_PEC);
+  }, []);
 
   return (
     <>
@@ -159,7 +193,15 @@ const PecContactWizard: React.FC<Props> = ({
             title: t(feedbackTitleLabel),
             content: t(feedbackContentLabel),
             buttonText: t('button.understand', { ns: 'common' }),
-            onClick: () => navigate(NOTIFICHE),
+            onClick: handleCloseFeedbackStep,
+            onFeedbackShow: () =>
+              PFEventStrategyFactory.triggerEvent(
+                PFEventsType.SEND_ADD_SERCQ_SEND_PEC_THANK_YOU_PAGE,
+                {
+                  event_type: EventAction.SCREEN_VIEW,
+                  contacts: courtesyAddresses,
+                }
+              ),
           },
           actions: { justifyContent: 'center' },
         }}
@@ -237,7 +279,7 @@ const PecContactWizard: React.FC<Props> = ({
             fullWidth
             variant="contained"
             color="primary"
-            onClick={formik.submitForm}
+            onClick={handleSubmitForm}
             sx={{ mt: 3 }}
             data-testid="next-button"
           >
@@ -252,7 +294,7 @@ const PecContactWizard: React.FC<Props> = ({
         channelType={ChannelType.PEC}
         open={openCodeModal}
         onConfirm={(code) => handleCodeVerification(code)}
-        onDiscard={() => setOpenCodeModal(false)}
+        onDiscard={handleCloseCodeModal}
         onError={() => PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_PEC_CODE_ERROR)}
       />
     </>
