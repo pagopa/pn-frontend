@@ -12,7 +12,6 @@ import {
 
 import {
   digitalAddresses,
-  digitalAddressesPecValidation,
   digitalAddressesSercq,
   digitalLegalAddresses,
 } from '../../../__mocks__/Contacts.mock';
@@ -28,9 +27,14 @@ import { fillCodeDialog } from './test-utils';
 
 const specialAddresses = digitalLegalAddresses.filter((addr) => addr.senderId !== 'default');
 
+const digitalAddressesWithInvalidPec = digitalAddresses.map((addr) =>
+  addr.senderName === 'Comune di Milano' && addr.channelType === ChannelType.PEC
+    ? { ...addr, pecValid: false }
+    : addr
+);
+
 const handleContactDiscardMock = vi.fn();
 const handleContactAddedMock = vi.fn();
-const handleErrorMock = vi.fn();
 
 interface AddSpecialContactRef {
   handleConfirm: () => Promise<void>;
@@ -52,11 +56,7 @@ const AddSpecialContactWrapper: React.FC<{
 
   return (
     <>
-      <AddSpecialContact
-        ref={ref}
-        handleContactAdded={handleSpecialContactAdded}
-        handleError={handleErrorMock}
-      />
+      <AddSpecialContact ref={ref} handleContactAdded={handleSpecialContactAdded} />
       <button data-testid="prev-button" color={'primary'} onClick={handleContactDiscardMock}>
         indietro
       </button>
@@ -236,98 +236,6 @@ describe('test AddSpecialContact', () => {
     });
   });
 
-  it('show already exist message', async () => {
-    mock.onGet('/bff/v1/pa-list').reply(200, parties);
-
-    // render component
-    const { container, getByTestId } = render(
-      <AddSpecialContactWrapper handleSpecialContactAdded={handleContactAddedMock} />,
-      {
-        preloadedState: { contactsState: { digitalAddresses } },
-      }
-    );
-
-    // select sender
-    await testAutocomplete(
-      container,
-      'sender',
-      parties,
-      true,
-      parties.findIndex((p) => p.name === specialAddresses[0].senderName),
-      true
-    );
-
-    // select PEC addressType
-    await testSelect(
-      container,
-      'channelType',
-      channelTypesItems,
-      channelTypesItems.findIndex((item) => item.value === ChannelType.PEC)
-    );
-
-    const input = getById(container, 's_value');
-    fireEvent.change(input, { target: { value: 'test@test.it' } });
-
-    await waitFor(() => {
-      expect(input).toHaveValue('test@test.it');
-    });
-
-    const alreadyExistsAlert = getByTestId('alreadyExistsAlert');
-    expect(alreadyExistsAlert).toBeInTheDocument();
-  });
-
-  it('show confirmation modal', async () => {
-    mock.onGet('/bff/v1/pa-list').reply(200, parties);
-
-    // render component
-    const { container, getByRole } = render(
-      <AddSpecialContactWrapper handleSpecialContactAdded={handleContactAddedMock} />,
-      {
-        preloadedState: { contactsState: { digitalAddresses } },
-      }
-    );
-
-    // select sender
-    await testAutocomplete(
-      container,
-      'sender',
-      parties,
-      true,
-      parties.findIndex((p) => p.name === 'Comune di Milano'),
-      true
-    );
-
-    // select PEC addressType
-    await testSelect(
-      container,
-      'channelType',
-      channelTypesItems,
-      channelTypesItems.findIndex((item) => item.value === ChannelType.PEC)
-    );
-
-    const input = getById(container, 's_value');
-    fireEvent.change(input, { target: { value: 'test@test.it' } });
-
-    await waitFor(() => {
-      expect(input).toHaveValue('test@test.it');
-    });
-
-    const disclaimerCheckbox = container.querySelector('[name="s_disclaimer"]');
-    fireEvent.click(disclaimerCheckbox!);
-
-    const confirmButton = getByRole('button', { name: 'conferma' });
-
-    fireEvent.click(confirmButton);
-
-    await waitFor(() => {
-      const dialog = getByRole('dialog');
-      expect(dialog).toBeInTheDocument();
-      const titleEl = getById(dialog, 'confirmation-dialog-title');
-      expect(titleEl).toBeInTheDocument();
-      expect(titleEl).toHaveTextContent('special-contacts.legal-association-title');
-    });
-  });
-
   it('should show all channelType options if PEC is default address and no default SERCQ is present', async () => {
     mock.onGet('/bff/v1/pa-list').reply(200, parties);
 
@@ -382,22 +290,34 @@ describe('test AddSpecialContact', () => {
     expect(pecInput).toHaveValue('');
   });
 
-  it('should not allow adding SERCQ while validating PEC', async () => {
+  it('show validating PEC error and banner selecting a sender having PEC in validation', async () => {
+    const pecValue = 'test@test.it';
+    const sender = specialAddresses[0];
     mock.onGet('/bff/v1/pa-list').reply(200, parties);
+
+    mock
+      .onPost(`/bff/v1/addresses/LEGAL/${sender.senderId}/PEC`, {
+        value: pecValue,
+      })
+      .reply(200, {
+        result: 'CODE_VERIFICATION_REQUIRED',
+      });
+
+    mock.onPost(`/bff/v1/addresses/LEGAL/${sender.senderId}/PEC`, {
+      value: pecValue,
+      verificationCode: '01234',
+    });
+
     // render component
-    const { container, getByTestId } = render(
+    const { container, getByRole, getByTestId, getByText, queryByText } = render(
       <AddSpecialContactWrapper handleSpecialContactAdded={handleContactAddedMock} />,
       {
-        preloadedState: {
-          contactsState: {
-            digitalAddresses: [
-              ...digitalAddressesPecValidation(true, true),
-              ...digitalAddressesPecValidation(false, false, parties[1]),
-            ],
-          },
-        },
+        preloadedState: { contactsState: { digitalAddresses: digitalAddressesWithInvalidPec } },
       }
     );
+
+    let error = queryByText('special-contacts.validating-pec-error-message');
+    expect(error).not.toBeInTheDocument();
 
     // select sender
     await testAutocomplete(
@@ -405,7 +325,169 @@ describe('test AddSpecialContact', () => {
       'sender',
       parties,
       true,
-      parties.findIndex((p) => p.name === parties[1].name),
+      parties.findIndex((p) => p.name === sender.senderName),
+      true
+    );
+
+    error = getByText('special-contacts.validating-pec-error-message');
+    expect(error).toBeInTheDocument();
+    expect(error).toBeVisible();
+
+    const confirmButton = getByRole('button', { name: 'conferma' });
+    expect(confirmButton).toBeInTheDocument();
+
+    fireEvent.click(confirmButton);
+
+    const validatingPecAlert = getByTestId('validatingPecForSenderAlert');
+    expect(validatingPecAlert).toBeInTheDocument();
+    expect(validatingPecAlert).toHaveTextContent('special-contacts.validating-pec-banner-content');
+
+    // select PEC addressType
+    await testSelect(
+      container,
+      'channelType',
+      channelTypesItems,
+      channelTypesItems.findIndex((item) => item.value === ChannelType.PEC)
+    );
+
+    const input = getById(container, 's_value');
+    fireEvent.change(input, { target: { value: pecValue } });
+
+    await waitFor(() => {
+      expect(input).toHaveValue(pecValue);
+    });
+
+    fireEvent.click(confirmButton);
+
+    expect(mock.history.get).toHaveLength(2);
+    expect(mock.history.get[0].url).toBe('/bff/v1/pa-list');
+    expect(mock.history.get[1].url).toBe('/bff/v1/pa-list?paNameFilter=Comune+di+Milano');
+
+    // no api call to override validating PEC
+    await waitFor(() => {
+      expect(mock.history.post).toHaveLength(0);
+    });
+  });
+
+  it('shows "already exists" banner if the selected sender already has a PEC', async () => {
+    const pecValue = 'test@test.it';
+    const sender = specialAddresses[0];
+    mock.onGet('/bff/v1/pa-list').reply(200, parties);
+
+    mock
+      .onPost(`/bff/v1/addresses/LEGAL/${sender.senderId}/PEC`, {
+        value: pecValue,
+      })
+      .reply(200, {
+        result: 'CODE_VERIFICATION_REQUIRED',
+      });
+
+    mock.onPost(`/bff/v1/addresses/LEGAL/${sender.senderId}/PEC`, {
+      value: pecValue,
+      verificationCode: '01234',
+    });
+
+    mock.onGet('/bff/v1/pa-list').reply(200, parties);
+
+    const { container, getByRole, getByTestId } = render(
+      <AddSpecialContactWrapper handleSpecialContactAdded={handleContactAddedMock} />,
+      {
+        preloadedState: {
+          contactsState: {
+            digitalAddresses,
+          },
+        },
+      }
+    );
+
+    expect(container.querySelector('[data-testid="alreadyExistsAlert"]')).not.toBeInTheDocument();
+
+    await testAutocomplete(
+      container,
+      'sender',
+      parties,
+      true,
+      parties.findIndex((p) => p.name === sender.senderName),
+      true
+    );
+
+    const banner = getByTestId('alreadyExistsAlert');
+    expect(banner).toBeInTheDocument();
+    expect(banner).toHaveTextContent('special-contacts.contact-already-exists');
+
+    // select PEC addressType
+    await testSelect(
+      container,
+      'channelType',
+      channelTypesItems,
+      channelTypesItems.findIndex((item) => item.value === ChannelType.PEC)
+    );
+
+    const input = getById(container, 's_value');
+    fireEvent.change(input, { target: { value: pecValue } });
+
+    await waitFor(() => {
+      expect(input).toHaveValue(pecValue);
+    });
+
+    const confirmButton = getByRole('button', { name: 'conferma' });
+    fireEvent.click(confirmButton);
+
+    const errorMessage = container.querySelector(`#s_disclaimer-helper-text`);
+    expect(errorMessage).toBeInTheDocument();
+    expect(errorMessage).toHaveTextContent('required-field');
+
+    await waitFor(() => {
+      expect(mock.history.post).toHaveLength(0);
+    });
+
+    const checkbox = getById(container, 's_disclaimer');
+
+    fireEvent.click(checkbox);
+    expect(errorMessage).toBeInTheDocument();
+
+    fireEvent.click(confirmButton);
+
+    expect(mock.history.get).toHaveLength(2);
+    expect(mock.history.get[0].url).toBe('/bff/v1/pa-list');
+
+    await waitFor(() => {
+      expect(mock.history.post).toHaveLength(1);
+    });
+  });
+
+  it('shows "existing contact dialog" adding same as "default" PEC address', async () => {
+    const pecValue = digitalAddresses[0].value;
+    const sender = specialAddresses[0];
+    mock.onGet('/bff/v1/pa-list').reply(200, parties);
+
+    mock
+      .onPost(`/bff/v1/addresses/LEGAL/${sender.senderId}/PEC`, {
+        value: pecValue,
+      })
+      .reply(200, {
+        result: 'CODE_VERIFICATION_REQUIRED',
+      });
+
+    const { container, getByRole, getByTestId, getByText } = render(
+      <AddSpecialContactWrapper handleSpecialContactAdded={handleContactAddedMock} />,
+      {
+        preloadedState: {
+          contactsState: {
+            digitalAddresses,
+          },
+        },
+      }
+    );
+
+    expect(container.querySelector('[data-testid="alreadyExistsAlert"]')).not.toBeInTheDocument();
+
+    await testAutocomplete(
+      container,
+      'sender',
+      parties,
+      true,
+      parties.findIndex((p) => p.name === sender.senderName),
       true
     );
 
@@ -414,14 +496,41 @@ describe('test AddSpecialContact', () => {
       container,
       'channelType',
       channelTypesItems,
-      channelTypesItems.findIndex((item) => item.value === ChannelType.SERCQ_SEND)
+      channelTypesItems.findIndex((item) => item.value === ChannelType.PEC)
     );
 
-    const validatingPecAlert = getByTestId('validatingPecForSenderAlert');
-    expect(validatingPecAlert).toBeInTheDocument();
-    expect(handleErrorMock).toHaveBeenCalledTimes(2);
-    expect(handleErrorMock).toHaveBeenCalledWith(false);
-    expect(handleErrorMock).toHaveBeenCalledWith(true);
+    const input = getById(container, 's_value');
+    fireEvent.change(input, { target: { value: pecValue } });
+
+    await waitFor(() => {
+      expect(input).toHaveValue(pecValue);
+    });
+
+    const checkbox = getById(container, 's_disclaimer');
+    fireEvent.click(checkbox);
+
+    const confirmButton = getByRole('button', { name: 'conferma' });
+    fireEvent.click(confirmButton);
+
+    let confirmDialog: HTMLElement;
+    await waitFor(() => {
+      confirmDialog = getByTestId('confirmationDialog');
+      expect(confirmDialog).toBeInTheDocument();
+    });
+
+    const dialogConfirmButton = getByText('button.understand');
+    fireEvent.click(dialogConfirmButton);
+
+    await waitFor(() => {
+      expect(confirmDialog).not.toBeInTheDocument();
+    });
+
+    expect(mock.history.get).toHaveLength(2);
+    expect(mock.history.get[0].url).toBe('/bff/v1/pa-list');
+
+    await waitFor(() => {
+      expect(mock.history.post).toHaveLength(0);
+    });
   });
 
   it('API error', async () => {
