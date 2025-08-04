@@ -129,12 +129,9 @@ const FilterNotificationsFormBody = ({
                 type: 'text',
                 'data-testid': 'input(start date)',
               },
-              helperText: (
-                <FormHelperText sx={{ ml: 0 }} error aria-live="assertive" component="span">
-                  {!!formikInstance.errors.startDate &&
-                    t('filters.errors.data_a', { ns: 'notifiche' })}
-                </FormHelperText>
-              ),
+              helperText:
+                !!formikInstance.errors.startDate &&
+                t('filters.errors.data_a', { ns: 'notifiche' }),
             },
           }}
           disableFuture={true}
@@ -169,12 +166,8 @@ const FilterNotificationsFormBody = ({
                 type: 'text',
                 'data-testid': 'input(end date)',
               },
-              helperText: (
-                <FormHelperText sx={{ ml: 0 }} error aria-live="assertive" component="span">
-                  {!!formikInstance.errors.endDate &&
-                    t('filters.errors.data_a', { ns: 'notifiche' })}
-                </FormHelperText>
-              ),
+              helperText:
+                !!formikInstance.errors.endDate && t('filters.errors.data_a', { ns: 'notifiche' }),
             },
           }}
           disableFuture={true}
