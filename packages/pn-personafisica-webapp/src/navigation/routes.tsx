@@ -11,7 +11,6 @@ import {
 
 import { getConfiguration } from '../services/configuration.service';
 import RapidAccessGuard from './RapidAccessGuard';
-import RouteGuard from './RouteGuard';
 import SessionGuard from './SessionGuard';
 import ToSGuard from './ToSGuard';
 import * as routes from './routes.const';
@@ -72,14 +71,11 @@ function Router() {
                 />
                 <Route element={<Navigate to={routes.RECAPITI} replace />} index />
               </Route>
+              <Route
+                path="*"
+                element={<NotFound goBackAction={() => navigate(NOTIFICHE, { replace: true })} />}
+              />
             </Route>
-          </Route>
-          {/* not found - non-logged users will see the common AccessDenied component */}
-          <Route path="*" element={<RouteGuard />}>
-            <Route
-              path="*"
-              element={<NotFound goBackAction={() => navigate(NOTIFICHE, { replace: true })} />}
-            />
           </Route>
         </Route>
         <Route path={routes.PRIVACY_POLICY} element={<PrivacyPolicyPage />} />
