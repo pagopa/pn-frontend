@@ -83,7 +83,7 @@
   "not-logged-subtitle": "Pour voir et gérer vos notifications, connectez-vous avec SPID ou CIE.",
   "not-found": {
     "title": "404 : la page que vous cherchez n’existe pas",
-    "descpription": "Vous êtes ici par erreur, essayez d’utiliser la navigation."
+    "description": "Vous êtes ici par erreur, essayez d’utiliser la navigation."
   },
   "leaving-app": {
     "title": "Vous quittez SEND",
