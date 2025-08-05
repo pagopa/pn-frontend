@@ -17,7 +17,6 @@ const DigitalContactManagement: React.FC = () => {
   const { t } = useTranslation(['recapiti', 'common']);
   const navigate = useNavigate();
   const [activeStep, setActiveStep] = useState(0);
-  const [specialContactError, setSpecialContactError] = useState(false);
   const [currentAction, setCurrentAction] = useState<DigitalDomicileManagementAction>(
     DigitalDomicileManagementAction.DEFAULT
   );
@@ -56,10 +55,6 @@ const DigitalContactManagement: React.FC = () => {
     setActiveStep(1);
   };
 
-  const handleSpecialContactError = (hasError: boolean) => {
-    setSpecialContactError(hasError);
-  };
-
   if (currentAction === DigitalDomicileManagementAction.DIGITAL_DOMICILE_TRANSFER) {
     return (
       <DigitalContactActivation
@@ -95,8 +90,6 @@ const DigitalContactManagement: React.FC = () => {
         stepContainer: { sx: { p: 0, mb: '20px', mt: 3, background: 'transparent' } },
         nextButton: {
           onClick: () => handleConfirmClick(),
-          variant: specialContactError ? 'outlined' : 'contained',
-          color: specialContactError ? 'error' : 'primary',
         },
         feedback: {
           title: t(`legal-contacts.sercq-send-wizard.feedback.title-transfer`),
@@ -109,7 +102,6 @@ const DigitalContactManagement: React.FC = () => {
         {currentAction === DigitalDomicileManagementAction.ADD_SPECIAL_CONTACT ? (
           <AddSpecialContact
             ref={addSpecialContactRef}
-            handleError={handleSpecialContactError}
             handleContactAdded={handleSpecialContactAdded}
           />
         ) : (
