@@ -2,12 +2,14 @@
   "applinks": {
     "details": [
       {
-        "appID": "M2X5YQ4BJ7.it.pagopa.app.io",
         "appIDs": [
           "M2X5YQ4BJ7.it.pagopa.app.io"
         ],
-        "paths": [
-          "/io"
+        "components": [
+          {
+            "/": "/io/*",
+            "caseSensitive": false
+          }
         ]
       }
     ]
