@@ -225,6 +225,8 @@ describe('Event Strategy Factory', () => {
       PFEventsType.SEND_ADD_SERCQ_SEND_POP_UP_EMAIL_SMS,
       PFEventsType.SEND_ADD_SERCQ_SEND_EMAIL_OTP,
       PFEventsType.SEND_ADD_SERCQ_SEND_SMS_OTP,
+      PFEventsType.SEND_ADD_SERCQ_SEND_POP_UP_EMAIL,
+      PFEventsType.SEND_ADD_SERCQ_SEND_POP_UP_SMS,
     ];
     eventTypes.forEach((eventType) => {
       expect(factory.getStrategy(eventType)).toBeInstanceOf(UXScreenViewStrategy);
@@ -233,9 +235,9 @@ describe('Event Strategy Factory', () => {
 
   it('should return UXConfirmStrategy for UX Confirm events', () => {
     const eventTypes = [
-      PFEventsType.SEND_ADD_SERCQ_SEND_CONNECT_IO_SUCCESS,
+      PFEventsType.SEND_ADD_SERCQ_SEND_CONNECT_IO_UX_SUCCESS,
       PFEventsType.SEND_ADD_SERCQ_SEND_REMOVE_IO_SUCCESS,
-      PFEventsType.SEND_ADD_SERCQ_SEND_ADD_EMAIL_SUCCESS,
+      PFEventsType.SEND_ADD_SERCQ_SEND_ADD_EMAIL_UX_SUCCESS,
       PFEventsType.SEND_ADD_SERCQ_SEND_ADD_SMS_UX_SUCCESS,
     ];
 
@@ -300,6 +302,10 @@ describe('Event Strategy Factory', () => {
       PFEventsType.SEND_ADD_SERCQ_SEND_SUMMARY_TOS_ACCEPTED,
       PFEventsType.SEND_ADD_SERCQ_SEND_SUMMARY_TOS_DISMISSED,
       PFEventsType.SEND_ADD_SERCQ_SEND_THANK_YOU_PAGE_CLOSE,
+      PFEventsType.SEND_ADD_SERCQ_SEND_POP_UP_EMAIL_CANCEL,
+      PFEventsType.SEND_ADD_SERCQ_SEND_POP_UP_EMAIL_CONTINUE,
+      PFEventsType.SEND_ADD_SERCQ_SEND_POP_UP_SMS_CANCEL,
+      PFEventsType.SEND_ADD_SERCQ_SEND_POP_UP_SMS_CONTINUE,
     ];
     eventTypes.forEach((eventType) => {
       expect(factory.getStrategy(eventType)).toBeInstanceOf(UXActionStrategy);
