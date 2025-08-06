@@ -139,11 +139,11 @@ const DomicileBanner: React.FC<Props> = ({ source }) => {
         });
         navigate(routes.DIGITAL_DOMICILE_ACTIVATION);
       } else {
+        PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_VIEW_CONTACT_DETAILS, { source });
         navigate(routes.RECAPITI);
       }
       dispatch(setExternalEvent({ destination, source, operation }));
     }
-    PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_VIEW_CONTACT_DETAILS, { source });
   };
 
   return open && domicileBannerData ? (
