@@ -1,0 +1,12 @@
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "it.pagopa.io.app",
+      "sha256_cert_fingerprints": [
+        "7D:E4:FE:3E:AA:E0:83:FF:CD:8B:07:03:01:E8:65:02:D3:F1:EA:D1:DD:66:AC:14:2B:AD:7C:54:47:55:4F:82"
+      ]
+    }
+  }
+]
