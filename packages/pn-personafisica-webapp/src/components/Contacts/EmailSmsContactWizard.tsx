@@ -304,6 +304,9 @@ const EmailSmsContactWizard: React.FC = () => {
             },
           }}
           onEditCallback={(editMode: boolean) => handleEditCallback(editMode, ChannelType.SMS)}
+          beforeValidationCallback={(value: string, errors?: string) =>
+            handleTrackValidationEvents(value, ChannelType.SMS, errors)
+          }
         />
       ) : (
         <SmsContactItem
