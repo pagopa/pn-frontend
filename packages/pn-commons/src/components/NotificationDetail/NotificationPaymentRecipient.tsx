@@ -1,7 +1,7 @@
 import React, { memo, useEffect, useState } from 'react';
 
 import { Download } from '@mui/icons-material/';
-import { Alert, Box, Button, Link, RadioGroup, Typography } from '@mui/material';
+import { Alert, Box, Button, FormControl, Link, RadioGroup, Typography } from '@mui/material';
 
 import { downloadDocument } from '../../hooks';
 import {
@@ -210,33 +210,35 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
 
       {pagoPaF24.length > 0 && (
         <>
-          <RadioGroup
-            name="radio-buttons-group"
-            value={selectedPayment?.pagoPa}
-            onChange={handleClick}
-          >
-            {paginatedPayments.map((payment, index) =>
-              payment.pagoPa ? (
-                <Box
-                  mb={2}
-                  key={`payment-${payment.pagoPa.noticeCode}-${payment.pagoPa.creditorTaxId}`}
-                  data-testid="pagopa-item"
-                >
-                  <NotificationPaymentPagoPAItem
-                    pagoPAItem={payment.pagoPa}
-                    loading={payment.isLoading ?? false}
-                    isSelected={payment.pagoPa.noticeCode === selectedPayment?.pagoPa?.noticeCode}
-                    handleFetchPaymentsInfo={() => handleFetchPaymentsInfo([payment])}
-                    handleDeselectPayment={handleDeselectPayment}
-                    isSinglePayment={isSinglePayment}
-                    isCancelled={isCancelled}
-                    handleTrackEventDetailPaymentError={handleTrackEventFn}
-                    slotProps={{ radio: { id: `radioPayment_${index}` } }}
-                  />
-                </Box>
-              ) : null
-            )}
-          </RadioGroup>
+          <FormControl>
+            <RadioGroup
+              name="radio-buttons-group"
+              value={selectedPayment?.pagoPa}
+              onChange={handleClick}
+            >
+              {paginatedPayments.map((payment, index) =>
+                payment.pagoPa ? (
+                  <Box
+                    mb={2}
+                    key={`payment-${payment.pagoPa.noticeCode}-${payment.pagoPa.creditorTaxId}`}
+                    data-testid="pagopa-item"
+                  >
+                    <NotificationPaymentPagoPAItem
+                      pagoPAItem={payment.pagoPa}
+                      loading={payment.isLoading ?? false}
+                      isSelected={payment.pagoPa.noticeCode === selectedPayment?.pagoPa?.noticeCode}
+                      handleFetchPaymentsInfo={() => handleFetchPaymentsInfo([payment])}
+                      handleDeselectPayment={handleDeselectPayment}
+                      isSinglePayment={isSinglePayment}
+                      isCancelled={isCancelled}
+                      handleTrackEventDetailPaymentError={handleTrackEventFn}
+                      slotProps={{ radio: { id: `radioPayment_${index}` } }}
+                    />
+                  </Box>
+                ) : null
+              )}
+            </RadioGroup>
+          </FormControl>
           {paginationData.totalElements > paginationData.size && (
             <Box width="full" display="flex" justifyContent="right" data-testid="pagination-box">
               <CustomPagination

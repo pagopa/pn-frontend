@@ -5,11 +5,7 @@ import { AppResponsePublisher, ResponseEventDispatcher } from './AppResponse';
 import * as screenshot from './Screenshot';
 import { validateCurrentStatus, validateHistory, validateLegaFact } from './appStatus.utility';
 import { PRIVACY_LINK_RELATIVE_PATH, TOS_LINK_RELATIVE_PATH } from './costants';
-import {
-  formatCurrency,
-  formatEurocentToCurrency,
-  formatEurocentToCurrencyText,
-} from './currency.utility';
+import { formatCurrency, formatEurocentToCurrency } from './currency.utility';
 import {
   DATE_FORMAT,
   convertHoursToDays,
@@ -108,7 +104,6 @@ export {
   formatIun,
   formatCurrency,
   formatEurocentToCurrency,
-  formatEurocentToCurrencyText,
   dataRegex,
   storageOpsBuilder,
   compileRoute,
