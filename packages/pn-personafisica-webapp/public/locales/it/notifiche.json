@@ -94,8 +94,8 @@
       "disclaimer-link": "Scopri di più",
       "f24-download-error": "Il download non è riuscito. Riprova.",
       "status": {
-        "succeded": "Pagato",
-        "succeded-tooltip": "Il pagamento è stato inviato correttamente.",
+        "succeeded": "Pagato",
+        "succeeded-tooltip": "Il pagamento è stato inviato correttamente.",
         "failed": "Scaduto",
         "failed-tooltip": "L’avviso è scaduto e non è più possibile pagarlo. Per maggiori informazioni, contatta l’ente mittente.",
         "inprogress": "In elaborazione",
