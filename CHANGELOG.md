@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.17.1-RC.1](https://github.com/pagopa/pn-frontend/compare/v2.17.1-RC.0...v2.17.1-RC.1) (2025-08-07)
+
+
+### Bug Fixes
+
+* **PN-15402:** add email/sms popup events and fix some sercq handling events ([#1616](https://github.com/pagopa/pn-frontend/issues/1616)) ([6533202](https://github.com/pagopa/pn-frontend/commit/6533202b646465340b33a97cec082c5f64d5df1e))
+
+
+
+
+
 ## [2.17.1-RC.0](https://github.com/pagopa/pn-frontend/compare/v2.17.0...v2.17.1-RC.0) (2025-07-31)
 
 
