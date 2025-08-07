@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.17.1-RC.2](https://github.com/pagopa/pn-frontend/compare/v2.17.1-RC.1...v2.17.1-RC.2) (2025-08-07)
+
+
+### Bug Fixes
+
+* **PN-15402:** add missing mixpanel start event on SMS edit ([#1617](https://github.com/pagopa/pn-frontend/issues/1617)) ([3377538](https://github.com/pagopa/pn-frontend/commit/3377538f600cdf9e9d2988ac0df9e0e218c27994))
+
+
+
+
+
 ## [2.17.1-RC.1](https://github.com/pagopa/pn-frontend/compare/v2.17.1-RC.0...v2.17.1-RC.1) (2025-08-07)
 
 
