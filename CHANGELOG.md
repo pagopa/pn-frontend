@@ -3,6 +3,47 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.17.1](https://github.com/pagopa/pn-frontend/compare/v2.17.1-RC.2...v2.17.1) (2025-08-08)
+
+**Note:** Version bump only for package pn-frontend
+
+
+
+
+
+## [2.17.1-RC.2](https://github.com/pagopa/pn-frontend/compare/v2.17.1-RC.1...v2.17.1-RC.2) (2025-08-07)
+
+
+### Bug Fixes
+
+* **PN-15402:** add missing mixpanel start event on SMS edit ([#1617](https://github.com/pagopa/pn-frontend/issues/1617)) ([3377538](https://github.com/pagopa/pn-frontend/commit/3377538f600cdf9e9d2988ac0df9e0e218c27994))
+
+
+
+
+
+## [2.17.1-RC.1](https://github.com/pagopa/pn-frontend/compare/v2.17.1-RC.0...v2.17.1-RC.1) (2025-08-07)
+
+
+### Bug Fixes
+
+* **PN-15402:** add email/sms popup events and fix some sercq handling events ([#1616](https://github.com/pagopa/pn-frontend/issues/1616)) ([6533202](https://github.com/pagopa/pn-frontend/commit/6533202b646465340b33a97cec082c5f64d5df1e))
+
+
+
+
+
+## [2.17.1-RC.0](https://github.com/pagopa/pn-frontend/compare/v2.17.0...v2.17.1-RC.0) (2025-07-31)
+
+
+### Bug Fixes
+
+* **PN-15402:** track new events of SERCQ ([#1595](https://github.com/pagopa/pn-frontend/issues/1595)) ([5f3d540](https://github.com/pagopa/pn-frontend/commit/5f3d540eb35d614dd119fdb11d5d820d271347e9))
+
+
+
+
+
 # [2.17.0](https://github.com/pagopa/pn-frontend/compare/v2.17.0-RC.2...v2.17.0) (2025-07-24)
 
 **Note:** Version bump only for package pn-frontend

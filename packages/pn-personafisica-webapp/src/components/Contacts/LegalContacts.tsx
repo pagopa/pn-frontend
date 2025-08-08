@@ -11,7 +11,7 @@ import { Alert, Box, Button, Chip, ChipOwnProps, Stack, Typography } from '@mui/
 import { PnInfoCard, appStateActions, useIsMobile } from '@pagopa-pn/pn-commons';
 
 import { PFEventsType } from '../../models/PFEventsType';
-import { AddressType, ChannelType } from '../../models/contacts';
+import { AddressType, ChannelType, ContactSource } from '../../models/contacts';
 import {
   DIGITAL_DOMICILE_ACTIVATION,
   DIGITAL_DOMICILE_MANAGEMENT,
@@ -38,6 +38,13 @@ const EmptyLegalContacts = () => {
       ns: 'recapiti',
     }
   );
+
+  const handleStartActivation = () => {
+    PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SERCQ_SEND_ENTER_FLOW, {
+      source: ContactSource.RECAPITI,
+    });
+    navigate(DIGITAL_DOMICILE_ACTIVATION);
+  };
 
   return (
     <>
@@ -66,11 +73,7 @@ const EmptyLegalContacts = () => {
           );
         })}
       </Stack>
-      <Button
-        variant="contained"
-        fullWidth={isMobile}
-        onClick={() => navigate(DIGITAL_DOMICILE_ACTIVATION)}
-      >
+      <Button variant="contained" fullWidth={isMobile} onClick={handleStartActivation}>
         {t('button.start')}
       </Button>
     </>
