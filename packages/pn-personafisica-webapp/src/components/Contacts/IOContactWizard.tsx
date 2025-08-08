@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 
 import CompareArrowsIcon from '@mui/icons-material/CompareArrows';
@@ -47,12 +47,11 @@ const IOContactWizard: React.FC<Props> = ({ goToNextStep }) => {
   });
 
   const handleConfirmIOActivation = () => {
-    PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ACTIVE_IO_START);
-    PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ACTIVE_IO_UX_CONVERSION);
+    PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SERCQ_SEND_CONNECT_IO_UX_CONVERSION);
     dispatch(enableIOAddress())
       .unwrap()
       .then(() => {
-        PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ACTIVE_IO_UX_SUCCESS, true);
+        PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SERCQ_SEND_CONNECT_IO_UX_SUCCESS);
         dispatch(
           appStateActions.addSuccess({
             title: '',
@@ -66,10 +65,15 @@ const IOContactWizard: React.FC<Props> = ({ goToNextStep }) => {
   };
 
   const handleConfirmIODeactivation = () => {
+    PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SERCQ_SEND_REMOVE_IO);
+    PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SERCQ_SEND_POP_UP_REMOVE_APP_IO);
     setModal({ open: true });
   };
 
   const handleIODeactivation = () => {
+    PFEventStrategyFactory.triggerEvent(
+      PFEventsType.SEND_ADD_SERCQ_SEND_POP_UP_REMOVE_APP_IO_DISCONNECT
+    );
     dispatch(disableIOAddress())
       .unwrap()
       .then(() => {
@@ -79,6 +83,7 @@ const IOContactWizard: React.FC<Props> = ({ goToNextStep }) => {
             message: t('courtesy-contacts.io-removed-successfully'),
           })
         );
+        PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SERCQ_SEND_REMOVE_IO_SUCCESS);
         goToNextStep();
         setModal({ open: false });
       })
@@ -86,13 +91,36 @@ const IOContactWizard: React.FC<Props> = ({ goToNextStep }) => {
   };
 
   const handleConfirmationModalDecline = () => {
+    if (isIOEnabled) {
+      PFEventStrategyFactory.triggerEvent(
+        PFEventsType.SEND_ADD_SERCQ_SEND_POP_UP_REMOVE_APP_IO_CANCEL
+      );
+    } else {
+      PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SERCQ_SEND_POP_UP_APP_IO_DECLINED);
+    }
     goToNextStep();
     setModal({ open: false });
   };
 
+  const handleActivateIOFromModal = () => {
+    PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SERCQ_SEND_POP_UP_APP_IO_CONNECT);
+    handleConfirmIOActivation();
+  };
+
   const handleSkip = () => {
+    PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SERCQ_SEND_CONTINUE_WITHOUT_IO);
+    PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SERCQ_SEND_POP_UP_APP_IO);
     setModal({ open: true });
   };
+
+  const handleGoToNextStep = () => {
+    PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SERCQ_SEND_APP_IO_NEXT_STEP);
+    goToNextStep();
+  };
+
+  useEffect(() => {
+    PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SERCQ_SEND_APP_IO);
+  }, []);
 
   return (
     <>
@@ -148,7 +176,7 @@ const IOContactWizard: React.FC<Props> = ({ goToNextStep }) => {
             </Button>
             <ButtonNaked
               sx={{ fontSize: '16px' }}
-              onClick={goToNextStep}
+              onClick={handleGoToNextStep}
               color="primary"
               fullWidth
               data-testid="skipButton"
@@ -217,7 +245,7 @@ const IOContactWizard: React.FC<Props> = ({ goToNextStep }) => {
                   children: t('button.do-later', { ns: 'common' }),
                 },
                 confirmButton: {
-                  onClick: handleConfirmIOActivation,
+                  onClick: handleActivateIOFromModal,
                   children: t(`courtesy-contacts.confirmation-modal-io-accept`),
                 },
               }

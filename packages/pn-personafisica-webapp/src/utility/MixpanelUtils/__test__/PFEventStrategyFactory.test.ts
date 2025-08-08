@@ -1,5 +1,6 @@
 import { PFEventsType } from '../../../models/PFEventsType';
 import PFEventStrategyFactory from '../PFEventStrategyFactory';
+import { KoErrorStrategy } from '../Strategies/KoErrorStrategy';
 import { SendAcceptDelegationStrategy } from '../Strategies/SendAcceptDelegationStrategy';
 import { SendActiveIOUxSuccessStrategy } from '../Strategies/SendActiveIOUxSuccessStrategy';
 import { SendAddAddressStrategy } from '../Strategies/SendAddAddressStrategy';
@@ -9,7 +10,11 @@ import { SendAddCourtesyContactUXSuccessStrategy } from '../Strategies/SendAddCo
 import { SendAddLegalContactUXSuccessStrategy } from '../Strategies/SendAddLegalContactUXSuccessStrategy';
 import { SendAddMandateUXConversionStrategy } from '../Strategies/SendAddMandateUXConversionStrategy';
 import { SendAddMandateUXSuccessStrategy } from '../Strategies/SendAddMandateUXSuccessStrategy';
-import { SendAddSercqSendUxSuccessStrategy } from '../Strategies/SendAddSercqSendUxSuccessStrategy';
+import { SendAddSercqSendAddEmailStartStrategy } from '../Strategies/SendAddSercqSendAddEmailStartStrategy';
+import { SendAddSercqSendAddSmsStartStrategy } from '../Strategies/SendAddSercqSendAddSmsStartStrategy';
+import { SendAddSercqSendEnterFlowStrategy } from '../Strategies/SendAddSercqSendEnterFlowStrategy';
+import { SendAddSercqSendUxConversionStrategy } from '../Strategies/SendAddSercqSendUxConversionStrategy';
+import { SendAddSercqUxSuccessStrategy } from '../Strategies/SendAddSercqUxSuccessStrategy';
 import { SendDisableIOStrategy } from '../Strategies/SendDisableIOStrategy';
 import { SendDownloadCertificateOpposable } from '../Strategies/SendDownloadCertificateOpposable';
 import { SendDownloadResponseStrategy } from '../Strategies/SendDownloadResponse';
@@ -42,6 +47,8 @@ import { UXActionStrategy } from '../Strategies/UXActionStrategy';
 import { UXErrorStrategy } from '../Strategies/UXErrorStrategy';
 import { UXPspActionStrategy } from '../Strategies/UXPspActionStrategy';
 import { UXScreenViewStrategy } from '../Strategies/UXScreenViewStrategy';
+import { UXConfirmStrategy } from '../Strategies/UxConfirmStrategy';
+import { UxWithCourtesyContactListStrategy } from '../Strategies/UxWithCourtesyContactListStrategy';
 
 describe('Event Strategy Factory', () => {
   const factory = PFEventStrategyFactory;
@@ -165,7 +172,6 @@ describe('Event Strategy Factory', () => {
 
   it('should return sendAddContactWithSourceActionStrategy for add contacts action events', () => {
     const eventTypes = [
-      PFEventsType.SEND_ADD_SERCQ_SEND_START,
       PFEventsType.SEND_ADD_PEC_START,
       PFEventsType.SEND_ADD_EMAIL_START,
       PFEventsType.SEND_ADD_SMS_START,
@@ -199,7 +205,6 @@ describe('Event Strategy Factory', () => {
       PFEventsType.SEND_ADD_SMS_UX_CONVERSION,
       PFEventsType.SEND_ADD_EMAIL_UX_CONVERSION,
       PFEventsType.SEND_ADD_PEC_UX_CONVERSION,
-      PFEventsType.SEND_ADD_SERCQ_SEND_UX_CONVERSION,
     ];
     eventTypes.forEach((eventType) => {
       expect(factory.getStrategy(eventType)).toBeInstanceOf(SendAddContactScreenViewStrategy);
@@ -211,9 +216,33 @@ describe('Event Strategy Factory', () => {
       PFEventsType.SEND_PROFILE,
       PFEventsType.SEND_ADD_MANDATE_DATA_INPUT,
       PFEventsType.SEND_DEACTIVE_IO_UX_SUCCESS,
+      PFEventsType.SEND_ADD_SERCQ_SEND_POP_UP,
+      PFEventsType.SEND_ADD_SERCQ_SEND_PEC_ENTER_PEC,
+      PFEventsType.SEND_ADD_SERCQ_SEND_PEC_OTP,
+      PFEventsType.SEND_ADD_SERCQ_SEND_APP_IO,
+      PFEventsType.SEND_ADD_SERCQ_SEND_POP_UP_APP_IO,
+      PFEventsType.SEND_ADD_SERCQ_SEND_POP_UP_REMOVE_APP_IO,
+      PFEventsType.SEND_ADD_SERCQ_SEND_POP_UP_EMAIL_SMS,
+      PFEventsType.SEND_ADD_SERCQ_SEND_EMAIL_OTP,
+      PFEventsType.SEND_ADD_SERCQ_SEND_SMS_OTP,
+      PFEventsType.SEND_ADD_SERCQ_SEND_POP_UP_EMAIL,
+      PFEventsType.SEND_ADD_SERCQ_SEND_POP_UP_SMS,
     ];
     eventTypes.forEach((eventType) => {
       expect(factory.getStrategy(eventType)).toBeInstanceOf(UXScreenViewStrategy);
+    });
+  });
+
+  it('should return UXConfirmStrategy for UX Confirm events', () => {
+    const eventTypes = [
+      PFEventsType.SEND_ADD_SERCQ_SEND_CONNECT_IO_UX_SUCCESS,
+      PFEventsType.SEND_ADD_SERCQ_SEND_REMOVE_IO_SUCCESS,
+      PFEventsType.SEND_ADD_SERCQ_SEND_ADD_EMAIL_UX_SUCCESS,
+      PFEventsType.SEND_ADD_SERCQ_SEND_ADD_SMS_UX_SUCCESS,
+    ];
+
+    eventTypes.forEach((eventType) => {
+      expect(factory.getStrategy(eventType)).toBeInstanceOf(UXConfirmStrategy);
     });
   });
 
@@ -237,6 +266,46 @@ describe('Event Strategy Factory', () => {
       PFEventsType.SEND_PAYMENT_LIST_CHANGE_PAGE,
       PFEventsType.SEND_F24_DOWNLOAD,
       PFEventsType.SEND_DOWNLOAD_PAYMENT_NOTICE,
+      PFEventsType.SEND_ADD_SERCQ_SEND_CANCEL,
+      PFEventsType.SEND_ADD_SERCQ_SEND_PEC_BACK,
+      PFEventsType.SEND_ADD_SERCQ_SEND_PEC_TOS_ACCEPTED,
+      PFEventsType.SEND_ADD_SERCQ_SEND_PEC_TOS_DISMISSED,
+      PFEventsType.SEND_ADD_SERCQ_SEND_PEC_OTP_BACK,
+      PFEventsType.SEND_ADD_SERCQ_SEND_PEC_UX_CONVERSION,
+      PFEventsType.SEND_ADD_SERCQ_SEND_PEC_THANK_YOU_PAGE_CLOSE,
+      PFEventsType.SEND_ADD_SERCQ_SEND_APP_IO_BACK,
+      PFEventsType.SEND_ADD_SERCQ_SEND_CONTINUE_WITHOUT_IO,
+      PFEventsType.SEND_ADD_SERCQ_SEND_POP_UP_APP_IO_CONNECT,
+      PFEventsType.SEND_ADD_SERCQ_SEND_POP_UP_APP_IO_DECLINED,
+      PFEventsType.SEND_ADD_SERCQ_SEND_REMOVE_IO,
+      PFEventsType.SEND_ADD_SERCQ_SEND_APP_IO_NEXT_STEP,
+      PFEventsType.SEND_ADD_SERCQ_SEND_POP_UP_REMOVE_APP_IO_CONFIRM,
+      PFEventsType.SEND_ADD_SERCQ_SEND_POP_UP_REMOVE_APP_IO_BACK,
+      PFEventsType.SEND_ADD_SERCQ_SEND_CONNECT_IO_UX_CONVERSION,
+      PFEventsType.SEND_ADD_SERCQ_SEND_POP_UP_REMOVE_APP_IO_DISCONNECT,
+      PFEventsType.SEND_ADD_SERCQ_SEND_POP_UP_REMOVE_APP_IO_CANCEL,
+      PFEventsType.SEND_ADD_SERCQ_SEND_CONNECT_IO_UX_CONVERSION,
+      PFEventsType.SEND_ADD_SERCQ_SEND_EMAIL_SMS_BACK,
+      PFEventsType.SEND_ADD_SERCQ_SEND_POP_UP_EMAIL_SMS_BACK,
+      PFEventsType.SEND_ADD_SERCQ_SEND_ADD_EMAIL_UX_CONVERSION,
+      PFEventsType.SEND_ADD_SERCQ_SEND_ADD_EMAIL_BACK,
+      PFEventsType.SEND_ADD_SERCQ_SEND_CHANGE_EMAIL,
+      PFEventsType.SEND_ADD_SERCQ_SEND_ADD_SMS,
+      PFEventsType.SEND_ADD_SERCQ_SEND_ADD_SMS_CANCEL,
+      PFEventsType.SEND_ADD_SERCQ_SEND_ADD_SMS_BACK,
+      PFEventsType.SEND_ADD_SERCQ_SEND_ADD_SMS_UX_CONVERSION,
+      PFEventsType.SEND_ADD_SERCQ_SEND_CHANGE_SMS,
+      PFEventsType.SEND_ADD_SERCQ_SEND_SUMMARY_BACK,
+      PFEventsType.SEND_ADD_SERCQ_SEND_GO_TO_SMS,
+      PFEventsType.SEND_ADD_SERCQ_SEND_GO_TO_EMAIL,
+      PFEventsType.SEND_ADD_SERCQ_SEND_GO_TO_APP_IO,
+      PFEventsType.SEND_ADD_SERCQ_SEND_SUMMARY_TOS_ACCEPTED,
+      PFEventsType.SEND_ADD_SERCQ_SEND_SUMMARY_TOS_DISMISSED,
+      PFEventsType.SEND_ADD_SERCQ_SEND_THANK_YOU_PAGE_CLOSE,
+      PFEventsType.SEND_ADD_SERCQ_SEND_POP_UP_EMAIL_CANCEL,
+      PFEventsType.SEND_ADD_SERCQ_SEND_POP_UP_EMAIL_CONTINUE,
+      PFEventsType.SEND_ADD_SERCQ_SEND_POP_UP_SMS_CANCEL,
+      PFEventsType.SEND_ADD_SERCQ_SEND_POP_UP_SMS_CONTINUE,
     ];
     eventTypes.forEach((eventType) => {
       expect(factory.getStrategy(eventType)).toBeInstanceOf(UXActionStrategy);
@@ -274,10 +343,49 @@ describe('Event Strategy Factory', () => {
     });
   });
 
+  it('should return UxWithCourtesyContactListStrategy for UX Action events with contacts details', () => {
+    const eventTypes = [
+      PFEventsType.SEND_ADD_SERCQ_SEND_INTRO,
+      PFEventsType.SEND_ADD_SERCQ_SEND_START,
+      PFEventsType.SEND_ADD_SERCQ_SEND_PEC_START,
+      PFEventsType.SEND_ADD_SERCQ_SEND_PEC_THANK_YOU_PAGE,
+      PFEventsType.SEND_ADD_SERCQ_SEND_EMAIL_SMS,
+      PFEventsType.SEND_ADD_SERCQ_SEND_EMAIL_SMS_CONTINUE,
+      PFEventsType.SEND_ADD_SERCQ_SEND_SUMMARY,
+      PFEventsType.SEND_ADD_SERCQ_SEND_THANK_YOU_PAGE,
+    ];
+    eventTypes.forEach((eventType) => {
+      expect(factory.getStrategy(eventType)).toBeInstanceOf(UxWithCourtesyContactListStrategy);
+    });
+  });
+
+  it('should return KoErrorStrategy for KO Events', () => {
+    const eventTypes = [
+      PFEventsType.SEND_ADD_SERCQ_SEND_PEC_ERROR,
+      PFEventsType.SEND_ADD_SERCQ_SEND_PEC_TOS_MANDATORY,
+      PFEventsType.SEND_ADD_SERCQ_SEND_TOS_MANDATORY,
+      PFEventsType.SEND_ADD_SERCQ_SEND_EMAIL_ERROR,
+      PFEventsType.SEND_ADD_SERCQ_SEND_SMS_ERROR,
+    ];
+    eventTypes.forEach((eventType) => {
+      expect(factory.getStrategy(eventType)).toBeInstanceOf(KoErrorStrategy);
+    });
+  });
+
   it('should return TechScreenViewStrategy for tech screen view events', () => {
     const eventTypes = [PFEventsType.SEND_NOTIFICATION_NOT_ALLOWED];
     eventTypes.forEach((eventType) => {
       expect(factory.getStrategy(eventType)).toBeInstanceOf(TechScreenViewStrategy);
+    });
+  });
+
+  it('should return SendAddSercqUxSuccessStrategy for sercq add ux success events', () => {
+    const eventTypes = [
+      PFEventsType.SEND_ADD_SERCQ_SEND_UX_SUCCESS,
+      PFEventsType.SEND_ADD_SERCQ_SEND_PEC_UX_SUCCESS,
+    ];
+    eventTypes.forEach((eventType) => {
+      expect(factory.getStrategy(eventType)).toBeInstanceOf(SendAddSercqUxSuccessStrategy);
     });
   });
 
@@ -343,12 +451,6 @@ describe('Event Strategy Factory', () => {
     );
   });
 
-  it('should return SendAddSercqSendUxSuccessStrategy for SEND_ADD_SERCQ_SEND_UX_SUCCESS', () => {
-    expect(factory.getStrategy(PFEventsType.SEND_ADD_SERCQ_SEND_UX_SUCCESS)).toBeInstanceOf(
-      SendAddSercqSendUxSuccessStrategy
-    );
-  });
-
   it('should return SendRemoveSercqSendSuccessStrategy for SEND_REMOVE_SERCQ_SEND_SUCCESS', () => {
     expect(factory.getStrategy(PFEventsType.SEND_REMOVE_SERCQ_SEND_SUCCESS)).toBeInstanceOf(
       SendRemoveSercqSendSuccessStrategy
@@ -358,6 +460,30 @@ describe('Event Strategy Factory', () => {
   it('should return SendActiveIOUxSuccessStrategy for SEND_ACTIVE_IO_UX_SUCCESS', () => {
     expect(factory.getStrategy(PFEventsType.SEND_ACTIVE_IO_UX_SUCCESS)).toBeInstanceOf(
       SendActiveIOUxSuccessStrategy
+    );
+  });
+
+  it('should return SendAddSercqSendAddEmailStartStrategy for SEND_ADD_SERCQ_SEND_ADD_EMAIL_START event', () => {
+    expect(factory.getStrategy(PFEventsType.SEND_ADD_SERCQ_SEND_ADD_EMAIL_START)).toBeInstanceOf(
+      SendAddSercqSendAddEmailStartStrategy
+    );
+  });
+
+  it('should return SendAddSercqSendAddSmsStartStrategy for SEND_ADD_SERCQ_SEND_ADD_SMS_START event', () => {
+    expect(factory.getStrategy(PFEventsType.SEND_ADD_SERCQ_SEND_ADD_SMS_START)).toBeInstanceOf(
+      SendAddSercqSendAddSmsStartStrategy
+    );
+  });
+
+  it('should return SendAddSercqSendUxConversionStrategy for SEND_ADD_SERCQ_SEND_UX_CONVERSION event', () => {
+    expect(factory.getStrategy(PFEventsType.SEND_ADD_SERCQ_SEND_UX_CONVERSION)).toBeInstanceOf(
+      SendAddSercqSendUxConversionStrategy
+    );
+  });
+
+  it('should return SendAddSercqSendEnterFlowStrategy for SEND_ADD_SERCQ_SEND_ENTER_FLOW event', () => {
+    expect(factory.getStrategy(PFEventsType.SEND_ADD_SERCQ_SEND_ENTER_FLOW)).toBeInstanceOf(
+      SendAddSercqSendEnterFlowStrategy
     );
   });
 

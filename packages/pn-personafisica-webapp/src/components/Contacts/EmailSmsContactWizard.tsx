@@ -1,22 +1,17 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 
 import { Divider, Stack, Typography } from '@mui/material';
-import { appStateActions } from '@pagopa-pn/pn-commons';
+import { EventAction, appStateActions } from '@pagopa-pn/pn-commons';
 
 import { PFEventsType } from '../../models/PFEventsType';
-import {
-  AddressType,
-  ChannelType,
-  ContactSource,
-  SaveDigitalAddressParams,
-} from '../../models/contacts';
+import { AddressType, ChannelType, SaveDigitalAddressParams } from '../../models/contacts';
 import { createOrUpdateAddress } from '../../redux/contact/actions';
 import { contactsSelectors } from '../../redux/contact/reducers';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
-import { RootState } from '../../redux/store';
 import PFEventStrategyFactory from '../../utility/MixpanelUtils/PFEventStrategyFactory';
 import { contactAlreadyExists, internationalPhonePrefix } from '../../utility/contacts.utility';
+import { isPFEvent } from '../../utility/mixpanel';
 import ContactCodeDialog from './ContactCodeDialog';
 import DigitalContact from './DigitalContact';
 import ExistingContactDialog from './ExistingContactDialog';
@@ -53,8 +48,8 @@ const EmailSmsContactWizard: React.FC = () => {
     defaultPECAddress,
     defaultSERCQ_SENDAddress,
     addresses,
+    courtesyAddresses,
   } = useAppSelector(contactsSelectors.selectAddresses);
-  const externalEvent = useAppSelector((state: RootState) => state.contactsState.event);
   const emailContactRef = useRef<{ toggleEdit: () => void; resetForm: () => Promise<void> }>({
     toggleEdit: () => {},
     resetForm: () => Promise.resolve(),
@@ -76,16 +71,6 @@ const EmailSmsContactWizard: React.FC = () => {
   const smsValue = defaultSMSAddress?.value ?? '';
 
   const handleSubmit = (channelType: ChannelType, value: string) => {
-    const source = externalEvent?.source ?? ContactSource.RECAPITI;
-    PFEventStrategyFactory.triggerEvent(
-      channelType === ChannelType.EMAIL
-        ? PFEventsType.SEND_ADD_EMAIL_START
-        : PFEventsType.SEND_ADD_SMS_START,
-      {
-        senderId: 'default',
-        source,
-      }
-    );
     // eslint-disable-next-line functional/immutable-data
     currentAddress.current = { channelType, value };
     // first check if contact already exists
@@ -94,6 +79,7 @@ const EmailSmsContactWizard: React.FC = () => {
       return;
     }
     if (!isDigitalDomicileActive && channelType === ChannelType.EMAIL) {
+      PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SERCQ_SEND_POP_UP_EMAIL);
       setModalOpen(ModalType.INFORMATIVE);
       return;
     }
@@ -104,8 +90,8 @@ const EmailSmsContactWizard: React.FC = () => {
     if (verificationCode) {
       PFEventStrategyFactory.triggerEvent(
         channelType === ChannelType.EMAIL
-          ? PFEventsType.SEND_ADD_EMAIL_UX_CONVERSION
-          : PFEventsType.SEND_ADD_SMS_UX_CONVERSION,
+          ? PFEventsType.SEND_ADD_SERCQ_SEND_ADD_EMAIL_UX_CONVERSION
+          : PFEventsType.SEND_ADD_SERCQ_SEND_ADD_SMS_UX_CONVERSION,
         'default'
       );
     }
@@ -128,15 +114,18 @@ const EmailSmsContactWizard: React.FC = () => {
         // open code modal
         if (!res) {
           // aprire la code modal
+          const eventKey = `SEND_ADD_SERCQ_SEND_${channelType}_OTP`;
+          if (isPFEvent(eventKey)) {
+            PFEventStrategyFactory.triggerEvent(PFEventsType[eventKey]);
+          }
           setModalOpen(ModalType.CODE);
           return;
         }
 
         PFEventStrategyFactory.triggerEvent(
           channelType === ChannelType.EMAIL
-            ? PFEventsType.SEND_ADD_EMAIL_UX_SUCCESS
-            : PFEventsType.SEND_ADD_SMS_UX_SUCCESS,
-          { senderId: 'default', fromSercqSend: true }
+            ? PFEventsType.SEND_ADD_SERCQ_SEND_ADD_EMAIL_UX_SUCCESS
+            : PFEventsType.SEND_ADD_SERCQ_SEND_ADD_SMS_UX_SUCCESS
         );
 
         // contact has already been verified
@@ -160,16 +149,65 @@ const EmailSmsContactWizard: React.FC = () => {
       .catch(() => {});
   };
 
+  const handleTrackValidationEvents = (
+    value: string,
+    channelType: ChannelType,
+    errors?: string
+  ) => {
+    const status = !value ? 'missing' : errors ? 'invalid' : 'valid';
+    const validationKey = `${channelType.toLowerCase()}_validation`;
+    const data = { [validationKey]: status };
+
+    if (!value || errors) {
+      const eventKey = `SEND_ADD_SERCQ_SEND_${channelType}_ERROR`;
+      if (isPFEvent(eventKey)) {
+        PFEventStrategyFactory.triggerEvent(PFEventsType[eventKey], data);
+      }
+    }
+
+    const eventKey = `SEND_ADD_SERCQ_SEND_ADD_${channelType}_START`;
+    if (isPFEvent(eventKey)) {
+      PFEventStrategyFactory.triggerEvent(PFEventsType[eventKey], data);
+    }
+  };
+
+  const handleEditCallback = (editMode: boolean, channelType: ChannelType) => {
+    if (editMode) {
+      const eventKey = `SEND_ADD_SERCQ_SEND_CHANGE_${channelType}`;
+      if (isPFEvent(eventKey)) {
+        PFEventStrategyFactory.triggerEvent(PFEventsType[eventKey]);
+      }
+    }
+  };
+
   const handleCancelCode = async () => {
+    const eventKey = `SEND_ADD_SERCQ_SEND_ADD_${currentAddress.current.channelType}_BACK`;
+    if (isPFEvent(eventKey)) {
+      PFEventStrategyFactory.triggerEvent(PFEventsType[eventKey]);
+    }
+
     setModalOpen(null);
-    if (currentAddress.current.channelType === ChannelType.EMAIL && emailValue) {
-      emailContactRef.current.toggleEdit();
-      await emailContactRef.current.resetForm();
-    } else if (currentAddress.current.channelType === ChannelType.SMS && smsValue) {
+
+    const isEmail = currentAddress.current.channelType === ChannelType.EMAIL;
+    const isSms = currentAddress.current.channelType === ChannelType.SMS;
+
+    if (isEmail) {
+      if (emailValue) {
+        emailContactRef.current.toggleEdit();
+        await emailContactRef.current.resetForm();
+      }
+    } else if (isSms && smsValue) {
       smsContactRef.current.toggleEdit();
       await smsContactRef.current.resetForm();
     }
   };
+
+  useEffect(() => {
+    PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SERCQ_SEND_EMAIL_SMS, {
+      event_type: EventAction.SCREEN_VIEW,
+      contacts: courtesyAddresses,
+    });
+  }, []);
 
   return (
     <Stack useFlexGap data-testid="emailSmsContactWizard">
@@ -214,14 +252,26 @@ const EmailSmsContactWizard: React.FC = () => {
             width: '100%',
           },
         }}
+        onEditCallback={(editMode: boolean) => handleEditCallback(editMode, ChannelType.EMAIL)}
+        beforeValidationCallback={(value: string, errors?: string) =>
+          handleTrackValidationEvents(value, ChannelType.EMAIL, errors)
+        }
       />
       <InformativeDialog
         open={modalOpen === ModalType.INFORMATIVE}
         title={t('courtesy-contacts.info-modal-email-title', { ns: 'recapiti' })}
         subtitle={t('courtesy-contacts.info-modal-email-subtitle', { ns: 'recapiti' })}
         content={t('courtesy-contacts.info-modal-email-content', { ns: 'recapiti' })}
-        onConfirm={() => handleCodeVerification(currentAddress.current.channelType)}
-        onDiscard={() => setModalOpen(null)}
+        onConfirm={() => {
+          PFEventStrategyFactory.triggerEvent(
+            PFEventsType.SEND_ADD_SERCQ_SEND_POP_UP_EMAIL_CONTINUE
+          );
+          handleCodeVerification(currentAddress.current.channelType);
+        }}
+        onDiscard={() => {
+          PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SERCQ_SEND_POP_UP_EMAIL_CANCEL);
+          setModalOpen(null);
+        }}
       />
 
       <Divider sx={{ mt: 3, mb: 3 }} />
@@ -253,6 +303,10 @@ const EmailSmsContactWizard: React.FC = () => {
               width: '100%',
             },
           }}
+          onEditCallback={(editMode: boolean) => handleEditCallback(editMode, ChannelType.SMS)}
+          beforeValidationCallback={(value: string, errors?: string) =>
+            handleTrackValidationEvents(value, ChannelType.SMS, errors)
+          }
         />
       ) : (
         <SmsContactItem
@@ -265,6 +319,9 @@ const EmailSmsContactWizard: React.FC = () => {
               sx: { height: '43px', fontWeight: 700, flexBasis: { xs: 'unset', lg: '25%' } },
             },
           }}
+          beforeValidationCallback={(value: string, errors?: string) =>
+            handleTrackValidationEvents(value, ChannelType.SMS, errors)
+          }
         />
       )}
 
