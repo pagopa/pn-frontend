@@ -45,7 +45,7 @@ const RapidAccessGuard = () => {
   const rapidAccess = useRapidAccessParam();
 
   useEffect(() => {
-    const [param, value] = rapidAccess || [];
+    const { param, value } = rapidAccess || {};
     if (param && value) {
       void exchangeNotification(param, value);
     }
@@ -100,7 +100,7 @@ const RapidAccessGuard = () => {
     };
   }, []);
 
-  if (!rapidAccess || (fetchError && rapidAccess[0] !== AppRouteParams.AAR)) {
+  if (!rapidAccess || (fetchError && rapidAccess.param !== AppRouteParams.AAR)) {
     return <Outlet />;
   }
 

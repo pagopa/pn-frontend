@@ -12,10 +12,9 @@ export const AuthApi = {
   exchangeToken: async ({ spidToken, rapidAccess }: TokenExchangeRequest): Promise<User> => {
     const body: TokenExchangeBody = { authorizationToken: spidToken };
     if (rapidAccess) {
-      const [param, value] = rapidAccess;
       body.source = {
-        type: paramsToSourceType[param],
-        id: value,
+        type: paramsToSourceType[rapidAccess.param],
+        id: rapidAccess.value,
       };
     }
     const response = await authClient.post<User>(AUTH_TOKEN_EXCHANGE(), body);

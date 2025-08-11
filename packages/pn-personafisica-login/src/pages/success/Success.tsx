@@ -22,8 +22,13 @@ const SuccessPage = () => {
     // the includes check is needed to prevent xss attacks
     if (redirectUrl && [PF_URL].includes(redirectUrl) && rapidAccess) {
       storageRapidAccessOps.delete();
+      const queryString = new URLSearchParams();
+      queryString.append(rapidAccess.param, sanitizeString(rapidAccess.value));
+      if (rapidAccess.origin) {
+        queryString.append('origin', sanitizeString(rapidAccess.origin));
+      }
       // eslint-disable-next-line functional/immutable-data
-      redirectUrl += `?${rapidAccess[0]}=${sanitizeString(rapidAccess[1])}`;
+      redirectUrl += `?${queryString.toString()}`;
     }
 
     // the findIndex check is needed to prevent xss attacks

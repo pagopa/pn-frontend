@@ -81,7 +81,7 @@ describe('Routes utility', () => {
   it('getRapidAccessParam returns correct param when present', () => {
     const params = new URLSearchParams({ aar: 'value' });
     const result = getRapidAccessParam(params);
-    expect(result).toEqual([AppRouteParams.AAR, 'value']);
+    expect(result).toEqual({ param: AppRouteParams.AAR, value: 'value' });
   });
 
   it('getRapidAccessParam returns undefined when no params are present', () => {
@@ -93,13 +93,13 @@ describe('Routes utility', () => {
   it('getRapidAccessParam returns correct param when multiple params are present', () => {
     const params = new URLSearchParams({ aar: 'value', retrievalId: '123' });
     const result = getRapidAccessParam(params);
-    expect(result).toEqual([AppRouteParams.AAR, 'value']);
+    expect(result).toEqual({ param: AppRouteParams.AAR, value: 'value' });
   });
 
   it('getRapidAccessParam returns correct param when only retrievalId is present', () => {
     const params = new URLSearchParams({ retrievalId: '123' });
     const result = getRapidAccessParam(params);
-    expect(result).toEqual([AppRouteParams.RETRIEVAL_ID, '123']);
+    expect(result).toEqual({ param: AppRouteParams.RETRIEVAL_ID, value: '123' });
   });
 
   it('getRapidAccessParam returns undefined when param is empty', () => {

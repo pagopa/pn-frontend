@@ -92,6 +92,7 @@ import { SideMenuItem } from './SideMenuItem';
 import { SmartTableData } from './SmartTable';
 import { BasicUser, ConsentUser, basicNoLoggedUserData } from './User';
 import { WithRequired } from './UtilityTypes';
+import { RapidAccess } from './Navigation';
 
 export {
   basicNoLoggedUserData,
@@ -193,4 +194,5 @@ export type {
   NotificationDocumentRequest,
   NotificationDocumentResponse,
   WithRequired,
+  RapidAccess
 };

@@ -1,22 +1,29 @@
-import { AppRouteParams } from '@pagopa-pn/pn-commons';
+import { AppRouteParams, RapidAccess } from '@pagopa-pn/pn-commons';
 
-import { storageRapidAccessOps } from '../storage';
+import { RAPID_ACCESS_STORAGE_KEY, storageRapidAccessOps } from '../storage';
 
 describe('storage utility test', () => {
   it('storage Aar', () => {
-    const aar: [AppRouteParams, string] = [AppRouteParams.AAR, 'test-aar'];
+    const aar: RapidAccess = {
+      param: AppRouteParams.AAR,
+      value: 'test-aar',
+      origin: 'io',
+    };
     storageRapidAccessOps.write(aar);
-    expect(sessionStorage.getItem(AppRouteParams.AAR)).toBe('test-aar');
+    expect(sessionStorage.getItem(RAPID_ACCESS_STORAGE_KEY)).toEqual(JSON.stringify(aar));
     expect(storageRapidAccessOps.read()).toEqual(aar);
     storageRapidAccessOps.delete();
-    expect(sessionStorage.getItem(AppRouteParams.AAR)).toBeNull();
+    expect(sessionStorage.getItem(RAPID_ACCESS_STORAGE_KEY)).toBeNull();
   });
   it('storageRetrievalId test', () => {
-    const retrievalId: [AppRouteParams, string] = [AppRouteParams.RETRIEVAL_ID, 'test-retrieval-id'];
+    const retrievalId: RapidAccess = {
+      param: AppRouteParams.RETRIEVAL_ID,
+      value: 'test-retrieval-id',
+    };
     storageRapidAccessOps.write(retrievalId);
-    expect(sessionStorage.getItem(AppRouteParams.RETRIEVAL_ID)).toBe('test-retrieval-id');
+    expect(sessionStorage.getItem(RAPID_ACCESS_STORAGE_KEY)).toEqual(JSON.stringify(retrievalId));
     expect(storageRapidAccessOps.read()).toEqual(retrievalId);
     storageRapidAccessOps.delete();
-    expect(sessionStorage.getItem(AppRouteParams.RETRIEVAL_ID)).toBeNull();
+    expect(sessionStorage.getItem(RAPID_ACCESS_STORAGE_KEY)).toBeNull();
   });
 });

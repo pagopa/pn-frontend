@@ -1,3 +1,5 @@
+import { RapidAccess } from "../models";
+
 type ParameterValue = string | number | Date;
 
 interface Parameters {
@@ -74,9 +76,9 @@ export enum AppRouteParams {
   RETRIEVAL_ID = 'retrievalId',
 }
 
-export function getRapidAccessParam(params: URLSearchParams): [AppRouteParams, string] | undefined {
+export function getRapidAccessParam(params: URLSearchParams): RapidAccess | undefined {
   const keys = Object.values(AppRouteParams);
   const key = keys.find((k) => params.has(k));
   const param = key ? params.get(key) : undefined;
-  return key && param ? [key, param] : undefined;
+  return key && param ? { param: key, value: param } : undefined;
 }

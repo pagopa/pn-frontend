@@ -1,6 +1,6 @@
 import { matchPath } from 'react-router-dom';
 
-import { AppRouteParams, EventPageType, sanitizeString } from '@pagopa-pn/pn-commons';
+import { EventPageType, RapidAccess, sanitizeString } from '@pagopa-pn/pn-commons';
 
 import {
   APP_STATUS,
@@ -13,13 +13,13 @@ import {
   RECAPITI,
 } from './routes.const';
 
-export function goToLoginPortal(rapidAccess?: [AppRouteParams, string]) {
+export function goToLoginPortal(rapidAccess?: RapidAccess) {
   // eslint-disable-next-line functional/no-let
   let urlToRedirect = `${LOGOUT}`;
   // the startsWith check is to prevent xss attacks
   if (urlToRedirect.startsWith(LOGOUT) && rapidAccess) {
     // eslint-disable-next-line functional/immutable-data
-    urlToRedirect += `?${rapidAccess[0]}=${sanitizeString(rapidAccess[1])}`;
+    urlToRedirect += `?${rapidAccess.param}=${sanitizeString(rapidAccess.value)}`;
   }
   // the indexOf check is to prevent xss attacks
   if (urlToRedirect.startsWith(LOGOUT)) {

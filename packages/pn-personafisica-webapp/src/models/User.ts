@@ -1,4 +1,4 @@
-import { AppRouteParams, BasicUser } from '@pagopa-pn/pn-commons';
+import { AppRouteParams, BasicUser, RapidAccess } from '@pagopa-pn/pn-commons';
 
 export interface User extends BasicUser {
   from_aa: boolean;
@@ -33,7 +33,7 @@ export interface TokenExchangeBody {
 
 export interface TokenExchangeRequest {
   spidToken: string;
-  rapidAccess?: [AppRouteParams, string];
+  rapidAccess?: RapidAccess;
 }
 
 export const paramsToSourceType: Record<AppRouteParams, 'TPP' | 'QR'> = {

@@ -39,19 +39,19 @@ describe('Tests navigation utility methods', () => {
   });
 
   it('goToLoginPortal - aar', () => {
-    goToLoginPortal([AppRouteParams.AAR, 'fake-aar-token']);
+    goToLoginPortal({ param: AppRouteParams.AAR, value: 'fake-aar-token' });
     expect(mockOpenFn).toBeCalledTimes(1);
     expect(mockOpenFn).toBeCalledWith(`${LOGOUT}?aar=fake-aar-token`, '_self');
   });
 
   it('goToLoginPortal - retrievalId', () => {
-    goToLoginPortal([AppRouteParams.RETRIEVAL_ID, 'fake-id']);
+    goToLoginPortal({ param: AppRouteParams.RETRIEVAL_ID, value: 'fake-id' });
     expect(mockOpenFn).toBeCalledTimes(1);
     expect(mockOpenFn).toBeCalledWith(`${LOGOUT}?retrievalId=fake-id`, '_self');
   });
 
   it('goToLoginPortal - aar with malicious code', () => {
-    goToLoginPortal([AppRouteParams.AAR, '<script>malicious code</script>malicious-aar-token']);
+    goToLoginPortal({ param: AppRouteParams.AAR, value: '<script>malicious code</script>malicious-aar-token' });
     expect(mockOpenFn).toBeCalledTimes(1);
     expect(mockOpenFn).toBeCalledWith(`${LOGOUT}?aar=malicious-aar-token`, '_self');
   });

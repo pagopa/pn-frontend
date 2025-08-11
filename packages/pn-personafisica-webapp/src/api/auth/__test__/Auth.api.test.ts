@@ -1,6 +1,6 @@
 import MockAdapter from 'axios-mock-adapter';
 
-import { AppRouteParams } from '@pagopa-pn/pn-commons';
+import { AppRouteParams, RapidAccess } from '@pagopa-pn/pn-commons';
 
 import { userResponse, userResponseWithRetrievalId } from '../../../__mocks__/Auth.mock';
 import { authClient } from '../../apiClients';
@@ -31,7 +31,10 @@ describe('Auth api tests', () => {
 
   it('exchangeToken with rapidAccess', async () => {
     const spidToken = 'mocked-token';
-    const rapidAccess: [AppRouteParams, string] = [AppRouteParams.AAR, 'mocked-qr-code'];
+    const rapidAccess: RapidAccess = {
+      param: AppRouteParams.AAR,
+      value: 'mocked-qr-code',
+    };
     mock
       .onPost(AUTH_TOKEN_EXCHANGE(), {
         authorizationToken: spidToken,
