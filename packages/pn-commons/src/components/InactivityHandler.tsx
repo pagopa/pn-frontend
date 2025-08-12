@@ -30,8 +30,7 @@ const InactivityHandler: React.FC<Props> = ({ inactivityTimer, onTimerExpired, c
     setOpenModal(false);
   };
 
-  const handleActivity = useCallback((e:any) => {
-    console.log('handleActivity', e);
+  const handleActivity = useCallback(() => {
     if (openModal) {
       return;
     }
