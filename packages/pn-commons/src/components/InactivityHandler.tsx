@@ -8,7 +8,7 @@ import PnDialog from './PnDialog/PnDialog';
 import PnDialogActions from './PnDialog/PnDialogActions';
 import PnDialogContent from './PnDialog/PnDialogContent';
 
-const warningTimer = 30 * 1000; // 30 seconds before inactivityTimer user will be warned
+export const warningTimer = 30 * 1000; // 30 seconds before inactivityTimer user will be warned
 
 type Props = {
   /** Inactivity timer (in milliseconds), if 0 the inactivity timer is disabled */

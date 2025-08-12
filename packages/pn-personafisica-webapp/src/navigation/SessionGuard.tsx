@@ -23,8 +23,6 @@ import { getConfiguration } from '../services/configuration.service';
 import { goToLoginPortal } from './navigation.utility';
 import * as routes from './routes.const';
 
-const inactivityTimer = 5 * 60 * 1000;
-
 const SessionGuard = () => {
   const location = useLocation();
   const dispatch = useAppDispatch();
@@ -32,7 +30,7 @@ const SessionGuard = () => {
   const { loading } = useAppSelector((state: RootState) => state.userState);
   const { sessionToken, exp } = useAppSelector((state: RootState) => state.userState.user);
   const navigate = useNavigate();
-  const { WORK_IN_PROGRESS, IS_INACTIVITY_HANDLER_ENABLED } = getConfiguration();
+  const { WORK_IN_PROGRESS, INACTIVITY_HANDLER_MINUTES } = getConfiguration();
   const sessionCheck = useSessionCheck(200, () => sessionCheckCallback());
   const { t } = useTranslation(['common']);
   const { hasSpecificStatusError } = useErrors();
@@ -114,8 +112,11 @@ const SessionGuard = () => {
       ) : (
         <>
           <SessionModal {...modalData} handleClose={() => exit()} initTimeout />
-          {IS_INACTIVITY_HANDLER_ENABLED && (
-            <InactivityHandler inactivityTimer={inactivityTimer} onTimerExpired={() => exit()} />
+          {INACTIVITY_HANDLER_MINUTES && (
+            <InactivityHandler
+              inactivityTimer={INACTIVITY_HANDLER_MINUTES * 60 * 1000}
+              onTimerExpired={() => exit()}
+            />
           )}
           <Outlet />
         </>
