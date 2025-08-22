@@ -20,13 +20,8 @@ const TagIndicator: React.FC<{
   visibleItems: number;
   dataTestId: string;
   ariaLabel?: string;
-}> = ({ arrayChildren, visibleItems, dataTestId, ariaLabel }) => (
-  <Tag
-    value={`+${arrayChildren.length - visibleItems}`}
-    aria-hidden={!!ariaLabel}
-    aria-label={ariaLabel || undefined}
-    data-testid={dataTestId}
-  />
+}> = ({ arrayChildren, visibleItems, dataTestId }) => (
+  <Tag value={`+${arrayChildren.length - visibleItems}`} data-testid={dataTestId} />
 );
 
 const CustomTagGroup: React.FC<CustomTagGroupProps> = ({
@@ -46,12 +41,8 @@ const CustomTagGroup: React.FC<CustomTagGroupProps> = ({
       {isOverflow && (
         <Box>
           {!disableTooltip && (
-            <Tooltip
-              title={<>{arrayChildren.slice(visibleItems).map((c) => c)}</>}
-              arrow
-              describeChild
-            >
-              <Button sx={{ m: 0, p: 0 }}>
+            <Tooltip title={arrayChildren.slice(visibleItems).map((c) => c)} arrow describeChild>
+              <Button sx={{ width: 'fit-content', p: 0, m: 0, height: 'auto' }}>
                 <TagIndicator
                   arrayChildren={arrayChildren}
                   visibleItems={visibleItems as number}
