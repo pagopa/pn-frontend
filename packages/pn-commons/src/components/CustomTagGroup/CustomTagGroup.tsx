@@ -1,9 +1,7 @@
 import React from 'react';
 
-import { Box, BoxProps } from '@mui/material';
+import { Box, BoxProps, Button, Tooltip } from '@mui/material';
 import { Tag } from '@pagopa/mui-italia';
-
-import CustomTooltip from '../CustomTooltip';
 
 interface CustomTagGroupProps {
   /** how many items will be visible */
@@ -22,21 +20,18 @@ const TagIndicator: React.FC<{
   visibleItems: number;
   dataTestId: string;
   ariaLabel?: string;
-}> = ({ boxProps, arrayChildren, visibleItems, dataTestId, ariaLabel }) => (
-  <Box
-    {...boxProps}
-    sx={{ cursor: 'pointer', display: 'inline-block' }}
-    data-testid={dataTestId}
+}> = ({ arrayChildren, visibleItems, dataTestId, ariaLabel }) => (
+  <Tag
+    value={`+${arrayChildren.length - visibleItems}`}
+    aria-hidden={!!ariaLabel}
     aria-label={ariaLabel || undefined}
-  >
-    <Tag value={`+${arrayChildren.length - visibleItems}`} aria-hidden={!!ariaLabel} />
-  </Box>
+    data-testid={dataTestId}
+  />
 );
 
 const CustomTagGroup: React.FC<CustomTagGroupProps> = ({
   visibleItems,
   disableTooltip = false,
-  onOpen,
   children,
 }) => {
   const arrayChildren = React.Children.count(children)
@@ -51,24 +46,19 @@ const CustomTagGroup: React.FC<CustomTagGroupProps> = ({
       {isOverflow && (
         <Box>
           {!disableTooltip && (
-            <CustomTooltip
-              openOnClick={false}
-              onOpen={onOpen}
-              tooltipContent={<>{arrayChildren.slice(visibleItems).map((c) => c)}</>}
+            <Tooltip
+              title={<>{arrayChildren.slice(visibleItems).map((c) => c)}</>}
+              arrow
+              describeChild
             >
-              <Box sx={{ width: 'fit-content' }}>
+              <Button sx={{ m: 0, p: 0 }}>
                 <TagIndicator
                   arrayChildren={arrayChildren}
                   visibleItems={visibleItems as number}
                   dataTestId="custom-tooltip-indicator"
-                  ariaLabel={arrayChildren
-                    .slice(visibleItems)
-                    .map((c) => c.props?.children?.props?.value) // <Box><Tag value={v}></Tag></Box>
-                    .filter(Boolean)
-                    .join(',')}
                 />
-              </Box>
-            </CustomTooltip>
+              </Button>
+            </Tooltip>
           )}
           {disableTooltip && (
             <TagIndicator
