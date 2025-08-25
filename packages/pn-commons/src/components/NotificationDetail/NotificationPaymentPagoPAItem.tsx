@@ -100,7 +100,14 @@ const SkeletonCard = () => {
         </Box>
         <Skeleton variant="rounded" width="137px" height="15px" sx={{ borderRadius: '8px' }} />
       </Box>
-      <Box display="flex" flexDirection="row" alignItems="center" gap={1}>
+      <Box
+        display="flex"
+        flexDirection="row"
+        alignItems="center"
+        justifyContent={isMobile ? 'space-between' : 'flex-end'}
+        gap={1}
+        width={isMobile ? '100%' : 'auto'}
+      >
         <Box display="flex" flexDirection="column" gap={1}>
           <Skeleton variant="rounded" width="79px" height="23px" sx={{ borderRadius: '8px' }} />
           <Skeleton variant="rounded" width="120px" height="15px" sx={{ borderRadius: '8px' }} />
@@ -164,7 +171,8 @@ const PagoPAAmountLabel = ({
 }) => {
   const isMobile = useIsMobile();
   const align = isMobile || forceLeftAlign ? 'flex-start' : 'flex-end';
-  return (
+
+  return pagoPAItem.amount !== undefined ? (
     <Box mr={1} display="flex" flexDirection="column" alignItems={align} mb={isMobile ? 1 : 0}>
       <Typography
         variant="body2"
@@ -173,7 +181,7 @@ const PagoPAAmountLabel = ({
         color="primary.main"
         data-testid="payment-amount"
       >
-        {formatEurocentToCurrency(pagoPAItem.amount || 0)}
+        {formatEurocentToCurrency(pagoPAItem.amount)}
       </Typography>
       {pagoPAItem.applyCost && (
         <Typography
@@ -187,7 +195,7 @@ const PagoPAAmountLabel = ({
         </Typography>
       )}
     </Box>
-  );
+  ) : null;
 };
 
 const getErrorMessage = (pagoPAItem: PagoPAPaymentFullDetails) => {

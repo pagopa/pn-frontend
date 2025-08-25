@@ -69,7 +69,7 @@ describe('NotificationPaymentPagoPAItem Component', () => {
         isCancelled={false}
       />
     );
-    const chip = getByTestId('statusChip-detail.payment.status.succeded');
+    const chip = getByTestId('statusChip-detail.payment.status.succeeded');
     const radio = queryByTestId('radio-button');
     expect(radio).not.toBeInTheDocument();
     expect(chip).toBeInTheDocument();
