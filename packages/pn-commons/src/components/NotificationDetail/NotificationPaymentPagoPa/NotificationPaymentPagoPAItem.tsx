@@ -60,7 +60,7 @@ type Props = {
   handleTrackEventDetailPaymentError?: (event: EventPaymentRecipientType, param?: object) => void;
 };
 
-const SkeletonCard = () => {
+const SkeletonCard: React.FC = () => {
   const isMobile = useIsMobile();
   return (
     <Box
