@@ -86,7 +86,14 @@ const SkeletonCard = () => {
         </Box>
         <Skeleton variant="rounded" width="137px" height="15px" sx={{ borderRadius: '8px' }} />
       </Box>
-      <Box display="flex" flexDirection="row" alignItems="center" gap={1}>
+      <Box
+        display="flex"
+        flexDirection="row"
+        alignItems="center"
+        justifyContent={isMobile ? 'space-between' : 'flex-end'}
+        gap={1}
+        width={isMobile ? '100%' : 'auto'}
+      >
         <Box display="flex" flexDirection="column" gap={1}>
           <Skeleton variant="rounded" width="79px" height="23px" sx={{ borderRadius: '8px' }} />
           <Skeleton variant="rounded" width="120px" height="15px" sx={{ borderRadius: '8px' }} />
