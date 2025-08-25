@@ -1,16 +1,16 @@
 import { vi } from 'vitest';
 
-import { paymentInfo } from '../../../__mocks__/ExternalRegistry.mock';
-import { notificationDTO } from '../../../__mocks__/NotificationDetail.mock';
+import { paymentInfo } from '../../../../__mocks__/ExternalRegistry.mock';
+import { notificationDTO } from '../../../../__mocks__/NotificationDetail.mock';
 import {
   PagoPAPaymentFullDetails,
   PaymentDetails,
   PaymentInfoDetail,
   PaymentStatus,
-} from '../../../models';
-import { fireEvent, getById, queryById, render, waitFor } from '../../../test-utils';
-import { formatEurocentToCurrency, populatePaymentsPagoPaF24 } from '../../../utility';
-import NotificationPaymentPagoPAItem from '../NotificationPaymentPagoPAItem';
+} from '../../../../models';
+import { fireEvent, getById, queryById, render, waitFor } from '../../../../test-utils';
+import { formatEurocentToCurrency, populatePaymentsPagoPaF24 } from '../../../../utility';
+import NotificationPaymentPagoPAItem from '../../NotificationPaymentPagoPa/NotificationPaymentPagoPAItem';
 
 describe('NotificationPaymentPagoPAItem Component', () => {
   const pagoPAItems: PaymentDetails[] = populatePaymentsPagoPaF24(

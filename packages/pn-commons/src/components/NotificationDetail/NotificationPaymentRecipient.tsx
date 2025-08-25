@@ -20,7 +20,7 @@ import { getLocalizedOrDefaultLabel } from '../../utility/localization.utility';
 import { getPaymentCache, setPaymentCache } from '../../utility/paymentCaching.utility';
 import CustomPagination from '../Pagination/CustomPagination';
 import NotificationPaymentF24Item from './NotificationPaymentF24Item';
-import NotificationPaymentPagoPAItem from './NotificationPaymentPagoPAItem';
+import NotificationPaymentPagoPAItem from './NotificationPaymentPagoPa/NotificationPaymentPagoPAItem';
 import NotificationPaymentTitle from './NotificationPaymentTitle';
 
 const FAQ_NOTIFICATION_CANCELLED_REFUND = '/faq#notifica-pagata-rimborso';
@@ -216,7 +216,7 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
               value={selectedPayment?.pagoPa}
               onChange={handleClick}
             >
-              {paginatedPayments.map((payment, index) =>
+              {paginatedPayments.map((payment) =>
                 payment.pagoPa ? (
                   <Box
                     mb={2}
@@ -232,7 +232,6 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
                       isSinglePayment={isSinglePayment}
                       isCancelled={isCancelled}
                       handleTrackEventDetailPaymentError={handleTrackEventFn}
-                      slotProps={{ radio: { id: `radioPayment_${index}` } }}
                     />
                   </Box>
                 ) : null
