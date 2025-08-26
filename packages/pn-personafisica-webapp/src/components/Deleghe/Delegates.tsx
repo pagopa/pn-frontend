@@ -114,7 +114,8 @@ const Delegates = () => {
         title={t('deleghe.show_code_title', { name: showCodeModal.name })}
         subtitle={t('deleghe.show_code_subtitle')}
         open={showCodeModal.open}
-        initialValues={showCodeModal.code.split('')}
+        codeLength={5}
+        initialValue={showCodeModal.code}
         cancelCallback={handleCloseShowCodeModal}
         cancelLabel={t('deleghe.close')}
         codeSectionTitle={t('deleghe.verification_code')}
