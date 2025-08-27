@@ -1,5 +1,5 @@
 /* eslint-disable functional/immutable-data */
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import { Button, DialogContentText, DialogTitle } from '@mui/material';
 
