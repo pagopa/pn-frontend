@@ -23,7 +23,6 @@ const events = ['mousemove', 'keydown', 'scroll', 'click', 'touchstart'];
 const InactivityHandler: React.FC<Props> = ({ inactivityTimer, onTimerExpired, children }) => {
   const [openModal, setOpenModal] = useState(false);
   const lastActivityRef = useRef(Date.now());
-  const intervalRef = useRef(0);
 
   const confirmModal = () => {
     lastActivityRef.current = Date.now();
@@ -42,10 +41,7 @@ const InactivityHandler: React.FC<Props> = ({ inactivityTimer, onTimerExpired, c
       return;
     }
 
-    if (intervalRef.current) {
-      clearInterval(intervalRef.current);
-    }
-    intervalRef.current = window.setInterval(() => {
+    const interval = window.setInterval(() => {
       const diffMs = Date.now() - lastActivityRef.current;
       if (inactivityTimer > warningTimer && diffMs >= inactivityTimer - warningTimer) {
         setOpenModal(true);
@@ -60,7 +56,7 @@ const InactivityHandler: React.FC<Props> = ({ inactivityTimer, onTimerExpired, c
     });
 
     return () => {
-      clearInterval(intervalRef.current);
+      clearInterval(interval);
       events.forEach((event) => {
         window.removeEventListener(event, handleActivity);
       });
