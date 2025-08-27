@@ -29,12 +29,12 @@ const InactivityHandler: React.FC<Props> = ({ inactivityTimer, onTimerExpired, c
     setOpenModal(false);
   };
 
-  const handleActivity = useCallback(() => {
+  const handleActivity = (() => {
     if (openModal) {
       return;
     }
     lastActivityRef.current = Date.now();
-  }, [openModal]);
+  });
 
   useEffect(() => {
     if (inactivityTimer === 0) {
