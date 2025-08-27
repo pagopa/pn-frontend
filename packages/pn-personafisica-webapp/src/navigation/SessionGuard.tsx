@@ -49,8 +49,8 @@ const SessionGuard = () => {
   const performExchangeToken = async (token: TokenExchangeRequest) => {
     AppResponsePublisher.error.subscribe('exchangeToken', manageUnforbiddenError);
     try {
-      await dispatch(exchangeToken(token)).unwrap();
-      sessionCheck(exp);
+      const user = await dispatch(exchangeToken(token)).unwrap();
+      sessionCheck(user.exp);
     } catch (error) {
       const adaptedError = adaptedTokenExchangeError(error);
       if (adaptedError.response.status === 451 || WORK_IN_PROGRESS) {
