@@ -44,6 +44,7 @@ type Props = {
       content?: ReactNode;
       buttonText: string;
       onClick: () => void;
+      onFeedbackShow?: () => void;
     };
   };
 };
@@ -93,6 +94,9 @@ const PnWizard: React.FC<Props> = ({
 
   if (activeStep >= childrens.length && slotsProps?.feedback) {
     const feedback = slotsProps?.feedback;
+
+    feedback.onFeedbackShow?.();
+
     return (
       <Box
         sx={{ minHeight: '350px', height: '100%', display: 'flex' }}
