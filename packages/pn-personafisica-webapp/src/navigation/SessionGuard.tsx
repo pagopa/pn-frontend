@@ -15,7 +15,7 @@ import {
 
 import { useRapidAccessParam } from '../hooks/useRapidAccessParam';
 import { TokenExchangeRequest } from '../models/User';
-import { exchangeToken } from '../redux/auth/actions';
+import { apiLogout, exchangeToken } from '../redux/auth/actions';
 import { resetState } from '../redux/auth/reducers';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { RootState } from '../redux/store';
@@ -95,11 +95,15 @@ const SessionGuard = () => {
 
   useEffect(() => {
     if (hasAnyForbiddenError) {
-      exit();
+      void exit();
     }
   }, [hasAnyForbiddenError]);
 
-  const exit = () => {
+  const exit = async () => {
+    if (sessionToken) {
+      await dispatch(apiLogout(sessionToken));
+    }
+
     sessionStorage.clear();
     dispatch(resetState());
     goToLoginPortal();
