@@ -57,6 +57,7 @@ const ConfirmationModal: React.FC<Props> = ({
           variant="contained"
           data-testid="confirmButton"
           {...slotsProps?.confirmButton}
+          autoFocus={!slotsProps?.closeButton?.autoFocus}
         />
       </PnDialogActions>
     </PnDialog>

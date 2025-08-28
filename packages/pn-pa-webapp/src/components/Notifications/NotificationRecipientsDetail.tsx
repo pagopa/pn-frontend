@@ -52,7 +52,10 @@ const NotificationRecipientsDetail: React.FC<Props> = ({ recipients, iun }) => {
                 </Box>
               </Grid>
               <Grid item xs="auto">
-                <CopyToClipboardButton value={`${recipient.denomination} - ${recipient.taxId}`} />
+                <CopyToClipboardButton
+                  value={`${recipient.denomination} - ${recipient.taxId}`}
+                  autoFocus
+                />
               </Grid>
             </Grid>
           ))}

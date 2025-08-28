@@ -37,7 +37,7 @@ const CancelVerificationModal: React.FC<Props> = ({ open, senderId = 'default', 
         <Button onClick={handleClose} variant="outlined">
           {t('button.annulla')}
         </Button>
-        <Button onClick={handleConfirm} variant="contained">
+        <Button onClick={handleConfirm} variant="contained" autoFocus>
           {t('button.conferma')}
         </Button>
       </PnDialogActions>

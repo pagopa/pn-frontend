@@ -47,6 +47,7 @@ const ApiKeyModal = ({
         data-testid="close-modal-button"
         variant={closeButtonVariant}
         onClick={closeModalHandler}
+        autoFocus={!actionButtonLabel}
       >
         {closeButtonLabel}
       </Button>
@@ -58,6 +59,7 @@ const ApiKeyModal = ({
           onClick={actionHandler}
           color={hasDeleteButton ? 'error' : 'primary'}
           sx={hasDeleteButton ? { color: 'white' } : null}
+          autoFocus
         >
           {buttonIcon}
           {actionButtonLabel}

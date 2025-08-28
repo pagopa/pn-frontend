@@ -29,7 +29,7 @@ const DeleteDialog: React.FC<DialogProps> = ({
   const { t } = useTranslation(['common']);
 
   const deleteModalActions = blockDelete ? (
-    <Button id="buttonClose" onClick={handleModalClose} variant="contained">
+    <Button id="buttonClose" onClick={handleModalClose} variant="contained" autoFocus>
       {t('button.understand')}
     </Button>
   ) : (
@@ -48,6 +48,7 @@ const DeleteDialog: React.FC<DialogProps> = ({
         key="confirm"
         onClick={confirmHandler}
         variant="contained"
+        autoFocus
         {...slotsProps?.primaryButton}
       >
         {slotsProps?.primaryButton?.label ?? t('button.conferma')}

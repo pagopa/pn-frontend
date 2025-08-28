@@ -75,7 +75,14 @@ const SessionModal: React.FC<Props> = ({
       </PnDialogContent>
       {onConfirm && (
         <PnDialogActions>
-          <Button sx={{ width: '100%' }} color="primary" variant="contained" data-testid='buttonOfSessionModal' onClick={onConfirm}>
+          <Button
+            sx={{ width: '100%' }}
+            color="primary"
+            variant="contained"
+            data-testid="buttonOfSessionModal"
+            onClick={onConfirm}
+            autoFocus
+          >
             {onConfirmLabel}
           </Button>
         </PnDialogActions>

@@ -322,7 +322,12 @@ const App = () => {
             <Button id="cancelButton" variant="outlined" onClick={() => setOpenModal(false)}>
               {t('button.annulla')}
             </Button>
-            <Button data-testid="confirm-button" variant="contained" onClick={performLogout}>
+            <Button
+              data-testid="confirm-button"
+              variant="contained"
+              onClick={performLogout}
+              autoFocus
+            >
               {t('header.logout')}
             </Button>
           </PnDialogActions>

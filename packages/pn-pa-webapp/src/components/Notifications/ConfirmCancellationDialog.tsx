@@ -56,6 +56,7 @@ const ConfirmCancellationDialog: React.FC<Props> = ({ showModal, onClose, onConf
                   data-testid="checkbox"
                   checked={checked}
                   onChange={handleChange}
+                  autoFocus
                 ></Checkbox>
               }
               label={t('detail.cancel-notification-modal.i-understand')}
@@ -73,6 +74,7 @@ const ConfirmCancellationDialog: React.FC<Props> = ({ showModal, onClose, onConf
           disabled={payment ? !checked : false}
           variant="contained"
           data-testid="modalCloseAndProceedBtnId"
+          autoFocus={!payment}
         >
           {t('detail.cancel-notification')}
         </Button>

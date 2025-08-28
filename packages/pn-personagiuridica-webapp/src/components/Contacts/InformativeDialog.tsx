@@ -54,6 +54,7 @@ const InformativeDialog: React.FC<DialogProps> = ({
           onClick={onConfirm}
           variant="contained"
           data-testid="understandButton"
+          autoFocus
         >
           {t('button.understand')}
         </Button>

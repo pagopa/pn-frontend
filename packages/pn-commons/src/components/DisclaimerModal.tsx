@@ -60,6 +60,7 @@ const DisclaimerModal: React.FC<Props> = ({
                 />
               }
               label={checkboxLabel}
+              autoFocus
             />
           </Box>
         )}

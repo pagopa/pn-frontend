@@ -174,6 +174,7 @@ const CodeModal = forwardRef<ModalHandle, Props>(
                 sx={{ mt: 1.5 }}
                 value={initialValues.join('')}
                 tooltipTitle={getLocalizedOrDefaultLabel('delegations', 'deleghe.code_copied')}
+                autoFocus
               />
             )}
           </Box>
@@ -203,6 +204,7 @@ const CodeModal = forwardRef<ModalHandle, Props>(
               color={internalHasError ? 'error' : 'primary'}
               data-testid="codeConfirmButton"
               onClick={confirmHandler}
+              autoFocus={!isReadOnly}
             >
               {confirmLabel}
             </Button>

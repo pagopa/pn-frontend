@@ -260,6 +260,7 @@ const AcceptDelegationModal: React.FC<Props> = ({
           data-testid="groupConfirmButton"
           onClick={() => handleConfirm(code, groupForm.value)}
           disabled={groupForm.value.length === 0 && associateGroup}
+          autoFocus
         >
           {t('button.conferma', { ns: 'common' })}
         </Button>

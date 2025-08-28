@@ -67,6 +67,7 @@ const InactivityHandler: React.FC<Props> = ({ inactivityTimer, onTimerExpired, c
             variant="outlined"
             data-testid="inactivity-button"
             onClick={resetTimer}
+            autoFocus
           >
             {getLocalizedOrDefaultLabel('common', 'inactivity.action')}
           </Button>

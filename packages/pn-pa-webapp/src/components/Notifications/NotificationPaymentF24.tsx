@@ -42,7 +42,12 @@ const NotificationPaymentF24: React.FC<Props> = ({ iun, payments }) => {
           ))}
         </PnDialogContent>
         <PnDialogActions>
-          <Button variant="outlined" onClick={() => setOpen(false)} data-testid="close-dialog">
+          <Button
+            variant="outlined"
+            onClick={() => setOpen(false)}
+            data-testid="close-dialog"
+            autoFocus
+          >
             {t('button.close', { ns: 'common' })}
           </Button>
         </PnDialogActions>

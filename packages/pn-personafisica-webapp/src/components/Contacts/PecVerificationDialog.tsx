@@ -28,7 +28,7 @@ const PecVerificationDialog: React.FC<Props> = ({ open = false, handleConfirm })
         </DialogContentText>
       </PnDialogContent>
       <PnDialogActions>
-        <Button id="confirmDialog" onClick={handleConfirm} variant="contained">
+        <Button id="confirmDialog" onClick={handleConfirm} variant="contained" autoFocus>
           {t('button.conferma')}
         </Button>
       </PnDialogActions>
