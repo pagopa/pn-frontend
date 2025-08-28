@@ -1,0 +1,17 @@
+{
+  "applinks": {
+    "details": [
+      {
+        "appIDs": [
+          "M2X5YQ4BJ7.it.pagopa.app.io"
+        ],
+        "components": [
+          {
+            "/": "/io/*",
+            "caseSensitive": false
+          }
+        ]
+      }
+    ]
+  }
+}

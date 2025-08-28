@@ -3,6 +3,44 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.17.1](https://github.com/pagopa/pn-frontend/compare/v2.17.1-RC.2...v2.17.1) (2025-08-08)
+
+**Note:** Version bump only for package @pagopa-pn/pn-personagiuridica-webapp
+
+
+
+
+
+# [2.17.0](https://github.com/pagopa/pn-frontend/compare/v2.17.0-RC.2...v2.17.0) (2025-07-24)
+
+**Note:** Version bump only for package @pagopa-pn/pn-personagiuridica-webapp
+
+
+
+
+
+# [2.17.0-RC.2](https://github.com/pagopa/pn-frontend/compare/v2.17.0-RC.1...v2.17.0-RC.2) (2025-07-21)
+
+
+### Bug Fixes
+
+* **pn-15729:** add InformativeDialog for email during SERCQ activation wizard (PF and PG) ([#1599](https://github.com/pagopa/pn-frontend/issues/1599)) ([14beb5c](https://github.com/pagopa/pn-frontend/commit/14beb5cf8b3f1c94cde24673087953290c233b25))
+
+
+
+
+
+# [2.17.0-RC.1](https://github.com/pagopa/pn-frontend/compare/v2.17.0-RC.0...v2.17.0-RC.1) (2025-07-16)
+
+
+### Bug Fixes
+
+* **pn-15747:** fixed wrong copy when a courtesy contact linked to a sender is deleted ([#1600](https://github.com/pagopa/pn-frontend/issues/1600)) ([bbff98e](https://github.com/pagopa/pn-frontend/commit/bbff98e0064f093dcba6066a45d39944cd12505f))
+
+
+
+
+
 ## [2.16.2](https://github.com/pagopa/pn-frontend/compare/v2.16.2-RC.3...v2.16.2) (2025-07-16)
 
 **Note:** Version bump only for package @pagopa-pn/pn-personagiuridica-webapp
@@ -60,6 +98,25 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 * **pn-15400:** add recap step for SERCQ activation wizard ([#1586](https://github.com/pagopa/pn-frontend/issues/1586)) ([c18c70e](https://github.com/pagopa/pn-frontend/commit/c18c70e3d8a7cc867786e017e3c4bb9d3df5c5c6))
 * **PN-15403:** remove DATAPRIVACY_SERCQ  ([#1587](https://github.com/pagopa/pn-frontend/issues/1587)) ([4892cce](https://github.com/pagopa/pn-frontend/commit/4892cce13671b00794868488894212c9e92c0e75))
 
+
+
+
+
+
+# [2.17.0-RC.0](https://github.com/pagopa/pn-frontend/compare/v2.16.1...v2.17.0-RC.0) (2025-07-09)
+
+
+### Bug Fixes
+
+* **PN-15052:** resolve bug not updating content after switching lang on PrivacyPolicy and ToS pages (PA, PF, PG) ([#1564](https://github.com/pagopa/pn-frontend/issues/1564)) ([2f4a494](https://github.com/pagopa/pn-frontend/commit/2f4a4942bcf8d7c6a95b7ad8731b236c05148ca2))
+* **pn-15077:** fix existing tests and add new tests for sending errors to Zendesk ([#1561](https://github.com/pagopa/pn-frontend/issues/1561)) ([e4db5c1](https://github.com/pagopa/pn-frontend/commit/e4db5c10096504df65e3d8434f6e5217ddb71797))
+* **PN-15123:** restored special contacts for courtesy contacts ([#1570](https://github.com/pagopa/pn-frontend/issues/1570)) ([631bf8b](https://github.com/pagopa/pn-frontend/commit/631bf8bdf3a40095138722d68a583eb2b3ad68f5))
+* **PN-15509:** add TPP available type in courtesy message ([#1583](https://github.com/pagopa/pn-frontend/issues/1583)) ([61fef6a](https://github.com/pagopa/pn-frontend/commit/61fef6a082e31b35e1f3805742c3f260c84b00bf))
+
+
+### Features
+
+* **PN-15326:** PG call api logout before redirect ([#1577](https://github.com/pagopa/pn-frontend/issues/1577)) ([c6fc68e](https://github.com/pagopa/pn-frontend/commit/c6fc68e6a7f702e03c9d47541cb17019237d606a))
 
 
 

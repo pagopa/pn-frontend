@@ -3,7 +3,7 @@ import { Validator } from '@pagopa-pn/pn-validator';
 
 export interface PgConfiguration {
   API_BASE_URL: string;
-  IS_INACTIVITY_HANDLER_ENABLED: boolean;
+  INACTIVITY_HANDLER_MINUTES: number;
   MIXPANEL_TOKEN: string;
   ONE_TRUST_DRAFT_MODE: boolean;
   ONE_TRUST_PP: string;
@@ -29,7 +29,7 @@ class PgConfigurationValidator extends Validator<PgConfiguration> {
   constructor() {
     super();
     this.ruleFor('API_BASE_URL').isString().isRequired().matches(dataRegex.htmlPageUrl);
-    this.ruleFor('IS_INACTIVITY_HANDLER_ENABLED').isBoolean();
+    this.ruleFor('INACTIVITY_HANDLER_MINUTES').isNumber().isRequired();
     this.ruleFor('MIXPANEL_TOKEN').isString().isRequired();
     this.ruleFor('ONE_TRUST_DRAFT_MODE').isBoolean();
     this.ruleFor('ONE_TRUST_PP').isString().isRequired().matches(dataRegex.lettersNumbersAndDashs);

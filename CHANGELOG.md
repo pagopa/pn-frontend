@@ -3,6 +3,125 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.17.1](https://github.com/pagopa/pn-frontend/compare/v2.17.1-RC.2...v2.17.1) (2025-08-08)
+
+**Note:** Version bump only for package pn-frontend
+
+
+
+
+
+## [2.17.1-RC.2](https://github.com/pagopa/pn-frontend/compare/v2.17.1-RC.1...v2.17.1-RC.2) (2025-08-07)
+
+
+### Bug Fixes
+
+* **PN-15402:** add missing mixpanel start event on SMS edit ([#1617](https://github.com/pagopa/pn-frontend/issues/1617)) ([3377538](https://github.com/pagopa/pn-frontend/commit/3377538f600cdf9e9d2988ac0df9e0e218c27994))
+
+
+
+
+
+## [2.17.1-RC.1](https://github.com/pagopa/pn-frontend/compare/v2.17.1-RC.0...v2.17.1-RC.1) (2025-08-07)
+
+
+### Bug Fixes
+
+* **PN-15402:** add email/sms popup events and fix some sercq handling events ([#1616](https://github.com/pagopa/pn-frontend/issues/1616)) ([6533202](https://github.com/pagopa/pn-frontend/commit/6533202b646465340b33a97cec082c5f64d5df1e))
+
+
+
+
+
+## [2.17.1-RC.0](https://github.com/pagopa/pn-frontend/compare/v2.17.0...v2.17.1-RC.0) (2025-07-31)
+
+
+### Bug Fixes
+
+* **PN-15402:** track new events of SERCQ ([#1595](https://github.com/pagopa/pn-frontend/issues/1595)) ([5f3d540](https://github.com/pagopa/pn-frontend/commit/5f3d540eb35d614dd119fdb11d5d820d271347e9))
+
+
+
+
+
+# [2.17.0](https://github.com/pagopa/pn-frontend/compare/v2.17.0-RC.2...v2.17.0) (2025-07-24)
+
+**Note:** Version bump only for package pn-frontend
+
+
+
+
+
+# [2.17.0-RC.2](https://github.com/pagopa/pn-frontend/compare/v2.17.0-RC.1...v2.17.0-RC.2) (2025-07-21)
+
+
+### Bug Fixes
+
+* **pn-15729:** add InformativeDialog for email during SERCQ activation wizard (PF and PG) ([#1599](https://github.com/pagopa/pn-frontend/issues/1599)) ([14beb5c](https://github.com/pagopa/pn-frontend/commit/14beb5cf8b3f1c94cde24673087953290c233b25))
+
+
+
+## [2.16.2](https://github.com/pagopa/pn-frontend/compare/v2.16.2-RC.3...v2.16.2) (2025-07-16)
+
+
+
+## [2.16.2-RC.3](https://github.com/pagopa/pn-frontend/compare/v2.16.2-RC.2...v2.16.2-RC.3) (2025-07-15)
+
+
+### Bug Fixes
+
+* update localization for special contacts ([#1598](https://github.com/pagopa/pn-frontend/issues/1598)) ([78046f7](https://github.com/pagopa/pn-frontend/commit/78046f760f76dea249752cb9873809f97fe4c5b4))
+
+
+
+## [2.16.2-RC.2](https://github.com/pagopa/pn-frontend/compare/v2.16.2-RC.1...v2.16.2-RC.2) (2025-07-15)
+
+
+
+## [2.16.2-RC.1](https://github.com/pagopa/pn-frontend/compare/v2.16.2-RC.0...v2.16.2-RC.1) (2025-07-15)
+
+
+### Bug Fixes
+
+* **PN-15722:** restore localization for dod activation ([#1594](https://github.com/pagopa/pn-frontend/issues/1594)) ([b1da581](https://github.com/pagopa/pn-frontend/commit/b1da581961ce93d9ace515f80319d2370c9d54b8))
+
+
+
+## [2.16.2-RC.0](https://github.com/pagopa/pn-frontend/compare/v2.17.0-RC.0...v2.16.2-RC.0) (2025-07-14)
+
+
+### Bug Fixes
+
+* fix copy SERCQ (PG and PF) ([#1591](https://github.com/pagopa/pn-frontend/issues/1591)) ([c747fbf](https://github.com/pagopa/pn-frontend/commit/c747fbfddd7a2cc2851e2bd53d70fd1031f27978))
+* **pn-15396:** update IO step in SERCQ activation ([#1575](https://github.com/pagopa/pn-frontend/issues/1575)) ([ea6a2c9](https://github.com/pagopa/pn-frontend/commit/ea6a2c9a5b7b4c3c4b94c214629871da684a2c36))
+* **pn-15401:** update email and sms removal flow ([#1579](https://github.com/pagopa/pn-frontend/issues/1579)) ([9245bdd](https://github.com/pagopa/pn-frontend/commit/9245bdd1657b0e76a0a2742e2d5921941eef7484))
+* **pn-15404:** update PEC activation flow ([#1582](https://github.com/pagopa/pn-frontend/issues/1582)) ([4459554](https://github.com/pagopa/pn-frontend/commit/44595547569a9e4ed397a2ebc75edfef79bb4094))
+
+
+### Features
+
+* **pn-15395:** Add Initial page to SERCQ activation/transfer wizard ([#1571](https://github.com/pagopa/pn-frontend/issues/1571)) ([819154a](https://github.com/pagopa/pn-frontend/commit/819154ad73798ede75d2fe635b0217770d7f04f2))
+* **pn-15398:** Rework on SERCQ wizard navigation buttons ([#1573](https://github.com/pagopa/pn-frontend/issues/1573)) ([6e929bf](https://github.com/pagopa/pn-frontend/commit/6e929bfd3f3278a326adefdcd03a9c0d43617b97))
+* **pn-15399:** add email/sms confirmation modal and change feedback step ([#1576](https://github.com/pagopa/pn-frontend/issues/1576)) ([cc4e60e](https://github.com/pagopa/pn-frontend/commit/cc4e60e20c4ad1c0a0d64d8c750302077c29aebf))
+* **pn-15400:** add recap step for SERCQ activation wizard ([#1586](https://github.com/pagopa/pn-frontend/issues/1586)) ([c18c70e](https://github.com/pagopa/pn-frontend/commit/c18c70e3d8a7cc867786e017e3c4bb9d3df5c5c6))
+* **PN-15403:** remove DATAPRIVACY_SERCQ  ([#1587](https://github.com/pagopa/pn-frontend/issues/1587)) ([4892cce](https://github.com/pagopa/pn-frontend/commit/4892cce13671b00794868488894212c9e92c0e75))
+
+
+
+
+
+
+# [2.17.0-RC.1](https://github.com/pagopa/pn-frontend/compare/v2.17.0-RC.0...v2.17.0-RC.1) (2025-07-16)
+
+
+### Bug Fixes
+
+* **pn-15747:** fixed wrong copy when a courtesy contact linked to a sender is deleted ([#1600](https://github.com/pagopa/pn-frontend/issues/1600)) ([bbff98e](https://github.com/pagopa/pn-frontend/commit/bbff98e0064f093dcba6066a45d39944cd12505f))
+
+
+
+
+
 ## [2.16.2](https://github.com/pagopa/pn-frontend/compare/v2.16.2-RC.3...v2.16.2) (2025-07-16)
 
 **Note:** Version bump only for package pn-frontend
@@ -17,7 +136,6 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 ### Bug Fixes
 
 * update localization for special contacts ([#1598](https://github.com/pagopa/pn-frontend/issues/1598)) ([78046f7](https://github.com/pagopa/pn-frontend/commit/78046f760f76dea249752cb9873809f97fe4c5b4))
-
 
 
 
@@ -61,6 +179,29 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 * **pn-15400:** add recap step for SERCQ activation wizard ([#1586](https://github.com/pagopa/pn-frontend/issues/1586)) ([c18c70e](https://github.com/pagopa/pn-frontend/commit/c18c70e3d8a7cc867786e017e3c4bb9d3df5c5c6))
 * **PN-15403:** remove DATAPRIVACY_SERCQ  ([#1587](https://github.com/pagopa/pn-frontend/issues/1587)) ([4892cce](https://github.com/pagopa/pn-frontend/commit/4892cce13671b00794868488894212c9e92c0e75))
 
+
+
+
+
+# [2.17.0-RC.0](https://github.com/pagopa/pn-frontend/compare/v2.16.1...v2.17.0-RC.0) (2025-07-09)
+
+
+### Bug Fixes
+
+* **PN-15052:** resolve bug not updating content after switching lang on PrivacyPolicy and ToS pages (PA, PF, PG) ([#1564](https://github.com/pagopa/pn-frontend/issues/1564)) ([2f4a494](https://github.com/pagopa/pn-frontend/commit/2f4a4942bcf8d7c6a95b7ad8731b236c05148ca2))
+* **pn-15077:** fix existing tests and add new tests for sending errors to Zendesk ([#1561](https://github.com/pagopa/pn-frontend/issues/1561)) ([e4db5c1](https://github.com/pagopa/pn-frontend/commit/e4db5c10096504df65e3d8434f6e5217ddb71797))
+* **pn-15077:** fix toast layout ([#1562](https://github.com/pagopa/pn-frontend/issues/1562)) ([b292473](https://github.com/pagopa/pn-frontend/commit/b292473b992377e834f02dd85163174065f343c8))
+* **pn-15077:** fixed pn-commons tests ([#1581](https://github.com/pagopa/pn-frontend/issues/1581)) ([30f3cfa](https://github.com/pagopa/pn-frontend/commit/30f3cfae9f256475d77cb14052094f1f1d4bf6df))
+* **PN-15123:** restored special contacts for courtesy contacts ([#1570](https://github.com/pagopa/pn-frontend/issues/1570)) ([631bf8b](https://github.com/pagopa/pn-frontend/commit/631bf8bdf3a40095138722d68a583eb2b3ad68f5))
+* **PN-15230:** move DeliveryMandateNotFoundAppError translation to 'common' ns ([#1565](https://github.com/pagopa/pn-frontend/issues/1565)) ([58202a8](https://github.com/pagopa/pn-frontend/commit/58202a83a1f6cd85945c0a8b0da8de2479cf258e))
+* **PN-15509:** add TPP available type in courtesy message ([#1583](https://github.com/pagopa/pn-frontend/issues/1583)) ([61fef6a](https://github.com/pagopa/pn-frontend/commit/61fef6a082e31b35e1f3805742c3f260c84b00bf))
+
+
+### Features
+
+* **PN-15325:** [PA] call API /logout and redirect to selfcare login after explicit logout ([#1572](https://github.com/pagopa/pn-frontend/issues/1572)) ([6e54137](https://github.com/pagopa/pn-frontend/commit/6e5413794e2d9a03ad9a8e57921e54840fe37bc5))
+* **PN-15326:** PG call api logout before redirect ([#1577](https://github.com/pagopa/pn-frontend/issues/1577)) ([c6fc68e](https://github.com/pagopa/pn-frontend/commit/c6fc68e6a7f702e03c9d47541cb17019237d606a))
+* **PN-15327:** PF call api logout before redirect ([#1578](https://github.com/pagopa/pn-frontend/issues/1578)) ([e9cc7e7](https://github.com/pagopa/pn-frontend/commit/e9cc7e72274c9fe374b5863a18d62949d84c1dad))
 
 
 

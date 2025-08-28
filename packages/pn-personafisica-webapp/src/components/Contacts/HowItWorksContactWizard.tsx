@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 
 import {
@@ -13,11 +13,14 @@ import {
   Stack,
   Typography,
 } from '@mui/material';
+import { EventAction } from '@pagopa-pn/pn-commons';
 import { ButtonNaked } from '@pagopa/mui-italia';
 
+import { PFEventsType } from '../../models/PFEventsType';
 import { contactsSelectors } from '../../redux/contact/reducers';
 import { useAppSelector } from '../../redux/hooks';
 import { getConfiguration } from '../../services/configuration.service';
+import PFEventStrategyFactory from '../../utility/MixpanelUtils/PFEventStrategyFactory';
 import InformativeDialog from './InformativeDialog';
 
 enum ModalType {
@@ -25,7 +28,7 @@ enum ModalType {
 }
 
 type Props = {
-  goToNextStep?: () => void;
+  goToNextStep: () => void;
   setShowPecWizard: (showPecWizard: boolean) => void;
 };
 
@@ -33,7 +36,9 @@ const HowItWorksContactWizard: React.FC<Props> = ({ goToNextStep, setShowPecWiza
   const { t } = useTranslation(['recapiti', 'common']);
 
   const [modalOpen, setModalOpen] = useState<ModalType | null>(null);
-  const { defaultPECAddress } = useAppSelector(contactsSelectors.selectAddresses);
+  const { defaultPECAddress, courtesyAddresses } = useAppSelector(
+    contactsSelectors.selectAddresses
+  );
   const { IS_DOD_ENABLED } = getConfiguration();
 
   const sercqSendInfoList: Array<{ title: string; description: string }> = t(
@@ -43,6 +48,34 @@ const HowItWorksContactWizard: React.FC<Props> = ({ goToNextStep, setShowPecWiza
       defaultValue: [],
     }
   );
+
+  const handleShowDeliveredDialog = () => {
+    PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SERCQ_SEND_POP_UP);
+    setModalOpen(ModalType.DELIVERED);
+  };
+
+  const handleNextStep = () => {
+    PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SERCQ_SEND_START, {
+      event_type: EventAction.ACTION,
+      contacts: courtesyAddresses,
+    });
+    goToNextStep();
+  };
+
+  const handleShowPecWizard = () => {
+    PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SERCQ_SEND_PEC_START, {
+      event_type: EventAction.ACTION,
+      contacts: courtesyAddresses,
+    });
+    setShowPecWizard(true);
+  };
+
+  useEffect(() => {
+    PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SERCQ_SEND_INTRO, {
+      event_type: EventAction.SCREEN_VIEW,
+      contacts: courtesyAddresses,
+    });
+  }, []);
 
   return (
     <Box data-testid="sercqSendContactWizard">
@@ -88,7 +121,7 @@ const HowItWorksContactWizard: React.FC<Props> = ({ goToNextStep, setShowPecWiza
                               cursor: 'pointer',
                               textDecoration: 'underline',
                             }}
-                            onClick={() => setModalOpen(ModalType.DELIVERED)}
+                            onClick={handleShowDeliveredDialog}
                           />,
                         ]}
                       />
@@ -109,7 +142,7 @@ const HowItWorksContactWizard: React.FC<Props> = ({ goToNextStep, setShowPecWiza
             fullWidth
             variant="contained"
             color="primary"
-            onClick={goToNextStep}
+            onClick={handleNextStep}
             sx={{ textTransform: 'none', mb: !defaultPECAddress ? 3 : 0 }}
             data-testid="continueButton"
           >
@@ -134,7 +167,7 @@ const HowItWorksContactWizard: React.FC<Props> = ({ goToNextStep, setShowPecWiza
           <Typography variant="body2" mb={1}>
             {t('legal-contacts.sercq-send-wizard.step_1.have-pec-description')}
           </Typography>
-          <ButtonNaked color="primary" size="medium" onClick={() => setShowPecWizard(true)}>
+          <ButtonNaked color="primary" size="medium" onClick={handleShowPecWizard}>
             {t('legal-contacts.sercq-send-wizard.step_1.insert-pec')}
           </ButtonNaked>
         </Box>
