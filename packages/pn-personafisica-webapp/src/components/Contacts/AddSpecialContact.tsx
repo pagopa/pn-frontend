@@ -166,20 +166,23 @@ const AddSpecialContact = forwardRef<AddSpecialContactRef, Props>(
     };
 
     const addressTypeChangeHandler = async (e: ChangeEvent<HTMLInputElement>) => {
-      await formik.setFieldValue('s_value', '');
-      await formik.setFieldTouched('s_value', false);
-      if (e.target.value) {
+      if (e.target.value !== formik.values.channelType) {
+        await formik.setFieldValue('s_value', '');
+        await formik.setFieldTouched('s_value', false);
         formik.handleChange(e);
       }
     };
 
     const senderChangeHandler = async (_: any, newValue: Party | null) => {
-      const sender: Party = { id: newValue?.id ?? '', name: newValue?.name ?? '' };
+      const prevValue = formik.values.sender;
+      const nextValue: Party = { id: newValue?.id ?? '', name: newValue?.name ?? '' };
 
-      await formik.setFieldTouched('sender', true, false);
-      await formik.setFieldValue('sender', sender);
+      if (nextValue.id !== prevValue.id) {
+        await formik.setFieldTouched('sender', true, false);
+        await formik.setFieldValue('sender', nextValue);
 
-      updateErrorBanner(sender);
+        updateErrorBanner(nextValue);
+      }
     };
 
     const renderOption = (props: any, option: Party) => (
