@@ -1,5 +1,5 @@
 /* eslint-disable functional/immutable-data */
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 import { Button, DialogContentText, DialogTitle } from '@mui/material';
 
@@ -29,12 +29,12 @@ const InactivityHandler: React.FC<Props> = ({ inactivityTimer, onTimerExpired, c
     setOpenModal(false);
   };
 
-  const handleActivity = (() => {
+  const handleActivity = useCallback(() => {
     if (openModal) {
       return;
     }
     lastActivityRef.current = Date.now();
-  });
+  }, [openModal]);
 
   useEffect(() => {
     if (inactivityTimer === 0) {
