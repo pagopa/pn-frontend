@@ -2,6 +2,7 @@ import React from 'react';
 
 import { Box, BoxProps, Button, Tooltip } from '@mui/material';
 import { Tag } from '@pagopa/mui-italia';
+import CustomTooltip from '../CustomTooltip';
 
 interface CustomTagGroupProps {
   /** how many items will be visible */
@@ -19,9 +20,15 @@ const TagIndicator: React.FC<{
   arrayChildren: Array<JSX.Element>;
   visibleItems: number;
   dataTestId: string;
-  ariaLabel?: string;
-}> = ({ arrayChildren, visibleItems, dataTestId }) => (
-  <Tag value={`+${arrayChildren.length - visibleItems}`} data-testid={dataTestId} />
+}> = ({ boxProps, arrayChildren, visibleItems, dataTestId }) => (
+  <Box
+    {...boxProps}
+    sx={{ cursor: 'pointer', display: 'inline-block' }}
+    data-testid={dataTestId}
+    aria-hidden="true"
+  >
+    <Tag value={`+${arrayChildren.length - visibleItems}`} aria-hidden="true" />
+  </Box>
 );
 
 const CustomTagGroup: React.FC<CustomTagGroupProps> = ({
@@ -39,17 +46,20 @@ const CustomTagGroup: React.FC<CustomTagGroupProps> = ({
     <>
       {arrayChildren.slice(0, maxCount).map((c) => c)}
       {isOverflow && (
-        <Box>
+        <Box aria-hidden="true">
           {!disableTooltip && (
-            <Tooltip title={arrayChildren.slice(visibleItems).map((c) => c)} arrow describeChild>
-              <Button sx={{ width: 'fit-content', p: 0, m: 0, height: 'auto' }}>
+            <CustomTooltip
+              openOnClick={false}
+              onOpen={onOpen}
+              tooltipContent={<>{arrayChildren.slice(visibleItems).map((c) => c)}</>}
+            >
+              <Box sx={{ width: 'fit-content' }} aria-hidden="true">
                 <TagIndicator
                   arrayChildren={arrayChildren}
                   visibleItems={visibleItems as number}
                   dataTestId="custom-tooltip-indicator"
-                />
-              </Button>
-            </Tooltip>
+                </Box>
+            </CustomTooltip>
           )}
           {disableTooltip && (
             <TagIndicator
