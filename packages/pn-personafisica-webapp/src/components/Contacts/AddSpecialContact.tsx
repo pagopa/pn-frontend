@@ -244,8 +244,6 @@ const AddSpecialContact = forwardRef<AddSpecialContactRef, Props>(
     const formik = useFormik({
       initialValues,
       validationSchema,
-      validateOnChange: true,
-      validateOnBlur: true,
       enableReinitialize: true,
       onSubmit: (values) => {
         onConfirm(values.s_value, values.channelType as ChannelType, {
