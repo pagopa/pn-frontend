@@ -63,38 +63,36 @@ const InactivityHandler: React.FC<Props> = ({ inactivityTimer, onTimerExpired, c
     };
   }, [handleActivity]);
 
-  if (inactivityTimer === 0) {
-    return null;
-  }
-
   return (
     <>
-      <PnDialog
-        open={openModal}
-        aria-labelledby="inactivity-dialog-title"
-        aria-describedby="inactivity-dialog-description"
-        data-testid="inactivity-modal"
-      >
-        <DialogTitle id="inactivity-dialog-title">
-          {getLocalizedOrDefaultLabel('common', 'inactivity.title')}
-        </DialogTitle>
-        <PnDialogContent>
-          <DialogContentText id="inactivity-dialog-description">
-            {getLocalizedOrDefaultLabel('common', 'inactivity.body')}
-          </DialogContentText>
-        </PnDialogContent>
-        <PnDialogActions>
-          <Button
-            fullWidth
-            color="primary"
-            variant="outlined"
-            data-testid="inactivity-button"
-            onClick={confirmModal}
-          >
-            {getLocalizedOrDefaultLabel('common', 'inactivity.action')}
-          </Button>
-        </PnDialogActions>
-      </PnDialog>
+      {inactivityTimer > 0 && (
+        <PnDialog
+          open={openModal}
+          aria-labelledby="inactivity-dialog-title"
+          aria-describedby="inactivity-dialog-description"
+          data-testid="inactivity-modal"
+        >
+          <DialogTitle id="inactivity-dialog-title">
+            {getLocalizedOrDefaultLabel('common', 'inactivity.title')}
+          </DialogTitle>
+          <PnDialogContent>
+            <DialogContentText id="inactivity-dialog-description">
+              {getLocalizedOrDefaultLabel('common', 'inactivity.body')}
+            </DialogContentText>
+          </PnDialogContent>
+          <PnDialogActions>
+            <Button
+              fullWidth
+              color="primary"
+              variant="outlined"
+              data-testid="inactivity-button"
+              onClick={confirmModal}
+            >
+              {getLocalizedOrDefaultLabel('common', 'inactivity.action')}
+            </Button>
+          </PnDialogActions>
+        </PnDialog>
+      )}
       {children}
     </>
   );
