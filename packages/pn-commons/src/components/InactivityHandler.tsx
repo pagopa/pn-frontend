@@ -63,6 +63,10 @@ const InactivityHandler: React.FC<Props> = ({ inactivityTimer, onTimerExpired, c
     };
   }, [handleActivity]);
 
+  if (inactivityTimer === 0) {
+    return null;
+  }
+
   return (
     <>
       <PnDialog
