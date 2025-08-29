@@ -116,12 +116,10 @@ const SessionGuard = () => {
       ) : (
         <>
           <SessionModal {...modalData} handleClose={() => exit()} initTimeout />
-          {INACTIVITY_HANDLER_MINUTES && (
-            <InactivityHandler
-              inactivityTimer={INACTIVITY_HANDLER_MINUTES * 60 * 1000}
-              onTimerExpired={() => exit()}
-            />
-          )}
+          <InactivityHandler
+            inactivityTimer={INACTIVITY_HANDLER_MINUTES * 60 * 1000}
+            onTimerExpired={() => exit()}
+          />
           <Outlet />
         </>
       )}
