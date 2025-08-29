@@ -20,14 +20,13 @@ import {
   Divider,
   Typography,
 } from '@mui/material';
-import { CopyToClipboardButton } from '@pagopa/mui-italia';
+import { CodeInput, CopyToClipboardButton } from '@pagopa/mui-italia';
 
 import { ErrorMessage } from '../../models';
 import { getLocalizedOrDefaultLabel } from '../../utility/localization.utility';
 import PnDialog from '../PnDialog/PnDialog';
 import PnDialogActions from '../PnDialog/PnDialogActions';
 import PnDialogContent from '../PnDialog/PnDialogContent';
-import CodeInput from './NewCodeInput';
 
 type Props = {
   title: ReactNode;
