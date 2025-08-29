@@ -1,7 +1,8 @@
 import React from 'react';
 
-import { Box, BoxProps, Button, Tooltip } from '@mui/material';
+import { Box, BoxProps } from '@mui/material';
 import { Tag } from '@pagopa/mui-italia';
+
 import CustomTooltip from '../CustomTooltip';
 
 interface CustomTagGroupProps {
@@ -21,19 +22,15 @@ const TagIndicator: React.FC<{
   visibleItems: number;
   dataTestId: string;
 }> = ({ boxProps, arrayChildren, visibleItems, dataTestId }) => (
-  <Box
-    {...boxProps}
-    sx={{ cursor: 'pointer', display: 'inline-block' }}
-    data-testid={dataTestId}
-    aria-hidden="true"
-  >
-    <Tag value={`+${arrayChildren.length - visibleItems}`} aria-hidden="true" />
+  <Box {...boxProps} sx={{ cursor: 'pointer', display: 'inline-block' }} data-testid={dataTestId}>
+    <Tag value={`+${arrayChildren.length - visibleItems}`} />
   </Box>
 );
 
 const CustomTagGroup: React.FC<CustomTagGroupProps> = ({
   visibleItems,
   disableTooltip = false,
+  onOpen,
   children,
 }) => {
   const arrayChildren = React.Children.count(children)
@@ -46,7 +43,7 @@ const CustomTagGroup: React.FC<CustomTagGroupProps> = ({
     <>
       {arrayChildren.slice(0, maxCount).map((c) => c)}
       {isOverflow && (
-        <Box aria-hidden="true">
+        <Box>
           {!disableTooltip && (
             <CustomTooltip
               openOnClick={false}
@@ -58,7 +55,8 @@ const CustomTagGroup: React.FC<CustomTagGroupProps> = ({
                   arrayChildren={arrayChildren}
                   visibleItems={visibleItems as number}
                   dataTestId="custom-tooltip-indicator"
-                </Box>
+                />
+              </Box>
             </CustomTooltip>
           )}
           {disableTooltip && (
