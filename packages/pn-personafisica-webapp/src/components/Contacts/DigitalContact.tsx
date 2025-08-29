@@ -56,6 +56,8 @@ type Props = {
   onSubmit: (value: string) => void;
   onDelete?: () => void;
   onCancelInsert?: () => void;
+  onEditCallback?: (editMode: boolean) => void;
+  beforeValidationCallback?: (value: string, errors?: string) => void;
 };
 
 const DigitalContact = forwardRef<{ toggleEdit: () => void }, Props>(
@@ -74,6 +76,8 @@ const DigitalContact = forwardRef<{ toggleEdit: () => void }, Props>(
       onSubmit,
       onDelete,
       onCancelInsert,
+      onEditCallback,
+      beforeValidationCallback,
     },
     ref
     // eslint-disable-next-line sonarjs/cognitive-complexity
@@ -126,7 +130,13 @@ const DigitalContact = forwardRef<{ toggleEdit: () => void }, Props>(
     };
 
     const toggleEdit = () => {
-      setEditMode((prevState) => !prevState);
+      setEditMode((prevState) => {
+        const newState = !prevState;
+        if (onEditCallback) {
+          onEditCallback(newState);
+        }
+        return newState;
+      });
     };
 
     const onCancelEdit = () => {
@@ -146,10 +156,21 @@ const DigitalContact = forwardRef<{ toggleEdit: () => void }, Props>(
       },
     }));
 
+    const handleFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+      if (beforeValidationCallback) {
+        beforeValidationCallback(
+          formik.values[`${senderId}_${contactType}`],
+          formik.errors[`${senderId}_${contactType}`]
+        );
+      }
+
+      formik.handleSubmit(e);
+    };
+
     // INSERT MODE
     if (!value) {
       return (
-        <form onSubmit={formik.handleSubmit} data-testid={`${senderId}_${contactType}Contact`}>
+        <form onSubmit={handleFormSubmit} data-testid={`${senderId}_${contactType}Contact`}>
           <Label
             id={`${senderId}_${contactType}-custom-label`}
             variant="body2"
@@ -215,7 +236,7 @@ const DigitalContact = forwardRef<{ toggleEdit: () => void }, Props>(
     // EDIT MODE
     return (
       <form
-        onSubmit={formik.handleSubmit}
+        onSubmit={handleFormSubmit}
         data-testid={`${senderId}_${contactType}Contact`}
         style={{ width: isMobile ? '100%' : '50%', ...slotsProps?.container }}
       >
