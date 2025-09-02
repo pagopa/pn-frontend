@@ -125,5 +125,6 @@ const userSlice = createSlice({
     });
   },
 });
+
 export const { resetState } = userSlice.actions;
 export default userSlice;
