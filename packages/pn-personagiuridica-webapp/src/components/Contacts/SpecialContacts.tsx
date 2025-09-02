@@ -58,6 +58,10 @@ const SpecialContacts: React.FC<{ addressType: AddressType; channelType?: Channe
     channelType: ChannelType.PEC,
   });
 
+  const specialContactItemRef = useRef<{ toggleEdit: () => void }>({
+    toggleEdit: () => {},
+  });
+
   const labelRoot = `${addressType.toLowerCase()}-contacts`;
   const contactType = currentAddress.current.channelType.toLowerCase();
 
@@ -110,6 +114,9 @@ const SpecialContacts: React.FC<{ addressType: AddressType; channelType?: Channe
               operation: ContactOperation.ADD_COURTESY,
             })
           );
+          if (value) {
+            specialContactItemRef.current.toggleEdit();
+          }
           return;
         }
         // contact must be validated
@@ -258,6 +265,7 @@ const SpecialContacts: React.FC<{ addressType: AddressType; channelType?: Channe
               <Box key={`sender-${group.senderId}`}>
                 {group.addresses.map((addr, index) => (
                   <SpecialContactItem
+                    specialContactItemRef={specialContactItemRef}
                     key={`sender-${group.senderId}-${addr.channelType.toLowerCase()}`}
                     address={addr}
                     onEdit={handleEdit}
