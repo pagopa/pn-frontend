@@ -61,9 +61,9 @@ describe('Auth redux state tests', () => {
             },
             desired_exp: 0,
           },
-      isUnauthorizedUser: false,
       fetchedTos: false,
       fetchedPrivacy: false,
+      tosPrivacyApiError: false,
       tosConsent: {
         accepted: false,
         isFirstAccept: false,
@@ -74,9 +74,6 @@ describe('Auth redux state tests', () => {
         isFirstAccept: false,
         consentVersion: '',
       },
-      messageUnauthorizedUser: { title: '', message: '' },
-      isClosedSession: false,
-      isForbiddenUser: false,
       institutions: [],
       productsOfInstitution: [],
       additionalLanguages: [],
@@ -105,16 +102,18 @@ describe('Auth redux state tests', () => {
   });
 
   it('Should be able to exchange token - fail validation', async () => {
+    const preState = store.getState();
     const action = await mockLogin({ ...userResponse, uid: 'not an uid' });
     expect(action.type).toBe('exchangeToken/fulfilled');
-    const state = store.getState();
-    expect(state.userState.isUnauthorizedUser).toBeTruthy();
+    const postState = store.getState();
+    expect(postState.userState.user).toEqual(preState.userState.user);
   });
 
   it('Should be able to logout', async () => {
     const action = await mockLogout();
-    expect(action.type).toBe('logout/fulfilled');
-    expect(action.payload).toEqual({
+    expect(action.type).toBe('userSlice/resetState');
+    expect(store.getState().userState.user).toEqual({
+      desired_exp: 0,
       email: '',
       name: '',
       uid: '',

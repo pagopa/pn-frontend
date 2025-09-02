@@ -57,10 +57,7 @@ function Router() {
             <Route path={routes.NUOVA_API_KEY} element={<NewApiKey />} />
             <Route path="/" element={<Navigate to={routes.DASHBOARD} />} />
           </Route>
-          {/* not found - non-logged users will see the common AccessDenied component */}
-          <Route path="*" element={<RouteGuard roles={null} />}>
-            <Route path="*" element={<NotFound goBackAction={navigateToHome} />} />
-          </Route>
+          <Route path="*" element={<NotFound goBackAction={navigateToHome} />} />
         </Route>
       </Route>
       <Route path={routes.PRIVACY_POLICY} element={<PrivacyPolicyPage />} />
