@@ -42,11 +42,7 @@ const CustomTooltip: React.FC<Props> = ({
       onOpen={onOpen}
       {...tooltipProps}
     >
-      {openOnClick
-        ? cloneElement(children, {
-            onClick: handleTooltipOpen,
-          })
-        : children}
+      {children}
     </Tooltip>
   );
 };
