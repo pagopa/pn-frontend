@@ -5,8 +5,6 @@ import {
   useCallback,
   useEffect,
   useImperativeHandle,
-  useMemo,
-  useRef,
   useState,
 } from 'react';
 
@@ -84,37 +82,28 @@ const CodeModal = forwardRef<ModalHandle, Props>(
     ref
     // eslint-disable-next-line sonarjs/cognitive-complexity
   ) => {
-    const initial = useMemo(
-      () => (initialValue ?? '').slice(0, codeLength),
-      [initialValue, codeLength]
-    );
-    const [code, setCode] = useState<string>(initial);
+    const [code, setCode] = useState<string>(initialValue.slice(0, codeLength));
     const [internalError, setInternalError] = useState({
       internalHasError: false,
       internalErrorTitle: '',
       internalErrorMessage: '',
     });
 
-    const prevOpenRef = useRef<boolean>(open);
-    useEffect(() => {
-      if (open && !prevOpenRef.current) {
-        setCode(initial);
-      }
-      // eslint-disable-next-line functional/immutable-data
-      prevOpenRef.current = open;
-    }, [open, initial]);
-
     const { internalHasError, internalErrorTitle, internalErrorMessage } = internalError;
 
-    // const codeIsValid = code.every((v) => (!isNaN(Number(v)) ? v : false));
-    // const codeIsEmpty = code.some((v) => !v);
+    useEffect(() => {
+      if (open && code !== initialValue) {
+        setCode(initialValue);
+      } else if (!open) {
+        setCode('');
+      }
+    }, [initialValue, open]);
 
     const changeHandler = useCallback(
       (val: string) => {
-        const next = val.slice(0, codeLength);
-        setCode(next);
+        setCode(val);
 
-        if (next.length > 0 && !/^\d+$/.test(next)) {
+        if (val.length > 0 && !/^\d+$/.test(val)) {
           setInternalError({
             internalHasError: true,
             internalErrorTitle: getLocalizedOrDefaultLabel(
@@ -134,7 +123,7 @@ const CodeModal = forwardRef<ModalHandle, Props>(
           });
         }
       },
-      [codeLength, error?.hasError, error?.message, error?.title]
+      [error?.hasError, error?.message, error?.title]
     );
 
     const confirmHandler = () => {
