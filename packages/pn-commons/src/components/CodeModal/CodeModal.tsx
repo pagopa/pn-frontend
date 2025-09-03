@@ -96,6 +96,11 @@ const CodeModal = forwardRef<ModalHandle, Props>(
         setCode(initialValue);
       } else if (!open) {
         setCode('');
+        setInternalError({
+          internalHasError: false,
+          internalErrorTitle: '',
+          internalErrorMessage: '',
+        });
       }
     }, [initialValue, open]);
 
