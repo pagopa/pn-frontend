@@ -1,6 +1,6 @@
-const euro = Intl.NumberFormat("it-IT", {
-  style: "currency",
-  currency: "EUR"
+const euro = Intl.NumberFormat('it-IT', {
+  style: 'currency',
+  currency: 'EUR',
 });
 
 export function formatCurrency(currency: number) {

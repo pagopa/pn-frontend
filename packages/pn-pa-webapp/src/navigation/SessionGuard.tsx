@@ -32,8 +32,6 @@ const INITIALIZATION_SEQUENCE = [
   INITIALIZATION_STEPS.SESSION_CHECK,
 ];
 
-const inactivityTimer = 5 * 60 * 1000;
-
 const manageUnforbiddenError = (e: any) => {
   if (e.status === 451) {
     // error toast must not be shown
@@ -56,7 +54,7 @@ const SessionGuardRender = () => {
   );
   const { t } = useTranslation(['common']);
   const { hasApiErrors } = useErrors();
-  const { IS_INACTIVITY_HANDLER_ENABLED } = getConfiguration();
+  const { INACTIVITY_HANDLER_MINUTES } = getConfiguration();
 
   const isAnonymousUser = !isUnauthorizedUser && !sessionToken;
   const hasTosPrivacyApiErrors = hasApiErrors(AUTH_ACTIONS.GET_TOS_PRIVACY_APPROVAL);
@@ -92,7 +90,7 @@ const SessionGuardRender = () => {
     }
     return (
       <InactivityHandler
-        inactivityTimer={isAnonymousUser || !IS_INACTIVITY_HANDLER_ENABLED ? 0 : inactivityTimer}
+        inactivityTimer={isAnonymousUser || (INACTIVITY_HANDLER_MINUTES * 60 * 1000)}
         onTimerExpired={() => {
           sessionStorage.clear();
           goToSelfcareLogin();

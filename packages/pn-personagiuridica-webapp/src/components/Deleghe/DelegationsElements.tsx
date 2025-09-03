@@ -158,7 +158,7 @@ export const Menu: React.FC<Props> = ({ menuType, id, userLogged, row, onAction 
     return handleCustomGenericError(responseError, message, dispatch);
   }, []);
 
-  const handleUpdate = (_code: Array<string>, groups: Array<{ id: string; name: string }>) => {
+  const handleUpdate = (_code: string, groups: Array<{ id: string; name: string }>) => {
     void dispatch(updateMandate({ id, groups }))
       .unwrap()
       .then(() => {
@@ -277,7 +277,8 @@ export const Menu: React.FC<Props> = ({ menuType, id, userLogged, row, onAction 
           title={t('deleghe.show_code_title', { name })}
           subtitle={t('deleghe.show_code_subtitle')}
           open={showCodeModal}
-          initialValues={row?.verificationCode.split('')}
+          codeLength={5}
+          initialValue={row.verificationCode}
           cancelCallback={handleCloseShowCodeModal}
           cancelLabel={t('deleghe.close')}
           codeSectionTitle={t('deleghe.verification_code')}
@@ -364,8 +365,8 @@ export const AcceptButton: React.FC<AcceptButtonProps> = ({ id, name, onAccept }
     setOpen(false);
   };
 
-  const handleConfirm = (code: Array<string>, groups: Array<{ id: string; name: string }>) => {
-    void dispatch(acceptMandate({ id, code: code.join(''), groups }))
+  const handleConfirm = (code: string, groups: Array<{ id: string; name: string }>) => {
+    void dispatch(acceptMandate({ id, code, groups }))
       .unwrap()
       .then(async () => {
         dispatch(

@@ -20,7 +20,7 @@ window.getComputedStyle = (elt) => getComputedStyle(elt);
 beforeAll(async () => {
   Configuration.setForTest<PgConfiguration>({
     API_BASE_URL: 'https://webapi.test.notifichedigitali.it/',
-    IS_INACTIVITY_HANDLER_ENABLED: false,
+    INACTIVITY_HANDLER_MINUTES: 0,
     ONE_TRUST_DRAFT_MODE: false,
     ONE_TRUST_PP: 'mocked-id',
     ONE_TRUST_TOS: 'mocked-id',
