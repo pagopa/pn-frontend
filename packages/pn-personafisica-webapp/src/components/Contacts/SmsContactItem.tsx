@@ -47,28 +47,32 @@ enum ModalType {
   INFORMATIVE = 'informative',
 }
 
-type SmsElemProps = {
+interface SmsSlots {
+  label?: JSXElementConstructor<TypographyProps>;
+}
+
+interface SmsSlotsProps {
+  textField?: Partial<TextFieldProps>;
+  button?: Partial<ButtonProps>;
+}
+
+interface SmsElemProps {
+  slots?: SmsSlots;
+  slotsProps?: SmsSlotsProps;
+  beforeValidationCallback?: (value: string, errors?: string) => void;
   onCancelInsert?: () => void;
-  slots?: {
-    label?: JSXElementConstructor<TypographyProps>;
-  };
-  slotsProps?: {
-    textField?: Partial<TextFieldProps>;
-    button?: Partial<ButtonProps>;
-  };
-};
+  fromSercqSend?: boolean;
+}
 
-type SmsItemProps = {
-  slots?: {
-    label?: JSXElementConstructor<TypographyProps>;
-  };
-  slotsProps?: {
-    textField?: Partial<TextFieldProps>;
-    button?: Partial<ButtonProps>;
-  };
-};
+type SmsItemProps = Omit<SmsElemProps, 'onCancelInsert' | 'fromSercqSend'>;
 
-const SmsContactElem: React.FC<SmsElemProps> = ({ onCancelInsert, slotsProps, slots }) => {
+const SmsContactElem: React.FC<SmsElemProps> = ({
+  onCancelInsert,
+  slotsProps,
+  slots,
+  beforeValidationCallback,
+  fromSercqSend = false,
+}) => {
   const { t } = useTranslation(['common', 'recapiti']);
   const { defaultSERCQ_SENDAddress, defaultPECAddress, defaultSMSAddress, addresses } =
     useAppSelector(contactsSelectors.selectAddresses);
@@ -78,7 +82,6 @@ const SmsContactElem: React.FC<SmsElemProps> = ({ onCancelInsert, slotsProps, sl
     resetForm: () => Promise.resolve(),
   });
   const [modalOpen, setModalOpen] = useState<ModalType | null>(null);
-  const location = useLocation();
   // currentAddress is needed to store what address we are creating/editing/removing
   // because this variable isn't been used to render, we can use useRef
   const currentAddress = useRef<{ value: string }>({
@@ -90,16 +93,14 @@ const SmsContactElem: React.FC<SmsElemProps> = ({ onCancelInsert, slotsProps, sl
 
   const currentValue = defaultSMSAddress?.value ?? '';
 
-  const fromSercqSend = [DIGITAL_DOMICILE_ACTIVATION, DIGITAL_DOMICILE_MANAGEMENT].includes(
-    location.pathname
-  );
-
   const handleSubmit = (value: string) => {
-    const source = externalEvent?.source ?? ContactSource.RECAPITI;
-    PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SMS_START, {
-      senderId: 'default',
-      source,
-    });
+    if (!fromSercqSend) {
+      const source = externalEvent?.source ?? ContactSource.RECAPITI;
+      PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SMS_START, {
+        senderId: 'default',
+        source,
+      });
+    }
     // eslint-disable-next-line functional/immutable-data
     currentAddress.current = { value };
     // first check if contact already exists
@@ -110,6 +111,9 @@ const SmsContactElem: React.FC<SmsElemProps> = ({ onCancelInsert, slotsProps, sl
       return;
     }
     if (!isDigitalDomicileActive) {
+      if (fromSercqSend) {
+        PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SERCQ_SEND_POP_UP_SMS);
+      }
       setModalOpen(ModalType.INFORMATIVE);
       return;
     }
@@ -118,7 +122,11 @@ const SmsContactElem: React.FC<SmsElemProps> = ({ onCancelInsert, slotsProps, sl
 
   const handleCodeVerification = (verificationCode?: string) => {
     if (verificationCode) {
-      PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SMS_UX_CONVERSION, 'default');
+      if (fromSercqSend) {
+        PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SERCQ_SEND_ADD_SMS_UX_CONVERSION);
+      } else {
+        PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SMS_UX_CONVERSION, 'default');
+      }
     }
 
     const digitalAddressParams: SaveDigitalAddressParams = {
@@ -136,14 +144,21 @@ const SmsContactElem: React.FC<SmsElemProps> = ({ onCancelInsert, slotsProps, sl
         // open code modal
         if (!res) {
           // aprire la code modal
+          if (fromSercqSend) {
+            PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SERCQ_SEND_SMS_OTP);
+          }
           setModalOpen(ModalType.CODE);
           return;
         }
 
-        PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SMS_UX_SUCCESS, {
-          senderId: 'default',
-          fromSercqSend,
-        });
+        if (fromSercqSend) {
+          PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SERCQ_SEND_ADD_SMS_UX_SUCCESS);
+        } else {
+          PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SMS_UX_SUCCESS, {
+            senderId: 'default',
+            fromSercqSend,
+          });
+        }
 
         // contact has already been verified
         // show success message
@@ -164,6 +179,9 @@ const SmsContactElem: React.FC<SmsElemProps> = ({ onCancelInsert, slotsProps, sl
   };
 
   const handleCancelCode = async () => {
+    if (fromSercqSend) {
+      PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SERCQ_SEND_ADD_SMS_BACK);
+    }
     setModalOpen(null);
     if (currentValue) {
       digitalContactRef.current.toggleEdit();
@@ -198,6 +216,7 @@ const SmsContactElem: React.FC<SmsElemProps> = ({ onCancelInsert, slotsProps, sl
         onCancelInsert={onCancelInsert}
         slots={slots}
         slotsProps={slotsProps}
+        beforeValidationCallback={beforeValidationCallback}
       />
       <ExistingContactDialog
         open={modalOpen === ModalType.EXISTING}
@@ -219,16 +238,27 @@ const SmsContactElem: React.FC<SmsElemProps> = ({ onCancelInsert, slotsProps, sl
         title={t('courtesy-contacts.info-modal-sms-title', { ns: 'recapiti' })}
         subtitle={t('courtesy-contacts.info-modal-sms-subtitle', { ns: 'recapiti' })}
         content={t('courtesy-contacts.info-modal-sms-content', { ns: 'recapiti' })}
-        onConfirm={() => handleCodeVerification()}
-        onDiscard={() => setModalOpen(null)}
+        onConfirm={() => {
+          PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SERCQ_SEND_POP_UP_SMS_CONTINUE);
+          handleCodeVerification();
+        }}
+        onDiscard={() => {
+          PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SERCQ_SEND_POP_UP_SMS_CANCEL);
+          setModalOpen(null);
+        }}
       />
     </>
   );
 };
 
-const SmsContactItem: React.FC<SmsItemProps> = ({ slotsProps, slots }) => {
+const SmsContactItem: React.FC<SmsItemProps> = ({
+  slotsProps,
+  slots,
+  beforeValidationCallback,
+}) => {
   const { t } = useTranslation(['common', 'recapiti']);
   const dispatch = useAppDispatch();
+  const location = useLocation();
   const { defaultSERCQ_SENDAddress, defaultSMSAddress, addresses, specialSMSAddresses } =
     useAppSelector(contactsSelectors.selectAddresses);
 
@@ -236,6 +266,9 @@ const SmsContactItem: React.FC<SmsItemProps> = ({ slotsProps, slots }) => {
   const [insertMode, setInsertMode] = useState(false);
 
   const isActive = !!defaultSMSAddress;
+  const fromSercqSend = [DIGITAL_DOMICILE_ACTIVATION, DIGITAL_DOMICILE_MANAGEMENT].includes(
+    location.pathname
+  );
   const blockDelete = specialSMSAddresses.length > 0;
 
   const hasCourtesyAddresses =
@@ -309,6 +342,20 @@ const SmsContactItem: React.FC<SmsItemProps> = ({ slotsProps, slots }) => {
       value: defaultSMSAddress?.value,
       ns: 'recapiti',
     });
+  };
+
+  const handleSetInsertMode = () => {
+    if (fromSercqSend) {
+      PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SERCQ_SEND_ADD_SMS);
+    }
+    setInsertMode(true);
+  };
+
+  const handleCancelInsertMode = () => {
+    if (fromSercqSend) {
+      PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SERCQ_SEND_ADD_SMS_CANCEL);
+    }
+    setInsertMode(false);
   };
 
   const getActions = () =>
@@ -392,24 +439,23 @@ const SmsContactItem: React.FC<SmsItemProps> = ({ slotsProps, slots }) => {
       </PnInfoCard>
     );
   }
+
   return (
     <Box>
       {insertMode ? (
         <SmsContactElem
           slotsProps={slotsProps}
           slots={slots}
-          onCancelInsert={() => setInsertMode(false)}
+          onCancelInsert={handleCancelInsertMode}
+          beforeValidationCallback={beforeValidationCallback}
+          fromSercqSend={fromSercqSend}
         />
       ) : (
         <>
           <Typography variant="body1" fontWeight={600} fontSize="16px" mb={1}>
             {t('courtesy-contacts.email-sms-updates', { ns: 'recapiti' })}
           </Typography>
-          <ButtonNaked
-            color="primary"
-            sx={{ fontSize: '16px' }}
-            onClick={() => setInsertMode(true)}
-          >
+          <ButtonNaked color="primary" sx={{ fontSize: '16px' }} onClick={handleSetInsertMode}>
             {t('courtesy-contacts.email-sms-add', { ns: 'recapiti' })}
           </ButtonNaked>
         </>

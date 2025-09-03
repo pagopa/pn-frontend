@@ -10,14 +10,14 @@ import { Configuration } from '@pagopa-pn/pn-commons';
 import '@testing-library/jest-dom';
 
 import { initAxiosClients } from './api/apiClients';
+import { PhysicalAddressLookupConfig } from './models/NewNotification';
 import { initStore } from './redux/store';
 import { PaConfiguration } from './services/configuration.service';
-import { PhysicalAddressLookupConfig } from './models/NewNotification';
 
 beforeAll(() => {
   Configuration.setForTest<PaConfiguration>({
     API_BASE_URL: 'https://mock-api-base-url',
-    IS_INACTIVITY_HANDLER_ENABLED: false,
+    INACTIVITY_HANDLER_MINUTES: 0,
     ONE_TRUST_DRAFT_MODE: true,
     ONE_TRUST_PP: '365c84c5-9329-4ec5-89f5-e53572eda132',
     ONE_TRUST_TOS: 'b0da531e-8370-4373-8bd2-61ddc89e7fa6',

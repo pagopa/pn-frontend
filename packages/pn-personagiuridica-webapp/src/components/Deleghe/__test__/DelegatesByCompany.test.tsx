@@ -93,18 +93,21 @@ describe('Delegates Component - assuming delegates API works properly', async ()
     });
     const menu = getAllByTestId('delegationMenuIcon');
     fireEvent.click(menu[0]);
+
     const menuOpen = await waitFor(async () => getByTestId('delegationMenu'));
     const menuItems = menuOpen.querySelectorAll('[role="menuitem"]');
     expect(menuItems).toHaveLength(2);
     expect(menuItems[0]).toHaveTextContent(/deleghe.show/i);
+
     fireEvent.click(menuItems[0]);
+
     await waitFor(() => {
       const dialog = getByTestId('codeDialog');
-      const arrayOfVerificationCode = mandatesByDelegator[0].verificationCode.split('');
-      const codeInputs = dialog?.querySelectorAll('input');
-      codeInputs?.forEach((input, index) => {
-        expect(input).toHaveValue(arrayOfVerificationCode[index]);
-      });
+      expect(dialog).toBeInTheDocument();
+
+      const textbox = within(dialog).getByRole('textbox');
+      // since CodeModal truncates to codeLength (default 5), check only first 5 chars
+      expect(textbox).toHaveValue(mandatesByDelegator[0].verificationCode.slice(0, 5));
     });
   });
 

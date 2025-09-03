@@ -12,7 +12,7 @@ export interface PaConfiguration {
   ONE_TRUST_PP: string;
   ONE_TRUST_TOS: string;
   PAGOPA_HELP_EMAIL: string;
-  IS_INACTIVITY_HANDLER_ENABLED: boolean;
+  INACTIVITY_HANDLER_MINUTES: number;
   IS_PAYMENT_ENABLED: boolean;
   MIXPANEL_TOKEN: string;
   WORK_IN_PROGRESS: boolean;
@@ -38,7 +38,7 @@ class PaConfigurationValidator extends Validator<PaConfiguration> {
     this.ruleFor('ONE_TRUST_PP').isString().isRequired().matches(dataRegex.token);
     this.ruleFor('ONE_TRUST_TOS').isString().isRequired().matches(dataRegex.token);
     this.ruleFor('PAGOPA_HELP_EMAIL').isString().isRequired().matches(dataRegex.email);
-    this.ruleFor('IS_INACTIVITY_HANDLER_ENABLED').isBoolean();
+    this.ruleFor('INACTIVITY_HANDLER_MINUTES').isNumber().isRequired();
     this.ruleFor('IS_PAYMENT_ENABLED').isBoolean();
     this.ruleFor('MIXPANEL_TOKEN').isString().isRequired();
     this.ruleFor('WORK_IN_PROGRESS').isBoolean();

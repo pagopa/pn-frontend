@@ -134,13 +134,16 @@ const DomicileBanner: React.FC<Props> = ({ source }) => {
   const handleClick = (destination?: ChannelType, operation?: ContactOperation) => {
     if (destination && operation) {
       if (destination === ChannelType.SERCQ_SEND && operation === ContactOperation.ADD) {
+        PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SERCQ_SEND_ENTER_FLOW, {
+          source,
+        });
         navigate(routes.DIGITAL_DOMICILE_ACTIVATION);
       } else {
+        PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_VIEW_CONTACT_DETAILS, { source });
         navigate(routes.RECAPITI);
       }
       dispatch(setExternalEvent({ destination, source, operation }));
     }
-    PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_VIEW_CONTACT_DETAILS, { source });
   };
 
   return open && domicileBannerData ? (

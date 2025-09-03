@@ -23,8 +23,6 @@ const ExistingContactDialog: React.FC<Props> = ({
   return (
     <ConfirmationModal
       open={open}
-      aria-labelledby="dialog-title"
-      aria-describedby="dialog-description"
       title={t(`common.duplicate-${isDefault ? 'default-' : ''}contact-title`, {
         value,
         ns: 'recapiti',

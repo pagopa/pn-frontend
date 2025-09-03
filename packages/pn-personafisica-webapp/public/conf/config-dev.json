@@ -1,6 +1,6 @@
 {
   "API_BASE_URL": "https://webapi.dev.notifichedigitali.it/",
-  "IS_INACTIVITY_HANDLER_ENABLED": false,
+  "INACTIVITY_HANDLER_MINUTES": 0,
   "MIXPANEL_TOKEN": "ba1f5101fe34a61bb125cbfe587780d8",
   "ONE_TRUST_DRAFT_MODE": true,
   "ONE_TRUST_PARTICIPATING_ENTITIES": "ffb2a640-8165-4d5f-94c2-6259e21bee51",

@@ -1,8 +1,9 @@
 import { vi } from 'vitest';
 
 import { testAutocomplete } from '@pagopa-pn/pn-commons/src/test-utils';
+import userEvent from '@testing-library/user-event';
 
-import { fireEvent, render, screen, waitFor, within } from '../../../__test__/test-utils';
+import { render, screen, waitFor, within } from '../../../__test__/test-utils';
 import AcceptDelegationModal from '../AcceptDelegationModal';
 
 const confirmCbk = vi.fn();
@@ -27,7 +28,7 @@ describe('AcceptDelegationModal', () => {
     expect(dialog).toBeInTheDocument();
   });
 
-  it('calls cancel callback - codeModal', () => {
+  it('calls cancel callback - codeModal', async () => {
     render(
       <AcceptDelegationModal
         isEditMode={false}
@@ -41,7 +42,7 @@ describe('AcceptDelegationModal', () => {
     const codeConfirmButton = within(dialog).getByTestId('codeConfirmButton');
     const codeCancelButton = within(dialog).getByTestId('codeCancelButton');
     expect(codeConfirmButton).toBeEnabled();
-    fireEvent.click(codeCancelButton);
+    await userEvent.click(codeCancelButton);
     expect(cancelCbk).toHaveBeenCalledTimes(1);
   });
 
@@ -91,7 +92,7 @@ describe('AcceptDelegationModal', () => {
     expect(autocomplete).toHaveTextContent(groups[1].name);
   });
 
-  it('calls cancel callback - groupModal', () => {
+  it('calls cancel callback - groupModal', async () => {
     render(
       <AcceptDelegationModal
         isEditMode
@@ -106,7 +107,7 @@ describe('AcceptDelegationModal', () => {
     const groupCancelButton = within(dialog).getByTestId('groupCancelButton');
     expect(groupConfirmButton).toBeEnabled();
     expect(groupCancelButton).toHaveTextContent('button.annulla');
-    fireEvent.click(groupCancelButton);
+    await userEvent.click(groupCancelButton);
     expect(cancelCbk).toHaveBeenCalledTimes(1);
   });
 
@@ -134,12 +135,12 @@ describe('AcceptDelegationModal', () => {
     const dialog = screen.getByTestId('groupDialog');
     const groupConfirmButton = within(dialog).getByTestId('groupConfirmButton');
     const associateGroupRadio = within(dialog).getByTestId('associate-group');
-    fireEvent.click(associateGroupRadio);
+    await userEvent.click(associateGroupRadio);
     await testAutocomplete(dialog, 'groups', groups, true, 1);
     expect(groupConfirmButton).toBeEnabled();
-    fireEvent.click(groupConfirmButton);
+    await userEvent.click(groupConfirmButton);
     expect(confirmCbk).toHaveBeenCalledTimes(1);
-    expect(confirmCbk).toHaveBeenCalledWith([], [groups[1]]);
+    expect(confirmCbk).toHaveBeenCalledWith('', [groups[1]]);
   });
 
   it('fills the code, go next step and returns back', async () => {
@@ -166,28 +167,30 @@ describe('AcceptDelegationModal', () => {
     let codeDialog = screen.getByTestId('codeDialog');
     const codeConfirmButton = within(codeDialog).getByTestId('codeConfirmButton');
     expect(codeConfirmButton).toBeEnabled();
-    const codeInputs = codeDialog.querySelectorAll('input');
-    codeInputs.forEach((input, index) => {
-      fireEvent.change(input, { target: { value: index.toString() } });
-    });
+
+    const code = '01234';
+    const textbox = within(codeDialog).getByRole('textbox');
+    textbox.focus();
+    await userEvent.keyboard(code);
+
     expect(codeConfirmButton).toBeEnabled();
     // got to next step
-    fireEvent.click(codeConfirmButton);
+    await userEvent.click(codeConfirmButton);
     const groupDialog = await waitFor(() => screen.findByTestId('groupDialog'));
     expect(codeDialog).not.toBeInTheDocument();
     expect(groupDialog).toBeInTheDocument();
-    // go to previous step and check that inputs are filled with previous values
+    // go to previous step and check the code is preserved
     const groupCancelButton = within(groupDialog).getByTestId('groupCancelButton');
     expect(groupCancelButton).toHaveTextContent('button.indietro');
-    fireEvent.click(groupCancelButton);
+    await userEvent.click(groupCancelButton);
     await waitFor(() => {
       codeDialog = screen.getByTestId('codeDialog');
       expect(groupDialog).not.toBeInTheDocument();
     });
     expect(codeDialog).toBeInTheDocument();
-    codeInputs.forEach((input, index) => {
-      expect(input).toHaveValue(index.toString());
-    });
+
+    const textboxBack = within(codeDialog).getByRole('textbox');
+    expect(textboxBack).toHaveValue(code);
   });
 
   it('fills the code and confirm - no groups', async () => {
@@ -203,14 +206,17 @@ describe('AcceptDelegationModal', () => {
     const codeDialog = screen.getByTestId('codeDialog');
     const codeConfirmButton = within(codeDialog).getByTestId('codeConfirmButton');
     expect(codeConfirmButton).toBeEnabled();
-    const codeInputs = codeDialog.querySelectorAll('input');
-    codeInputs.forEach((input, index) => {
-      fireEvent.change(input, { target: { value: index.toString() } });
-    });
+
+    const code = '01234';
+    const textbox = within(codeDialog).getByRole('textbox');
+    textbox.focus();
+    await userEvent.keyboard(code);
+
     expect(codeConfirmButton).toBeEnabled();
-    fireEvent.click(codeConfirmButton);
+    await userEvent.click(codeConfirmButton);
+
     expect(confirmCbk).toHaveBeenCalledTimes(1);
-    expect(confirmCbk).toHaveBeenCalledWith(['0', '1', '2', '3', '4'], []);
+    expect(confirmCbk).toHaveBeenCalledWith(code, []);
   });
 
   it('fills the code, go next step, choose groups and confirm', async () => {
@@ -237,24 +243,32 @@ describe('AcceptDelegationModal', () => {
     const codeDialog = screen.getByTestId('codeDialog');
     const codeConfirmButton = within(codeDialog).getByTestId('codeConfirmButton');
     expect(codeConfirmButton).toBeEnabled();
-    const codeInputs = codeDialog.querySelectorAll('input');
-    codeInputs.forEach((input, index) => {
-      fireEvent.change(input, { target: { value: index.toString() } });
-    });
+
+    const code = '01234';
+    const textbox = within(codeDialog).getByRole('textbox');
+    textbox.focus();
+    await userEvent.keyboard(code);
+
     expect(codeConfirmButton).toBeEnabled();
+
     // got to next step
-    fireEvent.click(codeConfirmButton);
+    await userEvent.click(codeConfirmButton);
+
     const groupDialog = await waitFor(() => screen.findByTestId('groupDialog'));
     expect(codeDialog).not.toBeInTheDocument();
     expect(groupDialog).toBeInTheDocument();
+
     const associateGroupRadio = await waitFor(() =>
       within(groupDialog).getByTestId('associate-group')
     );
-    fireEvent.click(associateGroupRadio);
+    await userEvent.click(associateGroupRadio);
+
     await testAutocomplete(groupDialog, 'groups', groups, true, 1);
+
     const groupConfirmButton = within(groupDialog).getByTestId('groupConfirmButton');
-    fireEvent.click(groupConfirmButton);
+    await userEvent.click(groupConfirmButton);
+
     expect(confirmCbk).toHaveBeenCalledTimes(1);
-    expect(confirmCbk).toHaveBeenCalledWith(['0', '1', '2', '3', '4'], [groups[1]]);
+    expect(confirmCbk).toHaveBeenCalledWith(code, [groups[1]]);
   });
 });
