@@ -321,7 +321,7 @@ export const OrganizationsList: React.FC<OrganizationsListProps> = ({
         </Typography>
       ) : (
         <Box
-          role="region"
+          tabIndex={0}
           aria-label={`${t('deleghe.table.notificationsFrom')} ${organizations
             .map((c) => c)
             .join(', ')}`}
