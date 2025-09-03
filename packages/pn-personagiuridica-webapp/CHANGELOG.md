@@ -3,6 +3,24 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.18.0-RC.0](https://github.com/pagopa/pn-frontend/compare/v2.17.1...v2.18.0-RC.0) (2025-09-03)
+
+
+### Bug Fixes
+
+* **PN-13213:** add hidden label to payment Radio button to improve component a11y ([#1606](https://github.com/pagopa/pn-frontend/issues/1606)) ([#1624](https://github.com/pagopa/pn-frontend/issues/1624)) ([ee72d57](https://github.com/pagopa/pn-frontend/commit/ee72d57f33819d4d6c527c7c22f544a4741b9928))
+* **pn-14226:** Special contacts banners when pec is validating or user already set another contact for the same pa ([#1601](https://github.com/pagopa/pn-frontend/issues/1601)) ([22b97fa](https://github.com/pagopa/pn-frontend/commit/22b97face0d64b27d05257cca2bad6588d217725))
+* **pn-14794:** handle user inactivity ([#1620](https://github.com/pagopa/pn-frontend/issues/1620)) ([ef957f1](https://github.com/pagopa/pn-frontend/commit/ef957f1a5fac27739c6b358c408e3d85ed485140))
+
+
+### Features
+
+* **PN-15517:** refactor SessionGuard in PF app ([#1603](https://github.com/pagopa/pn-frontend/issues/1603)) ([04ca6b3](https://github.com/pagopa/pn-frontend/commit/04ca6b30d4d5f09c8252ee4a316a9d6ddec1e3df))
+
+
+
+
+
 ## [2.17.1](https://github.com/pagopa/pn-frontend/compare/v2.17.1-RC.2...v2.17.1) (2025-08-08)
 
 **Note:** Version bump only for package @pagopa-pn/pn-personagiuridica-webapp
