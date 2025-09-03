@@ -3,9 +3,10 @@ import { vi } from 'vitest';
 
 import { Row } from '@pagopa-pn/pn-commons';
 import { testAutocomplete } from '@pagopa-pn/pn-commons/src/test-utils';
+import userEvent from '@testing-library/user-event';
 
 import { mandatesByDelegate } from '../../../__mocks__/Delegations.mock';
-import { fireEvent, render, screen, waitFor, within } from '../../../__test__/test-utils';
+import { render, screen, waitFor, within } from '../../../__test__/test-utils';
 import { apiClient } from '../../../api/apiClients';
 import { DelegationColumnData, DelegationStatus } from '../../../models/Deleghe';
 import { AcceptButton, Menu, OrganizationsList } from '../DelegationsElements';
@@ -36,23 +37,23 @@ describe('DelegationElements', async () => {
     expect(closedMenu).toBeNull();
   });
 
-  it('opens the delegate Menu', () => {
+  it('opens the delegate Menu', async () => {
     const { queryByTestId, getByTestId } = render(<Menu menuType="delegates" id="111" />);
     const menuIcon = getByTestId('delegationMenuIcon');
     const closedMenu = queryByTestId('delegationMenu');
     expect(closedMenu).toBeNull();
-    fireEvent.click(menuIcon);
+    await userEvent.click(menuIcon);
     const menu = getByTestId('delegationMenu');
     expect(menu).toHaveTextContent(/deleghe.revoke/i);
     expect(menu).toHaveTextContent(/deleghe.show/i);
   });
 
-  it('opens the delegator Menu', () => {
+  it('opens the delegator Menu', async () => {
     const { queryByTestId, getByTestId } = render(<Menu menuType="delegators" id="111" />);
     const menuIcon = getByTestId('delegationMenuIcon');
     const closedMenu = queryByTestId('delegationMenu');
     expect(closedMenu).toBeNull();
-    fireEvent.click(menuIcon);
+    await userEvent.click(menuIcon);
     const menu = getByTestId('delegationMenu');
     expect(menu).toHaveTextContent(/deleghe.reject/i);
   });
@@ -86,7 +87,7 @@ describe('DelegationElements', async () => {
     expect(container).toHaveTextContent(/Abbiategrasso/i);
     expect(container).toHaveTextContent(/\+1/i);
     expect(container).not.toHaveTextContent(/Malpesa/i);
-    await waitFor(() => fireEvent.mouseOver(organizationsList));
+    await userEvent.hover(organizationsList);
     await waitFor(() => expect(screen.getByText(/Malpensa/i)).toBeInTheDocument());
   });
 
@@ -96,7 +97,7 @@ describe('DelegationElements', async () => {
     );
     expect(container).toHaveTextContent(/deleghe.accept/i);
     const button = getByTestId('acceptButton');
-    fireEvent.click(button);
+    await userEvent.click(button);
     const codeDialog = await waitFor(() => screen.getByTestId('codeDialog'));
     expect(codeDialog).toBeInTheDocument();
   });
@@ -107,11 +108,11 @@ describe('DelegationElements', async () => {
     );
     expect(container).toHaveTextContent(/deleghe.accept/i);
     const button = getByTestId('acceptButton');
-    fireEvent.click(button);
+    await userEvent.click(button);
     const codeDialog = await waitFor(() => screen.getByTestId('codeDialog'));
     expect(codeDialog).toBeInTheDocument();
     const cancelButton = getByTestId('codeCancelButton');
-    fireEvent.click(cancelButton);
+    await userEvent.click(cancelButton);
     await waitFor(() => expect(codeDialog).not.toBeInTheDocument());
     expect(actionCbk).not.toHaveBeenCalled();
   });
@@ -137,29 +138,28 @@ describe('DelegationElements', async () => {
     );
     expect(container).toHaveTextContent(/deleghe.accept/i);
     const button = getByTestId('acceptButton');
-    fireEvent.click(button);
+    await userEvent.click(button);
     const codeDialog = await waitFor(() => screen.getByTestId('codeDialog'));
     expect(codeDialog).toBeInTheDocument();
     const codeConfirmButton = within(codeDialog).getByTestId('codeConfirmButton');
     expect(codeConfirmButton).toBeEnabled();
     // fill the code
-    const codeInputs = codeDialog.querySelectorAll('input');
-    codeInputs.forEach((input, index) => {
-      fireEvent.change(input, { target: { value: index.toString() } });
-    });
+    const textbox = within(codeDialog).getByRole('textbox');
+    textbox.focus();
+    await userEvent.keyboard('01234');
     expect(codeConfirmButton).toBeEnabled();
     // got to next step
-    fireEvent.click(codeConfirmButton);
+    await userEvent.click(codeConfirmButton);
     const groupDialog = await waitFor(() => screen.getByTestId('groupDialog'));
     expect(groupDialog).toBeInTheDocument();
     // select groups to associate
     const associateGroupRadio = await waitFor(() =>
       within(groupDialog).getByTestId('associate-group')
     );
-    fireEvent.click(associateGroupRadio);
+    await userEvent.click(associateGroupRadio);
     await testAutocomplete(groupDialog, 'groups', groups, true, 1);
     const groupConfirmButton = within(groupDialog).getByTestId('groupConfirmButton');
-    fireEvent.click(groupConfirmButton);
+    await userEvent.click(groupConfirmButton);
     await waitFor(() => {
       expect(mock.history.patch.length).toBe(1);
       expect(mock.history.patch[0].url).toContain(`/bff/v1/mandate/4/accept`);
@@ -182,18 +182,16 @@ describe('DelegationElements', async () => {
     );
     const menuIcon = getByTestId('delegationMenuIcon');
 
-    fireEvent.click(menuIcon);
+    await userEvent.click(menuIcon);
     const menu = getByTestId('delegationMenu');
     const show = menu.querySelectorAll('[role="menuitem"]')[0];
-    fireEvent.click(show);
+    await userEvent.click(show);
     const showDialog = await waitFor(() => screen.getByTestId('codeDialog'));
-    const codeInputs = showDialog?.querySelectorAll('input');
-    const arrayOfVerificationCode = verificationCode.split('');
-    codeInputs?.forEach((input, index) => {
-      expect(input).toHaveValue(arrayOfVerificationCode[index]);
-    });
+    const textbox = within(showDialog).getByRole('textbox');
+    // since CodeModal truncates to codeLength (default 5), check only first 5 chars
+    expect(textbox).toHaveValue(verificationCode.slice(0, 5));
     const cancelButton = within(showDialog).getByTestId('codeCancelButton');
-    fireEvent.click(cancelButton);
+    await userEvent.click(cancelButton);
     await waitFor(() => {
       expect(showDialog).not.toBeInTheDocument();
     });
@@ -210,13 +208,13 @@ describe('DelegationElements', async () => {
       />
     );
     const menuIcon = getByTestId('delegationMenuIcon');
-    fireEvent.click(menuIcon);
+    await userEvent.click(menuIcon);
     const menu = getByTestId('delegationMenu');
     const revoke = menu.querySelectorAll('[role="menuitem"]')[1];
-    fireEvent.click(revoke);
+    await userEvent.click(revoke);
     const showDialog = await waitFor(() => screen.getByTestId('confirmationDialog'));
     const confirmButton = within(showDialog).getByTestId('confirmButton');
-    fireEvent.click(confirmButton);
+    await userEvent.click(confirmButton);
     await waitFor(() => {
       expect(mock.history.patch.length).toBe(1);
       expect(mock.history.patch[0].url).toContain('/bff/v1/mandate/111/revoke');
@@ -234,13 +232,13 @@ describe('DelegationElements', async () => {
       />
     );
     const menuIcon = getByTestId('delegationMenuIcon');
-    fireEvent.click(menuIcon);
+    await userEvent.click(menuIcon);
     const menu = getByTestId('delegationMenu');
     const revoke = menu.querySelectorAll('[role="menuitem"]')[1];
-    fireEvent.click(revoke);
+    await userEvent.click(revoke);
     const showDialog = await waitFor(() => screen.getByTestId('confirmationDialog'));
     const cancelButton = within(showDialog).getByTestId('closeButton');
-    fireEvent.click(cancelButton);
+    await userEvent.click(cancelButton);
     await waitFor(() => {
       expect(showDialog).not.toBeInTheDocument();
     });
@@ -256,13 +254,13 @@ describe('DelegationElements', async () => {
       />
     );
     const menuIcon = getByTestId('delegationMenuIcon');
-    fireEvent.click(menuIcon);
+    await userEvent.click(menuIcon);
     const menu = getByTestId('delegationMenu');
     const reject = menu.querySelectorAll('[role="menuitem"]')[0];
-    fireEvent.click(reject);
+    await userEvent.click(reject);
     const showDialog = await waitFor(() => screen.getByTestId('confirmationDialog'));
     const confirmButton = within(showDialog).getByTestId('confirmButton');
-    fireEvent.click(confirmButton);
+    await userEvent.click(confirmButton);
     await waitFor(() => {
       expect(mock.history.patch.length).toBe(1);
       expect(mock.history.patch[0].url).toContain('/bff/v1/mandate/111/reject');
@@ -285,7 +283,7 @@ describe('DelegationElements', async () => {
       />
     );
     const menuIcon = getByTestId('delegationMenuIcon');
-    fireEvent.click(menuIcon);
+    await userEvent.click(menuIcon);
     const menu = getByTestId('delegationMenu');
     const menuItems = menu.querySelectorAll('[role="menuitem"]');
     expect(menuItems).toHaveLength(1);
@@ -319,16 +317,16 @@ describe('DelegationElements', async () => {
       }
     );
     const menuIcon = getByTestId('delegationMenuIcon');
-    fireEvent.click(menuIcon);
+    await userEvent.click(menuIcon);
     const menu = getByTestId('delegationMenu');
     const menuItems = menu.querySelectorAll('[role="menuitem"]');
     expect(menuItems).toHaveLength(2);
     const updateButton = menuItems[1];
-    fireEvent.click(updateButton);
+    await userEvent.click(updateButton);
     const updateDialog = await waitFor(() => screen.getByTestId('groupDialog'));
     expect(updateDialog).toBeInTheDocument();
     const cancelButton = getByTestId('groupCancelButton');
-    fireEvent.click(cancelButton);
+    await userEvent.click(cancelButton);
     await waitFor(() => expect(updateDialog).not.toBeInTheDocument());
     expect(actionCbk).not.toHaveBeenCalled();
   });
@@ -366,17 +364,17 @@ describe('DelegationElements', async () => {
       }
     );
     const menuIcon = getByTestId('delegationMenuIcon');
-    fireEvent.click(menuIcon);
+    await userEvent.click(menuIcon);
     const menu = getByTestId('delegationMenu');
     const menuItems = menu.querySelectorAll('[role="menuitem"]');
     expect(menuItems).toHaveLength(2);
     const updateButton = menuItems[1];
-    fireEvent.click(updateButton);
+    await userEvent.click(updateButton);
     const updateDialog = await waitFor(() => screen.getByTestId('groupDialog'));
     expect(updateDialog).toBeInTheDocument();
     await testAutocomplete(updateDialog, 'groups', groups, true, 2);
     const groupConfirmButton = within(updateDialog).getByTestId('groupConfirmButton');
-    fireEvent.click(groupConfirmButton);
+    await userEvent.click(groupConfirmButton);
     await waitFor(() => {
       expect(mock.history.patch.length).toBe(1);
       expect(mock.history.patch[0].url).toContain(`/bff/v1/mandate/4/update`);

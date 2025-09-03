@@ -90,9 +90,9 @@ const Deleghe = () => {
     dispatch(closeAcceptModal());
   };
 
-  const handleAccept = (code: Array<string>) => {
+  const handleAccept = (code: string) => {
     PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_MANDATE_ACCEPTED);
-    dispatch(acceptMandate({ id: acceptId, code: code.join('') }))
+    dispatch(acceptMandate({ id: acceptId, code }))
       .unwrap()
       .then(() => {
         void dispatch(getSidemenuInformation());
@@ -154,7 +154,7 @@ const Deleghe = () => {
           title={t('deleghe.accept_title')}
           subtitle={t('deleghe.accept_description', { name: acceptName })}
           open={acceptOpen}
-          initialValues={new Array(5).fill('')}
+          codeLength={5}
           cancelCallback={handleCloseAcceptModal}
           cancelLabel={t('button.indietro', { ns: 'common' })}
           confirmCallback={handleAccept}
