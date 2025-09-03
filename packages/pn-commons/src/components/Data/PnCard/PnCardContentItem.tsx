@@ -28,7 +28,11 @@ const PnCardContentItem: React.FC<Props> = ({
         {children}
       </Typography>
     )}
-    {!wrapValueInTypography && <Box data-testid={testId ? `${testId}Value` : null}>{children}</Box>}
+    {!wrapValueInTypography && (
+      <Box aria-label="box esterno" data-testid={testId ? `${testId}Value` : 'null'}>
+        {children}
+      </Box>
+    )}
   </>
 );
 
