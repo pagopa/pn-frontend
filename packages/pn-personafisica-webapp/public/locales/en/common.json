@@ -30,6 +30,8 @@
     "app-status": "Platform status"
   },
   "header": {
+    "assistance": "Assistance",
+    "login": "Login",
     "logout": "Exit",
     "pago-pa-link": "PagoPA S.p.A. website"
   },
