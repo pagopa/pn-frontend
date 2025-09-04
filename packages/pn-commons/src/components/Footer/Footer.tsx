@@ -13,6 +13,7 @@ import {
 
 type Props = {
   currentLanguage: string;
+  accessibilityLink: string;
   onLanguageChanged?: (langCode: string) => void;
   loggedUser?: boolean;
   /** Enables the Terms of Service Link */
@@ -25,6 +26,7 @@ type Props = {
 
 const Footer: React.FC<Props> = ({
   currentLanguage,
+  accessibilityLink,
   onLanguageChanged = () => {},
   loggedUser = false,
   hasTermsOfService,
@@ -45,8 +47,13 @@ const Footer: React.FC<Props> = ({
         onClick: () => window.open(localizedPagoPALink.href, '_blank'),
       }}
       legalInfo={companyLegalInfo()}
-      postLoginLinks={postLoginLinks()}
-      preLoginLinks={preLoginLinks(hasTermsOfService, privacyPolicyHref, termsOfServiceHref)}
+      postLoginLinks={postLoginLinks(accessibilityLink)}
+      preLoginLinks={preLoginLinks(
+        hasTermsOfService,
+        privacyPolicyHref,
+        termsOfServiceHref,
+        accessibilityLink
+      )}
       languages={LANGUAGES}
       currentLangCode={currentLangCode}
       onLanguageChanged={changeLanguageHandler}

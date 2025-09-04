@@ -70,8 +70,14 @@ const App = () => {
 
 // eslint-disable-next-line complexity
 const ActualApp = () => {
-  const { MIXPANEL_TOKEN, PAGOPA_HELP_EMAIL, SELFCARE_BASE_URL, IS_B2B_ENABLED, SELFCARE_CDN_URL } =
-    getConfiguration();
+  const {
+    MIXPANEL_TOKEN,
+    PAGOPA_HELP_EMAIL,
+    SELFCARE_BASE_URL,
+    IS_B2B_ENABLED,
+    SELFCARE_CDN_URL,
+    ACCESSIBILITY_LINK,
+  } = getConfiguration();
   const dispatch = useAppDispatch();
   const { t, i18n } = useTranslation(['common', 'notifiche']);
   const [openModal, setOpenModal] = useState(false);
@@ -300,6 +306,7 @@ const ActualApp = () => {
         partyList={partyList}
         isLogged={!!sessionToken}
         hasTermsOfService={true}
+        accessibilityLink={ACCESSIBILITY_LINK}
       >
         <PnDialog open={openModal}>
           <DialogTitle sx={{ mb: 2 }}>{t('header.logout-message')}</DialogTitle>
