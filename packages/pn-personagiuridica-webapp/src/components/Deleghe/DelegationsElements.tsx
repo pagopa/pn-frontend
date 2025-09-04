@@ -321,13 +321,22 @@ export const OrganizationsList: React.FC<OrganizationsListProps> = ({
           {t('deleghe.table.allNotifications')}
         </Typography>
       ) : (
-        <Box>
-          <Typography variant={textVariant || 'inherit'} mb={2}>
+        <Box
+          tabIndex={0}
+          aria-label={`${t('deleghe.table.notificationsFrom')} ${organizations
+            .map((c) => c)
+            .join(', ')}`}
+        >
+          <Typography variant={textVariant || 'inherit'} mb={2} aria-hidden="true">
             {t('deleghe.table.notificationsFrom')}
           </Typography>
           <CustomTagGroup visibleItems={visibleItems}>
             {organizations.map((organization) => (
-              <Box sx={{ mb: 1, mr: 1, display: 'inline-block' }} key={organization}>
+              <Box
+                sx={{ mb: 1, mr: 1, display: 'inline-block' }}
+                key={organization}
+                aria-hidden="true"
+              >
                 <Tag
                   value={organization}
                   sx={{
