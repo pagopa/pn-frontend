@@ -41,6 +41,7 @@ const Login = () => {
     PAGOPA_HELP_EMAIL,
     PF_URL,
     IS_SMART_APP_BANNER_ENABLED,
+    ACCESSIBILITY_LINK,
   } = getConfiguration();
   const privacyPolicyUrl = `${PF_URL}${PRIVACY_POLICY}`;
   const smartBannerHeight = IS_SMART_APP_BANNER_ENABLED ? 66 : 0;
@@ -95,6 +96,7 @@ const Login = () => {
           email: undefined,
         }}
         privacyPolicyHref={privacyPolicyUrl}
+        accessibilityLink={ACCESSIBILITY_LINK}
         slotsProps={
           isMobile
             ? {

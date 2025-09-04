@@ -50,9 +50,9 @@ const Footer: React.FC<Props> = ({
       postLoginLinks={postLoginLinks(accessibilityLink)}
       preLoginLinks={preLoginLinks(
         hasTermsOfService,
+        accessibilityLink,
         privacyPolicyHref,
-        termsOfServiceHref,
-        accessibilityLink
+        termsOfServiceHref
       )}
       languages={LANGUAGES}
       currentLangCode={currentLangCode}
