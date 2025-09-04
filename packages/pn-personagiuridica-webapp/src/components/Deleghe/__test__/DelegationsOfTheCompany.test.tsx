@@ -1,9 +1,10 @@
 import MockAdapter from 'axios-mock-adapter';
 
 import { testAutocomplete } from '@pagopa-pn/pn-commons/src/test-utils';
+import userEvent from '@testing-library/user-event';
 
 import { mandatesByDelegate } from '../../../__mocks__/Delegations.mock';
-import { fireEvent, render, screen, waitFor, within } from '../../../__test__/test-utils';
+import { render, screen, waitFor, within } from '../../../__test__/test-utils';
 import { apiClient } from '../../../api/apiClients';
 import { DelegationStatus } from '../../../models/Deleghe';
 import DelegationsOfTheCompany from '../DelegationsOfTheCompany';
@@ -17,7 +18,7 @@ export async function testMultiSelect(
 ) {
   if (mustBeOpened) {
     const selectButton = form.querySelector(`div[id="${elementName}"]`);
-    fireEvent.mouseDown(selectButton!);
+    await userEvent.click(selectButton!);
   }
   const selectOptionsContainer = await screen.findByRole('presentation');
   expect(selectOptionsContainer).toBeInTheDocument();
@@ -28,7 +29,7 @@ export async function testMultiSelect(
   selectOptionsListItems.forEach((opt, index) => {
     expect(opt).toHaveTextContent(options[index].name);
   });
-  fireEvent.click(selectOptionsListItems[optToSelect]);
+  await userEvent.click(selectOptionsListItems[optToSelect]);
 }
 
 const initialState = {
@@ -153,7 +154,7 @@ describe('DelegationsOfTheCompany Component', async () => {
     await testMultiSelect(form!, 'status', status, 0, true);
     await testMultiSelect(form!, 'status', status, 2, false);
     expect(confirmButton).toBeEnabled();
-    fireEvent.click(confirmButton);
+    await userEvent.click(confirmButton);
     await waitFor(() => {
       expect(mock.history.post.length).toBe(1);
       expect(mock.history.post[0].url).toContain('/bff/v1/mandate/delegate?size=10');
@@ -223,7 +224,7 @@ describe('DelegationsOfTheCompany Component', async () => {
     await testMultiSelect(form!, 'status', status, 0, true);
     await testMultiSelect(form!, 'status', status, 2, false);
     expect(confirmButton).toBeEnabled();
-    fireEvent.click(confirmButton);
+    await userEvent.click(confirmButton);
     await waitFor(() => {
       expect(mock.history.post.length).toBe(1);
       expect(mock.history.post[0].url).toContain('/bff/v1/mandate/delegate?size=10');
@@ -237,7 +238,7 @@ describe('DelegationsOfTheCompany Component', async () => {
     expect(container).toHaveTextContent(/deleghe.no_delegators_after_filters/i);
     // clicks on empty state action
     const button = getByTestId('link-remove-filters');
-    fireEvent.click(button);
+    await userEvent.click(button);
     await waitFor(() => {
       expect(mock.history.post.length).toBe(2);
       expect(mock.history.post[0].url).toContain('/bff/v1/mandate/delegate?size=10');
@@ -270,12 +271,12 @@ describe('DelegationsOfTheCompany Component', async () => {
     const itemsPerPageSelector = getByTestId('itemsPerPageSelector');
     const button = itemsPerPageSelector.querySelector('button');
     expect(button).toHaveTextContent(/10/i);
-    fireEvent.click(button!);
+    await userEvent.click(button!);
     const itemsPerPageListContainer = await waitFor(() => screen.queryByRole('presentation'));
     expect(itemsPerPageListContainer).toBeInTheDocument();
     const itemsPerPageList = screen.getAllByRole('menuitem');
     expect(itemsPerPageList).toHaveLength(3);
-    fireEvent.click(itemsPerPageList[1]!);
+    await userEvent.click(itemsPerPageList[1]!);
     await waitFor(() => {
       expect(button).toHaveTextContent(/20/i);
       expect(mock.history.post.length).toBe(1);
@@ -317,7 +318,7 @@ describe('DelegationsOfTheCompany Component', async () => {
     expect(pageButtons[1]).toHaveTextContent(/1/i);
     expect(pageButtons[2]).toHaveTextContent(/2/i);
     expect(pageButtons[3]).toHaveTextContent(/3/i);
-    fireEvent.click(pageButtons[2]);
+    await userEvent.click(pageButtons[2]);
     await waitFor(() => {
       expect(mock.history.post.length).toBe(1);
       expect(mock.history.post[0].url).toContain(
@@ -343,17 +344,17 @@ describe('DelegationsOfTheCompany Component', async () => {
       },
     });
     const menu = getAllByTestId('delegationMenuIcon');
-    fireEvent.click(menu[0]);
+    await userEvent.click(menu[0]);
     const menuOpen = await waitFor(async () => getByTestId('delegationMenu'));
     const menuItems = menuOpen.querySelectorAll('[role="menuitem"]');
     expect(menuItems).toHaveLength(1);
     expect(menuItems[0]).toHaveTextContent(/deleghe.reject/i);
-    fireEvent.click(menuItems[0]);
+    await userEvent.click(menuItems[0]);
     const dialog = await waitFor(() => getByTestId('confirmationDialog'));
     expect(dialog).toBeInTheDocument();
     const confirmButton = within(dialog).getByTestId('confirmButton');
     // click on confirm button
-    fireEvent.click(confirmButton);
+    await userEvent.click(confirmButton);
     await waitFor(() => {
       expect(mock.history.patch.length).toBe(1);
       expect(mock.history.patch[0].url).toContain(
@@ -386,17 +387,16 @@ describe('DelegationsOfTheCompany Component', async () => {
     expect(table).toBeInTheDocument();
     const acceptButton = within(table).getByTestId('acceptButton');
     expect(acceptButton).toBeInTheDocument();
-    fireEvent.click(acceptButton);
+    await userEvent.click(acceptButton);
     const dialog = await waitFor(() => getByTestId('codeDialog'));
     expect(dialog).toBeInTheDocument();
     // fill the code
-    const codeInputs = dialog.querySelectorAll('input');
-    codeInputs.forEach((input, index) => {
-      fireEvent.change(input, { target: { value: index.toString() } });
-    });
+    const textbox = within(dialog).getByRole('textbox');
+    textbox.focus();
+    await userEvent.keyboard('01234');
     const codeConfirmButton = within(dialog).getByTestId('codeConfirmButton');
     // click on confirm button
-    fireEvent.click(codeConfirmButton);
+    await userEvent.click(codeConfirmButton);
     await waitFor(() => {
       expect(mock.history.patch.length).toBe(1);
       expect(mock.history.patch[0].url).toContain(
@@ -433,19 +433,19 @@ describe('DelegationsOfTheCompany Component', async () => {
     let rows = getAllByTestId('delegationsBodyRowDesktop');
     expect(rows[1]).not.toHaveTextContent('Group 3');
     const menu = within(rows[1]).getByTestId('delegationMenuIcon');
-    fireEvent.click(menu);
+    await userEvent.click(menu);
     const menuOpen = await waitFor(async () => getByTestId('delegationMenu'));
     const menuItems = menuOpen.querySelectorAll('[role="menuitem"]');
     expect(menuItems).toHaveLength(2);
     expect(menuItems[1]).toHaveTextContent(/deleghe.update/i);
-    fireEvent.click(menuItems[1]);
+    await userEvent.click(menuItems[1]);
     const updateDialog = await waitFor(() => screen.getByTestId('groupDialog'));
     expect(updateDialog).toBeInTheDocument();
     const associateGroupRadio = within(updateDialog).getByTestId('associate-group');
-    fireEvent.click(associateGroupRadio);
+    await userEvent.click(associateGroupRadio);
     await testAutocomplete(updateDialog, 'groups', groups, true, 2);
     const groupConfirmButton = within(updateDialog).getByTestId('groupConfirmButton');
-    fireEvent.click(groupConfirmButton);
+    await userEvent.click(groupConfirmButton);
     await waitFor(() => {
       expect(mock.history.patch.length).toBe(1);
       expect(mock.history.patch[0].url).toContain(

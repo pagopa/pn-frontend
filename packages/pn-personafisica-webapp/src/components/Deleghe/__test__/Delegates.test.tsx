@@ -144,10 +144,10 @@ describe('Delegates Component', async () => {
     expect(dialog).toHaveTextContent('deleghe.show_code_subtitle');
     expect(dialog).toHaveTextContent('deleghe.close');
     expect(dialog).toHaveTextContent('deleghe.verification_code');
-    const codeInputs = dialog?.querySelectorAll('input');
-    const codes = mandatesByDelegator[0].verificationCode.split('');
-    codeInputs?.forEach((input, index) => {
-      expect(input).toHaveValue(codes[index]);
-    });
+    const textbox = within(dialog).getByRole('textbox');
+    expect(textbox).toHaveValue(mandatesByDelegator[0].verificationCode);
+
+    const copyBtn = within(dialog).getByTestId('copyCodeButton');
+    expect(copyBtn).toBeInTheDocument();
   });
 });
