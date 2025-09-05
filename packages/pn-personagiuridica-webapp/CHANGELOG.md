@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.18.0-RC.2](https://github.com/pagopa/pn-frontend/compare/v2.18.0-RC.1...v2.18.0-RC.2) (2025-09-05)
+
+
+### Bug Fixes
+
+* **PN-16258:** move accessibilityLink in single configuration file ([#1634](https://github.com/pagopa/pn-frontend/issues/1634)) ([3e0f832](https://github.com/pagopa/pn-frontend/commit/3e0f832d0944658b616c9164222692b75122dab1))
+
+
+
+
+
 # [2.18.0-RC.1](https://github.com/pagopa/pn-frontend/compare/v2.18.0-RC.0...v2.18.0-RC.1) (2025-09-04)
 
 **Note:** Version bump only for package @pagopa-pn/pn-personagiuridica-webapp
