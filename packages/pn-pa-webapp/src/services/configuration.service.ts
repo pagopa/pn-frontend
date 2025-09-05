@@ -25,6 +25,7 @@ export interface PaConfiguration {
   PAYMENT_INFO_LINK: string;
   DEVELOPER_API_DOCUMENTATION_LINK: string;
   PHYSICAL_ADDRESS_LOOKUP: PhysicalAddressLookupConfig;
+  ACCESSIBILITY_LINK: string;
 }
 
 class PaConfigurationValidator extends Validator<PaConfiguration> {
@@ -57,6 +58,7 @@ class PaConfigurationValidator extends Validator<PaConfiguration> {
       .isString()
       .isRequired()
       .isOneOf(Object.values(PhysicalAddressLookupConfig));
+    this.ruleFor('ACCESSIBILITY_LINK').isString().isRequired();
   }
 }
 

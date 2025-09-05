@@ -33,6 +33,7 @@ describe('Layout Component', () => {
         sideMenu={<SideMenu menuItems={menuItems} />}
         productsList={productsList}
         loggedUser={loggedUser}
+        accessibilityLink="link-test"
       >
         <div data-testid="mockedChild">Mocked Child</div>
       </Layout>
