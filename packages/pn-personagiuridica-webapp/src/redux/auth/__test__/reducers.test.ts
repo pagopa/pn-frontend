@@ -91,6 +91,7 @@ describe('Auth redux state tests', () => {
       fiscal_number: '',
       email: '',
       from_aa: false,
+      hasGroup: false,
       uid: '',
       level: '',
       iat: 0,

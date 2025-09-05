@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Outlet, useLocation, useNavigate } from 'react-router-dom';
+import { Outlet, useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 
 import {
   AppResponsePublisher,
@@ -9,6 +9,7 @@ import {
   LoadingPage,
   SessionModal,
   adaptedTokenExchangeError,
+  sanitizeString,
   useErrors,
   useSessionCheck,
 } from '@pagopa-pn/pn-commons';
@@ -23,6 +24,7 @@ import * as routes from './routes.const';
 
 const SessionGuard = () => {
   const location = useLocation();
+  const [params] = useSearchParams();
   const { sessionToken, desired_exp: expDate } = useAppSelector(
     (state: RootState) => state.userState.user
   );
@@ -93,6 +95,10 @@ const SessionGuard = () => {
     } else if (sessionToken) {
       sessionCheck(expDate);
     } else {
+      const aar = params.get(AppRouteParams.AAR);
+      if (aar) {
+        localStorage.setItem(AppRouteParams.AAR, sanitizeString(aar));
+      }
       goToLoginPortal();
     }
     return () => {
