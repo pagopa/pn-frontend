@@ -18,6 +18,8 @@ const i18n: Partial<i18nInterface> = {
     }),
 };
 
+const accessibilityLink = 'accessibility-link.it';
+
 describe('Footer Component', () => {
   const original = window.open;
 
@@ -35,7 +37,11 @@ describe('Footer Component', () => {
   it('renders footer', () => {
     // render component
     const { getAllByRole, getByRole } = render(
-      <Footer currentLanguage={i18n.language ?? 'it'} loggedUser={true} />
+      <Footer
+        currentLanguage={i18n.language ?? 'it'}
+        loggedUser={true}
+        accessibilityLink={accessibilityLink}
+      />
     );
     const buttons = getAllByRole('link');
     expect(buttons).toHaveLength(4);
@@ -44,8 +50,11 @@ describe('Footer Component', () => {
         expect(button).toHaveTextContent('PagoPA');
         expect(button).toHaveAttribute('aria-label', pagoPALink().ariaLabel);
       } else {
-        expect(button).toHaveTextContent(postLoginLinks()[index - 1].label);
-        expect(button).toHaveAttribute('aria-label', postLoginLinks()[index - 1].ariaLabel);
+        expect(button).toHaveTextContent(postLoginLinks(accessibilityLink)[index - 1].label);
+        expect(button).toHaveAttribute(
+          'aria-label',
+          postLoginLinks(accessibilityLink)[index - 1].ariaLabel
+        );
       }
     });
     const dropdownLanguageButton = getByRole('button');
@@ -55,7 +64,11 @@ describe('Footer Component', () => {
 
   it('clicks on company link', () => {
     const { getAllByRole } = render(
-      <Footer currentLanguage={i18n.language ?? 'it'} loggedUser={true} />
+      <Footer
+        currentLanguage={i18n.language ?? 'it'}
+        loggedUser={true}
+        accessibilityLink={accessibilityLink}
+      />
     );
     const buttons = getAllByRole('link');
     fireEvent.click(buttons[0]);
@@ -70,6 +83,7 @@ describe('Footer Component', () => {
         loggedUser={true}
         currentLanguage={i18n.language ?? 'it'}
         onLanguageChanged={(langCode) => i18n.changeLanguage!(langCode)}
+        accessibilityLink={accessibilityLink}
       />
     );
     let dropdownLanguageButton = getByRole('button');
@@ -94,7 +108,13 @@ describe('Footer Component', () => {
     expect(sessionStorage.getItem('lang')).toBe(languageCode);
     expect(i18n.language).toBe(languageCode);
     // simulate rerendering due to language change
-    rerender(<Footer loggedUser={true} currentLanguage={i18n.language ?? 'it'} />);
+    rerender(
+      <Footer
+        loggedUser={true}
+        currentLanguage={i18n.language ?? 'it'}
+        accessibilityLink={accessibilityLink}
+      />
+    );
     dropdownLanguageButton = getByRole('button');
     expect(dropdownLanguageButton).toHaveTextContent(Object.values(LANGUAGES[languageCode]!)[2]);
     // check the dropdown languages
@@ -111,7 +131,13 @@ describe('Footer Component', () => {
     // we assume that the languages array has at least a length of 4
     const languageCode = Object.keys(LANGUAGES)[3] as keyof Languages;
     i18n.language = languageCode;
-    const { getByRole } = render(<Footer loggedUser={true} currentLanguage={i18n.language} />);
+    const { getByRole } = render(
+      <Footer
+        loggedUser={true}
+        currentLanguage={i18n.language}
+        accessibilityLink={accessibilityLink}
+      />
+    );
     const dropdownLanguageButton = getByRole('button');
     const expectedLanguagesLabels = Object.values(LANGUAGES[languageCode]!);
     expect(dropdownLanguageButton).toHaveTextContent(Object.values(LANGUAGES[languageCode]!)[3]);
