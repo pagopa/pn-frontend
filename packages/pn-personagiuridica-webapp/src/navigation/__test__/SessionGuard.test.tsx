@@ -1,4 +1,5 @@
 import MockAdapter from 'axios-mock-adapter';
+import { sub } from 'date-fns';
 import { Route, Routes } from 'react-router-dom';
 import { vi } from 'vitest';
 
@@ -230,15 +231,19 @@ describe('SessionGuard Component', async () => {
   it('logout', async () => {
     window.location.hash = '';
     window.location.pathname = '/';
+    const exp = sub(new Date(), { minutes: 5 }).getTime() / 1000;
+
     const mockReduxState = {
-      userState: { user: userResponse, isClosedSession: true },
+      userState: { user: { ...userResponse, exp } },
     };
     await act(async () => {
       render(<Guard />, { preloadedState: mockReduxState });
     });
-    const logoutComponent = screen.queryByTestId('session-modal');
-    expect(logoutComponent).toBeTruthy();
-    const logoutTitleComponent = screen.queryByText('leaving-app.title');
-    expect(logoutTitleComponent).toBeTruthy();
+    await waitFor(() => {
+      const logoutComponent = screen.queryByTestId('session-modal');
+      expect(logoutComponent).toBeTruthy();
+      const logoutTitleComponent = screen.queryByText('leaving-app.title');
+      expect(logoutTitleComponent).toBeTruthy();
+    });
   });
 });
