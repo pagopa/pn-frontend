@@ -95,7 +95,17 @@ const AcceptDelegationModal: React.FC<Props> = ({
     }
   };
 
+  const clearError = () => {
+    // eslint-disable-next-line functional/immutable-data
+    errorRef.current = {
+      title: '',
+      message: '',
+      hasError: false,
+    };
+  };
+
   const handleClose = () => {
+    clearError();
     setGroupForm({
       value: hasGroupsAssociated ? currentGroups : [],
       touched: false,
