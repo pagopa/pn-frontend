@@ -22,6 +22,7 @@ import {
 } from '@pagopa-pn/pn-commons';
 import { PartyEntity, ProductEntity } from '@pagopa/mui-italia';
 
+import { useMenuItems } from './hooks/useMenuItems';
 import { PNRole } from './models/User';
 import { goToLoginPortal } from './navigation/navigation.utility';
 import Router from './navigation/routes';
@@ -37,7 +38,6 @@ import { getConfiguration } from './services/configuration.service';
 import { PGAppErrorFactory } from './utility/AppError/PGAppErrorFactory';
 import showLayoutParts from './utility/layout.utility';
 import './utility/onetrust';
-import { useMenuItems } from './hooks/useMenuItems';
 
 // Cfr. PN-6096
 // --------------------
@@ -63,8 +63,13 @@ const App = () => {
 
 // eslint-disable-next-line complexity
 const ActualApp = () => {
-  const { MIXPANEL_TOKEN, PAGOPA_HELP_EMAIL, SELFCARE_BASE_URL, SELFCARE_CDN_URL } =
-    getConfiguration();
+  const {
+    MIXPANEL_TOKEN,
+    PAGOPA_HELP_EMAIL,
+    SELFCARE_BASE_URL,
+    SELFCARE_CDN_URL,
+    ACCESSIBILITY_LINK,
+  } = getConfiguration();
   const dispatch = useAppDispatch();
   const { t, i18n } = useTranslation(['common', 'notifiche']);
   const [openModal, setOpenModal] = useState(false);
@@ -201,6 +206,7 @@ const ActualApp = () => {
         partyList={partyList}
         isLogged={!!sessionToken}
         hasTermsOfService={true}
+        accessibilityLink={ACCESSIBILITY_LINK}
       >
         <PnDialog open={openModal}>
           <DialogTitle sx={{ mb: 2 }}>{t('header.logout-message')}</DialogTitle>

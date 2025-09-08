@@ -86,7 +86,7 @@ const App = () => {
   const currentStatus = useAppSelector((state: RootState) => state.appStatus.currentStatus);
   const navigate = useNavigate();
   const { pathname } = useLocation();
-  const { MIXPANEL_TOKEN, PAGOPA_HELP_EMAIL } = getConfiguration();
+  const { MIXPANEL_TOKEN, PAGOPA_HELP_EMAIL, ACCESSIBILITY_LINK } = getConfiguration();
 
   const sessionToken = loggedUser.sessionToken;
   const jwtUser = useMemo(
@@ -315,6 +315,7 @@ const App = () => {
         eventTrackingCallbackAppCrash={handleEventTrackingCallbackAppCrash}
         eventTrackingCallbackRefreshPage={handleEventTrackingCallbackRefreshPage}
         enableAssistanceButton={showAssistanceButton}
+        accessibilityLink={ACCESSIBILITY_LINK}
       >
         <PnDialog open={openModal}>
           <DialogTitle sx={{ mb: 2 }}>{t('header.logout-message')}</DialogTitle>

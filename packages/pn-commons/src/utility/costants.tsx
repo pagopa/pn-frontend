@@ -15,8 +15,6 @@ export const LANGUAGES: Languages = {
 export const PRIVACY_LINK_RELATIVE_PATH = '/informativa-privacy';
 export const TOS_LINK_RELATIVE_PATH = '/termini-di-servizio';
 
-const ACCESSIBILITY_LINK = 'https://form.agid.gov.it/view/978876c0-df2d-11ef-8637-9f856ac3da10';
-
 const getFooterLinkLabels = (
   link: string,
   defaultLabel: string
@@ -61,6 +59,7 @@ export const companyLegalInfo = () => (
 
 export const preLoginLinks = (
   hasTermsOfService: boolean = false,
+  accessibilityLink: string,
   privacyPolicyHref?: string,
   termsOfServiceHref?: string
 ): PreLoginFooterLinksType => {
@@ -195,7 +194,7 @@ export const preLoginLinks = (
       links: [
         {
           ...getFooterLinkLabels('accessibility', 'Accessibilità'),
-          href: ACCESSIBILITY_LINK,
+          href: accessibilityLink,
           linkType: 'external',
         },
       ],
@@ -218,6 +217,7 @@ export const preLoginLinks = (
 };
 
 export const postLoginLinks = (
+  accessibilityLink: string,
   privacyPolicyHref?: string,
   termsOfServiceHref?: string
 ): Array<FooterLinksType> => [
@@ -233,7 +233,7 @@ export const postLoginLinks = (
   },
   {
     ...getFooterLinkLabels('accessibility', 'Accessibilità'),
-    href: ACCESSIBILITY_LINK,
+    href: accessibilityLink,
     linkType: 'external',
   },
 ];
