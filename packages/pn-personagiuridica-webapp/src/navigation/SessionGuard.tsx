@@ -90,15 +90,16 @@ const SessionGuard = () => {
   };
 
   useEffect(() => {
+    const aar = params.get(AppRouteParams.AAR);
+    if (aar) {
+      localStorage.setItem(AppRouteParams.AAR, sanitizeString(aar));
+    }
+
     if (spidToken) {
       void performExchangeToken(spidToken);
     } else if (sessionToken) {
       sessionCheck(expDate);
     } else {
-      const aar = params.get(AppRouteParams.AAR);
-      if (aar) {
-        localStorage.setItem(AppRouteParams.AAR, sanitizeString(aar));
-      }
       goToLoginPortal();
     }
     return () => {
