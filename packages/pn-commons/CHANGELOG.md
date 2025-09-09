@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.18.0-RC.3](https://github.com/pagopa/pn-frontend/compare/v2.18.0-RC.2...v2.18.0-RC.3) (2025-09-09)
+
+
+### Bug Fixes
+
+* **PN-16269:** show OTP error when modal is open and reset state on close on AcceptDelegationModal (PG) ([#1637](https://github.com/pagopa/pn-frontend/issues/1637)) ([7928516](https://github.com/pagopa/pn-frontend/commit/7928516882f1bf9c9353cbb45c10e4c570ead4a0))
+
+
+
+
+
+
 # [2.18.0-RC.2](https://github.com/pagopa/pn-frontend/compare/v2.18.0-RC.1...v2.18.0-RC.2) (2025-09-05)
 
 
