@@ -263,9 +263,10 @@ const AddSpecialContact = forwardRef<AddSpecialContactRef, Props>(
     const contactType = formik.values.channelType.toLowerCase();
 
     const sendSuccessEvent = (type: ChannelType) => {
-      const eventKey = `SEND_ADD_${type}_UX_SUCCESS`;
-      if (isPFEvent(eventKey)) {
-        PFEventStrategyFactory.triggerEvent(PFEventsType[eventKey], {
+      if (type === ChannelType.PEC) {
+        PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_PEC_UX_SUCCESS, false);
+      } else {
+        PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SERCQ_SEND_UX_SUCCESS, {
           sercq_type: type,
           contacts: addressesData.courtesyAddresses,
           other_contact: 'yes',
@@ -300,11 +301,13 @@ const AddSpecialContact = forwardRef<AddSpecialContactRef, Props>(
       channelType: ChannelType,
       sender: Sender = { senderId: 'default' }
     ) => {
-      const eventKey = `SEND_ADD_${channelType}_START`;
-      if (isPFEvent(eventKey)) {
-        PFEventStrategyFactory.triggerEvent(PFEventsType[eventKey], {
+      if (channelType === ChannelType.PEC) {
+        PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_PEC_START, {
           senderId: sender.senderId,
           source: ContactSource.RECAPITI,
+        });
+      } else {
+        PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SERCQ_SEND_START, {
           event_type: EventAction.ACTION,
           contacts: addressesData.courtesyAddresses,
         });
