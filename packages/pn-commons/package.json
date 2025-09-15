@@ -10,7 +10,7 @@
     "@mui/material": "^5.14.5",
     "@mui/system": "^5.14.5",
     "@mui/x-date-pickers": "^6.10.1",
-    "@pagopa/mui-italia": "^1.7.2-rc.20250912131604",
+    "@pagopa/mui-italia": "^1.7.2",
     "@reduxjs/toolkit": "^1.9.5",
     "@types/node": "^17.0.8",
     "@types/react": "^18.2.24",
