@@ -19,6 +19,7 @@ import {
   ConsentActionType,
   ConsentType,
   CustomDropdown,
+  EventAction,
   PnAutocomplete,
   SERCQ_SEND_VALUE,
   TosPrivacyConsent,
@@ -300,6 +301,8 @@ const AddSpecialContact = forwardRef<AddSpecialContactRef, Props>(
         PFEventStrategyFactory.triggerEvent(PFEventsType[eventKey], {
           senderId: sender.senderId,
           source: ContactSource.RECAPITI,
+          event_type: EventAction.ACTION,
+          contacts: addressesData.courtesyAddresses,
         });
       }
 
