@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.18.0-RC.4](https://github.com/pagopa/pn-frontend/compare/v2.18.0-RC.3...v2.18.0-RC.4) (2025-09-15)
+
+
+### Bug Fixes
+
+* **PN-16263:** fix CodeInput 'jumping caret bug' on Android ([#1642](https://github.com/pagopa/pn-frontend/issues/1642)) ([9a6e434](https://github.com/pagopa/pn-frontend/commit/9a6e4345909df4f8d6c3e1570a8e86d0e4b69d99))
+
+
+
+
+
+
 # [2.18.0-RC.3](https://github.com/pagopa/pn-frontend/compare/v2.18.0-RC.2...v2.18.0-RC.3) (2025-09-09)
 
 
