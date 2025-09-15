@@ -265,7 +265,11 @@ const AddSpecialContact = forwardRef<AddSpecialContactRef, Props>(
     const sendSuccessEvent = (type: ChannelType) => {
       const eventKey = `SEND_ADD_${type}_UX_SUCCESS`;
       if (isPFEvent(eventKey)) {
-        PFEventStrategyFactory.triggerEvent(PFEventsType[eventKey], formik.values.sender.id);
+        PFEventStrategyFactory.triggerEvent(PFEventsType[eventKey], {
+          sercq_type: type,
+          contacts: addressesData.courtesyAddresses,
+          other_contact: 'yes',
+        });
       }
     };
 
