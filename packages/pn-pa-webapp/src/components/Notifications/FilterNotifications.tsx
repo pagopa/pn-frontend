@@ -1,6 +1,7 @@
+import { add } from 'date-fns';
 import { FormikValues, useFormik } from 'formik';
 import _ from 'lodash';
-import { forwardRef, useEffect, useImperativeHandle, useRef, useState } from 'react';
+import { forwardRef, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 
@@ -15,7 +16,9 @@ import {
   dateIsDefined,
   filtersApplied,
   getNotificationAllowedStatus,
+  getStartOfDay,
   getValidValue,
+  sixMonthsAgo,
   tenYearsAgo,
   today,
   useIsMobile,
@@ -34,7 +37,7 @@ type Props = {
 const localizedNotificationStatus = getNotificationAllowedStatus();
 
 const emptyValues = {
-  startDate: tenYearsAgo,
+  startDate: sixMonthsAgo,
   endDate: today,
   status: '',
   recipientId: '',
@@ -71,19 +74,60 @@ const FilterNotifications = forwardRef(({ showFilters }: Props, ref) => {
   const { t } = useTranslation(['common', 'notifiche']);
   const dialogRef = useRef<{ toggleOpen: () => void }>(null);
 
-  const validationSchema = yup.object({
-    recipientId: yup
-      .string()
-      .matches(dataRegex.pIvaAndFiscalCode, t('filters.errors.fiscal-code', { ns: 'notifiche' })),
-    iunMatch: yup.string().matches(IUN_regex, t('filters.errors.iun', { ns: 'notifiche' })),
-    // the formik validations for dates (which control the enable status of the "filtra" button)
-    // must coincide with the input field validations (which control the color of the frame around each field)
-    startDate: yup.date().min(tenYearsAgo).max(today),
-    endDate: yup
-      .date()
-      .min(dateIsDefined(startDate) ? startDate : tenYearsAgo)
-      .max(today),
-  });
+  const validationSchema = useMemo(
+    () =>
+      yup.object({
+        recipientId: yup
+          .string()
+          .matches(
+            dataRegex.pIvaAndFiscalCode,
+            t('filters.errors.fiscal-code', { ns: 'notifiche' })
+          ),
+        iunMatch: yup.string().matches(IUN_regex, t('filters.errors.iun', { ns: 'notifiche' })),
+        // the formik validations for dates (which control the enable status of the "filtra" button)
+        // must coincide with the input field validations (which control the color of the frame around each field)
+        startDate: yup
+          .date()
+          .min(tenYearsAgo)
+          .max(today)
+          .test({
+            name: 'max-six-months-start',
+            message:
+              t('filters.errors.max-six-months', { ns: 'notifiche' }) ||
+              'Intervallo massimo: 6 mesi',
+            test(value, context) {
+              const { endDate } = context.parent as { endDate?: Date };
+              if (!value || !endDate) {
+                // no validation if selection is incomplete
+                return true;
+              }
+              const end = getStartOfDay(endDate);
+              const minStart = add(end, { months: -6, days: 1 });
+              return value >= minStart;
+            },
+          }),
+        endDate: yup
+          .date()
+          .min(dateIsDefined(startDate) ? startDate : tenYearsAgo)
+          .max(today)
+          .test({
+            name: 'max-six-months-end',
+            message:
+              t('filters.errors.max-six-months', { ns: 'notifiche' }) ||
+              'Intervallo massimo: 6 mesi',
+            test(value, context) {
+              const { startDate } = context.parent as { startDate?: Date };
+              if (!value || !startDate) {
+                return true;
+              }
+              const end = getStartOfDay(value);
+              const minStart = add(end, { months: -6, days: 1 });
+              return new Date(startDate) >= minStart;
+            },
+          }),
+      }),
+    [startDate, endDate, t]
+  );
 
   const [prevFilters, setPrevFilters] = useState(filters || emptyValues);
   const filtersCount = filtersApplied(prevFilters, emptyValues);
@@ -114,7 +158,7 @@ const FilterNotifications = forwardRef(({ showFilters }: Props, ref) => {
   };
 
   const setDates = () => {
-    if (!_.isEqual(filters.startDate, tenYearsAgo)) {
+    if (!_.isEqual(filters.startDate, sixMonthsAgo)) {
       setStartDate(formik.values.startDate);
     }
     if (!_.isEqual(filters.endDate, today)) {

@@ -87,6 +87,20 @@ const FilterNotificationsFormBody = ({
     );
   };
 
+  const anyDateTouched =
+    Boolean(formikInstance.touched.startDate) || Boolean(formikInstance.touched.endDate);
+
+  const startErrorMsg = formikInstance.errors.startDate
+    ? String(formikInstance.errors.startDate)
+    : undefined;
+
+  const endErrorMsg = formikInstance.errors.endDate
+    ? String(formikInstance.errors.endDate)
+    : undefined;
+
+  const showStartError = Boolean(startErrorMsg) && anyDateTouched;
+  const showEndError = Boolean(endErrorMsg) && anyDateTouched;
+
   return (
     <Fragment>
       <TextField
@@ -130,7 +144,7 @@ const FilterNotificationsFormBody = ({
         format={DATE_FORMAT}
         value={startDate}
         onChange={(value: DatePickerTypes) => {
-          void formikInstance.setFieldValue('startDate', value || tenYearsAgo).then(() => {
+          void formikInstance.setFieldValue('startDate', value || tenYearsAgo, true).then(() => {
             setStartDate(value);
           });
         }}
@@ -146,6 +160,8 @@ const FilterNotificationsFormBody = ({
             },
             fullWidth: isMobile,
             sx: { mb: isMobile ? '20px' : '0' },
+            error: showStartError,
+            helperText: showStartError ? startErrorMsg : undefined,
           },
         }}
         disableFuture={true}
@@ -158,7 +174,7 @@ const FilterNotificationsFormBody = ({
         format={DATE_FORMAT}
         value={endDate}
         onChange={(value: DatePickerTypes) => {
-          void formikInstance.setFieldValue('endDate', value || today).then(() => {
+          void formikInstance.setFieldValue('endDate', value || today, true).then(() => {
             setEndDate(value);
           });
         }}
@@ -174,6 +190,8 @@ const FilterNotificationsFormBody = ({
             },
             fullWidth: isMobile,
             sx: { mb: isMobile ? '20px' : 0 },
+            error: showEndError,
+            helperText: showEndError ? startErrorMsg : undefined,
           },
         }}
         disableFuture={true}
