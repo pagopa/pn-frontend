@@ -50,7 +50,6 @@ type DatePickerFieldProps = {
   formikInstance: FormikInst;
   setLocalDate: (value: Date | null) => void;
   fallbackIfNull: Date;
-  showError: boolean;
   errorMsg?: string;
 };
 
@@ -68,7 +67,6 @@ function DatePickerField({
   formikInstance,
   setLocalDate,
   fallbackIfNull,
-  showError,
   errorMsg,
 }: Readonly<DatePickerFieldProps>) {
   return (
@@ -80,6 +78,12 @@ function DatePickerField({
       onChange={(v: DatePickerTypes) => {
         void formikInstance.setFieldValue(id, v || fallbackIfNull, true).then(() => {
           setLocalDate(v);
+          if (errorMsg) {
+            const errors = formikInstance.errors || {};
+            if (errors.startDate === errorMsg || errors.endDate === errorMsg) {
+              formikInstance.setErrors({ ...errors, startDate: undefined, endDate: undefined });
+            }
+          }
         });
       }}
       slotProps={{
@@ -94,8 +98,7 @@ function DatePickerField({
           },
           fullWidth: isMobile,
           sx: { mb },
-          error: showError,
-          helperText: showError ? errorMsg : undefined,
+          ...(errorMsg ? { error: true, helperText: errorMsg } : {}),
         },
       }}
       disableFuture={disableFuture}
@@ -161,19 +164,14 @@ const FilterNotificationsFormBody = ({
 
   const mb = isMobile ? '20px' : 0;
 
-  const anyDateTouched =
-    Boolean(formikInstance.touched.startDate) || Boolean(formikInstance.touched.endDate);
+  const rangeErrorMsg =
+    t('filters.errors.max-six-months', { ns: 'notifiche' }) || 'Intervallo massimo: 6 mesi';
 
-  const startErrorMsg = formikInstance.errors.startDate
-    ? String(formikInstance.errors.startDate)
-    : undefined;
+  const showRangeError =
+    formikInstance.errors?.startDate === rangeErrorMsg ||
+    formikInstance.errors?.endDate === rangeErrorMsg;
 
-  const endErrorMsg = formikInstance.errors.endDate
-    ? String(formikInstance.errors.endDate)
-    : undefined;
-
-  const showStartError = Boolean(startErrorMsg) && anyDateTouched;
-  const showEndError = Boolean(endErrorMsg) && anyDateTouched;
+  const errorMsg = showRangeError ? rangeErrorMsg : undefined;
 
   return (
     <Fragment>
@@ -227,8 +225,7 @@ const FilterNotificationsFormBody = ({
         formikInstance={formikInstance}
         setLocalDate={setStartDate}
         fallbackIfNull={tenYearsAgo}
-        showError={showStartError}
-        errorMsg={startErrorMsg}
+        errorMsg={errorMsg}
       />
 
       <DatePickerField
@@ -245,8 +242,7 @@ const FilterNotificationsFormBody = ({
         formikInstance={formikInstance}
         setLocalDate={setEndDate}
         fallbackIfNull={today}
-        showError={showEndError}
-        errorMsg={endErrorMsg}
+        errorMsg={errorMsg}
       />
 
       <TextField

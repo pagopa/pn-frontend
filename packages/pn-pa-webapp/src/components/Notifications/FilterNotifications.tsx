@@ -86,45 +86,11 @@ const FilterNotifications = forwardRef(({ showFilters }: Props, ref) => {
         iunMatch: yup.string().matches(IUN_regex, t('filters.errors.iun', { ns: 'notifiche' })),
         // the formik validations for dates (which control the enable status of the "filtra" button)
         // must coincide with the input field validations (which control the color of the frame around each field)
-        startDate: yup
-          .date()
-          .min(tenYearsAgo)
-          .max(today)
-          .test({
-            name: 'max-six-months-start',
-            message:
-              t('filters.errors.max-six-months', { ns: 'notifiche' }) ||
-              'Intervallo massimo: 6 mesi',
-            test(value, context) {
-              const { endDate } = context.parent as { endDate?: Date };
-              if (!value || !endDate) {
-                // no validation if selection is incomplete
-                return true;
-              }
-              const end = getStartOfDay(endDate);
-              const minStart = add(end, { months: -6, days: 1 });
-              return value >= minStart;
-            },
-          }),
+        startDate: yup.date().min(tenYearsAgo).max(today),
         endDate: yup
           .date()
           .min(dateIsDefined(startDate) ? startDate : tenYearsAgo)
-          .max(today)
-          .test({
-            name: 'max-six-months-end',
-            message:
-              t('filters.errors.max-six-months', { ns: 'notifiche' }) ||
-              'Intervallo massimo: 6 mesi',
-            test(value, context) {
-              const { startDate } = context.parent as { startDate?: Date };
-              if (!value || !startDate) {
-                return true;
-              }
-              const end = getStartOfDay(value);
-              const minStart = add(end, { months: -6, days: 1 });
-              return new Date(startDate) >= minStart;
-            },
-          }),
+          .max(today),
       }),
     [startDate, endDate, t]
   );
@@ -137,6 +103,18 @@ const FilterNotifications = forwardRef(({ showFilters }: Props, ref) => {
     validationSchema,
     /** onSubmit populates filters */
     onSubmit: (values) => {
+      const start = values.startDate ? new Date(values.startDate) : null;
+      const end = values.endDate ? new Date(values.endDate) : null;
+      if (start && end) {
+        const endAtStart = getStartOfDay(end);
+        const minStart = add(endAtStart, { months: -6, days: 1 });
+        if (start < minStart) {
+          const msg =
+            t('filters.errors.max-six-months', { ns: 'notifiche' }) || 'Intervallo massimo: 6 mesi';
+          formik.setErrors({ startDate: msg, endDate: msg });
+          return;
+        }
+      }
       const currentFilters = {
         startDate: values.startDate,
         endDate: values.endDate,
@@ -192,7 +170,21 @@ const FilterNotifications = forwardRef(({ showFilters }: Props, ref) => {
     return <></>;
   }
 
-  const isInitialSearch = _.isEqual(formik.values, initialEmptyValues);
+  /**
+   * Build a normalized snapshot of the current form values before comparing with `initialEmptyValues`.
+   * In the UI, an empty date picker (null) means "use the implicit defaults" (last 6 months),
+   * but Formik may still hold fallback dates set by the picker handlers. To avoid a false mismatch,
+   * when a picker is empty we substitute the implicit defaults (sixMonthsAgo/today).
+   * This way, clearing both dates (and leaving other fields empty) is treated as the true initial state
+   * and the "Filter" button is correctly disabled.
+   */
+  const normalizedForInitial = {
+    ...formik.values,
+    startDate: startDate === null ? sixMonthsAgo : formik.values.startDate,
+    endDate: endDate === null ? today : formik.values.endDate,
+  };
+
+  const isInitialSearch = _.isEqual(normalizedForInitial, initialEmptyValues);
 
   return isMobile ? (
     <CustomMobileDialog>

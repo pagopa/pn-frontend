@@ -50,7 +50,7 @@
   },
   "empty-state": {
     "filtered": "Non abbiamo trovato risultati: prova con dei filtri diversi. <0>Rimuovi filtri</0>.",
-    "no-notifications": "L'ente non ha ancora inviato nessuna notifica. Usa le <0>API Key</0> o fai un <1>invio manuale</1>.",
+    "no-notifications": "Nessuna notifica negli ultimi 6 mesi. Modifica le date nei filtri oppure procedi con l’invio di una nuova notifica usando le <0>API Key</0> o effettuando un <1>invio manuale</1>.",
     "aria-label-remove-filters": "Rimuovi filtri",
     "aria-label-api-keys": "API Key",
     "aria-label-create-notification": "Invio manuale"
@@ -95,6 +95,10 @@
       "delivery_notification_without_payment_attachment": {
         "title": "Il documento non è disponibile",
         "message": "Si è verificato un problema con il recupero del documento. Riprova più tardi. Se l’errore si ripete, contatta l’assistenza e comunica le informazioni errore."
+      },
+      "delivery_delivery_timeout": {
+        "title": "Nessun risultato",
+        "message": "Non abbiamo trovato risultati prova con filtri diversi"
       },
       "delivery_push_file_not_found": {
         "title": "Il documento non è disponibile",

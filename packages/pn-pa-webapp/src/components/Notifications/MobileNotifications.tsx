@@ -167,16 +167,14 @@ const MobileNotifications = ({
 
   const filtersApplied: boolean = filterNotificationsRef.current.filtersApplied;
 
-  const showFilters = notifications?.length > 0 || filtersApplied;
-
   return (
     <>
       <Grid container direction="row" sx={{ marginBottom: '16px' }}>
         <Grid item xs={6}>
-          <FilterNotifications ref={filterNotificationsRef} showFilters={showFilters} />
+          <FilterNotifications ref={filterNotificationsRef} showFilters={true} />
         </Grid>
         <Grid item xs={6} textAlign="right">
-          {sort && showFilters && onChangeSorting && (
+          {sort && onChangeSorting && (
             <MobileNotificationsSort
               title={t('sort.title')}
               optionsTitle={t('sort.options')}

@@ -151,8 +151,6 @@ const DesktopNotifications = ({
 
   const filtersApplied: boolean = filterNotificationsRef.current.filtersApplied;
 
-  const showFilters = notifications?.length > 0 || filtersApplied;
-
   const handleRowClick = (iun: string) => {
     navigate(routes.GET_DETTAGLIO_NOTIFICA_PATH(iun));
   };
@@ -161,7 +159,7 @@ const DesktopNotifications = ({
     <>
       {notifications && (
         <>
-          <FilterNotifications ref={filterNotificationsRef} showFilters={showFilters} />
+          <FilterNotifications ref={filterNotificationsRef} showFilters={true} />
           {notifications.length > 0 ? (
             <PnTable
               ariaTitle={t('table.title')}
