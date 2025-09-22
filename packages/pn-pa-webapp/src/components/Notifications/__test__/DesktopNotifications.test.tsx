@@ -36,10 +36,10 @@ describe('DesktopNotifications Component', () => {
         <DesktopNotifications notifications={[]} onManualSend={() => {}} onApiKeys={() => {}} />
       );
     });
-    const filters = result!.queryByTestId('filter-form');
-    expect(filters).not.toBeInTheDocument();
-    const norificationTable = result!.queryByTestId('notificationsTable');
-    expect(norificationTable).not.toBeInTheDocument();
+    const filters = result!.getByTestId('filter-form');
+    expect(filters).toBeInTheDocument();
+    const norificationsTable = result!.queryByTestId('notificationsTable');
+    expect(norificationsTable).not.toBeInTheDocument();
     expect(result!.container).toHaveTextContent(/empty-state.no-notifications/i);
   });
 

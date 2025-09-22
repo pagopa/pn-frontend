@@ -44,10 +44,10 @@ describe('MobileNotifications Component', () => {
         />
       );
     });
-    const filters = result!.queryByTestId('dialogToggle');
-    expect(filters).not.toBeInTheDocument();
-    const norificationCards = result!.queryAllByTestId('mobileCards');
-    expect(norificationCards).toHaveLength(0);
+    const filtersToggle = result!.queryByTestId('dialogToggle');
+    expect(filtersToggle).toBeInTheDocument();
+    const notificationCards = result!.queryAllByTestId('mobileCards');
+    expect(notificationCards).toHaveLength(0);
     expect(result!.container).toHaveTextContent(/empty-state.no-notifications/i);
   });
 
