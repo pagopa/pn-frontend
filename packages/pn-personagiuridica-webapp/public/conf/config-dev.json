@@ -19,5 +19,6 @@
   "IS_B2B_ENABLED": true,
   "IS_DOD_ENABLED": true,
   "DOWNTIME_EXAMPLE_LINK": "https://d3uwnqvme5tqoz.cloudfront.net/Legal_Fact_Malfunction_11f784e148.pdf",
-  "SELFCARE_CDN_URL": "https://selcuweupnpgcheckoutsa.z6.web.core.windows.net"
+  "SELFCARE_CDN_URL": "https://selcuweupnpgcheckoutsa.z6.web.core.windows.net",
+  "ACCESSIBILITY_LINK": "https://form.agid.gov.it/view/978876c0-df2d-11ef-8637-9f856ac3da10"
 }

@@ -84,9 +84,9 @@ const CodeModal = forwardRef<ModalHandle, Props>(
   ) => {
     const [code, setCode] = useState<string>(initialValue.slice(0, codeLength));
     const [internalError, setInternalError] = useState({
-      internalHasError: false,
-      internalErrorTitle: '',
-      internalErrorMessage: '',
+      internalHasError: error?.hasError ?? false,
+      internalErrorTitle: error?.title ?? '',
+      internalErrorMessage: error?.message ?? '',
     });
 
     const { internalHasError, internalErrorTitle, internalErrorMessage } = internalError;
