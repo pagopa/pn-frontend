@@ -2,7 +2,6 @@ import { Navigate, Route, Routes, useNavigate } from 'react-router-dom';
 
 import { AppNotAccessible, NotFound } from '@pagopa-pn/pn-commons';
 
-// import Statistics from '../pages/Statistics.page';
 import { PNRole } from '../models/user';
 import ApiKeys from '../pages/ApiKeys.page';
 import AppStatus from '../pages/AppStatus.page';
@@ -43,21 +42,10 @@ function Router() {
               <Route path={routes.NUOVA_NOTIFICA} element={<NewNotification />} />
             )}
             <Route path={routes.APP_STATUS} element={<AppStatus />} />
-            {/**
-             * Refers to PN-1741
-             * Commented out because beyond MVP scope
-             *
-             * LINKED TO:
-             * - "const BasicMenuItems" in packages/pn-pa-webapp/src/utility/role.utility.ts
-             * - BasicMenuItems in packages/pn-pa-webapp/src/utility/__TEST__/role.utilitytest.ts
-             *
-             * <Route path={routes.API_KEYS} element={<ApiKeys />} />
-             * */}
             <Route path={routes.API_KEYS} element={<ApiKeys />} />
             <Route path={routes.NUOVA_API_KEY} element={<NewApiKey />} />
             <Route path="/" element={<Navigate to={routes.DASHBOARD} />} />
           </Route>
-          <Route path="*" element={<NotFound goBackAction={navigateToHome} />} />
         </Route>
       </Route>
       <Route path={routes.PRIVACY_POLICY} element={<PrivacyPolicyPage />} />
