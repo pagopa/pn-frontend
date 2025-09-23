@@ -96,7 +96,7 @@
         "title": "Il documento non è disponibile",
         "message": "Si è verificato un problema con il recupero del documento. Riprova più tardi. Se l’errore si ripete, contatta l’assistenza e comunica le informazioni errore."
       },
-      "delivery_delivery_timeout": {
+      "delivery_timeout": {
         "title": "Nessun risultato",
         "message": "Non abbiamo trovato risultati prova con filtri diversi"
       },
