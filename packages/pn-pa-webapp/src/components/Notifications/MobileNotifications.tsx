@@ -1,4 +1,3 @@
-import { useRef } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
@@ -25,7 +24,6 @@ import {
 import { ButtonNaked } from '@pagopa/mui-italia';
 
 import * as routes from '../../navigation/routes.const';
-import FilterNotifications from './FilterNotifications';
 import NotificationsDataSwitch from './NotificationsDataSwitch';
 
 type Props = {
@@ -38,6 +36,8 @@ type Props = {
   onManualSend: () => void;
   /** The function to be invoked if the user clicks on api keys link */
   onApiKeys: () => void;
+  filtersApplied: boolean;
+  onCleanFilters: () => void;
 };
 
 type LinkRemoveFiltersProps = {
@@ -103,9 +103,10 @@ const MobileNotifications = ({
   onChangeSorting,
   onManualSend,
   onApiKeys,
+  filtersApplied,
+  onCleanFilters,
 }: Props) => {
   const navigate = useNavigate();
-  const filterNotificationsRef = useRef({ filtersApplied: false, cleanFilters: () => void 0 });
   const { t } = useTranslation(['notifiche', 'common']);
 
   const cardBody: Array<CardElement<Notification>> = [
@@ -165,15 +166,10 @@ const MobileNotifications = ({
     return arr;
   }, [] as Array<CardSort<Notification>>);
 
-  const filtersApplied: boolean = filterNotificationsRef.current.filtersApplied;
-
   return (
     <>
       <Grid container direction="row" sx={{ marginBottom: '16px' }}>
-        <Grid item xs={6}>
-          <FilterNotifications ref={filterNotificationsRef} showFilters={true} />
-        </Grid>
-        <Grid item xs={6} textAlign="right">
+        <Grid item xs={12} textAlign="right">
           {sort && onChangeSorting && (
             <MobileNotificationsSort
               title={t('sort.title')}
@@ -250,10 +246,7 @@ const MobileNotifications = ({
               ns={'notifiche'}
               i18nKey={'empty-state.filtered'}
               components={[
-                <LinkRemoveFilters
-                  key={'remove-filters'}
-                  cleanFilters={filterNotificationsRef.current.cleanFilters}
-                />,
+                <LinkRemoveFilters key={'remove-filters'} cleanFilters={onCleanFilters} />,
               ]}
             />
           ) : (

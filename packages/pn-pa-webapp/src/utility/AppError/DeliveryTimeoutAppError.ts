@@ -4,7 +4,7 @@ export class DeliveryTimeoutAppError extends AppError {
   private readonly translateFunction: (path: string, ns: string) => string = (path: string) => path;
 
   constructor(error: ServerResponseError, translateFunction: (path: string, ns: string) => string) {
-    super(error, true);
+    super(error);
     this.translateFunction = translateFunction;
   }
 

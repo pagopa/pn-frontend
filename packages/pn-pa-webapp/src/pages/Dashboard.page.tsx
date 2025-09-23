@@ -1,4 +1,4 @@
-import { useCallback, useEffect } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
@@ -14,6 +14,7 @@ import {
 import { ButtonNaked } from '@pagopa/mui-italia';
 
 import DesktopNotifications from '../components/Notifications/DesktopNotifications';
+import FilterNotifications from '../components/Notifications/FilterNotifications';
 import MobileNotifications from '../components/Notifications/MobileNotifications';
 import NotificationSettingsDrawer from '../components/Notifications/NotificationSettingsDrawer';
 import * as routes from '../navigation/routes.const';
@@ -48,6 +49,11 @@ const Dashboard = () => {
   );
 
   const { IS_MANUAL_SEND_ENABLED } = getConfiguration();
+
+  const filterNotificationsRef = useRef<{ filtersApplied: boolean; cleanFilters: () => void }>({
+    filtersApplied: false,
+    cleanFilters: () => void 0,
+  });
 
   // Pagination handlers
   const handleChangePage = (paginationData: PaginationData) => {
@@ -136,6 +142,11 @@ const Dashboard = () => {
           </Box>
         }
       />
+
+      <Box sx={{ mb: { xs: 0, lg: 3 } }}>
+        <FilterNotifications ref={filterNotificationsRef} showFilters />
+      </Box>
+
       <ApiErrorWrapper
         apiId={DASHBOARD_ACTIONS.GET_SENT_NOTIFICATIONS}
         reloadAction={() => fetchNotifications()}
@@ -147,6 +158,8 @@ const Dashboard = () => {
             // onChangeSorting={handleChangeSorting} // Riabilitare con la issue PN-1124
             onManualSend={handleRouteManualSend}
             onApiKeys={handleRouteApiKeys}
+            filtersApplied={filterNotificationsRef.current.filtersApplied}
+            onCleanFilters={filterNotificationsRef.current.cleanFilters}
           />
         ) : (
           <DesktopNotifications
@@ -154,6 +167,8 @@ const Dashboard = () => {
             // onChangeSorting={handleChangeSorting} // Riabilitare con la issue PN-1124
             onManualSend={handleRouteManualSend}
             onApiKeys={handleRouteApiKeys}
+            filtersApplied={filterNotificationsRef.current.filtersApplied}
+            onCleanFilters={filterNotificationsRef.current.cleanFilters}
           />
         )}
         {notifications.length > 0 && (
