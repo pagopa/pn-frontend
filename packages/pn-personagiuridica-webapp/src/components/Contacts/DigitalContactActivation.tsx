@@ -26,7 +26,7 @@ const DigitalContactActivation: React.FC<Props> = ({ isTransferring = false, onG
   const { t } = useTranslation(['recapiti', 'common']);
   const navigate = useNavigate();
   const { IS_DOD_ENABLED } = getConfiguration();
-  const { defaultEMAILAddress, defaultSMSAddress, defaultSERCQ_SENDAddress } = useAppSelector(
+  const { defaultEMAILAddress, defaultSERCQ_SENDAddress } = useAppSelector(
     contactsSelectors.selectAddresses
   );
 
@@ -34,7 +34,7 @@ const DigitalContactActivation: React.FC<Props> = ({ isTransferring = false, onG
   const [showConfirmationModal, setShowConfirmationModal] = useState(false);
   const [showPecWizard, setShowPecWizard] = useState(!!defaultSERCQ_SENDAddress || !IS_DOD_ENABLED);
 
-  const hasEmailOrSms = !!(defaultEMAILAddress || defaultSMSAddress);
+  const hasEmail = !!defaultEMAILAddress;
 
   const isEmailSmsStep = activeStep === 1;
 
@@ -44,7 +44,7 @@ const DigitalContactActivation: React.FC<Props> = ({ isTransferring = false, onG
   const feedbackContentLabel = 'legal-contacts.sercq-send-wizard.feedback.content-sercq_send';
 
   const handleConfirmEmailSmsStep = () => {
-    if (hasEmailOrSms) {
+    if (hasEmail) {
       goToNextStep();
     } else {
       setShowConfirmationModal(true);

@@ -244,6 +244,65 @@ describe('DigitalContactActivation', () => {
     expect(mockNavigateFn).toHaveBeenCalledWith(NOTIFICHE);
   });
 
+  it('blocks moving on to recap step when only SMS is present (shows confirmation modal)', async () => {
+    const result = render(<DigitalContactActivation />, {
+      preloadedState: {
+        contactsState: {
+          digitalAddresses: [
+            {
+              addressType: AddressType.COURTESY,
+              senderId: 'default',
+              channelType: ChannelType.SMS,
+              value: '+39333123456',
+            },
+          ],
+        },
+      },
+    });
+
+    const howItWorksContinueButton = result.getByTestId('continueButton');
+    fireEvent.click(howItWorksContinueButton);
+
+    const emailSmsContinueButton = result.getByText('button.continue');
+    expect(emailSmsContinueButton).toBeEnabled();
+    fireEvent.click(emailSmsContinueButton);
+
+    // should show confirmation modal and NOT go to step 3
+    const modal = await result.findByRole('dialog');
+    expect(modal).toBeInTheDocument();
+    expect(result.queryByText(`${labelPrefix}.step_3.title`)).not.toBeInTheDocument();
+  });
+
+  it('moves on to recap step when EMAIL is present', async () => {
+    const result = render(<DigitalContactActivation />, {
+      preloadedState: {
+        contactsState: {
+          digitalAddresses: [
+            {
+              addressType: AddressType.COURTESY,
+              senderId: 'default',
+              channelType: ChannelType.EMAIL,
+              value: 'mock@mail.com',
+            },
+          ],
+        },
+      },
+    });
+
+    const howItWorksContinueButton = result.getByTestId('continueButton');
+    fireEvent.click(howItWorksContinueButton);
+
+    const emailSmsContinueButton = result.getByText('button.continue');
+    fireEvent.click(emailSmsContinueButton);
+
+    // should go to step 3
+    await waitFor(() => {
+      expect(result.queryByRole('dialog')).not.toBeInTheDocument();
+    });
+    const step4Title = result.getByText(`${labelPrefix}.step_3.title`);
+    expect(step4Title).toBeInTheDocument();
+  });
+
   it('renders component correctly when transferring', async () => {
     /// mock SERCQ activation api call
     mock

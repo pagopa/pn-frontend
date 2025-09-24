@@ -33,7 +33,6 @@ const DigitalContactActivation: React.FC<Props> = ({ isTransferring = false, onG
   const {
     addresses,
     defaultEMAILAddress,
-    defaultSMSAddress,
     defaultAPPIOAddress,
     defaultSERCQ_SENDAddress,
     courtesyAddresses,
@@ -48,7 +47,7 @@ const DigitalContactActivation: React.FC<Props> = ({ isTransferring = false, onG
     []
   );
 
-  const hasEmailOrSms = !!(defaultEMAILAddress || defaultSMSAddress);
+  const hasEmail = !!defaultEMAILAddress;
 
   const isEmailSmsStep = !showIOStep ? activeStep === 1 : activeStep === 2;
   const isRecapStep = activeStep === (showIOStep ? MAX_STEPS_NUMBER - 1 : MAX_STEPS_NUMBER - 2);
@@ -63,7 +62,7 @@ const DigitalContactActivation: React.FC<Props> = ({ isTransferring = false, onG
       event_type: EventAction.ACTION,
       contacts: addresses,
     });
-    if (hasEmailOrSms) {
+    if (hasEmail) {
       goToNextStep();
     } else {
       PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SERCQ_SEND_POP_UP_EMAIL_SMS);
