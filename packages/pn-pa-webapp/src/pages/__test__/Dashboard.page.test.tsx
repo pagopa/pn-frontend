@@ -232,7 +232,7 @@ describe('Dashboard Page', async () => {
     );
     expect(statusApiErrorComponent).toBeInTheDocument();
 
-    // filters must still be visible on desktop
+    // filters should be visible on desktop
     const filterForm = screen.getByTestId('filter-form');
     expect(filterForm).toBeInTheDocument();
   });
