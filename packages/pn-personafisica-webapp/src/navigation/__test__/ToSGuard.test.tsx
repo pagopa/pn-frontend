@@ -3,7 +3,7 @@ import { Route, Routes } from 'react-router-dom';
 
 import { userResponse } from '../../__mocks__/Auth.mock';
 import { tosPrivacyConsentMock } from '../../__mocks__/Consents.mock';
-import { act, render, screen } from '../../__test__/test-utils';
+import { act, render, screen, waitFor } from '../../__test__/test-utils';
 import { apiClient } from '../../api/apiClients';
 import ToSGuard from '../ToSGuard';
 
@@ -22,6 +22,7 @@ const reduxState = {
       isFirstAccept: false,
       consentVersion: '',
     },
+    tosPrivacyApiError: false,
   },
 };
 
@@ -109,5 +110,19 @@ describe('Tests the ToSGuard component', async () => {
     expect(tosComponent).toBeNull();
     expect(genericPage).toBeTruthy();
     expect(mock.history.get).toHaveLength(1);
+  });
+
+  it('renders sessionModal if tosApi has errors ', async () => {
+    mock.onGet(/\/bff\/v2\/tos-privacy.*/).reply(500);
+    await act(async () => {
+      render(<Guard />, {
+        preloadedState: { userState: { ...reduxState.userState, tosPrivacyApiError: true } },
+      });
+    });
+
+    await waitFor(() => {
+      const logoutComponent = screen.queryByTestId('session-modal');
+      expect(logoutComponent).toBeTruthy();
+    });
   });
 });

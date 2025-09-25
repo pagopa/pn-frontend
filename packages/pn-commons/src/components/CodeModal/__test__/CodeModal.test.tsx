@@ -4,7 +4,7 @@ import { vi } from 'vitest';
 import userEvent from '@testing-library/user-event';
 
 import { ErrorMessage } from '../../../models';
-import { act, fireEvent, render, screen, waitFor, within } from '../../../test-utils';
+import { act, render, screen, waitFor, within } from '../../../test-utils';
 import CodeModal from '../CodeModal';
 
 const cancelButtonMock = vi.fn();
@@ -17,19 +17,22 @@ type ModalHandle = {
 const CodeModalWrapper: React.FC<{
   open: boolean;
   readonly?: boolean;
-  initialValues?: string[];
+  codeLength?: number;
+  initialValue?: string;
   refError?: React.RefObject<ModalHandle>;
 }> = ({
   open,
   readonly = false,
-  initialValues = new Array(5).fill(''),
+  codeLength = 5,
+  initialValue = '',
   refError = React.createRef<ModalHandle>(),
 }) => (
   <CodeModal
     title="mocked-title"
     subtitle="mocked-subtitle"
     open={open}
-    initialValues={initialValues}
+    codeLength={codeLength}
+    initialValue={initialValue}
     codeSectionTitle="mocked-section-title"
     cancelLabel="mocked-cancel"
     cancelCallback={cancelButtonMock}
@@ -70,11 +73,10 @@ describe('CodeModal Component', () => {
     expect(dialog).toHaveTextContent(/mocked-title/i);
     expect(dialog).toHaveTextContent(/mocked-subtitle/i);
     expect(dialog).toHaveTextContent(/mocked-section-title/i);
-    const codeInputs = within(dialog).getAllByTestId(/code-input-[0-4]/);
-    expect(codeInputs).toHaveLength(5);
-    codeInputs?.forEach((input) => {
-      expect(input).toHaveValue('');
-    });
+
+    const textbox = within(dialog).getByRole('textbox');
+    expect(textbox).toHaveValue('');
+
     const buttons = within(dialog).getAllByRole('button');
     expect(buttons).toHaveLength(2);
     expect(buttons[0]).toHaveTextContent('mocked-cancel');
@@ -83,21 +85,21 @@ describe('CodeModal Component', () => {
 
   it('renders CodeModal (read only)', async () => {
     // render component
-    render(<CodeModalWrapper open readonly initialValues={['0', '1', '2', '3', '4']} />);
+    render(<CodeModalWrapper open readonly initialValue="01234" />);
     const dialog = screen.getByTestId('codeDialog');
     expect(dialog).toBeInTheDocument();
     expect(dialog).toHaveTextContent(/mocked-title/i);
     expect(dialog).toHaveTextContent(/mocked-subtitle/i);
     expect(dialog).toHaveTextContent(/mocked-section-title/i);
-    const codeInputs = within(dialog).getAllByTestId(/code-input-[0-4]/);
-    expect(codeInputs).toHaveLength(5);
-    codeInputs?.forEach((input, index) => {
-      expect(input).toHaveValue(index.toString());
-      expect(input).toHaveAttribute('readonly');
-    });
+
+    const textbox = within(dialog).getByRole('textbox');
+    expect(textbox).toHaveAttribute('readonly');
+
+    // Copy button is visible in readonly mode
     const button = within(dialog).getByTestId('copyCodeButton');
     expect(button).toBeInTheDocument();
-    fireEvent.click(button);
+
+    await userEvent.click(button);
     await waitFor(() => {
       expect(window.navigator.clipboard.writeText).toHaveBeenCalledWith('01234');
     });
@@ -108,7 +110,8 @@ describe('CodeModal Component', () => {
     render(<CodeModalWrapper open />);
     const dialog = screen.getByTestId('codeDialog');
     const button = within(dialog).getByTestId('codeCancelButton');
-    fireEvent.click(button);
+
+    await userEvent.click(button);
     await waitFor(() => {
       expect(cancelButtonMock).toHaveBeenCalledTimes(1);
     });
@@ -116,37 +119,30 @@ describe('CodeModal Component', () => {
 
   it('clicks on confirm', async () => {
     // render component
-    render(<CodeModalWrapper open />);
+    render(<CodeModalWrapper open codeLength={5} />);
     const dialog = screen.getByTestId('codeDialog');
     const button = within(dialog).getByTestId('codeConfirmButton');
     expect(button).toBeEnabled();
-    const codeInputs = within(dialog).getAllByTestId(/code-input-[0-4]/);
-    // fill inputs with values
-    codeInputs?.forEach((input, index) => {
-      fireEvent.change(input, { target: { value: index.toString() } });
-    });
-    await waitFor(() => {
-      codeInputs?.forEach((input, index) => {
-        expect(input).toHaveValue(index.toString());
-      });
-      expect(button).toBeEnabled();
-    });
-    fireEvent.click(button);
+    const textbox = within(dialog).getByRole('textbox');
+
+    // Fill the hidden input with a valid numeric code
+    textbox.focus();
+    await userEvent.keyboard('01234');
+
+    await userEvent.click(button);
     expect(confirmButtonMock).toHaveBeenCalledTimes(1);
-    expect(confirmButtonMock).toHaveBeenCalledWith(['0', '1', '2', '3', '4']);
+    expect(confirmButtonMock).toHaveBeenCalledWith('01234');
   });
 
-  it('shows error', () => {
+  it('shows error via updateError ref method', () => {
     // render component
-    const { rerender } = render(
-      <CodeModalWrapper open initialValues={['0', '1', '2', '3', '4']} />
-    );
+    const { rerender } = render(<CodeModalWrapper open initialValue="01234" />);
     const dialog = screen.getByTestId('codeDialog');
     let errorAlert = within(dialog).queryByTestId('errorAlert');
     expect(errorAlert).not.toBeInTheDocument();
     // simulate error from external
     const ref = React.createRef<ModalHandle>();
-    rerender(<CodeModalWrapper refError={ref} open initialValues={['0', '1', '2', '3', '4']} />);
+    rerender(<CodeModalWrapper refError={ref} open initialValue="01234" />);
     act(() =>
       ref.current?.updateError({ title: 'mocked-errorTitle', content: 'mocked-errorMessage' }, true)
     );
@@ -157,53 +153,57 @@ describe('CodeModal Component', () => {
 
   it('shows error in case of empty or incomplete code', async () => {
     // render component
-    render(<CodeModalWrapper open />);
+    render(<CodeModalWrapper open codeLength={5} />);
     const dialog = screen.getByTestId('codeDialog');
     const button = within(dialog).getByTestId('codeConfirmButton');
 
     let errorAlert = within(dialog).queryByTestId('errorAlert');
     expect(errorAlert).not.toBeInTheDocument();
-    fireEvent.click(button);
-    errorAlert = within(dialog).queryByTestId('errorAlert');
+    await userEvent.click(button);
+
+    errorAlert = within(dialog).getByTestId('errorAlert');
     expect(errorAlert).toBeInTheDocument();
     expect(errorAlert).toHaveTextContent('errors.empty_code.title');
     expect(errorAlert).toHaveTextContent('errors.empty_code.message');
   });
 
-  it('shows error in case of letters as input values', async () => {
+  it('shows error in case of letters as input values (typed)', async () => {
     // render component
-    render(<CodeModalWrapper open />);
+    render(<CodeModalWrapper open codeLength={5} />);
     const dialog = screen.getByTestId('codeDialog');
-    const codeInputs = within(dialog).getAllByTestId(/code-input-[0-4]/);
-    fireEvent.change(codeInputs[0], { target: { value: 'A' } });
-    const errorAlert = screen.getByTestId('errorAlert');
+    const textbox = within(dialog).getByRole('textbox');
+
+    textbox.focus();
+    await userEvent.keyboard('A');
+
+    const errorAlert = within(dialog).getByTestId('errorAlert');
     expect(errorAlert).toBeInTheDocument();
     expect(errorAlert).toHaveTextContent('errors.invalid_type_code.message');
   });
 
-  it('error in case of letters (pasted)', async () => {
+  it('shows error in case of letters (pasted)', async () => {
     // render component
-    render(<CodeModalWrapper open />);
+    render(<CodeModalWrapper open codeLength={5} />);
     const dialog = screen.getByTestId('codeDialog');
-    const codeInputs = within(dialog).getAllByTestId(/code-input-[0-4]/);
-    act(() => (codeInputs[2] as HTMLInputElement).focus());
-    (codeInputs[2] as HTMLInputElement).setSelectionRange(0, 0);
-    const codePasted = 'abcd';
-    await userEvent.paste(codePasted);
-    const errorAlert = screen.getByTestId('errorAlert');
+    const textbox = within(dialog).getByRole('textbox');
+
+    textbox.focus();
+    await userEvent.paste('abcd');
+
+    const errorAlert = within(dialog).getByTestId('errorAlert');
     expect(errorAlert).toBeInTheDocument();
     expect(errorAlert).toHaveTextContent('errors.invalid_type_code.message');
   });
 
-  it('short code (pasted) - confirm disabled', async () => {
+  it('short code (pasted) - confirm button remains enabled (validation happens on submit)', async () => {
     // render component
-    render(<CodeModalWrapper open />);
+    render(<CodeModalWrapper open codeLength={5} />);
     const dialog = screen.getByTestId('codeDialog');
-    const codeInputs = within(dialog).getAllByTestId(/code-input-[0-4]/);
-    act(() => (codeInputs[2] as HTMLInputElement).focus());
-    (codeInputs[2] as HTMLInputElement).setSelectionRange(0, 0);
-    const codePasted = '123';
-    await userEvent.paste(codePasted);
+    const textbox = within(dialog).getByRole('textbox');
+
+    textbox.focus();
+    await userEvent.paste('123');
+
     const button = screen.getByTestId('codeConfirmButton');
     expect(button).toBeEnabled();
   });

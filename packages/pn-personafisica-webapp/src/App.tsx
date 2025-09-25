@@ -37,6 +37,8 @@ import { getCurrentEventTypePage, goToLoginPortal } from './navigation/navigatio
 import Router from './navigation/routes';
 import * as routes from './navigation/routes.const';
 import { getCurrentAppStatus } from './redux/appStatus/actions';
+import { apiLogout } from './redux/auth/actions';
+import { resetState } from './redux/auth/reducers';
 import { getDigitalAddresses } from './redux/contact/actions';
 import { useAppDispatch, useAppSelector } from './redux/hooks';
 import { getSidemenuInformation } from './redux/sidemenu/actions';
@@ -46,7 +48,6 @@ import { PFAppErrorFactory } from './utility/AppError/PFAppErrorFactory';
 import PFEventStrategyFactory from './utility/MixpanelUtils/PFEventStrategyFactory';
 import showLayoutParts from './utility/layout.utility';
 import './utility/onetrust';
-import { apiLogout } from './redux/auth/actions';
 
 // TODO: get products list from be (?)
 const productsList: Array<ProductEntity> = [
@@ -85,7 +86,7 @@ const App = () => {
   const currentStatus = useAppSelector((state: RootState) => state.appStatus.currentStatus);
   const navigate = useNavigate();
   const { pathname } = useLocation();
-  const { MIXPANEL_TOKEN, PAGOPA_HELP_EMAIL } = getConfiguration();
+  const { MIXPANEL_TOKEN, PAGOPA_HELP_EMAIL, ACCESSIBILITY_LINK } = getConfiguration();
 
   const sessionToken = loggedUser.sessionToken;
   const jwtUser = useMemo(
@@ -213,7 +214,7 @@ const App = () => {
     // if user is logged in, we redirect to support page
     // otherwise, we open the email provider
     if (sessionToken) {
-      const url = addParamToUrl(routes.SUPPORT, "data", JSON.stringify(lastError));
+      const url = addParamToUrl(routes.SUPPORT, 'data', JSON.stringify(lastError));
       navigate(url);
       return;
     }
@@ -266,8 +267,7 @@ const App = () => {
 
   const performLogout = async () => {
     await dispatch(apiLogout(loggedUser.sessionToken));
-
-    sessionStorage.clear();
+    dispatch(resetState());
     goToLoginPortal();
     setOpenModal(false);
   };
@@ -315,6 +315,7 @@ const App = () => {
         eventTrackingCallbackAppCrash={handleEventTrackingCallbackAppCrash}
         eventTrackingCallbackRefreshPage={handleEventTrackingCallbackRefreshPage}
         enableAssistanceButton={showAssistanceButton}
+        accessibilityLink={ACCESSIBILITY_LINK}
       >
         <PnDialog open={openModal}>
           <DialogTitle sx={{ mb: 2 }}>{t('header.logout-message')}</DialogTitle>
@@ -322,11 +323,7 @@ const App = () => {
             <Button id="cancelButton" variant="outlined" onClick={() => setOpenModal(false)}>
               {t('button.annulla')}
             </Button>
-            <Button
-              data-testid="confirm-button"
-              variant="contained"
-              onClick={performLogout}
-            >
+            <Button data-testid="confirm-button" variant="contained" onClick={performLogout}>
               {t('header.logout')}
             </Button>
           </PnDialogActions>

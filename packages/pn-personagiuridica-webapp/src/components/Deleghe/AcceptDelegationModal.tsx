@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import SearchIcon from '@mui/icons-material/Search';
 import {
   Button,
   DialogContentText,
@@ -22,7 +23,6 @@ import {
   PnDialogActions,
   PnDialogContent,
 } from '@pagopa-pn/pn-commons';
-import SearchIcon from '@mui/icons-material/Search';
 
 import { GroupStatus } from '../../models/groups';
 import { useAppSelector } from '../../redux/hooks';
@@ -35,7 +35,7 @@ type Props = {
   name: string;
   currentGroups?: Array<{ id: string; name: string }>;
   handleCloseAcceptModal: () => void;
-  handleConfirm: (code: Array<string>, groups: Array<{ id: string; name: string }>) => void;
+  handleConfirm: (code: string, groups: Array<{ id: string; name: string }>) => void;
 };
 
 const AcceptDelegationModal: React.FC<Props> = ({
@@ -57,9 +57,10 @@ const AcceptDelegationModal: React.FC<Props> = ({
     value: hasGroupsAssociated ? currentGroups : [],
   });
   const [groupInputValue, setGroupInputValue] = useState('');
-  const [code, setCode] = useState<Array<string>>([]);
-  const codeModalRef =
-    useRef<{ updateError: (error: ErrorMessage, codeNotValid: boolean) => void }>(null);
+  const [code, setCode] = useState<string>('');
+  const codeModalRef = useRef<{
+    updateError: (error: ErrorMessage, codeNotValid: boolean) => void;
+  }>(null);
   const { t } = useTranslation(['deleghe']);
   const groups = useAppSelector((state: RootState) => state.delegationsState.groups);
   // when there are groups, the codeModal component is unmounted at confirm button click
@@ -76,7 +77,7 @@ const AcceptDelegationModal: React.FC<Props> = ({
     <li {...props}>{option.name}</li>
   );
 
-  const handleFirstStepConfirm = (code: Array<string>) => {
+  const handleFirstStepConfirm = (code: string) => {
     if (groups.length) {
       setStep(1);
       setCode(code);
@@ -94,12 +95,22 @@ const AcceptDelegationModal: React.FC<Props> = ({
     }
   };
 
+  const clearError = () => {
+    // eslint-disable-next-line functional/immutable-data
+    errorRef.current = {
+      title: '',
+      message: '',
+      hasError: false,
+    };
+  };
+
   const handleClose = () => {
+    clearError();
     setGroupForm({
       value: hasGroupsAssociated ? currentGroups : [],
       touched: false,
     });
-    setCode([]);
+    setCode('');
     if (!isEditMode) {
       setStep(0);
     }
@@ -153,7 +164,8 @@ const AcceptDelegationModal: React.FC<Props> = ({
         title={t('deleghe.accept_title')}
         subtitle={t('deleghe.accept_description', { name })}
         open={open}
-        initialValues={code.length ? code : new Array(5).fill('')}
+        codeLength={5}
+        initialValue={code || ''}
         cancelCallback={handleClose}
         cancelLabel={t('button.indietro', { ns: 'common' })}
         confirmCallback={handleFirstStepConfirm}
@@ -227,9 +239,7 @@ const AcceptDelegationModal: React.FC<Props> = ({
                 }
                 InputProps={{
                   ...params.InputProps,
-                  endAdornment: (
-                    <SearchIcon sx={{color:'text.secondary'}}/>
-                  ),
+                  endAdornment: <SearchIcon sx={{ color: 'text.secondary' }} />,
                 }}
               />
             )}

@@ -39,7 +39,7 @@ const SessionModal: React.FC<Props> = ({
   initTimeout = false,
 }) => {
   useEffect(() => {
-    if (!initTimeout) {
+    if (!initTimeout || !open) {
       return;
     }
     if (timeout) {
@@ -57,7 +57,7 @@ const SessionModal: React.FC<Props> = ({
         clearTimeout(timeout);
       }
     };
-  }, []);
+  }, [open]);
 
   return (
     <PnDialog

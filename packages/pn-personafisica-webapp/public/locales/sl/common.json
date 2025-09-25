@@ -83,7 +83,7 @@
   "not-logged-subtitle": "Če si želite ogledati in upravljati obvestila, se prijavite s SPID ali CIE.",
   "not-found": {
     "title": "404: Stran, ki jo iščete, ne obstaja",
-    "descpription": "Tukaj ste po pomoti, poskusite uporabiti navigacijo."
+    "description": "Tukaj ste po pomoti, poskusite uporabiti navigacijo."
   },
   "leaving-app": {
     "title": "Zapuščate SEND",

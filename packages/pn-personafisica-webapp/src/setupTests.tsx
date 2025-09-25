@@ -16,7 +16,7 @@ window.getComputedStyle = (elt) => getComputedStyle(elt);
 beforeAll(() => {
   Configuration.setForTest<PfConfiguration>({
     API_BASE_URL: 'https://webapi.test.notifichedigitali.it/',
-    IS_INACTIVITY_HANDLER_ENABLED: false,
+    INACTIVITY_HANDLER_MINUTES: 0,
     ONE_TRUST_DRAFT_MODE: false,
     ONE_TRUST_PARTICIPATING_ENTITIES: 'mocked-id',
     ONE_TRUST_PP: 'mocked-id',
@@ -36,6 +36,7 @@ beforeAll(() => {
     WORK_IN_PROGRESS: false,
     F24_DOWNLOAD_WAIT_TIME: 0,
     DOWNTIME_EXAMPLE_LINK: 'https://fake.downtime.pagopa.it',
+    ACCESSIBILITY_LINK: 'https://accessibility-link.it',
   });
   initStore(false);
   initAxiosClients();

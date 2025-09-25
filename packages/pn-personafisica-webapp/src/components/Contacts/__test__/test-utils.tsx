@@ -1,15 +1,16 @@
-import { RenderResult, fireEvent, waitFor } from '../../../__test__/test-utils';
+import userEvent from '@testing-library/user-event';
 
-export const fillCodeDialog = async (result: RenderResult) => {
+import { RenderResult, waitFor, within } from '../../../__test__/test-utils';
+
+export const fillCodeDialog = async (result: RenderResult, code: string = '01234') => {
   const dialog = await waitFor(() => result.getByTestId('codeDialog'));
   expect(dialog).toBeInTheDocument();
-  const codeInputs = dialog?.querySelectorAll('input');
-  // fill inputs with values
-  codeInputs?.forEach((codeInput, index) => {
-    fireEvent.change(codeInput, { target: { value: index.toString() } });
-  });
+
+  const textbox = within(dialog).getByRole('textbox');
+  textbox.focus();
+  await userEvent.keyboard(code);
   // confirm the addition
   const dialogButtons = dialog.querySelectorAll('button');
-  fireEvent.click(dialogButtons[1]);
+  await userEvent.click(dialogButtons[1]);
   return dialog;
 };

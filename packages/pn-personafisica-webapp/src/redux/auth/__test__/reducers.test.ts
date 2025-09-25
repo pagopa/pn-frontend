@@ -31,6 +31,7 @@ describe('Auth redux state tests', () => {
     const state = store.getState().userState;
     expect(state).toEqual({
       loading: false,
+      exchangedToken: false,
       user: {
         sessionToken: '',
         name: '',
@@ -46,10 +47,6 @@ describe('Auth redux state tests', () => {
         jti: '',
         aud: '',
       },
-      isClosedSession: false,
-      isUnauthorizedUser: false,
-      messageUnauthorizedUser: { title: '', message: '' },
-      isForbiddenUser: false,
       fetchedTos: false,
       fetchedPrivacy: false,
       tosConsent: {
@@ -62,6 +59,7 @@ describe('Auth redux state tests', () => {
         isFirstAccept: false,
         consentVersion: '',
       },
+      tosPrivacyApiError: false,
     });
   });
 
@@ -73,8 +71,8 @@ describe('Auth redux state tests', () => {
 
   it('Should be able to logout', async () => {
     const action = await mockLogout();
-    expect(action.type).toBe('logout/fulfilled');
-    expect(action.payload).toEqual({
+    expect(action.type).toBe('userSlice/resetState');
+    expect(store.getState().userState.user).toEqual({
       sessionToken: '',
       name: '',
       family_name: '',

@@ -1,6 +1,6 @@
 {
   "API_BASE_URL": "https://webapi.dev.notifichedigitali.it/",
-  "IS_INACTIVITY_HANDLER_ENABLED": false,
+  "INACTIVITY_HANDLER_MINUTES": 0,
   "MIXPANEL_TOKEN": "41f1a1ad6abcc5fc5ed5809b9a9d5761",
   "ONE_TRUST_DRAFT_MODE": true,
   "ONE_TRUST_PP": "9d7b7236-956b-4669-8943-5284fba6a815",
@@ -19,5 +19,6 @@
   "IS_B2B_ENABLED": true,
   "IS_DOD_ENABLED": true,
   "DOWNTIME_EXAMPLE_LINK": "https://d3uwnqvme5tqoz.cloudfront.net/Legal_Fact_Malfunction_11f784e148.pdf",
-  "SELFCARE_CDN_URL": "https://selcuweupnpgcheckoutsa.z6.web.core.windows.net"
+  "SELFCARE_CDN_URL": "https://selcuweupnpgcheckoutsa.z6.web.core.windows.net",
+  "ACCESSIBILITY_LINK": "https://form.agid.gov.it/view/978876c0-df2d-11ef-8637-9f856ac3da10"
 }

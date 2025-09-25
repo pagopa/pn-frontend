@@ -2,7 +2,7 @@
   "PAGOPA_HELP_EMAIL": "enti-send@assistenza.pagopa.it",
   "SELFCARE_BASE_URL": "https://uat.selfcare.pagopa.it",
   "API_BASE_URL": "https://webapi.dev.notifichedigitali.it/",
-  "IS_INACTIVITY_HANDLER_ENABLED": false,
+  "INACTIVITY_HANDLER_MINUTES": 0,
   "OT_DOMAIN_ID": "62ebb6a0-1a65-48a4-8ca0-837de03b1199-test",
   "MIXPANEL_TOKEN": "aef0b0d89c3355510e9cdfdb18e7d0b5",
   "ONE_TRUST_DRAFT_MODE": true,
@@ -19,5 +19,6 @@
   "DOWNTIME_EXAMPLE_LINK": "https://d3uwnqvme5tqoz.cloudfront.net/Legal_Fact_Malfunction_11f784e148.pdf",
   "PAYMENT_INFO_LINK": "https://developer.pagopa.it/send/guides/knowledge-base/readme/pagamenti-e-spese-di-notifica/pagamenti-pagopa",
   "DEVELOPER_API_DOCUMENTATION_LINK": "https://developer.pagopa.it/send/api",
-  "PHYSICAL_ADDRESS_LOOKUP": "on"
+  "PHYSICAL_ADDRESS_LOOKUP": "on",
+  "ACCESSIBILITY_LINK": "https://form.agid.gov.it/view/978876c0-df2d-11ef-8637-9f856ac3da10"
 }
