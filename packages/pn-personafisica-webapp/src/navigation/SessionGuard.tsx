@@ -79,6 +79,15 @@ const SessionGuard = () => {
     return true;
   };
 
+  const exit = async () => {
+    if (sessionToken) {
+      await dispatch(apiLogout(sessionToken));
+    }
+
+    dispatch(resetState());
+    goToLoginPortal();
+  };
+
   useEffect(() => {
     if (spidToken) {
       void performExchangeToken({ spidToken, rapidAccess });
@@ -99,16 +108,6 @@ const SessionGuard = () => {
     }
   }, [hasAnyForbiddenError]);
 
-  const exit = async () => {
-    if (sessionToken) {
-      await dispatch(apiLogout(sessionToken));
-    }
-
-    sessionStorage.clear();
-    dispatch(resetState());
-    goToLoginPortal();
-  };
-
   return (
     <>
       {loading ? (
@@ -116,12 +115,10 @@ const SessionGuard = () => {
       ) : (
         <>
           <SessionModal {...modalData} handleClose={() => exit()} initTimeout />
-          {INACTIVITY_HANDLER_MINUTES && (
-            <InactivityHandler
-              inactivityTimer={INACTIVITY_HANDLER_MINUTES * 60 * 1000}
-              onTimerExpired={() => exit()}
-            />
-          )}
+          <InactivityHandler
+            inactivityTimer={INACTIVITY_HANDLER_MINUTES * 60 * 1000}
+            onTimerExpired={() => exit()}
+          />
           <Outlet />
         </>
       )}

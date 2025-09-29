@@ -2,10 +2,11 @@ import MockAdapter from 'axios-mock-adapter';
 
 import { ResponseEventDispatcher } from '@pagopa-pn/pn-commons';
 import { createMatchMedia } from '@pagopa-pn/pn-commons/src/test-utils';
+import userEvent from '@testing-library/user-event';
 
 import { mandatesByDelegate, mandatesByDelegator } from '../../__mocks__/Delegations.mock';
 import { errorMock } from '../../__mocks__/Errors.mock';
-import { RenderResult, act, fireEvent, render, waitFor, within } from '../../__test__/test-utils';
+import { RenderResult, act, render, waitFor, within } from '../../__test__/test-utils';
 import { apiClient } from '../../api/apiClients';
 import { DelegationStatus } from '../../utility/status.utility';
 import Deleghe from '../Deleghe.page';
@@ -79,10 +80,10 @@ describe('Deleghe page', async () => {
     let delegatesRows = result.getAllByTestId('delegatesTable.body.row');
     const delegationMenuIcon = within(delegatesRows[0]).getByTestId('delegationMenuIcon');
     // open menu
-    fireEvent.click(delegationMenuIcon);
+    await userEvent.click(delegationMenuIcon);
     const revokeDelegate = await waitFor(() => result.getByTestId('menuItem-revokeDelegate'));
     // show confirmation dialog
-    fireEvent.click(revokeDelegate);
+    await userEvent.click(revokeDelegate);
     const dialog = await waitFor(() => result.getByTestId('confirmationDialog'));
     expect(dialog).toBeInTheDocument();
     expect(dialog).toHaveTextContent('deleghe.revocation_question');
@@ -90,7 +91,7 @@ describe('Deleghe page', async () => {
       name: 'deleghe.confirm_revocation',
     });
     // confirm revokation
-    fireEvent.click(confirmButton);
+    await userEvent.click(confirmButton);
     await waitFor(() => {
       expect(mock.history.patch).toHaveLength(1);
       expect(mock.history.patch[0].url).toBe(
@@ -120,10 +121,10 @@ describe('Deleghe page', async () => {
     let delegatorsRows = result.getAllByTestId('delegatorsTable.body.row');
     const delegationMenuIcon = within(delegatorsRows[1]).getByTestId('delegationMenuIcon');
     // open menu
-    fireEvent.click(delegationMenuIcon);
+    await userEvent.click(delegationMenuIcon);
     const rejectDelegator = await waitFor(() => result.getByTestId('menuItem-rejectDelegator'));
     // show confirmation dialog
-    fireEvent.click(rejectDelegator);
+    await userEvent.click(rejectDelegator);
     const dialog = await waitFor(() => result.getByTestId('confirmationDialog'));
     expect(dialog).toBeInTheDocument();
     expect(dialog).toHaveTextContent('deleghe.rejection_question');
@@ -131,7 +132,7 @@ describe('Deleghe page', async () => {
       name: 'deleghe.confirm_rejection',
     });
     // confirm rejection
-    fireEvent.click(confirmButton);
+    await userEvent.click(confirmButton);
     await waitFor(() => {
       expect(mock.history.patch).toHaveLength(1);
       expect(mock.history.patch[0].url).toBe(
@@ -167,22 +168,21 @@ describe('Deleghe page', async () => {
     let delegatorsRows = result.getAllByTestId('delegatorsTable.body.row');
     const acceptButton = within(delegatorsRows[0]).getByTestId('acceptButton');
     // show code dialog
-    fireEvent.click(acceptButton);
+    await userEvent.click(acceptButton);
     const dialog = await waitFor(() => result.getByTestId('codeDialog'));
     expect(dialog).toBeInTheDocument();
     expect(dialog).toHaveTextContent('deleghe.accept_title');
     expect(dialog).toHaveTextContent('deleghe.accept_description');
     expect(dialog).toHaveTextContent('deleghe.verification_code');
-    // fill the inputs
-    const codeInputs = dialog?.querySelectorAll('input');
-    expect(codeInputs).toHaveLength(5);
-    const codes = mandatesByDelegate[0].verificationCode.split('');
-    codeInputs?.forEach((codeInput, index) => {
-      fireEvent.change(codeInput, { target: { value: codes[index] } });
-    });
+
+    // fill the code
+    const textbox = within(dialog).getByRole('textbox');
+    textbox.focus();
+    await userEvent.keyboard(mandatesByDelegate[0].verificationCode);
+
     const dialogButtons = within(dialog).getByRole('button', { name: 'deleghe.accept' });
     // confirm rejection
-    fireEvent.click(dialogButtons);
+    await userEvent.click(dialogButtons);
     await waitFor(() => {
       expect(mock.history.patch).toHaveLength(1);
       expect(mock.history.patch[0].url).toBe(
@@ -226,22 +226,21 @@ describe('Deleghe page', async () => {
     let delegatorsRows = result.getAllByTestId('delegatorsTable.body.row');
     let acceptButton = within(delegatorsRows[0]).getByTestId('acceptButton');
     // show code dialog
-    fireEvent.click(acceptButton);
+    await userEvent.click(acceptButton);
     const dialog = await waitFor(() => result.getByTestId('codeDialog'));
     expect(dialog).toBeInTheDocument();
     expect(dialog).toHaveTextContent('deleghe.accept_title');
     expect(dialog).toHaveTextContent('deleghe.accept_description');
     expect(dialog).toHaveTextContent('deleghe.verification_code');
-    // fill the inputs
-    const codeInputs = dialog?.querySelectorAll('input');
-    expect(codeInputs).toHaveLength(5);
-    const codes = mandatesByDelegate[0].verificationCode.split('');
-    codeInputs?.forEach((codeInput, index) => {
-      fireEvent.change(codeInput, { target: { value: codes[index] } });
-    });
+
+    // fill the code
+    const textbox = within(dialog).getByRole('textbox');
+    textbox.focus();
+    await userEvent.keyboard(mandatesByDelegate[0].verificationCode);
+
     const dialogButtons = within(dialog).getByRole('button', { name: 'deleghe.accept' });
     // confirm accept
-    fireEvent.click(dialogButtons);
+    await userEvent.click(dialogButtons);
     await waitFor(() => {
       expect(mock.history.patch).toHaveLength(1);
       expect(mock.history.patch[0].url).toBe(

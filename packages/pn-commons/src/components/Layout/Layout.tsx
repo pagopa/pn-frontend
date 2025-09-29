@@ -53,6 +53,8 @@ type Props = {
   privacyPolicyHref?: string;
   /** Url to terms of service page */
   termsOfServiceHref?: string;
+  /** Url to accessibility declaration page */
+  accessibilityLink: string;
   /** Enable assistance button */
   enableAssistanceButton?: boolean;
   slotsProps?: {
@@ -85,6 +87,7 @@ const Layout: React.FC<Props> = ({
   hasTermsOfService,
   privacyPolicyHref,
   termsOfServiceHref,
+  accessibilityLink,
   enableAssistanceButton = true,
   slotsProps,
 }) => (
@@ -147,6 +150,7 @@ const Layout: React.FC<Props> = ({
             hasTermsOfService={hasTermsOfService}
             privacyPolicyHref={privacyPolicyHref}
             termsOfServiceHref={termsOfServiceHref}
+            accessibilityLink={accessibilityLink}
           />
         )}
       </>

@@ -19,5 +19,6 @@
   "APP_IO_ANDROID": "https://play.google.com/store/apps/details?id=it.pagopa.io.app",
   "APP_IO_IOS": "https://apps.apple.com/it/app/io/id1501681835",
   "IS_DOD_ENABLED": true,
-  "DOWNTIME_EXAMPLE_LINK": "https://d3uwnqvme5tqoz.cloudfront.net/Legal_Fact_Malfunction_11f784e148.pdf"
+  "DOWNTIME_EXAMPLE_LINK": "https://d3uwnqvme5tqoz.cloudfront.net/Legal_Fact_Malfunction_11f784e148.pdf",
+  "ACCESSIBILITY_LINK": "https://form.agid.gov.it/view/978876c0-df2d-11ef-8637-9f856ac3da10"
 }

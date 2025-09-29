@@ -47,12 +47,10 @@ import {
 import DropDownPartyMenuItem from '../Party/DropDownParty';
 import ContactCodeDialog from './ContactCodeDialog';
 import ExistingContactDialog from './ExistingContactDialog';
-import LegalContactAssociationDialog from './LegalContactAssociationDialog';
 
 enum ModalType {
   EXISTING = 'existing',
   CODE = 'code',
-  CONFIRM_LEGAL_ASSOCIATION = 'confirm_legal_association',
 }
 
 enum ErrorBannerType {
@@ -66,26 +64,44 @@ export interface AddSpecialContactRef {
 
 type Props = {
   handleContactAdded: () => void;
-  handleError: (hasError: boolean) => void;
 };
 
-const ErrorBanner: React.FC<{ type: ErrorBannerType | undefined }> = ({ type }) => {
-  const { t } = useTranslation(['recapiti']);
+const ErrorBanner: React.FC<{ type: ErrorBannerType | undefined; contactValue?: string }> = ({
+  type,
+  contactValue,
+}) => {
   if (type === ErrorBannerType.ALREADY_EXISTS) {
     return (
-      <Alert severity="warning" sx={{ mt: 2 }} data-testid="alreadyExistsAlert">
-        {t(`special-contacts.contact-already-exists`)}
+      <Alert severity="warning" sx={{ mt: 2 }} data-testid="alreadyExistsAlert" aria-live="polite">
+        <Trans
+          ns="recapiti"
+          i18nKey="special-contacts.contact-already-exists"
+          components={[
+            <Typography key="paragraph_1" variant="body2" />,
+            <Typography key="paragraph_2" variant="body2" />,
+          ]}
+          values={{
+            contactValue,
+          }}
+        />
       </Alert>
     );
   } else if (type === ErrorBannerType.VALIDATING_PEC) {
     return (
       <Alert
-        variant="outlined"
-        severity="error"
+        severity="warning"
         sx={{ mt: 2 }}
         data-testid="validatingPecForSenderAlert"
+        aria-live="assertive"
       >
-        {t(`special-contacts.validating-pec`)}
+        <Trans
+          ns="recapiti"
+          i18nKey="special-contacts.validating-pec-banner-content"
+          components={[
+            <Typography key="paragraph_1" variant="body2" />,
+            <Typography key="paragraph_2" variant="body2" />,
+          ]}
+        />
       </Alert>
     );
   }
@@ -101,7 +117,7 @@ const ErrorBanner: React.FC<{ type: ErrorBannerType | undefined }> = ({ type }) 
  */
 const AddSpecialContact = forwardRef<AddSpecialContactRef, Props>(
   // eslint-disable-next-line sonarjs/cognitive-complexity
-  ({ handleContactAdded, handleError }: Props, ref) => {
+  ({ handleContactAdded }: Props, ref) => {
     const { t } = useTranslation(['common', 'recapiti']);
     const dispatch = useAppDispatch();
     const getOptionLabel = (option: Party) => option.name || '';
@@ -109,9 +125,9 @@ const AddSpecialContact = forwardRef<AddSpecialContactRef, Props>(
     const parties = useAppSelector((state: RootState) => state.contactsState.parties);
     const addressesData = useAppSelector(contactsSelectors.selectAddresses);
     const { IS_DOD_ENABLED } = getConfiguration();
-    const [modalOpen, setModalOpen] = useState<{ type: ModalType; isDefault?: boolean } | null>(
-      null
-    );
+    const [modalOpen, setModalOpen] = useState<ModalType | null>(null);
+    const [isExistingContactDefault, setIsExistingContactDefault] = useState(false);
+
     const tosConsent = useRef<Array<TosPrivacyConsent>>();
 
     const addressTypes = specialContactsAvailableAddressTypes(addressesData).filter(
@@ -122,7 +138,10 @@ const AddSpecialContact = forwardRef<AddSpecialContactRef, Props>(
 
     const isValidatingPecForSender = (senderId: string) =>
       addressesData.specialAddresses.some(
-        (address) => address.senderId === senderId && !address.pecValid
+        (address) =>
+          address.channelType === ChannelType.PEC &&
+          address.senderId === senderId &&
+          !address.pecValid
       );
 
     const isSenderAlreadyAdded = (sender: Party, channelType?: ChannelType | string) =>
@@ -130,43 +149,29 @@ const AddSpecialContact = forwardRef<AddSpecialContactRef, Props>(
         (a) => a.senderId === sender.id && (!channelType || a.channelType === channelType)
       );
 
-    const updateErrorBanner = (sender: Party, channelType: ChannelType) => {
-      if (channelType === ChannelType.SERCQ_SEND && isValidatingPecForSender(sender.id)) {
-        setErrorBanner(ErrorBannerType.VALIDATING_PEC);
-        handleError(true);
-        return;
-      }
-
-      if (channelType === ChannelType.PEC && isSenderAlreadyAdded(sender, channelType)) {
+    const updateErrorBanner = (sender: Party) => {
+      if (isSenderAlreadyAdded(sender) && !isValidatingPecForSender(sender.id)) {
         setErrorBanner(ErrorBannerType.ALREADY_EXISTS);
       } else {
         setErrorBanner(undefined);
       }
-      handleError(false);
     };
 
     const addressTypeChangeHandler = async (e: ChangeEvent<HTMLInputElement>) => {
       await formik.setFieldValue('s_value', '');
       await formik.setFieldTouched('s_value', false);
       if (e.target.value) {
-        const channelType = e.target.value as ChannelType;
-        const sender = formik.values.sender;
         formik.handleChange(e);
-
-        updateErrorBanner(sender, channelType);
       }
     };
 
     const senderChangeHandler = async (_: any, newValue: Party | null) => {
-      const channelType = formik.values.channelType as ChannelType;
-      const sender: Party = {
-        id: newValue?.id ?? '',
-        name: newValue?.name ?? '',
-      };
-      await formik.setFieldTouched('sender', true, false);
-      await formik.setFieldValue('sender', { id: sender.id, name: sender.name });
+      const sender: Party = { id: newValue?.id ?? '', name: newValue?.name ?? '' };
 
-      updateErrorBanner(sender, channelType);
+      await formik.setFieldTouched('sender', true, false);
+      await formik.setFieldValue('sender', sender);
+
+      updateErrorBanner(sender);
     };
 
     const renderOption = (props: any, option: Party) => (
@@ -182,7 +187,15 @@ const AddSpecialContact = forwardRef<AddSpecialContactRef, Props>(
           name: yup
             .string()
             .required(t('required-field'))
-            .max(80, t('too-long-field-error', { maxLength: 80 })),
+            .max(80, t('too-long-field-error', { maxLength: 80 }))
+            .test(
+              'validating-pec',
+              t('special-contacts.validating-pec-error-message', { ns: 'recapiti' }),
+              function () {
+                const senderId = this.parent.id;
+                return !isValidatingPecForSender(senderId);
+              }
+            ),
         })
         .required(),
       channelType: yup.string().required(t('required-field')),
@@ -219,8 +232,9 @@ const AddSpecialContact = forwardRef<AddSpecialContactRef, Props>(
 
     const formik = useFormik({
       initialValues,
-      validateOnMount: true,
       validationSchema,
+      validateOnChange: true,
+      validateOnBlur: true,
       enableReinitialize: true,
       onSubmit: (values) => {
         onConfirm(values.s_value, values.channelType as ChannelType, {
@@ -258,21 +272,10 @@ const AddSpecialContact = forwardRef<AddSpecialContactRef, Props>(
       channelType: ChannelType,
       sender: Sender = { senderId: 'default' }
     ) => {
-      // verify if the sender already has a contact associated
-      const oldAddress = addressesData.specialAddresses.find(
-        (addr) => addr.senderId === sender.senderId
-      );
-      if (oldAddress) {
-        setModalOpen({ type: ModalType.CONFIRM_LEGAL_ASSOCIATION });
-        return;
-      }
-
       // first check if contact already exists
       if (contactAlreadyExists(addressesData.addresses, value, sender.senderId, channelType)) {
-        setModalOpen({
-          type: ModalType.EXISTING,
-          isDefault: addressesData.defaultPECAddress?.value === value,
-        });
+        setIsExistingContactDefault(addressesData.defaultPECAddress?.value === value);
+        setModalOpen(ModalType.EXISTING);
         return;
       }
       handleAssociation();
@@ -304,7 +307,9 @@ const AddSpecialContact = forwardRef<AddSpecialContactRef, Props>(
 
     useImperativeHandle(ref, () => ({
       handleConfirm: async () => {
-        if (errorBanner !== ErrorBannerType.VALIDATING_PEC) {
+        if (isValidatingPecForSender(formik.values.sender.id)) {
+          setErrorBanner(ErrorBannerType.VALIDATING_PEC);
+        } else {
           await formik.submitForm();
         }
       },
@@ -363,7 +368,7 @@ const AddSpecialContact = forwardRef<AddSpecialContactRef, Props>(
         .then((res) => {
           // contact to verify
           if (!res) {
-            setModalOpen({ type: ModalType.CODE });
+            setModalOpen(ModalType.CODE);
             return;
           }
 
@@ -386,23 +391,9 @@ const AddSpecialContact = forwardRef<AddSpecialContactRef, Props>(
 
     return (
       <Paper data-testid="addSpecialContact" sx={{ p: { xs: 2, lg: 3 }, mb: 3 }}>
-        <LegalContactAssociationDialog
-          open={modalOpen?.type === ModalType.CONFIRM_LEGAL_ASSOCIATION}
-          sender={{
-            senderId: formik.values.sender.id,
-            senderName: formik.values.sender.name,
-          }}
-          oldAddress={oldAddress}
-          newAddress={{
-            addressType: AddressType.LEGAL,
-            channelType: formik.values.channelType as ChannelType,
-            value: formik.values.s_value,
-          }}
-          onCancel={() => setModalOpen(null)}
-          onConfirm={() => handleAssociation()}
-        />
         <ExistingContactDialog
-          open={modalOpen?.type === ModalType.EXISTING}
+          open={modalOpen === ModalType.EXISTING}
+          isDefault={isExistingContactDefault}
           value={formik.values.s_value}
           handleDiscard={() => setModalOpen(null)}
           handleConfirm={() => handleCodeVerification()}
@@ -412,7 +403,7 @@ const AddSpecialContact = forwardRef<AddSpecialContactRef, Props>(
             value={formik.values.s_value}
             addressType={AddressType.LEGAL}
             channelType={formik.values.channelType}
-            open={modalOpen?.type === ModalType.CODE}
+            open={modalOpen === ModalType.CODE}
             onConfirm={(code) => handleCodeVerification(code)}
             onDiscard={() => setModalOpen(null)}
           />
@@ -556,7 +547,14 @@ const AddSpecialContact = forwardRef<AddSpecialContactRef, Props>(
             </>
           )}
         </form>
-        <ErrorBanner type={errorBanner} />
+        <ErrorBanner
+          type={errorBanner}
+          contactValue={
+            oldAddress?.channelType === ChannelType.PEC
+              ? oldAddress.value
+              : t('special-contacts.sercq_send', { ns: 'recapiti' })
+          }
+        />
       </Paper>
     );
   }

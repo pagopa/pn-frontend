@@ -40,6 +40,7 @@ beforeAll(async () => {
     F24_DOWNLOAD_WAIT_TIME: 0,
     DOWNTIME_EXAMPLE_LINK: 'https://www.example.com',
     SELFCARE_CDN_URL: 'https://cdn.selfcare.pagopa.it',
+    ACCESSIBILITY_LINK: 'https://accessibility-link.it',
   });
   initStore(false);
   initAxiosClients();
