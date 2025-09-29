@@ -1,6 +1,7 @@
 import { FC, ReactNode } from 'react';
 import { Provider } from 'react-redux';
 
+import { SideMenuItem } from '@pagopa-pn/pn-commons';
 import { renderHook } from '@pagopa-pn/pn-commons/src/test-utils';
 import { EnhancedStore, configureStore } from '@reduxjs/toolkit';
 
@@ -9,7 +10,6 @@ import * as routes from '../../navigation/routes.const';
 import { appReducers } from '../../redux/store';
 import { getConfiguration } from '../../services/configuration.service';
 import { useMenuItems } from '../useMenuItems';
-import { SideMenuItem } from '@pagopa-pn/pn-commons';
 
 const TestStoreProvider = ({ children, store }: { children: ReactNode; store: EnhancedStore }) => {
   return <Provider store={store}>{children}</Provider>;
