@@ -51,6 +51,9 @@ const EmailContactItem: React.FC = () => {
 
   const isDigitalDomicileActive = defaultPECAddress || defaultSERCQ_SENDAddress;
   const isEmailActive = !!defaultEMAILAddress;
+  const hasAnySERCQAddrEnabled =
+    defaultSERCQ_SENDAddress ||
+    specialAddresses.some((addr) => addr.channelType === ChannelType.SERCQ_SEND);
 
   const hasCourtesyAddresses =
     addresses.filter(
@@ -182,7 +185,7 @@ const EmailContactItem: React.FC = () => {
     if (blockDelete) {
       return t(`courtesy-contacts.block-remove-email-title`, { ns: 'recapiti' });
     }
-    if (defaultSERCQ_SENDAddress) {
+    if (hasAnySERCQAddrEnabled) {
       return t(`courtesy-contacts.remove-email-title-dod-enabled`, {
         ns: 'recapiti',
       });
@@ -194,7 +197,7 @@ const EmailContactItem: React.FC = () => {
     if (blockDelete) {
       return t(`courtesy-contacts.block-remove-email-message`, { ns: 'recapiti' });
     }
-    if (defaultSERCQ_SENDAddress) {
+    if (hasAnySERCQAddrEnabled) {
       return (
         <Trans
           i18nKey={'courtesy-contacts.remove-email-message-dod-enabled'}
@@ -323,7 +326,7 @@ const EmailContactItem: React.FC = () => {
         removeModalBody={getRemoveModalMessage()}
         handleModalClose={() => setModalOpen(null)}
         confirmHandler={deleteConfirmHandler}
-        blockDelete={blockDelete || !!defaultSERCQ_SENDAddress}
+        blockDelete={blockDelete || !!hasAnySERCQAddrEnabled}
       />
       <InformativeDialog
         open={modalOpen === ModalType.INFORMATIVE}

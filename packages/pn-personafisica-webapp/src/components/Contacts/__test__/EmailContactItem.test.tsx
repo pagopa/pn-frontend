@@ -286,7 +286,7 @@ describe('testing EmailContactItem', () => {
     });
   });
 
-  it('delete email - SERCQ enabled)', async () => {
+  it('delete email - SERCQ enabled as default', async () => {
     const sercqEnabledNoSpecials = digitalAddressesSercq.filter(
       (addr) =>
         !(
@@ -300,6 +300,62 @@ describe('testing EmailContactItem', () => {
       preloadedState: {
         contactsState: {
           digitalAddresses: sercqEnabledNoSpecials,
+        },
+      },
+    });
+
+    const disableBtn = result.getByRole('button', { name: 'button.disable' });
+    expect(disableBtn).toBeInTheDocument();
+    fireEvent.click(disableBtn);
+
+    const dialog = await waitFor(() => result.getByRole('dialog'));
+    expect(dialog).toBeInTheDocument();
+
+    expect(dialog).toHaveTextContent('courtesy-contacts.remove-email-title-dod-enabled');
+    expect(dialog).toHaveTextContent('courtesy-contacts.remove-email-message-dod-enabled');
+
+    const dialogButtons = dialog.querySelectorAll('button');
+    expect(dialogButtons.length).toBe(1);
+    expect(dialogButtons[0]).toHaveTextContent('button.understand');
+
+    fireEvent.click(dialogButtons[0]);
+
+    // delete API should not be called
+    await waitFor(() => {
+      expect(mock.history.delete).toHaveLength(0);
+    });
+
+    await waitFor(() => expect(dialog).not.toBeInTheDocument());
+    const form = result.container.querySelector('form')!;
+    const emailTypography = getById(form, 'default_email-typography');
+    expect(emailTypography).toBeInTheDocument();
+    expect(emailTypography.textContent).toBeTruthy();
+  });
+
+  it('delete email - SERCQ enabled as special contact', async () => {
+    const sercqEnabledNoSpecialEmails = digitalAddressesSercq.filter(
+      (addr) =>
+        !(
+          addr.addressType === AddressType.COURTESY &&
+          addr.channelType === ChannelType.EMAIL &&
+          addr.senderId !== 'default'
+        )
+    );
+
+    const sercqOnSpecial = sercqEnabledNoSpecialEmails.map((addr) =>
+      addr.channelType === ChannelType.SERCQ_SEND
+        ? {
+            ...addr,
+            senderId: 'tribunale-milano',
+            senderName: 'Tribunale di Milano',
+          }
+        : addr
+    );
+
+    const result = render(<EmailContactItem />, {
+      preloadedState: {
+        contactsState: {
+          digitalAddresses: [defaultAddress, ...sercqOnSpecial],
         },
       },
     });
