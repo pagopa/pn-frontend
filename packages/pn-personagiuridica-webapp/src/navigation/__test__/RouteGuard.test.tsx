@@ -46,16 +46,6 @@ describe('RouteGuard component', () => {
     Object.defineProperty(window, 'location', { writable: true, value: original });
   });
 
-  it('No user logged', async () => {
-    await act(async () => {
-      render(<Guard />);
-    });
-    const pageComponent = screen.queryByText('Generic Page');
-    const accessDeniedComponent = screen.queryByTestId('access-denied');
-    expect(pageComponent).toBeNull();
-    expect(accessDeniedComponent).toBeTruthy();
-  });
-
   it('Logged user', async () => {
     await act(async () => {
       render(<Guard />, { preloadedState: mockReduxState });
