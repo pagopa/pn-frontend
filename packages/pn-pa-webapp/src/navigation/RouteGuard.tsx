@@ -18,15 +18,14 @@ interface Props {
 
 const RouteGuard = ({ roles }: Props) => {
   const navigate = useNavigate();
-  const { sessionToken } = useAppSelector((state: RootState) => state.userState.user);
   const role = useAppSelector((state: RootState) => state.userState.user.organization?.roles[0]);
 
   const userHasRequiredRole = !roles || (role && roles.includes(role.role));
 
-  if (!sessionToken || !userHasRequiredRole) {
+  if (!userHasRequiredRole) {
     return (
       <AccessDenied
-        isLogged={!!sessionToken}
+        isLogged={true}
         goToHomePage={() => navigate(getHomePage(), { replace: true })}
         goToLogin={() => goToSelfcareLogin()}
       />
