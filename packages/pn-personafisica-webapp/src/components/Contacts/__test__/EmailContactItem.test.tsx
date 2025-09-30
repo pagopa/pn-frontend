@@ -2,7 +2,7 @@ import MockAdapter from 'axios-mock-adapter';
 
 import { getById } from '@pagopa-pn/pn-commons/src/test-utils';
 
-import { digitalCourtesyAddresses } from '../../../__mocks__/Contacts.mock';
+import { digitalAddressesSercq, digitalCourtesyAddresses } from '../../../__mocks__/Contacts.mock';
 import { fireEvent, render, testStore, waitFor } from '../../../__test__/test-utils';
 import { apiClient } from '../../../api/apiClients';
 import { AddressType, ChannelType } from '../../../models/contacts';
@@ -232,7 +232,7 @@ describe('testing EmailContactItem', () => {
     expect(disableBtn).toBeInTheDocument();
   });
 
-  it('delete email', async () => {
+  it('delete email - SERCQ disabled', async () => {
     mock.onDelete('/bff/v1/addresses/COURTESY/default/EMAIL').reply(204);
     const result = render(<EmailContactItem />, {
       preloadedState: { contactsState: { digitalAddresses: [defaultAddress] } },
@@ -244,15 +244,24 @@ describe('testing EmailContactItem', () => {
     fireEvent.click(disableBtn);
     let dialog = await waitFor(() => result.getByRole('dialog'));
     expect(dialog).toBeInTheDocument();
-    let dialogButtons = dialog.querySelectorAll('button');
+
+    // verify dialog copy and buttons
+    expect(dialog).toHaveTextContent('courtesy-contacts.remove-email');
+    expect(dialog).toHaveTextContent('courtesy-contacts.remove-email-message');
+    const cancelBtn = result.getByRole('button', { name: 'button.annulla' });
+    const confirmBtn = result.getByRole('button', { name: 'button.conferma' });
+    expect(cancelBtn).toBeInTheDocument();
+    expect(confirmBtn).toBeInTheDocument();
+
     // cancel remove operation
-    fireEvent.click(dialogButtons[0]);
+    fireEvent.click(cancelBtn);
     await waitFor(() => expect(dialog).not.toBeInTheDocument());
+
     // click on confirm
     fireEvent.click(disableBtn);
     dialog = await waitFor(() => result.getByRole('dialog'));
-    dialogButtons = dialog.querySelectorAll('button');
-    fireEvent.click(dialogButtons[1]);
+    fireEvent.click(result.getByRole('button', { name: 'button.conferma' }));
+
     await waitFor(() => {
       expect(dialog).not.toBeVisible();
     });
@@ -268,12 +277,96 @@ describe('testing EmailContactItem', () => {
           )
       ).toStrictEqual([]);
     });
+
     // wait rerendering due to redux changes
     await waitFor(() => {
       const input = result.container.querySelector(`[name="default_email"]`);
       expect(input).toBeInTheDocument();
       expect(result.container).not.toHaveTextContent('');
     });
+  });
+
+  it('delete email - SERCQ enabled)', async () => {
+    const sercqEnabledNoSpecials = digitalAddressesSercq.filter(
+      (addr) =>
+        !(
+          addr.addressType === AddressType.COURTESY &&
+          addr.channelType === ChannelType.EMAIL &&
+          addr.senderId !== 'default'
+        )
+    );
+
+    const result = render(<EmailContactItem />, {
+      preloadedState: {
+        contactsState: {
+          digitalAddresses: sercqEnabledNoSpecials,
+        },
+      },
+    });
+
+    const disableBtn = result.getByRole('button', { name: 'button.disable' });
+    expect(disableBtn).toBeInTheDocument();
+    fireEvent.click(disableBtn);
+
+    const dialog = await waitFor(() => result.getByRole('dialog'));
+    expect(dialog).toBeInTheDocument();
+
+    expect(dialog).toHaveTextContent('courtesy-contacts.remove-email-title-dod-enabled');
+    expect(dialog).toHaveTextContent('courtesy-contacts.remove-email-message-dod-enabled');
+
+    const dialogButtons = dialog.querySelectorAll('button');
+    expect(dialogButtons.length).toBe(1);
+    expect(dialogButtons[0]).toHaveTextContent('button.understand');
+
+    fireEvent.click(dialogButtons[0]);
+
+    // delete API should not be called
+    await waitFor(() => {
+      expect(mock.history.delete).toHaveLength(0);
+    });
+
+    await waitFor(() => expect(dialog).not.toBeInTheDocument());
+    const form = result.container.querySelector('form')!;
+    const emailTypography = getById(form, 'default_email-typography');
+    expect(emailTypography).toBeInTheDocument();
+    expect(emailTypography.textContent).toBeTruthy();
+  });
+
+  it('delete email - special email address set', async () => {
+    const result = render(<EmailContactItem />, {
+      preloadedState: {
+        contactsState: {
+          digitalAddresses: digitalCourtesyAddresses,
+        },
+      },
+    });
+
+    const disableBtn = result.getByRole('button', { name: 'button.disable' });
+    expect(disableBtn).toBeInTheDocument();
+    fireEvent.click(disableBtn);
+
+    const dialog = await waitFor(() => result.getByRole('dialog'));
+    expect(dialog).toBeInTheDocument();
+
+    expect(dialog).toHaveTextContent('courtesy-contacts.block-remove-email-title');
+    expect(dialog).toHaveTextContent('courtesy-contacts.block-remove-email-message');
+
+    const dialogButtons = dialog.querySelectorAll('button');
+    expect(dialogButtons.length).toBe(1);
+    expect(dialogButtons[0]).toHaveTextContent('button.understand');
+
+    fireEvent.click(dialogButtons[0]);
+
+    // delete API should not be called
+    await waitFor(() => {
+      expect(mock.history.delete).toHaveLength(0);
+    });
+
+    await waitFor(() => expect(dialog).not.toBeInTheDocument());
+    const form = result.container.querySelector('form')!;
+    const emailTypography = getById(form, 'default_email-typography');
+    expect(emailTypography).toBeInTheDocument();
+    expect(emailTypography.textContent).toBeTruthy();
   });
 
   it('show special contact section - without default sms address', () => {

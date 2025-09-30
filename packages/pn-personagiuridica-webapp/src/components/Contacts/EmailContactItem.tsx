@@ -172,7 +172,7 @@ const EmailContactItem: React.FC = () => {
     if (defaultSERCQ_SENDAddress) {
       return (
         <Trans
-          i18nKey={'courtesy-contacts.remove-address-message-dod-enabled'}
+          i18nKey={'courtesy-contacts.remove-email-message-dod-enabled'}
           ns={'recapiti'}
           components={[
             <Typography variant="body2" fontSize={'18px'} key={'paragraph1'} sx={{ mb: 2 }} />,
@@ -297,19 +297,7 @@ const EmailContactItem: React.FC = () => {
         removeModalBody={getRemoveModalMessage()}
         handleModalClose={() => setModalOpen(null)}
         confirmHandler={deleteConfirmHandler}
-        slotsProps={{
-          primaryButton: {
-            onClick: defaultSERCQ_SENDAddress ? () => setModalOpen(null) : deleteConfirmHandler,
-            label: defaultSERCQ_SENDAddress ? t('button.annulla') : undefined,
-          },
-          secondaryButton: {
-            onClick: defaultSERCQ_SENDAddress ? deleteConfirmHandler : () => setModalOpen(null),
-            label: defaultSERCQ_SENDAddress
-              ? t('courtesy-contacts.remove-email-button-dod-enabled', { ns: 'recapiti' })
-              : undefined,
-          },
-        }}
-        blockDelete={blockDelete}
+        blockDelete={blockDelete || !!defaultSERCQ_SENDAddress}
       />
       <InformativeDialog
         open={modalOpen === ModalType.INFORMATIVE}
