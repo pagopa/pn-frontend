@@ -3,11 +3,11 @@ import { Provider } from 'react-redux';
 
 import { SideMenuItem } from '@pagopa-pn/pn-commons';
 import { renderHook } from '@pagopa-pn/pn-commons/src/test-utils';
-import { EnhancedStore, configureStore } from '@reduxjs/toolkit';
+import { EnhancedStore } from '@reduxjs/toolkit';
 
 import { userResponse } from '../../__mocks__/Auth.mock';
+import { createTestStore } from '../../__test__/test-utils';
 import * as routes from '../../navigation/routes.const';
-import { appReducers } from '../../redux/store';
 import { getConfiguration } from '../../services/configuration.service';
 import { useMenuItems } from '../useMenuItems';
 
@@ -21,17 +21,10 @@ describe('useMenuItems', () => {
   let selfCareMenuItems: Array<SideMenuItem>;
 
   beforeAll(() => {
-    store = configureStore({
-      reducer: appReducers,
-      preloadedState: {
-        userState: {
-          user: userResponse,
-        } as any,
+    store = createTestStore({
+      userState: {
+        user: userResponse,
       },
-      middleware: (getDefaultMiddleware) =>
-        getDefaultMiddleware({
-          serializableCheck: false,
-        }),
     });
     wrapper = ({ children }: { children: ReactNode }) => (
       <TestStoreProvider store={store}>{children}</TestStoreProvider>

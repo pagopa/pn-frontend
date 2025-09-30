@@ -6,7 +6,7 @@ import {
   digitalCourtesyAddresses,
   digitalLegalAddresses,
 } from '../../../__mocks__/Contacts.mock';
-import { createMockedStore } from '../../../__test__/test-utils';
+import { createTestStore } from '../../../__test__/test-utils';
 import { apiClient } from '../../../api/apiClients';
 import { AddressType, ChannelType } from '../../../models/contacts';
 import { store } from '../../store';
@@ -234,7 +234,7 @@ describe('Contacts redux state tests', () => {
 
   it('Shoud be able to retrieve addresses', () => {
     // init store
-    const testStore = createMockedStore({
+    const testStore = createTestStore({
       contactsState: {
         digitalAddresses,
       },
@@ -262,7 +262,7 @@ describe('Contacts redux state tests', () => {
   });
 
   it('should handle loading state during fetch digital addresses', async () => {
-    const testStore = createMockedStore({
+    const testStore = createTestStore({
       contactsState: initialState,
     });
 
@@ -283,7 +283,7 @@ describe('Contacts redux state tests', () => {
   });
 
   it('should reset loading state if fetch fails', async () => {
-    const testStore = createMockedStore({
+    const testStore = createTestStore({
       contactsState: initialState,
     });
 
