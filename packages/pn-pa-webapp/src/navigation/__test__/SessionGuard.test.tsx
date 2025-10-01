@@ -1,4 +1,5 @@
 import MockAdapter from 'axios-mock-adapter';
+import { sub } from 'date-fns';
 import { Route, Routes } from 'react-router-dom';
 import { vi } from 'vitest';
 
@@ -82,7 +83,7 @@ describe('SessionGuard Component', async () => {
       render(<Guard />);
     });
     expect(mockOpenFn).toHaveBeenCalledTimes(1);
-    const url = `${getConfiguration().SELFCARE_BASE_URL}${SELFCARE_LOGIN_PATH}`
+    const url = `${getConfiguration().SELFCARE_BASE_URL}${SELFCARE_LOGIN_PATH}`;
     expect(mockOpenFn).toHaveBeenCalledWith(url, '_self');
   });
 
@@ -106,7 +107,7 @@ describe('SessionGuard Component', async () => {
     expect(logoutTitleComponent).toBeNull();
   });
 
-  // expected behavior: doesn't enter the app, shows the error message linked to the exchangeToken
+  // expected behavior: doesn't enter the app, shows page not_accessible for error 451
   it('exchange token error (451)', async () => {
     window.location.hash = '#selfCareToken=451_token';
     mock.onPost(AUTH_TOKEN_EXCHANGE()).reply(451, {
@@ -120,15 +121,13 @@ describe('SessionGuard Component', async () => {
     expect(JSON.parse(mock.history.post[0].data)).toStrictEqual({
       authorizationToken: '451_token',
     });
-    const logoutComponent = screen.queryByTestId('session-modal');
-    expect(logoutComponent).toBeTruthy();
-    const logoutTitleComponent = screen.queryByText('leaving-app.title');
-    expect(logoutTitleComponent).toBeNull();
-    expect(mockNavigateFn).toHaveBeenCalledTimes(1);
-    expect(mockNavigateFn).toHaveBeenCalledWith(
-      { pathname: routes.NOT_ACCESSIBLE },
-      { replace: true }
-    );
+    await waitFor(() => {
+      expect(mockNavigateFn).toHaveBeenCalledTimes(1);
+      expect(mockNavigateFn).toHaveBeenCalledWith(
+        { pathname: routes.NOT_ACCESSIBLE },
+        { replace: true }
+      );
+    });
   });
 
   // expected behavior: enters the app, does a navigate to notifications page, launches sessionCheck
@@ -151,18 +150,21 @@ describe('SessionGuard Component', async () => {
     expect(pageComponent).toBeTruthy();
   });
 
-  // expected behavior: enters the app, logout message
+  // expected behavior: enters the app, exp token -> logout message
   it('logout', async () => {
     window.location.hash = '';
+    const desired_exp = sub(new Date(), { minutes: 5 }).getTime() / 1000;
     const mockReduxState = {
-      userState: { user: userResponse, isClosedSession: true },
+      userState: { user: { ...userResponse, desired_exp } },
     };
     await act(async () => {
       render(<Guard />, { preloadedState: mockReduxState });
     });
-    const logoutComponent = screen.queryByTestId('session-modal');
-    expect(logoutComponent).toBeTruthy();
-    const logoutTitleComponent = screen.queryByText('leaving-app.title');
-    expect(logoutTitleComponent).toBeTruthy();
+    await waitFor(() => {
+      const logoutComponent = screen.queryByTestId('session-modal');
+      expect(logoutComponent).toBeTruthy();
+      const logoutTitleComponent = screen.queryByText('leaving-app.title');
+      expect(logoutTitleComponent).toBeTruthy();
+    });
   });
 });

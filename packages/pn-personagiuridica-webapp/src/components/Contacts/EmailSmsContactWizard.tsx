@@ -74,7 +74,7 @@ const EmailSmsContactWizard: React.FC = () => {
       setModalOpen(ModalType.EXISTING);
       return;
     }
-    if (!isDigitalDomicileActive && channelType === ChannelType.EMAIL) {
+    if (!isDigitalDomicileActive) {
       setModalOpen(ModalType.INFORMATIVE);
       return;
     }
@@ -136,6 +136,11 @@ const EmailSmsContactWizard: React.FC = () => {
     }
   };
 
+  const getInformativeModalText = (suffix: string) => {
+    const channelTypeLower = currentAddress.current.channelType.toLowerCase();
+    return t(`courtesy-contacts.info-modal-${channelTypeLower}-${suffix}`, { ns: 'recapiti' });
+  };
+
   return (
     <Stack useFlexGap data-testid="emailSmsContactWizard">
       <Typography fontSize="22px" fontWeight={700} mb={{ xs: 2, lg: 3 }}>
@@ -179,14 +184,6 @@ const EmailSmsContactWizard: React.FC = () => {
             width: '100%',
           },
         }}
-      />
-      <InformativeDialog
-        open={modalOpen === ModalType.INFORMATIVE}
-        title={t('courtesy-contacts.info-modal-email-title', { ns: 'recapiti' })}
-        subtitle={t('courtesy-contacts.info-modal-email-subtitle', { ns: 'recapiti' })}
-        content={t('courtesy-contacts.info-modal-email-content', { ns: 'recapiti' })}
-        onConfirm={() => handleCodeVerification(currentAddress.current.channelType)}
-        onDiscard={() => setModalOpen(null)}
       />
 
       <Divider sx={{ mt: 3, mb: 3 }} />
@@ -234,6 +231,15 @@ const EmailSmsContactWizard: React.FC = () => {
           }}
         />
       )}
+
+      <InformativeDialog
+        open={modalOpen === ModalType.INFORMATIVE}
+        title={getInformativeModalText('title')}
+        subtitle={getInformativeModalText('subtitle')}
+        content={getInformativeModalText('content')}
+        onConfirm={() => handleCodeVerification(currentAddress.current.channelType)}
+        onDiscard={() => setModalOpen(null)}
+      />
 
       <ContactCodeDialog
         value={currentAddress.current.value}

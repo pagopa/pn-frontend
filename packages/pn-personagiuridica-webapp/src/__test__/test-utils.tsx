@@ -29,6 +29,16 @@ const AllTheProviders = ({
   return <Provider store={testStore}>{children}</Provider>;
 };
 
+const createTestStore = (preloadedState = {}) =>
+  configureStore({
+    reducer: appReducers,
+    preloadedState,
+    middleware: (getDefaultMiddleware) =>
+      getDefaultMiddleware({
+        serializableCheck: false,
+      }),
+  });
+
 const customRender = (
   ui: ReactElement,
   {
@@ -41,14 +51,7 @@ const customRender = (
     navigationRouter?: NavigationRouter;
   } = {}
 ) => {
-  testStore = configureStore({
-    reducer: appReducers,
-    preloadedState,
-    middleware: (getDefaultMiddleware) =>
-      getDefaultMiddleware({
-        serializableCheck: false,
-      }),
-  });
+  testStore = createTestStore(preloadedState);
   return render(ui, {
     wrapper: ({ children }) => (
       <AllTheProviders navigationRouter={navigationRouter} testStore={testStore}>
@@ -59,17 +62,7 @@ const customRender = (
   });
 };
 
-const createMockedStore = (preloadedState: any) =>
-  configureStore({
-    reducer: appReducers,
-    preloadedState,
-    middleware: (getDefaultMiddleware) =>
-      getDefaultMiddleware({
-        serializableCheck: false,
-      }),
-  });
-
 // re-exporting everything
 export * from '@testing-library/react';
 // override render method
-export { createMockedStore, customRender as render, testStore };
+export { customRender as render, testStore, createTestStore };

@@ -23,7 +23,7 @@ import {
   paymentsData,
   recipients,
 } from '../../../__mocks__/NotificationDetail.mock';
-import { createMockedStore } from '../../../__test__/test-utils';
+import { createTestStore } from '../../../__test__/test-utils';
 import { apiClient } from '../../../api/apiClients';
 import { getDowntimeLegalFact } from '../../appStatus/actions';
 import { store } from '../../store';
@@ -240,7 +240,7 @@ describe('Notification detail redux state tests', () => {
   });
 
   it('Should be able to fetch payment info', async () => {
-    const mockedStore = createMockedStore({
+    const mockedStore = createTestStore({
       notificationState: {
         notification: notificationToFe,
         timeline: notificationToFe.timeline,
@@ -271,7 +271,7 @@ describe('Notification detail redux state tests', () => {
 
   it('Should be able to fetch payment info and not replace the payment if is equal', async () => {
     sessionStorage.removeItem(PAYMENT_CACHE_KEY);
-    const mockedStore = createMockedStore({
+    const mockedStore = createTestStore({
       notificationState: {
         notification: notificationToFe,
         paymentsData: {

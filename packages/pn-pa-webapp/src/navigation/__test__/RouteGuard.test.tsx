@@ -20,16 +20,6 @@ const Guard = ({ roles }: { roles: Array<PNRole> | null }) => (
 );
 
 describe('RouteGuard component', () => {
-  it('No user logged', async () => {
-    await act(async () => {
-      render(<Guard roles={[PNRole.ADMIN, PNRole.OPERATOR]} />);
-    });
-    const pageComponent = screen.queryByText('Generic Page');
-    const accessDeniedComponent = screen.queryByTestId('access-denied');
-    expect(pageComponent).toBeNull();
-    expect(accessDeniedComponent).toBeTruthy();
-  });
-
   it('Logged user - route without required roles', async () => {
     await act(async () => {
       render(<Guard roles={null} />, { preloadedState: mockReduxState });

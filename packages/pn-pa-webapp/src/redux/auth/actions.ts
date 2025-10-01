@@ -14,7 +14,7 @@ import {
   BffTosPrivacyActionBody,
   UserConsentsApiFactory,
 } from '../../generated-client/tos-privacy';
-import { PNRole, PartyRole, User } from '../../models/user';
+import { User } from '../../models/user';
 import { RootState } from '../store';
 
 export enum AUTH_ACTIONS {
@@ -42,16 +42,13 @@ export const exchangeToken = createAsyncThunk<User, string>(
 /**
  * Call api logout to invalidate access token.
  */
-export const apiLogout = createAsyncThunk<void, string>(
-  'apiLogout',
-  async (token) => {
-    try {
-      return await AuthApi.logout(token);
-    } catch (e: any) {
-      console.log('Error during logout', e);
-    }
+export const apiLogout = createAsyncThunk<void, string>('apiLogout', async (token) => {
+  try {
+    return await AuthApi.logout(token);
+  } catch (e: any) {
+    console.log('Error during logout', e);
   }
-);
+});
 
 /**
  * Get the list of institutions
@@ -100,32 +97,6 @@ export const getProductsOfInstitution = createAsyncThunk(
     }
   }
 );
-
-/**
- * Logout action
- * Clears sessionStorage, clears state
- */
-export const logout = createAsyncThunk<User>('logout', async () => {
-  sessionStorage.clear();
-  return {
-    sessionToken: '',
-    name: '',
-    family_name: '',
-    fiscal_number: '',
-    email: '',
-    uid: '',
-    organization: {
-      id: '',
-      roles: [
-        {
-          partyRole: PartyRole.MANAGER,
-          role: PNRole.ADMIN,
-        },
-      ],
-      fiscal_code: '',
-    },
-  } as User;
-});
 
 /**
  * Retrieves if the terms of service are already approved

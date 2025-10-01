@@ -39,6 +39,7 @@ import {
   getInstitutions,
   getProductsOfInstitution,
 } from './redux/auth/actions';
+import { resetState } from './redux/auth/reducers';
 import { useAppDispatch, useAppSelector } from './redux/hooks';
 import { RootState } from './redux/store';
 import { getConfiguration } from './services/configuration.service';
@@ -236,8 +237,7 @@ const ActualApp = () => {
 
   const performLogout = async () => {
     await dispatch(apiLogout(loggedUser.sessionToken));
-
-    sessionStorage.clear();
+    dispatch(resetState());
     goToSelfcareLogout();
     setOpenModal(false);
   };

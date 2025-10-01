@@ -45,7 +45,6 @@ const noLoggedUserData = {
 
 const initialState = {
   loading: false,
-  exchangedToken: false, // api exchangeToken has been called
   user: basicInitialUserData(userDataMatcher, noLoggedUserData),
   fetchedTos: false,
   fetchedPrivacy: false,
@@ -87,12 +86,10 @@ const userSlice = createSlice({
         console.debug(e);
       } finally {
         state.loading = false;
-        state.exchangedToken = true;
       }
     });
     builder.addCase(exchangeToken.rejected, (state) => {
       state.loading = false;
-      state.exchangedToken = true;
     });
     builder.addCase(getTosPrivacyApproval.fulfilled, (state, action) => {
       const [tosConsent, privacyConsent] = action.payload.filter(
@@ -128,5 +125,6 @@ const userSlice = createSlice({
     });
   },
 });
+
 export const { resetState } = userSlice.actions;
 export default userSlice;

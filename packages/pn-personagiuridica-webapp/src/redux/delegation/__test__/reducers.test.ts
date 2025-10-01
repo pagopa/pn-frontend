@@ -3,7 +3,7 @@ import MockAdapter from 'axios-mock-adapter';
 import { mockAuthentication } from '../../../__mocks__/Auth.mock';
 import { mandatesByDelegate, mandatesByDelegator } from '../../../__mocks__/Delegations.mock';
 import { errorMock } from '../../../__mocks__/Errors.mock';
-import { createMockedStore } from '../../../__test__/test-utils';
+import { createTestStore } from '../../../__test__/test-utils';
 import { apiClient } from '../../../api/apiClients';
 import { DelegationStatus } from '../../../models/Deleghe';
 import { GroupStatus } from '../../../models/groups';
@@ -91,7 +91,7 @@ describe('delegation redux state tests', () => {
 
   it('should accept a delegation request', async () => {
     // init store
-    const testStore = createMockedStore({
+    const testStore = createTestStore({
       delegationsState: {
         ...initialState,
         delegations: {
@@ -125,7 +125,7 @@ describe('delegation redux state tests', () => {
 
   it('should reject a delegation from a delegator', async () => {
     // init store
-    const testStore = createMockedStore({
+    const testStore = createTestStore({
       delegationsState: {
         ...initialState,
         delegations: {
@@ -153,7 +153,7 @@ describe('delegation redux state tests', () => {
 
   it('should revoke a delegation for a delegate', async () => {
     // init store
-    const testStore = createMockedStore({
+    const testStore = createTestStore({
       delegationsState: {
         ...initialState,
         delegations: {
@@ -195,7 +195,7 @@ describe('delegation redux state tests', () => {
 
   it('should update a delegation request', async () => {
     // init store
-    const testStore = createMockedStore({
+    const testStore = createTestStore({
       delegationsState: {
         ...initialState,
         delegations: {

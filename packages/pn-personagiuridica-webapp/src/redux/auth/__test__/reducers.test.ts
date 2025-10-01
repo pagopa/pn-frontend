@@ -71,10 +71,7 @@ describe('Auth redux state tests', () => {
         isFirstAccept: false,
         consentVersion: '',
       },
-      isClosedSession: false,
-      isUnauthorizedUser: false,
-      messageUnauthorizedUser: { title: '', message: '' },
-      isForbiddenUser: false,
+      tosPrivacyApiError: false,
     });
   });
 
@@ -86,14 +83,15 @@ describe('Auth redux state tests', () => {
 
   it('Should be able to logout', async () => {
     const action = await mockLogout();
-    expect(action.type).toBe('logout/fulfilled');
-    expect(action.payload).toEqual({
+    expect(action.type).toBe('userSlice/resetState');
+    expect(store.getState().userState.user).toEqual({
       sessionToken: '',
       name: '',
       family_name: '',
       fiscal_number: '',
       email: '',
       from_aa: false,
+      hasGroup: false,
       uid: '',
       level: '',
       iat: 0,

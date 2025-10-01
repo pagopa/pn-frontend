@@ -62,6 +62,15 @@ function Router() {
             <Route path="/" element={<ToSGuard />}>
               <Route path="/" element={<AARGuard />}>
                 <Route
+                  index
+                  element={
+                    <Navigate
+                      to={hasGroup ? routes.NOTIFICHE_DELEGATO : routes.NOTIFICHE}
+                      replace
+                    />
+                  }
+                />
+                <Route
                   path={routes.NOTIFICHE}
                   element={
                     <PrivateRoute
@@ -201,10 +210,7 @@ function Router() {
                 <Route path={routes.APP_STATUS} element={<AppStatus />} />
               </Route>
             </Route>
-            {/* not found - non-logged users will see the common AccessDenied component */}
-            <Route path="*" element={<RouteGuard />}>
-              <Route path="*" element={<NotFound goBackAction={navigateToHome} />} />
-            </Route>
+            <Route path="*" element={<NotFound goBackAction={navigateToHome} />} />
           </Route>
         </Route>
         <Route path={routes.PRIVACY_POLICY} element={<PrivacyPolicyPage />} />
