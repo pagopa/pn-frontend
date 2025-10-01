@@ -31,7 +31,6 @@ describe('Auth redux state tests', () => {
     const state = store.getState().userState;
     expect(state).toEqual({
       loading: false,
-      exchangedToken: false,
       user: {
         sessionToken: '',
         name: '',
