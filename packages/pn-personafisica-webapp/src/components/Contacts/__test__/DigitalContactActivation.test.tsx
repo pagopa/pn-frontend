@@ -348,6 +348,18 @@ describe('DigitalContactActivation', () => {
     // should show confirmation modal and NOT go to step 4
     const modal = await result.findByRole('dialog');
     expect(modal).toBeInTheDocument();
+
+    expect(modal).toHaveTextContent('courtesy-contacts.confirmation-modal-title');
+    expect(modal).toHaveTextContent('courtesy-contacts.confirmation-modal-email-content');
+
+    const dialogButtons = modal.querySelectorAll('button');
+    expect(dialogButtons.length).toBe(1);
+    expect(dialogButtons[0]).toHaveTextContent('button.understand');
+
+    fireEvent.click(dialogButtons[0]);
+    await waitFor(() => expect(result.queryByRole('dialog')).not.toBeInTheDocument());
+
+    expect(result.queryByText(`${labelPrefix}.step_3.title`)).toBeInTheDocument();
     expect(result.queryByText(`${labelPrefix}.step_4.title`)).not.toBeInTheDocument();
   });
 
