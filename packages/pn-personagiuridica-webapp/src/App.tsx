@@ -2,14 +2,6 @@ import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router-dom';
 
-import { People, SupervisedUserCircle } from '@mui/icons-material';
-import AltRouteIcon from '@mui/icons-material/AltRoute';
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
-import ErrorIcon from '@mui/icons-material/Error';
-import HelpIcon from '@mui/icons-material/Help';
-import MailOutlineIcon from '@mui/icons-material/MailOutline';
-import MarkunreadMailboxIcon from '@mui/icons-material/MarkunreadMailbox';
-import SettingsEthernet from '@mui/icons-material/SettingsEthernet';
 import { Box, Button, DialogTitle } from '@mui/material';
 import {
   APP_VERSION,
@@ -20,7 +12,6 @@ import {
   PnDialogActions,
   ResponseEventDispatcher,
   SideMenu,
-  SideMenuItem,
   addParamToUrl,
   appStateActions,
   errorFactoryManager,
@@ -31,12 +22,14 @@ import {
 } from '@pagopa-pn/pn-commons';
 import { PartyEntity, ProductEntity } from '@pagopa/mui-italia';
 
+import { useMenuItems } from './hooks/useMenuItems';
 import { PNRole } from './models/User';
 import { goToLoginPortal } from './navigation/navigation.utility';
 import Router from './navigation/routes';
 import * as routes from './navigation/routes.const';
 import { getCurrentAppStatus } from './redux/appStatus/actions';
 import { apiLogout } from './redux/auth/actions';
+import { resetState } from './redux/auth/reducers';
 import { getDigitalAddresses } from './redux/contact/actions';
 import { useAppDispatch, useAppSelector } from './redux/hooks';
 import { getSidemenuInformation } from './redux/sidemenu/actions';
@@ -70,8 +63,13 @@ const App = () => {
 
 // eslint-disable-next-line complexity
 const ActualApp = () => {
-  const { MIXPANEL_TOKEN, PAGOPA_HELP_EMAIL, SELFCARE_BASE_URL, IS_B2B_ENABLED, SELFCARE_CDN_URL } =
-    getConfiguration();
+  const {
+    MIXPANEL_TOKEN,
+    PAGOPA_HELP_EMAIL,
+    SELFCARE_BASE_URL,
+    SELFCARE_CDN_URL,
+    ACCESSIBILITY_LINK,
+  } = getConfiguration();
   const dispatch = useAppDispatch();
   const { t, i18n } = useTranslation(['common', 'notifiche']);
   const [openModal, setOpenModal] = useState(false);
@@ -80,10 +78,6 @@ const ActualApp = () => {
   const { tosConsent, fetchedTos, privacyConsent, fetchedPrivacy } = useAppSelector(
     (state: RootState) => state.userState
   );
-  const pendingDelegators = useAppSelector(
-    (state: RootState) => state.generalInfoState.pendingDelegators
-  );
-  const currentStatus = useAppSelector((state: RootState) => state.appStatus.currentStatus);
   const { pathname } = useLocation();
 
   const sessionToken = loggedUser.sessionToken;
@@ -111,6 +105,7 @@ const ActualApp = () => {
   const organization = loggedUser.organization;
   const role = loggedUser.organization?.roles ? loggedUser.organization?.roles[0] : null;
   const userHasAdminPermissions = useHasPermissions(role ? [role.role] : [], [PNRole.ADMIN]);
+  const { menuItems, selfCareMenuItems } = useMenuItems(userHasAdminPermissions);
 
   // TODO: get products list from be (?)
   const productsList: Array<ProductEntity> = useMemo(
@@ -145,94 +140,6 @@ const ActualApp = () => {
       void dispatch(getCurrentAppStatus());
     }
   }, [sessionToken]);
-
-  const mapDelegatorSideMenuItem = (): Array<SideMenuItem> | undefined => {
-    // if the current user is not a groupAdmin can also see own PG notifications,
-    // else it sees only delegated notifications and we return undefined
-    if (!loggedUser.hasGroup) {
-      return [
-        {
-          label: t('menu.notifiche-impresa'),
-          route: routes.NOTIFICHE,
-        },
-        {
-          label: t('menu.notifiche-delegato'),
-          route: routes.NOTIFICHE_DELEGATO,
-        },
-      ];
-    } else {
-      return undefined;
-    }
-  };
-
-  const notificationMenuItems: Array<SideMenuItem> | undefined = mapDelegatorSideMenuItem();
-
-  // TODO spostare questo in un file di utility
-  const menuItems: Array<SideMenuItem> = [
-    {
-      label: !loggedUser.hasGroup ? t('menu.notifiche') : t('menu.notifiche-delegato'),
-      icon: MailOutlineIcon,
-      route: !loggedUser.hasGroup ? routes.NOTIFICHE : routes.NOTIFICHE_DELEGATO,
-      children: notificationMenuItems,
-      notSelectable: notificationMenuItems && notificationMenuItems.length > 0,
-    },
-    {
-      label: t('menu.app-status'),
-      // ATTENTION - a similar logic to choose the icon and its color is implemented in AppStatusBar (in pn-commons)
-      icon: () =>
-        currentStatus ? (
-          currentStatus.appIsFullyOperative ? (
-            <CheckCircleIcon sx={{ color: 'success.main' }} />
-          ) : (
-            <ErrorIcon sx={{ color: 'error.main' }} />
-          )
-        ) : (
-          <HelpIcon />
-        ),
-      route: routes.APP_STATUS,
-    },
-  ];
-
-  if (userHasAdminPermissions) {
-    /* eslint-disable-next-line functional/immutable-data */
-    menuItems.splice(1, 0, {
-      label: t('menu.deleghe'),
-      icon: () => <AltRouteIcon />,
-      route: routes.DELEGHE,
-      rightBadgeNotification: pendingDelegators ? pendingDelegators : undefined,
-    });
-  }
-
-  if (userHasAdminPermissions && !loggedUser.hasGroup) {
-    /* eslint-disable-next-line functional/immutable-data */
-    menuItems.splice(2, 0, {
-      label: t('menu.contacts'),
-      icon: MarkunreadMailboxIcon,
-      route: routes.RECAPITI,
-    });
-  }
-
-  if (IS_B2B_ENABLED) {
-    /* eslint-disable-next-line functional/immutable-data */
-    menuItems.splice(3, 0, {
-      label: t('menu.integrazione-api'),
-      icon: SettingsEthernet,
-      route: routes.INTEGRAZIONE_API,
-    });
-  }
-
-  const selfcareMenuItems: Array<SideMenuItem> = [
-    {
-      label: t('menu.users'),
-      icon: People,
-      route: routes.USERS(organization?.id, i18n.language),
-    },
-    {
-      label: t('menu.groups'),
-      icon: SupervisedUserCircle,
-      route: routes.GROUPS(organization?.id, i18n.language),
-    },
-  ];
 
   const partyList: Array<PartyEntity> = useMemo(
     () => [
@@ -273,8 +180,7 @@ const ActualApp = () => {
 
   const performLogout = async () => {
     await dispatch(apiLogout(loggedUser.sessionToken));
-
-    sessionStorage.clear();
+    dispatch(resetState());
     goToLoginPortal();
     setOpenModal(false);
   };
@@ -286,7 +192,7 @@ const ActualApp = () => {
         showHeader
         showFooter
         onExitAction={handleUserLogout}
-        sideMenu={<SideMenu menuItems={menuItems} selfCareItems={selfcareMenuItems} />}
+        sideMenu={<SideMenu menuItems={menuItems} selfCareItems={selfCareMenuItems} />}
         showSideMenu={showSideMenu}
         productsList={productsList}
         productId={'0'}
@@ -300,6 +206,7 @@ const ActualApp = () => {
         partyList={partyList}
         isLogged={!!sessionToken}
         hasTermsOfService={true}
+        accessibilityLink={ACCESSIBILITY_LINK}
       >
         <PnDialog open={openModal}>
           <DialogTitle sx={{ mb: 2 }}>{t('header.logout-message')}</DialogTitle>

@@ -7,7 +7,7 @@ import {
   BffTosPrivacyActionBody,
   UserConsentsApiFactory,
 } from '../../generated-client/tos-privacy';
-import { PNRole, PartyRole, User } from '../../models/User';
+import { User } from '../../models/User';
 
 export enum AUTH_ACTIONS {
   GET_TOS_PRIVACY_APPROVAL = 'getTosPrivacyApproval',
@@ -32,49 +32,12 @@ export const exchangeToken = createAsyncThunk<User, { spidToken: string; aar?: s
 /**
  * Call api logout to invalidate access token.
  */
-export const apiLogout = createAsyncThunk<void, string>(
-  'apiLogout',
-  async (token) => {
-    try {
-      return await AuthApi.logout(token);
-    } catch (e: any) {
-      console.log('Error during logout', e);
-    }
+export const apiLogout = createAsyncThunk<void, string>('apiLogout', async (token) => {
+  try {
+    return await AuthApi.logout(token);
+  } catch (e: any) {
+    console.log('Error during logout', e);
   }
-);
-
-/**
- * Logout action
- * Clears sessionStorage, clears state
- */
-export const logout = createAsyncThunk<User>('logout', async () => {
-  sessionStorage.clear();
-  return {
-    sessionToken: '',
-    name: '',
-    family_name: '',
-    fiscal_number: '',
-    email: '',
-    from_aa: false,
-    uid: '',
-    level: '',
-    iat: 0,
-    exp: 0,
-    iss: '',
-    jti: '',
-    aud: '',
-    organization: {
-      id: '',
-      roles: [
-        {
-          partyRole: PartyRole.MANAGER,
-          role: PNRole.ADMIN,
-        },
-      ],
-      fiscal_code: '',
-    },
-    desired_exp: 0,
-  } as User;
 });
 
 /**

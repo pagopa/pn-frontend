@@ -1,4 +1,12 @@
-import { ReactNode, forwardRef, memo, useCallback, useImperativeHandle, useState } from 'react';
+import {
+  ReactNode,
+  forwardRef,
+  memo,
+  useCallback,
+  useEffect,
+  useImperativeHandle,
+  useState,
+} from 'react';
 
 import {
   Alert,
@@ -10,26 +18,26 @@ import {
   Divider,
   Typography,
 } from '@mui/material';
-import { CopyToClipboardButton } from '@pagopa/mui-italia';
+import { CodeInput, CopyToClipboardButton } from '@pagopa/mui-italia';
 
 import { ErrorMessage } from '../../models';
 import { getLocalizedOrDefaultLabel } from '../../utility/localization.utility';
 import PnDialog from '../PnDialog/PnDialog';
 import PnDialogActions from '../PnDialog/PnDialogActions';
 import PnDialogContent from '../PnDialog/PnDialogContent';
-import CodeInput from './CodeInput';
 
 type Props = {
   title: ReactNode;
   subtitle: ReactNode;
   open: boolean;
-  initialValues: Array<string>;
+  codeLength: number;
+  initialValue?: string;
   codeSectionTitle: string;
   codeSectionAdditional?: ReactNode;
   confirmLabel?: string;
   cancelLabel: string;
   cancelCallback: () => void;
-  confirmCallback?: (values: Array<string>) => void;
+  confirmCallback?: (value: string) => void;
   isReadOnly?: boolean;
   error?: { title: string; message: string; hasError: boolean };
 };
@@ -43,12 +51,16 @@ type ModalHandle = {
  * @param title title to show
  * @param subtitle subtitle to show
  * @param open flag to hide/show modal
- * @param initialValues initial code
+ * @param codeLength required code length
+ * @param initialValue initial code
  * @param codeSectionTitle title of the section where is the code
  * @param codeSectionAdditional additional elments under the code
  * @param confirmLabel label of the confirm button
  * @param cancelLabel label of the cancel button
+ * @param cancelCallback cancel callback
+ * @param confirmCallback confirm callback (receives the code as string)
  * @param isReadOnly set if code is in readonly mode
+ * @param error optional error state (title, message, hasError)
  */
 const CodeModal = forwardRef<ModalHandle, Props>(
   (
@@ -56,7 +68,8 @@ const CodeModal = forwardRef<ModalHandle, Props>(
       title,
       subtitle,
       open,
-      initialValues,
+      codeLength,
+      initialValue = '',
       codeSectionTitle,
       codeSectionAdditional,
       confirmLabel,
@@ -69,46 +82,64 @@ const CodeModal = forwardRef<ModalHandle, Props>(
     ref
     // eslint-disable-next-line sonarjs/cognitive-complexity
   ) => {
-    const [code, setCode] = useState(initialValues);
+    const [code, setCode] = useState<string>(initialValue.slice(0, codeLength));
     const [internalError, setInternalError] = useState({
-      internalHasError: false,
-      internalErrorTitle: '',
-      internalErrorMessage: '',
+      internalHasError: error?.hasError ?? false,
+      internalErrorTitle: error?.title ?? '',
+      internalErrorMessage: error?.message ?? '',
     });
 
     const { internalHasError, internalErrorTitle, internalErrorMessage } = internalError;
 
-    const codeIsValid = code.every((v) => (!isNaN(Number(v)) ? v : false));
-    const codeIsEmpty = code.some((v) => !v);
-
-    const changeHandler = useCallback((inputsValues: Array<string>) => {
-      setCode(inputsValues);
-      if (isNaN(Number(inputsValues.join('')))) {
+    useEffect(() => {
+      if (open && code !== initialValue) {
+        setCode(initialValue);
+      } else if (!open) {
+        setCode('');
         setInternalError({
-          internalHasError: true,
-          internalErrorTitle: getLocalizedOrDefaultLabel(
-            'common',
-            `errors.invalid_type_code.title`
-          ),
-          internalErrorMessage: getLocalizedOrDefaultLabel(
-            'common',
-            `errors.invalid_type_code.message`
-          ),
-        });
-      } else {
-        setInternalError({
-          internalHasError: error?.hasError ?? false,
-          internalErrorTitle: error?.title ?? '',
-          internalErrorMessage: error?.message ?? '',
+          internalHasError: false,
+          internalErrorTitle: '',
+          internalErrorMessage: '',
         });
       }
-    }, []);
+    }, [initialValue, open]);
+
+    const changeHandler = useCallback(
+      (val: string) => {
+        setCode(val);
+
+        if (val.length > 0 && !/^\d+$/.test(val)) {
+          setInternalError({
+            internalHasError: true,
+            internalErrorTitle: getLocalizedOrDefaultLabel(
+              'common',
+              `errors.invalid_type_code.title`
+            ),
+            internalErrorMessage: getLocalizedOrDefaultLabel(
+              'common',
+              `errors.invalid_type_code.message`
+            ),
+          });
+        } else {
+          setInternalError({
+            internalHasError: error?.hasError ?? false,
+            internalErrorTitle: error?.title ?? '',
+            internalErrorMessage: error?.message ?? '',
+          });
+        }
+      },
+      [error?.hasError, error?.message, error?.title]
+    );
 
     const confirmHandler = () => {
       if (!confirmCallback) {
         return;
       }
-      if (codeIsEmpty) {
+
+      const isComplete = code.length === codeLength;
+      const isNumeric = /^\d+$/.test(code);
+
+      if (!isComplete) {
         setInternalError({
           internalHasError: true,
           internalErrorTitle: getLocalizedOrDefaultLabel('common', `errors.empty_code.title`),
@@ -116,7 +147,7 @@ const CodeModal = forwardRef<ModalHandle, Props>(
         });
         return;
       }
-      if (!codeIsValid) {
+      if (!isNumeric) {
         setInternalError({
           internalHasError: true,
           internalErrorTitle: getLocalizedOrDefaultLabel(
@@ -162,17 +193,19 @@ const CodeModal = forwardRef<ModalHandle, Props>(
           </Typography>
           <Box sx={{ mt: 2 }}>
             <CodeInput
-              initialValues={initialValues}
-              isReadOnly={isReadOnly}
-              hasError={internalHasError}
+              length={codeLength}
+              value={code}
+              error={internalHasError}
               onChange={changeHandler}
+              inputMode="numeric"
+              readOnly={isReadOnly}
             />
             {isReadOnly && (
               <CopyToClipboardButton
                 id="copy-code-button"
                 data-testid="copyCodeButton"
                 sx={{ mt: 1.5 }}
-                value={initialValues.join('')}
+                value={code}
                 tooltipTitle={getLocalizedOrDefaultLabel('delegations', 'deleghe.code_copied')}
               />
             )}

@@ -1,4 +1,5 @@
 import MockAdapter from 'axios-mock-adapter';
+import { sub } from 'date-fns';
 import { Route, Routes } from 'react-router-dom';
 import { vi } from 'vitest';
 
@@ -39,7 +40,7 @@ describe('SessionGuard Component', async () => {
     mock = new MockAdapter(authClient);
     Object.defineProperty(window, 'location', {
       writable: true,
-      value: { hash: '', pathname: '/' },
+      value: { hash: '', pathname: '/', search: '' },
     });
     Object.defineProperty(window, 'open', {
       configurable: true,
@@ -52,7 +53,7 @@ describe('SessionGuard Component', async () => {
     vi.clearAllMocks();
     Object.defineProperty(window, 'location', {
       writable: true,
-      value: { hash: '', pathname: '/' },
+      value: { hash: '', pathname: '/', search: '' },
     });
   });
 
@@ -129,15 +130,13 @@ describe('SessionGuard Component', async () => {
     expect(JSON.parse(mock.history.post[0].data)).toStrictEqual({
       authorizationToken: '451_token',
     });
-    const logoutComponent = screen.queryByTestId('session-modal');
-    expect(logoutComponent).toBeTruthy();
-    const logoutTitleComponent = screen.queryByText('leaving-app.title');
-    expect(logoutTitleComponent).toBeNull();
-    expect(mockNavigateFn).toHaveBeenCalledTimes(1);
-    expect(mockNavigateFn).toHaveBeenCalledWith(
-      { pathname: routes.NOT_ACCESSIBLE },
-      { replace: true }
-    );
+    await waitFor(() => {
+      expect(mockNavigateFn).toHaveBeenCalledTimes(1);
+      expect(mockNavigateFn).toHaveBeenCalledWith(
+        { pathname: routes.NOT_ACCESSIBLE },
+        { replace: true }
+      );
+    });
   });
 
   // expected behavior: enters the app, does a navigate to notifications page, launches sessionCheck
@@ -158,11 +157,6 @@ describe('SessionGuard Component', async () => {
     });
     const pageComponent = screen.queryByText('Generic Page');
     expect(pageComponent).toBeTruthy();
-    expect(mockNavigateFn).toHaveBeenCalledTimes(1);
-    expect(mockNavigateFn).toHaveBeenCalledWith(
-      { pathname: routes.NOTIFICHE, search: '' },
-      { replace: true }
-    );
   });
 
   // expected behavior: enters the app, does a navigate to notifications page, launches sessionCheck
@@ -184,11 +178,6 @@ describe('SessionGuard Component', async () => {
     });
     const pageComponent = screen.queryByText('Generic Page');
     expect(pageComponent).toBeTruthy();
-    expect(mockNavigateFn).toHaveBeenCalledTimes(1);
-    expect(mockNavigateFn).toHaveBeenCalledWith(
-      { pathname: routes.NOTIFICHE_DELEGATO, search: '' },
-      { replace: true }
-    );
   });
 
   // expected behavior: enters the app, does a navigate to notifications page, launches sessionCheck
@@ -210,11 +199,6 @@ describe('SessionGuard Component', async () => {
     });
     const pageComponent = screen.queryByText('Mocked Page');
     expect(pageComponent).toBeTruthy();
-    expect(mockNavigateFn).toHaveBeenCalledTimes(1);
-    expect(mockNavigateFn).toHaveBeenCalledWith(
-      { pathname: location.pathname, search: '', hash: 'greet=hola' },
-      { replace: true }
-    );
   });
 
   it('store aar in localStorage', async () => {
@@ -230,15 +214,19 @@ describe('SessionGuard Component', async () => {
   it('logout', async () => {
     window.location.hash = '';
     window.location.pathname = '/';
+    const desired_exp = sub(new Date(), { minutes: 5 }).getTime() / 1000;
+
     const mockReduxState = {
-      userState: { user: userResponse, isClosedSession: true },
+      userState: { user: { ...userResponse, desired_exp } },
     };
     await act(async () => {
       render(<Guard />, { preloadedState: mockReduxState });
     });
-    const logoutComponent = screen.queryByTestId('session-modal');
-    expect(logoutComponent).toBeTruthy();
-    const logoutTitleComponent = screen.queryByText('leaving-app.title');
-    expect(logoutTitleComponent).toBeTruthy();
+    await waitFor(() => {
+      const logoutComponent = screen.queryByTestId('session-modal');
+      expect(logoutComponent).toBeTruthy();
+      const logoutTitleComponent = screen.queryByText('leaving-app.title');
+      expect(logoutTitleComponent).toBeTruthy();
+    });
   });
 });

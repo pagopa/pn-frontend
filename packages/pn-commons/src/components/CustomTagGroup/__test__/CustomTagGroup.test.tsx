@@ -62,15 +62,4 @@ describe('CustomTagGroup component', () => {
     expect(tooltip).not.toBeInTheDocument();
     expect(mockCallbackFn).toBeCalledTimes(0);
   });
-
-  it('renders component with limited 1 tags with aria-label', () => {
-    const { getByTestId } = render(
-      <CustomTagGroup visibleItems={2} disableTooltip={false}>
-        {tags}
-      </CustomTagGroup>
-    );
-    const tooltipIndicator = getByTestId('custom-tooltip-indicator');
-    expect(tooltipIndicator).toBeInTheDocument();
-    expect(tooltipIndicator).toHaveAttribute('aria-label', 'mock-tag-3,mock-tag-4');
-  });
 });

@@ -68,7 +68,7 @@ const ContactCodeDialog: React.FC<Props> = ({
       title={t(`${labelRoot}.${contactType}-verify`, { ns: 'recapiti', value })}
       subtitle={<Trans i18nKey={`${labelRoot}.${contactType}-verify-descr`} ns="recapiti" />}
       open={open}
-      initialValues={new Array(5).fill('')}
+      codeLength={5}
       codeSectionTitle={t(`insert-code`, { ns: 'recapiti' })}
       codeSectionAdditional={
         <Typography component={Box} variant="body2">
@@ -97,7 +97,7 @@ const ContactCodeDialog: React.FC<Props> = ({
       cancelLabel={t('button.annulla')}
       confirmLabel={t('button.conferma')}
       cancelCallback={onDiscard}
-      confirmCallback={(values: Array<string>) => onConfirm(values.join(''))}
+      confirmCallback={(value: string) => onConfirm(value)}
       ref={codeModalRef}
     />
   );
