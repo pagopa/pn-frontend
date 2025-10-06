@@ -184,7 +184,7 @@ const EmailContactItem: React.FC = () => {
     }
     return (
       <Trans
-        i18nKey={'courtesy-contacts.confirmation-modal-email-content'}
+        i18nKey={'courtesy-contacts.confirmation-modal-content'}
         ns={'recapiti'}
         components={[
           <Typography variant="body2" fontSize={'18px'} key={'paragraph1'} sx={{ mb: 2 }} />,

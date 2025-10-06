@@ -258,7 +258,7 @@ describe('testing EmailContactItem', () => {
 
     // verify dialog copy and buttons
     expect(dialog).toHaveTextContent('courtesy-contacts.remove-email-title');
-    expect(dialog).toHaveTextContent('courtesy-contacts.confirmation-modal-email-content');
+    expect(dialog).toHaveTextContent('courtesy-contacts.confirmation-modal-content');
     const cancelBtn = result.getByRole('button', { name: 'button.annulla' });
     const confirmBtn = result.getByRole('button', { name: 'courtesy-contacts.remove-email' });
     expect(cancelBtn).toBeInTheDocument();
