@@ -17,6 +17,7 @@ type SendHasAddresses = {
 type Props = {
   sercq_type: ChannelType;
   contacts: Array<DigitalAddress>;
+  other_contact?: 'yes' | 'no';
 };
 
 type Return =
@@ -27,12 +28,12 @@ type Return =
   | SendHasAddresses;
 
 export class SendAddSercqUxSuccessStrategy implements EventStrategy {
-  performComputations({ sercq_type, contacts }: Props): TrackedEvent<Return> {
+  performComputations({ sercq_type, contacts, other_contact = 'no' }: Props): TrackedEvent<Return> {
     return {
       [EventPropertyType.TRACK]: {
         event_category: EventCategory.UX,
         event_type: EventAction.CONFIRM,
-        other_contact: 'no',
+        other_contact,
         contact_details: concatCourtestyContacts(contacts),
       },
       [EventPropertyType.PROFILE]: {

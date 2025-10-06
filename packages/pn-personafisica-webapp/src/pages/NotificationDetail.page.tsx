@@ -115,11 +115,6 @@ const NotificationDetail: React.FC = () => {
       value: <Box fontWeight={600}>{formatDate(notification.sentAt)}</Box>,
     },
     {
-      label: t('detail.payment-terms', { ns: 'notifiche' }),
-      rawValue: notification.paymentExpirationDate,
-      value: <Box fontWeight={600}>{notification.paymentExpirationDate}</Box>,
-    },
-    {
       label: t('detail.iun', { ns: 'notifiche' }),
       rawValue: notification.iun,
       value: <Box fontWeight={600}>{notification.iun}</Box>,

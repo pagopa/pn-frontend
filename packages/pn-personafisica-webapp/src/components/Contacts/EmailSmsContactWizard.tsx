@@ -78,8 +78,11 @@ const EmailSmsContactWizard: React.FC = () => {
       setModalOpen(ModalType.EXISTING);
       return;
     }
-    if (!isDigitalDomicileActive && channelType === ChannelType.EMAIL) {
-      PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SERCQ_SEND_POP_UP_EMAIL);
+    if (!isDigitalDomicileActive) {
+      const eventKey = `SEND_ADD_SERCQ_SEND_POP_UP_${channelType}`;
+      if (isPFEvent(eventKey)) {
+        PFEventStrategyFactory.triggerEvent(PFEventsType[eventKey]);
+      }
       setModalOpen(ModalType.INFORMATIVE);
       return;
     }
@@ -202,6 +205,28 @@ const EmailSmsContactWizard: React.FC = () => {
     }
   };
 
+  const handleConfirmInformativeDialog = () => {
+    const channelType = currentAddress.current.channelType;
+    const eventKey = `SEND_ADD_SERCQ_SEND_POP_UP_${channelType}_CONTINUE`;
+    if (isPFEvent(eventKey)) {
+      PFEventStrategyFactory.triggerEvent(PFEventsType[eventKey]);
+    }
+    handleCodeVerification(channelType);
+  };
+
+  const handleDiscardInformativeDialog = () => {
+    const eventKey = `SEND_ADD_SERCQ_SEND_POP_UP_${currentAddress.current.channelType}_CANCEL`;
+    if (isPFEvent(eventKey)) {
+      PFEventStrategyFactory.triggerEvent(PFEventsType[eventKey]);
+    }
+    setModalOpen(null);
+  };
+
+  const getInformativeModalText = (suffix: string) => {
+    const channelTypeLower = currentAddress.current.channelType.toLowerCase();
+    return t(`courtesy-contacts.info-modal-${channelTypeLower}-${suffix}`, { ns: 'recapiti' });
+  };
+
   useEffect(() => {
     PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SERCQ_SEND_EMAIL_SMS, {
       event_type: EventAction.SCREEN_VIEW,
@@ -257,22 +282,6 @@ const EmailSmsContactWizard: React.FC = () => {
           handleTrackValidationEvents(value, ChannelType.EMAIL, errors)
         }
       />
-      <InformativeDialog
-        open={modalOpen === ModalType.INFORMATIVE}
-        title={t('courtesy-contacts.info-modal-email-title', { ns: 'recapiti' })}
-        subtitle={t('courtesy-contacts.info-modal-email-subtitle', { ns: 'recapiti' })}
-        content={t('courtesy-contacts.info-modal-email-content', { ns: 'recapiti' })}
-        onConfirm={() => {
-          PFEventStrategyFactory.triggerEvent(
-            PFEventsType.SEND_ADD_SERCQ_SEND_POP_UP_EMAIL_CONTINUE
-          );
-          handleCodeVerification(currentAddress.current.channelType);
-        }}
-        onDiscard={() => {
-          PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SERCQ_SEND_POP_UP_EMAIL_CANCEL);
-          setModalOpen(null);
-        }}
-      />
 
       <Divider sx={{ mt: 3, mb: 3 }} />
       {/* SMS */}
@@ -325,6 +334,14 @@ const EmailSmsContactWizard: React.FC = () => {
         />
       )}
 
+      <InformativeDialog
+        open={modalOpen === ModalType.INFORMATIVE}
+        title={getInformativeModalText('title')}
+        subtitle={getInformativeModalText('subtitle')}
+        content={getInformativeModalText('content')}
+        onConfirm={handleConfirmInformativeDialog}
+        onDiscard={handleDiscardInformativeDialog}
+      />
       <ContactCodeDialog
         value={currentAddress.current.value}
         addressType={AddressType.COURTESY}
