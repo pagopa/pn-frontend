@@ -21,6 +21,8 @@
     "app-status": "Stanje platforme"
   },
   "header": {
+    "assistance": "Pomoč",
+    "login": "Prijava",
     "logout": "Izhod",
     "pago-pa-link": "Spletna stran PagoPA S.p.A.",
     "reserved-area": "rezerviranega območja",
