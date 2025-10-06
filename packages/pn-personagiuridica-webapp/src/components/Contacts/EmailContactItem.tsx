@@ -6,7 +6,7 @@ import { Button, Chip, Divider, Typography } from '@mui/material';
 import { PnInfoCard, appStateActions } from '@pagopa-pn/pn-commons';
 
 import { AddressType, ChannelType, SaveDigitalAddressParams } from '../../models/contacts';
-import { createOrUpdateAddress, deleteAddress } from '../../redux/contact/actions';
+import { createOrUpdateAddress, removeSercqAndEmail } from '../../redux/contact/actions';
 import { contactsSelectors } from '../../redux/contact/reducers';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { contactAlreadyExists } from '../../utility/contacts.utility';
@@ -44,7 +44,7 @@ const EmailContactItem: React.FC = () => {
   const isDigitalDomicileActive = defaultPECAddress || defaultSERCQ_SENDAddress;
   const isEmailActive = !!defaultEMAILAddress;
   const hasAnySERCQAddrEnabled =
-    defaultSERCQ_SENDAddress ||
+    !!defaultSERCQ_SENDAddress ||
     specialAddresses.some((addr) => addr.channelType === ChannelType.SERCQ_SEND);
 
   const hasCourtesyAddresses =
@@ -127,19 +127,20 @@ const EmailContactItem: React.FC = () => {
 
   const deleteConfirmHandler = () => {
     setModalOpen(null);
-    dispatch(
-      deleteAddress({
-        addressType: AddressType.COURTESY,
-        senderId: 'default',
-        channelType: ChannelType.EMAIL,
-      })
-    )
+
+    // Collect all sender IDs with an active SERCQ address
+    // to be removed before deleting the email
+    const sercqSenderIds = addresses
+      .filter((addr) => addr.channelType === ChannelType.SERCQ_SEND)
+      .map((addr) => addr.senderId);
+
+    dispatch(removeSercqAndEmail({ senderIds: sercqSenderIds }))
       .unwrap()
       .then(() => {
         dispatch(
           appStateActions.addSuccess({
             title: '',
-            message: t(`courtesy-contacts.email-removed-successfully`, { ns: 'recapiti' }),
+            message: t('courtesy-contacts.email-removed-successfully', { ns: 'recapiti' }),
           })
         );
       })
@@ -161,11 +162,11 @@ const EmailContactItem: React.FC = () => {
       return t(`courtesy-contacts.block-remove-email-title`, { ns: 'recapiti' });
     }
     if (hasAnySERCQAddrEnabled) {
-      return t(`courtesy-contacts.remove-email-title-dod-enabled`, {
+      return t(`courtesy-contacts.remove-email-and-sercq-title`, {
         ns: 'recapiti',
       });
     }
-    return t(`courtesy-contacts.remove-email`, { ns: 'recapiti' });
+    return t(`courtesy-contacts.remove-email-title`, { ns: 'recapiti' });
   };
 
   const getRemoveModalMessage = () => {
@@ -175,19 +176,22 @@ const EmailContactItem: React.FC = () => {
     if (hasAnySERCQAddrEnabled) {
       return (
         <Trans
-          i18nKey={'courtesy-contacts.remove-email-message-dod-enabled'}
-          ns={'recapiti'}
-          components={[
-            <Typography variant="body2" fontSize={'18px'} key={'paragraph1'} sx={{ mb: 2 }} />,
-            <Typography variant="body2" fontSize={'18px'} key={'paragraph2'} />,
-          ]}
+          i18nKey={'courtesy-contacts.remove-email-and-sercq-message'}
+          ns="recapiti"
+          components={[<strong key="0" />]}
         />
       );
     }
-    return t(`courtesy-contacts.remove-email-message`, {
-      value: currentAddress.current.value,
-      ns: 'recapiti',
-    });
+    return (
+      <Trans
+        i18nKey={'courtesy-contacts.confirmation-modal-email-content'}
+        ns={'recapiti'}
+        components={[
+          <Typography variant="body2" fontSize={'18px'} key={'paragraph1'} sx={{ mb: 2 }} />,
+          <Typography variant="body2" fontSize={'18px'} key={'paragraph2'} />,
+        ]}
+      />
+    );
   };
 
   const getActions = () =>
@@ -300,7 +304,24 @@ const EmailContactItem: React.FC = () => {
         removeModalBody={getRemoveModalMessage()}
         handleModalClose={() => setModalOpen(null)}
         confirmHandler={deleteConfirmHandler}
-        blockDelete={blockDelete || !!hasAnySERCQAddrEnabled}
+        blockDelete={blockDelete}
+        slotsProps={
+          !blockDelete
+            ? {
+                primaryButton: {
+                  onClick: () => setModalOpen(null),
+                  label: t('button.annulla'),
+                },
+                secondaryButton: {
+                  onClick: deleteConfirmHandler,
+                  label: hasAnySERCQAddrEnabled
+                    ? t('courtesy-contacts.remove-email-and-sercq', { ns: 'recapiti' })
+                    : t('courtesy-contacts.remove-email', { ns: 'recapiti' }),
+                  ...(hasAnySERCQAddrEnabled ? { variant: 'outlined', color: 'error' } : {}),
+                },
+              }
+            : undefined
+        }
       />
       <InformativeDialog
         open={modalOpen === ModalType.INFORMATIVE}

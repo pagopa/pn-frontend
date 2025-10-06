@@ -246,10 +246,10 @@ describe('testing EmailContactItem', () => {
     expect(dialog).toBeInTheDocument();
 
     // verify dialog copy and buttons
-    expect(dialog).toHaveTextContent('courtesy-contacts.remove-email');
-    expect(dialog).toHaveTextContent('courtesy-contacts.remove-email-message');
+    expect(dialog).toHaveTextContent('courtesy-contacts.remove-email-title');
+    expect(dialog).toHaveTextContent('courtesy-contacts.confirmation-modal-email-content');
     const cancelBtn = result.getByRole('button', { name: 'button.annulla' });
-    const confirmBtn = result.getByRole('button', { name: 'button.conferma' });
+    const confirmBtn = result.getByRole('button', { name: 'courtesy-contacts.remove-email' });
     expect(cancelBtn).toBeInTheDocument();
     expect(confirmBtn).toBeInTheDocument();
 
@@ -260,7 +260,7 @@ describe('testing EmailContactItem', () => {
     // click on confirm
     fireEvent.click(disableBtn);
     dialog = await waitFor(() => result.getByRole('dialog'));
-    fireEvent.click(result.getByRole('button', { name: 'button.conferma' }));
+    fireEvent.click(result.getByRole('button', { name: 'courtesy-contacts.remove-email' }));
 
     await waitFor(() => {
       expect(dialog).not.toBeVisible();
@@ -287,6 +287,8 @@ describe('testing EmailContactItem', () => {
   });
 
   it('delete email - SERCQ enabled as default', async () => {
+    mock.onDelete('/bff/v1/addresses/LEGAL/default/SERCQ_SEND').reply(204);
+    mock.onDelete('/bff/v1/addresses/COURTESY/default/EMAIL').reply(204);
     const sercqEnabledNoSpecials = digitalAddressesSercq.filter(
       (addr) =>
         !(
@@ -311,16 +313,18 @@ describe('testing EmailContactItem', () => {
     const dialog = await waitFor(() => result.getByRole('dialog'));
     expect(dialog).toBeInTheDocument();
 
-    expect(dialog).toHaveTextContent('courtesy-contacts.remove-email-title-dod-enabled');
-    expect(dialog).toHaveTextContent('courtesy-contacts.remove-email-message-dod-enabled');
+    expect(dialog).toHaveTextContent('courtesy-contacts.remove-email-and-sercq-title');
+    expect(dialog).toHaveTextContent('courtesy-contacts.remove-email-and-sercq-message');
 
-    const dialogButtons = dialog.querySelectorAll('button');
-    expect(dialogButtons.length).toBe(1);
-    expect(dialogButtons[0]).toHaveTextContent('button.understand');
+    const cancelBtn = result.getByRole('button', { name: 'button.annulla' });
+    const confirmBtn = result.getByRole('button', {
+      name: 'courtesy-contacts.remove-email-and-sercq',
+    });
+    expect(cancelBtn).toBeInTheDocument();
+    expect(confirmBtn).toBeInTheDocument();
 
-    fireEvent.click(dialogButtons[0]);
-
-    // delete API should not be called
+    // test cancel
+    fireEvent.click(cancelBtn);
     await waitFor(() => {
       expect(mock.history.delete).toHaveLength(0);
     });
@@ -330,9 +334,31 @@ describe('testing EmailContactItem', () => {
     const emailTypography = getById(form, 'default_email-typography');
     expect(emailTypography).toBeInTheDocument();
     expect(emailTypography.textContent).toBeTruthy();
+
+    // reopen modal and confirm
+    fireEvent.click(disableBtn);
+    const dialog2 = await waitFor(() => result.getByRole('dialog'));
+    fireEvent.click(
+      result.getByRole('button', { name: 'courtesy-contacts.remove-email-and-sercq' })
+    );
+
+    await waitFor(() => expect(dialog2).not.toBeInTheDocument());
+
+    await waitFor(() => {
+      expect(mock.history.delete).toHaveLength(2);
+    });
+    const urls = mock.history.delete.map((r) => r.url);
+    expect(urls).toContain('/bff/v1/addresses/LEGAL/default/SERCQ_SEND');
+    expect(urls).toContain('/bff/v1/addresses/COURTESY/default/EMAIL');
+    expect(urls.indexOf('/bff/v1/addresses/COURTESY/default/EMAIL')).toBeGreaterThan(
+      urls.indexOf('/bff/v1/addresses/LEGAL/default/SERCQ_SEND')
+    );
   });
 
   it('delete email - SERCQ enabled as special contact', async () => {
+    mock.onDelete('/bff/v1/addresses/LEGAL/tribunale-milano/SERCQ_SEND').reply(204);
+    mock.onDelete('/bff/v1/addresses/COURTESY/default/EMAIL').reply(204);
+
     const sercqEnabledNoSpecialEmails = digitalAddressesSercq.filter(
       (addr) =>
         !(
@@ -367,16 +393,18 @@ describe('testing EmailContactItem', () => {
     const dialog = await waitFor(() => result.getByRole('dialog'));
     expect(dialog).toBeInTheDocument();
 
-    expect(dialog).toHaveTextContent('courtesy-contacts.remove-email-title-dod-enabled');
-    expect(dialog).toHaveTextContent('courtesy-contacts.remove-email-message-dod-enabled');
+    expect(dialog).toHaveTextContent('courtesy-contacts.remove-email-and-sercq-title');
+    expect(dialog).toHaveTextContent('courtesy-contacts.remove-email-and-sercq-message');
 
-    const dialogButtons = dialog.querySelectorAll('button');
-    expect(dialogButtons.length).toBe(1);
-    expect(dialogButtons[0]).toHaveTextContent('button.understand');
+    const cancelBtn = result.getByRole('button', { name: 'button.annulla' });
+    const confirmBtn = result.getByRole('button', {
+      name: 'courtesy-contacts.remove-email-and-sercq',
+    });
+    expect(cancelBtn).toBeInTheDocument();
+    expect(confirmBtn).toBeInTheDocument();
 
-    fireEvent.click(dialogButtons[0]);
-
-    // delete API should not be called
+    // test cancel
+    fireEvent.click(cancelBtn);
     await waitFor(() => {
       expect(mock.history.delete).toHaveLength(0);
     });
@@ -386,6 +414,25 @@ describe('testing EmailContactItem', () => {
     const emailTypography = getById(form, 'default_email-typography');
     expect(emailTypography).toBeInTheDocument();
     expect(emailTypography.textContent).toBeTruthy();
+
+    // reopen modal and confirm
+    fireEvent.click(disableBtn);
+    const dialog2 = await waitFor(() => result.getByRole('dialog'));
+    fireEvent.click(
+      result.getByRole('button', { name: 'courtesy-contacts.remove-email-and-sercq' })
+    );
+
+    await waitFor(() => expect(dialog2).not.toBeInTheDocument());
+
+    await waitFor(() => {
+      expect(mock.history.delete).toHaveLength(2);
+    });
+    const urls = mock.history.delete.map((r) => r.url);
+    expect(urls).toContain('/bff/v1/addresses/LEGAL/tribunale-milano/SERCQ_SEND');
+    expect(urls).toContain('/bff/v1/addresses/COURTESY/default/EMAIL');
+    expect(urls.indexOf('/bff/v1/addresses/COURTESY/default/EMAIL')).toBeGreaterThan(
+      urls.indexOf('/bff/v1/addresses/LEGAL/tribunale-milano/SERCQ_SEND')
+    );
   });
 
   it('delete email - special email address set', async () => {
