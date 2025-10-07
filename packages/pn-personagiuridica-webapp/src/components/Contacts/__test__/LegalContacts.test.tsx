@@ -166,7 +166,7 @@ describe('LegalContacts Component', async () => {
     expect(pecDescription).toBeInTheDocument();
   });
 
-  it('disable digital domicile', async () => {
+  it('disable digital domicile - PEC', async () => {
     mock.onDelete('bff/v1/addresses/LEGAL/default/PEC').reply(200);
     const initialAddresses = digitalAddresses.filter(
       (addr) => addr.addressType !== AddressType.LEGAL || addr.senderId === 'default'
@@ -209,7 +209,7 @@ describe('LegalContacts Component', async () => {
 
     const cancelBtn = screen.getByRole('button', { name: 'button.annulla' });
     expect(cancelBtn).toBeInTheDocument();
-    const confirmBtn = screen.getByRole('button', { name: 'button.conferma' });
+    const confirmBtn = screen.getByRole('button', { name: 'legal-contacts.remove-pec-confirm' });
     fireEvent.click(confirmBtn);
     await waitFor(() => {
       expect(dialog).not.toBeInTheDocument();
@@ -222,5 +222,42 @@ describe('LegalContacts Component', async () => {
     expect(testStore.getState().contactsState.digitalAddresses).toStrictEqual(
       initialAddresses.filter((addr) => addr.addressType !== AddressType.LEGAL)
     );
+  });
+
+  it('disable digital domicile - SERCQ', async () => {
+    mock.onDelete('/bff/v1/addresses/LEGAL/default/SERCQ_SEND').reply(204);
+
+    const noSpecialContacts = digitalLegalAddressesSercq.filter(
+      (addr) => !(addr.addressType === AddressType.LEGAL && addr.senderId !== 'default')
+    );
+
+    const { getByRole } = render(<LegalContacts />, {
+      preloadedState: { contactsState: { digitalAddresses: noSpecialContacts } },
+    });
+
+    const disableBtn = getByRole('button', { name: 'button.disable' });
+    fireEvent.click(disableBtn);
+
+    const dialog = await waitFor(() => screen.getByRole('dialog'));
+    expect(dialog).toBeInTheDocument();
+
+    expect(screen.getByText('legal-contacts.remove-sercq_send-title')).toBeInTheDocument();
+    expect(screen.getByText('legal-contacts.remove-sercq_send-message')).toBeInTheDocument();
+
+    const confirmBtn = screen.getByRole('button', {
+      name: 'legal-contacts.remove-sercq_send-confirm',
+    });
+    expect(confirmBtn).toBeInTheDocument();
+
+    fireEvent.click(confirmBtn);
+
+    await waitFor(() => {
+      expect(dialog).not.toBeInTheDocument();
+    });
+
+    await waitFor(() => {
+      expect(mock.history.delete).toHaveLength(1);
+      expect(mock.history.delete[0].url).toBe('/bff/v1/addresses/LEGAL/default/SERCQ_SEND');
+    });
   });
 });
