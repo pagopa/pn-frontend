@@ -40,7 +40,7 @@ const PrivacyPolicyPage: React.FC = () => {
 
   return (
     <>
-      <div role="article" id={`otnotice-${pp}`} className="otnotice"></div>
+      <div key={`otnotice-${lang}`} role="article" id={`otnotice-${pp}`} className="otnotice"></div>
     </>
   );
 };

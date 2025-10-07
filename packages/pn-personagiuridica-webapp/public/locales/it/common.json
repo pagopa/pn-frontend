@@ -40,6 +40,8 @@
     "groups": "Gruppi"
   },
   "header": {
+    "assistance": "Assistenza",
+    "login": "Accedi",
     "product": {
       "organization-dashboard": "La tua impresa",
       "notification-platform": "SEND - Servizio Notifiche Digitali"
