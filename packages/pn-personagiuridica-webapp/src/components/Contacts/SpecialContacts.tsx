@@ -114,9 +114,6 @@ const SpecialContacts: React.FC<{ addressType: AddressType; channelType?: Channe
               operation: ContactOperation.ADD_COURTESY,
             })
           );
-          if (value) {
-            specialContactItemRef.current.toggleEdit();
-          }
           return;
         }
         // contact must be validated

@@ -42,6 +42,13 @@ const SpecialContactItem: React.FC<Props> = ({
     });
   };
 
+  const handleEdit = (pecValue: string) => {
+    if (pecValue === value) {
+      specialContactItemRef?.current?.toggleEdit();
+    }
+    onEdit(pecValue, channelType, { senderId, senderName });
+  };
+
   return (
     <Stack direction="column">
       {showSenderName && (
@@ -109,7 +116,7 @@ const SpecialContactItem: React.FC<Props> = ({
                 label: t('legal-contacts.link-pec-placeholder'),
               }}
               insertButtonLabel={t('button.attiva', { ns: 'common' })}
-              onSubmit={(pecValue) => onEdit(pecValue, channelType, { senderId, senderName })}
+              onSubmit={handleEdit}
               onDelete={handleDelete}
               slots={{
                 editButton: addressType === AddressType.COURTESY ? () => <></> : undefined,
