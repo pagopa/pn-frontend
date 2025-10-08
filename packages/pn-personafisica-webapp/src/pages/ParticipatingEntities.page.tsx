@@ -31,6 +31,7 @@ const ParticipatingEntitiesPage = () => {
   return (
     <>
       <div
+        key={`otnotice-${lang}`}
         role="article"
         id="otnotice-ffb2a640-8165-4d5f-94c2-6259e21bee51"
         className="otnotice"
