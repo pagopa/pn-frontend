@@ -29,6 +29,7 @@ import SpecialContacts from './SpecialContacts';
 enum ModalType {
   EXISTING = 'existing',
   CODE = 'code',
+  DELETE_PRECONFIRM = 'delete_preconfirm',
   DELETE = 'delete',
   INFORMATIVE = 'informative',
 }
@@ -186,17 +187,30 @@ const EmailContactItem: React.FC = () => {
     if (blockDelete) {
       return t(`courtesy-contacts.block-remove-email-title`, { ns: 'recapiti' });
     }
-    if (hasAnySERCQAddrEnabled) {
-      return t(`courtesy-contacts.remove-email-and-sercq-title`, {
-        ns: 'recapiti',
-      });
+    if (modalOpen === ModalType.DELETE_PRECONFIRM) {
+      return t(`courtesy-contacts.remove-email-preconfirm-title`, { ns: 'recapiti' });
     }
-    return t(`courtesy-contacts.remove-email-title`, { ns: 'recapiti' });
+    if (hasAnySERCQAddrEnabled) {
+      return t(`courtesy-contacts.remove-email-and-sercq-title`, { ns: 'recapiti' });
+    }
+    if (defaultPECAddress) {
+      return t(`courtesy-contacts.remove-email-pec-enabled-title`, { ns: 'recapiti' });
+    }
+    return t(`courtesy-contacts.remove-email-no-domicile-title`, { ns: 'recapiti' });
   };
 
   const getRemoveModalMessage = () => {
     if (blockDelete) {
       return t(`courtesy-contacts.block-remove-email-message`, { ns: 'recapiti' });
+    }
+    if (modalOpen === ModalType.DELETE_PRECONFIRM) {
+      return (
+        <Trans
+          i18nKey="courtesy-contacts.remove-email-preconfirm-message"
+          ns="recapiti"
+          components={[<strong key="0" />]}
+        />
+      );
     }
     if (hasAnySERCQAddrEnabled) {
       return (
@@ -207,16 +221,33 @@ const EmailContactItem: React.FC = () => {
         />
       );
     }
-    return (
-      <Trans
-        i18nKey={'courtesy-contacts.confirmation-modal-email-content'}
-        ns={'recapiti'}
-        components={[
-          <Typography variant="body2" fontSize={'18px'} key={'paragraph1'} sx={{ mb: 2 }} />,
-          <Typography variant="body2" fontSize={'18px'} key={'paragraph2'} />,
-        ]}
-      />
-    );
+    if (defaultPECAddress) {
+      return (
+        <Trans
+          i18nKey="courtesy-contacts.remove-email-pec-enabled-message"
+          ns="recapiti"
+          components={[
+            <Typography variant="body2" fontSize={'18px'} key={'paragraph1'} sx={{ mb: 2 }} />,
+            <Typography variant="body2" fontSize={'18px'} key={'paragraph2'} />,
+          ]}
+        />
+      );
+    }
+    // No digital domicile (no PEC and no SERCQ)
+    return t('courtesy-contacts.remove-email-no-domicile-message', {
+      ns: 'recapiti',
+      value: currentAddress.current.value,
+    });
+  };
+
+  const getSecondaryButtonLabel = () => {
+    if (modalOpen === ModalType.DELETE_PRECONFIRM) {
+      return t('courtesy-contacts.remove-email', { ns: 'recapiti' });
+    } else {
+      return hasAnySERCQAddrEnabled
+        ? t('courtesy-contacts.remove-email-and-sercq', { ns: 'recapiti' })
+        : t('courtesy-contacts.remove-email', { ns: 'recapiti' });
+    }
   };
 
   const getActions = () =>
@@ -229,9 +260,14 @@ const EmailContactItem: React.FC = () => {
             color="error"
             startIcon={<PowerSettingsNewIcon />}
             onClick={() => {
-              setModalOpen(ModalType.DELETE);
               // eslint-disable-next-line functional/immutable-data
               currentAddress.current = { value: currentValue };
+              // If any SERCQ is active (and not blocked), open a pre-confirm step first
+              setModalOpen(
+                !blockDelete && hasAnySERCQAddrEnabled
+                  ? ModalType.DELETE_PRECONFIRM
+                  : ModalType.DELETE
+              );
             }}
             sx={{ p: '10px 16px' }}
           >
@@ -325,7 +361,7 @@ const EmailContactItem: React.FC = () => {
         onError={() => PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_EMAIL_CODE_ERROR)}
       />
       <DeleteDialog
-        showModal={modalOpen === ModalType.DELETE}
+        showModal={modalOpen === ModalType.DELETE || modalOpen === ModalType.DELETE_PRECONFIRM}
         removeModalTitle={getRemoveModalTitle()}
         removeModalBody={getRemoveModalMessage()}
         handleModalClose={() => setModalOpen(null)}
@@ -333,19 +369,38 @@ const EmailContactItem: React.FC = () => {
         blockDelete={blockDelete}
         slotsProps={
           !blockDelete
-            ? {
-                primaryButton: {
-                  onClick: () => setModalOpen(null),
-                  label: t('button.annulla'),
-                },
-                secondaryButton: {
-                  onClick: deleteConfirmHandler,
-                  label: hasAnySERCQAddrEnabled
-                    ? t('courtesy-contacts.remove-email-and-sercq', { ns: 'recapiti' })
-                    : t('courtesy-contacts.remove-email', { ns: 'recapiti' }),
-                  ...(hasAnySERCQAddrEnabled ? { variant: 'outlined', color: 'error' } : {}),
-                },
-              }
+            ? (() => {
+                const noDigitalDomicile = !defaultPECAddress && !hasAnySERCQAddrEnabled;
+                // For "no digital domicile" the confirm must be the PRIMARY button
+                if (modalOpen === ModalType.DELETE && noDigitalDomicile) {
+                  return {
+                    primaryButton: {
+                      onClick: deleteConfirmHandler,
+                      label: t('courtesy-contacts.remove-email', { ns: 'recapiti' }),
+                    },
+                    secondaryButton: {
+                      onClick: () => setModalOpen(null),
+                      label: t('button.annulla'),
+                    },
+                  };
+                }
+                // Default: primary = cancel, secondary = confirm (outlined, error)
+                return {
+                  primaryButton: {
+                    onClick: () => setModalOpen(null),
+                    label: t('button.annulla'),
+                  },
+                  secondaryButton: {
+                    onClick:
+                      modalOpen === ModalType.DELETE_PRECONFIRM
+                        ? () => setModalOpen(ModalType.DELETE)
+                        : deleteConfirmHandler,
+                    label: getSecondaryButtonLabel(),
+                    variant: 'outlined',
+                    color: 'error',
+                  },
+                };
+              })()
             : undefined
         }
       />
