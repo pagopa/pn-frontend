@@ -35,11 +35,11 @@
     "validation-progress-content": "Stiamo verificando che l’indirizzo PEC sia valido. Riceverai una email con l’esito entro 24 ore.",
     "sercq_send-title": "Piattaforma SEND",
     "sercq_send-description": "Quando un ente ti invia una notifica SEND, viene recapitata in modo sicuro e con valore legale tramite la piattaforma stessa.",
-    "sercq-send-description-pec-enabled": "Usa SEND come Domicilio Digitale per gestire le tue notifiche SEND in un unico punto, senza preoccuparti più delle raccomandate cartacee e dei costi annessi.",
+    "sercq-send-description-pec-enabled": "Usa SEND come domicilio digitale per gestire le tue notifiche SEND in un unico punto, senza preoccuparti più delle raccomandate cartacee e dei costi annessi.",
     "sercq-send-active": "Attiva",
     "sercq-send-active-pec-enabled": "Attiva domicilio digitale",
-    "sercq-send-info-title": "Attiva SEND come tuo Domicilio Digitale",
-    "sercq-send-info-description": "Se attivi il Domicilio Digitale, SEND diventa <strong>il tuo recapito a valore legale</strong> per le comunicazioni della PA.",
+    "sercq-send-info-title": "Attiva SEND come tuo domicilio digitale",
+    "sercq-send-info-description": "Se attivi il domicilio digitale, SEND diventa <strong>il tuo recapito a valore legale</strong> per le comunicazioni della PA.",
     "sercq-send-info-advantages": "Perché è utile?",
     "sercq-send-info-list": [
       {
@@ -55,14 +55,14 @@
         "description": "Le notifiche SEND ti saranno recapitate in modo sicuro e saranno tutte disponibili nella tua area riservata SEND."
       }
     ],
-    "sercq_send-added-successfully": "Domicilio Digitale attivato correttamente",
-    "remove-sercq_send-title": "Confermi di voler disattivare il Domicilio digitale su SEND?",
+    "sercq_send-added-successfully": "Domicilio digitale attivato correttamente",
+    "remove-sercq_send-title": "Confermi di voler disattivare il domicilio digitale su SEND?",
     "remove-sercq_send-message": "Non avrai più un recapito digitale a valore legale per le comunicazioni della Pubblica Amministrazione e potresti riceverle su carta.",
-    "block-remove-digital-domicile-title": "Non è possibile disattivare il Domicilio Digitale",
+    "block-remove-digital-domicile-title": "Non è possibile disattivare il domicilio digitale",
     "block-remove-digital-domicile-message": "Per procedere, devi prima disattivare i domicili digitali personalizzati per ente.",
-    "sercq_send-removed-successfully": "Domicilio Digitale disattivato correttamente",
+    "sercq_send-removed-successfully": "Domicilio digitale disattivato correttamente",
     "sercq-send-io-title": "Attiva SEND su IO",
-    "sercq-send-io-description": "Attiva SEND - Notifiche Digitali su IO per<strong> ricevere direttamente in app</strong> le comunicazioni inviate al tuo Domicilio Digitale SEND.",
+    "sercq-send-io-description": "Attiva SEND - Notifiche Digitali su IO per<strong> ricevere direttamente in app</strong> le comunicazioni inviate al tuo domicilio digitale SEND.",
     "sercq-send-io-advantages": "Su IO",
     "sercq-send-wizard": {
       "title": "Attiva domicilio digitale su SEND",
@@ -141,8 +141,8 @@
         "title-pec-transfer": "Hai trasferito il tuo domicilio digitale su PEC",
         "title-sercq_send-activation": "Hai attivato il tuo domicilio digitale su SEND",
         "title-sercq_send-transfer": "Hai trasferito il tuo domicilio digitale su SEND",
-        "content-pec": "Riceverai le tue comunicazioni a valore legale al tuo Domicilio digitale su PEC",
-        "content-sercq_send": "Riceverai le tue comunicazioni a valore legale al tuo Domicilio digitale su SEND e un messaggio ai recapiti che hai scelto.",
+        "content-pec": "Riceverai le tue comunicazioni a valore legale al tuo domicilio digitale su PEC",
+        "content-sercq_send": "Riceverai le tue comunicazioni a valore legale al tuo domicilio digitale su SEND e un messaggio ai recapiti che hai scelto.",
         "go-to-contacts": "Vai ai tuoi recapiti"
       }
     },
@@ -245,9 +245,9 @@
     "select-address": "Tipologia",
     "add-sender": "Ente mittente",
     "pec": "Indirizzo PEC",
-    "sercq_send": "Domicilio Digitale SEND",
+    "sercq_send": "Domicilio digitale SEND",
     "link-pec-label": "Indirizzo PEC",
-    "link-sercq-label": "Il tuo Domicilio Digitale SEND",
+    "link-sercq-label": "Il tuo domicilio digitale SEND",
     "contact-to-add-description": "Il domicilio digitale personalizzato dove riceverai le notifiche SEND che ti invia un ente specifico",
     "contact-already-exists": "<0>Questo ente è già associato al recapito {{contactValue}}.</0><1>Se premi <strong>Conferma</strong>, lo sostituirai con quello appena inserito.</1>",
     "validating-pec-banner-content": "<0>Per questo ente hai già inserito una PEC che è in fase di validazione.</0><1>Una volta confermata potrai modificarla.</1>",
@@ -258,6 +258,8 @@
     "remove-special-title": "Vuoi eliminare {{contactValue}}?",
     "remove-special-description": "Gli avvisi relativi alle notifiche degli enti associati non saranno più inviati a questo recapito, ma a quello principale.",
     "pec-disclaimer": "Compilando il campo e premendo <strong>Conferma</strong> accetti che l’indirizzo PEC che hai scelto sia utilizzato da SEND per l’invio delle notifiche di questo specifico ente mittente, in via prioritaria rispetto al  domicilio digitale di piattaforma, a un eventuale domicilio digitale eletto presso lo stesso ente mittente o presente nei pubblici registri",
+    "sercq-disclaimer": "Premendo “Conferma” dichiari di aver letto la <0>Informativa privacy</0> e di accettare i <1>Termini del servizio</1>",
+    "email-description": "L’email dove ti avviseremo quando ricevi una comunicazione a valore legale per te su SEND.",
     "courtesy-banner": {
       "title": "Funzionalità dismessa",
       "description": "Non puoi più inserire recapiti di cortesia personalizzati per ente o modificare recapiti già esistenti. Se elimini un recapito personalizzato non potrai più recuperarlo o inserirlo di nuovo. "
@@ -286,8 +288,8 @@
     }
   },
   "domicile-banner": {
-    "no-sercq-send-title": "Niente più documenti cartacei: attiva SEND come Domicilio Digitale",
-    "no-sercq-send-description": "Scegli la piattaforma SEND come Domicilio Digitale per ricevere le prossime notifiche solo in digitale e leggerle in tempo reale, ovunque tu sia.",
+    "no-sercq-send-title": "Niente più documenti cartacei: attiva SEND come domicilio digitale",
+    "no-sercq-send-description": "Scegli la piattaforma SEND come domicilio digitale per ricevere le prossime notifiche solo in digitale e leggerle in tempo reale, ovunque tu sia.",
     "no-sercq-cta": "Inizia",
     "no-courtesy-title": "Non perderti le comunicazioni importanti",
     "no-courtesy-description": "Senza un recapito di cortesia non possiamo avvisarti quando c’è da leggere una comunicazione a valore legale su SEND.",
@@ -296,7 +298,7 @@
     "no-io-description": "Quando c’è una notifica per te puoi riceverla sull’app IO, leggerla e pagare eventuali spese direttamente in app!",
     "add-io": "Attiva SEND sull’app IO",
     "no-courtesy-sercq-send-title": "Vuoi ricevere le prossime notifiche solo in digitale?",
-    "no-courtesy-sercq-send-description": "Attiva SEND come Domicilio Digitale e non preoccuparti più delle raccomandate cartacee.",
+    "no-courtesy-sercq-send-description": "Attiva SEND come domicilio digitale e non preoccuparti più delle raccomandate cartacee.",
     "complete-configuration": "Completa la configurazione",
     "no-courtesy-no-sercq-send-title": "Non perderti le comunicazioni importanti ",
     "no-courtesy-no-sercq-send-description": "Aggiungi un indirizzo email per ricevere un avviso quando hai una nuova notifica su SEND.",

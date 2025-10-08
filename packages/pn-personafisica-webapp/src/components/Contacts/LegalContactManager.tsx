@@ -130,14 +130,16 @@ const LegalContactManager: React.FC<Props> = ({ setAction }) => {
                 }}
               />
             )}
-            <DigitalDomicileOption
-              title={t('legal-contacts.digital-domicile-management.special_contacts.title')}
-              content={t('legal-contacts.digital-domicile-management.special_contacts.content')}
-              action={{
-                text: t('legal-contacts.digital-domicile-management.special_contacts.action'),
-                callback: () => setAction(DigitalDomicileManagementAction.ADD_SPECIAL_CONTACT),
-              }}
-            />
+            {IS_DOD_ENABLED && (
+              <DigitalDomicileOption
+                title={t('legal-contacts.digital-domicile-management.special_contacts.title')}
+                content={t('legal-contacts.digital-domicile-management.special_contacts.content')}
+                action={{
+                  text: t('legal-contacts.digital-domicile-management.special_contacts.action'),
+                  callback: () => setAction(DigitalDomicileManagementAction.ADD_SPECIAL_CONTACT),
+                }}
+              />
+            )}
           </Stack>
         </Paper>
       )}
