@@ -3,6 +3,46 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.18.0](https://github.com/pagopa/pn-frontend/compare/v2.18.0-RC.4...v2.18.0) (2025-09-17)
+
+**Note:** Version bump only for package @pagopa-pn/pn-personafisica-login
+
+
+
+
+
+
+# [2.18.0-RC.4](https://github.com/pagopa/pn-frontend/compare/v2.18.0-RC.3...v2.18.0-RC.4) (2025-09-15)
+
+
+### Bug Fixes
+
+* **PN-16263:** fix CodeInput 'jumping caret bug' on Android ([#1642](https://github.com/pagopa/pn-frontend/issues/1642)) ([9a6e434](https://github.com/pagopa/pn-frontend/commit/9a6e4345909df4f8d6c3e1570a8e86d0e4b69d99))
+
+
+
+
+
+
+# [2.18.0-RC.2](https://github.com/pagopa/pn-frontend/compare/v2.18.0-RC.1...v2.18.0-RC.2) (2025-09-05)
+
+
+### Bug Fixes
+
+* **PN-16258:** move accessibilityLink in single configuration file ([#1634](https://github.com/pagopa/pn-frontend/issues/1634)) ([3e0f832](https://github.com/pagopa/pn-frontend/commit/3e0f832d0944658b616c9164222692b75122dab1))
+
+
+
+
+
+# [2.18.0-RC.0](https://github.com/pagopa/pn-frontend/compare/v2.17.1...v2.18.0-RC.0) (2025-09-03)
+
+**Note:** Version bump only for package @pagopa-pn/pn-personafisica-login
+
+
+
+
+
 ## [2.17.1](https://github.com/pagopa/pn-frontend/compare/v2.17.1-RC.2...v2.17.1) (2025-08-08)
 
 **Note:** Version bump only for package @pagopa-pn/pn-personafisica-login
