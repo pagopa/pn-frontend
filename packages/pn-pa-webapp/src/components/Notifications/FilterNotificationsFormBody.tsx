@@ -53,7 +53,7 @@ type DatePickerFieldProps = {
   errorMsg?: string;
 };
 
-function DatePickerField({
+const DatePickerField: React.FC<Readonly<DatePickerFieldProps>> = ({
   language,
   label,
   id,
@@ -68,45 +68,43 @@ function DatePickerField({
   setLocalDate,
   fallbackIfNull,
   errorMsg,
-}: Readonly<DatePickerFieldProps>) {
-  return (
-    <CustomDatePicker
-      language={language}
-      label={label}
-      format={DATE_FORMAT}
-      value={value}
-      onChange={(v: DatePickerTypes) => {
-        void formikInstance.setFieldValue(id, v || fallbackIfNull, true).then(() => {
-          setLocalDate(v);
-          if (errorMsg) {
-            const errors = formikInstance.errors || {};
-            if (errors.startDate === errorMsg || errors.endDate === errorMsg) {
-              formikInstance.setErrors({ ...errors, startDate: undefined, endDate: undefined });
-            }
+}) => (
+  <CustomDatePicker
+    language={language}
+    label={label}
+    format={DATE_FORMAT}
+    value={value}
+    onChange={(v: DatePickerTypes) => {
+      void formikInstance.setFieldValue(id, v || fallbackIfNull, true).then(() => {
+        setLocalDate(v);
+        if (errorMsg) {
+          const errors = formikInstance.errors || {};
+          if (errors.startDate === errorMsg || errors.endDate === errorMsg) {
+            formikInstance.setErrors({ ...errors, startDate: undefined, endDate: undefined });
           }
-        });
-      }}
-      slotProps={{
-        textField: {
-          id,
-          name: id,
-          size: 'small',
-          inputProps: {
-            inputMode: 'text',
-            type: 'text',
-            'aria-label': ariaLabel,
-          },
-          fullWidth: isMobile,
-          sx: { mb },
-          ...(errorMsg ? { error: true, helperText: errorMsg } : {}),
+        }
+      });
+    }}
+    slotProps={{
+      textField: {
+        id,
+        name: id,
+        size: 'small',
+        inputProps: {
+          inputMode: 'text',
+          type: 'text',
+          'aria-label': ariaLabel,
         },
-      }}
-      disableFuture={disableFuture}
-      minDate={minDate ?? undefined}
-      maxDate={maxDate ?? undefined}
-    />
-  );
-}
+        fullWidth: isMobile,
+        sx: { mb },
+        ...(errorMsg ? { error: true, helperText: errorMsg } : {}),
+      },
+    }}
+    disableFuture={disableFuture}
+    minDate={minDate ?? undefined}
+    maxDate={maxDate ?? undefined}
+  />
+);
 
 const FilterNotificationsFormBody = ({
   formikInstance,

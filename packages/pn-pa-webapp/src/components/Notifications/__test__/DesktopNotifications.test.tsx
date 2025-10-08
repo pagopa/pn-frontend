@@ -42,8 +42,8 @@ describe('DesktopNotifications Component', () => {
     });
     const filters = result!.queryByTestId('filter-form');
     expect(filters).not.toBeInTheDocument();
-    const norificationsTable = result!.queryByTestId('notificationsTable');
-    expect(norificationsTable).not.toBeInTheDocument();
+    const notificationsTable = result!.queryByTestId('notificationsTable');
+    expect(notificationsTable).not.toBeInTheDocument();
     expect(result!.container).toHaveTextContent(/empty-state.no-notifications/i);
   });
 
@@ -63,8 +63,8 @@ describe('DesktopNotifications Component', () => {
     const filters = result!.queryByTestId('filter-form');
     expect(filters).not.toBeInTheDocument();
 
-    const norificationTableRows = result!.getAllByTestId('notificationsTable.body.row');
-    expect(norificationTableRows).toHaveLength(notificationsToFe.resultsPage.length);
+    const notificationTableRows = result!.getAllByTestId('notificationsTable.body.row');
+    expect(notificationTableRows).toHaveLength(notificationsToFe.resultsPage.length);
   });
 
   it('renders component - no notification after filter', async () => {

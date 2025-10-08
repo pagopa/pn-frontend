@@ -30,6 +30,7 @@ type Props = {
   onManualSend: () => void;
   /** The function to be invoked if the user clicks on api keys link */
   onApiKeys: () => void;
+  /** True when at least one filter is active (non-default). Used to show the “filtered” EmptyState variant. */
   filtersApplied: boolean;
   onCleanFilters: () => void;
 };
