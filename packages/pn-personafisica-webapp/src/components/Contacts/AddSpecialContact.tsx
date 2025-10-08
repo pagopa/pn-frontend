@@ -60,6 +60,7 @@ import {
 import { isPFEvent } from '../../utility/mixpanel';
 import DropDownPartyMenuItem from '../Party/DropDownParty';
 import ContactCodeDialog from './ContactCodeDialog';
+import DigitalContact from './DigitalContact';
 import ExistingContactDialog from './ExistingContactDialog';
 
 const redirectPrivacyLink = () => window.open(`${PRIVACY_POLICY}`, '_blank');
@@ -146,6 +147,11 @@ const AddSpecialContact = forwardRef<AddSpecialContactRef, Props>(
     const [isExistingContactDefault, setIsExistingContactDefault] = useState(false);
     const tosConsent = useRef<Array<TosPrivacyConsent>>();
     const { defaultEMAILAddress } = useAppSelector(contactsSelectors.selectAddresses);
+
+    const emailContactRef = useRef<{ toggleEdit: () => void; resetForm: () => Promise<void> }>({
+      toggleEdit: () => {},
+      resetForm: () => Promise.resolve(),
+    });
 
     const addressTypes = specialContactsAvailableAddressTypes(addressesData).filter(
       (addr) => addr.shown && (!IS_DOD_ENABLED ? addr.id !== ChannelType.SERCQ_SEND : true)
@@ -603,23 +609,51 @@ const AddSpecialContact = forwardRef<AddSpecialContactRef, Props>(
               </FormControl>
             </>
           )}
-          {formik.values.channelType === ChannelType.SERCQ_SEND && defaultEMAILAddress && (
+          {formik.values.channelType === ChannelType.SERCQ_SEND && (
             <Stack spacing={2} alignItems="start">
               <Typography>{t(`special-contacts.email-description`, { ns: 'recapiti' })}</Typography>
-              <Stack direction="row" spacing={1}>
-                <Typography
-                  sx={{
-                    wordBreak: 'break-word',
-                    fontSize: '18px',
-                    fontWeight: 600,
+              {defaultEMAILAddress ? (
+                <Stack direction="row" spacing={1}>
+                  <Typography
+                    sx={{
+                      wordBreak: 'break-word',
+                      fontSize: '18px',
+                      fontWeight: 600,
+                    }}
+                    component="span"
+                    variant="body2"
+                  >
+                    {defaultEMAILAddress.value}
+                  </Typography>
+                  <CheckCircleIcon sx={{ color: 'success.main' }} />
+                </Stack>
+              ) : (
+                <DigitalContact
+                  label={t(`courtesy-contacts.email-to-add`, { ns: 'recapiti' })}
+                  value={''}
+                  channelType={ChannelType.EMAIL}
+                  ref={emailContactRef}
+                  inputProps={{
+                    label: t(`courtesy-contacts.link-email-placeholder`, {
+                      ns: 'recapiti',
+                    }),
                   }}
-                  component="span"
-                  variant="body2"
-                >
-                  {defaultEMAILAddress.value}
-                </Typography>
-                <CheckCircleIcon sx={{ color: 'success.main' }} />
-              </Stack>
+                  insertButtonLabel={t(`courtesy-contacts.email-add`, { ns: 'recapiti' })}
+                  onSubmit={(value) => console.log('Email added:', value)}
+                  showVerifiedIcon
+                  showLabelOnEdit
+                  slots={{ label: () => <></> }}
+                  slotsProps={{
+                    container: {
+                      width: '100%',
+                    },
+                  }}
+                  onEditCallback={(editMode: boolean) => console.log('Edit mode:', editMode)}
+                  beforeValidationCallback={(value: string, errors?: string) =>
+                    console.log('Before validation:', value, errors)
+                  }
+                />
+              )}
 
               <FormControl>
                 <FormControlLabel
