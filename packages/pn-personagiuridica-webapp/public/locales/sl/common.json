@@ -30,6 +30,8 @@
     "groups": "Skupine"
   },
   "header": {
+    "assistance": "Pomoč",
+    "login": "Prijava",
     "product": {
       "organization-dashboard": "Vaše podjetje",
       "notification-platform": "SEND - Servizio Notifiche Digitali"

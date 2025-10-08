@@ -41,6 +41,7 @@ const TermsOfServicePage = () => {
   return (
     <>
       <div
+        key={`otnotice-${lang}`}
         role="article"
         id="otnotice-083fb982-149c-4241-be09-12ae67d88b66"
         className="otnotice"

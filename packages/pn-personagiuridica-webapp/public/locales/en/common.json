@@ -30,6 +30,8 @@
     "groups": "Groups"
   },
   "header": {
+    "assistance": "Assistance",
+    "login": "Login",
     "product": {
       "organization-dashboard": "Your company",
       "notification-platform": "SEND - Servizio Notifiche Digitali"

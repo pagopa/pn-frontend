@@ -35,6 +35,8 @@
     "app-status": "Stato della piattaforma"
   },
   "header": {
+    "assistance": "Assistenza",
+    "login": "Accedi",
     "logout": "Esci",
     "pago-pa-link": "Sito di PagoPA S.p.A.",
     "logout-message": "Confermi di voler uscire da SEND?"
