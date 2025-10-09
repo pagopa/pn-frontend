@@ -139,13 +139,27 @@ const DigitalContact = forwardRef<{ toggleEdit: () => void }, Props>(
       });
     };
 
+    const closeEditMode = () => {
+      setEditMode(false);
+      if (onEditCallback) {
+        onEditCallback(false);
+      }
+    };
+
     const onCancelEdit = () => {
       formik.resetForm({ values: initialValues });
       toggleEdit();
     };
 
+    const isFormValid = async () => {
+      await formik.setFieldTouched(`${senderId}_${contactType}`, true, true);
+      return formik.isValid;
+    };
+
     useImperativeHandle(ref, () => ({
       toggleEdit,
+      closeEditMode,
+      isFormValid,
       resetForm: async () => {
         await formik.setFieldTouched(`${senderId}_${contactType}`, false, false);
         await formik.setFieldValue(

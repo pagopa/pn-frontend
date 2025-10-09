@@ -1,3 +1,8 @@
+/* eslint-disable sonarjs/cognitive-complexity */
+
+/* eslint-disable complexity */
+
+/* eslint-disable functional/immutable-data */
 import { useFormik } from 'formik';
 import { ChangeEvent, forwardRef, useEffect, useImperativeHandle, useRef, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
@@ -60,8 +65,8 @@ import {
 import { isPFEvent } from '../../utility/mixpanel';
 import DropDownPartyMenuItem from '../Party/DropDownParty';
 import ContactCodeDialog from './ContactCodeDialog';
-import DigitalContact from './DigitalContact';
 import ExistingContactDialog from './ExistingContactDialog';
+import SercqAddSpecialEmail from './SercqAddSpecialEmail';
 
 const redirectPrivacyLink = () => window.open(`${PRIVACY_POLICY}`, '_blank');
 const redirectToSLink = () => window.open(`${TERMS_OF_SERVICE_SERCQ_SEND}`, '_blank');
@@ -147,10 +152,12 @@ const AddSpecialContact = forwardRef<AddSpecialContactRef, Props>(
     const [isExistingContactDefault, setIsExistingContactDefault] = useState(false);
     const tosConsent = useRef<Array<TosPrivacyConsent>>();
     const { defaultEMAILAddress } = useAppSelector(contactsSelectors.selectAddresses);
+    const [hasInitialEmail, setHasInitialEmail] = useState<boolean>(false);
 
-    const emailContactRef = useRef<{ toggleEdit: () => void; resetForm: () => Promise<void> }>({
-      toggleEdit: () => {},
-      resetForm: () => Promise.resolve(),
+    const sercqAddSpecialEmailRef = useRef<{
+      isFormValid: () => Promise<boolean>;
+    }>({
+      isFormValid: () => Promise.resolve(false),
     });
 
     const addressTypes = specialContactsAvailableAddressTypes(addressesData).filter(
@@ -256,6 +263,19 @@ const AddSpecialContact = forwardRef<AddSpecialContactRef, Props>(
     const formik = useFormik({
       initialValues,
       validationSchema,
+      validate: async (values) => {
+        const errors: Record<string, string> = {};
+        if (values.channelType === ChannelType.SERCQ_SEND && !hasInitialEmail) {
+          const emailValid = await sercqAddSpecialEmailRef.current?.isFormValid();
+          if (!emailValid) {
+            errors.form_email = 'invalid email';
+          }
+        }
+        if (!defaultEMAILAddress) {
+          errors.default_email = 'no default email';
+        }
+        return errors;
+      },
       enableReinitialize: true,
       onSubmit: (values) => {
         onConfirm(values.s_value, values.channelType as ChannelType, {
@@ -356,6 +376,12 @@ const AddSpecialContact = forwardRef<AddSpecialContactRef, Props>(
     useEffect(() => {
       getParties();
     }, [formik.values.sender.name]);
+
+    useEffect(() => {
+      if (defaultEMAILAddress && defaultEMAILAddress.value) {
+        setHasInitialEmail(true);
+      }
+    }, []);
 
     useImperativeHandle(ref, () => ({
       handleConfirm: async () => {
@@ -460,6 +486,7 @@ const AddSpecialContact = forwardRef<AddSpecialContactRef, Props>(
           handleDiscard={() => setModalOpen(null)}
           handleConfirm={() => handleCodeVerification()}
         />
+
         {formik.values.channelType && (
           <ContactCodeDialog
             value={formik.values.s_value}
@@ -609,108 +636,99 @@ const AddSpecialContact = forwardRef<AddSpecialContactRef, Props>(
               </FormControl>
             </>
           )}
-          {formik.values.channelType === ChannelType.SERCQ_SEND && (
+          {formik.values.channelType === ChannelType.SERCQ_SEND && hasInitialEmail && (
             <Stack spacing={2} alignItems="start">
               <Typography>{t(`special-contacts.email-description`, { ns: 'recapiti' })}</Typography>
-              {defaultEMAILAddress ? (
-                <Stack direction="row" spacing={1}>
-                  <Typography
-                    sx={{
-                      wordBreak: 'break-word',
-                      fontSize: '18px',
-                      fontWeight: 600,
-                    }}
-                    component="span"
-                    variant="body2"
-                  >
-                    {defaultEMAILAddress.value}
-                  </Typography>
-                  <CheckCircleIcon sx={{ color: 'success.main' }} />
-                </Stack>
-              ) : (
-                <DigitalContact
-                  label={t(`courtesy-contacts.email-to-add`, { ns: 'recapiti' })}
-                  value={''}
-                  channelType={ChannelType.EMAIL}
-                  ref={emailContactRef}
-                  inputProps={{
-                    label: t(`courtesy-contacts.link-email-placeholder`, {
-                      ns: 'recapiti',
-                    }),
+              <Stack direction="row" spacing={1}>
+                <Typography
+                  sx={{
+                    wordBreak: 'break-word',
+                    fontSize: '18px',
+                    fontWeight: 600,
                   }}
-                  insertButtonLabel={t(`courtesy-contacts.email-add`, { ns: 'recapiti' })}
-                  onSubmit={(value) => console.log('Email added:', value)}
-                  showVerifiedIcon
-                  showLabelOnEdit
-                  slots={{ label: () => <></> }}
-                  slotsProps={{
-                    container: {
-                      width: '100%',
-                    },
-                  }}
-                  onEditCallback={(editMode: boolean) => console.log('Edit mode:', editMode)}
-                  beforeValidationCallback={(value: string, errors?: string) =>
-                    console.log('Before validation:', value, errors)
-                  }
-                />
-              )}
-
-              <FormControl>
-                <FormControlLabel
-                  control={
-                    <Checkbox
-                      name="s_disclaimer"
-                      id="s_disclaimer"
-                      required
-                      onChange={handleChangeTouched}
-                      inputProps={{
-                        'aria-describedby': 'sercq_disclaimer-helper-text',
-                        'aria-invalid':
-                          formik.touched.s_disclaimer && Boolean(formik.errors.s_disclaimer),
-                      }}
-                    />
-                  }
-                  label={
-                    <Trans
-                      i18nKey="special-contacts.sercq-disclaimer"
-                      ns="recapiti"
-                      components={[
-                        <Link
-                          key="privacy-policy"
-                          sx={{
-                            cursor: 'pointer',
-                            textDecoration: 'none !important',
-                            fontWeight: 'bold',
-                          }}
-                          onClick={redirectPrivacyLink}
-                          data-testid="tos-link"
-                        />,
-
-                        <Link
-                          key="tos"
-                          sx={{
-                            cursor: 'pointer',
-                            textDecoration: 'none !important',
-                            fontWeight: 'bold',
-                          }}
-                          onClick={redirectToSLink}
-                          data-testid="tos-link"
-                        />,
-                      ]}
-                    />
-                  }
-                  sx={{ mt: 2 }}
-                  value={formik.values.s_disclaimer}
-                />
-                {formik.touched.s_disclaimer && Boolean(formik.errors.s_disclaimer) && (
-                  <FormHelperText id="s_disclaimer-helper-text" error>
-                    {formik.errors.s_disclaimer}
-                  </FormHelperText>
-                )}
-              </FormControl>
+                  component="span"
+                  variant="body2"
+                >
+                  {defaultEMAILAddress?.value}
+                </Typography>
+                <CheckCircleIcon sx={{ color: 'success.main' }} />
+              </Stack>
             </Stack>
           )}
         </form>
+        {formik.values.channelType === ChannelType.SERCQ_SEND && (
+          <>
+            {!hasInitialEmail && (
+              <>
+                <Typography sx={{ mb: 2 }}>
+                  {t(`special-contacts.email-description`, { ns: 'recapiti' })}
+                </Typography>
+                <SercqAddSpecialEmail ref={sercqAddSpecialEmailRef} />
+
+                {(formik.errors as any).default_email &&
+                  !(formik.errors as any).form_email &&
+                  !defaultEMAILAddress && (
+                    <FormHelperText sx={{ ml: 2 }} error>
+                      Devi aggiungere l&#39;email
+                    </FormHelperText>
+                  )}
+              </>
+            )}
+            <FormControl>
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    name="s_disclaimer"
+                    id="s_disclaimer"
+                    required
+                    onChange={handleChangeTouched}
+                    inputProps={{
+                      'aria-describedby': 'sercq_disclaimer-helper-text',
+                      'aria-invalid':
+                        formik.touched.s_disclaimer && Boolean(formik.errors.s_disclaimer),
+                    }}
+                  />
+                }
+                label={
+                  <Trans
+                    i18nKey="special-contacts.sercq-disclaimer"
+                    ns="recapiti"
+                    components={[
+                      <Link
+                        key="privacy-policy"
+                        sx={{
+                          cursor: 'pointer',
+                          textDecoration: 'none !important',
+                          fontWeight: 'bold',
+                        }}
+                        onClick={redirectPrivacyLink}
+                        data-testid="tos-link"
+                      />,
+
+                      <Link
+                        key="tos"
+                        sx={{
+                          cursor: 'pointer',
+                          textDecoration: 'none !important',
+                          fontWeight: 'bold',
+                        }}
+                        onClick={redirectToSLink}
+                        data-testid="tos-link"
+                      />,
+                    ]}
+                  />
+                }
+                sx={{ mt: 2 }}
+                value={formik.values.s_disclaimer}
+              />
+              {formik.touched.s_disclaimer && Boolean(formik.errors.s_disclaimer) && (
+                <FormHelperText id="s_disclaimer-helper-text" error>
+                  {formik.errors.s_disclaimer}
+                </FormHelperText>
+              )}
+            </FormControl>
+          </>
+        )}
         <ErrorBanner
           type={errorBanner}
           contactValue={
