@@ -168,6 +168,8 @@ const EmailContactItem: React.FC = () => {
       .filter((addr) => addr.channelType === ChannelType.SERCQ_SEND)
       .map((addr) => addr.senderId);
 
+    const removingSercq = sercqSenderIds.length > 0;
+
     dispatch(removeSercqAndEmail({ senderIds: sercqSenderIds }))
       .unwrap()
       .then(() => {
@@ -175,7 +177,12 @@ const EmailContactItem: React.FC = () => {
         dispatch(
           appStateActions.addSuccess({
             title: '',
-            message: t('courtesy-contacts.email-removed-successfully', { ns: 'recapiti' }),
+            message: t(
+              removingSercq
+                ? 'courtesy-contacts.email-and-sercq-removed-successfully'
+                : 'courtesy-contacts.email-removed-successfully',
+              { ns: 'recapiti' }
+            ),
           })
         );
       })
@@ -222,7 +229,7 @@ const EmailContactItem: React.FC = () => {
         <Trans
           i18nKey="courtesy-contacts.remove-email-preconfirm-message"
           ns="recapiti"
-          components={[<strong key="0" />]}
+          components={[<Typography variant="body2" fontSize={'18px'} key={'paragraph1'} />]}
         />
       );
     }
@@ -231,7 +238,7 @@ const EmailContactItem: React.FC = () => {
         <Trans
           i18nKey="courtesy-contacts.remove-email-and-sercq-message"
           ns="recapiti"
-          components={[<strong key="0" />]}
+          components={[<Typography variant="body2" fontSize={'18px'} key={'paragraph1'} />]}
         />
       );
     }
