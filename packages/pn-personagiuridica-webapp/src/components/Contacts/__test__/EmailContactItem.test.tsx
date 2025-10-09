@@ -261,7 +261,7 @@ describe('testing EmailContactItem', () => {
     expect(dialog).toHaveTextContent('courtesy-contacts.remove-email-no-domicile-title');
     expect(dialog).toHaveTextContent('courtesy-contacts.remove-email-no-domicile-message');
     const cancelBtn = result.getByRole('button', { name: 'button.annulla' });
-    const confirmBtn = result.getByRole('button', { name: 'courtesy-contacts.remove-email' });
+    const confirmBtn = result.getByRole('button', { name: 'button.conferma' });
     expect(cancelBtn).toBeInTheDocument();
     expect(confirmBtn).toBeInTheDocument();
 
@@ -273,7 +273,7 @@ describe('testing EmailContactItem', () => {
     fireEvent.click(disableBtn);
     dialog = await waitFor(() => result.getByRole('dialog'));
 
-    fireEvent.click(result.getByRole('button', { name: 'courtesy-contacts.remove-email' }));
+    fireEvent.click(result.getByRole('button', { name: 'button.conferma' }));
 
     await waitFor(() => {
       expect(dialog).not.toBeVisible();
