@@ -232,7 +232,7 @@ describe('testing EmailContactItem', () => {
     expect(disableBtn).toBeInTheDocument();
   });
 
-  it('delete email - SERCQ disabled', async () => {
+  it('delete email - no digital domicile', async () => {
     mock.onDelete('/bff/v1/addresses/COURTESY/default/EMAIL').reply(204);
     const result = render(<EmailContactItem />, {
       preloadedState: { contactsState: { digitalAddresses: [defaultAddress] } },
@@ -242,12 +242,13 @@ describe('testing EmailContactItem', () => {
     expect(disableBtn).toBeInTheDocument();
     // click on cancel
     fireEvent.click(disableBtn);
+
     let dialog = await waitFor(() => result.getByRole('dialog'));
     expect(dialog).toBeInTheDocument();
 
     // verify dialog copy and buttons
-    expect(dialog).toHaveTextContent('courtesy-contacts.remove-email-title');
-    expect(dialog).toHaveTextContent('courtesy-contacts.confirmation-modal-email-content');
+    expect(dialog).toHaveTextContent('courtesy-contacts.remove-email-no-domicile-title');
+    expect(dialog).toHaveTextContent('courtesy-contacts.remove-email-no-domicile-message');
     const cancelBtn = result.getByRole('button', { name: 'button.annulla' });
     const confirmBtn = result.getByRole('button', { name: 'courtesy-contacts.remove-email' });
     expect(cancelBtn).toBeInTheDocument();
@@ -292,8 +293,16 @@ describe('testing EmailContactItem', () => {
     const sercqEnabledNoSpecials = digitalAddressesSercq.filter(
       (addr) =>
         !(
-          addr.addressType === AddressType.COURTESY &&
-          addr.channelType === ChannelType.EMAIL &&
+          // no special email
+          (
+            addr.addressType === AddressType.COURTESY &&
+            addr.channelType === ChannelType.EMAIL &&
+            addr.senderId !== 'default'
+          )
+        ) && // no special PEC
+        !(
+          addr.addressType === AddressType.LEGAL &&
+          addr.channelType === ChannelType.PEC &&
           addr.senderId !== 'default'
         )
     );
@@ -310,37 +319,43 @@ describe('testing EmailContactItem', () => {
     expect(disableBtn).toBeInTheDocument();
     fireEvent.click(disableBtn);
 
-    const dialog = await waitFor(() => result.getByRole('dialog'));
+    let dialog = await waitFor(() => result.getByRole('dialog'));
     expect(dialog).toBeInTheDocument();
 
-    expect(dialog).toHaveTextContent('courtesy-contacts.remove-email-and-sercq-title');
-    expect(dialog).toHaveTextContent('courtesy-contacts.remove-email-and-sercq-message');
+    expect(dialog).toHaveTextContent('courtesy-contacts.remove-email-preconfirm-title');
+    expect(dialog).toHaveTextContent('courtesy-contacts.remove-email-preconfirm-message');
 
-    const cancelBtn = result.getByRole('button', { name: 'button.annulla' });
-    const confirmBtn = result.getByRole('button', {
-      name: 'courtesy-contacts.remove-email-and-sercq',
-    });
+    let cancelBtn = result.getByRole('button', { name: 'button.annulla' });
     expect(cancelBtn).toBeInTheDocument();
-    expect(confirmBtn).toBeInTheDocument();
+    let preConfirmBtn = result.getByRole('button', { name: 'courtesy-contacts.remove-email' });
+    expect(preConfirmBtn).toBeInTheDocument();
 
     // test cancel
     fireEvent.click(cancelBtn);
+
+    // delete API should not be called
     await waitFor(() => {
       expect(mock.history.delete).toHaveLength(0);
     });
 
     await waitFor(() => expect(dialog).not.toBeInTheDocument());
-    const form = result.container.querySelector('form')!;
-    const emailTypography = getById(form, 'default_email-typography');
-    expect(emailTypography).toBeInTheDocument();
-    expect(emailTypography.textContent).toBeTruthy();
 
-    // reopen modal and confirm
+    // reopen and confirm preconfirm modal
     fireEvent.click(disableBtn);
+    dialog = await waitFor(() => result.getByRole('dialog'));
+    preConfirmBtn = result.getByRole('button', { name: 'courtesy-contacts.remove-email' });
+    fireEvent.click(preConfirmBtn);
+
+    // second modal
     const dialog2 = await waitFor(() => result.getByRole('dialog'));
-    fireEvent.click(
-      result.getByRole('button', { name: 'courtesy-contacts.remove-email-and-sercq' })
-    );
+    expect(dialog2).toHaveTextContent('courtesy-contacts.remove-email-and-sercq-title');
+    expect(dialog2).toHaveTextContent('courtesy-contacts.remove-email-and-sercq-message');
+
+    const finalConfirm = result.getByRole('button', {
+      name: 'courtesy-contacts.remove-email-and-sercq',
+    });
+    expect(finalConfirm).toBeInTheDocument();
+    fireEvent.click(finalConfirm);
 
     await waitFor(() => expect(dialog2).not.toBeInTheDocument());
 
@@ -390,37 +405,41 @@ describe('testing EmailContactItem', () => {
     expect(disableBtn).toBeInTheDocument();
     fireEvent.click(disableBtn);
 
-    const dialog = await waitFor(() => result.getByRole('dialog'));
+    // preconfirm modal
+    let dialog = await waitFor(() => result.getByRole('dialog'));
     expect(dialog).toBeInTheDocument();
 
-    expect(dialog).toHaveTextContent('courtesy-contacts.remove-email-and-sercq-title');
-    expect(dialog).toHaveTextContent('courtesy-contacts.remove-email-and-sercq-message');
+    expect(dialog).toHaveTextContent('courtesy-contacts.remove-email-preconfirm-title');
+    expect(dialog).toHaveTextContent('courtesy-contacts.remove-email-preconfirm-message');
 
-    const cancelBtn = result.getByRole('button', { name: 'button.annulla' });
-    const confirmBtn = result.getByRole('button', {
-      name: 'courtesy-contacts.remove-email-and-sercq',
-    });
-    expect(cancelBtn).toBeInTheDocument();
-    expect(confirmBtn).toBeInTheDocument();
+    // cancel first
+    let cancelBtn = result.getByRole('button', { name: 'button.annulla' });
+    let preConfirmBtn = result.getByRole('button', { name: 'courtesy-contacts.remove-email' });
+    expect(preConfirmBtn).toBeInTheDocument();
 
-    // test cancel
     fireEvent.click(cancelBtn);
+
     await waitFor(() => {
       expect(mock.history.delete).toHaveLength(0);
     });
 
     await waitFor(() => expect(dialog).not.toBeInTheDocument());
-    const form = result.container.querySelector('form')!;
-    const emailTypography = getById(form, 'default_email-typography');
-    expect(emailTypography).toBeInTheDocument();
-    expect(emailTypography.textContent).toBeTruthy();
 
-    // reopen modal and confirm
+    // reopen and confirm on preconfirm modal
     fireEvent.click(disableBtn);
+    dialog = await waitFor(() => result.getByRole('dialog'));
+    preConfirmBtn = result.getByRole('button', { name: 'courtesy-contacts.remove-email' });
+    fireEvent.click(preConfirmBtn);
+
+    // second modal
     const dialog2 = await waitFor(() => result.getByRole('dialog'));
-    fireEvent.click(
-      result.getByRole('button', { name: 'courtesy-contacts.remove-email-and-sercq' })
-    );
+    expect(dialog2).toHaveTextContent('courtesy-contacts.remove-email-and-sercq-title');
+    expect(dialog2).toHaveTextContent('courtesy-contacts.remove-email-and-sercq-message');
+
+    const finalConfirm = result.getByRole('button', {
+      name: 'courtesy-contacts.remove-email-and-sercq',
+    });
+    fireEvent.click(finalConfirm);
 
     await waitFor(() => expect(dialog2).not.toBeInTheDocument());
 
@@ -435,7 +454,7 @@ describe('testing EmailContactItem', () => {
     );
   });
 
-  it('delete email - special email address set', async () => {
+  it('delete email - special email address set (blocking modal)', async () => {
     const result = render(<EmailContactItem />, {
       preloadedState: {
         contactsState: {
@@ -470,6 +489,42 @@ describe('testing EmailContactItem', () => {
     const emailTypography = getById(form, 'default_email-typography');
     expect(emailTypography).toBeInTheDocument();
     expect(emailTypography.textContent).toBeTruthy();
+  });
+
+  it('should block email deletion when SERCQ default and PEC special', async () => {
+    const sercqWithPecSpecials = digitalAddressesSercq.filter(
+      (addr) =>
+        !(
+          addr.addressType === AddressType.COURTESY &&
+          addr.channelType === ChannelType.EMAIL &&
+          addr.senderId !== 'default'
+        )
+    );
+
+    const result = render(<EmailContactItem />, {
+      preloadedState: { contactsState: { digitalAddresses: sercqWithPecSpecials } },
+    });
+
+    const disableBtn = result.getByRole('button', { name: 'button.disable' });
+    fireEvent.click(disableBtn);
+
+    const dialog = await waitFor(() => result.getByRole('dialog'));
+    expect(dialog).toBeInTheDocument();
+    expect(dialog).toHaveTextContent('courtesy-contacts.block-remove-email-title');
+    expect(dialog).toHaveTextContent(
+      'courtesy-contacts.block-remove-email-sercq-default-pec-special-message'
+    );
+
+    const buttons = dialog.querySelectorAll('button');
+    expect(buttons.length).toBe(1);
+    expect(buttons[0]).toHaveTextContent('button.understand');
+
+    fireEvent.click(buttons[0]);
+    await waitFor(() => expect(dialog).not.toBeInTheDocument());
+
+    await waitFor(() => {
+      expect(mock.history.delete).toHaveLength(0);
+    });
   });
 
   it('show special contact section - without default sms address', () => {
