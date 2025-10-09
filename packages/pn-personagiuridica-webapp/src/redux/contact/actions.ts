@@ -10,6 +10,7 @@ import {
 } from '../../generated-client/tos-privacy';
 import {
   AddressType,
+  ChannelType,
   DeleteDigitalAddressParams,
   DigitalAddress,
   SaveDigitalAddressParams,
@@ -94,9 +95,12 @@ export const createOrUpdateAddress = createAsyncThunk<
   }
 );
 
-export const deleteAddress = createAsyncThunk<void, DeleteDigitalAddressParams>(
+export const deleteAddress = createAsyncThunk<
+  void,
+  DeleteDigitalAddressParams & { blockLoading?: boolean }
+>(
   CONTACT_ACTIONS.DELETE_ADDRESS,
-  async (params: DeleteDigitalAddressParams, { rejectWithValue }) => {
+  async (params, { rejectWithValue }) => {
     try {
       const digitalAddressesFactory = AddressesApiFactory(undefined, undefined, apiClient);
       const response = await digitalAddressesFactory.deleteAddressV1(
@@ -106,6 +110,52 @@ export const deleteAddress = createAsyncThunk<void, DeleteDigitalAddressParams>(
       );
 
       return response.data;
+    } catch (e: any) {
+      return rejectWithValue(parseError(e));
+    }
+  },
+  {
+    getPendingMeta: ({ arg }) => ({ blockLoading: arg?.blockLoading }),
+  }
+);
+
+/**
+ * Remove all active SERCQ addresses before deleting the default EMAIL.
+ *
+ * If any removal fails, `unwrap()` throws and the chain aborts,
+ * preventing the email deletion.
+ */
+
+export const removeSercqAndEmail = createAsyncThunk<void, { senderIds: Array<string> }>(
+  `${CONTACT_ACTIONS.DELETE_ADDRESS}/removeEmailAndAllSercq`,
+  async ({ senderIds }, { dispatch, rejectWithValue }) => {
+    try {
+      // Remove all SERCQ addresses (if any) in parallel
+      if (senderIds.length) {
+        await Promise.all(
+          senderIds.map((senderId) =>
+            dispatch(
+              deleteAddress({
+                addressType: AddressType.LEGAL,
+                senderId,
+                channelType: ChannelType.SERCQ_SEND,
+                blockLoading: true,
+              })
+            ).unwrap()
+          )
+        );
+      }
+
+      // Remove email
+      await dispatch(
+        deleteAddress({
+          addressType: AddressType.COURTESY,
+          senderId: 'default',
+          channelType: ChannelType.EMAIL,
+          blockLoading: true,
+        })
+      ).unwrap();
+      return;
     } catch (e: any) {
       return rejectWithValue(parseError(e));
     }
