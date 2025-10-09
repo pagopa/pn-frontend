@@ -168,6 +168,7 @@ describe('LegalContacts Component', async () => {
 
   it('disable digital domicile - PEC', async () => {
     mock.onDelete('bff/v1/addresses/LEGAL/default/PEC').reply(200);
+
     const initialAddresses = digitalAddresses.filter(
       (addr) => addr.addressType !== AddressType.LEGAL || addr.senderId === 'default'
     );

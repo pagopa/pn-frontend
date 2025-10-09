@@ -168,9 +168,11 @@ describe('LegalContacts Component', async () => {
 
   it('disable digital domicile - PEC', async () => {
     mock.onDelete('bff/v1/addresses/LEGAL/default/PEC').reply(200);
+
     const initialAddresses = digitalAddresses.filter(
       (addr) => addr.addressType !== AddressType.LEGAL || addr.senderId === 'default'
     );
+
     const { container, getByTestId, getByText, getByRole } = render(<LegalContacts />, {
       preloadedState: {
         contactsState: {
@@ -227,8 +229,12 @@ describe('LegalContacts Component', async () => {
   it('disable digital domicile - SERCQ', async () => {
     mock.onDelete('/bff/v1/addresses/LEGAL/default/SERCQ_SEND').reply(204);
 
+    const noSpecialContacts = digitalLegalAddressesSercq.filter(
+      (addr) => !(addr.addressType === AddressType.LEGAL && addr.senderId !== 'default')
+    );
+
     const { getByRole } = render(<LegalContacts />, {
-      preloadedState: { contactsState: { digitalAddresses: digitalLegalAddressesSercq } },
+      preloadedState: { contactsState: { digitalAddresses: noSpecialContacts } },
     });
 
     const disableBtn = getByRole('button', { name: 'button.disable' });
