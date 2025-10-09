@@ -368,12 +368,11 @@ const EmailContactItem: React.FC = () => {
           !blockDelete
             ? (() => {
                 const noDigitalDomicile = !defaultPECAddress && !hasAnySERCQAddrEnabled;
-                // For "no digital domicile" the confirm must be the PRIMARY button
                 if (modalOpen === ModalType.DELETE && noDigitalDomicile) {
                   return {
                     primaryButton: {
                       onClick: deleteConfirmHandler,
-                      label: t('courtesy-contacts.remove-email', { ns: 'recapiti' }),
+                      label: t('button.conferma'),
                     },
                     secondaryButton: {
                       onClick: () => setModalOpen(null),
@@ -381,7 +380,6 @@ const EmailContactItem: React.FC = () => {
                     },
                   };
                 }
-                // Default: primary = cancel, secondary = confirm (outlined, error)
                 return {
                   primaryButton: {
                     onClick: () => setModalOpen(null),
