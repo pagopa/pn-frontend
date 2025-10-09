@@ -265,14 +265,16 @@ const AddSpecialContact = forwardRef<AddSpecialContactRef, Props>(
       validationSchema,
       validate: async (values) => {
         const errors: Record<string, string> = {};
-        if (values.channelType === ChannelType.SERCQ_SEND && !hasInitialEmail) {
-          const emailValid = await sercqAddSpecialEmailRef.current?.isFormValid();
-          if (!emailValid) {
-            errors.form_email = 'invalid email';
+        if (values.channelType === ChannelType.SERCQ_SEND) {
+          if (!hasInitialEmail) {
+            const emailValid = await sercqAddSpecialEmailRef.current?.isFormValid();
+            if (!emailValid) {
+              errors.form_email = 'invalid email';
+            }
           }
-        }
-        if (!defaultEMAILAddress) {
-          errors.default_email = 'no default email';
+          if (!defaultEMAILAddress) {
+            errors.default_email = 'no default email';
+          }
         }
         return errors;
       },
