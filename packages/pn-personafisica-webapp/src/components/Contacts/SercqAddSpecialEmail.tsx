@@ -2,7 +2,6 @@
 import { forwardRef, useImperativeHandle, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { Typography } from '@mui/material';
 import { appStateActions } from '@pagopa-pn/pn-commons';
 
 import { PFEventsType } from '../../models/PFEventsType';
@@ -21,7 +20,7 @@ enum ModalType {
   CODE = 'code',
 }
 
-const SecqAddSpecialEmail = forwardRef((props, ref) => {
+const SecqAddSpecialEmail = forwardRef((_, ref) => {
   const { t } = useTranslation(['common', 'recapiti']);
   const dispatch = useAppDispatch();
   const addressesData = useAppSelector(contactsSelectors.selectAddresses);
