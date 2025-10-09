@@ -11,7 +11,7 @@ import {
   StackProps,
   Typography,
 } from '@mui/material';
-import { ButtonNaked, IllusCompleted } from '@pagopa/mui-italia';
+import { ButtonNaked, IllusCompleted, IllustrationProps } from '@pagopa/mui-italia';
 
 import checkChildren from '../../utility/children.utility';
 import { getLocalizedOrDefaultLabel } from '../../utility/localization.utility';
@@ -27,6 +27,7 @@ type Props = {
     nextButton?: JSXElementConstructor<ButtonProps>;
     prevButton?: JSXElementConstructor<ButtonProps>;
     exitButton?: JSXElementConstructor<ButtonProps>;
+    feedbackIcon?: JSXElementConstructor<IllustrationProps>;
   };
   slotsProps?: {
     stepContainer?: Partial<PaperProps>;
@@ -43,6 +44,7 @@ type Props = {
       title: string;
       content?: ReactNode;
       buttonText: string;
+      iconProps?: Partial<IllustrationProps>;
       onClick: () => void;
       onFeedbackShow?: () => void;
     };
@@ -61,6 +63,7 @@ const PnWizard: React.FC<Props> = ({
   const PrevButton = slots?.prevButton || Button;
   const NextButton = slots?.nextButton || Button;
   const ExitButton = slots?.exitButton || ButtonNaked;
+  const FeedbackIcon = slots?.feedbackIcon || IllusCompleted;
 
   const childrens = React.Children.toArray(children);
   const steps = childrens
@@ -103,7 +106,7 @@ const PnWizard: React.FC<Props> = ({
         data-testid="wizard-feedback-step"
       >
         <Box sx={{ mt: 11, mx: 'auto', textAlign: 'center', width: '80vw' }}>
-          <IllusCompleted />
+          <FeedbackIcon {...slotsProps?.feedback?.iconProps} />
           <Typography
             data-testid="wizard-feedback-title"
             variant="h4"

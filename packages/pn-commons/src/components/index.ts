@@ -46,6 +46,7 @@ import Header from './Header/Header';
 import { IllusAppIO } from './Illustrations/IllusAppIO';
 import { IllusAppIODialog } from './Illustrations/IllusAppIODialog';
 import { IllusAppIoLogo } from './Illustrations/IllusAppIOLogo';
+import { IllusHourglass } from './Illustrations/IllusHourglass';
 import { IllusQuestion } from './Illustrations/IllusQuestion';
 import { IllusSendLogo } from './Illustrations/IllusSendLogo';
 import { IllusStatistics } from './Illustrations/IllusStatistics';
@@ -158,6 +159,7 @@ export {
   IllusAppIODialog,
   IllusAppIoLogo,
   IllusSendLogo,
+  IllusHourglass,
   PnWizard,
   PnWizardStep,
 };

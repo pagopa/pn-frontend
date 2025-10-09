@@ -14,7 +14,7 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
-import { EventAction, PnWizard, PnWizardStep } from '@pagopa-pn/pn-commons';
+import { EventAction, IllusHourglass, PnWizard, PnWizardStep } from '@pagopa-pn/pn-commons';
 import { ButtonNaked } from '@pagopa/mui-italia';
 
 import { PFEventsType } from '../../models/PFEventsType';
@@ -184,6 +184,7 @@ const PecContactWizard: React.FC<Props> = ({
               {t('button.indietro', { ns: 'common' })}
             </ButtonNaked>
           ),
+          feedbackIcon: IllusHourglass,
         }}
         slotsProps={{
           container: {
