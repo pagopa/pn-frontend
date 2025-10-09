@@ -52,7 +52,9 @@ const PecContactWizard: React.FC<Props> = ({
   const feedbackTitleLabel = `legal-contacts.sercq-send-wizard.feedback.title-pec-${
     isTransferring ? 'transfer' : 'activation'
   }`;
-  const feedbackContentLabel = 'legal-contacts.sercq-send-wizard.feedback.content-pec';
+  const feedbackContentLabel = `legal-contacts.sercq-send-wizard.feedback.content-pec${
+    isTransferring ? '-transfer' : ''
+  }`;
 
   const validationSchema = yup.object().shape({
     pec: pecValidationSchema(t),
