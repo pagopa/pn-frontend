@@ -45,7 +45,6 @@ const EmptyLegalContacts = () => {
     });
     navigate(DIGITAL_DOMICILE_ACTIVATION);
   };
-  // test dummy commit
 
   return (
     <>
