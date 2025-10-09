@@ -304,8 +304,16 @@ describe('testing EmailContactItem', () => {
     const sercqEnabledNoSpecials = digitalAddressesSercq.filter(
       (addr) =>
         !(
-          addr.addressType === AddressType.COURTESY &&
-          addr.channelType === ChannelType.EMAIL &&
+          // no special email
+          (
+            addr.addressType === AddressType.COURTESY &&
+            addr.channelType === ChannelType.EMAIL &&
+            addr.senderId !== 'default'
+          )
+        ) && // no special PEC
+        !(
+          addr.addressType === AddressType.LEGAL &&
+          addr.channelType === ChannelType.PEC &&
           addr.senderId !== 'default'
         )
     );
@@ -492,6 +500,42 @@ describe('testing EmailContactItem', () => {
     const emailTypography = getById(form, 'default_email-typography');
     expect(emailTypography).toBeInTheDocument();
     expect(emailTypography.textContent).toBeTruthy();
+  });
+
+  it('should block email deletion when SERCQ default and PEC special', async () => {
+    const sercqWithPecSpecials = digitalAddressesSercq.filter(
+      (addr) =>
+        !(
+          addr.addressType === AddressType.COURTESY &&
+          addr.channelType === ChannelType.EMAIL &&
+          addr.senderId !== 'default'
+        )
+    );
+
+    const result = render(<EmailContactItem />, {
+      preloadedState: { contactsState: { digitalAddresses: sercqWithPecSpecials } },
+    });
+
+    const disableBtn = result.getByRole('button', { name: 'button.disable' });
+    fireEvent.click(disableBtn);
+
+    const dialog = await waitFor(() => result.getByRole('dialog'));
+    expect(dialog).toBeInTheDocument();
+    expect(dialog).toHaveTextContent('courtesy-contacts.block-remove-email-title');
+    expect(dialog).toHaveTextContent(
+      'courtesy-contacts.block-remove-email-sercq-default-pec-special-message'
+    );
+
+    const buttons = dialog.querySelectorAll('button');
+    expect(buttons.length).toBe(1);
+    expect(buttons[0]).toHaveTextContent('button.understand');
+
+    fireEvent.click(buttons[0]);
+    await waitFor(() => expect(dialog).not.toBeInTheDocument());
+
+    await waitFor(() => {
+      expect(mock.history.delete).toHaveLength(0);
+    });
   });
 
   it('show special contact section - without default sms address', () => {

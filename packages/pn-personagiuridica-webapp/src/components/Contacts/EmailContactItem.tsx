@@ -66,6 +66,15 @@ const EmailContactItem: React.FC = () => {
   const currentValue = defaultEMAILAddress?.value ?? '';
   const blockDelete = specialEMAILAddresses.length > 0;
 
+  const blockDueToSercqDefaultAndPecSpecials =
+    !!defaultSERCQ_SENDAddress &&
+    addresses.some(
+      (a) =>
+        a.addressType === AddressType.LEGAL &&
+        a.channelType === ChannelType.PEC &&
+        a.senderId !== 'default'
+    );
+
   const handleSubmit = (value: string) => {
     // eslint-disable-next-line functional/immutable-data
     currentAddress.current = { value };
@@ -159,7 +168,7 @@ const EmailContactItem: React.FC = () => {
   };
 
   const getRemoveModalTitle = () => {
-    if (blockDelete) {
+    if (blockDelete || blockDueToSercqDefaultAndPecSpecials) {
       return t(`courtesy-contacts.block-remove-email-title`, { ns: 'recapiti' });
     }
     if (modalOpen === ModalType.DELETE_PRECONFIRM) {
@@ -177,6 +186,11 @@ const EmailContactItem: React.FC = () => {
   const getRemoveModalMessage = () => {
     if (blockDelete) {
       return t(`courtesy-contacts.block-remove-email-message`, { ns: 'recapiti' });
+    }
+    if (blockDueToSercqDefaultAndPecSpecials) {
+      return t('courtesy-contacts.block-remove-email-sercq-default-pec-special-message', {
+        ns: 'recapiti',
+      });
     }
     if (modalOpen === ModalType.DELETE_PRECONFIRM) {
       return (
@@ -239,7 +253,7 @@ const EmailContactItem: React.FC = () => {
               currentAddress.current = { value: currentValue };
               // If any SERCQ is active (and not blocked), open a pre-confirm step first
               setModalOpen(
-                !blockDelete && hasAnySERCQAddrEnabled
+                !blockDelete && hasAnySERCQAddrEnabled && !blockDueToSercqDefaultAndPecSpecials
                   ? ModalType.DELETE_PRECONFIRM
                   : ModalType.DELETE
               );
@@ -340,7 +354,7 @@ const EmailContactItem: React.FC = () => {
         removeModalBody={getRemoveModalMessage()}
         handleModalClose={() => setModalOpen(null)}
         confirmHandler={deleteConfirmHandler}
-        blockDelete={blockDelete}
+        blockDelete={blockDelete || blockDueToSercqDefaultAndPecSpecials}
         slotsProps={
           !blockDelete
             ? (() => {
