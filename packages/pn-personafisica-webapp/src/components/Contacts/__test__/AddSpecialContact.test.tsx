@@ -533,6 +533,128 @@ describe('test AddSpecialContact', () => {
     });
   });
 
+  it('insert address', async () => {
+    const pecValue = 'mocked@pec.it';
+    mock.onGet('/bff/v1/pa-list').reply(200, parties);
+    mock
+      .onPost(`/bff/v1/addresses/LEGAL/${parties[2].id}/PEC`, {
+        value: pecValue,
+      })
+      .reply(200, {
+        result: 'CODE_VERIFICATION_REQUIRED',
+      });
+    mock
+      .onPost(`/bff/v1/addresses/LEGAL/${parties[2].id}/PEC`, {
+        value: pecValue,
+        verificationCode: '01234',
+      })
+      .reply(204);
+    // render component
+    const result = render(
+      <AddSpecialContactWrapper handleSpecialContactAdded={handleContactAddedMock} />,
+      {
+        preloadedState: { contactsState: { digitalAddresses: digitalLegalAddresses } },
+      }
+    );
+
+    // select sender
+    await testAutocomplete(result.container, 'sender', parties, true, 2, true);
+
+    // select addressType
+    await testSelect(
+      result.container,
+      'channelType',
+      channelTypesItems,
+      channelTypesItems.findIndex((item) => item.value === ChannelType.PEC)
+    );
+
+    const input = getById(result.container, 's_value');
+
+    // fill with invalid value
+    fireEvent.change(input, { target: { value: 'invalid value' } });
+    await waitFor(() => {
+      expect(input).toHaveValue('invalid value');
+    });
+    let errorMessage = getById(result.container, `s_value-helper-text`);
+    expect(errorMessage).toBeInTheDocument();
+
+    // fill with valid value
+    fireEvent.change(input, { target: { value: pecValue } });
+    await waitFor(() => {
+      expect(input).toHaveValue(pecValue);
+    });
+    expect(errorMessage).not.toBeInTheDocument();
+
+    const discardButton = result.getByRole('button', { name: 'indietro' });
+    const confirmButton = result.getByRole('button', { name: 'conferma' });
+    expect(confirmButton).toBeInTheDocument();
+
+    // verify "back" button
+    fireEvent.click(discardButton);
+    await waitFor(() => {
+      expect(handleContactDiscardMock).toHaveBeenCalledTimes(1);
+    });
+
+    fireEvent.click(confirmButton);
+
+    const disclaimerCheckbox = result.container.querySelector('[name="s_disclaimer"]');
+
+    // check disclaimer error
+    errorMessage = getById(result.container, `s_disclaimer-helper-text`);
+    expect(errorMessage).toBeInTheDocument();
+
+    fireEvent.click(disclaimerCheckbox!);
+    await waitFor(() => {
+      expect(errorMessage).not.toBeInTheDocument();
+    });
+
+    fireEvent.click(confirmButton);
+    await waitFor(() => {
+      expect(mock.history.post).toHaveLength(1);
+      expect(JSON.parse(mock.history.post[0].data)).toStrictEqual({
+        value: pecValue,
+      });
+    });
+    const dialog = await fillCodeDialog(result);
+    await waitFor(() => {
+      expect(mock.history.post).toHaveLength(2);
+      expect(JSON.parse(mock.history.post[1].data)).toStrictEqual({
+        value: pecValue,
+        verificationCode: '01234',
+      });
+    });
+    await waitFor(() => {
+      expect(dialog).not.toBeInTheDocument();
+    });
+    const addresses = [
+      ...digitalLegalAddresses,
+      {
+        senderName: parties[2].name,
+        value: pecValue,
+        pecValid: true,
+        senderId: parties[2].id,
+        addressType: AddressType.LEGAL,
+        channelType: ChannelType.PEC,
+        codeValid: true,
+      },
+    ];
+
+    expect(testStore.getState().contactsState.digitalAddresses).toStrictEqual(addresses);
+    // simulate rerendering due to redux changes
+    result.rerender(<SpecialContacts addressType={AddressType.LEGAL} />);
+    await waitFor(() => {
+      // contacts list
+      const specialContactForms = result.getAllByTestId(
+        /^[a-zA-Z0-9-]+(?:_pecSpecialContact|_sercq_sendSpecialContact)$/
+      );
+      expect(specialContactForms).toHaveLength(specialAddresses.length + 1);
+    });
+
+    await waitFor(() => {
+      expect(handleContactAddedMock).toHaveBeenCalledTimes(1);
+    });
+  });
+  
   it('API error', async () => {
     mock.onGet(/\/bff\/v1\/pa-list.*/).reply(errorMock.status, errorMock.data);
     await act(async () => {
