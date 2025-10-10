@@ -242,7 +242,11 @@ const AddSpecialContact = forwardRef<AddSpecialContactRef, Props>(
           is: ChannelType.SERCQ_SEND,
           then: yup.string().nullable(),
         }),
-      s_disclaimer: yup.bool().isTrue(t('required-field')),
+      s_disclaimer: yup.boolean().when('channelType', {
+        is: (val: ChannelType) => [ChannelType.PEC, ChannelType.SERCQ_SEND].includes(val),
+        then: (schema) => schema.isTrue(t('required-field')),
+        otherwise: (schema) => schema.notRequired(),
+      }),
     });
 
     const initialValues: {
