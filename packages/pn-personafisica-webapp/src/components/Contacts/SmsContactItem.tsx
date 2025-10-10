@@ -329,7 +329,7 @@ const SmsContactItem: React.FC<SmsItemProps> = ({
     if (defaultSERCQ_SENDAddress) {
       return (
         <Trans
-          i18nKey={'courtesy-contacts.remove-address-message-dod-enabled'}
+          i18nKey={'courtesy-contacts.remove-sms-message-dod-enabled'}
           ns={'recapiti'}
           components={[
             <Typography variant="body2" fontSize={'18px'} key={'paragraph1'} sx={{ mb: 2 }} />,
