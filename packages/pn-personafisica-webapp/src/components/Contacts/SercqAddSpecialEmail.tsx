@@ -20,7 +20,7 @@ enum ModalType {
   CODE = 'code',
 }
 
-const SecqAddSpecialEmail = () => {
+const SercqAddSpecialEmail = () => {
   const { t } = useTranslation(['common', 'recapiti']);
   const dispatch = useAppDispatch();
   const addressesData = useAppSelector(contactsSelectors.selectAddresses);
@@ -138,4 +138,4 @@ const SecqAddSpecialEmail = () => {
   );
 };
 
-export default SecqAddSpecialEmail;
+export default SercqAddSpecialEmail;
