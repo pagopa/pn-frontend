@@ -556,6 +556,11 @@ describe('test AddSpecialContact', () => {
       channelTypesItems.findIndex((item) => item.value === ChannelType.SERCQ_SEND)
     );
 
+    const pecInput = queryById(result.container, 's_value');
+    await waitFor(() => {
+      expect(pecInput).not.toBeInTheDocument();
+    })
+
     const digitalContentEl = result.getByTestId('default_emailContact');
     expect(digitalContentEl).toBeInTheDocument();
 
@@ -603,7 +608,9 @@ describe('test AddSpecialContact', () => {
       channelTypesItems.findIndex((item) => item.value === ChannelType.SERCQ_SEND)
     );
 
-    const email = digitalCourtesyAddresses.find(addr => addr.senderId === 'default' && addr.channelType === ChannelType.EMAIL)?.value;
+    const email = digitalCourtesyAddresses.find(
+      (addr) => addr.senderId === 'default' && addr.channelType === ChannelType.EMAIL
+    )?.value;
     const emailActive = result.getByText(email!);
     expect(emailActive).toBeInTheDocument();
   });
