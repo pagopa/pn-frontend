@@ -720,7 +720,7 @@ const AddSpecialContact = forwardRef<AddSpecialContactRef, Props>(
                           fontWeight: 'bold',
                         }}
                         onClick={redirectPrivacyLink}
-                        data-testid="tos-link"
+                        data-testid="privacy-link"
                       />,
 
                       <Link
@@ -731,7 +731,7 @@ const AddSpecialContact = forwardRef<AddSpecialContactRef, Props>(
                           fontWeight: 'bold',
                         }}
                         onClick={redirectToSLink}
-                        data-testid="privacy-link"
+                        data-testid="tos-link"
                       />,
                     ]}
                   />
