@@ -156,7 +156,7 @@ const AddSpecialContact = forwardRef<AddSpecialContactRef, Props>(
     const [isExistingContactDefault, setIsExistingContactDefault] = useState(false);
     const tosConsent = useRef<Array<TosPrivacyConsent>>();
     const { defaultEMAILAddress } = addressesData || {};
-    const [hasInitialEmail, setHasInitialEmail] = useState<boolean>(false);
+    const [canEditEmail, setCanEditEmail] = useState<boolean>(false);
 
     const addressTypes = specialContactsAvailableAddressTypes(addressesData).filter(
       (addr) => addr.shown && (!IS_DOD_ENABLED ? addr.id !== ChannelType.SERCQ_SEND : true)
@@ -373,7 +373,7 @@ const AddSpecialContact = forwardRef<AddSpecialContactRef, Props>(
 
     useEffect(() => {
       if (defaultEMAILAddress && defaultEMAILAddress.value) {
-        setHasInitialEmail(true);
+        setCanEditEmail(true);
       }
     }, []);
 
@@ -656,7 +656,7 @@ const AddSpecialContact = forwardRef<AddSpecialContactRef, Props>(
               </FormControl>
             </>
           )}
-          {formik.values.channelType === ChannelType.SERCQ_SEND && hasInitialEmail && (
+          {formik.values.channelType === ChannelType.SERCQ_SEND && canEditEmail && (
             <Stack spacing={2} alignItems="start">
               <Typography>{t(`special-contacts.email-description`, { ns: 'recapiti' })}</Typography>
               <Stack direction="row" spacing={1}>
@@ -678,7 +678,7 @@ const AddSpecialContact = forwardRef<AddSpecialContactRef, Props>(
         </form>
         {formik.values.channelType === ChannelType.SERCQ_SEND && (
           <>
-            {!hasInitialEmail && (
+            {!canEditEmail && (
               <>
                 <Typography sx={{ mb: 2 }}>
                   {t(`special-contacts.email-description`, { ns: 'recapiti' })}
