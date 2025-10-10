@@ -188,17 +188,10 @@
     "remove-email-no-domicile-title": "Disattiva email",
     "remove-email-no-domicile-message": "Se confermi, non riceverai più l’email su {{value}} quando c’è una notifica SEND da leggere.",
     "remove-email-preconfirm-title": "Vuoi disattivare gli avvisi via email?",
-<<<<<<< HEAD
-    "remove-email-preconfirm-message": "Se disattivi l’indirizzo email non possiamo <0>avvisarti quando c’è una comunicazione a valore legale per la tua impresa.</0>",
-    "remove-email-and-sercq": "Disattiva email e domicilio",
-    "remove-email-and-sercq-title": "Con l’email si disattiva anche il domicilio digitale SEND",
-    "remove-email-and-sercq-message": "Se scegli di disattivare il domicilio digitale SEND l'azienda potrebbe ricevere le comunicazioni via raccomandata e <0>pagare i relativi costi.</0>",
-=======
     "remove-email-preconfirm-message": "<0>Se disattivi l’indirizzo email non possiamo <strong>avvisarti quando c’è una comunicazione a valore legale per la tua impresa.</strong></0",
     "remove-email-and-sercq": "Disattiva email e domicilio",
     "remove-email-and-sercq-title": "Con l’email si disattiva anche il domicilio digitale SEND",
     "remove-email-and-sercq-message": "<0>Se scegli di disattivare il domicilio digitale SEND l'azienda potrebbe ricevere le comunicazioni via raccomandata e <strong>pagare i relativi costi.</strong></0>",
->>>>>>> 4aa7bc70cdae6c6f88614e8883a2915c758b1541
     "remove-sms": "Disattiva SMS",
     "remove-sms-title-dod-enabled": "Vuoi disattivare gli avvisi via SMS?",
     "remove-email-button-dod-enabled": "Disattiva email aziendale",
