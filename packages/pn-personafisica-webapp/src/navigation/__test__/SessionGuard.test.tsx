@@ -186,5 +186,14 @@ describe('SessionGuard Component', async () => {
       const logoutTitleComponent = screen.queryByText('leaving-app.title');
       expect(logoutTitleComponent).toBeTruthy();
     });
+
+    // No call api logout because the token is expired
+    vi.useFakeTimers();
+    await act(async () => {
+      vi.advanceTimersByTime(3000);
+      expect(mock.history.post).toHaveLength(0);
+    });
+    vi.useRealTimers();
   });
+
 });

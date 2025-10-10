@@ -76,6 +76,15 @@ const EmailContactItem: React.FC = () => {
   const currentValue = defaultEMAILAddress?.value ?? '';
   const blockDelete = specialEMAILAddresses.length > 0;
 
+  const blockDueToSercqDefaultAndPecSpecials =
+    !!defaultSERCQ_SENDAddress &&
+    addresses.some(
+      (a) =>
+        a.addressType === AddressType.LEGAL &&
+        a.channelType === ChannelType.PEC &&
+        a.senderId !== 'default'
+    );
+
   const handleSubmit = (value: string) => {
     PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_EMAIL_START, {
       senderId: 'default',
@@ -114,7 +123,6 @@ const EmailContactItem: React.FC = () => {
         // contact to verify
         // open code modal
         if (!res) {
-          // aprire la code modal
           setModalOpen(ModalType.CODE);
           return;
         }
@@ -159,6 +167,8 @@ const EmailContactItem: React.FC = () => {
       .filter((addr) => addr.channelType === ChannelType.SERCQ_SEND)
       .map((addr) => addr.senderId);
 
+    const removingSercq = sercqSenderIds.length > 0;
+
     dispatch(removeSercqAndEmail({ senderIds: sercqSenderIds }))
       .unwrap()
       .then(() => {
@@ -166,7 +176,12 @@ const EmailContactItem: React.FC = () => {
         dispatch(
           appStateActions.addSuccess({
             title: '',
-            message: t('courtesy-contacts.email-removed-successfully', { ns: 'recapiti' }),
+            message: t(
+              removingSercq
+                ? 'courtesy-contacts.email-and-sercq-removed-successfully'
+                : 'courtesy-contacts.email-removed-successfully',
+              { ns: 'recapiti' }
+            ),
           })
         );
       })
@@ -184,7 +199,7 @@ const EmailContactItem: React.FC = () => {
   };
 
   const getRemoveModalTitle = () => {
-    if (blockDelete) {
+    if (blockDelete || blockDueToSercqDefaultAndPecSpecials) {
       return t(`courtesy-contacts.block-remove-email-title`, { ns: 'recapiti' });
     }
     if (modalOpen === ModalType.DELETE_PRECONFIRM) {
@@ -203,12 +218,17 @@ const EmailContactItem: React.FC = () => {
     if (blockDelete) {
       return t(`courtesy-contacts.block-remove-email-message`, { ns: 'recapiti' });
     }
+    if (blockDueToSercqDefaultAndPecSpecials) {
+      return t('courtesy-contacts.block-remove-email-sercq-default-pec-special-message', {
+        ns: 'recapiti',
+      });
+    }
     if (modalOpen === ModalType.DELETE_PRECONFIRM) {
       return (
         <Trans
           i18nKey="courtesy-contacts.remove-email-preconfirm-message"
           ns="recapiti"
-          components={[<strong key="0" />]}
+          components={[<Typography variant="body2" fontSize={'18px'} key={'paragraph1'} />]}
         />
       );
     }
@@ -217,7 +237,7 @@ const EmailContactItem: React.FC = () => {
         <Trans
           i18nKey="courtesy-contacts.remove-email-and-sercq-message"
           ns="recapiti"
-          components={[<strong key="0" />]}
+          components={[<Typography variant="body2" fontSize={'18px'} key={'paragraph1'} />]}
         />
       );
     }
@@ -264,7 +284,7 @@ const EmailContactItem: React.FC = () => {
               currentAddress.current = { value: currentValue };
               // If any SERCQ is active (and not blocked), open a pre-confirm step first
               setModalOpen(
-                !blockDelete && hasAnySERCQAddrEnabled
+                !blockDelete && hasAnySERCQAddrEnabled && !blockDueToSercqDefaultAndPecSpecials
                   ? ModalType.DELETE_PRECONFIRM
                   : ModalType.DELETE
               );
@@ -366,17 +386,16 @@ const EmailContactItem: React.FC = () => {
         removeModalBody={getRemoveModalMessage()}
         handleModalClose={() => setModalOpen(null)}
         confirmHandler={deleteConfirmHandler}
-        blockDelete={blockDelete}
+        blockDelete={blockDelete || blockDueToSercqDefaultAndPecSpecials}
         slotsProps={
           !blockDelete
             ? (() => {
                 const noDigitalDomicile = !defaultPECAddress && !hasAnySERCQAddrEnabled;
-                // For "no digital domicile" the confirm must be the PRIMARY button
                 if (modalOpen === ModalType.DELETE && noDigitalDomicile) {
                   return {
                     primaryButton: {
                       onClick: deleteConfirmHandler,
-                      label: t('courtesy-contacts.remove-email', { ns: 'recapiti' }),
+                      label: t('button.conferma'),
                     },
                     secondaryButton: {
                       onClick: () => setModalOpen(null),
@@ -384,7 +403,6 @@ const EmailContactItem: React.FC = () => {
                     },
                   };
                 }
-                // Default: primary = cancel, secondary = confirm (outlined, error)
                 return {
                   primaryButton: {
                     onClick: () => setModalOpen(null),
