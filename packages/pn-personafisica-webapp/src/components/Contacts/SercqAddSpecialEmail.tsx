@@ -25,7 +25,7 @@ const SecqAddSpecialEmail = forwardRef((_, ref) => {
   const dispatch = useAppDispatch();
   const addressesData = useAppSelector(contactsSelectors.selectAddresses);
   const [modalOpen, setModalOpen] = useState<ModalType | null>(null);
-  const { defaultEMAILAddress } = useAppSelector(contactsSelectors.selectAddresses);
+  const { defaultEMAILAddress } = addressesData || {};
 
   const currentAddress = useRef<{ channelType: ChannelType; value: string }>({
     channelType: ChannelType.EMAIL,

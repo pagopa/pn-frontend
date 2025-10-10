@@ -151,7 +151,7 @@ const AddSpecialContact = forwardRef<AddSpecialContactRef, Props>(
     const [modalOpen, setModalOpen] = useState<ModalType | null>(null);
     const [isExistingContactDefault, setIsExistingContactDefault] = useState(false);
     const tosConsent = useRef<Array<TosPrivacyConsent>>();
-    const { defaultEMAILAddress } = useAppSelector(contactsSelectors.selectAddresses);
+    const { defaultEMAILAddress } = addressesData || {};
     const [hasInitialEmail, setHasInitialEmail] = useState<boolean>(false);
 
     const sercqAddSpecialEmailRef = useRef<{
