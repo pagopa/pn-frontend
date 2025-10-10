@@ -151,15 +151,9 @@ const DigitalContact = forwardRef<{ toggleEdit: () => void }, Props>(
       toggleEdit();
     };
 
-    const isFormValid = async () => {
-      await formik.setFieldTouched(`${senderId}_${contactType}`, true, true);
-      return formik.isValid;
-    };
-
     useImperativeHandle(ref, () => ({
       toggleEdit,
       closeEditMode,
-      isFormValid,
       resetForm: async () => {
         await formik.setFieldTouched(`${senderId}_${contactType}`, false, false);
         await formik.setFieldValue(

@@ -34,12 +34,10 @@ const SecqAddSpecialEmail = () => {
   const emailContactRef = useRef<{
     toggleEdit: () => void;
     resetForm: () => Promise<void>;
-    isFormValid: () => Promise<boolean>;
     closeEditMode: () => void;
   }>({
     toggleEdit: () => {},
     resetForm: () => Promise.resolve(),
-    isFormValid: () => Promise.resolve(false),
     closeEditMode: () => {},
   });
 
