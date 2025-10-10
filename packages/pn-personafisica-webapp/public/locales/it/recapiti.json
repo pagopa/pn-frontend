@@ -140,7 +140,7 @@
       "feedback": {
         "title-transfer": "Hai aggiornato il tuo domicilio digitale",
         "title-pec-activation": "Attivazione del domicilio digitale in corso",
-        "title-pec-transfer": "Trasferimento del domicilio digitale su PEC in corso",
+        "title-pec-transfer": "Trasferimento del domicilio digitale in corso",
         "title-sercq_send-activation": "Hai attivato il tuo domicilio digitale su SEND",
         "title-sercq_send-transfer": "Hai trasferito il tuo domicilio digitale su SEND",
         "content-pec": "La PEC che hai inserito è in fase di validazione. Una volta confermata, il domicilio digitale si attiverà e riceverai tutte le comunicazioni a valore legale all’indirizzo che hai scelto.",
