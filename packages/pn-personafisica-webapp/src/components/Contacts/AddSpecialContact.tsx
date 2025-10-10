@@ -12,6 +12,7 @@ import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import {
   Alert,
   Checkbox,
+  DialogContentText,
   FormControl,
   FormControlLabel,
   FormHelperText,
@@ -24,6 +25,7 @@ import {
 } from '@mui/material';
 import {
   ApiErrorWrapper,
+  ConfirmationModal,
   ConsentActionType,
   ConsentType,
   CustomDropdown,
@@ -75,6 +77,7 @@ const redirectToSLink = () => window.open(`${TERMS_OF_SERVICE_SERCQ_SEND}`, '_bl
 enum ModalType {
   EXISTING = 'existing',
   CODE = 'code',
+  EMAIL_NOT_ACTIVE = 'email_not_active',
 }
 
 enum ErrorBannerType {
@@ -154,12 +157,6 @@ const AddSpecialContact = forwardRef<AddSpecialContactRef, Props>(
     const tosConsent = useRef<Array<TosPrivacyConsent>>();
     const { defaultEMAILAddress } = addressesData || {};
     const [hasInitialEmail, setHasInitialEmail] = useState<boolean>(false);
-
-    const sercqAddSpecialEmailRef = useRef<{
-      isFormValid: () => Promise<boolean>;
-    }>({
-      isFormValid: () => Promise.resolve(false),
-    });
 
     const addressTypes = specialContactsAvailableAddressTypes(addressesData).filter(
       (addr) => addr.shown && (!IS_DOD_ENABLED ? addr.id !== ChannelType.SERCQ_SEND : true)
@@ -268,21 +265,6 @@ const AddSpecialContact = forwardRef<AddSpecialContactRef, Props>(
     const formik = useFormik({
       initialValues,
       validationSchema,
-      validate: async (values) => {
-        const errors: Record<string, string> = {};
-        if (values.channelType === ChannelType.SERCQ_SEND) {
-          if (!hasInitialEmail) {
-            const emailValid = await sercqAddSpecialEmailRef.current?.isFormValid();
-            if (!emailValid) {
-              errors.form_email = 'invalid email';
-            }
-          }
-          if (!defaultEMAILAddress) {
-            errors.default_email = 'no default email';
-          }
-        }
-        return errors;
-      },
       enableReinitialize: true,
       onSubmit: (values) => {
         onConfirm(values.s_value, values.channelType as ChannelType, {
@@ -357,6 +339,11 @@ const AddSpecialContact = forwardRef<AddSpecialContactRef, Props>(
         setModalOpen(ModalType.EXISTING);
         return;
       }
+      if (channelType === ChannelType.SERCQ_SEND && !defaultEMAILAddress) {
+        setModalOpen(ModalType.EMAIL_NOT_ACTIVE);
+        return;
+      }
+
       handleAssociation();
     };
 
@@ -505,6 +492,26 @@ const AddSpecialContact = forwardRef<AddSpecialContactRef, Props>(
             onError={() => sendCodeErrorEvent(formik.values.channelType as ChannelType)}
           />
         )}
+        <ConfirmationModal
+          open={modalOpen === ModalType.EMAIL_NOT_ACTIVE}
+          title={t('courtesy-contacts.confirmation-modal-title', { ns: 'recapiti' })}
+          slotsProps={{
+            confirmButton: {
+              onClick: () => setModalOpen(null),
+              children: t('button.understand', { ns: 'common' }),
+            },
+          }}
+        >
+          <Trans
+            ns="recapiti"
+            i18nKey={`courtesy-contacts.confirmation-modal-content`}
+            components={[
+              <DialogContentText key="paragraph1" color="text.primary" />,
+              <DialogContentText key="paragraph2" color="text.primary" mt={2} />,
+            ]}
+          />
+        </ConfirmationModal>
+
         <Typography
           variant="h6"
           fontSize={{ xs: '22px', lg: '24px' }}
@@ -676,15 +683,7 @@ const AddSpecialContact = forwardRef<AddSpecialContactRef, Props>(
                 <Typography sx={{ mb: 2 }}>
                   {t(`special-contacts.email-description`, { ns: 'recapiti' })}
                 </Typography>
-                <SercqAddSpecialEmail ref={sercqAddSpecialEmailRef} />
-
-                {(formik.errors as any).default_email &&
-                  !(formik.errors as any).form_email &&
-                  !defaultEMAILAddress && (
-                    <FormHelperText sx={{ ml: 2 }} error>
-                      {t('special-contacts.sercq-email-error', { ns: 'recapiti' })}
-                    </FormHelperText>
-                  )}
+                <SercqAddSpecialEmail />
               </>
             )}
             <FormControl>

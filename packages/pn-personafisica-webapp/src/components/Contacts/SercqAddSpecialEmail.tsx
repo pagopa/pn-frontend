@@ -1,5 +1,5 @@
 /* eslint-disable functional/immutable-data */
-import { forwardRef, useImperativeHandle, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { appStateActions } from '@pagopa-pn/pn-commons';
@@ -20,7 +20,7 @@ enum ModalType {
   CODE = 'code',
 }
 
-const SecqAddSpecialEmail = forwardRef((_, ref) => {
+const SecqAddSpecialEmail = () => {
   const { t } = useTranslation(['common', 'recapiti']);
   const dispatch = useAppDispatch();
   const addressesData = useAppSelector(contactsSelectors.selectAddresses);
@@ -92,10 +92,6 @@ const SecqAddSpecialEmail = forwardRef((_, ref) => {
       .catch(() => {});
   };
 
-  useImperativeHandle(ref, () => ({
-    isFormValid: async () => await emailContactRef.current.isFormValid(),
-  }));
-
   return (
     <>
       <ExistingContactDialog
@@ -142,6 +138,6 @@ const SecqAddSpecialEmail = forwardRef((_, ref) => {
       />
     </>
   );
-});
+};
 
 export default SecqAddSpecialEmail;
