@@ -12,7 +12,6 @@ import {
   appStateActions,
   useIsMobile,
 } from '@pagopa-pn/pn-commons';
-import { ButtonNaked } from '@pagopa/mui-italia';
 
 import { PFEventsType } from '../../models/PFEventsType';
 import { AddressType, IOAllowedValues } from '../../models/contacts';
@@ -215,15 +214,16 @@ const IOContact: React.FC = () => {
       actions={
         isAppIOEnabled
           ? [
-              <ButtonNaked
+              <Button
                 key="disable"
-                onClick={handleOpenDeleteModal}
+                variant="naked"
                 color="error"
                 startIcon={<PowerSettingsNewIcon />}
-                sx={{ fontSize: '16px', color: 'error.dark' }}
+                onClick={handleOpenDeleteModal}
+                sx={{ p: '10px 16px' }}
               >
                 {t('button.disable')}
-              </ButtonNaked>,
+              </Button>,
             ]
           : undefined
       }
