@@ -34,6 +34,7 @@ import {
   appStateActions,
   searchStringLimitReachedText,
 } from '@pagopa-pn/pn-commons';
+import { theme } from '@pagopa/mui-italia';
 
 import { PFEventsType } from '../../models/PFEventsType';
 import {
@@ -628,6 +629,12 @@ const AddSpecialContact = forwardRef<AddSpecialContactRef, Props>(
                         'aria-invalid':
                           formik.touched.s_disclaimer && Boolean(formik.errors.s_disclaimer),
                       }}
+                      sx={{
+                        color:
+                          formik.touched.s_disclaimer && Boolean(formik.errors.s_disclaimer)
+                            ? theme.palette.error.dark
+                            : theme.palette.text.secondary,
+                      }}
                     />
                   }
                   label={<Trans ns="recapiti" i18nKey="special-contacts.pec-disclaimer" />}
@@ -692,6 +699,12 @@ const AddSpecialContact = forwardRef<AddSpecialContactRef, Props>(
                       'aria-describedby': 'sercq_disclaimer-helper-text',
                       'aria-invalid':
                         formik.touched.s_disclaimer && Boolean(formik.errors.s_disclaimer),
+                    }}
+                    sx={{
+                      color:
+                        formik.touched.s_disclaimer && Boolean(formik.errors.s_disclaimer)
+                          ? theme.palette.error.dark
+                          : theme.palette.text.secondary,
                     }}
                   />
                 }
