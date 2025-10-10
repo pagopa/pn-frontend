@@ -675,7 +675,7 @@ const AddSpecialContact = forwardRef<AddSpecialContactRef, Props>(
                   !(formik.errors as any).form_email &&
                   !defaultEMAILAddress && (
                     <FormHelperText sx={{ ml: 2 }} error>
-                      Devi aggiungere l&#39;email
+                      {t('special-contacts.sercq-email-error', { ns: 'recapiti' })}
                     </FormHelperText>
                   )}
               </>
