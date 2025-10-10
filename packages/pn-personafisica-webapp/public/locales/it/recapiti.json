@@ -185,7 +185,9 @@
     "download": "Scarica l'app IO",
     "disable-modal": {
       "title": "Disattiva SEND sull’app IO",
-      "content": "Se confermi, non riceverai più le notifiche SEND in app."
+      "content": "Se confermi, non riceverai più le notifiche SEND in app.",
+      "content-dod-enabled": "<0>Se disattivi SEND su IO, <strong>non riceverai più le notifiche SEND in app.</strong></0><1>Ricorda che se non leggi in tempo una notifica SEND, potresti non essere al corrente di eventuali scadenze e incorrere in sanzioni.</1>",
+      "confirm-dod-enabled": "Disattiva SEND su IO"
     },
     "info-modal": {
       "title": "SEND su IO: come funziona",
