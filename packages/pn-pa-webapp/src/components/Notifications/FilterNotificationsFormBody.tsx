@@ -34,6 +34,78 @@ type Props = {
   setEndDate: (value: Date | null) => void;
 };
 
+type FormikInst = Props['formikInstance'];
+
+type DatePickerFieldProps = {
+  language: string;
+  label: string;
+  id: 'startDate' | 'endDate';
+  ariaLabel: string;
+  isMobile: boolean;
+  mb: string | number;
+  value: Date | null;
+  minDate?: Date | null;
+  maxDate?: Date | null;
+  disableFuture?: boolean;
+  formikInstance: FormikInst;
+  setLocalDate: (value: Date | null) => void;
+  fallbackIfNull: Date;
+  errorMsg?: string;
+};
+
+const DatePickerField: React.FC<Readonly<DatePickerFieldProps>> = ({
+  language,
+  label,
+  id,
+  ariaLabel,
+  isMobile,
+  mb,
+  value,
+  minDate,
+  maxDate,
+  disableFuture,
+  formikInstance,
+  setLocalDate,
+  fallbackIfNull,
+  errorMsg,
+}) => (
+  <CustomDatePicker
+    language={language}
+    label={label}
+    format={DATE_FORMAT}
+    value={value}
+    onChange={(v: DatePickerTypes) => {
+      void formikInstance.setFieldValue(id, v || fallbackIfNull, true).then(() => {
+        setLocalDate(v);
+        if (errorMsg) {
+          const errors = formikInstance.errors || {};
+          if (errors.startDate === errorMsg || errors.endDate === errorMsg) {
+            formikInstance.setErrors({ ...errors, startDate: undefined, endDate: undefined });
+          }
+        }
+      });
+    }}
+    slotProps={{
+      textField: {
+        id,
+        name: id,
+        size: 'small',
+        inputProps: {
+          inputMode: 'text',
+          type: 'text',
+          'aria-label': ariaLabel,
+        },
+        fullWidth: isMobile,
+        sx: { mb },
+        ...(errorMsg ? { error: true, helperText: errorMsg } : {}),
+      },
+    }}
+    disableFuture={disableFuture}
+    minDate={minDate ?? undefined}
+    maxDate={maxDate ?? undefined}
+  />
+);
+
 const FilterNotificationsFormBody = ({
   formikInstance,
   startDate,
@@ -44,6 +116,7 @@ const FilterNotificationsFormBody = ({
   const isMobile = useIsMobile();
   const { t, i18n } = useTranslation(['notifiche']);
   const localizedNotificationStatus = getNotificationAllowedStatus();
+
   const handlePaste = async (e: React.ClipboardEvent) => {
     e.preventDefault();
     const trimmedValue = e.clipboardData.getData('text').trim();
@@ -87,6 +160,17 @@ const FilterNotificationsFormBody = ({
     );
   };
 
+  const mb = isMobile ? '20px' : 0;
+
+  const rangeErrorMsg =
+    t('filters.errors.max-six-months', { ns: 'notifiche' }) || 'Intervallo massimo: 6 mesi';
+
+  const showRangeError =
+    formikInstance.errors?.startDate === rangeErrorMsg ||
+    formikInstance.errors?.endDate === rangeErrorMsg;
+
+  const errorMsg = showRangeError ? rangeErrorMsg : undefined;
+
   return (
     <Fragment>
       <TextField
@@ -104,7 +188,7 @@ const FilterNotificationsFormBody = ({
         }
         size="small"
         fullWidth={isMobile}
-        sx={{ mb: isMobile ? '20px' : 0 }}
+        sx={{ mb }}
       />
       <TextField
         id="iunMatch"
@@ -121,64 +205,44 @@ const FilterNotificationsFormBody = ({
         }
         size="small"
         fullWidth={isMobile}
-        sx={{ mb: isMobile ? '20px' : 0 }}
+        sx={{ mb }}
         inputProps={{ maxLength: 25 }}
       />
-      <CustomDatePicker
+
+      <DatePickerField
         language={i18n.language}
         label={t('filters.data_da')}
-        format={DATE_FORMAT}
+        id="startDate"
+        ariaLabel={t('filters.data_da-input-aria-label')}
+        isMobile={isMobile}
+        mb={mb}
         value={startDate}
-        onChange={(value: DatePickerTypes) => {
-          void formikInstance.setFieldValue('startDate', value || tenYearsAgo).then(() => {
-            setStartDate(value);
-          });
-        }}
-        slotProps={{
-          textField: {
-            id: 'startDate',
-            name: 'startDate',
-            size: 'small',
-            inputProps: {
-              inputMode: 'text',
-              type: 'text',
-              'aria-label': t('filters.data_da-input-aria-label'),
-            },
-            fullWidth: isMobile,
-            sx: { mb: isMobile ? '20px' : '0' },
-          },
-        }}
-        disableFuture={true}
         minDate={tenYearsAgo}
-        maxDate={endDate ?? undefined}
+        maxDate={endDate ?? null}
+        disableFuture={true}
+        formikInstance={formikInstance}
+        setLocalDate={setStartDate}
+        fallbackIfNull={tenYearsAgo}
+        errorMsg={errorMsg}
       />
-      <CustomDatePicker
+
+      <DatePickerField
         language={i18n.language}
         label={t('filters.data_a')}
-        format={DATE_FORMAT}
+        id="endDate"
+        ariaLabel={t('filters.data_a-input-aria-label')}
+        isMobile={isMobile}
+        mb={mb}
         value={endDate}
-        onChange={(value: DatePickerTypes) => {
-          void formikInstance.setFieldValue('endDate', value || today).then(() => {
-            setEndDate(value);
-          });
-        }}
-        slotProps={{
-          textField: {
-            id: 'endDate',
-            name: 'endDate',
-            size: 'small',
-            inputProps: {
-              inputMode: 'text',
-              type: 'text',
-              'aria-label': t('filters.data_a-input-aria-label'),
-            },
-            fullWidth: isMobile,
-            sx: { mb: isMobile ? '20px' : 0 },
-          },
-        }}
-        disableFuture={true}
         minDate={startDate ?? tenYearsAgo}
+        maxDate={null}
+        disableFuture={true}
+        formikInstance={formikInstance}
+        setLocalDate={setEndDate}
+        fallbackIfNull={today}
+        errorMsg={errorMsg}
       />
+
       <TextField
         id="status"
         data-testid="notificationStatus"
@@ -190,7 +254,7 @@ const FilterNotificationsFormBody = ({
         size="small"
         fullWidth={isMobile}
         sx={{
-          mb: isMobile ? '20px' : 0,
+          mb,
           '& .MuiInputBase-root': {
             overflow: 'hidden',
             textOverflow: 'ellipsis',

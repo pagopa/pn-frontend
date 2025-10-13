@@ -1,6 +1,5 @@
 import { vi } from 'vitest';
 
-import { formatToTimezoneString, tenYearsAgo, today } from '@pagopa-pn/pn-commons';
 import { createMatchMedia } from '@pagopa-pn/pn-commons/src/test-utils';
 
 import { notificationsToFe } from '../../../__mocks__/Notifications.mock';
@@ -41,13 +40,15 @@ describe('MobileNotifications Component', () => {
           onChangeSorting={() => {}}
           onManualSend={() => {}}
           onApiKeys={() => {}}
+          filtersApplied={false}
+          onCleanFilters={() => {}}
         />
       );
     });
-    const filters = result!.queryByTestId('dialogToggle');
-    expect(filters).not.toBeInTheDocument();
-    const norificationCards = result!.queryAllByTestId('mobileCards');
-    expect(norificationCards).toHaveLength(0);
+    const filtersToggle = result!.queryByTestId('dialogToggle');
+    expect(filtersToggle).not.toBeInTheDocument();
+    const notificationCards = result!.queryAllByTestId('mobileCards');
+    expect(notificationCards).toHaveLength(0);
     expect(result!.container).toHaveTextContent(/empty-state.no-notifications/i);
   });
 
@@ -61,13 +62,16 @@ describe('MobileNotifications Component', () => {
           onChangeSorting={() => {}}
           onManualSend={() => {}}
           onApiKeys={() => {}}
+          filtersApplied={false}
+          onCleanFilters={() => {}}
         />
       );
     });
     const filters = result!.queryByTestId('dialogToggle');
-    expect(filters).toBeInTheDocument();
-    const norificationCards = result!.queryAllByTestId('mobileCards');
-    expect(norificationCards).toHaveLength(notificationsToFe.resultsPage.length);
+    expect(filters).not.toBeInTheDocument();
+
+    const notificationCards = result!.queryAllByTestId('mobileCards');
+    expect(notificationCards).toHaveLength(notificationsToFe.resultsPage.length);
   });
 
   it('renders component - no notification after filter', async () => {
@@ -75,26 +79,17 @@ describe('MobileNotifications Component', () => {
     let result: RenderResult;
     await act(async () => {
       result = render(
-        <MobileNotifications notifications={[]} onManualSend={() => {}} onApiKeys={() => {}} />,
-        {
-          preloadedState: {
-            dashboardState: {
-              filters: {
-                startDate: formatToTimezoneString(tenYearsAgo),
-                endDate: formatToTimezoneString(today),
-                iunMatch: 'ABCD-EFGH-ILMN-123456-A-1',
-              },
-            },
-          },
-        }
+        <MobileNotifications
+          notifications={[]}
+          onManualSend={() => {}}
+          onApiKeys={() => {}}
+          filtersApplied={true} // simulate "filtered" empty state
+          onCleanFilters={() => {}}
+        />
       );
     });
-    // the rerendering must be done to take the useRef updates
-    result!.rerender(
-      <MobileNotifications notifications={[]} onManualSend={() => {}} onApiKeys={() => {}} />
-    );
     const filters = await waitFor(() => result!.queryByTestId('dialogToggle'));
-    expect(filters).toBeInTheDocument();
+    expect(filters).not.toBeInTheDocument();
     expect(result!.container).toHaveTextContent(/empty-state.filtered/i);
   });
 
@@ -107,11 +102,13 @@ describe('MobileNotifications Component', () => {
           notifications={notificationsToFe.resultsPage}
           onManualSend={() => {}}
           onApiKeys={() => {}}
+          filtersApplied={false}
+          onCleanFilters={() => {}}
         />
       );
     });
-    const norificationCards = result!.getAllByTestId('mobileCards');
-    const notificationsCardButton = norificationCards[0].querySelector('button');
+    const notificationCards = result!.getAllByTestId('mobileCards');
+    const notificationsCardButton = notificationCards[0].querySelector('button');
     fireEvent.click(notificationsCardButton!);
     await waitFor(() => {
       expect(mockNavigateFn).toHaveBeenCalledTimes(1);
