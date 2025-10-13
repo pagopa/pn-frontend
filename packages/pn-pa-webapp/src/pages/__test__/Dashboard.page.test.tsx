@@ -5,7 +5,8 @@ import {
   AppResponseMessage,
   ResponseEventDispatcher,
   formatToTimezoneString,
-  tenYearsAgo,
+  getStartOfDay,
+  sixMonthsAgo,
   today,
 } from '@pagopa-pn/pn-commons';
 import { createMatchMedia, testInput } from '@pagopa-pn/pn-commons/src/test-utils';
@@ -29,9 +30,11 @@ describe('Dashboard Page', async () => {
   let result: RenderResult;
   let mock: MockAdapter;
   const original = window.matchMedia;
-  const notificationsPath = `/bff/v1/notifications/sent?startDate=${encodeURIComponent(
-    formatToTimezoneString(tenYearsAgo)
-  )}&endDate=${encodeURIComponent(formatToTimezoneString(today))}&size=10`;
+
+  const startParam = encodeURIComponent(formatToTimezoneString(getStartOfDay(sixMonthsAgo)));
+  const endParam = encodeURIComponent(formatToTimezoneString(today));
+
+  const notificationsPath = `/bff/v1/notifications/sent?startDate=${startParam}&endDate=${endParam}&size=10`;
 
   beforeAll(() => {
     mock = new MockAdapter(apiClient);
@@ -99,15 +102,20 @@ describe('Dashboard Page', async () => {
     await act(async () => {
       result = render(<Dashboard />);
     });
+
     expect(screen.getByRole('heading')).toHaveTextContent(/title/i);
     expect(mock.history.get).toHaveLength(1);
     expect(mock.history.get[0].url).toContain('/bff/v1/notifications/sent');
+
     const filterForm = result.getByTestId('filter-form');
     expect(filterForm).toBeInTheDocument();
+
     const notificationsTable = result.container.querySelector('table');
     expect(notificationsTable).toBeInTheDocument();
+
     const itemsPerPageSelector = result.queryByTestId('itemsPerPageSelector');
     expect(itemsPerPageSelector).toBeInTheDocument();
+
     const pageSelector = result.queryByTestId('pageSelector');
     expect(pageSelector).toBeInTheDocument();
   });
@@ -116,9 +124,9 @@ describe('Dashboard Page', async () => {
     mock
       .onGet(notificationsPath)
       .reply(200, { ...notificationsDTO, resultsPage: [notificationsDTO.resultsPage[0]] });
-    const notificationsPathWithSize = `/bff/v1/notifications/sent?startDate=${encodeURIComponent(
-      formatToTimezoneString(tenYearsAgo)
-    )}&endDate=${encodeURIComponent(formatToTimezoneString(today))}&size=20`;
+
+    const notificationsPathWithSize = `/bff/v1/notifications/sent?startDate=${startParam}&endDate=${endParam}&size=20`;
+
     mock.onGet(notificationsPathWithSize).reply(200, notificationsDTO);
     await act(async () => {
       result = render(<Dashboard />);
@@ -145,11 +153,9 @@ describe('Dashboard Page', async () => {
     mock
       .onGet(notificationsPath)
       .reply(200, { ...notificationsDTO, resultsPage: [notificationsDTO.resultsPage[0]] });
-    const notificationsPathSecondPage = `/bff/v1/notifications/sent?startDate=${encodeURIComponent(
-      formatToTimezoneString(tenYearsAgo)
-    )}&endDate=${encodeURIComponent(formatToTimezoneString(today))}&size=10&nextPagesKey=${
-      notificationsDTO.nextPagesKey[0]
-    }`;
+
+    const notificationsPathSecondPage = `/bff/v1/notifications/sent?startDate=${startParam}&endDate=${endParam}&size=10&nextPagesKey=${notificationsDTO.nextPagesKey[0]}`;
+
     mock
       .onGet(notificationsPathSecondPage)
       .reply(200, { ...notificationsDTO, resultsPage: [notificationsDTO.resultsPage[1]] });
@@ -177,11 +183,9 @@ describe('Dashboard Page', async () => {
 
   it('filter', async () => {
     mock.onGet(notificationsPath).reply(200, notificationsDTO);
-    const notificationsPathFiltered = `/bff/v1/notifications/sent?startDate=${encodeURIComponent(
-      formatToTimezoneString(tenYearsAgo)
-    )}&endDate=${encodeURIComponent(formatToTimezoneString(today))}&recipientId=${
-      notificationsDTO.resultsPage[0].recipients[0]
-    }&size=10`;
+
+    const notificationsPathFiltered = `/bff/v1/notifications/sent?startDate=${startParam}&endDate=${endParam}&recipientId=${notificationsDTO.resultsPage[0].recipients[0]}&size=10`;
+
     mock
       .onGet(notificationsPathFiltered)
       .reply(200, { ...notificationsDTO, resultsPage: [notificationsDTO.resultsPage[1]] });
@@ -227,6 +231,10 @@ describe('Dashboard Page', async () => {
       `api-error-${DASHBOARD_ACTIONS.GET_SENT_NOTIFICATIONS}`
     );
     expect(statusApiErrorComponent).toBeInTheDocument();
+
+    // filters should be visible on desktop
+    const filterForm = screen.getByTestId('filter-form');
+    expect(filterForm).toBeInTheDocument();
   });
 
   it('renders page - mobile', async () => {
@@ -247,5 +255,71 @@ describe('Dashboard Page', async () => {
     expect(itemsPerPageSelector).toBeInTheDocument();
     const pageSelector = result.queryByTestId('pageSelector');
     expect(pageSelector).toBeInTheDocument();
+  });
+
+  it('errors on api - mobile keeps filter toggle visible', async () => {
+    window.matchMedia = createMatchMedia(800);
+    mock.onGet(notificationsPath).reply(errorMock.status, errorMock.data);
+
+    await act(async () => {
+      result = render(
+        <>
+          <ResponseEventDispatcher />
+          <AppResponseMessage />
+          <Dashboard />
+        </>
+      );
+    });
+
+    const statusApiErrorComponent = screen.queryByTestId(
+      `api-error-${DASHBOARD_ACTIONS.GET_SENT_NOTIFICATIONS}`
+    );
+    expect(statusApiErrorComponent).toBeInTheDocument();
+
+    // On mobile we expect the toggle for filters to be visible
+    const toggle = screen.getByTestId('dialogToggle');
+    expect(toggle).toBeInTheDocument();
+  });
+
+  it('mobile: opens filters drawer and applies recipientId filter', async () => {
+    window.matchMedia = createMatchMedia(800);
+
+    // initial call
+    mock.onGet(notificationsPath).reply(200, notificationsDTO);
+
+    // filtered call (recipientId)
+    const filteredRecipient = notificationsDTO.resultsPage[1].recipients[0];
+    const notificationsPathFiltered = `/bff/v1/notifications/sent?startDate=${startParam}&endDate=${endParam}&recipientId=${filteredRecipient}&size=10`;
+    mock.onGet(notificationsPathFiltered).reply(200, {
+      ...notificationsDTO,
+      resultsPage: [notificationsDTO.resultsPage[1]],
+    });
+
+    await act(async () => {
+      result = render(<Dashboard />);
+    });
+
+    // open filters drawer
+    const toggleBtn = result.getByTestId('dialogToggleButton');
+    fireEvent.click(toggleBtn);
+
+    // fill and submit
+    const form = await screen.findByTestId<HTMLFormElement>('filter-form');
+    await testInput(form, 'recipientId', filteredRecipient);
+
+    const submit = form.querySelector<HTMLButtonElement>('button[type="submit"]')!;
+    expect(submit).toBeEnabled();
+    fireEvent.click(submit);
+
+    await waitFor(() => {
+      expect(mock.history.get).toHaveLength(2);
+      expect(mock.history.get[1].url).toContain('/bff/v1/notifications/sent');
+      expect(mock.history.get[1].url).toContain(`recipientId=${filteredRecipient}`);
+    });
+
+    // drawer should close after submit
+    await waitFor(() => {
+      expect(screen.queryByTestId('filter-form')).not.toBeInTheDocument();
+    });
   });
 });

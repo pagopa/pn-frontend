@@ -5,16 +5,17 @@ import {
   UnknownAppError,
 } from '@pagopa-pn/pn-commons';
 
+import { DeliveryFileInfoNotFoundAppError } from './DeliveryFileInfoNotFoundAppError';
+import { DeliveryInvalidParameterGroupAppError } from './DeliveryInvalidParameterGroupAppError';
 import { DeliveryNotificationLimitExceededAppError } from './DeliveryNotificationLimitExceededAppError';
+import { DeliveryNotificationWithoutPaymentAttachmentAppError } from './DeliveryNotificationWithoutPaymentAttachmentAppError';
+import { DeliveryPushFileNotFoundAppError } from './DeliveryPushFileNotFoundAppError';
+import { DeliveryTimeoutAppError } from './DeliveryTimeoutAppError';
 import { GenericInvalidParameterAppError } from './GenericInvalidParameterAppError';
 import { GenericInvalidParameterDuplicateAppError } from './GenericInvalidParameterDuplicateAppError';
 import { GenericInvalidParameterTaxonomyCodeAppError } from './GenericInvalidParameterTaxonomyCodeAppError';
-import { ServerResponseErrorCode } from './types';
-import { DeliveryFileInfoNotFoundAppError } from './DeliveryFileInfoNotFoundAppError';
-import { DeliveryNotificationWithoutPaymentAttachmentAppError } from './DeliveryNotificationWithoutPaymentAttachmentAppError';
-import { DeliveryPushFileNotFoundAppError } from './DeliveryPushFileNotFoundAppError';
-import { DeliveryInvalidParameterGroupAppError } from './DeliveryInvalidParameterGroupAppError';
 import { InvalidBodyAppError } from './InvalidBodyAppError';
+import { ServerResponseErrorCode } from './types';
 
 export class PAAppErrorFactory extends AppErrorFactory {
   private translateFunction: (path: string, ns: string) => string;
@@ -39,9 +40,14 @@ export class PAAppErrorFactory extends AppErrorFactory {
       case ServerResponseErrorCode.PN_DELIVERY_FILEINFONOTFOUND:
         return new DeliveryFileInfoNotFoundAppError(error, this.translateFunction);
       case ServerResponseErrorCode.PN_DELIVERY_NOTIFICATIONWITHOUTPAYMENTATTACHMENT:
-        return new DeliveryNotificationWithoutPaymentAttachmentAppError(error, this.translateFunction);
+        return new DeliveryNotificationWithoutPaymentAttachmentAppError(
+          error,
+          this.translateFunction
+        );
       case ServerResponseErrorCode.PN_DELIVERY_INVALIDPARAMETER_GROUP:
         return new DeliveryInvalidParameterGroupAppError(error, this.translateFunction);
+      case ServerResponseErrorCode.PN_DELIVERY_TIMEOUT:
+        return new DeliveryTimeoutAppError(error, this.translateFunction);
       case ServerResponseErrorCode.PN_DELIVERYPUSH_FILE_NOT_FOUND:
         return new DeliveryPushFileNotFoundAppError(error, this.translateFunction);
       case ServerResponseErrorCode.PN_INVALID_BODY:

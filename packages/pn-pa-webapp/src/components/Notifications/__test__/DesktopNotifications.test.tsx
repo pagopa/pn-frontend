@@ -1,7 +1,5 @@
 import { vi } from 'vitest';
 
-import { formatToTimezoneString, tenYearsAgo, today } from '@pagopa-pn/pn-commons';
-
 import { notificationsToFe } from '../../../__mocks__/Notifications.mock';
 import {
   RenderResult,
@@ -33,13 +31,19 @@ describe('DesktopNotifications Component', () => {
     // render component
     await act(async () => {
       result = render(
-        <DesktopNotifications notifications={[]} onManualSend={() => {}} onApiKeys={() => {}} />
+        <DesktopNotifications
+          notifications={[]}
+          onManualSend={() => {}}
+          onApiKeys={() => {}}
+          filtersApplied={false}
+          onCleanFilters={() => {}}
+        />
       );
     });
     const filters = result!.queryByTestId('filter-form');
     expect(filters).not.toBeInTheDocument();
-    const norificationTable = result!.queryByTestId('notificationsTable');
-    expect(norificationTable).not.toBeInTheDocument();
+    const notificationsTable = result!.queryByTestId('notificationsTable');
+    expect(notificationsTable).not.toBeInTheDocument();
     expect(result!.container).toHaveTextContent(/empty-state.no-notifications/i);
   });
 
@@ -51,44 +55,34 @@ describe('DesktopNotifications Component', () => {
           notifications={notificationsToFe.resultsPage}
           onManualSend={() => {}}
           onApiKeys={() => {}}
+          filtersApplied={false}
+          onCleanFilters={() => {}}
         />
       );
     });
-    const filters = result!.getByTestId('filter-form');
-    expect(filters).toBeInTheDocument();
-    const norificationTableRows = result!.getAllByTestId('notificationsTable.body.row');
-    expect(norificationTableRows).toHaveLength(notificationsToFe.resultsPage.length);
+    const filters = result!.queryByTestId('filter-form');
+    expect(filters).not.toBeInTheDocument();
+
+    const notificationTableRows = result!.getAllByTestId('notificationsTable.body.row');
+    expect(notificationTableRows).toHaveLength(notificationsToFe.resultsPage.length);
   });
 
   it('renders component - no notification after filter', async () => {
     // render component
     await act(async () => {
       result = render(
-        <DesktopNotifications notifications={[]} onManualSend={() => {}} onApiKeys={() => {}} />,
-        {
-          preloadedState: {
-            dashboardState: {
-              filters: {
-                startDate: formatToTimezoneString(tenYearsAgo),
-                endDate: formatToTimezoneString(today),
-                iunMatch: 'ABCD-EFGH-ILMN-123456-A-1',
-              },
-            },
-          },
-        }
+        <DesktopNotifications
+          notifications={[]}
+          sort={{ orderBy: '', order: 'asc' }}
+          onManualSend={() => {}}
+          onApiKeys={() => {}}
+          filtersApplied={true} // <- simulate "filtered" empty state
+          onCleanFilters={() => {}}
+        />
       );
     });
-    // the rerendering must be done to take the useRef updates
-    result!.rerender(
-      <DesktopNotifications
-        notifications={[]}
-        sort={{ orderBy: '', order: 'asc' }}
-        onManualSend={() => {}}
-        onApiKeys={() => {}}
-      />
-    );
-    const filters = await waitFor(() => result!.queryByTestId('filter-form'));
-    expect(filters).toBeInTheDocument();
+    const filters = result!.queryByTestId('filter-form');
+    expect(filters).not.toBeInTheDocument();
     expect(result!.container).toHaveTextContent(/empty-state.filtered/i);
   });
 
@@ -99,6 +93,8 @@ describe('DesktopNotifications Component', () => {
           notifications={notificationsToFe.resultsPage}
           onManualSend={() => {}}
           onApiKeys={() => {}}
+          filtersApplied={false}
+          onCleanFilters={() => {}}
         />
       );
     });
