@@ -1,5 +1,5 @@
 import React, { useRef, useState } from 'react';
-import { useTranslation } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 
 import {
   Alert,
@@ -288,20 +288,46 @@ const SpecialContacts: React.FC<{ addressType: AddressType; channelType?: Channe
       )}
       <DeleteDialog
         showModal={modalOpen === ModalType.DELETE}
-        removeModalTitle={t(`special-contacts.remove-special-title`, {
-          ns: 'recapiti',
-          contactValue:
-            currentAddress.current.channelType === ChannelType.SERCQ_SEND
-              ? t(`legal-contacts.sercq_send-title`, {
-                  ns: 'recapiti',
-                })
-              : currentAddress.current.value,
-        })}
-        removeModalBody={t(`special-contacts.remove-special-description`, {
-          ns: 'recapiti',
-        })}
+        removeModalTitle={
+          currentAddress.current.channelType === ChannelType.SERCQ_SEND
+            ? t('legal-contacts.remove-sercq_send-title', { ns: 'recapiti' })
+            : t('special-contacts.remove-special-title', {
+                ns: 'recapiti',
+                contactValue: currentAddress.current.value,
+              })
+        }
+        removeModalBody={
+          currentAddress.current.channelType === ChannelType.SERCQ_SEND ? (
+            <Trans
+              i18nKey="legal-contacts.remove-sercq_send-message"
+              ns="recapiti"
+              components={[
+                <Typography variant="body2" fontSize="18px" key="paragraph1" sx={{ mb: 2 }} />,
+                <Typography variant="body2" fontSize="18px" key="paragraph2" />,
+              ]}
+            />
+          ) : (
+            t('special-contacts.remove-special-description', { ns: 'recapiti' })
+          )
+        }
         handleModalClose={handleCloseModal}
         confirmHandler={deleteConfirmHandler}
+        slotsProps={
+          currentAddress.current.channelType === ChannelType.SERCQ_SEND
+            ? {
+                primaryButton: {
+                  onClick: handleCloseModal,
+                  label: t('button.annulla'),
+                },
+                secondaryButton: {
+                  onClick: deleteConfirmHandler,
+                  label: t('legal-contacts.remove-sercq_send-confirm', { ns: 'recapiti' }),
+                  variant: 'outlined',
+                  color: 'error',
+                },
+              }
+            : undefined
+        }
       />
       <PecVerificationDialog
         open={modalOpen === ModalType.VALIDATION}
