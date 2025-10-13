@@ -275,7 +275,9 @@
     "courtesy-banner": {
       "title": "Funzionalità dismessa",
       "description": "Non puoi più inserire recapiti di cortesia personalizzati per ente o modificare recapiti già esistenti. Se elimini un recapito personalizzato non potrai più recuperarlo o inserirlo di nuovo. "
-    }
+    },
+    "email-description": "L’email dove ti avviseremo quando ricevi una comunicazione a valore legale per te su SEND.",
+    "sercq-disclaimer": "Premendo “Conferma” dichiari di aver letto la <0>Informativa privacy</0> e di accettare i <1>Termini del servizio</1>"
   },
   "common": {
     "duplicate-contact-title": "Recapito già presente",

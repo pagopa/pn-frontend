@@ -130,10 +130,12 @@ export const removeSercqAndEmail = createAsyncThunk<void, { senderIds: Array<str
   `${CONTACT_ACTIONS.DELETE_ADDRESS}/removeEmailAndAllSercq`,
   async ({ senderIds }, { dispatch, rejectWithValue }) => {
     try {
-      // Remove all SERCQ addresses (if any) in parallel
-      if (senderIds.length) {
+      // removes any special SERCQ
+      const specialSenderIds = senderIds.filter((id) => id !== 'default');
+      const hasDefault = senderIds.includes('default');
+      if (specialSenderIds.length) {
         await Promise.all(
-          senderIds.map((senderId) =>
+          specialSenderIds.map((senderId) =>
             dispatch(
               deleteAddress({
                 addressType: AddressType.LEGAL,
@@ -145,8 +147,19 @@ export const removeSercqAndEmail = createAsyncThunk<void, { senderIds: Array<str
           )
         );
       }
+      // removes default SERCQ (if any)
+      if (hasDefault) {
+        await dispatch(
+          deleteAddress({
+            addressType: AddressType.LEGAL,
+            senderId: 'default',
+            channelType: ChannelType.SERCQ_SEND,
+            blockLoading: true,
+          })
+        ).unwrap();
+      }
 
-      // Remove email
+      // removes email
       await dispatch(
         deleteAddress({
           addressType: AddressType.COURTESY,
