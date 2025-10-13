@@ -580,7 +580,7 @@ describe('test AddSpecialContact', () => {
       const titleEl = getById(dialog, 'confirmation-dialog-title');
       expect(titleEl).toHaveTextContent('courtesy-contacts.confirmation-modal-title');
       const contentEl = getById(dialog, 'confirmation-dialog-description');
-      expect(contentEl).toHaveTextContent('courtesy-contacts.confirmation-modal-content');
+      expect(contentEl).toHaveTextContent('courtesy-contacts.confirmation-modal-email-content');
     });
   });
 

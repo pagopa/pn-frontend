@@ -25,7 +25,6 @@ import {
   ConsentType,
   SERCQ_SEND_VALUE,
   TosPrivacyConsent,
-  appStateActions,
 } from '@pagopa-pn/pn-commons';
 import { theme } from '@pagopa/mui-italia';
 
@@ -167,14 +166,6 @@ const SercqSendContactWizard: React.FC<Props> = ({ goToStep }) => {
       .unwrap()
       .then(() => {
         sessionStorage.removeItem('domicileBannerClosed');
-        // show success message
-        dispatch(
-          appStateActions.addSuccess({
-            title: '',
-            message: t(`legal-contacts.sercq_send-added-successfully`, { ns: 'recapiti' }),
-          })
-        );
-
         goToStep(thankYouStep);
       })
       .catch(() => {});
