@@ -328,7 +328,7 @@ describe('Contacts redux state tests', () => {
     expect(urls.indexOf(emailUrl)).toBeGreaterThan(urls.indexOf(sercqDefaultUrl));
   });
 
-  it('should remove multiple SERCQ (parallel) and then EMAIL', async () => {
+  it('should remove special SERCQ, then default SERCQ, then EMAIL (in order)', async () => {
     const sercqDefaultUrl = '/bff/v1/addresses/LEGAL/default/SERCQ_SEND';
     const sercqTribUrl = '/bff/v1/addresses/LEGAL/tribunale-milano/SERCQ_SEND';
     const emailUrl = '/bff/v1/addresses/COURTESY/default/EMAIL';
@@ -342,15 +342,22 @@ describe('Contacts redux state tests', () => {
     );
 
     expect(action.type).toBe('deleteAddress/removeEmailAndAllSercq/fulfilled');
+
     const urls = mock.history.delete.map((r) => r.url);
     expect(urls).toContain(sercqDefaultUrl);
     expect(urls).toContain(sercqTribUrl);
     expect(urls).toContain(emailUrl);
 
-    // Both SERCQ deletions must be before the EMAIL deletion
+    const tribIdx = urls.indexOf(sercqTribUrl);
+    const defIdx = urls.indexOf(sercqDefaultUrl);
     const emailIdx = urls.indexOf(emailUrl);
-    expect(emailIdx).toBeGreaterThan(urls.indexOf(sercqDefaultUrl));
-    expect(emailIdx).toBeGreaterThan(urls.indexOf(sercqTribUrl));
+
+    // special SERCQ deletion is called before default one
+    expect(defIdx).toBeGreaterThan(tribIdx);
+
+    // email deletion is called at the end
+    expect(emailIdx).toBeGreaterThan(defIdx);
+    expect(emailIdx).toBeGreaterThan(tribIdx);
   });
 
   it('should abort EMAIL deletion if any SERCQ deletion fails', async () => {
