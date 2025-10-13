@@ -192,8 +192,13 @@ const SmsContactElem: React.FC<SmsElemProps> = ({ onCancelInsert, slotsProps, sl
 const SmsContactItem: React.FC<SmsItemProps> = ({ slotsProps, slots }) => {
   const { t } = useTranslation(['common', 'recapiti']);
   const dispatch = useAppDispatch();
-  const { defaultSERCQ_SENDAddress, defaultSMSAddress, addresses, specialSMSAddresses } =
-    useAppSelector(contactsSelectors.selectAddresses);
+  const {
+    defaultSERCQ_SENDAddress,
+    defaultPECAddress,
+    defaultSMSAddress,
+    addresses,
+    specialSMSAddresses,
+  } = useAppSelector(contactsSelectors.selectAddresses);
 
   const [modalOpen, setModalOpen] = useState<ModalType | null>(null);
   const [insertMode, setInsertMode] = useState(false);
@@ -205,6 +210,8 @@ const SmsContactItem: React.FC<SmsItemProps> = ({ slotsProps, slots }) => {
     addresses.filter((addr) => addr.addressType === AddressType.COURTESY).length > 0;
 
   const showSpecialContactsSection = specialSMSAddresses.length > 0;
+
+  const hasDigitalDomicile = !!defaultSERCQ_SENDAddress || !!defaultPECAddress;
 
   const deleteConfirmHandler = () => {
     setModalOpen(null);
@@ -241,7 +248,7 @@ const SmsContactItem: React.FC<SmsItemProps> = ({ slotsProps, slots }) => {
     if (blockDelete) {
       return t('courtesy-contacts.block-remove-sms-title', { ns: 'recapiti' });
     }
-    if (defaultSERCQ_SENDAddress) {
+    if (hasDigitalDomicile) {
       return t(`courtesy-contacts.remove-sms-title-dod-enabled`, {
         ns: 'recapiti',
       });
@@ -253,7 +260,7 @@ const SmsContactItem: React.FC<SmsItemProps> = ({ slotsProps, slots }) => {
     if (blockDelete) {
       return t('courtesy-contacts.block-remove-sms-message', { ns: 'recapiti' });
     }
-    if (defaultSERCQ_SENDAddress) {
+    if (hasDigitalDomicile) {
       return (
         <Trans
           i18nKey={'courtesy-contacts.remove-sms-message-dod-enabled'}
@@ -337,14 +344,15 @@ const SmsContactItem: React.FC<SmsItemProps> = ({ slotsProps, slots }) => {
           confirmHandler={deleteConfirmHandler}
           slotsProps={{
             primaryButton: {
-              onClick: defaultSERCQ_SENDAddress ? () => setModalOpen(null) : deleteConfirmHandler,
-              label: defaultSERCQ_SENDAddress ? t('button.annulla') : undefined,
+              onClick: hasDigitalDomicile ? () => setModalOpen(null) : deleteConfirmHandler,
+              label: hasDigitalDomicile ? t('button.annulla') : undefined,
             },
             secondaryButton: {
-              onClick: defaultSERCQ_SENDAddress ? deleteConfirmHandler : () => setModalOpen(null),
-              label: defaultSERCQ_SENDAddress
+              onClick: hasDigitalDomicile ? deleteConfirmHandler : () => setModalOpen(null),
+              label: hasDigitalDomicile
                 ? t('courtesy-contacts.remove-sms-button-dod-enabled', { ns: 'recapiti' })
                 : undefined,
+              ...(hasDigitalDomicile ? { variant: 'outlined', color: 'error' } : {}),
             },
           }}
           blockDelete={blockDelete}
