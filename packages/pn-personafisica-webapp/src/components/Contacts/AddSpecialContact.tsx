@@ -1,21 +1,31 @@
+/* eslint-disable sonarjs/cognitive-complexity */
+
+/* eslint-disable complexity */
+
+/* eslint-disable functional/immutable-data */
 import { useFormik } from 'formik';
 import { ChangeEvent, forwardRef, useEffect, useImperativeHandle, useRef, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import {
   Alert,
   Checkbox,
+  DialogContentText,
   FormControl,
   FormControlLabel,
   FormHelperText,
+  Link,
   MenuItem,
   Paper,
+  Stack,
   TextField,
   Typography,
 } from '@mui/material';
 import {
   ApiErrorWrapper,
+  ConfirmationModal,
   ConsentActionType,
   ConsentType,
   CustomDropdown,
@@ -26,6 +36,7 @@ import {
   appStateActions,
   searchStringLimitReachedText,
 } from '@pagopa-pn/pn-commons';
+import { theme } from '@pagopa/mui-italia';
 
 import { PFEventsType } from '../../models/PFEventsType';
 import {
@@ -36,6 +47,7 @@ import {
   Sender,
 } from '../../models/contacts';
 import { Party } from '../../models/party';
+import { PRIVACY_POLICY, TERMS_OF_SERVICE_SERCQ_SEND } from '../../navigation/routes.const';
 import {
   CONTACT_ACTIONS,
   acceptSercqSendTos,
@@ -57,10 +69,15 @@ import { isPFEvent } from '../../utility/mixpanel';
 import DropDownPartyMenuItem from '../Party/DropDownParty';
 import ContactCodeDialog from './ContactCodeDialog';
 import ExistingContactDialog from './ExistingContactDialog';
+import SercqAddSpecialEmail from './SercqAddSpecialEmail';
+
+const redirectPrivacyLink = () => window.open(`${PRIVACY_POLICY}`, '_blank');
+const redirectToSLink = () => window.open(`${TERMS_OF_SERVICE_SERCQ_SEND}`, '_blank');
 
 enum ModalType {
   EXISTING = 'existing',
   CODE = 'code',
+  EMAIL_NOT_ACTIVE = 'email_not_active',
 }
 
 enum ErrorBannerType {
@@ -138,6 +155,8 @@ const AddSpecialContact = forwardRef<AddSpecialContactRef, Props>(
     const [modalOpen, setModalOpen] = useState<ModalType | null>(null);
     const [isExistingContactDefault, setIsExistingContactDefault] = useState(false);
     const tosConsent = useRef<Array<TosPrivacyConsent>>();
+    const { defaultEMAILAddress } = addressesData || {};
+    const [canEditEmail, setCanEditEmail] = useState<boolean>(false);
 
     const addressTypes = specialContactsAvailableAddressTypes(addressesData).filter(
       (addr) => addr.shown && (!IS_DOD_ENABLED ? addr.id !== ChannelType.SERCQ_SEND : true)
@@ -221,9 +240,10 @@ const AddSpecialContact = forwardRef<AddSpecialContactRef, Props>(
           is: ChannelType.SERCQ_SEND,
           then: yup.string().nullable(),
         }),
-      s_disclaimer: yup.bool().when('channelType', {
-        is: ChannelType.PEC,
-        then: yup.bool().isTrue(t('required-field')),
+      s_disclaimer: yup.boolean().when('channelType', {
+        is: (val: ChannelType) => [ChannelType.PEC, ChannelType.SERCQ_SEND].includes(val),
+        then: (schema) => schema.isTrue(t('required-field')),
+        otherwise: (schema) => schema.notRequired(),
       }),
     });
 
@@ -319,6 +339,11 @@ const AddSpecialContact = forwardRef<AddSpecialContactRef, Props>(
         setModalOpen(ModalType.EXISTING);
         return;
       }
+      if (channelType === ChannelType.SERCQ_SEND && !defaultEMAILAddress) {
+        setModalOpen(ModalType.EMAIL_NOT_ACTIVE);
+        return;
+      }
+
       handleAssociation();
     };
 
@@ -345,6 +370,12 @@ const AddSpecialContact = forwardRef<AddSpecialContactRef, Props>(
     useEffect(() => {
       getParties();
     }, [formik.values.sender.name]);
+
+    useEffect(() => {
+      if (defaultEMAILAddress && defaultEMAILAddress.value) {
+        setCanEditEmail(true);
+      }
+    }, []);
 
     useImperativeHandle(ref, () => ({
       handleConfirm: async () => {
@@ -449,6 +480,7 @@ const AddSpecialContact = forwardRef<AddSpecialContactRef, Props>(
           handleDiscard={() => setModalOpen(null)}
           handleConfirm={() => handleCodeVerification()}
         />
+
         {formik.values.channelType && (
           <ContactCodeDialog
             value={formik.values.s_value}
@@ -460,6 +492,26 @@ const AddSpecialContact = forwardRef<AddSpecialContactRef, Props>(
             onError={() => sendCodeErrorEvent(formik.values.channelType as ChannelType)}
           />
         )}
+        <ConfirmationModal
+          open={modalOpen === ModalType.EMAIL_NOT_ACTIVE}
+          title={t('courtesy-contacts.confirmation-modal-title', { ns: 'recapiti' })}
+          slotsProps={{
+            confirmButton: {
+              onClick: () => setModalOpen(null),
+              children: t('button.understand', { ns: 'common' }),
+            },
+          }}
+        >
+          <Trans
+            ns="recapiti"
+            i18nKey={`courtesy-contacts.confirmation-modal-email-content`}
+            components={[
+              <DialogContentText key="paragraph1" color="text.primary" />,
+              <DialogContentText key="paragraph2" color="text.primary" mt={2} />,
+            ]}
+          />
+        </ConfirmationModal>
+
         <Typography
           variant="h6"
           fontSize={{ xs: '22px', lg: '24px' }}
@@ -584,6 +636,12 @@ const AddSpecialContact = forwardRef<AddSpecialContactRef, Props>(
                         'aria-invalid':
                           formik.touched.s_disclaimer && Boolean(formik.errors.s_disclaimer),
                       }}
+                      sx={{
+                        color:
+                          formik.touched.s_disclaimer && Boolean(formik.errors.s_disclaimer)
+                            ? theme.palette.error.dark
+                            : theme.palette.text.secondary,
+                      }}
                     />
                   }
                   label={<Trans ns="recapiti" i18nKey="special-contacts.pec-disclaimer" />}
@@ -598,7 +656,97 @@ const AddSpecialContact = forwardRef<AddSpecialContactRef, Props>(
               </FormControl>
             </>
           )}
+          {formik.values.channelType === ChannelType.SERCQ_SEND && canEditEmail && (
+            <Stack spacing={2} alignItems="start">
+              <Typography>{t(`special-contacts.email-description`, { ns: 'recapiti' })}</Typography>
+              <Stack direction="row" spacing={1}>
+                <Typography
+                  sx={{
+                    wordBreak: 'break-word',
+                    fontSize: '18px',
+                    fontWeight: 600,
+                  }}
+                  component="span"
+                  variant="body2"
+                >
+                  {defaultEMAILAddress?.value}
+                </Typography>
+                <CheckCircleIcon sx={{ color: 'success.main' }} />
+              </Stack>
+            </Stack>
+          )}
         </form>
+        {formik.values.channelType === ChannelType.SERCQ_SEND && (
+          <>
+            {!canEditEmail && (
+              <>
+                <Typography sx={{ mb: 2 }}>
+                  {t(`special-contacts.email-description`, { ns: 'recapiti' })}
+                </Typography>
+                <SercqAddSpecialEmail />
+              </>
+            )}
+            <FormControl>
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    name="s_disclaimer"
+                    id="s_disclaimer"
+                    required
+                    onChange={handleChangeTouched}
+                    inputProps={{
+                      'aria-describedby': 'sercq_disclaimer-helper-text',
+                      'aria-invalid':
+                        formik.touched.s_disclaimer && Boolean(formik.errors.s_disclaimer),
+                    }}
+                    sx={{
+                      color:
+                        formik.touched.s_disclaimer && Boolean(formik.errors.s_disclaimer)
+                          ? theme.palette.error.dark
+                          : theme.palette.text.secondary,
+                    }}
+                  />
+                }
+                label={
+                  <Trans
+                    i18nKey="special-contacts.sercq-disclaimer"
+                    ns="recapiti"
+                    components={[
+                      <Link
+                        key="privacy-policy"
+                        sx={{
+                          cursor: 'pointer',
+                          textDecoration: 'none !important',
+                          fontWeight: 'bold',
+                        }}
+                        onClick={redirectPrivacyLink}
+                        data-testid="privacy-link"
+                      />,
+
+                      <Link
+                        key="tos"
+                        sx={{
+                          cursor: 'pointer',
+                          textDecoration: 'none !important',
+                          fontWeight: 'bold',
+                        }}
+                        onClick={redirectToSLink}
+                        data-testid="tos-link"
+                      />,
+                    ]}
+                  />
+                }
+                sx={{ mt: 2 }}
+                value={formik.values.s_disclaimer}
+              />
+              {formik.touched.s_disclaimer && Boolean(formik.errors.s_disclaimer) && (
+                <FormHelperText id="s_disclaimer-helper-text" error>
+                  {formik.errors.s_disclaimer}
+                </FormHelperText>
+              )}
+            </FormControl>
+          </>
+        )}
         <ErrorBanner
           type={errorBanner}
           contactValue={
