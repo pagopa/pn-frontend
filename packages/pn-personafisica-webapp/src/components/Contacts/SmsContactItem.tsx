@@ -111,9 +111,6 @@ const SmsContactElem: React.FC<SmsElemProps> = ({
       return;
     }
     if (!isDigitalDomicileActive) {
-      if (fromSercqSend) {
-        PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SERCQ_SEND_POP_UP_SMS);
-      }
       setModalOpen(ModalType.INFORMATIVE);
       return;
     }
@@ -239,11 +236,9 @@ const SmsContactElem: React.FC<SmsElemProps> = ({
         subtitle={t('courtesy-contacts.info-modal-sms-subtitle', { ns: 'recapiti' })}
         content={t('courtesy-contacts.info-modal-sms-content', { ns: 'recapiti' })}
         onConfirm={() => {
-          PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SERCQ_SEND_POP_UP_SMS_CONTINUE);
           handleCodeVerification();
         }}
         onDiscard={() => {
-          PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SERCQ_SEND_POP_UP_SMS_CANCEL);
           setModalOpen(null);
         }}
       />
