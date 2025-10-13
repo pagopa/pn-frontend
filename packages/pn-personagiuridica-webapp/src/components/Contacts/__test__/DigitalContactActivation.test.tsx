@@ -192,12 +192,10 @@ describe('DigitalContactActivation', () => {
     const button = result.getByTestId('default_email-button');
     fireEvent.click(button);
 
-    // informative dialog
+    // no informative dialog
     await waitFor(() => {
-      expect(result.getByRole('dialog')).toBeInTheDocument();
+      expect(result.getByTestId('codeDialog')).toBeInTheDocument();
     });
-    const infoButton = result.getByRole('button', { name: 'button.understand' });
-    fireEvent.click(infoButton);
 
     // inser otp and confirm
     const dialog = await fillCodeDialog(result);

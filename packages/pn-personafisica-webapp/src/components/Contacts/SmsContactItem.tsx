@@ -110,10 +110,7 @@ const SmsContactElem: React.FC<SmsElemProps> = ({
       setModalOpen(ModalType.EXISTING);
       return;
     }
-    if (!isDigitalDomicileActive) {
-      if (fromSercqSend) {
-        PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SERCQ_SEND_POP_UP_SMS);
-      }
+    if (!isDigitalDomicileActive && !fromSercqSend) {
       setModalOpen(ModalType.INFORMATIVE);
       return;
     }
