@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.19.0-RC.0](https://github.com/pagopa/pn-frontend/compare/v2.18.0...v2.19.0-RC.0) (2025-10-13)
+
+**Note:** Version bump only for package @pagopa-pn/pn-data-viz
+
+
+
+
+
 # [2.18.0](https://github.com/pagopa/pn-frontend/compare/v2.18.0-RC.4...v2.18.0) (2025-09-17)
 
 **Note:** Version bump only for package @pagopa-pn/pn-data-viz
