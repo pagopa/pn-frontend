@@ -1,11 +1,26 @@
+import MockAdapter from 'axios-mock-adapter';
+
 import { getById } from '@pagopa-pn/pn-commons/src/test-utils';
 
 import { fireEvent, render, waitFor } from '../../../__test__/test-utils';
+import { apiClient } from '../../../api/apiClients';
+import { DIGITAL_DOMICILE_ACTIVATION } from '../../../navigation/routes.const';
 import EmailSmsContactWizard from '../EmailSmsContactWizard';
 
 const labelPrefix = 'legal-contacts.sercq-send-wizard.step_2';
 
 describe('EmailSmsContactWizard', () => {
+  let mock: MockAdapter;
+  beforeAll(() => {
+    mock = new MockAdapter(apiClient);
+  });
+  afterEach(() => {
+    mock.reset();
+    window.history.pushState({}, '', '/');
+  });
+  afterAll(() => {
+    mock.restore();
+  });
   it('render component', () => {
     const { container, getByRole, getByText } = render(<EmailSmsContactWizard />);
 
@@ -151,8 +166,14 @@ describe('EmailSmsContactWizard', () => {
     expect(smsInsertButton).not.toBeInTheDocument();
   });
 
-  it('show informative modal when adding email without digital domicile', async () => {
-    const { container, getByRole, getByTestId, getByText } = render(<EmailSmsContactWizard />, {
+  it('opens OTP dialog when adding email without digital domicile (no informative dialog)', async () => {
+    mock
+      .onPost('/bff/v1/addresses/COURTESY/default/EMAIL', {
+        value: 'test@example.com',
+      })
+      .reply(200, { result: 'CODE_VERIFICATION_REQUIRED' });
+
+    const { container, getByRole, queryByTestId } = render(<EmailSmsContactWizard />, {
       preloadedState: {
         contactsState: {
           digitalAddresses: [],
@@ -167,15 +188,24 @@ describe('EmailSmsContactWizard', () => {
 
     fireEvent.click(emailAddButton);
 
-    const informativeDialog = await waitFor(() => getByTestId('informativeDialog'));
-    expect(informativeDialog).toBeInTheDocument();
-    expect(getByText('courtesy-contacts.info-modal-email-title')).toBeInTheDocument();
-    expect(getByText('courtesy-contacts.info-modal-email-subtitle')).toBeInTheDocument();
-    expect(getByText('courtesy-contacts.info-modal-email-content')).toBeInTheDocument();
+    await waitFor(() => {
+      // no informative dialog
+      expect(queryByTestId('informativeDialog')).not.toBeInTheDocument();
+      // show OTP dialog
+      expect(getByRole('dialog')).toBeInTheDocument();
+    });
   });
 
-  it('show informative modal when adding SMS without digital domicile', async () => {
-    const { container, getByRole, getByTestId, getByText } = render(<EmailSmsContactWizard />, {
+  it('opens OTP dialog when adding SMS without digital domicile (no informative dialog)', async () => {
+    // simulate beeing in SERCQ activation wizard
+    window.history.pushState({}, '', DIGITAL_DOMICILE_ACTIVATION);
+    mock
+      .onPost('/bff/v1/addresses/COURTESY/default/SMS', {
+        value: '+393331234567',
+      })
+      .reply(200, { result: 'CODE_VERIFICATION_REQUIRED' });
+
+    const { container, getByRole, queryByTestId } = render(<EmailSmsContactWizard />, {
       preloadedState: {
         contactsState: {
           digitalAddresses: [],
@@ -193,17 +223,22 @@ describe('EmailSmsContactWizard', () => {
 
     fireEvent.click(smsAddButton);
 
-    const informativeDialog = await waitFor(() => getByTestId('informativeDialog'));
-    expect(informativeDialog).toBeInTheDocument();
-    expect(getByText('courtesy-contacts.info-modal-sms-title')).toBeInTheDocument();
-    expect(getByText('courtesy-contacts.info-modal-sms-subtitle')).toBeInTheDocument();
-    expect(getByText('courtesy-contacts.info-modal-sms-content')).toBeInTheDocument();
+    await waitFor(() => {
+      expect(queryByTestId('informativeDialog')).not.toBeInTheDocument();
+      expect(getByRole('dialog')).toBeInTheDocument();
+    });
   });
 
-  it('show informative modal when editing email without digital domicile', async () => {
+  it('opens OTP dialog when editing email without digital domicile (no informative dialog)', async () => {
+    mock
+      .onPost('/bff/v1/addresses/COURTESY/default/EMAIL', {
+        value: 'newemail@example.com',
+      })
+      .reply(200, { result: 'CODE_VERIFICATION_REQUIRED' });
+
     const emailValue = 'test@mail.it';
 
-    const { container, getByText, getByTestId } = render(<EmailSmsContactWizard />, {
+    const { container, getByRole, queryByTestId } = render(<EmailSmsContactWizard />, {
       preloadedState: {
         contactsState: {
           digitalAddresses: [
@@ -228,17 +263,22 @@ describe('EmailSmsContactWizard', () => {
     fireEvent.change(emailInput, { target: { value: 'newemail@example.com' } });
     fireEvent.click(emailConfirmButton);
 
-    const informativeDialog = await waitFor(() => getByTestId('informativeDialog'));
-    expect(informativeDialog).toBeInTheDocument();
-    expect(getByText('courtesy-contacts.info-modal-email-title')).toBeInTheDocument();
-    expect(getByText('courtesy-contacts.info-modal-email-subtitle')).toBeInTheDocument();
-    expect(getByText('courtesy-contacts.info-modal-email-content')).toBeInTheDocument();
+    await waitFor(() => {
+      expect(queryByTestId('informativeDialog')).not.toBeInTheDocument();
+      expect(getByRole('dialog')).toBeInTheDocument();
+    });
   });
 
-  it('show informative modal when editing SMS without digital domicile', async () => {
+  it('opens OTP dialog when editing SMS without digital domicile (no informative dialog)', async () => {
+    mock
+      .onPost('/bff/v1/addresses/COURTESY/default/SMS', {
+        value: '+393337654321',
+      })
+      .reply(200, { result: 'CODE_VERIFICATION_REQUIRED' });
+
     const smsValue = '3331234567';
 
-    const { container, getByText, getByTestId } = render(<EmailSmsContactWizard />, {
+    const { container, getByRole, queryByTestId } = render(<EmailSmsContactWizard />, {
       preloadedState: {
         contactsState: {
           digitalAddresses: [
@@ -263,10 +303,9 @@ describe('EmailSmsContactWizard', () => {
     fireEvent.change(smsInput, { target: { value: '3337654321' } });
     fireEvent.click(smsConfirmButton);
 
-    const informativeDialog = await waitFor(() => getByTestId('informativeDialog'));
-    expect(informativeDialog).toBeInTheDocument();
-    expect(getByText('courtesy-contacts.info-modal-sms-title')).toBeInTheDocument();
-    expect(getByText('courtesy-contacts.info-modal-sms-subtitle')).toBeInTheDocument();
-    expect(getByText('courtesy-contacts.info-modal-sms-content')).toBeInTheDocument();
+    await waitFor(() => {
+      expect(queryByTestId('informativeDialog')).not.toBeInTheDocument();
+      expect(getByRole('dialog')).toBeInTheDocument();
+    });
   });
 });

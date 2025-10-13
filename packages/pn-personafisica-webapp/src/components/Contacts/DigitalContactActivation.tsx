@@ -63,13 +63,11 @@ const DigitalContactActivation: React.FC<Props> = ({ isTransferring = false, onG
     if (defaultEMAILAddress) {
       goToNextStep();
     } else {
-      PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SERCQ_SEND_POP_UP_EMAIL_SMS);
       setShowConfirmationModal(true);
     }
   };
 
   const handleCloseConfirmEmailSmsModal = () => {
-    PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SERCQ_SEND_POP_UP_EMAIL_SMS_BACK);
     setShowConfirmationModal(false);
   };
 
