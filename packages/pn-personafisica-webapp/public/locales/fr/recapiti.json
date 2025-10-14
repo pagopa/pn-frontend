@@ -177,8 +177,11 @@
     }
   },
   "io-contact": {
+    "title": "App IO",
     "description": "Connecter SEND à IO est le moyen le plus pratique de recevoir et de gérer les communications à valeur légale : lorsqu’une notification vous est destinée, vous la recevez dans l’app et vous pouvez payer d’éventuels frais.",
     "description-enabled": "Lorsqu'une notification vous est destinée, vous la recevez directement dans l'app et vous pouvez payer d'éventuels frais.",
+    "enable": "Activez SEND sur IO",
+    "download": "Téléchargez l’app IO",
     "disable-modal": {
       "title": "Désactiver SEND sur l’app IO",
       "content": "Si vous confirmez, vous ne recevrez plus les notifications SEND dans l'app.",
@@ -194,13 +197,30 @@
   "courtesy-contacts": {
     "email-title": "Votre adresse e-mail",
     "email-empty-description": "Ajoutez une adresse e-mail sur laquelle nous pouvons vous aviser lorsqu'il y a une notification à lire sur SEND.",
+    "email-filled-description": "Lorsqu’une notification vous est adressée, nous vous en informons par courrier électronique à l’adresse que vous avez choisie.",
     "email-sms-updates": "Voulez-vous aussi recevoir les avis par SMS ?",
     "email-sms-add": "Ajouter un numéro de téléphone portable",
     "sms-title": "Votre téléphone portable",
+    "sms-description": "Lorsqu’une notification vous est adressée, nous vous en informons par SMS au numéro vous avez choisi.",
+    "link-sms-placeholder": "Votre numéro de téléphone mobile",
     "link-email-placeholder": "Adresse email",
     "sms-add": "Ajouter numéro",
     "email-add": "Ajouter email",
+    "email-verify": "Vérifier l’email {{value}}",
+    "email-verify-descr": "Nous avons envoyé un code à l’adresse email indiquée. Le code est <strong>valable 15 minutes<strong>.",
+    "sms-verify": "Vérifier le numéro de portable  {{value}}",
+    "sms-verify-descr": "Nous avons envoyé un code au numéro de téléphone portable indiqué. Le code est <strong>valable 15 minutes<strong>.",
+    "email-new-code": "Vous ne l’avez pas reçu ? Vérifiez que vous avez saisi la bonne adresse email ou <0>générez un nouveau code</0>.",
+    "sms-new-code": "Vous ne l’avez pas reçu ? Vérifiez que vous avez saisi le bon numéro de portable ou <0>générez un nouveau code</0>.",
+    "email-to-add": "Adresse email",
+    "sms-to-add": "Numéro de téléphone portable",
+    "valid-email": "Adresse email invalide",
+    "valid-sms": "Numéro de téléphone portable invalide",
+    "email-added-successfully": "Adresse email correctement ajoutée",
+    "sms-added-successfully": "Numéro de téléphone portable ajouté correctement",
+    "email-removed-successfully": "Adresse email correctement supprimée",
     "email-and-sercq-removed-successfully": "E-mail et Domicile Numérique SEND désactivés",
+    "sms-removed-successfully": "Numéro de téléphone portable correctement supprimé",
     "io-added-successfully": "Vous avez activé le service SEND - Notifiche Digitali sur IO.",
     "io-removed-successfully": "Vous avez désactivé le service SEND - Notifiche Digitali sur IO.",
     "remove-email": "Désactiver l’email",
@@ -237,13 +257,17 @@
   "special-contacts": {
     "select-address": "Type",
     "add-sender": "Organisme expéditeur",
+    "pec": "Adresse PEC",
+    "sercq_send": "Domicile Numérique SEND",
     "link-pec-label": "Adresse PEC",
     "contact-to-add-description": "Le Domicile Numérique personnalisé où vous recevrez les notifications SEND que vous envoie un organisme spécifique",
     "contact-already-exists": "<0>Cet organisme est déjà associé à l'adresse {{contactValue}}.</0><1>Si vous appuyez sur <strong>Confirmer</strong>, vous le remplacerez par celui que vous venez d'insérer.</1>",
     "validating-pec-banner-content": "<0>Vous avez déjà inséré une PEC pour cet organisme qui est en cours de validation.</0><1>Une fois confirmée, vous pourrez la modifier.</1>",
     "validating-pec-error-message": "Vous avez déjà inséré une PEC pour cet organisme qui est actuellement en cours de validation",
+    "fetch-party-error": "Nous n’avons pas pu récupérer les données dont nous avions besoin pour créer une nouvelle adresse.",
     "add-title": "Insérer l'organisme et l'adresse à associer",
     "card-title": "PERSONNALISÉES PAR ORGANISME",
+    "remove-special-title": "Vous souhaitez supprimer {{contactValue}}?",
     "remove-special-description": "Les avis sur les notifications des organismes associés ne seront plus envoyés à cette adresse mais à l’adresse principale.",
     "pec-disclaimer": "J'accepte que cette adresse soit utilisée par SEND en priorité par rapport à d'éventuelles PEC enregistrées auprès d'un organisme expéditeur ou présente dans les registres publics.",
     "courtesy-banner": {
@@ -257,7 +281,9 @@
     "duplicate-contact-title": "Adresse déjà présente",
     "duplicate-contact-descr": "Le contact {{value}} est déjà présent, voulez-vous continuer quand même ?",
     "duplicate-default-contact-title": "Cette adresse est déjà utilisée comme Domicile Numérique",
-    "duplicate-default-contact-descr": "L'adresse {{value}} est déjà utilisée comme Domicile Numérique principal sur SEND.<br />Pour personnaliser le Domicile Numérique par organisme expéditeur, choisissez une adresse différente."
+    "duplicate-default-contact-descr": "L'adresse {{value}} est déjà utilisée comme Domicile Numérique principal sur SEND.<br />Pour personnaliser le Domicile Numérique par organisme expéditeur, choisissez une adresse différente.",
+    "enti-not-found": "Aucun organisme trouvé",
+    "too-long-field-error": "Écrire un maximum de {{maxLength}} caractères"
   },
   "errors": {
     "invalid_verification_code": {
@@ -274,13 +300,19 @@
     }
   },
   "domicile-banner": {
+    "no-sercq-send-title": "Fini les documents papier : activez SEND comme Domicile Numérique",
     "no-sercq-send-description": "Choisissez la plateforme SEND comme Domicile Numérique pour recevoir les prochaines notifications uniquement par voie numérique et les lire en temps réel, où que vous soyez.",
     "no-sercq-cta": "Commencer",
     "no-courtesy-title": "Ne manquez pas les communications importantes",
     "no-courtesy-description": "Sans adresse de courtoisie, nous ne pouvons pas vous informer de l’existence d’une communication à valeur juridique sur SEND.",
+    "complete-addresses": "Saisissez un email",
     "no-io-title": "Vos notifications à portée d'application",
     "no-io-description": "Lorsqu’une notification vous est destinée, vous pouvez la recevoir sur l’app IO, la lire et payer tout frais éventuel directement dans l’app !",
     "no-courtesy-sercq-send-title": "Vous souhaitez recevoir les prochaines notifications uniquement par voie numérique ?",
-    "no-courtesy-sercq-send-description": "Activez SEND comme Domicile Numérique et ne vous souciez plus des lettres recommandées papier."
+    "no-courtesy-sercq-send-description": "Activez SEND comme Domicile Numérique et ne vous souciez plus des lettres recommandées papier.",
+    "complete-configuration": "Complétez la configuration",
+    "no-courtesy-no-sercq-send-title": "Recevez toutes les communications importantes ",
+    "no-courtesy-no-sercq-send-description": "Ajoutez une adresse mail pour recevoir un avis lorsque vous avez une nouvelle notification sur SEND.",
+    "no-courtesy-no-sercq-send-cta": "Confirmez votre email"
   }
 }
