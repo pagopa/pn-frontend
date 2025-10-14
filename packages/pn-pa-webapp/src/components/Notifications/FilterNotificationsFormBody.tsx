@@ -10,7 +10,6 @@ import {
   formatIun,
   getNotificationAllowedStatus,
   tenYearsAgo,
-  today,
   useIsMobile,
 } from '@pagopa-pn/pn-commons';
 
@@ -49,7 +48,6 @@ type DatePickerFieldProps = {
   disableFuture?: boolean;
   formikInstance: FormikInst;
   setLocalDate: (value: Date | null) => void;
-  fallbackIfNull: Date;
   errorMsg?: string;
 };
 
@@ -66,7 +64,6 @@ const DatePickerField: React.FC<Readonly<DatePickerFieldProps>> = ({
   disableFuture,
   formikInstance,
   setLocalDate,
-  fallbackIfNull,
   errorMsg,
 }) => (
   <CustomDatePicker
@@ -75,7 +72,7 @@ const DatePickerField: React.FC<Readonly<DatePickerFieldProps>> = ({
     format={DATE_FORMAT}
     value={value}
     onChange={(v: DatePickerTypes) => {
-      void formikInstance.setFieldValue(id, v || fallbackIfNull, true).then(() => {
+      void formikInstance.setFieldValue(id, v ?? null, false).then(() => {
         setLocalDate(v);
         if (errorMsg) {
           const errors = formikInstance.errors || {};
@@ -222,7 +219,6 @@ const FilterNotificationsFormBody = ({
         disableFuture={true}
         formikInstance={formikInstance}
         setLocalDate={setStartDate}
-        fallbackIfNull={tenYearsAgo}
         errorMsg={errorMsg}
       />
 
@@ -239,7 +235,6 @@ const FilterNotificationsFormBody = ({
         disableFuture={true}
         formikInstance={formikInstance}
         setLocalDate={setEndDate}
-        fallbackIfNull={today}
         errorMsg={errorMsg}
       />
 
