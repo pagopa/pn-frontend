@@ -155,7 +155,7 @@
       "content-description": "Quando un ente ti invia una notifica SEND, ricevi la comunicazione a valore legale sulla PEC che hai scelto.",
       "input-label": "Indirizzo PEC",
       "sercq-info-alert": "La PEC sostituirà la piattaforma SEND come tuo domicilio digitale.",
-      "disclaimer": "Compilando il campo e premendo <strong>Attiva domicilio digitale</strong> accetti che l’indirizzo PEC che hai scelto sia utilizzato da SEND per l’invio delle notifiche, in via prioritaria rispetto a un eventuale domicilio digitale eletto presso un ente mittente o presente nei pubblici registri"
+      "disclaimer": "Accetto che questo indirizzo sia utilizzato da SEND in via prioritaria rispetto a eventuali PEC registrate presso un ente mittente o presente nei pubblici registri."
     },
     "digital-domicile-management": {
       "title": "Gestisci il tuo domicilio digitale",
@@ -270,7 +270,7 @@
     "card-title": "PERSONALIZZATI PER ENTE",
     "remove-special-title": "Vuoi eliminare {{contactValue}}?",
     "remove-special-description": "Gli avvisi relativi alle notifiche degli enti associati non saranno più inviati a questo recapito, ma a quello principale.",
-    "pec-disclaimer": "Compilando il campo e premendo <strong>Conferma</strong> accetti che l’indirizzo PEC che hai scelto sia utilizzato da SEND per l’invio delle notifiche di questo specifico ente mittente, in via prioritaria rispetto al  domicilio digitale di piattaforma, a un eventuale domicilio digitale eletto presso lo stesso ente mittente o presente nei pubblici registri",
+    "pec-disclaimer": "Accetto che questo indirizzo sia utilizzato da SEND in via prioritaria rispetto a eventuali PEC registrate presso un ente mittente o presente nei pubblici registri.",
     "courtesy-banner": {
       "title": "Funzionalità dismessa",
       "description": "Non puoi più inserire recapiti di cortesia personalizzati per ente o modificare recapiti già esistenti. Se elimini un recapito personalizzato non potrai più recuperarlo o inserirlo di nuovo. "
