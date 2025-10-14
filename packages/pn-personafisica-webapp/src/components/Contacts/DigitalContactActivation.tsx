@@ -208,11 +208,9 @@ const DigitalContactActivation: React.FC<Props> = ({ isTransferring = false, onG
           <Trans
             ns="recapiti"
             i18nKey={`courtesy-contacts.confirmation-modal-email-content`}
-            components={[
-              <DialogContentText key="paragraph1" color="text.primary" />,
-              <DialogContentText key="paragraph2" color="text.primary" mt={2} />,
-            ]}
+            components={[]}
           />
+          <DialogContentText key="paragraph1" color="text.primary" />
         </ConfirmationModal>
       </PnWizardStep>
       <PnWizardStep label={t('legal-contacts.sercq-send-wizard.step_4.step-title')}>
