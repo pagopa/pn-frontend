@@ -1,4 +1,4 @@
-import { add } from 'date-fns';
+import { add, isValid } from 'date-fns';
 import { FormikValues, useFormik } from 'formik';
 import _ from 'lodash';
 import { forwardRef, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
@@ -88,10 +88,17 @@ const FilterNotifications = forwardRef(({ showFilters }: Props, ref) => {
         return true;
       }
 
+      // verify startDate and endDate are both valid dates before validating range
+      const start = new Date(startDate);
+      const end = new Date(endDate);
+      if (!isValid(start) || !isValid(end)) {
+        return true;
+      }
+
       const endAtStart = getStartOfDay(new Date(endDate));
       const minStart = add(endAtStart, { months: -6, days: 1 });
 
-      return new Date(startDate) >= minStart || ctx.createError({ message: rangeErrorMsg });
+      return start >= minStart || ctx.createError({ message: rangeErrorMsg });
     };
     return yup.object({
       recipientId: yup

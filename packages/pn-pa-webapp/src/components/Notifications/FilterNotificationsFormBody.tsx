@@ -48,7 +48,8 @@ type DatePickerFieldProps = {
   disableFuture?: boolean;
   formikInstance: FormikInst;
   setLocalDate: (value: Date | null) => void;
-  errorMsg?: string;
+  error?: boolean;
+  helperText?: string;
 };
 
 const DatePickerField: React.FC<Readonly<DatePickerFieldProps>> = ({
@@ -64,7 +65,8 @@ const DatePickerField: React.FC<Readonly<DatePickerFieldProps>> = ({
   disableFuture,
   formikInstance,
   setLocalDate,
-  errorMsg,
+  error,
+  helperText,
 }) => (
   <CustomDatePicker
     language={language}
@@ -72,14 +74,8 @@ const DatePickerField: React.FC<Readonly<DatePickerFieldProps>> = ({
     format={DATE_FORMAT}
     value={value}
     onChange={(v: DatePickerTypes) => {
-      void formikInstance.setFieldValue(id, v ?? null, false).then(() => {
+      void formikInstance.setFieldValue(id, v ?? null, true).then(() => {
         setLocalDate(v);
-        if (errorMsg) {
-          const errors = formikInstance.errors || {};
-          if (errors.startDate === errorMsg || errors.endDate === errorMsg) {
-            formikInstance.setErrors({ ...errors, startDate: undefined, endDate: undefined });
-          }
-        }
       });
     }}
     slotProps={{
@@ -94,7 +90,8 @@ const DatePickerField: React.FC<Readonly<DatePickerFieldProps>> = ({
         },
         fullWidth: isMobile,
         sx: { mb },
-        ...(errorMsg ? { error: true, helperText: errorMsg } : {}),
+        ...(error ? { error: true } : {}),
+        ...(helperText ? { helperText } : {}),
       },
     }}
     disableFuture={disableFuture}
@@ -159,14 +156,11 @@ const FilterNotificationsFormBody = ({
 
   const mb = isMobile ? '20px' : 0;
 
-  const rangeErrorMsg =
-    t('filters.errors.max-six-months', { ns: 'notifiche' }) || 'Intervallo massimo: 6 mesi';
+  const startErr = formikInstance.errors?.startDate as string | undefined;
+  const endErr = formikInstance.errors?.endDate as string | undefined;
 
-  const showRangeError =
-    formikInstance.errors?.startDate === rangeErrorMsg ||
-    formikInstance.errors?.endDate === rangeErrorMsg;
-
-  const errorMsg = showRangeError ? rangeErrorMsg : undefined;
+  // verify it's a "max range exceeded" error, otherwise no helperText is shown
+  const helperText = startErr && endErr && startErr === endErr ? startErr : undefined;
 
   return (
     <Fragment>
@@ -219,7 +213,8 @@ const FilterNotificationsFormBody = ({
         disableFuture={true}
         formikInstance={formikInstance}
         setLocalDate={setStartDate}
-        errorMsg={errorMsg}
+        error={!!startErr}
+        helperText={helperText}
       />
 
       <DatePickerField
@@ -235,7 +230,8 @@ const FilterNotificationsFormBody = ({
         disableFuture={true}
         formikInstance={formikInstance}
         setLocalDate={setEndDate}
-        errorMsg={errorMsg}
+        error={!!endErr}
+        helperText={helperText}
       />
 
       <TextField
