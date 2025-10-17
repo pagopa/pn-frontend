@@ -69,6 +69,8 @@
     "sercq-send-wizard": {
       "title": "Attiva domicilio digitale su SEND",
       "title-transfer": "Trasferisci il domicilio digitale sulla piattaforma SEND",
+      "button-transfer": "Trasferisci domicilio digitale",
+      "button-activation": "Attiva domicilio digitale",
       "step_1": {
         "title": "Come funziona",
         "info-list": [
