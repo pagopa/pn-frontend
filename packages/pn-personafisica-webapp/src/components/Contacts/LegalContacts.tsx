@@ -260,7 +260,7 @@ const LegalContacts = () => {
                   onClick: deleteConfirmHandler,
                   label: t(`legal-contacts.${removeDialogLabel}-confirm`, { ns: 'recapiti' }),
                   variant: 'outlined',
-                  ...(channelType === ChannelType.SERCQ_SEND ? { color: 'error' as const } : {}),
+                  color: 'error',
                 },
               }
             : undefined
