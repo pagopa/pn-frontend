@@ -106,7 +106,7 @@ describe('EmailSmsContactWizard', () => {
   it('shows label and hides disclaimer when email has a value', () => {
     const emailValue = 'test@mail.it';
 
-    const { container, queryByText } = render(<EmailSmsContactWizard />, {
+    const { container } = render(<EmailSmsContactWizard />, {
       preloadedState: {
         contactsState: {
           digitalAddresses: [
