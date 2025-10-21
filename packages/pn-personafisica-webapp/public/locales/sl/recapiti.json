@@ -69,6 +69,8 @@
     "sercq-send-wizard": {
       "title": "Aktiviraj digitalno prebivališče na SEND",
       "title-transfer": "Prenesi digitalno prebivališče na platformo SEND",
+      "button-transfer": "Prenesi digitalno prebivališče",
+      "button-activation": "Aktiviraj digitalno prebivališče",
       "step_1": {
         "title": "Kako deluje",
         "info-list": [

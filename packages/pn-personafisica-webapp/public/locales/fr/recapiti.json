@@ -69,6 +69,8 @@
     "sercq-send-wizard": {
       "title": "Activer le Domicile Numérique sur SEND",
       "title-transfer": "Transférer le Domicile Numérique sur la plateforme SEND",
+      "button-transfer": "Transférez le Domicile Numérique",
+      "button-activation": "Activez le Domicile Numérique",
       "step_1": {
         "title": "Comment ça marche",
         "info-list": [
@@ -260,6 +262,7 @@
     "pec": "Adresse PEC",
     "sercq_send": "Domicile Numérique SEND",
     "link-pec-label": "Adresse PEC",
+    "link-sercq-label": "Ton Domicile Numérique SEND",
     "contact-to-add-description": "Le Domicile Numérique personnalisé où vous recevrez les notifications SEND que vous envoie un organisme spécifique",
     "contact-already-exists": "<0>Cet organisme est déjà associé à l'adresse {{contactValue}}.</0><1>Si vous appuyez sur <strong>Confirmer</strong>, vous le remplacerez par celui que vous venez d'insérer.</1>",
     "validating-pec-banner-content": "<0>Vous avez déjà inséré une PEC pour cet organisme qui est en cours de validation.</0><1>Une fois confirmée, vous pourrez la modifier.</1>",
@@ -308,6 +311,7 @@
     "complete-addresses": "Saisissez un email",
     "no-io-title": "Vos notifications à portée d'application",
     "no-io-description": "Lorsqu’une notification vous est destinée, vous pouvez la recevoir sur l’app IO, la lire et payer tout frais éventuel directement dans l’app !",
+    "add-io": "Activez SEND sur l'application IO",
     "no-courtesy-sercq-send-title": "Vous souhaitez recevoir les prochaines notifications uniquement par voie numérique ?",
     "no-courtesy-sercq-send-description": "Activez SEND comme Domicile Numérique et ne vous souciez plus des lettres recommandées papier.",
     "complete-configuration": "Complétez la configuration",

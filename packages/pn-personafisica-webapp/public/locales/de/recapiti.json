@@ -69,6 +69,8 @@
     "sercq-send-wizard": {
       "title": "Digitales Domizil auf SEND aktivieren",
       "title-transfer": "Digitales Domizil auf die SEND-Plattform übertragen",
+      "button-transfer": "Digitalen Wohnsitz übertragen",
+      "button-activation": "Digitalen Wohnsitz aktivieren",
       "step_1": {
         "title": "Funktionsweise",
         "info-list": [
@@ -184,10 +186,14 @@
     "download": "IO-App herunterladen",
     "disable-modal": {
       "title": "Deaktiviere SEND auf der IO-App",
-      "confirm": "SEND auf IO deaktivieren",
       "content": "Wenn du dies bestätigst, erhältst du die SEND-Mitteilungen nicht mehr in der App.",
       "content-dod-enabled": "<0>Wenn du SEND auf IO deaktivierst, <strong>erhältst du die SEND-Mitteilungen nicht mehr in der App.</strong></0><1>Denke daran, dass du, wenn du eine SEND-Mitteilung nicht rechtzeitig liest, möglicherweise Fristen versäumst und Strafen riskierst.</1>",
       "confirm-dod-enabled": "SEND auf IO deaktivieren"
+    },
+    "info-modal": {
+      "title": "SEND in IO: Wie es funktioniert",
+      "subtitle": "Für jede neue SEND-Mitteilung erhalten Sie eine Nachricht in der IO App, von der aus Sie bequem die beigefügten Dokumente öffnen und die vorgesehenen Zahlungen tätigen können.",
+      "content": "Wenn Sie keinen aktiven digitalen Wohnsitz haben und die Nachricht nicht innerhalb von 5 Tagen nach dem Versand öffnen, erhalten Sie die Dokumente in Papierform zu Hause"
     }
   },
   "courtesy-contacts": {
@@ -219,8 +225,6 @@
     "sms-removed-successfully": "Handynummer erfolgreich entfernt",
     "io-added-successfully": "Du hast den Dienst SEND - Notifiche Digitali auf IO aktiviert.",
     "io-removed-successfully": "Du hast den Dienst SEND - Notifiche Digitali auf IO deaktiviert.",
-    "remove-email-message": "Möchtest du die E-Mail-Adresse {{value}} wirklich entfernen?",
-    "remove-sms": "Handynummer entfernen",
     "remove-email": "E-Mail-Adresse deaktivieren",
     "remove-email-pec-enabled-title": "Möchtest du die E-Mail-Benachrichtigungen deaktivieren?",
     "remove-email-pec-enabled-message": "<0>Wenn du die E-Mail-Adresse deaktivierst, können wir dich nicht benachrichtigen, wenn eine rechtsgültige Mitteilung für dich vorliegt.</0><1>Denke daran, dass du, wenn du eine SEND-Mitteilung nicht rechtzeitig liest, möglicherweise Fristen versäumst und Strafen riskierst.</1>",
@@ -231,6 +235,7 @@
     "remove-email-and-sercq": "E-Mail und Domizil deaktivieren",
     "remove-email-and-sercq-title": "Mit der E-Mail wird auch das digitale Domizil SEND deaktiviert",
     "remove-email-and-sercq-message": "<0>Wenn du dich entscheidest, dein digitales Domizil SEND zu deaktivieren, könntest du die Mitteilungen per Einschreiben erhalten und <strong>die entsprechenden Kosten bezahlen.</strong></0>",
+    "remove-sms": "Handynummer entfernen",
     "remove-sms-title-dod-enabled": "Möchtest du die SMS-Benachrichtigungen deaktivieren?",
     "remove-sms-message-dod-enabled": "<0>Wenn du deine Handynummer deaktivierst, <strong>erhältst du keine SMS-Benachrichtigungen mehr, wenn eine rechtsgültige Mitteilung für dich auf SEND vorliegt.</strong></0><1>Denke daran, dass du, wenn du eine SEND-Mitteilung nicht rechtzeitig liest, möglicherweise Fristen versäumst und Strafen riskierst.</1>",
     "remove-sms-message": "Wenn du dies bestätigst, erhältst du keine SMS mehr auf {{value}}, wenn eine SEND-Mitteilung zu lesen ist.",
@@ -263,7 +268,6 @@
     "validating-pec-banner-content": "<0>Du hast bereits eine PEC für diese Körperschaft eingegeben, die validiert wird.</0><1>Sobald sie bestätigt ist, kannst du sie ändern.</1>",
     "validating-pec-error-message": "Du hast bereits eine PEC für diese Körperschaft eingegeben, die derzeit validiert wird",
     "fetch-party-error": "Wir konnten die Daten, die benötigt werden, um eine neue Adresse zu erstellen, nicht wiederherstellen.",
-    "modal-title": "Personalisiere die mit einer Körperschaft verknüpfte Adresse",
     "add-title": "Gib die Körperschaft und die zu verknüpfende Adresse ein",
     "card-title": "PERSONALISIERT PRO KÖRPERSCHAFT",
     "remove-special-title": "Möchtest du {{contactValue}} entfernen?",

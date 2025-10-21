@@ -69,6 +69,8 @@
     "sercq-send-wizard": {
       "title": "Activate digital domicile on SEND",
       "title-transfer": "Transfer the digital domicile to the SEND platform",
+      "button-transfer": "Transfer digital domicile",
+      "button-activation": "Activate digital domicile",
       "step_1": {
         "title": "How it works",
         "info-list": [

@@ -1,75 +1,280 @@
 {
-  "title": "Anschriften",
-  "subtitle": "Hier können digitale Anschriften angeben und geändert werden, an die Bescheide für {{recipient}} gesendet werden sollen. Wenn du nach Firmendaten suchst, <0>findest du sie hier</0>.",
+  "title": "Kontaktdaten",
+  "subtitle": "Verwalten Sie die digitalen Kontaktdaten, an die Sie rechtsverbindliche Mitteilungen von SEND und/oder die entsprechenden Höflichkeitsnachrichten für <0>Ihr Unternehmen</0> erhalten möchten.",
   "insert-code": "Code eingeben",
+  "status": {
+    "active": "Aktiv",
+    "inactive": "Zu aktivieren",
+    "pec-validation": "PEC-Validierung läuft"
+  },
   "legal-contacts": {
-    "title": "",
-    "description": [
-      "Wenn ein Bescheid für das Unternehmen vorliegt, wird die Empfangsbestätigung an diese Anschrift gesendet. Zum Lesen des Bescheids und zur Entrichtung eventueller Gebühren musst du dich auf der Plattform anmelden."
-    ],
+    "title": "Der digitale Zustellort Ihres Unternehmens",
+    "pec-validation-banner": {
+      "title": "Die PEC wird validiert",
+      "dod-enabled-message": "Bis zum Ende des Vorgangs bleibt die SEND-Plattform als digitaler Zustellort aktiv.",
+      "dod-disabled-message": "Bis zum Ende des Vorgangs können die rechtsverbindlichen Kontaktdaten nicht geändert werden.",
+      "parties-list": "Die SEND-Plattform bleibt Ihr digitaler Zustellort für {{list}} bis zum Abschluss der Validierung."
+    },
+    "pec-disclaimer": "Dies ist die Hauptadresse, die für den digitalen Versand der Benachrichtigungen des Unternehmens verwendet wird. Durch die Eingabe erhält das Unternehmen keine Einschreiben in Papierform mehr.",
+    "pec-description": "Wenn eine Behörde Ihrem Unternehmen eine SEND-Benachrichtigung sendet, wird diese sicher und mit Rechtswert an die von Ihnen gewählte PEC zugestellt.",
     "link-pec-placeholder": "PEC-Adresse",
     "valid-pec": "Ungültige PEC-Adresse",
-    "pec-verify": "Überprüfung der PEC {{value}}",
-    "pec-verify-descr": "Wir haben einen Code an die angegebene PEC-Adresse gesendet. Der Code ist <strong>10 Minuten gültig</strong>.",
-    "pec-new-code": "Du hast ihn nicht erhalten? Überprüfe, ob die richtige PEC eingegeben wurde oder <0>generiere eine neue</0>.",
+    "pec-verify": "PEC {{value}} verifizieren",
+    "pec-verify-descr": "Wir haben einen Code an die angegebene PEC-Adresse gesendet. Der Code ist <strong>15 Minuten</strong> gültig.",
+    "pec-new-code": "Nicht erhalten? Überprüfen Sie, ob Sie die korrekte PEC eingegeben haben oder <0>generieren Sie einen neuen</0>.",
     "pec-added-successfully": "PEC erfolgreich zugeordnet",
-    "pec-to-add": "PEC zugeordnet",
-    "pec-validating": "Validierung der PEC läuft",
+    "pec-removed-successfully": "PEC erfolgreich entfernt",
+    "pec-to-add": "PEC-Adresse",
+    "pec-validating": "PEC-Validierung läuft",
     "cancel-pec-validation": "Validierung abbrechen",
-    "remove-pec-title": "PEC entfernen",
-    "remove-pec-message": "Möchtest du die PEC-Adresse {{value}} wirklich entfernen?",
-    "block-remove-pec-title": "PEC-Adresse kann nicht gelöscht werden",
-    "block-remove-pec-message": "Dazu müssen zuerst alle PEC-Adressen unter „Weitere Anschriften“ gelöscht werden.",
-    "validation-cancel-title": "Überprüfung abbrechen?",
-    "validation-cancel-content": "Wird die Überprüfung abgebrochen, muss eine neue PEC-Adresse eingegeben und der Vorgang erneut begonnen werden.",
-    "validation-progress-title": "Danke!",
-    "validation-progress-content": "Wir prüfen, ob die PEC-Adresse gültig ist. Du erhältst innerhalb von 24 Stunden eine E-Mail mit dem Ergebnis."
+    "remove-pec-title": "Möchten Sie die PEC wirklich deaktivieren?",
+    "remove-pec-message": "<0>Sie haben dann keinen digitalen rechtsverbindlichen Kontakt für Mitteilungen der öffentlichen Verwaltung mehr und könnten diese in Papierform erhalten, wobei eventuelle Kosten vom Unternehmen zu tragen sind.</0><1>Sie erhalten jedoch weiterhin Benachrichtigungen über die von Ihnen aktivierten Kanäle.</1>",
+    "remove-pec-confirm": "PEC deaktivieren",
+    "validation-cancel-title": "Validierung der PEC abbrechen",
+    "validation-cancel-content": "Wenn Sie bestätigen, brechen Sie die Aktivierung der PEC als digitaler Zustellort auf SEND ab.",
+    "validation-progress-title": "Vielen Dank!",
+    "validation-progress-content": "Wir überprüfen die Gültigkeit der PEC-Adresse. Sie erhalten innerhalb von 24 Stunden eine E-Mail mit dem Ergebnis.",
+    "sercq_send-title": "SEND-Plattform",
+    "sercq_send-description": "Wenn eine Behörde Ihrem Unternehmen eine SEND-Benachrichtigung sendet, wird diese sicher und mit Rechtswert über die Plattform selbst zugestellt.",
+    "sercq-send-description-pec-enabled": "Nutzen Sie SEND als digitalen Zustellort, um Ihre SEND-Benachrichtigungen an einem einzigen Ort zu verwalten, ohne sich mehr um Einschreiben in Papierform und die damit verbundenen Kosten kümmern zu müssen.",
+    "sercq-send-active": "Aktivieren",
+    "sercq-send-active-pec-enabled": "Digitalen Zustellort aktivieren",
+    "sercq-send-active-pec-transfer": "Digitalen Zustellort übertragen",
+    "sercq-send-info-title": "SEND als digitalen Zustellort aktivieren",
+    "sercq-send-info-description": "Durch die Aktivierung des digitalen Zustellorts wird SEND **der rechtsverbindliche Kontakt Ihres Unternehmens** für Mitteilungen der öffentlichen Verwaltung.",
+    "sercq-send-info-advantages": "Warum ist das nützlich?",
+    "sercq-send-info-list": [
+      {
+        "title": "100 % digitale Benachrichtigungen",
+        "description": "Die SEND-Benachrichtigungen werden Ihnen nicht mehr in Papierform zugestellt."
+      },
+      {
+        "title": "Einsparung bei Postgebühren",
+        "description": "Sie müssen sich nicht mehr um die Abholung von Papierdokumenten und die Zahlung der damit verbundenen Kosten kümmern."
+      },
+      {
+        "title": "Alles an einem Ort",
+        "description": "Die SEND-Benachrichtigungen werden sicher zugestellt und sind alle im reservierten SEND-Bereich Ihres Unternehmens verfügbar."
+      }
+    ],
+    "sercq-send-info-tos": "Mit der Auswahl von „Aktivieren“ erklären Sie, dass Sie die <0>Nutzungsbedingungen</0> gelesen und akzeptiert haben.",
+    "sercq_send-added-successfully": "Digitaler Zustellort erfolgreich aktiviert",
+    "remove-sercq_send-title": "Möchten Sie den digitalen Zustellort auf SEND wirklich deaktivieren?",
+    "remove-sercq_send-message": "<0>Wenn Sie den digitalen Zustellort SEND deaktivieren, könnte Ihr Unternehmen Mitteilungen per Einschreiben erhalten und **die damit verbundenen Kosten tragen müssen.**</0><1>Das Unternehmen erhält weiterhin Benachrichtigungen per E-Mail, Sie können diese im Abschnitt „Ihre Kontaktdaten“ deaktivieren.</1>",
+    "remove-sercq_send-confirm": "Digitalen Zustellort deaktivieren",
+    "block-remove-digital-domicile-title": "Der digitale Zustellort kann nicht deaktiviert werden",
+    "block-remove-digital-domicile-message": "Um fortzufahren, müssen Sie zuerst die personalisierten digitalen Zustellorte pro Behörde deaktivieren.",
+    "sercq_send-removed-successfully": "Digitaler Zustellort erfolgreich deaktiviert",
+    "sercq-send-wizard": {
+      "title": "Digitalen Zustellort auf SEND aktivieren",
+      "title-transfer": "Digitalen Zustellort auf die SEND-Plattform übertragen",
+      "step_1": {
+        "title": "So funktioniert’s",
+        "info-list": [
+          {
+            "title": "Eine Behörde sendet eine SEND-Benachrichtigung für das Unternehmen",
+            "description": "Die Benachrichtigung wird sicher und mit Rechtswert über die Plattform <0>zugestellt</0>"
+          },
+          {
+            "title": "Sie erhalten eine Nachricht",
+            "description": "Wenn eine Benachrichtigung für Ihr Unternehmen auf SEND eingeht, benachrichtigen wir Sie per E-Mail und auf Wunsch auch per SMS"
+          },
+          {
+            "title": "Auf die Benachrichtigung zugreifen",
+            "description": "Öffnen Sie die Details der digitalen Benachrichtigung auf der SEND-Plattform"
+          }
+        ],
+        "info-tos": "Durch Drücken von „Aktivieren“ erklären Sie, dass Sie die <0>Nutzungsbedingungen</0> gelesen und akzeptiert haben.",
+        "have-pec": "Möchten Sie die PEC Ihres Unternehmens nutzen?",
+        "have-pec-description": "Alternativ können Sie eine PEC als digitalen Zustellort für SEND-Benachrichtigungen verwenden.",
+        "insert-pec": "PEC eingeben",
+        "delivered-dialog-title": "Rechtswert der Benachrichtigung am digitalen Zustellort SEND",
+        "delivered-dialog-description": "Wenn Sie SEND als digitalen Zustellort wählen, gilt die Benachrichtigung **7 Tage nach Zustellung** als rechtlich zugestellt, auch wenn Sie diese nicht eingesehen haben.",
+        "pec-info-alert": "Die SEND-Plattform ersetzt die PEC des Unternehmens als digitalen Zustellort Ihres Unternehmens. "
+      },
+      "step_2": {
+        "title": "Die E-Mail für Benachrichtigungen über SEND-Mitteilungen",
+        "step-title": "Geben Sie die Unternehmens-E-Mail-Adresse ein",
+        "content": "Die Unternehmens-E-Mail-Adresse, über die wir das Unternehmen benachrichtigen, wenn eine neue rechtsverbindliche Mitteilung auf SEND vorliegt.",
+        "sms-disclaimer": "Wenn Sie **Nummer hinzufügen** drücken, speichern Sie diese Kontaktdaten, um Benachrichtigungen über SEND-Mitteilungen für das Unternehmen zu erhalten. Sie können diese im Abschnitt **Kontaktdaten** verwalten."
+      },
+      "step_3": {
+        "title": "Sie aktivieren den digitalen Zustellort auf SEND",
+        "step-title": "Zusammenfassung",
+        "content": "Rechtsverbindliche Mitteilungen für das Unternehmen werden zugestellt an:",
+        "digital-domicile": "Digitaler Zustellort",
+        "send": "SEND",
+        "courtesy-content": "Sie haben gewählt, eine Nachricht zu erhalten über:",
+        "contacts-list": {
+          "email": {
+            "title": "Unternehmens-E-Mail-Adresse",
+            "textDisabled": "E-Mail hinzufügen"
+          },
+          "sms": {
+            "title": "Mobilfunknummer",
+            "textDisabled": "Mobilfunknummer hinzufügen"
+          }
+        },
+        "disclaimer-enable": "Durch Drücken von „Digitalen Zustellort aktivieren“ erklären Sie, dass Sie die <0>Datenschutzerklärung</0> gelesen und die <1>Nutzungsbedingungen</1> akzeptiert haben",
+        "disclaimer-transfer": "Durch Drücken von „Digitalen Zustellort übertragen“ erklären Sie, dass Sie die <0>Datenschutzerklärung</0> gelesen und die <1>Nutzungsbedingungen</1> akzeptiert haben",
+        "enable": "Digitalen Zustellort aktivieren",
+        "transfer": "Digitalen Zustellort übertragen"
+      },
+      "feedback": {
+        "title-transfer": "Sie haben den digitalen Zustellort Ihres Unternehmens aktualisiert",
+        "title-pec-activation": "Aktivierung des digitalen Zustellorts läuft",
+        "title-pec-transfer": "Übertragung des digitalen Zustellorts läuft",
+        "title-sercq_send-activation": "Sie haben den digitalen Zustellort auf SEND aktiviert",
+        "title-sercq_send-transfer": "Sie haben den digitalen Zustellort Ihres Unternehmens auf SEND übertragen",
+        "content-pec": "Die von Ihnen eingegebene PEC wird validiert. Nach Bestätigung wird der digitale Zustellort aktiviert und das Unternehmen erhält alle rechtsverbindlichen Mitteilungen an die von Ihnen gewählte Adresse.",
+        "content-pec-transfer": "Die PEC wird validiert. Nach Bestätigung wird der digitale Zustellort des Unternehmens an die von Ihnen gewählte Adresse übertragen. Bis dahin bleibt der digitale Zustellort SEND aktiv.",
+        "content-sercq_send": "Das Unternehmen erhält die rechtsverbindlichen Mitteilungen an den digitalen Zustellort auf SEND und eine Nachricht an die von Ihnen gewählten Kontaktdaten.",
+        "go-to-contacts": "Zu Ihren Kontaktdaten"
+      }
+    },
+    "pec-contact-wizard": {
+      "title": "PEC als digitalen Zustellort verwenden",
+      "title-transfer": "Digitalen Zustellort auf eine Unternehmens-PEC übertragen",
+      "content-title": "Geben Sie die PEC Ihres Unternehmens ein",
+      "content-description": "Wenn eine Behörde Ihrem Unternehmen eine SEND-Benachrichtigung sendet, erhalten Sie die rechtsverbindliche Mitteilung an die von Ihnen gewählte PEC.",
+      "input-label": "PEC-Adresse",
+      "sercq-info-alert": "Die Unternehmens-PEC ersetzt die SEND-Plattform als digitalen Zustellort des Unternehmens.",
+      "disclaimer": "Ich akzeptiere, dass diese Adresse von SEND vorrangig gegenüber einer eventuell beim sendenden Amt registrierten oder in öffentlichen Registern vorhandenen PEC verwendet wird."
+    },
+    "digital-domicile-management": {
+      "title": "Digitalen Zustellort verwalten",
+      "sercq_send-active": "Die SEND-Plattform ist der digitale Zustellort Ihres Unternehmens",
+      "choose-action": "Wählen Sie eine Option",
+      "transfer": {
+        "title-pec": "Digitalen Zustellort auf die SEND-Plattform übertragen",
+        "content-pec": "Die SEND-Plattform gewährleistet sichere und rechtsverbindliche Zustellungen. Der Dienst ist kostenlos und erfordert keine zusätzlichen Tools.",
+        "action-pec": "Auf SEND übertragen",
+        "title-sercq_send": "Digitalen Zustellort auf eine Unternehmens-PEC übertragen",
+        "content-sercq_send": "Wenn Sie eine PEC haben, können Sie diese als digitalen Zustellort für SEND-Benachrichtigungen verwenden.",
+        "action-sercq_send": "Auf eine PEC übertragen"
+      },
+      "special_contacts": {
+        "title": "Digitalen Zustellort pro sendender Behörde personalisieren",
+        "content": "Wählen Sie, wo die an Ihr Unternehmen von einer bestimmten Behörde gesendeten Benachrichtigungen eingehen sollen.",
+        "action": "Pro Behörde personalisieren"
+      }
+    }
   },
   "courtesy-contacts": {
-    "link-sms-placeholder": "Handynummer",
-    "link-email-placeholder": "E-Mail-Adresse",
-    "sms-add": "Benachrichtige mich per SMS",
-    "email-add": "Benachrichtige mich per E-Mail",
-    "email-verify": "E-Mail-Verifizierung {{value}}",
-    "email-verify-descr": "Wir haben einen Code an die angegebene E-Mail-Adresse gesendet. Der Code ist <strong>10 Minuten gültig</strong>.",
-    "sms-verify": "Überprüfung der Nummer {{value}}",
-    "sms-verify-descr": "Wir haben einen Code an die angegebene Handynummer gesendet. Der Code ist <strong>10 Minuten gültig</strong>.",
-    "email-new-code": "Du hast ihn nicht erhalten? Überprüfe, ob die richtige E-Mail-Adresse eingegeben wurde oder <0>generiere eine neue</0>.",
-    "sms-new-code": "Du hast ihn nicht erhalten? Überprüfe, ob die richtige Handynummer eingegeben wurde oder <0>generiere eine neue</0>.",
+    "email-title": "Unternehmens-E-Mail-Adresse",
+    "email-empty-description": "Fügen Sie eine Unternehmens-E-Mail-Adresse hinzu, an die wir Sie benachrichtigen können, wenn eine SEND-Mitteilung für Ihr Unternehmen vorliegt.",
+    "email-filled-description": "Wenn eine Benachrichtigung für Ihr Unternehmen vorliegt, informieren wir Sie per E-Mail an die von Ihnen gewählte Adresse.",
+    "email-sms-updates": "Möchten Sie die Benachrichtigungen auch per SMS erhalten?",
+    "email-sms-add": "Mobilfunknummer hinzufügen",
+    "sms-title": "Unternehmens-Mobiltelefon",
+    "sms-description": "Wenn eine Benachrichtigung für Ihr Unternehmen vorliegt, benachrichtigen wir Sie per SMS.",
+    "link-sms-placeholder": "Unternehmens-Mobiltelefon",
+    "link-email-placeholder": "Unternehmens-E-Mail-Adresse",
+    "sms-add": "Nummer hinzufügen",
+    "email-add": "E-Mail hinzufügen",
+    "email-verify": "E-Mail {{value}} verifizieren",
+    "email-verify-descr": "Wir haben einen Code an die angegebene E-Mail-Adresse gesendet. Der Code ist <strong>15 Minuten</strong> gültig.",
+    "sms-verify": "Nummer {{value}} verifizieren",
+    "sms-verify-descr": "Wir haben einen Code an die angegebene Mobilfunknummer gesendet. Der Code ist <strong>15 Minuten</strong> gültig.",
+    "email-new-code": "Nicht erhalten? Überprüfen Sie, ob Sie die korrekte E-Mail eingegeben haben oder <0>generieren Sie einen neuen</0>.",
+    "sms-new-code": "Nicht erhalten? Überprüfen Sie, ob Sie die korrekte Mobilfunknummer eingegeben haben oder <0>generieren Sie einen neuen</0>.",
     "email-to-add": "E-Mail-Adresse",
-    "sms-to-add": "Handynummer",
-    "valid-email": "E-Mail-Adresse ungültig",
-    "valid-sms": "Handynummer ungültig",
+    "sms-to-add": "Mobilfunknummer",
+    "valid-email": "Ungültige E-Mail-Adresse",
+    "valid-sms": "Ungültige Mobilfunknummer",
     "email-added-successfully": "E-Mail-Adresse erfolgreich hinzugefügt",
-    "sms-added-successfully": "Mobiltelefonnummer erfolgreich hinzugefügt",
-    "remove-email": "E-Mail-Adresse entfernen",
-    "remove-email-message": "Möchtest du die E-Mail-Adresse {{value}} wirklich entfernen?",
-    "remove-sms": "Handynummer entfernen",
-    "remove-sms-message": "Möchtest du die Handynummer {{value}} wirklich entfernen?"
+    "sms-added-successfully": "Mobilfunknummer erfolgreich hinzugefügt",
+    "email-removed-successfully": "E-Mail-Adresse erfolgreich entfernt",
+    "email-and-sercq-removed-successfully": "E-Mail und digitaler Zustellort SEND deaktiviert",
+    "sms-removed-successfully": "Mobilfunknummer erfolgreich entfernt",
+    "remove-email": "E-Mail deaktivieren",
+    "remove-email-pec-enabled-title": "Möchten Sie Ihre Unternehmens-E-Mail-Adresse deaktivieren?",
+    "remove-email-pec-enabled-message": "<0>Wenn Sie die Unternehmens-E-Mail-Adresse deaktivieren, können wir Sie nicht benachrichtigen, wenn eine rechtsverbindliche Mitteilung für Ihr Unternehmen vorliegt.</0><1>Denken Sie daran: Wenn die Benachrichtigung nicht rechtzeitig gelesen wird, könnte das Unternehmen Fristen verpassen und Bußgelder riskieren.</1>",
+    "remove-email-no-domicile-title": "E-Mail deaktivieren",
+    "remove-email-no-domicile-message": "Wenn Sie bestätigen, erhalten Sie keine E-Mail mehr an {{value}}, wenn eine SEND-Benachrichtigung zum Lesen vorliegt.",
+    "remove-email-preconfirm-title": "Möchten Sie die E-Mail-Benachrichtigungen deaktivieren?",
+    "remove-email-preconfirm-message": "<0>Wenn Sie die E-Mail-Adresse deaktivieren, können wir Sie nicht **benachrichtigen, wenn eine rechtsverbindliche Mitteilung für Ihr Unternehmen vorliegt.**</0",
+    "remove-email-and-sercq": "E-Mail und Zustellort deaktivieren",
+    "remove-email-and-sercq-title": "Mit der E-Mail wird auch der digitale Zustellort SEND deaktiviert",
+    "remove-email-and-sercq-message": "<0>Wenn Sie den digitalen Zustellort SEND deaktivieren, könnte Ihr Unternehmen Mitteilungen per Einschreiben erhalten und **die damit verbundenen Kosten tragen müssen.**</0>",
+    "remove-sms": "Mobiltelefon deaktivieren",
+    "remove-sms-title-dod-enabled": "Möchten Sie die SMS-Benachrichtigungen deaktivieren?",
+    "remove-email-button-dod-enabled": "Unternehmens-E-Mail deaktivieren",
+    "remove-sms-button-dod-enabled": "SMS deaktivieren",
+    "remove-sms-message-dod-enabled": "<0>Wenn Sie die Unternehmens-Telefonnummer deaktivieren, **erhalten Sie keine SMS-Benachrichtigungen mehr, wenn eine rechtsverbindliche Mitteilung für Ihr Unternehmen auf SEND vorliegt.**</0><1>Denken Sie daran: Wenn das Unternehmen eine SEND-Benachrichtigung nicht rechtzeitig liest, könnte es Fristen verpassen und Bußgelder riskieren.</1>",
+    "remove-sms-message": "Wenn Sie bestätigen, erhalten Sie keine SMS mehr an {{value}}, wenn eine SEND-Benachrichtigung zum Lesen vorliegt.",
+    "info-modal-email-title": "E-Mail-Benachrichtigungen: So funktionieren sie",
+    "info-modal-email-subtitle": "Wenn neue SEND-Mitteilungen für Ihr Unternehmen vorliegen, erhalten Sie eine Benachrichtigung an die eingegebene Unternehmens-E-Mail-Adresse.",
+    "info-modal-email-content": "Wenn Sie den digitalen Zustellort nicht aktiviert haben und die Benachrichtigung nicht innerhalb von 5 Tagen nach Erhalt der E-Mail öffnen, erhalten Sie die Dokumente in Papierform per Post.",
+    "info-modal-sms-title": "SMS-Benachrichtigungen: So funktionieren sie",
+    "info-modal-sms-subtitle": "Wenn neue SEND-Mitteilungen für Ihr Unternehmen vorliegen, erhalten Sie eine SMS an die eingegebene Nummer.",
+    "info-modal-sms-content": "Wenn Sie den digitalen Zustellort nicht aktiviert haben und die Benachrichtigung nicht innerhalb von 5 Tagen nach Erhalt der E-Mail öffnen, erhalten Sie die Dokumente in Papierform per Post.",
+    "confirmation-modal-title": "Fügen Sie eine Unternehmens-E-Mail-Adresse für Benachrichtigungen hinzu!",
+    "confirmation-modal-email-content": "<0>Um den digitalen Zustellort SEND zu aktivieren, benötigen wir eine Unternehmens-E-Mail-Adresse, damit wir **eine Benachrichtigung senden können, wenn eine rechtsverbindliche Mitteilung für Ihr Unternehmen vorliegt.**</0>",
+    "block-remove-email-title": "Die E-Mail kann nicht deaktiviert werden",
+    "block-remove-email-message": "Um fortzufahren, müssen Sie zuerst die personalisierten E-Mail-Adressen pro Behörde entfernen.",
+    "block-remove-email-sercq-default-pec-special-message": "Um fortzufahren, müssen Sie zuerst den digitalen Zustellort und die personalisierten Kontaktdaten deaktivieren.",
+    "block-remove-sms-title": "Die Mobilfunknummer kann nicht deaktiviert werden",
+    "block-remove-sms-message": "Um fortzufahren, müssen Sie zuerst die personalisierten Mobilfunknummern pro Behörde löschen."
   },
   "special-contacts": {
+    "select-address": "Typ",
+    "add-sender": "Sendende Behörde",
     "pec": "PEC-Adresse",
-    "sms": "Handy",
-    "email": "E-Mail-Adresse",
-    "fetch-party-error": "Wir konnten die Daten, die benötigt werden, um eine neue Anschrift zu erstellen, nicht wiederherstellen."
+    "sercq_send": "Digitaler Zustellort SEND",
+    "link-pec-label": "PEC-Adresse",
+    "link-sercq-label": "Ihr digitaler Zustellort SEND",
+    "contact-to-add-description": "Der personalisierte digitale Zustellort, an dem Ihr Unternehmen die von einer bestimmten Behörde gesendeten SEND-Benachrichtigungen erhält.",
+    "contact-already-exists": "<0>Diese Behörde ist bereits der Kontaktadresse {{contactValue}} zugeordnet.</0><1>Wenn Sie **Bestätigen** drücken, wird diese durch die gerade eingegebene ersetzt.</1>",
+    "validating-pec-banner-content": "<0>Für diese Behörde haben Sie bereits eine PEC eingegeben, die gerade validiert wird.</0><1>Sobald sie bestätigt ist, können Sie sie ändern.</1>",
+    "validating-pec-error-message": "Sie haben für diese Behörde bereits eine PEC eingegeben, die sich derzeit in der Validierung befindet",
+    "fetch-party-error": "Wir konnten die Daten, die zur Erstellung eines neuen Kontakts erforderlich sind, nicht abrufen.",
+    "add-title": "Geben Sie die Behörde und den zuzuordnenden Kontakt ein",
+    "card-title": "PERSONALISIERT PRO BEHÖRDE",
+    "remove-special-title": "Möchten Sie {{contactValue}} löschen?",
+    "remove-special-description": "Die Benachrichtigungen zu Mitteilungen der zugeordneten Behörden werden nicht mehr an diesen Kontakt gesendet, sondern an den Hauptkontakt.",
+    "pec-disclaimer": "Durch Ausfüllen des Feldes und Drücken von **Bestätigen** akzeptieren Sie, dass die von Ihnen gewählte PEC-Adresse von SEND für den Versand der Benachrichtigungen dieser spezifischen sendenden Behörde vorrangig gegenüber dem digitalen Zustellort der Plattform, einem eventuellen bei derselben sendenden Behörde gewählten digitalen Zustellort oder einem in öffentlichen Registern vorhandenen verwendet wird.",
+    "courtesy-banner": {
+      "title": "Funktion eingestellt",
+      "description": "Sie können keine personalisierten Höflichkeitskontakte pro Behörde mehr hinzufügen oder bereits vorhandene Kontakte ändern. Wenn Sie einen personalisierten Kontakt löschen, können Sie ihn nicht mehr wiederherstellen oder erneut hinzufügen. "
+    },
+    "email-description": "Die E-Mail-Adresse, an die wir Ihr Unternehmen benachrichtigen, wenn es eine rechtsverbindliche Mitteilung auf SEND erhält.",
+    "sercq-disclaimer": "Durch Drücken von „Bestätigen“ erklären Sie, dass Sie die <0>Datenschutzerklärung</0> gelesen und die <1>Nutzungsbedingungen</1> akzeptiert haben"
   },
   "common": {
-    "duplicate-contact-title": "Anschrift bereits vorhanden",
-    "duplicate-contact-descr": "Der Kontakt {{value}} ist bereits vorhanden, möchtest du trotzdem fortfahren?",
-    "enti-not-found": "Keine Körperschaft gefunden"
+    "duplicate-contact-title": "Kontakt bereits vorhanden",
+    "duplicate-contact-descr": "Der Kontakt {{value}} ist bereits vorhanden, möchten Sie trotzdem fortfahren?",
+    "duplicate-default-contact-title": "Dieser Kontakt wird bereits als digitaler Zustellort verwendet",
+    "duplicate-default-contact-descr": "Der Kontakt {{value}} wird bereits als primärer digitaler Zustellort auf SEND verwendet.<br />Um den digitalen Zustellort pro sendender Behörde zu personalisieren, wählen Sie einen anderen Kontakt.",
+    "enti-not-found": "Keine Behörde gefunden",
+    "too-long-field-error": "Geben Sie maximal {{maxLength}} Zeichen ein"
   },
   "errors": {
     "invalid_verification_code": {
       "title": "Der Code ist falsch",
-      "message": "Überprüfe ihn und gib ihn erneut ein, oder generiere einen neuen."
+      "message": "Überprüfen Sie ihn und geben Sie ihn erneut ein, oder generieren Sie einen neuen."
     },
     "retry_limit_code": {
-      "title": "Zu viele Versuche",
-      "message": "Code zu oft falsch eingegeben. Um es erneut zu versuchen, auf „Abbrechen“ klicken, sicherstellen, dass der Kontakt korrekt ist und neuen Code eingeben."
+      "title": "Sie haben zu viele Versuche unternommen",
+      "message": "Sie haben zu oft einen falschen Code eingegeben. Um es erneut zu versuchen, drücken Sie „Abbrechen“, stellen Sie sicher, dass der Kontakt korrekt ist, und geben Sie den neuen Code ein."
     },
     "expired_verification_code": {
-      "title": "Code abgelaufen",
-      "message": "Einen neuen generieren und eingeben."
+      "title": "Der Code ist abgelaufen",
+      "message": "Generieren Sie einen neuen und geben Sie ihn ein."
     }
+  },
+  "domicile-banner": {
+    "no-sercq-send-title": "Keine Papierdokumente mehr: SEND als digitalen Zustellort aktivieren",
+    "no-sercq-send-description": "Wählen Sie die SEND-Plattform als digitalen Zustellort, um die nächsten Benachrichtigungen nur digital zu erhalten und sie in Echtzeit überall zu lesen.",
+    "no-sercq-cta": "Starten",
+    "no-courtesy-title": "Verpassen Sie keine wichtigen Mitteilungen",
+    "no-courtesy-description": "Ohne Höflichkeitskontakt können wir Sie nicht benachrichtigen, wenn eine rechtsverbindliche Mitteilung auf SEND zum Lesen vorliegt.",
+    "complete-addresses": "Eine E-Mail eingeben",
+    "no-courtesy-sercq-send-title": "Möchten Sie die nächsten Benachrichtigungen nur digital erhalten?",
+    "no-courtesy-sercq-send-description": "Aktivieren Sie SEND als digitalen Zustellort und kümmern Sie sich nicht mehr um Einschreiben in Papierform.",
+    "complete-configuration": "Konfiguration abschließen",
+    "no-courtesy-no-sercq-send-title": "Verpassen Sie keine wichtigen Mitteilungen ",
+    "no-courtesy-no-sercq-send-description": "Fügen Sie eine E-Mail-Adresse hinzu, um eine Benachrichtigung zu erhalten, wenn Sie eine neue Mitteilung auf SEND haben.",
+    "no-courtesy-no-sercq-send-cta": "Ihre E-Mail bestätigen"
   }
 }
