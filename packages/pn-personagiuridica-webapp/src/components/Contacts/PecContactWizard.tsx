@@ -220,7 +220,9 @@ const PecContactWizard: React.FC<Props> = ({
             sx={{ mt: 3 }}
             data-testid="next-button"
           >
-            {t('legal-contacts.sercq-send-active-pec-enabled', { ns: 'recapiti' })}
+            {defaultSERCQ_SENDAddress?.value
+              ? t('legal-contacts.sercq-send-active-pec-transfer', { ns: 'recapiti' })
+              : t('legal-contacts.sercq-send-active-pec-enabled', { ns: 'recapiti' })}
           </Button>
         </PnWizardStep>
       </PnWizard>
