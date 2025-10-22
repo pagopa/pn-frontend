@@ -55,6 +55,9 @@ const PecContactWizard: React.FC<Props> = ({
   const feedbackContentLabel = `legal-contacts.sercq-send-wizard.feedback.content-pec${
     isTransferring ? '-transfer' : ''
   }`;
+  const buttonTextLabel = `legal-contacts.sercq-send-wizard.button${
+    isTransferring ? '-transfer' : '-activation'
+  }`;
 
   const validationSchema = yup.object().shape({
     pec: pecValidationSchema(t),
@@ -286,7 +289,7 @@ const PecContactWizard: React.FC<Props> = ({
             sx={{ mt: 3 }}
             data-testid="next-button"
           >
-            {t('legal-contacts.sercq-send-active-pec-enabled', { ns: 'recapiti' })}
+            {t(buttonTextLabel, { ns: 'recapiti' })}
           </Button>
         </PnWizardStep>
       </PnWizard>

@@ -26,7 +26,6 @@ describe('EmailSmsContactWizard', () => {
 
     expect(getByText(`${labelPrefix}.title`)).toBeInTheDocument();
     expect(getByText(`${labelPrefix}.content`)).toBeInTheDocument();
-    expect(getByText(`${labelPrefix}.email-disclaimer`)).toBeInTheDocument();
 
     // Email
     const emailInput = getById(container, 'default_email');
@@ -108,7 +107,7 @@ describe('EmailSmsContactWizard', () => {
   it('shows label and hides disclaimer when email has a value', () => {
     const emailValue = 'test@mail.it';
 
-    const { container, queryByText } = render(<EmailSmsContactWizard />, {
+    const { container } = render(<EmailSmsContactWizard />, {
       preloadedState: {
         contactsState: {
           digitalAddresses: [
@@ -130,8 +129,6 @@ describe('EmailSmsContactWizard', () => {
     const emailReadOnlyField = getById(container, 'default_email-typography');
     expect(emailReadOnlyField).toBeInTheDocument();
     expect(emailReadOnlyField).toHaveTextContent(emailValue);
-
-    expect(queryByText(`${labelPrefix}.email-disclaimer`)).not.toBeInTheDocument();
   });
 
   it('renders SMS in read-only mode when value exists', () => {

@@ -6,6 +6,7 @@
     "associa": "Link",
     "capito": "OK, I understand",
     "conferma": "Confirm",
+    "attiva": "Activate",
     "annulla": "Cancel",
     "modifica": "Edit",
     "salva": "Save",
@@ -13,10 +14,18 @@
     "enter": "Enter",
     "exit": "Exit",
     "close": "Close",
+    "end": "End",
     "enable": "Activate",
+    "manage": "Manage",
     "disable": "Deactivate",
+    "start": "Start",
+    "continue": "Continue",
     "go-to-home": "Go to home page",
-    "go-to-login": "Login"
+    "go-to-login": "Login",
+    "not-now": "Not now",
+    "do-later": "I'll do it later",
+    "add": "Add",
+    "understand": "Ok, I understand"
   },
   "menu": {
     "notifiche": "Notifications",
@@ -25,6 +34,7 @@
     "deleghe": "Delegations of authority",
     "profilo": "Your details",
     "contacts": "Contact details",
+    "integrazione-api": "API Integration",
     "app-status": "Platform status",
     "users": "Users",
     "groups": "Groups"
@@ -36,6 +46,7 @@
       "organization-dashboard": "Your company",
       "notification-platform": "SEND - Servizio Notifiche Digitali"
     },
+    "logout-message": "Do you confirm you want to log out of SEND?",
     "logout": "Exit",
     "pago-pa-link": "PagoPA S.p.A. website"
   },
@@ -43,7 +54,7 @@
     "title": "SEND - Servizio Notifiche Digitali",
     "body": "To log in, accept the Terms and Conditions of Service and read the Privacy Policy.",
     "redo-body": "The Terms and Conditions of Service and Privacy Policy have changed. To log in, you must agree and confirm that you have read the new versions.",
-    "switch-label": "I accept the <1>Terms and Conditions of Use</1> and confirm that I have read the <0>Privacy Policy </0>",
+    "switch-label": "I accept the <1>Terms and Conditions of Use</1> and confirm that I have read the <0>Privacy Policy</0>",
     "button": "Login"
   },
   "table": {
@@ -87,9 +98,10 @@
   "access-denied": "You do not have the necessary permissions to access this page",
   "not-logged": "Log in to SEND",
   "not-logged-subtitle": "To view and manage your notifications, log in with SPID or CIE.",
+  "loading": "Loading",
   "not-found": {
-    "title": "404: The page you are looking for does not exist",
-    "description": "You are here by mistake, try using the navigation menu."
+    "title": "What you were looking for is not here.",
+    "description": "The page you were looking for does not exist or is no longer available."
   },
   "leaving-app": {
     "title": "You are exiting SEND",
@@ -111,7 +123,7 @@
     "500-title": "Service not available",
     "500-message": "Due to a temporary service issue, your request has not been sent. Please come back later.",
     "lacking-grants-for-app-title": "You are not authorised to log in",
-    "invalid-token-title": "You cannot log in due to a technical issue – invalid token",
+    "invalid-token-title": "You cannot log in due to a technical issue - invalid token",
     "generic-token-exchange-problem": "Login could not be completed",
     "generic-title": "Generic error",
     "generic-message": "An error has occurred. Please try again later",
@@ -136,8 +148,8 @@
     "social": "Link: go to the website {{social}} of PagoPA S.p.A.",
     "resources": "Resources",
     "follow": "Follow us on",
-    "legal-part-1": "joint stock company with sole shareholder – share capital of 1,000,000 euros fully paid up – registered office in Rome, Piazza Colonna 370",
-    "legal-part-2": "CAP 00187 – Reg. no. in the Rome Business Register, Fiscal code and VAT number 15376371009"
+    "legal-part-1": "joint stock company with sole shareholder - share capital of 1,000,000 euros fully paid up - registered office in Rome, Piazza Colonna 370",
+    "legal-part-2": "CAP 00187 - Reg. no. in the Rome Business Register, Fiscal code and VAT number 15376371009"
   },
   "required-fields": "*Required fields",
   "too-long-field-error": "Write maximum {{maxLength}} characters",
@@ -146,6 +158,10 @@
     "invalid-characters-not-inserted": "Invalid characters have not been entered."
   },
   "errors": {
+    "technical-error": {
+      "title": "Error Information",
+      "copy-to-clipboard": "Copy error information"
+    },
     "bad_request": {
       "title": "Error sending data",
       "message": "The request format is invalid."
@@ -177,6 +193,22 @@
     "unknown": {
       "title": "Error",
       "message": "Unexpected error"
+    },
+    "invalid_type_code": {
+      "title": "This field only accepts numeric values",
+      "message": "Check the verification code and enter it again"
+    },
+    "empty_code": {
+      "title": "Missing or incomplete code",
+      "message": "The code you entered is incomplete; please enter a 5-digit code."
+    },
+    "invalid_body": {
+      "title": "Data is invalid",
+      "message": "An error occurred while submitting your data. Please check that it is correct, without spaces or special characters, and try again. If the error persists, contact support and provide the error information."
+    },
+    "invalid_parameter": {
+      "title": "Invalid data",
+      "message": "One or more of the entered data is invalid"
     }
   },
   "roles": {
@@ -184,5 +216,35 @@
     "pg-admin": "Administrator"
   },
   "required-field": "Required field",
-  "no-spaces-at-edges": "Delete spaces at the beginning or end"
+  "badges": {
+    "news": "News"
+  },
+  "conjunctions": {
+    "or": "or"
+  },
+  "downtime_language_banner": {
+    "message": "The original text of these documents is in Italian. In case of conflict between the Italian version and the translations into other languages, the meaning and conditions of the Italian language shall prevail.",
+    "link": "Consult the translations"
+  },
+  "no-spaces-at-edges": "Delete spaces at the beginning or end",
+  "wizard": {
+    "stepper": {
+      "of": "{{currentStep}} of {{totalSteps}}",
+      "activeStep": "Step {{currentStep}}"
+    }
+  },
+  "inactivity": {
+    "title": "Do you really want to log out of SEND?",
+    "body": "The disconnection is in progress. If you have changed your mind, press “Keep access” within a few seconds.",
+    "action": "Keep access"
+  },
+  "code-modal": {
+    "digits": [
+      "First digit",
+      "Second digit",
+      "Third digit",
+      "Fourth digit",
+      "Last digit"
+    ]
+  }
 }

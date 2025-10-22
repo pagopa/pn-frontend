@@ -201,15 +201,9 @@ const EmailSmsContactWizard: React.FC = () => {
         {t('legal-contacts.sercq-send-wizard.step_3.title')}
       </Typography>
 
-      <Typography fontSize="16px" mb={emailValue ? { xs: 3, lg: 4 } : 1}>
+      <Typography fontSize="16px" mb={emailValue ? { xs: 3, lg: 4 } : 3}>
         {t('legal-contacts.sercq-send-wizard.step_3.content')}
       </Typography>
-
-      {!emailValue && (
-        <Typography fontSize="16px" mb={{ xs: 3, lg: 4 }}>
-          <Trans ns="recapiti" i18nKey="legal-contacts.sercq-send-wizard.step_3.email-disclaimer" />
-        </Typography>
-      )}
 
       {/* EMAIL */}
       <DigitalContact
