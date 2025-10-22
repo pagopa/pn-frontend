@@ -1,75 +1,280 @@
 {
-  "title": "Anschriften",
-  "subtitle": "Hier können digitale Anschriften angeben und geändert werden, an die Bescheide für {{recipient}} gesendet werden sollen. Wenn du nach Firmendaten suchst, <0>findest du sie hier</0>.",
+  "title": "Kontakte",
+  "subtitle": "Verwalten Sie die digitalen Kontakte, über die Sie rechtsverbindliche Mitteilungen von SEND und/oder die entsprechenden Höflichkeitsmitteilungen für <0>Ihr Unternehmen</0> erhalten können.",
   "insert-code": "Code eingeben",
+  "status": {
+    "active": "Aktiv",
+    "inactive": "Zu aktivieren",
+    "pec-validation": "PEC-Validierung läuft"
+  },
   "legal-contacts": {
-    "title": "",
-    "description": [
-      "Wenn ein Bescheid für das Unternehmen vorliegt, wird die Empfangsbestätigung an diese Anschrift gesendet. Zum Lesen des Bescheids und zur Entrichtung eventueller Gebühren musst du dich auf der Plattform anmelden."
-    ],
+    "title": "Der Digitale Wohnsitz Ihres Unternehmens",
+    "pec-validation-banner": {
+      "title": "PEC wird validiert",
+      "dod-enabled-message": "Bis zum Abschluss des Prozesses bleibt die SEND-Plattform als Digitaler Wohnsitz aktiv.",
+      "dod-disabled-message": "Bis zum Abschluss des Prozesses können die rechtsverbindlichen Kontakte nicht geändert werden.",
+      "parties-list": "Die SEND-Plattform bleibt Ihr Digitaler Wohnsitz für {{list}}, bis die Validierung abgeschlossen ist."
+    },
+    "pec-disclaimer": "Dies ist die Hauptadresse, die für den digitalen Versand von Benachrichtigungen an das Unternehmen verwendet wird. Durch die Eingabe erhält das Unternehmen keine Papier-Einschreiben mehr.",
+    "pec-description": "Wenn eine Behörde eine SEND-Mitteilung an Ihr Unternehmen sendet, wird diese sicher und mit Rechtswert an die von Ihnen gewählte PEC zugestellt.",
     "link-pec-placeholder": "PEC-Adresse",
     "valid-pec": "Ungültige PEC-Adresse",
-    "pec-verify": "Überprüfung der PEC {{value}}",
-    "pec-verify-descr": "Wir haben einen Code an die angegebene PEC-Adresse gesendet. Der Code ist <strong>10 Minuten gültig</strong>.",
-    "pec-new-code": "Du hast ihn nicht erhalten? Überprüfe, ob die richtige PEC eingegeben wurde oder <0>generiere eine neue</0>.",
+    "pec-verify": "PEC {{value}} verifizieren",
+    "pec-verify-descr": "Wir haben einen Code an die angegebene PEC-Adresse gesendet. Der Code ist <strong>15 Minuten</strong> gültig.",
+    "pec-new-code": "Sie haben ihn nicht erhalten? Prüfen Sie, ob Sie die korrekte PEC eingegeben haben oder <0>generieren Sie einen neuen</0>.",
     "pec-added-successfully": "PEC erfolgreich zugeordnet",
-    "pec-to-add": "PEC zugeordnet",
-    "pec-validating": "Validierung der PEC läuft",
+    "pec-removed-successfully": "PEC erfolgreich entfernt",
+    "pec-to-add": "PEC-Adresse",
+    "pec-validating": "PEC-Validierung läuft",
     "cancel-pec-validation": "Validierung abbrechen",
-    "remove-pec-title": "PEC entfernen",
-    "remove-pec-message": "Möchtest du die PEC-Adresse {{value}} wirklich entfernen?",
-    "block-remove-pec-title": "PEC-Adresse kann nicht gelöscht werden",
-    "block-remove-pec-message": "Dazu müssen zuerst alle PEC-Adressen unter „Weitere Anschriften“ gelöscht werden.",
-    "validation-cancel-title": "Überprüfung abbrechen?",
-    "validation-cancel-content": "Wird die Überprüfung abgebrochen, muss eine neue PEC-Adresse eingegeben und der Vorgang erneut begonnen werden.",
+    "remove-pec-title": "Bestätigen Sie die Deaktivierung der PEC?",
+    "remove-pec-message": "<0>Sie haben keinen rechtsverbindlichen digitalen Kontakt mehr für Mitteilungen der öffentlichen Verwaltung und könnten diese auf Papier erhalten, mit möglichen Kosten für das Unternehmen.</0><1>Sie erhalten jedoch weiterhin Benachrichtigungen über die von Ihnen aktivierten Kanäle.</1>",
+    "remove-pec-confirm": "PEC deaktivieren",
+    "validation-cancel-title": "PEC-Validierung abbrechen",
+    "validation-cancel-content": "Wenn Sie bestätigen, brechen Sie die Aktivierung der PEC als Digitaler Wohnsitz auf SEND ab.",
     "validation-progress-title": "Danke!",
-    "validation-progress-content": "Wir prüfen, ob die PEC-Adresse gültig ist. Du erhältst innerhalb von 24 Stunden eine E-Mail mit dem Ergebnis."
+    "validation-progress-content": "Wir überprüfen, ob die PEC-Adresse gültig ist. Sie erhalten innerhalb von 24 Stunden eine E-Mail mit dem Ergebnis.",
+    "sercq_send-title": "SEND-Plattform",
+    "sercq_send-description": "Wenn eine Behörde eine SEND-Mitteilung an Ihr Unternehmen sendet, wird diese sicher und mit Rechtswert über die Plattform selbst zugestellt.",
+    "sercq-send-description-pec-enabled": "Nutzen Sie SEND als Digitalen Wohnsitz, um Ihre SEND-Mitteilungen an einem zentralen Ort zu verwalten, ohne sich mehr um Papier-Einschreiben  und damit verbundene Kosten sorgen zu müssen.",
+    "sercq-send-active": "Aktivieren",
+    "sercq-send-active-pec-enabled": "Digitalen Wohnsitz aktivieren",
+    "sercq-send-active-pec-transfer": "Digitalen Wohnsitz übertragen",
+    "sercq-send-info-title": "SEND als Digitalen Wohnsitz aktivieren",
+    "sercq-send-info-description": "Durch die Aktivierung des Digitalen Wohnsitzes wird SEND <strong>der rechtsverbindliche Kontakt Ihres Unternehmens</strong> für Mitteilungen der öffentlichen Verwaltung.",
+    "sercq-send-info-advantages": "Warum ist das nützlich?",
+    "sercq-send-info-list": [
+      {
+        "title": "100 % digitale Benachrichtigungen",
+        "description": "SEND-Mitteilungen erreichen Sie nicht mehr in Papierform."
+      },
+      {
+        "title": "Einsparung bei Postgebühren",
+        "description": "Sie müssen sich nicht mehr darum kümmern, Papierdokumente abzuholen und die damit verbundenen Kosten zu bezahlen."
+      },
+      {
+        "title": "Alles an einem Ort",
+        "description": "SEND-Mitteilungen werden sicher zugestellt und sind alle im reservierten SEND-Bereich Ihres Unternehmens verfügbar."
+      }
+    ],
+    "sercq-send-info-tos": "Durch Auswahl von „Aktivieren“ erklären Sie, dass Sie die <0>Nutzungsbedingungen</0> gelesen und akzeptiert haben.",
+    "sercq_send-added-successfully": "Digitaler Wohnsitz erfolgreich aktiviert",
+    "remove-sercq_send-title": "Bestätigen Sie die Deaktivierung des Digitalen Wohnsitzes auf SEND?",
+    "remove-sercq_send-message": "<0>Wenn Sie den Digitalen Wohnsitz SEND deaktivieren, könnte Ihr Unternehmen die Mitteilungen per Einschreiben erhalten und <strong>die damit verbundenen Kosten tragen.</strong></0><1>Das Unternehmen erhält weiterhin Benachrichtigungen per E-Mail, Sie können diese im Abschnitt Ihre Kontakte deaktivieren.</1>",
+    "remove-sercq_send-confirm": "Digitalen Wohnsitz deaktivieren",
+    "block-remove-digital-domicile-title": "Digitaler Wohnsitz kann nicht deaktiviert werden",
+    "block-remove-digital-domicile-message": "Um fortzufahren, müssen Sie zuerst die personalisierten Digitalen Wohnsitze pro Behörde deaktivieren.",
+    "sercq_send-removed-successfully": "Digitaler Wohnsitz erfolgreich deaktiviert",
+    "sercq-send-wizard": {
+      "title": "Digitalen Wohnsitz auf SEND aktivieren",
+      "title-transfer": "Digitalen Wohnsitz auf die SEND-Plattform übertragen",
+      "step_1": {
+        "title": "So funktioniert’s",
+        "info-list": [
+          {
+            "title": "Eine Behörde sendet eine SEND-Mitteilung für das Unternehmen",
+            "description": "Die Benachrichtigung wird sicher und mit Rechtswert über die Plattform <0>zugestellt</0>"
+          },
+          {
+            "title": "Sie erhalten eine Nachricht",
+            "description": "Wenn eine Mitteilung für Ihr Unternehmen auf SEND eingeht, benachrichtigen wir Sie per E-Mail und, falls gewünscht, auch per SMS"
+          },
+          {
+            "title": "Auf die Benachrichtigung zugreifen",
+            "description": "Öffnen Sie die Details der digitalen Mitteilung auf der SEND-Plattform"
+          }
+        ],
+        "info-tos": "Durch Drücken von „Aktivieren“ erklären Sie, dass Sie die <0>Nutzungsbedingungen</0> gelesen und akzeptiert haben.",
+        "have-pec": "Möchten Sie lieber die PEC des Unternehmens nutzen?",
+        "have-pec-description": "Alternativ können Sie eine PEC als Digitalen Wohnsitz für SEND-Mitteilungen verwenden.",
+        "insert-pec": "PEC eingeben",
+        "delivered-dialog-title": "Rechtswert der Mitteilung am Digitalen Wohnsitz SEND",
+        "delivered-dialog-description": "Wenn Sie SEND als Digitalen Wohnsitz wählen, gilt die Mitteilung <strong>7 Tage nach Zustellung</strong> als rechtswirksam zugestellt[cite: 32], auch wenn Sie sie nicht eingesehen haben.",
+        "pec-info-alert": "Die SEND-Plattform wird die PEC des Unternehmens als Digitalen Wohnsitz Ihres Unternehmens ersetzen. "
+      },
+      "step_2": {
+        "title": "Die E-Mail für Benachrichtigungen über SEND-Mitteilungen",
+        "step-title": "E-Mail des Unternehmens eingeben",
+        "content": "Die E-Mail des Unternehmens, über die wir das Unternehmen benachrichtigen, wenn eine neue rechtliche Mitteilung  auf SEND vorliegt.",
+        "sms-disclaimer": "Wenn Sie auf <strong>Nummer hinzufügen</strong> klicken, speichern Sie diesen Kontakt, um Benachrichtigungen über SEND-Mitteilungen für das Unternehmen zu erhalten. Sie können ihn im Abschnitt <strong>Kontakte</strong> verwalten."
+      },
+      "step_3": {
+        "title": "Sie aktivieren den Digitalen Wohnsitz auf SEND",
+        "step-title": "Zusammenfassung",
+        "content": "Rechtliche Mitteilungen  für das Unternehmen werden zugestellt an:",
+        "digital-domicile": "Digitaler Wohnsitz",
+        "send": "SEND",
+        "courtesy-content": "Sie haben gewählt, eine Nachricht zu erhalten unter:",
+        "contacts-list": {
+          "email": {
+            "title": "E-Mail des Unternehmens",
+            "textDisabled": "E-Mail hinzufügen"
+          },
+          "sms": {
+            "title": "Handynummer",
+            "textDisabled": "Handynummer hinzufügen"
+          }
+        },
+        "disclaimer-enable": "Durch Drücken von „Digitalen Wohnsitz aktivieren“ erklären Sie, dass Sie die <0>Datenschutzerklärung</0> gelesen und die <1>Nutzungsbedingungen</1> akzeptiert haben",
+        "disclaimer-transfer": "Durch Drücken von „Digitalen Wohnsitz übertragen“ erklären Sie, dass Sie die <0>Datenschutzerklärung</0> gelesen und die <1>Nutzungsbedingungen</1> akzeptiert haben",
+        "enable": "Digitalen Wohnsitz aktivieren",
+        "transfer": "Digitalen Wohnsitz übertragen"
+      },
+      "feedback": {
+        "title-transfer": "Sie haben den Digitalen Wohnsitz Ihres Unternehmens aktualisiert",
+        "title-pec-activation": "Aktivierung des Digitalen Wohnsitzes läuft",
+        "title-pec-transfer": "Übertragung des Digitalen Wohnsitzes läuft",
+        "title-sercq_send-activation": "Sie haben den Digitalen Wohnsitz auf SEND aktiviert",
+        "title-sercq_send-transfer": "Sie haben den Digitalen Wohnsitz Ihres Unternehmens auf SEND übertragen",
+        "content-pec": "Die von Ihnen eingegebene PEC wird validiert. Sobald dies bestätigt ist, wird der Digitale Wohnsitz aktiviert und das Unternehmen erhält alle rechtlichen Mitteilungen  an die von Ihnen gewählte Adresse.",
+        "content-pec-transfer": "Die PEC wird validiert. Sobald dies bestätigt ist, wird der Digitale Wohnsitz des Unternehmens an die von Ihnen gewählte Adresse übertragen. Bis dahin bleibt der Digitale Wohnsitz SEND aktiv.",
+        "content-sercq_send": "Das Unternehmen erhält rechtliche Mitteilungen  an den Digitalen Wohnsitz auf SEND und eine Nachricht an die von Ihnen gewählten Kontakte.",
+        "go-to-contacts": "Zurück zu den Kontakten"
+      }
+    },
+    "pec-contact-wizard": {
+      "title": "PEC als Digitalen Wohnsitz verwenden",
+      "title-transfer": "Digitalen Wohnsitz auf eine Unternehmens-PEC übertragen",
+      "content-title": "PEC Ihres Unternehmens eingeben",
+      "content-description": "Wenn eine Behörde eine SEND-Mitteilung an Ihr Unternehmen sendet, erhalten Sie die rechtliche Mitteilung  an die von Ihnen gewählte PEC.",
+      "input-label": "PEC-Adresse",
+      "sercq-info-alert": "Die Unternehmens-PEC wird die SEND-Plattform als Digitalen Wohnsitz des Unternehmens ersetzen.",
+      "disclaimer": "Ich akzeptiere, dass diese Adresse von SEND vorrangig gegenüber jeder PEC verwendet wird, die bei einer sendenden Behörde registriert ist oder in öffentlichen Registern vorhanden ist."
+    },
+    "digital-domicile-management": {
+      "title": "Digitalen Wohnsitz verwalten",
+      "sercq_send-active": "Die SEND-Plattform ist der Digitale Wohnsitz Ihres Unternehmens",
+      "choose-action": "Wählen Sie eine Option",
+      "transfer": {
+        "title-pec": "Digitalen Wohnsitz auf die SEND-Plattform übertragen",
+        "content-pec": "Die SEND-Plattform gewährleistet sichere und rechtsverbindliche Zustellungen. Der Dienst ist kostenlos und erfordert keine zusätzlichen Tools.",
+        "action-pec": "Auf SEND übertragen",
+        "title-sercq_send": "Digitalen Wohnsitz auf eine Unternehmens-PEC übertragen",
+        "content-sercq_send": "Wenn Sie eine PEC haben, können Sie diese als Digitalen Wohnsitz für SEND-Mitteilungen verwenden.",
+        "action-sercq_send": "Auf eine PEC übertragen"
+      },
+      "special_contacts": {
+        "title": "Digitalen Wohnsitz pro sendender Behörde personalisieren",
+        "content": "Wählen Sie, wo Sie Mitteilungen erhalten möchten, die von einer bestimmten Behörde an Ihr Unternehmen gesendet werden.",
+        "action": "Pro Behörde personalisieren"
+      }
+    }
   },
   "courtesy-contacts": {
-    "link-sms-placeholder": "Handynummer",
-    "link-email-placeholder": "E-Mail-Adresse",
-    "sms-add": "Benachrichtige mich per SMS",
-    "email-add": "Benachrichtige mich per E-Mail",
-    "email-verify": "E-Mail-Verifizierung {{value}}",
-    "email-verify-descr": "Wir haben einen Code an die angegebene E-Mail-Adresse gesendet. Der Code ist <strong>10 Minuten gültig</strong>.",
-    "sms-verify": "Überprüfung der Nummer {{value}}",
-    "sms-verify-descr": "Wir haben einen Code an die angegebene Handynummer gesendet. Der Code ist <strong>10 Minuten gültig</strong>.",
-    "email-new-code": "Du hast ihn nicht erhalten? Überprüfe, ob die richtige E-Mail-Adresse eingegeben wurde oder <0>generiere eine neue</0>.",
-    "sms-new-code": "Du hast ihn nicht erhalten? Überprüfe, ob die richtige Handynummer eingegeben wurde oder <0>generiere eine neue</0>.",
+    "email-title": "E-Mail-Adresse des Unternehmens",
+    "email-empty-description": "Fügen Sie eine E-Mail-Adresse des Unternehmens hinzu, über die wir Sie benachrichtigen können, wenn eine SEND-Mitteilung für Ihr Unternehmen vorliegt.",
+    "email-filled-description": "Wenn eine Mitteilung für Ihr Unternehmen vorliegt, informieren wir Sie per E-Mail an die von Ihnen gewählte Adresse.",
+    "email-sms-updates": "Möchten Sie Benachrichtigungen auch per SMS erhalten?",
+    "email-sms-add": "Handynummer hinzufügen",
+    "sms-title": "Handynummer des Unternehmens",
+    "sms-description": "Wenn eine Mitteilung für Ihr Unternehmen vorliegt, benachrichtigen wir Sie per SMS.",
+    "link-sms-placeholder": "Handynummer des Unternehmens",
+    "link-email-placeholder": "E-Mail-Adresse des Unternehmens",
+    "sms-add": "Nummer hinzufügen",
+    "email-add": "E-Mail hinzufügen",
+    "email-verify": "E-Mail {{value}} verifizieren",
+    "email-verify-descr": "Wir haben einen Code an die angegebene E-Mail-Adresse gesendet. Der Code ist <strong>15 Minuten</strong> gültig.",
+    "sms-verify": "Nummer {{value}} verifizieren",
+    "sms-verify-descr": "Wir haben einen Code an die angegebene Handynummer gesendet. Der Code ist <strong>15 Minuten</strong> gültig.",
+    "email-new-code": "Sie haben ihn nicht erhalten? Prüfen Sie, ob Sie die korrekte E-Mail eingegeben haben oder <0>generieren Sie einen neuen</0>.",
+    "sms-new-code": "Sie haben ihn nicht erhalten? Prüfen Sie, ob Sie die korrekte Handynummer eingegeben haben oder <0>generieren Sie einen neuen</0>.",
     "email-to-add": "E-Mail-Adresse",
     "sms-to-add": "Handynummer",
-    "valid-email": "E-Mail-Adresse ungültig",
-    "valid-sms": "Handynummer ungültig",
+    "valid-email": "Ungültige E-Mail-Adresse",
+    "valid-sms": "Ungültige Handynummer",
     "email-added-successfully": "E-Mail-Adresse erfolgreich hinzugefügt",
-    "sms-added-successfully": "Mobiltelefonnummer erfolgreich hinzugefügt",
-    "remove-email": "E-Mail-Adresse entfernen",
-    "remove-email-message": "Möchtest du die E-Mail-Adresse {{value}} wirklich entfernen?",
-    "remove-sms": "Handynummer entfernen",
-    "remove-sms-message": "Möchtest du die Handynummer {{value}} wirklich entfernen?"
+    "sms-added-successfully": "Handynummer erfolgreich hinzugefügt",
+    "email-removed-successfully": "E-Mail-Adresse erfolgreich entfernt",
+    "email-and-sercq-removed-successfully": "E-Mail und Digitaler Wohnsitz SEND deaktiviert",
+    "sms-removed-successfully": "Handynummer erfolgreich entfernt",
+    "remove-email": "E-Mail deaktivieren",
+    "remove-email-pec-enabled-title": "Möchten Sie Ihre Unternehmens-E-Mail deaktivieren?",
+    "remove-email-pec-enabled-message": "<0>Wenn Sie die E-Mail-Adresse des Unternehmens deaktivieren, können wir Sie nicht benachrichtigen, wenn eine rechtliche Mitteilung  für Ihr Unternehmen vorliegt.</0><1>Denken Sie daran, dass das Unternehmen, wenn die Mitteilung nicht rechtzeitig gelesen wird, möglicherweise keine Kenntnis von Fristen hat und Strafen riskiert.</1>",
+    "remove-email-no-domicile-title": "E-Mail deaktivieren",
+    "remove-email-no-domicile-message": "Wenn Sie bestätigen, erhalten Sie die E-Mail an {{value}} nicht mehr, wenn eine SEND-Mitteilung zum Lesen vorliegt.",
+    "remove-email-preconfirm-title": "Möchten Sie E-Mail-Benachrichtigungen deaktivieren?",
+    "remove-email-preconfirm-message": "<0>Wenn Sie die E-Mail-Adresse deaktivieren, können wir Sie nicht <strong>benachrichtigen, wenn eine rechtliche Mitteilung  für Ihr Unternehmen vorliegt.</strong></0>",
+    "remove-email-and-sercq": "E-Mail und Wohnsitz deaktivieren",
+    "remove-email-and-sercq-title": "Der Digitale Wohnsitz SEND wird auch mit der E-Mail deaktiviert",
+    "remove-email-and-sercq-message": "<0>Wenn Sie den Digitalen Wohnsitz SEND deaktivieren, könnte Ihr Unternehmen die Mitteilungen per Einschreiben erhalten und <strong>die damit verbundenen Kosten tragen.</strong></0>",
+    "remove-sms": "Handynummer deaktivieren",
+    "remove-sms-title-dod-enabled": "Möchten Sie SMS-Benachrichtigungen deaktivieren?",
+    "remove-email-button-dod-enabled": "Unternehmens-E-Mail deaktivieren",
+    "remove-sms-button-dod-enabled": "SMS deaktivieren",
+    "remove-sms-message-dod-enabled": "<0>Wenn Sie die Telefonnummer des Unternehmens deaktivieren, <strong>erhalten Sie keine SMS-Benachrichtigungen mehr, wenn eine rechtliche Mitteilung  für Ihr Unternehmen auf SEND vorliegt.</strong></0><1>Denken Sie daran, dass das Unternehmen, wenn eine SEND-Mitteilung nicht rechtzeitig gelesen wird, möglicherweise keine Kenntnis von Fristen hat und Strafen riskiert.</1>",
+    "remove-sms-message": "Wenn Sie bestätigen, erhalten Sie die SMS an {{value}} nicht mehr, wenn eine SEND-Mitteilung zum Lesen vorliegt.",
+    "info-modal-email-title": "E-Mail-Benachrichtigungen: So funktionieren sie",
+    "info-modal-email-subtitle": "Wenn neue SEND-Mitteilungen für Ihr Unternehmen vorliegen, erhalten Sie eine Benachrichtigung an die eingegebene E-Mail-Adresse des Unternehmens.",
+    "info-modal-email-content": "Wenn Sie keinen aktiven Digitalen Wohnsitz haben und die Mitteilung nicht innerhalb von 5 Tagen nach Erhalt der E-Mail öffnen, erhalten Sie die Dokumente in Papierform nach Hause.",
+    "info-modal-sms-title": "SMS-Benachrichtigungen: So funktionieren sie",
+    "info-modal-sms-subtitle": "Wenn neue SEND-Mitteilungen für Ihr Unternehmen vorliegen, erhalten Sie eine SMS an die eingegebene Nummer.",
+    "info-modal-sms-content": "Wenn Sie keinen aktiven Digitalen Wohnsitz haben und die Mitteilung nicht innerhalb von 5 Tagen nach Erhalt der E-Mail öffnen, erhalten Sie die Dokumente in Papierform nach Hause.",
+    "confirmation-modal-title": "Fügen Sie eine E-Mail-Adresse des Unternehmens für Benachrichtigungen hinzu!",
+    "confirmation-modal-email-content": "<0>Um den Digitalen Wohnsitz SEND zu aktivieren, benötigen wir eine E-Mail-Adresse des Unternehmens, damit wir <strong>eine Benachrichtigung senden können, wenn eine rechtliche Mitteilung  für Ihr Unternehmen vorliegt.</strong></0>",
+    "block-remove-email-title": "E-Mail kann nicht deaktiviert werden",
+    "block-remove-email-message": "Um fortzufahren, müssen Sie zuerst die personalisierten E-Mails pro Behörde entfernen.",
+    "block-remove-email-sercq-default-pec-special-message": "Um fortzufahren, müssen Sie zuerst den Digitalen Wohnsitz und die personalisierten Kontakte deaktivieren.",
+    "block-remove-sms-title": "Handynummer kann nicht deaktiviert werden",
+    "block-remove-sms-message": "Um fortzufahren, müssen Sie zuerst die personalisierten Handynummern pro Behörde löschen."
   },
   "special-contacts": {
+    "select-address": "Typ",
+    "add-sender": "Sendende Einrichtung ",
     "pec": "PEC-Adresse",
-    "sms": "Handy",
-    "email": "E-Mail-Adresse",
-    "fetch-party-error": "Wir konnten die Daten, die benötigt werden, um eine neue Anschrift zu erstellen, nicht wiederherstellen."
+    "sercq_send": "Digitaler Wohnsitz SEND",
+    "link-pec-label": "PEC-Adresse",
+    "link-sercq-label": "Ihr Digitaler Wohnsitz SEND",
+    "contact-to-add-description": "Der personalisierte Digitale Wohnsitz, an dem Ihr Unternehmen SEND-Mitteilungen von einer bestimmten Behörde erhält.",
+    "contact-already-exists": "<0>Diese Behörde ist bereits dem Kontakt {{contactValue}} zugeordnet.</0><1>Wenn Sie auf <strong>Bestätigen</strong> klicken, ersetzen Sie ihn durch den gerade eingegebenen.</1>",
+    "validating-pec-banner-content": "<0>Sie haben für diese Behörde bereits eine PEC eingegeben, die gerade validiert wird.</0><1>Sobald dies bestätigt ist, können Sie sie ändern.</1>",
+    "validating-pec-error-message": "Sie haben für diese Behörde bereits eine PEC eingegeben, die sich derzeit in Validierung befindet",
+    "fetch-party-error": "Wir konnten die Daten, die zum Erstellen eines neuen Kontakts erforderlich sind, nicht abrufen.",
+    "add-title": "Behörde und zuzuordnenden Kontakt eingeben",
+    "card-title": "PRO BEHÖRDE PERSONALISIERT",
+    "remove-special-title": "Möchten Sie {{contactValue}} löschen?",
+    "remove-special-description": "Benachrichtigungen der zugeordneten Behörden werden nicht mehr an diesen Kontakt, sondern an den Hauptkontakt gesendet.",
+    "pec-disclaimer": "Durch Ausfüllen des Feldes und Drücken von <strong>Bestätigen</strong> akzeptieren Sie, dass die von Ihnen gewählte PEC-Adresse von SEND für den Versand von Mitteilungen dieser spezifischen Sendenden Einrichtung  verwendet wird, vorrangig vor dem Digitalen Wohnsitz der Plattform, einem eventuellen beim selben Absender gewählten Digitalen Wohnsitz oder einem in öffentlichen Registern vorhandenen.",
+    "courtesy-banner": {
+      "title": "Funktion eingestellt",
+      "description": "Sie können keine personalisierten Höflichkeitskontakte mehr pro Behörde eingeben oder bestehende Kontakte ändern. Wenn Sie einen personalisierten Kontakt löschen, können Sie ihn nicht wiederherstellen oder erneut eingeben."
+    },
+    "email-description": "Die E-Mail, über die wir Ihr Unternehmen benachrichtigen, wenn es eine rechtliche Mitteilung  auf SEND erhält.",
+    "sercq-disclaimer": "Durch Drücken von „Bestätigen“ erklären Sie, dass Sie die <0>Datenschutzerklärung</0> gelesen und die <1>Nutzungsbedingungen</1> akzeptiert haben"
   },
   "common": {
-    "duplicate-contact-title": "Anschrift bereits vorhanden",
-    "duplicate-contact-descr": "Der Kontakt {{value}} ist bereits vorhanden, möchtest du trotzdem fortfahren?",
-    "enti-not-found": "Keine Körperschaft gefunden"
+    "duplicate-contact-title": "Kontakt bereits vorhanden",
+    "duplicate-contact-descr": "Der Kontakt {{value}} ist bereits vorhanden. Möchten Sie trotzdem fortfahren?",
+    "duplicate-default-contact-title": "Dieser Kontakt wird bereits als Digitaler Wohnsitz verwendet",
+    "duplicate-default-contact-descr": "Der Kontakt {{value}} wird bereits als Haupt-Digitaler Wohnsitz auf SEND verwendet.<br />Um den Digitalen Wohnsitz pro Absendebehörde zu personalisieren, wählen Sie einen anderen Kontakt.",
+    "enti-not-found": "Keine Behörden gefunden",
+    "too-long-field-error": "Schreiben Sie maximal {{maxLength}} Zeichen"
   },
   "errors": {
     "invalid_verification_code": {
       "title": "Der Code ist falsch",
-      "message": "Überprüfe ihn und gib ihn erneut ein, oder generiere einen neuen."
+      "message": "Überprüfen Sie ihn und geben Sie ihn erneut ein, oder generieren Sie einen neuen."
     },
     "retry_limit_code": {
-      "title": "Zu viele Versuche",
-      "message": "Code zu oft falsch eingegeben. Um es erneut zu versuchen, auf „Abbrechen“ klicken, sicherstellen, dass der Kontakt korrekt ist und neuen Code eingeben."
+      "title": "Sie haben zu viele Versuche unternommen",
+      "message": "Sie haben zu oft einen falschen Code eingegeben. Um es erneut zu versuchen, drücken Sie „Abbrechen“, stellen Sie sicher, dass der Kontakt korrekt ist, und geben Sie den neuen Code ein."
     },
     "expired_verification_code": {
-      "title": "Code abgelaufen",
-      "message": "Einen neuen generieren und eingeben."
+      "title": "Der Code ist abgelaufen",
+      "message": "Generieren Sie einen neuen und geben Sie ihn ein."
     }
+  },
+  "domicile-banner": {
+    "no-sercq-send-title": "Keine Papierdokumente mehr: Aktivieren Sie SEND als Digitalen Wohnsitz",
+    "no-sercq-send-description": "Wählen Sie die SEND-Plattform als Digitalen Wohnsitz, um zukünftige Mitteilungen nur digital zu erhalten und sie in Echtzeit einzusehen, egal wo Sie sich befinden.",
+    "no-sercq-cta": "Starten",
+    "no-courtesy-title": "Verpassen Sie keine wichtigen Mitteilungen",
+    "no-courtesy-description": "Ohne einen Höflichkeitskontakt können wir Sie nicht benachrichtigen, wenn eine rechtliche Mitteilung  auf SEND zum Lesen vorliegt.",
+    "complete-addresses": "E-Mail eingeben",
+    "no-courtesy-sercq-send-title": "Möchten Sie die nächsten Mitteilungen nur digital erhalten?",
+    "no-courtesy-sercq-send-description": "Aktivieren Sie SEND als Digitalen Wohnsitz und machen Sie sich keine Sorgen mehr über Papier-Einschreiben.",
+    "complete-configuration": "Konfiguration abschließen",
+    "no-courtesy-no-sercq-send-title": "Verpassen Sie keine wichtigen Mitteilungen",
+    "no-courtesy-no-sercq-send-description": "Fügen Sie eine E-Mail-Adresse hinzu, um eine Benachrichtigung zu erhalten, wenn Sie eine neue Mitteilung auf SEND haben.",
+    "no-courtesy-no-sercq-send-cta": "Bestätigen Sie Ihre E-Mail"
   }
 }

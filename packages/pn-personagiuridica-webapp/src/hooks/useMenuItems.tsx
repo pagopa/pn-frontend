@@ -19,10 +19,7 @@ import { getConfiguration } from '../services/configuration.service';
 export const useMenuItems = (userHasAdminPermissions: boolean) => {
   const { IS_B2B_ENABLED } = getConfiguration();
   const { t, i18n } = useTranslation(['common', 'notifiche']);
-  const loggedUser = useAppSelector((state: RootState) => {
-    console.log(state);
-    return state.userState.user;
-  });
+  const loggedUser = useAppSelector((state: RootState) => state.userState.user);
   const currentStatus = useAppSelector((state: RootState) => state.appStatus.currentStatus);
   const pendingDelegators = useAppSelector(
     (state: RootState) => state.generalInfoState.pendingDelegators

@@ -71,7 +71,7 @@ describe('SercqSendContactWizard', () => {
 
     const disclaimerCkb = getById(container, 'disclaimer');
     expect(disclaimerCkb).not.toBeChecked();
-    expect(getByText(`${labelPrefix}.disclaimer`)).toBeInTheDocument();
+    expect(getByText(`${labelPrefix}.disclaimer-enable`)).toBeInTheDocument();
 
     const activateButton = getByTestId('activateButton');
     expect(activateButton).toBeInTheDocument();
