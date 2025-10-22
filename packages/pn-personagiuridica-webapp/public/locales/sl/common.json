@@ -6,6 +6,7 @@
     "associa": "Poveži",
     "capito": "Razumem",
     "conferma": "Potrdi",
+    "attiva": "Aktiviraj",
     "annulla": "Prekliči",
     "modifica": "Spremeni",
     "salva": "Shrani",
@@ -13,10 +14,18 @@
     "enter": "Dostop",
     "exit": "Izhod",
     "close": "Zapri",
+    "end": "Konec",
     "enable": "Aktiviraj",
+    "manage": "Upravljaj",
     "disable": "Deaktiviraj",
+    "start": "Začni",
+    "continue": "Nadaljuj",
     "go-to-home": "Pojdi na domačo stran",
-    "go-to-login": "Prijava"
+    "go-to-login": "Prijava",
+    "not-now": "Ne zdaj",
+    "do-later": "Naredim pozneje",
+    "add": "Dodaj",
+    "understand": "V redu, razumem"
   },
   "menu": {
     "notifiche": "Obvestila",
@@ -25,6 +34,7 @@
     "deleghe": "Prenosi pooblastil",
     "profilo": "Vaši podatki",
     "contacts": "Kontaktni podatki",
+    "integrazione-api": "Integracija API",
     "app-status": "Stanje platforme",
     "users": "Uporabniki",
     "groups": "Skupine"
@@ -36,6 +46,7 @@
       "organization-dashboard": "Vaše podjetje",
       "notification-platform": "SEND - Servizio Notifiche Digitali"
     },
+    "logout-message": "Ali potrjujete, da se želite odjaviti iz SEND?",
     "logout": "Izhod",
     "pago-pa-link": "Spletna stran PagoPA S.p.A."
   },
@@ -87,9 +98,11 @@
   "access-denied": "Nimate potrebnih dovoljenj za dostop do te strani",
   "not-logged": "Dostopite do SEND",
   "not-logged-subtitle": "Če si želite ogledati in upravljati obvestila, se prijavite s SPID ali CIE.",
+  "loading": "Nalaganje",
   "not-found": {
-    "title": "404: Stran, ki jo iščete, ne obstaja",
-    "description": "Tukaj ste po pomoti, poskusite uporabiti navigacijo."
+    "title": "Kar ste iskali, ni tukaj.",
+    "description": "Stran, ki ste jo poskušali doseči, ne obstaja ali ni več na voljo.",
+    "back-to-home": "Nazaj na domačo stran"
   },
   "leaving-app": {
     "title": "Zapuščate SEND",
@@ -146,6 +159,10 @@
     "invalid-characters-not-inserted": "Neveljavni znaki niso bili vneseni."
   },
   "errors": {
+    "technical-error": {
+      "title": "Informacije o napaki",
+      "copy-to-clipboard": "Kopiraj informacije o napaki"
+    },
     "bad_request": {
       "title": "Napaka pri pošiljanju podatkov",
       "message": "Oblika zahteve ni veljavna."
@@ -177,6 +194,22 @@
     "unknown": {
       "title": "Napaka",
       "message": "Nepričakovana napaka"
+    },
+    "invalid_type_code": {
+      "title": "To polje sprejema samo številske vrednosti",
+      "message": "Preverite kodo za preverjanje in jo ponovno vnesite"
+    },
+    "empty_code": {
+      "title": "Koda manjka ali je nepopolna",
+      "message": "Vnesena koda je nepopolna, vnesite 5-mestno kodo."
+    },
+    "invalid_body": {
+      "title": "Podatki niso veljavni",
+      "message": "Pri pošiljanju podatkov je prišlo do napake. Preverite, ali so podatki pravilni, brez presledkov ali posebnih znakov, in poskusite znova. Če se napaka ponovi, se obrnite na podporo in sporočite informacije o napaki."
+    },
+    "invalid_parameter": {
+      "title": "Neveljavni podatki",
+      "message": "Eden ali več vnesenih podatkov je neveljavnih"
     }
   },
   "roles": {
@@ -184,5 +217,35 @@
     "pg-admin": "Upravitelj"
   },
   "required-field": "Obvezno polje",
-  "no-spaces-at-edges": "Izbrišite presledke na začetku ali koncu"
+  "badges": {
+    "news": "Novice"
+  },
+  "conjunctions": {
+    "or": "ali"
+  },
+  "downtime_language_banner": {
+    "message": "Izvirno besedilo dokumentov je v italijanskem jeziku. V primeru neskladja med italijansko različico in prevodi v druge jezike bodo prevladali pomen in pogoji v italijanskem jeziku.",
+    "link": "Oglejte si prevode"
+  },
+  "no-spaces-at-edges": "Izbrišite presledke na začetku ali koncu",
+  "wizard": {
+    "stepper": {
+      "of": "{{currentStep}} od {{totalSteps}}",
+      "activeStep": "Korak {{currentStep}}"
+    }
+  },
+  "inactivity": {
+    "title": "Ali se res želite odjaviti iz SEND?",
+    "body": "Odjava je v teku. Če ste si premislili, pritisnite »Ostani prijavljen« v nekaj sekundah.",
+    "action": "Ostani prijavljen"
+  },
+  "code-modal": {
+    "digits": [
+      "prva številka",
+      "druga številka",
+      "tretja številka",
+      "četrta številka",
+      "zadnja številka"
+    ]
+  }
 }
