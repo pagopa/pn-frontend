@@ -32,7 +32,6 @@ import {
   PnAutocomplete,
   SERCQ_SEND_VALUE,
   TosPrivacyConsent,
-  appStateActions,
   searchStringLimitReachedText,
 } from '@pagopa-pn/pn-commons';
 import { theme } from '@pagopa/mui-italia';
@@ -268,9 +267,6 @@ const AddSpecialContact = forwardRef<AddSpecialContactRef, Props>(
       (addr) => addr.senderId === formik.values.sender.id
     );
 
-    const labelRoot = `legal-contacts`;
-    const contactType = formik.values.channelType.toLowerCase();
-
     const handleAssociation = () => {
       if (formik.values.channelType === ChannelType.SERCQ_SEND) {
         dispatch(getSercqSendTosApproval())
@@ -401,17 +397,6 @@ const AddSpecialContact = forwardRef<AddSpecialContactRef, Props>(
             return;
           }
 
-          // show success message
-          if (formik.values.channelType !== ChannelType.PEC) {
-            dispatch(
-              appStateActions.addSuccess({
-                title: '',
-                message: t(`${labelRoot}.${contactType}-added-successfully`, {
-                  ns: 'recapiti',
-                }),
-              })
-            );
-          }
           setModalOpen(null);
           handleContactAdded();
         })
