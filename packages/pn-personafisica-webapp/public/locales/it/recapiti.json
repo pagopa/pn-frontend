@@ -16,7 +16,7 @@
       "parties-list": "La piattaforma SEND resterà il tuo domicilio digitale per {{list}} fino al completamento della validazione."
     },
     "pec-disclaimer": "Questo è l'indirizzo principale che verrà utilizzato per inviarti le notifiche in via digitale. Inserendolo, non riceverai più raccomandate cartacee.",
-    "pec-description": "Quando un ente ti invia una notifica SEND, ricevi l’avviso a valore legale sulla PEC che hai scelto.",
+    "pec-description": "Quando un ente ti invia una notifica SEND, viene recapitata in modo sicuro e con valore legale sulla PEC che hai scelto.",
     "link-pec-placeholder": "La tua PEC",
     "valid-pec": "Indirizzo PEC non valido",
     "pec-verify": "Verifica PEC {{value}}",
