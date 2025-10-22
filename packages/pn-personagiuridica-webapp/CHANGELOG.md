@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.19.0-RC.1](https://github.com/pagopa/pn-frontend/compare/v2.19.0-RC.0...v2.19.0-RC.1) (2025-10-22)
+
+
+### Features
+
+* **pn-16604:** update copy PF and PG ([#1663](https://github.com/pagopa/pn-frontend/issues/1663)) ([0711433](https://github.com/pagopa/pn-frontend/commit/0711433607b825b180adf7bb0f931df3058b1d22))
+
+
+
+
+
 # [2.19.0-RC.0](https://github.com/pagopa/pn-frontend/compare/v2.18.0...v2.19.0-RC.0) (2025-10-13)
 
 
