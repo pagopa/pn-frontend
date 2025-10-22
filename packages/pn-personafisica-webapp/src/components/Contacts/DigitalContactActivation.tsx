@@ -205,11 +205,7 @@ const DigitalContactActivation: React.FC<Props> = ({ isTransferring = false, onG
             },
           }}
         >
-          <Trans
-            ns="recapiti"
-            i18nKey={`courtesy-contacts.confirmation-modal-email-content`}
-            components={[]}
-          />
+          <Trans ns="recapiti" i18nKey={`courtesy-contacts.confirmation-modal-email-content`} />
           <DialogContentText key="paragraph1" color="text.primary" />
         </ConfirmationModal>
       </PnWizardStep>

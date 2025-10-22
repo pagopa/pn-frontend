@@ -69,9 +69,6 @@ const SercqSendContactWizard: React.FC<Props> = ({ goToStep }) => {
   const isDodEnabled =
     defaultSERCQ_SENDAddress?.value !== undefined || defaultPECAddress?.value !== undefined;
 
-  console.log('isDodEnabled', isDodEnabled);
-  console.log('defaultPECAddress', defaultPECAddress);
-
   const validationSchema = yup.object().shape({
     disclaimer: yup.bool().isTrue(t('required-field', { ns: 'common' })),
   });
