@@ -66,8 +66,7 @@ const SercqSendContactWizard: React.FC<Props> = ({ goToStep }) => {
   const thankYouStep = 3;
 
   const labelPrefix = 'legal-contacts.sercq-send-wizard.step_3.contacts-list';
-  const isDodEnabled =
-    defaultSERCQ_SENDAddress?.value !== undefined || defaultPECAddress?.value !== undefined;
+  const isDodEnabled = defaultSERCQ_SENDAddress || defaultPECAddress;
 
   const validationSchema = yup.object().shape({
     disclaimer: yup.bool().isTrue(t('required-field', { ns: 'common' })),
