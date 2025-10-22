@@ -401,17 +401,6 @@ const AddSpecialContact = forwardRef<AddSpecialContactRef, Props>(
             return;
           }
 
-          // show success message
-          if (formik.values.channelType !== ChannelType.PEC) {
-            dispatch(
-              appStateActions.addSuccess({
-                title: '',
-                message: t(`${labelRoot}.${contactType}-added-successfully`, {
-                  ns: 'recapiti',
-                }),
-              })
-            );
-          }
           setModalOpen(null);
           handleContactAdded();
         })
