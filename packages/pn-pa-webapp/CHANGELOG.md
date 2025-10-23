@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.19.0-RC.2](https://github.com/pagopa/pn-frontend/compare/v2.19.0-RC.1...v2.19.0-RC.2) (2025-10-23)
+
+
+### Bug Fixes
+
+* **pn-16309:** Fix notification search timeout ([#1644](https://github.com/pagopa/pn-frontend/issues/1644)) ([cb80b84](https://github.com/pagopa/pn-frontend/commit/cb80b84bb2f05b7e1a52975acb410042d821397d))
+
+
+
+
+
 # [2.19.0-RC.1](https://github.com/pagopa/pn-frontend/compare/v2.19.0-RC.0...v2.19.0-RC.1) (2025-10-22)
 
 
