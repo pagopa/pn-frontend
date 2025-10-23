@@ -132,6 +132,18 @@ const FilterNotifications = forwardRef(({ showFilters }: Props, ref) => {
     validationSchema,
     /** onSubmit populates filters */
     onSubmit: (values) => {
+      const start = values.startDate ? new Date(values.startDate) : null;
+      const end = values.endDate ? new Date(values.endDate) : null;
+      if (start && end) {
+        const endAtStart = getStartOfDay(end);
+        const minStart = add(endAtStart, { months: -6, days: 1 });
+        if (start < minStart) {
+          const msg =
+            t('filters.errors.max-six-months', { ns: 'notifiche' }) || 'Intervallo massimo: 6 mesi';
+          formik.setErrors({ startDate: msg, endDate: msg });
+          return;
+        }
+      }
       const currentFilters = {
         startDate: values.startDate ?? sixMonthsAgo,
         endDate: values.endDate ?? today,
@@ -187,7 +199,21 @@ const FilterNotifications = forwardRef(({ showFilters }: Props, ref) => {
     return <></>;
   }
 
-  const isInitialSearch = _.isEqual(formik.values, initialEmptyValues);
+  /**
+   * Build a normalized snapshot of the current form values before comparing with `initialEmptyValues`.
+   * In the UI, an empty date picker (null) means "use the implicit defaults" (last 6 months),
+   * but Formik may still hold fallback dates set by the picker handlers. To avoid a false mismatch,
+   * when a picker is empty we substitute the implicit defaults (sixMonthsAgo/today).
+   * This way, clearing both dates (and leaving other fields empty) is treated as the true initial state
+   * and the "Filter" button is correctly disabled.
+   */
+  const normalizedForInitial = {
+    ...formik.values,
+    startDate: startDate === null ? sixMonthsAgo : formik.values.startDate,
+    endDate: endDate === null ? today : formik.values.endDate,
+  };
+
+  const isInitialSearch = _.isEqual(normalizedForInitial, initialEmptyValues);
 
   return isMobile ? (
     <CustomMobileDialog>

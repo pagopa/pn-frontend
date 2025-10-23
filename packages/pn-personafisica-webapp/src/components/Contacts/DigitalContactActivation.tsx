@@ -63,13 +63,11 @@ const DigitalContactActivation: React.FC<Props> = ({ isTransferring = false, onG
     if (defaultEMAILAddress) {
       goToNextStep();
     } else {
-      PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SERCQ_SEND_POP_UP_EMAIL_SMS);
       setShowConfirmationModal(true);
     }
   };
 
   const handleCloseConfirmEmailSmsModal = () => {
-    PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SERCQ_SEND_POP_UP_EMAIL_SMS_BACK);
     setShowConfirmationModal(false);
   };
 
@@ -207,14 +205,8 @@ const DigitalContactActivation: React.FC<Props> = ({ isTransferring = false, onG
             },
           }}
         >
-          <Trans
-            ns="recapiti"
-            i18nKey={`courtesy-contacts.confirmation-modal-email-content`}
-            components={[
-              <DialogContentText key="paragraph1" color="text.primary" />,
-              <DialogContentText key="paragraph2" color="text.primary" mt={2} />,
-            ]}
-          />
+          <Trans ns="recapiti" i18nKey={`courtesy-contacts.confirmation-modal-email-content`} />
+          <DialogContentText key="paragraph1" color="text.primary" />
         </ConfirmationModal>
       </PnWizardStep>
       <PnWizardStep label={t('legal-contacts.sercq-send-wizard.step_4.step-title')}>

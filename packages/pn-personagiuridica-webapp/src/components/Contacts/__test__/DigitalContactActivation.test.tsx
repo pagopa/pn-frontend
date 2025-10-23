@@ -174,7 +174,7 @@ describe('DigitalContactActivation', () => {
 
     expect(confirmationDialog).toBeInTheDocument();
     within(confirmationDialog).getByText('courtesy-contacts.confirmation-modal-title');
-    within(confirmationDialog).getByText('courtesy-contacts.confirmation-modal-content');
+    within(confirmationDialog).getByText('courtesy-contacts.confirmation-modal-email-content');
 
     const dismissButton = result.getByRole('button', { name: 'button.understand' });
 
@@ -192,12 +192,10 @@ describe('DigitalContactActivation', () => {
     const button = result.getByTestId('default_email-button');
     fireEvent.click(button);
 
-    // informative dialog
+    // no informative dialog
     await waitFor(() => {
-      expect(result.getByRole('dialog')).toBeInTheDocument();
+      expect(result.getByTestId('codeDialog')).toBeInTheDocument();
     });
-    const infoButton = result.getByRole('button', { name: 'button.understand' });
-    fireEvent.click(infoButton);
 
     // inser otp and confirm
     const dialog = await fillCodeDialog(result);
@@ -272,7 +270,7 @@ describe('DigitalContactActivation', () => {
     expect(modal).toBeInTheDocument();
 
     expect(modal).toHaveTextContent('courtesy-contacts.confirmation-modal-title');
-    expect(modal).toHaveTextContent('courtesy-contacts.confirmation-modal-content');
+    expect(modal).toHaveTextContent('courtesy-contacts.confirmation-modal-email-content');
 
     const dialogButtons = modal.querySelectorAll('button');
     expect(dialogButtons.length).toBe(1);

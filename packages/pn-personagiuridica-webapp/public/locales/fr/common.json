@@ -6,6 +6,7 @@
     "associa": "Associer",
     "capito": "J'ai compris",
     "conferma": "Confirmer",
+    "attiva": "Activer",
     "annulla": "Annuler",
     "modifica": "Modifier",
     "salva": "Enregistrer",
@@ -13,10 +14,18 @@
     "enter": "Entrer",
     "exit": "Quitter",
     "close": "Fermer",
+    "end": "Fin",
     "enable": "Activer",
+    "manage": "Gérer",
     "disable": "Désactiver",
+    "start": "Démarrer",
+    "continue": "Continuer",
     "go-to-home": "Aller à la page d’accueil",
-    "go-to-login": "Se connecter"
+    "go-to-login": "Se connecter",
+    "not-now": "Pas maintenant",
+    "do-later": "Je le ferai plus tard",
+    "add": "Ajouter",
+    "understand": "OK, j'ai compris"
   },
   "menu": {
     "notifiche": "Notifications",
@@ -25,6 +34,7 @@
     "deleghe": "Procurations",
     "profilo": "Vos données",
     "contacts": "Coordonnées",
+    "integrazione-api": "Intégration API",
     "app-status": "État de la plateforme",
     "users": "Utilisateurs",
     "groups": "Groupes"
@@ -36,6 +46,7 @@
       "organization-dashboard": "Votre entreprise",
       "notification-platform": "SEND - Servizio Notifiche Digitali"
     },
+    "logout-message": "Confirmez-vous vouloir vous déconnecter de SEND ?",
     "logout": "Quitter",
     "pago-pa-link": "Site de PagoPA S.p.A."
   },
@@ -87,9 +98,11 @@
   "access-denied": "Vous n’avez pas les autorisations nécessaires pour accéder à cette page",
   "not-logged": "Se connecter à SEND",
   "not-logged-subtitle": "Pour voir et gérer vos notifications, connectez-vous avec SPID ou CIE.",
+  "loading": "Chargement en cours",
   "not-found": {
-    "title": "404 : La page que vous cherchez n’existe pas",
-    "description": "Vous êtes ici par erreur, essayez d’utiliser la navigation."
+    "title": "Ce que vous cherchiez n'est pas ici.",
+    "description": "La page que vous avez tenté d'atteindre n'existe pas ou n'est plus disponible.",
+    "back-to-home": "Retour à l'accueil"
   },
   "leaving-app": {
     "title": "Vous allez quitter SEND",
@@ -119,10 +132,10 @@
     "generic-api-error-action-text": "Recharger"
   },
   "footer": {
-    "go-to-pagopa": "Lien : aller sur le site de PagoPA S.p.A.",
+    "go-to-pagopa": "Lien : aller sur le site de PagoPA S.p.A.",
     "go-to": "Cliquer sur le lien",
     "privacy-info": "Politique de confidentialité",
-    "who": "Qui sommes-nous ?",
+    "who": "Qui sommes-nous ?",
     "work": "Carrière",
     "certifications": "Certifications",
     "security": "Sécurité des informations",
@@ -131,13 +144,13 @@
     "terms-conditions": "Conditions générales",
     "company": "Société transparente",
     "disclosure": "Politique de divulgation responsable",
-    "321-model": "Formulaire 231",
+    "321-model": "Formulaire 231",
     "accessibility": "Accessibilité",
-    "social": "Lien : va sur le site {{social}} de PagoPA S.p.A.",
+    "social": "Lien : va sur le site {{social}} de PagoPA S.p.A.",
     "resources": "Ressources",
     "follow": "Suivez-nous sur",
-    "legal-part-1": "société anonyme à associé unique – capital social de 1 000 000 d’euros entièrement libéré – siège social à Rome, Piazza Colonna 370",
-    "legal-part-2": "Code postal 00187 – N° d’inscription au Registre du Commerce de Rome, code fiscal et n° de TVA 15376371009"
+    "legal-part-1": "société anonyme à associé unique- capital social de 1 000 000 d’euros entièrement libéré- siège social à Rome, Piazza Colonna 370",
+    "legal-part-2": "Code postal 00187- N° d’inscription au Registre du Commerce de Rome, code fiscal et n° de TVA 15376371009"
   },
   "required-fields": "*Champs obligatoires",
   "too-long-field-error": "Écrire un maximum de {{maxLength}} caractères",
@@ -146,6 +159,10 @@
     "invalid-characters-not-inserted": "Les caractères non valides n’ont pas été saisis."
   },
   "errors": {
+    "technical-error": {
+      "title": "Informations sur l'erreur",
+      "copy-to-clipboard": "Copier les informations sur l'erreur"
+    },
     "bad_request": {
       "title": "Erreur lors de l’envoi des données",
       "message": "Le format de la demande n’est pas valide."
@@ -177,6 +194,22 @@
     "unknown": {
       "title": "Erreur",
       "message": "Erreur inattendue"
+    },
+    "invalid_type_code": {
+      "title": "Ce champ n'accepte que des valeurs numériques",
+      "message": "Vérifiez le code de vérification et saisissez-le à nouveau"
+    },
+    "empty_code": {
+      "title": "Code manquant ou incomplet",
+      "message": "Le code que vous avez saisi est incomplet. Veuillez saisir un code à 5 chiffres."
+    },
+    "invalid_body": {
+      "title": "Les données ne sont pas valides",
+      "message": "Une erreur s'est produite lors de l'envoi des données. Veuillez vérifier qu'elles sont correctes, sans espaces ni caractères spéciaux, et réessayez. Si l'erreur persiste, contactez l'assistance et communiquez les informations sur l'erreur."
+    },
+    "invalid_parameter": {
+      "title": "Données non valides",
+      "message": "Une ou plusieurs des données saisies ne sont pas valides"
     }
   },
   "roles": {
@@ -184,5 +217,35 @@
     "pg-admin": "Administrateur"
   },
   "required-field": "Champ obligatoire",
-  "no-spaces-at-edges": "Supprimer les espaces au début ou à la fin"
+  "badges": {
+    "news": "Nouveautés"
+  },
+  "conjunctions": {
+    "or": "ou"
+  },
+  "downtime_language_banner": {
+    "message": "Le texte original de ces documents est en italien. En cas de différences entre la version italienne et ses traductions, le sens et les conditions de la langue italienne feront foi.",
+    "link": "Consulter les traductions"
+  },
+  "no-spaces-at-edges": "Supprimer les espaces au début ou à la fin",
+  "wizard": {
+    "stepper": {
+      "of": "{{currentStep}} sur {{totalSteps}}",
+      "activeStep": "Étape {{currentStep}}"
+    }
+  },
+  "inactivity": {
+    "title": "Voulez-vous vraiment vous déconnecter de SEND ?",
+    "body": "La déconnexion est en cours. Si vous avez changé d'avis, appuyez sur « Maintenir l'accès » dans quelques secondes.",
+    "action": "Maintenir l'accès"
+  },
+  "code-modal": {
+    "digits": [
+      "Premier chiffre",
+      "Deuxième chiffre",
+      "Troisième chiffre",
+      "Quatrième chiffre",
+      "Dernier chiffre"
+    ]
+  }
 }

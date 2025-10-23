@@ -13,6 +13,7 @@ import {
 import {
   digitalAddresses,
   digitalAddressesSercq,
+  digitalCourtesyAddresses,
   digitalLegalAddresses,
 } from '../../../__mocks__/Contacts.mock';
 import { errorMock } from '../../../__mocks__/Errors.mock';
@@ -531,6 +532,87 @@ describe('test AddSpecialContact', () => {
     await waitFor(() => {
       expect(mock.history.post).toHaveLength(0);
     });
+  });
+
+  it('show form component if email not active and show modal warning if try to confirm', async () => {
+    mock.onGet('/bff/v1/pa-list').reply(200, parties);
+
+    // render component
+    const result = render(
+      <AddSpecialContactWrapper handleSpecialContactAdded={handleContactAddedMock} />,
+      {
+        preloadedState: { contactsState: { digitalAddresses: digitalLegalAddresses } },
+      }
+    );
+
+    // select sender
+    await testAutocomplete(result.container, 'sender', parties, true, 2, true);
+
+    // select addressType
+    await testSelect(
+      result.container,
+      'channelType',
+      channelTypesItems,
+      channelTypesItems.findIndex((item) => item.value === ChannelType.SERCQ_SEND)
+    );
+
+    const pecInput = queryById(result.container, 's_value');
+    await waitFor(() => {
+      expect(pecInput).not.toBeInTheDocument();
+    })
+
+    const digitalContentEl = result.getByTestId('default_emailContact');
+    expect(digitalContentEl).toBeInTheDocument();
+
+    // check disclaimer
+    const disclaimerCheckbox = result.container.querySelector('[name="s_disclaimer"]');
+    fireEvent.click(disclaimerCheckbox!);
+
+    const confirmButton = result.getByRole('button', { name: 'conferma' });
+    fireEvent.click(confirmButton);
+
+    await waitFor(() => {
+      const dialog = screen.getByTestId('confirmationDialog');
+      expect(dialog).toBeInTheDocument();
+
+      const titleEl = getById(dialog, 'confirmation-dialog-title');
+      expect(titleEl).toHaveTextContent('courtesy-contacts.confirmation-modal-title');
+      const contentEl = getById(dialog, 'confirmation-dialog-description');
+      expect(contentEl).toHaveTextContent('courtesy-contacts.confirmation-modal-email-content');
+    });
+  });
+
+  it("show email if it's active", async () => {
+    mock.onGet('/bff/v1/pa-list').reply(200, parties);
+
+    // render component
+    const result = render(
+      <AddSpecialContactWrapper handleSpecialContactAdded={handleContactAddedMock} />,
+      {
+        preloadedState: {
+          contactsState: {
+            digitalAddresses: [...digitalLegalAddresses, ...digitalCourtesyAddresses],
+          },
+        },
+      }
+    );
+
+    // select sender
+    await testAutocomplete(result.container, 'sender', parties, true, 2, true);
+
+    // select addressType
+    await testSelect(
+      result.container,
+      'channelType',
+      channelTypesItems,
+      channelTypesItems.findIndex((item) => item.value === ChannelType.SERCQ_SEND)
+    );
+
+    const email = digitalCourtesyAddresses.find(
+      (addr) => addr.senderId === 'default' && addr.channelType === ChannelType.EMAIL
+    )?.value;
+    const emailActive = result.getByText(email!);
+    expect(emailActive).toBeInTheDocument();
   });
 
   it('API error', async () => {

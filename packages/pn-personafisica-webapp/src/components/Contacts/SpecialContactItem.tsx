@@ -1,3 +1,4 @@
+import { RefObject } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -9,6 +10,7 @@ import DigitalContact from './DigitalContact';
 import PecValidationItem from './PecValidationItem';
 
 type Props = {
+  specialContactItemRef?: RefObject<{ toggleEdit: () => void }>;
   address: DigitalAddress;
   showSenderName?: boolean;
   onEdit: (value: string, channelType: ChannelType, sender: Sender) => void;
@@ -17,6 +19,7 @@ type Props = {
 };
 
 const SpecialContactItem: React.FC<Props> = ({
+  specialContactItemRef,
   address,
   showSenderName = true,
   onDelete,
@@ -37,6 +40,13 @@ const SpecialContactItem: React.FC<Props> = ({
       senderId,
       senderName,
     });
+  };
+
+  const handleEdit = (pecValue: string) => {
+    if (pecValue === value) {
+      specialContactItemRef?.current?.toggleEdit();
+    }
+    onEdit(pecValue, channelType, { senderId, senderName });
   };
 
   return (
@@ -97,6 +107,7 @@ const SpecialContactItem: React.FC<Props> = ({
             </Stack>
           ) : (
             <DigitalContact
+              ref={specialContactItemRef}
               value={value}
               channelType={channelType}
               senderId={senderId}
@@ -105,7 +116,7 @@ const SpecialContactItem: React.FC<Props> = ({
                 label: t('legal-contacts.link-pec-placeholder'),
               }}
               insertButtonLabel={t('button.attiva', { ns: 'common' })}
-              onSubmit={(pecValue) => onEdit(pecValue, channelType, { senderId, senderName })}
+              onSubmit={handleEdit}
               onDelete={handleDelete}
               slots={{
                 editButton: addressType === AddressType.COURTESY ? () => <></> : undefined,
