@@ -32,6 +32,7 @@ type Props = {
   onApiKeys: () => void;
   /** True when at least one filter is active (non-default). Used to show the “filtered” EmptyState variant. */
   filtersApplied: boolean;
+  /** The function to be invoked if the user clicks on clean filters button */
   onCleanFilters: () => void;
 };
 
