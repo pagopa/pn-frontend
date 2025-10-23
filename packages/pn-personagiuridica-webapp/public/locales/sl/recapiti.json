@@ -189,7 +189,7 @@
     "sms-removed-successfully": "Mobilna številka uspešno odstranjena",
     "remove-email": "Deaktiviraj e-pošto",
     "remove-email-pec-enabled-title": "Ali želite deaktivirati vašo poslovno e-pošto?",
-    "remove-email-pec-enabled-message": "<0>Če deaktivirate poslovni e-poštni naslov, vas ne moremo opozoriti, ko je na voljo pravno veljavna komunikacija za vaše podjetje.</0><1>Ne pozabite, da podjetje, če obvestilo ni prebrano pravočasno, morda ne bo seznanjeno z morebitnimi roki in lahko nastanejo kazni.</1>",
+    "remove-email-pec-enabled-message": "<0>Če deaktivirate poslovni e-poštni naslov, <strong>vas ne moremo opozoriti, ko je na voljo pravno veljavna komunikacija za vaše podjetje</strong>.</0><1>Ne pozabite, da podjetje, če obvestilo ni prebrano pravočasno, morda ne bo seznanjeno z morebitnimi roki in lahko nastanejo kazni.</1>",
     "remove-email-no-domicile-title": "Deaktiviraj e-pošto",
     "remove-email-no-domicile-message": "Če potrdite, ne boste več prejemali e-pošte na {{value}}, ko bo na voljo obvestilo SEND za branje.",
     "remove-email-preconfirm-title": "Ali želite deaktivirati e-poštna opozorila?",

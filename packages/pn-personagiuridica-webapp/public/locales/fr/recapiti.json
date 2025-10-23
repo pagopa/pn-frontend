@@ -189,7 +189,7 @@
     "sms-removed-successfully": "Numéro de portable retiré avec succès",
     "remove-email": "Désactiver le courriel",
     "remove-email-pec-enabled-title": "Voulez-vous désactiver votre courriel d'entreprise ?",
-    "remove-email-pec-enabled-message": "<0>Si vous désactivez l'adresse courriel de l'entreprise, nous ne pourrons pas vous avertir lorsqu'il y a une communication à valeur légale pour votre entreprise.</0><1>N'oubliez pas que, si la notification n'est pas lue à temps, l'entreprise pourrait ne pas être au courant d'éventuelles échéances et encourir des pénalités.</1>",
+    "remove-email-pec-enabled-message": "<0>Si vous désactivez l'adresse courriel de l'entreprise, <strong>nous ne pourrons pas vous avertir lorsqu'il y a une communication à valeur légale pour votre entreprise</strong>.</0><1>N'oubliez pas que, si la notification n'est pas lue à temps, l'entreprise pourrait ne pas être au courant d'éventuelles échéances et encourir des pénalités.</1>",
     "remove-email-no-domicile-title": "Désactiver le courriel",
     "remove-email-no-domicile-message": "Si vous confirmez, vous ne recevrez plus le courriel sur {{value}} lorsqu'il y aura une notification SEND à lire.",
     "remove-email-preconfirm-title": "Voulez-vous désactiver les alertes par courriel ?",
