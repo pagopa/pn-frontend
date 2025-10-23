@@ -85,7 +85,7 @@ describe('IOContactWizard', () => {
 
     let dialog = await waitFor(() => getByRole('dialog'));
     expect(dialog).toBeInTheDocument();
-    getByText('courtesy-contacts.confirmation-modal-title');
+    getByText('courtesy-contacts.confirmation-modal-io-title');
     getByText('courtesy-contacts.confirmation-modal-io-content');
     getByText('courtesy-contacts.confirmation-modal-io-accept');
 

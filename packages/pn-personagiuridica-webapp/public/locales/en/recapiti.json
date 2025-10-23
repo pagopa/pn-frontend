@@ -189,7 +189,7 @@
     "sms-removed-successfully": "Mobile number successfully removed",
     "remove-email": "Remove email",
     "remove-email-pec-enabled-title": "Do you want to deactivate your company email?",
-    "remove-email-pec-enabled-message": "<0>If you deactivate the company email address, we cannot notify you when there is a legal value communication for your business.</0><1>Remember that, if the notification is not read in time, the business might not be aware of any deadlines and incur penalties.</1>",
+    "remove-email-pec-enabled-message": "<0>If you deactivate the company email address, <strong>we cannot notify you when there is a legal value communication for your business</strong>.</0><1>Remember that, if the notification is not read in time, the business might not be aware of any deadlines and incur penalties.</1>",
     "remove-email-no-domicile-title": "Deactivate email",
     "remove-email-no-domicile-message": "If you confirm, you will no longer receive the email on {{value}} when there is a SEND notification to read.",
     "remove-email-preconfirm-title": "Do you want to deactivate email alerts?",
