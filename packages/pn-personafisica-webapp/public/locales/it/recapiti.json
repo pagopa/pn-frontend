@@ -246,6 +246,7 @@
     "info-modal-sms-subtitle": "Quando ci sono nuove notifiche per te, riceverai un SMS al numero inserito.",
     "info-modal-sms-content": "Se non hai il domicilio digitale attivo e non apri la notifica entro 5 giorni dall’invio dell’SMS, riceverai i documenti in formato cartaceo a casa.",
     "confirmation-modal-title": "Aggiungi un indirizzo email per gli avvisi!",
+    "confirmation-modal-io-title": "Aggiungere i tuoi recapiti è importante!",
     "confirmation-modal-io-content": "Se non colleghi SEND a IO <strong>non riceverai in app un messaggio</strong> quando ricevi una comunicazione a valore legale su SEND.",
     "confirmation-modal-disable-io-content": "Se scolleghi SEND da IO <strong>non riceverai in app un messaggio</strong> quando ricevi una comunicazione a valore legale su SEND.",
     "confirmation-modal-io-accept": "Collega SEND a IO",
