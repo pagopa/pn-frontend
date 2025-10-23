@@ -75,8 +75,7 @@ const FilterNotifications = forwardRef(({ showFilters }: Props, ref) => {
   const dialogRef = useRef<{ toggleOpen: () => void }>(null);
 
   const validationSchema = useMemo(() => {
-    const rangeErrorMsg =
-      t('filters.errors.max-six-months', { ns: 'notifiche' }) || 'Intervallo massimo: 6 mesi';
+    const rangeErrorMsg = t('filters.errors.max-six-months', { ns: 'notifiche' });
 
     const maxSixMonthsTest = (_value: Date | null | undefined, ctx: yup.TestContext) => {
       const { startDate, endDate } = (ctx.parent ?? {}) as {
@@ -98,8 +97,12 @@ const FilterNotifications = forwardRef(({ showFilters }: Props, ref) => {
       const endAtStart = getStartOfDay(new Date(endDate));
       const minStart = add(endAtStart, { months: -6, days: 1 });
 
-      return start >= minStart || ctx.createError({ message: rangeErrorMsg });
+      if (start >= minStart) {
+        return true;
+      }
+      return ctx.createError({ message: rangeErrorMsg });
     };
+
     return yup.object({
       recipientId: yup
         .string()
@@ -107,20 +110,23 @@ const FilterNotifications = forwardRef(({ showFilters }: Props, ref) => {
       iunMatch: yup.string().matches(IUN_regex, t('filters.errors.iun', { ns: 'notifiche' })),
       // the formik validations for dates (which control the enable status of the "filtra" button)
       // must coincide with the input field validations (which control the color of the frame around each field)
+      // -------- ATTENTION!!! -------------
+      // now we show an helperText when date rage is above six months
+      // this leads that also other error messages (date invalid, end date before start date and so on) are shown
+      // but we don't have custom messages for these other errors, and so yup shows its own error messages
+      // to fix this behaviour, we put an empty string with a space, but it is NOT ACCESSIBLE and we will fix it in the accessibility task
       startDate: yup
         .date()
-        .nullable()
-        .notRequired()
-        .min(tenYearsAgo)
-        .max(today)
-        .test('max-six-months', rangeErrorMsg, maxSixMonthsTest),
+        .typeError(' ')
+        .test('max-six-months', rangeErrorMsg, maxSixMonthsTest)
+        .min(tenYearsAgo, ' ')
+        .max(today, ' '),
       endDate: yup
         .date()
-        .nullable()
-        .notRequired()
-        .min(dateIsDefined(startDate) ? startDate : tenYearsAgo)
-        .max(today)
-        .test('max-six-months', rangeErrorMsg, maxSixMonthsTest),
+        .typeError(' ')
+        .test('max-six-months', rangeErrorMsg, maxSixMonthsTest)
+        .min(dateIsDefined(startDate) ? startDate : tenYearsAgo, ' ')
+        .max(today, ' '),
     });
   }, [startDate, endDate, t]);
 
@@ -132,21 +138,9 @@ const FilterNotifications = forwardRef(({ showFilters }: Props, ref) => {
     validationSchema,
     /** onSubmit populates filters */
     onSubmit: (values) => {
-      const start = values.startDate ? new Date(values.startDate) : null;
-      const end = values.endDate ? new Date(values.endDate) : null;
-      if (start && end) {
-        const endAtStart = getStartOfDay(end);
-        const minStart = add(endAtStart, { months: -6, days: 1 });
-        if (start < minStart) {
-          const msg =
-            t('filters.errors.max-six-months', { ns: 'notifiche' }) || 'Intervallo massimo: 6 mesi';
-          formik.setErrors({ startDate: msg, endDate: msg });
-          return;
-        }
-      }
       const currentFilters = {
-        startDate: values.startDate ?? sixMonthsAgo,
-        endDate: values.endDate ?? today,
+        startDate: values.startDate,
+        endDate: values.endDate,
         recipientId: getValidValue(values.recipientId),
         iunMatch: getValidValue(values.iunMatch),
         status: getValidStatus(values.status),

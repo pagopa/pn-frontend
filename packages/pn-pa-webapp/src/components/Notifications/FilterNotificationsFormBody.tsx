@@ -9,7 +9,9 @@ import {
   DatePickerTypes,
   formatIun,
   getNotificationAllowedStatus,
+  sixMonthsAgo,
   tenYearsAgo,
+  today,
   useIsMobile,
 } from '@pagopa-pn/pn-commons';
 
@@ -43,16 +45,14 @@ type DatePickerFieldProps = {
   isMobile: boolean;
   mb: string | number;
   value: Date | null;
-  minDate?: Date | null;
-  maxDate?: Date | null;
-  disableFuture?: boolean;
+  defaultValue: Date;
+  minDate: Date | null;
+  maxDate: Date | null;
   formikInstance: FormikInst;
   setLocalDate: (value: Date | null) => void;
-  error?: boolean;
-  helperText?: string;
 };
 
-const DatePickerField: React.FC<Readonly<DatePickerFieldProps>> = ({
+const DatePickerField: React.FC<DatePickerFieldProps> = ({
   language,
   label,
   id,
@@ -60,13 +60,11 @@ const DatePickerField: React.FC<Readonly<DatePickerFieldProps>> = ({
   isMobile,
   mb,
   value,
+  defaultValue,
   minDate,
   maxDate,
-  disableFuture,
   formikInstance,
   setLocalDate,
-  error,
-  helperText,
 }) => (
   <CustomDatePicker
     language={language}
@@ -74,7 +72,7 @@ const DatePickerField: React.FC<Readonly<DatePickerFieldProps>> = ({
     format={DATE_FORMAT}
     value={value}
     onChange={(v: DatePickerTypes) => {
-      void formikInstance.setFieldValue(id, v ?? null, true).then(() => {
+      void formikInstance.setFieldValue(id, v || defaultValue).then(() => {
         setLocalDate(v);
       });
     }}
@@ -90,11 +88,14 @@ const DatePickerField: React.FC<Readonly<DatePickerFieldProps>> = ({
         },
         fullWidth: isMobile,
         sx: { mb },
-        ...(error ? { error: true } : {}),
-        ...(helperText ? { helperText } : {}),
+        error: formikInstance.touched[id] && Boolean(formikInstance.errors[id]),
+        helperText:
+          formikInstance.touched[id] &&
+          formikInstance.errors[id] &&
+          String(formikInstance.errors[id]),
       },
     }}
-    disableFuture={disableFuture}
+    disableFuture
     minDate={minDate ?? undefined}
     maxDate={maxDate ?? undefined}
   />
@@ -156,12 +157,6 @@ const FilterNotificationsFormBody = ({
 
   const mb = isMobile ? '20px' : 0;
 
-  const startErr = formikInstance.errors?.startDate as string | undefined;
-  const endErr = formikInstance.errors?.endDate as string | undefined;
-
-  // verify it's a "max range exceeded" error, otherwise no helperText is shown
-  const helperText = startErr && endErr && startErr === endErr ? startErr : undefined;
-
   return (
     <Fragment>
       <TextField
@@ -208,13 +203,11 @@ const FilterNotificationsFormBody = ({
         isMobile={isMobile}
         mb={mb}
         value={startDate}
+        defaultValue={sixMonthsAgo}
         minDate={tenYearsAgo}
         maxDate={endDate ?? null}
-        disableFuture={true}
         formikInstance={formikInstance}
         setLocalDate={setStartDate}
-        error={!!startErr}
-        helperText={helperText}
       />
 
       <DatePickerField
@@ -225,13 +218,11 @@ const FilterNotificationsFormBody = ({
         isMobile={isMobile}
         mb={mb}
         value={endDate}
+        defaultValue={today}
         minDate={startDate ?? tenYearsAgo}
         maxDate={null}
-        disableFuture={true}
         formikInstance={formikInstance}
         setLocalDate={setEndDate}
-        error={!!endErr}
-        helperText={helperText}
       />
 
       <TextField
