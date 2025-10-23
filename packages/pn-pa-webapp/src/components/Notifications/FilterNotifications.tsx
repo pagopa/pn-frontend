@@ -1,4 +1,4 @@
-import { add } from 'date-fns';
+import { add, isValid } from 'date-fns';
 import { FormikValues, useFormik } from 'formik';
 import _ from 'lodash';
 import { forwardRef, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
@@ -74,26 +74,61 @@ const FilterNotifications = forwardRef(({ showFilters }: Props, ref) => {
   const { t } = useTranslation(['common', 'notifiche']);
   const dialogRef = useRef<{ toggleOpen: () => void }>(null);
 
-  const validationSchema = useMemo(
-    () =>
-      yup.object({
-        recipientId: yup
-          .string()
-          .matches(
-            dataRegex.pIvaAndFiscalCode,
-            t('filters.errors.fiscal-code', { ns: 'notifiche' })
-          ),
-        iunMatch: yup.string().matches(IUN_regex, t('filters.errors.iun', { ns: 'notifiche' })),
-        // the formik validations for dates (which control the enable status of the "filtra" button)
-        // must coincide with the input field validations (which control the color of the frame around each field)
-        startDate: yup.date().min(tenYearsAgo).max(today),
-        endDate: yup
-          .date()
-          .min(dateIsDefined(startDate) ? startDate : tenYearsAgo)
-          .max(today),
-      }),
-    [startDate, endDate, t]
-  );
+  const validationSchema = useMemo(() => {
+    const rangeErrorMsg = t('filters.errors.max-six-months', { ns: 'notifiche' });
+
+    const maxSixMonthsTest = (_value: Date | null | undefined, ctx: yup.TestContext) => {
+      const { startDate, endDate } = (ctx.parent ?? {}) as {
+        startDate?: Date | null;
+        endDate?: Date | null;
+      };
+
+      if (!startDate || !endDate) {
+        return true;
+      }
+
+      // verify startDate and endDate are both valid dates before validating range
+      const start = new Date(startDate);
+      const end = new Date(endDate);
+      if (!isValid(start) || !isValid(end)) {
+        return true;
+      }
+
+      const endAtStart = getStartOfDay(new Date(endDate));
+      const minStart = add(endAtStart, { months: -6, days: 1 });
+
+      if (start >= minStart) {
+        return true;
+      }
+      return ctx.createError({ message: rangeErrorMsg });
+    };
+
+    return yup.object({
+      recipientId: yup
+        .string()
+        .matches(dataRegex.pIvaAndFiscalCode, t('filters.errors.fiscal-code', { ns: 'notifiche' })),
+      iunMatch: yup.string().matches(IUN_regex, t('filters.errors.iun', { ns: 'notifiche' })),
+      // the formik validations for dates (which control the enable status of the "filtra" button)
+      // must coincide with the input field validations (which control the color of the frame around each field)
+      // -------- ATTENTION!!! -------------
+      // now we show an helperText when date rage is above six months
+      // this leads that also other error messages (date invalid, end date before start date and so on) are shown
+      // but we don't have custom messages for these other errors, and so yup shows its own error messages
+      // to fix this behaviour, we put an empty string with a space, but it is NOT ACCESSIBLE and we will fix it in the accessibility task
+      startDate: yup
+        .date()
+        .typeError(' ')
+        .test('max-six-months', rangeErrorMsg, maxSixMonthsTest)
+        .min(tenYearsAgo, ' ')
+        .max(today, ' '),
+      endDate: yup
+        .date()
+        .typeError(' ')
+        .test('max-six-months', rangeErrorMsg, maxSixMonthsTest)
+        .min(dateIsDefined(startDate) ? startDate : tenYearsAgo, ' ')
+        .max(today, ' '),
+    });
+  }, [startDate, endDate, t]);
 
   const [prevFilters, setPrevFilters] = useState(filters || emptyValues);
   const filtersCount = filtersApplied(prevFilters, emptyValues);
@@ -103,18 +138,6 @@ const FilterNotifications = forwardRef(({ showFilters }: Props, ref) => {
     validationSchema,
     /** onSubmit populates filters */
     onSubmit: (values) => {
-      const start = values.startDate ? new Date(values.startDate) : null;
-      const end = values.endDate ? new Date(values.endDate) : null;
-      if (start && end) {
-        const endAtStart = getStartOfDay(end);
-        const minStart = add(endAtStart, { months: -6, days: 1 });
-        if (start < minStart) {
-          const msg =
-            t('filters.errors.max-six-months', { ns: 'notifiche' }) || 'Intervallo massimo: 6 mesi';
-          formik.setErrors({ startDate: msg, endDate: msg });
-          return;
-        }
-      }
       const currentFilters = {
         startDate: values.startDate,
         endDate: values.endDate,
