@@ -1,8 +1,8 @@
 import { Box, Typography } from '@mui/material';
 
-import { useIsMobile } from '../../../hooks';
-import { PagoPAPaymentFullDetails } from '../../../models';
-import { formatEurocentToCurrency } from '../../../utility';
+import { useIsMobile } from '../../../hooks/useIsMobile';
+import { PagoPAPaymentFullDetails } from '../../../models/NotificationDetail';
+import { formatEurocentToCurrency } from '../../../utility/currency.utility';
 import { getLocalizedOrDefaultLabel } from '../../../utility/localization.utility';
 
 type Props = {

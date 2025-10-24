@@ -1,6 +1,6 @@
 import { AppResponse, ServerResponseErrorCode } from '../../models/AppResponse';
 import { render, waitFor } from '../../test-utils';
-import { AppResponsePublisher } from '../../utility';
+import AppResponsePublisher from '../../utility/AppResponse/AppResponsePublisher';
 import { createAppMessage } from '../../utility/message.utility';
 import AppResponseMessage from '../AppResponseMessage';
 
@@ -37,7 +37,7 @@ describe('AppResponseMessage Component', () => {
         showTechnicalData: false,
         status: appErrorResponse.status,
         action,
-        errorCode: ServerResponseErrorCode.BAD_REQUEST_ERROR
+        errorCode: ServerResponseErrorCode.BAD_REQUEST_ERROR,
       });
       expect(state.messages.errors).toStrictEqual([{ ...message, id: '1' }]);
     });

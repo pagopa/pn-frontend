@@ -4,8 +4,8 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { Menu } from '@mui/icons-material';
 import { Box, Drawer, List, ListItemButton, ListItemIcon, ListItemText } from '@mui/material';
 
-import { useIsMobile } from '../../hooks';
-import { SideMenuItem } from '../../models';
+import { useIsMobile } from '../../hooks/useIsMobile';
+import { SideMenuItem } from '../../models/SideMenuItem';
 import SideMenuList from './SideMenuList';
 
 type Props = {
@@ -84,7 +84,7 @@ const SideMenu: FC<Props> = ({ menuItems, selfCareItems }) => {
   };
 
   useEffect(() => {
-    if(isMobile){
+    if (isMobile) {
       setState(false);
     }
   }, [location]);

@@ -2,8 +2,9 @@ import { useCallback, useEffect, useState } from 'react';
 
 import { Box, Stack, Typography } from '@mui/material';
 
-import { useIsMobile } from '../../hooks';
-import { AppStatusData, GetDowntimeHistoryParams, KnownSentiment } from '../../models';
+import { useIsMobile } from '../../hooks/useIsMobile';
+import { AppStatusData, GetDowntimeHistoryParams } from '../../models/AppStatus';
+import { KnownSentiment } from '../../models/EmptyState';
 import { PaginationData } from '../../models/Pagination';
 import { formatDateTime } from '../../utility/date.utility';
 import { getLocalizedOrDefaultLabel } from '../../utility/localization.utility';

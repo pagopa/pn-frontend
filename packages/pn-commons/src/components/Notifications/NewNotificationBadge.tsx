@@ -1,6 +1,6 @@
 import { Badge } from '@mui/material';
 
-import { NotificationStatus } from '../../models';
+import { NotificationStatus } from '../../models/NotificationStatus';
 
 export const isNewNotification = (value: NotificationStatus) => {
   switch (value) {

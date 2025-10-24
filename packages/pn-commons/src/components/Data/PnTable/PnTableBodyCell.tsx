@@ -1,7 +1,7 @@
 import { TableCell, TableCellProps } from '@mui/material';
 import { ButtonNaked } from '@pagopa/mui-italia';
 
-import { buttonNakedInheritStyle } from '../../../utility';
+import { buttonNakedInheritStyle } from '../../../utility/styles.utility';
 
 export type PnTableBodyCellProps = {
   testId?: string;

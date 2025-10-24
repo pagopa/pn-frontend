@@ -3,7 +3,7 @@ import {
   INotificationDetailTimeline,
   NotificationDetailRecipient,
   PhysicalAddress,
-} from '../../models';
+} from '../../models/NotificationDetail';
 import { getLocalizedOrDefaultLabel } from '../../utility/localization.utility';
 
 export interface TimelineStepPayload {

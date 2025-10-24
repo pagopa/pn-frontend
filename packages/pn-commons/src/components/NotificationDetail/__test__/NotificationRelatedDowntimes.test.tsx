@@ -3,14 +3,12 @@ import { vi } from 'vitest';
 
 import { beDowntimeHistoryWithIncidents } from '../../../__mocks__/AppStatus.mock';
 import { notificationDTO } from '../../../__mocks__/NotificationDetail.mock';
-import {
-  Downtime,
-  IAppMessage,
-  NotificationStatus,
-  NotificationStatusHistory,
-} from '../../../models';
+import { IAppMessage } from '../../../models/AppMessage';
+import { Downtime } from '../../../models/AppStatus';
+import { NotificationStatusHistory } from '../../../models/NotificationDetail';
+import { NotificationStatus } from '../../../models/NotificationStatus';
 import { RenderResult, initLocalizationForTest, render, within } from '../../../test-utils';
-import { formatDate, isToday } from '../../../utility';
+import { formatDate, isToday } from '../../../utility/date.utility';
 import { LANGUAGE_SESSION_KEY } from '../../../utility/multilanguage.utility';
 import NotificationRelatedDowntimes from '../NotificationRelatedDowntimes';
 

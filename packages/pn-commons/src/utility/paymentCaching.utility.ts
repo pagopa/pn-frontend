@@ -1,7 +1,7 @@
 import _ from 'lodash';
 
-import { PaymentCache, PaymentDetails, PaymentStatus } from '../models';
-import { paymentCacheSchema } from '../models/PaymentCache';
+import { PaymentDetails, PaymentStatus } from '../models/NotificationDetail';
+import { PaymentCache, paymentCacheSchema } from '../models/PaymentCache';
 
 export const PAYMENT_CACHE_KEY = 'payments';
 
