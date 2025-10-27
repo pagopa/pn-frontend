@@ -1,4 +1,4 @@
-import { removeNullProperties } from '@pagopa-pn/pn-commons/src/utility/user.utility';
+import { removeNullProperties } from '@pagopa-pn/pn-commons';
 
 import { User } from '../../models/user';
 import { authClient } from '../apiClients';

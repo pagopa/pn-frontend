@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import * as _ from 'lodash-es';
 
 import { PaymentDetails, PaymentStatus } from '../models/NotificationDetail';
 import { PaymentCache, paymentCacheSchema } from '../models/PaymentCache';

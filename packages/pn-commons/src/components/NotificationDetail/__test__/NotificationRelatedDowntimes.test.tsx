@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import * as _ from 'lodash-es';
 import { vi } from 'vitest';
 
 import { beDowntimeHistoryWithIncidents } from '../../../__mocks__/AppStatus.mock';

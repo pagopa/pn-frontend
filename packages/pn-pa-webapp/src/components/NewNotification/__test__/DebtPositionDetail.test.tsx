@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import * as _ from 'lodash-es';
 import { vi } from 'vitest';
 
 import { getById, testInput, testRadio } from '@pagopa-pn/pn-commons/src/test-utils';

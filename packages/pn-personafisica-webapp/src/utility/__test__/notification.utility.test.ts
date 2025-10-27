@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import * as _ from 'lodash-es';
 
 import { mandatesByDelegate } from '../../__mocks__/Delegations.mock';
 import { notificationDTO } from '../../__mocks__/NotificationDetail.mock';

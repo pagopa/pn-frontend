@@ -1,5 +1,5 @@
 // leave default import for mixpanel, using named once it won't work
-import _ from 'lodash';
+import * as _ from 'lodash-es';
 import mixpanel from 'mixpanel-browser';
 
 import { AnyAction, Dispatch, PayloadAction } from '@reduxjs/toolkit';

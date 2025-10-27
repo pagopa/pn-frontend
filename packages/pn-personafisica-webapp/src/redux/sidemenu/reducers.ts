@@ -1,4 +1,4 @@
-import { PaymentTpp } from '@pagopa-pn/pn-commons/src/models/NotificationDetail';
+import { PaymentTpp } from '@pagopa-pn/pn-commons';
 import { createSlice } from '@reduxjs/toolkit';
 
 import { acceptMandate, rejectMandate } from '../delegation/actions';

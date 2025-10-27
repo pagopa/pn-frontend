@@ -1,5 +1,5 @@
 /* eslint-disable functional/immutable-data */
-import _ from 'lodash';
+import * as _ from 'lodash-es';
 
 import { IAppMessage } from '../models/AppMessage';
 

@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import * as _ from 'lodash-es';
 import { FormEvent, PropsWithChildren, useRef } from 'react';
 
 import { Box, Button, DialogActions, DialogContent, Grid } from '@mui/material';

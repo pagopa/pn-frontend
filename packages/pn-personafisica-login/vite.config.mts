@@ -1,3 +1,4 @@
+import { visualizer } from 'rollup-plugin-visualizer';
 import { defineConfig, loadEnv, mergeConfig, splitVendorChunkPlugin } from 'vite';
 import { defineConfig as defineVitestConfig } from 'vitest/config';
 
@@ -25,7 +26,17 @@ export default defineConfig(({ mode }) => {
 
   return mergeConfig(vitestConfig, {
     base: '/auth/',
-    plugins: [react(), basicSsl(), splitVendorChunkPlugin()],
+    plugins: [
+      react(),
+      basicSsl(),
+      splitVendorChunkPlugin(),
+      visualizer({
+        // Aggiungi il visualizer
+        open: true, // Apre automaticamente il report nel browser dopo la build
+        filename: 'build-stats.html', // Nome del file di report
+        gzipSize: true, // Mostra la dimensione dopo gzip,
+      }),
+    ],
     server: {
       host: env.HOST,
       port: 443,
