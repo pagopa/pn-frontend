@@ -20,7 +20,7 @@ import {
 import userEvent from '@testing-library/user-event';
 
 import { appStateSlice } from './redux/slices/appStateSlice';
-import { formatDate } from './utility';
+import { formatDate } from './utility/date.utility';
 import { initLocalization } from './utility/localization.utility';
 
 type NavigationRouter = 'default' | 'none';

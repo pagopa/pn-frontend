@@ -1,7 +1,8 @@
 import { useMemo } from 'react';
 
 import { useFieldSpecs } from '../../hooks/useFieldSpecs';
-import { CardElement, Downtime, DowntimeLogHistory } from '../../models';
+import { Downtime, DowntimeLogHistory } from '../../models/AppStatus';
+import { CardElement } from '../../models/PnCard';
 import PnCard from '../Data/PnCard/PnCard';
 import PnCardContent from '../Data/PnCard/PnCardContent';
 import PnCardContentItem from '../Data/PnCard/PnCardContentItem';

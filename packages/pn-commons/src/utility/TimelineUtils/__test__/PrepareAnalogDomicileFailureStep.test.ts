@@ -1,5 +1,5 @@
 import { getTimelineElem, notificationDTO } from '../../../__mocks__/NotificationDetail.mock';
-import { TimelineCategory } from '../../../models';
+import { TimelineCategory } from '../../../models/NotificationDetail';
 import { PrepareAnalogDomicileFailureDetails } from '../../../models/NotificationDetail';
 import { initLocalization } from '../../../utility/localization.utility';
 import { PrepareAnalogDomicileFailureStep } from '../PrepareAnalogDomicileFailureStep';

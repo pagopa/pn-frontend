@@ -1,5 +1,5 @@
 import { useFormik } from 'formik';
-import _ from 'lodash';
+import * as _ from 'lodash-es';
 import { useEffect, useRef, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import * as yup from 'yup';

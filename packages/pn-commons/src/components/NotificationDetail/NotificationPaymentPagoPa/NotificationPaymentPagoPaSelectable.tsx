@@ -1,7 +1,7 @@
 import { Box, FormControlLabel, Radio } from '@mui/material';
 
-import { useIsMobile } from '../../../hooks';
-import { PagoPAPaymentFullDetails } from '../../../models';
+import { useIsMobile } from '../../../hooks/useIsMobile';
+import { PagoPAPaymentFullDetails } from '../../../models/NotificationDetail';
 import NotificationPaymentPagoPaAmount from './NotificationPaymentPagoPaAmount';
 import NotificationPaymentPagoPaDescription from './NotificationPaymentPagoPaDescription';
 

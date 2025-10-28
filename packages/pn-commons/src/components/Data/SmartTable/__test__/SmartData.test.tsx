@@ -2,7 +2,8 @@ import { vi } from 'vitest';
 
 import { Box } from '@mui/material';
 
-import { Row, SmartTableData, Sort } from '../../../../models';
+import { Row, Sort } from '../../../../models/PnTable';
+import { SmartTableData } from '../../../../models/SmartTable';
 import {
   createMatchMedia,
   disableConsoleLogging,

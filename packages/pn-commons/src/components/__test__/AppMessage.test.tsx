@@ -1,6 +1,6 @@
 import { vi } from 'vitest';
 
-import { IAppMessage } from '../../models';
+import { IAppMessage } from '../../models/AppMessage';
 import { act, render } from '../../test-utils';
 import AppMessage from '../AppMessage';
 

@@ -3,7 +3,7 @@
 /* eslint-disable complexity */
 
 /* eslint-disable functional/immutable-data */
-import _ from 'lodash';
+import * as _ from 'lodash-es';
 
 import {
   AnalogWorkflowDetails,
@@ -17,7 +17,6 @@ import {
   NotificationDetailPayment,
   NotificationDetailRecipient,
   NotificationDetailTimelineDetails,
-  NotificationStatus,
   NotificationStatusHistory,
   PagoPAPaymentFullDetails,
   PaidDetails,
@@ -27,7 +26,8 @@ import {
   SendDigitalDetails,
   SendPaperDetails,
   TimelineCategory,
-} from '../models';
+} from '../models/NotificationDetail';
+import { NotificationStatus } from '../models/NotificationStatus';
 import { getLocalizedOrDefaultLabel } from '../utility/localization.utility';
 import { TimelineStepInfo } from './TimelineUtils/TimelineStep';
 import { TimelineStepFactory } from './TimelineUtils/TimelineStepFactory';

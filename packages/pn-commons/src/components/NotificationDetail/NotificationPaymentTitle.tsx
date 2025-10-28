@@ -1,6 +1,7 @@
 import { Link, Typography } from '@mui/material';
 
-import { EventPaymentRecipientType, F24PaymentDetails, PaymentDetails } from '../../models';
+import { EventPaymentRecipientType } from '../../models/MixpanelEvents';
+import { F24PaymentDetails, PaymentDetails } from '../../models/NotificationDetail';
 import { getLocalizedOrDefaultLabel } from '../../utility/localization.utility';
 
 type Props = {

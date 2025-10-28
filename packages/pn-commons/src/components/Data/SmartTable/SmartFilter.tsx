@@ -1,10 +1,10 @@
-import _ from 'lodash';
+import * as _ from 'lodash-es';
 import { FormEvent, PropsWithChildren, useRef } from 'react';
 
 import { Box, Button, DialogActions, DialogContent, Grid } from '@mui/material';
 
-import { useIsMobile } from '../../../hooks';
-import { filtersApplied } from '../../../utility';
+import { useIsMobile } from '../../../hooks/useIsMobile';
+import { filtersApplied } from '../../../utility/genericFunctions.utility';
 import CustomMobileDialog from '../../CustomMobileDialog/CustomMobileDialog';
 import CustomMobileDialogAction from '../../CustomMobileDialog/CustomMobileDialogAction';
 import CustomMobileDialogContent from '../../CustomMobileDialog/CustomMobileDialogContent';

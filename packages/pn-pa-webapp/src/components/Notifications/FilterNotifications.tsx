@@ -1,6 +1,6 @@
 import { add, isValid } from 'date-fns';
 import { FormikValues, useFormik } from 'formik';
-import _ from 'lodash';
+import * as _ from 'lodash-es';
 import { forwardRef, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';

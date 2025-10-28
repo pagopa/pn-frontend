@@ -1,5 +1,5 @@
 import { cachedPayments, paymentsData } from '../../__mocks__/NotificationDetail.mock';
-import { PaymentDetails, PaymentStatus } from '../../models';
+import { PaymentDetails, PaymentStatus } from '../../models/NotificationDetail';
 import {
   PAYMENT_CACHE_KEY,
   checkIfPaymentsIsAlreadyInCache,

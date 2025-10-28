@@ -1,5 +1,5 @@
 /* eslint-disable functional/immutable-data */
-import { isArray } from 'lodash';
+import * as _ from 'lodash-es';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -62,7 +62,7 @@ const LastStateStatistics: React.FC<Props> = (props) => {
     tooltip: {
       trigger: 'axis',
       formatter: (params) => {
-        const elem = isArray(params) ? params[0] : params;
+        const elem = _.isArray(params) ? params[0] : params;
         return `<div style="word-break: break-word;white-space: pre-wrap;">${elem.marker}${
           elem.name
         } <b>${elem.data.value.toLocaleString()}</b>

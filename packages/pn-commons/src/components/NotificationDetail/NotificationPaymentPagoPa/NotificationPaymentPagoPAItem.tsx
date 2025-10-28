@@ -1,12 +1,12 @@
 import { Box, Skeleton } from '@mui/material';
 
-import { useIsMobile } from '../../../hooks';
+import { useIsMobile } from '../../../hooks/useIsMobile';
+import { EventPaymentRecipientType } from '../../../models/MixpanelEvents';
 import {
-  EventPaymentRecipientType,
   PagoPAPaymentFullDetails,
   PaymentInfoDetail,
   PaymentStatus,
-} from '../../../models';
+} from '../../../models/NotificationDetail';
 import NotificationPaymentPagoPaError from './NotificationPaymentPagoPaError';
 import NotificationPaymentPagoPaReadOnly from './NotificationPaymentPagoPaReadOnly';
 import NotificationPaymentPagoPaSelectable from './NotificationPaymentPagoPaSelectable';

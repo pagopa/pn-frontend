@@ -2,8 +2,8 @@ import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 
 import { AppResponse, AppResponseError } from '../models/AppResponse';
-import { appStateActions } from '../redux';
-import { AppResponsePublisher } from '../utility/AppResponse';
+import { appStateActions } from '../redux/slices/appStateSlice';
+import AppResponsePublisher from '../utility/AppResponse/AppResponsePublisher';
 
 /**
  * AppResponseMessage that subscribes to error messages using an AppResponsePublisher

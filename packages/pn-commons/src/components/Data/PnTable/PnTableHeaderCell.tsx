@@ -3,7 +3,7 @@ import { ReactChild, ReactFragment } from 'react';
 import { Box, TableCell, TableCellProps, TableSortLabel } from '@mui/material';
 import { visuallyHidden } from '@mui/utils';
 
-import { Sort } from '../../../models';
+import { Sort } from '../../../models/PnTable';
 
 export type PnTableHeaderCellProps<T> = {
   testId?: string;
@@ -53,8 +53,8 @@ const PnTableHeaderCell = <T,>({
             '&:focus-visible': {
               borderRadius: '2px',
               outlineOffset: '4px',
-              outline: '2px solid currentColor'
-            }
+              outline: '2px solid currentColor',
+            },
           }}
         >
           {children}

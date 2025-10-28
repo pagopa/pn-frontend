@@ -4,8 +4,10 @@ import AttachFileIcon from '@mui/icons-material/AttachFile';
 import { Box, Grid, Paper, Stack, Typography, useTheme } from '@mui/material';
 import { ButtonNaked } from '@pagopa/mui-italia';
 
-import { Downtime, NotificationStatus, NotificationStatusHistory } from '../../models';
-import { formatDate, isToday } from '../../utility';
+import { Downtime } from '../../models/AppStatus';
+import { NotificationStatusHistory } from '../../models/NotificationDetail';
+import { NotificationStatus } from '../../models/NotificationStatus';
+import { formatDate, isToday } from '../../utility/date.utility';
 import { getLocalizedOrDefaultLabel } from '../../utility/localization.utility';
 import { getSessionLanguage } from '../../utility/multilanguage.utility';
 import ApiErrorWrapper from '../ApiError/ApiErrorWrapper';

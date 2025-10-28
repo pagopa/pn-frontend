@@ -2,11 +2,12 @@ import { Children, PropsWithChildren } from 'react';
 
 import { Box, Grid } from '@mui/material';
 
-import { useIsMobile } from '../../hooks';
-import { PaginationData, Row, SmartTableData, Sort } from '../../models';
-import { SlotProps } from '../../models/PnTable';
-import { calculatePages } from '../../utility';
+import { useIsMobile } from '../../hooks/useIsMobile';
+import { PaginationData } from '../../models/Pagination';
+import { Row, SlotProps, Sort } from '../../models/PnTable';
+import { SmartTableData } from '../../models/SmartTable';
 import checkChildren from '../../utility/children.utility';
+import { calculatePages } from '../../utility/pagination.utility';
 import CustomPagination from '../Pagination/CustomPagination';
 import SmartBody from './SmartTable/SmartBody';
 import SmartData from './SmartTable/SmartData';

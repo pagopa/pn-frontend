@@ -1,3 +1,4 @@
+// import { visualizer } from 'rollup-plugin-visualizer';
 import { defineConfig, loadEnv, mergeConfig, splitVendorChunkPlugin } from 'vite';
 import { configDefaults, defineConfig as defineVitestConfig } from 'vitest/config';
 
@@ -27,7 +28,18 @@ export default defineConfig(({ mode }) => {
   const webAppEnv = env.HOST ? env.HOST.split('.')[1] : 'dev'; // the host value is like "cittadini.dev.notifichedigitali.it"
 
   return mergeConfig(vitestConfig, {
-    plugins: [react(), basicSsl(), splitVendorChunkPlugin()],
+    plugins: [
+      react(),
+      basicSsl(),
+      splitVendorChunkPlugin(),
+      /*visualizer({
+        // Aggiungi il visualizer
+        open: true, // Apre automaticamente il report nel browser dopo la build
+        filename: 'build-stats.html', // Nome del file di report
+        gzipSize: true, // Mostra la dimensione dopo gzip
+      }),
+      */
+    ],
     server: {
       host: env.HOST,
       port: 443,

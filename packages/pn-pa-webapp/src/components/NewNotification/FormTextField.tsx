@@ -1,5 +1,5 @@
 import { FormikErrors, FormikTouched, FormikValues, getIn } from 'formik';
-import _ from 'lodash';
+import * as _ from 'lodash-es';
 
 import { Grid, SxProps, TextField } from '@mui/material';
 

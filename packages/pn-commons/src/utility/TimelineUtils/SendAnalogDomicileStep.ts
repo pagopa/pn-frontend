@@ -1,4 +1,8 @@
-import { AnalogWorkflowDetails, PhysicalCommunicationType, SendPaperDetails } from '../../models';
+import {
+  AnalogWorkflowDetails,
+  PhysicalCommunicationType,
+  SendPaperDetails,
+} from '../../models/NotificationDetail';
 import { TimelineStep, TimelineStepInfo, TimelineStepPayload } from './TimelineStep';
 
 export class SendAnalogDomicileStep extends TimelineStep {

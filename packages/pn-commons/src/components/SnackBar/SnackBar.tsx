@@ -5,7 +5,7 @@ import { Alert, AlertTitle, Box, IconButton, Snackbar, Typography } from '@mui/m
 import { ButtonNaked } from '@pagopa/mui-italia';
 
 import { useIsMobile } from '../../hooks/useIsMobile';
-import { IAppMessage } from '../../models';
+import { IAppMessage } from '../../models/AppMessage';
 import { AppResponseOutcome } from '../../models/AppResponse';
 import { getLocalizedOrDefaultLabel } from '../../utility/localization.utility';
 import CopyToClipboard from '../CopyToClipboard';

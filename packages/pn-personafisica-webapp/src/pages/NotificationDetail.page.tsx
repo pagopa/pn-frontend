@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import * as _ from 'lodash-es';
 import { Fragment, ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';

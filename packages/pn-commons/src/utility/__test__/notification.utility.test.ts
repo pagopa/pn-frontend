@@ -11,7 +11,6 @@ import {
   LegalFactType,
   NotificationDeliveryMode,
   NotificationDetailRecipient,
-  NotificationStatus,
   NotificationStatusHistory,
   PagoPAPaymentFullDetails,
   PaidDetails,
@@ -20,7 +19,8 @@ import {
   PaymentsData,
   SendDigitalDetails,
   TimelineCategory,
-} from '../../models';
+} from '../../models/NotificationDetail';
+import { NotificationStatus } from '../../models/NotificationStatus';
 import { initLocalizationForTest } from '../../test-utils';
 import { TimelineStepFactory } from '../TimelineUtils/TimelineStepFactory';
 import {

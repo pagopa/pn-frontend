@@ -11,7 +11,7 @@ import {
   ListItemText,
 } from '@mui/material';
 
-import { SideMenuItem } from '../../models';
+import { SideMenuItem } from '../../models/SideMenuItem';
 import SideMenuListItem from './SideMenuListItem';
 
 type Props = {
@@ -31,8 +31,11 @@ const style = {
 const SideMenuList = ({ menuItems, selfCareItems, handleLinkClick, selectedItem }: Props) => {
   const [open, setOpen] = useState<boolean>(false);
   const [openId, setOpenId] = useState<string>('');
-  const [selectedIndex, setSelectedIndex] =
-    useState<{ label: string; index: number; route: string }>();
+  const [selectedIndex, setSelectedIndex] = useState<{
+    label: string;
+    index: number;
+    route: string;
+  }>();
   // store previous values
   const prevOpenId = useRef(openId);
 

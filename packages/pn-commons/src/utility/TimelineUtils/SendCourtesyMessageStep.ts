@@ -1,4 +1,4 @@
-import { DigitalDomicileType, SendCourtesyMessageDetails } from '../../models';
+import { DigitalDomicileType, SendCourtesyMessageDetails } from '../../models/NotificationDetail';
 import { getLocalizedOrDefaultLabel } from '../localization.utility';
 import { TimelineStep, TimelineStepInfo, TimelineStepPayload } from './TimelineStep';
 

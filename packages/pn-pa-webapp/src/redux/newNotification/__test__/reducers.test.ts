@@ -1,5 +1,5 @@
 import MockAdapter from 'axios-mock-adapter';
-import _ from 'lodash';
+import * as _ from 'lodash-es';
 
 import { PhysicalCommunicationType } from '@pagopa-pn/pn-commons';
 

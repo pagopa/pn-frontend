@@ -1,6 +1,6 @@
 import { vi } from 'vitest';
 
-import { Sort } from '../../../../models';
+import { Sort } from '../../../../models/PnTable';
 import { disableConsoleLogging, fireEvent, render } from '../../../../test-utils';
 import PnTableHeaderCell from '../PnTableHeaderCell';
 

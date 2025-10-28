@@ -3,7 +3,7 @@ import { vi } from 'vitest';
 
 import userEvent from '@testing-library/user-event';
 
-import { ErrorMessage } from '../../../models';
+import { ErrorMessage } from '../../../models/AppResponse';
 import { act, render, screen, waitFor, within } from '../../../test-utils';
 import CodeModal from '../CodeModal';
 

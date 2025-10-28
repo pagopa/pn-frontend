@@ -7,9 +7,10 @@ import {
   PaymentDetails,
   PaymentInfoDetail,
   PaymentStatus,
-} from '../../../../models';
+} from '../../../../models/NotificationDetail';
 import { fireEvent, getById, queryById, render, waitFor } from '../../../../test-utils';
-import { formatEurocentToCurrency, populatePaymentsPagoPaF24 } from '../../../../utility';
+import { formatEurocentToCurrency } from '../../../../utility/currency.utility';
+import { populatePaymentsPagoPaF24 } from '../../../../utility/notification.utility';
 import NotificationPaymentPagoPAItem from '../../NotificationPaymentPagoPa/NotificationPaymentPagoPAItem';
 
 describe('NotificationPaymentPagoPAItem Component', () => {

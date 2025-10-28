@@ -1,8 +1,8 @@
 import { vi } from 'vitest';
 
-import { PagoPAPaymentFullDetails } from '../../../../models';
+import { PagoPAPaymentFullDetails } from '../../../../models/NotificationDetail';
 import { fireEvent, render } from '../../../../test-utils';
-import { formatEurocentToCurrency } from '../../../../utility';
+import { formatEurocentToCurrency } from '../../../../utility/currency.utility';
 import NotificationPaymentPagoPaSelectable from '../NotificationPaymentPagoPaSelectable';
 
 describe('NotificationPaymentPagoPaSelectable', () => {

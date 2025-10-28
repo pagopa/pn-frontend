@@ -1,7 +1,7 @@
 import { vi } from 'vitest';
 
 import { selfcareMenuItems, sideMenuItems } from '../../../__mocks__/SideMenu.mock';
-import { SideMenuItem } from '../../../models';
+import { SideMenuItem } from '../../../models/SideMenuItem';
 import { fireEvent, render, waitFor, within } from '../../../test-utils';
 import SideMenuList from '../SideMenuList';
 
