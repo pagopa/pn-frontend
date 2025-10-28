@@ -147,7 +147,7 @@
         "content-pec": "Die von dir eingegebene PEC wird validiert. Sobald sie bestätigt ist, wird das digitale Domizil aktiviert und du erhältst alle rechtsgültigen Mitteilungen an die von dir gewählte Adresse.",
         "content-pec-transfer": "Die PEC wird validiert. Sobald sie bestätigt ist, wird dein digitales Domizil an die von dir gewählte Adresse übertragen. Bis dahin bleibt das digitale Domizil SEND aktiv.",
         "content-sercq_send": "Du erhältst deine rechtsgültigen Mitteilungen an dein digitales Domizil auf SEND und eine Nachricht an die von dir gewählten Kontakte.",
-        "go-to-contacts": "Zu deinen Adressen gehen"
+        "go-to-contacts": "Zurück zu deinen Adressen"
       }
     },
     "pec-contact-wizard": {

@@ -147,7 +147,7 @@
         "content-pec": "PEC, ki ste jo vnesli, je v fazi validacije. Ko bo potrjena, se bo digitalno prebivališče aktiviralo in prejeli boste vse komunikacije z zakonsko vrednostjo na naslov, ki ste ga izbrali.",
         "content-pec-transfer": "PEC je v fazi validacije. Ko bo potrjena, bo vaše digitalno prebivališče preneseno na naslov, ki ste ga izbrali. Do takrat ostaja aktivno digitalno prebivališče SEND.",
         "content-sercq_send": "Svoje komunikacije z zakonsko vrednostjo boste prejeli na svoje digitalno prebivališče na SEND in sporočilo na kontaktne podatke, ki ste jih izbrali.",
-        "go-to-contacts": "Pojdi na tvoje kontaktne podatke"
+        "go-to-contacts": "Nazaj na vaše kontaktne podatke"
       }
     },
     "pec-contact-wizard": {
