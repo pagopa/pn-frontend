@@ -47,9 +47,6 @@ import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import PFEventStrategyFactory from '../../utility/MixpanelUtils/PFEventStrategyFactory';
 import { isPFEvent } from '../../utility/mixpanel';
 
-const redirectPrivacyLink = () => window.open(`${PRIVACY_POLICY}`, '_blank');
-const redirectToSLink = () => window.open(`${TERMS_OF_SERVICE_SERCQ_SEND}`, '_blank');
-
 type Props = {
   goToStep: (step: number) => void;
   showIOStep?: boolean;
@@ -337,8 +334,10 @@ const SercqSendContactWizard: React.FC<Props> = ({ goToStep, showIOStep }) => {
                       textDecoration: 'none !important',
                       fontWeight: 'bold',
                     }}
-                    onClick={redirectPrivacyLink}
-                    data-testid="tos-link"
+                    data-testid="privacy-link"
+                    href={PRIVACY_POLICY}
+                    target="_blank"
+                    rel="noopener"
                   />,
 
                   <Link
@@ -348,8 +347,10 @@ const SercqSendContactWizard: React.FC<Props> = ({ goToStep, showIOStep }) => {
                       textDecoration: 'none !important',
                       fontWeight: 'bold',
                     }}
-                    onClick={redirectToSLink}
                     data-testid="tos-link"
+                    href={TERMS_OF_SERVICE_SERCQ_SEND}
+                    target="_blank"
+                    rel="noopener"
                   />,
                 ]}
               />
