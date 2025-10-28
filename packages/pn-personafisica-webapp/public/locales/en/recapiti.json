@@ -147,7 +147,7 @@
         "content-pec": "The PEC you entered is being validated. Once confirmed, the digital domicile will be activated and you will receive all legally-binding communications at the address you selected.",
         "content-pec-transfer": "The PEC is being validated. Once confirmed, your digital domicile will be transferred to the address you selected. Until then, the SEND digital domicile will remain active.",
         "content-sercq_send": "You will receive your legally-binding communications at your digital domicile on SEND and a message at the addresses you selected.",
-        "go-to-contacts": "Back to your addresses"
+        "go-to-contacts": "Go back to your contact details"
       }
     },
     "pec-contact-wizard": {
