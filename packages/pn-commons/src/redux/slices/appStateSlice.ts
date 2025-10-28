@@ -76,7 +76,7 @@ export const appStateSlice = createSlice({
         status: action.payload.status,
         action: action.payload.action,
         traceId: extractRootTraceId(action.payload.traceId),
-        errorCode: action.payload.errorCode
+        errorCode: action.payload.errorCode,
       });
       if (message.showTechnicalData) {
         state.lastError = {
@@ -105,7 +105,7 @@ export const appStateSlice = createSlice({
         title: action.payload.title,
         message: action.payload.message,
         showTechnicalData: false,
-        status: action.payload.status
+        status: action.payload.status,
       });
       state.messages.success.push(message);
     },
@@ -124,7 +124,7 @@ export const appStateSlice = createSlice({
         title: action.payload.title,
         message: action.payload.message,
         showTechnicalData: false,
-        status: action.payload.status
+        status: action.payload.status,
       });
       state.messages.info.push(message);
     },
@@ -143,7 +143,10 @@ export const appStateSlice = createSlice({
         }
       })
       .addMatcher(isFulfilled, (state, action) => {
-        state.loading.result = false;
+        const blocked = action.meta?.arg?.blockLoading;
+        if (!blocked) {
+          state.loading.result = false;
+        }
         const actionBeingFulfilled = action.type.slice(0, action.type.indexOf('/'));
         state.messages.errors = doRemoveErrorsByAction(actionBeingFulfilled, state.messages.errors);
         const response = createAppResponseSuccess(actionBeingFulfilled, action.payload?.response);
@@ -154,7 +157,10 @@ export const appStateSlice = createSlice({
         };
       })
       .addMatcher(handleError, (state, action) => {
-        state.loading.result = false;
+        const blocked = action.meta?.arg?.blockLoading;
+        if (!blocked) {
+          state.loading.result = false;
+        }
         const actionBeingRejected = action.type.slice(0, action.type.indexOf('/'));
         state.messages.errors = doRemoveErrorsByAction(actionBeingRejected, state.messages.errors);
         const response = createAppResponseError(actionBeingRejected, action.payload.response);

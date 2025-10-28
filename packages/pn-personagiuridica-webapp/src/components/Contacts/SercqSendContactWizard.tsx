@@ -25,7 +25,6 @@ import {
   ConsentType,
   SERCQ_SEND_VALUE,
   TosPrivacyConsent,
-  appStateActions,
 } from '@pagopa-pn/pn-commons';
 import { theme } from '@pagopa/mui-italia';
 
@@ -60,14 +59,14 @@ const SercqSendContactWizard: React.FC<Props> = ({ goToStep }) => {
   const dispatch = useAppDispatch();
 
   const tosConsent = useRef<Array<TosPrivacyConsent>>();
-  const { defaultEMAILAddress, defaultSMSAddress } = useAppSelector(
-    contactsSelectors.selectAddresses
-  );
+  const { defaultEMAILAddress, defaultSMSAddress, defaultPECAddress, defaultSERCQ_SENDAddress } =
+    useAppSelector(contactsSelectors.selectAddresses);
 
   const emailSmsStep = 1;
   const thankYouStep = 3;
 
   const labelPrefix = 'legal-contacts.sercq-send-wizard.step_3.contacts-list';
+  const isDodEnabled = defaultSERCQ_SENDAddress || defaultPECAddress;
 
   const validationSchema = yup.object().shape({
     disclaimer: yup.bool().isTrue(t('required-field', { ns: 'common' })),
@@ -167,14 +166,6 @@ const SercqSendContactWizard: React.FC<Props> = ({ goToStep }) => {
       .unwrap()
       .then(() => {
         sessionStorage.removeItem('domicileBannerClosed');
-        // show success message
-        dispatch(
-          appStateActions.addSuccess({
-            title: '',
-            message: t(`legal-contacts.sercq_send-added-successfully`, { ns: 'recapiti' }),
-          })
-        );
-
         goToStep(thankYouStep);
       })
       .catch(() => {});
@@ -258,7 +249,9 @@ const SercqSendContactWizard: React.FC<Props> = ({ goToStep }) => {
           label={
             <Typography fontSize="14px" color="text.secondary">
               <Trans
-                i18nKey="legal-contacts.sercq-send-wizard.step_3.disclaimer"
+                i18nKey={`legal-contacts.sercq-send-wizard.step_3.disclaimer-${
+                  isDodEnabled ? 'transfer' : 'enable'
+                }`}
                 ns="recapiti"
                 components={[
                   <Link
@@ -303,7 +296,9 @@ const SercqSendContactWizard: React.FC<Props> = ({ goToStep }) => {
         onClick={() => formik.submitForm()}
         data-testid="activateButton"
       >
-        {t('legal-contacts.sercq-send-wizard.step_3.enable', { ns: 'recapiti' })}
+        {isDodEnabled
+          ? t('legal-contacts.sercq-send-wizard.step_3.transfer', { ns: 'recapiti' })
+          : t('legal-contacts.sercq-send-wizard.step_3.enable', { ns: 'recapiti' })}
       </Button>
     </Box>
   );

@@ -8,6 +8,7 @@ import {
   LoadingPage,
   SessionModal,
   adaptedTokenExchangeError,
+  isJwtExpired,
   useErrors,
   useSessionCheck,
 } from '@pagopa-pn/pn-commons';
@@ -78,7 +79,7 @@ const SessionGuard = () => {
   };
 
   const exit = async () => {
-    if (sessionToken) {
+    if (sessionToken && !isJwtExpired(expDate)) {
       await dispatch(apiLogout(sessionToken));
     }
     dispatch(resetState());

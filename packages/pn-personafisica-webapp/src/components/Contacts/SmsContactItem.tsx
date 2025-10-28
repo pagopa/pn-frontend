@@ -110,10 +110,7 @@ const SmsContactElem: React.FC<SmsElemProps> = ({
       setModalOpen(ModalType.EXISTING);
       return;
     }
-    if (!isDigitalDomicileActive) {
-      if (fromSercqSend) {
-        PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SERCQ_SEND_POP_UP_SMS);
-      }
+    if (!isDigitalDomicileActive && !fromSercqSend) {
       setModalOpen(ModalType.INFORMATIVE);
       return;
     }
@@ -239,11 +236,9 @@ const SmsContactElem: React.FC<SmsElemProps> = ({
         subtitle={t('courtesy-contacts.info-modal-sms-subtitle', { ns: 'recapiti' })}
         content={t('courtesy-contacts.info-modal-sms-content', { ns: 'recapiti' })}
         onConfirm={() => {
-          PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SERCQ_SEND_POP_UP_SMS_CONTINUE);
           handleCodeVerification();
         }}
         onDiscard={() => {
-          PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SERCQ_SEND_POP_UP_SMS_CANCEL);
           setModalOpen(null);
         }}
       />
@@ -259,8 +254,13 @@ const SmsContactItem: React.FC<SmsItemProps> = ({
   const { t } = useTranslation(['common', 'recapiti']);
   const dispatch = useAppDispatch();
   const location = useLocation();
-  const { defaultSERCQ_SENDAddress, defaultSMSAddress, addresses, specialSMSAddresses } =
-    useAppSelector(contactsSelectors.selectAddresses);
+  const {
+    defaultSERCQ_SENDAddress,
+    defaultPECAddress,
+    defaultSMSAddress,
+    addresses,
+    specialSMSAddresses,
+  } = useAppSelector(contactsSelectors.selectAddresses);
 
   const [modalOpen, setModalOpen] = useState<ModalType | null>(null);
   const [insertMode, setInsertMode] = useState(false);
@@ -277,6 +277,8 @@ const SmsContactItem: React.FC<SmsItemProps> = ({
     ).length > 0;
 
   const showSpecialContactsSection = specialSMSAddresses.length > 0;
+
+  const hasDigitalDomicile = !!defaultSERCQ_SENDAddress || !!defaultPECAddress;
 
   const deleteConfirmHandler = () => {
     setModalOpen(null);
@@ -314,7 +316,7 @@ const SmsContactItem: React.FC<SmsItemProps> = ({
     if (blockDelete) {
       return t('courtesy-contacts.block-remove-sms-title', { ns: 'recapiti' });
     }
-    if (defaultSERCQ_SENDAddress) {
+    if (hasDigitalDomicile) {
       return t(`courtesy-contacts.remove-sms-title-dod-enabled`, {
         ns: 'recapiti',
       });
@@ -326,10 +328,10 @@ const SmsContactItem: React.FC<SmsItemProps> = ({
     if (blockDelete) {
       return t('courtesy-contacts.block-remove-sms-message', { ns: 'recapiti' });
     }
-    if (defaultSERCQ_SENDAddress) {
+    if (hasDigitalDomicile) {
       return (
         <Trans
-          i18nKey={'courtesy-contacts.remove-address-message-dod-enabled'}
+          i18nKey={'courtesy-contacts.remove-sms-message-dod-enabled'}
           ns={'recapiti'}
           components={[
             <Typography variant="body2" fontSize={'18px'} key={'paragraph1'} sx={{ mb: 2 }} />,
@@ -424,14 +426,15 @@ const SmsContactItem: React.FC<SmsItemProps> = ({
           confirmHandler={deleteConfirmHandler}
           slotsProps={{
             primaryButton: {
-              onClick: defaultSERCQ_SENDAddress ? () => setModalOpen(null) : deleteConfirmHandler,
-              label: defaultSERCQ_SENDAddress ? t('button.annulla') : undefined,
+              onClick: hasDigitalDomicile ? () => setModalOpen(null) : deleteConfirmHandler,
+              label: hasDigitalDomicile ? t('button.annulla') : undefined,
             },
             secondaryButton: {
-              onClick: defaultSERCQ_SENDAddress ? deleteConfirmHandler : () => setModalOpen(null),
-              label: defaultSERCQ_SENDAddress
+              onClick: hasDigitalDomicile ? deleteConfirmHandler : () => setModalOpen(null),
+              label: hasDigitalDomicile
                 ? t('courtesy-contacts.remove-sms', { ns: 'recapiti' })
                 : undefined,
+              ...(hasDigitalDomicile ? { variant: 'outlined', color: 'error' } : {}),
             },
           }}
           blockDelete={blockDelete}

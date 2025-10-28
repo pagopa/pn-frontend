@@ -6,12 +6,13 @@ import { useIsMobile } from './useIsMobile';
 import { useMobileOS } from './useMobileOS';
 import { useMultiEvent } from './useMultiEvent';
 import { useProcess } from './useProcess';
-import { useSessionCheck } from './useSessionCheck';
+import { isJwtExpired, useSessionCheck } from './useSessionCheck';
 import { useTracking } from './useTracking';
 import { useUnload } from './useUnload';
 
 export {
   downloadDocument,
+  isJwtExpired,
   useErrors,
   useHasPermissions,
   useIsCancelled,

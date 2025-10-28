@@ -33,7 +33,6 @@ const DigitalContactActivation: React.FC<Props> = ({ isTransferring = false, onG
   const {
     addresses,
     defaultEMAILAddress,
-    defaultSMSAddress,
     defaultAPPIOAddress,
     defaultSERCQ_SENDAddress,
     courtesyAddresses,
@@ -48,8 +47,6 @@ const DigitalContactActivation: React.FC<Props> = ({ isTransferring = false, onG
     []
   );
 
-  const hasEmailOrSms = !!(defaultEMAILAddress || defaultSMSAddress);
-
   const isEmailSmsStep = !showIOStep ? activeStep === 1 : activeStep === 2;
   const isRecapStep = activeStep === (showIOStep ? MAX_STEPS_NUMBER - 1 : MAX_STEPS_NUMBER - 2);
 
@@ -63,16 +60,14 @@ const DigitalContactActivation: React.FC<Props> = ({ isTransferring = false, onG
       event_type: EventAction.ACTION,
       contacts: addresses,
     });
-    if (hasEmailOrSms) {
+    if (defaultEMAILAddress) {
       goToNextStep();
     } else {
-      PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SERCQ_SEND_POP_UP_EMAIL_SMS);
       setShowConfirmationModal(true);
     }
   };
 
   const handleCloseConfirmEmailSmsModal = () => {
-    PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SERCQ_SEND_POP_UP_EMAIL_SMS_BACK);
     setShowConfirmationModal(false);
   };
 
@@ -210,14 +205,8 @@ const DigitalContactActivation: React.FC<Props> = ({ isTransferring = false, onG
             },
           }}
         >
-          <Trans
-            ns="recapiti"
-            i18nKey={`courtesy-contacts.confirmation-modal-email-content`}
-            components={[
-              <DialogContentText key="paragraph1" color="text.primary" />,
-              <DialogContentText key="paragraph2" color="text.primary" mt={2} />,
-            ]}
-          />
+          <Trans ns="recapiti" i18nKey={`courtesy-contacts.confirmation-modal-email-content`} />
+          <DialogContentText key="paragraph1" color="text.primary" />
         </ConfirmationModal>
       </PnWizardStep>
       <PnWizardStep label={t('legal-contacts.sercq-send-wizard.step_4.step-title')}>

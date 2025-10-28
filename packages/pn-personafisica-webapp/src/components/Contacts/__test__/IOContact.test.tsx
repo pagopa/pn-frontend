@@ -1,6 +1,8 @@
 import MockAdapter from 'axios-mock-adapter';
 import { vi } from 'vitest';
 
+import { SERCQ_SEND_VALUE } from '@pagopa-pn/pn-commons';
+
 import { digitalCourtesyAddresses } from '../../../__mocks__/Contacts.mock';
 import { fireEvent, render, screen, testStore, waitFor } from '../../../__test__/test-utils';
 import { apiClient } from '../../../api/apiClients';
@@ -147,5 +149,52 @@ describe('IOContact component', async () => {
     fireEvent.click(button);
     expect(assignFn).toHaveBeenCalledTimes(1);
     expect(assignFn).toHaveBeenCalledWith(getConfiguration().APP_IO_ANDROID);
+  });
+
+  it('disables IO - Digital Domicile enabled', async () => {
+    mock.onDelete('/bff/v1/addresses/COURTESY/default/APPIO').reply(200);
+
+    const { getByRole } = render(<IOContact />, {
+      preloadedState: {
+        contactsState: {
+          digitalAddresses: [
+            {
+              addressType: AddressType.COURTESY,
+              senderId: 'default',
+              channelType: ChannelType.IOMSG,
+              value: IOAllowedValues.ENABLED,
+            },
+            {
+              addressType: AddressType.LEGAL,
+              senderId: 'default',
+              channelType: ChannelType.SERCQ_SEND,
+              value: SERCQ_SEND_VALUE,
+              codeValid: true,
+            },
+          ],
+        },
+      },
+    });
+
+    const disableBtn = getByRole('button', { name: 'button.disable' });
+    fireEvent.click(disableBtn);
+
+    const dialog = await waitFor(() => screen.getByRole('dialog'));
+
+    expect(dialog).toHaveTextContent('io-contact.disable-modal.title');
+    expect(dialog).toHaveTextContent('io-contact.disable-modal.content-dod-enabled');
+
+    const cancelBtn = getByRole('button', { name: 'button.annulla' });
+    const confirmBtn = getByRole('button', {
+      name: 'io-contact.disable-modal.confirm-dod-enabled',
+    });
+    expect(cancelBtn).toBeInTheDocument();
+    expect(confirmBtn).toBeInTheDocument();
+
+    fireEvent.click(confirmBtn);
+
+    await waitFor(() => {
+      expect(mock.history.delete).toHaveLength(1);
+    });
   });
 });

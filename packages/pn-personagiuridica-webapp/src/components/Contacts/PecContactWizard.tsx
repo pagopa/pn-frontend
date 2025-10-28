@@ -14,7 +14,7 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
-import { PnWizard, PnWizardStep } from '@pagopa-pn/pn-commons';
+import { IllusHourglass, PnWizard, PnWizardStep } from '@pagopa-pn/pn-commons';
 import { ButtonNaked } from '@pagopa/mui-italia';
 
 import { AddressType, ChannelType, SaveDigitalAddressParams } from '../../models/contacts';
@@ -48,7 +48,9 @@ const PecContactWizard: React.FC<Props> = ({
   const feedbackTitleLabel = `legal-contacts.sercq-send-wizard.feedback.title-pec-${
     isTransferring ? 'transfer' : 'activation'
   }`;
-  const feedbackContentLabel = 'legal-contacts.sercq-send-wizard.feedback.content-pec';
+  const feedbackContentLabel = `legal-contacts.sercq-send-wizard.feedback.content-pec${
+    isTransferring ? '-transfer' : ''
+  }`;
 
   const validationSchema = yup.object().shape({
     pec: pecValidationSchema(t),
@@ -126,6 +128,7 @@ const PecContactWizard: React.FC<Props> = ({
               {t('button.indietro', { ns: 'common' })}
             </ButtonNaked>
           ),
+          feedbackIcon: IllusHourglass,
         }}
         slotsProps={{
           container: {
@@ -217,7 +220,9 @@ const PecContactWizard: React.FC<Props> = ({
             sx={{ mt: 3 }}
             data-testid="next-button"
           >
-            {t('legal-contacts.sercq-send-active-pec-enabled', { ns: 'recapiti' })}
+            {defaultSERCQ_SENDAddress?.value
+              ? t('legal-contacts.sercq-send-active-pec-transfer', { ns: 'recapiti' })
+              : t('legal-contacts.sercq-send-active-pec-enabled', { ns: 'recapiti' })}
           </Button>
         </PnWizardStep>
       </PnWizard>

@@ -9,6 +9,7 @@ import {
   LoadingPage,
   SessionModal,
   adaptedTokenExchangeError,
+  isJwtExpired,
   sanitizeString,
   useErrors,
   useSessionCheck,
@@ -82,7 +83,7 @@ const SessionGuard = () => {
   };
 
   const exit = async () => {
-    if (sessionToken) {
+    if (sessionToken && !isJwtExpired(expDate)) {
       await dispatch(apiLogout(sessionToken));
     }
     dispatch(resetState());

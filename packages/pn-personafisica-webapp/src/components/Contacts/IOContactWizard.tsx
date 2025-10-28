@@ -210,7 +210,7 @@ const IOContactWizard: React.FC<Props> = ({ goToNextStep }) => {
       </Stack>
       <ConfirmationModal
         open={modal.open}
-        title={t('courtesy-contacts.confirmation-modal-title')}
+        title={t('courtesy-contacts.confirmation-modal-io-title')}
         slots={{
           confirmButton: Button,
           closeButton: Button,

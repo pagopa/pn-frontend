@@ -2,7 +2,7 @@ import MockAdapter from 'axios-mock-adapter';
 
 import { getById } from '@pagopa-pn/pn-commons/src/test-utils';
 
-import { digitalCourtesyAddresses } from '../../../__mocks__/Contacts.mock';
+import { digitalAddressesSercq, digitalCourtesyAddresses } from '../../../__mocks__/Contacts.mock';
 import { fireEvent, render, testStore, waitFor } from '../../../__test__/test-utils';
 import { apiClient } from '../../../api/apiClients';
 import { AddressType, ChannelType } from '../../../models/contacts';
@@ -287,7 +287,7 @@ describe('test SmsContactItem', () => {
     expect(disableBtn).toBeInTheDocument();
   });
 
-  it('delete phone number', async () => {
+  it('delete phone number - SERCQ disabled', async () => {
     mock.onDelete('/bff/v1/addresses/COURTESY/default/SMS').reply(204);
     // render component
     const result = render(<SmsContactItem />, {
@@ -329,6 +329,80 @@ describe('test SmsContactItem', () => {
     });
     expect(result.container).toHaveTextContent('courtesy-contacts.email-sms-updates');
     expect(result.container).toHaveTextContent('courtesy-contacts.email-sms-add');
+  });
+
+  it('delete phone number - SERCQ enabled (not blocked)', async () => {
+    mock.onDelete('/bff/v1/addresses/COURTESY/default/SMS').reply(204);
+
+    const sercqEnabledNoSpecials = digitalAddressesSercq.filter(
+      (addr) => !(addr.channelType === ChannelType.SMS && addr.senderId !== 'default')
+    );
+
+    // render component
+    const result = render(<SmsContactItem />, {
+      preloadedState: { contactsState: { digitalAddresses: sercqEnabledNoSpecials } },
+    });
+
+    const disableBtn = result.getByRole('button', { name: 'button.disable' });
+    expect(disableBtn).toBeInTheDocument();
+
+    // click on disable
+    fireEvent.click(disableBtn);
+
+    const dialog = await waitFor(() => result.getByRole('dialog'));
+    expect(dialog).toBeInTheDocument();
+
+    expect(dialog).toHaveTextContent('courtesy-contacts.remove-sms-title-dod-enabled');
+    expect(dialog).toHaveTextContent('courtesy-contacts.remove-sms-message-dod-enabled');
+
+    const cancelBtn = result.getByRole('button', { name: 'button.annulla' });
+    const removeBtn = result.getByRole('button', {
+      name: 'courtesy-contacts.remove-sms-button-dod-enabled',
+    });
+    expect(cancelBtn).toBeInTheDocument();
+    expect(removeBtn).toBeInTheDocument();
+
+    // click on confirm
+    fireEvent.click(removeBtn);
+
+    await waitFor(() => {
+      expect(mock.history.delete).toHaveLength(1);
+    });
+  });
+
+  it('delete phone number - special sms address set', async () => {
+    // render component
+    const result = render(<SmsContactItem />, {
+      preloadedState: { contactsState: { digitalAddresses: digitalCourtesyAddresses } },
+    });
+
+    const disableBtn = result.getByRole('button', { name: 'button.disable' });
+    expect(disableBtn).toBeInTheDocument();
+
+    // click on disable
+    fireEvent.click(disableBtn);
+
+    const dialog = await waitFor(() => result.getByRole('dialog'));
+    expect(dialog).toBeInTheDocument();
+
+    expect(dialog).toHaveTextContent('courtesy-contacts.block-remove-sms-title');
+    expect(dialog).toHaveTextContent('courtesy-contacts.block-remove-sms-message');
+
+    const dialogButtons = dialog.querySelectorAll('button');
+    expect(dialogButtons.length).toBe(1);
+    expect(dialogButtons[0]).toHaveTextContent('button.understand');
+
+    fireEvent.click(dialogButtons[0]);
+
+    await waitFor(() => {
+      expect(mock.history.delete).toHaveLength(0);
+    });
+
+    await waitFor(() => expect(dialog).not.toBeInTheDocument());
+    const form = result.container.querySelector('form')!;
+    const smsTypography = getById(form, 'default_sms-typography');
+    expect(smsTypography).toBeInTheDocument();
+    expect(smsTypography.textContent).toBeTruthy();
   });
 
   it('show special contact section', () => {

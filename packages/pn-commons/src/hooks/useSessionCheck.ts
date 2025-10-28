@@ -10,11 +10,7 @@ export const useSessionCheck = (timer: number, sessionExpiredCbk: () => void) =>
     }
     if (expt) {
       interval = setInterval(() => {
-        const now = new Date();
-        // expt is in epoch format
-        const expireAt = new Date(0); // The 0 there is the key, which sets the date to the epoch
-        expireAt.setUTCSeconds(expt);
-        if (now.getTime() >= expireAt.getTime()) {
+        if (isJwtExpired(expt)) {
           sessionExpiredCbk();
           clearInterval(interval);
         }
@@ -34,4 +30,12 @@ export const useSessionCheck = (timer: number, sessionExpiredCbk: () => void) =>
   );
 
   return initSessionCheck;
+};
+
+// exp in seconds (from JWT standard)
+export const isJwtExpired = (exp: number) => {
+  const now = new Date();
+  const expireAt = new Date(0);
+  expireAt.setUTCSeconds(exp);
+  return now.getTime() >= expireAt.getTime();
 };

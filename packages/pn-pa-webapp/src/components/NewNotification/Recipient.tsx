@@ -196,7 +196,7 @@ const Recipient: React.FC<Props> = ({
     ),
     municipality: conditionalPhysicalAddress(requiredStringFieldValidation(tc, 256)),
     province: conditionalPhysicalAddress(requiredStringFieldValidation(tc, 256)),
-    foreignState: conditionalPhysicalAddress(requiredStringFieldValidation(tc, 1024)),
+    foreignState: conditionalPhysicalAddress(requiredStringFieldValidation(tc, 256)),
     physicalAddressLookup: yup
       .mixed<PhysicalAddressLookup>()
       .oneOf(Object.values(PhysicalAddressLookup)),

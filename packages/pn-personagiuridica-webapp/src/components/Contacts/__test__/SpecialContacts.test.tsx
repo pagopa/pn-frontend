@@ -1,6 +1,7 @@
 import MockAdapter from 'axios-mock-adapter';
 import { vi } from 'vitest';
 
+import { SERCQ_SEND_VALUE } from '@pagopa-pn/pn-commons';
 import { testInput } from '@pagopa-pn/pn-commons/src/test-utils';
 
 import { digitalCourtesyAddresses, digitalLegalAddresses } from '../../../__mocks__/Contacts.mock';
@@ -144,7 +145,7 @@ describe('SpecialContacts Component', async () => {
     });
   });
 
-  it('delete special legal contact', async () => {
+  it('delete special legal contact - PEC', async () => {
     mock.onGet('/bff/v1/pa-list').reply(200, parties);
     mock.onDelete(`/bff/v1/addresses/LEGAL/${specialLegalAddresses[0].senderId}/PEC`).reply(200);
     // render component
@@ -176,6 +177,65 @@ describe('SpecialContacts Component', async () => {
       // contacts list
       const specialContactForms = getAllByTestId(
         /^[a-zA-Z0-9-]+(?:_pecContact|_sercq_sendContact)$/
+      );
+      expect(specialContactForms).toHaveLength(specialLegalAddresses.length - 1);
+    });
+  });
+
+  it('delete special legal contact - SERCQ', async () => {
+    mock.onGet('/bff/v1/pa-list').reply(200, parties);
+
+    const sercqSpecial = {
+      ...specialLegalAddresses[0],
+      channelType: ChannelType.SERCQ_SEND,
+      value: SERCQ_SEND_VALUE,
+    };
+    const initialAddresses = [sercqSpecial, ...specialLegalAddresses.slice(1)];
+
+    mock.onDelete(`/bff/v1/addresses/LEGAL/${sercqSpecial.senderId}/SERCQ_SEND`).reply(200);
+
+    // render component
+    const { getAllByTestId, getByRole } = render(
+      <SpecialContacts addressType={AddressType.LEGAL} />,
+      {
+        preloadedState: { contactsState: { digitalAddresses: initialAddresses } },
+      }
+    );
+
+    // ATTENTION: the order in the mock is very important
+    const specialContactForms = getAllByTestId(
+      /^[a-zA-Z0-9-]+(?:_pecSpecialContact|_sercq_sendSpecialContact)$/
+    );
+    const deleteButton = within(specialContactForms[0]).getByRole('button', {
+      name: 'button.disable',
+    });
+    fireEvent.click(deleteButton);
+    const dialogBox = getByRole('dialog');
+    expect(dialogBox).toBeVisible();
+
+    const deleteTitle = within(dialogBox).getByText('legal-contacts.remove-sercq_send-title');
+    expect(deleteTitle).toBeInTheDocument();
+
+    const confirmButton = within(dialogBox).getByRole('button', {
+      name: 'legal-contacts.remove-sercq_send-confirm',
+    });
+    fireEvent.click(confirmButton);
+
+    await waitFor(() => {
+      expect(dialogBox).not.toBeVisible();
+      expect(mock.history.delete).toHaveLength(1);
+      expect(mock.history.delete[0].url).toBe(
+        `/bff/v1/addresses/LEGAL/${sercqSpecial.senderId}/SERCQ_SEND`
+      );
+    });
+
+    const addresses = initialAddresses.slice(1);
+    expect(testStore.getState().contactsState.digitalAddresses).toStrictEqual(addresses);
+
+    await waitFor(() => {
+      // contacts list
+      const specialContactForms = getAllByTestId(
+        /^[a-zA-Z0-9-]+(?:_pecSpecialContact|_sercq_sendSpecialContact)$/
       );
       expect(specialContactForms).toHaveLength(specialLegalAddresses.length - 1);
     });

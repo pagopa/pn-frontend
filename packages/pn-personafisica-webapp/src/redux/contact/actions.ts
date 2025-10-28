@@ -100,9 +100,12 @@ export const createOrUpdateAddress = createAsyncThunk<
   }
 );
 
-export const deleteAddress = createAsyncThunk<void, DeleteDigitalAddressParams>(
+export const deleteAddress = createAsyncThunk<
+  void,
+  DeleteDigitalAddressParams & { blockLoading?: boolean }
+>(
   CONTACT_ACTIONS.DELETE_ADDRESS,
-  async (params: DeleteDigitalAddressParams, { rejectWithValue }) => {
+  async (params, { rejectWithValue }) => {
     try {
       const digitalAddressesFactory = AddressesApiFactory(undefined, undefined, apiClient);
       const response = await digitalAddressesFactory.deleteAddressV1(
@@ -110,8 +113,66 @@ export const deleteAddress = createAsyncThunk<void, DeleteDigitalAddressParams>(
         params.senderId,
         params.channelType
       );
-
       return response.data;
+    } catch (e: any) {
+      return rejectWithValue(parseError(e));
+    }
+  },
+  {
+    getPendingMeta: ({ arg }) => ({ blockLoading: arg?.blockLoading }),
+  }
+);
+
+/**
+ * Remove all active SERCQ addresses before deleting the default EMAIL.
+ *
+ * If any removal fails, `unwrap()` throws and the chain aborts,
+ * preventing the email deletion.
+ */
+
+export const removeSercqAndEmail = createAsyncThunk<void, { senderIds: Array<string> }>(
+  `${CONTACT_ACTIONS.DELETE_ADDRESS}/removeEmailAndAllSercq`,
+  async ({ senderIds }, { dispatch, rejectWithValue }) => {
+    try {
+      // removes any special SERCQ
+      const specialSenderIds = senderIds.filter((id) => id !== 'default');
+      const hasDefault = senderIds.includes('default');
+      if (specialSenderIds.length) {
+        await Promise.all(
+          specialSenderIds.map((senderId) =>
+            dispatch(
+              deleteAddress({
+                addressType: AddressType.LEGAL,
+                senderId,
+                channelType: ChannelType.SERCQ_SEND,
+                blockLoading: true,
+              })
+            ).unwrap()
+          )
+        );
+      }
+      // removes default SERCQ (if any)
+      if (hasDefault) {
+        await dispatch(
+          deleteAddress({
+            addressType: AddressType.LEGAL,
+            senderId: 'default',
+            channelType: ChannelType.SERCQ_SEND,
+            blockLoading: true,
+          })
+        ).unwrap();
+      }
+
+      // removes email
+      await dispatch(
+        deleteAddress({
+          addressType: AddressType.COURTESY,
+          senderId: 'default',
+          channelType: ChannelType.EMAIL,
+          blockLoading: true,
+        })
+      ).unwrap();
+      return;
     } catch (e: any) {
       return rejectWithValue(parseError(e));
     }

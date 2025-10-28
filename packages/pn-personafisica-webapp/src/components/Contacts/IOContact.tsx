@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useTranslation } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 
 import CompareArrowsIcon from '@mui/icons-material/CompareArrows';
 import PowerSettingsNewIcon from '@mui/icons-material/PowerSettingsNew';
@@ -12,7 +12,6 @@ import {
   appStateActions,
   useIsMobile,
 } from '@pagopa-pn/pn-commons';
-import { ButtonNaked } from '@pagopa/mui-italia';
 
 import { PFEventsType } from '../../models/PFEventsType';
 import { AddressType, IOAllowedValues } from '../../models/contacts';
@@ -43,6 +42,7 @@ const IOContact: React.FC = () => {
   const {
     defaultAPPIOAddress: contact,
     defaultSERCQ_SENDAddress,
+    defaultPECAddress,
     addresses,
   } = useAppSelector(contactsSelectors.selectAddresses);
   const { APP_IO_SITE, APP_IO_ANDROID, APP_IO_IOS } = getConfiguration();
@@ -65,6 +65,8 @@ const IOContact: React.FC = () => {
   const status = parseContact();
 
   const isAppIOEnabled = status === IOContactStatus.ENABLED;
+
+  const hasDigitalDomicile = !!defaultSERCQ_SENDAddress || !!defaultPECAddress;
 
   const enableIO = () => {
     PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ACTIVE_IO_UX_CONVERSION);
@@ -172,6 +174,22 @@ const IOContact: React.FC = () => {
     return 'default';
   };
 
+  const getRemoveModalMessage = () => {
+    if (hasDigitalDomicile) {
+      return (
+        <Trans
+          i18nKey="io-contact.disable-modal.content-dod-enabled"
+          ns="recapiti"
+          components={[
+            <Typography variant="body2" fontSize={'18px'} key="p1" sx={{ mb: 2 }} />,
+            <Typography variant="body2" fontSize={'18px'} key="p2" />,
+          ]}
+        />
+      );
+    }
+    return t('io-contact.disable-modal.content', { ns: 'recapiti' });
+  };
+
   return (
     <PnInfoCard
       title={
@@ -196,15 +214,16 @@ const IOContact: React.FC = () => {
       actions={
         isAppIOEnabled
           ? [
-              <ButtonNaked
+              <Button
                 key="disable"
-                onClick={handleOpenDeleteModal}
+                variant="naked"
                 color="error"
                 startIcon={<PowerSettingsNewIcon />}
-                sx={{ fontSize: '16px', color: 'error.dark' }}
+                onClick={handleOpenDeleteModal}
+                sx={{ p: '10px 16px' }}
               >
                 {t('button.disable')}
-              </ButtonNaked>,
+              </Button>,
             ]
           : undefined
       }
@@ -258,9 +277,27 @@ const IOContact: React.FC = () => {
       <DeleteDialog
         showModal={modalOpen === ModalType.DELETE}
         removeModalTitle={t('io-contact.disable-modal.title', { ns: 'recapiti' })}
-        removeModalBody={t('io-contact.disable-modal.content', { ns: 'recapiti' })}
+        removeModalBody={getRemoveModalMessage()}
         handleModalClose={() => setModalOpen(null)}
         confirmHandler={disableIO}
+        slotsProps={
+          hasDigitalDomicile
+            ? {
+                primaryButton: {
+                  onClick: () => setModalOpen(null),
+                  label: t('button.annulla'),
+                },
+                secondaryButton: {
+                  onClick: disableIO,
+                  label: hasDigitalDomicile
+                    ? t('io-contact.disable-modal.confirm-dod-enabled', { ns: 'recapiti' })
+                    : t('button.disable'),
+                  variant: 'outlined',
+                  color: 'error',
+                },
+              }
+            : undefined
+        }
       />
     </PnInfoCard>
   );

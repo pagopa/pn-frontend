@@ -36,10 +36,10 @@ import {
 
 import DomicileBanner from '../components/DomicileBanner/DomicileBanner';
 import LoadingPageWrapper from '../components/LoadingPageWrapper/LoadingPageWrapper';
+import { PNRole } from '../models/User';
 import { ContactSource } from '../models/contacts';
 import * as routes from '../navigation/routes.const';
 import { getDowntimeLegalFact } from '../redux/appStatus/actions';
-import { PNRole } from '../models/User';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import {
   NOTIFICATION_ACTIONS,
@@ -112,11 +112,6 @@ const NotificationDetail = () => {
       label: t('detail.date', { ns: 'notifiche' }),
       rawValue: formatDate(notification.sentAt),
       value: <Box fontWeight={600}>{formatDate(notification.sentAt)}</Box>,
-    },
-    {
-      label: t('detail.payment-terms', { ns: 'notifiche' }),
-      rawValue: notification.paymentExpirationDate,
-      value: <Box fontWeight={600}>{notification.paymentExpirationDate}</Box>,
     },
     {
       label: t('detail.iun', { ns: 'notifiche' }),

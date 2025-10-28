@@ -4,7 +4,7 @@
     "annulla filtro": "Supprimer les filtres",
     "indietro": "Retour",
     "associa": "Associer",
-    "capito": "J’ai compris",
+    "capito": "J'ai compris",
     "conferma": "Confirmer",
     "attiva": "Activer",
     "annulla": "Annuler",
@@ -12,170 +12,200 @@
     "salva": "Enregistrer",
     "elimina": "Supprimer",
     "enter": "Entrer",
-    "exit": "Sortir",
+    "exit": "Quitter",
     "close": "Fermer",
     "enable": "Activer",
+    "manage": "Gérer",
     "disable": "Désactiver",
-    "continue": "Suivant",
-    "go-to-home": "Aller à la page d’accueil",
+    "start": "Commencer",
+    "continue": "Continuer",
+    "go-on": "Suivant",
+    "go-to-home": "Aller à la page d'accueil",
     "go-to-login": "Se connecter",
     "not-now": "Pas maintenant",
-    "add": "Ajouter"
+    "do-later": "Je le ferai plus tard",
+    "add": "Ajouter",
+    "understand": "OK, j'ai compris"
   },
   "menu": {
     "notifiche": "Notifications",
-    "deleghe": "Procurations",
-    "profilo": "Vos données",
-    "contacts": "Vos adresses",
-    "app-status": "État de la plateforme"
+    "deleghe": "Délégations",
+    "profilo": "Tes données",
+    "contacts": "Tes coordonnées",
+    "app-status": "Statut de la plateforme"
   },
   "header": {
-    "logout": "Sortir",
-    "pago-pa-link": "Site de PagoPA S.p.A."
+    "assistance": "Assistance",
+    "login": "Se connecter",
+    "logout": "Quitter",
+    "pago-pa-link": "Site web de PagoPA S.p.A.",
+    "logout-message": "Confirmes-tu vouloir te déconnecter de SEND ?"
   },
   "tos": {
     "title": "SEND - Servizio Notifiche Digitali",
-    "body": "Pour y accéder, vous devez accepter les conditions d’utilisation du service et lire la politique de confidentialité.",
-    "redo-body": "Les conditions d’utilisation du service et la politique de confidentialité ont changé. Pour accéder, vous devez accepter et confirmer avoir lu les nouvelles versions.",
-    "switch-label": "J’accepte les <1>Conditions générales d’utilisation</1> et je confirme avoir lu la <0>Politique de confidentialité</0>",
+    "body": "Pour te connecter, accepte les Conditions Générales d’Utilisation du service et lis la Politique de Confidentialité.",
+    "redo-body": "Les Conditions Générales d’Utilisation du service et la Politique de Confidentialité ont changé. Pour te connecter, accepte et confirme que tu as lu les nouvelles versions.",
+    "switch-label": "J'accepte les <1>Conditions Générales d’Utilisation</1> et je confirme que j'ai lu la <0>Politique de Confidentialité</0>",
     "button": "Se connecter"
   },
   "table": {
-    "aria-label": "Tableau des éléments"
+    "aria-label": "Tableau d'articles"
   },
   "paginator": {
-    "aria-label": "Menu pagination",
+    "aria-label": "Menu de pagination",
     "first": "premier élément",
     "last": "dernier élément",
     "page": "page",
-    "next": "Passer à la page suivante",
+    "next": "Aller à la page suivante",
     "previous": "Aller à la page précédente",
     "selected": "élément sélectionné",
     "rows-per-page": "Lignes par page"
   },
   "toast": {
-    "aria-label": "Icône de fermeture de toast"
+    "aria-label": "Icône de fermeture toast"
   },
   "date-picker": {
     "left-arrow": "Aller au mois précédent",
     "right-arrow": "Aller au mois suivant",
-    "switch-to-year": "mode calendrier actif, passez au mode de choix de l’année",
-    "switch-to-calendar": "mode de choix de l’année active, passez en mode calendrier",
+    "switch-to-year": "mode calendrier actif, passer au mode de sélection de l'année",
+    "switch-to-calendar": "mode de sélection de l'année actif, passer au mode calendrier",
     "select-date": "Choisir la date",
     "date-selected": "Choisir la date, la date sélectionnée est {{date}}"
   },
   "date-time": {
-    "today-uppercase-initial": "Aujourd’hui",
+    "today-uppercase-initial": "Aujourd'hui",
     "hour-of-day": "heures"
   },
   "error-boundary": {
-    "title": "Une erreur s’est produite",
-    "description": "Nous n’avons pas pu charger la page. Rechargez-la, ou essayez plus tard.",
+    "title": "Quelque chose n'a pas fonctionné",
+    "description": "Nous n'avons pas pu charger la page. Recharge-la, ou essaie plus tard.",
     "action": "Recharger la page"
   },
   "not-accessible": {
-    "title": "Impossible d’accéder à la plateforme",
-    "description": "SEND est actuellement en phase de test et n’est pas encore disponible. Pour plus d’informations sur l’initiative,",
-    "action": "visitez le site dédié"
+    "title": "Accès à la plateforme impossible",
+    "description": "SEND est en phase de test et n'est pas encore disponible. Pour plus d'informations sur l'initiative,",
+    "action": "visite le site dédié"
   },
-  "access-denied": "Vous n’avez pas les autorisations nécessaires pour accéder à cette page",
-  "not-logged": "Se connecter à SEND",
-  "not-logged-subtitle": "Pour voir et gérer vos notifications, connectez-vous avec SPID ou CIE.",
+  "access-denied": "Tu n'as pas les autorisations nécessaires pour accéder à cette page",
+  "not-logged": "Connecte-toi à SEND",
+  "not-logged-subtitle": "Pour voir et gérer tes notifications, connecte-toi avec SPID ou CIE.",
   "not-found": {
-    "title": "404 : la page que vous cherchez n’existe pas",
-    "description": "Vous êtes ici par erreur, essayez d’utiliser la navigation."
+    "title": "Ce que tu cherchais n'est pas ici.",
+    "description": "La page que tu as tenté d'atteindre n'existe pas ou n'est plus disponible.",
+    "back-to-home": "Retour à l'accueil"
   },
   "leaving-app": {
-    "title": "Vous quittez SEND",
-    "message": "Vous serez redirigé(e)"
+    "title": "Tu quittes SEND",
+    "message": "Tu seras redirigé(e)"
   },
   "error-when-fetching-tos-status": {
-    "title": "Problèmes d’accès dans SEND",
-    "message": "Réessayer plus tard"
+    "title": "Problèmes d'accès à SEND",
+    "message": "Essaie plus tard"
   },
   "messages": {
-    "404-title": "Ressource introuvable",
-    "404-message": "Une erreur s’est produite. Veuillez réessayer ultérieurement.",
-    "403-title": "La session a expiré",
-    "403-message": "Entrez et connectez-vous avec SPID ou CIE.",
+    "404-title": "Ressource non trouvée",
+    "404-message": "Une erreur s'est produite. Merci de réessayer plus tard",
+    "403-title": "Session expirée",
+    "403-message": "Entre et connecte-toi avec SPID ou CIE.",
     "401-title": "Utilisateur non autorisé",
-    "401-message": "L’utilisateur actuel ne dispose pas des autorisations nécessaires",
-    "451-title": "Plateforme inaccessible",
-    "451-message": "Impossible d’accéder à la plateforme",
-    "500-title": "Le service n’est pas disponible",
-    "500-message": "En raison d’un problème temporaire du service, votre demande n’a pas été envoyée. Veuillez réessayer plus tard.",
-    "lacking-grants-for-app-title": "Vous n’êtes pas autorisé à accéder",
-    "invalid-token-title": "Vous ne pouvez pas vous connecter en raison d’un problème technique - jeton non valide",
-    "generic-token-exchange-problem": "Impossible de finaliser la procédure de connexion",
+    "401-message": "L'utilisateur actuel n'a pas les autorisations",
+    "451-title": "Plateforme non accessible",
+    "451-message": "Accès à la plateforme impossible",
+    "500-title": "Le service n'est pas disponible",
+    "500-message": "En raison d'un problème de service temporaire, ta demande n'a pas été envoyée. Essaie plus tard.",
+    "lacking-grants-for-app-title": "Tu n'es pas autorisé(e) à accéder",
+    "invalid-token-title": "Tu ne peux pas te connecter à cause d'un problème technique - jeton non valide",
+    "generic-token-exchange-problem": "La connexion n'a pas pu être finalisée",
     "generic-title": "Erreur générique",
-    "generic-message": "Une erreur s’est produite. Veuillez réessayer ultérieurement.",
-    "generic-api-error-main-text": "Nous n’avons pas pu récupérer ces données.",
+    "generic-message": "Une erreur s'est produite. Merci de réessayer plus tard",
+    "generic-api-error-main-text": "Nous n'avons pas pu récupérer ces données.",
     "generic-api-error-action-text": "Recharger"
   },
   "footer": {
-    "go-to-pagopa": "Lien : aller sur le site de PagoPA S.p.A.",
-    "go-to": "Cliquer sur le lien",
-    "privacy-info": "Charte de confidentialité",
-    "who": "Qui sommes-nous ?",
-    "work": "Carrière",
+    "go-to-pagopa": "Lien : aller au site de PagoPA S.p.A.",
+    "go-to": "Aller au lien",
+    "privacy-info": "Politique de Confidentialité",
+    "who": "Qui sommes-nous",
+    "work": "Travailler avec nous",
     "certifications": "Certifications",
     "security": "Sécurité des informations",
     "personal-data": "Droit à la protection des données personnelles",
-    "cookie": "Préférences en matière de cookies",
-    "terms-conditions": "Conditions générales",
+    "cookie": "Préférences Cookies",
+    "terms-conditions": "Conditions Générales",
     "company": "Société transparente",
-    "disclosure": "Politique de divulgation responsable",
-    "321-model": "Formulaire 231",
+    "disclosure": "Politique de Divulgation Responsable (Responsible Disclosure Policy)",
+    "321-model": "Modèle 231",
     "accessibility": "Accessibilité",
-    "social": "Lien : aller sur le site {{social}} de PagoPA S.p.A.",
+    "social": "Lien : aller au site {{social}} de PagoPA S.p.A.",
     "resources": "Ressources",
     "follow": "Suis-nous sur",
-    "legal-part-1": "société anonyme à associé unique – capital social de 1 000 000 d’euros entièrement libéré – siège social à Rome, Piazza Colonna 370",
-    "legal-part-2": "Code postal 00187 – N° d’inscription au Registre du Commerce de Rome, code fiscal et n° de TVA 15376371009"
+    "legal-part-1": "société anonyme avec associé unique - capital social de 1 000 000 euros entièrement versé - siège social à Rome, Piazza Colonna 370",
+    "legal-part-2": "CAP 00187 - n. d'inscription au Registre des Entreprises de Rome, CF et TVA 15376371009"
   },
   "required-fields": "*Champs obligatoires",
   "required-field": "Champ obligatoire",
-  "too-long-field-error": "Écrire un maximum de {{maxLength}} caractères",
+  "too-long-field-error": "Saisis un maximum de {{maxLength}} caractères",
+  "loading": "Chargement en cours",
   "validation": {
-    "search-pattern-length-limit": "recherche de {{maxLength}} caractères max.",
-    "invalid-characters-not-inserted": "Les caractères non valides n’ont pas été saisis."
+    "search-pattern-length-limit": "recherche max {{maxLength}} caractères",
+    "invalid-characters-not-inserted": "Les caractères non valides n'ont pas été insérés."
   },
   "errors": {
+    "delivery_mandate_not_found": {
+      "title": "Erreur",
+      "message": "Cette délégation n'est plus active."
+    },
+    "technical-error": {
+      "title": "Informations sur l'erreur",
+      "copy-to-clipboard": "Copier les informations sur l'erreur"
+    },
     "bad_request": {
-      "title": "Erreur lors de l’envoi des données",
-      "message": "Le format de la demande n’est pas valide."
+      "title": "Erreur lors de l'envoi des données",
+      "message": "Le format de la requête n'est pas valide."
     },
     "unauthorized": {
       "title": "Utilisateur non autorisé",
-      "message": "L’utilisateur actuel ne dispose pas des autorisations nécessaires."
+      "message": "L'utilisateur actuel n'a pas les autorisations."
     },
     "unavailable_legal_reasons": {
-      "title": "Plateforme inaccessible",
-      "message": "Impossible d’accéder à la plateforme"
+      "title": "Plateforme non accessible",
+      "message": "Accès à la plateforme impossible"
     },
     "forbidden": {
-      "title": "La session a expiré",
-      "message": "Entrez et connectez-vous avec SPID ou CIE."
+      "title": "Session expirée",
+      "message": "Entre et connecte-toi avec SPID ou CIE."
     },
     "not_found": {
-      "title": "Ressource introuvable",
-      "message": "Une erreur s’est produite. Veuillez réessayer plus tard."
+      "title": "Ressource non trouvée",
+      "message": "Une erreur s'est produite. Merci de réessayer plus tard."
     },
     "internal_server": {
-      "title": "Le service n’est pas disponible",
-      "message": "En raison d’un problème temporaire du service, votre demande n’a pas été envoyée. Veuillez réessayer plus tard."
+      "title": "Une erreur s'est produite",
+      "message": "Le service n'est pas disponible en raison d'un problème technique. Essaie plus tard. Si l'erreur se répète, contacte l'assistance et communique les informations sur l'erreur."
     },
     "unhandled": {
-      "title": "Erreur générique",
-      "message": "Une erreur s’est produite. Veuillez réessayer plus tard."
+      "title": "Une erreur s'est produite",
+      "message": "Le service n'est pas disponible. Essaie plus tard. Si l'erreur se répète, contacte l'assistance et communique les informations sur l'erreur."
     },
     "unknown": {
-      "title": "Erreur",
-      "message": "Erreur inattendue"
+      "title": "Une erreur s'est produite",
+      "message": "Le service n'est pas disponible. Essaie plus tard. Si l'erreur se répète, contacte l'assistance et communique les informations sur l'erreur."
     },
     "invalid_type_code": {
-      "title": "Ce champ n’accepte que des valeurs numériques",
-      "message": "Contrôlez le code de vérification et saisissez-le à nouveau"
+      "title": "Ce champ n'accepte que des valeurs numériques",
+      "message": "Vérifie le code de vérification et saisis-le à nouveau"
+    },
+    "empty_code": {
+      "title": "Code absent ou incomplet",
+      "message": "Le code que tu as saisi est incomplet, saisis un code à 5 chiffres."
+    },
+    "invalid_body": {
+      "title": "Les données ne sont pas valides",
+      "message": "Une erreur s'est produite lors de l'envoi des données. Vérifie qu'elles sont correctes, sans espaces ni caractères spéciaux, et essaie à nouveau. Si l'erreur se répète, contacte l'assistance et communique les informations sur l'erreur."
+    },
+    "invalid_parameter": {
+      "title": "Données non valides",
+      "message": "Une ou plusieurs des données saisies ne sont pas valides"
     }
   },
   "badges": {
@@ -184,5 +214,29 @@
   "conjunctions": {
     "or": "ou"
   },
-  "no-spaces-at-edges": "Supprimer les espaces au début ou à la fin"
+  "downtime_language_banner": {
+    "message": "Le texte original de ces documents est en langue italienne. En cas de conflit entre la version italienne et les traductions dans d'autres langues, le sens et les conditions de la langue italienne prévaudront.",
+    "link": "Consulter les traductions"
+  },
+  "no-spaces-at-edges": "Élimine les espaces au début ou à la fin",
+  "wizard": {
+    "stepper": {
+      "of": "{{currentStep}} sur {{totalSteps}}",
+      "activeStep": "Étape {{currentStep}}"
+    }
+  },
+  "inactivity": {
+    "title": "Veux-tu vraiment quitter SEND ?",
+    "body": "La déconnexion est en cours. Si tu as changé d'avis, appuie sur « Maintenir l'accès » dans quelques secondes.",
+    "action": "Maintenir l'accès"
+  },
+  "code-modal": {
+    "digits": [
+      "première chiffre",
+      "deuxième chiffre",
+      "troisième chiffre",
+      "quatrième chiffre",
+      "dernière chiffre"
+    ]
+  }
 }

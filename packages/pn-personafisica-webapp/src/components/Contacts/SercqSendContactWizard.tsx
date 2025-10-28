@@ -26,7 +26,6 @@ import {
   EventAction,
   SERCQ_SEND_VALUE,
   TosPrivacyConsent,
-  appStateActions,
 } from '@pagopa-pn/pn-commons';
 import { theme } from '@pagopa/mui-italia';
 
@@ -239,13 +238,6 @@ const SercqSendContactWizard: React.FC<Props> = ({ goToStep, showIOStep }) => {
           sercq_type: ChannelType.SERCQ_SEND,
           contacts: courtesyAddresses,
         });
-        // show success message
-        dispatch(
-          appStateActions.addSuccess({
-            title: '',
-            message: t(`legal-contacts.sercq_send-added-successfully`, { ns: 'recapiti' }),
-          })
-        );
         goToStep(thankYouStep);
       })
       .catch(() => {});

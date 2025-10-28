@@ -270,12 +270,10 @@ describe('DigitalContactActivation', () => {
     const button = result.getByTestId('default_email-button');
     fireEvent.click(button);
 
-    // informative dialog
+    // no informative dialog
     await waitFor(() => {
-      expect(result.getByRole('dialog')).toBeInTheDocument();
+      expect(result.getByTestId('codeDialog')).toBeInTheDocument();
     });
-    const infoButton = result.getByRole('button', { name: 'button.understand' });
-    fireEvent.click(infoButton);
 
     // inser otp and confirm
     const dialog = await fillCodeDialog(result);
@@ -320,6 +318,77 @@ describe('DigitalContactActivation', () => {
     fireEvent.click(feedbackButton);
     expect(mockNavigateFn).toHaveBeenCalledTimes(1);
     expect(mockNavigateFn).toHaveBeenCalledWith(NOTIFICHE);
+  });
+
+  it('blocks moving on to recap step when only SMS is present (shows confirmation modal)', async () => {
+    const result = render(<DigitalContactActivation />, {
+      preloadedState: {
+        contactsState: {
+          digitalAddresses: [
+            {
+              addressType: AddressType.COURTESY,
+              senderId: 'default',
+              channelType: ChannelType.SMS,
+              value: '+39333123456',
+            },
+          ],
+        },
+      },
+    });
+
+    const howItWorksContinueButton = result.getByTestId('continueButton');
+    fireEvent.click(howItWorksContinueButton);
+
+    const emailSmsContinueButton = result.getByText('button.continue');
+    expect(emailSmsContinueButton).toBeEnabled();
+    fireEvent.click(emailSmsContinueButton);
+
+    // should show confirmation modal and NOT go to step 4
+    const modal = await result.findByRole('dialog');
+    expect(modal).toBeInTheDocument();
+
+    expect(modal).toHaveTextContent('courtesy-contacts.confirmation-modal-title');
+    expect(modal).toHaveTextContent('courtesy-contacts.confirmation-modal-email-content');
+
+    const dialogButtons = modal.querySelectorAll('button');
+    expect(dialogButtons.length).toBe(1);
+    expect(dialogButtons[0]).toHaveTextContent('button.understand');
+
+    fireEvent.click(dialogButtons[0]);
+    await waitFor(() => expect(result.queryByRole('dialog')).not.toBeInTheDocument());
+
+    expect(result.queryByText(`${labelPrefix}.step_3.title`)).toBeInTheDocument();
+    expect(result.queryByText(`${labelPrefix}.step_4.title`)).not.toBeInTheDocument();
+  });
+
+  it('moves on to recap step when EMAIL is present', async () => {
+    const result = render(<DigitalContactActivation />, {
+      preloadedState: {
+        contactsState: {
+          digitalAddresses: [
+            {
+              addressType: AddressType.COURTESY,
+              senderId: 'default',
+              channelType: ChannelType.EMAIL,
+              value: 'mock@mail.com',
+            },
+          ],
+        },
+      },
+    });
+
+    const howItWorksContinueButton = result.getByTestId('continueButton');
+    fireEvent.click(howItWorksContinueButton);
+
+    const emailSmsContinueButton = result.getByText('button.continue');
+    fireEvent.click(emailSmsContinueButton);
+
+    // should go to step 4
+    await waitFor(() => {
+      expect(result.queryByRole('dialog')).not.toBeInTheDocument();
+    });
+    const step4Title = result.getByText(`${labelPrefix}.step_4.title`);
+    expect(step4Title).toBeInTheDocument();
   });
 
   it('renders component correctly when transferring', async () => {

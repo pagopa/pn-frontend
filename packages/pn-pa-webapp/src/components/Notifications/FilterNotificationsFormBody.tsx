@@ -9,6 +9,7 @@ import {
   DatePickerTypes,
   formatIun,
   getNotificationAllowedStatus,
+  sixMonthsAgo,
   tenYearsAgo,
   today,
   useIsMobile,
@@ -44,16 +45,14 @@ type DatePickerFieldProps = {
   isMobile: boolean;
   mb: string | number;
   value: Date | null;
-  minDate?: Date | null;
-  maxDate?: Date | null;
-  disableFuture?: boolean;
+  defaultValue: Date;
+  minDate: Date | null;
+  maxDate: Date | null;
   formikInstance: FormikInst;
   setLocalDate: (value: Date | null) => void;
-  fallbackIfNull: Date;
-  errorMsg?: string;
 };
 
-function DatePickerField({
+const DatePickerField: React.FC<DatePickerFieldProps> = ({
   language,
   label,
   id,
@@ -61,52 +60,46 @@ function DatePickerField({
   isMobile,
   mb,
   value,
+  defaultValue,
   minDate,
   maxDate,
-  disableFuture,
   formikInstance,
   setLocalDate,
-  fallbackIfNull,
-  errorMsg,
-}: Readonly<DatePickerFieldProps>) {
-  return (
-    <CustomDatePicker
-      language={language}
-      label={label}
-      format={DATE_FORMAT}
-      value={value}
-      onChange={(v: DatePickerTypes) => {
-        void formikInstance.setFieldValue(id, v || fallbackIfNull, true).then(() => {
-          setLocalDate(v);
-          if (errorMsg) {
-            const errors = formikInstance.errors || {};
-            if (errors.startDate === errorMsg || errors.endDate === errorMsg) {
-              formikInstance.setErrors({ ...errors, startDate: undefined, endDate: undefined });
-            }
-          }
-        });
-      }}
-      slotProps={{
-        textField: {
-          id,
-          name: id,
-          size: 'small',
-          inputProps: {
-            inputMode: 'text',
-            type: 'text',
-            'aria-label': ariaLabel,
-          },
-          fullWidth: isMobile,
-          sx: { mb },
-          ...(errorMsg ? { error: true, helperText: errorMsg } : {}),
+}) => (
+  <CustomDatePicker
+    language={language}
+    label={label}
+    format={DATE_FORMAT}
+    value={value}
+    onChange={(v: DatePickerTypes) => {
+      void formikInstance.setFieldValue(id, v || defaultValue).then(() => {
+        setLocalDate(v);
+      });
+    }}
+    slotProps={{
+      textField: {
+        id,
+        name: id,
+        size: 'small',
+        inputProps: {
+          inputMode: 'text',
+          type: 'text',
+          'aria-label': ariaLabel,
         },
-      }}
-      disableFuture={disableFuture}
-      minDate={minDate ?? undefined}
-      maxDate={maxDate ?? undefined}
-    />
-  );
-}
+        fullWidth: isMobile,
+        sx: { mb },
+        error: formikInstance.touched[id] && Boolean(formikInstance.errors[id]),
+        helperText:
+          formikInstance.touched[id] &&
+          formikInstance.errors[id] &&
+          String(formikInstance.errors[id]),
+      },
+    }}
+    disableFuture
+    minDate={minDate ?? undefined}
+    maxDate={maxDate ?? undefined}
+  />
+);
 
 const FilterNotificationsFormBody = ({
   formikInstance,
@@ -164,15 +157,6 @@ const FilterNotificationsFormBody = ({
 
   const mb = isMobile ? '20px' : 0;
 
-  const rangeErrorMsg =
-    t('filters.errors.max-six-months', { ns: 'notifiche' }) || 'Intervallo massimo: 6 mesi';
-
-  const showRangeError =
-    formikInstance.errors?.startDate === rangeErrorMsg ||
-    formikInstance.errors?.endDate === rangeErrorMsg;
-
-  const errorMsg = showRangeError ? rangeErrorMsg : undefined;
-
   return (
     <Fragment>
       <TextField
@@ -219,13 +203,11 @@ const FilterNotificationsFormBody = ({
         isMobile={isMobile}
         mb={mb}
         value={startDate}
+        defaultValue={sixMonthsAgo}
         minDate={tenYearsAgo}
         maxDate={endDate ?? null}
-        disableFuture={true}
         formikInstance={formikInstance}
         setLocalDate={setStartDate}
-        fallbackIfNull={tenYearsAgo}
-        errorMsg={errorMsg}
       />
 
       <DatePickerField
@@ -236,13 +218,11 @@ const FilterNotificationsFormBody = ({
         isMobile={isMobile}
         mb={mb}
         value={endDate}
+        defaultValue={today}
         minDate={startDate ?? tenYearsAgo}
         maxDate={null}
-        disableFuture={true}
         formikInstance={formikInstance}
         setLocalDate={setEndDate}
-        fallbackIfNull={today}
-        errorMsg={errorMsg}
       />
 
       <TextField
