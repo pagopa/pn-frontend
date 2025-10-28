@@ -9,7 +9,9 @@ import { ButtonNaked } from '@pagopa/mui-italia';
 import LegalContactManager, {
   DigitalDomicileManagementAction,
 } from '../../components/Contacts/LegalContactManager';
+import { PFEventsType } from '../../models/PFEventsType';
 import { RECAPITI } from '../../navigation/routes.const';
+import PFEventStrategyFactory from '../../utility/MixpanelUtils/PFEventStrategyFactory';
 import AddSpecialContact, { AddSpecialContactRef } from './AddSpecialContact';
 import DigitalContactActivation from './DigitalContactActivation';
 
@@ -56,6 +58,15 @@ const DigitalContactManagement: React.FC = () => {
     setActiveStep(1);
   };
 
+  const handleClickFeedback = () => {
+    if (currentAction === DigitalDomicileManagementAction.ADD_SPECIAL_CONTACT) {
+      PFEventStrategyFactory.triggerEvent(
+        PFEventsType.SEND_ADD_CUSTOMIZED_CONTACT_THANK_YOU_PAGE_CLOSE
+      );
+    }
+    navigate(RECAPITI);
+  };
+
   if (currentAction === DigitalDomicileManagementAction.DIGITAL_DOMICILE_TRANSFER) {
     return (
       <DigitalContactActivation
@@ -95,7 +106,7 @@ const DigitalContactManagement: React.FC = () => {
         feedback: {
           title: t(`legal-contacts.sercq-send-wizard.feedback.title-transfer`),
           buttonText: t('legal-contacts.sercq-send-wizard.feedback.go-to-contacts'),
-          onClick: () => navigate(RECAPITI),
+          onClick: handleClickFeedback,
         },
       }}
     >
