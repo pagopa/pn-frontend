@@ -1,4 +1,4 @@
-// import { visualizer } from 'rollup-plugin-visualizer';
+import { visualizer } from 'rollup-plugin-visualizer';
 import { defineConfig, loadEnv, mergeConfig, splitVendorChunkPlugin } from 'vite';
 import { configDefaults, defineConfig as defineVitestConfig } from 'vitest/config';
 
@@ -30,14 +30,12 @@ export default defineConfig(({ mode }) => {
       react(),
       basicSsl(),
       splitVendorChunkPlugin(),
-      /*
       visualizer({
         // Aggiungi il visualizer
         open: true, // Apre automaticamente il report nel browser dopo la build
         filename: 'build-stats.html', // Nome del file di report
         gzipSize: true, // Mostra la dimensione dopo gzip
       }),
-      */
     ],
     server: {
       host: env.HOST,

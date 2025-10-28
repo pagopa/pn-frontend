@@ -3,6 +3,8 @@
   "version": "2.18.0",
   "private": true,
   "main": "./src/index.ts",
+  "type": "module",
+  "sideEffects": false,
   "dependencies": {
     "@date-io/date-fns": "^2.15.0",
     "@mui/icons-material": "^5.14.3",
