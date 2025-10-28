@@ -28,7 +28,7 @@
     "pec-validating": "Potrjevanje PEC v teku",
     "cancel-pec-validation": "Prekliči potrjevanje",
     "remove-pec-title": "Ali potrjujete, da želite deaktivirati PEC?",
-    "remove-pec-message": "<0>Ne boste več imeli digitalnega naslova s pravno veljavnostjo za komunikacije javne uprave in morda jih boste prejemali na papirju, z možnimi stroški za podjetje.</0><1>Vendar boste še naprej prejemali opozorila na kanalih, ki ste jih aktivirali.</1>",
+    "remove-pec-message": "<0>Vaše podjetje ne bo več imelo digitalnega naslova s pravno veljavnostjo za komunikacije javne uprave in jih bo morda prejemalo na papirju, z morebitnimi stroški za podjetje.</0><1>Podjetje bo še naprej prejemalo obvestila na kanalih, ki jih je aktiviralo.</1>",
     "remove-pec-confirm": "Deaktiviraj PEC",
     "validation-cancel-title": "Prekliči potrjevanje PEC",
     "validation-cancel-content": "Če potrdite, prekličete aktivacijo PEC kot digitalnega naslova na SEND.",
