@@ -109,10 +109,7 @@ const TermsOfService = ({ tosConsent, privacyConsent }: TermsOfServiceProps) => 
                   ns={'common'}
                   i18nKey={'tos.switch-label'}
                   components={[<TosLink key={'tos-link'} />, <PrivacyLink key={'privacy-link'} />]}
-                >
-                  Accedendo, accetti i <TosLink>Termini e condizioni d’uso</TosLink> del servizio e
-                  confermi di aver letto l’<PrivacyLink>Informativa Privacy</PrivacyLink>.
-                </Trans>
+                />
               </Typography>
             </Box>
           }
