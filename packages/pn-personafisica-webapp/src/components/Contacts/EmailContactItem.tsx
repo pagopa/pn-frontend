@@ -129,7 +129,7 @@ const EmailContactItem: React.FC = () => {
 
         PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_EMAIL_UX_SUCCESS, {
           senderId: 'default',
-          fromSercqSend: true,
+          fromSercqSend: false,
         });
 
         // contact has already been verified
