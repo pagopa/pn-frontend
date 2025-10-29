@@ -143,7 +143,7 @@ const EmailContactItem: React.FC = () => {
         } else {
           PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_EMAIL_UX_SUCCESS, {
             senderId: 'default',
-            fromSercqSend: true,
+            fromSercqSend: false,
           });
         }
 
