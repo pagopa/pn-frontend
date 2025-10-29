@@ -52,6 +52,7 @@ import { UXPspActionStrategy } from './Strategies/UXPspActionStrategy';
 import { UXScreenViewStrategy } from './Strategies/UXScreenViewStrategy';
 import { UXConfirmStrategy } from './Strategies/UxConfirmStrategy';
 import { UxWithCourtesyContactListStrategy } from './Strategies/UxWithCourtesyContactListStrategy';
+import { UxWithDigitalDomicileStateStrategy } from './Strategies/UxWithDigitalDomicileStateStrategy';
 
 const uxActionStrategy = [
   PFEventsType.SEND_DOWNLOAD_ATTACHMENT,
@@ -64,9 +65,7 @@ const uxActionStrategy = [
   PFEventsType.SEND_MANDATE_REJECTED,
   PFEventsType.SEND_MANDATE_ACCEPTED,
   PFEventsType.SEND_ACTIVE_IO_START,
-  PFEventsType.SEND_DEACTIVE_IO_START,
   PFEventsType.SEND_ACTIVE_IO_UX_CONVERSION,
-  PFEventsType.SEND_DEACTIVE_IO_UX_CONVERSION,
   PFEventsType.SEND_CANCELLED_NOTIFICATION_REFOUND_INFO,
   PFEventsType.SEND_MULTIPAYMENT_MORE_INFO,
   PFEventsType.SEND_PAYMENT_LIST_CHANGE_PAGE,
@@ -173,11 +172,8 @@ const sendAddContactScreenViewStrategy = [
 const uxScreenViewStrategy = [
   PFEventsType.SEND_PROFILE,
   PFEventsType.SEND_ADD_MANDATE_DATA_INPUT,
-  PFEventsType.SEND_DEACTIVE_IO_UX_SUCCESS,
   PFEventsType.SEND_ADD_SERCQ_SEND_POP_UP,
-  PFEventsType.SEND_ADD_SERCQ_SEND_PEC_ENTER_PEC,
   PFEventsType.SEND_ADD_SERCQ_SEND_PEC_OTP,
-  PFEventsType.SEND_ADD_SERCQ_SEND_APP_IO,
   PFEventsType.SEND_ADD_SERCQ_SEND_POP_UP_APP_IO,
   PFEventsType.SEND_ADD_SERCQ_SEND_POP_UP_REMOVE_APP_IO,
   PFEventsType.SEND_ADD_SERCQ_SEND_EMAIL_OTP,
@@ -236,6 +232,32 @@ const koErrorStrategy = [
   PFEventsType.SEND_ADD_CUSTOMIZED_CONTACT_TOS_MANDATORY,
 ] as const;
 
+const uxWithDigitalDomicileStateStrategy = [
+  PFEventsType.SEND_ADD_SERCQ_SEND_APP_IO,
+  PFEventsType.SEND_DEACTIVE_IO_CANCEL,
+  PFEventsType.SEND_DEACTIVE_IO_POP_UP,
+  PFEventsType.SEND_DEACTIVE_IO_START,
+  PFEventsType.SEND_DEACTIVE_IO_UX_CONVERSION,
+  PFEventsType.SEND_DEACTIVE_IO_UX_SUCCESS,
+  PFEventsType.SEND_DIGITAL_DOMICILE_MANAGEMENT,
+  PFEventsType.SEND_MANAGE_DIGITAL_DOMICILE,
+  PFEventsType.SEND_REMOVE_EMAIL_AND_SERCQ_CANCEL,
+  PFEventsType.SEND_REMOVE_EMAIL_AND_SERCQ_POP_UP,
+  PFEventsType.SEND_REMOVE_EMAIL_AND_SERCQ_POP_UP_CONTINUE,
+  PFEventsType.SEND_REMOVE_EMAIL_AND_SERCQ_UX_SUCCESS,
+  PFEventsType.SEND_REMOVE_EMAIL_POP_UP,
+  PFEventsType.SEND_REMOVE_EMAIL_POP_UP_CANCEL,
+  PFEventsType.SEND_REMOVE_EMAIL_POP_UP_CONTINUE,
+  PFEventsType.SEND_REMOVE_EMAIL_START,
+  PFEventsType.SEND_REMOVE_EMAIL_UX_SUCCESS,
+  PFEventsType.SEND_REMOVE_SMS_POP_UP,
+  PFEventsType.SEND_REMOVE_SMS_POP_UP_CANCEL,
+  PFEventsType.SEND_REMOVE_SMS_POP_UP_CONTINUE,
+  PFEventsType.SEND_REMOVE_SMS_POP_UP_UX_SUCCESS,
+  PFEventsType.SEND_REMOVE_SMS_START,
+  PFEventsType.SEND_ADD_SERCQ_SEND_PEC_ENTER_PEC,
+] as const;
+
 type ArrayToTuple<T extends ReadonlyArray<PFEventsType>> = keyof {
   [K in T extends ReadonlyArray<infer U> ? U : never]: string;
 };
@@ -255,6 +277,7 @@ const eventStrategy: Record<
     | ArrayToTuple<typeof uxWithCourtesyContactListStrategy>
     | ArrayToTuple<typeof koErrorStrategy>
     | ArrayToTuple<typeof sendAddSercqUxSuccessStrategy>
+    | ArrayToTuple<typeof uxWithDigitalDomicileStateStrategy>
   >,
   EventStrategy
 > = {
@@ -308,6 +331,7 @@ const isInEventStrategyMap = (value: PFEventsType): value is keyof typeof eventS
 };
 
 class PFEventStrategyFactory extends EventStrategyFactory<PFEventsType> {
+  // eslint-disable-next-line sonarjs/cognitive-complexity
   getStrategy(eventType: PFEventsType): EventStrategy | null {
     if (uxActionStrategy.findIndex((el) => el === eventType) > -1) {
       return new UXActionStrategy();
@@ -363,6 +387,10 @@ class PFEventStrategyFactory extends EventStrategyFactory<PFEventsType> {
 
     if (sendAddSercqUxSuccessStrategy.findIndex((el) => el === eventType) > -1) {
       return new SendAddSercqUxSuccessStrategy();
+    }
+
+    if (uxWithDigitalDomicileStateStrategy.findIndex((el) => el === eventType) > -1) {
+      return new UxWithDigitalDomicileStateStrategy();
     }
 
     if (isInEventStrategyMap(eventType)) {
