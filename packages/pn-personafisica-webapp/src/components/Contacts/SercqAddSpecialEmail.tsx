@@ -86,6 +86,15 @@ const SercqAddSpecialEmail = () => {
       .unwrap()
       .then((res) => {
         if (!res) {
+          if (defaultEMAILAddress) {
+            PFEventStrategyFactory.triggerEvent(
+              PFEventsType.SEND_ADD_CUSTOMIZED_CONTACT_SERCQ_SEND_CHANGE_EMAIL_OTP
+            );
+          } else {
+            PFEventStrategyFactory.triggerEvent(
+              PFEventsType.SEND_ADD_CUSTOMIZED_CONTACT_SERCQ_SEND_ADD_EMAIL_OTP
+            );
+          }
           setModalOpen(ModalType.CODE);
           return;
         }

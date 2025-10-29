@@ -86,10 +86,12 @@ const EmailContactItem: React.FC = () => {
     );
 
   const handleSubmit = (value: string) => {
-    PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_EMAIL_START, {
-      senderId: 'default',
-      source: ContactSource.RECAPITI,
-    });
+    if (!defaultEMAILAddress) {
+      PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_EMAIL_START, {
+        senderId: 'default',
+        source: ContactSource.RECAPITI,
+      });
+    }
     // eslint-disable-next-line functional/immutable-data
     currentAddress.current = { value };
     // first check if contact already exists
@@ -106,7 +108,11 @@ const EmailContactItem: React.FC = () => {
 
   const handleCodeVerification = (verificationCode?: string) => {
     if (verificationCode) {
-      PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_EMAIL_UX_CONVERSION, 'default');
+      if (defaultEMAILAddress) {
+        PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_CHANGE_EMAIL_UX_CONVERSION);
+      } else {
+        PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_EMAIL_UX_CONVERSION, 'default');
+      }
     }
 
     const digitalAddressParams: SaveDigitalAddressParams = {
@@ -123,14 +129,23 @@ const EmailContactItem: React.FC = () => {
         // contact to verify
         // open code modal
         if (!res) {
+          if (defaultEMAILAddress) {
+            PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_CHANGE_EMAIL_OTP);
+          } else {
+            PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_EMAIL_OTP);
+          }
           setModalOpen(ModalType.CODE);
           return;
         }
 
-        PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_EMAIL_UX_SUCCESS, {
-          senderId: 'default',
-          fromSercqSend: true,
-        });
+        if (defaultEMAILAddress) {
+          PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_CHANGE_EMAIL_UX_SUCCESS);
+        } else {
+          PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_EMAIL_UX_SUCCESS, {
+            senderId: 'default',
+            fromSercqSend: true,
+          });
+        }
 
         // contact has already been verified
         // show success message
@@ -151,6 +166,11 @@ const EmailContactItem: React.FC = () => {
   };
 
   const handleCancelCode = async () => {
+    if (defaultEMAILAddress) {
+      PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_CHANGE_EMAIL_BACK);
+    } else {
+      PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_EMAIL_BACK);
+    }
     setModalOpen(null);
     if (currentValue) {
       digitalContactRef.current.toggleEdit();
@@ -347,6 +367,15 @@ const EmailContactItem: React.FC = () => {
         }}
         insertButtonLabel={t(`courtesy-contacts.email-add`, { ns: 'recapiti' })}
         onSubmit={handleSubmit}
+        onEditButtonClickCallback={() =>
+          PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_CHANGE_EMAIL_START)
+        }
+        onEditCancelCallback={() =>
+          PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_CHANGE_EMAIL_CANCEL)
+        }
+        onEditConfirmCallback={() =>
+          PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_CHANGE_EMAIL_CONTINUE)
+        }
       />
       {isEmailActive && (
         <Typography variant="body1" fontSize={{ xs: '14px', lg: '16px' }} mt={2}>
