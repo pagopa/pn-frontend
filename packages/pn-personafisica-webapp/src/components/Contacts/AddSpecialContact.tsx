@@ -349,13 +349,16 @@ const AddSpecialContact = forwardRef<AddSpecialContactRef, Props>(
     })}${searchStringLimitReachedText(formik.values.sender.name)}`;
 
     const handleChangeTouched = async (e: ChangeEvent<HTMLInputElement>) => {
-      const event = e.target.checked
-        ? PFEventsType.SEND_ADD_CUSTOMIZED_CONTACT_TOS_ACCEPTED
-        : PFEventsType.SEND_ADD_CUSTOMIZED_CONTACT_TOS_DISMISSEDD;
+      if (e.target.type === 'checkbox') {
+        const event = e.target.checked
+          ? PFEventsType.SEND_ADD_CUSTOMIZED_CONTACT_TOS_ACCEPTED
+          : PFEventsType.SEND_ADD_CUSTOMIZED_CONTACT_TOS_DISMISSEDD;
+
+        PFEventStrategyFactory.triggerEvent(event);
+      }
 
       formik.handleChange(e);
       await formik.setFieldTouched(e.target.id, true, false);
-      PFEventStrategyFactory.triggerEvent(event);
     };
 
     const getParties = () => {
