@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
 import { Typography } from '@mui/material';
-import { PnWizard, PnWizardStep } from '@pagopa-pn/pn-commons';
+import { EventAction, PnWizard, PnWizardStep } from '@pagopa-pn/pn-commons';
 import { ButtonNaked } from '@pagopa/mui-italia';
 
 import LegalContactManager, {
@@ -11,6 +11,8 @@ import LegalContactManager, {
 } from '../../components/Contacts/LegalContactManager';
 import { PFEventsType } from '../../models/PFEventsType';
 import { RECAPITI } from '../../navigation/routes.const';
+import { contactsSelectors } from '../../redux/contact/reducers';
+import { useAppSelector } from '../../redux/hooks';
 import PFEventStrategyFactory from '../../utility/MixpanelUtils/PFEventStrategyFactory';
 import AddSpecialContact, { AddSpecialContactRef } from './AddSpecialContact';
 import DigitalContactActivation from './DigitalContactActivation';
@@ -22,8 +24,16 @@ const DigitalContactManagement: React.FC = () => {
   const [currentAction, setCurrentAction] = useState<DigitalDomicileManagementAction>(
     DigitalDomicileManagementAction.DEFAULT
   );
+  const { legalAddresses } = useAppSelector(contactsSelectors.selectAddresses);
 
   const addSpecialContactRef = useRef<AddSpecialContactRef>(null);
+
+  if (currentAction === DigitalDomicileManagementAction.DEFAULT) {
+    PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_DIGITAL_DOMICILE_MANAGEMENT, {
+      legal_addresses: legalAddresses,
+      event_type: EventAction.SCREEN_VIEW,
+    });
+  }
 
   const handleConfirmClick = async () => {
     if (addSpecialContactRef.current) {
