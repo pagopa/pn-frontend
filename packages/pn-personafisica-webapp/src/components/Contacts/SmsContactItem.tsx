@@ -94,7 +94,7 @@ const SmsContactElem: React.FC<SmsElemProps> = ({
   const currentValue = defaultSMSAddress?.value ?? '';
 
   const handleSubmit = (value: string) => {
-    if (!fromSercqSend) {
+    if (!fromSercqSend && !defaultSMSAddress) {
       const source = externalEvent?.source ?? ContactSource.RECAPITI;
       PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SMS_START, {
         senderId: 'default',
@@ -188,9 +188,9 @@ const SmsContactElem: React.FC<SmsElemProps> = ({
     if (fromSercqSend) {
       PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SERCQ_SEND_ADD_SMS_BACK);
     } else if (defaultSMSAddress) {
-      PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SMS_BACK);
-    } else {
       PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_CHANGE_SMS_BACK);
+    } else {
+      PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SMS_BACK);
     }
 
     setModalOpen(null);
