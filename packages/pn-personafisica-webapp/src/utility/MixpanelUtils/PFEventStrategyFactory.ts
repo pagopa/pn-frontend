@@ -256,6 +256,7 @@ const uxWithDigitalDomicileStateAndContactDetailsStrategy = [
   PFEventsType.SEND_ADD_SERCQ_SEND_START,
   PFEventsType.SEND_ADD_SERCQ_SEND_SUMMARY,
   PFEventsType.SEND_ADD_SERCQ_SEND_THANK_YOU_PAGE,
+  PFEventsType.SEND_CUSTOMIZE_CONTACT,
 ] as const;
 
 type ArrayToTuple<T extends ReadonlyArray<PFEventsType>> = keyof {

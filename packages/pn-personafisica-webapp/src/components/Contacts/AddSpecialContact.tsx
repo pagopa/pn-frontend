@@ -475,6 +475,13 @@ const AddSpecialContact = forwardRef<AddSpecialContactRef, Props>(
         .catch(() => {});
     };
 
+    useEffect(() => {
+      PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_CUSTOMIZE_CONTACT, {
+        event_type: EventAction.SCREEN_VIEW,
+        addresses,
+      });
+    }, []);
+
     return (
       <Paper data-testid="addSpecialContact" sx={{ p: { xs: 2, lg: 3 }, mb: 3 }}>
         <ExistingContactDialog
