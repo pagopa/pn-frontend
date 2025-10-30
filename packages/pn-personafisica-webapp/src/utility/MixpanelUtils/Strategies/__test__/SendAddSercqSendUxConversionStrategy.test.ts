@@ -7,12 +7,12 @@ describe('Mixpanel - Add SERCQ SEND UX Conversion Strategy', () => {
   it('should return add SERCQ SEND UX conversion event', () => {
     const strategy = new SendAddSercqSendUxConversionStrategy();
 
-    const assSercqSendValidationEvent = strategy.performComputations({
+    const addSercqSendValidationEvent = strategy.performComputations({
       tos_validation: 'missing',
       legal_addresses: digitalAddressesSercq,
     });
 
-    expect(assSercqSendValidationEvent).toEqual({
+    expect(addSercqSendValidationEvent).toEqual({
       [EventPropertyType.TRACK]: {
         event_category: EventCategory.UX,
         event_type: EventAction.ACTION,
