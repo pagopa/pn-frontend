@@ -3,7 +3,8 @@ import { Validator } from '@pagopa-pn/pn-validator';
 
 export interface LoginConfiguration {
   MIXPANEL_TOKEN: string;
-  OT_DOMAIN_ID?: string;
+  OT_DOMAIN_ID: string;
+  OT_SETTINGS_TOKEN: string;
   PAGOPA_HELP_EMAIL: string;
   PF_URL: string;
   SPID_TEST_ENV_ENABLED?: boolean;
@@ -30,6 +31,7 @@ class LoginConfigurationValidator extends Validator<LoginConfiguration> {
     this.ruleFor('URL_API_LOGIN').isString().isRequired().matches(dataRegex.htmlPageUrl);
     this.ruleFor('PAGOPA_HELP_EMAIL').isString().isRequired().matches(dataRegex.email);
     this.ruleFor('OT_DOMAIN_ID').isString().isRequired().matches(dataRegex.lettersNumbersAndDashs);
+    this.ruleFor('OT_SETTINGS_TOKEN').isString().isRequired().matches(dataRegex.token);
     this.ruleFor('PF_URL').isString().isRequired().matches(dataRegex.htmlPageUrl);
     this.ruleFor('APP_IO_SITE').isString().isRequired().matches(dataRegex.htmlPageUrl);
     this.ruleFor('APP_IO_ANDROID').isString().isRequired().matches(dataRegex.htmlPageUrl);

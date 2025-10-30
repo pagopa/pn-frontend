@@ -134,7 +134,6 @@ const uxActionStrategy = [
   PFEventsType.SEND_PEC_CANCEL_VALIDATION,
   PFEventsType.SEND_PEC_CANCEL_VALIDATION_CANCEL,
   PFEventsType.SEND_PEC_CANCEL_VALIDATION_CONFIRM,
-  PFEventsType.SEND_PEC_CANCEL_VALIDATION_POP_UP,
 ] as const;
 
 const uxPspActionStrategy = [PFEventsType.SEND_START_PAYMENT] as const;
@@ -186,6 +185,7 @@ const uxScreenViewStrategy = [
   PFEventsType.SEND_CHANGE_EMAIL_UX_SUCCESS,
   PFEventsType.SEND_CHANGE_SMS_OTP,
   PFEventsType.SEND_CHANGE_SMS_UX_SUCCESS,
+  PFEventsType.SEND_PEC_CANCEL_VALIDATION_POP_UP,
 ] as const;
 
 const uxConfirmStrategy = [

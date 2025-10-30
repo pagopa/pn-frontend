@@ -94,7 +94,7 @@ const SmsContactElem: React.FC<SmsElemProps> = ({
   const currentValue = defaultSMSAddress?.value ?? '';
 
   const handleSubmit = (value: string) => {
-    if (!fromSercqSend) {
+    if (!fromSercqSend && !defaultSMSAddress) {
       const source = externalEvent?.source ?? ContactSource.RECAPITI;
       PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SMS_START, {
         senderId: 'default',
@@ -121,6 +121,8 @@ const SmsContactElem: React.FC<SmsElemProps> = ({
     if (verificationCode) {
       if (fromSercqSend) {
         PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SERCQ_SEND_ADD_SMS_UX_CONVERSION);
+      } else if (defaultSMSAddress) {
+        PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_CHANGE_SMS_UX_CONVERSION);
       } else {
         PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SMS_UX_CONVERSION, 'default');
       }
@@ -143,13 +145,20 @@ const SmsContactElem: React.FC<SmsElemProps> = ({
           // aprire la code modal
           if (fromSercqSend) {
             PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SERCQ_SEND_SMS_OTP);
+          } else if (defaultSMSAddress) {
+            PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_CHANGE_SMS_OTP);
+          } else {
+            PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SMS_OTP);
           }
+
           setModalOpen(ModalType.CODE);
           return;
         }
 
         if (fromSercqSend) {
           PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SERCQ_SEND_ADD_SMS_UX_SUCCESS);
+        } else if (defaultSMSAddress) {
+          PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_CHANGE_SMS_UX_SUCCESS);
         } else {
           PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SMS_UX_SUCCESS, {
             senderId: 'default',
@@ -178,7 +187,12 @@ const SmsContactElem: React.FC<SmsElemProps> = ({
   const handleCancelCode = async () => {
     if (fromSercqSend) {
       PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SERCQ_SEND_ADD_SMS_BACK);
+    } else if (defaultSMSAddress) {
+      PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_CHANGE_SMS_BACK);
+    } else {
+      PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SMS_BACK);
     }
+
     setModalOpen(null);
     if (currentValue) {
       digitalContactRef.current.toggleEdit();
@@ -214,6 +228,15 @@ const SmsContactElem: React.FC<SmsElemProps> = ({
         slots={slots}
         slotsProps={slotsProps}
         beforeValidationCallback={beforeValidationCallback}
+        onEditButtonClickCallback={() =>
+          PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_CHANGE_SMS_START)
+        }
+        onEditCancelCallback={() =>
+          PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_CHANGE_SMS_CANCEL)
+        }
+        onEditConfirmCallback={() =>
+          PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_CHANGE_SMS_CONTINUE)
+        }
       />
       <ExistingContactDialog
         open={modalOpen === ModalType.EXISTING}
