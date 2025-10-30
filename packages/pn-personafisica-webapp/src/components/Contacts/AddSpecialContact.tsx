@@ -349,6 +349,14 @@ const AddSpecialContact = forwardRef<AddSpecialContactRef, Props>(
     })}${searchStringLimitReachedText(formik.values.sender.name)}`;
 
     const handleChangeTouched = async (e: ChangeEvent<HTMLInputElement>) => {
+      if (e.target.type === 'checkbox') {
+        const event = e.target.checked
+          ? PFEventsType.SEND_ADD_CUSTOMIZED_CONTACT_TOS_ACCEPTED
+          : PFEventsType.SEND_ADD_CUSTOMIZED_CONTACT_TOS_DISMISSEDD;
+
+        PFEventStrategyFactory.triggerEvent(event);
+      }
+
       formik.handleChange(e);
       await formik.setFieldTouched(e.target.id, true, false);
     };
@@ -379,6 +387,18 @@ const AddSpecialContact = forwardRef<AddSpecialContactRef, Props>(
           setErrorBanner(ErrorBannerType.VALIDATING_PEC);
         } else {
           await formik.submitForm();
+
+          if (formik.errors) {
+            PFEventStrategyFactory.triggerEvent(
+              PFEventsType.SEND_ADD_CUSTOMIZED_CONTACT_SELECTION_MISSING
+            );
+          }
+
+          if (formik.errors.s_disclaimer) {
+            PFEventStrategyFactory.triggerEvent(
+              PFEventsType.SEND_ADD_CUSTOMIZED_CONTACT_TOS_MANDATORY
+            );
+          }
         }
       },
     }));

@@ -133,6 +133,11 @@ const IOContact: React.FC = () => {
     }
   };
 
+  const handleCloseInformativeDialog = () => {
+    PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ACTIVE_IO_CANCEL);
+    setModalOpen(null);
+  };
+
   const getButton = () => {
     if (status === IOContactStatus.UNAVAILABLE) {
       return (
@@ -272,7 +277,7 @@ const IOContact: React.FC = () => {
         }
         illustration={<IllusAppIO />}
         onConfirm={() => handleConfirm()}
-        onDiscard={() => setModalOpen(null)}
+        onDiscard={handleCloseInformativeDialog}
       />
       <DeleteDialog
         showModal={modalOpen === ModalType.DELETE}
