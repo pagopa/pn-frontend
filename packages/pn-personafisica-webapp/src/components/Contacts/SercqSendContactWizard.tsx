@@ -69,8 +69,13 @@ const SercqSendContactWizard: React.FC<Props> = ({ goToStep, showIOStep }) => {
   const dispatch = useAppDispatch();
 
   const tosConsent = useRef<Array<TosPrivacyConsent>>();
-  const { courtesyAddresses, defaultEMAILAddress, defaultAPPIOAddress, defaultSMSAddress } =
-    useAppSelector(contactsSelectors.selectAddresses);
+  const {
+    courtesyAddresses,
+    defaultEMAILAddress,
+    defaultAPPIOAddress,
+    defaultSMSAddress,
+    legalAddresses,
+  } = useAppSelector(contactsSelectors.selectAddresses);
 
   const isIOInstalled = !!defaultAPPIOAddress;
 
@@ -162,6 +167,7 @@ const SercqSendContactWizard: React.FC<Props> = ({ goToStep, showIOStep }) => {
 
     PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SERCQ_SEND_UX_CONVERSION, {
       tos_validation: errors?.disclaimer ? 'missing' : 'valid',
+      legal_addresses: legalAddresses,
     });
 
     await formik.submitForm();
