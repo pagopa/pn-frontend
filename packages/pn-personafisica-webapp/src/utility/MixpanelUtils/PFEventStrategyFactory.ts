@@ -234,6 +234,7 @@ const koErrorStrategy = [
 
 const uxWithDigitalDomicileStateStrategy = [
   PFEventsType.SEND_ADD_SERCQ_SEND_APP_IO,
+  PFEventsType.SEND_ADD_SERCQ_SEND_PEC_ENTER_PEC,
   PFEventsType.SEND_DEACTIVE_IO_CANCEL,
   PFEventsType.SEND_DEACTIVE_IO_POP_UP,
   PFEventsType.SEND_DEACTIVE_IO_START,
@@ -255,7 +256,6 @@ const uxWithDigitalDomicileStateStrategy = [
   PFEventsType.SEND_REMOVE_SMS_POP_UP_CONTINUE,
   PFEventsType.SEND_REMOVE_SMS_POP_UP_UX_SUCCESS,
   PFEventsType.SEND_REMOVE_SMS_START,
-  PFEventsType.SEND_ADD_SERCQ_SEND_PEC_ENTER_PEC,
 ] as const;
 
 type ArrayToTuple<T extends ReadonlyArray<PFEventsType>> = keyof {
