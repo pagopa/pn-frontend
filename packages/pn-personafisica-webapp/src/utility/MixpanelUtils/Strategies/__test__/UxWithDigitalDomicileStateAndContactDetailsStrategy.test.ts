@@ -2,10 +2,10 @@ import { EventAction, EventCategory, EventPropertyType } from '@pagopa-pn/pn-com
 
 import { digitalAddresses } from '../../../../__mocks__/Contacts.mock';
 import { AddressType, ChannelType, IOAllowedValues } from '../../../../models/contacts';
-import { UxWithCourtesyContactListStrategy } from '../UxWithCourtesyContactListStrategy';
+import { UxWithDigitalDomicileStateAndContactDetailsStrategy } from '../UxWithDigitalDomicileStateAndContactDetailsStrategy';
 
-describe('Mixpanel - UX Action with Courtesy Contacts List Strategy', () => {
-  const strategy = new UxWithCourtesyContactListStrategy();
+describe('Mixpanel - UX Action with DigitalDomicileState and ContactDetails Strategy Strategy', () => {
+  const strategy = new UxWithDigitalDomicileStateAndContactDetailsStrategy();
 
   const courtesyContacts = digitalAddresses
     .filter((addr) => addr.addressType === AddressType.COURTESY)
@@ -23,7 +23,8 @@ describe('Mixpanel - UX Action with Courtesy Contacts List Strategy', () => {
   it('should return "no_contact" when no contacts are provided', () => {
     const result = strategy.performComputations({
       event_type: EventAction.SCREEN_VIEW,
-      contacts: [],
+      legal_addresses: [],
+      contact_details: [],
     });
 
     expect(result).toEqual({
@@ -38,7 +39,8 @@ describe('Mixpanel - UX Action with Courtesy Contacts List Strategy', () => {
   it('should return "no_contact" when only legal contacts are provided', () => {
     const result = strategy.performComputations({
       event_type: EventAction.ACTION,
-      contacts: legalContacts,
+      legal_addresses: legalContacts,
+      contact_details: [],
     });
 
     expect(result).toEqual({
@@ -53,7 +55,11 @@ describe('Mixpanel - UX Action with Courtesy Contacts List Strategy', () => {
   it('should return "app_io" when only IOMSG courtesy contact is provided', () => {
     const contacts = getContactsByChannelType(ChannelType.IOMSG);
 
-    const result = strategy.performComputations({ event_type: EventAction.ACTION, contacts });
+    const result = strategy.performComputations({
+      event_type: EventAction.ACTION,
+      legal_addresses: [],
+      contact_details: contacts,
+    });
 
     expect(result).toEqual({
       [EventPropertyType.TRACK]: {
@@ -67,7 +73,11 @@ describe('Mixpanel - UX Action with Courtesy Contacts List Strategy', () => {
   it('should return "email" when only EMAIL courtesy contact is provided', () => {
     const contacts = getContactsByChannelType(ChannelType.EMAIL);
 
-    const result = strategy.performComputations({ event_type: EventAction.ACTION, contacts });
+    const result = strategy.performComputations({
+      event_type: EventAction.ACTION,
+      legal_addresses: [],
+      contact_details: contacts,
+    });
 
     expect(result).toEqual({
       [EventPropertyType.TRACK]: {
@@ -81,7 +91,11 @@ describe('Mixpanel - UX Action with Courtesy Contacts List Strategy', () => {
   it('should return "sms" when only SMS courtesy contact is provided', () => {
     const contacts = getContactsByChannelType(ChannelType.SMS);
 
-    const result = strategy.performComputations({ event_type: EventAction.ACTION, contacts });
+    const result = strategy.performComputations({
+      event_type: EventAction.ACTION,
+      legal_addresses: [],
+      contact_details: contacts,
+    });
 
     expect(result).toEqual({
       [EventPropertyType.TRACK]: {
@@ -98,7 +112,11 @@ describe('Mixpanel - UX Action with Courtesy Contacts List Strategy', () => {
       ...getContactsByChannelType(ChannelType.EMAIL),
     ];
 
-    const result = strategy.performComputations({ event_type: EventAction.ACTION, contacts });
+    const result = strategy.performComputations({
+      event_type: EventAction.ACTION,
+      legal_addresses: [],
+      contact_details: contacts,
+    });
 
     expect(result).toEqual({
       [EventPropertyType.TRACK]: {
@@ -115,7 +133,11 @@ describe('Mixpanel - UX Action with Courtesy Contacts List Strategy', () => {
       ...getContactsByChannelType(ChannelType.SMS),
     ];
 
-    const result = strategy.performComputations({ event_type: EventAction.ACTION, contacts });
+    const result = strategy.performComputations({
+      event_type: EventAction.ACTION,
+      legal_addresses: [],
+      contact_details: contacts,
+    });
 
     expect(result).toEqual({
       [EventPropertyType.TRACK]: {
@@ -132,7 +154,11 @@ describe('Mixpanel - UX Action with Courtesy Contacts List Strategy', () => {
       ...getContactsByChannelType(ChannelType.SMS),
     ];
 
-    const result = strategy.performComputations({ event_type: EventAction.ACTION, contacts });
+    const result = strategy.performComputations({
+      event_type: EventAction.ACTION,
+      legal_addresses: [],
+      contact_details: contacts,
+    });
 
     expect(result).toEqual({
       [EventPropertyType.TRACK]: {
@@ -146,7 +172,8 @@ describe('Mixpanel - UX Action with Courtesy Contacts List Strategy', () => {
   it('should return "app_io_email_sms" when all courtesy contacts are provided', () => {
     const result = strategy.performComputations({
       event_type: EventAction.ACTION,
-      contacts: courtesyContacts,
+      legal_addresses: [],
+      contact_details: courtesyContacts,
     });
 
     expect(result).toEqual({
@@ -164,7 +191,11 @@ describe('Mixpanel - UX Action with Courtesy Contacts List Strategy', () => {
       value: IOAllowedValues.DISABLED,
     }));
 
-    const result = strategy.performComputations({ event_type: EventAction.ACTION, contacts });
+    const result = strategy.performComputations({
+      event_type: EventAction.ACTION,
+      legal_addresses: [],
+      contact_details: contacts,
+    });
 
     expect(result).toEqual({
       [EventPropertyType.TRACK]: {
@@ -188,7 +219,11 @@ describe('Mixpanel - UX Action with Courtesy Contacts List Strategy', () => {
       },
     ];
 
-    const result = strategy.performComputations({ event_type: EventAction.ACTION, contacts });
+    const result = strategy.performComputations({
+      event_type: EventAction.ACTION,
+      legal_addresses: [],
+      contact_details: contacts,
+    });
 
     expect(result).toEqual({
       [EventPropertyType.TRACK]: {
