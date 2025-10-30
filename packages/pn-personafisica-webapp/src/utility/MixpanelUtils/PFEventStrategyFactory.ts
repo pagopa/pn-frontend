@@ -51,7 +51,7 @@ import { UXErrorStrategy } from './Strategies/UXErrorStrategy';
 import { UXPspActionStrategy } from './Strategies/UXPspActionStrategy';
 import { UXScreenViewStrategy } from './Strategies/UXScreenViewStrategy';
 import { UXConfirmStrategy } from './Strategies/UxConfirmStrategy';
-import { UxWithCourtesyContactListStrategy } from './Strategies/UxWithCourtesyContactListStrategy';
+import { UxWithDigitalDomicileStateAndContactDetailsStrategy } from './Strategies/UxWithDigitalDomicileStateAndContactDetailsStrategy';
 import { UxWithDigitalDomicileStateStrategy } from './Strategies/UxWithDigitalDomicileStateStrategy';
 
 const uxActionStrategy = [
@@ -71,7 +71,6 @@ const uxActionStrategy = [
   PFEventsType.SEND_PAYMENT_LIST_CHANGE_PAGE,
   PFEventsType.SEND_F24_DOWNLOAD,
   PFEventsType.SEND_DOWNLOAD_PAYMENT_NOTICE,
-  PFEventsType.SEND_ADD_CUSTOMIZED_CONTACT,
   PFEventsType.SEND_ADD_SERCQ_SEND_CANCEL,
   PFEventsType.SEND_ADD_SERCQ_SEND_PEC_BACK,
   PFEventsType.SEND_ADD_SERCQ_SEND_PEC_TOS_ACCEPTED,
@@ -211,17 +210,6 @@ const techStrategy = [
   PFEventsType.SEND_F24_DOWNLOAD_TIMEOUT,
 ] as const;
 
-const uxWithCourtesyContactListStrategy = [
-  PFEventsType.SEND_ADD_SERCQ_SEND_INTRO,
-  PFEventsType.SEND_ADD_SERCQ_SEND_START,
-  PFEventsType.SEND_ADD_SERCQ_SEND_PEC_START,
-  PFEventsType.SEND_ADD_SERCQ_SEND_PEC_THANK_YOU_PAGE,
-  PFEventsType.SEND_ADD_SERCQ_SEND_EMAIL_SMS,
-  PFEventsType.SEND_ADD_SERCQ_SEND_EMAIL_SMS_CONTINUE,
-  PFEventsType.SEND_ADD_SERCQ_SEND_SUMMARY,
-  PFEventsType.SEND_ADD_SERCQ_SEND_THANK_YOU_PAGE,
-] as const;
-
 const koErrorStrategy = [
   PFEventsType.SEND_ADD_SERCQ_SEND_PEC_ERROR,
   PFEventsType.SEND_ADD_SERCQ_SEND_EMAIL_ERROR,
@@ -258,6 +246,18 @@ const uxWithDigitalDomicileStateStrategy = [
   PFEventsType.SEND_REMOVE_SMS_START,
 ] as const;
 
+const uxWithDigitalDomicileStateAndContactDetailsStrategy = [
+  PFEventsType.SEND_ADD_CUSTOMIZED_CONTACT,
+  PFEventsType.SEND_ADD_SERCQ_SEND_EMAIL_SMS,
+  PFEventsType.SEND_ADD_SERCQ_SEND_EMAIL_SMS_CONTINUE,
+  PFEventsType.SEND_ADD_SERCQ_SEND_INTRO,
+  PFEventsType.SEND_ADD_SERCQ_SEND_PEC_START,
+  PFEventsType.SEND_ADD_SERCQ_SEND_PEC_THANK_YOU_PAGE,
+  PFEventsType.SEND_ADD_SERCQ_SEND_START,
+  PFEventsType.SEND_ADD_SERCQ_SEND_SUMMARY,
+  PFEventsType.SEND_ADD_SERCQ_SEND_THANK_YOU_PAGE,
+] as const;
+
 type ArrayToTuple<T extends ReadonlyArray<PFEventsType>> = keyof {
   [K in T extends ReadonlyArray<infer U> ? U : never]: string;
 };
@@ -274,7 +274,6 @@ const eventStrategy: Record<
     | ArrayToTuple<typeof uxConfirmStrategy>
     | ArrayToTuple<typeof uxErrorStrategy>
     | ArrayToTuple<typeof techStrategy>
-    | ArrayToTuple<typeof uxWithCourtesyContactListStrategy>
     | ArrayToTuple<typeof koErrorStrategy>
     | ArrayToTuple<typeof sendAddSercqUxSuccessStrategy>
     | ArrayToTuple<typeof uxWithDigitalDomicileStateStrategy>
@@ -377,10 +376,6 @@ class PFEventStrategyFactory extends EventStrategyFactory<PFEventsType> {
       return new TechStrategy();
     }
 
-    if (uxWithCourtesyContactListStrategy.findIndex((el) => el === eventType) > -1) {
-      return new UxWithCourtesyContactListStrategy();
-    }
-
     if (koErrorStrategy.findIndex((el) => el === eventType) > -1) {
       return new KoErrorStrategy();
     }
@@ -391,6 +386,12 @@ class PFEventStrategyFactory extends EventStrategyFactory<PFEventsType> {
 
     if (uxWithDigitalDomicileStateStrategy.findIndex((el) => el === eventType) > -1) {
       return new UxWithDigitalDomicileStateStrategy();
+    }
+
+    if (
+      uxWithDigitalDomicileStateAndContactDetailsStrategy.findIndex((el) => el === eventType) > -1
+    ) {
+      return new UxWithDigitalDomicileStateAndContactDetailsStrategy();
     }
 
     if (isInEventStrategyMap(eventType)) {
