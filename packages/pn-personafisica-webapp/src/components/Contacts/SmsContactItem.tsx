@@ -12,7 +12,7 @@ import {
   Typography,
   TypographyProps,
 } from '@mui/material';
-import { PnInfoCard, appStateActions } from '@pagopa-pn/pn-commons';
+import { EventAction, PnInfoCard, appStateActions } from '@pagopa-pn/pn-commons';
 import { ButtonNaked } from '@pagopa/mui-italia';
 
 import { PFEventsType } from '../../models/PFEventsType';
@@ -283,6 +283,7 @@ const SmsContactItem: React.FC<SmsItemProps> = ({
     defaultSMSAddress,
     addresses,
     specialSMSAddresses,
+    legalAddresses,
   } = useAppSelector(contactsSelectors.selectAddresses);
 
   const [modalOpen, setModalOpen] = useState<ModalType | null>(null);
@@ -304,6 +305,13 @@ const SmsContactItem: React.FC<SmsItemProps> = ({
   const hasDigitalDomicile = !!defaultSERCQ_SENDAddress || !!defaultPECAddress;
 
   const deleteConfirmHandler = () => {
+    if (!fromSercqSend) {
+      PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_REMOVE_SMS_POP_UP_CONTINUE, {
+        event_type: EventAction.ACTION,
+        legal_addresses: legalAddresses,
+      });
+    }
+
     setModalOpen(null);
     dispatch(
       deleteAddress({
@@ -315,6 +323,12 @@ const SmsContactItem: React.FC<SmsItemProps> = ({
       .unwrap()
       .then(() => {
         PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_REMOVE_SMS_SUCCESS, 'default');
+        if (!fromSercqSend) {
+          PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_REMOVE_SMS_POP_UP_UX_SUCCESS, {
+            event_type: EventAction.SCREEN_VIEW,
+            legal_addresses: legalAddresses,
+          });
+        }
         dispatch(
           appStateActions.addSuccess({
             title: '',
@@ -383,6 +397,33 @@ const SmsContactItem: React.FC<SmsItemProps> = ({
     setInsertMode(false);
   };
 
+  const handleDisableSms = () => {
+    if (!fromSercqSend) {
+      PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_REMOVE_SMS_START, {
+        event_type: EventAction.ACTION,
+        legal_addresses: legalAddresses,
+      });
+
+      PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_REMOVE_SMS_POP_UP, {
+        event_type: EventAction.SCREEN_VIEW,
+        legal_addresses: legalAddresses,
+      });
+    }
+
+    setModalOpen(ModalType.DELETE);
+  };
+
+  const handleCloseDeleteDialog = () => {
+    if (!fromSercqSend) {
+      PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_REMOVE_SMS_POP_UP_CANCEL, {
+        event_type: EventAction.ACTION,
+        legal_addresses: legalAddresses,
+      });
+    }
+
+    setModalOpen(null);
+  };
+
   const getActions = () =>
     isActive
       ? [
@@ -392,9 +433,7 @@ const SmsContactItem: React.FC<SmsItemProps> = ({
             variant="naked"
             color="error"
             startIcon={<PowerSettingsNewIcon />}
-            onClick={() => {
-              setModalOpen(ModalType.DELETE);
-            }}
+            onClick={handleDisableSms}
             sx={{ p: '10px 16px' }}
           >
             {t('button.disable')}
@@ -445,15 +484,15 @@ const SmsContactItem: React.FC<SmsItemProps> = ({
           showModal={modalOpen === ModalType.DELETE}
           removeModalTitle={getRemoveModalTitle()}
           removeModalBody={getRemoveModalMessage()}
-          handleModalClose={() => setModalOpen(null)}
+          handleModalClose={handleCloseDeleteDialog}
           confirmHandler={deleteConfirmHandler}
           slotsProps={{
             primaryButton: {
-              onClick: hasDigitalDomicile ? () => setModalOpen(null) : deleteConfirmHandler,
+              onClick: hasDigitalDomicile ? handleCloseDeleteDialog : deleteConfirmHandler,
               label: hasDigitalDomicile ? t('button.annulla') : undefined,
             },
             secondaryButton: {
-              onClick: hasDigitalDomicile ? deleteConfirmHandler : () => setModalOpen(null),
+              onClick: hasDigitalDomicile ? deleteConfirmHandler : handleCloseDeleteDialog,
               label: hasDigitalDomicile
                 ? t('courtesy-contacts.remove-sms', { ns: 'recapiti' })
                 : undefined,
