@@ -114,7 +114,19 @@ const IOContact: React.FC = () => {
   };
 
   const handleOpenDeleteModal = () => {
+    PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_DEACTIVE_IO_POP_UP, {
+      event_type: EventAction.SCREEN_VIEW,
+      legal_addresses: legalAddresses,
+    });
     setModalOpen(ModalType.DELETE);
+  };
+
+  const handleCloseDeleteModal = () => {
+    PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_DEACTIVE_IO_CANCEL, {
+      event_type: EventAction.ACTION,
+      legal_addresses: legalAddresses,
+    });
+    setModalOpen(null);
   };
 
   const handleConfirm = () => {
@@ -293,13 +305,13 @@ const IOContact: React.FC = () => {
         showModal={modalOpen === ModalType.DELETE}
         removeModalTitle={t('io-contact.disable-modal.title', { ns: 'recapiti' })}
         removeModalBody={getRemoveModalMessage()}
-        handleModalClose={() => setModalOpen(null)}
+        handleModalClose={handleCloseDeleteModal}
         confirmHandler={disableIO}
         slotsProps={
           hasDigitalDomicile
             ? {
                 primaryButton: {
-                  onClick: () => setModalOpen(null),
+                  onClick: handleCloseDeleteModal,
                   label: t('button.annulla'),
                 },
                 secondaryButton: {
