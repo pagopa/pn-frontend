@@ -23,8 +23,7 @@ describe('Mixpanel - UX Action with DigitalDomicileState and ContactDetails Stra
   it('should return "no_contact" when no contacts are provided', () => {
     const result = strategy.performComputations({
       event_type: EventAction.SCREEN_VIEW,
-      legal_addresses: [],
-      contact_details: [],
+      addresses: [],
     });
 
     expect(result).toEqual({
@@ -32,6 +31,7 @@ describe('Mixpanel - UX Action with DigitalDomicileState and ContactDetails Stra
         event_category: EventCategory.UX,
         event_type: EventAction.SCREEN_VIEW,
         contact_details: 'no_contact',
+        digital_domicile_state: 'not_active',
       },
     });
   });
@@ -39,8 +39,7 @@ describe('Mixpanel - UX Action with DigitalDomicileState and ContactDetails Stra
   it('should return "no_contact" when only legal contacts are provided', () => {
     const result = strategy.performComputations({
       event_type: EventAction.ACTION,
-      legal_addresses: legalContacts,
-      contact_details: [],
+      addresses: legalContacts,
     });
 
     expect(result).toEqual({
@@ -48,6 +47,7 @@ describe('Mixpanel - UX Action with DigitalDomicileState and ContactDetails Stra
         event_category: EventCategory.UX,
         event_type: EventAction.ACTION,
         contact_details: 'no_contact',
+        digital_domicile_state: 'pec',
       },
     });
   });
@@ -57,8 +57,7 @@ describe('Mixpanel - UX Action with DigitalDomicileState and ContactDetails Stra
 
     const result = strategy.performComputations({
       event_type: EventAction.ACTION,
-      legal_addresses: [],
-      contact_details: contacts,
+      addresses: contacts,
     });
 
     expect(result).toEqual({
@@ -66,6 +65,7 @@ describe('Mixpanel - UX Action with DigitalDomicileState and ContactDetails Stra
         event_category: EventCategory.UX,
         event_type: EventAction.ACTION,
         contact_details: 'app_io',
+        digital_domicile_state: 'not_active',
       },
     });
   });
@@ -75,8 +75,7 @@ describe('Mixpanel - UX Action with DigitalDomicileState and ContactDetails Stra
 
     const result = strategy.performComputations({
       event_type: EventAction.ACTION,
-      legal_addresses: [],
-      contact_details: contacts,
+      addresses: contacts,
     });
 
     expect(result).toEqual({
@@ -84,6 +83,7 @@ describe('Mixpanel - UX Action with DigitalDomicileState and ContactDetails Stra
         event_category: EventCategory.UX,
         event_type: EventAction.ACTION,
         contact_details: 'email',
+        digital_domicile_state: 'not_active',
       },
     });
   });
@@ -93,8 +93,7 @@ describe('Mixpanel - UX Action with DigitalDomicileState and ContactDetails Stra
 
     const result = strategy.performComputations({
       event_type: EventAction.ACTION,
-      legal_addresses: [],
-      contact_details: contacts,
+      addresses: contacts,
     });
 
     expect(result).toEqual({
@@ -102,6 +101,7 @@ describe('Mixpanel - UX Action with DigitalDomicileState and ContactDetails Stra
         event_category: EventCategory.UX,
         event_type: EventAction.ACTION,
         contact_details: 'sms',
+        digital_domicile_state: 'not_active',
       },
     });
   });
@@ -114,8 +114,7 @@ describe('Mixpanel - UX Action with DigitalDomicileState and ContactDetails Stra
 
     const result = strategy.performComputations({
       event_type: EventAction.ACTION,
-      legal_addresses: [],
-      contact_details: contacts,
+      addresses: contacts,
     });
 
     expect(result).toEqual({
@@ -123,6 +122,7 @@ describe('Mixpanel - UX Action with DigitalDomicileState and ContactDetails Stra
         event_category: EventCategory.UX,
         event_type: EventAction.ACTION,
         contact_details: 'app_io_email',
+        digital_domicile_state: 'not_active',
       },
     });
   });
@@ -135,8 +135,7 @@ describe('Mixpanel - UX Action with DigitalDomicileState and ContactDetails Stra
 
     const result = strategy.performComputations({
       event_type: EventAction.ACTION,
-      legal_addresses: [],
-      contact_details: contacts,
+      addresses: contacts,
     });
 
     expect(result).toEqual({
@@ -144,6 +143,7 @@ describe('Mixpanel - UX Action with DigitalDomicileState and ContactDetails Stra
         event_category: EventCategory.UX,
         event_type: EventAction.ACTION,
         contact_details: 'app_io_sms',
+        digital_domicile_state: 'not_active',
       },
     });
   });
@@ -156,8 +156,7 @@ describe('Mixpanel - UX Action with DigitalDomicileState and ContactDetails Stra
 
     const result = strategy.performComputations({
       event_type: EventAction.ACTION,
-      legal_addresses: [],
-      contact_details: contacts,
+      addresses: contacts,
     });
 
     expect(result).toEqual({
@@ -165,6 +164,7 @@ describe('Mixpanel - UX Action with DigitalDomicileState and ContactDetails Stra
         event_category: EventCategory.UX,
         event_type: EventAction.ACTION,
         contact_details: 'email_sms',
+        digital_domicile_state: 'not_active',
       },
     });
   });
@@ -172,8 +172,7 @@ describe('Mixpanel - UX Action with DigitalDomicileState and ContactDetails Stra
   it('should return "app_io_email_sms" when all courtesy contacts are provided', () => {
     const result = strategy.performComputations({
       event_type: EventAction.ACTION,
-      legal_addresses: [],
-      contact_details: courtesyContacts,
+      addresses: courtesyContacts,
     });
 
     expect(result).toEqual({
@@ -181,6 +180,7 @@ describe('Mixpanel - UX Action with DigitalDomicileState and ContactDetails Stra
         event_category: EventCategory.UX,
         event_type: EventAction.ACTION,
         contact_details: 'app_io_email_sms',
+        digital_domicile_state: 'not_active',
       },
     });
   });
@@ -193,8 +193,7 @@ describe('Mixpanel - UX Action with DigitalDomicileState and ContactDetails Stra
 
     const result = strategy.performComputations({
       event_type: EventAction.ACTION,
-      legal_addresses: [],
-      contact_details: contacts,
+      addresses: contacts,
     });
 
     expect(result).toEqual({
@@ -202,6 +201,7 @@ describe('Mixpanel - UX Action with DigitalDomicileState and ContactDetails Stra
         event_category: EventCategory.UX,
         event_type: EventAction.ACTION,
         contact_details: 'no_contact',
+        digital_domicile_state: 'not_active',
       },
     });
   });
@@ -221,8 +221,7 @@ describe('Mixpanel - UX Action with DigitalDomicileState and ContactDetails Stra
 
     const result = strategy.performComputations({
       event_type: EventAction.ACTION,
-      legal_addresses: [],
-      contact_details: contacts,
+      addresses: contacts,
     });
 
     expect(result).toEqual({
@@ -230,6 +229,7 @@ describe('Mixpanel - UX Action with DigitalDomicileState and ContactDetails Stra
         event_category: EventCategory.UX,
         event_type: EventAction.ACTION,
         contact_details: 'email_sms',
+        digital_domicile_state: 'not_active',
       },
     });
   });

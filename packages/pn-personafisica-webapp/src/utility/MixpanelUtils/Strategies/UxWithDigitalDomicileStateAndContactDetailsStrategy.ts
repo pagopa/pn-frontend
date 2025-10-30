@@ -6,7 +6,7 @@ import {
   TrackedEvent,
 } from '@pagopa-pn/pn-commons';
 
-import { DigitalAddress } from '../../../models/contacts';
+import { AddressType, DigitalAddress } from '../../../models/contacts';
 import {
   MixpanelConcatCourtesyContacts,
   MixpanelDigitalDomicileState,
@@ -15,9 +15,8 @@ import {
 } from '../../mixpanel';
 
 type Props = {
-  legal_addresses: Array<DigitalAddress>;
-  contact_details: Array<DigitalAddress>;
   event_type: EventAction.ACTION | EventAction.SCREEN_VIEW;
+  addresses: Array<DigitalAddress>;
 };
 
 type Return = {
@@ -26,17 +25,18 @@ type Return = {
 };
 
 export class UxWithDigitalDomicileStateAndContactDetailsStrategy implements EventStrategy {
-  performComputations({
-    legal_addresses,
-    contact_details,
-    event_type,
-  }: Props): TrackedEvent<Return> {
+  performComputations({ addresses, event_type }: Props): TrackedEvent<Return> {
+    const legalAddresses = addresses.filter((address) => address.addressType === AddressType.LEGAL);
+    const courtesyAddresses = addresses.filter(
+      (address) => address.addressType === AddressType.COURTESY
+    );
+
     return {
       [EventPropertyType.TRACK]: {
         event_category: EventCategory.UX,
         event_type,
-        digital_domicile_state: getDigitalDomicileState(legal_addresses),
-        contact_details: concatCourtestyContacts(contact_details),
+        digital_domicile_state: getDigitalDomicileState(legalAddresses),
+        contact_details: concatCourtestyContacts(courtesyAddresses),
       },
     };
   }

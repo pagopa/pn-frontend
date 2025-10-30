@@ -75,6 +75,7 @@ const SercqSendContactWizard: React.FC<Props> = ({ goToStep, showIOStep }) => {
     defaultAPPIOAddress,
     defaultSMSAddress,
     legalAddresses,
+    addresses,
   } = useAppSelector(contactsSelectors.selectAddresses);
 
   const isIOInstalled = !!defaultAPPIOAddress;
@@ -252,7 +253,7 @@ const SercqSendContactWizard: React.FC<Props> = ({ goToStep, showIOStep }) => {
   useEffect(() => {
     PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SERCQ_SEND_SUMMARY, {
       event_type: EventAction.SCREEN_VIEW,
-      contacts: courtesyAddresses,
+      addresses,
     });
   }, []);
 

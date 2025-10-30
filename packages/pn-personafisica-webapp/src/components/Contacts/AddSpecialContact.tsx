@@ -154,7 +154,7 @@ const AddSpecialContact = forwardRef<AddSpecialContactRef, Props>(
     const [modalOpen, setModalOpen] = useState<ModalType | null>(null);
     const [isExistingContactDefault, setIsExistingContactDefault] = useState(false);
     const tosConsent = useRef<Array<TosPrivacyConsent>>();
-    const { defaultEMAILAddress } = addressesData || {};
+    const { defaultEMAILAddress, addresses } = addressesData || {};
     const [canEditEmail, setCanEditEmail] = useState<boolean>(false);
 
     const addressTypes = specialContactsAvailableAddressTypes(addressesData).filter(
@@ -325,7 +325,7 @@ const AddSpecialContact = forwardRef<AddSpecialContactRef, Props>(
       } else {
         PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SERCQ_SEND_START, {
           event_type: EventAction.ACTION,
-          contacts: addressesData.courtesyAddresses,
+          addresses,
         });
       }
 

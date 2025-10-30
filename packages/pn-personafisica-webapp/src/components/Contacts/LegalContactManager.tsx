@@ -3,12 +3,15 @@ import { useTranslation } from 'react-i18next';
 
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import { Chip, ChipProps, Paper, Stack, Typography } from '@mui/material';
+import { EventAction } from '@pagopa-pn/pn-commons';
 import { ButtonNaked } from '@pagopa/mui-italia';
 
+import { PFEventsType } from '../../models/PFEventsType';
 import { ChannelType } from '../../models/contacts';
 import { contactsSelectors } from '../../redux/contact/reducers';
 import { useAppSelector } from '../../redux/hooks';
 import { getConfiguration } from '../../services/configuration.service';
+import PFEventStrategyFactory from '../../utility/MixpanelUtils/PFEventStrategyFactory';
 
 export enum DigitalDomicileManagementAction {
   DEFAULT = 'DEFAULT',
@@ -51,7 +54,7 @@ const DigitalDomicileOption: React.FC<DigitalDomicileOption> = ({ title, content
 
 const LegalContactManager: React.FC<Props> = ({ setAction }) => {
   const { t } = useTranslation(['recapiti', 'common']);
-  const { defaultPECAddress, defaultSERCQ_SENDAddress } = useAppSelector(
+  const { defaultPECAddress, defaultSERCQ_SENDAddress, addresses } = useAppSelector(
     contactsSelectors.selectAddresses
   );
   const { IS_DOD_ENABLED } = getConfiguration();
@@ -90,6 +93,14 @@ const LegalContactManager: React.FC<Props> = ({ setAction }) => {
   };
 
   const config = getConfig();
+
+  const handleAddSpecialContact = () => {
+    PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_CUSTOMIZED_CONTACT, {
+      event_type: EventAction.ACTION,
+      addresses,
+    });
+    setAction(DigitalDomicileManagementAction.ADD_SPECIAL_CONTACT);
+  };
 
   return (
     <Stack data-testid="legalContactManager" spacing={2}>
@@ -135,7 +146,7 @@ const LegalContactManager: React.FC<Props> = ({ setAction }) => {
               content={t('legal-contacts.digital-domicile-management.special_contacts.content')}
               action={{
                 text: t('legal-contacts.digital-domicile-management.special_contacts.action'),
-                callback: () => setAction(DigitalDomicileManagementAction.ADD_SPECIAL_CONTACT),
+                callback: handleAddSpecialContact,
               }}
             />
           </Stack>
