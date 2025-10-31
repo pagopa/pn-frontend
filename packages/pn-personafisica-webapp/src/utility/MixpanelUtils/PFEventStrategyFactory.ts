@@ -51,6 +51,7 @@ import { UXErrorStrategy } from './Strategies/UXErrorStrategy';
 import { UXPspActionStrategy } from './Strategies/UXPspActionStrategy';
 import { UXScreenViewStrategy } from './Strategies/UXScreenViewStrategy';
 import { UXConfirmStrategy } from './Strategies/UxConfirmStrategy';
+import { UxWithContactDetailsAndCustomizedContactStrategy } from './Strategies/UxWithContactDetailsAndCustomizedContactStrategy';
 import { UxWithDigitalDomicileStateAndContactDetailsStrategy } from './Strategies/UxWithDigitalDomicileStateAndContactDetailsStrategy';
 import { UxWithDigitalDomicileStateStrategy } from './Strategies/UxWithDigitalDomicileStateStrategy';
 
@@ -259,6 +260,17 @@ const uxWithDigitalDomicileStateAndContactDetailsStrategy = [
   PFEventsType.SEND_CUSTOMIZE_CONTACT,
 ] as const;
 
+const uxWithContactDetailsAndCustomizedContactStrategy = [
+  PFEventsType.SEND_REMOVE_DIGITAL_DOMICILE_PEC_POP_UP,
+  PFEventsType.SEND_REMOVE_DIGITAL_DOMICILE_PEC_POP_UP_CANCEL,
+  PFEventsType.SEND_REMOVE_DIGITAL_DOMICILE_PEC_POP_UP_CONTINUE,
+  PFEventsType.SEND_REMOVE_DIGITAL_DOMICILE_PEC_START,
+  PFEventsType.SEND_REMOVE_SERCQ_SEND_POP_UP,
+  PFEventsType.SEND_REMOVE_SERCQ_SEND_POP_UP_CANCEL,
+  PFEventsType.SEND_REMOVE_SERCQ_SEND_POP_UP_CONTINUE,
+  PFEventsType.SEND_REMOVE_SERCQ_SEND_START,
+] as const;
+
 type ArrayToTuple<T extends ReadonlyArray<PFEventsType>> = keyof {
   [K in T extends ReadonlyArray<infer U> ? U : never]: string;
 };
@@ -393,6 +405,9 @@ class PFEventStrategyFactory extends EventStrategyFactory<PFEventsType> {
       uxWithDigitalDomicileStateAndContactDetailsStrategy.findIndex((el) => el === eventType) > -1
     ) {
       return new UxWithDigitalDomicileStateAndContactDetailsStrategy();
+    }
+    if (uxWithContactDetailsAndCustomizedContactStrategy.findIndex((el) => el === eventType) > -1) {
+      return new UxWithContactDetailsAndCustomizedContactStrategy();
     }
 
     if (isInEventStrategyMap(eventType)) {
