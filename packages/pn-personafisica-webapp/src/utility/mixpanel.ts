@@ -70,4 +70,9 @@ export const getDigitalDomicileState = (
   return 'not_active';
 };
 
-export const isCustomizedContact = (senderId: string): boolean => senderId !== 'default';
+export const isCustomizedContact = (senderId: string): string => {
+  if (senderId === 'default') {
+    return 'no';
+  }
+  return 'yes';
+};
