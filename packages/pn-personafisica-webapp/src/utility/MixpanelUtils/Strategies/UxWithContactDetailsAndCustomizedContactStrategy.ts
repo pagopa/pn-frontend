@@ -10,13 +10,12 @@ import { AddressType, DigitalAddress } from '../../../models/contacts';
 import {
   MixpanelConcatCourtesyContacts,
   concatCourtestyContacts,
-  isCustomizedContact,
 } from '../../mixpanel';
 
 type Props = {
   event_type: EventAction.ACTION | EventAction.SCREEN_VIEW;
   addresses: Array<DigitalAddress>;
-  senderId: string;
+  customized_contact: boolean;
 };
 
 type Return = {
@@ -25,7 +24,7 @@ type Return = {
 };
 
 export class UxWithContactDetailsAndCustomizedContactStrategy implements EventStrategy {
-  performComputations({ addresses, senderId, event_type }: Props): TrackedEvent<Return> {
+  performComputations({ addresses, customized_contact, event_type }: Props): TrackedEvent<Return> {
     const courtesyAddresses = addresses.filter(
       (address) => address.addressType === AddressType.COURTESY
     );
@@ -35,7 +34,7 @@ export class UxWithContactDetailsAndCustomizedContactStrategy implements EventSt
         event_category: EventCategory.UX,
         event_type,
         contact_details: concatCourtestyContacts(courtesyAddresses),
-        customized_contact: isCustomizedContact(senderId),
+        customized_contact: customized_contact ? 'yes' : 'no',
       },
     };
   }

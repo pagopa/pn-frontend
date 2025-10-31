@@ -69,10 +69,3 @@ export const getDigitalDomicileState = (
   }
   return 'not_active';
 };
-
-export const isCustomizedContact = (senderId: string): string => {
-  if (senderId === 'default') {
-    return 'no';
-  }
-  return 'yes';
-};
