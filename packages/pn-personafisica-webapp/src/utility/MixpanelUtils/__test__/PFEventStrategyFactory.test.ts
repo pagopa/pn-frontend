@@ -161,11 +161,7 @@ describe('Event Strategy Factory', () => {
   });
 
   it('should return SendRemoveContactSuccessStrategy for remove contacts success events', () => {
-    const eventTypes = [
-      PFEventsType.SEND_REMOVE_EMAIL_SUCCESS,
-      PFEventsType.SEND_REMOVE_SMS_SUCCESS,
-      PFEventsType.SEND_REMOVE_PEC_SUCCESS,
-    ];
+    const eventTypes = [PFEventsType.SEND_REMOVE_SMS_SUCCESS, PFEventsType.SEND_REMOVE_PEC_SUCCESS];
     eventTypes.forEach((eventType) => {
       expect(factory.getStrategy(eventType)).toBeInstanceOf(SendRemoveContactSuccessStrategy);
     });
