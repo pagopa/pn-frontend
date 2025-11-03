@@ -19,6 +19,10 @@ export type MixpanelConcatCourtesyContacts =
 
 export type MixpanelDigitalDomicileState = 'pec' | 'send' | 'not_active';
 
+export type MixpanelPecState = 'valid' | 'invalid' | 'missing';
+
+export type MixpanelTosState = 'valid' | 'missing';
+
 /**
  * Redux middleware to track events
  */
@@ -68,4 +72,13 @@ export const getDigitalDomicileState = (
     return 'pec';
   }
   return 'not_active';
+};
+
+export const getPecValidationState = (
+  pecAddress?: DigitalAddress
+): MixpanelPecState => {
+  if (!pecAddress) {
+    return 'missing';
+  }
+  return pecAddress.pecValid ? 'valid' : 'invalid';
 };
