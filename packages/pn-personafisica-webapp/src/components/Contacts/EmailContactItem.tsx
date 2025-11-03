@@ -3,7 +3,7 @@ import { Trans, useTranslation } from 'react-i18next';
 
 import PowerSettingsNewIcon from '@mui/icons-material/PowerSettingsNew';
 import { Button, Chip, Divider, Typography } from '@mui/material';
-import { PnInfoCard, appStateActions } from '@pagopa-pn/pn-commons';
+import { EventAction, PnInfoCard, appStateActions } from '@pagopa-pn/pn-commons';
 
 import { PFEventsType } from '../../models/PFEventsType';
 import {
@@ -41,6 +41,7 @@ const EmailContactItem: React.FC = () => {
     defaultPECAddress,
     defaultEMAILAddress,
     defaultSMSAddress,
+    legalAddresses,
     specialAddresses,
     specialEMAILAddresses,
     addresses,
@@ -84,6 +85,12 @@ const EmailContactItem: React.FC = () => {
         a.channelType === ChannelType.PEC &&
         a.senderId !== 'default'
     );
+
+  const trackRemove = (event: PFEventsType, event_type: EventAction) =>
+    PFEventStrategyFactory.triggerEvent(event, {
+      legal_addresses: legalAddresses,
+      event_type,
+    });
 
   const handleSubmit = (value: string) => {
     if (!defaultEMAILAddress) {
@@ -192,7 +199,11 @@ const EmailContactItem: React.FC = () => {
     dispatch(removeSercqAndEmail({ senderIds: sercqSenderIds }))
       .unwrap()
       .then(() => {
-        PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_REMOVE_EMAIL_SUCCESS, 'default');
+        if (removingSercq) {
+          trackRemove(PFEventsType.SEND_REMOVE_EMAIL_AND_SERCQ_UX_SUCCESS, EventAction.SCREEN_VIEW);
+        } else {
+          trackRemove(PFEventsType.SEND_REMOVE_EMAIL_UX_SUCCESS, EventAction.SCREEN_VIEW);
+        }
         dispatch(
           appStateActions.addSuccess({
             title: '',
@@ -300,10 +311,11 @@ const EmailContactItem: React.FC = () => {
             color="error"
             startIcon={<PowerSettingsNewIcon />}
             onClick={() => {
+              trackRemove(PFEventsType.SEND_REMOVE_EMAIL_START, EventAction.ACTION);
               // eslint-disable-next-line functional/immutable-data
               currentAddress.current = { value: currentValue };
               // If any SERCQ is active (and not blocked), open a pre-confirm step first
-              setModalOpen(
+              openDeleteModal(
                 !blockDelete && hasAnySERCQAddrEnabled && !blockDueToSercqDefaultAndPecSpecials
                   ? ModalType.DELETE_PRECONFIRM
                   : ModalType.DELETE
@@ -315,6 +327,47 @@ const EmailContactItem: React.FC = () => {
           </Button>,
         ]
       : undefined;
+
+  const openDeleteModal = (next: ModalType) => {
+    setModalOpen(next);
+    if (next === ModalType.DELETE_PRECONFIRM) {
+      trackRemove(PFEventsType.SEND_REMOVE_EMAIL_POP_UP, EventAction.SCREEN_VIEW);
+    } else if (next === ModalType.DELETE) {
+      if (hasAnySERCQAddrEnabled && !blockDelete && !blockDueToSercqDefaultAndPecSpecials) {
+        trackRemove(PFEventsType.SEND_REMOVE_EMAIL_AND_SERCQ_POP_UP, EventAction.SCREEN_VIEW);
+      } else {
+        trackRemove(PFEventsType.SEND_REMOVE_EMAIL_POP_UP, EventAction.SCREEN_VIEW);
+      }
+    }
+  };
+
+  const handleDeleteCancel = () => {
+    if (modalOpen === ModalType.DELETE_PRECONFIRM) {
+      trackRemove(PFEventsType.SEND_REMOVE_EMAIL_POP_UP_CANCEL, EventAction.ACTION);
+    } else if (modalOpen === ModalType.DELETE) {
+      if (hasAnySERCQAddrEnabled && !blockDelete && !blockDueToSercqDefaultAndPecSpecials) {
+        trackRemove(PFEventsType.SEND_REMOVE_EMAIL_AND_SERCQ_CANCEL, EventAction.ACTION);
+      } else {
+        trackRemove(PFEventsType.SEND_REMOVE_EMAIL_POP_UP_CANCEL, EventAction.ACTION);
+      }
+    }
+    setModalOpen(null);
+  };
+
+  const handlePreconfirmContinue = () => {
+    trackRemove(PFEventsType.SEND_REMOVE_EMAIL_POP_UP_CONTINUE, EventAction.ACTION);
+    openDeleteModal(ModalType.DELETE);
+  };
+
+  const handleDeleteContinueEmailOnly = () => {
+    trackRemove(PFEventsType.SEND_REMOVE_EMAIL_POP_UP_CONTINUE, EventAction.ACTION);
+    deleteConfirmHandler();
+  };
+
+  const handleDeleteContinueEmailAndSercq = () => {
+    trackRemove(PFEventsType.SEND_REMOVE_EMAIL_AND_SERCQ_POP_UP_CONTINUE, EventAction.ACTION);
+    deleteConfirmHandler();
+  };
 
   /*
    * if *some* value (phone number, email address) has been attached to the contact type,
@@ -413,7 +466,7 @@ const EmailContactItem: React.FC = () => {
         showModal={modalOpen === ModalType.DELETE || modalOpen === ModalType.DELETE_PRECONFIRM}
         removeModalTitle={getRemoveModalTitle()}
         removeModalBody={getRemoveModalMessage()}
-        handleModalClose={() => setModalOpen(null)}
+        handleModalClose={handleDeleteCancel}
         confirmHandler={deleteConfirmHandler}
         blockDelete={blockDelete || blockDueToSercqDefaultAndPecSpecials}
         slotsProps={
@@ -423,25 +476,24 @@ const EmailContactItem: React.FC = () => {
                 if (modalOpen === ModalType.DELETE && noDigitalDomicile) {
                   return {
                     primaryButton: {
-                      onClick: deleteConfirmHandler,
+                      onClick: handleDeleteContinueEmailOnly,
                       label: t('button.conferma'),
                     },
-                    secondaryButton: {
-                      onClick: () => setModalOpen(null),
-                      label: t('button.annulla'),
-                    },
+                    secondaryButton: { onClick: handleDeleteCancel, label: t('button.annulla') },
                   };
                 }
                 return {
                   primaryButton: {
-                    onClick: () => setModalOpen(null),
+                    onClick: handleDeleteCancel,
                     label: t('button.annulla'),
                   },
                   secondaryButton: {
                     onClick:
                       modalOpen === ModalType.DELETE_PRECONFIRM
-                        ? () => setModalOpen(ModalType.DELETE)
-                        : deleteConfirmHandler,
+                        ? handlePreconfirmContinue
+                        : hasAnySERCQAddrEnabled && !blockDueToSercqDefaultAndPecSpecials
+                        ? handleDeleteContinueEmailAndSercq
+                        : handleDeleteContinueEmailOnly,
                     label: getSecondaryButtonLabel(),
                     variant: 'outlined',
                     color: 'error',
