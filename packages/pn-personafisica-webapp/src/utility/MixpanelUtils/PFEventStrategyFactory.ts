@@ -53,7 +53,7 @@ import { UXScreenViewStrategy } from './Strategies/UXScreenViewStrategy';
 import { UXConfirmStrategy } from './Strategies/UxConfirmStrategy';
 import { UxDDStateContactDetailsAndOtherStrategy } from './Strategies/UxDDStateContactDetailsAndOtherStrategy';
 import { UxDDStateContactDetailsCustomizedContactTypeStrategy } from './Strategies/UxDDStateContactDetailsCustomizedContactTypeStrategy';
-import { UxWithContactDetailsAndCustomizedContactStrategy } from './Strategies/UxWithContactDetailsAndCustomizedContactStrategy';
+import { UxWithContactDetailsAndOtherContactStrategy } from './Strategies/UxWithContactDetailsAndOtherContactStrategy';
 import { UxWithContactDetailsCustomizedContactAndOtherStrategy } from './Strategies/UxWithContactDetailsCustomizedContactAndOtherStrategy';
 import { UxWithDDStateSourceAndOtherStrategy } from './Strategies/UxWithDDStateSourceAndOtherStrategy';
 import { UxWithDDStateTosAndPecValidationStrategy } from './Strategies/UxWithDDStateTosAndPecValidationStrategy';
@@ -265,7 +265,7 @@ const uxWithDigitalDomicileStateAndContactDetailsStrategy = [
   PFEventsType.SEND_CUSTOMIZE_CONTACT,
 ] as const;
 
-const uxWithContactDetailsAndCustomizedContactStrategy = [
+const uxWithContactDetailsAndOtherContactStrategy = [
   PFEventsType.SEND_REMOVE_DIGITAL_DOMICILE_PEC_POP_UP,
   PFEventsType.SEND_REMOVE_DIGITAL_DOMICILE_PEC_POP_UP_CANCEL,
   PFEventsType.SEND_REMOVE_DIGITAL_DOMICILE_PEC_POP_UP_CONTINUE,
@@ -433,8 +433,8 @@ class PFEventStrategyFactory extends EventStrategyFactory<PFEventsType> {
       return new UxWithDigitalDomicileStateAndContactDetailsStrategy();
     }
 
-    if (uxWithContactDetailsAndCustomizedContactStrategy.findIndex((el) => el === eventType) > -1) {
-      return new UxWithContactDetailsAndCustomizedContactStrategy();
+    if (uxWithContactDetailsAndOtherContactStrategy.findIndex((el) => el === eventType) > -1) {
+      return new UxWithContactDetailsAndOtherContactStrategy();
     }
 
     if (uxWithDDStateSourceAndOtherStrategy.findIndex((el) => el === eventType) > -1) {

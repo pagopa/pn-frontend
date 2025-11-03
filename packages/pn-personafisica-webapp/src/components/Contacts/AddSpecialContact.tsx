@@ -154,7 +154,7 @@ const AddSpecialContact = forwardRef<AddSpecialContactRef, Props>(
     const [modalOpen, setModalOpen] = useState<ModalType | null>(null);
     const [isExistingContactDefault, setIsExistingContactDefault] = useState(false);
     const tosConsent = useRef<Array<TosPrivacyConsent>>();
-    const { defaultEMAILAddress, addresses } = addressesData || {};
+    const { defaultEMAILAddress, addresses, legalAddresses } = addressesData || {};
     const [canEditEmail, setCanEditEmail] = useState<boolean>(false);
 
     const addressTypes = specialContactsAvailableAddressTypes(addressesData).filter(
@@ -388,7 +388,7 @@ const AddSpecialContact = forwardRef<AddSpecialContactRef, Props>(
         } else {
           await formik.submitForm();
 
-          if (formik.errors) {
+          if (Object.keys(formik.errors).length > 0) {
             PFEventStrategyFactory.triggerEvent(
               PFEventsType.SEND_ADD_CUSTOMIZED_CONTACT_SELECTION_MISSING
             );
@@ -438,9 +438,16 @@ const AddSpecialContact = forwardRef<AddSpecialContactRef, Props>(
 
     const handleCodeVerification = (verificationCode?: string) => {
       if (verificationCode || formik.values.channelType === ChannelType.SERCQ_SEND) {
-        const eventKey = `SEND_ADD_${formik.values.channelType}_UX_CONVERSION`;
-        if (isPFEvent(eventKey)) {
-          PFEventStrategyFactory.triggerEvent(PFEventsType[eventKey], formik.values.sender.id);
+        if (formik.values.channelType === ChannelType.PEC) {
+          PFEventStrategyFactory.triggerEvent(
+            PFEventsType.SEND_ADD_PEC_UX_CONVERSION,
+            formik.values.sender.id
+          );
+        } else {
+          PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SERCQ_SEND_UX_CONVERSION, {
+            tos_validation: formik.errors?.s_disclaimer ? 'missing' : 'valid',
+            legal_addresses: legalAddresses,
+          });
         }
       }
 
