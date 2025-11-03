@@ -47,6 +47,7 @@ import { IllusAppIO } from './Illustrations/IllusAppIO';
 import { IllusAppIODialog } from './Illustrations/IllusAppIODialog';
 import { IllusAppIoLogo } from './Illustrations/IllusAppIOLogo';
 import { IllusHourglass } from './Illustrations/IllusHourglass';
+import { IllusLandingTpp } from './Illustrations/IllusLandingTpp';
 import { IllusQuestion } from './Illustrations/IllusQuestion';
 import { IllusSendLogo } from './Illustrations/IllusSendLogo';
 import { IllusStatistics } from './Illustrations/IllusStatistics';
@@ -160,6 +161,7 @@ export {
   IllusAppIoLogo,
   IllusSendLogo,
   IllusHourglass,
+  IllusLandingTpp,
   PnWizard,
   PnWizardStep,
 };
