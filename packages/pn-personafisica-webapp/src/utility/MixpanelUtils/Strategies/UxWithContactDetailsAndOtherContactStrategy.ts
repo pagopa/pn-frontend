@@ -7,24 +7,21 @@ import {
 } from '@pagopa-pn/pn-commons';
 
 import { AddressType, DigitalAddress } from '../../../models/contacts';
-import {
-  MixpanelConcatCourtesyContacts,
-  concatCourtestyContacts,
-} from '../../mixpanel';
+import { MixpanelConcatCourtesyContacts, concatCourtestyContacts } from '../../mixpanel';
 
 type Props = {
   event_type: EventAction.ACTION | EventAction.SCREEN_VIEW;
   addresses: Array<DigitalAddress>;
-  customized_contact: boolean;
+  other_contact: boolean;
 };
 
 type Return = {
   contact_details: MixpanelConcatCourtesyContacts;
-  customized_contact: string;
+  other_contact: string;
 };
 
-export class UxWithContactDetailsAndCustomizedContactStrategy implements EventStrategy {
-  performComputations({ addresses, customized_contact, event_type }: Props): TrackedEvent<Return> {
+export class UxWithContactDetailsAndOtherContactStrategy implements EventStrategy {
+  performComputations({ addresses, other_contact, event_type }: Props): TrackedEvent<Return> {
     const courtesyAddresses = addresses.filter(
       (address) => address.addressType === AddressType.COURTESY
     );
@@ -34,7 +31,7 @@ export class UxWithContactDetailsAndCustomizedContactStrategy implements EventSt
         event_category: EventCategory.UX,
         event_type,
         contact_details: concatCourtestyContacts(courtesyAddresses),
-        customized_contact: customized_contact ? 'yes' : 'no',
+        other_contact: other_contact ? 'yes' : 'no',
       },
     };
   }

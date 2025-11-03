@@ -80,6 +80,7 @@ const EmptyLegalContacts = () => {
   );
 };
 
+// eslint-disable-next-line sonarjs/cognitive-complexity
 const LegalContacts = () => {
   const { t } = useTranslation(['common', 'recapiti']);
   const dispatch = useAppDispatch();
@@ -139,7 +140,7 @@ const LegalContacts = () => {
       PFEventStrategyFactory.triggerEvent(event, {
         event_type: EventAction.ACTION,
         addresses,
-        customized_contact: false,
+        other_contact: false,
       });
     }
     setModalOpen(false);
@@ -152,7 +153,7 @@ const LegalContacts = () => {
     PFEventStrategyFactory.triggerEvent(event, {
       event_type: EventAction.ACTION,
       addresses,
-      customized_contact: false,
+      other_contact: false,
     });
     setModalOpen(false);
     dispatch(
@@ -216,7 +217,7 @@ const LegalContacts = () => {
               PFEventStrategyFactory.triggerEvent(event, {
                 event_type: EventAction.ACTION,
                 addresses,
-                customized_contact: false,
+                other_contact: false,
               });
               setModalOpen(true);
               if (!showSpecialContactsSection) {
@@ -226,7 +227,7 @@ const LegalContacts = () => {
                 PFEventStrategyFactory.triggerEvent(event, {
                   event_type: EventAction.SCREEN_VIEW,
                   addresses,
-                  customized_contact: false,
+                  other_contact: false,
                 });
               }
             }}

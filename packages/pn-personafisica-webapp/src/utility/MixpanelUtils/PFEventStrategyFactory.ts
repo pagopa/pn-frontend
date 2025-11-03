@@ -51,7 +51,7 @@ import { UXErrorStrategy } from './Strategies/UXErrorStrategy';
 import { UXPspActionStrategy } from './Strategies/UXPspActionStrategy';
 import { UXScreenViewStrategy } from './Strategies/UXScreenViewStrategy';
 import { UXConfirmStrategy } from './Strategies/UxConfirmStrategy';
-import { UxWithContactDetailsAndCustomizedContactStrategy } from './Strategies/UxWithContactDetailsAndCustomizedContactStrategy';
+import { UxWithContactDetailsAndCustomizedContactStrategy } from './Strategies/UxWithContactDetailsAndOtherContactStrategy';
 import { UxWithDigitalDomicileStateAndContactDetailsStrategy } from './Strategies/UxWithDigitalDomicileStateAndContactDetailsStrategy';
 import { UxWithDigitalDomicileStateStrategy } from './Strategies/UxWithDigitalDomicileStateStrategy';
 

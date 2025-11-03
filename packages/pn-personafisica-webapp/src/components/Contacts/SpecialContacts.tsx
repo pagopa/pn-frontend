@@ -190,7 +190,7 @@ const SpecialContacts: React.FC<{ addressType: AddressType; channelType?: Channe
       {
         event_type: EventAction.ACTION,
         addresses,
-        customized_contact: true,
+        other_contact: true,
       }
     );
     setModalOpen(null);
@@ -238,7 +238,7 @@ const SpecialContacts: React.FC<{ addressType: AddressType; channelType?: Channe
       {
         event_type: EventAction.ACTION,
         addresses,
-        customized_contact: true,
+        other_contact: true,
       }
     );
 
@@ -249,7 +249,7 @@ const SpecialContacts: React.FC<{ addressType: AddressType; channelType?: Channe
       {
         event_type: EventAction.SCREEN_VIEW,
         addresses,
-        customized_contact: true,
+        other_contact: true,
       }
     );
     // eslint-disable-next-line functional/immutable-data
@@ -270,7 +270,7 @@ const SpecialContacts: React.FC<{ addressType: AddressType; channelType?: Channe
       {
         event_type: EventAction.ACTION,
         addresses,
-        customized_contact: true,
+        other_contact: true,
       }
     );
     // eslint-disable-next-line functional/immutable-data
