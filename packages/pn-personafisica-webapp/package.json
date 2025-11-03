@@ -1,7 +1,7 @@
 {
   "name": "@pagopa-pn/pn-personafisica-webapp",
   "description": "SEND - Servizio Notifiche Digitali per il cittadino",
-  "version": "2.19.0-RC.2",
+  "version": "2.19.0-RC.3",
   "private": true,
   "dependencies": {
     "@emotion/react": "^11.11.1",

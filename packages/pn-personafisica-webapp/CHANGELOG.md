@@ -3,6 +3,21 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.19.0-RC.3](https://github.com/pagopa/pn-frontend/compare/v2.19.0-RC.2...v2.19.0-RC.3) (2025-11-03)
+
+
+### Bug Fixes
+
+* **PN-15731:** Resolve wrong copy on TYP after setting a special contact (PF) ([#1672](https://github.com/pagopa/pn-frontend/issues/1672)) ([dcb2ca1](https://github.com/pagopa/pn-frontend/commit/dcb2ca12f004422b16d83f273ef9c9079ed22d20))
+* **pn-16917:** fixed links to tos and privacy pages ([#1669](https://github.com/pagopa/pn-frontend/issues/1669)) ([b3f147b](https://github.com/pagopa/pn-frontend/commit/b3f147bc4dbbb6ed7e9b22db7bed4d7be66587e0))
+* **PN-17092:** update event mixpanel without properties ([#1674](https://github.com/pagopa/pn-frontend/issues/1674)) ([e73dcd4](https://github.com/pagopa/pn-frontend/commit/e73dcd403fbdddafbbdee9c2866165190a5980e5))
+* **PN-17093:** track events with one property ([#1679](https://github.com/pagopa/pn-frontend/issues/1679)) ([00b8e4b](https://github.com/pagopa/pn-frontend/commit/00b8e4b3e79ed8dd102eb806fa5991a2d0ff85d0))
+
+
+
+
+
+
 # [2.19.0-RC.2](https://github.com/pagopa/pn-frontend/compare/v2.19.0-RC.1...v2.19.0-RC.2) (2025-10-23)
 
 **Note:** Version bump only for package @pagopa-pn/pn-personafisica-webapp
