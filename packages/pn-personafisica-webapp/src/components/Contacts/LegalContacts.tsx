@@ -172,6 +172,22 @@ const LegalContacts = () => {
           PFEventsType[`SEND_REMOVE_${channelType}_SUCCESS`],
           'default'
         );
+        const uxEventProps = {
+          event_type: EventAction.SCREEN_VIEW,
+          addresses,
+          other_contact: false,
+        };
+        if (channelType === ChannelType.SERCQ_SEND) {
+          PFEventStrategyFactory.triggerEvent(
+            PFEventsType.SEND_REMOVE_SERCQ_SEND_UX_SUCCESS,
+            uxEventProps
+          );
+        } else {
+          PFEventStrategyFactory.triggerEvent(
+            PFEventsType.SEND_REMOVE_DIGITAL_DOMICILE_PEC_UX_SUCCESS,
+            uxEventProps
+          );
+        }
         dispatch(
           appStateActions.addSuccess({
             title: '',

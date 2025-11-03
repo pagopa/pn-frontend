@@ -210,6 +210,22 @@ const SpecialContacts: React.FC<{ addressType: AddressType; channelType?: Channe
             currentAddress.current.senderId
           );
         }
+        const uxEventProps = {
+          event_type: EventAction.SCREEN_VIEW,
+          addresses,
+          other_contact: true,
+        };
+        if (currentAddress.current.channelType === ChannelType.SERCQ_SEND) {
+          PFEventStrategyFactory.triggerEvent(
+            PFEventsType.SEND_REMOVE_SERCQ_SEND_UX_SUCCESS,
+            uxEventProps
+          );
+        } else {
+          PFEventStrategyFactory.triggerEvent(
+            PFEventsType.SEND_REMOVE_DIGITAL_DOMICILE_PEC_UX_SUCCESS,
+            uxEventProps
+          );
+        }
         // reset current address
         // eslint-disable-next-line functional/immutable-data
         currentAddress.current = {

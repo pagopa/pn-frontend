@@ -51,7 +51,7 @@ import { UXErrorStrategy } from './Strategies/UXErrorStrategy';
 import { UXPspActionStrategy } from './Strategies/UXPspActionStrategy';
 import { UXScreenViewStrategy } from './Strategies/UXScreenViewStrategy';
 import { UXConfirmStrategy } from './Strategies/UxConfirmStrategy';
-import { UxWithContactDetailsAndCustomizedContactStrategy } from './Strategies/UxWithContactDetailsAndOtherContactStrategy';
+import { UxWithContactDetailsAndOtherContactStrategy } from './Strategies/UxWithContactDetailsAndOtherContactStrategy';
 import { UxWithDigitalDomicileStateAndContactDetailsStrategy } from './Strategies/UxWithDigitalDomicileStateAndContactDetailsStrategy';
 import { UxWithDigitalDomicileStateStrategy } from './Strategies/UxWithDigitalDomicileStateStrategy';
 
@@ -260,15 +260,17 @@ const uxWithDigitalDomicileStateAndContactDetailsStrategy = [
   PFEventsType.SEND_CUSTOMIZE_CONTACT,
 ] as const;
 
-const uxWithContactDetailsAndCustomizedContactStrategy = [
+const uxWithContactDetailsAndOtherContactStrategy = [
   PFEventsType.SEND_REMOVE_DIGITAL_DOMICILE_PEC_POP_UP,
   PFEventsType.SEND_REMOVE_DIGITAL_DOMICILE_PEC_POP_UP_CANCEL,
   PFEventsType.SEND_REMOVE_DIGITAL_DOMICILE_PEC_POP_UP_CONTINUE,
   PFEventsType.SEND_REMOVE_DIGITAL_DOMICILE_PEC_START,
+  PFEventsType.SEND_REMOVE_DIGITAL_DOMICILE_PEC_UX_SUCCESS,
   PFEventsType.SEND_REMOVE_SERCQ_SEND_POP_UP,
   PFEventsType.SEND_REMOVE_SERCQ_SEND_POP_UP_CANCEL,
   PFEventsType.SEND_REMOVE_SERCQ_SEND_POP_UP_CONTINUE,
   PFEventsType.SEND_REMOVE_SERCQ_SEND_START,
+  PFEventsType.SEND_REMOVE_SERCQ_SEND_UX_SUCCESS,
 ] as const;
 
 type ArrayToTuple<T extends ReadonlyArray<PFEventsType>> = keyof {
@@ -406,8 +408,8 @@ class PFEventStrategyFactory extends EventStrategyFactory<PFEventsType> {
     ) {
       return new UxWithDigitalDomicileStateAndContactDetailsStrategy();
     }
-    if (uxWithContactDetailsAndCustomizedContactStrategy.findIndex((el) => el === eventType) > -1) {
-      return new UxWithContactDetailsAndCustomizedContactStrategy();
+    if (uxWithContactDetailsAndOtherContactStrategy.findIndex((el) => el === eventType) > -1) {
+      return new UxWithContactDetailsAndOtherContactStrategy();
     }
 
     if (isInEventStrategyMap(eventType)) {
