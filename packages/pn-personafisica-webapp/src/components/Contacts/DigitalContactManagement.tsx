@@ -1,15 +1,19 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
 import { Typography } from '@mui/material';
-import { PnWizard, PnWizardStep } from '@pagopa-pn/pn-commons';
+import { EventAction, PnWizard, PnWizardStep } from '@pagopa-pn/pn-commons';
 import { ButtonNaked } from '@pagopa/mui-italia';
 
 import LegalContactManager, {
   DigitalDomicileManagementAction,
 } from '../../components/Contacts/LegalContactManager';
+import { PFEventsType } from '../../models/PFEventsType';
 import { RECAPITI } from '../../navigation/routes.const';
+import { contactsSelectors } from '../../redux/contact/reducers';
+import { useAppSelector } from '../../redux/hooks';
+import PFEventStrategyFactory from '../../utility/MixpanelUtils/PFEventStrategyFactory';
 import AddSpecialContact, { AddSpecialContactRef } from './AddSpecialContact';
 import DigitalContactActivation from './DigitalContactActivation';
 
@@ -20,8 +24,18 @@ const DigitalContactManagement: React.FC = () => {
   const [currentAction, setCurrentAction] = useState<DigitalDomicileManagementAction>(
     DigitalDomicileManagementAction.DEFAULT
   );
+  const { legalAddresses } = useAppSelector(contactsSelectors.selectAddresses);
 
   const addSpecialContactRef = useRef<AddSpecialContactRef>(null);
+
+  useEffect(() => {
+    if (currentAction === DigitalDomicileManagementAction.DEFAULT) {
+      PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_DIGITAL_DOMICILE_MANAGEMENT, {
+        legal_addresses: legalAddresses,
+        event_type: EventAction.SCREEN_VIEW,
+      });
+    }
+  }, [currentAction]);
 
   const handleConfirmClick = async () => {
     if (addSpecialContactRef.current) {
@@ -54,6 +68,15 @@ const DigitalContactManagement: React.FC = () => {
 
   const handleSpecialContactAdded = () => {
     setActiveStep(1);
+  };
+
+  const handleClickFeedback = () => {
+    if (currentAction === DigitalDomicileManagementAction.ADD_SPECIAL_CONTACT) {
+      PFEventStrategyFactory.triggerEvent(
+        PFEventsType.SEND_ADD_CUSTOMIZED_CONTACT_THANK_YOU_PAGE_CLOSE
+      );
+    }
+    navigate(RECAPITI);
   };
 
   if (currentAction === DigitalDomicileManagementAction.DIGITAL_DOMICILE_TRANSFER) {
@@ -95,7 +118,7 @@ const DigitalContactManagement: React.FC = () => {
         feedback: {
           title: t(`legal-contacts.sercq-send-wizard.feedback.title-transfer`),
           buttonText: t('legal-contacts.sercq-send-wizard.feedback.go-to-contacts'),
-          onClick: () => navigate(RECAPITI),
+          onClick: handleClickFeedback,
         },
       }}
     >

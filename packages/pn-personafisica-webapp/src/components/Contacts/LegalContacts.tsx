@@ -8,7 +8,7 @@ import PowerSettingsNewIcon from '@mui/icons-material/PowerSettingsNew';
 import SavingsIcon from '@mui/icons-material/Savings';
 import TouchAppIcon from '@mui/icons-material/TouchApp';
 import { Alert, Box, Button, Chip, ChipOwnProps, Stack, Typography } from '@mui/material';
-import { PnInfoCard, appStateActions, useIsMobile } from '@pagopa-pn/pn-commons';
+import { EventAction, PnInfoCard, appStateActions, useIsMobile } from '@pagopa-pn/pn-commons';
 
 import { PFEventsType } from '../../models/PFEventsType';
 import { AddressType, ChannelType, ContactSource } from '../../models/contacts';
@@ -85,9 +85,8 @@ const LegalContacts = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const [modalOpen, setModalOpen] = useState<boolean>(false);
-  const { defaultPECAddress, defaultSERCQ_SENDAddress, specialAddresses } = useAppSelector(
-    contactsSelectors.selectAddresses
-  );
+  const { defaultPECAddress, defaultSERCQ_SENDAddress, legalAddresses, specialAddresses } =
+    useAppSelector(contactsSelectors.selectAddresses);
 
   const isValidatingPec = defaultPECAddress?.pecValid === false;
   const hasNoDefaultLegalAddress = !defaultPECAddress && !defaultSERCQ_SENDAddress;
@@ -157,6 +156,14 @@ const LegalContacts = () => {
       .catch(() => {});
   };
 
+  const handleStartManagement = () => {
+    PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_MANAGE_DIGITAL_DOMICILE, {
+      legal_addresses: legalAddresses,
+      event_type: EventAction.ACTION,
+    });
+    navigate(DIGITAL_DOMICILE_MANAGEMENT);
+  };
+
   const getActions = () =>
     isActive
       ? [
@@ -165,7 +172,7 @@ const LegalContacts = () => {
             variant="naked"
             color="primary"
             startIcon={<ConstructionIcon />}
-            onClick={() => navigate(DIGITAL_DOMICILE_MANAGEMENT)}
+            onClick={handleStartManagement}
             sx={{ p: '10px 16px' }}
           >
             {t('button.manage')}

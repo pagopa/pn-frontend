@@ -43,7 +43,7 @@ const PecContactWizard: React.FC<Props> = ({
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const [activeStep, setActiveStep] = useState(0);
-  const { defaultSERCQ_SENDAddress, courtesyAddresses } = useAppSelector(
+  const { defaultSERCQ_SENDAddress, courtesyAddresses, legalAddresses } = useAppSelector(
     contactsSelectors.selectAddresses
   );
   const [openCodeModal, setOpenCodeModal] = useState(false);
@@ -162,7 +162,10 @@ const PecContactWizard: React.FC<Props> = ({
   };
 
   useEffect(() => {
-    PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SERCQ_SEND_PEC_ENTER_PEC);
+    PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SERCQ_SEND_PEC_ENTER_PEC, {
+      event_type: EventAction.SCREEN_VIEW,
+      legal_addresses: legalAddresses,
+    });
   }, []);
 
   return (

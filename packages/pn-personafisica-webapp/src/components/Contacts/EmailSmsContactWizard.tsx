@@ -232,7 +232,9 @@ const EmailSmsContactWizard: React.FC = () => {
             width: '100%',
           },
         }}
-        onEditCallback={(editMode: boolean) => handleEditCallback(editMode, ChannelType.EMAIL)}
+        onEditButtonClickCallback={(editMode: boolean) =>
+          handleEditCallback(editMode, ChannelType.EMAIL)
+        }
         beforeValidationCallback={(value: string, errors?: string) =>
           handleTrackValidationEvents(value, ChannelType.EMAIL, errors)
         }
@@ -267,7 +269,9 @@ const EmailSmsContactWizard: React.FC = () => {
               width: '100%',
             },
           }}
-          onEditCallback={(editMode: boolean) => handleEditCallback(editMode, ChannelType.SMS)}
+          onEditButtonClickCallback={(editMode: boolean) =>
+            handleEditCallback(editMode, ChannelType.SMS)
+          }
           beforeValidationCallback={(value: string, errors?: string) =>
             handleTrackValidationEvents(value, ChannelType.SMS, errors)
           }

@@ -17,6 +17,8 @@ export type MixpanelConcatCourtesyContacts =
   | 'sms'
   | 'no_contact';
 
+export type MixpanelDigitalDomicileState = 'pec' | 'send' | 'not_active';
+
 /**
  * Redux middleware to track events
  */
@@ -52,4 +54,18 @@ export const concatCourtestyContacts = (
   return contactParts.length > 0
     ? (contactParts.join('_') as MixpanelConcatCourtesyContacts)
     : 'no_contact';
+};
+
+export const getDigitalDomicileState = (
+  legal_addresses: Array<DigitalAddress>
+): MixpanelDigitalDomicileState => {
+  const defaultAddresses = legal_addresses.filter((address) => address.senderId === 'default');
+
+  if (defaultAddresses.some((add) => add.channelType === ChannelType.SERCQ_SEND)) {
+    return 'send';
+  }
+  if (defaultAddresses.some((add) => add.channelType === ChannelType.PEC && add.pecValid)) {
+    return 'pec';
+  }
+  return 'not_active';
 };

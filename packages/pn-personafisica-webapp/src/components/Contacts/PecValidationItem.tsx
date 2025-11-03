@@ -5,6 +5,9 @@ import CloseIcon from '@mui/icons-material/Close';
 import { Stack } from '@mui/material';
 import { ButtonNaked } from '@pagopa/mui-italia';
 
+import { PFEventsType } from '../../models/PFEventsType';
+import PFEventStrategyFactory from '../../utility/MixpanelUtils/PFEventStrategyFactory';
+
 type Props = {
   senderId: string;
   onCancelValidation: (senderId: string) => void;
@@ -13,11 +16,16 @@ type Props = {
 const PecValidationItem: React.FC<Props> = ({ senderId, onCancelValidation }) => {
   const { t } = useTranslation(['recapiti', 'common']);
 
+  const handleCancelValidation = () => {
+    PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_PEC_CANCEL_VALIDATION);
+    onCancelValidation(senderId);
+  };
+
   return (
     <Stack direction="row" spacing={1} alignItems="center" data-testid={`${senderId}_pecContact`}>
       <ButtonNaked
         color="error"
-        onClick={() => onCancelValidation(senderId)}
+        onClick={handleCancelValidation}
         data-testid="cancelValidation"
         size="medium"
         sx={{ color: 'error.dark', fontWeight: 700 }}

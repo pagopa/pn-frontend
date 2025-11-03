@@ -49,6 +49,7 @@ import { UXPspActionStrategy } from '../Strategies/UXPspActionStrategy';
 import { UXScreenViewStrategy } from '../Strategies/UXScreenViewStrategy';
 import { UXConfirmStrategy } from '../Strategies/UxConfirmStrategy';
 import { UxWithCourtesyContactListStrategy } from '../Strategies/UxWithCourtesyContactListStrategy';
+import { UxWithDigitalDomicileStateStrategy } from '../Strategies/UxWithDigitalDomicileStateStrategy';
 
 describe('Event Strategy Factory', () => {
   const factory = PFEventStrategyFactory;
@@ -160,11 +161,7 @@ describe('Event Strategy Factory', () => {
   });
 
   it('should return SendRemoveContactSuccessStrategy for remove contacts success events', () => {
-    const eventTypes = [
-      PFEventsType.SEND_REMOVE_EMAIL_SUCCESS,
-      PFEventsType.SEND_REMOVE_SMS_SUCCESS,
-      PFEventsType.SEND_REMOVE_PEC_SUCCESS,
-    ];
+    const eventTypes = [PFEventsType.SEND_REMOVE_SMS_SUCCESS, PFEventsType.SEND_REMOVE_PEC_SUCCESS];
     eventTypes.forEach((eventType) => {
       expect(factory.getStrategy(eventType)).toBeInstanceOf(SendRemoveContactSuccessStrategy);
     });
@@ -215,15 +212,21 @@ describe('Event Strategy Factory', () => {
     const eventTypes = [
       PFEventsType.SEND_PROFILE,
       PFEventsType.SEND_ADD_MANDATE_DATA_INPUT,
-      PFEventsType.SEND_DEACTIVE_IO_UX_SUCCESS,
       PFEventsType.SEND_ADD_SERCQ_SEND_POP_UP,
-      PFEventsType.SEND_ADD_SERCQ_SEND_PEC_ENTER_PEC,
       PFEventsType.SEND_ADD_SERCQ_SEND_PEC_OTP,
-      PFEventsType.SEND_ADD_SERCQ_SEND_APP_IO,
       PFEventsType.SEND_ADD_SERCQ_SEND_POP_UP_APP_IO,
       PFEventsType.SEND_ADD_SERCQ_SEND_POP_UP_REMOVE_APP_IO,
       PFEventsType.SEND_ADD_SERCQ_SEND_EMAIL_OTP,
       PFEventsType.SEND_ADD_SERCQ_SEND_SMS_OTP,
+      PFEventsType.SEND_ADD_CUSTOMIZED_CONTACT_SERCQ_SEND_ADD_EMAIL_OTP,
+      PFEventsType.SEND_ADD_CUSTOMIZED_CONTACT_SERCQ_SEND_CHANGE_EMAIL_OTP,
+      PFEventsType.SEND_ADD_EMAIL_OTP,
+      PFEventsType.SEND_ADD_SMS_OTP,
+      PFEventsType.SEND_CHANGE_EMAIL_OTP,
+      PFEventsType.SEND_CHANGE_EMAIL_UX_SUCCESS,
+      PFEventsType.SEND_CHANGE_SMS_OTP,
+      PFEventsType.SEND_CHANGE_SMS_UX_SUCCESS,
+      PFEventsType.SEND_PEC_CANCEL_VALIDATION_POP_UP,
     ];
     eventTypes.forEach((eventType) => {
       expect(factory.getStrategy(eventType)).toBeInstanceOf(UXScreenViewStrategy);
@@ -236,6 +239,8 @@ describe('Event Strategy Factory', () => {
       PFEventsType.SEND_ADD_SERCQ_SEND_REMOVE_IO_SUCCESS,
       PFEventsType.SEND_ADD_SERCQ_SEND_ADD_EMAIL_UX_SUCCESS,
       PFEventsType.SEND_ADD_SERCQ_SEND_ADD_SMS_UX_SUCCESS,
+      PFEventsType.SEND_ADD_CUSTOMIZED_CONTACT_SERCQ_SEND_ADD_EMAIL_UX_SUCCESS,
+      PFEventsType.SEND_ADD_CUSTOMIZED_CONTACT_SERCQ_SEND_CHANGE_EMAIL_UX_SUCCESS,
     ];
 
     eventTypes.forEach((eventType) => {
@@ -255,9 +260,7 @@ describe('Event Strategy Factory', () => {
       PFEventsType.SEND_MANDATE_REJECTED,
       PFEventsType.SEND_MANDATE_ACCEPTED,
       PFEventsType.SEND_ACTIVE_IO_START,
-      PFEventsType.SEND_DEACTIVE_IO_START,
       PFEventsType.SEND_ACTIVE_IO_UX_CONVERSION,
-      PFEventsType.SEND_DEACTIVE_IO_UX_CONVERSION,
       PFEventsType.SEND_CANCELLED_NOTIFICATION_REFOUND_INFO,
       PFEventsType.SEND_MULTIPAYMENT_MORE_INFO,
       PFEventsType.SEND_PAYMENT_LIST_CHANGE_PAGE,
@@ -298,6 +301,33 @@ describe('Event Strategy Factory', () => {
       PFEventsType.SEND_ADD_SERCQ_SEND_SUMMARY_TOS_ACCEPTED,
       PFEventsType.SEND_ADD_SERCQ_SEND_SUMMARY_TOS_DISMISSED,
       PFEventsType.SEND_ADD_SERCQ_SEND_THANK_YOU_PAGE_CLOSE,
+      PFEventsType.SEND_ACTIVE_IO_CANCEL,
+      PFEventsType.SEND_ADD_CUSTOMIZED_CONTACT_SERCQ_SEND_ADD_EMAIL_BACK,
+      PFEventsType.SEND_ADD_CUSTOMIZED_CONTACT_SERCQ_SEND_ADD_EMAIL_START,
+      PFEventsType.SEND_ADD_CUSTOMIZED_CONTACT_SERCQ_SEND_ADD_EMAIL_UX_CONVERSION,
+      PFEventsType.SEND_ADD_CUSTOMIZED_CONTACT_SERCQ_SEND_CHANGE_EMAIL_BACK,
+      PFEventsType.SEND_ADD_CUSTOMIZED_CONTACT_SERCQ_SEND_CHANGE_EMAIL_CANCEL,
+      PFEventsType.SEND_ADD_CUSTOMIZED_CONTACT_SERCQ_SEND_CHANGE_EMAIL_CONTINUE,
+      PFEventsType.SEND_ADD_CUSTOMIZED_CONTACT_SERCQ_SEND_CHANGE_EMAIL_START,
+      PFEventsType.SEND_ADD_CUSTOMIZED_CONTACT_SERCQ_SEND_CHANGE_EMAIL_UX_CONVERSION,
+      PFEventsType.SEND_ADD_CUSTOMIZED_CONTACT_THANK_YOU_PAGE_CLOSE,
+      PFEventsType.SEND_ADD_CUSTOMIZED_CONTACT_TOS_ACCEPTED,
+      PFEventsType.SEND_ADD_CUSTOMIZED_CONTACT_TOS_DISMISSEDD,
+      PFEventsType.SEND_ADD_EMAIL_BACK,
+      PFEventsType.SEND_ADD_SMS_BACK,
+      PFEventsType.SEND_CHANGE_EMAIL_BACK,
+      PFEventsType.SEND_CHANGE_EMAIL_CANCEL,
+      PFEventsType.SEND_CHANGE_EMAIL_CONTINUE,
+      PFEventsType.SEND_CHANGE_EMAIL_START,
+      PFEventsType.SEND_CHANGE_EMAIL_UX_CONVERSION,
+      PFEventsType.SEND_CHANGE_SMS_BACK,
+      PFEventsType.SEND_CHANGE_SMS_CANCEL,
+      PFEventsType.SEND_CHANGE_SMS_CONTINUE,
+      PFEventsType.SEND_CHANGE_SMS_START,
+      PFEventsType.SEND_CHANGE_SMS_UX_CONVERSION,
+      PFEventsType.SEND_PEC_CANCEL_VALIDATION,
+      PFEventsType.SEND_PEC_CANCEL_VALIDATION_CANCEL,
+      PFEventsType.SEND_PEC_CANCEL_VALIDATION_CONFIRM,
     ];
     eventTypes.forEach((eventType) => {
       expect(factory.getStrategy(eventType)).toBeInstanceOf(UXActionStrategy);
@@ -358,6 +388,8 @@ describe('Event Strategy Factory', () => {
       PFEventsType.SEND_ADD_SERCQ_SEND_TOS_MANDATORY,
       PFEventsType.SEND_ADD_SERCQ_SEND_EMAIL_ERROR,
       PFEventsType.SEND_ADD_SERCQ_SEND_SMS_ERROR,
+      PFEventsType.SEND_ADD_CUSTOMIZED_CONTACT_SELECTION_MISSING,
+      PFEventsType.SEND_ADD_CUSTOMIZED_CONTACT_TOS_MANDATORY,
     ];
     eventTypes.forEach((eventType) => {
       expect(factory.getStrategy(eventType)).toBeInstanceOf(KoErrorStrategy);
@@ -477,6 +509,37 @@ describe('Event Strategy Factory', () => {
     expect(factory.getStrategy(PFEventsType.SEND_ADD_SERCQ_SEND_ENTER_FLOW)).toBeInstanceOf(
       SendAddSercqSendEnterFlowStrategy
     );
+  });
+
+  it('should return UxWithDigitalDomicileStateStrategy for UX Action events with digital domicile state', () => {
+    const eventTypes = [
+      PFEventsType.SEND_ADD_SERCQ_SEND_APP_IO,
+      PFEventsType.SEND_ADD_SERCQ_SEND_PEC_ENTER_PEC,
+      PFEventsType.SEND_DEACTIVE_IO_CANCEL,
+      PFEventsType.SEND_DEACTIVE_IO_POP_UP,
+      PFEventsType.SEND_DEACTIVE_IO_START,
+      PFEventsType.SEND_DEACTIVE_IO_UX_CONVERSION,
+      PFEventsType.SEND_DEACTIVE_IO_UX_SUCCESS,
+      PFEventsType.SEND_DIGITAL_DOMICILE_MANAGEMENT,
+      PFEventsType.SEND_MANAGE_DIGITAL_DOMICILE,
+      PFEventsType.SEND_REMOVE_EMAIL_AND_SERCQ_CANCEL,
+      PFEventsType.SEND_REMOVE_EMAIL_AND_SERCQ_POP_UP,
+      PFEventsType.SEND_REMOVE_EMAIL_AND_SERCQ_POP_UP_CONTINUE,
+      PFEventsType.SEND_REMOVE_EMAIL_AND_SERCQ_UX_SUCCESS,
+      PFEventsType.SEND_REMOVE_EMAIL_POP_UP,
+      PFEventsType.SEND_REMOVE_EMAIL_POP_UP_CANCEL,
+      PFEventsType.SEND_REMOVE_EMAIL_POP_UP_CONTINUE,
+      PFEventsType.SEND_REMOVE_EMAIL_START,
+      PFEventsType.SEND_REMOVE_EMAIL_UX_SUCCESS,
+      PFEventsType.SEND_REMOVE_SMS_POP_UP,
+      PFEventsType.SEND_REMOVE_SMS_POP_UP_CANCEL,
+      PFEventsType.SEND_REMOVE_SMS_POP_UP_CONTINUE,
+      PFEventsType.SEND_REMOVE_SMS_POP_UP_UX_SUCCESS,
+      PFEventsType.SEND_REMOVE_SMS_START,
+    ];
+    eventTypes.forEach((eventType) => {
+      expect(factory.getStrategy(eventType)).toBeInstanceOf(UxWithDigitalDomicileStateStrategy);
+    });
   });
 
   it('should return null for unknown event type', () => {
