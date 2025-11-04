@@ -32,8 +32,8 @@ export class UxWithDDStateSourceAndOtherStrategy implements EventStrategy {
         event_category: EventCategory.UX,
         event_type,
         digital_domicile_state: getDigitalDomicileState(addresses),
-        source, // to be implemented
-        other_contact: otherAddresses ? 'yes' : 'no',
+        source,
+        other_contact: otherAddresses.length > 0 ? 'yes' : 'no',
       },
     };
   }

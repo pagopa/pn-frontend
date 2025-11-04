@@ -16,9 +16,9 @@ import {
 
 type Props = {
   event_type: EventAction.ACTION | EventAction.SCREEN_VIEW;
+  legal_addresses: Array<DigitalAddress>;
   tos_validation: MixpanelTosState;
   pec_validation: MixpanelPecState;
-  legal_addresses: Array<DigitalAddress>;
 };
 
 type Return = {
@@ -29,10 +29,10 @@ type Return = {
 
 export class UxWithDDStateTosAndPecValidationStrategy implements EventStrategy {
   performComputations({
+    event_type,
     legal_addresses,
     tos_validation,
     pec_validation,
-    event_type,
   }: Props): TrackedEvent<Return> {
     return {
       [EventPropertyType.TRACK]: {

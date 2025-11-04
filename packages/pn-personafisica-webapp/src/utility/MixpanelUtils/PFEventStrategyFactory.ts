@@ -449,18 +449,6 @@ class PFEventStrategyFactory extends EventStrategyFactory<PFEventsType> {
       return new UxDDStateContactDetailsAndOtherStrategy();
     }
 
-    if (
-      uxDDStateContactDetailsCustomizedContactTypeStrategy.findIndex((el) => el === eventType) > -1
-    ) {
-      return new UxDDStateContactDetailsCustomizedContactTypeStrategy();
-    }
-
-    if (
-      uxWithContactDetailsCustomizedContactAndOtherStrategy.findIndex((el) => el === eventType) > -1
-    ) {
-      return new UxWithContactDetailsCustomizedContactAndOtherStrategy();
-    }
-
     if (isInEventStrategyMap(eventType)) {
       return eventStrategy[eventType];
     }
