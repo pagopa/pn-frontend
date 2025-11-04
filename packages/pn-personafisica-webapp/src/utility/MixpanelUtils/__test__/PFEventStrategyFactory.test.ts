@@ -48,6 +48,11 @@ import { UXErrorStrategy } from '../Strategies/UXErrorStrategy';
 import { UXPspActionStrategy } from '../Strategies/UXPspActionStrategy';
 import { UXScreenViewStrategy } from '../Strategies/UXScreenViewStrategy';
 import { UXConfirmStrategy } from '../Strategies/UxConfirmStrategy';
+import { UxWithContactDetailsAndOtherContactStrategy } from '../Strategies/UxWithContactDetailsAndOtherContactStrategy';
+import { UxWithDDStateContactDetailsAndOtherContactStrategy } from '../Strategies/UxWithDDStateContactDetailsAndOtherContactStrategy';
+import { UxWithDDStateContactDetailsCustomizedContactTypeStrategy } from '../Strategies/UxWithDDStateContactDetailsCustomizedContactTypeStrategy';
+import { UxWithDDStateSourceAndOtherContactStrategy } from '../Strategies/UxWithDDStateSourceAndOtherContactStrategy';
+import { UxWithDDStateTosAndPecValidationStrategy } from '../Strategies/UxWithDDStateTosAndPecValidationStrategy';
 import { UxWithDigitalDomicileStateAndContactDetailsStrategy } from '../Strategies/UxWithDigitalDomicileStateAndContactDetailsStrategy';
 import { UxWithDigitalDomicileStateStrategy } from '../Strategies/UxWithDigitalDomicileStateStrategy';
 
@@ -543,6 +548,126 @@ describe('Event Strategy Factory', () => {
     ];
     eventTypes.forEach((eventType) => {
       expect(factory.getStrategy(eventType)).toBeInstanceOf(UxWithDigitalDomicileStateStrategy);
+    });
+  });
+
+  it('should return UxWithDigitalDomicileStateAndContactDetailsStrategy for UX Action events with digital domicile state', () => {
+    const eventTypes = [
+      PFEventsType.SEND_ADD_CUSTOMIZED_CONTACT,
+      PFEventsType.SEND_ADD_SERCQ_SEND_EMAIL_SMS,
+      PFEventsType.SEND_ADD_SERCQ_SEND_EMAIL_SMS_CONTINUE,
+      PFEventsType.SEND_ADD_SERCQ_SEND_INTRO,
+      PFEventsType.SEND_ADD_SERCQ_SEND_PEC_START,
+      PFEventsType.SEND_ADD_SERCQ_SEND_PEC_THANK_YOU_PAGE,
+      PFEventsType.SEND_ADD_SERCQ_SEND_START,
+      PFEventsType.SEND_ADD_SERCQ_SEND_SUMMARY,
+      PFEventsType.SEND_ADD_SERCQ_SEND_THANK_YOU_PAGE,
+      PFEventsType.SEND_CUSTOMIZE_CONTACT,
+    ];
+    eventTypes.forEach((eventType) => {
+      expect(factory.getStrategy(eventType)).toBeInstanceOf(
+        UxWithDigitalDomicileStateAndContactDetailsStrategy
+      );
+    });
+  });
+
+  it('should return UxWithContactDetailsAndOtherContactStrategy for UX Action events with digital domicile state', () => {
+    const eventTypes = [
+      PFEventsType.SEND_REMOVE_DIGITAL_DOMICILE_PEC_POP_UP,
+      PFEventsType.SEND_REMOVE_DIGITAL_DOMICILE_PEC_POP_UP_CANCEL,
+      PFEventsType.SEND_REMOVE_DIGITAL_DOMICILE_PEC_POP_UP_CONTINUE,
+      PFEventsType.SEND_REMOVE_DIGITAL_DOMICILE_PEC_START,
+      PFEventsType.SEND_REMOVE_DIGITAL_DOMICILE_PEC_UX_SUCCESS,
+      PFEventsType.SEND_REMOVE_SERCQ_SEND_POP_UP,
+      PFEventsType.SEND_REMOVE_SERCQ_SEND_POP_UP_CANCEL,
+      PFEventsType.SEND_REMOVE_SERCQ_SEND_POP_UP_CONTINUE,
+      PFEventsType.SEND_REMOVE_SERCQ_SEND_START,
+      PFEventsType.SEND_REMOVE_SERCQ_SEND_UX_SUCCESS,
+    ];
+    eventTypes.forEach((eventType) => {
+      expect(factory.getStrategy(eventType)).toBeInstanceOf(
+        UxWithContactDetailsAndOtherContactStrategy
+      );
+    });
+  });
+
+  it('should return UxWithDDStateSourceAndOtherContactStrategy for UX Action events with digital domicile state', () => {
+    const eventTypes = [
+      PFEventsType.SEND_REMOVE_DIGITAL_DOMICILE_PEC_POP_UP,
+      PFEventsType.SEND_REMOVE_DIGITAL_DOMICILE_PEC_POP_UP_CANCEL,
+      PFEventsType.SEND_REMOVE_DIGITAL_DOMICILE_PEC_POP_UP_CONTINUE,
+      PFEventsType.SEND_REMOVE_DIGITAL_DOMICILE_PEC_START,
+      PFEventsType.SEND_REMOVE_DIGITAL_DOMICILE_PEC_UX_SUCCESS,
+      PFEventsType.SEND_REMOVE_SERCQ_SEND_POP_UP,
+      PFEventsType.SEND_REMOVE_SERCQ_SEND_POP_UP_CANCEL,
+      PFEventsType.SEND_REMOVE_SERCQ_SEND_POP_UP_CONTINUE,
+      PFEventsType.SEND_REMOVE_SERCQ_SEND_START,
+      PFEventsType.SEND_REMOVE_SERCQ_SEND_UX_SUCCESS,
+    ];
+    eventTypes.forEach((eventType) => {
+      expect(factory.getStrategy(eventType)).toBeInstanceOf(
+        UxWithDDStateSourceAndOtherContactStrategy
+      );
+    });
+  });
+
+  it('should return UxWithDDStateTosAndPecValidationStrategy for UX Action events with digital domicile state', () => {
+    const eventTypes = [
+      PFEventsType.SEND_REMOVE_DIGITAL_DOMICILE_PEC_POP_UP,
+      PFEventsType.SEND_REMOVE_DIGITAL_DOMICILE_PEC_POP_UP_CANCEL,
+      PFEventsType.SEND_REMOVE_DIGITAL_DOMICILE_PEC_POP_UP_CONTINUE,
+      PFEventsType.SEND_REMOVE_DIGITAL_DOMICILE_PEC_START,
+      PFEventsType.SEND_REMOVE_DIGITAL_DOMICILE_PEC_UX_SUCCESS,
+      PFEventsType.SEND_REMOVE_SERCQ_SEND_POP_UP,
+      PFEventsType.SEND_REMOVE_SERCQ_SEND_POP_UP_CANCEL,
+      PFEventsType.SEND_REMOVE_SERCQ_SEND_POP_UP_CONTINUE,
+      PFEventsType.SEND_REMOVE_SERCQ_SEND_START,
+      PFEventsType.SEND_REMOVE_SERCQ_SEND_UX_SUCCESS,
+    ];
+    eventTypes.forEach((eventType) => {
+      expect(factory.getStrategy(eventType)).toBeInstanceOf(
+        UxWithDDStateTosAndPecValidationStrategy
+      );
+    });
+  });
+
+  it('should return UxWithDDStateContactDetailsAndOtherContactStrategy for UX Action events with digital domicile state', () => {
+    const eventTypes = [
+      PFEventsType.SEND_REMOVE_DIGITAL_DOMICILE_PEC_POP_UP,
+      PFEventsType.SEND_REMOVE_DIGITAL_DOMICILE_PEC_POP_UP_CANCEL,
+      PFEventsType.SEND_REMOVE_DIGITAL_DOMICILE_PEC_POP_UP_CONTINUE,
+      PFEventsType.SEND_REMOVE_DIGITAL_DOMICILE_PEC_START,
+      PFEventsType.SEND_REMOVE_DIGITAL_DOMICILE_PEC_UX_SUCCESS,
+      PFEventsType.SEND_REMOVE_SERCQ_SEND_POP_UP,
+      PFEventsType.SEND_REMOVE_SERCQ_SEND_POP_UP_CANCEL,
+      PFEventsType.SEND_REMOVE_SERCQ_SEND_POP_UP_CONTINUE,
+      PFEventsType.SEND_REMOVE_SERCQ_SEND_START,
+      PFEventsType.SEND_REMOVE_SERCQ_SEND_UX_SUCCESS,
+    ];
+    eventTypes.forEach((eventType) => {
+      expect(factory.getStrategy(eventType)).toBeInstanceOf(
+        UxWithDDStateContactDetailsAndOtherContactStrategy
+      );
+    });
+  });
+
+  it('should return UxWithDDStateContactDetailsCustomizedContactTypeStrategy for UX Action events with digital domicile state', () => {
+    const eventTypes = [
+      PFEventsType.SEND_REMOVE_DIGITAL_DOMICILE_PEC_POP_UP,
+      PFEventsType.SEND_REMOVE_DIGITAL_DOMICILE_PEC_POP_UP_CANCEL,
+      PFEventsType.SEND_REMOVE_DIGITAL_DOMICILE_PEC_POP_UP_CONTINUE,
+      PFEventsType.SEND_REMOVE_DIGITAL_DOMICILE_PEC_START,
+      PFEventsType.SEND_REMOVE_DIGITAL_DOMICILE_PEC_UX_SUCCESS,
+      PFEventsType.SEND_REMOVE_SERCQ_SEND_POP_UP,
+      PFEventsType.SEND_REMOVE_SERCQ_SEND_POP_UP_CANCEL,
+      PFEventsType.SEND_REMOVE_SERCQ_SEND_POP_UP_CONTINUE,
+      PFEventsType.SEND_REMOVE_SERCQ_SEND_START,
+      PFEventsType.SEND_REMOVE_SERCQ_SEND_UX_SUCCESS,
+    ];
+    eventTypes.forEach((eventType) => {
+      expect(factory.getStrategy(eventType)).toBeInstanceOf(
+        UxWithDDStateContactDetailsCustomizedContactTypeStrategy
+      );
     });
   });
 
