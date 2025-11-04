@@ -53,7 +53,9 @@ import { UXScreenViewStrategy } from './Strategies/UXScreenViewStrategy';
 import { UXConfirmStrategy } from './Strategies/UxConfirmStrategy';
 import { UxWithContactDetailsAndOtherContactStrategy } from './Strategies/UxWithContactDetailsAndOtherContactStrategy';
 import { UxWithDDStateContactDetailsAndOtherContactStrategy } from './Strategies/UxWithDDStateContactDetailsAndOtherContactStrategy';
+import { UxWithDDStateContactDetailsCustomContactTypeAndOrgNameStrategy } from './Strategies/UxWithDDStateContactDetailsCustomContactTypeAndOrgNameStrategy';
 import { UxWithDDStateContactDetailsCustomizedContactTypeStrategy } from './Strategies/UxWithDDStateContactDetailsCustomizedContactTypeStrategy';
+import { UxWithDDStateCustomContactTypeOrgNameAndTosValidationStrategy } from './Strategies/UxWithDDStateCustomContactTypeOrgNameAndTosValidationStrategy';
 import { UxWithDDStateSourceAndOtherContactStrategy } from './Strategies/UxWithDDStateSourceAndOtherContactStrategy';
 import { UxWithDDStateTosAndPecValidationStrategy } from './Strategies/UxWithDDStateTosAndPecValidationStrategy';
 import { UxWithDigitalDomicileStateAndContactDetailsStrategy } from './Strategies/UxWithDigitalDomicileStateAndContactDetailsStrategy';
@@ -295,6 +297,20 @@ const uxWithDDStateContactDetailsCustomizedContactTypeStrategy = [
   PFEventsType.SEND_CUSTOMIZED_CONTACT_SERCQ_SEND_EMAIL_POP_UP_CONTINUE,
 ] as const;
 
+// SEND_ADD_CUSTOMIZED_CONTACT_START = 'SEND_ADD_CUSTOMIZED_CONTACT_START',
+// SEND_ADD_CUSTOMIZED_CONTACT_THANK_YOU_PAGE = 'SEND_ADD_CUSTOMIZED_CONTACT_THANK_YOU_PAGE',
+// SEND_ADD_CUSTOMIZED_CONTACT_UX_SUCCESS = 'SEND_ADD_CUSTOMIZED_CONTACT_UX_SUCCESS',
+
+const uxWithDDStateContactDetailsCustomContactTypeAndOrgNameStrategy = [
+  PFEventsType.SEND_ADD_CUSTOMIZED_CONTACT_START,
+  PFEventsType.SEND_ADD_CUSTOMIZED_CONTACT_THANK_YOU_PAGE,
+  PFEventsType.SEND_ADD_CUSTOMIZED_CONTACT_UX_SUCCESS,
+] as const;
+
+const uxWithDDStateCustomContactTypeOrgNameAndTosValidationStrategy = [
+  PFEventsType.SEND_ADD_CUSTOMIZED_CONTACT_UX_CONVERSION,
+] as const;
+
 type ArrayToTuple<T extends ReadonlyArray<PFEventsType>> = keyof {
   [K in T extends ReadonlyArray<infer U> ? U : never]: string;
 };
@@ -454,6 +470,22 @@ class PFEventStrategyFactory extends EventStrategyFactory<PFEventsType> {
       uxWithDDStateContactDetailsAndOtherContactStrategy.findIndex((el) => el === eventType) > -1
     ) {
       return new UxWithDDStateContactDetailsAndOtherContactStrategy();
+    }
+
+    if (
+      uxWithDDStateContactDetailsCustomContactTypeAndOrgNameStrategy.findIndex(
+        (el) => el === eventType
+      ) > -1
+    ) {
+      return new UxWithDDStateContactDetailsCustomContactTypeAndOrgNameStrategy();
+    }
+
+    if (
+      uxWithDDStateCustomContactTypeOrgNameAndTosValidationStrategy.findIndex(
+        (el) => el === eventType
+      ) > -1
+    ) {
+      return new UxWithDDStateCustomContactTypeOrgNameAndTosValidationStrategy();
     }
 
     if (isInEventStrategyMap(eventType)) {
