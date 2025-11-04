@@ -16,7 +16,6 @@ import { SendAddSercqSendAddEmailStartStrategy } from './Strategies/SendAddSercq
 import { SendAddSercqSendAddSmsStartStrategy } from './Strategies/SendAddSercqSendAddSmsStartStrategy';
 import { SendAddSercqSendEnterFlowStrategy } from './Strategies/SendAddSercqSendEnterFlowStrategy';
 import { SendAddSercqSendUxConversionStrategy } from './Strategies/SendAddSercqSendUxConversionStrategy';
-import { SendAddSercqUxSuccessStrategy } from './Strategies/SendAddSercqUxSuccessStrategy';
 import { SendDisableIOStrategy } from './Strategies/SendDisableIOStrategy';
 import { SendDownloadCertificateOpposable } from './Strategies/SendDownloadCertificateOpposable';
 import { SendDownloadResponseStrategy } from './Strategies/SendDownloadResponse';
@@ -153,11 +152,6 @@ const sendAddLegalContactUXSuccessStrategy = [PFEventsType.SEND_ADD_PEC_UX_SUCCE
 const sendAddCourtesyContactUXSuccessStrategy = [
   PFEventsType.SEND_ADD_EMAIL_UX_SUCCESS,
   PFEventsType.SEND_ADD_SMS_UX_SUCCESS,
-] as const;
-
-const sendAddSercqUxSuccessStrategy = [
-  PFEventsType.SEND_ADD_SERCQ_SEND_PEC_UX_SUCCESS,
-  PFEventsType.SEND_ADD_SERCQ_SEND_UX_SUCCESS,
 ] as const;
 
 const sendRemoveContactSuccessStrategy = [
@@ -312,7 +306,7 @@ const eventStrategy: Record<
     | ArrayToTuple<typeof uxErrorStrategy>
     | ArrayToTuple<typeof techStrategy>
     | ArrayToTuple<typeof koErrorStrategy>
-    | ArrayToTuple<typeof sendAddSercqUxSuccessStrategy>
+    | ArrayToTuple<typeof uxWithDDStateContactDetailsAndOtherContactStrategy>
     | ArrayToTuple<typeof uxWithDigitalDomicileStateStrategy>
   >,
   EventStrategy
@@ -415,10 +409,6 @@ class PFEventStrategyFactory extends EventStrategyFactory<PFEventsType> {
 
     if (koErrorStrategy.findIndex((el) => el === eventType) > -1) {
       return new KoErrorStrategy();
-    }
-
-    if (sendAddSercqUxSuccessStrategy.findIndex((el) => el === eventType) > -1) {
-      return new SendAddSercqUxSuccessStrategy();
     }
 
     if (uxWithDigitalDomicileStateStrategy.findIndex((el) => el === eventType) > -1) {
