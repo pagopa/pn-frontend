@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
@@ -28,12 +28,14 @@ const DigitalContactManagement: React.FC = () => {
 
   const addSpecialContactRef = useRef<AddSpecialContactRef>(null);
 
-  if (currentAction === DigitalDomicileManagementAction.DEFAULT) {
-    PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_DIGITAL_DOMICILE_MANAGEMENT, {
-      legal_addresses: legalAddresses,
-      event_type: EventAction.SCREEN_VIEW,
-    });
-  }
+  useEffect(() => {
+    if (currentAction === DigitalDomicileManagementAction.DEFAULT) {
+      PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_DIGITAL_DOMICILE_MANAGEMENT, {
+        legal_addresses: legalAddresses,
+        event_type: EventAction.SCREEN_VIEW,
+      });
+    }
+  }, [currentAction]);
 
   const handleConfirmClick = async () => {
     if (addSpecialContactRef.current) {

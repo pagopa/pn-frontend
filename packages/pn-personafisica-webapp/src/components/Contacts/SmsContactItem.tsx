@@ -61,17 +61,17 @@ interface SmsElemProps {
   slotsProps?: SmsSlotsProps;
   beforeValidationCallback?: (value: string, errors?: string) => void;
   onCancelInsert?: () => void;
-  fromSercqSend?: boolean;
+  inSERCQWizardContext?: boolean;
 }
 
-type SmsItemProps = Omit<SmsElemProps, 'onCancelInsert' | 'fromSercqSend'>;
+type SmsItemProps = Omit<SmsElemProps, 'onCancelInsert' | 'inSERCQWizardContext'>;
 
 const SmsContactElem: React.FC<SmsElemProps> = ({
   onCancelInsert,
   slotsProps,
   slots,
   beforeValidationCallback,
-  fromSercqSend = false,
+  inSERCQWizardContext = false,
 }) => {
   const { t } = useTranslation(['common', 'recapiti']);
   const { defaultSERCQ_SENDAddress, defaultPECAddress, defaultSMSAddress, addresses } =
@@ -94,7 +94,7 @@ const SmsContactElem: React.FC<SmsElemProps> = ({
   const currentValue = defaultSMSAddress?.value ?? '';
 
   const handleSubmit = (value: string) => {
-    if (!fromSercqSend && !defaultSMSAddress) {
+    if (!inSERCQWizardContext && !defaultSMSAddress) {
       const source = externalEvent?.source ?? ContactSource.RECAPITI;
       PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SMS_START, {
         senderId: 'default',
@@ -110,7 +110,7 @@ const SmsContactElem: React.FC<SmsElemProps> = ({
       setModalOpen(ModalType.EXISTING);
       return;
     }
-    if (!isDigitalDomicileActive && !fromSercqSend) {
+    if (!isDigitalDomicileActive && !inSERCQWizardContext) {
       setModalOpen(ModalType.INFORMATIVE);
       return;
     }
@@ -119,7 +119,7 @@ const SmsContactElem: React.FC<SmsElemProps> = ({
 
   const handleCodeVerification = (verificationCode?: string) => {
     if (verificationCode) {
-      if (fromSercqSend) {
+      if (inSERCQWizardContext) {
         PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SERCQ_SEND_ADD_SMS_UX_CONVERSION);
       } else if (defaultSMSAddress) {
         PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_CHANGE_SMS_UX_CONVERSION);
@@ -143,7 +143,7 @@ const SmsContactElem: React.FC<SmsElemProps> = ({
         // open code modal
         if (!res) {
           // aprire la code modal
-          if (fromSercqSend) {
+          if (inSERCQWizardContext) {
             PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SERCQ_SEND_SMS_OTP);
           } else if (defaultSMSAddress) {
             PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_CHANGE_SMS_OTP);
@@ -155,14 +155,14 @@ const SmsContactElem: React.FC<SmsElemProps> = ({
           return;
         }
 
-        if (fromSercqSend) {
+        if (inSERCQWizardContext) {
           PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SERCQ_SEND_ADD_SMS_UX_SUCCESS);
         } else if (defaultSMSAddress) {
           PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_CHANGE_SMS_UX_SUCCESS);
         } else {
           PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SMS_UX_SUCCESS, {
             senderId: 'default',
-            fromSercqSend,
+            fromSercqSend: inSERCQWizardContext,
           });
         }
 
@@ -185,7 +185,7 @@ const SmsContactElem: React.FC<SmsElemProps> = ({
   };
 
   const handleCancelCode = async () => {
-    if (fromSercqSend) {
+    if (inSERCQWizardContext) {
       PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SERCQ_SEND_ADD_SMS_BACK);
     } else if (defaultSMSAddress) {
       PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_CHANGE_SMS_BACK);
@@ -290,7 +290,7 @@ const SmsContactItem: React.FC<SmsItemProps> = ({
   const [insertMode, setInsertMode] = useState(false);
 
   const isActive = !!defaultSMSAddress;
-  const fromSercqSend = [DIGITAL_DOMICILE_ACTIVATION, DIGITAL_DOMICILE_MANAGEMENT].includes(
+  const inSERCQWizardContext = [DIGITAL_DOMICILE_ACTIVATION, DIGITAL_DOMICILE_MANAGEMENT].includes(
     location.pathname
   );
   const blockDelete = specialSMSAddresses.length > 0;
@@ -305,7 +305,7 @@ const SmsContactItem: React.FC<SmsItemProps> = ({
   const hasDigitalDomicile = !!defaultSERCQ_SENDAddress || !!defaultPECAddress;
 
   const deleteConfirmHandler = () => {
-    if (!fromSercqSend) {
+    if (!inSERCQWizardContext) {
       PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_REMOVE_SMS_POP_UP_CONTINUE, {
         event_type: EventAction.ACTION,
         legal_addresses: legalAddresses,
@@ -323,7 +323,7 @@ const SmsContactItem: React.FC<SmsItemProps> = ({
       .unwrap()
       .then(() => {
         PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_REMOVE_SMS_SUCCESS, 'default');
-        if (!fromSercqSend) {
+        if (!inSERCQWizardContext) {
           PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_REMOVE_SMS_POP_UP_UX_SUCCESS, {
             event_type: EventAction.SCREEN_VIEW,
             legal_addresses: legalAddresses,
@@ -384,21 +384,21 @@ const SmsContactItem: React.FC<SmsItemProps> = ({
   };
 
   const handleSetInsertMode = () => {
-    if (fromSercqSend) {
+    if (inSERCQWizardContext) {
       PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SERCQ_SEND_ADD_SMS);
     }
     setInsertMode(true);
   };
 
   const handleCancelInsertMode = () => {
-    if (fromSercqSend) {
+    if (inSERCQWizardContext) {
       PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SERCQ_SEND_ADD_SMS_CANCEL);
     }
     setInsertMode(false);
   };
 
   const handleDisableSms = () => {
-    if (!fromSercqSend) {
+    if (!inSERCQWizardContext) {
       PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_REMOVE_SMS_START, {
         event_type: EventAction.ACTION,
         legal_addresses: legalAddresses,
@@ -414,7 +414,7 @@ const SmsContactItem: React.FC<SmsItemProps> = ({
   };
 
   const handleCloseDeleteDialog = () => {
-    if (!fromSercqSend) {
+    if (!inSERCQWizardContext) {
       PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_REMOVE_SMS_POP_UP_CANCEL, {
         event_type: EventAction.ACTION,
         legal_addresses: legalAddresses,
@@ -513,7 +513,7 @@ const SmsContactItem: React.FC<SmsItemProps> = ({
           slots={slots}
           onCancelInsert={handleCancelInsertMode}
           beforeValidationCallback={beforeValidationCallback}
-          fromSercqSend={fromSercqSend}
+          inSERCQWizardContext={inSERCQWizardContext}
         />
       ) : (
         <>
