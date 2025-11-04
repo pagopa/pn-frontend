@@ -54,7 +54,6 @@ import { UXConfirmStrategy } from './Strategies/UxConfirmStrategy';
 import { UxDDStateContactDetailsAndOtherStrategy } from './Strategies/UxDDStateContactDetailsAndOtherStrategy';
 import { UxDDStateContactDetailsCustomizedContactTypeStrategy } from './Strategies/UxDDStateContactDetailsCustomizedContactTypeStrategy';
 import { UxWithContactDetailsAndOtherContactStrategy } from './Strategies/UxWithContactDetailsAndOtherContactStrategy';
-import { UxWithContactDetailsCustomizedContactAndOtherStrategy } from './Strategies/UxWithContactDetailsCustomizedContactAndOtherStrategy';
 import { UxWithDDStateSourceAndOtherStrategy } from './Strategies/UxWithDDStateSourceAndOtherStrategy';
 import { UxWithDDStateTosAndPecValidationStrategy } from './Strategies/UxWithDDStateTosAndPecValidationStrategy';
 import { UxWithDigitalDomicileStateAndContactDetailsStrategy } from './Strategies/UxWithDigitalDomicileStateAndContactDetailsStrategy';
@@ -270,6 +269,7 @@ const uxWithContactDetailsAndOtherContactStrategy = [
   PFEventsType.SEND_REMOVE_DIGITAL_DOMICILE_PEC_POP_UP_CANCEL,
   PFEventsType.SEND_REMOVE_DIGITAL_DOMICILE_PEC_POP_UP_CONTINUE,
   PFEventsType.SEND_REMOVE_DIGITAL_DOMICILE_PEC_START,
+  PFEventsType.SEND_REMOVE_DIGITAL_DOMICILE_PEC_UX_SUCCESS,
   PFEventsType.SEND_REMOVE_SERCQ_SEND_POP_UP,
   PFEventsType.SEND_REMOVE_SERCQ_SEND_POP_UP_CANCEL,
   PFEventsType.SEND_REMOVE_SERCQ_SEND_POP_UP_CONTINUE,
@@ -285,16 +285,13 @@ const uxWithDDStateTosAndPecValidationStrategy = [
 const uxDDStateContactDetailsAndOtherStrategy = [
   PFEventsType.SEND_ADD_SERCQ_SEND_PEC_UX_SUCCESS,
   PFEventsType.SEND_ADD_SERCQ_SEND_UX_SUCCESS,
+  PFEventsType.SEND_REMOVE_DIGITAL_DOMICILE_PEC_UX_SUCCESS,
+  PFEventsType.SEND_REMOVE_SERCQ_SEND_UX_SUCCESS,
 ] as const;
 
 const uxDDStateContactDetailsCustomizedContactTypeStrategy = [
   PFEventsType.SEND_CUSTOMIZED_CONTACT_SERCQ_SEND_EMAIL_POP_UP,
   PFEventsType.SEND_CUSTOMIZED_CONTACT_SERCQ_SEND_EMAIL_POP_UP_CONTINUE,
-] as const;
-
-const uxWithContactDetailsCustomizedContactAndOtherStrategy = [
-  PFEventsType.SEND_REMOVE_DIGITAL_DOMICILE_PEC_UX_SUCCESS,
-  PFEventsType.SEND_REMOVE_SERCQ_SEND_UX_SUCCESS,
 ] as const;
 
 type ArrayToTuple<T extends ReadonlyArray<PFEventsType>> = keyof {
@@ -435,6 +432,12 @@ class PFEventStrategyFactory extends EventStrategyFactory<PFEventsType> {
 
     if (uxWithContactDetailsAndOtherContactStrategy.findIndex((el) => el === eventType) > -1) {
       return new UxWithContactDetailsAndOtherContactStrategy();
+    }
+
+    if (
+      uxDDStateContactDetailsCustomizedContactTypeStrategy.findIndex((el) => el === eventType) > -1
+    ) {
+      return new UxDDStateContactDetailsCustomizedContactTypeStrategy();
     }
 
     if (uxWithDDStateSourceAndOtherStrategy.findIndex((el) => el === eventType) > -1) {
