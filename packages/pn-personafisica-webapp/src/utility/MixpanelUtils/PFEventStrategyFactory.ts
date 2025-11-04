@@ -51,10 +51,10 @@ import { UXErrorStrategy } from './Strategies/UXErrorStrategy';
 import { UXPspActionStrategy } from './Strategies/UXPspActionStrategy';
 import { UXScreenViewStrategy } from './Strategies/UXScreenViewStrategy';
 import { UXConfirmStrategy } from './Strategies/UxConfirmStrategy';
-import { UxDDStateContactDetailsAndOtherStrategy } from './Strategies/UxDDStateContactDetailsAndOtherStrategy';
-import { UxDDStateContactDetailsCustomizedContactTypeStrategy } from './Strategies/UxDDStateContactDetailsCustomizedContactTypeStrategy';
 import { UxWithContactDetailsAndOtherContactStrategy } from './Strategies/UxWithContactDetailsAndOtherContactStrategy';
-import { UxWithDDStateSourceAndOtherStrategy } from './Strategies/UxWithDDStateSourceAndOtherStrategy';
+import { UxWithDDStateContactDetailsAndOtherContactStrategy } from './Strategies/UxWithDDStateContactDetailsAndOtherContactStrategy';
+import { UxWithDDStateContactDetailsCustomizedContactTypeStrategy } from './Strategies/UxWithDDStateContactDetailsCustomizedContactTypeStrategy';
+import { UxWithDDStateSourceAndOtherContactStrategy } from './Strategies/UxWithDDStateSourceAndOtherContactStrategy';
 import { UxWithDDStateTosAndPecValidationStrategy } from './Strategies/UxWithDDStateTosAndPecValidationStrategy';
 import { UxWithDigitalDomicileStateAndContactDetailsStrategy } from './Strategies/UxWithDigitalDomicileStateAndContactDetailsStrategy';
 import { UxWithDigitalDomicileStateStrategy } from './Strategies/UxWithDigitalDomicileStateStrategy';
@@ -274,22 +274,23 @@ const uxWithContactDetailsAndOtherContactStrategy = [
   PFEventsType.SEND_REMOVE_SERCQ_SEND_POP_UP_CANCEL,
   PFEventsType.SEND_REMOVE_SERCQ_SEND_POP_UP_CONTINUE,
   PFEventsType.SEND_REMOVE_SERCQ_SEND_START,
+  PFEventsType.SEND_REMOVE_SERCQ_SEND_UX_SUCCESS,
 ] as const;
 
-const uxWithDDStateSourceAndOtherStrategy = [PFEventsType.SEND_ADD_SERCQ_SEND_ENTER_FLOW] as const;
+const uxWithDDStateSourceAndOtherContactStrategy = [
+  PFEventsType.SEND_ADD_SERCQ_SEND_ENTER_FLOW,
+] as const;
 
 const uxWithDDStateTosAndPecValidationStrategy = [
   PFEventsType.SEND_ADD_SERCQ_SEND_PEC_START_ACTIVATION,
 ] as const;
 
-const uxDDStateContactDetailsAndOtherStrategy = [
+const uxWithDDStateContactDetailsAndOtherContactStrategy = [
   PFEventsType.SEND_ADD_SERCQ_SEND_PEC_UX_SUCCESS,
   PFEventsType.SEND_ADD_SERCQ_SEND_UX_SUCCESS,
-  PFEventsType.SEND_REMOVE_DIGITAL_DOMICILE_PEC_UX_SUCCESS,
-  PFEventsType.SEND_REMOVE_SERCQ_SEND_UX_SUCCESS,
 ] as const;
 
-const uxDDStateContactDetailsCustomizedContactTypeStrategy = [
+const uxWithDDStateContactDetailsCustomizedContactTypeStrategy = [
   PFEventsType.SEND_CUSTOMIZED_CONTACT_SERCQ_SEND_EMAIL_POP_UP,
   PFEventsType.SEND_CUSTOMIZED_CONTACT_SERCQ_SEND_EMAIL_POP_UP_CONTINUE,
 ] as const;
@@ -435,21 +436,24 @@ class PFEventStrategyFactory extends EventStrategyFactory<PFEventsType> {
     }
 
     if (
-      uxDDStateContactDetailsCustomizedContactTypeStrategy.findIndex((el) => el === eventType) > -1
+      uxWithDDStateContactDetailsCustomizedContactTypeStrategy.findIndex((el) => el === eventType) >
+      -1
     ) {
-      return new UxDDStateContactDetailsCustomizedContactTypeStrategy();
+      return new UxWithDDStateContactDetailsCustomizedContactTypeStrategy();
     }
 
-    if (uxWithDDStateSourceAndOtherStrategy.findIndex((el) => el === eventType) > -1) {
-      return new UxWithDDStateSourceAndOtherStrategy();
+    if (uxWithDDStateSourceAndOtherContactStrategy.findIndex((el) => el === eventType) > -1) {
+      return new UxWithDDStateSourceAndOtherContactStrategy();
     }
 
     if (uxWithDDStateTosAndPecValidationStrategy.findIndex((el) => el === eventType) > -1) {
       return new UxWithDDStateTosAndPecValidationStrategy();
     }
 
-    if (uxDDStateContactDetailsAndOtherStrategy.findIndex((el) => el === eventType) > -1) {
-      return new UxDDStateContactDetailsAndOtherStrategy();
+    if (
+      uxWithDDStateContactDetailsAndOtherContactStrategy.findIndex((el) => el === eventType) > -1
+    ) {
+      return new UxWithDDStateContactDetailsAndOtherContactStrategy();
     }
 
     if (isInEventStrategyMap(eventType)) {

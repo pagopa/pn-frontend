@@ -21,9 +21,9 @@ type Return = {
   other_contact: 'yes' | 'no';
 };
 
-export class UxWithDDStateSourceAndOtherStrategy implements EventStrategy {
+export class UxWithDDStateSourceAndOtherContactStrategy implements EventStrategy {
   performComputations({ addresses, event_type, source }: Props): TrackedEvent<Return> {
-    const otherAddresses = addresses.filter(
+    const otherAddresses = addresses.some(
       (address) => address.addressType === AddressType.LEGAL && address.senderId !== 'default'
     );
 
@@ -33,7 +33,7 @@ export class UxWithDDStateSourceAndOtherStrategy implements EventStrategy {
         event_type,
         digital_domicile_state: getDigitalDomicileState(addresses),
         source,
-        other_contact: otherAddresses.length > 0 ? 'yes' : 'no',
+        other_contact: otherAddresses ? 'yes' : 'no',
       },
     };
   }
