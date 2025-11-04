@@ -26,7 +26,6 @@ describe('Mixpanel - UX Action with Digital Domicile State, Source and Other Con
       addresses: courtesyContacts,
       source: ContactSource.RECAPITI,
       // other_contact: false,
-
     });
 
     expect(result).toEqual({
@@ -39,12 +38,11 @@ describe('Mixpanel - UX Action with Digital Domicile State, Source and Other Con
     });
   });
 
-  it('should return no when other contact is false', () => {
+  it('should return other_contact = no', () => {
     const result = strategy.performComputations({
       event_type: EventAction.ACTION,
       addresses: courtesyContacts,
       source: ContactSource.RECAPITI,
-      // other_contact: false,
     });
 
     expect(result).toEqual({
