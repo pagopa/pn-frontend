@@ -387,29 +387,6 @@ const AddSpecialContact = forwardRef<AddSpecialContactRef, Props>(
         if (isValidatingPecForSender(formik.values.sender.id)) {
           setErrorBanner(ErrorBannerType.VALIDATING_PEC);
         } else {
-          // const errors = await formik.validateForm();
-
-          // const touched: Record<string, boolean> = {};
-          // for (const fieldName of Object.keys(errors)) {
-          //   touched[fieldName] = true;
-          // }
-
-          // await formik.setTouched(touched, false);
-
-          // if (Object.keys(errors).length > 0) {
-          //   PFEventStrategyFactory.triggerEvent(
-          //     PFEventsType.SEND_ADD_CUSTOMIZED_CONTACT_SELECTION_MISSING
-          //   );
-
-          //   if (formik.errors.s_disclaimer) {
-          //     PFEventStrategyFactory.triggerEvent(
-          //       PFEventsType.SEND_ADD_CUSTOMIZED_CONTACT_TOS_MANDATORY
-          //     );
-          //   }
-          //   return;
-          // }
-          // await formik.submitForm();
-          // const errors = await formik.validateForm();
           await formik.submitForm();
 
           if (!formik.isValid) {
