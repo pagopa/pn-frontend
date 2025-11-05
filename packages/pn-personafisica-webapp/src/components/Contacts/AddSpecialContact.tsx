@@ -154,7 +154,7 @@ const AddSpecialContact = forwardRef<AddSpecialContactRef, Props>(
     const [modalOpen, setModalOpen] = useState<ModalType | null>(null);
     const [isExistingContactDefault, setIsExistingContactDefault] = useState(false);
     const tosConsent = useRef<Array<TosPrivacyConsent>>();
-    const { defaultEMAILAddress } = addressesData || {};
+    const { defaultEMAILAddress, addresses, legalAddresses } = addressesData || {};
     const [canEditEmail, setCanEditEmail] = useState<boolean>(false);
 
     const addressTypes = specialContactsAvailableAddressTypes(addressesData).filter(
@@ -265,6 +265,7 @@ const AddSpecialContact = forwardRef<AddSpecialContactRef, Props>(
       initialValues,
       validationSchema,
       enableReinitialize: true,
+      validateOnMount: true,
       onSubmit: (values) => {
         onConfirm(values.s_value, values.channelType as ChannelType, {
           senderId: values.sender.id,
@@ -325,7 +326,7 @@ const AddSpecialContact = forwardRef<AddSpecialContactRef, Props>(
       } else {
         PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SERCQ_SEND_START, {
           event_type: EventAction.ACTION,
-          contacts: addressesData.courtesyAddresses,
+          addresses,
         });
       }
 
@@ -388,7 +389,7 @@ const AddSpecialContact = forwardRef<AddSpecialContactRef, Props>(
         } else {
           await formik.submitForm();
 
-          if (formik.errors) {
+          if (!formik.isValid) {
             PFEventStrategyFactory.triggerEvent(
               PFEventsType.SEND_ADD_CUSTOMIZED_CONTACT_SELECTION_MISSING
             );
@@ -438,9 +439,16 @@ const AddSpecialContact = forwardRef<AddSpecialContactRef, Props>(
 
     const handleCodeVerification = (verificationCode?: string) => {
       if (verificationCode || formik.values.channelType === ChannelType.SERCQ_SEND) {
-        const eventKey = `SEND_ADD_${formik.values.channelType}_UX_CONVERSION`;
-        if (isPFEvent(eventKey)) {
-          PFEventStrategyFactory.triggerEvent(PFEventsType[eventKey], formik.values.sender.id);
+        if (formik.values.channelType === ChannelType.PEC) {
+          PFEventStrategyFactory.triggerEvent(
+            PFEventsType.SEND_ADD_PEC_UX_CONVERSION,
+            formik.values.sender.id
+          );
+        } else {
+          PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SERCQ_SEND_UX_CONVERSION, {
+            tos_validation: formik.errors?.s_disclaimer ? 'missing' : 'valid',
+            legal_addresses: legalAddresses,
+          });
         }
       }
 
@@ -474,6 +482,13 @@ const AddSpecialContact = forwardRef<AddSpecialContactRef, Props>(
         })
         .catch(() => {});
     };
+
+    useEffect(() => {
+      PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_CUSTOMIZE_CONTACT, {
+        event_type: EventAction.SCREEN_VIEW,
+        addresses,
+      });
+    }, []);
 
     return (
       <Paper data-testid="addSpecialContact" sx={{ p: { xs: 2, lg: 3 }, mb: 3 }}>

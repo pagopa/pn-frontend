@@ -48,7 +48,7 @@ import { UXErrorStrategy } from '../Strategies/UXErrorStrategy';
 import { UXPspActionStrategy } from '../Strategies/UXPspActionStrategy';
 import { UXScreenViewStrategy } from '../Strategies/UXScreenViewStrategy';
 import { UXConfirmStrategy } from '../Strategies/UxConfirmStrategy';
-import { UxWithCourtesyContactListStrategy } from '../Strategies/UxWithCourtesyContactListStrategy';
+import { UxWithDigitalDomicileStateAndContactDetailsStrategy } from '../Strategies/UxWithDigitalDomicileStateAndContactDetailsStrategy';
 import { UxWithDigitalDomicileStateStrategy } from '../Strategies/UxWithDigitalDomicileStateStrategy';
 
 describe('Event Strategy Factory', () => {
@@ -365,19 +365,23 @@ describe('Event Strategy Factory', () => {
     });
   });
 
-  it('should return UxWithCourtesyContactListStrategy for UX Action events with contacts details', () => {
+  it('should return UxWithDigitalDomicileStateAndContactDetailsStrategy for events with digital domicile state and contacts details', () => {
     const eventTypes = [
-      PFEventsType.SEND_ADD_SERCQ_SEND_INTRO,
-      PFEventsType.SEND_ADD_SERCQ_SEND_START,
-      PFEventsType.SEND_ADD_SERCQ_SEND_PEC_START,
-      PFEventsType.SEND_ADD_SERCQ_SEND_PEC_THANK_YOU_PAGE,
+      PFEventsType.SEND_ADD_CUSTOMIZED_CONTACT,
       PFEventsType.SEND_ADD_SERCQ_SEND_EMAIL_SMS,
       PFEventsType.SEND_ADD_SERCQ_SEND_EMAIL_SMS_CONTINUE,
+      PFEventsType.SEND_ADD_SERCQ_SEND_INTRO,
+      PFEventsType.SEND_ADD_SERCQ_SEND_PEC_START,
+      PFEventsType.SEND_ADD_SERCQ_SEND_PEC_THANK_YOU_PAGE,
+      PFEventsType.SEND_ADD_SERCQ_SEND_START,
       PFEventsType.SEND_ADD_SERCQ_SEND_SUMMARY,
       PFEventsType.SEND_ADD_SERCQ_SEND_THANK_YOU_PAGE,
+      PFEventsType.SEND_CUSTOMIZE_CONTACT,
     ];
     eventTypes.forEach((eventType) => {
-      expect(factory.getStrategy(eventType)).toBeInstanceOf(UxWithCourtesyContactListStrategy);
+      expect(factory.getStrategy(eventType)).toBeInstanceOf(
+        UxWithDigitalDomicileStateAndContactDetailsStrategy
+      );
     });
   });
 

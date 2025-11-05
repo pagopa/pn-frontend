@@ -80,13 +80,19 @@ const EmptyLegalContacts = () => {
   );
 };
 
+// eslint-disable-next-line sonarjs/cognitive-complexity
 const LegalContacts = () => {
   const { t } = useTranslation(['common', 'recapiti']);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const [modalOpen, setModalOpen] = useState<boolean>(false);
-  const { defaultPECAddress, defaultSERCQ_SENDAddress, legalAddresses, specialAddresses } =
-    useAppSelector(contactsSelectors.selectAddresses);
+  const {
+    defaultPECAddress,
+    defaultSERCQ_SENDAddress,
+    legalAddresses,
+    specialAddresses,
+    addresses,
+  } = useAppSelector(contactsSelectors.selectAddresses);
 
   const isValidatingPec = defaultPECAddress?.pecValid === false;
   const hasNoDefaultLegalAddress = !defaultPECAddress && !defaultSERCQ_SENDAddress;
@@ -126,7 +132,29 @@ const LegalContacts = () => {
     return <Chip {...params} sx={{ mb: 2 }} />;
   };
 
+  const deleteAbortHandler = () => {
+    if (!showSpecialContactsSection) {
+      const event = hasSercqSendActive
+        ? PFEventsType.SEND_REMOVE_SERCQ_SEND_POP_UP_CANCEL
+        : PFEventsType.SEND_REMOVE_DIGITAL_DOMICILE_PEC_POP_UP_CANCEL;
+      PFEventStrategyFactory.triggerEvent(event, {
+        event_type: EventAction.ACTION,
+        addresses,
+        other_contact: false,
+      });
+    }
+    setModalOpen(false);
+  };
+
   const deleteConfirmHandler = () => {
+    const event = hasSercqSendActive
+      ? PFEventsType.SEND_REMOVE_SERCQ_SEND_POP_UP_CONTINUE
+      : PFEventsType.SEND_REMOVE_DIGITAL_DOMICILE_PEC_POP_UP_CONTINUE;
+    PFEventStrategyFactory.triggerEvent(event, {
+      event_type: EventAction.ACTION,
+      addresses,
+      other_contact: false,
+    });
     setModalOpen(false);
     dispatch(
       deleteAddress({
@@ -144,6 +172,22 @@ const LegalContacts = () => {
           PFEventsType[`SEND_REMOVE_${channelType}_SUCCESS`],
           'default'
         );
+        const uxEventProps = {
+          event_type: EventAction.SCREEN_VIEW,
+          addresses,
+          other_contact: false,
+        };
+        if (channelType === ChannelType.SERCQ_SEND) {
+          PFEventStrategyFactory.triggerEvent(
+            PFEventsType.SEND_REMOVE_SERCQ_SEND_UX_SUCCESS,
+            uxEventProps
+          );
+        } else {
+          PFEventStrategyFactory.triggerEvent(
+            PFEventsType.SEND_REMOVE_DIGITAL_DOMICILE_PEC_UX_SUCCESS,
+            uxEventProps
+          );
+        }
         dispatch(
           appStateActions.addSuccess({
             title: '',
@@ -182,7 +226,27 @@ const LegalContacts = () => {
             variant="naked"
             color="error"
             startIcon={<PowerSettingsNewIcon />}
-            onClick={() => setModalOpen(true)}
+            onClick={() => {
+              const event = hasSercqSendActive
+                ? PFEventsType.SEND_REMOVE_SERCQ_SEND_START
+                : PFEventsType.SEND_REMOVE_DIGITAL_DOMICILE_PEC_START;
+              PFEventStrategyFactory.triggerEvent(event, {
+                event_type: EventAction.ACTION,
+                addresses,
+                other_contact: false,
+              });
+              setModalOpen(true);
+              if (!showSpecialContactsSection) {
+                const event = hasSercqSendActive
+                  ? PFEventsType.SEND_REMOVE_SERCQ_SEND_POP_UP
+                  : PFEventsType.SEND_REMOVE_DIGITAL_DOMICILE_PEC_POP_UP;
+                PFEventStrategyFactory.triggerEvent(event, {
+                  event_type: EventAction.SCREEN_VIEW,
+                  addresses,
+                  other_contact: false,
+                });
+              }
+            }}
             sx={{ p: '10px 16px' }}
           >
             {t('button.disable')}
@@ -253,14 +317,14 @@ const LegalContacts = () => {
             />
           )
         }
-        handleModalClose={() => setModalOpen(false)}
+        handleModalClose={deleteAbortHandler}
         confirmHandler={deleteConfirmHandler}
         blockDelete={showSpecialContactsSection}
         slotsProps={
           !showSpecialContactsSection
             ? {
                 primaryButton: {
-                  onClick: () => setModalOpen(false),
+                  onClick: deleteAbortHandler,
                   label: t('button.annulla'),
                 },
                 secondaryButton: {
