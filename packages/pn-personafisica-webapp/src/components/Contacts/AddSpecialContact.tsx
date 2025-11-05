@@ -272,6 +272,7 @@ const AddSpecialContact = forwardRef<AddSpecialContactRef, Props>(
       initialValues,
       validationSchema,
       enableReinitialize: true,
+      validateOnMount: true,
       onSubmit: (values) => {
         onConfirm(values.s_value, values.channelType as ChannelType, {
           senderId: values.sender.id,
@@ -414,7 +415,7 @@ const AddSpecialContact = forwardRef<AddSpecialContactRef, Props>(
 
           await formik.submitForm();
 
-          if (Object.keys(formik.errors).length > 0) {
+          if (!formik.isValid) {
             PFEventStrategyFactory.triggerEvent(
               PFEventsType.SEND_ADD_CUSTOMIZED_CONTACT_SELECTION_MISSING
             );

@@ -258,6 +258,15 @@ const SpecialContacts: React.FC<{ addressType: AddressType; channelType?: Channe
       }
     );
 
+    // eslint-disable-next-line functional/immutable-data
+    currentAddress.current = {
+      value,
+      senderId: sender.senderId,
+      senderName: sender.senderName,
+      channelType,
+    };
+    setModalOpen(ModalType.DELETE);
+
     PFEventStrategyFactory.triggerEvent(
       channelType === ChannelType.SERCQ_SEND
         ? PFEventsType.SEND_REMOVE_SERCQ_SEND_POP_UP
@@ -268,14 +277,6 @@ const SpecialContacts: React.FC<{ addressType: AddressType; channelType?: Channe
         other_contact: true,
       }
     );
-    // eslint-disable-next-line functional/immutable-data
-    currentAddress.current = {
-      value,
-      senderId: sender.senderId,
-      senderName: sender.senderName,
-      channelType,
-    };
-    setModalOpen(ModalType.DELETE);
   };
 
   const handleCloseModal = () => {
