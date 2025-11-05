@@ -190,14 +190,12 @@ const AddSpecialContact = forwardRef<AddSpecialContactRef, Props>(
         await formik.setFieldValue('s_value', '');
         await formik.setFieldTouched('s_value', false);
         formik.handleChange(e);
-        if (nextType === ChannelType.SERCQ_SEND) {
-          PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_CUSTOMIZED_CONTACT_START, {
-            event_type: EventAction.ACTION,
-            addresses,
-            customized_contact_type: nextType,
-            organization_name: formik.values.sender?.name,
-          });
-        }
+        PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_CUSTOMIZED_CONTACT_START, {
+          event_type: EventAction.ACTION,
+          addresses,
+          customized_contact_type: nextType,
+          organization_name: formik.values.sender?.name,
+        });
       }
     };
 
@@ -296,17 +294,6 @@ const AddSpecialContact = forwardRef<AddSpecialContactRef, Props>(
       });
       if (type === ChannelType.PEC) {
         PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_PEC_UX_SUCCESS, false);
-        PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SERCQ_SEND_PEC_UX_SUCCESS, {
-          event_type: EventAction.CONFIRM,
-          addresses,
-          other_contact: true,
-        });
-      } else {
-        PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SERCQ_SEND_UX_SUCCESS, {
-          event_type: EventAction.CONFIRM,
-          addresses,
-          other_contact: true,
-        });
       }
     };
 
@@ -419,8 +406,8 @@ const AddSpecialContact = forwardRef<AddSpecialContactRef, Props>(
             {
               event_type: EventAction.ACTION,
               addresses,
-              customized_contact_type: formik.errors?.channelType ? '' : formik.values.channelType,
-              organization_name: formik.values.sender?.name,
+              customized_contact_type: formik.values.channelType || 'missing',
+              organization_name: formik.values.sender?.name || 'missing',
               tos_validation: formik.values.s_disclaimer ? 'valid' : 'missing',
             }
           );
