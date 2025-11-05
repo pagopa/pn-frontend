@@ -30,7 +30,7 @@
     "test:coverage": "tsc --noEmit && vitest run --coverage",
     "lint": "eslint . -c .eslintrc.js --ext .ts,.tsx --fix",
     "format": "prettier \"./**/*.{ts,tsx}\" --write",
-    "sonar": "node sonarqube-scanner.js"
+    "sonar": "node sonarqube-scanner.cjs"
   },
   "eslintConfig": {
     "extends": [
