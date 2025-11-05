@@ -10,20 +10,22 @@ import { AddressType, ChannelType, DigitalAddress } from '../../../models/contac
 import {
   MixpanelConcatCourtesyContacts,
   MixpanelDigitalDomicileState,
+  MixpanelCustomizedContactType,
   concatCourtestyContacts,
   getDigitalDomicileState,
+  getCustomizedContactType
 } from '../../mixpanel';
 
 type Props = {
   event_type: EventAction.ACTION | EventAction.SCREEN_VIEW;
   addresses: Array<DigitalAddress>;
-  customized_contact_type: ChannelType.PEC | ChannelType.SERCQ_SEND;
+  customized_contact_type: ChannelType.PEC | ChannelType.SERCQ_SEND | 'missing';
 };
 
 type Return = {
   digital_domicile_state: MixpanelDigitalDomicileState;
   contact_details: MixpanelConcatCourtesyContacts;
-  customized_contact_type: 'pec' | 'send';
+  customized_contact_type: MixpanelCustomizedContactType;
 };
 
 export class UxWithDDStateContactDetailsCustomizedContactTypeStrategy implements EventStrategy {
@@ -42,7 +44,7 @@ export class UxWithDDStateContactDetailsCustomizedContactTypeStrategy implements
         event_type,
         digital_domicile_state: getDigitalDomicileState(addresses),
         contact_details: concatCourtestyContacts(courtesyAddresses),
-        customized_contact_type: customized_contact_type === ChannelType.PEC ? 'pec' : 'send',
+        customized_contact_type: getCustomizedContactType(customized_contact_type),
       },
     };
   }
