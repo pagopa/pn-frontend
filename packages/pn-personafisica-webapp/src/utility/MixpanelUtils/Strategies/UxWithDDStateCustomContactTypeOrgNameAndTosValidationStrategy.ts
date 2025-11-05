@@ -8,22 +8,24 @@ import {
 
 import { ChannelType, DigitalAddress } from '../../../models/contacts';
 import {
+  MixpanelCustomizedContactType,
   MixpanelDigitalDomicileState,
   MixpanelTosState,
+  getCustomizedContactType,
   getDigitalDomicileState,
 } from '../../mixpanel';
 
 type Props = {
   event_type: EventAction.ACTION | EventAction.SCREEN_VIEW;
   addresses: Array<DigitalAddress>;
-  customized_contact_type: ChannelType.PEC | ChannelType.SERCQ_SEND;
+  customized_contact_type: ChannelType.PEC | ChannelType.SERCQ_SEND | 'missing';
   organization_name: string;
   tos_validation: MixpanelTosState;
 };
 
 type Return = {
   digital_domicile_state: MixpanelDigitalDomicileState;
-  customized_contact_type: 'pec' | 'send';
+  customized_contact_type: MixpanelCustomizedContactType;
   organization_name: string;
   tos_validation: MixpanelTosState;
 };
@@ -43,7 +45,7 @@ export class UxWithDDStateCustomContactTypeOrgNameAndTosValidationStrategy
         event_category: EventCategory.UX,
         event_type,
         digital_domicile_state: getDigitalDomicileState(addresses),
-        customized_contact_type: customized_contact_type === ChannelType.PEC ? 'pec' : 'send',
+        customized_contact_type: getCustomizedContactType(customized_contact_type),
         organization_name,
         tos_validation,
       },
