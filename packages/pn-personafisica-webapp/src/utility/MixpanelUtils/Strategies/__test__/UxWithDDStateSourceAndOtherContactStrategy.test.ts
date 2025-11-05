@@ -20,20 +20,20 @@ describe('Mixpanel - UX Action with Digital Domicile State, Source and Other Con
         : contact
     );
 
-  it('should return recapiti when Source is RECAPITI', () => {
+  it('should return profilo when Source is PROFILE', () => {
     const result = strategy.performComputations({
       event_type: EventAction.SCREEN_VIEW,
       addresses: courtesyContacts,
-      source: ContactSource.RECAPITI,
-      // other_contact: false,
+      source: ContactSource.PROFILO,
     });
 
     expect(result).toEqual({
       [EventPropertyType.TRACK]: {
         event_category: EventCategory.UX,
         event_type: EventAction.SCREEN_VIEW,
-        addresses: 'app_io_email_sms',
-        source: 'recapiti',
+        digital_domicile_state: 'not_active',
+        source: 'profilo',
+        other_contact: 'no',
       },
     });
   });
@@ -49,7 +49,8 @@ describe('Mixpanel - UX Action with Digital Domicile State, Source and Other Con
       [EventPropertyType.TRACK]: {
         event_category: EventCategory.UX,
         event_type: EventAction.ACTION,
-        addresses: 'app_io_email_sms',
+        digital_domicile_state: 'not_active',
+        source: 'recapiti',
         other_contact: 'no',
       },
     });

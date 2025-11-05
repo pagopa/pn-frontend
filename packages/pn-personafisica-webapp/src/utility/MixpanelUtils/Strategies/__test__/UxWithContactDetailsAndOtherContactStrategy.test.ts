@@ -14,7 +14,7 @@ describe('Mixpanel - UX Action with ContactDetails and Other Contacts Strategy S
         ? { ...contact, value: IOAllowedValues.ENABLED }
         : contact
     );
-    
+
   it('should return yes when other contact is true', () => {
     const result = strategy.performComputations({
       event_type: EventAction.SCREEN_VIEW,
@@ -26,7 +26,7 @@ describe('Mixpanel - UX Action with ContactDetails and Other Contacts Strategy S
       [EventPropertyType.TRACK]: {
         event_category: EventCategory.UX,
         event_type: EventAction.SCREEN_VIEW,
-        addresses: 'app_io_email_sms',
+        contact_details: 'app_io_email_sms',
         other_contact: 'yes',
       },
     });
@@ -43,7 +43,7 @@ describe('Mixpanel - UX Action with ContactDetails and Other Contacts Strategy S
       [EventPropertyType.TRACK]: {
         event_category: EventCategory.UX,
         event_type: EventAction.ACTION,
-        addresses: 'app_io_email_sms',
+        contact_details: 'app_io_email_sms',
         other_contact: 'no',
       },
     });
