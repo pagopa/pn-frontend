@@ -9,11 +9,11 @@ import {
 import { AddressType, ChannelType, DigitalAddress } from '../../../models/contacts';
 import {
   MixpanelConcatCourtesyContacts,
-  MixpanelDigitalDomicileState,
   MixpanelCustomizedContactType,
+  MixpanelDigitalDomicileState,
   concatCourtestyContacts,
+  getCustomizedContactType,
   getDigitalDomicileState,
-  getCustomizedContactType
 } from '../../mixpanel';
 
 type Props = {
