@@ -12,9 +12,7 @@ import { SendAddMandateUXConversionStrategy } from '../Strategies/SendAddMandate
 import { SendAddMandateUXSuccessStrategy } from '../Strategies/SendAddMandateUXSuccessStrategy';
 import { SendAddSercqSendAddEmailStartStrategy } from '../Strategies/SendAddSercqSendAddEmailStartStrategy';
 import { SendAddSercqSendAddSmsStartStrategy } from '../Strategies/SendAddSercqSendAddSmsStartStrategy';
-import { SendAddSercqSendEnterFlowStrategy } from '../Strategies/SendAddSercqSendEnterFlowStrategy';
 import { SendAddSercqSendUxConversionStrategy } from '../Strategies/SendAddSercqSendUxConversionStrategy';
-import { SendAddSercqUxSuccessStrategy } from '../Strategies/SendAddSercqUxSuccessStrategy';
 import { SendDisableIOStrategy } from '../Strategies/SendDisableIOStrategy';
 import { SendDownloadCertificateOpposable } from '../Strategies/SendDownloadCertificateOpposable';
 import { SendDownloadResponseStrategy } from '../Strategies/SendDownloadResponse';
@@ -48,6 +46,11 @@ import { UXErrorStrategy } from '../Strategies/UXErrorStrategy';
 import { UXPspActionStrategy } from '../Strategies/UXPspActionStrategy';
 import { UXScreenViewStrategy } from '../Strategies/UXScreenViewStrategy';
 import { UXConfirmStrategy } from '../Strategies/UxConfirmStrategy';
+import { UxWithContactDetailsAndOtherContactStrategy } from '../Strategies/UxWithContactDetailsAndOtherContactStrategy';
+import { UxWithDDStateContactDetailsAndOtherContactStrategy } from '../Strategies/UxWithDDStateContactDetailsAndOtherContactStrategy';
+import { UxWithDDStateContactDetailsCustomizedContactTypeStrategy } from '../Strategies/UxWithDDStateContactDetailsCustomizedContactTypeStrategy';
+import { UxWithDDStateSourceAndOtherContactStrategy } from '../Strategies/UxWithDDStateSourceAndOtherContactStrategy';
+import { UxWithDDStateTosAndPecValidationStrategy } from '../Strategies/UxWithDDStateTosAndPecValidationStrategy';
 import { UxWithDigitalDomicileStateAndContactDetailsStrategy } from '../Strategies/UxWithDigitalDomicileStateAndContactDetailsStrategy';
 import { UxWithDigitalDomicileStateStrategy } from '../Strategies/UxWithDigitalDomicileStateStrategy';
 
@@ -407,16 +410,6 @@ describe('Event Strategy Factory', () => {
     });
   });
 
-  it('should return SendAddSercqUxSuccessStrategy for sercq add ux success events', () => {
-    const eventTypes = [
-      PFEventsType.SEND_ADD_SERCQ_SEND_UX_SUCCESS,
-      PFEventsType.SEND_ADD_SERCQ_SEND_PEC_UX_SUCCESS,
-    ];
-    eventTypes.forEach((eventType) => {
-      expect(factory.getStrategy(eventType)).toBeInstanceOf(SendAddSercqUxSuccessStrategy);
-    });
-  });
-
   it('should return SendHasAddressesStrategy for SEND_HAS_ADDRESSES event', () => {
     expect(factory.getStrategy(PFEventsType.SEND_HAS_ADDRESSES)).toBeInstanceOf(
       SendHasAddressesStrategy
@@ -509,9 +502,9 @@ describe('Event Strategy Factory', () => {
     );
   });
 
-  it('should return SendAddSercqSendEnterFlowStrategy for SEND_ADD_SERCQ_SEND_ENTER_FLOW event', () => {
+  it('should return uxWithDDStateSourceAndOtherContactStrategy for SEND_ADD_SERCQ_SEND_ENTER_FLOW event', () => {
     expect(factory.getStrategy(PFEventsType.SEND_ADD_SERCQ_SEND_ENTER_FLOW)).toBeInstanceOf(
-      SendAddSercqSendEnterFlowStrategy
+      UxWithDDStateSourceAndOtherContactStrategy
     );
   });
 
@@ -543,6 +536,79 @@ describe('Event Strategy Factory', () => {
     ];
     eventTypes.forEach((eventType) => {
       expect(factory.getStrategy(eventType)).toBeInstanceOf(UxWithDigitalDomicileStateStrategy);
+    });
+  });
+
+  it('should return UxWithDigitalDomicileStateAndContactDetailsStrategy for UX Action events with digital domicile state', () => {
+    const eventTypes = [
+      PFEventsType.SEND_ADD_CUSTOMIZED_CONTACT,
+      PFEventsType.SEND_ADD_SERCQ_SEND_EMAIL_SMS,
+      PFEventsType.SEND_ADD_SERCQ_SEND_EMAIL_SMS_CONTINUE,
+      PFEventsType.SEND_ADD_SERCQ_SEND_INTRO,
+      PFEventsType.SEND_ADD_SERCQ_SEND_PEC_START,
+      PFEventsType.SEND_ADD_SERCQ_SEND_PEC_THANK_YOU_PAGE,
+      PFEventsType.SEND_ADD_SERCQ_SEND_START,
+      PFEventsType.SEND_ADD_SERCQ_SEND_SUMMARY,
+      PFEventsType.SEND_ADD_SERCQ_SEND_THANK_YOU_PAGE,
+      PFEventsType.SEND_CUSTOMIZE_CONTACT,
+    ];
+    eventTypes.forEach((eventType) => {
+      expect(factory.getStrategy(eventType)).toBeInstanceOf(
+        UxWithDigitalDomicileStateAndContactDetailsStrategy
+      );
+    });
+  });
+
+  it('should return UxWithContactDetailsAndOtherContactStrategy for UX Action events with digital domicile state', () => {
+    const eventTypes = [
+      PFEventsType.SEND_REMOVE_DIGITAL_DOMICILE_PEC_POP_UP,
+      PFEventsType.SEND_REMOVE_DIGITAL_DOMICILE_PEC_POP_UP_CANCEL,
+      PFEventsType.SEND_REMOVE_DIGITAL_DOMICILE_PEC_POP_UP_CONTINUE,
+      PFEventsType.SEND_REMOVE_DIGITAL_DOMICILE_PEC_START,
+      PFEventsType.SEND_REMOVE_DIGITAL_DOMICILE_PEC_UX_SUCCESS,
+      PFEventsType.SEND_REMOVE_SERCQ_SEND_POP_UP,
+      PFEventsType.SEND_REMOVE_SERCQ_SEND_POP_UP_CANCEL,
+      PFEventsType.SEND_REMOVE_SERCQ_SEND_POP_UP_CONTINUE,
+      PFEventsType.SEND_REMOVE_SERCQ_SEND_START,
+      PFEventsType.SEND_REMOVE_SERCQ_SEND_UX_SUCCESS,
+    ];
+    eventTypes.forEach((eventType) => {
+      expect(factory.getStrategy(eventType)).toBeInstanceOf(
+        UxWithContactDetailsAndOtherContactStrategy
+      );
+    });
+  });
+
+  it('should return UxWithDDStateTosAndPecValidationStrategy for UX Action events with digital domicile state', () => {
+    const eventTypes = [PFEventsType.SEND_ADD_SERCQ_SEND_PEC_START_ACTIVATION];
+    eventTypes.forEach((eventType) => {
+      expect(factory.getStrategy(eventType)).toBeInstanceOf(
+        UxWithDDStateTosAndPecValidationStrategy
+      );
+    });
+  });
+
+  it('should return uxWithDDStateContactDetailsAndOtherContactStrategy for UX Action events with digital domicile state', () => {
+    const eventTypes = [
+      PFEventsType.SEND_ADD_SERCQ_SEND_PEC_UX_SUCCESS,
+      PFEventsType.SEND_ADD_SERCQ_SEND_UX_SUCCESS,
+    ];
+    eventTypes.forEach((eventType) => {
+      expect(factory.getStrategy(eventType)).toBeInstanceOf(
+        UxWithDDStateContactDetailsAndOtherContactStrategy
+      );
+    });
+  });
+
+  it('should return uxWithDDStateContactDetailsCustomizedContactTypeStrategy for UX Action events with digital domicile state', () => {
+    const eventTypes = [
+      PFEventsType.SEND_CUSTOMIZED_CONTACT_SERCQ_SEND_EMAIL_POP_UP,
+      PFEventsType.SEND_CUSTOMIZED_CONTACT_SERCQ_SEND_EMAIL_POP_UP_CONTINUE,
+    ];
+    eventTypes.forEach((eventType) => {
+      expect(factory.getStrategy(eventType)).toBeInstanceOf(
+        UxWithDDStateContactDetailsCustomizedContactTypeStrategy
+      );
     });
   });
 

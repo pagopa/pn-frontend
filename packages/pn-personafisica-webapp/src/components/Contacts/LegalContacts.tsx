@@ -19,6 +19,7 @@ import {
 import { deleteAddress } from '../../redux/contact/actions';
 import { contactsSelectors } from '../../redux/contact/reducers';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
+import { RootState } from '../../redux/store';
 import PFEventStrategyFactory from '../../utility/MixpanelUtils/PFEventStrategyFactory';
 import DeleteDialog from './DeleteDialog';
 import PecContactItem from './PecContactItem';
@@ -26,6 +27,7 @@ import SpecialContacts from './SpecialContacts';
 
 const EmptyLegalContacts = () => {
   const { t } = useTranslation(['common', 'recapiti']);
+  const addresses = useAppSelector((state: RootState) => state.contactsState.digitalAddresses);
   const navigate = useNavigate();
   const isMobile = useIsMobile();
 
@@ -41,6 +43,8 @@ const EmptyLegalContacts = () => {
 
   const handleStartActivation = () => {
     PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SERCQ_SEND_ENTER_FLOW, {
+      event_type: EventAction.ACTION,
+      addresses,
       source: ContactSource.RECAPITI,
     });
     navigate(DIGITAL_DOMICILE_ACTIVATION);

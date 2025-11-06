@@ -16,7 +16,6 @@ import { SendAddSercqSendAddEmailStartStrategy } from './Strategies/SendAddSercq
 import { SendAddSercqSendAddSmsStartStrategy } from './Strategies/SendAddSercqSendAddSmsStartStrategy';
 import { SendAddSercqSendEnterFlowStrategy } from './Strategies/SendAddSercqSendEnterFlowStrategy';
 import { SendAddSercqSendUxConversionStrategy } from './Strategies/SendAddSercqSendUxConversionStrategy';
-import { SendAddSercqUxSuccessStrategy } from './Strategies/SendAddSercqUxSuccessStrategy';
 import { SendDisableIOStrategy } from './Strategies/SendDisableIOStrategy';
 import { SendDownloadCertificateOpposable } from './Strategies/SendDownloadCertificateOpposable';
 import { SendDownloadResponseStrategy } from './Strategies/SendDownloadResponse';
@@ -52,6 +51,10 @@ import { UXPspActionStrategy } from './Strategies/UXPspActionStrategy';
 import { UXScreenViewStrategy } from './Strategies/UXScreenViewStrategy';
 import { UXConfirmStrategy } from './Strategies/UxConfirmStrategy';
 import { UxWithContactDetailsAndOtherContactStrategy } from './Strategies/UxWithContactDetailsAndOtherContactStrategy';
+import { UxWithDDStateContactDetailsAndOtherContactStrategy } from './Strategies/UxWithDDStateContactDetailsAndOtherContactStrategy';
+import { UxWithDDStateContactDetailsCustomizedContactTypeStrategy } from './Strategies/UxWithDDStateContactDetailsCustomizedContactTypeStrategy';
+import { UxWithDDStateSourceAndOtherContactStrategy } from './Strategies/UxWithDDStateSourceAndOtherContactStrategy';
+import { UxWithDDStateTosAndPecValidationStrategy } from './Strategies/UxWithDDStateTosAndPecValidationStrategy';
 import { UxWithDigitalDomicileStateAndContactDetailsStrategy } from './Strategies/UxWithDigitalDomicileStateAndContactDetailsStrategy';
 import { UxWithDigitalDomicileStateStrategy } from './Strategies/UxWithDigitalDomicileStateStrategy';
 
@@ -149,11 +152,6 @@ const sendAddLegalContactUXSuccessStrategy = [PFEventsType.SEND_ADD_PEC_UX_SUCCE
 const sendAddCourtesyContactUXSuccessStrategy = [
   PFEventsType.SEND_ADD_EMAIL_UX_SUCCESS,
   PFEventsType.SEND_ADD_SMS_UX_SUCCESS,
-] as const;
-
-const sendAddSercqUxSuccessStrategy = [
-  PFEventsType.SEND_ADD_SERCQ_SEND_PEC_UX_SUCCESS,
-  PFEventsType.SEND_ADD_SERCQ_SEND_UX_SUCCESS,
 ] as const;
 
 const sendRemoveContactSuccessStrategy = [
@@ -273,6 +271,24 @@ const uxWithContactDetailsAndOtherContactStrategy = [
   PFEventsType.SEND_REMOVE_SERCQ_SEND_UX_SUCCESS,
 ] as const;
 
+const uxWithDDStateSourceAndOtherContactStrategy = [
+  PFEventsType.SEND_ADD_SERCQ_SEND_ENTER_FLOW,
+] as const;
+
+const uxWithDDStateTosAndPecValidationStrategy = [
+  PFEventsType.SEND_ADD_SERCQ_SEND_PEC_START_ACTIVATION,
+] as const;
+
+const uxWithDDStateContactDetailsAndOtherContactStrategy = [
+  PFEventsType.SEND_ADD_SERCQ_SEND_PEC_UX_SUCCESS,
+  PFEventsType.SEND_ADD_SERCQ_SEND_UX_SUCCESS,
+] as const;
+
+const uxWithDDStateContactDetailsCustomizedContactTypeStrategy = [
+  PFEventsType.SEND_CUSTOMIZED_CONTACT_SERCQ_SEND_EMAIL_POP_UP,
+  PFEventsType.SEND_CUSTOMIZED_CONTACT_SERCQ_SEND_EMAIL_POP_UP_CONTINUE,
+] as const;
+
 type ArrayToTuple<T extends ReadonlyArray<PFEventsType>> = keyof {
   [K in T extends ReadonlyArray<infer U> ? U : never]: string;
 };
@@ -290,7 +306,7 @@ const eventStrategy: Record<
     | ArrayToTuple<typeof uxErrorStrategy>
     | ArrayToTuple<typeof techStrategy>
     | ArrayToTuple<typeof koErrorStrategy>
-    | ArrayToTuple<typeof sendAddSercqUxSuccessStrategy>
+    | ArrayToTuple<typeof uxWithDDStateContactDetailsAndOtherContactStrategy>
     | ArrayToTuple<typeof uxWithDigitalDomicileStateStrategy>
   >,
   EventStrategy
@@ -345,7 +361,7 @@ const isInEventStrategyMap = (value: PFEventsType): value is keyof typeof eventS
 };
 
 class PFEventStrategyFactory extends EventStrategyFactory<PFEventsType> {
-  // eslint-disable-next-line sonarjs/cognitive-complexity
+  // eslint-disable-next-line sonarjs/cognitive-complexity, complexity
   getStrategy(eventType: PFEventsType): EventStrategy | null {
     if (uxActionStrategy.findIndex((el) => el === eventType) > -1) {
       return new UXActionStrategy();
@@ -395,10 +411,6 @@ class PFEventStrategyFactory extends EventStrategyFactory<PFEventsType> {
       return new KoErrorStrategy();
     }
 
-    if (sendAddSercqUxSuccessStrategy.findIndex((el) => el === eventType) > -1) {
-      return new SendAddSercqUxSuccessStrategy();
-    }
-
     if (uxWithDigitalDomicileStateStrategy.findIndex((el) => el === eventType) > -1) {
       return new UxWithDigitalDomicileStateStrategy();
     }
@@ -408,8 +420,30 @@ class PFEventStrategyFactory extends EventStrategyFactory<PFEventsType> {
     ) {
       return new UxWithDigitalDomicileStateAndContactDetailsStrategy();
     }
+
     if (uxWithContactDetailsAndOtherContactStrategy.findIndex((el) => el === eventType) > -1) {
       return new UxWithContactDetailsAndOtherContactStrategy();
+    }
+
+    if (
+      uxWithDDStateContactDetailsCustomizedContactTypeStrategy.findIndex((el) => el === eventType) >
+      -1
+    ) {
+      return new UxWithDDStateContactDetailsCustomizedContactTypeStrategy();
+    }
+
+    if (uxWithDDStateSourceAndOtherContactStrategy.findIndex((el) => el === eventType) > -1) {
+      return new UxWithDDStateSourceAndOtherContactStrategy();
+    }
+
+    if (uxWithDDStateTosAndPecValidationStrategy.findIndex((el) => el === eventType) > -1) {
+      return new UxWithDDStateTosAndPecValidationStrategy();
+    }
+
+    if (
+      uxWithDDStateContactDetailsAndOtherContactStrategy.findIndex((el) => el === eventType) > -1
+    ) {
+      return new UxWithDDStateContactDetailsAndOtherContactStrategy();
     }
 
     if (isInEventStrategyMap(eventType)) {
