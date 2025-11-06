@@ -3,6 +3,24 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.19.0-RC.4](https://github.com/pagopa/pn-frontend/compare/v2.19.0-RC.3...v2.19.0-RC.4) (2025-11-06)
+
+
+### Bug Fixes
+
+* **PN-17095:** track mixpanel events with 3 properties ([#1682](https://github.com/pagopa/pn-frontend/issues/1682)) ([28b3329](https://github.com/pagopa/pn-frontend/commit/28b332964cd40022df29b7359189dc2f9fb72e25))
+* **PN-17096:** update mixpanel event with 4 properties ([#1683](https://github.com/pagopa/pn-frontend/issues/1683)) ([217527a](https://github.com/pagopa/pn-frontend/commit/217527ad1dee85db71fa8172bd0f72ade6ed7966))
+
+
+### Features
+
+* **PN-17094:** track Mixpanel events with two properties ([#1680](https://github.com/pagopa/pn-frontend/issues/1680)) ([a36c5d8](https://github.com/pagopa/pn-frontend/commit/a36c5d8faee21e069fca11648592806259233d84))
+
+
+
+
+
+
 # [2.19.0-RC.3](https://github.com/pagopa/pn-frontend/compare/v2.19.0-RC.2...v2.19.0-RC.3) (2025-11-03)
 
 
