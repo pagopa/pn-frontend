@@ -1,6 +1,6 @@
 /** 
  * onetrust-hbbtv-script
- * v202510.1.0
+ * v202510.2.0
  * by OneTrust LLC
  * Copyright 2025 
  */
