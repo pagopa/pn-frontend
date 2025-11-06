@@ -89,7 +89,7 @@ export interface AddSpecialContactRef {
 }
 
 type Props = {
-  handleContactAdded: () => void;
+  handleContactAdded: (meta: { channelType: ChannelType; senderName: string }) => void;
 };
 
 const ErrorBanner: React.FC<{ type: ErrorBannerType | undefined; contactValue?: string }> = ({
@@ -185,10 +185,17 @@ const AddSpecialContact = forwardRef<AddSpecialContactRef, Props>(
     };
 
     const addressTypeChangeHandler = async (e: ChangeEvent<HTMLInputElement>) => {
-      if (e.target.value !== formik.values.channelType) {
+      const nextType = e.target.value;
+      if (nextType !== formik.values.channelType) {
         await formik.setFieldValue('s_value', '');
         await formik.setFieldTouched('s_value', false);
         formik.handleChange(e);
+        PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_CUSTOMIZED_CONTACT_START, {
+          event_type: EventAction.ACTION,
+          addresses,
+          customized_contact_type: nextType,
+          organization_name: formik.values.sender?.name,
+        });
       }
     };
 
@@ -280,19 +287,14 @@ const AddSpecialContact = forwardRef<AddSpecialContactRef, Props>(
     );
 
     const sendSuccessEvent = (type: ChannelType) => {
+      PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_CUSTOMIZED_CONTACT_UX_SUCCESS, {
+        event_type: EventAction.CONFIRM,
+        addresses,
+        customized_contact_type: type,
+        organization_name: formik.values.sender?.name,
+      });
       if (type === ChannelType.PEC) {
         PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_PEC_UX_SUCCESS, false);
-        PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SERCQ_SEND_PEC_UX_SUCCESS, {
-          event_type: EventAction.CONFIRM,
-          addresses,
-          other_contact: true,
-        });
-      } else {
-        PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SERCQ_SEND_UX_SUCCESS, {
-          event_type: EventAction.CONFIRM,
-          addresses,
-          other_contact: true,
-        });
       }
     };
 
@@ -400,6 +402,17 @@ const AddSpecialContact = forwardRef<AddSpecialContactRef, Props>(
         if (isValidatingPecForSender(formik.values.sender.id)) {
           setErrorBanner(ErrorBannerType.VALIDATING_PEC);
         } else {
+          PFEventStrategyFactory.triggerEvent(
+            PFEventsType.SEND_ADD_CUSTOMIZED_CONTACT_UX_CONVERSION,
+            {
+              event_type: EventAction.ACTION,
+              addresses,
+              customized_contact_type: formik.values.channelType || 'missing',
+              organization_name: formik.values.sender?.name || 'missing',
+              tos_validation: formik.values.s_disclaimer ? 'valid' : 'missing',
+            }
+          );
+
           await formik.submitForm();
 
           if (!formik.isValid) {
@@ -491,7 +504,10 @@ const AddSpecialContact = forwardRef<AddSpecialContactRef, Props>(
 
           sendSuccessEvent(formik.values.channelType as ChannelType);
           setModalOpen(null);
-          handleContactAdded();
+          handleContactAdded({
+            channelType: formik.values.channelType as ChannelType,
+            senderName: formik.values.sender?.name ?? '',
+          });
         })
         .catch(() => {});
     };

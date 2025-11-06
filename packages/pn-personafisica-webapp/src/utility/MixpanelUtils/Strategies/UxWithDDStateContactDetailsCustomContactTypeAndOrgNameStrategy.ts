@@ -20,19 +20,24 @@ type Props = {
   event_type: EventAction.ACTION | EventAction.SCREEN_VIEW;
   addresses: Array<DigitalAddress>;
   customized_contact_type: ChannelType.PEC | ChannelType.SERCQ_SEND | 'missing';
+  organization_name: string;
 };
 
 type Return = {
   digital_domicile_state: MixpanelDigitalDomicileState;
   contact_details: MixpanelConcatCourtesyContacts;
   customized_contact_type: MixpanelCustomizedContactType;
+  organization_name: string;
 };
 
-export class UxWithDDStateContactDetailsCustomizedContactTypeStrategy implements EventStrategy {
+export class UxWithDDStateContactDetailsCustomContactTypeAndOrgNameStrategy
+  implements EventStrategy
+{
   performComputations({
     addresses,
     customized_contact_type,
     event_type,
+    organization_name,
   }: Props): TrackedEvent<Return> {
     const courtesyAddresses = addresses.filter(
       (address) => address.addressType === AddressType.COURTESY
@@ -45,6 +50,7 @@ export class UxWithDDStateContactDetailsCustomizedContactTypeStrategy implements
         digital_domicile_state: getDigitalDomicileState(addresses),
         contact_details: concatCourtestyContacts(courtesyAddresses),
         customized_contact_type: getCustomizedContactType(customized_contact_type),
+        organization_name,
       },
     };
   }
