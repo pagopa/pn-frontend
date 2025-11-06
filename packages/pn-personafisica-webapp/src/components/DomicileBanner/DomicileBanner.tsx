@@ -2,6 +2,7 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
 import { Alert, AlertColor, Box, Typography } from '@mui/material';
+import { EventAction } from '@pagopa-pn/pn-commons';
 import { ButtonNaked } from '@pagopa/mui-italia';
 
 import { PFEventsType } from '../../models/PFEventsType';
@@ -107,8 +108,13 @@ const DomicileBanner: React.FC<Props> = ({ source }) => {
   const dispatch = useAppDispatch();
   const open = useAppSelector((state: RootState) => state.generalInfoState.domicileBannerOpened);
   const { IS_DOD_ENABLED } = getConfiguration();
-  const { defaultPECAddress, defaultSERCQ_SENDAddress, defaultAPPIOAddress, courtesyAddresses } =
-    useAppSelector(contactsSelectors.selectAddresses);
+  const {
+    defaultPECAddress,
+    defaultSERCQ_SENDAddress,
+    defaultAPPIOAddress,
+    courtesyAddresses,
+    addresses,
+  } = useAppSelector(contactsSelectors.selectAddresses);
 
   const hasAppIODisabled = defaultAPPIOAddress?.value === IOAllowedValues.DISABLED;
 
@@ -135,6 +141,8 @@ const DomicileBanner: React.FC<Props> = ({ source }) => {
     if (destination && operation) {
       if (destination === ChannelType.SERCQ_SEND && operation === ContactOperation.ADD) {
         PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SERCQ_SEND_ENTER_FLOW, {
+          event_type: EventAction.ACTION,
+          addresses,
           source,
         });
         navigate(routes.DIGITAL_DOMICILE_ACTIVATION);

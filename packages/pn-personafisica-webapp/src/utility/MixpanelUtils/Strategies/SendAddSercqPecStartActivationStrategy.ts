@@ -6,9 +6,11 @@ import {
   TrackedEvent,
 } from '@pagopa-pn/pn-commons';
 
+import { MixpanelPecState, MixpanelTosState } from '../../mixpanel';
+
 type Props = {
-  pec_validation: 'valid' | 'invalid' | 'missing';
-  tos_validation: 'valid' | 'missing';
+  pec_validation: MixpanelPecState;
+  tos_validation: MixpanelTosState;
 };
 
 export class SendAddSercqPecStartActivationStrategy implements EventStrategy {

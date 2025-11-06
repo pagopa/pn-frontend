@@ -5,6 +5,7 @@ import CompareArrowsIcon from '@mui/icons-material/CompareArrows';
 import PowerSettingsNewIcon from '@mui/icons-material/PowerSettingsNew';
 import { Avatar, Button, Chip, Stack, Typography } from '@mui/material';
 import {
+  EventAction,
   IllusAppIO,
   IllusAppIoLogo,
   IllusSendLogo,
@@ -44,6 +45,7 @@ const IOContact: React.FC = () => {
     defaultSERCQ_SENDAddress,
     defaultPECAddress,
     addresses,
+    legalAddresses,
   } = useAppSelector(contactsSelectors.selectAddresses);
   const { APP_IO_SITE, APP_IO_ANDROID, APP_IO_IOS } = getConfiguration();
 
@@ -85,12 +87,18 @@ const IOContact: React.FC = () => {
   };
 
   const disableIO = () => {
-    PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_DEACTIVE_IO_UX_CONVERSION);
+    PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_DEACTIVE_IO_UX_CONVERSION, {
+      event_type: EventAction.ACTION,
+      legal_addresses: legalAddresses,
+    });
     dispatch(disableIOAddress())
       .unwrap()
       .then(() => {
         setModalOpen(null);
-        PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_DEACTIVE_IO_UX_SUCCESS);
+        PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_DEACTIVE_IO_UX_SUCCESS, {
+          event_type: EventAction.SCREEN_VIEW,
+          legal_addresses: legalAddresses,
+        });
         dispatch(
           appStateActions.addSuccess({
             title: '',
@@ -106,17 +114,31 @@ const IOContact: React.FC = () => {
   };
 
   const handleOpenDeleteModal = () => {
+    PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_DEACTIVE_IO_POP_UP, {
+      event_type: EventAction.SCREEN_VIEW,
+      legal_addresses: legalAddresses,
+    });
     setModalOpen(ModalType.DELETE);
   };
 
+  const handleCloseDeleteModal = () => {
+    PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_DEACTIVE_IO_CANCEL, {
+      event_type: EventAction.ACTION,
+      legal_addresses: legalAddresses,
+    });
+    setModalOpen(null);
+  };
+
   const handleConfirm = () => {
-    PFEventStrategyFactory.triggerEvent(
-      isAppIOEnabled ? PFEventsType.SEND_DEACTIVE_IO_START : PFEventsType.SEND_ACTIVE_IO_START
-    );
     if (isAppIOEnabled) {
+      PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_DEACTIVE_IO_START, {
+        event_type: EventAction.ACTION,
+        legal_addresses: legalAddresses,
+      });
       disableIO();
       return;
     }
+    PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ACTIVE_IO_START);
     enableIO();
     setModalOpen(null);
   };
@@ -283,13 +305,13 @@ const IOContact: React.FC = () => {
         showModal={modalOpen === ModalType.DELETE}
         removeModalTitle={t('io-contact.disable-modal.title', { ns: 'recapiti' })}
         removeModalBody={getRemoveModalMessage()}
-        handleModalClose={() => setModalOpen(null)}
+        handleModalClose={handleCloseDeleteModal}
         confirmHandler={disableIO}
         slotsProps={
           hasDigitalDomicile
             ? {
                 primaryButton: {
-                  onClick: () => setModalOpen(null),
+                  onClick: handleCloseDeleteModal,
                   label: t('button.annulla'),
                 },
                 secondaryButton: {
