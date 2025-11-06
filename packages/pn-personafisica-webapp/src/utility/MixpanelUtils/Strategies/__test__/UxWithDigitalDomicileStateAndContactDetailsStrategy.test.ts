@@ -2,10 +2,10 @@ import { EventAction, EventCategory, EventPropertyType } from '@pagopa-pn/pn-com
 
 import { digitalAddresses } from '../../../../__mocks__/Contacts.mock';
 import { AddressType, ChannelType, IOAllowedValues } from '../../../../models/contacts';
-import { UxWithCourtesyContactListStrategy } from '../UxWithCourtesyContactListStrategy';
+import { UxWithDigitalDomicileStateAndContactDetailsStrategy } from '../UxWithDigitalDomicileStateAndContactDetailsStrategy';
 
-describe('Mixpanel - UX Action with Courtesy Contacts List Strategy', () => {
-  const strategy = new UxWithCourtesyContactListStrategy();
+describe('Mixpanel - UX Action with DigitalDomicileState and ContactDetails Strategy Strategy', () => {
+  const strategy = new UxWithDigitalDomicileStateAndContactDetailsStrategy();
 
   const courtesyContacts = digitalAddresses
     .filter((addr) => addr.addressType === AddressType.COURTESY)
@@ -23,7 +23,7 @@ describe('Mixpanel - UX Action with Courtesy Contacts List Strategy', () => {
   it('should return "no_contact" when no contacts are provided', () => {
     const result = strategy.performComputations({
       event_type: EventAction.SCREEN_VIEW,
-      contacts: [],
+      addresses: [],
     });
 
     expect(result).toEqual({
@@ -31,6 +31,7 @@ describe('Mixpanel - UX Action with Courtesy Contacts List Strategy', () => {
         event_category: EventCategory.UX,
         event_type: EventAction.SCREEN_VIEW,
         contact_details: 'no_contact',
+        digital_domicile_state: 'not_active',
       },
     });
   });
@@ -38,7 +39,7 @@ describe('Mixpanel - UX Action with Courtesy Contacts List Strategy', () => {
   it('should return "no_contact" when only legal contacts are provided', () => {
     const result = strategy.performComputations({
       event_type: EventAction.ACTION,
-      contacts: legalContacts,
+      addresses: legalContacts,
     });
 
     expect(result).toEqual({
@@ -46,6 +47,7 @@ describe('Mixpanel - UX Action with Courtesy Contacts List Strategy', () => {
         event_category: EventCategory.UX,
         event_type: EventAction.ACTION,
         contact_details: 'no_contact',
+        digital_domicile_state: 'pec',
       },
     });
   });
@@ -53,13 +55,17 @@ describe('Mixpanel - UX Action with Courtesy Contacts List Strategy', () => {
   it('should return "app_io" when only IOMSG courtesy contact is provided', () => {
     const contacts = getContactsByChannelType(ChannelType.IOMSG);
 
-    const result = strategy.performComputations({ event_type: EventAction.ACTION, contacts });
+    const result = strategy.performComputations({
+      event_type: EventAction.ACTION,
+      addresses: contacts,
+    });
 
     expect(result).toEqual({
       [EventPropertyType.TRACK]: {
         event_category: EventCategory.UX,
         event_type: EventAction.ACTION,
         contact_details: 'app_io',
+        digital_domicile_state: 'not_active',
       },
     });
   });
@@ -67,13 +73,17 @@ describe('Mixpanel - UX Action with Courtesy Contacts List Strategy', () => {
   it('should return "email" when only EMAIL courtesy contact is provided', () => {
     const contacts = getContactsByChannelType(ChannelType.EMAIL);
 
-    const result = strategy.performComputations({ event_type: EventAction.ACTION, contacts });
+    const result = strategy.performComputations({
+      event_type: EventAction.ACTION,
+      addresses: contacts,
+    });
 
     expect(result).toEqual({
       [EventPropertyType.TRACK]: {
         event_category: EventCategory.UX,
         event_type: EventAction.ACTION,
         contact_details: 'email',
+        digital_domicile_state: 'not_active',
       },
     });
   });
@@ -81,13 +91,17 @@ describe('Mixpanel - UX Action with Courtesy Contacts List Strategy', () => {
   it('should return "sms" when only SMS courtesy contact is provided', () => {
     const contacts = getContactsByChannelType(ChannelType.SMS);
 
-    const result = strategy.performComputations({ event_type: EventAction.ACTION, contacts });
+    const result = strategy.performComputations({
+      event_type: EventAction.ACTION,
+      addresses: contacts,
+    });
 
     expect(result).toEqual({
       [EventPropertyType.TRACK]: {
         event_category: EventCategory.UX,
         event_type: EventAction.ACTION,
         contact_details: 'sms',
+        digital_domicile_state: 'not_active',
       },
     });
   });
@@ -98,13 +112,17 @@ describe('Mixpanel - UX Action with Courtesy Contacts List Strategy', () => {
       ...getContactsByChannelType(ChannelType.EMAIL),
     ];
 
-    const result = strategy.performComputations({ event_type: EventAction.ACTION, contacts });
+    const result = strategy.performComputations({
+      event_type: EventAction.ACTION,
+      addresses: contacts,
+    });
 
     expect(result).toEqual({
       [EventPropertyType.TRACK]: {
         event_category: EventCategory.UX,
         event_type: EventAction.ACTION,
         contact_details: 'app_io_email',
+        digital_domicile_state: 'not_active',
       },
     });
   });
@@ -115,13 +133,17 @@ describe('Mixpanel - UX Action with Courtesy Contacts List Strategy', () => {
       ...getContactsByChannelType(ChannelType.SMS),
     ];
 
-    const result = strategy.performComputations({ event_type: EventAction.ACTION, contacts });
+    const result = strategy.performComputations({
+      event_type: EventAction.ACTION,
+      addresses: contacts,
+    });
 
     expect(result).toEqual({
       [EventPropertyType.TRACK]: {
         event_category: EventCategory.UX,
         event_type: EventAction.ACTION,
         contact_details: 'app_io_sms',
+        digital_domicile_state: 'not_active',
       },
     });
   });
@@ -132,13 +154,17 @@ describe('Mixpanel - UX Action with Courtesy Contacts List Strategy', () => {
       ...getContactsByChannelType(ChannelType.SMS),
     ];
 
-    const result = strategy.performComputations({ event_type: EventAction.ACTION, contacts });
+    const result = strategy.performComputations({
+      event_type: EventAction.ACTION,
+      addresses: contacts,
+    });
 
     expect(result).toEqual({
       [EventPropertyType.TRACK]: {
         event_category: EventCategory.UX,
         event_type: EventAction.ACTION,
         contact_details: 'email_sms',
+        digital_domicile_state: 'not_active',
       },
     });
   });
@@ -146,7 +172,7 @@ describe('Mixpanel - UX Action with Courtesy Contacts List Strategy', () => {
   it('should return "app_io_email_sms" when all courtesy contacts are provided', () => {
     const result = strategy.performComputations({
       event_type: EventAction.ACTION,
-      contacts: courtesyContacts,
+      addresses: courtesyContacts,
     });
 
     expect(result).toEqual({
@@ -154,6 +180,7 @@ describe('Mixpanel - UX Action with Courtesy Contacts List Strategy', () => {
         event_category: EventCategory.UX,
         event_type: EventAction.ACTION,
         contact_details: 'app_io_email_sms',
+        digital_domicile_state: 'not_active',
       },
     });
   });
@@ -164,13 +191,17 @@ describe('Mixpanel - UX Action with Courtesy Contacts List Strategy', () => {
       value: IOAllowedValues.DISABLED,
     }));
 
-    const result = strategy.performComputations({ event_type: EventAction.ACTION, contacts });
+    const result = strategy.performComputations({
+      event_type: EventAction.ACTION,
+      addresses: contacts,
+    });
 
     expect(result).toEqual({
       [EventPropertyType.TRACK]: {
         event_category: EventCategory.UX,
         event_type: EventAction.ACTION,
         contact_details: 'no_contact',
+        digital_domicile_state: 'not_active',
       },
     });
   });
@@ -188,13 +219,17 @@ describe('Mixpanel - UX Action with Courtesy Contacts List Strategy', () => {
       },
     ];
 
-    const result = strategy.performComputations({ event_type: EventAction.ACTION, contacts });
+    const result = strategy.performComputations({
+      event_type: EventAction.ACTION,
+      addresses: contacts,
+    });
 
     expect(result).toEqual({
       [EventPropertyType.TRACK]: {
         event_category: EventCategory.UX,
         event_type: EventAction.ACTION,
         contact_details: 'email_sms',
+        digital_domicile_state: 'not_active',
       },
     });
   });
