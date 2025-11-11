@@ -6,6 +6,7 @@ import {
   ConsentType,
   LoadingPage,
   NotFound,
+  UserValidationFailed,
   lazyRetry,
 } from '@pagopa-pn/pn-commons';
 
@@ -35,9 +36,14 @@ const DigitalContactManagement = lazyRetry(
   () => import('../components/Contacts/DigitalContactManagement')
 );
 
+const handleGoToLandingSite = () => {
+  /* eslint-disable-next-line functional/immutable-data */
+  globalThis.location.href = getConfiguration().LANDING_SITE_URL;
+};
+
 const handleAssistanceClick = () => {
   /* eslint-disable-next-line functional/immutable-data */
-  window.location.href = getConfiguration().LANDING_SITE_URL;
+  globalThis.location.href = `mailto:${getConfiguration().PAGOPA_HELP_EMAIL}`;
 };
 
 function Router() {
@@ -87,7 +93,11 @@ function Router() {
         <Route path={routes.PARTICIPATING_ENTITIES} element={<ParticipatingEntitiesPage />} />
         <Route
           path={routes.NOT_ACCESSIBLE}
-          element={<AppNotAccessible onAssistanceClick={handleAssistanceClick} />}
+          element={<AppNotAccessible onAssistanceClick={handleGoToLandingSite} />}
+        />
+        <Route
+          path={routes.USER_VALIDATION_FAILED}
+          element={<UserValidationFailed onAssistanceClick={handleAssistanceClick} />}
         />
       </Routes>
     </Suspense>

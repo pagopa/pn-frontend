@@ -78,7 +78,9 @@ import SessionModal from './SessionModal';
 import SideMenu from './SideMenu/SideMenu';
 import SnackBar from './SnackBar/SnackBar';
 import TabPanel from './TabPanel';
+import ThankYouPage from './ThankYouPage';
 import TitleBox from './TitleBox';
+import UserValidationFailed from './UserValidationFailed';
 
 export {
   ApiError,
@@ -162,4 +164,6 @@ export {
   IllusHourglass,
   PnWizard,
   PnWizardStep,
+  ThankYouPage,
+  UserValidationFailed,
 };
