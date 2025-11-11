@@ -61,9 +61,23 @@ export function basicInitialUserData<T extends BasicUser>(
 }
 
 export function adaptedTokenExchangeError(originalError: any) {
+  // validazione `user` TokenExchangeRequest fallisce
+  // ---------------------------------------------------
+  // Il thunk usa rejectWithValue({ code: 'USER_VALIDATION_FAILED' })
+  // Usiamo uno status "custom" 499 per mantenere lo stesso shape degli altri rami.
+  if (originalError?.code === 'USER_VALIDATION_FAILED' || originalError?.response?.status === 499) {
+    return {
+      ...originalError,
+      isUnauthorizedUser: true,
+      response: {
+        ...originalError.response,
+        status: 499,
+      },
+    };
+  }
   // status 403 - l'utente non ha i grants che servono per entrare nell'app
   // ------------------------
-  if (originalError.response?.status === 403) {
+  else if (originalError.response?.status === 403) {
     return {
       ...originalError,
       isUnauthorizedUser: true,

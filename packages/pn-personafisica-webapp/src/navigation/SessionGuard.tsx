@@ -49,11 +49,19 @@ const SessionGuard = () => {
     AppResponsePublisher.error.subscribe('exchangeToken', manageUnforbiddenError);
     try {
       const user = await dispatch(exchangeToken(token)).unwrap();
+
+      // store user in sessionStorage only on successful validation
+      sessionStorage.setItem('user', JSON.stringify(user));
+
       sessionCheck(user.exp);
     } catch (error) {
       const adaptedError = adaptedTokenExchangeError(error);
       if (adaptedError.response.status === 451 || WORK_IN_PROGRESS) {
         navigate({ pathname: routes.NOT_ACCESSIBLE }, { replace: true });
+        return;
+      }
+      if (adaptedError.code === 'USER_VALIDATION_FAILED') {
+        navigate({ pathname: routes.USER_VALIDATION_FAILED }, { replace: true });
         return;
       }
       setModalData({
