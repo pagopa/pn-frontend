@@ -3,6 +3,81 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.19.0](https://github.com/pagopa/pn-frontend/compare/v2.19.0-RC.5...v2.19.0) (2025-11-07)
+
+**Note:** Version bump only for package @pagopa-pn/pn-pa-webapp
+
+
+
+
+
+
+# [2.19.0-RC.5](https://github.com/pagopa/pn-frontend/compare/v2.19.0-RC.4...v2.19.0-RC.5) (2025-11-06)
+
+
+### Bug Fixes
+
+* **PN-15033:** update pa cookie script ([#1684](https://github.com/pagopa/pn-frontend/issues/1684)) ([916bdad](https://github.com/pagopa/pn-frontend/commit/916bdad942f50bab0150255c544fc5d4f47665fd))
+
+
+
+
+
+# [2.19.0-RC.3](https://github.com/pagopa/pn-frontend/compare/v2.19.0-RC.2...v2.19.0-RC.3) (2025-11-03)
+
+
+### Bug Fixes
+
+* **pn-16917:** fixed links to tos and privacy pages ([#1669](https://github.com/pagopa/pn-frontend/issues/1669)) ([b3f147b](https://github.com/pagopa/pn-frontend/commit/b3f147bc4dbbb6ed7e9b22db7bed4d7be66587e0))
+
+
+
+
+
+
+# [2.19.0-RC.2](https://github.com/pagopa/pn-frontend/compare/v2.19.0-RC.1...v2.19.0-RC.2) (2025-10-23)
+
+
+### Bug Fixes
+
+* **pn-16309:** Fix notification search timeout ([#1644](https://github.com/pagopa/pn-frontend/issues/1644)) ([cb80b84](https://github.com/pagopa/pn-frontend/commit/cb80b84bb2f05b7e1a52975acb410042d821397d))
+
+
+
+
+
+# [2.19.0-RC.1](https://github.com/pagopa/pn-frontend/compare/v2.19.0-RC.0...v2.19.0-RC.1) (2025-10-22)
+
+
+### Bug Fixes
+
+* **PN-15847:** adjust foreign state max length validation ([#1666](https://github.com/pagopa/pn-frontend/issues/1666)) ([f5ca9d5](https://github.com/pagopa/pn-frontend/commit/f5ca9d5838b5bb22f8548f285c882a9da93dfe8c))
+
+
+
+
+
+# [2.19.0-RC.0](https://github.com/pagopa/pn-frontend/compare/v2.18.0...v2.19.0-RC.0) (2025-10-13)
+
+
+### Bug Fixes
+
+* **PN-15847, PN-15848:** add max length validation to house number and foreignState fields ([#1629](https://github.com/pagopa/pn-frontend/issues/1629)) ([d83ab17](https://github.com/pagopa/pn-frontend/commit/d83ab172f332503845340eab12a314064b6a4ab5))
+* **PN-16113:** fix menu link in ToS and Policy page ([#1638](https://github.com/pagopa/pn-frontend/issues/1638)) ([26d91b6](https://github.com/pagopa/pn-frontend/commit/26d91b6fa10362346625451bbcb61bdfbde63f06))
+* **PN-16180:** Remove amount and paymentExpirationDate on NotificationDetail (PF, PG, PA) ([#1639](https://github.com/pagopa/pn-frontend/issues/1639)) ([fc620c2](https://github.com/pagopa/pn-frontend/commit/fc620c2bb919e2c5eb26caa7165bd1168c56b98c))
+* **PN-16259:** pass translated label in Header component ([#1635](https://github.com/pagopa/pn-frontend/issues/1635)) ([e056736](https://github.com/pagopa/pn-frontend/commit/e0567368b4ba95ec11ef499f68c70d67dbee3030))
+* **PN-16309:** Fix notification search timeout ([#1661](https://github.com/pagopa/pn-frontend/issues/1661)) ([2833eb2](https://github.com/pagopa/pn-frontend/commit/2833eb2f7426c01e0f7d7fedf0cddd5c0fb0bd4a))
+* **PN-16621:** avoid call api logout if token is expired on session guard ([#1649](https://github.com/pagopa/pn-frontend/issues/1649)) ([6ed1c9d](https://github.com/pagopa/pn-frontend/commit/6ed1c9d059c2862b4104cde813d1787c2c0e5e3c))
+
+
+### Features
+
+* **PN-16215:** refactor guards in PA ([244e9f1](https://github.com/pagopa/pn-frontend/commit/244e9f1195ba14e649bc31ead8bb4a17a8ac5330))
+
+
+
+
+
 # [2.18.0](https://github.com/pagopa/pn-frontend/compare/v2.18.0-RC.4...v2.18.0) (2025-09-17)
 
 **Note:** Version bump only for package @pagopa-pn/pn-pa-webapp
