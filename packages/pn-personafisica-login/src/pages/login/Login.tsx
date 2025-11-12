@@ -80,7 +80,7 @@ const Login = () => {
     setShowIDPS(false);
   };
 
-  console.log('TMP - Force build');
+  console.log('TMP - Forcing build');
 
   return (
     <>

@@ -46,7 +46,7 @@ const ApiIntegration: React.FC = () => {
     !isAdminWithoutGroups ||
     virtualKeys.items.length > 0;
 
-  console.log('TMP - Force build');
+  console.log('TMP - Forcing build');
 
   useEffect(() => {
     // Issuer object has two keys: isPresent and issuerStatus.

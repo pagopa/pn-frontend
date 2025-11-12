@@ -164,7 +164,7 @@ const ApiKeys = () => {
     dispatch(setPagination({ size: paginationData.size, page: paginationData.page }));
   };
 
-  console.log('TMP - Force build');
+  console.log('TMP - Forcing build');
 
   return (
     <Box p={3}>

@@ -78,7 +78,7 @@ const AppStatus = () => {
     );
   }, [getCurrentAppStatus]);
 
-  console.log('TMP - Force build');
+  console.log('TMP - Forcing build');
 
   return (
     <AppStatusRender
