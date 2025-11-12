@@ -2704,10 +2704,10 @@
     rxjs "7.8.1"
     tslib "2.6.2"
 
-"@pagopa/mui-italia@2.0.0-RC.0":
-  version "2.0.0-RC.0"
-  resolved "https://registry.yarnpkg.com/@pagopa/mui-italia/-/mui-italia-2.0.0-RC.0.tgz#7c6b6826e5b3e3dbd6c27272e7f3268c0b7037b5"
-  integrity sha512-j6PLaZHDmmfCLOvmsH21Q19hxEwKYaWkLZ8kXl3VrxXk8rG2l6fGsMy6C1Yy1LEb6MTXJoD/L97LQ0P54QicTg==
+"@pagopa/mui-italia@2.0.0-RC.1":
+  version "2.0.0-RC.1"
+  resolved "https://registry.yarnpkg.com/@pagopa/mui-italia/-/mui-italia-2.0.0-RC.1.tgz#18e1284a259385ffebe161acbc07704d68a7b333"
+  integrity sha512-pcD71AU+OKDg4DT0ltBkM4l2xvi2esNaM9W+IUUnXGO9BytguygIRRcOWUU3vcSQ0mVTgEGfTMWkJVX2V9CJug==
   dependencies:
     "@fontsource/dm-mono" "^4.5.10"
     "@fontsource/titillium-web" "^4.5.9"

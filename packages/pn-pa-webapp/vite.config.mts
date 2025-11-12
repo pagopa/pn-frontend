@@ -59,8 +59,5 @@ export default defineConfig(({ mode }) => {
     },
     // Exclude the test and the mock folders from being processed by Vite
     exclude: ['**/__test__/**', '**/__mocks__/**'],
-    /*resolve: {
-      alias: [{ find: '@mui/icons-material', replacement: '@mui/icons-material/esm' }],
-    },*/
   });
 });
