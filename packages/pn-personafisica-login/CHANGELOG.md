@@ -3,6 +3,35 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.19.0](https://github.com/pagopa/pn-frontend/compare/v2.19.0-RC.5...v2.19.0) (2025-11-07)
+
+**Note:** Version bump only for package @pagopa-pn/pn-personafisica-login
+
+
+
+
+
+
+# [2.19.0-RC.3](https://github.com/pagopa/pn-frontend/compare/v2.19.0-RC.2...v2.19.0-RC.3) (2025-11-03)
+
+
+### Bug Fixes
+
+* **pn-16917:** fixed links to tos and privacy pages ([#1669](https://github.com/pagopa/pn-frontend/issues/1669)) ([b3f147b](https://github.com/pagopa/pn-frontend/commit/b3f147bc4dbbb6ed7e9b22db7bed4d7be66587e0))
+
+
+
+
+
+
+# [2.19.0-RC.0](https://github.com/pagopa/pn-frontend/compare/v2.18.0...v2.19.0-RC.0) (2025-10-13)
+
+**Note:** Version bump only for package @pagopa-pn/pn-personafisica-login
+
+
+
+
+
 # [2.18.0](https://github.com/pagopa/pn-frontend/compare/v2.18.0-RC.4...v2.18.0) (2025-09-17)
 
 **Note:** Version bump only for package @pagopa-pn/pn-personafisica-login

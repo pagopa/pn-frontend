@@ -1,7 +1,7 @@
 {
   "name": "@pagopa-pn/pn-personafisica-login",
   "description": "Pagina di login di SEND per il cittadino",
-  "version": "2.18.0",
+  "version": "2.19.0",
   "private": true,
   "homepage": "auth",
   "dependencies": {
