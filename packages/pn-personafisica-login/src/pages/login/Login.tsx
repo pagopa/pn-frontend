@@ -11,7 +11,7 @@ import {
   PRIVACY_LINK_RELATIVE_PATH as PRIVACY_POLICY,
   useIsMobile,
 } from '@pagopa-pn/pn-commons';
-import { CieIcon, SpidIcon } from '@pagopa/mui-italia/dist/icons';
+import { CieIcon, SpidIcon } from '@pagopa/mui-italia/icons';
 
 import sendLogo from '../../assets/send.svg';
 import IOSmartAppBanner from '../../components/IoSmartAppBanner';

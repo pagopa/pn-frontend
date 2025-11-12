@@ -11,7 +11,7 @@
     "@mui/material": "^5.14.5",
     "@mui/system": "^5.14.5",
     "@mui/x-date-pickers": "^6.10.1",
-    "@pagopa/mui-italia": "^1.7.2",
+    "@pagopa/mui-italia": "2.0.0-RC.0",
     "@reduxjs/toolkit": "^1.9.5",
     "axios": "^1.6.0",
     "date-fns": "^2.30.0",
