@@ -16,7 +16,6 @@ import { SendAddSercqSendAddEmailStartStrategy } from './Strategies/SendAddSercq
 import { SendAddSercqSendAddSmsStartStrategy } from './Strategies/SendAddSercqSendAddSmsStartStrategy';
 import { SendAddSercqSendEnterFlowStrategy } from './Strategies/SendAddSercqSendEnterFlowStrategy';
 import { SendAddSercqSendUxConversionStrategy } from './Strategies/SendAddSercqSendUxConversionStrategy';
-import { SendAddSercqUxSuccessStrategy } from './Strategies/SendAddSercqUxSuccessStrategy';
 import { SendDisableIOStrategy } from './Strategies/SendDisableIOStrategy';
 import { SendDownloadCertificateOpposable } from './Strategies/SendDownloadCertificateOpposable';
 import { SendDownloadResponseStrategy } from './Strategies/SendDownloadResponse';
@@ -51,7 +50,15 @@ import { UXErrorStrategy } from './Strategies/UXErrorStrategy';
 import { UXPspActionStrategy } from './Strategies/UXPspActionStrategy';
 import { UXScreenViewStrategy } from './Strategies/UXScreenViewStrategy';
 import { UXConfirmStrategy } from './Strategies/UxConfirmStrategy';
-import { UxWithCourtesyContactListStrategy } from './Strategies/UxWithCourtesyContactListStrategy';
+import { UxWithContactDetailsAndOtherContactStrategy } from './Strategies/UxWithContactDetailsAndOtherContactStrategy';
+import { UxWithDDStateContactDetailsAndOtherContactStrategy } from './Strategies/UxWithDDStateContactDetailsAndOtherContactStrategy';
+import { UxWithDDStateContactDetailsCustomContactTypeAndOrgNameStrategy } from './Strategies/UxWithDDStateContactDetailsCustomContactTypeAndOrgNameStrategy';
+import { UxWithDDStateContactDetailsCustomizedContactTypeStrategy } from './Strategies/UxWithDDStateContactDetailsCustomizedContactTypeStrategy';
+import { UxWithDDStateCustomContactTypeOrgNameAndTosValidationStrategy } from './Strategies/UxWithDDStateCustomContactTypeOrgNameAndTosValidationStrategy';
+import { UxWithDDStateSourceAndOtherContactStrategy } from './Strategies/UxWithDDStateSourceAndOtherContactStrategy';
+import { UxWithDDStateTosAndPecValidationStrategy } from './Strategies/UxWithDDStateTosAndPecValidationStrategy';
+import { UxWithDigitalDomicileStateAndContactDetailsStrategy } from './Strategies/UxWithDigitalDomicileStateAndContactDetailsStrategy';
+import { UxWithDigitalDomicileStateStrategy } from './Strategies/UxWithDigitalDomicileStateStrategy';
 
 const uxActionStrategy = [
   PFEventsType.SEND_DOWNLOAD_ATTACHMENT,
@@ -64,15 +71,12 @@ const uxActionStrategy = [
   PFEventsType.SEND_MANDATE_REJECTED,
   PFEventsType.SEND_MANDATE_ACCEPTED,
   PFEventsType.SEND_ACTIVE_IO_START,
-  PFEventsType.SEND_DEACTIVE_IO_START,
   PFEventsType.SEND_ACTIVE_IO_UX_CONVERSION,
-  PFEventsType.SEND_DEACTIVE_IO_UX_CONVERSION,
   PFEventsType.SEND_CANCELLED_NOTIFICATION_REFOUND_INFO,
   PFEventsType.SEND_MULTIPAYMENT_MORE_INFO,
   PFEventsType.SEND_PAYMENT_LIST_CHANGE_PAGE,
   PFEventsType.SEND_F24_DOWNLOAD,
   PFEventsType.SEND_DOWNLOAD_PAYMENT_NOTICE,
-  PFEventsType.SEND_ADD_CUSTOMIZED_CONTACT,
   PFEventsType.SEND_ADD_SERCQ_SEND_CANCEL,
   PFEventsType.SEND_ADD_SERCQ_SEND_PEC_BACK,
   PFEventsType.SEND_ADD_SERCQ_SEND_PEC_TOS_ACCEPTED,
@@ -108,6 +112,33 @@ const uxActionStrategy = [
   PFEventsType.SEND_ADD_SERCQ_SEND_SUMMARY_TOS_ACCEPTED,
   PFEventsType.SEND_ADD_SERCQ_SEND_SUMMARY_TOS_DISMISSED,
   PFEventsType.SEND_ADD_SERCQ_SEND_THANK_YOU_PAGE_CLOSE,
+  PFEventsType.SEND_ACTIVE_IO_CANCEL,
+  PFEventsType.SEND_ADD_CUSTOMIZED_CONTACT_SERCQ_SEND_ADD_EMAIL_BACK,
+  PFEventsType.SEND_ADD_CUSTOMIZED_CONTACT_SERCQ_SEND_ADD_EMAIL_START,
+  PFEventsType.SEND_ADD_CUSTOMIZED_CONTACT_SERCQ_SEND_ADD_EMAIL_UX_CONVERSION,
+  PFEventsType.SEND_ADD_CUSTOMIZED_CONTACT_SERCQ_SEND_CHANGE_EMAIL_BACK,
+  PFEventsType.SEND_ADD_CUSTOMIZED_CONTACT_SERCQ_SEND_CHANGE_EMAIL_CANCEL,
+  PFEventsType.SEND_ADD_CUSTOMIZED_CONTACT_SERCQ_SEND_CHANGE_EMAIL_CONTINUE,
+  PFEventsType.SEND_ADD_CUSTOMIZED_CONTACT_SERCQ_SEND_CHANGE_EMAIL_START,
+  PFEventsType.SEND_ADD_CUSTOMIZED_CONTACT_SERCQ_SEND_CHANGE_EMAIL_UX_CONVERSION,
+  PFEventsType.SEND_ADD_CUSTOMIZED_CONTACT_THANK_YOU_PAGE_CLOSE,
+  PFEventsType.SEND_ADD_CUSTOMIZED_CONTACT_TOS_ACCEPTED,
+  PFEventsType.SEND_ADD_CUSTOMIZED_CONTACT_TOS_DISMISSEDD,
+  PFEventsType.SEND_ADD_EMAIL_BACK,
+  PFEventsType.SEND_ADD_SMS_BACK,
+  PFEventsType.SEND_CHANGE_EMAIL_BACK,
+  PFEventsType.SEND_CHANGE_EMAIL_CANCEL,
+  PFEventsType.SEND_CHANGE_EMAIL_CONTINUE,
+  PFEventsType.SEND_CHANGE_EMAIL_START,
+  PFEventsType.SEND_CHANGE_EMAIL_UX_CONVERSION,
+  PFEventsType.SEND_CHANGE_SMS_BACK,
+  PFEventsType.SEND_CHANGE_SMS_CANCEL,
+  PFEventsType.SEND_CHANGE_SMS_CONTINUE,
+  PFEventsType.SEND_CHANGE_SMS_START,
+  PFEventsType.SEND_CHANGE_SMS_UX_CONVERSION,
+  PFEventsType.SEND_PEC_CANCEL_VALIDATION,
+  PFEventsType.SEND_PEC_CANCEL_VALIDATION_CANCEL,
+  PFEventsType.SEND_PEC_CANCEL_VALIDATION_CONFIRM,
 ] as const;
 
 const uxPspActionStrategy = [PFEventsType.SEND_START_PAYMENT] as const;
@@ -125,11 +156,6 @@ const sendAddCourtesyContactUXSuccessStrategy = [
   PFEventsType.SEND_ADD_SMS_UX_SUCCESS,
 ] as const;
 
-const sendAddSercqUxSuccessStrategy = [
-  PFEventsType.SEND_ADD_SERCQ_SEND_PEC_UX_SUCCESS,
-  PFEventsType.SEND_ADD_SERCQ_SEND_UX_SUCCESS,
-] as const;
-
 const sendRemoveContactSuccessStrategy = [
   PFEventsType.SEND_REMOVE_EMAIL_SUCCESS,
   PFEventsType.SEND_REMOVE_SMS_SUCCESS,
@@ -145,15 +171,21 @@ const sendAddContactScreenViewStrategy = [
 const uxScreenViewStrategy = [
   PFEventsType.SEND_PROFILE,
   PFEventsType.SEND_ADD_MANDATE_DATA_INPUT,
-  PFEventsType.SEND_DEACTIVE_IO_UX_SUCCESS,
   PFEventsType.SEND_ADD_SERCQ_SEND_POP_UP,
-  PFEventsType.SEND_ADD_SERCQ_SEND_PEC_ENTER_PEC,
   PFEventsType.SEND_ADD_SERCQ_SEND_PEC_OTP,
-  PFEventsType.SEND_ADD_SERCQ_SEND_APP_IO,
   PFEventsType.SEND_ADD_SERCQ_SEND_POP_UP_APP_IO,
   PFEventsType.SEND_ADD_SERCQ_SEND_POP_UP_REMOVE_APP_IO,
   PFEventsType.SEND_ADD_SERCQ_SEND_EMAIL_OTP,
   PFEventsType.SEND_ADD_SERCQ_SEND_SMS_OTP,
+  PFEventsType.SEND_ADD_CUSTOMIZED_CONTACT_SERCQ_SEND_ADD_EMAIL_OTP,
+  PFEventsType.SEND_ADD_CUSTOMIZED_CONTACT_SERCQ_SEND_CHANGE_EMAIL_OTP,
+  PFEventsType.SEND_ADD_EMAIL_OTP,
+  PFEventsType.SEND_ADD_SMS_OTP,
+  PFEventsType.SEND_CHANGE_EMAIL_OTP,
+  PFEventsType.SEND_CHANGE_EMAIL_UX_SUCCESS,
+  PFEventsType.SEND_CHANGE_SMS_OTP,
+  PFEventsType.SEND_CHANGE_SMS_UX_SUCCESS,
+  PFEventsType.SEND_PEC_CANCEL_VALIDATION_POP_UP,
 ] as const;
 
 const uxConfirmStrategy = [
@@ -161,6 +193,8 @@ const uxConfirmStrategy = [
   PFEventsType.SEND_ADD_SERCQ_SEND_REMOVE_IO_SUCCESS,
   PFEventsType.SEND_ADD_SERCQ_SEND_ADD_EMAIL_UX_SUCCESS,
   PFEventsType.SEND_ADD_SERCQ_SEND_ADD_SMS_UX_SUCCESS,
+  PFEventsType.SEND_ADD_CUSTOMIZED_CONTACT_SERCQ_SEND_ADD_EMAIL_UX_SUCCESS,
+  PFEventsType.SEND_ADD_CUSTOMIZED_CONTACT_SERCQ_SEND_CHANGE_EMAIL_UX_SUCCESS,
 ] as const;
 
 const uxErrorStrategy = [
@@ -177,23 +211,94 @@ const techStrategy = [
   PFEventsType.SEND_F24_DOWNLOAD_TIMEOUT,
 ] as const;
 
-const uxWithCourtesyContactListStrategy = [
-  PFEventsType.SEND_ADD_SERCQ_SEND_INTRO,
-  PFEventsType.SEND_ADD_SERCQ_SEND_START,
-  PFEventsType.SEND_ADD_SERCQ_SEND_PEC_START,
-  PFEventsType.SEND_ADD_SERCQ_SEND_PEC_THANK_YOU_PAGE,
-  PFEventsType.SEND_ADD_SERCQ_SEND_EMAIL_SMS,
-  PFEventsType.SEND_ADD_SERCQ_SEND_EMAIL_SMS_CONTINUE,
-  PFEventsType.SEND_ADD_SERCQ_SEND_SUMMARY,
-  PFEventsType.SEND_ADD_SERCQ_SEND_THANK_YOU_PAGE,
-] as const;
-
 const koErrorStrategy = [
   PFEventsType.SEND_ADD_SERCQ_SEND_PEC_ERROR,
   PFEventsType.SEND_ADD_SERCQ_SEND_EMAIL_ERROR,
   PFEventsType.SEND_ADD_SERCQ_SEND_SMS_ERROR,
   PFEventsType.SEND_ADD_SERCQ_SEND_PEC_TOS_MANDATORY,
   PFEventsType.SEND_ADD_SERCQ_SEND_TOS_MANDATORY,
+  PFEventsType.SEND_ADD_CUSTOMIZED_CONTACT_SELECTION_MISSING,
+  PFEventsType.SEND_ADD_CUSTOMIZED_CONTACT_TOS_MANDATORY,
+] as const;
+
+const uxWithDigitalDomicileStateStrategy = [
+  PFEventsType.SEND_ADD_SERCQ_SEND_APP_IO,
+  PFEventsType.SEND_ADD_SERCQ_SEND_PEC_ENTER_PEC,
+  PFEventsType.SEND_DEACTIVE_IO_CANCEL,
+  PFEventsType.SEND_DEACTIVE_IO_POP_UP,
+  PFEventsType.SEND_DEACTIVE_IO_START,
+  PFEventsType.SEND_DEACTIVE_IO_UX_CONVERSION,
+  PFEventsType.SEND_DEACTIVE_IO_UX_SUCCESS,
+  PFEventsType.SEND_DIGITAL_DOMICILE_MANAGEMENT,
+  PFEventsType.SEND_MANAGE_DIGITAL_DOMICILE,
+  PFEventsType.SEND_REMOVE_EMAIL_AND_SERCQ_CANCEL,
+  PFEventsType.SEND_REMOVE_EMAIL_AND_SERCQ_POP_UP,
+  PFEventsType.SEND_REMOVE_EMAIL_AND_SERCQ_POP_UP_CONTINUE,
+  PFEventsType.SEND_REMOVE_EMAIL_AND_SERCQ_UX_SUCCESS,
+  PFEventsType.SEND_REMOVE_EMAIL_POP_UP,
+  PFEventsType.SEND_REMOVE_EMAIL_POP_UP_CANCEL,
+  PFEventsType.SEND_REMOVE_EMAIL_POP_UP_CONTINUE,
+  PFEventsType.SEND_REMOVE_EMAIL_START,
+  PFEventsType.SEND_REMOVE_EMAIL_UX_SUCCESS,
+  PFEventsType.SEND_REMOVE_SMS_POP_UP,
+  PFEventsType.SEND_REMOVE_SMS_POP_UP_CANCEL,
+  PFEventsType.SEND_REMOVE_SMS_POP_UP_CONTINUE,
+  PFEventsType.SEND_REMOVE_SMS_POP_UP_UX_SUCCESS,
+  PFEventsType.SEND_REMOVE_SMS_START,
+] as const;
+
+const uxWithDigitalDomicileStateAndContactDetailsStrategy = [
+  PFEventsType.SEND_ADD_CUSTOMIZED_CONTACT,
+  PFEventsType.SEND_ADD_SERCQ_SEND_EMAIL_SMS,
+  PFEventsType.SEND_ADD_SERCQ_SEND_EMAIL_SMS_CONTINUE,
+  PFEventsType.SEND_ADD_SERCQ_SEND_INTRO,
+  PFEventsType.SEND_ADD_SERCQ_SEND_PEC_START,
+  PFEventsType.SEND_ADD_SERCQ_SEND_PEC_THANK_YOU_PAGE,
+  PFEventsType.SEND_ADD_SERCQ_SEND_START,
+  PFEventsType.SEND_ADD_SERCQ_SEND_SUMMARY,
+  PFEventsType.SEND_ADD_SERCQ_SEND_THANK_YOU_PAGE,
+  PFEventsType.SEND_CUSTOMIZE_CONTACT,
+] as const;
+
+const uxWithContactDetailsAndOtherContactStrategy = [
+  PFEventsType.SEND_REMOVE_DIGITAL_DOMICILE_PEC_POP_UP,
+  PFEventsType.SEND_REMOVE_DIGITAL_DOMICILE_PEC_POP_UP_CANCEL,
+  PFEventsType.SEND_REMOVE_DIGITAL_DOMICILE_PEC_POP_UP_CONTINUE,
+  PFEventsType.SEND_REMOVE_DIGITAL_DOMICILE_PEC_START,
+  PFEventsType.SEND_REMOVE_DIGITAL_DOMICILE_PEC_UX_SUCCESS,
+  PFEventsType.SEND_REMOVE_SERCQ_SEND_POP_UP,
+  PFEventsType.SEND_REMOVE_SERCQ_SEND_POP_UP_CANCEL,
+  PFEventsType.SEND_REMOVE_SERCQ_SEND_POP_UP_CONTINUE,
+  PFEventsType.SEND_REMOVE_SERCQ_SEND_START,
+  PFEventsType.SEND_REMOVE_SERCQ_SEND_UX_SUCCESS,
+] as const;
+
+const uxWithDDStateSourceAndOtherContactStrategy = [
+  PFEventsType.SEND_ADD_SERCQ_SEND_ENTER_FLOW,
+] as const;
+
+const uxWithDDStateTosAndPecValidationStrategy = [
+  PFEventsType.SEND_ADD_SERCQ_SEND_PEC_START_ACTIVATION,
+] as const;
+
+const uxWithDDStateContactDetailsAndOtherContactStrategy = [
+  PFEventsType.SEND_ADD_SERCQ_SEND_PEC_UX_SUCCESS,
+  PFEventsType.SEND_ADD_SERCQ_SEND_UX_SUCCESS,
+] as const;
+
+const uxWithDDStateContactDetailsCustomizedContactTypeStrategy = [
+  PFEventsType.SEND_CUSTOMIZED_CONTACT_SERCQ_SEND_EMAIL_POP_UP,
+  PFEventsType.SEND_CUSTOMIZED_CONTACT_SERCQ_SEND_EMAIL_POP_UP_CONTINUE,
+] as const;
+
+const uxWithDDStateContactDetailsCustomContactTypeAndOrgNameStrategy = [
+  PFEventsType.SEND_ADD_CUSTOMIZED_CONTACT_START,
+  PFEventsType.SEND_ADD_CUSTOMIZED_CONTACT_THANK_YOU_PAGE,
+  PFEventsType.SEND_ADD_CUSTOMIZED_CONTACT_UX_SUCCESS,
+] as const;
+
+const uxWithDDStateCustomContactTypeOrgNameAndTosValidationStrategy = [
+  PFEventsType.SEND_ADD_CUSTOMIZED_CONTACT_UX_CONVERSION,
 ] as const;
 
 type ArrayToTuple<T extends ReadonlyArray<PFEventsType>> = keyof {
@@ -212,9 +317,9 @@ const eventStrategy: Record<
     | ArrayToTuple<typeof uxConfirmStrategy>
     | ArrayToTuple<typeof uxErrorStrategy>
     | ArrayToTuple<typeof techStrategy>
-    | ArrayToTuple<typeof uxWithCourtesyContactListStrategy>
     | ArrayToTuple<typeof koErrorStrategy>
-    | ArrayToTuple<typeof sendAddSercqUxSuccessStrategy>
+    | ArrayToTuple<typeof uxWithDDStateContactDetailsAndOtherContactStrategy>
+    | ArrayToTuple<typeof uxWithDigitalDomicileStateStrategy>
   >,
   EventStrategy
 > = {
@@ -268,6 +373,7 @@ const isInEventStrategyMap = (value: PFEventsType): value is keyof typeof eventS
 };
 
 class PFEventStrategyFactory extends EventStrategyFactory<PFEventsType> {
+  // eslint-disable-next-line sonarjs/cognitive-complexity, complexity
   getStrategy(eventType: PFEventsType): EventStrategy | null {
     if (uxActionStrategy.findIndex((el) => el === eventType) > -1) {
       return new UXActionStrategy();
@@ -313,16 +419,59 @@ class PFEventStrategyFactory extends EventStrategyFactory<PFEventsType> {
       return new TechStrategy();
     }
 
-    if (uxWithCourtesyContactListStrategy.findIndex((el) => el === eventType) > -1) {
-      return new UxWithCourtesyContactListStrategy();
-    }
-
     if (koErrorStrategy.findIndex((el) => el === eventType) > -1) {
       return new KoErrorStrategy();
     }
 
-    if (sendAddSercqUxSuccessStrategy.findIndex((el) => el === eventType) > -1) {
-      return new SendAddSercqUxSuccessStrategy();
+    if (uxWithDigitalDomicileStateStrategy.findIndex((el) => el === eventType) > -1) {
+      return new UxWithDigitalDomicileStateStrategy();
+    }
+
+    if (
+      uxWithDigitalDomicileStateAndContactDetailsStrategy.findIndex((el) => el === eventType) > -1
+    ) {
+      return new UxWithDigitalDomicileStateAndContactDetailsStrategy();
+    }
+
+    if (uxWithContactDetailsAndOtherContactStrategy.findIndex((el) => el === eventType) > -1) {
+      return new UxWithContactDetailsAndOtherContactStrategy();
+    }
+
+    if (
+      uxWithDDStateContactDetailsCustomizedContactTypeStrategy.findIndex((el) => el === eventType) >
+      -1
+    ) {
+      return new UxWithDDStateContactDetailsCustomizedContactTypeStrategy();
+    }
+
+    if (uxWithDDStateSourceAndOtherContactStrategy.findIndex((el) => el === eventType) > -1) {
+      return new UxWithDDStateSourceAndOtherContactStrategy();
+    }
+
+    if (uxWithDDStateTosAndPecValidationStrategy.findIndex((el) => el === eventType) > -1) {
+      return new UxWithDDStateTosAndPecValidationStrategy();
+    }
+
+    if (
+      uxWithDDStateContactDetailsAndOtherContactStrategy.findIndex((el) => el === eventType) > -1
+    ) {
+      return new UxWithDDStateContactDetailsAndOtherContactStrategy();
+    }
+
+    if (
+      uxWithDDStateContactDetailsCustomContactTypeAndOrgNameStrategy.findIndex(
+        (el) => el === eventType
+      ) > -1
+    ) {
+      return new UxWithDDStateContactDetailsCustomContactTypeAndOrgNameStrategy();
+    }
+
+    if (
+      uxWithDDStateCustomContactTypeOrgNameAndTosValidationStrategy.findIndex(
+        (el) => el === eventType
+      ) > -1
+    ) {
+      return new UxWithDDStateCustomContactTypeOrgNameAndTosValidationStrategy();
     }
 
     if (isInEventStrategyMap(eventType)) {
