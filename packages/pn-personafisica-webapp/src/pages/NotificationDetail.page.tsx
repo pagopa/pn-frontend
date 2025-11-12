@@ -1,3 +1,6 @@
+/* eslint-disable sonarjs/cognitive-complexity */
+
+/* eslint-disable complexity */
 import _ from 'lodash';
 import { Fragment, ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -8,6 +11,8 @@ import {
   AccessDenied,
   ApiError,
   ApiErrorWrapper,
+  AppResponse,
+  AppResponsePublisher,
   AppRouteParams,
   EventPaymentRecipientType,
   GetDowntimeHistoryParams,
@@ -39,7 +44,6 @@ import {
 
 import DomicileBanner from '../components/DomicileBanner/DomicileBanner';
 import LoadingPageWrapper from '../components/LoadingPageWrapper/LoadingPageWrapper';
-import useFetchNotificationDetail from '../hooks/useFetchNotificationDetail';
 import { NotificationDetailRouteState } from '../models/NotificationDetail';
 import { PFEventsType } from '../models/PFEventsType';
 import { ContactSource } from '../models/contacts';
@@ -49,15 +53,18 @@ import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import {
   NOTIFICATION_ACTIONS,
   getDowntimeHistory,
+  getReceivedNotification,
   getReceivedNotificationDocument,
   getReceivedNotificationPayment,
   getReceivedNotificationPaymentInfo,
   getReceivedNotificationPaymentTppUrl,
   getReceivedNotificationPaymentUrl,
 } from '../redux/notification/actions';
+import { resetState } from '../redux/notification/reducers';
 import { exchangeNotificationRetrievalId } from '../redux/sidemenu/actions';
 import { RootState } from '../redux/store';
 import { getConfiguration } from '../services/configuration.service';
+import { ServerResponseErrorCode } from '../utility/AppError/types';
 import PFEventStrategyFactory from '../utility/MixpanelUtils/PFEventStrategyFactory';
 
 const NotificationDetail: React.FC = () => {
@@ -75,11 +82,16 @@ const NotificationDetail: React.FC = () => {
 
   const isMobile = useIsMobile();
   const { hasApiErrors } = useErrors();
+  const [pageReady, setPageReady] = useState(false);
+  const [isUserValid, setIsUserValid] = useState(true);
   const [downtimesReady, setDowntimesReady] = useState(false);
   const { F24_DOWNLOAD_WAIT_TIME, LANDING_SITE_URL, DOWNTIME_EXAMPLE_LINK } = getConfiguration();
   const navigate = useNavigate();
 
   const currentUser = useAppSelector((state: RootState) => state.userState.user);
+  const delegatorsFromStore = useAppSelector(
+    (state: RootState) => state.generalInfoState.delegators
+  );
   const notification = useAppSelector((state: RootState) => state.notificationState.notification);
   const downtimeEvents = useAppSelector(
     (state: RootState) => state.notificationState.downtimeEvents
@@ -90,11 +102,6 @@ const NotificationDetail: React.FC = () => {
 
   const userPayments = useAppSelector((state: RootState) => state.notificationState.paymentsData);
   const paymentTpp = useAppSelector((state: RootState) => state.generalInfoState.paymentTpp);
-
-  const { pageReady, isUserValid, fetchReceivedNotification } = useFetchNotificationDetail(
-    id,
-    mandateId
-  );
 
   const unfilteredDetailTableRows: Array<{
     label: string;
@@ -318,6 +325,29 @@ const NotificationDetail: React.FC = () => {
     [isCancelled, notification.documentsAvailable]
   );
 
+  const fetchReceivedNotification = useCallback(() => {
+    if (id) {
+      dispatch(
+        getReceivedNotification({
+          iun: id,
+          currentUserTaxId: currentUser.fiscal_number,
+          delegatorsFromStore,
+          mandateId,
+        })
+      )
+        .unwrap()
+        .catch((error) => {
+          if (
+            error?.response?.data?.errors?.[0]?.code ===
+            ServerResponseErrorCode.PN_DELIVERY_USER_ID_NOT_RECIPIENT_OR_DELEGATOR
+          ) {
+            setIsUserValid(false);
+          }
+        })
+        .finally(() => setPageReady(true));
+    }
+  }, [id, currentUser.fiscal_number, delegatorsFromStore, mandateId]);
+
   const fetchPaymentsInfo = useCallback(
     (payments: Array<PaymentDetails | NotificationDetailPayment>) => {
       const paymentInfoRequest = payments.reduce((acc: any, payment) => {
@@ -350,6 +380,16 @@ const NotificationDetail: React.FC = () => {
       (history) => history.status === NotificationStatus.VIEWED
     );
 
+  const handleUserInvalidError = useCallback((e: AppResponse) => {
+    const error = e.errors?.[0];
+    return error?.code !== ServerResponseErrorCode.PN_DELIVERY_USER_ID_NOT_RECIPIENT_OR_DELEGATOR;
+  }, []);
+
+  useEffect(() => {
+    fetchReceivedNotification();
+    return () => void dispatch(resetState());
+  }, []);
+
   useEffect(() => {
     if (checkIfUserHasPayments && !(isCancelled.cancelled || isCancelled.cancellationInProgress)) {
       fetchPaymentsInfo(currentRecipient.payments?.slice(0, 5) ?? []);
@@ -369,6 +409,21 @@ const NotificationDetail: React.FC = () => {
     }
     void dispatch(exchangeNotificationRetrievalId(currentUser.source.retrievalId));
   }, [currentUser, checkIfUserHasPayments]);
+
+  // Dismiss toast if error is PN_DELIVERY_USER_ID_NOT_RECIPIENT_OR_DELEGATOR
+  useEffect(() => {
+    AppResponsePublisher.error.subscribe(
+      NOTIFICATION_ACTIONS.GET_RECEIVED_NOTIFICATION,
+      handleUserInvalidError
+    );
+
+    return () => {
+      AppResponsePublisher.error.unsubscribe(
+        NOTIFICATION_ACTIONS.GET_RECEIVED_NOTIFICATION,
+        handleUserInvalidError
+      );
+    };
+  }, [handleUserInvalidError]);
 
   /* function which loads relevant information about donwtimes */
   const fetchDowntimeEvents = useCallback((fromDate: string, toDate: string | undefined) => {
@@ -466,15 +521,16 @@ const NotificationDetail: React.FC = () => {
   }, [downtimesReady, pageReady]);
 
   /**
-   * If the user came from TPP but is not authorized to view the notification,
+   * If the user is not authorized to view the notification (PN_DELIVERY_USER_ID_NOT_RECIPIENT_OR_DELEGATOR),
    * we will show an AccessDenied component. PN-17207
    */
   if (pageReady && !isUserValid) {
+    const i18nKey = paymentTpp ? 'from-tpp' : 'from-qrcode';
     return (
       <AccessDenied
         icon={<IllusQuestion />}
-        message={t('from-tpp.not-found', { ns: 'notifiche' })}
-        subtitle={t('from-tpp.not-found-subtitle', { ns: 'notifiche' })}
+        message={t(`${i18nKey}.not-found`, { ns: 'notifiche' })}
+        subtitle={t(`${i18nKey}.not-found-subtitle`, { ns: 'notifiche' })}
         isLogged={true}
         goToHomePage={() => navigate(routes.NOTIFICHE, { replace: true })}
         goToLogin={() => {}}
