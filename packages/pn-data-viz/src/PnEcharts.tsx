@@ -1,6 +1,6 @@
 /* eslint-disable functional/no-let */
-import { getInstanceByDom, init, registerTheme } from 'echarts';
-import type { EChartOption, SetOptionOpts } from 'echarts';
+import type { EChartsCoreOption, SetOptionOpts } from 'echarts/core';
+import { getInstanceByDom, init, registerTheme } from 'echarts/core';
 import { useEffect, useMemo, useRef } from 'react';
 import type { CSSProperties } from 'react';
 
@@ -10,7 +10,7 @@ import { Box, Checkbox, FormControl, FormControlLabel, Stack, Typography } from 
 import senderDashboard from './theme/senderDashboard';
 
 export interface PnEChartsProps {
-  option: EChartOption;
+  option: EChartsCoreOption;
   style?: CSSProperties;
   settings?: SetOptionOpts;
   loading?: boolean;
@@ -35,6 +35,9 @@ export function PnECharts({
       return;
     }
     const chart = getInstanceByDom(chartRef.current);
+    if (!chart) {
+      return;
+    }
     chart.dispatchAction({
       type: 'legendToggleSelect',
       name,
@@ -82,6 +85,9 @@ export function PnECharts({
       ...option,
     };
     const chart = getInstanceByDom(chartRef.current);
+    if (!chart) {
+      return;
+    }
     chart.setOption(options, settings);
   }, [option, settings, theme]); // Whenever theme changes we need to add option and setting due to it being deleted in cleanup function
 
@@ -98,7 +104,7 @@ export function PnECharts({
   const legendContent = useMemo(
     () =>
       legend?.map((item, index) => {
-        const color = option.color?.[index] ?? '';
+        const color = (Array.isArray(option.color) ? option.color?.[index] : option.color) ?? '';
         const circleSx = {
           color,
           width: 10,

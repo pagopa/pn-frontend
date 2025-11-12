@@ -1,10 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
-import Grid from '@mui/material/Grid';
-import Typography from '@mui/material/Typography';
+import { Box, Button, Grid, Typography } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import {
   Layout,

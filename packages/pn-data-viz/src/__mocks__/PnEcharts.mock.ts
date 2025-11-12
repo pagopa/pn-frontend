@@ -1,6 +1,6 @@
-import { EChartOption } from 'echarts';
+import { EChartsOption } from 'echarts/';
 
-export const option: EChartOption = {
+export const option: EChartsOption = {
   tooltip: {
     trigger: 'axis',
   },
