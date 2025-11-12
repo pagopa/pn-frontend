@@ -32,7 +32,7 @@ describe('TppLanding page', () => {
     Object.defineProperty(window, 'location', { configurable: true, value: original });
   });
 
-  it('renders page with valid params', () => {
+  it('should renders page with valid params', () => {
     vi.spyOn(useRapidAccessParamHook, 'useRapidAccessParam').mockReturnValue([
       AppRouteParams.RETRIEVAL_ID,
       mockRetrievalId,
@@ -54,7 +54,6 @@ describe('TppLanding page', () => {
     expect(description).toBeInTheDocument();
     expect(description).toHaveTextContent(/description/);
 
-    // Check access button
     const accessButton = getByTestId('accessButton');
     expect(accessButton).toBeInTheDocument();
     expect(accessButton).toHaveTextContent(/access-button/);
@@ -67,7 +66,7 @@ describe('TppLanding page', () => {
     expect(faqTitle).toHaveTextContent(/faq.title/);
   });
 
-  it('redirects to login when no param is provided', () => {
+  it('should redirects to login when no param is provided', () => {
     vi.spyOn(useRapidAccessParamHook, 'useRapidAccessParam').mockReturnValue(undefined);
 
     const { queryByTestId } = render(<TppLanding />);
@@ -78,7 +77,7 @@ describe('TppLanding page', () => {
     expect(queryByTestId('faqSection')).not.toBeInTheDocument();
   });
 
-  it('redirects to login when param is invalid', () => {
+  it('should redirects to login when param is invalid', () => {
     vi.spyOn(useRapidAccessParamHook, 'useRapidAccessParam').mockReturnValue([
       AppRouteParams.AAR,
       mockRetrievalId,
@@ -90,7 +89,7 @@ describe('TppLanding page', () => {
     expect(queryByTestId('tppLandingContainer')).not.toBeInTheDocument();
   });
 
-  it('redirects to login when value is missing', () => {
+  it('should redirects to login when value is missing', () => {
     vi.spyOn(useRapidAccessParamHook, 'useRapidAccessParam').mockReturnValue([
       AppRouteParams.RETRIEVAL_ID,
       '',
@@ -102,7 +101,7 @@ describe('TppLanding page', () => {
     expect(queryByTestId('tppLandingContainer')).not.toBeInTheDocument();
   });
 
-  it('handle access button click', () => {
+  it('should handle access button click', () => {
     vi.spyOn(useRapidAccessParamHook, 'useRapidAccessParam').mockReturnValue([
       AppRouteParams.RETRIEVAL_ID,
       mockRetrievalId,
@@ -119,7 +118,7 @@ describe('TppLanding page', () => {
     expect(assignFn).toHaveBeenCalledTimes(1);
   });
 
-  it('displays FAQ questions correctly', async () => {
+  it('should displays FAQ correctly', async () => {
     vi.spyOn(useRapidAccessParamHook, 'useRapidAccessParam').mockReturnValue([
       AppRouteParams.RETRIEVAL_ID,
       mockRetrievalId,
