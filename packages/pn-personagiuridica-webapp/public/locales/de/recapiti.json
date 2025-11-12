@@ -28,7 +28,7 @@
     "pec-validating": "PEC-Validierung läuft",
     "cancel-pec-validation": "Validierung abbrechen",
     "remove-pec-title": "Bestätigen Sie die Deaktivierung der PEC?",
-    "remove-pec-message": "<0>Sie haben keinen rechtsverbindlichen digitalen Kontakt mehr für Mitteilungen der öffentlichen Verwaltung und könnten diese auf Papier erhalten, mit möglichen Kosten für das Unternehmen.</0><1>Sie erhalten jedoch weiterhin Benachrichtigungen über die von Ihnen aktivierten Kanäle.</1>",
+    "remove-pec-message": "<0>Ihr Unternehmen wird keine rechtswirksame digitale Adresse mehr für Mitteilungen der öffentlichen Verwaltung haben und könnte diese in Papierform erhalten, wobei ggf. Kosten anfallen.</0> <1>Das Unternehmen wird die Benachrichtigungen weiterhin über die von ihm aktivierten Kanäle erhalten.</1>",
     "remove-pec-confirm": "PEC deaktivieren",
     "validation-cancel-title": "PEC-Validierung abbrechen",
     "validation-cancel-content": "Wenn Sie bestätigen, brechen Sie die Aktivierung der PEC als Digitaler Wohnsitz auf SEND ab.",

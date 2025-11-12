@@ -40,7 +40,7 @@ const EmailSmsContactWizard: React.FC = () => {
   const { t } = useTranslation('recapiti');
   const dispatch = useAppDispatch();
   const [modalOpen, setModalOpen] = useState<ModalType | null>(null);
-  const { defaultSMSAddress, defaultEMAILAddress, addresses, courtesyAddresses } = useAppSelector(
+  const { defaultSMSAddress, defaultEMAILAddress, addresses } = useAppSelector(
     contactsSelectors.selectAddresses
   );
   const emailContactRef = useRef<{ toggleEdit: () => void; resetForm: () => Promise<void> }>({
@@ -191,7 +191,7 @@ const EmailSmsContactWizard: React.FC = () => {
   useEffect(() => {
     PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SERCQ_SEND_EMAIL_SMS, {
       event_type: EventAction.SCREEN_VIEW,
-      contacts: courtesyAddresses,
+      addresses,
     });
   }, []);
 
@@ -232,7 +232,9 @@ const EmailSmsContactWizard: React.FC = () => {
             width: '100%',
           },
         }}
-        onEditCallback={(editMode: boolean) => handleEditCallback(editMode, ChannelType.EMAIL)}
+        onEditButtonClickCallback={(editMode: boolean) =>
+          handleEditCallback(editMode, ChannelType.EMAIL)
+        }
         beforeValidationCallback={(value: string, errors?: string) =>
           handleTrackValidationEvents(value, ChannelType.EMAIL, errors)
         }
@@ -267,7 +269,9 @@ const EmailSmsContactWizard: React.FC = () => {
               width: '100%',
             },
           }}
-          onEditCallback={(editMode: boolean) => handleEditCallback(editMode, ChannelType.SMS)}
+          onEditButtonClickCallback={(editMode: boolean) =>
+            handleEditCallback(editMode, ChannelType.SMS)
+          }
           beforeValidationCallback={(value: string, errors?: string) =>
             handleTrackValidationEvents(value, ChannelType.SMS, errors)
           }
