@@ -46,8 +46,6 @@ const ApiIntegration: React.FC = () => {
     !isAdminWithoutGroups ||
     virtualKeys.items.length > 0;
 
-  console.log('TMP - Forcing build');
-
   useEffect(() => {
     // Issuer object has two keys: isPresent and issuerStatus.
     // isPresent is a boolean that is true when there is a public key (with any state)

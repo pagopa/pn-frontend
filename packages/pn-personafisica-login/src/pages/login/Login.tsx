@@ -80,8 +80,6 @@ const Login = () => {
     setShowIDPS(false);
   };
 
-  console.log('TMP - Forcing build');
-
   return (
     <>
       {isMobile && IS_SMART_APP_BANNER_ENABLED && <IOSmartAppBanner />}
