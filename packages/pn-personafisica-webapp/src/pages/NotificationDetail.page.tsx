@@ -5,11 +5,13 @@ import { useLocation, useNavigate, useParams } from 'react-router-dom';
 
 import { Alert, AlertTitle, Box, Grid, Paper, Stack, Typography } from '@mui/material';
 import {
+  AccessDenied,
   ApiError,
   ApiErrorWrapper,
   AppRouteParams,
   EventPaymentRecipientType,
   GetDowntimeHistoryParams,
+  IllusQuestion,
   LegalFactId,
   LegalFactType,
   NotificationDetailDocuments,
@@ -37,6 +39,7 @@ import {
 
 import DomicileBanner from '../components/DomicileBanner/DomicileBanner';
 import LoadingPageWrapper from '../components/LoadingPageWrapper/LoadingPageWrapper';
+import useFetchNotificationDetail from '../hooks/useFetchNotificationDetail';
 import { NotificationDetailRouteState } from '../models/NotificationDetail';
 import { PFEventsType } from '../models/PFEventsType';
 import { ContactSource } from '../models/contacts';
@@ -46,14 +49,12 @@ import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import {
   NOTIFICATION_ACTIONS,
   getDowntimeHistory,
-  getReceivedNotification,
   getReceivedNotificationDocument,
   getReceivedNotificationPayment,
   getReceivedNotificationPaymentInfo,
   getReceivedNotificationPaymentTppUrl,
   getReceivedNotificationPaymentUrl,
 } from '../redux/notification/actions';
-import { resetState } from '../redux/notification/reducers';
 import { exchangeNotificationRetrievalId } from '../redux/sidemenu/actions';
 import { RootState } from '../redux/store';
 import { getConfiguration } from '../services/configuration.service';
@@ -74,15 +75,11 @@ const NotificationDetail: React.FC = () => {
 
   const isMobile = useIsMobile();
   const { hasApiErrors } = useErrors();
-  const [pageReady, setPageReady] = useState(false);
   const [downtimesReady, setDowntimesReady] = useState(false);
   const { F24_DOWNLOAD_WAIT_TIME, LANDING_SITE_URL, DOWNTIME_EXAMPLE_LINK } = getConfiguration();
   const navigate = useNavigate();
 
   const currentUser = useAppSelector((state: RootState) => state.userState.user);
-  const delegatorsFromStore = useAppSelector(
-    (state: RootState) => state.generalInfoState.delegators
-  );
   const notification = useAppSelector((state: RootState) => state.notificationState.notification);
   const downtimeEvents = useAppSelector(
     (state: RootState) => state.notificationState.downtimeEvents
@@ -93,6 +90,11 @@ const NotificationDetail: React.FC = () => {
 
   const userPayments = useAppSelector((state: RootState) => state.notificationState.paymentsData);
   const paymentTpp = useAppSelector((state: RootState) => state.generalInfoState.paymentTpp);
+
+  const { pageReady, isUserValid, fetchReceivedNotification } = useFetchNotificationDetail(
+    id,
+    mandateId
+  );
 
   const unfilteredDetailTableRows: Array<{
     label: string;
@@ -316,21 +318,6 @@ const NotificationDetail: React.FC = () => {
     [isCancelled, notification.documentsAvailable]
   );
 
-  const fetchReceivedNotification = useCallback(() => {
-    if (id) {
-      void dispatch(
-        getReceivedNotification({
-          iun: id,
-          currentUserTaxId: currentUser.fiscal_number,
-          delegatorsFromStore,
-          mandateId,
-        })
-      ).then(() => {
-        setPageReady(true);
-      });
-    }
-  }, []);
-
   const fetchPaymentsInfo = useCallback(
     (payments: Array<PaymentDetails | NotificationDetailPayment>) => {
       const paymentInfoRequest = payments.reduce((acc: any, payment) => {
@@ -368,11 +355,6 @@ const NotificationDetail: React.FC = () => {
       fetchPaymentsInfo(currentRecipient.payments?.slice(0, 5) ?? []);
     }
   }, [currentRecipient.payments]);
-
-  useEffect(() => {
-    fetchReceivedNotification();
-    return () => void dispatch(resetState());
-  }, []);
 
   /* if retrievalId is in user token and payment info is not in redux, get payment info PN-13915 */
   useEffect(() => {
@@ -482,6 +464,23 @@ const NotificationDetail: React.FC = () => {
       });
     }
   }, [downtimesReady, pageReady]);
+
+  /**
+   * If the user came from TPP but is not authorized to view the notification,
+   * we will show an AccessDenied component. PN-17207
+   */
+  if (pageReady && !isUserValid) {
+    return (
+      <AccessDenied
+        icon={<IllusQuestion />}
+        message={t('from-tpp.not-found', { ns: 'notifiche' })}
+        subtitle={t('from-tpp.not-found-subtitle', { ns: 'notifiche' })}
+        isLogged={true}
+        goToHomePage={() => navigate(routes.NOTIFICHE, { replace: true })}
+        goToLogin={() => {}}
+      />
+    );
+  }
 
   return (
     <LoadingPageWrapper isInitialized={pageReady}>

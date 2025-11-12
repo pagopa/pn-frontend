@@ -36,6 +36,10 @@
     "not-found": "You cannot read this notification",
     "not-found-subtitle": "It can only be read by the recipient or by their delegate. To read it, ask your recipient to log into SEND and delegate you."
   },
+  "from-tpp": {
+    "not-found": "You cannot read this notification",
+    "not-found-subtitle": "This notification can only be read by the recipient."
+  },
   "detail": {
     "document-not-available": "The document will be available for download in a few minutes. You can try again by reloading the page or clicking on the link of the requested document",
     "table-aria-label": "Notification details",
