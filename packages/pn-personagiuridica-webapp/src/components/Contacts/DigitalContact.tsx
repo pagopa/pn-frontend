@@ -134,8 +134,13 @@ const DigitalContact = forwardRef<{ toggleEdit: () => void }, Props>(
       toggleEdit();
     };
 
+    const closeEditMode = () => {
+      setEditMode(false);
+    };
+
     useImperativeHandle(ref, () => ({
       toggleEdit,
+      closeEditMode,
       resetForm: async () => {
         await formik.setFieldTouched(`${senderId}_${contactType}`, false, false);
         await formik.setFieldValue(

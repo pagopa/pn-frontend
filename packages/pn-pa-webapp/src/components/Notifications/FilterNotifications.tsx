@@ -1,6 +1,7 @@
+import { add, isValid } from 'date-fns';
 import { FormikValues, useFormik } from 'formik';
 import _ from 'lodash';
-import { forwardRef, useEffect, useImperativeHandle, useRef, useState } from 'react';
+import { forwardRef, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 
@@ -15,7 +16,9 @@ import {
   dateIsDefined,
   filtersApplied,
   getNotificationAllowedStatus,
+  getStartOfDay,
   getValidValue,
+  sixMonthsAgo,
   tenYearsAgo,
   today,
   useIsMobile,
@@ -34,7 +37,7 @@ type Props = {
 const localizedNotificationStatus = getNotificationAllowedStatus();
 
 const emptyValues = {
-  startDate: tenYearsAgo,
+  startDate: sixMonthsAgo,
   endDate: today,
   status: '',
   recipientId: '',
@@ -71,19 +74,61 @@ const FilterNotifications = forwardRef(({ showFilters }: Props, ref) => {
   const { t } = useTranslation(['common', 'notifiche']);
   const dialogRef = useRef<{ toggleOpen: () => void }>(null);
 
-  const validationSchema = yup.object({
-    recipientId: yup
-      .string()
-      .matches(dataRegex.pIvaAndFiscalCode, t('filters.errors.fiscal-code', { ns: 'notifiche' })),
-    iunMatch: yup.string().matches(IUN_regex, t('filters.errors.iun', { ns: 'notifiche' })),
-    // the formik validations for dates (which control the enable status of the "filtra" button)
-    // must coincide with the input field validations (which control the color of the frame around each field)
-    startDate: yup.date().min(tenYearsAgo).max(today),
-    endDate: yup
-      .date()
-      .min(dateIsDefined(startDate) ? startDate : tenYearsAgo)
-      .max(today),
-  });
+  const validationSchema = useMemo(() => {
+    const rangeErrorMsg = t('filters.errors.max-six-months', { ns: 'notifiche' });
+
+    const maxSixMonthsTest = (_value: Date | null | undefined, ctx: yup.TestContext) => {
+      const { startDate, endDate } = (ctx.parent ?? {}) as {
+        startDate?: Date | null;
+        endDate?: Date | null;
+      };
+
+      if (!startDate || !endDate) {
+        return true;
+      }
+
+      // verify startDate and endDate are both valid dates before validating range
+      const start = new Date(startDate);
+      const end = new Date(endDate);
+      if (!isValid(start) || !isValid(end)) {
+        return true;
+      }
+
+      const endAtStart = getStartOfDay(new Date(endDate));
+      const minStart = add(endAtStart, { months: -6, days: 1 });
+
+      if (start >= minStart) {
+        return true;
+      }
+      return ctx.createError({ message: rangeErrorMsg });
+    };
+
+    return yup.object({
+      recipientId: yup
+        .string()
+        .matches(dataRegex.pIvaAndFiscalCode, t('filters.errors.fiscal-code', { ns: 'notifiche' })),
+      iunMatch: yup.string().matches(IUN_regex, t('filters.errors.iun', { ns: 'notifiche' })),
+      // the formik validations for dates (which control the enable status of the "filtra" button)
+      // must coincide with the input field validations (which control the color of the frame around each field)
+      // -------- ATTENTION!!! -------------
+      // now we show an helperText when date rage is above six months
+      // this leads that also other error messages (date invalid, end date before start date and so on) are shown
+      // but we don't have custom messages for these other errors, and so yup shows its own error messages
+      // to fix this behaviour, we put an empty string with a space, but it is NOT ACCESSIBLE and we will fix it in the accessibility task
+      startDate: yup
+        .date()
+        .typeError(' ')
+        .test('max-six-months', rangeErrorMsg, maxSixMonthsTest)
+        .min(tenYearsAgo, ' ')
+        .max(today, ' '),
+      endDate: yup
+        .date()
+        .typeError(' ')
+        .test('max-six-months', rangeErrorMsg, maxSixMonthsTest)
+        .min(dateIsDefined(startDate) ? startDate : tenYearsAgo, ' ')
+        .max(today, ' '),
+    });
+  }, [startDate, endDate, t]);
 
   const [prevFilters, setPrevFilters] = useState(filters || emptyValues);
   const filtersCount = filtersApplied(prevFilters, emptyValues);
@@ -114,7 +159,7 @@ const FilterNotifications = forwardRef(({ showFilters }: Props, ref) => {
   };
 
   const setDates = () => {
-    if (!_.isEqual(filters.startDate, tenYearsAgo)) {
+    if (!_.isEqual(filters.startDate, sixMonthsAgo)) {
       setStartDate(formik.values.startDate);
     }
     if (!_.isEqual(filters.endDate, today)) {
@@ -148,7 +193,21 @@ const FilterNotifications = forwardRef(({ showFilters }: Props, ref) => {
     return <></>;
   }
 
-  const isInitialSearch = _.isEqual(formik.values, initialEmptyValues);
+  /**
+   * Build a normalized snapshot of the current form values before comparing with `initialEmptyValues`.
+   * In the UI, an empty date picker (null) means "use the implicit defaults" (last 6 months),
+   * but Formik may still hold fallback dates set by the picker handlers. To avoid a false mismatch,
+   * when a picker is empty we substitute the implicit defaults (sixMonthsAgo/today).
+   * This way, clearing both dates (and leaving other fields empty) is treated as the true initial state
+   * and the "Filter" button is correctly disabled.
+   */
+  const normalizedForInitial = {
+    ...formik.values,
+    startDate: startDate === null ? sixMonthsAgo : formik.values.startDate,
+    endDate: endDate === null ? today : formik.values.endDate,
+  };
+
+  const isInitialSearch = _.isEqual(normalizedForInitial, initialEmptyValues);
 
   return isMobile ? (
     <CustomMobileDialog>

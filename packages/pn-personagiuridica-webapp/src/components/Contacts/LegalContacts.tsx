@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useTranslation } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
 import ConstructionIcon from '@mui/icons-material/Construction';
@@ -224,18 +224,39 @@ const LegalContacts = () => {
             ns: 'recapiti',
           }
         )}
-        removeModalBody={t(
-          `legal-contacts.${
-            showSpecialContactsSection ? 'block-remove-digital-domicile' : removeDialogLabel
-          }-message`,
-          {
-            ns: 'recapiti',
-            value: defaultPECAddress?.value,
-          }
-        )}
+        removeModalBody={
+          showSpecialContactsSection ? (
+            t('legal-contacts.block-remove-digital-domicile-message', { ns: 'recapiti' })
+          ) : (
+            <Trans
+              i18nKey={`legal-contacts.${removeDialogLabel}-message`}
+              ns={'recapiti'}
+              components={[
+                <Typography variant="body2" fontSize={'18px'} key={'paragraph1'} sx={{ mb: 2 }} />,
+                <Typography variant="body2" fontSize={'18px'} key={'paragraph2'} />,
+              ]}
+            />
+          )
+        }
         handleModalClose={() => setModalOpen(false)}
         confirmHandler={deleteConfirmHandler}
         blockDelete={showSpecialContactsSection}
+        slotsProps={
+          !showSpecialContactsSection
+            ? {
+                primaryButton: {
+                  onClick: () => setModalOpen(false),
+                  label: t('button.annulla'),
+                },
+                secondaryButton: {
+                  onClick: deleteConfirmHandler,
+                  label: t(`legal-contacts.${removeDialogLabel}-confirm`, { ns: 'recapiti' }),
+                  variant: 'outlined',
+                  color: 'error',
+                },
+              }
+            : undefined
+        }
       />
     </PnInfoCard>
   );

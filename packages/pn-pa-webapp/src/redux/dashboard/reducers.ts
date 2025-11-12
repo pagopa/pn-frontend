@@ -2,7 +2,7 @@ import {
   GetNotificationsParams,
   Notification,
   Sort,
-  tenYearsAgo,
+  sixMonthsAgo,
   today,
 } from '@pagopa-pn/pn-commons';
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
@@ -16,7 +16,7 @@ const dashboardSlice = createSlice({
     loading: false,
     notifications: [] as Array<Notification>,
     filters: {
-      startDate: tenYearsAgo,
+      startDate: sixMonthsAgo,
       endDate: today,
       status: '',
       recipientId: '',

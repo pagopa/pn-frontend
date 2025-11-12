@@ -9,6 +9,7 @@ import {
   LoadingPage,
   SessionModal,
   adaptedTokenExchangeError,
+  isJwtExpired,
   useErrors,
   useSessionCheck,
 } from '@pagopa-pn/pn-commons';
@@ -79,6 +80,15 @@ const SessionGuard = () => {
     return true;
   };
 
+  const exit = async () => {
+    if (sessionToken && !isJwtExpired(exp)) {
+      await dispatch(apiLogout(sessionToken));
+    }
+
+    dispatch(resetState());
+    goToLoginPortal();
+  };
+
   useEffect(() => {
     if (spidToken) {
       void performExchangeToken({ spidToken, rapidAccess });
@@ -98,16 +108,6 @@ const SessionGuard = () => {
       void exit();
     }
   }, [hasAnyForbiddenError]);
-
-  const exit = async () => {
-    if (sessionToken) {
-      await dispatch(apiLogout(sessionToken));
-    }
-
-    sessionStorage.clear();
-    dispatch(resetState());
-    goToLoginPortal();
-  };
 
   return (
     <>

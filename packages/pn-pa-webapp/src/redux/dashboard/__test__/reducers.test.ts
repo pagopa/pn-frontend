@@ -4,6 +4,7 @@ import {
   GetNotificationsResponse,
   NotificationStatus,
   formatToTimezoneString,
+  sixMonthsAgo,
   tenYearsAgo,
   today,
 } from '@pagopa-pn/pn-commons';
@@ -42,7 +43,7 @@ describe('Dashboard redux state tests', () => {
       loading: false,
       notifications: [],
       filters: {
-        startDate: tenYearsAgo,
+        startDate: sixMonthsAgo,
         endDate: today,
         status: '',
         recipientId: '',
@@ -65,7 +66,7 @@ describe('Dashboard redux state tests', () => {
     const mockRequest = {
       startDate: tenYearsAgo,
       endDate: today,
-      size: 10
+      size: 10,
     };
     mock.onGet(notificationsPath).reply(200, notificationsDTO);
     const action = await store.dispatch(getSentNotifications(mockRequest));

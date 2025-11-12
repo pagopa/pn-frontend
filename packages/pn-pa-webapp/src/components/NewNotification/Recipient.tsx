@@ -175,7 +175,12 @@ const Recipient: React.FC<Props> = ({
     addressDetails: conditionalPhysicalAddress(
       yup.string().max(1024, tc('too-long-field-error', { maxLength: 1024 }))
     ),
-    houseNumber: conditionalPhysicalAddress(yup.string().required(tc('required-field'))),
+    houseNumber: conditionalPhysicalAddress(
+      yup
+        .string()
+        .required(tc('required-field'))
+        .max(1024, tc('too-long-field-error', { maxLength: 1024 }))
+    ),
     zip: conditionalPhysicalAddress(
       yup
         .string()
@@ -191,7 +196,7 @@ const Recipient: React.FC<Props> = ({
     ),
     municipality: conditionalPhysicalAddress(requiredStringFieldValidation(tc, 256)),
     province: conditionalPhysicalAddress(requiredStringFieldValidation(tc, 256)),
-    foreignState: conditionalPhysicalAddress(requiredStringFieldValidation(tc)),
+    foreignState: conditionalPhysicalAddress(requiredStringFieldValidation(tc, 256)),
     physicalAddressLookup: yup
       .mixed<PhysicalAddressLookup>()
       .oneOf(Object.values(PhysicalAddressLookup)),

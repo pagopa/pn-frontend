@@ -3,8 +3,9 @@ import MockAdapter from 'axios-mock-adapter';
 import { authClient } from '../api/apiClients';
 import { AUTH_TOKEN_EXCHANGE } from '../api/auth/auth.routes';
 import { PNRole, PartyRole, User } from '../models/User';
-import { exchangeToken, logout } from '../redux/auth/actions';
+import { exchangeToken } from '../redux/auth/actions';
 import { store } from '../redux/store';
+import { resetState } from '../redux/auth/reducers';
 
 export const mockLogin = async (body: User | string = userResponse): Promise<any> => {
   const mock = new MockAdapter(authClient);
@@ -15,7 +16,7 @@ export const mockLogin = async (body: User | string = userResponse): Promise<any
   return action;
 };
 
-export const mockLogout = async (): Promise<any> => store.dispatch(logout());
+export const mockLogout = async (): Promise<any> => store.dispatch(resetState());
 
 export const mockAuthentication = () => {
   let mock: MockAdapter;

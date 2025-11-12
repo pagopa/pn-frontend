@@ -6,11 +6,16 @@ import {
   digitalCourtesyAddresses,
   digitalLegalAddresses,
 } from '../../../__mocks__/Contacts.mock';
-import { createMockedStore } from '../../../__test__/test-utils';
+import { createTestStore } from '../../../__test__/test-utils';
 import { apiClient } from '../../../api/apiClients';
 import { AddressType, ChannelType } from '../../../models/contacts';
 import { store } from '../../store';
-import { createOrUpdateAddress, deleteAddress, getDigitalAddresses } from '../actions';
+import {
+  createOrUpdateAddress,
+  deleteAddress,
+  getDigitalAddresses,
+  removeSercqAndEmail,
+} from '../actions';
 import { contactsSelectors, resetPecValidation, resetState } from '../reducers';
 
 const initialState = {
@@ -234,7 +239,7 @@ describe('Contacts redux state tests', () => {
 
   it('Shoud be able to retrieve addresses', () => {
     // init store
-    const testStore = createMockedStore({
+    const testStore = createTestStore({
       contactsState: {
         digitalAddresses,
       },
@@ -262,7 +267,7 @@ describe('Contacts redux state tests', () => {
   });
 
   it('should handle loading state during fetch digital addresses', async () => {
-    const testStore = createMockedStore({
+    const testStore = createTestStore({
       contactsState: initialState,
     });
 
@@ -283,7 +288,7 @@ describe('Contacts redux state tests', () => {
   });
 
   it('should reset loading state if fetch fails', async () => {
-    const testStore = createMockedStore({
+    const testStore = createTestStore({
       contactsState: initialState,
     });
 
@@ -294,5 +299,85 @@ describe('Contacts redux state tests', () => {
     const state = testStore.getState().contactsState;
     expect(state.loading).toBe(false);
     expect(action.type).toBe('getDigitalAddresses/rejected');
+  });
+
+  it('should remove only EMAIL when no SERCQ senderIds are provided', async () => {
+    const emailUrl = '/bff/v1/addresses/COURTESY/default/EMAIL';
+    mock.onDelete(emailUrl).reply(204);
+
+    const action = await store.dispatch(removeSercqAndEmail({ senderIds: [] }));
+
+    expect(action.type).toBe('deleteAddress/removeEmailAndAllSercq/fulfilled');
+    const urls = mock.history.delete.map((r) => r.url);
+    expect(urls).toEqual([emailUrl]);
+  });
+
+  it('should remove default SERCQ first, then EMAIL', async () => {
+    const sercqDefaultUrl = '/bff/v1/addresses/LEGAL/default/SERCQ_SEND';
+    const emailUrl = '/bff/v1/addresses/COURTESY/default/EMAIL';
+    mock.onDelete(sercqDefaultUrl).reply(204);
+    mock.onDelete(emailUrl).reply(204);
+
+    const action = await store.dispatch(removeSercqAndEmail({ senderIds: ['default'] }));
+
+    expect(action.type).toBe('deleteAddress/removeEmailAndAllSercq/fulfilled');
+    const urls = mock.history.delete.map((r) => r.url);
+    expect(urls).toContain(sercqDefaultUrl);
+    expect(urls).toContain(emailUrl);
+    // Email deletion must happen after SERCQ deletions
+    expect(urls.indexOf(emailUrl)).toBeGreaterThan(urls.indexOf(sercqDefaultUrl));
+  });
+
+  it('should remove special SERCQ, then default SERCQ, then EMAIL (in order)', async () => {
+    const sercqDefaultUrl = '/bff/v1/addresses/LEGAL/default/SERCQ_SEND';
+    const sercqTribUrl = '/bff/v1/addresses/LEGAL/tribunale-milano/SERCQ_SEND';
+    const emailUrl = '/bff/v1/addresses/COURTESY/default/EMAIL';
+
+    mock.onDelete(sercqDefaultUrl).reply(204);
+    mock.onDelete(sercqTribUrl).reply(204);
+    mock.onDelete(emailUrl).reply(204);
+
+    const action = await store.dispatch(
+      removeSercqAndEmail({ senderIds: ['default', 'tribunale-milano'] })
+    );
+
+    expect(action.type).toBe('deleteAddress/removeEmailAndAllSercq/fulfilled');
+
+    const urls = mock.history.delete.map((r) => r.url);
+    expect(urls).toContain(sercqDefaultUrl);
+    expect(urls).toContain(sercqTribUrl);
+    expect(urls).toContain(emailUrl);
+
+    const tribIdx = urls.indexOf(sercqTribUrl);
+    const defIdx = urls.indexOf(sercqDefaultUrl);
+    const emailIdx = urls.indexOf(emailUrl);
+
+    // special SERCQ deletion is called before default one
+    expect(defIdx).toBeGreaterThan(tribIdx);
+
+    // email deletion is called at the end
+    expect(emailIdx).toBeGreaterThan(defIdx);
+    expect(emailIdx).toBeGreaterThan(tribIdx);
+  });
+
+  it('should abort EMAIL deletion if any SERCQ deletion fails', async () => {
+    const sercqDefaultUrl = '/bff/v1/addresses/LEGAL/default/SERCQ_SEND';
+    const sercqTribUrl = '/bff/v1/addresses/LEGAL/tribunale-milano/SERCQ_SEND';
+    const emailUrl = '/bff/v1/addresses/COURTESY/default/EMAIL';
+
+    // One SERCQ fails -> chain must reject and not call EMAIL
+    mock.onDelete(sercqDefaultUrl).reply(500);
+    mock.onDelete(sercqTribUrl).reply(204);
+    mock.onDelete(emailUrl).reply(204); // should NOT be hit
+
+    const action = await store.dispatch(
+      removeSercqAndEmail({ senderIds: ['default', 'tribunale-milano'] })
+    );
+
+    expect(action.type).toBe('deleteAddress/removeEmailAndAllSercq/rejected');
+    const urls = mock.history.delete.map((r) => r.url);
+    expect(urls).toContain(sercqDefaultUrl);
+    expect(urls).toContain(sercqTribUrl);
+    expect(urls).not.toContain(emailUrl);
   });
 });

@@ -26,15 +26,13 @@ const DigitalContactActivation: React.FC<Props> = ({ isTransferring = false, onG
   const { t } = useTranslation(['recapiti', 'common']);
   const navigate = useNavigate();
   const { IS_DOD_ENABLED } = getConfiguration();
-  const { defaultEMAILAddress, defaultSMSAddress, defaultSERCQ_SENDAddress } = useAppSelector(
+  const { defaultEMAILAddress, defaultSERCQ_SENDAddress } = useAppSelector(
     contactsSelectors.selectAddresses
   );
 
   const [activeStep, setActiveStep] = useState(0);
   const [showConfirmationModal, setShowConfirmationModal] = useState(false);
   const [showPecWizard, setShowPecWizard] = useState(!!defaultSERCQ_SENDAddress || !IS_DOD_ENABLED);
-
-  const hasEmailOrSms = !!(defaultEMAILAddress || defaultSMSAddress);
 
   const isEmailSmsStep = activeStep === 1;
 
@@ -44,7 +42,7 @@ const DigitalContactActivation: React.FC<Props> = ({ isTransferring = false, onG
   const feedbackContentLabel = 'legal-contacts.sercq-send-wizard.feedback.content-sercq_send';
 
   const handleConfirmEmailSmsStep = () => {
-    if (hasEmailOrSms) {
+    if (defaultEMAILAddress) {
       goToNextStep();
     } else {
       setShowConfirmationModal(true);
@@ -163,7 +161,7 @@ const DigitalContactActivation: React.FC<Props> = ({ isTransferring = false, onG
         >
           <Trans
             ns="recapiti"
-            i18nKey={`courtesy-contacts.confirmation-modal-content`}
+            i18nKey={`courtesy-contacts.confirmation-modal-email-content`}
             components={[
               <DialogContentText key="paragraph1" color="text.primary" />,
               <DialogContentText key="paragraph2" color="text.primary" mt={2} />,

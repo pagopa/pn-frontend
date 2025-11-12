@@ -12,7 +12,7 @@ import {
   Typography,
   TypographyProps,
 } from '@mui/material';
-import { PnInfoCard, appStateActions } from '@pagopa-pn/pn-commons';
+import { EventAction, PnInfoCard, appStateActions } from '@pagopa-pn/pn-commons';
 import { ButtonNaked } from '@pagopa/mui-italia';
 
 import { PFEventsType } from '../../models/PFEventsType';
@@ -61,17 +61,17 @@ interface SmsElemProps {
   slotsProps?: SmsSlotsProps;
   beforeValidationCallback?: (value: string, errors?: string) => void;
   onCancelInsert?: () => void;
-  fromSercqSend?: boolean;
+  inSERCQWizardContext?: boolean;
 }
 
-type SmsItemProps = Omit<SmsElemProps, 'onCancelInsert' | 'fromSercqSend'>;
+type SmsItemProps = Omit<SmsElemProps, 'onCancelInsert' | 'inSERCQWizardContext'>;
 
 const SmsContactElem: React.FC<SmsElemProps> = ({
   onCancelInsert,
   slotsProps,
   slots,
   beforeValidationCallback,
-  fromSercqSend = false,
+  inSERCQWizardContext = false,
 }) => {
   const { t } = useTranslation(['common', 'recapiti']);
   const { defaultSERCQ_SENDAddress, defaultPECAddress, defaultSMSAddress, addresses } =
@@ -94,7 +94,7 @@ const SmsContactElem: React.FC<SmsElemProps> = ({
   const currentValue = defaultSMSAddress?.value ?? '';
 
   const handleSubmit = (value: string) => {
-    if (!fromSercqSend) {
+    if (!inSERCQWizardContext && !defaultSMSAddress) {
       const source = externalEvent?.source ?? ContactSource.RECAPITI;
       PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SMS_START, {
         senderId: 'default',
@@ -110,10 +110,7 @@ const SmsContactElem: React.FC<SmsElemProps> = ({
       setModalOpen(ModalType.EXISTING);
       return;
     }
-    if (!isDigitalDomicileActive) {
-      if (fromSercqSend) {
-        PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SERCQ_SEND_POP_UP_SMS);
-      }
+    if (!isDigitalDomicileActive && !inSERCQWizardContext) {
       setModalOpen(ModalType.INFORMATIVE);
       return;
     }
@@ -122,8 +119,10 @@ const SmsContactElem: React.FC<SmsElemProps> = ({
 
   const handleCodeVerification = (verificationCode?: string) => {
     if (verificationCode) {
-      if (fromSercqSend) {
+      if (inSERCQWizardContext) {
         PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SERCQ_SEND_ADD_SMS_UX_CONVERSION);
+      } else if (defaultSMSAddress) {
+        PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_CHANGE_SMS_UX_CONVERSION);
       } else {
         PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SMS_UX_CONVERSION, 'default');
       }
@@ -144,19 +143,26 @@ const SmsContactElem: React.FC<SmsElemProps> = ({
         // open code modal
         if (!res) {
           // aprire la code modal
-          if (fromSercqSend) {
+          if (inSERCQWizardContext) {
             PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SERCQ_SEND_SMS_OTP);
+          } else if (defaultSMSAddress) {
+            PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_CHANGE_SMS_OTP);
+          } else {
+            PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SMS_OTP);
           }
+
           setModalOpen(ModalType.CODE);
           return;
         }
 
-        if (fromSercqSend) {
+        if (inSERCQWizardContext) {
           PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SERCQ_SEND_ADD_SMS_UX_SUCCESS);
+        } else if (defaultSMSAddress) {
+          PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_CHANGE_SMS_UX_SUCCESS);
         } else {
           PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SMS_UX_SUCCESS, {
             senderId: 'default',
-            fromSercqSend,
+            fromSercqSend: inSERCQWizardContext,
           });
         }
 
@@ -179,9 +185,14 @@ const SmsContactElem: React.FC<SmsElemProps> = ({
   };
 
   const handleCancelCode = async () => {
-    if (fromSercqSend) {
+    if (inSERCQWizardContext) {
       PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SERCQ_SEND_ADD_SMS_BACK);
+    } else if (defaultSMSAddress) {
+      PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_CHANGE_SMS_BACK);
+    } else {
+      PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SMS_BACK);
     }
+
     setModalOpen(null);
     if (currentValue) {
       digitalContactRef.current.toggleEdit();
@@ -217,6 +228,15 @@ const SmsContactElem: React.FC<SmsElemProps> = ({
         slots={slots}
         slotsProps={slotsProps}
         beforeValidationCallback={beforeValidationCallback}
+        onEditButtonClickCallback={() =>
+          PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_CHANGE_SMS_START)
+        }
+        onEditCancelCallback={() =>
+          PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_CHANGE_SMS_CANCEL)
+        }
+        onEditConfirmCallback={() =>
+          PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_CHANGE_SMS_CONTINUE)
+        }
       />
       <ExistingContactDialog
         open={modalOpen === ModalType.EXISTING}
@@ -239,11 +259,9 @@ const SmsContactElem: React.FC<SmsElemProps> = ({
         subtitle={t('courtesy-contacts.info-modal-sms-subtitle', { ns: 'recapiti' })}
         content={t('courtesy-contacts.info-modal-sms-content', { ns: 'recapiti' })}
         onConfirm={() => {
-          PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SERCQ_SEND_POP_UP_SMS_CONTINUE);
           handleCodeVerification();
         }}
         onDiscard={() => {
-          PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SERCQ_SEND_POP_UP_SMS_CANCEL);
           setModalOpen(null);
         }}
       />
@@ -259,14 +277,20 @@ const SmsContactItem: React.FC<SmsItemProps> = ({
   const { t } = useTranslation(['common', 'recapiti']);
   const dispatch = useAppDispatch();
   const location = useLocation();
-  const { defaultSERCQ_SENDAddress, defaultSMSAddress, addresses, specialSMSAddresses } =
-    useAppSelector(contactsSelectors.selectAddresses);
+  const {
+    defaultSERCQ_SENDAddress,
+    defaultPECAddress,
+    defaultSMSAddress,
+    addresses,
+    specialSMSAddresses,
+    legalAddresses,
+  } = useAppSelector(contactsSelectors.selectAddresses);
 
   const [modalOpen, setModalOpen] = useState<ModalType | null>(null);
   const [insertMode, setInsertMode] = useState(false);
 
   const isActive = !!defaultSMSAddress;
-  const fromSercqSend = [DIGITAL_DOMICILE_ACTIVATION, DIGITAL_DOMICILE_MANAGEMENT].includes(
+  const inSERCQWizardContext = [DIGITAL_DOMICILE_ACTIVATION, DIGITAL_DOMICILE_MANAGEMENT].includes(
     location.pathname
   );
   const blockDelete = specialSMSAddresses.length > 0;
@@ -278,7 +302,16 @@ const SmsContactItem: React.FC<SmsItemProps> = ({
 
   const showSpecialContactsSection = specialSMSAddresses.length > 0;
 
+  const hasDigitalDomicile = !!defaultSERCQ_SENDAddress || !!defaultPECAddress;
+
   const deleteConfirmHandler = () => {
+    if (!inSERCQWizardContext) {
+      PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_REMOVE_SMS_POP_UP_CONTINUE, {
+        event_type: EventAction.ACTION,
+        legal_addresses: legalAddresses,
+      });
+    }
+
     setModalOpen(null);
     dispatch(
       deleteAddress({
@@ -290,6 +323,12 @@ const SmsContactItem: React.FC<SmsItemProps> = ({
       .unwrap()
       .then(() => {
         PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_REMOVE_SMS_SUCCESS, 'default');
+        if (!inSERCQWizardContext) {
+          PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_REMOVE_SMS_POP_UP_UX_SUCCESS, {
+            event_type: EventAction.SCREEN_VIEW,
+            legal_addresses: legalAddresses,
+          });
+        }
         dispatch(
           appStateActions.addSuccess({
             title: '',
@@ -314,7 +353,7 @@ const SmsContactItem: React.FC<SmsItemProps> = ({
     if (blockDelete) {
       return t('courtesy-contacts.block-remove-sms-title', { ns: 'recapiti' });
     }
-    if (defaultSERCQ_SENDAddress) {
+    if (hasDigitalDomicile) {
       return t(`courtesy-contacts.remove-sms-title-dod-enabled`, {
         ns: 'recapiti',
       });
@@ -326,10 +365,10 @@ const SmsContactItem: React.FC<SmsItemProps> = ({
     if (blockDelete) {
       return t('courtesy-contacts.block-remove-sms-message', { ns: 'recapiti' });
     }
-    if (defaultSERCQ_SENDAddress) {
+    if (hasDigitalDomicile) {
       return (
         <Trans
-          i18nKey={'courtesy-contacts.remove-address-message-dod-enabled'}
+          i18nKey={'courtesy-contacts.remove-sms-message-dod-enabled'}
           ns={'recapiti'}
           components={[
             <Typography variant="body2" fontSize={'18px'} key={'paragraph1'} sx={{ mb: 2 }} />,
@@ -345,17 +384,44 @@ const SmsContactItem: React.FC<SmsItemProps> = ({
   };
 
   const handleSetInsertMode = () => {
-    if (fromSercqSend) {
+    if (inSERCQWizardContext) {
       PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SERCQ_SEND_ADD_SMS);
     }
     setInsertMode(true);
   };
 
   const handleCancelInsertMode = () => {
-    if (fromSercqSend) {
+    if (inSERCQWizardContext) {
       PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SERCQ_SEND_ADD_SMS_CANCEL);
     }
     setInsertMode(false);
+  };
+
+  const handleDisableSms = () => {
+    if (!inSERCQWizardContext) {
+      PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_REMOVE_SMS_START, {
+        event_type: EventAction.ACTION,
+        legal_addresses: legalAddresses,
+      });
+
+      PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_REMOVE_SMS_POP_UP, {
+        event_type: EventAction.SCREEN_VIEW,
+        legal_addresses: legalAddresses,
+      });
+    }
+
+    setModalOpen(ModalType.DELETE);
+  };
+
+  const handleCloseDeleteDialog = () => {
+    if (!inSERCQWizardContext) {
+      PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_REMOVE_SMS_POP_UP_CANCEL, {
+        event_type: EventAction.ACTION,
+        legal_addresses: legalAddresses,
+      });
+    }
+
+    setModalOpen(null);
   };
 
   const getActions = () =>
@@ -367,9 +433,7 @@ const SmsContactItem: React.FC<SmsItemProps> = ({
             variant="naked"
             color="error"
             startIcon={<PowerSettingsNewIcon />}
-            onClick={() => {
-              setModalOpen(ModalType.DELETE);
-            }}
+            onClick={handleDisableSms}
             sx={{ p: '10px 16px' }}
           >
             {t('button.disable')}
@@ -420,18 +484,19 @@ const SmsContactItem: React.FC<SmsItemProps> = ({
           showModal={modalOpen === ModalType.DELETE}
           removeModalTitle={getRemoveModalTitle()}
           removeModalBody={getRemoveModalMessage()}
-          handleModalClose={() => setModalOpen(null)}
+          handleModalClose={handleCloseDeleteDialog}
           confirmHandler={deleteConfirmHandler}
           slotsProps={{
             primaryButton: {
-              onClick: defaultSERCQ_SENDAddress ? () => setModalOpen(null) : deleteConfirmHandler,
-              label: defaultSERCQ_SENDAddress ? t('button.annulla') : undefined,
+              onClick: hasDigitalDomicile ? handleCloseDeleteDialog : deleteConfirmHandler,
+              label: hasDigitalDomicile ? t('button.annulla') : undefined,
             },
             secondaryButton: {
-              onClick: defaultSERCQ_SENDAddress ? deleteConfirmHandler : () => setModalOpen(null),
-              label: defaultSERCQ_SENDAddress
+              onClick: hasDigitalDomicile ? deleteConfirmHandler : handleCloseDeleteDialog,
+              label: hasDigitalDomicile
                 ? t('courtesy-contacts.remove-sms', { ns: 'recapiti' })
                 : undefined,
+              ...(hasDigitalDomicile ? { variant: 'outlined', color: 'error' } : {}),
             },
           }}
           blockDelete={blockDelete}
@@ -448,7 +513,7 @@ const SmsContactItem: React.FC<SmsItemProps> = ({
           slots={slots}
           onCancelInsert={handleCancelInsertMode}
           beforeValidationCallback={beforeValidationCallback}
-          fromSercqSend={fromSercqSend}
+          inSERCQWizardContext={inSERCQWizardContext}
         />
       ) : (
         <>

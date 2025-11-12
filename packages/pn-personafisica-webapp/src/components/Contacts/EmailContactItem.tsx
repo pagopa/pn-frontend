@@ -3,7 +3,7 @@ import { Trans, useTranslation } from 'react-i18next';
 
 import PowerSettingsNewIcon from '@mui/icons-material/PowerSettingsNew';
 import { Button, Chip, Divider, Typography } from '@mui/material';
-import { PnInfoCard, appStateActions } from '@pagopa-pn/pn-commons';
+import { EventAction, PnInfoCard, appStateActions } from '@pagopa-pn/pn-commons';
 
 import { PFEventsType } from '../../models/PFEventsType';
 import {
@@ -13,7 +13,7 @@ import {
   IOAllowedValues,
   SaveDigitalAddressParams,
 } from '../../models/contacts';
-import { createOrUpdateAddress, deleteAddress } from '../../redux/contact/actions';
+import { createOrUpdateAddress, removeSercqAndEmail } from '../../redux/contact/actions';
 import { contactsSelectors } from '../../redux/contact/reducers';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import PFEventStrategyFactory from '../../utility/MixpanelUtils/PFEventStrategyFactory';
@@ -29,6 +29,7 @@ import SpecialContacts from './SpecialContacts';
 enum ModalType {
   EXISTING = 'existing',
   CODE = 'code',
+  DELETE_PRECONFIRM = 'delete_preconfirm',
   DELETE = 'delete',
   INFORMATIVE = 'informative',
 }
@@ -40,6 +41,7 @@ const EmailContactItem: React.FC = () => {
     defaultPECAddress,
     defaultEMAILAddress,
     defaultSMSAddress,
+    legalAddresses,
     specialAddresses,
     specialEMAILAddresses,
     addresses,
@@ -51,6 +53,9 @@ const EmailContactItem: React.FC = () => {
 
   const isDigitalDomicileActive = defaultPECAddress || defaultSERCQ_SENDAddress;
   const isEmailActive = !!defaultEMAILAddress;
+  const hasAnySERCQAddrEnabled =
+    !!defaultSERCQ_SENDAddress ||
+    specialAddresses.some((addr) => addr.channelType === ChannelType.SERCQ_SEND);
 
   const hasCourtesyAddresses =
     addresses.filter(
@@ -72,11 +77,28 @@ const EmailContactItem: React.FC = () => {
   const currentValue = defaultEMAILAddress?.value ?? '';
   const blockDelete = specialEMAILAddresses.length > 0;
 
-  const handleSubmit = (value: string) => {
-    PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_EMAIL_START, {
-      senderId: 'default',
-      source: ContactSource.RECAPITI,
+  const blockDueToSercqDefaultAndPecSpecials =
+    !!defaultSERCQ_SENDAddress &&
+    addresses.some(
+      (a) =>
+        a.addressType === AddressType.LEGAL &&
+        a.channelType === ChannelType.PEC &&
+        a.senderId !== 'default'
+    );
+
+  const trackRemove = (event: PFEventsType, event_type: EventAction) =>
+    PFEventStrategyFactory.triggerEvent(event, {
+      legal_addresses: legalAddresses,
+      event_type,
     });
+
+  const handleSubmit = (value: string) => {
+    if (!defaultEMAILAddress) {
+      PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_EMAIL_START, {
+        senderId: 'default',
+        source: ContactSource.RECAPITI,
+      });
+    }
     // eslint-disable-next-line functional/immutable-data
     currentAddress.current = { value };
     // first check if contact already exists
@@ -93,7 +115,11 @@ const EmailContactItem: React.FC = () => {
 
   const handleCodeVerification = (verificationCode?: string) => {
     if (verificationCode) {
-      PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_EMAIL_UX_CONVERSION, 'default');
+      if (defaultEMAILAddress) {
+        PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_CHANGE_EMAIL_UX_CONVERSION);
+      } else {
+        PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_EMAIL_UX_CONVERSION, 'default');
+      }
     }
 
     const digitalAddressParams: SaveDigitalAddressParams = {
@@ -110,15 +136,23 @@ const EmailContactItem: React.FC = () => {
         // contact to verify
         // open code modal
         if (!res) {
-          // aprire la code modal
+          if (defaultEMAILAddress) {
+            PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_CHANGE_EMAIL_OTP);
+          } else {
+            PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_EMAIL_OTP);
+          }
           setModalOpen(ModalType.CODE);
           return;
         }
 
-        PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_EMAIL_UX_SUCCESS, {
-          senderId: 'default',
-          fromSercqSend: true,
-        });
+        if (defaultEMAILAddress) {
+          PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_CHANGE_EMAIL_UX_SUCCESS);
+        } else {
+          PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_EMAIL_UX_SUCCESS, {
+            senderId: 'default',
+            fromSercqSend: false,
+          });
+        }
 
         // contact has already been verified
         // show success message
@@ -139,6 +173,11 @@ const EmailContactItem: React.FC = () => {
   };
 
   const handleCancelCode = async () => {
+    if (defaultEMAILAddress) {
+      PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_CHANGE_EMAIL_BACK);
+    } else {
+      PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_EMAIL_BACK);
+    }
     setModalOpen(null);
     if (currentValue) {
       digitalContactRef.current.toggleEdit();
@@ -148,20 +187,32 @@ const EmailContactItem: React.FC = () => {
 
   const deleteConfirmHandler = () => {
     setModalOpen(null);
-    dispatch(
-      deleteAddress({
-        addressType: AddressType.COURTESY,
-        senderId: 'default',
-        channelType: ChannelType.EMAIL,
-      })
-    )
+
+    // Collect all sender IDs with an active SERCQ address
+    // to be removed before deleting the email
+    const sercqSenderIds = addresses
+      .filter((addr) => addr.channelType === ChannelType.SERCQ_SEND)
+      .map((addr) => addr.senderId);
+
+    const removingSercq = sercqSenderIds.length > 0;
+
+    dispatch(removeSercqAndEmail({ senderIds: sercqSenderIds }))
       .unwrap()
       .then(() => {
-        PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_REMOVE_EMAIL_SUCCESS, 'default');
+        if (removingSercq) {
+          trackRemove(PFEventsType.SEND_REMOVE_EMAIL_AND_SERCQ_UX_SUCCESS, EventAction.SCREEN_VIEW);
+        } else {
+          trackRemove(PFEventsType.SEND_REMOVE_EMAIL_UX_SUCCESS, EventAction.SCREEN_VIEW);
+        }
         dispatch(
           appStateActions.addSuccess({
             title: '',
-            message: t(`courtesy-contacts.email-removed-successfully`, { ns: 'recapiti' }),
+            message: t(
+              removingSercq
+                ? 'courtesy-contacts.email-and-sercq-removed-successfully'
+                : 'courtesy-contacts.email-removed-successfully',
+              { ns: 'recapiti' }
+            ),
           })
         );
       })
@@ -179,26 +230,53 @@ const EmailContactItem: React.FC = () => {
   };
 
   const getRemoveModalTitle = () => {
-    if (blockDelete) {
+    if (blockDelete || blockDueToSercqDefaultAndPecSpecials) {
       return t(`courtesy-contacts.block-remove-email-title`, { ns: 'recapiti' });
     }
-    if (defaultSERCQ_SENDAddress) {
-      return t(`courtesy-contacts.remove-email-title-dod-enabled`, {
-        ns: 'recapiti',
-      });
+    if (modalOpen === ModalType.DELETE_PRECONFIRM) {
+      return t(`courtesy-contacts.remove-email-preconfirm-title`, { ns: 'recapiti' });
     }
-    return t(`courtesy-contacts.remove-email`, { ns: 'recapiti' });
+    if (hasAnySERCQAddrEnabled) {
+      return t(`courtesy-contacts.remove-email-and-sercq-title`, { ns: 'recapiti' });
+    }
+    if (defaultPECAddress) {
+      return t(`courtesy-contacts.remove-email-pec-enabled-title`, { ns: 'recapiti' });
+    }
+    return t(`courtesy-contacts.remove-email-no-domicile-title`, { ns: 'recapiti' });
   };
 
   const getRemoveModalMessage = () => {
     if (blockDelete) {
       return t(`courtesy-contacts.block-remove-email-message`, { ns: 'recapiti' });
     }
-    if (defaultSERCQ_SENDAddress) {
+    if (blockDueToSercqDefaultAndPecSpecials) {
+      return t('courtesy-contacts.block-remove-email-sercq-default-pec-special-message', {
+        ns: 'recapiti',
+      });
+    }
+    if (modalOpen === ModalType.DELETE_PRECONFIRM) {
       return (
         <Trans
-          i18nKey={'courtesy-contacts.remove-address-message-dod-enabled'}
-          ns={'recapiti'}
+          i18nKey="courtesy-contacts.remove-email-preconfirm-message"
+          ns="recapiti"
+          components={[<Typography variant="body2" fontSize={'18px'} key={'paragraph1'} />]}
+        />
+      );
+    }
+    if (hasAnySERCQAddrEnabled) {
+      return (
+        <Trans
+          i18nKey="courtesy-contacts.remove-email-and-sercq-message"
+          ns="recapiti"
+          components={[<Typography variant="body2" fontSize={'18px'} key={'paragraph1'} />]}
+        />
+      );
+    }
+    if (defaultPECAddress) {
+      return (
+        <Trans
+          i18nKey="courtesy-contacts.remove-email-pec-enabled-message"
+          ns="recapiti"
           components={[
             <Typography variant="body2" fontSize={'18px'} key={'paragraph1'} sx={{ mb: 2 }} />,
             <Typography variant="body2" fontSize={'18px'} key={'paragraph2'} />,
@@ -206,10 +284,21 @@ const EmailContactItem: React.FC = () => {
         />
       );
     }
-    return t(`courtesy-contacts.remove-email-message`, {
-      value: currentAddress.current.value,
+    // No digital domicile (no PEC and no SERCQ)
+    return t('courtesy-contacts.remove-email-no-domicile-message', {
       ns: 'recapiti',
+      value: currentAddress.current.value,
     });
+  };
+
+  const getSecondaryButtonLabel = () => {
+    if (modalOpen === ModalType.DELETE_PRECONFIRM) {
+      return t('courtesy-contacts.remove-email', { ns: 'recapiti' });
+    } else {
+      return hasAnySERCQAddrEnabled
+        ? t('courtesy-contacts.remove-email-and-sercq', { ns: 'recapiti' })
+        : t('courtesy-contacts.remove-email', { ns: 'recapiti' });
+    }
   };
 
   const getActions = () =>
@@ -222,9 +311,15 @@ const EmailContactItem: React.FC = () => {
             color="error"
             startIcon={<PowerSettingsNewIcon />}
             onClick={() => {
-              setModalOpen(ModalType.DELETE);
+              trackRemove(PFEventsType.SEND_REMOVE_EMAIL_START, EventAction.ACTION);
               // eslint-disable-next-line functional/immutable-data
               currentAddress.current = { value: currentValue };
+              // If any SERCQ is active (and not blocked), open a pre-confirm step first
+              openDeleteModal(
+                !blockDelete && hasAnySERCQAddrEnabled && !blockDueToSercqDefaultAndPecSpecials
+                  ? ModalType.DELETE_PRECONFIRM
+                  : ModalType.DELETE
+              );
             }}
             sx={{ p: '10px 16px' }}
           >
@@ -232,6 +327,47 @@ const EmailContactItem: React.FC = () => {
           </Button>,
         ]
       : undefined;
+
+  const openDeleteModal = (next: ModalType) => {
+    setModalOpen(next);
+    if (next === ModalType.DELETE_PRECONFIRM) {
+      trackRemove(PFEventsType.SEND_REMOVE_EMAIL_POP_UP, EventAction.SCREEN_VIEW);
+    } else if (next === ModalType.DELETE) {
+      if (hasAnySERCQAddrEnabled && !blockDelete && !blockDueToSercqDefaultAndPecSpecials) {
+        trackRemove(PFEventsType.SEND_REMOVE_EMAIL_AND_SERCQ_POP_UP, EventAction.SCREEN_VIEW);
+      } else {
+        trackRemove(PFEventsType.SEND_REMOVE_EMAIL_POP_UP, EventAction.SCREEN_VIEW);
+      }
+    }
+  };
+
+  const handleDeleteCancel = () => {
+    if (modalOpen === ModalType.DELETE_PRECONFIRM) {
+      trackRemove(PFEventsType.SEND_REMOVE_EMAIL_POP_UP_CANCEL, EventAction.ACTION);
+    } else if (modalOpen === ModalType.DELETE) {
+      if (hasAnySERCQAddrEnabled && !blockDelete && !blockDueToSercqDefaultAndPecSpecials) {
+        trackRemove(PFEventsType.SEND_REMOVE_EMAIL_AND_SERCQ_CANCEL, EventAction.ACTION);
+      } else {
+        trackRemove(PFEventsType.SEND_REMOVE_EMAIL_POP_UP_CANCEL, EventAction.ACTION);
+      }
+    }
+    setModalOpen(null);
+  };
+
+  const handlePreconfirmContinue = () => {
+    trackRemove(PFEventsType.SEND_REMOVE_EMAIL_POP_UP_CONTINUE, EventAction.ACTION);
+    openDeleteModal(ModalType.DELETE);
+  };
+
+  const handleDeleteContinueEmailOnly = () => {
+    trackRemove(PFEventsType.SEND_REMOVE_EMAIL_POP_UP_CONTINUE, EventAction.ACTION);
+    deleteConfirmHandler();
+  };
+
+  const handleDeleteContinueEmailAndSercq = () => {
+    trackRemove(PFEventsType.SEND_REMOVE_EMAIL_AND_SERCQ_POP_UP_CONTINUE, EventAction.ACTION);
+    deleteConfirmHandler();
+  };
 
   /*
    * if *some* value (phone number, email address) has been attached to the contact type,
@@ -284,6 +420,15 @@ const EmailContactItem: React.FC = () => {
         }}
         insertButtonLabel={t(`courtesy-contacts.email-add`, { ns: 'recapiti' })}
         onSubmit={handleSubmit}
+        onEditButtonClickCallback={() =>
+          PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_CHANGE_EMAIL_START)
+        }
+        onEditCancelCallback={() =>
+          PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_CHANGE_EMAIL_CANCEL)
+        }
+        onEditConfirmCallback={() =>
+          PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_CHANGE_EMAIL_CONTINUE)
+        }
       />
       {isEmailActive && (
         <Typography variant="body1" fontSize={{ xs: '14px', lg: '16px' }} mt={2}>
@@ -318,24 +463,45 @@ const EmailContactItem: React.FC = () => {
         onError={() => PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_EMAIL_CODE_ERROR)}
       />
       <DeleteDialog
-        showModal={modalOpen === ModalType.DELETE}
+        showModal={modalOpen === ModalType.DELETE || modalOpen === ModalType.DELETE_PRECONFIRM}
         removeModalTitle={getRemoveModalTitle()}
         removeModalBody={getRemoveModalMessage()}
-        handleModalClose={() => setModalOpen(null)}
+        handleModalClose={handleDeleteCancel}
         confirmHandler={deleteConfirmHandler}
-        slotsProps={{
-          primaryButton: {
-            onClick: defaultSERCQ_SENDAddress ? () => setModalOpen(null) : deleteConfirmHandler,
-            label: defaultSERCQ_SENDAddress ? t('button.annulla') : undefined,
-          },
-          secondaryButton: {
-            onClick: defaultSERCQ_SENDAddress ? deleteConfirmHandler : () => setModalOpen(null),
-            label: defaultSERCQ_SENDAddress
-              ? t('courtesy-contacts.remove-email', { ns: 'recapiti' })
-              : undefined,
-          },
-        }}
-        blockDelete={blockDelete}
+        blockDelete={blockDelete || blockDueToSercqDefaultAndPecSpecials}
+        slotsProps={
+          !blockDelete
+            ? (() => {
+                const noDigitalDomicile = !defaultPECAddress && !hasAnySERCQAddrEnabled;
+                if (modalOpen === ModalType.DELETE && noDigitalDomicile) {
+                  return {
+                    primaryButton: {
+                      onClick: handleDeleteContinueEmailOnly,
+                      label: t('button.conferma'),
+                    },
+                    secondaryButton: { onClick: handleDeleteCancel, label: t('button.annulla') },
+                  };
+                }
+                return {
+                  primaryButton: {
+                    onClick: handleDeleteCancel,
+                    label: t('button.annulla'),
+                  },
+                  secondaryButton: {
+                    onClick:
+                      modalOpen === ModalType.DELETE_PRECONFIRM
+                        ? handlePreconfirmContinue
+                        : hasAnySERCQAddrEnabled && !blockDueToSercqDefaultAndPecSpecials
+                        ? handleDeleteContinueEmailAndSercq
+                        : handleDeleteContinueEmailOnly,
+                    label: getSecondaryButtonLabel(),
+                    variant: 'outlined',
+                    color: 'error',
+                  },
+                };
+              })()
+            : undefined
+        }
       />
       <InformativeDialog
         open={modalOpen === ModalType.INFORMATIVE}

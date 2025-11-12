@@ -6,6 +6,7 @@
     "associa": "Zuordnen",
     "capito": "Verstanden",
     "conferma": "Bestätigen",
+    "attiva": "Aktivieren",
     "annulla": "Abbrechen",
     "modifica": "Bearbeiten",
     "salva": "Speichern",
@@ -13,10 +14,18 @@
     "enter": "Zugreifen",
     "exit": "Abmelden",
     "close": "Schließen",
+    "end": "Ende",
     "enable": "Aktivieren",
     "disable": "Deaktivieren",
     "go-to-home": "Zur Startseite",
-    "go-to-login": "Anmelden"
+    "go-to-login": "Anmelden",
+    "manage": "Verwalten",
+    "start": "Starten",
+    "continue": "Weiter",
+    "not-now": "Nicht jetzt",
+    "do-later": "Später erledigen",
+    "add": "Hinzufügen",
+    "understand": "OK, verstanden"
   },
   "menu": {
     "notifiche": "Bescheide",
@@ -25,15 +34,19 @@
     "deleghe": "Vollmachten",
     "profilo": "Deine Daten",
     "contacts": "Anschriften",
+    "integrazione-api": "API-Integration",
     "app-status": "Plattformstatus",
     "users": "Benutzer",
     "groups": "Gruppen"
   },
   "header": {
+    "assistance": "Hilfe",
+    "login": "Anmelden",
     "product": {
       "organization-dashboard": "Dein Unternehmen",
       "notification-platform": "SEND - Servizio Notifiche Digitali"
     },
+    "logout-message": "Bestätigen Sie, dass Sie sich von SEND abmelden möchten?",
     "logout": "Abmelden",
     "pago-pa-link": "Website von PagoPA S.p.A."
   },
@@ -85,9 +98,11 @@
   "access-denied": "Du bist für den Zugriff auf diese Seite nicht berechtigt",
   "not-logged": "Auf SEND zugreifen",
   "not-logged-subtitle": "Melde dich mit SPID oder CIE an, um Bescheide anzuzeigen oder zu verwalten.",
+  "loading": "Wird geladen",
   "not-found": {
-    "title": "404: Die gesuchte Seite existiert nicht",
-    "description": "Du bist versehentlich hier gelandet, benutze die Navigation."
+    "title": "Was Sie gesucht haben, ist nicht hier.",
+    "description": "Die Seite, die Sie aufzurufen versucht haben, existiert nicht oder ist nicht mehr verfügbar.",
+    "back-to-home": "Zur Startseite"
   },
   "leaving-app": {
     "title": "Du verlässt SEND",
@@ -144,6 +159,10 @@
     "invalid-characters-not-inserted": "Ungültige Zeichen wurden nicht eingegeben."
   },
   "errors": {
+    "technical-error": {
+      "title": "Fehlerinformationen",
+      "copy-to-clipboard": "Fehlerinformationen kopieren"
+    },
     "bad_request": {
       "title": "Fehler beim Senden der Daten",
       "message": "Format der Anfrage ungültig."
@@ -175,6 +194,22 @@
     "unknown": {
       "title": "Fehler",
       "message": "Unerwarteter Fehler"
+    },
+    "invalid_type_code": {
+      "title": "Dieses Feld akzeptiert nur numerische Werte",
+      "message": "Überprüfen Sie den Verifizierungscode und geben Sie ihn erneut ein"
+    },
+    "empty_code": {
+      "title": "Code fehlt oder ist unvollständig",
+      "message": "Der eingegebene Code ist unvollständig. Geben Sie einen 5-stelligen Code ein."
+    },
+    "invalid_body": {
+      "title": "Die Daten sind ungültig",
+      "message": "Beim Senden Ihrer Daten ist ein Fehler aufgetreten. Überprüfen Sie, ob sie korrekt sind, keine Leerzeichen oder Sonderzeichen enthalten, und versuchen Sie es erneut. Wenn der Fehler weiterhin auftritt, wenden Sie sich an den Support und teilen Sie die Fehlerinformationen mit."
+    },
+    "invalid_parameter": {
+      "title": "Ungültige Daten",
+      "message": "Eines oder mehrere der eingegebenen Daten sind ungültig"
     }
   },
   "roles": {
@@ -182,5 +217,35 @@
     "pg-admin": "Administrator"
   },
   "required-field": "Pflichtfeld",
-  "no-spaces-at-edges": "Lösche die Leerzeichen am Anfang oder Ende"
+  "badges": {
+    "news": "Neuigkeiten"
+  },
+  "conjunctions": {
+    "or": "oder"
+  },
+  "downtime_language_banner": {
+    "message": "Der Originaltext dieser Dokumente ist auf Italienisch. Bei Abweichungen zwischen der italienischen Fassung und den Übersetzungen in andere Sprachen sind die Bedeutung und die Bestimmungen der italienischen Sprache maßgebend.",
+    "link": "Übersetzungen konsultieren"
+  },
+  "no-spaces-at-edges": "Lösche die Leerzeichen am Anfang oder Ende",
+  "wizard": {
+    "stepper": {
+      "of": "{{currentStep}} von {{totalSteps}}",
+      "activeStep": "Schritt {{currentStep}}"
+    }
+  },
+  "inactivity": {
+    "title": "Möchten Sie sich wirklich von SEND abmelden?",
+    "body": "Die Abmeldung läuft. Wenn Sie es sich anders überlegt haben, drücken Sie innerhalb weniger Sekunden „Angemeldet bleiben“.",
+    "action": "Angemeldet bleiben"
+  },
+  "code-modal": {
+    "digits": [
+      "Erste Ziffer",
+      "Zweite Ziffer",
+      "Dritte Ziffer",
+      "Vierte Ziffer",
+      "Letzte Ziffer"
+    ]
+  }
 }

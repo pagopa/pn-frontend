@@ -1,4 +1,3 @@
-import { useRef } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
@@ -19,7 +18,6 @@ import {
 import { NotificationColumnData } from '@pagopa-pn/pn-commons/src/models/Notifications';
 
 import * as routes from '../../navigation/routes.const';
-import FilterNotifications from './FilterNotifications';
 import NotificationsDataSwitch from './NotificationsDataSwitch';
 
 type Props = {
@@ -32,6 +30,10 @@ type Props = {
   onManualSend: () => void;
   /** The function to be invoked if the user clicks on api keys link */
   onApiKeys: () => void;
+  /** True when at least one filter is active (non-default). Used to show the “filtered” EmptyState variant. */
+  filtersApplied: boolean;
+  /** The function to be invoked if the user clicks on clean filters button */
+  onCleanFilters: () => void;
 };
 
 type LinkRemoveFiltersProps = {
@@ -97,8 +99,9 @@ const DesktopNotifications = ({
   onChangeSorting,
   onManualSend,
   onApiKeys,
+  filtersApplied,
+  onCleanFilters,
 }: Props) => {
-  const filterNotificationsRef = useRef({ filtersApplied: false, cleanFilters: () => void 0 });
   const { t } = useTranslation(['notifiche']);
   const navigate = useNavigate();
 
@@ -149,10 +152,6 @@ const DesktopNotifications = ({
     id: n.iun,
   }));
 
-  const filtersApplied: boolean = filterNotificationsRef.current.filtersApplied;
-
-  const showFilters = notifications?.length > 0 || filtersApplied;
-
   const handleRowClick = (iun: string) => {
     navigate(routes.GET_DETTAGLIO_NOTIFICA_PATH(iun));
   };
@@ -161,7 +160,6 @@ const DesktopNotifications = ({
     <>
       {notifications && (
         <>
-          <FilterNotifications ref={filterNotificationsRef} showFilters={showFilters} />
           {notifications.length > 0 ? (
             <PnTable
               ariaTitle={t('table.title')}
@@ -212,10 +210,7 @@ const DesktopNotifications = ({
                   ns={'notifiche'}
                   i18nKey={'empty-state.filtered'}
                   components={[
-                    <LinkRemoveFilters
-                      key={'remove-filters'}
-                      cleanFilters={filterNotificationsRef.current.cleanFilters}
-                    />,
+                    <LinkRemoveFilters key={'remove-filters'} cleanFilters={onCleanFilters} />,
                   ]}
                 />
               ) : (

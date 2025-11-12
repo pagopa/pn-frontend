@@ -30,14 +30,8 @@ const DigitalContactActivation: React.FC<Props> = ({ isTransferring = false, onG
   const { t } = useTranslation(['recapiti', 'common']);
   const navigate = useNavigate();
   const { IS_DOD_ENABLED } = getConfiguration();
-  const {
-    addresses,
-    defaultEMAILAddress,
-    defaultSMSAddress,
-    defaultAPPIOAddress,
-    defaultSERCQ_SENDAddress,
-    courtesyAddresses,
-  } = useAppSelector(contactsSelectors.selectAddresses);
+  const { addresses, defaultEMAILAddress, defaultAPPIOAddress, defaultSERCQ_SENDAddress } =
+    useAppSelector(contactsSelectors.selectAddresses);
 
   const [activeStep, setActiveStep] = useState(0);
   const [showConfirmationModal, setShowConfirmationModal] = useState(false);
@@ -47,8 +41,6 @@ const DigitalContactActivation: React.FC<Props> = ({ isTransferring = false, onG
     () => defaultAPPIOAddress && defaultAPPIOAddress.value === IOAllowedValues.DISABLED,
     []
   );
-
-  const hasEmailOrSms = !!(defaultEMAILAddress || defaultSMSAddress);
 
   const isEmailSmsStep = !showIOStep ? activeStep === 1 : activeStep === 2;
   const isRecapStep = activeStep === (showIOStep ? MAX_STEPS_NUMBER - 1 : MAX_STEPS_NUMBER - 2);
@@ -61,18 +53,16 @@ const DigitalContactActivation: React.FC<Props> = ({ isTransferring = false, onG
   const handleConfirmEmailSmsStep = () => {
     PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SERCQ_SEND_EMAIL_SMS_CONTINUE, {
       event_type: EventAction.ACTION,
-      contacts: addresses,
+      addresses,
     });
-    if (hasEmailOrSms) {
+    if (defaultEMAILAddress) {
       goToNextStep();
     } else {
-      PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SERCQ_SEND_POP_UP_EMAIL_SMS);
       setShowConfirmationModal(true);
     }
   };
 
   const handleCloseConfirmEmailSmsModal = () => {
-    PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SERCQ_SEND_POP_UP_EMAIL_SMS_BACK);
     setShowConfirmationModal(false);
   };
 
@@ -183,7 +173,7 @@ const DigitalContactActivation: React.FC<Props> = ({ isTransferring = false, onG
           onFeedbackShow: () =>
             PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SERCQ_SEND_THANK_YOU_PAGE, {
               event_type: EventAction.SCREEN_VIEW,
-              contacts: courtesyAddresses,
+              addresses,
             }),
         },
         actions: !isEmailSmsStep ? { justifyContent: 'center' } : {},
@@ -210,14 +200,8 @@ const DigitalContactActivation: React.FC<Props> = ({ isTransferring = false, onG
             },
           }}
         >
-          <Trans
-            ns="recapiti"
-            i18nKey={`courtesy-contacts.confirmation-modal-email-content`}
-            components={[
-              <DialogContentText key="paragraph1" color="text.primary" />,
-              <DialogContentText key="paragraph2" color="text.primary" mt={2} />,
-            ]}
-          />
+          <Trans ns="recapiti" i18nKey={`courtesy-contacts.confirmation-modal-email-content`} />
+          <DialogContentText key="paragraph1" color="text.primary" />
         </ConfirmationModal>
       </PnWizardStep>
       <PnWizardStep label={t('legal-contacts.sercq-send-wizard.step_4.step-title')}>

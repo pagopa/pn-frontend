@@ -56,7 +56,9 @@ type Props = {
   onSubmit: (value: string) => void;
   onDelete?: () => void;
   onCancelInsert?: () => void;
-  onEditCallback?: (editMode: boolean) => void;
+  onEditButtonClickCallback?: (editMode: boolean) => void;
+  onEditConfirmCallback?: () => void;
+  onEditCancelCallback?: () => void;
   beforeValidationCallback?: (value: string, errors?: string) => void;
 };
 
@@ -76,7 +78,9 @@ const DigitalContact = forwardRef<{ toggleEdit: () => void }, Props>(
       onSubmit,
       onDelete,
       onCancelInsert,
-      onEditCallback,
+      onEditButtonClickCallback,
+      onEditConfirmCallback,
+      onEditCancelCallback,
       beforeValidationCallback,
     },
     ref
@@ -130,22 +134,24 @@ const DigitalContact = forwardRef<{ toggleEdit: () => void }, Props>(
     };
 
     const toggleEdit = () => {
-      setEditMode((prevState) => {
-        const newState = !prevState;
-        if (onEditCallback) {
-          onEditCallback(newState);
-        }
-        return newState;
-      });
+      setEditMode((prevState) => !prevState);
+    };
+
+    const closeEditMode = () => {
+      setEditMode(false);
     };
 
     const onCancelEdit = () => {
       formik.resetForm({ values: initialValues });
-      toggleEdit();
+      if (onEditCancelCallback) {
+        onEditCancelCallback();
+      }
+      setEditMode(false);
     };
 
     useImperativeHandle(ref, () => ({
       toggleEdit,
+      closeEditMode,
       resetForm: async () => {
         await formik.setFieldTouched(`${senderId}_${contactType}`, false, false);
         await formik.setFieldValue(
@@ -162,6 +168,10 @@ const DigitalContact = forwardRef<{ toggleEdit: () => void }, Props>(
           formik.values[`${senderId}_${contactType}`],
           formik.errors[`${senderId}_${contactType}`]
         );
+      }
+
+      if (value && onEditConfirmCallback) {
+        onEditConfirmCallback();
       }
 
       formik.handleSubmit(e);
@@ -343,7 +353,12 @@ const DigitalContact = forwardRef<{ toggleEdit: () => void }, Props>(
               <EditButton
                 key="editButton"
                 color="primary"
-                onClick={toggleEdit}
+                onClick={() => {
+                  if (onEditButtonClickCallback) {
+                    onEditButtonClickCallback(!editMode);
+                  }
+                  toggleEdit();
+                }}
                 startIcon={<CreateIcon />}
                 sx={{ fontWeight: 700, justifyContent: 'left' }}
                 id={`modifyContact-${senderId}_${contactType}`}

@@ -106,6 +106,11 @@ const Header: React.FC<HeaderProps> = ({
         enableDropdown={enableDropdown}
         userActions={userActions}
         enableAssistanceButton={enableAssistanceButton}
+        translationsMap={{
+          logIn: getLocalizedOrDefaultLabel('common', 'header.login', 'Accedi'),
+          logOut: getLocalizedOrDefaultLabel('common', 'header.logout', 'Esci'),
+          assistance: getLocalizedOrDefaultLabel('common', 'header.assistance', 'Assistenza'),
+        }}
       />
       {enableHeaderProduct && (
         <HeaderProduct
