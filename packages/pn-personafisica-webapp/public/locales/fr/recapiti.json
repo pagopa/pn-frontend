@@ -147,7 +147,7 @@
         "content-pec": "La PEC que vous avez insérée est en cours de validation. Une fois confirmée, le Domicile Numérique s'activera et vous recevrez toutes les communications à valeur légale à l'adresse que vous avez choisie.",
         "content-pec-transfer": "La PEC est en cours de validation. Une fois confirmée, votre Domicile Numérique sera transféré à l'adresse que vous avez choisie. Jusqu'à ce moment, le Domicile Numérique SEND restera actif.",
         "content-sercq_send": "Vous recevrez vos communications à valeur légale à votre Domicile Numérique sur SEND et un message aux adresses que vous avez choisies.",
-        "go-to-contacts": "Aller à vos adresses"
+        "go-to-contacts": "Retournez à vos adresses"
       }
     },
     "pec-contact-wizard": {

@@ -9,6 +9,7 @@
   "ONE_TRUST_SERCQ_SEND_DRAFT_MODE": true,
   "ONE_TRUST_TOS_SERCQ_SEND": "cfb44399-cac3-4c41-b225-b7c0372474c9",
   "OT_DOMAIN_ID": "29cc1c86-f2ef-494d-8242-9bec8009cd29-test",
+  "OT_SETTINGS_TOKEN": "eyJjYWxsYmFja1VybCI6Imh0dHBzOi8vcHJpdmFjeXBvcnRhbC1kZS5vbmV0cnVzdC5jb20vcmVxdWVzdC92MS9wcml2YWN5Tm90aWNlcy9zdGF0cy92aWV3cyIsImNvbnRlbnRBcGlVcmwiOiJodHRwczovL3ByaXZhY3lwb3J0YWwtZGUub25ldHJ1c3QuY29tL3JlcXVlc3QvdjEvZW50ZXJwcmlzZXBvbGljeS9kaWdpdGFscG9saWN5L2NvbnRlbnQiLCJtZXRhZGF0YUFwaVVybCI6Imh0dHBzOi8vcHJpdmFjeXBvcnRhbC1kZS5vbmV0cnVzdC5jb20vcmVxdWVzdC92MS9lbnRlcnByaXNlcG9saWN5L2RpZ2l0YWxwb2xpY3kvbWV0YS1kYXRhIn0=",
   "PAGOPA_HELP_EMAIL": "destinatari-send@assistenza.pagopa.it",
   "LANDING_SITE_URL": "https://www.notifichedigitali.it",
   "DELEGATIONS_TO_PG_ENABLED": true,

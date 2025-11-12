@@ -11,7 +11,7 @@ import {
   Stack,
   Typography,
 } from '@mui/material';
-import { SERCQ_SEND_VALUE, appStateActions } from '@pagopa-pn/pn-commons';
+import { EventAction, SERCQ_SEND_VALUE, appStateActions } from '@pagopa-pn/pn-commons';
 
 import { PFEventsType } from '../../models/PFEventsType';
 import {
@@ -183,6 +183,16 @@ const SpecialContacts: React.FC<{ addressType: AddressType; channelType?: Channe
   };
 
   const deleteConfirmHandler = () => {
+    PFEventStrategyFactory.triggerEvent(
+      currentAddress.current.channelType === ChannelType.SERCQ_SEND
+        ? PFEventsType.SEND_REMOVE_SERCQ_SEND_POP_UP_CONTINUE
+        : PFEventsType.SEND_REMOVE_DIGITAL_DOMICILE_PEC_POP_UP_CONTINUE,
+      {
+        event_type: EventAction.ACTION,
+        addresses,
+        other_contact: true,
+      }
+    );
     setModalOpen(null);
     dispatch(
       deleteAddress({
@@ -198,6 +208,22 @@ const SpecialContacts: React.FC<{ addressType: AddressType; channelType?: Channe
           PFEventStrategyFactory.triggerEvent(
             PFEventsType[eventKey],
             currentAddress.current.senderId
+          );
+        }
+        const uxEventProps = {
+          event_type: EventAction.SCREEN_VIEW,
+          addresses,
+          other_contact: true,
+        };
+        if (currentAddress.current.channelType === ChannelType.SERCQ_SEND) {
+          PFEventStrategyFactory.triggerEvent(
+            PFEventsType.SEND_REMOVE_SERCQ_SEND_UX_SUCCESS,
+            uxEventProps
+          );
+        } else {
+          PFEventStrategyFactory.triggerEvent(
+            PFEventsType.SEND_REMOVE_DIGITAL_DOMICILE_PEC_UX_SUCCESS,
+            uxEventProps
           );
         }
         // reset current address
@@ -221,6 +247,17 @@ const SpecialContacts: React.FC<{ addressType: AddressType; channelType?: Channe
   };
 
   const handleDelete = (value: string, channelType: ChannelType, sender: Sender) => {
+    PFEventStrategyFactory.triggerEvent(
+      channelType === ChannelType.SERCQ_SEND
+        ? PFEventsType.SEND_REMOVE_SERCQ_SEND_START
+        : PFEventsType.SEND_REMOVE_DIGITAL_DOMICILE_PEC_START,
+      {
+        event_type: EventAction.ACTION,
+        addresses,
+        other_contact: true,
+      }
+    );
+
     // eslint-disable-next-line functional/immutable-data
     currentAddress.current = {
       value,
@@ -229,9 +266,30 @@ const SpecialContacts: React.FC<{ addressType: AddressType; channelType?: Channe
       channelType,
     };
     setModalOpen(ModalType.DELETE);
+
+    PFEventStrategyFactory.triggerEvent(
+      channelType === ChannelType.SERCQ_SEND
+        ? PFEventsType.SEND_REMOVE_SERCQ_SEND_POP_UP
+        : PFEventsType.SEND_REMOVE_DIGITAL_DOMICILE_PEC_POP_UP,
+      {
+        event_type: EventAction.SCREEN_VIEW,
+        addresses,
+        other_contact: true,
+      }
+    );
   };
 
   const handleCloseModal = () => {
+    PFEventStrategyFactory.triggerEvent(
+      currentAddress.current.channelType === ChannelType.SERCQ_SEND
+        ? PFEventsType.SEND_REMOVE_SERCQ_SEND_POP_UP_CANCEL
+        : PFEventsType.SEND_REMOVE_DIGITAL_DOMICILE_PEC_POP_UP_CANCEL,
+      {
+        event_type: EventAction.ACTION,
+        addresses,
+        other_contact: true,
+      }
+    );
     // eslint-disable-next-line functional/immutable-data
     currentAddress.current = {
       ...currentAddress.current,

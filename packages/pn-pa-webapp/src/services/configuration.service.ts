@@ -5,6 +5,7 @@ import { PhysicalAddressLookupConfig } from '../models/NewNotification';
 
 export interface PaConfiguration {
   OT_DOMAIN_ID: string;
+  OT_SETTINGS_TOKEN: string;
   SELFCARE_BASE_URL: string;
   API_BASE_URL: string;
   LANDING_SITE_URL: string;
@@ -32,6 +33,7 @@ class PaConfigurationValidator extends Validator<PaConfiguration> {
   constructor() {
     super();
     this.ruleFor('OT_DOMAIN_ID').isString().isRequired().matches(dataRegex.token);
+    this.ruleFor('OT_SETTINGS_TOKEN').isString().isRequired().matches(dataRegex.token);
     this.ruleFor('SELFCARE_BASE_URL').isString().isRequired().matches(dataRegex.htmlPageUrl);
     this.ruleFor('API_BASE_URL').isString().isRequired().matches(dataRegex.htmlPageUrl);
     this.ruleFor('LANDING_SITE_URL').isString().isRequired().matches(dataRegex.htmlPageUrl);

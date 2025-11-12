@@ -42,6 +42,12 @@ const SercqAddSpecialEmail = () => {
   });
 
   const handleSubmit = (channelType: ChannelType, value: string) => {
+    if (!defaultEMAILAddress) {
+      PFEventStrategyFactory.triggerEvent(
+        PFEventsType.SEND_ADD_CUSTOMIZED_CONTACT_SERCQ_SEND_ADD_EMAIL_START
+      );
+    }
+
     currentAddress.current = { channelType, value };
     if (contactAlreadyExists(addressesData.addresses, value, 'default', channelType)) {
       setModalOpen(ModalType.EXISTING);
@@ -50,9 +56,22 @@ const SercqAddSpecialEmail = () => {
     handleCodeVerification();
   };
 
+  const handleCloseCodeDialog = () => {
+    const eventToTrigger = defaultEMAILAddress
+      ? PFEventsType.SEND_ADD_CUSTOMIZED_CONTACT_SERCQ_SEND_CHANGE_EMAIL_BACK
+      : PFEventsType.SEND_ADD_CUSTOMIZED_CONTACT_SERCQ_SEND_ADD_EMAIL_BACK;
+
+    PFEventStrategyFactory.triggerEvent(eventToTrigger);
+    setModalOpen(null);
+  };
+
   const handleCodeVerification = (verificationCode?: string) => {
     if (verificationCode) {
-      PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_EMAIL_UX_CONVERSION, 'default');
+      const eventToTrigger = defaultEMAILAddress
+        ? PFEventsType.SEND_ADD_CUSTOMIZED_CONTACT_SERCQ_SEND_CHANGE_EMAIL_UX_CONVERSION
+        : PFEventsType.SEND_ADD_CUSTOMIZED_CONTACT_SERCQ_SEND_ADD_EMAIL_UX_CONVERSION;
+
+      PFEventStrategyFactory.triggerEvent(eventToTrigger);
     }
 
     const digitalAddressParams: SaveDigitalAddressParams = {
@@ -67,14 +86,24 @@ const SercqAddSpecialEmail = () => {
       .unwrap()
       .then((res) => {
         if (!res) {
+          if (defaultEMAILAddress) {
+            PFEventStrategyFactory.triggerEvent(
+              PFEventsType.SEND_ADD_CUSTOMIZED_CONTACT_SERCQ_SEND_CHANGE_EMAIL_OTP
+            );
+          } else {
+            PFEventStrategyFactory.triggerEvent(
+              PFEventsType.SEND_ADD_CUSTOMIZED_CONTACT_SERCQ_SEND_ADD_EMAIL_OTP
+            );
+          }
           setModalOpen(ModalType.CODE);
           return;
         }
 
-        PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_EMAIL_UX_SUCCESS, {
-          senderId: 'default',
-          fromSercqSend: true,
-        });
+        const eventToTrigger = defaultEMAILAddress
+          ? PFEventsType.SEND_ADD_CUSTOMIZED_CONTACT_SERCQ_SEND_CHANGE_EMAIL_UX_SUCCESS
+          : PFEventsType.SEND_ADD_CUSTOMIZED_CONTACT_SERCQ_SEND_ADD_EMAIL_UX_SUCCESS;
+
+        PFEventStrategyFactory.triggerEvent(eventToTrigger);
 
         dispatch(
           appStateActions.addSuccess({
@@ -104,7 +133,7 @@ const SercqAddSpecialEmail = () => {
         channelType={ChannelType.EMAIL}
         open={modalOpen === ModalType.CODE}
         onConfirm={(code) => handleCodeVerification(code)}
-        onDiscard={() => setModalOpen(null)}
+        onDiscard={handleCloseCodeDialog}
         onError={() => PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_EMAIL_CODE_ERROR)}
       />
       <DigitalContact
@@ -133,6 +162,21 @@ const SercqAddSpecialEmail = () => {
             width: '100%',
           },
         }}
+        onEditButtonClickCallback={() =>
+          PFEventStrategyFactory.triggerEvent(
+            PFEventsType.SEND_ADD_CUSTOMIZED_CONTACT_SERCQ_SEND_CHANGE_EMAIL_START
+          )
+        }
+        onEditCancelCallback={() =>
+          PFEventStrategyFactory.triggerEvent(
+            PFEventsType.SEND_ADD_CUSTOMIZED_CONTACT_SERCQ_SEND_CHANGE_EMAIL_CANCEL
+          )
+        }
+        onEditConfirmCallback={() =>
+          PFEventStrategyFactory.triggerEvent(
+            PFEventsType.SEND_ADD_CUSTOMIZED_CONTACT_SERCQ_SEND_CHANGE_EMAIL_CONTINUE
+          )
+        }
       />
     </>
   );

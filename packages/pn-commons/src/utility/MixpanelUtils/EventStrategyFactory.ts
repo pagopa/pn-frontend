@@ -40,16 +40,20 @@ export default abstract class EventStrategyFactory<T extends string> {
    * @param {?unknown} [data]
    */
   public triggerEvent(eventType: T, data?: unknown) {
-    const strategy = this.getStrategy(eventType);
+    try {
+      const strategy = this.getStrategy(eventType);
 
-    if (!strategy) {
-      throw new Error('Unknown event type ' + eventType);
-    }
+      if (!strategy) {
+        throw new Error('Unknown event type ' + eventType);
+      }
 
-    const eventParameters = strategy.performComputations(data);
+      const eventParameters = strategy.performComputations(data);
 
-    for (const [type, parameters] of Object.entries(eventParameters)) {
-      trackEvent(type as EventPropertyType, eventType, process.env.NODE_ENV!, parameters);
+      for (const [type, parameters] of Object.entries(eventParameters)) {
+        trackEvent(type as EventPropertyType, eventType, process.env.NODE_ENV!, parameters);
+      }
+    } catch (error) {
+      console.error('MIXPANEL - Tracking error: ', eventType, error);
     }
   }
 }

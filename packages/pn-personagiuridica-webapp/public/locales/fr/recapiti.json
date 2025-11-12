@@ -28,7 +28,7 @@
     "pec-validating": "Validation PEC en cours",
     "cancel-pec-validation": "Annuler la validation",
     "remove-pec-title": "Confirmez-vous vouloir désactiver la PEC ?",
-    "remove-pec-message": "<0>Vous n'aurez plus de coordonnées numériques à valeur légale pour les communications de l'Administration Publique et vous pourriez les recevoir sur papier, avec des coûts éventuels à la charge de l'entreprise.</0><1>Vous continuerez cependant à recevoir des alertes sur les canaux que vous avez activés.</1>",
+    "remove-pec-message": "<0>Votre entreprise n'aura plus d'adresse numérique à valeur légale pour les communications de l'Administration Publique et pourrait les recevoir par voie papier, avec d'éventuels frais à sa charge.</0> <1>L'entreprise continuera de recevoir les avis sur les canaux qu'elle a activés.</1>",
     "remove-pec-confirm": "Désactiver la PEC",
     "validation-cancel-title": "Annuler la validation de la PEC",
     "validation-cancel-content": "Si vous confirmez, vous annulez l'activation de la PEC comme Domicile numérique sur SEND.",

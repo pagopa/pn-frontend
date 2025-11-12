@@ -12,6 +12,7 @@ export interface PfConfiguration {
   ONE_TRUST_SERCQ_SEND_DRAFT_MODE: boolean;
   ONE_TRUST_TOS_SERCQ_SEND: string;
   OT_DOMAIN_ID: string;
+  OT_SETTINGS_TOKEN: string;
   PAGOPA_HELP_EMAIL: string;
   LANDING_SITE_URL: string;
   // this will be removed when delegations to pg works correctly
@@ -46,6 +47,7 @@ class PfConfigurationValidator extends Validator<PfConfiguration> {
       .isRequired()
       .matches(dataRegex.lettersNumbersAndDashs);
     this.ruleFor('OT_DOMAIN_ID').isString().isRequired().matches(dataRegex.lettersNumbersAndDashs);
+    this.ruleFor('OT_SETTINGS_TOKEN').isString().isRequired().matches(dataRegex.token);
     this.ruleFor('PAGOPA_HELP_EMAIL').isString().isRequired().matches(dataRegex.email);
     this.ruleFor('LANDING_SITE_URL').isString().isRequired().matches(dataRegex.htmlPageUrl);
     this.ruleFor('DELEGATIONS_TO_PG_ENABLED').isBoolean();

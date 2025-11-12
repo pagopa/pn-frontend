@@ -5,6 +5,7 @@ import CompareArrowsIcon from '@mui/icons-material/CompareArrows';
 import { Avatar, Button, List, ListItem, ListItemText, Stack, Typography } from '@mui/material';
 import {
   ConfirmationModal,
+  EventAction,
   IllusAppIoLogo,
   IllusSendLogo,
   appStateActions,
@@ -33,7 +34,7 @@ const IOContactWizard: React.FC<Props> = ({ goToNextStep }) => {
   const dispatch = useAppDispatch();
 
   const [modal, setModal] = useState<ModalType>({ open: false });
-  const { defaultAPPIOAddress } = useAppSelector(contactsSelectors.selectAddresses);
+  const { defaultAPPIOAddress, legalAddresses } = useAppSelector(contactsSelectors.selectAddresses);
   const isMobile = useIsMobile('sm');
 
   const isIOEnabled = useMemo(
@@ -119,7 +120,10 @@ const IOContactWizard: React.FC<Props> = ({ goToNextStep }) => {
   };
 
   useEffect(() => {
-    PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SERCQ_SEND_APP_IO);
+    PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SERCQ_SEND_APP_IO, {
+      legal_addresses: legalAddresses,
+      event_type: EventAction.SCREEN_VIEW,
+    });
   }, []);
 
   return (

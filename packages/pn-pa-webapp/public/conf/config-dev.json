@@ -4,6 +4,7 @@
   "API_BASE_URL": "https://webapi.dev.notifichedigitali.it/",
   "INACTIVITY_HANDLER_MINUTES": 0,
   "OT_DOMAIN_ID": "62ebb6a0-1a65-48a4-8ca0-837de03b1199-test",
+  "OT_SETTINGS_TOKEN": "eyJjYWxsYmFja1VybCI6Imh0dHBzOi8vcHJpdmFjeXBvcnRhbC1kZS5vbmV0cnVzdC5jb20vcmVxdWVzdC92MS9wcml2YWN5Tm90aWNlcy9zdGF0cy92aWV3cyIsImNvbnRlbnRBcGlVcmwiOiJodHRwczovL3ByaXZhY3lwb3J0YWwtZGUub25ldHJ1c3QuY29tL3JlcXVlc3QvdjEvZW50ZXJwcmlzZXBvbGljeS9kaWdpdGFscG9saWN5L2NvbnRlbnQiLCJtZXRhZGF0YUFwaVVybCI6Imh0dHBzOi8vcHJpdmFjeXBvcnRhbC1kZS5vbmV0cnVzdC5jb20vcmVxdWVzdC92MS9lbnRlcnByaXNlcG9saWN5L2RpZ2l0YWxwb2xpY3kvbWV0YS1kYXRhIn0=",
   "MIXPANEL_TOKEN": "aef0b0d89c3355510e9cdfdb18e7d0b5",
   "ONE_TRUST_DRAFT_MODE": true,
   "ONE_TRUST_PP": "4824a110-316e-42fd-b492-8e2b0513db70",

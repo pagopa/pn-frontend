@@ -69,7 +69,7 @@ const SercqSendContactWizard: React.FC<Props> = ({ goToStep, showIOStep }) => {
   const dispatch = useAppDispatch();
 
   const tosConsent = useRef<Array<TosPrivacyConsent>>();
-  const { courtesyAddresses, defaultEMAILAddress, defaultAPPIOAddress, defaultSMSAddress } =
+  const { defaultEMAILAddress, defaultAPPIOAddress, defaultSMSAddress, legalAddresses, addresses } =
     useAppSelector(contactsSelectors.selectAddresses);
 
   const isIOInstalled = !!defaultAPPIOAddress;
@@ -162,6 +162,7 @@ const SercqSendContactWizard: React.FC<Props> = ({ goToStep, showIOStep }) => {
 
     PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SERCQ_SEND_UX_CONVERSION, {
       tos_validation: errors?.disclaimer ? 'missing' : 'valid',
+      legal_addresses: legalAddresses,
     });
 
     await formik.submitForm();
@@ -235,8 +236,9 @@ const SercqSendContactWizard: React.FC<Props> = ({ goToStep, showIOStep }) => {
       .then(() => {
         sessionStorage.removeItem('domicileBannerClosed');
         PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SERCQ_SEND_UX_SUCCESS, {
-          sercq_type: ChannelType.SERCQ_SEND,
-          contacts: courtesyAddresses,
+          event_type: EventAction.CONFIRM,
+          addresses,
+          other_contact: false,
         });
         goToStep(thankYouStep);
       })
@@ -246,7 +248,7 @@ const SercqSendContactWizard: React.FC<Props> = ({ goToStep, showIOStep }) => {
   useEffect(() => {
     PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SERCQ_SEND_SUMMARY, {
       event_type: EventAction.SCREEN_VIEW,
-      contacts: courtesyAddresses,
+      addresses,
     });
   }, []);
 
