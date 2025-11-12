@@ -951,7 +951,7 @@ describe('NotificationDetail Page', async () => {
     expect(tppPayButton).toHaveTextContent('MOCK BANK');
   });
 
-  it.only('should show AccessDenied component when user is not authorized to see the notification', async () => {
+  it('should show AccessDenied component when user is not authorized to see the notification', async () => {
     const unauthorizedError = {
       status: 404,
       data: {
