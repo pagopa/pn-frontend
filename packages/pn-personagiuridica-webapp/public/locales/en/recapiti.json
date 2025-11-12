@@ -28,7 +28,7 @@
     "pec-validating": "PEC validation in progress",
     "cancel-pec-validation": "Cancel validation",
     "remove-pec-title": "Confirm you want to deactivate the PEC?",
-    "remove-pec-message": "<0>You will no longer have a legal value digital contact for Public Administration communications and you might receive them on paper, with potential costs for the business.</0><1>You will, however, continue to receive alerts on the channels you have activated.</1>",
+    "remove-pec-message": "<0>Your business will no longer have a digital legal address for Public Administration communications and might receive them on paper, potentially incurring costs.</0> <1>The company will continue to receive notices on the channels it has activated.</1>",
     "remove-pec-confirm": "Deactivate PEC",
     "validation-cancel-title": "Cancel PEC validation",
     "validation-cancel-content": "If you confirm, you cancel the activation of the PEC as the Digital Domicile on SEND.",
