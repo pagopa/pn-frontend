@@ -525,7 +525,7 @@ const NotificationDetail: React.FC = () => {
    * we will show an AccessDenied component. PN-17207
    */
   if (pageReady && !isUserValid) {
-    const i18nKey = paymentTpp ? 'from-tpp' : 'from-qrcode';
+    const i18nKey = currentUser.source?.retrievalId ? 'from-tpp' : 'from-qrcode';
     return (
       <AccessDenied
         icon={<IllusQuestion />}

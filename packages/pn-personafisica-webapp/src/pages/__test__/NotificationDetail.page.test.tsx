@@ -968,7 +968,20 @@ describe('NotificationDetail Page', async () => {
       .reply(unauthorizedError.status, unauthorizedError.data);
 
     await act(async () => {
-      result = render(<NotificationDetail />);
+      result = render(<NotificationDetail />, {
+        preloadedState: {
+          userState: {
+            user: {
+              fiscal_number: notificationDTO.recipients[0].taxId,
+              source: {
+                channel: 'TPP',
+                details: 'mock-tpp-id',
+                retrievalId: 'retrieval-id',
+              },
+            },
+          },
+        },
+      });
     });
 
     await waitFor(() => {
