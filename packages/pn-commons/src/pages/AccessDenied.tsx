@@ -29,6 +29,8 @@ const AccessDenied: React.FC<Props> = ({
   const finalSubTitle =
     subtitle ?? (isLogged ? '' : getLocalizedOrDefaultLabel('common', 'not-logged-subtitle', ''));
 
+  console.log('TMP - Force build');
+
   return (
     <Stack
       direction="column"
