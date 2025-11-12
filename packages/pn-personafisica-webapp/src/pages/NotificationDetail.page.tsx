@@ -346,7 +346,7 @@ const NotificationDetail: React.FC = () => {
         })
         .finally(() => setPageReady(true));
     }
-  }, [id, currentUser.fiscal_number, delegatorsFromStore, mandateId]);
+  }, []);
 
   const fetchPaymentsInfo = useCallback(
     (payments: Array<PaymentDetails | NotificationDetailPayment>) => {
@@ -386,15 +386,15 @@ const NotificationDetail: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    fetchReceivedNotification();
-    return () => void dispatch(resetState());
-  }, []);
-
-  useEffect(() => {
     if (checkIfUserHasPayments && !(isCancelled.cancelled || isCancelled.cancellationInProgress)) {
       fetchPaymentsInfo(currentRecipient.payments?.slice(0, 5) ?? []);
     }
   }, [currentRecipient.payments]);
+
+  useEffect(() => {
+    fetchReceivedNotification();
+    return () => void dispatch(resetState());
+  }, []);
 
   /* if retrievalId is in user token and payment info is not in redux, get payment info PN-13915 */
   useEffect(() => {
