@@ -13,6 +13,7 @@ export interface PgConfiguration {
   ONE_TRUST_MASSIVI_DRAFT_MODE: boolean;
   ONE_TRUST_TOS_MASSIVI: string;
   OT_DOMAIN_ID: string;
+  OT_SETTINGS_TOKEN: string;
   PAGOPA_HELP_EMAIL: string;
   LANDING_SITE_URL: string;
   DELEGATIONS_TO_PG_ENABLED: boolean;
@@ -46,6 +47,7 @@ class PgConfigurationValidator extends Validator<PgConfiguration> {
       .isRequired()
       .matches(dataRegex.lettersNumbersAndDashs);
     this.ruleFor('OT_DOMAIN_ID').isString().isRequired().matches(dataRegex.lettersNumbersAndDashs);
+    this.ruleFor('OT_SETTINGS_TOKEN').isString().isRequired().matches(dataRegex.token);
     this.ruleFor('PAGOPA_HELP_EMAIL').isString().isRequired().matches(dataRegex.email);
     this.ruleFor('LANDING_SITE_URL').isString().isRequired().matches(dataRegex.htmlPageUrl);
     this.ruleFor('DELEGATIONS_TO_PG_ENABLED').isBoolean();

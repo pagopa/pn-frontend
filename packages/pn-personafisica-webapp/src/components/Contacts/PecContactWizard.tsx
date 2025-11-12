@@ -43,7 +43,7 @@ const PecContactWizard: React.FC<Props> = ({
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const [activeStep, setActiveStep] = useState(0);
-  const { defaultSERCQ_SENDAddress, courtesyAddresses } = useAppSelector(
+  const { defaultSERCQ_SENDAddress, legalAddresses, addresses } = useAppSelector(
     contactsSelectors.selectAddresses
   );
   const [openCodeModal, setOpenCodeModal] = useState(false);
@@ -54,6 +54,9 @@ const PecContactWizard: React.FC<Props> = ({
   }`;
   const feedbackContentLabel = `legal-contacts.sercq-send-wizard.feedback.content-pec${
     isTransferring ? '-transfer' : ''
+  }`;
+  const buttonTextLabel = `legal-contacts.sercq-send-wizard.button${
+    isTransferring ? '-transfer' : '-activation'
   }`;
 
   const validationSchema = yup.object().shape({
@@ -109,8 +112,9 @@ const PecContactWizard: React.FC<Props> = ({
           return;
         }
         PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SERCQ_SEND_PEC_UX_SUCCESS, {
-          sercq_type: ChannelType.PEC,
-          contacts: courtesyAddresses,
+          event_type: EventAction.CONFIRM,
+          addresses,
+          other_contact: false,
         });
         setOpenCodeModal(false);
         return setActiveStep(activeStep + 1);
@@ -146,6 +150,8 @@ const PecContactWizard: React.FC<Props> = ({
     }
 
     PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SERCQ_SEND_PEC_START_ACTIVATION, {
+      event_type: EventAction.ACTION,
+      legal_addresses: legalAddresses,
       pec_validation: pecValidation,
       tos_validation: errors?.disclaimer ? 'missing' : 'valid',
     });
@@ -159,7 +165,10 @@ const PecContactWizard: React.FC<Props> = ({
   };
 
   useEffect(() => {
-    PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SERCQ_SEND_PEC_ENTER_PEC);
+    PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SERCQ_SEND_PEC_ENTER_PEC, {
+      event_type: EventAction.SCREEN_VIEW,
+      legal_addresses: legalAddresses,
+    });
   }, []);
 
   return (
@@ -202,7 +211,7 @@ const PecContactWizard: React.FC<Props> = ({
                 PFEventsType.SEND_ADD_SERCQ_SEND_PEC_THANK_YOU_PAGE,
                 {
                   event_type: EventAction.SCREEN_VIEW,
-                  contacts: courtesyAddresses,
+                  addresses,
                 }
               ),
           },
@@ -286,7 +295,7 @@ const PecContactWizard: React.FC<Props> = ({
             sx={{ mt: 3 }}
             data-testid="next-button"
           >
-            {t('legal-contacts.sercq-send-active-pec-enabled', { ns: 'recapiti' })}
+            {t(buttonTextLabel, { ns: 'recapiti' })}
           </Button>
         </PnWizardStep>
       </PnWizard>

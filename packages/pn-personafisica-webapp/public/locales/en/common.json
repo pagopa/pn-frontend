@@ -2,65 +2,71 @@
   "button": {
     "filtra": "Filter",
     "annulla filtro": "Remove filters",
-    "indietro": "Go back",
+    "indietro": "Back",
     "associa": "Link",
-    "capito": "OK, I understand",
+    "capito": "Got it",
     "conferma": "Confirm",
-    "attiva": "Active",
+    "attiva": "Activate",
     "annulla": "Cancel",
-    "modifica": "Modification",
+    "modifica": "Edit",
     "salva": "Save",
     "elimina": "Delete",
     "enter": "Enter",
     "exit": "Exit",
     "close": "Close",
-    "enable": "Active",
-    "disable": "Deactivate",
-    "continue": "Go forward",
-    "go-to-home": "Go to home page",
+    "enable": "Enable",
+    "manage": "Manage",
+    "disable": "Disable",
+    "start": "Start",
+    "continue": "Continue",
+    "go-on": "Next",
+    "go-to-home": "Go to homepage",
     "go-to-login": "Login",
     "not-now": "Not now",
-    "add": "Add"
+    "do-later": "I'll do it later",
+    "add": "Add",
+    "understand": "OK, I understand"
   },
   "menu": {
     "notifiche": "Notifications",
-    "deleghe": "Delegates",
+    "deleghe": "Delegations",
     "profilo": "Your data",
-    "contacts": "Your addresses",
+    "contacts": "Your contact details",
     "app-status": "Platform status"
   },
   "header": {
-    "assistance": "Assistance",
+    "assistance": "Support",
     "login": "Login",
-    "logout": "Exit",
-    "pago-pa-link": "PagoPA S.p.A. website"
+    "logout": "Logout",
+    "pago-pa-link": "PagoPA S.p.A. website",
+    "logout-message": "Are you sure you want to log out of SEND?"
   },
   "tos": {
     "title": "SEND - Servizio Notifiche Digitali",
     "body": "To log in, accept the Terms and Conditions of Service and read the Privacy Policy.",
-    "redo-body": "The Terms and Conditions of Service and Privacy Policy have changed. To log in, you must agree and confirm that you have read the new versions.",
-    "switch-label": "By continuing you accept the service <1>terms and conditions of use</1> and confirm to have read the <0>Privacy Policy</0>",
+    "redo-body": "The Terms and Conditions of Service and the Privacy Policy have changed. To log in, accept and confirm that you have read the new versions.",
+    "switch-label": "I accept the <1>Terms and Conditions of Service</1> and confirm that I have read the <0>Privacy Policy</0>",
     "button": "Login"
   },
   "table": {
-    "aria-label": "Item table"
+    "aria-label": "Table of items"
   },
   "paginator": {
-    "aria-label": "Pagination Menu",
-    "first": "first element",
-    "last": "last element",
-    "page": "Page",
+    "aria-label": "Pagination menu",
+    "first": "first item",
+    "last": "last item",
+    "page": "page",
     "next": "Go to next page",
     "previous": "Go to previous page",
     "selected": "selected item",
-    "rows-per-page": "Lines per page"
+    "rows-per-page": "Rows per page"
   },
   "toast": {
-    "aria-label": "Toast close icon"
+    "aria-label": "Close toast icon"
   },
   "date-picker": {
-    "left-arrow": "Go to the previous month",
-    "right-arrow": "Go to the next month",
+    "left-arrow": "Go to previous month",
+    "right-arrow": "Go to next month",
     "switch-to-year": "calendar mode active, switch to year selection mode",
     "switch-to-calendar": "year selection mode active, switch to calendar mode",
     "select-date": "Select date",
@@ -68,116 +74,138 @@
   },
   "date-time": {
     "today-uppercase-initial": "Today",
-    "hour-of-day": "time"
+    "hour-of-day": "o'clock"
   },
   "error-boundary": {
     "title": "Something went wrong",
-    "description": "We were unable to load the page. Reload it, or try again later.",
-    "action": "Reload the page"
+    "description": "We couldn't load the page. Reload it, or try again later.",
+    "action": "Reload page"
   },
   "not-accessible": {
-    "title": "The platform cannot be accessed",
+    "title": "Platform access not possible",
     "description": "SEND is currently being tested and is not yet available. For more information on the initiative,",
     "action": "visit the dedicated website"
   },
-  "access-denied": "You do not have the necessary authorizations to access this page",
-  "not-logged": "Log in to SEND",
+  "access-denied": "You do not have the necessary permissions to access this page",
+  "not-logged": "Login to SEND",
   "not-logged-subtitle": "To view and manage your notifications, log in with SPID or CIE.",
   "not-found": {
-    "title": "404: The page you are looking for does not exist",
-    "description": "You are here by mistake, try using navigation."
+    "title": "What you were looking for isn't here.",
+    "description": "The page you tried to reach does not exist or is no longer available.",
+    "back-to-home": "Back to home"
   },
   "leaving-app": {
-    "title": "You are exiting SEND",
+    "title": "You are leaving SEND",
     "message": "You will be redirected"
   },
   "error-when-fetching-tos-status": {
-    "title": "Issues logging into SEND",
+    "title": "Problems accessing SEND",
     "message": "Try again later"
   },
   "messages": {
     "404-title": "Resource not found",
-    "404-message": "An error has occurred. Please try again later",
-    "403-title": "The session has expired",
+    "404-message": "An error occurred. Please try again later",
+    "403-title": "Session expired",
     "403-message": "Enter and log in with SPID or CIE.",
-    "401-title": "User not authorized",
-    "401-message": "Current user does not have the authorizations",
+    "401-title": "Unauthorized user",
+    "401-message": "The current user does not have the permissions",
     "451-title": "Platform not accessible",
-    "451-message": "The platform cannot be accessed",
-    "500-title": "Service not available",
-    "500-message": "Due to a temporary service issue, your request has not been submitted. Try again later.",
-    "lacking-grants-for-app-title": "You are not authorized to log in",
-    "invalid-token-title": "You cannot log in due to a technical issue – invalid token",
-    "generic-token-exchange-problem": "Login could not be completed",
+    "451-message": "Platform access not possible",
+    "500-title": "Service is unavailable",
+    "500-message": "Due to a temporary service issue, your request was not sent. Please try again later.",
+    "lacking-grants-for-app-title": "You are not authorized to access",
+    "invalid-token-title": "You cannot log in due to a technical issue - invalid token",
+    "generic-token-exchange-problem": "Could not complete login",
     "generic-title": "Generic error",
-    "generic-message": "An error has occurred. Please try again later",
+    "generic-message": "An error occurred. Please try again later",
     "generic-api-error-main-text": "We were unable to retrieve this data.",
     "generic-api-error-action-text": "Reload"
   },
   "footer": {
-    "go-to-pagopa": "Link: go to the website of PagoPA S.p.A.",
+    "go-to-pagopa": "Link: go to PagoPA S.p.A. website",
     "go-to": "Go to link",
     "privacy-info": "Privacy Policy",
-    "who": "About us",
+    "who": "Who we are",
     "work": "Work with us",
     "certifications": "Certifications",
     "security": "Information security",
-    "personal-data": "Right to the protection of personal data",
-    "cookie": "Cookie preferences",
+    "personal-data": "Right to personal data protection",
+    "cookie": "Cookie Preferences",
     "terms-conditions": "Terms and Conditions",
-    "company": "Transparent company",
+    "company": "Transparent Company",
     "disclosure": "Responsible Disclosure Policy",
     "321-model": "Model 231",
     "accessibility": "Accessibility",
-    "social": "Link: go to the {{social}} website of PagoPA S.p.A.",
+    "social": "Link: go to PagoPA S.p.A. {{social}} website",
     "resources": "Resources",
     "follow": "Follow us on",
-    "legal-part-1": "joint stock company with sole shareholder – share capital of € 1,000,000 fully paid up – registered office in Rome, Piazza Colonna 370",
-    "legal-part-2": "ZIP CODE 00187 – Reg. no. in the Rome Business Register, Fiscal code and VAT number 15376371009"
+    "legal-part-1": "società per azioni with sole shareholder - share capital of euro 1,000,000 fully paid up - registered office in Rome, Piazza Colonna 370",
+    "legal-part-2": "CAP 00187 - n. of registration in the Rome Business Register, FC and VAT 15376371009"
   },
-  "required-fields": "*Mandatory fields",
-  "required-field": "Mandatory field",
+  "required-fields": "*Required fields",
+  "required-field": "Required field",
   "too-long-field-error": "Enter a maximum of {{maxLength}} characters",
+  "loading": "Loading...",
   "validation": {
-    "search-pattern-length-limit": "search max {{maxLength}} characters",
-    "invalid-characters-not-inserted": "Invalid characters have not been entered."
+    "search-pattern-length-limit": "max search {{maxLength}} characters",
+    "invalid-characters-not-inserted": "Invalid characters were not entered."
   },
   "errors": {
+    "delivery_mandate_not_found": {
+      "title": "Error",
+      "message": "This delegation is no longer active."
+    },
+    "technical-error": {
+      "title": "Error information",
+      "copy-to-clipboard": "Copy error information"
+    },
     "bad_request": {
       "title": "Error sending data",
       "message": "The request format is invalid."
     },
     "unauthorized": {
-      "title": "User not authorized",
-      "message": "Current user does not have the authorizations."
+      "title": "Unauthorized user",
+      "message": "The current user does not have the permissions."
     },
     "unavailable_legal_reasons": {
       "title": "Platform not accessible",
-      "message": "The platform cannot be accessed"
+      "message": "Platform access not possible"
     },
     "forbidden": {
-      "title": "The session has expired",
+      "title": "Session expired",
       "message": "Enter and log in with SPID or CIE."
     },
     "not_found": {
       "title": "Resource not found",
-      "message": "An error has occurred. Please try again later."
+      "message": "An error occurred. Please try again later."
     },
     "internal_server": {
-      "title": "Service not available",
-      "message": "Due to a temporary service issue, your request has not been submitted. Try again later."
+      "title": "An error occurred",
+      "message": "The service is unavailable due to a technical issue. Please try again later. If the error persists, contact support and provide the error information."
     },
     "unhandled": {
-      "title": "Generic error",
-      "message": "An error has occurred. Please try again later."
+      "title": "An error occurred",
+      "message": "The service is unavailable. Please try again later. If the error persists, contact support and provide the error information."
     },
     "unknown": {
-      "title": "Error",
-      "message": "Unexpected error"
+      "title": "An error occurred",
+      "message": "The service is unavailable. Please try again later. If the error persists, contact support and provide the error information."
     },
     "invalid_type_code": {
       "title": "This field only accepts numerical values",
       "message": "Check the verification code and enter it again"
+    },
+    "empty_code": {
+      "title": "Code missing or incomplete",
+      "message": "The code you entered is incomplete, please enter a 5-digit code."
+    },
+    "invalid_body": {
+      "title": "Invalid data",
+      "message": "An error occurred while sending the data. Check that they are correct, without spaces or special characters, and try again. If the error persists, contact support and provide the error information."
+    },
+    "invalid_parameter": {
+      "title": "Invalid data",
+      "message": "One or more of the entered data are invalid"
     }
   },
   "badges": {
@@ -186,5 +214,29 @@
   "conjunctions": {
     "or": "or"
   },
-  "no-spaces-at-edges": "Delete spaces at the beginning or end"
+  "downtime_language_banner": {
+    "message": "The original text of these documents is in Italian. In case of conflict between the Italian version and the translations in other languages, the meaning and conditions of the Italian language shall prevail.",
+    "link": "Consult translations"
+  },
+  "no-spaces-at-edges": "Remove spaces at the beginning or end",
+  "wizard": {
+    "stepper": {
+      "of": "{{currentStep}} of {{totalSteps}}",
+      "activeStep": "Step {{currentStep}}"
+    }
+  },
+  "inactivity": {
+    "title": "Are you sure you want to log out of SEND?",
+    "body": "The disconnection is in progress. If you have changed your mind, press “Keep access” within a few seconds.",
+    "action": "Keep access"
+  },
+  "code-modal": {
+    "digits": [
+      "first digit",
+      "second digit",
+      "third digit",
+      "fourth digit",
+      "last digit"
+    ]
+  }
 }

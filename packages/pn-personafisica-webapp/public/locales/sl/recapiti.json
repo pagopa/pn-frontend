@@ -1,80 +1,217 @@
 {
-  "title": "Kontaktni podatki",
-  "subtitle": "Tukaj lahko upravljate kontaktne podatke, na katere boste prejemali obvestila, ki vam jih pošiljajo organizacije, ki so vključene v SEND.",
+  "title": "Tvoji kontaktni podatki",
+  "subtitle": "Upravljajte digitalne kontaktne podatke, na katere boste prejemali komunikacije SEND z zakonsko vrednostjo in/ali povezana vljudnostna sporočila.",
   "insert-code": "Vnesite kodo",
+  "status": {
+    "active": "Aktivno",
+    "inactive": "Za aktiviranje",
+    "pec-validation": "Validacija PEC v teku"
+  },
   "legal-contacts": {
-    "title": "Uradna dostava",
+    "title": "Tvoje digitalno prebivališče",
+    "pec-validation-banner": {
+      "title": "PEC je v validaciji",
+      "dod-enabled-message": "Do konca postopka ostaja platforma SEND aktivna kot digitalno prebivališče.",
+      "dod-disabled-message": "Do konca postopka ne bo mogoče spreminjati kontaktnih podatkov z zakonsko vrednostjo.",
+      "parties-list": "Platforma SEND bo ostala tvoje digitalno prebivališče za {{list}} do zaključka validacije."
+    },
+    "pec-disclaimer": "To je glavni naslov, ki se bo uporabljal za pošiljanje obvestil v digitalni obliki. Z vnosom le-tega ne boste več prejemali priporočenih pisem v papirnati obliki.",
     "pec-description": "Ko vam organizacija pošlje sporočilo na SEND, prejmete uradno obvestilo na PEC, ki ste ga izbrali.",
     "link-pec-placeholder": "Vaš PEC",
     "valid-pec": "Naslov PEC ni veljaven",
     "pec-verify": "Preverite PEC {{value}}",
-    "pec-verify-descr": "Kodo smo poslali na navedeni PEC. Koda <strong>velja 15 minut</strong>.",
+    "pec-verify-descr": "Kodo smo poslali na navedeni PEC. Koda je <strong>veljavna 15 minut</strong>.",
     "pec-new-code": "Je niste prejeli? Preverite, ali ste vnesli pravilen PEC, ali <0>ustvarite novo kodo</0>.",
     "pec-added-successfully": "PEC je pravilno povezan",
     "pec-removed-successfully": "PEC je bil uspešno odstranjen",
     "pec-to-add": "Naslov PEC",
     "pec-validating": "Validacija PEC v teku",
     "cancel-pec-validation": "Prekliči validacijo",
-    "remove-pec-title": "Odstrani PEC",
-    "remove-pec-message": "Ali ste prepričani, da želite odstraniti PEC {{value}}?",
-    "validation-cancel-title": "Želite preklicati preverjanje?",
-    "validation-cancel-content": "Če prekličete preverjanje, boste morali vnesti nov PEC in ponovno začeti postopek.",
+    "remove-pec-title": "Ali ste prepričani, da želite onemogočiti PEC?",
+    "remove-pec-message": "<0>Ne boste več imeli digitalnega kontaktnega podatka z zakonsko vrednostjo za komunikacije Javne uprave in morda jih boste prejemali na papirju, z morebitnimi stroški, ki jih krijete sami.</0><1>Še naprej pa boste prejemali opozorila prek kanalov, ki ste jih aktivirali.</1>",
+    "remove-pec-confirm": "Onemogoči PEC",
+    "validation-cancel-title": "Prekliči validacijo PEC",
+    "validation-cancel-content": "Če potrdite, prekličete aktivacijo PEC kot digitalnega prebivališča na SEND.",
     "validation-progress-title": "Hvala!",
-    "validation-progress-content": "Preverjamo, če je PEC veljaven. V 24 urah boste prejeli e-poštno sporočilo z rezultatom.",
-    "sercq_send-title": "Digitalno prebivališče SEND",
-    "sercq_send-description": "Je kot fizično prebivališče, vendar na spletu. Če izberete SEND kot svoje digitalno prebivališče, prejemate obvestila organizacij, ki se pridružijo platformi, v realnem času in se lahko posvetujete z njimi, ne glede na to, kje se nahajate.",
+    "validation-progress-content": "Preverjamo, če je naslov PEC veljaven. V 24 urah boste prejeli e-poštno sporočilo z rezultatom.",
+    "sercq_send-title": "Platforma SEND",
+    "sercq_send-description": "Ko vam organizacija pošlje obvestilo SEND, se to varno in z zakonsko vrednostjo dostavi prek same platforme.",
+    "sercq-send-description-pec-enabled": "Uporabite SEND kot digitalno prebivališče za upravljanje obvestil SEND na enem mestu, ne da bi vas skrbelo za priporočena pisma v papirnati obliki in povezane stroške.",
     "sercq-send-active": "Aktiviraj",
+    "sercq-send-active-pec-enabled": "Aktiviraj digitalno prebivališče",
     "sercq-send-info-title": "Aktivirajte SEND kot svoje digitalno prebivališče",
     "sercq-send-info-description": "Če aktivirate digitalno prebivališče, SEND postane <strong>vaš uradni naslov</strong> za komunikacijo z javno upravo.",
-    "sercq-send-info-advantages": "Prednosti",
+    "sercq-send-info-advantages": "Zakaj je koristno?",
     "sercq-send-info-list": [
       {
         "title": "100 % digitalna obvestila",
-        "description": "Obvestil v papirnati obliki ne boste več prejemali."
+        "description": "Obvestil SEND ne boste več prejemali v papirnati obliki."
       },
       {
-        "title": "Brez stroškov obveščanja",
+        "title": "Prihranek pri poštnih stroških",
         "description": "Ne bo vam treba skrbeti za prevzem papirnatih dokumentov in plačilo povezanih stroškov."
       },
       {
         "title": "Vse na enem mestu",
-        "description": "Obvestila, ki vam jih organizacije pošiljajo prek SEND, bodo vedno dostavljena na vaše digitalno prebivališče in na voljo v vašem rezerviranem območju."
+        "description": "Obvestila SEND vam bodo dostavljena varno in bodo vsa na voljo v vašem rezerviranem območju SEND."
       }
     ],
-    "sercq-send-info-tos": "S pritiskom na »Aktiviraj« izjavljate, da ste prebrali in se strinjate s <0>Pogoji storitve</0>.",
     "sercq_send-added-successfully": "Digitalno prebivališče je pravilno aktivirano",
     "remove-sercq_send-title": "Ali ste prepričani, da želite onemogočiti digitalno prebivališče pri SEND?",
-    "remove-sercq_send-message": "Ne boste več imeli uradnega digitalnega naslova za komunikacijo z javno upravo in lahko se vrnete na prejemanje obvestil v papirnati obliki.",
+    "remove-sercq_send-message": "<0>Če onemogočite digitalno prebivališče SEND, lahko prejmete komunikacije s priporočeno pošto in <strong>plačate povezane stroške.</strong></0><1>Še naprej boste prejemali opozorila po e-pošti, lahko jih onemogočite v razdelku Tvoji kontaktni podatki.</1>",
+    "remove-sercq_send-confirm": "Onemogoči digitalno prebivališče",
     "block-remove-digital-domicile-title": "Digitalnega prebivališča ni mogoče deaktivirati",
+    "block-remove-digital-domicile-message": "Za nadaljevanje morate najprej deaktivirati digitalna prebivališča, prilagojena za posamezno organizacijo.",
     "sercq_send-removed-successfully": "Digitalno prebivališče je pravilno deaktivirano",
     "sercq-send-io-title": "Aktivirajte SEND na IO",
-    "sercq-send-io-description": "Aktivirajte SEND - Notifiche Digitali na IO za<strong> prejemanje sporočil, poslanih na vaše digitalno prebivališče SEND neposredno v aplikaciji</strong>.",
-    "sercq-send-io-advantages": "Na IO"
+    "sercq-send-io-description": "Aktivirajte SEND - Digitalna obvestila na IO za<strong> prejemanje sporočil, poslanih na vaše digitalno prebivališče SEND neposredno v aplikaciji</strong>.",
+    "sercq-send-io-advantages": "Na IO",
+    "sercq-send-wizard": {
+      "title": "Aktiviraj digitalno prebivališče na SEND",
+      "title-transfer": "Prenesi digitalno prebivališče na platformo SEND",
+      "button-transfer": "Prenesi digitalno prebivališče",
+      "button-activation": "Aktiviraj digitalno prebivališče",
+      "step_1": {
+        "title": "Kako deluje",
+        "info-list": [
+          {
+            "title": "Organizacija vam pošlje obvestilo na SEND",
+            "description": "Obvestilo vam je <0>dostavljeno</0> varno in z zakonsko vrednostjo prek platforme"
+          },
+          {
+            "title": "Prejmeš sporočilo",
+            "description": "Ko prejmete obvestilo na SEND, vas obvestimo po e-pošti in na kanalih, ki jih izberete"
+          },
+          {
+            "title": "Dostopajte do obvestila",
+            "description": "Odprite podrobnosti digitalnega obvestila na platformi SEND ali, če ste storitev aktivirali, neposredno iz aplikacije IO"
+          }
+        ],
+        "info-tos": "S pritiskom na »Aktiviraj« izjavljate, da ste prebrali in se strinjate s <0>Pogoji storitve</0>.",
+        "have-pec": "Imate PEC?",
+        "have-pec-description": "Drugače lahko uporabite PEC kot digitalno prebivališče za obvestila SEND.",
+        "insert-pec": "Vnesite PEC",
+        "delivered-dialog-title": "Pravna vrednost obvestila na digitalnem prebivališču SEND",
+        "delivered-dialog-description": "Če izberete SEND kot digitalno prebivališče, bo obvestilo <strong>po 7 dneh od dostave</strong> pravno dostavljeno, tudi če ga niste prebrali.",
+        "pec-info-alert": "Platforma SEND bo nadomestila PEC kot vaše digitalno prebivališče."
+      },
+      "step_2": {
+        "title": "Povežite SEND z aplikacijo IO",
+        "content": "Povezava SEND z IO je najbolj praktičen način za prejemanje in upravljanje komunikacij z zakonsko vrednostjo.",
+        "io-list": [
+          "Prejmi obvestila v realnem času, takoj ko jih organizacija naloži na SEND",
+          "Lahko odprete in preberete dokumente, priložene obvestilu",
+          "Lahko plačate dolgovane zneske, če obvestilo zahteva plačilo"
+        ],
+        "confirm": "Poveži SEND z IO",
+        "disable": "Prekini povezavo SEND z IO",
+        "skip-io": "Nadaljuj brez povezovanja IO"
+      },
+      "step_3": {
+        "title": "Tvoj e-poštni naslov za prejemanje opozoril o obvestilih SEND",
+        "step-title": "Vnesite svoj e-poštni naslov",
+        "content": "E-pošta, na katero vas bomo opozorili, ko prejmete komunikacijo z zakonsko vrednostjo za vas na SEND.",
+        "sms-disclaimer": "Če pritisnete <strong>Dodaj številko</strong>, shranite ta kontakt za prejemanje opozoril o obvestilih SEND. Upravljate ga lahko v razdelku <strong>Kontaktni podatki.</strong>"
+      },
+      "step_4": {
+        "title": "Aktivirate digitalno prebivališče na SEND",
+        "step-title": "Povzetek",
+        "content": "Tvoje komunikacije z zakonsko vrednostjo bodo dostavljene na:",
+        "digital-domicile": "Digitalno prebivališče",
+        "send": "SEND",
+        "courtesy-content": "Izbral si prejemanje sporočila na:",
+        "contacts-list": {
+          "email": {
+            "title": "E-poštni naslov",
+            "textDisabled": "Dodaj e-pošto"
+          },
+          "io": {
+            "title": "Aplikacija IO",
+            "textDisabled": "Poveži SEND z IO",
+            "textEnabled": "Storitev SEND aktivirana"
+          },
+          "sms": {
+            "title": "Številka mobilnega telefona",
+            "textDisabled": "Dodaj številko mobilnega telefona"
+          }
+        },
+        "disclaimer": "S pritiskom na “Aktiviraj digitalno prebivališče” izjavljate, da ste prebrali <0>Informacije o zasebnosti</0> in se strinjate s <1>Pogoji storitve</1>",
+        "enable": "Aktiviraj digitalno prebivališče"
+      },
+      "feedback": {
+        "title-transfer": "Posodobil si svoje digitalno prebivališče",
+        "title-pec-activation": "Aktivacija digitalnega prebivališča v teku",
+        "title-pec-transfer": "Prenos digitalnega prebivališča v teku",
+        "title-sercq_send-activation": "Aktiviral si svoje digitalno prebivališče na SEND",
+        "title-sercq_send-transfer": "Prenesel si svoje digitalno prebivališče na SEND",
+        "content-pec": "PEC, ki ste jo vnesli, je v fazi validacije. Ko bo potrjena, se bo digitalno prebivališče aktiviralo in prejeli boste vse komunikacije z zakonsko vrednostjo na naslov, ki ste ga izbrali.",
+        "content-pec-transfer": "PEC je v fazi validacije. Ko bo potrjena, bo vaše digitalno prebivališče preneseno na naslov, ki ste ga izbrali. Do takrat ostaja aktivno digitalno prebivališče SEND.",
+        "content-sercq_send": "Svoje komunikacije z zakonsko vrednostjo boste prejeli na svoje digitalno prebivališče na SEND in sporočilo na kontaktne podatke, ki ste jih izbrali.",
+        "go-to-contacts": "Nazaj na vaše kontakte"
+      }
+    },
+    "pec-contact-wizard": {
+      "title": "Uporabite PEC kot digitalno prebivališče",
+      "title-transfer": "Prenesite digitalno prebivališče na PEC",
+      "content-title": "Vnesite svojo PEC",
+      "content-description": "Ko vam organizacija pošlje obvestilo SEND, prejmete komunikacijo z zakonsko vrednostjo na PEC, ki ste jo izbrali.",
+      "input-label": "Naslov PEC",
+      "sercq-info-alert": "PEC bo nadomestila platformo SEND kot vaše digitalno prebivališče.",
+      "disclaimer": "Sprejemam, da SEND uporablja ta naslov prednostno pred morebitnimi PEC, registriranimi pri organizaciji pošiljateljici ali prisotnimi v javnih registrih."
+    },
+    "digital-domicile-management": {
+      "title": "Upravljajte svoje digitalno prebivališče",
+      "sercq_send-active": "Platforma SEND je tvoje digitalno prebivališče",
+      "choose-action": "Izberite možnost",
+      "transfer": {
+        "title-pec": "Prenesite digitalno prebivališče na platformo SEND",
+        "content-pec": "Platforma SEND vam zagotavlja varne dostave z zakonsko vrednostjo. Storitev je brezplačna in ne zahteva dodatnih orodij.",
+        "action-pec": "Prenesi na SEND",
+        "title-sercq_send": "Prenesite digitalno prebivališče na PEC",
+        "content-sercq_send": "Če imate PEC, jo lahko uporabite kot digitalno prebivališče za obvestila SEND.",
+        "action-sercq_send": "Prenesi na PEC"
+      },
+      "special_contacts": {
+        "title": "Prilagodite svoje digitalno prebivališče za organizacijo pošiljateljico",
+        "content": "Izberite, kam želite prejemati obvestila, ki vam jih pošilja določena organizacija.",
+        "action": "Prilagodi za organizacijo"
+      }
+    }
   },
   "io-contact": {
-    "title": "Aplikacija IO",
-    "description": "Preberite in upravljajte uradno komunikacijo neposredno na IO: ko za vas prispe obvestilo, ga prejmete v aplikaciji in lahko poravnate vse stroške.",
+    "title": "SEND na aplikaciji IO",
+    "description": "Povezava SEND z IO je najbolj praktičen način za prejemanje in upravljanje komunikacij z zakonsko vrednostjo: ko je obvestilo za vas, ga prejmete v aplikaciji in lahko plačate morebitne stroške.",
+    "description-enabled": "Ko je obvestilo za vas, ga prejmete neposredno v aplikaciji in lahko plačate morebitne stroške.",
     "enable": "Aktivirajte SEND na IO",
     "download": "Prenesite aplikacijo IO",
     "disable-modal": {
-      "title": "Ali želite deaktivirati storitev »Notifiche Digitali« v IO?",
-      "confirm": "Deaktiviraj storitev",
-      "content": "Ko prejmete obvestilo, ne boste več prejeli sporočila v aplikaciji."
+      "title": "Deaktivirajte SEND na aplikaciji IO",
+      "content": "Če potrdite, ne boste več prejemali obvestil SEND v aplikaciji.",
+      "content-dod-enabled": "<0>Če deaktivirate SEND na IO, <strong>ne boste več prejemali obvestil SEND v aplikaciji.</strong></0><1>Ne pozabite, da če obvestila SEND ne preberete pravočasno, morda ne boste seznanjeni z morebitnimi roki in lahko nastanejo sankcije.</1>",
+      "confirm-dod-enabled": "Deaktiviraj SEND na IO"
+    },
+    "info-modal": {
+      "title": "SEND na IO: kako deluje",
+      "subtitle": "Za vsako novo obvestilo SEND prejmete sporočilo na aplikacijo IO, s katere lahko udobno odprete priložene dokumente in opravite predvidena plačila.",
+      "content": "Če nimate aktivnega digitalnega prebivališča in sporočila ne odprete v 5 dneh od pošiljanja, boste dokumente prejeli v papirnati obliki na dom."
     }
   },
   "courtesy-contacts": {
-    "email-title": "E-pošta",
-    "email-filled-description": "Ko boste prejeli obvestilo, vas bomo na naslov, ki ste ga izbrali, poslali e-poštno sporočilo.",
-    "sms-title": "SMS",
-    "sms-description": "Ko boste prejeli obvestilo, vas bomo na številko, ki ste jo izbrali, poslali SMS sporočilo.",
+    "email-title": "Vaš e-poštni naslov",
+    "email-empty-description": "Dodajte e-poštni naslov, na katerega vas lahko opozorimo, ko je na SEND obvestilo za branje.",
+    "email-filled-description": "Ko je obvestilo za vas, vas opozorimo z e-poštnim sporočilom na naslov, ki ste ga izbrali.",
+    "email-sms-updates": "Želite prejemati opozorila tudi po SMS-u?",
+    "email-sms-add": "Dodaj številko mobilnega telefona",
+    "sms-title": "Vaš mobilni telefon",
+    "sms-description": "Ko je obvestilo za vas, vas opozorimo z SMS-om.",
     "link-sms-placeholder": "Vaš mobilni telefon",
-    "link-email-placeholder": "Vaš e-poštni naslov",
-    "sms-add": "Obvestite me po SMS-u",
-    "email-add": "Obvesti me po e-pošti",
+    "link-email-placeholder": "E-poštni naslov",
+    "sms-add": "Dodaj številko",
+    "email-add": "Dodaj e-pošto",
     "email-verify": "Potrdi e-poštni naslov {{value}}",
-    "email-verify-descr": "Na navedeni e-poštni naslov smo poslali kodo. Koda <strong>velja 15 minut</strong>.",
+    "email-verify-descr": "Na navedeni e-poštni naslov smo poslali kodo. Koda je <strong>veljavna 15 minut</strong>.",
     "sms-verify": "Preverite mobilno številko {{value}}",
-    "sms-verify-descr": "Kodo smo poslali na navedeno mobilno številko. Koda <strong>velja 15 minut</strong>.",
+    "sms-verify-descr": "Kodo smo poslali na navedeno mobilno številko. Koda je <strong>veljavna 15 minut</strong>.",
     "email-new-code": "Je niste prejeli? Preverite, ali ste vnesli pravilen e-poštni naslov, ali <0>ustvarite novo kodo</0>.",
     "sms-new-code": "Je niste prejeli? Preverite, ali ste vnesli pravilno telefonsko številko, ali <0>ustvarite novo kodo</0>.",
     "email-to-add": "Elektronski naslov",
@@ -84,30 +221,71 @@
     "email-added-successfully": "E-poštni naslov je bil uspešno dodan",
     "sms-added-successfully": "Številka mobilnega telefona je bila uspešno dodana",
     "email-removed-successfully": "E-poštni naslov je bil uspešno odstranjen",
+    "email-and-sercq-removed-successfully": "E-pošta in digitalno prebivališče SEND sta deaktivirana",
     "sms-removed-successfully": "Številka mobilnega telefona je bila uspešno odstranjena",
-    "remove-email": "Odstrani e-poštni naslov",
-    "remove-email-message": "Ali ste prepričani, da želite odstraniti e-poštni naslov {{value}}?",
-    "remove-sms": "Odstrani mobilni telefon",
-    "remove-sms-message": "Ste prepričani, da želite odstraniti številko mobilnega telefona {{value}}?"
+    "io-added-successfully": "Aktivirali ste storitev SEND - Digitalna obvestila na IO.",
+    "io-removed-successfully": "Deaktivirali ste storitev SEND - Digitalna obvestila na IO.",
+    "remove-email": "Onemogoči e-pošto",
+    "remove-email-pec-enabled-title": "Želite deaktivirati opozorila po e-pošti?",
+    "remove-email-pec-enabled-message": "<0>Če deaktivirate e-poštni naslov, <strong>vas ne moremo opozoriti, ko je komunikacija z zakonsko vrednostjo za vas</strong>.</0><1>Ne pozabite, da če obvestila SEND ne preberete pravočasno, morda ne boste seznanjeni z morebitnimi roki in lahko nastanejo sankcije.</1>",
+    "remove-email-no-domicile-title": "Onemogoči e-pošto",
+    "remove-email-no-domicile-message": "Če potrdite, ne boste več prejemali e-pošte na {{value}}, ko je obvestilo SEND za branje.",
+    "remove-email-preconfirm-title": "Želite deaktivirati opozorila po e-pošti?",
+    "remove-email-preconfirm-message": "<0>Če deaktivirate e-poštni naslov, vas ne moremo <strong>opozoriti, ko je komunikacija z zakonsko vrednostjo za vas.</strong></0>",
+    "remove-email-and-sercq": "Onemogoči e-pošto in prebivališče",
+    "remove-email-and-sercq-title": "Z e-pošto se deaktivira tudi digitalno prebivališče SEND",
+    "remove-email-and-sercq-message": "<0>Če se odločite za deaktivacijo digitalnega prebivališča SEND, lahko prejmete komunikacije s priporočeno pošto in <strong>plačate povezane stroške.</strong></0>",
+    "remove-sms": "Onemogoči mobilni telefon",
+    "remove-sms-title-dod-enabled": "Želite deaktivirati opozorila po SMS-u?",
+    "remove-sms-message-dod-enabled": "<0>Če deaktivirate svojo telefonsko številko, <strong>ne prejmete opozoril po SMS-u, ko je komunikacija z zakonsko vrednostjo za vas na SEND.</strong></0><1>Ne pozabite, da če obvestila SEND ne preberete pravočasno, morda ne boste seznanjeni z morebitnimi roki in lahko nastanejo sankcije.</1>",
+    "remove-sms-message": "Če potrdite, ne boste več prejemali SMS-a na {{value}}, ko je obvestilo SEND za branje.",
+    "info-modal-email-title": "Opozorila po e-pošti: kako delujejo",
+    "info-modal-email-subtitle": "Ko so nova obvestila SEND za vas, boste prejeli opozorilo na vneseni e-poštni naslov.",
+    "info-modal-email-content": "Če nimate aktivnega digitalnega prebivališča in obvestila ne odprete v 5 dneh od pošiljanja e-pošte, boste dokumente prejeli v papirnati obliki na dom.",
+    "info-modal-sms-title": "Opozorila po SMS-u: kako delujejo",
+    "info-modal-sms-subtitle": "Ko so nova obvestila za vas, boste prejeli SMS na vneseno številko.",
+    "info-modal-sms-content": "Če nimate aktivnega digitalnega prebivališča in obvestila ne odprete v 5 dneh od pošiljanja SMS-a, boste dokumente prejeli v papirnati obliki na dom.",
+    "confirmation-modal-title": "Dodaj e-poštni naslov za opozorila!",
+    "confirmation-modal-io-title": "Pomembno je, da dodate svoje kontaktne podatke!",
+    "confirmation-modal-io-content": "Če SEND ne povežete z IO, <strong>ne boste prejeli sporočila v aplikaciji</strong>, ko prejmete komunikacijo z zakonsko vrednostjo na SEND.",
+    "confirmation-modal-disable-io-content": "Če prekinete povezavo SEND z IO, <strong>ne boste prejeli sporočila v aplikaciji</strong>, ko prejmete komunikacijo z zakonsko vrednostjo na SEND.",
+    "confirmation-modal-io-accept": "Poveži SEND z IO",
+    "confirmation-modal-email-content": "Za aktiviranje digitalnega prebivališča SEND potrebujemo vaš e-poštni naslov, da vas lahko <strong>opozorimo, ko je komunikacija z zakonsko vrednostjo za vas.</strong>",
+    "block-remove-email-title": "E-pošte ni mogoče deaktivirati",
+    "block-remove-email-message": "Za nadaljevanje morate najprej odstraniti e-poštne naslove, prilagojene za posamezno organizacijo.",
+    "block-remove-email-sercq-default-pec-special-message": "Za nadaljevanje morate najprej deaktivirati digitalno prebivališče in prilagojene kontaktne podatke.",
+    "block-remove-sms-title": "Številke mobilnega telefona ni mogoče deaktivirati",
+    "block-remove-sms-message": "Za nadaljevanje morate najprej odstraniti številke mobilnih telefonov, prilagojene za posamezno organizacijo."
   },
   "special-contacts": {
-    "select-address": "Izberite kontaktne podatke",
-    "add-sender": "Organizacija, ki bo povezana",
+    "select-address": "Tipologija",
+    "add-sender": "Organizacija pošiljateljica",
     "pec": "Naslov PEC",
     "sercq_send": "Digitalno prebivališče SEND",
-    "link-pec-label": "Vaš PEC",
+    "link-pec-label": "Naslov PEC",
     "link-sercq-label": "Vaše digitalno prebivališče je SEND",
-    "contact-to-add-description": "Povežite naslov z določeno organizacijo, da prilagodite sporočila, ki jih prejmete glede na pošiljatelja.",
-    "contact-already-exists": "Izbrana organizacija je že povezana s tem naslovom. Če pritisnete »Poveži«, ga bo nadomestil tisti, ki ste ga pravkar navedli.",
+    "contact-to-add-description": "Prilagojeno digitalno prebivališče, kamor boste prejeli obvestila SEND, ki vam jih pošilja določena organizacija",
+    "contact-already-exists": "<0>Ta organizacija je že povezana s kontaktnim podatkom {{contactValue}}.</0><1>Če pritisnete <strong>Potrdi</strong>, ga boste nadomestili s tistim, ki ste ga pravkar vnesli.</1>",
+    "validating-pec-banner-content": "<0>Za to organizacijo ste že vnesli PEC, ki je v fazi validacije.</0><1>Ko bo potrjena, jo boste lahko spremenili.</1>",
+    "validating-pec-error-message": "Za to organizacijo ste že vnesli PEC, ki je trenutno v validaciji",
     "fetch-party-error": "Podatkov, potrebnih za ustvarjanje novega kontaktnega podatka, ni bilo mogoče pridobiti.",
-    "modal-title": "Prilagodite naslov, povezan z organizacijo",
-    "card-title": "Prilagojeno",
-    "remove-special-title": "Ali želite izbrisati {{contactValue}}?",
-    "remove-special-description": "Opozorila v zvezi z obvestili povezanih organizacij se ne bodo več pošiljala na ta naslov, temveč na glavnega."
+    "add-title": "Vnesite organizacijo in kontaktni podatek za povezavo",
+    "card-title": "PRILAGOJENO ZA ORGANIZACIJO",
+    "remove-special-title": "Želite izbrisati {{contactValue}}?",
+    "remove-special-description": "Opozorila v zvezi z obvestili povezanih organizacij se ne bodo več pošiljala na ta naslov, temveč na glavnega.",
+    "pec-disclaimer": "Sprejemam, da SEND uporablja ta naslov prednostno pred morebitnimi PEC, registriranimi pri organizaciji pošiljateljici ali prisotnimi v javnih registrih.",
+    "courtesy-banner": {
+      "title": "Funkcionalnost je ukinjena",
+      "description": "Ne morete več vnašati vljudnostnih kontaktnih podatkov, prilagojenih za organizacijo, ali spreminjati že obstoječih kontaktnih podatkov. Če izbrišete prilagojen kontaktni podatek, ga ne boste mogli več obnoviti ali znova vnesti. "
+    },
+    "email-description": "E-pošta, na katero vas bomo opozorili, ko prejmete komunikacijo z zakonsko vrednostjo za vas na SEND.",
+    "sercq-disclaimer": "S pritiskom na “Potrdi” izjavljate, da ste prebrali <0>Informacije o zasebnosti</0> in se strinjate s <1>Pogoji storitve</1>"
   },
   "common": {
     "duplicate-contact-title": "Kontaktni podatek je že prisoten",
-    "duplicate-contact-descr": "Stik {{value}} je že prisoten, ali želite vseeno nadaljevati?",
+    "duplicate-contact-descr": "Stik {{value}} je že prisoten, želite vseeno nadaljevati?",
+    "duplicate-default-contact-title": "Ta kontaktni podatek se že uporablja kot digitalno prebivališče",
+    "duplicate-default-contact-descr": "Kontaktni podatek {{value}} se že uporablja kot glavno digitalno prebivališče na SEND.<br />Za prilagoditev digitalnega prebivališča za organizacijo pošiljateljico izberite drug kontaktni podatek.",
     "enti-not-found": "Najdena ni bila nobena organizacija",
     "too-long-field-error": "Vpišite največ {{maxLength}} znakov"
   },
@@ -118,7 +296,7 @@
     },
     "retry_limit_code": {
       "title": "Opravili ste preveč poskusov",
-      "message": "Prevečkrat ste vnesli napačno kodo. Če želite poskusiti znova, pritisnite »Prekliči«, prepričajte se, da je stik pravilen in vnesite novo kodo."
+      "message": "Prevečkrat ste vnesli napačno kodo. Za ponovni poskus pritisnite »Prekliči«, prepričajte se, da je stik pravilen in vnesite novo kodo."
     },
     "expired_verification_code": {
       "title": "Koda je potekla",
@@ -128,7 +306,7 @@
   "domicile-banner": {
     "no-sercq-send-title": "Nič več papirnatih dokumentov: aktivirajte SEND kot digitalno prebivališče",
     "no-sercq-send-description": "Izberite platformo SEND kot svoje digitalno prebivališče, če želite prihajajoča obvestila prejemati samo digitalno in jih prebirati v realnem času, ne glede na to, kje se nahajate.",
-    "no-sercq-cta": "Aktiviraj",
+    "no-sercq-cta": "Začni",
     "no-courtesy-title": "Ne zamudite pomembnih sporočil",
     "no-courtesy-description": "Brez vljudnostnega naslova vas ne moremo obvestiti, da na vas čaka uradno sporočilo na SEND.",
     "complete-addresses": "Vnesite e-poštni naslov",

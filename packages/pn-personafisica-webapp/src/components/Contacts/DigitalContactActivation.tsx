@@ -30,13 +30,8 @@ const DigitalContactActivation: React.FC<Props> = ({ isTransferring = false, onG
   const { t } = useTranslation(['recapiti', 'common']);
   const navigate = useNavigate();
   const { IS_DOD_ENABLED } = getConfiguration();
-  const {
-    addresses,
-    defaultEMAILAddress,
-    defaultAPPIOAddress,
-    defaultSERCQ_SENDAddress,
-    courtesyAddresses,
-  } = useAppSelector(contactsSelectors.selectAddresses);
+  const { addresses, defaultEMAILAddress, defaultAPPIOAddress, defaultSERCQ_SENDAddress } =
+    useAppSelector(contactsSelectors.selectAddresses);
 
   const [activeStep, setActiveStep] = useState(0);
   const [showConfirmationModal, setShowConfirmationModal] = useState(false);
@@ -58,7 +53,7 @@ const DigitalContactActivation: React.FC<Props> = ({ isTransferring = false, onG
   const handleConfirmEmailSmsStep = () => {
     PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SERCQ_SEND_EMAIL_SMS_CONTINUE, {
       event_type: EventAction.ACTION,
-      contacts: addresses,
+      addresses,
     });
     if (defaultEMAILAddress) {
       goToNextStep();
@@ -178,7 +173,7 @@ const DigitalContactActivation: React.FC<Props> = ({ isTransferring = false, onG
           onFeedbackShow: () =>
             PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SERCQ_SEND_THANK_YOU_PAGE, {
               event_type: EventAction.SCREEN_VIEW,
-              contacts: courtesyAddresses,
+              addresses,
             }),
         },
         actions: !isEmailSmsStep ? { justifyContent: 'center' } : {},
@@ -205,14 +200,8 @@ const DigitalContactActivation: React.FC<Props> = ({ isTransferring = false, onG
             },
           }}
         >
-          <Trans
-            ns="recapiti"
-            i18nKey={`courtesy-contacts.confirmation-modal-email-content`}
-            components={[
-              <DialogContentText key="paragraph1" color="text.primary" />,
-              <DialogContentText key="paragraph2" color="text.primary" mt={2} />,
-            ]}
-          />
+          <Trans ns="recapiti" i18nKey={`courtesy-contacts.confirmation-modal-email-content`} />
+          <DialogContentText key="paragraph1" color="text.primary" />
         </ConfirmationModal>
       </PnWizardStep>
       <PnWizardStep label={t('legal-contacts.sercq-send-wizard.step_4.step-title')}>
