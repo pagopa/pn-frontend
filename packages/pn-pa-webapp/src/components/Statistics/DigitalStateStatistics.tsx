@@ -66,7 +66,12 @@ const DigitalStateStatistics: React.FC<Props> = (props) => {
       show: true,
       confine: true,
       formatter: (params) => {
-        const elem = _.isArray(params) ? params[0] : params;
+        const elem = (_.isArray(params) ? params[0] : params) as {
+          dataIndex: number;
+          marker: string;
+          name: string;
+          data: { value: number };
+        };
         const pos = elem.dataIndex ?? 0;
         const title = labels[pos].title;
         const description = labels[pos].description;

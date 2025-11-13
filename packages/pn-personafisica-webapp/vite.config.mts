@@ -19,6 +19,11 @@ const vitestConfig = defineVitestConfig({
       exclude: ['src/models/**'],
       reportOnFailure: true,
     },
+    server: {
+      deps: {
+        inline: ['@pagopa/mui-italia'],
+      },
+    },
   },
 });
 
