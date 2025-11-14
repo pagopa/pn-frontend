@@ -1,4 +1,4 @@
-import { useErrors } from '../../hooks';
+import { useErrors } from '../../hooks/useErrors';
 import ApiError from './ApiError';
 
 interface ApiErrorWrapperCommonProps {

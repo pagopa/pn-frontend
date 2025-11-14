@@ -6,7 +6,7 @@
     "generators": {
       "bff-notifications": {
         "generatorName": "typescript-axios",
-        "inputSpec": "https://raw.githubusercontent.com/pagopa/pn-bff/6e57be809122945c29c99493ab86b75fdab0311b/docs/openapi/api-external-pn-bff-pa-notifications.yaml",
+        "inputSpec": "https://raw.githubusercontent.com/pagopa/pn-bff/189a5bd602f6c716002bf12e814448d08fb59ddd/docs/openapi/api-external-pn-bff-pa-notifications.yaml",
         "output": "./src/generated-client/notifications",
         "additionalProperties": {
           "supportsES6": true,
@@ -17,7 +17,7 @@
       },
       "bff-api-keys": {
         "generatorName": "typescript-axios",
-        "inputSpec": "https://raw.githubusercontent.com/pagopa/pn-bff/6e57be809122945c29c99493ab86b75fdab0311b/docs/openapi/api-external-pn-bff-pa-apikeys.yaml",
+        "inputSpec": "https://raw.githubusercontent.com/pagopa/pn-bff/189a5bd602f6c716002bf12e814448d08fb59ddd/docs/openapi/api-external-pn-bff-pa-apikeys.yaml",
         "output": "./src/generated-client/api-keys",
         "additionalProperties": {
           "supportsES6": true,
@@ -28,7 +28,7 @@
       },
       "bff-tos-privacy": {
         "generatorName": "typescript-axios",
-        "inputSpec": "https://raw.githubusercontent.com/pagopa/pn-bff/6e57be809122945c29c99493ab86b75fdab0311b/docs/openapi/api-external-pn-bff-tos-privacy.yaml",
+        "inputSpec": "https://raw.githubusercontent.com/pagopa/pn-bff/189a5bd602f6c716002bf12e814448d08fb59ddd/docs/openapi/api-external-pn-bff-tos-privacy.yaml",
         "output": "./src/generated-client/tos-privacy",
         "additionalProperties": {
           "supportsES6": true,
@@ -39,7 +39,7 @@
       },
       "bff-pa-info": {
         "generatorName": "typescript-axios",
-        "inputSpec": "https://raw.githubusercontent.com/pagopa/pn-bff/6e57be809122945c29c99493ab86b75fdab0311b/docs/openapi/api-external-pn-bff-pa-info.yaml",
+        "inputSpec": "https://raw.githubusercontent.com/pagopa/pn-bff/189a5bd602f6c716002bf12e814448d08fb59ddd/docs/openapi/api-external-pn-bff-pa-info.yaml",
         "output": "./src/generated-client/info-pa",
         "additionalProperties": {
           "supportsES6": true,
@@ -50,7 +50,7 @@
       },
       "bff-downtime-logs": {
         "generatorName": "typescript-axios",
-        "inputSpec": "https://raw.githubusercontent.com/pagopa/pn-bff/6e57be809122945c29c99493ab86b75fdab0311b/docs/openapi/api-external-pn-bff-downtime-logs.yaml",
+        "inputSpec": "https://raw.githubusercontent.com/pagopa/pn-bff/189a5bd602f6c716002bf12e814448d08fb59ddd/docs/openapi/api-external-pn-bff-downtime-logs.yaml",
         "output": "./src/generated-client/downtime-logs",
         "additionalProperties": {
           "supportsES6": true,
@@ -61,7 +61,7 @@
       },
       "bff-sender-dashboard": {
         "generatorName": "typescript-axios",
-        "inputSpec": "https://raw.githubusercontent.com/pagopa/pn-bff/6e57be809122945c29c99493ab86b75fdab0311b/docs/openapi/api-external-pn-bff-sender-dashboard.yaml",
+        "inputSpec": "https://raw.githubusercontent.com/pagopa/pn-bff/189a5bd602f6c716002bf12e814448d08fb59ddd/docs/openapi/api-external-pn-bff-sender-dashboard.yaml",
         "output": "./src/generated-client/sender-dashboard",
         "additionalProperties": {
           "supportsES6": true,

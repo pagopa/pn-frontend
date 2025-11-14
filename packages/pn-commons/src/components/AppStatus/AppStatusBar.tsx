@@ -3,8 +3,8 @@ import ErrorIcon from '@mui/icons-material/Error';
 import { Stack, Typography, useTheme } from '@mui/material';
 import { alpha } from '@mui/material/styles';
 
-import { useIsMobile } from '../../hooks';
-import { AppCurrentStatus } from '../../models';
+import { useIsMobile } from '../../hooks/useIsMobile';
+import { AppCurrentStatus } from '../../models/AppStatus';
 import { getLocalizedOrDefaultLabel } from '../../utility/localization.utility';
 
 export const AppStatusBar = ({ status }: { status: AppCurrentStatus }) => {

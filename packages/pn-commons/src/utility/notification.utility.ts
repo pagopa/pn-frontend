@@ -17,7 +17,6 @@ import {
   NotificationDetailPayment,
   NotificationDetailRecipient,
   NotificationDetailTimelineDetails,
-  NotificationStatus,
   NotificationStatusHistory,
   PagoPAPaymentFullDetails,
   PaidDetails,
@@ -27,7 +26,8 @@ import {
   SendDigitalDetails,
   SendPaperDetails,
   TimelineCategory,
-} from '../models';
+} from '../models/NotificationDetail';
+import { NotificationStatus } from '../models/NotificationStatus';
 import { getLocalizedOrDefaultLabel } from '../utility/localization.utility';
 import { TimelineStepInfo } from './TimelineUtils/TimelineStep';
 import { TimelineStepFactory } from './TimelineUtils/TimelineStepFactory';

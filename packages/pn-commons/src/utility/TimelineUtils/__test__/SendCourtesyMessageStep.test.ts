@@ -1,5 +1,5 @@
 import { getTimelineElem, notificationDTO } from '../../../__mocks__/NotificationDetail.mock';
-import { DigitalDomicileType, TimelineCategory } from '../../../models';
+import { DigitalDomicileType, TimelineCategory } from '../../../models/NotificationDetail';
 import { initLocalizationForTest } from '../../../test-utils';
 import { SendCourtesyMessageStep } from '../SendCourtesyMessageStep';
 

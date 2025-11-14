@@ -1,8 +1,9 @@
 import { vi } from 'vitest';
 
-import { NotificationStatus } from '../../../models';
+import { NotificationStatus } from '../../../models/NotificationStatus';
 import { createMatchMedia, fireEvent, render } from '../../../test-utils';
-import { formatDate, getNotificationStatusInfos } from '../../../utility';
+import { formatDate } from '../../../utility/date.utility';
+import { getNotificationStatusInfos } from '../../../utility/notification.utility';
 import NotificationsDataSwitch from '../NotificationsDataSwitch';
 
 const data = {

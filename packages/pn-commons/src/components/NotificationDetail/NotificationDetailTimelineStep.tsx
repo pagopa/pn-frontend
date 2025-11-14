@@ -14,23 +14,21 @@ import {
   TimelineNotificationSeparator,
 } from '@pagopa/mui-italia';
 
-import { useIsMobile } from '../../hooks';
+import { useIsMobile } from '../../hooks/useIsMobile';
 import {
   INotificationDetailTimeline,
   LegalFactId,
   NotificationDetailRecipient,
-  NotificationStatus,
   NotificationStatusHistory,
   TimelineCategory,
-} from '../../models';
+} from '../../models/NotificationDetail';
+import { NotificationStatus } from '../../models/NotificationStatus';
+import { formatDay, formatMonthString, formatTime } from '../../utility/date.utility';
 import {
-  formatDay,
-  formatMonthString,
-  formatTime,
   getLegalFactLabel,
   getNotificationStatusInfos,
   getNotificationTimelineStatusInfos,
-} from '../../utility';
+} from '../../utility/notification.utility';
 
 type Props = {
   timelineStep: NotificationStatusHistory;

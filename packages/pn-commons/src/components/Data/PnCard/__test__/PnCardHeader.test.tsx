@@ -1,6 +1,6 @@
 import { Box } from '@mui/material';
 
-import { Row } from '../../../../models';
+import { Row } from '../../../../models/PnTable';
 import { disableConsoleLogging, render } from '../../../../test-utils';
 import PnCardHeader from '../PnCardHeader';
 import PnCardHeaderItem from '../PnCardHeaderItem';

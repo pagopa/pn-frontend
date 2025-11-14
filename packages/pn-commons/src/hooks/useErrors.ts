@@ -1,14 +1,17 @@
 import { useSelector } from 'react-redux';
 
-import { IAppMessage } from '../models';
-import { appStateSelectors } from '../redux';
+import { IAppMessage } from '../models/AppMessage';
+import { appStateSelectors } from '../redux/slices/appStateSlice';
 
 /**
  * A custom React hook for handling and checking API errors in the application state.
  *
  * @returns {Object} An object containing the `hasApiErrors` and `hasSpecificStatusError` function.
  */
-export function useErrors(): { hasApiErrors: (actionType?: string) => boolean; hasSpecificStatusError: (status: number, actionType?: string) => boolean } {
+export function useErrors(): {
+  hasApiErrors: (actionType?: string) => boolean;
+  hasSpecificStatusError: (status: number, actionType?: string) => boolean;
+} {
   const errors = useSelector(appStateSelectors.selectErrors);
 
   function hasApiErrors(actionType?: string) {

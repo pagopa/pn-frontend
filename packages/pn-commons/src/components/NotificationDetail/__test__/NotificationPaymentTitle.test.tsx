@@ -1,8 +1,12 @@
 import { paymentInfo } from '../../../__mocks__/ExternalRegistry.mock';
 import { notificationDTO, payments } from '../../../__mocks__/NotificationDetail.mock';
-import { PaymentsData } from '../../../models';
+import { PaymentsData } from '../../../models/NotificationDetail';
 import { initLocalizationForTest, render } from '../../../test-utils';
-import { getF24Payments, getPagoPaF24Payments, populatePaymentsPagoPaF24 } from '../../../utility';
+import {
+  getF24Payments,
+  getPagoPaF24Payments,
+  populatePaymentsPagoPaF24,
+} from '../../../utility/notification.utility';
 import NotificationPaymentTitle from '../NotificationPaymentTitle';
 
 describe('NotificationPaymentTite component', () => {
@@ -126,7 +130,7 @@ describe('NotificationPaymentTite component', () => {
     const faq = getByTestId('faqNotificationCosts');
     expect(faq).toBeInTheDocument();
   });
-  
+
   it('should show title if all payments are paid, has more than one page BUT there are f24Only ', () => {
     const { container } = render(
       <NotificationPaymentTitle

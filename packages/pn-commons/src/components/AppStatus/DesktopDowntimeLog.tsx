@@ -1,7 +1,8 @@
 import { useMemo } from 'react';
 
 import { useFieldSpecs } from '../../hooks/useFieldSpecs';
-import { Column, Downtime, DowntimeLogHistory } from '../../models';
+import { Downtime, DowntimeLogHistory } from '../../models/AppStatus';
+import { Column } from '../../models/PnTable';
 import PnTable from '../Data/PnTable';
 import PnTableBody from '../Data/PnTable/PnTableBody';
 import PnTableBodyCell from '../Data/PnTable/PnTableBodyCell';
