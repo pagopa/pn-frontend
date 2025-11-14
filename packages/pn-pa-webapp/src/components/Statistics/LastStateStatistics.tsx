@@ -62,7 +62,11 @@ const LastStateStatistics: React.FC<Props> = (props) => {
     tooltip: {
       trigger: 'axis',
       formatter: (params) => {
-        const elem = _.isArray(params) ? params[0] : params;
+        const elem = (_.isArray(params) ? params[0] : params) as {
+          marker: string;
+          name: string;
+          data: { value: number };
+        };
         return `<div style="word-break: break-word;white-space: pre-wrap;">${elem.marker}${
           elem.name
         } <b>${elem.data.value.toLocaleString()}</b>
