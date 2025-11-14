@@ -1,5 +1,5 @@
 import { FormikValues, useFormik } from 'formik';
-import * as _ from 'lodash-es';
+import { isEqual } from 'lodash-es';
 import { forwardRef, useEffect, useImperativeHandle, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
@@ -48,7 +48,7 @@ const initialValues = (
     mandateId: string | undefined;
   }
 ): FormikValues => {
-  if (!filters || _.isEqual(filters, emptyValues)) {
+  if (!filters || isEqual(filters, emptyValues)) {
     return initialEmptyValues;
   }
   return {
@@ -99,7 +99,7 @@ const FilterNotifications = forwardRef(({ showFilters, currentDelegator }: Props
         iunMatch: values.iunMatch,
         mandateId: currentDelegator?.mandateId,
       };
-      if (_.isEqual(prevFilters, currentFilters)) {
+      if (isEqual(prevFilters, currentFilters)) {
         return;
       }
       dispatch(setNotificationFilters(currentFilters));
@@ -113,10 +113,10 @@ const FilterNotifications = forwardRef(({ showFilters, currentDelegator }: Props
   };
 
   const setDates = () => {
-    if (!_.isEqual(filters.startDate, tenYearsAgo)) {
+    if (!isEqual(filters.startDate, tenYearsAgo)) {
       setStartDate(formik.values.startDate);
     }
-    if (!_.isEqual(filters.endDate, today)) {
+    if (!isEqual(filters.endDate, today)) {
       setEndDate(formik.values.endDate);
     }
   };
@@ -126,7 +126,7 @@ const FilterNotifications = forwardRef(({ showFilters, currentDelegator }: Props
   }, []);
 
   useEffect(() => {
-    if (filters && _.isEqual(filters, emptyValues)) {
+    if (filters && isEqual(filters, emptyValues)) {
       formik.resetForm({
         values: initialEmptyValues,
       });
@@ -146,7 +146,7 @@ const FilterNotifications = forwardRef(({ showFilters, currentDelegator }: Props
   if (!showFilters) {
     return <></>;
   }
-  const isInitialSearch = _.isEqual(formik.values, initialEmptyValues);
+  const isInitialSearch = isEqual(formik.values, initialEmptyValues);
   return isMobile ? (
     <CustomMobileDialog>
       <CustomMobileDialogToggle

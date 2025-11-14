@@ -3,7 +3,7 @@
 /* eslint-disable complexity */
 
 /* eslint-disable functional/immutable-data */
-import * as _ from 'lodash-es';
+import { isNil, omit } from 'lodash-es';
 
 import {
   AnalogWorkflowDetails,
@@ -52,7 +52,7 @@ function localizeStatus(
 } {
   const isMultiRecipient = data?.isMultiRecipient;
   // eslint-disable-next-line functional/no-let
-  let filteredData: any = _.omit(data, ['isMultiRecipient']);
+  let filteredData: any = omit(data, ['isMultiRecipient']);
   if (Object.keys(filteredData).length === 0) {
     filteredData = undefined;
   }
@@ -513,7 +513,7 @@ export function getNotificationTimelineStatusInfos(
   recipients: Array<NotificationDetailRecipient>,
   allStepsForThisStatus?: Array<INotificationDetailTimeline>
 ): TimelineStepInfo | null {
-  const recipient = _.isNil(step.details.recIndex)
+  const recipient = isNil(step.details.recIndex)
     ? undefined
     : // For the accesses from recipient apps (cittadino / impresa)
     // the API response will probably (in some future) include only the info about the requester recipient,

@@ -1,5 +1,5 @@
 /* eslint-disable functional/no-let */
-import * as _ from 'lodash-es';
+import { cloneDeep, omit } from 'lodash-es';
 
 import {
   NotificationDetailDocument,
@@ -151,7 +151,7 @@ const newNotificationPaymentDocumentsMapper = (
   });
 
 export function newNotificationMapper(newNotification: NewNotification): BffNewNotificationRequest {
-  const clonedNotification = _.omit(_.cloneDeep(newNotification), [
+  const clonedNotification = omit(cloneDeep(newNotification), [
     'additionalAbstract',
     'additionalLang',
     'additionalSubject',

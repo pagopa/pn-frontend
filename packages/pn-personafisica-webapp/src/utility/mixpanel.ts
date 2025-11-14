@@ -1,4 +1,4 @@
-import * as _ from 'lodash-es';
+import { uniq } from 'lodash-es';
 
 import { interceptDispatch } from '@pagopa-pn/pn-commons';
 import { AnyAction, Dispatch, Middleware } from '@reduxjs/toolkit';
@@ -34,7 +34,7 @@ export const concatCourtestyContacts = (
       !(contact.channelType === ChannelType.IOMSG && contact.value === IOAllowedValues.DISABLED)
   );
 
-  const channelTypes = _.uniq(filteredContacts.map((contact) => contact.channelType));
+  const channelTypes = uniq(filteredContacts.map((contact) => contact.channelType));
 
   const contactParts = [];
 

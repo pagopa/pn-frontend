@@ -1,4 +1,4 @@
-import * as _ from 'lodash-es';
+import { isArray } from 'lodash-es';
 import { CSSProperties } from 'react';
 
 import { PnECharts, PnEChartsProps } from '@pagopa-pn/pn-data-viz';
@@ -38,7 +38,7 @@ const AggregateStatistics: React.FC<Props> = ({
     tooltip: {
       trigger: 'item',
       formatter: (params) => {
-        const elem = (_.isArray(params) ? params[0] : params) as {
+        const elem = (isArray(params) ? params[0] : params) as {
           marker: string;
           name: string;
           data: { value: number };

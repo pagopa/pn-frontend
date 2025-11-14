@@ -1,4 +1,4 @@
-import * as _ from 'lodash-es';
+import { uniqWith } from 'lodash-es';
 
 import { PaymentDetails, PaymentStatus } from '../models/NotificationDetail';
 import { PaymentCache, paymentCacheSchema } from '../models/PaymentCache';
@@ -64,7 +64,7 @@ export const setPaymentsInCache = (payments: Array<PaymentDetails>, iun: string)
   }
 
   if (paymentCache?.payments) {
-    const newPaymentCache = _.uniqWith(
+    const newPaymentCache = uniqWith(
       [...payments, ...paymentCache.payments],
       (a, b) =>
         a.pagoPa?.noticeCode === b.pagoPa?.noticeCode &&

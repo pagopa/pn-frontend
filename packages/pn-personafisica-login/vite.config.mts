@@ -64,5 +64,11 @@ export default defineConfig(({ mode }) => {
     },
     // Exclude the test and the mock folders from being processed by Vite
     exclude: ['**/__test__/**', '**/__mocks__/**'],
+    resolve: {
+      alias: {
+        // formik an yup use lodash and without this, also this library will be into the build
+        lodash: 'lodash-es',
+      },
+    },
   });
 });

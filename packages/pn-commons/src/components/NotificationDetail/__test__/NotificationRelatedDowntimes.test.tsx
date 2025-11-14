@@ -1,4 +1,4 @@
-import * as _ from 'lodash-es';
+import { cloneDeep } from 'lodash-es';
 import { vi } from 'vitest';
 
 import { beDowntimeHistoryWithIncidents } from '../../../__mocks__/AppStatus.mock';
@@ -361,7 +361,7 @@ describe('NotificationRelatedDowntimes component', () => {
   });
 
   it('cancelled modification', async () => {
-    const newMockHistory = _.cloneDeep(notificationDTO.notificationStatusHistory);
+    const newMockHistory = cloneDeep(notificationDTO.notificationStatusHistory);
     newMockHistory[0].status = NotificationStatus.CANCELLED;
     const { queryByTestId } = renderComponent(
       beDowntimeHistoryWithIncidents.result,

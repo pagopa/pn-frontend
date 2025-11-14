@@ -1,4 +1,4 @@
-import * as _ from 'lodash-es';
+import { isObject } from 'lodash-es';
 import React, { Fragment, useCallback, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
@@ -112,7 +112,7 @@ const NotificationDetail: React.FC = () => {
   const documentDowloadHandler = (
     document: string | NotificationDetailOtherDocument | undefined
   ) => {
-    if (_.isObject(document)) {
+    if (isObject(document)) {
       // AAR case
       dispatch(
         getSentNotificationDocument({
