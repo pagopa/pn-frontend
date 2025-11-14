@@ -1,5 +1,5 @@
-// import { visualizer } from 'rollup-plugin-visualizer';
-import { defineConfig, loadEnv, mergeConfig, splitVendorChunkPlugin } from 'vite';
+import { visualizer } from 'rollup-plugin-visualizer';
+import { defineConfig, loadEnv, mergeConfig } from 'vite';
 import { configDefaults, defineConfig as defineVitestConfig } from 'vitest/config';
 
 import basicSsl from '@vitejs/plugin-basic-ssl';
@@ -36,14 +36,12 @@ export default defineConfig(({ mode }) => {
     plugins: [
       react(),
       basicSsl(),
-      splitVendorChunkPlugin(),
-      /*visualizer({
+      visualizer({
         // Aggiungi il visualizer
         open: true, // Apre automaticamente il report nel browser dopo la build
         filename: 'build-stats.html', // Nome del file di report
         gzipSize: true, // Mostra la dimensione dopo gzip
       }),
-      */
     ],
     server: {
       host: env.HOST,
@@ -64,6 +62,13 @@ export default defineConfig(({ mode }) => {
       target: 'ES2020',
       rollupOptions: {
         external: ['**/*.test.tsx', '**/*.test.ts', '**/test-utils.tsx', '**/*.mock.ts'],
+        output: {
+          manualChunks(id: string) {
+            if (id.includes('node_modules')) {
+              return 'vendor';
+            }
+          },
+        },
       },
     },
     preview: {

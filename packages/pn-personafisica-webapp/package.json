@@ -60,10 +60,6 @@
     ]
   },
   "devDependencies": {
-    "@babel/core": "^7.23.2",
-    "@babel/preset-env": "^7.23.2",
-    "@babel/preset-react": "^7.23.2",
-    "@babel/preset-typescript": "^7.23.2",
     "@openapitools/openapi-generator-cli": "^2.13.1",
     "@testing-library/jest-dom": "^6.4.2",
     "@testing-library/react": "^14.0.0",
