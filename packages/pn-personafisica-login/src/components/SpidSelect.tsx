@@ -1,12 +1,16 @@
 import { Trans, useTranslation } from 'react-i18next';
 
 import ClearOutlinedIcon from '@mui/icons-material/ClearOutlined';
-import { Dialog, DialogContent, IconButton } from '@mui/material';
-import Button from '@mui/material/Button';
-import Grid from '@mui/material/Grid';
-import Icon from '@mui/material/Icon';
-import Link from '@mui/material/Link';
-import Typography from '@mui/material/Typography';
+import {
+  Button,
+  Dialog,
+  DialogContent,
+  Grid,
+  Icon,
+  IconButton,
+  Link,
+  Typography,
+} from '@mui/material';
 
 import SpidBig from '../assets/spid_big.svg';
 import { PFLoginEventsType } from '../models/PFLoginEventsType';

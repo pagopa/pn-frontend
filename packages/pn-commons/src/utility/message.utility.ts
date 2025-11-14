@@ -1,5 +1,5 @@
 /* eslint-disable functional/immutable-data */
-import _ from 'lodash';
+import { uniqueId } from 'lodash-es';
 
 import { IAppMessage } from '../models/AppMessage';
 
@@ -18,7 +18,7 @@ export const createAppMessage = ({
   errorCode,
 }: CreateAppMessageParams): IAppMessage => {
   const e: IAppMessage = {
-    id: _.uniqueId(),
+    id: uniqueId(),
     title,
     message,
     showTechnicalData,

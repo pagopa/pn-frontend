@@ -26,6 +26,7 @@ export type {
   EventPaymentStatusType,
   EventsType,
   TrackedEvent,
+  EventNotificationSource,
 } from './MixpanelEvents';
 export type {
   GetNotificationsParams,
@@ -70,6 +71,7 @@ export type {
   SendCourtesyMessageDetails,
   SendDigitalDetails,
   SendPaperDetails,
+  PaymentTpp,
 } from './NotificationDetail';
 
 export type { DatePickerTypes } from '../components/CustomDatePicker';

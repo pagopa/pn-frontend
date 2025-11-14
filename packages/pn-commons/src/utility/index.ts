@@ -1,10 +1,14 @@
 export { Configuration } from '../services/configuration.service';
 export { default as EventStrategyFactory } from './MixpanelUtils/EventStrategyFactory';
-export { AppError, AppErrorFactory, UnknownAppError, errorFactoryManager } from './AppError';
-export { AppResponsePublisher, ResponseEventDispatcher } from './AppResponse';
+export { default as AppError } from './AppError/AppError';
+export { default as AppErrorFactory } from './AppError/AppErrorFactory';
+export { default as errorFactoryManager } from './AppError/ErrorFactoryManager';
+export { default as UnknownAppError } from './AppError/UnknownAppError';
+export { default as AppResponsePublisher } from './AppResponse/AppResponsePublisher';
+export { ResponseEventDispatcher } from './AppResponse/AppResponsePublisher';
 export * as screenshot from './Screenshot';
 export { validateCurrentStatus, validateHistory, validateLegaFact } from './appStatus.utility';
-export { PRIVACY_LINK_RELATIVE_PATH, TOS_LINK_RELATIVE_PATH } from './costants';
+export { PRIVACY_LINK_RELATIVE_PATH, TOS_LINK_RELATIVE_PATH, LANGUAGES } from './costants';
 export { formatCurrency, formatEurocentToCurrency } from './currency.utility';
 export {
   DATE_FORMAT,
@@ -76,5 +80,6 @@ export {
   adaptedTokenExchangeError,
   basicInitialUserData,
   basicUserDataMatcherContents,
+  removeNullProperties,
 } from './user.utility';
 export { searchStringLimitReachedText, useSearchStringChangeInput } from './searchString.utility';

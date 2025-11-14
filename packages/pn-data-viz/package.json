@@ -22,7 +22,6 @@
     "test:coverage": "tsc && vitest run --coverage"
   },
   "devDependencies": {
-    "@types/echarts": "^4.9.22",
     "eslint": "7.11.0",
     "eslint-config-prettier": "^8.10.0",
     "eslint-plugin-functional": "^3.7.2",

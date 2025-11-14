@@ -1,4 +1,4 @@
-import { defineConfig, loadEnv, mergeConfig, splitVendorChunkPlugin } from 'vite';
+import { defineConfig, loadEnv, mergeConfig } from 'vite';
 import { configDefaults, defineConfig as defineVitestConfig } from 'vitest/config';
 
 import basicSsl from '@vitejs/plugin-basic-ssl';
@@ -18,6 +18,11 @@ const vitestConfig = defineVitestConfig({
       exclude: ['src/models/**'],
       reportOnFailure: true,
     },
+    server: {
+      deps: {
+        inline: ['@pagopa/mui-italia'],
+      },
+    },
   },
 });
 
@@ -25,7 +30,7 @@ export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '');
 
   return mergeConfig(vitestConfig, {
-    plugins: [react(), basicSsl(), splitVendorChunkPlugin()],
+    plugins: [react(), basicSsl()],
     server: {
       host: env.HOST,
       https: true,
@@ -45,6 +50,13 @@ export default defineConfig(({ mode }) => {
       target: 'ES2020',
       rollupOptions: {
         external: ['**/*.test.tsx', '**/*.test.ts', '**/test-utils.tsx', '**/*.mock.ts'],
+        output: {
+          manualChunks(id: string) {
+            if (id.includes('node_modules')) {
+              return 'vendor';
+            }
+          },
+        },
       },
     },
     preview: {
@@ -54,5 +66,11 @@ export default defineConfig(({ mode }) => {
     },
     // Exclude the test and the mock folders from being processed by Vite
     exclude: ['**/__test__/**', '**/__mocks__/**'],
+    resolve: {
+      alias: {
+        // formik an yup use lodash and without this, also this library will be into the build
+        lodash: 'lodash-es',
+      },
+    },
   });
 });

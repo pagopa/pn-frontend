@@ -1,5 +1,5 @@
 import { getIn, useFormik } from 'formik';
-import _ from 'lodash';
+import { cloneDeep, get, isNil } from 'lodash-es';
 import { ChangeEvent, ForwardedRef, forwardRef, useImperativeHandle, useMemo } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import * as yup from 'yup';
@@ -95,11 +95,11 @@ const DebtPositionDetail: React.FC<Props> = ({
   const hasFieldError = (fieldName: string) =>
     Boolean(
       getIn(formik.touched, fieldName) ||
-        (_.get(formik.values, fieldName) && String(_.get(formik.values, fieldName)).length > 0)
+        (get(formik.values, fieldName) && String(get(formik.values, fieldName)).length > 0)
     );
 
   const formatPayments = (): Array<NewNotificationRecipient> => {
-    const recipients = _.cloneDeep(notification.recipients);
+    const recipients = cloneDeep(notification.recipients);
     return recipients.map((recipient) => {
       const recipientKey = `${recipient.recipientType}-${recipient.taxId}`;
       const recipientData = formik.values.recipients[recipientKey];
@@ -136,7 +136,7 @@ const DebtPositionDetail: React.FC<Props> = ({
           },
           recipient
         ) => {
-          const recipientPayments = !_.isNil(recipient.payments) ? recipient.payments : [];
+          const recipientPayments = !isNil(recipient.payments) ? recipient.payments : [];
           const debtPosition = recipient.debtPosition;
 
           const hasPagoPa = recipientPayments.some((p) => p.pagoPa);

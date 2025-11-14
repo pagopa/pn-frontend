@@ -3,19 +3,19 @@
   "version": "2.19.1",
   "private": true,
   "main": "./src/index.ts",
+  "type": "module",
+  "sideEffects": false,
   "dependencies": {
     "@date-io/date-fns": "^2.15.0",
     "@mui/icons-material": "^5.14.3",
     "@mui/lab": "^5.0.0-alpha.140",
     "@mui/material": "^5.14.5",
     "@mui/system": "^5.14.5",
-    "@mui/x-date-pickers": "^6.10.1",
-    "@pagopa/mui-italia": "^1.7.2",
+    "@mui/x-date-pickers": "^6.17.0",
+    "@pagopa/mui-italia": "2.0.0-RC.2",
     "@reduxjs/toolkit": "^1.9.5",
-    "@types/node": "^17.0.8",
-    "@types/react": "^18.2.24",
-    "@types/react-dom": "^18.2.8",
     "date-fns": "^2.30.0",
+    "lodash-es": "^4.17.21",
     "mixpanel-browser": "^2.45.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
@@ -30,7 +30,7 @@
     "test:coverage": "tsc --noEmit && vitest run --coverage",
     "lint": "eslint . -c .eslintrc.js --ext .ts,.tsx --fix",
     "format": "prettier \"./**/*.{ts,tsx}\" --write",
-    "sonar": "node sonarqube-scanner.js"
+    "sonar": "node sonarqube-scanner.cjs"
   },
   "eslintConfig": {
     "extends": [
@@ -50,16 +50,15 @@
     ]
   },
   "devDependencies": {
-    "@babel/core": "^7.23.2",
-    "@babel/preset-env": "^7.23.2",
-    "@babel/preset-react": "^7.23.2",
-    "@babel/preset-typescript": "^7.23.2",
     "@testing-library/jest-dom": "^6.4.2",
     "@testing-library/react": "^14.0.0",
     "@testing-library/user-event": "^14.5.1",
     "@trivago/prettier-plugin-sort-imports": "^4.3.0",
     "@types/css-mediaquery": "^0.1.1",
     "@types/jest": "^29.5.12",
+    "@types/node": "^17.0.8",
+    "@types/react": "^18.2.24",
+    "@types/react-dom": "^18.2.8",
     "@typescript-eslint/eslint-plugin": "^6.7.3",
     "@typescript-eslint/parser": "^6.7.3",
     "@vitejs/plugin-react": "^4.2.1",

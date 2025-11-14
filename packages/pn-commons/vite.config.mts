@@ -20,6 +20,11 @@ const vitestConfig = defineVitestConfig({
       reporter: ['lcov'],
       reportOnFailure: true,
     },
+    server: {
+      deps: {
+        inline: ['@pagopa/mui-italia'],
+      },
+    },
   },
 });
 

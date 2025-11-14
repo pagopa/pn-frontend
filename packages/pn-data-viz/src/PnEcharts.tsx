@@ -1,6 +1,15 @@
 /* eslint-disable functional/no-let */
-import { getInstanceByDom, init, registerTheme } from 'echarts';
-import type { EChartOption, SetOptionOpts } from 'echarts';
+import { BarChart, LineChart, PieChart } from 'echarts/charts';
+import type { BarSeriesOption, LineSeriesOption, PieSeriesOption } from 'echarts/charts';
+import { GridComponent, LegendComponent, TooltipComponent } from 'echarts/components';
+import type {
+  GridComponentOption,
+  LegendComponentOption,
+  TooltipComponentOption,
+} from 'echarts/components';
+import type { ComposeOption, SetOptionOpts } from 'echarts/core';
+import { getInstanceByDom, init, registerTheme, use } from 'echarts/core';
+import { CanvasRenderer } from 'echarts/renderers';
 import { useEffect, useMemo, useRef } from 'react';
 import type { CSSProperties } from 'react';
 
@@ -9,8 +18,17 @@ import { Box, Checkbox, FormControl, FormControlLabel, Stack, Typography } from 
 
 import senderDashboard from './theme/senderDashboard';
 
+type ECOption = ComposeOption<
+  | TooltipComponentOption
+  | GridComponentOption
+  | LegendComponentOption
+  | BarSeriesOption
+  | LineSeriesOption
+  | PieSeriesOption
+>;
+
 export interface PnEChartsProps {
-  option: EChartOption;
+  option: ECOption;
   style?: CSSProperties;
   settings?: SetOptionOpts;
   loading?: boolean;
@@ -35,6 +53,9 @@ export function PnECharts({
       return;
     }
     const chart = getInstanceByDom(chartRef.current);
+    if (!chart) {
+      return;
+    }
     chart.dispatchAction({
       type: 'legendToggleSelect',
       name,
@@ -52,6 +73,15 @@ export function PnECharts({
       registerTheme('customTheme', theme);
       selectedTheme = 'customTheme';
     }
+    use([
+      CanvasRenderer,
+      TooltipComponent,
+      GridComponent,
+      LegendComponent,
+      BarChart,
+      LineChart,
+      PieChart,
+    ]);
     const chart = init(chartRef.current, selectedTheme, { renderer: 'canvas' });
 
     // Add chart resize listener
@@ -82,6 +112,9 @@ export function PnECharts({
       ...option,
     };
     const chart = getInstanceByDom(chartRef.current);
+    if (!chart) {
+      return;
+    }
     chart.setOption(options, settings);
   }, [option, settings, theme]); // Whenever theme changes we need to add option and setting due to it being deleted in cleanup function
 
@@ -98,7 +131,7 @@ export function PnECharts({
   const legendContent = useMemo(
     () =>
       legend?.map((item, index) => {
-        const color = option.color?.[index] ?? '';
+        const color = (option.color as Array<string>)?.[index] ?? '';
         const circleSx = {
           color,
           width: 10,

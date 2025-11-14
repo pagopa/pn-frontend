@@ -1,5 +1,5 @@
 import { FormikErrors, FormikTouched, FormikValues, getIn } from 'formik';
-import _ from 'lodash';
+import { get } from 'lodash-es';
 
 import { Grid, SxProps, TextField } from '@mui/material';
 
@@ -27,7 +27,7 @@ const FormTextField: React.FC<Props> = ({
   sx,
 }) => {
   const showErrorIfPresent = Boolean(
-    getIn(touched, keyName) || String(_.get(values, keyName)).length > 0
+    getIn(touched, keyName) || String(get(values, keyName)).length > 0
   );
 
   return (
@@ -35,7 +35,7 @@ const FormTextField: React.FC<Props> = ({
       <TextField
         size="small"
         id={keyName}
-        value={_.get(values, keyName)}
+        value={get(values, keyName)}
         onChange={(event) => {
           setFieldValue(keyName, event.currentTarget.value);
         }}
