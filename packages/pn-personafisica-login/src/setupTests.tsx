@@ -14,6 +14,7 @@ beforeAll(async () => {
   Configuration.setForTest<LoginConfiguration>({
     MIXPANEL_TOKEN: 'ba1f5101fe34a61bb125cbfe587780d8',
     OT_DOMAIN_ID: 'fd5aef6f-a6d3-422b-87b7-aa5e2cb6510c-test',
+    OT_SETTINGS_TOKEN: 'echaaduh12daweha78a684gha78=',
     PAGOPA_HELP_EMAIL: 'destinatari-send@assistenza.pagopa.it',
     PF_URL: 'https://cittadini.dev.notifichedigitali.it',
     SPID_TEST_ENV_ENABLED: true,

@@ -4,7 +4,7 @@ import { interceptDispatch } from '@pagopa-pn/pn-commons';
 import { AnyAction, Dispatch, Middleware } from '@reduxjs/toolkit';
 
 import { PFEventsType, eventsActionsMap } from '../models/PFEventsType';
-import { ChannelType, DigitalAddress, IOAllowedValues } from '../models/contacts';
+import { AddressType, ChannelType, DigitalAddress, IOAllowedValues } from '../models/contacts';
 import PFEventStrategyFactory from './MixpanelUtils/PFEventStrategyFactory';
 
 export type MixpanelConcatCourtesyContacts =
@@ -16,6 +16,14 @@ export type MixpanelConcatCourtesyContacts =
   | 'email'
   | 'sms'
   | 'no_contact';
+
+export type MixpanelDigitalDomicileState = 'pec' | 'send' | 'not_active';
+
+export type MixpanelCustomizedContactType = 'pec' | 'send' | 'missing';
+
+export type MixpanelPecState = 'valid' | 'invalid' | 'missing';
+
+export type MixpanelTosState = 'valid' | 'missing';
 
 /**
  * Redux middleware to track events
@@ -52,4 +60,36 @@ export const concatCourtestyContacts = (
   return contactParts.length > 0
     ? (contactParts.join('_') as MixpanelConcatCourtesyContacts)
     : 'no_contact';
+};
+
+export const getDigitalDomicileState = (
+  addresses: Array<DigitalAddress>
+): MixpanelDigitalDomicileState => {
+  const defaultAddresses = addresses.filter(
+    (address) => address.senderId === 'default' && address.addressType === AddressType.LEGAL
+  );
+
+  if (defaultAddresses.some((add) => add.channelType === ChannelType.SERCQ_SEND)) {
+    return 'send';
+  }
+  if (defaultAddresses.some((add) => add.channelType === ChannelType.PEC && add.pecValid)) {
+    return 'pec';
+  }
+  return 'not_active';
+};
+
+export const getPecValidationState = (pecAddress?: DigitalAddress): MixpanelPecState => {
+  if (!pecAddress) {
+    return 'missing';
+  }
+  return pecAddress.pecValid ? 'valid' : 'invalid';
+};
+
+export const getCustomizedContactType = (
+  customizedContactType: ChannelType.PEC | ChannelType.SERCQ_SEND | 'missing'
+): MixpanelCustomizedContactType => {
+  if (customizedContactType === 'missing') {
+    return 'missing';
+  }
+  return customizedContactType === ChannelType.PEC ? 'pec' : 'send';
 };

@@ -60,9 +60,6 @@ import ContactCodeDialog from './ContactCodeDialog';
 import ExistingContactDialog from './ExistingContactDialog';
 import SercqAddSpecialEmail from './SercqAddSpecialEmail';
 
-const redirectPrivacyLink = () => window.open(`${PRIVACY_POLICY}`, '_blank');
-const redirectToSLink = () => window.open(`${TERMS_OF_SERVICE_SERCQ_SEND}`, '_blank');
-
 enum ModalType {
   EXISTING = 'existing',
   CODE = 'code',
@@ -648,8 +645,10 @@ const AddSpecialContact = forwardRef<AddSpecialContactRef, Props>(
                           textDecoration: 'none !important',
                           fontWeight: 'bold',
                         }}
-                        onClick={redirectPrivacyLink}
                         data-testid="privacy-link"
+                        href={PRIVACY_POLICY}
+                        target="_blank"
+                        rel="noopener"
                       />,
 
                       <Link
@@ -659,8 +658,10 @@ const AddSpecialContact = forwardRef<AddSpecialContactRef, Props>(
                           textDecoration: 'none !important',
                           fontWeight: 'bold',
                         }}
-                        onClick={redirectToSLink}
                         data-testid="tos-link"
+                        href={TERMS_OF_SERVICE_SERCQ_SEND}
+                        target="_blank"
+                        rel="noopener"
                       />,
                     ]}
                   />

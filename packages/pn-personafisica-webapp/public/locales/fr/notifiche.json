@@ -301,7 +301,7 @@
         "pec-receipt-not-delivered": "de non-livraison PEC",
         "paper-receipt-delivered": "de livraison recommandée",
         "paper-receipt-not-delivered": "de non-livraison recommandée",
-        "analog-failure-delivery": "Dépôt de réception"
+        "analog-failure-delivery": "Dépôt de l'avis de réception"
       },
       "registered-letter-kind": {
         "890": "890",

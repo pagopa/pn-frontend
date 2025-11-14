@@ -27,6 +27,7 @@ beforeAll(async () => {
     ONE_TRUST_SERCQ_SEND_DRAFT_MODE: false,
     ONE_TRUST_TOS_SERCQ_SEND: 'mocked-id-sercq-send',
     OT_DOMAIN_ID: '29cc1c86-f2ef-494d-8242-9bec8009cd29',
+    OT_SETTINGS_TOKEN: 'echaaduh12daweha78a684gha78=',
     PAGOPA_HELP_EMAIL: 'assistenza@pn.it',
     MIXPANEL_TOKEN: 'DUMMY',
     SELFCARE_BASE_URL: 'https://test.selfcare.pagopa.it',
