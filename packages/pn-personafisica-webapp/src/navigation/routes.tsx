@@ -9,6 +9,7 @@ import {
   lazyRetry,
 } from '@pagopa-pn/pn-commons';
 
+import TppLanding from '../pages/TppLanding.page';
 import { getConfiguration } from '../services/configuration.service';
 import RapidAccessGuard from './RapidAccessGuard';
 import SessionGuard from './SessionGuard';
@@ -85,6 +86,7 @@ function Router() {
           element={<TermsOfServicePage type={ConsentType.TOS_SERCQ} />}
         />
         <Route path={routes.PARTICIPATING_ENTITIES} element={<ParticipatingEntitiesPage />} />
+        <Route path={routes.TPP_LANDING} element={<TppLanding />} />
         <Route
           path={routes.NOT_ACCESSIBLE}
           element={<AppNotAccessible onAssistanceClick={handleAssistanceClick} />}
