@@ -1,4 +1,4 @@
-import * as _ from 'lodash-es';
+import { isObject } from 'lodash-es';
 import { Fragment, ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
@@ -162,7 +162,7 @@ const NotificationDetail: React.FC = () => {
       return;
     }
 
-    if (_.isObject(document)) {
+    if (isObject(document)) {
       // AAR case
       dispatch(
         getReceivedNotificationDocument({

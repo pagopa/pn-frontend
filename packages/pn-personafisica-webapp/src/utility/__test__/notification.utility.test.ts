@@ -1,4 +1,4 @@
-import * as _ from 'lodash-es';
+import { cloneDeep } from 'lodash-es';
 
 import { mandatesByDelegate } from '../../__mocks__/Delegations.mock';
 import { notificationDTO } from '../../__mocks__/NotificationDetail.mock';
@@ -10,7 +10,7 @@ const filterOutRecipientIndex = notificationDTO.recipients.findIndex((rec) => !r
 describe('Tests notification utility', () => {
   it('parseNotificationDetailForRecipient - recipient is the current user logged', () => {
     const notification = parseNotificationDetailForRecipient(
-      _.cloneDeep(notificationDTO),
+      cloneDeep(notificationDTO),
       notificationDTO.recipients[recipientIndex].taxId,
       mandatesByDelegate
     );
@@ -22,7 +22,7 @@ describe('Tests notification utility', () => {
 
   it("parseNotificationDetailForRecipient - recipient isn't the current user logged neither a delegator", () => {
     const notification = parseNotificationDetailForRecipient(
-      _.cloneDeep(notificationDTO),
+      cloneDeep(notificationDTO),
       notificationDTO.recipients[filterOutRecipientIndex].taxId,
       mandatesByDelegate
     );
@@ -32,7 +32,7 @@ describe('Tests notification utility', () => {
 
   it('parseNotificationDetailForRecipient - recipient has delegated the current user logged', () => {
     const notification = parseNotificationDetailForRecipient(
-      _.cloneDeep(notificationDTO),
+      cloneDeep(notificationDTO),
       'CGNNMO80A03H501U',
       mandatesByDelegate,
       mandatesByDelegate[2].mandateId
@@ -45,7 +45,7 @@ describe('Tests notification utility', () => {
 
   it("parseNotificationDetailForRecipient - recipient hasn't delegated the current user logged", () => {
     const notification = parseNotificationDetailForRecipient(
-      _.cloneDeep(notificationDTO),
+      cloneDeep(notificationDTO),
       'CGNNMO80A03H501U',
       mandatesByDelegate,
       mandatesByDelegate[0].mandateId

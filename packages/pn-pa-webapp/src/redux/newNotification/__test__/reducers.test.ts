@@ -1,5 +1,5 @@
 import MockAdapter from 'axios-mock-adapter';
-import * as _ from 'lodash-es';
+import { cloneDeep } from 'lodash-es';
 
 import { PhysicalCommunicationType } from '@pagopa-pn/pn-commons';
 
@@ -240,7 +240,7 @@ describe('New notification redux state tests', () => {
   });
 
   it('Should be able to upload payment document', async () => {
-    const recipients = _.cloneDeep(newNotificationRecipients);
+    const recipients = cloneDeep(newNotificationRecipients);
     // set all mocked ref key and version token to empty
     for (const recipient of recipients) {
       if (recipient.payments) {

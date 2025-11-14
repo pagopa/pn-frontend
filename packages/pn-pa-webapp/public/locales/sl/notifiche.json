@@ -286,7 +286,7 @@
         "pec-receipt-not-delivered": "za nedostavo PEC",
         "paper-receipt-delivered": "za dostavo priporočenega pisma",
         "paper-receipt-not-delivered": "za nedostavo priporočenega pisma",
-        "analog-failure-delivery": "Vloga potrdila o prejemu"
+        "analog-failure-delivery": "Depozit potrdila o prejemu"
       },
       "registered-letter-kind": {
         "AR": "s povratnico",

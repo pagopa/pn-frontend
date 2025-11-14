@@ -286,7 +286,7 @@
         "pec-receipt-not-delivered": "non-delivery of PEC",
         "paper-receipt-delivered": "registered delivery",
         "paper-receipt-not-delivered": "non-registered delivery",
-        "analog-failure-delivery": "Deposit of acknowledgement of receipt"
+        "analog-failure-delivery": "Deposit of the notification of receipt"
       },
       "registered-letter-kind": {
         "AR": "Acknowledgement of receipt",

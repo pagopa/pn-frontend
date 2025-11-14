@@ -185,7 +185,7 @@ const Recipient: React.FC<Props> = ({
       yup
         .string()
         .required(tc('required-field'))
-        .max(12, tc('too-long-field-error', { maxLength: 12 }))
+        .max(15, tc('too-long-field-error', { maxLength: 15 }))
         .matches(dataRegex.zipCode, `${t('zip')} ${tc('invalid')}`)
     ),
     municipalityDetails: conditionalPhysicalAddress(

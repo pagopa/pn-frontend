@@ -1,5 +1,5 @@
 /* eslint-disable functional/immutable-data */
-import * as _ from 'lodash-es';
+import { isArray } from 'lodash-es';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -63,7 +63,7 @@ const DigitalMeanTimeStatistics: React.FC<Props> = (props) => {
       show: true,
       confine: true,
       formatter: (params) => {
-        const elem = (_.isArray(params) ? params[0] : params) as {
+        const elem = (isArray(params) ? params[0] : params) as {
           dataIndex: number;
           marker: string;
           name: string;

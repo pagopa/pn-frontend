@@ -20,11 +20,11 @@ async function doTheRender() {
     await loadLoginConfiguration();
 
     // init actions (previously static code) which make use of config
-    initOneTrust();
+    await initOneTrust();
 
     root.render(
       <React.StrictMode>
-        <BrowserRouter basename='/auth'>
+        <BrowserRouter basename="/auth">
           <ThemeProvider theme={theme}>
             <CssBaseline />
             <Suspense fallback={'loading...'}>

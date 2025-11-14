@@ -24,7 +24,7 @@ async function doTheRender() {
     await loadPaConfiguration();
 
     // init actions (previously static code) which make use of config
-    initOneTrust();
+    await initOneTrust();
     initStore();
     initAxiosClients();
     // move initialization of the Axios interceptor - PN-7557

@@ -1,4 +1,4 @@
-import * as _ from 'lodash-es';
+import { cloneDeep } from 'lodash-es';
 
 import {
   INotificationDetailTimeline,
@@ -897,7 +897,7 @@ export const paymentsData: PaymentsData = {
   f24Only: getF24Payments(payments, 1),
 };
 
-export const notificationToFe = parseNotificationDetailForRecipient(_.cloneDeep(notificationDTO));
+export const notificationToFe = parseNotificationDetailForRecipient(cloneDeep(notificationDTO));
 
 export const overrideNotificationMock = (overrideObj: object): NotificationDetail => {
   const notification = { ...notificationDTO, ...overrideObj };
@@ -905,7 +905,7 @@ export const overrideNotificationMock = (overrideObj: object): NotificationDetai
 };
 
 export const cancelledNotificationToFe = parseNotificationDetailForRecipient(
-  _.cloneDeep(cancelledNotificationDTO)
+  cloneDeep(cancelledNotificationDTO)
 );
 
 export const cachedPayments: PaymentCache = {
