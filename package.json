@@ -3,8 +3,7 @@
   "private": true,
   "license": "SEE LICENS IN LICENSE",
   "devDependencies": {
-    "lerna": "^6.4.1",
-    "rollup-plugin-visualizer": "^6.0.5"
+    "lerna": "^6.4.1"
   },
   "scripts": {
     "postinstall": "lerna bootstrap",

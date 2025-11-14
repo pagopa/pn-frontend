@@ -6,6 +6,8 @@
   "dependencies": {
     "typescript": "^5.2.2"
   },
+  "type": "module",
+  "sideEffect": true,
   "scripts": {
     "build": "tsc -p tsconfig.prod.json",
     "test": "tsc --noEmit && vitest --run",
