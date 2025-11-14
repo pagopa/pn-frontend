@@ -5,7 +5,7 @@ import mixpanel from 'mixpanel-browser';
 import { AnyAction, Dispatch, PayloadAction } from '@reduxjs/toolkit';
 
 import { ActionMeta, EventPropertyType } from '../models/MixpanelEvents';
-import { EventStrategyFactory } from '../utility';
+import EventStrategyFactory from '../utility/MixpanelUtils/EventStrategyFactory';
 
 /**
  * Function that calls the mixpanel tracking method based on the property type

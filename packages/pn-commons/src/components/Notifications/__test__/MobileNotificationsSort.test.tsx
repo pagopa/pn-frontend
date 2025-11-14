@@ -1,6 +1,7 @@
 import { vi } from 'vitest';
 
-import { CardSort, Sort } from '../../../models';
+import { CardSort } from '../../../models/PnCard';
+import { Sort } from '../../../models/PnTable';
 import {
   fireEvent,
   getById,

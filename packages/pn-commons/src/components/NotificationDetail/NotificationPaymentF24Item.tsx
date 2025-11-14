@@ -4,8 +4,12 @@ import { Download, InfoRounded } from '@mui/icons-material';
 import { CircularProgress, Stack, Typography } from '@mui/material';
 import { ButtonNaked } from '@pagopa/mui-italia';
 
-import { downloadDocument } from '../../hooks';
-import { F24PaymentDetails, PaymentAttachment, PaymentAttachmentSName } from '../../models';
+import { downloadDocument } from '../../hooks/useDownloadDocument';
+import {
+  F24PaymentDetails,
+  PaymentAttachment,
+  PaymentAttachmentSName,
+} from '../../models/NotificationDetail';
 import { getLocalizedOrDefaultLabel } from '../../utility/localization.utility';
 
 type Props = {

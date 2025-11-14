@@ -2,7 +2,6 @@ import { useMemo } from 'react';
 
 import { LangCode, Footer as MuiFooter } from '@pagopa/mui-italia';
 
-import { getLangCode } from '../../utility';
 import {
   LANGUAGES,
   companyLegalInfo,
@@ -10,6 +9,7 @@ import {
   postLoginLinks,
   preLoginLinks,
 } from '../../utility/costants';
+import { getLangCode } from '../../utility/multilanguage.utility';
 
 type Props = {
   currentLanguage: string;

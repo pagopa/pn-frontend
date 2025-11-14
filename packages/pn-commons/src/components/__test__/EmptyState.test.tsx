@@ -3,7 +3,7 @@ import { vi } from 'vitest';
 import BalconyIcon from '@mui/icons-material/Balcony';
 import { Button } from '@mui/material';
 
-import { KnownSentiment } from '../../models';
+import { KnownSentiment } from '../../models/EmptyState';
 import { fireEvent, render } from '../../test-utils';
 import EmptyState from '../EmptyState';
 

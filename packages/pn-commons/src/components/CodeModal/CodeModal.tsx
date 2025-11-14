@@ -20,7 +20,7 @@ import {
 } from '@mui/material';
 import { CodeInput, CopyToClipboardButton } from '@pagopa/mui-italia';
 
-import { ErrorMessage } from '../../models';
+import { ErrorMessage } from '../../models/AppResponse';
 import { getLocalizedOrDefaultLabel } from '../../utility/localization.utility';
 import PnDialog from '../PnDialog/PnDialog';
 import PnDialogActions from '../PnDialog/PnDialogActions';

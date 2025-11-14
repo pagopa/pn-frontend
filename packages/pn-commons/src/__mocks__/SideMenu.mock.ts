@@ -1,6 +1,6 @@
 import QuestionMarkIcon from '@mui/icons-material/QuestionMark';
 
-import { SideMenuItem } from '../models';
+import { SideMenuItem } from '../models/SideMenuItem';
 
 export const sideMenuItems: Array<SideMenuItem> = [
   {

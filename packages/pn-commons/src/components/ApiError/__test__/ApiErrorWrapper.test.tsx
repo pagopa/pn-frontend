@@ -7,7 +7,7 @@ import ApiErrorWrapper from '../ApiErrorWrapper';
 
 const mockApiError = 'mockApiId';
 // Mocking the useErrors hook, since the hook is already tested
-vi.mock('../../../hooks', () => ({
+vi.mock('../../../hooks/useErrors', () => ({
   useErrors: () => ({
     hasApiErrors: (apiId: string) => apiId === mockApiError, // Mocking hasApiErrors function
   }),

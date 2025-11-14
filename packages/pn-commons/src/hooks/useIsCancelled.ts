@@ -1,4 +1,5 @@
-import { NotificationDetail, NotificationStatus, TimelineCategory } from '../models';
+import { NotificationDetail, TimelineCategory } from '../models/NotificationDetail';
+import { NotificationStatus } from '../models/NotificationStatus';
 
 type Props = {
   notification: NotificationDetail;

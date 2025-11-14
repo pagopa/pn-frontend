@@ -3,7 +3,11 @@ import { vi } from 'vitest';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
 import { payments } from '../../../__mocks__/NotificationDetail.mock';
-import { F24PaymentDetails, PaymentAttachment, PaymentAttachmentSName } from '../../../models';
+import {
+  F24PaymentDetails,
+  PaymentAttachment,
+  PaymentAttachmentSName,
+} from '../../../models/NotificationDetail';
 import { act, createTestStore, fireEvent, render, waitFor } from '../../../test-utils';
 import NotificationPaymentF24Item from '../NotificationPaymentF24Item';
 

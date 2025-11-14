@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 
 import { AppResponse, AppResponseError } from '../models/AppResponse';
-import { appStateActions } from '../redux';
+import { appStateActions } from '../redux/slices/appStateSlice';
 import { AppResponsePublisher } from '../utility/AppResponse';
 
 /**

@@ -2,9 +2,9 @@ import DownloadIcon from '@mui/icons-material/Download';
 import { Button, Chip, Typography } from '@mui/material';
 import { Stack } from '@mui/system';
 
-import { Downtime, DowntimeStatus, Row } from '../../models';
-import { formatDate, formatDateTime } from '../../utility';
-import { formatTimeWithLegend } from '../../utility/date.utility';
+import { Downtime, DowntimeStatus } from '../../models/AppStatus';
+import { Row } from '../../models/PnTable';
+import { formatDate, formatDateTime, formatTimeWithLegend } from '../../utility/date.utility';
 import { getLocalizedOrDefaultLabel } from '../../utility/localization.utility';
 
 const FormattedDateAndTime: React.FC<{ date: string; inTwoLines?: boolean }> = ({

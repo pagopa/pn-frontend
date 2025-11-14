@@ -5,8 +5,12 @@ import { Box, Button, Drawer, Grid, Typography } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { TimelineNotification } from '@pagopa/mui-italia';
 
-import { useIsMobile } from '../../hooks';
-import { LegalFactId, NotificationDetailRecipient, NotificationStatusHistory } from '../../models';
+import { useIsMobile } from '../../hooks/useIsMobile';
+import {
+  LegalFactId,
+  NotificationDetailRecipient,
+  NotificationStatusHistory,
+} from '../../models/NotificationDetail';
 import { getLocalizedOrDefaultLabel } from '../../utility/localization.utility';
 import NotificationDetailTimelineStep from './NotificationDetailTimelineStep';
 

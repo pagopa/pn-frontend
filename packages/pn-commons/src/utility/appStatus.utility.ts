@@ -1,5 +1,9 @@
-import { AppCurrentStatus, DowntimeLogHistory, LegalFactDocumentDetails } from '../models';
-import { AppStatusDTOValidator } from '../validators';
+import {
+  AppCurrentStatus,
+  DowntimeLogHistory,
+  LegalFactDocumentDetails,
+} from '../models/AppStatus';
+import { AppStatusDTOValidator } from '../validators/appStatus.validator';
 import { DowntimeLogHistoryDTOValidator } from '../validators/appStatus.validator';
 
 export class BadApiDataException extends Error {
