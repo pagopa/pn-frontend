@@ -36,6 +36,10 @@
     "not-found": "Lien vers la notification introuvable",
     "not-found-subtitle": "Lien vers la notification introuvable Le document sera téléchargeable dans quelques minutes."
   },
+  "from-tpp": {
+    "not-found": "Lien vers la notification introuvable",
+    "not-found-subtitle": "Seul le destinataire peut lire cette notification."
+  },
   "detail": {
     "document-not-available": "Le document sera téléchargeable dans quelques minutes. Vous pouvez réessayer en rechargeant la page ou en cliquant sur le lien du document requis",
     "table-aria-label": "Détail de la notification",

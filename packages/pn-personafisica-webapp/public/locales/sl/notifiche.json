@@ -36,6 +36,10 @@
     "not-found": "Povezave do obvestila ni mogoče najti",
     "not-found-subtitle": "Povezave do obvestila ni mogoče najti. Če ga želite prebrati, prosite prejemnika, da se prijavi v SEND in ga prenese na vas."
   },
+  "from-tpp": {
+    "not-found": "Povezave do obvestila ni mogoče najti",
+    "not-found-subtitle": "To obvestilo lahko prebere samo prejemnik."
+  },
   "detail": {
     "document-not-available": "Dokument bo mogoče prenesti v nekaj minutah. Poskusite lahko znova tako, da ponovno naložite stran ali kliknete povezavo zahtevanega dokumenta",
     "table-aria-label": "Podrobnosti o obvestilu",
