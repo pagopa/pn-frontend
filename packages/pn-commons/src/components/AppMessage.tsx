@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { IAppMessage } from '../models';
+import { IAppMessage } from '../models/AppMessage';
 import { AppResponseOutcome } from '../models/AppResponse';
-import { appStateActions, appStateSelectors } from '../redux';
+import { appStateActions, appStateSelectors } from '../redux/slices/appStateSlice';
 import SnackBar from './SnackBar/SnackBar';
 
 type EnqueuedMessage = {

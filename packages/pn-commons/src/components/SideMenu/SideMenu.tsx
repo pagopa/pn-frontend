@@ -12,8 +12,8 @@ import {
   ListItemText,
 } from '@mui/material';
 
-import { useIsMobile } from '../../hooks';
-import { SideMenuItem } from '../../models';
+import { useIsMobile } from '../../hooks/useIsMobile';
+import { SideMenuItem } from '../../models/SideMenuItem';
 import SideMenuList from './SideMenuList';
 
 type Props = {

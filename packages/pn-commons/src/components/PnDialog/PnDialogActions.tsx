@@ -2,7 +2,7 @@ import { Children, cloneElement, isValidElement } from 'react';
 
 import { Button, DialogActions, DialogActionsProps } from '@mui/material';
 
-import { useIsMobile } from '../../hooks';
+import { useIsMobile } from '../../hooks/useIsMobile';
 import { ReactComponent } from '../../models/PnDialog';
 
 const PnDialogActions: React.FC<DialogActionsProps> = (props) => {

@@ -1,7 +1,7 @@
 /* eslint-disable functional/immutable-data */
 import _ from 'lodash';
 
-import { IAppMessage } from '../models';
+import { IAppMessage } from '../models/AppMessage';
 
 export type CreateAppMessageParams = Pick<
   IAppMessage,

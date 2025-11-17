@@ -1,4 +1,4 @@
-import { NotificationDetailTableRow } from '../../../models';
+import { NotificationDetailTableRow } from '../../../models/NotificationDetail';
 import { render, within } from '../../../test-utils';
 import NotificationDetailTable from '../NotificationDetailTable';
 

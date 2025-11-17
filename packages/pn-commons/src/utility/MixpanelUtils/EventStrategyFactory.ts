@@ -1,6 +1,6 @@
-import { EventPropertyType } from '../../models';
 import EventStrategy from '../../models/EventStrategy';
-import { trackEvent } from '../../services';
+import { EventPropertyType } from '../../models/MixpanelEvents';
+import { trackEvent } from '../../services/tracking.service';
 
 /**
  * The abstract factory that must be extended by each application to define

@@ -1,10 +1,10 @@
 import { getTimelineElem, notificationDTO } from '../../../__mocks__/NotificationDetail.mock';
+import { SERCQ_SEND_VALUE } from '../../../models/Contacts';
 import {
   DigitalDomicileType,
   ResponseStatus,
-  SERCQ_SEND_VALUE,
   TimelineCategory,
-} from '../../../models';
+} from '../../../models/NotificationDetail';
 import { initLocalizationForTest } from '../../../test-utils';
 import { SendDigitalFeedbackStep } from '../SendDigitalFeedbackStep';
 

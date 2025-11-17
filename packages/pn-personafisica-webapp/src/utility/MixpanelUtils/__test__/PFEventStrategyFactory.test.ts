@@ -48,7 +48,9 @@ import { UXScreenViewStrategy } from '../Strategies/UXScreenViewStrategy';
 import { UXConfirmStrategy } from '../Strategies/UxConfirmStrategy';
 import { UxWithContactDetailsAndOtherContactStrategy } from '../Strategies/UxWithContactDetailsAndOtherContactStrategy';
 import { UxWithDDStateContactDetailsAndOtherContactStrategy } from '../Strategies/UxWithDDStateContactDetailsAndOtherContactStrategy';
+import { UxWithDDStateContactDetailsCustomContactTypeAndOrgNameStrategy } from '../Strategies/UxWithDDStateContactDetailsCustomContactTypeAndOrgNameStrategy';
 import { UxWithDDStateContactDetailsCustomizedContactTypeStrategy } from '../Strategies/UxWithDDStateContactDetailsCustomizedContactTypeStrategy';
+import { UxWithDDStateCustomContactTypeOrgNameAndTosValidationStrategy } from '../Strategies/UxWithDDStateCustomContactTypeOrgNameAndTosValidationStrategy';
 import { UxWithDDStateSourceAndOtherContactStrategy } from '../Strategies/UxWithDDStateSourceAndOtherContactStrategy';
 import { UxWithDDStateTosAndPecValidationStrategy } from '../Strategies/UxWithDDStateTosAndPecValidationStrategy';
 import { UxWithDigitalDomicileStateAndContactDetailsStrategy } from '../Strategies/UxWithDigitalDomicileStateAndContactDetailsStrategy';
@@ -608,6 +610,28 @@ describe('Event Strategy Factory', () => {
     eventTypes.forEach((eventType) => {
       expect(factory.getStrategy(eventType)).toBeInstanceOf(
         UxWithDDStateContactDetailsCustomizedContactTypeStrategy
+      );
+    });
+  });
+
+  it('should return uxWithDDStateContactDetailsCustomContactTypeAndOrgNameStrategy for UX Action events with digital domicile state', () => {
+    const eventTypes = [
+      PFEventsType.SEND_ADD_CUSTOMIZED_CONTACT_START,
+      PFEventsType.SEND_ADD_CUSTOMIZED_CONTACT_THANK_YOU_PAGE,
+      PFEventsType.SEND_ADD_CUSTOMIZED_CONTACT_UX_SUCCESS,
+    ];
+    eventTypes.forEach((eventType) => {
+      expect(factory.getStrategy(eventType)).toBeInstanceOf(
+        UxWithDDStateContactDetailsCustomContactTypeAndOrgNameStrategy
+      );
+    });
+  });
+
+  it('should return uxWithDDStateCustomContactTypeOrgNameAndTosValidationStrategy for UX Action events with digital domicile state', () => {
+    const eventTypes = [PFEventsType.SEND_ADD_CUSTOMIZED_CONTACT_UX_CONVERSION];
+    eventTypes.forEach((eventType) => {
+      expect(factory.getStrategy(eventType)).toBeInstanceOf(
+        UxWithDDStateCustomContactTypeOrgNameAndTosValidationStrategy
       );
     });
   });
