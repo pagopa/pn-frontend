@@ -397,5 +397,21 @@
     "canceled": "Canceled",
     "canceled-tooltip": "The institution has canceled the sending of the notification",
     "canceled-description": "The institution has canceled the sending of the notification."
+  },
+  "tppLanding": {
+    "title": "Hi,\nYou have received a legally binding communication",
+    "description": "To read it, <strong>log in to SEND - Servizio Notifiche Digitali.</strong> You will find important documents concerning you.\n\nEven if you do not open or read it, <strong>the communication produces legal effects.</strong>",
+    "access-button": "Access documents",
+    "faq": {
+      "title": "Frequently Asked Questions",
+      "what-are-notifications": {
+        "question": "What are legally binding communications?",
+        "answer": "It means that the sending and receiving of these communications produce legal effects for both the sender and the recipient. For example, if you receive a traffic fine, the date you receive it affects the amount you must pay or your right to contest it."
+      },
+      "what-is-send": {
+        "question": "What is SEND - Servizio Notifiche Digitali?",
+        "answer": "SEND - Servizio Notifiche Digitali is a platform that digitizes and simplifies the management of notifications: it allows you to receive them, download notified documents, and pay any amounts directly online.\nSEND can send notifications on behalf of institutions to citizens, freelancers, and sole traders (i.e., \"natural persons\") as well as to companies (i.e., \"legal persons\")."
+      }
+    }
   }
 }
