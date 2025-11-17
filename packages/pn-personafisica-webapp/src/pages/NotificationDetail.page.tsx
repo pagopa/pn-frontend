@@ -83,7 +83,7 @@ const NotificationDetail: React.FC = () => {
   const isMobile = useIsMobile();
   const { hasApiErrors } = useErrors();
   const [pageReady, setPageReady] = useState(false);
-  const [isUserValid, setIsUserValid] = useState(true);
+  const [isUserForbidden, setIsUserForbidden] = useState(false);
   const [downtimesReady, setDowntimesReady] = useState(false);
   const { F24_DOWNLOAD_WAIT_TIME, LANDING_SITE_URL, DOWNTIME_EXAMPLE_LINK } = getConfiguration();
   const navigate = useNavigate();
@@ -341,7 +341,7 @@ const NotificationDetail: React.FC = () => {
             error?.response?.data?.errors?.[0]?.code ===
             ServerResponseErrorCode.PN_DELIVERY_USER_ID_NOT_RECIPIENT_OR_DELEGATOR
           ) {
-            setIsUserValid(false);
+            setIsUserForbidden(true);
           }
         })
         .finally(() => setPageReady(true));
@@ -503,7 +503,7 @@ const NotificationDetail: React.FC = () => {
   };
 
   useEffect(() => {
-    if (downtimesReady && pageReady) {
+    if (downtimesReady && pageReady && !isUserForbidden) {
       PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_NOTIFICATION_DETAIL, {
         downtimeEvents,
         mandateId,
@@ -518,13 +518,13 @@ const NotificationDetail: React.FC = () => {
         timeline: notification.timeline,
       });
     }
-  }, [downtimesReady, pageReady]);
+  }, [downtimesReady, pageReady, isUserForbidden]);
 
   /**
    * If the user is not authorized to view the notification (PN_DELIVERY_USER_ID_NOT_RECIPIENT_OR_DELEGATOR),
    * we will show an AccessDenied component. PN-17207
    */
-  if (pageReady && !isUserValid) {
+  if (pageReady && isUserForbidden) {
     const i18nKey = currentUser.source?.retrievalId ? 'from-tpp' : 'from-qrcode';
     return (
       <AccessDenied
