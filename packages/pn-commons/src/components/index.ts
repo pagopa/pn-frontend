@@ -163,3 +163,5 @@ export {
   PnWizard,
   PnWizardStep,
 };
+
+export { default as FeedbackBanner } from './FeedbackBanner/FeedbackBanner';
