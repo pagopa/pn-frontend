@@ -66,6 +66,7 @@ const FilterNotifications = forwardRef(({ showFilters, currentDelegator }: Props
   const [endDate, setEndDate] = useState<Date | null>(null);
   const isMobile = useIsMobile();
   const dialogRef = useRef<{ toggleOpen: () => void }>(null);
+  const formRef = useRef<HTMLFormElement>(null);
 
   const emptyValues = {
     startDate: tenYearsAgo,
@@ -121,6 +122,20 @@ const FilterNotifications = forwardRef(({ showFilters, currentDelegator }: Props
     }
   };
 
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const errors = await formik.validateForm();
+
+    if (Object.keys(errors).length > 0) {
+      const field = Object.keys(errors)[0] as keyof FormikValues;
+      const el = formRef.current?.querySelector<HTMLInputElement>(`[name="${field}"]`);
+      el?.focus();
+      return;
+    }
+
+    await formik.submitForm();
+  };
+
   useEffect(() => {
     void formik.validateForm();
   }, []);
@@ -146,6 +161,7 @@ const FilterNotifications = forwardRef(({ showFilters, currentDelegator }: Props
   if (!showFilters) {
     return <></>;
   }
+
   const isInitialSearch = _.isEqual(formik.values, initialEmptyValues);
   return isMobile ? (
     <CustomMobileDialog>
@@ -163,7 +179,7 @@ const FilterNotifications = forwardRef(({ showFilters, currentDelegator }: Props
         {t('button.filtra')}
       </CustomMobileDialogToggle>
       <CustomMobileDialogContent title={t('button.filtra')} ref={dialogRef}>
-        <form onSubmit={formik.handleSubmit} data-testid="filter-form">
+        <form onSubmit={handleSubmit} data-testid="filter-form" ref={formRef}>
           <DialogContent>
             <FilterNotificationsFormBody
               formikInstance={formik}
@@ -185,7 +201,7 @@ const FilterNotifications = forwardRef(({ showFilters, currentDelegator }: Props
       </CustomMobileDialogContent>
     </CustomMobileDialog>
   ) : (
-    <form onSubmit={formik.handleSubmit} data-testid="filter-form">
+    <form onSubmit={handleSubmit} data-testid="filter-form" ref={formRef}>
       <Box sx={{ flexGrow: 1, mt: 3 }}>
         <Grid
           container
