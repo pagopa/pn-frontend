@@ -49,7 +49,9 @@ const userSlice = createSlice({
       state.loading = true;
     });
     builder.addCase(exchangeToken.fulfilled, (state, action) => {
-      state.user = action.payload;
+      const user = action.payload;
+      sessionStorage.setItem('user', JSON.stringify(user));
+      state.user = user;
       state.loading = false;
     });
     builder.addCase(exchangeToken.rejected, (state) => {

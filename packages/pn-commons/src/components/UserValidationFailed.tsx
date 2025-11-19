@@ -1,7 +1,6 @@
 import * as React from 'react';
 
-import ThankYouPage from '../components/ThankYouPage';
-// <-- aggiorna il path se necessario
+import FeedbackPage from '../components/FeedbackPage';
 import { getLocalizedOrDefaultLabel } from '../utility/localization.utility';
 
 type Props = {
@@ -9,24 +8,12 @@ type Props = {
 };
 
 const UserValidationFailed: React.FC<Props> = ({ onAssistanceClick }) => (
-  <ThankYouPage
+  <FeedbackPage
     outcome="error"
-    title={getLocalizedOrDefaultLabel(
-      'common',
-      'user-validation-failed.title',
-      'Validazione utente fallita'
-    )}
-    description={getLocalizedOrDefaultLabel(
-      'common',
-      'user-validation-failed.description',
-      'Uno o più dati associati alla tua utenza non sono validi.'
-    )}
+    title={getLocalizedOrDefaultLabel('common', 'user-validation-failed.title')}
+    description={getLocalizedOrDefaultLabel('common', 'user-validation-failed.description')}
     action={{
-      text: getLocalizedOrDefaultLabel(
-        'common',
-        'user-validation-failed.cta',
-        "Contatta l'assistenza"
-      ),
+      text: getLocalizedOrDefaultLabel('common', 'user-validation-failed.cta'),
       onClick: onAssistanceClick,
     }}
   />

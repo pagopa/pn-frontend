@@ -49,10 +49,6 @@ const SessionGuard = () => {
     AppResponsePublisher.error.subscribe('exchangeToken', manageUnforbiddenError);
     try {
       const user = await dispatch(exchangeToken(token)).unwrap();
-
-      // store user in sessionStorage only on successful validation
-      sessionStorage.setItem('user', JSON.stringify(user));
-
       sessionCheck(user.exp);
     } catch (error) {
       const adaptedError = adaptedTokenExchangeError(error);

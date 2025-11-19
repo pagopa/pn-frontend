@@ -3,7 +3,7 @@ import * as React from 'react';
 import { Box, Button, Typography } from '@mui/material';
 import { IllusCompleted, IllusError } from '@pagopa/mui-italia';
 
-type ThankYouPageProps = {
+type FeedbackPageProps = {
   /** Visual outcome to render a suitable illustration */
   outcome: 'success' | 'error';
   /** Main heading text */
@@ -18,7 +18,7 @@ type ThankYouPageProps = {
   };
 };
 
-const ThankYouPage: React.FC<ThankYouPageProps> = ({ outcome, title, description, action }) => (
+const FeedbackPage: React.FC<FeedbackPageProps> = ({ outcome, title, description, action }) => (
   <Box sx={{ minHeight: '350px', height: '100%', display: 'flex' }}>
     <Box sx={{ margin: 'auto', textAlign: 'center', width: '80vw' }}>
       {outcome === 'success' ? <IllusCompleted /> : <IllusError />}
@@ -35,7 +35,7 @@ const ThankYouPage: React.FC<ThankYouPageProps> = ({ outcome, title, description
         variant="contained"
         sx={{ mt: 4 }}
         onClick={action.onClick}
-        data-testid="thankyou-cta"
+        data-testid="feedback-cta"
       >
         {action.text}
       </Button>
@@ -43,4 +43,4 @@ const ThankYouPage: React.FC<ThankYouPageProps> = ({ outcome, title, description
   </Box>
 );
 
-export default ThankYouPage;
+export default FeedbackPage;

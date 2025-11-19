@@ -61,10 +61,10 @@ export function basicInitialUserData<T extends BasicUser>(
 }
 
 export function adaptedTokenExchangeError(originalError: any) {
-  // validazione `user` TokenExchangeRequest fallisce
+  // `user` TokenExchangeRequest validation failed
   // ---------------------------------------------------
-  // Il thunk usa rejectWithValue({ code: 'USER_VALIDATION_FAILED' })
-  // Usiamo uno status "custom" 499 per mantenere lo stesso shape degli altri rami.
+  // The thunk uses rejectWithValue({ code: 'USER_VALIDATION_FAILED' })
+  // We use a custom status 499 to keep the same shape as the other branches.
   if (originalError?.code === 'USER_VALIDATION_FAILED' || originalError?.response?.status === 499) {
     return {
       ...originalError,
