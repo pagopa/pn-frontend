@@ -4,7 +4,7 @@ import { FeedbackBanner } from '@pagopa-pn/pn-commons';
 
 import { getConfiguration } from '../../services/configuration.service';
 
-const SideMenuBanner = () => {
+const SideMenuBanner: React.FC = () => {
   const { t } = useTranslation('common');
   const { FEEDBACK_SURVEY_URL } = getConfiguration();
 
