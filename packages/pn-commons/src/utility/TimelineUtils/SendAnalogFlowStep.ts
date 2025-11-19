@@ -1,4 +1,4 @@
-import { SendPaperDetails, TimelineCategory } from '../../models';
+import { SendPaperDetails, TimelineCategory } from '../../models/NotificationDetail';
 import { getLocalizedOrDefaultLabel } from '../../utility/localization.utility';
 import { TimelineStep, TimelineStepInfo, TimelineStepPayload } from './TimelineStep';
 

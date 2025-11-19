@@ -2,7 +2,7 @@ import { add, addDays, compareAsc } from 'date-fns';
 
 import DateFnsAdapter from '@date-io/date-fns';
 
-import { DatePickerTypes } from '../models';
+import { DatePickerTypes } from '../components/CustomDatePicker';
 import { getLocalizedOrDefaultLabel } from '../utility/localization.utility';
 
 const dateFns = new DateFnsAdapter();

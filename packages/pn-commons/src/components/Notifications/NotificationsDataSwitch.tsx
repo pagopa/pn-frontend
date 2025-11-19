@@ -2,10 +2,12 @@ import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import { Box, Typography } from '@mui/material';
 import { ButtonNaked } from '@pagopa/mui-italia';
 
-import { useIsMobile } from '../../hooks';
-import { Notification, NotificationColumnData, Row } from '../../models';
-import { formatDate, getNotificationStatusInfos } from '../../utility';
+import { useIsMobile } from '../../hooks/useIsMobile';
+import { Notification, NotificationColumnData } from '../../models/Notifications';
+import { Row } from '../../models/PnTable';
+import { formatDate } from '../../utility/date.utility';
 import { getLocalizedOrDefaultLabel } from '../../utility/localization.utility';
+import { getNotificationStatusInfos } from '../../utility/notification.utility';
 import NewNotificationBadge, { isNewNotification } from './NewNotificationBadge';
 import StatusTooltip from './StatusTooltip';
 

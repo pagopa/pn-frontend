@@ -5,7 +5,7 @@ import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import { Button, SxProps, Theme, Tooltip } from '@mui/material';
 import { ButtonNaked } from '@pagopa/mui-italia';
 
-import { useIsMobile } from '../hooks';
+import { useIsMobile } from '../hooks/useIsMobile';
 
 type AllowedSlots = typeof Button | typeof ButtonNaked;
 type AllowedSlotProps = ComponentPropsWithoutRef<AllowedSlots>;

@@ -36,6 +36,10 @@
     "not-found": "Povezave do obvestila ni mogoče najti",
     "not-found-subtitle": "Povezave do obvestila ni mogoče najti. Če ga želite prebrati, prosite prejemnika, da se prijavi v SEND in ga prenese na vas."
   },
+  "from-tpp": {
+    "not-found": "Povezave do obvestila ni mogoče najti",
+    "not-found-subtitle": "To obvestilo lahko prebere samo prejemnik."
+  },
   "detail": {
     "document-not-available": "Dokument bo mogoče prenesti v nekaj minutah. Poskusite lahko znova tako, da ponovno naložite stran ali kliknete povezavo zahtevanega dokumenta",
     "table-aria-label": "Podrobnosti o obvestilu",
@@ -301,7 +305,7 @@
         "pec-receipt-not-delivered": "za nedostavo PEC",
         "paper-receipt-delivered": "za dostavo priporočenega pisma",
         "paper-receipt-not-delivered": "za nedostavo priporočenega pisma",
-        "analog-failure-delivery": "Vloga potrdila o prejemu"
+        "analog-failure-delivery": "Depozit potrdila o prejemu"
       },
       "registered-letter-kind": {
         "AR": "s povratnico",
@@ -397,5 +401,21 @@
     "canceled": "Preklicano",
     "canceled-tooltip": "Organizacija je preklicala pošiljanje obvestila",
     "canceled-description": "Organizacija je preklicala pošiljanje obvestila."
+  },
+  "tppLanding": {
+    "title": "Pozdravljeni,\nprejeli ste pravno veljavno sporočilo",
+    "description": "Če ga želite prebrati, <strong>vstopite v SEND - Servizio Notifiche Digitali.</strong> Tam boste našli pomembne dokumente, ki zadevajo vas.\n\nTudi če sporočila ne odprete ali preberete, <strong>ima to pravne učinke.</strong>",
+    "access-button": "Dostop do dokumentov",
+    "faq": {
+      "title": "Pogosta vprašanja",
+      "what-are-notifications": {
+        "question": "Kaj so pravno veljavna sporočila?",
+        "answer": "To pomeni, da pošiljanje in prejemanje teh sporočil ustvarja pravne učinke tako za pošiljatelja kot za prejemnika. Če na primer prejmete globo za prometni prekršek, datum prejema vpliva na znesek, ki ga boste morali plačati, ali na vašo pravico do pritožbe."
+      },
+      "what-is-send": {
+        "question": "Kaj je SEND - Servizio Notifiche Digitali?",
+        "answer": "SEND - Servizio Notifiche Digitali je platforma, ki digitalizira in poenostavlja upravljanje obvestil: omogoča njihovo prejemanje, prenos vročenih dokumentov in plačilo morebitnih zneskov neposredno na spletu.\nSEND lahko pošilja obvestila v imenu organov tako državljanom, samostojnim poklicem in samostojnim podjetnikom (tj. „fizičnim osebam“) kot tudi podjetjem (tj. „pravnim osebam“)."
+      }
+    }
   }
 }

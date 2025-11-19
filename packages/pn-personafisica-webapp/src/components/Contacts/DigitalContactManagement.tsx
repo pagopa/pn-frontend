@@ -10,6 +10,7 @@ import LegalContactManager, {
   DigitalDomicileManagementAction,
 } from '../../components/Contacts/LegalContactManager';
 import { PFEventsType } from '../../models/PFEventsType';
+import { ChannelType } from '../../models/contacts';
 import { RECAPITI } from '../../navigation/routes.const';
 import { contactsSelectors } from '../../redux/contact/reducers';
 import { useAppSelector } from '../../redux/hooks';
@@ -24,9 +25,10 @@ const DigitalContactManagement: React.FC = () => {
   const [currentAction, setCurrentAction] = useState<DigitalDomicileManagementAction>(
     DigitalDomicileManagementAction.DEFAULT
   );
-  const { legalAddresses } = useAppSelector(contactsSelectors.selectAddresses);
+  const { legalAddresses, addresses } = useAppSelector(contactsSelectors.selectAddresses);
 
   const addSpecialContactRef = useRef<AddSpecialContactRef>(null);
+  const lastAddedMetaRef = useRef<{ channelType: ChannelType; senderName: string } | null>(null);
 
   useEffect(() => {
     if (currentAction === DigitalDomicileManagementAction.DEFAULT) {
@@ -66,7 +68,9 @@ const DigitalContactManagement: React.FC = () => {
       </ButtonNaked>
     );
 
-  const handleSpecialContactAdded = () => {
+  const handleSpecialContactAdded = (meta: { channelType: ChannelType; senderName: string }) => {
+    // eslint-disable-next-line functional/immutable-data
+    lastAddedMetaRef.current = meta;
     setActiveStep(1);
   };
 
@@ -119,6 +123,21 @@ const DigitalContactManagement: React.FC = () => {
           title: t(`legal-contacts.sercq-send-wizard.feedback.title-transfer`),
           buttonText: t('legal-contacts.sercq-send-wizard.feedback.go-to-contacts'),
           onClick: handleClickFeedback,
+          onFeedbackShow: () => {
+            const meta = lastAddedMetaRef.current;
+            if (!meta) {
+              return;
+            }
+            PFEventStrategyFactory.triggerEvent(
+              PFEventsType.SEND_ADD_CUSTOMIZED_CONTACT_THANK_YOU_PAGE,
+              {
+                event_type: EventAction.SCREEN_VIEW,
+                addresses,
+                customized_contact_type: meta.channelType,
+                organization_name: meta.senderName,
+              }
+            );
+          },
         },
       }}
     >

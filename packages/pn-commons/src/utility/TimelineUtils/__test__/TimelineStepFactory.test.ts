@@ -1,5 +1,5 @@
 import { getTimelineElem } from '../../../__mocks__/NotificationDetail.mock';
-import { TimelineCategory } from '../../../models';
+import { TimelineCategory } from '../../../models/NotificationDetail';
 import { AnalogFailureWorkflowStep } from '../AnalogFailureWorkflowStep';
 import { DefaultStep } from '../DefaultStep';
 import { NotHandledStep } from '../NotHandledStep';

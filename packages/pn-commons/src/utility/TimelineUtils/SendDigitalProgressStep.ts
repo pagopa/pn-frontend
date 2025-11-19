@@ -1,4 +1,4 @@
-import { SendDigitalDetails } from '../../models';
+import { SendDigitalDetails } from '../../models/NotificationDetail';
 import { TimelineStep, TimelineStepInfo, TimelineStepPayload } from './TimelineStep';
 
 export class SendDigitalProgressStep extends TimelineStep {

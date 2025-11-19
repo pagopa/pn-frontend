@@ -1,6 +1,6 @@
 import * as yup from 'yup';
 
-import { IUN_regex } from '../utility';
+import { IUN_regex } from '../utility/iun.utility';
 import {
   Attachment,
   F24PaymentDetails,

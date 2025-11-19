@@ -27,3 +27,4 @@ export const DIGITAL_DOMICILE = `${RECAPITI}/domicilio-digitale`;
 export const DIGITAL_DOMICILE_ACTIVATION = `${DIGITAL_DOMICILE}/attivazione`;
 export const DIGITAL_DOMICILE_MANAGEMENT = `${DIGITAL_DOMICILE}/gestione`;
 export const LOGOUT = '/auth/logout';
+export const TPP_LANDING = '/nuova-notifica-send';

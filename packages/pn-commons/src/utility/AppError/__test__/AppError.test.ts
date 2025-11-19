@@ -1,4 +1,4 @@
-import { ErrorMessage } from '../../../models';
+import { ErrorMessage } from '../../../models/AppResponse';
 import AppError from '../AppError';
 
 class MockAppError extends AppError {
