@@ -27,6 +27,7 @@ export type PaymentTpp = {
   paymentButton: string;
   retrievalId: string;
   iun: string;
+  isPaymentEnabled: boolean;
 };
 
 export type PaymentsData = {
