@@ -38,6 +38,10 @@
     "not-found": "Non puoi leggere questa notifica",
     "not-found-subtitle": "Può essere letta solo dal destinatario o da un suo delegato. Per leggerla, chiedi al destinatario di effettuare l’accesso a SEND e delegarti."
   },
+  "from-tpp": {
+    "not-found": "Non puoi leggere questa notifica",
+    "not-found-subtitle": "Questa notifica può essere letta solo dal destinatario."
+  },
   "detail": {
     "document-not-available": "Al momento non è possibile scaricare il documento, riprova più tardi. Per riprovare, ricarica la pagina o premi sul link del documento.",
     "table-aria-label": "Dettaglio notifica",

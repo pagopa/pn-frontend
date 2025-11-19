@@ -36,6 +36,10 @@
     "not-found": "Du kannst diese Zustellung nicht lesen",
     "not-found-subtitle": "Sie kann nur vom Empfänger oder von einem seiner Bevollmächtigten gelesen werden. Um sie zu lesen, bitte den Empfänger, sich auf SEND einzuloggen und dich zu bevollmächtigen."
   },
+  "from-tpp": {
+    "not-found": "Du kannst diese Zustellung nicht lesen",
+    "not-found-subtitle": "Diese Benachrichtigung kann nur vom Empfänger gelesen werden."
+  },
   "detail": {
     "document-not-available": "Das Dokument kann in wenigen Minuten heruntergeladen werden. Du kannst es erneut versuchen, indem du die Seite neu lädst oder auf den Link des angeforderten Dokuments klickst",
     "table-aria-label": "Einzelheiten zur Zustellung",
