@@ -397,5 +397,21 @@
     "canceled": "Annulée",
     "canceled-tooltip": "L’organisme a annulé l’envoi de la notification",
     "canceled-description": "L’organisme a annulé l’envoi de la notification."
+  },
+  "tppLanding": {
+    "title": "Bonjour,\nvous avez reçu une communication à valeur légale",
+    "description": "Pour la lire, <strong>accédez à SEND - Servizio Notifiche Digitali.</strong> Vous y trouverez des documents importants vous concernant.\n\nMême si vous ne l'ouvrez pas ou ne la lisez pas, <strong>la communication produit des effets juridiques.</strong>",
+    "access-button": "Accéder aux documents",
+    "faq": {
+      "title": "Foire aux questions",
+      "what-are-notifications": {
+        "question": "Qu'est-ce que les communications à valeur légale ?",
+        "answer": "Cela signifie que l'envoi et la réception de ces communications produisent des effets juridiques tant pour l'expéditeur que pour le destinataire. Par exemple, si vous recevez une amende pour infraction au code de la route, la date de réception a une incidence sur le montant que vous devrez payer ou sur votre droit de la contester."
+      },
+      "what-is-send": {
+        "question": "Qu'est-ce que SEND - Servizio Notifiche Digitali ?",
+        "answer": "SEND - Servizio Notifiche Digitali est une plateforme qui numérise et simplifie la gestion des notifications : elle permet de les recevoir, de télécharger les actes notifiés et de payer les éventuels montants directement en ligne.\nSEND peut envoyer des notifications pour le compte des institutions aussi bien aux citoyens, aux professions libérales et aux entreprises individuelles (c'est-à-dire les « personnes physiques ») qu'aux sociétés (c'est-à-dire les « personnes morales »)."
+      }
+    }
   }
 }
