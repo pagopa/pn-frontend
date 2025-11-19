@@ -916,14 +916,16 @@ describe('NotificationDetail Page', async () => {
 
   it('should show pay tpp button after call check-tpp api with retrievalId in user token', async () => {
     const mockRetrievalId = 'retrieval-id';
+    const paymentTpp: BffCheckTPPResponse = {
+      originId: notificationDTO.iun,
+      retrievalId: mockRetrievalId,
+      pspDenomination: 'MOCK BANK',
+      isPaymentEnabled: true,
+    };
     mock.onGet(`/bff/v1/notifications/received/${notificationDTO.iun}`).reply(200, notificationDTO);
     mock
       .onGet(`/bff/v1/notifications/received/check-tpp?retrievalId=${mockRetrievalId}`)
-      .reply(200, {
-        originId: notificationDTO.iun,
-        retrievalId: mockRetrievalId,
-        paymentButton: 'MOCK BANK',
-      } as BffCheckTPPResponse);
+      .reply(200, paymentTpp);
 
     await act(async () => {
       result = render(<NotificationDetail />, {

@@ -333,7 +333,10 @@ const PaymentButtons = ({
   handleTrackEventFn,
   handleCheckPaymentSelected,
 }: PaymentButtonsProps) => {
-  const hasPaymentTpp = paymentTpp?.iun === iun;
+  // isPaymentEnabled indicates whether the PSP handles the payment process
+  // If false, the payment in the notification is treated as standard (Checkout)
+  const hasPaymentTpp = paymentTpp?.iun === iun && paymentTpp.isPaymentEnabled;
+
   return (
     <>
       {hasPaymentTpp && (
