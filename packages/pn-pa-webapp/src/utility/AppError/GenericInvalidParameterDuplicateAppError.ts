@@ -2,12 +2,15 @@ import { AppError, ServerResponseError } from '@pagopa-pn/pn-commons';
 
 enum DuplicatedParameter {
   PROTOCOL_NUMBER = 'Duplicated notification for senderPaId##paProtocolNumber##idempotenceToken',
+  NOTICE_CODE = 'Duplicated notification for creditorTaxId##noticeCode',
 }
 
 const getDuplicatedParameterErrorString = (error: string) => {
   switch (error) {
     case DuplicatedParameter.PROTOCOL_NUMBER:
       return 'new-notification.errors.invalid_parameter_protocol_number_duplicate';
+    case DuplicatedParameter.NOTICE_CODE:
+      return 'new-notification.errors.invalid_parameter_notice_code_duplicate';
     default:
       return 'new-notification.errors.invalid_parameter';
   }

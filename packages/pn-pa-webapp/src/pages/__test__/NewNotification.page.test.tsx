@@ -329,6 +329,79 @@ describe('NewNotification Page without payment enabled in configuration', async 
       'new-notification.errors.invalid_parameter_protocol_number_duplicate.message.notifiche'
     );
   });
+
+  it('notification failed for duplicated notice code', async () => {
+    const mappedNotification = newNotificationMapper(newNotification);
+    const mockResponse = {
+      type: 'GENERIC_ERROR',
+      status: 409,
+      errors: [
+        {
+          code: 'PN_GENERIC_INVALIDPARAMETER_DUPLICATED',
+          element: 'Duplicated notification for creditorTaxId##noticeCode',
+        },
+      ],
+    };
+    mock.onPost('/bff/v1/notifications/sent', mappedNotification).reply(409, mockResponse);
+
+    await act(async () => {
+      const Component = () => {
+        errorFactoryManager.factory = new PAAppErrorFactory((path, ns) => `${path}.${ns}`);
+        return (
+          <>
+            <ResponseEventDispatcher />
+            <AppResponseMessage />
+            <AppMessage />
+            <NewNotification />
+          </>
+        );
+      };
+      result = render(<Component />, {
+        preloadedState: {
+          newNotificationState: { notification: newNotification, groups: [] },
+          userState: { user: userResponse },
+        },
+      });
+    });
+    // STEP 1
+    let buttonSubmit = await waitFor(() => result.getByTestId('step-submit'));
+    expect(buttonSubmit).toBeEnabled();
+    const preliminaryInformation = result.getByTestId('preliminaryInformationsForm');
+    expect(preliminaryInformation).toBeInTheDocument();
+    fireEvent.click(buttonSubmit);
+    // STEP 2
+    await waitFor(() => {
+      expect(preliminaryInformation).not.toBeInTheDocument();
+    });
+    buttonSubmit = result.getByTestId('step-submit');
+    const recipientForm = result.getByTestId('recipientForm');
+    expect(recipientForm).toBeInTheDocument();
+    fireEvent.click(buttonSubmit);
+    // STEP 3
+    await waitFor(() => {
+      expect(recipientForm).not.toBeInTheDocument();
+    });
+    buttonSubmit = result.getByTestId('step-submit');
+    const attachmentsForm = result.getByTestId('attachmentsForm');
+    expect(attachmentsForm).toBeInTheDocument();
+    // FINAL
+    fireEvent.click(buttonSubmit);
+    await waitFor(() => {
+      expect(mock.history.post).toHaveLength(1);
+    });
+    const finalStep = result.queryByTestId('finalStep');
+    expect(finalStep).not.toBeInTheDocument();
+
+    // check if toast is in the document
+    const snackBar = await waitFor(() => result.getByTestId('snackBarContainer'));
+    expect(snackBar).toBeInTheDocument();
+    expect(snackBar).toHaveTextContent(
+      'new-notification.errors.invalid_parameter_notice_code_duplicate.title.notifiche'
+    );
+    expect(snackBar).toHaveTextContent(
+      'new-notification.errors.invalid_parameter_notice_code_duplicate.message.notifiche'
+    );
+  });
 });
 
 describe('NewNotification Page with payment enabled in configuration', () => {

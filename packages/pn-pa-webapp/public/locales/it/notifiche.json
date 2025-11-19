@@ -598,6 +598,10 @@
         "title": "Dati non validi",
         "message": "Il numero di protocollo inserito è già esistente"
       },
+      "invalid_parameter_notice_code_duplicate": {
+        "title": "Dati non validi",
+        "message": "Uno o più dei codici di avviso inseriti è già esistente."
+      },
       "invalid_parameter_taxonomy_code": {
         "title": "Il codice tassonomico non è valido",
         "message": "Controlla il codice che hai inserito e riprova. Se l’errore si ripete, contatta l’assistenza e comunica le informazioni errore."

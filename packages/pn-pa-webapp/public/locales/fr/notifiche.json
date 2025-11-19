@@ -489,6 +489,10 @@
       "invalid_parameter_protocol_number_duplicate": {
         "title": "Données non valides",
         "message": "Le numéro de protocole saisi est déjà existant"
+      },
+      "invalid_parameter_notice_code_duplicate": {
+        "title": "Données non valides",
+        "message": "Un ou plusieurs des codes de notification saisis existent déjà."
       }
     }
   }

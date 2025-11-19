@@ -30,4 +30,20 @@ describe('Test GenericInvalidParameterDuplicateAppError', () => {
       'new-notification.errors.invalid_parameter_protocol_number_duplicate.message notifiche'
     );
   });
+
+  it('Should return duplicated notice code message', () => {
+    const appError = new GenericInvalidParameterDuplicateAppError(
+      {
+        element: 'Duplicated notification for creditorTaxId##noticeCode',
+      } as ServerResponseError,
+      translateFn
+    );
+    const message = appError.getMessage();
+    expect(message.title).toBe(
+      'new-notification.errors.invalid_parameter_notice_code_duplicate.title notifiche'
+    );
+    expect(message.content).toBe(
+      'new-notification.errors.invalid_parameter_notice_code_duplicate.message notifiche'
+    );
+  });
 });

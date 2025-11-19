@@ -487,8 +487,11 @@
         "message": "Eden ali več vnesenih podatkov ni veljavnih"
       },
       "invalid_parameter_protocol_number_duplicate": {
-        "title": "Neveljavni podatki",
         "message": "Vnesena številka protokola že obstaja"
+      },
+      "invalid_parameter_notice_code_duplicate": {
+        "title": "Neveljavni podatki",
+        "message": "Eden ali več vnesenih kod za obvestilo že obstaja."
       }
     }
   }
