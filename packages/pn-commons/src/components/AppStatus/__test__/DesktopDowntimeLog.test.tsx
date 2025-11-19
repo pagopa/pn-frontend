@@ -1,7 +1,7 @@
 import { vi } from 'vitest';
 
 import { beDowntimeHistoryWithIncidents } from '../../../__mocks__/AppStatus.mock';
-import { DowntimeStatus, KnownFunctionality } from '../../../models';
+import { DowntimeStatus, KnownFunctionality } from '../../../models/AppStatus';
 import {
   RenderResult,
   act,
@@ -11,8 +11,7 @@ import {
   theme,
   within,
 } from '../../../test-utils';
-import { formatDate } from '../../../utility';
-import { formatTimeWithLegend } from '../../../utility/date.utility';
+import { formatDate, formatTimeWithLegend } from '../../../utility/date.utility';
 import DesktopDowntimeLog from '../DesktopDowntimeLog';
 
 const columns = ['startDate', 'endDate', 'functionality', 'legalFactId', 'status'];

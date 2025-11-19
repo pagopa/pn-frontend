@@ -3,6 +3,110 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.19.1](https://github.com/pagopa/pn-frontend/compare/v2.19.0...v2.19.1) (2025-11-12)
+
+
+### Bug Fixes
+
+* **pn-17231:** fixed one trust scripts loading ([#1689](https://github.com/pagopa/pn-frontend/issues/1689)) ([45d4583](https://github.com/pagopa/pn-frontend/commit/45d4583ea5eb1aa44ece90e52bbc4b8484dd0cf7))
+
+
+
+
+
+# [2.19.0](https://github.com/pagopa/pn-frontend/compare/v2.19.0-RC.5...v2.19.0) (2025-11-07)
+
+**Note:** Version bump only for package @pagopa-pn/pn-personafisica-webapp
+
+
+
+
+
+
+# [2.19.0-RC.4](https://github.com/pagopa/pn-frontend/compare/v2.19.0-RC.3...v2.19.0-RC.4) (2025-11-06)
+
+
+### Bug Fixes
+
+* **PN-17095:** track mixpanel events with 3 properties ([#1682](https://github.com/pagopa/pn-frontend/issues/1682)) ([28b3329](https://github.com/pagopa/pn-frontend/commit/28b332964cd40022df29b7359189dc2f9fb72e25))
+* **PN-17096:** update mixpanel event with 4 properties ([#1683](https://github.com/pagopa/pn-frontend/issues/1683)) ([217527a](https://github.com/pagopa/pn-frontend/commit/217527ad1dee85db71fa8172bd0f72ade6ed7966))
+
+
+### Features
+
+* **PN-17094:** track Mixpanel events with two properties ([#1680](https://github.com/pagopa/pn-frontend/issues/1680)) ([a36c5d8](https://github.com/pagopa/pn-frontend/commit/a36c5d8faee21e069fca11648592806259233d84))
+
+
+
+
+
+
+# [2.19.0-RC.3](https://github.com/pagopa/pn-frontend/compare/v2.19.0-RC.2...v2.19.0-RC.3) (2025-11-03)
+
+
+### Bug Fixes
+
+* **PN-15731:** Resolve wrong copy on TYP after setting a special contact (PF) ([#1672](https://github.com/pagopa/pn-frontend/issues/1672)) ([dcb2ca1](https://github.com/pagopa/pn-frontend/commit/dcb2ca12f004422b16d83f273ef9c9079ed22d20))
+* **pn-16917:** fixed links to tos and privacy pages ([#1669](https://github.com/pagopa/pn-frontend/issues/1669)) ([b3f147b](https://github.com/pagopa/pn-frontend/commit/b3f147bc4dbbb6ed7e9b22db7bed4d7be66587e0))
+* **PN-17092:** update event mixpanel without properties ([#1674](https://github.com/pagopa/pn-frontend/issues/1674)) ([e73dcd4](https://github.com/pagopa/pn-frontend/commit/e73dcd403fbdddafbbdee9c2866165190a5980e5))
+* **PN-17093:** track events with one property ([#1679](https://github.com/pagopa/pn-frontend/issues/1679)) ([00b8e4b](https://github.com/pagopa/pn-frontend/commit/00b8e4b3e79ed8dd102eb806fa5991a2d0ff85d0))
+
+
+
+
+
+
+# [2.19.0-RC.2](https://github.com/pagopa/pn-frontend/compare/v2.19.0-RC.1...v2.19.0-RC.2) (2025-10-23)
+
+**Note:** Version bump only for package @pagopa-pn/pn-personafisica-webapp
+
+
+
+
+
+# [2.19.0-RC.1](https://github.com/pagopa/pn-frontend/compare/v2.19.0-RC.0...v2.19.0-RC.1) (2025-10-22)
+
+
+### Features
+
+* **pn-16604:** update copy PF and PG ([#1663](https://github.com/pagopa/pn-frontend/issues/1663)) ([0711433](https://github.com/pagopa/pn-frontend/commit/0711433607b825b180adf7bb0f931df3058b1d22))
+
+
+
+
+
+# [2.19.0-RC.0](https://github.com/pagopa/pn-frontend/compare/v2.18.0...v2.19.0-RC.0) (2025-10-13)
+
+
+### Bug Fixes
+
+* **PN-15803:** toggle edit mode when editing a special contact ([#1630](https://github.com/pagopa/pn-frontend/issues/1630)) ([e5e4d34](https://github.com/pagopa/pn-frontend/commit/e5e4d34389a31cdbcd80ad79619274453b41c55b))
+* **PN-16064:** display confirmation modal when editing a phone number from the SERCQ activation wizard ([#1626](https://github.com/pagopa/pn-frontend/issues/1626)) ([2e83103](https://github.com/pagopa/pn-frontend/commit/2e83103169bb7149fdf4ed484fc1b9884a923757))
+* **PN-16113:** fix menu link in ToS and Policy page ([#1638](https://github.com/pagopa/pn-frontend/issues/1638)) ([26d91b6](https://github.com/pagopa/pn-frontend/commit/26d91b6fa10362346625451bbcb61bdfbde63f06))
+* **PN-16180:** Remove amount and paymentExpirationDate on NotificationDetail (PF, PG, PA) ([#1639](https://github.com/pagopa/pn-frontend/issues/1639)) ([fc620c2](https://github.com/pagopa/pn-frontend/commit/fc620c2bb919e2c5eb26caa7165bd1168c56b98c))
+* **PN-16259:** pass translated label in Header component ([#1635](https://github.com/pagopa/pn-frontend/issues/1635)) ([e056736](https://github.com/pagopa/pn-frontend/commit/e0567368b4ba95ec11ef499f68c70d67dbee3030))
+* **PN-16362:** add courtesy contacts to Mixpanel event when adding special contact ([#1643](https://github.com/pagopa/pn-frontend/issues/1643)) ([af6a3c7](https://github.com/pagopa/pn-frontend/commit/af6a3c73ff270a617696c680d784631e6c62d9e8))
+* **PN-16387:** properly handle email deletion when SERCQ is enabled ([#1647](https://github.com/pagopa/pn-frontend/issues/1647)) ([4aa7bc7](https://github.com/pagopa/pn-frontend/commit/4aa7bc70cdae6c6f88614e8883a2915c758b1541))
+* **PN-16621:** avoid call api logout if token is expired on session guard ([#1649](https://github.com/pagopa/pn-frontend/issues/1649)) ([6ed1c9d](https://github.com/pagopa/pn-frontend/commit/6ed1c9d059c2862b4104cde813d1787c2c0e5e3c))
+* **PN-16660:** remove useless toast from SERCQ activation ([#1659](https://github.com/pagopa/pn-frontend/issues/1659)) ([822eb98](https://github.com/pagopa/pn-frontend/commit/822eb98343cc9087d9efc6b04007553ca71ed966))
+
+
+### Features
+
+* **PN-16215:** refactor guards in PA ([244e9f1](https://github.com/pagopa/pn-frontend/commit/244e9f1195ba14e649bc31ead8bb4a17a8ac5330))
+* **PN-16381:** Make email required for SERCQ activation/transfer (PF and PG) ([#1645](https://github.com/pagopa/pn-frontend/issues/1645)) ([9892d9f](https://github.com/pagopa/pn-frontend/commit/9892d9f21b66a2a5591e80ce99967942401e0c00))
+* **PN-16382:** make email required in digital domicile customization ([#1655](https://github.com/pagopa/pn-frontend/issues/1655)) ([deb7b4e](https://github.com/pagopa/pn-frontend/commit/deb7b4ecf38607915118977a6a2d15d8797fac71))
+* **PN-16388:** update SERCQ/PEC disable modal ([#1656](https://github.com/pagopa/pn-frontend/issues/1656)) ([aa873e3](https://github.com/pagopa/pn-frontend/commit/aa873e3b2c5e88f63e00a3d0063544cc91835ae5))
+* **PN-16659:** update content of thank you page during PEC activation ([#1654](https://github.com/pagopa/pn-frontend/issues/1654)) ([69e6bea](https://github.com/pagopa/pn-frontend/commit/69e6beabd74ea732c48d3d5ebd1b47bff84f285f))
+* **PN-16747/PN-16748:** change SMS and IO removal modals when digital domicile (SERCQ or PEC) is active ([#1653](https://github.com/pagopa/pn-frontend/issues/1653)) ([d8a91a7](https://github.com/pagopa/pn-frontend/commit/d8a91a7f1da24299cbdc5bfe1c31c6de371a17a2))
+* **PN-16758:** update deletion modal for per-sender SERCQ ([#1658](https://github.com/pagopa/pn-frontend/issues/1658)) ([15b4faf](https://github.com/pagopa/pn-frontend/commit/15b4faf5b4635c5f90b6f0fdb7a560000942e51b))
+* **PN-16773:** update api call order in removeSercqAndEmail action ([#1657](https://github.com/pagopa/pn-frontend/issues/1657)) ([7e02f7f](https://github.com/pagopa/pn-frontend/commit/7e02f7f2a2a03f6f402010b5c0286c7a6bd281e4))
+* **PN-16826:** remove email and SMS informative dialog during SERCQ activation/transfer wizard ([#1660](https://github.com/pagopa/pn-frontend/issues/1660)) ([fe4ce70](https://github.com/pagopa/pn-frontend/commit/fe4ce70f2982359a3a598aa3ebf6e07bb8961ff6))
+
+
+
+
+
 # [2.18.0](https://github.com/pagopa/pn-frontend/compare/v2.18.0-RC.4...v2.18.0) (2025-09-17)
 
 **Note:** Version bump only for package @pagopa-pn/pn-personafisica-webapp

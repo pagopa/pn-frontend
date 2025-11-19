@@ -1,8 +1,13 @@
 /* eslint-disable max-classes-per-file */
 import { Validator } from '@pagopa-pn/pn-validator';
 
-import { AppCurrentStatus, Downtime, DowntimeLogHistory, DowntimeStatus } from '../models';
-import { dataRegex } from '../utility';
+import {
+  AppCurrentStatus,
+  Downtime,
+  DowntimeLogHistory,
+  DowntimeStatus,
+} from '../models/AppStatus';
+import { dataRegex } from '../utility/string.utility';
 
 /* ------------------------------------------------------------------------
    validation - custom validators

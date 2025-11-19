@@ -1,5 +1,6 @@
 import React from 'react';
 import { Trans, useTranslation } from 'react-i18next';
+import { Navigate, useNavigate } from 'react-router-dom';
 
 import { ExpandMore } from '@mui/icons-material';
 import {
@@ -20,14 +21,14 @@ const TppLanding: React.FC = () => {
   const { t } = useTranslation('notifiche', { keyPrefix: 'tppLanding' });
   const rapidAccessParam = useRapidAccessParam() || [];
   const [param, value] = rapidAccessParam;
+  const navigate = useNavigate();
 
   const handleClickAccessButton = () => {
-    window.location.assign(`/?${AppRouteParams.RETRIEVAL_ID}=${value}`);
+    navigate(`/?${AppRouteParams.RETRIEVAL_ID}=${value}`, { replace: true });
   };
 
   if (!param || !value || param !== AppRouteParams.RETRIEVAL_ID) {
-    window.location.assign('/');
-    return;
+    return <Navigate to="/" replace />;
   }
 
   return (

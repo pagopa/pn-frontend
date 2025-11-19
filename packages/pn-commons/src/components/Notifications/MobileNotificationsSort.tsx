@@ -9,7 +9,8 @@ import {
   RadioGroup,
 } from '@mui/material';
 
-import { CardSort, Sort } from '../../models';
+import { CardSort } from '../../models/PnCard';
+import { Sort } from '../../models/PnTable';
 import CustomMobileDialog from '../CustomMobileDialog/CustomMobileDialog';
 import CustomMobileDialogAction from '../CustomMobileDialog/CustomMobileDialogAction';
 import CustomMobileDialogContent from '../CustomMobileDialog/CustomMobileDialogContent';

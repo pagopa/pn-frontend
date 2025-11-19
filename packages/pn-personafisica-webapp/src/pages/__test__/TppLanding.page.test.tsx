@@ -1,35 +1,32 @@
 import { vi } from 'vitest';
 
 import { AppRouteParams } from '@pagopa-pn/pn-commons';
+import userEvent from '@testing-library/user-event';
 
-import { fireEvent, render, waitFor } from '../../__test__/test-utils';
+import { render, waitFor } from '../../__test__/test-utils';
 import * as useRapidAccessParamHook from '../../hooks/useRapidAccessParam';
 import TppLanding from '../TppLanding.page';
 
-const assignFn = vi.fn();
+const mockNavigateFn = vi.fn();
+
+vi.mock('react-router-dom', async () => ({
+  ...(await vi.importActual<any>('react-router-dom')),
+  useNavigate: () => mockNavigateFn,
+  Navigate: ({ to, replace }: { to: string; replace?: boolean }) => {
+    mockNavigateFn(to, { replace });
+    return null;
+  },
+}));
 
 describe('TppLanding page', () => {
-  const original = window.location;
   const mockRetrievalId = '123456';
 
-  beforeAll(() => {
-    Object.defineProperty(window, 'location', {
-      configurable: true,
-      value: { href: '', assign: assignFn },
-    });
-  });
-
   beforeEach(() => {
-    window.location.href = '';
     vi.clearAllMocks();
   });
 
   afterEach(() => {
     vi.clearAllMocks();
-  });
-
-  afterAll(() => {
-    Object.defineProperty(window, 'location', { configurable: true, value: original });
   });
 
   it('should renders page with valid params', () => {
@@ -71,7 +68,7 @@ describe('TppLanding page', () => {
 
     const { queryByTestId } = render(<TppLanding />);
 
-    expect(assignFn).toHaveBeenCalledWith('/');
+    expect(mockNavigateFn).toHaveBeenCalledWith('/', { replace: true });
     expect(queryByTestId('tppLandingContainer')).not.toBeInTheDocument();
     expect(queryByTestId('accessButton')).not.toBeInTheDocument();
     expect(queryByTestId('faqSection')).not.toBeInTheDocument();
@@ -85,7 +82,7 @@ describe('TppLanding page', () => {
 
     const { queryByTestId } = render(<TppLanding />);
 
-    expect(assignFn).toHaveBeenCalledWith('/');
+    expect(mockNavigateFn).toHaveBeenCalledWith('/', { replace: true });
     expect(queryByTestId('tppLandingContainer')).not.toBeInTheDocument();
   });
 
@@ -97,11 +94,11 @@ describe('TppLanding page', () => {
 
     const { queryByTestId } = render(<TppLanding />);
 
-    expect(assignFn).toHaveBeenCalledWith('/');
+    expect(mockNavigateFn).toHaveBeenCalledWith('/', { replace: true });
     expect(queryByTestId('tppLandingContainer')).not.toBeInTheDocument();
   });
 
-  it('should handle access button click', () => {
+  it('should handle access button click', async () => {
     vi.spyOn(useRapidAccessParamHook, 'useRapidAccessParam').mockReturnValue([
       AppRouteParams.RETRIEVAL_ID,
       mockRetrievalId,
@@ -112,10 +109,13 @@ describe('TppLanding page', () => {
     const accessButton = getByTestId('accessButton');
     expect(accessButton).toBeEnabled();
 
-    fireEvent.click(accessButton);
+    await userEvent.click(accessButton);
 
-    expect(assignFn).toHaveBeenCalledWith(`/?${AppRouteParams.RETRIEVAL_ID}=${mockRetrievalId}`);
-    expect(assignFn).toHaveBeenCalledTimes(1);
+    expect(mockNavigateFn).toHaveBeenCalledWith(
+      `/?${AppRouteParams.RETRIEVAL_ID}=${mockRetrievalId}`,
+      { replace: true }
+    );
+    expect(mockNavigateFn).toHaveBeenCalledTimes(1);
   });
 
   it('should displays FAQ correctly', async () => {
@@ -128,7 +128,7 @@ describe('TppLanding page', () => {
 
     const notificationsAccordionSummary = getByTestId('notificationsAccordionSummary');
     expect(notificationsAccordionSummary).toHaveTextContent(/faq.what-are-notifications.question/);
-    fireEvent.click(notificationsAccordionSummary);
+    await userEvent.click(notificationsAccordionSummary);
 
     await waitFor(() => {
       const notificationsAccordionDetails = getByTestId('notificationsAccordionDetails');
@@ -138,7 +138,7 @@ describe('TppLanding page', () => {
 
     const sendAccordionSummary = getByTestId('sendAccordionSummary');
     expect(sendAccordionSummary).toHaveTextContent(/faq.what-is-send.question/);
-    fireEvent.click(sendAccordionSummary);
+    await userEvent.click(sendAccordionSummary);
 
     await waitFor(() => {
       const sendAccordionDetails = getByTestId('sendAccordionDetails');

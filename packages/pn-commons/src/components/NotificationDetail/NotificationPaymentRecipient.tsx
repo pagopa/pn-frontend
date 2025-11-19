@@ -3,19 +3,19 @@ import React, { memo, useEffect, useState } from 'react';
 import { Download } from '@mui/icons-material/';
 import { Alert, Box, Button, FormControl, Link, RadioGroup, Typography } from '@mui/material';
 
-import { downloadDocument } from '../../hooks';
+import { downloadDocument } from '../../hooks/useDownloadDocument';
+import { EventPaymentRecipientType } from '../../models/MixpanelEvents';
 import {
-  EventPaymentRecipientType,
   NotificationDetailPayment,
-  PaginationData,
   PaymentAttachment,
   PaymentAttachmentSName,
   PaymentDetails,
   PaymentStatus,
+  PaymentTpp,
   PaymentsData,
-} from '../../models';
-import { PaymentTpp } from '../../models/NotificationDetail';
-import { formatEurocentToCurrency } from '../../utility';
+} from '../../models/NotificationDetail';
+import { PaginationData } from '../../models/Pagination';
+import { formatEurocentToCurrency } from '../../utility/currency.utility';
 import { getLocalizedOrDefaultLabel } from '../../utility/localization.utility';
 import { getPaymentCache, setPaymentCache } from '../../utility/paymentCaching.utility';
 import CustomPagination from '../Pagination/CustomPagination';

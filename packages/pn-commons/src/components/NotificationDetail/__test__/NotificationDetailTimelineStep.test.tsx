@@ -1,15 +1,14 @@
 import { vi } from 'vitest';
 
 import { notificationDTO } from '../../../__mocks__/NotificationDetail.mock';
-import { INotificationDetailTimeline, LegalFactId, NotificationStatus } from '../../../models';
+import { INotificationDetailTimeline, LegalFactId } from '../../../models/NotificationDetail';
+import { NotificationStatus } from '../../../models/NotificationStatus';
 import { fireEvent, render } from '../../../test-utils';
+import { formatDay, formatMonthString, formatTime } from '../../../utility/date.utility';
 import {
-  formatDay,
-  formatMonthString,
-  formatTime,
   getLegalFactLabel,
   getNotificationStatusInfos,
-} from '../../../utility';
+} from '../../../utility/notification.utility';
 import NotificationDetailTimelineStep from '../NotificationDetailTimelineStep';
 
 // Define mock data for testing
@@ -129,7 +128,7 @@ describe('NotificationDetailTimelineStep', () => {
             getLegalFactLabel(step, lf.category, lf.key || '')
           );
         }
-        expect(microLegalFacts[counter]).toBeEnabled()
+        expect(microLegalFacts[counter]).toBeEnabled();
         counter++;
       }
     });
