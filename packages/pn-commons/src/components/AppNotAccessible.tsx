@@ -1,5 +1,3 @@
-import { Trans } from 'react-i18next';
-
 import { Typography } from '@mui/material';
 import { IllusInProgress } from '@pagopa/mui-italia';
 
@@ -22,23 +20,27 @@ const AppNotAccessible: React.FC<Props> = ({ onAction, variant = 'not-accessible
   );
 
   const description = isNotAccessible ? (
-    <Trans
-      ns="common"
-      i18nKey="not-accessible.description"
-      components={[
-        <Typography key="text" variant="body1" color="text.primary" display="inline" />,
-        <Typography
-          key="link"
-          variant="body1"
-          color="primary"
-          display="inline"
-          fontWeight="700"
-          sx={{ cursor: 'pointer', textDecoration: 'underline' }}
-          onClick={onAction}
-          data-testid="assistance-button"
-        />,
-      ]}
-    />
+    <>
+      <Typography variant="body1" color="text.primary" display="inline">
+        {getLocalizedOrDefaultLabel(
+          'common',
+          'not-accessible.description',
+          'Riprova tra qualche ora. Se hai bisogno di assistenza'
+        )}
+      </Typography>
+      &nbsp;
+      <Typography
+        variant="body1"
+        color="primary"
+        display="inline"
+        fontWeight="700"
+        sx={{ cursor: 'pointer', textDecoration: 'underline' }}
+        onClick={onAction}
+        data-testid="assistance-button"
+      >
+        {`${getLocalizedOrDefaultLabel('common', 'not-accessible.action', 'scrivici')}.`}
+      </Typography>
+    </>
   ) : (
     getLocalizedOrDefaultLabel('common', 'user-validation-failed.description')
   );
