@@ -355,6 +355,7 @@ const PaymentButtons = ({
             fontSize="14px"
             color="text.secondary"
             data-testid="tpp-helper-text"
+            sx={{ textAlign: { xs: 'center', lg: 'start' } }}
           >
             {getLocalizedOrDefaultLabel(
               'notifications',
