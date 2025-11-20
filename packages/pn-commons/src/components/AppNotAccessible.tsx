@@ -1,44 +1,66 @@
-import { Box, Typography } from '@mui/material';
+import { Trans } from 'react-i18next';
+
+import { Typography } from '@mui/material';
 import { IllusInProgress } from '@pagopa/mui-italia';
 
 import { getLocalizedOrDefaultLabel } from '../utility/localization.utility';
+import FeedbackPage from './FeedbackPage';
+
+type AppNotAccessibleVariant = 'not-accessible' | 'user-validation-failed';
 
 type Props = {
-  onAssistanceClick: () => void;
+  onAction: () => void;
+  variant?: AppNotAccessibleVariant;
 };
 
-const AppNotAccessible: React.FC<Props> = ({ onAssistanceClick }) => (
-  <Box sx={{ minHeight: '350px', height: '100%', display: 'flex' }}>
-    <Box sx={{ margin: 'auto', textAlign: 'center', width: '80vw' }}>
-      <IllusInProgress />
-      <Typography variant="h4" color="text.primary" sx={{ margin: '20px 0 10px 0' }}>
-        {getLocalizedOrDefaultLabel(
-          'common',
-          'not-accessible.title',
-          'Non è possibile accedere alla piattaforma'
-        )}
-      </Typography>
-      <Typography variant="body1" color="text.primary" display="inline">
-        {getLocalizedOrDefaultLabel(
-          'common',
-          'not-accessible.description',
-          'Riprova tra qualche ora. Se hai bisogno di assistenza'
-        )}
-      </Typography>
-      &nbsp;
-      <Typography
-        variant="body1"
-        color="primary"
-        display="inline"
-        fontWeight="700"
-        sx={{ cursor: 'pointer', textDecoration: 'underline' }}
-        onClick={onAssistanceClick}
-        data-testid="assistance-button"
-      >
-        {`${getLocalizedOrDefaultLabel('common', 'not-accessible.action', 'scrivici')}.`}
-      </Typography>
-    </Box>
-  </Box>
-);
+const AppNotAccessible: React.FC<Props> = ({ onAction, variant = 'not-accessible' }) => {
+  const isNotAccessible = variant === 'not-accessible';
+
+  const title = getLocalizedOrDefaultLabel(
+    'common',
+    isNotAccessible ? 'not-accessible.title' : 'user-validation-failed.title'
+  );
+
+  const description = isNotAccessible ? (
+    <Trans
+      ns="common"
+      i18nKey="not-accessible.description"
+      components={[
+        <Typography key="text" variant="body1" color="text.primary" display="inline" />,
+        <Typography
+          key="link"
+          variant="body1"
+          color="primary"
+          display="inline"
+          fontWeight="700"
+          sx={{ cursor: 'pointer', textDecoration: 'underline' }}
+          onClick={onAction}
+          data-testid="assistance-button"
+        />,
+      ]}
+    />
+  ) : (
+    getLocalizedOrDefaultLabel('common', 'user-validation-failed.description')
+  );
+
+  const slotProps = isNotAccessible ? { icon: <IllusInProgress /> } : undefined;
+
+  const action = isNotAccessible
+    ? undefined
+    : {
+        text: getLocalizedOrDefaultLabel('common', 'user-validation-failed.cta'),
+        onClick: onAction,
+      };
+
+  return (
+    <FeedbackPage
+      outcome="error"
+      title={title}
+      description={description}
+      slotProps={slotProps}
+      action={action}
+    />
+  );
+};
 
 export default AppNotAccessible;

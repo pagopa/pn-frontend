@@ -11,15 +11,13 @@ describe('AppNotAccessible Component', () => {
   });
 
   it('renders component', () => {
-    const { container } = render(<AppNotAccessible onAssistanceClick={assistanceClickHandlerMk} />);
+    const { container } = render(<AppNotAccessible onAction={assistanceClickHandlerMk} />);
     expect(container).toHaveTextContent('common - not-accessible.title');
     expect(container).toHaveTextContent('common - not-accessible.description');
   });
 
   it('clicks on assistance click', () => {
-    const { getByTestId } = render(
-      <AppNotAccessible onAssistanceClick={assistanceClickHandlerMk} />
-    );
+    const { getByTestId } = render(<AppNotAccessible onAction={assistanceClickHandlerMk} />);
     const assistanceLink = getByTestId('assistance-button');
     fireEvent.click(assistanceLink!);
     expect(assistanceClickHandlerMk).toBeCalledTimes(1);

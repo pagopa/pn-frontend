@@ -6,7 +6,6 @@ import {
   ConsentType,
   LoadingPage,
   NotFound,
-  UserValidationFailed,
   lazyRetry,
 } from '@pagopa-pn/pn-commons';
 
@@ -95,11 +94,13 @@ function Router() {
         <Route path={routes.TPP_LANDING} element={<TppLanding />} />
         <Route
           path={routes.NOT_ACCESSIBLE}
-          element={<AppNotAccessible onAssistanceClick={handleGoToLandingSite} />}
+          element={<AppNotAccessible onAction={handleGoToLandingSite} />}
         />
         <Route
           path={routes.USER_VALIDATION_FAILED}
-          element={<UserValidationFailed onAssistanceClick={handleAssistanceClick} />}
+          element={
+            <AppNotAccessible onAction={handleAssistanceClick} variant="user-validation-failed" />
+          }
         />
       </Routes>
     </Suspense>

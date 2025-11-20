@@ -81,4 +81,3 @@ export { default as SideMenu } from './SideMenu/SideMenu';
 export { default as SnackBar } from './SnackBar/SnackBar';
 export { default as TabPanel } from './TabPanel';
 export { default as TitleBox } from './TitleBox';
-export { default as UserValidationFailed } from './UserValidationFailed';

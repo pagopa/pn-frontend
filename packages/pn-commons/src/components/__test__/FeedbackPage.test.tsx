@@ -47,8 +47,8 @@ describe('FeedbackPage', () => {
     const { getByTestId } = render(
       <FeedbackPage
         outcome="error"
-        title="Something went wrong"
-        action={{ text: 'Retry', onClick: onClickHandler }}
+        title="Error description"
+        action={{ text: 'Error action', onClick: onClickHandler }}
       />
     );
 
@@ -60,8 +60,8 @@ describe('FeedbackPage', () => {
     const { getByTestId } = render(
       <FeedbackPage
         outcome="error"
-        title="Oops"
-        action={{ text: 'Contact', onClick: onClickHandler }}
+        title="Error description"
+        action={{ text: 'Error action', onClick: onClickHandler }}
       />
     );
 

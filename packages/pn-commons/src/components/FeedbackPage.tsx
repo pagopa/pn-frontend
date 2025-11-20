@@ -1,4 +1,4 @@
-import * as React from 'react';
+import { FC, ReactNode } from 'react';
 
 import { Box, Button, Typography } from '@mui/material';
 import { IllusCompleted, IllusError } from '@pagopa/mui-italia';
@@ -8,39 +8,62 @@ type FeedbackPageProps = {
   outcome: 'success' | 'error';
   /** Main heading text */
   title: string;
-  /** Optional description text */
-  description?: string;
-  action: {
+  /** Optional description content  */
+  description?: string | ReactNode;
+  action?: {
     /** CTA label */
     text: string;
     /** CTA callback */
     onClick: () => void;
   };
+  slotProps?: {
+    icon?: ReactNode;
+  };
 };
 
-const FeedbackPage: React.FC<FeedbackPageProps> = ({ outcome, title, description, action }) => (
-  <Box sx={{ minHeight: '350px', height: '100%', display: 'flex' }}>
-    <Box sx={{ margin: 'auto', textAlign: 'center', width: '80vw' }}>
-      {outcome === 'success' ? <IllusCompleted /> : <IllusError />}
-      <Typography variant="h4" color="text.primary" sx={{ mt: 2, mb: 1 }}>
-        {title}
-      </Typography>
-      {description ? (
+const FeedbackPage: FC<FeedbackPageProps> = ({
+  outcome,
+  title,
+  description,
+  action,
+  slotProps,
+}) => {
+  const getDescription = () => {
+    if (!description) {
+      return null;
+    }
+    if (typeof description === 'string') {
+      return (
         <Typography variant="body1" color="text.primary">
           {description}
         </Typography>
-      ) : null}
-      <Button
-        id="actionButton"
-        variant="contained"
-        sx={{ mt: 4 }}
-        onClick={action.onClick}
-        data-testid="feedback-cta"
-      >
-        {action.text}
-      </Button>
+      );
+    }
+    return description;
+  };
+
+  return (
+    <Box sx={{ minHeight: '350px', height: '100%', display: 'flex' }}>
+      <Box sx={{ margin: 'auto', textAlign: 'center', width: '80vw' }}>
+        {slotProps?.icon ?? (outcome === 'success' ? <IllusCompleted /> : <IllusError />)}
+        <Typography variant="h4" color="text.primary" sx={{ mt: 2, mb: 1 }}>
+          {title}
+        </Typography>
+        {getDescription()}
+        {action && (
+          <Button
+            id="actionButton"
+            variant="contained"
+            sx={{ mt: 4 }}
+            onClick={action.onClick}
+            data-testid="feedback-cta"
+          >
+            {action.text}
+          </Button>
+        )}
+      </Box>
     </Box>
-  </Box>
-);
+  );
+};
 
 export default FeedbackPage;
