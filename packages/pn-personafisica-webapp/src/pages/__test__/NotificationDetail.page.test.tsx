@@ -947,8 +947,8 @@ describe('NotificationDetail Page', async () => {
     expect(
       mock.history.get.find(({ url }) => url?.includes('bff/v1/notifications/received/check-tpp'))
     ).toBeDefined();
-    const tppPayButton = await waitFor(() => result.getByTestId('tpp-pay-button'));
+    const tppPayButton = result.getByTestId('tpp-pay-button');
     expect(tppPayButton).toBeInTheDocument();
-    expect(tppPayButton).toHaveTextContent('MOCK BANK');
+    expect(tppPayButton).toHaveTextContent('submit-tpp');
   });
 });
