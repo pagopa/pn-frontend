@@ -41,6 +41,7 @@ export { default as SmartHeaderCell } from './Data/SmartTable/SmartHeaderCell';
 export { default as DisclaimerModal } from './DisclaimerModal';
 export { default as EmptyState } from './EmptyState';
 export { default as FileUpload } from './FileUpload';
+export { default as FeedbackPage } from './FeedbackPage';
 export { default as Footer } from './Footer/Footer';
 export { default as Header } from './Header/Header';
 export { IllusAppIO } from './Illustrations/IllusAppIO';
