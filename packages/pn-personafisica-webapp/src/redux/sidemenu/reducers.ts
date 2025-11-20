@@ -44,7 +44,7 @@ const generalInfoSlice = createSlice({
     builder.addCase(exchangeNotificationRetrievalId.fulfilled, (state, action) => {
       state.paymentTpp = {
         retrievalId: action.payload.retrievalId,
-        paymentButton: action.payload.pspDenomination || '',
+        pspDenomination: action.payload.pspDenomination || '',
         iun: action.payload.originId || '',
         isPaymentEnabled: action.payload.isPaymentEnabled || false,
       };
