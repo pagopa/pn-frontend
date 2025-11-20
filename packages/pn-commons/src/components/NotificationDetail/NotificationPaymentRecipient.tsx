@@ -44,7 +44,8 @@ type Props = {
     noticeCode?: string,
     creditorTaxId?: string,
     retrievalId?: string,
-    tppName?: string
+    tppName?: string,
+    amount?: number
   ) => void;
   handleTrackEvent?: (event: EventPaymentRecipientType, param?: object) => void;
   handleFetchPaymentsInfo: (payment: Array<PaymentDetails | NotificationDetailPayment>) => void;
@@ -155,7 +156,8 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
           selectedPayment?.pagoPa?.noticeCode,
           selectedPayment?.pagoPa?.creditorTaxId,
           paymentTpp?.retrievalId,
-          paymentTpp?.paymentButton
+          paymentTpp?.paymentButton,
+          selectedPayment?.pagoPa?.amount
         );
         return;
       }
