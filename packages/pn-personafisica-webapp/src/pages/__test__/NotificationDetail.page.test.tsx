@@ -958,7 +958,7 @@ describe('NotificationDetail Page', async () => {
 
     const tppPayButton = result.getByTestId('tpp-pay-button');
     expect(tppPayButton).toBeInTheDocument();
-    expect(tppPayButton).toHaveTextContent('MOCK BANK');
+    expect(tppPayButton).toHaveTextContent('submit-tpp');
 
     await userEvent.click(tppPayButton);
 

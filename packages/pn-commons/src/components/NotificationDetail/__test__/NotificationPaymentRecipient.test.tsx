@@ -442,7 +442,7 @@ describe('NotificationPaymentRecipient Component', () => {
     const paymentTpp = {
       retrievalId: 'retrievalId',
       iun,
-      paymentButton: 'paymentButton',
+      pspDenomination: 'Bank1',
       isPaymentEnabled: true,
     };
     const { getByTestId, queryAllByTestId } = render(
@@ -461,6 +461,11 @@ describe('NotificationPaymentRecipient Component', () => {
     );
     const payTppButton = getByTestId('tpp-pay-button');
     expect(payTppButton).toBeInTheDocument();
+    expect(payTppButton).toHaveTextContent('submit-tpp');
+
+    const tppHelperText = getByTestId('tpp-helper-text');
+    expect(tppHelperText).toBeInTheDocument();
+    expect(tppHelperText).toHaveTextContent('tpp-helper-text');
 
     const payButton = getByTestId('pay-button');
     expect(payButton).toHaveTextContent('detail.payment.pay-with-other-methods');
@@ -483,7 +488,7 @@ describe('NotificationPaymentRecipient Component', () => {
       paymentsData.pagoPaF24[paymentIndex].pagoPa?.noticeCode,
       paymentsData.pagoPaF24[paymentIndex].pagoPa?.creditorTaxId,
       paymentTpp.retrievalId,
-      paymentTpp.paymentButton,
+      paymentTpp.pspDenomination,
       paymentsData.pagoPaF24[paymentIndex].pagoPa?.amount
     );
   });
@@ -493,7 +498,7 @@ describe('NotificationPaymentRecipient Component', () => {
     const paymentTpp = {
       retrievalId: 'retrievalId',
       iun,
-      paymentButton: 'paymentButton',
+      pspDenomination: 'Bank1',
       isPaymentEnabled: false,
     };
 
@@ -513,7 +518,9 @@ describe('NotificationPaymentRecipient Component', () => {
     );
 
     const payTppButton = queryByTestId('tpp-pay-button');
+    const tppHelperText = queryByTestId('tpp-helper-text');
     expect(payTppButton).not.toBeInTheDocument();
+    expect(tppHelperText).not.toBeInTheDocument();
 
     const payButton = getByTestId('pay-button');
     expect(payButton).toBeInTheDocument();

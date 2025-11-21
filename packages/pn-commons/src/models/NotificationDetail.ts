@@ -24,7 +24,7 @@ export interface NotificationDetail {
 }
 
 export type PaymentTpp = {
-  paymentButton: string;
+  pspDenomination: string;
   retrievalId: string;
   iun: string;
   isPaymentEnabled: boolean;
