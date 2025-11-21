@@ -489,6 +489,14 @@
       "invalid_parameter_protocol_number_duplicate": {
         "title": "Daten ungültig",
         "message": "Die eingegebene Protokollnummer ist bereits vorhanden"
+      },
+      "invalid_parameter_notice_code_duplicate": {
+        "title": "Ungültiger Mitteilungscode",
+        "message": "Der Mitteilungscode {{duplicatedNoticeCode}} wurde bereits verwendet"
+      },
+      "generic_invalid_parameter_notice_code_duplicate": {
+        "title": "Ungültiger Mitteilungscode",
+        "message": "Einer der Mitteilungscodes, den Sie eingegeben haben, wurde bereits verwendet."
       }
     }
   }
