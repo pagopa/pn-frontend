@@ -496,7 +496,7 @@
       },
       "generic_invalid_parameter_notice_code_duplicate": {
         "title": "Ungültiger Mitteilungscode",
-        "message": "Uno dei codici avviso che hai inserito è già stato utilizzato"
+        "message": "Einer der Mitteilungscodes, den Sie eingegeben haben, wurde bereits verwendet."
       }
     }
   }

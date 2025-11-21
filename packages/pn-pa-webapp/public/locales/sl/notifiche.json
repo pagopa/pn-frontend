@@ -495,7 +495,7 @@
       },
       "generic_invalid_parameter_notice_code_duplicate": {
         "title": "Neveljavna koda obvestila",
-        "message": "Uno dei codici avviso che hai inserito è già stato utilizzato"
+        "message": "Ena izmed kod obvestila, ki ste jo vnesli, je že bila uporabljena."
       }
     }
   }

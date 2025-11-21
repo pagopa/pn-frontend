@@ -496,7 +496,7 @@
       },
       "generic_invalid_parameter_notice_code_duplicate": {
         "title": "Code avis non valide",
-        "message": "Uno dei codici avviso che hai inserito è già stato utilizzato"
+        "message": "L'un des codes avis que vous avez saisi a déjà été utilisé."
       }
     }
   }

@@ -496,7 +496,7 @@
       },
       "generic_invalid_parameter_notice_code_duplicate": {
         "title": "Invalid notice code",
-        "message": "Uno dei codici avviso che hai inserito è già stato utilizzato"
+        "message": "One of the notice codes you entered has already been used"
       }
     }
   }
