@@ -15,8 +15,7 @@ import {
   RadioGroup,
   Typography,
 } from '@mui/material';
-import { CustomDropdown, useIsMobile } from '@pagopa-pn/pn-commons';
-import { LANGUAGES } from '@pagopa-pn/pn-commons/src/utility/costants';
+import { CustomDropdown, LANGUAGES, useIsMobile } from '@pagopa-pn/pn-commons';
 import { ButtonNaked, LangCode } from '@pagopa/mui-italia';
 
 import { BILINGUALISM_LANGUAGES, NewNotificationLangOther } from '../../models/NewNotification';

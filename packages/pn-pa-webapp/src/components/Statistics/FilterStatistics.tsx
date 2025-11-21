@@ -1,5 +1,5 @@
 import { useFormik } from 'formik';
-import _ from 'lodash';
+import { isEqual } from 'lodash-es';
 import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 
@@ -96,7 +96,7 @@ const FilterStatistics: React.FC<Props> = ({ filter, lastDate, className, sx }) 
     handleSelectFilter(defaultValues.selected);
   };
 
-  const isInitialSearch = _.isEqual(formik.values, defaultValues);
+  const isInitialSearch = isEqual(formik.values, defaultValues);
 
   const checkChipDisabled = (elem: SelectedStatisticsFilterKeys): boolean => {
     const [startDate, endDate] = getRangeDates(elem);

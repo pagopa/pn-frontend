@@ -1,11 +1,11 @@
 import {
   AppRouteParams,
   EventCategory,
+  EventNotificationSource,
   EventPropertyType,
   EventStrategy,
   TrackedEvent,
 } from '@pagopa-pn/pn-commons';
-import { EventNotificationSource } from '@pagopa-pn/pn-commons/src/models/MixpanelEvents';
 
 import { appRouteParamToEventSource } from '../../notification.utility';
 

@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import { isNil } from 'lodash-es';
 import { useTranslation } from 'react-i18next';
 
 import { Chip, Grid, Typography } from '@mui/material';
@@ -23,7 +23,7 @@ const NotificationPaymentPagoPa: React.FC<Props> = ({ iun, payment }) => {
   const dispatch = useAppDispatch();
 
   const dowloadHandler = () => {
-    if (!_.isNil(payment.recIndex) && payment.attachment) {
+    if (!isNil(payment.recIndex) && payment.attachment) {
       dispatch(
         getSentNotificationPayment({
           iun,

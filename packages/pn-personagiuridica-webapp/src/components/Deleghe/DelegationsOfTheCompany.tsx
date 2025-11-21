@@ -1,5 +1,5 @@
 import { useFormik } from 'formik';
-import _ from 'lodash';
+import { isEqual } from 'lodash-es';
 import { useEffect, useRef, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import * as yup from 'yup';
@@ -328,7 +328,7 @@ const DelegationsOfTheCompany = () => {
         reloadAction={() => dispatch(searchMandatesByDelegate(filters))}
         mainText={t('deleghe.delegatorsApiErrorMessage')}
       >
-        {rows.length > 0 || !_.isEqual({ size: 10, page: 0 }, filters) ? (
+        {rows.length > 0 || !isEqual({ size: 10, page: 0 }, filters) ? (
           <SmartTable
             conf={smartCfg}
             data={rows}

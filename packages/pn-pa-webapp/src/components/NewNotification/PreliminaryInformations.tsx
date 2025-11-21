@@ -17,10 +17,10 @@ import {
 import {
   ApiErrorWrapper,
   CustomDropdown,
+  LANGUAGES,
   PhysicalCommunicationType,
   dataRegex,
 } from '@pagopa-pn/pn-commons';
-import { LANGUAGES } from '@pagopa-pn/pn-commons/src/utility/costants';
 import { LangCode } from '@pagopa/mui-italia';
 
 import {

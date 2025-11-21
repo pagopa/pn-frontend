@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import { cloneDeep } from 'lodash-es';
 
 import {
   INotificationDetailTimeline,
@@ -1010,13 +1010,13 @@ export const overrideNotificationMock = (overrideObj: object): NotificationDetai
 };
 
 export const notificationToFe = parseNotificationDetailForRecipient(
-  _.cloneDeep(notificationDTO),
+  cloneDeep(notificationDTO),
   recipients[2].taxId,
   []
 );
 
 export const cancelledNotificationToFe = parseNotificationDetailForRecipient(
-  _.cloneDeep(cancelledNotificationDTO),
+  cloneDeep(cancelledNotificationDTO),
   recipients[2].taxId,
   []
 );
