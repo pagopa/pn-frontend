@@ -168,7 +168,7 @@ const Recipient: React.FC<Props> = ({
       }),
     digitalDomicile: yup
       .string()
-      .max(320, tc('too-long-field-error'))
+      .max(320, tc('too-long-field-error', { maxLength: 320 }))
       .matches(dataRegex.noSpaceAtEdges, tc('no-spaces-at-edges'))
       .matches(dataRegex.email, t('pec-error')),
     address: conditionalPhysicalAddress(requiredStringFieldValidation(tc, 1024)),
