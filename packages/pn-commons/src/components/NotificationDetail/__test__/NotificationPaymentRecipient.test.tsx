@@ -488,7 +488,8 @@ describe('NotificationPaymentRecipient Component', () => {
       paymentsData.pagoPaF24[paymentIndex].pagoPa?.noticeCode,
       paymentsData.pagoPaF24[paymentIndex].pagoPa?.creditorTaxId,
       paymentTpp.retrievalId,
-      paymentTpp.pspDenomination
+      paymentTpp.pspDenomination,
+      paymentsData.pagoPaF24[paymentIndex].pagoPa?.amount
     );
   });
 
