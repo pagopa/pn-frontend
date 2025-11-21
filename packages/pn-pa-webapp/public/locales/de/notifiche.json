@@ -491,8 +491,12 @@
         "message": "Die eingegebene Protokollnummer ist bereits vorhanden"
       },
       "invalid_parameter_notice_code_duplicate": {
-        "title": "Daten ungültig",
-        "message": "Einer oder mehrere der eingegebenen Hinweiscodes existieren bereits."
+        "title": "Ungültiger Mitteilungscode",
+        "message": "Der Mitteilungscode {{duplicatedNoticeCode}} wurde bereits verwendet"
+      },
+      "generic_invalid_parameter_notice_code_duplicate": {
+        "title": "Ungültiger Mitteilungscode",
+        "message": "Uno dei codici avviso che hai inserito è già stato utilizzato"
       }
     }
   }

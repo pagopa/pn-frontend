@@ -339,6 +339,7 @@ describe('NewNotification Page without payment enabled in configuration', async 
         {
           code: 'PN_GENERIC_INVALIDPARAMETER_DUPLICATED',
           element: 'Duplicated notification for creditorTaxId##noticeCode',
+          detail: 'Duplicated notification for creditorTaxId##noticeCode=77777777777##123456789',
         },
       ],
     };

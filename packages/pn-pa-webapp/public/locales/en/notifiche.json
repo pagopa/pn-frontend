@@ -491,8 +491,12 @@
         "message": "The entered protocol number already exists"
       },
       "invalid_parameter_notice_code_duplicate": {
-        "title": "Invalid data",
-        "message": "One or more of the entered notice codes already exists."
+        "title": "Invalid notice code",
+        "message": "The notice code {{duplicatedNoticeCode}} has already been used"
+      },
+      "generic_invalid_parameter_notice_code_duplicate": {
+        "title": "Invalid notice code",
+        "message": "Uno dei codici avviso che hai inserito è già stato utilizzato"
       }
     }
   }
