@@ -43,6 +43,7 @@ export enum NOTIFICATION_ACTIONS {
   GET_RECEIVED_NOTIFICATION_PAYMENT_URL = 'getReceivedNotificationPaymentUrl',
   GET_DOWNTIME_HISTORY = 'getNotificationDowntimeHistory',
   EXCHANGE_NOTIFICATION_QR_CODE = 'exchangeNotificationQrCode',
+  GET_RECEIVED_NOTIFICATION_PAYMENT_TPP_URL = 'getReceivedNotificationPaymentTppUrl',
 }
 
 export const getReceivedNotification = createAsyncThunk<
@@ -282,10 +283,10 @@ export const exchangeNotificationQrCode = createAsyncThunk<BffCheckAarResponse, 
 
 export const getReceivedNotificationPaymentTppUrl = createAsyncThunk<
   BffPaymentTppResponse,
-  { retrievalId: string; noticeCode: string; creditorTaxId: string }
+  { retrievalId: string; noticeCode: string; creditorTaxId: string; amount?: number }
 >(
-  'getReceivedNotificationPaymentTppUrl',
-  async ({ retrievalId, noticeCode, creditorTaxId }, { rejectWithValue }) => {
+  NOTIFICATION_ACTIONS.GET_RECEIVED_NOTIFICATION_PAYMENT_TPP_URL,
+  async ({ retrievalId, noticeCode, creditorTaxId, amount }, { rejectWithValue }) => {
     try {
       const paymentsApiFactory = PaymentsApiFactory(undefined, undefined, apiClient);
       const iun = store.getState().notificationState.notification.iun;
@@ -301,7 +302,8 @@ export const getReceivedNotificationPaymentTppUrl = createAsyncThunk<
       const response = await paymentsApiFactory.paymentsTppV1(
         retrievalId,
         noticeCode,
-        creditorTaxId
+        creditorTaxId,
+        amount
       );
       return response.data;
     } catch (e: any) {

@@ -27,10 +27,6 @@ export const getSidemenuInformation = createAsyncThunk<Array<Delegator>>(
   }
 );
 
-/**
- * TPP
- */
-
 export const exchangeNotificationRetrievalId = createAsyncThunk<BffCheckTPPResponse, string>(
   SIDEMENU_ACTIONS.EXCHANGE_NOTIFICATION_RETRIEVAL_ID,
   async (retrievalId: string, { rejectWithValue }) => {

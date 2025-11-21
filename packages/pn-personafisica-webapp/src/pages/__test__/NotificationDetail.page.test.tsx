@@ -18,6 +18,7 @@ import {
   setPaymentCache,
 } from '@pagopa-pn/pn-commons';
 import { initLocalizationForTest } from '@pagopa-pn/pn-commons/src/test-utils';
+import userEvent from '@testing-library/user-event';
 
 import { downtimesDTO } from '../../__mocks__/AppStatus.mock';
 import { mandatesByDelegate } from '../../__mocks__/Delegations.mock';
@@ -110,6 +111,18 @@ describe('NotificationDetail Page', async () => {
     creditorTaxId: payment.creditorTaxId,
     noticeCode: payment.noticeCode,
   }));
+
+  const paymentHistory = populatePaymentsPagoPaF24(
+    notificationToFe.timeline,
+    paymentsData.pagoPaF24,
+    paymentInfo
+  );
+
+  const requiredPaymentIndex = paymentHistory.findIndex(
+    (payment) => payment.pagoPa?.status === PaymentStatus.REQUIRED
+  );
+
+  const requiredPayment = paymentHistory[requiredPaymentIndex];
 
   it('renders NotificationDetail page', async () => {
     mock.onGet(`/bff/v1/notifications/received/${notificationDTO.iun}`).reply(200, notificationDTO);
@@ -622,15 +635,7 @@ describe('NotificationDetail Page', async () => {
 
   it('should dispatch getReceivedNotificationPaymentUrl on pay button click', async () => {
     vi.useFakeTimers();
-    const paymentHistory = populatePaymentsPagoPaF24(
-      notificationToFe.timeline,
-      paymentsData.pagoPaF24,
-      paymentInfo
-    );
-    const requiredPaymentIndex = paymentHistory.findIndex(
-      (payment) => payment.pagoPa?.status === PaymentStatus.REQUIRED
-    );
-    const requiredPayment = paymentHistory[requiredPaymentIndex];
+
     mock.onGet(`/bff/v1/notifications/received/${notificationDTO.iun}`).reply(200, notificationDTO);
     // we use regexp to not set the query parameters
     mock.onGet(/\/bff\/v1\/downtime\/history.*/).reply(200, { result: [] });
@@ -685,17 +690,6 @@ describe('NotificationDetail Page', async () => {
 
   it('should not duplicate payments when api call to cart respond with an error', async () => {
     vi.useFakeTimers();
-    const paymentHistory = populatePaymentsPagoPaF24(
-      notificationToFe.timeline,
-      paymentsData.pagoPaF24,
-      paymentInfo
-    );
-
-    const requiredPaymentIndex = paymentHistory.findIndex(
-      (payment) => payment.pagoPa?.status === PaymentStatus.REQUIRED
-    );
-
-    const requiredPayment = paymentHistory[requiredPaymentIndex];
     mock.onGet(`/bff/v1/notifications/received/${notificationDTO.iun}`).reply(200, notificationDTO);
     mock.onPost(`/bff/v1/payments/info`, paymentInfoRequest.slice(0, 5)).reply(200, paymentInfo);
     mock
@@ -915,16 +909,25 @@ describe('NotificationDetail Page', async () => {
     expect(alertRadd).toHaveTextContent('detail.timeline.radd.title');
   });
 
-  it('should show pay tpp button after call check-tpp api with retrievalId in user token', async () => {
+  it('should show pay tpp button after call check-tpp api with retrievalId in user token and get payment URL', async () => {
     const mockRetrievalId = 'retrieval-id';
+    const paymentTpp: BffCheckTPPResponse = {
+      originId: notificationDTO.iun,
+      retrievalId: mockRetrievalId,
+      pspDenomination: 'MOCK BANK',
+      isPaymentEnabled: true,
+    };
+    const tppPaymentUrlMock = `/bff/v1/payments/tpp?retrievalId=${mockRetrievalId}&noticeCode=${requiredPayment.pagoPa?.noticeCode}&paTaxId=${requiredPayment.pagoPa?.creditorTaxId}&amount=${requiredPayment.pagoPa?.amount}`;
+    const tppPaymentUrl = 'mocked-return-url';
+
     mock.onGet(`/bff/v1/notifications/received/${notificationDTO.iun}`).reply(200, notificationDTO);
+    mock.onPost(`/bff/v1/payments/info`, paymentInfoRequest.slice(0, 5)).reply(200, paymentInfo);
     mock
       .onGet(`/bff/v1/notifications/received/check-tpp?retrievalId=${mockRetrievalId}`)
-      .reply(200, {
-        originId: notificationDTO.iun,
-        retrievalId: mockRetrievalId,
-        paymentButton: 'MOCK BANK',
-      } as BffCheckTPPResponse);
+      .reply(200, paymentTpp);
+    mock.onGet(tppPaymentUrlMock).reply(200, {
+      paymentUrl: tppPaymentUrl,
+    });
 
     await act(async () => {
       result = render(<NotificationDetail />, {
@@ -943,12 +946,30 @@ describe('NotificationDetail Page', async () => {
       });
     });
 
+    expect(mock.history.get).toHaveLength(3);
     expect(
       mock.history.get.find(({ url }) => url?.includes('bff/v1/notifications/received/check-tpp'))
     ).toBeDefined();
-    const tppPayButton = await waitFor(() => result.getByTestId('tpp-pay-button'));
+
+    const item = result.queryAllByTestId('pagopa-item')[requiredPaymentIndex];
+    expect(item).toBeInTheDocument();
+    const radioButton = item?.querySelector('[data-testid="radio-button"] input');
+
+    await userEvent.click(radioButton!);
+
+    const tppPayButton = result.getByTestId('tpp-pay-button');
     expect(tppPayButton).toBeInTheDocument();
-    expect(tppPayButton).toHaveTextContent('MOCK BANK');
+    expect(tppPayButton).toHaveTextContent('submit-tpp');
+
+    await userEvent.click(tppPayButton);
+
+    expect(mock.history.get).toHaveLength(4);
+    expect(mock.history.get.find(({ url }) => url?.includes(tppPaymentUrlMock))).toBeDefined();
+
+    await vi.waitFor(() => {
+      expect(mockAssignFn).toHaveBeenCalledTimes(1);
+      expect(mockAssignFn).toHaveBeenCalledWith(tppPaymentUrl);
+    });
   });
 
   it('should show AccessDenied component when user is not authorized to see the notification', async () => {
