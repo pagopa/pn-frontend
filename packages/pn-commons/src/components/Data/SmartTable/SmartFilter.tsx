@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import { isEqual } from 'lodash-es';
 import { FormEvent, PropsWithChildren, useRef } from 'react';
 
 import { Box, Button, DialogActions, DialogContent, Grid } from '@mui/material';
@@ -42,7 +42,7 @@ const SmartFilter = <FormValues extends object>({
 }: PropsWithChildren<Props<FormValues>>) => {
   const isMobile = useIsMobile();
   const currentFilters = useRef<FormValues>(formValues);
-  const isPreviousSearch = _.isEqual(formValues, currentFilters.current);
+  const isPreviousSearch = isEqual(formValues, currentFilters.current);
   const filtersCount = filtersApplied(currentFilters.current, initialValues);
   const dialogRef = useRef<{ toggleOpen: () => void }>(null);
 
