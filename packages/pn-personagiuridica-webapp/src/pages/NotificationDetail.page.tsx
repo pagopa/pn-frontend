@@ -366,13 +366,8 @@ const NotificationDetail = () => {
   const breadcrumb = (
     <Fragment>
       {properBreadcrumb}
-      <TitleBox
-        variantTitle="h4"
-        title={notification.subject}
-        sx={{ pt: 3, mb: 2 }}
-        mbTitle={0}
-      ></TitleBox>
-      <Typography variant="body1" mb={{ xs: 3, md: 4 }}>
+      <TitleBox variantTitle="h4" title={notification.subject} sx={{ pt: 3, mb: 2 }} mbTitle={0} />
+      <Typography variant="body1" mb={{ xs: 3, md: 4 }} sx={{ overflowWrap: 'anywhere' }}>
         {notification.abstract}
       </Typography>
     </Fragment>
