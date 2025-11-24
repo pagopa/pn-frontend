@@ -1,12 +1,16 @@
-import { Configuration } from '../services/configuration.service';
-import EventStrategyFactory from '../utility/MixpanelUtils/EventStrategyFactory';
-import { AppError, AppErrorFactory, UnknownAppError, errorFactoryManager } from './AppError';
-import { AppResponsePublisher, ResponseEventDispatcher } from './AppResponse';
-import * as screenshot from './Screenshot';
-import { validateCurrentStatus, validateHistory, validateLegaFact } from './appStatus.utility';
-import { PRIVACY_LINK_RELATIVE_PATH, TOS_LINK_RELATIVE_PATH } from './costants';
-import { formatCurrency, formatEurocentToCurrency } from './currency.utility';
-import {
+export { Configuration } from '../services/configuration.service';
+export { default as EventStrategyFactory } from './MixpanelUtils/EventStrategyFactory';
+export { default as AppError } from './AppError/AppError';
+export { default as AppErrorFactory } from './AppError/AppErrorFactory';
+export { default as errorFactoryManager } from './AppError/ErrorFactoryManager';
+export { default as UnknownAppError } from './AppError/UnknownAppError';
+export { default as AppResponsePublisher } from './AppResponse/AppResponsePublisher';
+export { ResponseEventDispatcher } from './AppResponse/AppResponsePublisher';
+export * as screenshot from './Screenshot';
+export { validateCurrentStatus, validateHistory, validateLegaFact } from './appStatus.utility';
+export { PRIVACY_LINK_RELATIVE_PATH, TOS_LINK_RELATIVE_PATH, LANGUAGES } from './costants';
+export { formatCurrency, formatEurocentToCurrency } from './currency.utility';
+export {
   DATE_FORMAT,
   convertHoursToDays,
   dateIsDefined,
@@ -34,21 +38,21 @@ import {
   today,
   twelveMonthsAgo,
 } from './date.utility';
-import { waitForElement } from './dom.utility';
-import { APP_VERSION, IS_DEVELOP } from './environment.utility';
-import { calcUnit8Array } from './file.utility';
-import { filtersApplied, getValidValue, sortArray } from './genericFunctions.utility';
-import { IUN_regex, formatIun } from './iun.utility';
-import { lazyRetry } from './lazyRetry.utility';
-import { initLocalization } from './localization.utility';
-import {
+export { waitForElement } from './dom.utility';
+export { APP_VERSION, IS_DEVELOP } from './environment.utility';
+export { calcUnit8Array } from './file.utility';
+export { filtersApplied, getValidValue, sortArray } from './genericFunctions.utility';
+export { IUN_regex, formatIun } from './iun.utility';
+export { lazyRetry } from './lazyRetry.utility';
+export { initLocalization } from './localization.utility';
+export {
   getLangCode,
   getSessionLanguage,
   hashDetectorLookup,
   setSessionLanguage,
 } from './multilanguage.utility';
-import { addParamToUrl } from './navigation.utility';
-import {
+export { addParamToUrl } from './navigation.utility';
+export {
   getF24Payments,
   getLegalFactLabel,
   getNotificationAllowedStatus,
@@ -57,116 +61,25 @@ import {
   getPagoPaF24Payments,
   populatePaymentsPagoPaF24,
 } from './notification.utility';
-import { compileOneTrustPath, rewriteLinks } from './onetrust.utility';
-import { calculatePages } from './pagination.utility';
-import {
+export { compileOneTrustPath, rewriteLinks } from './onetrust.utility';
+export { calculatePages } from './pagination.utility';
+export {
   PAYMENT_CACHE_KEY,
   checkIfPaymentsIsAlreadyInCache,
   getPaymentCache,
   setPaymentCache,
   setPaymentsInCache,
 } from './paymentCaching.utility';
-import { parseError } from './redux.utility';
-import { AppRouteParams, compileRoute, getRapidAccessParam } from './routes.utility';
-import { searchStringLimitReachedText, useSearchStringChangeInput } from './searchString.utility';
-import { storageOpsBuilder } from './storage.utility';
-import { dataRegex, formatFiscalCode, fromStringToBase64, sanitizeString } from './string.utility';
-import { buttonNakedInheritStyle } from './styles.utility';
-import { extractRootTraceId } from './support.utility';
-import {
-  adaptedTokenExchangeError,
-  basicInitialUserData,
-  basicUserDataMatcherContents,
-} from './user.utility';
-
+export { parseError } from './redux.utility';
+export { AppRouteParams, compileRoute, getRapidAccessParam } from './routes.utility';
+export { storageOpsBuilder } from './storage.utility';
+export { dataRegex, formatFiscalCode, fromStringToBase64, sanitizeString } from './string.utility';
+export { buttonNakedInheritStyle } from './styles.utility';
+export { extractRootTraceId } from './support.utility';
 export {
-  getNotificationAllowedStatus,
-  getNotificationStatusInfos,
-  filtersApplied,
-  calculatePages,
-  isToday,
-  formatDate,
-  formatMonthString,
-  formatToSlicedISOString,
-  formatDay,
-  formatTime,
-  getEndOfDay,
-  getStartOfDay,
-  dateIsDefined,
-  minutesBeforeNow,
-  formatToTimezoneString,
-  getValidValue,
-  formatFiscalCode,
-  searchStringLimitReachedText,
-  useSearchStringChangeInput,
-  formatDateTime,
-  IUN_regex,
-  formatIun,
-  formatCurrency,
-  formatEurocentToCurrency,
-  dataRegex,
-  storageOpsBuilder,
-  compileRoute,
-  AppRouteParams,
-  today,
-  oneMonthAgo,
-  threeMonthsAgo,
-  sixMonthsAgo,
-  twelveMonthsAgo,
-  oneYearAgo,
-  tenYearsAgo,
-  DATE_FORMAT,
-  getLegalFactLabel,
-  getNotificationTimelineStatusInfos,
-  basicUserDataMatcherContents,
-  basicInitialUserData,
   adaptedTokenExchangeError,
-  PRIVACY_LINK_RELATIVE_PATH,
-  TOS_LINK_RELATIVE_PATH,
-  AppResponsePublisher,
-  ResponseEventDispatcher,
-  AppError,
-  AppErrorFactory,
-  UnknownAppError,
-  buttonNakedInheritStyle,
-  calcUnit8Array,
-  compileOneTrustPath,
-  errorFactoryManager,
-  getF24Payments,
-  getPagoPaF24Payments,
-  lazyRetry,
-  populatePaymentsPagoPaF24,
-  sanitizeString,
-  sortArray,
-  waitForElement,
-  initLocalization,
-  Configuration,
-  getPaymentCache,
-  setPaymentCache,
-  setPaymentsInCache,
-  checkIfPaymentsIsAlreadyInCache,
-  PAYMENT_CACHE_KEY,
-  rewriteLinks,
-  dateIsLessThan10Years,
-  EventStrategyFactory,
-  formatShortDate,
-  parseError,
-  validateHistory,
-  validateCurrentStatus,
-  validateLegaFact,
-  convertHoursToDays,
-  getLangCode,
-  getSessionLanguage,
-  setSessionLanguage,
-  hashDetectorLookup,
-  screenshot,
-  getDaysFromDateRange,
-  getWeeksFromDateRange,
-  getDateFromString,
-  fromStringToBase64,
-  IS_DEVELOP,
-  APP_VERSION,
-  getRapidAccessParam,
-  extractRootTraceId,
-  addParamToUrl,
-};
+  basicInitialUserData,
+  basicUserDataMatcherContents,
+  removeNullProperties,
+} from './user.utility';
+export { searchStringLimitReachedText, useSearchStringChangeInput } from './searchString.utility';

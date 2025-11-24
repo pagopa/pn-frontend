@@ -2,14 +2,18 @@ import { vi } from 'vitest';
 
 import { paymentInfo } from '../../../__mocks__/ExternalRegistry.mock';
 import { notificationDTO, payments } from '../../../__mocks__/NotificationDetail.mock';
-import { PaymentAttachmentSName, PaymentStatus, PaymentsData } from '../../../models';
+import {
+  PaymentAttachmentSName,
+  PaymentStatus,
+  PaymentsData,
+} from '../../../models/NotificationDetail';
 import { act, fireEvent, render, waitFor, within } from '../../../test-utils';
-import { setPaymentCache } from '../../../utility';
 import {
   getF24Payments,
   getPagoPaF24Payments,
   populatePaymentsPagoPaF24,
 } from '../../../utility/notification.utility';
+import { setPaymentCache } from '../../../utility/paymentCaching.utility';
 import NotificationPaymentRecipient from '../NotificationPaymentRecipient';
 
 describe('NotificationPaymentRecipient Component', () => {

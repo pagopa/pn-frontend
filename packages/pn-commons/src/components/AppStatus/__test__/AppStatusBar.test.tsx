@@ -1,6 +1,6 @@
 import { vi } from 'vitest';
 
-import { AppCurrentStatus } from '../../../models';
+import { AppCurrentStatus } from '../../../models/AppStatus';
 import {
   RenderResult,
   act,

@@ -2,7 +2,7 @@ import { ExitToApp } from '@mui/icons-material';
 import { ListItemButton, ListItemIcon, ListItemText } from '@mui/material';
 import Badge from '@mui/material/Badge';
 
-import { SideMenuItem } from '../../models';
+import { SideMenuItem } from '../../models/SideMenuItem';
 import NotificationBadge from './NotificationBadge';
 
 type Props = {

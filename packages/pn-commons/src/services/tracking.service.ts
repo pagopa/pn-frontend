@@ -1,11 +1,11 @@
 // leave default import for mixpanel, using named once it won't work
-import _ from 'lodash';
+import { isEmpty, isNil } from 'lodash-es';
 import mixpanel from 'mixpanel-browser';
 
 import { AnyAction, Dispatch, PayloadAction } from '@reduxjs/toolkit';
 
 import { ActionMeta, EventPropertyType } from '../models/MixpanelEvents';
-import { EventStrategyFactory } from '../utility';
+import EventStrategyFactory from '../utility/MixpanelUtils/EventStrategyFactory';
 
 /**
  * Function that calls the mixpanel tracking method based on the property type
@@ -27,8 +27,8 @@ function callMixpanelTrackingMethod(
       break;
     case EventPropertyType.INCREMENTAL: {
       const hasProperties =
-        !_.isNil(properties) && (typeof properties === 'object' || typeof properties === 'string')
-          ? !_.isEmpty(properties)
+        !isNil(properties) && (typeof properties === 'object' || typeof properties === 'string')
+          ? !isEmpty(properties)
           : true;
       mixpanel.people.increment(hasProperties ? { event_name: properties } : event_name);
       break;

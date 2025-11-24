@@ -1,15 +1,22 @@
-import _ from 'lodash';
+/* eslint-disable sonarjs/cognitive-complexity */
+
+/* eslint-disable complexity */
+import { isObject } from 'lodash-es';
 import { Fragment, ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 
 import { Alert, AlertTitle, Box, Grid, Paper, Stack, Typography } from '@mui/material';
 import {
+  AccessDenied,
   ApiError,
   ApiErrorWrapper,
+  AppResponse,
+  AppResponsePublisher,
   AppRouteParams,
   EventPaymentRecipientType,
   GetDowntimeHistoryParams,
+  IllusQuestion,
   LegalFactId,
   LegalFactType,
   NotificationDetailDocuments,
@@ -57,6 +64,7 @@ import { resetState } from '../redux/notification/reducers';
 import { exchangeNotificationRetrievalId } from '../redux/sidemenu/actions';
 import { RootState } from '../redux/store';
 import { getConfiguration } from '../services/configuration.service';
+import { ServerResponseErrorCode } from '../utility/AppError/types';
 import PFEventStrategyFactory from '../utility/MixpanelUtils/PFEventStrategyFactory';
 
 const NotificationDetail: React.FC = () => {
@@ -75,6 +83,7 @@ const NotificationDetail: React.FC = () => {
   const isMobile = useIsMobile();
   const { hasApiErrors } = useErrors();
   const [pageReady, setPageReady] = useState(false);
+  const [isUserForbidden, setIsUserForbidden] = useState(false);
   const [downtimesReady, setDowntimesReady] = useState(false);
   const { F24_DOWNLOAD_WAIT_TIME, LANDING_SITE_URL, DOWNTIME_EXAMPLE_LINK } = getConfiguration();
   const navigate = useNavigate();
@@ -162,7 +171,7 @@ const NotificationDetail: React.FC = () => {
       return;
     }
 
-    if (_.isObject(document)) {
+    if (isObject(document)) {
       // AAR case
       dispatch(
         getReceivedNotificationDocument({
@@ -318,16 +327,24 @@ const NotificationDetail: React.FC = () => {
 
   const fetchReceivedNotification = useCallback(() => {
     if (id) {
-      void dispatch(
+      dispatch(
         getReceivedNotification({
           iun: id,
           currentUserTaxId: currentUser.fiscal_number,
           delegatorsFromStore,
           mandateId,
         })
-      ).then(() => {
-        setPageReady(true);
-      });
+      )
+        .unwrap()
+        .catch((error) => {
+          if (
+            error?.response?.data?.errors?.[0]?.code ===
+            ServerResponseErrorCode.PN_DELIVERY_USER_ID_NOT_RECIPIENT_OR_DELEGATOR
+          ) {
+            setIsUserForbidden(true);
+          }
+        })
+        .finally(() => setPageReady(true));
     }
   }, []);
 
@@ -363,6 +380,11 @@ const NotificationDetail: React.FC = () => {
       (history) => history.status === NotificationStatus.VIEWED
     );
 
+  const handleUserInvalidError = useCallback((e: AppResponse) => {
+    const error = e.errors?.[0];
+    return error?.code !== ServerResponseErrorCode.PN_DELIVERY_USER_ID_NOT_RECIPIENT_OR_DELEGATOR;
+  }, []);
+
   useEffect(() => {
     if (checkIfUserHasPayments && !(isCancelled.cancelled || isCancelled.cancellationInProgress)) {
       fetchPaymentsInfo(currentRecipient.payments?.slice(0, 5) ?? []);
@@ -387,6 +409,21 @@ const NotificationDetail: React.FC = () => {
     }
     void dispatch(exchangeNotificationRetrievalId(currentUser.source.retrievalId));
   }, [currentUser, checkIfUserHasPayments]);
+
+  // Dismiss toast if error is PN_DELIVERY_USER_ID_NOT_RECIPIENT_OR_DELEGATOR
+  useEffect(() => {
+    AppResponsePublisher.error.subscribe(
+      NOTIFICATION_ACTIONS.GET_RECEIVED_NOTIFICATION,
+      handleUserInvalidError
+    );
+
+    return () => {
+      AppResponsePublisher.error.unsubscribe(
+        NOTIFICATION_ACTIONS.GET_RECEIVED_NOTIFICATION,
+        handleUserInvalidError
+      );
+    };
+  }, [handleUserInvalidError]);
 
   /* function which loads relevant information about donwtimes */
   const fetchDowntimeEvents = useCallback((fromDate: string, toDate: string | undefined) => {
@@ -466,7 +503,7 @@ const NotificationDetail: React.FC = () => {
   };
 
   useEffect(() => {
-    if (downtimesReady && pageReady) {
+    if (downtimesReady && pageReady && !isUserForbidden) {
       PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_NOTIFICATION_DETAIL, {
         downtimeEvents,
         mandateId,
@@ -481,7 +518,25 @@ const NotificationDetail: React.FC = () => {
         timeline: notification.timeline,
       });
     }
-  }, [downtimesReady, pageReady]);
+  }, [downtimesReady, pageReady, isUserForbidden]);
+
+  /**
+   * If the user is not authorized to view the notification (PN_DELIVERY_USER_ID_NOT_RECIPIENT_OR_DELEGATOR),
+   * we will show an AccessDenied component. PN-17207
+   */
+  if (pageReady && isUserForbidden) {
+    const i18nKey = currentUser.source?.retrievalId ? 'from-tpp' : 'from-qrcode';
+    return (
+      <AccessDenied
+        icon={<IllusQuestion />}
+        message={t(`${i18nKey}.not-found`, { ns: 'notifiche' })}
+        subtitle={t(`${i18nKey}.not-found-subtitle`, { ns: 'notifiche' })}
+        isLogged={true}
+        goToHomePage={() => navigate(routes.NOTIFICHE, { replace: true })}
+        goToLogin={() => {}}
+      />
+    );
+  }
 
   return (
     <LoadingPageWrapper isInitialized={pageReady}>
