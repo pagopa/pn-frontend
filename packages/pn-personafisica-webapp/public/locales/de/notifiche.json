@@ -36,6 +36,10 @@
     "not-found": "Du kannst diese Zustellung nicht lesen",
     "not-found-subtitle": "Sie kann nur vom Empfänger oder von einem seiner Bevollmächtigten gelesen werden. Um sie zu lesen, bitte den Empfänger, sich auf SEND einzuloggen und dich zu bevollmächtigen."
   },
+  "from-tpp": {
+    "not-found": "Du kannst diese Zustellung nicht lesen",
+    "not-found-subtitle": "Diese Benachrichtigung kann nur vom Empfänger gelesen werden."
+  },
   "detail": {
     "document-not-available": "Das Dokument kann in wenigen Minuten heruntergeladen werden. Du kannst es erneut versuchen, indem du die Seite neu lädst oder auf den Link des angeforderten Dokuments klickst",
     "table-aria-label": "Einzelheiten zur Zustellung",
@@ -397,5 +401,21 @@
     "canceled": "Abgebrochen",
     "canceled-tooltip": "Die Körperschaft hat den Versand der Zustellung abgebrochen",
     "canceled-description": "Die Körperschaft hat den Versand der Zustellung abgebrochen."
+  },
+  "tppLanding": {
+    "title": "Hallo,\nSie haben eine Mitteilung mit Rechtswirkung erhalten",
+    "description": "Um sie zu lesen, <strong>melden Sie sich bei SEND - Servizio Notifiche Digitali an.</strong> Dort finden Sie wichtige Dokumente, die Sie betreffen.\n\nAuch wenn Sie sie nicht öffnen oder lesen, <strong>entfaltet die Mitteilung Rechtswirkung.</strong>",
+    "access-button": "Zugriff auf Dokumente",
+    "faq": {
+      "title": "Häufig gestellte Fragen",
+      "what-are-notifications": {
+        "question": "Was sind Mitteilungen mit Rechtswirkung?",
+        "answer": "Das bedeutet, dass das Senden und Empfangen dieser Mitteilungen sowohl für den Absender als auch für den Empfänger rechtliche Folgen hat. Wenn Sie beispielsweise einen Bußgeldbescheid wegen einer Verkehrsordnungswidrigkeit erhalten, wirkt sich das Datum des Empfangs auf den zu zahlenden Betrag oder Ihr Recht auf Anfechtung aus."
+      },
+      "what-is-send": {
+        "question": "Was ist SEND - Servizio Notifiche Digitali?",
+        "answer": "SEND - Servizio Notifiche Digitali ist eine Plattform, die die Verwaltung von Bescheiden digitalisiert und vereinfacht: Sie ermöglicht den Empfang, das Herunterladen der zugestellten Dokumente und die direkte Online-Zahlung eventueller Beträge.\nSEND kann Bescheide im Auftrag von Behörden sowohl an Bürger, Freiberufler und Einzelunternehmen (d. h. „natürliche Personen“) als auch an Unternehmen (d. h. „juristische Personen“) senden."
+      }
+    }
   }
 }

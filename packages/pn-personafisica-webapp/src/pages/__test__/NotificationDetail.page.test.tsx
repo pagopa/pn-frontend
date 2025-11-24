@@ -44,6 +44,7 @@ import { apiClient } from '../../api/apiClients';
 import { BffCheckTPPResponse } from '../../generated-client/notifications';
 import * as routes from '../../navigation/routes.const';
 import { NOTIFICATION_ACTIONS } from '../../redux/notification/actions';
+import { ServerResponseErrorCode } from '../../utility/AppError/types';
 import NotificationDetail from '../NotificationDetail.page';
 
 const mockNavigateFn = vi.fn();
@@ -948,5 +949,55 @@ describe('NotificationDetail Page', async () => {
     const tppPayButton = await waitFor(() => result.getByTestId('tpp-pay-button'));
     expect(tppPayButton).toBeInTheDocument();
     expect(tppPayButton).toHaveTextContent('MOCK BANK');
+  });
+
+  it('should show AccessDenied component when user is not authorized to see the notification', async () => {
+    const unauthorizedError = {
+      status: 404,
+      data: {
+        errors: [
+          {
+            code: ServerResponseErrorCode.PN_DELIVERY_USER_ID_NOT_RECIPIENT_OR_DELEGATOR,
+          },
+        ],
+      },
+    };
+
+    mock
+      .onGet(`/bff/v1/notifications/received/${notificationDTO.iun}`)
+      .reply(unauthorizedError.status, unauthorizedError.data);
+
+    await act(async () => {
+      result = render(<NotificationDetail />, {
+        preloadedState: {
+          userState: {
+            user: {
+              fiscal_number: notificationDTO.recipients[0].taxId,
+              source: {
+                channel: 'TPP',
+                details: 'mock-tpp-id',
+                retrievalId: 'retrieval-id',
+              },
+            },
+          },
+        },
+      });
+    });
+
+    await waitFor(() => {
+      expect(screen.getByText('from-tpp.not-found')).toBeInTheDocument();
+    });
+
+    const accessDeniedComponent = screen.getByText('from-tpp.not-found');
+    expect(accessDeniedComponent).toBeInTheDocument();
+
+    const subtitle = screen.getByText('from-tpp.not-found-subtitle');
+    expect(subtitle).toBeInTheDocument();
+
+    const homeButton = screen.getByRole('button');
+    fireEvent.click(homeButton);
+
+    expect(mockNavigateFn).toHaveBeenCalledTimes(1);
+    expect(mockNavigateFn).toHaveBeenCalledWith(routes.NOTIFICHE, { replace: true });
   });
 });

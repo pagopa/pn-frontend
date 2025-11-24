@@ -1,6 +1,6 @@
 import { add, isValid } from 'date-fns';
 import { FormikValues, useFormik } from 'formik';
-import _ from 'lodash';
+import { isEqual } from 'lodash-es';
 import { forwardRef, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
@@ -47,7 +47,7 @@ const emptyValues = {
 const initialEmptyValues = { ...emptyValues, status: localizedNotificationStatus[0].value };
 
 const initialValues = (filters: GetNotificationsParams<Date>): FormikValues => {
-  if (!filters || _.isEqual(filters, emptyValues)) {
+  if (!filters || isEqual(filters, emptyValues)) {
     return initialEmptyValues;
   }
   return {
@@ -156,7 +156,7 @@ const FilterNotifications = forwardRef(({ showFilters }: Props, ref) => {
         iunMatch: getValidValue(values.iunMatch),
         status: getValidStatus(values.status),
       };
-      if (_.isEqual(prevFilters, currentFilters)) {
+      if (isEqual(prevFilters, currentFilters)) {
         return;
       }
       dispatch(setNotificationFilters(currentFilters));
@@ -170,10 +170,10 @@ const FilterNotifications = forwardRef(({ showFilters }: Props, ref) => {
   };
 
   const setDates = () => {
-    if (!_.isEqual(filters.startDate, sixMonthsAgo)) {
+    if (!isEqual(filters.startDate, sixMonthsAgo)) {
       setStartDate(formik.values.startDate);
     }
-    if (!_.isEqual(filters.endDate, today)) {
+    if (!isEqual(filters.endDate, today)) {
       setEndDate(formik.values.endDate);
     }
   };
@@ -188,7 +188,7 @@ const FilterNotifications = forwardRef(({ showFilters }: Props, ref) => {
   }, []);
 
   useEffect(() => {
-    if (_.isEqual(filters, emptyValues)) {
+    if (isEqual(filters, emptyValues)) {
       formik.resetForm({
         values: initialEmptyValues,
       });
@@ -223,7 +223,7 @@ const FilterNotifications = forwardRef(({ showFilters }: Props, ref) => {
     endDate: endDate === null ? today : formik.values.endDate,
   };
 
-  const isInitialSearch = _.isEqual(normalizedForInitial, initialEmptyValues);
+  const isInitialSearch = isEqual(normalizedForInitial, initialEmptyValues);
 
   return isMobile ? (
     <CustomMobileDialog>
