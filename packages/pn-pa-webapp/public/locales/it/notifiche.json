@@ -598,6 +598,14 @@
         "title": "Dati non validi",
         "message": "Il numero di protocollo inserito è già esistente"
       },
+      "invalid_parameter_notice_code_duplicate": {
+        "title": "Codice avviso non valido",
+        "message": "Il codice avviso {{duplicatedNoticeCode}} è stato già utilizzato"
+      },
+      "generic_invalid_parameter_notice_code_duplicate": {
+        "title": "Codice avviso non valido",
+        "message": "Uno dei codici avviso che hai inserito è già stato utilizzato"
+      },
       "invalid_parameter_taxonomy_code": {
         "title": "Il codice tassonomico non è valido",
         "message": "Controlla il codice che hai inserito e riprova. Se l’errore si ripete, contatta l’assistenza e comunica le informazioni errore."
