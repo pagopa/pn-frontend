@@ -65,6 +65,17 @@ function isFilterapplied(filtersCount: number): boolean {
 
 const getValidStatus = (status: string) => (status === 'All' ? '' : status);
 
+const submitForm = async (form: HTMLFormElement, formik: FormikValues) => {
+  const errors = await formik.validateForm();
+  if (Object.keys(errors).length > 0) {
+    const field = Object.keys(errors)[0];
+    const el = form.querySelector<HTMLInputElement>(`[name="${field}"]`);
+    el?.focus();
+    return;
+  }
+  await formik.submitForm();
+};
+
 const FilterNotifications = forwardRef(({ showFilters }: Props, ref) => {
   const filters = useAppSelector((state: RootState) => state.dashboardState.filters);
   const dispatch = useAppDispatch();
@@ -73,7 +84,6 @@ const FilterNotifications = forwardRef(({ showFilters }: Props, ref) => {
   const isMobile = useIsMobile();
   const { t } = useTranslation(['common', 'notifiche']);
   const dialogRef = useRef<{ toggleOpen: () => void }>(null);
-  const formRef = useRef<HTMLFormElement>(null);
 
   const validationSchema = useMemo(() => {
     const rangeErrorMsg = t('filters.errors.max-six-months', { ns: 'notifiche' });
@@ -168,18 +178,9 @@ const FilterNotifications = forwardRef(({ showFilters }: Props, ref) => {
     }
   };
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const errors = await formik.validateForm();
-
-    if (Object.keys(errors).length > 0) {
-      const field = Object.keys(errors)[0] as keyof FormikValues;
-      const el = formRef.current?.querySelector<HTMLInputElement>(`[name="${field}"]`);
-      el?.focus();
-      return;
-    }
-
-    await formik.submitForm();
+    void submitForm(e.currentTarget, formik);
   };
 
   useEffect(() => {
@@ -240,7 +241,7 @@ const FilterNotifications = forwardRef(({ showFilters }: Props, ref) => {
         {t('button.filtra')}
       </CustomMobileDialogToggle>
       <CustomMobileDialogContent title={t('button.filtra')} ref={dialogRef}>
-        <form onSubmit={handleSubmit} data-testid="filter-form" ref={formRef}>
+        <form onSubmit={handleSubmit} data-testid="filter-form">
           <DialogContent>
             <FilterNotificationsFormBody
               formikInstance={formik}
@@ -262,7 +263,7 @@ const FilterNotifications = forwardRef(({ showFilters }: Props, ref) => {
       </CustomMobileDialogContent>
     </CustomMobileDialog>
   ) : (
-    <form onSubmit={handleSubmit} data-testid="filter-form" ref={formRef}>
+    <form onSubmit={handleSubmit} data-testid="filter-form">
       <Stack
         direction={'row'}
         sx={{
