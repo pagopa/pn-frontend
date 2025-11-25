@@ -64,7 +64,7 @@ const userSlice = createSlice({
       const user = action.payload;
 
       sessionStorage.setItem('user', JSON.stringify(user));
-      state.user = action.payload;
+      state.user = user;
 
       state.loading = false;
     });

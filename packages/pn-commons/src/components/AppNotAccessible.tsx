@@ -36,7 +36,7 @@ const AppNotAccessible: React.FC<Props> = ({ onAction, reason = 'not-accessible'
         fontWeight="700"
         sx={{ cursor: 'pointer', textDecoration: 'underline' }}
         onClick={onAction}
-        data-testid="assistance-button"
+        data-testid="goToLanding-link"
       >
         {`${getLocalizedOrDefaultLabel('common', 'not-accessible.action', 'scrivici')}.`}
       </Typography>

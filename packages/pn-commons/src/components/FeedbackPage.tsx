@@ -56,7 +56,7 @@ const FeedbackPage: FC<FeedbackPageProps> = ({
             variant="contained"
             sx={{ mt: 4 }}
             onClick={action.onClick}
-            data-testid="feedback-cta"
+            data-testid="feedback-button"
           >
             {action.text}
           </Button>

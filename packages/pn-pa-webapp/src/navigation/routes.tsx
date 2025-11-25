@@ -1,6 +1,6 @@
-import { Navigate, Route, Routes, useNavigate } from 'react-router-dom';
+import { Navigate, Route, Routes, useNavigate, useSearchParams } from 'react-router-dom';
 
-import { AppNotAccessible, NotFound } from '@pagopa-pn/pn-commons';
+import { AppNotAccessible, AppNotAccessibleReason, NotFound } from '@pagopa-pn/pn-commons';
 
 import { PNRole } from '../models/user';
 import ApiKeys from '../pages/ApiKeys.page';
@@ -18,9 +18,25 @@ import SessionGuard from './SessionGuard';
 import ToSGuard from './ToSGuard';
 import * as routes from './routes.const';
 
-const handleAssistanceClick = () => {
-  /* eslint-disable-next-line functional/immutable-data */
-  window.location.href = getConfiguration().LANDING_SITE_URL;
+const AppNotAccessibleRoute = () => {
+  const [searchParams] = useSearchParams();
+
+  const reasonParam = searchParams.get('reason');
+
+  const reason: AppNotAccessibleReason =
+    reasonParam === 'user-validation-failed' ? 'user-validation-failed' : 'not-accessible';
+
+  const handleAction = () => {
+    if (reason === 'not-accessible') {
+      // eslint-disable-next-line functional/immutable-data
+      globalThis.location.href = getConfiguration().LANDING_SITE_URL;
+    } else {
+      // eslint-disable-next-line functional/immutable-data
+      globalThis.location.href = `mailto:${getConfiguration().PAGOPA_HELP_EMAIL}`;
+    }
+  };
+
+  return <AppNotAccessible reason={reason} onAction={handleAction} />;
 };
 
 function Router() {
@@ -50,10 +66,7 @@ function Router() {
       </Route>
       <Route path={routes.PRIVACY_POLICY} element={<PrivacyPolicyPage />} />
       <Route path={routes.TERMS_OF_SERVICE} element={<TermsOfServicePage />} />
-      <Route
-        path={routes.NOT_ACCESSIBLE}
-        element={<AppNotAccessible onAssistanceClick={handleAssistanceClick} />}
-      />
+      <Route path={routes.NOT_ACCESSIBLE} element={<AppNotAccessibleRoute />} />
       <Route path="*" element={<NotFound goBackAction={navigateToHome} />} />
     </Routes>
   );
