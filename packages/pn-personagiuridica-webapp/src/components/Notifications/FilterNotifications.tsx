@@ -58,13 +58,12 @@ const initialValues = (
   };
 };
 
-const submitForm = async (form: HTMLFormElement, formik: FormikValues) => {
+const submitForm = async (formik: FormikValues, form: HTMLFormElement) => {
   const errors = await formik.validateForm();
   if (Object.keys(errors).length > 0) {
     const field = Object.keys(errors)[0];
     const el = form.querySelector<HTMLInputElement>(`[name="${field}"]`);
     el?.focus();
-    return;
   }
   await formik.submitForm();
 };
@@ -132,7 +131,7 @@ const FilterNotifications = forwardRef(({ showFilters }: Props, ref) => {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    void submitForm(e.currentTarget, formik);
+    void submitForm(formik, e.currentTarget);
   };
 
   useEffect(() => {
