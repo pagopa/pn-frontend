@@ -489,6 +489,14 @@
       "invalid_parameter_protocol_number_duplicate": {
         "title": "Données non valides",
         "message": "Le numéro de protocole saisi est déjà existant"
+      },
+      "invalid_parameter_notice_code_duplicate": {
+        "title": "Code avis non valide",
+        "message": "Le code avis {{duplicatedNoticeCode}} a déjà été utilisé"
+      },
+      "generic_invalid_parameter_notice_code_duplicate": {
+        "title": "Code avis non valide",
+        "message": "L'un des codes avis que vous avez saisi a déjà été utilisé."
       }
     }
   }

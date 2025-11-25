@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { Navigate, useNavigate } from 'react-router-dom';
 
@@ -16,6 +16,8 @@ import {
 import { AppRouteParams, IllusLandingTpp } from '@pagopa-pn/pn-commons';
 
 import { useRapidAccessParam } from '../hooks/useRapidAccessParam';
+import { PFEventsType } from '../models/PFEventsType';
+import PFEventStrategyFactory from '../utility/MixpanelUtils/PFEventStrategyFactory';
 
 const TppLanding: React.FC = () => {
   const { t } = useTranslation('notifiche', { keyPrefix: 'tppLanding' });
@@ -23,9 +25,25 @@ const TppLanding: React.FC = () => {
   const [param, value] = rapidAccessParam;
   const navigate = useNavigate();
 
+  const whatIsSendFaqTitle = t('faq.what-is-send.question');
+  const whatAreNotificationsFaqTitle = t('faq.what-are-notifications.question');
+
   const handleClickAccessButton = () => {
+    PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_LANDING_PAGE_CLICK_ACCESS);
     navigate(`/?${AppRouteParams.RETRIEVAL_ID}=${value}`, { replace: true });
   };
+
+  const onAccordionClick = (expanded: boolean, faqTitle: string) => {
+    if (expanded) {
+      PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_LANDING_PAGE_FAQ_OPEN, {
+        faq_name: faqTitle,
+      });
+    }
+  };
+
+  useEffect(() => {
+    PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_LANDING_PAGE);
+  }, []);
 
   if (!param || !value || param !== AppRouteParams.RETRIEVAL_ID) {
     return <Navigate to="/" replace />;
@@ -85,7 +103,11 @@ const TppLanding: React.FC = () => {
             {t('faq.title')}
           </Typography>
 
-          <Accordion sx={{ borderRadius: '4px' }} data-testid="notificationsAccordion">
+          <Accordion
+            sx={{ borderRadius: '4px' }}
+            onChange={(_, expanded) => onAccordionClick(expanded, whatAreNotificationsFaqTitle)}
+            data-testid="notificationsAccordion"
+          >
             <AccordionSummary
               expandIcon={<ExpandMore />}
               data-testid="notificationsAccordionSummary"
@@ -93,7 +115,7 @@ const TppLanding: React.FC = () => {
               id="notifications-header"
             >
               <Typography fontWeight={600} fontSize="16px" component="span">
-                {t('faq.what-are-notifications.question')}
+                {whatAreNotificationsFaqTitle}
               </Typography>
             </AccordionSummary>
             <AccordionDetails data-testid="notificationsAccordionDetails">
@@ -109,6 +131,7 @@ const TppLanding: React.FC = () => {
                 display: 'none',
               },
             }}
+            onChange={(_, expanded) => onAccordionClick(expanded, whatIsSendFaqTitle)}
             data-testid="sendAccordion"
           >
             <AccordionSummary
@@ -118,7 +141,7 @@ const TppLanding: React.FC = () => {
               id="send-header"
             >
               <Typography fontWeight={600} fontSize="16px" component="span">
-                {t('faq.what-is-send.question')}
+                {whatIsSendFaqTitle}
               </Typography>
             </AccordionSummary>
             <AccordionDetails data-testid="sendAccordionDetails">

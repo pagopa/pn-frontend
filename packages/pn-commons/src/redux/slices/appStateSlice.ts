@@ -2,7 +2,10 @@ import { AnyAction, PayloadAction, createSlice } from '@reduxjs/toolkit';
 
 import { IAppMessage } from '../../models/AppMessage';
 import { AppResponse, AppResponseOutcome, HTTPStatusCode } from '../../models/AppResponse';
-import { createAppResponseError, createAppResponseSuccess } from '../../utility/AppResponse';
+import {
+  createAppResponseError,
+  createAppResponseSuccess,
+} from '../../utility/AppResponse/AppResponse';
 import { createAppMessage } from '../../utility/message.utility';
 import { extractRootTraceId } from '../../utility/support.utility';
 

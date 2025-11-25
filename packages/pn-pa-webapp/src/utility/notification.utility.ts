@@ -1,7 +1,12 @@
 /* eslint-disable functional/no-let */
-import _ from 'lodash';
+import { cloneDeep, omit } from 'lodash-es';
 
-import { NotificationDetailDocument, PhysicalAddress, PhysicalAddressLookup, RecipientType } from '@pagopa-pn/pn-commons';
+import {
+  NotificationDetailDocument,
+  PhysicalAddress,
+  PhysicalAddressLookup,
+  RecipientType,
+} from '@pagopa-pn/pn-commons';
 
 import {
   BffNewNotificationRequest,
@@ -56,7 +61,7 @@ const newNotificationRecipientsMapper = (
       recipientType: recipient.recipientType,
       taxId: recipient.taxId,
     };
-    if (recipient.physicalAddressLookup === PhysicalAddressLookup.MANUAL){
+    if (recipient.physicalAddressLookup === PhysicalAddressLookup.MANUAL) {
       // eslint-disable-next-line functional/immutable-data
       parsedRecipient.physicalAddress = checkPhysicalAddress(recipient);
     }
@@ -146,7 +151,7 @@ const newNotificationPaymentDocumentsMapper = (
   });
 
 export function newNotificationMapper(newNotification: NewNotification): BffNewNotificationRequest {
-  const clonedNotification = _.omit(_.cloneDeep(newNotification), [
+  const clonedNotification = omit(cloneDeep(newNotification), [
     'additionalAbstract',
     'additionalLang',
     'additionalSubject',
