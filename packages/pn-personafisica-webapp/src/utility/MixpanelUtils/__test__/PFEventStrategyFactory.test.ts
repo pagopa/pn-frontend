@@ -232,6 +232,7 @@ describe('Event Strategy Factory', () => {
       PFEventsType.SEND_CHANGE_SMS_OTP,
       PFEventsType.SEND_CHANGE_SMS_UX_SUCCESS,
       PFEventsType.SEND_PEC_CANCEL_VALIDATION_POP_UP,
+      PFEventsType.SEND_LANDING_PAGE,
     ];
     eventTypes.forEach((eventType) => {
       expect(factory.getStrategy(eventType)).toBeInstanceOf(UXScreenViewStrategy);
@@ -333,6 +334,8 @@ describe('Event Strategy Factory', () => {
       PFEventsType.SEND_PEC_CANCEL_VALIDATION,
       PFEventsType.SEND_PEC_CANCEL_VALIDATION_CANCEL,
       PFEventsType.SEND_PEC_CANCEL_VALIDATION_CONFIRM,
+      PFEventsType.SEND_LANDING_PAGE_FAQ_OPEN,
+      PFEventsType.SEND_LANDING_PAGE_CLICK_ACCESS,
     ];
     eventTypes.forEach((eventType) => {
       expect(factory.getStrategy(eventType)).toBeInstanceOf(UXActionStrategy);
