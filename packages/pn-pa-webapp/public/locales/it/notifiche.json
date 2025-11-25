@@ -15,7 +15,8 @@
     "errors": {
       "iun": "Inserisci un codice IUN valido",
       "fiscal-code": "Inserisci il codice per intero",
-      "max-six-months": "L'intervallo massimo consentito è di 6 mesi"
+      "max-six-months": "L'intervallo massimo consentito è di 6 mesi",
+      "date-invalid": "Inserisci una data valida"
     }
   },
   "payment": {

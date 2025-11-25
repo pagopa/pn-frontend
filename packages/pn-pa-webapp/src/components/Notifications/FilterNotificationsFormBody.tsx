@@ -88,11 +88,8 @@ const DatePickerField: React.FC<DatePickerFieldProps> = ({
         },
         fullWidth: isMobile,
         sx: { mb },
-        error: formikInstance.touched[id] && Boolean(formikInstance.errors[id]),
-        helperText:
-          formikInstance.touched[id] &&
-          formikInstance.errors[id] &&
-          String(formikInstance.errors[id]),
+        error: Boolean(formikInstance.errors[id]),
+        helperText: formikInstance.errors[id] && String(formikInstance.errors[id]),
       },
     }}
     disableFuture

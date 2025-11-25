@@ -1,4 +1,4 @@
-import { add, isValid } from 'date-fns';
+import { add, format, isValid } from 'date-fns';
 import { FormikValues, useFormik } from 'formik';
 import { isEqual } from 'lodash-es';
 import { forwardRef, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
@@ -127,15 +127,15 @@ const FilterNotifications = forwardRef(({ showFilters }: Props, ref) => {
       // to fix this behaviour, we put an empty string with a space, but it is NOT ACCESSIBLE and we will fix it in the accessibility task
       startDate: yup
         .date()
-        .typeError(' ')
+        .typeError(t('filters.errors.date-invalid', { ns: 'notifiche' }))
         .test('max-six-months', rangeErrorMsg, maxSixMonthsTest)
         .min(tenYearsAgo, ' ')
         .max(today, ' '),
       endDate: yup
         .date()
-        .typeError(' ')
+        .typeError(t('filters.errors.date-invalid', { ns: 'notifiche' }))
         .test('max-six-months', rangeErrorMsg, maxSixMonthsTest)
-        .min(dateIsDefined(startDate) ? startDate : tenYearsAgo, ' ')
+        .min(dateIsDefined(startDate) ? startDate : tenYearsAgo, '')
         .max(today, ' '),
     });
   }, [startDate, endDate, t]);

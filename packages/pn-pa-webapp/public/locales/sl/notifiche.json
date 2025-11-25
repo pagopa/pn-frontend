@@ -14,7 +14,9 @@
     "status": "Država",
     "errors": {
       "iun": "Vnesite veljavno kodo IUN",
-      "fiscal-code": "Vnesite celotno kodo"
+      "fiscal-code": "Vnesite celotno kodo",
+      "max-six-months": "Največje dovoljeno obdobje je 6 mesecev",
+      "date-invalid": "Vnesite veljaven datum"
     }
   },
   "payment": {

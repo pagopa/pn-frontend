@@ -14,7 +14,9 @@
     "status": "État",
     "errors": {
       "iun": "Veuillez saisir un code IUN valide",
-      "fiscal-code": "Saisir le code en entier"
+      "fiscal-code": "Saisir le code en entier",
+      "max-six-months": "La période maximale autorisée est de 6 mois",
+      "date-invalid": "Veuillez saisir une date valide"
     }
   },
   "payment": {

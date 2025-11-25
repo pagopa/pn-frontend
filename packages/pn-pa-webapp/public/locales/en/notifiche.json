@@ -14,7 +14,9 @@
     "status": "Status",
     "errors": {
       "iun": "Enter a valid IUN code",
-      "fiscal-code": "Enter the code in full"
+      "fiscal-code": "Enter the code in full",
+      "max-six-months": "The maximum allowed range is 6 months",
+      "date-invalid": "Enter a valid date"
     }
   },
   "payment": {
