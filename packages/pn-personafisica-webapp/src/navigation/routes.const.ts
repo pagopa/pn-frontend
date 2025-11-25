@@ -20,7 +20,6 @@ export const APP_STATUS = '/app-status';
 export { PRIVACY_POLICY, TERMS_OF_SERVICE };
 export const PARTICIPATING_ENTITIES = '/informativa-aderenti';
 export const NOT_ACCESSIBLE = '/non-accessibile';
-export const USER_VALIDATION_FAILED = '/validazione-utente-fallita';
 export const SUPPORT = '/assistenza';
 export const TERMS_OF_SERVICE_SERCQ_SEND = '/termini-di-servizio/sercq-send';
 export const DIGITAL_DOMICILE = `${RECAPITI}/domicilio-digitale`;

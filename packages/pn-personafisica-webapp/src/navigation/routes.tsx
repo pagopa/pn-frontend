@@ -1,8 +1,9 @@
 import { Suspense } from 'react';
-import { Navigate, Route, Routes, useNavigate } from 'react-router-dom';
+import { Navigate, Route, Routes, useNavigate, useSearchParams } from 'react-router-dom';
 
 import {
   AppNotAccessible,
+  AppNotAccessibleReason,
   ConsentType,
   LoadingPage,
   NotFound,
@@ -36,14 +37,25 @@ const DigitalContactManagement = lazyRetry(
   () => import('../components/Contacts/DigitalContactManagement')
 );
 
-const handleGoToLandingSite = () => {
-  /* eslint-disable-next-line functional/immutable-data */
-  globalThis.location.href = getConfiguration().LANDING_SITE_URL;
-};
+const AppNotAccessibleRoute = () => {
+  const [searchParams] = useSearchParams();
 
-const handleAssistanceClick = () => {
-  /* eslint-disable-next-line functional/immutable-data */
-  globalThis.location.href = `mailto:${getConfiguration().PAGOPA_HELP_EMAIL}`;
+  const reasonParam = searchParams.get('reason');
+
+  const reason: AppNotAccessibleReason =
+    reasonParam === 'user-validation-failed' ? 'user-validation-failed' : 'not-accessible';
+
+  const handleAction = () => {
+    if (reason === 'not-accessible') {
+      // eslint-disable-next-line functional/immutable-data
+      globalThis.location.href = getConfiguration().LANDING_SITE_URL;
+    } else {
+      // eslint-disable-next-line functional/immutable-data
+      globalThis.location.href = `mailto:${getConfiguration().PAGOPA_HELP_EMAIL}`;
+    }
+  };
+
+  return <AppNotAccessible reason={reason} onAction={handleAction} />;
 };
 
 function Router() {
@@ -92,16 +104,7 @@ function Router() {
         />
         <Route path={routes.PARTICIPATING_ENTITIES} element={<ParticipatingEntitiesPage />} />
         <Route path={routes.TPP_LANDING} element={<TppLanding />} />
-        <Route
-          path={routes.NOT_ACCESSIBLE}
-          element={<AppNotAccessible onAction={handleGoToLandingSite} />}
-        />
-        <Route
-          path={routes.USER_VALIDATION_FAILED}
-          element={
-            <AppNotAccessible onAction={handleAssistanceClick} variant="user-validation-failed" />
-          }
-        />
+        <Route path={routes.NOT_ACCESSIBLE} element={<AppNotAccessibleRoute />} />
       </Routes>
     </Suspense>
   );

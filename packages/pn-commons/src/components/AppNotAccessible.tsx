@@ -4,15 +4,15 @@ import { IllusInProgress } from '@pagopa/mui-italia';
 import { getLocalizedOrDefaultLabel } from '../utility/localization.utility';
 import FeedbackPage from './FeedbackPage';
 
-type AppNotAccessibleVariant = 'not-accessible' | 'user-validation-failed';
+export type AppNotAccessibleReason = 'not-accessible' | 'user-validation-failed';
 
 type Props = {
   onAction: () => void;
-  variant?: AppNotAccessibleVariant;
+  reason?: AppNotAccessibleReason;
 };
 
-const AppNotAccessible: React.FC<Props> = ({ onAction, variant = 'not-accessible' }) => {
-  const isNotAccessible = variant === 'not-accessible';
+const AppNotAccessible: React.FC<Props> = ({ onAction, reason = 'not-accessible' }) => {
+  const isNotAccessible = reason === 'not-accessible';
 
   const title = getLocalizedOrDefaultLabel(
     'common',

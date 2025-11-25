@@ -234,8 +234,8 @@
     "digits": ["prima cifra", "seconda cifra", "terza cifra", "quarta cifra", "ultima cifra"]
   },
   "user-validation-failed": {
-    "title": "Validazione utente fallita",
-    "description": "Uno o più dati associati alla tua utenza non sono validi.",
-    "cta": "Contatta l'assistenza"
+    "title": "I dati inseriti non sono validi",
+    "description": "Uno o più dati associati alla tua utenza non risultano validi, contatta l’assistenza per risolvere il problema.",
+    "cta": "Contatta l’assistenza"
   }
 }

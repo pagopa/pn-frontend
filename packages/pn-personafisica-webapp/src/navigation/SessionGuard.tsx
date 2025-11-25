@@ -57,7 +57,13 @@ const SessionGuard = () => {
         return;
       }
       if (adaptedError.code === 'USER_VALIDATION_FAILED') {
-        navigate({ pathname: routes.USER_VALIDATION_FAILED }, { replace: true });
+        navigate(
+          {
+            pathname: routes.NOT_ACCESSIBLE,
+            search: '?reason=user-validation-failed',
+          },
+          { replace: true }
+        );
         return;
       }
       setModalData({
