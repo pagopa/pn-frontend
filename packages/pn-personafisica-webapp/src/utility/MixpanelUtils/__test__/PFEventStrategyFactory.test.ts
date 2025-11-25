@@ -34,6 +34,7 @@ import { SendRemoveContactSuccessStrategy } from '../Strategies/SendRemoveContac
 import { SendRemoveSercqSendSuccessStrategy } from '../Strategies/SendRemoveSercqSendSuccessStrategy';
 import { SendServiceStatusStrategy } from '../Strategies/SendServiceStatusStrategy';
 import { SendToastErrorStrategy } from '../Strategies/SendToastErrorStrategy';
+import { SendTppLandingFaqOpenStrategy } from '../Strategies/SendTppLandingFaqOpenStrategy';
 import { SendViewContactDetailsStrategy } from '../Strategies/SendViewContactDetailsStrategy';
 import { SendViewProfileStrategy } from '../Strategies/SendViewProfileStrategy';
 import { SendYourContactDetailsStrategy } from '../Strategies/SendYourContactDetailsStrategy';
@@ -334,7 +335,6 @@ describe('Event Strategy Factory', () => {
       PFEventsType.SEND_PEC_CANCEL_VALIDATION,
       PFEventsType.SEND_PEC_CANCEL_VALIDATION_CANCEL,
       PFEventsType.SEND_PEC_CANCEL_VALIDATION_CONFIRM,
-      PFEventsType.SEND_LANDING_PAGE_FAQ_OPEN,
       PFEventsType.SEND_LANDING_PAGE_CLICK_ACCESS,
     ];
     eventTypes.forEach((eventType) => {
@@ -637,6 +637,12 @@ describe('Event Strategy Factory', () => {
         UxWithDDStateCustomContactTypeOrgNameAndTosValidationStrategy
       );
     });
+  });
+
+  it('should return SendTppLandingFaqOpenStrategy for UX Action events of TPP landing page FAQ opening', () => {
+    expect(factory.getStrategy(PFEventsType.SEND_LANDING_PAGE_FAQ_OPEN)).toBeInstanceOf(
+      SendTppLandingFaqOpenStrategy
+    );
   });
 
   it('should return null for unknown event type', () => {
