@@ -1,8 +1,9 @@
 import { Suspense } from 'react';
-import { Navigate, Route, Routes, useNavigate } from 'react-router-dom';
+import { Navigate, Route, Routes, useNavigate, useSearchParams } from 'react-router-dom';
 
 import {
   AppNotAccessible,
+  AppNotAccessibleReason,
   ConsentType,
   LoadingPage,
   NotFound,
@@ -40,9 +41,25 @@ const DigitalContactManagement = lazyRetry(
   () => import('../components/Contacts/DigitalContactManagement')
 );
 
-const handleAssistanceClick = () => {
-  /* eslint-disable-next-line functional/immutable-data */
-  window.location.href = getConfiguration().LANDING_SITE_URL;
+const AppNotAccessibleRoute = () => {
+  const [searchParams] = useSearchParams();
+
+  const reasonParam = searchParams.get('reason');
+
+  const reason: AppNotAccessibleReason =
+    reasonParam === 'user-validation-failed' ? 'user-validation-failed' : 'not-accessible';
+
+  const handleAction = () => {
+    if (reason === 'not-accessible') {
+      // eslint-disable-next-line functional/immutable-data
+      globalThis.location.href = getConfiguration().LANDING_SITE_URL;
+    } else {
+      // eslint-disable-next-line functional/immutable-data
+      globalThis.location.href = `mailto:${getConfiguration().PAGOPA_HELP_EMAIL}`;
+    }
+  };
+
+  return <AppNotAccessible reason={reason} onAction={handleAction} />;
 };
 
 function Router() {
@@ -223,10 +240,7 @@ function Router() {
           path={routes.TERMS_OF_SERVICE_B2B}
           element={<TermsOfServicePage type={ConsentType.TOS_DEST_B2B} />}
         />
-        <Route
-          path={routes.NOT_ACCESSIBLE}
-          element={<AppNotAccessible onAssistanceClick={handleAssistanceClick} />}
-        />
+        <Route path={routes.NOT_ACCESSIBLE} element={<AppNotAccessibleRoute />} />
         <Route path="*" element={<NotFound goBackAction={navigateToHome} />} />
       </Routes>
     </Suspense>

@@ -8,6 +8,7 @@ import {
   UserConsentsApiFactory,
 } from '../../generated-client/tos-privacy';
 import { User } from '../../models/User';
+import { userDataMatcher } from '../../utility/user.utility';
 
 export enum AUTH_ACTIONS {
   GET_TOS_PRIVACY_APPROVAL = 'getTosPrivacyApproval',
@@ -22,8 +23,16 @@ export const exchangeToken = createAsyncThunk<User, { spidToken: string; aar?: s
   'exchangeToken',
   async ({ spidToken, aar }, { rejectWithValue }) => {
     try {
-      return await AuthApi.exchangeToken(spidToken, aar);
+      const result = await AuthApi.exchangeToken(spidToken, aar);
+      userDataMatcher.validateSync(result, { stripUnknown: false });
+      return result;
     } catch (e: any) {
+      if (e?.name === 'ValidationError') {
+        return rejectWithValue({
+          code: 'USER_VALIDATION_FAILED',
+          message: e.message,
+        });
+      }
       return rejectWithValue(parseError(e));
     }
   }

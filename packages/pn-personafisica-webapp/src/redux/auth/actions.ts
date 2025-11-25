@@ -8,7 +8,7 @@ import {
   UserConsentsApiFactory,
 } from '../../generated-client/tos-privacy';
 import { TokenExchangeRequest, User } from '../../models/User';
-import { userDataMatcher } from './user.validation';
+import { userDataMatcher } from '../../utility/user.utility';
 
 export enum AUTH_ACTIONS {
   GET_TOS_PRIVACY_APPROVAL = 'getTosPrivacyApproval',

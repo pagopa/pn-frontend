@@ -2,8 +2,8 @@ import { ConsentType, basicInitialUserData, basicNoLoggedUserData } from '@pagop
 import { createSlice } from '@reduxjs/toolkit';
 
 import { User } from '../../models/User';
+import { userDataMatcher } from '../../utility/user.utility';
 import { acceptTosPrivacy, exchangeToken, getTosPrivacyApproval } from './actions';
-import { userDataMatcher } from './user.validation';
 
 const noLoggedUserData = {
   ...basicNoLoggedUserData,

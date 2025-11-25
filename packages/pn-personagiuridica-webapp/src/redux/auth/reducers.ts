@@ -1,51 +1,9 @@
-import * as yup from 'yup';
-
-import {
-  ConsentType,
-  basicInitialUserData,
-  basicNoLoggedUserData,
-  basicUserDataMatcherContents,
-  dataRegex,
-} from '@pagopa-pn/pn-commons';
+import { ConsentType, basicInitialUserData, basicNoLoggedUserData } from '@pagopa-pn/pn-commons';
 import { createSlice } from '@reduxjs/toolkit';
 
 import { PNRole, PartyRole, User } from '../../models/User';
+import { userDataMatcher } from '../../utility/user.utility';
 import { acceptTosPrivacy, exchangeToken, getTosPrivacyApproval } from './actions';
-
-const roleMatcher = yup.object({
-  role: yup.string().oneOf(Object.values(PNRole)),
-  partyRole: yup.string().oneOf(Object.values(PartyRole)),
-});
-
-const organizationMatcher = yup.object({
-  id: yup.string(),
-  roles: yup.array().of(roleMatcher),
-  fiscal_code: yup.string().matches(dataRegex.pIvaAndFiscalCode),
-  groups: yup.array().of(yup.string()),
-  name: yup.string(),
-});
-
-const userDataMatcher = yup
-  .object({
-    ...basicUserDataMatcherContents,
-    from_aa: yup.boolean(),
-    level: yup.string().matches(dataRegex.lettersAndNumbers),
-    iat: yup.number(),
-    exp: yup.number(),
-    aud: yup.string().matches(dataRegex.simpleServer),
-    iss: yup.string().url(),
-    jti: yup.string().matches(dataRegex.lettersNumbersAndDashs),
-    organization: organizationMatcher,
-    desired_exp: yup.number(),
-    hasGroup: yup.boolean(),
-    source: yup
-      .object({
-        channel: yup.string().oneOf(['WEB']),
-        details: yup.string(),
-      })
-      .optional(),
-  })
-  .noUnknown(true);
 
 const noLoggedUserData = {
   ...basicNoLoggedUserData,
@@ -104,16 +62,11 @@ const userSlice = createSlice({
     });
     builder.addCase(exchangeToken.fulfilled, (state, action) => {
       const user = action.payload;
-      // validate user from api before setting it in the sessionStorage
-      try {
-        userDataMatcher.validateSync(user, { stripUnknown: false });
-        sessionStorage.setItem('user', JSON.stringify(user));
-        state.user = action.payload;
-      } catch (e) {
-        console.debug(e);
-      } finally {
-        state.loading = false;
-      }
+
+      sessionStorage.setItem('user', JSON.stringify(user));
+      state.user = action.payload;
+
+      state.loading = false;
     });
     builder.addCase(exchangeToken.rejected, (state) => {
       state.loading = false;
