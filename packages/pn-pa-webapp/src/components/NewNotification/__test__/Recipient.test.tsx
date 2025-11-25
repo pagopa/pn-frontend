@@ -290,7 +290,7 @@ describe('Recipient Component with payment enabled', async () => {
     const firstNameError = await testStringFieldValidation(form, 1, 'firstName');
     await testInput(form, 'recipients[1].firstName', 'text-with-invalid-char’');
     expect(firstNameError).toHaveTextContent('forbidden-characters-denomination-error');
-    await testInput(form, 'recipients[1].firstName', randomString(81));
+    await testInput(form, 'recipients[1].firstName', randomString(89));
     expect(firstNameError).toHaveTextContent('too-long-field-error');
     // taxId empty
     await testInput(form, 'recipients[1].taxId', '', true);
@@ -409,7 +409,7 @@ describe('Recipient Component with payment enabled', async () => {
     await testInput(form, 'recipients[0].lastName', 'text-with-invalid-char’');
     expect(lastNameError).toBeInTheDocument();
     // firstName + lastName
-    await testInput(form, 'recipients[0].firstName', randomString(40));
+    await testInput(form, 'recipients[0].firstName', randomString(49));
     await testInput(form, 'recipients[0].lastName', randomString(45));
     expect(firstNameError).toHaveTextContent('too-long-field-error');
     expect(lastNameError).toBeInTheDocument();
