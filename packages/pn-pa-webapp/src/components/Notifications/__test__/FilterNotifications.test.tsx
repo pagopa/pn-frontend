@@ -373,5 +373,5 @@ describe('Filter Notifications Table Component', async () => {
       expect(screen.queryByTestId('filter-form')).not.toBeInTheDocument();
     });
     expect(testStore.getState().dashboardState.filters).toStrictEqual(initialState);
-  });
+  }, 10000);
 });

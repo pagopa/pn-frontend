@@ -1,5 +1,5 @@
 import { useFormik } from 'formik';
-import _ from 'lodash';
+import { isEqual } from 'lodash-es';
 import { forwardRef, useEffect, useImperativeHandle, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
@@ -48,7 +48,7 @@ const initialValues = (
     iunMatch: string;
   }
 ) => {
-  if (!filters || (filters && _.isEqual(filters, emptyValues))) {
+  if (!filters || (filters && isEqual(filters, emptyValues))) {
     return initialEmptyValues;
   }
   return {
@@ -97,7 +97,7 @@ const FilterNotifications = forwardRef(({ showFilters }: Props, ref) => {
         endDate: values.endDate,
         iunMatch: values.iunMatch,
       };
-      if (_.isEqual(prevFilters, currentFilters)) {
+      if (isEqual(prevFilters, currentFilters)) {
         return;
       }
       dispatch(setNotificationFilters(currentFilters));
@@ -111,10 +111,10 @@ const FilterNotifications = forwardRef(({ showFilters }: Props, ref) => {
   };
 
   const setDates = () => {
-    if (!_.isEqual(filters.startDate, tenYearsAgo)) {
+    if (!isEqual(filters.startDate, tenYearsAgo)) {
       setStartDate(formik.values.startDate);
     }
-    if (!_.isEqual(filters.endDate, today)) {
+    if (!isEqual(filters.endDate, today)) {
       setEndDate(formik.values.endDate);
     }
   };
@@ -124,7 +124,7 @@ const FilterNotifications = forwardRef(({ showFilters }: Props, ref) => {
   }, []);
 
   useEffect(() => {
-    if (filters && _.isEqual(filters, emptyValues)) {
+    if (filters && isEqual(filters, emptyValues)) {
       formik.resetForm({
         values: initialEmptyValues,
       });
@@ -145,7 +145,7 @@ const FilterNotifications = forwardRef(({ showFilters }: Props, ref) => {
     return <></>;
   }
 
-  const isInitialSearch = _.isEqual(formik.values, initialEmptyValues);
+  const isInitialSearch = isEqual(formik.values, initialEmptyValues);
   return isMobile ? (
     <CustomMobileDialog>
       <CustomMobileDialogToggle

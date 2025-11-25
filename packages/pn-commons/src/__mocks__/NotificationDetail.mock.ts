@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import { cloneDeep } from 'lodash-es';
 
 import {
   DigitalDomicileType,
@@ -25,7 +25,7 @@ import {
 import { paymentInfo } from './ExternalRegistry.mock';
 
 function getOneRecipientNotification(): NotificationDetail {
-  const oneRecipientNotification = _.cloneDeep(notificationDTOMultiRecipient);
+  const oneRecipientNotification = cloneDeep(notificationDTOMultiRecipient);
   oneRecipientNotification.recipients = [oneRecipientNotification.recipients[0]];
   oneRecipientNotification.timeline = oneRecipientNotification.timeline.filter(
     (t) => !t.details.recIndex
