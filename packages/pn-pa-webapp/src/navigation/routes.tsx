@@ -1,6 +1,6 @@
-import { Navigate, Route, Routes, useNavigate, useSearchParams } from 'react-router-dom';
+import { Navigate, Route, Routes, useNavigate } from 'react-router-dom';
 
-import { AppNotAccessible, AppNotAccessibleReason, NotFound } from '@pagopa-pn/pn-commons';
+import { NotFound } from '@pagopa-pn/pn-commons';
 
 import { PNRole } from '../models/user';
 import ApiKeys from '../pages/ApiKeys.page';
@@ -13,31 +13,11 @@ import PrivacyPolicyPage from '../pages/PrivacyPolicy.page';
 import Statistics from '../pages/Statistics.page';
 import TermsOfServicePage from '../pages/TermsOfService.page';
 import { getConfiguration } from '../services/configuration.service';
+import AppNotAccessibleRoute from './AppNotAccessibleRoute';
 import RouteGuard from './RouteGuard';
 import SessionGuard from './SessionGuard';
 import ToSGuard from './ToSGuard';
 import * as routes from './routes.const';
-
-const AppNotAccessibleRoute = () => {
-  const [searchParams] = useSearchParams();
-
-  const reasonParam = searchParams.get('reason');
-
-  const reason: AppNotAccessibleReason =
-    reasonParam === 'user-validation-failed' ? 'user-validation-failed' : 'not-accessible';
-
-  const handleAction = () => {
-    if (reason === 'not-accessible') {
-      // eslint-disable-next-line functional/immutable-data
-      globalThis.location.href = getConfiguration().LANDING_SITE_URL;
-    } else {
-      // eslint-disable-next-line functional/immutable-data
-      globalThis.location.href = `mailto:${getConfiguration().PAGOPA_HELP_EMAIL}`;
-    }
-  };
-
-  return <AppNotAccessible reason={reason} onAction={handleAction} />;
-};
 
 function Router() {
   const { IS_STATISTICS_ENABLED } = getConfiguration();

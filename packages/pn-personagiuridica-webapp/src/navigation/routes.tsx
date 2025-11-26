@@ -1,15 +1,7 @@
 import { Suspense } from 'react';
-import { Navigate, Route, Routes, useNavigate, useSearchParams } from 'react-router-dom';
+import { Navigate, Route, Routes, useNavigate } from 'react-router-dom';
 
-import {
-  AppNotAccessible,
-  AppNotAccessibleReason,
-  ConsentType,
-  LoadingPage,
-  NotFound,
-  PrivateRoute,
-  lazyRetry,
-} from '@pagopa-pn/pn-commons';
+import { ConsentType, LoadingPage, NotFound, PrivateRoute, lazyRetry } from '@pagopa-pn/pn-commons';
 
 import DelegatesByCompany from '../components/Deleghe/DelegatesByCompany';
 import DelegationsOfTheCompany from '../components/Deleghe/DelegationsOfTheCompany';
@@ -18,6 +10,7 @@ import { useAppSelector } from '../redux/hooks';
 import { RootState } from '../redux/store';
 import { getConfiguration } from '../services/configuration.service';
 import AARGuard from './AARGuard';
+import AppNotAccessibleRoute from './AppNotAccessibleRoute';
 import RouteGuard from './RouteGuard';
 import SessionGuard from './SessionGuard';
 import ToSGuard from './ToSGuard';
@@ -40,27 +33,6 @@ const DigitalContactActivation = lazyRetry(
 const DigitalContactManagement = lazyRetry(
   () => import('../components/Contacts/DigitalContactManagement')
 );
-
-const AppNotAccessibleRoute = () => {
-  const [searchParams] = useSearchParams();
-
-  const reasonParam = searchParams.get('reason');
-
-  const reason: AppNotAccessibleReason =
-    reasonParam === 'user-validation-failed' ? 'user-validation-failed' : 'not-accessible';
-
-  const handleAction = () => {
-    if (reason === 'not-accessible') {
-      // eslint-disable-next-line functional/immutable-data
-      globalThis.location.href = getConfiguration().LANDING_SITE_URL;
-    } else {
-      // eslint-disable-next-line functional/immutable-data
-      globalThis.location.href = `mailto:${getConfiguration().PAGOPA_HELP_EMAIL}`;
-    }
-  };
-
-  return <AppNotAccessible reason={reason} onAction={handleAction} />;
-};
 
 function Router() {
   const { organization, hasGroup } = useAppSelector((state: RootState) => state.userState.user);
