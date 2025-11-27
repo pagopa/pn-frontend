@@ -16,18 +16,12 @@ type FeedbackPageProps = {
     /** CTA callback */
     onClick: () => void;
   };
-  slotProps?: {
-    icon?: ReactNode;
+  slots?: {
+    headingIcon?: ReactNode;
   };
 };
 
-const FeedbackPage: FC<FeedbackPageProps> = ({
-  outcome,
-  title,
-  description,
-  action,
-  slotProps,
-}) => {
+const FeedbackPage: FC<FeedbackPageProps> = ({ outcome, title, description, action, slots }) => {
   const getDescription = () => {
     if (!description) {
       return null;
@@ -45,7 +39,7 @@ const FeedbackPage: FC<FeedbackPageProps> = ({
   return (
     <Box sx={{ minHeight: '350px', height: '100%', display: 'flex' }}>
       <Box sx={{ margin: 'auto', textAlign: 'center', width: '80vw' }}>
-        {slotProps?.icon ?? (outcome === 'success' ? <IllusCompleted /> : <IllusError />)}
+        {slots?.headingIcon ?? (outcome === 'success' ? <IllusCompleted /> : <IllusError />)}
         <Typography variant="h4" color="text.primary" sx={{ mt: 2, mb: 1 }}>
           {title}
         </Typography>

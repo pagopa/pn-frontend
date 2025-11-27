@@ -1,23 +1,7 @@
-import { vi } from 'vitest';
-
 import { fireEvent, render } from '../../__test__/test-utils';
 import { getConfiguration } from '../../services/configuration.service';
 import AppNotAccessibleRoute from '../AppNotAccessibleRoute';
 import * as routes from '../routes.const';
-
-vi.mock('@pagopa-pn/pn-commons', async () => {
-  const actual = await vi.importActual<any>('@pagopa-pn/pn-commons');
-  return {
-    ...actual,
-    AppNotAccessible: ({ reason, onAction }: { reason: string; onAction: () => void }) => (
-      <div data-testid="app-not-accessible" data-reason={reason}>
-        <button data-testid="action-button" onClick={onAction}>
-          Action
-        </button>
-      </div>
-    ),
-  };
-});
 
 describe('AppNotAccessibleRoute Component', () => {
   const notAccessibleBaseRoute = routes.NOT_ACCESSIBLE;
@@ -43,19 +27,21 @@ describe('AppNotAccessibleRoute Component', () => {
   it('uses "not-accessible" as default reason when query param is missing', () => {
     globalThis.history.pushState({}, '', notAccessibleBaseRoute);
 
-    const { getByTestId } = render(<AppNotAccessibleRoute />);
+    const { container } = render(<AppNotAccessibleRoute />);
 
-    const wrapper = getByTestId('app-not-accessible');
-    expect(wrapper.dataset.reason).toBe('not-accessible');
+    expect(container).toHaveTextContent('not-accessible.title');
+    expect(container).toHaveTextContent('not-accessible.description');
+    expect(container).toHaveTextContent('not-accessible.action');
   });
 
   it('uses "user-validation-failed" reason when query param is set', () => {
     globalThis.history.pushState({}, '', `${notAccessibleBaseRoute}?reason=user-validation-failed`);
 
-    const { getByTestId } = render(<AppNotAccessibleRoute />);
+    const { container } = render(<AppNotAccessibleRoute />);
 
-    const wrapper = getByTestId('app-not-accessible');
-    expect(wrapper.dataset.reason).toBe('user-validation-failed');
+    expect(container).toHaveTextContent('user-validation-failed.title');
+    expect(container).toHaveTextContent('user-validation-failed.description');
+    expect(container).toHaveTextContent('user-validation-failed.cta');
   });
 
   it('redirects to landing site when reason is "not-accessible"', () => {
@@ -66,7 +52,7 @@ describe('AppNotAccessibleRoute Component', () => {
     const mockLocation = { href: '' };
     globalThis.location = mockLocation as any;
 
-    const button = getByTestId('action-button');
+    const button = getByTestId('goToLanding-link');
     fireEvent.click(button);
 
     expect(mockLocation.href).toBe(landingSiteUrl);
@@ -80,7 +66,7 @@ describe('AppNotAccessibleRoute Component', () => {
     const mockLocation = { href: '' };
     globalThis.location = mockLocation as any;
 
-    const button = getByTestId('action-button');
+    const button = getByTestId('feedback-button');
     fireEvent.click(button);
 
     expect(mockLocation.href).toBe(`mailto:${supportEmail}`);

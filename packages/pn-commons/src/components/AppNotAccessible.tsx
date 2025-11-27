@@ -22,11 +22,7 @@ const AppNotAccessible: React.FC<Props> = ({ onAction, reason = 'not-accessible'
   const description = isNotAccessible ? (
     <>
       <Typography variant="body1" color="text.primary" display="inline">
-        {getLocalizedOrDefaultLabel(
-          'common',
-          'not-accessible.description',
-          'Riprova tra qualche ora. Se hai bisogno di assistenza'
-        )}
+        {getLocalizedOrDefaultLabel('common', 'not-accessible.description')}
       </Typography>
       &nbsp;
       <Typography
@@ -38,14 +34,14 @@ const AppNotAccessible: React.FC<Props> = ({ onAction, reason = 'not-accessible'
         onClick={onAction}
         data-testid="goToLanding-link"
       >
-        {`${getLocalizedOrDefaultLabel('common', 'not-accessible.action', 'scrivici')}.`}
+        {`${getLocalizedOrDefaultLabel('common', 'not-accessible.action')}.`}
       </Typography>
     </>
   ) : (
     getLocalizedOrDefaultLabel('common', 'user-validation-failed.description')
   );
 
-  const slotProps = isNotAccessible ? { icon: <IllusInProgress /> } : undefined;
+  const slotProps = isNotAccessible ? { headingIcon: <IllusInProgress /> } : undefined;
 
   const action = isNotAccessible
     ? undefined
@@ -59,7 +55,7 @@ const AppNotAccessible: React.FC<Props> = ({ onAction, reason = 'not-accessible'
       outcome="error"
       title={title}
       description={description}
-      slotProps={slotProps}
+      slots={slotProps}
       action={action}
     />
   );
