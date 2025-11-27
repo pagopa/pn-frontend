@@ -218,6 +218,10 @@
     "message": "Il testo originario di questi documenti è in lingua italiana. In caso di contrasto tra la versione italiana e le traduzioni in altre lingue, prevarranno il significato e le condizioni della lingua italiana.",
     "link": "Consulta le traduzioni"
   },
+  "feedback_banner": {
+    "title": "Aiutaci a migliorare SEND",
+    "content": "Il tuo feedback ci permette di rendere tutto più chiaro e semplice. Bastano pochi minuti per dirci cosa ne pensi."
+  },
   "no-spaces-at-edges": "Elimina gli spazi all'inizio o alla fine",
   "wizard": {
     "stepper": {
