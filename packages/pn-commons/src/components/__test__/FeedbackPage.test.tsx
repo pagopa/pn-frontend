@@ -65,7 +65,7 @@ describe('FeedbackPage', () => {
       />
     );
 
-    fireEvent.click(getByTestId('feedback-cta'));
+    fireEvent.click(getByTestId('feedback-button'));
     expect(onClickHandler).toHaveBeenCalledTimes(1);
   });
 });
