@@ -22,7 +22,8 @@
     "data_a": "Al",
     "data_a-input-aria-label": "Inserisci la data finale della ricerca",
     "errors": {
-      "iun": "Inserisci un codice IUN valido"
+      "iun": "Inserisci un codice IUN valido",
+      "data_a": "La data di inizio deve precedere la data di fine"
     }
   },
   "sort": {

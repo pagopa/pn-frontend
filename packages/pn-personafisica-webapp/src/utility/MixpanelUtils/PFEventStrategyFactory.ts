@@ -38,6 +38,7 @@ import { SendRemoveContactSuccessStrategy } from './Strategies/SendRemoveContact
 import { SendRemoveSercqSendSuccessStrategy } from './Strategies/SendRemoveSercqSendSuccessStrategy';
 import { SendServiceStatusStrategy } from './Strategies/SendServiceStatusStrategy';
 import { SendToastErrorStrategy } from './Strategies/SendToastErrorStrategy';
+import { SendTppLandingFaqOpenStrategy } from './Strategies/SendTppLandingFaqOpenStrategy';
 import { SendViewContactDetailsStrategy } from './Strategies/SendViewContactDetailsStrategy';
 import { SendViewProfileStrategy } from './Strategies/SendViewProfileStrategy';
 import { SendYourContactDetailsStrategy } from './Strategies/SendYourContactDetailsStrategy';
@@ -139,6 +140,7 @@ const uxActionStrategy = [
   PFEventsType.SEND_PEC_CANCEL_VALIDATION,
   PFEventsType.SEND_PEC_CANCEL_VALIDATION_CANCEL,
   PFEventsType.SEND_PEC_CANCEL_VALIDATION_CONFIRM,
+  PFEventsType.SEND_LANDING_PAGE_CLICK_ACCESS,
 ] as const;
 
 const uxPspActionStrategy = [PFEventsType.SEND_START_PAYMENT] as const;
@@ -186,6 +188,7 @@ const uxScreenViewStrategy = [
   PFEventsType.SEND_CHANGE_SMS_OTP,
   PFEventsType.SEND_CHANGE_SMS_UX_SUCCESS,
   PFEventsType.SEND_PEC_CANCEL_VALIDATION_POP_UP,
+  PFEventsType.SEND_LANDING_PAGE,
 ] as const;
 
 const uxConfirmStrategy = [
@@ -363,6 +366,7 @@ const eventStrategy: Record<
   [PFEventsType.SEND_ADD_SERCQ_SEND_ADD_SMS_START]: new SendAddSercqSendAddSmsStartStrategy(),
   [PFEventsType.SEND_ADD_SERCQ_SEND_UX_CONVERSION]: new SendAddSercqSendUxConversionStrategy(),
   [PFEventsType.SEND_ADD_SERCQ_SEND_ENTER_FLOW]: new SendAddSercqSendEnterFlowStrategy(),
+  [PFEventsType.SEND_LANDING_PAGE_FAQ_OPEN]: new SendTppLandingFaqOpenStrategy(),
 };
 
 const isInEventStrategyMap = (value: PFEventsType): value is keyof typeof eventStrategy => {
