@@ -1,8 +1,16 @@
-import { FC, Fragment, useEffect, useState } from 'react';
+import { FC, Fragment, ReactNode, useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 import { Menu } from '@mui/icons-material';
-import { Box, Drawer, List, ListItemButton, ListItemIcon, ListItemText } from '@mui/material';
+import {
+  Box,
+  Divider,
+  Drawer,
+  List,
+  ListItemButton,
+  ListItemIcon,
+  ListItemText,
+} from '@mui/material';
 
 import { useIsMobile } from '../../hooks/useIsMobile';
 import { SideMenuItem } from '../../models/SideMenuItem';
@@ -11,9 +19,10 @@ import SideMenuList from './SideMenuList';
 type Props = {
   menuItems: Array<SideMenuItem>;
   selfCareItems?: Array<SideMenuItem>;
+  feedbackBanner?: ReactNode;
 };
 
-const SideMenu: FC<Props> = ({ menuItems, selfCareItems }) => {
+const SideMenu: FC<Props> = ({ menuItems, selfCareItems, feedbackBanner }) => {
   const [state, setState] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
@@ -126,24 +135,46 @@ const SideMenu: FC<Props> = ({ menuItems, selfCareItems }) => {
                 <ListItemText primary={menuItemSelected?.label} sx={{ color: 'primary.main' }} />
               </ListItemButton>
             </List>
-            <Drawer anchor="left" open={state} onClose={toggleDrawer}>
-              {
-                <SideMenuList
-                  menuItems={menuItems}
-                  selfCareItems={selfCareItems}
-                  handleLinkClick={handleNavigation}
-                  selectedItem={menuItemSelected}
-                />
-              }
+            <Drawer
+              anchor="left"
+              open={state}
+              onClose={toggleDrawer}
+              PaperProps={{
+                sx: {
+                  width: 300,
+                  boxSizing: 'border-box',
+                },
+              }}
+            >
+              <SideMenuList
+                menuItems={menuItems}
+                selfCareItems={selfCareItems}
+                handleLinkClick={handleNavigation}
+                selectedItem={menuItemSelected}
+              />
+              {feedbackBanner && (
+                <>
+                  <Divider sx={{ mb: 1 }} />
+                  <Box p={2}>{feedbackBanner}</Box>
+                </>
+              )}
             </Drawer>
           </Fragment>
         ) : (
-          <SideMenuList
-            menuItems={menuItems}
-            selfCareItems={selfCareItems}
-            handleLinkClick={handleNavigation}
-            selectedItem={menuItemSelected}
-          />
+          <>
+            <SideMenuList
+              menuItems={menuItems}
+              selfCareItems={selfCareItems}
+              handleLinkClick={handleNavigation}
+              selectedItem={menuItemSelected}
+            />
+            {feedbackBanner && (
+              <>
+                <Divider sx={{ mb: 1 }} />
+                <Box p={2}>{feedbackBanner}</Box>
+              </>
+            )}
+          </>
         )}
       </Box>
     </Box>
