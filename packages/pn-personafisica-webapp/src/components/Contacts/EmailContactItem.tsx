@@ -22,7 +22,6 @@ import ContactCodeDialog from './ContactCodeDialog';
 import DeleteDialog from './DeleteDialog';
 import DigitalContact from './DigitalContact';
 import ExistingContactDialog from './ExistingContactDialog';
-import InformativeDialog from './InformativeDialog';
 import SmsContactItem from './SmsContactItem';
 import SpecialContacts from './SpecialContacts';
 
@@ -51,7 +50,6 @@ const EmailContactItem: React.FC = () => {
     resetForm: () => Promise.resolve(),
   });
 
-  const isDigitalDomicileActive = defaultPECAddress || defaultSERCQ_SENDAddress;
   const isEmailActive = !!defaultEMAILAddress;
   const hasAnySERCQAddrEnabled =
     !!defaultSERCQ_SENDAddress ||
@@ -104,10 +102,6 @@ const EmailContactItem: React.FC = () => {
     // first check if contact already exists
     if (contactAlreadyExists(addresses, value, 'default', ChannelType.EMAIL)) {
       setModalOpen(ModalType.EXISTING);
-      return;
-    }
-    if (!isDigitalDomicileActive) {
-      setModalOpen(ModalType.INFORMATIVE);
       return;
     }
     handleCodeVerification();
@@ -502,14 +496,6 @@ const EmailContactItem: React.FC = () => {
               })()
             : undefined
         }
-      />
-      <InformativeDialog
-        open={modalOpen === ModalType.INFORMATIVE}
-        title={t('courtesy-contacts.info-modal-email-title', { ns: 'recapiti' })}
-        subtitle={t('courtesy-contacts.info-modal-email-subtitle', { ns: 'recapiti' })}
-        content={t('courtesy-contacts.info-modal-email-content', { ns: 'recapiti' })}
-        onConfirm={() => handleCodeVerification()}
-        onDiscard={() => setModalOpen(null)}
       />
     </PnInfoCard>
   );
