@@ -30,12 +30,11 @@ import {
   ConsentType,
   CustomDropdown,
   EventAction,
-  PnAutocomplete,
   SERCQ_SEND_VALUE,
   TosPrivacyConsent,
   searchStringLimitReachedText,
 } from '@pagopa-pn/pn-commons';
-import { theme } from '@pagopa/mui-italia';
+import { Autocomplete, theme } from '@pagopa/mui-italia';
 
 import { PFEventsType } from '../../models/PFEventsType';
 import {
@@ -65,7 +64,6 @@ import {
   specialContactsAvailableAddressTypes,
 } from '../../utility/contacts.utility';
 import { isPFEvent } from '../../utility/mixpanel';
-import DropDownPartyMenuItem from '../Party/DropDownParty';
 import ContactCodeDialog from './ContactCodeDialog';
 import ExistingContactDialog from './ExistingContactDialog';
 import SercqAddSpecialEmail from './SercqAddSpecialEmail';
@@ -154,6 +152,8 @@ const AddSpecialContact = forwardRef<AddSpecialContactRef, Props>(
     const { defaultEMAILAddress, addresses, legalAddresses } = addressesData || {};
     const [canEditEmail, setCanEditEmail] = useState<boolean>(false);
 
+    console.log(parties);
+
     const addressTypes = specialContactsAvailableAddressTypes(addressesData).filter(
       (addr) => addr.shown && (!IS_DOD_ENABLED ? addr.id !== ChannelType.SERCQ_SEND : true)
     );
@@ -196,7 +196,7 @@ const AddSpecialContact = forwardRef<AddSpecialContactRef, Props>(
       }
     };
 
-    const senderChangeHandler = async (_: any, newValue: Party | null) => {
+    const senderChangeHandler = async (newValue: Party | null) => {
       const prevValue = formik.values.sender;
       const nextValue: Party = { id: newValue?.id ?? '', name: newValue?.name ?? '' };
 
@@ -207,12 +207,6 @@ const AddSpecialContact = forwardRef<AddSpecialContactRef, Props>(
         updateErrorBanner(nextValue);
       }
     };
-
-    const renderOption = (props: any, option: Party) => (
-      <MenuItem {...props} value={option.id} key={option.id}>
-        <DropDownPartyMenuItem name={option.name} />
-      </MenuItem>
-    );
 
     const validationSchema = yup.object({
       sender: yup
@@ -596,18 +590,15 @@ const AddSpecialContact = forwardRef<AddSpecialContactRef, Props>(
             mainText={t('special-contacts.fetch-party-error', { ns: 'recapiti' })}
             reloadAction={getParties}
           >
-            <PnAutocomplete
+            <Autocomplete
               id="sender"
               data-testid="sender"
-              size="small"
               options={parties ?? []}
-              autoComplete
               getOptionLabel={getOptionLabel}
-              noOptionsText={t('common.enti-not-found', { ns: 'recapiti' })}
               isOptionEqualToValue={(option, value) => option.id === value.id}
               onChange={senderChangeHandler}
               inputValue={formik.values.sender.name}
-              onInputChange={(_event, newInputValue, reason) => {
+              onInputChange={(newInputValue, reason) => {
                 if (reason === 'input') {
                   const senderId =
                     parties.find((sender) => sender.name === newInputValue)?.id ?? '';
@@ -615,24 +606,22 @@ const AddSpecialContact = forwardRef<AddSpecialContactRef, Props>(
                   void formik.setFieldValue('sender', { id: senderId, name: newInputValue });
                 }
               }}
-              filterOptions={(e) => e}
-              renderOption={renderOption}
-              renderInput={(params) => (
-                <TextField
-                  {...params}
-                  name="sender"
-                  label={entitySearchLabel}
-                  error={
-                    formik.touched.sender &&
-                    Boolean(formik.errors.sender?.name ?? formik.errors.sender?.id)
-                  }
-                  helperText={
-                    formik.touched.sender &&
-                    (formik.errors.sender?.name || formik.errors.sender?.id)
-                  }
-                  required
-                />
-              )}
+              handleFiltering={(e) => e}
+              label={entitySearchLabel}
+              error={
+                formik.touched.sender &&
+                Boolean(formik.errors.sender?.name ?? formik.errors.sender?.id)
+              }
+              helperText={
+                formik.touched.sender && (formik.errors.sender?.name || formik.errors.sender?.id)
+              }
+              required
+              // renderInput={(params) => <TextField {...params} name="sender" />}
+              slotProps={{
+                announcementBox: {
+                  noResultsText: t('common.enti-not-found', { ns: 'recapiti' }),
+                },
+              }}
               sx={{ flexGrow: 1, flexBasis: 0, mb: 2 }}
             />
           </ApiErrorWrapper>

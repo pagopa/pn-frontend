@@ -3,20 +3,8 @@ import { ChangeEvent, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 
+import { Box, Button, Grid, Paper, TextField, Typography } from '@mui/material';
 import {
-  Box,
-  Button,
-  Checkbox,
-  Grid,
-  ListItemIcon,
-  ListItemText,
-  MenuItem,
-  Paper,
-  TextField,
-  Typography,
-} from '@mui/material';
-import {
-  PnAutocomplete,
   PnBreadcrumb,
   Prompt,
   SectionHeading,
@@ -24,6 +12,7 @@ import {
   dataRegex,
   useIsMobile,
 } from '@pagopa-pn/pn-commons';
+import { Autocomplete } from '@pagopa/mui-italia';
 
 import SyncFeedbackApiKey from '../components/NewApiKey/SyncFeedbackApiKey';
 import { GroupStatus, UserGroup } from '../models/user';
@@ -87,7 +76,7 @@ const NewApiKey = () => {
     await formik.setFieldTouched(e.target.id, true, false);
   };
 
-  const handleGroupClick = async (_event: any, value: Array<UserGroup>) => {
+  const handleGroupClick = async (value: Array<UserGroup>) => {
     await formik.setFieldValue('groups', value);
     await formik.setFieldTouched('groups', true, false);
   };
@@ -135,28 +124,21 @@ const NewApiKey = () => {
                           sx={{ mb: '24px', mt: '8px' }}
                         />
                         <Typography fontWeight="bold">{tkp('form-label-groups')}</Typography>
-                        <PnAutocomplete
-                          disableCloseOnSelect
+                        <Autocomplete
+                          id="groups"
                           multiple
-                          noOptionsText={tkp('no-groups')}
                           value={formik.values.groups}
                           options={groups}
-                          id="groups"
                           data-testid="groups"
                           getOptionLabel={(option) => option.name}
                           onChange={handleGroupClick}
-                          renderOption={(props, option) => (
-                            <MenuItem {...props}>
-                              <ListItemIcon>
-                                <Checkbox checked={formik.values.groups.indexOf(option) > -1} />
-                              </ListItemIcon>
-                              <ListItemText primary={option.name} />
-                            </MenuItem>
-                          )}
-                          renderInput={(params) => (
-                            <TextField {...params} label={tkp('form-placeholder-groups')} />
-                          )}
+                          slotProps={{
+                            announcementBox: {
+                              noResultsText: tkp('no-groups'),
+                            },
+                          }}
                           sx={{ mt: '8px' }}
+                          label={tkp('form-placeholder-groups')}
                         />
                       </Box>
                     </Paper>

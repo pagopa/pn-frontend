@@ -1900,10 +1900,10 @@
     rxjs "7.8.1"
     tslib "2.6.2"
 
-"@pagopa/mui-italia@2.0.0-RC.2":
-  version "2.0.0-RC.2"
-  resolved "https://registry.yarnpkg.com/@pagopa/mui-italia/-/mui-italia-2.0.0-RC.2.tgz#e5c1f40445af9eb2f9bb485780c43041c5d41d82"
-  integrity sha512-NH29J6bYk0Pl+fRX6vR66h5QqGpyPhnP8dn++ogs8JQ6LXCGvrJPAapXYiH1I5rTBmixUJHkDukUH4W57xMbMA==
+"@pagopa/mui-italia@2.1.0-RC.3":
+  version "2.1.0-RC.3"
+  resolved "https://registry.yarnpkg.com/@pagopa/mui-italia/-/mui-italia-2.1.0-RC.3.tgz#919b4fc704a46c1f683db96640447147b0c6ba98"
+  integrity sha512-bqrNMByJaGJsxC6dry+rQBjFLAi/PaKe8y1GdHC+O7oX6LU5UK8FOobKf9JpbYZp/8YV2K/+YXBkB92rt2GBxw==
   dependencies:
     "@fontsource/dm-mono" "^4.5.10"
     "@fontsource/titillium-web" "^4.5.9"

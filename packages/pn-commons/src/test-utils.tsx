@@ -171,7 +171,7 @@ async function testAutocomplete(
     await userEvent.click(autocompleteInput!);
   }
   const dropdown = await waitFor(() =>
-    document.querySelector<HTMLElement>('[role="presentation"][class*="MuiAutocomplete-popper"]')
+    document.querySelector<HTMLElement>('[role="presentation"][class*="MuiPopper"]')
   );
   expect(dropdown).toBeInTheDocument();
   const dropdownOptionsList = within(dropdown!).getByRole('listbox');
