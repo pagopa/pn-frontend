@@ -1,16 +1,9 @@
-import * as yup from 'yup';
-
-import {
-  ConsentType,
-  basicInitialUserData,
-  basicNoLoggedUserData,
-  basicUserDataMatcherContents,
-  dataRegex,
-} from '@pagopa-pn/pn-commons';
+import { ConsentType, basicInitialUserData, basicNoLoggedUserData } from '@pagopa-pn/pn-commons';
 import { PartyEntity, ProductEntity } from '@pagopa/mui-italia';
 import { createSlice } from '@reduxjs/toolkit';
 
-import { Organization, PNRole, PartyRole, Role, User } from '../../models/user';
+import { PNRole, PartyRole, User } from '../../models/user';
+import { userDataMatcher } from '../../utility/user.utility';
 import {
   acceptTosPrivacy,
   exchangeToken,
@@ -20,38 +13,6 @@ import {
   getTosPrivacyApproval,
   setAdditionalLanguages,
 } from './actions';
-
-const roleMatcher: yup.SchemaOf<Role> = yup.object({
-  role: yup.mixed<PNRole>().required(),
-  partyRole: yup.mixed<PartyRole>().required(),
-});
-
-const organizationMatcher: yup.SchemaOf<Organization> = yup.object({
-  id: yup.string().required(),
-  roles: yup.array().of(roleMatcher).required(),
-  fiscal_code: yup.string().matches(dataRegex.pIva).required(),
-  groups: yup.array().of(yup.string()).notRequired(),
-  name: yup.string().required(),
-  hasGroups: yup.boolean(),
-  aooParent: yup.string().notRequired(),
-  subUnitCode: yup.string().notRequired(),
-  subUnitType: yup.string().notRequired(),
-  rootParent: yup
-    .object({
-      id: yup.string().notRequired(),
-      description: yup.string().notRequired(),
-    })
-    .notRequired(),
-  ipaCode: yup.string().notRequired(),
-});
-
-const userDataMatcher = yup
-  .object({
-    ...basicUserDataMatcherContents,
-    organization: organizationMatcher,
-    desired_exp: yup.number(),
-  })
-  .noUnknown(true);
 
 const noLoggedUserData = {
   ...basicNoLoggedUserData,
@@ -105,16 +66,11 @@ const userSlice = createSlice({
     });
     builder.addCase(exchangeToken.fulfilled, (state, action) => {
       const user = action.payload;
-      // validate user from api before setting it in the sessionStorage
-      try {
-        userDataMatcher.validateSync(user, { stripUnknown: false });
-        sessionStorage.setItem('user', JSON.stringify(user));
-        state.user = action.payload;
-      } catch (e) {
-        console.debug(e);
-      } finally {
-        state.loading = false;
-      }
+
+      sessionStorage.setItem('user', JSON.stringify(user));
+      state.user = user;
+
+      state.loading = false;
     });
     builder.addCase(exchangeToken.rejected, (state) => {
       state.loading = false;
