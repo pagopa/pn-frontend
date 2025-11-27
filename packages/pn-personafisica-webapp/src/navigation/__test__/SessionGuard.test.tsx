@@ -133,7 +133,7 @@ describe('SessionGuard Component', async () => {
   });
 
   it('token-exchange user validation failed', async () => {
-    globalThis.location.hash = '#selfCareToken=validation_error_token';
+    globalThis.location.hash = '#token=validation_error_token';
 
     const invalidUserResponse = {
       ...userResponse,
