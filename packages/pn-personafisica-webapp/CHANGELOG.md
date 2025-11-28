@@ -3,6 +3,30 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.20.0-RC.0](https://github.com/pagopa/pn-frontend/compare/v2.19.1...v2.20.0-RC.0) (2025-11-28)
+
+
+### Bug Fixes
+
+* **PN-14840:** fix translation of key analog-failure-delivery ([#1673](https://github.com/pagopa/pn-frontend/issues/1673)) ([8b51614](https://github.com/pagopa/pn-frontend/commit/8b51614421ba6442aaf04a3da001065631350415))
+* **PN-15723:** Handle user validation failure after token-exchange ([#1687](https://github.com/pagopa/pn-frontend/issues/1687)) ([e694d1b](https://github.com/pagopa/pn-frontend/commit/e694d1baa2a3b5bc985e245377f1b926806a5763))
+* **PN-15726:** replace window.open manually with link href ([#1677](https://github.com/pagopa/pn-frontend/issues/1677)) ([b4a52c7](https://github.com/pagopa/pn-frontend/commit/b4a52c74373f778d1a9d14d328d2979fe8efdf5f))
+* **PN-15842:** fixed long description problem in notification detail ([#1704](https://github.com/pagopa/pn-frontend/issues/1704)) ([40d0684](https://github.com/pagopa/pn-frontend/commit/40d0684a30b3683d83d88203215535d551ed3252))
+* **pn-16635:** update mui-italia to v2.0.0 to resolve CodeInput a11y issues and build size ([#1707](https://github.com/pagopa/pn-frontend/issues/1707)) ([235ef5a](https://github.com/pagopa/pn-frontend/commit/235ef5ab617eaba57ccab257ae28e60eee6d653d))
+* **PN-16983:** remove info dialog shown when adding a new email or mobile number ([#1706](https://github.com/pagopa/pn-frontend/issues/1706)) ([22cd107](https://github.com/pagopa/pn-frontend/commit/22cd107612c9d9348df530c4c98e477f140d2a5d))
+
+
+### Features
+
+* **PN-16963:** VOC banner ([#1694](https://github.com/pagopa/pn-frontend/issues/1694)) ([3530437](https://github.com/pagopa/pn-frontend/commit/3530437b610eff16236442934ee9f2c0715a1422))
+* **PN-17010:** create landing page for TPP payments ([#1681](https://github.com/pagopa/pn-frontend/issues/1681)) ([0e5d9d9](https://github.com/pagopa/pn-frontend/commit/0e5d9d9ad9ceb506c57920ce6eda4bfb694e7311))
+* **PN-17110:** track mixpanel events of TPP landing page ([#1705](https://github.com/pagopa/pn-frontend/issues/1705)) ([5a435c0](https://github.com/pagopa/pn-frontend/commit/5a435c07e837c3f9ebc5f9b05ad513b574d269f5))
+* **PN-17207:** handle unauthorized user error on TPP notifications ([#1688](https://github.com/pagopa/pn-frontend/issues/1688)) ([2d14831](https://github.com/pagopa/pn-frontend/commit/2d148315c49fbebb6b9bb603127312f863a89324))
+
+
+
+
+
 ## [2.19.1](https://github.com/pagopa/pn-frontend/compare/v2.19.0...v2.19.1) (2025-11-12)
 
 

@@ -3,6 +3,26 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.20.0-RC.0](https://github.com/pagopa/pn-frontend/compare/v2.19.1...v2.20.0-RC.0) (2025-11-28)
+
+
+### Bug Fixes
+
+* **PN-15723:** Handle user validation failure after token-exchange ([#1687](https://github.com/pagopa/pn-frontend/issues/1687)) ([e694d1b](https://github.com/pagopa/pn-frontend/commit/e694d1baa2a3b5bc985e245377f1b926806a5763))
+* **PN-15842:** fixed long description problem in notification detail ([#1704](https://github.com/pagopa/pn-frontend/issues/1704)) ([40d0684](https://github.com/pagopa/pn-frontend/commit/40d0684a30b3683d83d88203215535d551ed3252))
+* **pn-16635:** update mui-italia to v2.0.0 to resolve CodeInput a11y issues and build size ([#1707](https://github.com/pagopa/pn-frontend/issues/1707)) ([235ef5a](https://github.com/pagopa/pn-frontend/commit/235ef5ab617eaba57ccab257ae28e60eee6d653d))
+
+
+### Features
+
+* **PN-15928:** increased denomination max length to 88 characters ([#1700](https://github.com/pagopa/pn-frontend/issues/1700)) ([897604e](https://github.com/pagopa/pn-frontend/commit/897604e1589b636f64d9b9d28f574fce59db694f))
+* **PN-16963:** VOC banner ([#1694](https://github.com/pagopa/pn-frontend/issues/1694)) ([3530437](https://github.com/pagopa/pn-frontend/commit/3530437b610eff16236442934ee9f2c0715a1422))
+* **PN-17010:** create landing page for TPP payments ([#1681](https://github.com/pagopa/pn-frontend/issues/1681)) ([0e5d9d9](https://github.com/pagopa/pn-frontend/commit/0e5d9d9ad9ceb506c57920ce6eda4bfb694e7311))
+
+
+
+
+
 ## [2.19.1](https://github.com/pagopa/pn-frontend/compare/v2.19.0...v2.19.1) (2025-11-12)
 
 **Note:** Version bump only for package @pagopa-pn/pn-commons

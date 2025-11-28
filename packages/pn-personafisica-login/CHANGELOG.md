@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.20.0-RC.0](https://github.com/pagopa/pn-frontend/compare/v2.19.1...v2.20.0-RC.0) (2025-11-28)
+
+
+### Bug Fixes
+
+* **pn-16635:** update mui-italia to v2.0.0 to resolve CodeInput a11y issues and build size ([#1707](https://github.com/pagopa/pn-frontend/issues/1707)) ([235ef5a](https://github.com/pagopa/pn-frontend/commit/235ef5ab617eaba57ccab257ae28e60eee6d653d))
+
+
+
+
+
 ## [2.19.1](https://github.com/pagopa/pn-frontend/compare/v2.19.0...v2.19.1) (2025-11-12)
 
 
