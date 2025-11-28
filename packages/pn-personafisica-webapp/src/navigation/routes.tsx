@@ -1,16 +1,10 @@
 import { Suspense } from 'react';
 import { Navigate, Route, Routes, useNavigate } from 'react-router-dom';
 
-import {
-  AppNotAccessible,
-  ConsentType,
-  LoadingPage,
-  NotFound,
-  lazyRetry,
-} from '@pagopa-pn/pn-commons';
+import { ConsentType, LoadingPage, NotFound, lazyRetry } from '@pagopa-pn/pn-commons';
 
 import TppLanding from '../pages/TppLanding.page';
-import { getConfiguration } from '../services/configuration.service';
+import AppNotAccessibleRoute from './AppNotAccessibleRoute';
 import RapidAccessGuard from './RapidAccessGuard';
 import SessionGuard from './SessionGuard';
 import ToSGuard from './ToSGuard';
@@ -35,11 +29,6 @@ const DigitalContactActivation = lazyRetry(
 const DigitalContactManagement = lazyRetry(
   () => import('../components/Contacts/DigitalContactManagement')
 );
-
-const handleAssistanceClick = () => {
-  /* eslint-disable-next-line functional/immutable-data */
-  window.location.href = getConfiguration().LANDING_SITE_URL;
-};
 
 function Router() {
   const navigate = useNavigate();
@@ -87,10 +76,7 @@ function Router() {
         />
         <Route path={routes.PARTICIPATING_ENTITIES} element={<ParticipatingEntitiesPage />} />
         <Route path={routes.TPP_LANDING} element={<TppLanding />} />
-        <Route
-          path={routes.NOT_ACCESSIBLE}
-          element={<AppNotAccessible onAssistanceClick={handleAssistanceClick} />}
-        />
+        <Route path={routes.NOT_ACCESSIBLE} element={<AppNotAccessibleRoute />} />
       </Routes>
     </Suspense>
   );

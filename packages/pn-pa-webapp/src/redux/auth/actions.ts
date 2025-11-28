@@ -15,6 +15,7 @@ import {
   UserConsentsApiFactory,
 } from '../../generated-client/tos-privacy';
 import { User } from '../../models/user';
+import { userDataMatcher } from '../../utility/user.utility';
 import { RootState } from '../store';
 
 export enum AUTH_ACTIONS {
@@ -32,8 +33,16 @@ export const exchangeToken = createAsyncThunk<User, string>(
   'exchangeToken',
   async (selfCareToken, { rejectWithValue }) => {
     try {
-      return await AuthApi.exchangeToken(selfCareToken);
+      const result = await AuthApi.exchangeToken(selfCareToken);
+      userDataMatcher.validateSync(result, { stripUnknown: false });
+      return result;
     } catch (e: any) {
+      if (e?.name === 'ValidationError') {
+        return rejectWithValue({
+          code: 'USER_VALIDATION_FAILED',
+          message: e.message,
+        });
+      }
       return rejectWithValue(parseError(e));
     }
   }

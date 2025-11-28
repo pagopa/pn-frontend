@@ -240,12 +240,11 @@
     "action": "Mantieni l’accesso"
   },
   "code-modal": {
-    "digits": [
-      "prima cifra",
-      "seconda cifra",
-      "terza cifra",
-      "quarta cifra",
-      "ultima cifra"
-    ]
+    "digits": ["prima cifra", "seconda cifra", "terza cifra", "quarta cifra", "ultima cifra"]
+  },
+  "user-validation-failed": {
+    "title": "I dati inseriti non sono validi",
+    "description": "Uno o più dati associati alla tua utenza non risultano validi, contatta l’assistenza per risolvere il problema.",
+    "cta": "Contatta l’assistenza"
   }
 }

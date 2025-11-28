@@ -1,29 +1,28 @@
-import { Box, Typography } from '@mui/material';
+import { Typography } from '@mui/material';
 import { IllusInProgress } from '@pagopa/mui-italia';
 
 import { getLocalizedOrDefaultLabel } from '../utility/localization.utility';
+import FeedbackPage from './FeedbackPage';
+
+export type AppNotAccessibleReason = 'not-accessible' | 'user-validation-failed';
 
 type Props = {
-  onAssistanceClick: () => void;
+  onAction: () => void;
+  reason?: AppNotAccessibleReason;
 };
 
-const AppNotAccessible: React.FC<Props> = ({ onAssistanceClick }) => (
-  <Box sx={{ minHeight: '350px', height: '100%', display: 'flex' }}>
-    <Box sx={{ margin: 'auto', textAlign: 'center', width: '80vw' }}>
-      <IllusInProgress />
-      <Typography variant="h4" color="text.primary" sx={{ margin: '20px 0 10px 0' }}>
-        {getLocalizedOrDefaultLabel(
-          'common',
-          'not-accessible.title',
-          'Non è possibile accedere alla piattaforma'
-        )}
-      </Typography>
+const AppNotAccessible: React.FC<Props> = ({ onAction, reason = 'not-accessible' }) => {
+  const isNotAccessible = reason === 'not-accessible';
+
+  const title = getLocalizedOrDefaultLabel(
+    'common',
+    isNotAccessible ? 'not-accessible.title' : 'user-validation-failed.title'
+  );
+
+  const description = isNotAccessible ? (
+    <>
       <Typography variant="body1" color="text.primary" display="inline">
-        {getLocalizedOrDefaultLabel(
-          'common',
-          'not-accessible.description',
-          'Riprova tra qualche ora. Se hai bisogno di assistenza'
-        )}
+        {getLocalizedOrDefaultLabel('common', 'not-accessible.description')}
       </Typography>
       &nbsp;
       <Typography
@@ -32,13 +31,34 @@ const AppNotAccessible: React.FC<Props> = ({ onAssistanceClick }) => (
         display="inline"
         fontWeight="700"
         sx={{ cursor: 'pointer', textDecoration: 'underline' }}
-        onClick={onAssistanceClick}
-        data-testid="assistance-button"
+        onClick={onAction}
+        data-testid="goToLanding-link"
       >
-        {`${getLocalizedOrDefaultLabel('common', 'not-accessible.action', 'scrivici')}.`}
+        {`${getLocalizedOrDefaultLabel('common', 'not-accessible.action')}.`}
       </Typography>
-    </Box>
-  </Box>
-);
+    </>
+  ) : (
+    getLocalizedOrDefaultLabel('common', 'user-validation-failed.description')
+  );
+
+  const slotProps = isNotAccessible ? { headingIcon: <IllusInProgress /> } : undefined;
+
+  const action = isNotAccessible
+    ? undefined
+    : {
+        text: getLocalizedOrDefaultLabel('common', 'user-validation-failed.cta'),
+        onClick: onAction,
+      };
+
+  return (
+    <FeedbackPage
+      outcome="error"
+      title={title}
+      description={description}
+      slots={slotProps}
+      action={action}
+    />
+  );
+};
 
 export default AppNotAccessible;

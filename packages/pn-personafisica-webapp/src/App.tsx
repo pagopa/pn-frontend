@@ -32,6 +32,7 @@ import {
 } from '@pagopa-pn/pn-commons';
 import { ProductEntity } from '@pagopa/mui-italia';
 
+import SideMenuBanner from './components/SideMenuBanner/SideMenuBanner';
 import { PFEventsType } from './models/PFEventsType';
 import { getCurrentEventTypePage, goToLoginPortal } from './navigation/navigation.utility';
 import Router from './navigation/routes';
@@ -300,7 +301,7 @@ const App = () => {
       <Layout
         showHeader={showHeader}
         showFooter={showFooter}
-        sideMenu={<SideMenu menuItems={menuItems} />}
+        sideMenu={<SideMenu menuItems={menuItems} feedbackBanner={<SideMenuBanner />} />}
         showSideMenu={showSideMenu}
         productsList={productsList}
         showHeaderProduct={showHeaderProduct}

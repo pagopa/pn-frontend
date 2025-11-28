@@ -130,6 +130,38 @@ describe('SessionGuard Component', async () => {
     });
   });
 
+  it('token-exchange user validation failed', async () => {
+    globalThis.location.hash = '#selfCareToken=validation_error_token';
+
+    const invalidUserResponse = {
+      ...userResponse,
+      fiscal_number: '@RSSGPP80B02G273H',
+    };
+
+    mock.onPost(AUTH_TOKEN_EXCHANGE()).reply(200, invalidUserResponse);
+
+    await act(async () => {
+      render(<Guard />);
+    });
+
+    expect(mock.history.post).toHaveLength(1);
+    expect(mock.history.post[0].url).toBe(AUTH_TOKEN_EXCHANGE());
+    expect(JSON.parse(mock.history.post[0].data)).toStrictEqual({
+      authorizationToken: 'validation_error_token',
+    });
+
+    await waitFor(() => {
+      expect(mockNavigateFn).toHaveBeenCalledTimes(1);
+      expect(mockNavigateFn).toHaveBeenCalledWith(
+        {
+          pathname: routes.NOT_ACCESSIBLE,
+          search: '?reason=user-validation-failed',
+        },
+        { replace: true }
+      );
+    });
+  });
+
   // expected behavior: enters the app, does a navigate to notifications page, launches sessionCheck
   it('user logged in - TOS accepted', async () => {
     window.location.hash = '#selfCareToken=200_token';

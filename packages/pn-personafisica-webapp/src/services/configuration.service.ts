@@ -26,6 +26,7 @@ export interface PfConfiguration {
   IS_DOD_ENABLED: boolean;
   DOWNTIME_EXAMPLE_LINK: string;
   ACCESSIBILITY_LINK: string;
+  FEEDBACK_SURVEY_URL: string;
 }
 
 class PfConfigurationValidator extends Validator<PfConfiguration> {
@@ -60,6 +61,7 @@ class PfConfigurationValidator extends Validator<PfConfiguration> {
     this.ruleFor('IS_DOD_ENABLED').isBoolean();
     this.ruleFor('DOWNTIME_EXAMPLE_LINK').isString().isRequired().matches(dataRegex.htmlPageUrl);
     this.ruleFor('ACCESSIBILITY_LINK').isString().isRequired();
+    this.ruleFor('FEEDBACK_SURVEY_URL').isString().isRequired();
   }
 }
 
