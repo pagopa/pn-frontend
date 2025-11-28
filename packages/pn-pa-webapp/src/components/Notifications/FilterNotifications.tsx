@@ -1,4 +1,4 @@
-import { add, isValid } from 'date-fns';
+import { add, isBefore, isValid } from 'date-fns';
 import { FormikValues, useFormik } from 'formik';
 import { isEqual } from 'lodash-es';
 import { forwardRef, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
@@ -13,7 +13,6 @@ import {
   GetNotificationsParams,
   IUN_regex,
   dataRegex,
-  dateIsDefined,
   filtersApplied,
   getNotificationAllowedStatus,
   getStartOfDay,
@@ -104,6 +103,10 @@ const FilterNotifications = forwardRef(({ showFilters }: Props, ref) => {
         return true;
       }
 
+      if (isBefore(end, start)) {
+        return ctx.createError({ message: t('filters.errors.data_a', { ns: 'notifiche' }) });
+      }
+
       const endAtStart = getStartOfDay(new Date(endDate));
       const minStart = add(endAtStart, { months: -6, days: 1 });
 
@@ -129,14 +132,14 @@ const FilterNotifications = forwardRef(({ showFilters }: Props, ref) => {
         .date()
         .typeError(t('filters.errors.date-invalid', { ns: 'notifiche' }))
         .test('max-six-months', rangeErrorMsg, maxSixMonthsTest)
-        .min(tenYearsAgo, ' ')
-        .max(today, ' '),
+        .min(tenYearsAgo, t('filters.errors.min-ten-years', { ns: 'notifiche' }))
+        .max(today, t('filters.errors.max-today', { ns: 'notifiche' })),
       endDate: yup
         .date()
         .typeError(t('filters.errors.date-invalid', { ns: 'notifiche' }))
         .test('max-six-months', rangeErrorMsg, maxSixMonthsTest)
-        .min(dateIsDefined(startDate) ? startDate : tenYearsAgo, '')
-        .max(today, ' '),
+        .min(tenYearsAgo, t('filters.errors.min-ten-years', { ns: 'notifiche' }))
+        .max(today, t('filters.errors.max-today', { ns: 'notifiche' })),
     });
   }, [startDate, endDate, t]);
 

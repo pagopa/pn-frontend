@@ -16,7 +16,10 @@
       "iun": "Veuillez saisir un code IUN valide",
       "fiscal-code": "Saisir le code en entier",
       "max-six-months": "La période maximale autorisée est de 6 mois",
-      "date-invalid": "Veuillez saisir une date valide"
+      "date-invalid": "Veuillez saisir une date valide",
+      "data_a": "La date de début doit être antérieure à la date de fin",
+      "min-ten-years": "Veuillez saisir une date postérieure à il y a 10 ans",
+      "max-today": "Veuillez saisir une date antérieure à aujourd’hui"
     }
   },
   "payment": {

@@ -16,7 +16,10 @@
       "iun": "Vnesite veljavno kodo IUN",
       "fiscal-code": "Vnesite celotno kodo",
       "max-six-months": "Največje dovoljeno obdobje je 6 mesecev",
-      "date-invalid": "Vnesite veljaven datum"
+      "date-invalid": "Vnesite veljaven datum",
+      "data_a": "Datum začetka mora biti pred datumom konca",
+      "min-ten-years": "Vnesite datum, ki je kasnejši od 10 let nazaj",
+      "max-today": "Vnesite datum, ki je pred današnjim dnem"
     }
   },
   "payment": {
