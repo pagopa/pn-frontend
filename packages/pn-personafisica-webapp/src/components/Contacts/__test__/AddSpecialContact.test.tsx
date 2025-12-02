@@ -90,7 +90,7 @@ describe('test AddSpecialContact', () => {
     const { container, getByTestId, getByText, queryByTestId } = render(
       <AddSpecialContactWrapper handleSpecialContactAdded={handleContactAddedMock} />,
       {
-        preloadedState: { contactsState: { digitalAddresses } },
+        preloadedState: { contactsState: { digitalAddresses, parties: [] } },
       }
     );
 
@@ -135,7 +135,7 @@ describe('test AddSpecialContact', () => {
     const result = render(
       <AddSpecialContactWrapper handleSpecialContactAdded={handleContactAddedMock} />,
       {
-        preloadedState: { contactsState: { digitalAddresses: digitalLegalAddresses } },
+        preloadedState: { contactsState: { digitalAddresses: digitalLegalAddresses, parties: [] } },
       }
     );
 
@@ -244,7 +244,7 @@ describe('test AddSpecialContact', () => {
     const { container } = render(
       <AddSpecialContactWrapper handleSpecialContactAdded={handleContactAddedMock} />,
       {
-        preloadedState: { contactsState: { digitalAddresses } },
+        preloadedState: { contactsState: { digitalAddresses, parties: [] } },
       }
     );
 
@@ -265,7 +265,7 @@ describe('test AddSpecialContact', () => {
     const { container, getByTestId, queryByText } = render(
       <AddSpecialContactWrapper handleSpecialContactAdded={handleContactAddedMock} />,
       {
-        preloadedState: { contactsState: { digitalAddresses: digitalAddressesSercq } },
+        preloadedState: { contactsState: { digitalAddresses: digitalAddressesSercq, parties: [] } },
       }
     );
 
@@ -313,7 +313,9 @@ describe('test AddSpecialContact', () => {
     const { container, getByRole, getByTestId, getByText, queryByText } = render(
       <AddSpecialContactWrapper handleSpecialContactAdded={handleContactAddedMock} />,
       {
-        preloadedState: { contactsState: { digitalAddresses: digitalAddressesWithInvalidPec } },
+        preloadedState: {
+          contactsState: { digitalAddresses: digitalAddressesWithInvalidPec, parties: [] },
+        },
       }
     );
 
@@ -396,6 +398,7 @@ describe('test AddSpecialContact', () => {
         preloadedState: {
           contactsState: {
             digitalAddresses,
+            parties: [],
           },
         },
       }
@@ -476,6 +479,7 @@ describe('test AddSpecialContact', () => {
         preloadedState: {
           contactsState: {
             digitalAddresses,
+            parties: [],
           },
         },
       }
@@ -541,7 +545,7 @@ describe('test AddSpecialContact', () => {
     const result = render(
       <AddSpecialContactWrapper handleSpecialContactAdded={handleContactAddedMock} />,
       {
-        preloadedState: { contactsState: { digitalAddresses: digitalLegalAddresses } },
+        preloadedState: { contactsState: { digitalAddresses: digitalLegalAddresses, parties: [] } },
       }
     );
 
@@ -559,7 +563,7 @@ describe('test AddSpecialContact', () => {
     const pecInput = queryById(result.container, 's_value');
     await waitFor(() => {
       expect(pecInput).not.toBeInTheDocument();
-    })
+    });
 
     const digitalContentEl = result.getByTestId('default_emailContact');
     expect(digitalContentEl).toBeInTheDocument();
@@ -592,6 +596,7 @@ describe('test AddSpecialContact', () => {
         preloadedState: {
           contactsState: {
             digitalAddresses: [...digitalLegalAddresses, ...digitalCourtesyAddresses],
+            parties: [],
           },
         },
       }
@@ -625,7 +630,7 @@ describe('test AddSpecialContact', () => {
           <AddSpecialContactWrapper handleSpecialContactAdded={handleContactAddedMock} />
         </>,
         {
-          preloadedState: { contactsState: { digitalAddresses } },
+          preloadedState: { contactsState: { digitalAddresses, parties: [] } },
         }
       );
     });

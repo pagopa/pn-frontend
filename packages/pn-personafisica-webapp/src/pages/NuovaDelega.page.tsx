@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import * as yup from 'yup';
 
+import AccountBalanceIcon from '@mui/icons-material/AccountBalance';
 import PeopleIcon from '@mui/icons-material/People';
 import {
   Box,
@@ -12,7 +13,6 @@ import {
   FormControl,
   FormControlLabel,
   Grid,
-  MenuItem,
   Paper,
   Radio,
   RadioGroup,
@@ -26,7 +26,6 @@ import {
   DATE_FORMAT,
   DatePickerTypes,
   EventCreatedDelegationType,
-  PnAutocomplete,
   PnBreadcrumb,
   RecipientType,
   TitleBox,
@@ -36,11 +35,10 @@ import {
   useIsMobile,
   useSearchStringChangeInput,
 } from '@pagopa-pn/pn-commons';
-import { IllusCompleted } from '@pagopa/mui-italia';
+import { Autocomplete, IllusCompleted } from '@pagopa/mui-italia';
 
 import VerificationCodeComponent from '../components/Deleghe/VerificationCodeComponent';
 import LoadingPageWrapper from '../components/LoadingPageWrapper/LoadingPageWrapper';
-import DropDownPartyMenuItem from '../components/Party/DropDownParty';
 import { PFEventsType } from '../models/PFEventsType';
 import { Party } from '../models/party';
 import * as routes from '../navigation/routes.const';
@@ -56,7 +54,7 @@ import { generateVCode } from '../utility/delegation.utility';
 const getError = <TTouch, TError>(
   fieldTouched: FormikTouched<TTouch> | boolean | undefined,
   fieldError: undefined | string | FormikErrors<TError> | Array<string>
-) => Boolean(fieldTouched) && fieldError && String(fieldError);
+) => (Boolean(fieldTouched) && fieldError ? String(fieldError) : undefined);
 
 const NuovaDelega = () => {
   const { t, i18n } = useTranslation(['deleghe', 'common']);
@@ -198,10 +196,11 @@ const NuovaDelega = () => {
     }
   };
 
-  const renderOption = (props: any, option: Party) => (
-    <MenuItem {...props} value={option.id} key={option.id}>
-      <DropDownPartyMenuItem name={option.name} />
-    </MenuItem>
+  const renderOption = (option: Party) => (
+    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+      <AccountBalanceIcon fontSize="small" sx={{ color: '#BBC2D6' }} />
+      {option.name}
+    </Box>
   );
 
   // handling of search string for sender
@@ -423,36 +422,31 @@ const NuovaDelega = () => {
 
                             {values.selectTuttiEntiOrSelezionati === 'entiSelezionati' && (
                               <FormControl fullWidth>
-                                <PnAutocomplete
+                                <Autocomplete
                                   id="enti"
                                   data-testid="enti"
                                   multiple
                                   options={entities}
-                                  fullWidth
-                                  autoComplete
                                   getOptionLabel={getOptionLabel}
-                                  noOptionsText={t('nuovaDelega.form.party-not-found')}
                                   isOptionEqualToValue={(option, value) =>
                                     option.name === value.name
                                   }
-                                  onChange={(_event: any, newValue: Array<Party>) => {
+                                  onChange={(newValue: Array<Party>) => {
                                     setFieldValue('enti', newValue);
                                   }}
                                   inputValue={senderInputValue}
-                                  onInputChange={(_event, newInputValue) =>
+                                  onInputChange={(newInputValue) =>
                                     handleChangeInput(newInputValue)
                                   }
-                                  filterOptions={(e) => e}
+                                  handleFiltering={(e) => e}
+                                  label={entitySearchLabel(senderInputValue)}
+                                  error={Boolean(getError(touched.enti, errors.enti))}
+                                  helperText={getError(touched.enti, errors.enti)}
+                                  noResultsText={t('nuovaDelega.form.party-not-found')}
+                                  slotProps={{
+                                    textField: { name: 'enti' },
+                                  }}
                                   renderOption={renderOption}
-                                  renderInput={(params) => (
-                                    <TextField
-                                      name="enti"
-                                      {...params}
-                                      label={entitySearchLabel(senderInputValue)}
-                                      error={Boolean(getError(touched.enti, errors.enti))}
-                                      helperText={getError(touched.enti, errors.enti)}
-                                    />
-                                  )}
                                 />
                               </FormControl>
                             )}
