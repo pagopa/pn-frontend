@@ -227,7 +227,7 @@
     "io-removed-successfully": "You have deactivated the SEND - Digital Notifications service on IO.",
     "remove-email": "Deactivate email",
     "remove-email-pec-enabled-title": "Do you want to deactivate email alerts?",
-    "remove-email-pec-enabled-message": "<0>If you deactivate the email address <strong>we cannot notify you when there is a legally-binding communication for you/strong>.</0><1>Remember that if you do not read a SEND notification in time, you might not be aware of any deadlines and incur penalties.</1>",
+    "remove-email-pec-enabled-message": "<0>If you deactivate the email address <strong>we cannot notify you when there is a legally-binding communication for you</strong>.</0><1>Remember that if you do not read a SEND notification in time, you might not be aware of any deadlines and incur penalties.</1>",
     "remove-email-no-domicile-title": "Deactivate email",
     "remove-email-no-domicile-message": "If you confirm, you will no longer receive the email on {{value}} when there is a SEND notification to read.",
     "remove-email-preconfirm-title": "Do you want to deactivate email alerts?",
