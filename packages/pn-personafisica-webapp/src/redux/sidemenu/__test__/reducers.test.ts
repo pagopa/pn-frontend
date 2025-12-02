@@ -118,9 +118,10 @@ describe('Sidemenu redux state tests', () => {
   it('Should be able to set tpp info from retrievalId', async () => {
     const mockRetrievalId = 'mocked-retrieval-id';
     const mockResponse: BffCheckTPPResponse = {
-      paymentButton: 'Hype',
+      pspDenomination: 'Hype',
       retrievalId: mockRetrievalId,
       originId: 'mocked-iun',
+      isPaymentEnabled: true,
     };
     mock
       .onGet(`/bff/v1/notifications/received/check-tpp?retrievalId=${mockRetrievalId}`)
