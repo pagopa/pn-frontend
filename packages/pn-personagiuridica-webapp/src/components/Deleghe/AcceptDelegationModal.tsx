@@ -210,7 +210,7 @@ const AcceptDelegationModal: React.FC<Props> = ({
         </FormControl>
         {associateGroup && (
           <Autocomplete
-            id="input-group"
+            id="modal-groups"
             options={groups.filter((group) => group.status === GroupStatus.ACTIVE)}
             multiple
             getOptionLabel={getOptionLabel}
@@ -227,13 +227,13 @@ const AcceptDelegationModal: React.FC<Props> = ({
             onChange={(newValue: Array<{ id: string; name: string }>) =>
               setGroupForm({ value: newValue, touched: true })
             }
-            data-testid="groups"
+            data-testid="modal-groups"
             inputValue={groupInputValue}
             onInputChange={(newInputValue) => setGroupInputValue(newInputValue)}
             sx={{ mt: 2 }}
             noResultsText={t('deleghe.table.no-group-found')}
             slotProps={{
-              textField: { name: 'groups' },
+              textField: { name: 'modal-groups' },
             }}
           />
         )}
