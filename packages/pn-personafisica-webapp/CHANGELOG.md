@@ -3,6 +3,25 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.20.0-RC.1](https://github.com/pagopa/pn-frontend/compare/v2.20.0-RC.0...v2.20.0-RC.1) (2025-12-02)
+
+
+### Bug Fixes
+
+* **PN-17012:** update pn-bff commitId ([b9de58d](https://github.com/pagopa/pn-frontend/commit/b9de58d79d80519599dee4084ed79b5f212fb43f))
+* **PN-17234:** add missing escape character in en translation ([#1709](https://github.com/pagopa/pn-frontend/issues/1709)) ([ec3494c](https://github.com/pagopa/pn-frontend/commit/ec3494cb7afcb5bfa66cf0ef2ef8dd7b0ac0cec1))
+
+
+### Features
+
+* **PN-17013:** handle PSP that doesn't integrate payment process ([#1695](https://github.com/pagopa/pn-frontend/issues/1695)) ([4b89b55](https://github.com/pagopa/pn-frontend/commit/4b89b55c009c47702c9905c52e173d15ef34c98f))
+* **PN-17014:** update layout of TPP payment box ([#1698](https://github.com/pagopa/pn-frontend/issues/1698)) ([136e5f4](https://github.com/pagopa/pn-frontend/commit/136e5f4769ae9dbf274a4bc86ad56f59c4ba34c4))
+* **PN-17015:** add amount query parameter to get TPP payment URL API ([#1699](https://github.com/pagopa/pn-frontend/issues/1699)) ([c1577e3](https://github.com/pagopa/pn-frontend/commit/c1577e33d53dadb033af83e223eec3fc14821b03))
+
+
+
+
+
 # [2.20.0-RC.0](https://github.com/pagopa/pn-frontend/compare/v2.19.1...v2.20.0-RC.0) (2025-11-28)
 
 
