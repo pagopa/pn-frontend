@@ -281,7 +281,8 @@ const NotificationDetail: React.FC = () => {
     noticeCode?: string,
     creditorTaxId?: string,
     retrievalId?: string,
-    tppName?: string
+    tppName?: string,
+    amount?: number
   ) => {
     if (noticeCode && creditorTaxId && retrievalId) {
       PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_START_PAYMENT, { psp: tppName });
@@ -290,6 +291,7 @@ const NotificationDetail: React.FC = () => {
           noticeCode,
           creditorTaxId,
           retrievalId,
+          amount,
         })
       )
         .unwrap()
