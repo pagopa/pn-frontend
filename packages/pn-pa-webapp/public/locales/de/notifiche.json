@@ -14,7 +14,12 @@
     "status": "Status",
     "errors": {
       "iun": "Gültigen IUN-Code eingeben",
-      "fiscal-code": "Gib den vollständigen Code ein"
+      "fiscal-code": "Gib den vollständigen Code ein",
+      "max-six-months": "Der maximal zulässige Zeitraum beträgt 6 Monate",
+      "date-invalid": "Geben Sie ein gültiges Datum ein",
+      "data_a": "Das Anfangsdatum muss vor dem Enddatum liegen",
+      "min-ten-years": "Geben Sie ein Datum ein, das nicht älter als 10 Jahre ist",
+      "max-today": "Geben Sie ein Datum ein, das nicht in der Zukunft liegt"
     }
   },
   "payment": {

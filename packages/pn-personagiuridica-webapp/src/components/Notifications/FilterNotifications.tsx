@@ -1,4 +1,4 @@
-import { useFormik } from 'formik';
+import { FormikValues, useFormik } from 'formik';
 import { isEqual } from 'lodash-es';
 import { forwardRef, useEffect, useImperativeHandle, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -56,6 +56,16 @@ const initialValues = (
     endDate: new Date(filters.endDate),
     iunMatch: getValidValue(filters.iunMatch),
   };
+};
+
+const submitForm = async (formik: FormikValues, form: HTMLFormElement) => {
+  const errors = await formik.validateForm();
+  if (Object.keys(errors).length > 0) {
+    const field = Object.keys(errors)[0];
+    const el = form.querySelector<HTMLInputElement>(`[name="${field}"]`);
+    el?.focus();
+  }
+  await formik.submitForm();
 };
 
 const FilterNotifications = forwardRef(({ showFilters }: Props, ref) => {
@@ -119,6 +129,11 @@ const FilterNotifications = forwardRef(({ showFilters }: Props, ref) => {
     }
   };
 
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    void submitForm(formik, e.currentTarget);
+  };
+
   useEffect(() => {
     void formik.validateForm();
   }, []);
@@ -162,7 +177,7 @@ const FilterNotifications = forwardRef(({ showFilters }: Props, ref) => {
         {t('button.filtra')}
       </CustomMobileDialogToggle>
       <CustomMobileDialogContent title={t('button.filtra')} ref={dialogRef}>
-        <form onSubmit={formik.handleSubmit} data-testid="filter-form">
+        <form onSubmit={handleSubmit} data-testid="filter-form">
           <DialogContent>
             <FilterNotificationsFormBody
               formikInstance={formik}
@@ -184,7 +199,7 @@ const FilterNotifications = forwardRef(({ showFilters }: Props, ref) => {
       </CustomMobileDialogContent>
     </CustomMobileDialog>
   ) : (
-    <form onSubmit={formik.handleSubmit} data-testid="filter-form">
+    <form onSubmit={handleSubmit} data-testid="filter-form">
       <Box sx={{ flexGrow: 1, mt: 3 }}>
         <Grid
           container

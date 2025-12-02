@@ -58,6 +58,16 @@ const initialValues = (
   };
 };
 
+const submitForm = async (formik: FormikValues, form: HTMLFormElement) => {
+  const errors = await formik.validateForm();
+  if (Object.keys(errors).length > 0) {
+    const field = Object.keys(errors)[0];
+    const el = form.querySelector<HTMLInputElement>(`[name="${field}"]`);
+    el?.focus();
+  }
+  await formik.submitForm();
+};
+
 const FilterNotifications = forwardRef(({ showFilters, currentDelegator }: Props, ref) => {
   const dispatch = useDispatch();
   const filters = useAppSelector((state: RootState) => state.dashboardState.filters);
@@ -121,6 +131,11 @@ const FilterNotifications = forwardRef(({ showFilters, currentDelegator }: Props
     }
   };
 
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    void submitForm(formik, e.currentTarget);
+  };
+
   useEffect(() => {
     void formik.validateForm();
   }, []);
@@ -163,7 +178,7 @@ const FilterNotifications = forwardRef(({ showFilters, currentDelegator }: Props
         {t('button.filtra')}
       </CustomMobileDialogToggle>
       <CustomMobileDialogContent title={t('button.filtra')} ref={dialogRef}>
-        <form onSubmit={formik.handleSubmit} data-testid="filter-form">
+        <form onSubmit={handleSubmit} data-testid="filter-form">
           <DialogContent>
             <FilterNotificationsFormBody
               formikInstance={formik}
@@ -185,7 +200,7 @@ const FilterNotifications = forwardRef(({ showFilters, currentDelegator }: Props
       </CustomMobileDialogContent>
     </CustomMobileDialog>
   ) : (
-    <form onSubmit={formik.handleSubmit} data-testid="filter-form">
+    <form onSubmit={handleSubmit} data-testid="filter-form">
       <Box sx={{ flexGrow: 1, mt: 3 }}>
         <Grid
           container

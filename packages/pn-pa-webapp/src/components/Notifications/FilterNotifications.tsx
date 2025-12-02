@@ -1,4 +1,4 @@
-import { add, isValid } from 'date-fns';
+import { add, isBefore, isValid } from 'date-fns';
 import { FormikValues, useFormik } from 'formik';
 import { isEqual } from 'lodash-es';
 import { forwardRef, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
@@ -13,7 +13,6 @@ import {
   GetNotificationsParams,
   IUN_regex,
   dataRegex,
-  dateIsDefined,
   filtersApplied,
   getNotificationAllowedStatus,
   getStartOfDay,
@@ -65,6 +64,16 @@ function isFilterapplied(filtersCount: number): boolean {
 
 const getValidStatus = (status: string) => (status === 'All' ? '' : status);
 
+const submitForm = async (formik: FormikValues, form: HTMLFormElement) => {
+  const errors = await formik.validateForm();
+  if (Object.keys(errors).length > 0) {
+    const field = Object.keys(errors)[0];
+    const el = form.querySelector<HTMLInputElement>(`[name="${field}"]`);
+    el?.focus();
+  }
+  await formik.submitForm();
+};
+
 const FilterNotifications = forwardRef(({ showFilters }: Props, ref) => {
   const filters = useAppSelector((state: RootState) => state.dashboardState.filters);
   const dispatch = useAppDispatch();
@@ -94,6 +103,10 @@ const FilterNotifications = forwardRef(({ showFilters }: Props, ref) => {
         return true;
       }
 
+      if (isBefore(end, start)) {
+        return ctx.createError({ message: t('filters.errors.data_a', { ns: 'notifiche' }) });
+      }
+
       const endAtStart = getStartOfDay(new Date(endDate));
       const minStart = add(endAtStart, { months: -6, days: 1 });
 
@@ -117,16 +130,16 @@ const FilterNotifications = forwardRef(({ showFilters }: Props, ref) => {
       // to fix this behaviour, we put an empty string with a space, but it is NOT ACCESSIBLE and we will fix it in the accessibility task
       startDate: yup
         .date()
-        .typeError(' ')
+        .typeError(t('filters.errors.date-invalid', { ns: 'notifiche' }))
         .test('max-six-months', rangeErrorMsg, maxSixMonthsTest)
-        .min(tenYearsAgo, ' ')
-        .max(today, ' '),
+        .min(tenYearsAgo, t('filters.errors.min-ten-years', { ns: 'notifiche' }))
+        .max(today, t('filters.errors.max-today', { ns: 'notifiche' })),
       endDate: yup
         .date()
-        .typeError(' ')
+        .typeError(t('filters.errors.date-invalid', { ns: 'notifiche' }))
         .test('max-six-months', rangeErrorMsg, maxSixMonthsTest)
-        .min(dateIsDefined(startDate) ? startDate : tenYearsAgo, ' ')
-        .max(today, ' '),
+        .min(tenYearsAgo, t('filters.errors.min-ten-years', { ns: 'notifiche' }))
+        .max(today, t('filters.errors.max-today', { ns: 'notifiche' })),
     });
   }, [startDate, endDate, t]);
 
@@ -165,6 +178,11 @@ const FilterNotifications = forwardRef(({ showFilters }: Props, ref) => {
     if (!isEqual(filters.endDate, today)) {
       setEndDate(formik.values.endDate);
     }
+  };
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    void submitForm(formik, e.currentTarget);
   };
 
   useEffect(() => {
@@ -225,7 +243,7 @@ const FilterNotifications = forwardRef(({ showFilters }: Props, ref) => {
         {t('button.filtra')}
       </CustomMobileDialogToggle>
       <CustomMobileDialogContent title={t('button.filtra')} ref={dialogRef}>
-        <form onSubmit={formik.handleSubmit} data-testid="filter-form">
+        <form onSubmit={handleSubmit} data-testid="filter-form">
           <DialogContent>
             <FilterNotificationsFormBody
               formikInstance={formik}
@@ -247,7 +265,7 @@ const FilterNotifications = forwardRef(({ showFilters }: Props, ref) => {
       </CustomMobileDialogContent>
     </CustomMobileDialog>
   ) : (
-    <form onSubmit={formik.handleSubmit} data-testid="filter-form">
+    <form onSubmit={handleSubmit} data-testid="filter-form">
       <Stack
         direction={'row'}
         sx={{
