@@ -8,9 +8,11 @@ import { ChangeEvent, forwardRef, useEffect, useImperativeHandle, useRef, useSta
 import { Trans, useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 
+import AccountBalanceIcon from '@mui/icons-material/AccountBalance';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import {
   Alert,
+  Box,
   Checkbox,
   DialogContentText,
   FormControl,
@@ -152,8 +154,6 @@ const AddSpecialContact = forwardRef<AddSpecialContactRef, Props>(
     const { defaultEMAILAddress, addresses, legalAddresses } = addressesData || {};
     const [canEditEmail, setCanEditEmail] = useState<boolean>(false);
 
-    console.log(parties);
-
     const addressTypes = specialContactsAvailableAddressTypes(addressesData).filter(
       (addr) => addr.shown && (!IS_DOD_ENABLED ? addr.id !== ChannelType.SERCQ_SEND : true)
     );
@@ -207,6 +207,13 @@ const AddSpecialContact = forwardRef<AddSpecialContactRef, Props>(
         updateErrorBanner(nextValue);
       }
     };
+
+    const renderOption = (option: Party) => (
+      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+        <AccountBalanceIcon fontSize="small" sx={{ color: '#BBC2D6' }} />
+        {option.name}
+      </Box>
+    );
 
     const validationSchema = yup.object({
       sender: yup
@@ -593,7 +600,7 @@ const AddSpecialContact = forwardRef<AddSpecialContactRef, Props>(
             <Autocomplete
               id="sender"
               data-testid="sender"
-              options={parties ?? []}
+              options={parties}
               getOptionLabel={getOptionLabel}
               isOptionEqualToValue={(option, value) => option.id === value.id}
               onChange={senderChangeHandler}
@@ -615,13 +622,12 @@ const AddSpecialContact = forwardRef<AddSpecialContactRef, Props>(
               helperText={
                 formik.touched.sender && (formik.errors.sender?.name || formik.errors.sender?.id)
               }
+              noResultsText={t('common.enti-not-found', { ns: 'recapiti' })}
               required
-              // renderInput={(params) => <TextField {...params} name="sender" />}
               slotProps={{
-                announcementBox: {
-                  noResultsText: t('common.enti-not-found', { ns: 'recapiti' }),
-                },
+                textField: { name: 'sender' },
               }}
+              renderOption={renderOption}
               sx={{ flexGrow: 1, flexBasis: 0, mb: 2 }}
             />
           </ApiErrorWrapper>

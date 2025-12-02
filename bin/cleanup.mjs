@@ -23,7 +23,7 @@ const cleanup = async () => {
       } catch (error) {
         console.error(
           "Error while removing node_modules in: " + rootNodeModulesPath,
-          err
+          error
         );
       }
     } else {

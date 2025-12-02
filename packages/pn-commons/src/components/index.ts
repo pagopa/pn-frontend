@@ -67,7 +67,6 @@ export { isNewNotification } from './Notifications/NewNotificationBadge';
 export { default as NotificationsDataSwitch } from './Notifications/NotificationsDataSwitch';
 export { default as StatusTooltip } from './Notifications/StatusTooltip';
 export { default as CustomPagination } from './Pagination/CustomPagination';
-export { default as PnAutocomplete } from './PnAutocomplete';
 export { default as PnBreadcrumb } from './PnBreadcrumb';
 export { default as PnDialog } from './PnDialog/PnDialog';
 export { default as PnDialogActions } from './PnDialog/PnDialogActions';

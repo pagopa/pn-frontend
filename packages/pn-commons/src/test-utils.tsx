@@ -173,7 +173,7 @@ async function testAutocomplete(
   const dropdown = await waitFor(() =>
     document.querySelector<HTMLElement>('[role="presentation"][class*="MuiPopper"]')
   );
-  expect(dropdown).toBeInTheDocument();
+  expect(dropdown).toBeVisible();
   const dropdownOptionsList = within(dropdown!).getByRole('listbox');
   expect(dropdownOptionsList).toBeInTheDocument();
   const dropdownOptionsListItems = within(dropdownOptionsList).getAllByRole('option');
@@ -184,7 +184,7 @@ async function testAutocomplete(
   if (optToSelect !== undefined) {
     fireEvent.click(dropdownOptionsListItems[optToSelect]);
     if (closeOnSelect) {
-      await waitFor(() => expect(dropdown).not.toBeInTheDocument());
+      await waitFor(() => expect(dropdown).not.toBeVisible());
     }
   }
 }

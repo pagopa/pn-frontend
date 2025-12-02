@@ -132,11 +132,7 @@ const NewApiKey = () => {
                           data-testid="groups"
                           getOptionLabel={(option) => option.name}
                           onChange={handleGroupClick}
-                          slotProps={{
-                            announcementBox: {
-                              noResultsText: tkp('no-groups'),
-                            },
-                          }}
+                          noResultsText={tkp('no-groups')}
                           sx={{ mt: '8px' }}
                           label={tkp('form-placeholder-groups')}
                         />
