@@ -208,7 +208,7 @@
   },
   "autocomplete": {
     "clear": "Rimuovi opzioni selezionate",
-    "toggle-open": "Apri mennu selezione opzioni",
+    "toggle-open": "Apri menu selezione opzioni",
     "toggle-close": "Chiudi menu selezione opzioni",
     "selection-box": "Opzioni selezionate",
     "selection-done": "%s selezionati",
