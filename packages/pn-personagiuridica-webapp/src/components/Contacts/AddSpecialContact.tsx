@@ -426,7 +426,7 @@ const AddSpecialContact = forwardRef<AddSpecialContactRef, Props>(
           slotsProps={{
             confirmButton: {
               onClick: () => setModalOpen(null),
-              children: t('button.understand', { ns: 'common' }),
+              children: t('button.understand'),
             },
           }}
         >
@@ -497,6 +497,22 @@ const AddSpecialContact = forwardRef<AddSpecialContactRef, Props>(
               sx={{ flexGrow: 1, flexBasis: 0, mb: 2 }}
               slotProps={{
                 textField: { name: 'sender' },
+                clearButton: {
+                  'aria-label': t('autocomplete.clear'),
+                },
+                toggleButton: {
+                  'close-aria-label': t('autocomplete.toggle-close'),
+                  'open-aria-label': t('autocomplete.toggle-open'),
+                },
+                selectionBox: {
+                  'aria-label': t('autocomplete.selection-box'),
+                },
+                selectionChip: {
+                  'aria-label': t('autocomplete.delete-selection'),
+                },
+                announcementBox: {
+                  selectionText: t('autocomplete.selection-done'),
+                },
               }}
               renderOption={renderOption}
               noResultsText={t('common.enti-not-found', { ns: 'recapiti' })}

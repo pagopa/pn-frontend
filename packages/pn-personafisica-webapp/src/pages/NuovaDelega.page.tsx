@@ -445,6 +445,32 @@ const NuovaDelega = () => {
                                   noResultsText={t('nuovaDelega.form.party-not-found')}
                                   slotProps={{
                                     textField: { name: 'enti' },
+                                    clearButton: {
+                                      'aria-label': t('autocomplete.clear', { ns: 'common' }),
+                                    },
+                                    toggleButton: {
+                                      'close-aria-label': t('autocomplete.toggle-close', {
+                                        ns: 'common',
+                                      }),
+                                      'open-aria-label': t('autocomplete.toggle-open', {
+                                        ns: 'common',
+                                      }),
+                                    },
+                                    selectionBox: {
+                                      'aria-label': t('autocomplete.selection-box', {
+                                        ns: 'common',
+                                      }),
+                                    },
+                                    selectionChip: {
+                                      'aria-label': t('autocomplete.delete-selection', {
+                                        ns: 'common',
+                                      }),
+                                    },
+                                    announcementBox: {
+                                      selectionText: t('autocomplete.selection-done', {
+                                        ns: 'common',
+                                      }),
+                                    },
                                   }}
                                   renderOption={renderOption}
                                 />

@@ -59,7 +59,7 @@ const AcceptDelegationModal: React.FC<Props> = ({
   const codeModalRef = useRef<{
     updateError: (error: ErrorMessage, codeNotValid: boolean) => void;
   }>(null);
-  const { t } = useTranslation(['deleghe']);
+  const { t } = useTranslation(['deleghe', 'common']);
   const groups = useAppSelector((state: RootState) => state.delegationsState.groups);
   // when there are groups, the codeModal component is unmounted at confirm button click
   // so the updateError call in the handleAcceptanceError has no effect
@@ -234,6 +234,22 @@ const AcceptDelegationModal: React.FC<Props> = ({
             noResultsText={t('deleghe.table.no-group-found')}
             slotProps={{
               textField: { name: 'modal-groups' },
+              clearButton: {
+                'aria-label': t('autocomplete.clear', { ns: 'common' }),
+              },
+              toggleButton: {
+                'close-aria-label': t('autocomplete.toggle-close', { ns: 'common' }),
+                'open-aria-label': t('autocomplete.toggle-open', { ns: 'common' }),
+              },
+              selectionBox: {
+                'aria-label': t('autocomplete.selection-box', { ns: 'common' }),
+              },
+              selectionChip: {
+                'aria-label': t('autocomplete.delete-selection', { ns: 'common' }),
+              },
+              announcementBox: {
+                selectionText: t('autocomplete.selection-done', { ns: 'common' }),
+              },
             }}
           />
         )}
