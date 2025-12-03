@@ -1,7 +1,7 @@
 import {
   formatDate,
   getNotificationAllowedStatus,
-  sixMonthsAgo,
+  tenYearsAgo,
   today,
 } from '@pagopa-pn/pn-commons';
 import {
@@ -28,19 +28,12 @@ import FilterNotifications from '../FilterNotifications';
 const localizedNotificationStatus = getNotificationAllowedStatus();
 
 const initialState = {
-  startDate: sixMonthsAgo,
+  startDate: tenYearsAgo,
   endDate: today,
   recipientId: '',
   status: '',
   iunMatch: '',
 };
-
-function monthsAgo(n: number) {
-  const d = new Date();
-  d.setMonth(d.getMonth() - n);
-  d.setHours(0, 0, 0, 0);
-  return d;
-}
 
 async function setFormValues(
   form: HTMLFormElement,
@@ -162,33 +155,32 @@ describe('Filter Notifications Table Component', async () => {
       result = render(<FilterNotifications showFilters />);
     });
     form = result.container.querySelector('form') as HTMLFormElement;
-
-    const start = monthsAgo(5);
-    const end = monthsAgo(1);
-
+    const todayM = new Date();
+    const tenYearsAgoDate = new Date(new Date().setMonth(today.getMonth() - 120));
+    const oneYearAgo = new Date(new Date().setMonth(todayM.getMonth() - 12));
+    tenYearsAgoDate.setHours(0, 0, 0, 0);
+    oneYearAgo.setHours(0, 0, 0, 0);
     await setFormValues(
       form,
-      start,
-      end,
+      tenYearsAgoDate,
+      oneYearAgo,
       localizedNotificationStatus[2].value,
       'RSSMRA80A01H501U',
       'ABCD-EFGH-ILMN-123456-A-1'
     );
-
     const submitButton = form.querySelector(`button[type="submit"]`);
     expect(submitButton).toBeEnabled();
     fireEvent.click(submitButton!);
 
     await waitFor(() => {
       expect(testStore.getState().dashboardState.filters).toStrictEqual({
-        startDate: start,
-        endDate: end,
+        startDate: tenYearsAgoDate,
+        endDate: oneYearAgo,
         recipientId: 'RSSMRA80A01H501U',
         status: localizedNotificationStatus[2].value,
         iunMatch: 'ABCD-EFGH-ILMN-123456-A-1',
       });
     });
-
     // cancel filters
     const cancelButton = await waitFor(() => within(form!).getByTestId('cancelButton'));
     expect(cancelButton).toBeEnabled();
@@ -289,7 +281,7 @@ describe('Filter Notifications Table Component', async () => {
     const oneMonthAhead = new Date(new Date().setMonth(todayM.getMonth() + 1));
     todayM.setHours(0, 0, 0, 0);
     oneMonthAhead.setHours(0, 0, 0, 0);
-    // wrong since endDate is before startDate
+    // wrong since endDate is in the future
     await setFormValues(
       form,
       todayM,
@@ -324,45 +316,39 @@ describe('Filter Notifications Table Component', async () => {
     await act(async () => {
       result = render(<FilterNotifications showFilters />);
     });
-
-    const start = monthsAgo(4);
-    const end = monthsAgo(2);
-    start.setHours(0, 0, 0, 0);
-    end.setHours(0, 0, 0, 0);
-
+    const todayM = new Date();
+    const nineYearsAgo = new Date(new Date().setMonth(todayM.getMonth() - 12 * 9));
+    const oneYearAgo = new Date(new Date().setMonth(todayM.getMonth() - 12));
+    nineYearsAgo.setHours(0, 0, 0, 0);
+    oneYearAgo.setHours(0, 0, 0, 0);
     const button = result.getByTestId('dialogToggleButton');
     fireEvent.click(button);
     let dialogForm = await waitFor(() => screen.getByTestId<HTMLFormElement>('filter-form'));
-
     await setFormValues(
       dialogForm,
-      start,
-      end,
+      nineYearsAgo,
+      oneYearAgo,
       localizedNotificationStatus[2].value,
       'RSSMRA80A01H501U',
       'ABCD-EFGH-ILMN-123456-A-1',
       true
     );
-
     const submitButton = dialogForm.querySelector(`button[type="submit"]`);
     expect(submitButton).toBeEnabled();
     fireEvent.click(submitButton!);
-
     await waitFor(() => {
       expect(testStore.getState().dashboardState.filters).toStrictEqual({
-        startDate: start,
-        endDate: end,
+        startDate: nineYearsAgo,
+        endDate: oneYearAgo,
         recipientId: 'RSSMRA80A01H501U',
         status: localizedNotificationStatus[2].value,
         iunMatch: 'ABCD-EFGH-ILMN-123456-A-1',
       });
     });
-
-    // avoid using the old form ref (already unmounted)
     await waitFor(() => {
-      expect(screen.queryByTestId('filter-form')).not.toBeInTheDocument();
+      expect(dialogForm).not.toBeInTheDocument();
+      expect(result.container).toHaveTextContent('5');
     });
-
     // cancel filters
     fireEvent.click(button);
     dialogForm = await waitFor(() => screen.getByTestId<HTMLFormElement>('filter-form'));
@@ -370,7 +356,7 @@ describe('Filter Notifications Table Component', async () => {
     expect(cancelButton).toBeEnabled();
     fireEvent.click(cancelButton);
     await waitFor(() => {
-      expect(screen.queryByTestId('filter-form')).not.toBeInTheDocument();
+      expect(dialogForm).not.toBeInTheDocument();
     });
     expect(testStore.getState().dashboardState.filters).toStrictEqual(initialState);
   });

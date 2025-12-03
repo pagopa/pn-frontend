@@ -9,7 +9,6 @@ import {
   DatePickerTypes,
   formatIun,
   getNotificationAllowedStatus,
-  sixMonthsAgo,
   tenYearsAgo,
   today,
   useIsMobile,
@@ -203,7 +202,7 @@ const FilterNotificationsFormBody = ({
         isMobile={isMobile}
         mb={mb}
         value={startDate}
-        defaultValue={sixMonthsAgo}
+        defaultValue={tenYearsAgo}
         minDate={tenYearsAgo}
         maxDate={endDate ?? null}
         formikInstance={formikInstance}
