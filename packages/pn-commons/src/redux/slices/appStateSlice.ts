@@ -48,6 +48,8 @@ const isFulfilled = (action: AnyAction) => action.type.endsWith('/fulfilled');
 
 const handleError = (action: AnyAction) => action.type.endsWith('/rejected');
 
+const getBlockLoading = (meta?: any) => meta?.blockLoading ?? meta?.arg?.blockLoading ?? false;
+
 function doRemoveErrorsByAction(action: string, errors: Array<IAppMessage>) {
   return errors.filter((e) => e.action !== action);
 }
@@ -138,15 +140,23 @@ export const appStateSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addMatcher(isLoading, (state, action) => {
-        if (!action.meta || !action.meta.blockLoading) {
-          state.loading.result = true;
+        const blocked = getBlockLoading(action.meta);
+        if (blocked) {
+          return;
         }
+
+        const requestId = action.meta?.requestId || action.type;
+        state.loading.tasks[requestId] = true;
+        state.loading.result = true;
       })
       .addMatcher(isFulfilled, (state, action) => {
-        const blocked = action.meta?.arg?.blockLoading;
+        const blocked = getBlockLoading(action.meta);
         if (!blocked) {
-          state.loading.result = false;
+          const requestId = action.meta?.requestId || action.type;
+          delete state.loading.tasks[requestId];
+          state.loading.result = Object.keys(state.loading.tasks).length > 0;
         }
+
         const actionBeingFulfilled = action.type.slice(0, action.type.indexOf('/'));
         state.messages.errors = doRemoveErrorsByAction(actionBeingFulfilled, state.messages.errors);
         const response = createAppResponseSuccess(actionBeingFulfilled, action.payload?.response);
@@ -157,10 +167,13 @@ export const appStateSlice = createSlice({
         };
       })
       .addMatcher(handleError, (state, action) => {
-        const blocked = action.meta?.arg?.blockLoading;
+        const blocked = getBlockLoading(action.meta);
         if (!blocked) {
-          state.loading.result = false;
+          const requestId = action.meta?.requestId || action.type;
+          delete state.loading.tasks[requestId];
+          state.loading.result = Object.keys(state.loading.tasks).length > 0;
         }
+
         const actionBeingRejected = action.type.slice(0, action.type.indexOf('/'));
         state.messages.errors = doRemoveErrorsByAction(actionBeingRejected, state.messages.errors);
         const response = createAppResponseError(actionBeingRejected, action.payload.response);
