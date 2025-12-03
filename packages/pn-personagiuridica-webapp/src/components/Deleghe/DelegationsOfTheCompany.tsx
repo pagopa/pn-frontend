@@ -4,11 +4,7 @@ import { useEffect, useRef, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 
-import CheckBoxIcon from '@mui/icons-material/CheckBox';
-import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
-import SearchIcon from '@mui/icons-material/Search';
 import {
-  AutocompleteRenderOptionState,
   Box,
   Checkbox,
   Chip,
@@ -24,7 +20,6 @@ import {
   EmptyState,
   KnownSentiment,
   PaginationData,
-  PnAutocomplete,
   Row,
   SmartBody,
   SmartBodyCell,
@@ -37,6 +32,7 @@ import {
   dataRegex,
   useIsMobile,
 } from '@pagopa-pn/pn-commons';
+import { Autocomplete } from '@pagopa/mui-italia';
 
 import {
   DelegationColumnData,
@@ -186,25 +182,7 @@ const DelegationsOfTheCompany = () => {
     });
   }
 
-  const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
-  const checkedIcon = <CheckBoxIcon fontSize="small" />;
   const getOptionLabel = (option: { name: string; id: string }) => option.name || '';
-  const renderOption = (
-    props: any,
-    option: { name: string; id: string },
-    { selected }: AutocompleteRenderOptionState
-  ) => (
-    <li {...props} key={option.id}>
-      <Checkbox
-        inputProps={{ 'aria-live': 'assertive' }}
-        icon={icon}
-        checkedIcon={checkedIcon}
-        style={{ marginRight: 8 }}
-        checked={selected}
-      />
-      {option.name}
-    </li>
-  );
 
   const initialValues: {
     taxId: string;
@@ -379,45 +357,41 @@ const DelegationsOfTheCompany = () => {
                 />
               </Grid>
               <Grid item xs={12} lg={3} sx={{ justifyContent: 'space-between' }}>
-                {/* c''e ancora il bottone anche se non é raggiungibile o cliccabile */}
-                <PnAutocomplete
+                <Autocomplete
                   id="groups"
-                  size="small"
-                  fullWidth
                   options={groups.filter((group) => group.status === GroupStatus.ACTIVE)}
-                  disableCloseOnSelect
-                  forcePopupIcon={false}
                   multiple
-                  noOptionsText={t('deleghe.table.no-group-found')}
                   getOptionLabel={getOptionLabel}
                   isOptionEqualToValue={(option, value) => option.id === value.id}
-                  sx={{
-                    [`& .MuiAutocomplete-popupIndicator`]: {
-                      transform: 'none',
-                      pointerEvents: 'none',
-                    },
-                    marginBottom: isMobile ? '20px' : '0',
-                  }}
-                  renderOption={renderOption}
-                  renderInput={(params) => (
-                    <TextField
-                      {...params}
-                      label={t('deleghe.table.group')}
-                      placeholder={t('deleghe.table.group')}
-                      name="groups"
-                      InputProps={{
-                        ...params.InputProps,
-                        endAdornment: <SearchIcon sx={{ color: 'text.secondary' }} />,
-                      }}
-                    />
-                  )}
+                  label={t('deleghe.table.group')}
+                  placeholder={t('deleghe.table.group')}
                   value={formik.values.groups}
-                  onChange={(_event: any, newValue: Array<{ id: string; name: string }>) =>
+                  onChange={(newValue: Array<{ id: string; name: string }>) =>
                     handleChangeTouchedAutocomplete('groups', newValue)
                   }
                   data-testid="groups"
                   inputValue={groupInputValue}
-                  onInputChange={(_event, newInputValue) => setGroupInputValue(newInputValue)}
+                  onInputChange={(newInputValue) => setGroupInputValue(newInputValue)}
+                  noResultsText={t('deleghe.table.no-group-found')}
+                  slotProps={{
+                    textField: { name: 'groups' },
+                    clearButton: {
+                      'aria-label': t('autocomplete.clear', { ns: 'common' }),
+                    },
+                    toggleButton: {
+                      'close-aria-label': t('autocomplete.toggle-close', { ns: 'common' }),
+                      'open-aria-label': t('autocomplete.toggle-open', { ns: 'common' }),
+                    },
+                    selectionBox: {
+                      'aria-label': t('autocomplete.selection-box', { ns: 'common' }),
+                    },
+                    selectionChip: {
+                      'aria-label': t('autocomplete.delete-selection', { ns: 'common' }),
+                    },
+                    announcementBox: {
+                      selectionText: t('autocomplete.selection-done', { ns: 'common' }),
+                    },
+                  }}
                 />
               </Grid>
               <Grid item xs={12} lg={3}>

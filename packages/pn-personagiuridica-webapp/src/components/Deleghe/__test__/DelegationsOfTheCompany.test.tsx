@@ -443,7 +443,7 @@ describe('DelegationsOfTheCompany Component', async () => {
     expect(updateDialog).toBeInTheDocument();
     const associateGroupRadio = within(updateDialog).getByTestId('associate-group');
     await userEvent.click(associateGroupRadio);
-    await testAutocomplete(updateDialog, 'groups', groups, true, 2);
+    await testAutocomplete(updateDialog, 'modal-groups', groups, true, 2);
     const groupConfirmButton = within(updateDialog).getByTestId('groupConfirmButton');
     await userEvent.click(groupConfirmButton);
     await waitFor(() => {
