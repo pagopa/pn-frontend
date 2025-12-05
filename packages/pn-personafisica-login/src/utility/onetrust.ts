@@ -46,6 +46,9 @@ function initSdkScript(OT_DOMAIN_ID: string, domainScript: string): Promise<void
 }
 
 export async function initOneTrust() {
+  if (IS_DEVELOP) {
+    return;
+  }
   const { OT_DOMAIN_ID, OT_SETTINGS_TOKEN } = getConfiguration();
   const domainScript = IS_DEVELOP ? '-test' : '';
   await initNoticeScript(OT_SETTINGS_TOKEN);
