@@ -19,7 +19,8 @@
     "refresh:monorepo": "lerna clean -y && yarn install",
     "lint": "lerna run --scope @pagopa-pn/* lint",
     "format": "lerna run --scope @pagopa-pn/* format",
-    "clean": "node bin/cleanup.mjs"
+    "clean": "node bin/cleanup.mjs",
+    "vite-cache-clean": "rm -r node_modules/.vite && rm -r node_modules/.vite-temp"
   },
   "workspaces": {
     "packages": [
