@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.20.0-RC.4](https://github.com/pagopa/pn-frontend/compare/v2.20.0-RC.3...v2.20.0-RC.4) (2025-12-10)
+
+
+### Bug Fixes
+
+* **PN-14840:** fix DE label analog-failure-delivery in PG ([#1716](https://github.com/pagopa/pn-frontend/issues/1716)) ([8c35e15](https://github.com/pagopa/pn-frontend/commit/8c35e15605e4642db0764ffbf76fa3a8e188d726))
+
+
+
+
+
 # [2.20.0-RC.2](https://github.com/pagopa/pn-frontend/compare/v2.20.0-RC.1...v2.20.0-RC.2) (2025-12-03)
 
 
