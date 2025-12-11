@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
 import { Alert, Box, Button, Typography } from '@mui/material';
+import { visuallyHidden } from '@mui/utils';
 import {
   ApiErrorWrapper,
   AppResponse,
@@ -33,6 +34,7 @@ const Dashboard = () => {
   const filters = useAppSelector((state: RootState) => state.dashboardState.filters);
   const sort = useAppSelector((state: RootState) => state.dashboardState.sort);
   const pagination = useAppSelector((state: RootState) => state.dashboardState.pagination);
+  const loading = useAppSelector((state: RootState) => state.appState.loading.result);
   const navigate = useNavigate();
   const isMobile = useIsMobile();
   const { t } = useTranslation(['notifiche']);
@@ -59,6 +61,21 @@ const Dashboard = () => {
     filtersApplied: false,
     cleanFilters: () => void 0,
   });
+
+  // Screen reader live message, updated when loading completes
+  const [srMessage, setSrMessage] = useState('');
+  // Track previous loading value to detect the transition loading: true -> false
+  const prevLoadingRef = useRef(false);
+  // Used to alternate between two invisible characters and force SR to re-announce the same message
+  const announceToggleRef = useRef(false);
+  // This method forces a DOM text change using invisible characters so that
+  // screen readers will re-announce even if the visible text is identical.
+  const announce = (text: string) => {
+    // eslint-disable-next-line functional/immutable-data
+    announceToggleRef.current = !announceToggleRef.current;
+    const suffix = announceToggleRef.current ? '\u200B' : '\u200C';
+    setSrMessage(`${text}${suffix}`);
+  };
 
   // Pagination handlers
   const handleChangePage = (paginationData: PaginationData) => {
@@ -115,8 +132,32 @@ const Dashboard = () => {
     };
   }, [handleTimeoutError]);
 
+  // Announce every time loading goes from true -> false
+  useEffect(() => {
+    const wasLoading = prevLoadingRef.current;
+    // eslint-disable-next-line functional/immutable-data
+    prevLoadingRef.current = loading;
+
+    const loadingJustFinished = wasLoading && !loading;
+
+    if (!loadingJustFinished) {
+      return;
+    }
+
+    const msg =
+      notifications.length > 0
+        ? t('sr.loading_completed_with_results')
+        : t('sr.loading_completed_no_results');
+    announce(msg);
+  }, [loading, notifications.length]);
+
   return (
     <Box p={3}>
+      {/* Hidden live region: only for screen readers, used to announce loading completion + results */}
+      <Box role="status" aria-live="assertive" aria-atomic="true" sx={visuallyHidden}>
+        {srMessage}
+      </Box>
+
       <TitleBox
         title={t('title')}
         variantTitle="h4"

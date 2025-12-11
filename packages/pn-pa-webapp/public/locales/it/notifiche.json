@@ -17,6 +17,10 @@
       "fiscal-code": "Inserisci il codice per intero"
     }
   },
+  "sr": {
+    "loading_completed_with_results": "Caricamento completato. La ricerca ha prodotto dei risultati",
+    "loading_completed_no_results": "Caricamento completato. Nessuna notifica trovata"
+  },
   "payment": {
     "title": "Pagamenti",
     "subtitle-single": "Qui puoi monitorare lo stato di pagamento degli avvisi pagoPA allegati alla notifica.",
