@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.19.2-RC.0](https://github.com/pagopa/pn-frontend/compare/v2.19.1...v2.19.2-RC.0) (2025-12-10)
+
+
+### Bug Fixes
+
+* **PN-17334:** Remove date range limit and show timeout empty state on notifications dashboard (PA) ([#1715](https://github.com/pagopa/pn-frontend/issues/1715)) ([1f16a26](https://github.com/pagopa/pn-frontend/commit/1f16a26027ad43bcc525d33d82b64a15a5b5c27f))
+
+
+
+
+
 ## [2.19.1](https://github.com/pagopa/pn-frontend/compare/v2.19.0...v2.19.1) (2025-11-12)
 
 
