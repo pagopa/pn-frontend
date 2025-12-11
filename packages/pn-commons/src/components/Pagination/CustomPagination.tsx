@@ -68,14 +68,14 @@ const getA11yPaginationLabels = (
 };
 
 /** Selfcare custom table available pages component */
-export default function CustomPagination({
+const CustomPagination: React.FC<Props> = ({
   paginationData,
   onPageRequest,
   elementsPerPage = [10, 20, 50],
   pagesToShow,
   sx,
   hideSizeSelector = false,
-}: Props) {
+}) => {
   const size = paginationData.size || elementsPerPage[0];
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
@@ -210,4 +210,6 @@ export default function CustomPagination({
       </Grid>
     </Grid>
   );
-}
+};
+
+export default CustomPagination;
