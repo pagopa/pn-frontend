@@ -1,6 +1,8 @@
 {
-  "packages": ["packages/*"],
-  "version": "2.20.0-RC.4",
+  "packages": [
+    "packages/*"
+  ],
+  "version": "2.20.0",
   "npmClient": "yarn",
   "useNx": false,
   "command": {
