@@ -5,8 +5,7 @@ import {
   AppResponseMessage,
   ResponseEventDispatcher,
   formatToTimezoneString,
-  getStartOfDay,
-  sixMonthsAgo,
+  tenYearsAgo,
   today,
 } from '@pagopa-pn/pn-commons';
 import { createMatchMedia, testInput } from '@pagopa-pn/pn-commons/src/test-utils';
@@ -16,6 +15,7 @@ import { emptyNotificationsFromBe, notificationsDTO } from '../../__mocks__/Noti
 import { RenderResult, act, fireEvent, render, screen, waitFor } from '../../__test__/test-utils';
 import { apiClient } from '../../api/apiClients';
 import { DASHBOARD_ACTIONS } from '../../redux/dashboard/actions';
+import { ServerResponseErrorCode } from '../../utility/AppError/types';
 import Dashboard from '../Dashboard.page';
 
 const mockNavigateFn = vi.fn();
@@ -31,10 +31,23 @@ describe('Dashboard Page', async () => {
   let mock: MockAdapter;
   const original = window.matchMedia;
 
-  const startParam = encodeURIComponent(formatToTimezoneString(getStartOfDay(sixMonthsAgo)));
+  const startParam = encodeURIComponent(formatToTimezoneString(tenYearsAgo));
   const endParam = encodeURIComponent(formatToTimezoneString(today));
 
   const notificationsPath = `/bff/v1/notifications/sent?startDate=${startParam}&endDate=${endParam}&size=10`;
+
+  const timeoutErrorMock = {
+    status: errorMock.status,
+    data: {
+      ...errorMock.data,
+      errors: [
+        {
+          ...errorMock.data.errors[0],
+          code: ServerResponseErrorCode.PN_DELIVERY_TIMEOUT,
+        },
+      ],
+    },
+  };
 
   beforeAll(() => {
     mock = new MockAdapter(apiClient);
@@ -235,6 +248,29 @@ describe('Dashboard Page', async () => {
     // filters should be visible on desktop
     const filterForm = screen.getByTestId('filter-form');
     expect(filterForm).toBeInTheDocument();
+  });
+
+  it('shows timeout empty state when getSentNotifications times out', async () => {
+    mock.onGet(notificationsPath).reply(timeoutErrorMock.status, timeoutErrorMock.data);
+
+    await act(async () => {
+      result = render(
+        <>
+          <ResponseEventDispatcher />
+          <AppResponseMessage />
+          <Dashboard />
+        </>
+      );
+    });
+
+    const statusApiErrorComponent = screen.queryByTestId(
+      `api-error-${DASHBOARD_ACTIONS.GET_SENT_NOTIFICATIONS}`
+    );
+    expect(statusApiErrorComponent).not.toBeInTheDocument();
+
+    await waitFor(() => {
+      expect(screen.getByText(/empty-state\.timeout/i)).toBeInTheDocument();
+    });
   });
 
   it('renders page - mobile', async () => {

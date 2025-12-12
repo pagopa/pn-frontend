@@ -3,46 +3,20 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
-# [2.20.0-RC.2](https://github.com/pagopa/pn-frontend/compare/v2.20.0-RC.1...v2.20.0-RC.2) (2025-12-03)
+## [2.19.2](https://github.com/pagopa/pn-frontend/compare/v2.19.2-RC.0...v2.19.2) (2025-12-12)
+
+**Note:** Version bump only for package @pagopa-pn/pn-commons
+
+
+
+
+
+## [2.19.2-RC.0](https://github.com/pagopa/pn-frontend/compare/v2.19.1...v2.19.2-RC.0) (2025-12-10)
 
 
 ### Bug Fixes
 
-* **pn-13252:** added localized aria-labels ([#1711](https://github.com/pagopa/pn-frontend/issues/1711)) ([35da626](https://github.com/pagopa/pn-frontend/commit/35da6262b9db320e2b354eff43253ed38c8242b4))
-* **pn-13252:** fixed autocomplete accessibility ([#1710](https://github.com/pagopa/pn-frontend/issues/1710)) ([b3dd26e](https://github.com/pagopa/pn-frontend/commit/b3dd26e2db62d8d9ae0dd5317896333ddf5c44c0))
-
-
-
-
-
-# [2.20.0-RC.1](https://github.com/pagopa/pn-frontend/compare/v2.20.0-RC.0...v2.20.0-RC.1) (2025-12-02)
-
-
-### Features
-
-* **PN-17013:** handle PSP that doesn't integrate payment process ([#1695](https://github.com/pagopa/pn-frontend/issues/1695)) ([4b89b55](https://github.com/pagopa/pn-frontend/commit/4b89b55c009c47702c9905c52e173d15ef34c98f))
-* **PN-17014:** update layout of TPP payment box ([#1698](https://github.com/pagopa/pn-frontend/issues/1698)) ([136e5f4](https://github.com/pagopa/pn-frontend/commit/136e5f4769ae9dbf274a4bc86ad56f59c4ba34c4))
-* **PN-17015:** add amount query parameter to get TPP payment URL API ([#1699](https://github.com/pagopa/pn-frontend/issues/1699)) ([c1577e3](https://github.com/pagopa/pn-frontend/commit/c1577e33d53dadb033af83e223eec3fc14821b03))
-
-
-
-
-
-# [2.20.0-RC.0](https://github.com/pagopa/pn-frontend/compare/v2.19.1...v2.20.0-RC.0) (2025-11-28)
-
-
-### Bug Fixes
-
-* **PN-15723:** Handle user validation failure after token-exchange ([#1687](https://github.com/pagopa/pn-frontend/issues/1687)) ([e694d1b](https://github.com/pagopa/pn-frontend/commit/e694d1baa2a3b5bc985e245377f1b926806a5763))
-* **PN-15842:** fixed long description problem in notification detail ([#1704](https://github.com/pagopa/pn-frontend/issues/1704)) ([40d0684](https://github.com/pagopa/pn-frontend/commit/40d0684a30b3683d83d88203215535d551ed3252))
-* **pn-16635:** update mui-italia to v2.0.0 to resolve CodeInput a11y issues and build size ([#1707](https://github.com/pagopa/pn-frontend/issues/1707)) ([235ef5a](https://github.com/pagopa/pn-frontend/commit/235ef5ab617eaba57ccab257ae28e60eee6d653d))
-
-
-### Features
-
-* **PN-15928:** increased denomination max length to 88 characters ([#1700](https://github.com/pagopa/pn-frontend/issues/1700)) ([897604e](https://github.com/pagopa/pn-frontend/commit/897604e1589b636f64d9b9d28f574fce59db694f))
-* **PN-16963:** VOC banner ([#1694](https://github.com/pagopa/pn-frontend/issues/1694)) ([3530437](https://github.com/pagopa/pn-frontend/commit/3530437b610eff16236442934ee9f2c0715a1422))
-* **PN-17010:** create landing page for TPP payments ([#1681](https://github.com/pagopa/pn-frontend/issues/1681)) ([0e5d9d9](https://github.com/pagopa/pn-frontend/commit/0e5d9d9ad9ceb506c57920ce6eda4bfb694e7311))
+* **PN-17566:** stabilize global loading overlay with concurrent requests ([#1714](https://github.com/pagopa/pn-frontend/issues/1714)) ([7afa75c](https://github.com/pagopa/pn-frontend/commit/7afa75cd30042a868a1e2066a49ed7a5e910275b))
 
 
 

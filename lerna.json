@@ -1,7 +1,5 @@
 {
-  "packages": [
-    "packages/*"
-  ],
+  "packages": ["packages/*"],
   "version": "2.20.0-RC.4",
   "npmClient": "yarn",
   "useNx": false,
