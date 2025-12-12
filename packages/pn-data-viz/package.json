@@ -1,6 +1,6 @@
 {
   "name": "@pagopa-pn/pn-data-viz",
-  "version": "2.19.1",
+  "version": "2.19.2",
   "private": true,
   "description": "SEND component library for data visualization",
   "keywords": [

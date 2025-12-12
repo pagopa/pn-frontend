@@ -4,7 +4,6 @@ import {
   GetNotificationsResponse,
   NotificationStatus,
   formatToTimezoneString,
-  sixMonthsAgo,
   tenYearsAgo,
   today,
 } from '@pagopa-pn/pn-commons';
@@ -43,7 +42,7 @@ describe('Dashboard redux state tests', () => {
       loading: false,
       notifications: [],
       filters: {
-        startDate: sixMonthsAgo,
+        startDate: tenYearsAgo,
         endDate: today,
         status: '',
         recipientId: '',
