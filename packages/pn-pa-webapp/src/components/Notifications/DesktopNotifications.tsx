@@ -34,6 +34,8 @@ type Props = {
   filtersApplied: boolean;
   /** The function to be invoked if the user clicks on clean filters button */
   onCleanFilters: () => void;
+  /** True if the API returned a timeout error */
+  hasTimeoutError?: boolean;
 };
 
 type LinkRemoveFiltersProps = {
@@ -101,6 +103,7 @@ const DesktopNotifications = ({
   onApiKeys,
   filtersApplied,
   onCleanFilters,
+  hasTimeoutError = false,
 }: Props) => {
   const { t } = useTranslation(['notifiche']);
   const navigate = useNavigate();
@@ -156,6 +159,33 @@ const DesktopNotifications = ({
     navigate(routes.GET_DETTAGLIO_NOTIFICA_PATH(iun));
   };
 
+  const emptyStateContent = (() => {
+    if (hasTimeoutError) {
+      return <Trans ns="notifiche" i18nKey="empty-state.timeout" />;
+    }
+
+    if (filtersApplied) {
+      return (
+        <Trans
+          ns={'notifiche'}
+          i18nKey={'empty-state.filtered'}
+          components={[<LinkRemoveFilters key={'remove-filters'} cleanFilters={onCleanFilters} />]}
+        />
+      );
+    }
+
+    return (
+      <Trans
+        ns={'notifiche'}
+        i18nKey={'empty-state.no-notifications'}
+        components={[
+          <LinkApiKey key={'api-keys'} onApiKeys={onApiKeys} />,
+          <LinkCreateNotification key={'create-notification'} onManualSend={onManualSend} />,
+        ]}
+      />
+    );
+  })();
+
   return (
     <>
       {notifications && (
@@ -203,29 +233,13 @@ const DesktopNotifications = ({
             </PnTable>
           ) : (
             <EmptyState
-              sentimentIcon={filtersApplied ? KnownSentiment.DISSATISFIED : KnownSentiment.NONE}
+              sentimentIcon={
+                hasTimeoutError || filtersApplied
+                  ? KnownSentiment.DISSATISFIED
+                  : KnownSentiment.NONE
+              }
             >
-              {filtersApplied ? (
-                <Trans
-                  ns={'notifiche'}
-                  i18nKey={'empty-state.filtered'}
-                  components={[
-                    <LinkRemoveFilters key={'remove-filters'} cleanFilters={onCleanFilters} />,
-                  ]}
-                />
-              ) : (
-                <Trans
-                  ns={'notifiche'}
-                  i18nKey={'empty-state.no-notifications'}
-                  components={[
-                    <LinkApiKey key={'api-keys'} onApiKeys={onApiKeys} />,
-                    <LinkCreateNotification
-                      key={'create-notification'}
-                      onManualSend={onManualSend}
-                    />,
-                  ]}
-                />
-              )}
+              {emptyStateContent}
             </EmptyState>
           )}
         </>

@@ -51,11 +51,33 @@ const isFulfilled = (action: AnyAction) => action.type.endsWith('/fulfilled');
 
 const handleError = (action: AnyAction) => action.type.endsWith('/rejected');
 
+const isLoadingBlocked = (meta?: any) => meta?.blockLoading ?? meta?.arg?.blockLoading ?? false;
+
 function doRemoveErrorsByAction(action: string, errors: Array<IAppMessage>) {
   return errors.filter((e) => e.action !== action);
 }
 
+type LoadingTaskOperation = 'add' | 'remove';
+
 /* eslint-disable functional/immutable-data */
+function updateLoadingTask(
+  state: AppStateState,
+  meta: any,
+  actionType: string,
+  operation: LoadingTaskOperation
+) {
+  if (!isLoadingBlocked(meta)) {
+    const requestId = meta?.requestId || actionType;
+    if (operation === 'add') {
+      state.loading.tasks[requestId] = true;
+    } else {
+      delete state.loading.tasks[requestId];
+    }
+
+    state.loading.result = Object.keys(state.loading.tasks).length > 0;
+  }
+}
+
 export const appStateSlice = createSlice({
   name: 'appState',
   initialState,
@@ -141,15 +163,11 @@ export const appStateSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addMatcher(isLoading, (state, action) => {
-        if (!action.meta || !action.meta.blockLoading) {
-          state.loading.result = true;
-        }
+        updateLoadingTask(state, action.meta, action.type, 'add');
       })
       .addMatcher(isFulfilled, (state, action) => {
-        const blocked = action.meta?.arg?.blockLoading;
-        if (!blocked) {
-          state.loading.result = false;
-        }
+        updateLoadingTask(state, action.meta, action.type, 'remove');
+
         const actionBeingFulfilled = action.type.slice(0, action.type.indexOf('/'));
         state.messages.errors = doRemoveErrorsByAction(actionBeingFulfilled, state.messages.errors);
         const response = createAppResponseSuccess(actionBeingFulfilled, action.payload?.response);
@@ -160,10 +178,8 @@ export const appStateSlice = createSlice({
         };
       })
       .addMatcher(handleError, (state, action) => {
-        const blocked = action.meta?.arg?.blockLoading;
-        if (!blocked) {
-          state.loading.result = false;
-        }
+        updateLoadingTask(state, action.meta, action.type, 'remove');
+
         const actionBeingRejected = action.type.slice(0, action.type.indexOf('/'));
         state.messages.errors = doRemoveErrorsByAction(actionBeingRejected, state.messages.errors);
         const response = createAppResponseError(actionBeingRejected, action.payload.response);

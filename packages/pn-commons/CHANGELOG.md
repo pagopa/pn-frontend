@@ -3,6 +3,25 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.19.2](https://github.com/pagopa/pn-frontend/compare/v2.19.2-RC.0...v2.19.2) (2025-12-12)
+
+**Note:** Version bump only for package @pagopa-pn/pn-commons
+
+
+
+
+
+## [2.19.2-RC.0](https://github.com/pagopa/pn-frontend/compare/v2.19.1...v2.19.2-RC.0) (2025-12-10)
+
+
+### Bug Fixes
+
+* **PN-17566:** stabilize global loading overlay with concurrent requests ([#1714](https://github.com/pagopa/pn-frontend/issues/1714)) ([7afa75c](https://github.com/pagopa/pn-frontend/commit/7afa75cd30042a868a1e2066a49ed7a5e910275b))
+
+
+
+
+
 ## [2.19.1](https://github.com/pagopa/pn-frontend/compare/v2.19.0...v2.19.1) (2025-11-12)
 
 **Note:** Version bump only for package @pagopa-pn/pn-commons
