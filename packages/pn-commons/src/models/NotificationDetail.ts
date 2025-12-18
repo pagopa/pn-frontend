@@ -231,6 +231,8 @@ export interface NotificationStatusHistory {
   recipient?: string;
   // this is useful for the DELIVERED status only
   deliveryMode?: NotificationDeliveryMode;
+  // value to check if the event has been reworked
+  reworkedStatus?: ReworkedStatus;
 }
 
 export enum TimelineCategory {
@@ -395,4 +397,9 @@ export interface NotificationDocumentResponse {
 export enum PhysicalAddressLookup {
   MANUAL = 'MANUAL',
   NATIONAL_REGISTRY = 'NATIONAL_REGISTRY',
+}
+
+export enum ReworkedStatus {
+  VALID = 'REWORKED',
+  NOT_VALID = 'NOT_REWORKED',
 }

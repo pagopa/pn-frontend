@@ -7,6 +7,7 @@ import { TimelineConnector } from '@mui/lab';
 import { Box, Button, Chip, Typography } from '@mui/material';
 import {
   ButtonNaked,
+  Tag,
   TimelineNotificationContent,
   TimelineNotificationDot,
   TimelineNotificationItem,
@@ -20,6 +21,7 @@ import {
   LegalFactId,
   NotificationDetailRecipient,
   NotificationStatusHistory,
+  ReworkedStatus,
   TimelineCategory,
 } from '../../models/NotificationDetail';
 import { NotificationStatus } from '../../models/NotificationStatus';
@@ -44,6 +46,7 @@ type Props = {
   disableDownloads?: boolean;
   isParty?: boolean;
   language?: string;
+  reworkedStatus?: ReworkedStatus;
 };
 
 /**
@@ -105,6 +108,7 @@ const TimelineStepCmp: React.FC<StepProps> = ({
  * @param disableDownloads if notification is disabled
  * @param isParty if is party chip rendered with opacity for status cancellation in progress
  * @param language used to translate months in timeline
+ * @param reworkedStatus if the element has a reworked tag to display
  */
 
 const NotificationDetailTimelineStep = ({
@@ -121,6 +125,7 @@ const NotificationDetailTimelineStep = ({
   disableDownloads,
   isParty = true,
   language = 'it',
+  reworkedStatus,
 }: Props) => {
   const [collapsed, setCollapsed] = useState(true);
   /* eslint-disable functional/no-let */
@@ -132,6 +137,17 @@ const NotificationDetailTimelineStep = ({
   /* eslint-enable functional/no-let */
 
   const notificationStatusInfos = getNotificationStatusInfos(timelineStep, { recipients });
+
+  const getTag = (status: ReworkedStatus | undefined) => {
+    switch (status) {
+      case ReworkedStatus.VALID:
+        return <Tag value="Evento Validato" />;
+      case ReworkedStatus.NOT_VALID:
+        return <Tag value="Evento Non Validato" />;
+      default:
+        return null;
+    }
+  };
 
   if (timelineStep.steps) {
     /* eslint-disable functional/immutable-data */
@@ -164,6 +180,7 @@ const NotificationDetailTimelineStep = ({
           <Typography color="text.secondary" fontSize={14} data-testid="dateItem">
             {formatTime(timelineStep.activeFrom)}
           </Typography>
+          {getTag(reworkedStatus)}
           <Chip
             id={`${notificationStatusInfos.label}-status`}
             data-testid="itemStatus"
@@ -268,6 +285,7 @@ const NotificationDetailTimelineStep = ({
             <Typography color="text.secondary" fontSize={14} data-testid="dateItemMicro">
               {formatTime(s.timestamp)}
             </Typography>
+            {getTag(reworkedStatus)}
             <Typography
               color="text.primary"
               fontSize={14}

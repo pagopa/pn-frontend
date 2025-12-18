@@ -10,6 +10,7 @@ import {
   LegalFactId,
   NotificationDetailRecipient,
   NotificationStatusHistory,
+  ReworkedStatus,
 } from '../../models/NotificationDetail';
 import { getLocalizedOrDefaultLabel } from '../../utility/localization.utility';
 import NotificationDetailTimelineStep from './NotificationDetailTimelineStep';
@@ -105,6 +106,7 @@ const NotificationDetailTimeline = ({
       disableDownloads={disableDownloads}
       isParty={isParty}
       language={language}
+      reworkedStatus={t.reworkedStatus}
     />
   ));
 
