@@ -1,4 +1,4 @@
-import { IAppMessage } from '../models';
+import { IAppMessage } from '../models/AppMessage';
 
 type AppState = {
   loading: { result: boolean; tasks: any };

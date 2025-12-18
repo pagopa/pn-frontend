@@ -7,7 +7,7 @@ import {
   NotificationDetailDocument,
   NotificationDetailOtherDocument,
   NotificationDetailRecipient,
-} from '../../models';
+} from '../../models/NotificationDetail';
 import { getLocalizedOrDefaultLabel } from '../../utility/localization.utility';
 import { isNotificationDetailOtherDocument } from '../../utility/notification.utility';
 

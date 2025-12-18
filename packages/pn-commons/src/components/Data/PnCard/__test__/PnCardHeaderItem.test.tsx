@@ -1,4 +1,4 @@
-import { Row } from '../../../../models';
+import { Row } from '../../../../models/PnTable';
 import { render } from '../../../../test-utils';
 import PnCardHeaderItem from '../PnCardHeaderItem';
 

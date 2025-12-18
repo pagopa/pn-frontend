@@ -133,18 +133,6 @@ describe('test SmsContactItem', () => {
     expect(submitButton).toBeEnabled();
 
     fireEvent.click(submitButton);
-
-    // Confirms the informative dialog
-    const informativeDialog = await waitFor(() => result.getByTestId('informativeDialog'));
-    expect(informativeDialog).toBeInTheDocument();
-
-    const understandButton = result.getByTestId('understandButton');
-    expect(understandButton).toBeInTheDocument();
-    fireEvent.click(understandButton);
-
-    await waitFor(() => {
-      expect(informativeDialog).not.toBeVisible();
-    });
     await waitFor(() => {
       expect(mock.history.post).toHaveLength(1);
       expect(JSON.parse(mock.history.post[0].data)).toStrictEqual({
@@ -231,15 +219,6 @@ describe('test SmsContactItem', () => {
     });
     // confirm new value
     fireEvent.click(saveButton);
-    // Confirms the informative dialog
-    const informativeDialog = await waitFor(() => result.getByTestId('informativeDialog'));
-    expect(informativeDialog).toBeInTheDocument();
-    const understandButton = result.getByTestId('understandButton');
-    expect(understandButton).toBeInTheDocument();
-    fireEvent.click(understandButton);
-    await waitFor(() => {
-      expect(informativeDialog).not.toBeVisible();
-    });
     await waitFor(() => {
       expect(mock.history.post).toHaveLength(1);
       expect(JSON.parse(mock.history.post[0].data)).toStrictEqual({

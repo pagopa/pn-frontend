@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import { cloneDeep } from 'lodash-es';
 
 import { calcUnit8Array, parseError } from '@pagopa-pn/pn-commons';
 import { createAsyncThunk } from '@reduxjs/toolkit';
@@ -177,7 +177,7 @@ export const uploadNotificationPaymentDocument = createAsyncThunk<
         return recipients;
       }
       const documentsUploaded = await uploadNotificationDocumentCbk(documentsToUpload);
-      const updatedItems = _.cloneDeep(recipients);
+      const updatedItems = cloneDeep(recipients);
 
       for (const updatedItem of updatedItems) {
         if (!updatedItem.payments) {

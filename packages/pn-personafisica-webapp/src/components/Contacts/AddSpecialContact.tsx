@@ -8,9 +8,11 @@ import { ChangeEvent, forwardRef, useEffect, useImperativeHandle, useRef, useSta
 import { Trans, useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 
+import AccountBalanceIcon from '@mui/icons-material/AccountBalance';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import {
   Alert,
+  Box,
   Checkbox,
   DialogContentText,
   FormControl,
@@ -30,12 +32,11 @@ import {
   ConsentType,
   CustomDropdown,
   EventAction,
-  PnAutocomplete,
   SERCQ_SEND_VALUE,
   TosPrivacyConsent,
   searchStringLimitReachedText,
 } from '@pagopa-pn/pn-commons';
-import { theme } from '@pagopa/mui-italia';
+import { Autocomplete, theme } from '@pagopa/mui-italia';
 
 import { PFEventsType } from '../../models/PFEventsType';
 import {
@@ -65,13 +66,9 @@ import {
   specialContactsAvailableAddressTypes,
 } from '../../utility/contacts.utility';
 import { isPFEvent } from '../../utility/mixpanel';
-import DropDownPartyMenuItem from '../Party/DropDownParty';
 import ContactCodeDialog from './ContactCodeDialog';
 import ExistingContactDialog from './ExistingContactDialog';
 import SercqAddSpecialEmail from './SercqAddSpecialEmail';
-
-const redirectPrivacyLink = () => window.open(`${PRIVACY_POLICY}`, '_blank');
-const redirectToSLink = () => window.open(`${TERMS_OF_SERVICE_SERCQ_SEND}`, '_blank');
 
 enum ModalType {
   EXISTING = 'existing',
@@ -199,7 +196,7 @@ const AddSpecialContact = forwardRef<AddSpecialContactRef, Props>(
       }
     };
 
-    const senderChangeHandler = async (_: any, newValue: Party | null) => {
+    const senderChangeHandler = async (newValue: Party | null) => {
       const prevValue = formik.values.sender;
       const nextValue: Party = { id: newValue?.id ?? '', name: newValue?.name ?? '' };
 
@@ -211,10 +208,11 @@ const AddSpecialContact = forwardRef<AddSpecialContactRef, Props>(
       }
     };
 
-    const renderOption = (props: any, option: Party) => (
-      <MenuItem {...props} value={option.id} key={option.id}>
-        <DropDownPartyMenuItem name={option.name} />
-      </MenuItem>
+    const renderOption = (option: Party) => (
+      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+        <AccountBalanceIcon fontSize="small" sx={{ color: '#BBC2D6' }} />
+        {option.name}
+      </Box>
     );
 
     const validationSchema = yup.object({
@@ -599,18 +597,15 @@ const AddSpecialContact = forwardRef<AddSpecialContactRef, Props>(
             mainText={t('special-contacts.fetch-party-error', { ns: 'recapiti' })}
             reloadAction={getParties}
           >
-            <PnAutocomplete
+            <Autocomplete
               id="sender"
               data-testid="sender"
-              size="small"
-              options={parties ?? []}
-              autoComplete
+              options={parties}
               getOptionLabel={getOptionLabel}
-              noOptionsText={t('common.enti-not-found', { ns: 'recapiti' })}
               isOptionEqualToValue={(option, value) => option.id === value.id}
               onChange={senderChangeHandler}
               inputValue={formik.values.sender.name}
-              onInputChange={(_event, newInputValue, reason) => {
+              onInputChange={(newInputValue, reason) => {
                 if (reason === 'input') {
                   const senderId =
                     parties.find((sender) => sender.name === newInputValue)?.id ?? '';
@@ -618,24 +613,37 @@ const AddSpecialContact = forwardRef<AddSpecialContactRef, Props>(
                   void formik.setFieldValue('sender', { id: senderId, name: newInputValue });
                 }
               }}
-              filterOptions={(e) => e}
+              handleFiltering={(e) => e}
+              label={entitySearchLabel}
+              error={
+                formik.touched.sender &&
+                Boolean(formik.errors.sender?.name ?? formik.errors.sender?.id)
+              }
+              helperText={
+                formik.touched.sender && (formik.errors.sender?.name || formik.errors.sender?.id)
+              }
+              noResultsText={t('common.enti-not-found', { ns: 'recapiti' })}
+              required
+              slotProps={{
+                textField: { name: 'sender' },
+                clearButton: {
+                  'aria-label': t('autocomplete.clear'),
+                },
+                toggleButton: {
+                  'close-aria-label': t('autocomplete.toggle-close'),
+                  'open-aria-label': t('autocomplete.toggle-open'),
+                },
+                selectionBox: {
+                  'aria-label': t('autocomplete.selection-box'),
+                },
+                selectionChip: {
+                  'aria-label': t('autocomplete.delete-selection'),
+                },
+                announcementBox: {
+                  selectionText: t('autocomplete.selection-done'),
+                },
+              }}
               renderOption={renderOption}
-              renderInput={(params) => (
-                <TextField
-                  {...params}
-                  name="sender"
-                  label={entitySearchLabel}
-                  error={
-                    formik.touched.sender &&
-                    Boolean(formik.errors.sender?.name ?? formik.errors.sender?.id)
-                  }
-                  helperText={
-                    formik.touched.sender &&
-                    (formik.errors.sender?.name || formik.errors.sender?.id)
-                  }
-                  required
-                />
-              )}
               sx={{ flexGrow: 1, flexBasis: 0, mb: 2 }}
             />
           </ApiErrorWrapper>
@@ -777,8 +785,10 @@ const AddSpecialContact = forwardRef<AddSpecialContactRef, Props>(
                           textDecoration: 'none !important',
                           fontWeight: 'bold',
                         }}
-                        onClick={redirectPrivacyLink}
                         data-testid="privacy-link"
+                        href={PRIVACY_POLICY}
+                        target="_blank"
+                        rel="noopener"
                       />,
 
                       <Link
@@ -788,8 +798,10 @@ const AddSpecialContact = forwardRef<AddSpecialContactRef, Props>(
                           textDecoration: 'none !important',
                           fontWeight: 'bold',
                         }}
-                        onClick={redirectToSLink}
                         data-testid="tos-link"
+                        href={TERMS_OF_SERVICE_SERCQ_SEND}
+                        target="_blank"
+                        rel="noopener"
                       />,
                     ]}
                   />

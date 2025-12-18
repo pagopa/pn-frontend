@@ -1,4 +1,4 @@
-import { NotHandledDetails } from '../../models';
+import { NotHandledDetails } from '../../models/NotificationDetail';
 import { TimelineStep, TimelineStepInfo, TimelineStepPayload } from './TimelineStep';
 
 // PN-1647

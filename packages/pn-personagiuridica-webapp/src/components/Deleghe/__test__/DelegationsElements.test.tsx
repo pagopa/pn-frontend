@@ -157,7 +157,7 @@ describe('DelegationElements', async () => {
       within(groupDialog).getByTestId('associate-group')
     );
     await userEvent.click(associateGroupRadio);
-    await testAutocomplete(groupDialog, 'groups', groups, true, 1);
+    await testAutocomplete(groupDialog, 'modal-groups', groups, true, 1);
     const groupConfirmButton = within(groupDialog).getByTestId('groupConfirmButton');
     await userEvent.click(groupConfirmButton);
     await waitFor(() => {
@@ -372,7 +372,7 @@ describe('DelegationElements', async () => {
     await userEvent.click(updateButton);
     const updateDialog = await waitFor(() => screen.getByTestId('groupDialog'));
     expect(updateDialog).toBeInTheDocument();
-    await testAutocomplete(updateDialog, 'groups', groups, true, 2);
+    await testAutocomplete(updateDialog, 'modal-groups', groups, true, 2);
     const groupConfirmButton = within(updateDialog).getByTestId('groupConfirmButton');
     await userEvent.click(groupConfirmButton);
     await waitFor(() => {

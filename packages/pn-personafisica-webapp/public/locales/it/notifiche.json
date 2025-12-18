@@ -38,6 +38,10 @@
     "not-found": "Non puoi leggere questa notifica",
     "not-found-subtitle": "Può essere letta solo dal destinatario o da un suo delegato. Per leggerla, chiedi al destinatario di effettuare l’accesso a SEND e delegarti."
   },
+  "from-tpp": {
+    "not-found": "Non puoi leggere questa notifica",
+    "not-found-subtitle": "Questa notifica può essere letta solo dal destinatario."
+  },
   "detail": {
     "document-not-available": "Al momento non è possibile scaricare il documento, riprova più tardi. Per riprovare, ricarica la pagina o premi sul link del documento.",
     "table-aria-label": "Dettaglio notifica",
@@ -81,8 +85,9 @@
       "summary-in-progress": "Pagamento in corso",
       "amount": "Importo",
       "submit": "Paga",
-      "submit-tpp": "Paga con {{name}}",
-      "pay-with-other-methods": "Paga con altri metodi di pagamento",
+      "tpp-helper-text": "Premi \"Paga con la tua banca\" per completare il pagamento su {{pspDenomination}}",
+      "submit-tpp": "Paga con la tua banca",
+      "pay-with-other-methods": "Paga con altri metodi",
       "download-f24": "Scarica F24",
       "pay-with-f24": "Se preferisci, puoi pagare tramite F24.",
       "download-f24-in-progress": "Documento in elaborazione",
@@ -425,5 +430,21 @@
     "returned-to-sender-tooltip-multirecipient": "Tutti i destinatari sono deceduti",
     "returned-to-sender-description-monorecipient": "Il destinatario risulta deceduto.",
     "returned-to-sender-description-multirecipient": "Tutti i destinatari risultano deceduti."
+  },
+  "tppLanding": {
+    "title": "Ciao,\nhai ricevuto una comunicazione a valore legale",
+    "description": "Per leggerla, <strong>accedi a SEND - Servizio Notifiche Digitali.</strong> Troverai i documenti importanti che ti riguardano.\n\nAnche se non la apri o non la leggi, <strong>la comunicazione produce effetti giuridici.</strong>",
+    "access-button": "Accedi ai documenti",
+    "faq": {
+      "title": "Domande frequenti",
+      "what-are-notifications": {
+        "question": "Che cosa sono le comunicazioni a valore legale",
+        "answer": "Significa che l'invio e la ricezione di queste comunicazioni producono degli effetti giuridici sia nei confronti di chi le invia sia di chi le riceve. Per esempio, se ricevi una multa per violazione del codice stradale, la data in cui la ricevi incide sull'importo che dovrai pagare o sulla tua facoltà di contestarla."
+      },
+      "what-is-send": {
+        "question": "Cos’è SEND e come funziona",
+        "answer": "SEND - Servizio Notifiche Digitali è una piattaforma che digitalizza e semplifica la gestione delle notifiche: permette infatti di riceverle, scaricare i documenti notificati e pagare eventuali importi direttamente online.\nSEND può inviare notifiche per conto degli enti sia ai cittadini, ai liberi professionisti e alle ditte individuali, cioè le \"persone fisiche\", che alle imprese, cioè le \"persone giuridiche\"."
+      }
+    }
   }
 }

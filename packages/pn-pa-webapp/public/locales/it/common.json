@@ -200,5 +200,18 @@
       "title": "Si è verificato un errore",
       "message": "Il servizio non è disponibile. Riprova più tardi. Se l’errore si ripete, contatta l’assistenza e comunica le informazioni errore."
     }
+  },
+  "user-validation-failed": {
+    "title": "I dati inseriti non sono validi",
+    "description": "Uno o più dati associati alla tua utenza non risultano validi, contatta l’assistenza per risolvere il problema.",
+    "cta": "Contatta l’assistenza"
+  },
+  "autocomplete": {
+    "clear": "Rimuovi opzioni selezionate",
+    "toggle-open": "Apri menu selezione opzioni",
+    "toggle-close": "Chiudi menu selezione opzioni",
+    "selection-box": "Opzioni selezionate",
+    "selection-done": "%s selezionati",
+    "delete-selection": "Elimina %s"
   }
 }

@@ -17,9 +17,11 @@ import { InvalidBodyAppError } from './InvalidBodyAppError';
 import { ServerResponseErrorCode } from './types';
 
 export class PAAppErrorFactory extends AppErrorFactory {
-  private translateFunction: (path: string, ns: string) => string;
+  private translateFunction: (path: string, ns: string, params?: Record<string, string>) => string;
 
-  constructor(translateFunction: (path: string, ns: string) => string) {
+  constructor(
+    translateFunction: (path: string, ns: string, params?: Record<string, string>) => string
+  ) {
     super();
     this.translateFunction = translateFunction;
   }

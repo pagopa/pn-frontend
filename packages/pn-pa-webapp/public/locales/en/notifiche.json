@@ -286,7 +286,7 @@
         "pec-receipt-not-delivered": "PEC not delivered",
         "paper-receipt-delivered": "registered letter delivery",
         "paper-receipt-not-delivered": "registered letter not delivered",
-        "analog-failure-delivery": "Acknowledgment of receipt filed"
+        "analog-failure-delivery": "Deposit of the notification of receipt"
       },
       "registered-letter-kind": {
         "AR": "Registered letter with return receipt",
@@ -489,6 +489,14 @@
       "invalid_parameter_protocol_number_duplicate": {
         "title": "Invalid data",
         "message": "The entered protocol number already exists"
+      },
+      "invalid_parameter_notice_code_duplicate": {
+        "title": "Invalid notice code",
+        "message": "The notice code {{duplicatedNoticeCode}} has already been used"
+      },
+      "generic_invalid_parameter_notice_code_duplicate": {
+        "title": "Invalid notice code",
+        "message": "One of the notice codes you entered has already been used"
       }
     }
   }

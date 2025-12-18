@@ -1,4 +1,4 @@
-import { AnalogWorkflowDetails } from '../../models';
+import { AnalogWorkflowDetails } from '../../models/NotificationDetail';
 import { TimelineStep, TimelineStepInfo, TimelineStepPayload } from './TimelineStep';
 
 export class SendSimpleRegisteredLetterStep extends TimelineStep {

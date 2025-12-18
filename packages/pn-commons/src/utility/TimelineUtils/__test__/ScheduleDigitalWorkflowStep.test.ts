@@ -1,5 +1,5 @@
 import { getTimelineElem, notificationDTO } from '../../../__mocks__/NotificationDetail.mock';
-import { TimelineCategory } from '../../../models';
+import { TimelineCategory } from '../../../models/NotificationDetail';
 import { initLocalizationForTest } from '../../../test-utils';
 import { ScheduleDigitalWorkflowStep } from '../ScheduleDigitalWorkflowStep';
 

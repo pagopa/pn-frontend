@@ -1,23 +1,22 @@
 {
   "name": "@pagopa-pn/pn-validator",
-  "version": "2.19.2",
+  "version": "2.20.0",
   "private": true,
   "main": "./src/index.ts",
   "dependencies": {
     "typescript": "^5.2.2"
   },
+  "type": "module",
+  "sideEffect": true,
   "scripts": {
     "build": "tsc -p tsconfig.prod.json",
     "test": "tsc --noEmit && vitest --run",
     "test:coverage": "tsc --noEmit && vitest run --coverage",
     "lint": "eslint . -c .eslintrc.js --ext .ts,.tsx --fix",
     "format": "prettier \"./**/*.{ts,tsx}\" --write",
-    "sonar": "node sonarqube-scanner.js"
+    "sonar": "node sonarqube-scanner.cjs"
   },
   "devDependencies": {
-    "@babel/core": "^7.23.2",
-    "@babel/preset-env": "^7.23.2",
-    "@babel/preset-typescript": "^7.23.2",
     "@trivago/prettier-plugin-sort-imports": "^4.3.0",
     "@typescript-eslint/eslint-plugin": "^6.7.3",
     "@typescript-eslint/parser": "^6.7.3",

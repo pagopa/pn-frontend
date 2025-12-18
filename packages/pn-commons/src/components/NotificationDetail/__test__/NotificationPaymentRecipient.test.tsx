@@ -2,14 +2,18 @@ import { vi } from 'vitest';
 
 import { paymentInfo } from '../../../__mocks__/ExternalRegistry.mock';
 import { notificationDTO, payments } from '../../../__mocks__/NotificationDetail.mock';
-import { PaymentAttachmentSName, PaymentStatus, PaymentsData } from '../../../models';
+import {
+  PaymentAttachmentSName,
+  PaymentStatus,
+  PaymentsData,
+} from '../../../models/NotificationDetail';
 import { act, fireEvent, render, waitFor, within } from '../../../test-utils';
-import { setPaymentCache } from '../../../utility';
 import {
   getF24Payments,
   getPagoPaF24Payments,
   populatePaymentsPagoPaF24,
 } from '../../../utility/notification.utility';
+import { setPaymentCache } from '../../../utility/paymentCaching.utility';
 import NotificationPaymentRecipient from '../NotificationPaymentRecipient';
 
 describe('NotificationPaymentRecipient Component', () => {
@@ -142,8 +146,8 @@ describe('NotificationPaymentRecipient Component', () => {
       vi.advanceTimersByTime(1000);
     });
     fireEvent.click(payButton);
-    expect(payClickMk).toBeCalledTimes(1);
-    expect(payClickMk).toBeCalledWith(
+    expect(payClickMk).toHaveBeenCalledTimes(1);
+    expect(payClickMk).toHaveBeenCalledWith(
       paymentsData.pagoPaF24[paymentIndex].pagoPa!.noticeCode,
       paymentsData.pagoPaF24[paymentIndex].pagoPa!.creditorTaxId,
       paymentsData.pagoPaF24[paymentIndex].pagoPa!.amount
@@ -233,7 +237,7 @@ describe('NotificationPaymentRecipient Component', () => {
     // download pagoPA attachments
     const downloadButton = result.getByTestId('download-pagoPA-notice-button');
     downloadButton.click();
-    expect(getPaymentAttachmentActionMk).toBeCalledTimes(1);
+    expect(getPaymentAttachmentActionMk).toHaveBeenCalledTimes(1);
     expect(getPaymentAttachmentActionMk).toHaveBeenCalledWith(
       PaymentAttachmentSName.PAGOPA,
       paymentsData.pagoPaF24[paymentIndex].pagoPa?.attachmentIdx
@@ -242,7 +246,7 @@ describe('NotificationPaymentRecipient Component', () => {
     const attachedF24 = result.getByTestId('f24-download');
     const attachedF24DownloadButton = within(attachedF24).getByTestId('download-f24-button');
     fireEvent.click(attachedF24DownloadButton);
-    expect(getPaymentAttachmentActionMk).toBeCalledTimes(2);
+    expect(getPaymentAttachmentActionMk).toHaveBeenCalledTimes(2);
     expect(getPaymentAttachmentActionMk).toHaveBeenCalledWith(
       PaymentAttachmentSName.F24,
       paymentsData.pagoPaF24[paymentIndex].f24!.attachmentIdx
@@ -272,7 +276,7 @@ describe('NotificationPaymentRecipient Component', () => {
     const isolatedF24Item = result.getByTestId('f24only-box');
     const isolatedF24RadioButton = within(isolatedF24Item).getAllByTestId('download-f24-button');
     fireEvent.click(isolatedF24RadioButton[0]);
-    expect(getPaymentAttachmentActionMk).toBeCalledTimes(1);
+    expect(getPaymentAttachmentActionMk).toHaveBeenCalledTimes(1);
     expect(getPaymentAttachmentActionMk).toHaveBeenCalledWith(
       PaymentAttachmentSName.F24,
       paymentsData.f24Only[0].attachmentIdx
@@ -320,7 +324,7 @@ describe('NotificationPaymentRecipient Component', () => {
     // the buttons are < 1 2 >
     fireEvent.click(pageButtons[2]);
 
-    expect(fetchPaymentsInfoMk).toBeCalledTimes(1);
+    expect(fetchPaymentsInfoMk).toHaveBeenCalledTimes(1);
   });
 
   it('download pagoPa notice hidden if no attachment is present', () => {
@@ -430,15 +434,16 @@ describe('NotificationPaymentRecipient Component', () => {
     const f24ButtonToCheck = f24Buttons[1];
     fireEvent.click(f24ButtonToClick);
     fireEvent.click(f24ButtonToCheck);
-    expect(getPaymentAttachmentActionMk).toBeCalledTimes(1);
+    expect(getPaymentAttachmentActionMk).toHaveBeenCalledTimes(1);
   });
 
-  it('should show tpp button if payments tpp is present and click onPayTppClick', () => {
+  it('should show tpp button if payments tpp is present and payment is enabled and click onPayTppClick', () => {
     const onPayTppClick = vi.fn();
     const paymentTpp = {
       retrievalId: 'retrievalId',
       iun,
-      paymentButton: 'paymentButton',
+      pspDenomination: 'Bank1',
+      isPaymentEnabled: true,
     };
     const { getByTestId, queryAllByTestId } = render(
       <NotificationPaymentRecipient
@@ -456,6 +461,11 @@ describe('NotificationPaymentRecipient Component', () => {
     );
     const payTppButton = getByTestId('tpp-pay-button');
     expect(payTppButton).toBeInTheDocument();
+    expect(payTppButton).toHaveTextContent('submit-tpp');
+
+    const tppHelperText = getByTestId('tpp-helper-text');
+    expect(tppHelperText).toBeInTheDocument();
+    expect(tppHelperText).toHaveTextContent('tpp-helper-text');
 
     const payButton = getByTestId('pay-button');
     expect(payButton).toHaveTextContent('detail.payment.pay-with-other-methods');
@@ -478,7 +488,42 @@ describe('NotificationPaymentRecipient Component', () => {
       paymentsData.pagoPaF24[paymentIndex].pagoPa?.noticeCode,
       paymentsData.pagoPaF24[paymentIndex].pagoPa?.creditorTaxId,
       paymentTpp.retrievalId,
-      paymentTpp.paymentButton
+      paymentTpp.pspDenomination,
+      paymentsData.pagoPaF24[paymentIndex].pagoPa?.amount
     );
+  });
+
+  it('should show standard payment button when tpp is present but PSP payment is not enabled', () => {
+    const onPayTppClick = vi.fn();
+    const paymentTpp = {
+      retrievalId: 'retrievalId',
+      iun,
+      pspDenomination: 'Bank1',
+      isPaymentEnabled: false,
+    };
+
+    const { queryByTestId, getByTestId } = render(
+      <NotificationPaymentRecipient
+        payments={paymentsData}
+        paymentTpp={paymentTpp}
+        isCancelled={false}
+        timerF24={F24TIMER}
+        iun={iun}
+        getPaymentAttachmentAction={vi.fn()}
+        onPayClick={() => {}}
+        onPayTppClick={onPayTppClick}
+        handleFetchPaymentsInfo={() => {}}
+        landingSiteUrl=""
+      />
+    );
+
+    const payTppButton = queryByTestId('tpp-pay-button');
+    const tppHelperText = queryByTestId('tpp-helper-text');
+    expect(payTppButton).not.toBeInTheDocument();
+    expect(tppHelperText).not.toBeInTheDocument();
+
+    const payButton = getByTestId('pay-button');
+    expect(payButton).toBeInTheDocument();
+    expect(payButton).toHaveTextContent('detail.payment.submit');
   });
 });

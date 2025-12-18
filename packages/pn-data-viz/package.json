@@ -1,6 +1,6 @@
 {
   "name": "@pagopa-pn/pn-data-viz",
-  "version": "2.19.2",
+  "version": "2.20.0",
   "private": true,
   "description": "SEND component library for data visualization",
   "keywords": [
@@ -22,7 +22,6 @@
     "test:coverage": "tsc && vitest run --coverage"
   },
   "devDependencies": {
-    "@types/echarts": "^4.9.22",
     "eslint": "7.11.0",
     "eslint-config-prettier": "^8.10.0",
     "eslint-plugin-functional": "^3.7.2",

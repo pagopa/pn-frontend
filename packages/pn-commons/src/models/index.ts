@@ -1,196 +1,107 @@
-import { DatePickerTypes } from '../components/CustomDatePicker';
-import PrivateRoute from '../navigation/PrivateRoute';
-import { IAppMessage } from './AppMessage';
-import { AppResponse, AppResponseError, ErrorMessage, ServerResponseError } from './AppResponse';
-import {
+export type { IAppMessage } from './AppMessage';
+export type {
+  AppResponse,
+  AppResponseError,
+  ErrorMessage,
+  ServerResponseError,
+} from './AppResponse';
+export type {
   AppCurrentStatus,
   AppStatusData,
   Downtime,
   DowntimeLogHistory,
-  DowntimeStatus,
   GetDowntimeHistoryParams,
-  KnownFunctionality,
   LegalFactDocumentDetails,
-  isKnownFunctionality,
 } from './AppStatus';
-import { ConsentActionType, ConsentType, TosPrivacyConsent } from './Consents';
-import { SERCQ_SEND_VALUE } from './Contacts';
-import { KnownSentiment } from './EmptyState';
-import EventStrategy from './EventStrategy';
-import { EventType } from './EventType';
-import { Institution, PartyEntityWithUrl } from './Institutions';
-import {
+export type { TosPrivacyConsent } from './Consents';
+export type { default as EventStrategy } from './EventStrategy';
+export type { EventType } from './EventType';
+export type { Institution, PartyEntityWithUrl } from './Institutions';
+export type {
   ActionMeta,
-  EventAction,
-  EventCategory,
   EventCreatedDelegationType,
-  EventDowntimeType,
   EventMandateNotificationsListType,
   EventNotificationDetailType,
   EventNotificationsListType,
-  EventPageType,
-  EventPaymentRecipientType,
   EventPaymentStatusType,
-  EventPropertyType,
   EventsType,
   TrackedEvent,
+  EventNotificationSource,
 } from './MixpanelEvents';
-import {
-  AnalogDetails,
-  AnalogWorkflowDetails,
-  DigitalDomicileType,
-  ExtRegistriesPaymentDetails,
-  F24PaymentDetails,
-  INotificationDetailTimeline,
-  LegalFactId,
-  LegalFactType,
-  NotHandledDetails,
-  NotificationDeliveryMode,
-  NotificationDetail,
-  NotificationDetailDocument,
-  NotificationDetailOtherDocument,
-  NotificationDetailPayment,
-  NotificationDetailRecipient,
-  NotificationDetailTableRow,
-  NotificationDetailTimelineDetails,
-  NotificationDocumentRequest,
-  NotificationDocumentResponse,
-  NotificationDocumentType,
-  NotificationStatusHistory,
-  PagoPAPaymentFullDetails,
-  PaidDetails,
-  PaymentAttachment,
-  PaymentAttachmentSName,
-  PaymentDetails,
-  PaymentInfoDetail,
-  PaymentNotice,
-  PaymentStatus,
-  PaymentsData,
-  PhysicalAddress,
-  PhysicalCommunicationType,
-  RecipientType,
-  ResponseStatus,
-  SendCourtesyMessageDetails,
-  SendDigitalDetails,
-  SendPaperDetails,
-  TimelineCategory,
-  PhysicalAddressLookup,
-} from './NotificationDetail';
-import { NotificationStatus } from './NotificationStatus';
-import {
+export type {
   GetNotificationsParams,
   GetNotificationsResponse,
   Notification,
   NotificationColumnData,
 } from './Notifications';
-import { PaginationData } from './Pagination';
-import { PaymentCache } from './PaymentCache';
-import { CardElement, CardSort } from './PnCard';
-import { Column, Row, Sort } from './PnTable';
-import { Product } from './Products';
-import { SideMenuItem } from './SideMenuItem';
-import { SmartTableData } from './SmartTable';
-import { BasicUser, ConsentUser, basicNoLoggedUserData } from './User';
-import { WithRequired } from './UtilityTypes';
-
-export {
-  basicNoLoggedUserData,
-  NotificationStatus,
-  NotificationDeliveryMode,
-  TimelineCategory,
-  DigitalDomicileType,
-  RecipientType,
-  ResponseStatus,
-  LegalFactType,
-  EventPageType,
-  EventDowntimeType,
-  EventPaymentRecipientType,
-  EventAction,
-  PhysicalCommunicationType,
-  PaymentInfoDetail,
-  PaymentStatus,
-  EventCategory,
-  PaymentAttachmentSName,
-  KnownSentiment,
-  DowntimeStatus,
-  isKnownFunctionality,
-  KnownFunctionality,
-  PrivateRoute,
-  EventPropertyType,
-  ConsentType,
-  ConsentActionType,
-  NotificationDocumentType,
-  SERCQ_SEND_VALUE,
-  PhysicalAddressLookup,
-};
+export type { PaginationData } from './Pagination';
+export type { PaymentCache } from './PaymentCache';
+export type { CardElement, CardSort } from './PnCard';
+export type { Column, Row, Sort } from './PnTable';
+export type { Product } from './Products';
+export type { SideMenuItem } from './SideMenuItem';
+export type { SmartTableData } from './SmartTable';
+export type { BasicUser, ConsentUser } from './User';
+export type { WithRequired } from './UtilityTypes';
 export type {
-  AnalogWorkflowDetails,
   AnalogDetails,
-  AppStatusData,
-  BasicUser,
-  ConsentUser,
-  CardElement,
-  CardSort,
-  Column,
-  DatePickerTypes,
-  EventsType,
-  EventPaymentStatusType,
-  EventNotificationsListType,
-  EventMandateNotificationsListType,
-  EventNotificationDetailType,
-  EventCreatedDelegationType,
-  GetNotificationsParams,
-  GetNotificationsResponse,
-  NotificationColumnData,
-  IAppMessage,
+  AnalogWorkflowDetails,
+  ExtRegistriesPaymentDetails,
+  F24PaymentDetails,
   INotificationDetailTimeline,
-  Row,
   LegalFactId,
-  NotificationDetailOtherDocument,
   NotHandledDetails,
-  Notification,
   NotificationDetail,
   NotificationDetailDocument,
-  NotificationDetailRecipient,
+  NotificationDetailOtherDocument,
   NotificationDetailPayment,
+  NotificationDetailRecipient,
   NotificationDetailTableRow,
+  NotificationDetailTimelineDetails,
+  NotificationDocumentRequest,
+  NotificationDocumentResponse,
   NotificationStatusHistory,
-  PaginationData,
+  PagoPAPaymentFullDetails,
   PaidDetails,
   PaymentAttachment,
+  PaymentDetails,
   PaymentNotice,
+  PaymentsData,
+  PhysicalAddress,
   SendCourtesyMessageDetails,
   SendDigitalDetails,
   SendPaperDetails,
-  SideMenuItem,
-  Sort,
-  AppResponse,
-  AppResponseError,
-  ServerResponseError,
-  ErrorMessage,
-  SmartTableData,
-  PhysicalAddress,
-  DowntimeLogHistory,
-  GetDowntimeHistoryParams,
-  AppCurrentStatus,
-  Downtime,
-  LegalFactDocumentDetails,
-  F24PaymentDetails,
-  PagoPAPaymentFullDetails,
-  PaymentDetails,
-  PaymentsData,
-  ExtRegistriesPaymentDetails,
-  NotificationDetailTimelineDetails,
-  Institution,
-  PartyEntityWithUrl,
-  Product,
-  PaymentCache,
-  TrackedEvent,
-  EventStrategy,
-  EventType,
-  ActionMeta,
-  TosPrivacyConsent,
-  NotificationDocumentRequest,
-  NotificationDocumentResponse,
-  WithRequired,
-};
+  PaymentTpp,
+} from './NotificationDetail';
+
+export type { DatePickerTypes } from '../components/CustomDatePicker';
+
+export { SERCQ_SEND_VALUE } from './Contacts';
+export { KnownSentiment } from './EmptyState';
+export { default as PrivateRoute } from '../navigation/PrivateRoute';
+export { DowntimeStatus, KnownFunctionality, isKnownFunctionality } from './AppStatus';
+export { ConsentActionType, ConsentType } from './Consents';
+export {
+  EventAction,
+  EventCategory,
+  EventDowntimeType,
+  EventPageType,
+  EventPaymentRecipientType,
+  EventPropertyType,
+} from './MixpanelEvents';
+export {
+  DigitalDomicileType,
+  LegalFactType,
+  NotificationDeliveryMode,
+  NotificationDocumentType,
+  PaymentAttachmentSName,
+  PaymentInfoDetail,
+  PaymentStatus,
+  PhysicalAddressLookup,
+  PhysicalCommunicationType,
+  RecipientType,
+  ResponseStatus,
+  TimelineCategory,
+} from './NotificationDetail';
+export { NotificationStatus } from './NotificationStatus';
+export { basicNoLoggedUserData } from './User';

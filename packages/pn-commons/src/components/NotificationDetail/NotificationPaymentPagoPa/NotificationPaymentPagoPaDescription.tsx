@@ -1,7 +1,7 @@
 import { Box, Typography } from '@mui/material';
 
-import { PagoPAPaymentFullDetails } from '../../../models';
-import { formatDate } from '../../../utility';
+import { PagoPAPaymentFullDetails } from '../../../models/NotificationDetail';
+import { formatDate } from '../../../utility/date.utility';
 import { getLocalizedOrDefaultLabel } from '../../../utility/localization.utility';
 
 type Props = {

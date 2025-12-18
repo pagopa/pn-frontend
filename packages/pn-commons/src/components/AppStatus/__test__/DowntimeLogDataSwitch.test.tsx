@@ -1,10 +1,10 @@
 import { vi } from 'vitest';
 
 import { beDowntimeHistoryWithIncidents } from '../../../__mocks__/AppStatus.mock';
-import { KnownFunctionality } from '../../../models';
+import { KnownFunctionality } from '../../../models/AppStatus';
 import { fireEvent, render } from '../../../test-utils';
-import { formatDate, formatDateTime, initLocalization } from '../../../utility';
-import { formatTimeWithLegend } from '../../../utility/date.utility';
+import { formatDate, formatDateTime, formatTimeWithLegend } from '../../../utility/date.utility';
+import { initLocalization } from '../../../utility/localization.utility';
 import DowntimeLogDataSwitch from '../DowntimeLogDataSwitch';
 
 describe('DowntimeLogDataSwitch Component', () => {

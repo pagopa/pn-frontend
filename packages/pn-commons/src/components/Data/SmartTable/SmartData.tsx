@@ -1,8 +1,7 @@
 import { Children, ReactElement, isValidElement } from 'react';
 
-import { useIsMobile } from '../../../hooks';
-import { Sort } from '../../../models';
-import { SlotProps } from '../../../models/PnTable';
+import { useIsMobile } from '../../../hooks/useIsMobile';
+import { SlotProps, Sort } from '../../../models/PnTable';
 import PnCard from '../PnCard/PnCard';
 import PnCardActions from '../PnCard/PnCardActions';
 import PnCardContent from '../PnCard/PnCardContent';

@@ -4,7 +4,7 @@ import {
   DowntimeStatus,
   GetDowntimeHistoryParams,
   KnownFunctionality,
-} from '../models';
+} from '../models/AppStatus';
 
 export const incidentTimestamps = [
   '2022-10-21T06:07:08Z',

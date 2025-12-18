@@ -1,4 +1,4 @@
-import { PaymentTpp } from '@pagopa-pn/pn-commons/src/models/NotificationDetail';
+import { PaymentTpp } from '@pagopa-pn/pn-commons';
 import { createSlice } from '@reduxjs/toolkit';
 
 import { acceptMandate, rejectMandate } from '../delegation/actions';
@@ -44,8 +44,9 @@ const generalInfoSlice = createSlice({
     builder.addCase(exchangeNotificationRetrievalId.fulfilled, (state, action) => {
       state.paymentTpp = {
         retrievalId: action.payload.retrievalId,
-        paymentButton: action.payload.paymentButton || '',
+        pspDenomination: action.payload.pspDenomination || '',
         iun: action.payload.originId || '',
+        isPaymentEnabled: action.payload.isPaymentEnabled || false,
       };
     });
   },
