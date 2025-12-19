@@ -63,8 +63,8 @@
     "legalfact": "Attestazione opponibile a terzi",
     "receipt": "Ricevuta",
     "show-history": "Mostra storico",
-    "show-more": "Vedi più dettagli",
-    "show-less": "Vedi meno dettagli",
+    "show-more": "Mostra più dettagli",
+    "show-less": "Mostra meno dettagli",
     "cancelled-alert-text": "Questa notifica è stata annullata dall’ente mittente. Puoi ignorarne il contenuto.",
     "disclaimer-link": "Scopri di più",
     "payment": {
@@ -429,7 +429,10 @@
     "returned-to-sender-tooltip-monorecipient": "Il destinatario risulta deceduto",
     "returned-to-sender-tooltip-multirecipient": "Tutti i destinatari sono deceduti",
     "returned-to-sender-description-monorecipient": "Il destinatario risulta deceduto.",
-    "returned-to-sender-description-multirecipient": "Tutti i destinatari risultano deceduti."
+    "returned-to-sender-description-multirecipient": "Tutti i destinatari risultano deceduti.",
+    "notification-timeline-reworked": "Evento o più eventi aggiornati",
+    "notification-timeline-reworked-tooltip": "Evento o più eventi aggiornati",
+    "notification-timeline-reworked-description": "Gli eventi contrassegnati con EVENTO INVALIDATO non vanno considerati in quanto sostituiti dagli eventi successivi contrassegnati con EVENTO VALIDATO."
   },
   "tppLanding": {
     "title": "Ciao,\nhai ricevuto una comunicazione a valore legale",

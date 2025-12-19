@@ -249,6 +249,16 @@ export function getNotificationStatusInfos(
           { isMultiRecipient }
         ),
       };
+    case NotificationStatus.NOTIFICATION_TIMELINE_REWORKED:
+      return {
+        color: 'warning',
+        ...localizeStatus(
+          'notification-timeline-reworked',
+          'Evento o più eventi aggiornati',
+          `Evento o più eventi aggiornati`,
+          `Evento o più eventi aggiornati`
+        ),
+      };
     default:
       return {
         color: 'default',
@@ -306,6 +316,14 @@ export const getNotificationAllowedStatus = () => [
       'notifications',
       'status.returned-to-sender',
       'Resa al mittente'
+    ),
+  },
+    {
+    value: NotificationStatus.NOTIFICATION_TIMELINE_REWORKED,
+    label: getLocalizedOrDefaultLabel(
+      'notifications',
+      'notification-timeline-reworked',
+      'Evento o più eventi aggiornati'
     ),
   },
 ];

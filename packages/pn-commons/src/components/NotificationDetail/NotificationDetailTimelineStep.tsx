@@ -162,6 +162,17 @@ const NotificationDetailTimelineStep = ({
     /* eslint-enable functional/immutable-data */
   }
 
+  const getChipColor = (position: string, status: NotificationStatus, color?: string) => {
+    if (position === 'first') {
+      return color;
+    }
+    if (status === NotificationStatus.NOTIFICATION_TIMELINE_REWORKED) {
+      return 'warning';
+    }
+
+    return 'default';
+  };
+
   const macroStep = (
     <TimelineStepCmp
       oppositeContent={
@@ -185,7 +196,8 @@ const NotificationDetailTimelineStep = ({
             id={`${notificationStatusInfos.label}-status`}
             data-testid="itemStatus"
             label={notificationStatusInfos.label}
-            color={position === 'first' ? notificationStatusInfos.color : 'default'}
+            color={getChipColor(position, timelineStep.status, notificationStatusInfos.color)}
+            // color={position === 'first' ? notificationStatusInfos.color : 'default'}
             size={position === 'first' ? 'medium' : 'small'}
             sx={{
               opacity:

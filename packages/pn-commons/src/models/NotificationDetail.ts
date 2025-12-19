@@ -272,6 +272,8 @@ export enum TimelineCategory {
   NOTIFICATION_CANCELLED = 'NOTIFICATION_CANCELLED',
   // PN-9684
   NOTIFICATION_RADD_RETRIEVED = 'NOTIFICATION_RADD_RETRIEVED',
+  // PN-16970
+  NOTIFICATION_TIMELINE_REWORKED = 'NOTIFICATION_TIMELINE_REWORKED',
 }
 
 interface DigitalAddress {
@@ -400,6 +402,6 @@ export enum PhysicalAddressLookup {
 }
 
 export enum ReworkedStatus {
-  VALID = 'REWORKED',
-  NOT_VALID = 'NOT_REWORKED',
+  VALID = 'VALID',
+  NOT_VALID = 'NOT_VALID',
 }
