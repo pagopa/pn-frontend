@@ -37,7 +37,8 @@
     "iun": "Code IUN",
     "groups": "Groupes",
     "status": "État",
-    "show-detail": "Voir le détail"
+    "show-detail": "Voir le détail",
+    "aria-action-table": "Voir les détails de la notification avec IUN : {{iun}}"
   },
   "sort": {
     "title": "Trier",
@@ -49,6 +50,7 @@
   "empty-state": {
     "filtered": "Nous n’avons pas trouvé de résultats : essayez avec des filtres différents. <0>Supprimer filtres</0>.",
     "no-notifications": "L’organisme n’a pas encore envoyé de notification. Utilisez les <0>API Key</0> ou faites un <1>envoi manuel</1>.",
+    "timeout": "Aucun résultat trouvé ; réessayez con des filtres différents",
     "aria-label-remove-filters": "Supprimer les filtres",
     "aria-label-api-keys": "API Key",
     "aria-label-create-notification": "Envoi manuel"
@@ -85,6 +87,22 @@
       "generic_error": {
         "title": "",
         "message": "Une erreur s’est produite lors de l’annulation. Réessayer."
+      },
+      "delivery_file_info_not_found": {
+        "title": "Le document n'est pas disponible",
+        "message": "Un problème est survenu lors de la récupération du document. Veuillez réessayer plus tard. Si l'erreur persiste, contactez l'assistance  et communiquez les informations sur l'erreur."
+      },
+      "delivery_notification_without_payment_attachment": {
+        "title": "Le document n'est pas disponible",
+        "message": "Un problème est survenu lors de la récupération du document. Veuillez réessayer plus tard. Si l'erreur persiste, contactez l'assistance  et communiquez les informations sur l'erreur."
+      },
+      "delivery_timeout": {
+        "title": "Aucun résultat",
+        "message": "Nous n'avons trouvé aucun résultat ; réessayez avec des filtres différents."
+      },
+      "delivery_push_file_not_found": {
+        "title": "Le document n'est pas disponible",
+        "message": "Un problema est survenu lors de la récupération du document. Veuillez réessayer plus tard. Si l'erreur persiste, contactez l'assistance  et communiquez les informations sur l'erreur."
       }
     },
     "acts": "Pièces jointes",
@@ -275,6 +293,7 @@
       "send-analog-outcome-unknown": "Envoi par voie papier terminé - résultat non déterminé",
       "send-analog-unknown": "Événement sur envoi recommandé - non reconnu",
       "aar-document": "Accusé de réception",
+      "notification-cancelled-document": "Déclaration d'annulation de la notification",
       "legalfact": {
         "sender-ack": "notification prise en charge",
         "digital-delivery-success": "notification numérique",
@@ -300,6 +319,8 @@
         "23I": "Reçu de livraison",
         "Plico": "Scan du pli",
         "23L": "Accusé de réception",
+        "CAD": "La dématérialisation de la lettre recommandée  contenant l'avis de dépôt est disponible",
+        "ARCAD": "La dématérialisation de l'avis de réception  de la lettre recommandée  contenant l'avis de dépôt est disponible",
         "Indagine": "Scan de l’enquête",
         "generic": "Pièce jointe"
       },
@@ -322,7 +343,8 @@
         "title": "Les documents ont été retirés",
         "description-mono-recipient": "Le destinataire ou son délégué a retiré les documents notifiés auprès d’un opérateur autorisé à les délivrer.",
         "description-multi-recipients": "Un des destinataires ou son délégué a retiré les documents notifiés auprès d’un opérateur autorisé à les délivrer."
-      }
+      },
+      "tpp-type": "un canal numérique tiers"
     },
     "downtimes": {
       "title": "DYSFONCTIONNEMENTS",
@@ -380,11 +402,20 @@
     "viewed-description-multirecipient": "Au moins un destinataire a lu la notification.",
     "canceled": "Annulée",
     "canceled-tooltip": "L’organisme a annulé l’envoi de la notification",
-    "canceled-description": "L’organisme a annulé l’envoi de la notification."
+    "canceled-description": "L’organisme a annulé l’envoi de la notification.",
+    "returned-to-sender": "Retour à l'expéditeur",
+    "returned-to-sender-tooltip": "Le destinataire est décédé",
+    "returned-to-sender-tooltip-multirecipient": "Tous les destinataires sont décédés",
+    "returned-to-sender-description": "Le destinataire est décédé.",
+    "returned-to-sender-description-multirecipient": "Tous les destinataires sont décédés.",
+    "notification-timeline-reworked": "Un ou plusieurs événements mis à jour",
+    "notification-timeline-reworked-tooltip": "Un ou plusieurs événements mis à jour",
+    "notification-timeline-reworked-description": "Les événements marqués ÉVÉNEMENT INVALIDÉ ne doivent pas être pris en compte car ils ont été remplacés par les événements suivants marqués ÉVÉNEMENT VALIDÉ."
   },
   "new-notification": {
     "title": "Envoyer une nouvelle notification",
     "subtitle": "Pour envoyer une notification, saisissez les données requises et ajoutez les modèles de paiement. Si vous devez faire un envoi massif, vous pouvez utiliser les",
+    "how-it-works": "Découvrez comment cela fonctionne",
     "breadcrumb-root": "Notifications",
     "breadcrumb-leaf": "Nouvelle notification",
     "prompt": {
@@ -393,83 +424,163 @@
     },
     "back-to-notifications": "Retour aux notifications",
     "drag-doc-pc": "Faites glisser le document ici",
+    "drag-doc-with-format-pc": "Faites glisser ici le document au format {{type}}",
     "drag-doc-mobile": "Charger le document ici",
     "warning-payment-disabled": "À l’heure actuelle, les notifications impliquant un paiement ne peuvent être envoyées que via API Key.",
     "steps": {
       "preliminary-informations": {
-        "fetch-groups-error": "Nous n’avons pas pu récupérer les données nécessaires à la création d’une nouvelle notification.",
+        "fetch-groups-error": "Nous n'avons pas pu récupérer les données nécessaires pour créer une nouvelle notification.",
         "title": "Informations préliminaires",
         "protocol-number": "Numéro de protocole",
+        "protocol-number-subtitle": "Il s'agit du code unique fourni par le Bureau du Protocole de l'Administration Publique. Il sert à identifier officiellement la notification et à suivre son parcours au sein du système.",
         "subject": "Objet de la notification",
-        "sender-denomination": "Organisme expéditeur",
+        "sender-denomination": "Organismes émetteurs",
+        "sender-name": "Nom de l'administration/organisme",
         "abstract": "Description",
         "group": "Groupe",
-        "no-groups": "Il n’y a pas de groupes pour ce produit",
+        "no-groups": "Il n'y a pas de groupes pour ce produit",
         "taxonomy-id": "Code taxonomique",
-        "taxonomy-tooltip": "C’est le code qui définit le type de notification. Vous trouverez plus d’informations dans le manuel de SEND.",
-        "comunication-type": "Modes d’envoi",
+        "taxonomy-id-subtitle": "C'est le code qui définit le type de documents notifiés. Si vous ne le connaissez pas, consultez la liste dans <0>Taxonomie SEND</0>.",
+        "taxonomy-tooltip": "C'est le code qui définit le type de notification. Vous trouverez plus d'informations dans le manuel de SEND.",
+        "comunication-type": "Mode d'envoi",
+        "comunication-type-title": "Mode pour l’envoi papier",
+        "comunication-type-subtitle": "Si l'envoi numérique n'est pas possible, la notification sera envoyée par voie analogique selon le mode sélectionné.",
         "registered-letter-890": "Modèle 890",
-        "simple-registered-letter": "Lettre recommandée avec A/R",
+        "simple-registered-letter": "Lettre recommandée avec accusé de réception",
         "payment-method": "Modèle de paiement",
-        "pagopa-notice": "Avis de pagoPA",
+        "pagopa-notice": "Avis pagoPA",
         "f24": "Modèle F24",
-        "nothing": "Aucun"
+        "nothing": "Aucun",
+        "notification-language-title": "Langue d'envoi",
+        "notification-language-subtitle": "La notification, les documents et les attestations seront envoyés selon les préférences de langue sélectionnées.",
+        "italian-and-other-language": "Italien et autre langue",
+        "select-other-language": "Sélectionner une autre langue",
+        "notification-content-title": "Contenus de la notification",
+        "notification-content-subtitle": "Ces informations aideront le destinataire à comprendre le contenu et l'importance de la communication.",
+        "notification-management-title": "Gestion de la notification",
+        "notification-management-subtitle": "Choisissez le groupe d'utilisateurs responsable de la gestion de la notification."
       },
       "recipient": {
         "title": "Destinataires",
         "fiscal-code-error": "La valeur saisie est incorrecte",
-        "identical-fiscal-codes-error": "Il y a déjà un destinataire avec ce code fiscal. Saisissez-en un différent.",
-        "identical-notice-codes-error": "Il y a déjà un destinataire avec ce Code d’Avis. Saisissez-en un différent.",
-        "notice-code-error": "Entrez un code de 18 caractères numériques",
+        "identical-fiscal-codes-error": "Un destinataire avec ce Code Fiscal existe déjà. Saisissez-en un autre.",
+        "notice-code-error": "Saisissez un code de 18 caractères numériques",
         "pec-error": "Adresse PEC non valide",
         "forbidden-characters-denomination-error": "Vous avez saisi des caractères non valides",
-        "legal-entity": "Entité juridique",
+        "legal-entity": "Sujet juridique",
         "physical-person": "Personne physique",
         "name": "Prénom",
-        "surname": "Nom de famille",
+        "surname": "Nom",
         "legal-person": "Personne morale",
         "business-name": "Raison sociale",
-        "recipient-citizen-tax-id": "Code Fiscal destinataire",
-        "recipient-organization-tax-id": "Code Fiscal destinataire",
-        "creditor-fiscal-code": "Code Fiscal de l’organisme créancier",
-        "notice-code": "Code avis",
-        "add-digital-domicile": "Ajouter une adresse numérique",
-        "back-to-preliminary-informations": "Retour à Informations préliminaires",
+        "recipient-citizen-tax-id": "Code Fiscal du destinataire",
+        "recipient-organization-tax-id": "Code Fiscal du destinataire",
+        "creditor-fiscal-code": "Code Fiscal de l'Organisme Créancier",
+        "notice-code": "Code de l'avis",
+        "add-digital-domicile": "Ajouter un domicile numérique",
+        "back-to-preliminary-informations": "Retour aux Informations préliminaires",
         "digital-domicile": "Domicile numérique",
+        "digital-domicile-subtitle": "Si vous connaissez l'adresse PEC du destinataire, saisissez-la ici. De cette manière, vous vous assurez que la notification est délivrée au format numérique, réduisant les délais d'envoi par rapport aux canaux analogiques traditionnels.",
+        "pec-address": "Adresse PEC",
         "add-physical-domicile": "Ajouter une adresse physique",
         "address": "Adresse",
         "house-number": "Numéro de rue",
         "municipality-details": "Localité",
-        "municipality": "Commune",
+        "municipality": "Mairie",
         "province": "Province",
         "zip": "Code postal",
         "foreign-state": "État",
-        "at": "Auprès de",
-        "address-details": "Notes supplémentaires (escalier, étage)",
-        "add-recipient": "Ajoutez un destinataire",
-        "remove-recipient": "Supprimez un destinataire"
+        "at": "Chez",
+        "address-details": "Notes supplémentaires (chez, escalier, étage)",
+        "add-recipient": "Ajouter un destinataire",
+        "remove-recipient": "Supprimer le destinataire",
+        "address-subtitle": "Choisissez d'autoriser SEND à insérer automatiquement l'adresse à partir des registres nationaux. L'insertion automatique pourrait retarder l'envoi de la notification. Alternativement, vous pouvez remplir l'adresse manuellement.",
+        "address-physical-lookup-down": "Pour le moment, il n'est pas possible de récupérer l'adresse à partir des registres nationaux. Saisissez l'adresse manuellement.",
+        "address-physical-lookup-radios": {
+          "national-registry": "Insertion automatique à partir du registre national",
+          "manual": "Insertion manuelle"
+        }
       },
       "attachments": {
-        "max-attachments": "Vous pouvez télécharger jusqu’à 11 pièces jointes, y compris le document à notifier.",
-        "attach-for-recipients": "Annexes",
-        "act-attachment": "Joindre l’acte",
+        "title": "Documentation",
+        "max-attachments": "Ce sont les documents qui seront notifiés via SEND à tous les destinataires. Vous pouvez joindre jusqu'à un maximum de {{maxNumber}} documents.",
+        "attach-for-recipients": "Documents joints",
+        "act-attachment": "Joindre un document",
         "doc-attachment": "Joindre un autre document",
-        "act-name": "Nom de l’acte",
-        "doc-name": "Nom du document",
-        "add-doc": "Ajouter un document (par exemple, la lettre d’accompagnement)",
-        "add-another-doc": "Ajouter un autre document (par exemple, la lettre d’accompagnement)",
+        "act-name": "Nom de l'acte",
+        "doc-name": "Titre du document",
+        "add-doc": "Ajouter un document",
+        "add-another-doc": "Ajouter un autre document",
         "back-to-recipient": "Retour au Destinataire",
-        "remove-document": "Supprimer le document"
+        "back-to-debt-position": "Retour à la Position débitrice",
+        "back-to-debt-position-detail": "Retour au Détail de la position débitrice",
+        "remove-document": "Supprimer le document",
+        "banner-additional-languages": "Vous avez choisi d'envoyer la notification en plusieurs langues. N'oubliez pas de joindre les documents dans les deux langues sélectionnées.",
+        "file-upload-helper": "Le document doit être au format {{format}} et ne doit pas dépasser la taille de {{size}}"
       },
-      "payment-methods": {
-        "title": "Modèles de paiement",
-        "pagopa-notice": "Avis de pagoPA",
-        "f24": "F24",
-        "payment-models": "Modèles de paiement pour",
-        "attach-pagopa-notice": "Joindre un avis de pagoPA",
-        "attach-f24": "Joindre Modèle F24",
-        "nothing": "<0>Si cette notification prévoit un paiement, revenez à <0><1>Informations préliminaires<1><2> et sélectionnez un modèle. Ensuite, revenez ici pour le charger.<2>",
-        "back-to-attachments": "Retour à Pièces jointes"
+      "debt-position": {
+        "title": "Position débitrice",
+        "debt-position": "Position débitrice",
+        "debt-position-of": "Position débitrice de {{fullName}}",
+        "which-type-of-payments": "Quel type de paiement prévoyez-vous ?",
+        "back-to-recipient": "Retour aux Destinataires",
+        "radios": {
+          "pago-pa": "Avis pagoPA",
+          "f24": "Modèle F24",
+          "pago-pa-f24": "Avis pagoPA + Modèle F24",
+          "nothing": "Aucun paiement"
+        }
+      },
+      "debt-position-detail": {
+        "title": "Détail de la position débitrice",
+        "debt-position-of": "Position débitrice de {{fullName}}",
+        "notification-fee": {
+          "title": "Frais de notification",
+          "description": "Choisissez le type de frais de notification : vous pouvez choisir entre celui déjà inclus dans l'acte ou saisir un frais de notification personnalisé à la charge du destinataire.",
+          "pa-fee-format": "Le coût de la notification doit être une valeur comprise entre 0,01 et 1,00 et doit comporter au maximum 2 décimales.",
+          "disclaimer": "La TVA ne sera appliquée qu'aux notifications remises au format papier.",
+          "pa-fee": "Frais de notification",
+          "pa-fee-validation": "Saisissez une valeur comprise entre 0 et 1 avec un maximum de 2 décimales",
+          "pa-fee-currency": "Saisissez une valeur avec un maximum de 2 décimales",
+          "pa-fee-max-value": "Saisissez une valeur comprise entre 0 et 1",
+          "vat": "TVA"
+        },
+        "pagopa-int-mode": {
+          "title": "Technologie de paiement",
+          "description": "En mode synchrone, la position débitrice se trouve sur le système de l'Organisme Créancier (EC), tandis qu'en mode asynchrone, elle est chargée sur le système de Gestion des Positions Débitrices (GPD) de pagoPA. <0>En savoir plus</0>"
+        },
+        "alert": "Si vous n'avez pas d'informations certaines sur l'intégration pagoPA, vérifiez auprès de votre fournisseur technologique : en cas de choix incorrect, la facturation de la notification pourrait être erronée.",
+        "back-to-debt-position": "Retour à la Position débitrice",
+        "radios": {
+          "flat-rate": "Inclus dans l'acte (forfaitaire), à la charge du destinataire",
+          "delivery-mode": "Non inclus dans l'acte (ponctuel), à la charge du destinataire",
+          "sync": "Synchrone",
+          "async": "Asynchrone"
+        },
+        "identical-notice-codes-error": "Un paiement avec ce Code de l'avis existe déjà. Saisissez-en un autre.",
+        "at-least-one-applycost": "Appliquez les frais de notification à au moins un paiement.",
+        "identical-sha256-error": "Il n'est pas possible de télécharger le même fichier plus d'une fois. Téléchargez un fichier différent.",
+        "payment-methods": {
+          "title": "Modèles de paiement",
+          "pagopa-notice": "Avis pagoPA",
+          "payment-models": "Position débitrice de",
+          "nothing": "<0>Si cette notification prévoit un paiement, retournez à </0><1>Informations préliminaires</1><2> et sélectionnez un modèle. Ensuite, revenez ici pour le charger.</2>",
+          "back-to-attachments": "Retour aux Annexes",
+          "apply-cost-installment": "Attention : si la possibilité d'un paiement échelonné est prévue, vous devrez appliquer les frais de notification à une seule échéance.",
+          "pagopa": {
+            "attach-pagopa-notice": "Spécifications de l'Avis pagoPA",
+            "notice-code": "Code de l'avis",
+            "creditor-taxid": "Code Fiscal de l'Organisme Créancier",
+            "apply-cost": "Appliquer les frais de notification",
+            "add-new-pagopa-notice": "Ajouter un code d'avis pagoPA"
+          },
+          "f24": {
+            "attach-f24": "Spécifications du Modèle F24",
+            "document-name": "Titre du document",
+            "apply-cost": "Appliquer les frais de notification",
+            "add-new-f24": "Ajouter un autre Modèle F24"
+          }
+        }
       },
       "sync-feedback": {
         "title": "La notification a été créée",
@@ -479,25 +590,42 @@
     },
     "errors": {
       "fiscal_code": {
-        "title": "Code fiscal non valide",
-        "message": "Le code fiscal pour un ou plusieurs destinataires n’est pas valide"
+        "title": "Code Fiscal non valide",
+        "message": "Le Code Fiscal pour un ou plusieurs destinataires n'est pas valide."
       },
       "invalid_parameter": {
         "title": "Données non valides",
-        "message": "Une ou plusieurs des données saisies ne sont pas valides"
+        "message": "Une ou plusieurs des données saisies ne sont pas valides."
       },
       "invalid_parameter_protocol_number_duplicate": {
         "title": "Données non valides",
-        "message": "Le numéro de protocole saisi est déjà existant"
+        "message": "Le numéro de protocole saisi existe déjà."
       },
       "invalid_parameter_notice_code_duplicate": {
-        "title": "Code avis non valide",
-        "message": "Le code avis {{duplicatedNoticeCode}} a déjà été utilisé"
+        "title": "Code de l'avis non valide",
+        "message": "Le Code de l'avis {{duplicatedNoticeCode}} a déjà été utilisé."
       },
       "generic_invalid_parameter_notice_code_duplicate": {
-        "title": "Code avis non valide",
-        "message": "L'un des codes avis que vous avez saisi a déjà été utilisé."
+        "title": "Code de l'avis non valide",
+        "message": "L'un des Codes de l'avis que vous avez saisis a déjà été utilisé."
+      },
+      "invalid_parameter_taxonomy_code": {
+        "title": "Le code taxonomique n'est pas valide",
+        "message": "Vérifiez le code que vous avez saisi et réessayez. Si l'erreur persiste, contactez l'assistance et communiquez les informations sur l'erreur."
+      },
+      "delivery_notification_limit_exceeded": {
+        "title": "Vous avez atteint la limite de notifications",
+        "message": "Vous ne pouvez pas créer de nouvelles notifications pour le moment car vous avez déjà atteint le nombre maximum mensuel."
+      },
+      "delivery_invalid_parameter_group": {
+        "title": "Le groupe d'utilisateurs n'est pas valide",
+        "message": "Vérifiez le groupe que vous avez sélectionné et réessayez. Si l'erreur persiste, contactez l'assistance et communiquez les informations sur l'erreur."
       }
     }
+  },
+  "settings": {
+    "select-language-to-confirm": "Pour confirmer, sélectionnez une langue",
+    "language-settings-title": "Paramètres de langue",
+    "language-settings-subtitle": "Dans cette section, vous pouvez choisir une langue supplémentaire pour envoyer la notification [cite: 8] aux destinataires, en plus de l'italien."
   }
 }

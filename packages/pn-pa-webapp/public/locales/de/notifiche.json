@@ -37,7 +37,8 @@
     "iun": "IUN-Code",
     "groups": "Gruppen",
     "status": "Status",
-    "show-detail": "Siehe Detail"
+    "show-detail": "Siehe Detail",
+    "aria-action-table": "Benachrichtigungsdetails mit IUN anzeigen: {{iun}}"
   },
   "sort": {
     "title": "Sortieren",
@@ -49,6 +50,7 @@
   "empty-state": {
     "filtered": "Wir haben keine Ergebnisse gefunden: Versuche es mit anderen Filtern. <0>Filter entfernen</0>.",
     "no-notifications": "Die Körperschaft hat noch keine Zustellung gesendet. Verwende die <0>API-Schlüssel</0> oder sende sie <1>manuell</1>.",
+    "timeout": "Keine Ergebnisse gefunden; versuchen Sie es mit anderen Filtern",
     "aria-label-remove-filters": "Filter entfernen",
     "aria-label-api-keys": "API-Schlüssel",
     "aria-label-create-notification": "Manuelle Sendung"
@@ -85,6 +87,22 @@
       "generic_error": {
         "title": "",
         "message": "Beim Stornieren ist ein Fehler aufgetreten. Erneut versuchen."
+      },
+      "delivery_file_info_not_found": {
+        "title": "Das Dokument ist nicht verfügbar",
+        "message": "Beim Abrufen des Dokuments ist ein Problem aufgetreten. Bitte versuchen Sie es später noch einmal. Wenn der Fehler erneut auftritt, kontaktieren Sie den Support  und geben Sie die Fehlerinformationen an."
+      },
+      "delivery_notification_without_payment_attachment": {
+        "title": "Das Dokument ist nicht verfügbar",
+        "message": "Beim Abrufen des Dokuments ist ein Problem aufgetreten. Bitte versuchen Sie es später noch einmal. Wenn der Fehler erneut auftritt, kontaktieren Sie den Support  und geben Sie die Fehlerinformationen an."
+      },
+      "delivery_timeout": {
+        "title": "Keine Ergebnisse",
+        "message": "Keine Ergebnisse gefunden; versuchen Sie es mit anderen Filtern."
+      },
+      "delivery_push_file_not_found": {
+        "title": "Das Dokument ist nicht verfügbar",
+        "message": "Beim Abrufen des Dokuments ist ein Problem aufgetreten. Bitte versuchen Sie es später noch einmal. Wenn der Fehler erneut auftritt, kontaktieren Sie den Support  und geben Sie die Fehlerinformationen an."
       }
     },
     "acts": "Beigefügte Anlagen",
@@ -275,6 +293,7 @@
       "send-analog-outcome-unknown": "Versand in Papierform abgeschlossen - Ergebnis nicht bestimmt",
       "send-analog-unknown": "Ereignis Versand Einschreiben - nicht angenommen",
       "aar-document": "Empfangsbestätigung",
+      "notification-cancelled-document": "Erklärung über die Annullierung der Benachrichtigung",
       "legalfact": {
         "sender-ack": "Zustellung übernommen",
         "digital-delivery-success": "digitale Zustellung",
@@ -300,6 +319,8 @@
         "23I": "Zustellungsbescheinigung",
         "Plico": "Scan des Umschlags",
         "23L": "Empfangsbestätigung",
+        "CAD": "Die digitale Version des Einschreibens, das die Hinterlegungsmitteilung enthält, ist verfügbar",
+        "ARCAD": "Die digitale Version der Empfangsbestätigung  des Einschreibens, das die Hinterlegungsmitteilung enthält, ist verfügbar",
         "Indagine": "Scan der Nachforschung",
         "generic": "Beigefügtes Dokument"
       },
@@ -322,7 +343,8 @@
         "title": "Die Dokumente wurden abgeholt",
         "description-mono-recipient": "Der Empfänger oder sein Bevollmächtigter hat die zugestellten Dokumente bei einer zur Zustellung berechtigten Person abgeholt.",
         "description-multi-recipients": "Einer der Empfänger oder sein Bevollmächtigter hat die zugestellten Dokumente bei einer zur Zustellung berechtigten Person abgeholt."
-      }
+      },
+      "tpp-type": "ein digitaler Kanal von Drittanbietern"
     },
     "downtimes": {
       "title": "FEHLFUNKTIONEN",
@@ -380,11 +402,20 @@
     "viewed-description-multirecipient": "Mindestens ein Empfänger hat die Zustellung gelesen.",
     "canceled": "Abgebrochen",
     "canceled-tooltip": "Die Körperschaft hat den Versand der Zustellung abgebrochen",
-    "canceled-description": "Die Körperschaft hat den Versand der Zustellung abgebrochen."
+    "canceled-description": "Die Körperschaft hat den Versand der Zustellung abgebrochen.",
+    "returned-to-sender": "Rücksendung an den Absender",
+    "returned-to-sender-tooltip": "Der Empfänger ist verstorben",
+    "returned-to-sender-tooltip-multirecipient": "Alle Empfänger sind verstorben",
+    "returned-to-sender-description": "Der Empfänger ist verstorben.",
+    "returned-to-sender-description-multirecipient": "Alle Empfänger sind verstorben.",
+    "notification-timeline-reworked": "Ein oder mehrere Ereignisse aktualisiert",
+    "notification-timeline-reworked-tooltip": "Ein oder mehrere Ereignisse aktualisiert",
+    "notification-timeline-reworked-description": "Ereignisse, die als UNGÜLTIGES EREIGNIS gekennzeichnet sind, sollten nicht berücksichtigt werden, da sie durch nachfolgende Ereignisse ersetzt wurden, die als GÜLTIGES EREIGNIS gekennzeichnet sind."
   },
   "new-notification": {
     "title": "Neuen Bescheid senden",
     "subtitle": "Zum senden des Bescheids die erforderlichen Daten eingeben und Zahlungsvordrucke hinzufügen. Wenn du einen Massenversand durchführen musst, kannst du die",
+    "how-it-works": "Erfahren Sie, wie es funktioniert",
     "breadcrumb-root": "Zustellungen",
     "breadcrumb-leaf": "Neuer Bescheid",
     "prompt": {
@@ -393,83 +424,163 @@
     },
     "back-to-notifications": "Zurück zu den Zustellungen",
     "drag-doc-pc": "Das Dokument hierhin ziehen",
+    "drag-doc-with-format-pc": "Ziehen Sie das Dokument im Format {{type}} hierher",
     "drag-doc-mobile": "Das Dokument hier laden",
     "warning-payment-disabled": "Derzeit können Zustellungen, die eine Zahlung beinhalten, nur über API-Schlüssel gesendet werden.",
     "steps": {
       "preliminary-informations": {
-        "fetch-groups-error": "Wir konnten die Daten, die benötigt werden, um eine neue Zustellung zu erstellen, nicht wiederherstellen.",
-        "title": "Vorabinformationen",
+        "fetch-groups-error": "Die für die Erstellung einer neuen Benachrichtigung erforderlichen Daten konnten nicht abgerufen werden.",
+        "title": "Vorläufige Informationen",
         "protocol-number": "Protokollnummer",
-        "subject": "Gegenstand der Zustellung",
-        "sender-denomination": "Ausgebende Körperschaft",
+        "protocol-number-subtitle": "Dies ist der eindeutige Code, der von der Protokollstelle der öffentlichen Verwaltung bereitgestellt wird. Er dient zur offiziellen Identifizierung der Benachrichtigung und zur Verfolgung ihres Verlaufs innerhalb des Systems.",
+        "subject": "Betreff der Benachrichtigung",
+        "sender-denomination": "Sendende Einrichtungen",
+        "sender-name": "Name der Entität/Organisation",
         "abstract": "Beschreibung",
         "group": "Gruppe",
-        "no-groups": "Es sind keine Gruppen für dieses Produkt vorhanden",
-        "taxonomy-id": "Steuerkodex",
-        "taxonomy-tooltip": "Das ist der Code für die Art der Zustellung. Weitere Informationen in der Anleitung für SEND.",
+        "no-groups": "Für dieses Produkt gibt es keine Gruppen",
+        "taxonomy-id": "Taxonomischer Code",
+        "taxonomy-id-subtitle": "Dies ist der Code, der die Art der zugestellten Dokumente definiert. Wenn Sie ihn nicht kennen, lesen Sie die Liste in <0>SEND-Taxonomie</0>.",
+        "taxonomy-tooltip": "Dies ist der Code, der die Art der Benachrichtigung definiert. Weitere Informationen finden Sie im SEND-Handbuch.",
         "comunication-type": "Versandart",
-        "registered-letter-890": "Vordruck 890",
+        "comunication-type-title": "Art für den Papierversand",
+        "comunication-type-subtitle": "Falls eine digitale Zustellung nicht möglich ist, wird die Benachrichtigung auf analogem Weg in der gewählten Form versandt.",
+        "registered-letter-890": "Modell 890",
         "simple-registered-letter": "Einschreiben mit Rückschein",
         "payment-method": "Zahlungsmodell",
-        "pagopa-notice": "Bescheid pagoPA",
-        "f24": "Vordruck F24",
-        "nothing": "Keine"
+        "pagopa-notice": "pagoPA-Mitteilung",
+        "f24": "Modell F24",
+        "nothing": "Keine",
+        "notification-language-title": "Versandsprache",
+        "notification-language-subtitle": "Die Benachrichtigung, Dokumente und Bescheinigungen werden entsprechend den gewählten Sprachpräferenzen versandt.",
+        "italian-and-other-language": "Italienisch und eine weitere Sprache",
+        "select-other-language": "Andere Sprache auswählen",
+        "notification-content-title": "Inhalte der Benachrichtigung",
+        "notification-content-subtitle": "Diese Informationen helfen dem Empfänger, den Inhalt und die Bedeutung der Mitteilung zu verstehen.",
+        "notification-management-title": "Verwaltung der Benachrichtigung",
+        "notification-management-subtitle": "Wählen Sie die Benutzergruppe aus, die für die Verwaltung der Benachrichtigung verantwortlich ist."
       },
       "recipient": {
         "title": "Empfänger",
         "fiscal-code-error": "Der eingegebene Wert ist falsch",
-        "identical-fiscal-codes-error": "Es gibt bereits einen Empfänger mit dieser Steuernummer. Bitte einen anderen eingeben.",
-        "identical-notice-codes-error": "Es gibt bereits einen Empfänger mit diesem Benachrichtigungscode. Bitte einen anderen eingeben.",
-        "notice-code-error": "18-stelligen numerischen Code eingeben",
+        "identical-fiscal-codes-error": "Es gibt bereits einen Empfänger mit dieser Steuernummer. Geben Sie eine andere ein.",
+        "notice-code-error": "Geben Sie einen Code aus 18 numerischen Zeichen ein",
         "pec-error": "Ungültige PEC-Adresse",
-        "forbidden-characters-denomination-error": "Du hast ungültige Zeichen eingegeben",
-        "legal-entity": "Rechtsperson",
+        "forbidden-characters-denomination-error": "Sie haben ungültige Zeichen eingegeben",
+        "legal-entity": "Rechtssubjekt",
         "physical-person": "Natürliche Person",
-        "name": "Name",
+        "name": "Vorname",
         "surname": "Nachname",
         "legal-person": "Juristische Person",
-        "business-name": "Firmenbezeichnung",
+        "business-name": "Firmenname",
         "recipient-citizen-tax-id": "Steuernummer des Empfängers",
         "recipient-organization-tax-id": "Steuernummer des Empfängers",
-        "creditor-fiscal-code": "Steuernummer der forderungsberechtigten Körperschaft",
-        "notice-code": "Benachrichtigungscode",
-        "add-digital-domicile": "Digitale Adresse hinzufügen",
-        "back-to-preliminary-informations": "Zurück zu Vorabinformationen",
+        "creditor-fiscal-code": "Steuernummer der Gläubigerstelle",
+        "notice-code": "Zahlungsmitteilungskodex",
+        "add-digital-domicile": "Ein digitales Domizil hinzufügen",
+        "back-to-preliminary-informations": "Zurück zu den vorläufigen Informationen",
         "digital-domicile": "Digitales Domizil",
-        "add-physical-domicile": "Physische Adresse hinzufügen",
+        "digital-domicile-subtitle": "Wenn Sie die PEC-Adresse des Empfängers kennen, geben Sie diese hier ein. Auf diese Weise stellen Sie sicher, dass die Benachrichtigung in digitaler Form zugestellt wird, was die Zustellungszeiten im Vergleich zu herkömmlichen analogen Kanälen verkürzt.",
+        "pec-address": "PEC-Adresse",
+        "add-physical-domicile": "Eine physische Adresse hinzufügen",
         "address": "Adresse",
         "house-number": "Hausnummer",
         "municipality-details": "Ort",
         "municipality": "Gemeinde",
         "province": "Provinz",
-        "zip": "Postleitzahl",
-        "foreign-state": "Status",
+        "zip": "PLZ",
+        "foreign-state": "Staat",
         "at": "Bei",
-        "address-details": "Zusatzinformationen (Treppe, Stockwerk)",
-        "add-recipient": "Empfänger hinzufügen",
-        "remove-recipient": "Empfänger entfernen"
+        "address-details": "Zusätzliche Anmerkungen (bei, Treppe, Stockwerk)",
+        "add-recipient": "Einen Empfänger hinzufügen",
+        "remove-recipient": "Empfänger entfernen",
+        "address-subtitle": "Wählen Sie, ob SEND die Adresse automatisch aus den nationalen Registern übernehmen darf. Die automatische Übernahme kann den Versand der Benachrichtigung verzögern. Alternativ können Sie die Adresse manuell eingeben.",
+        "address-physical-lookup-down": "Derzeit ist es nicht möglich, die Adresse aus den nationalen Registern abzurufen. Geben Sie die Adresse manuell ein.",
+        "address-physical-lookup-radios": {
+          "national-registry": "Automatische Übernahme aus dem nationalen Register",
+          "manual": "Manuelle Eingabe"
+        }
       },
       "attachments": {
-        "max-attachments": "Du kannst bis zu 11 Anhänge hochladen, einschließlich des zuzustellenden Bescheids.",
-        "attach-for-recipients": "Anhänge",
-        "act-attachment": "Urkunde anhängen",
+        "title": "Dokumentation",
+        "max-attachments": "Dies sind die Dokumente, die über SEND an alle Empfänger zugestellt werden. Sie können maximal {{maxNumber}} Dokumente anhängen.",
+        "attach-for-recipients": "Angehängte Dokumente",
+        "act-attachment": "Dokument anhängen",
         "doc-attachment": "Ein weiteres Dokument anhängen",
-        "act-name": "Name der Urkunde",
-        "doc-name": "Name des Dokuments",
-        "add-doc": "Füge ein Dokument hinzu (z. B. Begleitschreiben)",
-        "add-another-doc": "Füge ein weiteres Dokument hinzu (z. B. das Begleitschreiben)",
+        "act-name": "Name des Rechtsakts",
+        "doc-name": "Dokumenttitel",
+        "add-doc": "Ein Dokument hinzufügen",
+        "add-another-doc": "Ein weiteres Dokument hinzufügen",
         "back-to-recipient": "Zurück zum Empfänger",
-        "remove-document": "Dokument löschen"
+        "back-to-debt-position": "Zurück zur Schuldenposition",
+        "back-to-debt-position-detail": "Zurück zum Detail der Schuldenposition",
+        "remove-document": "Dokument entfernen",
+        "banner-additional-languages": "Sie haben den Versand der Benachrichtigung in mehreren Sprachen gewählt. Denken Sie daran, die Dokumente in beiden ausgewählten Sprachen anzuhängen.",
+        "file-upload-helper": "Das Dokument muss im Format {{format}} vorliegen und darf eine Größe von {{size}} nicht überschreiten"
       },
-      "payment-methods": {
-        "title": "Zahlungsmodelle",
-        "pagopa-notice": "Bescheid pagoPA",
-        "f24": "F24",
-        "payment-models": "Zahlungsvordrucke für",
-        "attach-pagopa-notice": "Bescheid pagoPA anhängen",
-        "attach-f24": "Modell F24 anhängen",
-        "nothing": "<0>Wenn diese Zustellung eine Zahlung vorsieht, kehre zu </0><1>Vorabinformationen</1><2> zurück und wähle einen Vordruck aus. Komm dann hierher zurück, um diesen zu laden.</2>",
-        "back-to-attachments": "Zurück zu Anhänge"
+      "debt-position": {
+        "title": "Schuldenposition",
+        "debt-position": "Schuldenposition",
+        "debt-position-of": "Schuldenposition von {{fullName}}",
+        "which-type-of-payments": "Welche Art der Zahlung planen Sie ein?",
+        "back-to-recipient": "Zurück zu den Empfängern",
+        "radios": {
+          "pago-pa": "pagoPA-Mitteilung",
+          "f24": "Modell F24",
+          "pago-pa-f24": "pagoPA-Mitteilung + Modell F24",
+          "nothing": "Keine Zahlung"
+        }
+      },
+      "debt-position-detail": {
+        "title": "Detail der Schuldenposition",
+        "debt-position-of": "Schuldenposition von {{fullName}}",
+        "notification-fee": {
+          "title": "Zustellungsgebühr",
+          "description": "Wählen Sie die Art der Zustellungsgebühr: Sie können zwischen der bereits im Rechtsakt enthaltenen Gebühr wählen oder eine personalisierte Zustellungsgebühr zu Lasten des Empfängers eingeben.",
+          "pa-fee-format": "Die Benachrichtigungskosten müssen ein Wert zwischen 0,01 und 1,00 sein und maximal 2 Dezimalstellen enthalten.",
+          "disclaimer": "Die MwSt. wird nur auf Benachrichtigungen erhoben, die in Papierform zugestellt werden.",
+          "pa-fee": "Zustellungsgebühr",
+          "pa-fee-validation": "Geben Sie einen Wert zwischen 0 und 1 mit maximal 2 Dezimalstellen ein",
+          "pa-fee-currency": "Geben Sie einen Wert mit maximal 2 Dezimalstellen ein",
+          "pa-fee-max-value": "Geben Sie einen Wert zwischen 0 und 1 ein",
+          "vat": "MwSt."
+        },
+        "pagopa-int-mode": {
+          "title": "Zahlungstechnologie",
+          "description": "Im synchronen Modus befindet sich die Schuldenposition im System der Gläubigerstelle (EC), während sie im asynchronen Modus in das System zur Verwaltung von Schuldenpositionen (GPD) von pagoPA geladen wird. <0>Mehr erfahren</0>"
+        },
+        "alert": "Wenn Sie keine gesicherten Informationen zur pagoPA-Integration haben, prüfen Sie dies mit Ihrem Technologieanbieter: Bei einer fehlerhaften Auswahl könnte die Abrechnung der Benachrichtigung falsch sein.",
+        "back-to-debt-position": "Zurück zur Schuldenposition",
+        "radios": {
+          "flat-rate": "Im Rechtsakt enthalten (pauschal), zu Lasten des Empfängers",
+          "delivery-mode": "Nicht im Rechtsakt enthalten (punktuell), zu Lasten des Empfängers",
+          "sync": "Synchron",
+          "async": "Asynchron"
+        },
+        "identical-notice-codes-error": "Es gibt bereits eine Zahlung mit diesem Zahlungsmitteilungskodex. Geben Sie einen anderen ein.",
+        "at-least-one-applycost": "Wenden Sie die Zustellungsgebühr auf mindestens eine Zahlung an.",
+        "identical-sha256-error": "Dieselbe Datei kann nicht mehr als einmal hochgeladen werden. Laden Sie eine andere Datei hoch.",
+        "payment-methods": {
+          "title": "Zahlungsmodelle",
+          "pagopa-notice": "pagoPA-Mitteilung",
+          "payment-models": "Schuldenposition von",
+          "nothing": "<0>Wenn diese Benachrichtigung eine Zahlung vorsieht, kehren Sie zu </0><1>Vorläufige Informationen</1><2> zurück und wählen Sie ein Modell aus. Kehren Sie dann hierher zurück, um es hochzuladen.</2>",
+          "back-to-attachments": "Zurück zu den Anhängen",
+          "apply-cost-installment": "Achtung: Wenn eine Ratenzahlung vorgesehen ist, dürfen Sie die Zustellungsgebühr nur auf eine Rate anwenden.",
+          "pagopa": {
+            "attach-pagopa-notice": "Spezifikationen der pagoPA-Mitteilung",
+            "notice-code": "Zahlungsmitteilungskodex",
+            "creditor-taxid": "Steuernummer der Gläubigerstelle",
+            "apply-cost": "Zustellungsgebühr anwenden",
+            "add-new-pagopa-notice": "pagoPA-Mitteilungskodex hinzufügen"
+          },
+          "f24": {
+            "attach-f24": "Spezifikationen für Modell F24",
+            "document-name": "Dokumenttitel",
+            "apply-cost": "Zustellungsgebühr anwenden",
+            "add-new-f24": "Ein weiteres Modell F24 hinzufügen"
+          }
+        }
       },
       "sync-feedback": {
         "title": "Bescheid wurde erstellt",
@@ -479,25 +590,42 @@
     },
     "errors": {
       "fiscal_code": {
-        "title": "Steuernummer ungültig",
-        "message": "Die Steuernummer für einen oder mehrere Empfänger ist ungültig"
+        "title": "Ungültige Steuernummer",
+        "message": "Die Steuernummer für einen oder mehrere Empfänger ist ungültig."
       },
       "invalid_parameter": {
-        "title": "Daten ungültig",
-        "message": "Eine oder mehrere der eingegebenen Daten sind ungültig"
+        "title": "Ungültige Daten",
+        "message": "Einer oder mehrere der eingegebenen Daten sind ungültig."
       },
       "invalid_parameter_protocol_number_duplicate": {
-        "title": "Daten ungültig",
-        "message": "Die eingegebene Protokollnummer ist bereits vorhanden"
+        "title": "Ungültige Daten",
+        "message": "Die eingegebene Protokollnummer existiert bereits."
       },
       "invalid_parameter_notice_code_duplicate": {
-        "title": "Ungültiger Mitteilungscode",
-        "message": "Der Mitteilungscode {{duplicatedNoticeCode}} wurde bereits verwendet"
+        "title": "Ungültiger Zahlungsmitteilungskodex",
+        "message": "Der Zahlungsmitteilungskodex {{duplicatedNoticeCode}} wurde bereits verwendet."
       },
       "generic_invalid_parameter_notice_code_duplicate": {
-        "title": "Ungültiger Mitteilungscode",
-        "message": "Einer der Mitteilungscodes, den Sie eingegeben haben, wurde bereits verwendet."
+        "title": "Ungültiger Zahlungsmitteilungskodex",
+        "message": "Einer der von Ihnen eingegebenen Zahlungsmitteilungskodizes wurde bereits verwendet."
+      },
+      "invalid_parameter_taxonomy_code": {
+        "title": "Der taxonomische Code ist ungültig",
+        "message": "Überprüfen Sie den eingegebenen Code und versuchen Sie es erneut. Wenn der Fehler erneut auftritt, kontaktieren Sie den Support und geben Sie die Fehlerinformationen an."
+      },
+      "delivery_notification_limit_exceeded": {
+        "title": "Sie haben das Benachrichtigungslimit erreicht",
+        "message": "Sie können derzeit keine neuen Benachrichtigungen erstellen, da Sie die maximale monatliche Anzahl bereits erreicht haben."
+      },
+      "delivery_invalid_parameter_group": {
+        "title": "Die Benutzergruppe ist ungültig",
+        "message": "Überprüfen Sie die ausgewählte Gruppe und versuchen Sie es erneut. Wenn der Fehler erneut auftritt, kontaktieren Sie den Support und geben Sie die Fehlerinformationen an."
       }
     }
+  },
+  "settings": {
+    "select-language-to-confirm": "Um zu bestätigen, wählen Sie eine Sprache aus ",
+    "language-settings-title": "Spracheinstellungen",
+    "language-settings-subtitle": "In diesem Bereich können Sie eine zusätzliche Sprache auswählen, in der die Benachrichtigung [cite: 30] an die Empfänger  gesendet wird, zusätzlich zu Italienisch."
   }
 }
