@@ -6,7 +6,8 @@
     "oggetto": "Objet",
     "iun": "Code IUN",
     "status": "État",
-    "show-detail": "Voir le détail"
+    "show-detail": "Voir le détail",
+    "aria-action-table": "Voir les détails de la notification avec IUN : {{iun}}"
   },
   "filters": {
     "iun": "Recherche par code IUN",
@@ -15,7 +16,8 @@
     "data_a": "Au",
     "data_a-input-aria-label": "Entrez la date de fin de la recherche",
     "errors": {
-      "iun": "Veuillez saisir un code IUN valide"
+      "iun": "Veuillez saisir un code IUN valide",
+      "data_a": "La date de début doit précéder la date de fin"
     }
   },
   "sort": {
@@ -111,7 +113,8 @@
         "notice-error": "Un problème est survenu avec cette alerte.",
         "assistence": "Rechargez-la ou contactez l’assistance avec le code d’erreur",
         "duplicated": "Cette alerte a déjà été payée. L’état sera mis à jour sous peu."
-      }
+      },
+      "error-payment": "Sélectionnez un avis de paiement"
     },
     "acts_files": {
       "downloadable_acts": "Les documents sont disponibles en ligne pendant 120 jours à compter de la finalisation de la notification.",
@@ -297,6 +300,7 @@
       "send-analog-outcome-unknown": "Envoi par voie papier terminé - résultat non déterminé",
       "send-analog-unknown": "Événement sur envoi recommandé - non reconnu",
       "aar-document": "Accusé de réception",
+      "notification-cancelled-document": "Déclaration d'annulation de la notification",
       "legalfact": {
         "sender-ack": "notification prise en charge",
         "digital-delivery-success": "notification numérique",
@@ -322,6 +326,8 @@
         "23I": "Reçu de livraison",
         "Plico": "Scan du pli",
         "23L": "Accusé de réception",
+        "CAD": "La dématérialisation de la lettre recommandée contenant la notification de dépôt est disponible",
+        "ARCAD": "La dématérialisation de l'avis de réception de la lettre recommandée contenant la notification de dépôt est disponible",
         "Indagine": "Scan de l’enquête",
         "generic": "Pièce jointe"
       },
@@ -343,7 +349,8 @@
       "radd": {
         "title": "pour détérioration de l’enveloppe",
         "description": "Le destinataire ou son délégué a retiré les documents notifiés auprès d’un opérateur autorisé à les délivrer."
-      }
+      },
+      "tpp-type": "un canal numérique tiers"
     },
     "downtimes": {
       "title": "DYSFONCTIONNEMENTS",
@@ -356,6 +363,20 @@
     "help": {
       "goto": "Accédez au site",
       "assistance": "Pour des problèmes techniques ou des questions relatives à SEND, appuyez sur « Assistance » en haut à droite."
+    },
+    "errors": {
+      "delivery_file_info_not_found": {
+        "title": "Le document n'est pas disponible",
+        "message": "Un problème est survenu lors de la récupération du document. Veuillez réessayer plus tard. Si l'erreur persiste, contactez l'assistance et communiquez les informazioni sur l'erreur."
+      },
+      "delivery_notification_without_payment_attachment": {
+        "title": "Le document n'est pas disponible",
+        "message": "Un problème est survenu lors de la récupération du document. Veuillez réessayer plus tard. Si l'erreur persiste, contactez l'assistance et communiquez les informazioni sur l'erreur."
+      },
+      "delivery_push_file_not_found": {
+        "title": "Le document n'est pas disponible",
+        "message": "Un problème est survenu lors de la récupération du document. Veuillez réessayer plus tard. Si l'erreur persiste, contactez l'assistance et communiquez les informazioni sur l'erreur."
+      }
     }
   },
   "delegatorTitle": "Les notifications de {{name}}",
@@ -403,7 +424,15 @@
     "viewed-description-multirecipient": "Au moins un destinataire a lu la notification.",
     "canceled": "Annulée",
     "canceled-tooltip": "L’organisme a annulé l’envoi de la notification",
-    "canceled-description": "L’organisme a annulé l’envoi de la notification."
+    "canceled-description": "L’organisme a annulé l’envoi de la notification.",
+    "returned-to-sender": "Retour à l'expéditeur",
+    "returned-to-sender-tooltip-monorecipient": "Le destinataire est décédé",
+    "returned-to-sender-tooltip-multirecipient": "Tous les destinataires sont décédés",
+    "returned-to-sender-description-monorecipient": "Le destinataire est décédé.",
+    "returned-to-sender-description-multirecipient": "Tous les destinataires sono décédés.",
+    "notification-timeline-reworked": "Un ou plusieurs événements mis à jour",
+    "notification-timeline-reworked-tooltip": "Un ou plusieurs événements mis à jour",
+    "notification-timeline-reworked-description": "Les événements marqués ÉVÉNEMENT INVALIDÉ ne doivent pas être pris en compte car ils ont été remplacés par les événements suivants marqués ÉVÉNEMENT VALIDÉ."
   },
   "tppLanding": {
     "title": "Bonjour,\nvous avez reçu une communication à valeur légale",

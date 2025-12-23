@@ -6,7 +6,8 @@
     "oggetto": "Zadeva",
     "iun": "Koda IUN",
     "status": "Država",
-    "show-detail": "Ogled podrobnosti"
+    "show-detail": "Ogled podrobnosti",
+    "aria-action-table": "Oglejte si podrobnosti obvestila z IUN: {{iun}}"
   },
   "filters": {
     "iun": "Iskanje po kodi IUN",
@@ -15,7 +16,8 @@
     "data_a": "Do",
     "data_a-input-aria-label": "Vnesite končni datum iskanja",
     "errors": {
-      "iun": "Vnesite veljavno kodo IUN"
+      "iun": "Vnesite veljavno kodo IUN",
+      "data_a": "Datum začetka mora biti pred datumom konca"
     }
   },
   "sort": {
@@ -111,7 +113,8 @@
         "notice-error": "Prišlo je do težave s tem opozorilom.",
         "assistence": "Ponovno ga naložite ali se obrnite na podporo s kodo napake",
         "duplicated": "To opozorilo je bilo že plačano. Stanje bo kmalu posodobljeno."
-      }
+      },
+      "error-payment": "Izberite obvestilo o plačilu"
     },
     "acts_files": {
       "downloadable_acts": "Dokumenti so na voljo na spletu 120 dni od zaključka obvestila.",
@@ -297,6 +300,7 @@
       "send-analog-outcome-unknown": "Pošiljanje v papirni obliki zaključeno - izid ni določen",
       "send-analog-unknown": "Dogodek pri pošiljanju priporočenega pisma - ni prepoznan",
       "aar-document": "Potrdilo o prejemu",
+      "notification-cancelled-document": "Izjava o preklicu obvestila",
       "legalfact": {
         "sender-ack": "obvestilo o prevzemu",
         "digital-delivery-success": "digitalno obveščanje",
@@ -322,6 +326,8 @@
         "23I": "Potrdilo o dostavi",
         "Plico": "Skeniranje ovojnice",
         "23L": "Potrdilo o prejemu",
+        "CAD": "Na voljo je dematerializacija priporočenega pisma, ki vsebuje obvestilo o pologu",
+        "ARCAD": "Na voljo je dematerializacija povratnice za priporočeno pismo, ki vsebuje obvestilo o pologu",
         "Indagine": "Skeniranje ankete",
         "generic": "Priloženi dokumenti"
       },
@@ -343,7 +349,8 @@
       "radd": {
         "title": "Dokumenti so bili prevzeti",
         "description": "Prejemnik ali njegov pooblaščenec je prevzel priglašene dokumente od operaterja, pooblaščenega za njihovo dostavo."
-      }
+      },
+      "tpp-type": "digitalni kanal tretje osebe"
     },
     "downtimes": {
       "title": "MOTNJE",
@@ -356,6 +363,20 @@
     "help": {
       "goto": "Pojdi na spletno mesto",
       "assistance": "Za tehnične težave ali vprašanja, povezana s SEND, kliknite »Podpora« v zgornjem desnem kotu."
+    },
+    "errors": {
+      "delivery_file_info_not_found": {
+        "title": "Dokument ni na voljo",
+        "message": "Pri pridobivanju dokumenta je prišlo do težave. Poskusite znova pozneje. Če se napaka ponovi, stopite v stik s podporo in sporočite podatke o napaki."
+      },
+      "delivery_notification_without_payment_attachment": {
+        "title": "Dokument ni na voljo",
+        "message": "Pri pridobivanju dokumenta je prišlo do težave. Poskusite znova pozneje. Če se napaka ponovi, stopite v stik s podporo in sporočite podatke o napaki."
+      },
+      "delivery_push_file_not_found": {
+        "title": "Dokument ni na voljo",
+        "message": "Pri pridobivanju dokumenta je prišlo do težave. Poskusite znova pozneje. Če se napaka ponovi, stopite v stik s podporo in sporočite podatke o napaki."
+      }
     }
   },
   "delegatorTitle": "Obvestila {{name}}",
@@ -403,7 +424,15 @@
     "viewed-description-multirecipient": "Vsaj en prejemnik je prebral obvestilo.",
     "canceled": "Preklicano",
     "canceled-tooltip": "Organizacija je preklicala pošiljanje obvestila",
-    "canceled-description": "Organizacija je preklicala pošiljanje obvestila."
+    "canceled-description": "Organizacija je preklicala pošiljanje obvestila.",
+    "returned-to-sender": "Vrnjeno pošiljatelju",
+    "returned-to-sender-tooltip-monorecipient": "Prejemnik je umrl",
+    "returned-to-sender-tooltip-multirecipient": "Vsi prejemniki so umrli",
+    "returned-to-sender-description-monorecipient": "Prejemnik je umrl.",
+    "returned-to-sender-description-multirecipient": "Vsi prejemniki so umrli.",
+    "notification-timeline-reworked": "En ali več dogodkov je posodobljenih",
+    "notification-timeline-reworked-tooltip": "En ali več dogodkov je posodobljenih",
+    "notification-timeline-reworked-description": "Dogodkov, označenih z NEVELJAVEN DOGODEK, ne gre upoštevati, saj so jih nadomestili poznejši dogodki, označeni z VELJAVEN DOGODEK."
   },
   "tppLanding": {
     "title": "Pozdravljeni,\nprejeli ste pravno veljavno sporočilo",
