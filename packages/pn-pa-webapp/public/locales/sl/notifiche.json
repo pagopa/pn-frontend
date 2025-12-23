@@ -37,7 +37,8 @@
     "iun": "Koda IUN",
     "groups": "Skupine",
     "status": "Država",
-    "show-detail": "Ogled podrobnosti"
+    "show-detail": "Ogled podrobnosti",
+    "aria-action-table": "Oglejte si podrobnosti obvestila z IUN: {{iun}}"
   },
   "sort": {
     "title": "Razvrsti",
@@ -49,6 +50,7 @@
   "empty-state": {
     "filtered": "Ni bilo mogoče najti rezultatov: poskusite z različnimi filtri. <0>Odstranite filtre</0>.",
     "no-notifications": "Organizacija še ni poslala nobenega obvestila. Uporabite <0>ključe API</0> ali izvedite <1>ročno pošiljanje</1>.",
+    "timeout": "Ni najdenih rezultatov; poskusite z drugimi filtri",
     "aria-label-remove-filters": "Odstranite filtre",
     "aria-label-api-keys": "Ključ API",
     "aria-label-create-notification": "Ročno pošiljanje"
@@ -85,6 +87,22 @@
       "generic_error": {
         "title": "",
         "message": "Pri preklicu je prišlo do napake. Poskusite znova."
+      },
+      "delivery_file_info_not_found": {
+        "title": "Dokument ni na voljo",
+        "message": "Pri pridobivanju dokumenta je prišlo do težave. Poskusite znova pozneje. Če se napaka ponovi, stopite v stik s podporo in sporočite podatke o napaki."
+      },
+      "delivery_notification_without_payment_attachment": {
+        "title": "Dokument ni na voljo",
+        "message": "Pri pridobivanju dokumenta je prišlo do težave. Poskusite znova pozneje. Če se napaka ponovi, stopite v stik s podporo in sporočite podatke o napaki."
+      },
+      "delivery_timeout": {
+        "title": "Ni rezultatov",
+        "message": "Ni najdenih rezultatov; poskusite z drugimi filtri."
+      },
+      "delivery_push_file_not_found": {
+        "title": "Dokument ni na voljo",
+        "message": "Pri pridobivanju dokumenta je prišlo do težave. Poskusite znova pozneje. Če se napaka ponovi, stopite v stik s podporo in sporočite podatke o napaki."
       }
     },
     "acts": "Priloženi dokumenti",
@@ -275,6 +293,7 @@
       "send-analog-outcome-unknown": "Pošiljanje v papirni obliki zaključeno - izid ni določen",
       "send-analog-unknown": "Dogodek pri pošiljanju priporočenega pisma - ni prepoznan",
       "aar-document": "Potrdilo o prejemu",
+      "notification-cancelled-document": "Izjava o preklicu obvestila",
       "legalfact": {
         "sender-ack": "obvestilo o prevzemu",
         "digital-delivery-success": "digitalno obveščanje",
@@ -300,6 +319,8 @@
         "23I": "Potrdilo o dostavi",
         "Plico": "Skeniranje ovojnice",
         "23L": "Potrdilo o prejemu",
+        "CAD": "Na voljo je digitalna različica priporočenega pisma, ki vsebuje obvestilo o pologu",
+        "ARCAD": "Na voljo je digitalna različica potrdila o prejemu za priporočeno pismo, ki vsebuje obvestilo o pologu",
         "Indagine": "Skeniranje ankete",
         "generic": "Priloženi dokumenti"
       },
@@ -322,7 +343,8 @@
         "title": "Dokumenti so bili prevzeti",
         "description-mono-recipient": "Prejemnik ali njegov pooblaščenec je prevzel priglašene dokumente od operaterja, pooblaščenega za njihovo dostavo.",
         "description-multi-recipients": "Eden od prejemnikov ali njegov pooblaščenec je prevzel priglašene dokumente od operaterja, pooblaščenega za njihovo dostavo."
-      }
+      },
+      "tpp-type": "digitalni kanal tretje osebe"
     },
     "downtimes": {
       "title": "MOTNJE",
@@ -380,11 +402,20 @@
     "viewed-description-multirecipient": "Vsaj en prejemnik je prebral obvestilo.",
     "canceled": "Preklicano",
     "canceled-tooltip": "Organizacija je preklicala pošiljanje obvestila",
-    "canceled-description": "Organizacija je preklicala pošiljanje obvestila."
+    "canceled-description": "Organizacija je preklicala pošiljanje obvestila.",
+    "returned-to-sender": "Vrnjeno pošiljatelju",
+    "returned-to-sender-tooltip": "Prejemnik je umrl",
+    "returned-to-sender-tooltip-multirecipient": "Vsi prejemniki so umrli",
+    "returned-to-sender-description": "Prejemnik je umrl.",
+    "returned-to-sender-description-multirecipient": "Vsi prejemniki so umrli.",
+    "notification-timeline-reworked": "En ali več dogodkov je posodobljenih",
+    "notification-timeline-reworked-tooltip": "En ali več dogodkov je posodobljenih",
+    "notification-timeline-reworked-description": "Dogodkov, označenih z NEVELJAVEN DOGODEK, ne gre upoštevati, saj so jih nadomestili poznejši dogodki, označeni z VELJAVEN DOGODEK."
   },
   "new-notification": {
     "title": "Pošljite novo obvestilo",
     "subtitle": "Če želite poslati obvestilo, vnesite zahtevane podrobnosti in dodajte obrazce za plačila. Če morate poslati masovno pošto, lahko uporabite",
+    "how-it-works": "Izvedite, kako deluje",
     "breadcrumb-root": "Obvestila",
     "breadcrumb-leaf": "Novo obvestilo",
     "prompt": {
@@ -393,83 +424,163 @@
     },
     "back-to-notifications": "Vrnite se na obvestila",
     "drag-doc-pc": "Nazaj na obvestila",
+    "drag-doc-with-format-pc": "Tukaj povlecite dokument v formatu {{type}}",
     "drag-doc-mobile": "Povlecite dokument sem",
     "warning-payment-disabled": "Obvestila, ki vključujejo plačilo, je trenutno mogoče poslati samo prek ključa API.",
     "steps": {
       "preliminary-informations": {
         "fetch-groups-error": "Podatkov, potrebnih za ustvarjanje novega obvestila, ni bilo mogoče pridobiti.",
         "title": "Predhodne informacije",
-        "protocol-number": "Predhodne informacije",
-        "subject": "Številka protokola",
-        "sender-denomination": "Zadeva obvestila",
+        "protocol-number": "Številka protokola",
+        "protocol-number-subtitle": "To je edinstvena identifikacijska oznaka, ki jo izda urad za protokol javne uprave. Služi za uradno identifikacijo obvestila in sledenje njegovi poti znotraj sistema.",
+        "subject": "Predmet obvestila",
+        "sender-denomination": "Organi pošiljatelji",
+        "sender-name": "Ime organa",
         "abstract": "Opis",
         "group": "Skupina",
         "no-groups": "Za ta izdelek ni skupin",
         "taxonomy-id": "Taksonomska koda",
-        "taxonomy-tooltip": "Koda je tista, ki določa vrsto obvestila. Več informacij najdete v priročniku SEND.",
-        "comunication-type": "Načini pošiljanja",
-        "registered-letter-890": "Obrazec 890",
+        "taxonomy-id-subtitle": "To je koda, ki določa vrsto vročenih dokumentov. Če je ne poznate, si oglejte seznam v <0>Taksonomija SEND</0>.",
+        "taxonomy-tooltip": "To je koda, ki določa vrsto obvestila. Več informacij najdete v priročniku SEND.",
+        "comunication-type": "Način pošiljanja",
+        "comunication-type-title": "Način za pošiljanje v papirni obliki",
+        "comunication-type-subtitle": "Če digitalno pošiljanje ni mogoče, bo obvestilo poslano analogno v izbranem načinu.",
+        "registered-letter-890": "Model 890",
         "simple-registered-letter": "Priporočeno pismo s povratnico",
-        "payment-method": "Plačilni obrazec",
-        "pagopa-notice": "Opozorilo PagoPA",
+        "payment-method": "Model plačila",
+        "pagopa-notice": "Obvestilo pagoPA",
         "f24": "Obrazec F24",
-        "nothing": "Noben"
+        "nothing": "Brez",
+        "notification-language-title": "Jezik pošiljanja",
+        "notification-language-subtitle": "Obvestilo, dokumenti in potrdila bodo poslani v skladu z izbranimi jezikovnimi nastavitvami.",
+        "italian-and-other-language": "Italijanščina in drug jezik",
+        "select-other-language": "Izberite drug jezik",
+        "notification-content-title": "Vsebina obvestila",
+        "notification-content-subtitle": "Te informacije bodo prejemniku pomagale razumeti vsebino in pomembnost sporočila.",
+        "notification-management-title": "Upravljanje obvestil",
+        "notification-management-subtitle": "Izberite skupino uporabnikov, ki je odgovorna za upravljanje obvestila."
       },
       "recipient": {
         "title": "Prejemniki",
         "fiscal-code-error": "Vnesena vrednost ni pravilna",
-        "identical-fiscal-codes-error": "Prejemnik s to davčno številko že obstaja. Vnesite drugega.",
-        "identical-notice-codes-error": "Prejemnik s to kodo opozorila že obstaja. Vnesite drugega.",
-        "notice-code-error": "Vnesite 18-mestno številčno kodo",
-        "pec-error": "Naslov PEC ni veljaven",
+        "identical-fiscal-codes-error": "Prejemnik s to davčno številko že obstaja. Vnesite drugo.",
+        "notice-code-error": "Vnesite kodo z 18 številskimi znaki",
+        "pec-error": "Neveljaven naslov PEC",
         "forbidden-characters-denomination-error": "Vnesli ste neveljavne znake",
-        "legal-entity": "Pravni subjekt",
+        "legal-entity": "Pravna oseba",
         "physical-person": "Fizična oseba",
         "name": "Ime",
         "surname": "Priimek",
         "legal-person": "Pravna oseba",
-        "business-name": "Naziv podjetja",
+        "business-name": "Ime podjetja",
         "recipient-citizen-tax-id": "Davčna številka prejemnika",
         "recipient-organization-tax-id": "Davčna številka prejemnika",
-        "creditor-fiscal-code": "Davčna številka posojilodajalca",
-        "notice-code": "Št. obvestila",
-        "add-digital-domicile": "Dodajte digitalno prebivališče",
+        "creditor-fiscal-code": "Davčna številka organa prejemnika",
+        "notice-code": "Koda obvestila",
+        "add-digital-domicile": "Dodajte digitalni naslov",
         "back-to-preliminary-informations": "Nazaj na predhodne informacije",
-        "digital-domicile": "Digitalno prebivališče",
+        "digital-domicile": "Digitalni naslov",
+        "digital-domicile-subtitle": "Če poznate naslov PEC prejemnika, ga vnesite tukaj. Tako zagotovite, da bo obvestilo vročeno v digitalni obliki, kar skrajša čas dostave v primerjavi s tradicionalnimi analognimi kanali.",
+        "pec-address": "Naslov PEC",
         "add-physical-domicile": "Dodajte fizični naslov",
         "address": "Naslov",
         "house-number": "Hišna številka",
-        "municipality-details": "Mesto",
+        "municipality-details": "Kraj",
         "municipality": "Občina",
         "province": "Pokrajina",
         "zip": "Poštna številka",
         "foreign-state": "Država",
         "at": "Pri",
-        "address-details": "Dodatne opombe (stopnišče, nadstropje)",
+        "address-details": "Dodatne opombe (pri, stopnišče, nadstropje)",
         "add-recipient": "Dodajte prejemnika",
-        "remove-recipient": "Odstrani prejemnika"
+        "remove-recipient": "Odstranite prejemnika",
+        "address-subtitle": "Izberite, ali storitvi SEND dovolite samodejni vnos naslova iz nacionalnih registrov. Samodejni vnos lahko podaljša čas pošiljanja obvestila. Alternativno lahko naslov vnesete ročno.",
+        "address-physical-lookup-down": "Trenutno naslova ni mogoče pridobiti iz nacionalnih registrov. Naslov vnesite ročno.",
+        "address-physical-lookup-radios": {
+          "national-registry": "Samodejni vnos iz nacionalnega registra",
+          "manual": "Ročni vnos"
+        }
       },
       "attachments": {
-        "max-attachments": "Naložite lahko do 11 prilog, vključno z dokumentom, ki ga je treba obvestiti.",
-        "attach-for-recipients": "Priloge",
-        "act-attachment": "Priloži listino",
-        "doc-attachment": "Priložite še en dokument",
-        "act-name": "Ime listine",
-        "doc-name": "Ime dokumenta",
-        "add-doc": "Dodajte dokument (npr. spremno pismo)",
-        "add-another-doc": "Dodajte še en dokument (npr. spremno pismo)",
+        "title": "Dokumentacija",
+        "max-attachments": "To so dokumenti, ki bodo vročeni prek storitve SEND vsem prejemnikom. Priložite lahko največ {{maxNumber}} dokumentov.",
+        "attach-for-recipients": "Priloženi dokumenti",
+        "act-attachment": "Priložite dokument",
+        "doc-attachment": "Priložite drug dokument",
+        "act-name": "Ime akta",
+        "doc-name": "Naslov dokumenta",
+        "add-doc": "Dodajte dokument",
+        "add-another-doc": "Dodajte drug dokument",
         "back-to-recipient": "Nazaj na prejemnika",
-        "remove-document": "Odstrani dokument"
+        "back-to-debt-position": "Nazaj na dolžniški položaj",
+        "back-to-debt-position-detail": "Nazaj na podrobnosti dolžniškega položaja",
+        "remove-document": "Odstranite dokument",
+        "banner-additional-languages": "Izbrali ste pošiljanje obvestila v več jezikih. Ne pozabite priložiti dokumentov v obeh izbranih jezikih.",
+        "file-upload-helper": "Dokument mora biti v formatu {{format}} in ne sme presegati velikosti {{size}}"
       },
-      "payment-methods": {
-        "title": "Plačilni obrazci",
-        "pagopa-notice": "Opozorilo PagoPA",
-        "f24": "F24",
-        "payment-models": "Plačilni obrazci za",
-        "attach-pagopa-notice": "Priložite obvestilo pagoPA",
-        "attach-f24": "Priložite obrazec F24",
-        "nothing": "<0>Če to obvestilo vključuje plačilo, se vrnite na </0><1>Uvodne informacije</1><2> in izberite obrazec. Nato se vrnite in ga naložite.</2>",
-        "back-to-attachments": "Nazaj na priloge"
+      "debt-position": {
+        "title": "Dolžniški položaj",
+        "debt-position": "Dolžniški položaj",
+        "debt-position-of": "Dolžniški položaj osebe {{fullName}}",
+        "which-type-of-payments": "Katero vrsto plačila načrtujete?",
+        "back-to-recipient": "Nazaj na prejemnike",
+        "radios": {
+          "pago-pa": "Obvestilo pagoPA",
+          "f24": "Obrazec F24",
+          "pago-pa-f24": "Obvestilo pagoPA + Obrazec F24",
+          "nothing": "Brez plačila"
+        }
+      },
+      "debt-position-detail": {
+        "title": "Podrobnosti dolžniškega položaja",
+        "debt-position-of": "Dolžniški položaj osebe {{fullName}}",
+        "notification-fee": {
+          "title": "Stroški obvestila",
+          "description": "Izberite vrsto stroška obvestila: izbirate lahko med tistim, ki je že vključen v akt, ali pa vnesete prilagojen strošek obvestila v breme prejemnika.",
+          "pa-fee-format": "Strošek obvestila mora biti vrednost med 0,01 in 1,00 in mora vsebovati največ 2 decimalni mesti.",
+          "disclaimer": "DDV se obračuna le za obvestila, dostavljena v papirni obliki.",
+          "pa-fee": "Strošek obvestila",
+          "pa-fee-validation": "Vnesite vrednost med 0 in 1 z največ 2 decimalnima mestoma",
+          "pa-fee-currency": "Vnesite vrednost z največ 2 decimalnima mestoma",
+          "pa-fee-max-value": "Vnesite vrednost med 0 in 1",
+          "vat": "DDV"
+        },
+        "pagopa-int-mode": {
+          "title": "Tehnologija plačila",
+          "description": "V sinhronem načinu je dolžniški položaj v sistemu organa prejemnika (EC), v asinhronem načinu pa se naloži v sistem za upravljanje dolžniških položajev (GPD) pagoPA. <0>Izvedite več</0>"
+        },
+        "alert": "Če nimate zanesljivih informacij o integraciji pagoPA, preverite pri svojem ponudniku tehnologije: v primeru napačne izbire je lahko obračun obvestila napačen.",
+        "back-to-debt-position": "Nazaj na dolžniški položaj",
+        "radios": {
+          "flat-rate": "Vključeno v akt (pavšalno), na stroške prejemnika",
+          "delivery-mode": "Ni vključeno v akt (točkovno), na stroške prejemnika",
+          "sync": "Sinhrona",
+          "async": "Asinhrona"
+        },
+        "identical-notice-codes-error": "Plačilo s to kodo obvestila že obstaja. Vnesite drugo.",
+        "at-least-one-applycost": "Uporabite stroške obvestila pri vsaj enem plačilu.",
+        "identical-sha256-error": "Iste datoteke ni mogoče naložiti več kot enkrat. Naložite drugo datoteko.",
+        "payment-methods": {
+          "title": "Modeli plačila",
+          "pagopa-notice": "Obvestilo pagoPA",
+          "payment-models": "Dolžniški položaj osebe",
+          "nothing": "<0>Če to obvestilo predvideva plačilo, se vrnite na </0><1>Predhodne informacije</1><2> in izberite model. Nato se vrnite sem, da ga naložite.</2>",
+          "back-to-attachments": "Nazaj na priloge",
+          "apply-cost-installment": "Opozorilo: če je predvidena možnost obročnega plačila, morate strošek obvestila uporabiti le pri enem obroku.",
+          "pagopa": {
+            "attach-pagopa-notice": "Specifikacije obvestila pagoPA",
+            "notice-code": "Koda obvestila",
+            "creditor-taxid": "Davčna številka organa prejemnika",
+            "apply-cost": "Uporabi strošek obvestila",
+            "add-new-pagopa-notice": "Dodaj kodo obvestila pagoPA"
+          },
+          "f24": {
+            "attach-f24": "Specifikacije obrazca F24",
+            "document-name": "Naslov dokumenta",
+            "apply-cost": "Uporabi strošek obvestila",
+            "add-new-f24": "Dodaj drug obrazec F24"
+          }
+        }
       },
       "sync-feedback": {
         "title": "Obvestilo je bilo ustvarjeno",
@@ -480,23 +591,41 @@
     "errors": {
       "fiscal_code": {
         "title": "Neveljavna davčna številka",
-        "message": "Davčna številka za enega ali več prejemnikov ni veljavna"
+        "message": "Davčna številka za enega ali več prejemnikov ni veljavna."
       },
       "invalid_parameter": {
         "title": "Neveljavni podatki",
-        "message": "Eden ali več vnesenih podatkov ni veljavnih"
+        "message": "Eden ali več vnesenih podatkov ni veljavnih."
       },
       "invalid_parameter_protocol_number_duplicate": {
-        "message": "Vnesena številka protokola že obstaja"
+        "title": "Neveljavni podatki",
+        "message": "Vnesena številka protokola že obstaja."
       },
       "invalid_parameter_notice_code_duplicate": {
         "title": "Neveljavna koda obvestila",
-        "message": "Koda obvestila {{duplicatedNoticeCode}} je bila že uporabljena"
+        "message": "Koda obvestila {{duplicatedNoticeCode}} je bila že uporabljena."
       },
       "generic_invalid_parameter_notice_code_duplicate": {
         "title": "Neveljavna koda obvestila",
-        "message": "Ena izmed kod obvestila, ki ste jo vnesli, je že bila uporabljena."
+        "message": "Ena od kod obvestil, ki ste jih vnesli, je bila že uporabljena."
+      },
+      "invalid_parameter_taxonomy_code": {
+        "title": "Taksonomska koda ni veljavna",
+        "message": "Preverite vneseno kodo in poskusite znova. Če se napaka ponovi, stopite v stik s podporo in sporočite podatke o napaki."
+      },
+      "delivery_notification_limit_exceeded": {
+        "title": "Dosegli ste omejitev obvestil",
+        "message": "Trenutno ne morete ustvariti novih obvestil, ker ste že dosegli največje mesečno število."
+      },
+      "delivery_invalid_parameter_group": {
+        "title": "Skupina uporabnikov ni veljavna",
+        "message": "Preverite izbrano skupino in poskusite znova. Če se napaka ponovi, stopite v stik s podporo in sporočite podatke o napaki."
       }
     }
+  },
+  "settings": {
+    "select-language-to-confirm": "Za potrditev izberite jezik",
+    "language-settings-title": "Jezikovne nastavitve",
+    "language-settings-subtitle": "V tem razdelku lahko poleg italijanščine izberete dodaten jezik, v katerem boste prejemnikom [cite: 66] poslali obvestilo."
   }
 }

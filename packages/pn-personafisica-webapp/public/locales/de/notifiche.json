@@ -6,7 +6,8 @@
     "oggetto": "Betreff",
     "iun": "IUN-Code",
     "status": "Status",
-    "show-detail": "Siehe Detail"
+    "show-detail": "Siehe Detail",
+    "aria-action-table": "Benachrichtigungsdetails mit IUN anzeigen: {{iun}}"
   },
   "filters": {
     "iun": "Suche nach IUN-Code",
@@ -15,7 +16,8 @@
     "data_a": "Bis",
     "data_a-input-aria-label": "Enddatum der Suche eingeben",
     "errors": {
-      "iun": "Gültigen IUN-Code eingeben"
+      "iun": "Gültigen IUN-Code eingeben",
+      "data_a": "Das Startdatum muss vor dem Enddatum liegen"
     }
   },
   "sort": {
@@ -111,7 +113,8 @@
         "notice-error": "Es gab ein Problem mit dieser Benachrichtigung.",
         "assistence": "Lade sie erneut oder kontaktiere den Support unter Angabe des Fehlercodes",
         "duplicated": "Diese Benachrichtigung wurde bereits bezahlt. Der Status wird in Kürze aktualisiert."
-      }
+      },
+      "error-payment": "Wählen Sie eine Zahlungsaufforderung aus"
     },
     "acts_files": {
       "downloadable_acts": "Die Dokumente sind 120 Tage nach Vervollständigung der Zustellung online verfügbar.",
@@ -297,6 +300,7 @@
       "send-analog-outcome-unknown": "Versand in Papierform abgeschlossen - Ergebnis nicht bestimmt",
       "send-analog-unknown": "Ereignis Versand Einschreiben - nicht angenommen",
       "aar-document": "Empfangsbestätigung",
+      "notification-cancelled-document": "Erklärung über die Annullierung der Benachrichtigung",
       "legalfact": {
         "sender-ack": "Zustellung übernommen",
         "digital-delivery-success": "digitale Zustellung",
@@ -322,6 +326,8 @@
         "23I": "Zustellungsbescheinigung",
         "Plico": "Scan des Umschlags",
         "23L": "Empfangsbestätigung",
+        "CAD": "Die digitale Version des Einschreibens, das die Hinterlegungsmitteilung enthält, ist verfügbar",
+        "ARCAD": "Die digitale Version der Empfangsbestätigung des Einschreibens, das die Hinterlegungsmitteilung enthält, ist verfügbar",
         "Indagine": "Scan der Nachforschung",
         "generic": "Beigefügtes Dokument"
       },
@@ -343,7 +349,8 @@
       "radd": {
         "title": "Die Dokumente wurden abgeholt",
         "description": "Der Empfänger oder sein Bevollmächtigter hat die zugestellten Dokumente bei einer zur Zustellung berechtigten Person abgeholt."
-      }
+      },
+      "tpp-type": "ein digitaler Kanal von Drittanbietern"
     },
     "downtimes": {
       "title": "FEHLFUNKTIONEN",
@@ -356,6 +363,20 @@
     "help": {
       "goto": "Besuche die Website",
       "assistance": "Bei technischen Problemen oder Fragen zu SEND oben rechts auf „Service“ klicken."
+    },
+    "errors": {
+      "delivery_file_info_not_found": {
+        "title": "Das Dokument ist nicht verfügbar",
+        "message": "Beim Abrufen des Dokuments ist ein Problem aufgetreten. Bitte versuchen Sie es später noch einmal. Wenn der Fehler erneut auftritt, kontaktieren Sie den Support und geben Sie die Fehlerinformationen an."
+      },
+      "delivery_notification_without_payment_attachment": {
+        "title": "Das Dokument ist nicht verfügbar",
+        "message": "Beim Abrufen des Dokuments ist ein Problem aufgetreten. Bitte versuchen Sie es später noch einmal. Wenn der Fehler erneut auftritt, kontaktieren Sie den Support und geben Sie die Fehlerinformationen an."
+      },
+      "delivery_push_file_not_found": {
+        "title": "Das Dokument ist nicht verfügbar",
+        "message": "Beim Abrufen des Dokuments ist ein Problem aufgetreten. Bitte versuchen Sie es später noch einmal. Wenn der Fehler erneut auftritt, kontaktieren Sie den Support und geben Sie die Fehlerinformationen an."
+      }
     }
   },
   "delegatorTitle": "Zustellungen von {{name}}",
@@ -403,7 +424,15 @@
     "viewed-description-multirecipient": "Mindestens ein Empfänger hat die Zustellung gelesen.",
     "canceled": "Abgebrochen",
     "canceled-tooltip": "Die Körperschaft hat den Versand der Zustellung abgebrochen",
-    "canceled-description": "Die Körperschaft hat den Versand der Zustellung abgebrochen."
+    "canceled-description": "Die Körperschaft hat den Versand der Zustellung abgebrochen.",
+    "returned-to-sender": "Rücksendung an den Absender",
+    "returned-to-sender-tooltip-monorecipient": "Der Empfänger ist verstorben",
+    "returned-to-sender-tooltip-multirecipient": "Alle Empfänger sind verstorben",
+    "returned-to-sender-description-monorecipient": "Der Empfänger ist verstorben.",
+    "returned-to-sender-description-multirecipient": "Alle Empfänger sind verstorben.",
+    "notification-timeline-reworked": "Ein oder mehrere Ereignisse aktualisiert",
+    "notification-timeline-reworked-tooltip": "Ein oder mehrere Ereignisse aktualisiert",
+    "notification-timeline-reworked-description": "Ereignisse, die als UNGÜLTIGES EREIGNIS gekennzeichnet sind, sollten nicht berücksichtigt werden, da sie durch nachfolgende Ereignisse ersetzt wurden, die als GÜLTIGES EREIGNIS gekennzeichnet sind."
   },
   "tppLanding": {
     "title": "Hallo,\nSie haben eine Mitteilung mit Rechtswirkung erhalten",

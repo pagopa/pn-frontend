@@ -116,8 +116,8 @@
     "legalfact": "Attestazione opponibile a terzi",
     "receipt": "Ricevuta",
     "show-history": "Mostra storico",
-    "show-more": "Vedi più dettagli",
-    "show-less": "Vedi meno dettagli",
+    "show-more": "Mostra più dettagli",
+    "show-less": "Mostra meno dettagli",
     "show-all": "Vedi tutti",
     "timeline": {
       "schedule-digital-workflow": "Ulteriore invio per via digitale",
@@ -407,7 +407,10 @@
     "returned-to-sender-tooltip": "Il destinatario risulta deceduto",
     "returned-to-sender-tooltip-multirecipient": "Tutti i destinatari risultano deceduti",
     "returned-to-sender-description": "Il destinatario risulta deceduto.",
-    "returned-to-sender-description-multirecipient": "Tutti i destinatari risultano deceduti."
+    "returned-to-sender-description-multirecipient": "Tutti i destinatari risultano deceduti.",
+    "notification-timeline-reworked": "Evento o più eventi aggiornati",
+    "notification-timeline-reworked-tooltip": "Evento o più eventi aggiornati",
+    "notification-timeline-reworked-description": "Gli eventi contrassegnati con EVENTO INVALIDATO non vanno considerati in quanto sostituiti dagli eventi successivi contrassegnati con EVENTO VALIDATO."
   },
   "new-notification": {
     "title": "Invia una nuova notifica",

@@ -62,6 +62,7 @@ export const getReceivedNotification = createAsyncThunk<
         params.iun,
         params.mandateId
       );
+      console.log('---------------------------------', response.data);
       return parseNotificationDetailForRecipient(
         response.data as NotificationDetail,
         params.currentUserTaxId,

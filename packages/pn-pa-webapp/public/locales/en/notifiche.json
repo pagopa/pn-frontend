@@ -37,7 +37,8 @@
     "iun": "IUN code",
     "groups": "Groups",
     "status": "Status",
-    "show-detail": "See details"
+    "show-detail": "See details",
+    "aria-action-table": "View notification details with IUN: {{iun}}"
   },
   "sort": {
     "title": "Sort",
@@ -49,6 +50,7 @@
   "empty-state": {
     "filtered": "We did not find any results: try different filters. <0>Remove filters</0>.",
     "no-notifications": "The agency has not yet sent any notifications. Use the <0>API Keys</0> or <1>send manually</1>.",
+    "timeout": "No results found; try again with different filters",
     "aria-label-remove-filters": "Remove filters",
     "aria-label-api-keys": "API Key",
     "aria-label-create-notification": "Manual sending"
@@ -85,6 +87,22 @@
       "generic_error": {
         "title": "",
         "message": "An error occurred while canceling. Try again."
+      },
+      "delivery_file_info_not_found": {
+        "title": "The document is not available",
+        "message": "A problem occurred while retrieving the document. Please try again later. If the error persists, contact the support team  and provide the error details."
+      },
+      "delivery_notification_without_payment_attachment": {
+        "title": "The document is not available",
+        "message": "A problem occurred while retrieving the document. Please try again later. If the error persists, contact the support team  and provide the error details."
+      },
+      "delivery_timeout": {
+        "title": "No results",
+        "message": "No results found; try using different filters."
+      },
+      "delivery_push_file_not_found": {
+        "title": "The document is not available",
+        "message": "A problem occurred while retrieving the document. Please try again later. If the error persists, contact the support team  and provide the error details."
       }
     },
     "acts": "Attached documents",
@@ -275,6 +293,7 @@
       "send-analog-outcome-unknown": "Sending by mail completed – outcome not determined",
       "send-analog-unknown": "Event by registered mail – not recognized",
       "aar-document": "Notification of receipt",
+      "notification-cancelled-document": "Declaration of notification cancellation",
       "legalfact": {
         "sender-ack": "notification taken over",
         "digital-delivery-success": "digital notification",
@@ -300,6 +319,8 @@
         "23I": "Receipt of delivery",
         "Plico": "Scanning the envelope",
         "23L": "Notification of receipt",
+        "CAD": "The digital version of the registered mail  containing the notification of deposit is available",
+        "ARCAD": "The digital version of the notification of receipt  for the registered mail  containing the notification of deposit is available",
         "Indagine": "Scanning the survey",
         "generic": "Attached document"
       },
@@ -322,7 +343,8 @@
         "title": "The documents were collected",
         "description-mono-recipient": "The recipient or their delegate collected the notified documents from an operator enabled to deliver them.",
         "description-multi-recipients": "due to theft of the envelope"
-      }
+      },
+      "tpp-type": "a third-party digital channel"
     },
     "downtimes": {
       "title": "DISRUPTIONS",
@@ -380,11 +402,20 @@
     "viewed-description-multirecipient": "At least one recipient has read the notification.",
     "canceled": "Canceled",
     "canceled-tooltip": "The institution has canceled the sending of the notification",
-    "canceled-description": "The institution has canceled the sending of the notification."
+    "canceled-description": "The institution has canceled the sending of the notification.",
+    "returned-to-sender": "Returned to sender",
+    "returned-to-sender-tooltip": "The recipient is deceased",
+    "returned-to-sender-tooltip-multirecipient": "All recipients are deceased",
+    "returned-to-sender-description": "The recipient is deceased.",
+    "returned-to-sender-description-multirecipient": "All recipients are deceased.",
+    "notification-timeline-reworked": "One or more events updated",
+    "notification-timeline-reworked-tooltip": "One or more events updated",
+    "notification-timeline-reworked-description": "Events marked as INVALIDATED EVENT should not be considered as they have been replaced by subsequent events marked as VALIDATED EVENT."
   },
   "new-notification": {
     "title": "Send a new notification",
     "subtitle": "To send a notification, enter the required details and add payment forms. If you need to send a mass email, you can use the",
+    "how-it-works": "Find out how it works",
     "breadcrumb-root": "Notifications",
     "breadcrumb-leaf": "New notification",
     "prompt": {
@@ -393,83 +424,163 @@
     },
     "back-to-notifications": "Return to notifications",
     "drag-doc-pc": "Back to notifications",
+    "drag-doc-with-format-pc": "Drag the document in {{type}} format here",
     "drag-doc-mobile": "Drag the document here",
     "warning-payment-disabled": "Notifications involving a payment can only be sent via API Key at this time.",
     "steps": {
       "preliminary-informations": {
-        "fetch-groups-error": "We were unable to retrieve the data needed to create a new notification.",
+        "fetch-groups-error": "We were unable to retrieve the data required to create a new notification.",
         "title": "Preliminary information",
         "protocol-number": "Protocol number",
-        "subject": "Subject of the notification",
-        "sender-denomination": "Sending institution",
+        "protocol-number-subtitle": "It is the unique code provided by the Registry Office of the Public Administration. It is used to officially identify the notification and track its path within the system.",
+        "subject": "Notification subject",
+        "sender-denomination": "Issuing institution",
+        "sender-name": "Institution name",
         "abstract": "Description",
         "group": "Group",
         "no-groups": "There are no groups for this product",
         "taxonomy-id": "Taxonomic code",
-        "taxonomy-tooltip": "This is the code that defines the type of notification. You can find more information in the SEND manual.",
+        "taxonomy-id-subtitle": "It is the code that defines the type of notified documents. If you do not know it, consult the list in <0>SEND Taxonomy</0>.",
+        "taxonomy-tooltip": "It is the code that defines the type of notification. You can find more information in the SEND manual.",
         "comunication-type": "Sending method",
+        "comunication-type-title": "Method for paper delivery",
+        "comunication-type-subtitle": "If digital delivery is not possible, the notification will be sent via analog means in the selected mode.",
         "registered-letter-890": "Model 890",
-        "simple-registered-letter": "Registered letter with acknowledgment of receipt",
-        "payment-method": "Payment form",
-        "pagopa-notice": "PagoPA notice",
-        "f24": "Form F24",
-        "nothing": "None"
+        "simple-registered-letter": "Registered mail with acknowledgment of receipt",
+        "payment-method": "Payment model",
+        "pagopa-notice": "pagoPA Notice",
+        "f24": "F24 Form",
+        "nothing": "None",
+        "notification-language-title": "Sending language",
+        "notification-language-subtitle": "The notification, documents, and certificates will be sent according to the selected language preferences.",
+        "italian-and-other-language": "Italian and another language",
+        "select-other-language": "Select another language",
+        "notification-content-title": "Notification content",
+        "notification-content-subtitle": "This information will help the recipient understand the content and importance of the communication.",
+        "notification-management-title": "Notification management",
+        "notification-management-subtitle": "Choose the user group responsible for managing the notification."
       },
       "recipient": {
         "title": "Recipients",
-        "fiscal-code-error": "Value entered is incorrect",
-        "identical-fiscal-codes-error": "There is already a recipient with this Fiscal Code. Please insert a different one.",
-        "identical-notice-codes-error": "There is already a recipient with this Notice Code. Please insert a different one.",
-        "notice-code-error": "Enter an 18-digit numeric code",
+        "fiscal-code-error": "The value entered is incorrect",
+        "identical-fiscal-codes-error": "A recipient with this Fiscal Code already exists. Please enter a different one.",
+        "notice-code-error": "Enter a code of 18 numeric characters",
         "pec-error": "Invalid PEC address",
         "forbidden-characters-denomination-error": "You have entered invalid characters",
-        "legal-entity": "Legal person",
-        "physical-person": "Physical person",
+        "legal-entity": "Legal entity",
+        "physical-person": "Natural person",
         "name": "First name",
         "surname": "Surname",
         "legal-person": "Legal person",
-        "business-name": "Company name",
-        "recipient-citizen-tax-id": "Recipient Fiscal Code",
-        "recipient-organization-tax-id": "Recipient Fiscal Code",
-        "creditor-fiscal-code": "Fiscal Code of the credit institution",
-        "notice-code": "Notice code",
+        "business-name": "Business name",
+        "recipient-citizen-tax-id": "Recipient's Fiscal Code",
+        "recipient-organization-tax-id": "Recipient's Fiscal Code",
+        "creditor-fiscal-code": "Payee's Fiscal Code",
+        "notice-code": "Notice Code",
         "add-digital-domicile": "Add a digital domicile",
-        "back-to-preliminary-informations": "Back to Preliminary Information",
+        "back-to-preliminary-informations": "Back to Preliminary information",
         "digital-domicile": "Digital domicile",
+        "digital-domicile-subtitle": "If you know the recipient's PEC address, enter it here. This ensures the notification is delivered in digital forma, reducing delivery times compared to traditional analog channels.",
+        "pec-address": "PEC Address",
         "add-physical-domicile": "Add a physical address",
         "address": "Address",
-        "house-number": "Street no.",
-        "municipality-details": "Town/city",
+        "house-number": "House number",
+        "municipality-details": "Location",
         "municipality": "Municipality",
         "province": "Province",
-        "zip": "Postcode",
-        "foreign-state": "Status",
-        "at": "At",
-        "address-details": "Additional notes (staircase, floor)",
+        "zip": "ZIP Code",
+        "foreign-state": "State",
+        "at": "c/o",
+        "address-details": "Additional notes (c/o, staircase, floor)",
         "add-recipient": "Add a recipient",
-        "remove-recipient": "Remove recipient"
+        "remove-recipient": "Remove recipient",
+        "address-subtitle": "Choose whether to allow SEND to automatically enter the address from national registries. Automatic entry may delay notification delivery. Alternatively, you can fill in the address manually.",
+        "address-physical-lookup-down": "Currently, the address cannot be retrieved from national registries. Please enter the address manually.",
+        "address-physical-lookup-radios": {
+          "national-registry": "Automatic entry from national registry",
+          "manual": "Manual entry"
+        }
       },
       "attachments": {
-        "max-attachments": "You can upload up to 11 attachments, including the document to be notified.",
-        "attach-for-recipients": "Attachments",
-        "act-attachment": "Attach the deed",
+        "title": "Documentation",
+        "max-attachments": "These are the documents that will be notified via SEND to all recipients. You can attach up to a maximum of {{maxNumber}} documents.",
+        "attach-for-recipients": "Attached documents",
+        "act-attachment": "Attach document",
         "doc-attachment": "Attach another document",
-        "act-name": "Name of deed",
-        "doc-name": "Document name",
-        "add-doc": "Add a document (e.g. cover letter)",
-        "add-another-doc": "Add another document (e.g. cover letter)",
+        "act-name": "Act name",
+        "doc-name": "Document title",
+        "add-doc": "Add a document",
+        "add-another-doc": "Add another document",
         "back-to-recipient": "Back to Recipient",
-        "remove-document": "Remove document"
+        "back-to-debt-position": "Back to Debt position",
+        "back-to-debt-position-detail": "Back to Debt position detail",
+        "remove-document": "Remove document",
+        "banner-additional-languages": "You have chosen to send the notification in multiple languages. Remember to attach documents in both selected languages.",
+        "file-upload-helper": "The document must be in {{format}} format and must not exceed {{size}}"
       },
-      "payment-methods": {
-        "title": "Payment forms",
-        "pagopa-notice": "PagoPA notice",
-        "f24": "F24",
-        "payment-models": "Payment forms for",
-        "attach-pagopa-notice": "Attach pagoPA Notice",
-        "attach-f24": "Attach Form F24",
-        "nothing": "<0>If this notification involves a payment, go back to </0><1>Preliminary Information</1><2> and select a form. Then, return here to upload it.</2>",
-        "back-to-attachments": "Back to Attachments"
+      "debt-position": {
+        "title": "Debt position",
+        "debt-position": "Debt position",
+        "debt-position-of": "Debt position of {{fullName}}",
+        "which-type-of-payments": "What type of payment are you planning?",
+        "back-to-recipient": "Back to Recipients",
+        "radios": {
+          "pago-pa": "pagoPA Notice",
+          "f24": "F24 Form",
+          "pago-pa-f24": "pagoPA Notice + F24 Form",
+          "nothing": "No payment"
+        }
+      },
+      "debt-position-detail": {
+        "title": "Debt position detail",
+        "debt-position-of": "Debt position of {{fullName}}",
+        "notification-fee": {
+          "title": "Notification fee",
+          "description": "Choose the type of notification fee: you can choose between the one already included in the document or enter a custom notification fee to be paid by the recipient.",
+          "pa-fee-format": "The notification fee must be a value between 0.01 and 1.00 and must contain a maximum of 2 decimal places.",
+          "disclaimer": "VAT will only be applied to notifications delivered in paper format.",
+          "pa-fee": "Notification fee",
+          "pa-fee-validation": "Enter a value between 0 and 1 with a maximum of 2 decimal places",
+          "pa-fee-currency": "Enter a value with a maximum of 2 decimal places",
+          "pa-fee-max-value": "Enter a value between 0 and 1",
+          "vat": "VAT"
+        },
+        "pagopa-int-mode": {
+          "title": "Payment technology",
+          "description": "In synchronous mode, the debt position is held by the Payee's (EC) system, while in asynchronous mode, it is uploaded to the pagoPA Debt Position Management (GPD) system. <0>Find out more</0>"
+        },
+        "alert": "If you do not have certain information regarding pagoPA integration, check with your technology provider: if the choice is incorrect, the notification charge may be wrong.",
+        "back-to-debt-position": "Back to Debt position",
+        "radios": {
+          "flat-rate": "Included in the act (flat-rate), at the expense of the recipient",
+          "delivery-mode": "Not included in the act (specific), at the expense of the recipient",
+          "sync": "Synchronous",
+          "async": "Asynchronous"
+        },
+        "identical-notice-codes-error": "A payment with this Notice Code already exists. Please enter a different one.",
+        "at-least-one-applycost": "Apply notification fees to at least one payment.",
+        "identical-sha256-error": "It is not possible to upload the same file more than once. Please upload a different file.",
+        "payment-methods": {
+          "title": "Payment models",
+          "pagopa-notice": "pagoPA Notice",
+          "payment-models": "Debt position of",
+          "nothing": "<0>If this notification involves a payment, go back to </0><1>Preliminary information</1><2> and select a model. Then, return here to upload it.</2>",
+          "back-to-attachments": "Back to Attachments",
+          "apply-cost-installment": "Warning: if the possibility of installment payments is provided, you must apply the notification fee to only one installment.",
+          "pagopa": {
+            "attach-pagopa-notice": "pagoPA Notice specifications",
+            "notice-code": "Notice Code",
+            "creditor-taxid": "Payee's Fiscal Code",
+            "apply-cost": "Apply notification fee",
+            "add-new-pagopa-notice": "Add pagoPA notice code"
+          },
+          "f24": {
+            "attach-f24": "F24 Form specifications",
+            "document-name": "Document title",
+            "apply-cost": "Apply notification fee",
+            "add-new-f24": "Add another F24 Form"
+          }
+        }
       },
       "sync-feedback": {
         "title": "Notification has been created",
@@ -479,25 +590,42 @@
     },
     "errors": {
       "fiscal_code": {
-        "title": "Invalid tax code",
-        "message": "Fiscal code for one or more recipients is invalid"
+        "title": "Invalid Fiscal Code",
+        "message": "The Fiscal Code for one or more recipients is invalid."
       },
       "invalid_parameter": {
         "title": "Invalid data",
-        "message": "One or more of the data items entered is invalid"
+        "message": "One or more of the data entered are invalid."
       },
       "invalid_parameter_protocol_number_duplicate": {
         "title": "Invalid data",
-        "message": "The entered protocol number already exists"
+        "message": "The protocol number entered already exists."
       },
       "invalid_parameter_notice_code_duplicate": {
-        "title": "Invalid notice code",
-        "message": "The notice code {{duplicatedNoticeCode}} has already been used"
+        "title": "Invalid Notice Code",
+        "message": "The Notice Code {{duplicatedNoticeCode}} has already been used."
       },
       "generic_invalid_parameter_notice_code_duplicate": {
-        "title": "Invalid notice code",
-        "message": "One of the notice codes you entered has already been used"
+        "title": "Invalid Notice Code",
+        "message": "One of the Notice Codes you entered has already been used."
+      },
+      "invalid_parameter_taxonomy_code": {
+        "title": "The taxonomic code is invalid",
+        "message": "Check the code you entered and try again. If the error persists, contact the support team and provide the error details."
+      },
+      "delivery_notification_limit_exceeded": {
+        "title": "You have reached the notification limit",
+        "message": "You cannot create new notifications at this time because you have already reached the maximum monthly number."
+      },
+      "delivery_invalid_parameter_group": {
+        "title": "The user group is invalid",
+        "message": "Check the group you selected and try again. If the error persists, contact the support team and provide the error details."
       }
     }
+  },
+  "settings": {
+    "select-language-to-confirm": "To confirm, select a language",
+    "language-settings-title": "Language settings",
+    "language-settings-subtitle": "In this section, you can choose an additional language to send the notification [cite: 8] to the recipients, in addition to Italian."
   }
 }

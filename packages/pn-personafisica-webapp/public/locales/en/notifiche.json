@@ -6,7 +6,8 @@
     "oggetto": "Subject",
     "iun": "IUN code",
     "status": "Status",
-    "show-detail": "See details"
+    "show-detail": "See details",
+    "aria-action-table": "View notification details with IUN: {{iun}}"
   },
   "filters": {
     "iun": "Search by IUN Code",
@@ -15,7 +16,8 @@
     "data_a": "To",
     "data_a-input-aria-label": "Enter search end date",
     "errors": {
-      "iun": "Enter a valid IUN code"
+      "iun": "Enter a valid IUN code",
+      "data_a": "The start date must precede the end date"
     }
   },
   "sort": {
@@ -111,7 +113,8 @@
         "notice-error": "There is a problem with this notification.",
         "assistence": "Reload it or contact support with the error code",
         "duplicated": "This notification has already been paid. The status will be updated shortly."
-      }
+      },
+      "error-payment": "Select a Payment Notice"
     },
     "acts_files": {
       "downloadable_acts": "Documents are available online for 120 days from the finalization of the notification.",
@@ -297,6 +300,7 @@
       "send-analog-outcome-unknown": "Sending by mail completed – outcome not determined",
       "send-analog-unknown": "Event by registered mail – not recognized",
       "aar-document": "Notification of receipt",
+      "notification-cancelled-document": "Declaration of notification cancellation",
       "legalfact": {
         "sender-ack": "notification taken over",
         "digital-delivery-success": "digital notification",
@@ -322,6 +326,8 @@
         "23I": "Receipt of delivery",
         "Plico": "Scanning the envelope",
         "23L": "Notification of receipt",
+        "CAD": "The digital version of the registered mail containing the notification of deposit is available",
+        "ARCAD": "The digital version of the notification of receipt for the registered mail containing the notification of deposit is available",
         "Indagine": "Scanning the survey",
         "generic": "Attached document"
       },
@@ -343,7 +349,8 @@
       "radd": {
         "title": "The documents were collected",
         "description": "The recipient or their delegate collected the notified documents from an operator enabled to deliver them."
-      }
+      },
+      "tpp-type": "a third-party digital channel"
     },
     "downtimes": {
       "title": "DISRUPTIONS",
@@ -356,6 +363,20 @@
     "help": {
       "goto": "Visit the website",
       "assistance": "For technical problems or questions related to SEND, click on \"Support\" at the top right."
+    },
+    "errors": {
+      "delivery_file_info_not_found": {
+        "title": "The document is not available",
+        "message": "A problem occurred while retrieving the document. Please try again later. If the error persists, contact the support team and provide the error details."
+      },
+      "delivery_notification_without_payment_attachment": {
+        "title": "The document is not available",
+        "message": "A problem occurred while retrieving the document. Please try again later. If the error persists, contact the support team and provide the error details."
+      },
+      "delivery_push_file_not_found": {
+        "title": "The document is not available",
+        "message": "A problem occurred while retrieving the document. Please try again later. If the error persists, contact the support team and provide the error details."
+      }
     }
   },
   "delegatorTitle": "The notifications for {{name}}",
@@ -403,7 +424,15 @@
     "viewed-description-multirecipient": "At least one recipient has read the notification.",
     "canceled": "Canceled",
     "canceled-tooltip": "The institution has canceled the sending of the notification",
-    "canceled-description": "The institution has canceled the sending of the notification."
+    "canceled-description": "The institution has canceled the sending of the notification.",
+    "returned-to-sender": "Returned to sender",
+    "returned-to-sender-tooltip-monorecipient": "The recipient is deceased",
+    "returned-to-sender-tooltip-multirecipient": "All recipients are deceased",
+    "returned-to-sender-description-monorecipient": "The recipient is deceased.",
+    "returned-to-sender-description-multirecipient": "All recipients are deceased.",
+    "notification-timeline-reworked": "One or more events updated",
+    "notification-timeline-reworked-tooltip": "One or more events updated",
+    "notification-timeline-reworked-description": "Events marked as INVALIDATED EVENT should not be considered as they have been replaced by subsequent events marked as VALIDATED EVENT."
   },
   "tppLanding": {
     "title": "Hi,\nYou have received a legally binding communication",
