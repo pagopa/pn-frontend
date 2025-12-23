@@ -7,7 +7,6 @@ import { TimelineConnector } from '@mui/lab';
 import { Box, Button, Chip, Typography } from '@mui/material';
 import {
   ButtonNaked,
-  Tag,
   TimelineNotificationContent,
   TimelineNotificationDot,
   TimelineNotificationItem,
@@ -31,6 +30,7 @@ import {
   getNotificationStatusInfos,
   getNotificationTimelineStatusInfos,
 } from '../../utility/notification.utility';
+import { Tag } from '../Tag/Tag';
 
 type Props = {
   timelineStep: NotificationStatusHistory;
@@ -141,9 +141,9 @@ const NotificationDetailTimelineStep = ({
   const getTag = (status: ReworkedStatus | undefined) => {
     switch (status) {
       case ReworkedStatus.VALID:
-        return <Tag value="Evento Validato" />;
+        return <Tag value="Evento Validato" variant="warning" />;
       case ReworkedStatus.NOT_VALID:
-        return <Tag value="Evento Non Validato" />;
+        return <Tag value="Evento Invalidato" variant="warning" />;
       default:
         return null;
     }
@@ -162,7 +162,11 @@ const NotificationDetailTimelineStep = ({
     /* eslint-enable functional/immutable-data */
   }
 
-  const getChipColor = (position: string, status: NotificationStatus, color?: string) => {
+  const getChipColor = (
+    position: string,
+    status: NotificationStatus,
+    color?: 'warning' | 'error' | 'success' | 'info' | 'default' | 'primary' | 'secondary'
+  ) => {
     if (position === 'first') {
       return color;
     }
@@ -197,7 +201,6 @@ const NotificationDetailTimelineStep = ({
             data-testid="itemStatus"
             label={notificationStatusInfos.label}
             color={getChipColor(position, timelineStep.status, notificationStatusInfos.color)}
-            // color={position === 'first' ? notificationStatusInfos.color : 'default'}
             size={position === 'first' ? 'medium' : 'small'}
             sx={{
               opacity:
@@ -297,7 +300,7 @@ const NotificationDetailTimelineStep = ({
             <Typography color="text.secondary" fontSize={14} data-testid="dateItemMicro">
               {formatTime(s.timestamp)}
             </Typography>
-            {getTag(reworkedStatus)}
+            {getTag(s.reworkedStatus)}
             <Typography
               color="text.primary"
               fontSize={14}

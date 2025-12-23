@@ -93,7 +93,6 @@ const NotificationDetailTimeline = ({
     return undefined;
   };
 
-  console.log('statusHistory', statusHistory);
   const timelineComponent = statusHistory.map((t, i) => (
     <NotificationDetailTimelineStep
       timelineStep={t}
@@ -152,6 +151,7 @@ const NotificationDetailTimeline = ({
             historyButtonClickHandler={toggleHistoryDrawer}
             disableDownloads={disableDownloads}
             isParty={isParty}
+            reworkedStatus={statusHistory[0].reworkedStatus}
           />
         ) : (
           timelineComponent

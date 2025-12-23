@@ -74,6 +74,7 @@ export interface INotificationDetailTimeline {
   details: NotificationDetailTimelineDetails;
   hidden?: boolean;
   index?: number;
+  reworkedStatus?: ReworkedStatus;
 }
 
 export enum ResponseStatus {
