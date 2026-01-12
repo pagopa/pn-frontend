@@ -10,7 +10,6 @@ import {
   LegalFactId,
   NotificationDetailRecipient,
   NotificationStatusHistory,
-  ReworkedStatus,
 } from '../../models/NotificationDetail';
 import { getLocalizedOrDefaultLabel } from '../../utility/localization.utility';
 import NotificationDetailTimelineStep from './NotificationDetailTimelineStep';
