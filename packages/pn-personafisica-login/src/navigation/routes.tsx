@@ -19,8 +19,8 @@ const onLoginRequest = () => <Login />;
 const generateRandomUniqueString = () => uuidv4().replace(/-/g, '').slice(0, 15);
 const state = generateRandomUniqueString();
 const nonce = generateRandomUniqueString();
-const clientId = 's8Etz0L2Y0YsbUuH3mni9agV-QFXKMsuA8EThiO2kQQ';
-const redirect_uri = `https://cittadini.dev.notifichedigitali.it/`;
+const clientId = 'DFCUf4W3KHfKUl4USEVYrMgpMxvyKICHM_ZPiZ3ftm0';
+const redirect_uri = `https://cittadini.dev.notifichedigitali.it/auth/callback`;
 const encodedRedirectUri = encodeURIComponent(redirect_uri);
 
 const TestOIDCRedirect = () => {
