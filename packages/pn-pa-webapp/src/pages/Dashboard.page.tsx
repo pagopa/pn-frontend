@@ -1,10 +1,12 @@
-import { useCallback, useEffect, useRef } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
 import { Alert, Box, Button, Typography } from '@mui/material';
 import {
   ApiErrorWrapper,
+  AppResponse,
+  AppResponsePublisher,
   CustomPagination,
   PaginationData,
   TitleBox,
@@ -23,6 +25,7 @@ import { setPagination } from '../redux/dashboard/reducers';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { RootState } from '../redux/store';
 import { getConfiguration } from '../services/configuration.service';
+import { ServerResponseErrorCode } from '../utility/AppError/types';
 
 const Dashboard = () => {
   const dispatch = useAppDispatch();
@@ -33,6 +36,8 @@ const Dashboard = () => {
   const navigate = useNavigate();
   const isMobile = useIsMobile();
   const { t } = useTranslation(['notifiche']);
+
+  const [hasTimeoutError, setHasTimeoutError] = useState(false);
   // back end return at most the next three pages
   // we have flag moreResult to check if there are more pages
   // the minum number of pages, to have ellipsis in the paginator, is 8
@@ -78,12 +83,37 @@ const Dashboard = () => {
         pagination.page === 0 ? undefined : pagination.nextPagesKey[pagination.page - 1],
     };
 
+    setHasTimeoutError(false);
+
     void dispatch(getSentNotifications(params));
   }, [filters, pagination.size, pagination.page, sort]);
 
   useEffect(() => {
     fetchNotifications();
   }, [fetchNotifications]);
+
+  const handleTimeoutError = useCallback((responseError: AppResponse) => {
+    const error = responseError.errors ? responseError.errors[0] : null;
+    if (error?.code === ServerResponseErrorCode.PN_DELIVERY_TIMEOUT) {
+      setHasTimeoutError(true);
+      return false;
+    }
+    return true;
+  }, []);
+
+  useEffect(() => {
+    AppResponsePublisher.error.subscribe(
+      DASHBOARD_ACTIONS.GET_SENT_NOTIFICATIONS,
+      handleTimeoutError
+    );
+
+    return () => {
+      AppResponsePublisher.error.unsubscribe(
+        DASHBOARD_ACTIONS.GET_SENT_NOTIFICATIONS,
+        handleTimeoutError
+      );
+    };
+  }, [handleTimeoutError]);
 
   return (
     <Box p={3}>
@@ -160,6 +190,7 @@ const Dashboard = () => {
             onApiKeys={handleRouteApiKeys}
             filtersApplied={filterNotificationsRef.current.filtersApplied}
             onCleanFilters={filterNotificationsRef.current.cleanFilters}
+            hasTimeoutError={hasTimeoutError}
           />
         ) : (
           <DesktopNotifications
@@ -169,6 +200,7 @@ const Dashboard = () => {
             onApiKeys={handleRouteApiKeys}
             filtersApplied={filterNotificationsRef.current.filtersApplied}
             onCleanFilters={filterNotificationsRef.current.cleanFilters}
+            hasTimeoutError={hasTimeoutError}
           />
         )}
         {notifications.length > 0 && (

@@ -14,8 +14,7 @@
     "status": "Stato",
     "errors": {
       "iun": "Inserisci un codice IUN valido",
-      "fiscal-code": "Inserisci il codice per intero",
-      "max-six-months": "L'intervallo massimo consentito è di 6 mesi"
+      "fiscal-code": "Inserisci il codice per intero"
     }
   },
   "payment": {
@@ -50,7 +49,8 @@
   },
   "empty-state": {
     "filtered": "Non abbiamo trovato risultati: prova con dei filtri diversi. <0>Rimuovi filtri</0>.",
-    "no-notifications": "Nessuna notifica negli ultimi 6 mesi. Modifica le date nei filtri oppure procedi con l’invio di una nuova notifica usando le <0>API Key</0> o effettuando un <1>invio manuale</1>.",
+    "no-notifications": "L'ente non ha ancora inviato nessuna notifica. Usa le <0>API Key</0> o fai un <1>invio manuale</1>.",
+    "timeout": "Non abbiamo trovato risultati prova con filtri diversi",
     "aria-label-remove-filters": "Rimuovi filtri",
     "aria-label-api-keys": "API Key",
     "aria-label-create-notification": "Invio manuale"
