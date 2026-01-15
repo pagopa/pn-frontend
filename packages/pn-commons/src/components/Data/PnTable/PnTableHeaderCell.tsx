@@ -59,7 +59,7 @@ const PnTableHeaderCell = <T,>({
         >
           {children}
           {sort.orderBy === columnId && (
-            <Box component="span" sx={visuallyHidden}>
+            <Box component="span" sx={{ ...visuallyHidden }}>
               {sort.order === 'desc' ? 'sorted descending' : 'sorted ascending'}
             </Box>
           )}
