@@ -30,7 +30,7 @@ const TppLanding: React.FC = () => {
 
   const handleClickAccessButton = () => {
     PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_LANDING_PAGE_CLICK_ACCESS);
-    navigate(`/?${AppRouteParams.RETRIEVAL_ID}=${value}`, { replace: true });
+    navigate(`/auth/login?${AppRouteParams.RETRIEVAL_ID}=${value}`);
   };
 
   const onAccordionClick = (expanded: boolean, faqTitle: string) => {
