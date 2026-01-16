@@ -54,6 +54,16 @@ const SessionGuard = () => {
         navigate({ pathname: routes.NOT_ACCESSIBLE }, { replace: true });
         return;
       }
+      if (adaptedError.code === 'USER_VALIDATION_FAILED') {
+        navigate(
+          {
+            pathname: routes.NOT_ACCESSIBLE,
+            search: '?reason=user-validation-failed',
+          },
+          { replace: true }
+        );
+        return;
+      }
       setModalData({
         open: true,
         title: adaptedError.response.customMessage.title,

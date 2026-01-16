@@ -124,7 +124,9 @@ describe('App', async () => {
       result = render(<Component />, { preloadedState: reduxInitialState });
     });
     const header = document.querySelector('header');
-    const userButton = header?.querySelector('[aria-label="party-menu-button"]');
+    const userButton = header?.querySelector(
+      `[aria-label="Area utente ${userResponse.name} ${userResponse.family_name}"]`
+    );
     fireEvent.click(userButton!);
     let menu = await waitFor(() => screen.getByRole('presentation'));
     let menuItems = within(menu).getAllByRole('menuitem');
@@ -193,7 +195,9 @@ describe('App', async () => {
       render(<Component />, { preloadedState: reduxInitialState });
     });
     const header = document.querySelector('header');
-    const userButton = header?.querySelector('[aria-label="party-menu-button"]');
+    const userButton = header?.querySelector(
+      `[aria-label="Area utente ${userResponse.name} ${userResponse.family_name}"]`
+    );
     fireEvent.click(userButton!);
     const menu = await waitFor(() => screen.getByRole('presentation'));
     const menuItems = within(menu).getAllByRole('menuitem');

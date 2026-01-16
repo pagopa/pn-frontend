@@ -165,5 +165,13 @@
   },
   "attachments": {
     "remove-attachment": "Delete attachment"
+  },
+  "autocomplete": {
+    "clear": "Remove selected options",
+    "toggle-open": "Open option selection menu",
+    "toggle-close": "Close option selection menu",
+    "selection-box": "Selected options",
+    "selection-done": "%s selected",
+    "delete-selection": "Remove %s"
   }
 }

@@ -10,7 +10,6 @@ import { DeliveryInvalidParameterGroupAppError } from './DeliveryInvalidParamete
 import { DeliveryNotificationLimitExceededAppError } from './DeliveryNotificationLimitExceededAppError';
 import { DeliveryNotificationWithoutPaymentAttachmentAppError } from './DeliveryNotificationWithoutPaymentAttachmentAppError';
 import { DeliveryPushFileNotFoundAppError } from './DeliveryPushFileNotFoundAppError';
-import { DeliveryTimeoutAppError } from './DeliveryTimeoutAppError';
 import { GenericInvalidParameterAppError } from './GenericInvalidParameterAppError';
 import { GenericInvalidParameterDuplicateAppError } from './GenericInvalidParameterDuplicateAppError';
 import { GenericInvalidParameterTaxonomyCodeAppError } from './GenericInvalidParameterTaxonomyCodeAppError';
@@ -18,9 +17,11 @@ import { InvalidBodyAppError } from './InvalidBodyAppError';
 import { ServerResponseErrorCode } from './types';
 
 export class PAAppErrorFactory extends AppErrorFactory {
-  private translateFunction: (path: string, ns: string) => string;
+  private translateFunction: (path: string, ns: string, params?: Record<string, string>) => string;
 
-  constructor(translateFunction: (path: string, ns: string) => string) {
+  constructor(
+    translateFunction: (path: string, ns: string, params?: Record<string, string>) => string
+  ) {
     super();
     this.translateFunction = translateFunction;
   }
@@ -46,8 +47,6 @@ export class PAAppErrorFactory extends AppErrorFactory {
         );
       case ServerResponseErrorCode.PN_DELIVERY_INVALIDPARAMETER_GROUP:
         return new DeliveryInvalidParameterGroupAppError(error, this.translateFunction);
-      case ServerResponseErrorCode.PN_DELIVERY_TIMEOUT:
-        return new DeliveryTimeoutAppError(error, this.translateFunction);
       case ServerResponseErrorCode.PN_DELIVERYPUSH_FILE_NOT_FOUND:
         return new DeliveryPushFileNotFoundAppError(error, this.translateFunction);
       case ServerResponseErrorCode.PN_INVALID_BODY:

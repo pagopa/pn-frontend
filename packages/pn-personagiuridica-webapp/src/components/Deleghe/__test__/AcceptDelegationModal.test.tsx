@@ -88,7 +88,7 @@ describe('AcceptDelegationModal', () => {
     expect(dialog).toBeInTheDocument();
     const associateGroupRadio = dialog.querySelector('[data-testid="associate-group"] input');
     expect(associateGroupRadio).toBeChecked();
-    const autocomplete = within(dialog).getByTestId(`groups`);
+    const autocomplete = within(dialog).getByTestId(`modal-groups`);
     expect(autocomplete).toHaveTextContent(groups[1].name);
   });
 
@@ -136,7 +136,7 @@ describe('AcceptDelegationModal', () => {
     const groupConfirmButton = within(dialog).getByTestId('groupConfirmButton');
     const associateGroupRadio = within(dialog).getByTestId('associate-group');
     await userEvent.click(associateGroupRadio);
-    await testAutocomplete(dialog, 'groups', groups, true, 1);
+    await testAutocomplete(dialog, 'modal-groups', groups, true, 1);
     expect(groupConfirmButton).toBeEnabled();
     await userEvent.click(groupConfirmButton);
     expect(confirmCbk).toHaveBeenCalledTimes(1);
@@ -263,7 +263,7 @@ describe('AcceptDelegationModal', () => {
     );
     await userEvent.click(associateGroupRadio);
 
-    await testAutocomplete(groupDialog, 'groups', groups, true, 1);
+    await testAutocomplete(groupDialog, 'modal-groups', groups, true, 1);
 
     const groupConfirmButton = within(groupDialog).getByTestId('groupConfirmButton');
     await userEvent.click(groupConfirmButton);

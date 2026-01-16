@@ -33,6 +33,7 @@ import {
   getReceivedNotificationDocument,
   getReceivedNotificationPayment,
   getReceivedNotificationPaymentInfo,
+  getReceivedNotificationPaymentTppUrl,
   getReceivedNotificationPaymentUrl,
 } from '../actions';
 import { resetState } from '../reducers';
@@ -438,6 +439,28 @@ describe('Notification detail redux state tests', () => {
     mock.onGet(`/bff/v1/downtime/legal-facts/${mockRequest}`).reply(200, mockResponse);
     const action = await store.dispatch(getDowntimeLegalFact(mockRequest));
     expect(action.type).toBe('getDowntimeLegalFact/fulfilled');
+    expect(action.payload).toEqual(mockResponse);
+  });
+
+  it('Should be able to fetch the TPP payment URL', async () => {
+    const mockRequest = {
+      retrievalId: 'mocked-retrievalId',
+      noticeCode: 'mocked-noticeCode',
+      creditorTaxId: 'paTaxId',
+      amount: 100,
+    };
+    const mockResponse = {
+      paymentUrl: 'mocked-return-url',
+    };
+    mock
+      .onGet(
+        `/bff/v1/payments/tpp?retrievalId=${mockRequest.retrievalId}&noticeCode=${
+          mockRequest.noticeCode
+        }&paTaxId=${mockRequest.creditorTaxId}&amount=${mockRequest.amount.toString()}`
+      )
+      .reply(200, mockResponse);
+    const action = await store.dispatch(getReceivedNotificationPaymentTppUrl(mockRequest));
+    expect(action.type).toBe('getReceivedNotificationPaymentTppUrl/fulfilled');
     expect(action.payload).toEqual(mockResponse);
   });
 });

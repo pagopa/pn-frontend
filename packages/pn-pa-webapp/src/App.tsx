@@ -62,7 +62,9 @@ const App = () => {
       // init localization
       initLocalization((namespace, path, data) => t(path, { ns: namespace, ...data }));
       // eslint-disable-next-line functional/immutable-data
-      errorFactoryManager.factory = new PAAppErrorFactory((path, ns) => t(path, { ns }));
+      errorFactoryManager.factory = new PAAppErrorFactory((path, ns, params) =>
+        t(path, { ns, ...params })
+      );
     }
   }, [isInitialized]);
 

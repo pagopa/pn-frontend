@@ -132,6 +132,38 @@ describe('SessionGuard Component', async () => {
     });
   });
 
+  it('token-exchange user validation failed', async () => {
+    globalThis.location.hash = '#token=validation_error_token';
+
+    const invalidUserResponse = {
+      ...userResponse,
+      level: '@L2',
+    };
+
+    mock.onPost(AUTH_TOKEN_EXCHANGE()).reply(200, invalidUserResponse);
+
+    await act(async () => {
+      render(<Guard />);
+    });
+
+    expect(mock.history.post).toHaveLength(1);
+    expect(mock.history.post[0].url).toBe(AUTH_TOKEN_EXCHANGE());
+    expect(JSON.parse(mock.history.post[0].data)).toStrictEqual({
+      authorizationToken: 'validation_error_token',
+    });
+
+    await waitFor(() => {
+      expect(mockNavigateFn).toHaveBeenCalledTimes(1);
+      expect(mockNavigateFn).toHaveBeenCalledWith(
+        {
+          pathname: routes.NOT_ACCESSIBLE,
+          search: '?reason=user-validation-failed',
+        },
+        { replace: true }
+      );
+    });
+  });
+
   // expected behavior: enters the app
   it('user logged in - TOS accepted', async () => {
     window.location.hash = '#token=200_token';
@@ -195,5 +227,4 @@ describe('SessionGuard Component', async () => {
     });
     vi.useRealTimers();
   });
-
 });

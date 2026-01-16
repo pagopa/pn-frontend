@@ -38,6 +38,7 @@ beforeAll(() => {
     F24_DOWNLOAD_WAIT_TIME: 0,
     DOWNTIME_EXAMPLE_LINK: 'https://fake.downtime.pagopa.it',
     ACCESSIBILITY_LINK: 'https://accessibility-link.it',
+    FEEDBACK_SURVEY_URL: 'https://fake.survey.pagopa.it',
   });
   initStore(false);
   initAxiosClients();

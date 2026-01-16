@@ -22,8 +22,8 @@ describe('test custom validation for recipients', () => {
   });
 
   it('denominationTotalLength (errors - too long)', () => {
-    const result = denominationLengthAndCharacters(randomString(56), randomString(24));
-    expect(result).toStrictEqual({ messageKey: 'too-long-field-error', data: { maxLength: 80 } });
+    const result = denominationLengthAndCharacters(randomString(56), randomString(33));
+    expect(result).toStrictEqual({ messageKey: 'too-long-field-error', data: { maxLength: 88 } });
   });
 
   it('denominationTotalLength (errors - forbidden characters)', () => {

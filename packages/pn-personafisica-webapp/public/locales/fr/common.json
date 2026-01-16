@@ -238,5 +238,13 @@
       "quatrième chiffre",
       "dernière chiffre"
     ]
+  },
+  "autocomplete": {
+    "clear": "Supprimer les options sélectionnées",
+    "toggle-open": "Ouvre le menu de sélection",
+    "toggle-close": "Ferme le menu de sélection",
+    "selection-box": "Options sélectionnées",
+    "selection-done": "%s sélectionnés",
+    "delete-selection": "Supprime %s"
   }
 }

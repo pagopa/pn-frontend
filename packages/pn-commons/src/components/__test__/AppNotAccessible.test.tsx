@@ -4,24 +4,37 @@ import { fireEvent, initLocalizationForTest, render } from '../../test-utils';
 import AppNotAccessible from '../AppNotAccessible';
 
 describe('AppNotAccessible Component', () => {
-  const assistanceClickHandlerMk = vi.fn();
+  const actionHandlerMk = vi.fn();
 
   beforeAll(() => {
     initLocalizationForTest();
   });
 
-  it('renders component', () => {
-    const { container } = render(<AppNotAccessible onAssistanceClick={assistanceClickHandlerMk} />);
-    expect(container).toHaveTextContent('common - not-accessible.title');
-    expect(container).toHaveTextContent('common - not-accessible.description');
+  beforeEach(() => {
+    actionHandlerMk.mockClear();
   });
 
-  it('clicks on assistance click', () => {
-    const { getByTestId } = render(
-      <AppNotAccessible onAssistanceClick={assistanceClickHandlerMk} />
+  it('renders default "not-accessible" variant', () => {
+    const { container, getByTestId } = render(<AppNotAccessible onAction={actionHandlerMk} />);
+
+    expect(container).toHaveTextContent('common - not-accessible.title');
+    expect(container).toHaveTextContent('common - not-accessible.description');
+
+    const landingLink = getByTestId('goToLanding-link');
+    fireEvent.click(landingLink);
+    expect(actionHandlerMk).toHaveBeenCalledTimes(1);
+  });
+
+  it('renders "user-validation-failed" variant', () => {
+    const { container, getByTestId } = render(
+      <AppNotAccessible onAction={actionHandlerMk} reason="user-validation-failed" />
     );
-    const assistanceLink = getByTestId('assistance-button');
-    fireEvent.click(assistanceLink!);
-    expect(assistanceClickHandlerMk).toBeCalledTimes(1);
+
+    expect(container).toHaveTextContent('common - user-validation-failed.title');
+    expect(container).toHaveTextContent('common - user-validation-failed.description');
+
+    const feedbackButton = getByTestId('feedback-button');
+    fireEvent.click(feedbackButton);
+    expect(actionHandlerMk).toHaveBeenCalledTimes(1);
   });
 });

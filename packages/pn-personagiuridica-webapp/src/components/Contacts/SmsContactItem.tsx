@@ -1,6 +1,5 @@
 import { JSXElementConstructor, useRef, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
-import { useLocation } from 'react-router-dom';
 
 import PowerSettingsNewIcon from '@mui/icons-material/PowerSettingsNew';
 import {
@@ -16,10 +15,6 @@ import { PnInfoCard, appStateActions } from '@pagopa-pn/pn-commons';
 import { ButtonNaked } from '@pagopa/mui-italia';
 
 import { AddressType, ChannelType, SaveDigitalAddressParams } from '../../models/contacts';
-import {
-  DIGITAL_DOMICILE_ACTIVATION,
-  DIGITAL_DOMICILE_MANAGEMENT,
-} from '../../navigation/routes.const';
 import { createOrUpdateAddress, deleteAddress } from '../../redux/contact/actions';
 import { contactsSelectors } from '../../redux/contact/reducers';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
@@ -28,7 +23,6 @@ import ContactCodeDialog from './ContactCodeDialog';
 import DeleteDialog from './DeleteDialog';
 import DigitalContact from './DigitalContact';
 import ExistingContactDialog from './ExistingContactDialog';
-import InformativeDialog from './InformativeDialog';
 import SpecialContacts from './SpecialContacts';
 
 enum ModalType {
@@ -47,7 +41,6 @@ type SmsElemProps = {
     textField?: Partial<TextFieldProps>;
     button?: Partial<ButtonProps>;
   };
-  fromSercqSend?: boolean;
 };
 
 type SmsItemProps = {
@@ -60,15 +53,9 @@ type SmsItemProps = {
   };
 };
 
-const SmsContactElem: React.FC<SmsElemProps> = ({
-  onCancelInsert,
-  slotsProps,
-  slots,
-  fromSercqSend = false,
-}) => {
+const SmsContactElem: React.FC<SmsElemProps> = ({ onCancelInsert, slotsProps, slots }) => {
   const { t } = useTranslation(['common', 'recapiti']);
-  const { defaultSERCQ_SENDAddress, defaultPECAddress, defaultSMSAddress, addresses } =
-    useAppSelector(contactsSelectors.selectAddresses);
+  const { defaultSMSAddress, addresses } = useAppSelector(contactsSelectors.selectAddresses);
   const digitalContactRef = useRef<{ toggleEdit: () => void; resetForm: () => Promise<void> }>({
     toggleEdit: () => {},
     resetForm: () => Promise.resolve(),
@@ -81,8 +68,6 @@ const SmsContactElem: React.FC<SmsElemProps> = ({
   });
   const dispatch = useAppDispatch();
 
-  const isDigitalDomicileActive = defaultPECAddress || defaultSERCQ_SENDAddress;
-
   const currentValue = defaultSMSAddress?.value ?? '';
 
   const handleSubmit = (value: string) => {
@@ -93,10 +78,6 @@ const SmsContactElem: React.FC<SmsElemProps> = ({
       contactAlreadyExists(addresses, internationalPhonePrefix + value, 'default', ChannelType.SMS)
     ) {
       setModalOpen(ModalType.EXISTING);
-      return;
-    }
-    if (!isDigitalDomicileActive && !fromSercqSend) {
-      setModalOpen(ModalType.INFORMATIVE);
       return;
     }
     handleCodeVerification();
@@ -188,14 +169,6 @@ const SmsContactElem: React.FC<SmsElemProps> = ({
         onConfirm={(code) => handleCodeVerification(code)}
         onDiscard={handleCancelCode}
       />
-      <InformativeDialog
-        open={modalOpen === ModalType.INFORMATIVE}
-        title={t('courtesy-contacts.info-modal-sms-title', { ns: 'recapiti' })}
-        subtitle={t('courtesy-contacts.info-modal-sms-subtitle', { ns: 'recapiti' })}
-        content={t('courtesy-contacts.info-modal-sms-content', { ns: 'recapiti' })}
-        onConfirm={() => handleCodeVerification()}
-        onDiscard={() => setModalOpen(null)}
-      />
     </>
   );
 };
@@ -203,7 +176,6 @@ const SmsContactElem: React.FC<SmsElemProps> = ({
 const SmsContactItem: React.FC<SmsItemProps> = ({ slotsProps, slots }) => {
   const { t } = useTranslation(['common', 'recapiti']);
   const dispatch = useAppDispatch();
-  const location = useLocation();
   const {
     defaultSERCQ_SENDAddress,
     defaultPECAddress,
@@ -216,9 +188,6 @@ const SmsContactItem: React.FC<SmsItemProps> = ({ slotsProps, slots }) => {
   const [insertMode, setInsertMode] = useState(false);
 
   const isActive = !!defaultSMSAddress;
-  const fromSercqSend = [DIGITAL_DOMICILE_ACTIVATION, DIGITAL_DOMICILE_MANAGEMENT].includes(
-    location.pathname
-  );
   const blockDelete = specialSMSAddresses.length > 0;
 
   const hasCourtesyAddresses =
@@ -382,7 +351,6 @@ const SmsContactItem: React.FC<SmsItemProps> = ({ slotsProps, slots }) => {
           slotsProps={slotsProps}
           slots={slots}
           onCancelInsert={() => setInsertMode(false)}
-          fromSercqSend={fromSercqSend}
         />
       ) : (
         <>

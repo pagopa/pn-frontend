@@ -39,8 +39,8 @@ export function denominationLengthAndCharacters(
   if (dataRegex.denomination.test(denomination)) {
     return undefined;
   }
-  if (denomination.length > 80) {
-    return { messageKey: 'too-long-field-error', data: { maxLength: 80 } };
+  if (denomination.length > 88) {
+    return { messageKey: 'too-long-field-error', data: { maxLength: 88 } };
   }
   return { messageKey: `forbidden-characters-denomination-error` };
 }
