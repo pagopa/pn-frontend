@@ -17,6 +17,9 @@ import { AppRouteParams, IllusLandingTpp } from '@pagopa-pn/pn-commons';
 
 import { useRapidAccessParam } from '../hooks/useRapidAccessParam';
 import { PFEventsType } from '../models/PFEventsType';
+import { goToLoginPortal } from '../navigation/navigation.utility';
+import { useAppSelector } from '../redux/hooks';
+import { RootState } from '../redux/store';
 import PFEventStrategyFactory from '../utility/MixpanelUtils/PFEventStrategyFactory';
 
 const TppLanding: React.FC = () => {
@@ -24,13 +27,21 @@ const TppLanding: React.FC = () => {
   const rapidAccessParam = useRapidAccessParam() || [];
   const [param, value] = rapidAccessParam;
   const navigate = useNavigate();
+  const { sessionToken } = useAppSelector((state: RootState) => state.userState.user);
 
   const whatIsSendFaqTitle = t('faq.what-is-send.question');
   const whatAreNotificationsFaqTitle = t('faq.what-are-notifications.question');
 
   const handleClickAccessButton = () => {
+    if (!value) {
+      return;
+    }
     PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_LANDING_PAGE_CLICK_ACCESS);
-    navigate(`/auth/login?${AppRouteParams.RETRIEVAL_ID}=${value}`);
+    if (sessionToken) {
+      navigate(`/?${AppRouteParams.RETRIEVAL_ID}=${value}`);
+    } else {
+      goToLoginPortal([AppRouteParams.RETRIEVAL_ID, value]);
+    }
   };
 
   const onAccordionClick = (expanded: boolean, faqTitle: string) => {

@@ -59,6 +59,8 @@ export default defineConfig(({ mode }) => {
         '^/auth/.*': {
           target: `https://login.${webAppEnv}.notifichedigitali.it`,
           changeOrigin: true,
+          // When run login app locally
+          // secure: false,
         },
       },
     },
