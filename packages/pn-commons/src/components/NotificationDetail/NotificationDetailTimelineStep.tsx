@@ -25,6 +25,7 @@ import {
 } from '../../models/NotificationDetail';
 import { NotificationStatus } from '../../models/NotificationStatus';
 import { formatDay, formatMonthString, formatTime } from '../../utility/date.utility';
+import { getLocalizedOrDefaultLabel } from '../../utility/localization.utility';
 import {
   getLegalFactLabel,
   getNotificationStatusInfos,
@@ -141,9 +142,27 @@ const NotificationDetailTimelineStep = ({
   const getTag = (status: ReworkedStatus | undefined) => {
     switch (status) {
       case ReworkedStatus.VALID:
-        return <Tag value="Evento Validato" variant="warning" />;
+        return (
+          <Tag
+            value={getLocalizedOrDefaultLabel(
+              'notifications',
+              'status.reworked-status-valid',
+              'Evento validato'
+            )}
+            variant="warning"
+          />
+        );
       case ReworkedStatus.NOT_VALID:
-        return <Tag value="Evento Invalidato" variant="warning" />;
+        return (
+          <Tag
+            value={getLocalizedOrDefaultLabel(
+              'notifications',
+              'status.reworked-status-not-valid',
+              'Evento invalidato'
+            )}
+            variant="warning"
+          />
+        );
       default:
         return null;
     }
