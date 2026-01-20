@@ -162,6 +162,5 @@ const DebtPosition: React.FC<Props> = ({
 };
 
 // This is a workaorund to prevent cognitive complexity warning
-export default forwardRef((props: Omit<Props, 'forwardedRef'>, ref) => (
-  <DebtPosition {...props} forwardedRef={ref} />
-));
+type CmpProps = Omit<Props, 'forwardedRef'>;
+export default forwardRef((props: CmpProps, ref) => <DebtPosition {...props} forwardedRef={ref} />);

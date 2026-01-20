@@ -337,12 +337,7 @@ export const OrganizationsList: React.FC<OrganizationsListProps> = ({
                 key={organization}
                 aria-hidden="true"
               >
-                <Tag
-                  value={organization}
-                  sx={{
-                    whiteSpace: 'normal',
-                  }}
-                />
+                <Tag value={organization} />
               </Box>
             ))}
           </CustomTagGroup>

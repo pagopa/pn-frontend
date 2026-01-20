@@ -22,6 +22,7 @@ const reduxState = {
       isFirstAccept: false,
       consentVersion: '',
     },
+    tosPrivacyApiError: false,
   },
 };
 
