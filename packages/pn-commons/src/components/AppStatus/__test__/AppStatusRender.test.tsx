@@ -1,7 +1,7 @@
 import { vi } from 'vitest';
 
 import { beDowntimeHistoryWithIncidents } from '../../../__mocks__/AppStatus.mock';
-import { AppStatusData } from '../../../models';
+import { AppStatusData } from '../../../models/AppStatus';
 import {
   RenderResult,
   act,

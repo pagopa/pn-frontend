@@ -16,7 +16,7 @@ import {
 } from '@mui/material';
 import { ButtonNaked, CopyToClipboardButton } from '@pagopa/mui-italia';
 
-import { useIsMobile } from '../hooks';
+import { useIsMobile } from '../hooks/useIsMobile';
 import { calcSha256String, parseFileSize } from '../utility/file.utility';
 import { getLocalizedOrDefaultLabel } from '../utility/localization.utility';
 

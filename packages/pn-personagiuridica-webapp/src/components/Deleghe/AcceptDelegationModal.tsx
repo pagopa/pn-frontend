@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import SearchIcon from '@mui/icons-material/Search';
 import {
   Button,
   DialogContentText,
@@ -11,18 +10,17 @@ import {
   FormControlLabel,
   Radio,
   RadioGroup,
-  TextField,
 } from '@mui/material';
 import {
   AppResponse,
   AppResponsePublisher,
   CodeModal,
   ErrorMessage,
-  PnAutocomplete,
   PnDialog,
   PnDialogActions,
   PnDialogContent,
 } from '@pagopa-pn/pn-commons';
+import { Autocomplete } from '@pagopa/mui-italia';
 
 import { GroupStatus } from '../../models/groups';
 import { useAppSelector } from '../../redux/hooks';
@@ -61,7 +59,7 @@ const AcceptDelegationModal: React.FC<Props> = ({
   const codeModalRef = useRef<{
     updateError: (error: ErrorMessage, codeNotValid: boolean) => void;
   }>(null);
-  const { t } = useTranslation(['deleghe']);
+  const { t } = useTranslation(['deleghe', 'common']);
   const groups = useAppSelector((state: RootState) => state.delegationsState.groups);
   // when there are groups, the codeModal component is unmounted at confirm button click
   // so the updateError call in the handleAcceptanceError has no effect
@@ -73,9 +71,6 @@ const AcceptDelegationModal: React.FC<Props> = ({
   });
 
   const getOptionLabel = (option: { name: string; id: string }) => option.name || '';
-  const renderOption = (props: any, option: { name: string; id: string }) => (
-    <li {...props}>{option.name}</li>
-  );
 
   const handleFirstStepConfirm = (code: string) => {
     if (groups.length) {
@@ -214,43 +209,48 @@ const AcceptDelegationModal: React.FC<Props> = ({
           </RadioGroup>
         </FormControl>
         {associateGroup && (
-          <PnAutocomplete
-            id="input-group"
-            size="small"
-            fullWidth
+          <Autocomplete
+            id="modal-groups"
             options={groups.filter((group) => group.status === GroupStatus.ACTIVE)}
-            disableCloseOnSelect
             multiple
-            noOptionsText={t('deleghe.table.no-group-found')}
             getOptionLabel={getOptionLabel}
             isOptionEqualToValue={(option, value) => option.id === value.id}
-            renderOption={renderOption}
-            renderInput={(params) => (
-              <TextField
-                {...params}
-                label={t('deleghe.select-group')}
-                placeholder={t('deleghe.select-group')}
-                name="groups"
-                error={groupForm.touched && groupForm.value.length === 0}
-                helperText={
-                  groupForm.touched && groupForm.value.length === 0
-                    ? t('required-field', { ns: 'common' })
-                    : ''
-                }
-                InputProps={{
-                  ...params.InputProps,
-                  endAdornment: <SearchIcon sx={{ color: 'text.secondary' }} />,
-                }}
-              />
-            )}
+            label={t('deleghe.select-group')}
+            placeholder={t('deleghe.select-group')}
+            error={groupForm.touched && groupForm.value.length === 0}
+            helperText={
+              groupForm.touched && groupForm.value.length === 0
+                ? t('required-field', { ns: 'common' })
+                : ''
+            }
             value={groupForm.value}
-            onChange={(_event: any, newValue: Array<{ id: string; name: string }>) =>
+            onChange={(newValue: Array<{ id: string; name: string }>) =>
               setGroupForm({ value: newValue, touched: true })
             }
-            data-testid="groups"
+            data-testid="modal-groups"
             inputValue={groupInputValue}
-            onInputChange={(_event, newInputValue) => setGroupInputValue(newInputValue)}
+            onInputChange={(newInputValue) => setGroupInputValue(newInputValue)}
             sx={{ mt: 2 }}
+            noResultsText={t('deleghe.table.no-group-found')}
+            slotProps={{
+              textField: { name: 'modal-groups' },
+              clearButton: {
+                'aria-label': t('autocomplete.clear', { ns: 'common' }),
+              },
+              toggleButton: {
+                'close-aria-label': t('autocomplete.toggle-close', { ns: 'common' }),
+                'open-aria-label': t('autocomplete.toggle-open', { ns: 'common' }),
+              },
+              selectionBox: {
+                'aria-label': t('autocomplete.selection-box', { ns: 'common' }),
+              },
+              selectionChip: {
+                'aria-label': t('autocomplete.delete-selection', { ns: 'common' }),
+              },
+              announcementBox: {
+                selectionText: t('autocomplete.selection-done', { ns: 'common' }),
+              },
+            }}
           />
         )}
       </PnDialogContent>

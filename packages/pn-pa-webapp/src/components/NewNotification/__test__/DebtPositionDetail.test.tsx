@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import { isNil } from 'lodash-es';
 import { vi } from 'vitest';
 
 import { getById, testInput, testRadio } from '@pagopa-pn/pn-commons/src/test-utils';
@@ -389,14 +389,14 @@ describe('DebtPositionDetail Component', async () => {
         let pagoPaIdx = 0;
         let f24Idx = 0;
         for (const payment of recipient.payments) {
-          if (!_.isNil(payment.pagoPa)) {
+          if (!isNil(payment.pagoPa)) {
             const pagoPaPaymentBox = result.getByTestId(
               `recipients.${recipientKey}.pagoPa.${pagoPaIdx}`
             );
             const applyCostError = within(pagoPaPaymentBox).getByTestId('applyCost-helper-text');
             expect(applyCostError).toHaveTextContent('at-least-one-applycost');
           }
-          if (!_.isNil(payment.f24)) {
+          if (!isNil(payment.f24)) {
             const f24PaymentBox = result.getByTestId(`recipients.${recipientKey}.f24.${f24Idx}`);
             const applyCostError = within(f24PaymentBox).getByTestId('applyCost-helper-text');
             expect(applyCostError).toHaveTextContent('at-least-one-applycost');
@@ -442,7 +442,7 @@ describe('DebtPositionDetail Component', async () => {
       for (const recipient of notificationWithEmptyFiles.recipients) {
         if (!recipient.payments) continue;
         for (const [index, payment] of recipient.payments.entries()) {
-          if (!_.isNil(payment.pagoPa)) {
+          if (!isNil(payment.pagoPa)) {
             const pagoPaPaymentBox = result.getByTestId(
               `recipients.${recipientKey}.pagoPa.${index}`
             );
@@ -463,7 +463,7 @@ describe('DebtPositionDetail Component', async () => {
       for (const recipient of notificationWithEmptyFiles.recipients) {
         if (!recipient.payments) continue;
         for (const [index, payment] of recipient.payments.entries()) {
-          if (!_.isNil(payment.pagoPa)) {
+          if (!isNil(payment.pagoPa)) {
             const pagoPaPaymentBox = result.getByTestId(
               `recipients.${recipientKey}.pagoPa.${index}`
             );

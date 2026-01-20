@@ -4,8 +4,8 @@ import { InfoRounded, Refresh } from '@mui/icons-material';
 import { Box, Typography } from '@mui/material';
 import { ButtonNaked, CopyToClipboardButton } from '@pagopa/mui-italia';
 
-import { useIsMobile } from '../../../hooks';
-import { PagoPAPaymentFullDetails, PaymentInfoDetail } from '../../../models';
+import { useIsMobile } from '../../../hooks/useIsMobile';
+import { PagoPAPaymentFullDetails, PaymentInfoDetail } from '../../../models/NotificationDetail';
 import { getLocalizedOrDefaultLabel } from '../../../utility/localization.utility';
 import NotificationPaymentPagoPaDescription from './NotificationPaymentPagoPaDescription';
 

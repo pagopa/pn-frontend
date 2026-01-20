@@ -1,6 +1,10 @@
-import { PagoPAPaymentFullDetails, PaymentInfoDetail, PaymentStatus } from '../../../../models';
+import {
+  PagoPAPaymentFullDetails,
+  PaymentInfoDetail,
+  PaymentStatus,
+} from '../../../../models/NotificationDetail';
 import { fireEvent, render, screen, waitFor } from '../../../../test-utils';
-import { formatEurocentToCurrency } from '../../../../utility';
+import { formatEurocentToCurrency } from '../../../../utility/currency.utility';
 import NotificationPaymentPagoPaReadOnly from '../NotificationPaymentPagoPaReadOnly';
 
 describe('NotificationPaymentPagoPaReadOnly', () => {

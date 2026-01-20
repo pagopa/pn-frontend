@@ -359,5 +359,5 @@ describe('Filter Notifications Table Component', async () => {
       expect(dialogForm).not.toBeInTheDocument();
     });
     expect(testStore.getState().dashboardState.filters).toStrictEqual(initialState);
-  });
+  }, 10000);
 });

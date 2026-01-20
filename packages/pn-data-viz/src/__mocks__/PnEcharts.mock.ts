@@ -1,6 +1,9 @@
-import { EChartOption } from 'echarts';
+import type { BarSeriesOption } from 'echarts/charts';
+import { ComposeOption } from 'echarts/core';
 
-export const option: EChartOption = {
+type ECOption = ComposeOption<BarSeriesOption>;
+
+export const option: ECOption = {
   tooltip: {
     trigger: 'axis',
   },

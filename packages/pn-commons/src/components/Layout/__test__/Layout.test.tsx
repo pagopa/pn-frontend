@@ -2,7 +2,7 @@ import { Email } from '@mui/icons-material';
 
 import { loggedUser, productsList } from '../../../__mocks__/User.mock';
 import SideMenu from '../../../components/SideMenu/SideMenu';
-import { SideMenuItem } from '../../../models';
+import { SideMenuItem } from '../../../models/SideMenuItem';
 import { render } from '../../../test-utils';
 import Layout from '../Layout';
 

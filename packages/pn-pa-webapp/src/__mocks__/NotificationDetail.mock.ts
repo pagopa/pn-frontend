@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import { cloneDeep } from 'lodash-es';
 
 import {
   DigitalDomicileType,
@@ -16,7 +16,7 @@ import {
 } from '@pagopa-pn/pn-commons';
 
 function getOneRecipientNotification(): NotificationDetail {
-  const oneRecipientNotification = _.cloneDeep(notificationDTOMultiRecipient);
+  const oneRecipientNotification = cloneDeep(notificationDTOMultiRecipient);
   oneRecipientNotification.recipients = [oneRecipientNotification.recipients[0]];
   oneRecipientNotification.timeline = oneRecipientNotification.timeline.filter(
     (t) => 'recIndex' in t.details && !t.details.recIndex

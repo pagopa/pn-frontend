@@ -2,7 +2,8 @@ import { vi } from 'vitest';
 
 import { Box } from '@mui/material';
 
-import { CardElement, Row } from '../../../models';
+import { CardElement } from '../../../models/PnCard';
+import { Row } from '../../../models/PnTable';
 import { disableConsoleLogging, fireEvent, render, waitFor, within } from '../../../test-utils';
 import PnCard from '../PnCard/PnCard';
 import PnCardActions from '../PnCard/PnCardActions';

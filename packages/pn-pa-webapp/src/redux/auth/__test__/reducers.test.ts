@@ -88,23 +88,17 @@ describe('Auth redux state tests', () => {
 
   it('Should be able to exchange token - invalid json', async () => {
     const action = await mockLogin('invalid-json');
-    expect(action.type).toBe('exchangeToken/fulfilled');
-    expect(action.payload).toStrictEqual({
-      email: undefined,
-      name: undefined,
-      organization: undefined,
-      uid: undefined,
-      sessionToken: undefined,
-      family_name: undefined,
-      fiscal_number: undefined,
-      desired_exp: undefined,
+    expect(action.type).toBe('exchangeToken/rejected');
+    expect(action.payload).toEqual({
+      code: 'USER_VALIDATION_FAILED',
+      message: expect.any(String),
     });
   });
 
   it('Should be able to exchange token - fail validation', async () => {
     const preState = store.getState();
     const action = await mockLogin({ ...userResponse, uid: 'not an uid' });
-    expect(action.type).toBe('exchangeToken/fulfilled');
+    expect(action.type).toBe('exchangeToken/rejected');
     const postState = store.getState();
     expect(postState.userState.user).toEqual(preState.userState.user);
   });

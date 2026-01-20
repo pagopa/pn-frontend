@@ -5,13 +5,13 @@ import { Box, Typography } from '@mui/material';
 import {
   CustomTagGroup,
   Notification,
+  NotificationColumnData,
   Row,
   StatusTooltip,
   formatDate,
   getNotificationStatusInfos,
   useIsMobile,
 } from '@pagopa-pn/pn-commons';
-import { NotificationColumnData } from '@pagopa-pn/pn-commons/src/models/Notifications';
 import { ButtonNaked, Tag, TagGroup } from '@pagopa/mui-italia';
 
 const NotificationStatusChip: React.FC<{ data: Row<Notification> }> = ({ data }) => {

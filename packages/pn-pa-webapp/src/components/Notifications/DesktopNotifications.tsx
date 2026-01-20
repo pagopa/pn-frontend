@@ -7,6 +7,7 @@ import {
   EmptyState,
   KnownSentiment,
   Notification,
+  NotificationColumnData,
   PnTable,
   PnTableBody,
   PnTableBodyCell,
@@ -15,7 +16,6 @@ import {
   PnTableHeaderCell,
   Sort,
 } from '@pagopa-pn/pn-commons';
-import { NotificationColumnData } from '@pagopa-pn/pn-commons/src/models/Notifications';
 
 import * as routes from '../../navigation/routes.const';
 import NotificationsDataSwitch from './NotificationsDataSwitch';

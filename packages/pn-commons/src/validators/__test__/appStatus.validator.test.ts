@@ -4,7 +4,7 @@ import {
   DowntimeLogHistory,
   DowntimeStatus,
   KnownFunctionality,
-} from '../../models';
+} from '../../models/AppStatus';
 import {
   AppStatusDTOValidator,
   BEDowntimeValidator,

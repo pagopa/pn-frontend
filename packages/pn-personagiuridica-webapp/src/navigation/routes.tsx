@@ -1,14 +1,7 @@
 import { Suspense } from 'react';
 import { Navigate, Route, Routes, useNavigate } from 'react-router-dom';
 
-import {
-  AppNotAccessible,
-  ConsentType,
-  LoadingPage,
-  NotFound,
-  PrivateRoute,
-  lazyRetry,
-} from '@pagopa-pn/pn-commons';
+import { ConsentType, LoadingPage, NotFound, PrivateRoute, lazyRetry } from '@pagopa-pn/pn-commons';
 
 import DelegatesByCompany from '../components/Deleghe/DelegatesByCompany';
 import DelegationsOfTheCompany from '../components/Deleghe/DelegationsOfTheCompany';
@@ -17,6 +10,7 @@ import { useAppSelector } from '../redux/hooks';
 import { RootState } from '../redux/store';
 import { getConfiguration } from '../services/configuration.service';
 import AARGuard from './AARGuard';
+import AppNotAccessibleRoute from './AppNotAccessibleRoute';
 import RouteGuard from './RouteGuard';
 import SessionGuard from './SessionGuard';
 import ToSGuard from './ToSGuard';
@@ -39,11 +33,6 @@ const DigitalContactActivation = lazyRetry(
 const DigitalContactManagement = lazyRetry(
   () => import('../components/Contacts/DigitalContactManagement')
 );
-
-const handleAssistanceClick = () => {
-  /* eslint-disable-next-line functional/immutable-data */
-  window.location.href = getConfiguration().LANDING_SITE_URL;
-};
 
 function Router() {
   const { organization, hasGroup } = useAppSelector((state: RootState) => state.userState.user);
@@ -223,10 +212,7 @@ function Router() {
           path={routes.TERMS_OF_SERVICE_B2B}
           element={<TermsOfServicePage type={ConsentType.TOS_DEST_B2B} />}
         />
-        <Route
-          path={routes.NOT_ACCESSIBLE}
-          element={<AppNotAccessible onAssistanceClick={handleAssistanceClick} />}
-        />
+        <Route path={routes.NOT_ACCESSIBLE} element={<AppNotAccessibleRoute />} />
         <Route path="*" element={<NotFound goBackAction={navigateToHome} />} />
       </Routes>
     </Suspense>

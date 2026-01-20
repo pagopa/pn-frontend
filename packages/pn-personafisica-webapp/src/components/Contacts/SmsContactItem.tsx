@@ -37,7 +37,6 @@ import ContactCodeDialog from './ContactCodeDialog';
 import DeleteDialog from './DeleteDialog';
 import DigitalContact from './DigitalContact';
 import ExistingContactDialog from './ExistingContactDialog';
-import InformativeDialog from './InformativeDialog';
 import SpecialContacts from './SpecialContacts';
 
 enum ModalType {
@@ -74,8 +73,7 @@ const SmsContactElem: React.FC<SmsElemProps> = ({
   inSERCQWizardContext = false,
 }) => {
   const { t } = useTranslation(['common', 'recapiti']);
-  const { defaultSERCQ_SENDAddress, defaultPECAddress, defaultSMSAddress, addresses } =
-    useAppSelector(contactsSelectors.selectAddresses);
+  const { defaultSMSAddress, addresses } = useAppSelector(contactsSelectors.selectAddresses);
   const externalEvent = useAppSelector((state: RootState) => state.contactsState.event);
   const digitalContactRef = useRef<{ toggleEdit: () => void; resetForm: () => Promise<void> }>({
     toggleEdit: () => {},
@@ -88,8 +86,6 @@ const SmsContactElem: React.FC<SmsElemProps> = ({
     value: '',
   });
   const dispatch = useAppDispatch();
-
-  const isDigitalDomicileActive = defaultPECAddress || defaultSERCQ_SENDAddress;
 
   const currentValue = defaultSMSAddress?.value ?? '';
 
@@ -108,10 +104,6 @@ const SmsContactElem: React.FC<SmsElemProps> = ({
       contactAlreadyExists(addresses, internationalPhonePrefix + value, 'default', ChannelType.SMS)
     ) {
       setModalOpen(ModalType.EXISTING);
-      return;
-    }
-    if (!isDigitalDomicileActive && !inSERCQWizardContext) {
-      setModalOpen(ModalType.INFORMATIVE);
       return;
     }
     handleCodeVerification();
@@ -252,18 +244,6 @@ const SmsContactElem: React.FC<SmsElemProps> = ({
         onConfirm={(code) => handleCodeVerification(code)}
         onDiscard={handleCancelCode}
         onError={() => PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SMS_CODE_ERROR)}
-      />
-      <InformativeDialog
-        open={modalOpen === ModalType.INFORMATIVE}
-        title={t('courtesy-contacts.info-modal-sms-title', { ns: 'recapiti' })}
-        subtitle={t('courtesy-contacts.info-modal-sms-subtitle', { ns: 'recapiti' })}
-        content={t('courtesy-contacts.info-modal-sms-content', { ns: 'recapiti' })}
-        onConfirm={() => {
-          handleCodeVerification();
-        }}
-        onDiscard={() => {
-          setModalOpen(null);
-        }}
       />
     </>
   );

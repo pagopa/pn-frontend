@@ -1,21 +1,30 @@
 import React, { memo, useEffect, useState } from 'react';
 
 import { Download } from '@mui/icons-material/';
-import { Alert, Box, Button, FormControl, Link, RadioGroup, Typography } from '@mui/material';
-
-import { downloadDocument } from '../../hooks';
 import {
-  EventPaymentRecipientType,
+  Alert,
+  Box,
+  Button,
+  FormControl,
+  Link,
+  RadioGroup,
+  Stack,
+  Typography,
+} from '@mui/material';
+
+import { downloadDocument } from '../../hooks/useDownloadDocument';
+import { EventPaymentRecipientType } from '../../models/MixpanelEvents';
+import {
   NotificationDetailPayment,
-  PaginationData,
   PaymentAttachment,
   PaymentAttachmentSName,
   PaymentDetails,
   PaymentStatus,
+  PaymentTpp,
   PaymentsData,
-} from '../../models';
-import { PaymentTpp } from '../../models/NotificationDetail';
-import { formatEurocentToCurrency } from '../../utility';
+} from '../../models/NotificationDetail';
+import { PaginationData } from '../../models/Pagination';
+import { formatEurocentToCurrency } from '../../utility/currency.utility';
 import { getLocalizedOrDefaultLabel } from '../../utility/localization.utility';
 import { getPaymentCache, setPaymentCache } from '../../utility/paymentCaching.utility';
 import CustomPagination from '../Pagination/CustomPagination';
@@ -44,7 +53,8 @@ type Props = {
     noticeCode?: string,
     creditorTaxId?: string,
     retrievalId?: string,
-    tppName?: string
+    tppName?: string,
+    amount?: number
   ) => void;
   handleTrackEvent?: (event: EventPaymentRecipientType, param?: object) => void;
   handleFetchPaymentsInfo: (payment: Array<PaymentDetails | NotificationDetailPayment>) => void;
@@ -155,7 +165,8 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
           selectedPayment?.pagoPa?.noticeCode,
           selectedPayment?.pagoPa?.creditorTaxId,
           paymentTpp?.retrievalId,
-          paymentTpp?.paymentButton
+          paymentTpp?.pspDenomination,
+          selectedPayment?.pagoPa?.amount
         );
         return;
       }
@@ -215,11 +226,11 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
               name="radio-buttons-group"
               value={selectedPayment?.pagoPa}
               onChange={handleClick}
+              sx={{ gap: 2 }}
             >
               {paginatedPayments.map((payment) =>
                 payment.pagoPa ? (
                   <Box
-                    mb={2}
                     key={`payment-${payment.pagoPa.noticeCode}-${payment.pagoPa.creditorTaxId}`}
                     data-testid="pagopa-item"
                   >
@@ -333,21 +344,41 @@ const PaymentButtons = ({
   handleTrackEventFn,
   handleCheckPaymentSelected,
 }: PaymentButtonsProps) => {
-  const hasPaymentTpp = paymentTpp?.iun === iun;
+  // isPaymentEnabled indicates whether the PSP handles the payment process
+  // If false, the payment in the notification is treated as standard (Checkout)
+  const hasPaymentTpp = paymentTpp?.iun === iun && paymentTpp.isPaymentEnabled;
+
   return (
     <>
       {hasPaymentTpp && (
-        <Button
-          color={errorOnPayment ? 'error' : 'primary'}
-          fullWidth
-          variant={errorOnPayment ? 'outlined' : 'contained'}
-          data-testid="tpp-pay-button"
-          onClick={() => handleCheckPaymentSelected('tpp')}
-        >
-          {getLocalizedOrDefaultLabel('notifications', 'detail.payment.submit-tpp', undefined, {
-            name: paymentTpp?.paymentButton,
-          })}
-        </Button>
+        <Stack spacing={2}>
+          <Typography
+            fontWeight={400}
+            fontSize="14px"
+            color="text.secondary"
+            data-testid="tpp-helper-text"
+            sx={{ textAlign: { xs: 'center', lg: 'start' } }}
+          >
+            {getLocalizedOrDefaultLabel(
+              'notifications',
+              'detail.payment.tpp-helper-text',
+              undefined,
+              {
+                pspDenomination: paymentTpp.pspDenomination,
+              }
+            )}
+          </Typography>
+
+          <Button
+            color={errorOnPayment ? 'error' : 'primary'}
+            fullWidth
+            variant={errorOnPayment ? 'outlined' : 'contained'}
+            data-testid="tpp-pay-button"
+            onClick={() => handleCheckPaymentSelected('tpp')}
+          >
+            {getLocalizedOrDefaultLabel('notifications', 'detail.payment.submit-tpp')}
+          </Button>
+        </Stack>
       )}
       <Button
         color={errorOnPayment ? 'error' : 'primary'}

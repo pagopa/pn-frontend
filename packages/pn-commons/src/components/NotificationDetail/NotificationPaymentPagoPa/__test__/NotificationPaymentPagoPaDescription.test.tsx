@@ -1,6 +1,6 @@
-import { PagoPAPaymentFullDetails } from '../../../../models';
+import { PagoPAPaymentFullDetails } from '../../../../models/NotificationDetail';
 import { render } from '../../../../test-utils';
-import { formatDate } from '../../../../utility';
+import { formatDate } from '../../../../utility/date.utility';
 import NotificationPaymentPagoPaDescription from '../NotificationPaymentPagoPaDescription';
 
 describe('NotificationPaymentPagoPaDescription', () => {

@@ -1,4 +1,5 @@
-import { DigitalDomicileType, SERCQ_SEND_VALUE, SendDigitalDetails } from '../../models';
+import { SERCQ_SEND_VALUE } from '../../models/Contacts';
+import { DigitalDomicileType, SendDigitalDetails } from '../../models/NotificationDetail';
 import { TimelineStep, TimelineStepInfo, TimelineStepPayload } from './TimelineStep';
 
 export class SendDigitalFeedbackStep extends TimelineStep {

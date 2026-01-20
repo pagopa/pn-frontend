@@ -1,6 +1,6 @@
 import { vi } from 'vitest';
 
-import { PagoPAPaymentFullDetails, PaymentInfoDetail } from '../../../../models';
+import { PagoPAPaymentFullDetails, PaymentInfoDetail } from '../../../../models/NotificationDetail';
 import { fireEvent, render, waitFor, within } from '../../../../test-utils';
 import NotificationPaymentPagoPaError from '../NotificationPaymentPagoPaError';
 

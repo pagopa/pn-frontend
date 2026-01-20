@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import { cloneDeep } from 'lodash-es';
 
 import {
   DigitalDomicileType,
@@ -9,19 +9,23 @@ import {
   NotificationDetailPayment,
   NotificationDetailRecipient,
   NotificationDetailTimelineDetails,
-  NotificationStatus,
   NotificationStatusHistory,
-  PaymentCache,
   PaymentsData,
   RecipientType,
   ResponseStatus,
   TimelineCategory,
-} from '../models';
-import { getF24Payments, getPagoPaF24Payments, populatePaymentsPagoPaF24 } from '../utility';
+} from '../models/NotificationDetail';
+import { NotificationStatus } from '../models/NotificationStatus';
+import { PaymentCache } from '../models/PaymentCache';
+import {
+  getF24Payments,
+  getPagoPaF24Payments,
+  populatePaymentsPagoPaF24,
+} from '../utility/notification.utility';
 import { paymentInfo } from './ExternalRegistry.mock';
 
 function getOneRecipientNotification(): NotificationDetail {
-  const oneRecipientNotification = _.cloneDeep(notificationDTOMultiRecipient);
+  const oneRecipientNotification = cloneDeep(notificationDTOMultiRecipient);
   oneRecipientNotification.recipients = [oneRecipientNotification.recipients[0]];
   oneRecipientNotification.timeline = oneRecipientNotification.timeline.filter(
     (t) => !t.details.recIndex

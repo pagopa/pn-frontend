@@ -8,6 +8,7 @@ import {
   UserConsentsApiFactory,
 } from '../../generated-client/tos-privacy';
 import { TokenExchangeRequest, User } from '../../models/User';
+import { userDataMatcher } from '../../utility/user.utility';
 
 export enum AUTH_ACTIONS {
   GET_TOS_PRIVACY_APPROVAL = 'getTosPrivacyApproval',
@@ -22,8 +23,16 @@ export const exchangeToken = createAsyncThunk<User, TokenExchangeRequest>(
   'exchangeToken',
   async (request: TokenExchangeRequest, { rejectWithValue }) => {
     try {
-      return await AuthApi.exchangeToken(request);
+      const result = await AuthApi.exchangeToken(request);
+      userDataMatcher.validateSync(result, { stripUnknown: false });
+      return result;
     } catch (e: any) {
+      if (e?.name === 'ValidationError') {
+        return rejectWithValue({
+          code: 'USER_VALIDATION_FAILED',
+          message: e.message,
+        });
+      }
       return rejectWithValue(parseError(e));
     }
   }
@@ -32,16 +41,13 @@ export const exchangeToken = createAsyncThunk<User, TokenExchangeRequest>(
 /**
  * Call api logout to invalidate access token.
  */
-export const apiLogout = createAsyncThunk<void, string>(
-  'apiLogout',
-  async (token) => {
-    try {
-      return await AuthApi.logout(token);
-    } catch (e: any) {
-      console.log('Error during logout', e);
-    }
+export const apiLogout = createAsyncThunk<void, string>('apiLogout', async (token) => {
+  try {
+    return await AuthApi.logout(token);
+  } catch (e: any) {
+    console.log('Error during logout', e);
   }
-);
+});
 
 /**
  * Retrieves if the terms of service are already approved

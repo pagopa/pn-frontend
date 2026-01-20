@@ -1,6 +1,6 @@
-import { PagoPAPaymentFullDetails } from '../../../../models';
+import { PagoPAPaymentFullDetails } from '../../../../models/NotificationDetail';
 import { render } from '../../../../test-utils';
-import { formatEurocentToCurrency } from '../../../../utility';
+import { formatEurocentToCurrency } from '../../../../utility/currency.utility';
 import NotificationPaymentPagoPaAmount from '../NotificationPaymentPagoPaAmount';
 
 describe('NotificationPaymentPagoPaAmount', () => {

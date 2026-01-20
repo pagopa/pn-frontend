@@ -286,7 +286,7 @@
         "pec-receipt-not-delivered": "Nichtzustellung PEC",
         "paper-receipt-delivered": "Zustellung des Einschreibens",
         "paper-receipt-not-delivered": "Nichtzustellung des Einschreibens",
-        "analog-failure-delivery": "Hinterlegung der Eingangsbestätigung"
+        "analog-failure-delivery": "Hinterlegung der Empfangsbestätigung"
       },
       "registered-letter-kind": {
         "AR": "Rückschein",

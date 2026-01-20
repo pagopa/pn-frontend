@@ -238,5 +238,13 @@
       "četrta števka",
       "zadnja števka"
     ]
+  },
+  "autocomplete": {
+    "clear": "Odstrani izbrane možnosti",
+    "toggle-open": "Odpri meni z možnostmi",
+    "toggle-close": "Zapri meni z možnostmi",
+    "selection-box": "Izbrane možnosti",
+    "selection-done": "%s izbranih",
+    "delete-selection": "Odstrani %s"
   }
 }

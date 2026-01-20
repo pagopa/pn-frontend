@@ -126,10 +126,7 @@ const TermsOfService = ({ tosConsent, privacyConsent }: TermsOfServiceProps) => 
                   ns={'common'}
                   i18nKey={'tos.switch-label'}
                   components={[<PrivacyLink key={'privacy-link'} />, <TosLink key={'tos-link'} />]}
-                >
-                  Accetto l’<PrivacyLink>Informativa Privacy</PrivacyLink> e i
-                  <TosLink>Termini e condizioni d’uso </TosLink> di SEND.
-                </Trans>
+                />
               </Typography>
             </Box>
           </TOSAgreement>

@@ -2,7 +2,7 @@ import React, { ReactNode } from 'react';
 
 import { Box, CircularProgress, Stack, Step, StepLabel, Stepper, Typography } from '@mui/material';
 
-import { useIsMobile } from '../../hooks';
+import { useIsMobile } from '../../hooks/useIsMobile';
 import { getLocalizedOrDefaultLabel } from '../../utility/localization.utility';
 
 type Props = {

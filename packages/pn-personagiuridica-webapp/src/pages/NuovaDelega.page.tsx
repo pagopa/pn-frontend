@@ -3,7 +3,8 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import * as yup from 'yup';
-import SearchIcon from '@mui/icons-material/Search';
+
+import AccountBalanceIcon from '@mui/icons-material/AccountBalance';
 import PeopleIcon from '@mui/icons-material/People';
 import {
   Box,
@@ -12,7 +13,6 @@ import {
   FormControl,
   FormControlLabel,
   Grid,
-  MenuItem,
   Paper,
   Radio,
   RadioGroup,
@@ -25,7 +25,6 @@ import {
   CustomDatePicker,
   DATE_FORMAT,
   DatePickerTypes,
-  PnAutocomplete,
   PnBreadcrumb,
   RecipientType,
   TitleBox,
@@ -35,11 +34,10 @@ import {
   useIsMobile,
   useSearchStringChangeInput,
 } from '@pagopa-pn/pn-commons';
-import { IllusCompleted } from '@pagopa/mui-italia';
+import { Autocomplete, IllusCompleted } from '@pagopa/mui-italia';
 
 import VerificationCodeComponent from '../components/Deleghe/VerificationCodeComponent';
 import LoadingPageWrapper from '../components/LoadingPageWrapper/LoadingPageWrapper';
-import DropDownPartyMenuItem from '../components/Party/DropDownParty';
 import { NewDelegationFormProps } from '../models/Deleghe';
 import { Party } from '../models/party';
 import * as routes from '../navigation/routes.const';
@@ -50,18 +48,12 @@ import { RootState } from '../redux/store';
 import { getConfiguration } from '../services/configuration.service';
 import { generateVCode } from '../utility/delegation.utility';
 
-const renderOption = (props: any, option: Party) => (
-  <MenuItem {...props} value={option.id} key={option.id}>
-    <DropDownPartyMenuItem name={option.name} />
-  </MenuItem>
-);
-
 const getOptionLabel = (option: Party) => option.name || '';
 
 const getError = <TTouch, TError>(
   fieldTouched: FormikTouched<TTouch> | boolean | undefined,
   fieldError: undefined | string | FormikErrors<TError> | Array<string>
-) => fieldTouched && fieldError && String(fieldError);
+) => (fieldTouched && fieldError ? String(fieldError) : undefined);
 
 const NuovaDelega = () => {
   const { t, i18n } = useTranslation(['deleghe', 'common']);
@@ -156,6 +148,13 @@ const NuovaDelega = () => {
     funTouched('cognome', false, true);
     funTouched('ragioneSociale', false, true);
   };
+
+  const renderOption = (option: Party) => (
+    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+      <AccountBalanceIcon fontSize="small" sx={{ color: '#BBC2D6' }} />
+      {option.name}
+    </Box>
+  );
 
   useEffect(() => {
     if (senderInputValue.length >= 4) {
@@ -389,42 +388,57 @@ const NuovaDelega = () => {
 
                             {values.selectTuttiEntiOrSelezionati === 'entiSelezionati' && (
                               <FormControl fullWidth>
-                                <PnAutocomplete
+                                <Autocomplete
                                   id="enti"
                                   data-testid="enti"
                                   multiple
                                   options={entities}
-                                  fullWidth
-                                  autoComplete
                                   getOptionLabel={getOptionLabel}
-                                  noOptionsText={t('nuovaDelega.form.party-not-found')}
                                   isOptionEqualToValue={(option, value) =>
                                     option.name === value.name
                                   }
-                                  onChange={(_event: any, newValue: Array<Party>) => {
+                                  onChange={(newValue: Array<Party>) => {
                                     setFieldValue('enti', newValue);
                                   }}
                                   inputValue={senderInputValue}
-                                  onInputChange={(_event, newInputValue) =>
+                                  onInputChange={(newInputValue) =>
                                     handleChangeInput(newInputValue)
                                   }
-                                  filterOptions={(e) => e}
+                                  handleFiltering={(e) => e}
+                                  label={entitySearchLabel(senderInputValue)}
+                                  error={Boolean(getError(touched.enti, errors.enti))}
+                                  helperText={getError(touched.enti, errors.enti)}
+                                  noResultsText={t('nuovaDelega.form.party-not-found')}
                                   renderOption={renderOption}
-                                  renderInput={(params) => (
-                                    <TextField
-                                      name="enti"
-                                      {...params}
-                                      label={entitySearchLabel(senderInputValue)}
-                                      error={Boolean(getError(touched.enti, errors.enti))}
-                                      helperText={getError(touched.enti, errors.enti)}
-                                      InputProps={{
-                                     ...params.InputProps,
-                                     endAdornment: (
-                                         <SearchIcon sx={{color:'text.secondary'}}/>
-                                         ),
-                                      }}    
-                                    />
-                                  )}
+                                  slotProps={{
+                                    textField: { name: 'enti' },
+                                    clearButton: {
+                                      'aria-label': t('autocomplete.clear', { ns: 'common' }),
+                                    },
+                                    toggleButton: {
+                                      'close-aria-label': t('autocomplete.toggle-close', {
+                                        ns: 'common',
+                                      }),
+                                      'open-aria-label': t('autocomplete.toggle-open', {
+                                        ns: 'common',
+                                      }),
+                                    },
+                                    selectionBox: {
+                                      'aria-label': t('autocomplete.selection-box', {
+                                        ns: 'common',
+                                      }),
+                                    },
+                                    selectionChip: {
+                                      'aria-label': t('autocomplete.delete-selection', {
+                                        ns: 'common',
+                                      }),
+                                    },
+                                    announcementBox: {
+                                      selectionText: t('autocomplete.selection-done', {
+                                        ns: 'common',
+                                      }),
+                                    },
+                                  }}
                                 />
                               </FormControl>
                             )}

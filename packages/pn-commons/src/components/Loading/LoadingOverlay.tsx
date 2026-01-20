@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 import { CircularProgress, Modal } from '@mui/material';
 import { Box } from '@mui/system';
 
-import { appStateSelectors } from '../../redux';
+import { appStateSelectors } from '../../redux/slices/appStateSlice';
 import { getLocalizedOrDefaultLabel } from '../../utility/localization.utility';
 
 export function LoadingOverlay() {

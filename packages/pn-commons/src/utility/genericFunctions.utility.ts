@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import { isEqual } from 'lodash-es';
 
 import { formatFromString } from './date.utility';
 
@@ -17,7 +17,7 @@ export function filtersApplied<TFilters extends object>(
   emptyValues: TFilters
 ): number {
   return Object.entries(prevFilters).reduce((c: number, element: [string, any]) => {
-    if (element[0] in emptyValues && !_.isEqual(element[1], (emptyValues as any)[element[0]])) {
+    if (element[0] in emptyValues && !isEqual(element[1], (emptyValues as any)[element[0]])) {
       return c + 1;
     }
     return c;

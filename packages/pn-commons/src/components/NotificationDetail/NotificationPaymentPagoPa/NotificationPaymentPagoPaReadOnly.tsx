@@ -2,8 +2,12 @@ import { useCallback } from 'react';
 
 import { Stack } from '@mui/material';
 
-import { useIsMobile } from '../../../hooks';
-import { PagoPAPaymentFullDetails, PaymentInfoDetail, PaymentStatus } from '../../../models';
+import { useIsMobile } from '../../../hooks/useIsMobile';
+import {
+  PagoPAPaymentFullDetails,
+  PaymentInfoDetail,
+  PaymentStatus,
+} from '../../../models/NotificationDetail';
 import { getLocalizedOrDefaultLabel } from '../../../utility/localization.utility';
 import StatusTooltip from '../../Notifications/StatusTooltip';
 import NotificationPaymentPagoPaAmount from './NotificationPaymentPagoPaAmount';

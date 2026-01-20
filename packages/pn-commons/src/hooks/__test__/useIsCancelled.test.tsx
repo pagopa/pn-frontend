@@ -1,5 +1,6 @@
 import { notificationDTO } from '../../__mocks__/NotificationDetail.mock';
-import { NotificationDetail, NotificationStatus, TimelineCategory } from '../../models';
+import { NotificationDetail, TimelineCategory } from '../../models/NotificationDetail';
+import { NotificationStatus } from '../../models/NotificationStatus';
 import { render } from '../../test-utils';
 import { useIsCancelled } from '../useIsCancelled';
 

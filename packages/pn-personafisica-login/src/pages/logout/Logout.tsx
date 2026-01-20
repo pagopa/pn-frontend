@@ -11,7 +11,7 @@ const Logout = () => {
   useEffect(() => {
     storageRapidAccessOps.delete();
 
-    navigate(ROUTE_LOGIN + searchParams);
+    navigate(ROUTE_LOGIN + searchParams, { replace: true });
   }, []);
 
   return <></>;

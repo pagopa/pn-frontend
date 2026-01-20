@@ -3,10 +3,9 @@
   "private": true,
   "license": "SEE LICENS IN LICENSE",
   "devDependencies": {
-    "lerna": "^6.4.1"
+    "lerna": "^9.0.0"
   },
   "scripts": {
-    "postinstall": "lerna bootstrap",
     "start:pa": "lerna exec --scope @pagopa-pn/pn-pa-webapp -- yarn dev",
     "start:pf": "lerna exec --scope @pagopa-pn/pn-personafisica-webapp -- yarn dev",
     "start:pg": "lerna exec --scope @pagopa-pn/pn-personagiuridica-webapp -- yarn dev",

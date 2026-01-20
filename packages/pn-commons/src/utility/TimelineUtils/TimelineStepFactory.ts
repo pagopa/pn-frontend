@@ -1,4 +1,4 @@
-import { INotificationDetailTimeline, TimelineCategory } from '../../models';
+import { INotificationDetailTimeline, TimelineCategory } from '../../models/NotificationDetail';
 import { AnalogFailureWorkflowStep } from './AnalogFailureWorkflowStep';
 import { DefaultStep } from './DefaultStep';
 import { NotHandledStep } from './NotHandledStep';

@@ -16,14 +16,15 @@ vi.mock('react-router-dom', async () => ({
 }));
 
 describe('SideMenu', () => {
-  const original = window.matchMedia;
+  const original = globalThis.matchMedia;
 
   beforeEach(() => {
     mockPathname = '';
+    globalThis.matchMedia = original;
   });
 
   afterAll(() => {
-    window.matchMedia = original;
+    globalThis.matchMedia = original;
   });
 
   it('renders component (no mobile)', async () => {
@@ -113,15 +114,15 @@ describe('SideMenu', () => {
     // navigation
     const noChildrenIdx = menuItems.findIndex((item) => !item.children);
     fireEvent.click(buttons[noChildrenIdx]);
-    expect(mockNavigate).toBeCalledTimes(1);
-    expect(mockNavigate).toBeCalledWith(menuItems[noChildrenIdx].route);
+    expect(mockNavigate).toHaveBeenCalledTimes(1);
+    expect(mockNavigate).toHaveBeenCalledWith(menuItems[noChildrenIdx].route);
     expect(buttons[noChildrenIdx]).toHaveClass('Mui-selected');
     // with children and notSelectable set to false
     // navigate and open the accordion
     const withChildrenIdx = menuItems.findIndex((item) => item.children && !item.notSelectable);
     fireEvent.click(buttons[withChildrenIdx]);
-    expect(mockNavigate).toBeCalledTimes(2);
-    expect(mockNavigate).toBeCalledWith(menuItems[withChildrenIdx].route);
+    expect(mockNavigate).toHaveBeenCalledTimes(2);
+    expect(mockNavigate).toHaveBeenCalledWith(menuItems[withChildrenIdx].route);
     const accordion0 = within(ul).getByTestId(`collapse-${menuItems[withChildrenIdx].label}`);
     expect(accordion0).toBeInTheDocument();
     expect(buttons[withChildrenIdx]).toHaveClass('Mui-selected');
@@ -131,7 +132,7 @@ describe('SideMenu', () => {
       (item) => item.children && item.notSelectable
     );
     fireEvent.click(buttons[withChildrenAndNotSelectableIdx]);
-    expect(mockNavigate).toBeCalledTimes(2);
+    expect(mockNavigate).toHaveBeenCalledTimes(2);
     const accordion1 = within(ul).getByTestId(
       `collapse-${menuItems[withChildrenAndNotSelectableIdx].label}`
     );
@@ -144,13 +145,13 @@ describe('SideMenu', () => {
     // no navigation and action call
     const noChildrenAndNoRouteIdx = menuItems.findIndex((item) => !item.children && !item.route);
     fireEvent.click(buttons[noChildrenAndNoRouteIdx]);
-    expect(mockNavigate).toBeCalledTimes(2);
-    expect(mockedAction).toBeCalledTimes(1);
+    expect(mockNavigate).toHaveBeenCalledTimes(2);
+    expect(mockedAction).toHaveBeenCalledTimes(1);
     expect(buttons[noChildrenAndNoRouteIdx]).toHaveClass('Mui-selected');
   });
 
   it('renders component (mobile)', async () => {
-    window.matchMedia = createMatchMedia(800);
+    globalThis.matchMedia = createMatchMedia(800);
     const { getByRole, queryByRole } = render(<SideMenu menuItems={sideMenuItems} />);
     const ul = getByRole('navigation');
     expect(ul).toBeInTheDocument();
@@ -159,5 +160,38 @@ describe('SideMenu', () => {
     fireEvent.click(menuButtons[0]);
     const drawer = await waitFor(() => queryByRole('presentation'));
     expect(drawer).not.toBeInTheDocument();
+  });
+
+  it('renders feedbackBanner when provided (desktop)', () => {
+    const { getByTestId } = render(
+      <SideMenu
+        menuItems={sideMenuItems}
+        feedbackBanner={<div data-testid="test-feedback-banner">Feedback banner</div>}
+      />
+    );
+
+    const ul = getByTestId('menu-list');
+    expect(ul).toBeInTheDocument();
+
+    const banner = getByTestId('test-feedback-banner');
+    expect(banner).toBeInTheDocument();
+  });
+
+  it('renders feedbackBanner inside mobile drawer when provided', async () => {
+    globalThis.matchMedia = createMatchMedia(800);
+
+    const { getByRole, findByTestId } = render(
+      <SideMenu
+        menuItems={sideMenuItems}
+        feedbackBanner={<div data-testid="test-feedback-banner">Feedback banner</div>}
+      />
+    );
+
+    const nav = getByRole('navigation');
+    const menuButtons = within(nav).getAllByRole('button');
+    fireEvent.click(menuButtons[0]);
+
+    const banner = await findByTestId('test-feedback-banner');
+    expect(banner).toBeInTheDocument();
   });
 });

@@ -168,7 +168,7 @@ const Recipient: React.FC<Props> = ({
       }),
     digitalDomicile: yup
       .string()
-      .max(320, tc('too-long-field-error'))
+      .max(320, tc('too-long-field-error', { maxLength: 320 }))
       .matches(dataRegex.noSpaceAtEdges, tc('no-spaces-at-edges'))
       .matches(dataRegex.email, t('pec-error')),
     address: conditionalPhysicalAddress(requiredStringFieldValidation(tc, 1024)),
@@ -185,7 +185,7 @@ const Recipient: React.FC<Props> = ({
       yup
         .string()
         .required(tc('required-field'))
-        .max(12, tc('too-long-field-error', { maxLength: 12 }))
+        .max(15, tc('too-long-field-error', { maxLength: 15 }))
         .matches(dataRegex.zipCode, `${t('zip')} ${tc('invalid')}`)
     ),
     municipalityDetails: conditionalPhysicalAddress(
@@ -576,6 +576,5 @@ const Recipient: React.FC<Props> = ({
 };
 
 // This is a workaorund to prevent cognitive complexity warning
-export default forwardRef((props: Omit<Props, 'forwardedRef'>, ref) => (
-  <Recipient {...props} forwardedRef={ref} />
-));
+type CmpProps = Omit<Props, 'forwardedRef'>;
+export default forwardRef((props: CmpProps, ref) => <Recipient {...props} forwardedRef={ref} />);

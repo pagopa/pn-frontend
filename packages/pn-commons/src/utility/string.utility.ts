@@ -37,7 +37,7 @@ export const dataRegex = {
     /^\d{11}$|^([A-Z]{6}[0-9LMNPQRSTUV]{2}[ABCDEHLMPRST]{1}[0-9LMNPQRSTUV]{2}[A-Z]{1}[0-9LMNPQRSTUV]{3}[A-Z]{1})$/i,
   isoDate: /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2}(?:\.\d{1,3})?)Z$/,
   taxonomyCode: /^(\d{6}[A-Z]{1})$/,
-  denomination: /^([\x20-\xFF]{1,80})$/,
+  denomination: /^([\x20-\xFF]{1,88})$/,
   denominationSearch: /([\x20-\xFF]*)/g,
   noticeCode: /^\d{18}$/,
   zipCode: /^(\w|\ |\-)*$/,

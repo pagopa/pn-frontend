@@ -2,7 +2,7 @@ import { vi } from 'vitest';
 
 import { Box } from '@mui/material';
 
-import { Column, Row, Sort } from '../../../models';
+import { Column, Row, Sort } from '../../../models/PnTable';
 import { disableConsoleLogging, fireEvent, render, within } from '../../../test-utils';
 import PnTable from '../PnTable';
 import PnTableBody from '../PnTable/PnTableBody';

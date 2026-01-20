@@ -1,5 +1,5 @@
 import { FormikValues, useFormik } from 'formik';
-import { isEqual } from 'lodash';
+import { isEqual } from 'lodash-es';
 import { forwardRef, useEffect, useImperativeHandle, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';

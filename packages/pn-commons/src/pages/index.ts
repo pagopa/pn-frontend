@@ -1,5 +1,3 @@
-import AccessDenied from './AccessDenied';
-import CourtesyPage from './CourtesyPage';
-import NotFound from './NotFound';
-
-export { NotFound, AccessDenied, CourtesyPage };
+export { default as AccessDenied } from './AccessDenied';
+export { default as CourtesyPage } from './CourtesyPage';
+export { default as NotFound } from './NotFound';

@@ -1,6 +1,7 @@
 import { useCallback } from 'react';
 
-import { Column, Downtime, DowntimeLogHistory, Row } from '../models';
+import { Downtime, DowntimeLogHistory } from '../models/AppStatus';
+import { Column, Row } from '../models/PnTable';
 import { getLocalizedOrDefaultLabel } from '../utility/localization.utility';
 
 export function useFieldSpecs() {
