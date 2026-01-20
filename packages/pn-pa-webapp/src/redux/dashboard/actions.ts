@@ -32,7 +32,8 @@ export const getSentNotifications = createAsyncThunk(
         status:
           (params.status as Exclude<
             NotificationStatus,
-            NotificationStatus.CANCELLATION_IN_PROGRESS
+            | NotificationStatus.CANCELLATION_IN_PROGRESS
+            | NotificationStatus.NOTIFICATION_TIMELINE_REWORKED
           >) || undefined,
         subjectRegExp: params.subjectRegExp || undefined,
         iunMatch: params.iunMatch || undefined,
