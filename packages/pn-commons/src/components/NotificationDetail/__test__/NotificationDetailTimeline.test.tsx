@@ -129,7 +129,7 @@ describe('NotificationDetailTimeline', () => {
       />
     );
     expect(container).toHaveTextContent('Evento o più eventi aggiornati');
-    expect(container).toHaveTextContent('Evento Validato');
-    expect(container).toHaveTextContent('Evento Invalidato');
+    expect(container).toHaveTextContent('Evento validato');
+    expect(container).toHaveTextContent('Evento invalidato');
   });
 });
