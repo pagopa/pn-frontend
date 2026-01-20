@@ -3,6 +3,66 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.20.0](https://github.com/pagopa/pn-frontend/compare/v2.19.2...v2.20.0) (2025-12-12)
+
+
+
+# [2.20.0-RC.3](https://github.com/pagopa/pn-frontend/compare/v2.20.0-RC.2...v2.20.0-RC.3) (2025-12-04)
+
+
+### Bug Fixes
+
+* **pn-17528:** change wrong copy on landing page FAQ ([#1713](https://github.com/pagopa/pn-frontend/issues/1713)) ([549eda0](https://github.com/pagopa/pn-frontend/commit/549eda0951ea222da5cc587573dfa24381ece427))
+
+
+
+# [2.20.0-RC.2](https://github.com/pagopa/pn-frontend/compare/v2.20.0-RC.1...v2.20.0-RC.2) (2025-12-03)
+
+
+### Bug Fixes
+
+* **pn-13252:** added localized aria-labels ([#1711](https://github.com/pagopa/pn-frontend/issues/1711)) ([35da626](https://github.com/pagopa/pn-frontend/commit/35da6262b9db320e2b354eff43253ed38c8242b4))
+* **pn-13252:** fixed autocomplete accessibility ([#1710](https://github.com/pagopa/pn-frontend/issues/1710)) ([b3dd26e](https://github.com/pagopa/pn-frontend/commit/b3dd26e2db62d8d9ae0dd5317896333ddf5c44c0))
+
+
+
+# [2.20.0-RC.1](https://github.com/pagopa/pn-frontend/compare/v2.20.0-RC.0...v2.20.0-RC.1) (2025-12-02)
+
+
+### Bug Fixes
+
+* **PN-17012:** update pn-bff commitId ([b9de58d](https://github.com/pagopa/pn-frontend/commit/b9de58d79d80519599dee4084ed79b5f212fb43f))
+* **PN-17234:** add missing escape character in en translation ([#1709](https://github.com/pagopa/pn-frontend/issues/1709)) ([ec3494c](https://github.com/pagopa/pn-frontend/commit/ec3494cb7afcb5bfa66cf0ef2ef8dd7b0ac0cec1))
+
+
+
+# [2.20.0-RC.0](https://github.com/pagopa/pn-frontend/compare/v2.19.1...v2.20.0-RC.0) (2025-11-28)
+
+
+### Bug Fixes
+
+* **PN-14840:** fix translation of key analog-failure-delivery ([#1673](https://github.com/pagopa/pn-frontend/issues/1673)) ([8b51614](https://github.com/pagopa/pn-frontend/commit/8b51614421ba6442aaf04a3da001065631350415))
+* **PN-15723:** Handle user validation failure after token-exchange ([#1687](https://github.com/pagopa/pn-frontend/issues/1687)) ([e694d1b](https://github.com/pagopa/pn-frontend/commit/e694d1baa2a3b5bc985e245377f1b926806a5763))
+* **PN-15726:** replace window.open manually with link href ([#1677](https://github.com/pagopa/pn-frontend/issues/1677)) ([b4a52c7](https://github.com/pagopa/pn-frontend/commit/b4a52c74373f778d1a9d14d328d2979fe8efdf5f))
+* **PN-15842:** fixed long description problem in notification detail ([#1704](https://github.com/pagopa/pn-frontend/issues/1704)) ([40d0684](https://github.com/pagopa/pn-frontend/commit/40d0684a30b3683d83d88203215535d551ed3252))
+* **pn-16635:** update mui-italia to v2.0.0 to resolve CodeInput a11y issues and build size ([#1707](https://github.com/pagopa/pn-frontend/issues/1707)) ([235ef5a](https://github.com/pagopa/pn-frontend/commit/235ef5ab617eaba57ccab257ae28e60eee6d653d))
+* **PN-16983:** remove info dialog shown when adding a new email or mobile number ([#1706](https://github.com/pagopa/pn-frontend/issues/1706)) ([22cd107](https://github.com/pagopa/pn-frontend/commit/22cd107612c9d9348df530c4c98e477f140d2a5d))
+
+
+### Features
+
+* **PN-16963:** VOC banner ([#1694](https://github.com/pagopa/pn-frontend/issues/1694)) ([3530437](https://github.com/pagopa/pn-frontend/commit/3530437b610eff16236442934ee9f2c0715a1422))
+* **PN-17010:** create landing page for TPP payments ([#1681](https://github.com/pagopa/pn-frontend/issues/1681)) ([0e5d9d9](https://github.com/pagopa/pn-frontend/commit/0e5d9d9ad9ceb506c57920ce6eda4bfb694e7311))
+* **PN-17013:** handle PSP that doesn't integrate payment process ([#1695](https://github.com/pagopa/pn-frontend/issues/1695)) ([4b89b55](https://github.com/pagopa/pn-frontend/commit/4b89b55c009c47702c9905c52e173d15ef34c98f))
+* **PN-17014:** update layout of TPP payment box ([#1698](https://github.com/pagopa/pn-frontend/issues/1698)) ([136e5f4](https://github.com/pagopa/pn-frontend/commit/136e5f4769ae9dbf274a4bc86ad56f59c4ba34c4))
+* **PN-17015:** add amount query parameter to get TPP payment URL API ([#1699](https://github.com/pagopa/pn-frontend/issues/1699)) ([c1577e3](https://github.com/pagopa/pn-frontend/commit/c1577e33d53dadb033af83e223eec3fc14821b03))
+* **PN-17110:** track mixpanel events of TPP landing page ([#1705](https://github.com/pagopa/pn-frontend/issues/1705)) ([5a435c0](https://github.com/pagopa/pn-frontend/commit/5a435c07e837c3f9ebc5f9b05ad513b574d269f5))
+* **PN-17207:** handle unauthorized user error on TPP notifications ([#1688](https://github.com/pagopa/pn-frontend/issues/1688)) ([2d14831](https://github.com/pagopa/pn-frontend/commit/2d148315c49fbebb6b9bb603127312f863a89324))
+
+
+
+
+
 ## [2.19.2](https://github.com/pagopa/pn-frontend/compare/v2.19.2-RC.0...v2.19.2) (2025-12-12)
 
 **Note:** Version bump only for package @pagopa-pn/pn-personafisica-webapp

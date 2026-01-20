@@ -1,11 +1,18 @@
 {
-  "packages": ["packages/*"],
-  "version": "2.19.2",
+  "packages": [
+    "packages/*"
+  ],
+  "version": "2.20.0",
   "npmClient": "yarn",
   "useNx": false,
   "command": {
     "version": {
-      "allowBranch": ["main", "release/*", "develop", "hotfix/*"]
+      "allowBranch": [
+        "main",
+        "release/*",
+        "develop",
+        "hotfix/*"
+      ]
     }
   }
 }

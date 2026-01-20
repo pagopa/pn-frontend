@@ -3,6 +3,31 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.20.0](https://github.com/pagopa/pn-frontend/compare/v2.19.2...v2.20.0) (2025-12-12)
+
+
+
+# [2.20.0-RC.2](https://github.com/pagopa/pn-frontend/compare/v2.20.0-RC.1...v2.20.0-RC.2) (2025-12-03)
+
+
+### Bug Fixes
+
+* **pn-13252:** added localized aria-labels ([#1711](https://github.com/pagopa/pn-frontend/issues/1711)) ([35da626](https://github.com/pagopa/pn-frontend/commit/35da6262b9db320e2b354eff43253ed38c8242b4))
+* **pn-13252:** fixed autocomplete accessibility ([#1710](https://github.com/pagopa/pn-frontend/issues/1710)) ([b3dd26e](https://github.com/pagopa/pn-frontend/commit/b3dd26e2db62d8d9ae0dd5317896333ddf5c44c0))
+
+
+
+# [2.20.0-RC.0](https://github.com/pagopa/pn-frontend/compare/v2.19.1...v2.20.0-RC.0) (2025-11-28)
+
+
+### Bug Fixes
+
+* **pn-16635:** update mui-italia to v2.0.0 to resolve CodeInput a11y issues and build size ([#1707](https://github.com/pagopa/pn-frontend/issues/1707)) ([235ef5a](https://github.com/pagopa/pn-frontend/commit/235ef5ab617eaba57ccab257ae28e60eee6d653d))
+
+
+
+
+
 ## [2.19.2](https://github.com/pagopa/pn-frontend/compare/v2.19.2-RC.0...v2.19.2) (2025-12-12)
 
 **Note:** Version bump only for package @pagopa-pn/pn-personafisica-login

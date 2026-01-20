@@ -32,9 +32,8 @@ describe('test lazy loading retry', () => {
   });
 
   it('test lazyRetry - component loaded at first try', async () => {
-    const LazyComponent = lazyRetry<any>(() =>
-      Promise.resolve({ default: ({ children }: { children: ReactNode }) => <div>{children}</div> })
-    );
+    const Cmp = ({ children }: { children: ReactNode }) => <div>{children}</div>;
+    const LazyComponent = lazyRetry<typeof Cmp>(() => Promise.resolve({ default: Cmp }));
     let result: RenderResult;
     await act(async () => {
       result = render(

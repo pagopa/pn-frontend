@@ -43,6 +43,7 @@ const reduxInitialState = {
       isFirstAccept: false,
       currentVersion: 'mocked-version-1',
     },
+    tosPrivacyApiError: false,
   },
 };
 

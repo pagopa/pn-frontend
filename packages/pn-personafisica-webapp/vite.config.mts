@@ -59,6 +59,8 @@ export default defineConfig(({ mode }) => {
         '^/auth/.*': {
           target: `https://login.${webAppEnv}.notifichedigitali.it`,
           changeOrigin: true,
+          // When run login app locally
+          // secure: false,
         },
       },
     },
@@ -85,6 +87,8 @@ export default defineConfig(({ mode }) => {
     // Exclude the test and the mock folders from being processed by Vite
     exclude: ['**/__test__/**', '**/__mocks__/**'],
     resolve: {
+      // This is to work with mui-italia installed locally
+      // preserveSymlinks: true,
       alias: {
         // formik an yup use lodash and without this, also this library will be into the build
         lodash: 'lodash-es',
