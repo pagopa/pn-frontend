@@ -38,9 +38,3 @@ export const storageRapidAccessOps = {
 export const storageOneIdentityState = storageOpsBuilder<string>('state', 'string', false);
 
 export const storageOneIdentityNonce = storageOpsBuilder<string>('nonce', 'string', false);
-
-export const storageOneIdentityRedirectUri = storageOpsBuilder<string>(
-  'redirect_uri',
-  'string',
-  false
-);
