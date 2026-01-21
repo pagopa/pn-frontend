@@ -1,3 +1,5 @@
+import { v4 as uuidv4 } from 'uuid';
+
 export const shuffleList = (list: Array<any>) => {
   // eslint-disable-next-line functional/no-let
   for (let i = list.length - 1; i > 0; i--) {
@@ -7,3 +9,5 @@ export const shuffleList = (list: Array<any>) => {
   }
   return list;
 };
+
+export const generateRandomUniqueString = () => uuidv4().replace(/-/g, '').slice(0, 15);
