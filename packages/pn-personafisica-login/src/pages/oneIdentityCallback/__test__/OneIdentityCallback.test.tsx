@@ -2,9 +2,12 @@ import { BrowserRouter } from 'react-router-dom';
 import { vi } from 'vitest';
 
 import { AppRouteParams } from '@pagopa-pn/pn-commons';
-import { getById } from '@pagopa-pn/pn-commons/src/test-utils';
 
 import { render } from '../../../__test__/test-utils';
+import {
+  ROUTE_ONE_IDENTITY_LOGIN_ERROR,
+  oneIdentityRedirectUriPath,
+} from '../../../navigation/routes.const';
 import { getConfiguration } from '../../../services/configuration.service';
 import {
   storageOneIdentityNonce,
@@ -14,6 +17,18 @@ import {
 import OneIdentityCallback from '../OneIdentityCallback';
 
 const mockLocationReplace = vi.fn();
+const mockNavigate = vi.fn();
+
+vi.mock('react-router-dom', async () => {
+  const actual = await vi.importActual('react-router-dom');
+  return {
+    ...actual,
+    Navigate: ({ to, replace }: { to: string; replace?: boolean }) => {
+      mockNavigate(to, replace);
+      return null;
+    },
+  };
+});
 
 describe('OneIdentityCallback component', () => {
   const original = window.location;
@@ -32,12 +47,13 @@ describe('OneIdentityCallback component', () => {
   };
 
   const checkHashParams = (hashParams: URLSearchParams) => {
+    const { PF_URL } = getConfiguration();
     expect(hashParams.get('code')).toBe(mockCode);
     expect(hashParams.get('state')).toBe(mockState);
     expect(hashParams.get('nonce')).toBe(mockNonce);
     expect(hashParams.get('lang')).toBe('it');
     expect(hashParams.get('redirect_uri')).toBe(
-      encodeURIComponent(`${getConfiguration().PF_URL}/auth/callback`)
+      encodeURIComponent(`${PF_URL}${oneIdentityRedirectUriPath}`)
     );
   };
 
@@ -46,7 +62,7 @@ describe('OneIdentityCallback component', () => {
   });
 
   beforeEach(() => {
-    mockLocationReplace.mockClear();
+    vi.clearAllMocks();
     storageOneIdentityState.write(mockState);
     storageOneIdentityNonce.write(mockNonce);
     storageRapidAccessOps.delete();
@@ -143,7 +159,7 @@ describe('OneIdentityCallback component', () => {
     expect(aarValue).not.toContain('</script>');
   });
 
-  it('should show error when state does not match', () => {
+  it('should navigate to error route when state does not match', () => {
     storageOneIdentityState.write('different-state');
 
     render(
@@ -152,12 +168,11 @@ describe('OneIdentityCallback component', () => {
       </BrowserRouter>
     );
 
-    const errorDialog = getById(document.body, 'errorDialog');
-    expect(errorDialog).toBeInTheDocument();
+    expect(mockNavigate).toHaveBeenCalledWith(ROUTE_ONE_IDENTITY_LOGIN_ERROR, true);
     expect(mockLocationReplace).not.toHaveBeenCalled();
   });
 
-  it('should show error when code is missing', () => {
+  it('should navigate to error route when code is missing', () => {
     setWindowLocation(`?state=${mockState}`);
 
     render(
@@ -166,12 +181,11 @@ describe('OneIdentityCallback component', () => {
       </BrowserRouter>
     );
 
-    const errorDialog = getById(document.body, 'errorDialog');
-    expect(errorDialog).toBeInTheDocument();
+    expect(mockNavigate).toHaveBeenCalledWith(ROUTE_ONE_IDENTITY_LOGIN_ERROR, true);
     expect(mockLocationReplace).not.toHaveBeenCalled();
   });
 
-  it('should show error when state is missing', () => {
+  it('should navigate to error route when state is missing', () => {
     setWindowLocation(`?code=${mockCode}`);
 
     render(
@@ -180,12 +194,11 @@ describe('OneIdentityCallback component', () => {
       </BrowserRouter>
     );
 
-    const errorDialog = getById(document.body, 'errorDialog');
-    expect(errorDialog).toBeInTheDocument();
+    expect(mockNavigate).toHaveBeenCalledWith(ROUTE_ONE_IDENTITY_LOGIN_ERROR, true);
     expect(mockLocationReplace).not.toHaveBeenCalled();
   });
 
-  it('should show error when nonce is missing from storage', () => {
+  it('should navigate to error route when nonce is missing from storage', () => {
     storageOneIdentityNonce.delete();
 
     render(
@@ -194,8 +207,7 @@ describe('OneIdentityCallback component', () => {
       </BrowserRouter>
     );
 
-    const errorDialog = getById(document.body, 'errorDialog');
-    expect(errorDialog).toBeInTheDocument();
+    expect(mockNavigate).toHaveBeenCalledWith(ROUTE_ONE_IDENTITY_LOGIN_ERROR, true);
     expect(mockLocationReplace).not.toHaveBeenCalled();
   });
 
