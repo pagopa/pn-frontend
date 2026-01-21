@@ -4,6 +4,7 @@ import { useRapidAccessParam } from '../../hooks/useRapidAccessParam';
 import { getConfiguration } from '../../services/configuration.service';
 import {
   storageOneIdentityNonce,
+  storageOneIdentityRedirectUri,
   storageOneIdentityState,
   storageRapidAccessOps,
 } from '../../utility/storage';
@@ -25,6 +26,7 @@ const OneIdentityLogin: React.FC = () => {
 
   storageOneIdentityState.write(state);
   storageOneIdentityNonce.write(nonce);
+  storageOneIdentityRedirectUri.write(encodedRedirectUri);
 
   window.location.assign(oidcUrl);
 

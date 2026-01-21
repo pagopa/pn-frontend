@@ -2,6 +2,7 @@ import { AppRouteParams } from '@pagopa-pn/pn-commons';
 
 import {
   storageOneIdentityNonce,
+  storageOneIdentityRedirectUri,
   storageOneIdentityState,
   storageRapidAccessOps,
 } from '../storage';
@@ -44,5 +45,14 @@ describe('storage utility test', () => {
     expect(storageOneIdentityNonce.read()).toEqual(nonce);
     storageOneIdentityNonce.delete();
     expect(sessionStorage.getItem('nonce')).toBeNull();
+  });
+
+  it('storageOneIdentityRedirectUri tests', () => {
+    const redirectUri = 'https://example.com/callback';
+    storageOneIdentityRedirectUri.write(redirectUri);
+    expect(sessionStorage.getItem('redirect_uri')).toBe(redirectUri);
+    expect(storageOneIdentityRedirectUri.read()).toEqual(redirectUri);
+    storageOneIdentityRedirectUri.delete();
+    expect(sessionStorage.getItem('redirect_uri')).toBeNull();
   });
 });
