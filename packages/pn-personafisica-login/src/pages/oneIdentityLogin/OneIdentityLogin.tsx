@@ -1,6 +1,7 @@
 import React from 'react';
 
 import { useRapidAccessParam } from '../../hooks/useRapidAccessParam';
+import { oneIdentityRedirectUriPath } from '../../navigation/routes.const';
 import { getConfiguration } from '../../services/configuration.service';
 import {
   storageOneIdentityNonce,
@@ -15,7 +16,7 @@ const OneIdentityLogin: React.FC = () => {
 
   const state = generateRandomUniqueString();
   const nonce = generateRandomUniqueString();
-  const encodedRedirectUri = encodeURIComponent(`${PF_URL}/auth/callback`);
+  const encodedRedirectUri = encodeURIComponent(`${PF_URL}${oneIdentityRedirectUriPath}`);
 
   const oidcUrl = `${ONE_IDENTITY_BASE_URL}/login?response_type=CODE&scope=openid&client_id=${clientId}&state=${state}&nonce=${nonce}&redirect_uri=${encodedRedirectUri}`;
 

@@ -4,6 +4,7 @@ import { useSearchParams } from 'react-router-dom';
 
 import { getLangCode, sanitizeString } from '@pagopa-pn/pn-commons';
 
+import { oneIdentityRedirectUriPath } from '../../navigation/routes.const';
 import { getConfiguration } from '../../services/configuration.service';
 import {
   storageOneIdentityNonce,
@@ -21,8 +22,6 @@ const OneIdentityCallback: React.FC = () => {
   const [searchParams] = useSearchParams();
   const oneIdentityState = searchParams.get('state');
   const oneIdentityCode = searchParams.get('code');
-
-  const redirect_uri = `${PF_URL}/auth/callback`;
 
   const rapidAccess = useMemo(() => storageRapidAccessOps.read(), []);
   const { i18n } = useTranslation();
@@ -52,7 +51,7 @@ const OneIdentityCallback: React.FC = () => {
         code: oneIdentityCode,
         state: oneIdentityState,
         nonce: nonceFromStorage,
-        redirect_uri: encodeURIComponent(redirect_uri),
+        redirect_uri: encodeURIComponent(`${PF_URL}${oneIdentityRedirectUriPath}`),
         lang: sanitizeString(getLangCode(i18n.language)),
       });
 
@@ -74,7 +73,7 @@ const OneIdentityCallback: React.FC = () => {
     isValid,
     i18n.language,
     PF_URL,
-    redirect_uri,
+    oneIdentityRedirectUriPath,
   ]);
 
   useEffect(() => {
