@@ -74,7 +74,7 @@ const OneIdentityCallback: React.FC = () => {
   }, []);
 
   if (!isValid) {
-    return <Navigate to={ROUTE_ONE_IDENTITY_LOGIN_ERROR} />;
+    return <Navigate to={ROUTE_ONE_IDENTITY_LOGIN_ERROR} replace />;
   }
 
   return null;
