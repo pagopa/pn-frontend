@@ -1,17 +1,19 @@
-import React, { useCallback, useEffect, useMemo } from 'react';
+import React, { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useSearchParams } from 'react-router-dom';
+import { Navigate, useSearchParams } from 'react-router-dom';
 
 import { getLangCode, sanitizeString } from '@pagopa-pn/pn-commons';
 
-import { oneIdentityRedirectUriPath } from '../../navigation/routes.const';
+import {
+  ROUTE_ONE_IDENTITY_LOGIN_ERROR,
+  oneIdentityRedirectUriPath,
+} from '../../navigation/routes.const';
 import { getConfiguration } from '../../services/configuration.service';
 import {
   storageOneIdentityNonce,
   storageOneIdentityState,
   storageRapidAccessOps,
 } from '../../utility/storage';
-import LoginError from '../loginError/LoginError';
 
 const OneIdentityCallback: React.FC = () => {
   const { PF_URL } = getConfiguration();
@@ -23,7 +25,7 @@ const OneIdentityCallback: React.FC = () => {
   const oneIdentityState = searchParams.get('state');
   const oneIdentityCode = searchParams.get('code');
 
-  const rapidAccess = useMemo(() => storageRapidAccessOps.read(), []);
+  const rapidAccess = storageRapidAccessOps.read();
   const { i18n } = useTranslation();
 
   const isValid =
@@ -32,7 +34,7 @@ const OneIdentityCallback: React.FC = () => {
     nonceFromStorage &&
     oneIdentityState === stateFromStorage;
 
-  const calcRedirectUrl = useCallback(() => {
+  const calcRedirectUrl = () => {
     if (!isValid) {
       return;
     }
@@ -65,23 +67,14 @@ const OneIdentityCallback: React.FC = () => {
 
       window.location.replace(url);
     }
-  }, [
-    rapidAccess,
-    oneIdentityCode,
-    oneIdentityState,
-    nonceFromStorage,
-    isValid,
-    i18n.language,
-    PF_URL,
-    oneIdentityRedirectUriPath,
-  ]);
+  };
 
   useEffect(() => {
     calcRedirectUrl();
-  }, [calcRedirectUrl]);
+  }, []);
 
   if (!isValid) {
-    return <LoginError />;
+    return <Navigate to={ROUTE_ONE_IDENTITY_LOGIN_ERROR} />;
   }
 
   return null;
