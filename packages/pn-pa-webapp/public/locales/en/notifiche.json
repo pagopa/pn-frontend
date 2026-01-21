@@ -412,7 +412,7 @@
     "notification-timeline-reworked-tooltip": "Updated event or events",
     "notification-timeline-reworked-description": "Events marked as INVALIDATED EVENT are not to be considered as they have been replaced by the subsequent events marked as VALIDATED EVENT.",
     "reworked-status-valid": "Validated event",
-    "reworked-status-invalid": "Invalidated event"
+    "reworked-status-not-valid": "Invalidated event"
   },
   "new-notification": {
     "title": "Send a new notification",
