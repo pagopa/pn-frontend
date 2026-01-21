@@ -12,7 +12,8 @@
     "iun": "IUN-Code",
     "status": "Staat",
     "show-detail": "Siehe Detail",
-    "group-selector-title": "Gruppenauswahlmenü"
+    "group-selector-title": "Gruppenauswahlmenü",
+    "aria-action-table": "Benachrichtigungsdetails mit IUN anzeigen: {{iun}}"
   },
   "filters": {
     "iun": "Suche nach IUN-Code",
@@ -21,7 +22,8 @@
     "data_a": "bis",
     "data_a-input-aria-label": "Enddatum der Suche eingeben",
     "errors": {
-      "iun": "Gültigen IUN-Code eingeben"
+      "iun": "Gültigen IUN-Code eingeben",
+      "data_a": "Das Startdatum muss vor dem Enddatum liegen"
     }
   },
   "sort": {
@@ -38,7 +40,8 @@
     "aria-label-remove-filters": "Filter entfernen"
   },
   "from-qrcode": {
-    "not-found": "Link zum Bescheid nicht gefunden"
+    "not-found": "Link zum Bescheid nicht gefunden",
+    "not-found-subtitle": "Sie kann nur von den vom Empfängerunternehmen erfassten Benutzern oder von deren Bevollmächtigten gelesen werden."
   },
   "detail": {
     "document-not-available": "Das Dokument kann in wenigen Minuten heruntergeladen werden. Du kannst es erneut versuchen, indem du die Seite neu lädst oder auf den Link des angeforderten Dokuments klickst",
@@ -67,6 +70,7 @@
     "disclaimer-link": "Mehr erfahren",
     "payment": {
       "title": "Zahlung",
+      "single-payment-subtitle": "Der Endbetrag kann von dem im Bescheid angegebenen Betrag abweichen und die Zustellkosten enthalten.",
       "subtitle": "Dieser Bescheid enthält mehrere Zahlungsbenachrichtigungen: Wähle die aus, die du bezahlen möchtest. Einige Bescheide beinhalten Notifizierungsgebühren.",
       "subtitle-f24": "Diese können per F24 bezahlt werden. Für Einzelheiten, Muster öffnen.",
       "subtitle-mixed": "Für diesen Bescheid sind mehrere Zahlungsmöglichkeiten vorhanden: Wähle oder lade herunter, was du bezahlen möchtest. Einige Beträge beinhalten Notifizierungsgebühren.",
@@ -91,6 +95,8 @@
       "message-error-fetch-payment": "Wir konnten die Zahlungsdaten für diesen Bescheid nicht abrufen.",
       "cancelled-message": "Für eine eventuelle Rückerstattung von Zahlungen im Zusammenhang mit diesem Bescheid wende dich bitte an die ausgebende Körperschaft. Wenn du nach der Stornierung des Bescheids gezahlt hast, sind die nachstehenden Informationen möglicherweise nicht mehr aktuell.",
       "disclaimer-link": "Mehr erfahren",
+      "f24-download-error": "Der Download ist fehlgeschlagen. Versuchen Sie es erneut.",
+      "error-payment": "Wählen Sie eine Zahlungsaufforderung aus",
       "status": {
         "succeded": "Bezahlt",
         "succeded-tooltip": "Die Zahlung wurde erfolgreich gesendet.",
@@ -130,12 +136,18 @@
       "send-digital-domicile-PEC": "Versand per PEC",
       "send-digital-domicile-PEC-description": "Versand des Bescheids an die PEC-Adresse {{address}} läuft.",
       "send-digital-domicile-PEC-description-multirecipient": "Versand des Bescheids an {{name}} {{taxId}} an die PEC-Adresse {{address}} läuft.",
+      "send-digital-domicile-SERCQ-SEND": "Versand über das digitale SEND-Domizil",
+      "send-digital-domicile-SERCQ-SEND-description": "Der Versand der Benachrichtigung an das digitale SEND-Domizil ist im Gange.",
+      "send-digital-domicile-SERCQ-SEND-description-multirecipient": "Der Versand der Benachrichtigung an {{name}} {{taxId}} an das digitale SEND-Domizil ist im Gange",
       "send-digital-error": "Versand per PEC-Adresse fehlgeschlagen",
       "send-digital-error-description": "Versand an die PEC-Adresse {{address}} fehlgeschlagen, da das Postfach voll, ungültig oder inaktiv ist.",
       "send-digital-error-description-multirecipient": "Versand an {{name}} {{taxId}} an die PEC-Adresse {{address}} fehlgeschlagen, da das Postfach voll, ungültig oder inaktiv ist.",
       "send-digital-success-PEC": "PEC erfolgreich versendet",
       "send-digital-success-PEC-description": "Der Versand des Bescheids an die PEC-Adresse {{address}} war erfolgreich.",
       "send-digital-success-PEC-description-multirecipient": "Der Versand des Bescheids an {{name}} {{taxId}} an die PEC-Adresse {{address}} war erfolgreich.",
+      "send-digital-success-SERCQ-SEND": "Versand über das digitale SEND-Domizil erfolgreich",
+      "send-digital-success-SERCQ-SEND-description": "Der Versand der Benachrichtigung an das digitale SEND-Domizil war erfolgreich.",
+      "send-digital-success-SERCQ-SEND-description-multirecipient": "Der Versand der Benachrichtigung an {{name}} {{taxId}} an das digitale SEND-Domizil war erfolgreich.",
       "send-simple-registered-letter": "Einfacher Versand per Einschreiben",
       "send-simple-registered-letter-description": "Der Bescheid an die Anschrift {{address}} per einfachem Einschreiben wird gesendet.",
       "send-simple-registered-letter-description-multirecipient": "Der Bescheid an {{name}} {{taxId}} an die Adresse {{address}} per einfachem Einschreiben wird gesendet.",
@@ -164,6 +176,8 @@
       "prepare-analog-domicile-failure-ZZZ-description": "Es wurde keine gültige Adresse für einen weiteren Sendeversuch gefunden - Grund nicht angegeben.",
       "prepare-analog-domicile-failure-ZZZ-description-multirecipient": "Es wurde keine gültige Adresse für den Empfänger {{name}} {{taxId}} gefunden, um einen weiteren Sendeversuch vorzubereiten - Grund nicht angegeben.",
       "send-analog-flow-description": "Es gibt eine Aktualisierung zum Versand in Papierform.",
+      "send-analog-flow-CON020-description": "Original der AAR (digital natives Dokument), das vom Konsolidierer zur Verfügung gestellt und von PagoPA digital signiert wurde.",
+      "send-analog-flow-CON020-description-multirecipient": "Original der AAR (digital natives Dokument), das vom Konsolidierer zur Verfügung gestellt und von PagoPA digital signiert wurde.",
       "send-analog-flow-CON080-description": "Das Einschreiben {{registeredLetterKind}} Nummer {{registeredLetterNumber}} wurde gedruckt und in den Umschlag gesteckt.",
       "send-analog-flow-CON080-description-multirecipient": "Das Einschreiben {{registeredLetterKind}} Nummer {{registeredLetterNumber}} für {{name}} {{taxId}} wurde gedruckt und in den Umschlag gesteckt.",
       "send-analog-flow-PNAG012-description": "Der Empfänger hat das Einschreiben 890 {{registeredLetterNumber}} nicht innerhalb von 10 Tagen am Lagerort abgeholt.",
@@ -270,11 +284,20 @@
       "send-analog-flow-RECRI003B-description-multirecipient": "Ein neues Dokument ist angehängt.",
       "send-analog-flow-RECRI004B-description": "Ein neues Dokument ist angehängt.",
       "send-analog-flow-RECRI004B-description-multirecipient": "Ein neues Dokument ist angehängt.",
+      "send-analog-flow-RECAG010-description": "Der Zustellversuch für das Einschreiben 890 mit der Nummer {{registeredLetterNumber}} ist aufgrund der Abwesenheit des Empfängers gescheitert.",
+      "send-analog-flow-RECAG010-description-multirecipient": "Der Zustellversuch für das Einschreiben 890 mit der Nummer {{registeredLetterNumber}} für {{name}} {{taxId}} ist aufgrund der Abwesenheit des Empfängers gescheitert.",
+      "send-analog-flow-RECRS010-description": "Der Zustellversuch für das einfache Einschreiben mit der Nummer {{registeredLetterNumber}} ist aufgrund der Abwesenheit des Empfängers gescheitert.",
+      "send-analog-flow-RECRS010-description-multirecipient": "Der Zustellversuch für das einfache Einschreiben mit der Nummer {{registeredLetterNumber}} für {{name}} {{taxId}} ist aufgrund der Abwesenheit des Empfängers gescheitert.",
+      "send-analog-flow-RECRN010-description": "Der Zustellversuch für das Einschreiben mit Rückschein mit der Nummer {{registeredLetterNumber}} ist aufgrund der Abwesenheit des Empfängers gescheitert.",
+      "send-analog-flow-RECRN010-description-multirecipient": "Der Zustellversuch für das Einschreiben mit Rückschein mit der Nummer {{registeredLetterNumber}} für {{name}} {{taxId}} ist aufgrund der Abwesenheit des Empfängers gescheitert.",
+      "send-analog-flow-RECAG012-description": "Das Einschreiben 890 mit der Nummer {{registeredLetterNumber}} wurde abgeholt oder die Lagerfrist ist abgelaufen.",
+      "send-analog-flow-RECAG012-description-multirecipient": "Das Einschreiben 890 mit der Nummer {{registeredLetterNumber}} für {{name}} {{taxId}} wurde abgeholt oder die Lagerfrist ist abgelaufen.",
       "send-analog-error": "Der Versand auf dem Postweg hat zu keiner Zustellung geführt",
       "send-analog-success": "Versand in Papierform erfolgreich abgeschlossen",
       "send-analog-outcome-unknown": "Versand in Papierform abgeschlossen - Ergebnis nicht bestimmt",
       "send-analog-unknown": "Ereignis Versand Einschreiben - nicht angenommen",
       "aar-document": "Empfangsbestätigung",
+      "notification-cancelled-document": "Erklärung zur Annullierung der Benachrichtigung",
       "legalfact": {
         "sender-ack": "Benachrichtigung über Übernahme",
         "digital-delivery-success": "digitale Benachrichtigung",
@@ -300,6 +323,8 @@
         "23I": "Zustellungsbescheinigung",
         "Plico": "Scan des Umschlags",
         "23L": "Empfangsbestätigung",
+        "CAD": "Die Dematerialisierung des Einschreibens, das die Mitteilung über die erfolgte Hinterlegung enthält, ist verfügbar",
+        "ARCAD": "Die Dematerialisierung der Empfangsbestätigung des Einschreibens, das die Mitteilung über die erfolgte Hinterlegung enthält, ist verfügbar",
         "Indagine": "Scan der Nachforschung",
         "generic": "Dokument beigefügt"
       },
@@ -317,7 +342,12 @@
         "F02": "wegen Verlust des Umschlags",
         "F03": "wegen Beschädigung des Umschlags",
         "F04": "wegen Raub des Umschlags"
-      }
+      },
+      "radd": {
+        "title": "Die Dokumente wurden abgeholt",
+        "description": "Der Empfänger oder sein Bevollmächtigter hat die zugestellten Dokumente bei einem zur Zustellung befugten Betreiber abgeholt."
+      },
+      "tpp-type": "ein digitaler Drittanbieter-Kanal"
     },
     "downtimes": {
       "title": "FEHLFUNKTIONEN",
@@ -330,6 +360,20 @@
     "help": {
       "goto": "Besuche die Webseite",
       "assistance": "Bei technischen Problemen oder Fragen zu SEND oben rechts auf „Service“ klicken."
+    },
+    "errors": {
+      "delivery_file_info_not_found": {
+        "title": "Das Dokument ist nicht verfügbar",
+        "message": "Beim Abrufen des Dokuments ist ein Problem aufgetreten. Bitte versuchen Sie es später erneut. Wenn der Fehler weiterhin besteht, kontaktieren Sie den Support und geben Sie die Fehlerinformationen an."
+      },
+      "delivery_notification_without_payment_attachment": {
+        "title": "Das Dokument ist nicht verfügbar",
+        "message": "Beim Abrufen des Dokuments ist ein Problem aufgetreten. Bitte versuchen Sie es später erneut. Wenn der Fehler weiterhin besteht, kontaktieren Sie den Support und geben Sie die Fehlerinformationen an."
+      },
+      "delivery_push_file_not_found": {
+        "title": "Das Dokument ist nicht verfügbar",
+        "message": "Beim Abrufen des Dokuments ist ein Problem aufgetreten. Bitte versuchen Sie es später erneut. Wenn der Fehler weiterhin besteht, kontaktieren Sie den Support und geben Sie die Fehlerinformationen an."
+      }
     }
   },
   "delegatorTitle": "Bescheide von {{name}}",
@@ -377,6 +421,16 @@
     "viewed-description-multirecipient": "Mindestens ein Empfänger hat den Bescheid gelesen.",
     "canceled": "Abgebrochen",
     "canceled-tooltip": "Die Körperschaft hat den Versand des Bescheids abgebrochen",
-    "canceled-description": "Die Körperschaft hat den Versand des Bescheids abgebrochen."
+    "canceled-description": "Die Körperschaft hat den Versand des Bescheids abgebrochen.",
+    "returned-to-sender": "Rücksendung an den Absender",
+    "returned-to-sender-tooltip-monorecipient": "Der Empfänger ist verstorben",
+    "returned-to-sender-tooltip-multirecipient": "Alle Empfänger sind verstorben",
+    "returned-to-sender-description-monorecipient": "Der Empfänger ist verstorben.",
+    "returned-to-sender-description-multirecipient": "Alle Empfänger sind verstorben.",
+    "notification-timeline-reworked": "Aktualisiertes Ereignis oder mehrere aktualisierte Ereignisse",
+    "notification-timeline-reworked-tooltip": "Aktualisiertes Ereignis oder mehrere aktualisierte Ereignisse",
+    "notification-timeline-reworked-description": "Ereignisse, die als INVALIDIERTES EREIGNIS gekennzeichnet sind, sind nicht zu berücksichtigen, da sie durch nachfolgende Ereignisse ersetzt wurden, die als VALIDIERTES EREIGNIS gekennzeichnet sind.",
+    "reworked-status-valid": "Validiertes Ereignis",
+    "reworked-status-not-valid": "Invalidiertes Ereignis"
   }
 }
