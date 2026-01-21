@@ -25,13 +25,12 @@ import {
 } from '../../models/NotificationDetail';
 import { NotificationStatus } from '../../models/NotificationStatus';
 import { formatDay, formatMonthString, formatTime } from '../../utility/date.utility';
-import { getLocalizedOrDefaultLabel } from '../../utility/localization.utility';
 import {
   getLegalFactLabel,
   getNotificationStatusInfos,
   getNotificationTimelineStatusInfos,
 } from '../../utility/notification.utility';
-import { Tag } from '../Tag/Tag';
+import ReworkedStatusTag from './ReworkedStatusTag';
 
 type Props = {
   timelineStep: NotificationStatusHistory;
@@ -139,35 +138,6 @@ const NotificationDetailTimelineStep = ({
 
   const notificationStatusInfos = getNotificationStatusInfos(timelineStep, { recipients });
 
-  const getTag = (status: ReworkedStatus | undefined) => {
-    switch (status) {
-      case ReworkedStatus.VALID:
-        return (
-          <Tag
-            value={getLocalizedOrDefaultLabel(
-              'notifications',
-              'status.reworked-status-valid',
-              'Evento validato'
-            )}
-            variant="warning"
-          />
-        );
-      case ReworkedStatus.NOT_VALID:
-        return (
-          <Tag
-            value={getLocalizedOrDefaultLabel(
-              'notifications',
-              'status.reworked-status-not-valid',
-              'Evento invalidato'
-            )}
-            variant="warning"
-          />
-        );
-      default:
-        return null;
-    }
-  };
-
   if (timelineStep.steps) {
     /* eslint-disable functional/immutable-data */
     legalFactsIds = timelineStep.steps.reduce((arr, s) => {
@@ -214,7 +184,7 @@ const NotificationDetailTimelineStep = ({
           <Typography color="text.secondary" fontSize={14} data-testid="dateItem">
             {formatTime(timelineStep.activeFrom)}
           </Typography>
-          {getTag(reworkedStatus)}
+          <ReworkedStatusTag reworkedStatus={reworkedStatus} />
           <Chip
             id={`${notificationStatusInfos.label}-status`}
             data-testid="itemStatus"
@@ -319,7 +289,7 @@ const NotificationDetailTimelineStep = ({
             <Typography color="text.secondary" fontSize={14} data-testid="dateItemMicro">
               {formatTime(s.timestamp)}
             </Typography>
-            {getTag(s.reworkedStatus)}
+            <ReworkedStatusTag reworkedStatus={s.reworkedStatus} />
             <Typography
               color="text.primary"
               fontSize={14}
