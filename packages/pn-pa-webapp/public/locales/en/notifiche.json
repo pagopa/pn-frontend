@@ -15,7 +15,9 @@
     "errors": {
       "iun": "Enter a valid IUN code",
       "fiscal-code": "Enter the code in full"
-    }
+    },
+    "loading_completed_with_results": "Loading complete. The search produced results",
+    "loading_completed_no_results": "Loading complete. No notifications found"
   },
   "payment": {
     "title": "Payments",
