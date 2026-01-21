@@ -430,9 +430,11 @@
     "returned-to-sender-tooltip-multirecipient": "Tous les destinataires sont décédés",
     "returned-to-sender-description-monorecipient": "Le destinataire est décédé.",
     "returned-to-sender-description-multirecipient": "Tous les destinataires sono décédés.",
-    "notification-timeline-reworked": "Un ou plusieurs événements mis à jour",
-    "notification-timeline-reworked-tooltip": "Un ou plusieurs événements mis à jour",
-    "notification-timeline-reworked-description": "Les événements marqués ÉVÉNEMENT INVALIDÉ ne doivent pas être pris en compte car ils ont été remplacés par les événements suivants marqués ÉVÉNEMENT VALIDÉ."
+    "notification-timeline-reworked": "Événement ou plusieurs événements mis à jour",
+    "notification-timeline-reworked-tooltip": "Événement ou plusieurs événements mis à jour",
+    "notification-timeline-reworked-description": "Les événements marqués ÉVÉNEMENT INVALIDÉ ne devono pas être pris en compte, car ils ont été remplacés par les événements suivants marqués ÉVÉNEMENT VALIDÉ.",
+    "reworked-status-valid": "Événement validé",
+    "reworked-status-not-valid": "Événement invalidé"
   },
   "tppLanding": {
     "title": "Bonjour,\nvous avez reçu une communication à valeur légale",

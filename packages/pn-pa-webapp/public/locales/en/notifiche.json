@@ -408,9 +408,11 @@
     "returned-to-sender-tooltip-multirecipient": "All recipients are deceased",
     "returned-to-sender-description": "The recipient is deceased.",
     "returned-to-sender-description-multirecipient": "All recipients are deceased.",
-    "notification-timeline-reworked": "One or more events updated",
-    "notification-timeline-reworked-tooltip": "One or more events updated",
-    "notification-timeline-reworked-description": "Events marked as INVALIDATED EVENT should not be considered as they have been replaced by subsequent events marked as VALIDATED EVENT."
+    "notification-timeline-reworked": "Updated event or events",
+    "notification-timeline-reworked-tooltip": "Updated event or events",
+    "notification-timeline-reworked-description": "Events marked as INVALIDATED EVENT are not to be considered as they have been replaced by the subsequent events marked as VALIDATED EVENT.",
+    "reworked-status-valid": "Validated event",
+    "reworked-status-invalid": "Invalidated event"
   },
   "new-notification": {
     "title": "Send a new notification",

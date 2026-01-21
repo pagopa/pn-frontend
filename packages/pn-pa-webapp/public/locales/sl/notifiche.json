@@ -408,9 +408,11 @@
     "returned-to-sender-tooltip-multirecipient": "Vsi prejemniki so umrli",
     "returned-to-sender-description": "Prejemnik je umrl.",
     "returned-to-sender-description-multirecipient": "Vsi prejemniki so umrli.",
-    "notification-timeline-reworked": "En ali več dogodkov je posodobljenih",
-    "notification-timeline-reworked-tooltip": "En ali več dogodkov je posodobljenih",
-    "notification-timeline-reworked-description": "Dogodkov, označenih z NEVELJAVEN DOGODEK, ne gre upoštevati, saj so jih nadomestili poznejši dogodki, označeni z VELJAVEN DOGODEK."
+    "notification-timeline-reworked": "Posodobljen dogodek ali več dogodkov",
+    "notification-timeline-reworked-tooltip": "Posodobljen dogodek ali več dogodkov",
+    "notification-timeline-reworked-description": "Dogodkov, označenih z NEVALIDIRAN DOGODEK, ne upoštevajte, saj so jih nadomestili naslednji dogodki, označeni z VALIDIRAN DOGODEK.",
+    "reworked-status-valid": "Validiran dogodek",
+    "reworked-status-not-valid": "Nevalidiran dogodek"
   },
   "new-notification": {
     "title": "Pošljite novo obvestilo",

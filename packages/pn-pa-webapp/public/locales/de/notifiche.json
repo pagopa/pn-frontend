@@ -408,9 +408,11 @@
     "returned-to-sender-tooltip-multirecipient": "Alle Empfänger sind verstorben",
     "returned-to-sender-description": "Der Empfänger ist verstorben.",
     "returned-to-sender-description-multirecipient": "Alle Empfänger sind verstorben.",
-    "notification-timeline-reworked": "Ein oder mehrere Ereignisse aktualisiert",
-    "notification-timeline-reworked-tooltip": "Ein oder mehrere Ereignisse aktualisiert",
-    "notification-timeline-reworked-description": "Ereignisse, die als UNGÜLTIGES EREIGNIS gekennzeichnet sind, sollten nicht berücksichtigt werden, da sie durch nachfolgende Ereignisse ersetzt wurden, die als GÜLTIGES EREIGNIS gekennzeichnet sind."
+    "notification-timeline-reworked": "Aktualisiertes Ereignis oder mehrere aktualisierte Ereignisse",
+    "notification-timeline-reworked-tooltip": "Aktualisiertes Ereignis oder mehrere aktualisierte Ereignisse",
+    "notification-timeline-reworked-description": "Ereignisse, die als INVALIDIERTES EREIGNIS gekennzeichnet sind, sind nicht zu berücksichtigen, da sie durch nachfolgende Ereignisse ersetzt wurden, die als VALIDIERTES EREIGNIS gekennzeichnet sind.",
+    "reworked-status-valid": "Validiertes Ereignis",
+    "reworked-status-not-valid": "Invalidiertes Ereignis"
   },
   "new-notification": {
     "title": "Neuen Bescheid senden",
