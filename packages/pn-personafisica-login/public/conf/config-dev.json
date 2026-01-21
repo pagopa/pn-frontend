@@ -13,7 +13,7 @@
   "APP_IO_IOS": "https://apps.apple.com/it/app/io/id1501681835",
   "IS_SMART_APP_BANNER_ENABLED": false,
   "ACCESSIBILITY_LINK": "https://form.agid.gov.it/view/978876c0-df2d-11ef-8637-9f856ac3da10",
-  "ONE_IDENTITY_LOGIN_ENABLED": false,
+  "ONE_IDENTITY_LOGIN_ENABLED": true,
   "ONE_IDENTITY_CLIENT_ID": "DFCUf4W3KHfKUl4USEVYrMgpMxvyKICHM_ZPiZ3ftm0",
   "ONE_IDENTITY_BASE_URL": "https://uat.oneid.pagopa.it"
 }

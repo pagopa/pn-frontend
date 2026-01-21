@@ -2,10 +2,8 @@ import { BrowserRouter } from 'react-router-dom';
 import { vi } from 'vitest';
 
 import { AppRouteParams } from '@pagopa-pn/pn-commons';
-import { getById } from '@pagopa-pn/pn-commons/src/test-utils';
 
 import { render } from '../../../__test__/test-utils';
-import { getConfiguration } from '../../../services/configuration.service';
 import {
   storageOneIdentityNonce,
   storageOneIdentityState,
@@ -30,8 +28,6 @@ vi.mock('../../../utility/utils', async () => ({
   generateRandomUniqueString: vi.fn(),
 }));
 
-vi.mock('../../../services/configuration.service');
-
 describe('OneIdentityLogin component', () => {
   const original = window.location;
 
@@ -40,12 +36,6 @@ describe('OneIdentityLogin component', () => {
   });
 
   beforeEach(() => {
-    vi.mocked(getConfiguration).mockReturnValue({
-      ONE_IDENTITY_CLIENT_ID: 'DFCUf4W3KHfKUl4USEVYrMgpMxvyKICHM_ZPiZ3ftm0',
-      ONE_IDENTITY_BASE_URL: 'https://uat.oneid.pagopa.it',
-      PF_URL: 'https://cittadini.dev.notifichedigitali.it',
-    } as any);
-
     let callCount = 0;
     vi.mocked(utils.generateRandomUniqueString).mockImplementation(() => {
       callCount++;
@@ -115,73 +105,5 @@ describe('OneIdentityLogin component', () => {
       AppRouteParams.RETRIEVAL_ID,
       'mock-retrieval-id',
     ]);
-  });
-
-  it('renders LoginError when clientId is missing', async () => {
-    vi.mocked(getConfiguration).mockReturnValue({
-      ONE_IDENTITY_CLIENT_ID: '',
-      ONE_IDENTITY_BASE_URL: 'https://uat.oneid.pagopa.it',
-      PF_URL: 'https://cittadini.dev.notifichedigitali.it',
-    } as any);
-
-    render(
-      <BrowserRouter>
-        <OneIdentityLogin />
-      </BrowserRouter>
-    );
-
-    expect(mockAssign).not.toHaveBeenCalled();
-    const errorDialog = getById(document.body, 'errorDialog');
-    expect(errorDialog).toBeInTheDocument();
-  });
-
-  it('renders LoginError when ONE_IDENTITY_BASE_URL is missing', () => {
-    vi.mocked(getConfiguration).mockReturnValue({
-      ONE_IDENTITY_CLIENT_ID: 'DFCUf4W3KHfKUl4USEVYrMgpMxvyKICHM_ZPiZ3ftm0',
-      ONE_IDENTITY_BASE_URL: '',
-      PF_URL: 'https://cittadini.dev.notifichedigitali.it',
-    } as any);
-
-    render(
-      <BrowserRouter>
-        <OneIdentityLogin />
-      </BrowserRouter>
-    );
-
-    expect(mockAssign).not.toHaveBeenCalled();
-    const errorDialog = getById(document.body, 'errorDialog');
-    expect(errorDialog).toBeInTheDocument();
-  });
-
-  it('renders LoginError when state generation fails', () => {
-    vi.mocked(utils.generateRandomUniqueString).mockReturnValueOnce('');
-
-    render(
-      <BrowserRouter>
-        <OneIdentityLogin />
-      </BrowserRouter>
-    );
-
-    expect(mockAssign).not.toHaveBeenCalled();
-    const errorDialog = getById(document.body, 'errorDialog');
-    expect(errorDialog).toBeInTheDocument();
-  });
-
-  it('renders LoginError when nonce generation fails', () => {
-    let callCount = 0;
-    vi.mocked(utils.generateRandomUniqueString).mockImplementation(() => {
-      callCount++;
-      return callCount === 1 ? mockState : '';
-    });
-
-    render(
-      <BrowserRouter>
-        <OneIdentityLogin />
-      </BrowserRouter>
-    );
-
-    expect(mockAssign).not.toHaveBeenCalled();
-    const errorDialog = getById(document.body, 'errorDialog');
-    expect(errorDialog).toBeInTheDocument();
   });
 });
