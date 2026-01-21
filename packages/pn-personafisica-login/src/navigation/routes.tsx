@@ -3,6 +3,7 @@ import { Navigate, Route, Routes } from 'react-router-dom';
 import Login from '../pages/login/Login';
 import LoginError from '../pages/loginError/LoginError';
 import Logout from '../pages/logout/Logout';
+import OneIdentityCallback from '../pages/oneIdentityCallback/OneIdentityCallback';
 import OneIdentityLogin from '../pages/oneIdentityLogin/OneIdentityLogin';
 import SuccessPage from '../pages/success/Success';
 import { getConfiguration } from '../services/configuration.service';
@@ -29,7 +30,7 @@ function Router() {
       {ONE_IDENTITY_LOGIN_ENABLED && (
         <>
           <Route path={ROUTE_ONE_IDENTITY_LOGIN} element={<OneIdentityLogin />} />
-          <Route path={ROUTE_ONE_IDENTITY_CALLBACK} element={<>CALLBACK OI</>} />
+          <Route path={ROUTE_ONE_IDENTITY_CALLBACK} element={<OneIdentityCallback />} />
         </>
       )}
       <Route path="*" element={<Navigate to={ROUTE_LOGIN} replace />} />
