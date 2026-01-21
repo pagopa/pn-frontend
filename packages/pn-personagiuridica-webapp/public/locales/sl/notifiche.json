@@ -12,7 +12,8 @@
     "iun": "Koda IUN",
     "status": "Stanje",
     "show-detail": "Ogled podrobnosti",
-    "group-selector-title": "Meni za izbiro skupine"
+    "group-selector-title": "Meni za izbiro skupine",
+    "aria-action-table": "Oglejte si podrobnosti obvestila z IUN: {{iun}}"
   },
   "filters": {
     "iun": "Iskanje po kodi IUN",
@@ -21,7 +22,8 @@
     "data_a": "Do",
     "data_a-input-aria-label": "Vnesite končni datum iskanja",
     "errors": {
-      "iun": "Vnesite veljavno kodo IUN"
+      "iun": "Vnesite veljavno kodo IUN",
+      "data_a": "Datum začetka mora biti pred datumom konca"
     }
   },
   "sort": {
@@ -38,7 +40,8 @@
     "aria-label-remove-filters": "Odstrani filtre"
   },
   "from-qrcode": {
-    "not-found": "Povezave do obvestila ni mogoče najti"
+    "not-found": "Povezave do obvestila ni mogoče najti",
+    "not-found-subtitle": "Preberejo jo lahko le uporabniki, ki jih je evidentiralo podjetje prejemnik, ali njegov pooblaščenec."
   },
   "detail": {
     "document-not-available": "Dokument bo mogoče prenesti v nekaj minutah. Poskusite lahko znova tako, da ponovno naložite stran ali kliknete povezavo zahtevanega dokumenta",
@@ -67,6 +70,7 @@
     "disclaimer-link": "Izvedite več",
     "payment": {
       "title": "Plačilo",
+      "single-payment-subtitle": "Končni znesek se lahko razlikuje od zneska, navedenega v aktu, in vključuje stroške vročanja.",
       "subtitle": "V tem obvestilu je več opozoril o plačilu: izberite tisto, ki ga želite plačati. Nekatera opozorila vključujejo stroške obveščanja.",
       "subtitle-f24": "To obvestilo lahko plačate prek F24. Če si želite ogledati podrobnosti, odprite obrazce.",
       "subtitle-mixed": "V tem obvestilu je več možnosti plačila: izberite ali prenesite tisto, kar želite plačati. Nekateri zneski vključujejo stroške obveščanja.",
@@ -91,6 +95,8 @@
       "message-error-fetch-payment": "Podrobnosti o plačilu za to obvestilo ni bilo mogoče pridobiti.",
       "cancelled-message": "Za vsa povračila plačil, povezanih s tem obvestilom, se obrnite na ustanovo pošiljateljico. Če ste plačilo opravili po preklicu obvestila, spodnji podatki morda ne bodo posodobljeni.",
       "disclaimer-link": "Izvedite več",
+      "f24-download-error": "Prenos ni uspel. Poskusite znova.",
+      "error-payment": "Izberite obvestilo o plačilu",
       "status": {
         "succeded": "Plačano",
         "succeded-tooltip": "Vaše plačilo je bilo uspešno poslano.",
@@ -130,12 +136,18 @@
       "send-digital-domicile-PEC": "Pošiljanje prek PEC",
       "send-digital-domicile-PEC-description": "Obvestilo se pošlje na PEC {{address}}.",
       "send-digital-domicile-PEC-description-multirecipient": "Obvestilo se pošlje za {{name}} {{taxId}} na PEC {{address}}.",
+      "send-digital-domicile-SERCQ-SEND": "Pošiljanje prek digitalnega naslova SEND",
+      "send-digital-domicile-SERCQ-SEND-description": "Pošiljanje obvestila na digitalni naslov SEND je v teku.",
+      "send-digital-domicile-SERCQ-SEND-description-multirecipient": "Pošiljanje obvestila osebi {{name}} {{taxId}} na digitalni naslov SEND je v teku",
       "send-digital-error": "Pošiljanje prek PEC ni uspelo",
       "send-digital-error-description": "Pošiljanje obvestila na PEC {{address}} ni uspelo, ker je polje nasičeno, neveljavno ali neaktivno.",
       "send-digital-error-description-multirecipient": "Pošiljanje obvestila za {{name}} {{taxId}} na PEC {{address}} ni uspelo, ker je polje nasičeno, neveljavno ali neaktivno.",
       "send-digital-success-PEC": "Pošiljanje prek PEC je uspelo",
       "send-digital-success-PEC-description": "Obvestilo je bilo uspešno poslano na PEC {{address}}.",
       "send-digital-success-PEC-description-multirecipient": "Obvestilo za {{name}} {{taxId}} na PEC {{address}} je bilo uspešno poslano.",
+      "send-digital-success-SERCQ-SEND": "Pošiljanje prek digitalnega naslova SEND je uspelo",
+      "send-digital-success-SERCQ-SEND-description": "Pošiljanje obvestila na digitalni naslov SEND je uspelo.",
+      "send-digital-success-SERCQ-SEND-description-multirecipient": "Pošiljanje obvestila osebi {{name}} {{taxId}} na digitalni naslov SEND je uspelo.",
       "send-simple-registered-letter": "Pošiljanje z navadnim priporočenim pismom",
       "send-simple-registered-letter-description": "Obvestilo se pošlje na naslov {{address}} z navadnim priporočenim pismom.",
       "send-simple-registered-letter-description-multirecipient": "Obvestilo se pošlje za {{name}} {{taxId}} na naslov {{address}} z navadnim priporočenim pismom.",
@@ -164,6 +176,8 @@
       "prepare-analog-domicile-failure-ZZZ-description": "Veljavnega naslova ni bilo mogoče najti, da bi se dogovoril za drug poskus pošiljanja - razlog ni naveden.",
       "prepare-analog-domicile-failure-ZZZ-description-multirecipient": "Za prejemnika {{name}} {{taxId}} ni bil najden veljaven naslov, da bi se dogovoril za drug poskus pošiljanja - razlog ni naveden.",
       "send-analog-flow-description": "Pošiljanje v papirni obliki je posodobljeno.",
+      "send-analog-flow-CON020-description": "Izvirnik AAR (izvorno digitalni dokument), ki ga je dal na voljo konsolidator in ga je digitalno podpisal PagoPA.",
+      "send-analog-flow-CON020-description-multirecipient": "Izvirnik AAR (izvorno digitalni dokument), ki ga je dal na voljo konsolidator in ga je digitalno podpisal PagoPA.",
       "send-analog-flow-CON080-description": "Priporočeno pismo {{registeredLetterKind}} številka {{registeredLetterNumber}} je bilo natisnjeno in dano v ovojnico.",
       "send-analog-flow-CON080-description-multirecipient": "Priporočeno pismo {{registeredLetterKind}} številka {{registeredLetterNumber}} za {{name}} {{taxId}} je bilo natisnjeno in dano v ovojnico.",
       "send-analog-flow-PNAG012-description": "Prejemnik ni prevzel priporočenega pisma 890 številka {{registeredLetterNumber}} na mestu skladiščenja v roku 10 dni.",
@@ -270,11 +284,20 @@
       "send-analog-flow-RECRI003B-description-multirecipient": "Priložen je nov dokument.",
       "send-analog-flow-RECRI004B-description": "Priložen je nov dokument.",
       "send-analog-flow-RECRI004B-description-multirecipient": "Priložen je nov dokument.",
+      "send-analog-flow-RECAG010-description": "Poskus vročitve priporočenega pisma 890 št. {{registeredLetterNumber}} ni bil uspešen zaradi odsotnosti prejemnika.",
+      "send-analog-flow-RECAG010-description-multirecipient": "Poskus vročitve priporočenega pisma 890 št. {{registeredLetterNumber}} za {{name}} {{taxId}} ni bil uspešen zaradi odsotnosti prejemnika.",
+      "send-analog-flow-RECRS010-description": "Poskus vročitve navadnega priporočenega pisma št. {{registeredLetterNumber}} ni bil uspešen zaradi odsotnosti prejemnika.",
+      "send-analog-flow-RECRS010-description-multirecipient": "Poskus vročitve navadnega priporočenega pisma št. {{registeredLetterNumber}} za {{name}} {{taxId}} ni bil uspešen zaradi odsotnosti prejemnika.",
+      "send-analog-flow-RECRN010-description": "Poskus vročitve priporočenega pisma s povratnico št. {{registeredLetterNumber}} ni bil uspešen zaradi odsotnosti prejemnika.",
+      "send-analog-flow-RECRN010-description-multirecipient": "Poskus vročitve priporočenega pisma s povratnico št. {{registeredLetterNumber}} za {{name}} {{taxId}} ni bil uspešen zaradi odsotnosti prejemnika.",
+      "send-analog-flow-RECAG012-description": "Priporočeno pismo 890 št. {{registeredLetterNumber}} je bilo prevzeto oziroma se je iztekel rok za hrambo.",
+      "send-analog-flow-RECAG012-description-multirecipient": "Priporočeno pismo 890 št. {{registeredLetterNumber}} za {{name}} {{taxId}} je bilo prevzeto oziroma se je iztekel rok za hrambo.",
       "send-analog-error": "Pošiljanje v papirni obliki ni določilo dostave",
       "send-analog-success": "Pošiljanje v papirni obliki je bilo uspešno",
       "send-analog-outcome-unknown": "Pošiljanje v papirni obliki zaključeno - izid ni določen",
       "send-analog-unknown": "Dogodek pri pošiljanju priporočenega pisma - ni prepoznan",
       "aar-document": "Potrdilo o prejemu",
+      "notification-cancelled-document": "Izjava o preklicu obvestila",
       "legalfact": {
         "sender-ack": "obvestilo o prevzemu",
         "digital-delivery-success": "digitalno obveščanje",
@@ -300,6 +323,8 @@
         "23I": "Potrdilo o dostavi",
         "Plico": "Skeniranje ovojnice",
         "23L": "Potrdilo o prejemu",
+        "CAD": "Na voljo je dematerializacija priporočenega pisma, ki vsebuje obvestilo o opravljenem pologu",
+        "ARCAD": "Na voljo je dematerializacija povratnice priporočenega pisma, ki vsebuje obvestilo o opravljenem pologu",
         "Indagine": "Skeniranje ankete",
         "generic": "Priloženi dokument"
       },
@@ -317,7 +342,12 @@
         "F02": "zaradi izgube kuverte",
         "F03": "zaradi poškodbe kuverte",
         "F04": "zaradi ropa kuverte"
-      }
+      },
+      "radd": {
+        "title": "Dokumenti so bili prevzeti",
+        "description": "Prejemnik ali njegov pooblaščenec je vročene dokumente prevzel pri izvajalcu, ki je pooblaščen za njihovo vročanje."
+      },
+      "tpp-type": "digitalni kanal tretje osebe"
     },
     "downtimes": {
       "title": "MOTNJE",
@@ -330,6 +360,20 @@
     "help": {
       "goto": "Pojdi na spletno mesto",
       "assistance": "Za tehnične težave ali vprašanja, povezana s SEND, kliknite \"Podpora\" v zgornjem desnem kotu."
+    },
+    "errors": {
+      "delivery_file_info_not_found": {
+        "title": "Dokument ni na voljo",
+        "message": "Pri pridobivanju dokumenta je prišlo do težave. Poskusite znova pozneje. Če se napaka ponovi, stopite v stik s podporo in sporočite podatke o napaki."
+      },
+      "delivery_notification_without_payment_attachment": {
+        "title": "Dokument ni na voljo",
+        "message": "Pri pridobivanju dokumenta je prišlo do težave. Poskusite znova pozneje. Če se napaka ponovi, stopite v stik s podporo in sporočite podatke o napaki."
+      },
+      "delivery_push_file_not_found": {
+        "title": "Dokument ni na voljo",
+        "message": "Pri pridobivanju dokumenta je prišlo do težave. Poskusite znova pozneje. Če se napaka ponovi, stopite v stik s podporo in sporočite podatke o napaki."
+      }
     }
   },
   "delegatorTitle": "Obvestila za {{name}}",
@@ -377,6 +421,16 @@
     "viewed-description-multirecipient": "Vsaj en prejemnik je prebral obvestilo.",
     "canceled": "Preklicano",
     "canceled-tooltip": "Organizacija je preklicala pošiljanje obvestila",
-    "canceled-description": "Organizacija je preklicala pošiljanje obvestila."
+    "canceled-description": "Organizacija je preklicala pošiljanje obvestila.",
+    "returned-to-sender": "Vrnjeno pošiljatelju",
+    "returned-to-sender-tooltip-monorecipient": "Prejemnik je umrl",
+    "returned-to-sender-tooltip-multirecipient": "Vsi prejemniki so umrli",
+    "returned-to-sender-description-monorecipient": "Prejemnik je umrl.",
+    "returned-to-sender-description-multirecipient": "Vsi prejemniki so umrli.",
+    "notification-timeline-reworked": "Posodobljen dogodek ali več dogodkov",
+    "notification-timeline-reworked-tooltip": "Posodobljen dogodek ali več dogodkov",
+    "notification-timeline-reworked-description": "Dogodkov, označenih z NEVALIDIRAN DOGODEK, ne upoštevajte, saj so jih nadomestili naslednji dogodki, označeni z VALIDIRAN DOGODEK.",
+    "reworked-status-valid": "Validiran dogodek",
+    "reworked-status-not-valid": "Nevalidiran dogodek"
   }
 }

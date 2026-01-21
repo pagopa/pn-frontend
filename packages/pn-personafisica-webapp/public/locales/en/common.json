@@ -218,6 +218,10 @@
     "message": "The original text of these documents is in Italian. In case of conflict between the Italian version and the translations in other languages, the meaning and conditions of the Italian language shall prevail.",
     "link": "Consult translations"
   },
+  "feedback_banner": {
+    "title": "Help us improve SEND",
+    "content": "Your feedback allows us to make everything clearer and simpler. It only takes a few minutes to tell us what you think."
+  },
   "no-spaces-at-edges": "Remove spaces at the beginning or end",
   "wizard": {
     "stepper": {
@@ -238,6 +242,11 @@
       "fourth digit",
       "last digit"
     ]
+  },
+  "user-validation-failed": {
+    "title": "The data entered is invalid",
+    "description": "One or more data items associated with your account are invalid; contact support to resolve the issue.",
+    "cta": "Contact support"
   },
   "autocomplete": {
     "clear": "Remove selected options",
