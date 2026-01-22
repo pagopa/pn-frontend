@@ -3,7 +3,12 @@ import { createSlice } from '@reduxjs/toolkit';
 
 import { User } from '../../models/User';
 import { userDataMatcher } from '../../utility/user.utility';
-import { acceptTosPrivacy, exchangeToken, getTosPrivacyApproval } from './actions';
+import {
+  acceptTosPrivacy,
+  exchangeOneIdentityCode,
+  exchangeToken,
+  getTosPrivacyApproval,
+} from './actions';
 
 const noLoggedUserData = {
   ...basicNoLoggedUserData,
@@ -57,6 +62,21 @@ const userSlice = createSlice({
     builder.addCase(exchangeToken.rejected, (state) => {
       state.loading = false;
     });
+
+    builder.addCase(exchangeOneIdentityCode.pending, (state) => {
+      state.loading = true;
+    });
+    // eslint-disable-next-line sonarjs/no-identical-functions
+    builder.addCase(exchangeOneIdentityCode.fulfilled, (state, action) => {
+      const user = action.payload;
+      sessionStorage.setItem('user', JSON.stringify(user));
+      state.user = user;
+      state.loading = false;
+    });
+    builder.addCase(exchangeOneIdentityCode.rejected, (state) => {
+      state.loading = false;
+    });
+
     builder.addCase(getTosPrivacyApproval.fulfilled, (state, action) => {
       const [tosConsent, privacyConsent] = action.payload.filter(
         (consent) =>
