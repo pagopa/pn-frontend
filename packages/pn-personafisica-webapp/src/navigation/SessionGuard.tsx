@@ -15,8 +15,8 @@ import {
 } from '@pagopa-pn/pn-commons';
 
 import { useRapidAccessParam } from '../hooks/useRapidAccessParam';
-import { TokenExchangeRequest } from '../models/User';
-import { apiLogout, exchangeToken } from '../redux/auth/actions';
+import { OneIdentityCodeExchangeRequest, TokenExchangeRequest } from '../models/User';
+import { apiLogout, exchangeOneIdentityCode, exchangeToken } from '../redux/auth/actions';
 import { resetState } from '../redux/auth/reducers';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { RootState } from '../redux/store';
@@ -43,7 +43,38 @@ const SessionGuard = () => {
     message: '',
   });
 
-  const spidToken = new URLSearchParams(location.hash.substring(1)).get('token'); // https://github.com/remix-run/history/blob/main/docs/api-reference.md#location.hash
+  const hashParams = new URLSearchParams(location.hash.substring(1)); // https://github.com/remix-run/history/blob/main/docs/api-reference.md#location.hash
+
+  const spidToken = hashParams.get('token');
+
+  // Get One Identity params from URL hash
+  const code = hashParams.get('code');
+  const state = hashParams.get('state');
+  const nonce = hashParams.get('nonce');
+  const redirectUri = hashParams.get('redirect_uri');
+
+  const handleTokenExchangeError = (error: any) => {
+    const adaptedError = adaptedTokenExchangeError(error);
+    if (adaptedError.response.status === 451 || WORK_IN_PROGRESS) {
+      navigate({ pathname: routes.NOT_ACCESSIBLE }, { replace: true });
+      return;
+    }
+    if (adaptedError.code === 'USER_VALIDATION_FAILED') {
+      navigate(
+        {
+          pathname: routes.NOT_ACCESSIBLE,
+          search: '?reason=user-validation-failed',
+        },
+        { replace: true }
+      );
+      return;
+    }
+    setModalData({
+      open: true,
+      title: adaptedError.response.customMessage.title,
+      message: adaptedError.response.customMessage.message,
+    });
+  };
 
   const performExchangeToken = async (token: TokenExchangeRequest) => {
     AppResponsePublisher.error.subscribe('exchangeToken', manageUnforbiddenError);
@@ -51,26 +82,19 @@ const SessionGuard = () => {
       const user = await dispatch(exchangeToken(token)).unwrap();
       sessionCheck(user.exp);
     } catch (error) {
-      const adaptedError = adaptedTokenExchangeError(error);
-      if (adaptedError.response.status === 451 || WORK_IN_PROGRESS) {
-        navigate({ pathname: routes.NOT_ACCESSIBLE }, { replace: true });
-        return;
-      }
-      if (adaptedError.code === 'USER_VALIDATION_FAILED') {
-        navigate(
-          {
-            pathname: routes.NOT_ACCESSIBLE,
-            search: '?reason=user-validation-failed',
-          },
-          { replace: true }
-        );
-        return;
-      }
-      setModalData({
-        open: true,
-        title: adaptedError.response.customMessage.title,
-        message: adaptedError.response.customMessage.message,
-      });
+      handleTokenExchangeError(error);
+    }
+  };
+
+  const performOneIdentityTokenExchange = async (
+    exchangeCodeParams: OneIdentityCodeExchangeRequest
+  ) => {
+    AppResponsePublisher.error.subscribe('exchangeTokenOneIdentity', manageUnforbiddenError);
+    try {
+      const user = await dispatch(exchangeOneIdentityCode(exchangeCodeParams)).unwrap();
+      sessionCheck(user.exp);
+    } catch (error) {
+      handleTokenExchangeError(error);
     }
   };
 
@@ -102,6 +126,14 @@ const SessionGuard = () => {
   useEffect(() => {
     if (spidToken) {
       void performExchangeToken({ spidToken, rapidAccess });
+    } else if (code && state && nonce && redirectUri) {
+      void performOneIdentityTokenExchange({
+        code,
+        state,
+        nonce,
+        redirectUri: decodeURIComponent(redirectUri),
+        rapidAccess,
+      });
     } else if (sessionToken) {
       sessionCheck(exp);
     } else {
