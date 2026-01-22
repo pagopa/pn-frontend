@@ -4,8 +4,8 @@ import { authClient } from '../api/apiClients';
 import { AUTH_TOKEN_EXCHANGE } from '../api/auth/auth.routes';
 import { SourceChannel, User } from '../models/User';
 import { exchangeToken } from '../redux/auth/actions';
-import { store } from '../redux/store';
 import { resetState } from '../redux/auth/reducers';
+import { store } from '../redux/store';
 
 export const mockLogin = async (): Promise<any> => {
   const mock = new MockAdapter(authClient);

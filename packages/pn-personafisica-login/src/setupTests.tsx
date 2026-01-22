@@ -26,6 +26,9 @@ beforeAll(async () => {
     APP_IO_IOS: 'https://apps.apple.com/it/app/io/id1501681835',
     IS_SMART_APP_BANNER_ENABLED: true,
     ACCESSIBILITY_LINK: 'https://accessibility-link.it',
+    ONE_IDENTITY_LOGIN_ENABLED: true,
+    ONE_IDENTITY_CLIENT_ID: 'DFCUf4W3KHfKUl4USEVYrMgpMxvyKICHM_ZPiZ3ftm0',
+    ONE_IDENTITY_BASE_URL: 'https://uat.oneid.pagopa.it',
   });
   // mock translations
   vi.mock('react-i18next', () => ({
