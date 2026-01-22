@@ -10,4 +10,4 @@ export const shuffleList = (list: Array<any>) => {
   return list;
 };
 
-export const generateRandomUniqueString = () => uuidv4().replace(/-/g, '').slice(0, 15);
+export const generateRandomUniqueString = () => uuidv4().replace(/-/g, '').slice(0, 20);
