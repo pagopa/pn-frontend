@@ -4,3 +4,6 @@ export const ROUTE_LOGIN_ERROR = '/login/error';
 export const ROUTE_SUCCESS = '/login/success';
 export const ROUTE_ONE_IDENTITY_LOGIN = '/login-oi';
 export const ROUTE_ONE_IDENTITY_CALLBACK = '/callback';
+export const ROUTE_ONE_IDENTITY_LOGIN_ERROR = '/login-oi/error';
+
+export const oneIdentityRedirectUriPath = '/auth/callback';
