@@ -43,13 +43,15 @@ const SessionGuard = () => {
     message: '',
   });
 
-  const spidToken = new URLSearchParams(location.hash.substring(1)).get('token'); // https://github.com/remix-run/history/blob/main/docs/api-reference.md#location.hash
+  const hashParams = new URLSearchParams(location.hash.substring(1)); // https://github.com/remix-run/history/blob/main/docs/api-reference.md#location.hash
+
+  const spidToken = hashParams.get('token');
 
   // Get One Identity params from URL hash
-  const code = new URLSearchParams(location.hash.substring(1)).get('code');
-  const state = new URLSearchParams(location.hash.substring(1)).get('state');
-  const nonce = new URLSearchParams(location.hash.substring(1)).get('nonce');
-  const redirectUri = new URLSearchParams(location.hash.substring(1)).get('redirect_uri');
+  const code = hashParams.get('code');
+  const state = hashParams.get('state');
+  const nonce = hashParams.get('nonce');
+  const redirectUri = hashParams.get('redirect_uri');
 
   const handleTokenExchangeError = (error: any) => {
     const adaptedError = adaptedTokenExchangeError(error);

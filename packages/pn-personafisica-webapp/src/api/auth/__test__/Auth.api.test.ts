@@ -5,7 +5,7 @@ import { AppRouteParams } from '@pagopa-pn/pn-commons';
 import { userResponse, userResponseWithRetrievalId } from '../../../__mocks__/Auth.mock';
 import { authClient } from '../../apiClients';
 import { AuthApi } from '../Auth.api';
-import { AUTH_TOKEN_EXCHANGE } from '../auth.routes';
+import { AUTH_TOKEN_EXCHANGE, ONE_IDENTITY_TOKEN_EXCHANGE } from '../auth.routes';
 
 describe('Auth api tests', () => {
   let mock: MockAdapter;
@@ -45,42 +45,42 @@ describe('Auth api tests', () => {
     expect(res).toStrictEqual(userResponseWithRetrievalId);
   });
 
-  // describe('exchangeOneIdentityCode', () => {
-  //   const code = 'mock-code';
-  //   const state = 'mock-state';
-  //   const nonce = 'mock-nonce';
-  //   const redirectUri = 'mock-redirect-uri';
+  describe('exchangeOneIdentityCode', () => {
+    const code = 'mock-code';
+    const state = 'mock-state';
+    const nonce = 'mock-nonce';
+    const redirectUri = 'mock-redirect-uri';
 
-  //   it('exchange one identity code successfully', async () => {
-  //     mock
-  //       .onPost(ONE_IDENTITY_TOKEN_EXCHANGE(), { code, state, nonce, redirectUri })
-  //       .reply(200, userResponse);
-  //     const res = await AuthApi.exchangeOneIdentityCode({ code, state, nonce, redirectUri });
-  //     expect(res).toStrictEqual(userResponse);
-  //   });
+    it('exchange one identity code successfully', async () => {
+      mock
+        .onPost(ONE_IDENTITY_TOKEN_EXCHANGE(), { code, state, nonce, redirect_uri: redirectUri })
+        .reply(200, userResponse);
+      const res = await AuthApi.exchangeOneIdentityCode({ code, state, nonce, redirectUri });
+      expect(res).toStrictEqual(userResponse);
+    });
 
-  //   it('exchange one identity code with rapidAccess successfully', async () => {
-  //     const rapidAccess: [AppRouteParams, string] = [AppRouteParams.AAR, 'mocked-qr-code'];
-  //     mock
-  //       .onPost(ONE_IDENTITY_TOKEN_EXCHANGE(), {
-  //         code,
-  //         state,
-  //         nonce,
-  //         redirectUri,
-  //         source: {
-  //           type: 'QR',
-  //           id: 'mocked-qr-code',
-  //         },
-  //       })
-  //       .reply(200, userResponseWithRetrievalId);
-  //     const res = await AuthApi.exchangeOneIdentityCode({
-  //       code,
-  //       state,
-  //       nonce,
-  //       redirectUri,
-  //       rapidAccess,
-  //     });
-  //     expect(res).toStrictEqual(userResponseWithRetrievalId);
-  //   });
-  // });
+    it('exchange one identity code with rapidAccess successfully', async () => {
+      const rapidAccess: [AppRouteParams, string] = [AppRouteParams.AAR, 'mocked-qr-code'];
+      mock
+        .onPost(ONE_IDENTITY_TOKEN_EXCHANGE(), {
+          code,
+          state,
+          nonce,
+          redirect_uri: redirectUri,
+          source: {
+            type: 'QR',
+            id: 'mocked-qr-code',
+          },
+        })
+        .reply(200, userResponseWithRetrievalId);
+      const res = await AuthApi.exchangeOneIdentityCode({
+        code,
+        state,
+        nonce,
+        redirectUri,
+        rapidAccess,
+      });
+      expect(res).toStrictEqual(userResponseWithRetrievalId);
+    });
+  });
 });

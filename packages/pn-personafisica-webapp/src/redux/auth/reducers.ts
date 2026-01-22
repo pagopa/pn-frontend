@@ -1,5 +1,5 @@
 import { ConsentType, basicInitialUserData, basicNoLoggedUserData } from '@pagopa-pn/pn-commons';
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, isAnyOf } from '@reduxjs/toolkit';
 
 import { User } from '../../models/User';
 import { userDataMatcher } from '../../utility/user.utility';
@@ -50,33 +50,6 @@ const userSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
-    builder.addCase(exchangeToken.pending, (state) => {
-      state.loading = true;
-    });
-    builder.addCase(exchangeToken.fulfilled, (state, action) => {
-      const user = action.payload;
-      sessionStorage.setItem('user', JSON.stringify(user));
-      state.user = user;
-      state.loading = false;
-    });
-    builder.addCase(exchangeToken.rejected, (state) => {
-      state.loading = false;
-    });
-
-    builder.addCase(exchangeOneIdentityCode.pending, (state) => {
-      state.loading = true;
-    });
-    // eslint-disable-next-line sonarjs/no-identical-functions
-    builder.addCase(exchangeOneIdentityCode.fulfilled, (state, action) => {
-      const user = action.payload;
-      sessionStorage.setItem('user', JSON.stringify(user));
-      state.user = user;
-      state.loading = false;
-    });
-    builder.addCase(exchangeOneIdentityCode.rejected, (state) => {
-      state.loading = false;
-    });
-
     builder.addCase(getTosPrivacyApproval.fulfilled, (state, action) => {
       const [tosConsent, privacyConsent] = action.payload.filter(
         (consent) =>
@@ -109,6 +82,23 @@ const userSlice = createSlice({
       state.tosConsent.accepted = false;
       state.privacyConsent.accepted = false;
     });
+
+    builder
+      .addMatcher(isAnyOf(exchangeToken.pending, exchangeOneIdentityCode.pending), (state) => {
+        state.loading = true;
+      })
+      .addMatcher(
+        isAnyOf(exchangeToken.fulfilled, exchangeOneIdentityCode.fulfilled),
+        (state, action) => {
+          const user = action.payload;
+          sessionStorage.setItem('user', JSON.stringify(user));
+          state.user = user;
+          state.loading = false;
+        }
+      )
+      .addMatcher(isAnyOf(exchangeToken.rejected, exchangeOneIdentityCode.rejected), (state) => {
+        state.loading = false;
+      });
   },
 });
 
