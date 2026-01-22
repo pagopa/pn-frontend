@@ -14,7 +14,11 @@
     "status": "Država",
     "errors": {
       "iun": "Vnesite veljavno kodo IUN",
-      "fiscal-code": "Vnesite celotno kodo"
+      "fiscal-code": "Vnesite celotno kodo",
+      "date-format": "Neveljaven zapis datuma",
+      "date-range": "Vnesite datum med {{fromDate}} in {{toDate}}",
+      "date-start": "Začetni datum mora biti pred končnim datumom",
+      "date-end": "Končni datum mora biti za začetnim datumom"
     }
   },
   "payment": {

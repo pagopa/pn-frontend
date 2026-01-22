@@ -17,7 +17,10 @@
     "data_a-input-aria-label": "Enddatum der Suche eingeben",
     "errors": {
       "iun": "Gültigen IUN-Code eingeben",
-      "data_a": "Das Startdatum muss vor dem Enddatum liegen"
+      "date-format": "Ungültiges Datumsformat",
+      "date-range": "Geben Sie ein Datum zwischen {{fromDate}} und {{toDate}} ein",
+      "date-start": "Das Startdatum muss vor dem Enddatum liegen",
+      "date-end": "Das Enddatum muss nach dem Startdatum liegen"
     }
   },
   "sort": {

@@ -14,7 +14,11 @@
     "status": "Stato",
     "errors": {
       "iun": "Inserisci un codice IUN valido",
-      "fiscal-code": "Inserisci il codice per intero"
+      "fiscal-code": "Inserisci il codice per intero",
+      "date-format": "Formato data non valido",
+      "date-range": "Inserisci una data compresa tra {{fromDate}} e {{toDate}}",
+      "date-start": "La data di inizio deve precedere la data di fine",
+      "date-end": "La data di fine deve succedere la data di inizio"
     }
   },
   "payment": {

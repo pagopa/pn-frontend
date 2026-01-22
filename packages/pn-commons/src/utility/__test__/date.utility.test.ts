@@ -26,8 +26,14 @@ const sentAt = '2012-02-22T14:20:20.566Z';
 const date = new Date(dateString);
 
 describe('Date utility', () => {
-  it('format date in the format DD/MM/YYYY', () => {
+  it('format date in the format DD/MM/YYYY - string format', () => {
     const date = '2022-02-16T16:03:37.123Z';
+    const dateFormatted = formatDate(date);
+    expect(dateFormatted).toBe('16/02/2022');
+  });
+
+  it('format date in the format DD/MM/YYYY - date format', () => {
+    const date = new Date('2022-02-16T16:03:37.123Z');
     const dateFormatted = formatDate(date);
     expect(dateFormatted).toBe('16/02/2022');
   });
@@ -91,7 +97,7 @@ describe('Date utility', () => {
     expect(time).toBe(expectedTime);
   });
 
-  it('date is defined - sound date', () => {
+  it('date is defined - good date', () => {
     expect(dateIsDefined(date)).toBeTruthy();
   });
 
