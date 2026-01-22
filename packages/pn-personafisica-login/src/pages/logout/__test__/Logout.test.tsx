@@ -28,7 +28,7 @@ describe('Logout page', () => {
       </BrowserRouter>
     );
     expect(storageRapidAccessOps.read()).toBeUndefined();
-    expect(mockNavigateFn).toBeCalledTimes(1);
-    expect(mockNavigateFn).toBeCalledWith(ROUTE_LOGIN);
+    expect(mockNavigateFn).toHaveBeenCalledTimes(1);
+    expect(mockNavigateFn).toHaveBeenCalledWith(ROUTE_LOGIN, { replace: true });
   });
 });

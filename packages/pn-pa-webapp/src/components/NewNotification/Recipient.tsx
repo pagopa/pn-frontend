@@ -576,6 +576,5 @@ const Recipient: React.FC<Props> = ({
 };
 
 // This is a workaorund to prevent cognitive complexity warning
-export default forwardRef((props: Omit<Props, 'forwardedRef'>, ref) => (
-  <Recipient {...props} forwardedRef={ref} />
-));
+type CmpProps = Omit<Props, 'forwardedRef'>;
+export default forwardRef((props: CmpProps, ref) => <Recipient {...props} forwardedRef={ref} />);

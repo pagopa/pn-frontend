@@ -3,11 +3,13 @@ import { vi } from 'vitest';
 import { AppRouteParams } from '@pagopa-pn/pn-commons';
 import userEvent from '@testing-library/user-event';
 
+import { userResponse } from '../../__mocks__/Auth.mock';
 import { render, waitFor } from '../../__test__/test-utils';
 import * as useRapidAccessParamHook from '../../hooks/useRapidAccessParam';
 import TppLanding from '../TppLanding.page';
 
 const mockNavigateFn = vi.fn();
+const mockOpenFn = vi.fn();
 
 vi.mock('react-router-dom', async () => ({
   ...(await vi.importActual<any>('react-router-dom')),
@@ -20,13 +22,19 @@ vi.mock('react-router-dom', async () => ({
 
 describe('TppLanding page', () => {
   const mockRetrievalId = '123456';
+  const original = globalThis.open;
 
   beforeEach(() => {
     vi.clearAllMocks();
+    Object.defineProperty(globalThis, 'open', {
+      configurable: true,
+      value: mockOpenFn,
+    });
   });
 
   afterEach(() => {
     vi.clearAllMocks();
+    Object.defineProperty(globalThis, 'open', { configurable: true, value: original });
   });
 
   it('should renders page with valid params', () => {
@@ -98,7 +106,32 @@ describe('TppLanding page', () => {
     expect(queryByTestId('tppLandingContainer')).not.toBeInTheDocument();
   });
 
-  it('should handle access button click', async () => {
+  it('should handle access button click - user logged in', async () => {
+    vi.spyOn(useRapidAccessParamHook, 'useRapidAccessParam').mockReturnValue([
+      AppRouteParams.RETRIEVAL_ID,
+      mockRetrievalId,
+    ]);
+
+    const { getByTestId } = render(<TppLanding />, {
+      preloadedState: {
+        userState: {
+          user: userResponse,
+        },
+      },
+    });
+
+    const accessButton = getByTestId('accessButton');
+    expect(accessButton).toBeEnabled();
+
+    await userEvent.click(accessButton);
+
+    expect(mockNavigateFn).toHaveBeenCalledWith(
+      `/?${AppRouteParams.RETRIEVAL_ID}=${mockRetrievalId}`
+    );
+    expect(mockNavigateFn).toHaveBeenCalledTimes(1);
+  });
+
+  it('should handle access button click - user not logged in', async () => {
     vi.spyOn(useRapidAccessParamHook, 'useRapidAccessParam').mockReturnValue([
       AppRouteParams.RETRIEVAL_ID,
       mockRetrievalId,
@@ -111,11 +144,11 @@ describe('TppLanding page', () => {
 
     await userEvent.click(accessButton);
 
-    expect(mockNavigateFn).toHaveBeenCalledWith(
-      `/?${AppRouteParams.RETRIEVAL_ID}=${mockRetrievalId}`,
-      { replace: true }
+    expect(mockOpenFn).toHaveBeenCalledWith(
+      `/auth/logout?${AppRouteParams.RETRIEVAL_ID}=${mockRetrievalId}`,
+      '_self'
     );
-    expect(mockNavigateFn).toHaveBeenCalledTimes(1);
+    expect(mockOpenFn).toHaveBeenCalledTimes(1);
   });
 
   it('should displays FAQ correctly', async () => {

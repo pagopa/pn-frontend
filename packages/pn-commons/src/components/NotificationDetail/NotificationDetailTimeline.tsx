@@ -105,6 +105,7 @@ const NotificationDetailTimeline = ({
       disableDownloads={disableDownloads}
       isParty={isParty}
       language={language}
+      reworkedStatus={t.reworkedStatus}
     />
   ));
 
@@ -149,6 +150,7 @@ const NotificationDetailTimeline = ({
             historyButtonClickHandler={toggleHistoryDrawer}
             disableDownloads={disableDownloads}
             isParty={isParty}
+            reworkedStatus={statusHistory[0].reworkedStatus}
           />
         ) : (
           timelineComponent

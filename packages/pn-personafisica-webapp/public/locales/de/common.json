@@ -218,6 +218,10 @@
     "message": "Der Originaltext dieser Dokumente ist in italienischer Sprache. Im Falle eines Konflikts zwischen der italienischen Version und den Übersetzungen in andere Sprachen, sind die Bedeutung und die Bedingungen der italienischen Sprache maßgebend.",
     "link": "Übersetzungen einsehen"
   },
+  "feedback_banner": {
+    "title": "Helfen Sie uns, SEND zu verbessern",
+    "content": "Ihr Feedback ermöglicht es uns, alles klarer und einfacher zu gestalten. Es dauert nur wenige Minuten, uns Ihre Meinung mitzuteilen."
+  },
   "no-spaces-at-edges": "Leerzeichen am Anfang oder Ende entfernen",
   "wizard": {
     "stepper": {
@@ -238,6 +242,11 @@
       "vierte Ziffer",
       "letzte Ziffer"
     ]
+  },
+  "user-validation-failed": {
+    "title": "Die eingegebenen Daten sind ungültig",
+    "description": "Ein oder mehrere mit Ihrem Benutzerkonto verknüpfte Daten sind ungültig. Kontaktieren Sie den Support, um das Problem zu beheben.",
+    "cta": "Kontaktieren Sie den Support"
   },
   "autocomplete": {
     "clear": "Ausgewählte Optionen entfernen",

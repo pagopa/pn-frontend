@@ -120,7 +120,7 @@ export const OrganizationsList = (props: {
                 }}
                 key={organization}
               >
-                <Tag value={organization} sx={{ whiteSpace: 'normal' }} />
+                <Tag value={organization} />
               </Box>
             ))}
           </CustomTagGroup>

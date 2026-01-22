@@ -218,6 +218,10 @@
     "message": "Le texte original de ces documents est en langue italienne. En cas de conflit entre la version italienne et les traductions dans d'autres langues, le sens et les conditions de la langue italienne prévaudront.",
     "link": "Consulter les traductions"
   },
+  "feedback_banner": {
+    "title": "Aidez-nous à améliorer SEND",
+    "content": "Vos commentaires nous permettent de rendre tout plus clair et plus simple. Quelques minutes suffisent pour nous dire ce que vous en pensez."
+  },
   "no-spaces-at-edges": "Élimine les espaces au début ou à la fin",
   "wizard": {
     "stepper": {
@@ -238,6 +242,11 @@
       "quatrième chiffre",
       "dernière chiffre"
     ]
+  },
+  "user-validation-failed": {
+    "title": "Les données saisies ne sont pas valides",
+    "description": "Une ou plusieurs données associées à votre compte ne sont pas valides, contactez l'assistance pour résoudre le problème.",
+    "cta": "Contactez l'assistance"
   },
   "autocomplete": {
     "clear": "Supprimer les options sélectionnées",
