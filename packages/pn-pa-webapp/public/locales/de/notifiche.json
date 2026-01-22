@@ -15,7 +15,9 @@
     "errors": {
       "iun": "Gültigen IUN-Code eingeben",
       "fiscal-code": "Gib den vollständigen Code ein"
-    }
+    },
+    "loading_completed_with_results": "Laden abgeschlossen. Die Suche hat Ergebnisse geliefert",
+    "loading_completed_no_results": "Laden abgeschlossen. Keine Zustellung gefunden"
   },
   "payment": {
     "title": "Zahlungen",

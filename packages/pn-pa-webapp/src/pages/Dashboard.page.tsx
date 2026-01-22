@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 
 import { Alert, Box, Button, Typography } from '@mui/material';
 import {
+  A11yMessage,
   ApiErrorWrapper,
   AppResponse,
   AppResponsePublisher,
@@ -11,6 +12,7 @@ import {
   PaginationData,
   TitleBox,
   calculatePages,
+  useEventEmitter,
   useIsMobile,
 } from '@pagopa-pn/pn-commons';
 import { ButtonNaked } from '@pagopa/mui-italia';
@@ -33,9 +35,11 @@ const Dashboard = () => {
   const filters = useAppSelector((state: RootState) => state.dashboardState.filters);
   const sort = useAppSelector((state: RootState) => state.dashboardState.sort);
   const pagination = useAppSelector((state: RootState) => state.dashboardState.pagination);
+  const loading = useAppSelector((state: RootState) => state.appState.loading.result);
   const navigate = useNavigate();
   const isMobile = useIsMobile();
   const { t } = useTranslation(['notifiche']);
+  const { publishEvent } = useEventEmitter<A11yMessage>('a11y-message');
 
   const [hasTimeoutError, setHasTimeoutError] = useState(false);
   // back end return at most the next three pages
@@ -114,6 +118,22 @@ const Dashboard = () => {
       );
     };
   }, [handleTimeoutError]);
+
+  // Announce every time loading goes from true -> false
+  useEffect(() => {
+    if (loading) {
+      return;
+    }
+
+    const msg =
+      notifications.length > 0
+        ? t('filters.loading_completed_with_results')
+        : t('filters.loading_completed_no_results');
+
+    setTimeout(() => {
+      publishEvent({ message: msg });
+    }, 800);
+  }, [loading, notifications.length]);
 
   return (
     <Box p={3}>
