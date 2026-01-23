@@ -17,7 +17,10 @@
     "data_a-input-aria-label": "Enter search end date",
     "errors": {
       "iun": "Enter a valid IUN code",
-      "data_a": "The start date must precede the end date"
+      "date-format": "Invalid date format",
+      "date-range": "Enter a date between {{fromDate}} and {{toDate}}",
+      "date-start": "The start date must be before the end date",
+      "date-end": "The end date must be after the start date"
     }
   },
   "sort": {
@@ -75,8 +78,8 @@
       "subtitle-mixed": "This notification contains multiple payment options: select or download what you want to pay. Some amounts include notification costs.",
       "how": "Why is that?",
       "f24Models": "F24 forms",
-      "pagoPANotices": "PagoPA notifications",
-      "download-pagoPA-notice": "Download the PagoPA notification",
+      "pagoPANotices": "pagoPA notifications",
+      "download-pagoPA-notice": "Download the pagoPA notification",
       "notice-code": "Notice code",
       "due": "Expires on",
       "included-costs": "Notification costs included",

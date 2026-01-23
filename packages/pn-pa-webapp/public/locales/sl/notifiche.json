@@ -14,7 +14,11 @@
     "status": "Država",
     "errors": {
       "iun": "Vnesite veljavno kodo IUN",
-      "fiscal-code": "Vnesite celotno kodo"
+      "fiscal-code": "Vnesite celotno kodo",
+      "date-format": "Neveljaven zapis datuma",
+      "date-range": "Vnesite datum med {{fromDate}} in {{toDate}}",
+      "date-start": "Začetni datum mora biti pred končnim datumom",
+      "date-end": "Končni datum mora biti za začetnim datumom"
     }
   },
   "payment": {
@@ -23,7 +27,7 @@
     "subtitle-single-f24": "Tukaj si lahko ogledate obrazce F24, ki so priloženi obvestilu.",
     "subtitle-multiple": "Če si želite ogledati stanje plačila opozoril pagoPA, priloženih obvestilu, izberite prejemnika.",
     "subtitle-multiple-f24": "Če si želite ogledati obrazce F24, priložene obvestilu, izberite prejemnika.",
-    "pagopa-notice": "Opozorilo PagoPA",
+    "pagopa-notice": "Opozorilo pagoPA",
     "paid": "Plačano",
     "f24-attached": "Priloženi obrazci F24",
     "attachments": "priloge",

@@ -14,7 +14,11 @@
     "status": "Status",
     "errors": {
       "iun": "Enter a valid IUN code",
-      "fiscal-code": "Enter the code in full"
+      "fiscal-code": "Enter the code in full",
+      "date-format": "Invalid date format",
+      "date-range": "Enter a date between {{fromDate}} and {{toDate}}",
+      "date-start": "The start date must be before the end date",
+      "date-end": "The end date must be after the start date"
     }
   },
   "payment": {
@@ -23,7 +27,7 @@
     "subtitle-single-f24": "Here, you can see the F24 forms attached to the notification.",
     "subtitle-multiple": "To see the payment status of the pagoPA alerts attached to the notification, select a recipient.",
     "subtitle-multiple-f24": "To see the F24 forms attached to the notification, select a recipient.",
-    "pagopa-notice": "PagoPA notice",
+    "pagopa-notice": "pagoPA notice",
     "paid": "Paid",
     "f24-attached": "Attached F24 forms",
     "attachments": "attachments",

@@ -17,7 +17,10 @@
     "data_a-input-aria-label": "Vnesite končni datum iskanja",
     "errors": {
       "iun": "Vnesite veljavno kodo IUN",
-      "data_a": "Datum začetka mora biti pred datumom konca"
+      "date-format": "Neveljaven zapis datuma",
+      "date-range": "Vnesite datum med {{fromDate}} in {{toDate}}",
+      "date-start": "Začetni datum mora biti pred končnim datumom",
+      "date-end": "Končni datum mora biti za začetnim datumom"
     }
   },
   "sort": {
@@ -75,8 +78,8 @@
       "subtitle-mixed": "V tem obvestilu je več možnosti plačila: izberite ali prenesite tisto, kar želite plačati. Nekatera obvestila vključujejo stroške obveščanja.",
       "how": "Kako to?",
       "f24Models": "Obrazci F24",
-      "pagoPANotices": "Opozorila PagoPA",
-      "download-pagoPA-notice": "Prenesite obvestilo PagoPA",
+      "pagoPANotices": "Opozorila pagoPA",
+      "download-pagoPA-notice": "Prenesite obvestilo pagoPA",
       "notice-code": "Št. obvestila",
       "due": "Poteče dne",
       "included-costs": "Vključeni stroški obvestila",

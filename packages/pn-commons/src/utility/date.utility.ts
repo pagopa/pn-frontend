@@ -25,14 +25,14 @@ export function dateIsLessThan10Years(sentAt: string): boolean {
   return Date.parse(formatToTimezoneString(today)) - Date.parse(sentAt) < 315569520000;
 }
 
-export function dateIsDefined(date: Date | null | undefined) {
-  return date && !isNaN(date.getTime());
+export function dateIsDefined(date: Date | null | undefined): date is Date {
+  return !!date && !Number.isNaN(date.getTime());
 }
 
 export function formatMonthString(dateString: string, language?: string): string {
   const date = new Date(dateString);
   return date
-    .toLocaleString(language ? language : 'it', { month: 'long' })
+    .toLocaleString(language || 'it', { month: 'long' })
     .toUpperCase()
     .substring(0, 3);
 }
@@ -88,11 +88,11 @@ export function isToday(date: DatePickerTypes): boolean {
 }
 
 export function formatDate(
-  dateString: string,
+  dateToFormat: string | Date,
   todayLabelizzation: boolean = true,
   separator: string = '/'
 ): string {
-  const date = new Date(dateString);
+  const date = typeof dateToFormat === 'string' ? new Date(dateToFormat) : dateToFormat;
   const month = `0${date.getMonth() + 1}`.slice(-2);
   const day = `0${date.getDate()}`.slice(-2);
   const todayLabel = getLocalizedOrDefaultLabel(
