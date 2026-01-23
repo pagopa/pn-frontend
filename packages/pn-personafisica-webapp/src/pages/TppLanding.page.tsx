@@ -73,8 +73,7 @@ const TppLanding: React.FC = () => {
             <IllusLandingTpp
               sx={{
                 width: { xs: '100%', md: '50%' },
-                height: { md: '350px', xs: '100%' },
-                px: { xs: 3, sm: 0 },
+                height: { xs: '100%', md: '350px' },
               }}
               data-testid="tppLandingIllustration"
             />
