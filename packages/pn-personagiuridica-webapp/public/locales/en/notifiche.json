@@ -23,7 +23,10 @@
     "data_a-input-aria-label": "Enter search end date",
     "errors": {
       "iun": "Please enter a valid IUN code",
-      "data_a": "The start date must be before the end date"
+      "date-format": "Invalid date format",
+      "date-range": "Enter a date between {{fromDate}} and {{toDate}}",
+      "date-start": "The start date must be before the end date",
+      "date-end": "The end date must be after the start date"
     }
   },
   "sort": {

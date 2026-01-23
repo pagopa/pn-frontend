@@ -17,7 +17,10 @@
     "data_a-input-aria-label": "Inserisci la data finale della ricerca",
     "errors": {
       "iun": "Inserisci un codice IUN valido",
-      "data_a": "La data di inizio deve precedere la data di fine"
+      "date-format": "Formato data non valido",
+      "date-range": "Inserisci una data compresa tra {{fromDate}} e {{toDate}}",
+      "date-start": "La data di inizio deve precedere la data di fine",
+      "date-end": "La data di fine deve succedere la data di inizio"
     }
   },
   "sort": {

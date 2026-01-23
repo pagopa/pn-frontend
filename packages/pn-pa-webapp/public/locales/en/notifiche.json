@@ -14,7 +14,11 @@
     "status": "Status",
     "errors": {
       "iun": "Enter a valid IUN code",
-      "fiscal-code": "Enter the code in full"
+      "fiscal-code": "Enter the code in full",
+      "date-format": "Invalid date format",
+      "date-range": "Enter a date between {{fromDate}} and {{toDate}}",
+      "date-start": "The start date must be before the end date",
+      "date-end": "The end date must be after the start date"
     }
   },
   "payment": {
