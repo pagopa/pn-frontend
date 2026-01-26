@@ -19,7 +19,9 @@
       "date-range": "Enter a date between {{fromDate}} and {{toDate}}",
       "date-start": "The start date must be before the end date",
       "date-end": "The end date must be after the start date"
-    }
+    },
+    "loading_completed_with_results": "Loading complete. The search produced results",
+    "loading_completed_no_results": "Loading complete. No notifications found"
   },
   "payment": {
     "title": "Payments",

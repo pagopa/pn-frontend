@@ -4,6 +4,7 @@ import { useParams } from 'react-router-dom';
 
 import { Box } from '@mui/material';
 import {
+  A11yMessage,
   ApiErrorWrapper,
   CustomPagination,
   NotificationColumnData,
@@ -11,6 +12,7 @@ import {
   Sort,
   TitleBox,
   calculatePages,
+  useEventEmitter,
   useIsMobile,
 } from '@pagopa-pn/pn-commons';
 
@@ -37,6 +39,9 @@ const Notifiche = () => {
     (state: RootState) => state.dashboardState
   );
   const { delegators } = useAppSelector((state: RootState) => state.generalInfoState);
+  const loading = useAppSelector((state: RootState) => state.appState.loading.result);
+  const { publishEvent } = useEventEmitter<A11yMessage>('a11y-message');
+
   const currentDelegator = delegators.find(
     (delegation: Delegator) => delegation.mandateId === mandateId
   );
@@ -110,10 +115,26 @@ const Notifiche = () => {
     fetchNotifications();
   }, [fetchNotifications, currentDelegator]);
 
+  // Announce every time loading goes from true -> false
+  useEffect(() => {
+    if (loading) {
+      return;
+    }
+
+    const msg =
+      notifications.length > 0
+        ? t('filters.loading_completed_with_results')
+        : t('filters.loading_completed_no_results');
+
+    setTimeout(() => {
+      publishEvent({ message: msg });
+    }, 800);
+  }, [loading, notifications.length]);
+
   return (
     <LoadingPageWrapper isInitialized={pageReady}>
       <Box p={3}>
-      {!mandateId && <DomicileBanner source={ContactSource.HOME_NOTIFICHE} />}
+        {!mandateId && <DomicileBanner source={ContactSource.HOME_NOTIFICHE} />}
         <TitleBox variantTitle="h4" title={pageTitle} mbTitle={isMobile ? 3 : undefined} />
         <ApiErrorWrapper
           apiId={DASHBOARD_ACTIONS.GET_RECEIVED_NOTIFICATIONS}

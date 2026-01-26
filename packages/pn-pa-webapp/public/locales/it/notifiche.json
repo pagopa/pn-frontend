@@ -19,7 +19,9 @@
       "date-range": "Inserisci una data compresa tra {{fromDate}} e {{toDate}}",
       "date-start": "La data di inizio deve precedere la data di fine",
       "date-end": "La data di fine deve succedere la data di inizio"
-    }
+    },
+    "loading_completed_with_results": "Caricamento completato. La ricerca ha prodotto dei risultati",
+    "loading_completed_no_results": "Caricamento completato. Nessuna notifica trovata"
   },
   "payment": {
     "title": "Pagamenti",

@@ -12,6 +12,7 @@ import MarkunreadMailboxIcon from '@mui/icons-material/MarkunreadMailbox';
 import SettingsIcon from '@mui/icons-material/Settings';
 import { Box, Button, DialogTitle } from '@mui/material';
 import {
+  A11yMessageAnnouncer,
   APP_VERSION,
   AppMessage,
   AppResponse,
@@ -330,6 +331,7 @@ const App = () => {
           </PnDialogActions>
         </PnDialog>
         {/* <AppMessage sessionRedirect={async () => await dispatch(logout())} /> */}
+        <A11yMessageAnnouncer />
         <AppMessage />
         <AppResponseMessage
           eventTrackingToastErrorMessages={handleEventTrackingToastErrorMessages}
