@@ -8,9 +8,10 @@ import {
   tosPrivacyConsentMock,
 } from '../../../__mocks__/Consents.mock';
 import { errorMock } from '../../../__mocks__/Errors.mock';
-import { apiClient } from '../../../api/apiClients';
+import { apiClient, authClient } from '../../../api/apiClients';
+import { ONE_IDENTITY_TOKEN_EXCHANGE } from '../../../api/auth/auth.routes';
 import { store } from '../../store';
-import { acceptTosPrivacy, getTosPrivacyApproval } from '../actions';
+import { acceptTosPrivacy, exchangeOneIdentityCode, getTosPrivacyApproval } from '../actions';
 
 describe('Auth redux state tests', () => {
   let mock: MockAdapter;
@@ -66,6 +67,26 @@ describe('Auth redux state tests', () => {
     const action = await mockLogin();
     expect(action.type).toBe('exchangeToken/fulfilled');
     expect(action.payload).toEqual(userResponse);
+  });
+
+  it('Should be able to exchange code with One Identity', async () => {
+    const mock = new MockAdapter(authClient);
+    mock.onPost(ONE_IDENTITY_TOKEN_EXCHANGE()).reply(200, userResponse);
+    const action = await store.dispatch(
+      exchangeOneIdentityCode({
+        code: 'mocked-code',
+        state: 'mocked-state',
+        nonce: 'mocked-nonce',
+        redirectUri: 'www.test.it',
+      })
+    );
+
+    expect(action.type).toBe('exchangeOneIdentityCode/fulfilled');
+    expect(action.payload).toEqual(userResponse);
+
+    const userFromStorage = sessionStorage.getItem('user');
+    expect(userFromStorage).toBeDefined();
+    expect(JSON.parse(userFromStorage!)).toEqual(userResponse);
   });
 
   it('Should be able to logout', async () => {

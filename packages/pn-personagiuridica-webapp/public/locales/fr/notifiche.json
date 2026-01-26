@@ -23,7 +23,10 @@
     "data_a-input-aria-label": "Entrez la date de fin de la recherche",
     "errors": {
       "iun": "Veuillez saisir un code IUN valide",
-      "data_a": "La date de début doit précéder la date de fin"
+      "date-format": "Format de date non valide",
+      "date-range": "Saisissez une date comprise entre {{fromDate}} et {{toDate}}",
+      "date-start": "La date de début doit être antérieure à la date de fin",
+      "date-end": "La date de fin doit être postérieure à la date de début"
     }
   },
   "sort": {
@@ -76,8 +79,8 @@
       "subtitle-mixed": "Dans cette notification, il existe plusieurs possibilités de paiement : sélectionnez ou téléchargez ce que vous souhaitez payer. Certains montants incluent les frais de notification.",
       "how": "Pourquoi ?",
       "f24Models": "Formulaires F24",
-      "pagoPANotices": "Alertes PagoPA",
-      "download-pagoPA-notice": "Télécharger l’alerte PagoPA",
+      "pagoPANotices": "Alertes pagoPA",
+      "download-pagoPA-notice": "Télécharger l’alerte pagoPA",
       "notice-code": "Code de l’alerte",
       "due": "Expire le",
       "included-costs": "Frais de notification inclus",

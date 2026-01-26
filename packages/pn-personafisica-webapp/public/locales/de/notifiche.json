@@ -17,7 +17,10 @@
     "data_a-input-aria-label": "Enddatum der Suche eingeben",
     "errors": {
       "iun": "Gültigen IUN-Code eingeben",
-      "data_a": "Das Startdatum muss vor dem Enddatum liegen"
+      "date-format": "Ungültiges Datumsformat",
+      "date-range": "Geben Sie ein Datum zwischen {{fromDate}} und {{toDate}} ein",
+      "date-start": "Das Startdatum muss vor dem Enddatum liegen",
+      "date-end": "Das Enddatum muss nach dem Startdatum liegen"
     }
   },
   "sort": {
@@ -75,8 +78,8 @@
       "subtitle-mixed": "Für diese Zustellung sind mehrere Zahlungsmöglichkeiten vorhanden: Wähle oder lade herunter, was du bezahlen möchtest. Einige Beträge beinhalten Zustellungsgebühren.",
       "how": "Wieso?",
       "f24Models": "Vordruck F24",
-      "pagoPANotices": "Benachrichtigungen PagoPA",
-      "download-pagoPA-notice": "Benachrichtigung PagoPA herunterladen",
+      "pagoPANotices": "Benachrichtigungen pagoPA",
+      "download-pagoPA-notice": "Benachrichtigung pagoPA herunterladen",
       "notice-code": "Benachrichtigungscode",
       "due": "Läuft ab",
       "included-costs": "Einschließlich Zustellungsgebühren",
