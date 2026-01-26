@@ -117,7 +117,9 @@
         "assistence": "Reload it or contact support with the error code",
         "duplicated": "This notification has already been paid. The status will be updated shortly."
       },
-      "error-payment": "Select a Payment Notice"
+      "error-payment": "Select a Payment Notice",
+      "error-payment-failed-single": "There was a problem with a Payment Notice. Press Reload to try again. If the error persists, contact the support team.",
+      "error-payment-failed-multiple": "There was a problem with multiple Payment Notices. Press Reload to try again. If the error persists, contact the support team."
     },
     "acts_files": {
       "downloadable_acts": "Documents are available online for 120 days from the finalization of the notification.",

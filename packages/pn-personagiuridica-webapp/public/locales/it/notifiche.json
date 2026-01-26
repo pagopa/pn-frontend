@@ -100,6 +100,8 @@
       "disclaimer-link": "Scopri di più",
       "f24-download-error": "Il download non è riuscito. Riprova.",
       "error-payment": "Seleziona un avviso di pagamento",
+      "error-payment-failed-single": "Si è verificato un problema con un avviso di pagamento. Premi Ricarica per riprovare, se l’errore persiste contatta l’assistenza.",
+      "error-payment-failed-multiple": "Si è verificato un problema con più avvisi di pagamento. Premi Ricarica per riprovare, se l’errore persiste contatta l’assistenza.",
       "status": {
         "succeeded": "Pagato",
         "succeeded-tooltip": "Il pagamento è stato inviato correttamente.",

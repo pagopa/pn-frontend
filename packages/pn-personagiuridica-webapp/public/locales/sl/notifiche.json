@@ -100,6 +100,8 @@
       "disclaimer-link": "Izvedite več",
       "f24-download-error": "Prenos ni uspel. Poskusite znova.",
       "error-payment": "Izberite obvestilo o plačilu",
+      "error-payment-failed-single": "Prišlo je do težave z obvestilom o plačilu. Pritisnite Ponovno naloži za nov poskus. Če se napaka ponovi, se obrnite na podporo.",
+      "error-payment-failed-multiple": "Prišlo je do težave z več obvestili o plačilu. Pritisnite Ponovno naloži za nov poskus. Če se napaka ponovi, se obrnite na podporo.",
       "status": {
         "succeded": "Plačano",
         "succeded-tooltip": "Vaše plačilo je bilo uspešno poslano.",

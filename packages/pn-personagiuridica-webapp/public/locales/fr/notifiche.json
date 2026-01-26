@@ -100,6 +100,8 @@
       "disclaimer-link": "En savoir plus",
       "f24-download-error": "Le téléchargement a échoué. Réessayez.",
       "error-payment": "Sélectionnez un avis de paiement",
+      "error-payment-failed-single": "Un problème est survenu avec un avis de paiement. Appuyez sur Recharger pour réessayer. Si l’erreur persiste, contactez l’assistance.",
+      "error-payment-failed-multiple": "Un problème est survenu avec plusieurs avis de paiement. Appuyez sur Recharger pour réessayer. Si l’erreur persiste, contactez l’assistance.",
       "status": {
         "succeded": "Payé",
         "succeded-tooltip": "Le paiement a bien été envoyé.",

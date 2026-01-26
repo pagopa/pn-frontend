@@ -100,6 +100,8 @@
       "disclaimer-link": "Learn more",
       "f24-download-error": "Download failed. Try again.",
       "error-payment": "Select a payment notice",
+      "error-payment-failed-single": "There was a problem with a Payment Notice. Press Reload to try again. If the error persists, contact the support team.",
+      "error-payment-failed-multiple": "There was a problem with multiple Payment Notices. Press Reload to try again. If the error persists, contact the support team.",
       "status": {
         "succeded": "Paid",
         "succeded-tooltip": "Your payment has been sent successfully.",
