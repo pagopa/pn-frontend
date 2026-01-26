@@ -117,7 +117,9 @@
         "assistence": "Ricaricalo o contatta l’assistenza con il codice errore",
         "duplicated": "Questo avviso è già stato pagato. Lo stato verrà aggiornato a breve."
       },
-      "error-payment": "Seleziona un avviso di pagamento"
+      "error-payment": "Seleziona un avviso di pagamento",
+      "error-payment-failed-single": "Si è verificato un problema con un avviso di pagamento. Premi Ricarica per riprovare, se l’errore persiste contatta l’assistenza.",
+      "error-payment-failed-multiple": "Si è verificato un problema con più avvisi di pagamento. Premi Ricarica per riprovare, se l’errore persiste contatta l’assistenza."
     },
     "acts_files": {
       "downloadable_acts": "I documenti sono disponibili online per 120 giorni dal perfezionamento della notifica.",
