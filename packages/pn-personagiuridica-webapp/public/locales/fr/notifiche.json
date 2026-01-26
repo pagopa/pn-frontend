@@ -12,7 +12,8 @@
     "iun": "Code IUN",
     "status": "État",
     "show-detail": "Voir le détail",
-    "group-selector-title": "Menu sélection Groupe"
+    "group-selector-title": "Menu sélection Groupe",
+    "aria-action-table": "Voir le détail de la notification con IUN : {{iun}}"
   },
   "filters": {
     "iun": "Recherche par code IUN",
@@ -21,7 +22,11 @@
     "data_a": "Au",
     "data_a-input-aria-label": "Entrez la date de fin de la recherche",
     "errors": {
-      "iun": "Veuillez saisir un code IUN valide"
+      "iun": "Veuillez saisir un code IUN valide",
+      "date-format": "Format de date non valide",
+      "date-range": "Saisissez une date comprise entre {{fromDate}} et {{toDate}}",
+      "date-start": "La date de début doit être antérieure à la date de fin",
+      "date-end": "La date de fin doit être postérieure à la date de début"
     }
   },
   "sort": {
@@ -38,7 +43,8 @@
     "aria-label-remove-filters": "Supprimer les filtres"
   },
   "from-qrcode": {
-    "not-found": "Lien vers la notification introuvable"
+    "not-found": "Lien vers la notification introuvable",
+    "not-found-subtitle": "Elle ne peut être lue que par les utilisateurs recensés par l'entreprise destinataire ou par son délégué."
   },
   "detail": {
     "document-not-available": "Le document sera téléchargeable dans quelques minutes. Vous pouvez réessayer en rechargeant la page ou en cliquant sur le lien du document requis",
@@ -67,13 +73,14 @@
     "disclaimer-link": "En savoir plus",
     "payment": {
       "title": "Paiement",
+      "single-payment-subtitle": "Le montant final può essere différent de celui indiqué dans l'acte et inclure les frais de notification.",
       "subtitle": "Dans cette notification, il y a plusieurs alertes de paiement : sélectionnez celle que vous souhaitez payer. Certaines alertes incluent les frais de notification.",
       "subtitle-f24": "Vous pouvez payer cette notification via F24. Pour voir les détails, ouvrez les formulaires.",
       "subtitle-mixed": "Dans cette notification, il existe plusieurs possibilités de paiement : sélectionnez ou téléchargez ce que vous souhaitez payer. Certains montants incluent les frais de notification.",
-      "how": "Pourquoi ?",
+      "how": "Pourquoi ?",
       "f24Models": "Formulaires F24",
-      "pagoPANotices": "Alertes PagoPA",
-      "download-pagoPA-notice": "Télécharger l’alerte PagoPA",
+      "pagoPANotices": "Alertes pagoPA",
+      "download-pagoPA-notice": "Télécharger l’alerte pagoPA",
       "notice-code": "Code de l’alerte",
       "due": "Expire le",
       "included-costs": "Frais de notification inclus",
@@ -91,6 +98,8 @@
       "message-error-fetch-payment": "Nous n’avons pas pu récupérer les données de paiement pour cette notification.",
       "cancelled-message": "Pour tout remboursement de paiements liés à cette notification, veuillez contacter l’organisme émetteur. Si vous avez effectué un paiement après l’annulation de la notification, les informations ci-dessous pourraient ne pas être à jour.",
       "disclaimer-link": "En savoir plus",
+      "f24-download-error": "Le téléchargement a échoué. Réessayez.",
+      "error-payment": "Sélectionnez un avis de paiement",
       "status": {
         "succeded": "Payé",
         "succeded-tooltip": "Le paiement a bien été envoyé.",
@@ -130,12 +139,18 @@
       "send-digital-domicile-PEC": "Envoi via PEC",
       "send-digital-domicile-PEC-description": "La notification est en cours d’envoi à l’adresse PEC {{address}}.",
       "send-digital-domicile-PEC-description-multirecipient": "La notification est en cours d’envoi à {{name}} {{taxId}} à l’adresse PEC {{address}}.",
+      "send-digital-domicile-SERCQ-SEND": "Envoi via Domicile Numérique SEND",
+      "send-digital-domicile-SERCQ-SEND-description": "L'envoi de la notification au Domicile Numérique SEND est en cours.",
+      "send-digital-domicile-SERCQ-SEND-description-multirecipient": "L'envoi de la notification à {{name}} {{taxId}} au Domicile Numérique SEND est en cours",
       "send-digital-error": "L’envoi via PEC a échoué",
       "send-digital-error-description": "L’envoi de la notification à l’adresse PEC {{address}} a échoué car la boîte est saturée, invalide ou inactive.",
       "send-digital-error-description-multirecipient": "L’envoi de la notification à {{name}} {{taxId}} à l’adresse PEC {{address}} a échoué car la boîte est saturée, invalide ou inactive.",
       "send-digital-success-PEC": "Envoi via PEC réussi",
       "send-digital-success-PEC-description": "L’envoi de la notification à l’adresse PEC {{address}} a réussi.",
       "send-digital-success-PEC-description-multirecipient": "L’envoi de la notification à {{name}} {{taxId}} à l’adresse PEC {{address}} a réussi.",
+      "send-digital-success-SERCQ-SEND": "Envoi via Domicile Numérique SEND réussi",
+      "send-digital-success-SERCQ-SEND-description": "L'envoi de la notification au Domicile Numérique SEND a réussi.",
+      "send-digital-success-SERCQ-SEND-description-multirecipient": "L'envoi de la notification à {{name}} {{taxId}} au Domicile Numérique SEND a réussi.",
       "send-simple-registered-letter": "Envoi par courrier recommandé simple",
       "send-simple-registered-letter-description": "La notification est en cours d’envoi à l’adresse {{address}} par lettre recommandée simple.",
       "send-simple-registered-letter-description-multirecipient": "L’envoi de la notification à {{name}} {{taxId}} à l’adresse {{address}} par lettre recommandée simple est en cours.",
@@ -164,6 +179,8 @@
       "prepare-analog-domicile-failure-ZZZ-description": "Aucune adresse valide n’a été trouvée pour préparer une autre tentative d’envoi - raison non précisée.",
       "prepare-analog-domicile-failure-ZZZ-description-multirecipient": "Aucune adresse valide n’a été trouvée pour le destinataire {{name}} {{taxId}} afin de préparer une autre tentative d’envoi - raison non précisée.",
       "send-analog-flow-description": "Il y a une mise à jour sur l’envoi papier.",
+      "send-analog-flow-CON020-description": "Original de l'AAR (document nativement numérique) mis à disposition par le Consolidateur et signé numériquement par PagoPA.",
+      "send-analog-flow-CON020-description-multirecipient": "Original de l'AAR (document nativement numérique) mis à disposition par le Consolidateur et signé numériquement par PagoPA.",
       "send-analog-flow-CON080-description": "Le recommandé {{registeredLetterKind}} numéro {{registeredLetterNumber}} a été imprimé et mis sous pli.",
       "send-analog-flow-CON080-description-multirecipient": "Le recommandé {{registeredLetterKind}} numéro {{registeredLetterNumber}} pour {{name}} {{taxId}} a été imprimé et mis sous pli.",
       "send-analog-flow-PNAG012-description": "Le destinataire n’a pas retiré la lettre recommandée 890 numéro {{registeredLetterNumber}} au point de retrait dans les 10 jours.",
@@ -270,11 +287,20 @@
       "send-analog-flow-RECRI003B-description-multirecipient": "Il y a un nouveau document joint.",
       "send-analog-flow-RECRI004B-description": "Il y a un nouveau document joint.",
       "send-analog-flow-RECRI004B-description-multirecipient": "Il y a un nouveau document joint.",
+      "send-analog-flow-RECAG010-description": "La tentative de remise de la lettre recommandée 890 numéro {{registeredLetterNumber}} a échoué car le destinataire était absent.",
+      "send-analog-flow-RECAG010-description-multirecipient": "La tentative de remise de la lettre recommandée 890 numéro {{registeredLetterNumber}} pour {{name}} {{taxId}} a échoué car le destinataire était absent.",
+      "send-analog-flow-RECRS010-description": "La tentative de remise de la lettre recommandée simple numéro {{registeredLetterNumber}} a échoué car le destinataire était absent.",
+      "send-analog-flow-RECRS010-description-multirecipient": "La tentative de remise de la lettre recommandée simple numéro {{registeredLetterNumber}} pour {{name}} {{taxId}} a échoué car le destinataire était absent.",
+      "send-analog-flow-RECRN010-description": "La tentative de remise de la lettre recommandée avec accusé de réception numéro {{registeredLetterNumber}} a échoué car le destinataire était absent.",
+      "send-analog-flow-RECRN010-description-multirecipient": "La tentative de remise de la lettre recommandée avec accusé de réception numéro {{registeredLetterNumber}} pour {{name}} {{taxId}} a échoué car le destinataire était absent.",
+      "send-analog-flow-RECAG012-description": "La lettre recommandée 890 numéro {{registeredLetterNumber}} a été retirée ou le délai de garde a expiré.",
+      "send-analog-flow-RECAG012-description-multirecipient": "La lettre recommandée 890 numéro {{registeredLetterNumber}} pour {{name}} {{taxId}} a été retirée ou le délai de garde a expiré.",
       "send-analog-error": "L’envoi par papier n’a pas donné lieu à une remise",
       "send-analog-success": "Envoi par voie papier réussi",
       "send-analog-outcome-unknown": "Envoi par voie papier terminé - résultat non déterminé",
       "send-analog-unknown": "Événement sur envoi recommandé - non reconnu",
       "aar-document": "Accusé de réception",
+      "notification-cancelled-document": "Déclaration d'annulation de la notification",
       "legalfact": {
         "sender-ack": "notification prise en charge",
         "digital-delivery-success": "notification numérique",
@@ -300,6 +326,8 @@
         "23I": "Reçu de livraison",
         "Plico": "Scan du pli",
         "23L": "Accusé de réception",
+        "CAD": "La dématérialisation de la lettre recommandée contenant la communication de dépôt est disponible",
+        "ARCAD": "La dématérialisation de l'accusé de réception de la lettre recommandée contenant la communication de dépôt est disponible",
         "Indagine": "Scan de l’enquête",
         "generic": "Pièce jointe"
       },
@@ -317,7 +345,12 @@
         "F02": "pour perte de l’enveloppe",
         "F03": "pour détérioration de l’enveloppe",
         "F04": "pour vol de l’enveloppe"
-      }
+      },
+      "radd": {
+        "title": "Les documents ont été retirés",
+        "description": "Le destinataire ou son délégué a retiré les documents notifiés auprès d'un opérateur habilité à la remise de ceux-ci."
+      },
+      "tpp-type": "un canal numérique tiers"
     },
     "downtimes": {
       "title": "DYSFONCTIONNEMENTS",
@@ -330,6 +363,20 @@
     "help": {
       "goto": "Accédez au site",
       "assistance": "Pour des problèmes techniques ou des questions relatives à SEND, appuyez sur « Assistance » en haut à droite."
+    },
+    "errors": {
+      "delivery_file_info_not_found": {
+        "title": "Le document n'est pas disponible",
+        "message": "Un problème est survenu lors de la récupération du document. Veuillez réessayer plus tard. Si l'erreur persiste, contactez l'assistance et communiquez les informations d'erreur."
+      },
+      "delivery_notification_without_payment_attachment": {
+        "title": "Le document n'est pas disponible",
+        "message": "Un problème est survenu lors de la récupération du document. Veuillez réessayer plus tard. Si l'erreur persiste, contactez l'assistance et communiquez les informations d'erreur."
+      },
+      "delivery_push_file_not_found": {
+        "title": "Le document n'est pas disponible",
+        "message": "Un problème est survenu lors de la récupération du document. Veuillez réessayer plus tard. Si l'erreur persiste, contactez l'assistance et communiquez les informations d'erreur."
+      }
     }
   },
   "delegatorTitle": "Les notifications de {{name}} ",
@@ -377,6 +424,16 @@
     "viewed-description-multirecipient": "Au moins un destinataire a lu la notification.",
     "canceled": "Annulée",
     "canceled-tooltip": "L’organisme a annulé l’envoi de la notification",
-    "canceled-description": "L’organisme a annulé l’envoi de la notification."
+    "canceled-description": "L’organisme a annulé l’envoi de la notification.",
+    "returned-to-sender": "Retour à l'expéditeur",
+    "returned-to-sender-tooltip-monorecipient": "Le destinataire est décédé",
+    "returned-to-sender-tooltip-multirecipient": "Tous les destinataires sono décédés",
+    "returned-to-sender-description-monorecipient": "Le destinataire est décédé.",
+    "returned-to-sender-description-multirecipient": "Tous les destinataires sont décédés.",
+    "notification-timeline-reworked": "Événement ou plusieurs événements mis à jour",
+    "notification-timeline-reworked-tooltip": "Événement ou plusieurs événements mis à jour",
+    "notification-timeline-reworked-description": "Les événements marqués ÉVÉNEMENT INVALIDÉ ne doivent pas être pris en compte car ils ont été remplacés par les événements suivants marqués ÉVÉNEMENT VALIDÉ.",
+    "reworked-status-valid": "Événement validé",
+    "reworked-status-not-valid": "Événement invalidé"
   }
 }

@@ -17,7 +17,10 @@
     "data_a-input-aria-label": "Inserisci la data finale della ricerca",
     "errors": {
       "iun": "Inserisci un codice IUN valido",
-      "data_a": "La data di inizio deve precedere la data di fine"
+      "date-format": "Formato data non valido",
+      "date-range": "Inserisci una data compresa tra {{fromDate}} e {{toDate}}",
+      "date-start": "La data di inizio deve precedere la data di fine",
+      "date-end": "La data di fine deve succedere la data di inizio"
     }
   },
   "sort": {
@@ -63,8 +66,8 @@
     "legalfact": "Attestazione opponibile a terzi",
     "receipt": "Ricevuta",
     "show-history": "Mostra storico",
-    "show-more": "Vedi più dettagli",
-    "show-less": "Vedi meno dettagli",
+    "show-more": "Mostra più dettagli",
+    "show-less": "Mostra meno dettagli",
     "cancelled-alert-text": "Questa notifica è stata annullata dall’ente mittente. Puoi ignorarne il contenuto.",
     "disclaimer-link": "Scopri di più",
     "pec-unreachable": "Controlla che la tua PEC sia libera e attiva!",
@@ -76,8 +79,8 @@
       "subtitle-mixed": "In questa notifica ci sono più possibilità di pagamento: seleziona o scarica ciò che vuoi pagare. Alcuni importi includono i costi di notifica.",
       "how": "Come mai?",
       "f24Models": "Modelli F24",
-      "pagoPANotices": "Avvisi PagoPA",
-      "download-pagoPA-notice": "Scarica avviso PagoPA",
+      "pagoPANotices": "Avvisi pagoPA",
+      "download-pagoPA-notice": "Scarica avviso pagoPA",
       "notice-code": "Codice avviso",
       "due": "Scade il",
       "included-costs": "Costi di notifica inclusi",
@@ -430,7 +433,12 @@
     "returned-to-sender-tooltip-monorecipient": "Il destinatario risulta deceduto",
     "returned-to-sender-tooltip-multirecipient": "Tutti i destinatari sono deceduti",
     "returned-to-sender-description-monorecipient": "Il destinatario risulta deceduto.",
-    "returned-to-sender-description-multirecipient": "Tutti i destinatari risultano deceduti."
+    "returned-to-sender-description-multirecipient": "Tutti i destinatari risultano deceduti.",
+    "notification-timeline-reworked": "Evento o più eventi aggiornati",
+    "notification-timeline-reworked-tooltip": "Evento o più eventi aggiornati",
+    "notification-timeline-reworked-description": "Gli eventi contrassegnati con EVENTO INVALIDATO non vanno considerati in quanto sostituiti dagli eventi successivi contrassegnati con EVENTO VALIDATO.",
+    "reworked-status-valid": "Evento validato",
+    "reworked-status-not-valid": "Evento invalidato"
   },
   "tppLanding": {
     "title": "Ciao,\nhai ricevuto una comunicazione a valore legale",
