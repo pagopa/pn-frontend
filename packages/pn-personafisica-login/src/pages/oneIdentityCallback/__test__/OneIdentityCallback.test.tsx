@@ -242,6 +242,7 @@ describe('OneIdentityCallback component', () => {
     const url = new URL(calledUrl);
 
     expect(url.search).toBe('');
+    expect(url).not.toContain('?');
 
     const hashParams = new URLSearchParams(url.hash.substring(1));
 
