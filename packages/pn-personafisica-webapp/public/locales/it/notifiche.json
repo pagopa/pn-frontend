@@ -67,6 +67,7 @@
     "show-less": "Vedi meno dettagli",
     "cancelled-alert-text": "Questa notifica è stata annullata dall’ente mittente. Puoi ignorarne il contenuto.",
     "disclaimer-link": "Scopri di più",
+    "pec-unreachable": "Controlla che la tua PEC sia libera e attiva!",
     "payment": {
       "title": "Pagamento",
       "single-payment-subtitle": "L'importo finale potrebbe essere diverso da quello indicato nell’atto e includere i costi di notifica.",
@@ -445,6 +446,32 @@
         "question": "Cos’è SEND e come funziona",
         "answer": "SEND - Servizio Notifiche Digitali è una piattaforma che digitalizza e semplifica la gestione delle notifiche: permette infatti di riceverle, scaricare i documenti notificati e pagare eventuali importi direttamente online.\nSEND può inviare notifiche per conto degli enti sia ai cittadini, ai liberi professionisti e alle ditte individuali, cioè le \"persone fisiche\", che alle imprese, cioè le \"persone giuridiche\"."
       }
+    }
+  },
+  "notification-cost-banner": {
+    "analog": {
+      "title": "Con SEND puoi risparmiare!",
+      "message": "Non hai aperto la notifica in digitale in tempo e quindi ti è stata inviata la raccomandata con i relativi costi."
+    },
+    "digital_platform": {
+      "title": "Con SEND hai risparmiato!",
+      "message": "Grazie al domicilio digitale attivo, hai evitato l’invio della raccomandata e i relativi costi."
+    },
+    "digital_special": {
+      "title": "Con SEND hai risparmiato!",
+      "message": "Abbiamo inviato la notifica sulla PEC che ci ha comunicato l’ente mittente, così hai evitato la raccomandata e i relativi costi."
+    },
+    "digital_registry": {
+      "title": "Con SEND hai risparmiato!",
+      "message": "Abbiamo inviato la notifica sulla PEC salvata nei registri pubblici, così hai evitato la raccomandata e i relativi costi."
+    },
+    "viewed": {
+      "title": "Con SEND hai risparmiato!",
+      "message": "Hai aperto la notifica in digitale in tempo, evitando la raccomandata e i relativi costi."
+    },
+    "enable-sercq": {
+      "message": "Attiva un domicilio digitale per ricevere le prossime notifiche solo in digitale.",
+      "cta": "Attiva domicilio digitale"
     }
   }
 }
