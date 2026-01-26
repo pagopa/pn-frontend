@@ -98,13 +98,14 @@ const NotificationDetailTimeline = ({
       recipients={recipients}
       position={getPosition(i)}
       clickHandler={clickHandler}
-      key={`timeline_sep_${t.status}`}
+      key={`timeline_step_${t.status}_${i}`}
       showMoreButtonLabel={showMoreButtonLabel}
       showLessButtonLabel={showLessButtonLabel}
       handleTrackShowMoreLess={handleTrackShowMoreLess}
       disableDownloads={disableDownloads}
       isParty={isParty}
       language={language}
+      reworkedStatus={t.reworkedStatus}
     />
   ));
 
@@ -149,6 +150,7 @@ const NotificationDetailTimeline = ({
             historyButtonClickHandler={toggleHistoryDrawer}
             disableDownloads={disableDownloads}
             isParty={isParty}
+            reworkedStatus={statusHistory[0].reworkedStatus}
           />
         ) : (
           timelineComponent

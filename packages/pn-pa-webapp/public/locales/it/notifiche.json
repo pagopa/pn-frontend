@@ -14,7 +14,11 @@
     "status": "Stato",
     "errors": {
       "iun": "Inserisci un codice IUN valido",
-      "fiscal-code": "Inserisci il codice per intero"
+      "fiscal-code": "Inserisci il codice per intero",
+      "date-format": "Formato data non valido",
+      "date-range": "Inserisci una data compresa tra {{fromDate}} e {{toDate}}",
+      "date-start": "La data di inizio deve precedere la data di fine",
+      "date-end": "La data di fine deve succedere la data di inizio"
     },
     "loading_completed_with_results": "Caricamento completato. La ricerca ha prodotto dei risultati",
     "loading_completed_no_results": "Caricamento completato. Nessuna notifica trovata"
@@ -118,8 +122,8 @@
     "legalfact": "Attestazione opponibile a terzi",
     "receipt": "Ricevuta",
     "show-history": "Mostra storico",
-    "show-more": "Vedi più dettagli",
-    "show-less": "Vedi meno dettagli",
+    "show-more": "Mostra più dettagli",
+    "show-less": "Mostra meno dettagli",
     "show-all": "Vedi tutti",
     "timeline": {
       "schedule-digital-workflow": "Ulteriore invio per via digitale",
@@ -409,7 +413,12 @@
     "returned-to-sender-tooltip": "Il destinatario risulta deceduto",
     "returned-to-sender-tooltip-multirecipient": "Tutti i destinatari risultano deceduti",
     "returned-to-sender-description": "Il destinatario risulta deceduto.",
-    "returned-to-sender-description-multirecipient": "Tutti i destinatari risultano deceduti."
+    "returned-to-sender-description-multirecipient": "Tutti i destinatari risultano deceduti.",
+    "notification-timeline-reworked": "Evento o più eventi aggiornati",
+    "notification-timeline-reworked-tooltip": "Evento o più eventi aggiornati",
+    "notification-timeline-reworked-description": "Gli eventi contrassegnati con EVENTO INVALIDATO non vanno considerati in quanto sostituiti dagli eventi successivi contrassegnati con EVENTO VALIDATO.",
+    "reworked-status-valid": "Evento validato",
+    "reworked-status-not-valid": "Evento invalidato"
   },
   "new-notification": {
     "title": "Invia una nuova notifica",

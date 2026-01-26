@@ -1,4 +1,6 @@
 import { notificationDTO } from '../../../__mocks__/NotificationDetail.mock';
+import { NotificationStatus } from '../../../models';
+import { ReworkedStatus } from '../../../models/NotificationDetail';
 import { createMatchMedia, fireEvent, render, waitFor } from '../../../test-utils';
 import NotificationDetailTimeline from '../NotificationDetailTimeline';
 
@@ -91,5 +93,43 @@ describe('NotificationDetailTimeline', () => {
       expect(queryByTestId('notification-history-drawer')).not.toBeInTheDocument();
       expect(queryByTestId('notification-history-drawer-content')).not.toBeInTheDocument();
     });
+  });
+
+  it('renders macro step with tag reworked', () => {
+    window.matchMedia = createMatchMedia(1920)
+    const { container } = render(
+      <NotificationDetailTimeline
+        recipients={[]}
+        statusHistory={[
+          {
+            status: NotificationStatus.NOTIFICATION_TIMELINE_REWORKED,
+            activeFrom: '2023-01-03T00:00:00Z',
+            relatedTimelineElements: [],
+          },
+          {
+            status: NotificationStatus.DELIVERED,
+            activeFrom: '2023-01-01T00:00:00Z',
+            relatedTimelineElements: [],
+            reworkedStatus: ReworkedStatus.VALID,
+          },
+          {
+            status: NotificationStatus.EFFECTIVE_DATE,
+            activeFrom: '2023-01-02T00:00:00Z',
+            relatedTimelineElements: [],
+            reworkedStatus: ReworkedStatus.NOT_VALID,
+          },
+        ]}
+        title={''}
+        historyButtonLabel={''}
+        showMoreButtonLabel={''}
+        showLessButtonLabel={''}
+        clickHandler={function (): void {
+          throw new Error('Function not implemented.');
+        }}
+      />
+    );
+    expect(container).toHaveTextContent('Evento o più eventi aggiornati');
+    expect(container).toHaveTextContent('Evento validato');
+    expect(container).toHaveTextContent('Evento invalidato');
   });
 });
