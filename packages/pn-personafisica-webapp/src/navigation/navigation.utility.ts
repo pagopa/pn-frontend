@@ -8,21 +8,24 @@ import {
   DETTAGLIO_NOTIFICA,
   DETTAGLIO_NOTIFICA_DELEGATO,
   LOGOUT,
+  LOGOUT_OI,
   NOTIFICHE,
   NOTIFICHE_DELEGATO,
   RECAPITI,
 } from './routes.const';
 
-export function goToLoginPortal(rapidAccess?: [AppRouteParams, string]) {
+export function goToLoginPortal(rapidAccess?: [AppRouteParams, string], isFromOi?: boolean) {
+  const logoutPath = isFromOi ? `${LOGOUT_OI}` : `${LOGOUT}`;
+
   // eslint-disable-next-line functional/no-let
-  let urlToRedirect = `${LOGOUT}`;
+  let urlToRedirect = `${logoutPath}`;
   // the startsWith check is to prevent xss attacks
-  if (urlToRedirect.startsWith(LOGOUT) && rapidAccess) {
+  if (urlToRedirect.startsWith(logoutPath) && rapidAccess) {
     // eslint-disable-next-line functional/immutable-data
     urlToRedirect += `?${rapidAccess[0]}=${sanitizeString(rapidAccess[1])}`;
   }
   // the indexOf check is to prevent xss attacks
-  if (urlToRedirect.startsWith(LOGOUT)) {
+  if (urlToRedirect.startsWith(logoutPath)) {
     window.open(`${urlToRedirect}`, '_self');
   }
 }

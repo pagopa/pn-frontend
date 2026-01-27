@@ -1,5 +1,5 @@
 /* eslint-disable functional/immutable-data */
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 
@@ -36,6 +36,8 @@ const SessionGuard = () => {
   const { t } = useTranslation(['common']);
   const { hasSpecificStatusError } = useErrors();
   const hasAnyForbiddenError = hasSpecificStatusError(403);
+
+  const isFromOI = useRef<boolean>(false);
 
   const [modalData, setModalData] = useState({
     open: false,
@@ -77,6 +79,7 @@ const SessionGuard = () => {
   };
 
   const performExchangeToken = async (token: TokenExchangeRequest) => {
+    isFromOI.current = false;
     AppResponsePublisher.error.subscribe('exchangeToken', manageUnforbiddenError);
     try {
       const user = await dispatch(exchangeToken(token)).unwrap();
@@ -89,6 +92,7 @@ const SessionGuard = () => {
   const performOneIdentityTokenExchange = async (
     exchangeCodeParams: OneIdentityCodeExchangeRequest
   ) => {
+    isFromOI.current = true;
     AppResponsePublisher.error.subscribe('exchangeTokenOneIdentity', manageUnforbiddenError);
     try {
       const user = await dispatch(exchangeOneIdentityCode(exchangeCodeParams)).unwrap();
@@ -120,7 +124,7 @@ const SessionGuard = () => {
     }
 
     dispatch(resetState());
-    goToLoginPortal();
+    goToLoginPortal(undefined, isFromOI.current);
   };
 
   useEffect(() => {
@@ -142,6 +146,7 @@ const SessionGuard = () => {
 
     return () => {
       AppResponsePublisher.error.unsubscribe('exchangeToken', manageUnforbiddenError);
+      AppResponsePublisher.error.unsubscribe('exchangeTokenOneIdentity', manageUnforbiddenError);
     };
   }, []);
 

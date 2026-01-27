@@ -8,6 +8,7 @@ import {
   DELEGHE,
   DETTAGLIO_NOTIFICA,
   LOGOUT,
+  LOGOUT_OI,
   NOTIFICHE,
   RECAPITI,
 } from '../routes.const';
@@ -34,26 +35,44 @@ describe('Tests navigation utility methods', () => {
 
   it('goToLoginPortal', () => {
     goToLoginPortal();
-    expect(mockOpenFn).toBeCalledTimes(1);
-    expect(mockOpenFn).toBeCalledWith(`${LOGOUT}`, '_self');
+    expect(mockOpenFn).toHaveBeenCalledTimes(1);
+    expect(mockOpenFn).toHaveBeenCalledWith(`${LOGOUT}`, '_self');
   });
 
   it('goToLoginPortal - aar', () => {
     goToLoginPortal([AppRouteParams.AAR, 'fake-aar-token']);
-    expect(mockOpenFn).toBeCalledTimes(1);
-    expect(mockOpenFn).toBeCalledWith(`${LOGOUT}?aar=fake-aar-token`, '_self');
+    expect(mockOpenFn).toHaveBeenCalledTimes(1);
+    expect(mockOpenFn).toHaveBeenCalledWith(`${LOGOUT}?aar=fake-aar-token`, '_self');
   });
 
   it('goToLoginPortal - retrievalId', () => {
     goToLoginPortal([AppRouteParams.RETRIEVAL_ID, 'fake-id']);
-    expect(mockOpenFn).toBeCalledTimes(1);
-    expect(mockOpenFn).toBeCalledWith(`${LOGOUT}?retrievalId=fake-id`, '_self');
+    expect(mockOpenFn).toHaveBeenCalledTimes(1);
+    expect(mockOpenFn).toHaveBeenCalledWith(`${LOGOUT}?retrievalId=fake-id`, '_self');
   });
 
   it('goToLoginPortal - aar with malicious code', () => {
     goToLoginPortal([AppRouteParams.AAR, '<script>malicious code</script>malicious-aar-token']);
-    expect(mockOpenFn).toBeCalledTimes(1);
-    expect(mockOpenFn).toBeCalledWith(`${LOGOUT}?aar=malicious-aar-token`, '_self');
+    expect(mockOpenFn).toHaveBeenCalledTimes(1);
+    expect(mockOpenFn).toHaveBeenCalledWith(`${LOGOUT}?aar=malicious-aar-token`, '_self');
+  });
+
+  it('goToLoginPortal - from One Identity', () => {
+    goToLoginPortal(undefined, true);
+    expect(mockOpenFn).toHaveBeenCalledTimes(1);
+    expect(mockOpenFn).toHaveBeenCalledWith(`${LOGOUT_OI}`, '_self');
+  });
+
+  it('goToLoginPortal - from One Identity with aar', () => {
+    goToLoginPortal([AppRouteParams.AAR, 'fake-aar-token'], true);
+    expect(mockOpenFn).toHaveBeenCalledTimes(1);
+    expect(mockOpenFn).toHaveBeenCalledWith(`${LOGOUT_OI}?aar=fake-aar-token`, '_self');
+  });
+
+  it('goToLoginPortal - from One Identity with retrievalId', () => {
+    goToLoginPortal([AppRouteParams.RETRIEVAL_ID, 'fake-id'], true);
+    expect(mockOpenFn).toHaveBeenCalledTimes(1);
+    expect(mockOpenFn).toHaveBeenCalledWith(`${LOGOUT_OI}?retrievalId=fake-id`, '_self');
   });
 
   it('getCurrentPage - test for notifications list page', () => {
