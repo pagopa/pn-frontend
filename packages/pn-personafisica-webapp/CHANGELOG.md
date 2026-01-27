@@ -3,6 +3,26 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.21.0-RC.0](https://github.com/pagopa/pn-frontend/compare/v2.20.0...v2.21.0-RC.0) (2026-01-27)
+
+
+### Bug Fixes
+
+* **pn-14093:** Announce filter results to screen readers on dashboard ([#1717](https://github.com/pagopa/pn-frontend/issues/1717)) ([21436b5](https://github.com/pagopa/pn-frontend/commit/21436b51be4673f06aa8f434bd0bb6a46e91574e))
+* **PN-15760:** replaced PagoPA with pagoPA in all the labels that are about payment notices ([#1733](https://github.com/pagopa/pn-frontend/issues/1733)) ([4583889](https://github.com/pagopa/pn-frontend/commit/4583889505d0543afd41a0faedcbe086074e90d4))
+* **PN-17265:** add custom error message when all payments are unavailable ([#1737](https://github.com/pagopa/pn-frontend/issues/1737)) ([14a55cf](https://github.com/pagopa/pn-frontend/commit/14a55cfd164a8d73f3e8abcc58a558f7a9022058))
+* **PN-17541:** show errors below date fields in notifications list ([#1731](https://github.com/pagopa/pn-frontend/issues/1731)) ([953ad28](https://github.com/pagopa/pn-frontend/commit/953ad28483673c3a2722c02deafffaeb4065f93d))
+* **pn-17707:** Go back to landing page when navigating to login page and goes back in the browser history ([#1725](https://github.com/pagopa/pn-frontend/issues/1725)) ([479ce7f](https://github.com/pagopa/pn-frontend/commit/479ce7f16faf074260d2a170e3fda75998521743))
+
+
+### Features
+
+* **PN-18053:** handle login with One Identity in PF ([#1730](https://github.com/pagopa/pn-frontend/issues/1730)) ([8d14c67](https://github.com/pagopa/pn-frontend/commit/8d14c678f3052085c002f0cd8c68c4c02f569f68))
+
+
+
+
+
 # [2.20.0](https://github.com/pagopa/pn-frontend/compare/v2.19.2...v2.20.0) (2025-12-12)
 
 
