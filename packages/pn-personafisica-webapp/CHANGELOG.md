@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.21.0-RC.1](https://github.com/pagopa/pn-frontend/compare/v2.21.0-RC.0...v2.21.0-RC.1) (2026-01-28)
+
+
+### Bug Fixes
+
+* **PN-18053:** implement One Identity logout and update navigation routes ([#1738](https://github.com/pagopa/pn-frontend/issues/1738)) ([23ae882](https://github.com/pagopa/pn-frontend/commit/23ae88287edabdbaa9cc1ef47cae4dcecfaa1d9b))
+
+
+
+
+
 # [2.21.0-RC.0](https://github.com/pagopa/pn-frontend/compare/v2.20.0...v2.21.0-RC.0) (2026-01-27)
 
 
