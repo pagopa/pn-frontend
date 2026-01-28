@@ -12,8 +12,14 @@ import { goToLoginPortal } from './navigation.utility';
 
 const ToSGuard = () => {
   const dispatch = useAppDispatch();
-  const { tosConsent, privacyConsent, fetchedTos, fetchedPrivacy, tosPrivacyApiError } =
-    useAppSelector((state: RootState) => state.userState);
+  const {
+    tosConsent,
+    privacyConsent,
+    fetchedTos,
+    fetchedPrivacy,
+    tosPrivacyApiError,
+    loginProvider,
+  } = useAppSelector((state: RootState) => state.userState);
   const { sessionToken } = useAppSelector((state: RootState) => state.userState.user);
   const { t } = useTranslation(['common']);
 
@@ -31,7 +37,7 @@ const ToSGuard = () => {
           open={tosPrivacyApiError}
           title={t('error-when-fetching-tos-status.title')}
           message={t('error-when-fetching-tos-status.message')}
-          handleClose={() => goToLoginPortal()}
+          handleClose={() => goToLoginPortal({ loginProvider })}
           initTimeout
         />
       </>

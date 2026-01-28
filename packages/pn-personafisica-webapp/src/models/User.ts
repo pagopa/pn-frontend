@@ -58,3 +58,8 @@ export const paramsToSourceType: Record<AppRouteParams, 'TPP' | 'QR'> = {
   [AppRouteParams.AAR]: 'QR',
   [AppRouteParams.RETRIEVAL_ID]: 'TPP',
 };
+
+export enum LoginProvider {
+  SPIDHUB = 'SPIDHUB',
+  ONEIDENTITY = 'ONEIDENTITY',
+}

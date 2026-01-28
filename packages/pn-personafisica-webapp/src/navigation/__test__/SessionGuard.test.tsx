@@ -201,17 +201,21 @@ describe('SessionGuard Component', async () => {
     });
   });
 
-  // expected behavior: enters the app, exp token -> logout message
+  // expected behavior: enters the app, exp token -> logout message, redirects to LOGOUT (not OI)
   it('logout', async () => {
+    vi.useFakeTimers({ shouldAdvanceTime: true });
+
     window.location.hash = '';
     window.location.pathname = '/';
     const exp = sub(new Date(), { minutes: 5 }).getTime() / 1000;
     const mockReduxState = {
       userState: { user: { ...userResponse, exp } },
     };
+
     await act(async () => {
       render(<Guard />, { preloadedState: mockReduxState });
     });
+
     await waitFor(() => {
       const logoutComponent = screen.queryByTestId('session-modal');
       expect(logoutComponent).toBeTruthy();
@@ -219,12 +223,13 @@ describe('SessionGuard Component', async () => {
       expect(logoutTitleComponent).toBeTruthy();
     });
 
-    // No call api logout because the token is expired
-    vi.useFakeTimers();
     await act(async () => {
-      vi.advanceTimersByTime(3000);
+      await vi.advanceTimersByTimeAsync(2500);
       expect(mock.history.post).toHaveLength(0);
     });
+
+    expect(mockOpenFn).toHaveBeenCalledWith(`${routes.LOGOUT}`, '_self');
+
     vi.useRealTimers();
   });
 
@@ -367,5 +372,30 @@ describe('SessionGuard Component', async () => {
         id: 'mocked-qr-code',
       },
     });
+  });
+  it('One Identity Exchange Token - logout redirects to LOGOUT_OI', async () => {
+    vi.useFakeTimers({ shouldAdvanceTime: true });
+
+    window.location.hash =
+      '#code=valid_code&state=some_state&nonce=some_nonce&redirect_uri=some_uri';
+    const exp = sub(new Date(), { minutes: 5 }).getTime() / 1000;
+    mock.onPost(ONE_IDENTITY_TOKEN_EXCHANGE()).reply(200, { ...userResponse, exp });
+
+    await act(async () => {
+      render(<Guard />);
+    });
+
+    await waitFor(() => {
+      const logoutComponent = screen.queryByTestId('session-modal');
+      expect(logoutComponent).toBeTruthy();
+    });
+
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(2500);
+    });
+
+    expect(mockOpenFn).toHaveBeenCalledWith(routes.LOGOUT_OI, '_self');
+
+    vi.useRealTimers();
   });
 });
