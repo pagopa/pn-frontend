@@ -1,5 +1,5 @@
 /* eslint-disable functional/immutable-data */
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 
@@ -28,7 +28,7 @@ const SessionGuard = () => {
   const location = useLocation();
   const dispatch = useAppDispatch();
   const rapidAccess = useRapidAccessParam();
-  const { loading } = useAppSelector((state: RootState) => state.userState);
+  const { loading, loginProvider } = useAppSelector((state: RootState) => state.userState);
   const { sessionToken, exp } = useAppSelector((state: RootState) => state.userState.user);
   const navigate = useNavigate();
   const { WORK_IN_PROGRESS, INACTIVITY_HANDLER_MINUTES } = getConfiguration();
@@ -36,8 +36,6 @@ const SessionGuard = () => {
   const { t } = useTranslation(['common']);
   const { hasSpecificStatusError } = useErrors();
   const hasAnyForbiddenError = hasSpecificStatusError(403);
-
-  const isFromOI = useRef<boolean>(false);
 
   const [modalData, setModalData] = useState({
     open: false,
@@ -79,7 +77,6 @@ const SessionGuard = () => {
   };
 
   const performExchangeToken = async (token: TokenExchangeRequest) => {
-    isFromOI.current = false;
     AppResponsePublisher.error.subscribe('exchangeToken', manageUnforbiddenError);
     try {
       const user = await dispatch(exchangeToken(token)).unwrap();
@@ -92,7 +89,6 @@ const SessionGuard = () => {
   const performOneIdentityTokenExchange = async (
     exchangeCodeParams: OneIdentityCodeExchangeRequest
   ) => {
-    isFromOI.current = true;
     AppResponsePublisher.error.subscribe('exchangeTokenOneIdentity', manageUnforbiddenError);
     try {
       const user = await dispatch(exchangeOneIdentityCode(exchangeCodeParams)).unwrap();
@@ -124,7 +120,7 @@ const SessionGuard = () => {
     }
 
     dispatch(resetState());
-    goToLoginPortal(undefined, isFromOI.current);
+    goToLoginPortal(undefined, loginProvider);
   };
 
   useEffect(() => {

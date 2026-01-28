@@ -1,7 +1,7 @@
 import { ConsentType, basicInitialUserData, basicNoLoggedUserData } from '@pagopa-pn/pn-commons';
 import { createSlice, isAnyOf } from '@reduxjs/toolkit';
 
-import { User } from '../../models/User';
+import { LoginProvider, User } from '../../models/User';
 import { userDataMatcher } from '../../utility/user.utility';
 import {
   acceptTosPrivacy,
@@ -9,6 +9,25 @@ import {
   exchangeToken,
   getTosPrivacyApproval,
 } from './actions';
+
+type AuthInitialState = {
+  loading: boolean;
+  user: User;
+  fetchedTos: boolean;
+  fetchedPrivacy: boolean;
+  tosConsent: {
+    accepted: boolean;
+    isFirstAccept: boolean;
+    consentVersion: string;
+  };
+  privacyConsent: {
+    accepted: boolean;
+    isFirstAccept: boolean;
+    consentVersion: string;
+  };
+  tosPrivacyApiError: boolean;
+  loginProvider?: LoginProvider;
+};
 
 const noLoggedUserData = {
   ...basicNoLoggedUserData,
@@ -21,7 +40,7 @@ const noLoggedUserData = {
   aud: '',
 } as User;
 
-const initialState = {
+const initialState: AuthInitialState = {
   loading: false,
   user: basicInitialUserData(userDataMatcher, noLoggedUserData),
   fetchedTos: false,
@@ -37,6 +56,7 @@ const initialState = {
     consentVersion: '',
   },
   tosPrivacyApiError: false,
+  loginProvider: undefined,
 };
 
 /* eslint-disable functional/immutable-data */
@@ -94,6 +114,12 @@ const userSlice = createSlice({
           sessionStorage.setItem('user', JSON.stringify(user));
           state.user = user;
           state.loading = false;
+
+          if (action.type === exchangeToken.fulfilled.type) {
+            state.loginProvider = LoginProvider.SPIDHUB;
+          } else if (action.type === exchangeOneIdentityCode.fulfilled.type) {
+            state.loginProvider = LoginProvider.ONEIDENTITY;
+          }
         }
       )
       .addMatcher(isAnyOf(exchangeToken.rejected, exchangeOneIdentityCode.rejected), (state) => {

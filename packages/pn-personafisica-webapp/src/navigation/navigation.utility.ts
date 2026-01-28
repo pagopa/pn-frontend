@@ -2,6 +2,7 @@ import { matchPath } from 'react-router-dom';
 
 import { AppRouteParams, EventPageType, sanitizeString } from '@pagopa-pn/pn-commons';
 
+import { LoginProvider } from '../models/User';
 import {
   APP_STATUS,
   DELEGHE,
@@ -14,8 +15,11 @@ import {
   RECAPITI,
 } from './routes.const';
 
-export function goToLoginPortal(rapidAccess?: [AppRouteParams, string], isFromOi?: boolean) {
-  const logoutPath = isFromOi ? `${LOGOUT_OI}` : `${LOGOUT}`;
+export function goToLoginPortal(
+  rapidAccess?: [AppRouteParams, string],
+  loginProvider?: LoginProvider
+) {
+  const logoutPath = loginProvider === LoginProvider.ONEIDENTITY ? `${LOGOUT_OI}` : `${LOGOUT}`;
 
   // eslint-disable-next-line functional/no-let
   let urlToRedirect = `${logoutPath}`;

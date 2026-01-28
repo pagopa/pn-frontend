@@ -67,6 +67,7 @@ describe('Auth redux state tests', () => {
     const action = await mockLogin();
     expect(action.type).toBe('exchangeToken/fulfilled');
     expect(action.payload).toEqual(userResponse);
+    expect(store.getState().userState.loginProvider).toBe('SPIDHUB');
   });
 
   it('Should be able to exchange code with One Identity', async () => {
@@ -87,6 +88,9 @@ describe('Auth redux state tests', () => {
     const userFromStorage = sessionStorage.getItem('user');
     expect(userFromStorage).toBeDefined();
     expect(JSON.parse(userFromStorage!)).toEqual(userResponse);
+
+    expect(store.getState().userState.user).toEqual(userResponse);
+    expect(store.getState().userState.loginProvider).toBe('ONEIDENTITY');
   });
 
   it('Should be able to logout', async () => {

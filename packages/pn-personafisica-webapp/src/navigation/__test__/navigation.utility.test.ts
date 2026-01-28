@@ -2,6 +2,7 @@ import { vi } from 'vitest';
 
 import { AppRouteParams, EventPageType } from '@pagopa-pn/pn-commons';
 
+import { LoginProvider } from '../../models/User';
 import { getCurrentEventTypePage, goToLoginPortal } from '../navigation.utility';
 import {
   APP_STATUS,
@@ -58,19 +59,19 @@ describe('Tests navigation utility methods', () => {
   });
 
   it('goToLoginPortal - from One Identity', () => {
-    goToLoginPortal(undefined, true);
+    goToLoginPortal(undefined, LoginProvider.ONEIDENTITY);
     expect(mockOpenFn).toHaveBeenCalledTimes(1);
     expect(mockOpenFn).toHaveBeenCalledWith(`${LOGOUT_OI}`, '_self');
   });
 
   it('goToLoginPortal - from One Identity with aar', () => {
-    goToLoginPortal([AppRouteParams.AAR, 'fake-aar-token'], true);
+    goToLoginPortal([AppRouteParams.AAR, 'fake-aar-token'], LoginProvider.ONEIDENTITY);
     expect(mockOpenFn).toHaveBeenCalledTimes(1);
     expect(mockOpenFn).toHaveBeenCalledWith(`${LOGOUT_OI}?aar=fake-aar-token`, '_self');
   });
 
   it('goToLoginPortal - from One Identity with retrievalId', () => {
-    goToLoginPortal([AppRouteParams.RETRIEVAL_ID, 'fake-id'], true);
+    goToLoginPortal([AppRouteParams.RETRIEVAL_ID, 'fake-id'], LoginProvider.ONEIDENTITY);
     expect(mockOpenFn).toHaveBeenCalledTimes(1);
     expect(mockOpenFn).toHaveBeenCalledWith(`${LOGOUT_OI}?retrievalId=fake-id`, '_self');
   });

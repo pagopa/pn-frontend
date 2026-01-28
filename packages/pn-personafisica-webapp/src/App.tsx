@@ -79,7 +79,7 @@ const App = () => {
   const [openModal, setOpenModal] = useState(false);
   const loggedUser = useAppSelector((state: RootState) => state.userState.user);
   const lastError = useAppSelector((state: RootState) => state.appState.lastError);
-  const { tosConsent, fetchedTos, privacyConsent, fetchedPrivacy } = useAppSelector(
+  const { tosConsent, fetchedTos, privacyConsent, fetchedPrivacy, loginProvider } = useAppSelector(
     (state: RootState) => state.userState
   );
   const { pendingDelegators, delegators } = useAppSelector(
@@ -270,7 +270,7 @@ const App = () => {
   const performLogout = async () => {
     await dispatch(apiLogout(loggedUser.sessionToken));
     dispatch(resetState());
-    goToLoginPortal();
+    goToLoginPortal(undefined, loginProvider);
     setOpenModal(false);
   };
 
