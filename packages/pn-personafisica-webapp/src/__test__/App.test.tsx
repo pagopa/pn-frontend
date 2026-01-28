@@ -12,7 +12,8 @@ import { tosPrivacyConsentMock } from '../__mocks__/Consents.mock';
 import { digitalAddresses } from '../__mocks__/Contacts.mock';
 import { mandatesByDelegate } from '../__mocks__/Delegations.mock';
 import { apiClient, authClient } from '../api/apiClients';
-import { LOGOUT } from '../navigation/routes.const';
+import { LoginProvider } from '../models/User';
+import { LOGOUT, LOGOUT_OI } from '../navigation/routes.const';
 import { RenderResult, act, fireEvent, render, screen, waitFor, within } from './test-utils';
 
 vi.mock('../pages/Notifiche.page', () => ({ default: () => <div>Generic Page</div> }));
@@ -44,6 +45,7 @@ const reduxInitialState = {
       currentVersion: 'mocked-version-1',
     },
     tosPrivacyApiError: false,
+    loginProvider: LoginProvider.SPIDHUB,
   },
 };
 
@@ -153,6 +155,57 @@ describe('App', async () => {
       expect(sessionStorage.getItem('user')).toBeNull();
       expect(mockOpenFn).toHaveBeenCalledTimes(1);
       expect(mockOpenFn).toHaveBeenCalledWith(`${LOGOUT}`, '_self');
+      expect(mockAuth.history.post.length).toBe(1);
+    });
+  });
+
+  it('redirect to One Identity login portal on logout', async () => {
+    mock.onGet(/\/bff\/v2\/tos-privacy.*/).reply(200, tosPrivacyConsentMock(true, true));
+    mock.onGet('downtime/v1/status').reply(200, currentStatusDTO);
+    mock.onGet('/bff/v1/addresses').reply(200, digitalAddresses);
+    mock.onGet('/bff/v1/mandate/delegate').reply(200, mandatesByDelegate);
+    mockAuth.onPost('/logout').reply(200);
+
+    await act(async () => {
+      result = render(<Component />, {
+        preloadedState: {
+          ...reduxInitialState,
+          userState: {
+            ...reduxInitialState.userState,
+            loginProvider: LoginProvider.ONEIDENTITY,
+          },
+        },
+      });
+    });
+
+    const header = document.querySelector('header');
+    const userButton = header?.querySelector(
+      `[aria-label="Area utente ${userResponse.name} ${userResponse.family_name}"]`
+    );
+    fireEvent.click(userButton!);
+
+    let menu = await waitFor(() => screen.getByRole('presentation'));
+    let menuItems = within(menu).getAllByRole('menuitem');
+    fireEvent.click(menuItems[0]);
+
+    await waitFor(() => {
+      expect(result.container).toHaveTextContent('Profile Page');
+    });
+
+    fireEvent.click(userButton!);
+    menu = await waitFor(() => screen.getByRole('presentation'));
+    menuItems = within(menu).getAllByRole('menuitem');
+    fireEvent.click(menuItems[1]);
+
+    const logoutDialog = await waitFor(() => screen.getByTestId('dialog'));
+    expect(logoutDialog).toBeInTheDocument();
+    const confirmLogoutButton = within(logoutDialog).getByTestId('confirm-button');
+    fireEvent.click(confirmLogoutButton);
+
+    await waitFor(() => {
+      expect(sessionStorage.getItem('user')).toBeNull();
+      expect(mockOpenFn).toHaveBeenCalledTimes(1);
+      expect(mockOpenFn).toHaveBeenCalledWith(`${LOGOUT_OI}`, '_self');
       expect(mockAuth.history.post.length).toBe(1);
     });
   });
