@@ -120,7 +120,7 @@ const SessionGuard = () => {
     }
 
     dispatch(resetState());
-    goToLoginPortal(undefined, loginProvider);
+    goToLoginPortal({ loginProvider });
   };
 
   useEffect(() => {
@@ -137,7 +137,7 @@ const SessionGuard = () => {
     } else if (sessionToken) {
       sessionCheck(exp);
     } else {
-      goToLoginPortal(rapidAccess);
+      goToLoginPortal({ rapidAccess, loginProvider });
     }
 
     return () => {

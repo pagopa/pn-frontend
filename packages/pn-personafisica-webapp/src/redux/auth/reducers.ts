@@ -26,7 +26,7 @@ type AuthInitialState = {
     consentVersion: string;
   };
   tosPrivacyApiError: boolean;
-  loginProvider?: LoginProvider;
+  loginProvider: LoginProvider;
 };
 
 const noLoggedUserData = {
@@ -56,7 +56,7 @@ const initialState: AuthInitialState = {
     consentVersion: '',
   },
   tosPrivacyApiError: false,
-  loginProvider: undefined,
+  loginProvider: LoginProvider.SPIDHUB,
 };
 
 /* eslint-disable functional/immutable-data */
@@ -104,9 +104,18 @@ const userSlice = createSlice({
     });
 
     builder
-      .addMatcher(isAnyOf(exchangeToken.pending, exchangeOneIdentityCode.pending), (state) => {
-        state.loading = true;
-      })
+      .addMatcher(
+        isAnyOf(exchangeToken.pending, exchangeOneIdentityCode.pending),
+        (state, action) => {
+          state.loading = true;
+
+          if (action.type === exchangeToken.pending.type) {
+            state.loginProvider = LoginProvider.SPIDHUB;
+          } else if (action.type === exchangeOneIdentityCode.pending.type) {
+            state.loginProvider = LoginProvider.ONEIDENTITY;
+          }
+        }
+      )
       .addMatcher(
         isAnyOf(exchangeToken.fulfilled, exchangeOneIdentityCode.fulfilled),
         (state, action) => {
@@ -114,12 +123,6 @@ const userSlice = createSlice({
           sessionStorage.setItem('user', JSON.stringify(user));
           state.user = user;
           state.loading = false;
-
-          if (action.type === exchangeToken.fulfilled.type) {
-            state.loginProvider = LoginProvider.SPIDHUB;
-          } else if (action.type === exchangeOneIdentityCode.fulfilled.type) {
-            state.loginProvider = LoginProvider.ONEIDENTITY;
-          }
         }
       )
       .addMatcher(isAnyOf(exchangeToken.rejected, exchangeOneIdentityCode.rejected), (state) => {

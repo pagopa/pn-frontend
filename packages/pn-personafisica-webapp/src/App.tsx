@@ -270,7 +270,7 @@ const App = () => {
   const performLogout = async () => {
     await dispatch(apiLogout(loggedUser.sessionToken));
     dispatch(resetState());
-    goToLoginPortal(undefined, loginProvider);
+    goToLoginPortal({ loginProvider });
     setOpenModal(false);
   };
 

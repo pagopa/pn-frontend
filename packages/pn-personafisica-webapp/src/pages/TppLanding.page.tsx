@@ -28,6 +28,7 @@ const TppLanding: React.FC = () => {
   const [param, value] = rapidAccessParam;
   const navigate = useNavigate();
   const { sessionToken } = useAppSelector((state: RootState) => state.userState.user);
+  const { loginProvider } = useAppSelector((state: RootState) => state.userState);
 
   const whatIsSendFaqTitle = t('faq.what-is-send.question');
   const whatAreNotificationsFaqTitle = t('faq.what-are-notifications.question');
@@ -40,7 +41,7 @@ const TppLanding: React.FC = () => {
     if (sessionToken) {
       navigate(`/?${AppRouteParams.RETRIEVAL_ID}=${value}`);
     } else {
-      goToLoginPortal([AppRouteParams.RETRIEVAL_ID, value]);
+      goToLoginPortal({ rapidAccess: [AppRouteParams.RETRIEVAL_ID, value], loginProvider });
     }
   };
 

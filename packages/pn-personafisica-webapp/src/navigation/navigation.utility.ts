@@ -15,10 +15,12 @@ import {
   RECAPITI,
 } from './routes.const';
 
-export function goToLoginPortal(
-  rapidAccess?: [AppRouteParams, string],
-  loginProvider?: LoginProvider
-) {
+type GoToLoginProps = {
+  loginProvider: LoginProvider;
+  rapidAccess?: [AppRouteParams, string];
+};
+
+export function goToLoginPortal({ rapidAccess, loginProvider }: GoToLoginProps) {
   const logoutPath = loginProvider === LoginProvider.ONEIDENTITY ? `${LOGOUT_OI}` : `${LOGOUT}`;
 
   // eslint-disable-next-line functional/no-let

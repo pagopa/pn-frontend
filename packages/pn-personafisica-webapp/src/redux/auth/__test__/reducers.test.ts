@@ -10,6 +10,7 @@ import {
 import { errorMock } from '../../../__mocks__/Errors.mock';
 import { apiClient, authClient } from '../../../api/apiClients';
 import { ONE_IDENTITY_TOKEN_EXCHANGE } from '../../../api/auth/auth.routes';
+import { LoginProvider } from '../../../models/User';
 import { store } from '../../store';
 import { acceptTosPrivacy, exchangeOneIdentityCode, getTosPrivacyApproval } from '../actions';
 
@@ -60,6 +61,7 @@ describe('Auth redux state tests', () => {
         consentVersion: '',
       },
       tosPrivacyApiError: false,
+      loginProvider: LoginProvider.SPIDHUB,
     });
   });
 
