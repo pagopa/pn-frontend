@@ -6,7 +6,7 @@ import { Fragment, ReactNode, useCallback, useEffect, useMemo, useState } from '
 import { useTranslation } from 'react-i18next';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 
-import { Alert, AlertTitle, Box, Grid, Paper, Stack, Typography } from '@mui/material';
+import { Alert, AlertTitle, Box, Grid, Link, Paper, Stack, Typography } from '@mui/material';
 import {
   AccessDenied,
   ApiError,
@@ -86,7 +86,12 @@ const NotificationDetail: React.FC = () => {
   const [pageReady, setPageReady] = useState(false);
   const [isUserForbidden, setIsUserForbidden] = useState(false);
   const [downtimesReady, setDowntimesReady] = useState(false);
-  const { F24_DOWNLOAD_WAIT_TIME, LANDING_SITE_URL, DOWNTIME_EXAMPLE_LINK } = getConfiguration();
+  const {
+    F24_DOWNLOAD_WAIT_TIME,
+    LANDING_SITE_URL,
+    DOWNTIME_EXAMPLE_LINK,
+    NOTIFICATION_CANCELLED_HELP_LINK,
+  } = getConfiguration();
   const navigate = useNavigate();
 
   const currentUser = useAppSelector((state: RootState) => state.userState.user);
@@ -155,19 +160,19 @@ const NotificationDetail: React.FC = () => {
   const deliveryOutcome = useMemo(() => historyParser.resolveDeliveryOutcome(), [historyParser]);
 
   const isBannerVisible = !mandateId && !isNotificationCancelled;
+  const isNotificationCostBanner =
+    isBannerVisible &&
+    notification.pagoPaIntMode === 'ASYNC' &&
+    notification.recipients.length === 1;
 
   const banner = useMemo(() => {
-    if (!isBannerVisible) {
-      return null;
+    if (isNotificationCostBanner) {
+      return <NotificationCostBanner deliveryOutcome={deliveryOutcome} />;
     }
 
-    if (notification.pagoPaIntMode !== 'ASYNC' || notification.recipients.length > 1) {
-      return historyParser.hasViewedStatus() ? (
-        <DomicileBanner source={ContactSource.DETTAGLIO_NOTIFICA} />
-      ) : null;
-    }
-
-    return <NotificationCostBanner deliveryOutcome={deliveryOutcome} />;
+    return isBannerVisible && historyParser.hasViewedStatus() ? (
+      <DomicileBanner source={ContactSource.DETTAGLIO_NOTIFICA} />
+    ) : null;
   }, [
     isBannerVisible,
     notification.pagoPaIntMode,
@@ -581,10 +586,24 @@ const NotificationDetail: React.FC = () => {
               <Stack spacing={3}>
                 {isNotificationCancelled && (
                   <Alert data-testid="cancelledAlertText" severity="warning">
-                    {t('detail.cancelled-alert-text', { ns: 'notifiche' })}
+                    {t('detail.cancelled.message', { ns: 'notifiche' })}
+
+                    <Box mt={2}>
+                      <Link
+                        href={NOTIFICATION_CANCELLED_HELP_LINK}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        fontWeight={600}
+                        color="#614C15"
+                        underline="none"
+                        sx={{ cursor: 'pointer' }}
+                      >
+                        {t('detail.cancelled.cta', { ns: 'notifiche' })}
+                      </Link>
+                    </Box>
                   </Alert>
                 )}
-                {historyParser.hasSimpleRegisteredLetter() && (
+                {isNotificationCostBanner && historyParser.hasSimpleRegisteredLetter() && (
                   <Alert data-testid="pecUnreachableAlertText" severity="warning">
                     {t('detail.pec-unreachable', { ns: 'notifiche' })}
                   </Alert>

@@ -298,9 +298,9 @@
     }
   },
   "domicile-banner": {
-    "no-sercq-send-title": "Nichts mehr in Papierform: aktiviere SEND als digitales Domizil",
-    "no-sercq-send-description": "Wähle die Plattform SEND als digitales Domizil, um die nächsten Zustellungen ausschließlich digital zu empfangen und sie in Echtzeit zu lesen, wo immer du bist.",
-    "no-sercq-cta": "Starten",
+    "no-sercq-send-title": "Keine Papierdokumente mehr",
+    "no-sercq-send-description": "Aktiviere eine digitale Adresse, um die nächsten Zustellungen nur noch digital zu erhalten und Kosten zu sparen.",
+    "no-sercq-cta": "Digitale Adresse aktivieren",
     "no-courtesy-title": "Versäume keine wichtigen Mitteilungen",
     "no-courtesy-description": "Ohne informelle Adresse können wir dich nicht benachrichtigen, wenn es eine rechtsgültige Mitteilung auf SEND zu lesen gibt.",
     "complete-addresses": "Eine E-Mail-Adresse eingeben",
@@ -312,6 +312,7 @@
     "complete-configuration": "Konfiguration fertigstellen",
     "no-courtesy-no-sercq-send-title": "Versäume keine wichtigen Mitteilungen ",
     "no-courtesy-no-sercq-send-description": "Füge eine E-Mail-Adresse hinzu, um eine Benachrichtigung zum Vorliegen einer neuen Zustellung auf SEND zu erhalten.",
-    "no-courtesy-no-sercq-send-cta": "Deine E-Mail-Adresse bestätigen"
+    "no-courtesy-no-sercq-send-cta": "Deine E-Mail-Adresse bestätigen",
+    "close": "Banner schließen"
   }
 }

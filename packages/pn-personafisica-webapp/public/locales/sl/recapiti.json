@@ -298,9 +298,9 @@
     }
   },
   "domicile-banner": {
-    "no-sercq-send-title": "Nič več papirnatih dokumentov: aktivirajte SEND kot digitalno prebivališče",
-    "no-sercq-send-description": "Izberite platformo SEND kot svoje digitalno prebivališče, če želite prihajajoča obvestila prejemati samo digitalno in jih prebirati v realnem času, ne glede na to, kje se nahajate.",
-    "no-sercq-cta": "Začni",
+    "no-sercq-send-title": "Nič več papirnatih dokumentov",
+    "no-sercq-send-description": "Aktivirajte digitalni naslov, da boste prihodnja obvestila prejemali le v digitalni obliki in prihranili.",
+    "no-sercq-cta": "Aktiviraj digitalni naslov",
     "no-courtesy-title": "Ne zamudite pomembnih sporočil",
     "no-courtesy-description": "Brez vljudnostnega naslova vas ne moremo obvestiti, da na vas čaka uradno sporočilo na SEND.",
     "complete-addresses": "Vnesite e-poštni naslov",
@@ -312,6 +312,7 @@
     "complete-configuration": "Dokončajte nastavitev",
     "no-courtesy-no-sercq-send-title": "Ne zamudite pomembnih sporočil ",
     "no-courtesy-no-sercq-send-description": "Dodajte e-poštni naslov, na katerega boste prejeli opozorilo, ko bo prispelo novo sporočilo na SEND.",
-    "no-courtesy-no-sercq-send-cta": "Potrdite svoj e-poštni naslov"
+    "no-courtesy-no-sercq-send-cta": "Potrdite svoj e-poštni naslov",
+    "close": "Zapri pasico"
   }
 }

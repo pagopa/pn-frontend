@@ -68,9 +68,12 @@
     "show-history": "Mostra storico",
     "show-more": "Mostra più dettagli",
     "show-less": "Mostra meno dettagli",
-    "cancelled-alert-text": "Questa notifica è stata annullata dall’ente mittente. Puoi ignorarne il contenuto.",
     "disclaimer-link": "Scopri di più",
-    "pec-unreachable": "Controlla che la tua PEC sia libera e attiva!",
+    "pec-unreachable": "Mantieni la PEC libera per ricevere tutto in digitale!",
+    "cancelled": {
+      "message": "Questa notifica è stata annullata dall’ente mittente.",
+      "cta": "Cosa devo fare?"
+    },
     "payment": {
       "title": "Pagamento",
       "single-payment-subtitle": "L'importo finale potrebbe essere diverso da quello indicato nell’atto e includere i costi di notifica.",
@@ -99,8 +102,7 @@
       "download-f24-ongoing": "Download in corso",
       "reload": "Ricarica",
       "message-error-fetch-payment": "Non siamo riusciti a recuperare i dati di pagamento per questa notifica.",
-      "cancelled-message": "Per l’eventuale rimborso di pagamenti legati a questa notifica, contatta l’ente mittente. Se hai effettuato un pagamento dopo che la notifica è stata annullata, le informazioni qui sotto potrebbero non essere aggiornate.",
-      "disclaimer-link": "Scopri di più",
+      "cancelled-message": "Per informazioni in merito a un eventuale rimborso, contatta l'ente mittente.",
       "f24-download-error": "Il download non è riuscito. Riprova.",
       "status": {
         "succeeded": "Pagato",
@@ -459,7 +461,11 @@
   "notification-cost-banner": {
     "analog": {
       "title": "Con SEND puoi risparmiare!",
-      "message": "Non hai aperto la notifica in digitale in tempo e quindi ti è stata inviata la raccomandata con i relativi costi."
+      "message": "Non hai aperto la notifica in digitale in tempo e quindi non è stato possibile evitare la raccomandata e i relativi costi."
+    },
+    "digital_failure": {
+      "title": "Con SEND puoi risparmiare!",
+      "message": "Non siamo riusciti a consegnare la notifica sulla tua PEC, quindi ti è stata inviata una raccomandata con i relativi costi."
     },
     "digital_platform": {
       "title": "Con SEND hai risparmiato!",

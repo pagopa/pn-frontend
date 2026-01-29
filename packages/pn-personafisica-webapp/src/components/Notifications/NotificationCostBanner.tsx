@@ -31,18 +31,24 @@ type BannerContent = {
   ctaLabel?: string;
 };
 
-type BannerKey = 'analog' | 'viewed' | 'digital_platform' | 'digital_special' | 'digital_registry';
+type BannerKey =
+  | 'analog'
+  | 'viewed'
+  | 'digital_failure'
+  | 'digital_platform'
+  | 'digital_special'
+  | 'digital_registry';
 
 const resolveBannerKey = (deliveryOutcome: DeliveryOutcome | null): BannerKey => {
   if (!deliveryOutcome || deliveryOutcome.type === DeliveryOutcomeType.VIEWED) {
     return 'viewed';
   }
 
-  if (
-    deliveryOutcome.type === DeliveryOutcomeType.ANALOG ||
-    deliveryOutcome.type === DeliveryOutcomeType.DIGITAL_FAILURE
-  ) {
+  if (deliveryOutcome.type === DeliveryOutcomeType.ANALOG) {
     return 'analog';
+  }
+  if (deliveryOutcome.type === DeliveryOutcomeType.DIGITAL_FAILURE) {
+    return 'digital_failure';
   }
 
   switch (deliveryOutcome.details.source) {
@@ -84,13 +90,6 @@ export const NotificationCostBanner: React.FC<Props> = ({ deliveryOutcome }) => 
   const { t } = useTranslation(['notifiche', 'recapiti']);
   const { open, handleClose } = useBannerDismiss();
 
-  if (!open) {
-    return null;
-  }
-
-  const bannerKey = resolveBannerKey(deliveryOutcome);
-  const { title, message, ctaLabel } = getBannerContent(bannerKey, isDDomActive, t);
-
   const handleActivateDigitalDomicile = useCallback(() => {
     PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SERCQ_SEND_ENTER_FLOW, {
       event_type: EventAction.ACTION,
@@ -109,9 +108,17 @@ export const NotificationCostBanner: React.FC<Props> = ({ deliveryOutcome }) => 
     );
   }, [addresses, dispatch, navigate]);
 
+  if (!open) {
+    return null;
+  }
+
+  const bannerKey = resolveBannerKey(deliveryOutcome);
+  const { title, message, ctaLabel } = getBannerContent(bannerKey, isDDomActive, t);
+
   return (
     <Box my={4}>
       <Banner
+        data-testid="notificationCostBanner"
         variant="tertiary"
         color="info"
         icon={<SavingsOutlinedIcon fontSize="small" />}

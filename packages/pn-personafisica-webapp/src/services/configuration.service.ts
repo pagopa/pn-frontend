@@ -27,6 +27,7 @@ export interface PfConfiguration {
   DOWNTIME_EXAMPLE_LINK: string;
   ACCESSIBILITY_LINK: string;
   FEEDBACK_SURVEY_URL: string;
+  NOTIFICATION_CANCELLED_HELP_LINK: string;
 }
 
 class PfConfigurationValidator extends Validator<PfConfiguration> {
@@ -62,6 +63,7 @@ class PfConfigurationValidator extends Validator<PfConfiguration> {
     this.ruleFor('DOWNTIME_EXAMPLE_LINK').isString().isRequired().matches(dataRegex.htmlPageUrl);
     this.ruleFor('ACCESSIBILITY_LINK').isString().isRequired();
     this.ruleFor('FEEDBACK_SURVEY_URL').isString().isRequired();
+    this.ruleFor('NOTIFICATION_CANCELLED_HELP_LINK').isString().isRequired();
   }
 }
 

@@ -70,6 +70,11 @@
     "show-less": "Voir moins de détails",
     "cancelled-alert-text": "Cette notification a été annulée par l’organisme émetteur. Vous pouvez ignorer son contenu.",
     "disclaimer-link": "En savoir plus",
+    "pec-unreachable": "Garde ton adresse PEC libre pour tout recevoir au format numérique !",
+    "cancelled": {
+      "message": "Cette notification a été annulée par l'organisme émetteur.",
+      "cta": "Que dois-je faire ?"
+    },
     "payment": {
       "title": "Paiement",
       "single-payment-subtitle": "Le montant final pourrait être différent de celui indiqué.",
@@ -98,8 +103,7 @@
       "download-f24-ongoing": "Téléchargement en cours",
       "reload": "Recharger",
       "message-error-fetch-payment": "Nous n’avons pas pu récupérer les données de paiement pour cette notification.",
-      "cancelled-message": "Pour tout remboursement de paiements liés à cette notification, veuillez contacter l’organisme émetteur. Si vous avez effectué un paiement après l’annulation de la notification, les informations ci-dessous pourraient ne pas être à jour.",
-      "disclaimer-link": "En savoir plus",
+      "cancelled-message": "Pour toute information concernant un éventuel remboursement, contacte l'organisme émetteur.",
       "f24-download-error": "Le téléchargement a échoué. Réessayer.",
       "status": {
         "succeded": "Payé",
@@ -453,6 +457,36 @@
         "question": "Qu'est-ce que SEND et comment ça marche",
         "answer": "SEND - Servizio Notifiche Digitali est une plateforme qui numérise et simplifie la gestion des notifications : elle permet de les recevoir, de télécharger les actes notifiés et de payer les éventuels montants directement en ligne.\nSEND peut envoyer des notifications pour le compte des institutions aussi bien aux citoyens, aux professions libérales et aux entreprises individuelles (c'est-à-dire les « personnes physiques ») qu'aux sociétés (c'est-à-dire les « personnes morales »)."
       }
+    }
+  },
+  "notification-cost-banner": {
+    "analog": {
+      "title": "Avec SEND tu peux faire des économies !",
+      "message": "Tu n'as pas ouvert la notification numérique à temps, il n'a donc pas été possible d'éviter l'envoi recommandé et les frais correspondants."
+    },
+    "digital_failure": {
+      "title": "Avec SEND tu peux faire des économies !",
+      "message": "Nous n'avons pas pu remettre la notification sur ton adresse PEC, un courrier recommandé t'a donc été envoyé avec les frais correspondants."
+    },
+    "digital_platform": {
+      "title": "Avec SEND tu as fait des économies !",
+      "message": "Grâce à ton domicile numérique activé, tu as évité l'envoi recommandé et les frais correspondants."
+    },
+    "digital_special": {
+      "title": "Avec SEND tu as fait des économies !",
+      "message": "Nous avons envoyé la notification à l'adresse PEC communiquée par l'organisme émetteur, tu as ainsi évité l'envoi recommandé et les frais correspondants."
+    },
+    "digital_registry": {
+      "title": "Avec SEND tu as fait des économies !",
+      "message": "Nous avons envoyé la notification à l'adresse PEC enregistrée dans les registres publics, tu as ainsi évité l'envoi recommandé et les frais correspondants."
+    },
+    "viewed": {
+      "title": "Avec SEND tu as fait des économies !",
+      "message": "Tu as ouvert la notification numérique à temps, évitant ainsi l'envoi recommandé et les frais correspondants."
+    },
+    "enable-sercq": {
+      "message": "Active un domicile numérique pour recevoir tes prochaines notifications uniquement au format numérique.",
+      "cta": "Activer le domicile numérique"
     }
   }
 }
