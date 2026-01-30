@@ -312,7 +312,6 @@
     "complete-configuration": "Dokončajte nastavitev",
     "no-courtesy-no-sercq-send-title": "Ne zamudite pomembnih sporočil ",
     "no-courtesy-no-sercq-send-description": "Dodajte e-poštni naslov, na katerega boste prejeli opozorilo, ko bo prispelo novo sporočilo na SEND.",
-    "no-courtesy-no-sercq-send-cta": "Potrdite svoj e-poštni naslov",
-    "close": "Zapri pasico"
+    "no-courtesy-no-sercq-send-cta": "Potrdite svoj e-poštni naslov"
   }
 }

@@ -312,7 +312,6 @@
     "complete-configuration": "Konfiguration fertigstellen",
     "no-courtesy-no-sercq-send-title": "Versäume keine wichtigen Mitteilungen ",
     "no-courtesy-no-sercq-send-description": "Füge eine E-Mail-Adresse hinzu, um eine Benachrichtigung zum Vorliegen einer neuen Zustellung auf SEND zu erhalten.",
-    "no-courtesy-no-sercq-send-cta": "Deine E-Mail-Adresse bestätigen",
-    "close": "Banner schließen"
+    "no-courtesy-no-sercq-send-cta": "Deine E-Mail-Adresse bestätigen"
   }
 }

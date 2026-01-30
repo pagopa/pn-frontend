@@ -312,7 +312,6 @@
     "complete-configuration": "Complete the configuration",
     "no-courtesy-no-sercq-send-title": "Do not miss important communications ",
     "no-courtesy-no-sercq-send-description": "Add an email address to receive a notification when you have a new notification on SEND.",
-    "no-courtesy-no-sercq-send-cta": "Confirm your email",
-    "close": "Close banner"
+    "no-courtesy-no-sercq-send-cta": "Confirm your email"
   }
 }

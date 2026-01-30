@@ -87,7 +87,7 @@ export const NotificationCostBanner: React.FC<Props> = ({ deliveryOutcome }) => 
 
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const { t } = useTranslation(['notifiche', 'recapiti']);
+  const { t } = useTranslation(['notifiche', 'recapiti', 'common']);
   const { open, handleClose } = useBannerDismiss();
 
   const handleActivateDigitalDomicile = useCallback(() => {
@@ -131,7 +131,7 @@ export const NotificationCostBanner: React.FC<Props> = ({ deliveryOutcome }) => 
           },
         })}
         onClose={handleClose}
-        closeAriaLabel={t('domicile-banner.close', { ns: 'recapiti' })}
+        closeAriaLabel={t('button.close', { ns: 'common' })}
       />
     </Box>
   );

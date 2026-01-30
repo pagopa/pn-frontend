@@ -121,7 +121,7 @@ const resolveCta = (
 };
 
 const DomicileBanner: React.FC<Props> = ({ source }) => {
-  const { t } = useTranslation(['recapiti']);
+  const { t } = useTranslation(['recapiti', 'common']);
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const { IS_DOD_ENABLED } = getConfiguration();
@@ -177,7 +177,7 @@ const DomicileBanner: React.FC<Props> = ({ source }) => {
         message={t(`domicile-banner.${domicileBannerData.message}-description`)}
         icon={resolveIcon(domicileBannerData.message)}
         onClose={domicileBannerData.canBeClosed ? handleClose : undefined}
-        closeAriaLabel={t('domicile-banner.close')}
+        closeAriaLabel={t('button.close', { ns: 'common' })}
         cta={resolveCta(domicileBannerData, t, handleClick)}
         data-testid="addDomicileBanner"
       />
