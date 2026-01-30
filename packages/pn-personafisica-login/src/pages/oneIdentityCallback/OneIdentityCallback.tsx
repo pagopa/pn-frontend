@@ -57,7 +57,7 @@ const OneIdentityCallback: React.FC = () => {
         lang: sanitizeString(getLangCode(i18n.language)),
       });
 
-      const queryString = queryParams ? `?${queryParams.toString()}` : '';
+      const queryString = queryParams.size > 0 ? `?${queryParams.toString()}` : '';
       const hashString = hashParams.toString();
 
       const url = `${redirectUrl}${queryString}#${hashString}`;

@@ -100,6 +100,8 @@
       "disclaimer-link": "Mehr erfahren",
       "f24-download-error": "Der Download ist fehlgeschlagen. Versuchen Sie es erneut.",
       "error-payment": "Wählen Sie eine Zahlungsaufforderung aus",
+      "error-payment-failed-single": "Es ist ein Problem mit einer Zahlungsaufforderung aufgetreten. Drücken Sie auf Neu laden, um es erneut zu versuchen. Wenn der Fehler weiterhin besteht, kontaktieren Sie den Support.",
+      "error-payment-failed-multiple": "Es ist ein Problem mit mehreren Zahlungsaufforderungen aufgetreten. Drücken Sie auf Neu laden, um es erneut zu versuchen. Wenn der Fehler weiterhin besteht, kontaktieren Sie den Support.",
       "status": {
         "succeded": "Bezahlt",
         "succeded-tooltip": "Die Zahlung wurde erfolgreich gesendet.",

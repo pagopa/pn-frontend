@@ -121,7 +121,9 @@
         "assistence": "Lade sie erneut oder kontaktiere den Support unter Angabe des Fehlercodes",
         "duplicated": "Diese Benachrichtigung wurde bereits bezahlt. Der Status wird in Kürze aktualisiert."
       },
-      "error-payment": "Wählen Sie eine Zahlungsaufforderung aus"
+      "error-payment": "Wählen Sie eine Zahlungsaufforderung aus",
+      "error-payment-failed-single": "Es ist ein Problem mit einer Zahlungsaufforderung aufgetreten. Drücken Sie auf Neu laden, um es erneut zu versuchen. Wenn der Fehler weiterhin besteht, kontaktieren Sie den Support.",
+      "error-payment-failed-multiple": "Es ist ein Problem mit mehreren Zahlungsaufforderungen aufgetreten. Drücken Sie auf Neu laden, um es erneut zu versuchen. Wenn der Fehler weiterhin besteht, kontaktieren Sie den Support."
     },
     "acts_files": {
       "downloadable_acts": "Die Dokumente sind 120 Tage nach Vervollständigung der Zustellung online verfügbar.",

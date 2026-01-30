@@ -526,4 +526,95 @@ describe('NotificationPaymentRecipient Component', () => {
     expect(payButton).toBeInTheDocument();
     expect(payButton).toHaveTextContent('detail.payment.submit');
   });
+
+  it('should show single payment failure error when one payment fails', () => {
+    const failedPayment = {
+      pagoPaF24: [
+        {
+          pagoPa: {
+            ...paymentsData.pagoPaF24[0].pagoPa,
+            status: PaymentStatus.FAILED,
+          },
+          isLoading: false,
+        },
+      ],
+      f24Only: [],
+    } as PaymentsData;
+
+    const { getByTestId } = render(
+      <NotificationPaymentRecipient
+        payments={failedPayment}
+        isCancelled={false}
+        timerF24={F24TIMER}
+        iun={iun}
+        getPaymentAttachmentAction={vi.fn()}
+        onPayClick={() => void 0}
+        handleFetchPaymentsInfo={() => void 0}
+        landingSiteUrl=""
+      />
+    );
+
+    const payButton = getByTestId('pay-button');
+    fireEvent.click(payButton);
+
+    const errorMessage = getByTestId('payment-error');
+    expect(errorMessage).toBeInTheDocument();
+    expect(errorMessage).toHaveTextContent('detail.payment.error-payment-failed-single');
+  });
+
+  it('should show multiple payments failure error when all payments fail', () => {
+    const failedPayments = {
+      pagoPaF24: paymentsData.pagoPaF24.slice(0, 3).map((payment) => ({
+        ...payment,
+        pagoPa: {
+          ...payment.pagoPa!,
+          status: PaymentStatus.FAILED,
+        },
+        isLoading: false,
+      })),
+      f24Only: [],
+    } as PaymentsData;
+
+    const { getByTestId } = render(
+      <NotificationPaymentRecipient
+        payments={failedPayments}
+        isCancelled={false}
+        timerF24={F24TIMER}
+        iun={iun}
+        getPaymentAttachmentAction={vi.fn()}
+        onPayClick={() => void 0}
+        handleFetchPaymentsInfo={() => void 0}
+        landingSiteUrl=""
+      />
+    );
+
+    const payButton = getByTestId('pay-button');
+    fireEvent.click(payButton);
+
+    const errorMessage = getByTestId('payment-error');
+    expect(errorMessage).toBeInTheDocument();
+    expect(errorMessage).toHaveTextContent('detail.payment.error-payment-failed-multiple');
+  });
+
+  it('should show default error when no payment is selected but payments are valid', () => {
+    const { getByTestId } = render(
+      <NotificationPaymentRecipient
+        payments={paymentsData}
+        isCancelled={false}
+        timerF24={F24TIMER}
+        iun={iun}
+        getPaymentAttachmentAction={vi.fn()}
+        onPayClick={() => void 0}
+        handleFetchPaymentsInfo={() => void 0}
+        landingSiteUrl=""
+      />
+    );
+
+    const payButton = getByTestId('pay-button');
+    fireEvent.click(payButton);
+
+    const errorMessage = getByTestId('payment-error');
+    expect(errorMessage).toBeInTheDocument();
+    expect(errorMessage).toHaveTextContent('detail.payment.error-payment');
+  });
 });

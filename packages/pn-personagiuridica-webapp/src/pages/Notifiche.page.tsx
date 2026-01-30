@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 
 import { Box } from '@mui/material';
 import {
+  A11yMessage,
   ApiErrorWrapper,
   CustomPagination,
   NotificationColumnData,
@@ -10,6 +11,7 @@ import {
   Sort,
   TitleBox,
   calculatePages,
+  useEventEmitter,
   useHasPermissions,
   useIsMobile,
 } from '@pagopa-pn/pn-commons';
@@ -19,8 +21,8 @@ import LoadingPageWrapper from '../components/LoadingPageWrapper/LoadingPageWrap
 import DesktopNotifications from '../components/Notifications/DesktopNotifications';
 import GroupSelector from '../components/Notifications/GroupSelector';
 import MobileNotifications from '../components/Notifications/MobileNotifications';
-import { ContactSource } from '../models/contacts';
 import { PNRole } from '../models/User';
+import { ContactSource } from '../models/contacts';
 import { DASHBOARD_ACTIONS, getReceivedNotifications } from '../redux/dashboard/actions';
 import { setNotificationFilters, setPagination, setSorting } from '../redux/dashboard/reducers';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
@@ -38,6 +40,8 @@ const Notifiche = ({ isDelegatedPage = false }: Props) => {
   const { notifications, filters, sort, pagination } = useAppSelector(
     (state: RootState) => state.dashboardState
   );
+  const loading = useAppSelector((state: RootState) => state.appState.loading.result);
+  const { publishEvent } = useEventEmitter<A11yMessage>('a11y-message');
   const organization = useAppSelector((state: RootState) => state.userState.user.organization);
   const role = organization?.roles ? organization?.roles[0] : null;
 
@@ -102,6 +106,22 @@ const Notifiche = ({ isDelegatedPage = false }: Props) => {
   useEffect(() => {
     fetchNotifications();
   }, [fetchNotifications]);
+
+  // Announce every time loading goes from true -> false
+  useEffect(() => {
+    if (loading) {
+      return;
+    }
+
+    const msg =
+      notifications.length > 0
+        ? t('filters.loading_completed_with_results')
+        : t('filters.loading_completed_no_results');
+
+    setTimeout(() => {
+      publishEvent({ message: msg });
+    }, 800);
+  }, [loading, notifications.length]);
 
   return (
     <LoadingPageWrapper isInitialized={pageReady}>

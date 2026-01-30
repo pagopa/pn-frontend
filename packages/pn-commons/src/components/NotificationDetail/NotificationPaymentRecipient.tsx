@@ -168,6 +168,26 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
     }
   };
 
+  const getErrorMessage = () => {
+    const loadedPayments = pagoPaF24.filter((payment) => !payment.isLoading);
+
+    const failedPayments = loadedPayments.filter(
+      (payment) => payment.pagoPa?.status === PaymentStatus.FAILED
+    );
+
+    // All payments failed
+    if (failedPayments.length === loadedPayments.length) {
+      return getLocalizedOrDefaultLabel(
+        'notifications',
+        failedPayments.length === 1
+          ? 'detail.payment.error-payment-failed-single'
+          : 'detail.payment.error-payment-failed-multiple'
+      );
+    }
+
+    return getLocalizedOrDefaultLabel('notifications', 'detail.payment.error-payment');
+  };
+
   return (
     <Box display="flex" flexDirection="column" gap={2} data-testid="paymentInfoBox">
       <Typography variant="h6" data-testid="notification-payment-recipient-title">
@@ -237,7 +257,7 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
           )}
           {errorOnPayment && (
             <Alert severity="error" variant="outlined" data-testid="payment-error">
-              {getLocalizedOrDefaultLabel('notifications', 'detail.payment.error-payment')}
+              {getErrorMessage()}
             </Alert>
           )}
           {!allPaymentsIsPaid && (

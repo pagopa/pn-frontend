@@ -121,7 +121,9 @@
         "assistence": "Ponovno ga naložite ali se obrnite na podporo s kodo napake",
         "duplicated": "To opozorilo je bilo že plačano. Stanje bo kmalu posodobljeno."
       },
-      "error-payment": "Izberite obvestilo o plačilu"
+      "error-payment": "Izberite obvestilo o plačilu",
+      "error-payment-failed-single": "Prišlo je do težave z obvestilom o plačilu. Pritisnite Ponovno naloži za nov poskus. Če se napaka ponovi, se obrnite na podporo.",
+      "error-payment-failed-multiple": "Prišlo je do težave z več obvestili o plačilu. Pritisnite Ponovno naloži za nov poskus. Če se napaka ponovi, se obrnite na podporo."
     },
     "acts_files": {
       "downloadable_acts": "Dokumenti so na voljo na spletu 120 dni od zaključka obvestila.",

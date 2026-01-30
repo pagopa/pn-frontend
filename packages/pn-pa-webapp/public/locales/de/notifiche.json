@@ -19,7 +19,9 @@
       "date-range": "Geben Sie ein Datum zwischen {{fromDate}} und {{toDate}} ein",
       "date-start": "Das Startdatum muss vor dem Enddatum liegen",
       "date-end": "Das Enddatum muss nach dem Startdatum liegen"
-    }
+    },
+    "loading_completed_with_results": "Laden abgeschlossen. Die Suche hat Ergebnisse geliefert",
+    "loading_completed_no_results": "Laden abgeschlossen. Keine Zustellung gefunden"
   },
   "payment": {
     "title": "Zahlungen",
