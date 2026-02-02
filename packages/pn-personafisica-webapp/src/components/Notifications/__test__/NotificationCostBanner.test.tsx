@@ -207,7 +207,7 @@ describe('NotificationCostBanner component', () => {
     const cta = queryByText('notification-cost-banner.enable-sercq.cta');
     expect(cta).not.toBeInTheDocument();
 
-    const closeButton = getByLabelText('domicile-banner.close');
+    const closeButton = getByLabelText('button.close');
     fireEvent.click(closeButton);
 
     expect(sessionStorage.getItem('domicileBannerClosed')).toBe('true');
