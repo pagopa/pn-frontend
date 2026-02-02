@@ -258,9 +258,9 @@
     }
   },
   "domicile-banner": {
-    "no-sercq-send-title": "Nič več papirnatih dokumentov: aktivirajte SEND kot digitalni naslov",
-    "no-sercq-send-description": "Izberite platformo SEND kot digitalni naslov, da boste prihodnja obvestila prejemali le digitalno in jih brali v realnem času, kjer koli že ste.",
-    "no-sercq-cta": "Začni",
+    "no-sercq-send-title": "Nič več papirnatih dokumentov",
+    "no-sercq-send-description": "Aktivirajte digitalni naslov, da boste prihodnja obvestila prejemali le v digitalni obliki in prihranili.",
+    "no-sercq-cta": "Aktiviraj digitalni naslov",
     "no-courtesy-title": "Ne spreglejte pomembnih komunikacij",
     "no-courtesy-description": "Brez vljudnostnega naslova vas ne moremo opozoriti, ko je na voljo pravno veljavna komunikacija za branje na SEND.",
     "complete-addresses": "Vnesite e-pošto",

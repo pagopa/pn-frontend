@@ -25,6 +25,7 @@ export interface PgConfiguration {
   IS_DOD_ENABLED: boolean;
   SELFCARE_CDN_URL: string;
   ACCESSIBILITY_LINK: string;
+  NOTIFICATION_CANCELLED_HELP_LINK: string;
 }
 
 class PgConfigurationValidator extends Validator<PgConfiguration> {
@@ -59,6 +60,7 @@ class PgConfigurationValidator extends Validator<PgConfiguration> {
     this.ruleFor('IS_DOD_ENABLED').isBoolean();
     this.ruleFor('SELFCARE_CDN_URL').isString().isRequired().matches(dataRegex.htmlPageUrl);
     this.ruleFor('ACCESSIBILITY_LINK').isString().isRequired();
+    this.ruleFor('NOTIFICATION_CANCELLED_HELP_LINK').isString().isRequired();
   }
 }
 

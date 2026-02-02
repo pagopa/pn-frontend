@@ -61,6 +61,7 @@ export {
   getPagoPaF24Payments,
   populatePaymentsPagoPaF24,
 } from './notification.utility';
+export * from './StatusHistory';
 export { compileOneTrustPath, rewriteLinks } from './onetrust.utility';
 export { calculatePages } from './pagination.utility';
 export {

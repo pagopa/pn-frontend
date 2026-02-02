@@ -47,6 +47,7 @@ const initialState = {
     paymentExpirationDate: '',
     documents: [],
     otherDocuments: [],
+    pagoPaIntMode: '',
     iun: '',
     sentAt: '',
     notificationStatus: '',

@@ -258,9 +258,9 @@
     }
   },
   "domicile-banner": {
-    "no-sercq-send-title": "No more paper documents: activate SEND as Digital Domicile",
-    "no-sercq-send-description": "Choose the SEND platform as your Digital Domicile to receive future notifications only digitally and read them in real-time, wherever you are.",
-    "no-sercq-cta": "Start",
+    "no-sercq-send-title": "No more paper documents",
+    "no-sercq-send-description": "Activate a digital address to receive future notifications digitally only and save on costs.",
+    "no-sercq-cta": "Activate digital address",
     "no-courtesy-title": "Don't miss important communications",
     "no-courtesy-description": "Without a courtesy contact, we cannot notify you when there is a legal value communication to read on SEND.",
     "complete-addresses": "Enter an email",

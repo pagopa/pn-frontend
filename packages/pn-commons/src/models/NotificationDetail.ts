@@ -2,6 +2,8 @@ import { ReactNode } from 'react';
 
 import { NotificationStatus } from './NotificationStatus';
 
+export type PagoPaIntegrationMode = 'NONE' | 'SYNC' | 'ASYNC' | '';
+
 /** Notification Detail */
 export interface NotificationDetail {
   subject: string;
@@ -12,6 +14,7 @@ export interface NotificationDetail {
   senderDenomination?: string;
   paymentExpirationDate?: string;
   group?: string;
+  pagoPaIntMode?: PagoPaIntegrationMode;
   iun: string;
   sentAt: string;
   documentsAvailable?: boolean;

@@ -1,16 +1,7 @@
 import React, { memo, useEffect, useState } from 'react';
 
 import { Download } from '@mui/icons-material/';
-import {
-  Alert,
-  Box,
-  Button,
-  FormControl,
-  Link,
-  RadioGroup,
-  Stack,
-  Typography,
-} from '@mui/material';
+import { Alert, Box, Button, FormControl, RadioGroup, Stack, Typography } from '@mui/material';
 
 import { downloadDocument } from '../../hooks/useDownloadDocument';
 import { EventPaymentRecipientType } from '../../models/MixpanelEvents';
@@ -31,8 +22,6 @@ import CustomPagination from '../Pagination/CustomPagination';
 import NotificationPaymentF24Item from './NotificationPaymentF24Item';
 import NotificationPaymentPagoPAItem from './NotificationPaymentPagoPa/NotificationPaymentPagoPAItem';
 import NotificationPaymentTitle from './NotificationPaymentTitle';
-
-const FAQ_NOTIFICATION_CANCELLED_REFUND = '/faq#notifica-pagata-rimborso';
 
 type Props = {
   payments: PaymentsData;
@@ -80,7 +69,6 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
     size: 5,
     totalElements: payments.pagoPaF24.length,
   });
-  const cancelledNotificationFAQ = `${landingSiteUrl}${FAQ_NOTIFICATION_CANCELLED_REFUND}`;
   const [areOtherDowloading, setAreOtherDowloading] = useState(false);
   const [errorOnPayment, setErrorOnPayment] = useState(false);
   const paginatedPayments = pagoPaF24.slice(
@@ -209,18 +197,6 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
       {isCancelled ? (
         <Alert data-testid="cancelledAlertPayment" severity="info">
           {getLocalizedOrDefaultLabel('notifications', 'detail.payment.cancelled-message')}
-          &nbsp;
-          <Link
-            href={cancelledNotificationFAQ}
-            onClick={() =>
-              handleTrackEventFn(EventPaymentRecipientType.SEND_CANCELLED_NOTIFICATION_REFOUND_INFO)
-            }
-            target="_blank"
-            fontWeight="bold"
-            sx={{ cursor: 'pointer' }}
-          >
-            {getLocalizedOrDefaultLabel('notifications', 'detail.payment.disclaimer-link')}
-          </Link>
         </Alert>
       ) : (
         <NotificationPaymentTitle
