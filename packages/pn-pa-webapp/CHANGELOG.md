@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.21.0-RC.2](https://github.com/pagopa/pn-frontend/compare/v2.21.0-RC.1...v2.21.0-RC.2) (2026-02-02)
+
+
+### Features
+
+* **PN-17686:** Add notification cost banner ([#1736](https://github.com/pagopa/pn-frontend/issues/1736)) ([8693fb6](https://github.com/pagopa/pn-frontend/commit/8693fb698f33f9295f715d7a55c85462c937a495))
+
+
+
+
+
 # [2.21.0-RC.0](https://github.com/pagopa/pn-frontend/compare/v2.20.0...v2.21.0-RC.0) (2026-01-27)
 
 
