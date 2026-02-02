@@ -42,6 +42,7 @@ import {
 import { apiClient } from '../../api/apiClients';
 import * as routes from '../../navigation/routes.const';
 import { NOTIFICATION_ACTIONS } from '../../redux/notification/actions';
+import { getConfiguration } from '../../services/configuration.service';
 import NotificationDetail from '../NotificationDetail.page';
 
 const mockNavigateFn = vi.fn();
@@ -167,7 +168,7 @@ describe('NotificationDetail Page', async () => {
     expect(addDomicileBanner).toBeInTheDocument();
   });
 
-  it('renders NotificationDetail if status is cancelled', async () => {
+  it('renders NotificationDetail page when status is CANCELLED - documents messages', async () => {
     mock.onGet(`/bff/v1/notifications/received/${notificationDTO.iun}`).reply(200, {
       ...notificationDTO,
       notificationStatus: NotificationStatus.CANCELLED,
@@ -203,6 +204,45 @@ describe('NotificationDetail Page', async () => {
         /detail.acts_files.notification_cancelled_aar|detail.acts_files.notification_cancelled_acts/
       );
     }
+  });
+
+  it('renders CANCELLED alert with help link CTA', async () => {
+    const { NOTIFICATION_CANCELLED_HELP_LINK } = getConfiguration();
+    mock.onGet(`/bff/v1/notifications/received/${notificationDTO.iun}`).reply(200, {
+      ...notificationDTO,
+      notificationStatus: NotificationStatus.CANCELLED,
+      timeline: [
+        ...notificationDTO.timeline,
+        {
+          elementId: 'NOTIFICATION_CANCELLATION_REQUEST.HYTD-ERPH-WDUE-202308-H-1',
+          timestamp: '2033-08-14T13:42:54.17675939Z',
+          legalFactsIds: [],
+          category: TimelineCategory.NOTIFICATION_CANCELLATION_REQUEST,
+          details: {},
+        },
+      ],
+    });
+
+    mock.onGet(/\/bff\/v1\/downtime\/history.*/).reply(200, downtimesDTO);
+
+    await act(async () => {
+      result = render(<NotificationDetail />, {
+        preloadedState: {
+          userState: { user: { fiscal_number: notificationDTO.recipients[2].taxId } },
+        },
+      });
+    });
+
+    const cancelledAlert = result.getByTestId('cancelledAlertText');
+    expect(cancelledAlert).toBeInTheDocument();
+
+    expect(cancelledAlert).toHaveTextContent('detail.cancelled.message');
+
+    const ctaLink = within(cancelledAlert).getByRole('link', { name: 'detail.cancelled.cta' });
+    expect(ctaLink).toHaveAttribute('href', NOTIFICATION_CANCELLED_HELP_LINK);
+    expect(ctaLink).toHaveAttribute('target', '_blank');
+    expect(ctaLink).toHaveAttribute('rel', expect.stringContaining('noopener'));
+    expect(ctaLink).toHaveAttribute('rel', expect.stringContaining('noreferrer'));
   });
 
   it('checks not available documents', async () => {

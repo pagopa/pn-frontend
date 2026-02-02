@@ -1,6 +1,7 @@
 import { useTranslation } from 'react-i18next';
 
-import { FeedbackBanner } from '@pagopa-pn/pn-commons';
+import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
+import { Banner } from '@pagopa/mui-italia';
 
 import { getConfiguration } from '../../services/configuration.service';
 
@@ -9,11 +10,14 @@ const SideMenuBanner: React.FC = () => {
   const { FEEDBACK_SURVEY_URL } = getConfiguration();
 
   return (
-    <FeedbackBanner
+    <Banner
+      variant="tertiary"
+      color="info"
+      icon={<EditOutlinedIcon fontSize="small" />}
       title={t('feedback_banner.title')}
-      content={t('feedback_banner.content')}
-      action={{
-        text: t('button.start'),
+      message={t('feedback_banner.content')}
+      cta={{
+        label: t('button.start'),
         href: FEEDBACK_SURVEY_URL,
         target: '_blank',
       }}
