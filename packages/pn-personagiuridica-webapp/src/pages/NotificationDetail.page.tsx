@@ -3,7 +3,7 @@ import { Fragment, ReactNode, useCallback, useEffect, useMemo, useState } from '
 import { useTranslation } from 'react-i18next';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 
-import { Alert, AlertTitle, Box, Grid, Paper, Stack, Typography } from '@mui/material';
+import { Alert, AlertTitle, Box, Grid, Link, Paper, Stack, Typography } from '@mui/material';
 import {
   ApiError,
   ApiErrorWrapper,
@@ -76,7 +76,12 @@ const NotificationDetail = () => {
   const isMobile = useIsMobile();
   const { hasApiErrors } = useErrors();
   const [pageReady, setPageReady] = useState(false);
-  const { F24_DOWNLOAD_WAIT_TIME, LANDING_SITE_URL, DOWNTIME_EXAMPLE_LINK } = getConfiguration();
+  const {
+    F24_DOWNLOAD_WAIT_TIME,
+    LANDING_SITE_URL,
+    DOWNTIME_EXAMPLE_LINK,
+    NOTIFICATION_CANCELLED_HELP_LINK,
+  } = getConfiguration();
   const navigate = useNavigate();
 
   const currentUser = useAppSelector((state: RootState) => state.userState.user);
@@ -412,7 +417,20 @@ const NotificationDetail = () => {
               <Stack spacing={3}>
                 {(isCancelled.cancelled || isCancelled.cancellationInProgress) && (
                   <Alert data-testid="cancelledAlertText" severity="warning">
-                    {t('detail.cancelled-alert-text', { ns: 'notifiche' })}
+                    {t('detail.cancelled.message', { ns: 'notifiche' })}
+                    <Box mt={2}>
+                      <Link
+                        href={NOTIFICATION_CANCELLED_HELP_LINK}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        fontWeight={600}
+                        color="#614C15"
+                        underline="none"
+                        sx={{ cursor: 'pointer' }}
+                      >
+                        {t('detail.cancelled.cta', { ns: 'notifiche' })}
+                      </Link>
+                    </Box>
                   </Alert>
                 )}
                 <NotificationDetailTable rows={detailTableRows} />

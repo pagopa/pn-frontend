@@ -258,9 +258,9 @@
     }
   },
   "domicile-banner": {
-    "no-sercq-send-title": "Niente più documenti cartacei: attiva SEND come domicilio digitale",
-    "no-sercq-send-description": "Scegli la piattaforma SEND come domicilio digitale per ricevere le prossime notifiche solo in digitale e leggerle in tempo reale, ovunque tu sia.",
-    "no-sercq-cta": "Inizia",
+    "no-sercq-send-title": "Niente più documenti cartacei",
+    "no-sercq-send-description": "Attiva un domicilio digitale per ricevere le prossime notifiche solo in digitale e risparmiare.",
+    "no-sercq-cta": "Attiva domicilio digitale",
     "no-courtesy-title": "Non perderti le comunicazioni importanti",
     "no-courtesy-description": "Senza un recapito di cortesia non possiamo avvisarti quando c’è da leggere una comunicazione a valore legale su SEND.",
     "complete-addresses": "Inserisci una email",

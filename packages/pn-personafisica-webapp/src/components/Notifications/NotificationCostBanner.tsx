@@ -58,6 +58,11 @@ const resolveBannerKey = (deliveryOutcome: DeliveryOutcome | null): BannerKey =>
       return 'digital_special';
     case DigitalSource.REGISTRY:
       return 'digital_registry';
+    default:
+      // Fallback: in some edge cases the backend statusHistory/elementId may not expose a recognizable
+      // digitalAddressSource (or it can't be parsed), even if the deliveryOutcome is DIGITAL.
+      // In that scenario we default to the "platform" copy as the safest generic digital message.
+      return 'digital_platform';
   }
 };
 

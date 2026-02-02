@@ -26,7 +26,7 @@ export type DeliveryOutcome =
   | {
       type: typeof DeliveryOutcomeType.DIGITAL;
       details: {
-        source: DigitalSource;
-        domicileType: DigitalDomicileChannel;
+        source: DigitalSource | null;
+        domicileType: DigitalDomicileChannel | null;
       };
     };

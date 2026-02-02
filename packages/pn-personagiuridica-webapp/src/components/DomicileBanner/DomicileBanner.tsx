@@ -1,8 +1,10 @@
+import { TFunction } from 'i18next';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
-import { Alert, AlertColor, Box, Typography } from '@mui/material';
-import { ButtonNaked } from '@pagopa/mui-italia';
+import SavingsOutlinedIcon from '@mui/icons-material/SavingsOutlined';
+import { Box } from '@mui/material';
+import { Banner, type BannerCTA } from '@pagopa/mui-italia';
 
 import { ChannelType, ContactOperation, ContactSource } from '../../models/contacts';
 import * as routes from '../../navigation/routes.const';
@@ -17,7 +19,6 @@ type Props = {
 };
 
 type DomicileBannerData = {
-  severity: AlertColor;
   message: string;
   canBeClosed: boolean;
   callToAction?: string;
@@ -42,11 +43,9 @@ const getDomicileData = (
 ): DomicileBannerData | null => {
   const sessionClosed = getOpenStatusFromSession();
   if (isDodEnabled && source !== ContactSource.RECAPITI && !hasSercqSend && !sessionClosed) {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     return {
       destination: ChannelType.SERCQ_SEND,
       operation: ContactOperation.ADD,
-      severity: 'info',
       message: 'no-sercq-send',
       canBeClosed: true,
       callToAction: 'no-sercq-cta',
@@ -56,31 +55,43 @@ const getDomicileData = (
     ((!hasSercqSend && sessionClosed) || !isDodEnabled) &&
     !hasCourtesyAddresses
   ) {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     return {
       destination: ChannelType.EMAIL,
       operation: ContactOperation.SCROLL,
-      severity: 'info',
       message: 'no-courtesy-no-sercq-send',
       canBeClosed: false,
       callToAction: 'no-courtesy-no-sercq-send-cta',
     };
   } else if (isDodEnabled && hasSercqSend && !hasCourtesyAddresses) {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     return {
       destination: ChannelType.EMAIL,
       operation: ContactOperation.SCROLL,
-      severity: 'warning',
       message: 'no-courtesy',
       canBeClosed: false,
       callToAction: source === ContactSource.RECAPITI ? undefined : 'complete-addresses',
     };
   }
+
   return null;
 };
 
+const resolveCta = (
+  data: DomicileBannerData,
+  t: TFunction,
+  onClick: (destination?: ChannelType, operation?: ContactOperation) => void
+): BannerCTA | undefined => {
+  if (!data.callToAction) {
+    return undefined;
+  }
+
+  return {
+    label: t(`domicile-banner.${data.callToAction}`),
+    onClick: () => onClick(data.destination, data.operation),
+  };
+};
+
 const DomicileBanner: React.FC<Props> = ({ source }) => {
-  const { t } = useTranslation(['recapiti']);
+  const { t } = useTranslation(['recapiti', 'common']);
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const open = useAppSelector((state: RootState) => state.generalInfoState.domicileBannerOpened);
@@ -113,30 +124,17 @@ const DomicileBanner: React.FC<Props> = ({ source }) => {
 
   return open && domicileBannerData ? (
     <Box my={4}>
-      <Alert
-        severity={domicileBannerData.severity}
-        variant="outlined"
+      <Banner
+        variant="tertiary"
+        color="info"
+        title={t(`domicile-banner.${domicileBannerData.message}-title`)}
+        message={t(`domicile-banner.${domicileBannerData.message}-description`)}
+        icon={<SavingsOutlinedIcon fontSize="small" />}
         onClose={domicileBannerData.canBeClosed ? handleClose : undefined}
+        closeAriaLabel={t('button.close', { ns: 'common' })}
+        cta={resolveCta(domicileBannerData, t, handleClick)}
         data-testid="addDomicileBanner"
-      >
-        <Typography variant="body2" fontWeight={600}>
-          {t(`domicile-banner.${domicileBannerData.message}-title`)}
-        </Typography>
-        <Typography variant="body2">
-          {t(`domicile-banner.${domicileBannerData.message}-description`)}
-        </Typography>
-        {domicileBannerData.callToAction && (
-          <ButtonNaked
-            color="primary"
-            onClick={() =>
-              handleClick(domicileBannerData?.destination, domicileBannerData?.operation)
-            }
-            sx={{ mt: '12px', fontSize: '1rem', fontWeight: 700, textAlign: 'left' }}
-          >
-            {t(`domicile-banner.${domicileBannerData.callToAction}`)}
-          </ButtonNaked>
-        )}
-      </Alert>
+      />
     </Box>
   ) : (
     <></>

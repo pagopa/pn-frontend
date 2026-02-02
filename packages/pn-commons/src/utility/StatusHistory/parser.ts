@@ -22,6 +22,8 @@ type ParsedStatusHistory = {
 };
 
 export class StatusHistoryParser {
+  private static readonly DIGITAL_SOURCES = new Set<string>(Object.values(DigitalSource));
+
   private constructor(private readonly parsed: ParsedStatusHistory) {}
 
   static parse(
@@ -44,7 +46,7 @@ export class StatusHistoryParser {
       for (const step of steps) {
         categories.add(step.category);
 
-        if (!firstOkDigitalFeedbackStep && StatusHistoryParser.isSendDigitalFeedbackOk(step)) {
+        if (!firstOkDigitalFeedbackStep && this.isSendDigitalFeedbackOk(step)) {
           firstOkDigitalFeedbackStep = step;
         }
       }
@@ -83,12 +85,10 @@ export class StatusHistoryParser {
       const source = StatusHistoryParser.resolveDigitalSource(okFeedbackStep);
       const domicileType = StatusHistoryParser.resolveDigitalDomicileType(okFeedbackStep);
 
-      if (source && domicileType) {
-        return {
-          type: DeliveryOutcomeType.DIGITAL,
-          details: { source, domicileType },
-        };
-      }
+      return {
+        type: DeliveryOutcomeType.DIGITAL,
+        details: { source, domicileType },
+      };
     }
 
     if (this.parsed.hasViewedStatus) {
@@ -108,25 +108,44 @@ export class StatusHistoryParser {
       return false;
     }
 
-    const details = StatusHistoryParser.getDetails(step);
+    const details = this.getDetails(step);
     return details?.responseStatus === ResponseStatus.OK;
   }
 
   private static resolveDigitalSource(step: INotificationDetailTimeline): DigitalSourceType | null {
-    const details = StatusHistoryParser.getDetails(step);
+    const details = this.getDetails(step);
     const source = details?.digitalAddressSource;
 
-    return source === DigitalSource.PLATFORM ||
-      source === DigitalSource.SENDER ||
-      source === DigitalSource.REGISTRY
-      ? source
-      : null;
+    if (this.isDigitalSource(source)) {
+      return source;
+    }
+    return this.parseDigitalSourceFromElementId(step.elementId);
+  }
+
+  private static parseDigitalSourceFromElementId(
+    elementId: string | null | undefined
+  ): DigitalSourceType | null {
+    if (!elementId) {
+      return null;
+    }
+
+    const match = /\.SOURCE_([A-Z_]+)\./.exec(elementId);
+    if (!match) {
+      return null;
+    }
+
+    const token = match[1];
+    return this.isDigitalSource(token) ? token : null;
+  }
+
+  private static isDigitalSource(value: unknown): value is DigitalSourceType {
+    return typeof value === 'string' && this.DIGITAL_SOURCES.has(value);
   }
 
   private static resolveDigitalDomicileType(
     step: INotificationDetailTimeline
   ): DigitalDomicileChannel | null {
-    const details = StatusHistoryParser.getDetails(step);
+    const details = this.getDetails(step);
     const addressType = details?.digitalAddress?.type;
 
     return addressType === DigitalDomicileType.PEC || addressType === DigitalDomicileType.SERCQ
