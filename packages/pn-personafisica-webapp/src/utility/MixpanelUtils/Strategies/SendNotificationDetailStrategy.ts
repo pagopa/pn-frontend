@@ -1,3 +1,5 @@
+import { get } from 'http';
+
 import {
   AppRouteParams,
   Downtime,
@@ -19,7 +21,7 @@ import {
   EventDeliveryFlowType,
   EventDeliveryModeType,
 } from '@pagopa-pn/pn-commons/src/models/MixpanelEvents';
-import { formatFromString } from '@pagopa-pn/pn-commons/src/utility/date.utility';
+import { formatFromString, getElapsedTime } from '@pagopa-pn/pn-commons/src/utility/date.utility';
 
 import { appRouteParamToEventSource } from '../../notification.utility';
 
@@ -65,8 +67,6 @@ export class SendNotificationDetailStrategy implements EventStrategy {
       userPayments.f24Only.length > 0 ||
       userPayments.pagoPaF24.filter((payment) => payment.f24).length > 0;
 
-    // TODO FUNZIONE CHE CALCOLA IL TEMPO TRASCORSO TRA DELIVERED E VIEWED
-
     const viewedEvent = notificationStatusHistory.find(
       (el) => el.status === NotificationStatus.VIEWED
     );
@@ -74,19 +74,6 @@ export class SendNotificationDetailStrategy implements EventStrategy {
     const deliveredEvent = notificationStatusHistory.find(
       (el) => el.status === NotificationStatus.DELIVERED
     );
-
-    // eslint-disable-next-line functional/no-let
-    let elapsedTimeInDays = 0;
-
-    if (deliveredEvent) {
-      const elapsedTime = viewedEvent
-        ? Date.parse(viewedEvent.activeFrom) - Date.parse(deliveredEvent.activeFrom)
-        : Date.now() - Date.parse(deliveredEvent.activeFrom);
-      elapsedTimeInDays = Math.floor(elapsedTime / (1000 * 60 * 60 * 24));
-    }
-    // --------------------------------
-
-    console.log('SendNotificationDetailStrategy executed');
 
     return {
       [EventPropertyType.TRACK]: {
@@ -103,7 +90,7 @@ export class SendNotificationDetailStrategy implements EventStrategy {
         first_time_opening:
           timeline.findIndex((el) => el.category === TimelineCategory.NOTIFICATION_VIEWED) === -1,
         source: appRouteParamToEventSource(source) || 'LISTA_NOTIFICHE',
-        elapsed_time: elapsedTimeInDays,
+        elapsed_time: getElapsedTime(deliveredEvent?.activeFrom, viewedEvent?.activeFrom),
         flow,
         delivery_mode,
       },
