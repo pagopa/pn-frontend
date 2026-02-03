@@ -80,6 +80,8 @@ export type EventNotificationsListType = {
 };
 
 export type EventNotificationSource = '3Papp' | 'QRcode' | 'LISTA_NOTIFICHE';
+export type EventDeliveryFlowType = 'digital' | 'physical_flow' | 'not_available';
+export type EventDeliveryModeType = 'flat_rate' | 'sync' | 'async' | 'not_available';
 
 export type EventNotificationDetailType = {
   notification_owner: boolean;
@@ -91,6 +93,9 @@ export type EventNotificationDetailType = {
   contains_f24: 'yes' | 'no';
   first_time_opening: boolean;
   source: EventNotificationSource;
+  elapsed_time: number;
+  flow: EventDeliveryFlowType;
+  delivery_mode: EventDeliveryModeType;
 };
 
 export type EventMandateNotificationsListType = {

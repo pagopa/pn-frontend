@@ -14,6 +14,7 @@ import {
   AppResponse,
   AppResponsePublisher,
   AppRouteParams,
+  DeliveryOutcomeType,
   EventPaymentRecipientType,
   GetDowntimeHistoryParams,
   IllusQuestion,
@@ -41,6 +42,10 @@ import {
   useIsCancelled,
   useIsMobile,
 } from '@pagopa-pn/pn-commons';
+import {
+  EventDeliveryFlowType,
+  EventDeliveryModeType,
+} from '@pagopa-pn/pn-commons/src/models/MixpanelEvents';
 
 import DomicileBanner from '../components/DomicileBanner/DomicileBanner';
 import LoadingPageWrapper from '../components/LoadingPageWrapper/LoadingPageWrapper';
@@ -525,6 +530,29 @@ const NotificationDetail: React.FC = () => {
     });
   };
 
+  const getFlowType = (): EventDeliveryFlowType => {
+    if (deliveryOutcome?.type === DeliveryOutcomeType.ANALOG) {
+      return 'physical_flow';
+    }
+    if (deliveryOutcome?.type === DeliveryOutcomeType.DIGITAL) {
+      return 'digital';
+    }
+    return 'not_available';
+  };
+
+  const getDeliveryMode = (): EventDeliveryModeType => {
+    if (notification.pagoPaIntMode === 'SYNC') {
+      return 'sync';
+    }
+    if (notification.pagoPaIntMode === 'ASYNC') {
+      return 'async';
+    }
+    if (notification.notificationFeePolicy === 'FLAT_RATE') {
+      return 'flat_rate';
+    }
+    return 'not_available';
+  };
+
   useEffect(() => {
     if (downtimesReady && pageReady && !isUserForbidden) {
       PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_NOTIFICATION_DETAIL, {
@@ -535,6 +563,9 @@ const NotificationDetail: React.FC = () => {
         userPayments,
         source: rapidAccessSource,
         timeline: notification.timeline,
+        notificationStatusHistory: notification.notificationStatusHistory,
+        flow: getFlowType(),
+        delivery_mode: getDeliveryMode(),
       });
 
       PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_NOTIFICATIONS_COUNT, {

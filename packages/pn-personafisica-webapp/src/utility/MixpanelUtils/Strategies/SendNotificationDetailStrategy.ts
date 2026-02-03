@@ -10,10 +10,16 @@ import {
   F24PaymentDetails,
   INotificationDetailTimeline,
   NotificationStatus,
+  NotificationStatusHistory,
   PaymentDetails,
   TimelineCategory,
   TrackedEvent,
 } from '@pagopa-pn/pn-commons';
+import {
+  EventDeliveryFlowType,
+  EventDeliveryModeType,
+} from '@pagopa-pn/pn-commons/src/models/MixpanelEvents';
+
 import { appRouteParamToEventSource } from '../../notification.utility';
 
 type NotificationData = {
@@ -24,6 +30,9 @@ type NotificationData = {
   userPayments: { pagoPaF24: Array<PaymentDetails>; f24Only: Array<F24PaymentDetails> };
   source: AppRouteParams | undefined;
   timeline: Array<INotificationDetailTimeline>;
+  notificationStatusHistory: Array<NotificationStatusHistory>;
+  flow: EventDeliveryFlowType;
+  delivery_mode: EventDeliveryModeType;
 };
 
 export class SendNotificationDetailStrategy implements EventStrategy {
@@ -35,6 +44,9 @@ export class SendNotificationDetailStrategy implements EventStrategy {
     userPayments,
     source,
     timeline,
+    notificationStatusHistory,
+    flow,
+    delivery_mode,
   }: NotificationData): TrackedEvent<EventNotificationDetailType> {
     // eslint-disable-next-line functional/no-let
     let typeDowntime: EventDowntimeType;
@@ -52,6 +64,27 @@ export class SendNotificationDetailStrategy implements EventStrategy {
       userPayments.f24Only.length > 0 ||
       userPayments.pagoPaF24.filter((payment) => payment.f24).length > 0;
 
+    // TODO FUNZIONE CHE CALCOLA IL TEMPO TRASCORSO TRA DELIVERED E VIEWED
+
+    const viewedEvent = notificationStatusHistory.find(
+      (el) => el.status === NotificationStatus.VIEWED
+    );
+
+    const deliveredEvent = notificationStatusHistory.find(
+      (el) => el.status === NotificationStatus.DELIVERED
+    );
+
+    // eslint-disable-next-line functional/no-let
+    let elapsedTimeInDays = 0;
+
+    if (deliveredEvent) {
+      const elapsedTime = viewedEvent
+        ? +viewedEvent.activeFrom - +deliveredEvent.activeFrom
+        : Date.now() - +deliveredEvent.activeFrom;
+      elapsedTimeInDays = Math.floor(elapsedTime / (1000 * 60 * 60 * 24));
+    }
+    // --------------------------------
+
     return {
       [EventPropertyType.TRACK]: {
         event_category: EventCategory.UX,
@@ -67,6 +100,9 @@ export class SendNotificationDetailStrategy implements EventStrategy {
         first_time_opening:
           timeline.findIndex((el) => el.category === TimelineCategory.NOTIFICATION_VIEWED) === -1,
         source: appRouteParamToEventSource(source) || 'LISTA_NOTIFICHE',
+        elapsed_time: elapsedTimeInDays,
+        flow,
+        delivery_mode,
       },
     };
   }
