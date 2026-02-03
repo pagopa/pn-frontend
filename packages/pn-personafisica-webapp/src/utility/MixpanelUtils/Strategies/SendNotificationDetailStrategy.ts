@@ -1,5 +1,3 @@
-import { get } from 'http';
-
 import {
   AppRouteParams,
   Downtime,
@@ -16,12 +14,12 @@ import {
   PaymentDetails,
   TimelineCategory,
   TrackedEvent,
+  getElapsedTime,
 } from '@pagopa-pn/pn-commons';
 import {
   EventDeliveryFlowType,
   EventDeliveryModeType,
 } from '@pagopa-pn/pn-commons/src/models/MixpanelEvents';
-import { formatFromString, getElapsedTime } from '@pagopa-pn/pn-commons/src/utility/date.utility';
 
 import { appRouteParamToEventSource } from '../../notification.utility';
 
