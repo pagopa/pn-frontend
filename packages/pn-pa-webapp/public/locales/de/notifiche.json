@@ -435,6 +435,7 @@
     "drag-doc-with-format-pc": "Ziehen Sie das Dokument im Format {{type}} hierher",
     "drag-doc-mobile": "Das Dokument hier laden",
     "warning-payment-disabled": "Derzeit können Zustellungen, die eine Zahlung beinhalten, nur über API-Schlüssel gesendet werden.",
+    "step-completed-aria-label": "Abgeschlossen: ",
     "steps": {
       "preliminary-informations": {
         "fetch-groups-error": "Die für die Erstellung einer neuen Benachrichtigung erforderlichen Daten konnten nicht abgerufen werden.",

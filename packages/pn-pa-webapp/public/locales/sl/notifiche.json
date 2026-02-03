@@ -435,6 +435,7 @@
     "drag-doc-with-format-pc": "Tukaj povlecite dokument v formatu {{type}}",
     "drag-doc-mobile": "Povlecite dokument sem",
     "warning-payment-disabled": "Obvestila, ki vključujejo plačilo, je trenutno mogoče poslati samo prek ključa API.",
+    "step-completed-aria-label": "Zaključeno: ",
     "steps": {
       "preliminary-informations": {
         "fetch-groups-error": "Podatkov, potrebnih za ustvarjanje novega obvestila, ni bilo mogoče pridobiti.",
