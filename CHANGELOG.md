@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.21.0-RC.3](https://github.com/pagopa/pn-frontend/compare/v2.21.0-RC.2...v2.21.0-RC.3) (2026-02-03)
+
+
+### Bug Fixes
+
+* **PN-18241:** remove NOTIFICATION_TIMELINE_REWORKED from notification filters status ([#1740](https://github.com/pagopa/pn-frontend/issues/1740)) ([ec51798](https://github.com/pagopa/pn-frontend/commit/ec51798def0d9d2ee3035fd521766fc1d1340b6f))
+
+
+
+
+
 # [2.21.0-RC.2](https://github.com/pagopa/pn-frontend/compare/v2.21.0-RC.1...v2.21.0-RC.2) (2026-02-02)
 
 
