@@ -19,6 +19,7 @@ import {
   EventDeliveryFlowType,
   EventDeliveryModeType,
 } from '@pagopa-pn/pn-commons/src/models/MixpanelEvents';
+import { formatFromString } from '@pagopa-pn/pn-commons/src/utility/date.utility';
 
 import { appRouteParamToEventSource } from '../../notification.utility';
 
@@ -79,11 +80,13 @@ export class SendNotificationDetailStrategy implements EventStrategy {
 
     if (deliveredEvent) {
       const elapsedTime = viewedEvent
-        ? +viewedEvent.activeFrom - +deliveredEvent.activeFrom
-        : Date.now() - +deliveredEvent.activeFrom;
+        ? Date.parse(viewedEvent.activeFrom) - Date.parse(deliveredEvent.activeFrom)
+        : Date.now() - Date.parse(deliveredEvent.activeFrom);
       elapsedTimeInDays = Math.floor(elapsedTime / (1000 * 60 * 60 * 24));
     }
     // --------------------------------
+
+    console.log('SendNotificationDetailStrategy executed');
 
     return {
       [EventPropertyType.TRACK]: {
