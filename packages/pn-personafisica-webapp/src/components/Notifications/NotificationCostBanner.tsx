@@ -101,13 +101,17 @@ export const NotificationCostBanner: React.FC<Props> = ({ deliveryOutcome }) => 
   const { t } = useTranslation(['notifiche', 'recapiti', 'common']);
   const { open, handleClose } = useBannerDismiss();
 
-  const handleActivateDigitalDomicile = useCallback(() => {
-    PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_TAP_BANNER, {
-      event_type: EventAction.ACTION,
+  const triggerMixpanelEvent = (name: PFEventsType, type: EventAction, bannerKey: BannerKey) => {
+    PFEventStrategyFactory.triggerEvent(name, {
+      event_type: type,
       banner_id: mapBannerIds[bannerKey],
       banner_page: ContactSource.DETTAGLIO_NOTIFICA,
       banner_landing: showCta ? RouteDestination.DIGITAL_DOMICILE_ACTIVATION : 'not_set',
     });
+  };
+
+  const handleActivateDigitalDomicile = useCallback(() => {
+    triggerMixpanelEvent(PFEventsType.SEND_TAP_BANNER, EventAction.ACTION, bannerKey);
 
     navigate(routes.DIGITAL_DOMICILE_ACTIVATION);
 
@@ -126,12 +130,7 @@ export const NotificationCostBanner: React.FC<Props> = ({ deliveryOutcome }) => 
 
   useEffect(() => {
     if (open) {
-      PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_BANNER, {
-        event_type: EventAction.SCREEN_VIEW,
-        banner_id: mapBannerIds[bannerKey],
-        banner_page: ContactSource.DETTAGLIO_NOTIFICA,
-        banner_landing: showCta ? RouteDestination.DIGITAL_DOMICILE_ACTIVATION : 'not_set',
-      });
+      triggerMixpanelEvent(PFEventsType.SEND_BANNER, EventAction.SCREEN_VIEW, bannerKey);
     }
   }, []);
 
@@ -154,12 +153,7 @@ export const NotificationCostBanner: React.FC<Props> = ({ deliveryOutcome }) => 
   };
 
   const handleBannerClose = () => {
-    PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_CLOSE_BANNER, {
-      event_type: EventAction.ACTION,
-      banner_id: mapBannerIds[bannerKey],
-      banner_page: ContactSource.DETTAGLIO_NOTIFICA,
-      banner_landing: showCta ? RouteDestination.DIGITAL_DOMICILE_ACTIVATION : 'not_set',
-    });
+    triggerMixpanelEvent(PFEventsType.SEND_CLOSE_BANNER, EventAction.ACTION, bannerKey);
     handleClose();
   };
 
