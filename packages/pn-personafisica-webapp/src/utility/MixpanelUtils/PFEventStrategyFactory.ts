@@ -60,6 +60,7 @@ import { UxWithDDStateSourceAndOtherContactStrategy } from './Strategies/UxWithD
 import { UxWithDDStateTosAndPecValidationStrategy } from './Strategies/UxWithDDStateTosAndPecValidationStrategy';
 import { UxWithDigitalDomicileStateAndContactDetailsStrategy } from './Strategies/UxWithDigitalDomicileStateAndContactDetailsStrategy';
 import { UxWithDigitalDomicileStateStrategy } from './Strategies/UxWithDigitalDomicileStateStrategy';
+import { UxBannerStrategy } from './Strategies/uxBannerStrategy';
 
 const uxActionStrategy = [
   PFEventsType.SEND_DOWNLOAD_ATTACHMENT,
@@ -304,6 +305,12 @@ const uxWithDDStateCustomContactTypeOrgNameAndTosValidationStrategy = [
   PFEventsType.SEND_ADD_CUSTOMIZED_CONTACT_UX_CONVERSION,
 ] as const;
 
+const uxBannerStrategy = [
+  PFEventsType.SEND_BANNER,
+  PFEventsType.SEND_TAP_BANNER,
+  PFEventsType.SEND_CLOSE_BANNER,
+] as const;
+
 type ArrayToTuple<T extends ReadonlyArray<PFEventsType>> = keyof {
   [K in T extends ReadonlyArray<infer U> ? U : never]: string;
 };
@@ -323,6 +330,7 @@ const eventStrategy: Record<
     | ArrayToTuple<typeof koErrorStrategy>
     | ArrayToTuple<typeof uxWithDDStateContactDetailsAndOtherContactStrategy>
     | ArrayToTuple<typeof uxWithDigitalDomicileStateStrategy>
+    | ArrayToTuple<typeof uxBannerStrategy>
   >,
   EventStrategy
 > = {
@@ -476,6 +484,10 @@ class PFEventStrategyFactory extends EventStrategyFactory<PFEventsType> {
       ) > -1
     ) {
       return new UxWithDDStateCustomContactTypeOrgNameAndTosValidationStrategy();
+    }
+
+    if (uxBannerStrategy.findIndex((el) => el === eventType) > -1) {
+      return new UxBannerStrategy();
     }
 
     if (isInEventStrategyMap(eventType)) {

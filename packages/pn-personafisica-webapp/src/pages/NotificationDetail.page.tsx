@@ -550,7 +550,7 @@ const NotificationDetail: React.FC = () => {
     if (notification.notificationFeePolicy === 'FLAT_RATE') {
       return 'flat_rate';
     }
-    return 'not_available';
+    return 'not_set';
   };
 
   useEffect(() => {
