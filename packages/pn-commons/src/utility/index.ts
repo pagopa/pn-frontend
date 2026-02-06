@@ -37,6 +37,8 @@ export {
   threeMonthsAgo,
   today,
   twelveMonthsAgo,
+  subtractMonthsFromDate,
+  clampMax,
 } from './date.utility';
 export { waitForElement } from './dom.utility';
 export { APP_VERSION, IS_DEVELOP } from './environment.utility';
