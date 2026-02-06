@@ -6,18 +6,15 @@ import {
   TrackedEvent,
 } from '@pagopa-pn/pn-commons';
 
-type Props = {
-  event_type: EventAction.SCREEN_VIEW | EventAction.ACTION;
+interface Return {
   banner_id: string;
   banner_page: string;
   banner_landing: string;
-};
+}
 
-type Return = {
-  banner_id: string;
-  banner_page: string;
-  banner_landing: string;
-};
+interface Props extends Return {
+  event_type: EventAction.SCREEN_VIEW | EventAction.ACTION;
+}
 
 export class UxBannerStrategy implements EventStrategy {
   performComputations({

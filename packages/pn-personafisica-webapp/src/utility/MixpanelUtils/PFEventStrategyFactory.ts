@@ -50,6 +50,7 @@ import { UXActionStrategy } from './Strategies/UXActionStrategy';
 import { UXErrorStrategy } from './Strategies/UXErrorStrategy';
 import { UXPspActionStrategy } from './Strategies/UXPspActionStrategy';
 import { UXScreenViewStrategy } from './Strategies/UXScreenViewStrategy';
+import { UxBannerStrategy } from './Strategies/UxBannerStrategy';
 import { UXConfirmStrategy } from './Strategies/UxConfirmStrategy';
 import { UxWithContactDetailsAndOtherContactStrategy } from './Strategies/UxWithContactDetailsAndOtherContactStrategy';
 import { UxWithDDStateContactDetailsAndOtherContactStrategy } from './Strategies/UxWithDDStateContactDetailsAndOtherContactStrategy';
@@ -60,7 +61,6 @@ import { UxWithDDStateSourceAndOtherContactStrategy } from './Strategies/UxWithD
 import { UxWithDDStateTosAndPecValidationStrategy } from './Strategies/UxWithDDStateTosAndPecValidationStrategy';
 import { UxWithDigitalDomicileStateAndContactDetailsStrategy } from './Strategies/UxWithDigitalDomicileStateAndContactDetailsStrategy';
 import { UxWithDigitalDomicileStateStrategy } from './Strategies/UxWithDigitalDomicileStateStrategy';
-import { UxBannerStrategy } from './Strategies/uxBannerStrategy';
 
 const uxActionStrategy = [
   PFEventsType.SEND_DOWNLOAD_ATTACHMENT,

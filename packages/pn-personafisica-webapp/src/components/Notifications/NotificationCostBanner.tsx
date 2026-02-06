@@ -101,7 +101,11 @@ export const NotificationCostBanner: React.FC<Props> = ({ deliveryOutcome }) => 
   const { t } = useTranslation(['notifiche', 'recapiti', 'common']);
   const { open, handleClose } = useBannerDismiss();
 
-  const triggerMixpanelEvent = (name: PFEventsType, type: EventAction, bannerKey: BannerKey) => {
+  const bannerKey = resolveBannerKey(deliveryOutcome);
+  const { title, message, ctaLabel } = getBannerContent(bannerKey, isDDomActive, t);
+  const showCta = !(bannerKey === 'digital_platform' || isDDomActive);
+
+  const triggerMixpanelEvent = (name: PFEventsType, type: EventAction) => {
     PFEventStrategyFactory.triggerEvent(name, {
       event_type: type,
       banner_id: mapBannerIds[bannerKey],
@@ -111,7 +115,7 @@ export const NotificationCostBanner: React.FC<Props> = ({ deliveryOutcome }) => 
   };
 
   const handleActivateDigitalDomicile = useCallback(() => {
-    triggerMixpanelEvent(PFEventsType.SEND_TAP_BANNER, EventAction.ACTION, bannerKey);
+    triggerMixpanelEvent(PFEventsType.SEND_TAP_BANNER, EventAction.ACTION);
 
     navigate(routes.DIGITAL_DOMICILE_ACTIVATION);
 
@@ -123,20 +127,6 @@ export const NotificationCostBanner: React.FC<Props> = ({ deliveryOutcome }) => 
       })
     );
   }, [addresses, dispatch, navigate]);
-
-  const bannerKey = resolveBannerKey(deliveryOutcome);
-  const { title, message, ctaLabel } = getBannerContent(bannerKey, isDDomActive, t);
-  const showCta = !(bannerKey === 'digital_platform' || isDDomActive);
-
-  useEffect(() => {
-    if (open) {
-      triggerMixpanelEvent(PFEventsType.SEND_BANNER, EventAction.SCREEN_VIEW, bannerKey);
-    }
-  }, []);
-
-  if (!open) {
-    return null;
-  }
 
   const isDigital = deliveryOutcome?.type === DeliveryOutcomeType.DIGITAL;
 
@@ -153,9 +143,19 @@ export const NotificationCostBanner: React.FC<Props> = ({ deliveryOutcome }) => 
   };
 
   const handleBannerClose = () => {
-    triggerMixpanelEvent(PFEventsType.SEND_CLOSE_BANNER, EventAction.ACTION, bannerKey);
+    triggerMixpanelEvent(PFEventsType.SEND_CLOSE_BANNER, EventAction.ACTION);
     handleClose();
   };
+
+  useEffect(() => {
+    if (open) {
+      triggerMixpanelEvent(PFEventsType.SEND_BANNER, EventAction.SCREEN_VIEW);
+    }
+  }, []);
+
+  if (!open) {
+    return null;
+  }
 
   return (
     <Box my={4}>
