@@ -55,6 +55,7 @@ const Footer: React.FC<Props> = ({
         termsOfServiceHref
       )}
       languages={LANGUAGES}
+      // languagesInLang={true} -- uncomment with new RC mui-italia
       currentLangCode={currentLangCode}
       onLanguageChanged={changeLanguageHandler}
     />
