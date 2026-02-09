@@ -3,6 +3,7 @@ import { ReactNode } from 'react';
 import { NotificationStatus } from './NotificationStatus';
 
 export type PagoPaIntegrationMode = 'NONE' | 'SYNC' | 'ASYNC' | '';
+export type NotificationFeePolicy = 'FLAT_RATE' | 'DELIVERY_MODE' | '';
 
 /** Notification Detail */
 export interface NotificationDetail {
@@ -15,6 +16,7 @@ export interface NotificationDetail {
   paymentExpirationDate?: string;
   group?: string;
   pagoPaIntMode?: PagoPaIntegrationMode;
+  notificationFeePolicy?: NotificationFeePolicy;
   iun: string;
   sentAt: string;
   documentsAvailable?: boolean;

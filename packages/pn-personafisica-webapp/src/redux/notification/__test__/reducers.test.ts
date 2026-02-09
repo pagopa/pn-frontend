@@ -49,6 +49,7 @@ const initialState = {
     otherDocuments: [],
     pagoPaIntMode: '',
     iun: '',
+    notificationFeePolicy: '',
     sentAt: '',
     notificationStatus: '',
     notificationStatusHistory: [],

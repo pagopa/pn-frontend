@@ -37,6 +37,7 @@ const initialState = {
     documents: [] as Array<NotificationDetailDocument>,
     otherDocuments: [] as Array<NotificationDetailDocument>,
     pagoPaIntMode: '',
+    notificationFeePolicy: '',
     iun: '',
     sentAt: '',
     notificationStatus: '' as NotificationStatus,
