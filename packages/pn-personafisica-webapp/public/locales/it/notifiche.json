@@ -467,7 +467,7 @@
     },
     "digital_failure": {
       "title": "Con SEND puoi risparmiare!",
-      "message": "Non siamo riusciti a consegnare la notifica sulla tua PEC, quindi ti è stata inviata una raccomandata con i relativi costi."
+      "message": "Non siamo riusciti a consegnare la notifica sulla tua PEC, quindi ti è stata inviata una raccomandata informativa con i relativi costi."
     },
     "digital_platform": {
       "title": "Con SEND hai risparmiato!",
@@ -479,14 +479,17 @@
     },
     "digital_registry": {
       "title": "Con SEND hai risparmiato!",
-      "message": "Abbiamo inviato la notifica sulla PEC salvata nei registri pubblici, così hai evitato la raccomandata e i relativi costi."
+      "message": "Abbiamo inviato la notifica sulla PEC presente nei registri pubblici, così hai evitato la raccomandata e i relativi costi."
     },
     "viewed": {
       "title": "Con SEND hai risparmiato!",
       "message": "Hai aperto la notifica in digitale in tempo, evitando la raccomandata e i relativi costi."
     },
     "enable-sercq": {
-      "message": "Attiva un domicilio digitale per ricevere le prossime notifiche solo in digitale.",
+      "message": {
+        "default": "Attiva un domicilio digitale per ricevere le prossime notifiche solo in digitale.",
+        "external-pec": "Attiva un domicilio digitale per scegliere dove ricevere le tue notifiche SEND."
+      },
       "cta": "Attiva domicilio digitale"
     }
   }

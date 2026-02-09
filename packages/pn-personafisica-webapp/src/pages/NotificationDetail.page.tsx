@@ -26,8 +26,10 @@ import {
   NotificationDetailTableRow,
   NotificationDetailTimeline,
   NotificationDocumentType,
+  NotificationFeePolicy,
   NotificationPaymentRecipient,
   NotificationRelatedDowntimes,
+  PagoPaIntegrationMode,
   PaymentAttachmentSName,
   PaymentDetails,
   PnBreadcrumb,
@@ -162,7 +164,8 @@ const NotificationDetail: React.FC = () => {
   const isBannerVisible = !mandateId && !isNotificationCancelled;
   const isNotificationCostBanner =
     isBannerVisible &&
-    notification.pagoPaIntMode === 'ASYNC' &&
+    notification.notificationFeePolicy === NotificationFeePolicy.DeliveryMode &&
+    notification.pagoPaIntMode === PagoPaIntegrationMode.Async &&
     notification.recipients.length === 1;
 
   const banner = useMemo(() => {
@@ -173,13 +176,7 @@ const NotificationDetail: React.FC = () => {
     return isBannerVisible && historyParser.hasViewedStatus() ? (
       <DomicileBanner source={ContactSource.DETTAGLIO_NOTIFICA} />
     ) : null;
-  }, [
-    isBannerVisible,
-    notification.pagoPaIntMode,
-    notification.recipients.length,
-    historyParser,
-    deliveryOutcome,
-  ]);
+  }, [isNotificationCostBanner, deliveryOutcome, isBannerVisible, historyParser]);
 
   const showInfoMessageIfRetryAfterOrDownload = (response: {
     url: string;
@@ -356,7 +353,7 @@ const NotificationDetail: React.FC = () => {
           : t('detail.acts_files.not_downloadable_aar', { ns: 'notifiche' });
       }
     },
-    [isCancelled, notification.documentsAvailable]
+    [isNotificationCancelled, notification.documentsAvailable, notification.sentAt]
   );
 
   const fetchReceivedNotification = useCallback(() => {
@@ -417,7 +414,12 @@ const NotificationDetail: React.FC = () => {
     if (checkIfUserHasPayments && !isNotificationCancelled) {
       fetchPaymentsInfo(currentRecipient.payments?.slice(0, 5) ?? []);
     }
-  }, [currentRecipient.payments]);
+  }, [
+    checkIfUserHasPayments,
+    isNotificationCancelled,
+    fetchPaymentsInfo,
+    currentRecipient.payments,
+  ]);
 
   useEffect(() => {
     fetchReceivedNotification();
