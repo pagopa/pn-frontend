@@ -467,7 +467,7 @@
     },
     "digital_failure": {
       "title": "S SEND lahko prihraniš!",
-      "message": "Obvestila nismo mogli dostaviti na tvoj naslov PEC, zato ti je bila poslana priporočena pošta z ustreznimi stroški."
+      "message": "Obvestila nismo mogli dostaviti na tvoj naslov PEC, zato ti je bilo poslano informativno priporočeno pismo z ustreznimi stroški."
     },
     "digital_platform": {
       "title": "S SEND si prihranil!",
@@ -479,14 +479,17 @@
     },
     "digital_registry": {
       "title": "S SEND si prihranil!",
-      "message": "Obvestilo smo poslali na naslov PEC, shranjen v javnih registrih, tako si se izognil priporočeni pošti in s tem povezanim stroškom."
+      "message": "Obvestilo smo poslali na naslov PEC, ki je naveden v javnih registrih, s čimer si se izognil priporočenemu pismu in povezanim stroškom."
     },
     "viewed": {
       "title": "S SEND si prihranil!",
       "message": "Digitalno obvestilo si odprl pravočasno in se tako izognil priporočeni pošti ter s tem povezanim stroškom."
     },
     "enable-sercq": {
-      "message": "Aktiviraj digitalni naslov za prejemanje prihodnjih obvestil le v digitalni obliki.",
+      "message": {
+        "default": "Aktiviraj digitalni naslov za prejemanje prihodnjih obvestil le v digitalni obliki.",
+        "external-pec": "Aktiviraj digitalni naslov in izberi, kje želiš prejemati obvestila SEND."
+      },
       "cta": "Aktiviraj digitalni naslov"
     }
   }
