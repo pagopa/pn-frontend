@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 
-import { LangCode, Footer as MuiFooter } from '@pagopa/mui-italia';
+import { LangCode, LangLabels, Footer as MuiFooter } from '@pagopa/mui-italia';
 
 import {
   LANGUAGES,
@@ -39,6 +39,14 @@ const Footer: React.FC<Props> = ({
   };
   const currentLangCode = useMemo(() => getLangCode(currentLanguage), [currentLanguage]);
 
+  const languages = Object.keys(LANGUAGES).reduce((acc, langCode) => {
+    const code = langCode as LangCode;
+    return {
+      ...acc,
+      [code]: LANGUAGES[code]![code], // language label in its own language
+    };
+  }, {} as LangLabels);
+
   return (
     <MuiFooter
       loggedUser={loggedUser}
@@ -54,8 +62,7 @@ const Footer: React.FC<Props> = ({
         privacyPolicyHref,
         termsOfServiceHref
       )}
-      languages={LANGUAGES}
-      // languagesInLang={true} -- uncomment with new RC mui-italia
+      languages={languages}
       currentLangCode={currentLangCode}
       onLanguageChanged={changeLanguageHandler}
     />
