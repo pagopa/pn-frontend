@@ -1,5 +1,5 @@
 import type { TFunction } from 'i18next';
-import { useCallback, useEffect } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
@@ -14,7 +14,6 @@ import {
 } from '@pagopa-pn/pn-commons';
 import { Banner } from '@pagopa/mui-italia';
 
-import { useBannerDismiss } from '../../hooks/useBannerDismiss';
 import { PFEventsType } from '../../models/PFEventsType';
 import {
   ChannelType,
@@ -57,7 +56,9 @@ const resolveBannerKey = (deliveryOutcome: DeliveryOutcome | null): BannerKey =>
     return 'digital_failure';
   }
 
-  switch (deliveryOutcome.details.source) {
+  const source = deliveryOutcome.details?.source;
+
+  switch (source) {
     case DigitalSource.PLATFORM:
       return 'digital_platform';
     case DigitalSource.SENDER:
@@ -80,7 +81,12 @@ const getBannerContent = (key: BannerKey, isDDomActive: boolean, t: TFunction): 
     return { title, message };
   }
 
-  const enableSercqMessage = t('notification-cost-banner.enable-sercq.message');
+  const isExternalPec =
+    key === 'digital_special' || key === 'digital_registry' || key === 'digital_failure';
+
+  const enableSercqMessage = isExternalPec
+    ? t('notification-cost-banner.enable-sercq.message.external-pec')
+    : t('notification-cost-banner.enable-sercq.message.default');
   const ctaLabel = t('notification-cost-banner.enable-sercq.cta');
 
   return {
@@ -99,7 +105,9 @@ export const NotificationCostBanner: React.FC<Props> = ({ deliveryOutcome }) => 
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const { t } = useTranslation(['notifiche', 'recapiti', 'common']);
-  const { open, handleClose } = useBannerDismiss();
+  const [isVisible, setIsVisible] = useState(true);
+
+  const handleClose = () => setIsVisible(false);
 
   const bannerKey = resolveBannerKey(deliveryOutcome);
   const { title, message, ctaLabel } = getBannerContent(bannerKey, isDDomActive, t);
@@ -148,12 +156,12 @@ export const NotificationCostBanner: React.FC<Props> = ({ deliveryOutcome }) => 
   };
 
   useEffect(() => {
-    if (open) {
+    if (isVisible) {
       triggerMixpanelEvent(PFEventsType.SEND_BANNER, EventAction.SCREEN_VIEW);
     }
   }, []);
 
-  if (!open) {
+  if (!isVisible) {
     return null;
   }
 
