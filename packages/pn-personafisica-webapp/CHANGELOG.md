@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.21.0-RC.5](https://github.com/pagopa/pn-frontend/compare/v2.21.0-RC.4...v2.21.0-RC.5) (2026-02-10)
+
+
+### Bug Fixes
+
+* **PN-18305, PN-18309, PN-18314, PN-18318, PN-18350:** resolve NotificationCostBanner bugs (closing, copy, visibility rules) ([#1753](https://github.com/pagopa/pn-frontend/issues/1753)) ([a8cf8d2](https://github.com/pagopa/pn-frontend/commit/a8cf8d2d4e5c2292250b4a9f2d30f5b40e4213a7))
+
+
+
+
+
 # [2.21.0-RC.2](https://github.com/pagopa/pn-frontend/compare/v2.21.0-RC.1...v2.21.0-RC.2) (2026-02-02)
 
 
