@@ -111,7 +111,7 @@ const NotificationDetail: React.FC = () => {
   );
 
   const isCancelled = useIsCancelled({ notification });
-  const isNotificationCancelled = isCancelled.cancelled || isCancelled.cancellationInProgress;
+  const isCancelledOrCancelling = isCancelled.cancelled || isCancelled.cancellationInProgress;
   const currentRecipient = notification?.currentRecipient;
 
   const userPayments = useAppSelector((state: RootState) => state.notificationState.paymentsData);
@@ -166,7 +166,7 @@ const NotificationDetail: React.FC = () => {
   );
   const deliveryOutcome = useMemo(() => historyParser.resolveDeliveryOutcome(), [historyParser]);
 
-  const isBannerVisible = !mandateId && !isNotificationCancelled;
+  const isBannerVisible = !mandateId && !isCancelledOrCancelling;
   const isNotificationCostBanner =
     isBannerVisible &&
     notification.notificationFeePolicy === NotificationFeePolicy.DeliveryMode &&
@@ -204,7 +204,7 @@ const NotificationDetail: React.FC = () => {
   const documentDowloadHandler = (
     document: string | NotificationDetailOtherDocument | undefined
   ) => {
-    if (isNotificationCancelled) {
+    if (isCancelledOrCancelling) {
       return;
     }
 
@@ -240,7 +240,7 @@ const NotificationDetail: React.FC = () => {
   };
 
   const legalFactDownloadHandler = (legalFact: LegalFactId) => {
-    if (legalFact.category !== LegalFactType.NOTIFICATION_CANCELLED && isNotificationCancelled) {
+    if (legalFact.category !== LegalFactType.NOTIFICATION_CANCELLED && isCancelledOrCancelling) {
       return;
     }
     if (legalFact.category !== 'AAR') {
@@ -344,7 +344,7 @@ const NotificationDetail: React.FC = () => {
 
   const getDownloadFilesMessage = useCallback(
     (type: 'aar' | 'attachments'): string => {
-      if (isNotificationCancelled) {
+      if (isCancelledOrCancelling) {
         return type === 'aar'
           ? t('detail.acts_files.notification_cancelled_aar', { ns: 'notifiche' })
           : t('detail.acts_files.notification_cancelled_acts', { ns: 'notifiche' });
@@ -416,7 +416,7 @@ const NotificationDetail: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    if (checkIfUserHasPayments && !isNotificationCancelled) {
+    if (checkIfUserHasPayments && !isCancelledOrCancelling) {
       fetchPaymentsInfo(currentRecipient.payments?.slice(0, 5) ?? []);
     }
   }, [
@@ -617,7 +617,7 @@ const NotificationDetail: React.FC = () => {
             <Grid item lg={7} xs={12} sx={{ p: { xs: 0, lg: 3 } }}>
               {!isMobile && breadcrumb}
               <Stack spacing={3}>
-                {isNotificationCancelled && (
+                {isCancelledOrCancelling && (
                   <Alert data-testid="cancelledAlertText" severity="warning">
                     {t('detail.cancelled.message', { ns: 'notifiche' })}
 
@@ -677,7 +677,7 @@ const NotificationDetail: React.FC = () => {
                       <NotificationPaymentRecipient
                         payments={userPayments}
                         paymentTpp={paymentTpp}
-                        isCancelled={isCancelled.cancelled}
+                        isCancelled={isCancelledOrCancelling}
                         iun={notification.iun}
                         handleTrackEvent={trackEventPaymentRecipient}
                         onPayClick={onPayClick}
