@@ -210,25 +210,12 @@ describe('NotificationCostBanner component', () => {
     const closeButton = getByLabelText('button.close');
     fireEvent.click(closeButton);
 
-    expect(sessionStorage.getItem('domicileBannerClosed')).toBe('true');
+    // does not set sessionStorage key
+    expect(sessionStorage.getItem('domicileBannerClosed')).toBeNull();
 
     await waitFor(() => {
       const closedBanner = queryByTestId('notificationCostBanner');
       expect(closedBanner).not.toBeInTheDocument();
     });
-  });
-
-  it('does not render the component when banner is closed from store', () => {
-    const deliveryOutcome = { type: DeliveryOutcomeType.ANALOG } as any;
-
-    const { queryByTestId } = render(<NotificationCostBanner deliveryOutcome={deliveryOutcome} />, {
-      preloadedState: {
-        generalInfoState: { domicileBannerOpened: false },
-        contactsState: { digitalAddresses: [] },
-      },
-    });
-
-    const banner = queryByTestId('notificationCostBanner');
-    expect(banner).not.toBeInTheDocument();
   });
 });

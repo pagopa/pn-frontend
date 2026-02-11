@@ -467,7 +467,7 @@
     },
     "digital_failure": {
       "title": "Mit SEND kannst du sparen!",
-      "message": "Wir konnten die Zustellung nicht an deine PEC-Adresse zustellen, daher wurde dir ein Einschreiben mit den entsprechenden Kosten zugesandt."
+      "message": "Wir konnten die Zustellung an deine PEC nicht zustellen, daher wurde dir ein Informations-Einschreiben mit den entsprechenden Kosten zugesandt."
     },
     "digital_platform": {
       "title": "Mit SEND hast du gespart!",
@@ -479,14 +479,17 @@
     },
     "digital_registry": {
       "title": "Mit SEND hast du gespart!",
-      "message": "Wir haben die Zustellung an die in den öffentlichen Registern gespeicherte PEC-Adresse gesendet, so hast du das Einschreiben und die damit verbundenen Kosten vermieden."
+      "message": "Wir haben die Zustellung an die in den öffentlichen Registern eingetragene PEC gesendet, so hast du das Einschreiben und die entsprechenden Kosten gespart."
     },
     "viewed": {
       "title": "Mit SEND hast du gespart!",
       "message": "Du hast die digitale Zustellung rechtzeitig geöffnet und so das Einschreiben und die damit verbundenen Kosten vermieden."
     },
     "enable-sercq": {
-      "message": "Aktiviere eine digitale Adresse, um künftige Zustellungen nur noch digital zu erhalten.",
+      "message": {
+        "default": "Aktiviere eine digitale Adresse, um künftige Zustellungen nur noch digital zu erhalten.",
+        "external-pec": "Aktiviere eine digitale Adresse, um zu wählen, wo du deine SEND-Zustellungen erhalten möchtest."
+      },
       "cta": "Digitale Adresse aktivieren"
     }
   }

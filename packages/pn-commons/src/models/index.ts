@@ -94,6 +94,8 @@ export {
   LegalFactType,
   NotificationDeliveryMode,
   NotificationDocumentType,
+  NotificationFeePolicy,
+  PagoPaIntegrationMode,
   PaymentAttachmentSName,
   PaymentInfoDetail,
   PaymentStatus,
