@@ -358,7 +358,7 @@ const NotificationDetail: React.FC = () => {
           : t('detail.acts_files.not_downloadable_aar', { ns: 'notifiche' });
       }
     },
-    [isNotificationCancelled, notification.documentsAvailable, notification.sentAt]
+    [isCancelledOrCancelling, notification.documentsAvailable, notification.sentAt]
   );
 
   const fetchReceivedNotification = useCallback(() => {
@@ -421,7 +421,7 @@ const NotificationDetail: React.FC = () => {
     }
   }, [
     checkIfUserHasPayments,
-    isNotificationCancelled,
+    isCancelledOrCancelling,
     fetchPaymentsInfo,
     currentRecipient.payments,
   ]);
