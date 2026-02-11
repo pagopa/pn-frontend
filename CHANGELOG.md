@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.21.0-RC.6](https://github.com/pagopa/pn-frontend/compare/v2.21.0-RC.5...v2.21.0-RC.6) (2026-02-11)
+
+
+### Bug Fixes
+
+* **PN-18330:** prevent empty NotificationPaymentRecipient when notification cancellation is in progress ([#1754](https://github.com/pagopa/pn-frontend/issues/1754)) ([48679f7](https://github.com/pagopa/pn-frontend/commit/48679f71e53422a95468e463e198fa5ed3fff73b))
+* **PN-18330:** rename isNotificationCancelled variable ([#1755](https://github.com/pagopa/pn-frontend/issues/1755)) ([49d9d9c](https://github.com/pagopa/pn-frontend/commit/49d9d9c7e397d452d5e109bcfb3bd136e68e3a95))
+
+
+
+
+
 # [2.21.0-RC.5](https://github.com/pagopa/pn-frontend/compare/v2.21.0-RC.4...v2.21.0-RC.5) (2026-02-10)
 
 
