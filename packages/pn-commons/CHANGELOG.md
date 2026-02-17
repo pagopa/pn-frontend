@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.21.0](https://fbianchicodermine-github/pagopa/pn-frontend/compare/v2.21.0-RC.6...v2.21.0) (2026-02-17)
+
+**Note:** Version bump only for package @pagopa-pn/pn-commons
+
+
+
+
+
 # [2.21.0-RC.5](https://github.com/pagopa/pn-frontend/compare/v2.21.0-RC.4...v2.21.0-RC.5) (2026-02-10)
 
 
