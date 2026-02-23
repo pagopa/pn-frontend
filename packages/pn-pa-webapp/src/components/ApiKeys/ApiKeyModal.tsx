@@ -32,14 +32,18 @@ const ApiKeyModal = ({
           id="subtitle-top"
           data-testid="subtitle-top"
           variant="body1"
-          sx={{ wordBreak: 'break-word' }}
+          sx={{ mb: content ? 2 : 0, wordBreak: 'break-word' }}
         >
           {subTitle}
         </Typography>
       )}
       {content}
       {subTitle && subTitleAtBottom && (
-        <Typography data-testid="subtitle-bottom" variant="body1" sx={{ wordBreak: 'break-word' }}>
+        <Typography
+          data-testid="subtitle-bottom"
+          variant="body1"
+          sx={{ mt: content ? 2 : 0, wordBreak: 'break-word' }}
+        >
           {subTitle}
         </Typography>
       )}
