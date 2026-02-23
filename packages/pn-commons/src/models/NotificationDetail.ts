@@ -2,7 +2,22 @@ import { ReactNode } from 'react';
 
 import { NotificationStatus } from './NotificationStatus';
 
-export type PagoPaIntegrationMode = 'NONE' | 'SYNC' | 'ASYNC' | '';
+export const NotificationFeePolicy = {
+  FlatRate: 'FLAT_RATE',
+  DeliveryMode: 'DELIVERY_MODE',
+} as const;
+
+export type NotificationFeePolicy =
+  (typeof NotificationFeePolicy)[keyof typeof NotificationFeePolicy];
+
+export const PagoPaIntegrationMode = {
+  None: 'NONE',
+  Sync: 'SYNC',
+  Async: 'ASYNC',
+} as const;
+
+export type PagoPaIntegrationMode =
+  (typeof PagoPaIntegrationMode)[keyof typeof PagoPaIntegrationMode];
 
 /** Notification Detail */
 export interface NotificationDetail {
@@ -14,7 +29,8 @@ export interface NotificationDetail {
   senderDenomination?: string;
   paymentExpirationDate?: string;
   group?: string;
-  pagoPaIntMode?: PagoPaIntegrationMode;
+  notificationFeePolicy?: NotificationFeePolicy | '';
+  pagoPaIntMode?: PagoPaIntegrationMode | '';
   iun: string;
   sentAt: string;
   documentsAvailable?: boolean;
