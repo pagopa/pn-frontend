@@ -6,6 +6,8 @@ import {
   getEndOfDay,
   getStartOfDay,
   parseError,
+  tenYearsAgo,
+  today,
 } from '@pagopa-pn/pn-commons';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
@@ -24,20 +26,19 @@ export enum DASHBOARD_ACTIONS {
  */
 export const getReceivedNotifications = createAsyncThunk(
   DASHBOARD_ACTIONS.GET_RECEIVED_NOTIFICATIONS,
-  async (
-    params: GetNotificationsParams<Date> & { isDelegatedPage: boolean },
-    { rejectWithValue }
-  ) => {
+  async (params: GetNotificationsParams & { isDelegatedPage: boolean }, { rejectWithValue }) => {
     try {
       const receivedNotificationsFactory = NotificationReceivedApiFactory(
         undefined,
         undefined,
         apiClient
       );
+      const startDate = params.startDate || tenYearsAgo;
+      const endDate = params.endDate || today;
       const apiParams = {
         ...params,
-        startDate: formatToTimezoneString(getStartOfDay(params.startDate)),
-        endDate: formatToTimezoneString(getEndOfDay(params.endDate)),
+        startDate: formatToTimezoneString(getStartOfDay(startDate)),
+        endDate: formatToTimezoneString(getEndOfDay(endDate)),
         recipientId: params.recipientId ? formatFiscalCode(params.recipientId) : undefined,
         status: params.status as NotificationStatusV26 | undefined,
         iunMatch: params.iunMatch || undefined,

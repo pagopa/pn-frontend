@@ -1,4 +1,4 @@
-import { formatDate, tenYearsAgo, today } from '@pagopa-pn/pn-commons';
+import { formatDate } from '@pagopa-pn/pn-commons';
 import {
   createEvent,
   createMatchMedia,
@@ -20,8 +20,8 @@ import {
 import FilterNotifications from '../FilterNotifications';
 
 const initialState = {
-  startDate: tenYearsAgo,
-  endDate: today,
+  startDate: undefined,
+  endDate: undefined,
   iunMatch: '',
 };
 
