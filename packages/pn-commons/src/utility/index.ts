@@ -1,4 +1,5 @@
 export { Configuration } from '../services/configuration.service';
+export * from './MixpanelUtils';
 export { default as EventStrategyFactory } from './MixpanelUtils/EventStrategyFactory';
 export { default as AppError } from './AppError/AppError';
 export { default as AppErrorFactory } from './AppError/AppErrorFactory';
