@@ -10,10 +10,17 @@ import {
   F24PaymentDetails,
   INotificationDetailTimeline,
   NotificationStatus,
+  NotificationStatusHistory,
   PaymentDetails,
   TimelineCategory,
   TrackedEvent,
+  getElapsedTime,
 } from '@pagopa-pn/pn-commons';
+import {
+  EventDeliveryFlowType,
+  EventDeliveryModeType,
+} from '@pagopa-pn/pn-commons/src/models/MixpanelEvents';
+
 import { appRouteParamToEventSource } from '../../notification.utility';
 
 type NotificationData = {
@@ -24,6 +31,9 @@ type NotificationData = {
   userPayments: { pagoPaF24: Array<PaymentDetails>; f24Only: Array<F24PaymentDetails> };
   source: AppRouteParams | undefined;
   timeline: Array<INotificationDetailTimeline>;
+  notificationStatusHistory: Array<NotificationStatusHistory>;
+  flow: EventDeliveryFlowType;
+  delivery_mode: EventDeliveryModeType;
 };
 
 export class SendNotificationDetailStrategy implements EventStrategy {
@@ -35,6 +45,9 @@ export class SendNotificationDetailStrategy implements EventStrategy {
     userPayments,
     source,
     timeline,
+    notificationStatusHistory,
+    flow,
+    delivery_mode,
   }: NotificationData): TrackedEvent<EventNotificationDetailType> {
     // eslint-disable-next-line functional/no-let
     let typeDowntime: EventDowntimeType;
@@ -52,6 +65,14 @@ export class SendNotificationDetailStrategy implements EventStrategy {
       userPayments.f24Only.length > 0 ||
       userPayments.pagoPaF24.filter((payment) => payment.f24).length > 0;
 
+    const viewedEvent = notificationStatusHistory.find(
+      (el) => el.status === NotificationStatus.VIEWED
+    );
+
+    const deliveredEvent = notificationStatusHistory.find(
+      (el) => el.status === NotificationStatus.DELIVERED
+    );
+
     return {
       [EventPropertyType.TRACK]: {
         event_category: EventCategory.UX,
@@ -67,6 +88,9 @@ export class SendNotificationDetailStrategy implements EventStrategy {
         first_time_opening:
           timeline.findIndex((el) => el.category === TimelineCategory.NOTIFICATION_VIEWED) === -1,
         source: appRouteParamToEventSource(source) || 'LISTA_NOTIFICHE',
+        elapsed_time: getElapsedTime(deliveredEvent?.activeFrom, viewedEvent?.activeFrom),
+        flow,
+        delivery_mode,
       },
     };
   }

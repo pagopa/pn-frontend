@@ -95,6 +95,7 @@ const NotificationDetail = () => {
 
   const currentRecipient = notification?.currentRecipient;
   const isCancelled = useIsCancelled({ notification });
+  const isCancelledOrCancelling = isCancelled.cancelled || isCancelled.cancellationInProgress;
 
   const userPayments = useAppSelector((state: RootState) => state.notificationState.paymentsData);
 
@@ -162,7 +163,7 @@ const NotificationDetail = () => {
   const documentDowloadHandler = (
     document: string | NotificationDetailOtherDocument | undefined
   ) => {
-    if (isCancelled.cancelled || isCancelled.cancellationInProgress) {
+    if (isCancelledOrCancelling) {
       return;
     }
     if (isObject(document)) {
@@ -195,10 +196,7 @@ const NotificationDetail = () => {
   };
 
   const legalFactDownloadHandler = (legalFact: LegalFactId) => {
-    if (
-      legalFact.category !== LegalFactType.NOTIFICATION_CANCELLED &&
-      (isCancelled.cancelled || isCancelled.cancellationInProgress)
-    ) {
+    if (legalFact.category !== LegalFactType.NOTIFICATION_CANCELLED && isCancelledOrCancelling) {
       return;
     }
     if (legalFact.category !== 'AAR') {
@@ -268,7 +266,7 @@ const NotificationDetail = () => {
 
   const getDownloadFilesMessage = useCallback(
     (type: 'aar' | 'attachments'): string => {
-      if (isCancelled.cancelled || isCancelled.cancellationInProgress) {
+      if (isCancelledOrCancelling) {
         return type === 'aar'
           ? t('detail.acts_files.notification_cancelled_aar', { ns: 'notifiche' })
           : t('detail.acts_files.notification_cancelled_acts', { ns: 'notifiche' });
@@ -322,7 +320,7 @@ const NotificationDetail = () => {
   );
 
   useEffect(() => {
-    if (checkIfUserHasPayments && !(isCancelled.cancelled || isCancelled.cancellationInProgress)) {
+    if (checkIfUserHasPayments && !isCancelledOrCancelling) {
       fetchPaymentsInfo(currentRecipient.payments?.slice(0, 5) ?? []);
     }
   }, [currentRecipient.payments]);
@@ -415,7 +413,7 @@ const NotificationDetail = () => {
                 <DomicileBanner source={ContactSource.DETTAGLIO_NOTIFICA} />
               )}
               <Stack spacing={3}>
-                {(isCancelled.cancelled || isCancelled.cancellationInProgress) && (
+                {isCancelledOrCancelling && (
                   <Alert data-testid="cancelledAlertText" severity="warning">
                     {t('detail.cancelled.message', { ns: 'notifiche' })}
                     <Box mt={2}>
@@ -466,7 +464,7 @@ const NotificationDetail = () => {
                     >
                       <NotificationPaymentRecipient
                         payments={userPayments}
-                        isCancelled={isCancelled.cancelled}
+                        isCancelled={isCancelledOrCancelling}
                         iun={notification.iun}
                         onPayClick={onPayClick}
                         handleFetchPaymentsInfo={fetchPaymentsInfo}

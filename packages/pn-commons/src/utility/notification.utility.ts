@@ -318,14 +318,6 @@ export const getNotificationAllowedStatus = () => [
       'Resa al mittente'
     ),
   },
-    {
-    value: NotificationStatus.NOTIFICATION_TIMELINE_REWORKED,
-    label: getLocalizedOrDefaultLabel(
-      'notifications',
-      'notification-timeline-reworked',
-      'Evento o più eventi aggiornati'
-    ),
-  },
 ];
 
 function legalFactTypeForAnalogEvent(

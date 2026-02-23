@@ -14,6 +14,7 @@ import {
   AppResponse,
   AppResponsePublisher,
   AppRouteParams,
+  DeliveryOutcomeType,
   EventPaymentRecipientType,
   GetDowntimeHistoryParams,
   IllusQuestion,
@@ -26,8 +27,10 @@ import {
   NotificationDetailTableRow,
   NotificationDetailTimeline,
   NotificationDocumentType,
+  NotificationFeePolicy,
   NotificationPaymentRecipient,
   NotificationRelatedDowntimes,
+  PagoPaIntegrationMode,
   PaymentAttachmentSName,
   PaymentDetails,
   PnBreadcrumb,
@@ -41,6 +44,10 @@ import {
   useIsCancelled,
   useIsMobile,
 } from '@pagopa-pn/pn-commons';
+import {
+  EventDeliveryFlowType,
+  EventDeliveryModeType,
+} from '@pagopa-pn/pn-commons/src/models/MixpanelEvents';
 
 import DomicileBanner from '../components/DomicileBanner/DomicileBanner';
 import LoadingPageWrapper from '../components/LoadingPageWrapper/LoadingPageWrapper';
@@ -104,7 +111,7 @@ const NotificationDetail: React.FC = () => {
   );
 
   const isCancelled = useIsCancelled({ notification });
-  const isNotificationCancelled = isCancelled.cancelled || isCancelled.cancellationInProgress;
+  const isCancelledOrCancelling = isCancelled.cancelled || isCancelled.cancellationInProgress;
   const currentRecipient = notification?.currentRecipient;
 
   const userPayments = useAppSelector((state: RootState) => state.notificationState.paymentsData);
@@ -159,10 +166,11 @@ const NotificationDetail: React.FC = () => {
   );
   const deliveryOutcome = useMemo(() => historyParser.resolveDeliveryOutcome(), [historyParser]);
 
-  const isBannerVisible = !mandateId && !isNotificationCancelled;
+  const isBannerVisible = !mandateId && !isCancelledOrCancelling;
   const isNotificationCostBanner =
     isBannerVisible &&
-    notification.pagoPaIntMode === 'ASYNC' &&
+    notification.notificationFeePolicy === NotificationFeePolicy.DeliveryMode &&
+    notification.pagoPaIntMode === PagoPaIntegrationMode.Async &&
     notification.recipients.length === 1;
 
   const banner = useMemo(() => {
@@ -173,13 +181,7 @@ const NotificationDetail: React.FC = () => {
     return isBannerVisible && historyParser.hasViewedStatus() ? (
       <DomicileBanner source={ContactSource.DETTAGLIO_NOTIFICA} />
     ) : null;
-  }, [
-    isBannerVisible,
-    notification.pagoPaIntMode,
-    notification.recipients.length,
-    historyParser,
-    deliveryOutcome,
-  ]);
+  }, [isNotificationCostBanner, deliveryOutcome, isBannerVisible, historyParser]);
 
   const showInfoMessageIfRetryAfterOrDownload = (response: {
     url: string;
@@ -202,7 +204,7 @@ const NotificationDetail: React.FC = () => {
   const documentDowloadHandler = (
     document: string | NotificationDetailOtherDocument | undefined
   ) => {
-    if (isNotificationCancelled) {
+    if (isCancelledOrCancelling) {
       return;
     }
 
@@ -238,7 +240,7 @@ const NotificationDetail: React.FC = () => {
   };
 
   const legalFactDownloadHandler = (legalFact: LegalFactId) => {
-    if (legalFact.category !== LegalFactType.NOTIFICATION_CANCELLED && isNotificationCancelled) {
+    if (legalFact.category !== LegalFactType.NOTIFICATION_CANCELLED && isCancelledOrCancelling) {
       return;
     }
     if (legalFact.category !== 'AAR') {
@@ -342,7 +344,7 @@ const NotificationDetail: React.FC = () => {
 
   const getDownloadFilesMessage = useCallback(
     (type: 'aar' | 'attachments'): string => {
-      if (isNotificationCancelled) {
+      if (isCancelledOrCancelling) {
         return type === 'aar'
           ? t('detail.acts_files.notification_cancelled_aar', { ns: 'notifiche' })
           : t('detail.acts_files.notification_cancelled_acts', { ns: 'notifiche' });
@@ -356,7 +358,7 @@ const NotificationDetail: React.FC = () => {
           : t('detail.acts_files.not_downloadable_aar', { ns: 'notifiche' });
       }
     },
-    [isCancelled, notification.documentsAvailable]
+    [isCancelledOrCancelling, notification.documentsAvailable, notification.sentAt]
   );
 
   const fetchReceivedNotification = useCallback(() => {
@@ -414,10 +416,15 @@ const NotificationDetail: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    if (checkIfUserHasPayments && !isNotificationCancelled) {
+    if (checkIfUserHasPayments && !isCancelledOrCancelling) {
       fetchPaymentsInfo(currentRecipient.payments?.slice(0, 5) ?? []);
     }
-  }, [currentRecipient.payments]);
+  }, [
+    checkIfUserHasPayments,
+    isCancelledOrCancelling,
+    fetchPaymentsInfo,
+    currentRecipient.payments,
+  ]);
 
   useEffect(() => {
     fetchReceivedNotification();
@@ -525,6 +532,29 @@ const NotificationDetail: React.FC = () => {
     });
   };
 
+  const getFlowType = (): EventDeliveryFlowType => {
+    if (deliveryOutcome?.type === DeliveryOutcomeType.ANALOG) {
+      return 'physical_flow';
+    }
+    if (deliveryOutcome?.type === DeliveryOutcomeType.DIGITAL) {
+      return 'digital';
+    }
+    return 'not_available';
+  };
+
+  const getDeliveryMode = (): EventDeliveryModeType => {
+    if (notification.pagoPaIntMode === 'SYNC') {
+      return 'sync';
+    }
+    if (notification.pagoPaIntMode === 'ASYNC') {
+      return 'async';
+    }
+    if (notification.notificationFeePolicy === 'FLAT_RATE') {
+      return 'flat_rate';
+    }
+    return 'not_set';
+  };
+
   useEffect(() => {
     if (downtimesReady && pageReady && !isUserForbidden) {
       PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_NOTIFICATION_DETAIL, {
@@ -535,6 +565,9 @@ const NotificationDetail: React.FC = () => {
         userPayments,
         source: rapidAccessSource,
         timeline: notification.timeline,
+        notificationStatusHistory: notification.notificationStatusHistory,
+        flow: getFlowType(),
+        delivery_mode: getDeliveryMode(),
       });
 
       PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_NOTIFICATIONS_COUNT, {
@@ -584,7 +617,7 @@ const NotificationDetail: React.FC = () => {
             <Grid item lg={7} xs={12} sx={{ p: { xs: 0, lg: 3 } }}>
               {!isMobile && breadcrumb}
               <Stack spacing={3}>
-                {isNotificationCancelled && (
+                {isCancelledOrCancelling && (
                   <Alert data-testid="cancelledAlertText" severity="warning">
                     {t('detail.cancelled.message', { ns: 'notifiche' })}
 
@@ -644,7 +677,7 @@ const NotificationDetail: React.FC = () => {
                       <NotificationPaymentRecipient
                         payments={userPayments}
                         paymentTpp={paymentTpp}
-                        isCancelled={isCancelled.cancelled}
+                        isCancelled={isCancelledOrCancelling}
                         iun={notification.iun}
                         handleTrackEvent={trackEventPaymentRecipient}
                         onPayClick={onPayClick}
