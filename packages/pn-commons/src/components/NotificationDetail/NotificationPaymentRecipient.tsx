@@ -19,9 +19,9 @@ import { formatEurocentToCurrency } from '../../utility/currency.utility';
 import { getLocalizedOrDefaultLabel } from '../../utility/localization.utility';
 import { getPaymentCache, setPaymentCache } from '../../utility/paymentCaching.utility';
 import CustomPagination from '../Pagination/CustomPagination';
+import NotificationCostsDetailDrawer from './NotificationCostsDetailDrawer';
 import NotificationPaymentF24Item from './NotificationPaymentF24Item';
 import NotificationPaymentPagoPAItem from './NotificationPaymentPagoPa/NotificationPaymentPagoPAItem';
-import NotificationPaymentTitle from './NotificationPaymentTitle';
 
 type Props = {
   payments: PaymentsData;
@@ -84,7 +84,6 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
 
   const allPaymentsIsPaid = pagoPaF24.every((f) => f.pagoPa?.status === PaymentStatus.SUCCEEDED);
   const isSinglePayment = pagoPaF24.length === 1 && !isCancelled;
-  const hasMoreThanOnePage = paginationData.totalElements > paginationData.size;
 
   const handleClick = (event: React.ChangeEvent<HTMLInputElement>) => {
     const radioSelection = event.target.value;
@@ -199,14 +198,20 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
           {getLocalizedOrDefaultLabel('notifications', 'detail.payment.cancelled-message')}
         </Alert>
       ) : (
-        <NotificationPaymentTitle
-          landingSiteUrl={landingSiteUrl}
-          handleTrackEventFn={handleTrackEventFn}
-          pagoPaF24={pagoPaF24}
-          f24Only={f24Only}
-          allPaymentsIsPaid={allPaymentsIsPaid}
-          hasMoreThanOnePage={hasMoreThanOnePage}
-        />
+        <>
+          {/* <NotificationPaymentTitle
+            landingSiteUrl={landingSiteUrl}
+            handleTrackEventFn={handleTrackEventFn}
+            pagoPaF24={pagoPaF24}
+            f24Only={f24Only}
+            allPaymentsIsPaid={allPaymentsIsPaid}
+            hasMoreThanOnePage={hasMoreThanOnePage}
+          /> */}
+          <NotificationCostsDetailDrawer
+            landingSiteUrl={landingSiteUrl}
+            handleTrackEventFn={handleTrackEventFn}
+          />
+        </>
       )}
 
       {f24Only.length > 0 && pagoPaF24.length > 0 && (
