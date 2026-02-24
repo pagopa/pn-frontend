@@ -9,3 +9,4 @@ export { useProcess } from './useProcess';
 export { isJwtExpired, useSessionCheck } from './useSessionCheck';
 export { useTracking } from './useTracking';
 export { useUnload } from './useUnload';
+export { useEventEmitter } from './useEventEmitter';

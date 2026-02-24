@@ -218,6 +218,10 @@
     "message": "Izvirno besedilo teh dokumentov je v italijanščini. V primeru nasprotja med italijansko različico in prevodi v druge jezike prevladajo pomen in pogoji v italijanskem jeziku.",
     "link": "Oglej si prevode"
   },
+  "feedback_banner": {
+    "title": "Pomagajte nam izboljšati SEND",
+    "content": "Vaše povratne informacije nam omogočajo, da vse postane bolj jasno in preprosto. Traja le nekaj minut, da nam sporočite svoje mnenje."
+  },
   "no-spaces-at-edges": "Odstrani presledke na začetku ali na koncu",
   "wizard": {
     "stepper": {
@@ -238,6 +242,11 @@
       "četrta števka",
       "zadnja števka"
     ]
+  },
+  "user-validation-failed": {
+    "title": "Vneseni podatki niso veljavni",
+    "description": "Eden ali več podatkov, povezanih z vašim uporabniškim računom, ni veljavnih; za rešitev težave stopite v stik s podporo.",
+    "cta": "Stopite v stik s podporo"
   },
   "autocomplete": {
     "clear": "Odstrani izbrane možnosti",

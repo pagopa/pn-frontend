@@ -2,7 +2,7 @@ import { FormikErrors, FormikTouched, FormikValues } from 'formik';
 import { ChangeEvent, Fragment } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { FormHelperText, Grid, TextField } from '@mui/material';
+import { Grid, TextField } from '@mui/material';
 import {
   CustomDatePicker,
   DATE_FORMAT,
@@ -90,11 +90,8 @@ const FilterNotificationsFormBody = ({
           error={formikInstance.touched.iunMatch && Boolean(formikInstance.errors.iunMatch)}
           helperText={
             formikInstance.touched.iunMatch &&
-            formikInstance.errors.iunMatch && (
-              <FormHelperText error aria-live="assertive">
-                {String(formikInstance.errors.iunMatch)}
-              </FormHelperText>
-            )
+            formikInstance.errors.iunMatch &&
+            String(formikInstance.errors.iunMatch)
           }
           fullWidth
           sx={{ marginBottom: isMobile ? '20px' : '0' }}
@@ -127,11 +124,10 @@ const FilterNotificationsFormBody = ({
                 inputMode: 'text',
                 'aria-label': t('filters.data_da-input-aria-label'),
                 type: 'text',
-                'data-testid': 'input(start date)',
               },
+              error: Boolean(formikInstance.errors.startDate),
               helperText:
-                !!formikInstance.errors.startDate &&
-                t('filters.errors.data_a', { ns: 'notifiche' }),
+                formikInstance.errors.startDate && String(formikInstance.errors.startDate),
             },
           }}
           disableFuture={true}
@@ -164,14 +160,14 @@ const FilterNotificationsFormBody = ({
                 inputMode: 'text',
                 'aria-label': t('filters.data_a-input-aria-label'),
                 type: 'text',
-                'data-testid': 'input(end date)',
               },
-              helperText:
-                !!formikInstance.errors.endDate && t('filters.errors.data_a', { ns: 'notifiche' }),
+              error: Boolean(formikInstance.errors.endDate),
+              helperText: formikInstance.errors.endDate && String(formikInstance.errors.endDate),
             },
           }}
           disableFuture={true}
           minDate={startDate ?? tenYearsAgo}
+          maxDate={today}
         />
       </Grid>
     </Fragment>

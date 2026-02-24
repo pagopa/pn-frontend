@@ -23,6 +23,10 @@ export enum ContactSource {
   DETTAGLIO_NOTIFICA = 'dettaglio_notifica',
 }
 
+export enum RouteDestination {
+  DIGITAL_DOMICILE_ACTIVATION = 'digital_domicile_activation',
+}
+
 export enum ContactOperation {
   ADD = 'ADD',
   ADD_COURTESY = 'ADD_COURTESY',

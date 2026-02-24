@@ -174,7 +174,7 @@ export function PnECharts({
 
   return (
     <>
-      <Box ref={chartRef} sx={style} data-testid={dataTestId} />
+      <Box ref={chartRef} sx={{ ...style }} data-testid={dataTestId} />
       {legend && (
         <Stack
           direction={'row'}

@@ -1,6 +1,10 @@
 import { AppRouteParams } from '@pagopa-pn/pn-commons';
 
-import { storageRapidAccessOps } from '../storage';
+import {
+  storageOneIdentityNonce,
+  storageOneIdentityState,
+  storageRapidAccessOps,
+} from '../storage';
 
 describe('storage utility test', () => {
   it('storage Aar', () => {
@@ -11,12 +15,34 @@ describe('storage utility test', () => {
     storageRapidAccessOps.delete();
     expect(sessionStorage.getItem(AppRouteParams.AAR)).toBeNull();
   });
+
   it('storageRetrievalId test', () => {
-    const retrievalId: [AppRouteParams, string] = [AppRouteParams.RETRIEVAL_ID, 'test-retrieval-id'];
+    const retrievalId: [AppRouteParams, string] = [
+      AppRouteParams.RETRIEVAL_ID,
+      'test-retrieval-id',
+    ];
     storageRapidAccessOps.write(retrievalId);
     expect(sessionStorage.getItem(AppRouteParams.RETRIEVAL_ID)).toBe('test-retrieval-id');
     expect(storageRapidAccessOps.read()).toEqual(retrievalId);
     storageRapidAccessOps.delete();
     expect(sessionStorage.getItem(AppRouteParams.RETRIEVAL_ID)).toBeNull();
+  });
+
+  it('storageOneIdentityState test', () => {
+    const state = '123456789';
+    storageOneIdentityState.write(state);
+    expect(sessionStorage.getItem('state')).toBe(state);
+    expect(storageOneIdentityState.read()).toEqual(state);
+    storageOneIdentityState.delete();
+    expect(sessionStorage.getItem('state')).toBeNull();
+  });
+
+  it('storageOneIdentityNonce tests', () => {
+    const nonce = '123456789';
+    storageOneIdentityNonce.write(nonce);
+    expect(sessionStorage.getItem('nonce')).toBe(nonce);
+    expect(storageOneIdentityNonce.read()).toEqual(nonce);
+    storageOneIdentityNonce.delete();
+    expect(sessionStorage.getItem('nonce')).toBeNull();
   });
 });

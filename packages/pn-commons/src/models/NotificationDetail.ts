@@ -2,6 +2,23 @@ import { ReactNode } from 'react';
 
 import { NotificationStatus } from './NotificationStatus';
 
+export const NotificationFeePolicy = {
+  FlatRate: 'FLAT_RATE',
+  DeliveryMode: 'DELIVERY_MODE',
+} as const;
+
+export type NotificationFeePolicy =
+  (typeof NotificationFeePolicy)[keyof typeof NotificationFeePolicy];
+
+export const PagoPaIntegrationMode = {
+  None: 'NONE',
+  Sync: 'SYNC',
+  Async: 'ASYNC',
+} as const;
+
+export type PagoPaIntegrationMode =
+  (typeof PagoPaIntegrationMode)[keyof typeof PagoPaIntegrationMode];
+
 /** Notification Detail */
 export interface NotificationDetail {
   subject: string;
@@ -12,6 +29,8 @@ export interface NotificationDetail {
   senderDenomination?: string;
   paymentExpirationDate?: string;
   group?: string;
+  notificationFeePolicy?: NotificationFeePolicy | '';
+  pagoPaIntMode?: PagoPaIntegrationMode | '';
   iun: string;
   sentAt: string;
   documentsAvailable?: boolean;
@@ -74,6 +93,7 @@ export interface INotificationDetailTimeline {
   details: NotificationDetailTimelineDetails;
   hidden?: boolean;
   index?: number;
+  reworkedStatus?: ReworkedStatus;
 }
 
 export enum ResponseStatus {
@@ -231,6 +251,8 @@ export interface NotificationStatusHistory {
   recipient?: string;
   // this is useful for the DELIVERED status only
   deliveryMode?: NotificationDeliveryMode;
+  // value to check if the event has been reworked
+  reworkedStatus?: ReworkedStatus;
 }
 
 export enum TimelineCategory {
@@ -270,6 +292,8 @@ export enum TimelineCategory {
   NOTIFICATION_CANCELLED = 'NOTIFICATION_CANCELLED',
   // PN-9684
   NOTIFICATION_RADD_RETRIEVED = 'NOTIFICATION_RADD_RETRIEVED',
+  // PN-16970
+  NOTIFICATION_TIMELINE_REWORKED = 'NOTIFICATION_TIMELINE_REWORKED',
 }
 
 interface DigitalAddress {
@@ -395,4 +419,9 @@ export interface NotificationDocumentResponse {
 export enum PhysicalAddressLookup {
   MANUAL = 'MANUAL',
   NATIONAL_REGISTRY = 'NATIONAL_REGISTRY',
+}
+
+export enum ReworkedStatus {
+  VALID = 'VALID',
+  NOT_VALID = 'NOT_VALID',
 }

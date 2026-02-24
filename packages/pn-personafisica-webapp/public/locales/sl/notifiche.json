@@ -6,7 +6,8 @@
     "oggetto": "Zadeva",
     "iun": "Koda IUN",
     "status": "Država",
-    "show-detail": "Ogled podrobnosti"
+    "show-detail": "Ogled podrobnosti",
+    "aria-action-table": "Oglejte si podrobnosti obvestila z IUN: {{iun}}"
   },
   "filters": {
     "iun": "Iskanje po kodi IUN",
@@ -15,7 +16,11 @@
     "data_a": "Do",
     "data_a-input-aria-label": "Vnesite končni datum iskanja",
     "errors": {
-      "iun": "Vnesite veljavno kodo IUN"
+      "iun": "Vnesite veljavno kodo IUN",
+      "date-format": "Neveljaven zapis datuma",
+      "date-range": "Vnesite datum med {{fromDate}} in {{toDate}}",
+      "date-start": "Začetni datum mora biti pred končnim datumom",
+      "date-end": "Končni datum mora biti za začetnim datumom"
     }
   },
   "sort": {
@@ -63,8 +68,12 @@
     "show-history": "Prikaži zgodovino",
     "show-more": "Prikaži več podrobnosti",
     "show-less": "Prikaži manj podrobnosti",
-    "cancelled-alert-text": "To obvestilo je preklical organizacijo pošiljateljico. Vsebino lahko prezrete.",
     "disclaimer-link": "Izvedite več",
+    "pec-unreachable": "Naj bo tvoj naslov PEC prost, da boš vse prejemal v digitalni obliki!",
+    "cancelled": {
+      "message": "To obvestilo je preklical organ pošiljatelj.",
+      "cta": "Kaj moram storiti?"
+    },
     "payment": {
       "title": "Plačilo",
       "single-payment-subtitle": "Končni znesek se lahko razlikuje od navedenega.",
@@ -73,8 +82,8 @@
       "subtitle-mixed": "V tem obvestilu je več možnosti plačila: izberite ali prenesite tisto, kar želite plačati. Nekatera obvestila vključujejo stroške obveščanja.",
       "how": "Kako to?",
       "f24Models": "Obrazci F24",
-      "pagoPANotices": "Opozorila PagoPA",
-      "download-pagoPA-notice": "Prenesite obvestilo PagoPA",
+      "pagoPANotices": "Opozorila pagoPA",
+      "download-pagoPA-notice": "Prenesite obvestilo pagoPA",
       "notice-code": "Št. obvestila",
       "due": "Poteče dne",
       "included-costs": "Vključeni stroški obvestila",
@@ -93,8 +102,7 @@
       "download-f24-ongoing": "Prenos v teku",
       "reload": "Naloži znova",
       "message-error-fetch-payment": "Podatkov o plačilu za to obvestilo ni bilo mogoče pridobiti.",
-      "cancelled-message": "Za vsa povračila plačil, povezanih s tem obvestilom, se obrnite na organizacijo pošiljateljico. Če ste izvedli plačilo po preklicu obvestila, spodnji podatki morda niso aktualni.",
-      "disclaimer-link": "Izvedite več",
+      "cancelled-message": "Za informacije o morebitnem povračilu se obrni na organ pošiljatelja.",
       "f24-download-error": "Prenos ni uspel. Poskusite znova.",
       "status": {
         "succeded": "Plačano",
@@ -111,7 +119,10 @@
         "notice-error": "Prišlo je do težave s tem opozorilom.",
         "assistence": "Ponovno ga naložite ali se obrnite na podporo s kodo napake",
         "duplicated": "To opozorilo je bilo že plačano. Stanje bo kmalu posodobljeno."
-      }
+      },
+      "error-payment": "Izberite obvestilo o plačilu",
+      "error-payment-failed-single": "Prišlo je do težave z obvestilom o plačilu. Pritisnite Ponovno naloži za nov poskus. Če se napaka ponovi, se obrnite na podporo.",
+      "error-payment-failed-multiple": "Prišlo je do težave z več obvestili o plačilu. Pritisnite Ponovno naloži za nov poskus. Če se napaka ponovi, se obrnite na podporo."
     },
     "acts_files": {
       "downloadable_acts": "Dokumenti so na voljo na spletu 120 dni od zaključka obvestila.",
@@ -297,6 +308,7 @@
       "send-analog-outcome-unknown": "Pošiljanje v papirni obliki zaključeno - izid ni določen",
       "send-analog-unknown": "Dogodek pri pošiljanju priporočenega pisma - ni prepoznan",
       "aar-document": "Potrdilo o prejemu",
+      "notification-cancelled-document": "Izjava o preklicu obvestila",
       "legalfact": {
         "sender-ack": "obvestilo o prevzemu",
         "digital-delivery-success": "digitalno obveščanje",
@@ -322,6 +334,8 @@
         "23I": "Potrdilo o dostavi",
         "Plico": "Skeniranje ovojnice",
         "23L": "Potrdilo o prejemu",
+        "CAD": "Na voljo je dematerializacija priporočenega pisma, ki vsebuje obvestilo o pologu",
+        "ARCAD": "Na voljo je dematerializacija povratnice za priporočeno pismo, ki vsebuje obvestilo o pologu",
         "Indagine": "Skeniranje ankete",
         "generic": "Priloženi dokumenti"
       },
@@ -343,7 +357,8 @@
       "radd": {
         "title": "Dokumenti so bili prevzeti",
         "description": "Prejemnik ali njegov pooblaščenec je prevzel priglašene dokumente od operaterja, pooblaščenega za njihovo dostavo."
-      }
+      },
+      "tpp-type": "digitalni kanal tretje osebe"
     },
     "downtimes": {
       "title": "MOTNJE",
@@ -356,6 +371,20 @@
     "help": {
       "goto": "Pojdi na spletno mesto",
       "assistance": "Za tehnične težave ali vprašanja, povezana s SEND, kliknite »Podpora« v zgornjem desnem kotu."
+    },
+    "errors": {
+      "delivery_file_info_not_found": {
+        "title": "Dokument ni na voljo",
+        "message": "Pri pridobivanju dokumenta je prišlo do težave. Poskusite znova pozneje. Če se napaka ponovi, stopite v stik s podporo in sporočite podatke o napaki."
+      },
+      "delivery_notification_without_payment_attachment": {
+        "title": "Dokument ni na voljo",
+        "message": "Pri pridobivanju dokumenta je prišlo do težave. Poskusite znova pozneje. Če se napaka ponovi, stopite v stik s podporo in sporočite podatke o napaki."
+      },
+      "delivery_push_file_not_found": {
+        "title": "Dokument ni na voljo",
+        "message": "Pri pridobivanju dokumenta je prišlo do težave. Poskusite znova pozneje. Če se napaka ponovi, stopite v stik s podporo in sporočite podatke o napaki."
+      }
     }
   },
   "delegatorTitle": "Obvestila {{name}}",
@@ -403,7 +432,17 @@
     "viewed-description-multirecipient": "Vsaj en prejemnik je prebral obvestilo.",
     "canceled": "Preklicano",
     "canceled-tooltip": "Organizacija je preklicala pošiljanje obvestila",
-    "canceled-description": "Organizacija je preklicala pošiljanje obvestila."
+    "canceled-description": "Organizacija je preklicala pošiljanje obvestila.",
+    "returned-to-sender": "Vrnjeno pošiljatelju",
+    "returned-to-sender-tooltip-monorecipient": "Prejemnik je umrl",
+    "returned-to-sender-tooltip-multirecipient": "Vsi prejemniki so umrli",
+    "returned-to-sender-description-monorecipient": "Prejemnik je umrl.",
+    "returned-to-sender-description-multirecipient": "Vsi prejemniki so umrli.",
+    "notification-timeline-reworked": "Posodobljen dogodek ali več dogodkov",
+    "notification-timeline-reworked-tooltip": "Posodobljen dogodek ali več dogodkov",
+    "notification-timeline-reworked-description": "Dogodkov, označenih z NEVALIDIRAN DOGODEK, ne upoštevajte, saj so jih nadomestili naslednji dogodki, označeni z VALIDIRAN DOGODEK.",
+    "reworked-status-valid": "Validiran dogodek",
+    "reworked-status-not-valid": "Nevalidiran dogodek"
   },
   "tppLanding": {
     "title": "Pozdravljeni,\nprejeli ste pravno veljavno sporočilo",
@@ -419,6 +458,39 @@
         "question": "Kaj je SEND in kako deluje",
         "answer": "SEND - Servizio Notifiche Digitali je platforma, ki digitalizira in poenostavlja upravljanje obvestil: omogoča njihovo prejemanje, prenos vročenih dokumentov in plačilo morebitnih zneskov neposredno na spletu.\nSEND lahko pošilja obvestila v imenu organov tako državljanom, samostojnim poklicem in samostojnim podjetnikom (tj. „fizičnim osebam“) kot tudi podjetjem (tj. „pravnim osebam“)."
       }
+    }
+  },
+  "notification-cost-banner": {
+    "analog": {
+      "title": "S SEND lahko prihraniš!",
+      "message": "Digitalnega obvestila nisi odprl pravočasno, zato se ni bilo mogoče izogniti priporočeni pošti in s tem povezanim stroškom."
+    },
+    "digital_failure": {
+      "title": "S SEND lahko prihraniš!",
+      "message": "Obvestila nismo mogli dostaviti na tvoj naslov PEC, zato ti je bilo poslano informativno priporočeno pismo z ustreznimi stroški."
+    },
+    "digital_platform": {
+      "title": "S SEND si prihranil!",
+      "message": "Zahvaljujoč aktivnemu digitalnemu naslovu si se izognil pošiljanju priporočene pošte in s tem povezanim stroškom."
+    },
+    "digital_special": {
+      "title": "S SEND si prihranil!",
+      "message": "Obvestilo smo poslali na naslov PEC, ki nam ga je sporočil organ pošiljatelj, tako si se izognil priporočeni pošti in s tem povezanim stroškom."
+    },
+    "digital_registry": {
+      "title": "S SEND si prihranil!",
+      "message": "Obvestilo smo poslali na naslov PEC, ki je naveden v javnih registrih, s čimer si se izognil priporočenemu pismu in povezanim stroškom."
+    },
+    "viewed": {
+      "title": "S SEND si prihranil!",
+      "message": "Digitalno obvestilo si odprl pravočasno in se tako izognil priporočeni pošti ter s tem povezanim stroškom."
+    },
+    "enable-sercq": {
+      "message": {
+        "default": "Aktiviraj digitalni naslov za prejemanje prihodnjih obvestil le v digitalni obliki.",
+        "external-pec": "Aktiviraj digitalni naslov in izberi, kje želiš prejemati obvestila SEND."
+      },
+      "cta": "Aktiviraj digitalni naslov"
     }
   }
 }

@@ -1,12 +1,11 @@
 {
   "name": "@pagopa-pn/pn-validator",
-  "version": "2.20.0",
+  "version": "2.21.0",
   "private": true,
   "main": "./src/index.ts",
   "dependencies": {
     "typescript": "^5.2.2"
   },
-  "type": "module",
   "sideEffect": true,
   "scripts": {
     "build": "tsc -p tsconfig.prod.json",

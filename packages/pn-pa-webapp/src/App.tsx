@@ -10,6 +10,7 @@ import StatisticsIcon from '@mui/icons-material/ShowChart';
 import VpnKey from '@mui/icons-material/VpnKey';
 import { Box, Button, DialogTitle } from '@mui/material';
 import {
+  A11yMessageAnnouncer,
   APP_VERSION,
   AppMessage,
   AppResponseMessage,
@@ -288,6 +289,7 @@ const ActualApp = () => {
           </PnDialogActions>
         </PnDialog>
 
+        <A11yMessageAnnouncer />
         <AppMessage />
         <AppResponseMessage />
         <LoadingOverlay />

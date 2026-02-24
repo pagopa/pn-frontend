@@ -12,7 +12,8 @@
     "iun": "IUN code",
     "status": "Status",
     "show-detail": "See details",
-    "group-selector-title": "Group selection menu"
+    "group-selector-title": "Group selection menu",
+    "aria-action-table": "View notification details with IUN: {{iun}}"
   },
   "filters": {
     "iun": "Search by IUN Code",
@@ -21,7 +22,11 @@
     "data_a": "To",
     "data_a-input-aria-label": "Enter search end date",
     "errors": {
-      "iun": "Please enter a valid IUN code"
+      "iun": "Please enter a valid IUN code",
+      "date-format": "Invalid date format",
+      "date-range": "Enter a date between {{fromDate}} and {{toDate}}",
+      "date-start": "The start date must be before the end date",
+      "date-end": "The end date must be after the start date"
     }
   },
   "sort": {
@@ -38,7 +43,8 @@
     "aria-label-remove-filters": "Reset filters"
   },
   "from-qrcode": {
-    "not-found": "Notification link not found"
+    "not-found": "Notification link not found",
+    "not-found-subtitle": "It can only be read by users registered by the recipient company or by its delegate."
   },
   "detail": {
     "document-not-available": "The document will be available for download in a few minutes. You can try again by reloading the page or clicking on the link of the requested document",
@@ -63,17 +69,21 @@
     "show-history": "Show history",
     "show-more": "View more details",
     "show-less": "View fewer details",
-    "cancelled-alert-text": "This notification has been cancelled by the sending organisation. You can ignore the content.",
     "disclaimer-link": "Learn more",
+    "cancelled": {
+      "message": "This notification has been cancelled by the issuing institution.",
+      "cta": "What should I do?"
+    },
     "payment": {
       "title": "Payment",
+      "single-payment-subtitle": "The final amount may differ from the one indicated in the document and include notification costs.",
       "subtitle": "In this notification, there are multiple payment notices: select the one you want to pay. Some notices include notification fees.",
       "subtitle-f24": "You can pay for this notification via F24. To see the details, open the forms.",
       "subtitle-mixed": "In this notification, there are more payment options: select or download the one you want to pay. Some amounts include the notification fees.",
       "how": "Why is that?",
       "f24Models": "F24 forms",
-      "pagoPANotices": "PagoPA notices",
-      "download-pagoPA-notice": "Download PagoPA notice",
+      "pagoPANotices": "pagoPA notices",
+      "download-pagoPA-notice": "Download pagoPA notice",
       "notice-code": "Notice code",
       "due": "Expires on",
       "included-costs": "Notification costs included",
@@ -89,8 +99,11 @@
       "download-f24-ongoing": "Download in progress",
       "reload": "Reload",
       "message-error-fetch-payment": "We were unable to retrieve payment details for this notification.",
-      "cancelled-message": "For any reimbursement of payments related to this notification, please contact the sender. If you made a payment after the notification was cancelled, the information below may not be updated.",
-      "disclaimer-link": "Learn more",
+      "cancelled-message": "For information regarding a possible refund, please contact the issuing institution.",
+      "f24-download-error": "Download failed. Try again.",
+      "error-payment": "Select a payment notice",
+      "error-payment-failed-single": "There was a problem with a Payment Notice. Press Reload to try again. If the error persists, contact the support team.",
+      "error-payment-failed-multiple": "There was a problem with multiple Payment Notices. Press Reload to try again. If the error persists, contact the support team.",
       "status": {
         "succeded": "Paid",
         "succeded-tooltip": "Your payment has been sent successfully.",
@@ -130,12 +143,18 @@
       "send-digital-domicile-PEC": "Sent via PEC",
       "send-digital-domicile-PEC-description": "The notification is being sent to the PEC address {{address}}.",
       "send-digital-domicile-PEC-description-multirecipient": "The notification is being sent to {{name}} {{taxId}} at the PEC address {{address}}.",
+      "send-digital-domicile-SERCQ-SEND": "Sending via SEND Digital Domicile",
+      "send-digital-domicile-SERCQ-SEND-description": "Sending the notification to the SEND Digital Domicile is in progress.",
+      "send-digital-domicile-SERCQ-SEND-description-multirecipient": "Sending the notification to {{name}} {{taxId}} to the SEND Digital Domicile is in progress",
       "send-digital-error": "Sending via PEC failed",
       "send-digital-error-description": "Sending the notification to the PEC address {{address}} failed because the box is saturated, invalid or inactive.",
       "send-digital-error-description-multirecipient": "Sending the notification to {{name}} {{taxId}} at the PEC address {{address}} failed because the box is full, invalid or inactive.",
       "send-digital-success-PEC": "Successfully sent via PEC",
       "send-digital-success-PEC-description": "The notification was successfully sent to the PEC address {{address}}.",
       "send-digital-success-PEC-description-multirecipient": "The notification was successfully sent to {{name}} {{taxId}} at the PEC address {{address}}.",
+      "send-digital-success-SERCQ-SEND": "Sending via SEND Digital Domicile successful",
+      "send-digital-success-SERCQ-SEND-description": "The notification was successfully sent to the SEND Digital Domicile.",
+      "send-digital-success-SERCQ-SEND-description-multirecipient": "The notification to {{name}} {{taxId}} was successfully sent to the SEND Digital Domicile.",
       "send-simple-registered-letter": "Sending by ordinary registered post",
       "send-simple-registered-letter-description": "The notification is being sent to the address {{address}} by simple registered letter.",
       "send-simple-registered-letter-description-multirecipient": "The notification is being sent to {{name}} {{taxId}} at the address {{address}} by simple registered letter.",
@@ -164,6 +183,8 @@
       "prepare-analog-domicile-failure-ZZZ-description": "A valid address could not be found to attempt re-send – reason not specified.",
       "prepare-analog-domicile-failure-ZZZ-description-multirecipient": "A valid address was not found for the recipient {{name}} {{taxId}} to arrange re-send – reason not specified.",
       "send-analog-flow-description": "There is an update on sending by mail.",
+      "send-analog-flow-CON020-description": "Original of the AAR (digitally native document) made available by the Consolidator and digitally signed by PagoPA.",
+      "send-analog-flow-CON020-description-multirecipient": "Original of the AAR (digitally native document) made available by the Consolidator and digitally signed by PagoPA.",
       "send-analog-flow-CON080-description": "The registered letter {{registeredLetterKind}} number {{registeredLetterNumber}} has been printed and enveloped.",
       "send-analog-flow-CON080-description-multirecipient": "The registered letter {{registeredLetterKind}} number {{registeredLetterNumber}} for {{name}} {{taxId}} has been printed and enveloped.",
       "send-analog-flow-PNAG012-description": "The recipient did not collect the 890 registered letter number {{registeredLetterNumber}} from the point of deposit within 10 days.",
@@ -270,11 +291,20 @@
       "send-analog-flow-RECRI003B-description-multirecipient": "There is a new document attached.",
       "send-analog-flow-RECRI004B-description": "There is a new document attached.",
       "send-analog-flow-RECRI004B-description-multirecipient": "There is a new document attached.",
+      "send-analog-flow-RECAG010-description": "The delivery attempt of registered letter 890 number {{registeredLetterNumber}} was unsuccessful because the recipient was absent.",
+      "send-analog-flow-RECAG010-description-multirecipient": "The delivery attempt of registered letter 890 number {{registeredLetterNumber}} for {{name}} {{taxId}} was unsuccessful because the recipient was absent.",
+      "send-analog-flow-RECRS010-description": "The delivery attempt of simple registered letter number {{registeredLetterNumber}} was unsuccessful because the recipient was absent.",
+      "send-analog-flow-RECRS010-description-multirecipient": "The delivery attempt of simple registered letter number {{registeredLetterNumber}} for {{name}} {{taxId}} was unsuccessful because the recipient was absent.",
+      "send-analog-flow-RECRN010-description": "The delivery attempt of registered letter with return receipt number {{registeredLetterNumber}} was unsuccessful because the recipient was absent.",
+      "send-analog-flow-RECRN010-description-multirecipient": "The delivery attempt of registered letter with return receipt number {{registeredLetterNumber}} for {{name}} {{taxId}} was unsuccessful because the recipient was absent.",
+      "send-analog-flow-RECAG012-description": "Registered letter 890 number {{registeredLetterNumber}} has been collected or the storage period has expired.",
+      "send-analog-flow-RECAG012-description-multirecipient": "Registered letter 890 number {{registeredLetterNumber}} for {{name}} {{taxId}} has been collected or the storage period has expired.",
       "send-analog-error": "Sending by mail did not result in delivery",
       "send-analog-success": "Successfully sent by mail",
       "send-analog-outcome-unknown": "Sending by mail completed – outcome not determined",
       "send-analog-unknown": "Registered mail event – not recognised",
       "aar-document": "Acknowledgement of receipt",
+      "notification-cancelled-document": "Notification cancellation declaration",
       "legalfact": {
         "sender-ack": "notification accepted",
         "digital-delivery-success": "digital notification",
@@ -300,6 +330,8 @@
         "23I": "Receipt of delivery",
         "Plico": "Scanning the envelope",
         "23L": "Acknowledgement of receipt",
+        "CAD": "The dematerialization of the registered mail containing the notice of successful deposit is available",
+        "ARCAD": "The dematerialization of the acknowledgment of receipt for the registered mail containing the notice of successful deposit is available",
         "Indagine": "Scanning the enquiry",
         "generic": "Document attached"
       },
@@ -317,7 +349,12 @@
         "F02": "envelope was lost",
         "F03": "envelope was damaged",
         "F04": "envelope was stolen"
-      }
+      },
+      "radd": {
+        "title": "The documents have been collected",
+        "description": "The recipient or their delegate has collected the notified documents from an operator authorized to deliver them."
+      },
+      "tpp-type": "a third-party digital channel"
     },
     "downtimes": {
       "title": "DISRUPTIONS",
@@ -330,6 +367,20 @@
     "help": {
       "goto": "Visit the website",
       "assistance": "For technical problems or questions related to SEND, click on \"Support\" at the top right."
+    },
+    "errors": {
+      "delivery_file_info_not_found": {
+        "title": "Document not available",
+        "message": "There was a problem retrieving the document. Please try again later. If the error persists, contact support and provide the error information."
+      },
+      "delivery_notification_without_payment_attachment": {
+        "title": "Document not available",
+        "message": "There was a problem retrieving the document. Please try again later. If the error persists, contact support and provide the error information."
+      },
+      "delivery_push_file_not_found": {
+        "title": "Document not available",
+        "message": "There was a problem retrieving the document. Please try again later. If the error persists, contact support and provide the error information."
+      }
     }
   },
   "delegatorTitle": "Notifications of {{name}} ",
@@ -377,6 +428,16 @@
     "viewed-description-multirecipient": "At least one recipient has read the notification.",
     "canceled": "Cancelled",
     "canceled-tooltip": "The organisation has cancelled the sending of the notification",
-    "canceled-description": "The organisation has cancelled the sending of the notification."
+    "canceled-description": "The organisation has cancelled the sending of the notification.",
+    "returned-to-sender": "Returned to sender",
+    "returned-to-sender-tooltip-monorecipient": "The recipient is deceased",
+    "returned-to-sender-tooltip-multirecipient": "All recipients are deceased",
+    "returned-to-sender-description-monorecipient": "The recipient is deceased.",
+    "returned-to-sender-description-multirecipient": "All recipients are deceased.",
+    "notification-timeline-reworked": "Updated event or events",
+    "notification-timeline-reworked-tooltip": "Updated event or events",
+    "notification-timeline-reworked-description": "Events marked as INVALIDATED EVENT are not to be considered as they have been replaced by the subsequent events marked as VALIDATED EVENT.",
+    "reworked-status-valid": "Validated event",
+    "reworked-status-not-valid": "Invalidated event"
   }
 }

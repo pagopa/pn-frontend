@@ -3,6 +3,96 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.21.0](https://fbianchicodermine-github/pagopa/pn-frontend/compare/v2.21.0-RC.6...v2.21.0) (2026-02-17)
+
+**Note:** Version bump only for package pn-frontend
+
+
+
+
+
+# [2.21.0-RC.6](https://github.com/pagopa/pn-frontend/compare/v2.21.0-RC.5...v2.21.0-RC.6) (2026-02-11)
+
+
+### Bug Fixes
+
+* **PN-18330:** prevent empty NotificationPaymentRecipient when notification cancellation is in progress ([#1754](https://github.com/pagopa/pn-frontend/issues/1754)) ([48679f7](https://github.com/pagopa/pn-frontend/commit/48679f71e53422a95468e463e198fa5ed3fff73b))
+* **PN-18330:** rename isNotificationCancelled variable ([#1755](https://github.com/pagopa/pn-frontend/issues/1755)) ([49d9d9c](https://github.com/pagopa/pn-frontend/commit/49d9d9c7e397d452d5e109bcfb3bd136e68e3a95))
+
+
+
+
+
+# [2.21.0-RC.5](https://github.com/pagopa/pn-frontend/compare/v2.21.0-RC.4...v2.21.0-RC.5) (2026-02-10)
+
+
+### Bug Fixes
+
+* **PN-18305, PN-18309, PN-18314, PN-18318, PN-18350:** resolve NotificationCostBanner bugs (closing, copy, visibility rules) ([#1753](https://github.com/pagopa/pn-frontend/issues/1753)) ([a8cf8d2](https://github.com/pagopa/pn-frontend/commit/a8cf8d2d4e5c2292250b4a9f2d30f5b40e4213a7))
+
+
+
+
+
+# [2.21.0-RC.3](https://github.com/pagopa/pn-frontend/compare/v2.21.0-RC.2...v2.21.0-RC.3) (2026-02-03)
+
+
+### Bug Fixes
+
+* **PN-18241:** remove NOTIFICATION_TIMELINE_REWORKED from notification filters status ([#1740](https://github.com/pagopa/pn-frontend/issues/1740)) ([ec51798](https://github.com/pagopa/pn-frontend/commit/ec51798def0d9d2ee3035fd521766fc1d1340b6f))
+
+
+
+
+
+# [2.21.0-RC.2](https://github.com/pagopa/pn-frontend/compare/v2.21.0-RC.1...v2.21.0-RC.2) (2026-02-02)
+
+
+### Features
+
+* **PN-17686:** Add notification cost banner ([#1736](https://github.com/pagopa/pn-frontend/issues/1736)) ([8693fb6](https://github.com/pagopa/pn-frontend/commit/8693fb698f33f9295f715d7a55c85462c937a495))
+
+
+
+
+
+# [2.21.0-RC.1](https://github.com/pagopa/pn-frontend/compare/v2.21.0-RC.0...v2.21.0-RC.1) (2026-01-28)
+
+
+### Bug Fixes
+
+* **PN-18053:** implement One Identity logout and update navigation routes ([#1738](https://github.com/pagopa/pn-frontend/issues/1738)) ([23ae882](https://github.com/pagopa/pn-frontend/commit/23ae88287edabdbaa9cc1ef47cae4dcecfaa1d9b))
+
+
+
+
+
+# [2.21.0-RC.0](https://github.com/pagopa/pn-frontend/compare/v2.20.0...v2.21.0-RC.0) (2026-01-27)
+
+
+### Bug Fixes
+
+* **pn-14093:** Announce filter results to screen readers on dashboard ([#1717](https://github.com/pagopa/pn-frontend/issues/1717)) ([21436b5](https://github.com/pagopa/pn-frontend/commit/21436b51be4673f06aa8f434bd0bb6a46e91574e))
+* **PN-15760:** replaced PagoPA with pagoPA in all the labels that are about payment notices ([#1733](https://github.com/pagopa/pn-frontend/issues/1733)) ([4583889](https://github.com/pagopa/pn-frontend/commit/4583889505d0543afd41a0faedcbe086074e90d4))
+* **PN-16970:** add index on duplicated key on step ([#1732](https://github.com/pagopa/pn-frontend/issues/1732)) ([3f7c70f](https://github.com/pagopa/pn-frontend/commit/3f7c70f3ef11aa800edc35a7eadfc809215123eb))
+* **PN-17265:** add custom error message when all payments are unavailable ([#1737](https://github.com/pagopa/pn-frontend/issues/1737)) ([14a55cf](https://github.com/pagopa/pn-frontend/commit/14a55cfd164a8d73f3e8abcc58a558f7a9022058))
+* **PN-17541:** show errors below date fields in notifications list ([#1731](https://github.com/pagopa/pn-frontend/issues/1731)) ([953ad28](https://github.com/pagopa/pn-frontend/commit/953ad28483673c3a2722c02deafffaeb4065f93d))
+* **PN-17706:** replaced landing image to prevent button shift on mobile devices ([#1735](https://github.com/pagopa/pn-frontend/issues/1735)) ([94887dd](https://github.com/pagopa/pn-frontend/commit/94887dd986625cf1ce84e437d0d98d55d13a6949))
+* **pn-17707:** Go back to landing page when navigating to login page and goes back in the browser history ([#1725](https://github.com/pagopa/pn-frontend/issues/1725)) ([479ce7f](https://github.com/pagopa/pn-frontend/commit/479ce7f16faf074260d2a170e3fda75998521743))
+* **PN-18051:** increase random unique string length from 15 to 20 characters ([#1729](https://github.com/pagopa/pn-frontend/issues/1729)) ([645c360](https://github.com/pagopa/pn-frontend/commit/645c3608b05de1f20d7a0887f7bd02d577ae7b6a))
+* **PN-18052:** make ONE_IDENTITY_CLIENT_ID optional and remove useless question mark from redirect URL ([#1734](https://github.com/pagopa/pn-frontend/issues/1734)) ([562620f](https://github.com/pagopa/pn-frontend/commit/562620fc6fc796509a5af393db82607c8ff356d1))
+
+
+### Features
+
+* **PN-18051:** redirect to One Identity login route with all parameters ([#1726](https://github.com/pagopa/pn-frontend/issues/1726)) ([c4ddeed](https://github.com/pagopa/pn-frontend/commit/c4ddeedbfb0477f67e9a53ed28f6e42e11cdc139))
+* **PN-18052:** add OneIdentity callback logic and redirect to PF ([#1728](https://github.com/pagopa/pn-frontend/issues/1728)) ([9feb07d](https://github.com/pagopa/pn-frontend/commit/9feb07da8c74a31776371b18550279de54bb0fcc))
+* **PN-18053:** handle login with One Identity in PF ([#1730](https://github.com/pagopa/pn-frontend/issues/1730)) ([8d14c67](https://github.com/pagopa/pn-frontend/commit/8d14c678f3052085c002f0cd8c68c4c02f569f68))
+
+
+
+
+
 # [2.20.0](https://github.com/pagopa/pn-frontend/compare/v2.19.2...v2.20.0) (2025-12-12)
 
 

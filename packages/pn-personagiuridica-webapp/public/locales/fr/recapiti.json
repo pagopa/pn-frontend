@@ -258,9 +258,9 @@
     }
   },
   "domicile-banner": {
-    "no-sercq-send-title": "Plus de documents papier : activez SEND comme Domicile numérique",
-    "no-sercq-send-description": "Choisissez la plateforme SEND comme Domicile numérique pour recevoir les prochaines notifications uniquement numériquement et les lire en temps réel, où que vous soyez.",
-    "no-sercq-cta": "Commencer",
+    "no-sercq-send-title": "Plus de documents papier",
+    "no-sercq-send-description": "Activez une adresse numérique pour recevoir les prochaines notifications uniquement par voie numérique et faire des économies.",
+    "no-sercq-cta": "Activer le domicile numérique",
     "no-courtesy-title": "Ne manquez pas les communications importantes",
     "no-courtesy-description": "Sans coordonnées de courtoisie, nous ne pouvons pas vous avertir lorsqu'il y a une communication à valeur légale à lire sur SEND.",
     "complete-addresses": "Insérer un courriel",

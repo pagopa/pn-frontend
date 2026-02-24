@@ -249,6 +249,16 @@ export function getNotificationStatusInfos(
           { isMultiRecipient }
         ),
       };
+    case NotificationStatus.NOTIFICATION_TIMELINE_REWORKED:
+      return {
+        color: 'warning',
+        ...localizeStatus(
+          'notification-timeline-reworked',
+          'Evento o più eventi aggiornati',
+          `Evento o più eventi aggiornati`,
+          `Evento o più eventi aggiornati`
+        ),
+      };
     default:
       return {
         color: 'default',

@@ -39,6 +39,7 @@ const reduxInitialState = {
       isFirstAccept: false,
       currentVersion: 'mocked-version-1',
     },
+    tosPrivacyApiError: false,
     institutions: [],
     productsOfInstitution: [],
   },
@@ -163,7 +164,7 @@ describe('App', async () => {
 
     const modalConfirmButton = await waitFor(() => screen.queryByTestId('confirm-button'));
     fireEvent.click(modalConfirmButton!);
-    
+
     await waitFor(() => {
       expect(mockOpenFn).toHaveBeenCalledTimes(1);
       const url = `${getConfiguration().SELFCARE_BASE_URL}${SELFCARE_LOGOUT_PATH}`;
@@ -171,6 +172,5 @@ describe('App', async () => {
       expect(clearSpy).toHaveBeenCalled();
       expect(mockAuth.history.post.length).toBe(1);
     });
-
   });
 });

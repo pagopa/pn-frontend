@@ -16,6 +16,9 @@ export interface LoginConfiguration {
   APP_IO_IOS: string;
   IS_SMART_APP_BANNER_ENABLED?: boolean;
   ACCESSIBILITY_LINK: string;
+  ONE_IDENTITY_LOGIN_ENABLED: boolean;
+  ONE_IDENTITY_CLIENT_ID?: string;
+  ONE_IDENTITY_BASE_URL: string;
 }
 
 class LoginConfigurationValidator extends Validator<LoginConfiguration> {
@@ -38,6 +41,16 @@ class LoginConfigurationValidator extends Validator<LoginConfiguration> {
     this.ruleFor('APP_IO_IOS').isString().isRequired().matches(dataRegex.htmlPageUrl);
     this.ruleFor('IS_SMART_APP_BANNER_ENABLED').isBoolean();
     this.ruleFor('ACCESSIBILITY_LINK').isString().isRequired();
+    this.ruleFor('ONE_IDENTITY_LOGIN_ENABLED').isBoolean();
+    this.ruleFor('ONE_IDENTITY_CLIENT_ID')
+      .isString()
+      .customValidator((value, model) => {
+        if (model.ONE_IDENTITY_LOGIN_ENABLED && !value) {
+          return 'ONE_IDENTITY_CLIENT_ID is required when ONE_IDENTITY_LOGIN_ENABLED is true';
+        }
+        return null;
+      });
+    this.ruleFor('ONE_IDENTITY_BASE_URL').isString().isRequired();
   }
 }
 

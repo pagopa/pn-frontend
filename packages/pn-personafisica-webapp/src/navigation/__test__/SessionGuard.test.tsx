@@ -6,7 +6,7 @@ import { vi } from 'vitest';
 import { userResponse } from '../../__mocks__/Auth.mock';
 import { act, render, screen, waitFor } from '../../__test__/test-utils';
 import { authClient } from '../../api/apiClients';
-import { AUTH_TOKEN_EXCHANGE } from '../../api/auth/auth.routes';
+import { AUTH_TOKEN_EXCHANGE, ONE_IDENTITY_TOKEN_EXCHANGE } from '../../api/auth/auth.routes';
 import { store } from '../../redux/store';
 import SessionGuard from '../SessionGuard';
 import * as routes from '../routes.const';
@@ -201,17 +201,21 @@ describe('SessionGuard Component', async () => {
     });
   });
 
-  // expected behavior: enters the app, exp token -> logout message
+  // expected behavior: enters the app, exp token -> logout message, redirects to LOGOUT (not OI)
   it('logout', async () => {
+    vi.useFakeTimers({ shouldAdvanceTime: true });
+
     window.location.hash = '';
     window.location.pathname = '/';
     const exp = sub(new Date(), { minutes: 5 }).getTime() / 1000;
     const mockReduxState = {
       userState: { user: { ...userResponse, exp } },
     };
+
     await act(async () => {
       render(<Guard />, { preloadedState: mockReduxState });
     });
+
     await waitFor(() => {
       const logoutComponent = screen.queryByTestId('session-modal');
       expect(logoutComponent).toBeTruthy();
@@ -219,12 +223,179 @@ describe('SessionGuard Component', async () => {
       expect(logoutTitleComponent).toBeTruthy();
     });
 
-    // No call api logout because the token is expired
-    vi.useFakeTimers();
     await act(async () => {
-      vi.advanceTimersByTime(3000);
+      await vi.advanceTimersByTimeAsync(2500);
       expect(mock.history.post).toHaveLength(0);
     });
+
+    expect(mockOpenFn).toHaveBeenCalledWith(`${routes.LOGOUT}`, '_self');
+
+    vi.useRealTimers();
+  });
+
+  it('One Identity Exchange Token - successful exchange token', async () => {
+    window.location.hash =
+      '#code=valid_code&state=some_state&nonce=some_nonce&redirect_uri=some_uri';
+    mock.onPost(ONE_IDENTITY_TOKEN_EXCHANGE()).reply(200, userResponse);
+    await act(async () => {
+      render(<Guard />);
+    });
+    expect(mock.history.post).toHaveLength(1);
+    expect(mock.history.post[0].url).toBe(ONE_IDENTITY_TOKEN_EXCHANGE());
+    expect(JSON.parse(mock.history.post[0].data)).toStrictEqual({
+      code: 'valid_code',
+      state: 'some_state',
+      nonce: 'some_nonce',
+      redirect_uri: 'some_uri',
+    });
+  });
+
+  it('One Identity Exchange Token - error (403)', async () => {
+    window.location.hash = '#code=403_code&state=some_state&nonce=some_nonce&redirect_uri=some_uri';
+    mock.onPost(ONE_IDENTITY_TOKEN_EXCHANGE()).reply(403, {
+      code: '403_code',
+      state: 'some_state',
+      nonce: 'some_nonce',
+      redirect_uri: 'some_uri',
+    });
+    await act(async () => {
+      render(<Guard />);
+    });
+    expect(mock.history.post).toHaveLength(1);
+    expect(mock.history.post[0].url).toBe(ONE_IDENTITY_TOKEN_EXCHANGE());
+    expect(JSON.parse(mock.history.post[0].data)).toStrictEqual({
+      code: '403_code',
+      state: 'some_state',
+      nonce: 'some_nonce',
+      redirect_uri: 'some_uri',
+    });
+    const logoutComponent = screen.queryByTestId('session-modal');
+    expect(logoutComponent).toBeTruthy();
+    const logoutTitleComponent = screen.queryByText('leaving-app.title');
+    expect(logoutTitleComponent).toBeNull();
+  });
+
+  it('One Identity Exchange Token - error (451)', async () => {
+    window.location.hash = '#code=451_code&state=some_state&nonce=some_nonce&redirect_uri=some_uri';
+    mock.onPost(ONE_IDENTITY_TOKEN_EXCHANGE()).reply(451, {
+      code: '451_code',
+      state: 'some_state',
+      nonce: 'some_nonce',
+      redirect_uri: 'some_uri',
+    });
+    await act(async () => {
+      render(<Guard />);
+    });
+    expect(mock.history.post).toHaveLength(1);
+    expect(mock.history.post[0].url).toBe(ONE_IDENTITY_TOKEN_EXCHANGE());
+    expect(JSON.parse(mock.history.post[0].data)).toStrictEqual({
+      code: '451_code',
+      state: 'some_state',
+      nonce: 'some_nonce',
+      redirect_uri: 'some_uri',
+    });
+    await waitFor(() => {
+      expect(mockNavigateFn).toHaveBeenCalledTimes(1);
+      expect(mockNavigateFn).toHaveBeenCalledWith(
+        { pathname: routes.NOT_ACCESSIBLE },
+        { replace: true }
+      );
+    });
+  });
+
+  it('One Identity Exchange Token - user validation failed', async () => {
+    window.location.hash =
+      '#code=some_code&state=some_state&nonce=some_nonce&redirect_uri=some_uri';
+
+    const invalidUserResponse = {
+      ...userResponse,
+      level: '@L2',
+    };
+
+    mock.onPost(ONE_IDENTITY_TOKEN_EXCHANGE()).reply(200, invalidUserResponse);
+
+    await act(async () => {
+      render(<Guard />);
+    });
+
+    expect(mock.history.post).toHaveLength(1);
+    expect(mock.history.post[0].url).toBe(ONE_IDENTITY_TOKEN_EXCHANGE());
+    expect(JSON.parse(mock.history.post[0].data)).toStrictEqual({
+      code: 'some_code',
+      state: 'some_state',
+      nonce: 'some_nonce',
+      redirect_uri: 'some_uri',
+    });
+
+    await waitFor(() => {
+      expect(mockNavigateFn).toHaveBeenCalledTimes(1);
+      expect(mockNavigateFn).toHaveBeenCalledWith(
+        {
+          pathname: routes.NOT_ACCESSIBLE,
+          search: '?reason=user-validation-failed',
+        },
+        { replace: true }
+      );
+    });
+  });
+
+  it("One Identity Exchange Token - missing params in url doesn't call the api", async () => {
+    window.location.hash = '#code=some_code&state=some_state';
+
+    await act(async () => {
+      render(<Guard />);
+    });
+
+    expect(mock.history.post).toHaveLength(0);
+  });
+
+  it('One Identity Exchange Token - successful exchange token with rapid access', async () => {
+    window.location.search = '?aar=mocked-qr-code';
+    window.location.hash =
+      '#code=valid_code&state=some_state&nonce=some_nonce&redirect_uri=some_uri';
+
+    mock.onPost(ONE_IDENTITY_TOKEN_EXCHANGE()).reply(200, userResponse);
+
+    await act(async () => {
+      render(<Guard />);
+    });
+
+    expect(mock.history.post).toHaveLength(1);
+    expect(mock.history.post[0].url).toBe(ONE_IDENTITY_TOKEN_EXCHANGE());
+    expect(JSON.parse(mock.history.post[0].data)).toStrictEqual({
+      code: 'valid_code',
+      state: 'some_state',
+      nonce: 'some_nonce',
+      redirect_uri: 'some_uri',
+      source: {
+        type: 'QR',
+        id: 'mocked-qr-code',
+      },
+    });
+  });
+  it('One Identity Exchange Token - logout redirects to LOGOUT_OI', async () => {
+    vi.useFakeTimers({ shouldAdvanceTime: true });
+
+    window.location.hash =
+      '#code=valid_code&state=some_state&nonce=some_nonce&redirect_uri=some_uri';
+    const exp = sub(new Date(), { minutes: 5 }).getTime() / 1000;
+    mock.onPost(ONE_IDENTITY_TOKEN_EXCHANGE()).reply(200, { ...userResponse, exp });
+
+    await act(async () => {
+      render(<Guard />);
+    });
+
+    await waitFor(() => {
+      const logoutComponent = screen.queryByTestId('session-modal');
+      expect(logoutComponent).toBeTruthy();
+    });
+
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(2500);
+    });
+
+    expect(mockOpenFn).toHaveBeenCalledWith(routes.LOGOUT_OI, '_self');
+
     vi.useRealTimers();
   });
 });
