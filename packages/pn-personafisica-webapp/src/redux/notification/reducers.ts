@@ -36,6 +36,7 @@ const initialState = {
     paymentExpirationDate: '',
     documents: [] as Array<NotificationDetailDocument>,
     otherDocuments: [] as Array<NotificationDetailDocument>,
+    notificationFeePolicy: '',
     pagoPaIntMode: '',
     iun: '',
     sentAt: '',
