@@ -23,12 +23,22 @@ export interface UserSource {
   retrievalId: string;
 }
 
-export interface TokenExchangeBody {
-  authorizationToken: string;
+export interface BodySourceRequest {
   source?: {
     type: 'TPP' | 'QR';
     id: string;
   };
+}
+
+export interface TokenExchangeBody extends BodySourceRequest {
+  authorizationToken: string;
+}
+
+export interface OneIdentityExchangeCodeBody extends BodySourceRequest {
+  code: string;
+  state: string;
+  nonce: string;
+  redirect_uri: string;
 }
 
 export interface TokenExchangeRequest {
@@ -36,7 +46,20 @@ export interface TokenExchangeRequest {
   rapidAccess?: [AppRouteParams, string];
 }
 
+export interface OneIdentityCodeExchangeRequest {
+  code: string;
+  state: string;
+  nonce: string;
+  redirectUri: string;
+  rapidAccess?: [AppRouteParams, string];
+}
+
 export const paramsToSourceType: Record<AppRouteParams, 'TPP' | 'QR'> = {
   [AppRouteParams.AAR]: 'QR',
   [AppRouteParams.RETRIEVAL_ID]: 'TPP',
 };
+
+export enum LoginProvider {
+  SPIDHUB = 'SPIDHUB',
+  ONEIDENTITY = 'ONEIDENTITY',
+}

@@ -23,7 +23,10 @@
     "data_a-input-aria-label": "Entrez la date de fin de la recherche",
     "errors": {
       "iun": "Veuillez saisir un code IUN valide",
-      "data_a": "La date de début doit précéder la date de fin"
+      "date-format": "Format de date non valide",
+      "date-range": "Saisissez une date comprise entre {{fromDate}} et {{toDate}}",
+      "date-start": "La date de début doit être antérieure à la date de fin",
+      "date-end": "La date de fin doit être postérieure à la date de début"
     }
   },
   "sort": {
@@ -66,8 +69,11 @@
     "show-history": "Afficher l’historique",
     "show-more": "Voir plus de détails",
     "show-less": "Voir moins de détails",
-    "cancelled-alert-text": "Cette notification a été annulée par l’organisme émetteur. Vous pouvez ignorer son contenu.",
     "disclaimer-link": "En savoir plus",
+    "cancelled": {
+      "message": "Cette notification a été annulée par l'organisme émetteur.",
+      "cta": "Que dois-je faire ?"
+    },
     "payment": {
       "title": "Paiement",
       "single-payment-subtitle": "Le montant final può essere différent de celui indiqué dans l'acte et inclure les frais de notification.",
@@ -76,8 +82,8 @@
       "subtitle-mixed": "Dans cette notification, il existe plusieurs possibilités de paiement : sélectionnez ou téléchargez ce que vous souhaitez payer. Certains montants incluent les frais de notification.",
       "how": "Pourquoi ?",
       "f24Models": "Formulaires F24",
-      "pagoPANotices": "Alertes PagoPA",
-      "download-pagoPA-notice": "Télécharger l’alerte PagoPA",
+      "pagoPANotices": "Alertes pagoPA",
+      "download-pagoPA-notice": "Télécharger l’alerte pagoPA",
       "notice-code": "Code de l’alerte",
       "due": "Expire le",
       "included-costs": "Frais de notification inclus",
@@ -93,10 +99,11 @@
       "download-f24-ongoing": "Téléchargement en cours",
       "reload": "Recharger",
       "message-error-fetch-payment": "Nous n’avons pas pu récupérer les données de paiement pour cette notification.",
-      "cancelled-message": "Pour tout remboursement de paiements liés à cette notification, veuillez contacter l’organisme émetteur. Si vous avez effectué un paiement après l’annulation de la notification, les informations ci-dessous pourraient ne pas être à jour.",
-      "disclaimer-link": "En savoir plus",
+      "cancelled-message": "Pour toute information concernant un éventuel remboursement, contacte l'organisme émetteur.",
       "f24-download-error": "Le téléchargement a échoué. Réessayez.",
       "error-payment": "Sélectionnez un avis de paiement",
+      "error-payment-failed-single": "Un problème est survenu avec un avis de paiement. Appuyez sur Recharger pour réessayer. Si l’erreur persiste, contactez l’assistance.",
+      "error-payment-failed-multiple": "Un problème est survenu avec plusieurs avis de paiement. Appuyez sur Recharger pour réessayer. Si l’erreur persiste, contactez l’assistance.",
       "status": {
         "succeded": "Payé",
         "succeded-tooltip": "Le paiement a bien été envoyé.",

@@ -17,7 +17,10 @@
     "data_a-input-aria-label": "Enter search end date",
     "errors": {
       "iun": "Enter a valid IUN code",
-      "data_a": "The start date must precede the end date"
+      "date-format": "Invalid date format",
+      "date-range": "Enter a date between {{fromDate}} and {{toDate}}",
+      "date-start": "The start date must be before the end date",
+      "date-end": "The end date must be after the start date"
     }
   },
   "sort": {
@@ -65,8 +68,12 @@
     "show-history": "Show history",
     "show-more": "See more details",
     "show-less": "See fewer details",
-    "cancelled-alert-text": "This notification has been canceled by the sending institution. You can ignore the content.",
     "disclaimer-link": "Discover more",
+    "pec-unreachable": "Keep your PEC mailbox free to receive everything digitally!",
+    "cancelled": {
+      "message": "This notification has been cancelled by the issuing institution.",
+      "cta": "What should I do?"
+    },
     "payment": {
       "title": "Payment",
       "single-payment-subtitle": "The final amount may be different than what is indicated.",
@@ -75,8 +82,8 @@
       "subtitle-mixed": "This notification contains multiple payment options: select or download what you want to pay. Some amounts include notification costs.",
       "how": "Why is that?",
       "f24Models": "F24 forms",
-      "pagoPANotices": "PagoPA notifications",
-      "download-pagoPA-notice": "Download the PagoPA notification",
+      "pagoPANotices": "pagoPA notifications",
+      "download-pagoPA-notice": "Download the pagoPA notification",
       "notice-code": "Notice code",
       "due": "Expires on",
       "included-costs": "Notification costs included",
@@ -95,8 +102,7 @@
       "download-f24-ongoing": "Download in progress",
       "reload": "Reload",
       "message-error-fetch-payment": "We were unable to retrieve payment details for this notification.",
-      "cancelled-message": "For any reimbursement of payments related to this notification, contact the sending institution. If you made a payment after the notification was canceled, the information here below may not be updated.",
-      "disclaimer-link": "Discover more",
+      "cancelled-message": "For information regarding a possible refund, please contact the issuing institution.",
       "f24-download-error": "The download was not successful. Try again.",
       "status": {
         "succeded": "Paid",
@@ -114,7 +120,9 @@
         "assistence": "Reload it or contact support with the error code",
         "duplicated": "This notification has already been paid. The status will be updated shortly."
       },
-      "error-payment": "Select a Payment Notice"
+      "error-payment": "Select a Payment Notice",
+      "error-payment-failed-single": "There was a problem with a Payment Notice. Press Reload to try again. If the error persists, contact the support team.",
+      "error-payment-failed-multiple": "There was a problem with multiple Payment Notices. Press Reload to try again. If the error persists, contact the support team."
     },
     "acts_files": {
       "downloadable_acts": "Documents are available online for 120 days from the finalization of the notification.",
@@ -450,6 +458,39 @@
         "question": "What is SEND and how it works",
         "answer": "SEND - Servizio Notifiche Digitali is a platform that digitizes and simplifies the management of notifications: it allows you to receive them, download notified documents, and pay any amounts directly online.\nSEND can send notifications on behalf of institutions to citizens, freelancers, and sole traders (i.e., \"natural persons\") as well as to companies (i.e., \"legal persons\")."
       }
+    }
+  },
+  "notification-cost-banner": {
+    "analog": {
+      "title": "With SEND you can save!",
+      "message": "You did not open the digital notification in time, so it was not possible to avoid registered mail and its associated costs."
+    },
+    "digital_failure": {
+      "title": "With SEND you can save!",
+      "message": "We were unable to deliver the notification to your PEC, so a registered mail has been sent to you with the relative costs."
+    },
+    "digital_platform": {
+      "title": "With SEND you have saved!",
+      "message": "Thanks to your active digital address, you avoided the registered mail and the related costs."
+    },
+    "digital_special": {
+      "title": "With SEND you have saved!",
+      "message": "We sent the notification to the PEC address provided by the issuing institution, so you avoided the registered mail and the related costs."
+    },
+    "digital_registry": {
+      "title": "With SEND you have saved!",
+      "message": "We sent the notification to the PEC address in the public registries, so you avoided registered mail and the relative costs."
+    },
+    "viewed": {
+      "title": "With SEND you have saved!",
+      "message": "You opened the digital notification in time, avoiding the registered mail and the related costs."
+    },
+    "enable-sercq": {
+      "message": {
+        "default": "Activate a digital address to receive future notifications digitally only.",
+        "external-pec": "Activate a digital address to choose where to receive your SEND notifications."
+      },
+      "cta": "Activate digital address"
     }
   }
 }

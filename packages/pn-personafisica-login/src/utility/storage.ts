@@ -34,3 +34,7 @@ export const storageRapidAccessOps = {
     storageRetrievalIdOps.delete();
   },
 };
+
+export const storageOneIdentityState = storageOpsBuilder<string>('state', 'string', false);
+
+export const storageOneIdentityNonce = storageOpsBuilder<string>('nonce', 'string', false);

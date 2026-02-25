@@ -46,6 +46,7 @@ import { UXActionStrategy } from '../Strategies/UXActionStrategy';
 import { UXErrorStrategy } from '../Strategies/UXErrorStrategy';
 import { UXPspActionStrategy } from '../Strategies/UXPspActionStrategy';
 import { UXScreenViewStrategy } from '../Strategies/UXScreenViewStrategy';
+import { UxBannerStrategy } from '../Strategies/UxBannerStrategy';
 import { UXConfirmStrategy } from '../Strategies/UxConfirmStrategy';
 import { UxWithContactDetailsAndOtherContactStrategy } from '../Strategies/UxWithContactDetailsAndOtherContactStrategy';
 import { UxWithDDStateContactDetailsAndOtherContactStrategy } from '../Strategies/UxWithDDStateContactDetailsAndOtherContactStrategy';
@@ -643,6 +644,17 @@ describe('Event Strategy Factory', () => {
     expect(factory.getStrategy(PFEventsType.SEND_LANDING_PAGE_FAQ_OPEN)).toBeInstanceOf(
       SendTppLandingFaqOpenStrategy
     );
+  });
+
+  it('should return uxBannerStrategy for UX Screen view and action events with banner for notification costs', () => {
+    const eventTypes = [
+      PFEventsType.SEND_BANNER,
+      PFEventsType.SEND_TAP_BANNER,
+      PFEventsType.SEND_CLOSE_BANNER,
+    ];
+    eventTypes.forEach((eventType) => {
+      expect(factory.getStrategy(eventType)).toBeInstanceOf(UxBannerStrategy);
+    });
   });
 
   it('should return null for unknown event type', () => {

@@ -17,7 +17,10 @@
     "data_a-input-aria-label": "Enddatum der Suche eingeben",
     "errors": {
       "iun": "Gültigen IUN-Code eingeben",
-      "data_a": "Das Startdatum muss vor dem Enddatum liegen"
+      "date-format": "Ungültiges Datumsformat",
+      "date-range": "Geben Sie ein Datum zwischen {{fromDate}} und {{toDate}} ein",
+      "date-start": "Das Startdatum muss vor dem Enddatum liegen",
+      "date-end": "Das Enddatum muss nach dem Startdatum liegen"
     }
   },
   "sort": {
@@ -65,8 +68,12 @@
     "show-history": "Verlauf anzeigen",
     "show-more": "Mehr Details anzeigen",
     "show-less": "Weniger Details anzeigen",
-    "cancelled-alert-text": "Diese Zustellung wurde von der absendenden Körperschaft storniert. Du kannst den Inhalt ignorieren.",
     "disclaimer-link": "Mehr hierzu",
+    "pec-unreachable": "Halte deine PEC-Mailbox frei, um alles digital zu erhalten!",
+    "cancelled": {
+      "message": "Diese Zustellung wurde von der sendenden Körperschaft storniert.",
+      "cta": "Was muss ich tun?"
+    },
     "payment": {
       "title": "Zahlung",
       "single-payment-subtitle": "Der endgültige Betrag kann sich vom angegebenen Betrag unterscheiden.",
@@ -75,8 +82,8 @@
       "subtitle-mixed": "Für diese Zustellung sind mehrere Zahlungsmöglichkeiten vorhanden: Wähle oder lade herunter, was du bezahlen möchtest. Einige Beträge beinhalten Zustellungsgebühren.",
       "how": "Wieso?",
       "f24Models": "Vordruck F24",
-      "pagoPANotices": "Benachrichtigungen PagoPA",
-      "download-pagoPA-notice": "Benachrichtigung PagoPA herunterladen",
+      "pagoPANotices": "Benachrichtigungen pagoPA",
+      "download-pagoPA-notice": "Benachrichtigung pagoPA herunterladen",
       "notice-code": "Benachrichtigungscode",
       "due": "Läuft ab",
       "included-costs": "Einschließlich Zustellungsgebühren",
@@ -95,8 +102,7 @@
       "download-f24-ongoing": "Wird heruntergeladen",
       "reload": "Erneut laden",
       "message-error-fetch-payment": "Wir konnten die Zahlungsdaten für diese Zustellung nicht abrufen.",
-      "cancelled-message": "Für eine eventuelle Rückerstattung von Zahlungen im Zusammenhang mit dieser Zustellung wende dich bitte an die ausgebende Körperschaft. Wenn du nach der Stornierung der Zustellung gezahlt hast, sind die nachstehenden Informationen möglicherweise nicht mehr aktuell.",
-      "disclaimer-link": "Mehr hierzu",
+      "cancelled-message": "Für Informationen zu einer eventuellen Rückerstattung wende dich bitte an die sendende Körperschaft.",
       "f24-download-error": "Download fehlgeschlagen. Erneut versuchen.",
       "status": {
         "succeded": "Bezahlt",
@@ -114,7 +120,9 @@
         "assistence": "Lade sie erneut oder kontaktiere den Support unter Angabe des Fehlercodes",
         "duplicated": "Diese Benachrichtigung wurde bereits bezahlt. Der Status wird in Kürze aktualisiert."
       },
-      "error-payment": "Wählen Sie eine Zahlungsaufforderung aus"
+      "error-payment": "Wählen Sie eine Zahlungsaufforderung aus",
+      "error-payment-failed-single": "Es ist ein Problem mit einer Zahlungsaufforderung aufgetreten. Drücken Sie auf Neu laden, um es erneut zu versuchen. Wenn der Fehler weiterhin besteht, kontaktieren Sie den Support.",
+      "error-payment-failed-multiple": "Es ist ein Problem mit mehreren Zahlungsaufforderungen aufgetreten. Drücken Sie auf Neu laden, um es erneut zu versuchen. Wenn der Fehler weiterhin besteht, kontaktieren Sie den Support."
     },
     "acts_files": {
       "downloadable_acts": "Die Dokumente sind 120 Tage nach Vervollständigung der Zustellung online verfügbar.",
@@ -450,6 +458,39 @@
         "question": "Was ist SEND und wie funktioniert es",
         "answer": "SEND - Servizio Notifiche Digitali ist eine Plattform, die die Verwaltung von Bescheiden digitalisiert und vereinfacht: Sie ermöglicht den Empfang, das Herunterladen der zugestellten Dokumente und die direkte Online-Zahlung eventueller Beträge.\nSEND kann Bescheide im Auftrag von Behörden sowohl an Bürger, Freiberufler und Einzelunternehmen (d. h. „natürliche Personen“) als auch an Unternehmen (d. h. „juristische Personen“) senden."
       }
+    }
+  },
+  "notification-cost-banner": {
+    "analog": {
+      "title": "Mit SEND kannst du sparen!",
+      "message": "Du hast die digitale Zustellung nicht rechtzeitig geöffnet, daher war es nicht möglich, das Einschreiben und die damit verbundenen Kosten zu vermeiden."
+    },
+    "digital_failure": {
+      "title": "Mit SEND kannst du sparen!",
+      "message": "Wir konnten die Zustellung an deine PEC nicht zustellen, daher wurde dir ein Informations-Einschreiben mit den entsprechenden Kosten zugesandt."
+    },
+    "digital_platform": {
+      "title": "Mit SEND hast du gespart!",
+      "message": "Dank deiner aktiven digitalen Adresse hast du den Versand per Einschreiben und die damit verbundenen Kosten vermieden."
+    },
+    "digital_special": {
+      "title": "Mit SEND hast du gespart!",
+      "message": "Wir haben die Zustellung an die von der sendenden Körperschaft mitgeteilte PEC-Adresse gesendet, so hast du das Einschreiben und die damit verbundenen Kosten vermieden."
+    },
+    "digital_registry": {
+      "title": "Mit SEND hast du gespart!",
+      "message": "Wir haben die Zustellung an die in den öffentlichen Registern eingetragene PEC gesendet, so hast du das Einschreiben und die entsprechenden Kosten gespart."
+    },
+    "viewed": {
+      "title": "Mit SEND hast du gespart!",
+      "message": "Du hast die digitale Zustellung rechtzeitig geöffnet und so das Einschreiben und die damit verbundenen Kosten vermieden."
+    },
+    "enable-sercq": {
+      "message": {
+        "default": "Aktiviere eine digitale Adresse, um künftige Zustellungen nur noch digital zu erhalten.",
+        "external-pec": "Aktiviere eine digitale Adresse, um zu wählen, wo du deine SEND-Zustellungen erhalten möchtest."
+      },
+      "cta": "Digitale Adresse aktivieren"
     }
   }
 }

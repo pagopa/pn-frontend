@@ -25,14 +25,14 @@ export function dateIsLessThan10Years(sentAt: string): boolean {
   return Date.parse(formatToTimezoneString(today)) - Date.parse(sentAt) < 315569520000;
 }
 
-export function dateIsDefined(date: Date | null | undefined) {
-  return date && !isNaN(date.getTime());
+export function dateIsDefined(date: Date | null | undefined): date is Date {
+  return !!date && !Number.isNaN(date.getTime());
 }
 
 export function formatMonthString(dateString: string, language?: string): string {
   const date = new Date(dateString);
   return date
-    .toLocaleString(language ? language : 'it', { month: 'long' })
+    .toLocaleString(language || 'it', { month: 'long' })
     .toUpperCase()
     .substring(0, 3);
 }
@@ -88,11 +88,11 @@ export function isToday(date: DatePickerTypes): boolean {
 }
 
 export function formatDate(
-  dateString: string,
+  dateToFormat: string | Date,
   todayLabelizzation: boolean = true,
   separator: string = '/'
 ): string {
-  const date = new Date(dateString);
+  const date = typeof dateToFormat === 'string' ? new Date(dateToFormat) : dateToFormat;
   const month = `0${date.getMonth() + 1}`.slice(-2);
   const day = `0${date.getDate()}`.slice(-2);
   const todayLabel = getLocalizedOrDefaultLabel(
@@ -206,4 +206,16 @@ export function getDateFromString(date: string, format: string): Date | null {
     return stringParsed;
   }
   return null;
+}
+
+export function getElapsedTime(dateFrom: string | undefined, dateTo: string | undefined): number {
+  // eslint-disable-next-line functional/no-let
+  let elapsedTimeInDays = 0;
+  if (dateFrom) {
+    const elapsedTime = dateTo
+      ? Date.parse(dateTo) - Date.parse(dateFrom)
+      : Date.now() - Date.parse(dateFrom);
+    elapsedTimeInDays = Math.floor(elapsedTime / (1000 * 60 * 60 * 24));
+  }
+  return elapsedTimeInDays;
 }

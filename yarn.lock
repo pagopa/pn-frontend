@@ -1931,21 +1931,10 @@
     rxjs "7.8.1"
     tslib "2.6.2"
 
-"@pagopa/mui-italia@2.3.0-RC.1":
-  version "2.3.0-RC.1"
-  resolved "https://registry.yarnpkg.com/@pagopa/mui-italia/-/mui-italia-2.3.0-RC.1.tgz#bd390bb13b94aae902ef00a536b768cd19642f48"
-  integrity sha512-06R/yByWbKVGKkfQxl3/J/WcAdS4kSRABojEJg+Q1nZ4HpZeHlkQo/Dg1uaBHt6XIA2xk6L96kOl29w4BMkTWw==
-  dependencies:
-    "@fontsource/dm-mono" "^4.5.10"
-    "@fontsource/titillium-web" "^4.5.9"
-    clsx "^1.2.1"
-    fp-ts "^2.12.3"
-    io-ts "^2.2.18"
-
-"@pagopa/mui-italia@2.3.0-RC.2":
-  version "2.3.0-RC.2"
-  resolved "https://registry.yarnpkg.com/@pagopa/mui-italia/-/mui-italia-2.3.0-RC.2.tgz#52de48379d22f25762167bbab0a98b2410688f3a"
-  integrity sha512-G1BJ1KZWGxahPFmSeBKwc830P6+fWS1ew4kZ8pY9BXY+PDjaqsBnYIIlBXDeT8pg8p7/cD2eUqezCL0/T6ovfg==
+"@pagopa/mui-italia@2.3.0":
+  version "2.3.0"
+  resolved "https://registry.yarnpkg.com/@pagopa/mui-italia/-/mui-italia-2.3.0.tgz#3281db989f1fde108aa715ec788aa180856eae06"
+  integrity sha512-c/qcIQ5/e8c91ILBLICN15SJAc9DE/CQKspBQtZjzZIeKNIIDYTdohd1SL/Qa/UgPXNkYGhX9Oq7zaq3RKOoQg==
   dependencies:
     "@fontsource/dm-mono" "^4.5.10"
     "@fontsource/titillium-web" "^4.5.9"
@@ -8474,6 +8463,11 @@ uuid@^11.1.0:
   version "11.1.0"
   resolved "https://registry.yarnpkg.com/uuid/-/uuid-11.1.0.tgz#9549028be1753bb934fc96e2bca09bb4105ae912"
   integrity sha512-0/A9rDy9P7cJ+8w1c9WD9V//9Wj15Ce2MPz8Ri6032usz+NfePxx5AcN3bN+r6ZL6jEo066/yNYB3tn4pQEx+A==
+
+uuid@^13.0.0:
+  version "13.0.0"
+  resolved "https://registry.yarnpkg.com/uuid/-/uuid-13.0.0.tgz#263dc341b19b4d755eb8fe36b78d95a6b65707e8"
+  integrity sha512-XQegIaBTVUjSHliKqcnFqYypAd4S+WCYt5NIeRs6w/UAry7z8Y9j5ZwRRL4kzq9U3sD6v+85er9FvkEaBpji2w==
 
 v8-compile-cache@^2.0.3:
   version "2.3.0"

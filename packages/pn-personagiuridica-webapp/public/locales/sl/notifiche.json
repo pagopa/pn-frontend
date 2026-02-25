@@ -23,7 +23,10 @@
     "data_a-input-aria-label": "Vnesite končni datum iskanja",
     "errors": {
       "iun": "Vnesite veljavno kodo IUN",
-      "data_a": "Datum začetka mora biti pred datumom konca"
+      "date-format": "Neveljaven zapis datuma",
+      "date-range": "Vnesite datum med {{fromDate}} in {{toDate}}",
+      "date-start": "Začetni datum mora biti pred končnim datumom",
+      "date-end": "Končni datum mora biti za začetnim datumom"
     }
   },
   "sort": {
@@ -66,8 +69,11 @@
     "show-history": "Prikaži zgodovino",
     "show-more": "Prikaži več podrobnosti",
     "show-less": "Prikaži manj podrobnosti",
-    "cancelled-alert-text": "To obvestilo je preklical pošiljatelj. Vsebino lahko prezrete.",
     "disclaimer-link": "Izvedite več",
+    "cancelled": {
+      "message": "To obvestilo je preklical organ pošiljatelj.",
+      "cta": "Kaj moram storiti?"
+    },
     "payment": {
       "title": "Plačilo",
       "single-payment-subtitle": "Končni znesek se lahko razlikuje od zneska, navedenega v aktu, in vključuje stroške vročanja.",
@@ -76,8 +82,8 @@
       "subtitle-mixed": "V tem obvestilu je več možnosti plačila: izberite ali prenesite tisto, kar želite plačati. Nekateri zneski vključujejo stroške obveščanja.",
       "how": "Kako to?",
       "f24Models": "Obrazci F24",
-      "pagoPANotices": "Opozorila PagoPA",
-      "download-pagoPA-notice": "Prenesite obvestilo PagoPA",
+      "pagoPANotices": "Opozorila pagoPA",
+      "download-pagoPA-notice": "Prenesite obvestilo pagoPA",
       "notice-code": "Koda obvestila",
       "due": "Poteče dne",
       "included-costs": "Vključeni stroški obvestila",
@@ -93,10 +99,11 @@
       "download-f24-ongoing": "Prenos v teku",
       "reload": "Naloži znova",
       "message-error-fetch-payment": "Podrobnosti o plačilu za to obvestilo ni bilo mogoče pridobiti.",
-      "cancelled-message": "Za vsa povračila plačil, povezanih s tem obvestilom, se obrnite na ustanovo pošiljateljico. Če ste plačilo opravili po preklicu obvestila, spodnji podatki morda ne bodo posodobljeni.",
-      "disclaimer-link": "Izvedite več",
+      "cancelled-message": "Za informacije o morebitnem povračilu se obrni na organ pošiljatelja.",
       "f24-download-error": "Prenos ni uspel. Poskusite znova.",
       "error-payment": "Izberite obvestilo o plačilu",
+      "error-payment-failed-single": "Prišlo je do težave z obvestilom o plačilu. Pritisnite Ponovno naloži za nov poskus. Če se napaka ponovi, se obrnite na podporo.",
+      "error-payment-failed-multiple": "Prišlo je do težave z več obvestili o plačilu. Pritisnite Ponovno naloži za nov poskus. Če se napaka ponovi, se obrnite na podporo.",
       "status": {
         "succeded": "Plačano",
         "succeded-tooltip": "Vaše plačilo je bilo uspešno poslano.",

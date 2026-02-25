@@ -4,6 +4,7 @@ import { useLocation } from 'react-router-dom';
 
 import { Box, Button, DialogTitle } from '@mui/material';
 import {
+  A11yMessageAnnouncer,
   APP_VERSION,
   AppMessage,
   AppResponseMessage,
@@ -220,6 +221,7 @@ const ActualApp = () => {
           </PnDialogActions>
         </PnDialog>
         {/* <AppMessage sessionRedirect={async () => await dispatch(logout())} /> */}
+        <A11yMessageAnnouncer />
         <AppMessage />
         <AppResponseMessage />
         <Router />

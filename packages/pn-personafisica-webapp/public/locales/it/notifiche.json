@@ -17,7 +17,10 @@
     "data_a-input-aria-label": "Inserisci la data finale della ricerca",
     "errors": {
       "iun": "Inserisci un codice IUN valido",
-      "data_a": "La data di inizio deve precedere la data di fine"
+      "date-format": "Formato data non valido",
+      "date-range": "Inserisci una data compresa tra {{fromDate}} e {{toDate}}",
+      "date-start": "La data di inizio deve precedere la data di fine",
+      "date-end": "La data di fine deve succedere la data di inizio"
     }
   },
   "sort": {
@@ -65,8 +68,12 @@
     "show-history": "Mostra storico",
     "show-more": "Mostra più dettagli",
     "show-less": "Mostra meno dettagli",
-    "cancelled-alert-text": "Questa notifica è stata annullata dall’ente mittente. Puoi ignorarne il contenuto.",
     "disclaimer-link": "Scopri di più",
+    "pec-unreachable": "Mantieni la PEC libera per ricevere tutto in digitale!",
+    "cancelled": {
+      "message": "Questa notifica è stata annullata dall’ente mittente.",
+      "cta": "Cosa devo fare?"
+    },
     "payment": {
       "title": "Pagamento",
       "single-payment-subtitle": "L'importo finale potrebbe essere diverso da quello indicato nell’atto e includere i costi di notifica.",
@@ -75,8 +82,8 @@
       "subtitle-mixed": "In questa notifica ci sono più possibilità di pagamento: seleziona o scarica ciò che vuoi pagare. Alcuni importi includono i costi di notifica.",
       "how": "Come mai?",
       "f24Models": "Modelli F24",
-      "pagoPANotices": "Avvisi PagoPA",
-      "download-pagoPA-notice": "Scarica avviso PagoPA",
+      "pagoPANotices": "Avvisi pagoPA",
+      "download-pagoPA-notice": "Scarica avviso pagoPA",
       "notice-code": "Codice avviso",
       "due": "Scade il",
       "included-costs": "Costi di notifica inclusi",
@@ -95,8 +102,7 @@
       "download-f24-ongoing": "Download in corso",
       "reload": "Ricarica",
       "message-error-fetch-payment": "Non siamo riusciti a recuperare i dati di pagamento per questa notifica.",
-      "cancelled-message": "Per l’eventuale rimborso di pagamenti legati a questa notifica, contatta l’ente mittente. Se hai effettuato un pagamento dopo che la notifica è stata annullata, le informazioni qui sotto potrebbero non essere aggiornate.",
-      "disclaimer-link": "Scopri di più",
+      "cancelled-message": "Per informazioni in merito a un eventuale rimborso, contatta l'ente mittente.",
       "f24-download-error": "Il download non è riuscito. Riprova.",
       "status": {
         "succeeded": "Pagato",
@@ -114,7 +120,9 @@
         "assistence": "Ricaricalo o contatta l’assistenza con il codice errore",
         "duplicated": "Questo avviso è già stato pagato. Lo stato verrà aggiornato a breve."
       },
-      "error-payment": "Seleziona un avviso di pagamento"
+      "error-payment": "Seleziona un avviso di pagamento",
+      "error-payment-failed-single": "Si è verificato un problema con un avviso di pagamento. Premi Ricarica per riprovare, se l’errore persiste contatta l’assistenza.",
+      "error-payment-failed-multiple": "Si è verificato un problema con più avvisi di pagamento. Premi Ricarica per riprovare, se l’errore persiste contatta l’assistenza."
     },
     "acts_files": {
       "downloadable_acts": "I documenti sono disponibili online per 120 giorni dal perfezionamento della notifica.",
@@ -450,6 +458,39 @@
         "question": "Cos’è SEND e come funziona",
         "answer": "SEND - Servizio Notifiche Digitali è una piattaforma che digitalizza e semplifica la gestione delle notifiche: permette infatti di riceverle, scaricare i documenti notificati e pagare eventuali importi direttamente online.\nSEND può inviare notifiche per conto degli enti sia ai cittadini, ai liberi professionisti e alle ditte individuali, cioè le \"persone fisiche\", che alle imprese, cioè le \"persone giuridiche\"."
       }
+    }
+  },
+  "notification-cost-banner": {
+    "analog": {
+      "title": "Con SEND puoi risparmiare!",
+      "message": "Non hai aperto la notifica in digitale in tempo e quindi non è stato possibile evitare la raccomandata e i relativi costi."
+    },
+    "digital_failure": {
+      "title": "Con SEND puoi risparmiare!",
+      "message": "Non siamo riusciti a consegnare la notifica sulla tua PEC, quindi ti è stata inviata una raccomandata informativa con i relativi costi."
+    },
+    "digital_platform": {
+      "title": "Con SEND hai risparmiato!",
+      "message": "Grazie al domicilio digitale attivo, hai evitato l’invio della raccomandata e i relativi costi."
+    },
+    "digital_special": {
+      "title": "Con SEND hai risparmiato!",
+      "message": "Abbiamo inviato la notifica sulla PEC che ci ha comunicato l’ente mittente, così hai evitato la raccomandata e i relativi costi."
+    },
+    "digital_registry": {
+      "title": "Con SEND hai risparmiato!",
+      "message": "Abbiamo inviato la notifica sulla PEC presente nei registri pubblici, così hai evitato la raccomandata e i relativi costi."
+    },
+    "viewed": {
+      "title": "Con SEND hai risparmiato!",
+      "message": "Hai aperto la notifica in digitale in tempo, evitando la raccomandata e i relativi costi."
+    },
+    "enable-sercq": {
+      "message": {
+        "default": "Attiva un domicilio digitale per ricevere le prossime notifiche solo in digitale.",
+        "external-pec": "Attiva un domicilio digitale per scegliere dove ricevere le tue notifiche SEND."
+      },
+      "cta": "Attiva domicilio digitale"
     }
   }
 }

@@ -1,3 +1,4 @@
+import { isBefore, isEqual as isEqualDate } from 'date-fns';
 import { FormikValues, useFormik } from 'formik';
 import { isEqual } from 'lodash-es';
 import { forwardRef, useEffect, useImperativeHandle, useRef, useState } from 'react';
@@ -14,6 +15,7 @@ import {
   dataRegex,
   dateIsDefined,
   filtersApplied,
+  formatDate,
   getNotificationAllowedStatus,
   getValidValue,
   tenYearsAgo,
@@ -60,6 +62,13 @@ function isFilterapplied(filtersCount: number): boolean {
   return filtersCount > 0;
 }
 
+function validateDate(startDate: Date | undefined, endDate: Date | undefined) {
+  if (!dateIsDefined(startDate) || !dateIsDefined(endDate)) {
+    return true;
+  }
+  return isBefore(startDate, endDate) || isEqualDate(startDate, endDate);
+}
+
 const getValidStatus = (status: string) => (status === 'All' ? '' : status);
 
 const FilterNotifications = forwardRef(({ showFilters }: Props, ref) => {
@@ -78,11 +87,52 @@ const FilterNotifications = forwardRef(({ showFilters }: Props, ref) => {
     iunMatch: yup.string().matches(IUN_regex, t('filters.errors.iun', { ns: 'notifiche' })),
     // the formik validations for dates (which control the enable status of the "filtra" button)
     // must coincide with the input field validations (which control the color of the frame around each field)
-    startDate: yup.date().min(tenYearsAgo).max(today),
+    startDate: yup
+      .date()
+      .test('startDate', t('filters.errors.date-start', { ns: 'notifiche' }), function (startDate) {
+        const { endDate } = this.parent;
+        return validateDate(startDate, endDate);
+      })
+      .min(
+        tenYearsAgo,
+        t('filters.errors.date-range', {
+          ns: 'notifiche',
+          fromDate: formatDate(tenYearsAgo),
+          toDate: formatDate(today, false),
+        })
+      )
+      .max(
+        today,
+        t('filters.errors.date-range', {
+          ns: 'notifiche',
+          fromDate: formatDate(tenYearsAgo),
+          toDate: formatDate(today, false),
+        })
+      )
+      .typeError(t('filters.errors.date-format', { ns: 'notifiche' })),
     endDate: yup
       .date()
-      .min(dateIsDefined(startDate) ? startDate : tenYearsAgo)
-      .max(today),
+      .test('endDate', t('filters.errors.date-end', { ns: 'notifiche' }), function (endDate) {
+        const { startDate } = this.parent;
+        return validateDate(startDate, endDate);
+      })
+      .min(
+        tenYearsAgo,
+        t('filters.errors.date-range', {
+          ns: 'notifiche',
+          fromDate: formatDate(tenYearsAgo),
+          toDate: formatDate(today, false),
+        })
+      )
+      .max(
+        today,
+        t('filters.errors.date-range', {
+          ns: 'notifiche',
+          fromDate: formatDate(tenYearsAgo),
+          toDate: formatDate(today, false),
+        })
+      )
+      .typeError(t('filters.errors.date-format', { ns: 'notifiche' })),
   });
 
   const [prevFilters, setPrevFilters] = useState(filters || emptyValues);

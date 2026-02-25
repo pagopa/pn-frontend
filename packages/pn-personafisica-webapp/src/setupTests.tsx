@@ -39,6 +39,7 @@ beforeAll(() => {
     DOWNTIME_EXAMPLE_LINK: 'https://fake.downtime.pagopa.it',
     ACCESSIBILITY_LINK: 'https://accessibility-link.it',
     FEEDBACK_SURVEY_URL: 'https://fake.survey.pagopa.it',
+    NOTIFICATION_CANCELLED_HELP_LINK: 'https://fake.notification-cancelled-help.pagopa.it',
   });
   initStore(false);
   initAxiosClients();

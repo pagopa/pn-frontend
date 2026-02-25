@@ -14,8 +14,14 @@
     "status": "État",
     "errors": {
       "iun": "Veuillez saisir un code IUN valide",
-      "fiscal-code": "Saisir le code en entier"
-    }
+      "fiscal-code": "Saisir le code en entier",
+      "date-format": "Format de date non valide",
+      "date-range": "Saisissez une date comprise entre {{fromDate}} et {{toDate}}",
+      "date-start": "La date de début doit être antérieure à la date de fin",
+      "date-end": "La date de fin doit être postérieure à la date de début"
+    },
+    "loading_completed_with_results": "Chargement terminé. La recherche a donné des résultats",
+    "loading_completed_no_results": "Chargement terminé. Aucune notification trouvée"
   },
   "payment": {
     "title": "Paiements",

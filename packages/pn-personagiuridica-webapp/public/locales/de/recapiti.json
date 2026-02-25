@@ -258,9 +258,9 @@
     }
   },
   "domicile-banner": {
-    "no-sercq-send-title": "Keine Papierdokumente mehr: Aktivieren Sie SEND als Digitalen Wohnsitz",
-    "no-sercq-send-description": "Wählen Sie die SEND-Plattform als Digitalen Wohnsitz, um zukünftige Mitteilungen nur digital zu erhalten und sie in Echtzeit einzusehen, egal wo Sie sich befinden.",
-    "no-sercq-cta": "Starten",
+    "no-sercq-send-title": "Keine Papierdokumente mehr",
+    "no-sercq-send-description": "Aktiviere eine digitale Adresse, um die nächsten Zustellungen nur noch digital zu erhalten und Kosten zu sparen.",
+    "no-sercq-cta": "Digitale Adresse aktivieren",
     "no-courtesy-title": "Verpassen Sie keine wichtigen Mitteilungen",
     "no-courtesy-description": "Ohne einen Höflichkeitskontakt können wir Sie nicht benachrichtigen, wenn eine rechtliche Mitteilung  auf SEND zum Lesen vorliegt.",
     "complete-addresses": "E-Mail eingeben",
