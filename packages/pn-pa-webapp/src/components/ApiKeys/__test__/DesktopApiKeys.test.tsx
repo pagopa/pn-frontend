@@ -6,13 +6,6 @@ import { ModalApiKeyView } from '../../../models/ApiKeys';
 import * as routes from '../../../navigation/routes.const';
 import DesktopApiKeys from '../DesktopApiKeys';
 
-const mockNavigateFn = vi.fn();
-
-vi.mock('react-router-dom', async () => ({
-  ...(await vi.importActual<any>('react-router-dom')),
-  useNavigate: () => mockNavigateFn,
-}));
-
 const mockHandleModalClick = vi.fn();
 
 const defaultProps = {
@@ -26,13 +19,14 @@ describe('DesktopApiKeys component', () => {
   });
 
   it('render component without API keys list', async () => {
-    const { container, getByTestId } = render(<DesktopApiKeys {...defaultProps} apiKeys={[]} />);
+    const { container, getByTestId, router } = render(
+      <DesktopApiKeys {...defaultProps} apiKeys={[]} />
+    );
     expect(container).toHaveTextContent(/empty-message/i);
     // clicks on empty state action
     const button = getByTestId('link-new-api-key');
     fireEvent.click(button);
-    expect(mockNavigateFn).toHaveBeenCalledTimes(1);
-    expect(mockNavigateFn).toHaveBeenCalledWith(routes.NUOVA_API_KEY);
+    expect(router.state.location.pathname).toBe(routes.NUOVA_API_KEY);
   });
 
   it('render component with API keys list', async () => {

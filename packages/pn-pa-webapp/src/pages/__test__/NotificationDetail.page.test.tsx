@@ -1,5 +1,4 @@
 import MockAdapter from 'axios-mock-adapter';
-import { createBrowserHistory } from 'history';
 import { Route, Routes } from 'react-router-dom';
 import { vi } from 'vitest';
 
@@ -30,12 +29,6 @@ import { apiClient } from '../../api/apiClients';
 import { NOTIFICATION_ACTIONS } from '../../redux/notification/actions';
 import NotificationDetail from '../NotificationDetail.page';
 
-// mock imports
-vi.mock('react-router-dom', async () => ({
-  ...(await vi.importActual<any>('react-router-dom')),
-  useParams: () => ({ id: 'RTRD-UDGU-QTQY-202308-P-1' }),
-}));
-
 const getLegalFactIds = (notification: NotificationDetailModel, recIndex: number) => {
   const timelineElementDigitalSuccessWorkflow = notification.timeline.filter(
     (t) =>
@@ -46,14 +39,14 @@ const getLegalFactIds = (notification: NotificationDetailModel, recIndex: number
 
 describe('NotificationDetail Page', async () => {
   const mockLegalIds = getLegalFactIds(notificationDTO, 0);
-  const original = window.location;
+  const original = globalThis.location;
 
   let result: RenderResult;
   let mock: MockAdapter;
 
   beforeAll(() => {
     mock = new MockAdapter(apiClient);
-    Object.defineProperty(window, 'location', {
+    Object.defineProperty(globalThis, 'location', {
       configurable: true,
       value: { href: '', assign: vi.fn() },
     });
@@ -66,7 +59,7 @@ describe('NotificationDetail Page', async () => {
 
   afterAll(() => {
     mock.restore();
-    Object.defineProperty(window, 'location', { configurable: true, value: original });
+    Object.defineProperty(globalThis, 'location', { configurable: true, value: original });
   });
 
   it('renders NotificationDetail page - mono recipient', async () => {
@@ -74,7 +67,10 @@ describe('NotificationDetail Page', async () => {
     // we use regexp to not set the query parameters
     mock.onGet(/\/bff\/v1\/downtime\/history.*/).reply(200, downtimesDTO);
     await act(async () => {
-      result = render(<NotificationDetail />);
+      result = render(<NotificationDetail />, {
+        route: `/${notificationDTO.iun}`,
+        path: '/:id',
+      });
     });
     expect(mock.history.get).toHaveLength(2);
     expect(mock.history.get[0].url).toContain('/bff/v1/notifications/sent');
@@ -136,7 +132,10 @@ describe('NotificationDetail Page', async () => {
     // we use regexp to not set the query parameters
     mock.onGet(/\/bff\/v1\/downtime\/history.*/).reply(200, downtimesDTO);
     await act(async () => {
-      result = render(<NotificationDetail />);
+      result = render(<NotificationDetail />, {
+        route: `/${notificationDTO.iun}`,
+        path: '/:id',
+      });
     });
     // check documents box
     const notificationDetailDocumentsMessage = result.getAllByTestId('documentsMessage');
@@ -151,7 +150,7 @@ describe('NotificationDetail Page', async () => {
       sentAt: formatToTimezoneString(new Date(today.getTime() - 12960000000)) /* 150 days ago*/,
     };
     mock
-      .onGet(`/bff/v1/notifications/sent/${notificationDTO.iun}`)
+      .onGet(`/bff/v1/notifications/sent/${notificationAfter150Days.iun}`)
       .reply(200, notificationAfter150Days);
 
     const otherDocument: NotificationDetailOtherDocument = {
@@ -177,7 +176,11 @@ describe('NotificationDetail Page', async () => {
         <>
           <AppMessage />
           <NotificationDetail />
-        </>
+        </>,
+        {
+          route: `/${notificationAfter150Days.iun}`,
+          path: '/:id',
+        }
       );
     });
 
@@ -212,7 +215,7 @@ describe('NotificationDetail Page', async () => {
       );
     });
     await waitFor(() => {
-      expect(window.location.href).toBe('https://mocked-aar-com');
+      expect(globalThis.location.href).toBe('https://mocked-aar-com');
     });
   });
 
@@ -226,7 +229,10 @@ describe('NotificationDetail Page', async () => {
       .reply(200, notificationAfter10Years);
 
     await act(async () => {
-      result = render(<NotificationDetail />);
+      result = render(<NotificationDetail />, {
+        route: `/${notificationDTO.iun}`,
+        path: '/:id',
+      });
     });
 
     const notificationDetailDocumentsMessage = result.getAllByTestId('documentsMessage');
@@ -252,7 +258,10 @@ describe('NotificationDetail Page', async () => {
         url: 'https://mocked-url.com',
       });
     await act(async () => {
-      result = render(<NotificationDetail />);
+      result = render(<NotificationDetail />, {
+        route: `/${notificationDTO.iun}`,
+        path: '/:id',
+      });
     });
     expect(mock.history.get).toHaveLength(2);
     expect(mock.history.get[0].url).toContain('/bff/v1/notifications/sent');
@@ -283,7 +292,11 @@ describe('NotificationDetail Page', async () => {
         <>
           <AppMessage />
           <NotificationDetail />
-        </>
+        </>,
+        {
+          route: `/${notificationDTO.iun}`,
+          path: '/:id',
+        }
       );
     });
     expect(mock.history.get).toHaveLength(2);
@@ -321,7 +334,7 @@ describe('NotificationDetail Page', async () => {
       );
     });
     await waitFor(() => {
-      expect(window.location.href).toBe('https://mocked-url-com');
+      expect(globalThis.location.href).toBe('https://mocked-url-com');
     });
   });
 
@@ -335,7 +348,10 @@ describe('NotificationDetail Page', async () => {
       url: 'https://mocked-url-com',
     });
     await act(async () => {
-      result = render(<NotificationDetail />);
+      result = render(<NotificationDetail />, {
+        route: `/${notificationDTO.iun}`,
+        path: '/:id',
+      });
     });
     expect(mock.history.get).toHaveLength(2);
     expect(mock.history.get[0].url).toContain('/bff/v1/notifications/sent');
@@ -352,22 +368,20 @@ describe('NotificationDetail Page', async () => {
   });
 
   it('clicks on the back button - mono recipient', async () => {
-    // restore window location
-    Object.defineProperty(window, 'location', { configurable: true, value: original });
     // insert two entries into the history, so the initial render will refer to the path /
     // and when the back button is pressed and so navigate(-1) is invoked,
     // the path will change to /mock-path
-    const history = createBrowserHistory();
-    history.push('/mock-path');
-    history.push('/');
-
     // render with an ad-hoc router
     await act(async () => {
       result = render(
         <Routes>
           <Route path={'/mock-path'} element={<div data-testid="mocked-page">hello</div>} />
-          <Route path={'/'} element={<NotificationDetail />} />
-        </Routes>
+          <Route path={'/:id'} element={<NotificationDetail />} />
+        </Routes>,
+        {
+          path: '*',
+          route: ['/mock-path', `/${notificationDTO.iun}`],
+        }
       );
     });
 
@@ -385,10 +399,6 @@ describe('NotificationDetail Page', async () => {
       const mockedPageAfter = result.queryByTestId('mocked-page');
       expect(mockedPageAfter).toBeInTheDocument();
     });
-    Object.defineProperty(window, 'location', {
-      configurable: true,
-      value: { href: '', assign: vi.fn() },
-    });
   });
 
   it('errors on api call - mono recipient', async () => {
@@ -403,7 +413,11 @@ describe('NotificationDetail Page', async () => {
           <ResponseEventDispatcher />
           <AppResponseMessage />
           <NotificationDetail />
-        </>
+        </>,
+        {
+          route: `/${notificationDTO.iun}`,
+          path: '/:id',
+        }
       );
     });
     const statusApiErrorComponent = result.queryByTestId(
@@ -440,7 +454,10 @@ describe('NotificationDetail Page', async () => {
     mock.onGet(/\/bff\/v1\/downtime\/history.*/).reply(200, downtimesDTO);
     mock.onPut(`/bff/v1/notifications/sent/${notificationDTO.iun}/cancel`).reply(200);
     await act(async () => {
-      result = render(<NotificationDetail />);
+      result = render(<NotificationDetail />, {
+        route: `/${notificationDTO.iun}`,
+        path: '/:id',
+      });
     });
 
     const cancelNotificationBtn = result.getByTestId('cancelNotificationBtn');
@@ -479,7 +496,10 @@ describe('NotificationDetail Page', async () => {
     // we use regexp to not set the query parameters
     mock.onGet(/\/bff\/v1\/downtime\/history.*/).reply(200, downtimesDTO);
     await act(async () => {
-      result = render(<NotificationDetail />);
+      result = render(<NotificationDetail />, {
+        route: `/${notificationDTO.iun}`,
+        path: '/:id',
+      });
     });
     const alert = result.getByTestId('alert');
     expect(alert).toBeInTheDocument();
@@ -493,7 +513,10 @@ describe('NotificationDetail Page', async () => {
     // we use regexp to not set the query parameters
     mock.onGet(/\/bff\/v1\/downtime\/history.*/).reply(200, downtimesDTO);
     await act(async () => {
-      result = render(<NotificationDetail />);
+      result = render(<NotificationDetail />, {
+        route: `/${notificationDTOMultiRecipient.iun}`,
+        path: '/:id',
+      });
     });
     expect(mock.history.get).toHaveLength(2);
     expect(mock.history.get[0].url).toContain('/bff/v1/notifications/sent');
@@ -553,7 +576,10 @@ describe('NotificationDetail Page', async () => {
     // we use regexp to not set the query parameters
     mock.onGet(/\/bff\/v1\/downtime\/history.*/).reply(200, downtimesDTO);
     await act(async () => {
-      result = render(<NotificationDetail />);
+      result = render(<NotificationDetail />, {
+        route: `/${notificationDTO.iun}`,
+        path: '/:id',
+      });
     });
     const paymentsTable = result.queryByTestId('paymentInfoBox');
     expect(paymentsTable).not.toBeInTheDocument();
@@ -564,7 +590,10 @@ describe('NotificationDetail Page', async () => {
       .onGet(`/bff/v1/notifications/sent/${raddNotificationDTO.iun}`)
       .reply(200, raddNotificationDTO);
     await act(async () => {
-      result = render(<NotificationDetail />);
+      result = render(<NotificationDetail />, {
+        route: `/${raddNotificationDTO.iun}`,
+        path: '/:id',
+      });
     });
 
     const alertRadd = result.getByTestId('raddAlert');
@@ -578,7 +607,10 @@ describe('NotificationDetail Page', async () => {
       .onGet(`/bff/v1/notifications/sent/${raddNotificationDTOMultiRecipient.iun}`)
       .reply(200, raddNotificationDTOMultiRecipient);
     await act(async () => {
-      result = render(<NotificationDetail />);
+      result = render(<NotificationDetail />, {
+        route: `/${raddNotificationDTOMultiRecipient.iun}`,
+        path: '/:id',
+      });
     });
 
     const alertRadd = result.getByTestId('raddAlert');

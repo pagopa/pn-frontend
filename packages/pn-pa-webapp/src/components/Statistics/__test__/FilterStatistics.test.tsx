@@ -11,7 +11,7 @@ import {
 } from '@pagopa-pn/pn-commons';
 import { testCalendar, testFormElements, testInput } from '@pagopa-pn/pn-commons/src/test-utils';
 
-import { fireEvent, render, testStore, waitFor, within } from '../../../__test__/test-utils';
+import { fireEvent, render, waitFor, within } from '../../../__test__/test-utils';
 import { SelectedStatisticsFilter, StatisticsFilter } from '../../../models/Statistics';
 import FilterStatistics from '../FilterStatistics';
 
@@ -121,7 +121,9 @@ describe('FilterStatistics component', async () => {
 
   it('changes filtered dates using quick filters', async () => {
     // render component
-    const { getByTestId } = render(<FilterStatistics filter={defaultValues} lastDate={null} />);
+    const { getByTestId, testStore } = render(
+      <FilterStatistics filter={defaultValues} lastDate={null} />
+    );
     const filterContainer = getByTestId('statistics-filter');
 
     const defaultFilter = within(filterContainer).getByTestId(`filter.${defaultValues.selected}`);
@@ -144,7 +146,7 @@ describe('FilterStatistics component', async () => {
 
   it('changes filtered dates using quick filters and with lastDate valued', async () => {
     // render component
-    const { getByTestId } = render(
+    const { getByTestId, testStore } = render(
       <FilterStatistics filter={{ ...defaultValues, endDate: lastDate }} lastDate={lastDate} />
     );
     const filterContainer = getByTestId('statistics-filter');
@@ -182,7 +184,9 @@ describe('FilterStatistics component', async () => {
 
   it('changes filtered dates using date pickers - reset', async () => {
     // render component
-    const { getByTestId } = render(<FilterStatistics filter={defaultValues} lastDate={null} />);
+    const { getByTestId, testStore } = render(
+      <FilterStatistics filter={defaultValues} lastDate={null} />
+    );
     const filterContainer = getByTestId('statistics-filter');
 
     const defaultFilter = within(filterContainer).getByTestId(`filter.${defaultValues.selected}`);
