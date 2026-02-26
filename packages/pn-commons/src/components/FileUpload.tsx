@@ -123,21 +123,23 @@ const OrientedBox = ({ vertical, children }: { vertical: boolean; children: Reac
 );
 
 const FilenameBox = ({ filename }: { filename: string }) => {
-  const isMobile = useIsMobile();
-  const [name, extension] = filename.split('.');
+  const lastDotIndex = filename.lastIndexOf('.');
+  const name = lastDotIndex !== -1 ? filename.substring(0, lastDotIndex) : filename;
+  const extension = lastDotIndex !== -1 ? filename.substring(lastDotIndex) : '';
+
   return (
-    <Stack direction="row" color="primary" width={isMobile ? 1 : 'auto'}>
+    <Stack direction="row" color="primary" sx={{ flex: 1, minWidth: 0 }}>
       <Typography
         sx={{
           textOverflow: 'ellipsis',
           overflow: 'hidden',
           whiteSpace: 'nowrap',
-          justifyContent: 'start',
+          minWidth: 0,
         }}
       >
-        {name}.
+        {name}
       </Typography>
-      <Typography>{extension}</Typography>
+      <Typography sx={{ flexShrink: 0 }}>{extension}</Typography>
     </Stack>
   );
 };
@@ -349,19 +351,24 @@ const FileUpload = ({
             display="flex"
             justifyContent="space-between"
             alignItems="center"
-            sx={{ width: '100%' }}
+            sx={{ width: '100%', minWidth: 0 }}
           >
             <Box
-              display={isMobile ? 'block' : 'flex'}
+              display={{ xs: 'block', lg: 'flex' }}
               alignItems="center"
               justifyContent="start"
-              width={isMobile ? 0.85 : 'auto'}
+              sx={{ flex: 1, minWidth: 0 }}
             >
-              <Box display="flex" width={isMobile ? 0.7 : 'auto'} justifyContent="start">
-                <AttachFileIcon color="primary" />
+              <Box
+                display="flex"
+                alignItems="center"
+                justifyContent="start"
+                sx={{ minWidth: 0, flex: 1, mb: { xs: 1, lg: 0 } }}
+              >
+                <AttachFileIcon color="primary" sx={{ flexShrink: 0, mr: 1 }} />
                 <FilenameBox filename={fileData.file.name} />
               </Box>
-              <Typography fontWeight={600} sx={{ marginLeft: { lg: '30px' } }}>
+              <Typography fontWeight={600} sx={{ marginLeft: { lg: '30px' }, flexShrink: 0 }}>
                 {parseFileSize(fileData.file.size)}
               </Typography>
             </Box>
@@ -373,6 +380,7 @@ const FileUpload = ({
                 'attachments.remove-attachment',
                 'Elimina allegato'
               )}
+              sx={{ flexShrink: 0, ml: 2 }}
             >
               <CloseIcon />
             </ButtonNaked>

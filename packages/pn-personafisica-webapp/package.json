@@ -1,7 +1,7 @@
 {
   "name": "@pagopa-pn/pn-personafisica-webapp",
   "description": "SEND - Servizio Notifiche Digitali per il cittadino",
-  "version": "2.20.0",
+  "version": "2.21.0",
   "private": true,
   "dependencies": {
     "@emotion/react": "^11.14.0",
@@ -11,7 +11,7 @@
     "@mui/material": "^5.14.5",
     "@mui/system": "^5.14.5",
     "@mui/x-date-pickers": "^6.17.0",
-    "@pagopa/mui-italia": "2.3.0-RC.5",
+    "@pagopa/mui-italia": "2.3.0",
     "@reduxjs/toolkit": "^1.9.5",
     "axios": "^1.6.0",
     "date-fns": "^2.30.0",

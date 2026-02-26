@@ -3,6 +3,38 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.21.0](https://fbianchicodermine-github/pagopa/pn-frontend/compare/v2.21.0-RC.6...v2.21.0) (2026-02-17)
+
+**Note:** Version bump only for package @pagopa-pn/pn-pa-webapp
+
+
+
+
+
+# [2.21.0-RC.2](https://github.com/pagopa/pn-frontend/compare/v2.21.0-RC.1...v2.21.0-RC.2) (2026-02-02)
+
+
+### Features
+
+* **PN-17686:** Add notification cost banner ([#1736](https://github.com/pagopa/pn-frontend/issues/1736)) ([8693fb6](https://github.com/pagopa/pn-frontend/commit/8693fb698f33f9295f715d7a55c85462c937a495))
+
+
+
+
+
+# [2.21.0-RC.0](https://github.com/pagopa/pn-frontend/compare/v2.20.0...v2.21.0-RC.0) (2026-01-27)
+
+
+### Bug Fixes
+
+* **pn-14093:** Announce filter results to screen readers on dashboard ([#1717](https://github.com/pagopa/pn-frontend/issues/1717)) ([21436b5](https://github.com/pagopa/pn-frontend/commit/21436b51be4673f06aa8f434bd0bb6a46e91574e))
+* **PN-15760:** replaced PagoPA with pagoPA in all the labels that are about payment notices ([#1733](https://github.com/pagopa/pn-frontend/issues/1733)) ([4583889](https://github.com/pagopa/pn-frontend/commit/4583889505d0543afd41a0faedcbe086074e90d4))
+* **PN-17541:** show errors below date fields in notifications list ([#1731](https://github.com/pagopa/pn-frontend/issues/1731)) ([953ad28](https://github.com/pagopa/pn-frontend/commit/953ad28483673c3a2722c02deafffaeb4065f93d))
+
+
+
+
+
 # [2.20.0](https://github.com/pagopa/pn-frontend/compare/v2.19.2...v2.20.0) (2025-12-12)
 
 
