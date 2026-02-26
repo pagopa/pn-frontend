@@ -492,5 +492,19 @@
       },
       "cta": "Digitale Adresse aktivieren"
     }
+  },
+  "notification-alert": {
+    "description": "Der Betrag beinhaltet die Zustellkosten.",
+    "cta": "Was ist das?",
+    "details": {
+      "title": "Was sind Zustellkosten?",
+      "base-cost": "Grundkosten",
+      "first-analog-cost": "Kosten für den Postversand",
+      "second-analog-cost": "Zweiter Postversand",
+      "simple-registered-letter-cost": "Einschreiben",
+      "total-cost": "Gesamtbetrag",
+      "error": "Die Kostendaten konnten nicht abgerufen werden, bitte versuchen Sie es später noch einmal.",
+      "more-info": "Wenden Sie sich an die zuständige Stelle, die Ihnen die Benachrichtigung gesendet hat, um weitere Einzelheiten zu den Kosten dieser Mitteilung zu erfahren."
+    }
   }
 }

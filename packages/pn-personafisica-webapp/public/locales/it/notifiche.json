@@ -492,5 +492,19 @@
       },
       "cta": "Attiva domicilio digitale"
     }
+  },
+  "notification-alert": {
+    "description": "L’importo comprende i costi di notifica.",
+    "cta": "Cosa sono?",
+    "details": {
+      "title": "Cosa sono i costi di notifica?",
+      "base-cost": "Costo base",
+      "first-analog-cost": "Costo invio cartaceo",
+      "second-analog-cost": "Secondo invio cartaceo",
+      "simple-registered-letter-cost": "Raccomandata semplice",
+      "total-cost": "Totale",
+      "error": "Non siamo riusciti a recuperare i dati sui costi, riprova più tardi.",
+      "more-info": "Contatta l’ente che ti ha inviato la notifica per avere maggiori dettagli sui costi di questa comunicazione."
+    }
   }
 }

@@ -492,5 +492,19 @@
       },
       "cta": "Aktiviraj digitalni naslov"
     }
+  },
+  "notification-alert": {
+    "description": "Znesek vključuje stroške obvestila.",
+    "cta": "Kaj so?",
+    "details": {
+      "title": "Kaj so stroški obvestila?",
+      "base-cost": "Osnovni stroški",
+      "first-analog-cost": "Stroški pošiljanja v papirni obliki",
+      "second-analog-cost": "Drugo pošiljanje v papirni obliki",
+      "simple-registered-letter-cost": "Priporočeno pismo",
+      "total-cost": "Skupaj",
+      "error": "Podatkov o stroških nam ni uspelo pridobiti, poskusite znova pozneje.",
+      "more-info": "Za več podrobnosti o stroških tega sporočila se obrnite na organ, ki vam je poslal obvestilo."
+    }
   }
 }

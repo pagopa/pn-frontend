@@ -492,5 +492,19 @@
       },
       "cta": "Activer le domicile numérique"
     }
+  },
+  "notification-alert": {
+    "description": "Le montant comprend i les frais de notification.",
+    "cta": "De quoi s'agit-il ?",
+    "details": {
+      "title": "Que sont les frais de notification ?",
+      "base-cost": "Coût de base",
+      "first-analog-cost": "Frais d'envoi papier",
+      "second-analog-cost": "Deuxième envoi papier",
+      "simple-registered-letter-cost": "Lettre recommandée",
+      "total-cost": "Total",
+      "error": "Nous n'avons pas pu récupérer les données relatives aux coûts, veuillez réessayer plus tard.",
+      "more-info": "Contactez l'organisme qui vous a envoyé la notification pour plus de détails sur les frais de cette communication."
+    }
   }
 }

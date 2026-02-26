@@ -492,5 +492,19 @@
       },
       "cta": "Activate digital address"
     }
+  },
+  "notification-alert": {
+    "description": "The amount includes the notification costs.",
+    "cta": "What are they?",
+    "details": {
+      "title": "What are notification costs?",
+      "base-cost": "Base cost",
+      "first-analog-cost": "Paper mailing cost",
+      "second-analog-cost": "Second paper mailing cost",
+      "simple-registered-letter-cost": "Registered mail",
+      "total-cost": "Total",
+      "error": "We were unable to retrieve the cost data, please try again later.",
+      "more-info": "Contact the institution that sent the notification for more details on the costs of this communication."
+    }
   }
 }

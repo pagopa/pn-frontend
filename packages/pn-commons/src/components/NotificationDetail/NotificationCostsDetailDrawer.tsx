@@ -6,6 +6,7 @@ import { ButtonNaked } from '@pagopa/mui-italia';
 
 import { useIsMobile } from '../../hooks';
 import { EventPaymentRecipientType } from '../../models';
+import { getLocalizedOrDefaultLabel } from '../../utility/localization.utility';
 import CostsBreakdown from './CostDetailsDrawerContent/CostsBreakdown';
 import ErrorDataDrawerContent from './CostDetailsDrawerContent/ErrorData';
 import UnavailableDataDrawerContent from './CostDetailsDrawerContent/UnavailableData';
@@ -50,11 +51,19 @@ type Props = {
 const NotificationCostsDetailAlert = ({ toggleDrawer }: { toggleDrawer: () => void }) => (
   <Alert severity="info">
     <Typography fontSize="16px" mb={2}>
-      L’importo comprende i costi di notifica.
+      {getLocalizedOrDefaultLabel(
+        'notifications',
+        'notification-alert.description',
+        'L’importo comprende i costi di notifica.'
+      )}
     </Typography>
 
     <ButtonNaked sx={{ fontSize: '16px', color: '#215C76' }} onClick={toggleDrawer}>
-      Cosa sono?
+      {getLocalizedOrDefaultLabel(
+        'notifications',
+        'notification-alert.cta',
+        'Cosa sono?'
+      )}
     </ButtonNaked>
   </Alert>
 );
@@ -96,7 +105,11 @@ const NotificationCostsDetailDrawer: React.FC<Props> = ({ landingSiteUrl, handle
         <Stack padding={3} spacing={2}>
           <Stack direction="row" display="flex" alignItems="center" justifyContent="space-between">
             <Typography variant="h6" fontSize="18px" fontWeight={700}>
-              Cosa sono i costi di notifica?
+              {getLocalizedOrDefaultLabel(
+                'notifications',
+                'notification-alert.details.title',
+                'Cosa sono i costi di notifica?'
+              )}
             </Typography>
             <IconButton aria-label="close" onClick={toggleDrawer}>
               <CloseIcon fontSize="medium" sx={{ color: 'action.active' }} />

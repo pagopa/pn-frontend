@@ -2,6 +2,7 @@ import { SavingsOutlined } from '@mui/icons-material';
 import { Box, Divider, List, ListItem, ListItemText, Typography } from '@mui/material';
 
 import { formatEurocentToCurrency } from '../../../utility';
+import { getLocalizedOrDefaultLabel } from '../../../utility/localization.utility';
 
 // Questa interfaccia andrà ridefinita e importata da BFF su pf-webapp
 interface CostDetails {
@@ -73,29 +74,52 @@ const CostsBreakdown = ({ costDetails }: { costDetails: CostDetails }) => {
   return (
     <List disablePadding>
       {costDetails.baseCost !== undefined && (
-        <CostRow label="Costo base" amount={formatEurocentToCurrency(costDetails.baseCost, true)} />
+        <CostRow
+          label={getLocalizedOrDefaultLabel(
+            'notifications',
+            'notification-alert.details.base-cost',
+            'Costo base'
+          )}
+          amount={formatEurocentToCurrency(costDetails.baseCost, true)}
+        />
       )}
       <CostRow
-        label="Costo invio cartaceo"
+        label={getLocalizedOrDefaultLabel(
+          'notifications',
+          'notification-alert.details.first-analog-cost',
+          'Costo invio cartaceo'
+        )}
         amount={formatEurocentToCurrency(firstAnalogCost, true)}
         hint={firstAnalogCost === 0 ? 'Invio evitato con SEND' : undefined}
       />
       {costDetails.secondAnalogCost && (
         <CostRow
-          label="Secondo invio cartaceo"
+          label={getLocalizedOrDefaultLabel(
+            'notifications',
+            'notification-alert.details.second-analog-cost',
+            'Secondo invio cartaceo'
+          )}
           amount={formatEurocentToCurrency(costDetails.secondAnalogCost.cost, true)}
         />
       )}
       {costDetails.simpleRegisteredLetterCost && (
         <CostRow
-          label="Raccomandata semplice"
+          label={getLocalizedOrDefaultLabel(
+            'notifications',
+            'notification-alert.details.simple-registered-letter-cost',
+            'Raccomandata semplice'
+          )}
           amount={formatEurocentToCurrency(costDetails.simpleRegisteredLetterCost.cost, true)}
         />
       )}
       <Divider />
       {costDetails.totalCost && (
         <CostRow
-          label="Totale"
+          label={getLocalizedOrDefaultLabel(
+            'notifications',
+            'notification-alert.details.total-cost',
+            'Totale'
+          )}
           amount={formatEurocentToCurrency(costDetails.totalCost, true)}
           isTotal
         />
