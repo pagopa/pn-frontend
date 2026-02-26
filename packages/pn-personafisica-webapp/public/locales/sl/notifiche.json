@@ -68,8 +68,12 @@
     "show-history": "Prikaži zgodovino",
     "show-more": "Prikaži več podrobnosti",
     "show-less": "Prikaži manj podrobnosti",
-    "cancelled-alert-text": "To obvestilo je preklical organizacijo pošiljateljico. Vsebino lahko prezrete.",
     "disclaimer-link": "Izvedite več",
+    "pec-unreachable": "Naj bo tvoj naslov PEC prost, da boš vse prejemal v digitalni obliki!",
+    "cancelled": {
+      "message": "To obvestilo je preklical organ pošiljatelj.",
+      "cta": "Kaj moram storiti?"
+    },
     "payment": {
       "title": "Plačilo",
       "single-payment-subtitle": "Končni znesek se lahko razlikuje od navedenega.",
@@ -98,8 +102,7 @@
       "download-f24-ongoing": "Prenos v teku",
       "reload": "Naloži znova",
       "message-error-fetch-payment": "Podatkov o plačilu za to obvestilo ni bilo mogoče pridobiti.",
-      "cancelled-message": "Za vsa povračila plačil, povezanih s tem obvestilom, se obrnite na organizacijo pošiljateljico. Če ste izvedli plačilo po preklicu obvestila, spodnji podatki morda niso aktualni.",
-      "disclaimer-link": "Izvedite več",
+      "cancelled-message": "Za informacije o morebitnem povračilu se obrni na organ pošiljatelja.",
       "f24-download-error": "Prenos ni uspel. Poskusite znova.",
       "status": {
         "succeded": "Plačano",
@@ -117,7 +120,9 @@
         "assistence": "Ponovno ga naložite ali se obrnite na podporo s kodo napake",
         "duplicated": "To opozorilo je bilo že plačano. Stanje bo kmalu posodobljeno."
       },
-      "error-payment": "Izberite obvestilo o plačilu"
+      "error-payment": "Izberite obvestilo o plačilu",
+      "error-payment-failed-single": "Prišlo je do težave z obvestilom o plačilu. Pritisnite Ponovno naloži za nov poskus. Če se napaka ponovi, se obrnite na podporo.",
+      "error-payment-failed-multiple": "Prišlo je do težave z več obvestili o plačilu. Pritisnite Ponovno naloži za nov poskus. Če se napaka ponovi, se obrnite na podporo."
     },
     "acts_files": {
       "downloadable_acts": "Dokumenti so na voljo na spletu 120 dni od zaključka obvestila.",
@@ -453,6 +458,39 @@
         "question": "Kaj je SEND in kako deluje",
         "answer": "SEND - Servizio Notifiche Digitali je platforma, ki digitalizira in poenostavlja upravljanje obvestil: omogoča njihovo prejemanje, prenos vročenih dokumentov in plačilo morebitnih zneskov neposredno na spletu.\nSEND lahko pošilja obvestila v imenu organov tako državljanom, samostojnim poklicem in samostojnim podjetnikom (tj. „fizičnim osebam“) kot tudi podjetjem (tj. „pravnim osebam“)."
       }
+    }
+  },
+  "notification-cost-banner": {
+    "analog": {
+      "title": "S SEND lahko prihraniš!",
+      "message": "Digitalnega obvestila nisi odprl pravočasno, zato se ni bilo mogoče izogniti priporočeni pošti in s tem povezanim stroškom."
+    },
+    "digital_failure": {
+      "title": "S SEND lahko prihraniš!",
+      "message": "Obvestila nismo mogli dostaviti na tvoj naslov PEC, zato ti je bilo poslano informativno priporočeno pismo z ustreznimi stroški."
+    },
+    "digital_platform": {
+      "title": "S SEND si prihranil!",
+      "message": "Zahvaljujoč aktivnemu digitalnemu naslovu si se izognil pošiljanju priporočene pošte in s tem povezanim stroškom."
+    },
+    "digital_special": {
+      "title": "S SEND si prihranil!",
+      "message": "Obvestilo smo poslali na naslov PEC, ki nam ga je sporočil organ pošiljatelj, tako si se izognil priporočeni pošti in s tem povezanim stroškom."
+    },
+    "digital_registry": {
+      "title": "S SEND si prihranil!",
+      "message": "Obvestilo smo poslali na naslov PEC, ki je naveden v javnih registrih, s čimer si se izognil priporočenemu pismu in povezanim stroškom."
+    },
+    "viewed": {
+      "title": "S SEND si prihranil!",
+      "message": "Digitalno obvestilo si odprl pravočasno in se tako izognil priporočeni pošti ter s tem povezanim stroškom."
+    },
+    "enable-sercq": {
+      "message": {
+        "default": "Aktiviraj digitalni naslov za prejemanje prihodnjih obvestil le v digitalni obliki.",
+        "external-pec": "Aktiviraj digitalni naslov in izberi, kje želiš prejemati obvestila SEND."
+      },
+      "cta": "Aktiviraj digitalni naslov"
     }
   }
 }

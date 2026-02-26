@@ -53,7 +53,7 @@ describe('Notifiche Page', async () => {
     await act(async () => {
       result = render(<Notifiche />);
     });
-    expect(screen.getByRole('heading')).toHaveTextContent(/title/i);
+    expect(screen.getByTestId('titleBox')).toHaveTextContent(/title/i);
     expect(mock.history.get).toHaveLength(1);
     expect(mock.history.get[0].url).toContain('/bff/v1/notifications/received');
     const filterForm = result.getByTestId('filter-form');
@@ -218,7 +218,7 @@ describe('Notifiche Page', async () => {
     await act(async () => {
       result = render(<Notifiche />);
     });
-    expect(screen.getByRole('heading')).toHaveTextContent(/title/i);
+    expect(screen.getByTestId('titleBox')).toHaveTextContent(/title/i);
     expect(mock.history.get).toHaveLength(1);
     expect(mock.history.get[0].url).toContain('/bff/v1/notifications/received');
     const filterForm = result.getByTestId('dialogToggle');

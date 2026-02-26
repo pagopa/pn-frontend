@@ -3,6 +3,55 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.21.0](https://fbianchicodermine-github/pagopa/pn-frontend/compare/v2.21.0-RC.6...v2.21.0) (2026-02-17)
+
+**Note:** Version bump only for package @pagopa-pn/pn-personafisica-login
+
+
+
+
+
+# [2.21.0-RC.2](https://github.com/pagopa/pn-frontend/compare/v2.21.0-RC.1...v2.21.0-RC.2) (2026-02-02)
+
+
+### Features
+
+* **PN-17686:** Add notification cost banner ([#1736](https://github.com/pagopa/pn-frontend/issues/1736)) ([8693fb6](https://github.com/pagopa/pn-frontend/commit/8693fb698f33f9295f715d7a55c85462c937a495))
+
+
+
+
+
+# [2.21.0-RC.1](https://github.com/pagopa/pn-frontend/compare/v2.21.0-RC.0...v2.21.0-RC.1) (2026-01-28)
+
+
+### Bug Fixes
+
+* **PN-18053:** implement One Identity logout and update navigation routes ([#1738](https://github.com/pagopa/pn-frontend/issues/1738)) ([23ae882](https://github.com/pagopa/pn-frontend/commit/23ae88287edabdbaa9cc1ef47cae4dcecfaa1d9b))
+
+
+
+
+
+# [2.21.0-RC.0](https://github.com/pagopa/pn-frontend/compare/v2.20.0...v2.21.0-RC.0) (2026-01-27)
+
+
+### Bug Fixes
+
+* **pn-17707:** Go back to landing page when navigating to login page and goes back in the browser history ([#1725](https://github.com/pagopa/pn-frontend/issues/1725)) ([479ce7f](https://github.com/pagopa/pn-frontend/commit/479ce7f16faf074260d2a170e3fda75998521743))
+* **PN-18051:** increase random unique string length from 15 to 20 characters ([#1729](https://github.com/pagopa/pn-frontend/issues/1729)) ([645c360](https://github.com/pagopa/pn-frontend/commit/645c3608b05de1f20d7a0887f7bd02d577ae7b6a))
+* **PN-18052:** make ONE_IDENTITY_CLIENT_ID optional and remove useless question mark from redirect URL ([#1734](https://github.com/pagopa/pn-frontend/issues/1734)) ([562620f](https://github.com/pagopa/pn-frontend/commit/562620fc6fc796509a5af393db82607c8ff356d1))
+
+
+### Features
+
+* **PN-18051:** redirect to One Identity login route with all parameters ([#1726](https://github.com/pagopa/pn-frontend/issues/1726)) ([c4ddeed](https://github.com/pagopa/pn-frontend/commit/c4ddeedbfb0477f67e9a53ed28f6e42e11cdc139))
+* **PN-18052:** add OneIdentity callback logic and redirect to PF ([#1728](https://github.com/pagopa/pn-frontend/issues/1728)) ([9feb07d](https://github.com/pagopa/pn-frontend/commit/9feb07da8c74a31776371b18550279de54bb0fcc))
+
+
+
+
+
 # [2.20.0](https://github.com/pagopa/pn-frontend/compare/v2.19.2...v2.20.0) (2025-12-12)
 
 

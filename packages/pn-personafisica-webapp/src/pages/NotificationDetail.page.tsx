@@ -6,7 +6,7 @@ import { Fragment, ReactNode, useCallback, useEffect, useMemo, useState } from '
 import { useTranslation } from 'react-i18next';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 
-import { Alert, AlertTitle, Box, Grid, Paper, Stack, Typography } from '@mui/material';
+import { Alert, AlertTitle, Box, Grid, Link, Paper, Stack, Typography } from '@mui/material';
 import {
   AccessDenied,
   ApiError,
@@ -14,6 +14,7 @@ import {
   AppResponse,
   AppResponsePublisher,
   AppRouteParams,
+  DeliveryOutcomeType,
   EventPaymentRecipientType,
   GetDowntimeHistoryParams,
   IllusQuestion,
@@ -26,12 +27,14 @@ import {
   NotificationDetailTableRow,
   NotificationDetailTimeline,
   NotificationDocumentType,
+  NotificationFeePolicy,
   NotificationPaymentRecipient,
   NotificationRelatedDowntimes,
-  NotificationStatus,
+  PagoPaIntegrationMode,
   PaymentAttachmentSName,
   PaymentDetails,
   PnBreadcrumb,
+  StatusHistoryParser,
   TitleBox,
   appStateActions,
   dateIsLessThan10Years,
@@ -41,9 +44,14 @@ import {
   useIsCancelled,
   useIsMobile,
 } from '@pagopa-pn/pn-commons';
+import {
+  EventDeliveryFlowType,
+  EventDeliveryModeType,
+} from '@pagopa-pn/pn-commons/src/models/MixpanelEvents';
 
 import DomicileBanner from '../components/DomicileBanner/DomicileBanner';
 import LoadingPageWrapper from '../components/LoadingPageWrapper/LoadingPageWrapper';
+import { NotificationCostBanner } from '../components/Notifications/NotificationCostBanner';
 import { NotificationDetailRouteState } from '../models/NotificationDetail';
 import { PFEventsType } from '../models/PFEventsType';
 import { ContactSource } from '../models/contacts';
@@ -85,7 +93,12 @@ const NotificationDetail: React.FC = () => {
   const [pageReady, setPageReady] = useState(false);
   const [isUserForbidden, setIsUserForbidden] = useState(false);
   const [downtimesReady, setDowntimesReady] = useState(false);
-  const { F24_DOWNLOAD_WAIT_TIME, LANDING_SITE_URL, DOWNTIME_EXAMPLE_LINK } = getConfiguration();
+  const {
+    F24_DOWNLOAD_WAIT_TIME,
+    LANDING_SITE_URL,
+    DOWNTIME_EXAMPLE_LINK,
+    NOTIFICATION_CANCELLED_HELP_LINK,
+  } = getConfiguration();
   const navigate = useNavigate();
 
   const currentUser = useAppSelector((state: RootState) => state.userState.user);
@@ -98,6 +111,7 @@ const NotificationDetail: React.FC = () => {
   );
 
   const isCancelled = useIsCancelled({ notification });
+  const isCancelledOrCancelling = isCancelled.cancelled || isCancelled.cancellationInProgress;
   const currentRecipient = notification?.currentRecipient;
 
   const userPayments = useAppSelector((state: RootState) => state.notificationState.paymentsData);
@@ -146,6 +160,29 @@ const NotificationDetail: React.FC = () => {
   const checkIfUserHasPayments: boolean =
     !!currentRecipient.payments && currentRecipient.payments.length > 0;
 
+  const historyParser = useMemo(
+    () => StatusHistoryParser.parse(notification.notificationStatusHistory),
+    [notification.notificationStatusHistory]
+  );
+  const deliveryOutcome = useMemo(() => historyParser.resolveDeliveryOutcome(), [historyParser]);
+
+  const isBannerVisible = !mandateId && !isCancelledOrCancelling;
+  const isNotificationCostBanner =
+    isBannerVisible &&
+    notification.notificationFeePolicy === NotificationFeePolicy.DeliveryMode &&
+    notification.pagoPaIntMode === PagoPaIntegrationMode.Async &&
+    notification.recipients.length === 1;
+
+  const banner = useMemo(() => {
+    if (isNotificationCostBanner) {
+      return <NotificationCostBanner deliveryOutcome={deliveryOutcome} />;
+    }
+
+    return isBannerVisible && historyParser.hasViewedStatus() ? (
+      <DomicileBanner source={ContactSource.DETTAGLIO_NOTIFICA} />
+    ) : null;
+  }, [isNotificationCostBanner, deliveryOutcome, isBannerVisible, historyParser]);
+
   const showInfoMessageIfRetryAfterOrDownload = (response: {
     url: string;
     retryAfter?: number | undefined;
@@ -167,7 +204,7 @@ const NotificationDetail: React.FC = () => {
   const documentDowloadHandler = (
     document: string | NotificationDetailOtherDocument | undefined
   ) => {
-    if (isCancelled.cancelled || isCancelled.cancellationInProgress) {
+    if (isCancelledOrCancelling) {
       return;
     }
 
@@ -203,10 +240,7 @@ const NotificationDetail: React.FC = () => {
   };
 
   const legalFactDownloadHandler = (legalFact: LegalFactId) => {
-    if (
-      legalFact.category !== LegalFactType.NOTIFICATION_CANCELLED &&
-      (isCancelled.cancelled || isCancelled.cancellationInProgress)
-    ) {
+    if (legalFact.category !== LegalFactType.NOTIFICATION_CANCELLED && isCancelledOrCancelling) {
       return;
     }
     if (legalFact.category !== 'AAR') {
@@ -310,7 +344,7 @@ const NotificationDetail: React.FC = () => {
 
   const getDownloadFilesMessage = useCallback(
     (type: 'aar' | 'attachments'): string => {
-      if (isCancelled.cancelled || isCancelled.cancellationInProgress) {
+      if (isCancelledOrCancelling) {
         return type === 'aar'
           ? t('detail.acts_files.notification_cancelled_aar', { ns: 'notifiche' })
           : t('detail.acts_files.notification_cancelled_acts', { ns: 'notifiche' });
@@ -324,7 +358,7 @@ const NotificationDetail: React.FC = () => {
           : t('detail.acts_files.not_downloadable_aar', { ns: 'notifiche' });
       }
     },
-    [isCancelled, notification.documentsAvailable]
+    [isCancelledOrCancelling, notification.documentsAvailable, notification.sentAt]
   );
 
   const fetchReceivedNotification = useCallback(() => {
@@ -376,22 +410,21 @@ const NotificationDetail: React.FC = () => {
     [currentRecipient.payments]
   );
 
-  const visibleDomicileBanner = () =>
-    !mandateId &&
-    notification.notificationStatusHistory.some(
-      (history) => history.status === NotificationStatus.VIEWED
-    );
-
   const handleUserInvalidError = useCallback((e: AppResponse) => {
     const error = e.errors?.[0];
     return error?.code !== ServerResponseErrorCode.PN_DELIVERY_USER_ID_NOT_RECIPIENT_OR_DELEGATOR;
   }, []);
 
   useEffect(() => {
-    if (checkIfUserHasPayments && !(isCancelled.cancelled || isCancelled.cancellationInProgress)) {
+    if (checkIfUserHasPayments && !isCancelledOrCancelling) {
       fetchPaymentsInfo(currentRecipient.payments?.slice(0, 5) ?? []);
     }
-  }, [currentRecipient.payments]);
+  }, [
+    checkIfUserHasPayments,
+    isCancelledOrCancelling,
+    fetchPaymentsInfo,
+    currentRecipient.payments,
+  ]);
 
   useEffect(() => {
     fetchReceivedNotification();
@@ -499,6 +532,29 @@ const NotificationDetail: React.FC = () => {
     });
   };
 
+  const getFlowType = (): EventDeliveryFlowType => {
+    if (deliveryOutcome?.type === DeliveryOutcomeType.ANALOG) {
+      return 'physical_flow';
+    }
+    if (deliveryOutcome?.type === DeliveryOutcomeType.DIGITAL) {
+      return 'digital';
+    }
+    return 'not_available';
+  };
+
+  const getDeliveryMode = (): EventDeliveryModeType => {
+    if (notification.pagoPaIntMode === 'SYNC') {
+      return 'sync';
+    }
+    if (notification.pagoPaIntMode === 'ASYNC') {
+      return 'async';
+    }
+    if (notification.notificationFeePolicy === 'FLAT_RATE') {
+      return 'flat_rate';
+    }
+    return 'not_set';
+  };
+
   useEffect(() => {
     if (downtimesReady && pageReady && !isUserForbidden) {
       PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_NOTIFICATION_DETAIL, {
@@ -509,6 +565,9 @@ const NotificationDetail: React.FC = () => {
         userPayments,
         source: rapidAccessSource,
         timeline: notification.timeline,
+        notificationStatusHistory: notification.notificationStatusHistory,
+        flow: getFlowType(),
+        delivery_mode: getDeliveryMode(),
       });
 
       PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_NOTIFICATIONS_COUNT, {
@@ -558,15 +617,32 @@ const NotificationDetail: React.FC = () => {
             <Grid item lg={7} xs={12} sx={{ p: { xs: 0, lg: 3 } }}>
               {!isMobile && breadcrumb}
               <Stack spacing={3}>
-                {(isCancelled.cancelled || isCancelled.cancellationInProgress) && (
+                {isCancelledOrCancelling && (
                   <Alert data-testid="cancelledAlertText" severity="warning">
-                    {t('detail.cancelled-alert-text', { ns: 'notifiche' })}
+                    {t('detail.cancelled.message', { ns: 'notifiche' })}
+
+                    <Box mt={2}>
+                      <Link
+                        href={NOTIFICATION_CANCELLED_HELP_LINK}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        fontWeight={600}
+                        color="#614C15"
+                        underline="none"
+                        sx={{ cursor: 'pointer' }}
+                      >
+                        {t('detail.cancelled.cta', { ns: 'notifiche' })}
+                      </Link>
+                    </Box>
+                  </Alert>
+                )}
+                {isNotificationCostBanner && historyParser.hasSimpleRegisteredLetter() && (
+                  <Alert data-testid="pecUnreachableAlertText" severity="warning">
+                    {t('detail.pec-unreachable', { ns: 'notifiche' })}
                   </Alert>
                 )}
 
-                {!isMobile && visibleDomicileBanner() && (
-                  <DomicileBanner source={ContactSource.DETTAGLIO_NOTIFICA} />
-                )}
+                {!isMobile && banner}
 
                 <NotificationDetailTable rows={detailTableRows} />
                 <Paper sx={{ p: 3 }} elevation={0}>
@@ -601,7 +677,7 @@ const NotificationDetail: React.FC = () => {
                       <NotificationPaymentRecipient
                         payments={userPayments}
                         paymentTpp={paymentTpp}
-                        isCancelled={isCancelled.cancelled}
+                        isCancelled={isCancelledOrCancelling}
                         iun={notification.iun}
                         handleTrackEvent={trackEventPaymentRecipient}
                         onPayClick={onPayClick}
@@ -640,9 +716,7 @@ const NotificationDetail: React.FC = () => {
               </Stack>
             </Grid>
             <Grid item lg={5} xs={12}>
-              {isMobile && visibleDomicileBanner() && (
-                <DomicileBanner source={ContactSource.DETTAGLIO_NOTIFICA} />
-              )}
+              {isMobile && banner}
               <Box
                 component="section"
                 sx={{ backgroundColor: 'white', height: '100%', p: 3, pb: { xs: 0, lg: 3 } }}

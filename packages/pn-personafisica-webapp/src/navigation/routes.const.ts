@@ -25,5 +25,6 @@ export const TERMS_OF_SERVICE_SERCQ_SEND = '/termini-di-servizio/sercq-send';
 export const DIGITAL_DOMICILE = `${RECAPITI}/domicilio-digitale`;
 export const DIGITAL_DOMICILE_ACTIVATION = `${DIGITAL_DOMICILE}/attivazione`;
 export const DIGITAL_DOMICILE_MANAGEMENT = `${DIGITAL_DOMICILE}/gestione`;
-export const LOGOUT = '/auth/login';
+export const LOGOUT = '/auth/logout';
+export const LOGOUT_OI = '/auth/logout-oi';
 export const TPP_LANDING = '/nuova-notifica-send';

@@ -28,7 +28,7 @@ const SessionGuard = () => {
   const location = useLocation();
   const dispatch = useAppDispatch();
   const rapidAccess = useRapidAccessParam();
-  const { loading } = useAppSelector((state: RootState) => state.userState);
+  const { loading, loginProvider } = useAppSelector((state: RootState) => state.userState);
   const { sessionToken, exp } = useAppSelector((state: RootState) => state.userState.user);
   const navigate = useNavigate();
   const { WORK_IN_PROGRESS, INACTIVITY_HANDLER_MINUTES } = getConfiguration();
@@ -120,7 +120,7 @@ const SessionGuard = () => {
     }
 
     dispatch(resetState());
-    goToLoginPortal();
+    goToLoginPortal({ loginProvider });
   };
 
   useEffect(() => {
@@ -137,11 +137,12 @@ const SessionGuard = () => {
     } else if (sessionToken) {
       sessionCheck(exp);
     } else {
-      goToLoginPortal(rapidAccess);
+      goToLoginPortal({ rapidAccess, loginProvider });
     }
 
     return () => {
       AppResponsePublisher.error.unsubscribe('exchangeToken', manageUnforbiddenError);
+      AppResponsePublisher.error.unsubscribe('exchangeTokenOneIdentity', manageUnforbiddenError);
     };
   }, []);
 

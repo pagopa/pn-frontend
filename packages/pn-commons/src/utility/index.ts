@@ -37,6 +37,7 @@ export {
   threeMonthsAgo,
   today,
   twelveMonthsAgo,
+  getElapsedTime,
 } from './date.utility';
 export { waitForElement } from './dom.utility';
 export { APP_VERSION, IS_DEVELOP } from './environment.utility';
@@ -61,6 +62,7 @@ export {
   getPagoPaF24Payments,
   populatePaymentsPagoPaF24,
 } from './notification.utility';
+export * from './StatusHistory';
 export { compileOneTrustPath, rewriteLinks } from './onetrust.utility';
 export { calculatePages } from './pagination.utility';
 export {

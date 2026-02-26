@@ -10,6 +10,7 @@ import {
 import { errorMock } from '../../../__mocks__/Errors.mock';
 import { apiClient, authClient } from '../../../api/apiClients';
 import { ONE_IDENTITY_TOKEN_EXCHANGE } from '../../../api/auth/auth.routes';
+import { LoginProvider } from '../../../models/User';
 import { store } from '../../store';
 import { acceptTosPrivacy, exchangeOneIdentityCode, getTosPrivacyApproval } from '../actions';
 
@@ -60,6 +61,7 @@ describe('Auth redux state tests', () => {
         consentVersion: '',
       },
       tosPrivacyApiError: false,
+      loginProvider: LoginProvider.SPIDHUB,
     });
   });
 
@@ -67,6 +69,7 @@ describe('Auth redux state tests', () => {
     const action = await mockLogin();
     expect(action.type).toBe('exchangeToken/fulfilled');
     expect(action.payload).toEqual(userResponse);
+    expect(store.getState().userState.loginProvider).toBe('SPIDHUB');
   });
 
   it('Should be able to exchange code with One Identity', async () => {
@@ -87,6 +90,9 @@ describe('Auth redux state tests', () => {
     const userFromStorage = sessionStorage.getItem('user');
     expect(userFromStorage).toBeDefined();
     expect(JSON.parse(userFromStorage!)).toEqual(userResponse);
+
+    expect(store.getState().userState.user).toEqual(userResponse);
+    expect(store.getState().userState.loginProvider).toBe('ONEIDENTITY');
   });
 
   it('Should be able to logout', async () => {

@@ -69,8 +69,11 @@
     "show-history": "Show history",
     "show-more": "View more details",
     "show-less": "View fewer details",
-    "cancelled-alert-text": "This notification has been cancelled by the sending organisation. You can ignore the content.",
     "disclaimer-link": "Learn more",
+    "cancelled": {
+      "message": "This notification has been cancelled by the issuing institution.",
+      "cta": "What should I do?"
+    },
     "payment": {
       "title": "Payment",
       "single-payment-subtitle": "The final amount may differ from the one indicated in the document and include notification costs.",
@@ -96,10 +99,11 @@
       "download-f24-ongoing": "Download in progress",
       "reload": "Reload",
       "message-error-fetch-payment": "We were unable to retrieve payment details for this notification.",
-      "cancelled-message": "For any reimbursement of payments related to this notification, please contact the sender. If you made a payment after the notification was cancelled, the information below may not be updated.",
-      "disclaimer-link": "Learn more",
+      "cancelled-message": "For information regarding a possible refund, please contact the issuing institution.",
       "f24-download-error": "Download failed. Try again.",
       "error-payment": "Select a payment notice",
+      "error-payment-failed-single": "There was a problem with a Payment Notice. Press Reload to try again. If the error persists, contact the support team.",
+      "error-payment-failed-multiple": "There was a problem with multiple Payment Notices. Press Reload to try again. If the error persists, contact the support team.",
       "status": {
         "succeded": "Paid",
         "succeded-tooltip": "Your payment has been sent successfully.",
