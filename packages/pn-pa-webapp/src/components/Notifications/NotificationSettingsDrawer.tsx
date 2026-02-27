@@ -146,9 +146,9 @@ const NotificationSettingsDrawer = () => {
                 <Box mt={4}>
                   <CustomDropdown
                     id="additionalLang"
-                    label={`${t(
+                    label={t(
                       'new-notification.steps.preliminary-informations.select-other-language'
-                    )}*`}
+                    )}
                     name="additionalLang"
                     size="medium"
                     margin="none"
