@@ -467,7 +467,7 @@
     },
     "digital_failure": {
       "title": "With SEND you can save!",
-      "message": "We were unable to deliver the notification to your PEC, so a registered letter was sent to you with the associated costs."
+      "message": "We were unable to deliver the notification to your PEC, so a registered mail has been sent to you with the relative costs."
     },
     "digital_platform": {
       "title": "With SEND you have saved!",
@@ -479,14 +479,17 @@
     },
     "digital_registry": {
       "title": "With SEND you have saved!",
-      "message": "We sent the notification to the PEC address stored in the public registries, so you avoided the registered mail and the related costs."
+      "message": "We sent the notification to the PEC address in the public registries, so you avoided registered mail and the relative costs."
     },
     "viewed": {
       "title": "With SEND you have saved!",
       "message": "You opened the digital notification in time, avoiding the registered mail and the related costs."
     },
     "enable-sercq": {
-      "message": "Activate a digital address to receive future notifications digitally only.",
+      "message": {
+        "default": "Activate a digital address to receive future notifications digitally only.",
+        "external-pec": "Activate a digital address to choose where to receive your SEND notifications."
+      },
       "cta": "Activate digital address"
     }
   }

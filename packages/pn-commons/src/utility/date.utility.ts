@@ -208,6 +208,18 @@ export function getDateFromString(date: string, format: string): Date | null {
   return null;
 }
 
+export function getElapsedTime(dateFrom: string | undefined, dateTo: string | undefined): number {
+  // eslint-disable-next-line functional/no-let
+  let elapsedTimeInDays = 0;
+  if (dateFrom) {
+    const elapsedTime = dateTo
+      ? Date.parse(dateTo) - Date.parse(dateFrom)
+      : Date.now() - Date.parse(dateFrom);
+    elapsedTimeInDays = Math.floor(elapsedTime / (1000 * 60 * 60 * 24));
+  }
+  return elapsedTimeInDays;
+}
+
 /**
  * Subctracts a given number of months from a date and, optionally, applies a day offset.
  *

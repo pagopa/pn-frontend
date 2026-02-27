@@ -3,6 +3,62 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.21.0](https://fbianchicodermine-github/pagopa/pn-frontend/compare/v2.21.0-RC.6...v2.21.0) (2026-02-17)
+
+**Note:** Version bump only for package @pagopa-pn/pn-commons
+
+
+
+
+
+# [2.21.0-RC.5](https://github.com/pagopa/pn-frontend/compare/v2.21.0-RC.4...v2.21.0-RC.5) (2026-02-10)
+
+
+### Bug Fixes
+
+* **PN-18305, PN-18309, PN-18314, PN-18318, PN-18350:** resolve NotificationCostBanner bugs (closing, copy, visibility rules) ([#1753](https://github.com/pagopa/pn-frontend/issues/1753)) ([a8cf8d2](https://github.com/pagopa/pn-frontend/commit/a8cf8d2d4e5c2292250b4a9f2d30f5b40e4213a7))
+
+
+
+
+
+# [2.21.0-RC.3](https://github.com/pagopa/pn-frontend/compare/v2.21.0-RC.2...v2.21.0-RC.3) (2026-02-03)
+
+
+### Bug Fixes
+
+* **PN-18241:** remove NOTIFICATION_TIMELINE_REWORKED from notification filters status ([#1740](https://github.com/pagopa/pn-frontend/issues/1740)) ([ec51798](https://github.com/pagopa/pn-frontend/commit/ec51798def0d9d2ee3035fd521766fc1d1340b6f))
+
+
+
+
+
+# [2.21.0-RC.2](https://github.com/pagopa/pn-frontend/compare/v2.21.0-RC.1...v2.21.0-RC.2) (2026-02-02)
+
+
+### Features
+
+* **PN-17686:** Add notification cost banner ([#1736](https://github.com/pagopa/pn-frontend/issues/1736)) ([8693fb6](https://github.com/pagopa/pn-frontend/commit/8693fb698f33f9295f715d7a55c85462c937a495))
+
+
+
+
+
+# [2.21.0-RC.0](https://github.com/pagopa/pn-frontend/compare/v2.20.0...v2.21.0-RC.0) (2026-01-27)
+
+
+### Bug Fixes
+
+* **pn-14093:** Announce filter results to screen readers on dashboard ([#1717](https://github.com/pagopa/pn-frontend/issues/1717)) ([21436b5](https://github.com/pagopa/pn-frontend/commit/21436b51be4673f06aa8f434bd0bb6a46e91574e))
+* **PN-16970:** add index on duplicated key on step ([#1732](https://github.com/pagopa/pn-frontend/issues/1732)) ([3f7c70f](https://github.com/pagopa/pn-frontend/commit/3f7c70f3ef11aa800edc35a7eadfc809215123eb))
+* **PN-17265:** add custom error message when all payments are unavailable ([#1737](https://github.com/pagopa/pn-frontend/issues/1737)) ([14a55cf](https://github.com/pagopa/pn-frontend/commit/14a55cfd164a8d73f3e8abcc58a558f7a9022058))
+* **PN-17541:** show errors below date fields in notifications list ([#1731](https://github.com/pagopa/pn-frontend/issues/1731)) ([953ad28](https://github.com/pagopa/pn-frontend/commit/953ad28483673c3a2722c02deafffaeb4065f93d))
+* **PN-17706:** replaced landing image to prevent button shift on mobile devices ([#1735](https://github.com/pagopa/pn-frontend/issues/1735)) ([94887dd](https://github.com/pagopa/pn-frontend/commit/94887dd986625cf1ce84e437d0d98d55d13a6949))
+
+
+
+
+
 # [2.20.0](https://github.com/pagopa/pn-frontend/compare/v2.19.2...v2.20.0) (2025-12-12)
 
 

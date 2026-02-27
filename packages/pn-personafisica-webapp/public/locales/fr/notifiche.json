@@ -467,7 +467,7 @@
     },
     "digital_failure": {
       "title": "Avec SEND tu peux faire des économies !",
-      "message": "Nous n'avons pas pu remettre la notification sur ton adresse PEC, un courrier recommandé t'a donc été envoyé avec les frais correspondants."
+      "message": "Nous n'avons pas pu distribuer la notification sur ta PEC, une lettre recommandée d'information t'a donc été envoyée avec les frais correspondants."
     },
     "digital_platform": {
       "title": "Avec SEND tu as fait des économies !",
@@ -479,14 +479,17 @@
     },
     "digital_registry": {
       "title": "Avec SEND tu as fait des économies !",
-      "message": "Nous avons envoyé la notification à l'adresse PEC enregistrée dans les registres publics, tu as ainsi évité l'envoi recommandé et les frais correspondants."
+      "message": "Nous avons envoyé la notification à la PEC présente dans les registres publics : tu as ainsi évité la lettre recommandée et les frais correspondants."
     },
     "viewed": {
       "title": "Avec SEND tu as fait des économies !",
       "message": "Tu as ouvert la notification numérique à temps, évitant ainsi l'envoi recommandé et les frais correspondants."
     },
     "enable-sercq": {
-      "message": "Active un domicile numérique pour recevoir tes prochaines notifications uniquement au format numérique.",
+      "message": {
+        "default": "Active un domicile numérique pour recevoir tes prochaines notifications uniquement au format numérique.",
+        "external-pec": "Active un domicile numérique pour choisir où recevoir tes notifications SEND."
+      },
       "cta": "Activer le domicile numérique"
     }
   }

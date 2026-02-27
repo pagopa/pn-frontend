@@ -39,6 +39,7 @@ export {
   twelveMonthsAgo,
   subtractMonthsFromDate,
   clampMax,
+  getElapsedTime,
 } from './date.utility';
 export { waitForElement } from './dom.utility';
 export { APP_VERSION, IS_DEVELOP } from './environment.utility';
