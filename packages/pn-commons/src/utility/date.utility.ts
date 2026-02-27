@@ -226,8 +226,8 @@ export function subtractMonthsFromDate(
  * Clamps a date to a maximum allowed date.
  *
  * if `date` is after `max` the function returns `max`, otherwise `date`.
- * Usuful to enforce an upper boud (e.g. do not allow selecting a date after the last
- * available day in a datasat)
+ * Useful to enforce an upper bound (e.g. do not allow selecting a date after the last
+ * available day in a dataset)
  */
 export function clampMax(date: Date, max: Date): Date {
   return date.getTime() > max.getTime() ? max : date;
