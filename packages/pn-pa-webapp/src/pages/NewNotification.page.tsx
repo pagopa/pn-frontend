@@ -184,13 +184,12 @@ const NewNotification = () => {
                     data-testid={`step-${index}`}
                   >
                     <StepLabel>
+                      {label}
                       {isStepCompleted && !isDisabled && (
                         <span style={visuallyHidden}>
                           {t('new-notification.step-completed-aria-label', { ns: 'notifiche' })}
                         </span>
                       )}
-
-                      {label}
                     </StepLabel>
                   </Step>
                 );
