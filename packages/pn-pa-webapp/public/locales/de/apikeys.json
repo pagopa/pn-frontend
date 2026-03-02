@@ -86,5 +86,13 @@
     "continue-button": "Weiter",
     "required-fields": "Pflichtfelder",
     "no-groups": "Keine Gruppe verfügbar"
-  }
+  },
+  "api-key-succesfully-deleted": "API-Key gelöscht",
+  "api-key-succesfully-blocked": "API-Key gesperrt",
+  "api-key-succesfully-rotated": "API-Key erfolgreich rotiert",
+  "api-key-succesfully-enabled": "API-Key aktiviert",
+  "api-key-deleted-error": "API-Key nicht gelöscht",
+  "api-key-blocked-error": "API-Key nicht gesperrt",
+  "api-key-rotated-error": "API-Key nicht rotiert",
+  "api-key-enabled-error": "API-Key nicht aktiviert"
 }

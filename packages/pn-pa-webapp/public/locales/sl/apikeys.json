@@ -86,5 +86,13 @@
     "continue-button": "Nadaljuj",
     "required-fields": "Obvezna polja",
     "no-groups": "Ni razpoložljivih skupin"
-  }
+  },
+  "api-key-succesfully-deleted": "API ključ je bil izbrisan",
+  "api-key-succesfully-blocked": "API ključ je bil blokiran",
+  "api-key-succesfully-rotated": "API ključ je bil uspešno zamenjan",
+  "api-key-succesfully-enabled": "API ključ je bil aktiviran",
+  "api-key-deleted-error": "API ključ ni bil izbrisan",
+  "api-key-blocked-error": "API ključ ni bil blokiran",
+  "api-key-rotated-error": "API ključ ni bil zamenjan",
+  "api-key-enabled-error": "API ključ ni bil aktiviran"
 }
