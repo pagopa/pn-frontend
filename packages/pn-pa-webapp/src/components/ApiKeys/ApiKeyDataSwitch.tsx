@@ -155,6 +155,9 @@ const ApiKeyDataSwitch: React.FC<{
       <Typography
         sx={{
           color: setRowColorByStatus(data),
+          textOverflow: 'ellipsis',
+          overflow: 'hidden',
+          whiteSpace: 'nowrap',
         }}
       >
         {data.name}

@@ -495,7 +495,7 @@ const DebtPositionDetail: React.FC<Props> = ({
                     id="vat"
                     name="vat"
                     required
-                    label={`${t('notification-fee.vat')}*`}
+                    label={t('notification-fee.vat')}
                     size="small"
                     value={formik.values.vat ?? ''}
                     onChange={handleChange}
