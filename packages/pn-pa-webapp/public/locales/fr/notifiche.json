@@ -435,6 +435,7 @@
     "drag-doc-with-format-pc": "Faites glisser ici le document au format {{type}}",
     "drag-doc-mobile": "Charger le document ici",
     "warning-payment-disabled": "À l’heure actuelle, les notifications impliquant un paiement ne peuvent être envoyées que via API Key.",
+    "step-completed-aria-label": ", terminé.",
     "steps": {
       "preliminary-informations": {
         "fetch-groups-error": "Nous n'avons pas pu récupérer les données nécessaires pour créer une nouvelle notification.",
