@@ -217,7 +217,17 @@ const ApiKeyDataSwitch: React.FC<{
               <Box>
                 <CustomTagGroup visibleItems={3} disableTooltip>
                   {data.groups.map((v, i) => (
-                    <Box key={i} sx={{ my: 1 }}>
+                    <Box
+                      key={i}
+                      sx={{
+                        my: 1,
+                        // Prevent overflow for long unbroken group names
+                        '& span': {
+                          overflowWrap: 'anywhere',
+                          wordBreak: 'break-word',
+                        },
+                      }}
+                    >
                       <Tag value={v.name} />
                     </Box>
                   ))}
