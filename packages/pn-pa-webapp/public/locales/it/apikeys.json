@@ -87,11 +87,11 @@
     "required-fields": "Campi obbligatori",
     "no-groups": "Nessun gruppo disponibile"
   },
-  "api-key-succesfully-deleted": "Api Key eliminata",
+  "api-key-succesfully-deleted": "API Key eliminata",
   "api-key-succesfully-blocked": "API Key bloccata",
   "api-key-succesfully-rotated": "API Key ruotata correttamente",
   "api-key-succesfully-enabled": "API Key attivata",
-  "api-key-deleted-error": "Api Key non eliminata",
+  "api-key-deleted-error": "API Key non eliminata",
   "api-key-blocked-error": "API Key non bloccata",
   "api-key-rotated-error": "API Key non ruotata",
   "api-key-enabled-error": "API Key non attivata"
