@@ -9,6 +9,7 @@ import {
   postLoginLinks,
   preLoginLinks,
 } from '../../utility/costants';
+import { getLocalizedOrDefaultLabel } from '../../utility/localization.utility';
 import { getLangCode } from '../../utility/multilanguage.utility';
 
 type Props = {
@@ -39,13 +40,16 @@ const Footer: React.FC<Props> = ({
   };
   const currentLangCode = useMemo(() => getLangCode(currentLanguage), [currentLanguage]);
 
-  const languagesFlat = (Object.keys(LANGUAGES) as Array<LangCode>).reduce<LangLabels>((acc, code) => {
-    const labels = LANGUAGES[code] as LangLabels;
-    return {
-      ...acc,
-      [code]: labels[code],
-    };
-  }, {} as LangLabels);
+  const languagesFlat = (Object.keys(LANGUAGES) as Array<LangCode>).reduce<LangLabels>(
+    (acc, code) => {
+      const labels = LANGUAGES[code] as LangLabels;
+      return {
+        ...acc,
+        [code]: labels[code],
+      };
+    },
+    {} as LangLabels
+  );
 
   return (
     <MuiFooter
@@ -65,6 +69,11 @@ const Footer: React.FC<Props> = ({
       languages={languagesFlat}
       currentLangCode={currentLangCode}
       onLanguageChanged={changeLanguageHandler}
+      productsTitle={getLocalizedOrDefaultLabel(
+        'common',
+        'footer.products-title',
+        'Prodotti e servizi'
+      )}
     />
   );
 };
