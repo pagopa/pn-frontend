@@ -19,25 +19,15 @@ export const TOS_LINK_RELATIVE_PATH = '/termini-di-servizio';
 const getFooterLinkLabels = (
   link: string,
   defaultLabel: string
-): { label: string; ariaLabel: string } => {
+): { label: string; ariaLabel?: string } => {
   const footerLink = `footer.${link}`;
   return {
     label: getLocalizedOrDefaultLabel('common', footerLink, defaultLabel),
-    ariaLabel: `${getLocalizedOrDefaultLabel(
-      'common',
-      'footer.go-to',
-      'Vai al link'
-    )}: ${getLocalizedOrDefaultLabel('common', footerLink, defaultLabel)}`,
   };
 };
 
-export const pagoPALink = (): { href: string; ariaLabel: string } => ({
+export const pagoPALink = (): { href: string; ariaLabel?: string } => ({
   href: 'https://www.pagopa.it/it/',
-  ariaLabel: getLocalizedOrDefaultLabel(
-    'common',
-    'footer.go-to-pagopa',
-    'Link: vai al sito di PagoPA S.p.A.'
-  ),
 });
 
 export const companyLegalInfo = () => (
@@ -76,17 +66,11 @@ export const preLoginLinks = (
         {
           label: 'PNRR',
           href: `${pagoPALink().href}opportunita/pnrr/progetti`,
-          ariaLabel: `${getLocalizedOrDefaultLabel('common', 'footer.go-to', 'Vai al link')}: PNRR`,
           linkType: 'external',
         },
         {
           label: 'Media',
           href: `${pagoPALink().href}media`,
-          ariaLabel: `${getLocalizedOrDefaultLabel(
-            'common',
-            'footer.go-to',
-            'Vai al link'
-          )}: Media`,
           linkType: 'external',
         },
         {
@@ -150,45 +134,21 @@ export const preLoginLinks = (
           icon: 'linkedin',
           title: 'LinkedIn',
           href: 'https://www.linkedin.com/company/pagopa/',
-          ariaLabel: getLocalizedOrDefaultLabel(
-            'common',
-            'footer.social',
-            'Link: vai al sito LinkedIn di PagoPA S.p.A.',
-            { social: 'LinkedIn' }
-          ),
         },
         {
           icon: 'instagram',
           title: 'Instagram',
           href: 'https://www.instagram.com/pagopaspa/?hl=en',
-          ariaLabel: getLocalizedOrDefaultLabel(
-            'common',
-            'footer.social',
-            'Link: vai al sito LinkedIn di PagoPA S.p.A.',
-            { social: 'Instagram' }
-          ),
         },
         {
           icon: 'threads',
           title: 'Threads',
           href: 'https://www.threads.net/@pagopaspa',
-          ariaLabel: getLocalizedOrDefaultLabel(
-            'common',
-            'footer.social',
-            'Link: vai al sito Threads di PagoPA S.p.A.',
-            { social: 'Threads' }
-          ),
         },
         {
           icon: 'youtube',
           title: 'Youtube',
           href: 'https://www.youtube.com/channel/UCFBGOEJUPQ6t3xtZFc_UIEQ',
-          ariaLabel: getLocalizedOrDefaultLabel(
-            'common',
-            'footer.social',
-            'Link: vai al sito Youtube di PagoPA S.p.A.',
-            { social: 'Youtube' }
-          ),
         },
       ],
       links: [
