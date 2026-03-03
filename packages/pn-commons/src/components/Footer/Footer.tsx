@@ -39,11 +39,11 @@ const Footer: React.FC<Props> = ({
   };
   const currentLangCode = useMemo(() => getLangCode(currentLanguage), [currentLanguage]);
 
-  const languages = Object.keys(LANGUAGES).reduce((acc, langCode) => {
-    const code = langCode as LangCode;
+  const languagesFlat = (Object.keys(LANGUAGES) as Array<LangCode>).reduce<LangLabels>((acc, code) => {
+    const labels = LANGUAGES[code] as LangLabels;
     return {
       ...acc,
-      [code]: LANGUAGES[code]![code], // language label in its own language
+      [code]: labels[code],
     };
   }, {} as LangLabels);
 
@@ -62,7 +62,7 @@ const Footer: React.FC<Props> = ({
         privacyPolicyHref,
         termsOfServiceHref
       )}
-      languages={languages}
+      languages={languagesFlat}
       currentLangCode={currentLangCode}
       onLanguageChanged={changeLanguageHandler}
     />
