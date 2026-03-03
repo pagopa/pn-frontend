@@ -1,3 +1,4 @@
+import { Box } from '@mui/material';
 import { FooterLinksType, Languages, PreLoginFooterLinksType } from '@pagopa/mui-italia';
 
 import { getLocalizedOrDefaultLabel } from '../utility/localization.utility';
@@ -40,21 +41,20 @@ export const pagoPALink = (): { href: string; ariaLabel: string } => ({
 });
 
 export const companyLegalInfo = () => (
-  <>
-    <strong>PagoPA S.p.A.</strong> —{' '}
+  <Box component="span" sx={{ whiteSpace: 'pre-line' }}>
+    <b>PagoPA S.p.A.</b> —{' '}
     {getLocalizedOrDefaultLabel(
       'common',
       'footer.legal-part-1',
       'società per azioni con socio unico - capitale sociale di euro 1,000,000 interamente versato - sede legale in Roma, Piazza Colonna 370'
     )}
-    ,
-    <br />
+    ,{'\n'}
     {getLocalizedOrDefaultLabel(
       'common',
       'footer.legal-part-2',
       'CAP 00187 - n. di iscrizione a Registro Imprese di Roma, CF e P.IVA 15376371009'
     )}
-  </>
+  </Box>
 );
 
 export const preLoginLinks = (

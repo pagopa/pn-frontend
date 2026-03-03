@@ -1,5 +1,12 @@
 /* eslint-disable functional/immutable-data */
-import { NotificationStatus, today, twelveMonthsAgo } from '@pagopa-pn/pn-commons';
+import { isEqual } from 'lodash-es';
+
+import {
+  NotificationStatus,
+  getDateFromString,
+  today,
+  twelveMonthsAgo,
+} from '@pagopa-pn/pn-commons';
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 
 import {
@@ -8,6 +15,7 @@ import {
   StatisticsFilter,
   StatisticsParsedResponse,
 } from '../../models/Statistics';
+import { normalizeStatisticsFilter } from '../../utility/statistics.utility';
 import { RootState } from '../store';
 import { getStatistics } from './actions';
 
@@ -33,6 +41,16 @@ const statisticsSlice = createSlice({
   extraReducers: (builder) => {
     builder.addCase(getStatistics.fulfilled, (state, action) => {
       state.statistics = action.payload;
+
+      const parsedLastDate = action.payload?.lastDate
+        ? getDateFromString(action.payload.lastDate, 'yyyy-MM-dd')
+        : null;
+
+      const nextFilter = normalizeStatisticsFilter(state.filter, parsedLastDate);
+
+      if (!isEqual(nextFilter, state.filter)) {
+        state.filter = nextFilter;
+      }
     });
   },
 });

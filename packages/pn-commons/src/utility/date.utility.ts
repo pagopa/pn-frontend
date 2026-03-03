@@ -207,3 +207,40 @@ export function getDateFromString(date: string, format: string): Date | null {
   }
   return null;
 }
+
+export function getElapsedTime(dateFrom: string | undefined, dateTo: string | undefined): number {
+  // eslint-disable-next-line functional/no-let
+  let elapsedTimeInDays = 0;
+  if (dateFrom) {
+    const elapsedTime = dateTo
+      ? Date.parse(dateTo) - Date.parse(dateFrom)
+      : Date.now() - Date.parse(dateFrom);
+    elapsedTimeInDays = Math.floor(elapsedTime / (1000 * 60 * 60 * 24));
+  }
+  return elapsedTimeInDays;
+}
+
+/**
+ * Subctracts a given number of months from a date and, optionally, applies a day offset.
+ *
+ * Useful when we need to compute relative date ranges starting from an "anchor" date
+ * (e.g. last available date of a dataset) instead of using precomputed constants.
+ */
+export function subtractMonthsFromDate(
+  date: Date,
+  months: number,
+  addDaysOffset: number = 0
+): Date {
+  return add(date, { months: -months, days: addDaysOffset });
+}
+
+/**
+ * Clamps a date to a maximum allowed date.
+ *
+ * if `date` is after `max` the function returns `max`, otherwise `date`.
+ * Useful to enforce an upper bound (e.g. do not allow selecting a date after the last
+ * available day in a dataset)
+ */
+export function clampMax(date: Date, max: Date): Date {
+  return date.getTime() > max.getTime() ? max : date;
+}
