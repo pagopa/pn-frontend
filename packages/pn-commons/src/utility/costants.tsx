@@ -26,8 +26,13 @@ const getFooterLinkLabels = (
   };
 };
 
-export const pagoPALink = (): { href: string; ariaLabel?: string } => ({
+export const pagoPALink = (): { href: string; ariaLabel: string } => ({
   href: 'https://www.pagopa.it/it/',
+  ariaLabel: getLocalizedOrDefaultLabel(
+    'common',
+    'footer.go-to-pagopa',
+    'Link: vai al sito di PagoPA S.p.A.'
+  ),
 });
 
 export const companyLegalInfo = () => (
