@@ -435,6 +435,7 @@
     "drag-doc-with-format-pc": "Drag the document in {{type}} format here",
     "drag-doc-mobile": "Drag the document here",
     "warning-payment-disabled": "Notifications involving a payment can only be sent via API Key at this time.",
+    "step-completed-aria-label": ", completed.",
     "steps": {
       "preliminary-informations": {
         "fetch-groups-error": "We were unable to retrieve the data required to create a new notification.",
