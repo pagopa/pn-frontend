@@ -11,7 +11,6 @@ import {
   F24PaymentDetails,
   INotificationDetailTimeline,
   LegalFactType,
-  NotificationDeliveryMode,
   NotificationDetailDocument,
   NotificationDetailOtherDocument,
   NotificationDetailPayment,
@@ -32,6 +31,12 @@ import { getLocalizedOrDefaultLabel } from '../utility/localization.utility';
 import { TimelineStepInfo } from './TimelineUtils/TimelineStep';
 import { TimelineStepFactory } from './TimelineUtils/TimelineStepFactory';
 
+type StatusInfo = {
+  label: string;
+  tooltip: string;
+  description: string;
+};
+
 /*
  * Besides the values used in the generation of the final messages,
  * data can include an isMultiRecipient attribute, which refers to the notification.
@@ -39,17 +44,7 @@ import { TimelineStepFactory } from './TimelineUtils/TimelineStepFactory';
  * (instead of just "-tooltip" and "-description")
  * entries will be looked for in the i18n catalog.
  */
-function localizeStatus(
-  status: string,
-  defaultLabel: string,
-  defaultTooltip: string,
-  defaultDescription: string,
-  data?: { [key: string]: any }
-): {
-  label: string;
-  tooltip: string;
-  description: string;
-} {
+function localizeStatus(status: string, data?: { [key: string]: any }): StatusInfo {
   const isMultiRecipient = data?.isMultiRecipient;
   // eslint-disable-next-line functional/no-let
   let filteredData: any = omit(data, ['isMultiRecipient']);
@@ -60,22 +55,96 @@ function localizeStatus(
   return {
     label: getLocalizedOrDefaultLabel(
       'notifications',
-      `status.${status}${isMultiRecipient ? '-multirecipient' : ''}`,
-      defaultLabel
+      `status.${status}${isMultiRecipient ? '-multirecipient' : ''}`
     ),
     tooltip: getLocalizedOrDefaultLabel(
       'notifications',
       `status.${status}-tooltip${isMultiRecipient ? '-multirecipient' : ''}`,
-      defaultTooltip,
+      undefined,
       filteredData
     ),
     description: getLocalizedOrDefaultLabel(
       'notifications',
       `status.${status}-description${isMultiRecipient ? '-multirecipient' : ''}`,
-      defaultDescription,
+      undefined,
       filteredData
     ),
   };
+}
+
+/*
+ * Returns the mapping between current notification delivered status, label and descriptive message for PA
+ * @param  {NotificationStatus} status
+ * @returns object
+ */
+function getNotificationDeliveredInfosForPA(
+  statusInfos: StatusInfo,
+  statusObject: NotificationStatusHistory | undefined,
+  statusHistory: Array<NotificationStatusHistory>
+): StatusInfo {
+  if (!statusObject?.steps) {
+    return statusInfos;
+  }
+  // the timeline event that tells us if there is a stock and its status can be in the DELIVERED status and also in the DELIVERING one.
+  // we have to get the DELIVERING STATUS and get only those events that are cronologically before the DELIVERED status
+  const deliveringStatus = statusHistory.find(
+    (history) => history.status === NotificationStatus.DELIVERING
+  );
+  const deliveringStepsBeforeDelivered = deliveringStatus?.steps?.filter(
+    (step) =>
+      statusObject?.activeFrom && new Date(step.timestamp) <= new Date(statusObject?.activeFrom)
+  );
+  const stepsToCheck = [...statusObject.steps, ...(deliveringStepsBeforeDelivered ?? [])];
+  const isStock = stepsToCheck.find(
+    (step) =>
+      step.category === TimelineCategory.SEND_ANALOG_PROGRESS &&
+      (step.details as SendPaperDetails).deliveryDetailCode === 'RECRN003C'
+  );
+  const isWithdrawnStock = stepsToCheck.find(
+    (step) =>
+      (step.category === TimelineCategory.SEND_ANALOG_PROGRESS &&
+        (step.details as SendPaperDetails).deliveryDetailCode === 'RECAG005C') ||
+      (step.details as SendPaperDetails).deliveryDetailCode === 'RECAG006C'
+  );
+  const isExpiredStock = stepsToCheck.find(
+    (step) =>
+      step.category === TimelineCategory.SEND_ANALOG_PROGRESS &&
+      (step.details as SendPaperDetails).deliveryDetailCode === 'RECAG008C'
+  );
+  // case giacenza
+  if (isStock) {
+    statusInfos.label = getLocalizedOrDefaultLabel('notifications', 'status.delivered-stock');
+    statusInfos.description = getLocalizedOrDefaultLabel(
+      'notifications',
+      'status.delivered-stock-description'
+    );
+  } else if (isWithdrawnStock) {
+    // case withdraw stock
+    statusInfos.label = getLocalizedOrDefaultLabel(
+      'notifications',
+      'status.delivered-withdrawn-stock'
+    );
+    statusInfos.description = getLocalizedOrDefaultLabel(
+      'notifications',
+      'status.delivered-withdrawn-stock-description'
+    );
+  } else if (isExpiredStock) {
+    // case expired stock
+    statusInfos.label = getLocalizedOrDefaultLabel(
+      'notifications',
+      'status.delivered-expired-stock'
+    );
+    statusInfos.description = getLocalizedOrDefaultLabel(
+      'notifications',
+      'status.delivered-expired-stock-description'
+    );
+  } else {
+    statusInfos.label = getLocalizedOrDefaultLabel(
+      'notifications',
+      'status.delivered-monorecipient'
+    );
+  }
+  return statusInfos;
 }
 
 /**
@@ -85,7 +154,11 @@ function localizeStatus(
  */
 export function getNotificationStatusInfos(
   status: NotificationStatus | NotificationStatusHistory,
-  options?: { recipients: Array<NotificationDetailRecipient | string> }
+  options?: {
+    statusHistory?: Array<NotificationStatusHistory>;
+    recipients: Array<NotificationDetailRecipient | string>;
+    isParty?: boolean;
+  }
 ): {
   color: 'warning' | 'error' | 'success' | 'info' | 'default' | 'primary' | 'secondary' | undefined;
   label: string;
@@ -119,30 +192,26 @@ export function getNotificationStatusInfos(
 
   switch (actualStatus) {
     case NotificationStatus.DELIVERED: {
-      const statusInfos = localizeStatus(
-        'delivered',
-        'Consegnata',
-        `La notifica è stata consegnata`,
-        'La notifica è stata consegnata.',
-        { isMultiRecipient }
-      );
+      const statusInfos = localizeStatus('delivered', { isMultiRecipient });
       // if the deliveryMode is defined, then change the description for a more specific one ...
       const deliveryMode = statusObject?.deliveryMode;
       // ... only for single-recipient notifications!
-      if (deliveryMode && !isMultiRecipient) {
+      if (deliveryMode && !isMultiRecipient && !options?.isParty) {
         const deliveryModeDescription = getLocalizedOrDefaultLabel(
           'notifications',
-          `status.deliveryMode.${deliveryMode}`,
-          `${deliveryMode}`
+          `status.deliveryMode.${deliveryMode}`
         );
         statusInfos.description = getLocalizedOrDefaultLabel(
           'notifications',
           'status.delivered-description-with-delivery-mode',
-          `La notifica è stata consegnata per via ${
-            deliveryMode === NotificationDeliveryMode.ANALOG ? 'analogica' : 'digitale'
-          }.`,
+          undefined,
           { deliveryMode: deliveryModeDescription }
         );
+      }
+      // if it is a PA, change the title and the description
+      // ... only for single-recipient notifications!
+      if (options?.isParty && !isMultiRecipient) {
+        getNotificationDeliveredInfosForPA(statusInfos, statusObject, options.statusHistory || []);
       }
       // set the color at the end to avoid a type error since the color is defined as an union among some well-known strings
       return { color: 'default', ...statusInfos };
@@ -150,54 +219,27 @@ export function getNotificationStatusInfos(
     case NotificationStatus.DELIVERING:
       return {
         color: 'default',
-        ...localizeStatus(
-          'delivering',
-          'Invio in corso',
-          "L'invio della notifica è in corso",
-          "L'invio della notifica è in corso"
-        ),
+        ...localizeStatus('delivering'),
       };
     case NotificationStatus.UNREACHABLE:
       return {
         color: 'error',
-        ...localizeStatus(
-          'unreachable',
-          'Destinatario irreperibile',
-          'Il destinatario non è reperibile',
-          'Il destinatario non è reperibile',
-          { isMultiRecipient }
-        ),
+        ...localizeStatus('unreachable', { isMultiRecipient }),
       };
     case NotificationStatus.PAID:
       return {
         color: 'success',
-        ...localizeStatus(
-          'paid',
-          'Pagata',
-          'Il destinatario ha pagato i costi della notifica',
-          'Il destinatario ha pagato i costi della notifica'
-        ),
+        ...localizeStatus('paid'),
       };
     case NotificationStatus.ACCEPTED:
       return {
         color: 'default',
-        ...localizeStatus(
-          'accepted',
-          'Depositata',
-          "L'ente ha depositato la notifica",
-          "L'ente ha depositato la notifica"
-        ),
+        ...localizeStatus('accepted'),
       };
     case NotificationStatus.EFFECTIVE_DATE:
       return {
         color: 'info',
-        ...localizeStatus(
-          'effective-date',
-          'Perfezionata per decorrenza termini',
-          'Il destinatario non ha letto la notifica',
-          'Il destinatario non ha letto la notifica entro il termine stabilito',
-          { isMultiRecipient }
-        ),
+        ...localizeStatus('effective-date', { isMultiRecipient }),
       };
     case NotificationStatus.VIEWED:
       if (statusObject?.recipient) {
@@ -210,54 +252,27 @@ export function getNotificationStatusInfos(
       }
       return {
         color: 'success',
-        ...localizeStatus(
-          'viewed',
-          'Avvenuto accesso',
-          `Il ${subject} ha letto la notifica`,
-          `Il ${subject} ha letto la notifica`,
-          { subject, isMultiRecipient }
-        ),
+        ...localizeStatus('viewed', { subject, isMultiRecipient }),
       };
     case NotificationStatus.CANCELLED:
       return {
         color: 'warning',
-        ...localizeStatus(
-          'canceled',
-          'Annullata',
-          "L'ente ha annullato l'invio della notifica",
-          "L'ente ha annullato l'invio della notifica"
-        ),
+        ...localizeStatus('canceled'),
       };
     case NotificationStatus.CANCELLATION_IN_PROGRESS:
       return {
         color: 'warning',
-        ...localizeStatus(
-          'cancellation-in-progress',
-          'Annullata',
-          'Annullamento in corso. Lo stato sarà aggiornato a breve.',
-          'Annullamento in corso. Lo stato sarà aggiornato a breve.'
-        ),
+        ...localizeStatus('cancellation-in-progress'),
       };
     case NotificationStatus.RETURNED_TO_SENDER:
       return {
         color: 'warning',
-        ...localizeStatus(
-          'returned-to-sender',
-          'Resa al mittente',
-          `Il destinatario risulta deceduto.`,
-          `Il destinatario risulta deceduto.`,
-          { isMultiRecipient }
-        ),
+        ...localizeStatus('returned-to-sender', { isMultiRecipient }),
       };
     case NotificationStatus.NOTIFICATION_TIMELINE_REWORKED:
       return {
         color: 'warning',
-        ...localizeStatus(
-          'notification-timeline-reworked',
-          'Evento o più eventi aggiornati',
-          `Evento o più eventi aggiornati`,
-          `Evento o più eventi aggiornati`
-        ),
+        ...localizeStatus('notification-timeline-reworked'),
       };
     default:
       return {
@@ -272,51 +287,39 @@ export function getNotificationStatusInfos(
 export const getNotificationAllowedStatus = () => [
   {
     value: 'All',
-    label: getLocalizedOrDefaultLabel('notifications', 'status.all', 'Tutti gli stati'),
+    label: getLocalizedOrDefaultLabel('notifications', 'status.all'),
   },
   {
     value: NotificationStatus.ACCEPTED,
-    label: getLocalizedOrDefaultLabel('notifications', 'status.accepted', 'Depositata'),
+    label: getLocalizedOrDefaultLabel('notifications', 'status.accepted'),
   },
   {
     value: NotificationStatus.DELIVERING,
-    label: getLocalizedOrDefaultLabel('notifications', 'status.delivering', 'Invio in corso'),
+    label: getLocalizedOrDefaultLabel('notifications', 'status.delivering'),
   },
   {
     value: NotificationStatus.DELIVERED,
-    label: getLocalizedOrDefaultLabel('notifications', 'status.delivered', 'Consegnata'),
+    label: getLocalizedOrDefaultLabel('notifications', 'status.delivered'),
   },
   {
     value: NotificationStatus.EFFECTIVE_DATE,
-    label: getLocalizedOrDefaultLabel(
-      'notifications',
-      'status.effective-date',
-      'Perfezionata per decorrenza termini'
-    ),
+    label: getLocalizedOrDefaultLabel('notifications', 'status.effective-date'),
   },
   {
     value: NotificationStatus.VIEWED,
-    label: getLocalizedOrDefaultLabel('notifications', 'status.viewed', 'Avvenuto accesso'),
+    label: getLocalizedOrDefaultLabel('notifications', 'status.viewed'),
   },
   {
     value: NotificationStatus.CANCELLED,
-    label: getLocalizedOrDefaultLabel('notifications', 'status.canceled', 'Annullata'),
+    label: getLocalizedOrDefaultLabel('notifications', 'status.canceled'),
   },
   {
     value: NotificationStatus.UNREACHABLE,
-    label: getLocalizedOrDefaultLabel(
-      'notifications',
-      'status.unreachable',
-      'Destinatario irreperibile'
-    ),
+    label: getLocalizedOrDefaultLabel('notifications', 'status.unreachable'),
   },
   {
     value: NotificationStatus.RETURNED_TO_SENDER,
-    label: getLocalizedOrDefaultLabel(
-      'notifications',
-      'status.returned-to-sender',
-      'Resa al mittente'
-    ),
+    label: getLocalizedOrDefaultLabel('notifications', 'status.returned-to-sender'),
   },
 ];
 

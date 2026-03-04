@@ -46,7 +46,10 @@ function testNotificationStatusInfos(
   expectedTooltip: string,
   expectedDescription: string,
   status: NotificationStatus | NotificationStatusHistory,
-  options?: { recipients: Array<NotificationDetailRecipient | string> }
+  options?: {
+    recipients: Array<NotificationDetailRecipient | string>;
+    statusHistory?: Array<NotificationStatusHistory>;
+  }
 ) {
   const { color, label, tooltip, description } = getNotificationStatusInfos(status, options);
   expect(color).toBe(expectedColor);

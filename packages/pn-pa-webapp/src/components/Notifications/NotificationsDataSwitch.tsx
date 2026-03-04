@@ -30,7 +30,7 @@ const ActionButton: React.FC<{ iun: string; handleRowClick?: (iun: string) => vo
     <ButtonNaked
       color="primary"
       data-testid="goToNotificationDetail"
-      onClick={() => handleRowClick && handleRowClick(iun)}
+      onClick={() => handleRowClick?.(iun)}
       aria-label={t('table.aria-action-table', { iun })}
       endIcon={<ArrowForwardIosIcon />}
     >
