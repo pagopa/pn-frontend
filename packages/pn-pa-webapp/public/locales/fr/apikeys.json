@@ -87,12 +87,18 @@
     "required-fields": "Champs obligatoires",
     "no-groups": "Aucun groupe disponible"
   },
-  "api-key-succesfully-deleted": "Clé API supprimée",
-  "api-key-succesfully-blocked": "Clé API bloquée",
-  "api-key-succesfully-rotated": "Clé API pivotée avec succès",
-  "api-key-succesfully-enabled": "Clé API activée",
-  "api-key-deleted-error": "Clé API non supprimée",
-  "api-key-blocked-error": "Clé API non bloquée",
-  "api-key-rotated-error": "Clé API non pivotée",
-  "api-key-enabled-error": "Clé API non activée"
+  "messages": {
+    "success": {
+      "api-key-enable": "Clé publique activée avec succès.",
+      "api-key-block": "Clé publique bloquée avec succès.",
+      "api-key-rotate": "Clé publique pivotée avec succès.",
+      "api-key-delete": "Clé publique supprimée avec succès."
+    },
+    "error": {
+      "api-key-enable": "Clé publique non activée",
+      "api-key-block": "Clé publique non bloquée",
+      "api-key-rotate": "Clé publique non pivotée",
+      "api-key-delete": "Clé publique non supprimée"
+    }
+  }
 }

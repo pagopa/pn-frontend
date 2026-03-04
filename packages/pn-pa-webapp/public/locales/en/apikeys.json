@@ -87,12 +87,18 @@
     "required-fields": "Required fields",
     "no-groups": "No groups are available"
   },
-  "api-key-succesfully-deleted": "API Key deleted",
-  "api-key-succesfully-blocked": "API Key blocked",
-  "api-key-succesfully-rotated": "API Key successfully rotated",
-  "api-key-succesfully-enabled": "API Key enabled",
-  "api-key-deleted-error": "API Key not deleted",
-  "api-key-blocked-error": "API Key not blocked",
-  "api-key-rotated-error": "API Key not rotated",
-  "api-key-enabled-error": "API Key not enabled"
+  "messages": {
+    "success": {
+      "api-key-enable": "Public key successfully enabled.",
+      "api-key-block": "Public key successfully blocked.",
+      "api-key-rotate": "Public key successfully rotated.",
+      "api-key-delete": "Public key successfully deleted."
+    },
+    "error": {
+      "api-key-enable": "Public key not enabled",
+      "api-key-block": "Public key not blocked",
+      "api-key-rotate": "Public key not rotated",
+      "api-key-delete": "Public key not deleted"
+    }
+  }
 }

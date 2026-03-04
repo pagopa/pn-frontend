@@ -132,7 +132,7 @@ const ApiKeys = () => {
         dispatch(
           appStateActions.addSuccess({
             title: '',
-            message: t('api-key-succesfully-blocked'),
+            message: t('messages.success.api-key-block'),
           })
         )
       )
@@ -140,7 +140,7 @@ const ApiKeys = () => {
         dispatch(
           appStateActions.addError({
             title: '',
-            message: t('api-key-blocked-error'),
+            message: t('messages.error.api-key-block'),
             showTechnicalData: false,
           })
         )
@@ -156,7 +156,7 @@ const ApiKeys = () => {
         dispatch(
           appStateActions.addSuccess({
             title: '',
-            message: t('api-key-succesfully-enabled'),
+            message: t('messages.success.api-key-enable'),
           })
         )
       )
@@ -164,7 +164,7 @@ const ApiKeys = () => {
         dispatch(
           appStateActions.addError({
             title: '',
-            message: t('api-key-enabled-error'),
+            message: t('messages.error.api-key-enable'),
             showTechnicalData: false,
           })
         )
@@ -180,7 +180,7 @@ const ApiKeys = () => {
         dispatch(
           appStateActions.addSuccess({
             title: '',
-            message: t('api-key-succesfully-rotated'),
+            message: t('messages.success.api-key-rotate'),
           })
         )
       )
@@ -188,7 +188,7 @@ const ApiKeys = () => {
         dispatch(
           appStateActions.addError({
             title: '',
-            message: t('api-key-rotated-error'),
+            message: t('messages.error.api-key-rotate'),
             showTechnicalData: false,
           })
         )
@@ -204,7 +204,7 @@ const ApiKeys = () => {
         dispatch(
           appStateActions.addSuccess({
             title: '',
-            message: t('api-key-succesfully-deleted'),
+            message: t('messages.success.api-key-delete'),
           })
         )
       )
@@ -212,7 +212,7 @@ const ApiKeys = () => {
         dispatch(
           appStateActions.addError({
             title: '',
-            message: t('api-key-deleted-error'),
+            message: t('messages.error.api-key-delete'),
             showTechnicalData: false,
           })
         )
