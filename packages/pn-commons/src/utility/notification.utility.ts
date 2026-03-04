@@ -82,7 +82,7 @@ function getNotificationDeliveredInfosForPA(
   statusObject: NotificationStatusHistory | undefined,
   statusHistory: Array<NotificationStatusHistory>
 ): StatusInfo {
-  if (!statusObject?.steps) {
+  if (!statusObject) {
     return statusInfos;
   }
   // the timeline event that tells us if there is a stock and its status can be in the DELIVERED status and also in the DELIVERING one.
@@ -108,7 +108,7 @@ function getNotificationDeliveredInfosForPA(
       ? new Date(step.timestamp) <= activeFrom && new Date(step.timestamp) > activeTo
       : new Date(step.timestamp) <= activeFrom
   );
-  const stepsToCheck = [...statusObject.steps, ...(deliveringStepsBeforeDelivered ?? [])];
+  const stepsToCheck = [...(statusObject.steps || []), ...(deliveringStepsBeforeDelivered ?? [])];
   const isStock = stepsToCheck.find(
     (step) =>
       (step.category === TimelineCategory.SEND_ANALOG_PROGRESS &&

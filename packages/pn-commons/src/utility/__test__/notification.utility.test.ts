@@ -253,7 +253,7 @@ describe('notification status texts', () => {
           elementId: 'test',
           timestamp: '2023-01-26T13:12:16.42843144Z',
           details: {
-            deliveryDetailCode: 'RECRN003C',
+            deliveryDetailCode: 'RECRN011',
           },
         },
         {
@@ -268,9 +268,9 @@ describe('notification status texts', () => {
     };
     testNotificationStatusInfos(
       'default',
-      `notifiche - status.delivered-monorecipient`,
+      `notifiche - status.delivered-stock`,
       `notifiche - status.delivered-tooltip`,
-      `notifiche - status.delivered-description`,
+      `notifiche - status.delivered-stock-description`,
       currentStatus,
       {
         recipients: notificationDTO.recipients,
