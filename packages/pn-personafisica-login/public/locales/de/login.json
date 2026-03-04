@@ -33,5 +33,10 @@
     "pf": "Privatperson",
     "pg": "Juristische Person",
     "button": "Anmelden"
+  },
+  "ioSmartAppBanner": {
+    "title": "IO - Die App für öffentliche Dienste",
+    "subtitle": "In der IO-App öffnen",
+    "cta": "ÖFFNEN"
   }
 }
