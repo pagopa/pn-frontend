@@ -87,18 +87,33 @@ function getNotificationDeliveredInfosForPA(
   }
   // the timeline event that tells us if there is a stock and its status can be in the DELIVERED status and also in the DELIVERING one.
   // we have to get the DELIVERING STATUS and get only those events that are cronologically before the DELIVERED status
+  // for each status we have the activeFrom property that is the date from witch the status starts to take effect
+  const activeFrom = new Date(statusObject.activeFrom);
+  // the timeline can be corrected and so we can have multiple DELIVERED statuses
+  // in this case we have to get only those DELIVERING events that are releated to the current DELIVERED status
+  // to do this, we have to check if there is a DELIVERED status next to the current (beacuse the events are ordered from most recent to the oldest)
+  const nextDeliveredStatus = statusHistory.find(
+    (status) =>
+      status.status === NotificationStatus.DELIVERED && new Date(status.activeFrom) < activeFrom
+  );
+  // calc when the next status starts to take effect
+  const activeTo = nextDeliveredStatus ? new Date(nextDeliveredStatus.activeFrom) : null;
+  // get delivering status and filter out those events that are from the date of delivered status activation
+  // and the date of the next status activation (i.e. the date from witch the delivered status ends to take effect)
   const deliveringStatus = statusHistory.find(
     (history) => history.status === NotificationStatus.DELIVERING
   );
-  const deliveringStepsBeforeDelivered = deliveringStatus?.steps?.filter(
-    (step) =>
-      statusObject?.activeFrom && new Date(step.timestamp) <= new Date(statusObject?.activeFrom)
+  const deliveringStepsBeforeDelivered = deliveringStatus?.steps?.filter((step) =>
+    activeTo
+      ? new Date(step.timestamp) <= activeFrom && new Date(step.timestamp) > activeTo
+      : new Date(step.timestamp) <= activeFrom
   );
   const stepsToCheck = [...statusObject.steps, ...(deliveringStepsBeforeDelivered ?? [])];
   const isStock = stepsToCheck.find(
     (step) =>
-      step.category === TimelineCategory.SEND_ANALOG_PROGRESS &&
-      (step.details as SendPaperDetails).deliveryDetailCode === 'RECRN003C'
+      (step.category === TimelineCategory.SEND_ANALOG_PROGRESS &&
+        (step.details as SendPaperDetails).deliveryDetailCode === 'RECRN003C') ||
+      (step.details as SendPaperDetails).deliveryDetailCode === 'RECRN011'
   );
   const isWithdrawnStock = stepsToCheck.find(
     (step) =>

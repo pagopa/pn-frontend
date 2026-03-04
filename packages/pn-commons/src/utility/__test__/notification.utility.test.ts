@@ -49,6 +49,7 @@ function testNotificationStatusInfos(
   options?: {
     recipients: Array<NotificationDetailRecipient | string>;
     statusHistory?: Array<NotificationStatusHistory>;
+    isParty?: boolean;
   }
 ) {
   const { color, label, tooltip, description } = getNotificationStatusInfos(status, options);
@@ -119,6 +120,162 @@ describe('notification status texts', () => {
       },
       {
         recipients: notificationDTO.recipients,
+      }
+    );
+  });
+
+  it('return notification status infos - DELIVERED - single recipient - pa - in stock', () => {
+    testNotificationStatusInfos(
+      'default',
+      `notifiche - status.delivered-stock`,
+      `notifiche - status.delivered-tooltip`,
+      `notifiche - status.delivered-stock-description`,
+      {
+        status: NotificationStatus.DELIVERED,
+        activeFrom: '2023-01-26T13:57:16.42843144Z',
+        relatedTimelineElements: [],
+        deliveryMode: NotificationDeliveryMode.ANALOG,
+        steps: [
+          {
+            category: TimelineCategory.SEND_ANALOG_PROGRESS,
+            elementId: 'test',
+            timestamp: '1999-01-24T14:48:29Z',
+            details: {
+              deliveryDetailCode: 'RECRN003C',
+            },
+          },
+        ],
+      },
+      {
+        recipients: notificationDTO.recipients,
+        isParty: true,
+      }
+    );
+  });
+
+  it('return notification status infos - DELIVERED - single recipient - pa - withdrawn stock', () => {
+    testNotificationStatusInfos(
+      'default',
+      `notifiche - status.delivered-withdrawn-stock`,
+      `notifiche - status.delivered-tooltip`,
+      `notifiche - status.delivered-withdrawn-stock-description`,
+      {
+        status: NotificationStatus.DELIVERED,
+        activeFrom: '2023-01-26T13:57:16.42843144Z',
+        relatedTimelineElements: [],
+        deliveryMode: NotificationDeliveryMode.ANALOG,
+        steps: [
+          {
+            category: TimelineCategory.SEND_ANALOG_PROGRESS,
+            elementId: 'test',
+            timestamp: '1999-01-24T14:48:29Z',
+            details: {
+              deliveryDetailCode: 'RECAG005C',
+            },
+          },
+        ],
+      },
+      {
+        recipients: notificationDTO.recipients,
+        isParty: true,
+      }
+    );
+  });
+
+  it('return notification status infos - DELIVERED - single recipient - pa - delivered stock', () => {
+    testNotificationStatusInfos(
+      'default',
+      `notifiche - status.delivered-expired-stock`,
+      `notifiche - status.delivered-tooltip`,
+      `notifiche - status.delivered-expired-stock-description`,
+      {
+        status: NotificationStatus.DELIVERED,
+        activeFrom: '2023-01-26T13:57:16.42843144Z',
+        relatedTimelineElements: [],
+        deliveryMode: NotificationDeliveryMode.ANALOG,
+        steps: [
+          {
+            category: TimelineCategory.SEND_ANALOG_PROGRESS,
+            elementId: 'test',
+            timestamp: '1999-01-24T14:48:29Z',
+            details: {
+              deliveryDetailCode: 'RECAG008C',
+            },
+          },
+        ],
+      },
+      {
+        recipients: notificationDTO.recipients,
+        isParty: true,
+      }
+    );
+  });
+
+  it('return notification status infos - DELIVERED - single recipient - pa', () => {
+    testNotificationStatusInfos(
+      'default',
+      `notifiche - status.delivered-monorecipient`,
+      `notifiche - status.delivered-tooltip`,
+      `notifiche - status.delivered-description`,
+      {
+        status: NotificationStatus.DELIVERED,
+        activeFrom: '2023-01-26T13:57:16.42843144Z',
+        relatedTimelineElements: [],
+        deliveryMode: NotificationDeliveryMode.ANALOG,
+        steps: [],
+      },
+      {
+        recipients: notificationDTO.recipients,
+        isParty: true,
+      }
+    );
+  });
+
+  it('return notification status infos - DELIVERED - single recipient - pa - multiple DELIVERED STATUS', () => {
+    const currentStatus: NotificationStatusHistory = {
+      status: NotificationStatus.DELIVERED,
+      activeFrom: '2023-01-26T13:57:16.42843144Z',
+      relatedTimelineElements: [],
+      deliveryMode: NotificationDeliveryMode.ANALOG,
+    };
+    const nextDeliveredStatus: NotificationStatusHistory = {
+      status: NotificationStatus.DELIVERED,
+      activeFrom: '2023-01-26T13:00:16.42843144Z',
+      relatedTimelineElements: [],
+    };
+    const deliveringStatus: NotificationStatusHistory = {
+      status: NotificationStatus.DELIVERING,
+      activeFrom: '2023-01-26T12:00:16.42843144Z',
+      relatedTimelineElements: [],
+      steps: [
+        {
+          category: TimelineCategory.SEND_ANALOG_PROGRESS,
+          elementId: 'test',
+          timestamp: '2023-01-26T13:12:16.42843144Z',
+          details: {
+            deliveryDetailCode: 'RECRN003C',
+          },
+        },
+        {
+          category: TimelineCategory.SEND_ANALOG_PROGRESS,
+          elementId: 'test',
+          timestamp: '2023-01-26T12:58:16.42843144Z',
+          details: {
+            deliveryDetailCode: 'RECAG006C',
+          },
+        },
+      ],
+    };
+    testNotificationStatusInfos(
+      'default',
+      `notifiche - status.delivered-monorecipient`,
+      `notifiche - status.delivered-tooltip`,
+      `notifiche - status.delivered-description`,
+      currentStatus,
+      {
+        recipients: notificationDTO.recipients,
+        isParty: true,
+        statusHistory: [nextDeliveredStatus, deliveringStatus],
       }
     );
   });
