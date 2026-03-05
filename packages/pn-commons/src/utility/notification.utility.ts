@@ -37,6 +37,10 @@ type StatusInfo = {
   description: string;
 };
 
+const AnalogDeliveryCodeStock = new Set(['RECRN003C', 'RECRN011', 'RECAG011A']);
+const AnalogDeliveryCodeWithdrawnStock = new Set(['RECAG005C', 'RECAG006C']);
+const AnalogDeliveryCodeExpiredStock = new Set(['RECAG008C', 'RECRN005C', 'PNAG012', 'PNRN012']);
+
 /*
  * Besides the values used in the generation of the final messages,
  * data can include an isMultiRecipient attribute, which refers to the notification.
@@ -111,27 +115,36 @@ function getNotificationDeliveredInfosForPA(
   const stepsToCheck = [...(statusObject.steps || []), ...(deliveringStepsBeforeDelivered ?? [])];
   const isStock = stepsToCheck.find(
     (step) =>
-      (step.category === TimelineCategory.SEND_ANALOG_PROGRESS &&
-        (step.details as SendPaperDetails).deliveryDetailCode === 'RECRN003C') ||
-      (step.details as SendPaperDetails).deliveryDetailCode === 'RECRN011'
+      (step.category === TimelineCategory.SEND_ANALOG_PROGRESS ||
+        step.category === TimelineCategory.SEND_ANALOG_FEEDBACK) &&
+      AnalogDeliveryCodeStock.has((step.details as SendPaperDetails).deliveryDetailCode ?? '')
   );
   const isWithdrawnStock = stepsToCheck.find(
     (step) =>
-      (step.category === TimelineCategory.SEND_ANALOG_PROGRESS &&
-        (step.details as SendPaperDetails).deliveryDetailCode === 'RECAG005C') ||
-      (step.details as SendPaperDetails).deliveryDetailCode === 'RECAG006C'
+      (step.category === TimelineCategory.SEND_ANALOG_PROGRESS ||
+        step.category === TimelineCategory.SEND_ANALOG_FEEDBACK) &&
+      AnalogDeliveryCodeWithdrawnStock.has(
+        (step.details as SendPaperDetails).deliveryDetailCode ?? ''
+      )
   );
   const isExpiredStock = stepsToCheck.find(
     (step) =>
-      step.category === TimelineCategory.SEND_ANALOG_PROGRESS &&
-      (step.details as SendPaperDetails).deliveryDetailCode === 'RECAG008C'
+      (step.category === TimelineCategory.SEND_ANALOG_PROGRESS ||
+        step.category === TimelineCategory.SEND_ANALOG_FEEDBACK) &&
+      AnalogDeliveryCodeExpiredStock.has(
+        (step.details as SendPaperDetails).deliveryDetailCode ?? ''
+      )
   );
   // case giacenza
-  if (isStock) {
-    statusInfos.label = getLocalizedOrDefaultLabel('notifications', 'status.delivered-stock');
+  if (isExpiredStock) {
+    // case expired stock
+    statusInfos.label = getLocalizedOrDefaultLabel(
+      'notifications',
+      'status.delivered-expired-stock'
+    );
     statusInfos.description = getLocalizedOrDefaultLabel(
       'notifications',
-      'status.delivered-stock-description'
+      'status.delivered-expired-stock-description'
     );
   } else if (isWithdrawnStock) {
     // case withdraw stock
@@ -143,15 +156,11 @@ function getNotificationDeliveredInfosForPA(
       'notifications',
       'status.delivered-withdrawn-stock-description'
     );
-  } else if (isExpiredStock) {
-    // case expired stock
-    statusInfos.label = getLocalizedOrDefaultLabel(
-      'notifications',
-      'status.delivered-expired-stock'
-    );
+  } else if (isStock) {
+    statusInfos.label = getLocalizedOrDefaultLabel('notifications', 'status.delivered-stock');
     statusInfos.description = getLocalizedOrDefaultLabel(
       'notifications',
-      'status.delivered-expired-stock-description'
+      'status.delivered-stock-description'
     );
   } else {
     statusInfos.label = getLocalizedOrDefaultLabel(
