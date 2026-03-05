@@ -33,5 +33,10 @@
     "pf": "Private citizen",
     "pg": "Legal person",
     "button": "Login"
+  },
+  "ioSmartAppBanner": {
+    "title": "IO - The public services app",
+    "subtitle": "Open in the IO app",
+    "cta": "OPEN"
   }
 }
