@@ -40,7 +40,7 @@ export interface NotificationDetail {
   amount?: number;
   otherDocuments?: Array<NotificationDetailDocument>;
   radd?: INotificationDetailTimeline;
-  notificationCostDetails: NotificationCostDetails;
+  notificationCostDetails?: NotificationCostDetails;
 }
 
 export type PaymentTpp = {

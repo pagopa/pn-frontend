@@ -12,11 +12,10 @@ import {
 } from '../../models/NotificationDetail';
 import { getLocalizedOrDefaultLabel } from '../../utility/localization.utility';
 import CostsBreakdown from './CostDetailsDrawerContent/CostsBreakdown';
-import ErrorDataDrawerContent from './CostDetailsDrawerContent/ErrorData';
 import UnavailableDataDrawerContent from './CostDetailsDrawerContent/UnavailableData';
 
 const costDetails: NotificationCostDetails = {
-  status: NotificationCostDetailsStatus.OK,
+  status: NotificationCostDetailsStatus.ERROR,
   totalCost: 1050,
   baseCost: 200,
   analogCost: 850,
@@ -43,7 +42,15 @@ const NotificationCostsDetailDrawer: React.FC<Props> = ({ handleTrackEventFn }) 
       case NotificationCostDetailsStatus.OK:
         return <CostsBreakdown costDetails={costDetails} />;
       case NotificationCostDetailsStatus.ERROR:
-        return <ErrorDataDrawerContent />;
+        return (
+          <MIAlert
+            severity="warning"
+            description={getLocalizedOrDefaultLabel(
+              'notifications',
+              'notification-alert.details.error'
+            )}
+          />
+        );
       case NotificationCostDetailsStatus.UNAVAILABLE:
         return <UnavailableDataDrawerContent />;
       default:
