@@ -27,8 +27,21 @@ export function goToLoginPortal({ rapidAccess, loginProvider }: GoToLoginProps) 
   let urlToRedirect = `${logoutPath}`;
   // the startsWith check is to prevent xss attacks
   if (urlToRedirect.startsWith(logoutPath) && rapidAccess) {
+    const currentParams = new URLSearchParams(globalThis.window.location.search);
+    const filteredParams = new URLSearchParams();
+
+    // keep utm_* params
+    currentParams.forEach((value, key) => {
+      if (key.startsWith('utm_')) {
+        filteredParams.set(key, sanitizeString(value));
+      }
+    });
+
+    // ensure rapid access param is present and sanitized
+    filteredParams.set(rapidAccess[0], sanitizeString(rapidAccess[1]));
+
     // eslint-disable-next-line functional/immutable-data
-    urlToRedirect += `?${rapidAccess[0]}=${sanitizeString(rapidAccess[1])}`;
+    urlToRedirect += `?${filteredParams.toString()}`;
   }
   // the indexOf check is to prevent xss attacks
   if (urlToRedirect.startsWith(logoutPath)) {
