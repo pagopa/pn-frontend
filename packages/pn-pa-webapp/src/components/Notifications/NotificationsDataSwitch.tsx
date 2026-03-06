@@ -84,20 +84,7 @@ const NotificationsDataSwitch: React.FC<{
     return data.group ? (
       <CustomTagGroup visibleItems={1}>
         {[
-          <Box
-            sx={{
-              mb: 1,
-              mr: 1,
-              display: 'inline-block',
-              // Prevent long unbroken content from causing table/card layout overflow
-              // Use `overflowWrap` (modern approach) and keep `wordBreak` as legacy fallback
-              '& span': {
-                overflowWrap: 'anywhere',
-                wordBreak: 'break-word',
-              },
-            }}
-            key={data.id}
-          >
+          <Box sx={{ mb: 1, mr: 1, display: 'inline-block' }} key={data.id}>
             <Tag value={data.group} />
           </Box>,
         ]}
@@ -109,16 +96,7 @@ const NotificationsDataSwitch: React.FC<{
   if (type === 'group' && !isMobile) {
     return data.group ? (
       <TagGroup visibleItems={4}>
-        <Box
-          // Prevent long unbroken content from causing table/card layout overflow
-          // Use `overflowWrap` (modern approach) and keep `wordBreak` as legacy fallback
-          sx={{
-            overflowWrap: 'anywhere',
-            wordBreak: 'break-word',
-          }}
-        >
-          <Tag value={data.group} />
-        </Box>
+        <Tag value={data.group} />
       </TagGroup>
     ) : (
       <></>
