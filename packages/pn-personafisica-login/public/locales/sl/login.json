@@ -33,5 +33,10 @@
     "pf": "Fizična oseba",
     "pg": "Pravna oseba",
     "button": "Prijava"
+  },
+  "ioSmartAppBanner": {
+    "title": "IO - Aplikacija za javne storitve",
+    "subtitle": "Odpri v aplikaciji IO",
+    "cta": "ODPRI"
   }
 }
