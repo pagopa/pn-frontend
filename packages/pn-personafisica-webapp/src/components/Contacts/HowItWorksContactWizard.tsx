@@ -6,7 +6,6 @@ import {
   Box,
   Button,
   Divider,
-  Link,
   List,
   ListItem,
   ListItemText,
@@ -112,14 +111,19 @@ const HowItWorksContactWizard: React.FC<Props> = ({ goToNextStep, setShowPecWiza
                         ns="recapiti"
                         t={(s: string) => s}
                         components={[
-                          <Link
-                            data-testid="deliveredLink"
+                          <ButtonNaked
                             key="delivered"
-                            sx={{
-                              cursor: 'pointer',
-                              textDecoration: 'underline',
-                            }}
+                            data-testid="deliveredLink"
+                            size="medium"
                             onClick={handleShowDeliveredDialog}
+                            color="primary"
+                            sx={{
+                              textDecoration: 'underline',
+                              display: 'inline',
+                              fontWeight: 400,
+                              verticalAlign: 'baseline',
+                            }}
+                            component={Typography}
                           />,
                         ]}
                       />
