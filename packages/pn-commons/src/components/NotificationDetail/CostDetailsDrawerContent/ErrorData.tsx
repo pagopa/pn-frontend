@@ -5,11 +5,7 @@ import { getLocalizedOrDefaultLabel } from '../../../utility/localization.utilit
 const ErrorDataDrawerContent: React.FC = () => (
   <Alert severity="warning">
     <Typography fontSize="16px">
-      {getLocalizedOrDefaultLabel(
-        'notifications',
-        'notification-alert.details.error',
-        'Non siamo riusciti a recuperare i dati sui costi, riprova più tardi.'
-      )}
+      {getLocalizedOrDefaultLabel('notifications', 'notification-alert.details.error')}
     </Typography>
   </Alert>
 );

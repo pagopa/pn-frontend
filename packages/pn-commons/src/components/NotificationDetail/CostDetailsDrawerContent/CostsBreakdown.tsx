@@ -1,126 +1,151 @@
 import { SavingsOutlined } from '@mui/icons-material';
 import { Box, Divider, List, ListItem, ListItemText, Typography } from '@mui/material';
 
+import {
+  NotificationCostDetails,
+  NotificationCostDetailsStatus,
+} from '../../../models/NotificationDetail';
 import { formatEurocentToCurrency } from '../../../utility';
 import { getLocalizedOrDefaultLabel } from '../../../utility/localization.utility';
 
-// Questa interfaccia andrà ridefinita e importata da BFF su pf-webapp
-interface CostDetails {
-  status: 'OK' | 'UNAVAILABLE' | 'ERROR';
-  totalCost?: number;
-  baseCost?: number;
-  firstAnalogCost?: {
-    cost: number;
-    productType: string;
-  };
-  secondAnalogCost?: {
-    cost: number;
-    productType: string;
-  };
-  simpleRegisteredLetterCost?: {
-    cost: number;
-    productType: string;
-  };
+interface Props {
+  costDetails: NotificationCostDetails;
+}
+
+interface HintMessage {
+  text: string;
+  variant: 'highlight' | 'default';
+}
+
+function buildHintMessage(costDetails: NotificationCostDetails): HintMessage | undefined {
+  const { analogCost, numberOfAnalogCost } = costDetails;
+
+  if (!analogCost || analogCost === 0) {
+    return {
+      text: getLocalizedOrDefaultLabel(
+        'notifications',
+        'notification-alert.details.analog-cost.avoided'
+      ),
+      variant: 'highlight',
+    };
+  }
+
+  if (numberOfAnalogCost) {
+    const hintKey =
+      numberOfAnalogCost === 1
+        ? 'notification-alert.details.analog-cost.hint.single-analog-flow'
+        : 'notification-alert.details.analog-cost.hint.multiple-analog-flows';
+
+    return {
+      text: getLocalizedOrDefaultLabel('notifications', hintKey, undefined, {
+        count: numberOfAnalogCost,
+      }),
+      variant: 'default',
+    };
+  }
+
+  return undefined;
 }
 
 const CostRow = ({
   label,
   amount,
   hint,
-  isTotal,
+  isTotal = false,
 }: {
   label: string;
   amount: string;
-  hint?: string;
+  hint?: HintMessage;
   isTotal?: boolean;
-}) => (
-  <ListItem
-    disableGutters
-    sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}
-  >
-    <ListItemText
-      primary={label}
-      primaryTypographyProps={{ variant: 'body1', fontSize: '16px', fontWeight: 600 }}
-      secondary={
-        hint ? (
-          <Box component="span" sx={{ display: 'inline-flex', alignItems: 'center' }} gap={0.5}>
-            <SavingsOutlined sx={{ fontSize: 16, color: '#5517E3' }} />
-            {hint}
-          </Box>
-        ) : undefined
-      }
-      secondaryTypographyProps={{ variant: 'caption', color: '#5517E3' }}
-    />
-    <Typography
-      color={isTotal ? 'inherit' : 'primary'}
-      variant={isTotal ? 'h6' : 'body1'}
-      fontSize={isTotal ? '24px' : '16px'}
-      fontWeight={isTotal ? 'bold' : 600}
+}) => {
+  const isHighlight = hint?.variant === 'highlight';
+  const hintColor = isHighlight ? '#5517E3' : 'text.secondary';
+
+  return (
+    <ListItem
+      disableGutters
+      sx={{
+        py: '12px',
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+      }}
     >
-      {amount}
-    </Typography>
-  </ListItem>
+      <ListItemText
+        primary={label}
+        primaryTypographyProps={{ variant: 'body1', fontSize: '16px', fontWeight: 600 }}
+        secondary={
+          hint ? <HintLabel text={hint.text} color={hintColor} showIcon={isHighlight} /> : undefined
+        }
+        secondaryTypographyProps={{ variant: 'caption', color: hintColor }}
+      />
+
+      <Typography
+        color={isTotal ? 'inherit' : 'primary'}
+        fontSize={isTotal ? '24px' : '16px'}
+        fontWeight={isTotal ? 'bold' : 600}
+      >
+        {amount}
+      </Typography>
+    </ListItem>
+  );
+};
+
+const HintLabel = ({
+  text,
+  color,
+  showIcon,
+}: {
+  text: string;
+  color: string;
+  showIcon: boolean;
+}) => (
+  <Box component="span" sx={{ display: 'inline-flex', alignItems: 'center' }} gap={0.5}>
+    {showIcon && <SavingsOutlined sx={{ fontSize: 16, color }} />}
+    {text}
+  </Box>
 );
 
-const CostsBreakdown = ({ costDetails }: { costDetails: CostDetails }) => {
-  if (costDetails.status !== 'OK' && costDetails.status !== 'UNAVAILABLE') {
+const CostsBreakdown: React.FC<Props> = ({ costDetails }) => {
+  const { status, baseCost, analogCost = 0, totalCost } = costDetails;
+
+  if (
+    status !== NotificationCostDetailsStatus.OK &&
+    status !== NotificationCostDetailsStatus.UNAVAILABLE
+  ) {
     return null;
   }
 
-  const firstAnalogCost = costDetails.firstAnalogCost?.cost || 0;
-
-  // TODO -> Sul figma le cifre vengono riportate senza decimali (es. 200 -> 2 € e non 2,00 €)
-
   return (
     <List disablePadding>
-      {costDetails.baseCost !== undefined && (
+      {baseCost !== undefined && (
         <CostRow
           label={getLocalizedOrDefaultLabel(
             'notifications',
-            'notification-alert.details.base-cost',
-            'Costo base'
+            'notification-alert.details.base-cost'
           )}
-          amount={formatEurocentToCurrency(costDetails.baseCost, true)}
+          amount={formatEurocentToCurrency(baseCost, true)}
         />
       )}
+
       <CostRow
         label={getLocalizedOrDefaultLabel(
           'notifications',
-          'notification-alert.details.first-analog-cost',
-          'Costo invio cartaceo'
+          'notification-alert.details.analog-cost.total'
         )}
-        amount={formatEurocentToCurrency(firstAnalogCost, true)}
-        hint={firstAnalogCost === 0 ? 'Invio evitato con SEND' : undefined}
+        amount={formatEurocentToCurrency(analogCost, true)}
+        hint={buildHintMessage(costDetails)}
       />
-      {costDetails.secondAnalogCost && (
+
+      <Divider sx={{ color: '#E8EBF1' }} />
+
+      {totalCost && (
         <CostRow
           label={getLocalizedOrDefaultLabel(
             'notifications',
-            'notification-alert.details.second-analog-cost',
-            'Secondo invio cartaceo'
+            'notification-alert.details.total-cost'
           )}
-          amount={formatEurocentToCurrency(costDetails.secondAnalogCost.cost, true)}
-        />
-      )}
-      {costDetails.simpleRegisteredLetterCost && (
-        <CostRow
-          label={getLocalizedOrDefaultLabel(
-            'notifications',
-            'notification-alert.details.simple-registered-letter-cost',
-            'Raccomandata semplice'
-          )}
-          amount={formatEurocentToCurrency(costDetails.simpleRegisteredLetterCost.cost, true)}
-        />
-      )}
-      <Divider />
-      {costDetails.totalCost && (
-        <CostRow
-          label={getLocalizedOrDefaultLabel(
-            'notifications',
-            'notification-alert.details.total-cost',
-            'Totale'
-          )}
-          amount={formatEurocentToCurrency(costDetails.totalCost, true)}
+          amount={formatEurocentToCurrency(totalCost, true)}
           isTotal
         />
       )}
