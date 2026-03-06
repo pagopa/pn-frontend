@@ -9,12 +9,10 @@ import {
   CustomDatePicker,
   DATE_FORMAT,
   DatePickerTypes,
-  oneMonthAgo,
-  sixMonthsAgo,
+  clampMax,
+  getEndOfDay,
   tenYearsAgo,
-  threeMonthsAgo,
   today,
-  twelveMonthsAgo,
   useIsMobile,
 } from '@pagopa-pn/pn-commons';
 
@@ -26,6 +24,7 @@ import {
 } from '../../models/Statistics';
 import { useAppDispatch } from '../../redux/hooks';
 import { setStatisticsFilter } from '../../redux/statistics/reducers';
+import { normalizeStatisticsFilter } from '../../utility/statistics.utility';
 
 const quickFilters = Object.values(SelectedStatisticsFilter).filter((value) => value !== 'custom');
 
@@ -41,17 +40,18 @@ const FilterStatistics: React.FC<Props> = ({ filter, lastDate, className, sx }) 
   const isMobile = useIsMobile();
   const dispatch = useAppDispatch();
 
-  const defaultValues = {
-    startDate: twelveMonthsAgo,
-    endDate: lastDate ?? today,
-    selected: SelectedStatisticsFilter.last12Months,
-  };
+  const maxEndDate = getEndOfDay(lastDate ?? today);
+
+  const defaultFilter = normalizeStatisticsFilter(
+    { ...filter, selected: SelectedStatisticsFilter.last12Months },
+    lastDate
+  );
 
   const validationSchema = yup.object({
     // the formik validations for dates (which control the enable status of the "filtra" button)
     // must coincide with the input field validations (which control the color of the frame around each field)
-    startDate: yup.date().min(tenYearsAgo).max(today),
-    endDate: yup.date().min(yup.ref('startDate')).max(today),
+    startDate: yup.date().min(tenYearsAgo).max(maxEndDate),
+    endDate: yup.date().min(yup.ref('startDate')).max(maxEndDate),
     selected: yup
       .mixed<SelectedStatisticsFilterKeys>()
       .oneOf(Object.values(SelectedStatisticsFilter)),
@@ -60,7 +60,7 @@ const FilterStatistics: React.FC<Props> = ({ filter, lastDate, className, sx }) 
   const formik = useFormik({
     initialValues: {
       startDate: filter.startDate,
-      endDate: lastDate && filter.endDate.getTime() === today.getTime() ? lastDate : filter.endDate,
+      endDate: filter.endDate,
       selected: filter.selected,
     },
     validationSchema,
@@ -69,39 +69,31 @@ const FilterStatistics: React.FC<Props> = ({ filter, lastDate, className, sx }) 
     onSubmit: () => {},
   });
 
-  const getRangeDates = (range: SelectedStatisticsFilterKeys): [Date, Date] => {
-    switch (range) {
-      case SelectedStatisticsFilter.lastMonth:
-        return [oneMonthAgo, lastDate ?? today];
-      case SelectedStatisticsFilter.last3Months:
-        return [threeMonthsAgo, lastDate ?? today];
-      case SelectedStatisticsFilter.last6Months:
-        return [sixMonthsAgo, lastDate ?? today];
-      case SelectedStatisticsFilter.last12Months:
-        return [twelveMonthsAgo, lastDate ?? today];
-      case SelectedStatisticsFilter.custom:
-        return [formik.values.startDate, formik.values.endDate];
-      default:
-        return [defaultValues.startDate, defaultValues.endDate];
-    }
+  const applyQuickFilter = (type: SelectedStatisticsFilterKeys) => {
+    const next = normalizeStatisticsFilter({ ...filter, selected: type }, lastDate);
+    dispatch(setStatisticsFilter(next));
   };
 
-  const handleSelectFilter = (type: SelectedStatisticsFilterKeys) => {
-    const [startDate, endDate] = getRangeDates(type);
-    void formik.setValues({ startDate, endDate, selected: type });
-    dispatch(setStatisticsFilter({ startDate, endDate, selected: type }));
+  const applyCustomFilter = () => {
+    const next = normalizeStatisticsFilter(
+      {
+        selected: SelectedStatisticsFilter.custom,
+        startDate: formik.values.startDate,
+        endDate: formik.values.endDate,
+      },
+      lastDate
+    );
+
+    void formik.setValues(next);
+    dispatch(setStatisticsFilter(next));
   };
 
   const cleanFilter = () => {
-    handleSelectFilter(defaultValues.selected);
+    void formik.setValues(defaultFilter);
+    dispatch(setStatisticsFilter(defaultFilter));
   };
 
-  const isInitialSearch = isEqual(formik.values, defaultValues);
-
-  const checkChipDisabled = (elem: SelectedStatisticsFilterKeys): boolean => {
-    const [startDate, endDate] = getRangeDates(elem);
-    return startDate.getTime() > endDate.getTime();
-  };
+  const isInitialSearch = isEqual(formik.values, defaultFilter);
 
   const quickFiltersJsx = (): Array<JSX.Element> =>
     quickFilters.map((elem) => (
@@ -114,13 +106,13 @@ const FilterStatistics: React.FC<Props> = ({ filter, lastDate, className, sx }) 
           my: { xl: 0, xs: 1 },
           background: elem === formik.values.selected ? GraphColors.lightBlue2 : 'none',
           color: 'primary',
-          opacity: `${checkChipDisabled(elem) ? 0.5 : 1} !important`,
+          opacity: `${elem === formik.values.selected ? 0.5 : 1} !important`,
         }}
-        disabled={elem === formik.values.selected || checkChipDisabled(elem)}
+        disabled={elem === formik.values.selected}
         variant="outlined"
         component="button"
         color={elem === formik.values.selected ? 'primary' : 'default'}
-        onClick={() => handleSelectFilter(elem)}
+        onClick={() => applyQuickFilter(elem)}
       />
     ));
 
@@ -146,7 +138,7 @@ const FilterStatistics: React.FC<Props> = ({ filter, lastDate, className, sx }) 
           format={DATE_FORMAT}
           value={formik.values.startDate}
           onChange={(value: DatePickerTypes) => {
-            void formik.setFieldValue('startDate', value ?? defaultValues.startDate);
+            void formik.setFieldValue('startDate', value ?? defaultFilter.startDate);
           }}
           slotProps={{
             textField: {
@@ -164,7 +156,7 @@ const FilterStatistics: React.FC<Props> = ({ filter, lastDate, className, sx }) 
           }}
           disableFuture={true}
           minDate={tenYearsAgo}
-          maxDate={formik.values.endDate ?? undefined}
+          maxDate={clampMax(formik.values.endDate, maxEndDate)}
         />
         <CustomDatePicker
           language={i18n.language}
@@ -172,7 +164,7 @@ const FilterStatistics: React.FC<Props> = ({ filter, lastDate, className, sx }) 
           format={DATE_FORMAT}
           value={formik.values.endDate}
           onChange={(value: DatePickerTypes) => {
-            void formik.setFieldValue('endDate', value ?? defaultValues.endDate);
+            void formik.setFieldValue('endDate', value ?? defaultFilter.endDate);
           }}
           slotProps={{
             textField: {
@@ -189,14 +181,14 @@ const FilterStatistics: React.FC<Props> = ({ filter, lastDate, className, sx }) 
             },
           }}
           minDate={formik.values.startDate ?? tenYearsAgo}
-          maxDate={lastDate ?? today}
+          maxDate={maxEndDate}
         />
         <Button
           id="filter-button"
           data-testid="filterButton"
           variant="outlined"
           type="button"
-          onClick={() => handleSelectFilter(SelectedStatisticsFilter.custom)}
+          onClick={applyCustomFilter}
           size="small"
           sx={{
             height: '43px !important',

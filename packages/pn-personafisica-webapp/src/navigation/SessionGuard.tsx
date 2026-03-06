@@ -5,6 +5,7 @@ import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 
 import {
   AppResponsePublisher,
+  AppRouteParams,
   InactivityHandler,
   LoadingPage,
   SessionModal,
@@ -21,6 +22,7 @@ import { resetState } from '../redux/auth/reducers';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { RootState } from '../redux/store';
 import { getConfiguration } from '../services/configuration.service';
+import { addAarUtmToUrl } from '../utility/utm.utility';
 import { goToLoginPortal } from './navigation.utility';
 import * as routes from './routes.const';
 
@@ -124,6 +126,9 @@ const SessionGuard = () => {
   };
 
   useEffect(() => {
+    if (rapidAccess?.[0] === AppRouteParams.AAR) {
+      addAarUtmToUrl();
+    }
     if (spidToken) {
       void performExchangeToken({ spidToken, rapidAccess });
     } else if (code && state && nonce && redirectUri) {

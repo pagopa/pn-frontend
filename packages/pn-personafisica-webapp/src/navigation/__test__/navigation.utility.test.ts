@@ -17,10 +17,10 @@ import {
 const mockOpenFn = vi.fn();
 
 describe('Tests navigation utility methods', () => {
-  const original = window.location;
+  const original = globalThis.window.open;
 
   beforeAll(() => {
-    Object.defineProperty(window, 'open', {
+    Object.defineProperty(globalThis.window, 'open', {
       configurable: true,
       value: mockOpenFn,
     });
@@ -28,10 +28,11 @@ describe('Tests navigation utility methods', () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
+    globalThis.window.history.replaceState({}, '', '/');
   });
 
   afterAll((): void => {
-    Object.defineProperty(window, 'open', { configurable: true, value: original });
+    Object.defineProperty(globalThis.window, 'open', { configurable: true, value: original });
   });
 
   it('goToLoginPortal', () => {
@@ -40,22 +41,54 @@ describe('Tests navigation utility methods', () => {
     expect(mockOpenFn).toHaveBeenCalledWith(`${LOGOUT}`, '_self');
   });
 
-  it('goToLoginPortal - aar', () => {
+  it('goToLoginPortal - aar (preserves only utm_*)', () => {
+    globalThis.window.history.replaceState(
+      {},
+      '',
+      '/?utm_source=s&utm_medium=m&utm_campaign=c&invalid_param=value'
+    );
+
     goToLoginPortal({
       rapidAccess: [AppRouteParams.AAR, 'fake-aar-token'],
       loginProvider: LoginProvider.SPIDHUB,
     });
+
     expect(mockOpenFn).toHaveBeenCalledTimes(1);
-    expect(mockOpenFn).toHaveBeenCalledWith(`${LOGOUT}?aar=fake-aar-token`, '_self');
+
+    const [redirectUrl] = mockOpenFn.mock.calls[0];
+    const parsed = new URL(redirectUrl as string, 'https://test.pagopa.it');
+
+    expect(parsed.pathname).toBe(LOGOUT);
+    expect(parsed.searchParams.get('aar')).toBe('fake-aar-token');
+    expect(parsed.searchParams.get('utm_source')).toBe('s');
+    expect(parsed.searchParams.get('utm_medium')).toBe('m');
+    expect(parsed.searchParams.get('utm_campaign')).toBe('c');
+    expect(parsed.searchParams.has('invalid_param')).toBe(false);
   });
 
-  it('goToLoginPortal - retrievalId', () => {
+  it('goToLoginPortal - retrievalId (preserves only utm_*)', () => {
+    globalThis.window.history.replaceState(
+      {},
+      '',
+      '/?utm_source=s&utm_medium=m&utm_campaign=c&invalid_param=value'
+    );
+
     goToLoginPortal({
       rapidAccess: [AppRouteParams.RETRIEVAL_ID, 'fake-id'],
       loginProvider: LoginProvider.SPIDHUB,
     });
+
     expect(mockOpenFn).toHaveBeenCalledTimes(1);
-    expect(mockOpenFn).toHaveBeenCalledWith(`${LOGOUT}?retrievalId=fake-id`, '_self');
+
+    const [redirectUrl] = mockOpenFn.mock.calls[0];
+    const parsed = new URL(redirectUrl as string, 'https://test.pagopa.it');
+
+    expect(parsed.pathname).toBe(LOGOUT);
+    expect(parsed.searchParams.get('retrievalId')).toBe('fake-id');
+    expect(parsed.searchParams.get('utm_source')).toBe('s');
+    expect(parsed.searchParams.get('utm_medium')).toBe('m');
+    expect(parsed.searchParams.get('utm_campaign')).toBe('c');
+    expect(parsed.searchParams.has('invalid_param')).toBe(false);
   });
 
   it('goToLoginPortal - aar with malicious code', () => {
@@ -63,8 +96,14 @@ describe('Tests navigation utility methods', () => {
       rapidAccess: [AppRouteParams.AAR, '<script>malicious code</script>malicious-aar-token'],
       loginProvider: LoginProvider.SPIDHUB,
     });
+
     expect(mockOpenFn).toHaveBeenCalledTimes(1);
-    expect(mockOpenFn).toHaveBeenCalledWith(`${LOGOUT}?aar=malicious-aar-token`, '_self');
+
+    const [redirectUrl] = mockOpenFn.mock.calls[0];
+    const parsed = new URL(redirectUrl as string, 'https://test.pagopa.it');
+
+    expect(parsed.pathname).toBe(LOGOUT);
+    expect(parsed.searchParams.get('aar')).toBe('malicious-aar-token');
   });
 
   it('goToLoginPortal - from One Identity', () => {
@@ -78,8 +117,14 @@ describe('Tests navigation utility methods', () => {
       rapidAccess: [AppRouteParams.AAR, 'fake-aar-token'],
       loginProvider: LoginProvider.ONEIDENTITY,
     });
+
     expect(mockOpenFn).toHaveBeenCalledTimes(1);
-    expect(mockOpenFn).toHaveBeenCalledWith(`${LOGOUT_OI}?aar=fake-aar-token`, '_self');
+
+    const [redirectUrl] = mockOpenFn.mock.calls[0];
+    const parsed = new URL(redirectUrl as string, 'https://test.pagopa.it');
+
+    expect(parsed.pathname).toBe(LOGOUT_OI);
+    expect(parsed.searchParams.get('aar')).toBe('fake-aar-token');
   });
 
   it('goToLoginPortal - from One Identity with retrievalId', () => {
@@ -87,8 +132,14 @@ describe('Tests navigation utility methods', () => {
       rapidAccess: [AppRouteParams.RETRIEVAL_ID, 'fake-id'],
       loginProvider: LoginProvider.ONEIDENTITY,
     });
+
     expect(mockOpenFn).toHaveBeenCalledTimes(1);
-    expect(mockOpenFn).toHaveBeenCalledWith(`${LOGOUT_OI}?retrievalId=fake-id`, '_self');
+
+    const [redirectUrl] = mockOpenFn.mock.calls[0];
+    const parsed = new URL(redirectUrl as string, 'https://test.pagopa.it');
+
+    expect(parsed.pathname).toBe(LOGOUT_OI);
+    expect(parsed.searchParams.get('retrievalId')).toBe('fake-id');
   });
 
   it('getCurrentPage - test for notifications list page', () => {

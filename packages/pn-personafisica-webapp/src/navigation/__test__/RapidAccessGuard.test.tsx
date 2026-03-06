@@ -7,10 +7,12 @@ import { AppRouteParams } from '@pagopa-pn/pn-commons';
 import { act, render, screen, waitFor } from '../../__test__/test-utils';
 import { apiClient } from '../../api/apiClients';
 import { BffCheckTPPResponse } from '../../generated-client/notifications';
+import { AAR_UTM_CAMPAIGN, AAR_UTM_MEDIUM, AAR_UTM_SOURCE } from '../../utility/utm.utility';
 import RapidAccessGuard from '../RapidAccessGuard';
 import { GET_DETTAGLIO_NOTIFICA_DELEGATO_PATH, GET_DETTAGLIO_NOTIFICA_PATH } from '../routes.const';
 
-const mockNavigateFn = vi.fn(() => {});
+type NavigateArgs = [to: unknown, options?: unknown];
+const mockNavigateFn = vi.fn<NavigateArgs, void>();
 
 // mock imports
 vi.mock('react-router-dom', async () => ({
@@ -27,31 +29,26 @@ const Guard = () => (
 );
 
 describe('Rapid access Guard', async () => {
-  const original = window.location;
   let mock: MockAdapter;
 
   beforeAll(() => {
     mock = new MockAdapter(apiClient);
-    Object.defineProperty(window, 'location', {
-      writable: true,
-      value: { search: '' },
-    });
   });
 
   afterEach(() => {
     mock.reset();
     vi.clearAllMocks();
+    globalThis.window.history.replaceState({}, '', '/');
   });
 
   afterAll(() => {
     mock.restore();
-    Object.defineProperty(window, 'location', { writable: true, value: original });
   });
 
   describe('Notification from QR code', async () => {
     it('QR code requested by a recipient', async () => {
       const mockQrCode = 'qr-code';
-      window.location.search = `?${AppRouteParams.AAR}=${mockQrCode}`;
+      globalThis.window.history.replaceState({}, '', `/?${AppRouteParams.AAR}=${mockQrCode}`);
       mock
         .onPost('/bff/v1/notifications/received/check-aar-qr-code', { aarQrCodeValue: mockQrCode })
         .reply(
@@ -74,7 +71,20 @@ describe('Rapid access Guard', async () => {
       expect(loadingComponent).toBeInTheDocument();
       await waitFor(() => {
         expect(mockNavigateFn).toHaveBeenCalledTimes(1);
-        expect(mockNavigateFn).toHaveBeenCalledWith(GET_DETTAGLIO_NOTIFICA_PATH('mock-iun'), {
+
+        const [to, options] = mockNavigateFn.mock.calls[0];
+
+        expect(to).toMatchObject({
+          pathname: GET_DETTAGLIO_NOTIFICA_PATH('mock-iun'),
+        });
+
+        const sp = new URLSearchParams((to as any).search);
+        expect(sp.has(AppRouteParams.AAR)).toBe(false);
+        expect(sp.get('utm_source')).toBe(AAR_UTM_SOURCE);
+        expect(sp.get('utm_medium')).toBe(AAR_UTM_MEDIUM);
+        expect(sp.get('utm_campaign')).toBe(AAR_UTM_CAMPAIGN);
+
+        expect(options).toEqual({
           replace: true,
           state: { source: AppRouteParams.AAR },
         });
@@ -85,7 +95,7 @@ describe('Rapid access Guard', async () => {
 
     it('QR code requested by a delegate', async () => {
       const mockQrCode = 'qr-code-delegate';
-      window.location.search = `?${AppRouteParams.AAR}=${mockQrCode}`;
+      globalThis.window.history.replaceState({}, '', `/?${AppRouteParams.AAR}=${mockQrCode}`);
       mock
         .onPost('/bff/v1/notifications/received/check-aar-qr-code', { aarQrCodeValue: mockQrCode })
         .reply(200, { iun: 'mock-iun', mandateId: 'mock-mandateId' });
@@ -99,10 +109,23 @@ describe('Rapid access Guard', async () => {
       });
       await waitFor(() => {
         expect(mockNavigateFn).toHaveBeenCalledTimes(1);
-        expect(mockNavigateFn).toHaveBeenCalledWith(
-          GET_DETTAGLIO_NOTIFICA_DELEGATO_PATH('mock-iun', 'mock-mandateId'),
-          { replace: true, state: { source: AppRouteParams.AAR } }
-        );
+
+        const [to, options] = mockNavigateFn.mock.calls[0];
+
+        expect(to).toMatchObject({
+          pathname: GET_DETTAGLIO_NOTIFICA_DELEGATO_PATH('mock-iun', 'mock-mandateId'),
+        });
+
+        const sp = new URLSearchParams((to as any).search);
+        expect(sp.has(AppRouteParams.AAR)).toBe(false);
+        expect(sp.get('utm_source')).toBe(AAR_UTM_SOURCE);
+        expect(sp.get('utm_medium')).toBe(AAR_UTM_MEDIUM);
+        expect(sp.get('utm_campaign')).toBe(AAR_UTM_CAMPAIGN);
+
+        expect(options).toEqual({
+          replace: true,
+          state: { source: AppRouteParams.AAR },
+        });
       });
       const accessDeniedComponent = screen.queryByTestId('access-denied');
       expect(accessDeniedComponent).not.toBeInTheDocument();
@@ -110,7 +133,7 @@ describe('Rapid access Guard', async () => {
 
     it('invalid QR code', async () => {
       const mockQrCode = 'bad-qr-code';
-      window.location.search = `?${AppRouteParams.AAR}=${mockQrCode}`;
+      globalThis.window.history.replaceState({}, '', `/?${AppRouteParams.AAR}=${mockQrCode}`);
       mock
         .onPost('/bff/v1/notifications/received/check-aar-qr-code', { aarQrCodeValue: mockQrCode })
         .reply(500);
@@ -132,7 +155,7 @@ describe('Rapid access Guard', async () => {
 
     it('invalid recipient accesses to QR code', async () => {
       const mockQrCode = 'bad-qr-code';
-      window.location.search = `?${AppRouteParams.AAR}=${mockQrCode}`;
+      globalThis.window.history.replaceState({}, '', `/?${AppRouteParams.AAR}=${mockQrCode}`);
       mock
         .onPost('/bff/v1/notifications/received/check-aar-qr-code', { aarQrCodeValue: mockQrCode })
         .reply(404);
@@ -149,7 +172,7 @@ describe('Rapid access Guard', async () => {
 
     it('no QR code', async () => {
       const mockQrCode = '';
-      window.location.search = `?${AppRouteParams.AAR}=${mockQrCode}`;
+      globalThis.window.history.replaceState({}, '', `/?${AppRouteParams.AAR}=${mockQrCode}`);
       await act(async () => {
         render(<Guard />);
       });
@@ -164,7 +187,11 @@ describe('Rapid access Guard', async () => {
     it('retrievalId requested by a recipient', async () => {
       const mockRetrievalId = 'retrieval-id';
       const url = `/bff/v1/notifications/received/check-tpp?retrievalId=${mockRetrievalId}`;
-      window.location.search = `?${AppRouteParams.RETRIEVAL_ID}=${mockRetrievalId}`;
+      globalThis.window.history.replaceState(
+        {},
+        '',
+        `/?${AppRouteParams.RETRIEVAL_ID}=${mockRetrievalId}`
+      );
       mock.onGet(url).reply(
         () =>
           new Promise((resolve) => {
@@ -185,7 +212,17 @@ describe('Rapid access Guard', async () => {
       expect(loadingComponent).toBeInTheDocument();
       await waitFor(() => {
         expect(mockNavigateFn).toHaveBeenCalledTimes(1);
-        expect(mockNavigateFn).toHaveBeenCalledWith(GET_DETTAGLIO_NOTIFICA_PATH('mock-iun'), {
+
+        const [to, options] = mockNavigateFn.mock.calls[0];
+
+        expect(to).toMatchObject({
+          pathname: GET_DETTAGLIO_NOTIFICA_PATH('mock-iun'),
+        });
+
+        const sp = new URLSearchParams((to as any).search);
+        expect(sp.has(AppRouteParams.RETRIEVAL_ID)).toBe(false);
+
+        expect(options).toEqual({
           replace: true,
           state: { source: AppRouteParams.RETRIEVAL_ID },
         });
