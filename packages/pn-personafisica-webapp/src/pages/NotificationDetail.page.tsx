@@ -511,6 +511,25 @@ const NotificationDetail: React.FC = () => {
     </Fragment>
   );
 
+  const cancelledAlert = isCancelledOrCancelling && (
+    <Alert data-testid="cancelledAlertText" severity="warning" sx={{ mb: { xs: 2, lg: 0 } }}>
+      {t('detail.cancelled.message', { ns: 'notifiche' })}
+      <Box mt={2}>
+        <Link
+          href={NOTIFICATION_CANCELLED_HELP_LINK}
+          target="_blank"
+          rel="noopener noreferrer"
+          fontWeight={600}
+          color="#614C15"
+          underline="none"
+          sx={{ cursor: 'pointer' }}
+        >
+          {t('detail.cancelled.cta', { ns: 'notifiche' })}
+        </Link>
+      </Box>
+    </Alert>
+  );
+
   const trackEventPaymentRecipient = (event: EventPaymentRecipientType, param?: object) => {
     PFEventStrategyFactory.triggerEvent(
       PFEventsType[event],
@@ -609,6 +628,7 @@ const NotificationDetail: React.FC = () => {
       {!hasNotificationReceivedApiError && (
         <Box sx={{ p: { xs: 3, lg: 0 } }}>
           {isMobile && breadcrumb}
+          {isMobile && cancelledAlert}
           <Grid
             container
             direction={isMobile ? 'column-reverse' : 'row'}
@@ -617,25 +637,7 @@ const NotificationDetail: React.FC = () => {
             <Grid item lg={7} xs={12} sx={{ p: { xs: 0, lg: 3 } }}>
               {!isMobile && breadcrumb}
               <Stack spacing={3}>
-                {isCancelledOrCancelling && (
-                  <Alert data-testid="cancelledAlertText" severity="warning">
-                    {t('detail.cancelled.message', { ns: 'notifiche' })}
-
-                    <Box mt={2}>
-                      <Link
-                        href={NOTIFICATION_CANCELLED_HELP_LINK}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        fontWeight={600}
-                        color="#614C15"
-                        underline="none"
-                        sx={{ cursor: 'pointer' }}
-                      >
-                        {t('detail.cancelled.cta', { ns: 'notifiche' })}
-                      </Link>
-                    </Box>
-                  </Alert>
-                )}
+                {!isMobile && cancelledAlert}
                 {isNotificationCostBanner && historyParser.hasSimpleRegisteredLetter() && (
                   <Alert data-testid="pecUnreachableAlertText" severity="warning">
                     {t('detail.pec-unreachable', { ns: 'notifiche' })}

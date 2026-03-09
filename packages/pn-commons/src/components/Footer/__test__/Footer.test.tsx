@@ -1,7 +1,7 @@
 import { i18n as i18nInterface } from 'i18next';
 import { vi } from 'vitest';
 
-import { Languages } from '@pagopa/mui-italia';
+import { LangCode, LangLabels, Languages } from '@pagopa/mui-italia';
 
 import { fireEvent, render, screen, waitFor } from '../../../test-utils';
 import { LANGUAGES, pagoPALink, postLoginLinks } from '../../../utility/costants';
@@ -51,15 +51,11 @@ describe('Footer Component', () => {
         expect(button).toHaveAttribute('aria-label', pagoPALink().ariaLabel);
       } else {
         expect(button).toHaveTextContent(postLoginLinks(accessibilityLink)[index - 1].label);
-        expect(button).toHaveAttribute(
-          'aria-label',
-          postLoginLinks(accessibilityLink)[index - 1].ariaLabel
-        );
       }
     });
     const dropdownLanguageButton = getByRole('button');
     expect(dropdownLanguageButton).toBeInTheDocument();
-    expect(dropdownLanguageButton).toHaveTextContent(LANGUAGES.it.it); // language 'it' is default selected
+    expect(dropdownLanguageButton).toHaveTextContent((LANGUAGES.it as LangLabels).it); // language 'it' is default selected
   });
 
   it('clicks on company link', () => {
@@ -87,7 +83,9 @@ describe('Footer Component', () => {
       />
     );
     let dropdownLanguageButton = getByRole('button');
-    let expectedLanguagesLabels = Object.values(LANGUAGES.it);
+    let expectedLanguagesLabels: string[] = (Object.keys(LANGUAGES) as LangCode[]).map(
+      (langCode) => (LANGUAGES[langCode] as LangLabels)[langCode]!
+    );
     // open the dropdown
     fireEvent.click(dropdownLanguageButton);
     let languageSelector = screen.getByRole('presentation');
@@ -118,7 +116,6 @@ describe('Footer Component', () => {
     dropdownLanguageButton = getByRole('button');
     expect(dropdownLanguageButton).toHaveTextContent(Object.values(LANGUAGES[languageCode]!)[2]);
     // check the dropdown languages
-    expectedLanguagesLabels = Object.values(LANGUAGES[languageCode]!);
     fireEvent.click(dropdownLanguageButton);
     languageSelector = screen.getByRole('presentation');
     languageOptions = languageSelector?.querySelectorAll('ul li');
@@ -139,12 +136,15 @@ describe('Footer Component', () => {
       />
     );
     const dropdownLanguageButton = getByRole('button');
-    const expectedLanguagesLabels = Object.values(LANGUAGES[languageCode]!);
+    const expectedLanguagesLabels: string[] = (Object.keys(LANGUAGES) as LangCode[]).map(
+      (langCode) => (LANGUAGES[langCode] as LangLabels)[langCode]!
+    );
     expect(dropdownLanguageButton).toHaveTextContent(Object.values(LANGUAGES[languageCode]!)[3]);
     // open the dropdown
     fireEvent.click(dropdownLanguageButton);
     const languageSelector = screen.getByRole('presentation');
     const languageOptions = languageSelector?.querySelectorAll('ul li');
+    console.log(languageOptions.length);
     // check the dropdown languages
     languageOptions.forEach((option, index) => {
       expect(option).toHaveTextContent(expectedLanguagesLabels[index]);

@@ -376,6 +376,25 @@ const NotificationDetail = () => {
     </Fragment>
   );
 
+  const cancelledAlert = isCancelledOrCancelling && (
+    <Alert data-testid="cancelledAlertText" severity="warning" sx={{ mb: { xs: 2, lg: 0 } }}>
+      {t('detail.cancelled.message', { ns: 'notifiche' })}
+      <Box mt={2}>
+        <Link
+          href={NOTIFICATION_CANCELLED_HELP_LINK}
+          target="_blank"
+          rel="noopener noreferrer"
+          fontWeight={600}
+          color="#614C15"
+          underline="none"
+          sx={{ cursor: 'pointer' }}
+        >
+          {t('detail.cancelled.cta', { ns: 'notifiche' })}
+        </Link>
+      </Box>
+    </Alert>
+  );
+
   const visibleDomicileBanner = () =>
     userHasAdminPermissions &&
     !currentUser.hasGroup &&
@@ -398,9 +417,14 @@ const NotificationDetail = () => {
       )}
       {!hasNotificationReceivedApiError && (
         <Box sx={{ p: { xs: 3, lg: 0 } }}>
-          {isMobile && breadcrumb}
-          {isMobile && visibleDomicileBanner() && (
-            <DomicileBanner source={ContactSource.DETTAGLIO_NOTIFICA} />
+          {isMobile && (
+            <>
+              {breadcrumb}
+              {cancelledAlert}
+              {visibleDomicileBanner() && (
+                <DomicileBanner source={ContactSource.DETTAGLIO_NOTIFICA} />
+              )}
+            </>
           )}
           <Grid
             container
@@ -413,24 +437,7 @@ const NotificationDetail = () => {
                 <DomicileBanner source={ContactSource.DETTAGLIO_NOTIFICA} />
               )}
               <Stack spacing={3}>
-                {isCancelledOrCancelling && (
-                  <Alert data-testid="cancelledAlertText" severity="warning">
-                    {t('detail.cancelled.message', { ns: 'notifiche' })}
-                    <Box mt={2}>
-                      <Link
-                        href={NOTIFICATION_CANCELLED_HELP_LINK}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        fontWeight={600}
-                        color="#614C15"
-                        underline="none"
-                        sx={{ cursor: 'pointer' }}
-                      >
-                        {t('detail.cancelled.cta', { ns: 'notifiche' })}
-                      </Link>
-                    </Box>
-                  </Alert>
-                )}
+                {!isMobile && cancelledAlert}
                 <NotificationDetailTable rows={detailTableRows} />
                 <Paper sx={{ p: 3 }} elevation={0}>
                   <NotificationDetailDocuments
