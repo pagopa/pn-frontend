@@ -46,13 +46,13 @@ function validateDate(startDate: Date | undefined, endDate: Date | undefined) {
   return isBefore(startDate, endDate) || isEqualDate(startDate, endDate);
 }
 
-const initialEmptyValues = { startDate: tenYearsAgo, endDate: today, iunMatch: '' };
+const initialEmptyValues = { startDate: undefined, endDate: undefined, iunMatch: '' };
 
 const initialValues = (
-  filters: GetNotificationsParams<Date>,
+  filters: GetNotificationsParams,
   emptyValues: {
-    startDate: Date;
-    endDate: Date;
+    startDate: Date | undefined;
+    endDate: Date | undefined;
     iunMatch: string;
     mandateId: string | undefined;
   }
@@ -61,8 +61,8 @@ const initialValues = (
     return initialEmptyValues;
   }
   return {
-    startDate: new Date(filters.startDate),
-    endDate: new Date(filters.endDate),
+    startDate: filters.startDate ? new Date(filters.startDate) : undefined,
+    endDate: filters.endDate ? new Date(filters.endDate) : undefined,
     iunMatch: getValidValue(filters.iunMatch),
   };
 };
@@ -71,14 +71,12 @@ const FilterNotifications = forwardRef(({ showFilters, currentDelegator }: Props
   const dispatch = useDispatch();
   const filters = useAppSelector((state: RootState) => state.dashboardState.filters);
   const { t } = useTranslation(['common', 'notifiche']);
-  const [startDate, setStartDate] = useState<Date | null>(null);
-  const [endDate, setEndDate] = useState<Date | null>(null);
   const isMobile = useIsMobile();
   const dialogRef = useRef<{ toggleOpen: () => void }>(null);
 
   const emptyValues = {
-    startDate: tenYearsAgo,
-    endDate: today,
+    startDate: undefined,
+    endDate: undefined,
     iunMatch: '',
     mandateId: currentDelegator?.mandateId,
   };
@@ -162,15 +160,6 @@ const FilterNotifications = forwardRef(({ showFilters, currentDelegator }: Props
     dispatch(setNotificationFilters(emptyValues));
   };
 
-  const setDates = () => {
-    if (!isEqual(filters.startDate, tenYearsAgo)) {
-      setStartDate(formik.values.startDate);
-    }
-    if (!isEqual(filters.endDate, today)) {
-      setEndDate(formik.values.endDate);
-    }
-  };
-
   useEffect(() => {
     void formik.validateForm();
   }, []);
@@ -180,12 +169,8 @@ const FilterNotifications = forwardRef(({ showFilters, currentDelegator }: Props
       formik.resetForm({
         values: initialEmptyValues,
       });
-      setStartDate(null);
-      setEndDate(null);
       setPrevFilters(emptyValues);
-      return;
     }
-    setDates();
   }, [filters]);
 
   useImperativeHandle(ref, () => ({
@@ -215,13 +200,7 @@ const FilterNotifications = forwardRef(({ showFilters, currentDelegator }: Props
       <CustomMobileDialogContent title={t('button.filtra')} ref={dialogRef}>
         <form onSubmit={formik.handleSubmit} data-testid="filter-form">
           <DialogContent>
-            <FilterNotificationsFormBody
-              formikInstance={formik}
-              startDate={startDate}
-              endDate={endDate}
-              setStartDate={(value) => setStartDate(value)}
-              setEndDate={(value) => setEndDate(value)}
-            />
+            <FilterNotificationsFormBody formikInstance={formik} />
           </DialogContent>
           <DialogActions>
             <FilterNotificationsFormActions
@@ -245,13 +224,7 @@ const FilterNotifications = forwardRef(({ showFilters, currentDelegator }: Props
             alignItems: 'flex',
           }}
         >
-          <FilterNotificationsFormBody
-            formikInstance={formik}
-            startDate={startDate}
-            endDate={endDate}
-            setStartDate={(value) => setStartDate(value)}
-            setEndDate={(value) => setEndDate(value)}
-          />
+          <FilterNotificationsFormBody formikInstance={formik} />
           <FilterNotificationsFormActions
             cleanFilters={cleanFilters}
             filtersApplied={isFilterApplied(filtersCount)}
