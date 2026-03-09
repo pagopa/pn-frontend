@@ -6,7 +6,7 @@ import { Fragment, ReactNode, useCallback, useEffect, useMemo, useState } from '
 import { useTranslation } from 'react-i18next';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 
-import { Alert, AlertTitle, Box, Grid, Link, Paper, Stack, Typography } from '@mui/material';
+import { Box, Grid, Link, Paper, Stack, Typography } from '@mui/material';
 import {
   AccessDenied,
   ApiError,
@@ -48,6 +48,8 @@ import {
   EventDeliveryFlowType,
   EventDeliveryModeType,
 } from '@pagopa-pn/pn-commons/src/models/MixpanelEvents';
+import { getLocalizedOrDefaultLabel } from '@pagopa-pn/pn-commons/src/utility/localization.utility';
+import { MIAlert } from '@pagopa/mui-italia';
 
 import DomicileBanner from '../components/DomicileBanner/DomicileBanner';
 import LoadingPageWrapper from '../components/LoadingPageWrapper/LoadingPageWrapper';
@@ -512,22 +514,15 @@ const NotificationDetail: React.FC = () => {
   );
 
   const cancelledAlert = isCancelledOrCancelling && (
-    <Alert data-testid="cancelledAlertText" severity="warning" sx={{ mb: { xs: 2, lg: 0 } }}>
-      {t('detail.cancelled.message', { ns: 'notifiche' })}
-      <Box mt={2}>
-        <Link
-          href={NOTIFICATION_CANCELLED_HELP_LINK}
-          target="_blank"
-          rel="noopener noreferrer"
-          fontWeight={600}
-          color="#614C15"
-          underline="none"
-          sx={{ cursor: 'pointer' }}
-        >
-          {t('detail.cancelled.cta', { ns: 'notifiche' })}
-        </Link>
-      </Box>
-    </Alert>
+    <MIAlert
+      severity="info"
+      description={getLocalizedOrDefaultLabel('notifications', 'detail.cancelled.message')}
+      action={{
+        label: getLocalizedOrDefaultLabel('notifications', 'detail.cancelled.cta'),
+        href: NOTIFICATION_CANCELLED_HELP_LINK,
+        target: '_blank',
+      }}
+    />
   );
 
   const trackEventPaymentRecipient = (event: EventPaymentRecipientType, param?: object) => {
@@ -628,6 +623,13 @@ const NotificationDetail: React.FC = () => {
       {!hasNotificationReceivedApiError && (
         <Box sx={{ p: { xs: 3, lg: 0 } }}>
           {isMobile && breadcrumb}
+          {isMobile && isNotificationCostBanner && historyParser.hasSimpleRegisteredLetter() && (
+            <MIAlert
+              data-testid="pecUnreachableAlertText"
+              severity="warning"
+              description={getLocalizedOrDefaultLabel('notifications', 'detail.pec-unreachable')}
+            />
+          )}
           {isMobile && cancelledAlert}
           <Grid
             container
@@ -638,11 +640,18 @@ const NotificationDetail: React.FC = () => {
               {!isMobile && breadcrumb}
               <Stack spacing={3}>
                 {!isMobile && cancelledAlert}
-                {isNotificationCostBanner && historyParser.hasSimpleRegisteredLetter() && (
-                  <Alert data-testid="pecUnreachableAlertText" severity="warning">
-                    {t('detail.pec-unreachable', { ns: 'notifiche' })}
-                  </Alert>
-                )}
+                {!isMobile &&
+                  isNotificationCostBanner &&
+                  historyParser.hasSimpleRegisteredLetter() && (
+                    <MIAlert
+                      data-testid="pecUnreachableAlertText"
+                      severity="warning"
+                      description={getLocalizedOrDefaultLabel(
+                        'notifications',
+                        'detail.pec-unreachable'
+                      )}
+                    />
+                  )}
 
                 {!isMobile && banner}
 
@@ -659,12 +668,18 @@ const NotificationDetail: React.FC = () => {
                     titleVariant="h6"
                   />
                   {notification.radd && (
-                    <Alert severity={'success'} sx={{ mb: 3, mt: 2 }} data-testid="raddAlert">
-                      <AlertTitle>
-                        {t('detail.timeline.radd.title', { ns: 'notifiche' })}
-                      </AlertTitle>
-                      {t('detail.timeline.radd.description', { ns: 'notifiche' })}
-                    </Alert>
+                    <MIAlert
+                      data-testid="raddAlert"
+                      severity="success"
+                      title={getLocalizedOrDefaultLabel(
+                        'notifications',
+                        'detail.timeline.radd.title'
+                      )}
+                      description={getLocalizedOrDefaultLabel(
+                        'notifications',
+                        'detail.timeline.radd.description'
+                      )}
+                    />
                   )}
                 </Paper>
                 {checkIfUserHasPayments && (
