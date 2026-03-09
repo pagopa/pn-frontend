@@ -1,15 +1,6 @@
-import { vi } from 'vitest';
-
 import { fireEvent, render } from '../../../__test__/test-utils';
 import * as routes from '../../../navigation/routes.const';
 import EmptyStatistics from '../EmptyStatistics';
-
-const mockNavigateFn = vi.fn();
-
-vi.mock('react-router-dom', async () => ({
-  ...(await vi.importActual<any>('react-router-dom')),
-  useNavigate: () => mockNavigateFn,
-}));
 
 describe('EmptyStatistics component tests', () => {
   it('renders the component', () => {
@@ -31,7 +22,7 @@ describe('EmptyStatistics component tests', () => {
   });
 
   it('renders the component with not enough data description and link to dashboard', () => {
-    const { container, getByTestId } = render(
+    const { container, getByTestId, router } = render(
       <EmptyStatistics description="empty.not_enough_data" />
     );
 
@@ -41,8 +32,7 @@ describe('EmptyStatistics component tests', () => {
     expect(link).toBeInTheDocument();
 
     fireEvent.click(link);
-    expect(mockNavigateFn).toHaveBeenCalledTimes(1);
-    expect(mockNavigateFn).toHaveBeenCalledWith(routes.DASHBOARD);
+    expect(router.state.location.pathname).toBe(routes.DASHBOARD);
 
     const emptyImg = getByTestId('empty-image');
     expect(emptyImg).toBeInTheDocument();

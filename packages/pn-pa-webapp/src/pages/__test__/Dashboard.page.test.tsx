@@ -12,24 +12,24 @@ import { createMatchMedia, testInput } from '@pagopa-pn/pn-commons/src/test-util
 
 import { errorMock } from '../../__mocks__/Errors.mock';
 import { emptyNotificationsFromBe, notificationsDTO } from '../../__mocks__/Notifications.mock';
-import { RenderResult, act, fireEvent, render, screen, waitFor } from '../../__test__/test-utils';
+import {
+  CustomRenderResult,
+  act,
+  fireEvent,
+  render,
+  screen,
+  waitFor,
+} from '../../__test__/test-utils';
 import { apiClient } from '../../api/apiClients';
+import * as routes from '../../navigation/routes.const';
 import { DASHBOARD_ACTIONS } from '../../redux/dashboard/actions';
 import { ServerResponseErrorCode } from '../../utility/AppError/types';
 import Dashboard from '../Dashboard.page';
 
-const mockNavigateFn = vi.fn();
-
-// mock imports
-vi.mock('react-router-dom', async () => ({
-  ...(await vi.importActual<any>('react-router-dom')),
-  useNavigate: () => mockNavigateFn,
-}));
-
 describe('Dashboard Page', async () => {
-  let result: RenderResult;
+  let result: CustomRenderResult;
   let mock: MockAdapter;
-  const original = window.matchMedia;
+  const original = globalThis.matchMedia;
 
   const startParam = encodeURIComponent(formatToTimezoneString(tenYearsAgo));
   const endParam = encodeURIComponent(formatToTimezoneString(today));
@@ -60,7 +60,7 @@ describe('Dashboard Page', async () => {
 
   afterAll(() => {
     mock.restore();
-    window.matchMedia = original;
+    globalThis.matchMedia = original;
   });
 
   it('Dashboard without notifications, clicks on new notification inside empty state', async () => {
@@ -74,7 +74,7 @@ describe('Dashboard Page', async () => {
     const newNotificationBtn = result.queryByTestId('link-create-notification');
     fireEvent.click(newNotificationBtn!);
     await waitFor(() => {
-      expect(mockNavigateFn).toHaveBeenCalledTimes(1);
+      expect(result.router.state.location.pathname).toBe(routes.NUOVA_NOTIFICA);
     });
   });
 
@@ -90,7 +90,7 @@ describe('Dashboard Page', async () => {
     expect(newNotificationBtn).toHaveTextContent('new-notification-button');
     fireEvent.click(newNotificationBtn!);
     await waitFor(() => {
-      expect(mockNavigateFn).toHaveBeenCalledTimes(1);
+      expect(result.router.state.location.pathname).toBe(routes.NUOVA_NOTIFICA);
     });
   });
 
@@ -105,7 +105,7 @@ describe('Dashboard Page', async () => {
     const apiKeysBtn = result.queryByTestId('link-api-keys');
     fireEvent.click(apiKeysBtn!);
     await waitFor(() => {
-      expect(mockNavigateFn).toHaveBeenCalledTimes(1);
+      expect(result.router.state.location.pathname).toBe(routes.API_KEYS);
     });
   });
 
@@ -274,7 +274,7 @@ describe('Dashboard Page', async () => {
   });
 
   it('renders page - mobile', async () => {
-    window.matchMedia = createMatchMedia(800);
+    globalThis.matchMedia = createMatchMedia(800);
     mock.onGet(notificationsPath).reply(200, notificationsDTO);
 
     await act(async () => {
@@ -294,7 +294,7 @@ describe('Dashboard Page', async () => {
   });
 
   it('errors on api - mobile keeps filter toggle visible', async () => {
-    window.matchMedia = createMatchMedia(800);
+    globalThis.matchMedia = createMatchMedia(800);
     mock.onGet(notificationsPath).reply(errorMock.status, errorMock.data);
 
     await act(async () => {
@@ -318,7 +318,7 @@ describe('Dashboard Page', async () => {
   });
 
   it('mobile: opens filters drawer and applies recipientId filter', async () => {
-    window.matchMedia = createMatchMedia(800);
+    globalThis.matchMedia = createMatchMedia(800);
 
     // initial call
     mock.onGet(notificationsPath).reply(200, notificationsDTO);
