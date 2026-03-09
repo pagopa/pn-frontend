@@ -139,21 +139,45 @@ export const preLoginLinks = (
           icon: 'linkedin',
           title: 'LinkedIn',
           href: 'https://www.linkedin.com/company/pagopa/',
+          ariaLabel: getLocalizedOrDefaultLabel(
+            'common',
+            'footer.social',
+            'Link: vai al sito LinkedIn di PagoPA S.p.A.',
+            { social: 'LinkedIn' }
+          ),
         },
         {
           icon: 'instagram',
           title: 'Instagram',
           href: 'https://www.instagram.com/pagopaspa/?hl=en',
+          ariaLabel: getLocalizedOrDefaultLabel(
+            'common',
+            'footer.social',
+            'Link: vai al sito LinkedIn di PagoPA S.p.A.',
+            { social: 'Instagram' }
+          ),
         },
         {
           icon: 'threads',
           title: 'Threads',
           href: 'https://www.threads.net/@pagopaspa',
+          ariaLabel: getLocalizedOrDefaultLabel(
+            'common',
+            'footer.social',
+            'Link: vai al sito Threads di PagoPA S.p.A.',
+            { social: 'Threads' }
+          ),
         },
         {
           icon: 'youtube',
           title: 'Youtube',
-          href: 'https://www.youtube.com/channel/UCFBGOEJUPQ6t3xtZFc_UIEQ',
+          href: 'https://www.youtube.com/channel/@pagopaspa',
+          ariaLabel: getLocalizedOrDefaultLabel(
+            'common',
+            'footer.social',
+            'Link: vai al sito Youtube di PagoPA S.p.A.',
+            { social: 'Youtube' }
+          ),
         },
       ],
       links: [
