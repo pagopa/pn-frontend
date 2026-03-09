@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 
-import { LangCode, Footer as MuiFooter } from '@pagopa/mui-italia';
+import { LangCode, LangLabels, Footer as MuiFooter } from '@pagopa/mui-italia';
 
 import {
   LANGUAGES,
@@ -9,6 +9,7 @@ import {
   postLoginLinks,
   preLoginLinks,
 } from '../../utility/costants';
+import { getLocalizedOrDefaultLabel } from '../../utility/localization.utility';
 import { getLangCode } from '../../utility/multilanguage.utility';
 
 type Props = {
@@ -39,6 +40,17 @@ const Footer: React.FC<Props> = ({
   };
   const currentLangCode = useMemo(() => getLangCode(currentLanguage), [currentLanguage]);
 
+  const languagesFlat = (Object.keys(LANGUAGES) as Array<LangCode>).reduce<LangLabels>(
+    (acc, code) => {
+      const labels = LANGUAGES[code] as LangLabels;
+      return {
+        ...acc,
+        [code]: labels[code],
+      };
+    },
+    {} as LangLabels
+  );
+
   return (
     <MuiFooter
       loggedUser={loggedUser}
@@ -54,9 +66,14 @@ const Footer: React.FC<Props> = ({
         privacyPolicyHref,
         termsOfServiceHref
       )}
-      languages={LANGUAGES}
+      languages={languagesFlat}
       currentLangCode={currentLangCode}
       onLanguageChanged={changeLanguageHandler}
+      productsTitle={getLocalizedOrDefaultLabel(
+        'common',
+        'footer.products-title',
+        'Prodotti e servizi'
+      )}
     />
   );
 };
