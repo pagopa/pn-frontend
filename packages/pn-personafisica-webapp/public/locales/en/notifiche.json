@@ -494,17 +494,23 @@
     }
   },
   "notification-alert": {
-    "description": "The amount includes the notification costs.",
+    "description": "The amount includes notification costs.",
     "cta": "What are they?",
     "details": {
       "title": "What are notification costs?",
-      "base-cost": "Base cost",
-      "first-analog-cost": "Paper mailing cost",
-      "second-analog-cost": "Second paper mailing cost",
-      "simple-registered-letter-cost": "Registered mail",
+      "description": "These are the expenses related to sending the communication, which vary depending on how you receive it.",
+      "how-they-work": "How do notification costs work?",
+      "base-cost": "Management cost",
+      "analog-cost": {
+        "total": "Physical mailing cost",
+        "hint": {
+          "avoided": "Mailing avoided with SEND",
+          "multiple-analog-flows": "{{count}} mailings sent"
+        }
+      },
       "total-cost": "Total",
-      "error": "We were unable to retrieve the cost data, please try again later.",
-      "more-info": "Contact the institution that sent the notification for more details on the costs of this communication."
+      "error": "We were unable to retrieve the cost details, please try again later.",
+      "more-info": "Contact the institution that sent you the notification for more details on the costs of this communication."
     }
   }
 }

@@ -24,22 +24,20 @@ function buildHintMessage(costDetails: NotificationCostDetails): HintMessage | u
     return {
       text: getLocalizedOrDefaultLabel(
         'notifications',
-        'notification-alert.details.analog-cost.avoided'
+        'notification-alert.details.analog-cost.hint.avoided'
       ),
       variant: 'highlight',
     };
   }
 
-  if (numberOfAnalogCost) {
-    const hintKey =
-      numberOfAnalogCost === 1
-        ? 'notification-alert.details.analog-cost.hint.single-analog-flow'
-        : 'notification-alert.details.analog-cost.hint.multiple-analog-flows';
-
+  if (numberOfAnalogCost && numberOfAnalogCost > 1) {
     return {
-      text: getLocalizedOrDefaultLabel('notifications', hintKey, undefined, {
-        count: numberOfAnalogCost,
-      }),
+      text: getLocalizedOrDefaultLabel(
+        'notifications',
+        'notification-alert.details.analog-cost.hint.multiple-analog-flows',
+        undefined,
+        { count: numberOfAnalogCost }
+      ),
       variant: 'default',
     };
   }

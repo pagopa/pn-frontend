@@ -494,17 +494,23 @@
     }
   },
   "notification-alert": {
-    "description": "Le montant comprend i les frais de notification.",
+    "description": "Le montant comprend les frais de notification.",
     "cta": "De quoi s'agit-il ?",
     "details": {
       "title": "Que sont les frais de notification ?",
-      "base-cost": "Coût de base",
-      "first-analog-cost": "Frais d'envoi papier",
-      "second-analog-cost": "Deuxième envoi papier",
-      "simple-registered-letter-cost": "Lettre recommandée",
+      "description": "Il s'agit des frais liés à l'envoi de la communication, qui varient selon le mode de réception.",
+      "how-they-work": "Comment fonctionnent les frais de notification ?",
+      "base-cost": "Frais de gestion",
+      "analog-cost": {
+        "total": "Frais d'envoi papier",
+        "hint": {
+          "avoided": "Envoi évité avec SEND",
+          "multiple-analog-flows": "{{count}} envois effectués"
+        }
+      },
       "total-cost": "Total",
-      "error": "Nous n'avons pas pu récupérer les données relatives aux coûts, veuillez réessayer plus tard.",
-      "more-info": "Contactez l'organisme qui vous a envoyé la notification pour plus de détails sur les frais de cette communication."
+      "error": "Nous n'avons pas pu récupérer le détail des frais, réessaye plus tard.",
+      "more-info": "Contacte l'organisme qui t'a envoyé la notification per avoir plus de détails sur les frais de cette communication."
     }
   }
 }

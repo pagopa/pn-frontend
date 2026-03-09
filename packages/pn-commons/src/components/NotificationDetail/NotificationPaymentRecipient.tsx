@@ -28,7 +28,7 @@ type Props = {
   paymentTpp?: PaymentTpp;
   isCancelled: boolean;
   timerF24: number;
-  landingSiteUrl: string;
+  costDetailsAssistanceLink: string;
   iun: string;
   getPaymentAttachmentAction: (
     name: PaymentAttachmentSName,
@@ -54,7 +54,7 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
   paymentTpp,
   isCancelled,
   timerF24,
-  landingSiteUrl,
+  costDetailsAssistanceLink,
   iun,
   getPaymentAttachmentAction,
   onPayClick,
@@ -198,20 +198,10 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
           {getLocalizedOrDefaultLabel('notifications', 'detail.payment.cancelled-message')}
         </Alert>
       ) : (
-        <>
-          {/* <NotificationPaymentTitle
-            landingSiteUrl={landingSiteUrl}
-            handleTrackEventFn={handleTrackEventFn}
-            pagoPaF24={pagoPaF24}
-            f24Only={f24Only}
-            allPaymentsIsPaid={allPaymentsIsPaid}
-            hasMoreThanOnePage={hasMoreThanOnePage}
-          /> */}
-          <NotificationCostsDetailDrawer
-            landingSiteUrl={landingSiteUrl}
-            handleTrackEventFn={handleTrackEventFn}
-          />
-        </>
+        <NotificationCostsDetailDrawer
+          costDetailsAssistanceLink={costDetailsAssistanceLink}
+          handleTrackEventFn={handleTrackEventFn}
+        />
       )}
 
       {f24Only.length > 0 && pagoPaF24.length > 0 && (

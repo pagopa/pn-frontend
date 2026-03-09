@@ -495,16 +495,22 @@
   },
   "notification-alert": {
     "description": "Znesek vključuje stroške obvestila.",
-    "cta": "Kaj so?",
+    "cta": "Kaj so to?",
     "details": {
       "title": "Kaj so stroški obvestila?",
-      "base-cost": "Osnovni stroški",
-      "first-analog-cost": "Stroški pošiljanja v papirni obliki",
-      "second-analog-cost": "Drugo pošiljanje v papirni obliki",
-      "simple-registered-letter-cost": "Priporočeno pismo",
+      "description": "To so stroški, povezani s pošiljanjem komunikacije, ki se razlikujejo glede na način prejema.",
+      "how-they-work": "Kako delujejo stroški obvestila?",
+      "base-cost": "Stroški upravljanja",
+      "analog-cost": {
+        "total": "Stroški pošiljanja v papirni obliki",
+        "hint": {
+          "avoided": "Pošiljanje preprečeno s SEND",
+          "multiple-analog-flows": "{{count}} izvedenih pošiljanj"
+        }
+      },
       "total-cost": "Skupaj",
-      "error": "Podatkov o stroških nam ni uspelo pridobiti, poskusite znova pozneje.",
-      "more-info": "Za več podrobnosti o stroških tega sporočila se obrnite na organ, ki vam je poslal obvestilo."
+      "error": "Podrobnosti o stroških ni bilo mogoče pridobiti, poskusi znova pozneje.",
+      "more-info": "Za več podrobnosti o stroških te komunikacije se obrni na organ, ki ti je poslal obvestilo."
     }
   }
 }

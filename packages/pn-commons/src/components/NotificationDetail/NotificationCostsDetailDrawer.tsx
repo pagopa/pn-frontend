@@ -15,22 +15,22 @@ import CostsBreakdown from './CostDetailsDrawerContent/CostsBreakdown';
 import UnavailableDataDrawerContent from './CostDetailsDrawerContent/UnavailableData';
 
 const costDetails: NotificationCostDetails = {
-  status: NotificationCostDetailsStatus.ERROR,
+  status: NotificationCostDetailsStatus.OK,
   totalCost: 1050,
   baseCost: 200,
   analogCost: 850,
-  numberOfAnalogCost: 1,
+  numberOfAnalogCost: 2,
 };
 
 type Props = {
-  landingSiteUrl: string;
+  costDetailsAssistanceLink: string;
   handleTrackEventFn: (event: EventPaymentRecipientType, param?: object) => void;
 };
 
-const NotificationCostsDetailDrawer: React.FC<Props> = ({ handleTrackEventFn }) => {
-  // todo - spostare in conf?
-  const notificationCostCacLink = `https://assistenza.notifichedigitali.it/hc/it/articles/33545157719441-Cosa-sono-i-costi-di-notifica`;
-
+const NotificationCostsDetailDrawer: React.FC<Props> = ({
+  costDetailsAssistanceLink,
+  handleTrackEventFn,
+}) => {
   const [openDrawer, setOpenDrawer] = useState(false);
 
   const isMobile = useIsMobile();
@@ -94,7 +94,7 @@ const NotificationCostsDetailDrawer: React.FC<Props> = ({ handleTrackEventFn }) 
               )}
               <br />
               <Link
-                href={notificationCostCacLink}
+                href={costDetailsAssistanceLink}
                 onClick={() =>
                   handleTrackEventFn(EventPaymentRecipientType.SEND_MULTIPAYMENT_MORE_INFO)
                 }

@@ -445,14 +445,13 @@
     "cta": "Cosa sono?",
     "details": {
       "title": "Cosa sono i costi di notifica?",
-      "description": "Sono le spese sostenute per inviarti la comunicazione, che variano a seconda della modalità con cui la ricevi.",
+      "description": "Sono le spese correlate all’invio della comunicazione, che variano a seconda della modalità con cui la ricevi.",
       "how-they-work": "Come funzionano i costi di notifica?",
       "base-cost": "Costo di gestione",
       "analog-cost": {
         "total": "Costo invio cartaceo",
-        "avoided": "Invio evitato con SEND",
         "hint": {
-          "single-analog-flow": "1 invio eseguito",
+          "avoided": "Invio evitato con SEND",
           "multiple-analog-flows": "{{count}} invii eseguiti"
         }
       },

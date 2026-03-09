@@ -494,17 +494,23 @@
     }
   },
   "notification-alert": {
-    "description": "Der Betrag beinhaltet die Zustellkosten.",
+    "description": "Der Betrag enthält die Zustellkosten.",
     "cta": "Was ist das?",
     "details": {
       "title": "Was sind Zustellkosten?",
-      "base-cost": "Grundkosten",
-      "first-analog-cost": "Kosten für den Postversand",
-      "second-analog-cost": "Zweiter Postversand",
-      "simple-registered-letter-cost": "Einschreiben",
-      "total-cost": "Gesamtbetrag",
-      "error": "Die Kostendaten konnten nicht abgerufen werden, bitte versuchen Sie es später noch einmal.",
-      "more-info": "Wenden Sie sich an die zuständige Stelle, die Ihnen die Benachrichtigung gesendet hat, um weitere Einzelheiten zu den Kosten dieser Mitteilung zu erfahren."
+      "description": "Dies sind die mit dem Versand der Mitteilung verbundenen Kosten, die je nach Art des Empfangs variieren.",
+      "how-they-work": "Wie funktionieren die Zustellkosten?",
+      "base-cost": "Verwaltungskosten",
+      "analog-cost": {
+        "total": "Kosten für den Postversand",
+        "hint": {
+          "avoided": "Postversand durch SEND vermieden",
+          "multiple-analog-flows": "{{count}} Sendungen durchgeführt"
+        }
+      },
+      "total-cost": "Gesamt",
+      "error": "Die Kostendetails konnten nicht geladen werden, versuche es bitte später erneut.",
+      "more-info": "Kontaktiere die sendende Einrichtung, die dir die Zustellung geschickt hat, um weitere Informationen zu den Kosten dieser Mitteilung zu erhalten."
     }
   }
 }
