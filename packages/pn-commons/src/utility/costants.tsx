@@ -31,7 +31,7 @@ export const pagoPALink = (): { href: string; ariaLabel: string } => ({
   ariaLabel: getLocalizedOrDefaultLabel(
     'common',
     'footer.go-to-pagopa',
-    'Link: vai al sito di PagoPA S.p.A.'
+    'Vai al sito di PagoPA S.p.A.'
   ),
 });
 
@@ -142,7 +142,7 @@ export const preLoginLinks = (
           ariaLabel: getLocalizedOrDefaultLabel(
             'common',
             'footer.social',
-            'Link: vai al sito LinkedIn di PagoPA S.p.A.',
+            'Vai al sito LinkedIn di PagoPA S.p.A.',
             { social: 'LinkedIn' }
           ),
         },
@@ -153,7 +153,7 @@ export const preLoginLinks = (
           ariaLabel: getLocalizedOrDefaultLabel(
             'common',
             'footer.social',
-            'Link: vai al sito LinkedIn di PagoPA S.p.A.',
+            'Vai al sito LinkedIn di PagoPA S.p.A.',
             { social: 'Instagram' }
           ),
         },
@@ -164,7 +164,7 @@ export const preLoginLinks = (
           ariaLabel: getLocalizedOrDefaultLabel(
             'common',
             'footer.social',
-            'Link: vai al sito Threads di PagoPA S.p.A.',
+            'Vai al sito Threads di PagoPA S.p.A.',
             { social: 'Threads' }
           ),
         },
@@ -175,7 +175,7 @@ export const preLoginLinks = (
           ariaLabel: getLocalizedOrDefaultLabel(
             'common',
             'footer.social',
-            'Link: vai al sito Youtube di PagoPA S.p.A.',
+            'Vai al sito Youtube di PagoPA S.p.A.',
             { social: 'Youtube' }
           ),
         },

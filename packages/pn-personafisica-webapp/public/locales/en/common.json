@@ -122,7 +122,7 @@
     "generic-api-error-action-text": "Reload"
   },
   "footer": {
-    "go-to-pagopa": "Link: go to PagoPA S.p.A. website",
+    "go-to-pagopa": "Go to PagoPA S.p.A. website",
     "go-to": "Go to link",
     "privacy-info": "Privacy Policy",
     "who": "Who we are",
@@ -136,7 +136,7 @@
     "disclosure": "Responsible Disclosure Policy",
     "321-model": "Model 231",
     "accessibility": "Accessibility",
-    "social": "Link: go to PagoPA S.p.A. {{social}} website",
+    "social": "Go to PagoPA S.p.A. {{social}} website",
     "resources": "Resources",
     "follow": "Follow us on",
     "legal-part-1": "società per azioni with sole shareholder - share capital of euro 1,000,000 fully paid up - registered office in Rome, Piazza Colonna 370",
