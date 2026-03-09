@@ -21,7 +21,7 @@ import {
   PhysicalCommunicationType,
   dataRegex,
 } from '@pagopa-pn/pn-commons';
-import { LangCode } from '@pagopa/mui-italia';
+import { LangCode, LangLabels } from '@pagopa/mui-italia';
 
 import {
   NewNotification,
@@ -72,7 +72,7 @@ const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
 
   const languages = useMemo(() => {
     const currentLang = i18n.language?.substring(0, 2) as LangCode;
-    return LANGUAGES[currentLang] ?? LANGUAGES.it;
+    return (LANGUAGES[currentLang] ?? LANGUAGES.it) as LangLabels;
   }, [i18n.language]);
 
   const initialValues = useCallback(() => {

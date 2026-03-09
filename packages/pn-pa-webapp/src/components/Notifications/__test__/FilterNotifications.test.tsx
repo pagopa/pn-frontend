@@ -1,9 +1,4 @@
-import {
-  formatDate,
-  getNotificationAllowedStatus,
-  tenYearsAgo,
-  today,
-} from '@pagopa-pn/pn-commons';
+import { formatDate, getNotificationAllowedStatus, today } from '@pagopa-pn/pn-commons';
 import {
   createEvent,
   createMatchMedia,
@@ -27,8 +22,8 @@ import FilterNotifications from '../FilterNotifications';
 const localizedNotificationStatus = getNotificationAllowedStatus();
 
 const initialState = {
-  startDate: tenYearsAgo,
-  endDate: today,
+  startDate: undefined,
+  endDate: undefined,
   recipientId: '',
   status: '',
   iunMatch: '',

@@ -16,7 +16,7 @@ import {
   Typography,
 } from '@mui/material';
 import { CustomDropdown, LANGUAGES, useIsMobile } from '@pagopa-pn/pn-commons';
-import { ButtonNaked, LangCode } from '@pagopa/mui-italia';
+import { ButtonNaked, LangCode, LangLabels } from '@pagopa/mui-italia';
 
 import { BILINGUALISM_LANGUAGES, NewNotificationLangOther } from '../../models/NewNotification';
 import { setAdditionalLanguages } from '../../redux/auth/actions';
@@ -82,7 +82,7 @@ const NotificationSettingsDrawer = () => {
 
   const languages = useMemo(() => {
     const currentLang = i18n.language?.substring(0, 2) as LangCode;
-    return LANGUAGES[currentLang] ?? LANGUAGES.it;
+    return (LANGUAGES[currentLang] ?? LANGUAGES.it) as LangLabels;
   }, [i18n.language]);
 
   return (
@@ -146,9 +146,9 @@ const NotificationSettingsDrawer = () => {
                 <Box mt={4}>
                   <CustomDropdown
                     id="additionalLang"
-                    label={`${t(
+                    label={t(
                       'new-notification.steps.preliminary-informations.select-other-language'
-                    )}*`}
+                    )}
                     name="additionalLang"
                     size="medium"
                     margin="none"

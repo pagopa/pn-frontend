@@ -26,19 +26,9 @@ type Props = {
     errors: FormikErrors<FormikValues>;
     setErrors: (errors: FormikErrors<FormikValues>) => void;
   };
-  startDate: Date | null;
-  endDate: Date | null;
-  setStartDate: (value: Date | null) => void;
-  setEndDate: (value: Date | null) => void;
 };
 
-const FilterNotificationsFormBody = ({
-  formikInstance,
-  startDate,
-  endDate,
-  setStartDate,
-  setEndDate,
-}: Props) => {
+const FilterNotificationsFormBody = ({ formikInstance }: Props) => {
   const { t, i18n } = useTranslation(['notifiche']);
   const isMobile = useIsMobile();
 
@@ -104,14 +94,9 @@ const FilterNotificationsFormBody = ({
           language={i18n.language}
           label={t('filters.data_da', { ns: 'notifiche' })}
           format={DATE_FORMAT}
-          value={startDate}
+          value={formikInstance.values.startDate ?? null}
           onChange={(value: DatePickerTypes) => {
-            formikInstance
-              .setFieldValue('startDate', value || tenYearsAgo)
-              .then(() => {
-                setStartDate(value);
-              })
-              .catch(() => 'error');
+            void formikInstance.setFieldValue('startDate', value || tenYearsAgo);
           }}
           slotProps={{
             textField: {
@@ -132,7 +117,7 @@ const FilterNotificationsFormBody = ({
           }}
           disableFuture={true}
           minDate={tenYearsAgo}
-          maxDate={endDate ?? undefined}
+          maxDate={formikInstance.values.endDate ?? null}
         />
       </Grid>
       <Grid item lg={2} xs={12}>
@@ -140,14 +125,9 @@ const FilterNotificationsFormBody = ({
           language={i18n.language}
           label={t('filters.data_a', { ns: 'notifiche' })}
           format={DATE_FORMAT}
-          value={endDate}
+          value={formikInstance.values.endDate ?? null}
           onChange={(value: DatePickerTypes) => {
-            formikInstance
-              .setFieldValue('endDate', value || today)
-              .then(() => {
-                setEndDate(value);
-              })
-              .catch(() => 'error');
+            void formikInstance.setFieldValue('endDate', value || today);
           }}
           slotProps={{
             textField: {
@@ -166,7 +146,7 @@ const FilterNotificationsFormBody = ({
             },
           }}
           disableFuture={true}
-          minDate={startDate ?? tenYearsAgo}
+          minDate={formikInstance.values.startDate ?? tenYearsAgo}
           maxDate={today}
         />
       </Grid>
