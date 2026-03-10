@@ -48,7 +48,6 @@ import {
   EventDeliveryFlowType,
   EventDeliveryModeType,
 } from '@pagopa-pn/pn-commons/src/models/MixpanelEvents';
-import { getLocalizedOrDefaultLabel } from '@pagopa-pn/pn-commons/src/utility/localization.utility';
 import { MIAlert } from '@pagopa/mui-italia';
 
 import DomicileBanner from '../components/DomicileBanner/DomicileBanner';
@@ -537,7 +536,7 @@ const NotificationDetail: React.FC = () => {
       <MIAlert
         data-testid="pecUnreachableAlertText"
         severity="warning"
-        description={getLocalizedOrDefaultLabel('notifications', 'detail.pec-unreachable')}
+        description={t('detail.pec-unreachable', { ns: 'notifiche' })}
       />
     );
 
@@ -669,14 +668,8 @@ const NotificationDetail: React.FC = () => {
                     <MIAlert
                       data-testid="raddAlert"
                       severity="success"
-                      title={getLocalizedOrDefaultLabel(
-                        'notifications',
-                        'detail.timeline.radd.title'
-                      )}
-                      description={getLocalizedOrDefaultLabel(
-                        'notifications',
-                        'detail.timeline.radd.description'
-                      )}
+                      title={t('detail.timeline.radd.title', { ns: 'notifiche' })}
+                      description={t('detail.timeline.radd.description', { ns: 'notifiche' })}
                     />
                   )}
                 </Paper>
