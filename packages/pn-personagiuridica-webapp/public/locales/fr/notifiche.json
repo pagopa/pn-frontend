@@ -76,11 +76,6 @@
     },
     "payment": {
       "title": "Paiement",
-      "single-payment-subtitle": "Le montant final può essere différent de celui indiqué dans l'acte et inclure les frais de notification.",
-      "subtitle": "Dans cette notification, il y a plusieurs alertes de paiement : sélectionnez celle que vous souhaitez payer. Certaines alertes incluent les frais de notification.",
-      "subtitle-f24": "Vous pouvez payer cette notification via F24. Pour voir les détails, ouvrez les formulaires.",
-      "subtitle-mixed": "Dans cette notification, il existe plusieurs possibilités de paiement : sélectionnez ou téléchargez ce que vous souhaitez payer. Certains montants incluent les frais de notification.",
-      "how": "Pourquoi ?",
       "f24Models": "Formulaires F24",
       "pagoPANotices": "Alertes pagoPA",
       "download-pagoPA-notice": "Télécharger l’alerte pagoPA",

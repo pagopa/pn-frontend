@@ -76,11 +76,6 @@
     },
     "payment": {
       "title": "Plačilo",
-      "single-payment-subtitle": "Končni znesek se lahko razlikuje od zneska, navedenega v aktu, in vključuje stroške vročanja.",
-      "subtitle": "V tem obvestilu je več opozoril o plačilu: izberite tisto, ki ga želite plačati. Nekatera opozorila vključujejo stroške obveščanja.",
-      "subtitle-f24": "To obvestilo lahko plačate prek F24. Če si želite ogledati podrobnosti, odprite obrazce.",
-      "subtitle-mixed": "V tem obvestilu je več možnosti plačila: izberite ali prenesite tisto, kar želite plačati. Nekateri zneski vključujejo stroške obveščanja.",
-      "how": "Kako to?",
       "f24Models": "Obrazci F24",
       "pagoPANotices": "Opozorila pagoPA",
       "download-pagoPA-notice": "Prenesite obvestilo pagoPA",

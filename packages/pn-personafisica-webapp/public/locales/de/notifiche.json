@@ -76,11 +76,6 @@
     },
     "payment": {
       "title": "Zahlung",
-      "single-payment-subtitle": "Der endgültige Betrag kann sich vom angegebenen Betrag unterscheiden.",
-      "subtitle": "Diese Zustellung enthält mehrere Zahlungsbescheide: Wähle die aus, die du bezahlen möchtest. Einige Bescheide beinhalten Zustellungsgebühren.",
-      "subtitle-f24": "Diese können per F24 bezahlt werden. Für Einzelheiten, Vordrucke öffnen.",
-      "subtitle-mixed": "Für diese Zustellung sind mehrere Zahlungsmöglichkeiten vorhanden: Wähle oder lade herunter, was du bezahlen möchtest. Einige Beträge beinhalten Zustellungsgebühren.",
-      "how": "Wieso?",
       "f24Models": "Vordruck F24",
       "pagoPANotices": "Benachrichtigungen pagoPA",
       "download-pagoPA-notice": "Benachrichtigung pagoPA herunterladen",
