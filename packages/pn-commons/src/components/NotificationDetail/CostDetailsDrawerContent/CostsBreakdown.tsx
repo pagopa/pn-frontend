@@ -62,6 +62,7 @@ const CostRow = ({
   return (
     <ListItem
       disableGutters
+      data-testid={isTotal ? 'cost-row-total' : 'cost-row'}
       sx={{
         py: '12px',
         display: 'flex',
@@ -79,6 +80,7 @@ const CostRow = ({
       />
 
       <Typography
+        data-testid={isTotal ? 'cost-amount-total' : 'cost-amount'}
         color={isTotal ? 'inherit' : 'primary'}
         fontSize={isTotal ? '24px' : '16px'}
         fontWeight={isTotal ? 'bold' : 600}
@@ -98,7 +100,12 @@ const HintLabel = ({
   color: string;
   showIcon: boolean;
 }) => (
-  <Box component="span" sx={{ display: 'inline-flex', alignItems: 'center' }} gap={0.5}>
+  <Box
+    component="span"
+    sx={{ display: 'inline-flex', alignItems: 'center' }}
+    gap={0.5}
+    data-testid="cost-hint"
+  >
     {showIcon && <SavingsOutlined sx={{ fontSize: 16, color }} />}
     {text}
   </Box>
@@ -115,7 +122,7 @@ const CostsBreakdown: React.FC<Props> = ({ costDetails }) => {
   }
 
   return (
-    <List disablePadding>
+    <List disablePadding data-testid="costs-breakdown">
       {baseCost !== undefined && (
         <CostRow
           label={getLocalizedOrDefaultLabel(

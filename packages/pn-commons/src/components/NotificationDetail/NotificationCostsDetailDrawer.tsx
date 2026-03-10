@@ -67,6 +67,7 @@ const NotificationCostsDetailDrawer: React.FC<Props> = ({
           label: getLocalizedOrDefaultLabel('notifications', 'notification-alert.cta'),
           onClick: toggleDrawer,
         }}
+        data-testid="notification-costs-alert"
       />
 
       <Drawer
@@ -75,13 +76,18 @@ const NotificationCostsDetailDrawer: React.FC<Props> = ({
         PaperProps={{
           sx: { maxWidth: { xs: '100%', lg: '500px' } },
         }}
+        data-testid="cost-details-drawer"
       >
         <Stack padding={3} spacing={2}>
           <Stack direction="row" display="flex" alignItems="center" justifyContent="space-between">
-            <Typography fontSize="18px" fontWeight="bold">
+            <Typography fontSize="18px" fontWeight="bold" data-testid="cost-details-drawer-title">
               {getLocalizedOrDefaultLabel('notifications', 'notification-alert.details.title')}
             </Typography>
-            <IconButton aria-label="close" onClick={toggleDrawer}>
+            <IconButton
+              aria-label="close"
+              onClick={toggleDrawer}
+              data-testid="cost-details-drawer-close"
+            >
               <CloseIcon sx={{ color: 'action.active', fontSize: '24px' }} />
             </IconButton>
           </Stack>
@@ -102,7 +108,7 @@ const NotificationCostsDetailDrawer: React.FC<Props> = ({
                 fontSize="16px"
                 fontWeight={600}
                 sx={{ cursor: 'pointer' }}
-                data-testid="faqNotificationCosts"
+                data-testid="cost-details-drawer-assistance-link"
               >
                 {getLocalizedOrDefaultLabel(
                   'notifications',
