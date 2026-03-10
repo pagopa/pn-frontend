@@ -4,7 +4,10 @@ import { formatDate } from '@pagopa-pn/pn-commons';
 
 import { mockApiKeysDTO } from '../../../__mocks__/ApiKeys.mock';
 import { fireEvent, render, waitFor } from '../../../__test__/test-utils';
-import { getApiKeyStatusInfos } from '../../../utility/apikeys.utility';
+import {
+  getApiKeyStatusHistoryLines,
+  getApiKeyStatusInfos,
+} from '../../../utility/apikeys.utility';
 import ApiKeyDataSwitch from '../ApiKeyDataSwitch';
 
 const data = mockApiKeysDTO.items[0];
@@ -45,11 +48,11 @@ describe('ApiKeyDataSwitch Component', () => {
     const groupsString =
       data.groups.length > 3
         ? data.groups
-          .map((group) => group.name)
-          .splice(0, 3)
-          .join('') +
-        '\\+' +
-        (data.groups.length - 3).toString()
+            .map((group) => group.name)
+            .splice(0, 3)
+            .join('') +
+          '\\+' +
+          (data.groups.length - 3).toString()
         : data.groups.map((group) => group.name).join('');
     const regexp = new RegExp(`^${groupsString}$`, 'ig');
     expect(container).toHaveTextContent(regexp);
@@ -71,7 +74,11 @@ describe('ApiKeyDataSwitch Component', () => {
   });
 
   it('renders component - status', () => {
-    const { label } = getApiKeyStatusInfos(data.status, data.statusHistory);
+    const t = (key: string) => key;
+
+    const statusHistoryLines = getApiKeyStatusHistoryLines(t, data.statusHistory);
+    const { label } = getApiKeyStatusInfos(data.status, statusHistoryLines);
+
     const { container } = render(
       <ApiKeyDataSwitch handleModalClick={mockClick} data={data} type="status" />
     );

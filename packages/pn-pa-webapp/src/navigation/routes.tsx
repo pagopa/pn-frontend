@@ -19,7 +19,7 @@ import SessionGuard from './SessionGuard';
 import ToSGuard from './ToSGuard';
 import * as routes from './routes.const';
 
-function Router() {
+const Router: React.FC = () => {
   const { IS_STATISTICS_ENABLED } = getConfiguration();
   const navigate = useNavigate();
 
@@ -27,10 +27,10 @@ function Router() {
 
   return (
     <Routes>
-      <Route path="/" element={<SessionGuard />}>
+      <Route element={<SessionGuard />}>
         {/* protected routes */}
-        <Route path="/" element={<RouteGuard roles={[PNRole.ADMIN, PNRole.OPERATOR]} />}>
-          <Route path="/" element={<ToSGuard />}>
+        <Route element={<RouteGuard roles={[PNRole.ADMIN, PNRole.OPERATOR]} />}>
+          <Route element={<ToSGuard />}>
             <Route path={routes.DASHBOARD} element={<Dashboard />} />
             {IS_STATISTICS_ENABLED && <Route path={routes.STATISTICHE} element={<Statistics />} />}
             <Route path={routes.DETTAGLIO_NOTIFICA} element={<NotificationDetail />} />
@@ -50,6 +50,6 @@ function Router() {
       <Route path="*" element={<NotFound goBackAction={navigateToHome} />} />
     </Routes>
   );
-}
+};
 
 export default Router;

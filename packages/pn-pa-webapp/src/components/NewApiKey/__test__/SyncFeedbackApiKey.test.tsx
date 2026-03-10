@@ -4,13 +4,6 @@ import { fireEvent, render } from '../../../__test__/test-utils';
 import * as routes from '../../../navigation/routes.const';
 import SyncFeedbackApiKey from '../SyncFeedbackApiKey';
 
-const mockNavigateFn = vi.fn();
-
-vi.mock('react-router-dom', async () => ({
-  ...(await vi.importActual<any>('react-router-dom')),
-  useNavigate: () => mockNavigateFn,
-}));
-
 describe('SyncFeedbackApiKey Component', () => {
   afterEach(() => {
     vi.clearAllMocks();
@@ -25,10 +18,9 @@ describe('SyncFeedbackApiKey Component', () => {
   });
 
   it('navigate to api keys', () => {
-    const { getByRole } = render(<SyncFeedbackApiKey />);
+    const { getByRole, router } = render(<SyncFeedbackApiKey />);
     const button = getByRole('button', { name: /go-to-api-keys/i });
     fireEvent.click(button);
-    expect(mockNavigateFn).toHaveBeenCalledTimes(1);
-    expect(mockNavigateFn).toHaveBeenCalledWith(routes.API_KEYS);
+    expect(router.state.location.pathname).toBe(routes.API_KEYS);
   });
 });

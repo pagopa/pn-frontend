@@ -1,17 +1,15 @@
 import { vi } from 'vitest';
 
-import { PhysicalAddressLookup, RecipientType } from '@pagopa-pn/pn-commons';
-import { Configuration } from '@pagopa-pn/pn-commons';
+import { Configuration, PhysicalAddressLookup, RecipientType } from '@pagopa-pn/pn-commons';
 import { testFormElements, testInput, testRadio } from '@pagopa-pn/pn-commons/src/test-utils';
 
 import { newNotification } from '../../../__mocks__/NewNotification.mock';
 import {
-  RenderResult,
+  CustomRenderResult,
   act,
   fireEvent,
   randomString,
   render,
-  testStore,
   waitFor,
   within,
 } from '../../../__test__/test-utils';
@@ -46,7 +44,7 @@ const testRecipientFormRendering = async (
     'name*',
     recipient ? recipient.firstName : undefined
   );
-  if (!recipient || (recipient && recipient.recipientType === RecipientType.PF)) {
+  if (!recipient || recipient?.recipientType === RecipientType.PF) {
     testFormElements(
       form,
       `recipients[${recipientIndex}].lastName`,
@@ -57,7 +55,7 @@ const testRecipientFormRendering = async (
   testFormElements(
     form,
     `recipients[${recipientIndex}].taxId`,
-    recipient && recipient.recipientType === RecipientType.PG
+    recipient?.recipientType === RecipientType.PG
       ? 'recipient-organization-tax-id*'
       : 'recipient-citizen-tax-id*',
     recipient ? recipient.taxId : undefined
@@ -212,7 +210,7 @@ const recipientsWithoutPayments = newNotification.recipients.map(
 
 describe('Recipient Component with payment enabled', async () => {
   const confirmHandlerMk = vi.fn();
-  let result: RenderResult;
+  let result: CustomRenderResult;
 
   afterEach(() => {
     vi.clearAllMocks();
@@ -260,7 +258,7 @@ describe('Recipient Component with payment enabled', async () => {
     fireEvent.click(submitButton);
 
     await waitFor(() => {
-      const state = testStore.getState();
+      const state = result.testStore.getState();
       expect(state.newNotificationState.notification.recipients).toStrictEqual([
         recipientsWithoutPayments[0],
         recipientsWithoutPayments[1],
@@ -359,7 +357,7 @@ describe('Recipient Component with payment enabled', async () => {
     expect(submitButton).toBeEnabled();
     fireEvent.click(submitButton);
     await waitFor(() => {
-      const state = testStore.getState();
+      const state = result.testStore.getState();
       expect(state.newNotificationState.notification.recipients).toStrictEqual([
         recipientsWithoutPayments[0],
       ]);
@@ -381,7 +379,7 @@ describe('Recipient Component with payment enabled', async () => {
     const backButton = within(form).getByTestId('previous-step');
     fireEvent.click(backButton);
     await waitFor(() => {
-      const state = testStore.getState();
+      const state = result.testStore.getState();
       expect(state.newNotificationState.notification.recipients).toStrictEqual([
         recipientsWithoutPayments[0],
       ]);
@@ -457,7 +455,7 @@ describe('Recipient Component with payment enabled', async () => {
 
 describe('Recipient Component without payment enabled', async () => {
   const confirmHandlerMk = vi.fn();
-  let result: RenderResult;
+  let result: CustomRenderResult;
 
   afterEach(() => {
     vi.clearAllMocks();
@@ -484,7 +482,7 @@ describe('Recipient Component without payment enabled', async () => {
     expect(submitButton).toBeEnabled();
     fireEvent.click(submitButton);
     await waitFor(() => {
-      const state = testStore.getState();
+      const state = result.testStore.getState();
       expect(state.newNotificationState.notification.recipients).toStrictEqual([
         recipientsWithoutPayments[0],
       ]);
@@ -494,7 +492,7 @@ describe('Recipient Component without payment enabled', async () => {
 });
 
 describe('Feature flag for physical address lookup', async () => {
-  let result: RenderResult;
+  let result: CustomRenderResult;
 
   it('FF is off', async () => {
     Configuration.setForTest<PaConfiguration>({

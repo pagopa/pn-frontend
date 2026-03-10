@@ -1,14 +1,15 @@
 import { ReactNode } from 'react';
-import { useTranslation } from 'react-i18next';
 
 import { Box } from '@mui/material';
 import { formatDate, isToday } from '@pagopa-pn/pn-commons';
 
 import { ApiKeyStatus, ApiKeyStatusHistory } from '../models/ApiKeys';
 
+type TooltipApiKeyProps = { lines: Array<string> };
+
 function localizeStatus(
   status: string,
-  history: Array<ApiKeyStatusHistory>
+  statusHistoryLines: Array<string>
 ): {
   label: string;
   tooltip: ReactNode;
@@ -16,54 +17,56 @@ function localizeStatus(
 } {
   return {
     label: `status.${status}`,
-    tooltip: <TooltipApiKey history={history} />,
+    tooltip: <TooltipApiKey lines={statusHistoryLines} />,
     description: `status.${status}-description`,
   };
 }
 
-type TooltipApiKeyProps = { history: Array<ApiKeyStatusHistory> };
+export const TooltipApiKey: React.FC<TooltipApiKeyProps> = ({ lines }) => (
+  <Box
+    sx={{
+      '> .MuiBox-root:not(:last-child)': {
+        marginBottom: 1,
+      },
+    }}
+  >
+    {lines.map((line, index) => (
+      <Box sx={{ textAlign: 'left' }} key={index}>
+        <Box>{line}</Box>
+      </Box>
+    ))}
+  </Box>
+);
 
-export const TooltipApiKey: React.FC<TooltipApiKeyProps> = ({ history }) => {
-  const { t } = useTranslation(['apikeys']);
-  return (
-    <Box
-      sx={{
-        '> .MuiBox-root:not(:last-child)': {
-          marginBottom: 1,
-        },
-      }}
-    >
-      {history?.map((h, index) => {
-        const output = (p: string, h: ApiKeyStatusHistory) => (
-          <Box sx={{ textAlign: 'left' }} key={index}>
-            <Box>
-              {t(`tooltip.${p}`)} {formatDate(h.date)}
-            </Box>
-          </Box>
-        );
+/**
+ * Build the localized lines used to render the tooltip (and reusable for aria-label)
+ */
+export const getApiKeyStatusHistoryLines = (
+  t: (key: string) => string,
+  history: Array<ApiKeyStatusHistory>
+): Array<string> =>
+  history.flatMap((h) => {
+    const suffixToday = isToday(new Date(h.date)) ? '' : '-in';
 
-        const suffixToday = isToday(new Date(h.date)) ? '' : '-in';
+    const buildLine = (key: string) => `${t(key)} ${formatDate(h.date)}`;
 
-        switch (h.status) {
-          case ApiKeyStatus.ENABLED:
-            return output(`enabled${suffixToday}`, h);
-          case ApiKeyStatus.CREATED:
-            return output(`created${suffixToday}`, h);
-          case ApiKeyStatus.BLOCKED:
-            return output(`blocked${suffixToday}`, h);
-          case ApiKeyStatus.ROTATED:
-            return output(`rotated${suffixToday}`, h);
-          default:
-            return <></>;
-        }
-      })}
-    </Box>
-  );
-};
+    switch (h.status) {
+      case ApiKeyStatus.ENABLED:
+        return [buildLine(`tooltip.enabled${suffixToday}`)];
+      case ApiKeyStatus.CREATED:
+        return [buildLine(`tooltip.created${suffixToday}`)];
+      case ApiKeyStatus.BLOCKED:
+        return [buildLine(`tooltip.blocked${suffixToday}`)];
+      case ApiKeyStatus.ROTATED:
+        return [buildLine(`tooltip.rotated${suffixToday}`)];
+      default:
+        return [];
+    }
+  });
 
 export function getApiKeyStatusInfos(
   status: ApiKeyStatus,
-  statusHistory: Array<ApiKeyStatusHistory>
+  statusHistoryLines: Array<string>
 ): {
   color: 'warning' | 'error' | 'success' | 'info' | 'default' | 'primary' | 'secondary' | undefined;
   label: string;
@@ -74,17 +77,17 @@ export function getApiKeyStatusInfos(
     case ApiKeyStatus.ENABLED:
       return {
         color: 'success',
-        ...localizeStatus('enabled', statusHistory),
+        ...localizeStatus('enabled', statusHistoryLines),
       };
     case ApiKeyStatus.BLOCKED:
       return {
         color: 'default',
-        ...localizeStatus('blocked', statusHistory),
+        ...localizeStatus('blocked', statusHistoryLines),
       };
     case ApiKeyStatus.ROTATED:
       return {
         color: 'warning',
-        ...localizeStatus('rotated', statusHistory),
+        ...localizeStatus('rotated', statusHistoryLines),
       };
     default:
       return {

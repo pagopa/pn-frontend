@@ -16,7 +16,6 @@ import {
   DialogContentText,
   DialogTitle,
   Divider,
-  Typography,
 } from '@mui/material';
 import { CodeInput, CopyToClipboardButton } from '@pagopa/mui-italia';
 
@@ -188,11 +187,9 @@ const CodeModal = forwardRef<ModalHandle, Props>(
         <PnDialogContent>
           <DialogContentText id="dialog-description">{subtitle}</DialogContentText>
           <Divider sx={{ my: 2 }} />
-          <Typography fontSize={16} fontWeight={600}>
-            {codeSectionTitle}
-          </Typography>
           <Box sx={{ mt: 2 }}>
             <CodeInput
+              label={codeSectionTitle}
               length={codeLength}
               value={code}
               error={internalHasError}

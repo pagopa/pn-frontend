@@ -62,12 +62,25 @@ const PnWizardStepper: React.FC<Props> = ({ steps, activeStep }) => {
       </Stack>
     </Stack>
   ) : (
-    <Stepper activeStep={activeStep} alternativeLabel data-testid="desktopWizardStepper">
-      {steps.map((step, index) => (
-        <Step key={index}>
-          <StepLabel>{step.label}</StepLabel>
-        </Step>
-      ))}
+    <Stepper
+      activeStep={activeStep}
+      alternativeLabel
+      data-testid="desktopWizardStepper"
+      role="list"
+    >
+      {steps.map((step, index) => {
+        const isCurrent = index === activeStep;
+        return (
+          <Step
+            role="listitem"
+            key={index}
+            aria-current={isCurrent ? 'step' : undefined}
+            data-testid={`step-${index}`}
+          >
+            <StepLabel>{step.label}</StepLabel>
+          </Step>
+        );
+      })}
     </Stepper>
   );
 };
