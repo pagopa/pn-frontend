@@ -440,7 +440,7 @@
     "cta": "Was ist das?",
     "details": {
       "title": "Was sind Zustellkosten?",
-      "description": "Dies sind die mit dem Versand der Mitteilung verbundenen Kosten, die je nach Art des Empfangs variieren.",
+      "description": "Dies sind die mit dem Versand der Mitteilung verbundenen Kosten, die je nach Art des Empfangs durch dein Unternehmen variieren.",
       "how-they-work": "Wie funktionieren die Zustellkosten?",
       "base-cost": "Verwaltungskosten",
       "analog-cost": {
@@ -452,7 +452,7 @@
       },
       "total-cost": "Gesamt",
       "error": "Die Kostendetails konnten nicht geladen werden, versuche es bitte später erneut.",
-      "more-info": "Kontaktiere die sendende Einrichtung, die dir die Zustellung geschickt hat, um weitere Informationen zu den Kosten dieser Mitteilung zu erhalten."
+      "more-info": "Kontaktiere die sendende Einrichtung, die die Benachrichtigung gesendet hat, um weitere Informationen zu den Kosten dieser Mitteilung zu erhalten."
     }
   }
 }
