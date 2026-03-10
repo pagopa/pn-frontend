@@ -3,6 +3,31 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.22.0-RC.0](https://github.com/pagopa/pn-frontend/compare/v2.21.0...v2.22.0-RC.0) (2026-03-10)
+
+
+### Bug Fixes
+
+* **PN-17961:** avoid overflow for long unbroken group names in notifications, API keys and delegations lists ([#1760](https://github.com/pagopa/pn-frontend/issues/1760)) ([41c97cd](https://github.com/pagopa/pn-frontend/commit/41c97cd2443a4075ab21acdfe4379f506c97017e))
+* **PN-18325:** localize language names in footer language selector ([#1750](https://github.com/pagopa/pn-frontend/issues/1750)) ([d687e9c](https://github.com/pagopa/pn-frontend/commit/d687e9c4dad1570389d9a0c5d01d0326c4909ce7))
+* **PN-18583:** move cancelled alert above timeline on mobile devices ([#1758](https://github.com/pagopa/pn-frontend/issues/1758)) ([01a53eb](https://github.com/pagopa/pn-frontend/commit/01a53eb32223178254bf43c102215ec648d6fe08))
+* **PN-18844:** moved alert for saturated pec ([#1778](https://github.com/pagopa/pn-frontend/issues/1778)) ([a0b9cef](https://github.com/pagopa/pn-frontend/commit/a0b9cefbe106691a7cd09951e7778c61557af220))
+
+
+### Features
+
+* **PN-18115:** removed internal date management from notification list ([#1759](https://github.com/pagopa/pn-frontend/issues/1759)) ([766f680](https://github.com/pagopa/pn-frontend/commit/766f680ff5626643b90837d9a9882cea66322cc5))
+* **PN-18582:** implement bottom sheet with notification costs details ([#1763](https://github.com/pagopa/pn-frontend/issues/1763)) ([2de4b8a](https://github.com/pagopa/pn-frontend/commit/2de4b8a7fc9c0f7472fa52a1ec51068c1e1ac76f))
+
+
+### Reverts
+
+* **PN-17961:** avoid overflow for long unbroken group names in notifications, API keys and delegations lists ([#1760](https://github.com/pagopa/pn-frontend/issues/1760)) ([#1777](https://github.com/pagopa/pn-frontend/issues/1777)) ([465c76e](https://github.com/pagopa/pn-frontend/commit/465c76e88408095cda0b7a46eaeda89996077cb9))
+
+
+
+
+
 # [2.21.0](https://fbianchicodermine-github/pagopa/pn-frontend/compare/v2.21.0-RC.6...v2.21.0) (2026-02-17)
 
 **Note:** Version bump only for package @pagopa-pn/pn-personagiuridica-webapp

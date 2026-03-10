@@ -3,6 +3,30 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.22.0-RC.0](https://github.com/pagopa/pn-frontend/compare/v2.21.0...v2.22.0-RC.0) (2026-03-10)
+
+
+### Bug Fixes
+
+* **A2-2313:** fix footer company info for a11y ([#1747](https://github.com/pagopa/pn-frontend/issues/1747)) ([f2a88b0](https://github.com/pagopa/pn-frontend/commit/f2a88b045175c2cf11c636588a18023ca91447a1))
+* **A2-2344:** fix stepper wizard accessibility ([#1775](https://github.com/pagopa/pn-frontend/issues/1775)) ([5da3a39](https://github.com/pagopa/pn-frontend/commit/5da3a392c5127d2ee8b3d6c3a9ad679a7f1944f4))
+* **A2-2362:** use CodeInput label prop in CodeModal for a11y ([#1764](https://github.com/pagopa/pn-frontend/issues/1764)) ([91d8b5c](https://github.com/pagopa/pn-frontend/commit/91d8b5c444883f308a913914c015b08f857001c0))
+* **PN-16106, PN-16097:** avoid text overflow on FileInput component ([#1742](https://github.com/pagopa/pn-frontend/issues/1742)) ([39c9ca7](https://github.com/pagopa/pn-frontend/commit/39c9ca7313bc7a29edd10aba0234492bb0ff1270))
+* **PN-16975:** Tighten email validation rejecting numeric TLDs ([#1767](https://github.com/pagopa/pn-frontend/issues/1767)) ([cc448a3](https://github.com/pagopa/pn-frontend/commit/cc448a3bd2d75b6ed73340bdf357dc53bf258325))
+* **PN-18024:** normalize filters to lastDate and align tests for Statistics ([#1751](https://github.com/pagopa/pn-frontend/issues/1751)) ([d15f021](https://github.com/pagopa/pn-frontend/commit/d15f021048e8975a00890da528477b839a4d6333))
+* **PN-18325:** localize language names in footer language selector ([#1750](https://github.com/pagopa/pn-frontend/issues/1750)) ([d687e9c](https://github.com/pagopa/pn-frontend/commit/d687e9c4dad1570389d9a0c5d01d0326c4909ce7))
+* **PN-18844:** moved alert for saturated pec ([#1778](https://github.com/pagopa/pn-frontend/issues/1778)) ([a0b9cef](https://github.com/pagopa/pn-frontend/commit/a0b9cefbe106691a7cd09951e7778c61557af220))
+
+
+### Features
+
+* **PN-18115:** removed internal date management from notification list ([#1759](https://github.com/pagopa/pn-frontend/issues/1759)) ([766f680](https://github.com/pagopa/pn-frontend/commit/766f680ff5626643b90837d9a9882cea66322cc5))
+* **PN-18582:** implement bottom sheet with notification costs details ([#1763](https://github.com/pagopa/pn-frontend/issues/1763)) ([2de4b8a](https://github.com/pagopa/pn-frontend/commit/2de4b8a7fc9c0f7472fa52a1ec51068c1e1ac76f))
+
+
+
+
+
 # [2.21.0](https://fbianchicodermine-github/pagopa/pn-frontend/compare/v2.21.0-RC.6...v2.21.0) (2026-02-17)
 
 **Note:** Version bump only for package @pagopa-pn/pn-commons
