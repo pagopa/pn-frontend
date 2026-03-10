@@ -11,7 +11,12 @@ import {
   DigitalDomicileType,
   DigitalSource,
   EventAction,
+  formatEurocentToCurrency,
 } from '@pagopa-pn/pn-commons';
+import {
+  NotificationCostDetails,
+  NotificationCostDetailsStatus,
+} from '@pagopa-pn/pn-commons/src/models/NotificationDetail';
 import { Banner } from '@pagopa/mui-italia';
 
 import { PFEventsType } from '../../models/PFEventsType';
@@ -28,6 +33,7 @@ import PFEventStrategyFactory from '../../utility/MixpanelUtils/PFEventStrategyF
 
 type Props = {
   deliveryOutcome: DeliveryOutcome | null;
+  notificationCost?: NotificationCostDetails;
 };
 
 type BannerContent = {
@@ -73,9 +79,21 @@ const resolveBannerKey = (deliveryOutcome: DeliveryOutcome | null): BannerKey =>
   }
 };
 
-const getBannerContent = (key: BannerKey, isDDomActive: boolean, t: TFunction): BannerContent => {
+const getBannerContent = (
+  key: BannerKey,
+  isDDomActive: boolean,
+  t: TFunction,
+  notificationCost?: NotificationCostDetails
+): BannerContent => {
   const title = t(`notification-cost-banner.${key}.title`);
-  const message = t(`notification-cost-banner.${key}.message`);
+  const message =
+    notificationCost?.status === NotificationCostDetailsStatus.OK
+      ? t(`notification-cost-banner.${key}.message`, {
+          analogCost: notificationCost?.analogCost
+            ? formatEurocentToCurrency(notificationCost.analogCost)
+            : undefined,
+        })
+      : t(`notification-cost-banner.${key}.fallback`);
 
   if (key === 'digital_platform' || isDDomActive) {
     return { title, message };
@@ -96,7 +114,7 @@ const getBannerContent = (key: BannerKey, isDDomActive: boolean, t: TFunction): 
   };
 };
 
-export const NotificationCostBanner: React.FC<Props> = ({ deliveryOutcome }) => {
+export const NotificationCostBanner: React.FC<Props> = ({ deliveryOutcome, notificationCost }) => {
   const { defaultSERCQ_SENDAddress, defaultPECAddress, addresses } = useAppSelector(
     contactsSelectors.selectAddresses
   );
@@ -110,7 +128,12 @@ export const NotificationCostBanner: React.FC<Props> = ({ deliveryOutcome }) => 
   const handleClose = () => setIsVisible(false);
 
   const bannerKey = resolveBannerKey(deliveryOutcome);
-  const { title, message, ctaLabel } = getBannerContent(bannerKey, isDDomActive, t);
+  const { title, message, ctaLabel } = getBannerContent(
+    bannerKey,
+    isDDomActive,
+    t,
+    notificationCost
+  );
   const showCta = !(bannerKey === 'digital_platform' || isDDomActive);
 
   const triggerMixpanelEvent = (name: PFEventsType, type: EventAction) => {

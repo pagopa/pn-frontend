@@ -175,7 +175,12 @@ const NotificationDetail: React.FC = () => {
 
   const banner = useMemo(() => {
     if (isNotificationCostBanner) {
-      return <NotificationCostBanner deliveryOutcome={deliveryOutcome} />;
+      return (
+        <NotificationCostBanner
+          deliveryOutcome={deliveryOutcome}
+          notificationCost={notification.notificationCostDetails}
+        />
+      );
     }
 
     return isBannerVisible && historyParser.hasViewedStatus() ? (

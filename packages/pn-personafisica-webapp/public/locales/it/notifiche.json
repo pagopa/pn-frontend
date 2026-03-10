@@ -463,11 +463,13 @@
   "notification-cost-banner": {
     "analog": {
       "title": "Con SEND puoi risparmiare!",
-      "message": "Non hai aperto la notifica in digitale in tempo e quindi non è stato possibile evitare la raccomandata e i relativi costi."
+      "message": "Ti sono state inviate una o più raccomandate per conto dell'ente mittente al costo totale di {{analogCost}} €, perché questa notifica non è stata aperta sui canali digitali entro i termini previsti.",
+      "fallback": "Ti sono state inviate una o più raccomandate per conto dell’ente mittente perché questa notifica non è stata aperta sui canali digitali entro i termini previsti. Ciò comporterà per te dei costi aggiuntivi."
     },
     "digital_failure": {
       "title": "Con SEND puoi risparmiare!",
-      "message": "Non siamo riusciti a consegnare la notifica sulla tua PEC, quindi ti è stata inviata una raccomandata informativa con i relativi costi."
+      "message": "Non siamo riusciti a consegnare la notifica sulla tua PEC, quindi ti è stata inviata una raccomandata al costo di {{analogCost}}.",
+      "fallback": "Non siamo riusciti a consegnare la notifica sulla tua PEC, quindi ti è stata inviata una raccomandata. Ciò comporterà per te dei costi aggiuntivi."
     },
     "digital_platform": {
       "title": "Con SEND hai risparmiato!",
