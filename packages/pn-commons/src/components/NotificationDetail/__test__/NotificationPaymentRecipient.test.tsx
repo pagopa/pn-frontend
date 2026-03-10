@@ -1,7 +1,11 @@
 import { vi } from 'vitest';
 
 import { paymentInfo } from '../../../__mocks__/ExternalRegistry.mock';
-import { notificationDTO, payments } from '../../../__mocks__/NotificationDetail.mock';
+import {
+  notificationCostDetailsMock,
+  notificationDTO,
+  payments,
+} from '../../../__mocks__/NotificationDetail.mock';
 import {
   PaymentAttachmentSName,
   PaymentStatus,
@@ -40,10 +44,11 @@ describe('NotificationPaymentRecipient Component', () => {
         onPayClick={() => void 0}
         handleFetchPaymentsInfo={() => void 0}
         costDetailsAssistanceLink=""
+        costDetails={notificationCostDetailsMock}
       />
     );
     const title = getByTestId('notification-payment-recipient-title');
-    // const costsAlert = queryByTestId('notification-costs-alert');
+    const costsAlert = queryByTestId('notification-costs-alert');
     const f24Download = queryByTestId('f24-download');
     const pagoPABox = queryAllByTestId('pagopa-item');
     const downloadPagoPANotice = queryByTestId('download-pagoPA-notice-button');
@@ -55,7 +60,7 @@ describe('NotificationPaymentRecipient Component', () => {
 
     expect(title).toBeInTheDocument();
     expect(title).toHaveTextContent('detail.payment.title');
-    // expect(costsAlert).toBeInTheDocument();
+    expect(costsAlert).toBeInTheDocument();
     expect(f24Download).not.toBeInTheDocument();
     expect(pagoPABox).toHaveLength(pageLength > 5 ? 5 : pageLength);
     expect(downloadPagoPANotice).not.toBeInTheDocument();
@@ -186,7 +191,7 @@ describe('NotificationPaymentRecipient Component', () => {
   });
 
   it('should show alert if notification is cancelled', () => {
-    const { getByTestId } = render(
+    const { getByTestId, queryByTestId } = render(
       <NotificationPaymentRecipient
         payments={paymentsData}
         isCancelled={true}
@@ -196,13 +201,14 @@ describe('NotificationPaymentRecipient Component', () => {
         onPayClick={() => void 0}
         handleFetchPaymentsInfo={() => void 0}
         costDetailsAssistanceLink=""
+        costDetails={notificationCostDetailsMock}
       />
     );
     const alert = getByTestId('cancelledAlertPayment');
-    // const costsAlert = getByTestId('notification-costs-alert');
+    const costsAlert = queryByTestId('notification-costs-alert');
 
     expect(alert).toBeInTheDocument();
-    // expect(costsAlert).not.toBeInTheDocument();
+    expect(costsAlert).not.toBeInTheDocument();
   });
 
   it('should call handleDownloadAttachment on download button click - attached f24', async () => {
