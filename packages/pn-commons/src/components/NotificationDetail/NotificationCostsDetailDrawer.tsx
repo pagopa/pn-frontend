@@ -14,20 +14,14 @@ import { getLocalizedOrDefaultLabel } from '../../utility/localization.utility';
 import CostsBreakdown from './CostDetailsDrawerContent/CostsBreakdown';
 import UnavailableDataDrawerContent from './CostDetailsDrawerContent/UnavailableData';
 
-const costDetails: NotificationCostDetails = {
-  status: NotificationCostDetailsStatus.OK,
-  totalCost: 1050,
-  baseCost: 200,
-  analogCost: 850,
-  numberOfAnalogCost: 2,
-};
-
 type Props = {
+  costDetails: NotificationCostDetails;
   costDetailsAssistanceLink: string;
   handleTrackEventFn: (event: EventPaymentRecipientType, param?: object) => void;
 };
 
 const NotificationCostsDetailDrawer: React.FC<Props> = ({
+  costDetails,
   costDetailsAssistanceLink,
   handleTrackEventFn,
 }) => {

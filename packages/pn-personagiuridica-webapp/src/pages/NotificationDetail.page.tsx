@@ -478,6 +478,7 @@ const NotificationDetail = () => {
                         getPaymentAttachmentAction={getPaymentAttachmentAction}
                         timerF24={F24_DOWNLOAD_WAIT_TIME}
                         costDetailsAssistanceLink={NOTIFICATION_COST_DETAILS_ASSISTANCE_LINK}
+                        costDetails={notification.notificationCostDetails}
                       />
                     </ApiErrorWrapper>
                   </Paper>

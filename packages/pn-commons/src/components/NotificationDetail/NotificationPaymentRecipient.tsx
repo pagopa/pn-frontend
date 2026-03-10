@@ -6,6 +6,7 @@ import { Alert, Box, Button, FormControl, RadioGroup, Stack, Typography } from '
 import { downloadDocument } from '../../hooks/useDownloadDocument';
 import { EventPaymentRecipientType } from '../../models/MixpanelEvents';
 import {
+  NotificationCostDetails,
   NotificationDetailPayment,
   PaymentAttachment,
   PaymentAttachmentSName,
@@ -30,6 +31,7 @@ type Props = {
   timerF24: number;
   costDetailsAssistanceLink: string;
   iun: string;
+  costDetails?: NotificationCostDetails;
   getPaymentAttachmentAction: (
     name: PaymentAttachmentSName,
     attachmentIdx?: number
@@ -56,6 +58,7 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
   timerF24,
   costDetailsAssistanceLink,
   iun,
+  costDetails,
   getPaymentAttachmentAction,
   onPayClick,
   onPayTppClick,
@@ -193,12 +196,15 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
         {getLocalizedOrDefaultLabel('notifications', 'detail.payment.title')}
       </Typography>
 
-      {isCancelled ? (
+      {isCancelled && (
         <Alert data-testid="cancelledAlertPayment" severity="info">
           {getLocalizedOrDefaultLabel('notifications', 'detail.payment.cancelled-message')}
         </Alert>
-      ) : (
+      )}
+
+      {!isCancelled && costDetails && (
         <NotificationCostsDetailDrawer
+          costDetails={costDetails}
           costDetailsAssistanceLink={costDetailsAssistanceLink}
           handleTrackEventFn={handleTrackEventFn}
         />
