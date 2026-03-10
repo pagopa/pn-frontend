@@ -79,6 +79,29 @@ const resolveBannerKey = (deliveryOutcome: DeliveryOutcome | null): BannerKey =>
   }
 };
 
+const showCost = (key: BannerKey) => key === 'analog' || key === 'digital_failure';
+
+const getBannerMessage = (
+  key: BannerKey,
+  t: TFunction,
+  notificationCost?: NotificationCostDetails
+) => {
+  if (!showCost(key)) {
+    return t(`notification-cost-banner.${key}.message`);
+  }
+
+  if (
+    notificationCost?.status === NotificationCostDetailsStatus.OK &&
+    notificationCost.analogCost !== undefined
+  ) {
+    return t(`notification-cost-banner.${key}.message`, {
+      analogCost: formatEurocentToCurrency(notificationCost.analogCost),
+    });
+  } else {
+    return t(`notification-cost-banner.${key}.fallback`);
+  }
+};
+
 const getBannerContent = (
   key: BannerKey,
   isDDomActive: boolean,
@@ -86,15 +109,7 @@ const getBannerContent = (
   notificationCost?: NotificationCostDetails
 ): BannerContent => {
   const title = t(`notification-cost-banner.${key}.title`);
-  const message =
-    notificationCost?.status === NotificationCostDetailsStatus.OK &&
-    notificationCost?.analogCost !== undefined
-      ? t(`notification-cost-banner.${key}.message`, {
-          analogCost: notificationCost?.analogCost
-            ? formatEurocentToCurrency(notificationCost.analogCost)
-            : undefined,
-        })
-      : t(`notification-cost-banner.${key}.fallback`);
+  const message = getBannerMessage(key, t, notificationCost);
 
   if (key === 'digital_platform' || isDDomActive) {
     return { title, message };
