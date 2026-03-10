@@ -3,27 +3,19 @@ import { vi } from 'vitest';
 import { createMatchMedia } from '@pagopa-pn/pn-commons/src/test-utils';
 
 import { notificationsToFe } from '../../../__mocks__/Notifications.mock';
-import { RenderResult, act, fireEvent, render, waitFor } from '../../../__test__/test-utils';
+import { CustomRenderResult, act, fireEvent, render, waitFor } from '../../../__test__/test-utils';
 import { GET_DETTAGLIO_NOTIFICA_PATH } from '../../../navigation/routes.const';
 import MobileNotifications from '../MobileNotifications';
 
-const mockNavigateFn = vi.fn();
-
-// mock imports
-vi.mock('react-router-dom', async () => ({
-  ...(await vi.importActual<any>('react-router-dom')),
-  useNavigate: () => mockNavigateFn,
-}));
-
 describe('MobileNotifications Component', () => {
-  const original = window.matchMedia;
+  const original = globalThis.matchMedia;
 
   beforeAll(() => {
-    window.matchMedia = createMatchMedia(800);
+    globalThis.matchMedia = createMatchMedia(800);
   });
 
   afterAll(() => {
-    window.matchMedia = original;
+    globalThis.matchMedia = original;
   });
 
   afterEach(() => {
@@ -32,7 +24,7 @@ describe('MobileNotifications Component', () => {
 
   it('renders MobileNotifications - no notifications', async () => {
     // render component
-    let result: RenderResult;
+    let result: CustomRenderResult;
     await act(async () => {
       result = render(
         <MobileNotifications
@@ -54,7 +46,7 @@ describe('MobileNotifications Component', () => {
 
   it('renders MobileNotifications - notifications', async () => {
     // render component
-    let result: RenderResult;
+    let result: CustomRenderResult;
     await act(async () => {
       result = render(
         <MobileNotifications
@@ -76,7 +68,7 @@ describe('MobileNotifications Component', () => {
 
   it('renders component - no notification after filter', async () => {
     // render component
-    let result: RenderResult;
+    let result: CustomRenderResult;
     await act(async () => {
       result = render(
         <MobileNotifications
@@ -95,7 +87,7 @@ describe('MobileNotifications Component', () => {
 
   it('clicks on go to detail action', async () => {
     // render component
-    let result: RenderResult;
+    let result: CustomRenderResult;
     await act(async () => {
       result = render(
         <MobileNotifications
@@ -111,8 +103,7 @@ describe('MobileNotifications Component', () => {
     const notificationsCardButton = notificationCards[0].querySelector('button');
     fireEvent.click(notificationsCardButton!);
     await waitFor(() => {
-      expect(mockNavigateFn).toHaveBeenCalledTimes(1);
-      expect(mockNavigateFn).toHaveBeenCalledWith(
+      expect(result.router.state.location.pathname).toBe(
         GET_DETTAGLIO_NOTIFICA_PATH(notificationsToFe.resultsPage[0].iun)
       );
     });

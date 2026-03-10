@@ -1,5 +1,4 @@
 import MockAdapter from 'axios-mock-adapter';
-import { createBrowserHistory } from 'history';
 import { Route, Routes } from 'react-router-dom';
 import { vi } from 'vitest';
 
@@ -109,10 +108,6 @@ describe('NewApiKey component', async () => {
   });
 
   it('clicks on the breadcrumb button', async () => {
-    // simulate the current URL
-    const history = createBrowserHistory();
-    history.push(routes.NUOVA_API_KEY);
-
     // render using an ad-hoc router
     await act(async () => {
       result = render(
@@ -122,7 +117,8 @@ describe('NewApiKey component', async () => {
             path={routes.API_KEYS}
             element={<div data-testid="mock-api-keys-page">hello</div>}
           />
-        </Routes>
+        </Routes>,
+        { path: '*', route: [routes.API_KEYS, routes.NUOVA_API_KEY] }
       );
     });
     // the mocked ApiKeys page does not appear before we click the corresponding link

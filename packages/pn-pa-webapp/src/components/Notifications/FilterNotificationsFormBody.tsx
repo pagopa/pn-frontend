@@ -28,10 +28,6 @@ type Props = {
     errors: FormikErrors<FormikValues>;
     setErrors: (errors: FormikErrors<FormikValues>) => void;
   };
-  startDate: Date | null;
-  endDate: Date | null;
-  setStartDate: (value: Date | null) => void;
-  setEndDate: (value: Date | null) => void;
 };
 
 type FormikInst = Props['formikInstance'];
@@ -48,7 +44,6 @@ type DatePickerFieldProps = {
   minDate: Date | null;
   maxDate: Date | null;
   formikInstance: FormikInst;
-  setLocalDate: (value: Date | null) => void;
 };
 
 const DatePickerField: React.FC<DatePickerFieldProps> = ({
@@ -63,7 +58,6 @@ const DatePickerField: React.FC<DatePickerFieldProps> = ({
   minDate,
   maxDate,
   formikInstance,
-  setLocalDate,
 }) => (
   <CustomDatePicker
     language={language}
@@ -71,9 +65,7 @@ const DatePickerField: React.FC<DatePickerFieldProps> = ({
     format={DATE_FORMAT}
     value={value}
     onChange={(v: DatePickerTypes) => {
-      void formikInstance.setFieldValue(id, v || defaultValue).then(() => {
-        setLocalDate(v);
-      });
+      void formikInstance.setFieldValue(id, v || defaultValue);
     }}
     slotProps={{
       textField: {
@@ -97,13 +89,7 @@ const DatePickerField: React.FC<DatePickerFieldProps> = ({
   />
 );
 
-const FilterNotificationsFormBody = ({
-  formikInstance,
-  startDate,
-  endDate,
-  setStartDate,
-  setEndDate,
-}: Props) => {
+const FilterNotificationsFormBody = ({ formikInstance }: Props) => {
   const isMobile = useIsMobile();
   const { t, i18n } = useTranslation(['notifiche']);
   const localizedNotificationStatus = getNotificationAllowedStatus();
@@ -198,12 +184,11 @@ const FilterNotificationsFormBody = ({
         ariaLabel={t('filters.data_da-input-aria-label')}
         isMobile={isMobile}
         mb={mb}
-        value={startDate}
+        value={formikInstance.values.startDate ?? null}
         defaultValue={tenYearsAgo}
         minDate={tenYearsAgo}
-        maxDate={endDate ?? null}
+        maxDate={formikInstance.values.endDate ?? null}
         formikInstance={formikInstance}
-        setLocalDate={setStartDate}
       />
 
       <DatePickerField
@@ -213,12 +198,11 @@ const FilterNotificationsFormBody = ({
         ariaLabel={t('filters.data_a-input-aria-label')}
         isMobile={isMobile}
         mb={mb}
-        value={endDate}
+        value={formikInstance.values.endDate ?? null}
         defaultValue={today}
-        minDate={startDate ?? tenYearsAgo}
+        minDate={formikInstance.values.startDate ?? tenYearsAgo}
         maxDate={null}
         formikInstance={formikInstance}
-        setLocalDate={setEndDate}
       />
 
       <TextField

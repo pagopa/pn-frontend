@@ -5,11 +5,10 @@ import { testInput } from '@pagopa-pn/pn-commons/src/test-utils';
 
 import { newNotification } from '../../../__mocks__/NewNotification.mock';
 import {
-  RenderResult,
+  CustomRenderResult,
   act,
   fireEvent,
   render,
-  testStore,
   waitFor,
   within,
 } from '../../../__test__/test-utils';
@@ -45,7 +44,7 @@ async function uploadDocument(elem: HTMLElement, index: number, document: NewNot
 }
 
 describe('Attachments Component with payment enabled', async () => {
-  let result: RenderResult;
+  let result: CustomRenderResult;
   let mock: MockAdapter;
   let extMock: MockAdapter;
 
@@ -138,7 +137,7 @@ describe('Attachments Component with payment enabled', async () => {
       expect(mock.history.post).toHaveLength(1);
       expect(extMock.history.put).toHaveLength(1);
       // check data stored in redux state
-      const state = testStore.getState();
+      const state = result.testStore.getState();
       expect(state.newNotificationState.notification.documents).toStrictEqual([
         {
           ...newNotification.documents[0],
@@ -203,7 +202,7 @@ describe('Attachments Component with payment enabled', async () => {
     fireEvent.click(backButton);
     await waitFor(() => {
       // check data stored in redux state
-      const state = testStore.getState();
+      const state = result.testStore.getState();
       expect(state.newNotificationState.notification.documents).toStrictEqual([
         {
           ...newNotification.documents[0],
@@ -283,7 +282,7 @@ describe('Attachments Component with payment enabled', async () => {
       expect(mock.history.post).toHaveLength(1);
       expect(extMock.history.put).toHaveLength(2);
       // check data stored in redux state
-      const state = testStore.getState();
+      const state = result.testStore.getState();
       expect(state.newNotificationState.notification.documents).toStrictEqual([
         {
           ...newNotification.documents[0],
@@ -401,7 +400,7 @@ describe('Attachments Component with payment enabled', async () => {
 });
 
 describe('Attachments Component without payment enabled', () => {
-  let result: RenderResult;
+  let result: CustomRenderResult;
 
   beforeEach(async () => {
     mockIsPaymentEnabledGetter.mockReturnValue(false);

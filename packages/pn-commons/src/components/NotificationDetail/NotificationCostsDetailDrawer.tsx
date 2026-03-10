@@ -20,6 +20,27 @@ type Props = {
   handleTrackEventFn: (event: EventPaymentRecipientType, param?: object) => void;
 };
 
+const getDrawerContent = (costDetails: NotificationCostDetails) => {
+  switch (costDetails.status) {
+    case NotificationCostDetailsStatus.OK:
+      return <CostsBreakdown costDetails={costDetails} />;
+    case NotificationCostDetailsStatus.ERROR:
+      return (
+        <MIAlert
+          severity="warning"
+          description={getLocalizedOrDefaultLabel(
+            'notifications',
+            'notification-alert.details.error'
+          )}
+        />
+      );
+    case NotificationCostDetailsStatus.UNAVAILABLE:
+      return <UnavailableDataDrawerContent />;
+    default:
+      return <UnavailableDataDrawerContent />;
+  }
+};
+
 const NotificationCostsDetailDrawer: React.FC<Props> = ({
   costDetails,
   costDetailsAssistanceLink,
@@ -30,27 +51,6 @@ const NotificationCostsDetailDrawer: React.FC<Props> = ({
   const isMobile = useIsMobile();
 
   const toggleDrawer = () => setOpenDrawer(!openDrawer);
-
-  const getDrawerContent = () => {
-    switch (costDetails.status) {
-      case NotificationCostDetailsStatus.OK:
-        return <CostsBreakdown costDetails={costDetails} />;
-      case NotificationCostDetailsStatus.ERROR:
-        return (
-          <MIAlert
-            severity="warning"
-            description={getLocalizedOrDefaultLabel(
-              'notifications',
-              'notification-alert.details.error'
-            )}
-          />
-        );
-      case NotificationCostDetailsStatus.UNAVAILABLE:
-        return <UnavailableDataDrawerContent />;
-      default:
-        return <UnavailableDataDrawerContent />;
-    }
-  };
 
   return (
     <>
@@ -111,7 +111,7 @@ const NotificationCostsDetailDrawer: React.FC<Props> = ({
               </Link>
             </Typography>
 
-            {getDrawerContent()}
+            {getDrawerContent(costDetails)}
           </Stack>
         </Stack>
       </Drawer>
