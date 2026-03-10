@@ -43,6 +43,8 @@ beforeAll(async () => {
     SELFCARE_CDN_URL: 'https://cdn.selfcare.pagopa.it',
     ACCESSIBILITY_LINK: 'https://accessibility-link.it',
     NOTIFICATION_CANCELLED_HELP_LINK: 'https://fake.notification-cancelled-help.pagopa.it',
+    NOTIFICATION_COST_DETAILS_ASSISTANCE_LINK:
+      'https://fake.notification-cost-details-assistance.pagopa.it',
   });
   initStore(false);
   initAxiosClients();

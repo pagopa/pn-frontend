@@ -40,6 +40,7 @@ export interface NotificationDetail {
   amount?: number;
   otherDocuments?: Array<NotificationDetailDocument>;
   radd?: INotificationDetailTimeline;
+  notificationCostDetails?: NotificationCostDetails;
 }
 
 export type PaymentTpp = {
@@ -424,4 +425,18 @@ export enum PhysicalAddressLookup {
 export enum ReworkedStatus {
   VALID = 'VALID',
   NOT_VALID = 'NOT_VALID',
+}
+
+export enum NotificationCostDetailsStatus {
+  OK = 'OK',
+  UNAVAILABLE = 'UNAVAILABLE',
+  ERROR = 'ERROR',
+}
+
+export interface NotificationCostDetails {
+  status: NotificationCostDetailsStatus;
+  totalCost?: number;
+  baseCost?: number;
+  analogCost?: number;
+  numberOfAnalogCost?: number;
 }

@@ -439,5 +439,25 @@
     "notification-timeline-reworked-description": "Dogodkov, označenih z NEVALIDIRAN DOGODEK, ne upoštevajte, saj so jih nadomestili naslednji dogodki, označeni z VALIDIRAN DOGODEK.",
     "reworked-status-valid": "Validiran dogodek",
     "reworked-status-not-valid": "Nevalidiran dogodek"
+  },
+  "notification-alert": {
+    "description": "Znesek vključuje stroške obvestila.",
+    "cta": "Kaj so to?",
+    "details": {
+      "title": "Kaj so stroški obvestila?",
+      "description": "To so stroški, povezani s pošiljanjem komunikacije, ki se razlikujejo glede na način prejema.",
+      "how-they-work": "Kako delujejo stroški obvestila?",
+      "base-cost": "Stroški upravljanja",
+      "analog-cost": {
+        "total": "Stroški pošiljanja v papirni obliki",
+        "hint": {
+          "avoided": "Pošiljanje preprečeno s SEND",
+          "multiple-analog-flows": "{{count}} izvedenih pošiljanj"
+        }
+      },
+      "total-cost": "Skupaj",
+      "error": "Podrobnosti o stroških ni bilo mogoče pridobiti, poskusi znova pozneje.",
+      "more-info": "Za več podrobnosti o stroških te komunikacije se obrni na organ, ki ti je poslal obvestilo."
+    }
   }
 }
