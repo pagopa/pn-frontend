@@ -463,7 +463,7 @@
   "notification-cost-banner": {
     "analog": {
       "title": "Con SEND puoi risparmiare!",
-      "message": "Non hai aperto la notifica in digitale in tempo e quindi non è stato possibile evitare la raccomandata e i relativi costi."
+      "message": "Ti sono state inviate una o più raccomandate per conto dell'ente mittente al costo totale di {{analogCost}} €, perché questa notifica non è stata aperta sui canali digitali entro i termini previsti."
     },
     "digital_failure": {
       "title": "Con SEND puoi risparmiare!",
