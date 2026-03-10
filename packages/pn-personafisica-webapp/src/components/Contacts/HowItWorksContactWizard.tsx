@@ -123,7 +123,6 @@ const HowItWorksContactWizard: React.FC<Props> = ({ goToNextStep, setShowPecWiza
                               fontWeight: 400,
                               verticalAlign: 'baseline',
                             }}
-                            component={Typography}
                           />,
                         ]}
                       />
