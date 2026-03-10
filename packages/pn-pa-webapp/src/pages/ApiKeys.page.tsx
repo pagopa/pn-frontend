@@ -126,37 +126,98 @@ const ApiKeys = () => {
 
   const apiKeyBlocked = (apiKeyId: string) => {
     handleCloseModal();
-    void dispatch(changeApiKeyStatus({ apiKey: apiKeyId, status: ApiKeySetStatus.BLOCK })).then(
-      fetchApiKeys
-    );
+    void dispatch(changeApiKeyStatus({ apiKey: apiKeyId, status: ApiKeySetStatus.BLOCK }))
+      .unwrap()
+      .then(() =>
+        dispatch(
+          appStateActions.addSuccess({
+            title: '',
+            message: t('messages.success.api-key-block'),
+          })
+        )
+      )
+      .catch(() =>
+        dispatch(
+          appStateActions.addError({
+            title: '',
+            message: t('messages.error.api-key-block'),
+            showTechnicalData: false,
+          })
+        )
+      )
+      .finally(fetchApiKeys);
   };
 
   const apiKeyEnabled = (apiKeyId: string) => {
     handleCloseModal();
-    void dispatch(changeApiKeyStatus({ apiKey: apiKeyId, status: ApiKeySetStatus.ENABLE })).then(
-      fetchApiKeys
-    );
+    void dispatch(changeApiKeyStatus({ apiKey: apiKeyId, status: ApiKeySetStatus.ENABLE }))
+      .unwrap()
+      .then(() =>
+        dispatch(
+          appStateActions.addSuccess({
+            title: '',
+            message: t('messages.success.api-key-enable'),
+          })
+        )
+      )
+      .catch(() =>
+        dispatch(
+          appStateActions.addError({
+            title: '',
+            message: t('messages.error.api-key-enable'),
+            showTechnicalData: false,
+          })
+        )
+      )
+      .finally(fetchApiKeys);
   };
 
   const apiKeyRotated = (apiKeyId: string) => {
     handleCloseModal();
-    void dispatch(changeApiKeyStatus({ apiKey: apiKeyId, status: ApiKeySetStatus.ROTATE })).then(
-      fetchApiKeys
-    );
+    void dispatch(changeApiKeyStatus({ apiKey: apiKeyId, status: ApiKeySetStatus.ROTATE }))
+      .unwrap()
+      .then(() =>
+        dispatch(
+          appStateActions.addSuccess({
+            title: '',
+            message: t('messages.success.api-key-rotate'),
+          })
+        )
+      )
+      .catch(() =>
+        dispatch(
+          appStateActions.addError({
+            title: '',
+            message: t('messages.error.api-key-rotate'),
+            showTechnicalData: false,
+          })
+        )
+      )
+      .finally(fetchApiKeys);
   };
 
   const apiKeyDeleted = (apiKeyId: string) => {
     handleCloseModal();
     void dispatch(deleteApiKey(apiKeyId))
+      .unwrap()
       .then(() =>
         dispatch(
           appStateActions.addSuccess({
             title: '',
-            message: t('api-key-succesfully-deleted'),
+            message: t('messages.success.api-key-delete'),
           })
         )
       )
-      .then(fetchApiKeys);
+      .catch(() =>
+        dispatch(
+          appStateActions.addError({
+            title: '',
+            message: t('messages.error.api-key-delete'),
+            showTechnicalData: false,
+          })
+        )
+      )
+      .finally(fetchApiKeys);
   };
 
   // Pagination handlers

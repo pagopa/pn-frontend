@@ -21,12 +21,11 @@ import {
   newNotificationGroups,
 } from '../../../__mocks__/NewNotification.mock';
 import {
-  RenderResult,
+  CustomRenderResult,
   act,
   fireEvent,
   randomString,
   render,
-  testStore,
   waitFor,
   within,
 } from '../../../__test__/test-utils';
@@ -70,7 +69,7 @@ const populateForm = async (
 };
 
 describe('PreliminaryInformations Component', async () => {
-  let result: RenderResult;
+  let result: CustomRenderResult;
   const confirmHandlerMk = vi.fn();
   let mock: MockAdapter;
 
@@ -174,7 +173,7 @@ describe('PreliminaryInformations Component', async () => {
 
     fireEvent.click(button);
     await waitFor(() => {
-      const state = testStore.getState();
+      const state = result.testStore.getState();
       expect(state.newNotificationState.notification).toEqual({
         paProtocolNumber: newNotification.paProtocolNumber,
         abstract: '',

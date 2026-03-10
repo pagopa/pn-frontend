@@ -6,7 +6,7 @@ import { AppResponseMessage, ResponseEventDispatcher } from '@pagopa-pn/pn-commo
 import { mockApiKeysDTO } from '../../__mocks__/ApiKeys.mock';
 import { errorMock } from '../../__mocks__/Errors.mock';
 import {
-  RenderResult,
+  CustomRenderResult,
   act,
   fireEvent,
   render,
@@ -18,14 +18,6 @@ import { apiClient } from '../../api/apiClients';
 import { ApiKeySetStatus, ApiKeyStatus } from '../../models/ApiKeys';
 import * as routes from '../../navigation/routes.const';
 import ApiKeys from '../ApiKeys.page';
-
-const mockNavigateFn = vi.fn();
-
-// mock imports
-vi.mock('react-router-dom', async () => ({
-  ...(await vi.importActual<any>('react-router-dom')),
-  useNavigate: () => mockNavigateFn,
-}));
 
 const reduxInitialState = {
   apiKeysState: {
@@ -44,7 +36,7 @@ async function testApiKeyChangeStatus(
   apiKeyIndex: number,
   statusRequested: ApiKeyStatus,
   statusSetted: ApiKeySetStatus,
-  result: RenderResult,
+  result: CustomRenderResult,
   buttonTestId: string
 ) {
   mock
@@ -73,7 +65,7 @@ async function testApiKeyChangeStatus(
 }
 
 describe('ApiKeys Page', async () => {
-  let result: RenderResult;
+  let result: CustomRenderResult;
   let mock: MockAdapter;
 
   beforeAll(() => {
@@ -110,8 +102,7 @@ describe('ApiKeys Page', async () => {
     const button = result.queryByTestId('generateApiKey');
     fireEvent.click(button!);
     await waitFor(() => {
-      expect(mockNavigateFn).toHaveBeenCalledTimes(1);
-      expect(mockNavigateFn).toHaveBeenCalledWith(routes.NUOVA_API_KEY);
+      expect(result.router.state.location.pathname).toBe(routes.NUOVA_API_KEY);
     });
   });
 
@@ -121,7 +112,8 @@ describe('ApiKeys Page', async () => {
       .reply(200, { ...mockApiKeysDTO, items: mockApiKeysDTO.items.slice(0, 2) });
     mock
       .onGet(
-        `/bff/v1/api-keys?limit=10&lastKey=${mockApiKeysDTO.lastKey
+        `/bff/v1/api-keys?limit=10&lastKey=${
+          mockApiKeysDTO.lastKey
         }&lastUpdate=${encodeURIComponent(mockApiKeysDTO.lastUpdate!)}&showVirtualKey=true`
       )
       .reply(200, { ...mockApiKeysDTO, items: mockApiKeysDTO.items.slice(2) });

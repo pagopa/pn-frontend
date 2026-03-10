@@ -5,7 +5,8 @@ import {
   AppResponseMessage,
   ResponseEventDispatcher,
   formatToSlicedISOString,
-  sixMonthsAgo,
+  getEndOfDay,
+  subtractMonthsFromDate,
   today,
   twelveMonthsAgo,
 } from '@pagopa-pn/pn-commons';
@@ -187,15 +188,16 @@ describe('Statistics Page tests', () => {
     });
 
     await waitFor(() => {
-      expect(mock.history.get).toHaveLength(1);
-      expect(mock.history.get[0].url).toBe(
-        `/bff/v1/sender-dashboard/dashboard-data-request/PA/${
-          userResponse.organization.id
-        }?startDate=${formatToSlicedISOString(twelveMonthsAgo)}&endDate=${formatToSlicedISOString(
-          today
-        )}`
+      expect(mock.history.get[0]?.url).toBe(
+        `/bff/v1/sender-dashboard/dashboard-data-request/PA/${userResponse.organization.id}` +
+          `?startDate=${formatToSlicedISOString(twelveMonthsAgo)}` +
+          `&endDate=${formatToSlicedISOString(today)}`
       );
     });
+
+    const maxEndDate = getEndOfDay(new Date(rawResponseMock.lastDate));
+    const sixMonthsFromMaxEnd = subtractMonthsFromDate(maxEndDate, 6, 1);
+    const twelveMonthsFromMaxEnd = subtractMonthsFromDate(maxEndDate, 12, 1);
 
     // checks filters
     const statisticsFilters = getAllByTestId('statistics-filter');
@@ -209,7 +211,7 @@ describe('Statistics Page tests', () => {
     await waitFor(() => {
       for (const statisticsFilter of statisticsFilters) {
         const startDate = statisticsFilter.querySelector(`input[name="startDate"]`);
-        expect(startDate).toHaveValue(dateFormatter(sixMonthsAgo));
+        expect(startDate).toHaveValue(dateFormatter(sixMonthsFromMaxEnd));
         const endDate = statisticsFilter.querySelector(`input[name="endDate"]`);
         expect(endDate).toHaveValue(dateFormatter(new Date(rawResponseMock.lastDate)));
         const confirmBtn = within(statisticsFilter).getByTestId('filterButton');
@@ -220,12 +222,13 @@ describe('Statistics Page tests', () => {
     });
 
     // checks that the api is called correctly
-    expect(mock.history.get).toHaveLength(2);
-    expect(mock.history.get[1].url).toBe(
-      `/bff/v1/sender-dashboard/dashboard-data-request/PA/${
-        userResponse.organization.id
-      }?startDate=${formatToSlicedISOString(sixMonthsAgo)}&endDate=${rawResponseMock.lastDate}`
-    );
+    await waitFor(() => {
+      expect(mock.history.get.at(-1)?.url).toBe(
+        `/bff/v1/sender-dashboard/dashboard-data-request/PA/${userResponse.organization.id}` +
+          `?startDate=${formatToSlicedISOString(sixMonthsFromMaxEnd)}` +
+          `&endDate=${rawResponseMock.lastDate}`
+      );
+    });
 
     // cancel filters
     let cancelBtn = within(statisticsFilters[0]).getByTestId('cancelButton');
@@ -235,7 +238,7 @@ describe('Statistics Page tests', () => {
     await waitFor(() => {
       for (const statisticsFilter of statisticsFilters) {
         const startDate = statisticsFilter.querySelector(`input[name="startDate"]`);
-        expect(startDate).toHaveValue(dateFormatter(twelveMonthsAgo));
+        expect(startDate).toHaveValue(dateFormatter(twelveMonthsFromMaxEnd));
         const endDate = statisticsFilter.querySelector(`input[name="endDate"]`);
         expect(endDate).toHaveValue(dateFormatter(new Date(rawResponseMock.lastDate)));
         const confirmBtn = within(statisticsFilter).getByTestId('filterButton');
@@ -246,12 +249,13 @@ describe('Statistics Page tests', () => {
     });
 
     // checks that the api is called correctly
-    expect(mock.history.get).toHaveLength(3);
-    expect(mock.history.get[2].url).toBe(
-      `/bff/v1/sender-dashboard/dashboard-data-request/PA/${
-        userResponse.organization.id
-      }?startDate=${formatToSlicedISOString(twelveMonthsAgo)}&endDate=${rawResponseMock.lastDate}`
-    );
+    await waitFor(() => {
+      expect(mock.history.get.at(-1)?.url).toBe(
+        `/bff/v1/sender-dashboard/dashboard-data-request/PA/${userResponse.organization.id}` +
+          `?startDate=${formatToSlicedISOString(twelveMonthsFromMaxEnd)}` +
+          `&endDate=${rawResponseMock.lastDate}`
+      );
+    });
 
     // set custom date
     await testInput(statisticsFilters[1], 'startDate', '22/02/2022');
@@ -279,10 +283,33 @@ describe('Statistics Page tests', () => {
     });
 
     // checks that the api is called correctly
-    expect(mock.history.get).toHaveLength(4);
-    expect(mock.history.get[3].url).toBe(
-      `/bff/v1/sender-dashboard/dashboard-data-request/PA/${userResponse.organization.id}?startDate=2022-02-22&endDate=2024-05-13`
-    );
+    await waitFor(() => {
+      expect(mock.history.get.at(-1)?.url).toBe(
+        `/bff/v1/sender-dashboard/dashboard-data-request/PA/${userResponse.organization.id}` +
+          `?startDate=2022-02-22&endDate=2024-05-13`
+      );
+    });
+  });
+
+  it('auto aligns default range to lastDate after first fetch', async () => {
+    mock.onGet(/\/bff\/v1\/sender-dashboard\/dashboard-data-request*/).reply(200, rawResponseMock);
+
+    render(<Statistics />, {
+      preloadedState: {
+        userState: { user: userResponse },
+      },
+    });
+
+    const maxEndDate = getEndOfDay(new Date(rawResponseMock.lastDate));
+    const twelveMonthsFromMaxEnd = subtractMonthsFromDate(maxEndDate, 12, 1);
+
+    await waitFor(() => {
+      expect(mock.history.get.at(-1)?.url).toBe(
+        `/bff/v1/sender-dashboard/dashboard-data-request/PA/${userResponse.organization.id}` +
+          `?startDate=${formatToSlicedISOString(twelveMonthsFromMaxEnd)}` +
+          `&endDate=${rawResponseMock.lastDate}`
+      );
+    });
   });
 
   it('api returns error', async () => {

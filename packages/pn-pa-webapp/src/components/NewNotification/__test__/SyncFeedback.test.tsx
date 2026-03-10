@@ -4,13 +4,6 @@ import { fireEvent, render } from '../../../__test__/test-utils';
 import * as routes from '../../../navigation/routes.const';
 import SyncFeedback from '../SyncFeedback';
 
-const mockNavigateFn = vi.fn();
-
-vi.mock('react-router-dom', async () => ({
-  ...(await vi.importActual<any>('react-router-dom')),
-  useNavigate: () => mockNavigateFn,
-}));
-
 describe('SyncFeedback Component', () => {
   afterEach(() => {
     vi.clearAllMocks();
@@ -28,10 +21,9 @@ describe('SyncFeedback Component', () => {
 
   it('navigate to notifications', () => {
     // render component
-    const result = render(<SyncFeedback />);
-    const button = result.container.querySelector('button');
+    const { container, router } = render(<SyncFeedback />);
+    const button = container.querySelector('button');
     fireEvent.click(button!);
-    expect(mockNavigateFn).toHaveBeenCalledTimes(1);
-    expect(mockNavigateFn).toHaveBeenCalledWith(routes.DASHBOARD);
+    expect(router.state.location.pathname).toBe(routes.DASHBOARD);
   });
 });

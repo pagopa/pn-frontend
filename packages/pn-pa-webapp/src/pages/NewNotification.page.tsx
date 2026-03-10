@@ -2,12 +2,13 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { Alert, Box, Grid, Link, Step, StepLabel, Stepper, Typography } from '@mui/material';
-import { PnBreadcrumb, Prompt, TitleBox, useIsMobile } from '@pagopa-pn/pn-commons';
+import { visuallyHidden } from '@mui/utils';
+import { PnBreadcrumb, TitleBox, useIsMobile } from '@pagopa-pn/pn-commons';
 
+import Prompt from '../components-for-migration/Prompt';
 import Attachments from '../components/NewNotification/Attachments';
 import DebtPosition from '../components/NewNotification/DebtPosition';
 import DebtPositionDetail from '../components/NewNotification/DebtPositionDetail';
-// import PaymentMethods from '../components/NewNotification/PaymentMethods';
 import PreliminaryInformations from '../components/NewNotification/PreliminaryInformations';
 import Recipient from '../components/NewNotification/Recipient';
 import SyncFeedback from '../components/NewNotification/SyncFeedback';
@@ -165,19 +166,35 @@ const NewNotification = () => {
               alternativeLabel
               sx={{ marginTop: '60px' }}
               data-testid="stepper"
+              role="list"
             >
-              {steps.map((label, index) => (
-                <Step
-                  id={label}
-                  key={label}
-                  onClick={() => onStepClick(index)}
-                  sx={{ cursor: index < activeStep ? 'pointer' : 'auto' }}
-                  data-testid={`step-${index}`}
-                  disabled={isPaymentMethodStepDisabled(index)}
-                >
-                  <StepLabel>{label}</StepLabel>
-                </Step>
-              ))}
+              {steps.map((label, index) => {
+                const isStepCompleted = index < activeStep;
+                const isDisabled = isPaymentMethodStepDisabled(index);
+                const isCurrent = index === activeStep;
+
+                return (
+                  <Step
+                    id={label}
+                    key={label}
+                    role="listitem"
+                    onClick={() => onStepClick(index)}
+                    sx={{ cursor: isStepCompleted ? 'pointer' : 'auto' }}
+                    disabled={isDisabled}
+                    aria-current={isCurrent ? 'step' : undefined}
+                    data-testid={`step-${index}`}
+                  >
+                    <StepLabel>
+                      {label}
+                      {isStepCompleted && !isDisabled && (
+                        <span style={visuallyHidden}>
+                          {t('new-notification.step-completed-aria-label', { ns: 'notifiche' })}
+                        </span>
+                      )}
+                    </StepLabel>
+                  </Step>
+                );
+              })}
             </Stepper>
 
             {activeStep === 0 && (

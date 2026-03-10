@@ -86,5 +86,19 @@
     "continue-button": "Nadaljuj",
     "required-fields": "Obvezna polja",
     "no-groups": "Ni razpoložljivih skupin"
+  },
+  "messages": {
+    "success": {
+      "api-key-enable": "Javni ključ je bil uspešno aktiviran.",
+      "api-key-block": "Javni ključ je bil uspešno blokiran.",
+      "api-key-rotate": "Javni ključ je bil uspešno zamenjan.",
+      "api-key-delete": "Javni ključ je bil uspešno izbrisan."
+    },
+    "error": {
+      "api-key-enable": "Javni ključ ni bil aktiviran",
+      "api-key-block": "Javni ključ ni bil blokiran",
+      "api-key-rotate": "Javni ključ ni bil zamenjan",
+      "api-key-delete": "Javni ključ ni bil izbrisan"
+    }
   }
 }

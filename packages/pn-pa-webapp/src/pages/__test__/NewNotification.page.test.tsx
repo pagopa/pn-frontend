@@ -1,5 +1,4 @@
 import MockAdapter from 'axios-mock-adapter';
-import { createBrowserHistory } from 'history';
 import { Route, Routes } from 'react-router-dom';
 import { vi } from 'vitest';
 
@@ -81,9 +80,6 @@ describe('NewNotification Page without payment enabled in configuration', async 
   it('clicks on the breadcrumb button', async () => {
     // insert one entry into the history, so the initial render will refer
     // to the path /new-notification
-    const history = createBrowserHistory();
-    history.push(routes.NUOVA_NOTIFICA);
-
     // render with an ad-hoc router, will render initially NewNotification
     // since it corresponds to the top of the mocked history stack
     await act(async () => {
@@ -95,7 +91,11 @@ describe('NewNotification Page without payment enabled in configuration', async 
           />
           <Route path={routes.NUOVA_NOTIFICA} element={<NewNotification />} />
         </Routes>,
-        { preloadedState: { userState: { user: userResponse } } }
+        {
+          preloadedState: { userState: { user: userResponse } },
+          route: [routes.DASHBOARD, routes.NUOVA_NOTIFICA],
+          path: '*',
+        }
       );
     });
 
@@ -125,9 +125,6 @@ describe('NewNotification Page without payment enabled in configuration', async 
   it('clicks on api keys button', async () => {
     // insert one entry into the history, so the initial render will refer
     // to the path /new-notification
-    const history = createBrowserHistory();
-    history.push(routes.NUOVA_NOTIFICA);
-
     // render with an ad-hoc router, will render initially NewNotification
     // since it corresponds to the top of the mocked history stack
     await act(async () => {
@@ -139,7 +136,11 @@ describe('NewNotification Page without payment enabled in configuration', async 
           />
           <Route path={routes.NUOVA_NOTIFICA} element={<NewNotification />} />
         </Routes>,
-        { preloadedState: { userState: { user: userResponse } } }
+        {
+          preloadedState: { userState: { user: userResponse } },
+          route: [routes.API_KEYS, routes.NUOVA_NOTIFICA],
+          path: '*',
+        }
       );
     });
 

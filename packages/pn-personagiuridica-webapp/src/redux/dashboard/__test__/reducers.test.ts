@@ -39,8 +39,8 @@ describe('Dashbaord redux state tests', () => {
       loading: false,
       notifications: [],
       filters: {
-        startDate: tenYearsAgo,
-        endDate: today,
+        startDate: undefined,
+        endDate: undefined,
         iunMatch: '',
       },
       pagination: {
