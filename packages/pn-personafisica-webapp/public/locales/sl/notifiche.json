@@ -458,7 +458,7 @@
   "notification-cost-banner": {
     "analog": {
       "title": "S storitvijo SEND lahko prihranite!",
-      "message": "V imenu organa pošiljatelja vam je bilo poslanih eno ali več priporočenih pisem v skupnem znesku {{analogCost}} €, ker to obvestilo ni bilo odprto prek digitalnih kanalov v predvidenem roku.",
+      "message": "V imenu organa pošiljatelja vam je bilo poslanih eno ali več priporočenih pisem v skupnem znesku {{analogCost}}, ker to obvestilo ni bilo odprto prek digitalnih kanalov v predvidenem roku.",
       "fallback": "V imenu organa pošiljatelja vam je bilo poslanih eno ali več priporočenih pisem, ker to obvestilo ni bilo odprto prek digitalnih kanalov v predvidenem roku. To bo za vas povzročilo dodatne stroške."
     },
     "digital_failure": {

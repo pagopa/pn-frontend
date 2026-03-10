@@ -458,7 +458,7 @@
   "notification-cost-banner": {
     "analog": {
       "title": "Mit SEND können Sie Geld sparen!",
-      "message": "Im Auftrag der sendenden Einrichtung wurden ein oder mehrere Einschreiben zu Gesamtkosten von {{analogCost}} € an Sie versandt, da diese Benachrichtigung nicht innerhalb der vorgesehenen Fristen über die digitalen Kanäle geöffnet wurde.",
+      "message": "Im Auftrag der sendenden Einrichtung wurden ein oder mehrere Einschreiben zu Gesamtkosten von {{analogCost}} an Sie versandt, da diese Benachrichtigung nicht innerhalb der vorgesehenen Fristen über die digitalen Kanäle geöffnet wurde.",
       "fallback": "Im Auftrag der sendenden Einrichtung wurden ein oder mehrere Einschreiben an Sie versandt, da diese Benachrichtigung nicht innerhalb der vorgesehenen Fristen über die digitalen Kanäle geöffnet wurde. Dies führt für Sie zu zusätzlichen Kosten."
     },
     "digital_failure": {

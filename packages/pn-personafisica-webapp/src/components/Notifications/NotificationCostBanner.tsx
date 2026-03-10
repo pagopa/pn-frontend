@@ -5,18 +5,16 @@ import { useNavigate } from 'react-router-dom';
 
 import SavingsOutlinedIcon from '@mui/icons-material/SavingsOutlined';
 import { Box } from '@mui/material';
+import type { NotificationCostDetails } from '@pagopa-pn/pn-commons';
 import {
   DeliveryOutcome,
   DeliveryOutcomeType,
   DigitalDomicileType,
   DigitalSource,
   EventAction,
+  NotificationCostDetailsStatus,
   formatEurocentToCurrency,
 } from '@pagopa-pn/pn-commons';
-import {
-  NotificationCostDetails,
-  NotificationCostDetailsStatus,
-} from '@pagopa-pn/pn-commons/src/models/NotificationDetail';
 import { Banner } from '@pagopa/mui-italia';
 
 import { PFEventsType } from '../../models/PFEventsType';

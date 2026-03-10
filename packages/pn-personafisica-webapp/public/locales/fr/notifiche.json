@@ -458,7 +458,7 @@
   "notification-cost-banner": {
     "analog": {
       "title": "Avec SEND, vous pouvez faire des économies !",
-      "message": "Une ou plusieurs lettres recommandées vous ont été envoyées pour le compte de l'organisme émetteur pour un coût total de {{analogCost}} €, car cette notification n'a pas été ouverte sur les canaux numériques dans les délais prévus.",
+      "message": "Une ou plusieurs lettres recommandées vous ont été envoyées pour le compte de l'organisme émetteur pour un coût total de {{analogCost}}, car cette notification n'a pas été ouverte sur les canaux numériques dans les délais prévus.",
       "fallback": "Une ou plusieurs lettres recommandées vous ont été envoyées pour le compte de l'organisme émetteur car cette notification n'a pas été ouverte sur les canaux numériques dans les délais prévus. Cela entraînera des frais supplémentaires pour vous."
     },
     "digital_failure": {

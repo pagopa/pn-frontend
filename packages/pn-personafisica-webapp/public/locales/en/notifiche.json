@@ -458,7 +458,7 @@
   "notification-cost-banner": {
     "analog": {
       "title": "Save money with SEND!",
-      "message": "One or more registered mail have been sent to you on behalf of the issuing institution at a total cost of {{analogCost}} €, because this notification was not opened on digital channels within the required timeframes.",
+      "message": "One or more registered mail have been sent to you on behalf of the issuing institution at a total cost of {{analogCost}}, because this notification was not opened on digital channels within the required timeframes.",
       "fallback": "One or more registered mail have been sent to you on behalf of the issuing institution because this notification was not opened on digital channels within the required timeframes. This will result in additional costs for you."
     },
     "digital_failure": {
