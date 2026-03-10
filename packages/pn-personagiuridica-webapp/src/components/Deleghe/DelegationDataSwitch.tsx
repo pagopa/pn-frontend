@@ -45,20 +45,7 @@ const DelegationDataSwitch: React.FC<Props> = ({
       return (
         <CustomTagGroup visibleItems={3}>
           {data.groups.map((group) => (
-            <Box
-              sx={{
-                mb: 1,
-                mr: 1,
-                display: 'inline-block',
-                // Prevent long unbroken content from causing table/card layout overflow
-                // Use `overflowWrap` (modern approach) and keep `wordBreak` as legacy fallback
-                '& span': {
-                  overflowWrap: 'anywhere',
-                  wordBreak: 'break-word',
-                },
-              }}
-              key={group.id}
-            >
+            <Box sx={{ mb: 1, mr: 1, display: 'inline-block' }} key={group.id}>
               <Tag value={group.name} />
             </Box>
           ))}

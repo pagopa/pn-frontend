@@ -2,7 +2,7 @@ import { vi } from 'vitest';
 
 import { notificationsToFe } from '../../../__mocks__/Notifications.mock';
 import {
-  RenderResult,
+  CustomRenderResult,
   act,
   fireEvent,
   render,
@@ -12,16 +12,8 @@ import {
 import { GET_DETTAGLIO_NOTIFICA_PATH } from '../../../navigation/routes.const';
 import DesktopNotifications from '../DesktopNotifications';
 
-const mockNavigateFn = vi.fn();
-
-// mock imports
-vi.mock('react-router-dom', async () => ({
-  ...(await vi.importActual<any>('react-router-dom')),
-  useNavigate: () => mockNavigateFn,
-}));
-
 describe('DesktopNotifications Component', () => {
-  let result: RenderResult;
+  let result: CustomRenderResult;
 
   afterEach(() => {
     vi.clearAllMocks();
@@ -102,8 +94,7 @@ describe('DesktopNotifications Component', () => {
     const notificationsTableCellArrow = within(rows[0]).getByTestId('goToNotificationDetail');
     fireEvent.click(notificationsTableCellArrow);
     await waitFor(() => {
-      expect(mockNavigateFn).toHaveBeenCalledTimes(1);
-      expect(mockNavigateFn).toHaveBeenCalledWith(
+      expect(result.router.state.location.pathname).toBe(
         GET_DETTAGLIO_NOTIFICA_PATH(notificationsToFe.resultsPage[0].iun)
       );
     });

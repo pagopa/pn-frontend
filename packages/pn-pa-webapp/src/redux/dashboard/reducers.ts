@@ -1,10 +1,4 @@
-import {
-  GetNotificationsParams,
-  Notification,
-  Sort,
-  tenYearsAgo,
-  today,
-} from '@pagopa-pn/pn-commons';
+import { GetNotificationsParams, Notification, Sort } from '@pagopa-pn/pn-commons';
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 
 import { getSentNotifications } from './actions';
@@ -16,12 +10,12 @@ const dashboardSlice = createSlice({
     loading: false,
     notifications: [] as Array<Notification>,
     filters: {
-      startDate: tenYearsAgo,
-      endDate: today,
+      startDate: undefined,
+      endDate: undefined,
       status: '',
       recipientId: '',
       iunMatch: '',
-    } as GetNotificationsParams<Date>,
+    } as GetNotificationsParams,
     pagination: {
       nextPagesKey: [] as Array<string>,
       size: 10,
@@ -46,7 +40,7 @@ const dashboardSlice = createSlice({
     setSorting: (state, action: PayloadAction<Sort<Notification>>) => {
       state.sort = action.payload;
     },
-    setNotificationFilters: (state, action: PayloadAction<GetNotificationsParams<Date>>) => {
+    setNotificationFilters: (state, action: PayloadAction<GetNotificationsParams>) => {
       state.filters = action.payload;
       // reset pagination
       state.pagination.page = 0;

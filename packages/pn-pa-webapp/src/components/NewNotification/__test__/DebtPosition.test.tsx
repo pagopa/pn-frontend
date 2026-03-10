@@ -3,7 +3,7 @@ import { vi } from 'vitest';
 import { testRadio } from '@pagopa-pn/pn-commons/src/test-utils';
 
 import { newNotification } from '../../../__mocks__/NewNotification.mock';
-import { fireEvent, render, testStore, waitFor } from '../../../__test__/test-utils';
+import { fireEvent, render, waitFor } from '../../../__test__/test-utils';
 import { PaymentModel } from '../../../models/NewNotification';
 import DebtPosition from '../DebtPosition';
 
@@ -92,7 +92,7 @@ describe('DebtPosition Component', async () => {
 
   it('choose an option (two recipients)', async () => {
     // render component
-    const { getAllByTestId, getByTestId } = render(
+    const { getAllByTestId, getByTestId, testStore } = render(
       <DebtPosition
         recipients={[recipientsWithoutPayment[0], recipientsWithoutPayment[1]]}
         onConfirm={confirmHandlerMk}
@@ -150,7 +150,7 @@ describe('DebtPosition Component', async () => {
 
   it('choose an option (two recipients) - back button', async () => {
     // render component
-    const { getAllByTestId, getByTestId } = render(
+    const { getAllByTestId, getByTestId, testStore } = render(
       <DebtPosition
         recipients={recipientsWithoutPayment}
         onConfirm={confirmHandlerMk}
@@ -200,7 +200,7 @@ describe('DebtPosition Component', async () => {
 
   it('choose nothing option (multi recipients)', async () => {
     // render component
-    const { getAllByTestId, getByTestId } = render(
+    const { getAllByTestId, getByTestId, testStore } = render(
       <DebtPosition
         recipients={recipientsWithoutPayment}
         onConfirm={confirmHandlerMk}
@@ -252,7 +252,7 @@ describe('DebtPosition Component', async () => {
 
   it('initally filled (multi recipients)', async () => {
     // render component
-    const { getAllByTestId, getByTestId } = render(
+    const { getAllByTestId, getByTestId, testStore } = render(
       <DebtPosition
         recipients={newNotification.recipients}
         onConfirm={confirmHandlerMk}

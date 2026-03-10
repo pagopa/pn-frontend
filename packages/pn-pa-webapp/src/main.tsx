@@ -1,9 +1,10 @@
 import React, { Suspense } from 'react';
 import { createRoot } from 'react-dom/client';
 import { Provider } from 'react-redux';
-import { BrowserRouter } from 'react-router-dom';
+import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 
 import { CssBaseline, ThemeProvider } from '@mui/material';
+import { LoadingPage } from '@pagopa-pn/pn-commons';
 import { theme } from '@pagopa/mui-italia';
 
 import App from './App';
@@ -33,17 +34,22 @@ async function doTheRender() {
     // We need to comment out the StrictMode because it causes a rerender that
     // breaks the navigation inside TermsOfService and PrivacyPolicy pages.
     // PN-9549
+    const router = createBrowserRouter([
+      {
+        path: '*',
+        element: <App />,
+      },
+    ]);
+
     root.render(
       <Provider store={store}>
         {/* <React.StrictMode> */}
-        <BrowserRouter>
-          <ThemeProvider theme={theme}>
-            <CssBaseline />
-            <Suspense fallback="loading...">
-              <App />
-            </Suspense>
-          </ThemeProvider>
-        </BrowserRouter>
+        <ThemeProvider theme={theme}>
+          <CssBaseline />
+          <Suspense fallback={<LoadingPage renderType="whole" />}>
+            <RouterProvider router={router} />
+          </Suspense>
+        </ThemeProvider>
         {/* </React.StrictMode> */}
       </Provider>
     );
