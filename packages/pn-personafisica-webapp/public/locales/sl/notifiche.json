@@ -462,12 +462,14 @@
   },
   "notification-cost-banner": {
     "analog": {
-      "title": "S SEND lahko prihraniš!",
-      "message": "Digitalnega obvestila nisi odprl pravočasno, zato se ni bilo mogoče izogniti priporočeni pošti in s tem povezanim stroškom."
+      "title": "S storitvijo SEND lahko prihranite!",
+      "message": "V imenu organa pošiljatelja vam je bilo poslanih eno ali več priporočenih pisem v skupnem znesku {{analogCost}} €, ker to obvestilo ni bilo odprto prek digitalnih kanalov v predvidenem roku.",
+      "fallback": "V imenu organa pošiljatelja vam je bilo poslanih eno ali več priporočenih pisem, ker to obvestilo ni bilo odprto prek digitalnih kanalov v predvidenem roku. To bo za vas povzročilo dodatne stroške."
     },
     "digital_failure": {
-      "title": "S SEND lahko prihraniš!",
-      "message": "Obvestila nismo mogli dostaviti na tvoj naslov PEC, zato ti je bilo poslano informativno priporočeno pismo z ustreznimi stroški."
+      "title": "S storitvijo SEND lahko prihranite!",
+      "message": "Obvestila nismo mogli dostaviti na vaš certificiran e-poštni naslov (PEC), zato vam je bilo poslano priporočeno pismo s stroškom {{analogCost}}.",
+      "fallback": "Obvestila nismo mogli dostaviti na vaš certificiran e-poštni naslov (PEC), zato vam je bilo poslano priporočeno pismo. To bo za vas povzročilo dodatne stroške."
     },
     "digital_platform": {
       "title": "S SEND si prihranil!",

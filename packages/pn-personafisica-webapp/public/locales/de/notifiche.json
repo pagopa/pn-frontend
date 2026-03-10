@@ -462,12 +462,14 @@
   },
   "notification-cost-banner": {
     "analog": {
-      "title": "Mit SEND kannst du sparen!",
-      "message": "Du hast die digitale Zustellung nicht rechtzeitig geöffnet, daher war es nicht möglich, das Einschreiben und die damit verbundenen Kosten zu vermeiden."
+      "title": "Mit SEND können Sie Geld sparen!",
+      "message": "Im Auftrag der sendenden Einrichtung wurden ein oder mehrere Einschreiben zu Gesamtkosten von {{analogCost}} € an Sie versandt, da diese Benachrichtigung nicht innerhalb der vorgesehenen Fristen über die digitalen Kanäle geöffnet wurde.",
+      "fallback": "Im Auftrag der sendenden Einrichtung wurden ein oder mehrere Einschreiben an Sie versandt, da diese Benachrichtigung nicht innerhalb der vorgesehenen Fristen über die digitalen Kanäle geöffnet wurde. Dies führt für Sie zu zusätzlichen Kosten."
     },
     "digital_failure": {
-      "title": "Mit SEND kannst du sparen!",
-      "message": "Wir konnten die Zustellung an deine PEC nicht zustellen, daher wurde dir ein Informations-Einschreiben mit den entsprechenden Kosten zugesandt."
+      "title": "Mit SEND können Sie Geld sparen!",
+      "message": "Die Benachrichtigung konnte nicht an Ihre zertifizierte E-Mail-Adresse (PEC) zugestellt werden, daher wurde Ihnen ein Einschreiben zu Kosten von {{analogCost}} zugesandt.",
+      "fallback": "Die Benachrichtigung konnte nicht an Ihre zertifizierte E-Mail-Adresse (PEC) zugestellt werden, daher wurde Ihnen ein Einschreiben zugesandt. Dies führt für Sie zu zusätzlichen Kosten."
     },
     "digital_platform": {
       "title": "Mit SEND hast du gespart!",

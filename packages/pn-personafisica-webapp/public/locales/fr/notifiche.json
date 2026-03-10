@@ -462,12 +462,14 @@
   },
   "notification-cost-banner": {
     "analog": {
-      "title": "Avec SEND tu peux faire des économies !",
-      "message": "Tu n'as pas ouvert la notification numérique à temps, il n'a donc pas été possible d'éviter l'envoi recommandé et les frais correspondants."
+      "title": "Avec SEND, vous pouvez faire des économies !",
+      "message": "Une ou plusieurs lettres recommandées vous ont été envoyées pour le compte de l'organisme émetteur pour un coût total de {{analogCost}} €, car cette notification n'a pas été ouverte sur les canaux numériques dans les délais prévus.",
+      "fallback": "Une ou plusieurs lettres recommandées vous ont été envoyées pour le compte de l'organisme émetteur car cette notification n'a pas été ouverte sur les canaux numériques dans les délais prévus. Cela entraînera des frais supplémentaires pour vous."
     },
     "digital_failure": {
-      "title": "Avec SEND tu peux faire des économies !",
-      "message": "Nous n'avons pas pu distribuer la notification sur ta PEC, une lettre recommandée d'information t'a donc été envoyée avec les frais correspondants."
+      "title": "Avec SEND, vous pouvez faire des économies !",
+      "message": "Nous n'avons pas pu distribuer la notification sur votre adresse e-mail certifiée (PEC), une lettre recommandée vous a donc été envoyée au coût de {{analogCost}}.",
+      "fallback": "Nous n'avons pas pu distribuer la notification sur votre adresse e-mail certifiée (PEC), une lettre recommandée vous a donc été envoyée. Cela entraînera des frais supplémentaires pour vous."
     },
     "digital_platform": {
       "title": "Avec SEND tu as fait des économies !",
