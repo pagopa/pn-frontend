@@ -97,9 +97,9 @@ const NotificationDetail: React.FC = () => {
   const [downtimesReady, setDowntimesReady] = useState(false);
   const {
     F24_DOWNLOAD_WAIT_TIME,
-    LANDING_SITE_URL,
     DOWNTIME_EXAMPLE_LINK,
     NOTIFICATION_CANCELLED_HELP_LINK,
+    NOTIFICATION_COST_DETAILS_ASSISTANCE_LINK,
   } = getConfiguration();
   const navigate = useNavigate();
 
@@ -700,7 +700,8 @@ const NotificationDetail: React.FC = () => {
                         handleFetchPaymentsInfo={reloadPaymentsInfo}
                         getPaymentAttachmentAction={getPaymentAttachmentAction}
                         timerF24={F24_DOWNLOAD_WAIT_TIME}
-                        landingSiteUrl={LANDING_SITE_URL}
+                        costDetailsAssistanceLink={NOTIFICATION_COST_DETAILS_ASSISTANCE_LINK}
+                        costDetails={notification.notificationCostDetails}
                       />
                     </ApiErrorWrapper>
                   </Paper>

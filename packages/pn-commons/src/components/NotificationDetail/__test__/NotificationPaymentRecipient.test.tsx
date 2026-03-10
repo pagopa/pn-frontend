@@ -1,7 +1,11 @@
 import { vi } from 'vitest';
 
 import { paymentInfo } from '../../../__mocks__/ExternalRegistry.mock';
-import { notificationDTO, payments } from '../../../__mocks__/NotificationDetail.mock';
+import {
+  notificationCostDetailsMock,
+  notificationDTO,
+  payments,
+} from '../../../__mocks__/NotificationDetail.mock';
 import {
   PaymentAttachmentSName,
   PaymentStatus,
@@ -39,11 +43,12 @@ describe('NotificationPaymentRecipient Component', () => {
         getPaymentAttachmentAction={vi.fn()}
         onPayClick={() => void 0}
         handleFetchPaymentsInfo={() => void 0}
-        landingSiteUrl=""
+        costDetailsAssistanceLink=""
+        costDetails={notificationCostDetailsMock}
       />
     );
     const title = getByTestId('notification-payment-recipient-title');
-    const subtitle = getByTestId('notification-payment-recipient-subtitle');
+    const costsAlert = queryByTestId('notification-costs-alert');
     const f24Download = queryByTestId('f24-download');
     const pagoPABox = queryAllByTestId('pagopa-item');
     const downloadPagoPANotice = queryByTestId('download-pagoPA-notice-button');
@@ -55,8 +60,7 @@ describe('NotificationPaymentRecipient Component', () => {
 
     expect(title).toBeInTheDocument();
     expect(title).toHaveTextContent('detail.payment.title');
-    expect(subtitle).toBeInTheDocument();
-    expect(subtitle).toHaveTextContent('detail.payment.subtitle');
+    expect(costsAlert).toBeInTheDocument();
     expect(f24Download).not.toBeInTheDocument();
     expect(pagoPABox).toHaveLength(pageLength > 5 ? 5 : pageLength);
     expect(downloadPagoPANotice).not.toBeInTheDocument();
@@ -76,7 +80,7 @@ describe('NotificationPaymentRecipient Component', () => {
         getPaymentAttachmentAction={vi.fn()}
         onPayClick={() => void 0}
         handleFetchPaymentsInfo={() => void 0}
-        landingSiteUrl=""
+        costDetailsAssistanceLink=""
       />
     );
     let downloadPagoPANotice = queryByTestId('download-pagoPA-notice-button');
@@ -128,7 +132,7 @@ describe('NotificationPaymentRecipient Component', () => {
         getPaymentAttachmentAction={vi.fn()}
         onPayClick={payClickMk}
         handleFetchPaymentsInfo={() => void 0}
-        landingSiteUrl=""
+        costDetailsAssistanceLink=""
       />
     );
     const payButton = getByTestId('pay-button');
@@ -176,7 +180,7 @@ describe('NotificationPaymentRecipient Component', () => {
         getPaymentAttachmentAction={vi.fn()}
         onPayClick={() => void 0}
         handleFetchPaymentsInfo={() => void 0}
-        landingSiteUrl=""
+        costDetailsAssistanceLink=""
       />
     );
     const payButton = queryByTestId('pay-button');
@@ -196,13 +200,15 @@ describe('NotificationPaymentRecipient Component', () => {
         getPaymentAttachmentAction={vi.fn()}
         onPayClick={() => void 0}
         handleFetchPaymentsInfo={() => void 0}
-        landingSiteUrl=""
+        costDetailsAssistanceLink=""
+        costDetails={notificationCostDetailsMock}
       />
     );
     const alert = getByTestId('cancelledAlertPayment');
-    const subtitle = queryByTestId('notification-payment-recipient-subtitle');
+    const costsAlert = queryByTestId('notification-costs-alert');
+
     expect(alert).toBeInTheDocument();
-    expect(subtitle).not.toBeInTheDocument();
+    expect(costsAlert).not.toBeInTheDocument();
   });
 
   it('should call handleDownloadAttachment on download button click - attached f24', async () => {
@@ -220,7 +226,7 @@ describe('NotificationPaymentRecipient Component', () => {
         getPaymentAttachmentAction={getPaymentAttachmentActionMk}
         onPayClick={() => void 0}
         handleFetchPaymentsInfo={() => void 0}
-        landingSiteUrl=""
+        costDetailsAssistanceLink=""
       />
     );
     const paymentIndex = paymentsData.pagoPaF24.findIndex(
@@ -268,7 +274,7 @@ describe('NotificationPaymentRecipient Component', () => {
         getPaymentAttachmentAction={getPaymentAttachmentActionMk}
         onPayClick={() => void 0}
         handleFetchPaymentsInfo={() => void 0}
-        landingSiteUrl=""
+        costDetailsAssistanceLink=""
       />
     );
 
@@ -297,7 +303,7 @@ describe('NotificationPaymentRecipient Component', () => {
         getPaymentAttachmentAction={vi.fn()}
         onPayClick={() => void 0}
         handleFetchPaymentsInfo={() => void 0}
-        landingSiteUrl=""
+        costDetailsAssistanceLink=""
       />
     );
     const paginationBox = queryByTestId('pagination-box');
@@ -315,7 +321,7 @@ describe('NotificationPaymentRecipient Component', () => {
         getPaymentAttachmentAction={vi.fn()}
         onPayClick={() => void 0}
         handleFetchPaymentsInfo={fetchPaymentsInfoMk}
-        landingSiteUrl=""
+        costDetailsAssistanceLink=""
       />
     );
 
@@ -337,7 +343,7 @@ describe('NotificationPaymentRecipient Component', () => {
         getPaymentAttachmentAction={vi.fn()}
         onPayClick={() => void 0}
         handleFetchPaymentsInfo={() => {}}
-        landingSiteUrl=""
+        costDetailsAssistanceLink=""
       />
     );
     const paymentIndex = paymentsData.pagoPaF24.findIndex(
@@ -371,7 +377,7 @@ describe('NotificationPaymentRecipient Component', () => {
         getPaymentAttachmentAction={vi.fn()}
         onPayClick={() => void 0}
         handleFetchPaymentsInfo={() => void 0}
-        landingSiteUrl=""
+        costDetailsAssistanceLink=""
       />
     );
 
@@ -379,37 +385,6 @@ describe('NotificationPaymentRecipient Component', () => {
     const pageButtons = pageSelector?.querySelectorAll('button');
 
     expect(pageButtons[2]).toHaveClass('Mui-selected');
-  });
-
-  it('should show subtitle when all payments are paid and has only one page but has f24', () => {
-    const paidPayments = {
-      pagoPaF24: [
-        ...paymentsData.pagoPaF24.map((payment) => ({
-          ...payment,
-          pagoPa: {
-            ...payment.pagoPa!,
-            status: PaymentStatus.SUCCEEDED,
-          },
-        })),
-      ].slice(0, 3),
-      f24Only: [...paymentsData.f24Only],
-    };
-
-    const { queryByTestId } = render(
-      <NotificationPaymentRecipient
-        payments={paidPayments}
-        isCancelled={false}
-        timerF24={F24TIMER}
-        iun={iun}
-        getPaymentAttachmentAction={vi.fn()}
-        onPayClick={() => void 0}
-        handleFetchPaymentsInfo={() => {}}
-        landingSiteUrl=""
-      />
-    );
-
-    const subtitle = queryByTestId('notification-payment-recipient-subtitle');
-    expect(subtitle).toBeInTheDocument();
   });
 
   it('should disable other button for downloading f24 document when another one is downloading', () => {
@@ -425,7 +400,7 @@ describe('NotificationPaymentRecipient Component', () => {
         getPaymentAttachmentAction={getPaymentAttachmentActionMk}
         onPayClick={() => void 0}
         handleFetchPaymentsInfo={() => {}}
-        landingSiteUrl=""
+        costDetailsAssistanceLink=""
       />
     );
     const f24Buttons = result.queryAllByTestId('download-f24-button');
@@ -456,7 +431,7 @@ describe('NotificationPaymentRecipient Component', () => {
         onPayClick={() => {}}
         onPayTppClick={onPayTppClick}
         handleFetchPaymentsInfo={() => {}}
-        landingSiteUrl=""
+        costDetailsAssistanceLink=""
       />
     );
     const payTppButton = getByTestId('tpp-pay-button');
@@ -513,7 +488,7 @@ describe('NotificationPaymentRecipient Component', () => {
         onPayClick={() => {}}
         onPayTppClick={onPayTppClick}
         handleFetchPaymentsInfo={() => {}}
-        landingSiteUrl=""
+        costDetailsAssistanceLink=""
       />
     );
 
@@ -550,7 +525,7 @@ describe('NotificationPaymentRecipient Component', () => {
         getPaymentAttachmentAction={vi.fn()}
         onPayClick={() => void 0}
         handleFetchPaymentsInfo={() => void 0}
-        landingSiteUrl=""
+        costDetailsAssistanceLink=""
       />
     );
 
@@ -584,7 +559,7 @@ describe('NotificationPaymentRecipient Component', () => {
         getPaymentAttachmentAction={vi.fn()}
         onPayClick={() => void 0}
         handleFetchPaymentsInfo={() => void 0}
-        landingSiteUrl=""
+        costDetailsAssistanceLink=""
       />
     );
 
@@ -606,7 +581,7 @@ describe('NotificationPaymentRecipient Component', () => {
         getPaymentAttachmentAction={vi.fn()}
         onPayClick={() => void 0}
         handleFetchPaymentsInfo={() => void 0}
-        landingSiteUrl=""
+        costDetailsAssistanceLink=""
       />
     );
 

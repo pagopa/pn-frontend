@@ -76,11 +76,6 @@
     },
     "payment": {
       "title": "Payment",
-      "single-payment-subtitle": "The final amount may differ from the one indicated in the document and include notification costs.",
-      "subtitle": "In this notification, there are multiple payment notices: select the one you want to pay. Some notices include notification fees.",
-      "subtitle-f24": "You can pay for this notification via F24. To see the details, open the forms.",
-      "subtitle-mixed": "In this notification, there are more payment options: select or download the one you want to pay. Some amounts include the notification fees.",
-      "how": "Why is that?",
       "f24Models": "F24 forms",
       "pagoPANotices": "pagoPA notices",
       "download-pagoPA-notice": "Download pagoPA notice",
@@ -439,5 +434,25 @@
     "notification-timeline-reworked-description": "Events marked as INVALIDATED EVENT are not to be considered as they have been replaced by the subsequent events marked as VALIDATED EVENT.",
     "reworked-status-valid": "Validated event",
     "reworked-status-not-valid": "Invalidated event"
+  },
+  "notification-alert": {
+    "description": "The amount includes notification costs.",
+    "cta": "What are they?",
+    "details": {
+      "title": "What are notification costs?",
+      "description": "These are the expenses related to sending the communication, which vary depending on how you receive it.",
+      "how-they-work": "How do notification costs work?",
+      "base-cost": "Management cost",
+      "analog-cost": {
+        "total": "Physical mailing cost",
+        "hint": {
+          "avoided": "Mailing avoided with SEND",
+          "multiple-analog-flows": "{{count}} mailings sent"
+        }
+      },
+      "total-cost": "Total",
+      "error": "We were unable to retrieve the cost details, please try again later.",
+      "more-info": "Contact the institution that sent you the notification for more details on the costs of this communication."
+    }
   }
 }

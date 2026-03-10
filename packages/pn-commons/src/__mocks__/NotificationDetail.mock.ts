@@ -4,6 +4,8 @@ import {
   DigitalDomicileType,
   INotificationDetailTimeline,
   LegalFactType,
+  NotificationCostDetails,
+  NotificationCostDetailsStatus,
   NotificationDeliveryMode,
   NotificationDetail,
   NotificationDetailPayment,
@@ -1219,4 +1221,12 @@ export const cachedPayments: PaymentCache = {
     paymentsData.pagoPaF24,
     paymentInfo
   ),
+};
+
+export const notificationCostDetailsMock: NotificationCostDetails = {
+  status: NotificationCostDetailsStatus.OK,
+  totalCost: 1050,
+  baseCost: 200,
+  analogCost: 850,
+  numberOfAnalogCost: 1,
 };
