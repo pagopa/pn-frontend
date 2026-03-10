@@ -6,7 +6,7 @@ import { Fragment, ReactNode, useCallback, useEffect, useMemo, useState } from '
 import { useTranslation } from 'react-i18next';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 
-import { Box, Grid, Link, Paper, Stack, Typography } from '@mui/material';
+import { Alert, Box, Grid, Link, Paper, Stack, Typography } from '@mui/material';
 import {
   AccessDenied,
   ApiError,
@@ -514,16 +514,32 @@ const NotificationDetail: React.FC = () => {
   );
 
   const cancelledAlert = isCancelledOrCancelling && (
-    <MIAlert
-      severity="info"
-      description={getLocalizedOrDefaultLabel('notifications', 'detail.cancelled.message')}
-      action={{
-        label: getLocalizedOrDefaultLabel('notifications', 'detail.cancelled.cta'),
-        href: NOTIFICATION_CANCELLED_HELP_LINK,
-        target: '_blank',
-      }}
-    />
+    <Alert data-testid="cancelledAlertText" severity="warning" sx={{ mb: { xs: 2, lg: 0 } }}>
+      {t('detail.cancelled.message', { ns: 'notifiche' })}
+      <Box mt={2}>
+        <Link
+          href={NOTIFICATION_CANCELLED_HELP_LINK}
+          target="_blank"
+          rel="noopener noreferrer"
+          fontWeight={600}
+          color="#614C15"
+          underline="none"
+          sx={{ cursor: 'pointer' }}
+        >
+          {t('detail.cancelled.cta', { ns: 'notifiche' })}
+        </Link>
+      </Box>
+    </Alert>
   );
+
+  const pecUnreachableAlert = isNotificationCostBanner &&
+    historyParser.hasSimpleRegisteredLetter() && (
+      <MIAlert
+        data-testid="pecUnreachableAlertText"
+        severity="warning"
+        description={getLocalizedOrDefaultLabel('notifications', 'detail.pec-unreachable')}
+      />
+    );
 
   const trackEventPaymentRecipient = (event: EventPaymentRecipientType, param?: object) => {
     PFEventStrategyFactory.triggerEvent(
@@ -623,13 +639,7 @@ const NotificationDetail: React.FC = () => {
       {!hasNotificationReceivedApiError && (
         <Box sx={{ p: { xs: 3, lg: 0 } }}>
           {isMobile && breadcrumb}
-          {isMobile && isNotificationCostBanner && historyParser.hasSimpleRegisteredLetter() && (
-            <MIAlert
-              data-testid="pecUnreachableAlertText"
-              severity="warning"
-              description={getLocalizedOrDefaultLabel('notifications', 'detail.pec-unreachable')}
-            />
-          )}
+          {isMobile && pecUnreachableAlert}
           {isMobile && cancelledAlert}
           <Grid
             container
@@ -640,19 +650,7 @@ const NotificationDetail: React.FC = () => {
               {!isMobile && breadcrumb}
               <Stack spacing={3}>
                 {!isMobile && cancelledAlert}
-                {!isMobile &&
-                  isNotificationCostBanner &&
-                  historyParser.hasSimpleRegisteredLetter() && (
-                    <MIAlert
-                      data-testid="pecUnreachableAlertText"
-                      severity="warning"
-                      description={getLocalizedOrDefaultLabel(
-                        'notifications',
-                        'detail.pec-unreachable'
-                      )}
-                    />
-                  )}
-
+                {!isMobile && pecUnreachableAlert}
                 {!isMobile && banner}
 
                 <NotificationDetailTable rows={detailTableRows} />
