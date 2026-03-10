@@ -6,7 +6,7 @@ import { Fragment, ReactNode, useCallback, useEffect, useMemo, useState } from '
 import { useTranslation } from 'react-i18next';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 
-import { Alert, AlertTitle, Box, Grid, Link, Paper, Stack, Typography } from '@mui/material';
+import { Alert, Box, Grid, Link, Paper, Stack, Typography } from '@mui/material';
 import {
   AccessDenied,
   ApiError,
@@ -48,6 +48,7 @@ import {
   EventDeliveryFlowType,
   EventDeliveryModeType,
 } from '@pagopa-pn/pn-commons/src/models/MixpanelEvents';
+import { MIAlert } from '@pagopa/mui-italia';
 
 import DomicileBanner from '../components/DomicileBanner/DomicileBanner';
 import LoadingPageWrapper from '../components/LoadingPageWrapper/LoadingPageWrapper';
@@ -530,6 +531,15 @@ const NotificationDetail: React.FC = () => {
     </Alert>
   );
 
+  const pecUnreachableAlert = isNotificationCostBanner &&
+    historyParser.hasSimpleRegisteredLetter() && (
+      <MIAlert
+        data-testid="pecUnreachableAlertText"
+        severity="warning"
+        description={t('detail.pec-unreachable', { ns: 'notifiche' })}
+      />
+    );
+
   const trackEventPaymentRecipient = (event: EventPaymentRecipientType, param?: object) => {
     PFEventStrategyFactory.triggerEvent(
       PFEventsType[event],
@@ -628,6 +638,7 @@ const NotificationDetail: React.FC = () => {
       {!hasNotificationReceivedApiError && (
         <Box sx={{ p: { xs: 3, lg: 0 } }}>
           {isMobile && breadcrumb}
+          {isMobile && pecUnreachableAlert}
           {isMobile && cancelledAlert}
           <Grid
             container
@@ -638,12 +649,7 @@ const NotificationDetail: React.FC = () => {
               {!isMobile && breadcrumb}
               <Stack spacing={3}>
                 {!isMobile && cancelledAlert}
-                {isNotificationCostBanner && historyParser.hasSimpleRegisteredLetter() && (
-                  <Alert data-testid="pecUnreachableAlertText" severity="warning">
-                    {t('detail.pec-unreachable', { ns: 'notifiche' })}
-                  </Alert>
-                )}
-
+                {!isMobile && pecUnreachableAlert}
                 {!isMobile && banner}
 
                 <NotificationDetailTable rows={detailTableRows} />
@@ -659,12 +665,12 @@ const NotificationDetail: React.FC = () => {
                     titleVariant="h6"
                   />
                   {notification.radd && (
-                    <Alert severity={'success'} sx={{ mb: 3, mt: 2 }} data-testid="raddAlert">
-                      <AlertTitle>
-                        {t('detail.timeline.radd.title', { ns: 'notifiche' })}
-                      </AlertTitle>
-                      {t('detail.timeline.radd.description', { ns: 'notifiche' })}
-                    </Alert>
+                    <MIAlert
+                      data-testid="raddAlert"
+                      severity="success"
+                      title={t('detail.timeline.radd.title', { ns: 'notifiche' })}
+                      description={t('detail.timeline.radd.description', { ns: 'notifiche' })}
+                    />
                   )}
                 </Paper>
                 {checkIfUserHasPayments && (
