@@ -87,7 +87,8 @@ const getBannerContent = (
 ): BannerContent => {
   const title = t(`notification-cost-banner.${key}.title`);
   const message =
-    notificationCost?.status === NotificationCostDetailsStatus.OK
+    notificationCost?.status === NotificationCostDetailsStatus.OK &&
+    notificationCost?.analogCost !== undefined
       ? t(`notification-cost-banner.${key}.message`, {
           analogCost: notificationCost?.analogCost
             ? formatEurocentToCurrency(notificationCost.analogCost)
@@ -102,14 +103,20 @@ const getBannerContent = (
   const isExternalPec =
     key === 'digital_special' || key === 'digital_registry' || key === 'digital_failure';
 
-  const enableSercqMessage = isExternalPec
-    ? t('notification-cost-banner.enable-sercq.message.external-pec')
-    : t('notification-cost-banner.enable-sercq.message.default');
+  const getEnableSercqMessage = () => {
+    if (key === 'analog') {
+      return t('notification-cost-banner.enable-sercq.message.analog');
+    } else {
+      return isExternalPec
+        ? t('notification-cost-banner.enable-sercq.message.external-pec')
+        : t('notification-cost-banner.enable-sercq.message.default');
+    }
+  };
   const ctaLabel = t('notification-cost-banner.enable-sercq.cta');
 
   return {
     title,
-    message: `${message} ${enableSercqMessage}`,
+    message: `${message} ${getEnableSercqMessage()}`,
     ctaLabel,
   };
 };
