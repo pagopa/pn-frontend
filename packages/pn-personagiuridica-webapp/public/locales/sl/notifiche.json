@@ -440,7 +440,7 @@
     "cta": "Kaj so to?",
     "details": {
       "title": "Kaj so stroški obvestila?",
-      "description": "To so stroški, povezani s pošiljanjem komunikacije, ki se razlikujejo glede na način prejema.",
+      "description": "To so stroški, povezani s pošiljanjem obvestila, ki se razlikujejo glede na način, kako ga tvoje podjetje prejme.",
       "how-they-work": "Kako delujejo stroški obvestila?",
       "base-cost": "Stroški upravljanja",
       "analog-cost": {
@@ -452,7 +452,7 @@
       },
       "total-cost": "Skupaj",
       "error": "Podrobnosti o stroških ni bilo mogoče pridobiti, poskusi znova pozneje.",
-      "more-info": "Za več podrobnosti o stroških te komunikacije se obrni na organ, ki ti je poslal obvestilo."
+      "more-info": "Stopi v stik z organom, ki je poslal uradno obvestilo, za več podrobnosti o stroških tega obvestila."
     }
   }
 }

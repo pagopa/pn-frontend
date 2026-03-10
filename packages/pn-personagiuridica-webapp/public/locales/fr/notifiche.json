@@ -440,7 +440,7 @@
     "cta": "De quoi s'agit-il ?",
     "details": {
       "title": "Que sont les frais de notification ?",
-      "description": "Il s'agit des frais liés à l'envoi de la communication, qui varient selon le mode de réception.",
+      "description": "Il s'agit des frais liés à l'envoi de la communication, qui varient selon le mode de réception par ton entreprise.",
       "how-they-work": "Comment fonctionnent les frais de notification ?",
       "base-cost": "Frais de gestion",
       "analog-cost": {
@@ -452,7 +452,7 @@
       },
       "total-cost": "Total",
       "error": "Nous n'avons pas pu récupérer le détail des frais, réessaye plus tard.",
-      "more-info": "Contacte l'organisme qui t'a envoyé la notification per avoir plus de détails sur les frais de cette communication."
+      "more-info": "Contacte l'organisme qui a envoyé la notification pour avoir plus de détails sui les frais de cette communication."
     }
   }
 }
