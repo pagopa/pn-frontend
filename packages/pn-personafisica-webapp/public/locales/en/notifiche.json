@@ -76,11 +76,6 @@
     },
     "payment": {
       "title": "Payment",
-      "single-payment-subtitle": "The final amount may be different than what is indicated.",
-      "subtitle": "This notification contains multiple payment notifications: select what you want to pay. Some notifications include notification costs.",
-      "subtitle-f24": "You can pay this notification via F24. To see the details, open the forms.",
-      "subtitle-mixed": "This notification contains multiple payment options: select or download what you want to pay. Some amounts include notification costs.",
-      "how": "Why is that?",
       "f24Models": "F24 forms",
       "pagoPANotices": "pagoPA notifications",
       "download-pagoPA-notice": "Download the pagoPA notification",
@@ -491,6 +486,26 @@
         "external-pec": "Activate a digital address to choose where to receive your SEND notifications."
       },
       "cta": "Activate digital address"
+    }
+  },
+  "notification-alert": {
+    "description": "The amount includes notification costs.",
+    "cta": "What are they?",
+    "details": {
+      "title": "What are notification costs?",
+      "description": "These are the expenses related to sending the communication, which vary depending on how you receive it.",
+      "how-they-work": "How do notification costs work?",
+      "base-cost": "Management cost",
+      "analog-cost": {
+        "total": "Physical mailing cost",
+        "hint": {
+          "avoided": "Mailing avoided with SEND",
+          "multiple-analog-flows": "{{count}} mailings sent"
+        }
+      },
+      "total-cost": "Total",
+      "error": "We were unable to retrieve the cost details, please try again later.",
+      "more-info": "Contact the institution that sent you the notification for more details on the costs of this communication."
     }
   }
 }
