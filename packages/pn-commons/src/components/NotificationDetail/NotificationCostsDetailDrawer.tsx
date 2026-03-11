@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import CloseIcon from '@mui/icons-material/Close';
 import { Drawer, IconButton, Link, Stack, Typography } from '@mui/material';
 import { MIAlert } from '@pagopa/mui-italia';
 
 import { useIsMobile } from '../../hooks';
-import { EventPaymentRecipientType } from '../../models';
+import { EventAction, EventPaymentRecipientType } from '../../models';
 import {
   NotificationCostDetails,
   NotificationCostDetailsStatus,
@@ -41,6 +41,12 @@ const getDrawerContent = (costDetails: NotificationCostDetails) => {
   }
 };
 
+const alertEventProperties = {
+  banner_id: 'notification_expenses',
+  banner_page: 'dettaglio_notifica',
+  banner_landing: 'not_set',
+};
+
 const NotificationCostsDetailDrawer: React.FC<Props> = ({
   costDetails,
   costDetailsAssistanceLink,
@@ -50,7 +56,38 @@ const NotificationCostsDetailDrawer: React.FC<Props> = ({
 
   const isMobile = useIsMobile();
 
-  const toggleDrawer = () => setOpenDrawer(!openDrawer);
+  const handleCloseDrawer = () => {
+    setOpenDrawer(false);
+  };
+
+  const handleOpenDrawer = () => {
+    handleTrackEventFn(EventPaymentRecipientType.SEND_TAP_BANNER, {
+      event_type: EventAction.ACTION,
+      ...alertEventProperties,
+    });
+    setOpenDrawer(true);
+  };
+
+  const trackExternalLinkClickEvent = () => {
+    handleTrackEventFn(EventPaymentRecipientType.SEND_TAP_EXTERNAL_LINK, {
+      link: costDetailsAssistanceLink,
+    });
+  };
+
+  useEffect(() => {
+    if (openDrawer) {
+      handleTrackEventFn(EventPaymentRecipientType.SEND_NOTIFICATION_EXPENSES_DETAIL, {
+        status: costDetails.status === NotificationCostDetailsStatus.ERROR ? 'error' : 'display',
+      });
+    }
+  }, [openDrawer]);
+
+  useEffect(() => {
+    handleTrackEventFn(EventPaymentRecipientType.SEND_BANNER, {
+      event_type: EventAction.SCREEN_VIEW,
+      ...alertEventProperties,
+    });
+  }, []);
 
   return (
     <>
@@ -59,7 +96,7 @@ const NotificationCostsDetailDrawer: React.FC<Props> = ({
         description={getLocalizedOrDefaultLabel('notifications', 'notification-alert.description')}
         action={{
           label: getLocalizedOrDefaultLabel('notifications', 'notification-alert.cta'),
-          onClick: toggleDrawer,
+          onClick: handleOpenDrawer,
         }}
         data-testid="notification-costs-alert"
       />
@@ -79,7 +116,7 @@ const NotificationCostsDetailDrawer: React.FC<Props> = ({
             </Typography>
             <IconButton
               aria-label="close"
-              onClick={toggleDrawer}
+              onClick={handleCloseDrawer}
               data-testid="cost-details-drawer-close"
             >
               <CloseIcon sx={{ color: 'action.active', fontSize: '24px' }} />
@@ -95,9 +132,7 @@ const NotificationCostsDetailDrawer: React.FC<Props> = ({
               <br />
               <Link
                 href={costDetailsAssistanceLink}
-                onClick={() =>
-                  handleTrackEventFn(EventPaymentRecipientType.SEND_MULTIPAYMENT_MORE_INFO)
-                }
+                onClick={trackExternalLinkClickEvent}
                 target="_blank"
                 fontSize="16px"
                 fontWeight={600}

@@ -270,7 +270,6 @@ describe('Event Strategy Factory', () => {
       PFEventsType.SEND_ACTIVE_IO_START,
       PFEventsType.SEND_ACTIVE_IO_UX_CONVERSION,
       PFEventsType.SEND_CANCELLED_NOTIFICATION_REFOUND_INFO,
-      PFEventsType.SEND_MULTIPAYMENT_MORE_INFO,
       PFEventsType.SEND_PAYMENT_LIST_CHANGE_PAGE,
       PFEventsType.SEND_F24_DOWNLOAD,
       PFEventsType.SEND_DOWNLOAD_PAYMENT_NOTICE,
@@ -655,6 +654,18 @@ describe('Event Strategy Factory', () => {
     eventTypes.forEach((eventType) => {
       expect(factory.getStrategy(eventType)).toBeInstanceOf(UxBannerStrategy);
     });
+  });
+
+  it('should return UxExternalLinkStrategy for UX Action events of external link opening', () => {
+    expect(factory.getStrategy(PFEventsType.SEND_TAP_EXTERNAL_LINK)).toBeInstanceOf(
+      UxWithDDStateContactDetailsCustomContactTypeAndOrgNameStrategy
+    );
+  });
+
+  it('should return SendNotificationExpensesDetailStrateg for SEND_NOTIFICATION_EXPENSES_DETAIL event', () => {
+    expect(factory.getStrategy(PFEventsType.SEND_NOTIFICATION_EXPENSES_DETAIL)).toBeInstanceOf(
+      SendNotificationStatusDetailStrategy
+    );
   });
 
   it('should return null for unknown event type', () => {
