@@ -95,6 +95,7 @@ const NotificationDetailTimeline = ({
   const timelineComponent = statusHistory.map((t, i) => (
     <NotificationDetailTimelineStep
       timelineStep={t}
+      statusHistory={statusHistory}
       recipients={recipients}
       position={getPosition(i)}
       clickHandler={clickHandler}
@@ -142,6 +143,7 @@ const NotificationDetailTimeline = ({
         {isMobile && statusHistory.length > 0 ? (
           <NotificationDetailTimelineStep
             timelineStep={statusHistory[0]}
+            statusHistory={statusHistory}
             recipients={recipients}
             position="first"
             clickHandler={clickHandler}

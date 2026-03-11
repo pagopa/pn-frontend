@@ -34,6 +34,7 @@ import ReworkedStatusTag from './ReworkedStatusTag';
 
 type Props = {
   timelineStep: NotificationStatusHistory;
+  statusHistory: Array<NotificationStatusHistory>;
   recipients: Array<NotificationDetailRecipient>;
   clickHandler: (legalFactId: LegalFactId) => void;
   position?: 'first' | 'last' | 'middle';
@@ -113,6 +114,7 @@ const TimelineStepCmp: React.FC<StepProps> = ({
 
 const NotificationDetailTimelineStep = ({
   timelineStep,
+  statusHistory,
   recipients,
   clickHandler,
   position = 'middle',
@@ -136,7 +138,11 @@ const NotificationDetailTimelineStep = ({
   let visibleSteps: Array<INotificationDetailTimeline> = [];
   /* eslint-enable functional/no-let */
 
-  const notificationStatusInfos = getNotificationStatusInfos(timelineStep, { recipients });
+  const notificationStatusInfos = getNotificationStatusInfos(timelineStep, {
+    statusHistory,
+    recipients,
+    isParty,
+  });
 
   if (timelineStep.steps) {
     /* eslint-disable functional/immutable-data */
