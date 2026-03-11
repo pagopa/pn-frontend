@@ -1,7 +1,6 @@
 import { EventAction, EventCategory, EventPropertyType } from '@pagopa-pn/pn-commons';
 
 import { SendNotificationExpensesDetailStrategy } from '../SendNotificationExpensesDetailStrategy';
-import { SendNotificationStatusDetailStrategy } from '../SendNotificationStatusDetail';
 
 describe('Mixpanel - Send Notification Expenses Detail Strategy', () => {
   it('should return notification expenses detail event - Status display', () => {

@@ -23,6 +23,7 @@ import { SendHasMandateGivenStrategy } from '../Strategies/SendHasMandateGivensS
 import { SendHasMandateLoginStrategy } from '../Strategies/SendHasMandateLoginStrategy';
 import { SendHasMandateStrategy } from '../Strategies/SendHasMandateStrategy';
 import { SendNotificationCountStrategy } from '../Strategies/SendNotificationCount';
+import { SendNotificationExpensesDetailStrategy } from '../Strategies/SendNotificationExpensesDetailStrategy';
 import { SendNotificationStatusDetailStrategy } from '../Strategies/SendNotificationStatusDetail';
 import { SendPaymentDetailErrorStrategy } from '../Strategies/SendPaymentDetailErrorStrategy';
 import { SendPaymentOutcomeStrategy } from '../Strategies/SendPaymentOutcomeStrategy';
@@ -48,6 +49,7 @@ import { UXPspActionStrategy } from '../Strategies/UXPspActionStrategy';
 import { UXScreenViewStrategy } from '../Strategies/UXScreenViewStrategy';
 import { UxBannerStrategy } from '../Strategies/UxBannerStrategy';
 import { UXConfirmStrategy } from '../Strategies/UxConfirmStrategy';
+import { UxExternalLinkStrategy } from '../Strategies/UxExternalLinkStrategy';
 import { UxWithContactDetailsAndOtherContactStrategy } from '../Strategies/UxWithContactDetailsAndOtherContactStrategy';
 import { UxWithDDStateContactDetailsAndOtherContactStrategy } from '../Strategies/UxWithDDStateContactDetailsAndOtherContactStrategy';
 import { UxWithDDStateContactDetailsCustomContactTypeAndOrgNameStrategy } from '../Strategies/UxWithDDStateContactDetailsCustomContactTypeAndOrgNameStrategy';
@@ -658,13 +660,13 @@ describe('Event Strategy Factory', () => {
 
   it('should return UxExternalLinkStrategy for UX Action events of external link opening', () => {
     expect(factory.getStrategy(PFEventsType.SEND_TAP_EXTERNAL_LINK)).toBeInstanceOf(
-      UxWithDDStateContactDetailsCustomContactTypeAndOrgNameStrategy
+      UxExternalLinkStrategy
     );
   });
 
   it('should return SendNotificationExpensesDetailStrateg for SEND_NOTIFICATION_EXPENSES_DETAIL event', () => {
     expect(factory.getStrategy(PFEventsType.SEND_NOTIFICATION_EXPENSES_DETAIL)).toBeInstanceOf(
-      SendNotificationStatusDetailStrategy
+      SendNotificationExpensesDetailStrategy
     );
   });
 

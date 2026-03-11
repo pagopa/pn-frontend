@@ -1,7 +1,5 @@
 import { EventAction, EventCategory, EventPropertyType } from '@pagopa-pn/pn-commons';
 
-import { SendNotificationExpensesDetailStrategy } from '../SendNotificationExpensesDetailStrategy';
-import { SendNotificationStatusDetailStrategy } from '../SendNotificationStatusDetail';
 import { UxExternalLinkStrategy } from '../UxExternalLinkStrategy';
 
 describe('Mixpanel - UX External Link Strategy', () => {
