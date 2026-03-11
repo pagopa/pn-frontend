@@ -6,7 +6,7 @@ import { Fragment, ReactNode, useCallback, useEffect, useMemo, useState } from '
 import { useTranslation } from 'react-i18next';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 
-import { Alert, Box, Grid, Link, Paper, Stack, Typography } from '@mui/material';
+import { Box, Grid, Paper, Stack, Typography } from '@mui/material';
 import {
   AccessDenied,
   ApiError,
@@ -76,6 +76,8 @@ import { getConfiguration } from '../services/configuration.service';
 import { ServerResponseErrorCode } from '../utility/AppError/types';
 import PFEventStrategyFactory from '../utility/MixpanelUtils/PFEventStrategyFactory';
 
+const { NOTIFICATION_CANCELLED_HELP_LINK } = getConfiguration();
+
 const NotificationDetail: React.FC = () => {
   const { id, mandateId } = useParams();
   const location = useLocation();
@@ -97,7 +99,6 @@ const NotificationDetail: React.FC = () => {
   const {
     F24_DOWNLOAD_WAIT_TIME,
     DOWNTIME_EXAMPLE_LINK,
-    NOTIFICATION_CANCELLED_HELP_LINK,
     NOTIFICATION_COST_DETAILS_ASSISTANCE_LINK,
   } = getConfiguration();
   const navigate = useNavigate();
@@ -524,22 +525,17 @@ const NotificationDetail: React.FC = () => {
   );
 
   const cancelledAlert = isCancelledOrCancelling && (
-    <Alert data-testid="cancelledAlertText" severity="warning" sx={{ mb: { xs: 2, lg: 0 } }}>
-      {t('detail.cancelled.message', { ns: 'notifiche' })}
-      <Box mt={2}>
-        <Link
-          href={NOTIFICATION_CANCELLED_HELP_LINK}
-          target="_blank"
-          rel="noopener noreferrer"
-          fontWeight={600}
-          color="#614C15"
-          underline="none"
-          sx={{ cursor: 'pointer' }}
-        >
-          {t('detail.cancelled.cta', { ns: 'notifiche' })}
-        </Link>
-      </Box>
-    </Alert>
+    <Box sx={{ mb: { xs: 2, lg: 0 } }}>
+      <MIAlert
+        data-testid="cancelledAlertText"
+        severity="warning"
+        description={t('detail.cancelled.message', { ns: 'notifiche' })}
+        action={{
+          label: t('detail.cancelled.cta', { ns: 'notifiche' }),
+          href: NOTIFICATION_CANCELLED_HELP_LINK,
+        }}
+      />
+    </Box>
   );
 
   const pecUnreachableAlert = isNotificationCostBanner &&
