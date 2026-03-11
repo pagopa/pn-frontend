@@ -3,7 +3,7 @@ import { Fragment, ReactNode, useCallback, useEffect, useMemo, useState } from '
 import { useTranslation } from 'react-i18next';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 
-import { Alert, AlertTitle, Box, Grid, Link, Paper, Stack, Typography } from '@mui/material';
+import { Alert, AlertTitle, Box, Grid, Paper, Stack, Typography } from '@mui/material';
 import {
   ApiError,
   ApiErrorWrapper,
