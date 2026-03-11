@@ -485,6 +485,7 @@
     "enable-sercq": {
       "message": {
         "default": "Active un domicile numérique pour recevoir tes prochaines notifications uniquement au format numérique.",
+        "digital-failure": "Activez SEND comme domicile numérique pour vous épargner des frais comme celui-ci.",
         "external-pec": "Active un domicile numérique pour choisir où recevoir tes notifications SEND."
       },
       "cta": "Activer le domicile numérique"

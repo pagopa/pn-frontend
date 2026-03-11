@@ -485,6 +485,7 @@
     "enable-sercq": {
       "message": {
         "default": "Activate a digital address to receive future notifications digitally only.",
+        "digital-failure": "Activate SEND as your digital address to save on costs like this.",
         "external-pec": "Activate a digital address to choose where to receive your SEND notifications."
       },
       "cta": "Activate digital address"
