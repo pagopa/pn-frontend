@@ -33,6 +33,7 @@ import {
   useIsCancelled,
   useIsMobile,
 } from '@pagopa-pn/pn-commons';
+import { MIAlert } from '@pagopa/mui-italia';
 
 import DomicileBanner from '../components/DomicileBanner/DomicileBanner';
 import LoadingPageWrapper from '../components/LoadingPageWrapper/LoadingPageWrapper';
@@ -377,22 +378,19 @@ const NotificationDetail = () => {
   );
 
   const cancelledAlert = isCancelledOrCancelling && (
-    <Alert data-testid="cancelledAlertText" severity="warning" sx={{ mb: { xs: 2, lg: 0 } }}>
-      {t('detail.cancelled.message', { ns: 'notifiche' })}
-      <Box mt={2}>
-        <Link
-          href={NOTIFICATION_CANCELLED_HELP_LINK}
-          target="_blank"
-          rel="noopener noreferrer"
-          fontWeight={600}
-          color="#614C15"
-          underline="none"
-          sx={{ cursor: 'pointer' }}
-        >
-          {t('detail.cancelled.cta', { ns: 'notifiche' })}
-        </Link>
-      </Box>
-    </Alert>
+    <Box sx={{ mb: { xs: 2, lg: 0 } }}>
+      <MIAlert
+        data-testid="cancelledAlertText"
+        severity="warning"
+        description={t('detail.cancelled.message', { ns: 'notifiche' })}
+        action={{
+          label: t('detail.cancelled.cta', { ns: 'notifiche' }),
+          href: NOTIFICATION_CANCELLED_HELP_LINK,
+          rel: 'noopener noreferrer',
+          target: '_blank',
+        }}
+      />
+    </Box>
   );
 
   const visibleDomicileBanner = () =>

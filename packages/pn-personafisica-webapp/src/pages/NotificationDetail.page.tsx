@@ -6,7 +6,7 @@ import { Fragment, ReactNode, useCallback, useEffect, useMemo, useState } from '
 import { useTranslation } from 'react-i18next';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 
-import { Box, Grid, Paper, Stack, Typography } from '@mui/material';
+import { Alert, AlertTitle, Box, Grid, Paper, Stack, Typography } from '@mui/material';
 import {
   AccessDenied,
   ApiError,
@@ -76,8 +76,6 @@ import { getConfiguration } from '../services/configuration.service';
 import { ServerResponseErrorCode } from '../utility/AppError/types';
 import PFEventStrategyFactory from '../utility/MixpanelUtils/PFEventStrategyFactory';
 
-const { NOTIFICATION_CANCELLED_HELP_LINK } = getConfiguration();
-
 const NotificationDetail: React.FC = () => {
   const { id, mandateId } = useParams();
   const location = useLocation();
@@ -100,6 +98,7 @@ const NotificationDetail: React.FC = () => {
     F24_DOWNLOAD_WAIT_TIME,
     DOWNTIME_EXAMPLE_LINK,
     NOTIFICATION_COST_DETAILS_ASSISTANCE_LINK,
+    NOTIFICATION_CANCELLED_HELP_LINK,
   } = getConfiguration();
   const navigate = useNavigate();
 
@@ -533,6 +532,8 @@ const NotificationDetail: React.FC = () => {
         action={{
           label: t('detail.cancelled.cta', { ns: 'notifiche' }),
           href: NOTIFICATION_CANCELLED_HELP_LINK,
+          rel: 'noopener noreferrer',
+          target: '_blank',
         }}
       />
     </Box>
@@ -672,12 +673,12 @@ const NotificationDetail: React.FC = () => {
                     titleVariant="h6"
                   />
                   {notification.radd && (
-                    <MIAlert
-                      data-testid="raddAlert"
-                      severity="success"
-                      title={t('detail.timeline.radd.title', { ns: 'notifiche' })}
-                      description={t('detail.timeline.radd.description', { ns: 'notifiche' })}
-                    />
+                    <Alert severity={'success'} sx={{ mb: 3, mt: 2 }} data-testid="raddAlert">
+                      <AlertTitle>
+                        {t('detail.timeline.radd.title', { ns: 'notifiche' })}
+                      </AlertTitle>
+                      {t('detail.timeline.radd.description', { ns: 'notifiche' })}
+                    </Alert>
                   )}
                 </Paper>
                 {checkIfUserHasPayments && (
