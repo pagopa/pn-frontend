@@ -425,15 +425,19 @@
     "canceled-tooltip": "Organizacija je preklicala pošiljanje obvestila",
     "canceled-description": "Organizacija je preklicala pošiljanje obvestila.",
     "returned-to-sender": "Vrnjeno pošiljatelju",
-    "returned-to-sender-tooltip-monorecipient": "Prejemnik je umrl",
+    "returned-to-sender-multirecipient": "Vrnjeno pošiljatelju",
+    "returned-to-sender-tooltip": "Prejemnik je umrl",
     "returned-to-sender-tooltip-multirecipient": "Vsi prejemniki so umrli",
-    "returned-to-sender-description-monorecipient": "Prejemnik je umrl.",
+    "returned-to-sender-description": "Prejemnik je umrl.",
     "returned-to-sender-description-multirecipient": "Vsi prejemniki so umrli.",
     "notification-timeline-reworked": "Posodobljen dogodek ali več dogodkov",
     "notification-timeline-reworked-tooltip": "Posodobljen dogodek ali več dogodkov",
     "notification-timeline-reworked-description": "Dogodkov, označenih z NEVALIDIRAN DOGODEK, ne upoštevajte, saj so jih nadomestili naslednji dogodki, označeni z VALIDIRAN DOGODEK.",
     "reworked-status-valid": "Validiran dogodek",
-    "reworked-status-not-valid": "Nevalidiran dogodek"
+    "reworked-status-not-valid": "Nevalidiran dogodek",
+    "cancellation-in-progress": "Preklicano",
+    "cancellation-in-progress-tooltip": "Preklic poteka. Stanje bo kmalu posodobljeno.",
+    "cancellation-in-progress-description": "Preklic poteka. Stanje bo kmalu posodobljeno."
   },
   "notification-alert": {
     "description": "Znesek vključuje stroške obvestila.",

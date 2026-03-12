@@ -429,15 +429,19 @@
     "canceled-tooltip": "Die Körperschaft hat den Versand der Zustellung abgebrochen",
     "canceled-description": "Die Körperschaft hat den Versand der Zustellung abgebrochen.",
     "returned-to-sender": "Rücksendung an den Absender",
-    "returned-to-sender-tooltip-monorecipient": "Der Empfänger ist verstorben",
+    "returned-to-sender-multirecipient": "Rücksendung an den Absender",
+    "returned-to-sender-tooltip": "Der Empfänger ist verstorben",
     "returned-to-sender-tooltip-multirecipient": "Alle Empfänger sind verstorben",
-    "returned-to-sender-description-monorecipient": "Der Empfänger ist verstorben.",
+    "returned-to-sender-description": "Der Empfänger ist verstorben.",
     "returned-to-sender-description-multirecipient": "Alle Empfänger sind verstorben.",
     "notification-timeline-reworked": "Aktualisiertes Ereignis oder mehrere aktualisierte Ereignisse",
     "notification-timeline-reworked-tooltip": "Aktualisiertes Ereignis oder mehrere aktualisierte Ereignisse",
     "notification-timeline-reworked-description": "Ereignisse, die als INVALIDIERTES EREIGNIS gekennzeichnet sind, sind nicht zu berücksichtigen, da sie durch nachfolgende Ereignisse ersetzt wurden, die als VALIDIERTES EREIGNIS gekennzeichnet sind.",
     "reworked-status-valid": "Validiertes Ereignis",
-    "reworked-status-not-valid": "Invalidiertes Ereignis"
+    "reworked-status-not-valid": "Invalidiertes Ereignis",
+    "cancellation-in-progress": "Annulliert",
+    "cancellation-in-progress-tooltip": "Annullierung in Bearbeitung. Der Status wird in Kürze aktualisiert.",
+    "cancellation-in-progress-description": "Annullierung in Bearbeitung. Der Status wird in Kürze aktualisiert."
   },
   "tppLanding": {
     "title": "Hallo,\nSie haben eine Mitteilung mit Rechtswirkung erhalten",
