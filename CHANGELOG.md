@@ -3,6 +3,23 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.22.0-RC.1](https://github.com/pagopa/pn-frontend/compare/v2.22.0-RC.0...v2.22.0-RC.1) (2026-03-12)
+
+
+### Bug Fixes
+
+* **PN-18582:** update copy of PG notification cost details drawer ([#1782](https://github.com/pagopa/pn-frontend/issues/1782)) ([5bff15c](https://github.com/pagopa/pn-frontend/commit/5bff15ce358372ce7a559055c1e6d14fc81dd164))
+
+
+### Features
+
+* **PN-18585:** [CTA INPS] differentiate the contents based on the status of the registered letter ([#1772](https://github.com/pagopa/pn-frontend/issues/1772)) ([8aa9f97](https://github.com/pagopa/pn-frontend/commit/8aa9f97545c12875aa297952c00af72d4303f7e4))
+* **PN-18719:** track Mixpanel events of notification cost details ([#1785](https://github.com/pagopa/pn-frontend/issues/1785)) ([e993aea](https://github.com/pagopa/pn-frontend/commit/e993aea251e3aef7b248d8e899223ce4f55c8639))
+
+
+
+
+
 # [2.22.0-RC.0](https://github.com/pagopa/pn-frontend/compare/v2.21.0...v2.22.0-RC.0) (2026-03-10)
 
 

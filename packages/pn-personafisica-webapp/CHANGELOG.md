@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.22.0-RC.1](https://github.com/pagopa/pn-frontend/compare/v2.22.0-RC.0...v2.22.0-RC.1) (2026-03-12)
+
+
+### Features
+
+* **PN-18719:** track Mixpanel events of notification cost details ([#1785](https://github.com/pagopa/pn-frontend/issues/1785)) ([e993aea](https://github.com/pagopa/pn-frontend/commit/e993aea251e3aef7b248d8e899223ce4f55c8639))
+
+
+
+
+
 # [2.22.0-RC.0](https://github.com/pagopa/pn-frontend/compare/v2.21.0...v2.22.0-RC.0) (2026-03-10)
 
 
