@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.22.0-RC.3](https://github.com/pagopa/pn-frontend/compare/v2.22.0-RC.2...v2.22.0-RC.3) (2026-03-12)
+
+
+### Bug Fixes
+
+* **PN-18935:** add notification cancellation in progress labels and fix returned to sender's labels ([#1786](https://github.com/pagopa/pn-frontend/issues/1786)) ([bea4ad4](https://github.com/pagopa/pn-frontend/commit/bea4ad43bb83a4388d39120a425069d935060912))
+
+
+
+
+
 # [2.22.0-RC.1](https://github.com/pagopa/pn-frontend/compare/v2.22.0-RC.0...v2.22.0-RC.1) (2026-03-12)
 
 
