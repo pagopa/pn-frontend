@@ -117,8 +117,8 @@ const getBannerContent = (
     key === 'digital_special' || key === 'digital_registry' || key === 'digital_failure';
 
   const getEnableSercqMessage = () => {
-    if (key === 'digital_failure') {
-      return t('notification-cost-banner.enable-sercq.message.digital-failure');
+    if (key === 'analog') {
+      return t('notification-cost-banner.enable-sercq.message.analog');
     } else {
       return isExternalPec
         ? t('notification-cost-banner.enable-sercq.message.external-pec')

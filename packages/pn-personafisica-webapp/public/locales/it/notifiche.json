@@ -485,7 +485,7 @@
     "enable-sercq": {
       "message": {
         "default": "Attiva un domicilio digitale per ricevere le prossime notifiche solo in digitale.",
-        "digital-failure": "Attiva SEND come domicilio digitale per risparmiarti spese come questa.",
+        "analog": "Attiva un domicilio digitale per risparmiarti spese come questa.",
         "external-pec": "Attiva un domicilio digitale per scegliere dove ricevere le tue notifiche SEND."
       },
       "cta": "Attiva domicilio digitale"
