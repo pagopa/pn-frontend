@@ -485,6 +485,7 @@
     "enable-sercq": {
       "message": {
         "default": "Aktiviere eine digitale Adresse, um künftige Zustellungen nur noch digital zu erhalten.",
+        "analog": "Aktivieren Sie SEND als digitale Adresse, um sich Kosten wie diese zu ersparen.",
         "external-pec": "Aktiviere eine digitale Adresse, um zu wählen, wo du deine SEND-Zustellungen erhalten möchtest."
       },
       "cta": "Digitale Adresse aktivieren"
