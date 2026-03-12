@@ -2,6 +2,7 @@ import React, { memo, useEffect, useState } from 'react';
 
 import { Download } from '@mui/icons-material/';
 import { Alert, Box, Button, FormControl, RadioGroup, Stack, Typography } from '@mui/material';
+import { MIAlert } from '@pagopa/mui-italia';
 
 import { downloadDocument } from '../../hooks/useDownloadDocument';
 import { EventPaymentRecipientType } from '../../models/MixpanelEvents';
@@ -197,9 +198,14 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
       </Typography>
 
       {isCancelled && (
-        <Alert data-testid="cancelledAlertPayment" severity="info">
-          {getLocalizedOrDefaultLabel('notifications', 'detail.payment.cancelled-message')}
-        </Alert>
+        <MIAlert
+          data-testid="cancelledAlertPayment"
+          severity="info"
+          description={getLocalizedOrDefaultLabel(
+            'notifications',
+            'detail.payment.cancelled-message'
+          )}
+        />
       )}
 
       {!isCancelled && costDetails && (

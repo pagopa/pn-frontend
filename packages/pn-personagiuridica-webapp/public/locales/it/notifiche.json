@@ -440,7 +440,7 @@
     "cta": "Cosa sono?",
     "details": {
       "title": "Cosa sono i costi di notifica?",
-      "description": "Sono le spese correlate all’invio della comunicazione, che variano a seconda della modalità con cui la ricevi.",
+      "description": "Sono le spese correlate all’invio della comunicazione, che variano a seconda della modalità con cui viene ricevuta dalla tua impresa.",
       "how-they-work": "Come funzionano i costi di notifica?",
       "base-cost": "Costo di gestione",
       "analog-cost": {
@@ -452,7 +452,7 @@
       },
       "total-cost": "Totale",
       "error": "Non siamo riusciti a recuperare il dettaglio dei costi, riprova più tardi.",
-      "more-info": "Contatta l’ente che ti ha inviato la notifica per avere maggiori dettagli sui costi di questa comunicazione."
+      "more-info": "Contatta l’ente che ha inviato la notifica per avere maggiori dettagli sui costi di questa comunicazione."
     }
   }
 }

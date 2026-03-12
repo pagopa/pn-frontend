@@ -5,12 +5,15 @@ import { useNavigate } from 'react-router-dom';
 
 import SavingsOutlinedIcon from '@mui/icons-material/SavingsOutlined';
 import { Box } from '@mui/material';
+import type { NotificationCostDetails } from '@pagopa-pn/pn-commons';
 import {
   DeliveryOutcome,
   DeliveryOutcomeType,
   DigitalDomicileType,
   DigitalSource,
   EventAction,
+  NotificationCostDetailsStatus,
+  formatEurocentToCurrency,
 } from '@pagopa-pn/pn-commons';
 import { Banner } from '@pagopa/mui-italia';
 
@@ -28,6 +31,7 @@ import PFEventStrategyFactory from '../../utility/MixpanelUtils/PFEventStrategyF
 
 type Props = {
   deliveryOutcome: DeliveryOutcome | null;
+  notificationCost?: NotificationCostDetails;
 };
 
 type BannerContent = {
@@ -73,9 +77,37 @@ const resolveBannerKey = (deliveryOutcome: DeliveryOutcome | null): BannerKey =>
   }
 };
 
-const getBannerContent = (key: BannerKey, isDDomActive: boolean, t: TFunction): BannerContent => {
+const showCost = (key: BannerKey) => key === 'analog' || key === 'digital_failure';
+
+const getBannerMessage = (
+  key: BannerKey,
+  t: TFunction,
+  notificationCost?: NotificationCostDetails
+) => {
+  if (!showCost(key)) {
+    return t(`notification-cost-banner.${key}.message`);
+  }
+
+  if (
+    notificationCost?.status === NotificationCostDetailsStatus.OK &&
+    notificationCost.analogCost !== undefined
+  ) {
+    return t(`notification-cost-banner.${key}.message`, {
+      analogCost: formatEurocentToCurrency(notificationCost.analogCost),
+    });
+  } else {
+    return t(`notification-cost-banner.${key}.fallback`);
+  }
+};
+
+const getBannerContent = (
+  key: BannerKey,
+  isDDomActive: boolean,
+  t: TFunction,
+  notificationCost?: NotificationCostDetails
+): BannerContent => {
   const title = t(`notification-cost-banner.${key}.title`);
-  const message = t(`notification-cost-banner.${key}.message`);
+  const message = getBannerMessage(key, t, notificationCost);
 
   if (key === 'digital_platform' || isDDomActive) {
     return { title, message };
@@ -84,19 +116,25 @@ const getBannerContent = (key: BannerKey, isDDomActive: boolean, t: TFunction): 
   const isExternalPec =
     key === 'digital_special' || key === 'digital_registry' || key === 'digital_failure';
 
-  const enableSercqMessage = isExternalPec
-    ? t('notification-cost-banner.enable-sercq.message.external-pec')
-    : t('notification-cost-banner.enable-sercq.message.default');
+  const getEnableSercqMessage = () => {
+    if (key === 'analog') {
+      return t('notification-cost-banner.enable-sercq.message.analog');
+    } else {
+      return isExternalPec
+        ? t('notification-cost-banner.enable-sercq.message.external-pec')
+        : t('notification-cost-banner.enable-sercq.message.default');
+    }
+  };
   const ctaLabel = t('notification-cost-banner.enable-sercq.cta');
 
   return {
     title,
-    message: `${message} ${enableSercqMessage}`,
+    message: `${message} ${getEnableSercqMessage()}`,
     ctaLabel,
   };
 };
 
-export const NotificationCostBanner: React.FC<Props> = ({ deliveryOutcome }) => {
+export const NotificationCostBanner: React.FC<Props> = ({ deliveryOutcome, notificationCost }) => {
   const { defaultSERCQ_SENDAddress, defaultPECAddress, addresses } = useAppSelector(
     contactsSelectors.selectAddresses
   );
@@ -110,7 +148,12 @@ export const NotificationCostBanner: React.FC<Props> = ({ deliveryOutcome }) => 
   const handleClose = () => setIsVisible(false);
 
   const bannerKey = resolveBannerKey(deliveryOutcome);
-  const { title, message, ctaLabel } = getBannerContent(bannerKey, isDDomActive, t);
+  const { title, message, ctaLabel } = getBannerContent(
+    bannerKey,
+    isDDomActive,
+    t,
+    notificationCost
+  );
   const showCta = !(bannerKey === 'digital_platform' || isDDomActive);
 
   const triggerMixpanelEvent = (name: PFEventsType, type: EventAction) => {

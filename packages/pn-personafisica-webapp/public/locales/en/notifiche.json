@@ -457,12 +457,14 @@
   },
   "notification-cost-banner": {
     "analog": {
-      "title": "With SEND you can save!",
-      "message": "You did not open the digital notification in time, so it was not possible to avoid registered mail and its associated costs."
+      "title": "Save money with SEND!",
+      "message": "One or more registered mail have been sent to you on behalf of the issuing institution at a total cost of {{analogCost}}, because this notification was not opened on digital channels within the required timeframes.",
+      "fallback": "One or more registered mail have been sent to you on behalf of the issuing institution because this notification was not opened on digital channels within the required timeframes. This will result in additional costs for you."
     },
     "digital_failure": {
-      "title": "With SEND you can save!",
-      "message": "We were unable to deliver the notification to your PEC, so a registered mail has been sent to you with the relative costs."
+      "title": "Save money with SEND!",
+      "message": "We were unable to deliver the notification to your certified e-mail (PEC), so a registered mail was sent to you at a cost of {{analogCost}}.",
+      "fallback": "We were unable to deliver the notification to your certified e-mail (PEC), so a registered mail was sent to you. This will result in additional costs for you."
     },
     "digital_platform": {
       "title": "With SEND you have saved!",

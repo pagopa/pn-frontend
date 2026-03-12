@@ -26,7 +26,7 @@ const ActionButton: React.FC<{
   <ButtonNaked
     color="primary"
     data-testid="goToNotificationDetail"
-    onClick={() => handleRowClick && handleRowClick(iun, mandateId)}
+    onClick={() => handleRowClick?.(iun, mandateId)}
     endIcon={<ArrowForwardIosIcon />}
     aria-label={getLocalizedOrDefaultLabel('notifications', 'table.aria-action-table', undefined, {
       iun,
