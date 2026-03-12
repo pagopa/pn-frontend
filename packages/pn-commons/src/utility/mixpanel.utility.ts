@@ -14,6 +14,7 @@ export function mixpanelInit(mixpanelToken: string, nodeEnv: string): void {
     mixpanel.init(mixpanelToken, {
       api_host: 'https://api-eu.mixpanel.com',
       persistence: 'localStorage',
+      // disable UTM persistence
       stop_utm_persistence: true,
       // if this is true, Mixpanel will automatically determine
       // City, Region and Country data using the IP address of
