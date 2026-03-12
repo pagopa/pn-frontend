@@ -425,15 +425,19 @@
     "canceled-tooltip": "The organisation has cancelled the sending of the notification",
     "canceled-description": "The organisation has cancelled the sending of the notification.",
     "returned-to-sender": "Returned to sender",
-    "returned-to-sender-tooltip-monorecipient": "The recipient is deceased",
+    "returned-to-sender-multirecipient": "Returned to sender",
+    "returned-to-sender-tooltip": "The recipient is deceased",
     "returned-to-sender-tooltip-multirecipient": "All recipients are deceased",
-    "returned-to-sender-description-monorecipient": "The recipient is deceased.",
+    "returned-to-sender-description": "The recipient is deceased.",
     "returned-to-sender-description-multirecipient": "All recipients are deceased.",
     "notification-timeline-reworked": "Updated event or events",
     "notification-timeline-reworked-tooltip": "Updated event or events",
     "notification-timeline-reworked-description": "Events marked as INVALIDATED EVENT are not to be considered as they have been replaced by the subsequent events marked as VALIDATED EVENT.",
     "reworked-status-valid": "Validated event",
-    "reworked-status-not-valid": "Invalidated event"
+    "reworked-status-not-valid": "Invalidated event",
+    "cancellation-in-progress": "Cancelled",
+    "cancellation-in-progress-tooltip": "Cancellation in progress. The status will be updated shortly.",
+    "cancellation-in-progress-description": "Cancellation in progress. The status will be updated shortly."
   },
   "notification-alert": {
     "description": "The amount includes notification costs.",

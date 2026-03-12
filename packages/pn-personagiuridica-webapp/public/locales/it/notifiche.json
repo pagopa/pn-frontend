@@ -425,15 +425,19 @@
     "canceled-tooltip": "L'ente ha annullato l'invio della notifica",
     "canceled-description": "L'ente ha annullato l'invio della notifica.",
     "returned-to-sender": "Resa al mittente",
-    "returned-to-sender-tooltip-monorecipient": "Il destinatario risulta deceduto",
+    "returned-to-sender-multirecipient": "Resa al mittente",
+    "returned-to-sender-tooltip": "Il destinatario risulta deceduto",
     "returned-to-sender-tooltip-multirecipient": "Tutti i destinatari risultano deceduti",
-    "returned-to-sender-description-monorecipient": "Il destinatario risulta deceduto.",
+    "returned-to-sender-description": "Il destinatario risulta deceduto.",
     "returned-to-sender-description-multirecipient": "Tutti i destinatari risultano deceduti.",
     "notification-timeline-reworked": "Evento o più eventi aggiornati",
     "notification-timeline-reworked-tooltip": "Evento o più eventi aggiornati",
     "notification-timeline-reworked-description": "Gli eventi contrassegnati con EVENTO INVALIDATO non vanno considerati in quanto sostituiti dagli eventi successivi contrassegnati con EVENTO VALIDATO.",
     "reworked-status-valid": "Evento validato",
-    "reworked-status-not-valid": "Evento invalidato"
+    "reworked-status-not-valid": "Evento invalidato",
+    "cancellation-in-progress": "Annullata",
+    "cancellation-in-progress-tooltip": "Annullamento in corso. Lo stato sarà aggiornato a breve.",
+    "cancellation-in-progress-description": "Annullamento in corso. Lo stato sarà aggiornato a breve."
   },
   "notification-alert": {
     "description": "L’importo comprende i costi di notifica.",

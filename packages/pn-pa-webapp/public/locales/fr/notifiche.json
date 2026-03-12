@@ -416,6 +416,7 @@
     "canceled-tooltip": "L’organisme a annulé l’envoi de la notification",
     "canceled-description": "L’organisme a annulé l’envoi de la notification.",
     "returned-to-sender": "Retour à l'expéditeur",
+    "returned-to-sender-multirecipient": "Retour à l'expéditeur",
     "returned-to-sender-tooltip": "Le destinataire est décédé",
     "returned-to-sender-tooltip-multirecipient": "Tous les destinataires sont décédés",
     "returned-to-sender-description": "Le destinataire est décédé.",
@@ -424,7 +425,10 @@
     "notification-timeline-reworked-tooltip": "Événement ou plusieurs événements mis à jour",
     "notification-timeline-reworked-description": "Les événements marqués ÉVÉNEMENT INVALIDÉ ne devono pas être pris en compte, car ils ont été remplacés par les événements suivants marqués ÉVÉNEMENT VALIDÉ.",
     "reworked-status-valid": "Événement validé",
-    "reworked-status-not-valid": "Événement invalidé"
+    "reworked-status-not-valid": "Événement invalidé",
+    "cancellation-in-progress": "Annulée",
+    "cancellation-in-progress-tooltip": "Annulation en cours. Le statut sera mis à jour sous peu.",
+    "cancellation-in-progress-description": "Annulation en cours. Le statut sera mis à jour sous peu."
   },
   "new-notification": {
     "title": "Envoyer une nouvelle notification",
