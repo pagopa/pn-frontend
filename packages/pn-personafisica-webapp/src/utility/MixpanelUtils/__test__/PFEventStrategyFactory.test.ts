@@ -23,6 +23,7 @@ import { SendHasMandateGivenStrategy } from '../Strategies/SendHasMandateGivensS
 import { SendHasMandateLoginStrategy } from '../Strategies/SendHasMandateLoginStrategy';
 import { SendHasMandateStrategy } from '../Strategies/SendHasMandateStrategy';
 import { SendNotificationCountStrategy } from '../Strategies/SendNotificationCount';
+import { SendNotificationExpensesDetailStrategy } from '../Strategies/SendNotificationExpensesDetailStrategy';
 import { SendNotificationStatusDetailStrategy } from '../Strategies/SendNotificationStatusDetail';
 import { SendPaymentDetailErrorStrategy } from '../Strategies/SendPaymentDetailErrorStrategy';
 import { SendPaymentOutcomeStrategy } from '../Strategies/SendPaymentOutcomeStrategy';
@@ -48,6 +49,7 @@ import { UXPspActionStrategy } from '../Strategies/UXPspActionStrategy';
 import { UXScreenViewStrategy } from '../Strategies/UXScreenViewStrategy';
 import { UxBannerStrategy } from '../Strategies/UxBannerStrategy';
 import { UXConfirmStrategy } from '../Strategies/UxConfirmStrategy';
+import { UxExternalLinkStrategy } from '../Strategies/UxExternalLinkStrategy';
 import { UxWithContactDetailsAndOtherContactStrategy } from '../Strategies/UxWithContactDetailsAndOtherContactStrategy';
 import { UxWithDDStateContactDetailsAndOtherContactStrategy } from '../Strategies/UxWithDDStateContactDetailsAndOtherContactStrategy';
 import { UxWithDDStateContactDetailsCustomContactTypeAndOrgNameStrategy } from '../Strategies/UxWithDDStateContactDetailsCustomContactTypeAndOrgNameStrategy';
@@ -270,7 +272,6 @@ describe('Event Strategy Factory', () => {
       PFEventsType.SEND_ACTIVE_IO_START,
       PFEventsType.SEND_ACTIVE_IO_UX_CONVERSION,
       PFEventsType.SEND_CANCELLED_NOTIFICATION_REFOUND_INFO,
-      PFEventsType.SEND_MULTIPAYMENT_MORE_INFO,
       PFEventsType.SEND_PAYMENT_LIST_CHANGE_PAGE,
       PFEventsType.SEND_F24_DOWNLOAD,
       PFEventsType.SEND_DOWNLOAD_PAYMENT_NOTICE,
@@ -655,6 +656,18 @@ describe('Event Strategy Factory', () => {
     eventTypes.forEach((eventType) => {
       expect(factory.getStrategy(eventType)).toBeInstanceOf(UxBannerStrategy);
     });
+  });
+
+  it('should return UxExternalLinkStrategy for UX Action events of external link opening', () => {
+    expect(factory.getStrategy(PFEventsType.SEND_TAP_EXTERNAL_LINK)).toBeInstanceOf(
+      UxExternalLinkStrategy
+    );
+  });
+
+  it('should return SendNotificationExpensesDetailStrateg for SEND_NOTIFICATION_EXPENSES_DETAIL event', () => {
+    expect(factory.getStrategy(PFEventsType.SEND_NOTIFICATION_EXPENSES_DETAIL)).toBeInstanceOf(
+      SendNotificationExpensesDetailStrategy
+    );
   });
 
   it('should return null for unknown event type', () => {
