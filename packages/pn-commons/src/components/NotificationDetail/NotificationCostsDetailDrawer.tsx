@@ -65,6 +65,11 @@ const NotificationCostsDetailDrawer: React.FC<Props> = ({
       event_type: EventAction.ACTION,
       ...alertEventProperties,
     });
+
+    handleTrackEventFn(EventPaymentRecipientType.SEND_NOTIFICATION_EXPENSES_DETAIL, {
+      status: costDetails.status === NotificationCostDetailsStatus.ERROR ? 'error' : 'display',
+    });
+
     setOpenDrawer(true);
   };
 
@@ -73,14 +78,6 @@ const NotificationCostsDetailDrawer: React.FC<Props> = ({
       link: costDetailsAssistanceLink,
     });
   };
-
-  useEffect(() => {
-    if (openDrawer) {
-      handleTrackEventFn(EventPaymentRecipientType.SEND_NOTIFICATION_EXPENSES_DETAIL, {
-        status: costDetails.status === NotificationCostDetailsStatus.ERROR ? 'error' : 'display',
-      });
-    }
-  }, [openDrawer]);
 
   useEffect(() => {
     handleTrackEventFn(EventPaymentRecipientType.SEND_BANNER, {
