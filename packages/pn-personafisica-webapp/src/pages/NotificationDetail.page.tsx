@@ -549,13 +549,7 @@ const NotificationDetail: React.FC = () => {
     );
 
   const trackEventPaymentRecipient = (event: EventPaymentRecipientType, param?: object) => {
-    PFEventStrategyFactory.triggerEvent(
-      PFEventsType[event],
-      event === EventPaymentRecipientType.SEND_PAYMENT_STATUS ||
-        event === EventPaymentRecipientType.SEND_PAYMENT_DETAIL_ERROR
-        ? param
-        : undefined
-    );
+    PFEventStrategyFactory.triggerEvent(PFEventsType[event], param);
   };
 
   const reloadPaymentsInfo = (data: Array<NotificationDetailPayment>) => {
