@@ -69,18 +69,13 @@
     "show-more": "Prikaži več podrobnosti",
     "show-less": "Prikaži manj podrobnosti",
     "disclaimer-link": "Izvedite več",
-    "pec-unreachable": "Naj bo tvoj naslov PEC prost, da boš vse prejemal v digitalni obliki!",
+    "pec-unreachable": "Vaš predal PEC naj bo prost in aktiven, da boste vse prejemali v digitalni obliki!",
     "cancelled": {
       "message": "To obvestilo je preklical organ pošiljatelj.",
       "cta": "Kaj moram storiti?"
     },
     "payment": {
       "title": "Plačilo",
-      "single-payment-subtitle": "Končni znesek se lahko razlikuje od navedenega.",
-      "subtitle": "V tem obvestilu je več obvestil o plačilu: izberite ali prenesite tistega, ki želite plačati. Nekatera obvestila vključujejo stroške obveščanja.",
-      "subtitle-f24": "To obvestilo lahko plačate prek F24. Če si želite ogledati podrobnosti, odprite obrazce.",
-      "subtitle-mixed": "V tem obvestilu je več možnosti plačila: izberite ali prenesite tisto, kar želite plačati. Nekatera obvestila vključujejo stroške obveščanja.",
-      "how": "Kako to?",
       "f24Models": "Obrazci F24",
       "pagoPANotices": "Opozorila pagoPA",
       "download-pagoPA-notice": "Prenesite obvestilo pagoPA",
@@ -434,15 +429,19 @@
     "canceled-tooltip": "Organizacija je preklicala pošiljanje obvestila",
     "canceled-description": "Organizacija je preklicala pošiljanje obvestila.",
     "returned-to-sender": "Vrnjeno pošiljatelju",
-    "returned-to-sender-tooltip-monorecipient": "Prejemnik je umrl",
+    "returned-to-sender-multirecipient": "Vrnjeno pošiljatelju",
+    "returned-to-sender-tooltip": "Prejemnik je umrl",
     "returned-to-sender-tooltip-multirecipient": "Vsi prejemniki so umrli",
-    "returned-to-sender-description-monorecipient": "Prejemnik je umrl.",
+    "returned-to-sender-description": "Prejemnik je umrl.",
     "returned-to-sender-description-multirecipient": "Vsi prejemniki so umrli.",
     "notification-timeline-reworked": "Posodobljen dogodek ali več dogodkov",
     "notification-timeline-reworked-tooltip": "Posodobljen dogodek ali več dogodkov",
     "notification-timeline-reworked-description": "Dogodkov, označenih z NEVALIDIRAN DOGODEK, ne upoštevajte, saj so jih nadomestili naslednji dogodki, označeni z VALIDIRAN DOGODEK.",
     "reworked-status-valid": "Validiran dogodek",
-    "reworked-status-not-valid": "Nevalidiran dogodek"
+    "reworked-status-not-valid": "Nevalidiran dogodek",
+    "cancellation-in-progress": "Preklicano",
+    "cancellation-in-progress-tooltip": "Preklic poteka. Stanje bo kmalu posodobljeno.",
+    "cancellation-in-progress-description": "Preklic poteka. Stanje bo kmalu posodobljeno."
   },
   "tppLanding": {
     "title": "Pozdravljeni,\nprejeli ste pravno veljavno sporočilo",
@@ -462,12 +461,14 @@
   },
   "notification-cost-banner": {
     "analog": {
-      "title": "S SEND lahko prihraniš!",
-      "message": "Digitalnega obvestila nisi odprl pravočasno, zato se ni bilo mogoče izogniti priporočeni pošti in s tem povezanim stroškom."
+      "title": "S storitvijo SEND lahko prihranite!",
+      "message": "V imenu organa pošiljatelja vam je bilo poslanih eno ali več priporočenih pisem v skupnem znesku {{analogCost}}, ker to obvestilo ni bilo odprto prek digitalnih kanalov v predvidenem roku.",
+      "fallback": "V imenu organa pošiljatelja vam je bilo poslanih eno ali več priporočenih pisem, ker to obvestilo ni bilo odprto prek digitalnih kanalov v predvidenem roku. To bo za vas povzročilo dodatne stroške."
     },
     "digital_failure": {
-      "title": "S SEND lahko prihraniš!",
-      "message": "Obvestila nismo mogli dostaviti na tvoj naslov PEC, zato ti je bilo poslano informativno priporočeno pismo z ustreznimi stroški."
+      "title": "S storitvijo SEND lahko prihranite!",
+      "message": "Obvestila nismo mogli dostaviti na vaš certificiran e-poštni naslov (PEC), zato vam je bilo poslano priporočeno pismo s stroškom {{analogCost}}.",
+      "fallback": "Obvestila nismo mogli dostaviti na vaš certificiran e-poštni naslov (PEC), zato vam je bilo poslano priporočeno pismo. To bo za vas povzročilo dodatne stroške."
     },
     "digital_platform": {
       "title": "S SEND si prihranil!",
@@ -488,9 +489,30 @@
     "enable-sercq": {
       "message": {
         "default": "Aktiviraj digitalni naslov za prejemanje prihodnjih obvestil le v digitalni obliki.",
+        "analog": "Aktivirajte SEND kot digitalni naslov, da si prihranite stroške, kot je ta.",
         "external-pec": "Aktiviraj digitalni naslov in izberi, kje želiš prejemati obvestila SEND."
       },
       "cta": "Aktiviraj digitalni naslov"
+    }
+  },
+  "notification-alert": {
+    "description": "Znesek vključuje stroške obvestila.",
+    "cta": "Kaj so to?",
+    "details": {
+      "title": "Kaj so stroški obvestila?",
+      "description": "To so stroški, povezani s pošiljanjem komunikacije, ki se razlikujejo glede na način prejema.",
+      "how-they-work": "Kako delujejo stroški obvestila?",
+      "base-cost": "Stroški upravljanja",
+      "analog-cost": {
+        "total": "Stroški pošiljanja v papirni obliki",
+        "hint": {
+          "avoided": "Pošiljanje preprečeno s SEND",
+          "multiple-analog-flows": "{{count}} izvedenih pošiljanj"
+        }
+      },
+      "total-cost": "Skupaj",
+      "error": "Podrobnosti o stroških ni bilo mogoče pridobiti, poskusi znova pozneje.",
+      "more-info": "Za več podrobnosti o stroških te komunikacije se obrni na organ, ki ti je poslal obvestilo."
     }
   }
 }

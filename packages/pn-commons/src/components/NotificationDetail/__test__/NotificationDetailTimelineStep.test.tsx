@@ -44,6 +44,7 @@ describe('NotificationDetailTimelineStep', () => {
     const { getAllByTestId, getByTestId } = render(
       <NotificationDetailTimelineStep
         timelineStep={mockTimelineStep!}
+        statusHistory={[]}
         recipients={mockRecipients}
         clickHandler={mockClickHandler}
       />
@@ -81,6 +82,7 @@ describe('NotificationDetailTimelineStep', () => {
     const { getByTestId, getAllByTestId, queryAllByTestId } = render(
       <NotificationDetailTimelineStep
         timelineStep={mockTimelineStep!}
+        statusHistory={[]}
         recipients={mockRecipients}
         clickHandler={mockClickHandler}
         showMoreButtonLabel="Show More"
@@ -103,7 +105,7 @@ describe('NotificationDetailTimelineStep', () => {
     let moreLessButton = getByTestId('more-less-timeline-step');
     expect(moreLessButton).toHaveTextContent('Show More');
     fireEvent.click(moreLessButton);
-    expect(eventTrackingCallbackShowMore).toBeCalledTimes(1);
+    expect(eventTrackingCallbackShowMore).toHaveBeenCalledTimes(1);
     // After clicking "Show More", additional steps should be visible
     // some legal facts of the macro step can be hidden
     mockLegalFacts = getLegalFacts(false);
@@ -149,6 +151,7 @@ describe('NotificationDetailTimelineStep', () => {
     const { getAllByTestId, getByTestId } = render(
       <NotificationDetailTimelineStep
         timelineStep={mockTimelineStep!}
+        statusHistory={[]}
         recipients={mockRecipients}
         clickHandler={mockClickHandler}
       />
@@ -186,6 +189,7 @@ describe('NotificationDetailTimelineStep', () => {
     const { getAllByTestId, getByTestId } = render(
       <NotificationDetailTimelineStep
         timelineStep={mockTimelineStep!}
+        statusHistory={[]}
         recipients={mockRecipients}
         clickHandler={mockClickHandler}
         disableDownloads
@@ -212,6 +216,7 @@ describe('NotificationDetailTimelineStep', () => {
           steps: [],
           status: NotificationStatus.CANCELLATION_IN_PROGRESS,
         }}
+        statusHistory={[]}
         recipients={mockRecipients}
         clickHandler={mockClickHandler}
         isParty
@@ -229,6 +234,7 @@ describe('NotificationDetailTimelineStep', () => {
           steps: [],
           status: NotificationStatus.CANCELLATION_IN_PROGRESS,
         }}
+        statusHistory={[]}
         recipients={mockRecipients}
         clickHandler={mockClickHandler}
         isParty={false}
@@ -244,6 +250,7 @@ describe('NotificationDetailTimelineStep', () => {
     const { getAllByTestId, queryByTestId, getByTestId } = render(
       <NotificationDetailTimelineStep
         timelineStep={{ ...mockTimelineStep!, steps: [] }}
+        statusHistory={[]}
         recipients={mockRecipients}
         clickHandler={mockClickHandler}
       />

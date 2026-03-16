@@ -3,8 +3,9 @@ import { useTranslation } from 'react-i18next';
 
 import { Alert, Box, Grid, Link, Step, StepLabel, Stepper, Typography } from '@mui/material';
 import { visuallyHidden } from '@mui/utils';
-import { PnBreadcrumb, Prompt, TitleBox, useIsMobile } from '@pagopa-pn/pn-commons';
+import { PnBreadcrumb, TitleBox, useIsMobile } from '@pagopa-pn/pn-commons';
 
+import Prompt from '../components-for-migration/Prompt';
 import Attachments from '../components/NewNotification/Attachments';
 import DebtPosition from '../components/NewNotification/DebtPosition';
 import DebtPositionDetail from '../components/NewNotification/DebtPositionDetail';

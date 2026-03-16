@@ -38,8 +38,8 @@ describe('Dashbaord redux state tests', () => {
       loading: false,
       notifications: [],
       filters: {
-        startDate: tenYearsAgo,
-        endDate: today,
+        startDate: undefined,
+        endDate: undefined,
         iunMatch: '',
       },
       pagination: {
@@ -57,15 +57,17 @@ describe('Dashbaord redux state tests', () => {
 
   it('Should be able to fetch the notifications list', async () => {
     mock
-      .onGet(`/bff/v1/notifications/received?startDate=${encodeURIComponent(
-        formatToTimezoneString(tenYearsAgo)
-      )}&endDate=${encodeURIComponent(formatToTimezoneString(today))}&size=10`)
+      .onGet(
+        `/bff/v1/notifications/received?startDate=${encodeURIComponent(
+          formatToTimezoneString(tenYearsAgo)
+        )}&endDate=${encodeURIComponent(formatToTimezoneString(today))}&size=10`
+      )
       .reply(200, notificationsDTO);
     const action = await store.dispatch(
       getReceivedNotifications({
         startDate: tenYearsAgo,
         endDate: today,
-        size: 10
+        size: 10,
       })
     );
     expect(action.type).toBe('getReceivedNotifications/fulfilled');

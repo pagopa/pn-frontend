@@ -27,6 +27,7 @@ import { SendHasMandateLoginStrategy } from './Strategies/SendHasMandateLoginStr
 import { SendHasMandateStrategy } from './Strategies/SendHasMandateStrategy';
 import { SendNotificationCountStrategy } from './Strategies/SendNotificationCount';
 import { SendNotificationDetailStrategy } from './Strategies/SendNotificationDetailStrategy';
+import { SendNotificationExpensesDetailStrategy } from './Strategies/SendNotificationExpensesDetailStrategy';
 import { SendNotificationStatusDetailStrategy } from './Strategies/SendNotificationStatusDetail';
 import { SendPaymentDetailErrorStrategy } from './Strategies/SendPaymentDetailErrorStrategy';
 import { SendPaymentOutcomeStrategy } from './Strategies/SendPaymentOutcomeStrategy';
@@ -52,6 +53,7 @@ import { UXPspActionStrategy } from './Strategies/UXPspActionStrategy';
 import { UXScreenViewStrategy } from './Strategies/UXScreenViewStrategy';
 import { UxBannerStrategy } from './Strategies/UxBannerStrategy';
 import { UXConfirmStrategy } from './Strategies/UxConfirmStrategy';
+import { UxExternalLinkStrategy } from './Strategies/UxExternalLinkStrategy';
 import { UxWithContactDetailsAndOtherContactStrategy } from './Strategies/UxWithContactDetailsAndOtherContactStrategy';
 import { UxWithDDStateContactDetailsAndOtherContactStrategy } from './Strategies/UxWithDDStateContactDetailsAndOtherContactStrategy';
 import { UxWithDDStateContactDetailsCustomContactTypeAndOrgNameStrategy } from './Strategies/UxWithDDStateContactDetailsCustomContactTypeAndOrgNameStrategy';
@@ -75,7 +77,6 @@ const uxActionStrategy = [
   PFEventsType.SEND_ACTIVE_IO_START,
   PFEventsType.SEND_ACTIVE_IO_UX_CONVERSION,
   PFEventsType.SEND_CANCELLED_NOTIFICATION_REFOUND_INFO,
-  PFEventsType.SEND_MULTIPAYMENT_MORE_INFO,
   PFEventsType.SEND_PAYMENT_LIST_CHANGE_PAGE,
   PFEventsType.SEND_F24_DOWNLOAD,
   PFEventsType.SEND_DOWNLOAD_PAYMENT_NOTICE,
@@ -311,6 +312,8 @@ const uxBannerStrategy = [
   PFEventsType.SEND_CLOSE_BANNER,
 ] as const;
 
+const uxExternalLinkStrategy = [PFEventsType.SEND_TAP_EXTERNAL_LINK] as const;
+
 type ArrayToTuple<T extends ReadonlyArray<PFEventsType>> = keyof {
   [K in T extends ReadonlyArray<infer U> ? U : never]: string;
 };
@@ -375,6 +378,7 @@ const eventStrategy: Record<
   [PFEventsType.SEND_ADD_SERCQ_SEND_UX_CONVERSION]: new SendAddSercqSendUxConversionStrategy(),
   [PFEventsType.SEND_ADD_SERCQ_SEND_ENTER_FLOW]: new SendAddSercqSendEnterFlowStrategy(),
   [PFEventsType.SEND_LANDING_PAGE_FAQ_OPEN]: new SendTppLandingFaqOpenStrategy(),
+  [PFEventsType.SEND_NOTIFICATION_EXPENSES_DETAIL]: new SendNotificationExpensesDetailStrategy(),
 };
 
 const isInEventStrategyMap = (value: PFEventsType): value is keyof typeof eventStrategy => {
@@ -488,6 +492,10 @@ class PFEventStrategyFactory extends EventStrategyFactory<PFEventsType> {
 
     if (uxBannerStrategy.findIndex((el) => el === eventType) > -1) {
       return new UxBannerStrategy();
+    }
+
+    if (uxExternalLinkStrategy.findIndex((el) => el === eventType) > -1) {
+      return new UxExternalLinkStrategy();
     }
 
     if (isInEventStrategyMap(eventType)) {

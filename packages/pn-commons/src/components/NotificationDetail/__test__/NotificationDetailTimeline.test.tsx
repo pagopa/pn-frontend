@@ -96,7 +96,7 @@ describe('NotificationDetailTimeline', () => {
   });
 
   it('renders macro step with tag reworked', () => {
-    window.matchMedia = createMatchMedia(1920)
+    window.matchMedia = createMatchMedia(1920);
     const { container } = render(
       <NotificationDetailTimeline
         recipients={[]}
@@ -128,8 +128,8 @@ describe('NotificationDetailTimeline', () => {
         }}
       />
     );
-    expect(container).toHaveTextContent('Evento o più eventi aggiornati');
-    expect(container).toHaveTextContent('Evento validato');
-    expect(container).toHaveTextContent('Evento invalidato');
+    expect(container).toHaveTextContent('status.notification-timeline-reworked');
+    expect(container).toHaveTextContent('status.reworked-status-valid');
+    expect(container).toHaveTextContent('status.reworked-status-not-valid');
   });
 });

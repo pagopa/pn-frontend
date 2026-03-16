@@ -22,7 +22,8 @@
     "resources": "Viri",
     "follow": "Spremljajte nas na",
     "legal-part-1": "delniška družba z enim družbenikom – v celoti vplačan osnovni kapital 1.000.000 EUR – sedež v Rimu, Piazza Colonna 370",
-    "legal-part-2": "Poštna številka 00187 – št. vpisa v Poslovni register v Rimu, davčna številka in identifikacijska številka za DDV 15376371009"
+    "legal-part-2": "Poštna številka 00187 – št. vpisa v Poslovni register v Rimu, davčna številka in identifikacijska številka za DDV 15376371009",
+    "products-title": "Izdelki in storitve"
   },
   "button": {
     "close": "Zapri",

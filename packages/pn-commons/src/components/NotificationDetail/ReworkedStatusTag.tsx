@@ -12,22 +12,14 @@ const ReworkedStatusTag = ({ reworkedStatus }: { reworkedStatus?: ReworkedStatus
     case ReworkedStatus.VALID:
       return (
         <Tag
-          value={getLocalizedOrDefaultLabel(
-            'notifications',
-            'status.reworked-status-valid',
-            'Evento validato'
-          )}
+          value={getLocalizedOrDefaultLabel('notifications', 'status.reworked-status-valid')}
           variant="warning"
         />
       );
     case ReworkedStatus.NOT_VALID:
       return (
         <Tag
-          value={getLocalizedOrDefaultLabel(
-            'notifications',
-            'status.reworked-status-not-valid',
-            'Evento invalidato'
-          )}
+          value={getLocalizedOrDefaultLabel('notifications', 'status.reworked-status-not-valid')}
           variant="warning"
         />
       );
