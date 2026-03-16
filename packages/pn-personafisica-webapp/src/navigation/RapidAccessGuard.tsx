@@ -20,7 +20,7 @@ import { NOTIFICATION_ACTIONS, exchangeNotificationQrCode } from '../redux/notif
 import { exchangeNotificationRetrievalId } from '../redux/sidemenu/actions';
 import { ServerResponseErrorCode } from '../utility/AppError/types';
 import PFEventStrategyFactory from '../utility/MixpanelUtils/PFEventStrategyFactory';
-import { addAarUtmToUrl } from '../utility/utm.utility';
+import { AAR_UTM, injectUtmQueryParams } from '../utility/utm.utility';
 import {
   GET_DETTAGLIO_NOTIFICA_DELEGATO_PATH,
   GET_DETTAGLIO_NOTIFICA_PATH,
@@ -70,7 +70,7 @@ const RapidAccessGuard = () => {
       const state: NotificationDetailRouteState = { source: param };
 
       if (param === AppRouteParams.AAR) {
-        addAarUtmToUrl();
+        injectUtmQueryParams(AAR_UTM);
       }
 
       const currentParams = new URLSearchParams(globalThis.window.location.search);

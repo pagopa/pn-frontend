@@ -7,7 +7,7 @@ import { AppRouteParams } from '@pagopa-pn/pn-commons';
 import { act, render, screen, waitFor } from '../../__test__/test-utils';
 import { apiClient } from '../../api/apiClients';
 import { BffCheckTPPResponse } from '../../generated-client/notifications';
-import { AAR_UTM_CAMPAIGN, AAR_UTM_MEDIUM, AAR_UTM_SOURCE } from '../../utility/utm.utility';
+import { AAR_UTM, TPP_LANDING_UTM, UTM_KEY } from '../../utility/utm.utility';
 import RapidAccessGuard from '../RapidAccessGuard';
 import { GET_DETTAGLIO_NOTIFICA_DELEGATO_PATH, GET_DETTAGLIO_NOTIFICA_PATH } from '../routes.const';
 
@@ -78,11 +78,11 @@ describe('Rapid access Guard', async () => {
           pathname: GET_DETTAGLIO_NOTIFICA_PATH('mock-iun'),
         });
 
-        const sp = new URLSearchParams((to as any).search);
+        const sp = new URLSearchParams((to as { search: string }).search);
         expect(sp.has(AppRouteParams.AAR)).toBe(false);
-        expect(sp.get('utm_source')).toBe(AAR_UTM_SOURCE);
-        expect(sp.get('utm_medium')).toBe(AAR_UTM_MEDIUM);
-        expect(sp.get('utm_campaign')).toBe(AAR_UTM_CAMPAIGN);
+        expect(sp.get(UTM_KEY.CAMPAIGN)).toBe(AAR_UTM[UTM_KEY.CAMPAIGN]);
+        expect(sp.get(UTM_KEY.SOURCE)).toBe(AAR_UTM[UTM_KEY.SOURCE]);
+        expect(sp.get(UTM_KEY.MEDIUM)).toBe(AAR_UTM[UTM_KEY.MEDIUM]);
 
         expect(options).toEqual({
           replace: true,
@@ -116,11 +116,11 @@ describe('Rapid access Guard', async () => {
           pathname: GET_DETTAGLIO_NOTIFICA_DELEGATO_PATH('mock-iun', 'mock-mandateId'),
         });
 
-        const sp = new URLSearchParams((to as any).search);
+        const sp = new URLSearchParams((to as { search: string }).search);
         expect(sp.has(AppRouteParams.AAR)).toBe(false);
-        expect(sp.get('utm_source')).toBe(AAR_UTM_SOURCE);
-        expect(sp.get('utm_medium')).toBe(AAR_UTM_MEDIUM);
-        expect(sp.get('utm_campaign')).toBe(AAR_UTM_CAMPAIGN);
+        expect(sp.get(UTM_KEY.CAMPAIGN)).toBe(AAR_UTM[UTM_KEY.CAMPAIGN]);
+        expect(sp.get(UTM_KEY.SOURCE)).toBe(AAR_UTM[UTM_KEY.SOURCE]);
+        expect(sp.get(UTM_KEY.MEDIUM)).toBe(AAR_UTM[UTM_KEY.MEDIUM]);
 
         expect(options).toEqual({
           replace: true,
@@ -219,7 +219,7 @@ describe('Rapid access Guard', async () => {
           pathname: GET_DETTAGLIO_NOTIFICA_PATH('mock-iun'),
         });
 
-        const sp = new URLSearchParams((to as any).search);
+        const sp = new URLSearchParams((to as { search: string }).search);
         expect(sp.has(AppRouteParams.RETRIEVAL_ID)).toBe(false);
 
         expect(options).toEqual({
@@ -229,6 +229,51 @@ describe('Rapid access Guard', async () => {
       });
       const accessDeniedComponent = screen.queryByTestId('access-denied');
       expect(accessDeniedComponent).not.toBeInTheDocument();
+    });
+
+    it('should remove retrievalId and presernve existing UTMs', async () => {
+      const mockRetrievalId = 'retrieval-id';
+      const url = `/bff/v1/notifications/received/check-tpp?retrievalId=${mockRetrievalId}`;
+
+      globalThis.window.history.replaceState(
+        {},
+        '',
+        `/?${AppRouteParams.RETRIEVAL_ID}=${mockRetrievalId}` +
+          `&${UTM_KEY.CAMPAIGN}=${TPP_LANDING_UTM[UTM_KEY.CAMPAIGN]}` +
+          `&${UTM_KEY.SOURCE}=${TPP_LANDING_UTM[UTM_KEY.SOURCE]}` +
+          `&${UTM_KEY.MEDIUM}=${TPP_LANDING_UTM[UTM_KEY.MEDIUM]}`
+      );
+
+      mock.onGet(url).reply(200, {
+        originId: 'mock-iun',
+        retrievalId: mockRetrievalId,
+      } as BffCheckTPPResponse);
+
+      await act(async () => {
+        render(<Guard />);
+      });
+
+      await waitFor(() => {
+        expect(mockNavigateFn).toHaveBeenCalledTimes(1);
+
+        const [to, options] = mockNavigateFn.mock.calls[0];
+
+        expect(to).toMatchObject({
+          pathname: GET_DETTAGLIO_NOTIFICA_PATH('mock-iun'),
+        });
+
+        const sp = new URLSearchParams((to as { search: string }).search);
+
+        expect(sp.has(AppRouteParams.RETRIEVAL_ID)).toBe(false);
+        expect(sp.get(UTM_KEY.CAMPAIGN)).toBe(TPP_LANDING_UTM[UTM_KEY.CAMPAIGN]);
+        expect(sp.get(UTM_KEY.SOURCE)).toBe(TPP_LANDING_UTM[UTM_KEY.SOURCE]);
+        expect(sp.get(UTM_KEY.MEDIUM)).toBe(TPP_LANDING_UTM[UTM_KEY.MEDIUM]);
+
+        expect(options).toEqual({
+          replace: true,
+          state: { source: AppRouteParams.RETRIEVAL_ID },
+        });
+      });
     });
   });
 });

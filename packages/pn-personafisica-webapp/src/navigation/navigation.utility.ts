@@ -26,7 +26,7 @@ export function goToLoginPortal({ rapidAccess, loginProvider }: GoToLoginProps) 
   // eslint-disable-next-line functional/no-let
   let urlToRedirect = `${logoutPath}`;
   // the startsWith check is to prevent xss attacks
-  if (urlToRedirect.startsWith(logoutPath) && rapidAccess) {
+  if (urlToRedirect.startsWith(logoutPath)) {
     const currentParams = new URLSearchParams(globalThis.window.location.search);
     const filteredParams = new URLSearchParams();
 
@@ -38,13 +38,15 @@ export function goToLoginPortal({ rapidAccess, loginProvider }: GoToLoginProps) 
     });
 
     // ensure rapid access param is present and sanitized
-    filteredParams.set(rapidAccess[0], sanitizeString(rapidAccess[1]));
+    if (rapidAccess) {
+      filteredParams.set(rapidAccess[0], sanitizeString(rapidAccess[1]));
+    }
 
-    // eslint-disable-next-line functional/immutable-data
-    urlToRedirect += `?${filteredParams.toString()}`;
-  }
-  // the indexOf check is to prevent xss attacks
-  if (urlToRedirect.startsWith(logoutPath)) {
+    const query = filteredParams.toString();
+    if (query) {
+      urlToRedirect += `?${query}`;
+    }
+
     window.open(`${urlToRedirect}`, '_self');
   }
 }

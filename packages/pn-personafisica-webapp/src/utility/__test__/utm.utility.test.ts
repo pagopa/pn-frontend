@@ -1,8 +1,8 @@
 import { vi } from 'vitest';
 
-import { addAarUtmToUrl } from '../utm.utility';
+import { AAR_UTM, UTM_KEY, injectUtmQueryParams } from '../utm.utility';
 
-describe('addAarUtmToUrl', () => {
+describe('injectUtmQueryParams', () => {
   const replaceStateSpy = vi.spyOn(globalThis.window.history, 'replaceState');
 
   beforeEach(() => {
@@ -14,21 +14,11 @@ describe('addAarUtmToUrl', () => {
     globalThis.window.history.replaceState({}, '', '/');
   });
 
-  it('returns false when aar param is missing', () => {
-    globalThis.window.history.replaceState({}, '', '/?invalid_param=value');
+  it('injects utm params when no required utm key exists', () => {
+    globalThis.window.history.replaceState({}, '', '/?generic_param=value');
     replaceStateSpy.mockClear();
 
-    const result = addAarUtmToUrl();
-
-    expect(result).toBe(false);
-    expect(replaceStateSpy).not.toHaveBeenCalled();
-  });
-
-  it('adds utm params when aar is present and no utm_source exists', () => {
-    globalThis.window.history.replaceState({}, '', '/?aar=AAR_TOKEN');
-    replaceStateSpy.mockClear();
-
-    const result = addAarUtmToUrl();
+    const result = injectUtmQueryParams(AAR_UTM);
 
     expect(result).toBe(true);
     expect(replaceStateSpy).toHaveBeenCalledTimes(1);
@@ -36,22 +26,60 @@ describe('addAarUtmToUrl', () => {
     const url = replaceStateSpy.mock.calls[0][2] as string;
     const parsed = new URL(url, 'https://test.pagopa.it');
 
-    expect(parsed.searchParams.get('aar')).toBe('AAR_TOKEN');
-    expect(parsed.searchParams.get('utm_source')).toBeTruthy();
-    expect(parsed.searchParams.get('utm_medium')).toBeTruthy();
-    expect(parsed.searchParams.get('utm_campaign')).toBeTruthy();
+    expect(parsed.searchParams.get(UTM_KEY.CAMPAIGN)).toBe(AAR_UTM.utm_campaign);
+    expect(parsed.searchParams.get(UTM_KEY.SOURCE)).toBe(AAR_UTM.utm_source);
+    expect(parsed.searchParams.get(UTM_KEY.MEDIUM)).toBe(AAR_UTM.utm_medium);
+    expect(parsed.searchParams.get('generic_param')).toBe('value');
   });
 
-  it('does nothing when utm_source is already present', () => {
-    globalThis.window.history.replaceState({}, '', '/?aar=AAR_TOKEN&utm_source=s');
+  it('does nothing when any required utm key is already present', () => {
+    globalThis.window.history.replaceState({}, '', '/?utm_source=source&generic_param=value');
     replaceStateSpy.mockClear();
 
     const startingUrl = globalThis.window.location.href;
 
-    const result = addAarUtmToUrl();
+    const result = injectUtmQueryParams(AAR_UTM);
 
     expect(result).toBe(false);
     expect(replaceStateSpy).not.toHaveBeenCalled();
     expect(globalThis.window.location.href).toBe(startingUrl);
+  });
+
+  it('preserves hash when updating the url', () => {
+    globalThis.window.history.replaceState({}, '', '/?generic_param=value#hash');
+    replaceStateSpy.mockClear();
+
+    const result = injectUtmQueryParams(AAR_UTM);
+
+    expect(result).toBe(true);
+
+    const url = replaceStateSpy.mock.calls[0][2] as string;
+    const parsed = new URL(url, 'https://test.pagopa.it');
+
+    expect(parsed.hash).toBe('#hash');
+  });
+
+  it('injects optional utm_* params together with required ones', () => {
+    globalThis.window.history.replaceState({}, '', '/?generic_param=value');
+    replaceStateSpy.mockClear();
+
+    const result = injectUtmQueryParams({
+      ...AAR_UTM,
+      utm_content: 'hero-banner',
+      utm_term: 'send',
+    });
+
+    expect(result).toBe(true);
+    expect(replaceStateSpy).toHaveBeenCalledTimes(1);
+
+    const url = replaceStateSpy.mock.calls[0][2] as string;
+    const parsed = new URL(url, 'https://test.pagopa.it');
+
+    expect(parsed.searchParams.get(UTM_KEY.CAMPAIGN)).toBe(AAR_UTM[UTM_KEY.CAMPAIGN]);
+    expect(parsed.searchParams.get(UTM_KEY.SOURCE)).toBe(AAR_UTM[UTM_KEY.SOURCE]);
+    expect(parsed.searchParams.get(UTM_KEY.MEDIUM)).toBe(AAR_UTM[UTM_KEY.MEDIUM]);
+    expect(parsed.searchParams.get('utm_content')).toBe('hero-banner');
+    expect(parsed.searchParams.get('utm_term')).toBe('send');
+    expect(parsed.searchParams.get('generic_param')).toBe('value');
   });
 });

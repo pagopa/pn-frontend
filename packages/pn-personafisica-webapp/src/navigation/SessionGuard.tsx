@@ -22,7 +22,7 @@ import { resetState } from '../redux/auth/reducers';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { RootState } from '../redux/store';
 import { getConfiguration } from '../services/configuration.service';
-import { addAarUtmToUrl } from '../utility/utm.utility';
+import { AAR_UTM, injectUtmQueryParams } from '../utility/utm.utility';
 import { goToLoginPortal } from './navigation.utility';
 import * as routes from './routes.const';
 
@@ -127,7 +127,7 @@ const SessionGuard = () => {
 
   useEffect(() => {
     if (rapidAccess?.[0] === AppRouteParams.AAR) {
-      addAarUtmToUrl();
+      injectUtmQueryParams(AAR_UTM);
     }
     if (spidToken) {
       void performExchangeToken({ spidToken, rapidAccess });
