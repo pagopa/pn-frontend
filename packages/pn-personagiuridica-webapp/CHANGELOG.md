@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.22.0-RC.4](https://github.com/pagopa/pn-frontend/compare/v2.22.0-RC.3...v2.22.0-RC.4) (2026-03-17)
+
+
+### Bug Fixes
+
+* **PN-18989:** update mui-italia RC version to fix MIAlert icon position ([#1787](https://github.com/pagopa/pn-frontend/issues/1787)) ([d2ed8f0](https://github.com/pagopa/pn-frontend/commit/d2ed8f02783fe8e3c0c6510dd24003828a6065d9))
+
+
+
+
+
 # [2.22.0-RC.3](https://github.com/pagopa/pn-frontend/compare/v2.22.0-RC.2...v2.22.0-RC.3) (2026-03-12)
 
 
