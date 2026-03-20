@@ -29,7 +29,7 @@ type AuthInitialState = {
   loginProvider: LoginProvider;
 };
 
-const noLoggedUserData = {
+const noLoggedUserData: User = {
   ...basicNoLoggedUserData,
   from_aa: false,
   level: '',
@@ -38,11 +38,14 @@ const noLoggedUserData = {
   iss: '',
   jti: '',
   aud: '',
-} as User;
+  name: '',
+  family_name: '',
+  fiscal_number: '',
+};
 
 const initialState: AuthInitialState = {
   loading: false,
-  user: basicInitialUserData(userDataMatcher, noLoggedUserData),
+  user: basicInitialUserData<User>(userDataMatcher, noLoggedUserData),
   fetchedTos: false,
   fetchedPrivacy: false,
   tosConsent: {

@@ -1,4 +1,7 @@
-import { userResponse as baseValidUser } from '../../__mocks__/Auth.mock';
+import {
+  supportUserResponse as baseSupportUser,
+  userResponse as baseValidUser,
+} from '../../__mocks__/Auth.mock';
 import { userDataMatcher } from '../user.utility';
 
 describe('User utility test', () => {
@@ -77,6 +80,41 @@ describe('User utility test', () => {
       const invalidUser = {
         ...baseValidUser,
         desired_exp: 'not-a-number',
+      };
+
+      expect(() => userDataMatcher.validateSync(invalidUser, { stripUnknown: false })).toThrow();
+    });
+  });
+
+  describe('userDataMatcher - support organization', () => {
+    it('validates a support user without name, family_name, and fiscal_number', () => {
+      expect(() =>
+        userDataMatcher.validateSync(baseSupportUser, { stripUnknown: false })
+      ).not.toThrow();
+    });
+
+    it('rejects a non-support user with missing name', () => {
+      const invalidUser = {
+        ...baseValidUser,
+        name: undefined,
+      };
+
+      expect(() => userDataMatcher.validateSync(invalidUser, { stripUnknown: false })).toThrow();
+    });
+
+    it('rejects a non-support user with missing family_name', () => {
+      const invalidUser = {
+        ...baseValidUser,
+        family_name: undefined,
+      };
+
+      expect(() => userDataMatcher.validateSync(invalidUser, { stripUnknown: false })).toThrow();
+    });
+
+    it('rejects a non-support user with missing fiscal_number', () => {
+      const invalidUser = {
+        ...baseValidUser,
+        fiscal_number: undefined,
       };
 
       expect(() => userDataMatcher.validateSync(invalidUser, { stripUnknown: false })).toThrow();
