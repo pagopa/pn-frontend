@@ -186,9 +186,9 @@ const ActualApp = () => {
 
   const jwtUser = useMemo(
     () => ({
-      id: loggedUser.fiscal_number,
-      name: loggedUser.name,
-      surname: loggedUser.family_name,
+      id: loggedUser.fiscal_number ?? '',
+      name: loggedUser.name ?? '',
+      surname: loggedUser.family_name ?? '',
     }),
     [loggedUser]
   );
