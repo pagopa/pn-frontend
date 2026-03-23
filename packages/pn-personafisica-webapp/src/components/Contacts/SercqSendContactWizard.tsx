@@ -26,6 +26,7 @@ import {
   EventAction,
   SERCQ_SEND_VALUE,
   TosPrivacyConsent,
+  appStorage,
 } from '@pagopa-pn/pn-commons';
 import { theme } from '@pagopa/mui-italia';
 
@@ -231,7 +232,7 @@ const SercqSendContactWizard: React.FC<Props> = ({ goToStep, showIOStep }) => {
     dispatch(createOrUpdateAddress(digitalAddressParams))
       .unwrap()
       .then(() => {
-        sessionStorage.removeItem('domicileBannerClosed');
+        appStorage.domicileBanner.enable();
         PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SERCQ_SEND_UX_SUCCESS, {
           event_type: EventAction.CONFIRM,
           addresses,

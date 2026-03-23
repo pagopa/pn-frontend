@@ -25,6 +25,7 @@ import {
   ConsentType,
   SERCQ_SEND_VALUE,
   TosPrivacyConsent,
+  appStorage,
 } from '@pagopa-pn/pn-commons';
 import { theme } from '@pagopa/mui-italia';
 
@@ -162,7 +163,7 @@ const SercqSendContactWizard: React.FC<Props> = ({ goToStep }) => {
     dispatch(createOrUpdateAddress(digitalAddressParams))
       .unwrap()
       .then(() => {
-        sessionStorage.removeItem('domicileBannerClosed');
+        appStorage.domicileBanner.enable();
         goToStep(thankYouStep);
       })
       .catch(() => {});
