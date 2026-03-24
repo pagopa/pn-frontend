@@ -7,7 +7,7 @@ import {
 } from '@pagopa-pn/pn-commons';
 
 import { digitalAddressesSercq } from '../../../__mocks__/Contacts.mock';
-import { fireEvent, render, testStore, waitFor } from '../../../__test__/test-utils';
+import { fireEvent, render, testStore, within } from '../../../__test__/test-utils';
 import { ChannelType, ContactOperation, ContactSource } from '../../../models/contacts';
 import * as routes from '../../../navigation/routes.const';
 import { NotificationCostBanner } from '../NotificationCostBanner';
@@ -253,13 +253,13 @@ describe('NotificationCostBanner component', () => {
     expect(cta).not.toBeInTheDocument();
   });
 
-  it('renders the component - digital special - dd domicile active - closes the banner', async () => {
+  it('renders the component - digital special - dd domicile active - does not show close button', () => {
     const deliveryOutcome = {
       type: DeliveryOutcomeType.DIGITAL,
       details: { source: DigitalSource.SENDER, domicileType: 'SERCQ' },
     } as any;
 
-    const { container, getByTestId, getByLabelText, queryByTestId, queryByText } = render(
+    const { container, getByTestId, queryByText } = render(
       <NotificationCostBanner deliveryOutcome={deliveryOutcome} />,
       {
         preloadedState: {
@@ -280,13 +280,7 @@ describe('NotificationCostBanner component', () => {
     const cta = queryByText('notification-cost-banner.enable-sercq.cta');
     expect(cta).not.toBeInTheDocument();
 
-    const closeButton = getByLabelText('button.close');
-    fireEvent.click(closeButton);
-
-    await waitFor(() => {
-      const closedBanner = queryByTestId('notificationCostBanner');
-      expect(closedBanner).not.toBeInTheDocument();
-    });
+    expect(within(banner).queryAllByRole('button')).toHaveLength(0);
   });
 
   it('renders the component with cost details but status UNAVAILABLE', () => {
