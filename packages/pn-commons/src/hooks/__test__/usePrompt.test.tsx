@@ -1,19 +1,13 @@
-import { MemoryRouter, Route, Routes, useNavigate } from 'react-router-dom';
-import { vi } from 'vitest';
+import { Route, Routes, useNavigate } from 'react-router-dom';
+
+import { Box } from '@mui/material';
 
 import { fireEvent, render, waitFor } from '../../test-utils';
 import { usePrompt } from '../usePrompt';
 
-const mockConfirm = vi.fn();
-const mockCancel = vi.fn();
-
 const PromptComponent = () => {
   const navigate = useNavigate();
-  const [showPrompt, confirmNavigation, cancelNavigation] = usePrompt(
-    true,
-    mockCancel,
-    mockConfirm
-  );
+  const [showPrompt, confirmNavigation, cancelNavigation] = usePrompt(true);
 
   const handleNavigate = () => {
     navigate('/test');
@@ -22,46 +16,44 @@ const PromptComponent = () => {
   return (
     <>
       {showPrompt && (
-        <div data-testid="prompt">
-          <div data-testid="cancel" onClick={cancelNavigation}>
+        <Box data-testid="prompt">
+          <Box data-testid="cancel" onClick={cancelNavigation}>
             cancel
-          </div>
-          <div data-testid="confirm" onClick={confirmNavigation}>
+          </Box>
+          <Box data-testid="confirm" onClick={confirmNavigation}>
             confirm
-          </div>
-        </div>
+          </Box>
+        </Box>
       )}
       prompt component
-      <div onClick={handleNavigate} data-testid="click-me">
+      <Box onClick={handleNavigate} data-testid="click-me">
         navigate
-      </div>
-      <div onClick={() => navigate('/')} data-testid="stay-here">
+      </Box>
+      <Box onClick={() => navigate('/')} data-testid="stay-here">
         stay here
-      </div>
+      </Box>
     </>
   );
 };
 
-const Component = () => {
-  return (
-    <MemoryRouter>
-      <Routes>
-        <Route path={'/'} element={<PromptComponent />} />
-        <Route path={'/test'} element={<div>other</div>} />
-      </Routes>
-    </MemoryRouter>
-  );
-};
+const Component = () => (
+  <Routes>
+    <Route path={'/'} element={<PromptComponent />} />
+    <Route path={'/test'} element={<div>other</div>} />
+  </Routes>
+);
 
 describe('test usePrompt hook', () => {
   it('initialization', () => {
-    const { queryByTestId } = render(<Component />, { navigationRouter: 'none' });
+    const { queryByTestId } = render(<Component />);
     const prompt = queryByTestId('prompt');
     expect(prompt).not.toBeInTheDocument();
   });
 
   it('cancel navigation', async () => {
-    const { container, getByTestId } = render(<Component />, { navigationRouter: 'none' });
+    const { container, getByTestId, router } = render(<Component />);
+    expect(router.state.location.pathname).toBe('/');
+
     const navigateButton = getByTestId('click-me');
     fireEvent.click(navigateButton);
     const prompt = await waitFor(() => getByTestId('prompt'));
@@ -70,13 +62,15 @@ describe('test usePrompt hook', () => {
     fireEvent.click(cancelButton);
     await waitFor(() => {
       expect(prompt).not.toBeInTheDocument();
-      expect(mockCancel).toBeCalledTimes(1);
       expect(container).toHaveTextContent('prompt component');
+      expect(router.state.location.pathname).toBe('/');
     });
   });
 
   it('confirm navigation', async () => {
-    const { getByTestId, container } = render(<Component />, { navigationRouter: 'none' });
+    const { getByTestId, container, router } = render(<Component />);
+    expect(router.state.location.pathname).toBe('/');
+
     const navigateButton = getByTestId('click-me');
     fireEvent.click(navigateButton);
     const prompt = await waitFor(() => getByTestId('prompt'));
@@ -85,19 +79,19 @@ describe('test usePrompt hook', () => {
     fireEvent.click(confirmButton);
     await waitFor(() => {
       expect(prompt).not.toBeInTheDocument();
-      expect(mockConfirm).toBeCalledTimes(1);
       expect(container).toHaveTextContent('other');
+      expect(router.state.location.pathname).toBe('/test');
     });
   });
 
   it('try to navigate to the same page', async () => {
-    const { getByTestId, queryByTestId, container } = render(<Component />, {
-      navigationRouter: 'none',
-    });
+    const { getByTestId, queryByTestId, container, router } = render(<Component />);
+    expect(router.state.location.pathname).toBe('/');
     const navigateButton = getByTestId('stay-here');
     fireEvent.click(navigateButton);
     const prompt = await waitFor(() => queryByTestId('prompt'));
     expect(prompt).not.toBeInTheDocument();
     expect(container).toHaveTextContent('prompt component');
+    expect(router.state.location.pathname).toBe('/');
   });
 });
