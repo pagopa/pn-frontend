@@ -4,28 +4,20 @@ import { formatToTimezoneString, tenYearsAgo, today } from '@pagopa-pn/pn-common
 import { createMatchMedia } from '@pagopa-pn/pn-commons/src/test-utils';
 
 import { notificationsToFe } from '../../../__mocks__/Notifications.mock';
-import { RenderResult, act, fireEvent, render, waitFor } from '../../../__test__/test-utils';
+import { CustomRenderResult, act, fireEvent, render, waitFor } from '../../../__test__/test-utils';
 import * as routes from '../../../navigation/routes.const';
 import MobileNotifications from '../MobileNotifications';
 
-const mockNavigateFn = vi.fn();
-
-// mock imports
-vi.mock('react-router-dom', async () => ({
-  ...(await vi.importActual<any>('react-router-dom')),
-  useNavigate: () => mockNavigateFn,
-}));
-
 describe('MobileNotifications Component', () => {
-  let result: RenderResult;
-  const original = window.matchMedia;
+  let result: CustomRenderResult;
+  const original = globalThis.matchMedia;
 
   beforeAll(() => {
-    window.matchMedia = createMatchMedia(800);
+    globalThis.matchMedia = createMatchMedia(800);
   });
 
   afterAll(() => {
-    window.matchMedia = original;
+    globalThis.matchMedia = original;
   });
 
   afterEach(() => {
@@ -45,8 +37,7 @@ describe('MobileNotifications Component', () => {
     // clicks on empty state action
     const button = result.getByTestId('link-route-contacts');
     fireEvent.click(button);
-    expect(mockNavigateFn).toBeCalledTimes(1);
-    expect(mockNavigateFn).toBeCalledWith(routes.RECAPITI);
+    expect(result.router.state.location.pathname).toBe(routes.RECAPITI);
   });
 
   it('renders MobileNotifications - notifications', async () => {
@@ -91,8 +82,7 @@ describe('MobileNotifications Component', () => {
     const notificationsCardButton = norificationCards[0].querySelector('button');
     fireEvent.click(notificationsCardButton!);
     await waitFor(() => {
-      expect(mockNavigateFn).toBeCalledTimes(1);
-      expect(mockNavigateFn).toBeCalledWith(
+      expect(result.router.state.location.pathname).toBe(
         routes.GET_DETTAGLIO_NOTIFICA_PATH(notificationsToFe.resultsPage[0].iun)
       );
     });

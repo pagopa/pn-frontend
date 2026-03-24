@@ -49,6 +49,7 @@ export default defineConfig(({ mode }) => {
     ],
     server: {
       host: env.HOST,
+      // when you want test the login flux locally, change the port here
       port: 443,
       https: true,
       strictPort: true,

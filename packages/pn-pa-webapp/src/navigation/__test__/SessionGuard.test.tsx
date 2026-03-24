@@ -24,16 +24,11 @@ const Guard = () => (
 describe('SessionGuard Component', async () => {
   let mock: MockAdapter;
   let result: CustomRenderResult;
-  const originalLocation = globalThis.location;
   const originalOpen = globalThis.open;
   const mockOpenFn = vi.fn();
 
   beforeAll(() => {
     mock = new MockAdapter(authClient);
-    Object.defineProperty(globalThis, 'location', {
-      writable: true,
-      value: { hash: '' },
-    });
     Object.defineProperty(globalThis, 'open', {
       configurable: true,
       value: mockOpenFn,
@@ -47,7 +42,6 @@ describe('SessionGuard Component', async () => {
 
   afterAll(() => {
     mock.restore();
-    Object.defineProperty(globalThis, 'location', { writable: true, value: originalLocation });
     Object.defineProperty(globalThis, 'open', { configurable: true, value: originalOpen });
   });
 

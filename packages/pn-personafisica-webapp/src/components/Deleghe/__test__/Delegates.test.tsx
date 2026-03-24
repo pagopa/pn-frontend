@@ -1,19 +1,10 @@
 import { vi } from 'vitest';
 
 import { mandatesByDelegator } from '../../../__mocks__/Delegations.mock';
-import { fireEvent, render, testStore, waitFor, within } from '../../../__test__/test-utils';
+import { fireEvent, render, waitFor, within } from '../../../__test__/test-utils';
 import * as routes from '../../../navigation/routes.const';
-import { Delegate } from '../../../redux/delegation/types';
 import { sortDelegations } from '../../../utility/delegation.utility';
 import Delegates from '../Delegates';
-
-const mockNavigateFn = vi.fn();
-
-// mock imports
-vi.mock('react-router-dom', async () => ({
-  ...(await vi.importActual<any>('react-router-dom')),
-  useNavigate: () => mockNavigateFn,
-}));
 
 describe('Delegates Component', async () => {
   afterEach(() => {
@@ -21,7 +12,7 @@ describe('Delegates Component', async () => {
   });
 
   it('renders the empty state', () => {
-    const { container, queryByTestId, getByTestId } = render(<Delegates />);
+    const { container, queryByTestId, getByTestId, router } = render(<Delegates />);
     expect(container).toHaveTextContent(/deleghe.delegatesTitle/i);
     const addDelegation = getByTestId('add-delegation');
     expect(addDelegation).toBeInTheDocument();
@@ -32,16 +23,14 @@ describe('Delegates Component', async () => {
     // clicks on empty state action
     const button = getByTestId('link-add-delegate');
     fireEvent.click(button);
-    expect(mockNavigateFn).toBeCalledTimes(1);
-    expect(mockNavigateFn).toBeCalledWith(routes.NUOVA_DELEGA);
+    expect(router.state.location.pathname).toBe(routes.NUOVA_DELEGA);
   });
 
   it('navigates to the add delegation page', () => {
-    const { getByTestId } = render(<Delegates />);
+    const { getByTestId, router } = render(<Delegates />);
     const addDelegation = getByTestId('add-delegation');
     fireEvent.click(addDelegation);
-    expect(mockNavigateFn).toBeCalledTimes(1);
-    expect(mockNavigateFn).toBeCalledWith(routes.NUOVA_DELEGA);
+    expect(router.state.location.pathname).toBe(routes.NUOVA_DELEGA);
   });
 
   it('renders the delegates', () => {
@@ -58,7 +47,7 @@ describe('Delegates Component', async () => {
   });
 
   it('sorts the delegates', async () => {
-    const { getByTestId, getAllByTestId } = render(<Delegates />, {
+    const { getByTestId, getAllByTestId, testStore } = render(<Delegates />, {
       preloadedState: {
         delegationsState: {
           delegations: { delegates: mandatesByDelegator },
@@ -82,7 +71,7 @@ describe('Delegates Component', async () => {
       });
     });
     let delegatesRows = getAllByTestId('delegatesTable.body.row');
-    let sortedDelegates = sortDelegations('asc', 'name', mandatesByDelegator) as Array<Delegate>;
+    let sortedDelegates = sortDelegations('asc', 'name', mandatesByDelegator);
     delegatesRows.forEach((row, index) => {
       expect(row).toHaveTextContent(sortedDelegates[index].delegate?.displayName!);
     });
@@ -98,7 +87,7 @@ describe('Delegates Component', async () => {
       });
     });
     delegatesRows = getAllByTestId('delegatesTable.body.row');
-    sortedDelegates = sortDelegations('desc', 'name', mandatesByDelegator) as Array<Delegate>;
+    sortedDelegates = sortDelegations('desc', 'name', mandatesByDelegator);
     delegatesRows.forEach((row, index) => {
       expect(row).toHaveTextContent(sortedDelegates[index].delegate?.displayName!);
     });
@@ -116,7 +105,7 @@ describe('Delegates Component', async () => {
       });
     });
     delegatesRows = getAllByTestId('delegatesTable.body.row');
-    sortedDelegates = sortDelegations('asc', 'endDate', mandatesByDelegator) as Array<Delegate>;
+    sortedDelegates = sortDelegations('asc', 'endDate', mandatesByDelegator);
     delegatesRows.forEach((row, index) => {
       expect(row).toHaveTextContent(sortedDelegates[index].delegate?.displayName!);
     });
