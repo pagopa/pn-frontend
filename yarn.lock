@@ -1931,10 +1931,10 @@
     rxjs "7.8.1"
     tslib "2.6.2"
 
-"@pagopa/mui-italia@2.3.1-RC.3":
-  version "2.3.1-RC.3"
-  resolved "https://registry.yarnpkg.com/@pagopa/mui-italia/-/mui-italia-2.3.1-RC.3.tgz#41933c18b5f45c7c98aa165c01c25b1caed0cf09"
-  integrity sha512-r7PXJhCiei+ZpKVWiQjHZiYg+jAgrkIX6GDzXujlWDYB6CHvZ3QE6ftRnewzfTSX/238C9We8OHRa9XY8pCpQA==
+"@pagopa/mui-italia@2.3.1":
+  version "2.3.1"
+  resolved "https://registry.yarnpkg.com/@pagopa/mui-italia/-/mui-italia-2.3.1.tgz#9a956291365f092bb3617071de189ef820ca1e7c"
+  integrity sha512-FCedMyLVHEtHZdh+GiW/P3lHnRKGMJmWkEd1J5vc+Q9Pvfj+uJw++MChTLY174ynaLT29EQjN82nax6mQjYDFQ==
   dependencies:
     "@fontsource/dm-mono" "^4.5.10"
     "@fontsource/titillium-web" "^4.5.9"
