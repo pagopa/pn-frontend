@@ -70,6 +70,7 @@
     "show-more": "Voir plus de détails",
     "show-less": "Voir moins de détails",
     "disclaimer-link": "En savoir plus",
+    "pec-unreachable": "Maintenez votre adresse PEC libre et active pour tout recevoir au format numérique !",
     "cancelled": {
       "message": "Cette notification a été annulée par l'organisme émetteur.",
       "cta": "Que dois-je faire ?"
@@ -438,6 +439,42 @@
     "cancellation-in-progress": "Annulée",
     "cancellation-in-progress-tooltip": "Annulation en cours. Le statut sera mis à jour sous peu.",
     "cancellation-in-progress-description": "Annulation en cours. Le statut sera mis à jour sous peu."
+  },
+  "notification-cost-banner": {
+    "analog": {
+      "title": "Avec SEND, vous pouvez faire des économies !",
+      "message": "Une ou plusieurs lettres recommandées vous ont été envoyées pour le compte de l'organisme émetteur pour un coût total de {{analogCost}}, car cette notification n'a pas été ouverte sur les canaux numériques dans les délais prévus.",
+      "fallback": "Une ou plusieurs lettres recommandées vous ont été envoyées pour le compte de l'organisme émetteur car cette notification n'a pas été ouverte sur les canaux numériques dans les délais prévus. Cela entraînera des frais supplémentaires pour vous."
+    },
+    "digital_failure": {
+      "title": "Avec SEND, vous pouvez faire des économies !",
+      "message": "Nous n'avons pas pu distribuer la notification sur votre adresse e-mail certifiée (PEC), une lettre recommandée vous a donc été envoyée au coût de {{analogCost}}.",
+      "fallback": "Nous n'avons pas pu distribuer la notification sur votre adresse e-mail certifiée (PEC), une lettre recommandée vous a donc été envoyée. Cela entraînera des frais supplémentaires pour vous."
+    },
+    "digital_platform": {
+      "title": "Avec SEND tu as fait des économies !",
+      "message": "Grâce à ton domicile numérique activé, tu as évité l'envoi recommandé et les frais correspondants."
+    },
+    "digital_special": {
+      "title": "Avec SEND tu as fait des économies !",
+      "message": "Nous avons envoyé la notification à l'adresse PEC communiquée par l'organisme émetteur, tu as ainsi évité l'envoi recommandé et les frais correspondants."
+    },
+    "digital_registry": {
+      "title": "Avec SEND tu as fait des économies !",
+      "message": "Nous avons envoyé la notification à la PEC présente dans les registres publics : tu as ainsi évité la lettre recommandée et les frais correspondants."
+    },
+    "viewed": {
+      "title": "Avec SEND tu as fait des économies !",
+      "message": "Tu as ouvert la notification numérique à temps, évitant ainsi l'envoi recommandé et les frais correspondants."
+    },
+    "enable-sercq": {
+      "message": {
+        "default": "Active un domicile numérique pour recevoir tes prochaines notifications uniquement au format numérique.",
+        "analog": "Activez SEND comme domicile numérique pour vous épargner des frais comme celui-ci.",
+        "external-pec": "Active un domicile numérique pour choisir où recevoir tes notifications SEND."
+      },
+      "cta": "Activer le domicile numérique"
+    }
   },
   "notification-alert": {
     "description": "Le montant comprend les frais de notification.",

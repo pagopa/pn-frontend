@@ -70,6 +70,7 @@
     "show-more": "Prikaži več podrobnosti",
     "show-less": "Prikaži manj podrobnosti",
     "disclaimer-link": "Izvedite več",
+    "pec-unreachable": "Vaš predal PEC naj bo prost in aktiven, da boste vse prejemali v digitalni obliki!",
     "cancelled": {
       "message": "To obvestilo je preklical organ pošiljatelj.",
       "cta": "Kaj moram storiti?"
@@ -438,6 +439,42 @@
     "cancellation-in-progress": "Preklicano",
     "cancellation-in-progress-tooltip": "Preklic poteka. Stanje bo kmalu posodobljeno.",
     "cancellation-in-progress-description": "Preklic poteka. Stanje bo kmalu posodobljeno."
+  },
+  "notification-cost-banner": {
+    "analog": {
+      "title": "S storitvijo SEND lahko prihranite!",
+      "message": "V imenu organa pošiljatelja vam je bilo poslanih eno ali več priporočenih pisem v skupnem znesku {{analogCost}}, ker to obvestilo ni bilo odprto prek digitalnih kanalov v predvidenem roku.",
+      "fallback": "V imenu organa pošiljatelja vam je bilo poslanih eno ali več priporočenih pisem, ker to obvestilo ni bilo odprto prek digitalnih kanalov v predvidenem roku. To bo za vas povzročilo dodatne stroške."
+    },
+    "digital_failure": {
+      "title": "S storitvijo SEND lahko prihranite!",
+      "message": "Obvestila nismo mogli dostaviti na vaš certificiran e-poštni naslov (PEC), zato vam je bilo poslano priporočeno pismo s stroškom {{analogCost}}.",
+      "fallback": "Obvestila nismo mogli dostaviti na vaš certificiran e-poštni naslov (PEC), zato vam je bilo poslano priporočeno pismo. To bo za vas povzročilo dodatne stroške."
+    },
+    "digital_platform": {
+      "title": "S SEND si prihranil!",
+      "message": "Zahvaljujoč aktivnemu digitalnemu naslovu si se izognil pošiljanju priporočene pošte in s tem povezanim stroškom."
+    },
+    "digital_special": {
+      "title": "S SEND si prihranil!",
+      "message": "Obvestilo smo poslali na naslov PEC, ki nam ga je sporočil organ pošiljatelj, tako si se izognil priporočeni pošti in s tem povezanim stroškom."
+    },
+    "digital_registry": {
+      "title": "S SEND si prihranil!",
+      "message": "Obvestilo smo poslali na naslov PEC, ki je naveden v javnih registrih, s čimer si se izognil priporočenemu pismu in povezanim stroškom."
+    },
+    "viewed": {
+      "title": "S SEND si prihranil!",
+      "message": "Digitalno obvestilo si odprl pravočasno in se tako izognil priporočeni pošti ter s tem povezanim stroškom."
+    },
+    "enable-sercq": {
+      "message": {
+        "default": "Aktiviraj digitalni naslov za prejemanje prihodnjih obvestil le v digitalni obliki.",
+        "analog": "Aktivirajte SEND kot digitalni naslov, da si prihranite stroške, kot je ta.",
+        "external-pec": "Aktiviraj digitalni naslov in izberi, kje želiš prejemati obvestila SEND."
+      },
+      "cta": "Aktiviraj digitalni naslov"
+    }
   },
   "notification-alert": {
     "description": "Znesek vključuje stroške obvestila.",
