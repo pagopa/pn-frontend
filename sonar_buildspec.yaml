@@ -20,9 +20,7 @@ phases:
     commands:
       - >
         if [[ "$SUB_PRJ_NAME" == 'packages/pn-pa-webapp' || "$SUB_PRJ_NAME" == 'packages/pn-personafisica-webapp' || "$SUB_PRJ_NAME" == 'packages/pn-personagiuridica-webapp' ]] ; then 
-          VERSION=$(jq -r '.["generator-cli"].version' openapitools.json)
-          echo "Generate clients for the version $VERSION..."
-          npx @openapitools/openapi-generator-cli version-manager set $VERSION
+          echo "Generate clients..."
           yarn generate
         fi
       - echo Running tests with coverage...

@@ -3,6 +3,9 @@
   "spaces": 2,
   "generator-cli": {
     "version": "7.4.0",
+    "repository": {
+      "url": "https://pn-codeartifact-domain-911845998067.d.codeartifact.eu-central-1.amazonaws.com/maven/pn-codeartifact-repo/"
+    },
     "generators": {
       "bff-notifications": {
         "generatorName": "typescript-axios",
