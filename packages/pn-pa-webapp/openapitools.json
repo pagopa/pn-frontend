@@ -2,7 +2,7 @@
   "$schema": "./node_modules/@openapitools/openapi-generator-cli/config.schema.json",
   "spaces": 2,
   "generator-cli": {
-    "version": "7.4.0",
+    "version": "7.17.0",
     "repository": {
       "url": "https://pn-codeartifact-domain-911845998067.d.codeartifact.eu-central-1.amazonaws.com/maven/pn-codeartifact-repo/"
     },
