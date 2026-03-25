@@ -57,8 +57,8 @@ type Props = {
   accessibilityLink: string;
   /** Enable assistance button */
   enableAssistanceButton?: boolean;
-  /** Flag that indicate if logged user is a support user */
-  isSupportUser?: boolean;
+  /** Label of the chip displayed next to product switch */
+  chipLabel?: string;
   slotsProps?: {
     content?: Partial<StackProps>;
     main?: Partial<BoxOwnProps>;
@@ -91,7 +91,7 @@ const Layout: React.FC<Props> = ({
   termsOfServiceHref,
   accessibilityLink,
   enableAssistanceButton = true,
-  isSupportUser = false,
+  chipLabel,
   slotsProps,
 }) => (
   <ErrorBoundary
@@ -119,7 +119,7 @@ const Layout: React.FC<Props> = ({
             onAssistanceClick={onAssistanceClick}
             isLogged={isLogged}
             enableAssistanceButton={enableAssistanceButton}
-            isSupportUser={isSupportUser}
+            chipLabel={chipLabel}
           />
         )}
         <Stack

@@ -23,13 +23,13 @@ export const AuthApi = {
       .post<User>(AUTH_TOKEN_EXCHANGE(), { authorizationToken: selfCareToken })
       .then((response): User => {
         // eslint-disable-next-line functional/immutable-data
-        // response.data = {
-        //   uid: '4253a451-4b19-476f-8f8f-baa10f9934de',
-        //   email: 'f.bianchi@codermine.com',
-        //   organization: supportOrganization,
-        //   desired_exp: response.data.desired_exp,
-        //   sessionToken: response.data.sessionToken,
-        // };
+        response.data = {
+          uid: '4253a451-4b19-476f-8f8f-baa10f9934de',
+          email: 'f.bianchi@codermine.com',
+          organization: supportOrganization,
+          desired_exp: response.data.desired_exp,
+          sessionToken: response.data.sessionToken,
+        };
         console.log(response, supportOrganization);
 
         return removeNullProperties<User>({

@@ -312,7 +312,7 @@ const ActualApp = () => {
         onAssistanceClick={handleAssistanceClick}
         isLogged={!!sessionToken}
         accessibilityLink={ACCESSIBILITY_LINK}
-        isSupportUser={isSupportUser}
+        chipLabel={isSupportUser ? t('header.support') : undefined}
       >
         <PnDialog open={openModal}>
           <DialogTitle sx={{ mb: 2 }}>{t('header.logout-message')}</DialogTitle>

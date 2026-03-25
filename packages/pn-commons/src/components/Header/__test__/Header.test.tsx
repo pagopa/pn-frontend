@@ -330,16 +330,16 @@ describe('Header Component', () => {
     expect(window.location.href).toBe('');
   });
 
-  it('renders chip with "Supporto" label when isSupportUser is true', () => {
+  it('renders chip with label when chipLabel is defined', () => {
     render(
       <Header
         productsList={productsList}
         loggedUser={loggedUser}
         productId={productsList[0].id}
-        isSupportUser
+        chipLabel="test-label"
       />
     );
-    const chip = screen.getByText('header.support');
+    const chip = screen.getByText('test-label');
     expect(chip).toBeInTheDocument();
   });
 
