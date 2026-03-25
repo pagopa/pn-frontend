@@ -57,6 +57,8 @@ type Props = {
   accessibilityLink: string;
   /** Enable assistance button */
   enableAssistanceButton?: boolean;
+  /** Flag that indicate if logged user is a support user */
+  isSupportUser?: boolean;
   slotsProps?: {
     content?: Partial<StackProps>;
     main?: Partial<BoxOwnProps>;
@@ -89,6 +91,7 @@ const Layout: React.FC<Props> = ({
   termsOfServiceHref,
   accessibilityLink,
   enableAssistanceButton = true,
+  isSupportUser = false,
   slotsProps,
 }) => (
   <ErrorBoundary
@@ -116,6 +119,7 @@ const Layout: React.FC<Props> = ({
             onAssistanceClick={onAssistanceClick}
             isLogged={isLogged}
             enableAssistanceButton={enableAssistanceButton}
+            isSupportUser={isSupportUser}
           />
         )}
         <Stack

@@ -38,6 +38,8 @@ type HeaderProps = {
   isLogged?: boolean;
   /** Enable assistance button */
   enableAssistanceButton?: boolean;
+  /** Flag that indicate if logged user is a support user */
+  isSupportUser?: boolean;
 };
 
 const Header: React.FC<HeaderProps> = ({
@@ -53,6 +55,7 @@ const Header: React.FC<HeaderProps> = ({
   onAssistanceClick,
   isLogged,
   enableAssistanceButton,
+  isSupportUser = false,
 }) => {
   const pagoPAHeaderLink: RootLinkType = {
     ...pagoPALink(),
@@ -119,6 +122,10 @@ const Header: React.FC<HeaderProps> = ({
           partyId={partyId}
           productsList={productsList}
           partyList={partyList}
+          chipLabel={
+            isSupportUser ? getLocalizedOrDefaultLabel('common', 'header.support') : undefined
+          }
+          // chipSize="medium"
           onSelectedProduct={handleProductSelection}
           onSelectedParty={(party) => handlePartySelection(party as PartyEntityWithUrl)}
         />

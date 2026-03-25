@@ -330,6 +330,19 @@ describe('Header Component', () => {
     expect(window.location.href).toBe('');
   });
 
+  it('renders chip with "Supporto" label when isSupportUser is true', () => {
+    render(
+      <Header
+        productsList={productsList}
+        loggedUser={loggedUser}
+        productId={productsList[0].id}
+        isSupportUser
+      />
+    );
+    const chip = screen.getByText('header.support');
+    expect(chip).toBeInTheDocument();
+  });
+
   it('clicks on exit with default value', async () => {
     const { container } = render(
       <Header
