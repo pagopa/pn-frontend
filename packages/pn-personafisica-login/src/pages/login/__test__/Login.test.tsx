@@ -1,4 +1,3 @@
-import { BrowserRouter } from 'react-router-dom';
 import { vi } from 'vitest';
 
 import { AppRouteParams } from '@pagopa-pn/pn-commons';
@@ -15,28 +14,9 @@ import { storageRapidAccessOps } from '../../../utility/storage';
 import Login from '../Login';
 
 const mockAssign = vi.fn();
-let mockSearchParamsAar = true;
-let mockSearchParamsRetrievalId = false;
 let isSmartAppBannerEnabled = true;
 
-// simulate url params
-function mockCreateMockedSearchParams() {
-  const mockedSearchParams = new URLSearchParams();
-  if (mockSearchParamsAar) {
-    mockedSearchParams.set(AppRouteParams.AAR, 'fake-aar-token');
-  }
-  if (mockSearchParamsRetrievalId) {
-    mockedSearchParams.set(AppRouteParams.RETRIEVAL_ID, 'fake-retrieval_id');
-  }
-  return mockedSearchParams;
-}
-
 // mock imports
-vi.mock('react-router-dom', async () => ({
-  ...(await vi.importActual<any>('react-router-dom')),
-  useSearchParams: () => [mockCreateMockedSearchParams(), null],
-}));
-
 vi.mock('../../../services/configuration.service', async () => {
   return {
     ...(await vi.importActual<any>('../../../services/configuration.service')),
@@ -47,10 +27,10 @@ vi.mock('../../../services/configuration.service', async () => {
 });
 
 describe('test login page', () => {
-  const original = window.location;
+  const original = globalThis.location;
 
   beforeAll(() => {
-    Object.defineProperty(window, 'location', { value: { assign: mockAssign } });
+    Object.defineProperty(globalThis, 'location', { value: { assign: mockAssign } });
   });
 
   afterEach(() => {
@@ -59,15 +39,11 @@ describe('test login page', () => {
   });
 
   afterAll(() => {
-    Object.defineProperty(window, 'location', { value: original });
+    Object.defineProperty(globalThis, 'location', { value: original });
   });
 
   it('renders page', () => {
-    const { container } = render(
-      <BrowserRouter>
-        <Login />
-      </BrowserRouter>
-    );
+    const { container } = render(<Login />, { route: `/?${AppRouteParams.AAR}=fake-aar-token` });
     expect(container).toHaveTextContent(/loginPage.title/i);
     expect(container).toHaveTextContent(/loginPage.description/i);
     const spidButton = getById(container, 'spidButton');
@@ -81,35 +57,23 @@ describe('test login page', () => {
 
   it('renders page - with smart banner enabled', () => {
     // enable mobile view
-    window.matchMedia = createMatchMedia(800);
-    const { container } = render(
-      <BrowserRouter>
-        <Login />
-      </BrowserRouter>
-    );
+    globalThis.matchMedia = createMatchMedia(800);
+    const { container } = render(<Login />);
     const ioSmartAppBanner = getById(container, 'ioSmartAppBanner');
     expect(ioSmartAppBanner).toBeInTheDocument();
   });
 
   it('renders page - whitout smart banner enabled', () => {
     isSmartAppBannerEnabled = false;
-    const { container } = render(
-      <BrowserRouter>
-        <Login />
-      </BrowserRouter>
-    );
+    const { container } = render(<Login />);
     const ioSmartAppBanner = queryById(container, 'ioSmartAppBanner');
     expect(ioSmartAppBanner).not.toBeInTheDocument();
     // disable mobile view
-    window.matchMedia = createMatchMedia(1202);
+    globalThis.matchMedia = createMatchMedia(1202);
   });
 
   it('select spid login', async () => {
-    const { container } = render(
-      <BrowserRouter>
-        <Login />
-      </BrowserRouter>
-    );
+    const { container } = render(<Login />);
     const spidButton = getById(container, 'spidButton');
     fireEvent.click(spidButton);
     const spidSelect = await waitFor(() => document.querySelector('#spidSelect'));
@@ -118,11 +82,7 @@ describe('test login page', () => {
 
   it('select CIE login', () => {
     const { URL_API_LOGIN, SPID_CIE_ENTITY_ID } = getConfiguration();
-    const { container } = render(
-      <BrowserRouter>
-        <Login />
-      </BrowserRouter>
-    );
+    const { container } = render(<Login />);
     const cieButton = getById(container, 'cieButton');
     fireEvent.click(cieButton);
     expect(mockAssign).toHaveBeenCalledTimes(1);
@@ -132,22 +92,12 @@ describe('test login page', () => {
   });
 
   it('not store data in session storage', () => {
-    mockSearchParamsAar = false;
-    render(
-      <BrowserRouter>
-        <Login />
-      </BrowserRouter>
-    );
+    render(<Login />);
     expect(storageRapidAccessOps.read()).toBeUndefined();
   });
 
   it('store retrievalId in session storage', () => {
-    mockSearchParamsRetrievalId = true;
-    render(
-      <BrowserRouter>
-        <Login />
-      </BrowserRouter>
-    );
+    render(<Login />, { route: `/?${AppRouteParams.RETRIEVAL_ID}=fake-retrieval_id` });
     expect(storageRapidAccessOps.read()).toEqual([
       AppRouteParams.RETRIEVAL_ID,
       'fake-retrieval_id',
