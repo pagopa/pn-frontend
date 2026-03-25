@@ -5,7 +5,7 @@ import { formatToTimezoneString, tenYearsAgo, today } from '@pagopa-pn/pn-common
 import { mandatesByDelegate } from '../../../__mocks__/Delegations.mock';
 import { notificationsToFe } from '../../../__mocks__/Notifications.mock';
 import {
-  CustomRenderResult,
+  RenderResult,
   act,
   fireEvent,
   render,
@@ -17,7 +17,7 @@ import * as routes from '../../../navigation/routes.const';
 import DesktopNotifications from '../DesktopNotifications';
 
 describe('DesktopNotifications Component', () => {
-  let result: CustomRenderResult;
+  let result: RenderResult;
 
   afterEach(() => {
     vi.clearAllMocks();

@@ -5,7 +5,7 @@ import { RouterProvider, createMemoryRouter } from 'react-router-dom';
 import { vi } from 'vitest';
 
 import { ThemeProvider, createTheme } from '@mui/material';
-import { EnhancedStore, Store, configureStore } from '@reduxjs/toolkit';
+import { EnhancedStore, configureStore } from '@reduxjs/toolkit';
 import {
   Matcher,
   MatcherOptions,
@@ -20,7 +20,7 @@ import {
 } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
-import { appStateSlice } from './redux/slices/appStateSlice';
+import { AppStateState, appStateSlice } from './redux/slices/appStateSlice';
 import { formatDate } from './utility/date.utility';
 import { initLocalization } from './utility/localization.utility';
 
@@ -32,6 +32,11 @@ interface CustomRenderOptions extends Omit<RenderOptions, 'wrapper'> {
   initialIndex?: number;
   path?: string;
 }
+
+type CustomRenderResult = RenderResult & {
+  testStore: EnhancedStore<{ appState: AppStateState }>;
+  router: ReturnType<typeof createMemoryRouter>;
+};
 
 // UiContext and RouterBridge are needed to use wrapper and rerender method
 // the RouterProvider doesn't admit children, so to make rerender work we must use context that triggers every time the ui change
@@ -415,7 +420,4 @@ export {
   theme,
   disableConsoleLogging,
 };
-export type CustomRenderResult = RenderResult & {
-  testStore: EnhancedStore<Store>;
-  router: ReturnType<typeof createMemoryRouter>;
-};
+export type { CustomRenderResult as RenderResult };

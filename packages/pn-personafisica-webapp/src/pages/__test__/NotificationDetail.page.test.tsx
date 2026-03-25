@@ -37,7 +37,7 @@ import {
   raddNotificationDTO,
 } from '../../__mocks__/NotificationDetail.mock';
 import {
-  CustomRenderResult,
+  RenderResult,
   act,
   fireEvent,
   render,
@@ -77,7 +77,7 @@ const delegator = mandatesByDelegate.find(
 ATTENZIONE: un'evenutale modifica al mock potrebbe causare il fallimento di alcuni test
 */
 describe('NotificationDetail Page', async () => {
-  let result: CustomRenderResult;
+  let result: RenderResult;
   let mock: MockAdapter;
   const mockLegalIds = getLegalFactIds(notificationToFe, 2);
   const original = globalThis.location;

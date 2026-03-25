@@ -10,6 +10,10 @@ interface CustomRenderOptions extends Omit<RenderOptions, 'wrapper'> {
   path?: string;
 }
 
+type CustomRenderResult = RenderResult & {
+  router: ReturnType<typeof createMemoryRouter>;
+};
+
 // UiContext and RouterBridge are needed to use wrapper and rerender method
 // the RouterProvider doesn't admit children, so to make rerender work we must use context that triggers every time the ui change
 const UiContext = createContext<ReactElement | null>(null);
@@ -55,6 +59,4 @@ const customRender = (
 
 export * from '@testing-library/react';
 export { customRender as render };
-export type CustomRenderResult = RenderResult & {
-  router: ReturnType<typeof createMemoryRouter>;
-};
+export type { CustomRenderResult as RenderResult };

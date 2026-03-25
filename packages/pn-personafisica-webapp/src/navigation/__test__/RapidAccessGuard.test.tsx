@@ -1,10 +1,9 @@
 import MockAdapter from 'axios-mock-adapter';
 import { Route, Routes } from 'react-router-dom';
-import { vi } from 'vitest';
 
 import { AppRouteParams } from '@pagopa-pn/pn-commons';
 
-import { CustomRenderResult, act, render, screen, waitFor } from '../../__test__/test-utils';
+import { RenderResult, act, render, screen, waitFor } from '../../__test__/test-utils';
 import { apiClient } from '../../api/apiClients';
 import { BffCheckTPPResponse } from '../../generated-client/notifications';
 import RapidAccessGuard from '../RapidAccessGuard';
@@ -20,7 +19,7 @@ const Guard = () => (
 
 describe('Rapid access Guard', async () => {
   let mock: MockAdapter;
-  let result: CustomRenderResult;
+  let result: RenderResult;
 
   beforeAll(() => {
     mock = new MockAdapter(apiClient);
@@ -28,7 +27,6 @@ describe('Rapid access Guard', async () => {
 
   afterEach(() => {
     mock.reset();
-    vi.clearAllMocks();
   });
 
   afterAll(() => {

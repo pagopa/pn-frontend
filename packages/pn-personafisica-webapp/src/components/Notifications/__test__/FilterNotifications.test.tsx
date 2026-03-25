@@ -8,7 +8,7 @@ import {
 } from '@pagopa-pn/pn-commons/src/test-utils';
 
 import {
-  CustomRenderResult,
+  RenderResult,
   act,
   fireEvent,
   render,
@@ -43,7 +43,7 @@ async function setFormValues(
 }
 
 describe('Filter Notifications Table Component', async () => {
-  let result: CustomRenderResult;
+  let result: RenderResult;
   let form: HTMLFormElement;
 
   const original = globalThis.matchMedia;

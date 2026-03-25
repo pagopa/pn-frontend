@@ -1,32 +1,84 @@
-import { ReactElement, ReactNode } from 'react';
+import { ReactElement, ReactNode, createContext, useContext } from 'react';
 import { Provider } from 'react-redux';
-import { BrowserRouter } from 'react-router-dom';
+import { RouterProvider, createMemoryRouter } from 'react-router-dom';
 
-import { EnhancedStore, Store, configureStore } from '@reduxjs/toolkit';
-import { RenderOptions, render } from '@testing-library/react';
+import { EnhancedStore, configureStore } from '@reduxjs/toolkit';
+import { InitialEntry } from '@remix-run/router';
+import { RenderOptions, RenderResult, render } from '@testing-library/react';
 
 import { RootState, appReducers } from '../redux/store';
 
-let testStore: EnhancedStore<RootState>;
-type NavigationRouter = 'default' | 'none';
+interface CustomRenderOptions extends Omit<RenderOptions, 'wrapper'> {
+  preloadedState?: any;
+  route?: string | Array<InitialEntry>;
+  initialIndex?: number;
+  path?: string;
+}
 
-const AllTheProviders = ({
-  children,
-  testStore,
-  navigationRouter,
-}: {
-  children: ReactNode;
-  testStore: Store;
-  navigationRouter: NavigationRouter;
-}) => {
-  if (navigationRouter === 'default') {
-    return (
-      <BrowserRouter>
-        <Provider store={testStore}>{children}</Provider>
-      </BrowserRouter>
-    );
-  }
-  return <Provider store={testStore}>{children}</Provider>;
+type CustomRenderResult = RenderResult & {
+  testStore: EnhancedStore<RootState>;
+  router: ReturnType<typeof createMemoryRouter>;
+};
+
+// UiContext and RouterBridge are needed to use wrapper and rerender method
+// the RouterProvider doesn't admit children, so to make rerender work we must use context that triggers every time the ui change
+const UiContext = createContext<ReactElement | null>(null);
+
+const RouterBridge = () => {
+  const currentUi = useContext(UiContext);
+  return <>{currentUi}</>;
+};
+
+const customRender = (
+  ui: ReactElement,
+  {
+    preloadedState,
+    route = '/',
+    initialIndex,
+    path = '*',
+    ...renderOptions
+  }: CustomRenderOptions = {}
+) => {
+  // test redux store
+  const testStore = configureStore({
+    reducer: appReducers,
+    preloadedState,
+    middleware: (getDefaultMiddleware) =>
+      getDefaultMiddleware({
+        serializableCheck: false,
+      }),
+  });
+
+  // test router
+  const entries = Array.isArray(route) ? route : [route];
+  const activeIndex = initialIndex ?? entries.length - 1;
+  const router = createMemoryRouter(
+    [
+      {
+        path,
+        element: <RouterBridge />,
+      },
+    ],
+    {
+      initialEntries: entries, // Initial entries in the in-memory history stack
+      initialIndex: activeIndex, // Index of initialEntries the application should initialize to
+    }
+  );
+
+  // test view
+  const Wrapper = ({ children }: { children: ReactNode }) => (
+    <Provider store={testStore}>
+      <UiContext.Provider value={children as ReactElement}>
+        <RouterProvider router={router} />
+      </UiContext.Provider>
+    </Provider>
+  );
+  const view = render(ui, {
+    wrapper: Wrapper,
+    ...renderOptions,
+  });
+
+  return { ...view, router, testStore };
 };
 
 const createTestStore = (preloadedState = {}) =>
@@ -39,30 +91,6 @@ const createTestStore = (preloadedState = {}) =>
       }),
   });
 
-const customRender = (
-  ui: ReactElement,
-  {
-    preloadedState,
-    renderOptions,
-    navigationRouter = 'default',
-  }: {
-    preloadedState?: any;
-    renderOptions?: Omit<RenderOptions, 'wrapper'>;
-    navigationRouter?: NavigationRouter;
-  } = {}
-) => {
-  testStore = createTestStore(preloadedState);
-  return render(ui, {
-    wrapper: ({ children }) => (
-      <AllTheProviders navigationRouter={navigationRouter} testStore={testStore}>
-        {children}
-      </AllTheProviders>
-    ),
-    ...renderOptions,
-  });
-};
-
-// re-exporting everything
 export * from '@testing-library/react';
-// override render method
-export { customRender as render, testStore, createTestStore };
+export { customRender as render, createTestStore };
+export type { CustomRenderResult as RenderResult };

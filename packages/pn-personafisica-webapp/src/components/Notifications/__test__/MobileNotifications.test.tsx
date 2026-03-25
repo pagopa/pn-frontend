@@ -4,12 +4,12 @@ import { formatToTimezoneString, tenYearsAgo, today } from '@pagopa-pn/pn-common
 import { createMatchMedia } from '@pagopa-pn/pn-commons/src/test-utils';
 
 import { notificationsToFe } from '../../../__mocks__/Notifications.mock';
-import { CustomRenderResult, act, fireEvent, render, waitFor } from '../../../__test__/test-utils';
+import { RenderResult, act, fireEvent, render, waitFor } from '../../../__test__/test-utils';
 import * as routes from '../../../navigation/routes.const';
 import MobileNotifications from '../MobileNotifications';
 
 describe('MobileNotifications Component', () => {
-  let result: CustomRenderResult;
+  let result: RenderResult;
   const original = globalThis.matchMedia;
 
   beforeAll(() => {

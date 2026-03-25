@@ -12,14 +12,7 @@ import { createMatchMedia, testInput } from '@pagopa-pn/pn-commons/src/test-util
 
 import { errorMock } from '../../__mocks__/Errors.mock';
 import { emptyNotificationsFromBe, notificationsDTO } from '../../__mocks__/Notifications.mock';
-import {
-  CustomRenderResult,
-  act,
-  fireEvent,
-  render,
-  screen,
-  waitFor,
-} from '../../__test__/test-utils';
+import { RenderResult, act, fireEvent, render, screen, waitFor } from '../../__test__/test-utils';
 import { apiClient } from '../../api/apiClients';
 import * as routes from '../../navigation/routes.const';
 import { DASHBOARD_ACTIONS } from '../../redux/dashboard/actions';
@@ -27,7 +20,7 @@ import { ServerResponseErrorCode } from '../../utility/AppError/types';
 import Dashboard from '../Dashboard.page';
 
 describe('Dashboard Page', async () => {
-  let result: CustomRenderResult;
+  let result: RenderResult;
   let mock: MockAdapter;
   const original = globalThis.matchMedia;
 

@@ -1,18 +1,10 @@
 import MockAdapter from 'axios-mock-adapter';
-import { vi } from 'vitest';
 
 import { mandatesByDelegator } from '../../../__mocks__/Delegations.mock';
 import { fireEvent, render, waitFor, within } from '../../../__test__/test-utils';
 import { apiClient } from '../../../api/apiClients';
 import * as routes from '../../../navigation/routes.const';
 import DelegatesByCompany from '../DelegatesByCompany';
-
-const mockNavigateFn = vi.fn();
-
-vi.mock('react-router-dom', async () => ({
-  ...(await vi.importActual<any>('react-router-dom')),
-  useNavigate: () => mockNavigateFn,
-}));
 
 describe('Delegates Component - assuming delegates API works properly', async () => {
   let mock: MockAdapter;
@@ -23,16 +15,14 @@ describe('Delegates Component - assuming delegates API works properly', async ()
 
   afterEach(() => {
     mock.reset();
-    vi.clearAllMocks();
   });
 
   afterAll(() => {
-    vi.clearAllMocks();
     mock.restore();
   });
 
   it('renders the empty state', () => {
-    const { container, getByTestId } = render(<DelegatesByCompany />, {
+    const { container, getByTestId, router } = render(<DelegatesByCompany />, {
       preloadedState: {
         delegationsState: {
           delegations: {
@@ -49,8 +39,7 @@ describe('Delegates Component - assuming delegates API works properly', async ()
     // clicks on empty state action
     const button = getByTestId('link-add-delegate');
     fireEvent.click(button);
-    expect(mockNavigateFn).toHaveBeenCalledTimes(1);
-    expect(mockNavigateFn).toHaveBeenCalledWith(routes.NUOVA_DELEGA);
+    expect(router.state.location.pathname).toBe(routes.NUOVA_DELEGA);
   });
 
   it('render table with data', async () => {
@@ -74,11 +63,10 @@ describe('Delegates Component - assuming delegates API works properly', async ()
   });
 
   it('clicks on add button and navigate to new delegation page', () => {
-    const { getByTestId } = render(<DelegatesByCompany />);
+    const { getByTestId, router } = render(<DelegatesByCompany />);
     const addButton = getByTestId('addDeleghe');
     fireEvent.click(addButton);
-    expect(mockNavigateFn).toHaveBeenCalledTimes(1);
-    expect(mockNavigateFn).toHaveBeenCalledWith(routes.NUOVA_DELEGA);
+    expect(router.state.location.pathname).toBe(routes.NUOVA_DELEGA);
   });
 
   it('visualize modal code and check code', async () => {

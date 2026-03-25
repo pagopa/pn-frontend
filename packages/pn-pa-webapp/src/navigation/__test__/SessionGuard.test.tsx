@@ -4,7 +4,7 @@ import { Route, Routes } from 'react-router-dom';
 import { vi } from 'vitest';
 
 import { userResponse } from '../../__mocks__/Auth.mock';
-import { CustomRenderResult, act, render, screen, waitFor } from '../../__test__/test-utils';
+import { RenderResult, act, render, screen, waitFor } from '../../__test__/test-utils';
 import { authClient } from '../../api/apiClients';
 import { AUTH_TOKEN_EXCHANGE } from '../../api/auth/auth.routes';
 import { store } from '../../redux/store';
@@ -23,7 +23,7 @@ const Guard = () => (
 
 describe('SessionGuard Component', async () => {
   let mock: MockAdapter;
-  let result: CustomRenderResult;
+  let result: RenderResult;
   const originalOpen = globalThis.open;
   const mockOpenFn = vi.fn();
 
