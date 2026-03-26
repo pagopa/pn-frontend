@@ -443,29 +443,29 @@
   "notification-cost-banner": {
     "analog": {
       "title": "Con SEND puoi risparmiare!",
-      "message": "Ti sono state inviate una o più raccomandate per conto dell'ente mittente al costo totale di {{analogCost}}, perché questa notifica non è stata aperta sui canali digitali entro i termini previsti.",
-      "fallback": "Ti sono state inviate una o più raccomandate per conto dell’ente mittente perché questa notifica non è stata aperta sui canali digitali entro i termini previsti. Ciò comporterà per te dei costi aggiuntivi."
+      "message": "Sono state inviate alla tua impresa una o più raccomandate per conto dell'ente mittente al costo totale di {{analogCost}}, perché questa notifica non è stata aperta sui canali digitali entro i termini previsti.",
+      "fallback": "Sono state inviate alla tua impresa una o più raccomandate per conto dell'ente mittente perché questa notifica non è stata aperta sui canali digitali entro i termini previsti. Ciò comporterà dei costi aggiuntivi."
     },
     "digital_failure": {
       "title": "Con SEND puoi risparmiare!",
-      "message": "Non siamo riusciti a consegnare la notifica sulla tua PEC, quindi ti è stata inviata una raccomandata al costo di {{analogCost}}.",
-      "fallback": "Non siamo riusciti a consegnare la notifica sulla tua PEC, quindi ti è stata inviata una raccomandata. Ciò comporterà per te dei costi aggiuntivi."
+      "message": "Non siamo riusciti a consegnare la notifica sulla PEC, quindi è stata inviata alla tua impresa una raccomandata al costo di  {{analogCost}}.",
+      "fallback": "Non siamo riusciti a consegnare la notifica sulla PEC, quindi è stata inviata alla tua impresa una raccomandata. Ciò comporterà dei costi aggiuntivi."
     },
     "digital_platform": {
       "title": "Con SEND hai risparmiato!",
-      "message": "Grazie al domicilio digitale attivo, hai evitato l’invio della raccomandata e i relativi costi."
+      "message": "Grazie al domicilio digitale attivo, la tua impresa ha evitato l'invio della raccomandata e i relativi costi."
     },
     "digital_special": {
       "title": "Con SEND hai risparmiato!",
-      "message": "Abbiamo inviato la notifica sulla PEC che ci ha comunicato l’ente mittente, così hai evitato la raccomandata e i relativi costi."
+      "message": "Abbiamo inviato la notifica sulla PEC che ci ha comunicato l'ente mittente, così la tua impresa ha evitato la raccomandata e i relativi costi."
     },
     "digital_registry": {
       "title": "Con SEND hai risparmiato!",
-      "message": "Abbiamo inviato la notifica sulla PEC presente nei registri pubblici, così hai evitato la raccomandata e i relativi costi."
+      "message": "Abbiamo inviato la notifica sulla PEC presente nei registri pubblici, così la tua impresa ha evitato la raccomandata e i relativi costi."
     },
     "viewed": {
       "title": "Con SEND hai risparmiato!",
-      "message": "Hai aperto la notifica in digitale in tempo, evitando la raccomandata e i relativi costi."
+      "message": "È stata aperta la notifica in digitale in tempo, evitando la raccomandata e i relativi costi."
     },
     "enable-sercq": {
       "message": {

@@ -443,29 +443,29 @@
   "notification-cost-banner": {
     "analog": {
       "title": "Save money with SEND!",
-      "message": "One or more registered mail have been sent to you on behalf of the issuing institution at a total cost of {{analogCost}}, because this notification was not opened on digital channels within the required timeframes.",
-      "fallback": "One or more registered mail have been sent to you on behalf of the issuing institution because this notification was not opened on digital channels within the required timeframes. This will result in additional costs for you."
+      "message": "One or more registered mail were sent to your company on behalf of the issuing institution at a total cost of {{analogCost}}, because this notification was not opened via digital channels within the required deadlines.",
+      "fallback": "One or more registered mail were sent to your company on behalf of the issuing institution because this notification was not opened via digital channels within the required deadlines. This will result in additional costs."
     },
     "digital_failure": {
       "title": "Save money with SEND!",
-      "message": "We were unable to deliver the notification to your certified e-mail (PEC), so a registered mail was sent to you at a cost of {{analogCost}}.",
-      "fallback": "We were unable to deliver the notification to your certified e-mail (PEC), so a registered mail was sent to you. This will result in additional costs for you."
+      "message": "We were unable to deliver the notification to the certified email (PEC), so a registered mail was sent to your company at a cost of {{analogCost}}.",
+      "fallback": "We were unable to deliver the notification to the certified email (PEC), so a registered mail was sent to your company. This will result in additional costs."
     },
     "digital_platform": {
       "title": "With SEND you have saved!",
-      "message": "Thanks to your active digital address, you avoided the registered mail and the related costs."
+      "message": "Thanks to your active digital address, your company avoided the registered mail and the related costs."
     },
     "digital_special": {
       "title": "With SEND you have saved!",
-      "message": "We sent the notification to the PEC address provided by the issuing institution, so you avoided the registered mail and the related costs."
+      "message": "We sent the notification to the certified email (PEC) provided by the issuing institution, so your company avoided the registered mail and the related costs."
     },
     "digital_registry": {
       "title": "With SEND you have saved!",
-      "message": "We sent the notification to the PEC address in the public registries, so you avoided registered mail and the relative costs."
+      "message": "We sent the notification to the certified email (PEC) found in public registries, so your company avoided the registered mail and the related costs."
     },
     "viewed": {
       "title": "With SEND you have saved!",
-      "message": "You opened the digital notification in time, avoiding the registered mail and the related costs."
+      "message": "The digital notification was opened in time, avoiding the registered mail and the related costs."
     },
     "enable-sercq": {
       "message": {

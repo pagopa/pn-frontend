@@ -443,29 +443,29 @@
   "notification-cost-banner": {
     "analog": {
       "title": "Avec SEND, vous pouvez faire des économies !",
-      "message": "Une ou plusieurs lettres recommandées vous ont été envoyées pour le compte de l'organisme émetteur pour un coût total de {{analogCost}}, car cette notification n'a pas été ouverte sur les canaux numériques dans les délais prévus.",
-      "fallback": "Une ou plusieurs lettres recommandées vous ont été envoyées pour le compte de l'organisme émetteur car cette notification n'a pas été ouverte sur les canaux numériques dans les délais prévus. Cela entraînera des frais supplémentaires pour vous."
+      "message": "Une ou plusieurs lettres recommandées ont été envoyées à votre entreprise pour le compte de l'organisme émetteur pour un coût total de {{analogCost}}, car cette notification n'a pas été ouverte sur les canaux numériques dans les délais prévus.",
+      "fallback": "Une ou plusieurs lettres recommandées ont été envoyées à votre entreprise pour le compte de l'organisme émetteur car cette notification n'a pas été ouverte sur les canaux numériques dans les délais prévus. Cela entraînera des frais supplémentaires."
     },
     "digital_failure": {
       "title": "Avec SEND, vous pouvez faire des économies !",
-      "message": "Nous n'avons pas pu distribuer la notification sur votre adresse e-mail certifiée (PEC), une lettre recommandée vous a donc été envoyée au coût de {{analogCost}}.",
-      "fallback": "Nous n'avons pas pu distribuer la notification sur votre adresse e-mail certifiée (PEC), une lettre recommandée vous a donc été envoyée. Cela entraînera des frais supplémentaires pour vous."
+      "message": "Nous n'avons pas pu remettre la notification sur l'adresse PEC, une lettre recommandée a donc été envoyée à votre entreprise au coût de {{analogCost}}.",
+      "fallback": "Nous n'avons pas pu remettre la notification sur l'adresse PEC, une lettre recommandée a donc été envoyée à votre entreprise. Cela entraînera des frais supplémentaires."
     },
     "digital_platform": {
       "title": "Avec SEND tu as fait des économies !",
-      "message": "Grâce à ton domicile numérique activé, tu as évité l'envoi recommandé et les frais correspondants."
+      "message": "Grâce au domicile numérique actif, votre entreprise a évité l'envoi de la lettre recommandée et les frais associés."
     },
     "digital_special": {
       "title": "Avec SEND tu as fait des économies !",
-      "message": "Nous avons envoyé la notification à l'adresse PEC communiquée par l'organisme émetteur, tu as ainsi évité l'envoi recommandé et les frais correspondants."
+      "message": "Nous avons envoyé la notification à l'adresse PEC communiquée par l'organisme émetteur, ainsi votre entreprise a évité la lettre recommandée et les frais associés."
     },
     "digital_registry": {
       "title": "Avec SEND tu as fait des économies !",
-      "message": "Nous avons envoyé la notification à la PEC présente dans les registres publics : tu as ainsi évité la lettre recommandée et les frais correspondants."
+      "message": "Nous avons envoyé la notification à l'adresse PEC présente dans les registres publics, ainsi votre entreprise a évité la lettre recommandée et les frais associés."
     },
     "viewed": {
       "title": "Avec SEND tu as fait des économies !",
-      "message": "Tu as ouvert la notification numérique à temps, évitant ainsi l'envoi recommandé et les frais correspondants."
+      "message": "La notification numérique a été ouverte à temps, évitant la lettre recommandée et les frais associés."
     },
     "enable-sercq": {
       "message": {
