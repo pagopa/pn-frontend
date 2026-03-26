@@ -47,7 +47,7 @@ const NotificationsDataSwitch: React.FC<{
   const isMobile = useIsMobile();
 
   if (type === 'sentAt') {
-    return <>{formatDate(data.sentAt)}</>;
+    return formatDate(data.sentAt);
   }
   if (type === 'notificationStatus') {
     return <NotificationStatusChip data={data} />;
@@ -64,21 +64,10 @@ const NotificationsDataSwitch: React.FC<{
     );
   }
   if (type === 'subject') {
-    return (
-      <Box
-        sx={{
-          textOverflow: 'ellipsis',
-          overflow: 'hidden',
-          whiteSpace: 'nowrap',
-          color: 'inherit',
-        }}
-      >
-        {data.subject}
-      </Box>
-    );
+    return data.subject;
   }
   if (type === 'iun') {
-    return <>{data.iun}</>;
+    return data.iun;
   }
   if (type === 'group' && isMobile) {
     return data.group ? (

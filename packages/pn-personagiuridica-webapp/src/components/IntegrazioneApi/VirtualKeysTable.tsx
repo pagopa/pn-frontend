@@ -61,8 +61,9 @@ const VirtualKeysTable: React.FC<Props> = ({
     {
       id: 'name',
       label: t('virtualKeys.table.name'),
+      mode: 'wrap',
       tableConfiguration: {
-        cellProps: { width: '20%' },
+        cellProps: { width: '18%' },
       },
       cardConfiguration: {
         wrapValueInTypography: false,
@@ -98,7 +99,7 @@ const VirtualKeysTable: React.FC<Props> = ({
       id: 'menu',
       label: '',
       tableConfiguration: {
-        cellProps: { width: '5%' },
+        cellProps: { width: '7%' },
       },
       cardConfiguration: {
         position: 'right',
@@ -149,6 +150,7 @@ const VirtualKeysTable: React.FC<Props> = ({
               <SmartBodyCell
                 key={column.id.toString()}
                 columnId={column.id}
+                mode={column.mode}
                 tableProps={column.tableConfiguration}
                 cardProps={column.cardConfiguration}
                 isCardHeader={column.cardConfiguration?.isCardHeader}
