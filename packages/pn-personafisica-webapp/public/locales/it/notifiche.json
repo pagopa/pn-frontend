@@ -69,18 +69,13 @@
     "show-more": "Mostra più dettagli",
     "show-less": "Mostra meno dettagli",
     "disclaimer-link": "Scopri di più",
-    "pec-unreachable": "Mantieni la PEC libera per ricevere tutto in digitale!",
+    "pec-unreachable": "Mantieni la PEC libera e attiva per ricevere tutto in digitale!",
     "cancelled": {
       "message": "Questa notifica è stata annullata dall’ente mittente.",
       "cta": "Cosa devo fare?"
     },
     "payment": {
       "title": "Pagamento",
-      "single-payment-subtitle": "L'importo finale potrebbe essere diverso da quello indicato nell’atto e includere i costi di notifica.",
-      "subtitle": "In questa notifica ci sono più avvisi di pagamento: seleziona quello che vuoi pagare. L'importo finale potrebbe essere diverso da quello indicato nell’atto e includere i costi di notifica.",
-      "subtitle-f24": "Puoi pagare questa notifica tramite F24. Per vedere i dettagli, apri i modelli. L'importo finale potrebbe essere diverso da quello indicato nell’atto e includere i costi di notifica.",
-      "subtitle-mixed": "In questa notifica ci sono più possibilità di pagamento: seleziona o scarica ciò che vuoi pagare. Alcuni importi includono i costi di notifica.",
-      "how": "Come mai?",
       "f24Models": "Modelli F24",
       "pagoPANotices": "Avvisi pagoPA",
       "download-pagoPA-notice": "Scarica avviso pagoPA",
@@ -434,15 +429,19 @@
     "canceled-tooltip": "L'ente ha annullato l'invio della notifica",
     "canceled-description": "L'ente ha annullato l'invio della notifica.",
     "returned-to-sender": "Resa al mittente",
-    "returned-to-sender-tooltip-monorecipient": "Il destinatario risulta deceduto",
+    "returned-to-sender-multirecipient": "Resa al mittente",
+    "returned-to-sender-tooltip": "Il destinatario risulta deceduto",
     "returned-to-sender-tooltip-multirecipient": "Tutti i destinatari sono deceduti",
-    "returned-to-sender-description-monorecipient": "Il destinatario risulta deceduto.",
+    "returned-to-sender-description": "Il destinatario risulta deceduto.",
     "returned-to-sender-description-multirecipient": "Tutti i destinatari risultano deceduti.",
     "notification-timeline-reworked": "Evento o più eventi aggiornati",
     "notification-timeline-reworked-tooltip": "Evento o più eventi aggiornati",
     "notification-timeline-reworked-description": "Gli eventi contrassegnati con EVENTO INVALIDATO non vanno considerati in quanto sostituiti dagli eventi successivi contrassegnati con EVENTO VALIDATO.",
     "reworked-status-valid": "Evento validato",
-    "reworked-status-not-valid": "Evento invalidato"
+    "reworked-status-not-valid": "Evento invalidato",
+    "cancellation-in-progress": "Annullata",
+    "cancellation-in-progress-tooltip": "Annullamento in corso. Lo stato sarà aggiornato a breve.",
+    "cancellation-in-progress-description": "Annullamento in corso. Lo stato sarà aggiornato a breve."
   },
   "tppLanding": {
     "title": "Ciao,\nhai ricevuto una comunicazione a valore legale",
@@ -463,11 +462,13 @@
   "notification-cost-banner": {
     "analog": {
       "title": "Con SEND puoi risparmiare!",
-      "message": "Non hai aperto la notifica in digitale in tempo e quindi non è stato possibile evitare la raccomandata e i relativi costi."
+      "message": "Ti sono state inviate una o più raccomandate per conto dell'ente mittente al costo totale di {{analogCost}}, perché questa notifica non è stata aperta sui canali digitali entro i termini previsti.",
+      "fallback": "Ti sono state inviate una o più raccomandate per conto dell’ente mittente perché questa notifica non è stata aperta sui canali digitali entro i termini previsti. Ciò comporterà per te dei costi aggiuntivi."
     },
     "digital_failure": {
       "title": "Con SEND puoi risparmiare!",
-      "message": "Non siamo riusciti a consegnare la notifica sulla tua PEC, quindi ti è stata inviata una raccomandata informativa con i relativi costi."
+      "message": "Non siamo riusciti a consegnare la notifica sulla tua PEC, quindi ti è stata inviata una raccomandata al costo di {{analogCost}}.",
+      "fallback": "Non siamo riusciti a consegnare la notifica sulla tua PEC, quindi ti è stata inviata una raccomandata. Ciò comporterà per te dei costi aggiuntivi."
     },
     "digital_platform": {
       "title": "Con SEND hai risparmiato!",
@@ -488,9 +489,30 @@
     "enable-sercq": {
       "message": {
         "default": "Attiva un domicilio digitale per ricevere le prossime notifiche solo in digitale.",
+        "analog": "Attiva un domicilio digitale per risparmiarti spese come questa.",
         "external-pec": "Attiva un domicilio digitale per scegliere dove ricevere le tue notifiche SEND."
       },
       "cta": "Attiva domicilio digitale"
+    }
+  },
+  "notification-alert": {
+    "description": "L’importo comprende i costi di notifica.",
+    "cta": "Cosa sono?",
+    "details": {
+      "title": "Cosa sono i costi di notifica?",
+      "description": "Sono le spese correlate all’invio della comunicazione, che variano a seconda della modalità con cui la ricevi.",
+      "how-they-work": "Come funzionano i costi di notifica?",
+      "base-cost": "Costo di gestione",
+      "analog-cost": {
+        "total": "Costo invio cartaceo",
+        "hint": {
+          "avoided": "Invio evitato con SEND",
+          "multiple-analog-flows": "{{count}} invii eseguiti"
+        }
+      },
+      "total-cost": "Totale",
+      "error": "Non siamo riusciti a recuperare il dettaglio dei costi, riprova più tardi.",
+      "more-info": "Contatta l’ente che ti ha inviato la notifica per avere maggiori dettagli sui costi di questa comunicazione."
     }
   }
 }

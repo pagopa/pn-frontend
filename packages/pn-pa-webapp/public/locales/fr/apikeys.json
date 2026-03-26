@@ -86,5 +86,19 @@
     "continue-button": "Continuer",
     "required-fields": "Champs obligatoires",
     "no-groups": "Aucun groupe disponible"
+  },
+  "messages": {
+    "success": {
+      "api-key-enable": "Clé publique activée avec succès.",
+      "api-key-block": "Clé publique bloquée avec succès.",
+      "api-key-rotate": "Clé publique pivotée avec succès.",
+      "api-key-delete": "Clé publique supprimée avec succès."
+    },
+    "error": {
+      "api-key-enable": "Clé publique non activée",
+      "api-key-block": "Clé publique non bloquée",
+      "api-key-rotate": "Clé publique non pivotée",
+      "api-key-delete": "Clé publique non supprimée"
+    }
   }
 }

@@ -1,6 +1,11 @@
 import MockAdapter from 'axios-mock-adapter';
 
-import { oneMonthAgo, today, twelveMonthsAgo } from '@pagopa-pn/pn-commons';
+import {
+  formatToSlicedISOString,
+  oneMonthAgo,
+  today,
+  twelveMonthsAgo,
+} from '@pagopa-pn/pn-commons';
 
 import { mockAuthentication } from '../../../__mocks__/Auth.mock';
 import { errorMock } from '../../../__mocks__/Errors.mock';
@@ -62,6 +67,12 @@ describe('Statistics redux state tests', () => {
 
     expect(action.type).toBe('getStatistics/fulfilled');
     expect(payload).toEqual(parsedResponseMock);
+
+    const state = store.getState().statisticsState;
+    expect(state.statistics).toEqual(parsedResponseMock);
+
+    // verify filter is normalized considering lastDate from API
+    expect(formatToSlicedISOString(state.filter.endDate)).toBe(rawResponseMock.lastDate);
   });
 
   it('should handle empty response', async () => {

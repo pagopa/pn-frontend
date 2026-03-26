@@ -76,11 +76,6 @@
     },
     "payment": {
       "title": "Paiement",
-      "single-payment-subtitle": "Le montant final può essere différent de celui indiqué dans l'acte et inclure les frais de notification.",
-      "subtitle": "Dans cette notification, il y a plusieurs alertes de paiement : sélectionnez celle que vous souhaitez payer. Certaines alertes incluent les frais de notification.",
-      "subtitle-f24": "Vous pouvez payer cette notification via F24. Pour voir les détails, ouvrez les formulaires.",
-      "subtitle-mixed": "Dans cette notification, il existe plusieurs possibilités de paiement : sélectionnez ou téléchargez ce que vous souhaitez payer. Certains montants incluent les frais de notification.",
-      "how": "Pourquoi ?",
       "f24Models": "Formulaires F24",
       "pagoPANotices": "Alertes pagoPA",
       "download-pagoPA-notice": "Télécharger l’alerte pagoPA",
@@ -430,14 +425,38 @@
     "canceled-tooltip": "L’organisme a annulé l’envoi de la notification",
     "canceled-description": "L’organisme a annulé l’envoi de la notification.",
     "returned-to-sender": "Retour à l'expéditeur",
-    "returned-to-sender-tooltip-monorecipient": "Le destinataire est décédé",
+    "returned-to-sender-multirecipient": "Retour à l'expéditeur",
+    "returned-to-sender-tooltip": "Le destinataire est décédé",
     "returned-to-sender-tooltip-multirecipient": "Tous les destinataires sono décédés",
-    "returned-to-sender-description-monorecipient": "Le destinataire est décédé.",
+    "returned-to-sender-description": "Le destinataire est décédé.",
     "returned-to-sender-description-multirecipient": "Tous les destinataires sont décédés.",
     "notification-timeline-reworked": "Événement ou plusieurs événements mis à jour",
     "notification-timeline-reworked-tooltip": "Événement ou plusieurs événements mis à jour",
     "notification-timeline-reworked-description": "Les événements marqués ÉVÉNEMENT INVALIDÉ ne doivent pas être pris en compte car ils ont été remplacés par les événements suivants marqués ÉVÉNEMENT VALIDÉ.",
     "reworked-status-valid": "Événement validé",
-    "reworked-status-not-valid": "Événement invalidé"
+    "reworked-status-not-valid": "Événement invalidé",
+    "cancellation-in-progress": "Annulée",
+    "cancellation-in-progress-tooltip": "Annulation en cours. Le statut sera mis à jour sous peu.",
+    "cancellation-in-progress-description": "Annulation en cours. Le statut sera mis à jour sous peu."
+  },
+  "notification-alert": {
+    "description": "Le montant comprend les frais de notification.",
+    "cta": "De quoi s'agit-il ?",
+    "details": {
+      "title": "Que sont les frais de notification ?",
+      "description": "Il s'agit des frais liés à l'envoi de la communication, qui varient selon le mode de réception par ton entreprise.",
+      "how-they-work": "Comment fonctionnent les frais de notification ?",
+      "base-cost": "Frais de gestion",
+      "analog-cost": {
+        "total": "Frais d'envoi papier",
+        "hint": {
+          "avoided": "Envoi évité avec SEND",
+          "multiple-analog-flows": "{{count}} envois effectués"
+        }
+      },
+      "total-cost": "Total",
+      "error": "Nous n'avons pas pu récupérer le détail des frais, réessaye plus tard.",
+      "more-info": "Contacte l'organisme qui a envoyé la notification pour avoir plus de détails sui les frais de cette communication."
+    }
   }
 }

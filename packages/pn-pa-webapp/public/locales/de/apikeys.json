@@ -86,5 +86,19 @@
     "continue-button": "Weiter",
     "required-fields": "Pflichtfelder",
     "no-groups": "Keine Gruppe verfügbar"
+  },
+  "messages": {
+    "success": {
+      "api-key-enable": "Öffentlicher Schlüssel erfolgreich aktiviert.",
+      "api-key-block": "Öffentlicher Schlüssel erfolgreich gesperrt.",
+      "api-key-rotate": "Öffentlicher Schlüssel erfolgreich rotiert.",
+      "api-key-delete": "Öffentlicher Schlüssel erfolgreich gelöscht."
+    },
+    "error": {
+      "api-key-enable": "Öffentlicher Schlüssel nicht aktiviert",
+      "api-key-block": "Öffentlicher Schlüssel nicht gesperrt",
+      "api-key-rotate": "Öffentlicher Schlüssel nicht rotiert",
+      "api-key-delete": "Öffentlicher Schlüssel nicht gelöscht"
+    }
   }
 }

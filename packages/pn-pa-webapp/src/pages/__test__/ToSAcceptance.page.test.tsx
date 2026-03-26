@@ -8,19 +8,12 @@ import {
 } from '@pagopa-pn/pn-commons';
 
 import { acceptTosPrivacyConsentBodyMock } from '../../__mocks__/Consents.mock';
-import { RenderResult, act, fireEvent, render, waitFor } from '../../__test__/test-utils';
+import { CustomRenderResult, act, fireEvent, render, waitFor } from '../../__test__/test-utils';
 import { apiClient } from '../../api/apiClients';
 import * as routes from '../../navigation/routes.const';
 import ToSAcceptance from '../ToSAcceptance.page';
 
-const mockNavigateFn = vi.fn();
 const mockOpenFn = vi.fn();
-
-// mock imports
-vi.mock('react-router-dom', async () => ({
-  ...(await vi.importActual<any>('react-router-dom')),
-  useNavigate: () => mockNavigateFn,
-}));
 
 const tosConsent: ConsentUser = {
   accepted: false,
@@ -36,26 +29,25 @@ const privacyConsent: ConsentUser = {
 
 describe('test Terms of Service page', async () => {
   let mock: MockAdapter;
-  let result: RenderResult | undefined;
-  const original = window.open;
+  let result: CustomRenderResult;
+  const original = globalThis.open;
 
   beforeAll(() => {
     mock = new MockAdapter(apiClient);
-    Object.defineProperty(window, 'open', {
+    Object.defineProperty(globalThis, 'open', {
       configurable: true,
       value: mockOpenFn,
     });
   });
 
   afterEach(() => {
-    result = undefined;
     vi.clearAllMocks();
     mock.reset();
   });
 
   afterAll(() => {
     mock.restore();
-    Object.defineProperty(window, 'open', { configurable: true, value: original });
+    Object.defineProperty(globalThis, 'open', { configurable: true, value: original });
   });
 
   it('checks the texts in the page - First ToS acceptance', async () => {
@@ -63,9 +55,9 @@ describe('test Terms of Service page', async () => {
       result = render(<ToSAcceptance tosConsent={tosConsent} privacyConsent={privacyConsent} />);
     });
 
-    expect(result?.container).toHaveTextContent(/tos.title/i);
-    expect(result?.container).toHaveTextContent(/tos.switch-label/i);
-    expect(result?.container).toHaveTextContent(/tos.button/i);
+    expect(result.container).toHaveTextContent(/tos.title/i);
+    expect(result.container).toHaveTextContent(/tos.switch-label/i);
+    expect(result.container).toHaveTextContent(/tos.button/i);
   });
 
   it('accept ToS and Privacy', async () => {
@@ -74,9 +66,9 @@ describe('test Terms of Service page', async () => {
     await act(async () => {
       result = render(<ToSAcceptance tosConsent={tosConsent} privacyConsent={privacyConsent} />);
     });
-    const button = result?.getByText('tos.button');
+    const button = result.getByText('tos.button');
     expect(button).toBeInTheDocument();
-    fireEvent.click(button!);
+    fireEvent.click(button);
     await waitFor(() => {
       expect(mock.history.put).toHaveLength(1);
       expect(mock.history.put[0].url).toBe('/bff/v2/tos-privacy');
@@ -92,20 +84,19 @@ describe('test Terms of Service page', async () => {
         />
       );
     });
-    expect(mockNavigateFn).toHaveBeenCalledTimes(1);
-    expect(mockNavigateFn).toHaveBeenCalledWith(routes.DASHBOARD);
+    expect(result.router.state.location.pathname).toBe(routes.DASHBOARD);
   });
 
   it('navigate to privacy and tos pages', async () => {
     await act(async () => {
       result = render(<ToSAcceptance tosConsent={tosConsent} privacyConsent={privacyConsent} />);
     });
-    const tosLink = result?.getByTestId('tos-link');
-    fireEvent.click(tosLink!);
+    const tosLink = result.getByTestId('tos-link');
+    fireEvent.click(tosLink);
     expect(mockOpenFn).toHaveBeenCalledTimes(1);
     expect(mockOpenFn).toHaveBeenCalledWith(TOS_LINK_RELATIVE_PATH, '_blank');
-    const privacyLink = result?.getByTestId('privacy-link');
-    fireEvent.click(privacyLink!);
+    const privacyLink = result.getByTestId('privacy-link');
+    fireEvent.click(privacyLink);
     expect(mockOpenFn).toHaveBeenCalledTimes(2);
     expect(mockOpenFn).toHaveBeenCalledWith(PRIVACY_LINK_RELATIVE_PATH, '_blank');
   });

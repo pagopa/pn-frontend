@@ -1,5 +1,6 @@
 import { getLocalizedOrDefaultLabel } from '../../utility/localization.utility';
 import {
+  clampMax,
   convertHoursToDays,
   dateIsDefined,
   dateIsLessThan10Years,
@@ -19,6 +20,7 @@ import {
   getWeeksFromDateRange,
   isToday,
   minutesBeforeNow,
+  subtractMonthsFromDate,
 } from '../date.utility';
 
 const dateString = '2022-02-22T14:20:20.566Z';
@@ -236,5 +238,34 @@ describe('Date utility', () => {
       { start: '2024-06-20', end: '2024-06-26' },
       { start: '2024-06-27', end: '2024-06-28' },
     ]);
+  });
+
+  it('subtractMonthsFromDate - subtracts months without offset', () => {
+    const base = new Date('1980-06-22T10:00:00.000Z');
+    const result = subtractMonthsFromDate(base, 6);
+    expect(formatToSlicedISOString(result)).toBe('1979-12-22');
+    expect(formatToSlicedISOString(base)).toBe('1980-06-22');
+  });
+
+  it('subtractMonthsFromDate - subtracts months and applies day offset', () => {
+    const base = new Date('1980-06-22T10:00:00.000Z');
+    const result = subtractMonthsFromDate(base, 6, 1);
+    expect(formatToSlicedISOString(result)).toBe('1979-12-23');
+  });
+
+  it('clampMax - returns max when date is after max', () => {
+    const max = new Date('1980-06-22T23:59:59.999Z');
+    const dateAfter = new Date('1980-06-23T00:00:00.000Z');
+
+    const result = clampMax(dateAfter, max);
+    expect(result).toBe(max);
+  });
+
+  it('clampMax - returns date when date is before max', () => {
+    const max = new Date('1980-06-22T00:00:00.000Z');
+    const dateBefore = new Date('1980-06-21T23:59:59.999Z');
+
+    const result = clampMax(dateBefore, max);
+    expect(result).toBe(dateBefore);
   });
 });

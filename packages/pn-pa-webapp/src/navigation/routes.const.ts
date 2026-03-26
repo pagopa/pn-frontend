@@ -1,9 +1,9 @@
-import {
+import { getConfiguration } from '../services/configuration.service';
+
+export {
   PRIVACY_LINK_RELATIVE_PATH as PRIVACY_POLICY,
   TOS_LINK_RELATIVE_PATH as TERMS_OF_SERVICE,
 } from '@pagopa-pn/pn-commons';
-
-import { getConfiguration } from '../services/configuration.service';
 
 export const DASHBOARD = '/dashboard';
 const NOTIFICA = '/dettaglio';
@@ -16,7 +16,6 @@ export const STATISTICHE = '/statistiche';
 export const USERS_SEGMENT = '/users';
 export const GROUPS_SEGMENT = '/groups';
 export const APP_STATUS = '/app-status';
-export { PRIVACY_POLICY, TERMS_OF_SERVICE };
 
 /** USERS navigation link to SelfCare "Referenti" section for SEND
  * @param idOrganization

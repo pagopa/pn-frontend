@@ -2,10 +2,12 @@ import React, { memo, useEffect, useState } from 'react';
 
 import { Download } from '@mui/icons-material/';
 import { Alert, Box, Button, FormControl, RadioGroup, Stack, Typography } from '@mui/material';
+import { MIAlert } from '@pagopa/mui-italia';
 
 import { downloadDocument } from '../../hooks/useDownloadDocument';
 import { EventPaymentRecipientType } from '../../models/MixpanelEvents';
 import {
+  NotificationCostDetails,
   NotificationDetailPayment,
   PaymentAttachment,
   PaymentAttachmentSName,
@@ -19,17 +21,18 @@ import { formatEurocentToCurrency } from '../../utility/currency.utility';
 import { getLocalizedOrDefaultLabel } from '../../utility/localization.utility';
 import { getPaymentCache, setPaymentCache } from '../../utility/paymentCaching.utility';
 import CustomPagination from '../Pagination/CustomPagination';
+import NotificationCostsDetailDrawer from './NotificationCostsDetailDrawer';
 import NotificationPaymentF24Item from './NotificationPaymentF24Item';
 import NotificationPaymentPagoPAItem from './NotificationPaymentPagoPa/NotificationPaymentPagoPAItem';
-import NotificationPaymentTitle from './NotificationPaymentTitle';
 
 type Props = {
   payments: PaymentsData;
   paymentTpp?: PaymentTpp;
   isCancelled: boolean;
   timerF24: number;
-  landingSiteUrl: string;
+  costDetailsAssistanceLink: string;
   iun: string;
+  costDetails?: NotificationCostDetails;
   getPaymentAttachmentAction: (
     name: PaymentAttachmentSName,
     attachmentIdx?: number
@@ -54,8 +57,9 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
   paymentTpp,
   isCancelled,
   timerF24,
-  landingSiteUrl,
+  costDetailsAssistanceLink,
   iun,
+  costDetails,
   getPaymentAttachmentAction,
   onPayClick,
   onPayTppClick,
@@ -84,7 +88,6 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
 
   const allPaymentsIsPaid = pagoPaF24.every((f) => f.pagoPa?.status === PaymentStatus.SUCCEEDED);
   const isSinglePayment = pagoPaF24.length === 1 && !isCancelled;
-  const hasMoreThanOnePage = paginationData.totalElements > paginationData.size;
 
   const handleClick = (event: React.ChangeEvent<HTMLInputElement>) => {
     const radioSelection = event.target.value;
@@ -194,18 +197,22 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
         {getLocalizedOrDefaultLabel('notifications', 'detail.payment.title')}
       </Typography>
 
-      {isCancelled ? (
-        <Alert data-testid="cancelledAlertPayment" severity="info">
-          {getLocalizedOrDefaultLabel('notifications', 'detail.payment.cancelled-message')}
-        </Alert>
-      ) : (
-        <NotificationPaymentTitle
-          landingSiteUrl={landingSiteUrl}
+      {isCancelled && (
+        <MIAlert
+          data-testid="cancelledAlertPayment"
+          severity="info"
+          description={getLocalizedOrDefaultLabel(
+            'notifications',
+            'detail.payment.cancelled-message'
+          )}
+        />
+      )}
+
+      {!isCancelled && costDetails && (
+        <NotificationCostsDetailDrawer
+          costDetails={costDetails}
+          costDetailsAssistanceLink={costDetailsAssistanceLink}
           handleTrackEventFn={handleTrackEventFn}
-          pagoPaF24={pagoPaF24}
-          f24Only={f24Only}
-          allPaymentsIsPaid={allPaymentsIsPaid}
-          hasMoreThanOnePage={hasMoreThanOnePage}
         />
       )}
 

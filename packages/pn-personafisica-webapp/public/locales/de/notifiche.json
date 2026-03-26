@@ -69,18 +69,13 @@
     "show-more": "Mehr Details anzeigen",
     "show-less": "Weniger Details anzeigen",
     "disclaimer-link": "Mehr hierzu",
-    "pec-unreachable": "Halte deine PEC-Mailbox frei, um alles digital zu erhalten!",
+    "pec-unreachable": "Halten Sie Ihr zertifiziertes E-Mail-Postfach (PEC) frei und aktiv, um alles digital zu erhalten!",
     "cancelled": {
       "message": "Diese Zustellung wurde von der sendenden Körperschaft storniert.",
       "cta": "Was muss ich tun?"
     },
     "payment": {
       "title": "Zahlung",
-      "single-payment-subtitle": "Der endgültige Betrag kann sich vom angegebenen Betrag unterscheiden.",
-      "subtitle": "Diese Zustellung enthält mehrere Zahlungsbescheide: Wähle die aus, die du bezahlen möchtest. Einige Bescheide beinhalten Zustellungsgebühren.",
-      "subtitle-f24": "Diese können per F24 bezahlt werden. Für Einzelheiten, Vordrucke öffnen.",
-      "subtitle-mixed": "Für diese Zustellung sind mehrere Zahlungsmöglichkeiten vorhanden: Wähle oder lade herunter, was du bezahlen möchtest. Einige Beträge beinhalten Zustellungsgebühren.",
-      "how": "Wieso?",
       "f24Models": "Vordruck F24",
       "pagoPANotices": "Benachrichtigungen pagoPA",
       "download-pagoPA-notice": "Benachrichtigung pagoPA herunterladen",
@@ -434,15 +429,19 @@
     "canceled-tooltip": "Die Körperschaft hat den Versand der Zustellung abgebrochen",
     "canceled-description": "Die Körperschaft hat den Versand der Zustellung abgebrochen.",
     "returned-to-sender": "Rücksendung an den Absender",
-    "returned-to-sender-tooltip-monorecipient": "Der Empfänger ist verstorben",
+    "returned-to-sender-multirecipient": "Rücksendung an den Absender",
+    "returned-to-sender-tooltip": "Der Empfänger ist verstorben",
     "returned-to-sender-tooltip-multirecipient": "Alle Empfänger sind verstorben",
-    "returned-to-sender-description-monorecipient": "Der Empfänger ist verstorben.",
+    "returned-to-sender-description": "Der Empfänger ist verstorben.",
     "returned-to-sender-description-multirecipient": "Alle Empfänger sind verstorben.",
     "notification-timeline-reworked": "Aktualisiertes Ereignis oder mehrere aktualisierte Ereignisse",
     "notification-timeline-reworked-tooltip": "Aktualisiertes Ereignis oder mehrere aktualisierte Ereignisse",
     "notification-timeline-reworked-description": "Ereignisse, die als INVALIDIERTES EREIGNIS gekennzeichnet sind, sind nicht zu berücksichtigen, da sie durch nachfolgende Ereignisse ersetzt wurden, die als VALIDIERTES EREIGNIS gekennzeichnet sind.",
     "reworked-status-valid": "Validiertes Ereignis",
-    "reworked-status-not-valid": "Invalidiertes Ereignis"
+    "reworked-status-not-valid": "Invalidiertes Ereignis",
+    "cancellation-in-progress": "Annulliert",
+    "cancellation-in-progress-tooltip": "Annullierung in Bearbeitung. Der Status wird in Kürze aktualisiert.",
+    "cancellation-in-progress-description": "Annullierung in Bearbeitung. Der Status wird in Kürze aktualisiert."
   },
   "tppLanding": {
     "title": "Hallo,\nSie haben eine Mitteilung mit Rechtswirkung erhalten",
@@ -462,12 +461,14 @@
   },
   "notification-cost-banner": {
     "analog": {
-      "title": "Mit SEND kannst du sparen!",
-      "message": "Du hast die digitale Zustellung nicht rechtzeitig geöffnet, daher war es nicht möglich, das Einschreiben und die damit verbundenen Kosten zu vermeiden."
+      "title": "Mit SEND können Sie Geld sparen!",
+      "message": "Im Auftrag der sendenden Einrichtung wurden ein oder mehrere Einschreiben zu Gesamtkosten von {{analogCost}} an Sie versandt, da diese Benachrichtigung nicht innerhalb der vorgesehenen Fristen über die digitalen Kanäle geöffnet wurde.",
+      "fallback": "Im Auftrag der sendenden Einrichtung wurden ein oder mehrere Einschreiben an Sie versandt, da diese Benachrichtigung nicht innerhalb der vorgesehenen Fristen über die digitalen Kanäle geöffnet wurde. Dies führt für Sie zu zusätzlichen Kosten."
     },
     "digital_failure": {
-      "title": "Mit SEND kannst du sparen!",
-      "message": "Wir konnten die Zustellung an deine PEC nicht zustellen, daher wurde dir ein Informations-Einschreiben mit den entsprechenden Kosten zugesandt."
+      "title": "Mit SEND können Sie Geld sparen!",
+      "message": "Die Benachrichtigung konnte nicht an Ihre zertifizierte E-Mail-Adresse (PEC) zugestellt werden, daher wurde Ihnen ein Einschreiben zu Kosten von {{analogCost}} zugesandt.",
+      "fallback": "Die Benachrichtigung konnte nicht an Ihre zertifizierte E-Mail-Adresse (PEC) zugestellt werden, daher wurde Ihnen ein Einschreiben zugesandt. Dies führt für Sie zu zusätzlichen Kosten."
     },
     "digital_platform": {
       "title": "Mit SEND hast du gespart!",
@@ -488,9 +489,30 @@
     "enable-sercq": {
       "message": {
         "default": "Aktiviere eine digitale Adresse, um künftige Zustellungen nur noch digital zu erhalten.",
+        "analog": "Aktivieren Sie SEND als digitale Adresse, um sich Kosten wie diese zu ersparen.",
         "external-pec": "Aktiviere eine digitale Adresse, um zu wählen, wo du deine SEND-Zustellungen erhalten möchtest."
       },
       "cta": "Digitale Adresse aktivieren"
+    }
+  },
+  "notification-alert": {
+    "description": "Der Betrag enthält die Zustellkosten.",
+    "cta": "Was ist das?",
+    "details": {
+      "title": "Was sind Zustellkosten?",
+      "description": "Dies sind die mit dem Versand der Mitteilung verbundenen Kosten, die je nach Art des Empfangs variieren.",
+      "how-they-work": "Wie funktionieren die Zustellkosten?",
+      "base-cost": "Verwaltungskosten",
+      "analog-cost": {
+        "total": "Kosten für den Postversand",
+        "hint": {
+          "avoided": "Postversand durch SEND vermieden",
+          "multiple-analog-flows": "{{count}} Sendungen durchgeführt"
+        }
+      },
+      "total-cost": "Gesamt",
+      "error": "Die Kostendetails konnten nicht geladen werden, versuche es bitte später erneut.",
+      "more-info": "Kontaktiere die sendende Einrichtung, die dir die Zustellung geschickt hat, um weitere Informationen zu den Kosten dieser Mitteilung zu erhalten."
     }
   }
 }
