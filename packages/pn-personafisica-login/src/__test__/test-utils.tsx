@@ -1,21 +1,16 @@
 import { ReactElement, ReactNode, createContext, useContext } from 'react';
-import { Provider } from 'react-redux';
 import { RouterProvider, createMemoryRouter } from 'react-router-dom';
 
-import { EnhancedStore, configureStore } from '@reduxjs/toolkit';
 import { RenderOptions, RenderResult, render } from '@testing-library/react';
-
-import { RootState, appReducers } from '../redux/store';
 
 interface CustomRenderOptions extends Omit<RenderOptions, 'wrapper'> {
   preloadedState?: any;
-  route?: string | string[];
+  route?: string | Array<string>;
   initialIndex?: number;
   path?: string;
 }
 
 type CustomRenderResult = RenderResult & {
-  testStore: EnhancedStore<RootState>;
   router: ReturnType<typeof createMemoryRouter>;
 };
 
@@ -30,24 +25,8 @@ const RouterBridge = () => {
 
 const customRender = (
   ui: ReactElement,
-  {
-    preloadedState,
-    route = '/',
-    initialIndex,
-    path = '*',
-    ...renderOptions
-  }: CustomRenderOptions = {}
+  { route = '/', initialIndex, path = '*', ...renderOptions }: CustomRenderOptions = {}
 ) => {
-  // test redux store
-  const testStore = configureStore({
-    reducer: appReducers,
-    preloadedState,
-    middleware: (getDefaultMiddleware) =>
-      getDefaultMiddleware({
-        serializableCheck: false,
-      }),
-  });
-
   // test router
   const entries = Array.isArray(route) ? route : [route];
   const activeIndex = initialIndex ?? entries.length - 1;
@@ -66,46 +45,18 @@ const customRender = (
 
   // test view
   const Wrapper = ({ children }: { children: ReactNode }) => (
-    <Provider store={testStore}>
-      <UiContext.Provider value={children as ReactElement}>
-        <RouterProvider router={router} />
-      </UiContext.Provider>
-    </Provider>
+    <UiContext.Provider value={children as ReactElement}>
+      <RouterProvider router={router} />
+    </UiContext.Provider>
   );
   const view = render(ui, {
     wrapper: Wrapper,
     ...renderOptions,
   });
 
-  return { ...view, router, testStore };
+  return { ...view, router };
 };
 
-const createMockedStore = (preloadedState: any) =>
-  configureStore({
-    reducer: appReducers,
-    preloadedState,
-    middleware: (getDefaultMiddleware) =>
-      getDefaultMiddleware({
-        serializableCheck: false,
-      }),
-  });
-
-// utility functions
-/**
- * Generate a random string with specified length
- * @length desired length
- */
-function randomString(length: number) {
-  const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-  let result = '';
-  for (let i = 0; i < length; ++i) {
-    result += alphabet[Math.floor(alphabet.length * Math.random())];
-  }
-  return result;
-}
-
 export * from '@testing-library/react';
-export { customRender as render, createMockedStore };
+export { customRender as render };
 export type { CustomRenderResult as RenderResult };
-// utility functions
-export { randomString };

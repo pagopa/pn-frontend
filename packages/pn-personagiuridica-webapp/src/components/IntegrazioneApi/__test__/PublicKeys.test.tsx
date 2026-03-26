@@ -1,5 +1,4 @@
 import MockAdapter from 'axios-mock-adapter';
-import { vi } from 'vitest';
 
 import { testInput } from '@pagopa-pn/pn-commons/src/test-utils';
 
@@ -14,16 +13,6 @@ import {
 import * as routes from '../../../navigation/routes.const';
 import PublicKeys from '../PublicKeys';
 
-const mockNavigateFn = vi.fn();
-
-vi.mock('react-router-dom', async () => {
-  const originalImplementation = await vi.importActual<any>('react-router-dom');
-  return {
-    ...originalImplementation,
-    useNavigate: () => mockNavigateFn,
-  };
-});
-
 describe('Public Keys', () => {
   let mock: MockAdapter;
 
@@ -33,7 +22,6 @@ describe('Public Keys', () => {
 
   afterEach(() => {
     mock.reset();
-    vi.clearAllMocks();
   });
 
   afterAll(() => {
@@ -52,12 +40,11 @@ describe('Public Keys', () => {
   });
 
   it('generate new public key', () => {
-    const { getByTestId } = render(<PublicKeys />);
+    const { getByTestId, router } = render(<PublicKeys />);
 
     const button = getByTestId('generatePublicKey');
     fireEvent.click(button);
-    expect(mockNavigateFn).toHaveBeenCalledTimes(1);
-    expect(mockNavigateFn).toHaveBeenCalledWith(`${routes.REGISTRA_CHIAVE_PUBBLICA}`);
+    expect(router.state.location.pathname).toBe(routes.REGISTRA_CHIAVE_PUBBLICA);
   });
 
   it('render component with public key list and not show generate button if there is an active key', async () => {
@@ -177,7 +164,7 @@ describe('Public Keys', () => {
     const notRotatedKeys = publicKeys.items.filter((key) => key.status !== PublicKeyStatus.Rotated);
     const activeKeyIndex = notRotatedKeys.findIndex((key) => key.status === PublicKeyStatus.Active);
 
-    const { getByTestId, getAllByTestId } = render(<PublicKeys />, {
+    const { getByTestId, getAllByTestId, router } = render(<PublicKeys />, {
       preloadedState: {
         apiKeysState: {
           publicKeys: { total: notRotatedKeys.length, items: notRotatedKeys },
@@ -201,8 +188,7 @@ describe('Public Keys', () => {
     expect(confirmButton).toHaveTextContent('rotate-public-key-button');
     fireEvent.click(confirmButton);
 
-    expect(mockNavigateFn).toHaveBeenCalledTimes(1);
-    expect(mockNavigateFn).toHaveBeenCalledWith(
+    expect(router.state.location.pathname).toBe(
       `${routes.REGISTRA_CHIAVE_PUBBLICA}/${notRotatedKeys[activeKeyIndex].kid}`
     );
   });

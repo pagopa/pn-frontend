@@ -6,7 +6,7 @@ import { AppResponseMessage, ResponseEventDispatcher } from '@pagopa-pn/pn-commo
 import { mockApiKeysDTO } from '../../__mocks__/ApiKeys.mock';
 import { errorMock } from '../../__mocks__/Errors.mock';
 import {
-  CustomRenderResult,
+  RenderResult,
   act,
   fireEvent,
   render,
@@ -36,7 +36,7 @@ async function testApiKeyChangeStatus(
   apiKeyIndex: number,
   statusRequested: ApiKeyStatus,
   statusSetted: ApiKeySetStatus,
-  result: CustomRenderResult,
+  result: RenderResult,
   buttonTestId: string
 ) {
   mock
@@ -65,7 +65,7 @@ async function testApiKeyChangeStatus(
 }
 
 describe('ApiKeys Page', async () => {
-  let result: CustomRenderResult;
+  let result: RenderResult;
   let mock: MockAdapter;
 
   beforeAll(() => {

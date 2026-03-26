@@ -1,5 +1,4 @@
 import MockAdapter from 'axios-mock-adapter';
-import { createBrowserHistory } from 'history';
 import { Route, Routes } from 'react-router-dom';
 import { vi } from 'vitest';
 
@@ -18,25 +17,6 @@ import { apiClient } from '../../api/apiClients';
 import * as routes from '../../navigation/routes.const';
 import { createDelegationMapper } from '../../redux/newDelegation/actions';
 import NuovaDelega from '../NuovaDelega.page';
-
-// The test in which the "indietro" button in the breadcrumb is clicked
-// needs the actual version of navigate; mocking it would be inadequate
-// since the uses inside PnBreadrumb wouldn't be affected by the mock
-// and therefore the test would fail.
-// In that test we instead mock a router and a history, let the actual implementation
-// of navigate(-1) to go on, and then check that the mocked page corresponding to the
-// url in the mocked history is rendered.
-let mustMockNavigate = true;
-
-const mockNavigateFn = vi.fn();
-
-vi.mock('react-router-dom', async () => {
-  const originalImplementation = await vi.importActual<any>('react-router-dom');
-  return {
-    ...originalImplementation,
-    useNavigate: () => (mustMockNavigate ? mockNavigateFn : originalImplementation.useNavigate()),
-  };
-});
 
 vi.mock('../../utility/delegation.utility', async () => ({
   ...(await vi.importActual<any>('../../utility/delegation.utility')),
@@ -57,7 +37,6 @@ describe('NuovaDelega page', async () => {
 
   beforeEach(() => {
     mock.onGet('/bff/v1/pa-list').reply(200, parties);
-    mustMockNavigate = true;
   });
 
   beforeAll(() => {
@@ -119,13 +98,7 @@ describe('NuovaDelega page', async () => {
   // Carlos Lombardi, 2023-11-14
   // --------------------------------------
   it('navigates to Deleghe page', async () => {
-    mustMockNavigate = false;
-
     let result: RenderResult | undefined;
-
-    // simulate the current URL
-    const history = createBrowserHistory();
-    history.push(routes.NUOVA_DELEGA);
 
     // render with an ad-hoc router, will render initially NuovaDelega
     // since it corresponds to the top of the mocked history stack
@@ -134,7 +107,11 @@ describe('NuovaDelega page', async () => {
         <Routes>
           <Route path={routes.DELEGHE} element={<div data-testid="mocked-page">hello</div>} />
           <Route path={routes.NUOVA_DELEGA} element={<NuovaDelega />} />
-        </Routes>
+        </Routes>,
+        {
+          route: [routes.DELEGHE, routes.NUOVA_DELEGA],
+          path: '*',
+        }
       );
     });
 
@@ -160,7 +137,7 @@ describe('NuovaDelega page', async () => {
       verificationCode: '34153',
     };
     mock.onPost('/bff/v1/mandate', createDelegationMapper(creationPayload)).reply(200);
-    const { container, getByTestId, getByText } = render(<NuovaDelega />);
+    const { container, getByTestId, getByText, router } = render(<NuovaDelega />);
     const form = container.querySelector('form') as HTMLFormElement;
     await testInput(form, 'nome', createDelegationPayload.nome);
     await testInput(form, 'cognome', createDelegationPayload.cognome);
@@ -181,8 +158,7 @@ describe('NuovaDelega page', async () => {
     });
     const backButton = getByText('nuovaDelega.backToDelegations');
     fireEvent.click(backButton);
-    expect(mockNavigateFn).toBeCalledTimes(1);
-    expect(mockNavigateFn).toBeCalledWith(routes.DELEGHE);
+    expect(router.state.location.pathname).toBe(routes.DELEGHE);
   });
 
   it('fills form with invalid values', async () => {
@@ -243,7 +219,7 @@ describe('NuovaDelega page', async () => {
     const creationPayload = {
       ...createDelegationPayload,
       selectPersonaFisicaOrPersonaGiuridica: RecipientType.PG,
-      codiceFiscale:'01234567890',
+      codiceFiscale: '01234567890',
       expirationDate: new Date('01/01/2122'),
       verificationCode: '34153',
       enti: [parties[1]],

@@ -19,17 +19,18 @@ describe('SmartBodyRow', () => {
   });
 
   it('render component - incorrect child', () => {
-    expect(() =>
-      render(
-        <SmartBodyRow index={1}>
-          <SmartBodyCell columnId={'mock-column-id'} tableProps={{}}>
-            mocked-cell-content
-          </SmartBodyCell>
-          <Box>Incorrect child</Box>
-        </SmartBodyRow>
-      )
-    ).toThrowError(
-      'SmartBodyRow can have only children of type SmartBodyCell and 1 child of type SmartActions'
+    const { getByText } = render(
+      <SmartBodyRow index={1}>
+        <SmartBodyCell columnId={'mock-column-id'} tableProps={{}}>
+          mocked-cell-content
+        </SmartBodyCell>
+        <Box>Incorrect child</Box>
+      </SmartBodyRow>
     );
+    expect(
+      getByText(
+        'SmartBodyRow can have only children of type SmartBodyCell and 1 child of type SmartActions'
+      )
+    ).toBeInTheDocument();
   });
 });

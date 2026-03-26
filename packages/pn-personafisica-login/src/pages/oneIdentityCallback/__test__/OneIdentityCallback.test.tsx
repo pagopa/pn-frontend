@@ -1,4 +1,3 @@
-import { BrowserRouter } from 'react-router-dom';
 import { vi } from 'vitest';
 
 import { AppRouteParams } from '@pagopa-pn/pn-commons';
@@ -17,34 +16,12 @@ import {
 import OneIdentityCallback from '../OneIdentityCallback';
 
 const mockLocationReplace = vi.fn();
-const mockNavigate = vi.fn();
-
-vi.mock('react-router-dom', async () => {
-  const actual = await vi.importActual('react-router-dom');
-  return {
-    ...actual,
-    Navigate: ({ to, replace }: { to: string; replace?: boolean }) => {
-      mockNavigate(to, replace);
-      return null;
-    },
-  };
-});
 
 describe('OneIdentityCallback component', () => {
-  const original = window.location;
+  const original = globalThis.location;
   const mockState = 'mock-state-123';
   const mockCode = 'mock-code-456';
   const mockNonce = 'mock-nonce-789';
-
-  const setWindowLocation = (search: string) => {
-    Object.defineProperty(window, 'location', {
-      configurable: true,
-      value: {
-        replace: mockLocationReplace,
-        search,
-      },
-    });
-  };
 
   const checkHashParams = (hashParams: URLSearchParams) => {
     const { PF_URL } = getConfiguration();
@@ -57,8 +34,13 @@ describe('OneIdentityCallback component', () => {
     );
   };
 
-  afterAll(() => {
-    Object.defineProperty(window, 'location', { configurable: true, value: original });
+  beforeAll(() => {
+    Object.defineProperty(globalThis, 'location', {
+      configurable: true,
+      value: {
+        replace: mockLocationReplace,
+      },
+    });
   });
 
   beforeEach(() => {
@@ -66,8 +48,6 @@ describe('OneIdentityCallback component', () => {
     storageOneIdentityState.write(mockState);
     storageOneIdentityNonce.write(mockNonce);
     storageRapidAccessOps.delete();
-
-    setWindowLocation(`?state=${mockState}&code=${mockCode}`);
   });
 
   afterEach(() => {
@@ -76,12 +56,12 @@ describe('OneIdentityCallback component', () => {
     storageRapidAccessOps.delete();
   });
 
+  afterAll(() => {
+    Object.defineProperty(globalThis, 'location', { configurable: true, value: original });
+  });
+
   it('should redirect with correct hash params', () => {
-    render(
-      <BrowserRouter>
-        <OneIdentityCallback />
-      </BrowserRouter>
-    );
+    render(<OneIdentityCallback />, { route: `/?state=${mockState}&code=${mockCode}` });
 
     expect(mockLocationReplace).toHaveBeenCalled();
     const calledUrl = mockLocationReplace.mock.calls[0][0];
@@ -97,11 +77,7 @@ describe('OneIdentityCallback component', () => {
   it('should redirect with rapid access (aar)', () => {
     storageRapidAccessOps.write([AppRouteParams.AAR, 'aar-token']);
 
-    render(
-      <BrowserRouter>
-        <OneIdentityCallback />
-      </BrowserRouter>
-    );
+    render(<OneIdentityCallback />, { route: `/?state=${mockState}&code=${mockCode}` });
 
     expect(mockLocationReplace).toHaveBeenCalled();
     const calledUrl = mockLocationReplace.mock.calls[0][0];
@@ -118,11 +94,7 @@ describe('OneIdentityCallback component', () => {
   it('should redirect with rapid access (retrievalId)', () => {
     storageRapidAccessOps.write([AppRouteParams.RETRIEVAL_ID, 'retrieval-id']);
 
-    render(
-      <BrowserRouter>
-        <OneIdentityCallback />
-      </BrowserRouter>
-    );
+    render(<OneIdentityCallback />, { route: `/?state=${mockState}&code=${mockCode}` });
 
     expect(mockLocationReplace).toHaveBeenCalled();
     const calledUrl = mockLocationReplace.mock.calls[0][0];
@@ -139,11 +111,7 @@ describe('OneIdentityCallback component', () => {
   it('should sanitize rapid access parameter (XSS protection)', () => {
     storageRapidAccessOps.write([AppRouteParams.AAR, '<script>some-code</script>aar-token']);
 
-    render(
-      <BrowserRouter>
-        <OneIdentityCallback />
-      </BrowserRouter>
-    );
+    render(<OneIdentityCallback />, { route: `/?state=${mockState}&code=${mockCode}` });
 
     expect(mockLocationReplace).toHaveBeenCalled();
     const calledUrl = mockLocationReplace.mock.calls[0][0];
@@ -162,52 +130,40 @@ describe('OneIdentityCallback component', () => {
   it('should navigate to error route when state does not match', () => {
     storageOneIdentityState.write('different-state');
 
-    render(
-      <BrowserRouter>
-        <OneIdentityCallback />
-      </BrowserRouter>
-    );
+    const { router } = render(<OneIdentityCallback />, {
+      route: `/?state=${mockState}&code=${mockCode}`,
+    });
 
-    expect(mockNavigate).toHaveBeenCalledWith(ROUTE_ONE_IDENTITY_LOGIN_ERROR, true);
+    expect(router.state.location.pathname).toBe(ROUTE_ONE_IDENTITY_LOGIN_ERROR);
+    expect(router.state.historyAction).toBe('REPLACE');
     expect(mockLocationReplace).not.toHaveBeenCalled();
   });
 
   it('should navigate to error route when code is missing', () => {
-    setWindowLocation(`?state=${mockState}`);
+    const { router } = render(<OneIdentityCallback />, { route: `/?state=${mockState}` });
 
-    render(
-      <BrowserRouter>
-        <OneIdentityCallback />
-      </BrowserRouter>
-    );
-
-    expect(mockNavigate).toHaveBeenCalledWith(ROUTE_ONE_IDENTITY_LOGIN_ERROR, true);
+    expect(router.state.location.pathname).toBe(ROUTE_ONE_IDENTITY_LOGIN_ERROR);
+    expect(router.state.historyAction).toBe('REPLACE');
     expect(mockLocationReplace).not.toHaveBeenCalled();
   });
 
   it('should navigate to error route when state is missing', () => {
-    setWindowLocation(`?code=${mockCode}`);
+    const { router } = render(<OneIdentityCallback />, { route: `/?code=${mockCode}` });
 
-    render(
-      <BrowserRouter>
-        <OneIdentityCallback />
-      </BrowserRouter>
-    );
-
-    expect(mockNavigate).toHaveBeenCalledWith(ROUTE_ONE_IDENTITY_LOGIN_ERROR, true);
+    expect(router.state.location.pathname).toBe(ROUTE_ONE_IDENTITY_LOGIN_ERROR);
+    expect(router.state.historyAction).toBe('REPLACE');
     expect(mockLocationReplace).not.toHaveBeenCalled();
   });
 
   it('should navigate to error route when nonce is missing from storage', () => {
     storageOneIdentityNonce.delete();
 
-    render(
-      <BrowserRouter>
-        <OneIdentityCallback />
-      </BrowserRouter>
-    );
+    const { router } = render(<OneIdentityCallback />, {
+      route: `/?state=${mockState}&code=${mockCode}`,
+    });
 
-    expect(mockNavigate).toHaveBeenCalledWith(ROUTE_ONE_IDENTITY_LOGIN_ERROR, true);
+    expect(router.state.location.pathname).toBe(ROUTE_ONE_IDENTITY_LOGIN_ERROR);
+    expect(router.state.historyAction).toBe('REPLACE');
     expect(mockLocationReplace).not.toHaveBeenCalled();
   });
 
@@ -218,11 +174,7 @@ describe('OneIdentityCallback component', () => {
 
     storageRapidAccessOps.write([AppRouteParams.AAR, 'aar-token']);
 
-    render(
-      <BrowserRouter>
-        <OneIdentityCallback />
-      </BrowserRouter>
-    );
+    render(<OneIdentityCallback />, { route: `/?state=${mockState}&code=${mockCode}` });
 
     expect(deleteStateSpy).toHaveBeenCalledTimes(1);
     expect(deleteNonceSpy).toHaveBeenCalledTimes(1);
@@ -230,11 +182,7 @@ describe('OneIdentityCallback component', () => {
   });
 
   it('should not include query params when rapid access is not present', () => {
-    render(
-      <BrowserRouter>
-        <OneIdentityCallback />
-      </BrowserRouter>
-    );
+    render(<OneIdentityCallback />, { route: `/?state=${mockState}&code=${mockCode}` });
 
     expect(mockLocationReplace).toHaveBeenCalled();
     const calledUrl = mockLocationReplace.mock.calls[0][0];

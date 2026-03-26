@@ -1,43 +1,20 @@
-import { useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { Button, DialogContentText, DialogTitle } from '@mui/material';
+import { PnDialog, PnDialogActions, PnDialogContent } from '@pagopa-pn/pn-commons';
 
 import { usePrompt } from '../hooks/usePrompt';
-import { getLocalizedOrDefaultLabel } from '../utility/localization.utility';
-import PnDialog from './PnDialog/PnDialog';
-import PnDialogActions from './PnDialog/PnDialogActions';
-import PnDialogContent from './PnDialog/PnDialogContent';
 
 type Props = {
   disabled?: boolean;
   title: string;
   message: string;
-  eventTrackingCallbackPromptOpened?: () => void;
-  eventTrackingCallbackCancel?: () => void;
-  eventTrackingCallbackConfirm?: () => void;
   children?: React.ReactNode;
 };
 
-const Prompt: React.FC<Props> = ({
-  disabled = false,
-  title,
-  message,
-  children,
-  eventTrackingCallbackPromptOpened,
-  eventTrackingCallbackCancel,
-  eventTrackingCallbackConfirm,
-}) => {
-  const [showPrompt, confirmNavigation, cancelNavigation] = usePrompt(
-    !disabled,
-    eventTrackingCallbackCancel,
-    eventTrackingCallbackConfirm
-  );
-
-  useEffect(() => {
-    if (showPrompt) {
-      eventTrackingCallbackPromptOpened?.();
-    }
-  });
+const Prompt: React.FC<Props> = ({ disabled = false, title, message, children }) => {
+  const [showPrompt, confirmNavigation, cancelNavigation] = usePrompt(!disabled);
+  const { t } = useTranslation('common');
 
   return (
     <>
@@ -48,7 +25,7 @@ const Prompt: React.FC<Props> = ({
         </PnDialogContent>
         <PnDialogActions>
           <Button variant="outlined" onClick={cancelNavigation}>
-            {getLocalizedOrDefaultLabel('common', 'button.annulla', 'Annulla')}
+            {t('button.annulla')}
           </Button>
           <Button
             id="button-exit"
@@ -57,7 +34,7 @@ const Prompt: React.FC<Props> = ({
             autoFocus
             data-testid="confirmExitBtn"
           >
-            {getLocalizedOrDefaultLabel('common', 'button.exit', 'Esci')}
+            {t('button.exit')}
           </Button>
         </PnDialogActions>
       </PnDialog>

@@ -201,12 +201,11 @@ describe('PnWizard Component', () => {
   });
 
   it('should throw an error if children are not PnWizardStep', () => {
-    expect(() =>
-      render(
-        <PnWizard activeStep={0} setActiveStep={setActiveStep} title="Wizard Title">
-          <div>Step 1</div>
-        </PnWizard>
-      )
-    ).toThrow('PnWizard can have only children of type PnWizardStep');
+    const { getByText } = render(
+      <PnWizard activeStep={0} setActiveStep={setActiveStep} title="Wizard Title">
+        <div>Step 1</div>
+      </PnWizard>
+    );
+    expect(getByText('PnWizard can have only children of type PnWizardStep')).toBeInTheDocument();
   });
 });
