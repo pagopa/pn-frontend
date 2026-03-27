@@ -1,5 +1,7 @@
 import { vi } from 'vitest';
 
+import { appStorage } from '@pagopa-pn/pn-commons';
+
 import { digitalAddressesSercq, digitalCourtesyAddresses } from '../../../__mocks__/Contacts.mock';
 import { fireEvent, render, testStore } from '../../../__test__/test-utils';
 import {
@@ -32,6 +34,7 @@ const appIO = digitalCourtesyAddresses.find(
 describe('DomicileBanner component', () => {
   afterEach(() => {
     vi.clearAllMocks();
+    appStorage.domicileBanner.enable();
   });
 
   it('renders the component - no SERCQ SEND enabled', () => {
@@ -56,7 +59,7 @@ describe('DomicileBanner component', () => {
   });
 
   it('renders the component - no SERCQ SEND enabled - banner closed', () => {
-    sessionStorage.setItem('domicileBannerClosed', 'true');
+    appStorage.domicileBanner.disable();
     const { container, getByTestId, getByText, queryByTestId } = render(
       <DomicileBanner source={ContactSource.HOME_NOTIFICHE} />
     );
@@ -76,7 +79,6 @@ describe('DomicileBanner component', () => {
       source: ContactSource.HOME_NOTIFICHE,
       operation: ContactOperation.SCROLL,
     });
-    sessionStorage.removeItem('domicileBannerClosed');
   });
 
   it('renders the component - SERCQ SEND enabled, no courtesy address', () => {
