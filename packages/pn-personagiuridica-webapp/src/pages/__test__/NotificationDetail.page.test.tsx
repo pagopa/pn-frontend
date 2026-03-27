@@ -4,21 +4,25 @@ import { vi } from 'vitest';
 import {
   AppMessage,
   AppResponseMessage,
+  DeliveryOutcomeType,
   NotificationDetail as NotificationDetailModel,
   NotificationDetailOtherDocument,
+  NotificationFeePolicy,
   NotificationStatus,
   PAYMENT_CACHE_KEY,
+  PagoPaIntegrationMode,
   PaymentStatus,
   ResponseEventDispatcher,
+  StatusHistoryParser,
   TimelineCategory,
   formatDate,
   getPaymentCache,
   populatePaymentsPagoPaF24,
   setPaymentCache,
 } from '@pagopa-pn/pn-commons';
+import userEvent from '@testing-library/user-event';
 
 import { downtimesDTO } from '../../__mocks__/AppStatus.mock';
-import { userResponse } from '../../__mocks__/Auth.mock';
 import { mandatesByDelegate } from '../../__mocks__/Delegations.mock';
 import { errorMock } from '../../__mocks__/Errors.mock';
 import { paymentInfo } from '../../__mocks__/ExternalRegistry.mock';
@@ -29,6 +33,7 @@ import {
   paymentsData,
   raddNotificationDTO,
 } from '../../__mocks__/NotificationDetail.mock';
+import { adminUser, adminUserWithGroup, operatorUser } from '../../__mocks__/User.mock';
 import {
   RenderResult,
   act,
@@ -61,6 +66,9 @@ vi.mock('react-router-dom', async () => ({
   useLocation: () => ({ state: { fromQrCode: mockIsFromQrCode }, pathname: '/' }),
 }));
 
+const pfRecipient = notificationDTO.recipients[0];
+const pgRecipient = notificationDTO.recipients[1];
+
 const getLegalFactIds = (notification: NotificationDetailModel, recIndex: number) => {
   const timelineElementDigitalSuccessWorkflow = notification.timeline.filter(
     (t) =>
@@ -73,7 +81,7 @@ const getLegalFactIds = (notification: NotificationDetailModel, recIndex: number
 };
 
 const delegator = mandatesByDelegate.find(
-  (delegator) => delegator.delegator?.fiscalCode === notificationDTO.recipients[1].taxId
+  (delegator) => delegator.delegator?.fiscalCode === pgRecipient.taxId
 );
 
 /*
@@ -119,11 +127,7 @@ describe('NotificationDetail Page', async () => {
     mock.onGet(/\/bff\/v1\/downtime\/history.*/).reply(200, downtimesDTO);
     await act(async () => {
       result = render(<NotificationDetail />, {
-        preloadedState: {
-          userState: {
-            user: userResponse,
-          },
-        },
+        preloadedState: { userState: { user: adminUser } },
       });
     });
     expect(mock.history.get).toHaveLength(2);
@@ -138,9 +142,7 @@ describe('NotificationDetail Page', async () => {
     expect(notificationDetailTable).toBeInTheDocument();
     const tableRows = notificationDetailTable?.querySelectorAll('tr');
     expect(tableRows[0]).toHaveTextContent(`detail.sender${notificationToFe.senderDenomination}`);
-    expect(tableRows[1]).toHaveTextContent(
-      `detail.recipient${notificationToFe.recipients[1].denomination}`
-    );
+    expect(tableRows[1]).toHaveTextContent(`detail.recipient${pgRecipient.denomination}`);
     expect(tableRows[2]).toHaveTextContent(`detail.date${formatDate(notificationToFe.sentAt)}`);
     expect(tableRows[3]).toHaveTextContent(`detail.iun${notificationToFe.iun}`);
     // check documents box
@@ -168,6 +170,361 @@ describe('NotificationDetail Page', async () => {
     expect(addDomicileBanner).toBeInTheDocument();
   });
 
+  it('renders NotificationCostBanner - ASYNC and single recipient - admin user', async () => {
+    const asyncSingleRecipientDTO = {
+      ...notificationDTO,
+      notificationFeePolicy: NotificationFeePolicy.DeliveryMode,
+      pagoPaIntMode: PagoPaIntegrationMode.Async,
+      recipients: [pgRecipient],
+    };
+
+    mock
+      .onGet(`/bff/v1/notifications/received/${notificationDTO.iun}`)
+      .reply(200, asyncSingleRecipientDTO);
+    mock.onPost(`/bff/v1/payments/info`, paymentInfoRequest).reply(200, paymentInfo);
+    mock.onGet(/\/bff\/v1\/downtime\/history.*/).reply(200, downtimesDTO);
+
+    await act(async () => {
+      result = render(<NotificationDetail />, {
+        preloadedState: {
+          userState: { user: adminUser },
+        },
+      });
+    });
+
+    expect(result.getByTestId('notificationCostBanner')).toBeInTheDocument();
+    expect(result.getByText('notification-cost-banner.enable-sercq.cta')).toBeInTheDocument();
+    expect(result.queryByTestId('addDomicileBanner')).not.toBeInTheDocument();
+  });
+
+  it('renders NotificationCostBanner - ASYNC and single recipient - operator user', async () => {
+    const asyncSingleRecipientDTO = {
+      ...notificationDTO,
+      notificationFeePolicy: NotificationFeePolicy.DeliveryMode,
+      pagoPaIntMode: PagoPaIntegrationMode.Async,
+      recipients: [pgRecipient],
+    };
+
+    mock
+      .onGet(`/bff/v1/notifications/received/${notificationDTO.iun}`)
+      .reply(200, asyncSingleRecipientDTO);
+    mock.onPost(`/bff/v1/payments/info`, paymentInfoRequest).reply(200, paymentInfo);
+    mock.onGet(/\/bff\/v1\/downtime\/history.*/).reply(200, downtimesDTO);
+
+    await act(async () => {
+      result = render(<NotificationDetail />, {
+        preloadedState: {
+          userState: { user: operatorUser },
+        },
+      });
+    });
+
+    expect(result.getByTestId('notificationCostBanner')).toBeInTheDocument();
+    expect(result.queryByText('notification-cost-banner.enable-sercq.cta')).not.toBeInTheDocument();
+    expect(result.queryByTestId('addDomicileBanner')).not.toBeInTheDocument();
+  });
+
+  it('does not render NotificationCostBanner when notificationFeePolicy is DELIVERY_MODE but pagoPaIntMode is not ASYNC', async () => {
+    const dto = {
+      ...notificationDTO,
+      notificationFeePolicy: NotificationFeePolicy.DeliveryMode,
+      pagoPaIntMode: PagoPaIntegrationMode.Sync,
+      recipients: [pgRecipient],
+    };
+
+    mock.onGet(`/bff/v1/notifications/received/${notificationDTO.iun}`).reply(200, dto);
+    mock.onPost(`/bff/v1/payments/info`, paymentInfoRequest).reply(200, paymentInfo);
+    mock.onGet(/\/bff\/v1\/downtime\/history.*/).reply(200, downtimesDTO);
+
+    await act(async () => {
+      result = render(<NotificationDetail />, {
+        preloadedState: {
+          userState: { user: adminUser },
+        },
+      });
+    });
+
+    expect(result.queryByTestId('notificationCostBanner')).not.toBeInTheDocument();
+    expect(result.getByTestId('addDomicileBanner')).toBeInTheDocument();
+  });
+
+  it('does not render NotificationCostBanner when pagoPaIntMode is ASYNC but notificationFeePolicy is not DELIVERY_MODE', async () => {
+    const dto = {
+      ...notificationDTO,
+      notificationFeePolicy: NotificationFeePolicy.FlatRate,
+      pagoPaIntMode: PagoPaIntegrationMode.Async,
+      recipients: [pgRecipient],
+    };
+
+    mock.onGet(`/bff/v1/notifications/received/${notificationDTO.iun}`).reply(200, dto);
+    mock.onPost(`/bff/v1/payments/info`, paymentInfoRequest).reply(200, paymentInfo);
+    mock.onGet(/\/bff\/v1\/downtime\/history.*/).reply(200, downtimesDTO);
+
+    await act(async () => {
+      result = render(<NotificationDetail />, {
+        preloadedState: {
+          userState: { user: adminUser },
+        },
+      });
+    });
+
+    expect(result.queryByTestId('notificationCostBanner')).not.toBeInTheDocument();
+    expect(result.getByTestId('addDomicileBanner')).toBeInTheDocument();
+  });
+
+  it('shows NotificationCostBanner again after closing it and re-entering the page', async () => {
+    const asyncSingleRecipientDTO = {
+      ...notificationDTO,
+      notificationFeePolicy: NotificationFeePolicy.DeliveryMode,
+      pagoPaIntMode: PagoPaIntegrationMode.Async,
+      recipients: [pgRecipient],
+    };
+
+    mock
+      .onGet(`/bff/v1/notifications/received/${notificationDTO.iun}`)
+      .reply(200, asyncSingleRecipientDTO);
+    mock.onPost(`/bff/v1/payments/info`, paymentInfoRequest).reply(200, paymentInfo);
+    mock.onGet(/\/bff\/v1\/downtime\/history.*/).reply(200, downtimesDTO);
+
+    // 1) first enter -> banner is visible
+    await act(async () => {
+      result = render(<NotificationDetail />, {
+        preloadedState: {
+          userState: { user: adminUser },
+        },
+      });
+    });
+
+    const banner = result.getByTestId('notificationCostBanner');
+    expect(banner).toBeInTheDocument();
+
+    // 2) close banner
+    await userEvent.click(within(banner).getByRole('button', { name: 'button.close' }));
+
+    await waitFor(() => {
+      expect(result.queryByTestId('notificationCostBanner')).not.toBeInTheDocument();
+    });
+
+    // 3) leave page (unmount)
+    result.unmount();
+
+    // 4) re-enter page (remount) -> banner is visible again
+    await act(async () => {
+      result = render(<NotificationDetail />, {
+        preloadedState: {
+          userState: { user: adminUser },
+        },
+      });
+    });
+
+    expect(result.getByTestId('notificationCostBanner')).toBeInTheDocument();
+  });
+
+  it('renders pec unreachable alert - SIMPLE_REGISTERED_LETTER and ASYNC', async () => {
+    const asyncSingleRecipientDTO = {
+      ...notificationDTO,
+      notificationFeePolicy: NotificationFeePolicy.DeliveryMode,
+      pagoPaIntMode: PagoPaIntegrationMode.Async,
+      recipients: [pgRecipient],
+    };
+
+    const spy = vi.spyOn(StatusHistoryParser, 'parse').mockReturnValue({
+      resolveDeliveryOutcome: () => ({ type: DeliveryOutcomeType.DIGITAL_FAILURE }),
+      hasViewedStatus: () => true,
+      hasSimpleRegisteredLetter: () => true,
+    } as any);
+
+    mock
+      .onGet(`/bff/v1/notifications/received/${notificationDTO.iun}`)
+      .reply(200, asyncSingleRecipientDTO);
+    mock.onPost(`/bff/v1/payments/info`, paymentInfoRequest).reply(200, paymentInfo);
+    mock.onGet(/\/bff\/v1\/downtime\/history.*/).reply(200, downtimesDTO);
+
+    await act(async () => {
+      result = render(<NotificationDetail />, {
+        preloadedState: {
+          userState: { user: adminUser },
+        },
+      });
+    });
+
+    expect(result.getByTestId('notificationCostBanner')).toBeInTheDocument();
+    expect(result.getByTestId('pecUnreachableAlertText')).toBeInTheDocument();
+
+    spy.mockRestore();
+  });
+
+  it('does not render pec unreachable alert - SIMPLE_REGISTERED_LETTER and not ASYNC', async () => {
+    const spy = vi.spyOn(StatusHistoryParser, 'parse').mockReturnValue({
+      resolveDeliveryOutcome: () => ({ type: DeliveryOutcomeType.DIGITAL_FAILURE }),
+      hasViewedStatus: () => true,
+      hasSimpleRegisteredLetter: () => true,
+    } as any);
+
+    mock.onGet(`/bff/v1/notifications/received/${notificationDTO.iun}`).reply(200, notificationDTO);
+    mock.onPost(`/bff/v1/payments/info`, paymentInfoRequest).reply(200, paymentInfo);
+    mock.onGet(/\/bff\/v1\/downtime\/history.*/).reply(200, downtimesDTO);
+
+    await act(async () => {
+      result = render(<NotificationDetail />, {
+        preloadedState: {
+          userState: { user: adminUser },
+        },
+      });
+    });
+
+    expect(result.queryByTestId('pecUnreachableAlertText')).not.toBeInTheDocument();
+
+    spy.mockRestore();
+  });
+
+  it('does not render NotificationCostBanner when notification is cancelled', async () => {
+    const cancelledAsyncSingleRecipientDTO = {
+      ...notificationDTO,
+      notificationFeePolicy: NotificationFeePolicy.DeliveryMode,
+      pagoPaIntMode: PagoPaIntegrationMode.Async,
+      recipients: [pgRecipient],
+      notificationStatus: NotificationStatus.CANCELLED,
+      timeline: [
+        ...notificationDTO.timeline,
+        {
+          elementId: 'NOTIFICATION_CANCELLATION_REQUEST.HYTD-ERPH-WDUE-202308-H-1',
+          timestamp: '2033-08-14T13:42:54.17675939Z',
+          legalFactsIds: [],
+          category: TimelineCategory.NOTIFICATION_CANCELLATION_REQUEST,
+          details: {},
+        },
+      ],
+    };
+
+    mock
+      .onGet(`/bff/v1/notifications/received/${notificationDTO.iun}`)
+      .reply(200, cancelledAsyncSingleRecipientDTO);
+    mock.onGet(/\/bff\/v1\/downtime\/history.*/).reply(200, downtimesDTO);
+
+    await act(async () => {
+      result = render(<NotificationDetail />, {
+        preloadedState: {
+          userState: { user: adminUser },
+        },
+      });
+    });
+
+    expect(result.queryByTestId('notificationCostBanner')).not.toBeInTheDocument();
+    expect(result.queryByTestId('addDomicileBanner')).not.toBeInTheDocument();
+  });
+
+  it('does not render DomicileBanner when not viewed', async () => {
+    const spy = vi.spyOn(StatusHistoryParser, 'parse').mockReturnValue({
+      resolveDeliveryOutcome: () => null,
+      hasViewedStatus: () => false,
+      hasSimpleRegisteredLetter: () => false,
+    } as any);
+
+    mock.onGet(`/bff/v1/notifications/received/${notificationDTO.iun}`).reply(200, notificationDTO);
+    mock.onPost(`/bff/v1/payments/info`, paymentInfoRequest).reply(200, paymentInfo);
+    mock.onGet(/\/bff\/v1\/downtime\/history.*/).reply(200, downtimesDTO);
+
+    await act(async () => {
+      result = render(<NotificationDetail />, {
+        preloadedState: {
+          userState: { user: adminUser },
+        },
+      });
+    });
+
+    expect(result.queryByTestId('addDomicileBanner')).not.toBeInTheDocument();
+    expect(result.queryByTestId('notificationCostBanner')).not.toBeInTheDocument();
+
+    spy.mockRestore();
+  });
+
+  it('renders DomicileBanner when viewed and not NotificationCostBanner - admin user', async () => {
+    const spy = vi.spyOn(StatusHistoryParser, 'parse').mockReturnValue({
+      resolveDeliveryOutcome: () => ({ type: DeliveryOutcomeType.VIEWED }),
+      hasViewedStatus: () => true,
+      hasSimpleRegisteredLetter: () => false,
+    } as any);
+
+    mock.onGet(`/bff/v1/notifications/received/${notificationDTO.iun}`).reply(200, notificationDTO);
+    mock.onPost(`/bff/v1/payments/info`, paymentInfoRequest).reply(200, paymentInfo);
+    mock.onGet(/\/bff\/v1\/downtime\/history.*/).reply(200, downtimesDTO);
+
+    await act(async () => {
+      result = render(<NotificationDetail />, {
+        preloadedState: {
+          userState: { user: adminUser },
+        },
+      });
+    });
+
+    expect(result.getByTestId('addDomicileBanner')).toBeInTheDocument();
+    expect(result.queryByTestId('notificationCostBanner')).not.toBeInTheDocument();
+
+    spy.mockRestore();
+  });
+
+  it('does not render DomicileBanner when viewed and not NotificationCostBanner - admin with groups', async () => {
+    const spy = vi.spyOn(StatusHistoryParser, 'parse').mockReturnValue({
+      resolveDeliveryOutcome: () => ({ type: DeliveryOutcomeType.VIEWED }),
+      hasViewedStatus: () => true,
+      hasSimpleRegisteredLetter: () => false,
+    } as any);
+
+    mock.onGet(`/bff/v1/notifications/received/${notificationDTO.iun}`).reply(200, notificationDTO);
+    mock.onPost(`/bff/v1/payments/info`, paymentInfoRequest).reply(200, paymentInfo);
+    mock.onGet(/\/bff\/v1\/downtime\/history.*/).reply(200, downtimesDTO);
+
+    await act(async () => {
+      result = render(<NotificationDetail />, {
+        preloadedState: {
+          userState: { user: adminUserWithGroup },
+        },
+      });
+    });
+
+    expect(result.queryByTestId('addDomicileBanner')).not.toBeInTheDocument();
+    expect(result.queryByTestId('notificationCostBanner')).not.toBeInTheDocument();
+
+    spy.mockRestore();
+  });
+
+  it('does not render pec unreachable alert - SIMPLE_REGISTERED_LETTER and ASYNC with multiple recipients', async () => {
+    const asyncMultiRecipientDTO = {
+      ...notificationDTO,
+      notificationFeePolicy: NotificationFeePolicy.DeliveryMode,
+      pagoPaIntMode: PagoPaIntegrationMode.Async,
+      recipients: [pgRecipient, pfRecipient],
+    };
+
+    const spy = vi.spyOn(StatusHistoryParser, 'parse').mockReturnValue({
+      resolveDeliveryOutcome: () => ({ type: DeliveryOutcomeType.DIGITAL_FAILURE }),
+      hasViewedStatus: () => true,
+      hasSimpleRegisteredLetter: () => true,
+    } as any);
+
+    mock
+      .onGet(`/bff/v1/notifications/received/${notificationDTO.iun}`)
+      .reply(200, asyncMultiRecipientDTO);
+    mock.onPost(`/bff/v1/payments/info`, paymentInfoRequest).reply(200, paymentInfo);
+    mock.onGet(/\/bff\/v1\/downtime\/history.*/).reply(200, downtimesDTO);
+
+    await act(async () => {
+      result = render(<NotificationDetail />, {
+        preloadedState: {
+          userState: { user: adminUser },
+        },
+      });
+    });
+
+    expect(result.queryByTestId('pecUnreachableAlertText')).not.toBeInTheDocument();
+
+    expect(result.getByTestId('addDomicileBanner')).toBeInTheDocument();
+    expect(result.queryByTestId('notificationCostBanner')).not.toBeInTheDocument();
+
+    spy.mockRestore();
+  });
+
   it('renders NotificationDetail page when status is CANCELLED - documents messages', async () => {
     mock.onGet(`/bff/v1/notifications/received/${notificationDTO.iun}`).reply(200, {
       ...notificationDTO,
@@ -188,9 +545,7 @@ describe('NotificationDetail Page', async () => {
     await act(async () => {
       result = render(<NotificationDetail />, {
         preloadedState: {
-          userState: {
-            user: userResponse,
-          },
+          userState: { user: adminUser },
         },
       });
     });
@@ -228,7 +583,7 @@ describe('NotificationDetail Page', async () => {
     await act(async () => {
       result = render(<NotificationDetail />, {
         preloadedState: {
-          userState: { user: { fiscal_number: notificationDTO.recipients[2].taxId } },
+          userState: { user: adminUser },
         },
       });
     });
@@ -255,7 +610,11 @@ describe('NotificationDetail Page', async () => {
     // we use regexp to not set the query parameters
     mock.onGet(/\/bff\/v1\/downtime\/history.*/).reply(200, downtimesDTO);
     await act(async () => {
-      result = render(<NotificationDetail />);
+      result = render(<NotificationDetail />, {
+        preloadedState: {
+          userState: { user: adminUser },
+        },
+      });
     });
     expect(mock.history.get).toHaveLength(2);
     expect(mock.history.post).toHaveLength(1);
@@ -274,14 +633,16 @@ describe('NotificationDetail Page', async () => {
   it('checks not available payment', async () => {
     mock.onGet(`/bff/v1/notifications/received/${notificationDTO.iun}`).reply(200, {
       ...notificationDTO,
-      recipients: [
-        { ...notificationDTO.recipients[1], payment: { creditorTaxId: null, noticeCode: null } },
-      ],
+      recipients: [{ ...pgRecipient, payment: { creditorTaxId: null, noticeCode: null } }],
     });
     // we use regexp to not set the query parameters
     mock.onGet(/\/bff\/v1\/downtime\/history.*/).reply(200, downtimesDTO);
     await act(async () => {
-      result = render(<NotificationDetail />);
+      result = render(<NotificationDetail />, {
+        preloadedState: {
+          userState: { user: adminUser },
+        },
+      });
     });
     // check payment box
     const paymentData = result?.queryByTestId('paymentData');
@@ -307,9 +668,7 @@ describe('NotificationDetail Page', async () => {
     await act(async () => {
       result = render(<NotificationDetail />, {
         preloadedState: {
-          userState: {
-            user: userResponse,
-          },
+          userState: { user: adminUser },
         },
       });
     });
@@ -348,9 +707,7 @@ describe('NotificationDetail Page', async () => {
         </>,
         {
           preloadedState: {
-            userState: {
-              user: userResponse,
-            },
+            userState: { user: adminUser },
           },
         }
       );
@@ -419,7 +776,7 @@ describe('NotificationDetail Page', async () => {
         </>,
         {
           preloadedState: {
-            userState: { user: { fiscal_number: notificationDTO.recipients[2].taxId } },
+            userState: { user: adminUser },
           },
         }
       );
@@ -474,9 +831,7 @@ describe('NotificationDetail Page', async () => {
     await act(async () => {
       result = render(<NotificationDetail />, {
         preloadedState: {
-          userState: {
-            user: userResponse,
-          },
+          userState: { user: adminUser },
         },
       });
     });
@@ -504,9 +859,7 @@ describe('NotificationDetail Page', async () => {
     await act(async () => {
       result = render(<NotificationDetail />, {
         preloadedState: {
-          userState: {
-            user: userResponse,
-          },
+          userState: { user: adminUser },
         },
       });
     });
@@ -527,7 +880,7 @@ describe('NotificationDetail Page', async () => {
       result = render(<NotificationDetail />, {
         preloadedState: {
           userState: {
-            user: userResponse,
+            user: adminUser,
           },
         },
       });
@@ -550,9 +903,7 @@ describe('NotificationDetail Page', async () => {
         </>,
         {
           preloadedState: {
-            userState: {
-              user: userResponse,
-            },
+            userState: { user: adminUser },
           },
         }
       );
@@ -576,7 +927,7 @@ describe('NotificationDetail Page', async () => {
     await act(async () => {
       result = render(<NotificationDetail />, {
         preloadedState: {
-          userState: { user: userResponse },
+          userState: { user: adminUser },
         },
       });
     });
@@ -591,9 +942,7 @@ describe('NotificationDetail Page', async () => {
     expect(notificationDetailTable).toBeInTheDocument();
     const tableRows = notificationDetailTable?.querySelectorAll('tr');
     expect(tableRows[0]).toHaveTextContent(`detail.sender${notificationToFe.senderDenomination}`);
-    expect(tableRows[1]).toHaveTextContent(
-      `detail.recipient${notificationToFe.recipients[1].denomination}`
-    );
+    expect(tableRows[1]).toHaveTextContent(`detail.recipient${pgRecipient.denomination}`);
     expect(tableRows[2]).toHaveTextContent(`detail.date${formatDate(notificationToFe.sentAt)}`);
     expect(tableRows[3]).toHaveTextContent(`detail.iun${notificationToFe.iun}`);
     // check documents box
@@ -634,7 +983,7 @@ describe('NotificationDetail Page', async () => {
     await act(async () => {
       result = render(<NotificationDetail />, {
         preloadedState: {
-          userState: { user: userResponse },
+          userState: { user: adminUser },
           generalInfoState: {
             digitalAddresses: [],
           },
@@ -648,7 +997,7 @@ describe('NotificationDetail Page', async () => {
     expect(mockNavigateFn).toHaveBeenCalledWith(routes.NOTIFICHE_DELEGATO);
   });
 
-  it('renders NotificationDetail page with user with groups logged', async () => {
+  it('renders NotificationDetail page - admin with groups', async () => {
     mockIsDelegate = false;
     mock.onGet(`/bff/v1/notifications/received/${notificationDTO.iun}`).reply(200, notificationDTO);
     mock.onPost(`/bff/v1/payments/info`, paymentInfoRequest).reply(200, paymentInfo);
@@ -657,12 +1006,7 @@ describe('NotificationDetail Page', async () => {
     await act(async () => {
       result = render(<NotificationDetail />, {
         preloadedState: {
-          userState: {
-            user: {
-              ...userResponse,
-              hasGroup: true,
-            },
-          },
+          userState: { user: adminUserWithGroup },
         },
       });
     });
@@ -679,9 +1023,7 @@ describe('NotificationDetail Page', async () => {
     expect(notificationDetailTable).toBeInTheDocument();
     const tableRows = notificationDetailTable?.querySelectorAll('tr');
     expect(tableRows[0]).toHaveTextContent(`detail.sender${notificationToFe.senderDenomination}`);
-    expect(tableRows[1]).toHaveTextContent(
-      `detail.recipient${notificationToFe.recipients[1].denomination}`
-    );
+    expect(tableRows[1]).toHaveTextContent(`detail.recipient${pgRecipient.denomination}`);
     expect(tableRows[2]).toHaveTextContent(`detail.date${formatDate(notificationToFe.sentAt)}`);
     expect(tableRows[3]).toHaveTextContent(`detail.iun${notificationToFe.iun}`);
     // check documents box
@@ -740,7 +1082,7 @@ describe('NotificationDetail Page', async () => {
     await act(async () => {
       result = render(<NotificationDetail />, {
         preloadedState: {
-          userState: { user: { fiscal_number: notificationDTO.recipients[2].taxId } },
+          userState: { user: adminUser },
         },
       });
     });
@@ -799,7 +1141,7 @@ describe('NotificationDetail Page', async () => {
     await act(async () => {
       result = render(<NotificationDetail />, {
         preloadedState: {
-          userState: { user: { fiscal_number: notificationDTO.recipients[2].taxId } },
+          userState: { user: adminUser },
         },
       });
     });
@@ -836,7 +1178,7 @@ describe('NotificationDetail Page', async () => {
     let paginationData = {
       page: 0,
       size: 5,
-      totalElements: notificationDTO.recipients[2].payments?.length,
+      totalElements: pgRecipient.payments?.length,
     };
 
     mock.onGet(`/bff/v1/notifications/received/${notificationDTO.iun}`).reply(200, notificationDTO);
@@ -847,7 +1189,7 @@ describe('NotificationDetail Page', async () => {
     await act(async () => {
       result = render(<NotificationDetail />, {
         preloadedState: {
-          userState: { user: { fiscal_number: notificationDTO.recipients[2].taxId } },
+          userState: { user: adminUser },
         },
       });
     });
@@ -899,7 +1241,7 @@ describe('NotificationDetail Page', async () => {
     await act(async () => {
       result = render(<NotificationDetail />, {
         preloadedState: {
-          userState: { user: { fiscal_number: notificationDTO.recipients[2].taxId } },
+          userState: { user: adminUser },
         },
       });
     });
@@ -934,7 +1276,7 @@ describe('NotificationDetail Page', async () => {
     await act(async () => {
       result = render(<NotificationDetail />, {
         preloadedState: {
-          userState: { user: { fiscal_number: notificationDTO.recipients[2].taxId } },
+          userState: { user: adminUser },
         },
       });
     });
@@ -970,7 +1312,7 @@ describe('NotificationDetail Page', async () => {
     await act(async () => {
       result = render(<NotificationDetail />, {
         preloadedState: {
-          userState: { user: { fiscal_number: notificationDTO.recipients[2].taxId } },
+          userState: { user: adminUser },
         },
       });
     });
@@ -988,7 +1330,7 @@ describe('NotificationDetail Page', async () => {
     await act(async () => {
       result = render(<NotificationDetail />, {
         preloadedState: {
-          userState: { user: { fiscal_number: raddNotificationDTO.recipients[2].taxId } },
+          userState: { user: adminUser },
         },
       });
     });

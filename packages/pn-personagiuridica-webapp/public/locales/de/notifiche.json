@@ -70,6 +70,7 @@
     "show-more": "Mehr Details anzeigen",
     "show-less": "Weniger Details anzeigen",
     "disclaimer-link": "Mehr erfahren",
+    "pec-unreachable": "Halten Sie Ihr zertifiziertes E-Mail-Postfach (PEC) frei und aktiv, um alles digital zu erhalten!",
     "cancelled": {
       "message": "Diese Zustellung wurde von der sendenden Körperschaft storniert.",
       "cta": "Was muss ich tun?"
@@ -438,6 +439,42 @@
     "cancellation-in-progress": "Annulliert",
     "cancellation-in-progress-tooltip": "Annullierung in Bearbeitung. Der Status wird in Kürze aktualisiert.",
     "cancellation-in-progress-description": "Annullierung in Bearbeitung. Der Status wird in Kürze aktualisiert."
+  },
+  "notification-cost-banner": {
+    "analog": {
+      "title": "Mit SEND können Sie Geld sparen!",
+      "message": "Im Auftrag der sendenden Einrichtung wurden ein oder mehrere Papier-Einschreiben zu Gesamtkosten von {{analogCost}} an Ihr Unternehmen versandt, da diese Benachrichtigung nicht fristgerecht über die digitalen Kanäle geöffnet wurde.",
+      "fallback": "Im Auftrag der sendenden Einrichtung wurden ein oder mehrere Papier-Einschreiben an Ihr Unternehmen versandt, da diese Benachrichtigung nicht fristgerecht über die digitalen Kanäle geöffnet wurde. Dies führt zu zusätzlichen Kosten."
+    },
+    "digital_failure": {
+      "title": "Mit SEND können Sie Geld sparen!",
+      "message": "Die Zustellung der Benachrichtigung über PEC ist fehlgeschlagen, daher wurde ein Einschreiben zu Kosten von {{analogCost}} an Ihr Unternehmen versandt.",
+      "fallback": "Die Zustellung der Benachrichtigung über PEC ist fehlgeschlagen, daher wurde ein Einschreiben an Ihr Unternehmen versandt. Dies führt zu zusätzlichen Kosten."
+    },
+    "digital_platform": {
+      "title": "Mit SEND hast du gespart!",
+      "message": "Dank der aktiven digitalen Adresse hat Ihr Unternehmen den Versand des Einschreibens und die damit verbundenen Kosten vermieden."
+    },
+    "digital_special": {
+      "title": "Mit SEND hast du gespart!",
+      "message": "Wir haben die Benachrichtigung an die von der sendenden Einrichtung mitgeteilte PEC-Adresse gesendet, so dass Ihr Unternehmen das Einschreiben und die damit verbundenen Kosten vermieden hat."
+    },
+    "digital_registry": {
+      "title": "Mit SEND hast du gespart!",
+      "message": "Wir haben die Benachrichtigung an die in den öffentlichen Registern eingetragene PEC-Adresse gesendet, so dass Ihr Unternehmen das Einschreiben und die damit verbundenen Kosten vermieden hat."
+    },
+    "viewed": {
+      "title": "Mit SEND hast du gespart!",
+      "message": "Die digitale Benachrichtigung wurde rechtzeitig geöffnet, wodurch das Einschreiben und die damit verbundenen Kosten vermieden wurden."
+    },
+    "enable-sercq": {
+      "message": {
+        "default": "Aktiviere eine digitale Adresse, um künftige Zustellungen nur noch digital zu erhalten.",
+        "analog": "Aktivieren Sie SEND als digitale Adresse, um sich Kosten wie diese zu ersparen.",
+        "external-pec": "Aktiviere eine digitale Adresse, um zu wählen, wo du deine SEND-Zustellungen erhalten möchtest."
+      },
+      "cta": "Digitale Adresse aktivieren"
+    }
   },
   "notification-alert": {
     "description": "Der Betrag enthält die Zustellkosten.",

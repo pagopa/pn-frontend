@@ -70,6 +70,7 @@
     "show-more": "View more details",
     "show-less": "View fewer details",
     "disclaimer-link": "Learn more",
+    "pec-unreachable": "Keep your certified email (PEC) mailbox free and active to receive everything digitally!",
     "cancelled": {
       "message": "This notification has been cancelled by the issuing institution.",
       "cta": "What should I do?"
@@ -438,6 +439,42 @@
     "cancellation-in-progress": "Cancelled",
     "cancellation-in-progress-tooltip": "Cancellation in progress. The status will be updated shortly.",
     "cancellation-in-progress-description": "Cancellation in progress. The status will be updated shortly."
+  },
+  "notification-cost-banner": {
+    "analog": {
+      "title": "Save money with SEND!",
+      "message": "One or more registered mail were sent to your company on behalf of the issuing institution at a total cost of {{analogCost}}, because this notification was not opened via digital channels within the required deadlines.",
+      "fallback": "One or more registered mail were sent to your company on behalf of the issuing institution because this notification was not opened via digital channels within the required deadlines. This will result in additional costs."
+    },
+    "digital_failure": {
+      "title": "Save money with SEND!",
+      "message": "We were unable to deliver the notification to the certified email (PEC), so a registered mail was sent to your company at a cost of {{analogCost}}.",
+      "fallback": "We were unable to deliver the notification to the certified email (PEC), so a registered mail was sent to your company. This will result in additional costs."
+    },
+    "digital_platform": {
+      "title": "With SEND you have saved!",
+      "message": "Thanks to your active digital address, your company avoided the registered mail and the related costs."
+    },
+    "digital_special": {
+      "title": "With SEND you have saved!",
+      "message": "We sent the notification to the certified email (PEC) provided by the issuing institution, so your company avoided the registered mail and the related costs."
+    },
+    "digital_registry": {
+      "title": "With SEND you have saved!",
+      "message": "We sent the notification to the certified email (PEC) found in public registries, so your company avoided the registered mail and the related costs."
+    },
+    "viewed": {
+      "title": "With SEND you have saved!",
+      "message": "The digital notification was opened in time, avoiding the registered mail and the related costs."
+    },
+    "enable-sercq": {
+      "message": {
+        "default": "Activate a digital address to receive future notifications digitally only.",
+        "analog": "Activate SEND as your digital address to save on costs like this.",
+        "external-pec": "Activate a digital address to choose where to receive your SEND notifications."
+      },
+      "cta": "Activate digital address"
+    }
   },
   "notification-alert": {
     "description": "The amount includes notification costs.",

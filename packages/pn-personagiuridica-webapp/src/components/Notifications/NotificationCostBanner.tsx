@@ -1,5 +1,5 @@
 import type { TFunction } from 'i18next';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
@@ -9,29 +9,21 @@ import type { NotificationCostDetails } from '@pagopa-pn/pn-commons';
 import {
   DeliveryOutcome,
   DeliveryOutcomeType,
-  DigitalDomicileType,
   DigitalSource,
-  EventAction,
   NotificationCostDetailsStatus,
   formatEurocentToCurrency,
 } from '@pagopa-pn/pn-commons';
 import { Banner } from '@pagopa/mui-italia';
 
-import { PFEventsType } from '../../models/PFEventsType';
-import {
-  ChannelType,
-  ContactOperation,
-  ContactSource,
-  RouteDestination,
-} from '../../models/contacts';
+import { ChannelType, ContactOperation, ContactSource } from '../../models/contacts';
 import * as routes from '../../navigation/routes.const';
 import { contactsSelectors, setExternalEvent } from '../../redux/contact/reducers';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
-import PFEventStrategyFactory from '../../utility/MixpanelUtils/PFEventStrategyFactory';
 
 type Props = {
   deliveryOutcome: DeliveryOutcome | null;
   notificationCost?: NotificationCostDetails;
+  canManageContacts?: boolean;
 };
 
 type BannerContent = {
@@ -103,13 +95,14 @@ const getBannerMessage = (
 const getBannerContent = (
   key: BannerKey,
   isDDomActive: boolean,
+  canManageContacts: boolean,
   t: TFunction,
   notificationCost?: NotificationCostDetails
 ): BannerContent => {
   const title = t(`notification-cost-banner.${key}.title`);
   const message = getBannerMessage(key, t, notificationCost);
 
-  if (key === 'digital_platform' || isDDomActive) {
+  if (key === 'digital_platform' || isDDomActive || !canManageContacts) {
     return { title, message };
   }
 
@@ -134,7 +127,11 @@ const getBannerContent = (
   };
 };
 
-export const NotificationCostBanner: React.FC<Props> = ({ deliveryOutcome, notificationCost }) => {
+export const NotificationCostBanner: React.FC<Props> = ({
+  deliveryOutcome,
+  notificationCost,
+  canManageContacts = false,
+}) => {
   const { defaultSERCQ_SENDAddress, defaultPECAddress } = useAppSelector(
     contactsSelectors.selectAddresses
   );
@@ -142,7 +139,7 @@ export const NotificationCostBanner: React.FC<Props> = ({ deliveryOutcome, notif
 
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const { t } = useTranslation(['notifiche', 'recapiti', 'common']);
+  const { t } = useTranslation(['notifiche', 'common']);
   const [isVisible, setIsVisible] = useState(true);
 
   const handleClose = () => setIsVisible(false);
@@ -151,23 +148,12 @@ export const NotificationCostBanner: React.FC<Props> = ({ deliveryOutcome, notif
   const { title, message, ctaLabel } = getBannerContent(
     bannerKey,
     isDDomActive,
+    canManageContacts,
     t,
     notificationCost
   );
-  const showCta = !(bannerKey === 'digital_platform' || isDDomActive);
-
-  const triggerMixpanelEvent = (name: PFEventsType, type: EventAction) => {
-    PFEventStrategyFactory.triggerEvent(name, {
-      event_type: type,
-      banner_id: mapBannerIds[bannerKey],
-      banner_page: ContactSource.DETTAGLIO_NOTIFICA,
-      banner_landing: showCta ? RouteDestination.DIGITAL_DOMICILE_ACTIVATION : 'not_set',
-    });
-  };
 
   const handleActivateDigitalDomicile = useCallback(() => {
-    triggerMixpanelEvent(PFEventsType.SEND_TAP_BANNER, EventAction.ACTION);
-
     navigate(routes.DIGITAL_DOMICILE_ACTIVATION);
 
     dispatch(
@@ -178,31 +164,6 @@ export const NotificationCostBanner: React.FC<Props> = ({ deliveryOutcome, notif
       })
     );
   }, [dispatch, navigate]);
-
-  const isDigital = deliveryOutcome?.type === DeliveryOutcomeType.DIGITAL;
-
-  const mapBannerIds: Record<BannerKey, string> = {
-    analog: 'savings_missed_analog_sent',
-    viewed: 'savings_success_early_view',
-    digital_failure: 'savings_missed_analog_sent',
-    digital_platform:
-      isDigital && deliveryOutcome.details.domicileType === DigitalDomicileType.SERCQ
-        ? 'savings_success_sercq'
-        : 'savings_success_sercq_pec',
-    digital_special: 'savings_success_pec',
-    digital_registry: 'savings_success_pec',
-  };
-
-  const handleBannerClose = () => {
-    triggerMixpanelEvent(PFEventsType.SEND_CLOSE_BANNER, EventAction.ACTION);
-    handleClose();
-  };
-
-  useEffect(() => {
-    if (isVisible) {
-      triggerMixpanelEvent(PFEventsType.SEND_BANNER, EventAction.SCREEN_VIEW);
-    }
-  }, []);
 
   if (!isVisible) {
     return null;
@@ -223,7 +184,7 @@ export const NotificationCostBanner: React.FC<Props> = ({ deliveryOutcome, notif
             onClick: handleActivateDigitalDomicile,
           },
         })}
-        onClose={handleBannerClose}
+        onClose={handleClose}
         closeAriaLabel={t('button.close', { ns: 'common' })}
       />
     </Box>
