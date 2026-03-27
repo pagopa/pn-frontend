@@ -14,7 +14,7 @@ import {
 } from '@pagopa-pn/pn-commons';
 
 import { apiLogout, exchangeToken } from '../redux/auth/actions';
-import { resetState } from '../redux/auth/reducers';
+import { authSelectors, resetState } from '../redux/auth/reducers';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { RootState } from '../redux/store';
 import { getConfiguration } from '../services/configuration.service';
@@ -27,6 +27,7 @@ const SessionGuard = () => {
     (state: RootState) => state.userState.user
   );
   const { loading } = useAppSelector((state: RootState) => state.userState);
+  const isSupportUser = useAppSelector(authSelectors.selectIsSupportUser);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const sessionCheck = useSessionCheck(200, () => sessionCheckCallback());
@@ -93,7 +94,7 @@ const SessionGuard = () => {
       await dispatch(apiLogout(sessionToken));
     }
     dispatch(resetState());
-    goToSelfcareLogout();
+    goToSelfcareLogout(isSupportUser);
   };
 
   useEffect(() => {

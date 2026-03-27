@@ -21,6 +21,7 @@ import {
   waitFor,
 } from '../../__test__/test-utils';
 import { apiClient } from '../../api/apiClients';
+import { PNRole } from '../../models/user';
 import * as routes from '../../navigation/routes.const';
 import { DASHBOARD_ACTIONS } from '../../redux/dashboard/actions';
 import { ServerResponseErrorCode } from '../../utility/AppError/types';
@@ -357,5 +358,26 @@ describe('Dashboard Page', async () => {
     await waitFor(() => {
       expect(screen.queryByTestId('filter-form')).not.toBeInTheDocument();
     });
+  });
+
+  it('should not display new notification and language settings buttons if user has role support', async () => {
+    await act(async () => {
+      result = render(<Dashboard />, {
+        preloadedState: {
+          userState: {
+            user: {
+              organization: {
+                roles: [{ role: PNRole.SUPPORT }],
+              },
+            },
+          },
+        },
+      });
+    });
+
+    const newNotificationBtn = result.queryByTestId('newNotificationBtn');
+    const settingsLangBtn = result.queryByTestId('settingsLangBtn');
+    expect(newNotificationBtn).not.toBeInTheDocument();
+    expect(settingsLangBtn).not.toBeInTheDocument();
   });
 });
