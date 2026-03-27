@@ -23,6 +23,6 @@
     "noFallthroughCasesInSwitch": true,
     "resolveJsonModule": true
   },
-  "include": ["src/**/*"],
+  "include": ["src/**/*", "../../types/**/*.d.ts"],
   "exclude": ["dist", "node_modules"]
 }
