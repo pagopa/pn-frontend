@@ -1,17 +1,33 @@
-import React, { ReactChild, ReactFragment } from 'react';
+import React, { ReactNode } from 'react';
 
-import { Box, Typography } from '@mui/material';
+import { Box, SxProps, Theme, Typography } from '@mui/material';
+
+import { ValueMode } from '../../../models/SmartTable';
 
 type Props = {
-  children: ReactChild | ReactFragment;
-  label: ReactChild | ReactFragment;
+  children: ReactNode;
+  label: ReactNode;
+  mode?: ValueMode;
   wrapValueInTypography?: boolean;
   testId?: string;
+};
+
+const strategies: Record<ValueMode, SxProps<Theme>> = {
+  truncate: {
+    whiteSpace: 'nowrap',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+  },
+  wrap: {
+    whiteSpace: 'normal',
+    wordBreak: 'break-word',
+  },
 };
 
 const PnCardContentItem: React.FC<Props> = ({
   children,
   label,
+  mode,
   wrapValueInTypography = true,
   testId,
 }) => (
@@ -24,11 +40,19 @@ const PnCardContentItem: React.FC<Props> = ({
       {label}
     </Typography>
     {wrapValueInTypography && (
-      <Typography variant="body2" data-testid={testId ? `${testId}Value` : null}>
+      <Typography
+        variant="body2"
+        data-testid={testId ? `${testId}Value` : null}
+        sx={{ ...(mode && strategies[mode]) }}
+      >
         {children}
       </Typography>
     )}
-    {!wrapValueInTypography && <Box data-testid={testId ? `${testId}Value` : null}>{children}</Box>}
+    {!wrapValueInTypography && (
+      <Box data-testid={testId ? `${testId}Value` : null} sx={{ ...(mode && strategies[mode]) }}>
+        {children}
+      </Box>
+    )}
   </>
 );
 

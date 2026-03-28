@@ -1,11 +1,9 @@
-import { Box, SxProps } from '@mui/material';
+import { Box } from '@mui/material';
 
 import checkChildren from '../../utility/children.utility';
 import PnCard from './PnCard/PnCard';
 
 type Props = {
-  /** Custom style */
-  sx?: SxProps;
   /** Cards test id */
   testId?: string;
   children: React.ReactNode;
@@ -22,12 +20,12 @@ const cardStyle = {
   },
 };
 
-const PnCardsList: React.FC<Props> = ({ sx, testId, children }) => {
+const PnCardsList: React.FC<Props> = ({ testId, children }) => {
   // check on children
   checkChildren(children, [{ cmp: PnCard }], 'PnCardsList');
 
   return (
-    <Box sx={{ ...cardStyle, ...sx }} data-testid={testId}>
+    <Box sx={{ ...cardStyle }} data-testid={testId}>
       {children}
     </Box>
   );

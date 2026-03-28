@@ -107,6 +107,7 @@ const DelegationsOfTheCompany = () => {
     {
       id: 'name',
       label: t('deleghe.table.name'),
+      mode: 'wrap',
       tableConfiguration: {
         cellProps: { width: '18%' },
       },

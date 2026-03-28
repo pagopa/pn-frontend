@@ -1,17 +1,33 @@
-import { TableCell, TableCellProps } from '@mui/material';
+import { SxProps, TableCell, Theme } from '@mui/material';
 import { ButtonNaked } from '@pagopa/mui-italia';
 
+import { TableCellProps } from '../../../models/PnTable';
+import { ValueMode } from '../../../models/SmartTable';
 import { buttonNakedInheritStyle } from '../../../utility/styles.utility';
 
 export type PnTableBodyCellProps = {
   testId?: string;
+  mode?: ValueMode;
   cellProps?: TableCellProps;
   onClick?: () => void;
   children: React.ReactNode;
 };
 
+const strategies: Record<ValueMode, SxProps<Theme>> = {
+  truncate: {
+    whiteSpace: 'nowrap',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+  },
+  wrap: {
+    whiteSpace: 'normal',
+    wordBreak: 'break-word',
+  },
+};
+
 const PnTableBodyCell: React.FC<PnTableBodyCellProps> = ({
   testId,
+  mode,
   cellProps,
   children,
   onClick,
@@ -21,7 +37,7 @@ const PnTableBodyCell: React.FC<PnTableBodyCellProps> = ({
     data-testid={testId}
     {...cellProps}
     sx={{
-      ...cellProps?.sx,
+      ...(mode && strategies[mode]),
       borderBottom: 'none',
     }}
   >
@@ -34,4 +50,5 @@ const PnTableBodyCell: React.FC<PnTableBodyCellProps> = ({
     )}
   </TableCell>
 );
+
 export default PnTableBodyCell;

@@ -103,10 +103,12 @@ const MobileNotifications = ({ notifications, sort, onChangeSorting, currentDele
     {
       id: 'sender',
       label: t('table.mittente'),
+      mode: 'truncate',
     },
     {
       id: 'subject',
       label: t('table.oggetto'),
+      mode: 'truncate',
     },
     {
       id: 'iun',
@@ -149,11 +151,9 @@ const MobileNotifications = ({ notifications, sort, onChangeSorting, currentDele
   // Navigation handlers
   const handleRowClick = (row: Row<Notification>) => {
     if (currentDelegator) {
-      navigate(
-        routes.GET_DETTAGLIO_NOTIFICA_DELEGATO_PATH(row.iun as string, currentDelegator.mandateId)
-      );
+      navigate(routes.GET_DETTAGLIO_NOTIFICA_DELEGATO_PATH(row.iun, currentDelegator.mandateId));
     } else {
-      navigate(routes.GET_DETTAGLIO_NOTIFICA_PATH(row.iun as string));
+      navigate(routes.GET_DETTAGLIO_NOTIFICA_PATH(row.iun));
     }
   };
 
@@ -217,11 +217,7 @@ const MobileNotifications = ({ notifications, sort, onChangeSorting, currentDele
               </PnCardHeader>
               <PnCardContent>
                 {cardBody.map((body) => (
-                  <PnCardContentItem
-                    key={body.id}
-                    label={body.label}
-                    wrapValueInTypography={body.wrapValueInTypography}
-                  >
+                  <PnCardContentItem key={body.id} label={body.label} mode={body.mode}>
                     <NotificationsDataSwitch data={data} type={body.id} />
                   </PnCardContentItem>
                 ))}
