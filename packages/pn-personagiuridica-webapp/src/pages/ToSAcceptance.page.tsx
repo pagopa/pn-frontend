@@ -1,12 +1,14 @@
-import { ReactNode, useEffect, useState } from 'react';
+import { ChangeEvent, ReactNode, useEffect, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
 import { Box, Grid, Link, Switch, Typography } from '@mui/material';
+import { SxProps } from '@mui/system';
 import {
   ConsentActionType,
   ConsentType,
   ConsentUser,
+  InlineErrorMessage,
   PRIVACY_LINK_RELATIVE_PATH,
   TOS_LINK_RELATIVE_PATH,
 } from '@pagopa-pn/pn-commons';
@@ -22,11 +24,24 @@ type TermsOfServiceProps = {
   privacyConsent: ConsentUser;
 };
 
+const ACCEPTANCE_ERROR_COLOR = '#D13333';
+
+const tosAgreementErrorSx: SxProps = {
+  '& .MuiButton-root': {
+    backgroundColor: ACCEPTANCE_ERROR_COLOR,
+    color: '#FFF',
+    '&:hover': {
+      backgroundColor: ACCEPTANCE_ERROR_COLOR,
+    },
+  },
+};
+
 const TermsOfService = ({ tosConsent, privacyConsent }: TermsOfServiceProps) => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const { t } = useTranslation('common');
   const [accepted, setAccepted] = useState(false);
+  const [showAcceptanceError, setShowAcceptanceError] = useState(false);
 
   /*
   This is a temporary fix to resolve the bug PN-9921.
@@ -63,7 +78,18 @@ const TermsOfService = ({ tosConsent, privacyConsent }: TermsOfServiceProps) => 
     </Link>
   );
 
+  const handleAcceptanceChange = (_: ChangeEvent<HTMLInputElement>, checked: boolean) => {
+    setAccepted(checked);
+    if (checked) {
+      setShowAcceptanceError(false);
+    }
+  };
+
   const handleAccept = async () => {
+    if (!accepted) {
+      setShowAcceptanceError(true);
+      return;
+    }
     const tosPrivacyBody = [];
 
     if (!tosConsent.accepted) {
@@ -112,12 +138,13 @@ const TermsOfService = ({ tosConsent, privacyConsent }: TermsOfServiceProps) => 
             )}
             onConfirm={handleAccept}
             confirmBtnLabel={t('tos.button', 'Accedi')}
-            confirmBtnDisabled={!accepted}
+            confirmBtnDisabled={false}
+            sx={showAcceptanceError ? tosAgreementErrorSx : undefined}
           >
             <Box display="flex" alignItems="center">
               <Switch
-                value={accepted}
-                onClick={() => setAccepted(!accepted)}
+                checked={accepted}
+                onChange={handleAcceptanceChange}
                 data-testid="tosSwitch"
                 sx={{ margin: 2 }}
               />
@@ -129,6 +156,9 @@ const TermsOfService = ({ tosConsent, privacyConsent }: TermsOfServiceProps) => 
                 />
               </Typography>
             </Box>
+            {showAcceptanceError && (
+              <InlineErrorMessage message={t('required-field')} sx={{ ml: 9, mt: 0.5 }} />
+            )}
           </TOSAgreement>
         </Grid>
       </Grid>

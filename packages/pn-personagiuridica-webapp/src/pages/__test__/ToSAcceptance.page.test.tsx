@@ -34,7 +34,7 @@ const privacyConsent: ConsentUser = {
   consentVersion: 'mocked-version-1',
 };
 
-describe('test Terms of Service page', async () => {
+describe('test Terms of Service page', () => {
   let mock: MockAdapter;
   const original = window.open;
 
@@ -81,6 +81,31 @@ describe('test Terms of Service page', async () => {
     expect(container).toHaveTextContent(/tos.button/i);
   });
 
+  it('shows validation error - does not call accept API - clears the error when acceptance switch is enabled', async () => {
+    const { getByRole, queryByRole } = render(
+      <ToSAcceptance tosConsent={tosConsent} privacyConsent={privacyConsent} />
+    );
+
+    const acceptButton = getByRole('button');
+
+    expect(acceptButton).toBeEnabled();
+
+    fireEvent.click(acceptButton);
+
+    await waitFor(() => {
+      expect(mock.history.put).toHaveLength(0);
+      expect(getByRole('alert')).toHaveTextContent(/required-field/i);
+    });
+
+    const switchElement = getByRole('checkbox');
+
+    fireEvent.click(switchElement);
+
+    await waitFor(() => {
+      expect(queryByRole('alert')).not.toBeInTheDocument();
+    });
+  });
+
   it('accept ToS and Privacy', async () => {
     mock.onPut('/bff/v2/tos-privacy', acceptTosPrivacyConsentBodyMock()).reply(200);
     const { getByRole } = render(
@@ -88,9 +113,8 @@ describe('test Terms of Service page', async () => {
     );
     const switchElement = getByRole('checkbox');
     const acceptButton = getByRole('button');
-    expect(acceptButton).toBeDisabled();
+    expect(acceptButton).toBeEnabled();
     fireEvent.click(switchElement);
-    await waitFor(() => expect(acceptButton).toBeEnabled());
     fireEvent.click(acceptButton);
     await waitFor(() => {
       expect(mock.history.put).toHaveLength(1);
@@ -98,7 +122,7 @@ describe('test Terms of Service page', async () => {
     });
   });
 
-  it('navigate to dashboard if tos and privacy are accepted', async () => {
+  it('navigate to dashboard if tos and privacy are accepted', () => {
     render(
       <ToSAcceptance
         tosConsent={{ ...tosConsent, accepted: true }}
@@ -109,7 +133,7 @@ describe('test Terms of Service page', async () => {
     expect(mockNavigateFn).toHaveBeenCalledWith(routes.NOTIFICHE);
   });
 
-  it('navigate to privacy and tos pages', async () => {
+  it('navigate to privacy and tos pages', () => {
     const { getByTestId } = render(
       <ToSAcceptance tosConsent={tosConsent} privacyConsent={privacyConsent} />
     );
