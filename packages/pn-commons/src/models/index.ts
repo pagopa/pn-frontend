@@ -41,7 +41,7 @@ export type { Column, Row, Sort } from './PnTable';
 export type { Product } from './Products';
 export type { SideMenuItem } from './SideMenuItem';
 export type { SmartTableData } from './SmartTable';
-export type { BasicUser, ConsentUser } from './User';
+export type { BasicUser, BasicUserClaims, ConsentUser } from './User';
 export type { WithRequired } from './UtilityTypes';
 export type {
   AnalogDetails,
