@@ -34,7 +34,7 @@ const privacyConsent: ConsentUser = {
   consentVersion: 'mocked-version-1',
 };
 
-describe('test Terms of Service page', async () => {
+describe('test Terms of Service page', () => {
   const original = window.open;
   let mock: MockAdapter;
 
@@ -81,6 +81,31 @@ describe('test Terms of Service page', async () => {
     expect(container).toHaveTextContent(/tos.button/i);
   });
 
+  it('shows validation error - does not call accept API - clears the error when acceptance switch is enabled', async () => {
+    const { getByRole, queryByRole } = render(
+      <ToSAcceptance tosConsent={tosConsent} privacyConsent={privacyConsent} />
+    );
+
+    const acceptButton = getByRole('button');
+
+    expect(acceptButton).toBeEnabled();
+
+    fireEvent.click(acceptButton);
+
+    await waitFor(() => {
+      expect(mock.history.put).toHaveLength(0);
+      expect(getByRole('alert')).toHaveTextContent(/required-field/i);
+    });
+
+    const switchElement = getByRole('checkbox');
+
+    fireEvent.click(switchElement);
+
+    await waitFor(() => {
+      expect(queryByRole('alert')).not.toBeInTheDocument();
+    });
+  });
+
   it('accept ToS and Privacy', async () => {
     mock.onPut('/bff/v2/tos-privacy', acceptTosPrivacyConsentBodyMock()).reply(200);
     const { getByRole } = render(
@@ -88,9 +113,8 @@ describe('test Terms of Service page', async () => {
     );
     const switchElement = getByRole('checkbox');
     const acceptButton = getByRole('button');
-    expect(acceptButton).toBeDisabled();
+    expect(acceptButton).toBeEnabled();
     fireEvent.click(switchElement);
-    await waitFor(() => expect(acceptButton).toBeEnabled());
     fireEvent.click(acceptButton);
     await waitFor(() => {
       expect(mock.history.put).toHaveLength(1);
@@ -98,28 +122,28 @@ describe('test Terms of Service page', async () => {
     });
   });
 
-  it('navigate to dashboard if tos and privacy are accepted', async () => {
+  it('navigate to dashboard if tos and privacy are accepted', () => {
     render(
       <ToSAcceptance
         tosConsent={{ ...tosConsent, accepted: true }}
         privacyConsent={{ ...privacyConsent, accepted: true }}
       />
     );
-    expect(mockNavigateFn).toBeCalledTimes(1);
-    expect(mockNavigateFn).toBeCalledWith(routes.NOTIFICHE);
+    expect(mockNavigateFn).toHaveBeenCalledTimes(1);
+    expect(mockNavigateFn).toHaveBeenCalledWith(routes.NOTIFICHE);
   });
 
-  it('navigate to privacy and tos pages', async () => {
+  it('navigate to privacy and tos pages', () => {
     const { getByTestId } = render(
       <ToSAcceptance tosConsent={tosConsent} privacyConsent={privacyConsent} />
     );
     const tosLink = getByTestId('terms-and-conditions');
-    fireEvent.click(tosLink!);
-    expect(mockOpenFn).toBeCalledTimes(1);
-    expect(mockOpenFn).toBeCalledWith(TOS_LINK_RELATIVE_PATH, '_blank');
+    fireEvent.click(tosLink);
+    expect(mockOpenFn).toHaveBeenCalledTimes(1);
+    expect(mockOpenFn).toHaveBeenCalledWith(TOS_LINK_RELATIVE_PATH, '_blank');
     const privacyLink = getByTestId('privacy-link');
-    fireEvent.click(privacyLink!);
-    expect(mockOpenFn).toBeCalledTimes(2);
-    expect(mockOpenFn).toBeCalledWith(PRIVACY_LINK_RELATIVE_PATH, '_blank');
+    fireEvent.click(privacyLink);
+    expect(mockOpenFn).toHaveBeenCalledTimes(2);
+    expect(mockOpenFn).toHaveBeenCalledWith(PRIVACY_LINK_RELATIVE_PATH, '_blank');
   });
 });
