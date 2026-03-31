@@ -36,7 +36,7 @@ describe('TppLanding page', () => {
 
   afterEach(() => {
     vi.clearAllMocks();
-    globalThis.window.history.replaceState({}, '', '/');
+    globalThis.history.replaceState({}, '', '/');
     Object.defineProperty(globalThis, 'open', { configurable: true, value: original });
   });
 
@@ -115,7 +115,7 @@ describe('TppLanding page', () => {
       mockRetrievalId,
     ]);
 
-    globalThis.window.history.replaceState(
+    globalThis.history.replaceState(
       {},
       '',
       `${routes.TPP_LANDING}?${AppRouteParams.RETRIEVAL_ID}=${mockRetrievalId}`
@@ -136,7 +136,7 @@ describe('TppLanding page', () => {
 
     expect(mockNavigateFn).toHaveBeenCalledTimes(1);
 
-    const [to, options] = mockNavigateFn.mock.calls[0];
+    const [to] = mockNavigateFn.mock.calls[0];
 
     expect(to).toMatchObject({ pathname: '/' });
 
@@ -146,8 +146,6 @@ describe('TppLanding page', () => {
     expect(sp.get(UTM_KEY.CAMPAIGN)).toBe(TPP_LANDING_UTM[UTM_KEY.CAMPAIGN]);
     expect(sp.get(UTM_KEY.SOURCE)).toBe(TPP_LANDING_UTM[UTM_KEY.SOURCE]);
     expect(sp.get(UTM_KEY.MEDIUM)).toBe(TPP_LANDING_UTM[UTM_KEY.MEDIUM]);
-
-    expect(options).toEqual({ replace: true });
   });
 
   it('should handle access button click - user not logged in', async () => {
@@ -156,7 +154,7 @@ describe('TppLanding page', () => {
       mockRetrievalId,
     ]);
 
-    globalThis.window.history.replaceState(
+    globalThis.history.replaceState(
       {},
       '',
       `${routes.TPP_LANDING}?${AppRouteParams.RETRIEVAL_ID}=${mockRetrievalId}`
@@ -218,7 +216,7 @@ describe('TppLanding page', () => {
       mockRetrievalId,
     ]);
 
-    globalThis.window.history.replaceState(
+    globalThis.history.replaceState(
       {},
       '',
       `${routes.TPP_LANDING}?${AppRouteParams.RETRIEVAL_ID}=${mockRetrievalId}`
@@ -226,7 +224,7 @@ describe('TppLanding page', () => {
 
     render(<TppLanding />);
 
-    const sp = new URLSearchParams(globalThis.window.location.search);
+    const sp = new URLSearchParams(globalThis.location.search);
 
     expect(sp.get(AppRouteParams.RETRIEVAL_ID)).toBe(mockRetrievalId);
     expect(sp.get(UTM_KEY.CAMPAIGN)).toBeNull();
@@ -240,7 +238,7 @@ describe('TppLanding page', () => {
       mockRetrievalId,
     ]);
 
-    globalThis.window.history.replaceState(
+    globalThis.history.replaceState(
       {},
       '',
       `${routes.TPP_LANDING}?${AppRouteParams.RETRIEVAL_ID}=${mockRetrievalId}&${UTM_KEY.SOURCE}=already_present`

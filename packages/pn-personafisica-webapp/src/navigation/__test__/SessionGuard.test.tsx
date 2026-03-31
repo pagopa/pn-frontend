@@ -32,13 +32,13 @@ const Guard = () => (
 );
 
 describe('SessionGuard Component', async () => {
-  const originalOpen = globalThis.window.open;
+  const originalOpen = globalThis.open;
   let mock: MockAdapter;
   const mockOpenFn = vi.fn();
 
   beforeAll(() => {
     mock = new MockAdapter(authClient);
-    Object.defineProperty(globalThis.window, 'open', {
+    Object.defineProperty(globalThis, 'open', {
       configurable: true,
       value: mockOpenFn,
     });
@@ -46,14 +46,14 @@ describe('SessionGuard Component', async () => {
 
   afterEach(() => {
     mock.reset();
-    globalThis.window.history.replaceState({}, '', '/');
-    globalThis.window.location.hash = '';
+    globalThis.history.replaceState({}, '', '/');
+    globalThis.location.hash = '';
     vi.clearAllMocks();
   });
 
   afterAll(() => {
     mock.restore();
-    Object.defineProperty(globalThis.window, 'open', { configurable: true, value: originalOpen });
+    Object.defineProperty(globalThis, 'open', { configurable: true, value: originalOpen });
   });
 
   // expected behavior: enters the app, does a navigate, launches sessionCheck, the user is deleted from redux
@@ -87,7 +87,7 @@ describe('SessionGuard Component', async () => {
 
   // expected behavior: doesn't enter the app, shows the error message linked to the exchangeToken
   it('exchange token error (403)', async () => {
-    globalThis.window.location.hash = '#token=403_token';
+    globalThis.location.hash = '#token=403_token';
     mock.onPost(AUTH_TOKEN_EXCHANGE()).reply(403, {
       authorizationToken: '403_token',
     });
@@ -107,7 +107,7 @@ describe('SessionGuard Component', async () => {
 
   // expected behavior: doesn't enter the app, shows the page not_accessible for error 451
   it('exchange token error (451)', async () => {
-    globalThis.window.location.hash = '#token=451_token';
+    globalThis.location.hash = '#token=451_token';
     mock.onPost(AUTH_TOKEN_EXCHANGE()).reply(451, {
       authorizationToken: '451_token',
     });
@@ -129,7 +129,7 @@ describe('SessionGuard Component', async () => {
   });
 
   it('token-exchange user validation failed', async () => {
-    globalThis.window.location.hash = '#token=validation_error_token';
+    globalThis.location.hash = '#token=validation_error_token';
 
     const invalidUserResponse = {
       ...userResponse,
@@ -162,7 +162,7 @@ describe('SessionGuard Component', async () => {
 
   // expected behavior: enters the app
   it('user logged in - TOS accepted', async () => {
-    globalThis.window.history.replaceState({}, '', `/?greet=hola&foo=bar#token=200_token`);
+    globalThis.history.replaceState({}, '', `/?greet=hola&foo=bar#token=200_token`);
     mock
       .onPost(AUTH_TOKEN_EXCHANGE(), { authorizationToken: '200_token' })
       .reply(200, userResponse);
@@ -182,7 +182,7 @@ describe('SessionGuard Component', async () => {
 
   // expected behavior: enters the app with session token already present
   it('reload - session token already present', async () => {
-    globalThis.window.history.replaceState({}, '', '/mocked-route');
+    globalThis.history.replaceState({}, '', '/mocked-route');
     const mockReduxState = {
       userState: { user: userResponse },
     };
@@ -199,7 +199,7 @@ describe('SessionGuard Component', async () => {
   it('logout', async () => {
     vi.useFakeTimers({ shouldAdvanceTime: true });
 
-    globalThis.window.history.replaceState({}, '', '/');
+    globalThis.history.replaceState({}, '', '/');
     const exp = sub(new Date(), { minutes: 5 }).getTime() / 1000;
     const mockReduxState = {
       userState: { user: { ...userResponse, exp } },
@@ -227,7 +227,7 @@ describe('SessionGuard Component', async () => {
   });
 
   it('One Identity Exchange Token - successful exchange token', async () => {
-    globalThis.window.location.hash =
+    globalThis.location.hash =
       '#code=valid_code&state=some_state&nonce=some_nonce&redirect_uri=some_uri';
     mock.onPost(ONE_IDENTITY_TOKEN_EXCHANGE()).reply(200, userResponse);
     await act(async () => {
@@ -244,7 +244,7 @@ describe('SessionGuard Component', async () => {
   });
 
   it('One Identity Exchange Token - error (403)', async () => {
-    globalThis.window.location.hash =
+    globalThis.location.hash =
       '#code=403_code&state=some_state&nonce=some_nonce&redirect_uri=some_uri';
     mock.onPost(ONE_IDENTITY_TOKEN_EXCHANGE()).reply(403, {
       code: '403_code',
@@ -270,7 +270,7 @@ describe('SessionGuard Component', async () => {
   });
 
   it('One Identity Exchange Token - error (451)', async () => {
-    globalThis.window.location.hash =
+    globalThis.location.hash =
       '#code=451_code&state=some_state&nonce=some_nonce&redirect_uri=some_uri';
     mock.onPost(ONE_IDENTITY_TOKEN_EXCHANGE()).reply(451, {
       code: '451_code',
@@ -299,7 +299,7 @@ describe('SessionGuard Component', async () => {
   });
 
   it('One Identity Exchange Token - user validation failed', async () => {
-    globalThis.window.location.hash =
+    globalThis.location.hash =
       '#code=some_code&state=some_state&nonce=some_nonce&redirect_uri=some_uri';
 
     const invalidUserResponse = {
@@ -335,7 +335,7 @@ describe('SessionGuard Component', async () => {
   });
 
   it("One Identity Exchange Token - missing params in url doesn't call the api", async () => {
-    globalThis.window.location.hash = '#code=some_code&state=some_state';
+    globalThis.location.hash = '#code=some_code&state=some_state';
 
     await act(async () => {
       render(<Guard />);
@@ -347,7 +347,7 @@ describe('SessionGuard Component', async () => {
   it('One Identity Exchange Token - successful exchange token with rapid access', async () => {
     const search = '?aar=mocked-qr-code';
     const hash = '#code=valid_code&state=some_state&nonce=some_nonce&redirect_uri=some_uri';
-    globalThis.window.history.replaceState({}, '', `/${search}${hash}`);
+    globalThis.history.replaceState({}, '', `/${search}${hash}`);
     mock.onPost(ONE_IDENTITY_TOKEN_EXCHANGE()).reply(200, userResponse);
 
     await act(async () => {
@@ -370,7 +370,7 @@ describe('SessionGuard Component', async () => {
   it('One Identity Exchange Token - logout redirects to LOGOUT_OI', async () => {
     vi.useFakeTimers({ shouldAdvanceTime: true });
 
-    globalThis.window.location.hash =
+    globalThis.location.hash =
       '#code=valid_code&state=some_state&nonce=some_nonce&redirect_uri=some_uri';
     const exp = sub(new Date(), { minutes: 5 }).getTime() / 1000;
     mock.onPost(ONE_IDENTITY_TOKEN_EXCHANGE()).reply(200, { ...userResponse, exp });
@@ -394,7 +394,7 @@ describe('SessionGuard Component', async () => {
   });
 
   it('should preserve aar param and inject UTMs when redirecting a non-logged user to login', async () => {
-    globalThis.window.history.replaceState({}, '', `/?${AppRouteParams.AAR}=mocked-qr-code`);
+    globalThis.history.replaceState({}, '', `/?${AppRouteParams.AAR}=mocked-qr-code`);
 
     await act(async () => {
       render(<Guard />);

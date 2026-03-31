@@ -26,7 +26,7 @@ export const TPP_LANDING_UTM: UtmParams = {
 };
 
 export function injectUtmQueryParams(utm: UtmParams): boolean {
-  const { pathname, search, hash } = globalThis.window.location;
+  const { pathname, search, hash } = globalThis.location;
   const params = new URLSearchParams(search);
 
   // If any UTM already present, do nothing (avoid overrides)
@@ -51,7 +51,7 @@ export function injectUtmQueryParams(utm: UtmParams): boolean {
   const newUrl = `${pathname}?${newSearch}${hash ?? ''}`;
 
   // Replace current URL without reloading to let Mixpanel capture UTMs
-  globalThis.window.history.replaceState(globalThis.window.history.state, '', newUrl);
+  globalThis.history.replaceState(globalThis.history.state, '', newUrl);
 
   return true;
 }

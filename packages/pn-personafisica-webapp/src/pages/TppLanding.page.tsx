@@ -42,7 +42,7 @@ const TppLanding: React.FC = () => {
     PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_LANDING_PAGE_CLICK_ACCESS);
     if (sessionToken) {
       // At this point `search` should include both retrievalId and UTMs
-      navigate({ pathname: '/', search: globalThis.window.location.search }, { replace: true });
+      navigate({ pathname: '/', search: globalThis.location.search });
     } else {
       goToLoginPortal({ rapidAccess: [AppRouteParams.RETRIEVAL_ID, value], loginProvider });
     }

@@ -17,10 +17,10 @@ import {
 const mockOpenFn = vi.fn();
 
 describe('Tests navigation utility methods', () => {
-  const original = globalThis.window.open;
+  const original = globalThis.open;
 
   beforeAll(() => {
-    Object.defineProperty(globalThis.window, 'open', {
+    Object.defineProperty(globalThis, 'open', {
       configurable: true,
       value: mockOpenFn,
     });
@@ -28,11 +28,11 @@ describe('Tests navigation utility methods', () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
-    globalThis.window.history.replaceState({}, '', '/');
+    globalThis.history.replaceState({}, '', '/');
   });
 
   afterAll((): void => {
-    Object.defineProperty(globalThis.window, 'open', { configurable: true, value: original });
+    Object.defineProperty(globalThis, 'open', { configurable: true, value: original });
   });
 
   it('goToLoginPortal', () => {
@@ -42,7 +42,7 @@ describe('Tests navigation utility methods', () => {
   });
 
   it('goToLoginPortal - aar (preserves only utm_*)', () => {
-    globalThis.window.history.replaceState(
+    globalThis.history.replaceState(
       {},
       '',
       '/?utm_source=s&utm_medium=m&utm_campaign=c&invalid_param=value'
@@ -67,7 +67,7 @@ describe('Tests navigation utility methods', () => {
   });
 
   it('goToLoginPortal - retrievalId (preserves only utm_*)', () => {
-    globalThis.window.history.replaceState(
+    globalThis.history.replaceState(
       {},
       '',
       '/?utm_source=s&utm_medium=m&utm_campaign=c&invalid_param=value'

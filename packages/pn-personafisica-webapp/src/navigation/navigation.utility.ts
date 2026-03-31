@@ -27,7 +27,7 @@ export function goToLoginPortal({ rapidAccess, loginProvider }: GoToLoginProps) 
   let urlToRedirect = `${logoutPath}`;
   // the startsWith check is to prevent xss attacks
   if (urlToRedirect.startsWith(logoutPath)) {
-    const currentParams = new URLSearchParams(globalThis.window.location.search);
+    const currentParams = new URLSearchParams(globalThis.location.search);
     const filteredParams = new URLSearchParams();
 
     // keep utm_* params

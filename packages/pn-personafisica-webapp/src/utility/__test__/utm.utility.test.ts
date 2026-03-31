@@ -3,19 +3,19 @@ import { vi } from 'vitest';
 import { AAR_UTM, UTM_KEY, injectUtmQueryParams } from '../utm.utility';
 
 describe('injectUtmQueryParams', () => {
-  const replaceStateSpy = vi.spyOn(globalThis.window.history, 'replaceState');
+  const replaceStateSpy = vi.spyOn(globalThis.history, 'replaceState');
 
   beforeEach(() => {
     replaceStateSpy.mockClear();
-    globalThis.window.history.replaceState({}, '', '/');
+    globalThis.history.replaceState({}, '', '/');
   });
 
   afterEach(() => {
-    globalThis.window.history.replaceState({}, '', '/');
+    globalThis.history.replaceState({}, '', '/');
   });
 
   it('injects utm params when no required utm key exists', () => {
-    globalThis.window.history.replaceState({}, '', '/?generic_param=value');
+    globalThis.history.replaceState({}, '', '/?generic_param=value');
     replaceStateSpy.mockClear();
 
     const result = injectUtmQueryParams(AAR_UTM);
@@ -33,20 +33,20 @@ describe('injectUtmQueryParams', () => {
   });
 
   it('does nothing when any required utm key is already present', () => {
-    globalThis.window.history.replaceState({}, '', '/?utm_source=source&generic_param=value');
+    globalThis.history.replaceState({}, '', '/?utm_source=source&generic_param=value');
     replaceStateSpy.mockClear();
 
-    const startingUrl = globalThis.window.location.href;
+    const startingUrl = globalThis.location.href;
 
     const result = injectUtmQueryParams(AAR_UTM);
 
     expect(result).toBe(false);
     expect(replaceStateSpy).not.toHaveBeenCalled();
-    expect(globalThis.window.location.href).toBe(startingUrl);
+    expect(globalThis.location.href).toBe(startingUrl);
   });
 
   it('preserves hash when updating the url', () => {
-    globalThis.window.history.replaceState({}, '', '/?generic_param=value#hash');
+    globalThis.history.replaceState({}, '', '/?generic_param=value#hash');
     replaceStateSpy.mockClear();
 
     const result = injectUtmQueryParams(AAR_UTM);
@@ -60,7 +60,7 @@ describe('injectUtmQueryParams', () => {
   });
 
   it('injects optional utm_* params together with required ones', () => {
-    globalThis.window.history.replaceState({}, '', '/?generic_param=value');
+    globalThis.history.replaceState({}, '', '/?generic_param=value');
     replaceStateSpy.mockClear();
 
     const result = injectUtmQueryParams({

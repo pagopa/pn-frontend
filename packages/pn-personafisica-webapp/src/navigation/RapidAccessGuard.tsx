@@ -20,7 +20,6 @@ import { NOTIFICATION_ACTIONS, exchangeNotificationQrCode } from '../redux/notif
 import { exchangeNotificationRetrievalId } from '../redux/sidemenu/actions';
 import { ServerResponseErrorCode } from '../utility/AppError/types';
 import PFEventStrategyFactory from '../utility/MixpanelUtils/PFEventStrategyFactory';
-import { AAR_UTM, injectUtmQueryParams } from '../utility/utm.utility';
 import {
   GET_DETTAGLIO_NOTIFICA_DELEGATO_PATH,
   GET_DETTAGLIO_NOTIFICA_PATH,
@@ -69,13 +68,12 @@ const RapidAccessGuard = () => {
 
       const state: NotificationDetailRouteState = { source: param };
 
-      if (param === AppRouteParams.AAR) {
-        injectUtmQueryParams(AAR_UTM);
-      }
+      const currentParams = new URLSearchParams(globalThis.location.search);
 
-      const currentParams = new URLSearchParams(globalThis.window.location.search);
-
-      // remove rapid-access params to avoid loops
+      // `aar` and `retrievalId` are only needed for the rapid-access exchange step.
+      // Remove them before navigating to the final page to avoid re-triggering the
+      // exchange (and causing a loop) on subsequent renders/navigation, while
+      // preserving any existing UTM params in the URL.
       currentParams.delete(AppRouteParams.AAR);
       currentParams.delete(AppRouteParams.RETRIEVAL_ID);
 

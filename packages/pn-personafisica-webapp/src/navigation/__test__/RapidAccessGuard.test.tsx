@@ -38,7 +38,7 @@ describe('Rapid access Guard', async () => {
   afterEach(() => {
     mock.reset();
     vi.clearAllMocks();
-    globalThis.window.history.replaceState({}, '', '/');
+    globalThis.history.replaceState({}, '', '/');
   });
 
   afterAll(() => {
@@ -48,7 +48,7 @@ describe('Rapid access Guard', async () => {
   describe('Notification from QR code', async () => {
     it('QR code requested by a recipient', async () => {
       const mockQrCode = 'qr-code';
-      globalThis.window.history.replaceState({}, '', `/?${AppRouteParams.AAR}=${mockQrCode}`);
+      globalThis.history.replaceState({}, '', `/?${AppRouteParams.AAR}=${mockQrCode}`);
       mock
         .onPost('/bff/v1/notifications/received/check-aar-qr-code', { aarQrCodeValue: mockQrCode })
         .reply(
@@ -80,9 +80,7 @@ describe('Rapid access Guard', async () => {
 
         const sp = new URLSearchParams((to as { search: string }).search);
         expect(sp.has(AppRouteParams.AAR)).toBe(false);
-        expect(sp.get(UTM_KEY.CAMPAIGN)).toBe(AAR_UTM[UTM_KEY.CAMPAIGN]);
-        expect(sp.get(UTM_KEY.SOURCE)).toBe(AAR_UTM[UTM_KEY.SOURCE]);
-        expect(sp.get(UTM_KEY.MEDIUM)).toBe(AAR_UTM[UTM_KEY.MEDIUM]);
+        expect(sp.toString()).toBe('');
 
         expect(options).toEqual({
           replace: true,
@@ -95,7 +93,7 @@ describe('Rapid access Guard', async () => {
 
     it('QR code requested by a delegate', async () => {
       const mockQrCode = 'qr-code-delegate';
-      globalThis.window.history.replaceState({}, '', `/?${AppRouteParams.AAR}=${mockQrCode}`);
+      globalThis.history.replaceState({}, '', `/?${AppRouteParams.AAR}=${mockQrCode}`);
       mock
         .onPost('/bff/v1/notifications/received/check-aar-qr-code', { aarQrCodeValue: mockQrCode })
         .reply(200, { iun: 'mock-iun', mandateId: 'mock-mandateId' });
@@ -118,9 +116,7 @@ describe('Rapid access Guard', async () => {
 
         const sp = new URLSearchParams((to as { search: string }).search);
         expect(sp.has(AppRouteParams.AAR)).toBe(false);
-        expect(sp.get(UTM_KEY.CAMPAIGN)).toBe(AAR_UTM[UTM_KEY.CAMPAIGN]);
-        expect(sp.get(UTM_KEY.SOURCE)).toBe(AAR_UTM[UTM_KEY.SOURCE]);
-        expect(sp.get(UTM_KEY.MEDIUM)).toBe(AAR_UTM[UTM_KEY.MEDIUM]);
+        expect(sp.toString()).toBe('');
 
         expect(options).toEqual({
           replace: true,
@@ -133,7 +129,7 @@ describe('Rapid access Guard', async () => {
 
     it('invalid QR code', async () => {
       const mockQrCode = 'bad-qr-code';
-      globalThis.window.history.replaceState({}, '', `/?${AppRouteParams.AAR}=${mockQrCode}`);
+      globalThis.history.replaceState({}, '', `/?${AppRouteParams.AAR}=${mockQrCode}`);
       mock
         .onPost('/bff/v1/notifications/received/check-aar-qr-code', { aarQrCodeValue: mockQrCode })
         .reply(500);
@@ -155,7 +151,7 @@ describe('Rapid access Guard', async () => {
 
     it('invalid recipient accesses to QR code', async () => {
       const mockQrCode = 'bad-qr-code';
-      globalThis.window.history.replaceState({}, '', `/?${AppRouteParams.AAR}=${mockQrCode}`);
+      globalThis.history.replaceState({}, '', `/?${AppRouteParams.AAR}=${mockQrCode}`);
       mock
         .onPost('/bff/v1/notifications/received/check-aar-qr-code', { aarQrCodeValue: mockQrCode })
         .reply(404);
@@ -172,7 +168,7 @@ describe('Rapid access Guard', async () => {
 
     it('no QR code', async () => {
       const mockQrCode = '';
-      globalThis.window.history.replaceState({}, '', `/?${AppRouteParams.AAR}=${mockQrCode}`);
+      globalThis.history.replaceState({}, '', `/?${AppRouteParams.AAR}=${mockQrCode}`);
       await act(async () => {
         render(<Guard />);
       });
@@ -181,13 +177,56 @@ describe('Rapid access Guard', async () => {
       const pageComponent = screen.queryByText('Generic Page');
       expect(pageComponent).toBeTruthy();
     });
+
+    it('should remove aar param and preserve existing UTMs', async () => {
+      const mockQrCode = 'qr-code';
+
+      globalThis.history.replaceState(
+        {},
+        '',
+        `/?${AppRouteParams.AAR}=${mockQrCode}` +
+          `&${UTM_KEY.CAMPAIGN}=${AAR_UTM[UTM_KEY.CAMPAIGN]}` +
+          `&${UTM_KEY.SOURCE}=${AAR_UTM[UTM_KEY.SOURCE]}` +
+          `&${UTM_KEY.MEDIUM}=${AAR_UTM[UTM_KEY.MEDIUM]}`
+      );
+
+      mock
+        .onPost('/bff/v1/notifications/received/check-aar-qr-code', { aarQrCodeValue: mockQrCode })
+        .reply(200, { iun: 'mock-iun' });
+
+      await act(async () => {
+        render(<Guard />);
+      });
+
+      await waitFor(() => {
+        expect(mockNavigateFn).toHaveBeenCalledTimes(1);
+
+        const [to, options] = mockNavigateFn.mock.calls[0];
+
+        expect(to).toMatchObject({
+          pathname: GET_DETTAGLIO_NOTIFICA_PATH('mock-iun'),
+        });
+
+        const sp = new URLSearchParams((to as { search: string }).search);
+
+        expect(sp.has(AppRouteParams.AAR)).toBe(false);
+        expect(sp.get(UTM_KEY.CAMPAIGN)).toBe(AAR_UTM[UTM_KEY.CAMPAIGN]);
+        expect(sp.get(UTM_KEY.SOURCE)).toBe(AAR_UTM[UTM_KEY.SOURCE]);
+        expect(sp.get(UTM_KEY.MEDIUM)).toBe(AAR_UTM[UTM_KEY.MEDIUM]);
+
+        expect(options).toEqual({
+          replace: true,
+          state: { source: AppRouteParams.AAR },
+        });
+      });
+    });
   });
 
   describe('Notification from retrievalId', async () => {
     it('retrievalId requested by a recipient', async () => {
       const mockRetrievalId = 'retrieval-id';
       const url = `/bff/v1/notifications/received/check-tpp?retrievalId=${mockRetrievalId}`;
-      globalThis.window.history.replaceState(
+      globalThis.history.replaceState(
         {},
         '',
         `/?${AppRouteParams.RETRIEVAL_ID}=${mockRetrievalId}`
@@ -231,11 +270,11 @@ describe('Rapid access Guard', async () => {
       expect(accessDeniedComponent).not.toBeInTheDocument();
     });
 
-    it('should remove retrievalId and presernve existing UTMs', async () => {
+    it('should remove retrievalId and preserve existing UTMs', async () => {
       const mockRetrievalId = 'retrieval-id';
       const url = `/bff/v1/notifications/received/check-tpp?retrievalId=${mockRetrievalId}`;
 
-      globalThis.window.history.replaceState(
+      globalThis.history.replaceState(
         {},
         '',
         `/?${AppRouteParams.RETRIEVAL_ID}=${mockRetrievalId}` +
