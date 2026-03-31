@@ -6,10 +6,9 @@ import { AUTH_LOGOUT, AUTH_TOKEN_EXCHANGE } from './auth.routes';
 
 export const AuthApi = {
   exchangeToken: (selfCareToken: string): Promise<User> =>
-    authClient
-      .post<User>(AUTH_TOKEN_EXCHANGE(), { authorizationToken: selfCareToken })
-      .then((response) =>
-        removeNullProperties({
+    authClient.post<User>(AUTH_TOKEN_EXCHANGE(), { authorizationToken: selfCareToken }).then(
+      (response): User =>
+        removeNullProperties<User>({
           desired_exp: response.data.desired_exp,
           email: response.data.email,
           name: response.data.name,
@@ -19,7 +18,7 @@ export const AuthApi = {
           sessionToken: response.data.sessionToken,
           uid: response.data.uid,
         })
-      ),
+    ),
   logout: (token: string): Promise<void> =>
     authClient.post(AUTH_LOGOUT(), null, { headers: { Authorization: `Bearer ${token}` } }),
 };

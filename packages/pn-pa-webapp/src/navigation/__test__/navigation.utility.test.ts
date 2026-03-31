@@ -2,7 +2,11 @@ import { vi } from 'vitest';
 
 import { getConfiguration } from '../../services/configuration.service';
 import { goToSelfcareLogin, goToSelfcareLogout } from '../navigation.utility';
-import { SELFCARE_LOGIN_PATH, SELFCARE_LOGOUT_PATH } from '../routes.const';
+import {
+  SELFCARE_LOGIN_PATH,
+  SELFCARE_LOGOUT_GOOGLE_PATH,
+  SELFCARE_LOGOUT_PATH,
+} from '../routes.const';
 
 const mockOpenFn = vi.fn();
 
@@ -27,14 +31,21 @@ describe('Tests notification.utility', () => {
   it('goToSelfcareLogin', () => {
     goToSelfcareLogin();
     expect(mockOpenFn).toHaveBeenCalledTimes(1);
-    const url = `${getConfiguration().SELFCARE_BASE_URL}${SELFCARE_LOGIN_PATH}`
+    const url = `${getConfiguration().SELFCARE_BASE_URL}${SELFCARE_LOGIN_PATH}`;
     expect(mockOpenFn).toHaveBeenCalledWith(url, '_self');
   });
-  
-  it('goToSelfcareLogout', () => {
-    goToSelfcareLogout();
+
+  it('goToSelfcareLogout - basic user', () => {
+    goToSelfcareLogout(false);
     expect(mockOpenFn).toHaveBeenCalledTimes(1);
-    const url = `${getConfiguration().SELFCARE_BASE_URL}${SELFCARE_LOGOUT_PATH}`
+    const url = `${getConfiguration().SELFCARE_BASE_URL}${SELFCARE_LOGOUT_PATH}`;
+    expect(mockOpenFn).toHaveBeenCalledWith(url, '_self');
+  });
+
+  it('goToSelfcareLogout - support user', () => {
+    goToSelfcareLogout(true);
+    expect(mockOpenFn).toHaveBeenCalledTimes(1);
+    const url = `${getConfiguration().SELFCARE_BASE_URL}${SELFCARE_LOGOUT_GOOGLE_PATH}`;
     expect(mockOpenFn).toHaveBeenCalledWith(url, '_self');
   });
 });

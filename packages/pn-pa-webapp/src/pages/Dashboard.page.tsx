@@ -22,6 +22,7 @@ import FilterNotifications from '../components/Notifications/FilterNotifications
 import MobileNotifications from '../components/Notifications/MobileNotifications';
 import NotificationSettingsDrawer from '../components/Notifications/NotificationSettingsDrawer';
 import * as routes from '../navigation/routes.const';
+import { authSelectors } from '../redux/auth/reducers';
 import { DASHBOARD_ACTIONS, getSentNotifications } from '../redux/dashboard/actions';
 import { setPagination } from '../redux/dashboard/reducers';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
@@ -36,6 +37,7 @@ const Dashboard = () => {
   const sort = useAppSelector((state: RootState) => state.dashboardState.sort);
   const pagination = useAppSelector((state: RootState) => state.dashboardState.pagination);
   const loading = useAppSelector((state: RootState) => state.appState.loading.result);
+  const isSupportUser = useAppSelector(authSelectors.selectIsSupportUser);
   const navigate = useNavigate();
   const isMobile = useIsMobile();
   const { t } = useTranslation(['notifiche']);
@@ -77,6 +79,37 @@ const Dashboard = () => {
   // route to API keys
   const handleRouteApiKeys = () => {
     navigate(routes.API_KEYS);
+  };
+
+  const getTitleButtonContent = () => {
+    if (isSupportUser) {
+      return undefined;
+    }
+
+    return IS_MANUAL_SEND_ENABLED ? (
+      <Box display="flex" gap={5}>
+        <NotificationSettingsDrawer />
+        <Button
+          id="new-notification-btn"
+          variant="contained"
+          onClick={handleRouteManualSend}
+          data-testid="newNotificationBtn"
+        >
+          {t('new-notification-button')}
+        </Button>
+      </Box>
+    ) : (
+      <Alert
+        severity="warning"
+        action={
+          <ButtonNaked color="inherit" size="small" onClick={() => navigate(routes.APP_STATUS)}>
+            {t('manual-send-disabled-action')}
+          </ButtonNaked>
+        }
+      >
+        {t('manual-send-disabled-message')}
+      </Alert>
+    );
   };
 
   const fetchNotifications = useCallback(() => {
@@ -148,38 +181,7 @@ const Dashboard = () => {
           flexWrap: 'wrap',
           gap: 3,
         }}
-        titleButton={
-          <>
-            {IS_MANUAL_SEND_ENABLED ? (
-              <Box display="flex" gap={5}>
-                <NotificationSettingsDrawer />
-                <Button
-                  id="new-notification-btn"
-                  variant="contained"
-                  onClick={handleRouteManualSend}
-                  data-testid="newNotificationBtn"
-                >
-                  {t('new-notification-button')}
-                </Button>
-              </Box>
-            ) : (
-              <Alert
-                severity="warning"
-                action={
-                  <ButtonNaked
-                    color="inherit"
-                    size="small"
-                    onClick={() => navigate(routes.APP_STATUS)}
-                  >
-                    {t('manual-send-disabled-action')}
-                  </ButtonNaked>
-                }
-              >
-                {t('manual-send-disabled-message')}
-              </Alert>
-            )}
-          </>
-        }
+        titleButton={getTitleButtonContent()}
         subTitle={
           <Box
             display={isMobile ? 'block' : 'flex'}
