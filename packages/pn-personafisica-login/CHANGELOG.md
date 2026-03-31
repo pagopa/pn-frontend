@@ -3,6 +3,43 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.22.0](https://github.com/pagopa/pn-frontend/compare/v2.22.0-RC.4...v2.22.0) (2026-03-23)
+
+**Note:** Version bump only for package @pagopa-pn/pn-personafisica-login
+
+
+
+
+
+# [2.22.0-RC.4](https://github.com/pagopa/pn-frontend/compare/v2.22.0-RC.3...v2.22.0-RC.4) (2026-03-17)
+
+
+### Bug Fixes
+
+* **PN-18989:** update mui-italia RC version to fix MIAlert icon position ([#1787](https://github.com/pagopa/pn-frontend/issues/1787)) ([d2ed8f0](https://github.com/pagopa/pn-frontend/commit/d2ed8f02783fe8e3c0c6510dd24003828a6065d9))
+
+
+
+
+
+# [2.22.0-RC.0](https://github.com/pagopa/pn-frontend/compare/v2.21.0...v2.22.0-RC.0) (2026-03-10)
+
+
+### Bug Fixes
+
+* **PN-18121:** update locale files for pf-login ([#1771](https://github.com/pagopa/pn-frontend/issues/1771)) ([d91146d](https://github.com/pagopa/pn-frontend/commit/d91146d2438a992a0316ec7d1c7de2b6efa3f658))
+* **PN-18325:** localize language names in footer language selector ([#1750](https://github.com/pagopa/pn-frontend/issues/1750)) ([d687e9c](https://github.com/pagopa/pn-frontend/commit/d687e9c4dad1570389d9a0c5d01d0326c4909ce7))
+* **PN-18844:** moved alert for saturated pec ([#1778](https://github.com/pagopa/pn-frontend/issues/1778)) ([a0b9cef](https://github.com/pagopa/pn-frontend/commit/a0b9cefbe106691a7cd09951e7778c61557af220))
+
+
+### Features
+
+* **PN-18582:** implement bottom sheet with notification costs details ([#1763](https://github.com/pagopa/pn-frontend/issues/1763)) ([2de4b8a](https://github.com/pagopa/pn-frontend/commit/2de4b8a7fc9c0f7472fa52a1ec51068c1e1ac76f))
+
+
+
+
+
 # [2.21.0](https://fbianchicodermine-github/pagopa/pn-frontend/compare/v2.21.0-RC.6...v2.21.0) (2026-02-17)
 
 **Note:** Version bump only for package @pagopa-pn/pn-personafisica-login
