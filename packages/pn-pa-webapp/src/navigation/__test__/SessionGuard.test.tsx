@@ -3,7 +3,7 @@ import { sub } from 'date-fns';
 import { Route, Routes } from 'react-router-dom';
 import { vi } from 'vitest';
 
-import { userResponse } from '../../__mocks__/Auth.mock';
+import { supportUserResponse, userResponse } from '../../__mocks__/Auth.mock';
 import { RenderResult, act, render, screen, waitFor } from '../../__test__/test-utils';
 import { authClient } from '../../api/apiClients';
 import { AUTH_TOKEN_EXCHANGE } from '../../api/auth/auth.routes';
@@ -135,6 +135,24 @@ describe('SessionGuard Component', async () => {
       expect(result.router.state.location.search).toBe('?reason=user-validation-failed');
       expect(result.router.state.historyAction).toBe('REPLACE');
     });
+  });
+
+  it('support user logged in', async () => {
+    mock
+      .onPost(AUTH_TOKEN_EXCHANGE(), { authorizationToken: 'support_token' })
+      .reply(200, supportUserResponse);
+    await act(async () => {
+      render(<Guard />, { route: '/#selfCareToken=support_token' });
+    });
+    await waitFor(() => {
+      expect(mock.history.post).toHaveLength(1);
+      expect(mock.history.post[0].url).toBe(AUTH_TOKEN_EXCHANGE());
+      expect(JSON.parse(mock.history.post[0].data)).toStrictEqual({
+        authorizationToken: 'support_token',
+      });
+    });
+    const pageComponent = screen.queryByText('Generic Page');
+    expect(pageComponent).toBeTruthy();
   });
 
   // expected behavior: enters the app, does a navigate to notifications page, launches sessionCheck

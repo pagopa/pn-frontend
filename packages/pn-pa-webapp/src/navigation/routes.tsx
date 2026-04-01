@@ -29,18 +29,22 @@ const Router: React.FC = () => {
     <Routes>
       <Route element={<SessionGuard />}>
         {/* protected routes */}
-        <Route element={<RouteGuard roles={[PNRole.ADMIN, PNRole.OPERATOR]} />}>
+        <Route element={<RouteGuard roles={[PNRole.ADMIN, PNRole.OPERATOR, PNRole.SUPPORT]} />}>
           <Route element={<ToSGuard />}>
             <Route path={routes.DASHBOARD} element={<Dashboard />} />
             {IS_STATISTICS_ENABLED && <Route path={routes.STATISTICHE} element={<Statistics />} />}
             <Route path={routes.DETTAGLIO_NOTIFICA} element={<NotificationDetail />} />
-            {getConfiguration().IS_MANUAL_SEND_ENABLED && (
-              <Route path={routes.NUOVA_NOTIFICA} element={<NewNotification />} />
-            )}
             <Route path={routes.APP_STATUS} element={<AppStatus />} />
-            <Route path={routes.API_KEYS} element={<ApiKeys />} />
-            <Route path={routes.NUOVA_API_KEY} element={<NewApiKey />} />
             <Route path="/" element={<Navigate to={routes.DASHBOARD} />} />
+
+            {/* rotte non accessibili al ruolo SUPPORT */}
+            <Route element={<RouteGuard roles={[PNRole.ADMIN, PNRole.OPERATOR]} />}>
+              <Route path={routes.API_KEYS} element={<ApiKeys />} />
+              <Route path={routes.NUOVA_API_KEY} element={<NewApiKey />} />
+              {getConfiguration().IS_MANUAL_SEND_ENABLED && (
+                <Route path={routes.NUOVA_NOTIFICA} element={<NewNotification />} />
+              )}
+            </Route>
           </Route>
         </Route>
       </Route>

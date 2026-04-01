@@ -319,6 +319,19 @@ describe('Header Component', () => {
     expect(globalThis.location.href).toBe('');
   });
 
+  it('renders chip with label when chipLabel is defined', () => {
+    render(
+      <Header
+        productsList={productsList}
+        loggedUser={loggedUser}
+        productId={productsList[0].id}
+        chipLabel="test-label"
+      />
+    );
+    const chip = screen.getByText('test-label');
+    expect(chip).toBeInTheDocument();
+  });
+
   it('clicks on exit with default value', async () => {
     const { container } = render(
       <Header
