@@ -4,7 +4,7 @@ import { Route, Routes } from 'react-router-dom';
 import { vi } from 'vitest';
 
 import { supportUserResponse, userResponse } from '../../__mocks__/Auth.mock';
-import { CustomRenderResult, act, render, screen, waitFor } from '../../__test__/test-utils';
+import { RenderResult, act, render, screen, waitFor } from '../../__test__/test-utils';
 import { authClient } from '../../api/apiClients';
 import { AUTH_TOKEN_EXCHANGE } from '../../api/auth/auth.routes';
 import { store } from '../../redux/store';
@@ -23,17 +23,12 @@ const Guard = () => (
 
 describe('SessionGuard Component', async () => {
   let mock: MockAdapter;
-  let result: CustomRenderResult;
-  const originalLocation = globalThis.location;
+  let result: RenderResult;
   const originalOpen = globalThis.open;
   const mockOpenFn = vi.fn();
 
   beforeAll(() => {
     mock = new MockAdapter(authClient);
-    Object.defineProperty(globalThis, 'location', {
-      writable: true,
-      value: { hash: '' },
-    });
     Object.defineProperty(globalThis, 'open', {
       configurable: true,
       value: mockOpenFn,
@@ -47,7 +42,6 @@ describe('SessionGuard Component', async () => {
 
   afterAll(() => {
     mock.restore();
-    Object.defineProperty(globalThis, 'location', { writable: true, value: originalLocation });
     Object.defineProperty(globalThis, 'open', { configurable: true, value: originalOpen });
   });
 

@@ -17,13 +17,14 @@ describe('PnTableBodyRow', () => {
   });
 
   it('render component - incorrect child', () => {
-    expect(() =>
-      render(
-        <PnTableBodyRow index={1}>
-          <PnTableBodyCell>mocked-cell-content</PnTableBodyCell>
-          <Box>Incorrect child</Box>
-        </PnTableBodyRow>
-      )
-    ).toThrowError('PnTableBodyRow can have only children of type PnTableBodyCell');
+    const { getByText } = render(
+      <PnTableBodyRow index={1}>
+        <PnTableBodyCell>mocked-cell-content</PnTableBodyCell>
+        <Box>Incorrect child</Box>
+      </PnTableBodyRow>
+    );
+    expect(
+      getByText('PnTableBodyRow can have only children of type PnTableBodyCell')
+    ).toBeInTheDocument();
   });
 });

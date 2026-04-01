@@ -1,28 +1,46 @@
-import { ReactElement, ReactNode } from 'react';
+import { ReactElement, ReactNode, createContext, useContext } from 'react';
 import { Provider } from 'react-redux';
-import { BrowserRouter } from 'react-router-dom';
+import { RouterProvider, createMemoryRouter } from 'react-router-dom';
 
-import { EnhancedStore, Store, configureStore } from '@reduxjs/toolkit';
-import { RenderOptions, render } from '@testing-library/react';
+import { EnhancedStore, configureStore } from '@reduxjs/toolkit';
+import { InitialEntry } from '@remix-run/router';
+import { RenderOptions, RenderResult, render } from '@testing-library/react';
 
 import { RootState, appReducers } from '../redux/store';
 
-let testStore: EnhancedStore<RootState>;
+interface CustomRenderOptions extends Omit<RenderOptions, 'wrapper'> {
+  preloadedState?: any;
+  route?: string | Array<InitialEntry>;
+  initialIndex?: number;
+  path?: string;
+}
 
-const AllTheProviders = ({ children, testStore }: { children: ReactNode; testStore: Store }) => (
-  <BrowserRouter>
-    <Provider store={testStore}>{children}</Provider>
-  </BrowserRouter>
-);
+type CustomRenderResult = RenderResult & {
+  testStore: EnhancedStore<RootState>;
+  router: ReturnType<typeof createMemoryRouter>;
+};
+
+// UiContext and RouterBridge are needed to use wrapper and rerender method
+// the RouterProvider doesn't admit children, so to make rerender work we must use context that triggers every time the ui change
+const UiContext = createContext<ReactElement | null>(null);
+
+const RouterBridge = () => {
+  const currentUi = useContext(UiContext);
+  return <>{currentUi}</>;
+};
 
 const customRender = (
   ui: ReactElement,
   {
     preloadedState,
-    renderOptions,
-  }: { preloadedState?: any; renderOptions?: Omit<RenderOptions, 'wrapper'> } = {}
+    route = '/',
+    initialIndex,
+    path = '*',
+    ...renderOptions
+  }: CustomRenderOptions = {}
 ) => {
-  testStore = configureStore({
+  // test redux store
+  const testStore = configureStore({
     reducer: appReducers,
     preloadedState,
     middleware: (getDefaultMiddleware) =>
@@ -30,10 +48,37 @@ const customRender = (
         serializableCheck: false,
       }),
   });
-  return render(ui, {
-    wrapper: ({ children }) => <AllTheProviders testStore={testStore}>{children}</AllTheProviders>,
+
+  // test router
+  const entries = Array.isArray(route) ? route : [route];
+  const activeIndex = initialIndex ?? entries.length - 1;
+  const router = createMemoryRouter(
+    [
+      {
+        path,
+        element: <RouterBridge />,
+      },
+    ],
+    {
+      initialEntries: entries, // Initial entries in the in-memory history stack
+      initialIndex: activeIndex, // Index of initialEntries the application should initialize to
+    }
+  );
+
+  // test view
+  const Wrapper = ({ children }: { children: ReactNode }) => (
+    <Provider store={testStore}>
+      <UiContext.Provider value={children as ReactElement}>
+        <RouterProvider router={router} />
+      </UiContext.Provider>
+    </Provider>
+  );
+  const view = render(ui, {
+    wrapper: Wrapper,
     ...renderOptions,
   });
+
+  return { ...view, router, testStore };
 };
 
 const createMockedStore = (preloadedState: any) =>
@@ -47,4 +92,5 @@ const createMockedStore = (preloadedState: any) =>
   });
 
 export * from '@testing-library/react';
-export { customRender as render, createMockedStore, testStore };
+export { customRender as render, createMockedStore };
+export type { CustomRenderResult as RenderResult };

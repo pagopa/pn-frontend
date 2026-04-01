@@ -57,9 +57,10 @@ export default defineConfig(({ mode }) => {
       open: true,
       proxy: {
         '^/auth/.*': {
+          // when you want test the login flux locally, add :port on witch login app is running
           target: `https://login.${webAppEnv}.notifichedigitali.it`,
           changeOrigin: true,
-          // When run login app locally
+          // when you want test the login flux locally, decomment this property
           // secure: false,
         },
       },

@@ -1,4 +1,3 @@
-import { BrowserRouter } from 'react-router-dom';
 import { vi } from 'vitest';
 
 import { AppRouteParams } from '@pagopa-pn/pn-commons';
@@ -12,25 +11,21 @@ const mockLocationAssign = vi.fn();
 
 // mock imports
 describe('test login page', () => {
-  const original = window.location;
+  const original = globalThis.location;
 
   beforeAll(() => {
-    Object.defineProperty(window, 'location', {
+    Object.defineProperty(globalThis, 'location', {
       configurable: true,
       value: { replace: mockLocationAssign, hash: '#token=fake-token' },
     });
   });
 
   afterAll(() => {
-    Object.defineProperty(window, 'location', { configurable: true, value: original });
+    Object.defineProperty(globalThis, 'location', { configurable: true, value: original });
   });
 
   it('test redirect', () => {
-    render(
-      <BrowserRouter>
-        <SuccessPage />
-      </BrowserRouter>
-    );
+    render(<SuccessPage />);
     expect(mockLocationAssign).toHaveBeenCalled();
     expect(mockLocationAssign).toHaveBeenCalledWith(
       getConfiguration().PF_URL + '#token=fake-token&lang=it'
@@ -39,11 +34,7 @@ describe('test login page', () => {
 
   it('test redirect - aar', () => {
     storageRapidAccessOps.write([AppRouteParams.AAR, 'aar-token']);
-    render(
-      <BrowserRouter>
-        <SuccessPage />
-      </BrowserRouter>
-    );
+    render(<SuccessPage />);
 
     expect(mockLocationAssign).toHaveBeenCalled();
     expect(mockLocationAssign).toHaveBeenCalledWith(
@@ -53,11 +44,7 @@ describe('test login page', () => {
 
   it('test redirect - retrievalId', () => {
     storageRapidAccessOps.write([AppRouteParams.RETRIEVAL_ID, 'retrieval-id']);
-    render(
-      <BrowserRouter>
-        <SuccessPage />
-      </BrowserRouter>
-    );
+    render(<SuccessPage />);
 
     expect(mockLocationAssign).toHaveBeenCalled();
     expect(mockLocationAssign).toHaveBeenCalledWith(
@@ -70,11 +57,7 @@ describe('test login page', () => {
       AppRouteParams.AAR,
       '<script>malicious code</script>aar-malicious-token',
     ]);
-    render(
-      <BrowserRouter>
-        <SuccessPage />
-      </BrowserRouter>
-    );
+    render(<SuccessPage />);
 
     expect(mockLocationAssign).toHaveBeenCalled();
     expect(mockLocationAssign).toHaveBeenCalledWith(
