@@ -1,9 +1,11 @@
 import { useTranslation } from 'react-i18next';
 
 import { Button, DialogContentText, DialogTitle } from '@mui/material';
-import { PnDialog, PnDialogActions, PnDialogContent } from '@pagopa-pn/pn-commons';
 
 import { usePrompt } from '../hooks/usePrompt';
+import PnDialog from './PnDialog/PnDialog';
+import PnDialogActions from './PnDialog/PnDialogActions';
+import PnDialogContent from './PnDialog/PnDialogContent';
 
 type Props = {
   disabled?: boolean;
