@@ -42,7 +42,7 @@ const OneIdentityCallback: React.FC = () => {
     const redirectUrl = PF_URL;
 
     // the findIndex check is needed to prevent xss attacks
-    if (redirectUrl && [PF_URL].findIndex((url) => url && redirectUrl.startsWith(url)) > -1) {
+    if (redirectUrl && [PF_URL].some((url) => url && redirectUrl.startsWith(url))) {
       const queryParams = new URLSearchParams();
       if (rapidAccess) {
         storageRapidAccessOps.delete();

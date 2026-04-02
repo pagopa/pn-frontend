@@ -9,13 +9,7 @@ import { NOTIFICHE } from '../../../navigation/routes.const';
 import PecContactWizard from '../PecContactWizard';
 import { fillCodeDialog } from './test-utils';
 
-const mockNavigateFn = vi.fn();
 let setShowPecWizardMock: ReturnType<typeof vi.fn>;
-
-vi.mock('react-router-dom', async () => ({
-  ...(await vi.importActual<any>('react-router-dom')),
-  useNavigate: () => mockNavigateFn,
-}));
 
 describe('PecContactWizard', () => {
   const labelPrefix = 'legal-contacts.sercq-send-wizard.feedback';
@@ -140,7 +134,7 @@ describe('PecContactWizard', () => {
       .reply(200, { result: 'PEC_VALIDATION_REQUIRED' });
 
     const result = render(<PecContactWizard setShowPecWizard={setShowPecWizardMock} />);
-    const { getByTestId, getByRole, container } = result;
+    const { getByTestId, getByRole, container, router } = result;
 
     const pecInput = container.querySelector('[name="pec"]');
     fireEvent.change(pecInput!, { target: { value: VALID_PEC } });
@@ -173,8 +167,7 @@ describe('PecContactWizard', () => {
     const feedbackButton = getByRole('button', { name: 'button.understand' });
 
     fireEvent.click(feedbackButton);
-    expect(mockNavigateFn).toHaveBeenCalledTimes(1);
-    expect(mockNavigateFn).toHaveBeenCalledWith(NOTIFICHE);
+    expect(router.state.location.pathname).toBe(NOTIFICHE);
   });
 
   it('should render component and feedback step correctly when transferring', async () => {
@@ -196,7 +189,7 @@ describe('PecContactWizard', () => {
     const result = render(
       <PecContactWizard setShowPecWizard={setShowPecWizardMock} isTransferring />
     );
-    const { getByRole, getByTestId, queryByTestId, container } = result;
+    const { getByRole, getByTestId, queryByTestId, container, router } = result;
 
     const pecInput = container.querySelector('[name="pec"]');
     fireEvent.change(pecInput!, { target: { value: VALID_PEC } });
@@ -229,7 +222,6 @@ describe('PecContactWizard', () => {
     const feedbackButton = getByRole('button', { name: 'button.understand' });
 
     fireEvent.click(feedbackButton);
-    expect(mockNavigateFn).toHaveBeenCalledTimes(1);
-    expect(mockNavigateFn).toHaveBeenCalledWith(NOTIFICHE);
+    expect(router.state.location.pathname).toBe(NOTIFICHE);
   });
 });

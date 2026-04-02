@@ -5,17 +5,11 @@ import { digitalAddressesSercq } from '../../../__mocks__/Contacts.mock';
 import { fireEvent, render, waitFor } from '../../../__test__/test-utils';
 import { apiClient } from '../../../api/apiClients';
 import { ChannelType } from '../../../models/contacts';
-import { NOTIFICHE } from '../../../navigation/routes.const';
+import * as routes from '../../../navigation/routes.const';
 import PecContactWizard from '../PecContactWizard';
 import { fillCodeDialog } from './test-utils';
 
-const mockNavigateFn = vi.fn();
 let setShowPecWizardMock: ReturnType<typeof vi.fn>;
-
-vi.mock('react-router-dom', async () => ({
-  ...(await vi.importActual<any>('react-router-dom')),
-  useNavigate: () => mockNavigateFn,
-}));
 
 describe('PecContactWizard', () => {
   const labelPrefix = 'legal-contacts.sercq-send-wizard.feedback';
@@ -139,7 +133,9 @@ describe('PecContactWizard', () => {
       })
       .reply(200, { result: 'PEC_VALIDATION_REQUIRED' });
 
-    const result = render(<PecContactWizard setShowPecWizard={setShowPecWizardMock} />);
+    const result = render(<PecContactWizard setShowPecWizard={setShowPecWizardMock} />, {
+      route: [routes.NOTIFICHE, routes.DIGITAL_DOMICILE_ACTIVATION],
+    });
     const { getByTestId, getByRole, container } = result;
 
     const pecInput = container.querySelector('[name="pec"]');
@@ -173,8 +169,7 @@ describe('PecContactWizard', () => {
     const feedbackButton = getByRole('button', { name: 'button.understand' });
 
     fireEvent.click(feedbackButton);
-    expect(mockNavigateFn).toHaveBeenCalledTimes(1);
-    expect(mockNavigateFn).toHaveBeenCalledWith(NOTIFICHE);
+    expect(result.router.state.location.pathname).toBe(routes.NOTIFICHE);
   });
 
   it('should render component and feedback step correctly when transferring', async () => {
@@ -194,7 +189,8 @@ describe('PecContactWizard', () => {
       .reply(200, { result: 'PEC_VALIDATION_REQUIRED' });
 
     const result = render(
-      <PecContactWizard setShowPecWizard={setShowPecWizardMock} isTransferring />
+      <PecContactWizard setShowPecWizard={setShowPecWizardMock} isTransferring />,
+      { route: [routes.NOTIFICHE, routes.DIGITAL_DOMICILE_ACTIVATION] }
     );
     const { getByRole, getByTestId, queryByTestId, container } = result;
 
@@ -229,7 +225,6 @@ describe('PecContactWizard', () => {
     const feedbackButton = getByRole('button', { name: 'button.understand' });
 
     fireEvent.click(feedbackButton);
-    expect(mockNavigateFn).toHaveBeenCalledTimes(1);
-    expect(mockNavigateFn).toHaveBeenCalledWith(NOTIFICHE);
+    expect(result.router.state.location.pathname).toBe(routes.NOTIFICHE);
   });
 });

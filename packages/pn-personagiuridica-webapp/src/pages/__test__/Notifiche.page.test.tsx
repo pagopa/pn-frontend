@@ -1,5 +1,4 @@
 import MockAdapter from 'axios-mock-adapter';
-import { vi } from 'vitest';
 
 import {
   AppResponseMessage,
@@ -28,18 +27,11 @@ import { apiClient } from '../../api/apiClients';
 import { DASHBOARD_ACTIONS } from '../../redux/dashboard/actions';
 import Notifiche from '../Notifiche.page';
 
-const mockNavigateFn = vi.fn();
-
-// mock imports
-vi.mock('react-router-dom', async () => ({
-  ...(await vi.importActual<any>('react-router-dom')),
-  useNavigate: () => mockNavigateFn,
-}));
-
 describe('Notifiche Page ', async () => {
   let result: RenderResult;
   let mock: MockAdapter;
-  const original = window.matchMedia;
+  const original = globalThis.matchMedia;
+
   const notificationsPath = `/bff/v1/notifications/received?startDate=${encodeURIComponent(
     formatToTimezoneString(tenYearsAgo)
   )}&endDate=${encodeURIComponent(formatToTimezoneString(today))}&size=10`;
@@ -57,7 +49,7 @@ describe('Notifiche Page ', async () => {
 
   afterAll(() => {
     mock.restore();
-    window.matchMedia = original;
+    globalThis.matchMedia = original;
   });
 
   it('renders page', async () => {
@@ -326,7 +318,7 @@ describe('Notifiche Page ', async () => {
   });
 
   it('renders page - mobile', async () => {
-    window.matchMedia = createMatchMedia(800);
+    globalThis.matchMedia = createMatchMedia(800);
     mock.onGet(notificationsPath).reply(200, notificationsDTO);
 
     await act(async () => {

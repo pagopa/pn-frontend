@@ -18,7 +18,7 @@ import {
 } from '../../../__mocks__/Contacts.mock';
 import { errorMock } from '../../../__mocks__/Errors.mock';
 import { parties } from '../../../__mocks__/ExternalRegistry.mock';
-import { act, fireEvent, render, screen, testStore, waitFor } from '../../../__test__/test-utils';
+import { act, fireEvent, render, screen, waitFor } from '../../../__test__/test-utils';
 import { apiClient } from '../../../api/apiClients';
 import { AddressType, ChannelType } from '../../../models/contacts';
 import { CONTACT_ACTIONS } from '../../../redux/contact/actions';
@@ -221,7 +221,7 @@ describe('test AddSpecialContact', () => {
       },
     ];
 
-    expect(testStore.getState().contactsState.digitalAddresses).toStrictEqual(addresses);
+    expect(result.testStore.getState().contactsState.digitalAddresses).toStrictEqual(addresses);
     // simulate rerendering due to redux changes
     result.rerender(<SpecialContacts addressType={AddressType.LEGAL} />);
     await waitFor(() => {

@@ -1,6 +1,6 @@
 import React, { Suspense } from 'react';
 import { createRoot } from 'react-dom/client';
-import { BrowserRouter } from 'react-router-dom';
+import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 
 import { CssBaseline, ThemeProvider } from '@mui/material';
 import { theme } from '@pagopa/mui-italia';
@@ -22,16 +22,26 @@ async function doTheRender() {
     // init actions (previously static code) which make use of config
     await initOneTrust();
 
+    const router = createBrowserRouter(
+      [
+        {
+          path: '*',
+          element: <App />,
+        },
+      ],
+      {
+        basename: '/auth',
+      }
+    );
+
     root.render(
       <React.StrictMode>
-        <BrowserRouter basename="/auth">
-          <ThemeProvider theme={theme}>
-            <CssBaseline />
-            <Suspense fallback={'loading...'}>
-              <App />
-            </Suspense>
-          </ThemeProvider>
-        </BrowserRouter>
+        <ThemeProvider theme={theme}>
+          <CssBaseline />
+          <Suspense fallback={'loading...'}>
+            <RouterProvider router={router} />
+          </Suspense>
+        </ThemeProvider>
       </React.StrictMode>
     );
 

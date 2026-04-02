@@ -1,15 +1,16 @@
 import mediaQuery from 'css-mediaquery';
-import { ReactElement, ReactNode } from 'react';
+import { ReactElement, ReactNode, createContext, useContext } from 'react';
 import { Provider } from 'react-redux';
-import { BrowserRouter } from 'react-router-dom';
+import { RouterProvider, createMemoryRouter } from 'react-router-dom';
 import { vi } from 'vitest';
 
 import { ThemeProvider, createTheme } from '@mui/material';
-import { Store, configureStore } from '@reduxjs/toolkit';
+import { EnhancedStore, configureStore } from '@reduxjs/toolkit';
 import {
   Matcher,
   MatcherOptions,
   RenderOptions,
+  RenderResult,
   fireEvent,
   queryByAttribute,
   render,
@@ -19,74 +20,97 @@ import {
 } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
-import { appStateSlice } from './redux/slices/appStateSlice';
+import { AppStateState, appStateSlice } from './redux/slices/appStateSlice';
 import { formatDate } from './utility/date.utility';
 import { initLocalization } from './utility/localization.utility';
 
-type NavigationRouter = 'default' | 'none';
-
 const theme = createTheme({});
 
-const AllTheProviders = ({
-  children,
-  testStore,
-  navigationRouter,
-}: {
-  children: ReactNode;
-  testStore: Store;
-  navigationRouter: NavigationRouter;
-}) => {
-  if (navigationRouter === 'default') {
-    return (
-      <BrowserRouter>
-        <ThemeProvider theme={theme}>
-          <Provider store={testStore}>{children}</Provider>
-        </ThemeProvider>
-      </BrowserRouter>
-    );
-  }
-  return (
-    <ThemeProvider theme={theme}>
-      <Provider store={testStore}>{children}</Provider>
-    </ThemeProvider>
-  );
+interface CustomRenderOptions extends Omit<RenderOptions, 'wrapper'> {
+  preloadedState?: any;
+  route?: string | Array<string>;
+  initialIndex?: number;
+  path?: string;
+}
+
+type CustomRenderResult = RenderResult & {
+  testStore: EnhancedStore<{ appState: AppStateState }>;
+  router: ReturnType<typeof createMemoryRouter>;
 };
 
-const createTestStore = (preloadedState = {}) =>
-  configureStore({
-    reducer: { appState: appStateSlice.reducer },
-    middleware: (getDefaultMiddleware) =>
-      getDefaultMiddleware({
-        serializableCheck: false,
-      }),
-    preloadedState,
-  });
+// UiContext and RouterBridge are needed to use wrapper and rerender method
+// the RouterProvider doesn't admit children, so to make rerender work we must use context that triggers every time the ui change
+const UiContext = createContext<ReactElement | null>(null);
+
+const RouterBridge = () => {
+  const currentUi = useContext(UiContext);
+  return <>{currentUi}</>;
+};
 
 const customRender = (
   ui: ReactElement,
   {
     preloadedState,
-    renderOptions,
-    navigationRouter = 'default',
-  }: {
-    preloadedState?: any;
-    renderOptions?: Omit<RenderOptions, 'wrapper'>;
-    navigationRouter?: NavigationRouter;
-  } = {}
+    route = '/',
+    initialIndex,
+    path = '*',
+    ...renderOptions
+  }: CustomRenderOptions = {}
 ) => {
-  const testStore = createTestStore(preloadedState);
-  return {
-    ...render(ui, {
-      wrapper: ({ children }) => (
-        <AllTheProviders testStore={testStore} navigationRouter={navigationRouter}>
-          {children}
-        </AllTheProviders>
-      ),
-      ...renderOptions,
-    }),
-    testStore,
-  };
+  // test redux store
+  const testStore = configureStore({
+    reducer: { appState: appStateSlice.reducer },
+    preloadedState,
+    middleware: (getDefaultMiddleware) =>
+      getDefaultMiddleware({
+        serializableCheck: false,
+      }),
+  });
+
+  // test router
+  const entries = Array.isArray(route) ? route : [route];
+  const activeIndex = initialIndex ?? entries.length - 1;
+  const router = createMemoryRouter(
+    [
+      {
+        path,
+        element: <RouterBridge />,
+      },
+    ],
+    {
+      initialEntries: entries, // Initial entries in the in-memory history stack
+      initialIndex: activeIndex, // Index of initialEntries the application should initialize to
+    }
+  );
+
+  // test view
+  const Wrapper = ({ children }: { children: ReactNode }) => (
+    <Provider store={testStore}>
+      <ThemeProvider theme={theme}>
+        <UiContext.Provider value={children as ReactElement}>
+          <RouterProvider router={router} />
+        </UiContext.Provider>
+      </ThemeProvider>
+    </Provider>
+  );
+  const view = render(ui, {
+    wrapper: Wrapper,
+    ...renderOptions,
+  });
+
+  return { ...view, router, testStore };
 };
+
+const createTestStore = (preloadedState = {}) =>
+  configureStore({
+    reducer: { appState: appStateSlice.reducer },
+    preloadedState,
+    // eslint-disable-next-line sonarjs/no-identical-functions
+    middleware: (getDefaultMiddleware) =>
+      getDefaultMiddleware({
+        serializableCheck: false,
+      }),
+  });
 
 // utility function
 /** This function simulate media query and is useful to test differences between mobile and desktop view */
@@ -396,3 +420,4 @@ export {
   theme,
   disableConsoleLogging,
 };
+export type { CustomRenderResult as RenderResult };
