@@ -3,6 +3,7 @@ import { Navigate, Route, Routes, useNavigate } from 'react-router-dom';
 
 import { ConsentType, LoadingPage, NotFound, lazyRetry } from '@pagopa-pn/pn-commons';
 
+import Onboarding from '../pages/Onboarding.page';
 import TppLanding from '../pages/TppLanding.page';
 import AppNotAccessibleRoute from './AppNotAccessibleRoute';
 import RapidAccessGuard from './RapidAccessGuard';
@@ -50,6 +51,11 @@ const Router: React.FC = () => {
               <Route path={routes.PROFILO} element={<Profile />} />
               <Route path={routes.APP_STATUS} element={<AppStatus />} />
               <Route path={routes.SUPPORT} element={<SupportPage />} />
+              <Route path={routes.ONBOARDING} element={<Onboarding />}>
+                <Route path={routes.ONBOARDING_DIGITAL_DOMICILE} element={<></>} />
+                <Route path={routes.ONBOARDING_COURTESY} element={<></>} />
+                <Route path={routes.ONBOARDING_IO} element={<></>} />
+              </Route>
               <Route path={routes.DIGITAL_DOMICILE} element={<DigitalContact />}>
                 <Route
                   path={routes.DIGITAL_DOMICILE_ACTIVATION}
