@@ -128,6 +128,26 @@ const DigitalContact = forwardRef<{ toggleEdit: () => void }, Props>(
       },
     });
 
+    // Semantic/native input attributes derived from channel type.
+    const getSemanticTextFieldProps = (): Partial<TextFieldProps> => {
+      if (channelType === ChannelType.EMAIL || channelType === ChannelType.PEC) {
+        return {
+          type: 'email',
+          autoComplete: 'email',
+        };
+      }
+      if (channelType === ChannelType.SMS) {
+        return {
+          type: 'tel',
+          autoComplete: 'tel-national',
+        };
+      }
+
+      return {};
+    };
+
+    const semanticTextFieldProps = getSemanticTextFieldProps();
+
     const handleChangeTouched = async (e: ChangeEvent) => {
       formik.handleChange(e);
       await formik.setFieldTouched(e.target.id, true, false);
@@ -215,6 +235,7 @@ const DigitalContact = forwardRef<{ toggleEdit: () => void }, Props>(
                 formik.errors[`${senderId}_${contactType}`]
               }
               {...slotsProps?.textField}
+              {...semanticTextFieldProps}
             />
             <Button
               id={`${senderId}_${contactType}-button`}
@@ -287,6 +308,7 @@ const DigitalContact = forwardRef<{ toggleEdit: () => void }, Props>(
               }
               sx={{ mb: 2 }}
               autoFocus
+              {...semanticTextFieldProps}
             />
             <Stack direction={{ xs: 'column', lg: 'row' }} spacing={2}>
               <ButtonNaked

@@ -41,12 +41,18 @@ describe('PecContactWizard', () => {
   const VALID_PEC = 'test@pec.it';
 
   it('renders the component correctly', () => {
-    const { getByTestId } = render(<PecContactWizard setShowPecWizard={setShowPecWizardMock} />);
+    const { container, getByTestId } = render(
+      <PecContactWizard setShowPecWizard={setShowPecWizardMock} />
+    );
 
     expect(getByTestId('pec-wizard-title')).toBeInTheDocument();
     expect(getByTestId('pec-wizard-input')).toBeInTheDocument();
     expect(getByTestId('prev-button')).toBeInTheDocument();
     expect(getByTestId('next-button')).toBeInTheDocument();
+
+    const pecInput = container.querySelector('[name="pec"]');
+    expect(pecInput).toHaveAttribute('type', 'email');
+    expect(pecInput).toHaveAttribute('autocomplete', 'email');
   });
 
   it('calls setShowPecWizard when cancel button is clicked', async () => {
