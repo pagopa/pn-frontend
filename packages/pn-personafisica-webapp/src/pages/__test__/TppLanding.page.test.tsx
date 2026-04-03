@@ -8,17 +8,7 @@ import { render, waitFor } from '../../__test__/test-utils';
 import * as useRapidAccessParamHook from '../../hooks/useRapidAccessParam';
 import TppLanding from '../TppLanding.page';
 
-const mockNavigateFn = vi.fn();
 const mockOpenFn = vi.fn();
-
-vi.mock('react-router-dom', async () => ({
-  ...(await vi.importActual<any>('react-router-dom')),
-  useNavigate: () => mockNavigateFn,
-  Navigate: ({ to, replace }: { to: string; replace?: boolean }) => {
-    mockNavigateFn(to, { replace });
-    return null;
-  },
-}));
 
 describe('TppLanding page', () => {
   const mockRetrievalId = '123456';
@@ -74,9 +64,10 @@ describe('TppLanding page', () => {
   it('should redirects to login when no param is provided', () => {
     vi.spyOn(useRapidAccessParamHook, 'useRapidAccessParam').mockReturnValue(undefined);
 
-    const { queryByTestId } = render(<TppLanding />);
+    const { queryByTestId, router } = render(<TppLanding />);
 
-    expect(mockNavigateFn).toHaveBeenCalledWith('/', { replace: true });
+    expect(router.state.location.pathname).toBe('/');
+    expect(router.state.historyAction).toBe('REPLACE');
     expect(queryByTestId('tppLandingContainer')).not.toBeInTheDocument();
     expect(queryByTestId('accessButton')).not.toBeInTheDocument();
     expect(queryByTestId('faqSection')).not.toBeInTheDocument();
@@ -88,9 +79,10 @@ describe('TppLanding page', () => {
       mockRetrievalId,
     ]);
 
-    const { queryByTestId } = render(<TppLanding />);
+    const { queryByTestId, router } = render(<TppLanding />);
 
-    expect(mockNavigateFn).toHaveBeenCalledWith('/', { replace: true });
+    expect(router.state.location.pathname).toBe('/');
+    expect(router.state.historyAction).toBe('REPLACE');
     expect(queryByTestId('tppLandingContainer')).not.toBeInTheDocument();
   });
 
@@ -100,9 +92,10 @@ describe('TppLanding page', () => {
       '',
     ]);
 
-    const { queryByTestId } = render(<TppLanding />);
+    const { queryByTestId, router } = render(<TppLanding />);
 
-    expect(mockNavigateFn).toHaveBeenCalledWith('/', { replace: true });
+    expect(router.state.location.pathname).toBe('/');
+    expect(router.state.historyAction).toBe('REPLACE');
     expect(queryByTestId('tppLandingContainer')).not.toBeInTheDocument();
   });
 
@@ -112,7 +105,7 @@ describe('TppLanding page', () => {
       mockRetrievalId,
     ]);
 
-    const { getByTestId } = render(<TppLanding />, {
+    const { getByTestId, router } = render(<TppLanding />, {
       preloadedState: {
         userState: {
           user: userResponse,
@@ -125,10 +118,8 @@ describe('TppLanding page', () => {
 
     await userEvent.click(accessButton);
 
-    expect(mockNavigateFn).toHaveBeenCalledWith(
-      `/?${AppRouteParams.RETRIEVAL_ID}=${mockRetrievalId}`
-    );
-    expect(mockNavigateFn).toHaveBeenCalledTimes(1);
+    expect(router.state.location.pathname).toBe('/');
+    expect(router.state.location.search).toBe(`?${AppRouteParams.RETRIEVAL_ID}=${mockRetrievalId}`);
   });
 
   it('should handle access button click - user not logged in', async () => {

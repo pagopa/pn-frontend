@@ -13,7 +13,6 @@ import {
   fireEvent,
   render,
   screen,
-  testStore,
   waitFor,
   within,
 } from '../../../__test__/test-utils';
@@ -46,10 +45,10 @@ describe('Filter Notifications Table Component', async () => {
   let result: RenderResult;
   let form: HTMLFormElement;
 
-  const original = window.matchMedia;
+  const original = globalThis.matchMedia;
 
   afterAll(() => {
-    window.matchMedia = original;
+    globalThis.matchMedia = original;
   });
 
   it('renders filter notifications table - desktop', async () => {
@@ -131,7 +130,7 @@ describe('Filter Notifications Table Component', async () => {
     expect(submitButton).toBeEnabled();
     fireEvent.click(submitButton!);
     await waitFor(() => {
-      expect(testStore.getState().dashboardState.filters).toStrictEqual({
+      expect(result.testStore.getState().dashboardState.filters).toStrictEqual({
         startDate: nineYearsAgo,
         endDate: oneYearAgo,
         iunMatch: 'ABCD-EFGH-ILMN-123456-A-1',
@@ -142,7 +141,7 @@ describe('Filter Notifications Table Component', async () => {
     expect(cancelButton).toBeEnabled();
     fireEvent.click(cancelButton);
     await waitFor(() => {
-      expect(testStore.getState().dashboardState.filters).toStrictEqual(initialState);
+      expect(result.testStore.getState().dashboardState.filters).toStrictEqual(initialState);
     });
   });
 
@@ -161,7 +160,7 @@ describe('Filter Notifications Table Component', async () => {
     const submitButton = form!.querySelector(`button[type="submit"]`);
     fireEvent.click(submitButton!);
     await waitFor(() => {
-      expect(testStore.getState().dashboardState.filters).toStrictEqual(initialState);
+      expect(result.testStore.getState().dashboardState.filters).toStrictEqual(initialState);
     });
     expect(form!).toHaveTextContent('filters.errors.iun');
   });
@@ -182,7 +181,7 @@ describe('Filter Notifications Table Component', async () => {
     const submitButton = form!.querySelector(`button[type="submit"]`);
     fireEvent.click(submitButton!);
     await waitFor(() => {
-      expect(testStore.getState().dashboardState.filters).toStrictEqual(initialState);
+      expect(result.testStore.getState().dashboardState.filters).toStrictEqual(initialState);
     });
   });
 
@@ -201,12 +200,12 @@ describe('Filter Notifications Table Component', async () => {
     const submitButton = form!.querySelector(`button[type="submit"]`);
     fireEvent.click(submitButton!);
     await waitFor(() => {
-      expect(testStore.getState().dashboardState.filters).toStrictEqual(initialState);
+      expect(result.testStore.getState().dashboardState.filters).toStrictEqual(initialState);
     });
   });
 
   it('renders filter notifications table - mobile', async () => {
-    window.matchMedia = createMatchMedia(800);
+    globalThis.matchMedia = createMatchMedia(800);
     // render component
     await act(async () => {
       result = render(<FilterNotifications showFilters />);
@@ -220,7 +219,7 @@ describe('Filter Notifications Table Component', async () => {
   });
 
   it('test form submission - valid fields - mobile', async () => {
-    window.matchMedia = createMatchMedia(800);
+    globalThis.matchMedia = createMatchMedia(800);
     await act(async () => {
       result = render(<FilterNotifications showFilters />);
     });
@@ -237,7 +236,7 @@ describe('Filter Notifications Table Component', async () => {
     expect(submitButton).toBeEnabled();
     fireEvent.click(submitButton!);
     await waitFor(() => {
-      expect(testStore.getState().dashboardState.filters).toStrictEqual({
+      expect(result.testStore.getState().dashboardState.filters).toStrictEqual({
         startDate: nineYearsAgo,
         endDate: oneYearAgo,
         iunMatch: 'ABCD-EFGH-ILMN-123456-A-1',
@@ -256,6 +255,6 @@ describe('Filter Notifications Table Component', async () => {
     await waitFor(() => {
       expect(dialogForm).not.toBeInTheDocument();
     });
-    expect(testStore.getState().dashboardState.filters).toStrictEqual(initialState);
+    expect(result.testStore.getState().dashboardState.filters).toStrictEqual(initialState);
   });
 });

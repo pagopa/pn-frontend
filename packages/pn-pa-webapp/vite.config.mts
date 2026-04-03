@@ -81,10 +81,6 @@ export default defineConfig(({ mode }) => {
         // formik an yup use lodash and without this, also this library will be into the build
         lodash: 'lodash-es',
       },
-      // This tells vite to use only the istance of the react-router-dom that is installed in the current app
-      // This is useful now that pa has a different version of the react-router-dom from the other apps
-      // This can be removed when all the apps will have the same version installed
-      dedupe: ['react-router', 'react-router-dom'],
     },
   });
 });

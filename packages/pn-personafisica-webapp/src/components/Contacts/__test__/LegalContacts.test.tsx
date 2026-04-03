@@ -7,14 +7,7 @@ import {
   digitalLegalAddresses,
   digitalLegalAddressesSercq,
 } from '../../../__mocks__/Contacts.mock';
-import {
-  fireEvent,
-  render,
-  screen,
-  testStore,
-  waitFor,
-  within,
-} from '../../../__test__/test-utils';
+import { fireEvent, render, screen, waitFor, within } from '../../../__test__/test-utils';
 import { apiClient } from '../../../api/apiClients';
 import { AddressType, ChannelType } from '../../../models/contacts';
 import LegalContacts from '../LegalContacts';
@@ -26,11 +19,11 @@ const assignFn = vi.fn();
 
 describe('LegalContacts Component', async () => {
   let mock: MockAdapter;
-  const originalLocation = window.location;
+  const originalLocation = globalThis.location;
 
   beforeAll(() => {
     mock = new MockAdapter(apiClient);
-    Object.defineProperty(window, 'location', {
+    Object.defineProperty(globalThis, 'location', {
       configurable: true,
       value: { assign: assignFn },
     });
@@ -43,12 +36,12 @@ describe('LegalContacts Component', async () => {
 
   afterAll(() => {
     mock.restore();
-    Object.defineProperty(window, 'location', { configurable: true, value: originalLocation });
+    Object.defineProperty(globalThis, 'location', { configurable: true, value: originalLocation });
   });
 
   it('renders component - PEC enabled', async () => {
     // render component
-    const { container, getByText, getByTestId, getByRole } = render(<LegalContacts />, {
+    const { container, getByText, getByTestId, getByRole, testStore } = render(<LegalContacts />, {
       preloadedState: { contactsState: { digitalAddresses: digitalLegalAddresses } },
     });
 
@@ -173,7 +166,7 @@ describe('LegalContacts Component', async () => {
       (addr) => addr.addressType !== AddressType.LEGAL || addr.senderId === 'default'
     );
 
-    const { container, getByTestId, getByText, getByRole } = render(<LegalContacts />, {
+    const { container, getByTestId, getByText, getByRole, testStore } = render(<LegalContacts />, {
       preloadedState: {
         contactsState: {
           digitalAddresses: initialAddresses,

@@ -21,7 +21,7 @@ import {
   newNotificationGroups,
 } from '../../../__mocks__/NewNotification.mock';
 import {
-  CustomRenderResult,
+  RenderResult,
   act,
   fireEvent,
   randomString,
@@ -69,7 +69,7 @@ const populateForm = async (
 };
 
 describe('PreliminaryInformations Component', async () => {
-  let result: CustomRenderResult;
+  let result: RenderResult;
   const confirmHandlerMk = vi.fn();
   let mock: MockAdapter;
 

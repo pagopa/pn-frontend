@@ -40,7 +40,6 @@ import {
   fireEvent,
   render,
   screen,
-  testStore,
   waitFor,
   within,
 } from '../../__test__/test-utils';
@@ -50,34 +49,20 @@ import { NOTIFICATION_ACTIONS } from '../../redux/notification/actions';
 import { getConfiguration } from '../../services/configuration.service';
 import NotificationDetail from '../NotificationDetail.page';
 
-const mockNavigateFn = vi.fn();
-let mockIsDelegate = false;
-let mockIsFromQrCode = false;
 const mockAssignFn = vi.fn();
-
-// mock imports
-vi.mock('react-router-dom', async () => ({
-  ...(await vi.importActual<any>('react-router-dom')),
-  useParams: () =>
-    mockIsDelegate
-      ? { id: 'RPTH-YULD-WKMA-202305-T-1', mandateId: '5' }
-      : { id: 'RPTH-YULD-WKMA-202305-T-1' },
-  useNavigate: () => mockNavigateFn,
-  useLocation: () => ({ state: { fromQrCode: mockIsFromQrCode }, pathname: '/' }),
-}));
 
 const pfRecipient = notificationDTO.recipients[0];
 const pgRecipient = notificationDTO.recipients[1];
 
 const getLegalFactIds = (notification: NotificationDetailModel, recIndex: number) => {
-  const timelineElementDigitalSuccessWorkflow = notification.timeline.filter(
+  const timelineElementDigitalSuccessWorkflow = notification.timeline.find(
     (t) =>
       t.category === TimelineCategory.SEND_ANALOG_PROGRESS &&
       t.legalFactsIds &&
       t.legalFactsIds?.length > 0 &&
       t.details.recIndex === recIndex
-  )[0];
-  return timelineElementDigitalSuccessWorkflow.legalFactsIds![0];
+  );
+  return timelineElementDigitalSuccessWorkflow!.legalFactsIds![0];
 };
 
 const delegator = mandatesByDelegate.find(
@@ -91,11 +76,11 @@ describe('NotificationDetail Page', async () => {
   let result: RenderResult;
   let mock: MockAdapter;
   const mockLegalIds = getLegalFactIds(notificationToFe, 1);
-  const original = window.location;
+  const original = globalThis.location;
 
   beforeAll(() => {
     mock = new MockAdapter(apiClient);
-    Object.defineProperty(window, 'location', {
+    Object.defineProperty(globalThis, 'location', {
       configurable: true,
       value: { href: '', assign: mockAssignFn },
     });
@@ -105,14 +90,11 @@ describe('NotificationDetail Page', async () => {
     sessionStorage.removeItem(PAYMENT_CACHE_KEY);
     vi.clearAllMocks();
     mock.reset();
-    mockIsFromQrCode = false;
-    mockIsDelegate = false;
-    window.location.href = '';
   });
 
   afterAll(() => {
     mock.restore();
-    Object.defineProperty(window, 'location', { configurable: true, value: original });
+    Object.defineProperty(globalThis, 'location', { configurable: true, value: original });
   });
 
   const paymentInfoRequest = paymentInfo.map((payment) => ({
@@ -128,6 +110,8 @@ describe('NotificationDetail Page', async () => {
     await act(async () => {
       result = render(<NotificationDetail />, {
         preloadedState: { userState: { user: adminUser } },
+        route: `/${notificationDTO.iun}`,
+        path: '/:id',
       });
     });
     expect(mock.history.get).toHaveLength(2);
@@ -547,6 +531,8 @@ describe('NotificationDetail Page', async () => {
         preloadedState: {
           userState: { user: adminUser },
         },
+        route: `/${notificationDTO.iun}`,
+        path: '/:id',
       });
     });
     expect(mock.history.get).toHaveLength(2);
@@ -585,6 +571,8 @@ describe('NotificationDetail Page', async () => {
         preloadedState: {
           userState: { user: adminUser },
         },
+        route: `/${notificationDTO.iun}`,
+        path: '/:id',
       });
     });
 
@@ -614,6 +602,8 @@ describe('NotificationDetail Page', async () => {
         preloadedState: {
           userState: { user: adminUser },
         },
+        route: `/${notificationDTO.iun}`,
+        path: '/:id',
       });
     });
     expect(mock.history.get).toHaveLength(2);
@@ -642,6 +632,8 @@ describe('NotificationDetail Page', async () => {
         preloadedState: {
           userState: { user: adminUser },
         },
+        route: `/${notificationDTO.iun}`,
+        path: '/:id',
       });
     });
     // check payment box
@@ -670,6 +662,8 @@ describe('NotificationDetail Page', async () => {
         preloadedState: {
           userState: { user: adminUser },
         },
+        route: `/${notificationDTO.iun}`,
+        path: '/:id',
       });
     });
     expect(mock.history.get).toHaveLength(2);
@@ -683,7 +677,7 @@ describe('NotificationDetail Page', async () => {
       );
     });
     await waitFor(() => {
-      expect(window.location.href).toBe('https://mocked-url.com');
+      expect(globalThis.location.href).toBe('https://mocked-url.com');
     });
   });
 
@@ -709,6 +703,8 @@ describe('NotificationDetail Page', async () => {
           preloadedState: {
             userState: { user: adminUser },
           },
+          route: `/${notificationDTO.iun}`,
+          path: '/:id',
         }
       );
     });
@@ -742,7 +738,7 @@ describe('NotificationDetail Page', async () => {
       );
     });
     await waitFor(() => {
-      expect(window.location.href).toBe('https://mocked-url-com');
+      expect(globalThis.location.href).toBe('https://mocked-url-com');
     });
   });
 
@@ -778,6 +774,8 @@ describe('NotificationDetail Page', async () => {
           preloadedState: {
             userState: { user: adminUser },
           },
+          route: `/${notificationDTO.iun}`,
+          path: '/:id',
         }
       );
     });
@@ -814,7 +812,7 @@ describe('NotificationDetail Page', async () => {
       );
     });
     await waitFor(() => {
-      expect(window.location.href).toBe('https://mocked-aar-com');
+      expect(globalThis.location.href).toBe('https://mocked-aar-com');
     });
   });
 
@@ -833,6 +831,8 @@ describe('NotificationDetail Page', async () => {
         preloadedState: {
           userState: { user: adminUser },
         },
+        route: `/${notificationDTO.iun}`,
+        path: '/:id',
       });
     });
     expect(mock.history.get).toHaveLength(2);
@@ -847,7 +847,7 @@ describe('NotificationDetail Page', async () => {
       );
     });
     await waitFor(() => {
-      expect(window.location.href).toBe('https://mocked-url-com');
+      expect(globalThis.location.href).toBe('https://mocked-url-com');
     });
   });
 
@@ -861,17 +861,17 @@ describe('NotificationDetail Page', async () => {
         preloadedState: {
           userState: { user: adminUser },
         },
+        route: `/${notificationDTO.iun}`,
+        path: '/:id',
       });
     });
     const backButton = result?.getByTestId('breadcrumb-indietro-button');
     expect(backButton).toBeInTheDocument();
     fireEvent.click(backButton);
-    expect(mockNavigateFn).toHaveBeenCalledTimes(1);
-    expect(mockNavigateFn).toHaveBeenCalledWith(routes.NOTIFICHE);
+    expect(result.router.state.location.pathname).toBe(routes.NOTIFICHE);
   });
 
   it('navigation from QR code - does not include back button', async () => {
-    mockIsFromQrCode = true;
     mock.onGet(`/bff/v1/notifications/received/${notificationDTO.iun}`).reply(200, notificationDTO);
     mock.onPost(`/bff/v1/payments/info`, paymentInfoRequest).reply(200, paymentInfo);
     // we use regexp to not set the query parameters
@@ -883,6 +883,8 @@ describe('NotificationDetail Page', async () => {
             user: adminUser,
           },
         },
+        route: [{ pathname: `/${notificationDTO.iun}`, state: { fromQrCode: true } }],
+        path: '/:id',
       });
     });
     const backButton = result?.queryByTestId('breadcrumb-indietro-button');
@@ -905,6 +907,8 @@ describe('NotificationDetail Page', async () => {
           preloadedState: {
             userState: { user: adminUser },
           },
+          route: `/${notificationDTO.iun}`,
+          path: '/:id',
         }
       );
     });
@@ -915,7 +919,6 @@ describe('NotificationDetail Page', async () => {
   });
 
   it('renders NotificationDetail page with delegator logged', async () => {
-    mockIsDelegate = true;
     mock
       .onGet(
         `/bff/v1/notifications/received/${notificationDTO.iun}?mandateId=${delegator?.mandateId}`
@@ -929,6 +932,8 @@ describe('NotificationDetail Page', async () => {
         preloadedState: {
           userState: { user: adminUser },
         },
+        route: `/${delegator?.mandateId}/${notificationDTO.iun}`,
+        path: '/:mandateId/:id',
       });
     });
     // when a delegator sees a notification, we expect that he sees the same things that sees the recipient except the disclaimer
@@ -971,7 +976,6 @@ describe('NotificationDetail Page', async () => {
   });
 
   it('normal navigation when delegator is logged - includes back button', async () => {
-    mockIsDelegate = true;
     mock
       .onGet(
         `/bff/v1/notifications/received/${notificationDTO.iun}?mandateId=${delegator?.mandateId}`
@@ -988,17 +992,17 @@ describe('NotificationDetail Page', async () => {
             digitalAddresses: [],
           },
         },
+        route: `/${delegator?.mandateId}/${notificationDTO.iun}`,
+        path: '/:mandateId/:id',
       });
     });
     const backButton = result?.getByTestId('breadcrumb-indietro-button');
     expect(backButton).toBeInTheDocument();
     fireEvent.click(backButton);
-    expect(mockNavigateFn).toHaveBeenCalledTimes(1);
-    expect(mockNavigateFn).toHaveBeenCalledWith(routes.NOTIFICHE_DELEGATO);
+    expect(result.router.state.location.pathname).toBe(routes.NOTIFICHE_DELEGATO);
   });
 
   it('renders NotificationDetail page - admin with groups', async () => {
-    mockIsDelegate = false;
     mock.onGet(`/bff/v1/notifications/received/${notificationDTO.iun}`).reply(200, notificationDTO);
     mock.onPost(`/bff/v1/payments/info`, paymentInfoRequest).reply(200, paymentInfo);
     // we use regexp to not set the query parameters
@@ -1008,6 +1012,8 @@ describe('NotificationDetail Page', async () => {
         preloadedState: {
           userState: { user: adminUserWithGroup },
         },
+        route: `/${notificationDTO.iun}`,
+        path: '/:id',
       });
     });
     // when a delegator sees a notification, we expect that he sees the same things that sees the recipient except the disclaimer
@@ -1073,7 +1079,7 @@ describe('NotificationDetail Page', async () => {
           companyName: notificationToFe.senderDenomination,
           description: notificationToFe.subject,
         },
-        returnUrl: window.location.href,
+        returnUrl: globalThis.location.href,
       })
       .reply(200, {
         checkoutUrl: 'https://mocked-url.com',
@@ -1084,6 +1090,8 @@ describe('NotificationDetail Page', async () => {
         preloadedState: {
           userState: { user: adminUser },
         },
+        route: `/${notificationDTO.iun}`,
+        path: '/:id',
       });
     });
 
@@ -1134,7 +1142,7 @@ describe('NotificationDetail Page', async () => {
           companyName: notificationToFe.senderDenomination,
           description: notificationToFe.subject,
         },
-        returnUrl: window.location.href,
+        returnUrl: globalThis.location.href,
       })
       .reply(errorMock.status, errorMock.data);
 
@@ -1143,10 +1151,12 @@ describe('NotificationDetail Page', async () => {
         preloadedState: {
           userState: { user: adminUser },
         },
+        route: `/${notificationDTO.iun}`,
+        path: '/:id',
       });
     });
 
-    expect(testStore.getState().notificationState.paymentsData.pagoPaF24.length).toBe(6);
+    expect(result.testStore.getState().notificationState.paymentsData.pagoPaF24.length).toBe(6);
 
     const payButton = result.getByTestId('pay-button');
     const item = result.queryAllByTestId('pagopa-item')[requiredPaymentIndex];
@@ -1169,7 +1179,7 @@ describe('NotificationDetail Page', async () => {
 
     expect(errorMessage).toBeVisible();
     expect(reloadButton).toBeVisible();
-    expect(testStore.getState().notificationState.paymentsData.pagoPaF24.length).toBe(6);
+    expect(result.testStore.getState().notificationState.paymentsData.pagoPaF24.length).toBe(6);
 
     vi.useRealTimers();
   });
@@ -1191,6 +1201,8 @@ describe('NotificationDetail Page', async () => {
         preloadedState: {
           userState: { user: adminUser },
         },
+        route: `/${notificationDTO.iun}`,
+        path: '/:id',
       });
     });
 
@@ -1243,6 +1255,8 @@ describe('NotificationDetail Page', async () => {
         preloadedState: {
           userState: { user: adminUser },
         },
+        route: `/${notificationDTO.iun}`,
+        path: '/:id',
       });
     });
 
@@ -1278,6 +1292,8 @@ describe('NotificationDetail Page', async () => {
         preloadedState: {
           userState: { user: adminUser },
         },
+        route: `/${notificationDTO.iun}`,
+        path: '/:id',
       });
     });
 
@@ -1314,6 +1330,8 @@ describe('NotificationDetail Page', async () => {
         preloadedState: {
           userState: { user: adminUser },
         },
+        route: `/${notificationDTO.iun}`,
+        path: '/:id',
       });
     });
 
@@ -1332,6 +1350,8 @@ describe('NotificationDetail Page', async () => {
         preloadedState: {
           userState: { user: adminUser },
         },
+        route: `/${raddNotificationDTO.iun}`,
+        path: '/:id',
       });
     });
 
