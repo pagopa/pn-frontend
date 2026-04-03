@@ -639,8 +639,11 @@ describe('NotificationDetail Page', async () => {
             digitalAddresses: [],
           },
         },
-        route: `/${delegator?.mandateId}/${notificationDTO.iun}`,
-        path: '/:mandateId/:id',
+        route: [
+          routes.NOTIFICHE_DELEGATO,
+          `${routes.NOTIFICHE_DELEGATO}/${delegator?.mandateId}/${notificationDTO.iun}`,
+        ],
+        path: `${routes.NOTIFICHE_DELEGATO}/:mandateId?/:id?`,
       });
     });
     const backButton = result?.getByTestId('breadcrumb-indietro-button');

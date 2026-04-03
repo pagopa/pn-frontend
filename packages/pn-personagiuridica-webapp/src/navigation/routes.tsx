@@ -167,34 +167,19 @@ const Router: React.FC = () => {
                   }
                 />
 
-                <Route path={routes.REGISTRA_CHIAVE_PUBBLICA}>
-                  <Route
-                    index
-                    element={
-                      <PrivateRoute
-                        currentRoles={currentRoles}
-                        requiredRoles={[PNRole.ADMIN]}
-                        additionalCondition={IS_B2B_ENABLED}
-                        redirectTo={<NotFound goBackAction={navigateToHome} />}
-                      >
-                        <NewPublicKeyPage />
-                      </PrivateRoute>
-                    }
-                  />
-                  <Route
-                    path=":kid"
-                    element={
-                      <PrivateRoute
-                        currentRoles={currentRoles}
-                        requiredRoles={[PNRole.ADMIN]}
-                        additionalCondition={IS_B2B_ENABLED}
-                        redirectTo={<NotFound goBackAction={navigateToHome} />}
-                      >
-                        <NewPublicKeyPage />
-                      </PrivateRoute>
-                    }
-                  />
-                </Route>
+                <Route
+                  path={`${routes.REGISTRA_CHIAVE_PUBBLICA}/:kid?`}
+                  element={
+                    <PrivateRoute
+                      currentRoles={currentRoles}
+                      requiredRoles={[PNRole.ADMIN]}
+                      additionalCondition={IS_B2B_ENABLED}
+                      redirectTo={<NotFound goBackAction={navigateToHome} />}
+                    >
+                      <NewPublicKeyPage />
+                    </PrivateRoute>
+                  }
+                />
 
                 <Route path={routes.APP_STATUS} element={<AppStatus />} />
               </Route>
