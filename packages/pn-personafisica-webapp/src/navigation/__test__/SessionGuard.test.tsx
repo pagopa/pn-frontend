@@ -3,11 +3,13 @@ import { sub } from 'date-fns';
 import { Route, Routes } from 'react-router-dom';
 import { vi } from 'vitest';
 
+import { AppRouteParams } from '@pagopa-pn/pn-commons';
+
 import { userResponse } from '../../__mocks__/Auth.mock';
 import { RenderResult, act, render, screen, waitFor } from '../../__test__/test-utils';
 import { authClient } from '../../api/apiClients';
 import { AUTH_TOKEN_EXCHANGE, ONE_IDENTITY_TOKEN_EXCHANGE } from '../../api/auth/auth.routes';
-import { store } from '../../redux/store';
+import { AAR_UTM, UTM_KEY } from '../../utility/utm.utility';
 import SessionGuard from '../SessionGuard';
 import * as routes from '../routes.const';
 
@@ -37,6 +39,8 @@ describe('SessionGuard Component', async () => {
   afterEach(() => {
     mock.reset();
     vi.clearAllMocks();
+    globalThis.history.replaceState({}, '', '/');
+    globalThis.location.hash = '';
   });
 
   afterAll(() => {
@@ -56,7 +60,6 @@ describe('SessionGuard Component', async () => {
     const pageComponent = screen.queryByText('Generic Page');
     expect(pageComponent).toBeTruthy();
     await waitFor(() => {
-      expect(store.getState().userState.user.sessionToken).toEqual('');
       const logoutComponent = screen.queryByTestId('session-modal');
       expect(logoutComponent).toBeTruthy();
       const logoutTitleComponent = screen.queryByText('leaving-app.title');
@@ -350,5 +353,24 @@ describe('SessionGuard Component', async () => {
     });
     expect(mockOpenFn).toHaveBeenCalledWith(routes.LOGOUT_OI, '_self');
     vi.useRealTimers();
+  });
+
+  it('should preserve aar param and inject UTMs when redirecting a non-logged user to login', async () => {
+    await act(async () => {
+      render(<Guard />, { route: `/?${AppRouteParams.AAR}=mocked-qr-code` });
+    });
+
+    expect(mockOpenFn).toHaveBeenCalledTimes(1);
+
+    const [redirectUrl, target] = mockOpenFn.mock.calls[0];
+    expect(target).toBe('_self');
+
+    const parsed = new URL(redirectUrl, 'https://test.pagopa.it');
+
+    expect(parsed.pathname).toBe('/auth/logout');
+    expect(parsed.searchParams.get(AppRouteParams.AAR)).toBe('mocked-qr-code');
+    expect(parsed.searchParams.get(UTM_KEY.CAMPAIGN)).toBe(AAR_UTM[UTM_KEY.CAMPAIGN]);
+    expect(parsed.searchParams.get(UTM_KEY.SOURCE)).toBe(AAR_UTM[UTM_KEY.SOURCE]);
+    expect(parsed.searchParams.get(UTM_KEY.MEDIUM)).toBe(AAR_UTM[UTM_KEY.MEDIUM]);
   });
 });

@@ -32,10 +32,10 @@ function notificationDetailPath(notificationId: NotificationId): string {
     : GET_DETTAGLIO_NOTIFICA_PATH(notificationId.iun);
 }
 
-/** 
+/**
   Il cittadino può accedere direttamente a SEND tramite:
   - QR code dell'aar:                            https://cittadini.notifichedigitali.it/?aar=123456
-  - Messaggi di cortesia da app di terze parti:  https://cittadini.notifichedigitali.it/?retrievalId=123456 
+  - Messaggi di cortesia da app di terze parti:  https://cittadini.notifichedigitali.it/?retrievalId=123456
 */
 const RapidAccessGuard = () => {
   const dispatch = useAppDispatch();
@@ -67,11 +67,9 @@ const RapidAccessGuard = () => {
       PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_RAPID_ACCESS, { source: param });
 
       const state: NotificationDetailRouteState = { source: param };
-      navigate(path, {
-        replace: true,
-        state,
-      });
-    } catch (e: any) {
+
+      navigate(path, { replace: true, state });
+    } catch {
       PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_NOTIFICATION_NOT_ALLOWED);
       setFetchError(true);
     }
@@ -80,7 +78,7 @@ const RapidAccessGuard = () => {
   const handleErrorQrCode = (e: AppResponse) => {
     // fix(12155): hide toast error when check aar api returns notification not found
     const error = e.errors ? e.errors[0] : null;
-    if (error && error.code === ServerResponseErrorCode.PN_DELIVERY_NOTIFICATIONNOTFOUND) {
+    if (error?.code === ServerResponseErrorCode.PN_DELIVERY_NOTIFICATIONNOTFOUND) {
       return false;
     }
     return true;

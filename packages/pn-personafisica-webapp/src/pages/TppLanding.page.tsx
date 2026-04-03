@@ -21,6 +21,7 @@ import { goToLoginPortal } from '../navigation/navigation.utility';
 import { useAppSelector } from '../redux/hooks';
 import { RootState } from '../redux/store';
 import PFEventStrategyFactory from '../utility/MixpanelUtils/PFEventStrategyFactory';
+import { TPP_LANDING_UTM, injectUtmQueryParams } from '../utility/utm.utility';
 
 const TppLanding: React.FC = () => {
   const { t } = useTranslation('notifiche', { keyPrefix: 'tppLanding' });
@@ -37,9 +38,11 @@ const TppLanding: React.FC = () => {
     if (!value) {
       return;
     }
+    injectUtmQueryParams(TPP_LANDING_UTM);
     PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_LANDING_PAGE_CLICK_ACCESS);
     if (sessionToken) {
-      navigate(`/?${AppRouteParams.RETRIEVAL_ID}=${value}`);
+      // At this point `search` should include both retrievalId and UTMs
+      navigate({ pathname: '/', search: globalThis.location.search });
     } else {
       goToLoginPortal({ rapidAccess: [AppRouteParams.RETRIEVAL_ID, value], loginProvider });
     }
