@@ -44,7 +44,7 @@ describe('Footer Component', () => {
       />
     );
     const buttons = getAllByRole('link');
-    expect(buttons).toHaveLength(4);
+    expect(buttons).toHaveLength(5);
     buttons.forEach((button, index) => {
       if (index === 0) {
         expect(button).toHaveTextContent('PagoPA');

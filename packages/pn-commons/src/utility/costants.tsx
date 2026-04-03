@@ -15,10 +15,12 @@ export const LANGUAGES: Languages = {
 
 export const PRIVACY_LINK_RELATIVE_PATH = '/informativa-privacy';
 export const TOS_LINK_RELATIVE_PATH = '/termini-di-servizio';
+const sercqServiceStatementLink =
+  'https://notifichedigitali.it/assets/MO_006_Service_Practice_Statement_Pago_PA_S_p_A_v_1_6_signed_0d50fefc36.pdf';
 
 const getFooterLinkLabels = (
   link: string,
-  defaultLabel: string
+  defaultLabel?: string
 ): { label: string; ariaLabel?: string } => {
   const footerLink = `footer.${link}`;
   return {
@@ -64,7 +66,7 @@ export const preLoginLinks = (
       title: undefined,
       links: [
         {
-          ...getFooterLinkLabels('who', 'Chi siamo'),
+          ...getFooterLinkLabels('who'),
           href: `${pagoPALink().href}societa/chi-siamo`,
           linkType: 'external',
         },
@@ -79,7 +81,7 @@ export const preLoginLinks = (
           linkType: 'external',
         },
         {
-          ...getFooterLinkLabels('work', 'Lavora con noi'),
+          ...getFooterLinkLabels('work'),
           href: `${pagoPALink().href}lavora-con-noi`,
           linkType: 'external',
         },
@@ -87,53 +89,58 @@ export const preLoginLinks = (
     },
     // Third column
     resources: {
-      title: getLocalizedOrDefaultLabel('common', 'footer.resources', 'Risorse'),
+      title: getLocalizedOrDefaultLabel('common', 'footer.resources'),
       links: [
         {
-          ...getFooterLinkLabels('privacy-info', 'Informativa Privacy'),
+          ...getFooterLinkLabels('privacy-info'),
           href: privacyPolicyHref || `${window.location.origin}${PRIVACY_LINK_RELATIVE_PATH}`,
           linkType: 'internal',
         },
         {
-          ...getFooterLinkLabels('certifications', 'Certificazioni'),
+          ...getFooterLinkLabels('certifications'),
           href: 'https://www.pagopa.it/it/certificazioni/',
           linkType: 'internal',
         },
         {
-          ...getFooterLinkLabels('security', 'Sicurezza delle informazioni'),
+          ...getFooterLinkLabels('security'),
           href: 'https://www.pagopa.it/it/politiche-per-la-sicurezza-delle-informazioni/',
           linkType: 'internal',
         },
         {
-          ...getFooterLinkLabels('personal-data', 'Diritto alla protezione dei dati personali'),
+          ...getFooterLinkLabels('personal-data'),
           href: 'https://privacyportal-de.onetrust.com/webform/77f17844-04c3-4969-a11d-462ee77acbe1/9ab6533d-be4a-482e-929a-0d8d2ab29df8',
           linkType: 'internal',
         },
         {
-          ...getFooterLinkLabels('cookie', 'Preferenze Cookie'),
+          ...getFooterLinkLabels('cookie'),
           onClick: () => OneTrust.ToggleInfoDisplay(),
           linkType: 'internal',
         },
         {
-          ...getFooterLinkLabels('company', 'Società trasparente'),
+          ...getFooterLinkLabels('company'),
           href: 'https://pagopa.portaleamministrazionetrasparente.it/pagina0_home-page.html',
           linkType: 'internal',
         },
         {
-          ...getFooterLinkLabels('disclosure', 'Responsible Disclosure Policy'),
+          ...getFooterLinkLabels('disclosure'),
           href: 'https://www.pagopa.it/it/responsible-disclosure-policy/',
           linkType: 'internal',
         },
         {
-          ...getFooterLinkLabels('321-model', 'Modello 231'),
+          ...getFooterLinkLabels('321-model'),
           href: 'https://pagopa.portaleamministrazionetrasparente.it/pagina746_altri-contenuti.html',
+          linkType: 'internal',
+        },
+        {
+          ...getFooterLinkLabels('sercq-service-statement'),
+          href: sercqServiceStatementLink,
           linkType: 'internal',
         },
       ],
     },
     // Fourth column
     followUs: {
-      title: getLocalizedOrDefaultLabel('common', 'footer.follow', 'Seguici su'),
+      title: getLocalizedOrDefaultLabel('common', 'footer.follow'),
       socialLinks: [
         {
           icon: 'linkedin',
@@ -182,7 +189,7 @@ export const preLoginLinks = (
       ],
       links: [
         {
-          ...getFooterLinkLabels('accessibility', 'Accessibilità'),
+          ...getFooterLinkLabels('accessibility'),
           href: accessibilityLink,
           linkType: 'external',
         },
@@ -195,7 +202,7 @@ export const preLoginLinks = (
     links.resources.links = [
       ...links.resources.links,
       {
-        ...getFooterLinkLabels('terms-conditions', 'Termini e Condizioni'),
+        ...getFooterLinkLabels('terms-conditions'),
         href: termsOfServiceHref || `${window.location.origin}${TOS_LINK_RELATIVE_PATH}`,
         linkType: 'internal',
       },
@@ -211,17 +218,22 @@ export const postLoginLinks = (
   termsOfServiceHref?: string
 ): Array<FooterLinksType> => [
   {
-    ...getFooterLinkLabels('privacy-info', 'Informativa Privacy'),
+    ...getFooterLinkLabels('privacy-info'),
     href: privacyPolicyHref || `${window.location.origin}${PRIVACY_LINK_RELATIVE_PATH}`,
     linkType: 'internal',
   },
   {
-    ...getFooterLinkLabels('terms-conditions', 'Termini e Condizioni'),
+    ...getFooterLinkLabels('terms-conditions'),
     href: termsOfServiceHref || `${window.location.origin}${TOS_LINK_RELATIVE_PATH}`,
     linkType: 'internal',
   },
   {
-    ...getFooterLinkLabels('accessibility', 'Accessibilità'),
+    ...getFooterLinkLabels('sercq-service-statement'),
+    href: sercqServiceStatementLink,
+    linkType: 'external',
+  },
+  {
+    ...getFooterLinkLabels('accessibility'),
     href: accessibilityLink,
     linkType: 'external',
   },
