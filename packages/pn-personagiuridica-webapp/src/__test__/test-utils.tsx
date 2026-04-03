@@ -1,6 +1,6 @@
 import { ReactElement, ReactNode, createContext, useContext } from 'react';
 import { Provider } from 'react-redux';
-import { RouteObject, RouterProvider, createMemoryRouter } from 'react-router-dom';
+import { RouterProvider, createMemoryRouter } from 'react-router-dom';
 
 import { EnhancedStore, configureStore } from '@reduxjs/toolkit';
 import { InitialEntry } from '@remix-run/router';
@@ -13,7 +13,6 @@ interface CustomRenderOptions extends Omit<RenderOptions, 'wrapper'> {
   route?: string | Array<InitialEntry>;
   initialIndex?: number;
   path?: string;
-  extraRoutes?: Array<RouteObject>;
 }
 
 type CustomRenderResult = RenderResult & {
@@ -37,7 +36,6 @@ const customRender = (
     route = '/',
     initialIndex,
     path = '*',
-    extraRoutes = [],
     ...renderOptions
   }: CustomRenderOptions = {}
 ) => {
@@ -60,7 +58,6 @@ const customRender = (
         path,
         element: <RouterBridge />,
       },
-      ...extraRoutes,
     ],
     {
       initialEntries: entries, // Initial entries in the in-memory history stack
