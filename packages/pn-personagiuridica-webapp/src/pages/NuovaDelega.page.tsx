@@ -109,15 +109,24 @@ const NuovaDelega = () => {
       }),
     nome: yup.string().when('selectPersonaFisicaOrPersonaGiuridica', {
       is: RecipientType.PF,
-      then: yup.string().required(t('nuovaDelega.validation.name.required')),
+      then: yup
+        .string()
+        .required(t('nuovaDelega.validation.name.required'))
+        .matches(dataRegex.noSpaceAtEdges, t('no-spaces-at-edges', { ns: 'common' })),
     }),
     cognome: yup.string().when('selectPersonaFisicaOrPersonaGiuridica', {
       is: RecipientType.PF,
-      then: yup.string().required(t('nuovaDelega.validation.surname.required')),
+      then: yup
+        .string()
+        .required(t('nuovaDelega.validation.surname.required'))
+        .matches(dataRegex.noSpaceAtEdges, t('no-spaces-at-edges', { ns: 'common' })),
     }),
     ragioneSociale: yup.string().when('selectPersonaFisicaOrPersonaGiuridica', {
       is: RecipientType.PG,
-      then: yup.string().required(t('nuovaDelega.validation.businessName.required')),
+      then: yup
+        .string()
+        .required(t('nuovaDelega.validation.businessName.required'))
+        .matches(dataRegex.noSpaceAtEdges, t('no-spaces-at-edges', { ns: 'common' })),
     }),
     enti: yup.array().when('selectTuttiEntiOrSelezionati', {
       is: 'entiSelezionati',
@@ -242,7 +251,7 @@ const NuovaDelega = () => {
                               name="selectPersonaFisicaOrPersonaGiuridica"
                               value={values.selectPersonaFisicaOrPersonaGiuridica.toString()}
                               onChange={(event) => {
-                                setFieldValue(
+                                void setFieldValue(
                                   'selectPersonaFisicaOrPersonaGiuridica',
                                   event.currentTarget.value
                                 );
@@ -272,18 +281,20 @@ const NuovaDelega = () => {
                           </Stack>
                           <Stack
                             justifyContent="space-between"
-                            alignItems="center"
+                            alignItems={isMobile ? 'stretch' : 'flex-start'}
                             direction={isMobile ? 'column' : 'row'}
                             spacing={1}
                             flex="1 0"
+                            sx={{ pt: isMobile ? 0 : 2 }}
                           >
                             {values.selectPersonaFisicaOrPersonaGiuridica === RecipientType.PF && (
                               <TextField
-                                sx={{ margin: 'auto' }}
+                                sx={{ flex: 1 }}
                                 id="nome"
                                 value={values.nome.toString()}
                                 onChange={(event) => {
-                                  setFieldValue('nome', event.currentTarget.value);
+                                  void setFieldTouched('nome', true, false);
+                                  void setFieldValue('nome', event.currentTarget.value);
                                 }}
                                 label={t('nuovaDelega.form.firstName')}
                                 name="nome"
@@ -295,11 +306,12 @@ const NuovaDelega = () => {
 
                             {values.selectPersonaFisicaOrPersonaGiuridica === RecipientType.PF && (
                               <TextField
-                                sx={{ margin: 'auto' }}
+                                sx={{ flex: 1 }}
                                 id="cognome"
                                 value={values.cognome.toString()}
                                 onChange={(event) => {
-                                  setFieldValue('cognome', event.currentTarget.value);
+                                  void setFieldTouched('cognome', true, false);
+                                  void setFieldValue('cognome', event.currentTarget.value);
                                 }}
                                 label={t('nuovaDelega.form.lastName')}
                                 name="cognome"
@@ -310,11 +322,12 @@ const NuovaDelega = () => {
                             )}
                             {values.selectPersonaFisicaOrPersonaGiuridica === RecipientType.PG && (
                               <TextField
-                                sx={{ margin: 'auto' }}
+                                sx={{ flex: 1 }}
                                 id="ragioneSociale"
                                 value={values.ragioneSociale.toString()}
                                 onChange={(event) => {
-                                  setFieldValue('ragioneSociale', event.currentTarget.value);
+                                  void setFieldTouched('ragioneSociale', true, false);
+                                  void setFieldValue('ragioneSociale', event.currentTarget.value);
                                 }}
                                 label={t('nuovaDelega.form.businessName')}
                                 name="ragioneSociale"
@@ -333,7 +346,11 @@ const NuovaDelega = () => {
                         id="codiceFiscale"
                         value={values.codiceFiscale.toString()}
                         onChange={(event) => {
-                          setFieldValue('codiceFiscale', event.currentTarget.value.toUpperCase());
+                          void setFieldTouched('codiceFiscale', true, false);
+                          void setFieldValue(
+                            'codiceFiscale',
+                            event.currentTarget.value.toUpperCase()
+                          );
                         }}
                         label={t('nuovaDelega.form.fiscalCode')}
                         name="codiceFiscale"
@@ -358,7 +375,7 @@ const NuovaDelega = () => {
                             name="selectTuttiEntiOrSelezionati"
                             value={values.selectTuttiEntiOrSelezionati.toString()}
                             onChange={(event) => {
-                              setFieldValue(
+                              void setFieldValue(
                                 'selectTuttiEntiOrSelezionati',
                                 event.currentTarget.value
                               );
@@ -398,7 +415,7 @@ const NuovaDelega = () => {
                                     option.name === value.name
                                   }
                                   onChange={(newValue: Array<Party>) => {
-                                    setFieldValue('enti', newValue);
+                                    void setFieldValue('enti', newValue);
                                   }}
                                   inputValue={senderInputValue}
                                   onInputChange={(newInputValue) =>
@@ -457,8 +474,8 @@ const NuovaDelega = () => {
                             value={values.expirationDate && new Date(values.expirationDate)}
                             minDate={tomorrow}
                             onChange={(value: DatePickerTypes) => {
-                              setFieldTouched('expirationDate', true, false);
-                              setFieldValue('expirationDate', value);
+                              void setFieldTouched('expirationDate', true, false);
+                              void setFieldValue('expirationDate', value);
                             }}
                             shouldDisableDate={isToday}
                             slotProps={{

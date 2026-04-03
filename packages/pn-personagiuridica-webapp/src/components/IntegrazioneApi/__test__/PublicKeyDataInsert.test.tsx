@@ -20,19 +20,13 @@ const duplicateKeyMock = vi.fn().mockImplementation((publicKey: string | undefin
   }
   return true;
 });
-const mockNavigate = vi.fn();
 const mockOpenFn = vi.fn();
 
-vi.mock('react-router-dom', async () => ({
-  ...(await vi.importActual<any>('react-router-dom')),
-  useNavigate: () => mockNavigate,
-}));
-
 describe('PublicKeyDataInsert', () => {
-  const original = window.open;
+  const original = globalThis.open;
 
   beforeAll(() => {
-    Object.defineProperty(window, 'open', {
+    Object.defineProperty(globalThis, 'open', {
       configurable: true,
       value: mockOpenFn,
     });
@@ -43,7 +37,7 @@ describe('PublicKeyDataInsert', () => {
   });
 
   afterAll((): void => {
-    Object.defineProperty(window, 'open', { configurable: true, value: original });
+    Object.defineProperty(globalThis, 'open', { configurable: true, value: original });
   });
 
   it('render component', async () => {
@@ -140,7 +134,7 @@ describe('PublicKeyDataInsert', () => {
   });
 
   it('click on buttons', async () => {
-    const { getByTestId } = render(
+    const { getByTestId, router } = render(
       <PublicKeyDataInsert
         onConfirm={handleConfirmMk}
         duplicateKey={duplicateKeyMock}
@@ -153,8 +147,7 @@ describe('PublicKeyDataInsert', () => {
 
     // click on back button
     fireEvent.click(previousButton);
-    expect(mockNavigate).toHaveBeenCalledTimes(1);
-    expect(mockNavigate).toHaveBeenCalledWith(routes.INTEGRAZIONE_API);
+    expect(router.state.location.pathname).toBe(routes.INTEGRAZIONE_API);
 
     // click on confirm button
     await testInput(form, 'name', 'mocked-name-value');

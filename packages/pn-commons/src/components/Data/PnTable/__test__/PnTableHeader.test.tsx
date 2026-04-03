@@ -17,13 +17,14 @@ describe('PnTableHeaderCell', () => {
   });
 
   it('render component - incorrect child', () => {
-    expect(() =>
-      render(
-        <PnTableHeader>
-          <PnTableHeaderCell columnId={'mock-column-id'}>mock-column-label</PnTableHeaderCell>
-          <Box>Incorrect child</Box>
-        </PnTableHeader>
-      )
-    ).toThrowError('PnTableHeader can have only children of type PnTableHeaderCell');
+    const { getByText } = render(
+      <PnTableHeader>
+        <PnTableHeaderCell columnId={'mock-column-id'}>mock-column-label</PnTableHeaderCell>
+        <Box>Incorrect child</Box>
+      </PnTableHeader>
+    );
+    expect(
+      getByText('PnTableHeader can have only children of type PnTableHeaderCell')
+    ).toBeInTheDocument();
   });
 });

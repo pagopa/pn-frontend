@@ -38,3 +38,4 @@ export const NOT_ACCESSIBLE = '/non-accessibile';
 
 export const SELFCARE_LOGIN_PATH = '/auth/login';
 export const SELFCARE_LOGOUT_PATH = '/auth/logout';
+export const SELFCARE_LOGOUT_GOOGLE_PATH = `${SELFCARE_LOGOUT_PATH}/google`;

@@ -22,7 +22,7 @@ import {
 
 const onLoginRequest = () => <Login />;
 
-function Router() {
+const Router: React.FC = () => {
   const { ONE_IDENTITY_LOGIN_ENABLED } = getConfiguration();
 
   return (
@@ -42,6 +42,6 @@ function Router() {
       <Route path="*" element={<Navigate to={ROUTE_LOGIN} replace />} />
     </Routes>
   );
-}
+};
 
 export default Router;
