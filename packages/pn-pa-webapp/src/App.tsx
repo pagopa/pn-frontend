@@ -14,6 +14,7 @@ import {
   APP_VERSION,
   AppMessage,
   AppResponseMessage,
+  ConsentUser,
   Layout,
   LoadingOverlay,
   PnDialog,
@@ -40,7 +41,7 @@ import {
   getInstitutions,
   getProductsOfInstitution,
 } from './redux/auth/actions';
-import { resetState } from './redux/auth/reducers';
+import { authSelectors, resetState } from './redux/auth/reducers';
 import { useAppDispatch, useAppSelector } from './redux/hooks';
 import { RootState } from './redux/store';
 import { getConfiguration } from './services/configuration.service';
@@ -72,6 +73,32 @@ const App = () => {
   return isInitialized ? <ActualApp /> : <div />;
 };
 
+type ShowSideMenuParams = {
+  isPrivacyPage: boolean;
+  isSupportUser: boolean;
+  sessionToken?: string;
+  tosConsent?: ConsentUser;
+  privacyConsent?: ConsentUser;
+};
+
+const canShowSideMenu = ({
+  sessionToken,
+  tosConsent,
+  privacyConsent,
+  isPrivacyPage,
+  isSupportUser,
+}: ShowSideMenuParams): boolean => {
+  if (!sessionToken || isPrivacyPage) {
+    return false;
+  }
+
+  if (isSupportUser) {
+    return true;
+  }
+
+  return !!(tosConsent?.accepted && privacyConsent?.accepted);
+};
+
 const ActualApp = () => {
   const loggedUser = useAppSelector((state: RootState) => state.userState.user);
   const loggedUserOrganizationParty = loggedUser.organization;
@@ -86,6 +113,7 @@ const ActualApp = () => {
   const products = useAppSelector((state: RootState) => state.userState.productsOfInstitution);
   const institutions = useAppSelector((state: RootState) => state.userState.institutions);
   const lastError = useAppSelector((state: RootState) => state.appState.lastError);
+  const isSupportUser = useAppSelector(authSelectors.selectIsSupportUser);
   const dispatch = useAppDispatch();
   const { t, i18n } = useTranslation(['common', 'notifiche']);
 
@@ -116,10 +144,12 @@ const ActualApp = () => {
         ];
 
   const productId = products.length > 0 ? SELFCARE_SEND_PROD_ID : '0';
-  const institutionsList = institutions.map((institution) => ({
-    ...institution,
-    productRole: t(`roles.${institution.productRole}`),
-  }));
+  const institutionsList = institutions
+    .filter((institution) => !isSupportUser || institution.id === idOrganization)
+    .map((institution) => ({
+      ...institution,
+      productRole: t(`roles.${institution.productRole}`),
+    }));
 
   const sessionToken = loggedUser.sessionToken;
 
@@ -186,7 +216,7 @@ const ActualApp = () => {
 
   const jwtUser = useMemo(
     () => ({
-      id: loggedUser.fiscal_number,
+      id: loggedUser.fiscal_number ?? loggedUser.uid,
       name: loggedUser.name,
       surname: loggedUser.family_name,
     }),
@@ -196,15 +226,21 @@ const ActualApp = () => {
   useTracking(configuration.MIXPANEL_TOKEN, process.env.NODE_ENV);
 
   useEffect(() => {
-    if (sessionToken) {
-      void dispatch(getCurrentAppStatus());
-      void dispatch(getInstitutions());
+    if (!sessionToken) {
+      return;
+    }
+
+    void dispatch(getCurrentAppStatus());
+    void dispatch(getInstitutions());
+
+    if (!isSupportUser) {
       void dispatch(getAdditionalLanguages());
     }
+
     if (idOrganization) {
       void dispatch(getProductsOfInstitution());
     }
-  }, [sessionToken, getCurrentAppStatus, idOrganization]);
+  }, [sessionToken, getCurrentAppStatus, idOrganization, isSupportUser]);
 
   const { pathname } = useLocation();
   const path = pathname.split('/');
@@ -241,7 +277,7 @@ const ActualApp = () => {
   const performLogout = async () => {
     await dispatch(apiLogout(loggedUser.sessionToken));
     dispatch(resetState());
-    goToSelfcareLogout();
+    goToSelfcareLogout(isSupportUser);
     setOpenModal(false);
   };
 
@@ -258,14 +294,13 @@ const ActualApp = () => {
             <SideMenu menuItems={menuItems.menuItems} selfCareItems={menuItems.selfCareItems} />
           )
         }
-        showSideMenu={
-          !!sessionToken &&
-          tosConsent &&
-          tosConsent.accepted &&
-          privacyConsent &&
-          privacyConsent.accepted &&
-          !isPrivacyPage
-        }
+        showSideMenu={canShowSideMenu({
+          sessionToken,
+          tosConsent,
+          privacyConsent,
+          isPrivacyPage,
+          isSupportUser,
+        })}
         productsList={productsList}
         productId={productId}
         partyId={idOrganization}
@@ -273,9 +308,11 @@ const ActualApp = () => {
         loggedUser={jwtUser}
         currentLanguage={i18n.language}
         onLanguageChanged={changeLanguageHandler}
+        enableAssistanceButton={!isSupportUser}
         onAssistanceClick={handleAssistanceClick}
         isLogged={!!sessionToken}
         accessibilityLink={ACCESSIBILITY_LINK}
+        chipLabel={isSupportUser ? t('header.support') : undefined}
       >
         <PnDialog open={openModal}>
           <DialogTitle sx={{ mb: 2 }}>{t('header.logout-message')}</DialogTitle>

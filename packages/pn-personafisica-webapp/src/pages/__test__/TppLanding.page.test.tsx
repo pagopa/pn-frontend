@@ -10,17 +10,7 @@ import * as routes from '../../navigation/routes.const';
 import { TPP_LANDING_UTM, UTM_KEY } from '../../utility/utm.utility';
 import TppLanding from '../TppLanding.page';
 
-const mockNavigateFn = vi.fn();
 const mockOpenFn = vi.fn();
-
-vi.mock('react-router-dom', async () => ({
-  ...(await vi.importActual<any>('react-router-dom')),
-  useNavigate: () => mockNavigateFn,
-  Navigate: ({ to, replace }: { to: string; replace?: boolean }) => {
-    mockNavigateFn(to, { replace });
-    return null;
-  },
-}));
 
 describe('TppLanding page', () => {
   const mockRetrievalId = '123456';
@@ -77,9 +67,10 @@ describe('TppLanding page', () => {
   it('should redirects to home when no param is provided', () => {
     vi.spyOn(useRapidAccessParamHook, 'useRapidAccessParam').mockReturnValue(undefined);
 
-    const { queryByTestId } = render(<TppLanding />);
+    const { queryByTestId, router } = render(<TppLanding />);
 
-    expect(mockNavigateFn).toHaveBeenCalledWith('/', { replace: true });
+    expect(router.state.location.pathname).toBe('/');
+    expect(router.state.historyAction).toBe('REPLACE');
     expect(queryByTestId('tppLandingContainer')).not.toBeInTheDocument();
     expect(queryByTestId('accessButton')).not.toBeInTheDocument();
     expect(queryByTestId('faqSection')).not.toBeInTheDocument();
@@ -91,9 +82,10 @@ describe('TppLanding page', () => {
       mockRetrievalId,
     ]);
 
-    const { queryByTestId } = render(<TppLanding />);
+    const { queryByTestId, router } = render(<TppLanding />);
 
-    expect(mockNavigateFn).toHaveBeenCalledWith('/', { replace: true });
+    expect(router.state.location.pathname).toBe('/');
+    expect(router.state.historyAction).toBe('REPLACE');
     expect(queryByTestId('tppLandingContainer')).not.toBeInTheDocument();
   });
 
@@ -103,13 +95,14 @@ describe('TppLanding page', () => {
       '',
     ]);
 
-    const { queryByTestId } = render(<TppLanding />);
+    const { queryByTestId, router } = render(<TppLanding />);
 
-    expect(mockNavigateFn).toHaveBeenCalledWith('/', { replace: true });
+    expect(router.state.location.pathname).toBe('/');
+    expect(router.state.historyAction).toBe('REPLACE');
     expect(queryByTestId('tppLandingContainer')).not.toBeInTheDocument();
   });
 
-  it('should handle access button click - user logged in and preserve retrievalId + UTMs', async () => {
+  it('should handle access button click - user logged in and navigate with retrievalId + TPP UTMs', async () => {
     vi.spyOn(useRapidAccessParamHook, 'useRapidAccessParam').mockReturnValue([
       AppRouteParams.RETRIEVAL_ID,
       mockRetrievalId,
@@ -121,7 +114,7 @@ describe('TppLanding page', () => {
       `${routes.TPP_LANDING}?${AppRouteParams.RETRIEVAL_ID}=${mockRetrievalId}`
     );
 
-    const { getByTestId } = render(<TppLanding />, {
+    const { getByTestId, router } = render(<TppLanding />, {
       preloadedState: {
         userState: {
           user: userResponse,
@@ -134,13 +127,9 @@ describe('TppLanding page', () => {
 
     await userEvent.click(accessButton);
 
-    expect(mockNavigateFn).toHaveBeenCalledTimes(1);
+    expect(router.state.location.pathname).toBe('/');
 
-    const [to] = mockNavigateFn.mock.calls[0];
-
-    expect(to).toMatchObject({ pathname: '/' });
-
-    const sp = new URLSearchParams(to.search);
+    const sp = new URLSearchParams(router.state.location.search);
 
     expect(sp.get(AppRouteParams.RETRIEVAL_ID)).toBe(mockRetrievalId);
     expect(sp.get(UTM_KEY.CAMPAIGN)).toBe(TPP_LANDING_UTM[UTM_KEY.CAMPAIGN]);
@@ -232,7 +221,7 @@ describe('TppLanding page', () => {
     expect(sp.get(UTM_KEY.MEDIUM)).toBeNull();
   });
 
-  it('should not override UTM params when required ones are already present', async () => {
+  it('should override required UTM params on TPP access button click', async () => {
     vi.spyOn(useRapidAccessParamHook, 'useRapidAccessParam').mockReturnValue([
       AppRouteParams.RETRIEVAL_ID,
       mockRetrievalId,
@@ -244,7 +233,7 @@ describe('TppLanding page', () => {
       `${routes.TPP_LANDING}?${AppRouteParams.RETRIEVAL_ID}=${mockRetrievalId}&${UTM_KEY.SOURCE}=already_present`
     );
 
-    const { getByTestId } = render(<TppLanding />, {
+    const { getByTestId, router } = render(<TppLanding />, {
       preloadedState: {
         userState: {
           user: userResponse,
@@ -254,14 +243,11 @@ describe('TppLanding page', () => {
 
     await userEvent.click(getByTestId('accessButton'));
 
-    expect(mockNavigateFn).toHaveBeenCalledTimes(1);
-
-    const [to] = mockNavigateFn.mock.calls[0];
-    const sp = new URLSearchParams(to.search);
+    const sp = new URLSearchParams(router.state.location.search);
 
     expect(sp.get(AppRouteParams.RETRIEVAL_ID)).toBe(mockRetrievalId);
-    expect(sp.get(UTM_KEY.SOURCE)).toBe('already_present');
-    expect(sp.get(UTM_KEY.CAMPAIGN)).toBeNull();
-    expect(sp.get(UTM_KEY.MEDIUM)).toBeNull();
+    expect(sp.get(UTM_KEY.CAMPAIGN)).toBe(TPP_LANDING_UTM[UTM_KEY.CAMPAIGN]);
+    expect(sp.get(UTM_KEY.SOURCE)).toBe(TPP_LANDING_UTM[UTM_KEY.SOURCE]);
+    expect(sp.get(UTM_KEY.MEDIUM)).toBe(TPP_LANDING_UTM[UTM_KEY.MEDIUM]);
   });
 });

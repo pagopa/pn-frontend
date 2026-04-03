@@ -1,5 +1,4 @@
 import MockAdapter from 'axios-mock-adapter';
-import { vi } from 'vitest';
 
 import { SERCQ_SEND_VALUE } from '@pagopa-pn/pn-commons';
 import { getById } from '@pagopa-pn/pn-commons/src/test-utils';
@@ -13,23 +12,13 @@ import { fireEvent, render, waitFor, within } from '../../../__test__/test-utils
 import { apiClient } from '../../../api/apiClients';
 import { AddressType, ChannelType } from '../../../models/contacts';
 import { NOTIFICHE } from '../../../navigation/routes.const';
+import * as routes from '../../../navigation/routes.const';
 import DigitalContactActivation from '../DigitalContactActivation';
 import { fillCodeDialog } from './test-utils';
-
-const mockNavigateFn = vi.fn();
-
-vi.mock('react-router-dom', async () => ({
-  ...(await vi.importActual<any>('react-router-dom')),
-  useNavigate: () => mockNavigateFn,
-}));
 
 describe('DigitalContactActivation', () => {
   const labelPrefix = 'legal-contacts.sercq-send-wizard';
   let mock: MockAdapter;
-
-  beforeEach(() => {
-    vi.clearAllMocks();
-  });
 
   beforeAll(() => {
     mock = new MockAdapter(apiClient);
@@ -50,12 +39,17 @@ describe('DigitalContactActivation', () => {
   });
 
   it('should go back when clicking on the back button', () => {
-    const { getByText } = render(<DigitalContactActivation />);
+    const { getByText, router } = render(<DigitalContactActivation />, {
+      route: [routes.RECAPITI, routes.DIGITAL_DOMICILE_MANAGEMENT],
+    });
     const backButton = getByText('button.annulla');
     expect(backButton).toBeInTheDocument();
+
+    expect(router.state.location.pathname).toBe(routes.DIGITAL_DOMICILE_MANAGEMENT);
+
     fireEvent.click(backButton);
-    expect(mockNavigateFn).toHaveBeenCalledTimes(1);
-    expect(mockNavigateFn).toHaveBeenCalledWith(-1);
+    expect(router.state.location.pathname).toBe(routes.RECAPITI);
+    expect(router.state.historyAction).toBe('POP');
   });
 
   it('renders pec contact wizard correctly', () => {
@@ -238,8 +232,7 @@ describe('DigitalContactActivation', () => {
     expect(feedbackButton).toHaveTextContent('button.understand');
 
     fireEvent.click(feedbackButton);
-    expect(mockNavigateFn).toHaveBeenCalledTimes(1);
-    expect(mockNavigateFn).toHaveBeenCalledWith(NOTIFICHE);
+    expect(result.router.state.location.pathname).toBe(NOTIFICHE);
   });
 
   it('blocks moving on to recap step when only SMS is present (shows confirmation modal)', async () => {

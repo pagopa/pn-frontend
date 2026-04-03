@@ -30,15 +30,15 @@ const DigitalContactManagement = lazyRetry(
   () => import('../components/Contacts/DigitalContactManagement')
 );
 
-function Router() {
+const Router: React.FC = () => {
   const navigate = useNavigate();
 
   return (
     <Suspense fallback={<LoadingPage />}>
       <Routes>
-        <Route path="/" element={<SessionGuard />}>
-          <Route path="/" element={<ToSGuard />}>
-            <Route path="/" element={<RapidAccessGuard />}>
+        <Route element={<SessionGuard />}>
+          <Route element={<ToSGuard />}>
+            <Route element={<RapidAccessGuard />}>
               <Route index element={<Navigate to={routes.NOTIFICHE} replace />} />
               <Route path={routes.NOTIFICHE} element={<Notifiche />} />
               <Route path={routes.NOTIFICHE_DELEGATO} element={<Notifiche />} />
@@ -80,6 +80,6 @@ function Router() {
       </Routes>
     </Suspense>
   );
-}
+};
 
 export default Router;
