@@ -173,6 +173,8 @@ describe('NotificationDetail Page', async () => {
         preloadedState: {
           userState: { user: adminUser },
         },
+        route: `/${notificationDTO.iun}`,
+        path: '/:id',
       });
     });
 
@@ -200,6 +202,8 @@ describe('NotificationDetail Page', async () => {
         preloadedState: {
           userState: { user: operatorUser },
         },
+        route: `/${notificationDTO.iun}`,
+        path: '/:id',
       });
     });
 
@@ -225,6 +229,8 @@ describe('NotificationDetail Page', async () => {
         preloadedState: {
           userState: { user: adminUser },
         },
+        route: `/${notificationDTO.iun}`,
+        path: '/:id',
       });
     });
 
@@ -249,6 +255,8 @@ describe('NotificationDetail Page', async () => {
         preloadedState: {
           userState: { user: adminUser },
         },
+        route: `/${notificationDTO.iun}`,
+        path: '/:id',
       });
     });
 
@@ -276,6 +284,8 @@ describe('NotificationDetail Page', async () => {
         preloadedState: {
           userState: { user: adminUser },
         },
+        route: `/${notificationDTO.iun}`,
+        path: '/:id',
       });
     });
 
@@ -298,6 +308,8 @@ describe('NotificationDetail Page', async () => {
         preloadedState: {
           userState: { user: adminUser },
         },
+        route: `/${notificationDTO.iun}`,
+        path: '/:id',
       });
     });
 
@@ -329,6 +341,8 @@ describe('NotificationDetail Page', async () => {
         preloadedState: {
           userState: { user: adminUser },
         },
+        route: `/${notificationDTO.iun}`,
+        path: '/:id',
       });
     });
 
@@ -354,6 +368,8 @@ describe('NotificationDetail Page', async () => {
         preloadedState: {
           userState: { user: adminUser },
         },
+        route: `/${notificationDTO.iun}`,
+        path: '/:id',
       });
     });
 
@@ -391,6 +407,8 @@ describe('NotificationDetail Page', async () => {
         preloadedState: {
           userState: { user: adminUser },
         },
+        route: `/${notificationDTO.iun}`,
+        path: '/:id',
       });
     });
 
@@ -414,6 +432,8 @@ describe('NotificationDetail Page', async () => {
         preloadedState: {
           userState: { user: adminUser },
         },
+        route: `/${notificationDTO.iun}`,
+        path: '/:id',
       });
     });
 
@@ -439,6 +459,8 @@ describe('NotificationDetail Page', async () => {
         preloadedState: {
           userState: { user: adminUser },
         },
+        route: `/${notificationDTO.iun}`,
+        path: '/:id',
       });
     });
 
@@ -464,6 +486,8 @@ describe('NotificationDetail Page', async () => {
         preloadedState: {
           userState: { user: adminUserWithGroup },
         },
+        route: `/${notificationDTO.iun}`,
+        path: '/:id',
       });
     });
 
@@ -498,6 +522,8 @@ describe('NotificationDetail Page', async () => {
         preloadedState: {
           userState: { user: adminUser },
         },
+        route: `/${notificationDTO.iun}`,
+        path: '/:id',
       });
     });
 
@@ -863,12 +889,19 @@ describe('NotificationDetail Page', async () => {
         },
         route: `/${notificationDTO.iun}`,
         path: '/:id',
+        extraRoutes: [
+          {
+            path: routes.NOTIFICHE,
+            element: <div data-testid="notifications-page" />,
+          },
+        ],
       });
     });
     const backButton = result?.getByTestId('breadcrumb-indietro-button');
     expect(backButton).toBeInTheDocument();
     fireEvent.click(backButton);
     expect(result.router.state.location.pathname).toBe(routes.NOTIFICHE);
+    expect(result.getByTestId('notifications-page')).toBeInTheDocument();
   });
 
   it('navigation from QR code - does not include back button', async () => {
@@ -994,12 +1027,19 @@ describe('NotificationDetail Page', async () => {
         },
         route: `/${delegator?.mandateId}/${notificationDTO.iun}`,
         path: '/:mandateId/:id',
+        extraRoutes: [
+          {
+            path: routes.NOTIFICHE_DELEGATO,
+            element: <div data-testid="delegate-notifications-page" />,
+          },
+        ],
       });
     });
     const backButton = result?.getByTestId('breadcrumb-indietro-button');
     expect(backButton).toBeInTheDocument();
     fireEvent.click(backButton);
     expect(result.router.state.location.pathname).toBe(routes.NOTIFICHE_DELEGATO);
+    expect(result.getByTestId('delegate-notifications-page')).toBeInTheDocument();
   });
 
   it('renders NotificationDetail page - admin with groups', async () => {

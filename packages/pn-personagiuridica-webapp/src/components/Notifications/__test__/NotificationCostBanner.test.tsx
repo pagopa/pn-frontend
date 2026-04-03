@@ -7,7 +7,7 @@ import {
 } from '@pagopa-pn/pn-commons';
 
 import { digitalAddressesSercq } from '../../../__mocks__/Contacts.mock';
-import { fireEvent, render, testStore, waitFor } from '../../../__test__/test-utils';
+import { fireEvent, render, waitFor } from '../../../__test__/test-utils';
 import { ChannelType, ContactOperation, ContactSource } from '../../../models/contacts';
 import * as routes from '../../../navigation/routes.const';
 import { NotificationCostBanner } from '../NotificationCostBanner';
@@ -29,7 +29,7 @@ describe('NotificationCostBanner component', () => {
   });
 
   it('deliveryOutcome null - dd domicile not active - can manage contacts', () => {
-    const { container, getByTestId, getByText } = render(
+    const { container, getByTestId, getByText, testStore } = render(
       <NotificationCostBanner deliveryOutcome={null} canManageContacts={true} />,
       {
         preloadedState: {
@@ -84,7 +84,7 @@ describe('NotificationCostBanner component', () => {
   it('analog - dd domicile not active without cost details - can manage contacts', () => {
     const deliveryOutcome = { type: DeliveryOutcomeType.ANALOG } as any;
 
-    const { container, getByTestId, getByText } = render(
+    const { container, getByTestId, getByText, testStore } = render(
       <NotificationCostBanner deliveryOutcome={deliveryOutcome} canManageContacts={true} />,
       {
         preloadedState: {
@@ -139,7 +139,7 @@ describe('NotificationCostBanner component', () => {
   it('analog - dd domicile not active, cost details and status OK', () => {
     const deliveryOutcome = { type: DeliveryOutcomeType.ANALOG } as any;
     const notificationCost = { status: NotificationCostDetailsStatus.OK, analogCost: 100 };
-    const { container, getByTestId, getByText } = render(
+    const { container, getByTestId, getByText, testStore } = render(
       <NotificationCostBanner
         deliveryOutcome={deliveryOutcome}
         notificationCost={notificationCost}
@@ -174,7 +174,7 @@ describe('NotificationCostBanner component', () => {
   it('digital failure - dd domicile not active without cost details - can manage contacts', () => {
     const deliveryOutcome = { type: DeliveryOutcomeType.DIGITAL_FAILURE } as any;
 
-    const { container, getByTestId, getByText } = render(
+    const { container, getByTestId, getByText, testStore } = render(
       <NotificationCostBanner deliveryOutcome={deliveryOutcome} canManageContacts={true} />,
       {
         preloadedState: {
@@ -233,7 +233,7 @@ describe('NotificationCostBanner component', () => {
   it('digital failure - dd domicile not active, with cost details and status OK', () => {
     const deliveryOutcome = { type: DeliveryOutcomeType.DIGITAL_FAILURE } as any;
     const notificationCost = { status: NotificationCostDetailsStatus.OK, analogCost: 100 };
-    const { container, getByTestId, getByText } = render(
+    const { container, getByTestId, getByText, testStore } = render(
       <NotificationCostBanner
         deliveryOutcome={deliveryOutcome}
         notificationCost={notificationCost}
@@ -273,7 +273,7 @@ describe('NotificationCostBanner component', () => {
       details: { source: DigitalSource.REGISTRY, domicileType: 'SERCQ' },
     } as any;
 
-    const { container, getByTestId, getByText } = render(
+    const { container, getByTestId, getByText, testStore } = render(
       <NotificationCostBanner deliveryOutcome={deliveryOutcome} canManageContacts={true} />,
       {
         preloadedState: {
@@ -418,7 +418,7 @@ describe('NotificationCostBanner component', () => {
   it('renders the component with cost details but status UNAVAILABLE', () => {
     const deliveryOutcome = { type: DeliveryOutcomeType.DIGITAL_FAILURE } as any;
     const notificationCost = { status: NotificationCostDetailsStatus.UNAVAILABLE, analogCost: 100 };
-    const { container, getByTestId, getByText } = render(
+    const { container, getByTestId, getByText, testStore } = render(
       <NotificationCostBanner
         deliveryOutcome={deliveryOutcome}
         notificationCost={notificationCost}
