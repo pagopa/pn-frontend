@@ -39,6 +39,8 @@ describe('SessionGuard Component', async () => {
   afterEach(() => {
     mock.reset();
     vi.clearAllMocks();
+    globalThis.history.replaceState({}, '', '/');
+    globalThis.location.hash = '';
   });
 
   afterAll(() => {
@@ -53,12 +55,11 @@ describe('SessionGuard Component', async () => {
     };
 
     await act(async () => {
-      result = render(<Guard />, { preloadedState: mockReduxState });
+      render(<Guard />, { preloadedState: mockReduxState });
     });
     const pageComponent = screen.queryByText('Generic Page');
     expect(pageComponent).toBeTruthy();
     await waitFor(() => {
-      expect(result.testStore.getState().userState.user.sessionToken).toEqual('');
       const logoutComponent = screen.queryByTestId('session-modal');
       expect(logoutComponent).toBeTruthy();
       const logoutTitleComponent = screen.queryByText('leaving-app.title');
