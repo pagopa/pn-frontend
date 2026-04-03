@@ -452,19 +452,19 @@
       "fallback": "Nous n'avons pas pu remettre la notification sur l'adresse PEC, une lettre recommandée a donc été envoyée à votre entreprise. Cela entraînera des frais supplémentaires."
     },
     "digital_platform": {
-      "title": "Avec SEND tu as fait des économies !",
+      "title": "Avec SEND, vous économisez !",
       "message": "Grâce au domicile numérique actif, votre entreprise a évité l'envoi de la lettre recommandée et les frais associés."
     },
     "digital_special": {
-      "title": "Avec SEND tu as fait des économies !",
+      "title": "Avec SEND, vous économisez !",
       "message": "Nous avons envoyé la notification à l'adresse PEC communiquée par l'organisme émetteur, ainsi votre entreprise a évité la lettre recommandée et les frais associés."
     },
     "digital_registry": {
-      "title": "Avec SEND tu as fait des économies !",
+      "title": "Avec SEND, vous économisez !",
       "message": "Nous avons envoyé la notification à l'adresse PEC présente dans les registres publics, ainsi votre entreprise a évité la lettre recommandée et les frais associés."
     },
     "viewed": {
-      "title": "Avec SEND tu as fait des économies !",
+      "title": "Avec SEND, vous économisez !",
       "message": "La notification numérique a été ouverte à temps, évitant la lettre recommandée et les frais associés."
     },
     "enable-sercq": {

@@ -442,29 +442,29 @@
   },
   "notification-cost-banner": {
     "analog": {
-      "title": "Mit SEND können Sie Geld sparen!",
+      "title": "Mit SEND können Sie sparen!",
       "message": "Im Auftrag der sendenden Einrichtung wurden ein oder mehrere Papier-Einschreiben zu Gesamtkosten von {{analogCost}} an Ihr Unternehmen versandt, da diese Benachrichtigung nicht fristgerecht über die digitalen Kanäle geöffnet wurde.",
       "fallback": "Im Auftrag der sendenden Einrichtung wurden ein oder mehrere Papier-Einschreiben an Ihr Unternehmen versandt, da diese Benachrichtigung nicht fristgerecht über die digitalen Kanäle geöffnet wurde. Dies führt zu zusätzlichen Kosten."
     },
     "digital_failure": {
-      "title": "Mit SEND können Sie Geld sparen!",
+      "title": "Mit SEND können Sie sparen!",
       "message": "Die Zustellung der Benachrichtigung über PEC ist fehlgeschlagen, daher wurde ein Einschreiben zu Kosten von {{analogCost}} an Ihr Unternehmen versandt.",
       "fallback": "Die Zustellung der Benachrichtigung über PEC ist fehlgeschlagen, daher wurde ein Einschreiben an Ihr Unternehmen versandt. Dies führt zu zusätzlichen Kosten."
     },
     "digital_platform": {
-      "title": "Mit SEND hast du gespart!",
+      "title": "Mit SEND sparen Sie!",
       "message": "Dank der aktiven digitalen Adresse hat Ihr Unternehmen den Versand des Einschreibens und die damit verbundenen Kosten vermieden."
     },
     "digital_special": {
-      "title": "Mit SEND hast du gespart!",
+      "title": "Mit SEND sparen Sie!",
       "message": "Wir haben die Benachrichtigung an die von der sendenden Einrichtung mitgeteilte PEC-Adresse gesendet, so dass Ihr Unternehmen das Einschreiben und die damit verbundenen Kosten vermieden hat."
     },
     "digital_registry": {
-      "title": "Mit SEND hast du gespart!",
+      "title": "Mit SEND sparen Sie!",
       "message": "Wir haben die Benachrichtigung an die in den öffentlichen Registern eingetragene PEC-Adresse gesendet, so dass Ihr Unternehmen das Einschreiben und die damit verbundenen Kosten vermieden hat."
     },
     "viewed": {
-      "title": "Mit SEND hast du gespart!",
+      "title": "Mit SEND sparen Sie!",
       "message": "Die digitale Benachrichtigung wurde rechtzeitig geöffnet, wodurch das Einschreiben und die damit verbundenen Kosten vermieden wurden."
     },
     "enable-sercq": {

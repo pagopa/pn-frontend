@@ -442,29 +442,29 @@
   },
   "notification-cost-banner": {
     "analog": {
-      "title": "S storitvijo SEND lahko prihranite!",
+      "title": "S SEND lahko prihraniš!",
       "message": "V imenu organa pošiljatelja je bilo vašemu podjetju poslanih eno ali več priporočenih pisem v skupni vrednosti {{analogCost}}, ker to obvestilo ni bilo pravočasno odprto prek digitalnih kanalov.",
       "fallback": "V imenu organa pošiljatelja je bilo vašemu podjetju poslanih eno ali več priporočenih pisem, ker to obvestilo ni bilo pravočasno odprto prek digitalnih kanalov. To bo povzročilo dodatne stroške."
     },
     "digital_failure": {
-      "title": "S storitvijo SEND lahko prihranite!",
+      "title": "S SEND lahko prihraniš!",
       "message": "Obvestila nismo mogli dostaviti na vaš PEC naslov, zato je bilo vašemu podjetju poslano priporočeno pismo s stroškom {{analogCost}}.",
       "fallback": "Obvestila nismo mogli dostaviti na vaš PEC naslov, zato je bilo vašemu podjetju poslano priporočeno pismo. To bo povzročilo dodatne stroške."
     },
     "digital_platform": {
-      "title": "S SEND si prihranil!",
+      "title": "S SEND prihraniš!",
       "message": "Zahvaljujoč aktivnemu digitalnemu naslovu se je vaše podjetje izognilo pošiljanju priporočenega pisma in s tem povezanih stroškov."
     },
     "digital_special": {
-      "title": "S SEND si prihranil!",
+      "title": "S SEND prihraniš!",
       "message": "Obvestilo smo poslali na PEC naslov, ki nam ga je sporočil organ pošiljatelj, tako se je vaše podjetje izognilo priporočenemu pismu in stroškom."
     },
     "digital_registry": {
-      "title": "S SEND si prihranil!",
+      "title": "S SEND prihraniš!",
       "message": "Obvestilo smo poslali na PEC naslov iz javnih registrov, tako se je vaše podjetje izognilo priporočenemu pismu in stroškom."
     },
     "viewed": {
-      "title": "S SEND si prihranil!",
+      "title": "S SEND prihraniš!",
       "message": "Digitalno obvestilo je bilo pravočasno odprto, s čimer ste se izognili priporočenemu pismu in stroškom."
     },
     "enable-sercq": {
