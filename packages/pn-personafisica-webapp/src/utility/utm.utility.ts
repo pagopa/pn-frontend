@@ -25,13 +25,18 @@ export const TPP_LANDING_UTM: UtmParams = {
   [UTM_KEY.MEDIUM]: 'website',
 };
 
-export function injectUtmQueryParams(utm: UtmParams): boolean {
+export function injectUtmQueryParams(
+  utm: UtmParams,
+  options?: { avoidOverride?: boolean }
+): boolean {
   const { pathname, search, hash } = globalThis.location;
   const params = new URLSearchParams(search);
 
-  // If any UTM already present, do nothing (avoid overrides)
+  const avoidOverride = options?.avoidOverride ?? false;
   const hasAnyUtm = UTM_KEYS.some((k) => params.has(k));
-  if (hasAnyUtm) {
+
+  // If required UTM params are already present and avoidOverride is true, do nothing
+  if (avoidOverride && hasAnyUtm) {
     return false;
   }
 

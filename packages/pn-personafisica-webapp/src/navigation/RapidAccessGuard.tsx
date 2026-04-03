@@ -68,21 +68,7 @@ const RapidAccessGuard = () => {
 
       const state: NotificationDetailRouteState = { source: param };
 
-      const currentParams = new URLSearchParams(globalThis.location.search);
-
-      // `aar` and `retrievalId` are only needed for the rapid-access exchange step.
-      // Remove them before navigating to the final page to avoid re-triggering the
-      // exchange (and causing a loop) on subsequent renders/navigation, while
-      // preserving any existing UTM params in the URL.
-      currentParams.delete(AppRouteParams.AAR);
-      currentParams.delete(AppRouteParams.RETRIEVAL_ID);
-
-      const newSearch = currentParams.toString();
-
-      navigate(
-        { pathname: path, search: newSearch ? `?${newSearch}` : '' },
-        { replace: true, state }
-      );
+      navigate(path, { replace: true, state });
     } catch {
       PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_NOTIFICATION_NOT_ALLOWED);
       setFetchError(true);

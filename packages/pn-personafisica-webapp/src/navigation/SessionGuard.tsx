@@ -127,7 +127,7 @@ const SessionGuard = () => {
 
   useEffect(() => {
     if (rapidAccess?.[0] === AppRouteParams.AAR) {
-      injectUtmQueryParams(AAR_UTM);
+      injectUtmQueryParams(AAR_UTM, { avoidOverride: true });
     }
     if (spidToken) {
       void performExchangeToken({ spidToken, rapidAccess });
