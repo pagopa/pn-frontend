@@ -28,6 +28,7 @@ import * as routes from '../../navigation/routes.const';
 import { contactsSelectors, setExternalEvent } from '../../redux/contact/reducers';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import PFEventStrategyFactory from '../../utility/MixpanelUtils/PFEventStrategyFactory';
+import { tracker } from '../../utility/tracking/tracker';
 
 type Props = {
   deliveryOutcome: DeliveryOutcome | null;
@@ -201,6 +202,15 @@ export const NotificationCostBanner: React.FC<Props> = ({ deliveryOutcome, notif
   useEffect(() => {
     if (isVisible) {
       triggerMixpanelEvent(PFEventsType.SEND_BANNER, EventAction.SCREEN_VIEW);
+
+      // MIGRATION NOTE (example only):
+      // The new registry+builder tracker is invoked here only as a reference implementation
+      // The legacy strategy-based tracking is still active for this event, so in dev you'll see it triggered twice.
+      tracker.trigger(PFEventsType.SEND_BANNER, {
+        banner_id: mapBannerIds[bannerKey],
+        banner_page: ContactSource.DETTAGLIO_NOTIFICA,
+        banner_landing: showCta ? RouteDestination.DIGITAL_DOMICILE_ACTIVATION : 'not_set',
+      });
     }
   }, []);
 

@@ -366,7 +366,7 @@ const AddSpecialContact = forwardRef<AddSpecialContactRef, Props>(
       if (e.target.type === 'checkbox') {
         const event = e.target.checked
           ? PFEventsType.SEND_ADD_CUSTOMIZED_CONTACT_TOS_ACCEPTED
-          : PFEventsType.SEND_ADD_CUSTOMIZED_CONTACT_TOS_DISMISSEDD;
+          : PFEventsType.SEND_ADD_CUSTOMIZED_CONTACT_TOS_DISMISSED;
 
         PFEventStrategyFactory.triggerEvent(event);
       }
