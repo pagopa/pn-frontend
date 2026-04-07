@@ -32,16 +32,17 @@ describe('PnCardHeader', () => {
   });
 
   it('render component - incorrect child', () => {
-    expect(() =>
-      render(
-        <PnCardHeader>
-          <PnCardHeaderItem>
-            <Box>{cardData['column-1']}</Box>
-            <Box>{cardData['column-2']}</Box>
-          </PnCardHeaderItem>
-          <Box>Incorrect child</Box>
-        </PnCardHeader>
-      )
-    ).toThrowError('PnCardHeader can have only children of type PnCardHeaderItem');
+    const { getByText } = render(
+      <PnCardHeader>
+        <PnCardHeaderItem>
+          <Box>{cardData['column-1']}</Box>
+          <Box>{cardData['column-2']}</Box>
+        </PnCardHeaderItem>
+        <Box>Incorrect child</Box>
+      </PnCardHeader>
+    );
+    expect(
+      getByText('PnCardHeader can have only children of type PnCardHeaderItem')
+    ).toBeInTheDocument();
   });
 });

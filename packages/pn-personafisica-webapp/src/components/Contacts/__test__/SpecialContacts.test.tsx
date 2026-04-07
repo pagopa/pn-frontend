@@ -6,7 +6,7 @@ import { testInput } from '@pagopa-pn/pn-commons/src/test-utils';
 
 import { digitalCourtesyAddresses, digitalLegalAddresses } from '../../../__mocks__/Contacts.mock';
 import { parties } from '../../../__mocks__/ExternalRegistry.mock';
-import { fireEvent, render, testStore, waitFor, within } from '../../../__test__/test-utils';
+import { fireEvent, render, waitFor, within } from '../../../__test__/test-utils';
 import { apiClient } from '../../../api/apiClients';
 import { AddressType, ChannelType } from '../../../models/contacts';
 import SpecialContacts from '../SpecialContacts';
@@ -134,7 +134,7 @@ describe('SpecialContacts Component', async () => {
       },
       ...specialLegalAddresses.slice(1),
     ];
-    expect(testStore.getState().contactsState.digitalAddresses).toStrictEqual(addresses);
+    expect(result.testStore.getState().contactsState.digitalAddresses).toStrictEqual(addresses);
     expect(input).not.toBeInTheDocument();
     await waitFor(() => {
       // contacts list
@@ -149,7 +149,7 @@ describe('SpecialContacts Component', async () => {
     mock.onGet('/bff/v1/pa-list').reply(200, parties);
     mock.onDelete(`/bff/v1/addresses/LEGAL/${specialLegalAddresses[0].senderId}/PEC`).reply(200);
     // render component
-    const { getAllByTestId, getByRole } = render(
+    const { getAllByTestId, getByRole, testStore } = render(
       <SpecialContacts addressType={AddressType.LEGAL} />,
       {
         preloadedState: { contactsState: { digitalAddresses: specialLegalAddresses } },
@@ -197,7 +197,7 @@ describe('SpecialContacts Component', async () => {
     mock.onDelete(`/bff/v1/addresses/LEGAL/${sercqSpecial.senderId}/SERCQ_SEND`).reply(200);
 
     // render component
-    const { getAllByTestId, getByRole } = render(
+    const { getAllByTestId, getByRole, testStore } = render(
       <SpecialContacts addressType={AddressType.LEGAL} />,
       {
         preloadedState: { contactsState: { digitalAddresses: initialAddresses } },
@@ -331,7 +331,7 @@ describe('SpecialContacts Component', async () => {
       .onDelete(`/bff/v1/addresses/COURTESY/${specialCourtesyAddresses[0].senderId}/EMAIL`)
       .reply(200);
     // render component
-    const { getAllByTestId, getByRole } = render(
+    const { getAllByTestId, getByRole, testStore } = render(
       <SpecialContacts addressType={AddressType.COURTESY} />,
       {
         preloadedState: { contactsState: { digitalAddresses: specialCourtesyAddresses } },

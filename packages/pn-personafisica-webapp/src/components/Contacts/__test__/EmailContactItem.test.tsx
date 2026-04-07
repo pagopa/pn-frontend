@@ -3,7 +3,7 @@ import MockAdapter from 'axios-mock-adapter';
 import { getById } from '@pagopa-pn/pn-commons/src/test-utils';
 
 import { digitalAddressesSercq, digitalCourtesyAddresses } from '../../../__mocks__/Contacts.mock';
-import { fireEvent, render, testStore, waitFor } from '../../../__test__/test-utils';
+import { fireEvent, render, waitFor } from '../../../__test__/test-utils';
 import { apiClient } from '../../../api/apiClients';
 import { AddressType, ChannelType } from '../../../models/contacts';
 import EmailContactItem from '../EmailContactItem';
@@ -115,7 +115,7 @@ describe('testing EmailContactItem', () => {
     // check that contact has been added
     await waitFor(() => expect(dialog).not.toBeInTheDocument());
     expect(
-      testStore
+      result.testStore
         .getState()
         .contactsState.digitalAddresses.filter(
           (addr) => addr.addressType === AddressType.COURTESY && addr.senderId === 'default'
@@ -191,7 +191,7 @@ describe('testing EmailContactItem', () => {
     // check that contact has been added
     await waitFor(() => expect(dialog).not.toBeInTheDocument());
     expect(
-      testStore
+      result.testStore
         .getState()
         .contactsState.digitalAddresses.filter((addr) => addr.addressType === AddressType.COURTESY)
     ).toStrictEqual([
@@ -254,7 +254,7 @@ describe('testing EmailContactItem', () => {
     });
     await waitFor(() => {
       expect(
-        testStore
+        result.testStore
           .getState()
           .contactsState.digitalAddresses.filter(
             (addr) => addr.addressType === AddressType.COURTESY

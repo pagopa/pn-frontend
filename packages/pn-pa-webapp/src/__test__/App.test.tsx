@@ -5,11 +5,15 @@ import { ThemeProvider, createTheme } from '@mui/material';
 
 import App from '../App';
 import { currentStatusDTO } from '../__mocks__/AppStatus.mock';
-import { userResponse } from '../__mocks__/Auth.mock';
+import { supportUserResponse, userResponse } from '../__mocks__/Auth.mock';
 import { tosPrivacyConsentMock } from '../__mocks__/Consents.mock';
 import { institutionsDTO, productsDTO } from '../__mocks__/User.mock';
 import { apiClient, authClient } from '../api/apiClients';
-import { SELFCARE_LOGIN_PATH, SELFCARE_LOGOUT_PATH } from '../navigation/routes.const';
+import {
+  SELFCARE_LOGIN_PATH,
+  SELFCARE_LOGOUT_GOOGLE_PATH,
+  SELFCARE_LOGOUT_PATH,
+} from '../navigation/routes.const';
 import { getConfiguration } from '../services/configuration.service';
 import { RenderResult, act, fireEvent, getByText, render, screen, waitFor } from './test-utils';
 
@@ -169,6 +173,41 @@ describe('App', async () => {
     await waitFor(() => {
       expect(mockOpenFn).toHaveBeenCalledTimes(1);
       const url = `${getConfiguration().SELFCARE_BASE_URL}${SELFCARE_LOGOUT_PATH}`;
+      expect(mockOpenFn).toHaveBeenCalledWith(url, '_self');
+      expect(clearSpy).toHaveBeenCalled();
+      expect(mockAuth.history.post.length).toBe(1);
+    });
+  });
+
+  it('render component - support user logs out', async () => {
+    mockAuth.onPost('/logout').reply(200);
+
+    const clearSpy = vi.spyOn(Storage.prototype, 'clear');
+
+    await act(async () => {
+      result = render(<Component />, {
+        preloadedState: {
+          ...reduxInitialState,
+          userState: {
+            ...reduxInitialState.userState,
+            user: supportUserResponse,
+          },
+        },
+      });
+    });
+
+    const header = result.container.querySelector('header');
+    expect(header).toBeInTheDocument();
+
+    const button = getByText(header!, 'Esci');
+    fireEvent.click(button);
+
+    const modalConfirmButton = await waitFor(() => screen.queryByTestId('confirm-button'));
+    fireEvent.click(modalConfirmButton!);
+
+    await waitFor(() => {
+      expect(mockOpenFn).toHaveBeenCalledTimes(1);
+      const url = `${getConfiguration().SELFCARE_BASE_URL}${SELFCARE_LOGOUT_GOOGLE_PATH}`;
       expect(mockOpenFn).toHaveBeenCalledWith(url, '_self');
       expect(clearSpy).toHaveBeenCalled();
       expect(mockAuth.history.post.length).toBe(1);

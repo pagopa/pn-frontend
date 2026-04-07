@@ -12,24 +12,9 @@ const DigitalContactPage = () => (
   </Routes>
 );
 
-describe('DigitalContact Page', async () => {
-  const originalLocation = window.location;
-
-  beforeAll(() => {
-    Object.defineProperty(window, 'location', {
-      writable: true,
-      value: { hash: '', pathname: '/' },
-    });
-  });
-
-  afterAll(() => {
-    Object.defineProperty(window, 'location', { writable: true, value: originalLocation });
-  });
-
-  it('renders the component', async () => {
-    window.location.pathname = '/mocked-route';
-
-    render(<DigitalContactPage />);
+describe('DigitalContact Page', () => {
+  it('renders the component', () => {
+    render(<DigitalContactPage />, { route: '/mocked-route' });
     const pageComponent = screen.queryByText('Mocked Page');
     expect(pageComponent).toBeTruthy();
   });

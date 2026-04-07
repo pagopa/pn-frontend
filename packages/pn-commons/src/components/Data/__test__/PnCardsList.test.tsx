@@ -124,25 +124,24 @@ describe('PnCardsList Component', () => {
     const { queryAllByTestId } = render(<RenderItemsCard />);
     const cards = queryAllByTestId('cards');
     const cardActionsEl = within(cards[0]).getByTestId('mockedAction');
-    fireEvent.click(cardActionsEl!);
+    fireEvent.click(cardActionsEl);
     await waitFor(() => {
-      expect(clickActionMockFn).toBeCalledTimes(1);
-      expect(clickActionMockFn).toBeCalledWith(cardData[0]);
+      expect(clickActionMockFn).toHaveBeenCalledTimes(1);
+      expect(clickActionMockFn).toHaveBeenCalledWith(cardData[0]);
     });
   });
 
   it('render component - incorrect child', () => {
-    expect(() =>
-      render(
-        <PnCardsList>
-          <PnCard>
-            <PnCardContent>
-              <PnCardContentItem label="mocked-label">mocked-value</PnCardContentItem>
-            </PnCardContent>
-          </PnCard>
-          <Box>Incorrect child</Box>
-        </PnCardsList>
-      )
-    ).toThrowError('PnCardsList can have only children of type PnCard');
+    const { getByText } = render(
+      <PnCardsList>
+        <PnCard>
+          <PnCardContent>
+            <PnCardContentItem label="mocked-label">mocked-value</PnCardContentItem>
+          </PnCardContent>
+        </PnCard>
+        <Box>Incorrect child</Box>
+      </PnCardsList>
+    );
+    expect(getByText('PnCardsList can have only children of type PnCard')).toBeInTheDocument();
   });
 });

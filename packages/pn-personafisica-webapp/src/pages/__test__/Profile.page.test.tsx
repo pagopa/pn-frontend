@@ -1,15 +1,6 @@
-import { vi } from 'vitest';
-
 import { userResponse } from '../../__mocks__/Auth.mock';
 import { render } from '../../__test__/test-utils';
 import Profile from '../Profile.page';
-
-const mockNavigateFn = vi.fn();
-// mock imports
-vi.mock('react-router-dom', async () => ({
-  ...(await vi.importActual<any>('react-router-dom')),
-  useNavigate: () => mockNavigateFn,
-}));
 
 describe('testing profile page', () => {
   it('profile page renders properly', () => {

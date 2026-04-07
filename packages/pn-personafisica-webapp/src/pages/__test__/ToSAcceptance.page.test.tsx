@@ -13,14 +13,7 @@ import { apiClient } from '../../api/apiClients';
 import * as routes from '../../navigation/routes.const';
 import ToSAcceptance from '../ToSAcceptance.page';
 
-const mockNavigateFn = vi.fn();
 const mockOpenFn = vi.fn();
-
-// mock imports
-vi.mock('react-router-dom', async () => ({
-  ...(await vi.importActual<any>('react-router-dom')),
-  useNavigate: () => mockNavigateFn,
-}));
 
 const tosConsent: ConsentUser = {
   accepted: false,
@@ -35,12 +28,12 @@ const privacyConsent: ConsentUser = {
 };
 
 describe('test Terms of Service page', async () => {
-  const original = window.open;
+  const original = globalThis.open;
   let mock: MockAdapter;
 
   beforeAll(() => {
     mock = new MockAdapter(apiClient);
-    Object.defineProperty(window, 'open', {
+    Object.defineProperty(globalThis, 'open', {
       configurable: true,
       value: mockOpenFn,
     });
@@ -53,7 +46,7 @@ describe('test Terms of Service page', async () => {
 
   afterAll(() => {
     mock.restore();
-    Object.defineProperty(window, 'open', { configurable: true, value: original });
+    Object.defineProperty(globalThis, 'open', { configurable: true, value: original });
   });
 
   it('checks the texts in the page - First ToS acceptance', () => {
@@ -99,14 +92,13 @@ describe('test Terms of Service page', async () => {
   });
 
   it('navigate to dashboard if tos and privacy are accepted', async () => {
-    render(
+    const { router } = render(
       <ToSAcceptance
         tosConsent={{ ...tosConsent, accepted: true }}
         privacyConsent={{ ...privacyConsent, accepted: true }}
       />
     );
-    expect(mockNavigateFn).toBeCalledTimes(1);
-    expect(mockNavigateFn).toBeCalledWith(routes.NOTIFICHE);
+    expect(router.state.location.pathname).toBe(routes.NOTIFICHE);
   });
 
   it('navigate to privacy and tos pages', async () => {
@@ -114,12 +106,12 @@ describe('test Terms of Service page', async () => {
       <ToSAcceptance tosConsent={tosConsent} privacyConsent={privacyConsent} />
     );
     const tosLink = getByTestId('terms-and-conditions');
-    fireEvent.click(tosLink!);
-    expect(mockOpenFn).toBeCalledTimes(1);
-    expect(mockOpenFn).toBeCalledWith(TOS_LINK_RELATIVE_PATH, '_blank');
+    fireEvent.click(tosLink);
+    expect(mockOpenFn).toHaveBeenCalledTimes(1);
+    expect(mockOpenFn).toHaveBeenCalledWith(TOS_LINK_RELATIVE_PATH, '_blank');
     const privacyLink = getByTestId('privacy-link');
-    fireEvent.click(privacyLink!);
-    expect(mockOpenFn).toBeCalledTimes(2);
-    expect(mockOpenFn).toBeCalledWith(PRIVACY_LINK_RELATIVE_PATH, '_blank');
+    fireEvent.click(privacyLink);
+    expect(mockOpenFn).toHaveBeenCalledTimes(2);
+    expect(mockOpenFn).toHaveBeenCalledWith(PRIVACY_LINK_RELATIVE_PATH, '_blank');
   });
 });

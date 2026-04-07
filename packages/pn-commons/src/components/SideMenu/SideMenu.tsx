@@ -1,4 +1,4 @@
-import { FC, Fragment, ReactNode, useEffect, useState } from 'react';
+import { FC, ReactNode, useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 import { Menu } from '@mui/icons-material';
@@ -55,7 +55,7 @@ const SideMenu: FC<Props> = ({ menuItems, selfCareItems, feedbackBanner }) => {
       }
     });
     if (menuItemIndex > -1) {
-      if (items[menuItemIndex].children && items[menuItemIndex].children?.length) {
+      if (items[menuItemIndex].children?.length) {
         return findMenuItemSelectedRecursive(
           // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
           items[menuItemIndex].children!,
@@ -118,7 +118,7 @@ const SideMenu: FC<Props> = ({ menuItems, selfCareItems, feedbackBanner }) => {
     >
       <Box alignItems="left" display="flex" flexDirection="column">
         {isMobile ? (
-          <Fragment>
+          <>
             <List
               component="nav"
               sx={{
@@ -159,7 +159,7 @@ const SideMenu: FC<Props> = ({ menuItems, selfCareItems, feedbackBanner }) => {
                 </>
               )}
             </Drawer>
-          </Fragment>
+          </>
         ) : (
           <>
             <SideMenuList

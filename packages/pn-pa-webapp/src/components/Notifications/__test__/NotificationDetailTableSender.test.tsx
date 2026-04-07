@@ -75,4 +75,26 @@ describe('NotificationDetailTableSender Component', () => {
     const cancelNotificationBtn = queryByTestId('cancelNotificationBtn');
     expect(cancelNotificationBtn).not.toBeInTheDocument();
   });
+
+  it('renders component - no cancel notification button with support role', () => {
+    const { queryByTestId } = render(
+      <NotificationDetailTableSender
+        notification={notificationDTO}
+        onCancelNotification={mockCancelHandler}
+      />,
+      {
+        preloadedState: {
+          userState: {
+            user: {
+              organization: {
+                roles: [{ role: PNRole.SUPPORT }],
+              },
+            },
+          },
+        },
+      }
+    );
+    const cancelNotificationBtn = queryByTestId('cancelNotificationBtn');
+    expect(cancelNotificationBtn).not.toBeInTheDocument();
+  });
 });

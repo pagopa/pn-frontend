@@ -144,7 +144,6 @@ describe('Footer Component', () => {
     fireEvent.click(dropdownLanguageButton);
     const languageSelector = screen.getByRole('presentation');
     const languageOptions = languageSelector?.querySelectorAll('ul li');
-    console.log(languageOptions.length);
     // check the dropdown languages
     languageOptions.forEach((option, index) => {
       expect(option).toHaveTextContent(expectedLanguagesLabels[index]);
