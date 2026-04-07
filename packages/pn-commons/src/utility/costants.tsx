@@ -30,8 +30,6 @@ export const LANGUAGES: Languages = {
 
 export const PRIVACY_LINK_RELATIVE_PATH = '/informativa-privacy';
 export const TOS_LINK_RELATIVE_PATH = '/termini-di-servizio';
-// const sercqServiceStatementLink =
-//   'https://notifichedigitali.it/assets/MO_006_Service_Practice_Statement_Pago_PA_S_p_A_v_1_6_signed_0d50fefc36.pdf';
 
 const getFooterLinkLabels = (
   link: string,
