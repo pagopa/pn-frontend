@@ -5,6 +5,21 @@ import { getLocalizedOrDefaultLabel } from '../utility/localization.utility';
 
 declare const OneTrust: any;
 
+type PreLoginProps = {
+  hasTermsOfService?: boolean;
+  accessibilityLink: string;
+  privacyPolicyHref?: string;
+  termsOfServiceHref?: string;
+  sercqServiceStatementLink: string;
+};
+
+type PostLoginProps = {
+  accessibilityLink: string;
+  privacyPolicyHref?: string;
+  termsOfServiceHref?: string;
+  sercqServiceStatementLink: string;
+};
+
 export const LANGUAGES: Languages = {
   it: { it: 'Italiano', en: 'Inglese', fr: 'Francese', de: 'Tedesco', sl: 'Sloveno' },
   en: { it: 'Italian', en: 'English', fr: 'French', de: 'German', sl: 'Slovenian' },
@@ -15,8 +30,8 @@ export const LANGUAGES: Languages = {
 
 export const PRIVACY_LINK_RELATIVE_PATH = '/informativa-privacy';
 export const TOS_LINK_RELATIVE_PATH = '/termini-di-servizio';
-const sercqServiceStatementLink =
-  'https://notifichedigitali.it/assets/MO_006_Service_Practice_Statement_Pago_PA_S_p_A_v_1_6_signed_0d50fefc36.pdf';
+// const sercqServiceStatementLink =
+//   'https://notifichedigitali.it/assets/MO_006_Service_Practice_Statement_Pago_PA_S_p_A_v_1_6_signed_0d50fefc36.pdf';
 
 const getFooterLinkLabels = (
   link: string,
@@ -54,12 +69,13 @@ export const companyLegalInfo = () => (
   </Box>
 );
 
-export const preLoginLinks = (
-  hasTermsOfService: boolean = false,
-  accessibilityLink: string,
-  privacyPolicyHref?: string,
-  termsOfServiceHref?: string
-): PreLoginFooterLinksType => {
+export const preLoginLinks = ({
+  hasTermsOfService = false,
+  accessibilityLink,
+  privacyPolicyHref,
+  termsOfServiceHref,
+  sercqServiceStatementLink,
+}: PreLoginProps): PreLoginFooterLinksType => {
   const links: PreLoginFooterLinksType = {
     // First column
     aboutUs: {
@@ -212,11 +228,12 @@ export const preLoginLinks = (
   return links;
 };
 
-export const postLoginLinks = (
-  accessibilityLink: string,
-  privacyPolicyHref?: string,
-  termsOfServiceHref?: string
-): Array<FooterLinksType> => [
+export const postLoginLinks = ({
+  accessibilityLink,
+  privacyPolicyHref,
+  termsOfServiceHref,
+  sercqServiceStatementLink,
+}: PostLoginProps): Array<FooterLinksType> => [
   {
     ...getFooterLinkLabels('privacy-info'),
     href: privacyPolicyHref || `${window.location.origin}${PRIVACY_LINK_RELATIVE_PATH}`,

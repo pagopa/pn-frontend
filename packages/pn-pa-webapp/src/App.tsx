@@ -108,8 +108,13 @@ const ActualApp = () => {
   const [openModal, setOpenModal] = useState(false);
   const { tosConsent, privacyConsent } = useAppSelector((state: RootState) => state.userState);
   const currentStatus = useAppSelector((state: RootState) => state.appStatus.currentStatus);
-  const { SELFCARE_BASE_URL, SELFCARE_SEND_PROD_ID, IS_STATISTICS_ENABLED, ACCESSIBILITY_LINK } =
-    getConfiguration();
+  const {
+    SELFCARE_BASE_URL,
+    SELFCARE_SEND_PROD_ID,
+    IS_STATISTICS_ENABLED,
+    ACCESSIBILITY_LINK,
+    SERCQ_SERVICE_STATEMENT_LINK,
+  } = getConfiguration();
   const products = useAppSelector((state: RootState) => state.userState.productsOfInstitution);
   const institutions = useAppSelector((state: RootState) => state.userState.institutions);
   const lastError = useAppSelector((state: RootState) => state.appState.lastError);
@@ -313,6 +318,7 @@ const ActualApp = () => {
         isLogged={!!sessionToken}
         accessibilityLink={ACCESSIBILITY_LINK}
         chipLabel={isSupportUser ? t('header.support') : undefined}
+        sercqServiceStatementLink={SERCQ_SERVICE_STATEMENT_LINK}
       >
         <PnDialog open={openModal}>
           <DialogTitle sx={{ mb: 2 }}>{t('header.logout-message')}</DialogTitle>
