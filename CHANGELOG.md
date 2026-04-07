@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.22.1-RC.0](https://github.com/pagopa/pn-frontend/compare/v2.22.0...v2.22.1-RC.0) (2026-04-07)
+
+
+### Bug Fixes
+
+* **PN-19290:** add noindex and canonical meta tags for auth routes ([#1813](https://github.com/pagopa/pn-frontend/issues/1813)) ([44c1427](https://github.com/pagopa/pn-frontend/commit/44c14273269b06f0fe7e6fb6f2decc740acec262))
+
+
+
+
+
 # [2.22.0](https://github.com/pagopa/pn-frontend/compare/v2.22.0-RC.4...v2.22.0) (2026-03-23)
 
 **Note:** Version bump only for package pn-frontend
