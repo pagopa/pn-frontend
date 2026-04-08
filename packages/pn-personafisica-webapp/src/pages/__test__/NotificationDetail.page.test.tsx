@@ -994,10 +994,10 @@ describe('NotificationDetail Page', async () => {
             digitalAddresses: [],
           },
         },
-        route: routes.GET_DETTAGLIO_NOTIFICA_DELEGATO_PATH(
-          notificationDTO.iun,
-          delegator!.mandateId
-        ),
+        route: [
+          routes.GET_NOTIFICHE_DELEGATO_PATH(delegator?.mandateId!),
+          routes.GET_DETTAGLIO_NOTIFICA_DELEGATO_PATH(notificationDTO.iun, delegator!.mandateId),
+        ],
       });
     });
     const backButton = result.getByTestId('breadcrumb-indietro-button');

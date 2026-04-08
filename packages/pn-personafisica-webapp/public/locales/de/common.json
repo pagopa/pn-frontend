@@ -135,6 +135,7 @@
     "company": "Transparente Gesellschaft",
     "disclosure": "Responsible Disclosure Policy",
     "321-model": "Modell 231",
+    "sercq-service-statement": "Service practice statement - SERCQ",
     "accessibility": "Barrierefreiheit",
     "social": "Zur {{social}} Website von PagoPA S.p.A.",
     "resources": "Ressourcen",
@@ -235,13 +236,7 @@
     "action": "Zugang beibehalten"
   },
   "code-modal": {
-    "digits": [
-      "erste Ziffer",
-      "zweite Ziffer",
-      "dritte Ziffer",
-      "vierte Ziffer",
-      "letzte Ziffer"
-    ]
+    "digits": ["erste Ziffer", "zweite Ziffer", "dritte Ziffer", "vierte Ziffer", "letzte Ziffer"]
   },
   "user-validation-failed": {
     "title": "Die eingegebenen Daten sind ungültig",

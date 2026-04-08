@@ -55,6 +55,8 @@ type Props = {
   termsOfServiceHref?: string;
   /** Url to accessibility declaration page */
   accessibilityLink: string;
+  /** Url to sercq service statement */
+  sercqServiceStatementLink: string;
   /** Enable assistance button */
   enableAssistanceButton?: boolean;
   /** Label of the chip displayed next to product switch */
@@ -90,6 +92,7 @@ const Layout: React.FC<Props> = ({
   privacyPolicyHref,
   termsOfServiceHref,
   accessibilityLink,
+  sercqServiceStatementLink,
   enableAssistanceButton = true,
   chipLabel,
   slotsProps,
@@ -155,6 +158,7 @@ const Layout: React.FC<Props> = ({
             privacyPolicyHref={privacyPolicyHref}
             termsOfServiceHref={termsOfServiceHref}
             accessibilityLink={accessibilityLink}
+            sercqServiceStatementLink={sercqServiceStatementLink}
           />
         )}
       </>
