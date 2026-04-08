@@ -28,6 +28,7 @@ import {
   dateIsLessThan10Years,
   downloadDocument,
   formatDate,
+  getPaymentCache,
   useErrors,
   useHasPermissions,
   useIsCancelled,
@@ -41,7 +42,7 @@ import { PNRole } from '../models/User';
 import { ContactSource } from '../models/contacts';
 import * as routes from '../navigation/routes.const';
 import { getDowntimeLegalFact } from '../redux/appStatus/actions';
-import { useAppDispatch, useAppSelector } from '../redux/hooks';
+import { useAppDispatch, useAppSelector, useSafeAppDispatch } from '../redux/hooks';
 import {
   NOTIFICATION_ACTIONS,
   getDowntimeHistory,
@@ -65,6 +66,7 @@ const NotificationDetail = () => {
   const { id, mandateId } = useParams();
   const location = useLocation();
   const dispatch = useAppDispatch();
+  const safeDispatch = useSafeAppDispatch();
 
   /*
    * appStatus is included since it is used inside NotificationRelatedDowntimes, a component
@@ -310,19 +312,19 @@ const NotificationDetail = () => {
       if (paymentInfoRequest.length === 0) {
         return;
       }
-      void dispatch(
-        getReceivedNotificationPaymentInfo({
-          taxId: currentRecipient.taxId,
-          paymentInfoRequest,
-        })
-      );
+      safeDispatch(getReceivedNotificationPaymentInfo, {
+        taxId: currentRecipient.taxId,
+        paymentInfoRequest,
+      });
     },
     [currentRecipient.payments]
   );
 
   useEffect(() => {
     if (checkIfUserHasPayments && !isCancelledOrCancelling) {
-      fetchPaymentsInfo(currentRecipient.payments?.slice(0, 5) ?? []);
+      // get current page stored in cache
+      const pageFromCache = getPaymentCache(notification.iun)?.currentPaymentPage ?? 0;
+      fetchPaymentsInfo(currentRecipient.payments?.slice(pageFromCache, 5 + pageFromCache) ?? []);
     }
   }, [currentRecipient.payments]);
 
