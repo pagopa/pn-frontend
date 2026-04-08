@@ -3,6 +3,7 @@ import { createRoot } from 'react-dom/client';
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 
 import { CssBaseline, ThemeProvider } from '@mui/material';
+import { LoadingPage } from '@pagopa-pn/pn-commons';
 import { theme } from '@pagopa/mui-italia';
 
 import App from './App';
@@ -38,7 +39,7 @@ async function doTheRender() {
       <React.StrictMode>
         <ThemeProvider theme={theme}>
           <CssBaseline />
-          <Suspense fallback={'loading...'}>
+          <Suspense fallback={<LoadingPage renderType="whole" />}>
             <RouterProvider router={router} />
           </Suspense>
         </ThemeProvider>
