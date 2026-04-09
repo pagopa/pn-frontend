@@ -1,7 +1,8 @@
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 
 import { Box, Card, CardActionArea, CardContent, Grid, Typography } from '@mui/material';
-import { Chip } from '@pagopa/mui-italia';
+import Chip from '@mui/material/Chip';
+import { IllusAppIO } from '@pagopa-pn/pn-commons';
 
 import LoadingPageWrapper from '../components/LoadingPageWrapper/LoadingPageWrapper';
 import * as routes from '../navigation/routes.const';
@@ -16,19 +17,26 @@ const Onboarding: React.FC = () => {
 
   const cardsData = [
     {
-      title: 'Domicilio Digitale',
-      description: 'Configura e gestisci il tuo domicilio digitale.',
+      illustration: <IllusAppIO />,
+      title: 'Scelgo il meglio di SEND',
+      description:
+        'Attivi il domicilio digitale e risparmi i costi di notifica legati alle raccomandate.',
+      cta: 'Attiva il meglio di SEND',
       path: routes.ONBOARDING_DIGITAL_DOMICILE,
-      chip: { label: 'Consigliato', color: 'indaco' },
+      chip: { label: 'Consigliato', color: 'info' },
     },
     {
+      illustration: <IllusAppIO />,
       title: 'Messaggio Cortesia',
       description: 'Imposta i messaggi di cortesia per gli utenti.',
+      cta: 'Attiva il meglio di SEND',
       path: routes.ONBOARDING_COURTESY,
     },
     {
+      illustration: <IllusAppIO />,
       title: 'Integrazione IO',
       description: "Gestisci i servizi e notifiche tramite l'App IO.",
+      cta: 'Attiva il meglio di SEND',
       path: routes.ONBOARDING_IO,
     },
   ];
@@ -41,52 +49,59 @@ const Onboarding: React.FC = () => {
       <Box display="flex" justifyContent="center">
         <Box sx={{ width: { xs: '100%', lg: '760px' }, p: { xs: 2, lg: 0 } }}>
           {isRootMode && (
-            <Box sx={{ mb: 4 }}>
-              <Typography variant="h5" sx={{ mb: 3, fontWeight: 'bold' }}>
-                Seleziona il tipo di Onboarding
-              </Typography>
+            <>
+              <Box sx={{ my: 3 }}>
+                <Typography component="h1" variant="h4" mb={1}>
+                  Configura SEND
+                </Typography>
+                <Typography component="p" variant="body1">
+                  Ottieni il massimo e risparmi!
+                </Typography>
+              </Box>
+              <Box sx={{ mb: 3 }}>
+                <Grid container spacing={2}>
+                  {cardsData.map((card, index) => (
+                    <Grid item xs={12} sm={4} key={index}>
+                      <Card sx={{ height: '100%' }}>
+                        <CardActionArea
+                          onClick={() => navigate(card.path)}
+                          sx={{ height: '100%', p: 2 }}
+                        >
+                          <CardContent sx={{ p: 0 }}>
+                            <Box mb={1}>
+                              {card.illustration}
+                              <Typography variant="subtitle1" fontWeight="bold">
+                                {card.title}
+                              </Typography>
 
-              <Grid container spacing={2}>
-                {cardsData.map((card, index) => (
-                  <Grid item xs={12} sm={4} key={index}>
-                    <Card sx={{ height: '100%' }}>
-                      <CardActionArea
-                        onClick={() => navigate(card.path)}
-                        sx={{ height: '100%', p: 2 }}
-                      >
-                        <CardContent sx={{ p: 0 }}>
-                          {/* Questo Box allinea orizzontalmente il Titolo e la Chip (se c'è) */}
-                          <Box
-                            display="flex"
-                            justifyContent="space-between"
-                            alignItems="flex-start"
-                            mb={1}
-                          >
-                            <Typography variant="subtitle1" fontWeight="bold">
-                              {card.title}
+                              {card.chip && (
+                                <Chip
+                                  label={card.chip.label}
+                                  color={
+                                    card.chip.color as
+                                      | 'default'
+                                      | 'primary'
+                                      | 'secondary'
+                                      | 'error'
+                                      | 'info'
+                                      | 'success'
+                                      | 'warning'
+                                  }
+                                />
+                              )}
+                            </Box>
+
+                            <Typography variant="body2" color="text.secondary">
+                              {card.description}
                             </Typography>
-
-                            {/* INTERRUTTORE 2: Se la card ha una 'chip', allora disegnala! */}
-                            {card.chip && (
-                              <Chip
-                                label={card.chip.label}
-                                // Usiamo "as any" per evitare che TypeScript faccia capricci sui nomi dei colori
-                                color={card.chip.color as any}
-                                size="small"
-                              />
-                            )}
-                          </Box>
-
-                          <Typography variant="body2" color="text.secondary">
-                            {card.description}
-                          </Typography>
-                        </CardContent>
-                      </CardActionArea>
-                    </Card>
-                  </Grid>
-                ))}
-              </Grid>
-            </Box>
+                          </CardContent>
+                        </CardActionArea>
+                      </Card>
+                    </Grid>
+                  ))}
+                </Grid>
+              </Box>
+            </>
           )}
 
           {/* Il nostro "buco nero" dove appaiono i componenti figli (es. Integrazione IO) */}
