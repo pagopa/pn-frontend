@@ -29,6 +29,7 @@ beforeAll(async () => {
     ONE_IDENTITY_LOGIN_ENABLED: true,
     ONE_IDENTITY_CLIENT_ID: 'DFCUf4W3KHfKUl4USEVYrMgpMxvyKICHM_ZPiZ3ftm0',
     ONE_IDENTITY_BASE_URL: 'https://uat.oneid.pagopa.it',
+    SERCQ_SERVICE_STATEMENT_LINK: 'https://fake.sercq-service-statement.pagopa.it',
   });
   // mock translations
   vi.mock('react-i18next', () => ({

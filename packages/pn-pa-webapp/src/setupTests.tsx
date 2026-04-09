@@ -39,6 +39,7 @@ beforeAll(() => {
     DEVELOPER_API_DOCUMENTATION_LINK: 'https://test.api.pagopa.it',
     PHYSICAL_ADDRESS_LOOKUP: PhysicalAddressLookupConfig.ON,
     ACCESSIBILITY_LINK: 'https://accessibility-link.it',
+    SERCQ_SERVICE_STATEMENT_LINK: 'https://fake.sercq-service-statement.pagopa.it',
   });
   initStore(false);
   initAxiosClients();
