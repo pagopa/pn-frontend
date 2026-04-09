@@ -15,6 +15,7 @@ import {
   Typography,
 } from '@mui/material';
 import Chip from '@mui/material/Chip';
+import { useIsMobile } from '@pagopa-pn/pn-commons';
 import { IllusEmailValidation, IllusPaymentCompleted, LogoIOApp } from '@pagopa/mui-italia';
 
 import LoadingPageWrapper from '../components/LoadingPageWrapper/LoadingPageWrapper';
@@ -39,7 +40,7 @@ type Item = {
 
 type ElementCategory = 'send' | 'contacts' | 'io';
 
-type cardConfig = Array<{
+type CardConfig = Array<{
   illustration: React.ReactNode;
   title: string;
   description: React.ReactNode;
@@ -47,6 +48,39 @@ type cardConfig = Array<{
   path: string;
   chip?: { label: string; color: ChipColors };
 }>;
+
+const items: Record<ElementCategory, Array<Item>> = {
+  send: [
+    {
+      icon: <CheckRoundedIcon />,
+      text: 'Attivi il domicilio digitale e risparmi i costi di notifica legati alle raccomandate.',
+    },
+    {
+      icon: <CheckRoundedIcon />,
+      text: 'Ti avvisiamo alla ricezione di una notifica SEND via email e su IO.',
+    },
+  ],
+  contacts: [
+    {
+      icon: <CheckRoundedIcon />,
+      text: 'Ricevi avvisi via email, SMS e sull’app IO, così hai più possibilità di leggere in tempo la comunicazione ed evitare i costi di notifica legati alle raccomandate.',
+    },
+    {
+      icon: <ErrorOutlineOutlinedIcon />,
+      text: 'Se non apri la notifica SEND entro 5 giorni dalla ricezione, riceverai comunque una raccomandata con i relativi costi aggiuntivi.',
+    },
+  ],
+  io: [
+    {
+      icon: <CheckRoundedIcon />,
+      text: 'Ricevi avvisi e l’accesso alle comunicazioni a valore legale direttamente attraverso IO.',
+    },
+    {
+      icon: <ErrorOutlineOutlinedIcon />,
+      text: 'Se non apri la notifica SEND entro 5 giorni dalla ricezione, riceverai comunque una raccomandata con i relativi costi aggiuntivi.',
+    },
+  ],
+};
 
 const PaperContent = ({ items }: { items: Array<Item> }) => (
   <List disablePadding sx={{ display: 'flex', flexDirection: 'column' }}>
@@ -68,70 +102,39 @@ const PaperContent = ({ items }: { items: Array<Item> }) => (
   </List>
 );
 
+const cardsData: CardConfig = [
+  {
+    illustration: <IllusPaymentCompleted size={48} />,
+    title: 'Scelgo il meglio di SEND',
+    description: <PaperContent items={items.send} />,
+    cta: 'Attiva il meglio di SEND',
+    path: routes.ONBOARDING_DIGITAL_DOMICILE,
+    chip: { label: 'Consigliato', color: 'info' },
+  },
+  {
+    illustration: <IllusEmailValidation size={48} />,
+
+    title: 'Voglio solo gli avvisi',
+    description: <PaperContent items={items.contacts} />,
+    cta: 'Attiva solo gli avvisi',
+    path: routes.ONBOARDING_COURTESY,
+  },
+  {
+    illustration: <LogoIOApp size={48} color="default" title="Logo dell'app IO" />,
+    title: 'Preferisco attivare solo SEND sull’app IO',
+    description: <PaperContent items={items.io} />,
+    cta: 'Attiva SEND su IO',
+    path: routes.ONBOARDING_IO,
+  },
+];
+
 const Onboarding: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
+  const isMobile = useIsMobile();
+
   const isRootMode = location.pathname === routes.ONBOARDING;
   const loading = useAppSelector(contactsSelectors.selectLoading);
-
-  const items: Record<ElementCategory, Array<Item>> = {
-    send: [
-      {
-        icon: <CheckRoundedIcon />,
-        text: 'Attivi il domicilio digitale e risparmi i costi di notifica legati alle raccomandate.',
-      },
-      {
-        icon: <CheckRoundedIcon />,
-        text: 'Ti avvisiamo alla ricezione di una notifica SEND via email e su IO.',
-      },
-    ],
-    contacts: [
-      {
-        icon: <CheckRoundedIcon />,
-        text: 'Ricevi avvisi via email, SMS e sull’app IO, così hai più possibilità di leggere in tempo la comunicazione ed evitare i costi di notifica legati alle raccomandate.',
-      },
-      {
-        icon: <ErrorOutlineOutlinedIcon />,
-        text: 'Se non apri la notifica SEND entro 5 giorni dalla ricezione, riceverai comunque una raccomandata con i relativi costi aggiuntivi.',
-      },
-    ],
-    io: [
-      {
-        icon: <CheckRoundedIcon />,
-        text: 'Ricevi avvisi e l’accesso alle comunicazioni a valore legale direttamente attraverso IO.',
-      },
-      {
-        icon: <ErrorOutlineOutlinedIcon />,
-        text: 'Se non apri la notifica SEND entro 5 giorni dalla ricezione, riceverai comunque una raccomandata con i relativi costi aggiuntivi.',
-      },
-    ],
-  };
-
-  const cardsData: cardConfig = [
-    {
-      illustration: <IllusPaymentCompleted size={48} />,
-      title: 'Scelgo il meglio di SEND',
-      description: <PaperContent items={items.send} />,
-      cta: 'Attiva il meglio di SEND',
-      path: routes.ONBOARDING_DIGITAL_DOMICILE,
-      chip: { label: 'Consigliato', color: 'info' },
-    },
-    {
-      illustration: <IllusEmailValidation size={48} />,
-
-      title: 'Voglio solo gli avvisi',
-      description: <PaperContent items={items.contacts} />,
-      cta: 'Attiva solo gli avvisi',
-      path: routes.ONBOARDING_COURTESY,
-    },
-    {
-      illustration: <LogoIOApp size={48} color="default" title="Logo dell'app IO" />,
-      title: 'Preferisco attivare solo SEND sull’app IO',
-      description: <PaperContent items={items.io} />,
-      cta: 'Attiva SEND su IO',
-      path: routes.ONBOARDING_IO,
-    },
-  ];
 
   if (loading) {
     return <></>;
@@ -149,13 +152,20 @@ const Onboarding: React.FC = () => {
               <Typography component="p" variant="body1">
                 Ottieni il massimo e risparmi!
               </Typography>
-              <Grid container spacing={2} mt={1}>
+              <Grid
+                container
+                spacing={2}
+                wrap={isMobile ? 'wrap' : 'nowrap'}
+                component="ul"
+                sx={{
+                  listStyle: 'none',
+                  p: 0,
+                }}
+                mt={1}
+              >
                 {cardsData.map((card, index) => (
-                  <Grid item xs={12} sm={4} key={index}>
-                    <Paper
-                      elevation={0}
-                      sx={{ padding: 3, borderRadius: 1, alignItems: 'flex-start' }}
-                    >
+                  <Grid item component="li" xs={12} sm={4} key={index}>
+                    <Paper elevation={0} sx={{ padding: 3, borderRadius: 1 }}>
                       <Box mb={2}>{card.illustration}</Box>
                       <Typography
                         component="h2"
