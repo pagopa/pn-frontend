@@ -96,7 +96,11 @@ const PaperContent = ({ items }: { items: Array<Item> }) => (
         >
           {item.icon}
         </ListItemIcon>
-        <ListItemText primary={item.text} disableTypography sx={{ m: 0, color: '#555C70' }} />
+        <ListItemText
+          primary={item.text}
+          disableTypography
+          sx={{ m: 0, fontWeight: 400, fontSize: '0.875rem', color: '#555C70' }}
+        />{' '}
       </ListItem>
     ))}
   </List>
@@ -189,6 +193,7 @@ const Onboarding: React.FC = () => {
                         endIcon={<ArrowForwardRoundedIcon />}
                         variant="text"
                         sx={{ padding: 0, justifyContent: 'flex-start' }}
+                        size={isMobile ? 'large' : 'medium'}
                       >
                         {card.cta}
                       </Button>
