@@ -103,4 +103,10 @@ describe('test login page', () => {
       'fake-retrieval_id',
     ]);
   });
+
+  it('clear old rapidAccess params on login page with no URL param', () => {
+    storageRapidAccessOps.write([AppRouteParams.AAR, 'old-token']);
+    render(<Login />);
+    expect(storageRapidAccessOps.read()).toBeUndefined();
+  });
 });

@@ -46,6 +46,8 @@ const Login = () => {
 
   if (rapidAccess) {
     storageRapidAccessOps.write(rapidAccess);
+  } else {
+    storageRapidAccessOps.delete();
   }
 
   useEffect(() => {

@@ -1,11 +1,13 @@
 import { AppRouteParams, storageOpsBuilder } from '@pagopa-pn/pn-commons';
 
-const storageAarOps = storageOpsBuilder<string>(AppRouteParams.AAR, 'string', false);
+import { isIOSMobile } from './utils';
+
+const storageAarOps = storageOpsBuilder<string>(AppRouteParams.AAR, 'string', isIOSMobile());
 
 const storageRetrievalIdOps = storageOpsBuilder<string>(
   AppRouteParams.RETRIEVAL_ID,
   'string',
-  false
+  isIOSMobile()
 );
 
 export const storageRapidAccessOps = {

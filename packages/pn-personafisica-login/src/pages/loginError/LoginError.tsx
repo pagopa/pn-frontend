@@ -8,8 +8,10 @@ import { IllusError } from '@pagopa/mui-italia';
 import { PFLoginEventsType } from '../../models/PFLoginEventsType';
 import { ROUTE_LOGIN } from '../../navigation/routes.const';
 import PFLoginEventStrategyFactory from '../../utility/MixpanelUtils/PFLoginEventStrategyFactory';
+import { storageRapidAccessOps } from '../../utility/storage';
 
 const handleError = (queryParams: string, errorMessage: string) => {
+  storageRapidAccessOps.delete();
   if (process.env.NODE_ENV !== 'test') {
     const IDP = sessionStorage.getItem('IDP');
     PFLoginEventStrategyFactory.triggerEvent(PFLoginEventsType.SEND_LOGIN_FAILURE, {
