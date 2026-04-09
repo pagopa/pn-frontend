@@ -70,6 +70,7 @@ const Statistics = () => {
   const isSupportUser = useAppSelector(authSelectors.selectIsSupportUser);
 
   const cxId = loggedUserOrganizationParty.id;
+  const cxType = isSupportUser ? CxType.BS : CxType.PA;
 
   const getLastUpdateText = (): string => {
     if (statisticsData) {
@@ -98,7 +99,7 @@ const Statistics = () => {
     const params = {
       startDate: new Date(statisticsFilter.startDate),
       endDate: new Date(statisticsFilter.endDate),
-      cxType: isSupportUser ? CxType.BS : CxType.PA,
+      cxType,
       cxId,
     };
 
