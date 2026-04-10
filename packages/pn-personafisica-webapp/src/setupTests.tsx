@@ -42,6 +42,7 @@ beforeAll(() => {
     NOTIFICATION_CANCELLED_HELP_LINK: 'https://fake.notification-cancelled-help.pagopa.it',
     NOTIFICATION_COST_DETAILS_ASSISTANCE_LINK:
       'https://fake.notification-cost-details-assistance.pagopa.it',
+    SERCQ_SERVICE_STATEMENT_LINK: 'https://fake.sercq-service-statement.pagopa.it',
   });
   initStore(false);
   initAxiosClients();

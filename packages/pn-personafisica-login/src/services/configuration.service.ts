@@ -19,6 +19,7 @@ export interface LoginConfiguration {
   ONE_IDENTITY_LOGIN_ENABLED: boolean;
   ONE_IDENTITY_CLIENT_ID?: string;
   ONE_IDENTITY_BASE_URL: string;
+  SERCQ_SERVICE_STATEMENT_LINK: string;
 }
 
 class LoginConfigurationValidator extends Validator<LoginConfiguration> {
@@ -51,6 +52,7 @@ class LoginConfigurationValidator extends Validator<LoginConfiguration> {
         return null;
       });
     this.ruleFor('ONE_IDENTITY_BASE_URL').isString().isRequired();
+    this.ruleFor('SERCQ_SERVICE_STATEMENT_LINK').isString().isRequired();
   }
 }
 

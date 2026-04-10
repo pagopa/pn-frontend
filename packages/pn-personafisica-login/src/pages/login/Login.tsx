@@ -39,6 +39,7 @@ const Login = () => {
     PF_URL,
     IS_SMART_APP_BANNER_ENABLED,
     ACCESSIBILITY_LINK,
+    SERCQ_SERVICE_STATEMENT_LINK,
   } = getConfiguration();
   const privacyPolicyUrl = `${PF_URL}${PRIVACY_POLICY}`;
   const smartBannerHeight = IS_SMART_APP_BANNER_ENABLED ? 66 : 0;
@@ -94,6 +95,7 @@ const Login = () => {
         }}
         privacyPolicyHref={privacyPolicyUrl}
         accessibilityLink={ACCESSIBILITY_LINK}
+        sercqServiceStatementLink={SERCQ_SERVICE_STATEMENT_LINK}
         slotsProps={
           isMobile
             ? {
