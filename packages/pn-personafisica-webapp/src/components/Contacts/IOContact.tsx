@@ -15,7 +15,7 @@ import {
 } from '@pagopa-pn/pn-commons';
 
 import { PFEventsType } from '../../models/PFEventsType';
-import { AddressType, IOAllowedValues } from '../../models/contacts';
+import { AddressType, IOAllowedValues, IOContactStatus } from '../../models/contacts';
 import { disableIOAddress, enableIOAddress } from '../../redux/contact/actions';
 import { contactsSelectors } from '../../redux/contact/reducers';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
@@ -23,12 +23,6 @@ import { getConfiguration } from '../../services/configuration.service';
 import PFEventStrategyFactory from '../../utility/MixpanelUtils/PFEventStrategyFactory';
 import DeleteDialog from './DeleteDialog';
 import InformativeDialog from './InformativeDialog';
-
-enum IOContactStatus {
-  UNAVAILABLE = 'unavailable',
-  ENABLED = 'enabled',
-  DISABLED = 'disabled',
-}
 
 enum ModalType {
   INFORMATIVE = 'informative',

@@ -313,5 +313,66 @@
     "no-courtesy-no-sercq-send-title": "Non perderti le comunicazioni importanti ",
     "no-courtesy-no-sercq-send-description": "Aggiungi un indirizzo email per ricevere un avviso quando hai una nuova notifica su SEND.",
     "no-courtesy-no-sercq-send-cta": "Conferma la tua email"
+  },
+  "onboarding": {
+    "digital-domicile": {
+      "title": "Il meglio di SEND",
+      "choice": {
+        "title": "Attiva il domicilio digitale su SEND",
+        "description": "Riceverai le comunicazioni a valore legale su SEND, solo in digitale, ed eviterai l’invio di una raccomandata con i relativi costi aggiuntivi.",
+        "cta": "Attiva su SEND",
+        "pec": {
+          "description": "In alternativa, puoi decidere di ricevere le notifiche SEND al tuo indirizzo PEC. Potresti evitare così l’invio di una raccomandata con i relativi costi aggiuntivi.",
+          "cta": "Attiva su una PEC"
+        },
+        "img-alt-text": ""
+      },
+      "email": {
+        "title": "Associa un indirizzo email al domicilio digitale",
+        "description": "Riceverai un’email alla ricezione di ogni notifica SEND.",
+        "label": "Email",
+        "input": {
+          "label": "Indirizzo email"
+        },
+        "verify-cta": "Verifica email"
+      },
+      "io": {
+        "title": "Attiva SEND sull’app IO",
+        "description": "C’è una notifica SEND per te?  Riceverai un avviso su IO e potrai consultarla direttamente in app!",
+        "not-installed": {
+          "primary-cta": "Scarica l’app IO",
+          "refresh-cta": "Ho già scaricato e installato l’app"
+        },
+        "disabled": {
+          "primary-cta": "Attiva gli avvisi su IO"
+        },
+        "enabled": {
+          "title": "Hai già attivato SEND sull’app IO",
+          "primary-cta": "Continua"
+        },
+        "img-alt-text": ""
+      },
+      "feedback": {
+        "send": {
+          "title": "Hai attivato il domicilio digitale e gli avvisi",
+          "content": "Riceverai le notifiche SEND e i relativi avvisi sui canali che hai scelto."
+        },
+        "pec": {
+          "title": "L’attivazione del domicilio digitale è in corso",
+          "content": "La PEC che hai inserito è in fase di validazione. Una volta confermata, riceverai tutte le notifiche SEND all’indirizzo che hai scelto. Gli avvisi, invece, sono già attivi."
+        }
+      },
+      "steps": {
+        "choice": "Scegli un domicilio digitale",
+        "pec": "Inserisci la tua PEC",
+        "email": "Associa un indirizzo email",
+        "io": "Attiva gli avvisi su IO",
+        "summary": "Conferma l’attivazione"
+      },
+      "buttons": {
+        "continue-without-io": "Continua senza l’app IO",
+        "confirm-activation": "Conferma attivazione"
+      }
+    }
   }
 }
