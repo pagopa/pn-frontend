@@ -167,7 +167,8 @@
   },
   "roles": {
     "operator": "Referente operativo",
-    "admin": "Amministratore"
+    "admin": "Amministratore",
+    "support": "Supporto"
   },
   "attachments": {
     "remove-attachment": "Elimina allegato"
