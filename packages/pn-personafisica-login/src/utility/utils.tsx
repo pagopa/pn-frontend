@@ -12,4 +12,6 @@ export const shuffleList = (list: Array<any>) => {
 
 export const generateRandomUniqueString = () => uuidv4().replace(/-/g, '').slice(0, 20);
 
-export const isIOSMobile = (): boolean => /iPhone|iPod|iPad/.test(navigator.userAgent);
+export const isIOSMobile = (): boolean =>
+  /iPhone|iPod|iPad/.test(navigator.userAgent) ||
+  (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);

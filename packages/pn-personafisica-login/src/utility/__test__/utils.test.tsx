@@ -44,5 +44,39 @@ describe('utils test', () => {
       });
       expect(isIOSMobile()).toBe(false);
     });
+
+    it('should return true for iOS 13+ iPad (MacIntel platform with touch)', () => {
+      Object.defineProperty(navigator, 'userAgent', {
+        value:
+          'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0 Safari/605.1.15',
+        configurable: true,
+      });
+      Object.defineProperty(navigator, 'platform', {
+        value: 'MacIntel',
+        configurable: true,
+      });
+      Object.defineProperty(navigator, 'maxTouchPoints', {
+        value: 5,
+        configurable: true,
+      });
+      expect(isIOSMobile()).toBe(true);
+    });
+
+    it('should return false for macOS (MacIntel platform without touch)', () => {
+      Object.defineProperty(navigator, 'userAgent', {
+        value:
+          'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.0 Safari/605.1.15',
+        configurable: true,
+      });
+      Object.defineProperty(navigator, 'platform', {
+        value: 'MacIntel',
+        configurable: true,
+      });
+      Object.defineProperty(navigator, 'maxTouchPoints', {
+        value: 0,
+        configurable: true,
+      });
+      expect(isIOSMobile()).toBe(false);
+    });
   });
 });
