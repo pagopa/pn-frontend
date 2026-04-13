@@ -313,5 +313,31 @@
     "no-courtesy-no-sercq-send-title": "Do not miss important communications ",
     "no-courtesy-no-sercq-send-description": "Add an email address to receive a notification when you have a new notification on SEND.",
     "no-courtesy-no-sercq-send-cta": "Confirm your email"
+  },
+  "onboarding": {
+    "title": "Configure SEND",
+    "description": "Get the most and save!",
+    "cards": {
+      "send": {
+        "title": "I choose the best of SEND",
+        "cta": "Activate the best of SEND",
+        "label": "Recommended",
+        "item_1": "Activate your digital address and save on delivery times and costs associated with registered mail.",
+        "item_2": "We will notify you upon receipt of a SEND notification via email and on IO."
+      },
+      "contacts": {
+        "title": "I only want notifications",
+        "cta": "Activate only notifications",
+        "item_1": "Receive notifications via email, SMS, and on the IO app, so you have a better chance of reading the communication in time and avoiding delivery costs associated with registered mail.",
+        "item_2": "If you do not open the SEND notification within 5 days of receipt, you will still receive a registered mail with the relative additional costs."
+      },
+      "io": {
+        "title": "I prefer to activate only SEND on the IO app",
+        "cta": "Activate SEND on IO",
+        "label": "Recommended",
+        "item_1": "Receive courtesy notifications and access legally binding communications directly through IO.",
+        "item_2": "If you do not open the SEND notification within 5 days of receipt, you will still receive a registered mail with the relative additional costs."
+      }
+    }
   }
 }

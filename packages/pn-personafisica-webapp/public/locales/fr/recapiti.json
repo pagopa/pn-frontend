@@ -313,5 +313,31 @@
     "no-courtesy-no-sercq-send-title": "Recevez toutes les communications importantes ",
     "no-courtesy-no-sercq-send-description": "Ajoutez une adresse mail pour recevoir un avis lorsque vous avez une nouvelle notification sur SEND.",
     "no-courtesy-no-sercq-send-cta": "Confirmez votre email"
+  },
+  "onboarding": {
+    "title": "Configurez SEND",
+    "description": "Profitez-en au maximum et économisez !",
+    "cards": {
+      "send": {
+        "title": "Je choisis le meilleur de SEND",
+        "cta": "Activer le meilleur de SEND",
+        "label": "Recommandé",
+        "item_1": "Activez votre adresse numérique et économisez sur les frais d'envoi liés aux lettres recommandées.",
+        "item_2": "Nous vous informerons de la réception d'une notification SEND par e-mail et sur IO."
+      },
+      "contacts": {
+        "title": "Je veux seulement les avis",
+        "cta": "Activer uniquement les avis",
+        "item_1": "Recevez des avis par e-mail, SMS et sur l'application IO, afin d'avoir plus de chances de lire la communication à temps et d'éviter les frais d'envoi liés aux lettres recommandées.",
+        "item_2": "Si vous n'ouvrez pas la notification SEND dans les 5 jours suivant sa réception, vous recevrez tout de même une lettre recommandée avec les frais supplémentaires afférents."
+      },
+      "io": {
+        "title": "Je préfère activer uniquement SEND sur l'application IO",
+        "cta": "Activer SEND sur IO",
+        "label": "Recommandé",
+        "item_1": "Recevez des avis de courtoisie et accédez aux communications à valeur juridique directement via IO.",
+        "item_2": "Si vous n'ouvrez pas la notification SEND dans les 5 jours suivant sa réception, vous recevrez tout de même une lettre recommandée avec les frais supplémentaires afférents."
+      }
+    }
   }
 }

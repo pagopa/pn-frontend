@@ -313,5 +313,31 @@
     "no-courtesy-no-sercq-send-title": "Ne zamudite pomembnih sporočil ",
     "no-courtesy-no-sercq-send-description": "Dodajte e-poštni naslov, na katerega boste prejeli opozorilo, ko bo prispelo novo sporočilo na SEND.",
     "no-courtesy-no-sercq-send-cta": "Potrdite svoj e-poštni naslov"
+  },
+  "onboarding": {
+    "title": "Konfigurirajte SEND",
+    "description": "Izkoristite največ in prihranite!",
+    "cards": {
+      "send": {
+        "title": "Izberem najboljše od SEND",
+        "cta": "Aktivirajte najboljše od SEND",
+        "label": "Priporočeno",
+        "item_1": "Aktivirajte svoj digitalni naslov in prihranite pri stroških pošiljanja, povezanih s priporočeno pošto.",
+        "item_2": "O prejemu obvestila SEND vas bomo obvestili po e-pošti in v aplikaciji IO."
+      },
+      "contacts": {
+        "title": "Želim samo obvestila",
+        "cta": "Aktivirajte samo obvestila",
+        "item_1": "Prejemajte obvestila prek e-pošte, SMS-ov in v aplikaciji IO, da boste imeli več možnosti za pravočasno branje sporočila in se izognili stroškom pošiljanja priporočene pošte.",
+        "item_2": "Če obvestila SEND ne odprete v 5 dneh po prejemu, boste vseeno prejeli priporočeno pošto z ustreznimi dodatnimi stroški."
+      },
+      "io": {
+        "title": "Raje aktiviram samo SEND v aplikaciji IO",
+        "cta": "Aktivirajte SEND na IO",
+        "label": "Priporočeno",
+        "item_1": "Prejemajte opozorilna obvestila in dostopajte do pravno zavezujočih sporočil neposredno prek IO.",
+        "item_2": "Če obvestila SEND ne odprete v 5 dneh po prejemu, boste vseeno prejeli priporočeno pošto z ustreznimi dodatnimi stroški."
+      }
+    }
   }
 }
