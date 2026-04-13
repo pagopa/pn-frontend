@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
-import { Navigate, useNavigate } from 'react-router-dom';
+import { Navigate, useLocation, useNavigate } from 'react-router-dom';
 
 import { ExpandMore } from '@mui/icons-material';
 import {
@@ -21,13 +21,14 @@ import { goToLoginPortal } from '../navigation/navigation.utility';
 import { useAppSelector } from '../redux/hooks';
 import { RootState } from '../redux/store';
 import PFEventStrategyFactory from '../utility/MixpanelUtils/PFEventStrategyFactory';
-import { TPP_LANDING_UTM, injectUtmQueryParams } from '../utility/utm.utility';
+import { TPP_LANDING_UTM, buildSearchWithUtm } from '../utility/utm.utility';
 
 const TppLanding: React.FC = () => {
   const { t } = useTranslation('notifiche', { keyPrefix: 'tppLanding' });
   const rapidAccessParam = useRapidAccessParam() || [];
   const [param, value] = rapidAccessParam;
   const navigate = useNavigate();
+  const location = useLocation();
   const { sessionToken } = useAppSelector((state: RootState) => state.userState.user);
   const { loginProvider } = useAppSelector((state: RootState) => state.userState);
 
@@ -38,13 +39,18 @@ const TppLanding: React.FC = () => {
     if (!value) {
       return;
     }
-    injectUtmQueryParams(TPP_LANDING_UTM);
+
+    const { search: nextSearch } = buildSearchWithUtm(location.search, TPP_LANDING_UTM);
+
     PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_LANDING_PAGE_CLICK_ACCESS);
     if (sessionToken) {
-      // At this point `search` should include both retrievalId and UTMs
-      navigate({ pathname: '/', search: globalThis.location.search });
+      navigate({ pathname: '/', search: nextSearch });
     } else {
-      goToLoginPortal({ rapidAccess: [AppRouteParams.RETRIEVAL_ID, value], loginProvider });
+      goToLoginPortal({
+        rapidAccess: [AppRouteParams.RETRIEVAL_ID, value],
+        loginProvider,
+        search: nextSearch,
+      });
     }
   };
 

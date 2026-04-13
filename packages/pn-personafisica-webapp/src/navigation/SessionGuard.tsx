@@ -22,7 +22,7 @@ import { resetState } from '../redux/auth/reducers';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { RootState } from '../redux/store';
 import { getConfiguration } from '../services/configuration.service';
-import { AAR_UTM, injectUtmQueryParams } from '../utility/utm.utility';
+import { AAR_UTM, buildSearchWithUtm } from '../utility/utm.utility';
 import { goToLoginPortal } from './navigation.utility';
 import * as routes from './routes.const';
 
@@ -38,6 +38,11 @@ const SessionGuard = () => {
   const { t } = useTranslation(['common']);
   const { hasSpecificStatusError } = useErrors();
   const hasAnyForbiddenError = hasSpecificStatusError(403);
+
+  const aarSearchWithUtm =
+    rapidAccess?.[0] === AppRouteParams.AAR
+      ? buildSearchWithUtm(location.search, AAR_UTM, { avoidOverride: true })
+      : null;
 
   const [modalData, setModalData] = useState({
     open: false,
@@ -122,12 +127,31 @@ const SessionGuard = () => {
     }
 
     dispatch(resetState());
-    goToLoginPortal({ loginProvider });
+    goToLoginPortal({ loginProvider, search: location.search });
   };
 
   useEffect(() => {
-    if (rapidAccess?.[0] === AppRouteParams.AAR) {
-      injectUtmQueryParams(AAR_UTM, { avoidOverride: true });
+    if (aarSearchWithUtm?.changed) {
+      navigate(
+        {
+          pathname: location.pathname,
+          search: aarSearchWithUtm.search,
+          hash: location.hash,
+        },
+        { replace: true }
+      );
+    }
+  }, [
+    aarSearchWithUtm?.changed,
+    aarSearchWithUtm?.search,
+    location.pathname,
+    location.hash,
+    navigate,
+  ]);
+
+  useEffect(() => {
+    if (aarSearchWithUtm?.changed) {
+      return;
     }
     if (spidToken) {
       void performExchangeToken({ spidToken, rapidAccess });
@@ -142,14 +166,27 @@ const SessionGuard = () => {
     } else if (sessionToken) {
       sessionCheck(exp);
     } else {
-      goToLoginPortal({ rapidAccess, loginProvider });
+      goToLoginPortal({
+        rapidAccess,
+        loginProvider,
+        search: aarSearchWithUtm?.search ?? location.search,
+      });
     }
 
     return () => {
       AppResponsePublisher.error.unsubscribe('exchangeToken', manageUnforbiddenError);
       AppResponsePublisher.error.unsubscribe('exchangeTokenOneIdentity', manageUnforbiddenError);
     };
-  }, []);
+  }, [
+    aarSearchWithUtm?.changed,
+    aarSearchWithUtm?.search,
+    spidToken,
+    code,
+    state,
+    nonce,
+    redirectUri,
+    location.search,
+  ]);
 
   useEffect(() => {
     if (hasAnyForbiddenError) {

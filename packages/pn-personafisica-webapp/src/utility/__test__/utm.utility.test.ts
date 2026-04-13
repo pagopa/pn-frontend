@@ -1,107 +1,60 @@
-import { vi } from 'vitest';
+import { AAR_UTM, UTM_KEY, buildSearchWithUtm } from '../utm.utility';
 
-import { AAR_UTM, UTM_KEY, injectUtmQueryParams } from '../utm.utility';
+describe('buildSearchWithUtm', () => {
+  it('builds search with required UTM params when none are present', () => {
+    const result = buildSearchWithUtm('?generic_param=value', AAR_UTM);
 
-describe('injectUtmQueryParams', () => {
-  const replaceStateSpy = vi.spyOn(globalThis.history, 'replaceState');
+    expect(result.changed).toBe(true);
 
-  beforeEach(() => {
-    replaceStateSpy.mockClear();
-    globalThis.history.replaceState({}, '', '/');
+    const parsed = new URLSearchParams(result.search);
+
+    expect(parsed.get(UTM_KEY.CAMPAIGN)).toBe(AAR_UTM.utm_campaign);
+    expect(parsed.get(UTM_KEY.SOURCE)).toBe(AAR_UTM.utm_source);
+    expect(parsed.get(UTM_KEY.MEDIUM)).toBe(AAR_UTM.utm_medium);
+    expect(parsed.get('generic_param')).toBe('value');
   });
 
-  afterEach(() => {
-    globalThis.history.replaceState({}, '', '/');
-  });
-
-  it('injects utm params when no required utm key exists', () => {
-    globalThis.history.replaceState({}, '', '/?generic_param=value');
-    replaceStateSpy.mockClear();
-
-    const result = injectUtmQueryParams(AAR_UTM);
-
-    expect(result).toBe(true);
-    expect(replaceStateSpy).toHaveBeenCalledTimes(1);
-
-    const url = replaceStateSpy.mock.calls[0][2] as string;
-    const parsed = new URL(url, 'https://test.pagopa.it');
-
-    expect(parsed.searchParams.get(UTM_KEY.CAMPAIGN)).toBe(AAR_UTM.utm_campaign);
-    expect(parsed.searchParams.get(UTM_KEY.SOURCE)).toBe(AAR_UTM.utm_source);
-    expect(parsed.searchParams.get(UTM_KEY.MEDIUM)).toBe(AAR_UTM.utm_medium);
-    expect(parsed.searchParams.get('generic_param')).toBe('value');
-  });
-
-  it('overrides existing required utm params by default', () => {
-    globalThis.history.replaceState(
-      {},
-      '',
-      '/?utm_source=old-source&utm_campaign=old-campaign&generic_param=value'
+  it('builds search overriding existing required UTM params by default', () => {
+    const result = buildSearchWithUtm(
+      '?utm_source=old-source&utm_campaign=old-campaign&generic_param=value',
+      AAR_UTM
     );
-    replaceStateSpy.mockClear();
 
-    const result = injectUtmQueryParams(AAR_UTM);
+    expect(result.changed).toBe(true);
 
-    expect(result).toBe(true);
-    expect(replaceStateSpy).toHaveBeenCalledTimes(1);
+    const parsed = new URLSearchParams(result.search);
 
-    const url = replaceStateSpy.mock.calls[0][2] as string;
-    const parsed = new URL(url, 'https://test.pagopa.it');
-
-    expect(parsed.searchParams.get(UTM_KEY.CAMPAIGN)).toBe(AAR_UTM[UTM_KEY.CAMPAIGN]);
-    expect(parsed.searchParams.get(UTM_KEY.SOURCE)).toBe(AAR_UTM[UTM_KEY.SOURCE]);
-    expect(parsed.searchParams.get(UTM_KEY.MEDIUM)).toBe(AAR_UTM[UTM_KEY.MEDIUM]);
-    expect(parsed.searchParams.get('generic_param')).toBe('value');
+    expect(parsed.get(UTM_KEY.CAMPAIGN)).toBe(AAR_UTM[UTM_KEY.CAMPAIGN]);
+    expect(parsed.get(UTM_KEY.SOURCE)).toBe(AAR_UTM[UTM_KEY.SOURCE]);
+    expect(parsed.get(UTM_KEY.MEDIUM)).toBe(AAR_UTM[UTM_KEY.MEDIUM]);
+    expect(parsed.get('generic_param')).toBe('value');
   });
 
-  it('does nothing when any required utm key is already present and avoidOverride is true', () => {
-    globalThis.history.replaceState({}, '', '/?utm_source=source&generic_param=value');
-    replaceStateSpy.mockClear();
+  it('returns search unchanged when any required UTM param is already present and avoidOverride is true', () => {
+    const currentSearch = '?utm_source=source&generic_param=value';
 
-    const startingUrl = globalThis.location.href;
+    const result = buildSearchWithUtm(currentSearch, AAR_UTM, { avoidOverride: true });
 
-    const result = injectUtmQueryParams(AAR_UTM, { avoidOverride: true });
-
-    expect(result).toBe(false);
-    expect(replaceStateSpy).not.toHaveBeenCalled();
-    expect(globalThis.location.href).toBe(startingUrl);
+    expect(result.changed).toBe(false);
+    expect(result.search).toBe(currentSearch);
   });
 
-  it('preserves hash when updating the url', () => {
-    globalThis.history.replaceState({}, '', '/?generic_param=value#hash');
-    replaceStateSpy.mockClear();
-
-    const result = injectUtmQueryParams(AAR_UTM);
-
-    expect(result).toBe(true);
-
-    const url = replaceStateSpy.mock.calls[0][2] as string;
-    const parsed = new URL(url, 'https://test.pagopa.it');
-
-    expect(parsed.hash).toBe('#hash');
-  });
-
-  it('injects optional utm_* params together with required ones', () => {
-    globalThis.history.replaceState({}, '', '/?generic_param=value');
-    replaceStateSpy.mockClear();
-
-    const result = injectUtmQueryParams({
+  it('builds search with optional utm_* params together with required ones', () => {
+    const result = buildSearchWithUtm('?generic_param=value', {
       ...AAR_UTM,
       utm_content: 'hero-banner',
       utm_term: 'send',
     });
 
-    expect(result).toBe(true);
-    expect(replaceStateSpy).toHaveBeenCalledTimes(1);
+    expect(result.changed).toBe(true);
 
-    const url = replaceStateSpy.mock.calls[0][2] as string;
-    const parsed = new URL(url, 'https://test.pagopa.it');
+    const parsed = new URLSearchParams(result.search);
 
-    expect(parsed.searchParams.get(UTM_KEY.CAMPAIGN)).toBe(AAR_UTM[UTM_KEY.CAMPAIGN]);
-    expect(parsed.searchParams.get(UTM_KEY.SOURCE)).toBe(AAR_UTM[UTM_KEY.SOURCE]);
-    expect(parsed.searchParams.get(UTM_KEY.MEDIUM)).toBe(AAR_UTM[UTM_KEY.MEDIUM]);
-    expect(parsed.searchParams.get('utm_content')).toBe('hero-banner');
-    expect(parsed.searchParams.get('utm_term')).toBe('send');
-    expect(parsed.searchParams.get('generic_param')).toBe('value');
+    expect(parsed.get(UTM_KEY.CAMPAIGN)).toBe(AAR_UTM[UTM_KEY.CAMPAIGN]);
+    expect(parsed.get(UTM_KEY.SOURCE)).toBe(AAR_UTM[UTM_KEY.SOURCE]);
+    expect(parsed.get(UTM_KEY.MEDIUM)).toBe(AAR_UTM[UTM_KEY.MEDIUM]);
+    expect(parsed.get('utm_content')).toBe('hero-banner');
+    expect(parsed.get('utm_term')).toBe('send');
+    expect(parsed.get('generic_param')).toBe('value');
   });
 });

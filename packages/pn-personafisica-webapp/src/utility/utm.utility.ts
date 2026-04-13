@@ -25,19 +25,22 @@ export const TPP_LANDING_UTM: UtmParams = {
   [UTM_KEY.MEDIUM]: 'website',
 };
 
-export function injectUtmQueryParams(
+export function buildSearchWithUtm(
+  currentSearch: string,
   utm: UtmParams,
   options?: { avoidOverride?: boolean }
-): boolean {
-  const { pathname, search, hash } = globalThis.location;
-  const params = new URLSearchParams(search);
-
+): { search: string; changed: boolean } {
+  const params = new URLSearchParams(currentSearch);
   const avoidOverride = options?.avoidOverride ?? false;
-  const hasAnyUtm = UTM_KEYS.some((k) => params.has(k));
+
+  const hasAnyRequiredUtm = UTM_KEYS.some((k) => params.has(k));
 
   // If required UTM params are already present and avoidOverride is true, do nothing
-  if (avoidOverride && hasAnyUtm) {
-    return false;
+  if (avoidOverride && hasAnyRequiredUtm) {
+    return {
+      search: currentSearch,
+      changed: false,
+    };
   }
 
   // set required keys
@@ -52,11 +55,11 @@ export function injectUtmQueryParams(
     }
   }
 
-  const newSearch = params.toString();
-  const newUrl = `${pathname}?${newSearch}${hash ?? ''}`;
+  const nextSearch = params.toString();
+  const normalizedNextSearch = nextSearch ? `?${nextSearch}` : '';
 
-  // Replace current URL without reloading to let Mixpanel capture UTMs
-  globalThis.history.replaceState(globalThis.history.state, '', newUrl);
-
-  return true;
+  return {
+    search: normalizedNextSearch,
+    changed: normalizedNextSearch !== currentSearch,
+  };
 }

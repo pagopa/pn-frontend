@@ -26,7 +26,6 @@ describe('TppLanding page', () => {
 
   afterEach(() => {
     vi.clearAllMocks();
-    globalThis.history.replaceState({}, '', '/');
     Object.defineProperty(globalThis, 'open', { configurable: true, value: original });
   });
 
@@ -108,13 +107,8 @@ describe('TppLanding page', () => {
       mockRetrievalId,
     ]);
 
-    globalThis.history.replaceState(
-      {},
-      '',
-      `${routes.TPP_LANDING}?${AppRouteParams.RETRIEVAL_ID}=${mockRetrievalId}`
-    );
-
     const { getByTestId, router } = render(<TppLanding />, {
+      route: `${routes.TPP_LANDING}?${AppRouteParams.RETRIEVAL_ID}=${mockRetrievalId}`,
       preloadedState: {
         userState: {
           user: userResponse,
@@ -143,13 +137,9 @@ describe('TppLanding page', () => {
       mockRetrievalId,
     ]);
 
-    globalThis.history.replaceState(
-      {},
-      '',
-      `${routes.TPP_LANDING}?${AppRouteParams.RETRIEVAL_ID}=${mockRetrievalId}`
-    );
-
-    const { getByTestId } = render(<TppLanding />);
+    const { getByTestId } = render(<TppLanding />, {
+      route: `${routes.TPP_LANDING}?${AppRouteParams.RETRIEVAL_ID}=${mockRetrievalId}`,
+    });
 
     const accessButton = getByTestId('accessButton');
     expect(accessButton).toBeEnabled();
@@ -199,21 +189,17 @@ describe('TppLanding page', () => {
     });
   });
 
-  it('should not inject landing UTM params on first render', () => {
+  it('should not add landing UTM params on first render', () => {
     vi.spyOn(useRapidAccessParamHook, 'useRapidAccessParam').mockReturnValue([
       AppRouteParams.RETRIEVAL_ID,
       mockRetrievalId,
     ]);
 
-    globalThis.history.replaceState(
-      {},
-      '',
-      `${routes.TPP_LANDING}?${AppRouteParams.RETRIEVAL_ID}=${mockRetrievalId}`
-    );
+    const { router } = render(<TppLanding />, {
+      route: `${routes.TPP_LANDING}?${AppRouteParams.RETRIEVAL_ID}=${mockRetrievalId}`,
+    });
 
-    render(<TppLanding />);
-
-    const sp = new URLSearchParams(globalThis.location.search);
+    const sp = new URLSearchParams(router.state.location.search);
 
     expect(sp.get(AppRouteParams.RETRIEVAL_ID)).toBe(mockRetrievalId);
     expect(sp.get(UTM_KEY.CAMPAIGN)).toBeNull();
@@ -227,13 +213,8 @@ describe('TppLanding page', () => {
       mockRetrievalId,
     ]);
 
-    globalThis.history.replaceState(
-      {},
-      '',
-      `${routes.TPP_LANDING}?${AppRouteParams.RETRIEVAL_ID}=${mockRetrievalId}&${UTM_KEY.SOURCE}=already_present`
-    );
-
     const { getByTestId, router } = render(<TppLanding />, {
+      route: `${routes.TPP_LANDING}?${AppRouteParams.RETRIEVAL_ID}=${mockRetrievalId}&${UTM_KEY.SOURCE}=already_present`,
       preloadedState: {
         userState: {
           user: userResponse,

@@ -28,7 +28,6 @@ describe('Tests navigation utility methods', () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
-    globalThis.history.replaceState({}, '', '/');
   });
 
   afterAll((): void => {
@@ -42,15 +41,10 @@ describe('Tests navigation utility methods', () => {
   });
 
   it('goToLoginPortal - aar (preserves only utm_*)', () => {
-    globalThis.history.replaceState(
-      {},
-      '',
-      '/?utm_source=s&utm_medium=m&utm_campaign=c&invalid_param=value'
-    );
-
     goToLoginPortal({
       rapidAccess: [AppRouteParams.AAR, 'fake-aar-token'],
       loginProvider: LoginProvider.SPIDHUB,
+      search: '?utm_source=s&utm_medium=m&utm_campaign=c&invalid_param=value',
     });
 
     expect(mockOpenFn).toHaveBeenCalledTimes(1);
@@ -67,15 +61,10 @@ describe('Tests navigation utility methods', () => {
   });
 
   it('goToLoginPortal - retrievalId (preserves only utm_*)', () => {
-    globalThis.history.replaceState(
-      {},
-      '',
-      '/?utm_source=s&utm_medium=m&utm_campaign=c&invalid_param=value'
-    );
-
     goToLoginPortal({
       rapidAccess: [AppRouteParams.RETRIEVAL_ID, 'fake-id'],
       loginProvider: LoginProvider.SPIDHUB,
+      search: '?utm_source=s&utm_medium=m&utm_campaign=c&invalid_param=value',
     });
 
     expect(mockOpenFn).toHaveBeenCalledTimes(1);

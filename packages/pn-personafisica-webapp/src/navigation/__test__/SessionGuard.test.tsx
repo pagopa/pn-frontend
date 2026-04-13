@@ -39,8 +39,6 @@ describe('SessionGuard Component', async () => {
   afterEach(() => {
     mock.reset();
     vi.clearAllMocks();
-    globalThis.history.replaceState({}, '', '/');
-    globalThis.location.hash = '';
   });
 
   afterAll(() => {
@@ -360,7 +358,9 @@ describe('SessionGuard Component', async () => {
       render(<Guard />, { route: `/?${AppRouteParams.AAR}=mocked-qr-code` });
     });
 
-    expect(mockOpenFn).toHaveBeenCalledTimes(1);
+    await waitFor(() => {
+      expect(mockOpenFn).toHaveBeenCalledTimes(1);
+    });
 
     const [redirectUrl, target] = mockOpenFn.mock.calls[0];
     expect(target).toBe('_self');
