@@ -17,12 +17,14 @@ import {
   NotificationDetailTableRow,
   NotificationDetailTimeline,
   NotificationDocumentType,
+  NotificationFeePolicy,
   NotificationPaymentRecipient,
   NotificationRelatedDowntimes,
-  NotificationStatus,
+  PagoPaIntegrationMode,
   PaymentAttachmentSName,
   PaymentDetails,
   PnBreadcrumb,
+  StatusHistoryParser,
   TitleBox,
   appStateActions,
   dateIsLessThan10Years,
@@ -37,6 +39,7 @@ import { MIAlert } from '@pagopa/mui-italia';
 
 import DomicileBanner from '../components/DomicileBanner/DomicileBanner';
 import LoadingPageWrapper from '../components/LoadingPageWrapper/LoadingPageWrapper';
+import { NotificationCostBanner } from '../components/Notifications/NotificationCostBanner';
 import { PNRole } from '../models/User';
 import { ContactSource } from '../models/contacts';
 import * as routes from '../navigation/routes.const';
@@ -61,6 +64,7 @@ type LocationState = {
   fromQrCode?: boolean; // indicates whether the user arrived to the notification detail page from the QR code
 };
 
+// eslint-disable-next-line complexity
 const NotificationDetail = () => {
   const { id, mandateId } = useParams();
   const location = useLocation();
@@ -142,6 +146,45 @@ const NotificationDetail = () => {
 
   const checkIfUserHasPayments: boolean =
     !!currentRecipient.payments && currentRecipient.payments.length > 0;
+
+  const canManageContacts = userHasAdminPermissions && !currentUser.hasGroup;
+
+  const historyParser = useMemo(
+    () => StatusHistoryParser.parse(notification.notificationStatusHistory),
+    [notification.notificationStatusHistory]
+  );
+  const deliveryOutcome = useMemo(() => historyParser.resolveDeliveryOutcome(), [historyParser]);
+
+  const isBannerVisible = !mandateId && !isCancelledOrCancelling;
+
+  const isNotificationCostBanner =
+    isBannerVisible &&
+    notification.notificationFeePolicy === NotificationFeePolicy.DeliveryMode &&
+    notification.pagoPaIntMode === PagoPaIntegrationMode.Async &&
+    notification.recipients.length === 1;
+
+  const banner = useMemo(() => {
+    if (isNotificationCostBanner) {
+      return (
+        <NotificationCostBanner
+          deliveryOutcome={deliveryOutcome}
+          notificationCost={notification.notificationCostDetails}
+          canManageContacts={canManageContacts}
+        />
+      );
+    }
+
+    return canManageContacts && isBannerVisible && historyParser.hasViewedStatus() ? (
+      <DomicileBanner source={ContactSource.DETTAGLIO_NOTIFICA} />
+    ) : null;
+  }, [
+    canManageContacts,
+    deliveryOutcome,
+    historyParser,
+    isNotificationCostBanner,
+    isBannerVisible,
+    notification.notificationCostDetails,
+  ]);
 
   const showInfoMessageIfRetryAfterOrDownload = (response: {
     url: string;
@@ -281,7 +324,7 @@ const NotificationDetail = () => {
           : t('detail.acts_files.not_downloadable_aar', { ns: 'notifiche' });
       }
     },
-    [isCancelled, notification.documentsAvailable]
+    [isCancelledOrCancelling, notification.documentsAvailable, notification.sentAt]
   );
 
   const fetchReceivedNotification = useCallback(() => {
@@ -393,12 +436,13 @@ const NotificationDetail = () => {
     </Box>
   );
 
-  const visibleDomicileBanner = () =>
-    userHasAdminPermissions &&
-    !currentUser.hasGroup &&
-    !mandateId &&
-    notification.notificationStatusHistory.some(
-      (history) => history.status === NotificationStatus.VIEWED
+  const pecUnreachableAlert = isNotificationCostBanner &&
+    historyParser.hasSimpleRegisteredLetter() && (
+      <MIAlert
+        data-testid="pecUnreachableAlertText"
+        severity="warning"
+        description={t('detail.pec-unreachable', { ns: 'notifiche' })}
+      />
     );
 
   return (
@@ -418,10 +462,8 @@ const NotificationDetail = () => {
           {isMobile && (
             <>
               {breadcrumb}
+              {pecUnreachableAlert}
               {cancelledAlert}
-              {visibleDomicileBanner() && (
-                <DomicileBanner source={ContactSource.DETTAGLIO_NOTIFICA} />
-              )}
             </>
           )}
           <Grid
@@ -431,11 +473,10 @@ const NotificationDetail = () => {
           >
             <Grid item lg={7} xs={12} sx={{ p: { xs: 0, lg: 3 } }}>
               {!isMobile && breadcrumb}
-              {!isMobile && visibleDomicileBanner() && (
-                <DomicileBanner source={ContactSource.DETTAGLIO_NOTIFICA} />
-              )}
               <Stack spacing={3}>
                 {!isMobile && cancelledAlert}
+                {!isMobile && pecUnreachableAlert}
+                {!isMobile && banner}
                 <NotificationDetailTable rows={detailTableRows} />
                 <Paper sx={{ p: 3 }} elevation={0}>
                   <NotificationDetailDocuments
@@ -508,6 +549,7 @@ const NotificationDetail = () => {
               </Stack>
             </Grid>
             <Grid item lg={5} xs={12}>
+              {isMobile && banner}
               <Box
                 component="section"
                 sx={{ backgroundColor: 'white', height: '100%', p: 3, pb: { xs: 0, lg: 3 } }}
