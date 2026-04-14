@@ -126,9 +126,13 @@ const Notifiche = () => {
         ? t('filters.loading_completed_with_results')
         : t('filters.loading_completed_no_results');
 
-    setTimeout(() => {
+    const timeoutId = setTimeout(() => {
       publishEvent({ message: msg });
     }, 800);
+
+    return () => {
+      clearTimeout(timeoutId);
+    };
   }, [loading, notifications.length]);
 
   return (

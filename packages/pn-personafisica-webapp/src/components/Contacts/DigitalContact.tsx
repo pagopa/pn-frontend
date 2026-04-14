@@ -31,6 +31,7 @@ import { ButtonNaked } from '@pagopa/mui-italia';
 import { ChannelType } from '../../models/contacts';
 import {
   emailValidationSchema,
+  getSemanticTextFieldProps,
   pecValidationSchema,
   phoneValidationSchema,
 } from '../../utility/contacts.utility';
@@ -128,25 +129,7 @@ const DigitalContact = forwardRef<{ toggleEdit: () => void }, Props>(
       },
     });
 
-    // Semantic/native input attributes derived from channel type.
-    const getSemanticTextFieldProps = (): Partial<TextFieldProps> => {
-      if (channelType === ChannelType.EMAIL || channelType === ChannelType.PEC) {
-        return {
-          type: 'email',
-          autoComplete: 'email',
-        };
-      }
-      if (channelType === ChannelType.SMS) {
-        return {
-          type: 'tel',
-          autoComplete: 'tel-national',
-        };
-      }
-
-      return {};
-    };
-
-    const semanticTextFieldProps = getSemanticTextFieldProps();
+    const semanticTextFieldProps = getSemanticTextFieldProps(channelType);
 
     const handleChangeTouched = async (e: ChangeEvent) => {
       formik.handleChange(e);
