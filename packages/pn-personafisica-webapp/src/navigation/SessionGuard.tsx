@@ -131,28 +131,6 @@ const SessionGuard = () => {
   };
 
   useEffect(() => {
-    if (aarSearchWithUtm?.changed) {
-      navigate(
-        {
-          pathname: location.pathname,
-          search: aarSearchWithUtm.search,
-          hash: location.hash,
-        },
-        { replace: true }
-      );
-    }
-  }, [
-    aarSearchWithUtm?.changed,
-    aarSearchWithUtm?.search,
-    location.pathname,
-    location.hash,
-    navigate,
-  ]);
-
-  useEffect(() => {
-    if (aarSearchWithUtm?.changed) {
-      return;
-    }
     if (spidToken) {
       void performExchangeToken({ spidToken, rapidAccess });
     } else if (code && state && nonce && redirectUri) {
@@ -165,11 +143,17 @@ const SessionGuard = () => {
       });
     } else if (sessionToken) {
       sessionCheck(exp);
+      if (aarSearchWithUtm) {
+        navigate(
+          { pathname: location.pathname, search: aarSearchWithUtm, hash: location.hash },
+          { replace: true }
+        );
+      }
     } else {
       goToLoginPortal({
         rapidAccess,
         loginProvider,
-        search: aarSearchWithUtm?.search ?? location.search,
+        search: aarSearchWithUtm ?? location.search,
       });
     }
 
@@ -177,16 +161,7 @@ const SessionGuard = () => {
       AppResponsePublisher.error.unsubscribe('exchangeToken', manageUnforbiddenError);
       AppResponsePublisher.error.unsubscribe('exchangeTokenOneIdentity', manageUnforbiddenError);
     };
-  }, [
-    aarSearchWithUtm?.changed,
-    aarSearchWithUtm?.search,
-    spidToken,
-    code,
-    state,
-    nonce,
-    redirectUri,
-    location.search,
-  ]);
+  }, []);
 
   useEffect(() => {
     if (hasAnyForbiddenError) {

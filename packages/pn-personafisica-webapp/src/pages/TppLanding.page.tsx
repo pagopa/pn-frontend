@@ -40,7 +40,7 @@ const TppLanding: React.FC = () => {
       return;
     }
 
-    const { search: nextSearch } = buildSearchWithUtm(location.search, TPP_LANDING_UTM);
+    const nextSearch = buildSearchWithUtm(location.search, TPP_LANDING_UTM);
 
     PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_LANDING_PAGE_CLICK_ACCESS);
     if (sessionToken) {

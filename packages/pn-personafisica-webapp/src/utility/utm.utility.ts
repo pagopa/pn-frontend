@@ -29,7 +29,7 @@ export function buildSearchWithUtm(
   currentSearch: string,
   utm: UtmParams,
   options?: { avoidOverride?: boolean }
-): { search: string; changed: boolean } {
+): string {
   const params = new URLSearchParams(currentSearch);
   const avoidOverride = options?.avoidOverride ?? false;
 
@@ -37,10 +37,7 @@ export function buildSearchWithUtm(
 
   // If required UTM params are already present and avoidOverride is true, do nothing
   if (avoidOverride && hasAnyRequiredUtm) {
-    return {
-      search: currentSearch,
-      changed: false,
-    };
+    return currentSearch;
   }
 
   // set required keys
@@ -56,10 +53,6 @@ export function buildSearchWithUtm(
   }
 
   const nextSearch = params.toString();
-  const normalizedNextSearch = nextSearch ? `?${nextSearch}` : '';
 
-  return {
-    search: normalizedNextSearch,
-    changed: normalizedNextSearch !== currentSearch,
-  };
+  return nextSearch ? `?${nextSearch}` : '';
 }

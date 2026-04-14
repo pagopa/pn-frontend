@@ -4,9 +4,7 @@ describe('buildSearchWithUtm', () => {
   it('builds search with required UTM params when none are present', () => {
     const result = buildSearchWithUtm('?generic_param=value', AAR_UTM);
 
-    expect(result.changed).toBe(true);
-
-    const parsed = new URLSearchParams(result.search);
+    const parsed = new URLSearchParams(result);
 
     expect(parsed.get(UTM_KEY.CAMPAIGN)).toBe(AAR_UTM.utm_campaign);
     expect(parsed.get(UTM_KEY.SOURCE)).toBe(AAR_UTM.utm_source);
@@ -20,9 +18,7 @@ describe('buildSearchWithUtm', () => {
       AAR_UTM
     );
 
-    expect(result.changed).toBe(true);
-
-    const parsed = new URLSearchParams(result.search);
+    const parsed = new URLSearchParams(result);
 
     expect(parsed.get(UTM_KEY.CAMPAIGN)).toBe(AAR_UTM[UTM_KEY.CAMPAIGN]);
     expect(parsed.get(UTM_KEY.SOURCE)).toBe(AAR_UTM[UTM_KEY.SOURCE]);
@@ -35,8 +31,7 @@ describe('buildSearchWithUtm', () => {
 
     const result = buildSearchWithUtm(currentSearch, AAR_UTM, { avoidOverride: true });
 
-    expect(result.changed).toBe(false);
-    expect(result.search).toBe(currentSearch);
+    expect(result).toBe(currentSearch);
   });
 
   it('builds search with optional utm_* params together with required ones', () => {
@@ -46,9 +41,7 @@ describe('buildSearchWithUtm', () => {
       utm_term: 'send',
     });
 
-    expect(result.changed).toBe(true);
-
-    const parsed = new URLSearchParams(result.search);
+    const parsed = new URLSearchParams(result);
 
     expect(parsed.get(UTM_KEY.CAMPAIGN)).toBe(AAR_UTM[UTM_KEY.CAMPAIGN]);
     expect(parsed.get(UTM_KEY.SOURCE)).toBe(AAR_UTM[UTM_KEY.SOURCE]);
