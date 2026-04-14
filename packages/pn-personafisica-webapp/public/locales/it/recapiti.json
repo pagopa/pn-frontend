@@ -338,6 +338,7 @@
         "item_1": "Ricevi avvisi e l’accesso alle comunicazioni a valore legale direttamente attraverso IO.",
         "item_2": "Se non apri la notifica SEND entro 5 giorni dalla ricezione, riceverai comunque una raccomandata con i relativi costi aggiuntivi."
       }
-    }
+    },
+    "exit-flow": "Salta e vai alle tue notifiche"
   }
 }

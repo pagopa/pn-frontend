@@ -338,6 +338,7 @@
         "item_1": "Prejemajte opozorilna obvestila in dostopajte do pravno zavezujočih sporočil neposredno prek IO.",
         "item_2": "Če obvestila SEND ne odprete v 5 dneh po prejemu, boste vseeno prejeli priporočeno pošto z ustreznimi dodatnimi stroški."
       }
-    }
+    },
+    "exit-flow": "Preskoči in pojdi na svoja obvestila"
   }
 }

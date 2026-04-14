@@ -338,6 +338,7 @@
         "item_1": "Erhalten Sie Höflichkeitsmitteilungen und Zugriff auf rechtliche Mitteilungen direkt über IO.",
         "item_2": "Wenn Sie die SEND-Benachrichtigung nicht innerhalb von 5 Tagen nach Erhalt öffnen, erhalten Sie dennoch ein Einschreiben mit den entsprechenden Zusatzkosten."
       }
-    }
+    },
+    "exit-flow": "Überspringen und zu deinen Zustellungen gehen"
   }
 }

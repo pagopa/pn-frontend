@@ -338,6 +338,7 @@
         "item_1": "Receive courtesy notifications and access legally binding communications directly through IO.",
         "item_2": "If you do not open the SEND notification within 5 days of receipt, you will still receive a registered mail with the relative additional costs."
       }
-    }
+    },
+    "exit-flow": "Skip and go to your notifications"
   }
 }

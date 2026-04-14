@@ -338,6 +338,7 @@
         "item_1": "Recevez des avis de courtoisie et accédez aux communications à valeur juridique directement via IO.",
         "item_2": "Si vous n'ouvrez pas la notification SEND dans les 5 jours suivant sa réception, vous recevrez tout de même une lettre recommandée avec les frais supplémentaires afférents."
       }
-    }
+    },
+    "exit-flow": "Passez et accédez à vos notifications"
   }
 }

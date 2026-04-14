@@ -8,13 +8,13 @@ import ErrorOutlineOutlinedIcon from '@mui/icons-material/ErrorOutlineOutlined';
 import {
   Box,
   Button,
-  Grid,
   List,
   ListItem,
   ListItemIcon,
   ListItemText,
   Paper,
   Skeleton,
+  Stack,
   Typography,
 } from '@mui/material';
 import Chip from '@mui/material/Chip';
@@ -79,10 +79,7 @@ const PaperContent = ({ items }: { items: Array<Item> }) => (
 const OnboardingSkeleton = () => {
   const isMobile = useIsMobile();
   return (
-    // aria-live e aria-busy avvisano lo screen reader che stiamo caricando
-    // 1. Manteniamo il contenitore esterno identico all'originale
     <Box display="flex" justifyContent="center" aria-live="polite" aria-busy="true">
-      {/* Testo invisibile per l'accessibilità (Screen Reader) */}
       <Typography
         sx={{
           position: 'absolute',
@@ -102,9 +99,9 @@ const OnboardingSkeleton = () => {
         <Skeleton variant="text" width={250} height={50} />
         <Skeleton variant="text" width={180} height={24} sx={{ mb: 1 }} />
 
-        <Grid container spacing={2} wrap={isMobile ? 'wrap' : 'nowrap'} mt={1}>
+        <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2} mt={1}>
           {[1, 2, 3].map((index) => (
-            <Grid item xs={12} sm={4} key={`skeleton-card-${index}`}>
+            <Box key={`skeleton-card-${index}`} sx={{ flex: 1 }}>
               <Paper elevation={0} sx={{ padding: 3, borderRadius: 1 }}>
                 <Box mb={2}>
                   <Skeleton variant="circular" width={48} height={48} />
@@ -118,9 +115,9 @@ const OnboardingSkeleton = () => {
                 </Box>
                 <Skeleton variant="text" width="60%" height={isMobile ? 42 : 36} />
               </Paper>
-            </Grid>
+            </Box>
           ))}
-        </Grid>
+        </Stack>
       </Box>
     </Box>
   );
@@ -177,7 +174,7 @@ const Onboarding: React.FC = () => {
 
   const cardsData: CardConfig = [
     {
-      illustration: <IllusPaymentCompleted size={48} />,
+      illustration: <IllusPaymentCompleted size={32} aria-hidden="true" />,
       title: t('onboarding.cards.send.title'),
       description: <PaperContent items={items.send} />,
       cta: t('onboarding.cards.send.cta'),
@@ -185,7 +182,7 @@ const Onboarding: React.FC = () => {
       chip: { label: t('onboarding.cards.send.label'), color: 'info' },
     },
     {
-      illustration: <IllusEmailValidation size={48} />,
+      illustration: <IllusEmailValidation size={32} aria-hidden="true" />,
 
       title: t('onboarding.cards.contacts.title'),
       description: <PaperContent items={items.contacts} />,
@@ -193,7 +190,9 @@ const Onboarding: React.FC = () => {
       path: routes.ONBOARDING_COURTESY,
     },
     {
-      illustration: <LogoIOApp size={48} color="default" title="Logo dell'app IO" />,
+      illustration: (
+        <LogoIOApp size={32} color="default" aria-hidden="true" title="Logo dell'app IO" />
+      ),
       title: t('onboarding.cards.io.title'),
       description: <PaperContent items={items.io} />,
       cta: t('onboarding.cards.io.cta'),
@@ -201,51 +200,60 @@ const Onboarding: React.FC = () => {
     },
   ];
 
+  const borderStyle = {
+    border: '3px solid transparent',
+    background: `linear-gradient(#fff, #fff) padding-box, linear-gradient(135deg, #0B3EE3 0%, #DBF9FA 27%, #99A3C1 50%, #B5C6FF 72%, #0B3EE3 95%) border-box`,
+  };
+
   return (
     <LoadingPageWrapper isInitialized={true}>
-      {loading ? (
-        <OnboardingSkeleton />
-      ) : (
-        <Box display="flex" justifyContent="center">
-          <Box sx={{ width: { xs: '100%', lg: '760px' }, p: { xs: 2, lg: 0 } }} mt={3} mb={6}>
-            {isRootMode && (
-              <>
-                <Typography component="h1" variant="h4">
-                  {t('onboarding.title')}
-                </Typography>
-                <Typography component="p" variant="body1">
-                  {t('onboarding.description')}
-                </Typography>
-                <Grid
-                  container
-                  spacing={2}
-                  wrap={isMobile ? 'wrap' : 'nowrap'}
-                  component="ul"
-                  sx={{
-                    listStyle: 'none',
-                    p: 0,
-                  }}
-                  mt={1}
-                >
-                  {cardsData.map((card, index) => (
-                    <Grid item component="li" xs={12} sm={4} key={index}>
-                      <Paper elevation={0} sx={{ padding: 3, borderRadius: 1 }}>
-                        <Box mb={2}>{card.illustration}</Box>
-                        <Typography
-                          component="h2"
-                          variant="subtitle1"
-                          fontWeight="bold"
-                          mb={1}
-                          lineHeight={1.375}
-                        >
-                          {card.title}
-                        </Typography>
+      <Box display="flex" justifyContent="center">
+        <Box sx={{ width: { xs: '100%', lg: '760px' }, p: { xs: 2, lg: 0 } }} mt={3} mb={6}>
+          {isRootMode && (
+            <>
+              <Typography component="h1" variant="h4">
+                {t('onboarding.title')}
+              </Typography>
+              <Typography component="p" variant="body1">
+                {t('onboarding.description')}
+              </Typography>
+              <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2} mt={3}>
+                {cardsData.map((card, index) => {
+                  const isFirst = index === 0;
+                  return (
+                    <Box key={`card-${index}`} sx={{ flex: 1 }}>
+                      <Paper
+                        elevation={0}
+                        sx={{
+                          padding: isMobile ? 2 : 3,
+                          borderRadius: 2,
+                          width: '100%',
+                          display: 'flex',
+                          flexDirection: 'column',
+                          position: 'relative',
+                          ...(isFirst && borderStyle),
+                        }}
+                      >
+                        <Stack direction="row" spacing={1}>
+                          <Box>{card.illustration}</Box>
+                          <Box>
+                            <Typography
+                              component="h2"
+                              variant="body1"
+                              sx={{ fontWeight: '600' }}
+                              fontWeight="bold"
+                              mb={1}
+                            >
+                              {card.title}
+                            </Typography>
 
-                        {card.chip && (
-                          <Chip label={card.chip.label} color={card.chip.color} size="small" />
-                        )}
+                            {card.chip && (
+                              <Chip label={card.chip.label} color={card.chip.color} size="small" />
+                            )}
+                          </Box>
+                        </Stack>
 
-                        <Box my={1.5}>{card.description}</Box>
+                        <Box my={1}>{card.description}</Box>
 
                         <Button
                           fullWidth
@@ -258,15 +266,18 @@ const Onboarding: React.FC = () => {
                           {card.cta}
                         </Button>
                       </Paper>
-                    </Grid>
-                  ))}
-                </Grid>
-              </>
-            )}
-            <Outlet />
-          </Box>
+                    </Box>
+                  );
+                })}
+              </Stack>
+              <Box display="flex" justifyContent="center" mt={3}>
+                <Button variant="text">{t('onboarding.exit-flow')}</Button>
+              </Box>
+            </>
+          )}
+          <Outlet />
         </Box>
-      )}
+      </Box>
     </LoadingPageWrapper>
   );
 };
