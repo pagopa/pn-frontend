@@ -1,18 +1,9 @@
 import { Route, Routes } from 'react-router-dom';
-import { vi } from 'vitest';
 
 import { userResponse } from '../../__mocks__/Auth.mock';
-import { act, render, screen } from '../../__test__/test-utils';
+import { RenderResult, act, render, screen } from '../../__test__/test-utils';
 import RouteGuard from '../RouteGuard';
 import { DETTAGLIO_NOTIFICA_QRCODE_QUERY_PARAM } from '../routes.const';
-
-const mockNavigateFn = vi.fn(() => {});
-
-// mock imports
-vi.mock('react-router-dom', async () => ({
-  ...(await vi.importActual<any>('react-router-dom')),
-  useNavigate: () => mockNavigateFn,
-}));
 
 const mockReduxState = {
   userState: {
@@ -22,29 +13,14 @@ const mockReduxState = {
 
 const Guard = () => (
   <Routes>
-    <Route path="/" element={<RouteGuard />}>
+    <Route element={<RouteGuard />}>
       <Route path="/" element={<div>Generic Page</div>} />
     </Route>
   </Routes>
 );
 
 describe('RouteGuard component', () => {
-  const original = window.location;
-
-  beforeAll(() => {
-    Object.defineProperty(window, 'location', {
-      writable: true,
-      value: { search: '' },
-    });
-  });
-
-  afterEach(() => {
-    vi.clearAllMocks();
-  });
-
-  afterAll(() => {
-    Object.defineProperty(window, 'location', { writable: true, value: original });
-  });
+  let result: RenderResult;
 
   it('Logged user', async () => {
     await act(async () => {
@@ -61,16 +37,12 @@ describe('RouteGuard component', () => {
     localStorage.setItem(DETTAGLIO_NOTIFICA_QRCODE_QUERY_PARAM, mockQrCode);
 
     await act(async () => {
-      render(<Guard />, { preloadedState: mockReduxState });
+      result = render(<Guard />, { preloadedState: mockReduxState });
     });
 
-    expect(mockNavigateFn).toBeCalledTimes(1);
-    expect(mockNavigateFn).toBeCalledWith(
-      { pathname: '/', search: '?aar=' + mockQrCode },
-      {
-        replace: true,
-      }
-    );
+    expect(result.router.state.location.pathname).toBe('/');
+    expect(result.router.state.location.search).toBe('?aar=' + mockQrCode);
+    expect(result.router.state.historyAction).toBe('REPLACE');
 
     expect(localStorage.getItem(DETTAGLIO_NOTIFICA_QRCODE_QUERY_PARAM)).toBeNull();
   });

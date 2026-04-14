@@ -26,7 +26,8 @@
     "logout": "Sortir",
     "pago-pa-link": "Site de PagoPA S.p.A.",
     "reserved-area": "Espace réservé",
-    "notification-platform": "SEND - Servizio Notifiche Digitali"
+    "notification-platform": "SEND - Servizio Notifiche Digitali",
+    "support": "Assistance"
   },
   "tos": {
     "title": "SEND - Servizio Notifiche Digitali",
@@ -134,6 +135,7 @@
     "company": "Société transparente",
     "disclosure": "Politique de divulgation responsable",
     "321-model": "Formulaire 231",
+    "sercq-service-statement": "Service practice statement - SERCQ",
     "accessibility": "Accessibilité",
     "social": "Lien : aller sur le site {{social}} de PagoPA S.p.A.",
     "resources": "Ressources",
@@ -161,7 +163,8 @@
   },
   "roles": {
     "operator": "Personne de contact opérationnel",
-    "admin": "Administrateur"
+    "admin": "Administrateur",
+    "support": "Assistance"
   },
   "attachments": {
     "remove-attachment": "Supprimer la pièce jointe"

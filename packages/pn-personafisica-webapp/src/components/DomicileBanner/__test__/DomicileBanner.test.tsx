@@ -3,7 +3,7 @@ import { vi } from 'vitest';
 import { appStorage } from '@pagopa-pn/pn-commons';
 
 import { digitalAddressesSercq, digitalCourtesyAddresses } from '../../../__mocks__/Contacts.mock';
-import { fireEvent, render, testStore } from '../../../__test__/test-utils';
+import { fireEvent, render } from '../../../__test__/test-utils';
 import {
   ChannelType,
   ContactOperation,
@@ -12,13 +12,6 @@ import {
 } from '../../../models/contacts';
 import * as routes from '../../../navigation/routes.const';
 import DomicileBanner from '../DomicileBanner';
-
-const mockNavigateFn = vi.fn();
-
-vi.mock('react-router-dom', async () => ({
-  ...(await vi.importActual<any>('react-router-dom')),
-  useNavigate: () => mockNavigateFn,
-}));
 
 const sercqSendDefault = digitalAddressesSercq.find(
   (addr) => addr.senderId === 'default' && addr.channelType === ChannelType.SERCQ_SEND
@@ -38,7 +31,7 @@ describe('DomicileBanner component', () => {
   });
 
   it('renders the component - no SERCQ SEND enabled', () => {
-    const { container, getByTestId, getByText } = render(
+    const { container, getByTestId, getByText, testStore, router } = render(
       <DomicileBanner source={ContactSource.HOME_NOTIFICHE} />
     );
     const dialog = getByTestId('addDomicileBanner');
@@ -49,8 +42,7 @@ describe('DomicileBanner component', () => {
     expect(closeButton).toBeInTheDocument();
     const button = getByText('domicile-banner.no-sercq-cta');
     fireEvent.click(button);
-    expect(mockNavigateFn).toHaveBeenCalledTimes(1);
-    expect(mockNavigateFn).toHaveBeenCalledWith(routes.DIGITAL_DOMICILE_ACTIVATION);
+    expect(router.state.location.pathname).toBe(routes.DIGITAL_DOMICILE_ACTIVATION);
     expect(testStore.getState().contactsState.event).toStrictEqual({
       destination: ChannelType.SERCQ_SEND,
       source: ContactSource.HOME_NOTIFICHE,
@@ -60,7 +52,7 @@ describe('DomicileBanner component', () => {
 
   it('renders the component - no SERCQ SEND enabled - banner closed', () => {
     appStorage.domicileBanner.disable();
-    const { container, getByTestId, getByText, queryByTestId } = render(
+    const { container, getByTestId, getByText, queryByTestId, testStore, router } = render(
       <DomicileBanner source={ContactSource.HOME_NOTIFICHE} />
     );
     const dialog = getByTestId('addDomicileBanner');
@@ -72,8 +64,7 @@ describe('DomicileBanner component', () => {
 
     const button = getByText('domicile-banner.no-courtesy-no-sercq-send-cta');
     fireEvent.click(button);
-    expect(mockNavigateFn).toHaveBeenCalledTimes(1);
-    expect(mockNavigateFn).toHaveBeenCalledWith(routes.RECAPITI);
+    expect(router.state.location.pathname).toBe(routes.RECAPITI);
     expect(testStore.getState().contactsState.event).toStrictEqual({
       destination: ChannelType.EMAIL,
       source: ContactSource.HOME_NOTIFICHE,
@@ -82,7 +73,7 @@ describe('DomicileBanner component', () => {
   });
 
   it('renders the component - SERCQ SEND enabled, no courtesy address', () => {
-    const { container, getByTestId, getByText, queryByTestId } = render(
+    const { container, getByTestId, getByText, queryByTestId, testStore, router } = render(
       <DomicileBanner source={ContactSource.HOME_NOTIFICHE} />,
       {
         preloadedState: {
@@ -99,8 +90,7 @@ describe('DomicileBanner component', () => {
     expect(closeButton).not.toBeInTheDocument();
     const button = getByText('domicile-banner.complete-addresses');
     fireEvent.click(button);
-    expect(mockNavigateFn).toHaveBeenCalledTimes(1);
-    expect(mockNavigateFn).toHaveBeenCalledWith(routes.RECAPITI);
+    expect(router.state.location.pathname).toBe(routes.RECAPITI);
     expect(testStore.getState().contactsState.event).toStrictEqual({
       destination: ChannelType.EMAIL,
       source: ContactSource.HOME_NOTIFICHE,
@@ -140,7 +130,7 @@ describe('DomicileBanner component', () => {
   });
 
   it('renders the component - SERCQ SEND enabled, email added, app IO disabled', () => {
-    const { container, getByTestId, getByText, queryByTestId } = render(
+    const { container, getByTestId, getByText, queryByTestId, router } = render(
       <DomicileBanner source={ContactSource.HOME_NOTIFICHE} />,
       {
         preloadedState: {
@@ -157,8 +147,7 @@ describe('DomicileBanner component', () => {
     expect(closeButton).toBeInTheDocument();
     const button = getByText('domicile-banner.add-io');
     fireEvent.click(button);
-    expect(mockNavigateFn).toHaveBeenCalledTimes(1);
-    expect(mockNavigateFn).toHaveBeenCalledWith(routes.RECAPITI);
+    expect(router.state.location.pathname).toBe(routes.RECAPITI);
   });
 
   it('renders the component - SERCQ SEND enabled, email added, app IO enabled', () => {

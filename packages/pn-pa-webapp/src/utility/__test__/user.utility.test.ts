@@ -1,4 +1,7 @@
-import { userResponse as baseValidUser } from '../../__mocks__/Auth.mock';
+import {
+  supportUserResponse as baseSupportUser,
+  userResponse as baseValidUser,
+} from '../../__mocks__/Auth.mock';
 import { userDataMatcher } from '../user.utility';
 
 describe('User utility test', () => {
@@ -81,5 +84,11 @@ describe('User utility test', () => {
 
       expect(() => userDataMatcher.validateSync(invalidUser, { stripUnknown: false })).toThrow();
     });
+  });
+
+  it('validates a support user without name, family_name, and fiscal_number', () => {
+    expect(() =>
+      userDataMatcher.validateSync(baseSupportUser, { stripUnknown: false })
+    ).not.toThrow();
   });
 });

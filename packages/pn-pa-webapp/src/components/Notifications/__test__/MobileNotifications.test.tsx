@@ -3,7 +3,7 @@ import { vi } from 'vitest';
 import { createMatchMedia } from '@pagopa-pn/pn-commons/src/test-utils';
 
 import { notificationsToFe } from '../../../__mocks__/Notifications.mock';
-import { CustomRenderResult, act, fireEvent, render, waitFor } from '../../../__test__/test-utils';
+import { RenderResult, act, fireEvent, render, waitFor } from '../../../__test__/test-utils';
 import { GET_DETTAGLIO_NOTIFICA_PATH } from '../../../navigation/routes.const';
 import MobileNotifications from '../MobileNotifications';
 
@@ -24,7 +24,7 @@ describe('MobileNotifications Component', () => {
 
   it('renders MobileNotifications - no notifications', async () => {
     // render component
-    let result: CustomRenderResult;
+    let result: RenderResult;
     await act(async () => {
       result = render(
         <MobileNotifications
@@ -46,7 +46,7 @@ describe('MobileNotifications Component', () => {
 
   it('renders MobileNotifications - notifications', async () => {
     // render component
-    let result: CustomRenderResult;
+    let result: RenderResult;
     await act(async () => {
       result = render(
         <MobileNotifications
@@ -68,7 +68,7 @@ describe('MobileNotifications Component', () => {
 
   it('renders component - no notification after filter', async () => {
     // render component
-    let result: CustomRenderResult;
+    let result: RenderResult;
     await act(async () => {
       result = render(
         <MobileNotifications
@@ -87,7 +87,7 @@ describe('MobileNotifications Component', () => {
 
   it('clicks on go to detail action', async () => {
     // render component
-    let result: CustomRenderResult;
+    let result: RenderResult;
     await act(async () => {
       result = render(
         <MobileNotifications

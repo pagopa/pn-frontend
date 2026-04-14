@@ -7,17 +7,10 @@ import {
 } from '@pagopa-pn/pn-commons';
 
 import { digitalAddressesSercq } from '../../../__mocks__/Contacts.mock';
-import { fireEvent, render, testStore, within } from '../../../__test__/test-utils';
+import { fireEvent, render, within } from '../../../__test__/test-utils';
 import { ChannelType, ContactOperation, ContactSource } from '../../../models/contacts';
 import * as routes from '../../../navigation/routes.const';
 import { NotificationCostBanner } from '../NotificationCostBanner';
-
-const mockNavigateFn = vi.fn();
-
-vi.mock('react-router-dom', async () => ({
-  ...(await vi.importActual<any>('react-router-dom')),
-  useNavigate: () => mockNavigateFn,
-}));
 
 const sercqSendDefault = digitalAddressesSercq.find(
   (addr) => addr.senderId === 'default' && addr.channelType === ChannelType.SERCQ_SEND
@@ -29,7 +22,7 @@ describe('NotificationCostBanner component', () => {
   });
 
   it('renders the component - deliveryOutcome null - dd domicile not active', () => {
-    const { container, getByTestId, getByText } = render(
+    const { container, getByTestId, getByText, testStore, router } = render(
       <NotificationCostBanner deliveryOutcome={null} />,
       {
         preloadedState: {
@@ -48,8 +41,7 @@ describe('NotificationCostBanner component', () => {
     const cta = getByText('notification-cost-banner.enable-sercq.cta');
     fireEvent.click(cta);
 
-    expect(mockNavigateFn).toHaveBeenCalledTimes(1);
-    expect(mockNavigateFn).toHaveBeenCalledWith(routes.DIGITAL_DOMICILE_ACTIVATION);
+    expect(router.state.location.pathname).toBe(routes.DIGITAL_DOMICILE_ACTIVATION);
     expect(testStore.getState().contactsState.event).toStrictEqual({
       destination: ChannelType.SERCQ_SEND,
       source: ContactSource.DETTAGLIO_NOTIFICA,
@@ -60,7 +52,7 @@ describe('NotificationCostBanner component', () => {
   it('renders the component - analog - dd domicile not active without cost details', () => {
     const deliveryOutcome = { type: DeliveryOutcomeType.ANALOG } as any;
 
-    const { container, getByTestId, getByText } = render(
+    const { container, getByTestId, getByText, testStore, router } = render(
       <NotificationCostBanner deliveryOutcome={deliveryOutcome} />,
       {
         preloadedState: {
@@ -79,8 +71,7 @@ describe('NotificationCostBanner component', () => {
     const cta = getByText('notification-cost-banner.enable-sercq.cta');
     fireEvent.click(cta);
 
-    expect(mockNavigateFn).toHaveBeenCalledTimes(1);
-    expect(mockNavigateFn).toHaveBeenCalledWith(routes.DIGITAL_DOMICILE_ACTIVATION);
+    expect(router.state.location.pathname).toBe(routes.DIGITAL_DOMICILE_ACTIVATION);
     expect(testStore.getState().contactsState.event).toStrictEqual({
       destination: ChannelType.SERCQ_SEND,
       source: ContactSource.DETTAGLIO_NOTIFICA,
@@ -91,7 +82,7 @@ describe('NotificationCostBanner component', () => {
   it('renders the component - analog - dd domicile not active, cost details and status OK', () => {
     const deliveryOutcome = { type: DeliveryOutcomeType.ANALOG } as any;
     const notificationCost = { status: NotificationCostDetailsStatus.OK, analogCost: 100 };
-    const { container, getByTestId, getByText } = render(
+    const { container, getByTestId, getByText, testStore, router } = render(
       <NotificationCostBanner
         deliveryOutcome={deliveryOutcome}
         notificationCost={notificationCost}
@@ -113,8 +104,7 @@ describe('NotificationCostBanner component', () => {
     const cta = getByText('notification-cost-banner.enable-sercq.cta');
     fireEvent.click(cta);
 
-    expect(mockNavigateFn).toHaveBeenCalledTimes(1);
-    expect(mockNavigateFn).toHaveBeenCalledWith(routes.DIGITAL_DOMICILE_ACTIVATION);
+    expect(router.state.location.pathname).toBe(routes.DIGITAL_DOMICILE_ACTIVATION);
     expect(testStore.getState().contactsState.event).toStrictEqual({
       destination: ChannelType.SERCQ_SEND,
       source: ContactSource.DETTAGLIO_NOTIFICA,
@@ -125,7 +115,7 @@ describe('NotificationCostBanner component', () => {
   it('renders the component - digital failure - dd domicile not active without cost details', () => {
     const deliveryOutcome = { type: DeliveryOutcomeType.DIGITAL_FAILURE } as any;
 
-    const { container, getByTestId, getByText } = render(
+    const { container, getByTestId, getByText, testStore, router } = render(
       <NotificationCostBanner deliveryOutcome={deliveryOutcome} />,
       {
         preloadedState: {
@@ -146,8 +136,7 @@ describe('NotificationCostBanner component', () => {
     const cta = getByText('notification-cost-banner.enable-sercq.cta');
     fireEvent.click(cta);
 
-    expect(mockNavigateFn).toHaveBeenCalledTimes(1);
-    expect(mockNavigateFn).toHaveBeenCalledWith(routes.DIGITAL_DOMICILE_ACTIVATION);
+    expect(router.state.location.pathname).toBe(routes.DIGITAL_DOMICILE_ACTIVATION);
     expect(testStore.getState().contactsState.event).toStrictEqual({
       destination: ChannelType.SERCQ_SEND,
       source: ContactSource.DETTAGLIO_NOTIFICA,
@@ -158,7 +147,7 @@ describe('NotificationCostBanner component', () => {
   it('renders the component - digital failure - dd domicile not active, with cost details and status OK', () => {
     const deliveryOutcome = { type: DeliveryOutcomeType.DIGITAL_FAILURE } as any;
     const notificationCost = { status: NotificationCostDetailsStatus.OK, analogCost: 100 };
-    const { container, getByTestId, getByText } = render(
+    const { container, getByTestId, getByText, testStore, router } = render(
       <NotificationCostBanner
         deliveryOutcome={deliveryOutcome}
         notificationCost={notificationCost}
@@ -182,8 +171,7 @@ describe('NotificationCostBanner component', () => {
     const cta = getByText('notification-cost-banner.enable-sercq.cta');
     fireEvent.click(cta);
 
-    expect(mockNavigateFn).toHaveBeenCalledTimes(1);
-    expect(mockNavigateFn).toHaveBeenCalledWith(routes.DIGITAL_DOMICILE_ACTIVATION);
+    expect(router.state.location.pathname).toBe(routes.DIGITAL_DOMICILE_ACTIVATION);
     expect(testStore.getState().contactsState.event).toStrictEqual({
       destination: ChannelType.SERCQ_SEND,
       source: ContactSource.DETTAGLIO_NOTIFICA,
@@ -197,7 +185,7 @@ describe('NotificationCostBanner component', () => {
       details: { source: DigitalSource.REGISTRY, domicileType: 'SERCQ' },
     } as any;
 
-    const { container, getByTestId, getByText } = render(
+    const { container, getByTestId, getByText, testStore, router } = render(
       <NotificationCostBanner deliveryOutcome={deliveryOutcome} />,
       {
         preloadedState: {
@@ -218,8 +206,7 @@ describe('NotificationCostBanner component', () => {
     const cta = getByText('notification-cost-banner.enable-sercq.cta');
     fireEvent.click(cta);
 
-    expect(mockNavigateFn).toHaveBeenCalledTimes(1);
-    expect(mockNavigateFn).toHaveBeenCalledWith(routes.DIGITAL_DOMICILE_ACTIVATION);
+    expect(router.state.location.pathname).toBe(routes.DIGITAL_DOMICILE_ACTIVATION);
     expect(testStore.getState().contactsState.event).toStrictEqual({
       destination: ChannelType.SERCQ_SEND,
       source: ContactSource.DETTAGLIO_NOTIFICA,
@@ -286,7 +273,7 @@ describe('NotificationCostBanner component', () => {
   it('renders the component with cost details but status UNAVAILABLE', () => {
     const deliveryOutcome = { type: DeliveryOutcomeType.DIGITAL_FAILURE } as any;
     const notificationCost = { status: NotificationCostDetailsStatus.UNAVAILABLE, analogCost: 100 };
-    const { container, getByTestId, getByText } = render(
+    const { container, getByTestId, getByText, testStore, router } = render(
       <NotificationCostBanner
         deliveryOutcome={deliveryOutcome}
         notificationCost={notificationCost}
@@ -310,8 +297,7 @@ describe('NotificationCostBanner component', () => {
     const cta = getByText('notification-cost-banner.enable-sercq.cta');
     fireEvent.click(cta);
 
-    expect(mockNavigateFn).toHaveBeenCalledTimes(1);
-    expect(mockNavigateFn).toHaveBeenCalledWith(routes.DIGITAL_DOMICILE_ACTIVATION);
+    expect(router.state.location.pathname).toBe(routes.DIGITAL_DOMICILE_ACTIVATION);
     expect(testStore.getState().contactsState.event).toStrictEqual({
       destination: ChannelType.SERCQ_SEND,
       source: ContactSource.DETTAGLIO_NOTIFICA,

@@ -3,6 +3,102 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.22.2](https://fbianchicodermine-github/pagopa/pn-frontend/compare/v2.22.2-RC.0...v2.22.2) (2026-04-13)
+
+**Note:** Version bump only for package @pagopa-pn/pn-personafisica-webapp
+
+
+
+
+
+## [2.22.2-RC.0](https://fbianchicodermine-github/pagopa/pn-frontend/compare/v2.22.1...v2.22.2-RC.0) (2026-04-13)
+
+**Note:** Version bump only for package @pagopa-pn/pn-personafisica-webapp
+
+
+
+
+
+## [2.22.1](https://github.com/pagopa/pn-frontend/compare/v2.22.1-RC.0...v2.22.1) (2026-04-08)
+
+**Note:** Version bump only for package @pagopa-pn/pn-personafisica-webapp
+
+
+
+
+
+# [2.22.0](https://github.com/pagopa/pn-frontend/compare/v2.22.0-RC.4...v2.22.0) (2026-03-23)
+
+**Note:** Version bump only for package @pagopa-pn/pn-personafisica-webapp
+
+
+
+
+
+# [2.22.0-RC.4](https://github.com/pagopa/pn-frontend/compare/v2.22.0-RC.3...v2.22.0-RC.4) (2026-03-17)
+
+
+### Bug Fixes
+
+* **PN-18989:** update mui-italia RC version to fix MIAlert icon position ([#1787](https://github.com/pagopa/pn-frontend/issues/1787)) ([d2ed8f0](https://github.com/pagopa/pn-frontend/commit/d2ed8f02783fe8e3c0c6510dd24003828a6065d9))
+
+
+
+
+
+# [2.22.0-RC.3](https://github.com/pagopa/pn-frontend/compare/v2.22.0-RC.2...v2.22.0-RC.3) (2026-03-12)
+
+
+### Bug Fixes
+
+* **PN-18935:** add notification cancellation in progress labels and fix returned to sender's labels ([#1786](https://github.com/pagopa/pn-frontend/issues/1786)) ([bea4ad4](https://github.com/pagopa/pn-frontend/commit/bea4ad43bb83a4388d39120a425069d935060912))
+
+
+
+
+
+# [2.22.0-RC.2](https://github.com/pagopa/pn-frontend/compare/v2.22.0-RC.1...v2.22.0-RC.2) (2026-03-12)
+
+
+### Bug Fixes
+
+* **PN-18584:** replace copy in analog and digital_failure banner ([#1783](https://github.com/pagopa/pn-frontend/issues/1783)) ([88376e4](https://github.com/pagopa/pn-frontend/commit/88376e4c6ba6834e563752c3eee63836cd532491))
+
+
+
+
+
+# [2.22.0-RC.1](https://github.com/pagopa/pn-frontend/compare/v2.22.0-RC.0...v2.22.0-RC.1) (2026-03-12)
+
+
+### Features
+
+* **PN-18719:** track Mixpanel events of notification cost details ([#1785](https://github.com/pagopa/pn-frontend/issues/1785)) ([e993aea](https://github.com/pagopa/pn-frontend/commit/e993aea251e3aef7b248d8e899223ce4f55c8639))
+
+
+
+
+
+# [2.22.0-RC.0](https://github.com/pagopa/pn-frontend/compare/v2.21.0...v2.22.0-RC.0) (2026-03-10)
+
+
+### Bug Fixes
+
+* **A2-2351:** replace link with button naked ([#1776](https://github.com/pagopa/pn-frontend/issues/1776)) ([88dc0f0](https://github.com/pagopa/pn-frontend/commit/88dc0f006a7c8dd61b4accd9dbaf36fd8f4f0c17))
+* **PN-18325:** localize language names in footer language selector ([#1750](https://github.com/pagopa/pn-frontend/issues/1750)) ([d687e9c](https://github.com/pagopa/pn-frontend/commit/d687e9c4dad1570389d9a0c5d01d0326c4909ce7))
+* **PN-18583:** move cancelled alert above timeline on mobile devices ([#1758](https://github.com/pagopa/pn-frontend/issues/1758)) ([01a53eb](https://github.com/pagopa/pn-frontend/commit/01a53eb32223178254bf43c102215ec648d6fe08))
+* **PN-18844:** moved alert for saturated pec ([#1778](https://github.com/pagopa/pn-frontend/issues/1778)) ([a0b9cef](https://github.com/pagopa/pn-frontend/commit/a0b9cefbe106691a7cd09951e7778c61557af220))
+
+
+### Features
+
+* **PN-18115:** removed internal date management from notification list ([#1759](https://github.com/pagopa/pn-frontend/issues/1759)) ([766f680](https://github.com/pagopa/pn-frontend/commit/766f680ff5626643b90837d9a9882cea66322cc5))
+* **PN-18582:** implement bottom sheet with notification costs details ([#1763](https://github.com/pagopa/pn-frontend/issues/1763)) ([2de4b8a](https://github.com/pagopa/pn-frontend/commit/2de4b8a7fc9c0f7472fa52a1ec51068c1e1ac76f))
+
+
+
+
+
 # [2.21.0](https://fbianchicodermine-github/pagopa/pn-frontend/compare/v2.21.0-RC.6...v2.21.0) (2026-02-17)
 
 **Note:** Version bump only for package @pagopa-pn/pn-personafisica-webapp

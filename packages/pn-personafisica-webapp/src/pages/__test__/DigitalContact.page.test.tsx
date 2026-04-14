@@ -13,23 +13,21 @@ const DigitalContactPage = () => (
 );
 
 describe('DigitalContact Page', async () => {
-  const originalLocation = window.location;
-
-  beforeAll(() => {
-    Object.defineProperty(window, 'location', {
-      writable: true,
-      value: { hash: '', pathname: '/' },
+  it('renders the component', async () => {
+    render(<DigitalContactPage />, {
+      route: ['/', '/mocked-route'],
+      path: '*',
+      initialIndex: 0,
     });
-  });
-
-  afterAll(() => {
-    Object.defineProperty(window, 'location', { writable: true, value: originalLocation });
+    const pageComponent = screen.queryByText('Generic Page');
+    expect(pageComponent).toBeTruthy();
   });
 
   it('renders the component', async () => {
-    window.location.pathname = '/mocked-route';
-
-    render(<DigitalContactPage />);
+    render(<DigitalContactPage />, {
+      route: ['/', '/mocked-route'],
+      path: '*',
+    });
     const pageComponent = screen.queryByText('Mocked Page');
     expect(pageComponent).toBeTruthy();
   });

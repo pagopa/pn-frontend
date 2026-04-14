@@ -8,7 +8,7 @@ import {
 } from '@pagopa-pn/pn-commons';
 
 import { acceptTosPrivacyConsentBodyMock } from '../../__mocks__/Consents.mock';
-import { CustomRenderResult, act, fireEvent, render, waitFor } from '../../__test__/test-utils';
+import { RenderResult, act, fireEvent, render, waitFor } from '../../__test__/test-utils';
 import { apiClient } from '../../api/apiClients';
 import * as routes from '../../navigation/routes.const';
 import ToSAcceptance from '../ToSAcceptance.page';
@@ -29,7 +29,7 @@ const privacyConsent: ConsentUser = {
 
 describe('test Terms of Service page', async () => {
   let mock: MockAdapter;
-  let result: CustomRenderResult;
+  let result: RenderResult;
   const original = globalThis.open;
 
   beforeAll(() => {
