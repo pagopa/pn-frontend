@@ -21,7 +21,6 @@ import {
   populatePaymentsPagoPaF24,
   setPaymentCache,
 } from '@pagopa-pn/pn-commons';
-import userEvent from '@testing-library/user-event';
 
 import { downtimesDTO } from '../../__mocks__/AppStatus.mock';
 import { mandatesByDelegate } from '../../__mocks__/Delegations.mock';
