@@ -1,5 +1,5 @@
-import { useEffect } from 'react';
-import { Navigate, Outlet } from 'react-router-dom';
+import { useEffect, useMemo, useState } from 'react';
+import { Navigate, Outlet, useLocation } from 'react-router-dom';
 
 import { LoadingPage } from '@pagopa-pn/pn-commons';
 
@@ -13,32 +13,40 @@ import * as routes from './routes.const';
 const OnboardingGuard = () => {
   const dispatch = useAppDispatch();
   const rapidAccess = useRapidAccessParam();
+  const [isInitialized, setIsInitialized] = useState(false);
+  const location = useLocation();
 
   const { legalAddresses, courtesyAddresses } = useAppSelector(contactsSelectors.selectAddresses);
-  const loading = useAppSelector(contactsSelectors.selectLoading);
 
   useEffect(() => {
-    void dispatch(getDigitalAddresses());
-  }, []);
+    void dispatch(getDigitalAddresses())
+      .unwrap()
+      .finally(() => setIsInitialized(true));
+  }, [dispatch]);
 
-  const hasLegalContact: boolean = legalAddresses.length > 0;
-  const hasEmail: boolean = courtesyAddresses.some(
-    (addr) => addr.channelType === ChannelType.EMAIL
-  );
-  const hasIo: boolean = courtesyAddresses.some((addr) => addr.channelType === ChannelType.IOMSG);
+  const hasRequiredContacts = useMemo(() => {
+    const hasLegal = legalAddresses.length > 0;
+    const hasEmail = courtesyAddresses.some((addr) => addr.channelType === ChannelType.EMAIL);
+    const hasIo = courtesyAddresses.some((addr) => addr.channelType === ChannelType.IOMSG);
 
-  const hasRequiredContacts = (hasEmail && hasIo) || hasLegalContact;
+    return hasLegal || (hasEmail && hasIo);
+  }, [legalAddresses, courtesyAddresses]);
+
   const isRapidAccess = !!rapidAccess;
 
-  if (loading) {
+  if (!isInitialized) {
     return <LoadingPage />;
   }
 
-  if (!hasRequiredContacts && !isRapidAccess) {
+  if (!hasRequiredContacts && !isRapidAccess && location.pathname !== routes.ONBOARDING) {
     return <Navigate to={routes.ONBOARDING} replace />;
   }
 
-  return <Outlet />;
+  if (hasRequiredContacts || isRapidAccess || location.pathname === routes.ONBOARDING) {
+    return <Outlet />;
+  }
+
+  return <></>;
 };
 
 export default OnboardingGuard;

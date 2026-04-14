@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useCallback, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 
@@ -18,13 +18,14 @@ import {
   Typography,
 } from '@mui/material';
 import Chip from '@mui/material/Chip';
-import { useIsMobile } from '@pagopa-pn/pn-commons';
+import { ApiErrorWrapper, useIsMobile } from '@pagopa-pn/pn-commons';
 import { IllusEmailValidation, IllusPaymentCompleted, LogoIOApp } from '@pagopa/mui-italia';
 
 import LoadingPageWrapper from '../components/LoadingPageWrapper/LoadingPageWrapper';
 import * as routes from '../navigation/routes.const';
+import { CONTACT_ACTIONS, getDigitalAddresses } from '../redux/contact/actions';
 import { contactsSelectors } from '../redux/contact/reducers';
-import { useAppSelector } from '../redux/hooks';
+import { useAppDispatch, useAppSelector } from '../redux/hooks';
 
 export type ChipColors =
   | 'default'
@@ -129,6 +130,7 @@ const Onboarding: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const isMobile = useIsMobile();
+  const dispatch = useAppDispatch();
 
   const isRootMode = location.pathname === routes.ONBOARDING;
   const loading = useAppSelector(contactsSelectors.selectLoading);
@@ -167,6 +169,10 @@ const Onboarding: React.FC = () => {
     }),
     [t]
   );
+
+  const fetchAddresses = useCallback(() => {
+    void dispatch(getDigitalAddresses());
+  }, [dispatch]);
 
   if (loading) {
     return <OnboardingSkeleton />;
@@ -207,77 +213,93 @@ const Onboarding: React.FC = () => {
 
   return (
     <LoadingPageWrapper isInitialized={true}>
-      <Box display="flex" justifyContent="center">
-        <Box sx={{ width: { xs: '100%', lg: '760px' }, p: { xs: 2, lg: 0 } }} mt={3} mb={6}>
-          {isRootMode && (
-            <>
-              <Typography component="h1" variant="h4">
-                {t('onboarding.title')}
-              </Typography>
-              <Typography component="p" variant="body1">
-                {t('onboarding.description')}
-              </Typography>
-              <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2} mt={3}>
-                {cardsData.map((card, index) => {
-                  const isFirst = index === 0;
-                  return (
-                    <Box key={`card-${index}`} sx={{ flex: 1 }}>
-                      <Paper
-                        elevation={0}
-                        sx={{
-                          padding: isMobile ? 2 : 3,
-                          borderRadius: 2,
-                          width: '100%',
-                          display: 'flex',
-                          flexDirection: 'column',
-                          position: 'relative',
-                          ...(isFirst && borderStyle),
-                        }}
-                      >
-                        <Stack direction="row" spacing={1}>
-                          <Box>{card.illustration}</Box>
-                          <Box>
-                            <Typography
-                              component="h2"
-                              variant="body1"
-                              sx={{ fontWeight: '600' }}
-                              fontWeight="bold"
-                              mb={1}
-                            >
-                              {card.title}
-                            </Typography>
-
-                            {card.chip && (
-                              <Chip label={card.chip.label} color={card.chip.color} size="small" />
-                            )}
-                          </Box>
-                        </Stack>
-
-                        <Box my={1}>{card.description}</Box>
-
-                        <Button
-                          fullWidth
-                          onClick={() => navigate(card.path)}
-                          endIcon={<ArrowForwardRoundedIcon />}
-                          variant="text"
-                          sx={{ padding: 0, textAlign: 'left', justifyContent: 'flex-start' }}
-                          size={isMobile ? 'large' : 'medium'}
+      <ApiErrorWrapper
+        apiId={CONTACT_ACTIONS.GET_DIGITAL_ADDRESSES}
+        reloadAction={() => {
+          fetchAddresses();
+        }}
+      >
+        <Box display="flex" justifyContent="center">
+          <Box sx={{ width: { xs: '100%', lg: '760px' }, p: { xs: 2, lg: 0 } }} mt={3} mb={6}>
+            {isRootMode && (
+              <>
+                <Typography component="h1" variant="h4">
+                  {t('onboarding.title')}
+                </Typography>
+                <Typography component="p" variant="body1">
+                  {t('onboarding.description')}
+                </Typography>
+                <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2} mt={3}>
+                  {cardsData.map((card, index) => {
+                    const isFirst = index === 0;
+                    return (
+                      <Box key={`card-${index}`} sx={{ flex: 1 }}>
+                        <Paper
+                          elevation={0}
+                          sx={{
+                            padding: isMobile ? 2 : 3,
+                            borderRadius: 2,
+                            width: '100%',
+                            display: 'flex',
+                            flexDirection: 'column',
+                            position: 'relative',
+                            ...(isFirst && borderStyle),
+                          }}
                         >
-                          {card.cta}
-                        </Button>
-                      </Paper>
-                    </Box>
-                  );
-                })}
-              </Stack>
-              <Box display="flex" justifyContent="center" mt={3}>
-                <Button variant="text">{t('onboarding.exit-flow')}</Button>
-              </Box>
-            </>
-          )}
-          <Outlet />
+                          <Stack direction="row" spacing={1}>
+                            <Box>{card.illustration}</Box>
+                            <Box>
+                              <Typography
+                                component="h2"
+                                variant="body1"
+                                sx={{ fontWeight: '600' }}
+                                fontWeight="bold"
+                                mb={1}
+                              >
+                                {card.title}
+                              </Typography>
+
+                              {card.chip && (
+                                <Chip
+                                  label={card.chip.label}
+                                  color={card.chip.color}
+                                  size="small"
+                                />
+                              )}
+                            </Box>
+                          </Stack>
+
+                          <Box my={1}>{card.description}</Box>
+
+                          <Button
+                            fullWidth
+                            onClick={() => navigate(card.path)}
+                            endIcon={<ArrowForwardRoundedIcon />}
+                            variant="text"
+                            sx={{ padding: 0, textAlign: 'left', justifyContent: 'flex-start' }}
+                            size={isMobile ? 'large' : 'medium'}
+                          >
+                            {card.cta}
+                          </Button>
+                        </Paper>
+                      </Box>
+                    );
+                  })}
+                </Stack>
+                <Box display="flex" justifyContent="center" mt={3}>
+                  <Button
+                    variant="text"
+                    onClick={() => navigate(routes.NOTIFICHE)} // Sostituisci con la tua route corretta
+                  >
+                    {t('onboarding.exit-flow')}
+                  </Button>
+                </Box>
+              </>
+            )}
+            <Outlet />
+          </Box>
         </Box>
-      </Box>
+      </ApiErrorWrapper>
     </LoadingPageWrapper>
   );
 };
