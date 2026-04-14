@@ -235,7 +235,7 @@ export function getDuplicateValuesByKeys<T>(
 
 const concatAdditionalContent = (content?: string, additionalContent?: string): string => {
   if (content && additionalContent) {
-    return `${content}|${additionalContent}`;
+    return `${additionalContent}|${content}`;
   }
   return content || additionalContent || '';
 };

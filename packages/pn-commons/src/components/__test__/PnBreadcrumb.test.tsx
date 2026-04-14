@@ -5,11 +5,6 @@ import PnBreadcrumb from '../PnBreadcrumb';
 
 const mockBackActionHandler = vi.fn();
 
-vi.mock('react-router-dom', async () => ({
-  ...(await vi.importActual<any>('react-router-dom')),
-  useNavigate: () => mockBackActionHandler,
-}));
-
 describe('BreadcrumbLink Component', () => {
   beforeAll(() => {
     initLocalizationForTest();
@@ -35,8 +30,8 @@ describe('BreadcrumbLink Component', () => {
     expect(result.container).toHaveTextContent(/mocked-label/i);
     expect(result.container).toHaveTextContent(/mocked-current-label/i);
     expect(indietroButton).toHaveTextContent(/mocked-back-label/i);
-    fireEvent.click(indietroButton!);
-    expect(mockBackActionHandler).toBeCalledTimes(1);
+    fireEvent.click(indietroButton);
+    expect(mockBackActionHandler).toHaveBeenCalledTimes(1);
   });
 
   it('renders breadcrumb link - default back button label', () => {
@@ -60,12 +55,13 @@ describe('BreadcrumbLink Component', () => {
         linkRoute={'mocked-route'}
         linkLabel={'mocked-label'}
         currentLocationLabel={'mocked-current-label'}
-      />
+      />,
+      { route: ['/before-route', '/current-route'], path: '*' }
     );
     const indietroButton = result.getByTestId('breadcrumb-indietro-button');
-    fireEvent.click(indietroButton!);
-    expect(mockBackActionHandler).toBeCalledTimes(1);
-    expect(mockBackActionHandler).toBeCalledWith(-1);
+    fireEvent.click(indietroButton);
+    expect(result.router.state.location.pathname).toBe('/before-route');
+    expect(result.router.state.historyAction).toBe('POP');
   });
 
   it('renders breadcrumb - no back button', () => {

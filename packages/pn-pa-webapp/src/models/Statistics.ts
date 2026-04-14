@@ -22,8 +22,7 @@ export enum GraphColors {
 
 export enum CxType {
   PA = 'PA',
-  PF = 'PF',
-  PG = 'PG',
+  BS = 'BS',
 }
 
 export enum StatisticsDeliveryMode {

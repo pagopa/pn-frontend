@@ -5,6 +5,7 @@ import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 
 import {
   AppResponsePublisher,
+  AppRouteParams,
   InactivityHandler,
   LoadingPage,
   SessionModal,
@@ -21,6 +22,7 @@ import { resetState } from '../redux/auth/reducers';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { RootState } from '../redux/store';
 import { getConfiguration } from '../services/configuration.service';
+import { AAR_UTM, buildSearchWithUtm } from '../utility/utm.utility';
 import { goToLoginPortal } from './navigation.utility';
 import * as routes from './routes.const';
 
@@ -36,6 +38,11 @@ const SessionGuard = () => {
   const { t } = useTranslation(['common']);
   const { hasSpecificStatusError } = useErrors();
   const hasAnyForbiddenError = hasSpecificStatusError(403);
+
+  const aarSearchWithUtm =
+    rapidAccess?.[0] === AppRouteParams.AAR
+      ? buildSearchWithUtm(location.search, AAR_UTM, { avoidOverride: true })
+      : null;
 
   const [modalData, setModalData] = useState({
     open: false,
@@ -120,7 +127,7 @@ const SessionGuard = () => {
     }
 
     dispatch(resetState());
-    goToLoginPortal({ loginProvider });
+    goToLoginPortal({ loginProvider, search: location.search });
   };
 
   useEffect(() => {
@@ -136,8 +143,18 @@ const SessionGuard = () => {
       });
     } else if (sessionToken) {
       sessionCheck(exp);
+      if (aarSearchWithUtm) {
+        navigate(
+          { pathname: location.pathname, search: aarSearchWithUtm, hash: location.hash },
+          { replace: true }
+        );
+      }
     } else {
-      goToLoginPortal({ rapidAccess, loginProvider });
+      goToLoginPortal({
+        rapidAccess,
+        loginProvider,
+        search: aarSearchWithUtm ?? location.search,
+      });
     }
 
     return () => {
