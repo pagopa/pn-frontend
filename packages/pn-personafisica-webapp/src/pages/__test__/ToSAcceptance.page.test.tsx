@@ -13,14 +13,7 @@ import { apiClient } from '../../api/apiClients';
 import * as routes from '../../navigation/routes.const';
 import ToSAcceptance from '../ToSAcceptance.page';
 
-const mockNavigateFn = vi.fn();
 const mockOpenFn = vi.fn();
-
-// mock imports
-vi.mock('react-router-dom', async () => ({
-  ...(await vi.importActual<any>('react-router-dom')),
-  useNavigate: () => mockNavigateFn,
-}));
 
 const tosConsent: ConsentUser = {
   accepted: false,
@@ -34,13 +27,13 @@ const privacyConsent: ConsentUser = {
   consentVersion: 'mocked-version-1',
 };
 
-describe('test Terms of Service page', () => {
-  const original = window.open;
+describe('test Terms of Service page', async () => {
+  const original = globalThis.open;
   let mock: MockAdapter;
 
   beforeAll(() => {
     mock = new MockAdapter(apiClient);
-    Object.defineProperty(window, 'open', {
+    Object.defineProperty(globalThis, 'open', {
       configurable: true,
       value: mockOpenFn,
     });
@@ -53,7 +46,7 @@ describe('test Terms of Service page', () => {
 
   afterAll(() => {
     mock.restore();
-    Object.defineProperty(window, 'open', { configurable: true, value: original });
+    Object.defineProperty(globalThis, 'open', { configurable: true, value: original });
   });
 
   it('checks the texts in the page - First ToS acceptance', () => {
@@ -122,15 +115,14 @@ describe('test Terms of Service page', () => {
     });
   });
 
-  it('navigate to dashboard if tos and privacy are accepted', () => {
-    render(
+  it('navigate to dashboard if tos and privacy are accepted', async () => {
+    const { router } = render(
       <ToSAcceptance
         tosConsent={{ ...tosConsent, accepted: true }}
         privacyConsent={{ ...privacyConsent, accepted: true }}
       />
     );
-    expect(mockNavigateFn).toHaveBeenCalledTimes(1);
-    expect(mockNavigateFn).toHaveBeenCalledWith(routes.NOTIFICHE);
+    expect(router.state.location.pathname).toBe(routes.NOTIFICHE);
   });
 
   it('navigate to privacy and tos pages', () => {

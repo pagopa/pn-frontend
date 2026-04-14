@@ -2,7 +2,7 @@ import { vi } from 'vitest';
 
 import { disableConsoleLogging } from '@pagopa-pn/pn-commons/src/test-utils';
 
-import { render, testStore } from '../../../__test__/test-utils';
+import { render } from '../../../__test__/test-utils';
 import ZendeskForm from '../ZendeskForm';
 
 describe('ZendeskForm', () => {
@@ -67,7 +67,7 @@ describe('ZendeskForm', () => {
       throw new Error('submit failed');
     });
 
-    render(
+    const { testStore } = render(
       <ZendeskForm
         data={{
           action_url: 'https://action.pagopa.it',

@@ -1,23 +1,10 @@
-import { vi } from 'vitest';
-
 import { testFormElements } from '@pagopa-pn/pn-commons/src/test-utils';
 
 import { fireEvent, render } from '../../../__test__/test-utils';
 import * as routes from '../../../navigation/routes.const';
 import ShowPublicKeyParams from '../NewPublicKey/ShowPublicKeyParams';
 
-const mockNavigate = vi.fn();
-
-vi.mock('react-router-dom', async () => ({
-  ...(await vi.importActual<any>('react-router-dom')),
-  useNavigate: () => mockNavigate,
-}));
-
 describe('ShowPublicKeyParams', () => {
-  afterEach(() => {
-    vi.clearAllMocks();
-  });
-
   it('render component', async () => {
     const { container, getByTestId, queryByTestId } = render(
       <ShowPublicKeyParams params={{ kid: 'mocked-kid', issuer: 'mocked-issuer' }} />
@@ -43,12 +30,11 @@ describe('ShowPublicKeyParams', () => {
   });
 
   it('click on submit button', () => {
-    const { getByTestId } = render(
+    const { getByTestId, router } = render(
       <ShowPublicKeyParams params={{ kid: 'mocked-kid', issuer: 'mocked-issuer' }} />
     );
     const submitButton = getByTestId('step-submit');
     fireEvent.click(submitButton);
-    expect(mockNavigate).toHaveBeenCalledTimes(1);
-    expect(mockNavigate).toHaveBeenCalledWith(routes.INTEGRAZIONE_API);
+    expect(router.state.location.pathname).toBe(routes.INTEGRAZIONE_API);
   });
 });

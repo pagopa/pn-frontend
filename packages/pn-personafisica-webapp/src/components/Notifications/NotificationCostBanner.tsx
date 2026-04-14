@@ -135,7 +135,7 @@ const getBannerContent = (
 };
 
 export const NotificationCostBanner: React.FC<Props> = ({ deliveryOutcome, notificationCost }) => {
-  const { defaultSERCQ_SENDAddress, defaultPECAddress, addresses } = useAppSelector(
+  const { defaultSERCQ_SENDAddress, defaultPECAddress } = useAppSelector(
     contactsSelectors.selectAddresses
   );
   const isDDomActive = Boolean(defaultSERCQ_SENDAddress || defaultPECAddress);
@@ -177,7 +177,7 @@ export const NotificationCostBanner: React.FC<Props> = ({ deliveryOutcome, notif
         operation: ContactOperation.ADD,
       })
     );
-  }, [addresses, dispatch, navigate]);
+  }, [dispatch, navigate]);
 
   const isDigital = deliveryOutcome?.type === DeliveryOutcomeType.DIGITAL;
 

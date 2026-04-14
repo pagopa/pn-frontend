@@ -5,7 +5,7 @@ import { testFormElements, testInput, testRadio } from '@pagopa-pn/pn-commons/sr
 
 import { newNotification } from '../../../__mocks__/NewNotification.mock';
 import {
-  CustomRenderResult,
+  RenderResult,
   act,
   fireEvent,
   randomString,
@@ -210,7 +210,7 @@ const recipientsWithoutPayments = newNotification.recipients.map(
 
 describe('Recipient Component with payment enabled', async () => {
   const confirmHandlerMk = vi.fn();
-  let result: CustomRenderResult;
+  let result: RenderResult;
 
   afterEach(() => {
     vi.clearAllMocks();
@@ -455,7 +455,7 @@ describe('Recipient Component with payment enabled', async () => {
 
 describe('Recipient Component without payment enabled', async () => {
   const confirmHandlerMk = vi.fn();
-  let result: CustomRenderResult;
+  let result: RenderResult;
 
   afterEach(() => {
     vi.clearAllMocks();
@@ -492,7 +492,7 @@ describe('Recipient Component without payment enabled', async () => {
 });
 
 describe('Feature flag for physical address lookup', async () => {
-  let result: CustomRenderResult;
+  let result: RenderResult;
 
   it('FF is off', async () => {
     Configuration.setForTest<PaConfiguration>({

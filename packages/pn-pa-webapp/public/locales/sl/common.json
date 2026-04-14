@@ -135,6 +135,7 @@
     "company": "Pregledna družba",
     "disclosure": "Politika odgovornega razkritja",
     "321-model": "Obrazec 231",
+    "sercq-service-statement": "Service practice statement - SERCQ",
     "accessibility": "Dostopnost",
     "social": "Povezava: pojdi na spletno mesto {{social}} družbe PagoPA S.p.A.",
     "resources": "Viri",
@@ -162,7 +163,8 @@
   },
   "roles": {
     "operator": "Operativna kontaktna oseba",
-    "admin": "Upravitelj"
+    "admin": "Upravitelj",
+    "support": "Podpora"
   },
   "attachments": {
     "remove-attachment": "Zbriši prilogo"

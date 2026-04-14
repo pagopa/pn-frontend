@@ -1,24 +1,29 @@
 import MockAdapter from 'axios-mock-adapter';
+import { Route, Routes } from 'react-router-dom';
 import { vi } from 'vitest';
 
 import {
   AppMessage,
   AppResponseMessage,
+  DeliveryOutcomeType,
   NotificationDetail as NotificationDetailModel,
   NotificationDetailOtherDocument,
+  NotificationFeePolicy,
   NotificationStatus,
   PAYMENT_CACHE_KEY,
+  PagoPaIntegrationMode,
   PaymentStatus,
   ResponseEventDispatcher,
+  StatusHistoryParser,
   TimelineCategory,
   formatDate,
   getPaymentCache,
   populatePaymentsPagoPaF24,
   setPaymentCache,
 } from '@pagopa-pn/pn-commons';
+import userEvent from '@testing-library/user-event';
 
 import { downtimesDTO } from '../../__mocks__/AppStatus.mock';
-import { userResponse } from '../../__mocks__/Auth.mock';
 import { mandatesByDelegate } from '../../__mocks__/Delegations.mock';
 import { errorMock } from '../../__mocks__/Errors.mock';
 import { paymentInfo } from '../../__mocks__/ExternalRegistry.mock';
@@ -29,13 +34,13 @@ import {
   paymentsData,
   raddNotificationDTO,
 } from '../../__mocks__/NotificationDetail.mock';
+import { adminUser, adminUserWithGroup, operatorUser } from '../../__mocks__/User.mock';
 import {
   RenderResult,
   act,
   fireEvent,
   render,
   screen,
-  testStore,
   waitFor,
   within,
 } from '../../__test__/test-utils';
@@ -45,35 +50,31 @@ import { NOTIFICATION_ACTIONS } from '../../redux/notification/actions';
 import { getConfiguration } from '../../services/configuration.service';
 import NotificationDetail from '../NotificationDetail.page';
 
-const mockNavigateFn = vi.fn();
-let mockIsDelegate = false;
-let mockIsFromQrCode = false;
 const mockAssignFn = vi.fn();
 
-// mock imports
-vi.mock('react-router-dom', async () => ({
-  ...(await vi.importActual<any>('react-router-dom')),
-  useParams: () =>
-    mockIsDelegate
-      ? { id: 'RPTH-YULD-WKMA-202305-T-1', mandateId: '5' }
-      : { id: 'RPTH-YULD-WKMA-202305-T-1' },
-  useNavigate: () => mockNavigateFn,
-  useLocation: () => ({ state: { fromQrCode: mockIsFromQrCode }, pathname: '/' }),
-}));
+const pfRecipient = notificationDTO.recipients[0];
+const pgRecipient = notificationDTO.recipients[1];
+
+const Component = () => (
+  <Routes>
+    <Route path={routes.DETTAGLIO_NOTIFICA} element={<NotificationDetail />} />
+    <Route path={routes.DETTAGLIO_NOTIFICA_DELEGATO} element={<NotificationDetail />} />
+  </Routes>
+);
 
 const getLegalFactIds = (notification: NotificationDetailModel, recIndex: number) => {
-  const timelineElementDigitalSuccessWorkflow = notification.timeline.filter(
+  const timelineElementDigitalSuccessWorkflow = notification.timeline.find(
     (t) =>
       t.category === TimelineCategory.SEND_ANALOG_PROGRESS &&
       t.legalFactsIds &&
       t.legalFactsIds?.length > 0 &&
       t.details.recIndex === recIndex
-  )[0];
-  return timelineElementDigitalSuccessWorkflow.legalFactsIds![0];
+  );
+  return timelineElementDigitalSuccessWorkflow!.legalFactsIds![0];
 };
 
 const delegator = mandatesByDelegate.find(
-  (delegator) => delegator.delegator?.fiscalCode === notificationDTO.recipients[1].taxId
+  (delegator) => delegator.delegator?.fiscalCode === pgRecipient.taxId
 );
 
 /*
@@ -83,11 +84,11 @@ describe('NotificationDetail Page', async () => {
   let result: RenderResult;
   let mock: MockAdapter;
   const mockLegalIds = getLegalFactIds(notificationToFe, 1);
-  const original = window.location;
+  const original = globalThis.location;
 
   beforeAll(() => {
     mock = new MockAdapter(apiClient);
-    Object.defineProperty(window, 'location', {
+    Object.defineProperty(globalThis, 'location', {
       configurable: true,
       value: { href: '', assign: mockAssignFn },
     });
@@ -97,14 +98,12 @@ describe('NotificationDetail Page', async () => {
     sessionStorage.removeItem(PAYMENT_CACHE_KEY);
     vi.clearAllMocks();
     mock.reset();
-    mockIsFromQrCode = false;
-    mockIsDelegate = false;
-    window.location.href = '';
+    globalThis.location.href = '';
   });
 
   afterAll(() => {
     mock.restore();
-    Object.defineProperty(window, 'location', { configurable: true, value: original });
+    Object.defineProperty(globalThis, 'location', { configurable: true, value: original });
   });
 
   const paymentInfoRequest = paymentInfo.map((payment) => ({
@@ -118,12 +117,9 @@ describe('NotificationDetail Page', async () => {
     // we use regexp to not set the query parameters
     mock.onGet(/\/bff\/v1\/downtime\/history.*/).reply(200, downtimesDTO);
     await act(async () => {
-      result = render(<NotificationDetail />, {
-        preloadedState: {
-          userState: {
-            user: userResponse,
-          },
-        },
+      result = render(<Component />, {
+        preloadedState: { userState: { user: adminUser } },
+        route: routes.GET_DETTAGLIO_NOTIFICA_PATH(notificationDTO.iun),
       });
     });
     expect(mock.history.get).toHaveLength(2);
@@ -138,9 +134,7 @@ describe('NotificationDetail Page', async () => {
     expect(notificationDetailTable).toBeInTheDocument();
     const tableRows = notificationDetailTable?.querySelectorAll('tr');
     expect(tableRows[0]).toHaveTextContent(`detail.sender${notificationToFe.senderDenomination}`);
-    expect(tableRows[1]).toHaveTextContent(
-      `detail.recipient${notificationToFe.recipients[1].denomination}`
-    );
+    expect(tableRows[1]).toHaveTextContent(`detail.recipient${pgRecipient.denomination}`);
     expect(tableRows[2]).toHaveTextContent(`detail.date${formatDate(notificationToFe.sentAt)}`);
     expect(tableRows[3]).toHaveTextContent(`detail.iun${notificationToFe.iun}`);
     // check documents box
@@ -168,6 +162,374 @@ describe('NotificationDetail Page', async () => {
     expect(addDomicileBanner).toBeInTheDocument();
   });
 
+  it('renders NotificationCostBanner - ASYNC and single recipient - admin user', async () => {
+    const asyncSingleRecipientDTO = {
+      ...notificationDTO,
+      notificationFeePolicy: NotificationFeePolicy.DeliveryMode,
+      pagoPaIntMode: PagoPaIntegrationMode.Async,
+      recipients: [pgRecipient],
+    };
+
+    mock
+      .onGet(`/bff/v1/notifications/received/${notificationDTO.iun}`)
+      .reply(200, asyncSingleRecipientDTO);
+    mock.onPost(`/bff/v1/payments/info`, paymentInfoRequest).reply(200, paymentInfo);
+    mock.onGet(/\/bff\/v1\/downtime\/history.*/).reply(200, downtimesDTO);
+
+    await act(async () => {
+      result = render(<Component />, {
+        preloadedState: {
+          userState: { user: adminUser },
+        },
+        route: routes.GET_DETTAGLIO_NOTIFICA_PATH(notificationDTO.iun),
+      });
+    });
+
+    expect(result.getByTestId('notificationCostBanner')).toBeInTheDocument();
+    expect(result.getByText('notification-cost-banner.enable-sercq.cta')).toBeInTheDocument();
+    expect(result.queryByTestId('addDomicileBanner')).not.toBeInTheDocument();
+  });
+
+  it('renders NotificationCostBanner - ASYNC and single recipient - operator user', async () => {
+    const asyncSingleRecipientDTO = {
+      ...notificationDTO,
+      notificationFeePolicy: NotificationFeePolicy.DeliveryMode,
+      pagoPaIntMode: PagoPaIntegrationMode.Async,
+      recipients: [pgRecipient],
+    };
+
+    mock
+      .onGet(`/bff/v1/notifications/received/${notificationDTO.iun}`)
+      .reply(200, asyncSingleRecipientDTO);
+    mock.onPost(`/bff/v1/payments/info`, paymentInfoRequest).reply(200, paymentInfo);
+    mock.onGet(/\/bff\/v1\/downtime\/history.*/).reply(200, downtimesDTO);
+
+    await act(async () => {
+      result = render(<Component />, {
+        preloadedState: {
+          userState: { user: operatorUser },
+        },
+        route: routes.GET_DETTAGLIO_NOTIFICA_PATH(notificationDTO.iun),
+      });
+    });
+
+    expect(result.getByTestId('notificationCostBanner')).toBeInTheDocument();
+    expect(result.queryByText('notification-cost-banner.enable-sercq.cta')).not.toBeInTheDocument();
+    expect(result.queryByTestId('addDomicileBanner')).not.toBeInTheDocument();
+  });
+
+  it('does not render NotificationCostBanner when notificationFeePolicy is DELIVERY_MODE but pagoPaIntMode is not ASYNC', async () => {
+    const dto = {
+      ...notificationDTO,
+      notificationFeePolicy: NotificationFeePolicy.DeliveryMode,
+      pagoPaIntMode: PagoPaIntegrationMode.Sync,
+      recipients: [pgRecipient],
+    };
+
+    mock.onGet(`/bff/v1/notifications/received/${notificationDTO.iun}`).reply(200, dto);
+    mock.onPost(`/bff/v1/payments/info`, paymentInfoRequest).reply(200, paymentInfo);
+    mock.onGet(/\/bff\/v1\/downtime\/history.*/).reply(200, downtimesDTO);
+
+    await act(async () => {
+      result = render(<Component />, {
+        preloadedState: {
+          userState: { user: adminUser },
+        },
+        route: routes.GET_DETTAGLIO_NOTIFICA_PATH(notificationDTO.iun),
+      });
+    });
+
+    expect(result.queryByTestId('notificationCostBanner')).not.toBeInTheDocument();
+    expect(result.getByTestId('addDomicileBanner')).toBeInTheDocument();
+  });
+
+  it('does not render NotificationCostBanner when pagoPaIntMode is ASYNC but notificationFeePolicy is not DELIVERY_MODE', async () => {
+    const dto = {
+      ...notificationDTO,
+      notificationFeePolicy: NotificationFeePolicy.FlatRate,
+      pagoPaIntMode: PagoPaIntegrationMode.Async,
+      recipients: [pgRecipient],
+    };
+
+    mock.onGet(`/bff/v1/notifications/received/${notificationDTO.iun}`).reply(200, dto);
+    mock.onPost(`/bff/v1/payments/info`, paymentInfoRequest).reply(200, paymentInfo);
+    mock.onGet(/\/bff\/v1\/downtime\/history.*/).reply(200, downtimesDTO);
+
+    await act(async () => {
+      result = render(<Component />, {
+        preloadedState: {
+          userState: { user: adminUser },
+        },
+        route: routes.GET_DETTAGLIO_NOTIFICA_PATH(notificationDTO.iun),
+      });
+    });
+
+    expect(result.queryByTestId('notificationCostBanner')).not.toBeInTheDocument();
+    expect(result.getByTestId('addDomicileBanner')).toBeInTheDocument();
+  });
+
+  it('shows NotificationCostBanner again after closing it and re-entering the page', async () => {
+    const asyncSingleRecipientDTO = {
+      ...notificationDTO,
+      notificationFeePolicy: NotificationFeePolicy.DeliveryMode,
+      pagoPaIntMode: PagoPaIntegrationMode.Async,
+      recipients: [pgRecipient],
+    };
+
+    mock
+      .onGet(`/bff/v1/notifications/received/${notificationDTO.iun}`)
+      .reply(200, asyncSingleRecipientDTO);
+    mock.onPost(`/bff/v1/payments/info`, paymentInfoRequest).reply(200, paymentInfo);
+    mock.onGet(/\/bff\/v1\/downtime\/history.*/).reply(200, downtimesDTO);
+
+    // 1) first enter -> banner is visible
+    await act(async () => {
+      result = render(<Component />, {
+        preloadedState: {
+          userState: { user: adminUser },
+        },
+        route: routes.GET_DETTAGLIO_NOTIFICA_PATH(notificationDTO.iun),
+      });
+    });
+
+    const banner = result.getByTestId('notificationCostBanner');
+    expect(banner).toBeInTheDocument();
+
+    // 2) close banner
+    await userEvent.click(within(banner).getByRole('button', { name: 'button.close' }));
+
+    await waitFor(() => {
+      expect(result.queryByTestId('notificationCostBanner')).not.toBeInTheDocument();
+    });
+
+    // 3) leave page (unmount)
+    result.unmount();
+
+    // 4) re-enter page (remount) -> banner is visible again
+    await act(async () => {
+      result = render(<Component />, {
+        preloadedState: {
+          userState: { user: adminUser },
+        },
+        route: routes.GET_DETTAGLIO_NOTIFICA_PATH(notificationDTO.iun),
+      });
+    });
+
+    expect(result.getByTestId('notificationCostBanner')).toBeInTheDocument();
+  });
+
+  it('renders pec unreachable alert - SIMPLE_REGISTERED_LETTER and ASYNC', async () => {
+    const asyncSingleRecipientDTO = {
+      ...notificationDTO,
+      notificationFeePolicy: NotificationFeePolicy.DeliveryMode,
+      pagoPaIntMode: PagoPaIntegrationMode.Async,
+      recipients: [pgRecipient],
+    };
+
+    const spy = vi.spyOn(StatusHistoryParser, 'parse').mockReturnValue({
+      resolveDeliveryOutcome: () => ({ type: DeliveryOutcomeType.DIGITAL_FAILURE }),
+      hasViewedStatus: () => true,
+      hasSimpleRegisteredLetter: () => true,
+    } as any);
+
+    mock
+      .onGet(`/bff/v1/notifications/received/${notificationDTO.iun}`)
+      .reply(200, asyncSingleRecipientDTO);
+    mock.onPost(`/bff/v1/payments/info`, paymentInfoRequest).reply(200, paymentInfo);
+    mock.onGet(/\/bff\/v1\/downtime\/history.*/).reply(200, downtimesDTO);
+
+    await act(async () => {
+      result = render(<Component />, {
+        preloadedState: {
+          userState: { user: adminUser },
+        },
+        route: routes.GET_DETTAGLIO_NOTIFICA_PATH(notificationDTO.iun),
+      });
+    });
+
+    expect(result.getByTestId('notificationCostBanner')).toBeInTheDocument();
+    expect(result.getByTestId('pecUnreachableAlertText')).toBeInTheDocument();
+
+    spy.mockRestore();
+  });
+
+  it('does not render pec unreachable alert - SIMPLE_REGISTERED_LETTER and not ASYNC', async () => {
+    const spy = vi.spyOn(StatusHistoryParser, 'parse').mockReturnValue({
+      resolveDeliveryOutcome: () => ({ type: DeliveryOutcomeType.DIGITAL_FAILURE }),
+      hasViewedStatus: () => true,
+      hasSimpleRegisteredLetter: () => true,
+    } as any);
+
+    mock.onGet(`/bff/v1/notifications/received/${notificationDTO.iun}`).reply(200, notificationDTO);
+    mock.onPost(`/bff/v1/payments/info`, paymentInfoRequest).reply(200, paymentInfo);
+    mock.onGet(/\/bff\/v1\/downtime\/history.*/).reply(200, downtimesDTO);
+
+    await act(async () => {
+      result = render(<Component />, {
+        preloadedState: {
+          userState: { user: adminUser },
+        },
+        route: routes.GET_DETTAGLIO_NOTIFICA_PATH(notificationDTO.iun),
+      });
+    });
+
+    expect(result.queryByTestId('pecUnreachableAlertText')).not.toBeInTheDocument();
+
+    spy.mockRestore();
+  });
+
+  it('does not render NotificationCostBanner when notification is cancelled', async () => {
+    const cancelledAsyncSingleRecipientDTO = {
+      ...notificationDTO,
+      notificationFeePolicy: NotificationFeePolicy.DeliveryMode,
+      pagoPaIntMode: PagoPaIntegrationMode.Async,
+      recipients: [pgRecipient],
+      notificationStatus: NotificationStatus.CANCELLED,
+      timeline: [
+        ...notificationDTO.timeline,
+        {
+          elementId: 'NOTIFICATION_CANCELLATION_REQUEST.HYTD-ERPH-WDUE-202308-H-1',
+          timestamp: '2033-08-14T13:42:54.17675939Z',
+          legalFactsIds: [],
+          category: TimelineCategory.NOTIFICATION_CANCELLATION_REQUEST,
+          details: {},
+        },
+      ],
+    };
+
+    mock
+      .onGet(`/bff/v1/notifications/received/${notificationDTO.iun}`)
+      .reply(200, cancelledAsyncSingleRecipientDTO);
+    mock.onGet(/\/bff\/v1\/downtime\/history.*/).reply(200, downtimesDTO);
+
+    await act(async () => {
+      result = render(<Component />, {
+        preloadedState: {
+          userState: { user: adminUser },
+        },
+        route: routes.GET_DETTAGLIO_NOTIFICA_PATH(notificationDTO.iun),
+      });
+    });
+
+    expect(result.queryByTestId('notificationCostBanner')).not.toBeInTheDocument();
+    expect(result.queryByTestId('addDomicileBanner')).not.toBeInTheDocument();
+  });
+
+  it('does not render DomicileBanner when not viewed', async () => {
+    const spy = vi.spyOn(StatusHistoryParser, 'parse').mockReturnValue({
+      resolveDeliveryOutcome: () => null,
+      hasViewedStatus: () => false,
+      hasSimpleRegisteredLetter: () => false,
+    } as any);
+
+    mock.onGet(`/bff/v1/notifications/received/${notificationDTO.iun}`).reply(200, notificationDTO);
+    mock.onPost(`/bff/v1/payments/info`, paymentInfoRequest).reply(200, paymentInfo);
+    mock.onGet(/\/bff\/v1\/downtime\/history.*/).reply(200, downtimesDTO);
+
+    await act(async () => {
+      result = render(<Component />, {
+        preloadedState: {
+          userState: { user: adminUser },
+        },
+        route: routes.GET_DETTAGLIO_NOTIFICA_PATH(notificationDTO.iun),
+      });
+    });
+
+    expect(result.queryByTestId('addDomicileBanner')).not.toBeInTheDocument();
+    expect(result.queryByTestId('notificationCostBanner')).not.toBeInTheDocument();
+
+    spy.mockRestore();
+  });
+
+  it('renders DomicileBanner when viewed and not NotificationCostBanner - admin user', async () => {
+    const spy = vi.spyOn(StatusHistoryParser, 'parse').mockReturnValue({
+      resolveDeliveryOutcome: () => ({ type: DeliveryOutcomeType.VIEWED }),
+      hasViewedStatus: () => true,
+      hasSimpleRegisteredLetter: () => false,
+    } as any);
+
+    mock.onGet(`/bff/v1/notifications/received/${notificationDTO.iun}`).reply(200, notificationDTO);
+    mock.onPost(`/bff/v1/payments/info`, paymentInfoRequest).reply(200, paymentInfo);
+    mock.onGet(/\/bff\/v1\/downtime\/history.*/).reply(200, downtimesDTO);
+
+    await act(async () => {
+      result = render(<Component />, {
+        preloadedState: {
+          userState: { user: adminUser },
+        },
+        route: routes.GET_DETTAGLIO_NOTIFICA_PATH(notificationDTO.iun),
+      });
+    });
+
+    expect(result.getByTestId('addDomicileBanner')).toBeInTheDocument();
+    expect(result.queryByTestId('notificationCostBanner')).not.toBeInTheDocument();
+
+    spy.mockRestore();
+  });
+
+  it('does not render DomicileBanner when viewed and not NotificationCostBanner - admin with groups', async () => {
+    const spy = vi.spyOn(StatusHistoryParser, 'parse').mockReturnValue({
+      resolveDeliveryOutcome: () => ({ type: DeliveryOutcomeType.VIEWED }),
+      hasViewedStatus: () => true,
+      hasSimpleRegisteredLetter: () => false,
+    } as any);
+
+    mock.onGet(`/bff/v1/notifications/received/${notificationDTO.iun}`).reply(200, notificationDTO);
+    mock.onPost(`/bff/v1/payments/info`, paymentInfoRequest).reply(200, paymentInfo);
+    mock.onGet(/\/bff\/v1\/downtime\/history.*/).reply(200, downtimesDTO);
+
+    await act(async () => {
+      result = render(<Component />, {
+        preloadedState: {
+          userState: { user: adminUserWithGroup },
+        },
+        route: routes.GET_DETTAGLIO_NOTIFICA_PATH(notificationDTO.iun),
+      });
+    });
+
+    expect(result.queryByTestId('addDomicileBanner')).not.toBeInTheDocument();
+    expect(result.queryByTestId('notificationCostBanner')).not.toBeInTheDocument();
+
+    spy.mockRestore();
+  });
+
+  it('does not render pec unreachable alert - SIMPLE_REGISTERED_LETTER and ASYNC with multiple recipients', async () => {
+    const asyncMultiRecipientDTO = {
+      ...notificationDTO,
+      notificationFeePolicy: NotificationFeePolicy.DeliveryMode,
+      pagoPaIntMode: PagoPaIntegrationMode.Async,
+      recipients: [pgRecipient, pfRecipient],
+    };
+
+    const spy = vi.spyOn(StatusHistoryParser, 'parse').mockReturnValue({
+      resolveDeliveryOutcome: () => ({ type: DeliveryOutcomeType.DIGITAL_FAILURE }),
+      hasViewedStatus: () => true,
+      hasSimpleRegisteredLetter: () => true,
+    } as any);
+
+    mock
+      .onGet(`/bff/v1/notifications/received/${notificationDTO.iun}`)
+      .reply(200, asyncMultiRecipientDTO);
+    mock.onPost(`/bff/v1/payments/info`, paymentInfoRequest).reply(200, paymentInfo);
+    mock.onGet(/\/bff\/v1\/downtime\/history.*/).reply(200, downtimesDTO);
+
+    await act(async () => {
+      result = render(<Component />, {
+        preloadedState: {
+          userState: { user: adminUser },
+        },
+        route: routes.GET_DETTAGLIO_NOTIFICA_PATH(notificationDTO.iun),
+      });
+    });
+
+    expect(result.queryByTestId('pecUnreachableAlertText')).not.toBeInTheDocument();
+
+    expect(result.getByTestId('addDomicileBanner')).toBeInTheDocument();
+    expect(result.queryByTestId('notificationCostBanner')).not.toBeInTheDocument();
+
+    spy.mockRestore();
+  });
+
   it('renders NotificationDetail page when status is CANCELLED - documents messages', async () => {
     mock.onGet(`/bff/v1/notifications/received/${notificationDTO.iun}`).reply(200, {
       ...notificationDTO,
@@ -186,12 +548,11 @@ describe('NotificationDetail Page', async () => {
     // we use regexp to not set the query parameters
     mock.onGet(/\/bff\/v1\/downtime\/history.*/).reply(200, downtimesDTO);
     await act(async () => {
-      result = render(<NotificationDetail />, {
+      result = render(<Component />, {
         preloadedState: {
-          userState: {
-            user: userResponse,
-          },
+          userState: { user: adminUser },
         },
+        route: routes.GET_DETTAGLIO_NOTIFICA_PATH(notificationDTO.iun),
       });
     });
     expect(mock.history.get).toHaveLength(2);
@@ -226,10 +587,11 @@ describe('NotificationDetail Page', async () => {
     mock.onGet(/\/bff\/v1\/downtime\/history.*/).reply(200, downtimesDTO);
 
     await act(async () => {
-      result = render(<NotificationDetail />, {
+      result = render(<Component />, {
         preloadedState: {
-          userState: { user: { fiscal_number: notificationDTO.recipients[2].taxId } },
+          userState: { user: adminUser },
         },
+        route: routes.GET_DETTAGLIO_NOTIFICA_PATH(notificationDTO.iun),
       });
     });
 
@@ -255,7 +617,12 @@ describe('NotificationDetail Page', async () => {
     // we use regexp to not set the query parameters
     mock.onGet(/\/bff\/v1\/downtime\/history.*/).reply(200, downtimesDTO);
     await act(async () => {
-      result = render(<NotificationDetail />);
+      result = render(<Component />, {
+        preloadedState: {
+          userState: { user: adminUser },
+        },
+        route: routes.GET_DETTAGLIO_NOTIFICA_PATH(notificationDTO.iun),
+      });
     });
     expect(mock.history.get).toHaveLength(2);
     expect(mock.history.post).toHaveLength(1);
@@ -274,14 +641,17 @@ describe('NotificationDetail Page', async () => {
   it('checks not available payment', async () => {
     mock.onGet(`/bff/v1/notifications/received/${notificationDTO.iun}`).reply(200, {
       ...notificationDTO,
-      recipients: [
-        { ...notificationDTO.recipients[1], payment: { creditorTaxId: null, noticeCode: null } },
-      ],
+      recipients: [{ ...pgRecipient, payment: { creditorTaxId: null, noticeCode: null } }],
     });
     // we use regexp to not set the query parameters
     mock.onGet(/\/bff\/v1\/downtime\/history.*/).reply(200, downtimesDTO);
     await act(async () => {
-      result = render(<NotificationDetail />);
+      result = render(<Component />, {
+        preloadedState: {
+          userState: { user: adminUser },
+        },
+        route: routes.GET_DETTAGLIO_NOTIFICA_PATH(notificationDTO.iun),
+      });
     });
     // check payment box
     const paymentData = result?.queryByTestId('paymentData');
@@ -305,12 +675,11 @@ describe('NotificationDetail Page', async () => {
         url: 'https://mocked-url.com',
       });
     await act(async () => {
-      result = render(<NotificationDetail />, {
+      result = render(<Component />, {
         preloadedState: {
-          userState: {
-            user: userResponse,
-          },
+          userState: { user: adminUser },
         },
+        route: routes.GET_DETTAGLIO_NOTIFICA_PATH(notificationDTO.iun),
       });
     });
     expect(mock.history.get).toHaveLength(2);
@@ -324,7 +693,7 @@ describe('NotificationDetail Page', async () => {
       );
     });
     await waitFor(() => {
-      expect(window.location.href).toBe('https://mocked-url.com');
+      expect(globalThis.location.href).toBe('https://mocked-url.com');
     });
   });
 
@@ -344,14 +713,13 @@ describe('NotificationDetail Page', async () => {
       result = render(
         <>
           <AppMessage />
-          <NotificationDetail />
+          <Component />
         </>,
         {
           preloadedState: {
-            userState: {
-              user: userResponse,
-            },
+            userState: { user: adminUser },
           },
+          route: routes.GET_DETTAGLIO_NOTIFICA_PATH(notificationDTO.iun),
         }
       );
     });
@@ -385,7 +753,7 @@ describe('NotificationDetail Page', async () => {
       );
     });
     await waitFor(() => {
-      expect(window.location.href).toBe('https://mocked-url-com');
+      expect(globalThis.location.href).toBe('https://mocked-url-com');
     });
   });
 
@@ -415,12 +783,13 @@ describe('NotificationDetail Page', async () => {
       result = render(
         <>
           <AppMessage />
-          <NotificationDetail />
+          <Component />
         </>,
         {
           preloadedState: {
-            userState: { user: { fiscal_number: notificationDTO.recipients[2].taxId } },
+            userState: { user: adminUser },
           },
+          route: routes.GET_DETTAGLIO_NOTIFICA_PATH(notificationDTO.iun),
         }
       );
     });
@@ -457,7 +826,7 @@ describe('NotificationDetail Page', async () => {
       );
     });
     await waitFor(() => {
-      expect(window.location.href).toBe('https://mocked-aar-com');
+      expect(globalThis.location.href).toBe('https://mocked-aar-com');
     });
   });
 
@@ -472,12 +841,11 @@ describe('NotificationDetail Page', async () => {
       url: 'https://mocked-url-com',
     });
     await act(async () => {
-      result = render(<NotificationDetail />, {
+      result = render(<Component />, {
         preloadedState: {
-          userState: {
-            user: userResponse,
-          },
+          userState: { user: adminUser },
         },
+        route: routes.GET_DETTAGLIO_NOTIFICA_PATH(notificationDTO.iun),
       });
     });
     expect(mock.history.get).toHaveLength(2);
@@ -492,7 +860,7 @@ describe('NotificationDetail Page', async () => {
       );
     });
     await waitFor(() => {
-      expect(window.location.href).toBe('https://mocked-url-com');
+      expect(globalThis.location.href).toBe('https://mocked-url-com');
     });
   });
 
@@ -502,34 +870,37 @@ describe('NotificationDetail Page', async () => {
     // we use regexp to not set the query parameters
     mock.onGet(/\/bff\/v1\/downtime\/history.*/).reply(200, downtimesDTO);
     await act(async () => {
-      result = render(<NotificationDetail />, {
+      result = render(<Component />, {
         preloadedState: {
-          userState: {
-            user: userResponse,
-          },
+          userState: { user: adminUser },
         },
+        route: routes.GET_DETTAGLIO_NOTIFICA_PATH(notificationDTO.iun),
       });
     });
     const backButton = result?.getByTestId('breadcrumb-indietro-button');
     expect(backButton).toBeInTheDocument();
     fireEvent.click(backButton);
-    expect(mockNavigateFn).toHaveBeenCalledTimes(1);
-    expect(mockNavigateFn).toHaveBeenCalledWith(routes.NOTIFICHE);
+    expect(result.router.state.location.pathname).toBe(routes.NOTIFICHE);
   });
 
   it('navigation from QR code - does not include back button', async () => {
-    mockIsFromQrCode = true;
     mock.onGet(`/bff/v1/notifications/received/${notificationDTO.iun}`).reply(200, notificationDTO);
     mock.onPost(`/bff/v1/payments/info`, paymentInfoRequest).reply(200, paymentInfo);
     // we use regexp to not set the query parameters
     mock.onGet(/\/bff\/v1\/downtime\/history.*/).reply(200, downtimesDTO);
     await act(async () => {
-      result = render(<NotificationDetail />, {
+      result = render(<Component />, {
         preloadedState: {
           userState: {
-            user: userResponse,
+            user: adminUser,
           },
         },
+        route: [
+          {
+            pathname: routes.GET_DETTAGLIO_NOTIFICA_PATH(notificationDTO.iun),
+            state: { fromQrCode: true },
+          },
+        ],
       });
     });
     const backButton = result?.queryByTestId('breadcrumb-indietro-button');
@@ -546,14 +917,13 @@ describe('NotificationDetail Page', async () => {
         <>
           <ResponseEventDispatcher />
           <AppResponseMessage />
-          <NotificationDetail />
+          <Component />
         </>,
         {
           preloadedState: {
-            userState: {
-              user: userResponse,
-            },
+            userState: { user: adminUser },
           },
+          route: routes.GET_DETTAGLIO_NOTIFICA_PATH(notificationDTO.iun),
         }
       );
     });
@@ -564,7 +934,6 @@ describe('NotificationDetail Page', async () => {
   });
 
   it('renders NotificationDetail page with delegator logged', async () => {
-    mockIsDelegate = true;
     mock
       .onGet(
         `/bff/v1/notifications/received/${notificationDTO.iun}?mandateId=${delegator?.mandateId}`
@@ -574,10 +943,17 @@ describe('NotificationDetail Page', async () => {
     // we use regexp to not set the query parameters
     mock.onGet(/\/bff\/v1\/downtime\/history.*/).reply(200, downtimesDTO);
     await act(async () => {
-      result = render(<NotificationDetail />, {
+      result = render(<Component />, {
         preloadedState: {
-          userState: { user: userResponse },
+          userState: { user: adminUser },
+          generalInfoState: {
+            delegators: mandatesByDelegate,
+          },
         },
+        route: routes.GET_DETTAGLIO_NOTIFICA_DELEGATO_PATH(
+          notificationDTO.iun,
+          delegator!.mandateId
+        ),
       });
     });
     // when a delegator sees a notification, we expect that he sees the same things that sees the recipient except the disclaimer
@@ -591,9 +967,7 @@ describe('NotificationDetail Page', async () => {
     expect(notificationDetailTable).toBeInTheDocument();
     const tableRows = notificationDetailTable?.querySelectorAll('tr');
     expect(tableRows[0]).toHaveTextContent(`detail.sender${notificationToFe.senderDenomination}`);
-    expect(tableRows[1]).toHaveTextContent(
-      `detail.recipient${notificationToFe.recipients[1].denomination}`
-    );
+    expect(tableRows[1]).toHaveTextContent(`detail.recipient${pgRecipient.denomination}`);
     expect(tableRows[2]).toHaveTextContent(`detail.date${formatDate(notificationToFe.sentAt)}`);
     expect(tableRows[3]).toHaveTextContent(`detail.iun${notificationToFe.iun}`);
     // check documents box
@@ -622,7 +996,6 @@ describe('NotificationDetail Page', async () => {
   });
 
   it('normal navigation when delegator is logged - includes back button', async () => {
-    mockIsDelegate = true;
     mock
       .onGet(
         `/bff/v1/notifications/received/${notificationDTO.iun}?mandateId=${delegator?.mandateId}`
@@ -632,38 +1005,37 @@ describe('NotificationDetail Page', async () => {
     // we use regexp to not set the query parameters
     mock.onGet(/\/bff\/v1\/downtime\/history.*/).reply(200, downtimesDTO);
     await act(async () => {
-      result = render(<NotificationDetail />, {
+      result = render(<Component />, {
         preloadedState: {
-          userState: { user: userResponse },
+          userState: { user: adminUser },
           generalInfoState: {
+            delegators: mandatesByDelegate,
             digitalAddresses: [],
           },
         },
+        route: routes.GET_DETTAGLIO_NOTIFICA_DELEGATO_PATH(
+          notificationDTO.iun,
+          delegator!.mandateId
+        ),
       });
     });
     const backButton = result?.getByTestId('breadcrumb-indietro-button');
     expect(backButton).toBeInTheDocument();
     fireEvent.click(backButton);
-    expect(mockNavigateFn).toHaveBeenCalledTimes(1);
-    expect(mockNavigateFn).toHaveBeenCalledWith(routes.NOTIFICHE_DELEGATO);
+    expect(result.router.state.location.pathname).toBe(routes.NOTIFICHE_DELEGATO);
   });
 
-  it('renders NotificationDetail page with user with groups logged', async () => {
-    mockIsDelegate = false;
+  it('renders NotificationDetail page - admin with groups', async () => {
     mock.onGet(`/bff/v1/notifications/received/${notificationDTO.iun}`).reply(200, notificationDTO);
     mock.onPost(`/bff/v1/payments/info`, paymentInfoRequest).reply(200, paymentInfo);
     // we use regexp to not set the query parameters
     mock.onGet(/\/bff\/v1\/downtime\/history.*/).reply(200, downtimesDTO);
     await act(async () => {
-      result = render(<NotificationDetail />, {
+      result = render(<Component />, {
         preloadedState: {
-          userState: {
-            user: {
-              ...userResponse,
-              hasGroup: true,
-            },
-          },
+          userState: { user: adminUserWithGroup },
         },
+        route: routes.GET_DETTAGLIO_NOTIFICA_PATH(notificationDTO.iun),
       });
     });
     // when a delegator sees a notification, we expect that he sees the same things that sees the recipient except the disclaimer
@@ -679,9 +1051,7 @@ describe('NotificationDetail Page', async () => {
     expect(notificationDetailTable).toBeInTheDocument();
     const tableRows = notificationDetailTable?.querySelectorAll('tr');
     expect(tableRows[0]).toHaveTextContent(`detail.sender${notificationToFe.senderDenomination}`);
-    expect(tableRows[1]).toHaveTextContent(
-      `detail.recipient${notificationToFe.recipients[1].denomination}`
-    );
+    expect(tableRows[1]).toHaveTextContent(`detail.recipient${pgRecipient.denomination}`);
     expect(tableRows[2]).toHaveTextContent(`detail.date${formatDate(notificationToFe.sentAt)}`);
     expect(tableRows[3]).toHaveTextContent(`detail.iun${notificationToFe.iun}`);
     // check documents box
@@ -731,17 +1101,18 @@ describe('NotificationDetail Page', async () => {
           companyName: notificationToFe.senderDenomination,
           description: notificationToFe.subject,
         },
-        returnUrl: window.location.href,
+        returnUrl: globalThis.location.href,
       })
       .reply(200, {
         checkoutUrl: 'https://mocked-url.com',
       });
 
     await act(async () => {
-      result = render(<NotificationDetail />, {
+      result = render(<Component />, {
         preloadedState: {
-          userState: { user: { fiscal_number: notificationDTO.recipients[2].taxId } },
+          userState: { user: adminUser },
         },
+        route: routes.GET_DETTAGLIO_NOTIFICA_PATH(notificationDTO.iun),
       });
     });
 
@@ -792,19 +1163,20 @@ describe('NotificationDetail Page', async () => {
           companyName: notificationToFe.senderDenomination,
           description: notificationToFe.subject,
         },
-        returnUrl: window.location.href,
+        returnUrl: globalThis.location.href,
       })
       .reply(errorMock.status, errorMock.data);
 
     await act(async () => {
-      result = render(<NotificationDetail />, {
+      result = render(<Component />, {
         preloadedState: {
-          userState: { user: { fiscal_number: notificationDTO.recipients[2].taxId } },
+          userState: { user: adminUser },
         },
+        route: routes.GET_DETTAGLIO_NOTIFICA_PATH(notificationDTO.iun),
       });
     });
 
-    expect(testStore.getState().notificationState.paymentsData.pagoPaF24.length).toBe(6);
+    expect(result.testStore.getState().notificationState.paymentsData.pagoPaF24.length).toBe(6);
 
     const payButton = result.getByTestId('pay-button');
     const item = result.queryAllByTestId('pagopa-item')[requiredPaymentIndex];
@@ -827,7 +1199,7 @@ describe('NotificationDetail Page', async () => {
 
     expect(errorMessage).toBeVisible();
     expect(reloadButton).toBeVisible();
-    expect(testStore.getState().notificationState.paymentsData.pagoPaF24.length).toBe(6);
+    expect(result.testStore.getState().notificationState.paymentsData.pagoPaF24.length).toBe(6);
 
     vi.useRealTimers();
   });
@@ -836,7 +1208,7 @@ describe('NotificationDetail Page', async () => {
     let paginationData = {
       page: 0,
       size: 5,
-      totalElements: notificationDTO.recipients[2].payments?.length,
+      totalElements: pgRecipient.payments?.length,
     };
 
     mock.onGet(`/bff/v1/notifications/received/${notificationDTO.iun}`).reply(200, notificationDTO);
@@ -845,10 +1217,11 @@ describe('NotificationDetail Page', async () => {
       .reply(200, paymentInfo.slice(0, paginationData.size));
 
     await act(async () => {
-      result = render(<NotificationDetail />, {
+      result = render(<Component />, {
         preloadedState: {
-          userState: { user: { fiscal_number: notificationDTO.recipients[2].taxId } },
+          userState: { user: adminUser },
         },
+        route: routes.GET_DETTAGLIO_NOTIFICA_PATH(notificationDTO.iun),
       });
     });
 
@@ -897,10 +1270,11 @@ describe('NotificationDetail Page', async () => {
     mock.onPost(`/bff/v1/payments/info`, paymentInfoRequest.slice(0, 5)).reply(200, paymentInfo);
 
     await act(async () => {
-      result = render(<NotificationDetail />, {
+      result = render(<Component />, {
         preloadedState: {
-          userState: { user: { fiscal_number: notificationDTO.recipients[2].taxId } },
+          userState: { user: adminUser },
         },
+        route: routes.GET_DETTAGLIO_NOTIFICA_PATH(notificationDTO.iun),
       });
     });
 
@@ -911,7 +1285,7 @@ describe('NotificationDetail Page', async () => {
     mock.resetHistory();
 
     await act(async () => {
-      result?.rerender(<NotificationDetail />);
+      result?.rerender(<Component />);
     });
 
     expect(mock.history.post).toHaveLength(0);
@@ -932,10 +1306,11 @@ describe('NotificationDetail Page', async () => {
     sessionStorage.setItem('payments', JSON.stringify(cacheWithOldDate));
 
     await act(async () => {
-      result = render(<NotificationDetail />, {
+      result = render(<Component />, {
         preloadedState: {
-          userState: { user: { fiscal_number: notificationDTO.recipients[2].taxId } },
+          userState: { user: adminUser },
         },
+        route: routes.GET_DETTAGLIO_NOTIFICA_PATH(notificationDTO.iun),
       });
     });
 
@@ -968,10 +1343,11 @@ describe('NotificationDetail Page', async () => {
       .reply(200, paymentInfo.slice(0, 1));
 
     await act(async () => {
-      result = render(<NotificationDetail />, {
+      result = render(<Component />, {
         preloadedState: {
-          userState: { user: { fiscal_number: notificationDTO.recipients[2].taxId } },
+          userState: { user: adminUser },
         },
+        route: routes.GET_DETTAGLIO_NOTIFICA_PATH(notificationDTO.iun),
       });
     });
 
@@ -986,10 +1362,11 @@ describe('NotificationDetail Page', async () => {
       .onGet(`/bff/v1/notifications/received/${raddNotificationDTO.iun}`)
       .reply(200, raddNotificationDTO);
     await act(async () => {
-      result = render(<NotificationDetail />, {
+      result = render(<Component />, {
         preloadedState: {
-          userState: { user: { fiscal_number: raddNotificationDTO.recipients[2].taxId } },
+          userState: { user: adminUser },
         },
+        route: routes.GET_DETTAGLIO_NOTIFICA_PATH(raddNotificationDTO.iun),
       });
     });
 
