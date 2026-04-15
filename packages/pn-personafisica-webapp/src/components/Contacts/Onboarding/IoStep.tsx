@@ -13,17 +13,19 @@ import {
 } from '../../../models/contacts';
 import { enableIOAddress, getDigitalAddresses } from '../../../redux/contact/actions';
 import { useAppDispatch } from '../../../redux/hooks';
+import { getConfiguration } from '../../../services/configuration.service';
+import { openAppIoDownloadPage } from '../../../utility/appio.utility';
 
 type Props = {
   value?: IOAllowedValues;
   onChange: (value?: IOAllowedValues) => void;
   onContinue: () => void;
-  onDownloadApp?: () => void;
 };
 
-const IoStep: React.FC<Props> = ({ value, onChange, onContinue, onDownloadApp }) => {
+const IoStep: React.FC<Props> = ({ value, onChange, onContinue }) => {
   const { t } = useTranslation(['recapiti', 'common']);
   const dispatch = useAppDispatch();
+  const { APP_IO_SITE, APP_IO_ANDROID, APP_IO_IOS } = getConfiguration();
 
   const getStatus = (): IOContactStatus => {
     if (value === IOAllowedValues.ENABLED) {
@@ -98,7 +100,11 @@ const IoStep: React.FC<Props> = ({ value, onChange, onContinue, onDownloadApp })
         break;
       case IOContactStatus.UNAVAILABLE:
       default:
-        onDownloadApp?.();
+        openAppIoDownloadPage({
+          appIoSite: APP_IO_SITE,
+          appIoAndroid: APP_IO_ANDROID,
+          appIoIos: APP_IO_IOS,
+        });
         break;
     }
   };

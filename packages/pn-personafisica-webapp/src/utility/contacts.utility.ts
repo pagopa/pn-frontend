@@ -95,7 +95,6 @@ export const specialContactsAvailableAddressTypes = (
   addressesData: SelectedAddresses
 ): Array<AddressTypeItem> =>
   addressesRelationships.map((relation) => {
-
     const isShown = isDropdownItemShown(relation, addressesData);
 
     return {
@@ -146,3 +145,8 @@ export const removeAddress = (
       address.addressType !== addressType ||
       address.channelType !== channelType
   );
+
+export const normalizeContactValue = (value?: string): string | undefined => {
+  const normalized = value?.trim();
+  return normalized || undefined;
+};

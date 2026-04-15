@@ -35,6 +35,7 @@ import {
 } from '../../../redux/contact/actions';
 import { contactsSelectors } from '../../../redux/contact/reducers';
 import { useAppDispatch, useAppSelector } from '../../../redux/hooks';
+import { normalizeContactValue } from '../../../utility/contacts.utility';
 import ChooseDigitalDomicileStep from './ChooseDigitalDomicileStep';
 import EmailStep from './EmailStep';
 import IoStep from './IoStep';
@@ -57,11 +58,6 @@ type InitialContactsSnapshot = {
 };
 
 const STEPS_COUNT = 4;
-
-const normalizeStringValue = (value?: string): string | undefined => {
-  const normalized = value?.trim();
-  return normalized || undefined;
-};
 
 const buildContactState = <T extends ContactValue>(value: T): ContactState<T> => ({
   value,
@@ -90,10 +86,12 @@ const DigitalDomicileWizard: React.FC = () => {
   );
 
   const initialContactsRef = useRef<InitialContactsSnapshot>({
-    email: normalizeStringValue(defaultEMAILAddress?.value),
-    pec: normalizeStringValue(defaultPECAddress?.value),
+    email: normalizeContactValue(defaultEMAILAddress?.value),
+    pec: normalizeContactValue(defaultPECAddress?.value),
     io: defaultAPPIOAddress?.value as IOAllowedValues | undefined,
   });
+
+  const pecContinueHandlerRef = useRef<(() => Promise<boolean>) | null>(null);
 
   const [activeStep, setActiveStep] = useState(0);
   const [wizardState, setWizardState] = useState<WizardState>(() =>
@@ -108,7 +106,13 @@ const DigitalDomicileWizard: React.FC = () => {
   const isSendMode = wizardState.mode === 'send';
   const isPecMode = wizardState.mode === 'pec';
   const isIoEnabled = wizardState.io.value === IOAllowedValues.ENABLED;
-  const showNextButton = !isChoiceStep && !(isIoStep && isIoEnabled);
+  const isSendEmailAlreadyPresent =
+    isSendMode && wizardState.email.alreadySet && Boolean(wizardState.email.value);
+
+  const showNextButton =
+    !isChoiceStep &&
+    !(isIoStep && isIoEnabled) &&
+    !(isContactStep && isSendMode && !isSendEmailAlreadyPresent);
 
   const goToNextStep = () => {
     setActiveStep((step) => Math.min(step + 1, STEPS_COUNT));
@@ -135,7 +139,7 @@ const DigitalDomicileWizard: React.FC = () => {
       ...prev,
       email: {
         ...prev.email,
-        value: normalizeStringValue(value),
+        value: normalizeContactValue(value),
       },
     }));
   };
@@ -145,7 +149,7 @@ const DigitalDomicileWizard: React.FC = () => {
       ...prev,
       pec: {
         ...prev.pec,
-        value: normalizeStringValue(value),
+        value: normalizeContactValue(value),
       },
     }));
   };
@@ -174,20 +178,6 @@ const DigitalDomicileWizard: React.FC = () => {
     }));
   };
 
-  const canContinueFromContactStep = () => {
-    if (!isContactStep || !wizardState.mode) {
-      return false;
-    }
-    if (isSendMode) {
-      return Boolean(wizardState.email.value);
-    }
-
-    return (
-      Boolean(wizardState.pec.value) &&
-      (!wizardState.showOptionalEmail || Boolean(wizardState.email.value))
-    );
-  };
-
   const canContinueFromSummaryStep = () => {
     if (!isSummaryStep || !wizardState.mode) {
       return false;
@@ -198,6 +188,8 @@ const DigitalDomicileWizard: React.FC = () => {
 
     return true;
   };
+
+  const disableNextButton = isSummaryStep && !canContinueFromSummaryStep();
 
   const getNextButtonLabel = () => {
     if (isContactStep) {
@@ -267,16 +259,27 @@ const DigitalDomicileWizard: React.FC = () => {
 
   const handleNext = async () => {
     if (isContactStep) {
-      if (!canContinueFromContactStep()) {
+      if (isPecMode) {
+        const canProceed = await pecContinueHandlerRef.current?.();
+
+        if (canProceed !== true) {
+          return;
+        }
+      }
+
+      if (isSendMode && !isSendEmailAlreadyPresent) {
         return;
       }
+
       goToNextStep();
       return;
     }
+
     if (isIoStep) {
       goToNextStep();
       return;
     }
+
     if (isSummaryStep) {
       if (!canContinueFromSummaryStep()) {
         return;
@@ -315,10 +318,7 @@ const DigitalDomicileWizard: React.FC = () => {
         onClick={() => void handleNext()}
         color="primary"
         size="medium"
-        disabled={
-          (isContactStep && !canContinueFromContactStep()) ||
-          (isSummaryStep && !canContinueFromSummaryStep())
-        }
+        disabled={disableNextButton}
         sx={{ width: { xs: '100%', md: 'auto' }, ml: { md: 'auto' } }}
         data-testid="next-button"
       >
@@ -389,16 +389,15 @@ const DigitalDomicileWizard: React.FC = () => {
             onPecChange={setPecValue}
             onEmailChange={setEmailValue}
             onShowOptionalEmail={setShowOptionalEmail}
+            registerContinueHandler={(handler) => {
+              // eslint-disable-next-line functional/immutable-data
+              pecContinueHandlerRef.current = handler;
+            }}
           />
         )}
       </PnWizardStep>
       <PnWizardStep label={t('onboarding.digital-domicile.steps.io')}>
-        <IoStep
-          value={wizardState.io.value}
-          onChange={setIoValue}
-          onContinue={() => console.log('Continue')}
-          onDownloadApp={() => console.log('Download App')}
-        />
+        <IoStep value={wizardState.io.value} onChange={setIoValue} onContinue={goToNextStep} />
       </PnWizardStep>
       <PnWizardStep label={t('onboarding.digital-domicile.steps.summary')}>
         {wizardState.mode ? (

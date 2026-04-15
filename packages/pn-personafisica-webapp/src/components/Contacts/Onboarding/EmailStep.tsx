@@ -8,7 +8,7 @@ import { AddressType, ChannelType, SaveDigitalAddressParams } from '../../../mod
 import { createOrUpdateAddress } from '../../../redux/contact/actions';
 import { contactsSelectors } from '../../../redux/contact/reducers';
 import { useAppDispatch, useAppSelector } from '../../../redux/hooks';
-import { contactAlreadyExists } from '../../../utility/contacts.utility';
+import { contactAlreadyExists, normalizeContactValue } from '../../../utility/contacts.utility';
 import ContactCodeDialog from '../ContactCodeDialog';
 import DigitalContact from '../DigitalContact';
 import ExistingContactDialog from '../ExistingContactDialog';
@@ -23,11 +23,6 @@ enum ModalType {
   EXISTING = 'existing',
   CODE = 'code',
 }
-
-const normalizeStringValue = (value?: string): string | undefined => {
-  const normalized = value?.trim();
-  return normalized || undefined;
-};
 
 const EmailStep: React.FC<Props> = ({ value, alreadySet, onChange }) => {
   const { t } = useTranslation(['recapiti', 'common']);
@@ -44,7 +39,7 @@ const EmailStep: React.FC<Props> = ({ value, alreadySet, onChange }) => {
   const currentValueRef = useRef<string>('');
 
   const handleSubmit = (newValue: string) => {
-    const normalizedValue = normalizeStringValue(newValue);
+    const normalizedValue = normalizeContactValue(newValue);
 
     if (!normalizedValue) {
       return;
@@ -125,7 +120,7 @@ const EmailStep: React.FC<Props> = ({ value, alreadySet, onChange }) => {
         value={value ?? ''}
         channelType={ChannelType.EMAIL}
         inputProps={{
-          label: t('onboarding.digital-domicile.email.input.label'),
+          label: t('onboarding.digital-domicile.email.input-label'),
         }}
         insertButtonLabel={t('onboarding.digital-domicile.email.verify-cta')}
         onSubmit={handleSubmit}

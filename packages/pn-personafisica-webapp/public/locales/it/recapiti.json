@@ -330,10 +330,8 @@
       "email": {
         "title": "Associa un indirizzo email al domicilio digitale",
         "description": "Riceverai un’email alla ricezione di ogni notifica SEND.",
-        "label": "Email",
-        "input": {
-          "label": "Indirizzo email"
-        },
+        "label": "Email:",
+        "input-label": "Indirizzo email",
         "verify-cta": "Verifica email"
       },
       "io": {
@@ -351,6 +349,24 @@
           "primary-cta": "Continua"
         },
         "img-alt-text": ""
+      },
+      "pec": {
+        "title": "La tua PEC come domicilio digitale SEND",
+        "description": "Riceverai le comunicazioni a valore legale sulla tua PEC, solo in digitale, e potrai evitare l’invio di una raccomandata con i relativi costi aggiuntivi.",
+        "label-choose-address": "Scegli un indirizzo PEC:",
+        "label-summary": "PEC",
+        "input-label": "Indirizzo PEC",
+        "verify-cta": "Verifica PEC",
+        "disclaimer": "Premendo <strong>Verifica PEC</strong> accetti che l’indirizzo PEC indicato sia utilizzato in via prioritaria rispetto a eventuali PEC registrate presso un ente mittente o presenti nei pubblici registri. ",
+        "email-cta": "Attiva gli avvisi via email",
+        "optional-email-description": "Vuoi ricevere anche un’email alla ricezione di una notifica SEND?",
+        "optional-email-title": "Attiva gli avvisi via email",
+        "optional-email-label": "Scegli un indirizzo email:",
+        "cancel-email-cta": "Annulla attivazione email",
+        "email-present-description": "Alla ricezione di una notifica SEND, riceverai anche un avviso all’indirizzo:",
+        "edit-email-cta": "Modifica indirizzo",
+        "verify-before-continue-title": "Verifica la tua PEC",
+        "verify-before-continue-content": "Prima di procedere, seleziona Verifica PEC e segui le istruzioni."
       },
       "feedback": {
         "send": {
