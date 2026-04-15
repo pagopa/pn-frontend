@@ -18,6 +18,7 @@ import { PFLoginEventsType } from '../../models/PFLoginEventsType';
 import { getConfiguration } from '../../services/configuration.service';
 import PFLoginEventStrategyFactory from '../../utility/MixpanelUtils/PFLoginEventStrategyFactory';
 import { storageRapidAccessOps } from '../../utility/storage';
+import { isIOSMobile } from '../../utility/utils';
 
 const LoginButton = styled(Button)(() => ({
   '& .MuiButton-startIcon': {
@@ -44,9 +45,7 @@ const Login = () => {
   const privacyPolicyUrl = `${PF_URL}${PRIVACY_POLICY}`;
   const smartBannerHeight = IS_SMART_APP_BANNER_ENABLED ? 66 : 0;
 
-  if (rapidAccess) {
-    storageRapidAccessOps.write(rapidAccess);
-  } else {
+  if (!rapidAccess) {
     storageRapidAccessOps.delete();
   }
 
@@ -56,6 +55,10 @@ const Login = () => {
 
   const goCIE = () => {
     sessionStorage.setItem('IDP', 'CIE');
+
+    if (rapidAccess) {
+      storageRapidAccessOps.write(rapidAccess, isIOSMobile());
+    }
 
     window.location.assign(
       `${URL_API_LOGIN}/login?entityID=${SPID_CIE_ENTITY_ID}&authLevel=SpidL2&RelayState=send`
@@ -196,7 +199,7 @@ const Login = () => {
             </Box>
           </Grid>
         </Grid>
-        <SpidSelect onClose={closeIDPS} show={showIDPS} />
+        <SpidSelect onClose={closeIDPS} show={showIDPS} rapidAccess={rapidAccess} />
       </Layout>
     </>
   );
