@@ -109,4 +109,27 @@ describe('LoginError component', () => {
       expect(storageRapidAccessOps.read()).toBeUndefined();
     });
   });
+
+  it('goToLogin appends rapidAccess param to login route', async () => {
+    storageRapidAccessOps.write([AppRouteParams.AAR, 'fake-aar']);
+    spidErrorCode = '2';
+    const { router } = render(<LoginError />, { route: createMockedErrorUrl() });
+    const buttonRedirect = getById(document.body, 'login-button');
+    fireEvent.click(buttonRedirect);
+    await waitFor(() => {
+      expect(router.state.location.pathname).toBe(ROUTE_LOGIN);
+      expect(router.state.location.search).toBe(`?${AppRouteParams.AAR}=fake-aar`);
+    });
+  });
+
+  it('goToLogin navigates to login without params when no rapidAccess in storage', async () => {
+    spidErrorCode = '2';
+    const { router } = render(<LoginError />, { route: createMockedErrorUrl() });
+    const buttonRedirect = getById(document.body, 'login-button');
+    fireEvent.click(buttonRedirect);
+    await waitFor(() => {
+      expect(router.state.location.pathname).toBe(ROUTE_LOGIN);
+      expect(router.state.location.search).toBe('');
+    });
+  });
 });
