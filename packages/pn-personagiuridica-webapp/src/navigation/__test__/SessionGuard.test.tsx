@@ -4,7 +4,7 @@ import { Route, Routes } from 'react-router-dom';
 import { vi } from 'vitest';
 
 import { userResponse } from '../../__mocks__/Auth.mock';
-import { act, render, screen, waitFor } from '../../__test__/test-utils';
+import { RenderResult, act, render, screen, waitFor } from '../../__test__/test-utils';
 import { authClient } from '../../api/apiClients';
 import { AUTH_TOKEN_EXCHANGE } from '../../api/auth/auth.routes';
 import { store } from '../../redux/store';
@@ -13,17 +13,9 @@ import SessionGuard from '../SessionGuard';
 import * as routes from '../routes.const';
 import { DETTAGLIO_NOTIFICA_QRCODE_QUERY_PARAM } from '../routes.const';
 
-const mockNavigateFn = vi.fn();
-
-// mock imports
-vi.mock('react-router-dom', async () => ({
-  ...(await vi.importActual<any>('react-router-dom')),
-  useNavigate: () => mockNavigateFn,
-}));
-
 const Guard = () => (
   <Routes>
-    <Route path="/" element={<SessionGuard />}>
+    <Route element={<SessionGuard />}>
       <Route path="/" element={<div>Generic Page</div>} />
       <Route path="/mocked-route" element={<div>Mocked Page</div>} />
     </Route>
@@ -31,18 +23,15 @@ const Guard = () => (
 );
 
 describe('SessionGuard Component', async () => {
-  const originalLocation = window.location;
-  const originalOpen = window.open;
   let mock: MockAdapter;
+  let result: RenderResult;
+
+  const originalOpen = globalThis.open;
   const mockOpenFn = vi.fn();
 
   beforeAll(() => {
     mock = new MockAdapter(authClient);
-    Object.defineProperty(window, 'location', {
-      writable: true,
-      value: { hash: '', pathname: '/', search: '' },
-    });
-    Object.defineProperty(window, 'open', {
+    Object.defineProperty(globalThis, 'open', {
       configurable: true,
       value: mockOpenFn,
     });
@@ -51,16 +40,11 @@ describe('SessionGuard Component', async () => {
   afterEach(() => {
     mock.reset();
     vi.clearAllMocks();
-    Object.defineProperty(window, 'location', {
-      writable: true,
-      value: { hash: '', pathname: '/', search: '' },
-    });
   });
 
   afterAll(() => {
     mock.restore();
-    Object.defineProperty(window, 'location', { writable: true, value: originalLocation });
-    Object.defineProperty(window, 'open', { configurable: true, value: originalOpen });
+    Object.defineProperty(globalThis, 'open', { configurable: true, value: originalOpen });
   });
 
   // expected behavior: enters the app, does a navigate, launches sessionCheck, the user is deleted from redux
@@ -98,12 +82,11 @@ describe('SessionGuard Component', async () => {
 
   // expected behavior: doesn't enter the app, shows the error message linked to the exchangeToken
   it('exchange token error (403)', async () => {
-    window.location.hash = '#selfCareToken=403_token';
     mock.onPost(AUTH_TOKEN_EXCHANGE()).reply(403, {
       authorizationToken: '403_token',
     });
     await act(async () => {
-      render(<Guard />);
+      render(<Guard />, { route: '/#selfCareToken=403_token' });
     });
     expect(mock.history.post).toHaveLength(1);
     expect(mock.history.post[0].url).toBe(AUTH_TOKEN_EXCHANGE());
@@ -118,12 +101,11 @@ describe('SessionGuard Component', async () => {
 
   // expected behavior: doesn't enter the app, shows the error message linked to the exchangeToken
   it('exchange token error (451)', async () => {
-    window.location.hash = '#selfCareToken=451_token';
     mock.onPost(AUTH_TOKEN_EXCHANGE()).reply(451, {
       authorizationToken: '451_token',
     });
     await act(async () => {
-      render(<Guard />);
+      result = render(<Guard />, { route: '/#selfCareToken=451_token' });
     });
     expect(mock.history.post).toHaveLength(1);
     expect(mock.history.post[0].url).toBe(AUTH_TOKEN_EXCHANGE());
@@ -131,17 +113,12 @@ describe('SessionGuard Component', async () => {
       authorizationToken: '451_token',
     });
     await waitFor(() => {
-      expect(mockNavigateFn).toHaveBeenCalledTimes(1);
-      expect(mockNavigateFn).toHaveBeenCalledWith(
-        { pathname: routes.NOT_ACCESSIBLE },
-        { replace: true }
-      );
+      expect(result.router.state.location.pathname).toBe(routes.NOT_ACCESSIBLE);
+      expect(result.router.state.historyAction).toBe('REPLACE');
     });
   });
 
   it('token-exchange user validation failed', async () => {
-    globalThis.location.hash = '#selfCareToken=validation_error_token';
-
     const invalidUserResponse = {
       ...userResponse,
       level: '@L2',
@@ -150,7 +127,7 @@ describe('SessionGuard Component', async () => {
     mock.onPost(AUTH_TOKEN_EXCHANGE()).reply(200, invalidUserResponse);
 
     await act(async () => {
-      render(<Guard />);
+      result = render(<Guard />, { route: '/#selfCareToken=validation_error_token' });
     });
 
     expect(mock.history.post).toHaveLength(1);
@@ -160,25 +137,19 @@ describe('SessionGuard Component', async () => {
     });
 
     await waitFor(() => {
-      expect(mockNavigateFn).toHaveBeenCalledTimes(1);
-      expect(mockNavigateFn).toHaveBeenCalledWith(
-        {
-          pathname: routes.NOT_ACCESSIBLE,
-          search: '?reason=user-validation-failed',
-        },
-        { replace: true }
-      );
+      expect(result.router.state.location.pathname).toBe(routes.NOT_ACCESSIBLE);
+      expect(result.router.state.location.search).toBe('?reason=user-validation-failed');
+      expect(result.router.state.historyAction).toBe('REPLACE');
     });
   });
 
   // expected behavior: enters the app, does a navigate to notifications page, launches sessionCheck
   it('user logged in - TOS accepted', async () => {
-    window.location.hash = '#selfCareToken=200_token';
     mock
       .onPost(AUTH_TOKEN_EXCHANGE(), { authorizationToken: '200_token' })
       .reply(200, userResponse);
     await act(async () => {
-      render(<Guard />);
+      render(<Guard />, { route: '/#selfCareToken=200_token' });
     });
     await waitFor(() => {
       expect(mock.history.post).toHaveLength(1);
@@ -193,13 +164,12 @@ describe('SessionGuard Component', async () => {
 
   // expected behavior: enters the app, does a navigate to notifications page, launches sessionCheck
   it('user with groups logged in - TOS accepted', async () => {
-    window.location.hash = '#selfCareToken=200_token';
     mock.onPost(AUTH_TOKEN_EXCHANGE(), { authorizationToken: '200_token' }).reply(200, {
       ...userResponse,
       organization: { ...userResponse.organization, groups: ['mocked-group'] },
     });
     await act(async () => {
-      render(<Guard />);
+      render(<Guard />, { route: '/#selfCareToken=200_token' });
     });
     await waitFor(() => {
       expect(mock.history.post).toHaveLength(1);
@@ -214,13 +184,11 @@ describe('SessionGuard Component', async () => {
 
   // expected behavior: enters the app, does a navigate to notifications page, launches sessionCheck
   it('reload - session token already present - with hash', async () => {
-    window.location.hash = '#selfCareToken=200_token&greet=hola';
-    window.location.pathname = '/mocked-route';
     mock
       .onPost(AUTH_TOKEN_EXCHANGE(), { authorizationToken: '200_token' })
       .reply(200, userResponse);
     await act(async () => {
-      render(<Guard />);
+      render(<Guard />, { route: '/mocked-route#selfCareToken=200_token&greet=hola' });
     });
     await waitFor(() => {
       expect(mock.history.post).toHaveLength(1);
@@ -235,17 +203,14 @@ describe('SessionGuard Component', async () => {
 
   it('store aar in localStorage', async () => {
     const mockQrCode = 'qr-code';
-    window.location.search = `?${DETTAGLIO_NOTIFICA_QRCODE_QUERY_PARAM}=${mockQrCode}`;
     await act(async () => {
-      render(<Guard />);
+      render(<Guard />, { route: `/?${DETTAGLIO_NOTIFICA_QRCODE_QUERY_PARAM}=${mockQrCode}` });
     });
     expect(localStorage.getItem(DETTAGLIO_NOTIFICA_QRCODE_QUERY_PARAM)).toBe(mockQrCode);
   });
 
   // expected behavior: does not enter the app, does no navigate, message about logout
   it('logout', async () => {
-    window.location.hash = '';
-    window.location.pathname = '/';
     const desired_exp = sub(new Date(), { minutes: 5 }).getTime() / 1000;
 
     const mockReduxState = {

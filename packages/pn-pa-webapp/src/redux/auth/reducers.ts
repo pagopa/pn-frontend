@@ -1,9 +1,10 @@
 import { ConsentType, basicInitialUserData, basicNoLoggedUserData } from '@pagopa-pn/pn-commons';
 import { PartyEntity, ProductEntity } from '@pagopa/mui-italia';
-import { createSlice } from '@reduxjs/toolkit';
+import { createSelector, createSlice } from '@reduxjs/toolkit';
 
 import { PNRole, PartyRole, User } from '../../models/user';
 import { userDataMatcher } from '../../utility/user.utility';
+import { RootState } from '../store';
 import {
   acceptTosPrivacy,
   exchangeToken,
@@ -14,10 +15,11 @@ import {
   setAdditionalLanguages,
 } from './actions';
 
-const noLoggedUserData = {
+const noLoggedUserData: User = {
   ...basicNoLoggedUserData,
   organization: {
     id: '',
+    name: '',
     roles: [
       {
         role: PNRole.ADMIN,
@@ -27,11 +29,11 @@ const noLoggedUserData = {
     fiscal_code: '',
   },
   desired_exp: 0,
-} as User;
+};
 
 const initialState = {
   loading: false,
-  user: basicInitialUserData(userDataMatcher, noLoggedUserData),
+  user: basicInitialUserData<User>(userDataMatcher, noLoggedUserData),
   fetchedTos: false,
   fetchedPrivacy: false,
   tosConsent: {
@@ -69,7 +71,6 @@ const userSlice = createSlice({
 
       sessionStorage.setItem('user', JSON.stringify(user));
       state.user = user;
-
       state.loading = false;
     });
     builder.addCase(exchangeToken.rejected, (state) => {
@@ -124,3 +125,16 @@ const userSlice = createSlice({
 
 export const { resetState } = userSlice.actions;
 export default userSlice;
+
+// SELECTORS
+const selectUserState = (state: RootState) => state.userState;
+
+const selectUser = createSelector([selectUserState], (userState) => userState.user);
+
+const selectIsSupportUser = createSelector([selectUser], (user) =>
+  user.organization.roles.some((r) => r.role === PNRole.SUPPORT)
+);
+
+export const authSelectors = {
+  selectIsSupportUser,
+};

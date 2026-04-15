@@ -1,6 +1,7 @@
 import { TFunction } from 'react-i18next';
 import * as yup from 'yup';
 
+import type { TextFieldProps } from '@mui/material';
 import { dataRegex } from '@pagopa-pn/pn-commons';
 
 import { AddressType, ChannelType, DigitalAddress } from '../models/contacts';
@@ -88,10 +89,9 @@ const isDropdownItemShown = (
 };
 
 export const specialContactsAvailableAddressTypes = (
-  addressesData: SelectedAddresses,
+  addressesData: SelectedAddresses
 ): Array<AddressTypeItem> =>
   addressesRelationships.map((relation) => {
-
     const isShown = isDropdownItemShown(relation, addressesData);
 
     return {
@@ -142,3 +142,21 @@ export const removeAddress = (
       address.addressType !== addressType ||
       address.channelType !== channelType
   );
+
+// Semantic/native input attributes derived from channel type.
+export const getSemanticTextFieldProps = (channelType: ChannelType): Partial<TextFieldProps> => {
+  if (channelType === ChannelType.EMAIL || channelType === ChannelType.PEC) {
+    return {
+      type: 'email',
+      autoComplete: 'email',
+    };
+  }
+  if (channelType === ChannelType.SMS) {
+    return {
+      type: 'tel',
+      autoComplete: 'tel-national',
+    };
+  }
+
+  return {};
+};

@@ -5,7 +5,7 @@ import { testInput } from '@pagopa-pn/pn-commons/src/test-utils';
 
 import { newNotification } from '../../../__mocks__/NewNotification.mock';
 import {
-  CustomRenderResult,
+  RenderResult,
   act,
   fireEvent,
   render,
@@ -44,7 +44,7 @@ async function uploadDocument(elem: HTMLElement, index: number, document: NewNot
 }
 
 describe('Attachments Component with payment enabled', async () => {
-  let result: CustomRenderResult;
+  let result: RenderResult;
   let mock: MockAdapter;
   let extMock: MockAdapter;
 
@@ -400,7 +400,7 @@ describe('Attachments Component with payment enabled', async () => {
 });
 
 describe('Attachments Component without payment enabled', () => {
-  let result: CustomRenderResult;
+  let result: RenderResult;
 
   beforeEach(async () => {
     mockIsPaymentEnabledGetter.mockReturnValue(false);

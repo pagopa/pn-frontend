@@ -1,6 +1,11 @@
 import MockAdapter from 'axios-mock-adapter';
 
-import { mockLogin, mockLogout, userResponse } from '../../../__mocks__/Auth.mock';
+import {
+  mockLogin,
+  mockLogout,
+  supportUserResponse,
+  userResponse,
+} from '../../../__mocks__/Auth.mock';
 import {
   acceptTosPrivacyConsentBodyMock,
   privacyConsentMock,
@@ -44,13 +49,11 @@ describe('Auth redux state tests', () => {
         ? JSON.parse(sessionStorage.getItem('user') || '')
         : {
             email: '',
-            name: '',
             uid: '',
             sessionToken: '',
-            family_name: '',
-            fiscal_number: '',
             organization: {
               id: '',
+              name: '',
               roles: [
                 {
                   role: PNRole.ADMIN,
@@ -86,6 +89,12 @@ describe('Auth redux state tests', () => {
     expect(action.payload).toEqual(userResponse);
   });
 
+  it('Should be able to exchange token for support user', async () => {
+    const action = await mockLogin(supportUserResponse);
+    expect(action.type).toBe('exchangeToken/fulfilled');
+    expect(action.payload).toEqual(supportUserResponse);
+  });
+
   it('Should be able to exchange token - invalid json', async () => {
     const action = await mockLogin('invalid-json');
     expect(action.type).toBe('exchangeToken/rejected');
@@ -109,13 +118,11 @@ describe('Auth redux state tests', () => {
     expect(store.getState().userState.user).toEqual({
       desired_exp: 0,
       email: '',
-      name: '',
       uid: '',
       sessionToken: '',
-      family_name: '',
-      fiscal_number: '',
       organization: {
         id: '',
+        name: '',
         roles: [
           {
             role: PNRole.ADMIN,

@@ -2,7 +2,7 @@ import { vi } from 'vitest';
 
 import { notificationsToFe } from '../../../__mocks__/Notifications.mock';
 import {
-  CustomRenderResult,
+  RenderResult,
   act,
   fireEvent,
   render,
@@ -13,7 +13,7 @@ import { GET_DETTAGLIO_NOTIFICA_PATH } from '../../../navigation/routes.const';
 import DesktopNotifications from '../DesktopNotifications';
 
 describe('DesktopNotifications Component', () => {
-  let result: CustomRenderResult;
+  let result: RenderResult;
 
   afterEach(() => {
     vi.clearAllMocks();

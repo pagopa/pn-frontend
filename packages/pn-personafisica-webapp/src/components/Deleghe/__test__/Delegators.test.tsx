@@ -1,6 +1,5 @@
 import { mandatesByDelegate } from '../../../__mocks__/Delegations.mock';
-import { fireEvent, render, testStore, waitFor, within } from '../../../__test__/test-utils';
-import { Delegator } from '../../../redux/delegation/types';
+import { fireEvent, render, waitFor, within } from '../../../__test__/test-utils';
 import { sortDelegations } from '../../../utility/delegation.utility';
 import Delegators from '../Delegators';
 
@@ -27,7 +26,7 @@ describe('Delegators Component', async () => {
   });
 
   it('sorts the delegators', async () => {
-    const { getByTestId, getAllByTestId } = render(<Delegators />, {
+    const { getByTestId, getAllByTestId, testStore } = render(<Delegators />, {
       preloadedState: {
         delegationsState: {
           delegations: { delegators: mandatesByDelegate },
@@ -51,7 +50,7 @@ describe('Delegators Component', async () => {
       });
     });
     let delegatorsRows = getAllByTestId('delegatorsTable.body.row');
-    let sortedDelegators = sortDelegations('asc', 'name', mandatesByDelegate) as Array<Delegator>;
+    let sortedDelegators = sortDelegations('asc', 'name', mandatesByDelegate);
     delegatorsRows.forEach((row, index) => {
       expect(row).toHaveTextContent(sortedDelegators[index].delegator?.displayName!);
     });
@@ -67,7 +66,7 @@ describe('Delegators Component', async () => {
       });
     });
     delegatorsRows = getAllByTestId('delegatorsTable.body.row');
-    sortedDelegators = sortDelegations('desc', 'name', mandatesByDelegate) as Array<Delegator>;
+    sortedDelegators = sortDelegations('desc', 'name', mandatesByDelegate);
     delegatorsRows.forEach((row, index) => {
       expect(row).toHaveTextContent(sortedDelegators[index].delegator?.displayName!);
     });
@@ -85,7 +84,7 @@ describe('Delegators Component', async () => {
       });
     });
     delegatorsRows = getAllByTestId('delegatorsTable.body.row');
-    sortedDelegators = sortDelegations('asc', 'endDate', mandatesByDelegate) as Array<Delegator>;
+    sortedDelegators = sortDelegations('asc', 'endDate', mandatesByDelegate);
     delegatorsRows.forEach((row, index) => {
       expect(row).toHaveTextContent(sortedDelegators[index].delegator?.displayName!);
     });

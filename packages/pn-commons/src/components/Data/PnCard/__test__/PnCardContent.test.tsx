@@ -21,15 +21,16 @@ describe('PnCardContent', () => {
   });
 
   it('render component - incorrect child', () => {
-    expect(() =>
-      render(
-        <PnCardContent>
-          <PnCardContentItem label="mocked-card-label-1">mocked-card-content-1</PnCardContentItem>
-          <PnCardContentItem label="mocked-card-label-2">mocked-card-content-2</PnCardContentItem>
-          <PnCardContentItem label="mocked-card-label-3">mocked-card-content-3</PnCardContentItem>
-          <Box>Incorrect child</Box>
-        </PnCardContent>
-      )
-    ).toThrowError('PnCardContent can have only children of type PnCardContentItem');
+    const { getByText } = render(
+      <PnCardContent>
+        <PnCardContentItem label="mocked-card-label-1">mocked-card-content-1</PnCardContentItem>
+        <PnCardContentItem label="mocked-card-label-2">mocked-card-content-2</PnCardContentItem>
+        <PnCardContentItem label="mocked-card-label-3">mocked-card-content-3</PnCardContentItem>
+        <Box>Incorrect child</Box>
+      </PnCardContent>
+    );
+    expect(
+      getByText('PnCardContent can have only children of type PnCardContentItem')
+    ).toBeInTheDocument();
   });
 });
