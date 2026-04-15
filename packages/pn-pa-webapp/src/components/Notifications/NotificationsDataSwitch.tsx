@@ -74,7 +74,7 @@ const NotificationsDataSwitch: React.FC<{
       <CustomTagGroup visibleItems={1}>
         {[
           <Box sx={{ mb: 1, mr: 1, display: 'inline-block' }} key={data.id}>
-            <Tag value={data.group} />
+            <Tag value={data.group} mode="truncate" />
           </Box>,
         ]}
       </CustomTagGroup>
@@ -85,7 +85,7 @@ const NotificationsDataSwitch: React.FC<{
   if (type === 'group' && !isMobile) {
     return data.group ? (
       <TagGroup visibleItems={4}>
-        <Tag value={data.group} />
+        <Tag value={data.group} mode="truncate" />
       </TagGroup>
     ) : (
       <></>
