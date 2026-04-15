@@ -1,167 +1,249 @@
-import { useRef, useState } from 'react';
+import { useFormik } from 'formik';
+import { useCallback, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import * as yup from 'yup';
 
+import MailOutlineIcon from '@mui/icons-material/MailOutline';
 import { Stack, Typography } from '@mui/material';
 import { appStateActions } from '@pagopa-pn/pn-commons';
 
 import { AddressType, ChannelType, SaveDigitalAddressParams } from '../../../models/contacts';
 import { createOrUpdateAddress } from '../../../redux/contact/actions';
-import { contactsSelectors } from '../../../redux/contact/reducers';
-import { useAppDispatch, useAppSelector } from '../../../redux/hooks';
-import { contactAlreadyExists, normalizeContactValue } from '../../../utility/contacts.utility';
+import { useAppDispatch } from '../../../redux/hooks';
+import { emailValidationSchema, normalizeContactValue } from '../../../utility/contacts.utility';
 import ContactCodeDialog from '../ContactCodeDialog';
 import DigitalContact from '../DigitalContact';
-import ExistingContactDialog from '../ExistingContactDialog';
+import OnboardingContactItem from './OnboardingContactItem';
 
 type Props = {
   value?: string;
   alreadySet: boolean;
   onChange: (value?: string) => void;
+  onVerified?: () => void;
 };
 
-enum ModalType {
-  EXISTING = 'existing',
-  CODE = 'code',
-}
-
-const EmailStep: React.FC<Props> = ({ value, alreadySet, onChange }) => {
+const EmailStep: React.FC<Props> = ({ value, alreadySet, onChange, onVerified }) => {
   const { t } = useTranslation(['recapiti', 'common']);
   const dispatch = useAppDispatch();
-  const { addresses } = useAppSelector(contactsSelectors.selectAddresses);
 
-  const [modalOpen, setModalOpen] = useState<ModalType | null>(null);
+  const [codeDialogOpen, setCodeDialogOpen] = useState(false);
 
-  const emailContactRef = useRef<{ toggleEdit: () => void; resetForm: () => Promise<void> }>({
+  const emailContactRef = useRef<{
+    toggleEdit: () => void;
+    resetForm: () => Promise<void>;
+  }>({
     toggleEdit: () => {},
     resetForm: () => Promise.resolve(),
   });
 
-  const currentValueRef = useRef<string>('');
+  const currentValueRef = useRef<string>(value ?? '');
 
-  const handleSubmit = (newValue: string) => {
-    const normalizedValue = normalizeContactValue(newValue);
+  const formik = useFormik({
+    initialValues: {
+      email: value ?? '',
+    },
+    enableReinitialize: true,
+    validationSchema: yup.object({
+      email: emailValidationSchema(t),
+    }),
+    onSubmit: async () => {
+      const normalizedValue = normalizeContactValue(formik.values.email);
 
-    if (!normalizedValue) {
+      if (!normalizedValue) {
+        return;
+      }
+
+      // eslint-disable-next-line functional/immutable-data
+      currentValueRef.current = normalizedValue;
+      await handleCodeVerification();
+    },
+  });
+
+  const showEditableExistingEmail = Boolean(value) && alreadySet;
+  const showReadonlyNewEmail = Boolean(value) && !alreadySet;
+  const isEmailSaved = showEditableExistingEmail || showReadonlyNewEmail;
+
+  const title = isEmailSaved
+    ? t('onboarding.digital-domicile.email.title-existing')
+    : t('onboarding.digital-domicile.email.title');
+
+  const description = t('onboarding.digital-domicile.email.description');
+
+  const handleCodeVerification = useCallback(
+    async (verificationCode?: string) => {
+      const digitalAddressParams: SaveDigitalAddressParams = {
+        addressType: AddressType.COURTESY,
+        senderId: 'default',
+        channelType: ChannelType.EMAIL,
+        value: currentValueRef.current,
+        code: verificationCode,
+      };
+
+      try {
+        const res = await dispatch(createOrUpdateAddress(digitalAddressParams)).unwrap();
+
+        if (!res) {
+          setCodeDialogOpen(true);
+          return;
+        }
+
+        setCodeDialogOpen(false);
+        onChange(currentValueRef.current);
+
+        dispatch(
+          appStateActions.addSuccess({
+            title: '',
+            message: t('courtesy-contacts.email-added-successfully', { ns: 'recapiti' }),
+          })
+        );
+
+        if (value && alreadySet) {
+          emailContactRef.current.toggleEdit();
+        } else {
+          onVerified?.();
+        }
+      } catch {
+        // handled by ContactCodeDialog/AppResponsePublisher
+      }
+    },
+    [alreadySet, dispatch, onChange, t, value, onVerified]
+  );
+
+  const handleVerifyEmail = useCallback(async () => {
+    await formik.setFieldTouched('email', true, false);
+    const errors = await formik.validateForm();
+    const normalizedValue = normalizeContactValue(formik.values.email);
+
+    if (!normalizedValue || errors.email) {
       return;
     }
 
     // eslint-disable-next-line functional/immutable-data
     currentValueRef.current = normalizedValue;
-    if (normalizedValue === value) {
-      emailContactRef.current.toggleEdit();
-      return;
-    }
+    await handleCodeVerification();
+  }, [formik, handleCodeVerification]);
 
-    if (contactAlreadyExists(addresses, normalizedValue, 'default', ChannelType.EMAIL)) {
-      setModalOpen(ModalType.EXISTING);
-      return;
-    }
+  const handleSubmitEmailEdit = useCallback(
+    (newValue: string) => {
+      const normalizedValue = normalizeContactValue(newValue);
 
-    void handleCodeVerification();
-  };
-
-  const handleCodeVerification = async (verificationCode?: string) => {
-    const digitalAddressParams: SaveDigitalAddressParams = {
-      addressType: AddressType.COURTESY,
-      senderId: 'default',
-      channelType: ChannelType.EMAIL,
-      value: currentValueRef.current,
-      code: verificationCode,
-    };
-
-    try {
-      const res = await dispatch(createOrUpdateAddress(digitalAddressParams)).unwrap();
-
-      if (!res) {
-        setModalOpen(ModalType.CODE);
+      if (!normalizedValue) {
         return;
       }
 
-      dispatch(
-        appStateActions.addSuccess({
-          title: '',
-          message: t('courtesy-contacts.email-added-successfully', { ns: 'recapiti' }),
-        })
-      );
-
-      setModalOpen(null);
-      onChange(currentValueRef.current);
-
-      if (value && alreadySet) {
+      if (normalizedValue === value && alreadySet) {
         emailContactRef.current.toggleEdit();
+        return;
       }
-    } catch {
-      // handled by ContactCodeDialog/AppResponsePublisher
-    }
-  };
 
-  const handleDiscard = async () => {
-    setModalOpen(null);
+      // eslint-disable-next-line functional/immutable-data
+      currentValueRef.current = normalizedValue;
+      void handleCodeVerification();
+    },
+    [alreadySet, handleCodeVerification, value]
+  );
+
+  const handleDiscardCodeDialog = useCallback(async () => {
+    setCodeDialogOpen(false);
 
     if (value && alreadySet) {
       emailContactRef.current.toggleEdit();
       await emailContactRef.current.resetForm();
     }
+  }, [alreadySet, value]);
+
+  const handleEmailFieldChange = (newValue: string) => {
+    void formik.setFieldValue('email', newValue);
+    void formik.setFieldTouched('email', true, false);
+  };
+
+  const renderEmailContent = () => {
+    if (showEditableExistingEmail) {
+      return (
+        <DigitalContact
+          ref={emailContactRef}
+          label={t('onboarding.digital-domicile.email.label')}
+          value={value ?? ''}
+          channelType={ChannelType.EMAIL}
+          inputProps={{
+            label: t('onboarding.digital-domicile.email.input-label'),
+          }}
+          insertButtonLabel={t('onboarding.digital-domicile.email.confirm-cta')}
+          onSubmit={handleSubmitEmailEdit}
+          showLabelOnEdit
+          slotsProps={{
+            textField: {
+              sx: { flexBasis: { xs: 'unset', lg: '50%' } },
+            },
+            button: {
+              sx: {
+                height: '43px',
+                fontWeight: 700,
+                flexBasis: { xs: 'unset', lg: '25%' },
+              },
+            },
+            container: {
+              width: '100%',
+            },
+          }}
+        />
+      );
+    }
+
+    if (!isEmailSaved) {
+      return (
+        <OnboardingContactItem
+          mode="entry"
+          label={t('onboarding.digital-domicile.email.label')}
+          inputLabel={t('onboarding.digital-domicile.email.input-label')}
+          value={formik.values.email}
+          buttonLabel={t('onboarding.digital-domicile.email.verify-cta')}
+          error={formik.errors.email}
+          touched={formik.touched.email}
+          onChange={handleEmailFieldChange}
+          onBlur={formik.handleBlur}
+          onSubmit={handleVerifyEmail}
+        />
+      );
+    }
+
+    if (showReadonlyNewEmail) {
+      return (
+        <OnboardingContactItem
+          mode="view"
+          label={t('onboarding.digital-domicile.email.label')}
+          value={value ?? currentValueRef.current}
+          icon={<MailOutlineIcon color="disabled" fontSize="small" aria-hidden="true" />}
+        />
+      );
+    }
+
+    return null;
   };
 
   return (
-    <Stack data-testid="email-step">
-      <Typography fontSize="22px" fontWeight={700} mb={1}>
-        {t('onboarding.digital-domicile.email.title')}
-      </Typography>
+    <>
+      <Stack data-testid="email-step">
+        <Typography fontSize="22px" fontWeight={700} mb={1}>
+          {title}
+        </Typography>
 
-      <Typography variant="body2" color="text.secondary" mb={3}>
-        {t('onboarding.digital-domicile.email.description')}
-      </Typography>
+        <Typography variant="body2" color="text.secondary" mb={3}>
+          {description}
+        </Typography>
 
-      <DigitalContact
-        ref={emailContactRef}
-        label={t('onboarding.digital-domicile.email.label')}
-        value={value ?? ''}
-        channelType={ChannelType.EMAIL}
-        inputProps={{
-          label: t('onboarding.digital-domicile.email.input-label'),
-        }}
-        insertButtonLabel={t('onboarding.digital-domicile.email.verify-cta')}
-        onSubmit={handleSubmit}
-        showVerifiedIcon
-        showLabelOnEdit
-        slots={{
-          editButton: alreadySet ? undefined : () => <></>,
-        }}
-        slotsProps={{
-          textField: {
-            sx: { flexBasis: { xs: 'unset', lg: '50%' } },
-          },
-          button: {
-            sx: {
-              height: '43px',
-              fontWeight: 700,
-              flexBasis: { xs: 'unset', lg: '25%' },
-            },
-          },
-          container: {
-            width: '100%',
-          },
-        }}
-      />
+        {renderEmailContent()}
+      </Stack>
 
       <ContactCodeDialog
         value={currentValueRef.current}
         addressType={AddressType.COURTESY}
         channelType={ChannelType.EMAIL}
-        open={modalOpen === ModalType.CODE}
+        open={codeDialogOpen}
         onConfirm={(code) => void handleCodeVerification(code)}
-        onDiscard={() => void handleDiscard()}
+        onDiscard={() => void handleDiscardCodeDialog()}
       />
-
-      <ExistingContactDialog
-        open={modalOpen === ModalType.EXISTING}
-        value={currentValueRef.current}
-        handleDiscard={() => void handleDiscard()}
-        handleConfirm={() => void handleCodeVerification()}
-      />
-    </Stack>
+    </>
   );
 };
 

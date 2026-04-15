@@ -329,10 +329,12 @@
       },
       "email": {
         "title": "Associa un indirizzo email al domicilio digitale",
+        "title-existing": "Hai già associato un indirizzo email al domicilio digitale",
         "description": "Riceverai un’email alla ricezione di ogni notifica SEND.",
         "label": "Email:",
         "input-label": "Indirizzo email",
-        "verify-cta": "Verifica email"
+        "verify-cta": "Verifica email",
+        "confirm-cta": "Conferma email"
       },
       "io": {
         "title": "Attiva SEND sull’app IO",

@@ -1,7 +1,7 @@
 import { FocusEventHandler, ReactNode } from 'react';
 
 import CheckIcon from '@mui/icons-material/Check';
-import { Box, Button, Stack, TextField, Typography } from '@mui/material';
+import { Box, Button, ButtonProps, Stack, TextField, Typography } from '@mui/material';
 import { ButtonNaked } from '@pagopa/mui-italia';
 
 type EntryModeProps = {
@@ -11,6 +11,7 @@ type EntryModeProps = {
   inputLabel: string;
   value: string;
   buttonLabel: string;
+  buttonVariant?: ButtonProps['variant'];
   error?: string;
   touched?: boolean;
   onChange: (value: string) => void | Promise<void>;
@@ -41,6 +42,7 @@ const OnboardingContactItem: React.FC<Props> = (props) => {
       inputLabel,
       value,
       buttonLabel,
+      buttonVariant = 'contained',
       error,
       touched,
       onChange,
@@ -74,7 +76,7 @@ const OnboardingContactItem: React.FC<Props> = (props) => {
           helperText={touched ? error : ' '}
         />
 
-        <Button fullWidth variant="outlined" onClick={() => void onSubmit()}>
+        <Button fullWidth variant={buttonVariant} color="primary" onClick={() => void onSubmit()}>
           {buttonLabel}
         </Button>
 

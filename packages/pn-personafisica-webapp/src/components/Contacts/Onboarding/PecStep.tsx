@@ -1,6 +1,7 @@
 import { useFormik } from 'formik';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
+import * as yup from 'yup';
 
 import { Divider, Stack, Typography } from '@mui/material';
 import { ConfirmationModal, appStateActions } from '@pagopa-pn/pn-commons';
@@ -9,7 +10,11 @@ import { EmailContactState, PecContactState } from '../../../models/DigitalDomic
 import { AddressType, ChannelType, SaveDigitalAddressParams } from '../../../models/contacts';
 import { createOrUpdateAddress } from '../../../redux/contact/actions';
 import { useAppDispatch } from '../../../redux/hooks';
-import { normalizeContactValue, pecValidationSchema } from '../../../utility/contacts.utility';
+import {
+  emailValidationSchema,
+  normalizeContactValue,
+  pecValidationSchema,
+} from '../../../utility/contacts.utility';
 import ContactCodeDialog from '../ContactCodeDialog';
 import EmailSection, { EmailMode } from './EmailSection';
 import OnboardingContactItem from './OnboardingContactItem';
@@ -28,7 +33,7 @@ type FlowKey = 'pec' | 'email';
 
 const getInitialEmailMode = (email: EmailContactState, showOptionalEmail: boolean): EmailMode => {
   if (email.value && email.alreadySet) {
-    return showOptionalEmail ? 'edit' : 'readonly';
+    return 'edit';
   }
 
   if (email.value && !email.alreadySet) {
@@ -56,7 +61,6 @@ const PecStep: React.FC<Props> = ({
   const [emailMode, setEmailMode] = useState<EmailMode>(() =>
     getInitialEmailMode(email, showOptionalEmail)
   );
-  const [emailDraft, setEmailDraft] = useState(email.value ?? '');
 
   const emailContactRef = useRef<{
     toggleEdit: () => void;
@@ -80,22 +84,24 @@ const PecStep: React.FC<Props> = ({
     [isPecVerifiedInWizard, pec.alreadySet, pec.value]
   );
 
+  const validationSchema = useMemo(
+    () =>
+      yup.object({
+        pec: pecValidationSchema(t),
+        email: emailMode === 'insert' ? emailValidationSchema(t) : yup.string().notRequired(),
+      }),
+    [emailMode, t]
+  );
+
   const formik = useFormik({
     initialValues: {
       pec: pec.value ?? '',
+      email: email.value ?? '',
     },
     enableReinitialize: true,
-    validationSchema: pecValidationSchema(t),
+    validationSchema,
     onSubmit: async () => {
-      const normalizedValue = normalizeContactValue(formik.values.pec);
-
-      if (!normalizedValue) {
-        return;
-      }
-
-      // eslint-disable-next-line functional/immutable-data
-      currentValuesRef.current.pec = normalizedValue;
-      await submitContactFlow('pec', normalizedValue);
+      // no-op: submission is handled by dedicated PEC and email actions
     },
   });
 
@@ -138,18 +144,17 @@ const PecStep: React.FC<Props> = ({
               message: t('legal-contacts.pec-added-successfully', { ns: 'recapiti' }),
             })
           );
-
           return;
         }
 
         onEmailChange(value);
-        setEmailDraft(value);
-        onShowOptionalEmail(false);
 
         if (email.alreadySet) {
           emailContactRef.current.toggleEdit();
+          setEmailMode('edit');
+        } else {
+          setEmailMode('readonly');
         }
-        setEmailMode('readonly');
 
         dispatch(
           appStateActions.addSuccess({
@@ -161,15 +166,15 @@ const PecStep: React.FC<Props> = ({
         // handled by ContactCodeDialog / AppResponsePublisher
       }
     },
-    [dispatch, email.alreadySet, onEmailChange, onPecChange, onShowOptionalEmail, t]
+    [dispatch, email.alreadySet, onEmailChange, onPecChange, t]
   );
 
-  const handlePecInputChange = useCallback(
-    async (value: string) => {
-      await formik.setFieldValue('pec', value);
-      await formik.setFieldTouched('pec', true, false);
+  const handleFieldChange = useCallback(
+    async (field: 'pec' | 'email', value: string) => {
+      await formik.setFieldValue(field, value);
+      await formik.setFieldTouched(field, true, false);
 
-      if (isPecVerifiedInWizard) {
+      if (field === 'pec' && isPecVerifiedInWizard) {
         setIsPecVerifiedInWizard(false);
       }
     },
@@ -177,10 +182,34 @@ const PecStep: React.FC<Props> = ({
   );
 
   const handleVerifyPec = useCallback(async () => {
-    await formik.submitForm();
-  }, [formik]);
+    await formik.setFieldTouched('pec', true, false);
+    const errors = await formik.validateForm();
+    const normalizedValue = normalizeContactValue(formik.values.pec);
 
-  const handleSubmitEmail = useCallback(
+    if (!normalizedValue || errors.pec) {
+      return;
+    }
+
+    // eslint-disable-next-line functional/immutable-data
+    currentValuesRef.current.pec = normalizedValue;
+    await submitContactFlow('pec', normalizedValue);
+  }, [formik, submitContactFlow]);
+
+  const handleVerifyEmail = useCallback(async () => {
+    await formik.setFieldTouched('email', true, false);
+    const errors = await formik.validateForm();
+    const normalizedValue = normalizeContactValue(formik.values.email);
+
+    if (!normalizedValue || errors.email) {
+      return;
+    }
+
+    // eslint-disable-next-line functional/immutable-data
+    currentValuesRef.current.email = normalizedValue;
+    await submitContactFlow('email', normalizedValue);
+  }, [formik, submitContactFlow]);
+
+  const handleSubmitEmailEdit = useCallback(
     (newValue: string) => {
       const normalizedValue = normalizeContactValue(newValue);
 
@@ -190,8 +219,7 @@ const PecStep: React.FC<Props> = ({
 
       if (normalizedValue === email.value && email.alreadySet) {
         emailContactRef.current.toggleEdit();
-        setEmailMode('readonly');
-        onShowOptionalEmail(false);
+        setEmailMode('edit');
         return;
       }
 
@@ -199,19 +227,15 @@ const PecStep: React.FC<Props> = ({
       currentValuesRef.current.email = normalizedValue;
       void submitContactFlow('email', normalizedValue);
     },
-    [email.alreadySet, email.value, onShowOptionalEmail, submitContactFlow]
+    [email.alreadySet, email.value, submitContactFlow]
   );
 
-  const handleEditExistingEmail = useCallback(() => {
-    setEmailMode('edit');
-    onShowOptionalEmail(true);
-  }, [onShowOptionalEmail]);
-
   const handleCollapseEmail = useCallback(() => {
-    setEmailDraft('');
+    void formik.setFieldValue('email', '', false);
+    void formik.setFieldTouched('email', false, false);
     setEmailMode('collapsed');
     onShowOptionalEmail(false);
-  }, [onShowOptionalEmail]);
+  }, [formik, onShowOptionalEmail]);
 
   const handleCodeDialogConfirm = useCallback(
     async (code?: string) => {
@@ -237,18 +261,17 @@ const PecStep: React.FC<Props> = ({
     if (activeFlow === 'email' && email.alreadySet) {
       emailContactRef.current.toggleEdit();
       await emailContactRef.current.resetForm();
-      setEmailMode('readonly');
-      onShowOptionalEmail(false);
+      setEmailMode('edit');
     }
-  }, [codeDialogFlow, email.alreadySet, onShowOptionalEmail]);
+  }, [codeDialogFlow, email.alreadySet]);
 
   const handleContinueAttempt = useCallback(async (): Promise<boolean> => {
     if (isPecSaved) {
       return true;
     }
 
+    await formik.setFieldTouched('pec', true, false);
     const errors = await formik.validateForm();
-    await formik.setTouched({ pec: true }, false);
 
     if (errors.pec) {
       return false;
@@ -298,9 +321,10 @@ const PecStep: React.FC<Props> = ({
               inputLabel={t('onboarding.digital-domicile.pec.input-label')}
               value={formik.values.pec}
               buttonLabel={t('onboarding.digital-domicile.pec.verify-cta')}
+              buttonVariant="outlined"
               error={formik.errors.pec}
               touched={formik.touched.pec}
-              onChange={handlePecInputChange}
+              onChange={(value) => void handleFieldChange('pec', value)}
               onBlur={formik.handleBlur}
               onSubmit={handleVerifyPec}
               footer={<Trans i18nKey="onboarding.digital-domicile.pec.disclaimer" ns="recapiti" />}
@@ -312,15 +336,18 @@ const PecStep: React.FC<Props> = ({
           <EmailSection
             mode={emailMode}
             email={email}
-            emailDraft={emailDraft}
-            onEmailDraftChange={setEmailDraft}
-            onSubmitEmail={handleSubmitEmail}
+            emailValue={formik.values.email}
+            emailError={formik.errors.email}
+            emailTouched={formik.touched.email}
+            onEmailValueChange={(value) => void handleFieldChange('email', value)}
+            onEmailBlur={formik.handleBlur}
+            onVerifyEmail={handleVerifyEmail}
+            onSubmitEmailEdit={handleSubmitEmailEdit}
             onExpand={() => {
               setEmailMode('insert');
               onShowOptionalEmail(true);
             }}
             onCollapse={handleCollapseEmail}
-            onEdit={handleEditExistingEmail}
             emailContactRef={emailContactRef}
           />
         </Stack>

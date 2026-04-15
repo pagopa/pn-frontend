@@ -106,13 +106,13 @@ const DigitalDomicileWizard: React.FC = () => {
   const isSendMode = wizardState.mode === 'send';
   const isPecMode = wizardState.mode === 'pec';
   const isIoEnabled = wizardState.io.value === IOAllowedValues.ENABLED;
-  const isSendEmailAlreadyPresent =
-    isSendMode && wizardState.email.alreadySet && Boolean(wizardState.email.value);
+
+  const hasSendEmailValue = isSendMode && Boolean(wizardState.email.value);
 
   const showNextButton =
     !isChoiceStep &&
     !(isIoStep && isIoEnabled) &&
-    !(isContactStep && isSendMode && !isSendEmailAlreadyPresent);
+    !(isContactStep && isSendMode && !hasSendEmailValue);
 
   const goToNextStep = () => {
     setActiveStep((step) => Math.min(step + 1, STEPS_COUNT));
@@ -267,7 +267,7 @@ const DigitalDomicileWizard: React.FC = () => {
         }
       }
 
-      if (isSendMode && !isSendEmailAlreadyPresent) {
+      if (isSendMode && !hasSendEmailValue) {
         return;
       }
 
@@ -380,6 +380,11 @@ const DigitalDomicileWizard: React.FC = () => {
             value={wizardState.email.value}
             alreadySet={wizardState.email.alreadySet}
             onChange={setEmailValue}
+            onVerified={() => {
+              if (!wizardState.email.alreadySet) {
+                goToNextStep();
+              }
+            }}
           />
         ) : (
           <PecStep

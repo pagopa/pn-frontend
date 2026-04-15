@@ -15,12 +15,15 @@ export type EmailMode = 'collapsed' | 'insert' | 'readonly' | 'edit';
 type Props = {
   mode: EmailMode;
   email: EmailContactState;
-  emailDraft: string;
-  onEmailDraftChange: (value: string) => void;
-  onSubmitEmail: (value: string) => void;
+  emailValue: string;
+  emailError?: string;
+  emailTouched?: boolean;
+  onEmailValueChange: (value: string) => void;
+  onEmailBlur?: React.FocusEventHandler<HTMLInputElement | HTMLTextAreaElement>;
+  onVerifyEmail: () => void | Promise<void>;
+  onSubmitEmailEdit: (value: string) => void;
   onExpand: () => void;
   onCollapse: () => void;
-  onEdit: () => void;
   emailContactRef: RefObject<{
     toggleEdit: () => void;
     resetForm: () => Promise<void>;
@@ -30,15 +33,19 @@ type Props = {
 const EmailSection: React.FC<Props> = ({
   mode,
   email,
-  emailDraft,
-  onEmailDraftChange,
-  onSubmitEmail,
+  emailValue,
+  emailError,
+  emailTouched,
+  onEmailValueChange,
+  onEmailBlur,
+  onVerifyEmail,
+  onSubmitEmailEdit,
   onExpand,
   onCollapse,
-  onEdit,
   emailContactRef,
 }) => {
   const { t } = useTranslation(['recapiti', 'common']);
+
   if (mode === 'collapsed') {
     return (
       <Stack spacing={2}>
@@ -65,10 +72,14 @@ const EmailSection: React.FC<Props> = ({
         title={t('onboarding.digital-domicile.pec.optional-email-title')}
         label={t('onboarding.digital-domicile.pec.optional-email-label')}
         inputLabel={t('onboarding.digital-domicile.email.input-label')}
-        value={emailDraft}
+        value={emailValue}
         buttonLabel={t('onboarding.digital-domicile.email.verify-cta')}
-        onChange={onEmailDraftChange}
-        onSubmit={() => onSubmitEmail(emailDraft)}
+        buttonVariant="outlined"
+        error={emailError}
+        touched={emailTouched}
+        onChange={onEmailValueChange}
+        onBlur={onEmailBlur}
+        onSubmit={onVerifyEmail}
         collapseLabel={t('onboarding.digital-domicile.pec.cancel-email-cta')}
         onCollapse={onCollapse}
       />
@@ -86,28 +97,11 @@ const EmailSection: React.FC<Props> = ({
     );
   }
 
-  if (mode === 'readonly' && email.value && email.alreadySet) {
-    return (
-      <OnboardingContactItem
-        mode="view"
-        introText={t('onboarding.digital-domicile.pec.email-present-description')}
-        value={email.value}
-        icon={<MailOutlineIcon color="disabled" fontSize="small" aria-hidden="true" />}
-        actionLabel={t('onboarding.digital-domicile.pec.edit-email-cta')}
-        onAction={onEdit}
-      />
-    );
-  }
-
   if (mode === 'edit') {
     return (
       <Stack spacing={2}>
-        <Typography fontSize="16px" fontWeight={700}>
-          {t('onboarding.digital-domicile.pec.optional-email-title')}
-        </Typography>
-
         <Typography variant="body2" color="text.secondary">
-          {t('onboarding.digital-domicile.pec.optional-email-label')}
+          {t('onboarding.digital-domicile.pec.email-present-description')}
         </Typography>
 
         <DigitalContact
@@ -118,9 +112,9 @@ const EmailSection: React.FC<Props> = ({
           inputProps={{
             label: t('onboarding.digital-domicile.email.input-label'),
           }}
-          insertButtonLabel={t('onboarding.digital-domicile.email.verify-cta')}
-          onSubmit={onSubmitEmail}
-          showLabelOnEdit
+          insertButtonLabel={t('onboarding.digital-domicile.email.confirm-cta')}
+          onSubmit={onSubmitEmailEdit}
+          showLabelOnEdit={false}
           slots={{
             label: () => <></>,
           }}
