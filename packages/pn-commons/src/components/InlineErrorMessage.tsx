@@ -1,45 +1,41 @@
 import ReportRoundedIcon from '@mui/icons-material/ReportRounded';
-import { Box, SxProps, Theme, Typography } from '@mui/material';
+import { Box, FormHelperText, SxProps, Theme, Typography } from '@mui/material';
 
 type InlineErrorMessageProps = {
+  id: string;
   message: string;
   sx?: SxProps<Theme>;
-  color?: string;
 };
 
-const InlineErrorMessage: React.FC<InlineErrorMessageProps> = ({
-  message,
-  sx,
-  color = '#D13333',
-}) => (
-  <Box
-    role="alert"
+const InlineErrorMessage: React.FC<InlineErrorMessageProps> = ({ message, sx, id }) => (
+  <FormHelperText
+    error
+    component={Box}
+    id={id}
     sx={{
       display: 'flex',
       alignItems: 'center',
       gap: 0.75,
-      color,
+      mt: 1,
       ...sx,
     }}
   >
     <ReportRoundedIcon
-      aria-hidden
       sx={{
         fontSize: 16,
-        color,
-        flexShrink: 0,
+        color: 'error.main',
       }}
     />
     <Typography
       variant="caption"
       sx={{
-        color,
+        color: 'error.main',
         lineHeight: 1.2,
       }}
     >
       {message}
     </Typography>
-  </Box>
+  </FormHelperText>
 );
 
 export default InlineErrorMessage;
