@@ -27,6 +27,7 @@ type EntryModeProps = {
 type ViewModeProps = {
   mode: 'view';
   introText?: ReactNode;
+  description?: ReactNode;
   label?: string;
   value?: ReactNode;
   secondaryContent?: ReactNode;
@@ -58,14 +59,14 @@ const OnboardingContactItem: React.FC<Props> = (props) => {
     } = props;
 
     return (
-      <Stack spacing={2}>
+      <Stack spacing={1}>
         {title && (
           <Typography fontSize="16px" fontWeight={700}>
             {title}
           </Typography>
         )}
 
-        <Typography variant="body2" color="text.secondary">
+        <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
           {label}
         </Typography>
 
@@ -100,7 +101,7 @@ const OnboardingContactItem: React.FC<Props> = (props) => {
     );
   }
 
-  const { introText, label, value, secondaryContent, icon, action } = props;
+  const { introText, description, label, value, secondaryContent, icon, action } = props;
 
   return (
     <Stack spacing={2}>
@@ -110,8 +111,14 @@ const OnboardingContactItem: React.FC<Props> = (props) => {
         </Typography>
       )}
 
+      {description && (
+        <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+          {label}
+        </Typography>
+      )}
+
       <Stack direction="row" spacing={1.5} alignItems="center">
-        {icon ?? <CheckIcon color="disabled" fontSize="small" aria-hidden="true" />}
+        {icon ?? <CheckIcon color="disabled" aria-hidden="true" />}
         <Box>
           {label && (
             <Typography variant="body2" color="text.secondary">
@@ -119,7 +126,7 @@ const OnboardingContactItem: React.FC<Props> = (props) => {
             </Typography>
           )}
           {value && (
-            <Typography variant="body1" fontWeight={700} sx={{ wordBreak: 'break-word' }}>
+            <Typography fontSize="16px" fontWeight={600}>
               {value}
             </Typography>
           )}

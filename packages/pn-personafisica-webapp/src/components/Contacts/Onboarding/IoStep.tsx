@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next';
 
 import { Box, Button, Stack, Typography } from '@mui/material';
-import { appStateActions } from '@pagopa-pn/pn-commons';
+import { IllusOnboardingAppIO, appStateActions } from '@pagopa-pn/pn-commons';
 import { ButtonNaked } from '@pagopa/mui-italia';
 
 import {
@@ -124,7 +124,7 @@ const IoStep: React.FC<Props> = ({ value, onChange, onContinue }) => {
         {t('onboarding.digital-domicile.io.description')}
       </Typography>
 
-      <Box sx={{ p: 3, borderRadius: 3, bgcolor: 'background.paper' }}>
+      <Box sx={{ borderRadius: 3, bgcolor: 'background.paper' }}>
         <Button
           fullWidth
           variant="contained"
@@ -146,17 +146,7 @@ const IoStep: React.FC<Props> = ({ value, onChange, onContinue }) => {
             {t(`${labelPrefixByStatus}.refresh-cta`)}
           </ButtonNaked>
         )}
-        {/* TODO: replace with final asset */}
-        <Box
-          sx={{
-            width: '100%',
-            height: 220,
-            borderRadius: 2,
-            bgcolor: 'grey.100',
-            mb: 2,
-          }}
-          // aria-label={t('onboarding.digital-domicile.io.img-alt-text')}
-        />
+        <IllusOnboardingAppIO aria-label={t('onboarding.digital-domicile.io.img-alt-text')} />
       </Box>
     </Stack>
   );

@@ -45,6 +45,7 @@ export { default as FeedbackPage } from './FeedbackPage';
 export { default as Footer } from './Footer/Footer';
 export { default as Header } from './Header/Header';
 export { IllusAppIO } from './Illustrations/IllusAppIO';
+export { IllusOnboardingAppIO } from './Illustrations/IllusOnboardingAppIO';
 export { IllusAppIODialog } from './Illustrations/IllusAppIODialog';
 export { IllusAppIoLogo } from './Illustrations/IllusAppIOLogo';
 export { IllusHourglass } from './Illustrations/IllusHourglass';
