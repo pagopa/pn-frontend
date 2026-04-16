@@ -19,10 +19,11 @@ import {
 } from '@mui/material';
 import Chip from '@mui/material/Chip';
 import { ApiErrorWrapper, useIsMobile } from '@pagopa-pn/pn-commons';
-import { IllusEmailValidation, IllusPaymentCompleted, LogoIOApp } from '@pagopa/mui-italia';
+import { IllusMIAward, IllusMIMessage, IllusMISmartphoneValidation } from '@pagopa/mui-italia';
 
 import LoadingPageWrapper from '../components/LoadingPageWrapper/LoadingPageWrapper';
 import * as routes from '../navigation/routes.const';
+import { setHasSkippedOnboarding } from '../redux/auth/reducers';
 import { CONTACT_ACTIONS, getDigitalAddresses } from '../redux/contact/actions';
 import { contactsSelectors } from '../redux/contact/reducers';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
@@ -180,7 +181,7 @@ const Onboarding: React.FC = () => {
 
   const cardsData: CardConfig = [
     {
-      illustration: <IllusPaymentCompleted size={32} aria-hidden="true" />,
+      illustration: <IllusMIAward size={32} aria-hidden="true" />,
       title: t('onboarding.cards.send.title'),
       description: <PaperContent items={items.send} />,
       cta: t('onboarding.cards.send.cta'),
@@ -188,7 +189,7 @@ const Onboarding: React.FC = () => {
       chip: { label: t('onboarding.cards.send.label'), color: 'info' },
     },
     {
-      illustration: <IllusEmailValidation size={32} aria-hidden="true" />,
+      illustration: <IllusMIMessage size={32} aria-hidden="true" />,
 
       title: t('onboarding.cards.contacts.title'),
       description: <PaperContent items={items.contacts} />,
@@ -196,9 +197,7 @@ const Onboarding: React.FC = () => {
       path: routes.ONBOARDING_COURTESY,
     },
     {
-      illustration: (
-        <LogoIOApp size={32} color="default" aria-hidden="true" title="Logo dell'app IO" />
-      ),
+      illustration: <IllusMISmartphoneValidation size={32} aria-hidden="true" />,
       title: t('onboarding.cards.io.title'),
       description: <PaperContent items={items.io} />,
       cta: t('onboarding.cards.io.cta'),
@@ -209,6 +208,11 @@ const Onboarding: React.FC = () => {
   const borderStyle = {
     border: '3px solid transparent',
     background: `linear-gradient(#fff, #fff) padding-box, linear-gradient(135deg, #0B3EE3 0%, #DBF9FA 27%, #99A3C1 50%, #B5C6FF 72%, #0B3EE3 95%) border-box`,
+  };
+
+  const redirectToNotifications = () => {
+    dispatch(setHasSkippedOnboarding());
+    navigate(routes.NOTIFICHE);
   };
 
   return (
@@ -287,10 +291,7 @@ const Onboarding: React.FC = () => {
                   })}
                 </Stack>
                 <Box display="flex" justifyContent="center" mt={3}>
-                  <Button
-                    variant="text"
-                    onClick={() => navigate(routes.NOTIFICHE)} // Sostituisci con la tua route corretta
-                  >
+                  <Button variant="text" onClick={redirectToNotifications}>
                     {t('onboarding.exit-flow')}
                   </Button>
                 </Box>
