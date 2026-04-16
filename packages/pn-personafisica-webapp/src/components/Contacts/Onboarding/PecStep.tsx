@@ -3,7 +3,15 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 
-import { Divider, Stack, Typography } from '@mui/material';
+import {
+  Checkbox,
+  Divider,
+  FormControl,
+  FormControlLabel,
+  FormHelperText,
+  Stack,
+  Typography,
+} from '@mui/material';
 import { ConfirmationModal, appStateActions } from '@pagopa-pn/pn-commons';
 
 import { EmailContactState, PecContactState } from '../../../models/DigitalDomicileOnboarding';
@@ -23,9 +31,11 @@ type Props = {
   pec: PecContactState;
   email: EmailContactState;
   showOptionalEmail: boolean;
+  pecDisclaimerAccepted: boolean;
   onPecChange: (value?: string) => void;
   onEmailChange: (value?: string) => void;
   onShowOptionalEmail: (show: boolean) => void;
+  onPecDisclaimerChange: (accepted: boolean) => void;
   registerContinueHandler?: (handler: () => Promise<boolean>) => void;
 };
 
@@ -47,9 +57,11 @@ const PecStep: React.FC<Props> = ({
   pec,
   email,
   showOptionalEmail,
+  pecDisclaimerAccepted,
   onPecChange,
   onEmailChange,
   onShowOptionalEmail,
+  onPecDisclaimerChange,
   registerContinueHandler,
 }) => {
   const { t } = useTranslation(['recapiti', 'common']);
@@ -84,19 +96,25 @@ const PecStep: React.FC<Props> = ({
     [isPecVerifiedInWizard, pec.alreadySet, pec.value]
   );
 
+  const showPecDisclaimer = !pec.alreadySet && !isPecSaved;
+
   const validationSchema = useMemo(
     () =>
       yup.object({
         pec: pecValidationSchema(t),
         email: emailMode === 'insert' ? emailValidationSchema(t) : yup.string().notRequired(),
+        pecDisclaimer: showPecDisclaimer
+          ? yup.bool().isTrue(t('required-field', { ns: 'common' }))
+          : yup.bool().notRequired(),
       }),
-    [emailMode, t]
+    [emailMode, showPecDisclaimer, t]
   );
 
   const formik = useFormik({
     initialValues: {
       pec: pec.value ?? '',
       email: email.value ?? '',
+      pecDisclaimer: pecDisclaimerAccepted,
     },
     enableReinitialize: true,
     validationSchema,
@@ -183,17 +201,22 @@ const PecStep: React.FC<Props> = ({
 
   const handleVerifyPec = useCallback(async () => {
     await formik.setFieldTouched('pec', true, false);
+
+    if (showPecDisclaimer) {
+      await formik.setFieldTouched('pecDisclaimer', true, false);
+    }
+
     const errors = await formik.validateForm();
     const normalizedValue = normalizeContactValue(formik.values.pec);
 
-    if (!normalizedValue || errors.pec) {
+    if (!normalizedValue || errors.pec || errors.pecDisclaimer) {
       return;
     }
 
     // eslint-disable-next-line functional/immutable-data
     currentValuesRef.current.pec = normalizedValue;
     await submitContactFlow('pec', normalizedValue);
-  }, [formik, submitContactFlow]);
+  }, [formik, showPecDisclaimer, submitContactFlow]);
 
   const handleVerifyEmail = useCallback(async () => {
     await formik.setFieldTouched('email', true, false);
@@ -289,6 +312,43 @@ const PecStep: React.FC<Props> = ({
   const codeDialogAddressType = codeDialogFlow === 'pec' ? AddressType.LEGAL : AddressType.COURTESY;
   const codeDialogChannelType = codeDialogFlow === 'pec' ? ChannelType.PEC : ChannelType.EMAIL;
 
+  const handlePecDisclaimerChange = useCallback(
+    async (checked: boolean) => {
+      onPecDisclaimerChange(checked);
+      await formik.setFieldValue('pecDisclaimer', checked, false);
+      await formik.setFieldTouched('pecDisclaimer', true, false);
+    },
+    [formik, onPecDisclaimerChange]
+  );
+
+  const renderPecDisclaimerFooter = () => {
+    if (!showPecDisclaimer) {
+      return null;
+    }
+
+    return (
+      <FormControl error={Boolean(formik.touched.pecDisclaimer && formik.errors.pecDisclaimer)}>
+        <FormControlLabel
+          sx={{ alignItems: 'flex-start', m: 0 }}
+          control={
+            <Checkbox
+              checked={formik.values.pecDisclaimer}
+              onChange={(_, checked) => void handlePecDisclaimerChange(checked)}
+            />
+          }
+          label={
+            <Typography variant="body2" color="text.secondary">
+              <Trans i18nKey="onboarding.digital-domicile.pec.disclaimer" ns="recapiti" />
+            </Typography>
+          }
+        />
+        {formik.touched.pecDisclaimer && formik.errors.pecDisclaimer && (
+          <FormHelperText>{formik.errors.pecDisclaimer}</FormHelperText>
+        )}
+      </FormControl>
+    );
+  };
+
   return (
     <>
       <Stack data-testid="pec-step">
@@ -327,7 +387,7 @@ const PecStep: React.FC<Props> = ({
               onChange={(value) => void handleFieldChange('pec', value)}
               onBlur={formik.handleBlur}
               onSubmit={handleVerifyPec}
-              footer={<Trans i18nKey="onboarding.digital-domicile.pec.disclaimer" ns="recapiti" />}
+              footer={renderPecDisclaimerFooter()}
             />
           )}
 

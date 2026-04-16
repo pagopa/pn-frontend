@@ -80,8 +80,10 @@ const EmailSection: React.FC<Props> = ({
         onChange={onEmailValueChange}
         onBlur={onEmailBlur}
         onSubmit={onVerifyEmail}
-        collapseLabel={t('onboarding.digital-domicile.pec.cancel-email-cta')}
-        onCollapse={onCollapse}
+        collapse={{
+          label: t('onboarding.digital-domicile.pec.cancel-email-cta'),
+          onClick: onCollapse,
+        }}
       />
     );
   }

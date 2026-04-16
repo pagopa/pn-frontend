@@ -48,7 +48,7 @@ type WizardState = {
   pec: PecContactState;
   io: IoContactState;
   showOptionalEmail: boolean;
-  sendDisclaimerAccepted: boolean;
+  pecDisclaimerAccepted: boolean;
 };
 
 type InitialContactsSnapshot = {
@@ -73,7 +73,7 @@ const buildInitialWizardState = (
   pec: buildContactState(snapshot.pec),
   io: buildContactState(snapshot.io),
   showOptionalEmail: mode === 'send' || Boolean(snapshot.email),
-  sendDisclaimerAccepted: false,
+  pecDisclaimerAccepted: Boolean(snapshot.pec),
 });
 
 const DigitalDomicileWizard: React.FC = () => {
@@ -171,25 +171,12 @@ const DigitalDomicileWizard: React.FC = () => {
     }));
   };
 
-  const setSendDisclaimerAccepted = (accepted: boolean) => {
+  const setPecDisclaimerAccepted = (accepted: boolean) => {
     setWizardState((prev) => ({
       ...prev,
-      sendDisclaimerAccepted: accepted,
+      pecDisclaimerAccepted: accepted,
     }));
   };
-
-  const canContinueFromSummaryStep = () => {
-    if (!isSummaryStep || !wizardState.mode) {
-      return false;
-    }
-    if (isSendMode) {
-      return wizardState.sendDisclaimerAccepted;
-    }
-
-    return true;
-  };
-
-  const disableNextButton = isSummaryStep && !canContinueFromSummaryStep();
 
   const getNextButtonLabel = () => {
     if (isContactStep) {
@@ -281,10 +268,6 @@ const DigitalDomicileWizard: React.FC = () => {
     }
 
     if (isSummaryStep) {
-      if (!canContinueFromSummaryStep()) {
-        return;
-      }
-
       await handleSummarySubmit();
     }
   };
@@ -318,7 +301,6 @@ const DigitalDomicileWizard: React.FC = () => {
         onClick={() => void handleNext()}
         color="primary"
         size="medium"
-        disabled={disableNextButton}
         sx={{ width: { xs: '100%', md: 'auto' }, ml: { md: 'auto' } }}
         data-testid="next-button"
       >
@@ -391,9 +373,11 @@ const DigitalDomicileWizard: React.FC = () => {
             pec={wizardState.pec}
             email={wizardState.email}
             showOptionalEmail={wizardState.showOptionalEmail}
+            pecDisclaimerAccepted={wizardState.pecDisclaimerAccepted}
             onPecChange={setPecValue}
             onEmailChange={setEmailValue}
             onShowOptionalEmail={setShowOptionalEmail}
+            onPecDisclaimerChange={setPecDisclaimerAccepted}
             registerContinueHandler={(handler) => {
               // eslint-disable-next-line functional/immutable-data
               pecContinueHandlerRef.current = handler;
@@ -411,8 +395,8 @@ const DigitalDomicileWizard: React.FC = () => {
             email={wizardState.email.value}
             pec={wizardState.pec.value}
             io={wizardState.io.value}
-            disclaimerAccepted={wizardState.sendDisclaimerAccepted}
-            onDisclaimerChange={setSendDisclaimerAccepted}
+            // disclaimerAccepted={wizardState.sendDisclaimerAccepted}
+            // onDisclaimerChange={setSendDisclaimerAccepted}
           />
         ) : null}
       </PnWizardStep>

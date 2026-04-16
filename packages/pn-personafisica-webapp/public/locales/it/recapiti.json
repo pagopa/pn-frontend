@@ -352,6 +352,19 @@
         },
         "img-alt-text": ""
       },
+      "summary": {
+        "title": "Il tuo riepilogo",
+        "legal-title": "Le comunicazioni a valore legale verranno recapitate su:",
+        "courtesy-title": "Riceverai un avviso via:",
+        "info-box": "Monitora i recapiti che hai scelto: una notifica digitale SEND inizia a produrre effetti giuridici anche se non l’hai consultata.",
+        "disclaimer": "Premendo <strong>Conferma</strong> dichiari di aver letto l'<0>Informativa privacy</0> e di accettare i <1>Termini del servizio</1>.",
+        "ddom-label": "Domicilio digitale",
+        "io-label": "IO, l’app dei servizi pubblici",
+        "io-value": "Servizio SEND su IO attivo",
+        "email-label": "Email",
+        "send-badge": "SEND",
+        "pec-badge": "PEC"
+      },
       "pec": {
         "title": "La tua PEC come domicilio digitale SEND",
         "description": "Riceverai le comunicazioni a valore legale sulla tua PEC, solo in digitale, e potrai evitare l’invio di una raccomandata con i relativi costi aggiuntivi.",
@@ -359,7 +372,7 @@
         "label-summary": "PEC",
         "input-label": "Indirizzo PEC",
         "verify-cta": "Verifica PEC",
-        "disclaimer": "Premendo <strong>Verifica PEC</strong> accetti che l’indirizzo PEC indicato sia utilizzato in via prioritaria rispetto a eventuali PEC registrate presso un ente mittente o presenti nei pubblici registri. ",
+        "disclaimer": "Accetto che questa PEC venga utilizzata in via prioritaria rispetto ad altre registrate a mio nome.",
         "email-cta": "Attiva gli avvisi via email",
         "optional-email-description": "Vuoi ricevere anche un’email alla ricezione di una notifica SEND?",
         "optional-email-title": "Attiva gli avvisi via email",

@@ -17,8 +17,10 @@ type EntryModeProps = {
   onChange: (value: string) => void | Promise<void>;
   onBlur?: FocusEventHandler<HTMLInputElement | HTMLTextAreaElement>;
   onSubmit: () => void | Promise<void>;
-  collapseLabel?: string;
-  onCollapse?: () => void;
+  collapse?: {
+    label: string;
+    onClick: () => void;
+  };
   footer?: ReactNode;
 };
 
@@ -26,10 +28,13 @@ type ViewModeProps = {
   mode: 'view';
   introText?: ReactNode;
   label?: string;
-  value: string;
+  value?: ReactNode;
+  secondaryContent?: ReactNode;
   icon?: ReactNode;
-  actionLabel?: string;
-  onAction?: () => void;
+  action?: {
+    label: string;
+    onClick: () => void;
+  };
 };
 
 type Props = EntryModeProps | ViewModeProps;
@@ -48,8 +53,7 @@ const OnboardingContactItem: React.FC<Props> = (props) => {
       onChange,
       onBlur,
       onSubmit,
-      collapseLabel,
-      onCollapse,
+      collapse,
       footer,
     } = props;
 
@@ -80,27 +84,23 @@ const OnboardingContactItem: React.FC<Props> = (props) => {
           {buttonLabel}
         </Button>
 
-        {footer && (
-          <Typography variant="body2" color="text.secondary">
-            {footer}
-          </Typography>
-        )}
+        {footer ?? null}
 
-        {collapseLabel && onCollapse && (
+        {collapse && (
           <ButtonNaked
             color="primary"
             size="medium"
-            onClick={onCollapse}
+            onClick={collapse.onClick}
             sx={{ alignSelf: 'center', fontWeight: 700 }}
           >
-            {collapseLabel}
+            {collapse.label}
           </ButtonNaked>
         )}
       </Stack>
     );
   }
 
-  const { introText, label, value, icon, actionLabel, onAction } = props;
+  const { introText, label, value, secondaryContent, icon, action } = props;
 
   return (
     <Stack spacing={2}>
@@ -118,20 +118,23 @@ const OnboardingContactItem: React.FC<Props> = (props) => {
               {label}
             </Typography>
           )}
-          <Typography variant="body1" fontWeight={700}>
-            {value}
-          </Typography>
+          {value && (
+            <Typography variant="body1" fontWeight={700} sx={{ wordBreak: 'break-word' }}>
+              {value}
+            </Typography>
+          )}
+          {secondaryContent ?? null}
         </Box>
       </Stack>
 
-      {actionLabel && onAction && (
+      {action && (
         <ButtonNaked
           color="primary"
           size="medium"
-          onClick={onAction}
+          onClick={action.onClick}
           sx={{ alignSelf: 'flex-start', fontWeight: 700 }}
         >
-          {actionLabel}
+          {action.label}
         </ButtonNaked>
       )}
     </Stack>
