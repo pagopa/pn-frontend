@@ -22,6 +22,7 @@ import { ApiErrorWrapper, useIsMobile } from '@pagopa-pn/pn-commons';
 import { IllusMIAward, IllusMIMessage, IllusMISmartphoneValidation } from '@pagopa/mui-italia';
 
 import LoadingPageWrapper from '../components/LoadingPageWrapper/LoadingPageWrapper';
+import { ChannelType, IOAllowedValues } from '../models/contacts';
 import * as routes from '../navigation/routes.const';
 import { setHasSkippedOnboarding } from '../redux/auth/reducers';
 import { CONTACT_ACTIONS, getDigitalAddresses } from '../redux/contact/actions';
@@ -52,6 +53,7 @@ type CardConfig = Array<{
   cta: string;
   path: string;
   chip?: { label: string; color: ChipColors };
+  hide?: boolean;
 }>;
 
 const PaperContent = ({ items }: { items: Array<Item> }) => (
@@ -80,6 +82,7 @@ const PaperContent = ({ items }: { items: Array<Item> }) => (
 
 const OnboardingSkeleton = () => {
   const isMobile = useIsMobile();
+  const { t } = useTranslation('common');
   return (
     <Box display="flex" justifyContent="center" aria-live="polite" aria-busy="true">
       <Typography
@@ -94,7 +97,7 @@ const OnboardingSkeleton = () => {
           whiteSpace: 'nowrap',
         }}
       >
-        Caricamento in corso
+        {t('loading')}
       </Typography>
 
       <Box sx={{ width: { xs: '100%', lg: '760px' }, p: { xs: 2, lg: 0 } }} mt={3} mb={6}>
@@ -135,6 +138,11 @@ const Onboarding: React.FC = () => {
 
   const isRootMode = location.pathname === routes.ONBOARDING;
   const loading = useAppSelector(contactsSelectors.selectLoading);
+  const { courtesyAddresses } = useAppSelector(contactsSelectors.selectAddresses);
+  const hasIoEnabled = courtesyAddresses.some(
+    (addr) => addr.channelType === ChannelType.IOMSG && addr.value === IOAllowedValues.ENABLED
+  );
+
   const items: Record<ElementCategory, Array<Item>> = useMemo(
     () => ({
       send: [
@@ -202,6 +210,7 @@ const Onboarding: React.FC = () => {
       description: <PaperContent items={items.io} />,
       cta: t('onboarding.cards.io.cta'),
       path: routes.ONBOARDING_IO,
+      hide: hasIoEnabled,
     },
   ];
 
@@ -234,61 +243,63 @@ const Onboarding: React.FC = () => {
                   {t('onboarding.description')}
                 </Typography>
                 <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2} mt={3}>
-                  {cardsData.map((card, index) => {
-                    const isFirst = index === 0;
-                    return (
-                      <Box key={`card-${index}`} sx={{ flex: 1 }}>
-                        <Paper
-                          elevation={0}
-                          sx={{
-                            padding: isMobile ? 2 : 3,
-                            borderRadius: 2,
-                            width: '100%',
-                            display: 'flex',
-                            flexDirection: 'column',
-                            position: 'relative',
-                            ...(isFirst && borderStyle),
-                          }}
-                        >
-                          <Stack direction="row" spacing={1}>
-                            <Box>{card.illustration}</Box>
-                            <Box>
-                              <Typography
-                                component="h2"
-                                variant="body1"
-                                sx={{ fontWeight: '600' }}
-                                fontWeight="bold"
-                                mb={1}
-                              >
-                                {card.title}
-                              </Typography>
-
-                              {card.chip && (
-                                <Chip
-                                  label={card.chip.label}
-                                  color={card.chip.color}
-                                  size="small"
-                                />
-                              )}
-                            </Box>
-                          </Stack>
-
-                          <Box my={1}>{card.description}</Box>
-
-                          <Button
-                            fullWidth
-                            onClick={() => navigate(card.path)}
-                            endIcon={<ArrowForwardRoundedIcon />}
-                            variant="text"
-                            sx={{ padding: 0, textAlign: 'left', justifyContent: 'flex-start' }}
-                            size={isMobile ? 'large' : 'medium'}
+                  {cardsData
+                    .filter((card) => !card.hide)
+                    .map((card, index) => {
+                      const isFirst = index === 0;
+                      return (
+                        <Box key={`card-${index}`} sx={{ flex: 1 }}>
+                          <Paper
+                            elevation={0}
+                            sx={{
+                              padding: isMobile ? 2 : 3,
+                              borderRadius: 2,
+                              width: '100%',
+                              display: 'flex',
+                              flexDirection: 'column',
+                              position: 'relative',
+                              ...(isFirst && borderStyle),
+                            }}
                           >
-                            {card.cta}
-                          </Button>
-                        </Paper>
-                      </Box>
-                    );
-                  })}
+                            <Stack direction="row" spacing={1}>
+                              <Box>{card.illustration}</Box>
+                              <Box>
+                                <Typography
+                                  component="h2"
+                                  variant="body1"
+                                  sx={{ fontWeight: '600' }}
+                                  fontWeight="bold"
+                                  mb={1}
+                                >
+                                  {card.title}
+                                </Typography>
+
+                                {card.chip && (
+                                  <Chip
+                                    label={card.chip.label}
+                                    color={card.chip.color}
+                                    size="small"
+                                  />
+                                )}
+                              </Box>
+                            </Stack>
+
+                            <Box my={1}>{card.description}</Box>
+
+                            <Button
+                              fullWidth
+                              onClick={() => navigate(card.path)}
+                              endIcon={<ArrowForwardRoundedIcon />}
+                              variant="text"
+                              sx={{ padding: 0, textAlign: 'left', justifyContent: 'flex-start' }}
+                              size={isMobile ? 'large' : 'medium'}
+                            >
+                              {card.cta}
+                            </Button>
+                          </Paper>
+                        </Box>
+                      );
+                    })}
                 </Stack>
                 <Box display="flex" justifyContent="center" mt={3}>
                   <Button variant="text" onClick={redirectToNotifications}>
