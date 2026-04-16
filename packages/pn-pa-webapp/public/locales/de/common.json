@@ -163,7 +163,8 @@
   },
   "roles": {
     "operator": "Sachbearbeiter",
-    "admin": "Administrator"
+    "admin": "Administrator",
+    "support": "Support"
   },
   "attachments": {
     "remove-attachment": "Anhang entfernen"
