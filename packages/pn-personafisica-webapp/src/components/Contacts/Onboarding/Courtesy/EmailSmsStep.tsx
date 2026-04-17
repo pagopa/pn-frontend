@@ -7,7 +7,7 @@ import { Divider, Stack, Typography } from '@mui/material';
 import { ConfirmationModal, appStateActions } from '@pagopa-pn/pn-commons';
 import { MIAlert } from '@pagopa/mui-italia';
 
-import { ContactState } from '../../../../models/DigitalDomicileOnboarding';
+import { EmailContactState, SmsContactState } from '../../../../models/DigitalDomicileOnboarding';
 import { AddressType, ChannelType, SaveDigitalAddressParams } from '../../../../models/contacts';
 import { createOrUpdateAddress } from '../../../../redux/contact/actions';
 import { useAppDispatch } from '../../../../redux/hooks';
@@ -25,8 +25,8 @@ enum ModalType {
 
 type Props = {
   ioEnabled: boolean;
-  email: ContactState<string | undefined>;
-  sms: ContactState<string | undefined>;
+  email: EmailContactState;
+  sms: SmsContactState;
   onContactAdded: (key: 'email' | 'sms', value: string) => void;
   registerContinueHandler?: (handler: () => Promise<boolean>) => void;
 };
@@ -41,7 +41,13 @@ const createContactRef = (): ContactRef => ({
   resetForm: () => Promise.resolve(),
 });
 
-const EmailSmsStep = ({ ioEnabled, email, sms, onContactAdded, registerContinueHandler }: Props) => {
+const EmailSmsStep = ({
+  ioEnabled,
+  email,
+  sms,
+  onContactAdded,
+  registerContinueHandler,
+}: Props) => {
   const { t } = useTranslation(['recapiti', 'common']);
   const dispatch = useAppDispatch();
 

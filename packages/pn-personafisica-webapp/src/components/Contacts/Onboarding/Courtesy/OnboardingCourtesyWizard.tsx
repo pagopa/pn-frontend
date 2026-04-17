@@ -10,7 +10,7 @@ import {
   ContactValue,
   EmailContactState,
   IoContactState,
-  WizardMode,
+  SmsContactState,
 } from '../../../../models/DigitalDomicileOnboarding';
 import { IOAllowedValues } from '../../../../models/contacts';
 import { NOTIFICHE } from '../../../../navigation/routes.const';
@@ -21,10 +21,9 @@ import IoStep from '../IoStep';
 import EmailSmsStep from './EmailSmsStep';
 
 type WizardState = {
-  mode: WizardMode | null;
   email: EmailContactState;
   io: IoContactState;
-  sms: ContactState<string | undefined>;
+  sms: SmsContactState;
 };
 
 type InitialContactsSnapshot = {
@@ -38,11 +37,7 @@ const buildContactState = <T extends ContactValue>(value: T): ContactState<T> =>
   alreadySet: value !== undefined,
 });
 
-const buildInitialWizardState = (
-  snapshot: InitialContactsSnapshot,
-  mode: WizardMode | null
-): WizardState => ({
-  mode,
+const buildInitialWizardState = (snapshot: InitialContactsSnapshot): WizardState => ({
   email: buildContactState(snapshot.email),
   io: buildContactState(snapshot.io),
   sms: buildContactState(snapshot.sms),
@@ -65,7 +60,7 @@ const OnboardingCourtesyWizard: React.FC = () => {
 
   const [activeStep, setActiveStep] = useState(0);
   const [wizardState, setWizardState] = useState<WizardState>(() =>
-    buildInitialWizardState(initialContactsRef.current, null)
+    buildInitialWizardState(initialContactsRef.current)
   );
 
   const isIoEnabled = wizardState.io.value === IOAllowedValues.ENABLED;
@@ -104,6 +99,12 @@ const OnboardingCourtesyWizard: React.FC = () => {
         exitButton: {
           onClick: goToNotifications,
         },
+        feedback: {
+          title: t('onboarding.courtesy.success-title'),
+          content: t('onboarding.courtesy.success-description'),
+          buttonText: t('button.understand', { ns: 'common' }),
+          onClick: goToNotifications,
+        },
         nextButton: {
           variant: activeStep === 0 && !isIoEnabled ? 'outlined' : 'contained',
           label:
@@ -111,14 +112,14 @@ const OnboardingCourtesyWizard: React.FC = () => {
               ? t('onboarding.courtesy.proceed-without-io')
               : undefined,
           sx: activeStep === 0 && isIoEnabled ? { display: 'none' } : { ml: { md: 'auto' } },
-          onClick: async (next, step) => {
+          onClick: async (_, step) => {
             if (step === 1) {
               const canProceed = await emailSmsContinueHandlerRef.current?.();
               if (canProceed !== true) {
                 return;
               }
             }
-            next();
+            goToNextStep();
           },
         },
       }}

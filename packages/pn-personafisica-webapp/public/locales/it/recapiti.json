@@ -411,6 +411,8 @@
       "step-2-label": "Email e SMS",
       "proceed-without-io": "Continua senza l'app IO",
       "banner-description": "Più avvisi attivi, più possibilità hai di leggere la notifica digitale in tempo ed evitare la raccomandata!",
+      "success-title": "Hai attivato gli avvisi",
+      "success-description": "Riceverai un avviso sui canali che hai scelto quando ricevi una notifica SEND.",
       "email": {
         "readonly": {
           "title": "Attiva gli avvisi via email",
