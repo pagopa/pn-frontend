@@ -35,6 +35,11 @@ type ContactRef = {
   resetForm: () => Promise<void>;
 };
 
+const createContactRef = (): ContactRef => ({
+  toggleEdit: () => {},
+  resetForm: () => Promise.resolve(),
+});
+
 const EmailSmsStep = ({ ioEnabled, email, sms, onContactAdded }: Props) => {
   const { t } = useTranslation(['recapiti', 'common']);
   const dispatch = useAppDispatch();
@@ -68,15 +73,8 @@ const EmailSmsStep = ({ ioEnabled, email, sms, onContactAdded }: Props) => {
     onSubmit: () => {},
   });
 
-  const emailContactRef = useRef<ContactRef>({
-    toggleEdit: () => {},
-    resetForm: () => Promise.resolve(),
-  });
-
-  const smsContactRef = useRef<ContactRef>({
-    toggleEdit: () => {},
-    resetForm: () => Promise.resolve(),
-  });
+  const emailContactRef = useRef<ContactRef>(createContactRef());
+  const smsContactRef = useRef<ContactRef>(createContactRef());
 
   const handleCollapseSms = async () => {
     setSmsMode('collapsed');

@@ -1,4 +1,4 @@
-import { RefObject } from 'react';
+import { RefObject, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import MailOutlineIcon from '@mui/icons-material/MailOutline';
@@ -50,34 +50,37 @@ const CourtesyContactHandler: React.FC<Props> = ({
 
   const ns = `onboarding.courtesy.${channelType.toLowerCase()}`;
 
-  const labels = {
-    readonly: {
-      title: t(`${ns}.readonly.title`),
-      description: t(`${ns}.readonly.description`),
-    },
-    insert: {
-      title: t(`${ns}.insert.title`),
-      description: t(`${ns}.insert.description`),
-      inputLabel: t(`${ns}.insert.input-label`),
-      buttonLabel: t(`${ns}.insert.button-label`),
-      collapseLabel: t(`${ns}.insert.collapse-label`),
-    },
-    collapsed: {
-      label: t(`${ns}.collapsed.label`),
-      buttonLabel: t(`${ns}.collapsed.button-label`),
-    },
-    edit: {
-      alreadyPresentTitle: t(`${ns}.edit.title`),
-      alreadyPresentDescription: t(`${ns}.edit.description`),
-      inputLabel: t(`${ns}.edit.input-label`),
-    },
-  };
+  const labels = useMemo(
+    () => ({
+      readonly: {
+        title: t(`${ns}.readonly.title`),
+        description: t(`${ns}.readonly.description`),
+      },
+      insert: {
+        title: t(`${ns}.insert.title`),
+        description: t(`${ns}.insert.description`),
+        inputLabel: t(`${ns}.insert.input-label`),
+        buttonLabel: t(`${ns}.insert.button-label`),
+        collapseLabel: t(`${ns}.insert.collapse-label`),
+      },
+      collapsed: {
+        label: t(`${ns}.collapsed.label`),
+        buttonLabel: t(`${ns}.collapsed.button-label`),
+      },
+      edit: {
+        alreadyPresentTitle: t(`${ns}.edit.title`),
+        alreadyPresentDescription: t(`${ns}.edit.description`),
+        inputLabel: t(`${ns}.edit.input-label`),
+      },
+    }),
+    [t, ns]
+  );
 
   if (mode === 'collapsed') {
     return (
       <Stack spacing={2}>
         <Typography variant="body2" color="text.secondary">
-          {labels?.collapsed?.label}
+          {labels.collapsed.label}
         </Typography>
 
         <ButtonNaked
@@ -86,7 +89,7 @@ const CourtesyContactHandler: React.FC<Props> = ({
           onClick={onExpand}
           sx={{ alignSelf: 'flex-start', fontWeight: 700 }}
         >
-          {labels?.collapsed?.buttonLabel}
+          {labels.collapsed.buttonLabel}
         </ButtonNaked>
       </Stack>
     );
@@ -130,11 +133,11 @@ const CourtesyContactHandler: React.FC<Props> = ({
     return (
       <Stack>
         <Typography fontWeight={600} fontSize="18px" sx={{ mb: 1 }}>
-          {labels.edit?.alreadyPresentTitle}
+          {labels.edit.alreadyPresentTitle}
         </Typography>
 
         <Typography variant="body2" fontSize="16px" color="text.secondary" sx={{ mb: 2 }}>
-          {labels.edit?.alreadyPresentDescription}
+          {labels.edit.alreadyPresentDescription}
         </Typography>
 
         <DigitalContact
@@ -143,9 +146,9 @@ const CourtesyContactHandler: React.FC<Props> = ({
           label=""
           value={contactState.value ?? ''}
           inputProps={{
-            label: labels.edit?.inputLabel,
+            label: labels.edit.inputLabel,
           }}
-          insertButtonLabel={labels?.edit?.inputLabel}
+          insertButtonLabel={labels.edit.inputLabel}
           onSubmit={onSubmitEdit}
           showLabelOnEdit={false}
           slots={{
