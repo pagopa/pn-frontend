@@ -2,6 +2,7 @@ import { RefObject, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import MailOutlineIcon from '@mui/icons-material/MailOutline';
+import PhoneOutlinedIcon from '@mui/icons-material/PhoneOutlined';
 import { Stack, Typography } from '@mui/material';
 import { ButtonNaked } from '@pagopa/mui-italia';
 
@@ -153,6 +154,8 @@ const CourtesyContactHandler: React.FC<Props> = ({
           showLabelOnEdit={false}
           slots={{
             label: () => <></>,
+            leadingEditIcon:
+              channelType === ChannelType.EMAIL ? MailOutlineIcon : PhoneOutlinedIcon,
           }}
           slotsProps={{
             textField: {
@@ -168,6 +171,10 @@ const CourtesyContactHandler: React.FC<Props> = ({
             },
             container: {
               width: '100%',
+            },
+            leadingEditIcon: {
+              sx: { color: 'text.secondary' },
+              fontSize: 'small',
             },
           }}
         />
