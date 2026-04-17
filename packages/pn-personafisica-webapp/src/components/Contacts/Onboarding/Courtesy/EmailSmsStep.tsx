@@ -53,7 +53,17 @@ const EmailSmsStep = ({
 
   const [smsMode, setSmsMode] = React.useState<CourtesyMode>(ioEnabled ? 'collapsed' : 'insert');
   const [modalOpen, setModalOpen] = useState<ModalType | null>(null);
-  const [showVerifyModal, setShowVerifyModal] = useState<ChannelType | null>(null);
+  const [verifyModal, setVerifyModal] = useState<{ open: boolean; channel: ChannelType | null }>({
+    open: false,
+    channel: null,
+  });
+
+  const toggleVerifyModal = (channel: ChannelType | null) => {
+    setVerifyModal((prev) => ({
+      open: !prev.open,
+      channel,
+    }));
+  };
 
   const shouldShowBanner = !ioEnabled && !email.alreadySet;
 
@@ -171,28 +181,28 @@ const EmailSmsStep = ({
   };
 
   const handleContinueAttempt = useCallback(async (): Promise<boolean> => {
+    const smsEnabled = smsMode === 'insert';
+
     await formik.setFieldTouched('email', true, false);
-    if (smsMode === 'insert') {
+    if (smsEnabled) {
       await formik.setFieldTouched('sms', true, false);
     }
 
     const errors = await formik.validateForm();
 
-    if (formik.values.email && !errors.email && !email.value) {
-      setShowVerifyModal(ChannelType.EMAIL);
+    const emailNeedsVerify = formik.values.email && !errors.email && !email.value;
+    const smsNeedsVerify = smsEnabled && formik.values.sms && !errors.sms && !sms.value;
+
+    if (emailNeedsVerify) {
+      toggleVerifyModal(ChannelType.EMAIL);
+      return false;
+    }
+    if (smsNeedsVerify) {
+      toggleVerifyModal(ChannelType.SMS);
       return false;
     }
 
-    if (smsMode === 'insert' && formik.values.sms && !errors.sms && !sms.value) {
-      setShowVerifyModal(ChannelType.SMS);
-      return false;
-    }
-
-    if (errors.email || (smsMode === 'insert' && errors.sms)) {
-      return false;
-    }
-
-    return true;
+    return !errors.email && (!smsEnabled || !errors.sms);
   }, [formik, smsMode, email.value, sms.value]);
 
   useEffect(() => {
@@ -249,21 +259,21 @@ const EmailSmsStep = ({
       />
 
       <ConfirmationModal
-        open={showVerifyModal !== null}
+        open={verifyModal.open}
         title={
-          showVerifyModal === ChannelType.EMAIL
+          verifyModal.channel === ChannelType.EMAIL
             ? t('onboarding.courtesy.email.verify-before-continue-title')
             : t('onboarding.courtesy.sms.verify-before-continue-title')
         }
         slotsProps={{
           confirmButton: {
-            onClick: () => setShowVerifyModal(null),
+            onClick: () => toggleVerifyModal(null),
             children: t('button.understand', { ns: 'common' }),
           },
         }}
       >
         <Typography variant="body2">
-          {showVerifyModal === ChannelType.EMAIL
+          {verifyModal.channel === ChannelType.EMAIL
             ? t('onboarding.courtesy.email.verify-before-continue-content')
             : t('onboarding.courtesy.sms.verify-before-continue-content')}
         </Typography>
