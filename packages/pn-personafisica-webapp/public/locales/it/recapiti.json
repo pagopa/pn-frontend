@@ -431,7 +431,9 @@
           "input-label": "Indirizzo email",
           "title": "Avvisi via email attivi",
           "description": "Riceverai un avviso all’indirizzo:"
-        }
+        },
+        "verify-before-continue-title": "Verifica la tua email",
+        "verify-before-continue-content": "Prima di procedere, seleziona Verifica email e segui le istruzioni."
       },
       "sms": {
         "readonly": {
@@ -453,7 +455,9 @@
           "input-label": "Numero di cellulare",
           "title": "Avvisi via SMS attivi",
           "description": "Riceverai un avviso al numero:"
-        }
+        },
+        "verify-before-continue-title": "Verifica il tuo numero",
+        "verify-before-continue-content": "Prima di procedere, seleziona Verifica numero e segui le istruzioni."
       }
     }
   }

@@ -61,6 +61,8 @@ const OnboardingCourtesyWizard: React.FC = () => {
     io: defaultAPPIOAddress?.value as IOAllowedValues | undefined,
   });
 
+  const emailSmsContinueHandlerRef = useRef<(() => Promise<boolean>) | null>(null);
+
   const [activeStep, setActiveStep] = useState(0);
   const [wizardState, setWizardState] = useState<WizardState>(() =>
     buildInitialWizardState(initialContactsRef.current, null)
@@ -109,6 +111,15 @@ const OnboardingCourtesyWizard: React.FC = () => {
               ? t('onboarding.courtesy.proceed-without-io')
               : undefined,
           sx: activeStep === 0 && isIoEnabled ? { display: 'none' } : { ml: { md: 'auto' } },
+          onClick: async (next, step) => {
+            if (step === 1) {
+              const canProceed = await emailSmsContinueHandlerRef.current?.();
+              if (canProceed !== true) {
+                return;
+              }
+            }
+            next();
+          },
         },
       }}
     >
@@ -125,6 +136,10 @@ const OnboardingCourtesyWizard: React.FC = () => {
           email={wizardState.email}
           sms={wizardState.sms}
           onContactAdded={(key, value) => updateContactValue(key, value)}
+          registerContinueHandler={(handler) => {
+            // eslint-disable-next-line functional/immutable-data
+            emailSmsContinueHandlerRef.current = handler;
+          }}
         />
       </PnWizardStep>
     </PnWizard>

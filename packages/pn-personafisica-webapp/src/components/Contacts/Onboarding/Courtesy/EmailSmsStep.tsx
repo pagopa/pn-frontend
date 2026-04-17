@@ -1,10 +1,10 @@
 import { useFormik } from 'formik';
-import React, { useMemo, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 
-import { Divider, Stack } from '@mui/material';
-import { appStateActions } from '@pagopa-pn/pn-commons';
+import { Divider, Stack, Typography } from '@mui/material';
+import { ConfirmationModal, appStateActions } from '@pagopa-pn/pn-commons';
 import { MIAlert } from '@pagopa/mui-italia';
 
 import { ContactState } from '../../../../models/DigitalDomicileOnboarding';
@@ -28,6 +28,7 @@ type Props = {
   email: ContactState<string | undefined>;
   sms: ContactState<string | undefined>;
   onContactAdded: (key: 'email' | 'sms', value: string) => void;
+  registerContinueHandler?: (handler: () => Promise<boolean>) => void;
 };
 
 type ContactRef = {
@@ -40,12 +41,13 @@ const createContactRef = (): ContactRef => ({
   resetForm: () => Promise.resolve(),
 });
 
-const EmailSmsStep = ({ ioEnabled, email, sms, onContactAdded }: Props) => {
+const EmailSmsStep = ({ ioEnabled, email, sms, onContactAdded, registerContinueHandler }: Props) => {
   const { t } = useTranslation(['recapiti', 'common']);
   const dispatch = useAppDispatch();
 
   const [smsMode, setSmsMode] = React.useState<CourtesyMode>(ioEnabled ? 'collapsed' : 'insert');
   const [modalOpen, setModalOpen] = useState<ModalType | null>(null);
+  const [showVerifyModal, setShowVerifyModal] = useState<ChannelType | null>(null);
 
   const shouldShowBanner = !ioEnabled && !email.alreadySet;
 
@@ -162,6 +164,35 @@ const EmailSmsStep = ({ ioEnabled, email, sms, onContactAdded }: Props) => {
     }
   };
 
+  const handleContinueAttempt = useCallback(async (): Promise<boolean> => {
+    await formik.setFieldTouched('email', true, false);
+    if (smsMode === 'insert') {
+      await formik.setFieldTouched('sms', true, false);
+    }
+
+    const errors = await formik.validateForm();
+
+    if (formik.values.email && !errors.email && !email.value) {
+      setShowVerifyModal(ChannelType.EMAIL);
+      return false;
+    }
+
+    if (smsMode === 'insert' && formik.values.sms && !errors.sms && !sms.value) {
+      setShowVerifyModal(ChannelType.SMS);
+      return false;
+    }
+
+    if (errors.email || (smsMode === 'insert' && errors.sms)) {
+      return false;
+    }
+
+    return true;
+  }, [formik, smsMode, email.value, sms.value]);
+
+  useEffect(() => {
+    registerContinueHandler?.(handleContinueAttempt);
+  }, [handleContinueAttempt, registerContinueHandler]);
+
   return (
     <Stack data-testid="email-sms-step" spacing={2}>
       {shouldShowBanner && (
@@ -210,6 +241,27 @@ const EmailSmsStep = ({ ioEnabled, email, sms, onContactAdded }: Props) => {
         onConfirm={(code) => handleCodeVerification(currentAddress.current.channelType, code)}
         onDiscard={handleCancelCode}
       />
+
+      <ConfirmationModal
+        open={showVerifyModal !== null}
+        title={
+          showVerifyModal === ChannelType.EMAIL
+            ? t('onboarding.courtesy.email.verify-before-continue-title')
+            : t('onboarding.courtesy.sms.verify-before-continue-title')
+        }
+        slotsProps={{
+          confirmButton: {
+            onClick: () => setShowVerifyModal(null),
+            children: t('button.understand', { ns: 'common' }),
+          },
+        }}
+      >
+        <Typography variant="body2">
+          {showVerifyModal === ChannelType.EMAIL
+            ? t('onboarding.courtesy.email.verify-before-continue-content')
+            : t('onboarding.courtesy.sms.verify-before-continue-content')}
+        </Typography>
+      </ConfirmationModal>
     </Stack>
   );
 };
