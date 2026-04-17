@@ -13,7 +13,7 @@ import {
   SmsContactState,
 } from '../../../../models/DigitalDomicileOnboarding';
 import { IOAllowedValues } from '../../../../models/contacts';
-import { NOTIFICHE } from '../../../../navigation/routes.const';
+import { NOTIFICHE, ONBOARDING } from '../../../../navigation/routes.const';
 import { contactsSelectors } from '../../../../redux/contact/reducers';
 import { useAppSelector } from '../../../../redux/hooks';
 import { normalizeContactValue } from '../../../../utility/contacts.utility';
@@ -73,6 +73,10 @@ const OnboardingCourtesyWizard: React.FC = () => {
     navigate(NOTIFICHE);
   };
 
+  const goToOnboarding = () => {
+    navigate(ONBOARDING);
+  };
+
   const updateContactValue = <K extends keyof Pick<WizardState, 'email' | 'sms' | 'io'>>(
     key: K,
     value: WizardState[K]['value']
@@ -96,8 +100,13 @@ const OnboardingCourtesyWizard: React.FC = () => {
       activeStep={activeStep}
       setActiveStep={setActiveStep}
       slotsProps={{
+        stepContainer: {
+          sx: {
+            width: { xs: '100%', md: '760px' },
+          },
+        },
         exitButton: {
-          onClick: goToNotifications,
+          onClick: goToOnboarding,
         },
         feedback: {
           title: t('onboarding.courtesy.success-title'),
