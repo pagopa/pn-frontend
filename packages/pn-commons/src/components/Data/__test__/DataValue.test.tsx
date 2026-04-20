@@ -5,12 +5,6 @@ import { render } from '@testing-library/react';
 
 import DataValue from '../DataValue';
 
-class ResizeObserverMock {
-  observe() {}
-  unobserve() {}
-  disconnect() {}
-}
-
 // Mock MITooltip if necessary (optional, but useful if MITooltip has complex dependencies)
 vi.mock('@pagopa/mui-italia', async () => {
   const original = await vi.importActual<any>('@pagopa/mui-italia');
@@ -37,12 +31,18 @@ const mockGlobalDimensions = (clientWidth: number, scrollWidth: number) => {
 };
 
 describe('TruncatedValue Component', () => {
+  const original = globalThis.ResizeObserver;
+
   beforeAll(() => {
-    vi.stubGlobal('ResizeObserver', ResizeObserverMock);
+    globalThis.ResizeObserver = vi.fn().mockImplementation(() => ({
+      observe: vi.fn(),
+      unobserve: vi.fn(),
+      disconnect: vi.fn(),
+    }));
   });
 
   afterAll(() => {
-    vi.unstubAllGlobals();
+    globalThis.ResizeObserver = original;
   });
 
   it('renders the default text correctly', () => {

@@ -14,6 +14,19 @@ const data = mockApiKeysDTO.items[0];
 
 describe('ApiKeyDataSwitch Component', () => {
   const mockClick = vi.fn();
+  const original = globalThis.ResizeObserver;
+
+  beforeAll(() => {
+    globalThis.ResizeObserver = vi.fn().mockImplementation(() => ({
+      observe: vi.fn(),
+      unobserve: vi.fn(),
+      disconnect: vi.fn(),
+    }));
+  });
+
+  afterAll(() => {
+    globalThis.ResizeObserver = original;
+  });
 
   it('renders component - name', () => {
     const { container } = render(
