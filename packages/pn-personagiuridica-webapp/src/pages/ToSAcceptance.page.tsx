@@ -1,12 +1,13 @@
-import { ReactNode, useEffect, useState } from 'react';
+import { ChangeEvent, ReactNode, useEffect, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
-import { Box, Grid, Link, Switch, Typography } from '@mui/material';
+import { FormControlLabel, Grid, Link, Switch, Typography } from '@mui/material';
 import {
   ConsentActionType,
   ConsentType,
   ConsentUser,
+  InlineErrorMessage,
   PRIVACY_LINK_RELATIVE_PATH,
   TOS_LINK_RELATIVE_PATH,
 } from '@pagopa-pn/pn-commons';
@@ -27,6 +28,7 @@ const TermsOfService = ({ tosConsent, privacyConsent }: TermsOfServiceProps) => 
   const navigate = useNavigate();
   const { t } = useTranslation('common');
   const [accepted, setAccepted] = useState(false);
+  const [showAcceptanceError, setShowAcceptanceError] = useState(false);
 
   /*
   This is a temporary fix to resolve the bug PN-9921.
@@ -63,7 +65,18 @@ const TermsOfService = ({ tosConsent, privacyConsent }: TermsOfServiceProps) => 
     </Link>
   );
 
+  const handleAcceptanceChange = (_: ChangeEvent<HTMLInputElement>, checked: boolean) => {
+    setAccepted(checked);
+    if (checked) {
+      setShowAcceptanceError(false);
+    }
+  };
+
   const handleAccept = async () => {
+    if (!accepted) {
+      setShowAcceptanceError(true);
+      return;
+    }
     const tosPrivacyBody = [];
 
     if (!tosConsent.accepted) {
@@ -112,23 +125,43 @@ const TermsOfService = ({ tosConsent, privacyConsent }: TermsOfServiceProps) => 
             )}
             onConfirm={handleAccept}
             confirmBtnLabel={t('tos.button', 'Accedi')}
-            confirmBtnDisabled={!accepted}
+            confirmBtnDisabled={false}
+            confirmBtnError={showAcceptanceError}
           >
-            <Box display="flex" alignItems="center">
-              <Switch
-                value={accepted}
-                onClick={() => setAccepted(!accepted)}
-                data-testid="tosSwitch"
-                sx={{ margin: 2 }}
-              />
-              <Typography color="text.secondary" variant="body1">
-                <Trans
-                  ns={'common'}
-                  i18nKey={'tos.switch-label'}
-                  components={[<PrivacyLink key={'privacy-link'} />, <TosLink key={'tos-link'} />]}
+            <FormControlLabel
+              control={
+                <Switch
+                  checked={accepted}
+                  onChange={handleAcceptanceChange}
+                  data-testid="tosSwitch"
+                  sx={{ margin: 2 }}
+                  inputProps={{
+                    'aria-describedby': showAcceptanceError ? 'tos-switch-helper-text' : undefined,
+                    'aria-required': true,
+                  }}
                 />
-              </Typography>
-            </Box>
+              }
+              label={
+                <Typography color="text.secondary" variant="body1">
+                  <Trans
+                    ns={'common'}
+                    i18nKey={'tos.switch-label'}
+                    components={[
+                      <PrivacyLink key={'privacy-link'} />,
+                      <TosLink key={'tos-link'} />,
+                    ]}
+                  />
+                </Typography>
+              }
+              sx={{ m: 0 }}
+            />
+            {showAcceptanceError && (
+              <InlineErrorMessage
+                id="tos-switch-helper-text"
+                message={t('required-field')}
+                sx={{ ml: 9, mt: 0.5 }}
+              />
+            )}
           </TOSAgreement>
         </Grid>
       </Grid>
