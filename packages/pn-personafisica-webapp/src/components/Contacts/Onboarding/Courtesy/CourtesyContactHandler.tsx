@@ -1,4 +1,4 @@
-import { RefObject, useMemo } from 'react';
+import { RefObject } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { EmailOutlined, PhoneOutlined } from '@mui/icons-material';
@@ -11,11 +11,11 @@ import { internationalPhonePrefix } from '../../../../utility/contacts.utility';
 import DigitalContact from '../../DigitalContact';
 import OnboardingContactItem from '../OnboardingContactItem';
 
-export type CourtesyMode = 'collapsed' | 'insert' | 'readonly' | 'edit';
+export type CourtesyInputMode = 'collapsed' | 'insert' | 'readonly' | 'edit';
 
 type Props = {
   channelType: ChannelType.EMAIL | ChannelType.SMS;
-  mode: CourtesyMode;
+  mode: CourtesyInputMode;
   contactValue: string;
   contactState: ContactState<string | undefined>;
   contactError?: string;
@@ -51,31 +51,28 @@ const CourtesyContactHandler: React.FC<Props> = ({
 
   const ns = `onboarding.courtesy.${channelType.toLowerCase()}`;
 
-  const labels = useMemo(
-    () => ({
-      readonly: {
-        title: t(`${ns}.readonly.title`),
-        description: t(`${ns}.readonly.description`),
-      },
-      insert: {
-        title: t(`${ns}.insert.title`),
-        description: t(`${ns}.insert.description`),
-        inputLabel: t(`${ns}.insert.input-label`),
-        buttonLabel: t(`${ns}.insert.button-label`),
-        collapseLabel: t(`${ns}.insert.collapse-label`),
-      },
-      collapsed: {
-        label: t(`${ns}.collapsed.label`),
-        buttonLabel: t(`${ns}.collapsed.button-label`),
-      },
-      edit: {
-        alreadyPresentTitle: t(`${ns}.edit.title`),
-        alreadyPresentDescription: t(`${ns}.edit.description`),
-        inputLabel: t(`${ns}.edit.input-label`),
-      },
-    }),
-    [t, ns]
-  );
+  const labels = {
+    readonly: {
+      title: t(`${ns}.readonly.title`),
+      description: t(`${ns}.readonly.description`),
+    },
+    insert: {
+      title: t(`${ns}.insert.title`),
+      description: t(`${ns}.insert.description`),
+      inputLabel: t(`${ns}.insert.input-label`),
+      buttonLabel: t(`${ns}.insert.button-label`),
+      collapseLabel: t(`${ns}.insert.collapse-label`),
+    },
+    collapsed: {
+      label: t(`${ns}.collapsed.label`),
+      buttonLabel: t(`${ns}.collapsed.button-label`),
+    },
+    edit: {
+      alreadyPresentTitle: t(`${ns}.edit.title`),
+      alreadyPresentDescription: t(`${ns}.edit.description`),
+      inputLabel: t(`${ns}.edit.input-label`),
+    },
+  };
 
   if (mode === 'collapsed') {
     return (

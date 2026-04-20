@@ -17,7 +17,7 @@ import {
   phoneValidationSchema,
 } from '../../../../utility/contacts.utility';
 import ContactCodeDialog from '../../ContactCodeDialog';
-import CourtesyContactHandler, { CourtesyMode } from './CourtesyContactHandler';
+import CourtesyContactHandler, { CourtesyInputMode } from './CourtesyContactHandler';
 
 type Props = {
   ioEnabled: boolean;
@@ -47,7 +47,9 @@ const EmailSmsStep = ({
   const { t } = useTranslation(['recapiti', 'common']);
   const dispatch = useAppDispatch();
 
-  const [smsMode, setSmsMode] = React.useState<CourtesyMode>(ioEnabled ? 'collapsed' : 'insert');
+  const [smsMode, setSmsMode] = React.useState<CourtesyInputMode>(
+    ioEnabled ? 'collapsed' : 'insert'
+  );
   const [codeModalOpen, setCodeModalOpen] = useState<boolean>(false);
   const [verifyModal, setVerifyModal] = useState<{ open: boolean; channel: ChannelType | null }>({
     open: false,
@@ -64,14 +66,14 @@ const EmailSmsStep = ({
   const emailContactRef = useRef<ContactRef>(createContactRef());
   const smsContactRef = useRef<ContactRef>(createContactRef());
 
-  const getEmailMode = (): CourtesyMode => {
+  const getEmailMode = (): CourtesyInputMode => {
     if (email.alreadySet) {
       return 'edit';
     }
     return email.value ? 'readonly' : 'insert';
   };
 
-  const getSmsMode = (): CourtesyMode => {
+  const getSmsMode = (): CourtesyInputMode => {
     if (sms.alreadySet) {
       return 'edit';
     }

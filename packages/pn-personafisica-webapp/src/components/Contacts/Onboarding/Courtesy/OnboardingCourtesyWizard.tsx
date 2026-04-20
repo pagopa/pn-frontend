@@ -133,6 +133,9 @@ const OnboardingCourtesyWizard: React.FC = () => {
           sx: isIoStep && isIoEnabled ? { display: 'none' } : { ml: { md: 'auto' } },
           onClick: async (_, step) => await handleClickNextButton(step),
         },
+        prevButton: {
+          sx: isIoStep ? { display: 'none' } : undefined,
+        },
       }}
     >
       <PnWizardStep label={t('onboarding.courtesy.step-1-label')}>
