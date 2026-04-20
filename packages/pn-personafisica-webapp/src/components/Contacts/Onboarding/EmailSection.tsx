@@ -5,7 +5,7 @@ import MailOutlineIcon from '@mui/icons-material/MailOutline';
 import { Stack, Typography } from '@mui/material';
 import { ButtonNaked } from '@pagopa/mui-italia';
 
-import { EmailContactState } from '../../../models/DigitalDomicileOnboarding';
+import { EmailContactState } from '../../../models/Onboarding';
 import { ChannelType } from '../../../models/contacts';
 import DigitalContact from '../DigitalContact';
 import OnboardingContactItem from './OnboardingContactItem';
@@ -119,6 +119,7 @@ const EmailSection: React.FC<Props> = ({
           showLabelOnEdit={false}
           slots={{
             label: () => <></>,
+            leadingEditIcon: MailOutlineIcon,
           }}
           slotsProps={{
             textField: {
@@ -134,6 +135,10 @@ const EmailSection: React.FC<Props> = ({
             },
             container: {
               width: '100%',
+            },
+            leadingEditIcon: {
+              sx: { color: 'text.secondary' },
+              fontSize: 'small',
             },
           }}
         />

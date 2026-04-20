@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
@@ -20,7 +20,7 @@ import {
   IoContactState,
   PecContactState,
   WizardMode,
-} from '../../../models/DigitalDomicileOnboarding';
+} from '../../../models/Onboarding';
 import {
   AddressType,
   ChannelType,
@@ -48,12 +48,12 @@ type WizardState = {
   pec: PecContactState;
   io: IoContactState;
   showOptionalEmail: boolean;
-  pecDisclaimerAccepted: boolean;
 };
 
 type InitialContactsSnapshot = {
   email: string | undefined;
   pec: string | undefined;
+  pecIsValid?: boolean;
   io: IOAllowedValues | undefined;
 };
 
@@ -64,17 +64,70 @@ const buildContactState = <T extends ContactValue>(value: T): ContactState<T> =>
   alreadySet: value !== undefined,
 });
 
+const buildPecState = (value: string | undefined, isValid?: boolean): PecContactState => ({
+  value,
+  alreadySet: value !== undefined,
+  isValid,
+});
+
 const buildInitialWizardState = (
   snapshot: InitialContactsSnapshot,
   mode: WizardMode | null
 ): WizardState => ({
   mode,
   email: buildContactState(snapshot.email),
-  pec: buildContactState(snapshot.pec),
+  pec: buildPecState(snapshot.pec, snapshot.pecIsValid),
   io: buildContactState(snapshot.io),
   showOptionalEmail: mode === 'send' || Boolean(snapshot.email),
-  pecDisclaimerAccepted: Boolean(snapshot.pec),
 });
+
+const hasPecActivationState = (pec?: string, pecIsValid?: boolean) =>
+  Boolean(pec) || pecIsValid !== undefined;
+
+const getInitialWizardSetup = (
+  snapshot: InitialContactsSnapshot
+): { initialMode: WizardMode | null; initialActiveStep: number } => {
+  const shouldResumePecFlow = hasPecActivationState(snapshot.pec, snapshot.pecIsValid);
+
+  return {
+    initialMode: shouldResumePecFlow ? 'pec' : null,
+    initialActiveStep: shouldResumePecFlow ? 1 : 0,
+  };
+};
+
+const shouldShowNextButton = ({
+  isChoiceStep,
+  isPecActivating,
+  isIoStep,
+  isIoEnabled,
+  isContactStep,
+  isSendMode,
+  hasSendEmailValue,
+}: {
+  isChoiceStep: boolean;
+  isPecActivating: boolean;
+  isIoStep: boolean;
+  isIoEnabled: boolean;
+  isContactStep: boolean;
+  isSendMode: boolean;
+  hasSendEmailValue: boolean;
+}) =>
+  (!isChoiceStep || isPecActivating) &&
+  !(isIoStep && isIoEnabled) &&
+  !(isContactStep && isSendMode && !hasSendEmailValue);
+
+const getWizardActionsSlotProps = ({
+  isChoiceStep,
+  isPecActivating,
+  showNextButton,
+}: {
+  isChoiceStep: boolean;
+  isPecActivating: boolean;
+  showNextButton: boolean;
+}) =>
+  isChoiceStep && !isPecActivating
+    ? { sx: { display: 'none' } }
+    : { justifyContent: showNextButton ? 'space-between' : 'center' };
 
 const DigitalDomicileWizard: React.FC = () => {
   const { t } = useTranslation(['recapiti', 'common']);
@@ -85,17 +138,43 @@ const DigitalDomicileWizard: React.FC = () => {
     contactsSelectors.selectAddresses
   );
 
+  useEffect(() => {
+    const normalizedStorePecValue = normalizeContactValue(defaultPECAddress?.value);
+    const storePecIsValid = defaultPECAddress?.pecValid;
+
+    setWizardState((prev) => {
+      const nextValue = normalizedStorePecValue ?? prev.pec.value;
+      const nextIsValid = storePecIsValid;
+
+      if (prev.pec.value === nextValue && prev.pec.isValid === nextIsValid) {
+        return prev;
+      }
+
+      return {
+        ...prev,
+        pec: {
+          ...prev.pec,
+          value: nextValue,
+          isValid: nextIsValid,
+        },
+      };
+    });
+  }, [defaultPECAddress?.value, defaultPECAddress?.pecValid]);
+
   const initialContactsRef = useRef<InitialContactsSnapshot>({
     email: normalizeContactValue(defaultEMAILAddress?.value),
     pec: normalizeContactValue(defaultPECAddress?.value),
+    pecIsValid: defaultPECAddress?.pecValid,
     io: defaultAPPIOAddress?.value as IOAllowedValues | undefined,
   });
 
   const pecContinueHandlerRef = useRef<(() => Promise<boolean>) | null>(null);
 
-  const [activeStep, setActiveStep] = useState(0);
+  const { initialMode, initialActiveStep } = getInitialWizardSetup(initialContactsRef.current);
+
+  const [activeStep, setActiveStep] = useState(initialActiveStep);
   const [wizardState, setWizardState] = useState<WizardState>(() =>
-    buildInitialWizardState(initialContactsRef.current, null)
+    buildInitialWizardState(initialContactsRef.current, initialMode)
   );
 
   const isChoiceStep = activeStep === 0;
@@ -103,16 +182,23 @@ const DigitalDomicileWizard: React.FC = () => {
   const isIoStep = activeStep === 2;
   const isSummaryStep = activeStep === 3;
 
+  const isPecActivating = Boolean(wizardState.pec.value) || wizardState.pec.isValid !== undefined;
+
   const isSendMode = wizardState.mode === 'send';
   const isPecMode = wizardState.mode === 'pec';
   const isIoEnabled = wizardState.io.value === IOAllowedValues.ENABLED;
 
   const hasSendEmailValue = isSendMode && Boolean(wizardState.email.value);
 
-  const showNextButton =
-    !isChoiceStep &&
-    !(isIoStep && isIoEnabled) &&
-    !(isContactStep && isSendMode && !hasSendEmailValue);
+  const showNextButton = shouldShowNextButton({
+    isChoiceStep,
+    isPecActivating,
+    isIoStep,
+    isIoEnabled,
+    isContactStep,
+    isSendMode,
+    hasSendEmailValue,
+  });
 
   const goToNextStep = () => {
     setActiveStep((step) => Math.min(step + 1, STEPS_COUNT));
@@ -144,12 +230,13 @@ const DigitalDomicileWizard: React.FC = () => {
     }));
   };
 
-  const setPecValue = (value?: string) => {
+  const setPecValue = (value?: string, isValid?: boolean) => {
     setWizardState((prev) => ({
       ...prev,
       pec: {
         ...prev.pec,
         value: normalizeContactValue(value),
+        isValid,
       },
     }));
   };
@@ -168,13 +255,6 @@ const DigitalDomicileWizard: React.FC = () => {
     setWizardState((prev) => ({
       ...prev,
       showOptionalEmail: show,
-    }));
-  };
-
-  const setPecDisclaimerAccepted = (accepted: boolean) => {
-    setWizardState((prev) => ({
-      ...prev,
-      pecDisclaimerAccepted: accepted,
     }));
   };
 
@@ -244,17 +324,30 @@ const DigitalDomicileWizard: React.FC = () => {
     goToNextStep();
   };
 
-  const handleNext = async () => {
-    if (isContactStep) {
-      if (isPecMode) {
-        const canProceed = await pecContinueHandlerRef.current?.();
+  const canProceedFromContactStep = async () => {
+    if (isPecMode) {
+      const canProceed = await pecContinueHandlerRef.current?.();
 
-        if (canProceed !== true) {
-          return;
-        }
+      if (canProceed !== true) {
+        return false;
       }
+    }
 
-      if (isSendMode && !hasSendEmailValue) {
+    if (isSendMode && !hasSendEmailValue) {
+      return false;
+    }
+
+    return true;
+  };
+
+  const handleNext = async () => {
+    if (isChoiceStep && isPecActivating) {
+      goToNextStep();
+      return;
+    }
+
+    if (isContactStep) {
+      if (!(await canProceedFromContactStep())) {
         return;
       }
 
@@ -339,21 +432,34 @@ const DigitalDomicileWizard: React.FC = () => {
         exitButton: {
           onClick: goToNotifications,
         },
-        actions: isChoiceStep
-          ? { sx: { display: 'none' } }
-          : { justifyContent: showNextButton ? 'space-between' : 'center' },
+        actions: getWizardActionsSlotProps({
+          isChoiceStep,
+          isPecActivating,
+          showNextButton,
+        }),
         feedback: {
           title: feedbackTitle,
           content: feedbackContent,
           buttonText: t('button.understand', { ns: 'common' }),
           onClick: goToNotifications,
         },
+        ...(isChoiceStep || isIoStep
+          ? {
+              stepContainer: {
+                sx: {
+                  p: 0,
+                  borderRadius: 4,
+                },
+              },
+            }
+          : { stepContainer: { sx: { p: 2 } } }),
       }}
     >
       <PnWizardStep label={t('onboarding.digital-domicile.steps.choice')}>
         <ChooseDigitalDomicileStep
           onSelectSend={() => selectMode('send')}
           onSelectPec={() => selectMode('pec')}
+          isPecActivating={isPecActivating}
         />
       </PnWizardStep>
       <PnWizardStep label={contactStepLabel}>
@@ -373,11 +479,9 @@ const DigitalDomicileWizard: React.FC = () => {
             pec={wizardState.pec}
             email={wizardState.email}
             showOptionalEmail={wizardState.showOptionalEmail}
-            pecDisclaimerAccepted={wizardState.pecDisclaimerAccepted}
             onPecChange={setPecValue}
             onEmailChange={setEmailValue}
             onShowOptionalEmail={setShowOptionalEmail}
-            onPecDisclaimerChange={setPecDisclaimerAccepted}
             registerContinueHandler={(handler) => {
               // eslint-disable-next-line functional/immutable-data
               pecContinueHandlerRef.current = handler;
@@ -395,8 +499,6 @@ const DigitalDomicileWizard: React.FC = () => {
             email={wizardState.email.value}
             pec={wizardState.pec.value}
             io={wizardState.io.value}
-            // disclaimerAccepted={wizardState.sendDisclaimerAccepted}
-            // onDisclaimerChange={setSendDisclaimerAccepted}
           />
         ) : null}
       </PnWizardStep>

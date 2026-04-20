@@ -4,7 +4,7 @@ import { Trans, useTranslation } from 'react-i18next';
 import { Chip, Link, Stack, Typography } from '@mui/material';
 import { MIAlert } from '@pagopa/mui-italia';
 
-import { WizardMode } from '../../../models/DigitalDomicileOnboarding';
+import { WizardMode } from '../../../models/Onboarding';
 import { IOAllowedValues } from '../../../models/contacts';
 import { PRIVACY_POLICY, TERMS_OF_SERVICE_SERCQ_SEND } from '../../../navigation/routes.const';
 import OnboardingContactItem from './OnboardingContactItem';
@@ -34,7 +34,13 @@ const SummaryStep: React.FC<Props> = ({ mode, email, pec, io }) => {
       ? {
           id: 'sercqSend',
           label: t('onboarding.digital-domicile.summary.ddom-label'),
-          secondaryContent: <Chip label={sendLabel} size="small" sx={{ mt: 0.75 }} />,
+          secondaryContent: (
+            <Chip
+              label={sendLabel}
+              size="small"
+              sx={{ mt: 0.75, '& .MuiChip-label': { fontSize: '12px' } }}
+            />
+          ),
         }
       : {
           id: 'pec',
@@ -65,13 +71,13 @@ const SummaryStep: React.FC<Props> = ({ mode, email, pec, io }) => {
   ];
 
   return (
-    <Stack spacing={3} data-testid="summary-step">
-      <Typography fontSize="22px" fontWeight={700}>
+    <Stack data-testid="summary-step">
+      <Typography fontSize="18px" fontWeight={700} mb={1}>
         {t('onboarding.digital-domicile.summary.title')}
       </Typography>
 
       <Stack spacing={2}>
-        <Typography variant="body1" color="text.secondary">
+        <Typography variant="body2" color="text.secondary">
           {t('onboarding.digital-domicile.summary.legal-title')}
         </Typography>
         <OnboardingContactItem
@@ -82,8 +88,8 @@ const SummaryStep: React.FC<Props> = ({ mode, email, pec, io }) => {
         />
       </Stack>
       {courtesyRows.length > 0 && (
-        <Stack spacing={2}>
-          <Typography variant="body1" color="text.secondary">
+        <Stack spacing={2} my={3}>
+          <Typography variant="body2" color="text.secondary">
             {t('onboarding.digital-domicile.summary.courtesy-title')}
           </Typography>
 
@@ -106,7 +112,7 @@ const SummaryStep: React.FC<Props> = ({ mode, email, pec, io }) => {
         description={t('onboarding.digital-domicile.summary.info-box')}
       />
       {mode === 'send' && (
-        <Typography variant="body2" color="text.secondary">
+        <Typography mt={1} variant="body2" fontSize="14px" color="text.secondary">
           <Trans
             i18nKey="onboarding.digital-domicile.summary.disclaimer"
             ns="recapiti"

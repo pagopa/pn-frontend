@@ -135,6 +135,7 @@
     "company": "Transparent company",
     "disclosure": "Responsible Disclosure Policy",
     "321-model": "Model 231",
+    "sercq-service-statement": "Service practice statement - SERCQ",
     "accessibility": "Accessibility",
     "social": "Go to the {{social}} website of PagoPA S.p.A.",
     "resources": "Resources",
@@ -162,7 +163,8 @@
   },
   "roles": {
     "operator": "Operational contact person",
-    "admin": "Administrator"
+    "admin": "Administrator",
+    "support": "Support"
   },
   "attachments": {
     "remove-attachment": "Delete attachment"

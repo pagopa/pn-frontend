@@ -1,8 +1,8 @@
-import { describe, expect, it, vi } from 'vitest';
+import { vi } from 'vitest';
 
 import { Chip } from '@mui/material';
 
-import { fireEvent, render, screen } from '../../../../__test__/test-utils';
+import { fireEvent, render } from '../../../../__test__/test-utils';
 import OnboardingContactItem from '../OnboardingContactItem';
 
 describe('OnboardingContactItem', () => {
@@ -13,7 +13,7 @@ describe('OnboardingContactItem', () => {
       const onSubmit = vi.fn();
       const onCollapse = vi.fn();
 
-      render(
+      const { getByText, getByLabelText, getByRole } = render(
         <OnboardingContactItem
           mode="entry"
           title="mock-title"
@@ -34,31 +34,31 @@ describe('OnboardingContactItem', () => {
         />
       );
 
-      expect(screen.getByText('mock-title')).toBeInTheDocument();
-      expect(screen.getByText('mock-label')).toBeInTheDocument();
-      expect(screen.getByLabelText('mock-input-label')).toBeInTheDocument();
-      expect(screen.getByRole('button', { name: 'mock-submit' })).toBeInTheDocument();
-      expect(screen.getByText('mock-footer')).toBeInTheDocument();
-      expect(screen.getByRole('button', { name: 'mock-collapse' })).toBeInTheDocument();
-      expect(screen.getByText('mock-error')).toBeInTheDocument();
+      expect(getByText('mock-title')).toBeInTheDocument();
+      expect(getByText('mock-label')).toBeInTheDocument();
+      expect(getByLabelText('mock-input-label')).toBeInTheDocument();
+      expect(getByRole('button', { name: 'mock-submit' })).toBeInTheDocument();
+      expect(getByText('mock-footer')).toBeInTheDocument();
+      expect(getByRole('button', { name: 'mock-collapse' })).toBeInTheDocument();
+      expect(getByText('mock-error')).toBeInTheDocument();
 
-      fireEvent.change(screen.getByLabelText('mock-input-label'), {
+      fireEvent.change(getByLabelText('mock-input-label'), {
         target: { value: 'a' },
       });
       expect(onChange).toHaveBeenCalledWith('a');
 
-      fireEvent.blur(screen.getByLabelText('mock-input-label'));
+      fireEvent.blur(getByLabelText('mock-input-label'));
       expect(onBlur).toHaveBeenCalled();
 
-      fireEvent.click(screen.getByRole('button', { name: 'mock-submit' }));
+      fireEvent.click(getByRole('button', { name: 'mock-submit' }));
       expect(onSubmit).toHaveBeenCalledTimes(1);
 
-      fireEvent.click(screen.getByRole('button', { name: 'mock-collapse' }));
+      fireEvent.click(getByRole('button', { name: 'mock-collapse' }));
       expect(onCollapse).toHaveBeenCalledTimes(1);
     });
 
     it('does not render extra buttons in entry mode when collapse props are not provided', () => {
-      render(
+      const { getByText, getByLabelText, getByRole, getAllByRole } = render(
         <OnboardingContactItem
           mode="entry"
           label="mock-label"
@@ -70,34 +70,35 @@ describe('OnboardingContactItem', () => {
         />
       );
 
-      expect(screen.getByText('mock-label')).toBeInTheDocument();
-      expect(screen.getByLabelText('mock-input-label')).toBeInTheDocument();
-      expect(screen.getByRole('button', { name: 'mock-submit' })).toBeInTheDocument();
+      expect(getByText('mock-label')).toBeInTheDocument();
+      expect(getByLabelText('mock-input-label')).toBeInTheDocument();
+      expect(getByRole('button', { name: 'mock-submit' })).toBeInTheDocument();
 
-      expect(screen.getAllByRole('button')).toHaveLength(1);
+      expect(getAllByRole('button')).toHaveLength(1);
     });
   });
 
   describe('view mode', () => {
     it('renders intro text, label, value and secondary content', () => {
-      render(
+      const mockEmail = 'mock@pagopa.it';
+      const { getByText } = render(
         <OnboardingContactItem
           mode="view"
           introText="mock-intro"
           label="mock-label"
-          value="user@example.com"
+          value={mockEmail}
           secondaryContent={<Chip label="SEND" size="small" />}
         />
       );
 
-      expect(screen.getByText('mock-intro')).toBeInTheDocument();
-      expect(screen.getByText('mock-label')).toBeInTheDocument();
-      expect(screen.getByText('user@example.com')).toBeInTheDocument();
-      expect(screen.getByText('SEND')).toBeInTheDocument();
+      expect(getByText('mock-intro')).toBeInTheDocument();
+      expect(getByText('mock-label')).toBeInTheDocument();
+      expect(getByText(mockEmail)).toBeInTheDocument();
+      expect(getByText('SEND')).toBeInTheDocument();
     });
 
     it('renders secondary content in view mode even when value is not provided', () => {
-      render(
+      const { getByText } = render(
         <OnboardingContactItem
           mode="view"
           label="mock-label"
@@ -105,8 +106,8 @@ describe('OnboardingContactItem', () => {
         />
       );
 
-      expect(screen.getByText('mock-label')).toBeInTheDocument();
-      expect(screen.getByText('SEND')).toBeInTheDocument();
+      expect(getByText('mock-label')).toBeInTheDocument();
+      expect(getByText('SEND')).toBeInTheDocument();
     });
   });
 });

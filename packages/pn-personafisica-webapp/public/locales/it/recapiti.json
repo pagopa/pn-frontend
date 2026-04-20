@@ -325,6 +325,12 @@
           "description": "In alternativa, puoi decidere di ricevere le notifiche SEND al tuo indirizzo PEC. Potresti evitare così l’invio di una raccomandata con i relativi costi aggiuntivi.",
           "cta": "Attiva su una PEC"
         },
+        "pec-activating": {
+          "title": "Domicilio digitale su PEC in attivazione",
+          "description": "Dopo l’attivazione, riceverai le notifiche SEND al tuo indirizzo PEC. Potresti evitare così l’invio di una raccomandata con i relativi costi aggiuntivi.",
+          "badge": "Attivazione in corso",
+          "img-alt-text": ""
+        },
         "img-alt-text": ""
       },
       "email": {
@@ -381,7 +387,12 @@
         "email-present-description": "Alla ricezione di una notifica SEND, riceverai anche un avviso all’indirizzo:",
         "edit-email-cta": "Modifica indirizzo",
         "verify-before-continue-title": "Verifica la tua PEC",
-        "verify-before-continue-content": "Prima di procedere, seleziona Verifica PEC e segui le istruzioni."
+        "verify-before-continue-content": "Prima di procedere, seleziona <strong>Verifica PEC</strong> e segui le istruzioni.",
+        "pending": {
+          "title": "Indirizzo PEC in validazione",
+          "description": "Dopo la validazione, riceverai le comunicazioni a valore legale sulla PEC che hai scelto solo in digitale, ed eviterai l’invio di una raccomandata con i relativi costi aggiuntivi.",
+          "badge": "Attivazione in corso"
+        }
       },
       "feedback": {
         "send": {
