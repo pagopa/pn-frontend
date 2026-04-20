@@ -1,4 +1,4 @@
-import { useCallback, useMemo } from 'react';
+import { useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 
@@ -63,7 +63,6 @@ const PaperContent = ({ items }: { items: Array<Item> }) => (
         <ListItemIcon
           sx={{
             minWidth: 0,
-            mr: 1,
             mt: 0.25,
             color: '#BBC2D6',
           }}
@@ -73,7 +72,7 @@ const PaperContent = ({ items }: { items: Array<Item> }) => (
         <ListItemText
           primary={item.text}
           disableTypography
-          sx={{ m: 0, fontWeight: 400, fontSize: '0.875rem', color: '#555C70' }}
+          sx={{ m: 0, ml: 1, fontWeight: 400, fontSize: '0.875rem', color: '#555C70' }}
         />{' '}
       </ListItem>
     ))}
@@ -143,41 +142,38 @@ const Onboarding: React.FC = () => {
     (addr) => addr.channelType === ChannelType.IOMSG && addr.value === IOAllowedValues.ENABLED
   );
 
-  const items: Record<ElementCategory, Array<Item>> = useMemo(
-    () => ({
-      send: [
-        {
-          icon: <CheckRoundedIcon />,
-          text: t('onboarding.cards.send.item_1'),
-        },
-        {
-          icon: <CheckRoundedIcon />,
-          text: t('onboarding.cards.send.item_2'),
-        },
-      ],
-      contacts: [
-        {
-          icon: <CheckRoundedIcon />,
-          text: t('onboarding.cards.contacts.item_1'),
-        },
-        {
-          icon: <ErrorOutlineOutlinedIcon />,
-          text: t('onboarding.cards.contacts.item_2'),
-        },
-      ],
-      io: [
-        {
-          icon: <CheckRoundedIcon />,
-          text: t('onboarding.cards.io.item_1'),
-        },
-        {
-          icon: <ErrorOutlineOutlinedIcon />,
-          text: t('onboarding.cards.io.item_2'),
-        },
-      ],
-    }),
-    [t]
-  );
+  const items: Record<ElementCategory, Array<Item>> = {
+    send: [
+      {
+        icon: <CheckRoundedIcon />,
+        text: t('onboarding.cards.send.item_1'),
+      },
+      {
+        icon: <CheckRoundedIcon />,
+        text: t('onboarding.cards.send.item_2'),
+      },
+    ],
+    contacts: [
+      {
+        icon: <CheckRoundedIcon />,
+        text: t('onboarding.cards.contacts.item_1'),
+      },
+      {
+        icon: <ErrorOutlineOutlinedIcon />,
+        text: t('onboarding.cards.contacts.item_2'),
+      },
+    ],
+    io: [
+      {
+        icon: <CheckRoundedIcon />,
+        text: t('onboarding.cards.io.item_1'),
+      },
+      {
+        icon: <ErrorOutlineOutlinedIcon />,
+        text: t('onboarding.cards.io.item_2'),
+      },
+    ],
+  };
 
   const fetchAddresses = useCallback(() => {
     void dispatch(getDigitalAddresses());
