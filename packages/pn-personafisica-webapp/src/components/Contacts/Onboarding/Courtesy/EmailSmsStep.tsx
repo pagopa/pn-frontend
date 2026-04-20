@@ -5,7 +5,7 @@ import * as yup from 'yup';
 
 import { Divider, Stack, Typography } from '@mui/material';
 import { ConfirmationModal, appStateActions } from '@pagopa-pn/pn-commons';
-import { MIAlert } from '@pagopa/mui-italia';
+import { IllusMIMessage, MIAlert } from '@pagopa/mui-italia';
 
 import { EmailContactState, SmsContactState } from '../../../../models/Onboarding';
 import { AddressType, ChannelType, SaveDigitalAddressParams } from '../../../../models/contacts';
@@ -267,6 +267,10 @@ const EmailSmsStep = ({
 
       <ConfirmationModal
         open={verifyModal.open}
+        contentAlign="center"
+        slots={{
+          illustration: <IllusMIMessage />,
+        }}
         title={
           verifyModal.channel === ChannelType.EMAIL
             ? t('onboarding.courtesy.email.verify-before-continue-title')
