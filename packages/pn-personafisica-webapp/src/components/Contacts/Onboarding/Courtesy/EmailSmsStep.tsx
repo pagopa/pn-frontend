@@ -94,7 +94,7 @@ const EmailSmsStep = ({
   const formik = useFormik({
     initialValues: {
       email: email.value ?? '',
-      sms: sms.value ?? '',
+      sms: (sms.value ?? '').replace(internationalPhonePrefix, ''),
     },
     enableReinitialize: true,
     validationSchema,
@@ -148,7 +148,9 @@ const EmailSmsStep = ({
         setCodeModalOpen(false);
         onContactAdded(
           channelType === ChannelType.EMAIL ? 'email' : 'sms',
-          currentAddress.current.value
+          channelType === ChannelType.SMS
+            ? internationalPhonePrefix + currentAddress.current.value
+            : currentAddress.current.value
         );
 
         if (channelType === ChannelType.EMAIL && email.alreadySet) {
