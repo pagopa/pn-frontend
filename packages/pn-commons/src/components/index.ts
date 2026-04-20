@@ -54,6 +54,7 @@ export { IllusSendLogo } from './Illustrations/IllusSendLogo';
 export { IllusStatistics } from './Illustrations/IllusStatistics';
 export { IllusLandingTpp } from './Illustrations/IllusLandingTpp';
 export { default as InactivityHandler } from './InactivityHandler';
+export { default as InlineErrorMessage } from './InlineErrorMessage';
 export { default as Layout } from './Layout/Layout';
 export { LoadingOverlay } from './Loading/LoadingOverlay';
 export { default as LoadingPage } from './LoadingPage';
