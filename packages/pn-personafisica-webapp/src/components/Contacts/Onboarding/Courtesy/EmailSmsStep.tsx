@@ -7,7 +7,7 @@ import { Divider, Stack, Typography } from '@mui/material';
 import { ConfirmationModal, appStateActions } from '@pagopa-pn/pn-commons';
 import { MIAlert } from '@pagopa/mui-italia';
 
-import { EmailContactState, SmsContactState } from '../../../../models/DigitalDomicileOnboarding';
+import { EmailContactState, SmsContactState } from '../../../../models/Onboarding';
 import { AddressType, ChannelType, SaveDigitalAddressParams } from '../../../../models/contacts';
 import { createOrUpdateAddress } from '../../../../redux/contact/actions';
 import { useAppDispatch } from '../../../../redux/hooks';

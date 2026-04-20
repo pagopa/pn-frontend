@@ -71,12 +71,12 @@ const OnboardingContactItem: React.FC<Props> = (props) => {
     return (
       <Stack>
         {title && (
-          <Typography fontSize="16px" fontWeight={700}>
+          <Typography fontSize="16px" fontWeight={700} sx={{ mb: 1 }}>
             {title}
           </Typography>
         )}
 
-        <Typography variant="body2" color="text.secondary" mb={2}>
+        <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
           {label ?? null}
         </Typography>
 
@@ -111,7 +111,7 @@ const OnboardingContactItem: React.FC<Props> = (props) => {
             color="primary"
             size="medium"
             onClick={collapse.onClick}
-            sx={{ alignSelf: 'center', fontWeight: 700 }}
+            sx={{ alignSelf: 'center', fontWeight: 700, mt: 1 }}
           >
             {collapse.label}
           </ButtonNaked>
@@ -125,7 +125,7 @@ const OnboardingContactItem: React.FC<Props> = (props) => {
   return (
     <Stack>
       {introText && (
-        <Typography variant="body2" color="text.secondary" mb={2}>
+        <Typography variant="body2" fontSize="16px" fontWeight={700} sx={{ mb: 1 }}>
           {introText}
         </Typography>
       )}

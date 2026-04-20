@@ -49,7 +49,6 @@ export { IllusOnboardingAppIO } from './Illustrations/IllusOnboardingAppIO';
 export { IllusAppIODialog } from './Illustrations/IllusAppIODialog';
 export { IllusAppIoLogo } from './Illustrations/IllusAppIOLogo';
 export { IllusHourglass } from './Illustrations/IllusHourglass';
-export { IllusOnboardingAppIO } from './Illustrations/IllusOnboardingAppIO';
 export { IllusOnboardingChoice } from './Illustrations/IllusOnboardingChoice';
 export { IllusQuestion } from './Illustrations/IllusQuestion';
 export { IllusSendLogo } from './Illustrations/IllusSendLogo';

@@ -11,7 +11,7 @@ import {
   EmailContactState,
   IoContactState,
   SmsContactState,
-} from '../../../../models/DigitalDomicileOnboarding';
+} from '../../../../models/Onboarding';
 import { IOAllowedValues } from '../../../../models/contacts';
 import { NOTIFICHE, ONBOARDING } from '../../../../navigation/routes.const';
 import { contactsSelectors } from '../../../../redux/contact/reducers';

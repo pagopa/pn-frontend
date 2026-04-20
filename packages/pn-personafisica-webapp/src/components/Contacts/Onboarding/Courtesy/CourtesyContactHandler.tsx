@@ -5,7 +5,7 @@ import { EmailOutlined, PhoneOutlined } from '@mui/icons-material';
 import { Stack, Typography } from '@mui/material';
 import { ButtonNaked } from '@pagopa/mui-italia';
 
-import { ContactState } from '../../../../models/DigitalDomicileOnboarding';
+import { ContactState } from '../../../../models/Onboarding';
 import { ChannelType } from '../../../../models/contacts';
 import { internationalPhonePrefix } from '../../../../utility/contacts.utility';
 import DigitalContact from '../../DigitalContact';
