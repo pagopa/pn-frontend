@@ -32,6 +32,7 @@ import { ButtonNaked } from '@pagopa/mui-italia';
 import { ChannelType } from '../../models/contacts';
 import {
   emailValidationSchema,
+  getSemanticTextFieldProps,
   pecValidationSchema,
   phoneValidationSchema,
 } from '../../utility/contacts.utility';
@@ -132,6 +133,8 @@ const DigitalContact = forwardRef<{ toggleEdit: () => void }, Props>(
       },
     });
 
+    const semanticTextFieldProps = getSemanticTextFieldProps(channelType);
+
     const handleChangeTouched = async (e: ChangeEvent) => {
       formik.handleChange(e);
       await formik.setFieldTouched(e.target.id, true, false);
@@ -219,6 +222,7 @@ const DigitalContact = forwardRef<{ toggleEdit: () => void }, Props>(
                 formik.errors[`${senderId}_${contactType}`]
               }
               {...slotsProps?.textField}
+              {...semanticTextFieldProps}
             />
             <Button
               id={`${senderId}_${contactType}-button`}
@@ -291,6 +295,7 @@ const DigitalContact = forwardRef<{ toggleEdit: () => void }, Props>(
               }
               sx={{ mb: 2 }}
               autoFocus
+              {...semanticTextFieldProps}
             />
             <Stack direction={{ xs: 'column', lg: 'row' }} spacing={2}>
               <ButtonNaked

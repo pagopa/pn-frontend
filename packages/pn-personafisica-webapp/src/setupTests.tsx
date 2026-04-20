@@ -43,6 +43,7 @@ beforeAll(() => {
     NOTIFICATION_COST_DETAILS_ASSISTANCE_LINK:
       'https://fake.notification-cost-details-assistance.pagopa.it',
     SERCQ_SERVICE_STATEMENT_LINK: 'https://fake.sercq-service-statement.pagopa.it',
+    IS_ONBOARDING_ENABLED: true,
   });
   initStore(false);
   initAxiosClients();
