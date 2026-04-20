@@ -1,13 +1,13 @@
 import { RefObject, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import MailOutlineIcon from '@mui/icons-material/MailOutline';
-import PhoneOutlinedIcon from '@mui/icons-material/PhoneOutlined';
+import { EmailOutlined, PhoneOutlined } from '@mui/icons-material';
 import { Stack, Typography } from '@mui/material';
 import { ButtonNaked } from '@pagopa/mui-italia';
 
 import { ContactState } from '../../../../models/DigitalDomicileOnboarding';
 import { ChannelType } from '../../../../models/contacts';
+import { internationalPhonePrefix } from '../../../../utility/contacts.utility';
 import DigitalContact from '../../DigitalContact';
 import OnboardingContactItem from '../OnboardingContactItem';
 
@@ -114,6 +114,13 @@ const CourtesyContactHandler: React.FC<Props> = ({
         collapse={
           onCollapse ? { onClick: onCollapse, label: labels.insert.collapseLabel } : undefined
         }
+        prefix={
+          channelType === ChannelType.SMS ? (
+            <PhoneOutlined fontSize="small" sx={{ color: 'text.secondary' }} />
+          ) : (
+            <EmailOutlined fontSize="small" sx={{ color: 'text.secondary' }} />
+          )
+        }
       />
     );
   }
@@ -125,7 +132,7 @@ const CourtesyContactHandler: React.FC<Props> = ({
         introText={labels.readonly.title}
         description={labels.readonly.description}
         value={contactState.value}
-        icon={<MailOutlineIcon color="disabled" fontSize="small" aria-hidden="true" />}
+        icon={<EmailOutlined color="disabled" fontSize="small" aria-hidden="true" />}
       />
     );
   }
@@ -148,14 +155,14 @@ const CourtesyContactHandler: React.FC<Props> = ({
           value={contactState.value ?? ''}
           inputProps={{
             label: labels.edit.inputLabel,
+            prefix: channelType === ChannelType.SMS ? internationalPhonePrefix : undefined,
           }}
           insertButtonLabel={labels.edit.inputLabel}
           onSubmit={onSubmitEdit}
           showLabelOnEdit={false}
           slots={{
             label: () => <></>,
-            leadingEditIcon:
-              channelType === ChannelType.EMAIL ? MailOutlineIcon : PhoneOutlinedIcon,
+            leadingEditIcon: channelType === ChannelType.EMAIL ? EmailOutlined : PhoneOutlined,
           }}
           slotsProps={{
             textField: {

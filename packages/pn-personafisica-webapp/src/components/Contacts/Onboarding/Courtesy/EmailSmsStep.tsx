@@ -19,10 +19,6 @@ import {
 import ContactCodeDialog from '../../ContactCodeDialog';
 import CourtesyContactHandler, { CourtesyMode } from './CourtesyContactHandler';
 
-enum ModalType {
-  CODE = 'code',
-}
-
 type Props = {
   ioEnabled: boolean;
   email: EmailContactState;
@@ -52,7 +48,7 @@ const EmailSmsStep = ({
   const dispatch = useAppDispatch();
 
   const [smsMode, setSmsMode] = React.useState<CourtesyMode>(ioEnabled ? 'collapsed' : 'insert');
-  const [modalOpen, setModalOpen] = useState<ModalType | null>(null);
+  const [codeModalOpen, setCodeModalOpen] = useState<boolean>(false);
   const [verifyModal, setVerifyModal] = useState<{ open: boolean; channel: ChannelType | null }>({
     open: false,
     channel: null,
@@ -110,6 +106,17 @@ const EmailSmsStep = ({
     return email.value ? 'readonly' : 'insert';
   };
 
+  const getSmsMode = (): CourtesyMode => {
+    if (sms.alreadySet) {
+      return 'edit';
+    }
+    if (sms.value) {
+      return 'readonly';
+    }
+
+    return smsMode;
+  };
+
   const handleCodeVerification = (channelType: ChannelType, verificationCode?: string) => {
     const digitalAddressParams: SaveDigitalAddressParams = {
       addressType: AddressType.COURTESY,
@@ -126,7 +133,7 @@ const EmailSmsStep = ({
       .unwrap()
       .then((res) => {
         if (!res) {
-          setModalOpen(ModalType.CODE);
+          setCodeModalOpen(true);
           return;
         }
 
@@ -138,7 +145,7 @@ const EmailSmsStep = ({
             }),
           })
         );
-        setModalOpen(null);
+        setCodeModalOpen(false);
         onContactAdded(
           channelType === ChannelType.EMAIL ? 'email' : 'sms',
           currentAddress.current.value
@@ -169,7 +176,7 @@ const EmailSmsStep = ({
   };
 
   const handleCancelCode = async () => {
-    setModalOpen(null);
+    setCodeModalOpen(false);
 
     if (currentAddress.current.channelType === ChannelType.EMAIL && email.alreadySet) {
       emailContactRef.current.toggleEdit();
@@ -236,7 +243,7 @@ const EmailSmsStep = ({
 
       <CourtesyContactHandler
         channelType={ChannelType.SMS}
-        mode={smsMode}
+        mode={getSmsMode()}
         contactState={sms}
         contactValue={formik.values.sms}
         onContactValueChange={(value) => formik.setFieldValue('sms', value)}
@@ -250,10 +257,10 @@ const EmailSmsStep = ({
       />
 
       <ContactCodeDialog
+        open={codeModalOpen}
         value={currentAddress.current.value}
         addressType={AddressType.COURTESY}
         channelType={currentAddress.current.channelType}
-        open={modalOpen === ModalType.CODE}
         onConfirm={(code) => handleCodeVerification(currentAddress.current.channelType, code)}
         onDiscard={handleCancelCode}
       />

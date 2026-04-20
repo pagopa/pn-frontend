@@ -1,7 +1,15 @@
 import { FocusEventHandler, ReactNode } from 'react';
 
 import CheckIcon from '@mui/icons-material/Check';
-import { Box, Button, ButtonProps, Stack, TextField, Typography } from '@mui/material';
+import {
+  Box,
+  Button,
+  ButtonProps,
+  InputAdornment,
+  Stack,
+  TextField,
+  Typography,
+} from '@mui/material';
 import { ButtonNaked } from '@pagopa/mui-italia';
 
 type EntryModeProps = {
@@ -22,6 +30,7 @@ type EntryModeProps = {
     onClick: () => void;
   };
   footer?: ReactNode;
+  prefix?: string | ReactNode;
 };
 
 type ViewModeProps = {
@@ -56,6 +65,7 @@ const OnboardingContactItem: React.FC<Props> = (props) => {
       onSubmit,
       collapse,
       footer,
+      prefix,
     } = props;
 
     return (
@@ -76,6 +86,9 @@ const OnboardingContactItem: React.FC<Props> = (props) => {
           label={inputLabel}
           value={value}
           onChange={(e) => void onChange(e.target.value)}
+          InputProps={{
+            startAdornment: prefix && <InputAdornment position="start">{prefix}</InputAdornment>,
+          }}
           onBlur={onBlur}
           error={Boolean(touched && error)}
           helperText={touched ? error : ' '}
@@ -104,16 +117,16 @@ const OnboardingContactItem: React.FC<Props> = (props) => {
   const { introText, description, label, value, secondaryContent, icon, action } = props;
 
   return (
-    <Stack spacing={2}>
+    <Stack>
       {introText && (
-        <Typography variant="body2" color="text.secondary">
+        <Typography variant="body2" fontSize="16px" fontWeight={700} sx={{ mb: 1 }}>
           {introText}
         </Typography>
       )}
 
       {description && (
         <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-          {label}
+          {description}
         </Typography>
       )}
 
@@ -139,7 +152,7 @@ const OnboardingContactItem: React.FC<Props> = (props) => {
           color="primary"
           size="medium"
           onClick={action.onClick}
-          sx={{ alignSelf: 'flex-start', fontWeight: 700 }}
+          sx={{ alignSelf: 'flex-start', fontWeight: 700, mt: 2 }}
         >
           {action.label}
         </ButtonNaked>
