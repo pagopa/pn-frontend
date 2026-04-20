@@ -33,7 +33,7 @@ const IoActivationWizard: React.FC = () => {
   return (
     <PnWizard
       title={
-        <Typography fontSize="28px" fontWeight={700}>
+        <Typography fontSize="24px" fontWeight={700}>
           {t('onboarding.io-activation.title')}
         </Typography>
       }
