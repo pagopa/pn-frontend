@@ -23,6 +23,8 @@ type Props = {
   privacyPolicyHref?: string;
   /** Url to terms of service page */
   termsOfServiceHref?: string;
+  /** Url to sercq service statement */
+  sercqServiceStatementLink: string;
 };
 
 const Footer: React.FC<Props> = ({
@@ -33,6 +35,7 @@ const Footer: React.FC<Props> = ({
   hasTermsOfService,
   privacyPolicyHref,
   termsOfServiceHref,
+  sercqServiceStatementLink,
 }) => {
   const localizedPagoPALink = pagoPALink();
   const changeLanguageHandler = (langCode: LangCode) => {
@@ -59,13 +62,14 @@ const Footer: React.FC<Props> = ({
         onClick: () => window.open(localizedPagoPALink.href, '_blank'),
       }}
       legalInfo={companyLegalInfo()}
-      postLoginLinks={postLoginLinks(accessibilityLink)}
-      preLoginLinks={preLoginLinks(
+      postLoginLinks={postLoginLinks({ accessibilityLink, sercqServiceStatementLink })}
+      preLoginLinks={preLoginLinks({
         hasTermsOfService,
         accessibilityLink,
         privacyPolicyHref,
-        termsOfServiceHref
-      )}
+        termsOfServiceHref,
+        sercqServiceStatementLink,
+      })}
       languages={languagesFlat}
       currentLangCode={currentLangCode}
       onLanguageChanged={changeLanguageHandler}

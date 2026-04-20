@@ -23,5 +23,6 @@
   "SELFCARE_CDN_URL": "https://selcuweupnpgcheckoutsa.z6.web.core.windows.net",
   "ACCESSIBILITY_LINK": "https://form.agid.gov.it/view/978876c0-df2d-11ef-8637-9f856ac3da10",
   "NOTIFICATION_CANCELLED_HELP_LINK": "https://assistenza.notifichedigitali.it/hc/articles/33377927707025-Cosa-fare-se-una-notifica-%C3%A8-stata-annullata",
-  "NOTIFICATION_COST_DETAILS_ASSISTANCE_LINK": "https://assistenza.notifichedigitali.it/hc/it/articles/33545157719441-Cosa-sono-i-costi-di-notifica"
+  "NOTIFICATION_COST_DETAILS_ASSISTANCE_LINK": "https://assistenza.notifichedigitali.it/hc/it/articles/33545157719441-Cosa-sono-i-costi-di-notifica",
+  "SERCQ_SERVICE_STATEMENT_LINK": "https://notifichedigitali.it/assets/MO_006_Service_Practice_Statement_Pago_PA_S_p_A_v_1_6_signed_0d50fefc36.pdf"
 }

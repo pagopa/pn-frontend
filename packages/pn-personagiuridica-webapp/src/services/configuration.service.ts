@@ -27,6 +27,7 @@ export interface PgConfiguration {
   ACCESSIBILITY_LINK: string;
   NOTIFICATION_CANCELLED_HELP_LINK: string;
   NOTIFICATION_COST_DETAILS_ASSISTANCE_LINK: string;
+  SERCQ_SERVICE_STATEMENT_LINK: string;
 }
 
 class PgConfigurationValidator extends Validator<PgConfiguration> {
@@ -66,6 +67,7 @@ class PgConfigurationValidator extends Validator<PgConfiguration> {
       .isString()
       .isRequired()
       .matches(dataRegex.htmlPageUrl);
+    this.ruleFor('SERCQ_SERVICE_STATEMENT_LINK').isString().isRequired();
   }
 }
 
