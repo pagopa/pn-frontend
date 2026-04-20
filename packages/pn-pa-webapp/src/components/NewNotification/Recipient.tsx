@@ -368,6 +368,7 @@ const Recipient: React.FC<Props> = ({
                       </ButtonNaked>
                     )}
                   </Stack>
+                  <FormBoxSubtitle text={t('legal-entity-subtitle')} />
                   <Box mt={3} mb={1}>
                     <FormControl>
                       <RadioGroup

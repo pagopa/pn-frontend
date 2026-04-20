@@ -487,6 +487,7 @@
         "pec-error": "Indirizzo PEC non valido",
         "forbidden-characters-denomination-error": "Hai inserito caratteri non validi",
         "legal-entity": "Soggetto giuridico",
+        "legal-entity-subtitle": "Queste informazioni aiuteranno il destinatario a comprendere il contenuto e l'importanza della comunicazione.",
         "physical-person": "Persona fisica",
         "name": "Nome",
         "surname": "Cognome",

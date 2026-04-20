@@ -487,6 +487,7 @@
         "pec-error": "Neveljaven naslov PEC",
         "forbidden-characters-denomination-error": "Vnesli ste neveljavne znake",
         "legal-entity": "Pravna oseba",
+        "legal-entity-subtitle": "Te informacije bodo prejemniku pomagale razumeti vsebino in pomembnost sporočila.",
         "physical-person": "Fizična oseba",
         "name": "Ime",
         "surname": "Priimek",

@@ -487,6 +487,7 @@
         "pec-error": "Invalid PEC address",
         "forbidden-characters-denomination-error": "You have entered invalid characters",
         "legal-entity": "Legal entity",
+        "legal-entity-subtitle": "These information will help the recipient understand the content and importance of the communication.",
         "physical-person": "Natural person",
         "name": "First name",
         "surname": "Surname",

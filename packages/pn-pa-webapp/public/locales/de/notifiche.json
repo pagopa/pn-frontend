@@ -487,6 +487,7 @@
         "pec-error": "Ungültige PEC-Adresse",
         "forbidden-characters-denomination-error": "Sie haben ungültige Zeichen eingegeben",
         "legal-entity": "Rechtssubjekt",
+        "legal-entity-subtitle": "Diese Informationen helfen dem Empfänger, den Inhalt und die Bedeutung der Mitteilung zu verstehen.",
         "physical-person": "Natürliche Person",
         "name": "Vorname",
         "surname": "Nachname",
