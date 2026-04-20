@@ -1,5 +1,5 @@
 import type { TFunction } from 'i18next';
-import { useCallback, useState } from 'react';
+import { useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
@@ -139,10 +139,7 @@ export const NotificationCostBanner: React.FC<Props> = ({
 
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const { t } = useTranslation(['notifiche', 'common']);
-  const [isVisible, setIsVisible] = useState(true);
-
-  const handleClose = () => setIsVisible(false);
+  const { t } = useTranslation(['notifiche']);
 
   const bannerKey = resolveBannerKey(deliveryOutcome);
   const { title, message, ctaLabel } = getBannerContent(
@@ -165,10 +162,6 @@ export const NotificationCostBanner: React.FC<Props> = ({
     );
   }, [dispatch, navigate]);
 
-  if (!isVisible) {
-    return null;
-  }
-
   return (
     <Box my={4}>
       <Banner
@@ -184,8 +177,6 @@ export const NotificationCostBanner: React.FC<Props> = ({
             onClick: handleActivateDigitalDomicile,
           },
         })}
-        onClose={handleClose}
-        closeAriaLabel={t('button.close', { ns: 'common' })}
       />
     </Box>
   );

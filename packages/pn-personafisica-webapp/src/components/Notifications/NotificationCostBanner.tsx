@@ -1,5 +1,5 @@
 import type { TFunction } from 'i18next';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
@@ -142,10 +142,7 @@ export const NotificationCostBanner: React.FC<Props> = ({ deliveryOutcome, notif
 
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const { t } = useTranslation(['notifiche', 'recapiti', 'common']);
-  const [isVisible, setIsVisible] = useState(true);
-
-  const handleClose = () => setIsVisible(false);
+  const { t } = useTranslation(['notifiche']);
 
   const bannerKey = resolveBannerKey(deliveryOutcome);
   const { title, message, ctaLabel } = getBannerContent(
@@ -193,20 +190,9 @@ export const NotificationCostBanner: React.FC<Props> = ({ deliveryOutcome, notif
     digital_registry: 'savings_success_pec',
   };
 
-  const handleBannerClose = () => {
-    triggerMixpanelEvent(PFEventsType.SEND_CLOSE_BANNER, EventAction.ACTION);
-    handleClose();
-  };
-
   useEffect(() => {
-    if (isVisible) {
-      triggerMixpanelEvent(PFEventsType.SEND_BANNER, EventAction.SCREEN_VIEW);
-    }
+    triggerMixpanelEvent(PFEventsType.SEND_BANNER, EventAction.SCREEN_VIEW);
   }, []);
-
-  if (!isVisible) {
-    return null;
-  }
 
   return (
     <Box my={4}>
@@ -223,8 +209,6 @@ export const NotificationCostBanner: React.FC<Props> = ({ deliveryOutcome, notif
             onClick: handleActivateDigitalDomicile,
           },
         })}
-        onClose={handleBannerClose}
-        closeAriaLabel={t('button.close', { ns: 'common' })}
       />
     </Box>
   );

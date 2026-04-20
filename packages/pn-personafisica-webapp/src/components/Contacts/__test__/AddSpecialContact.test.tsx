@@ -289,6 +289,8 @@ describe('test AddSpecialContact', () => {
     const pecInput = getById(container, 's_value');
     expect(pecInput).toBeInTheDocument();
     expect(pecInput).toHaveValue('');
+    expect(pecInput).toHaveAttribute('type', 'email');
+    expect(pecInput).toHaveAttribute('autocomplete', 'email');
   });
 
   it('show validating PEC error and banner selecting a sender having PEC in validation', async () => {
