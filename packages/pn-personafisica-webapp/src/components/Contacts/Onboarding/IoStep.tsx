@@ -116,7 +116,7 @@ const IoStep: React.FC<Props> = ({ value, onChange, onContinue }) => {
 
   return (
     <Stack data-testid="io-step">
-      <Box sx={{ p: 2, bgcolor: 'background.paper' }}>
+      <Box sx={{ p: 3, bgcolor: 'background.paper' }}>
         <Typography fontSize="18px" fontWeight={700} mb={1}>
           {title}
         </Typography>

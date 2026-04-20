@@ -20,7 +20,7 @@ import { normalizeContactValue } from '../../../../utility/contacts.utility';
 import IoStep from '../IoStep';
 import EmailSmsStep from './EmailSmsStep';
 
-type WizardState = {
+type CourtesyWizardState = {
   email: EmailContactState;
   io: IoContactState;
   sms: SmsContactState;
@@ -37,7 +37,7 @@ const buildContactState = <T extends ContactValue>(value: T): ContactState<T> =>
   alreadySet: value !== undefined,
 });
 
-const buildInitialWizardState = (snapshot: InitialContactsSnapshot): WizardState => ({
+const buildInitialWizardState = (snapshot: InitialContactsSnapshot): CourtesyWizardState => ({
   email: buildContactState(snapshot.email),
   io: buildContactState(snapshot.io),
   sms: buildContactState(snapshot.sms),
@@ -59,11 +59,12 @@ const OnboardingCourtesyWizard: React.FC = () => {
   const emailSmsContinueHandlerRef = useRef<(() => Promise<boolean>) | null>(null);
 
   const [activeStep, setActiveStep] = useState(0);
-  const [wizardState, setWizardState] = useState<WizardState>(() =>
+  const [wizardState, setWizardState] = useState<CourtesyWizardState>(() =>
     buildInitialWizardState(initialContactsRef.current)
   );
 
   const isIoEnabled = wizardState.io.value === IOAllowedValues.ENABLED;
+  const isIoStep = activeStep === 0;
 
   const goToNextStep = () => {
     setActiveStep((prev) => prev + 1);
@@ -77,9 +78,19 @@ const OnboardingCourtesyWizard: React.FC = () => {
     navigate(ONBOARDING);
   };
 
-  const updateContactValue = <K extends keyof Pick<WizardState, 'email' | 'sms' | 'io'>>(
+  const handleClickNextButton = async (step: number) => {
+    if (step === 1) {
+      const canProceed = await emailSmsContinueHandlerRef.current?.();
+      if (canProceed !== true) {
+        return;
+      }
+    }
+    goToNextStep();
+  };
+
+  const updateContactValue = <K extends keyof Pick<CourtesyWizardState, 'email' | 'sms' | 'io'>>(
     key: K,
-    value: WizardState[K]['value']
+    value: CourtesyWizardState[K]['value']
   ) => {
     setWizardState((prev) => ({
       ...prev,
@@ -103,6 +114,8 @@ const OnboardingCourtesyWizard: React.FC = () => {
         stepContainer: {
           sx: {
             width: { xs: '100%', md: '760px' },
+            p: isIoStep ? 0 : { xs: 2, md: 3 },
+            borderRadius: isIoStep ? '20px' : null,
           },
         },
         exitButton: {
@@ -115,21 +128,10 @@ const OnboardingCourtesyWizard: React.FC = () => {
           onClick: goToNotifications,
         },
         nextButton: {
-          variant: activeStep === 0 && !isIoEnabled ? 'outlined' : 'contained',
-          label:
-            activeStep === 0 && !isIoEnabled
-              ? t('onboarding.courtesy.proceed-without-io')
-              : undefined,
-          sx: activeStep === 0 && isIoEnabled ? { display: 'none' } : { ml: { md: 'auto' } },
-          onClick: async (_, step) => {
-            if (step === 1) {
-              const canProceed = await emailSmsContinueHandlerRef.current?.();
-              if (canProceed !== true) {
-                return;
-              }
-            }
-            goToNextStep();
-          },
+          variant: isIoStep && !isIoEnabled ? 'outlined' : 'contained',
+          label: isIoStep && !isIoEnabled ? t('onboarding.courtesy.proceed-without-io') : undefined,
+          sx: isIoStep && isIoEnabled ? { display: 'none' } : { ml: { md: 'auto' } },
+          onClick: async (_, step) => await handleClickNextButton(step),
         },
       }}
     >

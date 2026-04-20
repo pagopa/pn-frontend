@@ -98,7 +98,7 @@ const OnboardingContactItem: React.FC<Props> = (props) => {
 
         <Button
           fullWidth
-          sx={{ mt: 2 }}
+          sx={{ mt: 1 }}
           variant={buttonVariant}
           color="primary"
           onClick={() => void onSubmit()}
