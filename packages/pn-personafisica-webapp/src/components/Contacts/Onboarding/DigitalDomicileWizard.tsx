@@ -30,6 +30,7 @@ import {
 } from '../../../models/contacts';
 import {
   NOTIFICHE,
+  ONBOARDING,
   PRIVACY_POLICY,
   TERMS_OF_SERVICE_SERCQ_SEND,
 } from '../../../navigation/routes.const';
@@ -216,6 +217,9 @@ const DigitalDomicileWizard: React.FC = () => {
   };
   const goToNotifications = () => {
     navigate(NOTIFICHE);
+  };
+  const exit = () => {
+    navigate(ONBOARDING);
   };
 
   const selectMode = (mode: WizardMode) => {
@@ -474,7 +478,7 @@ const DigitalDomicileWizard: React.FC = () => {
       }}
       slotsProps={{
         exitButton: {
-          onClick: goToNotifications,
+          onClick: exit,
           sx: {
             color: '#0E0F13',
             '&:hover': {

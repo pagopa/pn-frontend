@@ -129,7 +129,7 @@ describe('PnWizard Component', () => {
     expect(onExitMock).toHaveBeenCalledTimes(1);
   });
 
-  it.skip('should render content below the step container when belowStepContent is provided', () => {
+  it('should render content below the step container when belowStepContent is provided', () => {
     const { getByText } = render(
       <PnWizard
         activeStep={0}
