@@ -54,13 +54,6 @@ const EmailSmsStep = ({
     channel: null,
   });
 
-  const toggleVerifyModal = (channel: ChannelType | null) => {
-    setVerifyModal((prev) => ({
-      open: !prev.open,
-      channel,
-    }));
-  };
-
   const shouldShowBanner = !ioEnabled && !email.alreadySet;
 
   const currentAddress = useRef<{ channelType: ChannelType; value: string }>({
@@ -68,36 +61,8 @@ const EmailSmsStep = ({
     value: '',
   });
 
-  const validationSchema = useMemo(
-    () =>
-      yup.object({
-        email: emailValidationSchema(t),
-        sms: smsMode === 'insert' ? phoneValidationSchema(t) : yup.string().notRequired(),
-      }),
-    [smsMode, t]
-  );
-
-  const formik = useFormik({
-    initialValues: {
-      email: email.value ?? '',
-      sms: sms.value ?? '',
-    },
-    enableReinitialize: true,
-    validationSchema,
-    onSubmit: () => {},
-  });
-
   const emailContactRef = useRef<ContactRef>(createContactRef());
   const smsContactRef = useRef<ContactRef>(createContactRef());
-
-  const handleCollapseSms = async () => {
-    setSmsMode('collapsed');
-    await smsContactRef.current.resetForm();
-  };
-
-  const handleExpandSms = () => {
-    setSmsMode('insert');
-  };
 
   const getEmailMode = (): CourtesyMode => {
     if (email.alreadySet) {
@@ -115,6 +80,41 @@ const EmailSmsStep = ({
     }
 
     return smsMode;
+  };
+
+  const validationSchema = useMemo(
+    () =>
+      yup.object({
+        email: emailValidationSchema(t),
+        sms: getSmsMode() === 'insert' ? phoneValidationSchema(t) : yup.string().notRequired(),
+      }),
+    [smsMode, t]
+  );
+
+  const formik = useFormik({
+    initialValues: {
+      email: email.value ?? '',
+      sms: sms.value ?? '',
+    },
+    enableReinitialize: true,
+    validationSchema,
+    onSubmit: () => {},
+  });
+
+  const toggleVerifyModal = (channel: ChannelType | null) => {
+    setVerifyModal((prev) => ({
+      open: !prev.open,
+      channel,
+    }));
+  };
+
+  const handleCollapseSms = async () => {
+    setSmsMode('collapsed');
+    await smsContactRef.current.resetForm();
+  };
+
+  const handleExpandSms = () => {
+    setSmsMode('insert');
   };
 
   const handleCodeVerification = (channelType: ChannelType, verificationCode?: string) => {
