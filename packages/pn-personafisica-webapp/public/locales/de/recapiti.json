@@ -339,6 +339,11 @@
         "item_2": "Wenn Sie die SEND-Benachrichtigung nicht innerhalb von 5 Tagen nach Erhalt öffnen, erhalten Sie dennoch ein Einschreiben mit den entsprechenden Zusatzkosten."
       }
     },
-    "exit-flow": "Überspringen und zu deinen Zustellungen gehen"
+    "exit-flow": "Überspringen und zu deinen Zustellungen gehen",
+    "exit-flow-dialog": {
+      "title": "Möchtest du die Konfiguration von SEND wirklich überspringen?",
+      "description": "Du riskierst, die SEND-Zustellungen nicht rechtzeitig zu lesen und die Kosten für den Versand des Einschreibens tragen zu müssen.",
+      "cancel": "Zurück zur Konfiguration"
+    }
   }
 }

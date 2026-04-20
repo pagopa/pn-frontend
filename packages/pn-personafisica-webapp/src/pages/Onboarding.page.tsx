@@ -1,4 +1,4 @@
-import { useCallback } from 'react';
+import React, { useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 
@@ -8,6 +8,8 @@ import ErrorOutlineOutlinedIcon from '@mui/icons-material/ErrorOutlineOutlined';
 import {
   Box,
   Button,
+  DialogContentText,
+  DialogTitle,
   List,
   ListItem,
   ListItemIcon,
@@ -18,8 +20,19 @@ import {
   Typography,
 } from '@mui/material';
 import Chip from '@mui/material/Chip';
-import { ApiErrorWrapper, useIsMobile } from '@pagopa-pn/pn-commons';
-import { IllusMIAward, IllusMIMessage, IllusMISmartphoneValidation } from '@pagopa/mui-italia';
+import {
+  ApiErrorWrapper,
+  PnDialog,
+  PnDialogActions,
+  PnDialogContent,
+  useIsMobile,
+} from '@pagopa-pn/pn-commons';
+import {
+  IllusMIAward,
+  IllusMIBell,
+  IllusMIMessage,
+  IllusMISmartphoneValidation,
+} from '@pagopa/mui-italia';
 
 import LoadingPageWrapper from '../components/LoadingPageWrapper/LoadingPageWrapper';
 import { ChannelType, IOAllowedValues } from '../models/contacts';
@@ -134,6 +147,8 @@ const Onboarding: React.FC = () => {
   const location = useLocation();
   const isMobile = useIsMobile();
   const dispatch = useAppDispatch();
+
+  const [openModal, setOpenModal] = React.useState(false);
 
   const isRootMode = location.pathname === routes.ONBOARDING;
   const loading = useAppSelector(contactsSelectors.selectLoading);
@@ -298,10 +313,45 @@ const Onboarding: React.FC = () => {
                     })}
                 </Stack>
                 <Box display="flex" justifyContent="center" mt={3}>
-                  <Button variant="text" onClick={redirectToNotifications}>
+                  <Button variant="text" onClick={() => setOpenModal(true)}>
                     {t('onboarding.exit-flow')}
                   </Button>
                 </Box>
+                <PnDialog
+                  open={openModal}
+                  aria-labelledby="exit-flow-dialog-title"
+                  aria-describedby="exit-flow-dialog-description"
+                >
+                  <DialogTitle id="exit-flow-dialog-title">
+                    <Box display="flex" flexDirection={'column'} alignItems="center" gap={2}>
+                      <IllusMIBell size={48} />
+                      {t('onboarding.exit-flow-dialog.title')}
+                    </Box>
+                  </DialogTitle>
+                  <PnDialogContent>
+                    <DialogContentText textAlign="center" id="exit-flow-dialog-description">
+                      {t('onboarding.exit-flow-dialog.description')}
+                    </DialogContentText>
+                  </PnDialogContent>
+                  <PnDialogActions sx={{ display: 'flex', flexDirection: 'column' }}>
+                    <Button
+                      fullWidth
+                      color="primary"
+                      variant="contained"
+                      onClick={() => setOpenModal(false)}
+                    >
+                      {t('onboarding.exit-flow-dialog.cancel')}
+                    </Button>
+                    <Button
+                      fullWidth
+                      color="primary"
+                      variant="text"
+                      onClick={redirectToNotifications}
+                    >
+                      {t('onboarding.exit-flow')}
+                    </Button>
+                  </PnDialogActions>
+                </PnDialog>
               </>
             )}
             <Outlet />

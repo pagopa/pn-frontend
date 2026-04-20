@@ -339,6 +339,11 @@
         "item_2": "Si vous n'ouvrez pas la notification SEND dans les 5 jours suivant sa réception, vous recevrez tout de même une lettre recommandée avec les frais supplémentaires afférents."
       }
     },
-    "exit-flow": "Passez et accédez à vos notifications"
+    "exit-flow": "Passez et accédez à vos notifications",
+    "exit-flow-dialog": {
+      "title": "Veux-tu vraiment ignorer la configuration de SEND ?",
+      "description": "Tu risques di ne pas lire les notifications SEND à temps et de devoir payer i frais d'envoi de la lettre recommandée.",
+      "cancel": "Retour à la configuration"
+    }
   }
 }
