@@ -8,6 +8,7 @@ export { default as AppResponsePublisher } from './AppResponse/AppResponsePublis
 export { ResponseEventDispatcher } from './AppResponse/AppResponsePublisher';
 export * as screenshot from './Screenshot';
 export { validateCurrentStatus, validateHistory, validateLegaFact } from './appStatus.utility';
+export { appStorage } from './appStorage.utility';
 export { PRIVACY_LINK_RELATIVE_PATH, TOS_LINK_RELATIVE_PATH, LANGUAGES } from './costants';
 export { formatCurrency, formatEurocentToCurrency } from './currency.utility';
 export {
