@@ -48,6 +48,7 @@ type Props = {
       onClick: () => void;
       onFeedbackShow?: () => void;
     };
+    belowStepContent?: ReactNode;
   };
 };
 
@@ -164,6 +165,8 @@ const PnWizard: React.FC<Props> = ({
         >
           {childrens[activeStep]}
         </Paper>
+
+        {slotsProps?.belowStepContent}
 
         <Stack
           direction={{ xs: 'column-reverse', md: 'row' }}

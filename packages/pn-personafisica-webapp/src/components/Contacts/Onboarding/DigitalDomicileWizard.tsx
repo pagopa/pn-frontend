@@ -1,8 +1,9 @@
 import { useEffect, useRef, useState } from 'react';
-import { useTranslation } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
-import { Button, Typography } from '@mui/material';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import { Button, Link, Typography } from '@mui/material';
 import {
   ConsentActionType,
   ConsentType,
@@ -27,7 +28,12 @@ import {
   IOAllowedValues,
   SaveDigitalAddressParams,
 } from '../../../models/contacts';
-import { NOTIFICHE } from '../../../navigation/routes.const';
+import {
+  NOTIFICHE,
+  ONBOARDING,
+  PRIVACY_POLICY,
+  TERMS_OF_SERVICE_SERCQ_SEND,
+} from '../../../navigation/routes.const';
 import {
   acceptSercqSendTos,
   createOrUpdateAddress,
@@ -200,6 +206,8 @@ const DigitalDomicileWizard: React.FC = () => {
     hasSendEmailValue,
   });
 
+  const showSummaryDisclaimer = isSummaryStep && isSendMode;
+
   const goToNextStep = () => {
     setActiveStep((step) => Math.min(step + 1, STEPS_COUNT));
   };
@@ -209,6 +217,9 @@ const DigitalDomicileWizard: React.FC = () => {
   };
   const goToNotifications = () => {
     navigate(NOTIFICHE);
+  };
+  const exit = () => {
+    navigate(ONBOARDING);
   };
 
   const selectMode = (mode: WizardMode) => {
@@ -376,6 +387,7 @@ const DigitalDomicileWizard: React.FC = () => {
         color="primary"
         size="medium"
         data-testid="prev-button"
+        startIcon={<ArrowBackIcon />}
         sx={{ mt: { xs: 2, md: 0 } }}
       >
         {t('button.indietro', { ns: 'common' })}
@@ -402,6 +414,42 @@ const DigitalDomicileWizard: React.FC = () => {
     );
   };
 
+  const getSendDisclaimer = () => (
+    <Typography mb={3} variant="body2" fontSize="14px" color="text.secondary">
+      <Trans
+        i18nKey="onboarding.digital-domicile.summary.disclaimer"
+        ns="recapiti"
+        components={[
+          <Link
+            key="privacy-policy"
+            sx={{
+              cursor: 'pointer',
+              textDecoration: 'none !important',
+              fontWeight: 'bold',
+            }}
+            data-testid="privacy-link"
+            href={PRIVACY_POLICY}
+            target="_blank"
+            rel="noopener"
+          />,
+
+          <Link
+            key="tos"
+            sx={{
+              cursor: 'pointer',
+              textDecoration: 'none !important',
+              fontWeight: 'bold',
+            }}
+            data-testid="tos-link"
+            href={TERMS_OF_SERVICE_SERCQ_SEND}
+            target="_blank"
+            rel="noopener"
+          />,
+        ]}
+      />
+    </Typography>
+  );
+
   const feedbackTitle = isPecMode
     ? t('onboarding.digital-domicile.feedback.pec.title')
     : t('onboarding.digital-domicile.feedback.send.title');
@@ -417,7 +465,7 @@ const DigitalDomicileWizard: React.FC = () => {
   return (
     <PnWizard
       title={
-        <Typography fontSize="28px" fontWeight={700}>
+        <Typography fontSize="24px" fontWeight={700}>
           {t('onboarding.digital-domicile.title')}
         </Typography>
       }
@@ -430,7 +478,13 @@ const DigitalDomicileWizard: React.FC = () => {
       }}
       slotsProps={{
         exitButton: {
-          onClick: goToNotifications,
+          onClick: exit,
+          sx: {
+            color: '#0E0F13',
+            '&:hover': {
+              color: '#0E0F13',
+            },
+          },
         },
         actions: getWizardActionsSlotProps({
           isChoiceStep,
@@ -443,16 +497,21 @@ const DigitalDomicileWizard: React.FC = () => {
           buttonText: t('button.understand', { ns: 'common' }),
           onClick: goToNotifications,
         },
+        belowStepContent: showSummaryDisclaimer ? getSendDisclaimer() : undefined,
         ...(isChoiceStep || isIoStep
           ? {
               stepContainer: {
                 sx: {
                   p: 0,
-                  borderRadius: 4,
+                  borderTopLeftRadius: 8,
+                  borderTopRightRadius: 8,
+                  borderBottomRightRadius: 24,
+                  borderBottomLeftRadius: 24,
+                  overflow: 'hidden',
                 },
               },
             }
-          : { stepContainer: { sx: { p: 2 } } }),
+          : { stepContainer: { sx: { p: 2, borderRadius: 2 } } }),
       }}
     >
       <PnWizardStep label={t('onboarding.digital-domicile.steps.choice')}>

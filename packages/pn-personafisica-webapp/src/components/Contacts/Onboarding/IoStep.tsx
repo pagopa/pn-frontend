@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next';
 
 import { Box, Button, Stack, Typography } from '@mui/material';
-import { IllusOnboardingAppIO, appStateActions } from '@pagopa-pn/pn-commons';
+import { appStateActions } from '@pagopa-pn/pn-commons';
 import { ButtonNaked } from '@pagopa/mui-italia';
 
 import {
@@ -15,6 +15,7 @@ import { enableIOAddress, getDigitalAddresses } from '../../../redux/contact/act
 import { useAppDispatch } from '../../../redux/hooks';
 import { getConfiguration } from '../../../services/configuration.service';
 import { openAppIoDownloadPage } from '../../../utility/appio.utility';
+import OnboardingImage from './OnboardingImage';
 
 type Props = {
   value?: IOAllowedValues;
@@ -147,7 +148,7 @@ const IoStep: React.FC<Props> = ({ value, onChange, onContinue }) => {
           </ButtonNaked>
         )}
       </Box>
-      <IllusOnboardingAppIO />
+      <OnboardingImage src="/imgs/onboarding-appio.png" decorative />
     </Stack>
   );
 };

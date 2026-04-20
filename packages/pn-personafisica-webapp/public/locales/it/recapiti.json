@@ -378,7 +378,7 @@
         "label-summary": "PEC",
         "input-label": "Indirizzo PEC",
         "verify-cta": "Verifica PEC",
-        "disclaimer": "Accetto che questa PEC venga utilizzata in via prioritaria rispetto ad altre registrate a mio nome.",
+        "disclaimer": "Accetto che l’indirizzo PEC indicato sia utilizzato in via prioritaria rispetto a eventuali PEC registrate presso un ente mittente o presenti nei pubblici registri.",
         "email-cta": "Attiva gli avvisi via email",
         "optional-email-description": "Vuoi ricevere anche un’email alla ricezione di una notifica SEND?",
         "optional-email-title": "Attiva gli avvisi via email",
@@ -409,7 +409,7 @@
         "pec": "Inserisci la tua PEC",
         "email": "Associa un indirizzo email",
         "io": "Attiva gli avvisi su IO",
-        "summary": "Conferma l’attivazione"
+        "summary": "Controlla le opzioni scelte"
       },
       "buttons": {
         "continue-without-io": "Continua senza l’app IO",

@@ -1,6 +1,5 @@
 import { render } from '../../../../__test__/test-utils';
 import { IOAllowedValues } from '../../../../models/contacts';
-import { PRIVACY_POLICY, TERMS_OF_SERVICE_SERCQ_SEND } from '../../../../navigation/routes.const';
 import SummaryStep from '../SummaryStep';
 
 describe('SummaryStep', () => {
@@ -8,7 +7,7 @@ describe('SummaryStep', () => {
   const mockEmail = 'test@mock.pagopa.it';
   const mockPec = 'test@pec.mock.pagopa.it';
 
-  it('renders the SEND summary with email, IO, alert and disclaimer links', () => {
+  it('renders the SEND summary with email, IO and info alert', () => {
     const { getByText, getByTestId } = render(
       <SummaryStep mode="send" email={mockEmail} io={IOAllowedValues.ENABLED} />
     );
@@ -28,9 +27,6 @@ describe('SummaryStep', () => {
 
     expect(getByTestId('onboardingDDomAlert')).toBeInTheDocument();
     expect(getByText(`${labelPrefix}.info-box`)).toBeInTheDocument();
-
-    expect(getByTestId('privacy-link')).toHaveAttribute('href', PRIVACY_POLICY);
-    expect(getByTestId('tos-link')).toHaveAttribute('href', TERMS_OF_SERVICE_SERCQ_SEND);
   });
 
   it('renders the PEC summary with PEC value and without disclaimer links', () => {
