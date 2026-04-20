@@ -1,6 +1,6 @@
 import { Box } from '@mui/material';
 
-import checkChildren from '../../utility/children.utility';
+import { checkChildren } from '../../utility/children.utility';
 import PnCard from './PnCard/PnCard';
 
 type Props = {

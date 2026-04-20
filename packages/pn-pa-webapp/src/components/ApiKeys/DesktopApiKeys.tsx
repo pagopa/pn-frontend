@@ -21,7 +21,6 @@ import ApiKeyDataSwitch from './ApiKeyDataSwitch';
 type Props = {
   apiKeys: Array<ApiKey>;
   handleModalClick: (view: ModalApiKeyView, apiKeyId: number) => void;
-  children?: React.ReactNode;
 };
 
 const LinkNewApiKey: React.FC<{ children?: React.ReactNode }> = ({ children }) => {

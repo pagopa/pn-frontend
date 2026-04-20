@@ -19,7 +19,6 @@ export interface Column<T> {
   mode?: ValueMode;
   cellProps?: CustomTableCellProps;
   sortable?: boolean;
-  onClick?(row?: Row<T>, columnId?: keyof T): void;
 }
 
 export type Row<T> = T & { id: string };

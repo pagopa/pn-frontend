@@ -1,4 +1,4 @@
-import checkChildren from '../../../utility/children.utility';
+import { checkChildren } from '../../../utility/children.utility';
 import { PnTableHeaderProps } from '../PnTable/PnTableHeader';
 import SmartHeaderCell from './SmartHeaderCell';
 

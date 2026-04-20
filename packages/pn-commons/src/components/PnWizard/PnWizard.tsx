@@ -13,7 +13,7 @@ import {
 } from '@mui/material';
 import { ButtonNaked, IllusCompleted, IllustrationProps } from '@pagopa/mui-italia';
 
-import checkChildren from '../../utility/children.utility';
+import { checkChildren } from '../../utility/children.utility';
 import { getLocalizedOrDefaultLabel } from '../../utility/localization.utility';
 import PnWizardStep, { PnWizardStepProps } from './PnWizardStep';
 import PnWizardStepper from './PnWizardStepper';

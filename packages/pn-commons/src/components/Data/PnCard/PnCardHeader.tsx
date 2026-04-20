@@ -1,6 +1,6 @@
 import { CardHeader, Grid, GridProps } from '@mui/material';
 
-import checkChildren from '../../../utility/children.utility';
+import { checkChildren } from '../../../utility/children.utility';
 import PnCardHeaderItem from './PnCardHeaderItem';
 
 type Props = {

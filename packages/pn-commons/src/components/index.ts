@@ -38,6 +38,7 @@ export { default as SmartBodyRow } from './Data/SmartTable/SmartBodyRow';
 export { default as SmartFilter } from './Data/SmartTable/SmartFilter';
 export { default as SmartHeader } from './Data/SmartTable/SmartHeader';
 export { default as SmartHeaderCell } from './Data/SmartTable/SmartHeaderCell';
+export { default as DataValue } from './Data/DataValue';
 export { default as DisclaimerModal } from './DisclaimerModal';
 export { default as EmptyState } from './EmptyState';
 export { default as FileUpload } from './FileUpload';

@@ -1,10 +1,11 @@
-import { FC, ReactNode, useRef, useState } from 'react';
+import { Children, FC, ReactNode } from 'react';
 
-import { Box, SxProps, TableCell, Theme } from '@mui/material';
-import { MITooltip } from '@pagopa/mui-italia';
+import { TableCell } from '@mui/material';
 
 import { TableCellProps } from '../../../models/PnTable';
 import { ValueMode } from '../../../models/SmartTable';
+import { isExplicitChild } from '../../../utility/children.utility';
+import DataValue from '../DataValue';
 
 export type PnTableBodyCellProps = {
   testId?: string;
@@ -13,32 +14,10 @@ export type PnTableBodyCellProps = {
   children: ReactNode;
 };
 
-const strategies: Record<ValueMode, SxProps<Theme>> = {
-  truncate: {
-    whiteSpace: 'nowrap',
-    overflow: 'hidden',
-    textOverflow: 'ellipsis',
-  },
-  wrap: {
-    whiteSpace: 'normal',
-    wordBreak: 'break-word',
-  },
-};
-
 const PnTableBodyCell: FC<PnTableBodyCellProps> = ({ testId, mode, cellProps, children }) => {
-  const [isTruncated, setIsTruncated] = useState(false);
-  const valueRef = useRef<HTMLSpanElement>(null);
-
-  const checkOverflow = () => {
-    const el = valueRef.current;
-    if (el) {
-      const hasOverflow = el.scrollWidth > el.clientWidth;
-      setIsTruncated(hasOverflow);
-      return;
-    }
-    setIsTruncated(false);
-  };
-
+  const hasDataValue = Children.toArray(children).some((child) =>
+    isExplicitChild(child, 'DataValue')
+  );
   return (
     <TableCell
       scope="col"
@@ -48,17 +27,8 @@ const PnTableBodyCell: FC<PnTableBodyCellProps> = ({ testId, mode, cellProps, ch
         borderBottom: 'none',
       }}
     >
-      <MITooltip title={children} disabled={!isTruncated}>
-        <Box
-          ref={valueRef}
-          onMouseEnter={checkOverflow}
-          onTouchStart={checkOverflow}
-          tabIndex={isTruncated ? 0 : undefined}
-          sx={{ ...(mode && strategies[mode]) }}
-        >
-          {children}
-        </Box>
-      </MITooltip>
+      {hasDataValue && children}
+      {!hasDataValue && <DataValue mode={mode}>{children}</DataValue>}
     </TableCell>
   );
 };

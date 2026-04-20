@@ -1,9 +1,10 @@
-import React, { ReactNode, useRef, useState } from 'react';
+import React, { Children, ReactNode } from 'react';
 
-import { Box, SxProps, Theme, Typography } from '@mui/material';
-import { MITooltip } from '@pagopa/mui-italia';
+import { Typography } from '@mui/material';
 
 import { ValueMode } from '../../../models/SmartTable';
+import { isExplicitChild } from '../../../utility/children.utility';
+import DataValue from '../DataValue';
 
 type Props = {
   children: ReactNode;
@@ -13,18 +14,6 @@ type Props = {
   testId?: string;
 };
 
-const strategies: Record<ValueMode, SxProps<Theme>> = {
-  truncate: {
-    whiteSpace: 'nowrap',
-    overflow: 'hidden',
-    textOverflow: 'ellipsis',
-  },
-  wrap: {
-    whiteSpace: 'normal',
-    wordBreak: 'break-word',
-  },
-};
-
 const PnCardContentItem: React.FC<Props> = ({
   children,
   label,
@@ -32,19 +21,9 @@ const PnCardContentItem: React.FC<Props> = ({
   wrapValueInTypography = true,
   testId,
 }) => {
-  const [isTruncated, setIsTruncated] = useState(false);
-  const valueRef = useRef<HTMLSpanElement>(null);
-
-  const checkOverflow = () => {
-    const el = valueRef.current;
-    if (el) {
-      const hasOverflow = el.scrollWidth > el.clientWidth;
-      setIsTruncated(hasOverflow);
-      return;
-    }
-    setIsTruncated(false);
-  };
-
+  const hasDataValue = Children.toArray(children).some((child) =>
+    isExplicitChild(child, 'DataValue')
+  );
   return (
     <>
       <Typography
@@ -54,34 +33,16 @@ const PnCardContentItem: React.FC<Props> = ({
       >
         {label}
       </Typography>
-      {wrapValueInTypography && (
-        <MITooltip title={children} disabled={!isTruncated}>
-          <Typography
-            variant="body2"
-            data-testid={testId ? `${testId}Value` : null}
-            sx={{ ...(mode && strategies[mode]) }}
-            ref={valueRef}
-            onMouseEnter={checkOverflow}
-            onTouchStart={checkOverflow}
-            tabIndex={isTruncated ? 0 : undefined}
-          >
-            {children}
-          </Typography>
-        </MITooltip>
-      )}
-      {!wrapValueInTypography && (
-        <MITooltip title={children} disabled={!isTruncated}>
-          <Box
-            data-testid={testId ? `${testId}Value` : null}
-            sx={{ ...(mode && strategies[mode]) }}
-            ref={valueRef}
-            onMouseEnter={checkOverflow}
-            onTouchStart={checkOverflow}
-            tabIndex={isTruncated ? 0 : undefined}
-          >
-            {children}
-          </Box>
-        </MITooltip>
+      {hasDataValue && children}
+      {!hasDataValue && (
+        <DataValue
+          data-testid={testId ? `${testId}Value` : undefined}
+          mode={mode}
+          slots={{ root: wrapValueInTypography ? Typography : undefined }}
+          slotProps={{ root: wrapValueInTypography ? { variant: 'body2' } : undefined }}
+        >
+          {children}
+        </DataValue>
       )}
     </>
   );
