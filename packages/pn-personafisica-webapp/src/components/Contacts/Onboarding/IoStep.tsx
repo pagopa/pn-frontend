@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next';
 
 import { Box, Button, Stack, Typography } from '@mui/material';
-import { appStateActions } from '@pagopa-pn/pn-commons';
+import { IllusOnboardingAppIO, appStateActions } from '@pagopa-pn/pn-commons';
 import { ButtonNaked } from '@pagopa/mui-italia';
 
 import {
@@ -116,20 +116,20 @@ const IoStep: React.FC<Props> = ({ value, onChange, onContinue }) => {
 
   return (
     <Stack data-testid="io-step">
-      <Typography fontSize="22px" fontWeight={700} mb={1}>
-        {title}
-      </Typography>
+      <Box sx={{ p: 2, bgcolor: 'background.paper' }}>
+        <Typography fontSize="18px" fontWeight={700} mb={1}>
+          {title}
+        </Typography>
 
-      <Typography variant="body2" color="text.secondary" mb={3}>
-        {t('onboarding.digital-domicile.io.description')}
-      </Typography>
+        <Typography variant="body2" color="text.secondary" mb={2}>
+          {t('onboarding.digital-domicile.io.description')}
+        </Typography>
 
-      <Box sx={{ p: 3, borderRadius: 3, bgcolor: 'background.paper' }}>
         <Button
           fullWidth
           variant="contained"
           onClick={handlePrimaryAction}
-          sx={{ mb: 2 }}
+          sx={{ mb: 1 }}
           data-testid="io-primary-button"
         >
           {t(`${labelPrefixByStatus}.primary-cta`)}
@@ -141,23 +141,13 @@ const IoStep: React.FC<Props> = ({ value, onChange, onContinue }) => {
             size="medium"
             onClick={() => void handleRefreshState()}
             data-testid="io-refresh-link"
-            sx={{ mb: 2, fontWeight: 700 }}
+            sx={{ fontWeight: 700 }}
           >
             {t(`${labelPrefixByStatus}.refresh-cta`)}
           </ButtonNaked>
         )}
-        {/* TODO: replace with final asset */}
-        <Box
-          sx={{
-            width: '100%',
-            height: 220,
-            borderRadius: 2,
-            bgcolor: 'grey.100',
-            mb: 2,
-          }}
-          // aria-label={t('onboarding.digital-domicile.io.img-alt-text')}
-        />
       </Box>
+      <IllusOnboardingAppIO />
     </Stack>
   );
 };

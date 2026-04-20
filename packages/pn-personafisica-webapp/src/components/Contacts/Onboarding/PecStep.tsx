@@ -5,6 +5,7 @@ import * as yup from 'yup';
 
 import {
   Checkbox,
+  Chip,
   Divider,
   FormControl,
   FormControlLabel,
@@ -13,8 +14,9 @@ import {
   Typography,
 } from '@mui/material';
 import { ConfirmationModal, appStateActions } from '@pagopa-pn/pn-commons';
+import { IllusMIMessage } from '@pagopa/mui-italia';
 
-import { EmailContactState, PecContactState } from '../../../models/DigitalDomicileOnboarding';
+import { EmailContactState, PecContactState } from '../../../models/Onboarding';
 import { AddressType, ChannelType, SaveDigitalAddressParams } from '../../../models/contacts';
 import { createOrUpdateAddress } from '../../../redux/contact/actions';
 import { useAppDispatch } from '../../../redux/hooks';
@@ -31,11 +33,9 @@ type Props = {
   pec: PecContactState;
   email: EmailContactState;
   showOptionalEmail: boolean;
-  pecDisclaimerAccepted: boolean;
-  onPecChange: (value?: string) => void;
+  onPecChange: (value?: string, isValid?: boolean) => void;
   onEmailChange: (value?: string) => void;
   onShowOptionalEmail: (show: boolean) => void;
-  onPecDisclaimerChange: (accepted: boolean) => void;
   registerContinueHandler?: (handler: () => Promise<boolean>) => void;
 };
 
@@ -57,17 +57,14 @@ const PecStep: React.FC<Props> = ({
   pec,
   email,
   showOptionalEmail,
-  pecDisclaimerAccepted,
   onPecChange,
   onEmailChange,
   onShowOptionalEmail,
-  onPecDisclaimerChange,
   registerContinueHandler,
 }) => {
   const { t } = useTranslation(['recapiti', 'common']);
   const dispatch = useAppDispatch();
 
-  const [isPecVerifiedInWizard, setIsPecVerifiedInWizard] = useState(false);
   const [showVerifyPecModal, setShowVerifyPecModal] = useState(false);
   const [codeDialogFlow, setCodeDialogFlow] = useState<FlowKey | null>(null);
   const [emailMode, setEmailMode] = useState<EmailMode>(() =>
@@ -91,12 +88,9 @@ const PecStep: React.FC<Props> = ({
     setEmailMode(getInitialEmailMode(email, showOptionalEmail));
   }, [email, showOptionalEmail]);
 
-  const isPecSaved = useMemo(
-    () => (Boolean(pec.value) && pec.alreadySet) || (Boolean(pec.value) && isPecVerifiedInWizard),
-    [isPecVerifiedInWizard, pec.alreadySet, pec.value]
-  );
-
-  const showPecDisclaimer = !pec.alreadySet && !isPecSaved;
+  const hasPecFlowState = Boolean(pec.value) || pec.isValid !== undefined;
+  const isPecPendingValidation = pec.isValid === false;
+  const showPecDisclaimer = !pec.alreadySet && !hasPecFlowState;
 
   const validationSchema = useMemo(
     () =>
@@ -114,7 +108,7 @@ const PecStep: React.FC<Props> = ({
     initialValues: {
       pec: pec.value ?? '',
       email: email.value ?? '',
-      pecDisclaimer: pecDisclaimerAccepted,
+      pecDisclaimer: pec.alreadySet,
     },
     enableReinitialize: true,
     validationSchema,
@@ -153,8 +147,7 @@ const PecStep: React.FC<Props> = ({
         setCodeDialogFlow(null);
 
         if (flow === 'pec') {
-          setIsPecVerifiedInWizard(true);
-          onPecChange(value);
+          onPecChange(value, res?.pecValid);
 
           dispatch(
             appStateActions.addSuccess({
@@ -191,12 +184,8 @@ const PecStep: React.FC<Props> = ({
     async (field: 'pec' | 'email', value: string) => {
       await formik.setFieldValue(field, value);
       await formik.setFieldTouched(field, true, false);
-
-      if (field === 'pec' && isPecVerifiedInWizard) {
-        setIsPecVerifiedInWizard(false);
-      }
     },
-    [formik, isPecVerifiedInWizard]
+    [formik]
   );
 
   const handleVerifyPec = useCallback(async () => {
@@ -289,20 +278,24 @@ const PecStep: React.FC<Props> = ({
   }, [codeDialogFlow, email.alreadySet]);
 
   const handleContinueAttempt = useCallback(async (): Promise<boolean> => {
-    if (isPecSaved) {
+    if (hasPecFlowState) {
       return true;
     }
 
     await formik.setFieldTouched('pec', true, false);
+
+    if (showPecDisclaimer) {
+      await formik.setFieldTouched('pecDisclaimer', true, false);
+    }
     const errors = await formik.validateForm();
 
-    if (errors.pec) {
+    if (errors.pec || errors.pecDisclaimer) {
       return false;
     }
 
     setShowVerifyPecModal(true);
     return false;
-  }, [formik, isPecSaved]);
+  }, [formik, hasPecFlowState, showPecDisclaimer]);
 
   useEffect(() => {
     registerContinueHandler?.(handleContinueAttempt);
@@ -314,11 +307,11 @@ const PecStep: React.FC<Props> = ({
 
   const handlePecDisclaimerChange = useCallback(
     async (checked: boolean) => {
-      onPecDisclaimerChange(checked);
       await formik.setFieldValue('pecDisclaimer', checked, false);
       await formik.setFieldTouched('pecDisclaimer', true, false);
+      await formik.validateField('pecDisclaimer');
     },
-    [formik, onPecDisclaimerChange]
+    [formik]
   );
 
   const renderPecDisclaimerFooter = () => {
@@ -334,10 +327,16 @@ const PecStep: React.FC<Props> = ({
             <Checkbox
               checked={formik.values.pecDisclaimer}
               onChange={(_, checked) => void handlePecDisclaimerChange(checked)}
+              size="small"
+              sx={{
+                alignSelf: 'flex-start',
+                p: 0,
+                mr: 1,
+              }}
             />
           }
           label={
-            <Typography variant="body2" color="text.secondary">
+            <Typography variant="body2" fontSize="14px" color="text.secondary">
               <Trans i18nKey="onboarding.digital-domicile.pec.disclaimer" ns="recapiti" />
             </Typography>
           }
@@ -352,27 +351,40 @@ const PecStep: React.FC<Props> = ({
   return (
     <>
       <Stack data-testid="pec-step">
-        <Typography fontSize="22px" fontWeight={700} mb={1}>
-          {t('onboarding.digital-domicile.pec.title')}
+        <Typography fontSize="18px" fontWeight={700} mb={1}>
+          {t(
+            isPecPendingValidation
+              ? 'onboarding.digital-domicile.pec.pending.title'
+              : 'onboarding.digital-domicile.pec.title'
+          )}
         </Typography>
 
-        <Typography variant="body2" color="text.secondary" mb={3}>
-          {t('onboarding.digital-domicile.pec.description')}
+        <Typography variant="body2" color="text.secondary" mb={2}>
+          {t(
+            isPecPendingValidation
+              ? 'onboarding.digital-domicile.pec.pending.description'
+              : 'onboarding.digital-domicile.pec.description'
+          )}
         </Typography>
 
         <Stack
-          spacing={3}
+          spacing={2}
           sx={{
-            p: 3,
             borderRadius: 3,
             bgcolor: 'background.paper',
           }}
         >
-          {isPecSaved ? (
+          {isPecPendingValidation ? (
+            <Chip
+              label={t('onboarding.digital-domicile.pec.pending.badge')}
+              size="small"
+              sx={{ width: 'fit-content' }}
+            />
+          ) : hasPecFlowState ? (
             <OnboardingContactItem
               mode="view"
               label={t('onboarding.digital-domicile.pec.label-summary')}
-              value={pec.value ?? currentValuesRef.current.pec}
+              value={pec.value}
             />
           ) : (
             <OnboardingContactItem
@@ -425,6 +437,10 @@ const PecStep: React.FC<Props> = ({
       <ConfirmationModal
         open={showVerifyPecModal}
         title={t('onboarding.digital-domicile.pec.verify-before-continue-title')}
+        contentAlign="center"
+        slots={{
+          illustration: <IllusMIMessage />,
+        }}
         slotsProps={{
           confirmButton: {
             onClick: () => setShowVerifyPecModal(false),
@@ -433,7 +449,10 @@ const PecStep: React.FC<Props> = ({
         }}
       >
         <Typography variant="body2">
-          {t('onboarding.digital-domicile.pec.verify-before-continue-content')}
+          <Trans
+            i18nKey="onboarding.digital-domicile.pec.verify-before-continue-content"
+            ns="recapiti"
+          />
         </Typography>
       </ConfirmationModal>
     </>

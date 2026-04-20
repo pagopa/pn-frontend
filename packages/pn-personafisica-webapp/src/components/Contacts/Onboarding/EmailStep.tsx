@@ -171,6 +171,10 @@ const EmailStep: React.FC<Props> = ({ value, alreadySet, onChange, onVerified })
           insertButtonLabel={t('onboarding.digital-domicile.email.confirm-cta')}
           onSubmit={handleSubmitEmailEdit}
           showLabelOnEdit
+          slots={{
+            label: () => <></>,
+            leadingEditIcon: MailOutlineIcon,
+          }}
           slotsProps={{
             textField: {
               sx: { flexBasis: { xs: 'unset', lg: '50%' } },
@@ -185,6 +189,10 @@ const EmailStep: React.FC<Props> = ({ value, alreadySet, onChange, onVerified })
             container: {
               width: '100%',
             },
+            leadingEditIcon: {
+              sx: { color: 'text.secondary' },
+              fontSize: 'small',
+            },
           }}
         />
       );
@@ -194,7 +202,6 @@ const EmailStep: React.FC<Props> = ({ value, alreadySet, onChange, onVerified })
       return (
         <OnboardingContactItem
           mode="entry"
-          label={t('onboarding.digital-domicile.email.label')}
           inputLabel={t('onboarding.digital-domicile.email.input-label')}
           value={formik.values.email}
           buttonLabel={t('onboarding.digital-domicile.email.verify-cta')}
@@ -224,11 +231,11 @@ const EmailStep: React.FC<Props> = ({ value, alreadySet, onChange, onVerified })
   return (
     <>
       <Stack data-testid="email-step">
-        <Typography fontSize="22px" fontWeight={700} mb={1}>
+        <Typography fontSize="18px" fontWeight={700} mb={1}>
           {title}
         </Typography>
 
-        <Typography variant="body2" color="text.secondary" mb={3}>
+        <Typography variant="body2" color="text.secondary" mb={2}>
           {description}
         </Typography>
 

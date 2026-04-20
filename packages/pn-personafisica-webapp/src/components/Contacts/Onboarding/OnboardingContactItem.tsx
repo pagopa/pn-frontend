@@ -7,7 +7,7 @@ import { ButtonNaked } from '@pagopa/mui-italia';
 type EntryModeProps = {
   mode: 'entry';
   title?: string;
-  label: string;
+  label?: string;
   inputLabel: string;
   value: string;
   buttonLabel: string;
@@ -58,15 +58,15 @@ const OnboardingContactItem: React.FC<Props> = (props) => {
     } = props;
 
     return (
-      <Stack spacing={2}>
+      <Stack>
         {title && (
           <Typography fontSize="16px" fontWeight={700}>
             {title}
           </Typography>
         )}
 
-        <Typography variant="body2" color="text.secondary">
-          {label}
+        <Typography variant="body2" color="text.secondary" mb={2}>
+          {label ?? null}
         </Typography>
 
         <TextField
@@ -80,11 +80,17 @@ const OnboardingContactItem: React.FC<Props> = (props) => {
           helperText={touched ? error : ' '}
         />
 
-        <Button fullWidth variant={buttonVariant} color="primary" onClick={() => void onSubmit()}>
+        {footer ?? null}
+
+        <Button
+          fullWidth
+          sx={{ mt: 2 }}
+          variant={buttonVariant}
+          color="primary"
+          onClick={() => void onSubmit()}
+        >
           {buttonLabel}
         </Button>
-
-        {footer ?? null}
 
         {collapse && (
           <ButtonNaked
@@ -103,9 +109,9 @@ const OnboardingContactItem: React.FC<Props> = (props) => {
   const { introText, label, value, secondaryContent, icon, action } = props;
 
   return (
-    <Stack spacing={2}>
+    <Stack>
       {introText && (
-        <Typography variant="body2" color="text.secondary">
+        <Typography variant="body2" color="text.secondary" mb={2}>
           {introText}
         </Typography>
       )}
@@ -114,12 +120,12 @@ const OnboardingContactItem: React.FC<Props> = (props) => {
         {icon ?? <CheckIcon color="disabled" fontSize="small" aria-hidden="true" />}
         <Box>
           {label && (
-            <Typography variant="body2" color="text.secondary">
+            <Typography variant="body2" fontSize="14px" color="text.secondary">
               {label}
             </Typography>
           )}
           {value && (
-            <Typography variant="body1" fontWeight={700} sx={{ wordBreak: 'break-word' }}>
+            <Typography variant="body2" fontWeight={700} sx={{ wordBreak: 'break-word' }}>
               {value}
             </Typography>
           )}
