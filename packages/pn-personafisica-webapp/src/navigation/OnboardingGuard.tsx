@@ -1,50 +1,35 @@
-import { useEffect, useMemo, useState } from 'react';
-import { Navigate, Outlet, useLocation } from 'react-router-dom';
+import { useEffect, useMemo } from 'react';
+import { useDispatch } from 'react-redux';
+import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 
 import { LoadingPage, NotificationStatus } from '@pagopa-pn/pn-commons';
 
-import { useRapidAccessParam } from '../hooks/useRapidAccessParam';
 import { ChannelType } from '../models/contacts';
-import { getDigitalAddresses } from '../redux/contact/actions';
+import { setIsFreshLogin } from '../redux/auth/reducers';
 import { contactsSelectors } from '../redux/contact/reducers';
-import { getReceivedNotifications } from '../redux/dashboard/actions';
-import { useAppDispatch, useAppSelector } from '../redux/hooks';
+import { useAppSelector } from '../redux/hooks';
 import * as routes from './routes.const';
 
 const OnboardingGuard = () => {
-  const dispatch = useAppDispatch();
-  const rapidAccess = useRapidAccessParam();
-  const [isInitialized, setIsInitialized] = useState(false);
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
   const location = useLocation();
 
   const { legalAddresses, courtesyAddresses } = useAppSelector(contactsSelectors.selectAddresses);
-  const notifications = useAppSelector((state) => state.dashboardState.notifications);
-  const hasSkippedOnboarding = useAppSelector((state) => state.userState.hasSkippedOnboarding);
+  const isContactLoading = useAppSelector(contactsSelectors.selectLoading);
+  const { loading: isNotificationsLoading, notifications } = useAppSelector(
+    (state) => state.dashboardState
+  );
+  const isFreshLogin = useAppSelector((state) => state.userState.isFreshLogin);
 
-  useEffect(() => {
-    const initData = async () => {
-      try {
-        await Promise.all([
-          dispatch(getDigitalAddresses()).unwrap(),
-          dispatch(getReceivedNotifications({ size: 10 })).unwrap(),
-        ]);
-      } catch (error) {
-        console.error('Errore durante il recupero dei dati', error);
-      } finally {
-        setIsInitialized(true);
-      }
-    };
+  const isLoading = isContactLoading || isNotificationsLoading;
 
-    void initData();
-  }, [dispatch]);
-
-  const hasRequiredContacts = useMemo(() => {
+  const hasRequiredContacts = () => {
     const hasLegal = legalAddresses.length > 0;
     const hasEmail = courtesyAddresses.some((addr) => addr.channelType === ChannelType.EMAIL);
     const hasIo = courtesyAddresses.some((addr) => addr.channelType === ChannelType.IOMSG);
-
     return hasLegal || (hasEmail && hasIo);
-  }, [legalAddresses, courtesyAddresses]);
+  };
 
   const hasNotificationsToRead = useMemo(() => {
     const managedStatusesSet = new Set([
@@ -56,17 +41,20 @@ const OnboardingGuard = () => {
     return notifications.some((n) => !managedStatusesSet.has(n.notificationStatus));
   }, [notifications]);
 
-  const isRapidAccess = !!rapidAccess;
+  useEffect(() => {
+    if (
+      location.pathname === '/' &&
+      isFreshLogin &&
+      !hasRequiredContacts() &&
+      !hasNotificationsToRead
+    ) {
+      navigate(routes.ONBOARDING, { replace: true });
+    }
+    dispatch(setIsFreshLogin(false));
+  }, []);
 
-  const goToOnboarding =
-    !hasNotificationsToRead && !hasRequiredContacts && !isRapidAccess && !hasSkippedOnboarding;
-
-  if (!isInitialized) {
+  if (isLoading) {
     return <LoadingPage />;
-  }
-
-  if (goToOnboarding && !location.pathname.startsWith(routes.ONBOARDING)) {
-    return <Navigate to={routes.ONBOARDING} replace />;
   }
 
   return <Outlet />;

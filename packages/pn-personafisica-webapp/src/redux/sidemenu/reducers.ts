@@ -13,6 +13,9 @@ const generalInfoSlice = createSlice({
     delegators: [] as Array<Delegator>,
     domicileBannerOpened: true,
     paymentTpp: {} as PaymentTpp,
+    onboardingData: {
+      // add skip onboarding
+    },
   },
   reducers: {
     closeDomicileBanner: (state) => {
