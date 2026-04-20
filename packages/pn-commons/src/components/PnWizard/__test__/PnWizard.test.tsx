@@ -129,6 +129,25 @@ describe('PnWizard Component', () => {
     expect(onExitMock).toHaveBeenCalledTimes(1);
   });
 
+  it.skip('should render content below the step container when belowStepContent is provided', () => {
+    const { getByText } = render(
+      <PnWizard
+        activeStep={0}
+        setActiveStep={setActiveStep}
+        title="Wizard Title"
+        slotsProps={{
+          belowStepContent: <div>Below step content</div>,
+        }}
+      >
+        <PnWizardStep label="Label Step 1">Step 1</PnWizardStep>
+        <PnWizardStep label="Label Step 2">Step 2</PnWizardStep>
+      </PnWizard>
+    );
+
+    expect(getByText('Step 1')).toBeInTheDocument();
+    expect(getByText('Below step content')).toBeInTheDocument();
+  });
+
   it('should render feedback step', () => {
     const { getByTestId } = render(
       <PnWizard
