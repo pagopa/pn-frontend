@@ -6,6 +6,7 @@ import {
   PRIVACY_LINK_RELATIVE_PATH,
   TOS_LINK_RELATIVE_PATH,
 } from '@pagopa-pn/pn-commons';
+import { getById } from '@pagopa-pn/pn-commons/src/test-utils';
 
 import { acceptTosPrivacyConsentBodyMock } from '../../__mocks__/Consents.mock';
 import { fireEvent, render, waitFor } from '../../__test__/test-utils';
@@ -75,7 +76,7 @@ describe('test Terms of Service page', () => {
   });
 
   it('shows validation error - does not call accept API - clears the error when acceptance switch is enabled', async () => {
-    const { getByRole, queryByRole } = render(
+    const { getByRole, container } = render(
       <ToSAcceptance tosConsent={tosConsent} privacyConsent={privacyConsent} />
     );
 
@@ -85,9 +86,11 @@ describe('test Terms of Service page', () => {
 
     fireEvent.click(acceptButton);
 
-    await waitFor(() => {
+    const message = await waitFor(() => {
       expect(mock.history.put).toHaveLength(0);
-      expect(getByRole('alert')).toHaveTextContent(/required-field/i);
+      const message = getById(container, 'tos-switch-helper-text');
+      expect(message).toHaveTextContent(/required-field/i);
+      return message;
     });
 
     const switchElement = getByRole('checkbox');
@@ -95,7 +98,7 @@ describe('test Terms of Service page', () => {
     fireEvent.click(switchElement);
 
     await waitFor(() => {
-      expect(queryByRole('alert')).not.toBeInTheDocument();
+      expect(message).not.toBeInTheDocument();
     });
   });
 
