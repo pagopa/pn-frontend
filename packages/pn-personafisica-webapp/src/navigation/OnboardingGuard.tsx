@@ -19,7 +19,6 @@ const OnboardingGuard = () => {
 
   const { legalAddresses, courtesyAddresses } = useAppSelector(contactsSelectors.selectAddresses);
   const notifications = useAppSelector((state) => state.dashboardState.notifications);
-  const hasSkippedOnboarding = useAppSelector((state) => state.userState.hasSkippedOnboarding);
 
   useEffect(() => {
     const initData = async () => {
@@ -58,8 +57,7 @@ const OnboardingGuard = () => {
 
   const isRapidAccess = !!rapidAccess;
 
-  const goToOnboarding =
-    !hasNotificationsToRead && !hasRequiredContacts && !isRapidAccess && !hasSkippedOnboarding;
+  const goToOnboarding = !hasNotificationsToRead && !hasRequiredContacts && !isRapidAccess;
 
   if (!isInitialized) {
     return <LoadingPage />;

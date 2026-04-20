@@ -27,7 +27,6 @@ type AuthInitialState = {
   };
   tosPrivacyApiError: boolean;
   loginProvider: LoginProvider;
-  hasSkippedOnboarding: boolean;
 };
 
 const noLoggedUserData: User = {
@@ -61,7 +60,6 @@ const initialState: AuthInitialState = {
   },
   tosPrivacyApiError: false,
   loginProvider: LoginProvider.SPIDHUB,
-  hasSkippedOnboarding: false,
 };
 
 /* eslint-disable functional/immutable-data */
@@ -72,9 +70,6 @@ const userSlice = createSlice({
     resetState: () => {
       sessionStorage.clear();
       return initialState;
-    },
-    setHasSkippedOnboarding: (state) => {
-      state.hasSkippedOnboarding = true;
     },
   },
   extraReducers: (builder) => {
@@ -139,5 +134,5 @@ const userSlice = createSlice({
   },
 });
 
-export const { resetState, setHasSkippedOnboarding } = userSlice.actions;
+export const { resetState } = userSlice.actions;
 export default userSlice;

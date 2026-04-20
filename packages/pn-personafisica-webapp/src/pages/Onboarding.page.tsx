@@ -37,7 +37,6 @@ import {
 import LoadingPageWrapper from '../components/LoadingPageWrapper/LoadingPageWrapper';
 import { ChannelType, IOAllowedValues } from '../models/contacts';
 import * as routes from '../navigation/routes.const';
-import { setHasSkippedOnboarding } from '../redux/auth/reducers';
 import { CONTACT_ACTIONS, getDigitalAddresses } from '../redux/contact/actions';
 import { contactsSelectors } from '../redux/contact/reducers';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
@@ -231,7 +230,6 @@ const Onboarding: React.FC = () => {
   };
 
   const redirectToNotifications = () => {
-    dispatch(setHasSkippedOnboarding());
     navigate(routes.NOTIFICHE);
   };
 
