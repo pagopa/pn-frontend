@@ -5,6 +5,7 @@ import { ConsentType, LoadingPage, NotFound, lazyRetry } from '@pagopa-pn/pn-com
 
 import Onboarding from '../pages/Onboarding.page';
 import TppLanding from '../pages/TppLanding.page';
+import { getConfiguration } from '../services/configuration.service';
 import AppNotAccessibleRoute from './AppNotAccessibleRoute';
 import RapidAccessGuard from './RapidAccessGuard';
 import SessionGuard from './SessionGuard';
@@ -34,6 +35,8 @@ const DigitalContactManagement = lazyRetry(
 const Router: React.FC = () => {
   const navigate = useNavigate();
 
+  const { IS_ONBOARDING_ENABLED } = getConfiguration();
+
   return (
     <Suspense fallback={<LoadingPage />}>
       <Routes>
@@ -51,11 +54,13 @@ const Router: React.FC = () => {
               <Route path={routes.PROFILO} element={<Profile />} />
               <Route path={routes.APP_STATUS} element={<AppStatus />} />
               <Route path={routes.SUPPORT} element={<SupportPage />} />
-              <Route path={routes.ONBOARDING} element={<Onboarding />}>
-                <Route path={routes.ONBOARDING_DIGITAL_DOMICILE} element={<></>} />
-                <Route path={routes.ONBOARDING_COURTESY} element={<></>} />
-                <Route path={routes.ONBOARDING_IO} element={<></>} />
-              </Route>
+              {IS_ONBOARDING_ENABLED && (
+                <Route path={routes.ONBOARDING} element={<Onboarding />}>
+                  <Route path={routes.ONBOARDING_DIGITAL_DOMICILE} element={<></>} />
+                  <Route path={routes.ONBOARDING_COURTESY} element={<></>} />
+                  <Route path={routes.ONBOARDING_IO} element={<></>} />
+                </Route>
+              )}
               <Route path={routes.DIGITAL_DOMICILE} element={<DigitalContact />}>
                 <Route
                   path={routes.DIGITAL_DOMICILE_ACTIVATION}
