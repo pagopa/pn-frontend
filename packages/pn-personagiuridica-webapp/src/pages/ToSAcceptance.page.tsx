@@ -126,6 +126,7 @@ const TermsOfService = ({ tosConsent, privacyConsent }: TermsOfServiceProps) => 
             onConfirm={handleAccept}
             confirmBtnLabel={t('tos.button', 'Accedi')}
             confirmBtnDisabled={false}
+            confirmBtnError={showAcceptanceError}
           >
             <FormControlLabel
               control={
@@ -134,6 +135,10 @@ const TermsOfService = ({ tosConsent, privacyConsent }: TermsOfServiceProps) => 
                   onChange={handleAcceptanceChange}
                   data-testid="tosSwitch"
                   sx={{ margin: 2 }}
+                  inputProps={{
+                    'aria-describedby': showAcceptanceError ? 'tos-switch-helper-text' : undefined,
+                    'aria-required': true,
+                  }}
                 />
               }
               label={
@@ -149,7 +154,6 @@ const TermsOfService = ({ tosConsent, privacyConsent }: TermsOfServiceProps) => 
                 </Typography>
               }
               sx={{ m: 0 }}
-              aria-describedby={showAcceptanceError ? 'tos-switch-helper-text' : undefined}
             />
             {showAcceptanceError && (
               <InlineErrorMessage
