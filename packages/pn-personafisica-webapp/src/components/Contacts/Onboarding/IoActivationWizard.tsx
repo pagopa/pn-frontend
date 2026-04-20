@@ -6,7 +6,7 @@ import { Typography } from '@mui/material';
 import { PnWizard, PnWizardStep } from '@pagopa-pn/pn-commons';
 
 import { IOAllowedValues } from '../../../models/contacts';
-import { NOTIFICHE } from '../../../navigation/routes.const';
+import { NOTIFICHE, ONBOARDING } from '../../../navigation/routes.const';
 import { contactsSelectors } from '../../../redux/contact/reducers';
 import { useAppSelector } from '../../../redux/hooks';
 import IoStep from './IoStep';
@@ -26,6 +26,10 @@ const IoActivationWizard: React.FC = () => {
     navigate(NOTIFICHE);
   };
 
+  const exit = () => {
+    navigate(ONBOARDING);
+  };
+
   const goToFeedback = () => {
     setActiveStep(1);
   };
@@ -41,7 +45,13 @@ const IoActivationWizard: React.FC = () => {
       setActiveStep={setActiveStep}
       slotsProps={{
         exitButton: {
-          onClick: goToNotifications,
+          onClick: exit,
+          sx: {
+            color: '#0E0F13',
+            '&:hover': {
+              color: '#0E0F13',
+            },
+          },
         },
         actions: {
           sx: { display: 'none' },
@@ -55,7 +65,11 @@ const IoActivationWizard: React.FC = () => {
         stepContainer: {
           sx: {
             p: 0,
-            borderRadius: 4,
+            borderTopLeftRadius: 8,
+            borderTopRightRadius: 8,
+            borderBottomRightRadius: 24,
+            borderBottomLeftRadius: 24,
+            overflow: 'hidden',
           },
         },
       }}
