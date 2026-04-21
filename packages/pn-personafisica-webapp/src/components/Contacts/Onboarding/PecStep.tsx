@@ -322,7 +322,7 @@ const PecStep: React.FC<Props> = ({
     return (
       <FormControl error={Boolean(formik.touched.pecDisclaimer && formik.errors.pecDisclaimer)}>
         <FormControlLabel
-          sx={{ alignItems: 'flex-start', m: 0 }}
+          sx={{ alignItems: 'flex-start', m: 0, mt: 2 }}
           control={
             <Checkbox
               checked={formik.values.pecDisclaimer}

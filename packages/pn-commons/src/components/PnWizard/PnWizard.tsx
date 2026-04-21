@@ -33,6 +33,7 @@ type Props = {
     stepContainer?: Partial<PaperProps>;
     nextButton?: Omit<ButtonProps, 'onClick'> & {
       onClick?: (next: () => void, step: number) => void;
+      label?: string;
     };
     prevButton?: Omit<ButtonProps, 'onClick'> & {
       onClick?: (previous: () => void, step: number) => void;
@@ -189,7 +190,8 @@ const PnWizard: React.FC<Props> = ({
             {...slotsProps?.nextButton}
             onClick={handleNextStep}
           >
-            {getLocalizedOrDefaultLabel('common', 'button.conferma', 'Conferma')}
+            {slotsProps?.nextButton?.label ||
+              getLocalizedOrDefaultLabel('common', 'button.conferma', 'Conferma')}
           </NextButton>
         </Stack>
       </Box>
