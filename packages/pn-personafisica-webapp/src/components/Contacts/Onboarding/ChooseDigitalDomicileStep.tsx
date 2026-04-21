@@ -1,6 +1,7 @@
 import { useTranslation } from 'react-i18next';
 
 import { Box, Button, Chip, Divider, Stack, Typography } from '@mui/material';
+import { useIsMobile } from '@pagopa-pn/pn-commons';
 import { ButtonNaked } from '@pagopa/mui-italia';
 
 import OnboardingImage from './OnboardingImage';
@@ -16,6 +17,7 @@ const ChooseDigitalDomicileStep: React.FC<Props> = ({
   onSelectPec,
   isPecActivating,
 }) => {
+  const isMobile = useIsMobile();
   const { t } = useTranslation(['recapiti', 'common']);
 
   if (isPecActivating) {
@@ -41,7 +43,11 @@ const ChooseDigitalDomicileStep: React.FC<Props> = ({
             sx={{ width: 'fit-content', '& .MuiChip-label': { fontSize: '12px' } }}
           />
         </Box>
-        <OnboardingImage src="/imgs/onboarding-choice.png" decorative />
+        <OnboardingImage
+          src="/imgs/onboarding-choice.png"
+          decorative
+          height={isMobile ? '160px' : '276px'}
+        />
       </Stack>
     );
   }
@@ -88,7 +94,11 @@ const ChooseDigitalDomicileStep: React.FC<Props> = ({
           </ButtonNaked>
         </Box>
       </Box>
-      <OnboardingImage src="/imgs/onboarding-choice.png" decorative />
+      <OnboardingImage
+        src="/imgs/onboarding-choice.png"
+        decorative
+        height={isMobile ? '160px' : '276px'}
+      />
     </Stack>
   );
 };
