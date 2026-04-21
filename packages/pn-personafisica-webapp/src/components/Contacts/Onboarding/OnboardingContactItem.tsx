@@ -111,7 +111,7 @@ const OnboardingContactItem: React.FC<Props> = (props) => {
             color="primary"
             size="medium"
             onClick={collapse.onClick}
-            sx={{ alignSelf: 'center', fontWeight: 700 }}
+            sx={{ alignSelf: 'center', fontWeight: 700, mt: 2 }}
           >
             {collapse.label}
           </ButtonNaked>

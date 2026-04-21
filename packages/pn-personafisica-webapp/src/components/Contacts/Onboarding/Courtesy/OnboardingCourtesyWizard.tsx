@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 
 import { Typography } from '@mui/material';
 import { PnWizard, PnWizardStep } from '@pagopa-pn/pn-commons';
+import { IllusMICompleted } from '@pagopa/mui-italia';
 
 import {
   ContactState,
@@ -110,14 +111,10 @@ const OnboardingCourtesyWizard: React.FC = () => {
       }
       activeStep={activeStep}
       setActiveStep={setActiveStep}
+      slots={{
+        feedbackIcon: IllusMICompleted,
+      }}
       slotsProps={{
-        stepContainer: {
-          sx: {
-            width: { xs: '100%', md: '760px' },
-            p: isIoStep ? 0 : { xs: 2, md: 3 },
-            borderRadius: isIoStep ? '20px' : null,
-          },
-        },
         exitButton: {
           onClick: goToOnboarding,
         },
@@ -135,6 +132,14 @@ const OnboardingCourtesyWizard: React.FC = () => {
         },
         prevButton: {
           sx: isIoStep ? { display: 'none' } : undefined,
+        },
+        stepContainer: {
+          sx: {
+            width: { xs: '100%', md: '760px' },
+            borderRadius: 2,
+            overflow: isIoStep ? 'hidden' : 'visible',
+            p: isIoStep ? 0 : { xs: 2, md: 3 },
+          },
         },
       }}
     >

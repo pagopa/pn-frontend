@@ -7,12 +7,11 @@ import { Button, Link, Typography } from '@mui/material';
 import {
   ConsentActionType,
   ConsentType,
-  IllusHourglass,
   PnWizard,
   PnWizardStep,
   SERCQ_SEND_VALUE,
 } from '@pagopa-pn/pn-commons';
-import { ButtonNaked } from '@pagopa/mui-italia';
+import { ButtonNaked, IllusMICompleted, IllusMIQuick } from '@pagopa/mui-italia';
 
 import {
   ContactState,
@@ -474,7 +473,7 @@ const DigitalDomicileWizard: React.FC = () => {
       slots={{
         prevButton: getPreviousButton,
         nextButton: getNextButton,
-        feedbackIcon: isPecMode ? IllusHourglass : undefined, // TODO: change the icons
+        feedbackIcon: isPecMode ? IllusMIQuick : IllusMICompleted,
       }}
       slotsProps={{
         exitButton: {
