@@ -344,6 +344,171 @@
       "title": "Ali res želiš preskočiti konfiguracijo storitve SEND?",
       "description": "Tvegaš, da obvestil SEND ne boš prebral pravočasno in boš moral plačati stroške pošiljanja priporočene pošte.",
       "cancel": "Nazaj na konfiguracijo"
+    },
+    "digital-domicile": {
+      "title": "Najboljše od SEND",
+      "choice": {
+        "title": "Aktiviraj digitalni naslov na SEND",
+        "description": "Pravno veljavna sporočila boš prejemal na SEND, samo v digitalni obliki, in se izognil pošiljanju priporočene pošte s pripadajočimi dodatnimi stroški.",
+        "cta": "Aktiviraj na SEND",
+        "pec": {
+          "description": "Alternativno se lahko odločiš za prejemanje uradnih obvestil SEND na tvoj naslov PEC. Tako bi se lahko izognil pošiljanju priporočene pošte s pripadajočimi dodatnimi stroški.",
+          "cta": "Aktiviraj na PEC"
+        },
+        "pec-activating": {
+          "title": "Aktivacija digitalnega naslova na PEC v teku",
+          "description": "Po aktivaciji boš prejemal uradna obvestila SEND na tvoj naslov PEC. Tako bi se lahko izognil pošiljanju priporočene pošte s pripadajočimi dodatnimi stroški.",
+          "badge": "Aktivacija v teku",
+          "img-alt-text": ""
+        },
+        "img-alt-text": ""
+      },
+      "email": {
+        "title": "Poveži e-poštni naslov z digitalnim naslovom",
+        "title-existing": "E-poštni naslov si že povezal z digitalnim naslovom",
+        "description": "Ob vsakem prejemu uradnega obvestila SEND boš prejel e-poštno sporočilo.",
+        "label": "E-pošta:",
+        "input-label": "E-poštni naslov",
+        "verify-cta": "Preveri e-pošto",
+        "confirm-cta": "Potrdi e-pošto"
+      },
+      "io": {
+        "title": "Aktiviraj SEND v aplikaciji IO",
+        "description": "Ali je na voljo uradno obvestilo SEND zate? Prejel boš obvestilo v aplikaciji IO in si ga boš lahko ogledal neposredno v aplikaciji!",
+        "not-installed": {
+          "primary-cta": "Prenesi aplikacijo IO",
+          "refresh-cta": "Aplikacijo sem že prenesel in namestil"
+        },
+        "disabled": {
+          "primary-cta": "Aktiviraj obvestila v IO"
+        },
+        "enabled": {
+          "title": "SEND si že aktiviral v aplikaciji IO",
+          "primary-cta": "Nadaljuj"
+        },
+        "img-alt-text": ""
+      },
+      "summary": {
+        "title": "Tvoj povzetek",
+        "legal-title": "Pravno veljavna sporočila bodo dostavljena na:",
+        "courtesy-title": "Obvestilo boš prejel prek:",
+        "info-box": "Spremljaj izbrane kontaktne podatke: digitalno uradno obvestilo SEND začne pravno učinkovati, tudi če si ga nisi ogledal.",
+        "disclaimer": "S pritiskom na <strong>Potrdi</strong> izjavljaš, da si prebral <0>Informacije o zasebnosti</0> in sprejemaš <1>Pogoje storitve</1>.",
+        "ddom-label": "Digitalni naslov",
+        "io-label": "IO, aplikacija javnih storitev",
+        "io-value": "Storitev SEND v IO je aktivna",
+        "email-label": "E-pošta",
+        "send-badge": "SEND",
+        "pec-badge": "PEC"
+      },
+      "pec": {
+        "title": "Tvoj PEC kot digitalni naslov SEND",
+        "description": "Pravno veljavna sporočila boš prejemal na svoj PEC, samo v digitalni obliki, in se boš lahko izognil pošiljanju priporočene pošte s pripadajočimi dodatnimi stroški.",
+        "label-choose-address": "Izberi naslov PEC:",
+        "label-summary": "PEC",
+        "input-label": "Naslov PEC",
+        "verify-cta": "Preveri PEC",
+        "disclaimer": "Sprejemam, da se navedeni naslov PEC uporablja prednostno pred morebitnimi naslovi PEC, registriranimi pri subjektu pošiljatelju ali prisotnimi v javnih registrih.",
+        "email-cta": "Aktiviraj obvestila po e-pošti",
+        "optional-email-description": "Želiš prejeti tudi e-poštno sporočilo ob prejemu uradnega obvestila SEND?",
+        "optional-email-title": "Aktiviraj obvestila po e-pošti",
+        "optional-email-label": "Izberi e-poštni naslov:",
+        "cancel-email-cta": "Prekliči aktivacijo e-pošte",
+        "email-present-description": "Ob prejemu uradnega obvestila SEND boš prejel tudi obvestilo na naslov:",
+        "edit-email-cta": "Spremeni naslov",
+        "verify-before-continue-title": "Preveri svoj PEC",
+        "verify-before-continue-content": "Preden nadaljuješ, izberi <strong>Preveri PEC</strong> in sledi navodilom.",
+        "pending": {
+          "title": "Naslov PEC v preverjanju",
+          "description": "Po preverjanju boš pravno veljavna sporočila prejemal na izbrani PEC samo v digitalni obliki in se izognil pošiljanju priporočene pošte s pripadajočimi dodatnimi stroški.",
+          "badge": "Aktivacija v teku"
+        }
+      },
+      "feedback": {
+        "send": {
+          "title": "Aktiviral si digitalni naslov in obvestila",
+          "content": "Uradna obvestila SEND in pripadajoča obvestila boš prejemal na izbranih kanalih."
+        },
+        "pec": {
+          "title": "Aktivacija digitalnega naslova je v teku",
+          "content": "Vneseni naslov PEC je v fazi preverjanja. Ko bo potrjen, boš vsa uradna obvestila SEND prejemal na izbrani naslov. Obvestila pa so že aktivna."
+        }
+      },
+      "steps": {
+        "choice": "Izberi digitalni naslov",
+        "pec": "Vnesi svoj PEC",
+        "email": "Poveži e-poštni naslov",
+        "io": "Aktiviraj obvestila v IO",
+        "summary": "Preveri izbrane možnosti"
+      },
+      "buttons": {
+        "continue-without-io": "Nadaljuj brez aplikacije IO",
+        "confirm-activation": "Potrdi aktivacijo"
+      }
+    },
+    "io-activation": {
+      "title": "Vse v aplikaciji IO",
+      "feedback": {
+        "title": "Aktiviral si obvestila",
+        "content": "V aplikaciji IO boš prejel obvestilo, ko prejmeš uradno obvestilo SEND."
+      }
+    },
+    "courtesy": {
+      "title": "Aktivacija obvestil",
+      "step-1-label": "Aktiviraj obvestila v IO",
+      "step-2-label": "E-pošta in SMS",
+      "proceed-without-io": "Nadaljuj brez aplikacije IO",
+      "banner-description": "Več ko je aktivnih obvestil, večja je možnost, da digitalno uradno obvestilo prebereš pravočasno in se izogneš priporočeni pošti!",
+      "success-title": "Aktiviral si obvestila",
+      "success-description": "Ob prejemu uradnega obvestila SEND boš prejel obvestilo na izbranih kanalih.",
+      "email": {
+        "readonly": {
+          "title": "Aktiviraj obvestila po e-pošti",
+          "description": "Obvestilo boš prejel na naslov:"
+        },
+        "insert": {
+          "title": "Aktiviraj obvestila po e-pošti",
+          "description": "Izberi e-poštni naslov:",
+          "input-label": "E-poštni naslov",
+          "button-label": "Preveri e-pošto",
+          "collapse-label": "Prekliči aktivacijo e-pošte"
+        },
+        "collapsed": {
+          "label": "Želiš prejeti tudi e-poštno sporočilo ob prejemu uradnega obvestila SEND?",
+          "button-label": "Aktiviraj obvestila po e-pošti"
+        },
+        "edit": {
+          "input-label": "E-poštni naslov",
+          "title": "Obvestila po e-pošti so aktivna",
+          "description": "Obvestilo boš prejel na naslov:"
+        },
+        "verify-before-continue-title": "Preveri svojo e-pošto",
+        "verify-before-continue-content": "Preden nadaljuješ, izberi Preveri e-pošto in sledi navodilom."
+      },
+      "sms": {
+        "readonly": {
+          "title": "Aktiviraj obvestila prek SMS",
+          "description": "Obvestilo boš prejel na številko:"
+        },
+        "insert": {
+          "title": "Aktiviraj obvestila prek SMS",
+          "description": "Izberi številko mobilnega telefona:",
+          "input-label": "Številka mobilnega telefona",
+          "button-label": "Preveri številko",
+          "collapse-label": "Prekliči aktivacijo SMS"
+        },
+        "collapsed": {
+          "label": "Želiš prejeti obvestilo tudi na svoj pametni telefon?",
+          "button-label": "Aktiviraj obvestila prek SMS"
+        },
+        "edit": {
+          "input-label": "Številka mobilnega telefona",
+          "title": "Obvestila prek SMS so aktivna",
+          "description": "Obvestilo boš prejel na številko:"
+        },
+        "verify-before-continue-title": "Preveri svojo številko",
+        "verify-before-continue-content": "Preden nadaljuješ, izberi Preveri številko in sledi navodilom."
+      }
     }
   }
 }
