@@ -1,14 +1,6 @@
 import React, { JSXElementConstructor, ReactNode } from 'react';
 
-import {
-  Box,
-  Button,
-  ButtonProps,
-  DialogActionsProps,
-  DialogTitle,
-  SxProps,
-  Theme,
-} from '@mui/material';
+import { Box, Button, ButtonProps, DialogActionsProps, DialogTitle } from '@mui/material';
 import { PnDialog, PnDialogActions, PnDialogContent } from '@pagopa-pn/pn-commons';
 
 import PnDialogIllustration from './PnDialog/PnDialogIllustration';
@@ -42,12 +34,19 @@ const ConfirmationModal: React.FC<Props> = ({
   const ConfirmButton = slots?.confirmButton || Button;
   const CloseButton = slots?.closeButton;
 
+  // const actionsProps: DialogActionsProps = {
+  //   ...slotsProps?.actions,
+  //   sx:
+  //     contentAlign === 'center'
+  //       ? ([{ justifyContent: 'center' }, slotsProps?.actions?.sx] as SxProps<Theme>)
+  //       : slotsProps?.actions?.sx,
+  // };
   const actionsProps: DialogActionsProps = {
     ...slotsProps?.actions,
-    sx:
-      contentAlign === 'center'
-        ? ([{ justifyContent: 'center' }, slotsProps?.actions?.sx] as SxProps<Theme>)
-        : slotsProps?.actions?.sx,
+    sx: {
+      ...(contentAlign === 'center' && { justifyContent: 'center' }),
+      ...slotsProps?.actions?.sx,
+    },
   };
 
   return (

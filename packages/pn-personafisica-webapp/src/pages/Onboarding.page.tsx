@@ -8,8 +8,6 @@ import ErrorOutlineOutlinedIcon from '@mui/icons-material/ErrorOutlineOutlined';
 import {
   Box,
   Button,
-  DialogContentText,
-  DialogTitle,
   List,
   ListItem,
   ListItemIcon,
@@ -20,13 +18,7 @@ import {
   Typography,
 } from '@mui/material';
 import Chip from '@mui/material/Chip';
-import {
-  ApiErrorWrapper,
-  PnDialog,
-  PnDialogActions,
-  PnDialogContent,
-  useIsMobile,
-} from '@pagopa-pn/pn-commons';
+import { ApiErrorWrapper, ConfirmationModal, useIsMobile } from '@pagopa-pn/pn-commons';
 import {
   IllusMIAward,
   IllusMIBell,
@@ -315,41 +307,41 @@ const Onboarding: React.FC = () => {
                     {t('onboarding.exit-flow')}
                   </Button>
                 </Box>
-                <PnDialog
+                <ConfirmationModal
                   open={openModal}
-                  aria-labelledby="exit-flow-dialog-title"
-                  aria-describedby="exit-flow-dialog-description"
+                  contentAlign="center"
+                  slots={{
+                    illustration: <IllusMIBell size={48} />,
+                    closeButton: Button,
+                  }}
+                  title={t('onboarding.exit-flow-dialog.title')}
+                  slotsProps={{
+                    actions: {
+                      sx: {
+                        flexDirection: isMobile ? 'column' : 'row-reverse',
+                        justifyContent: 'flex-start',
+                        gap: 2,
+                      },
+                    },
+                    closeButton: {
+                      children: t('onboarding.exit-flow-dialog.cancel'),
+                      variant: 'contained',
+                      fullWidth: true,
+                      onClick: () => setOpenModal(false),
+                    },
+                    confirmButton: {
+                      children: t('onboarding.exit-flow'),
+                      variant: 'outlined',
+                      fullWidth: true,
+                      onClick: redirectToNotifications,
+                      sx: { marginBottom: 0 },
+                    },
+                  }}
                 >
-                  <DialogTitle id="exit-flow-dialog-title">
-                    <Box display="flex" flexDirection={'column'} alignItems="center" gap={2}>
-                      <IllusMIBell size={48} />
-                      {t('onboarding.exit-flow-dialog.title')}
-                    </Box>
-                  </DialogTitle>
-                  <PnDialogContent>
-                    <DialogContentText textAlign="center" id="exit-flow-dialog-description">
-                      {t('onboarding.exit-flow-dialog.description')}
-                    </DialogContentText>
-                  </PnDialogContent>
-                  <PnDialogActions sx={{ display: 'flex', flexDirection: 'column' }}>
-                    <Button
-                      fullWidth
-                      color="primary"
-                      variant="contained"
-                      onClick={() => setOpenModal(false)}
-                    >
-                      {t('onboarding.exit-flow-dialog.cancel')}
-                    </Button>
-                    <Button
-                      fullWidth
-                      color="primary"
-                      variant="text"
-                      onClick={redirectToNotifications}
-                    >
-                      {t('onboarding.exit-flow')}
-                    </Button>
-                  </PnDialogActions>
-                </PnDialog>
+                  <Typography variant="body2">
+                    {t('onboarding.exit-flow-dialog.description')}
+                  </Typography>
+                </ConfirmationModal>
               </>
             )}
             <Outlet />
