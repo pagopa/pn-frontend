@@ -2,7 +2,7 @@ import { Children, isValidElement } from 'react';
 
 import { Box, CardContent } from '@mui/material';
 
-import checkChildren from '../../../utility/children.utility';
+import { checkChildren } from '../../../utility/children.utility';
 import PnCardContentItem from './PnCardContentItem';
 
 type Props = {

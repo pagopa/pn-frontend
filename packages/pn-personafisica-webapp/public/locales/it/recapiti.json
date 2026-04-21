@@ -315,6 +315,36 @@
     "no-courtesy-no-sercq-send-cta": "Conferma la tua email"
   },
   "onboarding": {
+    "title": "Configura SEND",
+    "description": "Ottieni il massimo e risparmi!",
+    "cards": {
+      "send": {
+        "title": "Scelgo il meglio di SEND",
+        "cta": "Attiva il meglio di SEND",
+        "label": "Consigliato",
+        "item_1": "Attivi il domicilio digitale e risparmi i costi di notifica legati alle raccomandate.",
+        "item_2": "Ti avvisiamo alla ricezione di una notifica SEND via email e su IO."
+      },
+      "contacts": {
+        "title": "Voglio solo gli avvisi",
+        "cta": "Attiva solo gli avvisi",
+        "item_1": "Ricevi avvisi via email, SMS e sull’app IO, così hai più possibilità di leggere in tempo la comunicazione ed evitare i costi di notifica legati alle raccomandate.",
+        "item_2": "Se non apri la notifica SEND entro 5 giorni dalla ricezione, riceverai comunque una raccomandata con i relativi costi aggiuntivi."
+      },
+      "io": {
+        "title": "Preferisco attivare solo SEND sull’app IO",
+        "cta": "Attiva SEND su IO",
+        "label": "Consigliato",
+        "item_1": "Ricevi avvisi e l’accesso alle comunicazioni a valore legale direttamente attraverso IO.",
+        "item_2": "Se non apri la notifica SEND entro 5 giorni dalla ricezione, riceverai comunque una raccomandata con i relativi costi aggiuntivi."
+      }
+    },
+    "exit-flow": "Salta e vai alle tue notifiche",
+    "exit-flow-dialog": {
+      "title": "Vuoi davvero saltare la configurazione di SEND?",
+      "description": "Rischi di non leggere le notifiche SEND in tempo e di dover pagare i costi per l’invio della raccomandata.",
+      "cancel": "Torna alla configurazione"
+    },
     "digital-domicile": {
       "title": "Il meglio di SEND",
       "choice": {

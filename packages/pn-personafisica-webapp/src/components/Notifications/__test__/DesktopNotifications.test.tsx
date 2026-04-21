@@ -2,6 +2,7 @@ import { vi } from 'vitest';
 
 import { formatToTimezoneString, tenYearsAgo, today } from '@pagopa-pn/pn-commons';
 
+import { digitalAddressesSercq } from '../../../__mocks__/Contacts.mock';
 import { mandatesByDelegate } from '../../../__mocks__/Delegations.mock';
 import { notificationsToFe } from '../../../__mocks__/Notifications.mock';
 import {
@@ -12,27 +13,67 @@ import {
   waitFor,
   within,
 } from '../../../__test__/test-utils';
-import { GET_DETTAGLIO_NOTIFICA_PATH } from '../../../navigation/routes.const';
 import * as routes from '../../../navigation/routes.const';
+import { GET_DETTAGLIO_NOTIFICA_PATH } from '../../../navigation/routes.const';
 import DesktopNotifications from '../DesktopNotifications';
 
 describe('DesktopNotifications Component', () => {
   let result: RenderResult;
 
-  afterEach(() => {
-    vi.clearAllMocks();
+  const original = globalThis.ResizeObserver;
+
+  beforeAll(() => {
+    globalThis.ResizeObserver = vi.fn().mockImplementation(() => ({
+      observe: vi.fn(),
+      unobserve: vi.fn(),
+      disconnect: vi.fn(),
+    }));
   });
 
-  it('renders component - no notification', async () => {
+  afterAll(() => {
+    globalThis.ResizeObserver = original;
+  });
+
+  it('renders component - no notification - no contacts', async () => {
     // render component
     await act(async () => {
-      result = render(<DesktopNotifications notifications={[]} />);
+      result = render(<DesktopNotifications notifications={[]} />, {
+        preloadedState: {
+          contactsState: {
+            digitalAddresses: [],
+          },
+        },
+      });
     });
     const filters = result.queryByTestId('filter-form');
     expect(filters).not.toBeInTheDocument();
     const norificationTable = result.queryByTestId('notificationsTable');
     expect(norificationTable).not.toBeInTheDocument();
-    expect(result.container).toHaveTextContent(/empty-state.no-notifications/i);
+    expect(result.container).toHaveTextContent(/empty-state.title/i);
+    expect(result.container).toHaveTextContent(/empty-state.description-onboarding/i);
+    // clicks on empty state action
+    const button = result.getByTestId('button-route-onboarding');
+    fireEvent.click(button);
+    expect(result.router.state.location.pathname).toBe(routes.ONBOARDING);
+  });
+
+  it('renders component - no notification - with contacts', async () => {
+    // render component
+    await act(async () => {
+      result = render(<DesktopNotifications notifications={[]} />, {
+        preloadedState: {
+          contactsState: {
+            digitalAddresses: digitalAddressesSercq,
+          },
+        },
+      });
+    });
+    const filters = result.queryByTestId('filter-form');
+    expect(filters).not.toBeInTheDocument();
+    const norificationTable = result.queryByTestId('notificationsTable');
+    expect(norificationTable).not.toBeInTheDocument();
+    expect(result.container).toHaveTextContent(/empty-state.title/i);
+    expect(result.container).toHaveTextContent(/empty-state.description/i);
     // clicks on empty state action
     const button = result.getByTestId('link-route-contacts');
     fireEvent.click(button);

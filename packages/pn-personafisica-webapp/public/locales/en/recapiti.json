@@ -313,5 +313,202 @@
     "no-courtesy-no-sercq-send-title": "Do not miss important communications ",
     "no-courtesy-no-sercq-send-description": "Add an email address to receive a notification when you have a new notification on SEND.",
     "no-courtesy-no-sercq-send-cta": "Confirm your email"
+  },
+  "onboarding": {
+    "title": "Configure SEND",
+    "description": "Get the most and save!",
+    "cards": {
+      "send": {
+        "title": "I choose the best of SEND",
+        "cta": "Activate the best of SEND",
+        "label": "Recommended",
+        "item_1": "Activate your digital address and save on delivery times and costs associated with registered mail.",
+        "item_2": "We will notify you upon receipt of a SEND notification via email and on IO."
+      },
+      "contacts": {
+        "title": "I only want notifications",
+        "cta": "Activate only notifications",
+        "item_1": "Receive notifications via email, SMS, and on the IO app, so you have a better chance of reading the communication in time and avoiding delivery costs associated with registered mail.",
+        "item_2": "If you do not open the SEND notification within 5 days of receipt, you will still receive a registered mail with the relative additional costs."
+      },
+      "io": {
+        "title": "I prefer to activate only SEND on the IO app",
+        "cta": "Activate SEND on IO",
+        "label": "Recommended",
+        "item_1": "Receive courtesy notifications and access legally binding communications directly through IO.",
+        "item_2": "If you do not open the SEND notification within 5 days of receipt, you will still receive a registered mail with the relative additional costs."
+      }
+    },
+    "exit-flow": "Skip and go to your notifications",
+    "exit-flow-dialog": {
+      "title": "Do you really want to skip the SEND configuration?",
+      "description": "You risk not reading SEND notifications in time and having to pay the mailing costs for the registered mail.",
+      "cancel": "Back to configuration"
+    },
+    "digital-domicile": {
+      "title": "The best of SEND",
+      "choice": {
+        "title": "Activate your digital domicile on SEND",
+        "description": "You will receive legally-binding communications on SEND, digitally only, and you will avoid being sent a registered post with the relative additional costs.",
+        "cta": "Activate on SEND",
+        "pec": {
+          "description": "Alternatively, you can choose to receive SEND notifications at your PEC address. This way you could avoid being sent a registered post with the relative additional costs.",
+          "cta": "Activate on a PEC"
+        },
+        "pec-activating": {
+          "title": "Digital domicile on PEC being activated",
+          "description": "After activation, you will receive SEND notifications at your PEC address. This way you could avoid being sent a registered post with the relative additional costs.",
+          "badge": "Activation in progress",
+          "img-alt-text": ""
+        },
+        "img-alt-text": ""
+      },
+      "email": {
+        "title": "Associate an email address with your digital domicile",
+        "title-existing": "You have already associated an email address with your digital domicile",
+        "description": "You will receive an email upon receipt of each SEND notification.",
+        "label": "Email:",
+        "input-label": "Email address",
+        "verify-cta": "Verify email",
+        "confirm-cta": "Confirm email"
+      },
+      "io": {
+        "title": "Activate SEND on the IO app",
+        "description": "Is there a SEND notification for you? You will receive a notice on IO and you can consult it directly in the app!",
+        "not-installed": {
+          "primary-cta": "Download the IO app",
+          "refresh-cta": "I have already downloaded and installed the app"
+        },
+        "disabled": {
+          "primary-cta": "Activate notices on IO"
+        },
+        "enabled": {
+          "title": "You have already activated SEND on the IO app",
+          "primary-cta": "Continue"
+        },
+        "img-alt-text": ""
+      },
+      "summary": {
+        "title": "Your summary",
+        "legal-title": "Legally-binding communications will be delivered to:",
+        "courtesy-title": "You will receive a notice via:",
+        "info-box": "Monitor the contact details you have chosen: a SEND digital notification starts to produce legal effects even if you have not consulted it.",
+        "disclaimer": "By pressing <strong>Confirm</strong> you declare that you have read the <0>Privacy Policy</0> and accept the <1>Terms of Service</1>.",
+        "ddom-label": "Digital domicile",
+        "io-label": "IO, the public services app",
+        "io-value": "SEND service on IO active",
+        "email-label": "Email",
+        "send-badge": "SEND",
+        "pec-badge": "PEC"
+      },
+      "pec": {
+        "title": "Your PEC as a SEND digital domicile",
+        "description": "You will receive legally-binding communications on your PEC, digitally only, and you can avoid being sent a registered post with the relative additional costs.",
+        "label-choose-address": "Choose a PEC address:",
+        "label-summary": "PEC",
+        "input-label": "PEC address",
+        "verify-cta": "Verify PEC",
+        "disclaimer": "I accept that the indicated PEC address be used with priority over any PECs registered with an issuing institution or present in public registers.",
+        "email-cta": "Activate email notices",
+        "optional-email-description": "Do you also want to receive an email upon receipt of a SEND notification?",
+        "optional-email-title": "Activate email notices",
+        "optional-email-label": "Choose an email address:",
+        "cancel-email-cta": "Cancel email activation",
+        "email-present-description": "Upon receipt of a SEND notification, you will also receive a notice at the address:",
+        "edit-email-cta": "Edit address",
+        "verify-before-continue-title": "Verify your PEC",
+        "verify-before-continue-content": "Before proceeding, select <strong>Verify PEC</strong> and follow the instructions.",
+        "pending": {
+          "title": "PEC address being validated",
+          "description": "After validation, you will receive legally-binding communications on the PEC you have chosen digitally only, and you will avoid being sent a registered post with the relative additional costs.",
+          "badge": "Activation in progress"
+        }
+      },
+      "feedback": {
+        "send": {
+          "title": "You have activated your digital domicile and notices",
+          "content": "You will receive SEND notifications and relative notices on the channels you have chosen."
+        },
+        "pec": {
+          "title": "Digital domicile activation is in progress",
+          "content": "The PEC you entered is being validated. Once confirmed, you will receive all SEND notifications at the address you have chosen. Notices, however, are already active."
+        }
+      },
+      "steps": {
+        "choice": "Choose a digital domicile",
+        "pec": "Enter your PEC",
+        "email": "Associate an email address",
+        "io": "Activate notices on IO",
+        "summary": "Check the chosen options"
+      },
+      "buttons": {
+        "continue-without-io": "Continue without the IO app",
+        "confirm-activation": "Confirm activation"
+      }
+    },
+    "io-activation": {
+      "title": "Everything on the IO app",
+      "feedback": {
+        "title": "You have activated the notices",
+        "content": "You will receive a notice on the IO app when you receive a SEND notification."
+      }
+    },
+    "courtesy": {
+      "title": "Notice activation",
+      "step-1-label": "Activate notices on IO",
+      "step-2-label": "Email and SMS",
+      "proceed-without-io": "Continue without the IO app",
+      "banner-description": "The more notices are active, the more chances you have to read the digital notification in time and avoid the registered post!",
+      "success-title": "You have activated the notices",
+      "success-description": "You will receive a notice on the channels you have chosen when you receive a SEND notification.",
+      "email": {
+        "readonly": {
+          "title": "Activate email notices",
+          "description": "You will receive a notice at the address:"
+        },
+        "insert": {
+          "title": "Activate email notices",
+          "description": "Choose an email address:",
+          "input-label": "Email address",
+          "button-label": "Verify email",
+          "collapse-label": "Cancel email activation"
+        },
+        "collapsed": {
+          "label": "Do you also want to receive an email upon receipt of a SEND notification?",
+          "button-label": "Activate email notices"
+        },
+        "edit": {
+          "input-label": "Email address",
+          "title": "Email notices active",
+          "description": "You will receive a notice at the address:"
+        },
+        "verify-before-continue-title": "Verify your email",
+        "verify-before-continue-content": "Before proceeding, select Verify email and follow the instructions."
+      },
+      "sms": {
+        "readonly": {
+          "title": "Activate SMS notices",
+          "description": "You will receive a notice at the number:"
+        },
+        "insert": {
+          "title": "Activate SMS notices",
+          "description": "Choose a mobile number:",
+          "input-label": "Mobile number",
+          "button-label": "Verify number",
+          "collapse-label": "Cancel SMS activation"
+        },
+        "collapsed": {
+          "label": "Do you also want to receive a notice on your smartphone?",
+          "button-label": "Activate SMS notices"
+        },
+        "edit": {
+          "input-label": "Mobile number",
+          "title": "SMS notices active",
+          "description": "You will receive a notice at the number:"
+        },
+        "verify-before-continue-title": "Verify your number",
+        "verify-before-continue-content": "Before proceeding, select Verify number and follow the instructions."
+      }
+    }
   }
 }
