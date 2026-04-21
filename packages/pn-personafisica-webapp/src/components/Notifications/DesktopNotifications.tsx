@@ -1,12 +1,9 @@
 import { useRef } from 'react';
-import { Trans, useTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
-import { Link } from '@mui/material';
 import {
   Column,
-  EmptyState,
-  KnownSentiment,
   Notification,
   NotificationColumnData,
   NotificationsDataSwitch,
@@ -20,12 +17,10 @@ import {
   Sort,
 } from '@pagopa-pn/pn-commons';
 
-import { PFEventsType } from '../../models/PFEventsType';
-import { ContactSource } from '../../models/contacts';
 import * as routes from '../../navigation/routes.const';
 import { Delegator } from '../../redux/delegation/types';
-import PFEventStrategyFactory from '../../utility/MixpanelUtils/PFEventStrategyFactory';
 import FilterNotifications from './FilterNotifications';
+import NotificationsEmptyState from './NotificationsEmptyState';
 
 type Props = {
   notifications: Array<Notification>;
@@ -35,46 +30,6 @@ type Props = {
   onChangeSorting?: (s: Sort<NotificationColumnData>) => void;
   /** Delegator */
   currentDelegator?: Delegator;
-};
-
-type LinkRemoveFiltersProps = {
-  cleanFilters: () => void;
-  children?: React.ReactNode;
-};
-
-const LinkRemoveFilters: React.FC<LinkRemoveFiltersProps> = ({ children, cleanFilters }) => (
-  <Link
-    component={'button'}
-    variant="body1"
-    id="call-to-action-first"
-    key="remove-filters"
-    data-testid="link-remove-filters"
-    onClick={cleanFilters}
-  >
-    {children}
-  </Link>
-);
-
-const LinkRouteContacts: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
-  const navigate = useNavigate();
-  const goToContactsPage = () => {
-    PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_VIEW_CONTACT_DETAILS, {
-      source: ContactSource.HOME_NOTIFICHE,
-    });
-    navigate(routes.RECAPITI);
-  };
-  return (
-    <Link
-      component={'button'}
-      variant="body1"
-      id="call-to-action-first"
-      key="route-contacts"
-      data-testid="link-route-contacts"
-      onClick={goToContactsPage}
-    >
-      {children}
-    </Link>
-  );
 };
 
 const DesktopNotifications = ({
@@ -194,36 +149,11 @@ const DesktopNotifications = ({
           </PnTableBody>
         </PnTable>
       ) : (
-        <EmptyState
-          sentimentIcon={filtersApplied ? KnownSentiment.DISSATISFIED : KnownSentiment.NONE}
-        >
-          {filtersApplied && (
-            <Trans
-              ns={'notifiche'}
-              i18nKey={'empty-state.filtered'}
-              components={[
-                <LinkRemoveFilters
-                  key={'remove-filters'}
-                  cleanFilters={filterNotificationsRef.current.cleanFilters}
-                />,
-              ]}
-            />
-          )}
-          {!filtersApplied && currentDelegator && (
-            <Trans
-              values={{ name: currentDelegator.delegator?.displayName }}
-              ns={'notifiche'}
-              i18nKey={'empty-state.delegate'}
-            />
-          )}
-          {!filtersApplied && !currentDelegator && (
-            <Trans
-              ns={'notifiche'}
-              i18nKey={'empty-state.no-notifications'}
-              components={[<LinkRouteContacts key={'route-contacts'} />]}
-            />
-          )}
-        </EmptyState>
+        <NotificationsEmptyState
+          filtersApplied={filtersApplied}
+          filterNotificationsRef={filterNotificationsRef}
+          currentDelegator={currentDelegator}
+        />
       )}
     </>
   );
