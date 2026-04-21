@@ -1,13 +1,25 @@
-import React, { JSXElementConstructor } from 'react';
+import React, { JSXElementConstructor, ReactNode } from 'react';
 
-import { Button, ButtonProps, DialogActionsProps, DialogTitle } from '@mui/material';
+import {
+  Box,
+  Button,
+  ButtonProps,
+  DialogActionsProps,
+  DialogTitle,
+  SxProps,
+  Theme,
+} from '@mui/material';
 import { PnDialog, PnDialogActions, PnDialogContent } from '@pagopa-pn/pn-commons';
+
+import PnDialogIllustration from './PnDialog/PnDialogIllustration';
 
 type Props = {
   open: boolean;
   title: string;
+  contentAlign?: 'left' | 'center';
   slots?: {
-    confirmButton: JSXElementConstructor<ButtonProps>;
+    illustration?: ReactNode;
+    confirmButton?: JSXElementConstructor<ButtonProps>;
     closeButton?: JSXElementConstructor<ButtonProps>;
   };
   slotsProps?: {
@@ -21,12 +33,22 @@ type Props = {
 const ConfirmationModal: React.FC<Props> = ({
   open,
   title,
+  contentAlign = 'left',
   slots,
   slotsProps,
   children,
 }: Props) => {
+  const illustration = slots?.illustration;
   const ConfirmButton = slots?.confirmButton || Button;
   const CloseButton = slots?.closeButton;
+
+  const actionsProps: DialogActionsProps = {
+    ...slotsProps?.actions,
+    sx:
+      contentAlign === 'center'
+        ? ([{ justifyContent: 'center' }, slotsProps?.actions?.sx] as SxProps<Theme>)
+        : slotsProps?.actions?.sx,
+  };
 
   return (
     <PnDialog
@@ -37,11 +59,25 @@ const ConfirmationModal: React.FC<Props> = ({
       maxWidth="sm"
       data-testid="confirmationDialog"
     >
-      <DialogTitle id="confirmation-dialog-title">{title}</DialogTitle>
-      {children && (
-        <PnDialogContent id="confirmation-dialog-description">{children}</PnDialogContent>
+      {illustration && (
+        <PnDialogIllustration
+          sx={{
+            display: 'flex',
+            justifyContent: contentAlign === 'center' ? 'center' : 'flex-start',
+          }}
+        >
+          {illustration}
+        </PnDialogIllustration>
       )}
-      <PnDialogActions {...slotsProps?.actions}>
+      <DialogTitle id="confirmation-dialog-title" sx={{ textAlign: contentAlign }}>
+        {title}
+      </DialogTitle>
+      {children && (
+        <PnDialogContent id="confirmation-dialog-description">
+          <Box sx={{ textAlign: contentAlign }}>{children}</Box>
+        </PnDialogContent>
+      )}
+      <PnDialogActions {...actionsProps}>
         {CloseButton && (
           <CloseButton
             id="dialog-close-button"

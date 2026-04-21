@@ -3,6 +3,7 @@ import { Navigate, Route, Routes, useNavigate } from 'react-router-dom';
 
 import { ConsentType, LoadingPage, NotFound, lazyRetry } from '@pagopa-pn/pn-commons';
 
+import DigitalDomicileWizard from '../components/Contacts/Onboarding/DigitalDomicileWizard';
 import TppLanding from '../pages/TppLanding.page';
 import { getConfiguration } from '../services/configuration.service';
 import AppNotAccessibleRoute from './AppNotAccessibleRoute';
@@ -43,7 +44,6 @@ const Router: React.FC = () => {
         <Route element={<SessionGuard />}>
           <Route element={<ToSGuard />}>
             <Route element={<RapidAccessGuard />}>
-              {/* <Route element={<OnboardingGuard />}> */}
               <Route index element={<Navigate to={routes.NOTIFICHE} replace />} />
               <Route path={routes.NOTIFICHE} element={<Notifiche />} />
               <Route path={routes.NOTIFICHE_DELEGATO} element={<Notifiche />} />
@@ -57,7 +57,10 @@ const Router: React.FC = () => {
               <Route path={routes.SUPPORT} element={<SupportPage />} />
               {IS_ONBOARDING_ENABLED && (
                 <Route path={routes.ONBOARDING} element={<Onboarding />}>
-                  <Route path={routes.ONBOARDING_DIGITAL_DOMICILE} element={<></>} />
+                  <Route
+                    path={routes.ONBOARDING_DIGITAL_DOMICILE}
+                    element={<DigitalDomicileWizard />}
+                  />
                   <Route path={routes.ONBOARDING_COURTESY} element={<></>} />
                   <Route path={routes.ONBOARDING_IO} element={<></>} />
                 </Route>
@@ -77,7 +80,6 @@ const Router: React.FC = () => {
                 path="*"
                 element={<NotFound goBackAction={() => navigate(NOTIFICHE, { replace: true })} />}
               />
-              {/* </Route> */}
             </Route>
           </Route>
         </Route>
