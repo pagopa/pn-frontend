@@ -48,6 +48,7 @@ type Props = {
       onClick: () => void;
       onFeedbackShow?: () => void;
     };
+    belowStepContent?: ReactNode;
   };
 };
 
@@ -157,9 +158,15 @@ const PnWizard: React.FC<Props> = ({
 
         {steps.length > 0 && <PnWizardStepper steps={steps} activeStep={activeStep} />}
 
-        <Paper sx={{ p: 3, mb: '20px', mt: 3 }} elevation={0} {...slotsProps?.stepContainer}>
+        <Paper
+          elevation={0}
+          {...slotsProps?.stepContainer}
+          sx={{ p: 3, mb: '20px', mt: 3, ...slotsProps?.stepContainer?.sx }}
+        >
           {childrens[activeStep]}
         </Paper>
+
+        {slotsProps?.belowStepContent}
 
         <Stack
           direction={{ xs: 'column-reverse', md: 'row' }}

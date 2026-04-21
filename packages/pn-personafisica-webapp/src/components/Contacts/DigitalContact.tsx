@@ -20,6 +20,7 @@ import {
   ButtonProps,
   InputAdornment,
   Stack,
+  SvgIconProps,
   TextField,
   TextFieldProps,
   Typography,
@@ -43,11 +44,13 @@ type Props = {
   slots?: {
     label?: JSXElementConstructor<TypographyProps>;
     editButton?: JSXElementConstructor<ButtonProps>;
+    leadingEditIcon?: JSXElementConstructor<SvgIconProps>;
   };
   slotsProps?: {
     container?: CSSProperties;
     textField?: Partial<TextFieldProps>;
     button?: Partial<ButtonProps>;
+    leadingEditIcon?: Partial<SvgIconProps>;
   };
   showLabelOnEdit?: boolean;
   senderId?: string;
@@ -94,6 +97,7 @@ const DigitalContact = forwardRef<{ toggleEdit: () => void }, Props>(
 
     const Label = slots?.label || Typography;
     const EditButton = slots?.editButton || ButtonNaked;
+    const LeadingEditIcon = slots?.leadingEditIcon;
 
     // value contains the prefix
     const contactValue = inputProps.prefix ? value.replace(inputProps.prefix, '') : value;
@@ -330,8 +334,18 @@ const DigitalContact = forwardRef<{ toggleEdit: () => void }, Props>(
             <Stack
               width={{ xs: '100%', lg: 'auto' }}
               direction="row"
-              justifyContent={{ xs: 'space-between', lg: 'auto' }}
+              alignItems="center"
+              justifyContent={{
+                xs: slots?.leadingEditIcon ? 'normal' : 'space-between',
+                lg: 'auto',
+              }}
             >
+              {LeadingEditIcon && (
+                <LeadingEditIcon
+                  {...slotsProps?.leadingEditIcon}
+                  sx={{ mr: '12px', ...slotsProps?.leadingEditIcon?.sx }}
+                />
+              )}
               <Typography
                 sx={{
                   wordBreak: 'break-word',
