@@ -69,10 +69,7 @@ const IoActivationWizard: React.FC = () => {
         stepContainer: {
           sx: {
             p: 0,
-            borderTopLeftRadius: 8,
-            borderTopRightRadius: 8,
-            borderBottomRightRadius: 24,
-            borderBottomLeftRadius: 24,
+            borderRadius: 2,
             overflow: 'hidden',
           },
         },
