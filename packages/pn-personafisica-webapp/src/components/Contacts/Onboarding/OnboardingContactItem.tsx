@@ -77,7 +77,7 @@ const OnboardingContactItem: React.FC<Props> = (props) => {
           onChange={(e) => void onChange(e.target.value)}
           onBlur={onBlur}
           error={touched && Boolean(error)}
-          helperText={(touched && error) || ' '}
+          helperText={touched && error}
         />
 
         {footer ?? null}
