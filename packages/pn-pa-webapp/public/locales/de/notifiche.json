@@ -487,7 +487,6 @@
         "pec-error": "Ungültige PEC-Adresse",
         "forbidden-characters-denomination-error": "Sie haben ungültige Zeichen eingegeben",
         "legal-entity": "Rechtssubjekt",
-        "legal-entity-subtitle": "Diese Informationen helfen dem Empfänger, den Inhalt und die Bedeutung der Mitteilung zu verstehen.",
         "physical-person": "Natürliche Person",
         "name": "Vorname",
         "surname": "Nachname",
@@ -504,6 +503,7 @@
         "pec-address": "PEC-Adresse",
         "add-physical-domicile": "Eine physische Adresse hinzufügen",
         "address": "Adresse",
+        "physical-address": "Physische Adresse",
         "house-number": "Hausnummer",
         "municipality-details": "Ort",
         "municipality": "Gemeinde",
@@ -519,7 +519,8 @@
         "address-physical-lookup-radios": {
           "national-registry": "Automatische Übernahme aus dem nationalen Register",
           "manual": "Manuelle Eingabe"
-        }
+        },
+        "recipient-info-subtitle": "Diese Informationen helfen dem Empfänger, den Inhalt und die Bedeutung der Mitteilung zu verstehen."
       },
       "attachments": {
         "title": "Dokumentation",

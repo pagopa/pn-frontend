@@ -487,7 +487,6 @@
         "pec-error": "Indirizzo PEC non valido",
         "forbidden-characters-denomination-error": "Hai inserito caratteri non validi",
         "legal-entity": "Soggetto giuridico",
-        "legal-entity-subtitle": "Queste informazioni aiuteranno il destinatario a comprendere il contenuto e l'importanza della comunicazione.",
         "physical-person": "Persona fisica",
         "name": "Nome",
         "surname": "Cognome",
@@ -504,6 +503,7 @@
         "pec-address": "Indirizzo PEC",
         "add-physical-domicile": "Aggiungi un indirizzo fisico",
         "address": "Indirizzo",
+        "physical-address": "Indirizzo fisico",
         "house-number": "Numero civico",
         "municipality-details": "Località",
         "municipality": "Comune",
@@ -519,7 +519,8 @@
         "address-physical-lookup-radios": {
           "national-registry": "Inserimento automatico da registro nazionale",
           "manual": "Inserimento manuale"
-        }
+        },
+        "recipient-info-subtitle": "Queste informazioni aiuteranno il destinatario a comprendere il contenuto e l'importanza della comunicazione."
       },
       "attachments": {
         "title": "Documentazione",
