@@ -28,6 +28,32 @@ describe('storage utility test', () => {
     expect(sessionStorage.getItem(AppRouteParams.RETRIEVAL_ID)).toBeNull();
   });
 
+  it('write with useLocalStorage=true stores in localStorage', () => {
+    const aar: [AppRouteParams, string] = [AppRouteParams.AAR, 'test-aar-local'];
+    storageRapidAccessOps.write(aar, true);
+    expect(localStorage.getItem(AppRouteParams.AAR)).toBe('test-aar-local');
+    expect(sessionStorage.getItem(AppRouteParams.AAR)).toBeNull();
+    expect(storageRapidAccessOps.read()).toEqual(aar);
+    storageRapidAccessOps.delete();
+    expect(localStorage.getItem(AppRouteParams.AAR)).toBeNull();
+  });
+
+  it('write clears the other storage', () => {
+    storageRapidAccessOps.write([AppRouteParams.AAR, 'local-value'], true);
+    expect(localStorage.getItem(AppRouteParams.AAR)).toBe('local-value');
+    storageRapidAccessOps.write([AppRouteParams.AAR, 'session-value'], false);
+    expect(sessionStorage.getItem(AppRouteParams.AAR)).toBe('session-value');
+    expect(localStorage.getItem(AppRouteParams.AAR)).toBeNull();
+    storageRapidAccessOps.delete();
+  });
+
+  it('read reads from localStorage when sessionStorage is empty', () => {
+    storageRapidAccessOps.write([AppRouteParams.RETRIEVAL_ID, 'local-retrieval'], true);
+    expect(sessionStorage.getItem(AppRouteParams.RETRIEVAL_ID)).toBeNull();
+    expect(storageRapidAccessOps.read()).toEqual([AppRouteParams.RETRIEVAL_ID, 'local-retrieval']);
+    storageRapidAccessOps.delete();
+  });
+
   it('storageOneIdentityState test', () => {
     const state = '123456789';
     storageOneIdentityState.write(state);
