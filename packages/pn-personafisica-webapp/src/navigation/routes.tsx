@@ -4,6 +4,7 @@ import { Navigate, Route, Routes, useNavigate } from 'react-router-dom';
 import { ConsentType, LoadingPage, NotFound, lazyRetry } from '@pagopa-pn/pn-commons';
 
 import TppLanding from '../pages/TppLanding.page';
+import { getConfiguration } from '../services/configuration.service';
 import AppNotAccessibleRoute from './AppNotAccessibleRoute';
 import OnboardingGuard from './OnboardingGuard';
 import RapidAccessGuard from './RapidAccessGuard';
@@ -35,45 +36,47 @@ const DigitalContactManagement = lazyRetry(
 const Router: React.FC = () => {
   const navigate = useNavigate();
 
+  const { IS_ONBOARDING_ENABLED } = getConfiguration();
+
   return (
     <Suspense fallback={<LoadingPage />}>
       <Routes>
         <Route element={<SessionGuard />}>
           <Route element={<ToSGuard />}>
             <Route element={<RapidAccessGuard />}>
-              <Route element={<OnboardingGuard />}>
-                <Route index element={<Navigate to={routes.NOTIFICHE} replace />} />
-                <Route path={routes.NOTIFICHE} element={<Notifiche />} />
-                <Route path={routes.NOTIFICHE_DELEGATO} element={<Notifiche />} />
-                <Route path={routes.DETTAGLIO_NOTIFICA} element={<NotificationDetail />} />
-                <Route path={routes.DETTAGLIO_NOTIFICA_DELEGATO} element={<NotificationDetail />} />
-                <Route path={routes.DELEGHE} element={<Deleghe />} />
-                <Route path={routes.NUOVA_DELEGA} element={<NuovaDelega />} />
-                <Route path={routes.RECAPITI} element={<Contacts />} />
-                <Route path={routes.PROFILO} element={<Profile />} />
-                <Route path={routes.APP_STATUS} element={<AppStatus />} />
-                <Route path={routes.SUPPORT} element={<SupportPage />} />
+              <Route index element={<Navigate to={routes.NOTIFICHE} replace />} />
+              <Route path={routes.NOTIFICHE} element={<Notifiche />} />
+              <Route path={routes.NOTIFICHE_DELEGATO} element={<Notifiche />} />
+              <Route path={routes.DETTAGLIO_NOTIFICA} element={<NotificationDetail />} />
+              <Route path={routes.DETTAGLIO_NOTIFICA_DELEGATO} element={<NotificationDetail />} />
+              <Route path={routes.DELEGHE} element={<Deleghe />} />
+              <Route path={routes.NUOVA_DELEGA} element={<NuovaDelega />} />
+              <Route path={routes.RECAPITI} element={<Contacts />} />
+              <Route path={routes.PROFILO} element={<Profile />} />
+              <Route path={routes.APP_STATUS} element={<AppStatus />} />
+              <Route path={routes.SUPPORT} element={<SupportPage />} />
+              {IS_ONBOARDING_ENABLED && (
                 <Route path={routes.ONBOARDING} element={<Onboarding />}>
                   <Route path={routes.ONBOARDING_DIGITAL_DOMICILE} element={<></>} />
                   <Route path={routes.ONBOARDING_COURTESY} element={<></>} />
                   <Route path={routes.ONBOARDING_IO} element={<></>} />
                 </Route>
-                <Route path={routes.DIGITAL_DOMICILE} element={<DigitalContact />}>
-                  <Route
-                    path={routes.DIGITAL_DOMICILE_ACTIVATION}
-                    element={<DigitalContactActivation />}
-                  />
-                  <Route
-                    path={routes.DIGITAL_DOMICILE_MANAGEMENT}
-                    element={<DigitalContactManagement />}
-                  />
-                  <Route element={<Navigate to={routes.RECAPITI} replace />} index />
-                </Route>
+              )}
+              <Route path={routes.DIGITAL_DOMICILE} element={<DigitalContact />}>
                 <Route
-                  path="*"
-                  element={<NotFound goBackAction={() => navigate(NOTIFICHE, { replace: true })} />}
+                  path={routes.DIGITAL_DOMICILE_ACTIVATION}
+                  element={<DigitalContactActivation />}
                 />
+                <Route
+                  path={routes.DIGITAL_DOMICILE_MANAGEMENT}
+                  element={<DigitalContactManagement />}
+                />
+                <Route element={<Navigate to={routes.RECAPITI} replace />} index />
               </Route>
+              <Route
+                path="*"
+                element={<NotFound goBackAction={() => navigate(NOTIFICHE, { replace: true })} />}
+              />
             </Route>
           </Route>
         </Route>
