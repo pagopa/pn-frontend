@@ -445,6 +445,70 @@
         "continue-without-io": "Continua senza l’app IO",
         "confirm-activation": "Conferma attivazione"
       }
+    },
+    "io-activation": {
+      "title": "Tutto, sull'app IO",
+      "feedback": {
+        "title": "Hai attivato gli avvisi",
+        "content": "Riceverai un avviso sull’app IO quando ricevi una notifica SEND."
+      }
+    },
+    "courtesy": {
+      "title": "Attivazione avvisi",
+      "step-1-label": "Attiva gli avvisi su IO",
+      "step-2-label": "Email e SMS",
+      "proceed-without-io": "Continua senza l'app IO",
+      "banner-description": "Più avvisi attivi, più possibilità hai di leggere la notifica digitale in tempo ed evitare la raccomandata!",
+      "success-title": "Hai attivato gli avvisi",
+      "success-description": "Riceverai un avviso sui canali che hai scelto quando ricevi una notifica SEND.",
+      "email": {
+        "readonly": {
+          "title": "Attiva gli avvisi via email",
+          "description": "Riceverai un avviso all’indirizzo:"
+        },
+        "insert": {
+          "title": "Attiva gli avvisi via email",
+          "description": "Scegli un indirizzo email:",
+          "input-label": "Indirizzo email",
+          "button-label": "Verifica email",
+          "collapse-label": "Annulla attivazione email"
+        },
+        "collapsed": {
+          "label": "Vuoi ricevere anche un’email alla ricezione di una notifica SEND?",
+          "button-label": "Attiva gli avvisi via email"
+        },
+        "edit": {
+          "input-label": "Indirizzo email",
+          "title": "Avvisi via email attivi",
+          "description": "Riceverai un avviso all’indirizzo:"
+        },
+        "verify-before-continue-title": "Verifica la tua email",
+        "verify-before-continue-content": "Prima di procedere, seleziona Verifica email e segui le istruzioni."
+      },
+      "sms": {
+        "readonly": {
+          "title": "Attiva gli avvisi via SMS",
+          "description": "Riceverai un avviso al numero:"
+        },
+        "insert": {
+          "title": "Attiva gli avvisi via SMS",
+          "description": "Scegli un numero di cellulare:",
+          "input-label": "Numero di cellulare",
+          "button-label": "Verifica numero",
+          "collapse-label": "Annulla attivazione SMS"
+        },
+        "collapsed": {
+          "label": "Vuoi ricevere un avviso anche sul tuo smartphone?",
+          "button-label": "Attiva gli avvisi via SMS"
+        },
+        "edit": {
+          "input-label": "Numero di cellulare",
+          "title": "Avvisi via SMS attivi",
+          "description": "Riceverai un avviso al numero:"
+        },
+        "verify-before-continue-title": "Verifica il tuo numero",
+        "verify-before-continue-content": "Prima di procedere, seleziona Verifica numero e segui le istruzioni."
+      }
     }
   }
 }
