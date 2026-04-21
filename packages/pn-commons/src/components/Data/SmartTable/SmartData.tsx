@@ -62,7 +62,7 @@ const SmartData = <T,>({
     return (
       <PnCardsList>
         {Children.map(body.props.children, (card: ReactElement | null) => {
-          if (!card || card.type !== SmartBodyRow) {
+          if (card?.type !== SmartBodyRow) {
             return;
           }
           // carHeader are those SmartBodyCell with flag isCardHeader set to true
@@ -107,6 +107,7 @@ const SmartData = <T,>({
                     <PnCardContentItem
                       key={contentItem.key}
                       label={label ? label.props.children : null}
+                      mode={contentItem.props.mode}
                       {...contentItem.props.cardProps}
                       testId={calcTestId(suffix, contentItem.props.testId)}
                     >
@@ -158,6 +159,7 @@ const SmartData = <T,>({
                     bodyCell?.type === SmartBodyCell && (
                       <PnTableBodyCell
                         key={bodyCell.key}
+                        mode={bodyCell.props.mode}
                         {...bodyCell.props.tableProps}
                         testId={calcTestId(suffix, bodyCell.props.testId)}
                       >

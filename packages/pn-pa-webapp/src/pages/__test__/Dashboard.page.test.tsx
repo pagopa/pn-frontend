@@ -23,7 +23,8 @@ import Dashboard from '../Dashboard.page';
 describe('Dashboard Page', async () => {
   let result: RenderResult;
   let mock: MockAdapter;
-  const original = globalThis.matchMedia;
+  const originalMatchMedia = globalThis.matchMedia;
+  const originalResizeObserver = globalThis.ResizeObserver;
 
   const startParam = encodeURIComponent(formatToTimezoneString(tenYearsAgo));
   const endParam = encodeURIComponent(formatToTimezoneString(today));
@@ -45,6 +46,11 @@ describe('Dashboard Page', async () => {
 
   beforeAll(() => {
     mock = new MockAdapter(apiClient);
+    globalThis.ResizeObserver = vi.fn().mockImplementation(() => ({
+      observe: vi.fn(),
+      unobserve: vi.fn(),
+      disconnect: vi.fn(),
+    }));
   });
 
   afterEach(() => {
@@ -54,7 +60,8 @@ describe('Dashboard Page', async () => {
 
   afterAll(() => {
     mock.restore();
-    globalThis.matchMedia = original;
+    globalThis.matchMedia = originalMatchMedia;
+    globalThis.ResizeObserver = originalResizeObserver;
   });
 
   it('Dashboard without notifications, clicks on new notification inside empty state', async () => {

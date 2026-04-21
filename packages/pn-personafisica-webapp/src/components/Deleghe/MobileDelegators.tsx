@@ -35,6 +35,7 @@ const MobileDelegators = () => {
     {
       id: 'name',
       label: t('deleghe.table.name'),
+      mode: 'wrap',
       wrapValueInTypography: false,
     },
     {
@@ -93,6 +94,7 @@ const MobileDelegators = () => {
                     <PnCardContentItem
                       key={body.id}
                       label={body.label}
+                      mode={body.mode}
                       wrapValueInTypography={body.wrapValueInTypography}
                     >
                       <DelegatorsDataSwitch data={data} type={body.id} menuType="delegators" />

@@ -1,3 +1,5 @@
+import { vi } from 'vitest';
+
 import { formatToTimezoneString, tenYearsAgo, today } from '@pagopa-pn/pn-commons';
 
 import { notificationsToFe } from '../../../__mocks__/Notifications.mock';
@@ -17,6 +19,20 @@ import DesktopNotifications from '../DesktopNotifications';
 
 describe('DesktopNotifications Component', () => {
   let result: RenderResult;
+
+  const original = globalThis.ResizeObserver;
+
+  beforeAll(() => {
+    globalThis.ResizeObserver = vi.fn().mockImplementation(() => ({
+      observe: vi.fn(),
+      unobserve: vi.fn(),
+      disconnect: vi.fn(),
+    }));
+  });
+
+  afterAll(() => {
+    globalThis.ResizeObserver = original;
+  });
 
   it('renders component - no notification', async () => {
     // render component
