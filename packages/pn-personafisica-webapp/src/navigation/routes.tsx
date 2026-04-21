@@ -6,6 +6,7 @@ import { ConsentType, LoadingPage, NotFound, lazyRetry } from '@pagopa-pn/pn-com
 import OnboardingCourtesyWizard from '../components/Contacts/Onboarding/Courtesy/OnboardingCourtesyWizard';
 import DigitalDomicileWizard from '../components/Contacts/Onboarding/DigitalDomicileWizard';
 import IoActivationWizard from '../components/Contacts/Onboarding/IoActivationWizard';
+import OnboardingHome from '../components/Contacts/Onboarding/OnboardingHome';
 import TppLanding from '../pages/TppLanding.page';
 import { getConfiguration } from '../services/configuration.service';
 import AppNotAccessibleRoute from './AppNotAccessibleRoute';
@@ -61,6 +62,7 @@ const Router: React.FC = () => {
                 <Route path={routes.SUPPORT} element={<SupportPage />} />
                 {IS_ONBOARDING_ENABLED && (
                   <Route path={routes.ONBOARDING} element={<Onboarding />}>
+                    <Route path={routes.ONBOARDING} element={<OnboardingHome />} />
                     <Route
                       path={routes.ONBOARDING_DIGITAL_DOMICILE}
                       element={<DigitalDomicileWizard />}
