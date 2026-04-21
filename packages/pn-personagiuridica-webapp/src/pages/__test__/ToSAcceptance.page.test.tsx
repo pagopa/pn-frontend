@@ -6,6 +6,7 @@ import {
   PRIVACY_LINK_RELATIVE_PATH,
   TOS_LINK_RELATIVE_PATH,
 } from '@pagopa-pn/pn-commons';
+import { getById } from '@pagopa-pn/pn-commons/src/test-utils';
 
 import { acceptTosPrivacyConsentBodyMock } from '../../__mocks__/Consents.mock';
 import { fireEvent, render, waitFor } from '../../__test__/test-utils';
@@ -27,7 +28,7 @@ const privacyConsent: ConsentUser = {
   consentVersion: 'mocked-version-1',
 };
 
-describe('test Terms of Service page', async () => {
+describe('test Terms of Service page', () => {
   let mock: MockAdapter;
   const original = globalThis.open;
 
@@ -74,6 +75,33 @@ describe('test Terms of Service page', async () => {
     expect(container).toHaveTextContent(/tos.button/i);
   });
 
+  it('shows validation error - does not call accept API - clears the error when acceptance switch is enabled', async () => {
+    const { getByRole, container } = render(
+      <ToSAcceptance tosConsent={tosConsent} privacyConsent={privacyConsent} />
+    );
+
+    const acceptButton = getByRole('button');
+
+    expect(acceptButton).toBeEnabled();
+
+    fireEvent.click(acceptButton);
+
+    const message = await waitFor(() => {
+      expect(mock.history.put).toHaveLength(0);
+      const message = getById(container, 'tos-switch-helper-text');
+      expect(message).toHaveTextContent(/required-field/i);
+      return message;
+    });
+
+    const switchElement = getByRole('checkbox');
+
+    fireEvent.click(switchElement);
+
+    await waitFor(() => {
+      expect(message).not.toBeInTheDocument();
+    });
+  });
+
   it('accept ToS and Privacy', async () => {
     mock.onPut('/bff/v2/tos-privacy', acceptTosPrivacyConsentBodyMock()).reply(200);
     const { getByRole } = render(
@@ -81,9 +109,8 @@ describe('test Terms of Service page', async () => {
     );
     const switchElement = getByRole('checkbox');
     const acceptButton = getByRole('button');
-    expect(acceptButton).toBeDisabled();
+    expect(acceptButton).toBeEnabled();
     fireEvent.click(switchElement);
-    await waitFor(() => expect(acceptButton).toBeEnabled());
     fireEvent.click(acceptButton);
     await waitFor(() => {
       expect(mock.history.put).toHaveLength(1);
@@ -101,7 +128,7 @@ describe('test Terms of Service page', async () => {
     expect(router.state.location.pathname).toBe(routes.NOTIFICHE);
   });
 
-  it('navigate to privacy and tos pages', async () => {
+  it('navigate to privacy and tos pages', () => {
     const { getByTestId } = render(
       <ToSAcceptance tosConsent={tosConsent} privacyConsent={privacyConsent} />
     );
