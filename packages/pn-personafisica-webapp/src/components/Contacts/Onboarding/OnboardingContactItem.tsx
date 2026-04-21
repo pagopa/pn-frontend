@@ -86,10 +86,10 @@ const OnboardingContactItem: React.FC<Props> = (props) => {
           label={inputLabel}
           value={value}
           onChange={(e) => void onChange(e.target.value)}
+          onBlur={onBlur}
           InputProps={{
             startAdornment: prefix && <InputAdornment position="start">{prefix}</InputAdornment>,
           }}
-          onBlur={onBlur}
           error={touched && Boolean(error)}
           helperText={touched && error}
         />

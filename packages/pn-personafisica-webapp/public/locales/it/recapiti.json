@@ -416,6 +416,13 @@
         "confirm-activation": "Conferma attivazione"
       }
     },
+    "io-activation": {
+      "title": "Tutto, sull'app IO",
+      "feedback": {
+        "title": "Hai attivato gli avvisi",
+        "content": "Riceverai un avviso sull’app IO quando ricevi una notifica SEND."
+      }
+    },
     "courtesy": {
       "title": "Attivazione avvisi",
       "step-1-label": "Attiva gli avvisi su IO",
