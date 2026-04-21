@@ -339,6 +339,11 @@
         "item_2": "If you do not open the SEND notification within 5 days of receipt, you will still receive a registered mail with the relative additional costs."
       }
     },
-    "exit-flow": "Skip and go to your notifications"
+    "exit-flow": "Skip and go to your notifications",
+    "exit-flow-dialog": {
+      "title": "Do you really want to skip the SEND configuration?",
+      "description": "You risk not reading SEND notifications in time and having to pay the mailing costs for the registered mail.",
+      "cancel": "Back to configuration"
+    }
   }
 }

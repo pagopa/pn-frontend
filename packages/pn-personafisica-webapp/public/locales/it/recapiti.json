@@ -339,6 +339,11 @@
         "item_2": "Se non apri la notifica SEND entro 5 giorni dalla ricezione, riceverai comunque una raccomandata con i relativi costi aggiuntivi."
       }
     },
-    "exit-flow": "Salta e vai alle tue notifiche"
+    "exit-flow": "Salta e vai alle tue notifiche",
+    "exit-flow-dialog": {
+      "title": "Vuoi davvero saltare la configurazione di SEND?",
+      "description": "Rischi di non leggere le notifiche SEND in tempo e di dover pagare i costi per l’invio della raccomandata.",
+      "cancel": "Torna alla configurazione"
+    }
   }
 }

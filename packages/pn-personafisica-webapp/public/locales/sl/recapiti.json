@@ -339,6 +339,11 @@
         "item_2": "Če obvestila SEND ne odprete v 5 dneh po prejemu, boste vseeno prejeli priporočeno pošto z ustreznimi dodatnimi stroški."
       }
     },
-    "exit-flow": "Preskoči in pojdi na svoja obvestila"
+    "exit-flow": "Preskoči in pojdi na svoja obvestila",
+    "exit-flow-dialog": {
+      "title": "Ali res želiš preskočiti konfiguracijo storitve SEND?",
+      "description": "Tvegaš, da obvestil SEND ne boš prebral pravočasno in boš moral plačati stroške pošiljanja priporočene pošte.",
+      "cancel": "Nazaj na konfiguracijo"
+    }
   }
 }
