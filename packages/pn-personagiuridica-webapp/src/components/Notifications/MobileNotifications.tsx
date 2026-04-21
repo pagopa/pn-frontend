@@ -89,10 +89,12 @@ const MobileNotifications = ({
     {
       id: 'sender',
       label: t('table.mittente'),
+      mode: 'truncate',
     },
     {
       id: 'subject',
       label: t('table.oggetto'),
+      mode: 'truncate',
     },
     {
       id: 'iun',
@@ -211,6 +213,7 @@ const MobileNotifications = ({
                   <PnCardContentItem
                     key={body.id}
                     label={body.label}
+                    mode={body.mode}
                     wrapValueInTypography={body.wrapValueInTypography}
                   >
                     <NotificationsDataSwitch data={data} type={body.id} />

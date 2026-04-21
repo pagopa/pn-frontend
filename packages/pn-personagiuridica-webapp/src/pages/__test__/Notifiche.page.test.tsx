@@ -1,4 +1,5 @@
 import MockAdapter from 'axios-mock-adapter';
+import { vi } from 'vitest';
 
 import {
   AppResponseMessage,
@@ -30,7 +31,8 @@ import Notifiche from '../Notifiche.page';
 describe('Notifiche Page ', async () => {
   let result: RenderResult;
   let mock: MockAdapter;
-  const original = globalThis.matchMedia;
+  const originalMatchMedia = globalThis.matchMedia;
+  const originalResizeObserver = globalThis.ResizeObserver;
 
   const notificationsPath = `/bff/v1/notifications/received?startDate=${encodeURIComponent(
     formatToTimezoneString(tenYearsAgo)
@@ -41,6 +43,11 @@ describe('Notifiche Page ', async () => {
 
   beforeAll(() => {
     mock = new MockAdapter(apiClient);
+    globalThis.ResizeObserver = vi.fn().mockImplementation(() => ({
+      observe: vi.fn(),
+      unobserve: vi.fn(),
+      disconnect: vi.fn(),
+    }));
   });
 
   afterEach(() => {
@@ -49,7 +56,8 @@ describe('Notifiche Page ', async () => {
 
   afterAll(() => {
     mock.restore();
-    globalThis.matchMedia = original;
+    globalThis.matchMedia = originalMatchMedia;
+    globalThis.ResizeObserver = originalResizeObserver;
   });
 
   it('renders page', async () => {

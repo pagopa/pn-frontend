@@ -74,18 +74,21 @@ const DesktopNotifications = ({
     {
       id: 'sentAt',
       label: t('table.data'),
+      mode: 'truncate',
       cellProps: { width: '10%' },
       sortable: false, // TODO: will be re-enabled in PN-1124
     },
     {
       id: 'sender',
       label: t('table.mittente'),
+      mode: 'truncate',
       cellProps: { width: '15%' },
       sortable: false, // TODO: will be re-enabled in PN-1124
     },
     {
       id: 'subject',
       label: t('table.oggetto'),
+      mode: 'truncate',
       cellProps: { width: '19%' },
     },
     {
@@ -162,6 +165,7 @@ const DesktopNotifications = ({
                 {columns.map((column) => (
                   <PnTableBodyCell
                     key={column.id}
+                    mode={column.mode}
                     cellProps={{
                       ...column.cellProps,
                     }}

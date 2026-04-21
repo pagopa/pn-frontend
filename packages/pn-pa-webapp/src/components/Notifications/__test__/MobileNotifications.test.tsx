@@ -8,18 +8,21 @@ import { GET_DETTAGLIO_NOTIFICA_PATH } from '../../../navigation/routes.const';
 import MobileNotifications from '../MobileNotifications';
 
 describe('MobileNotifications Component', () => {
-  const original = globalThis.matchMedia;
+  const originalMatchMedia = globalThis.matchMedia;
+  const originalResizeObserver = globalThis.ResizeObserver;
 
   beforeAll(() => {
     globalThis.matchMedia = createMatchMedia(800);
+    globalThis.ResizeObserver = vi.fn().mockImplementation(() => ({
+      observe: vi.fn(),
+      unobserve: vi.fn(),
+      disconnect: vi.fn(),
+    }));
   });
 
   afterAll(() => {
-    globalThis.matchMedia = original;
-  });
-
-  afterEach(() => {
-    vi.clearAllMocks();
+    globalThis.matchMedia = originalMatchMedia;
+    globalThis.ResizeObserver = originalResizeObserver;
   });
 
   it('renders MobileNotifications - no notifications', async () => {

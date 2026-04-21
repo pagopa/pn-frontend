@@ -1,5 +1,5 @@
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
-import { Box, Typography } from '@mui/material';
+import { Typography } from '@mui/material';
 import { ButtonNaked } from '@pagopa/mui-italia';
 
 import { useIsMobile } from '../../hooks/useIsMobile';
@@ -47,7 +47,7 @@ const NotificationsDataSwitch: React.FC<{
     return <NewNotificationBadge status={data.notificationStatus} />;
   }
   if (type === 'sentAt' && !isMobile) {
-    return <>{formatDate(data.sentAt)}</>;
+    return formatDate(data.sentAt);
   }
   if (type === 'sentAt' && isMobile) {
     const newNotification = isNewNotification(data.notificationStatus);
@@ -65,24 +65,13 @@ const NotificationsDataSwitch: React.FC<{
     );
   }
   if (type === 'sender') {
-    return <>{data.sender}</>;
+    return data.sender;
   }
   if (type === 'subject') {
-    return (
-      <Box
-        sx={{
-          textOverflow: 'ellipsis',
-          overflow: 'hidden',
-          whiteSpace: 'nowrap',
-          color: 'inherit',
-        }}
-      >
-        {data.subject}
-      </Box>
-    );
+    return data.subject;
   }
   if (type === 'iun') {
-    return <>{data.iun}</>;
+    return data.iun;
   }
   if (type === 'notificationStatus') {
     return <NotificationStatusChip data={data} />;
