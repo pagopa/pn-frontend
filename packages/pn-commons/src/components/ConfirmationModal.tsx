@@ -34,13 +34,6 @@ const ConfirmationModal: React.FC<Props> = ({
   const ConfirmButton = slots?.confirmButton || Button;
   const CloseButton = slots?.closeButton;
 
-  // const actionsProps: DialogActionsProps = {
-  //   ...slotsProps?.actions,
-  //   sx:
-  //     contentAlign === 'center'
-  //       ? ([{ justifyContent: 'center' }, slotsProps?.actions?.sx] as SxProps<Theme>)
-  //       : slotsProps?.actions?.sx,
-  // };
   const actionsProps: DialogActionsProps = {
     ...slotsProps?.actions,
     sx: {
