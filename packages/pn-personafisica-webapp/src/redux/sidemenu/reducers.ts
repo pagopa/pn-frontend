@@ -1,5 +1,5 @@
 import { PaymentTpp } from '@pagopa-pn/pn-commons';
-import { createSlice } from '@reduxjs/toolkit';
+import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 
 import { acceptMandate, rejectMandate } from '../delegation/actions';
 import { Delegator } from '../delegation/types';
@@ -13,10 +13,24 @@ const generalInfoSlice = createSlice({
     delegators: [] as Array<Delegator>,
     domicileBannerOpened: true,
     paymentTpp: {} as PaymentTpp,
+    onboardingData: {
+      hasBeenShown: false,
+      hasSkippedOnboarding: false,
+      exitReminderShown: false,
+    },
   },
   reducers: {
     closeDomicileBanner: (state) => {
       state.domicileBannerOpened = false;
+    },
+    setOnboardingHasBeenShown: (state, action: PayloadAction<boolean>) => {
+      state.onboardingData.hasBeenShown = action.payload;
+    },
+    setHasSkippedOnboarding: (state, action: PayloadAction<boolean>) => {
+      state.onboardingData.hasSkippedOnboarding = action.payload;
+    },
+    setOnboardingExitReminderShown: (state, action: PayloadAction<boolean>) => {
+      state.onboardingData.exitReminderShown = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -52,6 +66,11 @@ const generalInfoSlice = createSlice({
   },
 });
 
-export const { closeDomicileBanner } = generalInfoSlice.actions;
+export const {
+  closeDomicileBanner,
+  setOnboardingHasBeenShown,
+  setHasSkippedOnboarding,
+  setOnboardingExitReminderShown,
+} = generalInfoSlice.actions;
 
 export default generalInfoSlice;

@@ -15,6 +15,11 @@ const initialState = {
   delegators: [],
   domicileBannerOpened: true,
   paymentTpp: {},
+  onboardingData: {
+    exitReminderShown: false,
+    hasBeenShown: false,
+    hasSkippedOnboarding: false,
+  },
 };
 
 const pendingDelegators = mandatesByDelegate.filter((d) => d.status === 'pending');

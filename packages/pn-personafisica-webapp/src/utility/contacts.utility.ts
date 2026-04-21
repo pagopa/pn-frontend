@@ -169,3 +169,15 @@ export const getSemanticTextFieldProps = (channelType: ChannelType): Partial<Tex
 
   return {};
 };
+
+export const hasRequiredContacts = (addresses: SelectedAddresses): boolean => {
+  const hasLegal = addresses.legalAddresses.length > 0;
+  const hasEmail = addresses.courtesyAddresses.some(
+    (address) => address.channelType === ChannelType.EMAIL
+  );
+  const hasIo = addresses.courtesyAddresses.some(
+    (address) => address.channelType === ChannelType.IOMSG
+  );
+
+  return hasLegal || (hasEmail && hasIo);
+};

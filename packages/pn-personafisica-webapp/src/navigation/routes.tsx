@@ -6,9 +6,11 @@ import { ConsentType, LoadingPage, NotFound, lazyRetry } from '@pagopa-pn/pn-com
 import OnboardingCourtesyWizard from '../components/Contacts/Onboarding/Courtesy/OnboardingCourtesyWizard';
 import DigitalDomicileWizard from '../components/Contacts/Onboarding/DigitalDomicileWizard';
 import IoActivationWizard from '../components/Contacts/Onboarding/IoActivationWizard';
+import OnboardingHome from '../components/Contacts/Onboarding/OnboardingHome';
 import TppLanding from '../pages/TppLanding.page';
 import { getConfiguration } from '../services/configuration.service';
 import AppNotAccessibleRoute from './AppNotAccessibleRoute';
+import OnboardingGuard from './OnboardingGuard';
 import RapidAccessGuard from './RapidAccessGuard';
 import SessionGuard from './SessionGuard';
 import ToSGuard from './ToSGuard';
@@ -46,42 +48,48 @@ const Router: React.FC = () => {
         <Route element={<SessionGuard />}>
           <Route element={<ToSGuard />}>
             <Route element={<RapidAccessGuard />}>
-              <Route index element={<Navigate to={routes.NOTIFICHE} replace />} />
-              <Route path={routes.NOTIFICHE} element={<Notifiche />} />
-              <Route path={routes.NOTIFICHE_DELEGATO} element={<Notifiche />} />
-              <Route path={routes.DETTAGLIO_NOTIFICA} element={<NotificationDetail />} />
-              <Route path={routes.DETTAGLIO_NOTIFICA_DELEGATO} element={<NotificationDetail />} />
-              <Route path={routes.DELEGHE} element={<Deleghe />} />
-              <Route path={routes.NUOVA_DELEGA} element={<NuovaDelega />} />
-              <Route path={routes.RECAPITI} element={<Contacts />} />
-              <Route path={routes.PROFILO} element={<Profile />} />
-              <Route path={routes.APP_STATUS} element={<AppStatus />} />
-              <Route path={routes.SUPPORT} element={<SupportPage />} />
-              {IS_ONBOARDING_ENABLED && (
-                <Route path={routes.ONBOARDING} element={<Onboarding />}>
+              <Route element={<OnboardingGuard />}>
+                <Route index element={<Navigate to={routes.NOTIFICHE} replace />} />
+                <Route path={routes.NOTIFICHE} element={<Notifiche />} />
+                <Route path={routes.NOTIFICHE_DELEGATO} element={<Notifiche />} />
+                <Route path={routes.DETTAGLIO_NOTIFICA} element={<NotificationDetail />} />
+                <Route path={routes.DETTAGLIO_NOTIFICA_DELEGATO} element={<NotificationDetail />} />
+                <Route path={routes.DELEGHE} element={<Deleghe />} />
+                <Route path={routes.NUOVA_DELEGA} element={<NuovaDelega />} />
+                <Route path={routes.RECAPITI} element={<Contacts />} />
+                <Route path={routes.PROFILO} element={<Profile />} />
+                <Route path={routes.APP_STATUS} element={<AppStatus />} />
+                <Route path={routes.SUPPORT} element={<SupportPage />} />
+                {IS_ONBOARDING_ENABLED && (
+                  <Route path={routes.ONBOARDING} element={<Onboarding />}>
+                    <Route index element={<OnboardingHome />} />
+                    <Route
+                      path={routes.ONBOARDING_DIGITAL_DOMICILE}
+                      element={<DigitalDomicileWizard />}
+                    />
+                    <Route path={routes.ONBOARDING_IO} element={<IoActivationWizard />} />
+                    <Route
+                      path={routes.ONBOARDING_COURTESY}
+                      element={<OnboardingCourtesyWizard />}
+                    />
+                  </Route>
+                )}
+                <Route path={routes.DIGITAL_DOMICILE} element={<DigitalContact />}>
                   <Route
-                    path={routes.ONBOARDING_DIGITAL_DOMICILE}
-                    element={<DigitalDomicileWizard />}
+                    path={routes.DIGITAL_DOMICILE_ACTIVATION}
+                    element={<DigitalContactActivation />}
                   />
-                  <Route path={routes.ONBOARDING_IO} element={<IoActivationWizard />} />
-                  <Route path={routes.ONBOARDING_COURTESY} element={<OnboardingCourtesyWizard />} />
+                  <Route
+                    path={routes.DIGITAL_DOMICILE_MANAGEMENT}
+                    element={<DigitalContactManagement />}
+                  />
+                  <Route element={<Navigate to={routes.RECAPITI} replace />} index />
                 </Route>
-              )}
-              <Route path={routes.DIGITAL_DOMICILE} element={<DigitalContact />}>
                 <Route
-                  path={routes.DIGITAL_DOMICILE_ACTIVATION}
-                  element={<DigitalContactActivation />}
+                  path="*"
+                  element={<NotFound goBackAction={() => navigate(NOTIFICHE, { replace: true })} />}
                 />
-                <Route
-                  path={routes.DIGITAL_DOMICILE_MANAGEMENT}
-                  element={<DigitalContactManagement />}
-                />
-                <Route element={<Navigate to={routes.RECAPITI} replace />} index />
               </Route>
-              <Route
-                path="*"
-                element={<NotFound goBackAction={() => navigate(NOTIFICHE, { replace: true })} />}
-              />
             </Route>
           </Route>
         </Route>
