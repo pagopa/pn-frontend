@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 
 import { Typography } from '@mui/material';
 import { PnWizard, PnWizardStep } from '@pagopa-pn/pn-commons';
+import { IllusMICompleted } from '@pagopa/mui-italia';
 
 import { IOAllowedValues } from '../../../models/contacts';
 import { NOTIFICHE, ONBOARDING } from '../../../navigation/routes.const';
@@ -43,6 +44,9 @@ const IoActivationWizard: React.FC = () => {
       }
       activeStep={activeStep}
       setActiveStep={setActiveStep}
+      slots={{
+        feedbackIcon: IllusMICompleted,
+      }}
       slotsProps={{
         exitButton: {
           onClick: exit,
