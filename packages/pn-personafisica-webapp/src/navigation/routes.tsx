@@ -6,7 +6,6 @@ import { ConsentType, LoadingPage, NotFound, lazyRetry } from '@pagopa-pn/pn-com
 import OnboardingCourtesyWizard from '../components/Contacts/Onboarding/Courtesy/OnboardingCourtesyWizard';
 import DigitalDomicileWizard from '../components/Contacts/Onboarding/DigitalDomicileWizard';
 import IoActivationWizard from '../components/Contacts/Onboarding/IoActivationWizard';
-import Onboarding from '../pages/Onboarding.page';
 import TppLanding from '../pages/TppLanding.page';
 import { getConfiguration } from '../services/configuration.service';
 import AppNotAccessibleRoute from './AppNotAccessibleRoute';
@@ -25,6 +24,7 @@ const NuovaDelega = lazyRetry(() => import('../pages/NuovaDelega.page'));
 const PrivacyPolicyPage = lazyRetry(() => import('../pages/PrivacyPolicy.page'));
 const TermsOfServicePage = lazyRetry(() => import('../pages/TermsOfService.page'));
 const AppStatus = lazyRetry(() => import('../pages/AppStatus.page'));
+const Onboarding = lazyRetry(() => import('../pages/Onboarding.page'));
 const ParticipatingEntitiesPage = lazyRetry(() => import('../pages/ParticipatingEntities.page'));
 const SupportPage = lazyRetry(() => import('../pages/Support.page'));
 const DigitalContact = lazyRetry(() => import('../pages/DigitalContact.page'));
