@@ -1,12 +1,11 @@
 import { ReactNode } from 'react';
-import { Trans, useTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 
-import { Chip, Link, Stack, Typography } from '@mui/material';
+import { Chip, Stack, Typography } from '@mui/material';
 import { MIAlert } from '@pagopa/mui-italia';
 
 import { WizardMode } from '../../../models/Onboarding';
 import { IOAllowedValues } from '../../../models/contacts';
-import { PRIVACY_POLICY, TERMS_OF_SERVICE_SERCQ_SEND } from '../../../navigation/routes.const';
 import OnboardingContactItem from './OnboardingContactItem';
 
 type Props = {
@@ -111,41 +110,6 @@ const SummaryStep: React.FC<Props> = ({ mode, email, pec, io }) => {
         severity="info"
         description={t('onboarding.digital-domicile.summary.info-box')}
       />
-      {mode === 'send' && (
-        <Typography mt={1} variant="body2" fontSize="14px" color="text.secondary">
-          <Trans
-            i18nKey="onboarding.digital-domicile.summary.disclaimer"
-            ns="recapiti"
-            components={[
-              <Link
-                key="privacy-policy"
-                sx={{
-                  cursor: 'pointer',
-                  textDecoration: 'none !important',
-                  fontWeight: 'bold',
-                }}
-                data-testid="privacy-link"
-                href={PRIVACY_POLICY}
-                target="_blank"
-                rel="noopener"
-              />,
-
-              <Link
-                key="tos"
-                sx={{
-                  cursor: 'pointer',
-                  textDecoration: 'none !important',
-                  fontWeight: 'bold',
-                }}
-                data-testid="tos-link"
-                href={TERMS_OF_SERVICE_SERCQ_SEND}
-                target="_blank"
-                rel="noopener"
-              />,
-            ]}
-          />
-        </Typography>
-      )}
     </Stack>
   );
 };

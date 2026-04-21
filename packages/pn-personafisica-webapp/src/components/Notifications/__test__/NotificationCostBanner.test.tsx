@@ -7,7 +7,7 @@ import {
 } from '@pagopa-pn/pn-commons';
 
 import { digitalAddressesSercq } from '../../../__mocks__/Contacts.mock';
-import { fireEvent, render, waitFor } from '../../../__test__/test-utils';
+import { fireEvent, render, within } from '../../../__test__/test-utils';
 import { ChannelType, ContactOperation, ContactSource } from '../../../models/contacts';
 import * as routes from '../../../navigation/routes.const';
 import { NotificationCostBanner } from '../NotificationCostBanner';
@@ -19,7 +19,6 @@ const sercqSendDefault = digitalAddressesSercq.find(
 describe('NotificationCostBanner component', () => {
   afterEach(() => {
     vi.clearAllMocks();
-    sessionStorage.clear();
   });
 
   it('renders the component - deliveryOutcome null - dd domicile not active', () => {
@@ -27,7 +26,6 @@ describe('NotificationCostBanner component', () => {
       <NotificationCostBanner deliveryOutcome={null} />,
       {
         preloadedState: {
-          generalInfoState: { domicileBannerOpened: true },
           contactsState: { digitalAddresses: [] },
         },
       }
@@ -38,7 +36,7 @@ describe('NotificationCostBanner component', () => {
 
     expect(container).toHaveTextContent('notification-cost-banner.viewed.title');
     expect(container).toHaveTextContent('notification-cost-banner.viewed.message');
-    expect(container).toHaveTextContent('notification-cost-banner.enable-sercq.message');
+    expect(container).toHaveTextContent('notification-cost-banner.enable-sercq.message.default');
 
     const cta = getByText('notification-cost-banner.enable-sercq.cta');
     fireEvent.click(cta);
@@ -58,7 +56,6 @@ describe('NotificationCostBanner component', () => {
       <NotificationCostBanner deliveryOutcome={deliveryOutcome} />,
       {
         preloadedState: {
-          generalInfoState: { domicileBannerOpened: true },
           contactsState: { digitalAddresses: [] },
         },
       }
@@ -69,7 +66,7 @@ describe('NotificationCostBanner component', () => {
 
     expect(container).toHaveTextContent('notification-cost-banner.analog.title');
     expect(container).toHaveTextContent('notification-cost-banner.analog.fallback');
-    expect(container).toHaveTextContent('notification-cost-banner.enable-sercq.message');
+    expect(container).toHaveTextContent('notification-cost-banner.enable-sercq.message.analog');
 
     const cta = getByText('notification-cost-banner.enable-sercq.cta');
     fireEvent.click(cta);
@@ -92,7 +89,6 @@ describe('NotificationCostBanner component', () => {
       />,
       {
         preloadedState: {
-          generalInfoState: { domicileBannerOpened: true },
           contactsState: { digitalAddresses: [] },
         },
       }
@@ -103,7 +99,7 @@ describe('NotificationCostBanner component', () => {
 
     expect(container).toHaveTextContent('notification-cost-banner.analog.title');
     expect(container).toHaveTextContent('notification-cost-banner.analog.message');
-    expect(container).toHaveTextContent('notification-cost-banner.enable-sercq.message');
+    expect(container).toHaveTextContent('notification-cost-banner.enable-sercq.message.analog');
 
     const cta = getByText('notification-cost-banner.enable-sercq.cta');
     fireEvent.click(cta);
@@ -123,7 +119,6 @@ describe('NotificationCostBanner component', () => {
       <NotificationCostBanner deliveryOutcome={deliveryOutcome} />,
       {
         preloadedState: {
-          generalInfoState: { domicileBannerOpened: true },
           contactsState: { digitalAddresses: [] },
         },
       }
@@ -134,7 +129,9 @@ describe('NotificationCostBanner component', () => {
 
     expect(container).toHaveTextContent('notification-cost-banner.digital_failure.title');
     expect(container).toHaveTextContent('notification-cost-banner.digital_failure.fallback');
-    expect(container).toHaveTextContent('notification-cost-banner.enable-sercq.message');
+    expect(container).toHaveTextContent(
+      'notification-cost-banner.enable-sercq.message.external-pec'
+    );
 
     const cta = getByText('notification-cost-banner.enable-sercq.cta');
     fireEvent.click(cta);
@@ -157,7 +154,6 @@ describe('NotificationCostBanner component', () => {
       />,
       {
         preloadedState: {
-          generalInfoState: { domicileBannerOpened: true },
           contactsState: { digitalAddresses: [] },
         },
       }
@@ -168,7 +164,9 @@ describe('NotificationCostBanner component', () => {
 
     expect(container).toHaveTextContent('notification-cost-banner.digital_failure.title');
     expect(container).toHaveTextContent('notification-cost-banner.digital_failure.message');
-    expect(container).toHaveTextContent('notification-cost-banner.enable-sercq.message');
+    expect(container).toHaveTextContent(
+      'notification-cost-banner.enable-sercq.message.external-pec'
+    );
 
     const cta = getByText('notification-cost-banner.enable-sercq.cta');
     fireEvent.click(cta);
@@ -191,7 +189,6 @@ describe('NotificationCostBanner component', () => {
       <NotificationCostBanner deliveryOutcome={deliveryOutcome} />,
       {
         preloadedState: {
-          generalInfoState: { domicileBannerOpened: true },
           contactsState: { digitalAddresses: [] },
         },
       }
@@ -202,7 +199,9 @@ describe('NotificationCostBanner component', () => {
 
     expect(container).toHaveTextContent('notification-cost-banner.digital_registry.title');
     expect(container).toHaveTextContent('notification-cost-banner.digital_registry.message');
-    expect(container).toHaveTextContent('notification-cost-banner.enable-sercq.message');
+    expect(container).toHaveTextContent(
+      'notification-cost-banner.enable-sercq.message.external-pec'
+    );
 
     const cta = getByText('notification-cost-banner.enable-sercq.cta');
     fireEvent.click(cta);
@@ -225,7 +224,6 @@ describe('NotificationCostBanner component', () => {
       <NotificationCostBanner deliveryOutcome={deliveryOutcome} />,
       {
         preloadedState: {
-          generalInfoState: { domicileBannerOpened: true },
           contactsState: { digitalAddresses: [] },
         },
       }
@@ -242,17 +240,16 @@ describe('NotificationCostBanner component', () => {
     expect(cta).not.toBeInTheDocument();
   });
 
-  it('renders the component - digital special - dd domicile active - closes the banner', async () => {
+  it('renders the component - digital special - dd domicile active - does not show close button', () => {
     const deliveryOutcome = {
       type: DeliveryOutcomeType.DIGITAL,
       details: { source: DigitalSource.SENDER, domicileType: 'SERCQ' },
     } as any;
 
-    const { container, getByTestId, getByLabelText, queryByTestId, queryByText } = render(
+    const { container, getByTestId, queryByText } = render(
       <NotificationCostBanner deliveryOutcome={deliveryOutcome} />,
       {
         preloadedState: {
-          generalInfoState: { domicileBannerOpened: true },
           contactsState: { digitalAddresses: [sercqSendDefault] },
         },
       }
@@ -263,21 +260,14 @@ describe('NotificationCostBanner component', () => {
 
     expect(container).toHaveTextContent('notification-cost-banner.digital_special.title');
     expect(container).toHaveTextContent('notification-cost-banner.digital_special.message');
-    expect(container).not.toHaveTextContent('notification-cost-banner.enable-sercq.message');
+    expect(container).not.toHaveTextContent(
+      'notification-cost-banner.enable-sercq.message.external-pec'
+    );
 
     const cta = queryByText('notification-cost-banner.enable-sercq.cta');
     expect(cta).not.toBeInTheDocument();
 
-    const closeButton = getByLabelText('button.close');
-    fireEvent.click(closeButton);
-
-    // does not set sessionStorage key
-    expect(sessionStorage.getItem('domicileBannerClosed')).toBeNull();
-
-    await waitFor(() => {
-      const closedBanner = queryByTestId('notificationCostBanner');
-      expect(closedBanner).not.toBeInTheDocument();
-    });
+    expect(within(banner).queryAllByRole('button')).toHaveLength(0);
   });
 
   it('renders the component with cost details but status UNAVAILABLE', () => {
@@ -290,7 +280,6 @@ describe('NotificationCostBanner component', () => {
       />,
       {
         preloadedState: {
-          generalInfoState: { domicileBannerOpened: true },
           contactsState: { digitalAddresses: [] },
         },
       }
@@ -301,7 +290,9 @@ describe('NotificationCostBanner component', () => {
 
     expect(container).toHaveTextContent('notification-cost-banner.digital_failure.title');
     expect(container).toHaveTextContent('notification-cost-banner.digital_failure.fallback');
-    expect(container).toHaveTextContent('notification-cost-banner.enable-sercq.message');
+    expect(container).toHaveTextContent(
+      'notification-cost-banner.enable-sercq.message.external-pec'
+    );
 
     const cta = getByText('notification-cost-banner.enable-sercq.cta');
     fireEvent.click(cta);

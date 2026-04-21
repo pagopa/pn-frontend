@@ -199,6 +199,13 @@ describe('NotificationDetail Page', async () => {
 
     expect(result.getByTestId('notificationCostBanner')).toBeInTheDocument();
     expect(result.queryByTestId('addDomicileBanner')).not.toBeInTheDocument();
+
+    // the banner should only show the "enable-sercq" CTA and no close button
+    const banner = result.getByTestId('notificationCostBanner');
+    const bannerButtons = within(banner).queryAllByRole('button');
+
+    expect(bannerButtons).toHaveLength(1);
+    expect(bannerButtons[0]).toHaveTextContent('notification-cost-banner.enable-sercq.cta');
   });
 
   it('does not render NotificationCostBanner when notificationFeePolicy is DELIVERY_MODE but pagoPaIntMode is not ASYNC', async () => {
@@ -249,56 +256,6 @@ describe('NotificationDetail Page', async () => {
 
     expect(result.queryByTestId('notificationCostBanner')).not.toBeInTheDocument();
     expect(result.getByTestId('addDomicileBanner')).toBeInTheDocument();
-  });
-
-  it('shows NotificationCostBanner again after closing it and re-entering the page', async () => {
-    const asyncSingleRecipientDTO = {
-      ...notificationDTO,
-      notificationFeePolicy: NotificationFeePolicy.DeliveryMode,
-      pagoPaIntMode: PagoPaIntegrationMode.Async,
-      recipients: [notificationDTO.recipients[2]],
-    };
-
-    mock
-      .onGet(`/bff/v1/notifications/received/${notificationDTO.iun}`)
-      .reply(200, asyncSingleRecipientDTO);
-    mock.onPost(`/bff/v1/payments/info`, paymentInfoRequest).reply(200, paymentInfo);
-    mock.onGet(/\/bff\/v1\/downtime\/history.*/).reply(200, downtimesDTO);
-
-    // 1) first enter -> banner is visible
-    await act(async () => {
-      result = render(<Component />, {
-        preloadedState: {
-          userState: { user: { fiscal_number: notificationDTO.recipients[2].taxId } },
-        },
-        route: routes.GET_DETTAGLIO_NOTIFICA_PATH(notificationDTO.iun),
-      });
-    });
-
-    const banner = result.getByTestId('notificationCostBanner');
-    expect(banner).toBeInTheDocument();
-
-    // 2) close banner
-    await userEvent.click(within(banner).getByRole('button', { name: 'button.close' }));
-
-    await waitFor(() => {
-      expect(result.queryByTestId('notificationCostBanner')).not.toBeInTheDocument();
-    });
-
-    // 3) leave page (unmount)
-    result.unmount();
-
-    // 4) re-enter page (remount) -> banner is visible again
-    await act(async () => {
-      result = render(<Component />, {
-        preloadedState: {
-          userState: { user: { fiscal_number: notificationDTO.recipients[2].taxId } },
-        },
-        route: routes.GET_DETTAGLIO_NOTIFICA_PATH(notificationDTO.iun),
-      });
-    });
-
-    expect(result.getByTestId('notificationCostBanner')).toBeInTheDocument();
   });
 
   it('renders pec unreachable alert - SIMPLE_REGISTERED_LETTER and ASYNC', async () => {
@@ -1282,7 +1239,7 @@ describe('NotificationDetail Page', async () => {
         preloadedState: {
           userState: { user: { fiscal_number: raddNotificationDTO.recipients[2].taxId } },
         },
-        route: routes.GET_DETTAGLIO_NOTIFICA_PATH(notificationDTO.iun),
+        route: routes.GET_DETTAGLIO_NOTIFICA_PATH(raddNotificationDTO.iun),
       });
     });
 

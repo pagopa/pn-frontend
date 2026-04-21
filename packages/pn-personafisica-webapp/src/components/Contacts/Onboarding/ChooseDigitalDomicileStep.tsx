@@ -1,8 +1,9 @@
 import { useTranslation } from 'react-i18next';
 
 import { Box, Button, Chip, Divider, Stack, Typography } from '@mui/material';
-import { IllusOnboardingChoice } from '@pagopa-pn/pn-commons';
 import { ButtonNaked } from '@pagopa/mui-italia';
+
+import OnboardingImage from './OnboardingImage';
 
 type Props = {
   onSelectSend: () => void;
@@ -23,7 +24,6 @@ const ChooseDigitalDomicileStep: React.FC<Props> = ({
         <Box
           sx={{
             p: 2,
-            borderRadius: 3,
             bgcolor: 'background.paper',
           }}
         >
@@ -41,7 +41,7 @@ const ChooseDigitalDomicileStep: React.FC<Props> = ({
             sx={{ width: 'fit-content', '& .MuiChip-label': { fontSize: '12px' } }}
           />
         </Box>
-        <IllusOnboardingChoice />
+        <OnboardingImage src="/imgs/onboarding-choice.png" decorative />
       </Stack>
     );
   }
@@ -88,7 +88,7 @@ const ChooseDigitalDomicileStep: React.FC<Props> = ({
           </ButtonNaked>
         </Box>
       </Box>
-      <IllusOnboardingChoice />
+      <OnboardingImage src="/imgs/onboarding-choice.png" decorative />
     </Stack>
   );
 };

@@ -9,6 +9,7 @@ import {
 import { act, fireEvent, render, waitFor } from '../../../../__test__/test-utils';
 import { apiClient } from '../../../../api/apiClients';
 import { AddressType, ChannelType, IOAllowedValues } from '../../../../models/contacts';
+import { PRIVACY_POLICY, TERMS_OF_SERVICE_SERCQ_SEND } from '../../../../navigation/routes.const';
 import DigitalDomicileWizard from '../DigitalDomicileWizard';
 
 describe('DigitalDomicileWizard', () => {
@@ -227,7 +228,7 @@ describe('DigitalDomicileWizard', () => {
     mock.onPut('/bff/v2/tos-privacy', acceptTosSercqSendBodyMock).reply(200);
     mock.onPost('/bff/v1/addresses/LEGAL/default/SERCQ_SEND').reply(204);
 
-    const { getByRole, getByText, findByText } = render(<DigitalDomicileWizard />, {
+    const { getByRole, getByTestId, getByText, findByText } = render(<DigitalDomicileWizard />, {
       preloadedState: {
         contactsState: {
           digitalAddresses: [
@@ -265,6 +266,9 @@ describe('DigitalDomicileWizard', () => {
 
     expect(await findByText(`${labelPrefix}.summary.title`)).toBeInTheDocument();
 
+    expect(getByTestId('privacy-link')).toHaveAttribute('href', PRIVACY_POLICY);
+    expect(getByTestId('tos-link')).toHaveAttribute('href', TERMS_OF_SERVICE_SERCQ_SEND);
+
     await act(async () => {
       fireEvent.click(
         getByRole('button', {
@@ -293,7 +297,7 @@ describe('DigitalDomicileWizard', () => {
       .onPost('/bff/v1/addresses/LEGAL/default/PEC')
       .reply(200, { result: 'PEC_VALIDATION_REQUIRED' });
 
-    const { getByRole, getByLabelText, getByText, findByText, queryByText } = render(
+    const { getByRole, getByLabelText, getByText, findByText, queryByTestId, queryByText } = render(
       <DigitalDomicileWizard />,
       {
         preloadedState: {
@@ -351,6 +355,9 @@ describe('DigitalDomicileWizard', () => {
     });
 
     expect(await findByText(`${labelPrefix}.summary.title`)).toBeInTheDocument();
+
+    expect(queryByTestId('privacy-link')).not.toBeInTheDocument();
+    expect(queryByTestId('tos-link')).not.toBeInTheDocument();
 
     await act(async () => {
       fireEvent.click(
