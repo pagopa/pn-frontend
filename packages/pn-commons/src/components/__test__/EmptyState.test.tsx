@@ -34,7 +34,7 @@ describe('EmptyState component', () => {
   });
 
   it('renders with custom icon', () => {
-    const { getByTestId, queryByTestId } = render(<EmptyState sentimentIcon={BalconyIcon} />);
+    const { getByTestId, queryByTestId } = render(<EmptyState sentimentIcon={<BalconyIcon />} />);
     const sadIcon = queryByTestId('SentimentDissatisfiedIcon');
     const happyIcon = queryByTestId('InsertEmoticonIcon');
     const customIcon = getByTestId('BalconyIcon');

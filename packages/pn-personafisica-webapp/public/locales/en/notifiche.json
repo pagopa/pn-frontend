@@ -33,7 +33,11 @@
   "empty-state": {
     "filtered": "We did not find any results: try different filters. <0>Remove filters</0>.",
     "delegate": "{{name}} did not receive any notification.",
-    "no-notifications": "You did not receive any notification. <0>Go to your addresses</0> and enter one or more courtesy addresses, if you receive a notification we will communicate to you.",
+    "title": "Here you will find your SEND notifications",
+    "description-onboarding": "Did you know you can save money by choosing to receive legally binding communications only digitally?",
+    "description": "Update your contact details now and you will immediately know when you receive one.",
+    "go-to-onboarding-cta": "Set up SEND",
+    "go-to-contacts-cta": "Go to your contact details",
     "aria-label-remove-filters": "Remove filters",
     "aria-label-route-contacts": "Go to your addresses"
   },
