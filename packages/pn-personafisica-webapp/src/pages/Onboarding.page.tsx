@@ -1,13 +1,20 @@
+import { useEffect } from 'react';
 import { Outlet } from 'react-router-dom';
 
 import { Box } from '@mui/material';
 
 import LoadingPageWrapper from '../components/LoadingPageWrapper/LoadingPageWrapper';
 import { contactsSelectors } from '../redux/contact/reducers';
-import { useAppSelector } from '../redux/hooks';
+import { useAppDispatch, useAppSelector } from '../redux/hooks';
+import { setOnboardingShown } from '../redux/onboarding/reducers';
 
 const Onboarding: React.FC = () => {
   const loading = useAppSelector(contactsSelectors.selectLoading);
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    dispatch(setOnboardingShown(true));
+  }, [dispatch]);
 
   if (loading) {
     return <></>;

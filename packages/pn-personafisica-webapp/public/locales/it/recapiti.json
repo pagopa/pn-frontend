@@ -415,6 +415,14 @@
         "continue-without-io": "Continua senza l’app IO",
         "confirm-activation": "Conferma attivazione"
       }
+    },
+    "notification-exit-dialog": {
+      "title": "Come vuoi ricevere le comunicazioni a valore legale?",
+      "description": "Configura al meglio SEND e risparmi!",
+      "buttons": {
+        "configure": "Configura SEND",
+        "skip": "Salta la configurazione"
+      }
     }
   }
 }

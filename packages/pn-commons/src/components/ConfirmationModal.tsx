@@ -53,7 +53,13 @@ const ConfirmationModal: React.FC<Props> = ({
   return (
     <PnDialog
       open={open}
-      onClose={slotsProps?.closeButton?.onClick}
+      onClose={(_, reason) => {
+        if (reason === 'backdropClick') {
+          return;
+        }
+
+        slotsProps?.closeButton?.onClick?.({} as React.MouseEvent<HTMLButtonElement>);
+      }}
       aria-labelledby="confirmation-dialog-title"
       aria-describedby="confirmation-dialog-description"
       maxWidth="sm"

@@ -6,7 +6,7 @@ import { Fragment, ReactNode, useCallback, useEffect, useMemo, useState } from '
 import { useTranslation } from 'react-i18next';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 
-import { Alert, AlertTitle, Box, Grid, Paper, Stack, Typography } from '@mui/material';
+import { Alert, AlertTitle, Box, Button, Grid, Paper, Stack, Typography } from '@mui/material';
 import {
   AccessDenied,
   ApiError,
@@ -14,6 +14,7 @@ import {
   AppResponse,
   AppResponsePublisher,
   AppRouteParams,
+  ConfirmationModal,
   DeliveryOutcomeType,
   EventPaymentRecipientType,
   GetDowntimeHistoryParams,
@@ -49,16 +50,18 @@ import {
   EventDeliveryFlowType,
   EventDeliveryModeType,
 } from '@pagopa-pn/pn-commons/src/models/MixpanelEvents';
-import { MIAlert } from '@pagopa/mui-italia';
+import { IllusMIMessage, MIAlert } from '@pagopa/mui-italia';
 
 import DomicileBanner from '../components/DomicileBanner/DomicileBanner';
 import LoadingPageWrapper from '../components/LoadingPageWrapper/LoadingPageWrapper';
 import { NotificationCostBanner } from '../components/Notifications/NotificationCostBanner';
+import { useNotificationExitPrompt } from '../hooks/useNotificationExitPrompt';
 import { NotificationDetailRouteState } from '../models/NotificationDetail';
 import { PFEventsType } from '../models/PFEventsType';
 import { ContactSource } from '../models/contacts';
 import * as routes from '../navigation/routes.const';
 import { getDowntimeLegalFact } from '../redux/appStatus/actions';
+import { contactsSelectors } from '../redux/contact/reducers';
 import { useAppDispatch, useAppSelector, useSafeAppDispatch } from '../redux/hooks';
 import {
   NOTIFICATION_ACTIONS,
@@ -71,11 +74,13 @@ import {
   getReceivedNotificationPaymentUrl,
 } from '../redux/notification/actions';
 import { resetState } from '../redux/notification/reducers';
+import { onboardingSelectors, setOnboardingExitReminderShown } from '../redux/onboarding/reducers';
 import { exchangeNotificationRetrievalId } from '../redux/sidemenu/actions';
 import { RootState } from '../redux/store';
 import { getConfiguration } from '../services/configuration.service';
 import { ServerResponseErrorCode } from '../utility/AppError/types';
 import PFEventStrategyFactory from '../utility/MixpanelUtils/PFEventStrategyFactory';
+import { hasRequiredContacts } from '../utility/contacts.utility';
 
 const NotificationDetail: React.FC = () => {
   const { id, mandateId } = useParams();
@@ -101,6 +106,7 @@ const NotificationDetail: React.FC = () => {
     DOWNTIME_EXAMPLE_LINK,
     NOTIFICATION_COST_DETAILS_ASSISTANCE_LINK,
     NOTIFICATION_CANCELLED_HELP_LINK,
+    IS_ONBOARDING_ENABLED,
   } = getConfiguration();
   const navigate = useNavigate();
 
@@ -119,6 +125,75 @@ const NotificationDetail: React.FC = () => {
 
   const userPayments = useAppSelector((state: RootState) => state.notificationState.paymentsData);
   const paymentTpp = useAppSelector((state: RootState) => state.generalInfoState.paymentTpp);
+
+  // START ONBOARDING
+  const addresses = useAppSelector(contactsSelectors.selectAddresses);
+
+  const notificationsRoute = mandateId
+    ? routes.GET_NOTIFICHE_DELEGATO_PATH(mandateId)
+    : routes.NOTIFICHE;
+
+  const onboardingShown = useAppSelector(onboardingSelectors.selectWasShown);
+  const onboardingSkipped = useAppSelector(onboardingSelectors.selectWasSkipped);
+  const onboardingExitReminderShown = useAppSelector(onboardingSelectors.selectExitReminderShown);
+
+  const userHasRequiredContacts = useMemo(() => hasRequiredContacts(addresses), [addresses]);
+
+  const canShowOnboardingExitReminder =
+    IS_ONBOARDING_ENABLED &&
+    !onboardingShown &&
+    !onboardingSkipped &&
+    !onboardingExitReminderShown &&
+    !userHasRequiredContacts;
+
+  const [isNotificationExitBlocked, confirmNotificationExit, cancelNotificationExit] =
+    useNotificationExitPrompt({
+      when: canShowOnboardingExitReminder,
+      notificationsRoute,
+    });
+
+  const [showOnboardingExitReminder, setShowOnboardingExitReminder] = useState(false);
+
+  const openOnboardingExitReminder = useCallback(() => {
+    setShowOnboardingExitReminder(true);
+    dispatch(setOnboardingExitReminderShown(true));
+  }, [dispatch]);
+
+  const closeOnboardingExitReminder = useCallback(() => {
+    setShowOnboardingExitReminder(false);
+
+    if (isNotificationExitBlocked) {
+      confirmNotificationExit();
+      return;
+    }
+
+    cancelNotificationExit();
+  }, [isNotificationExitBlocked, confirmNotificationExit, cancelNotificationExit]);
+
+  const goToOnboarding = useCallback(() => {
+    setShowOnboardingExitReminder(false);
+    cancelNotificationExit();
+    navigate(routes.ONBOARDING);
+  }, [navigate, cancelNotificationExit]);
+
+  const isReturningFromPayment = useMemo(
+    () => Boolean(notification.iun && getPaymentCache(notification.iun)?.currentPayment),
+    [notification.iun]
+  );
+
+  useEffect(() => {
+    if (isNotificationExitBlocked) {
+      openOnboardingExitReminder();
+    }
+  }, [isNotificationExitBlocked, openOnboardingExitReminder]);
+
+  useEffect(() => {
+    if (isReturningFromPayment && canShowOnboardingExitReminder) {
+      openOnboardingExitReminder();
+    }
+  }, [isReturningFromPayment, canShowOnboardingExitReminder, openOnboardingExitReminder]);
+
+  // END ONBOARDING
 
   const unfilteredDetailTableRows: Array<{
     label: string;
@@ -414,7 +489,7 @@ const NotificationDetail: React.FC = () => {
         return;
       }
 
-      safeDispatch(getReceivedNotificationPaymentInfo, {
+      void safeDispatch(getReceivedNotificationPaymentInfo, {
         taxId: currentRecipient.taxId,
         paymentInfoRequest,
       });
@@ -750,6 +825,31 @@ const NotificationDetail: React.FC = () => {
               </Box>
             </Grid>
           </Grid>
+          <ConfirmationModal
+            open={showOnboardingExitReminder}
+            title={t('onboarding.notification-exit-dialog.title', { ns: 'recapiti' })}
+            contentAlign="center"
+            slots={{
+              illustration: <IllusMIMessage />,
+              closeButton: Button,
+            }}
+            slotsProps={{
+              confirmButton: {
+                onClick: goToOnboarding,
+                children: t('onboarding.notification-exit-dialog.buttons.configure', {
+                  ns: 'recapiti',
+                }),
+              },
+              closeButton: {
+                onClick: closeOnboardingExitReminder,
+                children: t('onboarding.notification-exit-dialog.buttons.skip', { ns: 'recapiti' }),
+              },
+            }}
+          >
+            <Typography variant="body2">
+              {t('onboarding.notification-exit-dialog.description', { ns: 'recapiti' })}
+            </Typography>
+          </ConfirmationModal>
         </Box>
       )}
     </LoadingPageWrapper>

@@ -11,6 +11,7 @@ import dashboardSlice from './dashboard/reducers';
 import delegationsSlice from './delegation/reducers';
 import newDelegationSlice from './newDelegation/reducers';
 import notificationSlice from './notification/reducers';
+import onboardingSlice from './onboarding/reducers';
 import generalInfoSlice from './sidemenu/reducers';
 
 export const appReducers = {
@@ -23,6 +24,7 @@ export const appReducers = {
   newDelegationState: newDelegationSlice.reducer,
   contactsState: contactsSlice.reducer,
   generalInfoState: generalInfoSlice.reducer,
+  onboardingState: onboardingSlice.reducer,
 };
 
 const createStore = (logReduxActions?: boolean) => {
