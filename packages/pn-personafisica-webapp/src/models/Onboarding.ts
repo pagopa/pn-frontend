@@ -12,3 +12,4 @@ export type ContactState<TValue extends ContactValue = ContactValue> = {
 export type EmailContactState = ContactState<string | undefined>;
 export type PecContactState = ContactState<string | undefined> & { isValid?: boolean };
 export type IoContactState = ContactState<IOAllowedValues | undefined>;
+export type SmsContactState = ContactState<string | undefined>;

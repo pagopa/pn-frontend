@@ -3,6 +3,7 @@ import { Navigate, Route, Routes, useNavigate } from 'react-router-dom';
 
 import { ConsentType, LoadingPage, NotFound, lazyRetry } from '@pagopa-pn/pn-commons';
 
+import OnboardingCourtesyWizard from '../components/Contacts/Onboarding/Courtesy/OnboardingCourtesyWizard';
 import DigitalDomicileWizard from '../components/Contacts/Onboarding/DigitalDomicileWizard';
 import Onboarding from '../pages/Onboarding.page';
 import TppLanding from '../pages/TppLanding.page';
@@ -61,7 +62,7 @@ const Router: React.FC = () => {
                     path={routes.ONBOARDING_DIGITAL_DOMICILE}
                     element={<DigitalDomicileWizard />}
                   />
-                  <Route path={routes.ONBOARDING_COURTESY} element={<></>} />
+                  <Route path={routes.ONBOARDING_COURTESY} element={<OnboardingCourtesyWizard />} />
                   <Route path={routes.ONBOARDING_IO} element={<></>} />
                 </Route>
               )}
