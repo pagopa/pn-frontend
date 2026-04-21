@@ -11,6 +11,7 @@ import {
 import { fireEvent, render } from '../../../__test__/test-utils';
 import { getConfiguration } from '../../../services/configuration.service';
 import { storageRapidAccessOps } from '../../../utility/storage';
+import { isIOSMobile } from '../../../utility/utils';
 import Login from '../Login';
 
 const mockAssign = vi.fn();
@@ -25,6 +26,11 @@ vi.mock('../../../services/configuration.service', async () => {
     }),
   };
 });
+
+vi.mock('../../../utility/utils', async () => ({
+  ...(await vi.importActual<any>('../../../utility/utils')),
+  isIOSMobile: vi.fn().mockReturnValue(false),
+}));
 
 describe('test login page', () => {
   const original = globalThis.location;
@@ -52,7 +58,6 @@ describe('test login page', () => {
     expect(cieButton).toBeInTheDocument();
     const spidSelect = queryById(container, 'spidSelect');
     expect(spidSelect).not.toBeInTheDocument();
-    expect(storageRapidAccessOps.read()).toEqual([AppRouteParams.AAR, 'fake-aar-token']);
   });
 
   it('renders page - with smart banner enabled', () => {
@@ -96,11 +101,27 @@ describe('test login page', () => {
     expect(storageRapidAccessOps.read()).toBeUndefined();
   });
 
-  it('store retrievalId in session storage', () => {
-    render(<Login />, { route: `/?${AppRouteParams.RETRIEVAL_ID}=fake-retrieval_id` });
-    expect(storageRapidAccessOps.read()).toEqual([
-      AppRouteParams.RETRIEVAL_ID,
-      'fake-retrieval_id',
-    ]);
+  it('stores rapidAccess to localStorage on CIE click when iOS', () => {
+    vi.mocked(isIOSMobile).mockReturnValue(true);
+    const { container } = render(<Login />, { route: `/?${AppRouteParams.AAR}=fake-aar-token` });
+    const cieButton = getById(container, 'cieButton');
+    fireEvent.click(cieButton);
+    expect(localStorage.getItem(AppRouteParams.AAR)).toBe('fake-aar-token');
+    expect(sessionStorage.getItem(AppRouteParams.AAR)).toBeNull();
+  });
+
+  it('stores rapidAccess to sessionStorage on CIE click when non-iOS', () => {
+    vi.mocked(isIOSMobile).mockReturnValue(false);
+    const { container } = render(<Login />, { route: `/?${AppRouteParams.AAR}=fake-aar-token` });
+    const cieButton = getById(container, 'cieButton');
+    fireEvent.click(cieButton);
+    expect(sessionStorage.getItem(AppRouteParams.AAR)).toBe('fake-aar-token');
+    expect(localStorage.getItem(AppRouteParams.AAR)).toBeNull();
+  });
+
+  it('clear old rapidAccess params on login page with no URL param', () => {
+    storageRapidAccessOps.write([AppRouteParams.AAR, 'old-token']);
+    render(<Login />);
+    expect(storageRapidAccessOps.read()).toBeUndefined();
   });
 });
