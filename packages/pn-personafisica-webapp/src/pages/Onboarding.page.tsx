@@ -40,6 +40,7 @@ import * as routes from '../navigation/routes.const';
 import { CONTACT_ACTIONS, getDigitalAddresses } from '../redux/contact/actions';
 import { contactsSelectors } from '../redux/contact/reducers';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
+import { setHasSkippedOnboarding } from '../redux/sidemenu/reducers';
 
 export type ChipColors =
   | 'default'
@@ -230,6 +231,7 @@ const Onboarding: React.FC = () => {
   };
 
   const redirectToNotifications = () => {
+    dispatch(setHasSkippedOnboarding(true));
     navigate(routes.NOTIFICHE);
   };
 
