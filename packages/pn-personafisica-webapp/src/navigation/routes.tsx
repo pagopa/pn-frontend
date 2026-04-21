@@ -3,7 +3,9 @@ import { Navigate, Route, Routes, useNavigate } from 'react-router-dom';
 
 import { ConsentType, LoadingPage, NotFound, lazyRetry } from '@pagopa-pn/pn-commons';
 
+import OnboardingCourtesyWizard from '../components/Contacts/Onboarding/Courtesy/OnboardingCourtesyWizard';
 import DigitalDomicileWizard from '../components/Contacts/Onboarding/DigitalDomicileWizard';
+import IoActivationWizard from '../components/Contacts/Onboarding/IoActivationWizard';
 import TppLanding from '../pages/TppLanding.page';
 import { getConfiguration } from '../services/configuration.service';
 import AppNotAccessibleRoute from './AppNotAccessibleRoute';

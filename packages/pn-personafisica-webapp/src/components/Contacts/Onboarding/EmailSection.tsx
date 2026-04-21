@@ -92,7 +92,7 @@ const EmailSection: React.FC<Props> = ({
     return (
       <OnboardingContactItem
         mode="view"
-        introText={t('onboarding.digital-domicile.pec.email-present-description')}
+        description={t('onboarding.digital-domicile.pec.email-present-description')}
         value={email.value}
         icon={<MailOutlineIcon color="disabled" fontSize="small" aria-hidden="true" />}
       />
