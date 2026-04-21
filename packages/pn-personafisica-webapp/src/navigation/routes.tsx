@@ -62,7 +62,7 @@ const Router: React.FC = () => {
                 <Route path={routes.SUPPORT} element={<SupportPage />} />
                 {IS_ONBOARDING_ENABLED && (
                   <Route path={routes.ONBOARDING} element={<Onboarding />}>
-                    <Route path={routes.ONBOARDING} element={<OnboardingHome />} />
+                    <Route index element={<OnboardingHome />} />
                     <Route
                       path={routes.ONBOARDING_DIGITAL_DOMICILE}
                       element={<DigitalDomicileWizard />}
