@@ -11,21 +11,33 @@ import {
   Link,
   Typography,
 } from '@mui/material';
+import { AppRouteParams } from '@pagopa-pn/pn-commons';
 
 import SpidBig from '../assets/spid_big.svg';
 import { PFLoginEventsType } from '../models/PFLoginEventsType';
 import { getConfiguration } from '../services/configuration.service';
 import { IdentityProvider, getIDPS } from '../utility/IDPS';
 import PFLoginEventStrategyFactory from '../utility/MixpanelUtils/PFLoginEventStrategyFactory';
+import { storageRapidAccessOps } from '../utility/storage';
 import { shuffleList } from '../utility/utils';
 
-const SpidSelect = ({ show, onClose }: { show: boolean; onClose: () => void }) => {
+type Props = {
+  show: boolean;
+  onClose: () => void;
+  rapidAccess?: [AppRouteParams, string];
+};
+
+const SpidSelect = ({ show, onClose, rapidAccess }: Props) => {
   const { URL_API_LOGIN, SPID_TEST_ENV_ENABLED, SPID_VALIDATOR_ENV_ENABLED } = getConfiguration();
   const { t } = useTranslation(['login']);
   const IDPS = getIDPS(SPID_TEST_ENV_ENABLED, SPID_VALIDATOR_ENV_ENABLED);
   const shuffledIDPS = shuffleList(IDPS.identityProviders);
 
   const getSPID = (IDP: IdentityProvider) => {
+    if (rapidAccess) {
+      storageRapidAccessOps.write(rapidAccess);
+    }
+
     sessionStorage.setItem('IDP', IDP.entityId);
 
     PFLoginEventStrategyFactory.triggerEvent(PFLoginEventsType.SEND_IDP_SELECTED, {

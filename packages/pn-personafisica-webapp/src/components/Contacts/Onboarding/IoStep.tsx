@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next';
 
 import { Box, Button, Stack, Typography } from '@mui/material';
-import { appStateActions } from '@pagopa-pn/pn-commons';
+import { appStateActions, useIsMobile } from '@pagopa-pn/pn-commons';
 import { ButtonNaked } from '@pagopa/mui-italia';
 
 import {
@@ -25,6 +25,7 @@ type Props = {
 
 const IoStep: React.FC<Props> = ({ value, onChange, onContinue }) => {
   const { t } = useTranslation(['recapiti', 'common']);
+  const isMobile = useIsMobile();
   const dispatch = useAppDispatch();
   const { APP_IO_SITE, APP_IO_ANDROID, APP_IO_IOS } = getConfiguration();
 
@@ -117,7 +118,7 @@ const IoStep: React.FC<Props> = ({ value, onChange, onContinue }) => {
 
   return (
     <Stack data-testid="io-step">
-      <Box sx={{ p: 3, bgcolor: 'background.paper' }}>
+      <Box sx={{ p: 2, bgcolor: 'background.paper' }}>
         <Typography fontSize="18px" fontWeight={700} mb={1}>
           {title}
         </Typography>
@@ -148,7 +149,11 @@ const IoStep: React.FC<Props> = ({ value, onChange, onContinue }) => {
           </ButtonNaked>
         )}
       </Box>
-      <OnboardingImage src="/imgs/onboarding-appio.png" decorative />
+      <OnboardingImage
+        src="/imgs/onboarding-appio.png"
+        decorative
+        height={isMobile ? '160px' : '276px'}
+      />
     </Stack>
   );
 };

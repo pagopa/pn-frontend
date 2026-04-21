@@ -76,7 +76,7 @@ const OnboardingContactItem: React.FC<Props> = (props) => {
           </Typography>
         )}
 
-        <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+        <Typography variant="body2" color="text.secondary" mb={2}>
           {label ?? null}
         </Typography>
 
@@ -90,15 +90,15 @@ const OnboardingContactItem: React.FC<Props> = (props) => {
             startAdornment: prefix && <InputAdornment position="start">{prefix}</InputAdornment>,
           }}
           onBlur={onBlur}
-          error={Boolean(touched && error)}
-          helperText={touched ? error : ' '}
+          error={touched && Boolean(error)}
+          helperText={touched && error}
         />
 
         {footer ?? null}
 
         <Button
           fullWidth
-          sx={{ mt: 1 }}
+          sx={{ mt: 2 }}
           variant={buttonVariant}
           color="primary"
           onClick={() => void onSubmit()}
@@ -111,7 +111,7 @@ const OnboardingContactItem: React.FC<Props> = (props) => {
             color="primary"
             size="medium"
             onClick={collapse.onClick}
-            sx={{ alignSelf: 'center', fontWeight: 700, mt: 1 }}
+            sx={{ alignSelf: 'center', fontWeight: 700 }}
           >
             {collapse.label}
           </ButtonNaked>
@@ -137,7 +137,7 @@ const OnboardingContactItem: React.FC<Props> = (props) => {
       )}
 
       <Stack direction="row" spacing={1.5} alignItems="center">
-        {icon ?? <CheckIcon color="disabled" aria-hidden="true" />}
+        {icon ?? <CheckIcon color="disabled" fontSize="small" aria-hidden="true" />}
         <Box>
           {label && (
             <Typography variant="body2" fontSize="14px" color="text.secondary">
