@@ -65,8 +65,11 @@ const Router: React.FC = () => {
                       path={routes.ONBOARDING_DIGITAL_DOMICILE}
                       element={<DigitalDomicileWizard />}
                     />
-                    <Route path={routes.ONBOARDING_COURTESY} element={<></>} />
-                    <Route path={routes.ONBOARDING_IO} element={<></>} />
+                    <Route path={routes.ONBOARDING_IO} element={<IoActivationWizard />} />
+                    <Route
+                      path={routes.ONBOARDING_COURTESY}
+                      element={<OnboardingCourtesyWizard />}
+                    />
                   </Route>
                 )}
                 <Route path={routes.DIGITAL_DOMICILE} element={<DigitalContact />}>
