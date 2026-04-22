@@ -14,6 +14,7 @@ import {
 import { getOnboardingBasePayload } from '../../mixpanel';
 
 type Props = {
+  event_type?: EventAction;
   onboarding_selected_flow: OnboardingAvailableFlows;
 };
 
@@ -25,11 +26,14 @@ type SendOnboardingFlowReturn = {
 };
 
 export class SendOnboardingFlowStrategy implements EventStrategy {
-  performComputations({ onboarding_selected_flow }: Props): TrackedEvent<SendOnboardingFlowReturn> {
+  performComputations({
+    event_type,
+    onboarding_selected_flow,
+  }: Props): TrackedEvent<SendOnboardingFlowReturn> {
     return {
       [EventPropertyType.TRACK]: {
         event_category: EventCategory.UX,
-        event_type: EventAction.ACTION,
+        event_type: event_type || EventAction.ACTION,
         onboarding_selected_flow,
         ...getOnboardingBasePayload(),
       },
