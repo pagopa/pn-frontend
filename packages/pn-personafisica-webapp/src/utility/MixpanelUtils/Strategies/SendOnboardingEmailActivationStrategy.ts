@@ -6,7 +6,11 @@ import {
   TrackedEvent,
 } from '@pagopa-pn/pn-commons';
 
-import { ContactStatus, OnboardingFlow, OnboardingSource } from '../../../models/Onboarding';
+import {
+  OnboardingContactStatus,
+  OnboardingFlow,
+  OnboardingSource,
+} from '../../../models/Onboarding';
 import { store } from '../../../redux/store';
 import { getOnboardingAvailableFlows } from '../../mixpanel';
 
@@ -14,13 +18,17 @@ type Props = {
   event_type: EventAction;
   source: OnboardingSource;
   onboarding_selected_flow: OnboardingFlow;
-  email_status: ContactStatus;
-  sms_status?: ContactStatus;
+  email_value?: string;
+  sms_value?: string;
 };
 
-type SendOnboardingEmailActivationReturn = Props & {
+type SendOnboardingEmailActivationReturn = {
+  source: OnboardingSource;
   onboarding_available_flow: string;
   flow: OnboardingFlow;
+  onboarding_selected_flow: OnboardingFlow;
+  email_status?: OnboardingContactStatus;
+  sms_status?: OnboardingContactStatus;
 };
 
 export class SendOnboardingEmailActivationStrategy implements EventStrategy {
@@ -28,8 +36,8 @@ export class SendOnboardingEmailActivationStrategy implements EventStrategy {
     event_type,
     source,
     onboarding_selected_flow,
-    email_status,
-    sms_status,
+    email_value,
+    sms_value,
   }: Props): TrackedEvent<SendOnboardingEmailActivationReturn> {
     const { digitalAddresses } = store.getState().contactsState;
 
@@ -41,8 +49,10 @@ export class SendOnboardingEmailActivationStrategy implements EventStrategy {
         onboarding_available_flow: getOnboardingAvailableFlows(digitalAddresses),
         flow: 'onboarding',
         onboarding_selected_flow,
-        email_status,
-        ...(sms_status !== undefined && { sms_status }),
+        email_status: email_value
+          ? OnboardingContactStatus.POPULATED
+          : OnboardingContactStatus.EMPTY,
+        sms_status: sms_value ? OnboardingContactStatus.POPULATED : OnboardingContactStatus.EMPTY,
       },
     };
   }

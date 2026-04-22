@@ -30,4 +30,9 @@ export type OnboardingFlows = (typeof OnboardingFlows)[keyof typeof OnboardingFl
 
 export type OnboardingFlow = 'onboarding';
 
-export type ContactStatus = 'empty' | 'populated';
+export const OnboardingContactStatus = {
+  EMPTY: 'empty',
+  POPULATED: 'populated',
+};
+export type OnboardingContactStatus =
+  (typeof OnboardingContactStatus)[keyof typeof OnboardingContactStatus];

@@ -4,13 +4,15 @@ import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 
 import { Divider, Stack, Typography } from '@mui/material';
-import { ConfirmationModal, appStateActions } from '@pagopa-pn/pn-commons';
+import { ConfirmationModal, EventAction, appStateActions } from '@pagopa-pn/pn-commons';
 import { IllusMIMessage, MIAlert } from '@pagopa/mui-italia';
 
-import { EmailContactState, SmsContactState } from '../../../../models/Onboarding';
+import { EmailContactState, OnboardingFlows, SmsContactState } from '../../../../models/Onboarding';
+import { PFEventsType } from '../../../../models/PFEventsType';
 import { AddressType, ChannelType, SaveDigitalAddressParams } from '../../../../models/contacts';
 import { createOrUpdateAddress } from '../../../../redux/contact/actions';
 import { useAppDispatch } from '../../../../redux/hooks';
+import PFEventStrategyFactory from '../../../../utility/MixpanelUtils/PFEventStrategyFactory';
 import {
   emailValidationSchema,
   internationalPhonePrefix,
@@ -219,6 +221,16 @@ const EmailSmsStep = ({
   useEffect(() => {
     registerContinueHandler?.(handleContinueAttempt);
   }, [handleContinueAttempt, registerContinueHandler]);
+
+  useEffect(() => {
+    PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ONBOARDING_EMAIL_SMS_ACTIVATION, {
+      event_type: EventAction.SCREEN_VIEW,
+      source: '', // TODO
+      onboarding_selected_flow: OnboardingFlows.COURTESY,
+      email_value: email.value,
+      sms_value: sms.value,
+    });
+  }, []);
 
   return (
     <Stack data-testid="email-sms-step" spacing={2}>
