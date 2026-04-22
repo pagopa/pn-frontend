@@ -89,6 +89,11 @@ const OnboardingCourtesyWizard: React.FC = () => {
   };
 
   const handleClickNextButton = async (step: number) => {
+    if (isIoStep && !isIoEnabled) {
+      PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ONBOARDING_IO_DOWNLOAD_DECLINED, {
+        onboarding_selected_flow: OnboardingAvailableFlows.COURTESY,
+      });
+    }
     if (step === 1) {
       const canProceed = await emailSmsContinueHandlerRef.current?.();
       if (canProceed !== true) {
@@ -157,6 +162,7 @@ const OnboardingCourtesyWizard: React.FC = () => {
           value={defaultAPPIOAddress?.value as IOAllowedValues | undefined}
           onChange={(value) => updateContactValue('io', value)}
           onContinue={goToNextStep}
+          selectedOnboardingFlow={OnboardingAvailableFlows.COURTESY}
         />
       </PnWizardStep>
       <PnWizardStep label={t('onboarding.courtesy.step-2-label')}>

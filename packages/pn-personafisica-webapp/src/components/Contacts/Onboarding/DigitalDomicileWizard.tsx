@@ -388,6 +388,11 @@ const DigitalDomicileWizard: React.FC = () => {
     }
 
     if (isIoStep) {
+      if (!isIoEnabled) {
+        PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ONBOARDING_IO_DOWNLOAD_DECLINED, {
+          onboarding_selected_flow: OnboardingAvailableFlows.DIGITAL_DOMICILE,
+        });
+      }
       goToNextStep();
       return;
     }
@@ -570,7 +575,12 @@ const DigitalDomicileWizard: React.FC = () => {
         )}
       </PnWizardStep>
       <PnWizardStep label={t('onboarding.digital-domicile.steps.io')}>
-        <IoStep value={wizardState.io.value} onChange={setIoValue} onContinue={goToNextStep} />
+        <IoStep
+          value={wizardState.io.value}
+          onChange={setIoValue}
+          onContinue={goToNextStep}
+          selectedOnboardingFlow={OnboardingAvailableFlows.DIGITAL_DOMICILE}
+        />
       </PnWizardStep>
       <PnWizardStep label={t('onboarding.digital-domicile.steps.summary')}>
         {wizardState.mode ? (

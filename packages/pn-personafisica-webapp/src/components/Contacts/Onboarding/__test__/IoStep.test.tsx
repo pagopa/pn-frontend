@@ -3,6 +3,7 @@ import { vi } from 'vitest';
 
 import { act, fireEvent, render, waitFor } from '../../../../__test__/test-utils';
 import { apiClient } from '../../../../api/apiClients';
+import { OnboardingAvailableFlows } from '../../../../models/Onboarding';
 import { AddressType, ChannelType, IOAllowedValues } from '../../../../models/contacts';
 import { getConfiguration } from '../../../../services/configuration.service';
 import { openAppIoDownloadPage } from '../../../../utility/appio.utility';
@@ -33,6 +34,7 @@ describe('IoStep', () => {
     value: undefined as IOAllowedValues | undefined,
     onChange: vi.fn(),
     onContinue: vi.fn(),
+    selectedOnboardingFlow: OnboardingAvailableFlows.DIGITAL_DOMICILE,
   });
 
   it('renders the unavailable state with download and refresh CTAs', () => {

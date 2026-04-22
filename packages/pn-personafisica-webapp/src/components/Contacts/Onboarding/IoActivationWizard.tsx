@@ -83,7 +83,12 @@ const IoActivationWizard: React.FC = () => {
       }}
     >
       <PnWizardStep>
-        <IoStep value={ioValue} onChange={setIoValue} onContinue={goToFeedback} />
+        <IoStep
+          value={ioValue}
+          onChange={setIoValue}
+          onContinue={goToFeedback}
+          selectedOnboardingFlow={OnboardingAvailableFlows.IO}
+        />
       </PnWizardStep>
     </PnWizard>
   );
