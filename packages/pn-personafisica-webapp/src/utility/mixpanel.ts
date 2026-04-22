@@ -3,6 +3,7 @@ import { uniq } from 'lodash-es';
 import { interceptDispatch } from '@pagopa-pn/pn-commons';
 import { AnyAction, Dispatch, Middleware } from '@reduxjs/toolkit';
 
+import { OnboardingFlows } from '../models/Onboarding';
 import { PFEventsType, eventsActionsMap } from '../models/PFEventsType';
 import { AddressType, ChannelType, DigitalAddress, IOAllowedValues } from '../models/contacts';
 import PFEventStrategyFactory from './MixpanelUtils/PFEventStrategyFactory';
@@ -92,4 +93,21 @@ export const getCustomizedContactType = (
     return 'missing';
   }
   return customizedContactType === ChannelType.PEC ? 'pec' : 'send';
+};
+
+export const getOnboardingAvailableFlows = (addresses: Array<DigitalAddress>): string => {
+  const hasIOEnabled = addresses.some(
+    (addr) => addr.channelType === ChannelType.IOMSG && addr.value === IOAllowedValues.ENABLED
+  );
+
+  const flows: Array<OnboardingFlows> = [
+    OnboardingFlows.DIGITAL_DOMICILE,
+    OnboardingFlows.COURTESY,
+  ];
+
+  if (!hasIOEnabled) {
+    flows.push(OnboardingFlows.IO);
+  }
+
+  return flows.join(',');
 };

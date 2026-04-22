@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 import ArrowForwardRoundedIcon from '@mui/icons-material/ArrowForwardRounded';
 import CheckRoundedIcon from '@mui/icons-material/CheckRounded';
@@ -17,7 +17,7 @@ import {
   Stack,
   Typography,
 } from '@mui/material';
-import { ConfirmationModal, useIsMobile } from '@pagopa-pn/pn-commons';
+import { ConfirmationModal, EventAction, useIsMobile } from '@pagopa-pn/pn-commons';
 import {
   IllusMIAward,
   IllusMIBell,
@@ -25,11 +25,14 @@ import {
   IllusMISmartphoneValidation,
 } from '@pagopa/mui-italia';
 
+import { OnboardingFlows, OnboardingSource } from '../../../models/Onboarding';
+import { PFEventsType } from '../../../models/PFEventsType';
 import { ChannelType, IOAllowedValues } from '../../../models/contacts';
 import * as routes from '../../../navigation/routes.const';
 import { contactsSelectors } from '../../../redux/contact/reducers';
 import { useAppDispatch, useAppSelector } from '../../../redux/hooks';
 import { setHasSkippedOnboarding } from '../../../redux/sidemenu/reducers';
+import PFEventStrategyFactory from '../../../utility/MixpanelUtils/PFEventStrategyFactory';
 
 export type ChipColors =
   | 'default'
@@ -56,6 +59,7 @@ type CardConfig = Array<{
   path: string;
   chip?: { label: string; color: ChipColors };
   hide?: boolean;
+  mixpanelFlowId: string;
 }>;
 
 const PaperContent = ({ items }: { items: Array<Item> }) => (
@@ -91,7 +95,9 @@ const OnboardingHome: React.FC = () => {
   const navigate = useNavigate();
   const isMobile = useIsMobile();
   const dispatch = useAppDispatch();
+  const location = useLocation();
 
+  const source: OnboardingSource = location.state?.source || '';
   const [openModal, setOpenModal] = React.useState(false);
 
   const items: Record<ElementCategory, Array<Item>> = {
@@ -135,6 +141,7 @@ const OnboardingHome: React.FC = () => {
       cta: t('onboarding.cards.send.cta'),
       path: routes.ONBOARDING_DIGITAL_DOMICILE,
       chip: { label: t('onboarding.cards.send.label'), color: 'info' },
+      mixpanelFlowId: OnboardingFlows.DIGITAL_DOMICILE,
     },
     {
       illustration: <IllusMIMessage size={32} aria-hidden="true" />,
@@ -143,6 +150,7 @@ const OnboardingHome: React.FC = () => {
       description: <PaperContent items={items.contacts} />,
       cta: t('onboarding.cards.contacts.cta'),
       path: routes.ONBOARDING_COURTESY,
+      mixpanelFlowId: OnboardingFlows.COURTESY,
     },
     {
       illustration: <IllusMISmartphoneValidation size={32} aria-hidden="true" />,
@@ -151,6 +159,7 @@ const OnboardingHome: React.FC = () => {
       cta: t('onboarding.cards.io.cta'),
       path: routes.ONBOARDING_IO,
       hide: hasIoEnabled,
+      mixpanelFlowId: OnboardingFlows.IO,
     },
   ];
 
@@ -163,6 +172,30 @@ const OnboardingHome: React.FC = () => {
     dispatch(setHasSkippedOnboarding(true));
     navigate(routes.NOTIFICHE);
   };
+
+  const handleSelectFlow = (path: string, selectedFlow: OnboardingFlows) => {
+    PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ONBOARDING_FLOW_SELECTED, {
+      onboarding_selected_flow: selectedFlow,
+      source,
+    });
+    navigate(path);
+  };
+
+  const handleExitFlow = () => {
+    PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ONBOARDING_DECLINED, {
+      event_type: EventAction.EXIT,
+      source,
+    });
+
+    setOpenModal(true);
+  };
+
+  useEffect(() => {
+    PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ONBOARDING_START_FLOW, {
+      event_type: EventAction.SCREEN_VIEW,
+      source,
+    });
+  }, []);
 
   return (
     <>
@@ -214,7 +247,7 @@ const OnboardingHome: React.FC = () => {
 
                   <Button
                     fullWidth
-                    onClick={() => navigate(card.path)}
+                    onClick={() => handleSelectFlow(card.path, card.mixpanelFlowId)}
                     endIcon={<ArrowForwardRoundedIcon />}
                     variant="text"
                     sx={{ padding: 0, textAlign: 'left', justifyContent: 'flex-start' }}
@@ -228,7 +261,7 @@ const OnboardingHome: React.FC = () => {
           })}
       </Stack>
       <Box display="flex" justifyContent="center" mt={3}>
-        <Button variant="text" onClick={() => setOpenModal(true)}>
+        <Button variant="text" onClick={handleExitFlow}>
           {t('onboarding.exit-flow')}
         </Button>
       </Box>

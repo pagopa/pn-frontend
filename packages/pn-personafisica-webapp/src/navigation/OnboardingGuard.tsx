@@ -4,6 +4,7 @@ import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 
 import { LoadingPage, NotificationStatus } from '@pagopa-pn/pn-commons';
 
+import { OnboardingSource } from '../models/Onboarding';
 import { setIsFreshLogin } from '../redux/auth/reducers';
 import { contactsSelectors } from '../redux/contact/reducers';
 import { useAppSelector } from '../redux/hooks';
@@ -41,7 +42,7 @@ const OnboardingGuard = () => {
       !hasRequiredContacts(addresses) &&
       !hasNotificationsToRead
     ) {
-      navigate(routes.ONBOARDING, { replace: true });
+      navigate(routes.ONBOARDING, { replace: true, state: { source: OnboardingSource.LOGIN } });
     }
     dispatch(setIsFreshLogin(false));
   }, []);
