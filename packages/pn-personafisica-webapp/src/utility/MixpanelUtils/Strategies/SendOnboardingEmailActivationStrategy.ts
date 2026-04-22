@@ -12,7 +12,7 @@ import {
   OnboardingSource,
   TrackingFlow,
 } from '../../../models/Onboarding';
-import { getOnboardingBasePayload } from '../../mixpanel';
+import { getOnboardingBasePayload, getOnboardingContactStatus } from '../../mixpanel';
 
 type Props = {
   event_type: EventAction;
@@ -42,10 +42,10 @@ export class SendOnboardingEmailActivationStrategy implements EventStrategy {
         event_category: EventCategory.UX,
         event_type,
         onboarding_selected_flow,
-        email_status: email_value
-          ? OnboardingContactStatus.POPULATED
-          : OnboardingContactStatus.EMPTY,
-        sms_status: sms_value ? OnboardingContactStatus.POPULATED : OnboardingContactStatus.EMPTY,
+        email_status: getOnboardingContactStatus(email_value),
+        ...(sms_value !== undefined && {
+          sms_status: getOnboardingContactStatus(sms_value),
+        }),
         ...getOnboardingBasePayload(),
       },
     };

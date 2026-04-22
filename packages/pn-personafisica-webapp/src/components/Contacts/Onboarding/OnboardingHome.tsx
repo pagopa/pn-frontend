@@ -59,7 +59,7 @@ type CardConfig = Array<{
   path: string;
   chip?: { label: string; color: ChipColors };
   hide?: boolean;
-  mixpanelFlowId: string;
+  mixpanelFlowId: OnboardingAvailableFlows;
 }>;
 
 const PaperContent = ({ items }: { items: Array<Item> }) => (

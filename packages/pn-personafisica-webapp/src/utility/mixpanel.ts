@@ -3,7 +3,12 @@ import { uniq } from 'lodash-es';
 import { interceptDispatch } from '@pagopa-pn/pn-commons';
 import { AnyAction, Dispatch, Middleware } from '@reduxjs/toolkit';
 
-import { OnboardingAvailableFlows, OnboardingSource, TrackingFlow } from '../models/Onboarding';
+import {
+  OnboardingAvailableFlows,
+  OnboardingContactStatus,
+  OnboardingSource,
+  TrackingFlow,
+} from '../models/Onboarding';
 import { PFEventsType, eventsActionsMap } from '../models/PFEventsType';
 import { AddressType, ChannelType, DigitalAddress, IOAllowedValues } from '../models/contacts';
 import { store } from '../redux/store';
@@ -100,7 +105,7 @@ export const getCustomizedContactType = (
 export const getOnboardingSource = (): OnboardingSource | undefined =>
   store.getState().generalInfoState.onboardingData.source;
 
-export const getOnboardingAvilableFlows = () => {
+export const getOnboardingAvailableFlows = () => {
   const { digitalAddresses } = store.getState().contactsState;
 
   const hasIOEnabled = digitalAddresses.some(
@@ -121,7 +126,10 @@ export const getOnboardingAvilableFlows = () => {
 
 export const getOnboardingBasePayload = () => ({
   source: getOnboardingSource(),
-  onboarding_available_flow: getOnboardingAvilableFlows(),
+  onboarding_available_flow: getOnboardingAvailableFlows(),
   flow: TrackingFlow.ONBOARDING,
 });
+
+export const getOnboardingContactStatus = (value?: string): OnboardingContactStatus =>
+  value ? OnboardingContactStatus.POPULATED : OnboardingContactStatus.EMPTY;
 // -- End Onboarding
