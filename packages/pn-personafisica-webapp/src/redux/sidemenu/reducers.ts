@@ -1,24 +1,43 @@
 import { PaymentTpp } from '@pagopa-pn/pn-commons';
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 
+import { OnboardingSource } from '../../models/Onboarding';
 import { acceptMandate, rejectMandate } from '../delegation/actions';
 import { Delegator } from '../delegation/types';
 import { exchangeNotificationRetrievalId, getSidemenuInformation } from './actions';
 
+type OnboardingDataState = {
+  hasBeenShown: boolean;
+  hasSkippedOnboarding: boolean;
+  exitReminderShown: boolean;
+  source?: OnboardingSource;
+};
+
+type GeneralInfoState = {
+  pendingDelegators: number;
+  delegators: Array<Delegator>;
+  domicileBannerOpened: boolean;
+  paymentTpp: PaymentTpp;
+  onboardingData: OnboardingDataState;
+};
+
+const initialState: GeneralInfoState = {
+  pendingDelegators: 0,
+  delegators: [],
+  domicileBannerOpened: true,
+  paymentTpp: {} as PaymentTpp,
+  onboardingData: {
+    hasBeenShown: false,
+    hasSkippedOnboarding: false,
+    exitReminderShown: false,
+    source: undefined,
+  },
+};
+
 /* eslint-disable functional/immutable-data */
 const generalInfoSlice = createSlice({
   name: 'generalInfoSlice',
-  initialState: {
-    pendingDelegators: 0,
-    delegators: [] as Array<Delegator>,
-    domicileBannerOpened: true,
-    paymentTpp: {} as PaymentTpp,
-    onboardingData: {
-      hasBeenShown: false,
-      hasSkippedOnboarding: false,
-      exitReminderShown: false,
-    },
-  },
+  initialState,
   reducers: {
     closeDomicileBanner: (state) => {
       state.domicileBannerOpened = false;
@@ -31,6 +50,9 @@ const generalInfoSlice = createSlice({
     },
     setOnboardingExitReminderShown: (state, action: PayloadAction<boolean>) => {
       state.onboardingData.exitReminderShown = action.payload;
+    },
+    setOnboardingSource: (state, action: PayloadAction<OnboardingSource | undefined>) => {
+      state.onboardingData.source = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -71,6 +93,7 @@ export const {
   setOnboardingHasBeenShown,
   setHasSkippedOnboarding,
   setOnboardingExitReminderShown,
+  setOnboardingSource,
 } = generalInfoSlice.actions;
 
 export default generalInfoSlice;

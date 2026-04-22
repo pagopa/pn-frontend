@@ -21,14 +21,19 @@ export const OnboardingSource = {
 } as const;
 export type OnboardingSource = (typeof OnboardingSource)[keyof typeof OnboardingSource];
 
-export const OnboardingFlows = {
+export const OnboardingAvailableFlows = {
   DIGITAL_DOMICILE: 'digital_domicile',
   COURTESY: 'courtesy',
   IO: 'io',
 };
-export type OnboardingFlows = (typeof OnboardingFlows)[keyof typeof OnboardingFlows];
+export type OnboardingAvailableFlow =
+  (typeof OnboardingAvailableFlows)[keyof typeof OnboardingAvailableFlows];
 
-export type OnboardingFlow = 'onboarding';
+export const TrackingFlow = {
+  ONBOARDING: 'onboarding',
+} as const;
+
+export type TrackingFlow = (typeof TrackingFlow)[keyof typeof TrackingFlow];
 
 export const OnboardingContactStatus = {
   EMPTY: 'empty',
