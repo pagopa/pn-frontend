@@ -6,7 +6,7 @@ import { Fragment, ReactNode, useCallback, useEffect, useMemo, useState } from '
 import { useTranslation } from 'react-i18next';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 
-import { Alert, AlertTitle, Box, Button, Grid, Paper, Stack, Typography } from '@mui/material';
+import { Alert, AlertTitle, Box, Grid, Paper, Stack, Typography } from '@mui/material';
 import {
   AccessDenied,
   ApiError,
@@ -14,7 +14,6 @@ import {
   AppResponse,
   AppResponsePublisher,
   AppRouteParams,
-  ConfirmationModal,
   DeliveryOutcomeType,
   EventPaymentRecipientType,
   GetDowntimeHistoryParams,
@@ -50,18 +49,17 @@ import {
   EventDeliveryFlowType,
   EventDeliveryModeType,
 } from '@pagopa-pn/pn-commons/src/models/MixpanelEvents';
-import { IllusMIMessage, MIAlert } from '@pagopa/mui-italia';
+import { MIAlert } from '@pagopa/mui-italia';
 
+import NotificationDetailOnboardingPrompt from '../components/Contacts/Onboarding/NotificationDetailOnboardingPrompt';
 import DomicileBanner from '../components/DomicileBanner/DomicileBanner';
 import LoadingPageWrapper from '../components/LoadingPageWrapper/LoadingPageWrapper';
 import { NotificationCostBanner } from '../components/Notifications/NotificationCostBanner';
-import { useNotificationExitPrompt } from '../hooks/useNotificationExitPrompt';
 import { NotificationDetailRouteState } from '../models/NotificationDetail';
 import { PFEventsType } from '../models/PFEventsType';
 import { ContactSource } from '../models/contacts';
 import * as routes from '../navigation/routes.const';
 import { getDowntimeLegalFact } from '../redux/appStatus/actions';
-import { contactsSelectors } from '../redux/contact/reducers';
 import { useAppDispatch, useAppSelector, useSafeAppDispatch } from '../redux/hooks';
 import {
   NOTIFICATION_ACTIONS,
@@ -74,13 +72,11 @@ import {
   getReceivedNotificationPaymentUrl,
 } from '../redux/notification/actions';
 import { resetState } from '../redux/notification/reducers';
-import { onboardingSelectors, setOnboardingExitReminderShown } from '../redux/onboarding/reducers';
 import { exchangeNotificationRetrievalId } from '../redux/sidemenu/actions';
 import { RootState } from '../redux/store';
 import { getConfiguration } from '../services/configuration.service';
 import { ServerResponseErrorCode } from '../utility/AppError/types';
 import PFEventStrategyFactory from '../utility/MixpanelUtils/PFEventStrategyFactory';
-import { hasRequiredContacts } from '../utility/contacts.utility';
 
 const NotificationDetail: React.FC = () => {
   const { id, mandateId } = useParams();
@@ -106,7 +102,6 @@ const NotificationDetail: React.FC = () => {
     DOWNTIME_EXAMPLE_LINK,
     NOTIFICATION_COST_DETAILS_ASSISTANCE_LINK,
     NOTIFICATION_CANCELLED_HELP_LINK,
-    IS_ONBOARDING_ENABLED,
   } = getConfiguration();
   const navigate = useNavigate();
 
@@ -125,75 +120,6 @@ const NotificationDetail: React.FC = () => {
 
   const userPayments = useAppSelector((state: RootState) => state.notificationState.paymentsData);
   const paymentTpp = useAppSelector((state: RootState) => state.generalInfoState.paymentTpp);
-
-  // START ONBOARDING
-  const addresses = useAppSelector(contactsSelectors.selectAddresses);
-
-  const notificationsRoute = mandateId
-    ? routes.GET_NOTIFICHE_DELEGATO_PATH(mandateId)
-    : routes.NOTIFICHE;
-
-  const onboardingShown = useAppSelector(onboardingSelectors.selectWasShown);
-  const onboardingSkipped = useAppSelector(onboardingSelectors.selectWasSkipped);
-  const onboardingExitReminderShown = useAppSelector(onboardingSelectors.selectExitReminderShown);
-
-  const userHasRequiredContacts = useMemo(() => hasRequiredContacts(addresses), [addresses]);
-
-  const canShowOnboardingExitReminder =
-    IS_ONBOARDING_ENABLED &&
-    !onboardingShown &&
-    !onboardingSkipped &&
-    !onboardingExitReminderShown &&
-    !userHasRequiredContacts;
-
-  const [isNotificationExitBlocked, confirmNotificationExit, cancelNotificationExit] =
-    useNotificationExitPrompt({
-      when: canShowOnboardingExitReminder,
-      notificationsRoute,
-    });
-
-  const [showOnboardingExitReminder, setShowOnboardingExitReminder] = useState(false);
-
-  const openOnboardingExitReminder = useCallback(() => {
-    setShowOnboardingExitReminder(true);
-    dispatch(setOnboardingExitReminderShown(true));
-  }, [dispatch]);
-
-  const closeOnboardingExitReminder = useCallback(() => {
-    setShowOnboardingExitReminder(false);
-
-    if (isNotificationExitBlocked) {
-      confirmNotificationExit();
-      return;
-    }
-
-    cancelNotificationExit();
-  }, [isNotificationExitBlocked, confirmNotificationExit, cancelNotificationExit]);
-
-  const goToOnboarding = useCallback(() => {
-    setShowOnboardingExitReminder(false);
-    cancelNotificationExit();
-    navigate(routes.ONBOARDING);
-  }, [navigate, cancelNotificationExit]);
-
-  const isReturningFromPayment = useMemo(
-    () => Boolean(notification.iun && getPaymentCache(notification.iun)?.currentPayment),
-    [notification.iun]
-  );
-
-  useEffect(() => {
-    if (isNotificationExitBlocked) {
-      openOnboardingExitReminder();
-    }
-  }, [isNotificationExitBlocked, openOnboardingExitReminder]);
-
-  useEffect(() => {
-    if (isReturningFromPayment && canShowOnboardingExitReminder) {
-      openOnboardingExitReminder();
-    }
-  }, [isReturningFromPayment, canShowOnboardingExitReminder, openOnboardingExitReminder]);
-
-  // END ONBOARDING
 
   const unfilteredDetailTableRows: Array<{
     label: string;
@@ -703,156 +629,139 @@ const NotificationDetail: React.FC = () => {
   }
 
   return (
-    <LoadingPageWrapper isInitialized={pageReady}>
-      {hasNotificationReceivedApiError && (
-        <Box sx={{ p: 3 }}>
-          {properBreadcrumb}
-          <ApiError
-            onClick={fetchReceivedNotification}
-            mt={3}
-            apiId={NOTIFICATION_ACTIONS.GET_RECEIVED_NOTIFICATION}
-          />
-        </Box>
-      )}
-      {!hasNotificationReceivedApiError && (
-        <Box sx={{ p: { xs: 3, lg: 0 } }}>
-          {isMobile && breadcrumb}
-          {isMobile && pecUnreachableAlert}
-          {isMobile && cancelledAlert}
-          <Grid
-            container
-            direction={isMobile ? 'column-reverse' : 'row'}
-            spacing={isMobile ? 3 : 0}
-          >
-            <Grid item lg={7} xs={12} sx={{ p: { xs: 0, lg: 3 } }}>
-              {!isMobile && breadcrumb}
-              <Stack spacing={3}>
-                {!isMobile && cancelledAlert}
-                {!isMobile && pecUnreachableAlert}
-                {!isMobile && banner}
+    <NotificationDetailOnboardingPrompt
+      iun={notification.iun}
+      mandateId={mandateId}
+      route={routes.NOTIFICHE}
+    >
+      <LoadingPageWrapper isInitialized={pageReady}>
+        {hasNotificationReceivedApiError && (
+          <Box sx={{ p: 3 }}>
+            {properBreadcrumb}
+            <ApiError
+              onClick={fetchReceivedNotification}
+              mt={3}
+              apiId={NOTIFICATION_ACTIONS.GET_RECEIVED_NOTIFICATION}
+            />
+          </Box>
+        )}
+        {!hasNotificationReceivedApiError && (
+          <Box sx={{ p: { xs: 3, lg: 0 } }}>
+            {isMobile && breadcrumb}
+            {isMobile && pecUnreachableAlert}
+            {isMobile && cancelledAlert}
+            <Grid
+              container
+              direction={isMobile ? 'column-reverse' : 'row'}
+              spacing={isMobile ? 3 : 0}
+            >
+              <Grid item lg={7} xs={12} sx={{ p: { xs: 0, lg: 3 } }}>
+                {!isMobile && breadcrumb}
+                <Stack spacing={3}>
+                  {!isMobile && cancelledAlert}
+                  {!isMobile && pecUnreachableAlert}
+                  {!isMobile && banner}
 
-                <NotificationDetailTable rows={detailTableRows} />
-                <Paper sx={{ p: 3 }} elevation={0}>
-                  <NotificationDetailDocuments
-                    title={t('detail.acts', { ns: 'notifiche' })}
-                    documents={notification.documents}
-                    clickHandler={documentDowloadHandler}
-                    documentsAvailable={notification.documentsAvailable}
-                    downloadFilesMessage={getDownloadFilesMessage('attachments')}
-                    downloadFilesLink={t('detail.acts_files.effected_faq', { ns: 'notifiche' })}
-                    disableDownloads={isCancelled.cancellationInTimeline}
-                    titleVariant="h6"
-                  />
-                  {notification.radd && (
-                    <Alert severity={'success'} sx={{ mb: 3, mt: 2 }} data-testid="raddAlert">
-                      <AlertTitle>
-                        {t('detail.timeline.radd.title', { ns: 'notifiche' })}
-                      </AlertTitle>
-                      {t('detail.timeline.radd.description', { ns: 'notifiche' })}
-                    </Alert>
-                  )}
-                </Paper>
-                {checkIfUserHasPayments && (
+                  <NotificationDetailTable rows={detailTableRows} />
                   <Paper sx={{ p: 3 }} elevation={0}>
-                    <ApiErrorWrapper
-                      apiId={NOTIFICATION_ACTIONS.GET_RECEIVED_NOTIFICATION_PAYMENT_INFO}
-                      reloadAction={() => fetchPaymentsInfo(currentRecipient.payments ?? [])}
-                      mainText={t('detail.payment.message-error-fetch-payment', {
-                        ns: 'notifiche',
-                      })}
-                    >
-                      <NotificationPaymentRecipient
-                        payments={userPayments}
-                        paymentTpp={paymentTpp}
-                        isCancelled={isCancelledOrCancelling}
-                        iun={notification.iun}
-                        handleTrackEvent={trackEventPaymentRecipient}
-                        onPayClick={onPayClick}
-                        onPayTppClick={onPayTppClick}
-                        handleFetchPaymentsInfo={reloadPaymentsInfo}
-                        getPaymentAttachmentAction={getPaymentAttachmentAction}
-                        timerF24={F24_DOWNLOAD_WAIT_TIME}
-                        costDetailsAssistanceLink={NOTIFICATION_COST_DETAILS_ASSISTANCE_LINK}
-                        costDetails={notification.notificationCostDetails}
-                      />
-                    </ApiErrorWrapper>
+                    <NotificationDetailDocuments
+                      title={t('detail.acts', { ns: 'notifiche' })}
+                      documents={notification.documents}
+                      clickHandler={documentDowloadHandler}
+                      documentsAvailable={notification.documentsAvailable}
+                      downloadFilesMessage={getDownloadFilesMessage('attachments')}
+                      downloadFilesLink={t('detail.acts_files.effected_faq', { ns: 'notifiche' })}
+                      disableDownloads={isCancelled.cancellationInTimeline}
+                      titleVariant="h6"
+                    />
+                    {notification.radd && (
+                      <Alert severity={'success'} sx={{ mb: 3, mt: 2 }} data-testid="raddAlert">
+                        <AlertTitle>
+                          {t('detail.timeline.radd.title', { ns: 'notifiche' })}
+                        </AlertTitle>
+                        {t('detail.timeline.radd.description', { ns: 'notifiche' })}
+                      </Alert>
+                    )}
                   </Paper>
-                )}
-                <Paper sx={{ p: 3, mb: 3 }} elevation={0} data-testid="aarBox">
-                  <NotificationDetailDocuments
-                    title={t('detail.aar-acts', { ns: 'notifiche' })}
-                    documents={notification.otherDocuments ?? []}
-                    recipients={notification.recipients}
-                    clickHandler={documentDowloadHandler}
-                    downloadFilesMessage={getDownloadFilesMessage('aar')}
-                    downloadFilesLink={t('detail.acts_files.effected_faq', { ns: 'notifiche' })}
-                    disableDownloads={
-                      isCancelled.cancellationInTimeline ||
-                      !dateIsLessThan10Years(notification.sentAt)
+                  {checkIfUserHasPayments && (
+                    <Paper sx={{ p: 3 }} elevation={0}>
+                      <ApiErrorWrapper
+                        apiId={NOTIFICATION_ACTIONS.GET_RECEIVED_NOTIFICATION_PAYMENT_INFO}
+                        reloadAction={() => fetchPaymentsInfo(currentRecipient.payments ?? [])}
+                        mainText={t('detail.payment.message-error-fetch-payment', {
+                          ns: 'notifiche',
+                        })}
+                      >
+                        <NotificationPaymentRecipient
+                          payments={userPayments}
+                          paymentTpp={paymentTpp}
+                          isCancelled={isCancelledOrCancelling}
+                          iun={notification.iun}
+                          handleTrackEvent={trackEventPaymentRecipient}
+                          onPayClick={onPayClick}
+                          onPayTppClick={onPayTppClick}
+                          handleFetchPaymentsInfo={reloadPaymentsInfo}
+                          getPaymentAttachmentAction={getPaymentAttachmentAction}
+                          timerF24={F24_DOWNLOAD_WAIT_TIME}
+                          costDetailsAssistanceLink={NOTIFICATION_COST_DETAILS_ASSISTANCE_LINK}
+                          costDetails={notification.notificationCostDetails}
+                        />
+                      </ApiErrorWrapper>
+                    </Paper>
+                  )}
+                  <Paper sx={{ p: 3, mb: 3 }} elevation={0} data-testid="aarBox">
+                    <NotificationDetailDocuments
+                      title={t('detail.aar-acts', { ns: 'notifiche' })}
+                      documents={notification.otherDocuments ?? []}
+                      recipients={notification.recipients}
+                      clickHandler={documentDowloadHandler}
+                      downloadFilesMessage={getDownloadFilesMessage('aar')}
+                      downloadFilesLink={t('detail.acts_files.effected_faq', { ns: 'notifiche' })}
+                      disableDownloads={
+                        isCancelled.cancellationInTimeline ||
+                        !dateIsLessThan10Years(notification.sentAt)
+                      }
+                    />
+                  </Paper>
+                  <NotificationRelatedDowntimes
+                    downtimeEvents={downtimeEvents}
+                    fetchDowntimeEvents={(fromDate, toDate) =>
+                      fetchDowntimeEvents(fromDate, toDate)
                     }
+                    notificationStatusHistory={notification.notificationStatusHistory}
+                    fetchDowntimeLegalFactDocumentDetails={fetchDowntimeLegalFactDocumentDetails}
+                    apiId={NOTIFICATION_ACTIONS.GET_DOWNTIME_HISTORY}
+                    disableDownloads={isCancelled.cancellationInTimeline}
+                    downtimeExampleLink={DOWNTIME_EXAMPLE_LINK}
                   />
-                </Paper>
-                <NotificationRelatedDowntimes
-                  downtimeEvents={downtimeEvents}
-                  fetchDowntimeEvents={(fromDate, toDate) => fetchDowntimeEvents(fromDate, toDate)}
-                  notificationStatusHistory={notification.notificationStatusHistory}
-                  fetchDowntimeLegalFactDocumentDetails={fetchDowntimeLegalFactDocumentDetails}
-                  apiId={NOTIFICATION_ACTIONS.GET_DOWNTIME_HISTORY}
-                  disableDownloads={isCancelled.cancellationInTimeline}
-                  downtimeExampleLink={DOWNTIME_EXAMPLE_LINK}
-                />
-              </Stack>
+                </Stack>
+              </Grid>
+              <Grid item lg={5} xs={12}>
+                {isMobile && banner}
+                <Box
+                  component="section"
+                  sx={{ backgroundColor: 'white', height: '100%', p: 3, pb: { xs: 0, lg: 3 } }}
+                >
+                  <NotificationDetailTimeline
+                    language={i18n.language}
+                    recipients={notification.recipients}
+                    statusHistory={notification.notificationStatusHistory}
+                    title={t('detail.timeline-title', { ns: 'notifiche' })}
+                    clickHandler={legalFactDownloadHandler}
+                    historyButtonLabel={t('detail.show-history', { ns: 'notifiche' })}
+                    showMoreButtonLabel={t('detail.show-more', { ns: 'notifiche' })}
+                    showLessButtonLabel={t('detail.show-less', { ns: 'notifiche' })}
+                    handleTrackShowMoreLess={trackShowMoreLess}
+                    disableDownloads={isCancelled.cancellationInTimeline}
+                    isParty={false}
+                  />
+                </Box>
+              </Grid>
             </Grid>
-            <Grid item lg={5} xs={12}>
-              {isMobile && banner}
-              <Box
-                component="section"
-                sx={{ backgroundColor: 'white', height: '100%', p: 3, pb: { xs: 0, lg: 3 } }}
-              >
-                <NotificationDetailTimeline
-                  language={i18n.language}
-                  recipients={notification.recipients}
-                  statusHistory={notification.notificationStatusHistory}
-                  title={t('detail.timeline-title', { ns: 'notifiche' })}
-                  clickHandler={legalFactDownloadHandler}
-                  historyButtonLabel={t('detail.show-history', { ns: 'notifiche' })}
-                  showMoreButtonLabel={t('detail.show-more', { ns: 'notifiche' })}
-                  showLessButtonLabel={t('detail.show-less', { ns: 'notifiche' })}
-                  handleTrackShowMoreLess={trackShowMoreLess}
-                  disableDownloads={isCancelled.cancellationInTimeline}
-                  isParty={false}
-                />
-              </Box>
-            </Grid>
-          </Grid>
-          <ConfirmationModal
-            open={showOnboardingExitReminder}
-            title={t('onboarding.notification-exit-dialog.title', { ns: 'recapiti' })}
-            contentAlign="center"
-            slots={{
-              illustration: <IllusMIMessage />,
-              closeButton: Button,
-            }}
-            slotsProps={{
-              confirmButton: {
-                onClick: goToOnboarding,
-                children: t('onboarding.notification-exit-dialog.buttons.configure', {
-                  ns: 'recapiti',
-                }),
-              },
-              closeButton: {
-                onClick: closeOnboardingExitReminder,
-                children: t('onboarding.notification-exit-dialog.buttons.skip', { ns: 'recapiti' }),
-              },
-            }}
-          >
-            <Typography variant="body2">
-              {t('onboarding.notification-exit-dialog.description', { ns: 'recapiti' })}
-            </Typography>
-          </ConfirmationModal>
-        </Box>
-      )}
-    </LoadingPageWrapper>
+          </Box>
+        )}
+      </LoadingPageWrapper>
+    </NotificationDetailOnboardingPrompt>
   );
 };
 

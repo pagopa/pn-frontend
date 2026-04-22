@@ -3,12 +3,12 @@ import { BlockerFunction, useBlocker } from 'react-router-dom';
 
 type Params = {
   when: boolean;
-  notificationsRoute: string;
+  route: string;
 };
 
 export function useNotificationExitPrompt({
   when,
-  notificationsRoute,
+  route,
 }: Params): [boolean, () => void, () => void] {
   const handleBlockedNavigation: BlockerFunction = useCallback(
     ({ currentLocation, nextLocation }) => {
@@ -17,11 +17,11 @@ export function useNotificationExitPrompt({
       }
 
       const isPathChanging = nextLocation.pathname !== currentLocation.pathname;
-      const isGoingToNotifications = nextLocation.pathname === notificationsRoute;
+      const isGoingToNotifications = nextLocation.pathname === route;
 
       return isPathChanging && isGoingToNotifications;
     },
-    [when, notificationsRoute]
+    [when, route]
   );
 
   const blocker = useBlocker(handleBlockedNavigation);

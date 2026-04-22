@@ -1,6 +1,7 @@
 import { SERCQ_SEND_VALUE } from '@pagopa-pn/pn-commons';
 
 import {
+  buildSelectedAddresses,
   digitalAddresses,
   digitalAddressesSercq,
   digitalCourtesyAddresses,
@@ -11,6 +12,7 @@ import {
   contactAlreadyExists,
   countContactsByType,
   getSemanticTextFieldProps,
+  hasRequiredContacts,
   removeAddress,
   specialContactsAvailableAddressTypes,
   updateAddressesList,
@@ -227,6 +229,74 @@ describe('Contacts utility test', () => {
     );
 
     expect(result).toStrictEqual(currentAddresses);
+  });
+
+  it('test hasRequiredContacts function, no contacts', () => {
+    expect(hasRequiredContacts(buildSelectedAddresses([]))).toBe(false);
+  });
+
+  it('test hasRequiredContacts function, only email', () => {
+    const contacts: Array<DigitalAddress> = [
+      {
+        addressType: AddressType.COURTESY,
+        channelType: ChannelType.EMAIL,
+        senderId: 'default',
+        value: 'test@mail.com',
+      },
+    ];
+
+    expect(hasRequiredContacts(buildSelectedAddresses(contacts))).toBe(false);
+  });
+
+  it('test hasRequiredContacts function, only io', () => {
+    const contacts: Array<DigitalAddress> = [
+      {
+        addressType: AddressType.COURTESY,
+        channelType: ChannelType.IOMSG,
+        senderId: 'default',
+        value: 'ENABLED',
+      },
+    ];
+
+    expect(hasRequiredContacts(buildSelectedAddresses(contacts))).toBe(false);
+  });
+
+  it('test hasRequiredContacts function, email and io', () => {
+    const contacts: Array<DigitalAddress> = [
+      {
+        addressType: AddressType.COURTESY,
+        channelType: ChannelType.EMAIL,
+        senderId: 'default',
+        value: 'test@mail.com',
+      },
+      {
+        addressType: AddressType.COURTESY,
+        channelType: ChannelType.IOMSG,
+        senderId: 'default',
+        value: 'ENABLED',
+      },
+    ];
+
+    expect(hasRequiredContacts(buildSelectedAddresses(contacts))).toBe(true);
+  });
+
+  it('test hasRequiredContacts function, email and sms', () => {
+    const contacts: Array<DigitalAddress> = [
+      {
+        addressType: AddressType.COURTESY,
+        channelType: ChannelType.EMAIL,
+        senderId: 'default',
+        value: 'test@mail.com',
+      },
+      {
+        addressType: AddressType.COURTESY,
+        channelType: ChannelType.SMS,
+        senderId: 'default',
+        value: '+393331234567',
+      },
+    ];
+
+    expect(hasRequiredContacts(buildSelectedAddresses(contacts))).toBe(false);
   });
 
   it('test getSemanticTextFieldProps function', () => {
