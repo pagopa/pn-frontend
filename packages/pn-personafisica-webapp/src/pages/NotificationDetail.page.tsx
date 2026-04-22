@@ -51,6 +51,7 @@ import {
 } from '@pagopa-pn/pn-commons/src/models/MixpanelEvents';
 import { MIAlert } from '@pagopa/mui-italia';
 
+import NotificationDetailOnboardingPrompt from '../components/Contacts/Onboarding/NotificationDetailOnboardingPrompt';
 import DomicileBanner from '../components/DomicileBanner/DomicileBanner';
 import LoadingPageWrapper from '../components/LoadingPageWrapper/LoadingPageWrapper';
 import { NotificationCostBanner } from '../components/Notifications/NotificationCostBanner';
@@ -414,7 +415,7 @@ const NotificationDetail: React.FC = () => {
         return;
       }
 
-      safeDispatch(getReceivedNotificationPaymentInfo, {
+      void safeDispatch(getReceivedNotificationPaymentInfo, {
         taxId: currentRecipient.taxId,
         paymentInfoRequest,
       });
@@ -628,131 +629,139 @@ const NotificationDetail: React.FC = () => {
   }
 
   return (
-    <LoadingPageWrapper isInitialized={pageReady}>
-      {hasNotificationReceivedApiError && (
-        <Box sx={{ p: 3 }}>
-          {properBreadcrumb}
-          <ApiError
-            onClick={fetchReceivedNotification}
-            mt={3}
-            apiId={NOTIFICATION_ACTIONS.GET_RECEIVED_NOTIFICATION}
-          />
-        </Box>
-      )}
-      {!hasNotificationReceivedApiError && (
-        <Box sx={{ p: { xs: 3, lg: 0 } }}>
-          {isMobile && breadcrumb}
-          {isMobile && pecUnreachableAlert}
-          {isMobile && cancelledAlert}
-          <Grid
-            container
-            direction={isMobile ? 'column-reverse' : 'row'}
-            spacing={isMobile ? 3 : 0}
-          >
-            <Grid item lg={7} xs={12} sx={{ p: { xs: 0, lg: 3 } }}>
-              {!isMobile && breadcrumb}
-              <Stack spacing={3}>
-                {!isMobile && cancelledAlert}
-                {!isMobile && pecUnreachableAlert}
-                {!isMobile && banner}
+    <NotificationDetailOnboardingPrompt
+      iun={notification.iun}
+      mandateId={mandateId}
+      route={routes.NOTIFICHE}
+    >
+      <LoadingPageWrapper isInitialized={pageReady}>
+        {hasNotificationReceivedApiError && (
+          <Box sx={{ p: 3 }}>
+            {properBreadcrumb}
+            <ApiError
+              onClick={fetchReceivedNotification}
+              mt={3}
+              apiId={NOTIFICATION_ACTIONS.GET_RECEIVED_NOTIFICATION}
+            />
+          </Box>
+        )}
+        {!hasNotificationReceivedApiError && (
+          <Box sx={{ p: { xs: 3, lg: 0 } }}>
+            {isMobile && breadcrumb}
+            {isMobile && pecUnreachableAlert}
+            {isMobile && cancelledAlert}
+            <Grid
+              container
+              direction={isMobile ? 'column-reverse' : 'row'}
+              spacing={isMobile ? 3 : 0}
+            >
+              <Grid item lg={7} xs={12} sx={{ p: { xs: 0, lg: 3 } }}>
+                {!isMobile && breadcrumb}
+                <Stack spacing={3}>
+                  {!isMobile && cancelledAlert}
+                  {!isMobile && pecUnreachableAlert}
+                  {!isMobile && banner}
 
-                <NotificationDetailTable rows={detailTableRows} />
-                <Paper sx={{ p: 3 }} elevation={0}>
-                  <NotificationDetailDocuments
-                    title={t('detail.acts', { ns: 'notifiche' })}
-                    documents={notification.documents}
-                    clickHandler={documentDowloadHandler}
-                    documentsAvailable={notification.documentsAvailable}
-                    downloadFilesMessage={getDownloadFilesMessage('attachments')}
-                    downloadFilesLink={t('detail.acts_files.effected_faq', { ns: 'notifiche' })}
-                    disableDownloads={isCancelled.cancellationInTimeline}
-                    titleVariant="h6"
-                  />
-                  {notification.radd && (
-                    <Alert severity={'success'} sx={{ mb: 3, mt: 2 }} data-testid="raddAlert">
-                      <AlertTitle>
-                        {t('detail.timeline.radd.title', { ns: 'notifiche' })}
-                      </AlertTitle>
-                      {t('detail.timeline.radd.description', { ns: 'notifiche' })}
-                    </Alert>
-                  )}
-                </Paper>
-                {checkIfUserHasPayments && (
+                  <NotificationDetailTable rows={detailTableRows} />
                   <Paper sx={{ p: 3 }} elevation={0}>
-                    <ApiErrorWrapper
-                      apiId={NOTIFICATION_ACTIONS.GET_RECEIVED_NOTIFICATION_PAYMENT_INFO}
-                      reloadAction={() => fetchPaymentsInfo(currentRecipient.payments ?? [])}
-                      mainText={t('detail.payment.message-error-fetch-payment', {
-                        ns: 'notifiche',
-                      })}
-                    >
-                      <NotificationPaymentRecipient
-                        payments={userPayments}
-                        paymentTpp={paymentTpp}
-                        isCancelled={isCancelledOrCancelling}
-                        iun={notification.iun}
-                        handleTrackEvent={trackEventPaymentRecipient}
-                        onPayClick={onPayClick}
-                        onPayTppClick={onPayTppClick}
-                        handleFetchPaymentsInfo={reloadPaymentsInfo}
-                        getPaymentAttachmentAction={getPaymentAttachmentAction}
-                        timerF24={F24_DOWNLOAD_WAIT_TIME}
-                        costDetailsAssistanceLink={NOTIFICATION_COST_DETAILS_ASSISTANCE_LINK}
-                        costDetails={notification.notificationCostDetails}
-                      />
-                    </ApiErrorWrapper>
+                    <NotificationDetailDocuments
+                      title={t('detail.acts', { ns: 'notifiche' })}
+                      documents={notification.documents}
+                      clickHandler={documentDowloadHandler}
+                      documentsAvailable={notification.documentsAvailable}
+                      downloadFilesMessage={getDownloadFilesMessage('attachments')}
+                      downloadFilesLink={t('detail.acts_files.effected_faq', { ns: 'notifiche' })}
+                      disableDownloads={isCancelled.cancellationInTimeline}
+                      titleVariant="h6"
+                    />
+                    {notification.radd && (
+                      <Alert severity={'success'} sx={{ mb: 3, mt: 2 }} data-testid="raddAlert">
+                        <AlertTitle>
+                          {t('detail.timeline.radd.title', { ns: 'notifiche' })}
+                        </AlertTitle>
+                        {t('detail.timeline.radd.description', { ns: 'notifiche' })}
+                      </Alert>
+                    )}
                   </Paper>
-                )}
-                <Paper sx={{ p: 3, mb: 3 }} elevation={0} data-testid="aarBox">
-                  <NotificationDetailDocuments
-                    title={t('detail.aar-acts', { ns: 'notifiche' })}
-                    documents={notification.otherDocuments ?? []}
-                    recipients={notification.recipients}
-                    clickHandler={documentDowloadHandler}
-                    downloadFilesMessage={getDownloadFilesMessage('aar')}
-                    downloadFilesLink={t('detail.acts_files.effected_faq', { ns: 'notifiche' })}
-                    disableDownloads={
-                      isCancelled.cancellationInTimeline ||
-                      !dateIsLessThan10Years(notification.sentAt)
+                  {checkIfUserHasPayments && (
+                    <Paper sx={{ p: 3 }} elevation={0}>
+                      <ApiErrorWrapper
+                        apiId={NOTIFICATION_ACTIONS.GET_RECEIVED_NOTIFICATION_PAYMENT_INFO}
+                        reloadAction={() => fetchPaymentsInfo(currentRecipient.payments ?? [])}
+                        mainText={t('detail.payment.message-error-fetch-payment', {
+                          ns: 'notifiche',
+                        })}
+                      >
+                        <NotificationPaymentRecipient
+                          payments={userPayments}
+                          paymentTpp={paymentTpp}
+                          isCancelled={isCancelledOrCancelling}
+                          iun={notification.iun}
+                          handleTrackEvent={trackEventPaymentRecipient}
+                          onPayClick={onPayClick}
+                          onPayTppClick={onPayTppClick}
+                          handleFetchPaymentsInfo={reloadPaymentsInfo}
+                          getPaymentAttachmentAction={getPaymentAttachmentAction}
+                          timerF24={F24_DOWNLOAD_WAIT_TIME}
+                          costDetailsAssistanceLink={NOTIFICATION_COST_DETAILS_ASSISTANCE_LINK}
+                          costDetails={notification.notificationCostDetails}
+                        />
+                      </ApiErrorWrapper>
+                    </Paper>
+                  )}
+                  <Paper sx={{ p: 3, mb: 3 }} elevation={0} data-testid="aarBox">
+                    <NotificationDetailDocuments
+                      title={t('detail.aar-acts', { ns: 'notifiche' })}
+                      documents={notification.otherDocuments ?? []}
+                      recipients={notification.recipients}
+                      clickHandler={documentDowloadHandler}
+                      downloadFilesMessage={getDownloadFilesMessage('aar')}
+                      downloadFilesLink={t('detail.acts_files.effected_faq', { ns: 'notifiche' })}
+                      disableDownloads={
+                        isCancelled.cancellationInTimeline ||
+                        !dateIsLessThan10Years(notification.sentAt)
+                      }
+                    />
+                  </Paper>
+                  <NotificationRelatedDowntimes
+                    downtimeEvents={downtimeEvents}
+                    fetchDowntimeEvents={(fromDate, toDate) =>
+                      fetchDowntimeEvents(fromDate, toDate)
                     }
+                    notificationStatusHistory={notification.notificationStatusHistory}
+                    fetchDowntimeLegalFactDocumentDetails={fetchDowntimeLegalFactDocumentDetails}
+                    apiId={NOTIFICATION_ACTIONS.GET_DOWNTIME_HISTORY}
+                    disableDownloads={isCancelled.cancellationInTimeline}
+                    downtimeExampleLink={DOWNTIME_EXAMPLE_LINK}
                   />
-                </Paper>
-                <NotificationRelatedDowntimes
-                  downtimeEvents={downtimeEvents}
-                  fetchDowntimeEvents={(fromDate, toDate) => fetchDowntimeEvents(fromDate, toDate)}
-                  notificationStatusHistory={notification.notificationStatusHistory}
-                  fetchDowntimeLegalFactDocumentDetails={fetchDowntimeLegalFactDocumentDetails}
-                  apiId={NOTIFICATION_ACTIONS.GET_DOWNTIME_HISTORY}
-                  disableDownloads={isCancelled.cancellationInTimeline}
-                  downtimeExampleLink={DOWNTIME_EXAMPLE_LINK}
-                />
-              </Stack>
+                </Stack>
+              </Grid>
+              <Grid item lg={5} xs={12}>
+                {isMobile && banner}
+                <Box
+                  component="section"
+                  sx={{ backgroundColor: 'white', height: '100%', p: 3, pb: { xs: 0, lg: 3 } }}
+                >
+                  <NotificationDetailTimeline
+                    language={i18n.language}
+                    recipients={notification.recipients}
+                    statusHistory={notification.notificationStatusHistory}
+                    title={t('detail.timeline-title', { ns: 'notifiche' })}
+                    clickHandler={legalFactDownloadHandler}
+                    historyButtonLabel={t('detail.show-history', { ns: 'notifiche' })}
+                    showMoreButtonLabel={t('detail.show-more', { ns: 'notifiche' })}
+                    showLessButtonLabel={t('detail.show-less', { ns: 'notifiche' })}
+                    handleTrackShowMoreLess={trackShowMoreLess}
+                    disableDownloads={isCancelled.cancellationInTimeline}
+                    isParty={false}
+                  />
+                </Box>
+              </Grid>
             </Grid>
-            <Grid item lg={5} xs={12}>
-              {isMobile && banner}
-              <Box
-                component="section"
-                sx={{ backgroundColor: 'white', height: '100%', p: 3, pb: { xs: 0, lg: 3 } }}
-              >
-                <NotificationDetailTimeline
-                  language={i18n.language}
-                  recipients={notification.recipients}
-                  statusHistory={notification.notificationStatusHistory}
-                  title={t('detail.timeline-title', { ns: 'notifiche' })}
-                  clickHandler={legalFactDownloadHandler}
-                  historyButtonLabel={t('detail.show-history', { ns: 'notifiche' })}
-                  showMoreButtonLabel={t('detail.show-more', { ns: 'notifiche' })}
-                  showLessButtonLabel={t('detail.show-less', { ns: 'notifiche' })}
-                  handleTrackShowMoreLess={trackShowMoreLess}
-                  disableDownloads={isCancelled.cancellationInTimeline}
-                  isParty={false}
-                />
-              </Box>
-            </Grid>
-          </Grid>
-        </Box>
-      )}
-    </LoadingPageWrapper>
+          </Box>
+        )}
+      </LoadingPageWrapper>
+    </NotificationDetailOnboardingPrompt>
   );
 };
 
