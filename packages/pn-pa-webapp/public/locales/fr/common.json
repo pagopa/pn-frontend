@@ -163,7 +163,8 @@
   },
   "roles": {
     "operator": "Personne de contact opérationnel",
-    "admin": "Administrateur"
+    "admin": "Administrateur",
+    "support": "Assistance"
   },
   "attachments": {
     "remove-attachment": "Supprimer la pièce jointe"

@@ -1,6 +1,6 @@
 import { TableRow } from '@mui/material';
 
-import checkChildren from '../../../utility/children.utility';
+import { checkChildren } from '../../../utility/children.utility';
 import PnTableBodyCell from './PnTableBodyCell';
 
 export type PnTableBodyRowProps = {

@@ -1,6 +1,7 @@
 import { TFunction } from 'react-i18next';
 import * as yup from 'yup';
 
+import type { TextFieldProps } from '@mui/material';
 import { dataRegex } from '@pagopa-pn/pn-commons';
 
 import { AddressType, ChannelType, DigitalAddress } from '../models/contacts';
@@ -95,7 +96,6 @@ export const specialContactsAvailableAddressTypes = (
   addressesData: SelectedAddresses
 ): Array<AddressTypeItem> =>
   addressesRelationships.map((relation) => {
-
     const isShown = isDropdownItemShown(relation, addressesData);
 
     return {
@@ -146,3 +146,38 @@ export const removeAddress = (
       address.addressType !== addressType ||
       address.channelType !== channelType
   );
+
+export const normalizeContactValue = (value?: string): string | undefined => {
+  const normalized = value?.trim();
+  return normalized || undefined;
+};
+
+// Semantic/native input attributes derived from channel type.
+export const getSemanticTextFieldProps = (channelType: ChannelType): Partial<TextFieldProps> => {
+  if (channelType === ChannelType.EMAIL || channelType === ChannelType.PEC) {
+    return {
+      type: 'email',
+      autoComplete: 'email',
+    };
+  }
+  if (channelType === ChannelType.SMS) {
+    return {
+      type: 'tel',
+      autoComplete: 'tel-national',
+    };
+  }
+
+  return {};
+};
+
+export const hasRequiredContacts = (addresses: SelectedAddresses): boolean => {
+  const hasLegal = addresses.legalAddresses.length > 0;
+  const hasEmail = addresses.courtesyAddresses.some(
+    (address) => address.channelType === ChannelType.EMAIL
+  );
+  const hasIo = addresses.courtesyAddresses.some(
+    (address) => address.channelType === ChannelType.IOMSG
+  );
+
+  return hasLegal || (hasEmail && hasIo);
+};

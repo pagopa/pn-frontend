@@ -18,7 +18,7 @@ import {
 import { useRapidAccessParam } from '../hooks/useRapidAccessParam';
 import { OneIdentityCodeExchangeRequest, TokenExchangeRequest } from '../models/User';
 import { apiLogout, exchangeOneIdentityCode, exchangeToken } from '../redux/auth/actions';
-import { resetState } from '../redux/auth/reducers';
+import { resetState, setIsFreshLogin } from '../redux/auth/reducers';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { RootState } from '../redux/store';
 import { getConfiguration } from '../services/configuration.service';
@@ -87,6 +87,7 @@ const SessionGuard = () => {
     AppResponsePublisher.error.subscribe('exchangeToken', manageUnforbiddenError);
     try {
       const user = await dispatch(exchangeToken(token)).unwrap();
+      dispatch(setIsFreshLogin(true));
       sessionCheck(user.exp);
     } catch (error) {
       handleTokenExchangeError(error);

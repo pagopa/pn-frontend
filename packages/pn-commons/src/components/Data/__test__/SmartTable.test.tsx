@@ -15,7 +15,6 @@ import SmartHeader from '../SmartTable/SmartHeader';
 import SmartHeaderCell from '../SmartTable/SmartHeaderCell';
 
 const handleSort = vi.fn();
-const handleColumnClick = vi.fn();
 const handleChangePagination = vi.fn();
 
 type Item = {
@@ -44,9 +43,7 @@ const smartCfg: Array<SmartTableData<Item>> = [
   {
     id: 'column-3',
     label: 'Column 3',
-    tableConfiguration: {
-      onClick: handleColumnClick,
-    },
+    tableConfiguration: {},
   },
 ];
 
@@ -116,7 +113,7 @@ const RenderSmartable: React.FC<{
             <SmartBodyCell
               key={column.id.toString()}
               columnId={column.id}
-              tableProps={{ onClick: column.tableConfiguration.onClick }}
+              tableProps={column.tableConfiguration}
               cardProps={column.cardConfiguration}
               isCardHeader={column.cardConfiguration?.isCardHeader}
             >
@@ -206,7 +203,7 @@ describe('Smart Table Component', () => {
                 <SmartBodyCell
                   key={column.id.toString()}
                   columnId={column.id}
-                  tableProps={{ onClick: column.tableConfiguration.onClick }}
+                  tableProps={column.tableConfiguration}
                   cardProps={column.cardConfiguration}
                   isCardHeader={column.cardConfiguration?.isCardHeader}
                 >
@@ -223,7 +220,7 @@ describe('Smart Table Component', () => {
                 <SmartBodyCell
                   key={column.id.toString()}
                   columnId={column.id}
-                  tableProps={{ onClick: column.tableConfiguration.onClick }}
+                  tableProps={column.tableConfiguration}
                   cardProps={column.cardConfiguration}
                   isCardHeader={column.cardConfiguration?.isCardHeader}
                 >

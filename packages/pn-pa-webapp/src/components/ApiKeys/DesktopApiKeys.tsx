@@ -21,7 +21,6 @@ import ApiKeyDataSwitch from './ApiKeyDataSwitch';
 type Props = {
   apiKeys: Array<ApiKey>;
   handleModalClick: (view: ModalApiKeyView, apiKeyId: number) => void;
-  children?: React.ReactNode;
 };
 
 const LinkNewApiKey: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
@@ -88,10 +87,19 @@ const DesktopApiKeys = ({ apiKeys, handleModalClick }: Props) => {
   return (
     <>
       {apiKeys && apiKeys.length > 0 ? (
-        <PnTable testId="tableApiKeys" ariaTitle={t('table.title')} slotProps={{ table: { sx: { tableLayout: 'fixed' } } }}>
+        <PnTable
+          testId="tableApiKeys"
+          ariaTitle={t('table.title')}
+          slotProps={{ table: { sx: { tableLayout: 'fixed' } } }}
+        >
           <PnTableHeader>
             {columns.map((column) => (
-              <PnTableHeaderCell key={column.id} columnId={column.id} sortable={column.sortable} cellProps={column.cellProps}>
+              <PnTableHeaderCell
+                key={column.id}
+                columnId={column.id}
+                sortable={column.sortable}
+                cellProps={column.cellProps}
+              >
                 {column.label}
               </PnTableHeaderCell>
             ))}

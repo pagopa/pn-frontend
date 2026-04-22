@@ -8,7 +8,13 @@ import PowerSettingsNewIcon from '@mui/icons-material/PowerSettingsNew';
 import SavingsIcon from '@mui/icons-material/Savings';
 import TouchAppIcon from '@mui/icons-material/TouchApp';
 import { Alert, Box, Button, Chip, ChipOwnProps, Stack, Typography } from '@mui/material';
-import { EventAction, PnInfoCard, appStateActions, useIsMobile } from '@pagopa-pn/pn-commons';
+import {
+  EventAction,
+  PnInfoCard,
+  appStateActions,
+  appStorage,
+  useIsMobile,
+} from '@pagopa-pn/pn-commons';
 
 import { PFEventsType } from '../../models/PFEventsType';
 import { AddressType, ChannelType, ContactSource } from '../../models/contacts';
@@ -170,7 +176,7 @@ const LegalContacts = () => {
       .unwrap()
       .then(() => {
         if (channelType === ChannelType.SERCQ_SEND) {
-          sessionStorage.removeItem('domicileBannerClosed');
+          appStorage.domicileBanner.enable();
         }
         PFEventStrategyFactory.triggerEvent(
           PFEventsType[`SEND_REMOVE_${channelType}_SUCCESS`],

@@ -1,6 +1,6 @@
 import { TableHead, TableRow } from '@mui/material';
 
-import checkChildren from '../../../utility/children.utility';
+import { checkChildren } from '../../../utility/children.utility';
 import PnTableHeaderCell from './PnTableHeaderCell';
 
 export type PnTableHeaderProps = {

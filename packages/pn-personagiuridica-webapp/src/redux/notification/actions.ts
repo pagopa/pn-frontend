@@ -142,7 +142,7 @@ export const getReceivedNotificationPaymentInfo = createAsyncThunk<
       taxId: string;
       paymentInfoRequest: Array<{ noticeCode: string; creditorTaxId: string }>;
     },
-    { rejectWithValue, getState }
+    { rejectWithValue, getState, signal }
   ) => {
     try {
       const { notificationState } = getState();
@@ -151,11 +151,12 @@ export const getReceivedNotificationPaymentInfo = createAsyncThunk<
       const paymentsApiFactory = PaymentsApiFactory(undefined, undefined, apiClient);
 
       if (paymentCache?.payments) {
-        // If i have the current payment in cache means that i'm coming from the payment page and i need to update the payment
+        // If I have the current payment in cache means that I'm coming from the payment page and i need to update the payment
         if (paymentCache?.currentPayment) {
-          const updatedPaymentResponse = await paymentsApiFactory.getPaymentsInfoV1([
-            paymentCache.currentPayment,
-          ]);
+          const updatedPaymentResponse = await paymentsApiFactory.getPaymentsInfoV1(
+            [paymentCache.currentPayment],
+            { signal }
+          );
 
           const updatedPayment = updatedPaymentResponse.data as Array<ExtRegistriesPaymentDetails>;
 
@@ -168,15 +169,16 @@ export const getReceivedNotificationPaymentInfo = createAsyncThunk<
           return updatedCache.payments;
         }
 
-        // If all the payments are already in cache i can return them
+        // If all the payments are already in cache I can return them
         if (checkIfPaymentsIsAlreadyInCache(params.paymentInfoRequest, iun)) {
           return paymentCache.payments;
         }
       }
 
-      // If i don't have the payments in cache i need to request all the payments to ext-registries
+      // If I don't have the payments in cache I need to request all the payments to ext-registries
       const paymentInfoResponse = await paymentsApiFactory.getPaymentsInfoV1(
-        params.paymentInfoRequest
+        params.paymentInfoRequest,
+        { signal }
       );
 
       const paymentInfo = paymentInfoResponse.data as Array<ExtRegistriesPaymentDetails>;

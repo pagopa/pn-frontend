@@ -313,5 +313,210 @@
     "no-courtesy-no-sercq-send-title": "Recevez toutes les communications importantes ",
     "no-courtesy-no-sercq-send-description": "Ajoutez une adresse mail pour recevoir un avis lorsque vous avez une nouvelle notification sur SEND.",
     "no-courtesy-no-sercq-send-cta": "Confirmez votre email"
+  },
+  "onboarding": {
+    "title": "Configurez SEND",
+    "description": "Profitez-en au maximum et économisez !",
+    "cards": {
+      "send": {
+        "title": "Je choisis le meilleur de SEND",
+        "cta": "Activer le meilleur de SEND",
+        "label": "Recommandé",
+        "item_1": "Activez votre adresse numérique et économisez sur les frais d'envoi liés aux lettres recommandées.",
+        "item_2": "Nous vous informerons de la réception d'une notification SEND par e-mail et sur IO."
+      },
+      "contacts": {
+        "title": "Je veux seulement les avis",
+        "cta": "Activer uniquement les avis",
+        "item_1": "Recevez des avis par e-mail, SMS et sur l'application IO, afin d'avoir plus de chances de lire la communication à temps et d'éviter les frais d'envoi liés aux lettres recommandées.",
+        "item_2": "Si vous n'ouvrez pas la notification SEND dans les 5 jours suivant sa réception, vous recevrez tout de même une lettre recommandée avec les frais supplémentaires afférents."
+      },
+      "io": {
+        "title": "Je préfère activer uniquement SEND sur l'application IO",
+        "cta": "Activer SEND sur IO",
+        "label": "Recommandé",
+        "item_1": "Recevez des avis de courtoisie et accédez aux communications à valeur juridique directement via IO.",
+        "item_2": "Si vous n'ouvrez pas la notification SEND dans les 5 jours suivant sa réception, vous recevrez tout de même une lettre recommandée avec les frais supplémentaires afférents."
+      }
+    },
+    "exit-flow": "Passez et accédez à vos notifications",
+    "exit-flow-dialog": {
+      "title": "Veux-tu vraiment ignorer la configuration de SEND ?",
+      "description": "Tu risques di ne pas lire les notifications SEND à temps et de devoir payer i frais d'envoi de la lettre recommandée.",
+      "cancel": "Retour à la configuration"
+    },
+    "digital-domicile": {
+      "title": "Le meilleur de SEND",
+      "choice": {
+        "title": "Active ton domicile numérique sur SEND",
+        "description": "Tu recevras les communications à valeur juridique sur SEND, uniquement en format numérique, et tu éviteras l’envoi d’une lettre recommandée avec les frais supplémentaires correspondants.",
+        "cta": "Activer sur SEND",
+        "pec": {
+          "description": "Alternativement, tu peux décider de recevoir les notifications SEND à ton adresse PEC. Tu pourrais ainsi éviter l’envoi d’une lettre recommandée avec les frais supplémentaires correspondants.",
+          "cta": "Activer sur une PEC"
+        },
+        "pec-activating": {
+          "title": "Domicile numérique sur PEC en cours d’activation",
+          "description": "Après l’activation, tu recevras les notifications SEND à ton adresse PEC. Tu pourrais ainsi éviter l’envoi d’une lettre recommandée avec les frais supplémentaires correspondants.",
+          "badge": "Activation en cours",
+          "img-alt-text": ""
+        },
+        "img-alt-text": ""
+      },
+      "email": {
+        "title": "Associe une adresse e-mail au domicile numérique",
+        "title-existing": "Tu as déjà associé une adresse e-mail au domicile numérique",
+        "description": "Tu recevras un e-mail à la réception de chaque notification SEND.",
+        "label": "E-mail :",
+        "input-label": "Adresse e-mail",
+        "verify-cta": "Vérifier l’e-mail",
+        "confirm-cta": "Confirmer l’e-mail"
+      },
+      "io": {
+        "title": "Active SEND sur l’app IO",
+        "description": "Il y a une notification SEND pour toi ? Tu recevras un avis sur IO et tu pourras la consulter directement dans l’app !",
+        "not-installed": {
+          "primary-cta": "Télécharge l’app IO",
+          "refresh-cta": "J’ai déjà téléchargé et installé l’app"
+        },
+        "disabled": {
+          "primary-cta": "Activer les avis sur IO"
+        },
+        "enabled": {
+          "title": "Tu as déjà activé SEND sur l’app IO",
+          "primary-cta": "Continuer"
+        },
+        "img-alt-text": ""
+      },
+      "summary": {
+        "title": "Ton récapitulatif",
+        "legal-title": "Les communications à valeur juridique seront remises sur :",
+        "courtesy-title": "Tu recevras un avis via :",
+        "info-box": "Surveille les coordonnées que tu as choisies : une notification numérique SEND commence à produire des effets juridiques même si tu ne l’as pas consultée.",
+        "disclaimer": "En appuyant sur <strong>Confirmer</strong>, tu déclares avoir lu l'<0>Information sur la confidentialité</0> et accepter les <1>Conditions de service</1>.",
+        "ddom-label": "Domicile numérique",
+        "io-label": "IO, l’app des services publics",
+        "io-value": "Service SEND sur IO actif",
+        "email-label": "E-mail",
+        "send-badge": "SEND",
+        "pec-badge": "PEC"
+      },
+      "pec": {
+        "title": "Ta PEC comme domicile numérique SEND",
+        "description": "Tu recevras les communications à valeur juridique sur ta PEC, uniquement en format numérique, et tu pourras éviter l’envoi d’une lettre recommandée avec les frais supplémentaires correspondants.",
+        "label-choose-address": "Choisis une adresse PEC :",
+        "label-summary": "PEC",
+        "input-label": "Adresse PEC",
+        "verify-cta": "Vérifier la PEC",
+        "disclaimer": "J'accepte que l'adresse PEC indiquée soit utilisée en priorité par rapport aux éventuelles PEC enregistrées auprès d'un organisme émetteur ou présentes dans les registres publics.",
+        "email-cta": "Activer les avis par e-mail",
+        "optional-email-description": "Veux-tu aussi recevoir un e-mail à la réception d'une notification SEND ?",
+        "optional-email-title": "Activer les avis par e-mail",
+        "optional-email-label": "Choisis une adresse e-mail :",
+        "cancel-email-cta": "Annuler l'activation de l'e-mail",
+        "email-present-description": "À la réception d'une notification SEND, tu recevras également un avis à l'adresse :",
+        "edit-email-cta": "Modifier l'adresse",
+        "verify-before-continue-title": "Vérifie ta PEC",
+        "verify-before-continue-content": "Avant de continuer, sélectionne <strong>Vérifier la PEC</strong> et suis les instructions.",
+        "pending": {
+          "title": "Adresse PEC en cours de validation",
+          "description": "Après la validation, tu recevras les communications à valeur juridique sur la PEC que tu as choisie uniquement en format numérique, et tu éviteras l’envoi d’une lettre recommandée avec les frais supplémentaires correspondants.",
+          "badge": "Activation en cours"
+        }
+      },
+      "feedback": {
+        "send": {
+          "title": "Tu as activé le domicile numérique et les avis",
+          "content": "Tu recevras les notifications SEND et les avis correspondants sur les canaux que tu as choisis."
+        },
+        "pec": {
+          "title": "L’activation du domicile numérique est en cours",
+          "content": "La PEC que tu as saisie est en phase de validation. Une fois confirmée, tu recevras toutes les notifications SEND à l’adresse que tu as choisie. Les avis, en revanche, sont déjà actifs."
+        }
+      },
+      "steps": {
+        "choice": "Choisis un domicile numérique",
+        "pec": "Saisis ta PEC",
+        "email": "Associe une adresse e-mail",
+        "io": "Active les avis sur IO",
+        "summary": "Vérifie les options choisies"
+      },
+      "buttons": {
+        "continue-without-io": "Continuer sans l’app IO",
+        "confirm-activation": "Confirmer l’activation"
+      }
+    },
+    "io-activation": {
+      "title": "Tout sur l’app IO",
+      "feedback": {
+        "title": "Tu as activé les avis",
+        "content": "Tu recevras un avis sur l’app IO quand tu recevras une notification SEND."
+      }
+    },
+    "courtesy": {
+      "title": "Activation des avis",
+      "step-1-label": "Active les avis sur IO",
+      "step-2-label": "E-mail et SMS",
+      "proceed-without-io": "Continuer sans l'app IO",
+      "banner-description": "Plus il y a d'avis actifs, plus tu as de chances de lire la notification numérique à temps et d'éviter la lettre recommandée !",
+      "success-title": "Tu as activé les avis",
+      "success-description": "Tu recevras un avis sur les canaux que tu as choisis quand tu recevras une notification SEND.",
+      "email": {
+        "readonly": {
+          "title": "Activer les avis par e-mail",
+          "description": "Tu recevras un avis à l’adresse :"
+        },
+        "insert": {
+          "title": "Activer les avis par e-mail",
+          "description": "Choisis une adresse e-mail :",
+          "input-label": "Adresse e-mail",
+          "button-label": "Vérifier l’e-mail",
+          "collapse-label": "Annuler l’activation de l’e-mail"
+        },
+        "collapsed": {
+          "label": "Veux-tu aussi recevoir un e-mail à la réception d'une notification SEND ?",
+          "button-label": "Activer les avis par e-mail"
+        },
+        "edit": {
+          "input-label": "Adresse e-mail",
+          "title": "Avis par e-mail actifs",
+          "description": "Tu recevras un avis à l’adresse :"
+        },
+        "verify-before-continue-title": "Vérifie ton e-mail",
+        "verify-before-continue-content": "Avant de continuer, sélectionne Vérifier l’e-mail et suis les instructions."
+      },
+      "sms": {
+        "readonly": {
+          "title": "Activer les avis par SMS",
+          "description": "Tu recevras un avis au numéro :"
+        },
+        "insert": {
+          "title": "Activer les avis par SMS",
+          "description": "Choisis un numéro de portable :",
+          "input-label": "Numéro de portable",
+          "button-label": "Vérifier le numéro",
+          "collapse-label": "Annuler l’activation du SMS"
+        },
+        "collapsed": {
+          "label": "Veux-tu aussi recevoir un avis sur ton smartphone ?",
+          "button-label": "Activer les avis par SMS"
+        },
+        "edit": {
+          "input-label": "Numéro de portable",
+          "title": "Avis par SMS actifs",
+          "description": "Tu recevras un avis au numéro :"
+        },
+        "verify-before-continue-title": "Vérifie ton numéro",
+        "verify-before-continue-content": "Avant de continuer, sélectionne Vérifier le numéro et suis les instructions."
+      }
+    },
+    "notification-exit-dialog": {
+      "title": "Comment souhaitez-vous recevoir les communications à valeur juridique ?",
+      "description": "Configurez SEND au mieux et faites des économies !",
+      "buttons": {
+        "configure": "Configurer SEND",
+        "skip": "Ignorer la configuration"
+      }
+    }
   }
 }

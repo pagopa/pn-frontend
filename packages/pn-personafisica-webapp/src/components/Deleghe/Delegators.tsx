@@ -40,6 +40,7 @@ const Delegators = () => {
     {
       id: 'name',
       label: t('deleghe.table.name'),
+      mode: 'wrap',
       cellProps: { width: '13%' },
       sortable: true,
     },
@@ -105,7 +106,11 @@ const Delegators = () => {
               {rows.map((row, index) => (
                 <PnTableBodyRow key={row.id} testId="delegatorsTable.body.row" index={index}>
                   {delegatorsColumns.map((column) => (
-                    <PnTableBodyCell key={column.id} cellProps={column.cellProps}>
+                    <PnTableBodyCell
+                      key={column.id}
+                      cellProps={column.cellProps}
+                      mode={column.mode}
+                    >
                       <DelegatorsDataSwitch data={row} type={column.id} menuType="delegators" />
                     </PnTableBodyCell>
                   ))}

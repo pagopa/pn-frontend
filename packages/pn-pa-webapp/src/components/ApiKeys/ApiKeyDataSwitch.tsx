@@ -6,6 +6,7 @@ import { Box, IconButton, Menu, MenuItem, Stack, Typography } from '@mui/materia
 import {
   CustomTagGroup,
   CustomTooltip,
+  DataValue,
   Row,
   StatusTooltip,
   formatDate,
@@ -21,7 +22,7 @@ import { getApiKeyStatusHistoryLines, getApiKeyStatusInfos } from '../../utility
  */
 const isApiKeyRotated = (data: Row<ApiKey>): boolean =>
   data.statusHistory &&
-  !!data.statusHistory.find((status) => status.status === ApiKeyStatus.ROTATED);
+  !!data.statusHistory.some((status) => status.status === ApiKeyStatus.ROTATED);
 
 const setRowColorByStatus = (data: Row<ApiKey>): string | undefined =>
   isApiKeyRotated(data) ? '#aaa' : undefined;
@@ -152,16 +153,13 @@ const ApiKeyDataSwitch: React.FC<{
 
   if (type === 'name') {
     return (
-      <Typography
-        sx={{
-          color: setRowColorByStatus(data),
-          textOverflow: 'ellipsis',
-          overflow: 'hidden',
-          whiteSpace: 'nowrap',
-        }}
+      <DataValue
+        mode="truncate"
+        slots={{ root: Typography }}
+        slotProps={{ root: { color: setRowColorByStatus(data) } }}
       >
         {data.name}
-      </Typography>
+      </DataValue>
     );
   }
   if (type === 'value') {
@@ -173,17 +171,13 @@ const ApiKeyDataSwitch: React.FC<{
           color: setRowColorByStatus(data),
         }}
       >
-        <Typography
-          variant="body2"
-          sx={{
-            textOverflow: 'ellipsis',
-            overflow: 'hidden',
-            whiteSpace: 'nowrap',
-            color: 'inherit',
-          }}
+        <DataValue
+          mode="truncate"
+          slots={{ root: Typography }}
+          slotProps={{ root: { variant: 'body2', color: 'inherit' } }}
         >
           {data.value}
-        </Typography>
+        </DataValue>
         <CopyToClipboardButton
           data-testid="copyToClipboard"
           disabled={isApiKeyRotated(data)}
@@ -202,7 +196,12 @@ const ApiKeyDataSwitch: React.FC<{
   }
   if (type === 'groups') {
     return (
-      <Box sx={{ display: 'flex', alignItems: 'center' }}>
+      <Stack
+        direction="row"
+        sx={{
+          alignItems: 'center',
+        }}
+      >
         {data.groups.length > 0 && (
           <>
             <CustomTooltip
@@ -221,7 +220,7 @@ const ApiKeyDataSwitch: React.FC<{
                 <CustomTagGroup visibleItems={3} disableTooltip>
                   {data.groups.map((v, i) => (
                     <Box key={i} sx={{ my: 1 }}>
-                      <Tag value={v.name} />
+                      <Tag value={v.name} mode="wrap" />
                     </Box>
                   ))}
                 </CustomTagGroup>
@@ -234,7 +233,7 @@ const ApiKeyDataSwitch: React.FC<{
             />
           </>
         )}
-      </Box>
+      </Stack>
     );
   }
   if (type === 'status') {

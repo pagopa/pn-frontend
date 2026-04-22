@@ -82,6 +82,12 @@ describe('NotificationDetail Page', async () => {
   const mockLegalIds = getLegalFactIds(notificationToFe, 2);
   const original = globalThis.location;
 
+  const defaultOnboardingData = {
+    hasBeenShown: false,
+    hasSkippedOnboarding: false,
+    exitReminderShown: false,
+  };
+
   beforeAll(() => {
     mock = new MockAdapter(apiClient);
     Object.defineProperty(globalThis, 'location', {
@@ -199,6 +205,13 @@ describe('NotificationDetail Page', async () => {
 
     expect(result.getByTestId('notificationCostBanner')).toBeInTheDocument();
     expect(result.queryByTestId('addDomicileBanner')).not.toBeInTheDocument();
+
+    // the banner should only show the "enable-sercq" CTA and no close button
+    const banner = result.getByTestId('notificationCostBanner');
+    const bannerButtons = within(banner).queryAllByRole('button');
+
+    expect(bannerButtons).toHaveLength(1);
+    expect(bannerButtons[0]).toHaveTextContent('notification-cost-banner.enable-sercq.cta');
   });
 
   it('does not render NotificationCostBanner when notificationFeePolicy is DELIVERY_MODE but pagoPaIntMode is not ASYNC', async () => {
@@ -249,56 +262,6 @@ describe('NotificationDetail Page', async () => {
 
     expect(result.queryByTestId('notificationCostBanner')).not.toBeInTheDocument();
     expect(result.getByTestId('addDomicileBanner')).toBeInTheDocument();
-  });
-
-  it('shows NotificationCostBanner again after closing it and re-entering the page', async () => {
-    const asyncSingleRecipientDTO = {
-      ...notificationDTO,
-      notificationFeePolicy: NotificationFeePolicy.DeliveryMode,
-      pagoPaIntMode: PagoPaIntegrationMode.Async,
-      recipients: [notificationDTO.recipients[2]],
-    };
-
-    mock
-      .onGet(`/bff/v1/notifications/received/${notificationDTO.iun}`)
-      .reply(200, asyncSingleRecipientDTO);
-    mock.onPost(`/bff/v1/payments/info`, paymentInfoRequest).reply(200, paymentInfo);
-    mock.onGet(/\/bff\/v1\/downtime\/history.*/).reply(200, downtimesDTO);
-
-    // 1) first enter -> banner is visible
-    await act(async () => {
-      result = render(<Component />, {
-        preloadedState: {
-          userState: { user: { fiscal_number: notificationDTO.recipients[2].taxId } },
-        },
-        route: routes.GET_DETTAGLIO_NOTIFICA_PATH(notificationDTO.iun),
-      });
-    });
-
-    const banner = result.getByTestId('notificationCostBanner');
-    expect(banner).toBeInTheDocument();
-
-    // 2) close banner
-    await userEvent.click(within(banner).getByRole('button', { name: 'button.close' }));
-
-    await waitFor(() => {
-      expect(result.queryByTestId('notificationCostBanner')).not.toBeInTheDocument();
-    });
-
-    // 3) leave page (unmount)
-    result.unmount();
-
-    // 4) re-enter page (remount) -> banner is visible again
-    await act(async () => {
-      result = render(<Component />, {
-        preloadedState: {
-          userState: { user: { fiscal_number: notificationDTO.recipients[2].taxId } },
-        },
-        route: routes.GET_DETTAGLIO_NOTIFICA_PATH(notificationDTO.iun),
-      });
-    });
-
-    expect(result.getByTestId('notificationCostBanner')).toBeInTheDocument();
   });
 
   it('renders pec unreachable alert - SIMPLE_REGISTERED_LETTER and ASYNC', async () => {
@@ -821,11 +784,12 @@ describe('NotificationDetail Page', async () => {
     });
   });
 
-  it('normal navigation - includes back button', async () => {
+  it('normal navigation - clicking back opens onboarding exit reminder and skip continues to notifications', async () => {
     mock.onGet(`/bff/v1/notifications/received/${notificationDTO.iun}`).reply(200, notificationDTO);
     mock.onPost(`/bff/v1/payments/info`, paymentInfoRequest).reply(200, paymentInfo);
     // we use regexp to not set the query parameters
     mock.onGet(/\/bff\/v1\/downtime\/history.*/).reply(200, downtimesDTO);
+
     await act(async () => {
       result = render(<Component />, {
         preloadedState: {
@@ -834,10 +798,95 @@ describe('NotificationDetail Page', async () => {
         route: routes.GET_DETTAGLIO_NOTIFICA_PATH(notificationDTO.iun),
       });
     });
+
     const backButton = result.getByTestId('breadcrumb-indietro-button');
     expect(backButton).toBeInTheDocument();
-    fireEvent.click(backButton);
-    expect(result.router.state.location.pathname).toBe(routes.NOTIFICHE);
+
+    await userEvent.click(backButton);
+
+    expect(await screen.findByTestId('confirmationDialog')).toBeInTheDocument();
+    expect(result.router.state.location.pathname).toBe(
+      routes.GET_DETTAGLIO_NOTIFICA_PATH(notificationDTO.iun)
+    );
+
+    await userEvent.click(screen.getByTestId('closeButton'));
+
+    await waitFor(() => {
+      expect(result.router.state.location.pathname).toBe(routes.NOTIFICHE);
+    });
+  });
+
+  it('normal navigation - clicking back opens onboarding exit reminder and configure navigates to onboarding', async () => {
+    mock.onGet(`/bff/v1/notifications/received/${notificationDTO.iun}`).reply(200, notificationDTO);
+    mock.onPost(`/bff/v1/payments/info`, paymentInfoRequest).reply(200, paymentInfo);
+    mock.onGet(/\/bff\/v1\/downtime\/history.*/).reply(200, downtimesDTO);
+
+    await act(async () => {
+      result = render(
+        <Routes>
+          <Route path={routes.DETTAGLIO_NOTIFICA} element={<NotificationDetail />} />
+          <Route path={routes.DETTAGLIO_NOTIFICA_DELEGATO} element={<NotificationDetail />} />
+          <Route path={routes.ONBOARDING} element={<div>Onboarding page</div>} />
+        </Routes>,
+        {
+          preloadedState: {
+            userState: { user: { fiscal_number: notificationDTO.recipients[2].taxId } },
+          },
+          route: routes.GET_DETTAGLIO_NOTIFICA_PATH(notificationDTO.iun),
+        }
+      );
+    });
+
+    const backButton = result.getByTestId('breadcrumb-indietro-button');
+    await userEvent.click(backButton);
+
+    expect(await screen.findByTestId('confirmationDialog')).toBeInTheDocument();
+
+    await userEvent.click(screen.getByTestId('confirmButton'));
+
+    await waitFor(() => {
+      expect(result.router.state.location.pathname).toBe(routes.ONBOARDING);
+    });
+
+    expect(screen.getByText('Onboarding page')).toBeInTheDocument();
+  });
+
+  it('should open onboarding exit reminder when returning from payment and stay on detail after skip', async () => {
+    setPaymentCache(
+      {
+        ...cachedPayments,
+        currentPayment: {
+          creditorTaxId: paymentsData.pagoPaF24[0].pagoPa?.creditorTaxId ?? '',
+          noticeCode: paymentsData.pagoPaF24[0].pagoPa?.noticeCode ?? '',
+        },
+      },
+      notificationDTO.iun
+    );
+
+    mock.onGet(`/bff/v1/notifications/received/${notificationDTO.iun}`).reply(200, notificationDTO);
+    mock.onPost(`/bff/v1/payments/info`, paymentInfoRequest).reply(200, paymentInfo);
+    mock.onGet(/\/bff\/v1\/downtime\/history.*/).reply(200, downtimesDTO);
+
+    await act(async () => {
+      result = render(<Component />, {
+        preloadedState: {
+          userState: { user: { fiscal_number: notificationDTO.recipients[2].taxId } },
+        },
+        route: routes.GET_DETTAGLIO_NOTIFICA_PATH(notificationDTO.iun),
+      });
+    });
+
+    expect(await screen.findByTestId('confirmationDialog')).toBeInTheDocument();
+
+    await userEvent.click(screen.getByTestId('closeButton'));
+
+    await waitFor(() => {
+      expect(screen.queryByTestId('confirmationDialog')).not.toBeInTheDocument();
+    });
+
+    expect(result.router.state.location.pathname).toBe(
+      routes.GET_DETTAGLIO_NOTIFICA_PATH(notificationDTO.iun)
+    );
   });
 
   it('navigation from QR code - does not include back button', async () => {
@@ -925,6 +974,7 @@ describe('NotificationDetail Page', async () => {
           userState: { user: { fiscal_number: 'CGNNMO80A03H501U' } },
           generalInfoState: {
             delegators: mandatesByDelegate,
+            onboardingData: defaultOnboardingData,
           },
         },
         route: routes.GET_DETTAGLIO_NOTIFICA_DELEGATO_PATH(
@@ -991,7 +1041,7 @@ describe('NotificationDetail Page', async () => {
           userState: { user: { fiscal_number: 'CGNNMO80A03H501U' } },
           generalInfoState: {
             delegators: mandatesByDelegate,
-            digitalAddresses: [],
+            onboardingData: defaultOnboardingData,
           },
         },
         route: [
@@ -1282,7 +1332,7 @@ describe('NotificationDetail Page', async () => {
         preloadedState: {
           userState: { user: { fiscal_number: raddNotificationDTO.recipients[2].taxId } },
         },
-        route: routes.GET_DETTAGLIO_NOTIFICA_PATH(notificationDTO.iun),
+        route: routes.GET_DETTAGLIO_NOTIFICA_PATH(raddNotificationDTO.iun),
       });
     });
 
