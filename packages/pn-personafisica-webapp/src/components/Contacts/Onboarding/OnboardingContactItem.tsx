@@ -10,6 +10,7 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
+import { useIsMobile } from '@pagopa-pn/pn-commons';
 import { ButtonNaked } from '@pagopa/mui-italia';
 
 type EntryModeProps = {
@@ -49,37 +50,53 @@ type ViewModeProps = {
 
 type Props = EntryModeProps | ViewModeProps;
 
-const OnboardingContactItem: React.FC<Props> = (props) => {
-  if (props.mode === 'entry') {
-    const {
-      title,
-      label,
-      inputLabel,
-      value,
-      buttonLabel,
-      buttonVariant = 'contained',
-      error,
-      touched,
-      onChange,
-      onBlur,
-      onSubmit,
-      collapse,
-      footer,
-      prefix,
-    } = props;
+const EntryMode: React.FC<Omit<EntryModeProps, 'mode'>> = ({
+  title,
+  label,
+  inputLabel,
+  value,
+  buttonLabel,
+  buttonVariant = 'contained',
+  error,
+  touched,
+  onChange,
+  onBlur,
+  onSubmit,
+  collapse,
+  footer,
+  prefix,
+}) => {
+  const isMobile = useIsMobile();
 
-    return (
-      <Stack>
-        {title && (
-          <Typography fontSize="16px" fontWeight={700} sx={{ mb: 1 }}>
-            {title}
-          </Typography>
-        )}
+  const submitButton = (
+    <Button
+      fullWidth={isMobile}
+      sx={isMobile ? { mt: 2 } : { height: '43px', fontWeight: 700, flexShrink: 0 }}
+      variant={buttonVariant}
+      color="primary"
+      onClick={() => void onSubmit()}
+    >
+      {buttonLabel}
+    </Button>
+  );
 
-        <Typography variant="body2" color="text.secondary" mb={2}>
-          {label ?? null}
+  return (
+    <Stack>
+      {title && (
+        <Typography fontSize="16px" fontWeight={700}>
+          {title}
         </Typography>
+      )}
 
+      <Typography variant="body2" color="text.secondary" mb={2}>
+        {label ?? null}
+      </Typography>
+
+      <Stack
+        direction={isMobile ? 'column' : 'row'}
+        spacing={isMobile ? 0 : 2}
+        alignItems={isMobile ? 'stretch' : 'flex-start'}
+      >
         <TextField
           fullWidth
           size="small"
@@ -93,78 +110,80 @@ const OnboardingContactItem: React.FC<Props> = (props) => {
           error={touched && Boolean(error)}
           helperText={touched && error}
         />
-
-        {footer ?? null}
-
-        <Button
-          fullWidth
-          sx={{ mt: 2 }}
-          variant={buttonVariant}
-          color="primary"
-          onClick={() => void onSubmit()}
-        >
-          {buttonLabel}
-        </Button>
-
-        {collapse && (
-          <ButtonNaked
-            color="primary"
-            size="medium"
-            onClick={collapse.onClick}
-            sx={{ alignSelf: 'center', fontWeight: 700, mt: 2 }}
-          >
-            {collapse.label}
-          </ButtonNaked>
-        )}
-      </Stack>
-    );
-  }
-
-  const { introText, description, label, value, secondaryContent, icon, action } = props;
-
-  return (
-    <Stack>
-      {introText && (
-        <Typography variant="body2" fontSize="16px" fontWeight={700} sx={{ mb: 1 }}>
-          {introText}
-        </Typography>
-      )}
-
-      {description && (
-        <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-          {description}
-        </Typography>
-      )}
-
-      <Stack direction="row" spacing={1.5} alignItems="center">
-        {icon ?? <CheckIcon color="disabled" fontSize="small" aria-hidden="true" />}
-        <Box>
-          {label && (
-            <Typography variant="body2" fontSize="14px" color="text.secondary">
-              {label}
-            </Typography>
-          )}
-          {value && (
-            <Typography variant="body2" fontWeight={700} sx={{ wordBreak: 'break-word' }}>
-              {value}
-            </Typography>
-          )}
-          {secondaryContent ?? null}
-        </Box>
+        {!isMobile && submitButton}
       </Stack>
 
-      {action && (
+      {footer ?? null}
+
+      {isMobile && submitButton}
+
+      {collapse && (
         <ButtonNaked
           color="primary"
           size="medium"
-          onClick={action.onClick}
-          sx={{ alignSelf: 'flex-start', fontWeight: 700, mt: 2 }}
+          onClick={collapse.onClick}
+          sx={{ alignSelf: isMobile ? 'center' : 'flex-start', fontWeight: 700, mt: 2 }}
         >
-          {action.label}
+          {collapse.label}
         </ButtonNaked>
       )}
     </Stack>
   );
 };
+
+const ViewMode: React.FC<Omit<ViewModeProps, 'mode'>> = ({
+  introText,
+  description,
+  label,
+  value,
+  secondaryContent,
+  icon,
+  action,
+}) => (
+  <Stack>
+    {introText && (
+      <Typography fontSize="16px" fontWeight={700} sx={{ mb: 1 }}>
+        {introText}
+      </Typography>
+    )}
+
+    {description && (
+      <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+        {description}
+      </Typography>
+    )}
+
+    <Stack direction="row" spacing={1.5} alignItems="center">
+      {icon ?? <CheckIcon color="disabled" fontSize="small" aria-hidden="true" />}
+      <Box>
+        {label && (
+          <Typography variant="body2" fontSize="14px" color="text.secondary">
+            {label}
+          </Typography>
+        )}
+        {value && (
+          <Typography variant="body2" fontWeight={700} sx={{ wordBreak: 'break-word' }}>
+            {value}
+          </Typography>
+        )}
+        {secondaryContent ?? null}
+      </Box>
+    </Stack>
+
+    {action && (
+      <ButtonNaked
+        color="primary"
+        size="medium"
+        onClick={action.onClick}
+        sx={{ alignSelf: 'flex-start', fontWeight: 700 }}
+      >
+        {action.label}
+      </ButtonNaked>
+    )}
+  </Stack>
+);
+
+const OnboardingContactItem: React.FC<Props> = (props) =>
+  props.mode === 'entry' ? <EntryMode {...props} /> : <ViewMode {...props} />;
 
 export default OnboardingContactItem;
