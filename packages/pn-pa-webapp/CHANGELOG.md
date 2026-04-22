@@ -3,6 +3,28 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.23.0-RC.0](https://fbianchicodermine-github/pagopa/pn-frontend/compare/v2.22.2...v2.23.0-RC.0) (2026-04-22)
+
+
+### Bug Fixes
+
+* **PN-18283:** fix bilingual subject/abstract concat in new notification ([#1788](https://fbianchicodermine-github/pagopa/pn-frontend/issues/1788)) ([8959e17](https://fbianchicodermine-github/pagopa/pn-frontend/commit/8959e17d31e6689a410571bc2c213fbbd1fb556b))
+* **PN-18939:** manage long values in tables ([#1802](https://fbianchicodermine-github/pagopa/pn-frontend/issues/1802)) ([363789c](https://fbianchicodermine-github/pagopa/pn-frontend/commit/363789c361efc1f33c03085fff5c61efbe3ed7a0))
+* **PN-18982:** add missing translations and use cxType BS on statistics API request ([#1818](https://fbianchicodermine-github/pagopa/pn-frontend/issues/1818)) ([449002b](https://fbianchicodermine-github/pagopa/pn-frontend/commit/449002b8cfea5f56ca4f5773ede2e9388ca903ec))
+* **PN-19097:** keep ToS confirm button enabled and show inline validation error ([#1803](https://fbianchicodermine-github/pagopa/pn-frontend/issues/1803)) ([302037e](https://fbianchicodermine-github/pagopa/pn-frontend/commit/302037e3ff5f14ffd2abca23da748f5c5f210e42))
+
+
+### Features
+
+* **PN-18800:** Inject UTM params for AAR QR code and TPP landing ([#1774](https://fbianchicodermine-github/pagopa/pn-frontend/issues/1774)) ([ad3ce7f](https://fbianchicodermine-github/pagopa/pn-frontend/commit/ad3ce7f5eeefe31cf85f67884c848158546bc30a))
+* **PN-18981:** edit user validation schema in order to allow support user login ([#1790](https://fbianchicodermine-github/pagopa/pn-frontend/issues/1790)) ([3c0e62b](https://fbianchicodermine-github/pagopa/pn-frontend/commit/3c0e62b911309a917f76f918aac9acceeecaba49))
+* **PN-18982:** adapt UI for support users by hiding routes and actions ([#1796](https://fbianchicodermine-github/pagopa/pn-frontend/issues/1796)) ([96ed747](https://fbianchicodermine-github/pagopa/pn-frontend/commit/96ed747f37876a6088093d0f6389d2d87ba22b7a))
+* **PN-19006:** add SERCQ service practice statement link on footer ([#1804](https://fbianchicodermine-github/pagopa/pn-frontend/issues/1804)) ([654a848](https://fbianchicodermine-github/pagopa/pn-frontend/commit/654a848ab5605dbec7e6c55f96516a9313ffe7ec))
+
+
+
+
+
 ## [2.22.2](https://fbianchicodermine-github/pagopa/pn-frontend/compare/v2.22.2-RC.0...v2.22.2) (2026-04-13)
 
 **Note:** Version bump only for package @pagopa-pn/pn-pa-webapp

@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.23.0-RC.0](https://fbianchicodermine-github/pagopa/pn-frontend/compare/v2.22.2...v2.23.0-RC.0) (2026-04-22)
+
+
+### Features
+
+* **PN-18800:** Inject UTM params for AAR QR code and TPP landing ([#1774](https://fbianchicodermine-github/pagopa/pn-frontend/issues/1774)) ([ad3ce7f](https://fbianchicodermine-github/pagopa/pn-frontend/commit/ad3ce7f5eeefe31cf85f67884c848158546bc30a))
+
+
+
+
+
 ## [2.22.2](https://fbianchicodermine-github/pagopa/pn-frontend/compare/v2.22.2-RC.0...v2.22.2) (2026-04-13)
 
 **Note:** Version bump only for package @pagopa-pn/pn-data-viz
