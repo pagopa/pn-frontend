@@ -41,3 +41,14 @@ export const OnboardingContactStatus = {
 };
 export type OnboardingContactStatus =
   (typeof OnboardingContactStatus)[keyof typeof OnboardingContactStatus];
+
+export const OnboardingScreen = {
+  CHOICE: 'choice',
+  EMAIL: 'email',
+  PEC: 'pec',
+  IO: 'io',
+  SUMMARY: 'summary',
+  EMAIL_SMS: 'email_sms',
+} as const;
+
+export type OnboardingScreen = (typeof OnboardingScreen)[keyof typeof OnboardingScreen];

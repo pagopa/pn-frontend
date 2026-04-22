@@ -18,9 +18,12 @@ import {
   ContactValue,
   EmailContactState,
   IoContactState,
+  OnboardingAvailableFlows,
+  OnboardingScreen,
   PecContactState,
   WizardMode,
 } from '../../../models/Onboarding';
+import { PFEventsType } from '../../../models/PFEventsType';
 import {
   AddressType,
   ChannelType,
@@ -40,6 +43,7 @@ import {
 } from '../../../redux/contact/actions';
 import { contactsSelectors } from '../../../redux/contact/reducers';
 import { useAppDispatch, useAppSelector } from '../../../redux/hooks';
+import PFEventStrategyFactory from '../../../utility/MixpanelUtils/PFEventStrategyFactory';
 import { normalizeContactValue } from '../../../utility/contacts.utility';
 import ChooseDigitalDomicileStep from './ChooseDigitalDomicileStep';
 import EmailStep from './EmailStep';
@@ -207,6 +211,19 @@ const DigitalDomicileWizard: React.FC = () => {
 
   const showSummaryDisclaimer = isSummaryStep && isSendMode;
 
+  const getExitScreen = () => {
+    if (isChoiceStep) {
+      return OnboardingScreen.CHOICE;
+    }
+    if (isContactStep) {
+      return isSendMode ? OnboardingScreen.EMAIL : OnboardingScreen.PEC;
+    }
+    if (isIoStep) {
+      return OnboardingScreen.IO;
+    }
+    return OnboardingScreen.SUMMARY;
+  };
+
   const goToNextStep = () => {
     setActiveStep((step) => Math.min(step + 1, STEPS_COUNT));
   };
@@ -218,6 +235,11 @@ const DigitalDomicileWizard: React.FC = () => {
     navigate(NOTIFICHE);
   };
   const exit = () => {
+    PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ONBOARDING_EXIT_SELECTED, {
+      onboarding_selected_flow: OnboardingAvailableFlows.DIGITAL_DOMICILE,
+      screen: getExitScreen(),
+    });
+
     navigate(ONBOARDING);
   };
 

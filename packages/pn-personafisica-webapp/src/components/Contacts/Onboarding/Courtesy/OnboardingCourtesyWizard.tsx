@@ -11,12 +11,16 @@ import {
   ContactValue,
   EmailContactState,
   IoContactState,
+  OnboardingAvailableFlows,
+  OnboardingScreen,
   SmsContactState,
 } from '../../../../models/Onboarding';
+import { PFEventsType } from '../../../../models/PFEventsType';
 import { IOAllowedValues } from '../../../../models/contacts';
 import { NOTIFICHE, ONBOARDING } from '../../../../navigation/routes.const';
 import { contactsSelectors } from '../../../../redux/contact/reducers';
 import { useAppSelector } from '../../../../redux/hooks';
+import PFEventStrategyFactory from '../../../../utility/MixpanelUtils/PFEventStrategyFactory';
 import { normalizeContactValue } from '../../../../utility/contacts.utility';
 import IoStep from '../IoStep';
 import EmailSmsStep from './EmailSmsStep';
@@ -76,6 +80,11 @@ const OnboardingCourtesyWizard: React.FC = () => {
   };
 
   const goToOnboarding = () => {
+    PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ONBOARDING_EXIT_SELECTED, {
+      onboarding_selected_flow: OnboardingAvailableFlows.COURTESY,
+      screen: activeStep === 0 ? OnboardingScreen.IO : OnboardingScreen.EMAIL_SMS,
+    });
+
     navigate(ONBOARDING);
   };
 

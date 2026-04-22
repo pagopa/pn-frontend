@@ -6,10 +6,13 @@ import { Typography } from '@mui/material';
 import { PnWizard, PnWizardStep } from '@pagopa-pn/pn-commons';
 import { IllusMICompleted } from '@pagopa/mui-italia';
 
+import { OnboardingAvailableFlows, OnboardingScreen } from '../../../models/Onboarding';
+import { PFEventsType } from '../../../models/PFEventsType';
 import { IOAllowedValues } from '../../../models/contacts';
 import { NOTIFICHE, ONBOARDING } from '../../../navigation/routes.const';
 import { contactsSelectors } from '../../../redux/contact/reducers';
 import { useAppSelector } from '../../../redux/hooks';
+import PFEventStrategyFactory from '../../../utility/MixpanelUtils/PFEventStrategyFactory';
 import IoStep from './IoStep';
 
 const IoActivationWizard: React.FC = () => {
@@ -28,6 +31,10 @@ const IoActivationWizard: React.FC = () => {
   };
 
   const exit = () => {
+    PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ONBOARDING_EXIT_SELECTED, {
+      onboarding_selected_flow: OnboardingAvailableFlows.IO,
+      screen: OnboardingScreen.IO,
+    });
     navigate(ONBOARDING);
   };
 
