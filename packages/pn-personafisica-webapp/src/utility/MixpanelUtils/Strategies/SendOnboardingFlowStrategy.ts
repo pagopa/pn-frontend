@@ -11,34 +11,27 @@ import {
   OnboardingSource,
   TrackingFlow,
 } from '../../../models/Onboarding';
-import { store } from '../../../redux/store';
-import { getOnboardingAvailableFlows } from '../../mixpanel';
+import { getOnboardingBasePayload } from '../../mixpanel';
 
 type Props = {
-  source: OnboardingSource;
   onboarding_selected_flow: OnboardingAvailableFlows;
 };
 
-type SendOnboardingFlowReturn = Props & {
+type SendOnboardingFlowReturn = {
+  source?: OnboardingSource;
+  onboarding_selected_flow: OnboardingAvailableFlows;
   flow: TrackingFlow;
   onboarding_available_flow: string;
 };
 
 export class SendOnboardingFlowStrategy implements EventStrategy {
-  performComputations({
-    source,
-    onboarding_selected_flow,
-  }: Props): TrackedEvent<SendOnboardingFlowReturn> {
-    const { digitalAddresses } = store.getState().contactsState;
-
+  performComputations({ onboarding_selected_flow }: Props): TrackedEvent<SendOnboardingFlowReturn> {
     return {
       [EventPropertyType.TRACK]: {
         event_category: EventCategory.UX,
         event_type: EventAction.ACTION,
-        source,
-        onboarding_available_flow: getOnboardingAvailableFlows(digitalAddresses),
-        flow: 'onboarding',
         onboarding_selected_flow,
+        ...getOnboardingBasePayload(),
       },
     };
   }

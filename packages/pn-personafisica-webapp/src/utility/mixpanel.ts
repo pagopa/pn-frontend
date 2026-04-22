@@ -3,9 +3,10 @@ import { uniq } from 'lodash-es';
 import { interceptDispatch } from '@pagopa-pn/pn-commons';
 import { AnyAction, Dispatch, Middleware } from '@reduxjs/toolkit';
 
-import { OnboardingAvailableFlows } from '../models/Onboarding';
+import { OnboardingAvailableFlows, OnboardingSource, TrackingFlow } from '../models/Onboarding';
 import { PFEventsType, eventsActionsMap } from '../models/PFEventsType';
 import { AddressType, ChannelType, DigitalAddress, IOAllowedValues } from '../models/contacts';
+import { store } from '../redux/store';
 import PFEventStrategyFactory from './MixpanelUtils/PFEventStrategyFactory';
 
 export type MixpanelConcatCourtesyContacts =
@@ -95,8 +96,14 @@ export const getCustomizedContactType = (
   return customizedContactType === ChannelType.PEC ? 'pec' : 'send';
 };
 
-export const getOnboardingAvailableFlows = (addresses: Array<DigitalAddress>): string => {
-  const hasIOEnabled = addresses.some(
+// -- Start Onboarding
+export const getOnboardingSource = (): OnboardingSource | undefined =>
+  store.getState().generalInfoState.onboardingData.source;
+
+export const getOnboardingAvilableFlows = () => {
+  const { digitalAddresses } = store.getState().contactsState;
+
+  const hasIOEnabled = digitalAddresses.some(
     (addr) => addr.channelType === ChannelType.IOMSG && addr.value === IOAllowedValues.ENABLED
   );
 
@@ -111,3 +118,10 @@ export const getOnboardingAvailableFlows = (addresses: Array<DigitalAddress>): s
 
   return flows.join(',');
 };
+
+export const getOnboardingBasePayload = () => ({
+  source: getOnboardingSource(),
+  onboarding_available_flow: getOnboardingAvilableFlows(),
+  flow: TrackingFlow.ONBOARDING,
+});
+// -- End Onboarding

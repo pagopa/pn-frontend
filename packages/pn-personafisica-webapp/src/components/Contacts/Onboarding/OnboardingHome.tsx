@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 import ArrowForwardRoundedIcon from '@mui/icons-material/ArrowForwardRounded';
 import CheckRoundedIcon from '@mui/icons-material/CheckRounded';
@@ -25,7 +25,7 @@ import {
   IllusMISmartphoneValidation,
 } from '@pagopa/mui-italia';
 
-import { OnboardingAvailableFlows, OnboardingSource } from '../../../models/Onboarding';
+import { OnboardingAvailableFlows } from '../../../models/Onboarding';
 import { PFEventsType } from '../../../models/PFEventsType';
 import { ChannelType, IOAllowedValues } from '../../../models/contacts';
 import * as routes from '../../../navigation/routes.const';
@@ -95,9 +95,7 @@ const OnboardingHome: React.FC = () => {
   const navigate = useNavigate();
   const isMobile = useIsMobile();
   const dispatch = useAppDispatch();
-  const location = useLocation();
 
-  const source: OnboardingSource = location.state?.source || '';
   const [openModal, setOpenModal] = React.useState(false);
 
   const items: Record<ElementCategory, Array<Item>> = {
@@ -176,7 +174,6 @@ const OnboardingHome: React.FC = () => {
   const handleSelectFlow = (path: string, selectedFlow: OnboardingAvailableFlows) => {
     PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ONBOARDING_FLOW_SELECTED, {
       onboarding_selected_flow: selectedFlow,
-      source,
     });
     navigate(path);
   };
@@ -184,7 +181,6 @@ const OnboardingHome: React.FC = () => {
   const handleExitFlow = () => {
     PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ONBOARDING_DECLINED, {
       event_type: EventAction.EXIT,
-      source,
     });
 
     setOpenModal(true);
@@ -193,7 +189,6 @@ const OnboardingHome: React.FC = () => {
   useEffect(() => {
     PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ONBOARDING_START_FLOW, {
       event_type: EventAction.SCREEN_VIEW,
-      source,
     });
   }, []);
 

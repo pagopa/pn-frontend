@@ -8,6 +8,7 @@ import { OnboardingSource } from '../models/Onboarding';
 import { setIsFreshLogin } from '../redux/auth/reducers';
 import { contactsSelectors } from '../redux/contact/reducers';
 import { useAppSelector } from '../redux/hooks';
+import { setOnboardingSource } from '../redux/sidemenu/reducers';
 import { hasRequiredContacts } from '../utility/contacts.utility';
 import * as routes from './routes.const';
 
@@ -42,7 +43,8 @@ const OnboardingGuard = () => {
       !hasRequiredContacts(addresses) &&
       !hasNotificationsToRead
     ) {
-      navigate(routes.ONBOARDING, { replace: true, state: { source: OnboardingSource.LOGIN } });
+      dispatch(setOnboardingSource(OnboardingSource.LOGIN));
+      navigate(routes.ONBOARDING, { replace: true });
     }
     dispatch(setIsFreshLogin(false));
   }, []);

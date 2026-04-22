@@ -229,7 +229,6 @@ const EmailSmsStep = ({
   useEffect(() => {
     PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ONBOARDING_EMAIL_SMS_ACTIVATION, {
       event_type: EventAction.SCREEN_VIEW,
-      source: '', // TODO
       onboarding_selected_flow: OnboardingAvailableFlows.COURTESY,
       email_value: email.value,
       sms_value: sms.value,
