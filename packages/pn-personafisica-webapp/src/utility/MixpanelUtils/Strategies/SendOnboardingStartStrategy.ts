@@ -6,7 +6,7 @@ import {
   TrackedEvent,
 } from '@pagopa-pn/pn-commons';
 
-import { OnboardingFlow, type OnboardingSource } from '../../../models/Onboarding';
+import { type OnboardingSource, TrackingFlow } from '../../../models/Onboarding';
 import { store } from '../../../redux/store';
 import { getOnboardingAvailableFlows } from '../../mixpanel';
 
@@ -18,7 +18,7 @@ type Props = {
 type SendOnboardingStartReturn = {
   source: OnboardingSource;
   onboarding_available_flow: string;
-  flow: OnboardingFlow;
+  flow: TrackingFlow;
 };
 
 export class SendOnboardingStartStrategy implements EventStrategy {

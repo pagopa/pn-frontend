@@ -3,7 +3,7 @@ import { uniq } from 'lodash-es';
 import { interceptDispatch } from '@pagopa-pn/pn-commons';
 import { AnyAction, Dispatch, Middleware } from '@reduxjs/toolkit';
 
-import { OnboardingFlows } from '../models/Onboarding';
+import { OnboardingAvailableFlows } from '../models/Onboarding';
 import { PFEventsType, eventsActionsMap } from '../models/PFEventsType';
 import { AddressType, ChannelType, DigitalAddress, IOAllowedValues } from '../models/contacts';
 import PFEventStrategyFactory from './MixpanelUtils/PFEventStrategyFactory';
@@ -100,13 +100,13 @@ export const getOnboardingAvailableFlows = (addresses: Array<DigitalAddress>): s
     (addr) => addr.channelType === ChannelType.IOMSG && addr.value === IOAllowedValues.ENABLED
   );
 
-  const flows: Array<OnboardingFlows> = [
-    OnboardingFlows.DIGITAL_DOMICILE,
-    OnboardingFlows.COURTESY,
+  const flows: Array<OnboardingAvailableFlows> = [
+    OnboardingAvailableFlows.DIGITAL_DOMICILE,
+    OnboardingAvailableFlows.COURTESY,
   ];
 
   if (!hasIOEnabled) {
-    flows.push(OnboardingFlows.IO);
+    flows.push(OnboardingAvailableFlows.IO);
   }
 
   return flows.join(',');

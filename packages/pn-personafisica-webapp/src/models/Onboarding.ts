@@ -26,7 +26,7 @@ export const OnboardingAvailableFlows = {
   COURTESY: 'courtesy',
   IO: 'io',
 };
-export type OnboardingAvailableFlow =
+export type OnboardingAvailableFlows =
   (typeof OnboardingAvailableFlows)[keyof typeof OnboardingAvailableFlows];
 
 export const TrackingFlow = {

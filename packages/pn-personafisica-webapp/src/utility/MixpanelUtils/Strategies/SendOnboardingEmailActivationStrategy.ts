@@ -7,9 +7,10 @@ import {
 } from '@pagopa-pn/pn-commons';
 
 import {
+  OnboardingAvailableFlows,
   OnboardingContactStatus,
-  OnboardingFlow,
   OnboardingSource,
+  TrackingFlow,
 } from '../../../models/Onboarding';
 import { store } from '../../../redux/store';
 import { getOnboardingAvailableFlows } from '../../mixpanel';
@@ -17,7 +18,7 @@ import { getOnboardingAvailableFlows } from '../../mixpanel';
 type Props = {
   event_type: EventAction;
   source: OnboardingSource;
-  onboarding_selected_flow: OnboardingFlow;
+  onboarding_selected_flow: OnboardingAvailableFlows;
   email_value?: string;
   sms_value?: string;
 };
@@ -25,8 +26,8 @@ type Props = {
 type SendOnboardingEmailActivationReturn = {
   source: OnboardingSource;
   onboarding_available_flow: string;
-  flow: OnboardingFlow;
-  onboarding_selected_flow: OnboardingFlow;
+  flow: TrackingFlow;
+  onboarding_selected_flow: OnboardingAvailableFlows;
   email_status?: OnboardingContactStatus;
   sms_status?: OnboardingContactStatus;
 };

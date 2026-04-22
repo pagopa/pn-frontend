@@ -7,7 +7,11 @@ import { Divider, Stack, Typography } from '@mui/material';
 import { ConfirmationModal, EventAction, appStateActions } from '@pagopa-pn/pn-commons';
 import { IllusMIMessage, MIAlert } from '@pagopa/mui-italia';
 
-import { EmailContactState, OnboardingFlows, SmsContactState } from '../../../../models/Onboarding';
+import {
+  EmailContactState,
+  OnboardingAvailableFlows,
+  SmsContactState,
+} from '../../../../models/Onboarding';
 import { PFEventsType } from '../../../../models/PFEventsType';
 import { AddressType, ChannelType, SaveDigitalAddressParams } from '../../../../models/contacts';
 import { createOrUpdateAddress } from '../../../../redux/contact/actions';
@@ -226,7 +230,7 @@ const EmailSmsStep = ({
     PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ONBOARDING_EMAIL_SMS_ACTIVATION, {
       event_type: EventAction.SCREEN_VIEW,
       source: '', // TODO
-      onboarding_selected_flow: OnboardingFlows.COURTESY,
+      onboarding_selected_flow: OnboardingAvailableFlows.COURTESY,
       email_value: email.value,
       sms_value: sms.value,
     });

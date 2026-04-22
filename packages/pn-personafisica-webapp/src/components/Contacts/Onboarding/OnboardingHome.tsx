@@ -25,7 +25,7 @@ import {
   IllusMISmartphoneValidation,
 } from '@pagopa/mui-italia';
 
-import { OnboardingFlows, OnboardingSource } from '../../../models/Onboarding';
+import { OnboardingAvailableFlows, OnboardingSource } from '../../../models/Onboarding';
 import { PFEventsType } from '../../../models/PFEventsType';
 import { ChannelType, IOAllowedValues } from '../../../models/contacts';
 import * as routes from '../../../navigation/routes.const';
@@ -141,7 +141,7 @@ const OnboardingHome: React.FC = () => {
       cta: t('onboarding.cards.send.cta'),
       path: routes.ONBOARDING_DIGITAL_DOMICILE,
       chip: { label: t('onboarding.cards.send.label'), color: 'info' },
-      mixpanelFlowId: OnboardingFlows.DIGITAL_DOMICILE,
+      mixpanelFlowId: OnboardingAvailableFlows.DIGITAL_DOMICILE,
     },
     {
       illustration: <IllusMIMessage size={32} aria-hidden="true" />,
@@ -150,7 +150,7 @@ const OnboardingHome: React.FC = () => {
       description: <PaperContent items={items.contacts} />,
       cta: t('onboarding.cards.contacts.cta'),
       path: routes.ONBOARDING_COURTESY,
-      mixpanelFlowId: OnboardingFlows.COURTESY,
+      mixpanelFlowId: OnboardingAvailableFlows.COURTESY,
     },
     {
       illustration: <IllusMISmartphoneValidation size={32} aria-hidden="true" />,
@@ -159,7 +159,7 @@ const OnboardingHome: React.FC = () => {
       cta: t('onboarding.cards.io.cta'),
       path: routes.ONBOARDING_IO,
       hide: hasIoEnabled,
-      mixpanelFlowId: OnboardingFlows.IO,
+      mixpanelFlowId: OnboardingAvailableFlows.IO,
     },
   ];
 
@@ -173,7 +173,7 @@ const OnboardingHome: React.FC = () => {
     navigate(routes.NOTIFICHE);
   };
 
-  const handleSelectFlow = (path: string, selectedFlow: OnboardingFlows) => {
+  const handleSelectFlow = (path: string, selectedFlow: OnboardingAvailableFlows) => {
     PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ONBOARDING_FLOW_SELECTED, {
       onboarding_selected_flow: selectedFlow,
       source,
