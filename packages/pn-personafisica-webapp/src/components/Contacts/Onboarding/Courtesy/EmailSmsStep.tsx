@@ -22,9 +22,39 @@ import {
   internationalPhonePrefix,
   phoneValidationSchema,
 } from '../../../../utility/contacts.utility';
-import { isPFEvent } from '../../../../utility/mixpanel';
 import ContactCodeDialog from '../../ContactCodeDialog';
 import CourtesyContactHandler, { CourtesyInputMode } from './CourtesyContactHandler';
+
+type CourtesyChannelType = ChannelType.EMAIL | ChannelType.SMS;
+
+const channelEvents: Record<
+  CourtesyChannelType,
+  {
+    otp: PFEventsType;
+    otpVerification: PFEventsType;
+    verification: PFEventsType;
+    activated: PFEventsType;
+  }
+> = {
+  [ChannelType.EMAIL]: {
+    otp: PFEventsType.SEND_ONBOARDING_EMAIL_OTP,
+    otpVerification: PFEventsType.SEND_ONBOARDING_EMAIL_OTP_VERIFICATION,
+    verification: PFEventsType.SEND_ONBOARDING_EMAIL_VERIFICATION,
+    activated: PFEventsType.SEND_ONBOARDING_EMAIL_ACTIVATED,
+  },
+  [ChannelType.SMS]: {
+    otp: PFEventsType.SEND_ONBOARDING_SMS_OTP,
+    otpVerification: PFEventsType.SEND_ONBOARDING_SMS_OTP_VERIFICATION,
+    verification: PFEventsType.SEND_ONBOARDING_SMS_VERIFICATION,
+    activated: PFEventsType.SEND_ONBOARDING_SMS_ACTIVATED,
+  },
+};
+
+const trackCourtesy = (event: PFEventsType, extra?: Record<string, unknown>) =>
+  PFEventStrategyFactory.triggerEvent(event, {
+    onboarding_selected_flow: OnboardingAvailableFlows.COURTESY,
+    ...extra,
+  });
 
 type Props = {
   ioEnabled: boolean;
@@ -118,17 +148,13 @@ const EmailSmsStep = ({
   };
 
   const handleCollapseSms = async () => {
-    PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ONBOARDING_SMS_ACTIVATION_CANCELED, {
-      onboarding_selected_flow: OnboardingAvailableFlows.COURTESY,
-    });
+    trackCourtesy(PFEventsType.SEND_ONBOARDING_SMS_ACTIVATION_CANCELED);
     setSmsMode('collapsed');
     await smsContactRef.current.resetForm();
   };
 
   const handleExpandSms = () => {
-    PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ONBOARDING_SMS_SELECTED, {
-      onboarding_selected_flow: OnboardingAvailableFlows.COURTESY,
-    });
+    trackCourtesy(PFEventsType.SEND_ONBOARDING_SMS_SELECTED);
     setSmsMode('insert');
   };
 
@@ -144,30 +170,17 @@ const EmailSmsStep = ({
       code: verificationCode,
     };
 
-    const otpVerificationEvent =
-      channelType === ChannelType.EMAIL
-        ? PFEventsType.SEND_ONBOARDING_EMAIL_OTP_VERIFICATION
-        : PFEventsType.SEND_ONBOARDING_SMS_OTP_VERIFICATION;
+    const events = channelEvents[channelType as CourtesyChannelType];
 
-    if (isPFEvent(otpVerificationEvent) && verificationCode) {
-      PFEventStrategyFactory.triggerEvent(otpVerificationEvent, {
-        onboarding_selected_flow: OnboardingAvailableFlows.COURTESY,
-      });
+    if (verificationCode) {
+      trackCourtesy(events.otpVerification);
     }
 
     dispatch(createOrUpdateAddress(digitalAddressParams))
       .unwrap()
       .then((res) => {
         if (!res) {
-          PFEventStrategyFactory.triggerEvent(
-            channelType === ChannelType.EMAIL
-              ? PFEventsType.SEND_ONBOARDING_EMAIL_OTP
-              : PFEventsType.SEND_ONBOARDING_SMS_OTP,
-            {
-              event_type: EventAction.SCREEN_VIEW,
-              onboarding_selected_flow: OnboardingAvailableFlows.COURTESY,
-            }
-          );
+          trackCourtesy(events.otp, { event_type: EventAction.SCREEN_VIEW });
           setCodeModalOpen(true);
           return;
         }
@@ -188,17 +201,7 @@ const EmailSmsStep = ({
             : currentAddress.current.value
         );
 
-        const contactActivatedEvent =
-          channelType === ChannelType.EMAIL
-            ? PFEventsType.SEND_ONBOARDING_EMAIL_ACTIVATED
-            : PFEventsType.SEND_ONBOARDING_SMS_ACTIVATED;
-
-        if (isPFEvent(contactActivatedEvent)) {
-          PFEventStrategyFactory.triggerEvent(contactActivatedEvent, {
-            event_type: EventAction.CONFIRM,
-            onboarding_selected_flow: OnboardingAvailableFlows.COURTESY,
-          });
-        }
+        trackCourtesy(events.activated, { event_type: EventAction.CONFIRM });
 
         if (channelType === ChannelType.EMAIL && email.alreadySet) {
           emailContactRef.current.toggleEdit();
@@ -221,16 +224,7 @@ const EmailSmsStep = ({
     // eslint-disable-next-line functional/immutable-data
     currentAddress.current = { channelType, value };
 
-    const contactVerificationEvent =
-      channelType === ChannelType.EMAIL
-        ? PFEventsType.SEND_ONBOARDING_EMAIL_VERIFICATION
-        : PFEventsType.SEND_ONBOARDING_SMS_VERIFICATION;
-
-    if (isPFEvent(contactVerificationEvent)) {
-      PFEventStrategyFactory.triggerEvent(contactVerificationEvent, {
-        onboarding_selected_flow: OnboardingAvailableFlows.COURTESY,
-      });
-    }
+    trackCourtesy(channelEvents[channelType as CourtesyChannelType].verification);
 
     handleCodeVerification(channelType);
   };
