@@ -11,6 +11,7 @@ import { store } from '../../../redux/store';
 import { getOnboardingAvailableFlows } from '../../mixpanel';
 
 type Props = {
+  event_type: EventAction;
   source: OnboardingSource;
   onboarding_selected_flow: OnboardingFlow;
   email_status: ContactStatus;
@@ -24,6 +25,7 @@ type SendOnboardingEmailActivationReturn = Props & {
 
 export class SendOnboardingEmailActivationStrategy implements EventStrategy {
   performComputations({
+    event_type,
     source,
     onboarding_selected_flow,
     email_status,
@@ -34,7 +36,7 @@ export class SendOnboardingEmailActivationStrategy implements EventStrategy {
     return {
       [EventPropertyType.TRACK]: {
         event_category: EventCategory.UX,
-        event_type: EventAction.ACTION,
+        event_type,
         source,
         onboarding_available_flow: getOnboardingAvailableFlows(digitalAddresses),
         flow: 'onboarding',
