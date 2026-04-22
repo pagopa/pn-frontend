@@ -3,6 +3,7 @@ import { vi } from 'vitest';
 import { formatToTimezoneString, tenYearsAgo, today } from '@pagopa-pn/pn-commons';
 import { createMatchMedia } from '@pagopa-pn/pn-commons/src/test-utils';
 
+import { digitalAddressesSercq } from '../../../__mocks__/Contacts.mock';
 import { notificationsToFe } from '../../../__mocks__/Notifications.mock';
 import { RenderResult, act, fireEvent, render, waitFor } from '../../../__test__/test-utils';
 import * as routes from '../../../navigation/routes.const';
@@ -31,16 +32,46 @@ describe('MobileNotifications Component', () => {
     vi.clearAllMocks();
   });
 
-  it('renders MobileNotifications - no notifications', async () => {
+  it('renders MobileNotifications - no notifications - no contacts', async () => {
     // render component
     await act(async () => {
-      result = render(<MobileNotifications notifications={[]} />);
+      result = render(<MobileNotifications notifications={[]} />, {
+        preloadedState: {
+          contactsState: {
+            digitalAddresses: [],
+          },
+        },
+      });
     });
     const filters = result!.queryByTestId('dialogToggle');
     expect(filters).not.toBeInTheDocument();
     const norificationCards = result!.queryAllByTestId('mobileNotificationsCards');
     expect(norificationCards).toHaveLength(0);
-    expect(result!.container).toHaveTextContent(/empty-state.no-notifications/i);
+    expect(result!.container).toHaveTextContent(/empty-state.title/i);
+    expect(result!.container).toHaveTextContent(/empty-state.description-onboarding/i);
+    // clicks on empty state action
+    const button = result.getByTestId('button-route-onboarding');
+    fireEvent.click(button);
+    expect(result.router.state.location.pathname).toBe(routes.ONBOARDING);
+  });
+
+  it('renders MobileNotifications - no notifications - with contacts', async () => {
+    // render component
+    await act(async () => {
+      result = render(<MobileNotifications notifications={[]} />, {
+        preloadedState: {
+          contactsState: {
+            digitalAddresses: digitalAddressesSercq,
+          },
+        },
+      });
+    });
+    const filters = result!.queryByTestId('dialogToggle');
+    expect(filters).not.toBeInTheDocument();
+    const norificationCards = result!.queryAllByTestId('mobileNotificationsCards');
+    expect(norificationCards).toHaveLength(0);
+    expect(result!.container).toHaveTextContent(/empty-state.title/i);
+    expect(result!.container).toHaveTextContent(/empty-state.description/i);
     // clicks on empty state action
     const button = result.getByTestId('link-route-contacts');
     fireEvent.click(button);

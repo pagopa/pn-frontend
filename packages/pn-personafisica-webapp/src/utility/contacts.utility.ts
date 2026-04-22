@@ -147,6 +147,11 @@ export const removeAddress = (
       address.channelType !== channelType
   );
 
+export const normalizeContactValue = (value?: string): string | undefined => {
+  const normalized = value?.trim();
+  return normalized || undefined;
+};
+
 // Semantic/native input attributes derived from channel type.
 export const getSemanticTextFieldProps = (channelType: ChannelType): Partial<TextFieldProps> => {
   if (channelType === ChannelType.EMAIL || channelType === ChannelType.PEC) {
@@ -163,4 +168,16 @@ export const getSemanticTextFieldProps = (channelType: ChannelType): Partial<Tex
   }
 
   return {};
+};
+
+export const hasRequiredContacts = (addresses: SelectedAddresses): boolean => {
+  const hasLegal = addresses.legalAddresses.length > 0;
+  const hasEmail = addresses.courtesyAddresses.some(
+    (address) => address.channelType === ChannelType.EMAIL
+  );
+  const hasIo = addresses.courtesyAddresses.some(
+    (address) => address.channelType === ChannelType.IOMSG
+  );
+
+  return hasLegal || (hasEmail && hasIo);
 };
