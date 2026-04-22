@@ -5,20 +5,22 @@ import { acceptMandate, rejectMandate } from '../delegation/actions';
 import { Delegator } from '../delegation/types';
 import { exchangeNotificationRetrievalId, getSidemenuInformation } from './actions';
 
+const initialState = {
+  pendingDelegators: 0,
+  delegators: [] as Array<Delegator>,
+  domicileBannerOpened: true,
+  paymentTpp: {} as PaymentTpp,
+  onboardingData: {
+    hasBeenShown: false,
+    hasSkippedOnboarding: false,
+    exitReminderShown: false,
+  },
+};
+
 /* eslint-disable functional/immutable-data */
 const generalInfoSlice = createSlice({
   name: 'generalInfoSlice',
-  initialState: {
-    pendingDelegators: 0,
-    delegators: [] as Array<Delegator>,
-    domicileBannerOpened: true,
-    paymentTpp: {} as PaymentTpp,
-    onboardingData: {
-      hasBeenShown: false,
-      hasSkippedOnboarding: false,
-      exitReminderShown: false,
-    },
-  },
+  initialState,
   reducers: {
     closeDomicileBanner: (state) => {
       state.domicileBannerOpened = false;
@@ -32,6 +34,7 @@ const generalInfoSlice = createSlice({
     setOnboardingExitReminderShown: (state, action: PayloadAction<boolean>) => {
       state.onboardingData.exitReminderShown = action.payload;
     },
+    resetState: () => initialState,
   },
   extraReducers: (builder) => {
     builder.addCase(getSidemenuInformation.fulfilled, (state, action) => {
@@ -71,6 +74,7 @@ export const {
   setOnboardingHasBeenShown,
   setHasSkippedOnboarding,
   setOnboardingExitReminderShown,
+  resetState,
 } = generalInfoSlice.actions;
 
 export default generalInfoSlice;

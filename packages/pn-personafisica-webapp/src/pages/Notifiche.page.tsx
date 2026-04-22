@@ -68,6 +68,7 @@ const Notifiche = () => {
 
   // API call, this function is passed to the ApiErrorWrapper component
   const fetchNotifications = useCallback(() => {
+    console.log(filters);
     const params = {
       ...filters,
       size: pagination.size,
