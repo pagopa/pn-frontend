@@ -43,6 +43,7 @@ import { apiLogout } from './redux/auth/actions';
 import { resetState as resetUserState } from './redux/auth/reducers';
 import { getDigitalAddresses } from './redux/contact/actions';
 import { getReceivedNotifications } from './redux/dashboard/actions';
+import { setFirstSearch } from './redux/dashboard/reducers';
 import { useAppDispatch, useAppSelector } from './redux/hooks';
 import { getSidemenuInformation } from './redux/sidemenu/actions';
 import { resetState as resetGeneralState } from './redux/sidemenu/reducers';
@@ -284,6 +285,7 @@ const App = () => {
       void dispatch(getSidemenuInformation());
       void dispatch(getCurrentAppStatus());
       void dispatch(getReceivedNotifications({ size: 10 })); // to do: remove the first one from notifications page
+      dispatch(setFirstSearch(true));
     }
   }, [sessionToken]);
 
