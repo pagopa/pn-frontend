@@ -39,6 +39,32 @@ describe('String utility', () => {
     const result = fromStringToBase64(srt);
     expect(result).toStrictEqual('SGVsbG8=');
   });
+
+  describe('dataRegex.email', () => {
+    it('accepts valid email addresses', () => {
+      const validAddresses = [
+        'first.last@mail.com',
+        'first+last@mail.co.uk',
+        'first{last}@mail.it',
+        'first|last@mail.it',
+        'first.last@06.it', // numeric domain label
+        'first@xn--mller-kva.de', // punycode domain label (IDN)
+        'first@russian.xn--p1ai', // punycode TLD (IDN)
+      ];
+
+      for (const valid of validAddresses) {
+        expect(valid).toMatch(dataRegex.email);
+      }
+    });
+
+    it('rejects emails with numeric TLD', () => {
+      const invalidAddresses = ['first.last@06.50', 'firstlast@mail.123'];
+
+      for (const invalid of invalidAddresses) {
+        expect(invalid).not.toMatch(dataRegex.email);
+      }
+    });
+  });
 });
 
 describe('dataRegex.name', () => {
