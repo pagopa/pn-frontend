@@ -137,7 +137,7 @@ const CourtesyContactHandler: React.FC<Props> = ({
   if (mode === 'edit') {
     return (
       <Stack>
-        <Typography fontWeight={600} fontSize="18px" sx={{ mb: 1 }}>
+        <Typography fontSize="18px" fontWeight={700} sx={{ mb: 1 }}>
           {labels.edit.alreadyPresentTitle}
         </Typography>
 
