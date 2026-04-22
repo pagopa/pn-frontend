@@ -509,6 +509,14 @@
         "verify-before-continue-title": "Vérifie ton numéro",
         "verify-before-continue-content": "Avant de continuer, sélectionne Vérifier le numéro et suis les instructions."
       }
+    },
+    "notification-exit-dialog": {
+      "title": "Comment souhaitez-vous recevoir les communications à valeur juridique ?",
+      "description": "Configurez SEND au mieux et faites des économies !",
+      "buttons": {
+        "configure": "Configurer SEND",
+        "skip": "Ignorer la configuration"
+      }
     }
   }
 }

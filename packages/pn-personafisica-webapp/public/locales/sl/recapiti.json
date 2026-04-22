@@ -509,6 +509,14 @@
         "verify-before-continue-title": "Preveri svojo številko",
         "verify-before-continue-content": "Preden nadaljuješ, izberi Preveri številko in sledi navodilom."
       }
+    },
+    "notification-exit-dialog": {
+      "title": "Kako želite prejemati uradna sporočila?",
+      "description": "Optimalno konfigurirajte SEND in prihranite!",
+      "buttons": {
+        "configure": "Konfigurirajte SEND",
+        "skip": "Preskočite konfiguracijo"
+      }
     }
   }
 }
