@@ -113,10 +113,14 @@ const getBannerContent = (
     return { title, message };
   }
 
-  const isExternalPec =
-    key === 'digital_special' || key === 'digital_registry' || key === 'digital_failure';
+  const isExternalPec = key === 'digital_special' || key === 'digital_failure';
+
+  const isRegistryPec = key === 'digital_registry';
 
   const getEnableSercqMessage = () => {
+    if (isRegistryPec) {
+      return undefined;
+    }
     if (key === 'analog') {
       return t('notification-cost-banner.enable-sercq.message.analog');
     } else {
@@ -125,7 +129,7 @@ const getBannerContent = (
         : t('notification-cost-banner.enable-sercq.message.default');
     }
   };
-  const ctaLabel = t('notification-cost-banner.enable-sercq.cta');
+  const ctaLabel = isRegistryPec ? undefined : t('notification-cost-banner.enable-sercq.cta');
 
   return {
     title,
