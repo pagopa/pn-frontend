@@ -1,15 +1,18 @@
-import { useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
 import { Typography } from '@mui/material';
-import { PnWizard, PnWizardStep } from '@pagopa-pn/pn-commons';
+import { EventAction, PnWizard, PnWizardStep } from '@pagopa-pn/pn-commons';
 import { IllusMICompleted } from '@pagopa/mui-italia';
 
+import { OnboardingAvailableFlows, OnboardingScreen } from '../../../models/Onboarding';
+import { PFEventsType } from '../../../models/PFEventsType';
 import { IOAllowedValues } from '../../../models/contacts';
 import { NOTIFICHE, ONBOARDING } from '../../../navigation/routes.const';
 import { contactsSelectors } from '../../../redux/contact/reducers';
 import { useAppSelector } from '../../../redux/hooks';
+import PFEventStrategyFactory from '../../../utility/MixpanelUtils/PFEventStrategyFactory';
 import IoStep from './IoStep';
 
 const IoActivationWizard: React.FC = () => {
@@ -28,12 +31,36 @@ const IoActivationWizard: React.FC = () => {
   };
 
   const exit = () => {
+    trackIo(PFEventsType.SEND_ONBOARDING_EXIT_SELECTED, {
+      screen: OnboardingScreen.IO,
+    });
     navigate(ONBOARDING);
   };
 
   const goToFeedback = () => {
     setActiveStep(1);
   };
+
+  // START Mixpanel
+  const trackIo = useCallback(
+    (event: PFEventsType, extra?: Record<string, unknown>) =>
+      PFEventStrategyFactory.triggerEvent(event, {
+        onboarding_selected_flow: OnboardingAvailableFlows.IO,
+        ...extra,
+      }),
+    []
+  );
+
+  useEffect(() => {
+    if (activeStep !== 1) {
+      return;
+    }
+
+    trackIo(PFEventsType.SEND_ONBOARDING_UX_SUCCESS, {
+      event_type: EventAction.SCREEN_VIEW,
+    });
+  }, [activeStep, trackIo]);
+  // END Mixpanel
 
   return (
     <PnWizard
@@ -76,7 +103,12 @@ const IoActivationWizard: React.FC = () => {
       }}
     >
       <PnWizardStep>
-        <IoStep value={ioValue} onChange={setIoValue} onContinue={goToFeedback} />
+        <IoStep
+          value={ioValue}
+          onChange={setIoValue}
+          onContinue={goToFeedback}
+          selectedOnboardingFlow={OnboardingAvailableFlows.IO}
+        />
       </PnWizardStep>
     </PnWizard>
   );

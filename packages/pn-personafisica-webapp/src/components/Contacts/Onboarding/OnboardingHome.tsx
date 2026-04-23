@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
@@ -17,7 +17,7 @@ import {
   Stack,
   Typography,
 } from '@mui/material';
-import { ConfirmationModal, useIsMobile } from '@pagopa-pn/pn-commons';
+import { ConfirmationModal, EventAction, useIsMobile } from '@pagopa-pn/pn-commons';
 import {
   IllusMIAward,
   IllusMIBell,
@@ -25,11 +25,18 @@ import {
   IllusMISmartphoneValidation,
 } from '@pagopa/mui-italia';
 
-import { ChannelType, IOAllowedValues } from '../../../models/contacts';
+import { OnboardingAvailableFlows } from '../../../models/Onboarding';
+import { PFEventsType } from '../../../models/PFEventsType';
 import * as routes from '../../../navigation/routes.const';
 import { contactsSelectors } from '../../../redux/contact/reducers';
 import { useAppDispatch, useAppSelector } from '../../../redux/hooks';
-import { setHasSkippedOnboarding } from '../../../redux/sidemenu/reducers';
+import {
+  setHasSkippedOnboarding,
+  setOnboardingHasBeenShown,
+  setOnboardingSelectedFlow,
+} from '../../../redux/sidemenu/reducers';
+import PFEventStrategyFactory from '../../../utility/MixpanelUtils/PFEventStrategyFactory';
+import { hasCourtesyContacts } from '../../../utility/contacts.utility';
 
 export type ChipColors =
   | 'default'
@@ -56,6 +63,7 @@ type CardConfig = Array<{
   path: string;
   chip?: { label: string; color: ChipColors };
   hide?: boolean;
+  mixpanelFlowId: OnboardingAvailableFlows;
 }>;
 
 const PaperContent = ({ items }: { items: Array<Item> }) => (
@@ -83,9 +91,7 @@ const PaperContent = ({ items }: { items: Array<Item> }) => (
 
 const OnboardingHome: React.FC = () => {
   const { courtesyAddresses } = useAppSelector(contactsSelectors.selectAddresses);
-  const hasIoEnabled = courtesyAddresses.some(
-    (addr) => addr.channelType === ChannelType.IOMSG && addr.value === IOAllowedValues.ENABLED
-  );
+  const hasIoEnabled = hasCourtesyContacts(courtesyAddresses);
   const { t } = useTranslation('recapiti');
 
   const navigate = useNavigate();
@@ -135,6 +141,7 @@ const OnboardingHome: React.FC = () => {
       cta: t('onboarding.cards.send.cta'),
       path: routes.ONBOARDING_DIGITAL_DOMICILE,
       chip: { label: t('onboarding.cards.send.label'), color: 'info' },
+      mixpanelFlowId: OnboardingAvailableFlows.DIGITAL_DOMICILE,
     },
     {
       illustration: <IllusMIMessage size={32} aria-hidden="true" />,
@@ -143,6 +150,7 @@ const OnboardingHome: React.FC = () => {
       description: <PaperContent items={items.contacts} />,
       cta: t('onboarding.cards.contacts.cta'),
       path: routes.ONBOARDING_COURTESY,
+      mixpanelFlowId: OnboardingAvailableFlows.COURTESY,
     },
     {
       illustration: <IllusMISmartphoneValidation size={32} aria-hidden="true" />,
@@ -151,6 +159,7 @@ const OnboardingHome: React.FC = () => {
       cta: t('onboarding.cards.io.cta'),
       path: routes.ONBOARDING_IO,
       hide: hasIoEnabled,
+      mixpanelFlowId: OnboardingAvailableFlows.IO,
     },
   ];
 
@@ -163,6 +172,30 @@ const OnboardingHome: React.FC = () => {
     dispatch(setHasSkippedOnboarding(true));
     navigate(routes.NOTIFICHE);
   };
+
+  const handleSelectFlow = (path: string, selectedFlow: OnboardingAvailableFlows) => {
+    PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ONBOARDING_FLOW_SELECTED, {
+      onboarding_selected_flow: selectedFlow,
+    });
+    dispatch(setOnboardingSelectedFlow(selectedFlow));
+    navigate(path);
+  };
+
+  const handleExitFlow = () => {
+    PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ONBOARDING_DECLINED, {
+      event_type: EventAction.EXIT,
+    });
+
+    setOpenModal(true);
+  };
+
+  useEffect(() => {
+    PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ONBOARDING_START_FLOW, {
+      event_type: EventAction.SCREEN_VIEW,
+    });
+
+    dispatch(setOnboardingHasBeenShown(true));
+  }, []);
 
   return (
     <>
@@ -214,7 +247,7 @@ const OnboardingHome: React.FC = () => {
 
                   <Button
                     fullWidth
-                    onClick={() => navigate(card.path)}
+                    onClick={() => handleSelectFlow(card.path, card.mixpanelFlowId)}
                     endIcon={<ArrowForwardRoundedIcon />}
                     variant="text"
                     sx={{ padding: 0, textAlign: 'left', justifyContent: 'flex-start' }}
@@ -228,7 +261,7 @@ const OnboardingHome: React.FC = () => {
           })}
       </Stack>
       <Box display="flex" justifyContent="center" mt={3}>
-        <Button variant="text" onClick={() => setOpenModal(true)}>
+        <Button variant="text" onClick={handleExitFlow}>
           {t('onboarding.exit-flow')}
         </Button>
       </Box>
@@ -243,9 +276,8 @@ const OnboardingHome: React.FC = () => {
         slotsProps={{
           actions: {
             sx: {
-              flexDirection: isMobile ? 'column' : 'row-reverse',
+              flexDirection: 'column',
               justifyContent: 'flex-start',
-              gap: 2,
             },
           },
           closeButton: {
@@ -256,7 +288,7 @@ const OnboardingHome: React.FC = () => {
           },
           confirmButton: {
             children: t('onboarding.exit-flow'),
-            variant: 'outlined',
+            variant: 'text',
             fullWidth: true,
             onClick: redirectToNotifications,
             sx: { marginBottom: 0 },

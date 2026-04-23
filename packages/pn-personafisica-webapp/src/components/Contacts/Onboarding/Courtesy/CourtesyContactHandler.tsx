@@ -5,9 +5,12 @@ import { EmailOutlined, PhoneOutlined } from '@mui/icons-material';
 import { Stack, Typography } from '@mui/material';
 import { ButtonNaked } from '@pagopa/mui-italia';
 
-import { ContactState } from '../../../../models/Onboarding';
+import { ContactState, OnboardingAvailableFlows } from '../../../../models/Onboarding';
+import { PFEventsType } from '../../../../models/PFEventsType';
 import { ChannelType } from '../../../../models/contacts';
+import PFEventStrategyFactory from '../../../../utility/MixpanelUtils/PFEventStrategyFactory';
 import { internationalPhonePrefix } from '../../../../utility/contacts.utility';
+import { isPFEvent } from '../../../../utility/mixpanel';
 import DigitalContact from '../../DigitalContact';
 import OnboardingContactItem from '../OnboardingContactItem';
 
@@ -72,6 +75,32 @@ const CourtesyContactHandler: React.FC<Props> = ({
       alreadyPresentDescription: t(`${ns}.edit.description`),
       inputLabel: t(`${ns}.edit.input-label`),
     },
+  };
+
+  const onEditButtonClick = () => {
+    const editEvent =
+      channelType === ChannelType.EMAIL
+        ? PFEventsType.SEND_ONBOARDING_EMAIL_EDITING
+        : PFEventsType.SEND_ONBOARDING_SMS_EDITING;
+
+    if (isPFEvent(editEvent)) {
+      PFEventStrategyFactory.triggerEvent(editEvent, {
+        onboarding_selected_flow: OnboardingAvailableFlows.COURTESY,
+      });
+    }
+  };
+
+  const onEditConfirmClick = () => {
+    const confirmEditEvent =
+      channelType === ChannelType.EMAIL
+        ? PFEventsType.SEND_ONBOARDING_EMAIL_CONFIRMED
+        : PFEventsType.SEND_ONBOARDING_SMS_CONFIRMED;
+
+    if (isPFEvent(confirmEditEvent)) {
+      PFEventStrategyFactory.triggerEvent(confirmEditEvent, {
+        onboarding_selected_flow: OnboardingAvailableFlows.COURTESY,
+      });
+    }
   };
 
   if (mode === 'collapsed') {
@@ -157,6 +186,8 @@ const CourtesyContactHandler: React.FC<Props> = ({
           insertButtonLabel={labels.edit.inputLabel}
           onSubmit={onSubmitEdit}
           showLabelOnEdit={false}
+          onEditButtonClickCallback={onEditButtonClick}
+          onEditConfirmCallback={onEditConfirmClick}
           slots={{
             label: () => <></>,
             leadingEditIcon: channelType === ChannelType.EMAIL ? EmailOutlined : PhoneOutlined,

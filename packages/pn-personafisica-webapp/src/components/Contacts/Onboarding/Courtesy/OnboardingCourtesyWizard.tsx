@@ -1,9 +1,10 @@
-import React, { useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { Typography } from '@mui/material';
-import { PnWizard, PnWizardStep } from '@pagopa-pn/pn-commons';
+import { EventAction, PnWizard, PnWizardStep } from '@pagopa-pn/pn-commons';
 import { IllusMICompleted } from '@pagopa/mui-italia';
 
 import {
@@ -11,12 +12,16 @@ import {
   ContactValue,
   EmailContactState,
   IoContactState,
+  OnboardingAvailableFlows,
+  OnboardingScreen,
   SmsContactState,
 } from '../../../../models/Onboarding';
+import { PFEventsType } from '../../../../models/PFEventsType';
 import { IOAllowedValues } from '../../../../models/contacts';
 import { NOTIFICHE, ONBOARDING } from '../../../../navigation/routes.const';
 import { contactsSelectors } from '../../../../redux/contact/reducers';
 import { useAppSelector } from '../../../../redux/hooks';
+import PFEventStrategyFactory from '../../../../utility/MixpanelUtils/PFEventStrategyFactory';
 import { normalizeContactValue } from '../../../../utility/contacts.utility';
 import IoStep from '../IoStep';
 import EmailSmsStep from './EmailSmsStep';
@@ -76,16 +81,26 @@ const OnboardingCourtesyWizard: React.FC = () => {
   };
 
   const goToOnboarding = () => {
+    trackCourtesy(PFEventsType.SEND_ONBOARDING_EXIT_SELECTED, {
+      screen: getCurrentScreen(),
+    });
+
     navigate(ONBOARDING);
   };
 
   const handleClickNextButton = async (step: number) => {
+    trackContinueSelected();
+
+    if (isIoStep && !isIoEnabled) {
+      trackCourtesy(PFEventsType.SEND_ONBOARDING_IO_DOWNLOAD_DECLINED);
+    }
     if (step === 1) {
       const canProceed = await emailSmsContinueHandlerRef.current?.();
       if (canProceed !== true) {
         return;
       }
     }
+
     goToNextStep();
   };
 
@@ -102,6 +117,47 @@ const OnboardingCourtesyWizard: React.FC = () => {
     }));
   };
 
+  // START Mixpanel
+  const trackCourtesy = useCallback(
+    (event: PFEventsType, extra?: Record<string, unknown>) =>
+      PFEventStrategyFactory.triggerEvent(event, {
+        onboarding_selected_flow: OnboardingAvailableFlows.COURTESY,
+        ...extra,
+      }),
+    []
+  );
+
+  const getCurrentScreen = (): OnboardingScreen =>
+    isIoStep ? OnboardingScreen.IO : OnboardingScreen.EMAIL_SMS;
+
+  const trackBackSelected = () => {
+    trackCourtesy(PFEventsType.SEND_ONBOARDING_BACK_SELECTED, {
+      screen: getCurrentScreen(),
+    });
+  };
+
+  const trackContinueSelected = () => {
+    trackCourtesy(PFEventsType.SEND_ONBOARDING_CONTINUE_SELECTED, {
+      screen: getCurrentScreen(),
+    });
+  };
+
+  const handlePrevious = () => {
+    trackBackSelected();
+    setActiveStep((prev) => Math.max(prev - 1, 0));
+  };
+
+  useEffect(() => {
+    if (activeStep !== 2) {
+      return;
+    }
+
+    trackCourtesy(PFEventsType.SEND_ONBOARDING_UX_SUCCESS, {
+      event_type: EventAction.SCREEN_VIEW,
+    });
+  }, [activeStep, trackCourtesy]);
+  // END Mixpanel
+
   return (
     <PnWizard
       title={
@@ -117,6 +173,12 @@ const OnboardingCourtesyWizard: React.FC = () => {
       slotsProps={{
         exitButton: {
           onClick: goToOnboarding,
+          sx: {
+            color: '#0E0F13',
+            '&:hover': {
+              color: '#0E0F13',
+            },
+          },
         },
         feedback: {
           title: t('onboarding.courtesy.success-title'),
@@ -132,6 +194,8 @@ const OnboardingCourtesyWizard: React.FC = () => {
         },
         prevButton: {
           sx: isIoStep ? { display: 'none' } : undefined,
+          startIcon: <ArrowBackIcon />,
+          onClick: handlePrevious,
         },
         stepContainer: {
           sx: {
@@ -148,6 +212,7 @@ const OnboardingCourtesyWizard: React.FC = () => {
           value={defaultAPPIOAddress?.value as IOAllowedValues | undefined}
           onChange={(value) => updateContactValue('io', value)}
           onContinue={goToNextStep}
+          selectedOnboardingFlow={OnboardingAvailableFlows.COURTESY}
         />
       </PnWizardStep>
       <PnWizardStep label={t('onboarding.courtesy.step-2-label')}>
