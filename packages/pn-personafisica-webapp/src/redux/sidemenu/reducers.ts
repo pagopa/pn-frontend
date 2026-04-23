@@ -54,6 +54,7 @@ const generalInfoSlice = createSlice({
     setOnboardingSource: (state, action: PayloadAction<OnboardingSource | undefined>) => {
       state.onboardingData.source = action.payload;
     },
+    resetState: () => initialState,
   },
   extraReducers: (builder) => {
     builder.addCase(getSidemenuInformation.fulfilled, (state, action) => {
@@ -94,6 +95,7 @@ export const {
   setHasSkippedOnboarding,
   setOnboardingExitReminderShown,
   setOnboardingSource,
+  resetState,
 } = generalInfoSlice.actions;
 
 export default generalInfoSlice;

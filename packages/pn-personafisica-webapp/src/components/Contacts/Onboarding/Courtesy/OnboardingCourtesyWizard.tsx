@@ -172,6 +172,12 @@ const OnboardingCourtesyWizard: React.FC = () => {
       slotsProps={{
         exitButton: {
           onClick: goToOnboarding,
+          sx: {
+            color: '#0E0F13',
+            '&:hover': {
+              color: '#0E0F13',
+            },
+          },
         },
         feedback: {
           title: t('onboarding.courtesy.success-title'),

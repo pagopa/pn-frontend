@@ -27,12 +27,12 @@ import {
 
 import { OnboardingAvailableFlows } from '../../../models/Onboarding';
 import { PFEventsType } from '../../../models/PFEventsType';
-import { ChannelType, IOAllowedValues } from '../../../models/contacts';
 import * as routes from '../../../navigation/routes.const';
 import { contactsSelectors } from '../../../redux/contact/reducers';
 import { useAppDispatch, useAppSelector } from '../../../redux/hooks';
 import { setHasSkippedOnboarding } from '../../../redux/sidemenu/reducers';
 import PFEventStrategyFactory from '../../../utility/MixpanelUtils/PFEventStrategyFactory';
+import { hasCourtesyContacts } from '../../../utility/contacts.utility';
 
 export type ChipColors =
   | 'default'
@@ -87,9 +87,7 @@ const PaperContent = ({ items }: { items: Array<Item> }) => (
 
 const OnboardingHome: React.FC = () => {
   const { courtesyAddresses } = useAppSelector(contactsSelectors.selectAddresses);
-  const hasIoEnabled = courtesyAddresses.some(
-    (addr) => addr.channelType === ChannelType.IOMSG && addr.value === IOAllowedValues.ENABLED
-  );
+  const hasIoEnabled = hasCourtesyContacts(courtesyAddresses);
   const { t } = useTranslation('recapiti');
 
   const navigate = useNavigate();
@@ -271,9 +269,8 @@ const OnboardingHome: React.FC = () => {
         slotsProps={{
           actions: {
             sx: {
-              flexDirection: isMobile ? 'column' : 'row-reverse',
+              flexDirection: 'column',
               justifyContent: 'flex-start',
-              gap: 2,
             },
           },
           closeButton: {
@@ -284,7 +281,7 @@ const OnboardingHome: React.FC = () => {
           },
           confirmButton: {
             children: t('onboarding.exit-flow'),
-            variant: 'outlined',
+            variant: 'text',
             fullWidth: true,
             onClick: redirectToNotifications,
             sx: { marginBottom: 0 },
