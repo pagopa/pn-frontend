@@ -284,7 +284,7 @@ const App = () => {
       void dispatch(getDigitalAddresses());
       void dispatch(getSidemenuInformation());
       void dispatch(getCurrentAppStatus());
-      void dispatch(getReceivedNotifications({ size: 10 })); // to do: remove the first one from notifications page
+      void dispatch(getReceivedNotifications({ size: 10 }));
       dispatch(setFirstSearch(true));
     }
   }, [sessionToken]);
