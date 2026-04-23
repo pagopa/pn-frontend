@@ -7,10 +7,14 @@ import { ConfirmationModal, getPaymentCache } from '@pagopa-pn/pn-commons';
 import { IllusMIMessage } from '@pagopa/mui-italia';
 
 import { useNotificationExitPrompt } from '../../../hooks/useNotificationExitPrompt';
+import { OnboardingSource } from '../../../models/Onboarding';
 import * as routes from '../../../navigation/routes.const';
 import { contactsSelectors } from '../../../redux/contact/reducers';
 import { useAppDispatch, useAppSelector } from '../../../redux/hooks';
-import { setOnboardingExitReminderShown } from '../../../redux/sidemenu/reducers';
+import {
+  setOnboardingExitReminderShown,
+  setOnboardingSource,
+} from '../../../redux/sidemenu/reducers';
 import { RootState } from '../../../redux/store';
 import { getConfiguration } from '../../../services/configuration.service';
 import { hasRequiredContacts } from '../../../utility/contacts.utility';
@@ -89,6 +93,7 @@ const NotificationDetailOnboardingPrompt: React.FC<Props> = ({
   const goToOnboarding = useCallback(() => {
     setShowOnboardingExitReminder(false);
     cancelNotificationExit();
+    dispatch(setOnboardingSource(OnboardingSource.NOTIFICATION_DETAIL));
     navigate(routes.ONBOARDING);
   }, [navigate, cancelNotificationExit]);
 

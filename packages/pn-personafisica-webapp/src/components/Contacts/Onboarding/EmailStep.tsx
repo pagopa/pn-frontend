@@ -5,11 +5,14 @@ import * as yup from 'yup';
 
 import MailOutlineIcon from '@mui/icons-material/MailOutline';
 import { Stack, Typography } from '@mui/material';
-import { appStateActions } from '@pagopa-pn/pn-commons';
+import { EventAction, appStateActions } from '@pagopa-pn/pn-commons';
 
+import { OnboardingAvailableFlows } from '../../../models/Onboarding';
+import { PFEventsType } from '../../../models/PFEventsType';
 import { AddressType, ChannelType, SaveDigitalAddressParams } from '../../../models/contacts';
 import { createOrUpdateAddress } from '../../../redux/contact/actions';
 import { useAppDispatch } from '../../../redux/hooks';
+import PFEventStrategyFactory from '../../../utility/MixpanelUtils/PFEventStrategyFactory';
 import { emailValidationSchema, normalizeContactValue } from '../../../utility/contacts.utility';
 import ContactCodeDialog from '../ContactCodeDialog';
 import DigitalContact from '../DigitalContact';
@@ -69,6 +72,33 @@ const EmailStep: React.FC<Props> = ({ value, alreadySet, onChange, onVerified })
 
   const description = t('onboarding.digital-domicile.email.description');
 
+  // START Mixpanel
+  const trackDigitalDomicile = useCallback(
+    (event: PFEventsType, extra?: Record<string, unknown>) =>
+      PFEventStrategyFactory.triggerEvent(event, {
+        onboarding_selected_flow: OnboardingAvailableFlows.DIGITAL_DOMICILE,
+        ...extra,
+      }),
+    []
+  );
+
+  const handleEditButtonClick = useCallback(
+    (nextEditMode: boolean) => {
+      if (!nextEditMode) {
+        return;
+      }
+
+      trackDigitalDomicile(PFEventsType.SEND_ONBOARDING_EMAIL_EDITING);
+    },
+    [trackDigitalDomicile]
+  );
+
+  const handleEditConfirmClick = useCallback(() => {
+    trackDigitalDomicile(PFEventsType.SEND_ONBOARDING_EMAIL_CONFIRMED);
+  }, [trackDigitalDomicile]);
+
+  // END Mixpanel
+
   const handleCodeVerification = useCallback(
     async (verificationCode?: string) => {
       const digitalAddressParams: SaveDigitalAddressParams = {
@@ -80,9 +110,16 @@ const EmailStep: React.FC<Props> = ({ value, alreadySet, onChange, onVerified })
       };
 
       try {
+        if (verificationCode) {
+          trackDigitalDomicile(PFEventsType.SEND_ONBOARDING_EMAIL_OTP_VERIFICATION);
+        }
         const res = await dispatch(createOrUpdateAddress(digitalAddressParams)).unwrap();
 
         if (!res) {
+          trackDigitalDomicile(PFEventsType.SEND_ONBOARDING_EMAIL_OTP, {
+            event_type: EventAction.SCREEN_VIEW,
+          });
+
           setCodeDialogOpen(true);
           return;
         }
@@ -97,6 +134,10 @@ const EmailStep: React.FC<Props> = ({ value, alreadySet, onChange, onVerified })
           })
         );
 
+        trackDigitalDomicile(PFEventsType.SEND_ONBOARDING_EMAIL_ACTIVATED, {
+          event_type: EventAction.CONFIRM,
+        });
+
         if (value && alreadySet) {
           emailContactRef.current.toggleEdit();
         } else {
@@ -106,7 +147,7 @@ const EmailStep: React.FC<Props> = ({ value, alreadySet, onChange, onVerified })
         // handled by ContactCodeDialog/AppResponsePublisher
       }
     },
-    [alreadySet, dispatch, onChange, t, value, onVerified]
+    [alreadySet, dispatch, onChange, t, value, onVerified, trackDigitalDomicile]
   );
 
   const handleVerifyEmail = useCallback(async () => {
@@ -118,10 +159,12 @@ const EmailStep: React.FC<Props> = ({ value, alreadySet, onChange, onVerified })
       return;
     }
 
+    trackDigitalDomicile(PFEventsType.SEND_ONBOARDING_EMAIL_VERIFICATION);
+
     // eslint-disable-next-line functional/immutable-data
     currentValueRef.current = normalizedValue;
     await handleCodeVerification();
-  }, [formik, handleCodeVerification]);
+  }, [formik, handleCodeVerification, trackDigitalDomicile]);
 
   const handleSubmitEmailEdit = useCallback(
     (newValue: string) => {
@@ -170,6 +213,8 @@ const EmailStep: React.FC<Props> = ({ value, alreadySet, onChange, onVerified })
           }}
           insertButtonLabel={t('onboarding.digital-domicile.email.confirm-cta')}
           onSubmit={handleSubmitEmailEdit}
+          onEditButtonClickCallback={handleEditButtonClick}
+          onEditConfirmCallback={handleEditConfirmClick}
           showLabelOnEdit
           slots={{
             label: () => <></>,

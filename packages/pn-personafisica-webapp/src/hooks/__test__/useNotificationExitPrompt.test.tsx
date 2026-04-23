@@ -1,8 +1,8 @@
-import { RouterProvider, createMemoryRouter, useLocation, useNavigate } from 'react-router-dom';
+import { Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 
-import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
+import { render, screen, waitFor } from '../../__test__/test-utils';
 import { useNotificationExitPrompt } from '../useNotificationExitPrompt';
 
 type PromptTestComponentProps = {
@@ -31,33 +31,22 @@ const PromptTestComponent = ({ when = true, route = '/notifiche' }: PromptTestCo
   );
 };
 
-const renderComponent = (props?: PromptTestComponentProps) => {
-  const router = createMemoryRouter(
-    [
-      {
-        path: '/detail',
-        element: <PromptTestComponent {...props} />,
-      },
-      {
-        path: '/notifiche',
-        element: <div>Notifications page</div>,
-      },
-      {
-        path: '/other',
-        element: <div>Other page</div>,
-      },
-    ],
-    {
-      initialEntries: ['/detail'],
-      initialIndex: 0,
-    }
-  );
+const PromptRoutes = (props?: PromptTestComponentProps) => (
+  <Routes>
+    <Route path="/detail" element={<PromptTestComponent {...props} />} />
+    <Route path="/notifiche" element={<div>Notifications page</div>} />
+    <Route path="/other" element={<div>Other page</div>} />
+  </Routes>
+);
 
+const renderComponent = (props?: PromptTestComponentProps) => {
   const user = userEvent.setup();
 
-  render(<RouterProvider router={router} />);
+  const renderResult = render(<PromptRoutes {...props} />, {
+    route: '/detail',
+  });
 
-  return { router, user };
+  return { user, ...renderResult };
 };
 
 describe('useNotificationExitPrompt', () => {

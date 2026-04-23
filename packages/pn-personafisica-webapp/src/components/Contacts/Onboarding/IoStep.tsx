@@ -1,9 +1,12 @@
+import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { Box, Button, Stack, Typography } from '@mui/material';
-import { appStateActions, useIsMobile } from '@pagopa-pn/pn-commons';
+import { EventAction, appStateActions, useIsMobile } from '@pagopa-pn/pn-commons';
 import { ButtonNaked } from '@pagopa/mui-italia';
 
+import { OnboardingAvailableFlows } from '../../../models/Onboarding';
+import { PFEventsType } from '../../../models/PFEventsType';
 import {
   AddressType,
   ChannelType,
@@ -14,16 +17,29 @@ import {
 import { enableIOAddress, getDigitalAddresses } from '../../../redux/contact/actions';
 import { useAppDispatch } from '../../../redux/hooks';
 import { getConfiguration } from '../../../services/configuration.service';
+import PFEventStrategyFactory from '../../../utility/MixpanelUtils/PFEventStrategyFactory';
 import { openAppIoDownloadPage } from '../../../utility/appio.utility';
 import OnboardingImage from './OnboardingImage';
 
 type Props = {
   value?: IOAllowedValues;
+  selectedOnboardingFlow: OnboardingAvailableFlows;
   onChange: (value?: IOAllowedValues) => void;
   onContinue: () => void;
 };
 
-const IoStep: React.FC<Props> = ({ value, onChange, onContinue }) => {
+const getIoStatusEvent = (status: IOContactStatus) => {
+  switch (status) {
+    case IOContactStatus.ENABLED:
+      return PFEventsType.SEND_ONBOARDING_IO_VERIFICATION;
+    case IOContactStatus.DISABLED:
+      return PFEventsType.SEND_ONBOARDING_IO_ACTIVATION;
+    default:
+      return PFEventsType.SEND_ONBOARDING_IO_DOWNLOAD;
+  }
+};
+
+const IoStep: React.FC<Props> = ({ value, selectedOnboardingFlow, onChange, onContinue }) => {
   const { t } = useTranslation(['recapiti', 'common']);
   const isMobile = useIsMobile();
   const dispatch = useAppDispatch();
@@ -67,6 +83,10 @@ const IoStep: React.FC<Props> = ({ value, onChange, onContinue }) => {
   };
 
   const handleRefreshState = async () => {
+    PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ONBOARDING_IO_DOWNLOAD_VERIFICATION, {
+      onboarding_selected_flow: selectedOnboardingFlow,
+    });
+
     try {
       const addresses = await dispatch(getDigitalAddresses()).unwrap();
       onChange(getIoValue(addresses));
@@ -77,6 +97,10 @@ const IoStep: React.FC<Props> = ({ value, onChange, onContinue }) => {
 
   const handleEnable = async () => {
     try {
+      PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ONBOARDING_IO_ACTIVATION_SELECTED, {
+        onboarding_selected_flow: selectedOnboardingFlow,
+      });
+
       await dispatch(enableIOAddress()).unwrap();
 
       dispatch(
@@ -85,6 +109,10 @@ const IoStep: React.FC<Props> = ({ value, onChange, onContinue }) => {
           message: t('courtesy-contacts.io-added-successfully', { ns: 'recapiti' }),
         })
       );
+
+      PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ONBOARDING_IO_ACTIVATED, {
+        onboarding_selected_flow: selectedOnboardingFlow,
+      });
 
       onChange(IOAllowedValues.ENABLED);
     } catch {
@@ -95,6 +123,9 @@ const IoStep: React.FC<Props> = ({ value, onChange, onContinue }) => {
   const handlePrimaryAction = () => {
     switch (status) {
       case IOContactStatus.ENABLED:
+        PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ONBOARDING_IO_CONFIRMED, {
+          onboarding_selected_flow: selectedOnboardingFlow,
+        });
         onContinue();
         break;
       case IOContactStatus.DISABLED:
@@ -102,6 +133,9 @@ const IoStep: React.FC<Props> = ({ value, onChange, onContinue }) => {
         break;
       case IOContactStatus.UNAVAILABLE:
       default:
+        PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ONBOARDING_IO_DOWNLOAD_SELECTED, {
+          onboarding_selected_flow: selectedOnboardingFlow,
+        });
         openAppIoDownloadPage({
           appIoSite: APP_IO_SITE,
           appIoAndroid: APP_IO_ANDROID,
@@ -115,6 +149,13 @@ const IoStep: React.FC<Props> = ({ value, onChange, onContinue }) => {
     status === IOContactStatus.ENABLED
       ? t('onboarding.digital-domicile.io.enabled.title')
       : t('onboarding.digital-domicile.io.title');
+
+  useEffect(() => {
+    PFEventStrategyFactory.triggerEvent(getIoStatusEvent(status), {
+      event_type: EventAction.SCREEN_VIEW,
+      onboarding_selected_flow: selectedOnboardingFlow,
+    });
+  }, [status]);
 
   return (
     <Stack data-testid="io-step">
