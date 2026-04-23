@@ -5,7 +5,12 @@ import * as pnCommons from '@pagopa-pn/pn-commons';
 import userEvent from '@testing-library/user-event';
 
 import { render, screen, waitFor } from '../../../../__test__/test-utils';
-import { AddressType, ChannelType, DigitalAddress } from '../../../../models/contacts';
+import {
+  AddressType,
+  ChannelType,
+  DigitalAddress,
+  IOContactStatus,
+} from '../../../../models/contacts';
 import * as routes from '../../../../navigation/routes.const';
 import type { PfConfiguration } from '../../../../services/configuration.service';
 import NotificationDetailOnboardingPrompt from '../NotificationDetailOnboardingPrompt';
@@ -218,7 +223,7 @@ describe('NotificationDetailOnboardingPrompt', () => {
           addressType: AddressType.COURTESY,
           channelType: ChannelType.IOMSG,
           senderId: 'default',
-          value: 'ENABLED',
+          value: IOContactStatus.ENABLED,
         },
       ],
     });
