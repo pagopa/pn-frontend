@@ -119,7 +119,7 @@ const getBannerContent = (
 
   const getEnableSercqMessage = () => {
     if (isRegistryPec) {
-      return undefined;
+      return '';
     }
     if (key === 'analog') {
       return t('notification-cost-banner.enable-sercq.message.analog');
@@ -129,7 +129,7 @@ const getBannerContent = (
         : t('notification-cost-banner.enable-sercq.message.default');
     }
   };
-  const ctaLabel = isRegistryPec ? undefined : t('notification-cost-banner.enable-sercq.cta');
+  const ctaLabel = isRegistryPec ? '' : t('notification-cost-banner.enable-sercq.cta');
 
   return {
     title,
