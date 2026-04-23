@@ -4,7 +4,7 @@ import * as yup from 'yup';
 import type { TextFieldProps } from '@mui/material';
 import { dataRegex } from '@pagopa-pn/pn-commons';
 
-import { AddressType, ChannelType, DigitalAddress } from '../models/contacts';
+import { AddressType, ChannelType, DigitalAddress, IOContactStatus } from '../models/contacts';
 import { SelectedAddresses } from '../redux/contact/reducers';
 
 export const internationalPhonePrefix = '+39';
@@ -181,7 +181,8 @@ export const hasRequiredContacts = (addresses: SelectedAddresses): boolean => {
     (address) => address.channelType === ChannelType.EMAIL
   );
   const hasIo = addresses.courtesyAddresses.some(
-    (address) => address.channelType === ChannelType.IOMSG
+    (address) =>
+      address.channelType === ChannelType.IOMSG && address.value === IOContactStatus.ENABLED
   );
 
   return hasLegal || (hasEmail && hasIo);
@@ -194,7 +195,10 @@ export const hasRequiredContacts = (addresses: SelectedAddresses): boolean => {
 export const hasCourtesyContacts = (addresses: Array<DigitalAddress>): boolean => {
   const hasEmail = addresses.some((address) => address.channelType === ChannelType.EMAIL);
   const hasSMS = addresses.some((address) => address.channelType === ChannelType.SMS);
-  const hasIo = addresses.some((address) => address.channelType === ChannelType.IOMSG);
+  const hasIo = addresses.some(
+    (address) =>
+      address.channelType === ChannelType.IOMSG && address.value === IOContactStatus.ENABLED
+  );
 
   return hasEmail || hasIo || hasSMS;
 };

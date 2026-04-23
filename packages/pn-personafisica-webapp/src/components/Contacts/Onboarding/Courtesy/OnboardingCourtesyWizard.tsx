@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { Typography } from '@mui/material';
 import { EventAction, PnWizard, PnWizardStep } from '@pagopa-pn/pn-commons';
 import { IllusMICompleted } from '@pagopa/mui-italia';
@@ -193,6 +194,7 @@ const OnboardingCourtesyWizard: React.FC = () => {
         },
         prevButton: {
           sx: isIoStep ? { display: 'none' } : undefined,
+          startIcon: <ArrowBackIcon />,
           onClick: handlePrevious,
         },
         stepContainer: {
