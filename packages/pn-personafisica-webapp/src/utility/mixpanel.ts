@@ -13,6 +13,7 @@ import { PFEventsType, eventsActionsMap } from '../models/PFEventsType';
 import { AddressType, ChannelType, DigitalAddress, IOAllowedValues } from '../models/contacts';
 import { store } from '../redux/store';
 import PFEventStrategyFactory from './MixpanelUtils/PFEventStrategyFactory';
+import { hasCourtesyContacts } from './contacts.utility';
 
 export type MixpanelConcatCourtesyContacts =
   | 'app_io_email_sms'
@@ -107,17 +108,18 @@ export const getOnboardingSource = (): OnboardingSource | undefined =>
 
 export const getOnboardingAvailableFlows = () => {
   const { digitalAddresses } = store.getState().contactsState;
-
-  const hasIOEnabled = digitalAddresses.some(
-    (addr) => addr.channelType === ChannelType.IOMSG && addr.value === IOAllowedValues.ENABLED
+  const courtesyAddresses = digitalAddresses.filter(
+    (address) => address.addressType === AddressType.COURTESY
   );
+
+  const hasCourtesyContact = hasCourtesyContacts(courtesyAddresses);
 
   const flows: Array<OnboardingAvailableFlows> = [
     OnboardingAvailableFlows.DIGITAL_DOMICILE,
     OnboardingAvailableFlows.COURTESY,
   ];
 
-  if (!hasIOEnabled) {
+  if (!hasCourtesyContact) {
     flows.push(OnboardingAvailableFlows.IO);
   }
 

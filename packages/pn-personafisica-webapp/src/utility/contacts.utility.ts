@@ -170,6 +170,11 @@ export const getSemanticTextFieldProps = (channelType: ChannelType): Partial<Tex
   return {};
 };
 
+/**
+ * Function that checks if the user has the required contacts to skip onboarding
+ * The user needs at least a legal address or both email and io as courtesy addresses
+ * @param addresses - The user addresses
+ */
 export const hasRequiredContacts = (addresses: SelectedAddresses): boolean => {
   const hasLegal = addresses.legalAddresses.length > 0;
   const hasEmail = addresses.courtesyAddresses.some(
@@ -182,6 +187,10 @@ export const hasRequiredContacts = (addresses: SelectedAddresses): boolean => {
   return hasLegal || (hasEmail && hasIo);
 };
 
+/**
+ * Function that checks if the user has at least one courtesy contact (email, sms or io)
+ * @param addresses - The user addresses
+ */
 export const hasCourtesyContacts = (addresses: Array<DigitalAddress>): boolean => {
   const hasEmail = addresses.some((address) => address.channelType === ChannelType.EMAIL);
   const hasSMS = addresses.some((address) => address.channelType === ChannelType.SMS);
