@@ -121,6 +121,11 @@ const NotificationDetailOnboardingPrompt: React.FC<Props> = ({
           closeButton: Button,
         }}
         slotsProps={{
+          actions: {
+            sx: {
+              flexDirection: 'column-reverse',
+            },
+          },
           confirmButton: {
             onClick: goToOnboarding,
             children: t('onboarding.notification-exit-dialog.buttons.configure', {
@@ -130,6 +135,7 @@ const NotificationDetailOnboardingPrompt: React.FC<Props> = ({
           closeButton: {
             onClick: closeOnboardingExitReminder,
             children: t('onboarding.notification-exit-dialog.buttons.skip', { ns: 'recapiti' }),
+            variant: 'text',
           },
         }}
       >

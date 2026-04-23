@@ -150,7 +150,7 @@ const IoStep: React.FC<Props> = ({ value, onChange, onContinue }) => {
         )}
       </Box>
       <OnboardingImage
-        src="/imgs/onboarding-appio.png"
+        src="/imgs/onboarding-appio.webp"
         decorative
         height={isMobile ? '160px' : '276px'}
       />

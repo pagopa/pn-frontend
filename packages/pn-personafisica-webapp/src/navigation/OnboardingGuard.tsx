@@ -7,6 +7,7 @@ import { LoadingPage, NotificationStatus } from '@pagopa-pn/pn-commons';
 import { setIsFreshLogin } from '../redux/auth/reducers';
 import { contactsSelectors } from '../redux/contact/reducers';
 import { useAppSelector } from '../redux/hooks';
+import { getConfiguration } from '../services/configuration.service';
 import { hasRequiredContacts } from '../utility/contacts.utility';
 import * as routes from './routes.const';
 
@@ -14,6 +15,7 @@ const OnboardingGuard = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const location = useLocation();
+  const { IS_ONBOARDING_ENABLED } = getConfiguration();
 
   const addresses = useAppSelector(contactsSelectors.selectAddresses);
   const isContactLoading = useAppSelector(contactsSelectors.selectLoading);
@@ -39,7 +41,8 @@ const OnboardingGuard = () => {
       location.pathname === '/' &&
       isFreshLogin &&
       !hasRequiredContacts(addresses) &&
-      !hasNotificationsToRead
+      !hasNotificationsToRead &&
+      IS_ONBOARDING_ENABLED
     ) {
       navigate(routes.ONBOARDING, { replace: true });
     }

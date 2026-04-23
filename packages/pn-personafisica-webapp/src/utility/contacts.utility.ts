@@ -181,3 +181,11 @@ export const hasRequiredContacts = (addresses: SelectedAddresses): boolean => {
 
   return hasLegal || (hasEmail && hasIo);
 };
+
+export const hasCourtesyContacts = (addresses: Array<DigitalAddress>): boolean => {
+  const hasEmail = addresses.some((address) => address.channelType === ChannelType.EMAIL);
+  const hasSMS = addresses.some((address) => address.channelType === ChannelType.SMS);
+  const hasIo = addresses.some((address) => address.channelType === ChannelType.IOMSG);
+
+  return hasEmail || hasIo || hasSMS;
+};
