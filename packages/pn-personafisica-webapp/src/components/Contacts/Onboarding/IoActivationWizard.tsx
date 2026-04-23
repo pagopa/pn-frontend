@@ -1,9 +1,9 @@
-import { useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
 import { Typography } from '@mui/material';
-import { PnWizard, PnWizardStep } from '@pagopa-pn/pn-commons';
+import { EventAction, PnWizard, PnWizardStep } from '@pagopa-pn/pn-commons';
 import { IllusMICompleted } from '@pagopa/mui-italia';
 
 import { OnboardingAvailableFlows, OnboardingScreen } from '../../../models/Onboarding';
@@ -31,8 +31,7 @@ const IoActivationWizard: React.FC = () => {
   };
 
   const exit = () => {
-    PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ONBOARDING_EXIT_SELECTED, {
-      onboarding_selected_flow: OnboardingAvailableFlows.IO,
+    trackIo(PFEventsType.SEND_ONBOARDING_EXIT_SELECTED, {
       screen: OnboardingScreen.IO,
     });
     navigate(ONBOARDING);
@@ -41,6 +40,27 @@ const IoActivationWizard: React.FC = () => {
   const goToFeedback = () => {
     setActiveStep(1);
   };
+
+  // START Mixpanel
+  const trackIo = useCallback(
+    (event: PFEventsType, extra?: Record<string, unknown>) =>
+      PFEventStrategyFactory.triggerEvent(event, {
+        onboarding_selected_flow: OnboardingAvailableFlows.IO,
+        ...extra,
+      }),
+    []
+  );
+
+  useEffect(() => {
+    if (activeStep !== 1) {
+      return;
+    }
+
+    trackIo(PFEventsType.SEND_ONBOARDING_UX_SUCCESS, {
+      event_type: EventAction.SCREEN_VIEW,
+    });
+  }, [activeStep, trackIo]);
+  // END Mixpanel
 
   return (
     <PnWizard

@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
@@ -7,6 +7,7 @@ import { Button, Link, Typography } from '@mui/material';
 import {
   ConsentActionType,
   ConsentType,
+  EventAction,
   PnWizard,
   PnWizardStep,
   SERCQ_SEND_VALUE,
@@ -65,6 +66,11 @@ type InitialContactsSnapshot = {
   pecIsValid?: boolean;
   io: IOAllowedValues | undefined;
 };
+
+type ScreenEventConfig = {
+  type: PFEventsType;
+  payload: Record<string, unknown>;
+} | null;
 
 const STEPS_COUNT = 4;
 
@@ -211,19 +217,6 @@ const DigitalDomicileWizard: React.FC = () => {
 
   const showSummaryDisclaimer = isSummaryStep && isSendMode;
 
-  const getExitScreen = () => {
-    if (isChoiceStep) {
-      return OnboardingScreen.CHOICE;
-    }
-    if (isContactStep) {
-      return isSendMode ? OnboardingScreen.EMAIL : OnboardingScreen.PEC;
-    }
-    if (isIoStep) {
-      return OnboardingScreen.IO;
-    }
-    return OnboardingScreen.SUMMARY;
-  };
-
   const goToNextStep = () => {
     setActiveStep((step) => Math.min(step + 1, STEPS_COUNT));
   };
@@ -235,9 +228,8 @@ const DigitalDomicileWizard: React.FC = () => {
     navigate(NOTIFICHE);
   };
   const exit = () => {
-    PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ONBOARDING_EXIT_SELECTED, {
-      onboarding_selected_flow: OnboardingAvailableFlows.DIGITAL_DOMICILE,
-      screen: getExitScreen(),
+    trackDigitalDomicile(PFEventsType.SEND_ONBOARDING_EXIT_SELECTED, {
+      screen: getCurrentScreen(),
     });
 
     navigate(ONBOARDING);
@@ -309,6 +301,7 @@ const DigitalDomicileWizard: React.FC = () => {
       return;
     }
 
+    trackBackSelected();
     goToPreviousStep();
   };
 
@@ -349,6 +342,8 @@ const DigitalDomicileWizard: React.FC = () => {
   };
 
   const handleSummarySubmit = async () => {
+    trackDigitalDomicile(PFEventsType.SEND_ONBOARDING_UX_CONVERSION);
+
     if (isSendMode) {
       await activateSendDigitalDomicile();
     }
@@ -373,26 +368,27 @@ const DigitalDomicileWizard: React.FC = () => {
   };
 
   const handleNext = async () => {
+    trackContinueSelected();
+
+    if (isContactStep && !(await canProceedFromContactStep())) {
+      return;
+    }
+
     if (isChoiceStep && isPecActivating) {
       goToNextStep();
       return;
     }
 
     if (isContactStep) {
-      if (!(await canProceedFromContactStep())) {
-        return;
-      }
-
       goToNextStep();
       return;
     }
 
     if (isIoStep) {
       if (!isIoEnabled) {
-        PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ONBOARDING_IO_DOWNLOAD_DECLINED, {
-          onboarding_selected_flow: OnboardingAvailableFlows.DIGITAL_DOMICILE,
-        });
+        trackDigitalDomicile(PFEventsType.SEND_ONBOARDING_IO_DOWNLOAD_DECLINED);
       }
+
       goToNextStep();
       return;
     }
@@ -488,6 +484,109 @@ const DigitalDomicileWizard: React.FC = () => {
     ? t('onboarding.digital-domicile.steps.pec')
     : t('onboarding.digital-domicile.steps.email');
 
+  // Start Mixpanel
+  const trackDigitalDomicile = useCallback(
+    (event: PFEventsType, extra?: Record<string, unknown>) =>
+      PFEventStrategyFactory.triggerEvent(event, {
+        onboarding_selected_flow: OnboardingAvailableFlows.DIGITAL_DOMICILE,
+        ...extra,
+      }),
+    []
+  );
+
+  const getCurrentScreen = (): OnboardingScreen => {
+    if (isChoiceStep) {
+      return OnboardingScreen.CHOICE;
+    }
+    if (isContactStep) {
+      return isSendMode ? OnboardingScreen.EMAIL : OnboardingScreen.PEC;
+    }
+    if (isIoStep) {
+      return OnboardingScreen.IO;
+    }
+    return OnboardingScreen.SUMMARY;
+  };
+
+  const handleSelectSend = () => {
+    trackDigitalDomicile(PFEventsType.SEND_ONBOARDING_SERCQ_SEND_SELECTED);
+    selectMode('send');
+  };
+
+  const getCurrentScreenEvent = (): ScreenEventConfig => {
+    switch (activeStep) {
+      case 0:
+        return {
+          type: PFEventsType.SEND_ONBOARDING_SERCQ_ACTIVATION,
+          payload: {
+            event_type: EventAction.SCREEN_VIEW,
+          },
+        };
+
+      case 1:
+        if (isSendMode) {
+          return {
+            type: PFEventsType.SEND_ONBOARDING_EMAIL_ACTIVATION,
+            payload: {
+              event_type: EventAction.SCREEN_VIEW,
+              email_value: wizardState.email.value,
+            },
+          };
+        }
+
+        return {
+          type: PFEventsType.SEND_ONBOARDING_PEC_EMAIL_ACTIVATION,
+          payload: {
+            event_type: EventAction.SCREEN_VIEW,
+            email_value: wizardState.email.value,
+          },
+        };
+
+      case 3:
+        return {
+          type: PFEventsType.SEND_ONBOARDING_FLOW_RECAP,
+          payload: {
+            event_type: EventAction.SCREEN_VIEW,
+          },
+        };
+
+      default:
+        return null;
+    }
+  };
+
+  useEffect(() => {
+    const event = getCurrentScreenEvent();
+
+    if (!event) {
+      return;
+    }
+
+    trackDigitalDomicile(event.type, event.payload);
+  }, [activeStep, isSendMode, trackDigitalDomicile]);
+
+  useEffect(() => {
+    if (activeStep !== 4) {
+      return;
+    }
+
+    trackDigitalDomicile(PFEventsType.SEND_ONBOARDING_UX_SUCCESS, {
+      event_type: EventAction.SCREEN_VIEW,
+    });
+  }, [activeStep, trackDigitalDomicile]);
+
+  const trackBackSelected = () => {
+    trackDigitalDomicile(PFEventsType.SEND_ONBOARDING_BACK_SELECTED, {
+      screen: getCurrentScreen(),
+    });
+  };
+
+  const trackContinueSelected = () => {
+    trackDigitalDomicile(PFEventsType.SEND_ONBOARDING_CONTINUE_SELECTED, {
+      screen: getCurrentScreen(),
+    });
+  };
+  // END Mixpanel
+
   return (
     <PnWizard
       title={
@@ -542,7 +641,7 @@ const DigitalDomicileWizard: React.FC = () => {
     >
       <PnWizardStep label={t('onboarding.digital-domicile.steps.choice')}>
         <ChooseDigitalDomicileStep
-          onSelectSend={() => selectMode('send')}
+          onSelectSend={handleSelectSend}
           onSelectPec={() => selectMode('pec')}
           isPecActivating={isPecActivating}
         />

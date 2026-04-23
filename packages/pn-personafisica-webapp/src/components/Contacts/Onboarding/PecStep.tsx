@@ -13,13 +13,19 @@ import {
   Stack,
   Typography,
 } from '@mui/material';
-import { ConfirmationModal, appStateActions } from '@pagopa-pn/pn-commons';
+import { ConfirmationModal, EventAction, appStateActions } from '@pagopa-pn/pn-commons';
 import { IllusMIMessage } from '@pagopa/mui-italia';
 
-import { EmailContactState, PecContactState } from '../../../models/Onboarding';
+import {
+  EmailContactState,
+  OnboardingAvailableFlows,
+  PecContactState,
+} from '../../../models/Onboarding';
+import { PFEventsType } from '../../../models/PFEventsType';
 import { AddressType, ChannelType, SaveDigitalAddressParams } from '../../../models/contacts';
 import { createOrUpdateAddress } from '../../../redux/contact/actions';
 import { useAppDispatch } from '../../../redux/hooks';
+import PFEventStrategyFactory from '../../../utility/MixpanelUtils/PFEventStrategyFactory';
 import {
   emailValidationSchema,
   normalizeContactValue,
@@ -117,6 +123,31 @@ const PecStep: React.FC<Props> = ({
     },
   });
 
+  // Track Mixpanel events for digital domicile onboarding
+  const trackDigitalDomicile = useCallback(
+    (event: PFEventsType, extra?: Record<string, unknown>) =>
+      PFEventStrategyFactory.triggerEvent(event, {
+        onboarding_selected_flow: OnboardingAvailableFlows.DIGITAL_DOMICILE,
+        ...extra,
+      }),
+    []
+  );
+
+  const handleEmailEditButtonClick = useCallback(
+    (nextEditMode: boolean) => {
+      if (!nextEditMode) {
+        return;
+      }
+
+      trackDigitalDomicile(PFEventsType.SEND_ONBOARDING_EMAIL_EDITING);
+    },
+    [trackDigitalDomicile]
+  );
+
+  const handleEmailEditConfirmClick = useCallback(() => {
+    trackDigitalDomicile(PFEventsType.SEND_ONBOARDING_EMAIL_CONFIRMED);
+  }, [trackDigitalDomicile]);
+
   const submitContactFlow = useCallback(
     async (flow: FlowKey, value: string, verificationCode?: string) => {
       const digitalAddressParams: SaveDigitalAddressParams =
@@ -137,9 +168,26 @@ const PecStep: React.FC<Props> = ({
             };
 
       try {
+        if (verificationCode) {
+          trackDigitalDomicile(
+            flow === 'pec'
+              ? PFEventsType.SEND_ONBOARDING_PEC_OTP_VERIFICATION
+              : PFEventsType.SEND_ONBOARDING_EMAIL_OTP_VERIFICATION
+          );
+        }
+
         const res = await dispatch(createOrUpdateAddress(digitalAddressParams)).unwrap();
 
         if (!res) {
+          trackDigitalDomicile(
+            flow === 'pec'
+              ? PFEventsType.SEND_ONBOARDING_PEC_OTP
+              : PFEventsType.SEND_ONBOARDING_EMAIL_OTP,
+            {
+              event_type: EventAction.SCREEN_VIEW,
+            }
+          );
+
           setCodeDialogFlow(flow);
           return;
         }
@@ -155,6 +203,11 @@ const PecStep: React.FC<Props> = ({
               message: t('legal-contacts.pec-added-successfully', { ns: 'recapiti' }),
             })
           );
+
+          trackDigitalDomicile(PFEventsType.SEND_ONBOARDING_PEC_ACTIVATED, {
+            event_type: EventAction.CONFIRM,
+          });
+
           return;
         }
 
@@ -173,11 +226,15 @@ const PecStep: React.FC<Props> = ({
             message: t('courtesy-contacts.email-added-successfully', { ns: 'recapiti' }),
           })
         );
+
+        trackDigitalDomicile(PFEventsType.SEND_ONBOARDING_EMAIL_ACTIVATED, {
+          event_type: EventAction.CONFIRM,
+        });
       } catch {
         // handled by ContactCodeDialog / AppResponsePublisher
       }
     },
-    [dispatch, email.alreadySet, onEmailChange, onPecChange, t]
+    [dispatch, email.alreadySet, onEmailChange, onPecChange, t, trackDigitalDomicile]
   );
 
   const handleFieldChange = useCallback(
@@ -202,10 +259,12 @@ const PecStep: React.FC<Props> = ({
       return;
     }
 
+    trackDigitalDomicile(PFEventsType.SEND_ONBOARDING_PEC_VERIFICATION);
+
     // eslint-disable-next-line functional/immutable-data
     currentValuesRef.current.pec = normalizedValue;
     await submitContactFlow('pec', normalizedValue);
-  }, [formik, showPecDisclaimer, submitContactFlow]);
+  }, [formik, showPecDisclaimer, submitContactFlow, trackDigitalDomicile]);
 
   const handleVerifyEmail = useCallback(async () => {
     await formik.setFieldTouched('email', true, false);
@@ -216,10 +275,12 @@ const PecStep: React.FC<Props> = ({
       return;
     }
 
+    trackDigitalDomicile(PFEventsType.SEND_ONBOARDING_EMAIL_VERIFICATION);
+
     // eslint-disable-next-line functional/immutable-data
     currentValuesRef.current.email = normalizedValue;
     await submitContactFlow('email', normalizedValue);
-  }, [formik, submitContactFlow]);
+  }, [formik, submitContactFlow, trackDigitalDomicile]);
 
   const handleSubmitEmailEdit = useCallback(
     (newValue: string) => {
@@ -239,15 +300,22 @@ const PecStep: React.FC<Props> = ({
       currentValuesRef.current.email = normalizedValue;
       void submitContactFlow('email', normalizedValue);
     },
-    [email.alreadySet, email.value, submitContactFlow]
+    [email.alreadySet, email.value, submitContactFlow, trackDigitalDomicile]
   );
 
+  const handleExpandEmail = useCallback(() => {
+    trackDigitalDomicile(PFEventsType.SEND_ONBOARDING_EMAIL_SELECTED);
+    setEmailMode('insert');
+    onShowOptionalEmail(true);
+  }, [onShowOptionalEmail, trackDigitalDomicile]);
+
   const handleCollapseEmail = useCallback(() => {
+    trackDigitalDomicile(PFEventsType.SEND_ONBOARDING_EMAIL_ACTIVATION_CANCELED);
     void formik.setFieldValue('email', '', false);
     void formik.setFieldTouched('email', false, false);
     setEmailMode('collapsed');
     onShowOptionalEmail(false);
-  }, [formik, onShowOptionalEmail]);
+  }, [formik, onShowOptionalEmail, trackDigitalDomicile]);
 
   const handleCodeDialogConfirm = useCallback(
     async (code?: string) => {
@@ -415,12 +483,11 @@ const PecStep: React.FC<Props> = ({
             onEmailBlur={formik.handleBlur}
             onVerifyEmail={handleVerifyEmail}
             onSubmitEmailEdit={handleSubmitEmailEdit}
-            onExpand={() => {
-              setEmailMode('insert');
-              onShowOptionalEmail(true);
-            }}
+            onExpand={handleExpandEmail}
             onCollapse={handleCollapseEmail}
             emailContactRef={emailContactRef}
+            onEditButtonClickCallback={handleEmailEditButtonClick}
+            onEditConfirmCallback={handleEmailEditConfirmClick}
           />
         </Stack>
       </Stack>
