@@ -3,6 +3,23 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.23.0-RC.1](https://github.com/pagopa/pn-frontend/compare/v2.23.0-RC.0...v2.23.0-RC.1) (2026-04-23)
+
+
+### Bug Fixes
+
+* **PN-19275:** solved some issues and avoid to call notifications api at first start of onboarding  ([#1839](https://github.com/pagopa/pn-frontend/issues/1839)) ([9116f53](https://github.com/pagopa/pn-frontend/commit/9116f534593e9738f69fa5ab05510205ec03c57e))
+* **PN-19535:** remove cta and sentence for public registry PEC ([#1840](https://github.com/pagopa/pn-frontend/issues/1840)) ([c096769](https://github.com/pagopa/pn-frontend/commit/c09676985d15c8c45900cd93beeefb341f127b94))
+
+
+### Features
+
+* **PN-19528:** track onboarding Mixpanel events ([#1836](https://github.com/pagopa/pn-frontend/issues/1836)) ([df88d6d](https://github.com/pagopa/pn-frontend/commit/df88d6d0bf68285854facc02a39c112ee3e01987))
+
+
+
+
+
 # [2.23.0-RC.0](https://fbianchicodermine-github/pagopa/pn-frontend/compare/v2.22.2...v2.23.0-RC.0) (2026-04-22)
 
 

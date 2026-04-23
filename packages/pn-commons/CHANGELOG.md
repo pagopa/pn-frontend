@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.23.0-RC.1](https://github.com/pagopa/pn-frontend/compare/v2.23.0-RC.0...v2.23.0-RC.1) (2026-04-23)
+
+
+### Features
+
+* **PN-19528:** track onboarding Mixpanel events ([#1836](https://github.com/pagopa/pn-frontend/issues/1836)) ([df88d6d](https://github.com/pagopa/pn-frontend/commit/df88d6d0bf68285854facc02a39c112ee3e01987))
+
+
+
+
+
 # [2.23.0-RC.0](https://fbianchicodermine-github/pagopa/pn-frontend/compare/v2.22.2...v2.23.0-RC.0) (2026-04-22)
 
 
