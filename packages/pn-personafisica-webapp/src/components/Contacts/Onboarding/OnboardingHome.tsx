@@ -30,7 +30,11 @@ import { PFEventsType } from '../../../models/PFEventsType';
 import * as routes from '../../../navigation/routes.const';
 import { contactsSelectors } from '../../../redux/contact/reducers';
 import { useAppDispatch, useAppSelector } from '../../../redux/hooks';
-import { setHasSkippedOnboarding } from '../../../redux/sidemenu/reducers';
+import {
+  setHasSkippedOnboarding,
+  setOnboardingHasBeenShown,
+  setOnboardingSelectedFlow,
+} from '../../../redux/sidemenu/reducers';
 import PFEventStrategyFactory from '../../../utility/MixpanelUtils/PFEventStrategyFactory';
 import { hasCourtesyContacts } from '../../../utility/contacts.utility';
 
@@ -173,6 +177,7 @@ const OnboardingHome: React.FC = () => {
     PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ONBOARDING_FLOW_SELECTED, {
       onboarding_selected_flow: selectedFlow,
     });
+    dispatch(setOnboardingSelectedFlow(selectedFlow));
     navigate(path);
   };
 
@@ -188,6 +193,8 @@ const OnboardingHome: React.FC = () => {
     PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ONBOARDING_START_FLOW, {
       event_type: EventAction.SCREEN_VIEW,
     });
+
+    dispatch(setOnboardingHasBeenShown(true));
   }, []);
 
   return (

@@ -7,6 +7,7 @@ import {
   OnboardingAvailableFlows,
   OnboardingContactStatus,
   OnboardingSource,
+  OnboardingStatus,
   TrackingFlow,
 } from '../models/Onboarding';
 import { PFEventsType, eventsActionsMap } from '../models/PFEventsType';
@@ -134,4 +135,36 @@ export const getOnboardingBasePayload = () => ({
 
 export const getOnboardingContactStatus = (value?: string): OnboardingContactStatus =>
   value ? OnboardingContactStatus.POPULATED : OnboardingContactStatus.EMPTY;
+
+export const getOnboardingStatus = () => {
+  const state = store.getState().generalInfoState.onboardingData;
+
+  if (state.hasSkippedOnboarding) {
+    return OnboardingStatus.DECLINED;
+  }
+
+  if (!state.hasBeenShown) {
+    return OnboardingStatus.NOT_VIEWED;
+  }
+
+  return OnboardingStatus.ENGAGED;
+};
+
+export const getOnboardingNotificationsPayload = () => {
+  const onboarding_selected_flow =
+    store.getState().generalInfoState.onboardingData.onboardingSelectedFlow;
+  const onboarding = getOnboardingStatus();
+
+  if (onboarding === OnboardingStatus.NOT_VIEWED) {
+    return {
+      onboarding,
+    };
+  }
+
+  return {
+    onboarding,
+    onboarding_selected_flow,
+    flow: TrackingFlow.ONBOARDING,
+  };
+};
 // -- End Onboarding

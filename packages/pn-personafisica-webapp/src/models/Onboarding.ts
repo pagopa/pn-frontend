@@ -52,3 +52,11 @@ export const OnboardingScreen = {
 } as const;
 
 export type OnboardingScreen = (typeof OnboardingScreen)[keyof typeof OnboardingScreen];
+
+export const OnboardingStatus = {
+  DECLINED: 'declined',
+  NOT_VIEWED: 'not_viewed',
+  ENGAGED: 'engaged',
+  INTERRUPTED: 'interrupted',
+} as const;
+export type OnboardingStatus = (typeof OnboardingStatus)[keyof typeof OnboardingStatus];

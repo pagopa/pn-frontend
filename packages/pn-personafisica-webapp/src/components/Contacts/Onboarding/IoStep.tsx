@@ -123,6 +123,9 @@ const IoStep: React.FC<Props> = ({ value, selectedOnboardingFlow, onChange, onCo
   const handlePrimaryAction = () => {
     switch (status) {
       case IOContactStatus.ENABLED:
+        PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ONBOARDING_IO_CONFIRMED, {
+          onboarding_selected_flow: selectedOnboardingFlow,
+        });
         onContinue();
         break;
       case IOContactStatus.DISABLED:

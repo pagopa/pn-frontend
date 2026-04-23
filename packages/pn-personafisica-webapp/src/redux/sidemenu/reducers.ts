@@ -1,7 +1,7 @@
 import { PaymentTpp } from '@pagopa-pn/pn-commons';
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 
-import { OnboardingSource } from '../../models/Onboarding';
+import { OnboardingAvailableFlows, OnboardingSource } from '../../models/Onboarding';
 import { acceptMandate, rejectMandate } from '../delegation/actions';
 import { Delegator } from '../delegation/types';
 import { exchangeNotificationRetrievalId, getSidemenuInformation } from './actions';
@@ -11,6 +11,7 @@ type OnboardingDataState = {
   hasSkippedOnboarding: boolean;
   exitReminderShown: boolean;
   source?: OnboardingSource;
+  onboardingSelectedFlow?: OnboardingAvailableFlows;
 };
 
 type GeneralInfoState = {
@@ -31,6 +32,7 @@ const initialState: GeneralInfoState = {
     hasSkippedOnboarding: false,
     exitReminderShown: false,
     source: undefined,
+    onboardingSelectedFlow: undefined,
   },
 };
 
@@ -53,6 +55,12 @@ const generalInfoSlice = createSlice({
     },
     setOnboardingSource: (state, action: PayloadAction<OnboardingSource | undefined>) => {
       state.onboardingData.source = action.payload;
+    },
+    setOnboardingSelectedFlow: (
+      state,
+      action: PayloadAction<OnboardingAvailableFlows | undefined>
+    ) => {
+      state.onboardingData.onboardingSelectedFlow = action.payload;
     },
     resetState: () => initialState,
   },
@@ -95,6 +103,7 @@ export const {
   setHasSkippedOnboarding,
   setOnboardingExitReminderShown,
   setOnboardingSource,
+  setOnboardingSelectedFlow,
   resetState,
 } = generalInfoSlice.actions;
 
