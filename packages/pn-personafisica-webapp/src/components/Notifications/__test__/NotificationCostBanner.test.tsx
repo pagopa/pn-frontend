@@ -185,7 +185,7 @@ describe('NotificationCostBanner component', () => {
       details: { source: DigitalSource.REGISTRY, domicileType: 'SERCQ' },
     } as any;
 
-    const { container, getByTestId, getByText, testStore, router } = render(
+    const { container, getByTestId } = render(
       <NotificationCostBanner deliveryOutcome={deliveryOutcome} />,
       {
         preloadedState: {
