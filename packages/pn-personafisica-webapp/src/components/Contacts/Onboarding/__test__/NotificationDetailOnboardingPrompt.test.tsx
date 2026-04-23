@@ -1,7 +1,7 @@
 import { Route, Routes, useNavigate } from 'react-router-dom';
 import { vi } from 'vitest';
 
-import { Configuration, PAYMENT_CACHE_KEY, setPaymentCache } from '@pagopa-pn/pn-commons';
+import * as pnCommons from '@pagopa-pn/pn-commons';
 import userEvent from '@testing-library/user-event';
 
 import { render, screen, waitFor } from '../../../../__test__/test-utils';
@@ -14,6 +14,8 @@ const defaultOnboardingData = {
   hasBeenShown: false,
   hasSkippedOnboarding: false,
   exitReminderShown: false,
+  source: undefined,
+  onboardingSelectedFlow: undefined,
 };
 
 const defaultPaymentTpp = {
@@ -69,15 +71,12 @@ const renderComponent = ({
   addresses = [],
 }: RenderOptions = {}) => {
   if (withPaymentReturn) {
-    setPaymentCache(
-      {
-        currentPayment: {
-          creditorTaxId: 'creditor-tax-id',
-          noticeCode: 'notice-code',
-        },
-      } as any,
-      'TEST_IUN'
-    );
+    vi.spyOn(pnCommons, 'getPaymentCache').mockReturnValue({
+      currentPayment: {
+        creditorTaxId: 'creditor-tax-id',
+        noticeCode: 'notice-code',
+      },
+    } as any);
   }
 
   const user = userEvent.setup();
@@ -106,9 +105,9 @@ const renderComponent = ({
 
 describe('NotificationDetailOnboardingPrompt', () => {
   beforeEach(() => {
-    vi.clearAllMocks();
-    sessionStorage.removeItem(PAYMENT_CACHE_KEY);
-    Configuration.setForTest<PfConfiguration>({
+    vi.restoreAllMocks();
+    sessionStorage.removeItem(pnCommons.PAYMENT_CACHE_KEY);
+    pnCommons.Configuration.setForTest<PfConfiguration>({
       IS_ONBOARDING_ENABLED: true,
     } as PfConfiguration);
   });
@@ -181,7 +180,7 @@ describe('NotificationDetailOnboardingPrompt', () => {
   });
 
   it('should not open the modal when onboarding feature is disabled', async () => {
-    Configuration.setForTest<PfConfiguration>({
+    pnCommons.Configuration.setForTest<PfConfiguration>({
       IS_ONBOARDING_ENABLED: false,
     } as PfConfiguration);
 

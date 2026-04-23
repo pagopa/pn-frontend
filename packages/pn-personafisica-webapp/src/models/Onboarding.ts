@@ -57,6 +57,5 @@ export const OnboardingStatus = {
   DECLINED: 'declined',
   NOT_VIEWED: 'not_viewed',
   ENGAGED: 'engaged',
-  INTERRUPTED: 'interrupted',
 } as const;
 export type OnboardingStatus = (typeof OnboardingStatus)[keyof typeof OnboardingStatus];
