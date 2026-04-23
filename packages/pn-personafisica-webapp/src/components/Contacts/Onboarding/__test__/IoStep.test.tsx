@@ -1,16 +1,24 @@
 import MockAdapter from 'axios-mock-adapter';
 import { vi } from 'vitest';
 
+import { EventAction } from '@pagopa-pn/pn-commons';
+
 import { act, fireEvent, render, waitFor } from '../../../../__test__/test-utils';
 import { apiClient } from '../../../../api/apiClients';
 import { OnboardingAvailableFlows } from '../../../../models/Onboarding';
+import { PFEventsType } from '../../../../models/PFEventsType';
 import { AddressType, ChannelType, IOAllowedValues } from '../../../../models/contacts';
 import { getConfiguration } from '../../../../services/configuration.service';
 import { openAppIoDownloadPage } from '../../../../utility/appio.utility';
+import PFEventStrategyFactory from '../../../../utility/MixpanelUtils/PFEventStrategyFactory';
 import IoStep from '../IoStep';
 
 vi.mock('../../../../utility/appio.utility', () => ({
   openAppIoDownloadPage: vi.fn(),
+}));
+
+vi.mock('../../../../utility/MixpanelUtils/PFEventStrategyFactory', () => ({
+  default: { triggerEvent: vi.fn() },
 }));
 
 describe('IoStep', () => {
@@ -50,6 +58,10 @@ describe('IoStep', () => {
     expect(
       getByRole('button', { name: `${labelPrefix}.not-installed.refresh-cta` })
     ).toBeInTheDocument();
+    expect(PFEventStrategyFactory.triggerEvent).toHaveBeenCalledWith(
+      PFEventsType.SEND_ONBOARDING_IO_DOWNLOAD,
+      { event_type: EventAction.SCREEN_VIEW, onboarding_selected_flow: OnboardingAvailableFlows.DIGITAL_DOMICILE }
+    );
   });
 
   it('opens the App IO download page when the primary CTA is clicked in unavailable state', async () => {
@@ -75,6 +87,10 @@ describe('IoStep', () => {
     });
     expect(props.onChange).not.toHaveBeenCalled();
     expect(props.onContinue).not.toHaveBeenCalled();
+    expect(PFEventStrategyFactory.triggerEvent).toHaveBeenCalledWith(
+      PFEventsType.SEND_ONBOARDING_IO_DOWNLOAD_SELECTED,
+      { onboarding_selected_flow: OnboardingAvailableFlows.DIGITAL_DOMICILE }
+    );
   });
 
   it('refreshes the IO state and calls onChange with the value from addresses', async () => {
@@ -99,6 +115,11 @@ describe('IoStep', () => {
       expect(mock.history.get).toHaveLength(1);
       expect(props.onChange).toHaveBeenCalledWith(IOAllowedValues.DISABLED);
     });
+
+    expect(PFEventStrategyFactory.triggerEvent).toHaveBeenCalledWith(
+      PFEventsType.SEND_ONBOARDING_IO_DOWNLOAD_VERIFICATION,
+      { onboarding_selected_flow: OnboardingAvailableFlows.DIGITAL_DOMICILE }
+    );
   });
 
   it('renders the disabled state and enables IO on primary CTA click', async () => {
@@ -120,6 +141,10 @@ describe('IoStep', () => {
     expect(
       queryByRole('button', { name: `${labelPrefix}.not-installed.refresh-cta` })
     ).not.toBeInTheDocument();
+    expect(PFEventStrategyFactory.triggerEvent).toHaveBeenCalledWith(
+      PFEventsType.SEND_ONBOARDING_IO_ACTIVATION,
+      { event_type: EventAction.SCREEN_VIEW, onboarding_selected_flow: OnboardingAvailableFlows.DIGITAL_DOMICILE }
+    );
 
     await act(async () => {
       fireEvent.click(getByRole('button', { name: `${labelPrefix}.disabled.primary-cta` }));
@@ -137,6 +162,15 @@ describe('IoStep', () => {
       expect(props.onChange).toHaveBeenCalledWith(IOAllowedValues.ENABLED);
       expect(props.onContinue).not.toHaveBeenCalled();
     });
+
+    expect(PFEventStrategyFactory.triggerEvent).toHaveBeenCalledWith(
+      PFEventsType.SEND_ONBOARDING_IO_ACTIVATION_SELECTED,
+      { onboarding_selected_flow: OnboardingAvailableFlows.DIGITAL_DOMICILE }
+    );
+    expect(PFEventStrategyFactory.triggerEvent).toHaveBeenCalledWith(
+      PFEventsType.SEND_ONBOARDING_IO_ACTIVATED,
+      { onboarding_selected_flow: OnboardingAvailableFlows.DIGITAL_DOMICILE }
+    );
   });
 
   it('renders the enabled state and calls onContinue on primary CTA click', async () => {
@@ -147,6 +181,10 @@ describe('IoStep', () => {
     expect(getByText(`${labelPrefix}.enabled.title`)).toBeInTheDocument();
     expect(getByText(`${labelPrefix}.description`)).toBeInTheDocument();
     expect(getByRole('button', { name: `${labelPrefix}.enabled.primary-cta` })).toBeInTheDocument();
+    expect(PFEventStrategyFactory.triggerEvent).toHaveBeenCalledWith(
+      PFEventsType.SEND_ONBOARDING_IO_VERIFICATION,
+      { event_type: EventAction.SCREEN_VIEW, onboarding_selected_flow: OnboardingAvailableFlows.DIGITAL_DOMICILE }
+    );
 
     await act(async () => {
       fireEvent.click(getByRole('button', { name: `${labelPrefix}.enabled.primary-cta` }));
@@ -154,5 +192,9 @@ describe('IoStep', () => {
 
     expect(props.onContinue).toHaveBeenCalledTimes(1);
     expect(props.onChange).not.toHaveBeenCalled();
+    expect(PFEventStrategyFactory.triggerEvent).toHaveBeenCalledWith(
+      PFEventsType.SEND_ONBOARDING_IO_CONFIRMED,
+      { onboarding_selected_flow: OnboardingAvailableFlows.DIGITAL_DOMICILE }
+    );
   });
 });
