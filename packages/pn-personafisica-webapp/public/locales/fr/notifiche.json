@@ -69,18 +69,13 @@
     "show-more": "Voir plus de détails",
     "show-less": "Voir moins de détails",
     "disclaimer-link": "En savoir plus",
-    "pec-unreachable": "Garde ton adresse PEC libre pour tout recevoir au format numérique !",
+    "pec-unreachable": "Maintenez votre adresse PEC libre et active pour tout recevoir au format numérique !",
     "cancelled": {
       "message": "Cette notification a été annulée par l'organisme émetteur.",
       "cta": "Que dois-je faire ?"
     },
     "payment": {
       "title": "Paiement",
-      "single-payment-subtitle": "Le montant final pourrait être différent de celui indiqué.",
-      "subtitle": "Cette notification comporte plusieurs avis de paiement : sélectionnez celui que vous souhaitez payer. Certaines alertes incluent les frais de notification.",
-      "subtitle-f24": "Vous pouvez payer cette notification via F24. Pour voir les détails, ouvrez les formulaires.",
-      "subtitle-mixed": "Dans cette notification, il existe plusieurs possibilités de paiement : sélectionnez ou téléchargez ce que vous souhaitez payer. Certains montants incluent les frais de notification.",
-      "how": "Pourquoi ?",
       "f24Models": "Formulaires F24",
       "pagoPANotices": "Alertes pagoPA",
       "download-pagoPA-notice": "Télécharger l’alerte pagoPA",
@@ -434,15 +429,19 @@
     "canceled-tooltip": "L’organisme a annulé l’envoi de la notification",
     "canceled-description": "L’organisme a annulé l’envoi de la notification.",
     "returned-to-sender": "Retour à l'expéditeur",
-    "returned-to-sender-tooltip-monorecipient": "Le destinataire est décédé",
+    "returned-to-sender-multirecipient": "Retour à l'expéditeur",
+    "returned-to-sender-tooltip": "Le destinataire est décédé",
     "returned-to-sender-tooltip-multirecipient": "Tous les destinataires sont décédés",
-    "returned-to-sender-description-monorecipient": "Le destinataire est décédé.",
+    "returned-to-sender-description": "Le destinataire est décédé.",
     "returned-to-sender-description-multirecipient": "Tous les destinataires sono décédés.",
     "notification-timeline-reworked": "Événement ou plusieurs événements mis à jour",
     "notification-timeline-reworked-tooltip": "Événement ou plusieurs événements mis à jour",
     "notification-timeline-reworked-description": "Les événements marqués ÉVÉNEMENT INVALIDÉ ne devono pas être pris en compte, car ils ont été remplacés par les événements suivants marqués ÉVÉNEMENT VALIDÉ.",
     "reworked-status-valid": "Événement validé",
-    "reworked-status-not-valid": "Événement invalidé"
+    "reworked-status-not-valid": "Événement invalidé",
+    "cancellation-in-progress": "Annulée",
+    "cancellation-in-progress-tooltip": "Annulation en cours. Le statut sera mis à jour sous peu.",
+    "cancellation-in-progress-description": "Annulation en cours. Le statut sera mis à jour sous peu."
   },
   "tppLanding": {
     "title": "Bonjour,\nvous avez reçu une communication à valeur légale",
@@ -462,12 +461,14 @@
   },
   "notification-cost-banner": {
     "analog": {
-      "title": "Avec SEND tu peux faire des économies !",
-      "message": "Tu n'as pas ouvert la notification numérique à temps, il n'a donc pas été possible d'éviter l'envoi recommandé et les frais correspondants."
+      "title": "Avec SEND, vous pouvez faire des économies !",
+      "message": "Une ou plusieurs lettres recommandées vous ont été envoyées pour le compte de l'organisme émetteur pour un coût total de {{analogCost}}, car cette notification n'a pas été ouverte sur les canaux numériques dans les délais prévus.",
+      "fallback": "Une ou plusieurs lettres recommandées vous ont été envoyées pour le compte de l'organisme émetteur car cette notification n'a pas été ouverte sur les canaux numériques dans les délais prévus. Cela entraînera des frais supplémentaires pour vous."
     },
     "digital_failure": {
-      "title": "Avec SEND tu peux faire des économies !",
-      "message": "Nous n'avons pas pu distribuer la notification sur ta PEC, une lettre recommandée d'information t'a donc été envoyée avec les frais correspondants."
+      "title": "Avec SEND, vous pouvez faire des économies !",
+      "message": "Nous n'avons pas pu distribuer la notification sur votre adresse e-mail certifiée (PEC), une lettre recommandée vous a donc été envoyée au coût de {{analogCost}}.",
+      "fallback": "Nous n'avons pas pu distribuer la notification sur votre adresse e-mail certifiée (PEC), une lettre recommandée vous a donc été envoyée. Cela entraînera des frais supplémentaires pour vous."
     },
     "digital_platform": {
       "title": "Avec SEND tu as fait des économies !",
@@ -488,9 +489,30 @@
     "enable-sercq": {
       "message": {
         "default": "Active un domicile numérique pour recevoir tes prochaines notifications uniquement au format numérique.",
+        "analog": "Activez SEND comme domicile numérique pour vous épargner des frais comme celui-ci.",
         "external-pec": "Active un domicile numérique pour choisir où recevoir tes notifications SEND."
       },
       "cta": "Activer le domicile numérique"
+    }
+  },
+  "notification-alert": {
+    "description": "Le montant comprend les frais de notification.",
+    "cta": "De quoi s'agit-il ?",
+    "details": {
+      "title": "Que sont les frais de notification ?",
+      "description": "Il s'agit des frais liés à l'envoi de la communication, qui varient selon le mode de réception.",
+      "how-they-work": "Comment fonctionnent les frais de notification ?",
+      "base-cost": "Frais de gestion",
+      "analog-cost": {
+        "total": "Frais d'envoi papier",
+        "hint": {
+          "avoided": "Envoi évité avec SEND",
+          "multiple-analog-flows": "{{count}} envois effectués"
+        }
+      },
+      "total-cost": "Total",
+      "error": "Nous n'avons pas pu récupérer le détail des frais, réessaye plus tard.",
+      "more-info": "Contacte l'organisme qui t'a envoyé la notification per avoir plus de détails sur les frais de cette communication."
     }
   }
 }

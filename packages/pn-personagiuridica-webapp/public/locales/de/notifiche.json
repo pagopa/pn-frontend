@@ -76,11 +76,6 @@
     },
     "payment": {
       "title": "Zahlung",
-      "single-payment-subtitle": "Der Endbetrag kann von dem im Bescheid angegebenen Betrag abweichen und die Zustellkosten enthalten.",
-      "subtitle": "Dieser Bescheid enthält mehrere Zahlungsbenachrichtigungen: Wähle die aus, die du bezahlen möchtest. Einige Bescheide beinhalten Notifizierungsgebühren.",
-      "subtitle-f24": "Diese können per F24 bezahlt werden. Für Einzelheiten, Muster öffnen.",
-      "subtitle-mixed": "Für diesen Bescheid sind mehrere Zahlungsmöglichkeiten vorhanden: Wähle oder lade herunter, was du bezahlen möchtest. Einige Beträge beinhalten Notifizierungsgebühren.",
-      "how": "Wieso? ",
       "f24Models": "Vordruck F24",
       "pagoPANotices": "Benachrichtigungen pagoPA",
       "download-pagoPA-notice": "Benachrichtigung pagoPA herunterladen",
@@ -430,14 +425,38 @@
     "canceled-tooltip": "Die Körperschaft hat den Versand des Bescheids abgebrochen",
     "canceled-description": "Die Körperschaft hat den Versand des Bescheids abgebrochen.",
     "returned-to-sender": "Rücksendung an den Absender",
-    "returned-to-sender-tooltip-monorecipient": "Der Empfänger ist verstorben",
+    "returned-to-sender-multirecipient": "Rücksendung an den Absender",
+    "returned-to-sender-tooltip": "Der Empfänger ist verstorben",
     "returned-to-sender-tooltip-multirecipient": "Alle Empfänger sind verstorben",
-    "returned-to-sender-description-monorecipient": "Der Empfänger ist verstorben.",
+    "returned-to-sender-description": "Der Empfänger ist verstorben.",
     "returned-to-sender-description-multirecipient": "Alle Empfänger sind verstorben.",
     "notification-timeline-reworked": "Aktualisiertes Ereignis oder mehrere aktualisierte Ereignisse",
     "notification-timeline-reworked-tooltip": "Aktualisiertes Ereignis oder mehrere aktualisierte Ereignisse",
     "notification-timeline-reworked-description": "Ereignisse, die als INVALIDIERTES EREIGNIS gekennzeichnet sind, sind nicht zu berücksichtigen, da sie durch nachfolgende Ereignisse ersetzt wurden, die als VALIDIERTES EREIGNIS gekennzeichnet sind.",
     "reworked-status-valid": "Validiertes Ereignis",
-    "reworked-status-not-valid": "Invalidiertes Ereignis"
+    "reworked-status-not-valid": "Invalidiertes Ereignis",
+    "cancellation-in-progress": "Annulliert",
+    "cancellation-in-progress-tooltip": "Annullierung in Bearbeitung. Der Status wird in Kürze aktualisiert.",
+    "cancellation-in-progress-description": "Annullierung in Bearbeitung. Der Status wird in Kürze aktualisiert."
+  },
+  "notification-alert": {
+    "description": "Der Betrag enthält die Zustellkosten.",
+    "cta": "Was ist das?",
+    "details": {
+      "title": "Was sind Zustellkosten?",
+      "description": "Dies sind die mit dem Versand der Mitteilung verbundenen Kosten, die je nach Art des Empfangs durch dein Unternehmen variieren.",
+      "how-they-work": "Wie funktionieren die Zustellkosten?",
+      "base-cost": "Verwaltungskosten",
+      "analog-cost": {
+        "total": "Kosten für den Postversand",
+        "hint": {
+          "avoided": "Postversand durch SEND vermieden",
+          "multiple-analog-flows": "{{count}} Sendungen durchgeführt"
+        }
+      },
+      "total-cost": "Gesamt",
+      "error": "Die Kostendetails konnten nicht geladen werden, versuche es bitte später erneut.",
+      "more-info": "Kontaktiere die sendende Einrichtung, die die Benachrichtigung gesendet hat, um weitere Informationen zu den Kosten dieser Mitteilung zu erhalten."
+    }
   }
 }

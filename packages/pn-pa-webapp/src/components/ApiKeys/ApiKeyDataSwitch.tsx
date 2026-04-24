@@ -13,7 +13,7 @@ import {
 import { CopyToClipboardButton, Tag } from '@pagopa/mui-italia';
 
 import { ApiKey, ApiKeyStatus, ModalApiKeyView } from '../../models/ApiKeys';
-import { getApiKeyStatusInfos } from '../../utility/apikeys.utility';
+import { getApiKeyStatusHistoryLines, getApiKeyStatusInfos } from '../../utility/apikeys.utility';
 
 /**
  * Checks if status history of a api key contains a status set as ROTATED
@@ -220,17 +220,7 @@ const ApiKeyDataSwitch: React.FC<{
               <Box>
                 <CustomTagGroup visibleItems={3} disableTooltip>
                   {data.groups.map((v, i) => (
-                    <Box
-                      key={i}
-                      sx={{
-                        my: 1,
-                        // Prevent overflow for long unbroken group names
-                        '& span': {
-                          overflowWrap: 'anywhere',
-                          wordBreak: 'break-word',
-                        },
-                      }}
-                    >
+                    <Box key={i} sx={{ my: 1 }}>
                       <Tag value={v.name} />
                     </Box>
                   ))}
@@ -248,7 +238,13 @@ const ApiKeyDataSwitch: React.FC<{
     );
   }
   if (type === 'status') {
-    const { label, tooltip, color } = getApiKeyStatusInfos(data.status, data.statusHistory);
+    const statusHistoryLines = getApiKeyStatusHistoryLines(t, data.statusHistory);
+    const { label, tooltip, color } = getApiKeyStatusInfos(data.status, statusHistoryLines);
+
+    const statusLabel = t(label);
+    const ariaLabel = statusHistoryLines.length
+      ? `${statusLabel}: ${statusHistoryLines.join(', ')}`
+      : statusLabel;
     return (
       <Box
         sx={{
@@ -257,7 +253,12 @@ const ApiKeyDataSwitch: React.FC<{
           justifyContent: 'center',
         }}
       >
-        <StatusTooltip label={t(label)} tooltip={tooltip} color={color} />
+        <StatusTooltip
+          label={t(statusLabel)}
+          tooltip={tooltip}
+          color={color}
+          ariaLabel={ariaLabel}
+        />
       </Box>
     );
   }

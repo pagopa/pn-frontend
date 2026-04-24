@@ -69,18 +69,13 @@
     "show-more": "See more details",
     "show-less": "See fewer details",
     "disclaimer-link": "Discover more",
-    "pec-unreachable": "Keep your PEC mailbox free to receive everything digitally!",
+    "pec-unreachable": "Keep your certified email (PEC) mailbox free and active to receive everything digitally!",
     "cancelled": {
       "message": "This notification has been cancelled by the issuing institution.",
       "cta": "What should I do?"
     },
     "payment": {
       "title": "Payment",
-      "single-payment-subtitle": "The final amount may be different than what is indicated.",
-      "subtitle": "This notification contains multiple payment notifications: select what you want to pay. Some notifications include notification costs.",
-      "subtitle-f24": "You can pay this notification via F24. To see the details, open the forms.",
-      "subtitle-mixed": "This notification contains multiple payment options: select or download what you want to pay. Some amounts include notification costs.",
-      "how": "Why is that?",
       "f24Models": "F24 forms",
       "pagoPANotices": "pagoPA notifications",
       "download-pagoPA-notice": "Download the pagoPA notification",
@@ -434,15 +429,19 @@
     "canceled-tooltip": "The institution has canceled the sending of the notification",
     "canceled-description": "The institution has canceled the sending of the notification.",
     "returned-to-sender": "Returned to sender",
-    "returned-to-sender-tooltip-monorecipient": "The recipient is deceased",
+    "returned-to-sender-multirecipient": "Returned to sender",
+    "returned-to-sender-tooltip": "The recipient is deceased",
     "returned-to-sender-tooltip-multirecipient": "All recipients are deceased",
-    "returned-to-sender-description-monorecipient": "The recipient is deceased.",
+    "returned-to-sender-description": "The recipient is deceased.",
     "returned-to-sender-description-multirecipient": "All recipients are deceased.",
     "notification-timeline-reworked": "Updated event or events",
     "notification-timeline-reworked-tooltip": "Updated event or events",
     "notification-timeline-reworked-description": "Events marked as INVALIDATED EVENT are not to be considered as they have been replaced by the subsequent events marked as VALIDATED EVENT.",
     "reworked-status-valid": "Validated event",
-    "reworked-status-not-valid": "Invalidated event"
+    "reworked-status-not-valid": "Invalidated event",
+    "cancellation-in-progress": "Cancelled",
+    "cancellation-in-progress-tooltip": "Cancellation in progress. The status will be updated shortly.",
+    "cancellation-in-progress-description": "Cancellation in progress. The status will be updated shortly."
   },
   "tppLanding": {
     "title": "Hi,\nYou have received a legally binding communication",
@@ -462,12 +461,14 @@
   },
   "notification-cost-banner": {
     "analog": {
-      "title": "With SEND you can save!",
-      "message": "You did not open the digital notification in time, so it was not possible to avoid registered mail and its associated costs."
+      "title": "Save money with SEND!",
+      "message": "One or more registered mail have been sent to you on behalf of the issuing institution at a total cost of {{analogCost}}, because this notification was not opened on digital channels within the required timeframes.",
+      "fallback": "One or more registered mail have been sent to you on behalf of the issuing institution because this notification was not opened on digital channels within the required timeframes. This will result in additional costs for you."
     },
     "digital_failure": {
-      "title": "With SEND you can save!",
-      "message": "We were unable to deliver the notification to your PEC, so a registered mail has been sent to you with the relative costs."
+      "title": "Save money with SEND!",
+      "message": "We were unable to deliver the notification to your certified e-mail (PEC), so a registered mail was sent to you at a cost of {{analogCost}}.",
+      "fallback": "We were unable to deliver the notification to your certified e-mail (PEC), so a registered mail was sent to you. This will result in additional costs for you."
     },
     "digital_platform": {
       "title": "With SEND you have saved!",
@@ -488,9 +489,30 @@
     "enable-sercq": {
       "message": {
         "default": "Activate a digital address to receive future notifications digitally only.",
+        "analog": "Activate SEND as your digital address to save on costs like this.",
         "external-pec": "Activate a digital address to choose where to receive your SEND notifications."
       },
       "cta": "Activate digital address"
+    }
+  },
+  "notification-alert": {
+    "description": "The amount includes notification costs.",
+    "cta": "What are they?",
+    "details": {
+      "title": "What are notification costs?",
+      "description": "These are the expenses related to sending the communication, which vary depending on how you receive it.",
+      "how-they-work": "How do notification costs work?",
+      "base-cost": "Management cost",
+      "analog-cost": {
+        "total": "Physical mailing cost",
+        "hint": {
+          "avoided": "Mailing avoided with SEND",
+          "multiple-analog-flows": "{{count}} mailings sent"
+        }
+      },
+      "total-cost": "Total",
+      "error": "We were unable to retrieve the cost details, please try again later.",
+      "more-info": "Contact the institution that sent you the notification for more details on the costs of this communication."
     }
   }
 }

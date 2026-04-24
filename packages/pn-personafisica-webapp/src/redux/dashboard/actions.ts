@@ -6,10 +6,16 @@ import {
   getEndOfDay,
   getStartOfDay,
   parseError,
+  tenYearsAgo,
+  today,
 } from '@pagopa-pn/pn-commons';
 import { createAsyncThunk } from '@reduxjs/toolkit';
+
 import { apiClient } from '../../api/apiClients';
-import { NotificationReceivedApiFactory, NotificationStatusV26 } from '../../generated-client/notifications';
+import {
+  NotificationReceivedApiFactory,
+  NotificationStatusV26,
+} from '../../generated-client/notifications';
 
 export enum DASHBOARD_ACTIONS {
   GET_RECEIVED_NOTIFICATIONS = 'getReceivedNotifications',
@@ -20,17 +26,19 @@ export enum DASHBOARD_ACTIONS {
  */
 export const getReceivedNotifications = createAsyncThunk(
   DASHBOARD_ACTIONS.GET_RECEIVED_NOTIFICATIONS,
-  async (params: GetNotificationsParams<Date>, { rejectWithValue }) => {
+  async (params: GetNotificationsParams, { rejectWithValue }) => {
     try {
       const receivedNotificationsFactory = NotificationReceivedApiFactory(
         undefined,
         undefined,
         apiClient
       );
+      const startDate = params.startDate || tenYearsAgo;
+      const endDate = params.endDate || today;
       const apiParams = {
         ...params,
-        startDate: formatToTimezoneString(getStartOfDay(params.startDate)),
-        endDate: formatToTimezoneString(getEndOfDay(params.endDate)),
+        startDate: formatToTimezoneString(getStartOfDay(startDate)),
+        endDate: formatToTimezoneString(getEndOfDay(endDate)),
         recipientId: params.recipientId ? formatFiscalCode(params.recipientId) : undefined,
         status: params.status as NotificationStatusV26 | undefined,
         iunMatch: params.iunMatch || undefined,
@@ -47,8 +55,7 @@ export const getReceivedNotifications = createAsyncThunk(
         apiParams.nextPagesKey
       );
       return response.data as GetNotificationsResponse;
-    }
-    catch (e) {
+    } catch (e) {
       return rejectWithValue(parseError(e));
     }
   }

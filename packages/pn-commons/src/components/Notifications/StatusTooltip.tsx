@@ -12,15 +12,19 @@ const StatusTooltip = ({
   color,
   tooltipProps,
   chipProps,
+  ariaLabel,
 }: {
   tooltip: string | ReactNode;
   label: string;
   color: 'warning' | 'error' | 'success' | 'info' | 'default' | 'primary' | 'secondary' | undefined;
   tooltipProps?: Partial<TooltipProps>;
   chipProps?: SxProps;
+  ariaLabel?: string;
 }) => {
   const tooltipContent = <Fragment>{tooltip}</Fragment>;
   const isMobile = useIsMobile();
+
+  const computedAriaLabel = `${label}: ${tooltip}`;
 
   return (
     <CustomTooltip openOnClick={false} tooltipContent={tooltipContent} tooltipProps={tooltipProps}>
@@ -33,7 +37,7 @@ const StatusTooltip = ({
           cursor: 'default',
         }}
         data-testid={`statusChip-${label}`}
-        aria-label={`${label}: ${tooltip}`}
+        aria-label={ariaLabel ?? computedAriaLabel}
       />
     </CustomTooltip>
   );

@@ -6,7 +6,7 @@ import { Fragment, ReactNode, useCallback, useEffect, useMemo, useState } from '
 import { useTranslation } from 'react-i18next';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 
-import { Alert, AlertTitle, Box, Grid, Link, Paper, Stack, Typography } from '@mui/material';
+import { Alert, AlertTitle, Box, Grid, Paper, Stack, Typography } from '@mui/material';
 import {
   AccessDenied,
   ApiError,
@@ -48,6 +48,7 @@ import {
   EventDeliveryFlowType,
   EventDeliveryModeType,
 } from '@pagopa-pn/pn-commons/src/models/MixpanelEvents';
+import { MIAlert } from '@pagopa/mui-italia';
 
 import DomicileBanner from '../components/DomicileBanner/DomicileBanner';
 import LoadingPageWrapper from '../components/LoadingPageWrapper/LoadingPageWrapper';
@@ -95,8 +96,8 @@ const NotificationDetail: React.FC = () => {
   const [downtimesReady, setDowntimesReady] = useState(false);
   const {
     F24_DOWNLOAD_WAIT_TIME,
-    LANDING_SITE_URL,
     DOWNTIME_EXAMPLE_LINK,
+    NOTIFICATION_COST_DETAILS_ASSISTANCE_LINK,
     NOTIFICATION_CANCELLED_HELP_LINK,
   } = getConfiguration();
   const navigate = useNavigate();
@@ -175,13 +176,24 @@ const NotificationDetail: React.FC = () => {
 
   const banner = useMemo(() => {
     if (isNotificationCostBanner) {
-      return <NotificationCostBanner deliveryOutcome={deliveryOutcome} />;
+      return (
+        <NotificationCostBanner
+          deliveryOutcome={deliveryOutcome}
+          notificationCost={notification.notificationCostDetails}
+        />
+      );
     }
 
     return isBannerVisible && historyParser.hasViewedStatus() ? (
       <DomicileBanner source={ContactSource.DETTAGLIO_NOTIFICA} />
     ) : null;
-  }, [isNotificationCostBanner, deliveryOutcome, isBannerVisible, historyParser]);
+  }, [
+    isNotificationCostBanner,
+    deliveryOutcome,
+    isBannerVisible,
+    historyParser,
+    notification.notificationCostDetails,
+  ]);
 
   const showInfoMessageIfRetryAfterOrDownload = (response: {
     url: string;
@@ -511,14 +523,33 @@ const NotificationDetail: React.FC = () => {
     </Fragment>
   );
 
-  const trackEventPaymentRecipient = (event: EventPaymentRecipientType, param?: object) => {
-    PFEventStrategyFactory.triggerEvent(
-      PFEventsType[event],
-      event === EventPaymentRecipientType.SEND_PAYMENT_STATUS ||
-        event === EventPaymentRecipientType.SEND_PAYMENT_DETAIL_ERROR
-        ? param
-        : undefined
+  const cancelledAlert = isCancelledOrCancelling && (
+    <Box sx={{ mb: { xs: 2, lg: 0 } }}>
+      <MIAlert
+        data-testid="cancelledAlertText"
+        severity="warning"
+        description={t('detail.cancelled.message', { ns: 'notifiche' })}
+        action={{
+          label: t('detail.cancelled.cta', { ns: 'notifiche' }),
+          href: NOTIFICATION_CANCELLED_HELP_LINK,
+          rel: 'noopener noreferrer',
+          target: '_blank',
+        }}
+      />
+    </Box>
+  );
+
+  const pecUnreachableAlert = isNotificationCostBanner &&
+    historyParser.hasSimpleRegisteredLetter() && (
+      <MIAlert
+        data-testid="pecUnreachableAlertText"
+        severity="warning"
+        description={t('detail.pec-unreachable', { ns: 'notifiche' })}
+      />
     );
+
+  const trackEventPaymentRecipient = (event: EventPaymentRecipientType, param?: object) => {
+    PFEventStrategyFactory.triggerEvent(PFEventsType[event], param);
   };
 
   const reloadPaymentsInfo = (data: Array<NotificationDetailPayment>) => {
@@ -609,6 +640,8 @@ const NotificationDetail: React.FC = () => {
       {!hasNotificationReceivedApiError && (
         <Box sx={{ p: { xs: 3, lg: 0 } }}>
           {isMobile && breadcrumb}
+          {isMobile && pecUnreachableAlert}
+          {isMobile && cancelledAlert}
           <Grid
             container
             direction={isMobile ? 'column-reverse' : 'row'}
@@ -617,31 +650,8 @@ const NotificationDetail: React.FC = () => {
             <Grid item lg={7} xs={12} sx={{ p: { xs: 0, lg: 3 } }}>
               {!isMobile && breadcrumb}
               <Stack spacing={3}>
-                {isCancelledOrCancelling && (
-                  <Alert data-testid="cancelledAlertText" severity="warning">
-                    {t('detail.cancelled.message', { ns: 'notifiche' })}
-
-                    <Box mt={2}>
-                      <Link
-                        href={NOTIFICATION_CANCELLED_HELP_LINK}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        fontWeight={600}
-                        color="#614C15"
-                        underline="none"
-                        sx={{ cursor: 'pointer' }}
-                      >
-                        {t('detail.cancelled.cta', { ns: 'notifiche' })}
-                      </Link>
-                    </Box>
-                  </Alert>
-                )}
-                {isNotificationCostBanner && historyParser.hasSimpleRegisteredLetter() && (
-                  <Alert data-testid="pecUnreachableAlertText" severity="warning">
-                    {t('detail.pec-unreachable', { ns: 'notifiche' })}
-                  </Alert>
-                )}
-
+                {!isMobile && cancelledAlert}
+                {!isMobile && pecUnreachableAlert}
                 {!isMobile && banner}
 
                 <NotificationDetailTable rows={detailTableRows} />
@@ -685,7 +695,8 @@ const NotificationDetail: React.FC = () => {
                         handleFetchPaymentsInfo={reloadPaymentsInfo}
                         getPaymentAttachmentAction={getPaymentAttachmentAction}
                         timerF24={F24_DOWNLOAD_WAIT_TIME}
-                        landingSiteUrl={LANDING_SITE_URL}
+                        costDetailsAssistanceLink={NOTIFICATION_COST_DETAILS_ASSISTANCE_LINK}
+                        costDetails={notification.notificationCostDetails}
                       />
                     </ApiErrorWrapper>
                   </Paper>

@@ -3,7 +3,7 @@ import { Fragment, ReactNode, useCallback, useEffect, useMemo, useState } from '
 import { useTranslation } from 'react-i18next';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 
-import { Alert, AlertTitle, Box, Grid, Link, Paper, Stack, Typography } from '@mui/material';
+import { Alert, AlertTitle, Box, Grid, Paper, Stack, Typography } from '@mui/material';
 import {
   ApiError,
   ApiErrorWrapper,
@@ -33,6 +33,7 @@ import {
   useIsCancelled,
   useIsMobile,
 } from '@pagopa-pn/pn-commons';
+import { MIAlert } from '@pagopa/mui-italia';
 
 import DomicileBanner from '../components/DomicileBanner/DomicileBanner';
 import LoadingPageWrapper from '../components/LoadingPageWrapper/LoadingPageWrapper';
@@ -78,9 +79,9 @@ const NotificationDetail = () => {
   const [pageReady, setPageReady] = useState(false);
   const {
     F24_DOWNLOAD_WAIT_TIME,
-    LANDING_SITE_URL,
     DOWNTIME_EXAMPLE_LINK,
     NOTIFICATION_CANCELLED_HELP_LINK,
+    NOTIFICATION_COST_DETAILS_ASSISTANCE_LINK,
   } = getConfiguration();
   const navigate = useNavigate();
 
@@ -376,6 +377,22 @@ const NotificationDetail = () => {
     </Fragment>
   );
 
+  const cancelledAlert = isCancelledOrCancelling && (
+    <Box sx={{ mb: { xs: 2, lg: 0 } }}>
+      <MIAlert
+        data-testid="cancelledAlertText"
+        severity="warning"
+        description={t('detail.cancelled.message', { ns: 'notifiche' })}
+        action={{
+          label: t('detail.cancelled.cta', { ns: 'notifiche' }),
+          href: NOTIFICATION_CANCELLED_HELP_LINK,
+          rel: 'noopener noreferrer',
+          target: '_blank',
+        }}
+      />
+    </Box>
+  );
+
   const visibleDomicileBanner = () =>
     userHasAdminPermissions &&
     !currentUser.hasGroup &&
@@ -398,9 +415,14 @@ const NotificationDetail = () => {
       )}
       {!hasNotificationReceivedApiError && (
         <Box sx={{ p: { xs: 3, lg: 0 } }}>
-          {isMobile && breadcrumb}
-          {isMobile && visibleDomicileBanner() && (
-            <DomicileBanner source={ContactSource.DETTAGLIO_NOTIFICA} />
+          {isMobile && (
+            <>
+              {breadcrumb}
+              {cancelledAlert}
+              {visibleDomicileBanner() && (
+                <DomicileBanner source={ContactSource.DETTAGLIO_NOTIFICA} />
+              )}
+            </>
           )}
           <Grid
             container
@@ -413,24 +435,7 @@ const NotificationDetail = () => {
                 <DomicileBanner source={ContactSource.DETTAGLIO_NOTIFICA} />
               )}
               <Stack spacing={3}>
-                {isCancelledOrCancelling && (
-                  <Alert data-testid="cancelledAlertText" severity="warning">
-                    {t('detail.cancelled.message', { ns: 'notifiche' })}
-                    <Box mt={2}>
-                      <Link
-                        href={NOTIFICATION_CANCELLED_HELP_LINK}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        fontWeight={600}
-                        color="#614C15"
-                        underline="none"
-                        sx={{ cursor: 'pointer' }}
-                      >
-                        {t('detail.cancelled.cta', { ns: 'notifiche' })}
-                      </Link>
-                    </Box>
-                  </Alert>
-                )}
+                {!isMobile && cancelledAlert}
                 <NotificationDetailTable rows={detailTableRows} />
                 <Paper sx={{ p: 3 }} elevation={0}>
                   <NotificationDetailDocuments
@@ -470,7 +475,8 @@ const NotificationDetail = () => {
                         handleFetchPaymentsInfo={fetchPaymentsInfo}
                         getPaymentAttachmentAction={getPaymentAttachmentAction}
                         timerF24={F24_DOWNLOAD_WAIT_TIME}
-                        landingSiteUrl={LANDING_SITE_URL}
+                        costDetailsAssistanceLink={NOTIFICATION_COST_DETAILS_ASSISTANCE_LINK}
+                        costDetails={notification.notificationCostDetails}
                       />
                     </ApiErrorWrapper>
                   </Paper>

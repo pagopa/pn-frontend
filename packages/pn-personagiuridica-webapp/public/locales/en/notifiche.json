@@ -76,11 +76,6 @@
     },
     "payment": {
       "title": "Payment",
-      "single-payment-subtitle": "The final amount may differ from the one indicated in the document and include notification costs.",
-      "subtitle": "In this notification, there are multiple payment notices: select the one you want to pay. Some notices include notification fees.",
-      "subtitle-f24": "You can pay for this notification via F24. To see the details, open the forms.",
-      "subtitle-mixed": "In this notification, there are more payment options: select or download the one you want to pay. Some amounts include the notification fees.",
-      "how": "Why is that?",
       "f24Models": "F24 forms",
       "pagoPANotices": "pagoPA notices",
       "download-pagoPA-notice": "Download pagoPA notice",
@@ -430,14 +425,38 @@
     "canceled-tooltip": "The organisation has cancelled the sending of the notification",
     "canceled-description": "The organisation has cancelled the sending of the notification.",
     "returned-to-sender": "Returned to sender",
-    "returned-to-sender-tooltip-monorecipient": "The recipient is deceased",
+    "returned-to-sender-multirecipient": "Returned to sender",
+    "returned-to-sender-tooltip": "The recipient is deceased",
     "returned-to-sender-tooltip-multirecipient": "All recipients are deceased",
-    "returned-to-sender-description-monorecipient": "The recipient is deceased.",
+    "returned-to-sender-description": "The recipient is deceased.",
     "returned-to-sender-description-multirecipient": "All recipients are deceased.",
     "notification-timeline-reworked": "Updated event or events",
     "notification-timeline-reworked-tooltip": "Updated event or events",
     "notification-timeline-reworked-description": "Events marked as INVALIDATED EVENT are not to be considered as they have been replaced by the subsequent events marked as VALIDATED EVENT.",
     "reworked-status-valid": "Validated event",
-    "reworked-status-not-valid": "Invalidated event"
+    "reworked-status-not-valid": "Invalidated event",
+    "cancellation-in-progress": "Cancelled",
+    "cancellation-in-progress-tooltip": "Cancellation in progress. The status will be updated shortly.",
+    "cancellation-in-progress-description": "Cancellation in progress. The status will be updated shortly."
+  },
+  "notification-alert": {
+    "description": "The amount includes notification costs.",
+    "cta": "What are they?",
+    "details": {
+      "title": "What are notification costs?",
+      "description": "These are the costs related to sending the communication, which vary depending on how it is received by your business.",
+      "how-they-work": "How do notification costs work?",
+      "base-cost": "Management cost",
+      "analog-cost": {
+        "total": "Physical mailing cost",
+        "hint": {
+          "avoided": "Mailing avoided with SEND",
+          "multiple-analog-flows": "{{count}} mailings sent"
+        }
+      },
+      "total-cost": "Total",
+      "error": "We were unable to retrieve the cost details, please try again later.",
+      "more-info": "Contact the institution that sent the notification for more details on the costs of this communication."
+    }
   }
 }
