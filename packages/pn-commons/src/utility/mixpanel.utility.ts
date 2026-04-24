@@ -14,7 +14,7 @@ export function mixpanelInit(mixpanelToken: string, nodeEnv: string): void {
     mixpanel.init(mixpanelToken, {
       api_host: 'https://api-eu.mixpanel.com',
       persistence: 'localStorage',
-      stop_utm_persistence: false,
+      stop_utm_persistence: true,
       // if this is true, Mixpanel will automatically determine
       // City, Region and Country data using the IP address of
       // the client
@@ -28,8 +28,8 @@ export function mixpanelInit(mixpanelToken: string, nodeEnv: string): void {
     mixpanel.identify(mixpanel.get_distinct_id());
 
     // Remove dirty data saved on localStorage
-    // mixpanel.unregister('utm_source');
-    // mixpanel.unregister('utm_campaign');
-    // mixpanel.unregister('utm_medium');
+    mixpanel.unregister('utm_source');
+    mixpanel.unregister('utm_campaign');
+    mixpanel.unregister('utm_medium');
   }
 }
