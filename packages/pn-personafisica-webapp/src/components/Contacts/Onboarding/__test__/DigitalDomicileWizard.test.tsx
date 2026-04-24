@@ -1,6 +1,7 @@
 import MockAdapter from 'axios-mock-adapter';
+import { vi } from 'vitest';
 
-import { SERCQ_SEND_VALUE } from '@pagopa-pn/pn-commons';
+import { EventAction, SERCQ_SEND_VALUE } from '@pagopa-pn/pn-commons';
 
 import {
   acceptTosSercqSendBodyMock,
@@ -8,9 +9,16 @@ import {
 } from '../../../../__mocks__/Consents.mock';
 import { act, fireEvent, render, waitFor } from '../../../../__test__/test-utils';
 import { apiClient } from '../../../../api/apiClients';
+import { OnboardingAvailableFlows, OnboardingScreen } from '../../../../models/Onboarding';
+import { PFEventsType } from '../../../../models/PFEventsType';
 import { AddressType, ChannelType, IOAllowedValues } from '../../../../models/contacts';
 import { PRIVACY_POLICY, TERMS_OF_SERVICE_SERCQ_SEND } from '../../../../navigation/routes.const';
+import PFEventStrategyFactory from '../../../../utility/MixpanelUtils/PFEventStrategyFactory';
 import DigitalDomicileWizard from '../DigitalDomicileWizard';
+
+vi.mock('../../../../utility/MixpanelUtils/PFEventStrategyFactory', () => ({
+  default: { triggerEvent: vi.fn() },
+}));
 
 describe('DigitalDomicileWizard', () => {
   const labelPrefix = 'onboarding.digital-domicile';
@@ -23,6 +31,7 @@ describe('DigitalDomicileWizard', () => {
 
   beforeEach(() => {
     mock.reset();
+    vi.clearAllMocks();
   });
 
   afterAll(() => {
@@ -44,6 +53,11 @@ describe('DigitalDomicileWizard', () => {
 
     expect(queryByText(`${labelPrefix}.choice.pec-activating.title`)).not.toBeInTheDocument();
     expect(queryByText(`${labelPrefix}.choice.pec-activating.badge`)).not.toBeInTheDocument();
+
+    expect(PFEventStrategyFactory.triggerEvent).toHaveBeenCalledWith(
+      PFEventsType.SEND_ONBOARDING_SERCQ_ACTIVATION,
+      { onboarding_selected_flow: OnboardingAvailableFlows.DIGITAL_DOMICILE, event_type: EventAction.SCREEN_VIEW }
+    );
   });
 
   it('starts from the PEC step and shows the pending PEC content when a default PEC is in activation', () => {
@@ -134,6 +148,11 @@ describe('DigitalDomicileWizard', () => {
       queryByRole('button', { name: `${labelPrefix}.choice.pec.cta` })
     ).not.toBeInTheDocument();
     expect(getByRole('button', { name: 'button.continue' })).toBeInTheDocument();
+
+    expect(PFEventStrategyFactory.triggerEvent).toHaveBeenCalledWith(
+      PFEventsType.SEND_ONBOARDING_BACK_SELECTED,
+      { onboarding_selected_flow: OnboardingAvailableFlows.DIGITAL_DOMICILE, screen: OnboardingScreen.PEC }
+    );
   });
 
   it('does not show the next button in the SEND contact step when no email is available', () => {
@@ -147,6 +166,15 @@ describe('DigitalDomicileWizard', () => {
 
     fireEvent.click(getByRole('button', { name: `${labelPrefix}.choice.cta` }));
     expect(queryByRole('button', { name: 'button.continue' })).not.toBeInTheDocument();
+
+    expect(PFEventStrategyFactory.triggerEvent).toHaveBeenCalledWith(
+      PFEventsType.SEND_ONBOARDING_SERCQ_SEND_SELECTED,
+      { onboarding_selected_flow: OnboardingAvailableFlows.DIGITAL_DOMICILE }
+    );
+    expect(PFEventStrategyFactory.triggerEvent).toHaveBeenCalledWith(
+      PFEventsType.SEND_ONBOARDING_EMAIL_ACTIVATION,
+      { onboarding_selected_flow: OnboardingAvailableFlows.DIGITAL_DOMICILE, event_type: EventAction.SCREEN_VIEW, email_value: undefined }
+    );
   });
 
   it('shows the PEC verification modal when the user tries to continue with a formally valid PEC and accepted disclaimer', async () => {
@@ -288,6 +316,19 @@ describe('DigitalDomicileWizard', () => {
 
     expect(await findByText(`${labelPrefix}.feedback.send.title`)).toBeInTheDocument();
     expect(await findByText(`${labelPrefix}.feedback.send.content`)).toBeInTheDocument();
+
+    expect(PFEventStrategyFactory.triggerEvent).toHaveBeenCalledWith(
+      PFEventsType.SEND_ONBOARDING_IO_DOWNLOAD_DECLINED,
+      { onboarding_selected_flow: OnboardingAvailableFlows.DIGITAL_DOMICILE }
+    );
+    expect(PFEventStrategyFactory.triggerEvent).toHaveBeenCalledWith(
+      PFEventsType.SEND_ONBOARDING_UX_CONVERSION,
+      { onboarding_selected_flow: OnboardingAvailableFlows.DIGITAL_DOMICILE }
+    );
+    expect(PFEventStrategyFactory.triggerEvent).toHaveBeenCalledWith(
+      PFEventsType.SEND_ONBOARDING_UX_SUCCESS,
+      { onboarding_selected_flow: OnboardingAvailableFlows.DIGITAL_DOMICILE, event_type: EventAction.SCREEN_VIEW }
+    );
   });
 
   it('completes the PEC flow and shows the final feedback', async () => {
@@ -369,5 +410,14 @@ describe('DigitalDomicileWizard', () => {
 
     expect(await findByText(`${labelPrefix}.feedback.pec.title`)).toBeInTheDocument();
     expect(await findByText(`${labelPrefix}.feedback.pec.content`)).toBeInTheDocument();
+
+    expect(PFEventStrategyFactory.triggerEvent).toHaveBeenCalledWith(
+      PFEventsType.SEND_ONBOARDING_IO_DOWNLOAD_DECLINED,
+      { onboarding_selected_flow: OnboardingAvailableFlows.DIGITAL_DOMICILE }
+    );
+    expect(PFEventStrategyFactory.triggerEvent).toHaveBeenCalledWith(
+      PFEventsType.SEND_ONBOARDING_UX_SUCCESS,
+      { onboarding_selected_flow: OnboardingAvailableFlows.DIGITAL_DOMICILE, event_type: EventAction.SCREEN_VIEW }
+    );
   });
 });
