@@ -1,8 +1,11 @@
-import { matchPath } from 'react-router-dom';
+import { defer, matchPath } from 'react-router-dom';
 
 import { AppRouteParams, EventPageType, sanitizeString } from '@pagopa-pn/pn-commons';
 
 import { LoginProvider } from '../models/User';
+import { getDigitalAddresses } from '../redux/contact/actions';
+import { getReceivedNotifications } from '../redux/dashboard/actions';
+import { store } from '../redux/store';
 import {
   APP_STATUS,
   DELEGHE,
@@ -82,4 +85,17 @@ export const getCurrentEventTypePage = (location: string): EventPageType | undef
   }
 
   return pageType;
+};
+
+export const onboardingLoader = () => {
+  // Lanciamo le azioni senza "scompattarle" con unwrap
+  // Questo restituisce una promessa che Redux gestirà
+  const addressesPromise = store.dispatch(getDigitalAddresses());
+  const notificationsPromise = store.dispatch(getReceivedNotifications({ size: 10 }));
+
+  // Usiamo defer per passare queste promesse al componente
+  return defer({
+    addresses: addressesPromise,
+    notifications: notificationsPromise,
+  });
 };

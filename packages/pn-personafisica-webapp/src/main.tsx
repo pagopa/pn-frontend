@@ -1,17 +1,16 @@
 import React, { Suspense } from 'react';
 import { createRoot } from 'react-dom/client';
 import { Provider } from 'react-redux';
-import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 
 import { CssBaseline, ThemeProvider } from '@mui/material';
 import { LoadingPage } from '@pagopa-pn/pn-commons';
 import { theme } from '@pagopa/mui-italia';
 
-import App from './App';
 import { initAxiosClients } from './api/apiClients';
 import { setUpInterceptor } from './api/interceptors';
 import './i18n';
 import './index.css';
+import Router from './navigation/routes';
 import { initStore, store } from './redux/store';
 import reportWebVitals from './reportWebVitals';
 import { loadPfConfiguration } from './services/configuration.service';
@@ -31,23 +30,13 @@ async function doTheRender() {
     // move initialization of the Axios interceptor - PN-7557
     setUpInterceptor(store);
 
-    // We need to comment out the StrictMode because it causes a rerender that
-    // breaks the navigation inside TermsOfService and PrivacyPolicy pages.
-    // PN-9549
-    const router = createBrowserRouter([
-      {
-        path: '*',
-        element: <App />,
-      },
-    ]);
-
     root.render(
       <Provider store={store}>
         {/* <React.StrictMode> */}
         <ThemeProvider theme={theme}>
           <CssBaseline />
           <Suspense fallback={<LoadingPage renderType="whole" />}>
-            <RouterProvider router={router} />
+            <Router />
           </Suspense>
         </ThemeProvider>
         {/* </React.StrictMode> */}

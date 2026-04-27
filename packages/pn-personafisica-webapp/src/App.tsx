@@ -1,6 +1,6 @@
 import { ErrorInfo, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 
 import AltRouteIcon from '@mui/icons-material/AltRoute';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
@@ -36,7 +36,6 @@ import { ProductEntity } from '@pagopa/mui-italia';
 import SideMenuBanner from './components/SideMenuBanner/SideMenuBanner';
 import { PFEventsType } from './models/PFEventsType';
 import { getCurrentEventTypePage, goToLoginPortal } from './navigation/navigation.utility';
-import Router from './navigation/routes';
 import * as routes from './navigation/routes.const';
 import { getCurrentAppStatus } from './redux/appStatus/actions';
 import { apiLogout } from './redux/auth/actions';
@@ -344,7 +343,7 @@ const App = () => {
         <AppResponseMessage
           eventTrackingToastErrorMessages={handleEventTrackingToastErrorMessages}
         />
-        <Router />
+        <Outlet />
       </Layout>
       <Box onClick={clickVersion} sx={{ height: '5px', background: 'white' }}></Box>
     </>
