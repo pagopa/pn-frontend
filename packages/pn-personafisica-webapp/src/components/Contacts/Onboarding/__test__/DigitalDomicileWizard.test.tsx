@@ -272,7 +272,7 @@ describe('DigitalDomicileWizard', () => {
     await act(async () => {
       fireEvent.click(
         getByRole('button', {
-          name: `${labelPrefix}.buttons.confirm-activation`,
+          name: 'button.conferma',
         })
       );
     });
@@ -362,7 +362,7 @@ describe('DigitalDomicileWizard', () => {
     await act(async () => {
       fireEvent.click(
         getByRole('button', {
-          name: `${labelPrefix}.buttons.confirm-activation`,
+          name: 'button.conferma',
         })
       );
     });

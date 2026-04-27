@@ -442,8 +442,7 @@
         "summary": "Preveri izbrane možnosti"
       },
       "buttons": {
-        "continue-without-io": "Nadaljuj brez aplikacije IO",
-        "confirm-activation": "Potrdi aktivacijo"
+        "continue-without-io": "Nadaljuj brez aplikacije IO"
       }
     },
     "io-activation": {

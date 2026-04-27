@@ -2,6 +2,7 @@ import { ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { Chip, Stack, Typography } from '@mui/material';
+import { useIsMobile } from '@pagopa-pn/pn-commons';
 import { MIAlert } from '@pagopa/mui-italia';
 
 import { WizardMode } from '../../../models/Onboarding';
@@ -24,6 +25,7 @@ type SummaryRow = {
 
 const SummaryStep: React.FC<Props> = ({ mode, email, pec, io }) => {
   const { t } = useTranslation(['recapiti']);
+  const isMobile = useIsMobile();
 
   const sendLabel = t('onboarding.digital-domicile.summary.send-badge');
   const pecLabel = t('onboarding.digital-domicile.summary.pec-badge');
@@ -49,21 +51,21 @@ const SummaryStep: React.FC<Props> = ({ mode, email, pec, io }) => {
         };
 
   const courtesyRows: Array<SummaryRow> = [
-    ...(io === IOAllowedValues.ENABLED
-      ? [
-          {
-            id: 'io',
-            label: t('onboarding.digital-domicile.summary.io-label'),
-            value: t('onboarding.digital-domicile.summary.io-value'),
-          },
-        ]
-      : []),
     ...(email
       ? [
           {
             id: 'email',
             label: t('onboarding.digital-domicile.summary.email-label'),
             value: email,
+          },
+        ]
+      : []),
+    ...(io === IOAllowedValues.ENABLED
+      ? [
+          {
+            id: 'io',
+            label: t('onboarding.digital-domicile.summary.io-label'),
+            value: t('onboarding.digital-domicile.summary.io-value'),
           },
         ]
       : []),
@@ -92,7 +94,7 @@ const SummaryStep: React.FC<Props> = ({ mode, email, pec, io }) => {
             {t('onboarding.digital-domicile.summary.courtesy-title')}
           </Typography>
 
-          <Stack spacing={2}>
+          <Stack spacing={2} direction={isMobile ? 'column' : 'row'}>
             {courtesyRows.map((row) => (
               <OnboardingContactItem
                 mode="view"
@@ -100,6 +102,13 @@ const SummaryStep: React.FC<Props> = ({ mode, email, pec, io }) => {
                 label={row.label}
                 value={row.value}
                 secondaryContent={row.secondaryContent}
+                slotProps={{
+                  container: {
+                    sx: {
+                      flex: isMobile ? '1 1 100%' : '1 1 50%',
+                    },
+                  },
+                }}
               />
             ))}
           </Stack>

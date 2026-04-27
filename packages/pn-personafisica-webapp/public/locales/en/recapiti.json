@@ -442,8 +442,7 @@
         "summary": "Check the chosen options"
       },
       "buttons": {
-        "continue-without-io": "Continue without the IO app",
-        "confirm-activation": "Confirm activation"
+        "continue-without-io": "Continue without the IO app"
       }
     },
     "io-activation": {
