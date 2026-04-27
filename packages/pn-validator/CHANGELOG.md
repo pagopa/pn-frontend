@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.22.3](https://github.com/pagopa/pn-frontend/compare/v2.22.3-RC.0...v2.22.3) (2026-04-24)
+
+**Note:** Version bump only for package @pagopa-pn/pn-validator
+
+
+
+
+
 # [2.23.0-RC.0](https://fbianchicodermine-github/pagopa/pn-frontend/compare/v2.22.2...v2.23.0-RC.0) (2026-04-22)
 
 **Note:** Version bump only for package @pagopa-pn/pn-validator

@@ -3,6 +3,25 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.22.3](https://github.com/pagopa/pn-frontend/compare/v2.22.3-RC.0...v2.22.3) (2026-04-24)
+
+**Note:** Version bump only for package @pagopa-pn/pn-commons
+
+
+
+
+
+## [2.22.3-RC.0](https://github.com/pagopa/pn-frontend/compare/v2.22.2...v2.22.3-RC.0) (2026-04-24)
+
+
+### Bug Fixes
+
+* **PN-19560:** remove drty data saved in localStorage ([af5e10f](https://github.com/pagopa/pn-frontend/commit/af5e10f6093c3dd87327fe4ea5b09dba08271422))
+
+
+
+
+
 # [2.23.0-RC.1](https://github.com/pagopa/pn-frontend/compare/v2.23.0-RC.0...v2.23.0-RC.1) (2026-04-23)
 
 
