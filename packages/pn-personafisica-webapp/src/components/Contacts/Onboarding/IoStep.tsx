@@ -87,12 +87,9 @@ const IoStep: React.FC<Props> = ({ value, selectedOnboardingFlow, onChange, onCo
       onboarding_selected_flow: selectedOnboardingFlow,
     });
 
-    try {
-      const addresses = await dispatch(getDigitalAddresses()).unwrap();
-      onChange(getIoValue(addresses));
-    } catch {
-      // no-op
-    }
+    void dispatch(getDigitalAddresses({ blockLoading: true }))
+      .unwrap()
+      .then((response) => onChange(getIoValue(response)));
   };
 
   const handleEnable = async () => {

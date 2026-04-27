@@ -31,7 +31,10 @@ export enum CONTACT_ACTIONS {
   ACCEPT_SERCQ_SEND_TOS = 'acceptSercqSendTosApproval',
 }
 
-export const getDigitalAddresses = createAsyncThunk<Array<DigitalAddress>>(
+export const getDigitalAddresses = createAsyncThunk<
+  Array<DigitalAddress>,
+  { blockLoading?: boolean } | undefined
+>(
   CONTACT_ACTIONS.GET_DIGITAL_ADDRESSES,
   async (_, { rejectWithValue }) => {
     try {
@@ -44,6 +47,9 @@ export const getDigitalAddresses = createAsyncThunk<Array<DigitalAddress>>(
     } catch (e: any) {
       return rejectWithValue(parseError(e));
     }
+  },
+  {
+    getPendingMeta: ({ arg }) => ({ blockLoading: arg?.blockLoading }),
   }
 );
 

@@ -54,8 +54,8 @@ const contactsSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
-    builder.addCase(getDigitalAddresses.pending, (state) => {
-      state.loading = true;
+    builder.addCase(getDigitalAddresses.pending, (state, action) => {
+      state.loading = !action.meta.arg?.blockLoading;
     });
     builder.addCase(getDigitalAddresses.fulfilled, (state, action) => {
       state.digitalAddresses = action.payload;
