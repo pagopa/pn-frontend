@@ -420,7 +420,7 @@
         "verify-before-continue-content": "Before proceeding, select <strong>Verify PEC</strong> and follow the instructions.",
         "pending": {
           "title": "PEC address being validated",
-          "description": "After validation, you will receive legally-binding communications on the PEC you have chosen digitally only, and you will avoid being sent a registered post with the relative additional costs.",
+          "description": "You will receive legally binding communications at the chosen PEC, digitally only, and you will be able to avoid the delivery of registered mail with the relative additional costs. After validation, you can modify it in the \"Your contact details\" section.",
           "badge": "Activation in progress"
         }
       },

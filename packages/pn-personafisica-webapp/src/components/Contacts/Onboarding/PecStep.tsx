@@ -416,6 +416,45 @@ const PecStep: React.FC<Props> = ({
     );
   };
 
+  const renderPecContent = () => {
+    if (pec.value) {
+      return (
+        <OnboardingContactItem
+          mode="view"
+          label={t('onboarding.digital-domicile.pec.label-summary')}
+          value={pec.value}
+        />
+      );
+    }
+
+    if (isPecPendingValidation) {
+      return (
+        <Chip
+          label={t('onboarding.digital-domicile.pec.pending.badge')}
+          color="warning"
+          sx={{ width: 'fit-content', '& .MuiChip-label': { fontSize: '12px' } }}
+        />
+      );
+    }
+
+    return (
+      <OnboardingContactItem
+        mode="entry"
+        label={t('onboarding.digital-domicile.pec.label-choose-address')}
+        inputLabel={t('onboarding.digital-domicile.pec.input-label')}
+        value={formik.values.pec}
+        buttonLabel={t('onboarding.digital-domicile.pec.verify-cta')}
+        buttonVariant="outlined"
+        error={formik.errors.pec}
+        touched={formik.touched.pec}
+        onChange={(value) => void handleFieldChange('pec', value)}
+        onBlur={formik.handleBlur}
+        onSubmit={handleVerifyPec}
+        footer={renderPecDisclaimerFooter()}
+      />
+    );
+  };
+
   return (
     <>
       <Stack data-testid="pec-step">
@@ -442,34 +481,7 @@ const PecStep: React.FC<Props> = ({
             bgcolor: 'background.paper',
           }}
         >
-          {isPecPendingValidation ? (
-            <Chip
-              label={t('onboarding.digital-domicile.pec.pending.badge')}
-              size="small"
-              sx={{ width: 'fit-content' }}
-            />
-          ) : hasPecFlowState ? (
-            <OnboardingContactItem
-              mode="view"
-              label={t('onboarding.digital-domicile.pec.label-summary')}
-              value={pec.value}
-            />
-          ) : (
-            <OnboardingContactItem
-              mode="entry"
-              label={t('onboarding.digital-domicile.pec.label-choose-address')}
-              inputLabel={t('onboarding.digital-domicile.pec.input-label')}
-              value={formik.values.pec}
-              buttonLabel={t('onboarding.digital-domicile.pec.verify-cta')}
-              buttonVariant="outlined"
-              error={formik.errors.pec}
-              touched={formik.touched.pec}
-              onChange={(value) => void handleFieldChange('pec', value)}
-              onBlur={formik.handleBlur}
-              onSubmit={handleVerifyPec}
-              footer={renderPecDisclaimerFooter()}
-            />
-          )}
+          {renderPecContent()}
 
           <Divider />
 

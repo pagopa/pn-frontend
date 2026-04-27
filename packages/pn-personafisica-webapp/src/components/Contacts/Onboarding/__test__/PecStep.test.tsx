@@ -81,7 +81,31 @@ describe('PecStep', () => {
     expect(props.onPecChange).not.toHaveBeenCalled();
   });
 
-  it('renders the PEC pending content when the PEC is in activation', () => {
+  it('renders the PEC pending content when the PEC is in activation and value is not available', () => {
+    const props = createProps();
+
+    const { getByText, queryByRole, queryByText } = render(
+      <PecStep
+        {...props}
+        pec={{
+          value: undefined,
+          alreadySet: false,
+          isValid: false,
+        }}
+      />
+    );
+
+    expect(getByText(`${labelPrefix}.pending.title`)).toBeInTheDocument();
+    expect(getByText(`${labelPrefix}.pending.description`)).toBeInTheDocument();
+    expect(getByText(`${labelPrefix}.pending.badge`)).toBeInTheDocument();
+
+    expect(queryByText(`${labelPrefix}.label-summary`)).not.toBeInTheDocument();
+    expect(queryByText(mockPec)).not.toBeInTheDocument();
+    expect(queryByRole('button', { name: `${labelPrefix}.verify-cta` })).not.toBeInTheDocument();
+    expect(queryByText(`${labelPrefix}.disclaimer`)).not.toBeInTheDocument();
+  });
+
+  it('renders the PEC in readonly mode when the PEC is in activation and value is still available', () => {
     const props = createProps();
 
     const { getByText, queryByRole, queryByText } = render(
@@ -97,10 +121,10 @@ describe('PecStep', () => {
 
     expect(getByText(`${labelPrefix}.pending.title`)).toBeInTheDocument();
     expect(getByText(`${labelPrefix}.pending.description`)).toBeInTheDocument();
-    expect(getByText(`${labelPrefix}.pending.badge`)).toBeInTheDocument();
+    expect(queryByText(`${labelPrefix}.pending.badge`)).not.toBeInTheDocument();
 
-    expect(queryByText(`${labelPrefix}.label-summary`)).not.toBeInTheDocument();
-    expect(queryByText(mockPec)).not.toBeInTheDocument();
+    expect(getByText(`${labelPrefix}.label-summary`)).toBeInTheDocument();
+    expect(getByText(mockPec)).toBeInTheDocument();
     expect(queryByRole('button', { name: `${labelPrefix}.verify-cta` })).not.toBeInTheDocument();
     expect(queryByText(`${labelPrefix}.disclaimer`)).not.toBeInTheDocument();
   });

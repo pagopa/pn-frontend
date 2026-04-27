@@ -420,7 +420,7 @@
         "verify-before-continue-content": "Bevor du fortfährst, wähle <strong>PEC überprüfen</strong> und folge den Anweisungen.",
         "pending": {
           "title": "PEC-Adresse wird validiert",
-          "description": "Nach der Validierung erhältst du rechtliche Mitteilungen auf der von dir gewählten PEC ausschließlich digital und vermeidest so den Versand eines Einschreibens mit den entsprechenden Zusatzkosten.",
+          "description": "Sie erhalten rechtliche Mitteilungen über die gewählte PEC, ausschließlich auf digitalem Weg, und können so den Versand eines Einschreibens mit den entsprechenden Zusatzkosten vermeiden. Nach der Validierung können Sie diese im Bereich „Ihre Kontaktdaten\" ändern.",
           "badge": "Aktivierung läuft"
         }
       },

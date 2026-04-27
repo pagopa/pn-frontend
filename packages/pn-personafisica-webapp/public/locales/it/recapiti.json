@@ -420,7 +420,7 @@
         "verify-before-continue-content": "Prima di procedere, seleziona <strong>Verifica PEC</strong> e segui le istruzioni.",
         "pending": {
           "title": "Indirizzo PEC in validazione",
-          "description": "Dopo la validazione, riceverai le comunicazioni a valore legale sulla PEC che hai scelto solo in digitale, ed eviterai l’invio di una raccomandata con i relativi costi aggiuntivi.",
+          "description": "Riceverai le comunicazioni a valore legale sulla PEC scelta, solo in digitale, e potrai evitare l’invio di una raccomandata con i relativi costi aggiuntivi. Dopo la validazione, potrai modificarla nella sezione \"I tuoi recapiti\".",
           "badge": "Attivazione in corso"
         }
       },

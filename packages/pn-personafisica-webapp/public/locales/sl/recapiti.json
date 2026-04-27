@@ -420,7 +420,7 @@
         "verify-before-continue-content": "Preden nadaljuješ, izberi <strong>Preveri PEC</strong> in sledi navodilom.",
         "pending": {
           "title": "Naslov PEC v preverjanju",
-          "description": "Po preverjanju boš pravno veljavna sporočila prejemal na izbrani PEC samo v digitalni obliki in se izognil pošiljanju priporočene pošte s pripadajočimi dodatnimi stroški.",
+          "description": "Uradna sporočila boste prejemali na izbrani naslov PEC, izključno v digitalni obliki, in se tako izognili pošiljanju priporočene pošte s pripadajočimi dodatnimi stroški. Po potrditvi ga boste lahko spremenili v razdelku »Moji kontaktni podatki«.",
           "badge": "Aktivacija v teku"
         }
       },

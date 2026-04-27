@@ -337,8 +337,9 @@ describe('DigitalDomicileWizard', () => {
 
     expect(await findByText(`${labelPrefix}.pec.pending.title`)).toBeInTheDocument();
     expect(await findByText(`${labelPrefix}.pec.pending.description`)).toBeInTheDocument();
-    expect(await findByText(`${labelPrefix}.pec.pending.badge`)).toBeInTheDocument();
-    expect(queryByText(mockPec)).not.toBeInTheDocument();
+    expect(queryByText(`${labelPrefix}.pec.pending.badge`)).not.toBeInTheDocument();
+    expect(await findByText(`${labelPrefix}.pec.label-summary`)).toBeInTheDocument();
+    expect(await findByText(mockPec)).toBeInTheDocument();
 
     await act(async () => {
       fireEvent.click(getByRole('button', { name: 'button.continue' }));
