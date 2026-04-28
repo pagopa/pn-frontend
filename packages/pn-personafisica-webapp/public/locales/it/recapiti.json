@@ -356,7 +356,7 @@
           "cta": "Attiva su una PEC"
         },
         "pec-activating": {
-          "title": "Domicilio digitale su PEC in attivazione",
+          "title": "L’attivazione del domicilio digitale su PEC è in corso",
           "description": "Dopo l’attivazione, riceverai le notifiche SEND al tuo indirizzo PEC. Potresti evitare così l’invio di una raccomandata con i relativi costi aggiuntivi.",
           "badge": "Attivazione in corso",
           "img-alt-text": ""
@@ -405,7 +405,7 @@
         "title": "La tua PEC come domicilio digitale SEND",
         "description": "Riceverai le comunicazioni a valore legale sulla tua PEC, solo in digitale, e potrai evitare l’invio di una raccomandata con i relativi costi aggiuntivi.",
         "label-choose-address": "Scegli un indirizzo PEC:",
-        "label-summary": "PEC",
+        "label-summary": "Indirizzo PEC",
         "input-label": "Indirizzo PEC",
         "verify-cta": "Verifica PEC",
         "disclaimer": "Accetto che l’indirizzo PEC indicato sia utilizzato in via prioritaria rispetto a eventuali PEC registrate presso un ente mittente o presenti nei pubblici registri.",
@@ -419,7 +419,7 @@
         "verify-before-continue-title": "Verifica la tua PEC",
         "verify-before-continue-content": "Prima di procedere, seleziona <strong>Verifica PEC</strong> e segui le istruzioni.",
         "pending": {
-          "title": "Indirizzo PEC in validazione",
+          "title": "La PEC inserita è in fase di validazione",
           "description": "Riceverai le comunicazioni a valore legale sulla PEC scelta, solo in digitale, e potrai evitare l’invio di una raccomandata con i relativi costi aggiuntivi. Dopo la validazione, potrai modificarla nella sezione \"I tuoi recapiti\".",
           "badge": "Attivazione in corso"
         }
@@ -436,6 +436,7 @@
       },
       "steps": {
         "choice": "Scegli un domicilio digitale",
+        "generic-inbox": "Associa una casella di posta",
         "pec": "Inserisci la tua PEC",
         "email": "Associa un indirizzo email",
         "io": "Attiva gli avvisi su IO",

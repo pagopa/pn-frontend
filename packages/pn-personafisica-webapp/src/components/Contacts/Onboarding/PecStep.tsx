@@ -96,6 +96,7 @@ const PecStep: React.FC<Props> = ({
 
   const hasPecFlowState = Boolean(pec.value) || pec.isValid !== undefined;
   const isPecPendingValidation = pec.isValid === false;
+  const shouldShowPendingHeader = isPecPendingValidation && !pec.value;
   const showPecDisclaimer = !pec.alreadySet && !hasPecFlowState;
 
   const validationSchema = useMemo(
@@ -460,7 +461,7 @@ const PecStep: React.FC<Props> = ({
       <Stack data-testid="pec-step">
         <Typography fontSize="18px" fontWeight={700} mb={1}>
           {t(
-            isPecPendingValidation
+            shouldShowPendingHeader
               ? 'onboarding.digital-domicile.pec.pending.title'
               : 'onboarding.digital-domicile.pec.title'
           )}
@@ -468,7 +469,7 @@ const PecStep: React.FC<Props> = ({
 
         <Typography variant="body2" color="text.secondary" mb={2}>
           {t(
-            isPecPendingValidation
+            shouldShowPendingHeader
               ? 'onboarding.digital-domicile.pec.pending.description'
               : 'onboarding.digital-domicile.pec.description'
           )}

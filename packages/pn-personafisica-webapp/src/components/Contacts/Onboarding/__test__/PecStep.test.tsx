@@ -119,8 +119,10 @@ describe('PecStep', () => {
       />
     );
 
-    expect(getByText(`${labelPrefix}.pending.title`)).toBeInTheDocument();
-    expect(getByText(`${labelPrefix}.pending.description`)).toBeInTheDocument();
+    expect(getByText(`${labelPrefix}.title`)).toBeInTheDocument();
+    expect(getByText(`${labelPrefix}.description`)).toBeInTheDocument();
+    expect(queryByText(`${labelPrefix}.pending.title`)).not.toBeInTheDocument();
+    expect(queryByText(`${labelPrefix}.pending.description`)).not.toBeInTheDocument();
     expect(queryByText(`${labelPrefix}.pending.badge`)).not.toBeInTheDocument();
 
     expect(getByText(`${labelPrefix}.label-summary`)).toBeInTheDocument();
