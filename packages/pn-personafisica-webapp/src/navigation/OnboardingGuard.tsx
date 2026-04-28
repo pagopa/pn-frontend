@@ -47,8 +47,6 @@ const OnboardingGuard: React.FC = () => {
   useEffect(() => {
     fetchOnboardingData()
       .then((notifications) => {
-        console.log('NOTIFICATIONS TO READ? ', hasNotificationsToRead(notifications));
-
         const shouldRedirectToOnboarding =
           location.pathname === '/' &&
           isFreshLogin &&

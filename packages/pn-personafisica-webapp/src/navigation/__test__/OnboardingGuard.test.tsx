@@ -1,6 +1,5 @@
 import MockAdapter from 'axios-mock-adapter';
 import { Route, Routes } from 'react-router-dom';
-import { vi } from 'vitest';
 
 import {
   Configuration,
@@ -44,7 +43,6 @@ describe('OnboardingGuard', async () => {
 
   afterEach(() => {
     mock.reset();
-    vi.clearAllMocks();
   });
 
   afterAll(() => {
