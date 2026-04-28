@@ -1,10 +1,8 @@
-import { Suspense, useMemo } from 'react';
-import { Navigate, RouterProvider, createBrowserRouter } from 'react-router-dom';
+import { Suspense } from 'react';
+import { Navigate, Route, Routes, useNavigate } from 'react-router-dom';
 
 import { ConsentType, LoadingPage, NotFound, lazyRetry } from '@pagopa-pn/pn-commons';
-import ErrorBoundary from '@pagopa-pn/pn-commons/src/components/ErrorBoundary';
 
-import App from '../App';
 import OnboardingCourtesyWizard from '../components/Contacts/Onboarding/Courtesy/OnboardingCourtesyWizard';
 import DigitalDomicileWizard from '../components/Contacts/Onboarding/DigitalDomicileWizard';
 import IoActivationWizard from '../components/Contacts/Onboarding/IoActivationWizard';
@@ -40,135 +38,78 @@ const DigitalContactManagement = lazyRetry(
 );
 
 const Router: React.FC = () => {
+  const navigate = useNavigate();
   const { IS_ONBOARDING_ENABLED } = getConfiguration();
-
-  const router = useMemo(
-    () =>
-      createBrowserRouter([
-        {
-          path: '/',
-          element: <App />,
-          errorElement: <ErrorBoundary />,
-          children: [
-            {
-              element: <SessionGuard />,
-              children: [
-                {
-                  element: <ToSGuard />,
-                  children: [
-                    {
-                      element: <RapidAccessGuard />,
-                      children: [
-                        {
-                          element: <OnboardingGuard />,
-                          loader: onboardingLoader,
-                          children: [
-                            {
-                              index: true,
-                              element: <Navigate to={routes.NOTIFICHE} replace />,
-                            },
-                            {
-                              path: routes.NOTIFICHE,
-                              element: <Notifiche />,
-                            },
-                            { path: routes.NOTIFICHE_DELEGATO, element: <Notifiche /> },
-                            { path: routes.DETTAGLIO_NOTIFICA, element: <NotificationDetail /> },
-                            {
-                              path: routes.DETTAGLIO_NOTIFICA_DELEGATO,
-                              element: <NotificationDetail />,
-                            },
-                            { path: routes.DELEGHE, element: <Deleghe /> },
-                            { path: routes.NUOVA_DELEGA, element: <NuovaDelega /> },
-                            { path: routes.RECAPITI, element: <Contacts /> },
-                            { path: routes.PROFILO, element: <Profile /> },
-                            { path: routes.APP_STATUS, element: <AppStatus /> },
-                            { path: routes.SUPPORT, element: <SupportPage /> },
-                            ...(IS_ONBOARDING_ENABLED
-                              ? [
-                                  {
-                                    path: routes.ONBOARDING,
-                                    element: <Onboarding />,
-                                    children: [
-                                      { index: true, element: <OnboardingHome /> },
-                                      {
-                                        path: routes.ONBOARDING_DIGITAL_DOMICILE,
-                                        element: <DigitalDomicileWizard />,
-                                      },
-                                      {
-                                        path: routes.ONBOARDING_IO,
-                                        element: <IoActivationWizard />,
-                                      },
-                                      {
-                                        path: routes.ONBOARDING_COURTESY,
-                                        element: <OnboardingCourtesyWizard />,
-                                      },
-                                    ],
-                                  },
-                                ]
-                              : []),
-                            {
-                              path: routes.DIGITAL_DOMICILE,
-                              element: <DigitalContact />,
-                              children: [
-                                {
-                                  index: true,
-                                  element: <Navigate to={routes.RECAPITI} replace />,
-                                },
-                                {
-                                  path: routes.DIGITAL_DOMICILE_ACTIVATION,
-                                  element: <DigitalContactActivation />,
-                                },
-                                {
-                                  path: routes.DIGITAL_DOMICILE_MANAGEMENT,
-                                  element: <DigitalContactManagement />,
-                                },
-                              ],
-                            },
-                            {
-                              path: '*',
-                              element: (
-                                <NotFound
-                                  goBackAction={() =>
-                                    router.navigate(routes.NOTIFICHE, { replace: true })
-                                  }
-                                />
-                              ),
-                            },
-                          ],
-                        },
-                      ],
-                    },
-                  ],
-                },
-              ],
-            },
-          ],
-        },
-        {
-          path: routes.PRIVACY_POLICY,
-          element: <PrivacyPolicyPage />,
-          children: [],
-        },
-        { path: routes.TERMS_OF_SERVICE, element: <TermsOfServicePage />, children: [] },
-        {
-          path: routes.TERMS_OF_SERVICE_SERCQ_SEND,
-          element: <TermsOfServicePage type={ConsentType.TOS_SERCQ} />,
-          children: [],
-        },
-        {
-          path: routes.PARTICIPATING_ENTITIES,
-          element: <ParticipatingEntitiesPage />,
-          children: [],
-        },
-        { path: routes.TPP_LANDING, element: <TppLanding />, children: [] },
-        { path: routes.NOT_ACCESSIBLE, element: <AppNotAccessibleRoute />, children: [] },
-      ]),
-    [IS_ONBOARDING_ENABLED]
-  );
 
   return (
     <Suspense fallback={<LoadingPage />}>
-      <RouterProvider router={router} />
+      <Routes>
+        <Route element={<SessionGuard />}>
+          <Route element={<ToSGuard />}>
+            <Route element={<RapidAccessGuard />}>
+              <Route
+                element={<OnboardingGuard />}
+                loader={() => {
+                  console.log('Eseguo il loader');
+                  return onboardingLoader();
+                }}
+              >
+                <Route index element={<Navigate to={routes.NOTIFICHE} replace />} />
+                <Route path={routes.NOTIFICHE} element={<Notifiche />} />
+                <Route path={routes.NOTIFICHE_DELEGATO} element={<Notifiche />} />
+                <Route path={routes.DETTAGLIO_NOTIFICA} element={<NotificationDetail />} />
+                <Route path={routes.DETTAGLIO_NOTIFICA_DELEGATO} element={<NotificationDetail />} />
+                <Route path={routes.DELEGHE} element={<Deleghe />} />
+                <Route path={routes.NUOVA_DELEGA} element={<NuovaDelega />} />
+                <Route path={routes.RECAPITI} element={<Contacts />} />
+                <Route path={routes.PROFILO} element={<Profile />} />
+                <Route path={routes.APP_STATUS} element={<AppStatus />} />
+                <Route path={routes.SUPPORT} element={<SupportPage />} />
+                {IS_ONBOARDING_ENABLED && (
+                  <Route path={routes.ONBOARDING} element={<Onboarding />}>
+                    <Route index element={<OnboardingHome />} />
+                    <Route
+                      path={routes.ONBOARDING_DIGITAL_DOMICILE}
+                      element={<DigitalDomicileWizard />}
+                    />
+                    <Route path={routes.ONBOARDING_IO} element={<IoActivationWizard />} />
+                    <Route
+                      path={routes.ONBOARDING_COURTESY}
+                      element={<OnboardingCourtesyWizard />}
+                    />
+                  </Route>
+                )}
+                <Route path={routes.DIGITAL_DOMICILE} element={<DigitalContact />}>
+                  <Route
+                    path={routes.DIGITAL_DOMICILE_ACTIVATION}
+                    element={<DigitalContactActivation />}
+                  />
+                  <Route
+                    path={routes.DIGITAL_DOMICILE_MANAGEMENT}
+                    element={<DigitalContactManagement />}
+                  />
+                  <Route element={<Navigate to={routes.RECAPITI} replace />} index />
+                </Route>
+                <Route
+                  path="*"
+                  element={
+                    <NotFound goBackAction={() => navigate(routes.NOTIFICHE, { replace: true })} />
+                  }
+                />
+              </Route>
+            </Route>
+          </Route>
+        </Route>
+        <Route path={routes.PRIVACY_POLICY} element={<PrivacyPolicyPage />} />
+        <Route path={routes.TERMS_OF_SERVICE} element={<TermsOfServicePage />} />
+        <Route
+          path={routes.TERMS_OF_SERVICE_SERCQ_SEND}
+          element={<TermsOfServicePage type={ConsentType.TOS_SERCQ} />}
+        />
+        <Route path={routes.PARTICIPATING_ENTITIES} element={<ParticipatingEntitiesPage />} />
+        <Route path={routes.TPP_LANDING} element={<TppLanding />} />
+        <Route path={routes.NOT_ACCESSIBLE} element={<AppNotAccessibleRoute />} />
+      </Routes>
     </Suspense>
   );
 };
