@@ -356,7 +356,7 @@
           "cta": "Aktiviraj na PEC"
         },
         "pec-activating": {
-          "title": "Aktivacija digitalnega naslova na PEC v teku",
+          "title": "Aktivacija digitalnega domicila prek PEC je v teku",
           "description": "Po aktivaciji boš prejemal uradna obvestila SEND na tvoj naslov PEC. Tako bi se lahko izognil pošiljanju priporočene pošte s pripadajočimi dodatnimi stroški.",
           "badge": "Aktivacija v teku",
           "img-alt-text": ""
@@ -405,7 +405,7 @@
         "title": "Tvoj PEC kot digitalni naslov SEND",
         "description": "Pravno veljavna sporočila boš prejemal na svoj PEC, samo v digitalni obliki, in se boš lahko izognil pošiljanju priporočene pošte s pripadajočimi dodatnimi stroški.",
         "label-choose-address": "Izberi naslov PEC:",
-        "label-summary": "PEC",
+        "label-summary": "Naslov PEC",
         "input-label": "Naslov PEC",
         "verify-cta": "Preveri PEC",
         "disclaimer": "Sprejemam, da se navedeni naslov PEC uporablja prednostno pred morebitnimi naslovi PEC, registriranimi pri subjektu pošiljatelju ali prisotnimi v javnih registrih.",
@@ -419,8 +419,8 @@
         "verify-before-continue-title": "Preveri svoj PEC",
         "verify-before-continue-content": "Preden nadaljuješ, izberi <strong>Preveri PEC</strong> in sledi navodilom.",
         "pending": {
-          "title": "Naslov PEC v preverjanju",
-          "description": "Po preverjanju boš pravno veljavna sporočila prejemal na izbrani PEC samo v digitalni obliki in se izognil pošiljanju priporočene pošte s pripadajočimi dodatnimi stroški.",
+          "title": "Vneseni naslov PEC je v postopku preverjanja",
+          "description": "Uradna sporočila boste prejemali na izbrani naslov PEC, izključno v digitalni obliki, in se tako izognili pošiljanju priporočene pošte s pripadajočimi dodatnimi stroški. Po potrditvi ga boste lahko spremenili v razdelku »Moji kontaktni podatki«.",
           "badge": "Aktivacija v teku"
         }
       },
@@ -436,6 +436,7 @@
       },
       "steps": {
         "choice": "Izberi digitalni naslov",
+        "generic-inbox": "Povežite poštni predal",
         "pec": "Vnesi svoj PEC",
         "email": "Poveži e-poštni naslov",
         "io": "Aktiviraj obvestila v IO",

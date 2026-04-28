@@ -295,6 +295,15 @@ const DigitalDomicileWizard: React.FC = () => {
     }
 
     trackBackSelected();
+
+    if (isContactStep && !isPecActivating) {
+      setWizardState((prev) => ({
+        ...prev,
+        mode: null,
+        showOptionalEmail: Boolean(prev.email.value),
+      }));
+    }
+
     goToPreviousStep();
   };
 
@@ -475,9 +484,19 @@ const DigitalDomicileWizard: React.FC = () => {
     ? t('onboarding.digital-domicile.feedback.pec.content')
     : t('onboarding.digital-domicile.feedback.send.content');
 
-  const contactStepLabel = isPecMode
-    ? t('onboarding.digital-domicile.steps.pec')
-    : t('onboarding.digital-domicile.steps.email');
+  const getContactStepLabel = () => {
+    if (isPecMode || isPecActivating) {
+      return t('onboarding.digital-domicile.steps.pec');
+    }
+
+    if (isSendMode) {
+      return t('onboarding.digital-domicile.steps.email');
+    }
+
+    return t('onboarding.digital-domicile.steps.generic-inbox');
+  };
+
+  const contactStepLabel = getContactStepLabel();
 
   // Start Mixpanel
   const trackDigitalDomicile = useCallback(

@@ -96,6 +96,7 @@ const PecStep: React.FC<Props> = ({
 
   const hasPecFlowState = Boolean(pec.value) || pec.isValid !== undefined;
   const isPecPendingValidation = pec.isValid === false;
+  const shouldShowPendingHeader = isPecPendingValidation && !pec.value;
   const showPecDisclaimer = !pec.alreadySet && !hasPecFlowState;
 
   const validationSchema = useMemo(
@@ -416,12 +417,51 @@ const PecStep: React.FC<Props> = ({
     );
   };
 
+  const renderPecContent = () => {
+    if (pec.value) {
+      return (
+        <OnboardingContactItem
+          mode="view"
+          label={t('onboarding.digital-domicile.pec.label-summary')}
+          value={pec.value}
+        />
+      );
+    }
+
+    if (isPecPendingValidation) {
+      return (
+        <Chip
+          label={t('onboarding.digital-domicile.pec.pending.badge')}
+          color="warning"
+          sx={{ width: 'fit-content', '& .MuiChip-label': { fontSize: '12px' } }}
+        />
+      );
+    }
+
+    return (
+      <OnboardingContactItem
+        mode="entry"
+        label={t('onboarding.digital-domicile.pec.label-choose-address')}
+        inputLabel={t('onboarding.digital-domicile.pec.input-label')}
+        value={formik.values.pec}
+        buttonLabel={t('onboarding.digital-domicile.pec.verify-cta')}
+        buttonVariant="outlined"
+        error={formik.errors.pec}
+        touched={formik.touched.pec}
+        onChange={(value) => void handleFieldChange('pec', value)}
+        onBlur={formik.handleBlur}
+        onSubmit={handleVerifyPec}
+        footer={renderPecDisclaimerFooter()}
+      />
+    );
+  };
+
   return (
     <>
       <Stack data-testid="pec-step">
         <Typography fontSize="18px" fontWeight={700} mb={1}>
           {t(
-            isPecPendingValidation
+            shouldShowPendingHeader
               ? 'onboarding.digital-domicile.pec.pending.title'
               : 'onboarding.digital-domicile.pec.title'
           )}
@@ -429,7 +469,7 @@ const PecStep: React.FC<Props> = ({
 
         <Typography variant="body2" color="text.secondary" mb={2}>
           {t(
-            isPecPendingValidation
+            shouldShowPendingHeader
               ? 'onboarding.digital-domicile.pec.pending.description'
               : 'onboarding.digital-domicile.pec.description'
           )}
@@ -442,34 +482,7 @@ const PecStep: React.FC<Props> = ({
             bgcolor: 'background.paper',
           }}
         >
-          {isPecPendingValidation ? (
-            <Chip
-              label={t('onboarding.digital-domicile.pec.pending.badge')}
-              size="small"
-              sx={{ width: 'fit-content' }}
-            />
-          ) : hasPecFlowState ? (
-            <OnboardingContactItem
-              mode="view"
-              label={t('onboarding.digital-domicile.pec.label-summary')}
-              value={pec.value}
-            />
-          ) : (
-            <OnboardingContactItem
-              mode="entry"
-              label={t('onboarding.digital-domicile.pec.label-choose-address')}
-              inputLabel={t('onboarding.digital-domicile.pec.input-label')}
-              value={formik.values.pec}
-              buttonLabel={t('onboarding.digital-domicile.pec.verify-cta')}
-              buttonVariant="outlined"
-              error={formik.errors.pec}
-              touched={formik.touched.pec}
-              onChange={(value) => void handleFieldChange('pec', value)}
-              onBlur={formik.handleBlur}
-              onSubmit={handleVerifyPec}
-              footer={renderPecDisclaimerFooter()}
-            />
-          )}
+          {renderPecContent()}
 
           <Divider />
 
