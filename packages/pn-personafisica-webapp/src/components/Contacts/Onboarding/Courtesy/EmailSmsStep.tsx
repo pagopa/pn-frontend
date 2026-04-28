@@ -93,7 +93,6 @@ const EmailSmsStep = ({
     channel: null,
   });
 
-  const shouldShowBanner = !ioEnabled && !email.alreadySet;
 
   const currentAddress = useRef<{ channelType: ChannelType; value: string }>({
     channelType: ChannelType.EMAIL,
@@ -281,7 +280,7 @@ const EmailSmsStep = ({
 
   return (
     <Stack data-testid="email-sms-step" spacing={2}>
-      {shouldShowBanner && (
+      {!ioEnabled && (
         <MIAlert
           severity="info"
           data-testid="courtesy-banner"

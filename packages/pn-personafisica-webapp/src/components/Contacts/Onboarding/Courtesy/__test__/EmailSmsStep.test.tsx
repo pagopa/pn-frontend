@@ -41,14 +41,12 @@ describe('EmailSmsStep', () => {
     expect(queryByLabelText(`${labelPrefix}.sms.insert.input-label`)).not.toBeInTheDocument();
   });
 
-  it('registers the continue handler on mount', () => {
-    const props = createProps();
+  it('renders the courtesy banner when IO is not enabled and the email is already set', () => {
+    const { getByTestId } = render(
+      <EmailSmsStep {...createProps()} email={{ value: 'test@mock.pagopa.it', alreadySet: true }} />
+    );
 
-    render(<EmailSmsStep {...props} />);
-
-    expect(props.registerContinueHandler).toHaveBeenCalled();
-    const handler = props.registerContinueHandler.mock.calls.at(-1)?.[0];
-    expect(typeof handler).toBe('function');
+    expect(getByTestId('courtesy-banner')).toBeInTheDocument();
   });
 
   it('renders the email edit section when the email is already set', () => {
