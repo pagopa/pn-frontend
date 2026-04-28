@@ -41,9 +41,6 @@ import * as routes from './navigation/routes.const';
 import { getCurrentAppStatus } from './redux/appStatus/actions';
 import { apiLogout } from './redux/auth/actions';
 import { resetState as resetUserState } from './redux/auth/reducers';
-import { getDigitalAddresses } from './redux/contact/actions';
-import { getReceivedNotifications } from './redux/dashboard/actions';
-import { setFirstSearch } from './redux/dashboard/reducers';
 import { useAppDispatch, useAppSelector } from './redux/hooks';
 import { getSidemenuInformation } from './redux/sidemenu/actions';
 import { resetState as resetGeneralState } from './redux/sidemenu/reducers';
@@ -281,11 +278,8 @@ const App = () => {
 
   useEffect(() => {
     if (sessionToken !== '') {
-      void dispatch(getDigitalAddresses());
       void dispatch(getSidemenuInformation());
       void dispatch(getCurrentAppStatus());
-      void dispatch(getReceivedNotifications({ size: 10 }));
-      dispatch(setFirstSearch(true));
     }
   }, [sessionToken]);
 

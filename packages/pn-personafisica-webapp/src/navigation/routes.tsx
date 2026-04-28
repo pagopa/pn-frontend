@@ -14,8 +14,8 @@ import OnboardingGuard from './OnboardingGuard';
 import RapidAccessGuard from './RapidAccessGuard';
 import SessionGuard from './SessionGuard';
 import ToSGuard from './ToSGuard';
+import { onboardingLoader } from './navigation.utility';
 import * as routes from './routes.const';
-import { NOTIFICHE } from './routes.const';
 
 const Profile = lazyRetry(() => import('../pages/Profile.page'));
 const Notifiche = lazyRetry(() => import('../pages/Notifiche.page'));
@@ -39,7 +39,6 @@ const DigitalContactManagement = lazyRetry(
 
 const Router: React.FC = () => {
   const navigate = useNavigate();
-
   const { IS_ONBOARDING_ENABLED } = getConfiguration();
 
   return (
@@ -48,7 +47,13 @@ const Router: React.FC = () => {
         <Route element={<SessionGuard />}>
           <Route element={<ToSGuard />}>
             <Route element={<RapidAccessGuard />}>
-              <Route element={<OnboardingGuard />}>
+              <Route
+                element={<OnboardingGuard />}
+                loader={() => {
+                  console.log('Eseguo il loader');
+                  return onboardingLoader();
+                }}
+              >
                 <Route index element={<Navigate to={routes.NOTIFICHE} replace />} />
                 <Route path={routes.NOTIFICHE} element={<Notifiche />} />
                 <Route path={routes.NOTIFICHE_DELEGATO} element={<Notifiche />} />
@@ -87,7 +92,9 @@ const Router: React.FC = () => {
                 </Route>
                 <Route
                   path="*"
-                  element={<NotFound goBackAction={() => navigate(NOTIFICHE, { replace: true })} />}
+                  element={
+                    <NotFound goBackAction={() => navigate(routes.NOTIFICHE, { replace: true })} />
+                  }
                 />
               </Route>
             </Route>

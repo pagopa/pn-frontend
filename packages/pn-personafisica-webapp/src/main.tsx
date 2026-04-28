@@ -1,7 +1,12 @@
 import React, { Suspense } from 'react';
 import { createRoot } from 'react-dom/client';
 import { Provider } from 'react-redux';
-import { RouterProvider, createBrowserRouter } from 'react-router-dom';
+import {
+  Route,
+  RouterProvider,
+  createBrowserRouter,
+  createRoutesFromElements,
+} from 'react-router-dom';
 
 import { CssBaseline, ThemeProvider } from '@mui/material';
 import { LoadingPage } from '@pagopa-pn/pn-commons';
@@ -34,12 +39,9 @@ async function doTheRender() {
     // We need to comment out the StrictMode because it causes a rerender that
     // breaks the navigation inside TermsOfService and PrivacyPolicy pages.
     // PN-9549
-    const router = createBrowserRouter([
-      {
-        path: '*',
-        element: <App />,
-      },
-    ]);
+    const router = createBrowserRouter(
+      createRoutesFromElements(<Route path="*" element={<App />} />)
+    );
 
     root.render(
       <Provider store={store}>

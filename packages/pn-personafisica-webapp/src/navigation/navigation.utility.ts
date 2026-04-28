@@ -1,8 +1,19 @@
-import { matchPath } from 'react-router-dom';
+import { defer, matchPath } from 'react-router-dom';
 
-import { AppRouteParams, EventPageType, sanitizeString } from '@pagopa-pn/pn-commons';
+import {
+  AppRouteParams,
+  EventPageType,
+  GetNotificationsResponse,
+  Notification,
+  sanitizeString,
+} from '@pagopa-pn/pn-commons';
 
 import { LoginProvider } from '../models/User';
+import { getDigitalAddresses } from '../redux/contact/actions';
+import { SelectedAddresses, contactsSelectors } from '../redux/contact/reducers';
+import { getReceivedNotifications } from '../redux/dashboard/actions';
+import { setFirstSearch } from '../redux/dashboard/reducers';
+import { store } from '../redux/store';
 import {
   APP_STATUS,
   DELEGHE,
@@ -19,6 +30,11 @@ type GoToLoginProps = {
   loginProvider: LoginProvider;
   rapidAccess?: [AppRouteParams, string];
   search?: string;
+};
+
+export type OnboardingLoaderData = {
+  addresses: SelectedAddresses;
+  notifications: Array<Notification>;
 };
 
 export function goToLoginPortal({ rapidAccess, loginProvider, search = '' }: GoToLoginProps) {
@@ -83,3 +99,35 @@ export const getCurrentEventTypePage = (location: string): EventPageType | undef
 
   return pageType;
 };
+
+function waitForSessionToken(): Promise<void> {
+  if (store.getState().userState.user.sessionToken) {
+    return Promise.resolve();
+  }
+  return new Promise<void>((resolve) => {
+    const unsubscribe = store.subscribe(() => {
+      if (store.getState().userState.user.sessionToken) {
+        unsubscribe();
+        resolve();
+      }
+    });
+  });
+}
+
+async function fetchOnboardingData(): Promise<OnboardingLoaderData> {
+  await waitForSessionToken();
+
+  const [, notificationsResult] = await Promise.all([
+    store.dispatch(getDigitalAddresses()),
+    store.dispatch(getReceivedNotifications({ size: 10 })),
+  ]);
+
+  store.dispatch(setFirstSearch(true));
+
+  return {
+    addresses: contactsSelectors.selectAddresses(store.getState()),
+    notifications: (notificationsResult.payload as GetNotificationsResponse).resultsPage ?? [],
+  };
+}
+
+export const onboardingLoader = () => defer({ data: fetchOnboardingData() });
