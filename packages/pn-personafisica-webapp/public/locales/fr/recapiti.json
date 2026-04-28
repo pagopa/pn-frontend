@@ -356,7 +356,7 @@
           "cta": "Activer sur une PEC"
         },
         "pec-activating": {
-          "title": "Domicile numérique sur PEC en cours d’activation",
+          "title": "L'activation du domicile numérique via PEC est en cours",
           "description": "Après l’activation, tu recevras les notifications SEND à ton adresse PEC. Tu pourrais ainsi éviter l’envoi d’une lettre recommandée avec les frais supplémentaires correspondants.",
           "badge": "Activation en cours",
           "img-alt-text": ""
@@ -405,7 +405,7 @@
         "title": "Ta PEC comme domicile numérique SEND",
         "description": "Tu recevras les communications à valeur juridique sur ta PEC, uniquement en format numérique, et tu pourras éviter l’envoi d’une lettre recommandée avec les frais supplémentaires correspondants.",
         "label-choose-address": "Choisis une adresse PEC :",
-        "label-summary": "PEC",
+        "label-summary": "Adresse PEC",
         "input-label": "Adresse PEC",
         "verify-cta": "Vérifier la PEC",
         "disclaimer": "J'accepte que l'adresse PEC indiquée soit utilisée en priorité par rapport aux éventuelles PEC enregistrées auprès d'un organisme émetteur ou présentes dans les registres publics.",
@@ -419,8 +419,8 @@
         "verify-before-continue-title": "Vérifie ta PEC",
         "verify-before-continue-content": "Avant de continuer, sélectionne <strong>Vérifier la PEC</strong> et suis les instructions.",
         "pending": {
-          "title": "Adresse PEC en cours de validation",
-          "description": "Après la validation, tu recevras les communications à valeur juridique sur la PEC que tu as choisie uniquement en format numérique, et tu éviteras l’envoi d’une lettre recommandée avec les frais supplémentaires correspondants.",
+          "title": "L'adresse PEC saisie est en cours de validation",
+          "description": "Vous recevrez les communications à valeur juridique sur l'adresse PEC choisie, uniquement par voie numérique, et vous pourrez éviter l'envoi d'une lettre recommandée et ses frais supplémentaires. Après validation, vous pourrez la modifier dans la section « Vos coordonnées ».",
           "badge": "Activation en cours"
         }
       },
@@ -436,6 +436,7 @@
       },
       "steps": {
         "choice": "Choisis un domicile numérique",
+        "generic-inbox": "Associer une boîte de réception",
         "pec": "Saisis ta PEC",
         "email": "Associe une adresse e-mail",
         "io": "Active les avis sur IO",

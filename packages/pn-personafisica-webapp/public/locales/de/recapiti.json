@@ -356,7 +356,7 @@
           "cta": "Auf einer PEC aktivieren"
         },
         "pec-activating": {
-          "title": "Digitales Domizil auf PEC in Aktivierung",
+          "title": "Die Aktivierung deines digitalen Domizils über PEC ist in Bearbeitung",
           "description": "Nach der Aktivierung erhältst du SEND-Zustellungen an deine PEC-Adresse. So könntest du den Versand eines Einschreibens mit den entsprechenden Zusatzkosten vermeiden.",
           "badge": "Aktivierung läuft",
           "img-alt-text": ""
@@ -405,7 +405,7 @@
         "title": "Deine PEC als digitales SEND-Domizil",
         "description": "Du erhältst rechtliche Mitteilungen auf deiner PEC, ausschließlich digital, und kannst so den Versand eines Einschreibens mit den entsprechenden Zusatzkosten vermeiden.",
         "label-choose-address": "Wähle eine PEC-Adresse:",
-        "label-summary": "PEC",
+        "label-summary": "PEC-Adresse",
         "input-label": "PEC-Adresse",
         "verify-cta": "PEC überprüfen",
         "disclaimer": "Ich akzeptiere, dass die angegebene PEC-Adresse vorrangig gegenüber etwaigen bei einer sendenden Einrichtung registrierten oder in öffentlichen Registern vorhandenen PEC-Adressen verwendet wird.",
@@ -419,8 +419,8 @@
         "verify-before-continue-title": "Überprüfe deine PEC",
         "verify-before-continue-content": "Bevor du fortfährst, wähle <strong>PEC überprüfen</strong> und folge den Anweisungen.",
         "pending": {
-          "title": "PEC-Adresse wird validiert",
-          "description": "Nach der Validierung erhältst du rechtliche Mitteilungen auf der von dir gewählten PEC ausschließlich digital und vermeidest so den Versand eines Einschreibens mit den entsprechenden Zusatzkosten.",
+          "title": "Die eingegebene PEC-Adresse wird validiert",
+          "description": "Sie erhalten rechtliche Mitteilungen über die gewählte PEC, ausschließlich auf digitalem Weg, und können so den Versand eines Einschreibens mit den entsprechenden Zusatzkosten vermeiden. Nach der Validierung können Sie diese im Bereich „Ihre Kontaktdaten\" ändern.",
           "badge": "Aktivierung läuft"
         }
       },
@@ -436,6 +436,7 @@
       },
       "steps": {
         "choice": "Wähle ein digitales Domizil",
+        "generic-inbox": "Ein Postfach verknüpfen",
         "pec": "Gib deine PEC ein",
         "email": "Verknüpfe eine E-Mail-Adresse",
         "io": "Aktiviere Benachrichtigungen auf IO",
