@@ -77,7 +77,7 @@ const SummaryStep: React.FC<Props> = ({ mode, email, pec, io }) => {
         {t('onboarding.digital-domicile.summary.title')}
       </Typography>
 
-      <Stack spacing={2}>
+      <Stack spacing={2} mb={3}>
         <Typography variant="body2" color="text.secondary">
           {t('onboarding.digital-domicile.summary.legal-title')}
         </Typography>
@@ -89,7 +89,7 @@ const SummaryStep: React.FC<Props> = ({ mode, email, pec, io }) => {
         />
       </Stack>
       {courtesyRows.length > 0 && (
-        <Stack spacing={2} my={3}>
+        <Stack spacing={2} mb={3}>
           <Typography variant="body2" color="text.secondary">
             {t('onboarding.digital-domicile.summary.courtesy-title')}
           </Typography>
