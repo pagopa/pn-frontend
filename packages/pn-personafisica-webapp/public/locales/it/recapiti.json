@@ -437,8 +437,6 @@
       "steps": {
         "choice": "Scegli un domicilio digitale",
         "generic-inbox": "Associa una casella di posta",
-        "pec": "Inserisci la tua PEC",
-        "email": "Associa un indirizzo email",
         "io": "Attiva gli avvisi su IO",
         "summary": "Controlla le opzioni scelte"
       },
