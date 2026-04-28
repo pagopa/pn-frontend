@@ -35,13 +35,11 @@ describe('OnboardingCourtesyWizard', () => {
       },
     });
 
-    expect(
-      getByRole('button', { name: `${labelPrefix}.proceed-without-io` })
-    ).toBeInTheDocument();
+    expect(getByRole('button', { name: `${labelPrefix}.proceed-without-io` })).toBeInTheDocument();
   });
 
-  it('hides the wizard next button on the IO step when IO is enabled', () => {
-    const { queryByRole } = render(<OnboardingCourtesyWizard />, {
+  it('shows the wizard continue button on the IO step when IO is enabled', () => {
+    const { getByRole, queryByRole } = render(<OnboardingCourtesyWizard />, {
       preloadedState: {
         contactsState: {
           digitalAddresses: [
@@ -59,6 +57,6 @@ describe('OnboardingCourtesyWizard', () => {
     expect(
       queryByRole('button', { name: `${labelPrefix}.proceed-without-io` })
     ).not.toBeInTheDocument();
-    expect(queryByRole('button', { name: 'button.continue' })).not.toBeInTheDocument();
+    expect(getByRole('button', { name: 'button.continue' })).toBeInTheDocument();
   });
 });
