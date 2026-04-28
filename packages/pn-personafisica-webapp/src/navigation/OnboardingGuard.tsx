@@ -1,55 +1,73 @@
-import { useEffect, useMemo } from 'react';
-import { useDispatch } from 'react-redux';
+import React, { useEffect, useState } from 'react';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 
+import type { Notification } from '@pagopa-pn/pn-commons';
 import { LoadingPage, NotificationStatus } from '@pagopa-pn/pn-commons';
 
 import { OnboardingSource } from '../models/Onboarding';
 import { setIsFreshLogin } from '../redux/auth/reducers';
+import { getDigitalAddresses } from '../redux/contact/actions';
 import { contactsSelectors } from '../redux/contact/reducers';
-import { useAppSelector } from '../redux/hooks';
+import { getReceivedNotifications } from '../redux/dashboard/actions';
+import { setFirstSearch } from '../redux/dashboard/reducers';
+import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { setOnboardingSource } from '../redux/sidemenu/reducers';
 import { getConfiguration } from '../services/configuration.service';
 import { hasRequiredContacts } from '../utility/contacts.utility';
 import * as routes from './routes.const';
 
-const OnboardingGuard = () => {
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
-  const location = useLocation();
-  const { IS_ONBOARDING_ENABLED } = getConfiguration();
+const hasNotificationsToRead = (notifications: Array<Notification>): boolean => {
+  const managedStatuses = new Set([
+    NotificationStatus.VIEWED,
+    NotificationStatus.CANCELLED,
+    NotificationStatus.RETURNED_TO_SENDER,
+    NotificationStatus.EFFECTIVE_DATE,
+  ]);
+  return notifications.some((n) => !managedStatuses.has(n.notificationStatus));
+};
 
+const OnboardingGuard: React.FC = () => {
+  const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+  const location = useLocation();
+
+  const { IS_ONBOARDING_ENABLED } = getConfiguration();
   const addresses = useAppSelector(contactsSelectors.selectAddresses);
-  const isContactLoading = useAppSelector(contactsSelectors.selectLoading);
-  const { loading: isNotificationsLoading, notifications } = useAppSelector(
-    (state) => state.dashboardState
-  );
   const isFreshLogin = useAppSelector((state) => state.userState.isFreshLogin);
 
-  const isLoading = isContactLoading || isNotificationsLoading;
+  const [isLoading, setIsLoading] = useState(true);
 
-  const hasNotificationsToRead = useMemo(() => {
-    const managedStatusesSet = new Set([
-      NotificationStatus.VIEWED,
-      NotificationStatus.CANCELLED,
-      NotificationStatus.RETURNED_TO_SENDER,
-      NotificationStatus.EFFECTIVE_DATE,
-    ]);
-    return notifications.some((n) => !managedStatusesSet.has(n.notificationStatus));
-  }, [notifications]);
+  const fetchOnboardingData = async () => {
+    await dispatch(getDigitalAddresses()).unwrap();
+    const notifications = await dispatch(getReceivedNotifications({ size: 10 })).unwrap();
+    dispatch(setFirstSearch(true));
+    return notifications.resultsPage;
+  };
 
   useEffect(() => {
-    if (
-      location.pathname === '/' &&
-      isFreshLogin &&
-      !hasRequiredContacts(addresses) &&
-      !hasNotificationsToRead &&
-      IS_ONBOARDING_ENABLED
-    ) {
-      dispatch(setOnboardingSource(OnboardingSource.LOGIN));
-      navigate(routes.ONBOARDING, { replace: true });
-    }
-    dispatch(setIsFreshLogin(false));
+    fetchOnboardingData()
+      .then((notifications) => {
+        console.log('NOTIFICATIONS TO READ? ', hasNotificationsToRead(notifications));
+
+        const shouldRedirectToOnboarding =
+          location.pathname === '/' &&
+          isFreshLogin &&
+          !hasRequiredContacts(addresses) &&
+          !hasNotificationsToRead(notifications) &&
+          IS_ONBOARDING_ENABLED;
+
+        if (shouldRedirectToOnboarding) {
+          dispatch(setOnboardingSource(OnboardingSource.LOGIN));
+          navigate(routes.ONBOARDING, { replace: true });
+        }
+      })
+      .catch((error) => {
+        console.error('OnboardingGuard - Failed to fetch onboarding data', error);
+      })
+      .finally(() => {
+        dispatch(setIsFreshLogin(false));
+        setIsLoading(false);
+      });
   }, []);
 
   if (isLoading) {
