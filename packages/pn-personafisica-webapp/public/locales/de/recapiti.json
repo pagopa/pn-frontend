@@ -484,7 +484,7 @@
           "description": "Du erhältst eine Mitteilung an die Adresse:"
         },
         "verify-before-continue-title": "Überprüfe deine E-Mail",
-        "verify-before-continue-content": "Bevor du fortfährst, wähle E-Mail überprüfen und folge den Anweisungen."
+        "verify-before-continue-content": "Bevor du fortfährst, wähle <strong>E-Mail überprüfen</strong> und folge den Anweisungen."
       },
       "sms": {
         "readonly": {
@@ -508,7 +508,7 @@
           "description": "Du erhältst eine Mitteilung an die Nummer:"
         },
         "verify-before-continue-title": "Überprüfe deine Nummer",
-        "verify-before-continue-content": "Bevor du fortfährst, wähle Nummer überprüfen und folge den Anweisungen."
+        "verify-before-continue-content": "Bevor du fortfährst, wähle <strong>Nummer überprüfen</strong> und folge den Anweisungen."
       }
     },
     "notification-exit-dialog": {
