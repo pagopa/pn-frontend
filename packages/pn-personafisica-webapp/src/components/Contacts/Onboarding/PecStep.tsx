@@ -3,6 +3,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 
+import MailOutlineIcon from '@mui/icons-material/MailOutline';
 import {
   Checkbox,
   Chip,
@@ -452,6 +453,7 @@ const PecStep: React.FC<Props> = ({
         onBlur={formik.handleBlur}
         onSubmit={handleVerifyPec}
         footer={renderPecDisclaimerFooter()}
+        prefix={<MailOutlineIcon fontSize="small" color="disabled" />}
       />
     );
   };
