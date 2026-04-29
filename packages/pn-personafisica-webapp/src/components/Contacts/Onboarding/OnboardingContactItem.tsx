@@ -10,8 +10,15 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
+import { SxProps, Theme } from '@mui/material/styles';
 import { useIsMobile } from '@pagopa-pn/pn-commons';
 import { ButtonNaked } from '@pagopa/mui-italia';
+
+type CommonSlotProps = {
+  container?: {
+    sx?: SxProps<Theme>;
+  };
+};
 
 type EntryModeProps = {
   mode: 'entry';
@@ -32,6 +39,7 @@ type EntryModeProps = {
   };
   footer?: ReactNode;
   prefix?: string | ReactNode;
+  slotProps?: CommonSlotProps;
 };
 
 type ViewModeProps = {
@@ -46,6 +54,7 @@ type ViewModeProps = {
     label: string;
     onClick: () => void;
   };
+  slotProps?: CommonSlotProps;
 };
 
 type Props = EntryModeProps | ViewModeProps;
@@ -65,6 +74,7 @@ const EntryMode: React.FC<Omit<EntryModeProps, 'mode'>> = ({
   collapse,
   footer,
   prefix,
+  slotProps,
 }) => {
   const isMobile = useIsMobile();
 
@@ -81,7 +91,7 @@ const EntryMode: React.FC<Omit<EntryModeProps, 'mode'>> = ({
   );
 
   return (
-    <Stack>
+    <Stack sx={slotProps?.container?.sx}>
       {title && (
         <Typography fontSize="16px" fontWeight={700}>
           {title}
@@ -139,8 +149,9 @@ const ViewMode: React.FC<Omit<ViewModeProps, 'mode'>> = ({
   secondaryContent,
   icon,
   action,
+  slotProps,
 }) => (
-  <Stack>
+  <Stack sx={slotProps?.container?.sx}>
     {introText && (
       <Typography fontSize="16px" fontWeight={700} sx={{ mb: 1 }}>
         {introText}

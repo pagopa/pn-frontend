@@ -68,7 +68,7 @@ const ChooseDigitalDomicileStep: React.FC<Props> = ({
           {t('onboarding.digital-domicile.choice.description')}
         </Typography>
         <Button
-          fullWidth
+          fullWidth={isMobile}
           variant="contained"
           onClick={onSelectSend}
           data-testid="select-send-button"

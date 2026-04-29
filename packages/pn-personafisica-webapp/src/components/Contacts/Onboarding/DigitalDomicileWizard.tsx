@@ -113,23 +113,16 @@ const getInitialWizardSetup = (
 const shouldShowNextButton = ({
   isChoiceStep,
   isPecActivating,
-  isIoStep,
-  isIoEnabled,
   isContactStep,
   isSendMode,
   hasSendEmailValue,
 }: {
   isChoiceStep: boolean;
   isPecActivating: boolean;
-  isIoStep: boolean;
-  isIoEnabled: boolean;
   isContactStep: boolean;
   isSendMode: boolean;
   hasSendEmailValue: boolean;
-}) =>
-  (!isChoiceStep || isPecActivating) &&
-  !(isIoStep && isIoEnabled) &&
-  !(isContactStep && isSendMode && !hasSendEmailValue);
+}) => (!isChoiceStep || isPecActivating) && !(isContactStep && isSendMode && !hasSendEmailValue);
 
 const getWizardActionsSlotProps = ({
   isChoiceStep,
@@ -208,8 +201,6 @@ const DigitalDomicileWizard: React.FC = () => {
   const showNextButton = shouldShowNextButton({
     isChoiceStep,
     isPecActivating,
-    isIoStep,
-    isIoEnabled,
     isContactStep,
     isSendMode,
     hasSendEmailValue,
@@ -283,17 +274,16 @@ const DigitalDomicileWizard: React.FC = () => {
   };
 
   const getNextButtonLabel = () => {
-    if (isContactStep) {
+    if (isIoStep) {
+      return isIoEnabled
+        ? t('button.continue', { ns: 'common' })
+        : t('onboarding.digital-domicile.buttons.continue-without-io');
+    }
+    if (!isSummaryStep) {
       return t('button.continue', { ns: 'common' });
     }
-    if (isIoStep) {
-      return t('onboarding.digital-domicile.buttons.continue-without-io');
-    }
-    if (isSummaryStep) {
-      return t('onboarding.digital-domicile.buttons.confirm-activation');
-    }
 
-    return t('button.continue', { ns: 'common' });
+    return t('button.conferma', { ns: 'common' });
   };
 
   const handlePrevious = () => {
@@ -385,7 +375,9 @@ const DigitalDomicileWizard: React.FC = () => {
     }
 
     if (isIoStep) {
-      if (!isIoEnabled) {
+      if (isIoEnabled) {
+        trackDigitalDomicile(PFEventsType.SEND_ONBOARDING_IO_CONFIRMED);
+      } else {
         trackDigitalDomicile(PFEventsType.SEND_ONBOARDING_IO_DOWNLOAD_DECLINED);
       }
 
@@ -480,9 +472,7 @@ const DigitalDomicileWizard: React.FC = () => {
     ? t('onboarding.digital-domicile.feedback.pec.content')
     : t('onboarding.digital-domicile.feedback.send.content');
 
-  const contactStepLabel = isPecMode
-    ? t('onboarding.digital-domicile.steps.pec')
-    : t('onboarding.digital-domicile.steps.email');
+  const contactStepLabel = t('onboarding.digital-domicile.steps.generic-inbox');
 
   // Start Mixpanel
   const trackDigitalDomicile = useCallback(

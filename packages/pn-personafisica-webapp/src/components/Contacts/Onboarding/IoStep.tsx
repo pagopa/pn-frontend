@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import FileDownloadOutlinedIcon from '@mui/icons-material/FileDownloadOutlined';
 import { Box, Button, Stack, Typography } from '@mui/material';
 import { EventAction, appStateActions, useIsMobile } from '@pagopa-pn/pn-commons';
 import { ButtonNaked } from '@pagopa/mui-italia';
@@ -115,6 +116,7 @@ const IoStep: React.FC<Props> = ({ value, selectedOnboardingFlow, onChange, onCo
       });
 
       onChange(IOAllowedValues.ENABLED);
+      onContinue();
     } catch {
       // no-op
     }
@@ -122,12 +124,6 @@ const IoStep: React.FC<Props> = ({ value, selectedOnboardingFlow, onChange, onCo
 
   const handlePrimaryAction = () => {
     switch (status) {
-      case IOContactStatus.ENABLED:
-        PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ONBOARDING_IO_CONFIRMED, {
-          onboarding_selected_flow: selectedOnboardingFlow,
-        });
-        onContinue();
-        break;
       case IOContactStatus.DISABLED:
         void handleEnable();
         break;
@@ -167,27 +163,39 @@ const IoStep: React.FC<Props> = ({ value, selectedOnboardingFlow, onChange, onCo
         <Typography variant="body2" color="text.secondary" mb={2}>
           {t('onboarding.digital-domicile.io.description')}
         </Typography>
-
-        <Button
-          fullWidth
-          variant="contained"
-          onClick={handlePrimaryAction}
-          sx={{ mb: 1 }}
-          data-testid="io-primary-button"
-        >
-          {t(`${labelPrefixByStatus}.primary-cta`)}
-        </Button>
-
-        {status === IOContactStatus.UNAVAILABLE && (
-          <ButtonNaked
-            color="primary"
-            size="medium"
-            onClick={() => void handleRefreshState()}
-            data-testid="io-refresh-link"
-            sx={{ fontWeight: 700 }}
+        {status !== IOContactStatus.ENABLED && (
+          <Stack
+            direction={isMobile ? 'column' : 'row'}
+            spacing={2}
+            justifyContent={isMobile ? undefined : 'space-between'}
           >
-            {t(`${labelPrefixByStatus}.refresh-cta`)}
-          </ButtonNaked>
+            <Button
+              fullWidth={isMobile}
+              variant="contained"
+              onClick={handlePrimaryAction}
+              data-testid="io-primary-button"
+              startIcon={
+                status === IOContactStatus.UNAVAILABLE ? <FileDownloadOutlinedIcon /> : undefined
+              }
+            >
+              {t(`${labelPrefixByStatus}.primary-cta`)}
+            </Button>
+
+            {status === IOContactStatus.UNAVAILABLE && (
+              <ButtonNaked
+                color="primary"
+                size="medium"
+                onClick={() => void handleRefreshState()}
+                data-testid="io-refresh-link"
+                sx={{
+                  fontWeight: 700,
+                  alignSelf: isMobile ? 'flex-start' : undefined,
+                }}
+              >
+                {t(`${labelPrefixByStatus}.refresh-cta`)}
+              </ButtonNaked>
+            )}
+          </Stack>
         )}
       </Box>
       <OnboardingImage

@@ -356,7 +356,7 @@
           "cta": "Activate on a PEC"
         },
         "pec-activating": {
-          "title": "Digital domicile on PEC being activated",
+          "title": "Activation of the digital domicile via PEC is in progress",
           "description": "After activation, you will receive SEND notifications at your PEC address. This way you could avoid being sent a registered post with the relative additional costs.",
           "badge": "Activation in progress",
           "img-alt-text": ""
@@ -405,7 +405,7 @@
         "title": "Your PEC as a SEND digital domicile",
         "description": "You will receive legally-binding communications on your PEC, digitally only, and you can avoid being sent a registered post with the relative additional costs.",
         "label-choose-address": "Choose a PEC address:",
-        "label-summary": "PEC",
+        "label-summary": "PEC address",
         "input-label": "PEC address",
         "verify-cta": "Verify PEC",
         "disclaimer": "I accept that the indicated PEC address be used with priority over any PECs registered with an issuing institution or present in public registers.",
@@ -419,8 +419,8 @@
         "verify-before-continue-title": "Verify your PEC",
         "verify-before-continue-content": "Before proceeding, select <strong>Verify PEC</strong> and follow the instructions.",
         "pending": {
-          "title": "PEC address being validated",
-          "description": "After validation, you will receive legally-binding communications on the PEC you have chosen digitally only, and you will avoid being sent a registered post with the relative additional costs.",
+          "title": "The entered PEC address is being validated",
+          "description": "You will receive legally binding communications at the chosen PEC, digitally only, and you will be able to avoid the delivery of registered mail with the relative additional costs. After validation, you can modify it in the \"Your contact details\" section.",
           "badge": "Activation in progress"
         }
       },
@@ -436,14 +436,12 @@
       },
       "steps": {
         "choice": "Choose a digital domicile",
-        "pec": "Enter your PEC",
-        "email": "Associate an email address",
+        "generic-inbox": "Associate a mailbox",
         "io": "Activate notices on IO",
         "summary": "Check the chosen options"
       },
       "buttons": {
-        "continue-without-io": "Continue without the IO app",
-        "confirm-activation": "Confirm activation"
+        "continue-without-io": "Continue without the IO app"
       }
     },
     "io-activation": {
@@ -483,7 +481,7 @@
           "description": "You will receive a notice at the address:"
         },
         "verify-before-continue-title": "Verify your email",
-        "verify-before-continue-content": "Before proceeding, select Verify email and follow the instructions."
+        "verify-before-continue-content": "Before proceeding, select <strong>Verify email</strong> and follow the instructions."
       },
       "sms": {
         "readonly": {
@@ -507,7 +505,7 @@
           "description": "You will receive a notice at the number:"
         },
         "verify-before-continue-title": "Verify your number",
-        "verify-before-continue-content": "Before proceeding, select Verify number and follow the instructions."
+        "verify-before-continue-content": "Before proceeding, select <strong>Verify number</strong> and follow the instructions."
       }
     },
     "notification-exit-dialog": {

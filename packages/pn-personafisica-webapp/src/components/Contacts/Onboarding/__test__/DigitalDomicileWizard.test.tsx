@@ -146,6 +146,7 @@ describe('DigitalDomicileWizard', () => {
     });
 
     fireEvent.click(getByRole('button', { name: `${labelPrefix}.choice.cta` }));
+
     expect(queryByRole('button', { name: 'button.continue' })).not.toBeInTheDocument();
   });
 
@@ -272,7 +273,7 @@ describe('DigitalDomicileWizard', () => {
     await act(async () => {
       fireEvent.click(
         getByRole('button', {
-          name: `${labelPrefix}.buttons.confirm-activation`,
+          name: 'button.conferma',
         })
       );
     });
@@ -335,10 +336,13 @@ describe('DigitalDomicileWizard', () => {
       });
     });
 
-    expect(await findByText(`${labelPrefix}.pec.pending.title`)).toBeInTheDocument();
-    expect(await findByText(`${labelPrefix}.pec.pending.description`)).toBeInTheDocument();
-    expect(await findByText(`${labelPrefix}.pec.pending.badge`)).toBeInTheDocument();
-    expect(queryByText(mockPec)).not.toBeInTheDocument();
+    expect(await findByText(`${labelPrefix}.pec.title`)).toBeInTheDocument();
+    expect(await findByText(`${labelPrefix}.pec.description`)).toBeInTheDocument();
+    expect(queryByText(`${labelPrefix}.pec.pending.title`)).not.toBeInTheDocument();
+    expect(queryByText(`${labelPrefix}.pec.pending.description`)).not.toBeInTheDocument();
+    expect(queryByText(`${labelPrefix}.pec.pending.badge`)).not.toBeInTheDocument();
+    expect(await findByText(`${labelPrefix}.pec.label-summary`)).toBeInTheDocument();
+    expect(await findByText(mockPec)).toBeInTheDocument();
 
     await act(async () => {
       fireEvent.click(getByRole('button', { name: 'button.continue' }));
@@ -362,7 +366,7 @@ describe('DigitalDomicileWizard', () => {
     await act(async () => {
       fireEvent.click(
         getByRole('button', {
-          name: `${labelPrefix}.buttons.confirm-activation`,
+          name: 'button.conferma',
         })
       );
     });

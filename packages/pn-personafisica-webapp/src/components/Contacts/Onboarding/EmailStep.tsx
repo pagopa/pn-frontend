@@ -235,7 +235,7 @@ const EmailStep: React.FC<Props> = ({ value, alreadySet, onChange, onVerified })
               width: '100%',
             },
             leadingEditIcon: {
-              sx: { color: 'text.secondary' },
+              sx: { color: 'disabled' },
               fontSize: 'small',
             },
           }}
@@ -255,6 +255,7 @@ const EmailStep: React.FC<Props> = ({ value, alreadySet, onChange, onVerified })
           onChange={handleEmailFieldChange}
           onBlur={formik.handleBlur}
           onSubmit={handleVerifyEmail}
+          prefix={<MailOutlineIcon fontSize="small" color="disabled" />}
         />
       );
     }

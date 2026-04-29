@@ -77,6 +77,8 @@ const CourtesyContactHandler: React.FC<Props> = ({
     },
   };
 
+  const ChannelTypeIcon = channelType === ChannelType.EMAIL ? EmailOutlined : PhoneOutlined;
+
   const onEditButtonClick = () => {
     const editEvent =
       channelType === ChannelType.EMAIL
@@ -140,13 +142,7 @@ const CourtesyContactHandler: React.FC<Props> = ({
         collapse={
           onCollapse ? { onClick: onCollapse, label: labels.insert.collapseLabel } : undefined
         }
-        prefix={
-          channelType === ChannelType.SMS ? (
-            <PhoneOutlined fontSize="small" sx={{ color: 'text.secondary' }} />
-          ) : (
-            <EmailOutlined fontSize="small" sx={{ color: 'text.secondary' }} />
-          )
-        }
+        prefix={<ChannelTypeIcon fontSize="small" color="disabled" />}
       />
     );
   }
@@ -158,7 +154,7 @@ const CourtesyContactHandler: React.FC<Props> = ({
         introText={labels.readonly.title}
         description={labels.readonly.description}
         value={contactState.value}
-        icon={<EmailOutlined color="disabled" fontSize="small" aria-hidden="true" />}
+        icon={<ChannelTypeIcon color="disabled" fontSize="small" aria-hidden="true" />}
       />
     );
   }
@@ -190,7 +186,7 @@ const CourtesyContactHandler: React.FC<Props> = ({
           onEditConfirmCallback={onEditConfirmClick}
           slots={{
             label: () => <></>,
-            leadingEditIcon: channelType === ChannelType.EMAIL ? EmailOutlined : PhoneOutlined,
+            leadingEditIcon: ChannelTypeIcon,
           }}
           slotsProps={{
             textField: {
