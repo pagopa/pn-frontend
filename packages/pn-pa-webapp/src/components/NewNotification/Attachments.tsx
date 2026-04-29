@@ -41,6 +41,7 @@ function NameFocusHelperText() {
 type AttachmentBoxProps = {
   id: string;
   title: string;
+  maxAttachmentsLabel?: string;
   sx?: SxProps;
   canBeDeleted?: boolean;
   onDelete?: () => void;
@@ -63,6 +64,7 @@ const MAX_NUMBER_OF_ATTACHMENTS = 10;
 const AttachmentBox: React.FC<AttachmentBoxProps> = ({
   id,
   title,
+  maxAttachmentsLabel,
   sx,
   canBeDeleted = false,
   onDelete,
@@ -93,6 +95,11 @@ const AttachmentBox: React.FC<AttachmentBoxProps> = ({
           </ButtonNaked>
         )}
       </Box>
+      {maxAttachmentsLabel && (
+        <Typography variant="body2" mt={1}>
+          {maxAttachmentsLabel}
+        </Typography>
+      )}
       <FormControl fullWidth>
         <TextField
           id={`${id}.name`}
@@ -338,9 +345,6 @@ const Attachments: React.FC<Props> = ({
         previousStepLabel={getPreviousStepLabel()}
         previousStepOnClick={() => handlePreviousStep()}
       >
-        <Typography variant="body2">
-          {t('max-attachments', { maxNumber: MAX_NUMBER_OF_ATTACHMENTS })}
-        </Typography>
         {hasAdditionalLang && (
           <Alert severity="info" sx={{ mt: 2, mb: 2 }} data-testid="bannerAdditionalLanguages">
             {t('banner-additional-languages')}
@@ -355,6 +359,9 @@ const Attachments: React.FC<Props> = ({
               key={d.id}
               id={d.id}
               title={i === 0 ? `${t('act-attachment')}` : `${t('doc-attachment')}`}
+              maxAttachmentsLabel={
+                i === 0 ? t('max-attachments', { maxNumber: MAX_NUMBER_OF_ATTACHMENTS }) : undefined
+              }
               canBeDeleted={i > 0}
               onDelete={() => deleteDocumentHandler(i)}
               fieldLabel={`${t('doc-name')}*`}
