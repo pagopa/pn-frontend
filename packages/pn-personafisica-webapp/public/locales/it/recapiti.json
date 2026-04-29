@@ -443,8 +443,7 @@
         "summary": "Controlla le opzioni scelte"
       },
       "buttons": {
-        "continue-without-io": "Continua senza l’app IO",
-        "confirm-activation": "Conferma attivazione"
+        "continue-without-io": "Continua senza l’app IO"
       }
     },
     "io-activation": {

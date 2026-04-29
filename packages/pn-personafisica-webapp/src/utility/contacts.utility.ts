@@ -202,3 +202,40 @@ export const hasCourtesyContacts = (addresses: Array<DigitalAddress>): boolean =
 
   return hasEmail || hasIo || hasSMS;
 };
+
+/**
+ * Groups a flat list of digital addresses into categorized collections,
+ * separating them by type (legal/courtesy) and sender (default/special).
+ * @param digitalAddresses - The user addresses
+ */
+export const groupDigitalAddresses = (digitalAddresses: Array<DigitalAddress>) => {
+  const initialValue = {
+    addresses: digitalAddresses,
+    legalAddresses: [] as Array<DigitalAddress>,
+    courtesyAddresses: [] as Array<DigitalAddress>,
+    specialAddresses: [] as Array<DigitalAddress>,
+  } as SelectedAddresses;
+
+  /* eslint-disable functional/immutable-data */
+  for (const channelType of Object.values(ChannelType)) {
+    initialValue[`default${channelType}Address`] = undefined;
+    initialValue[`special${channelType}Addresses`] = [];
+  }
+
+  return digitalAddresses.reduce((obj, addr) => {
+    if (addr.addressType === AddressType.LEGAL) {
+      obj.legalAddresses.push(addr);
+    }
+    if (addr.addressType === AddressType.COURTESY) {
+      obj.courtesyAddresses.push(addr);
+    }
+    if (addr.senderId === 'default') {
+      obj[`default${addr.channelType}Address`] = addr;
+    }
+    if (addr.senderId !== 'default') {
+      obj[`special${addr.channelType}Addresses`].push(addr);
+      obj.specialAddresses.push(addr);
+    }
+    return obj;
+  }, initialValue);
+};
