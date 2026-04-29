@@ -164,30 +164,38 @@ const IoStep: React.FC<Props> = ({ value, selectedOnboardingFlow, onChange, onCo
           {t('onboarding.digital-domicile.io.description')}
         </Typography>
         {status !== IOContactStatus.ENABLED && (
-          <Button
-            fullWidth={isMobile}
-            variant="contained"
-            onClick={handlePrimaryAction}
-            sx={{ mb: 1 }}
-            data-testid="io-primary-button"
-            startIcon={
-              status === IOContactStatus.UNAVAILABLE ? <FileDownloadOutlinedIcon /> : undefined
-            }
+          <Stack
+            direction={isMobile ? 'column' : 'row'}
+            spacing={2}
+            justifyContent={isMobile ? undefined : 'space-between'}
           >
-            {t(`${labelPrefixByStatus}.primary-cta`)}
-          </Button>
-        )}
+            <Button
+              fullWidth={isMobile}
+              variant="contained"
+              onClick={handlePrimaryAction}
+              data-testid="io-primary-button"
+              startIcon={
+                status === IOContactStatus.UNAVAILABLE ? <FileDownloadOutlinedIcon /> : undefined
+              }
+            >
+              {t(`${labelPrefixByStatus}.primary-cta`)}
+            </Button>
 
-        {status === IOContactStatus.UNAVAILABLE && (
-          <ButtonNaked
-            color="primary"
-            size="medium"
-            onClick={() => void handleRefreshState()}
-            data-testid="io-refresh-link"
-            sx={{ fontWeight: 700, display: 'block' }}
-          >
-            {t(`${labelPrefixByStatus}.refresh-cta`)}
-          </ButtonNaked>
+            {status === IOContactStatus.UNAVAILABLE && (
+              <ButtonNaked
+                color="primary"
+                size="medium"
+                onClick={() => void handleRefreshState()}
+                data-testid="io-refresh-link"
+                sx={{
+                  fontWeight: 700,
+                  alignSelf: isMobile ? 'flex-start' : undefined,
+                }}
+              >
+                {t(`${labelPrefixByStatus}.refresh-cta`)}
+              </ButtonNaked>
+            )}
+          </Stack>
         )}
       </Box>
       <OnboardingImage
