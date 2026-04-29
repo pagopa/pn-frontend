@@ -481,7 +481,7 @@
           "description": "You will receive a notice at the address:"
         },
         "verify-before-continue-title": "Verify your email",
-        "verify-before-continue-content": "Before proceeding, select Verify email and follow the instructions."
+        "verify-before-continue-content": "Before proceeding, select <strong>Verify email</strong> and follow the instructions."
       },
       "sms": {
         "readonly": {
@@ -505,7 +505,7 @@
           "description": "You will receive a notice at the number:"
         },
         "verify-before-continue-title": "Verify your number",
-        "verify-before-continue-content": "Before proceeding, select Verify number and follow the instructions."
+        "verify-before-continue-content": "Before proceeding, select <strong>Verify number</strong> and follow the instructions."
       }
     },
     "notification-exit-dialog": {

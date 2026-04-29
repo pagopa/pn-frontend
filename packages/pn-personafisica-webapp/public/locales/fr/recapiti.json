@@ -481,7 +481,7 @@
           "description": "Tu recevras un avis à l’adresse :"
         },
         "verify-before-continue-title": "Vérifie ton e-mail",
-        "verify-before-continue-content": "Avant de continuer, sélectionne Vérifier l’e-mail et suis les instructions."
+        "verify-before-continue-content": "Avant de continuer, sélectionne <strong>Vérifier l’e-mail</strong> et suis les instructions."
       },
       "sms": {
         "readonly": {
@@ -505,7 +505,7 @@
           "description": "Tu recevras un avis au numéro :"
         },
         "verify-before-continue-title": "Vérifie ton numéro",
-        "verify-before-continue-content": "Avant de continuer, sélectionne Vérifier le numéro et suis les instructions."
+        "verify-before-continue-content": "Avant de continuer, sélectionne <strong>Vérifier le numéro</strong> et suis les instructions."
       }
     },
     "notification-exit-dialog": {
