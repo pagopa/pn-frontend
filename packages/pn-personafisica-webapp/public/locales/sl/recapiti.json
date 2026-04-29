@@ -437,8 +437,6 @@
       "steps": {
         "choice": "Izberi digitalni naslov",
         "generic-inbox": "Povežite poštni predal",
-        "pec": "Vnesi svoj PEC",
-        "email": "Poveži e-poštni naslov",
         "io": "Aktiviraj obvestila v IO",
         "summary": "Preveri izbrane možnosti"
       },

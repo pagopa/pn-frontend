@@ -437,8 +437,6 @@
       "steps": {
         "choice": "Choose a digital domicile",
         "generic-inbox": "Associate a mailbox",
-        "pec": "Enter your PEC",
-        "email": "Associate an email address",
         "io": "Activate notices on IO",
         "summary": "Check the chosen options"
       },

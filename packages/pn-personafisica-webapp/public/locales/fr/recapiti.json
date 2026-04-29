@@ -437,8 +437,6 @@
       "steps": {
         "choice": "Choisis un domicile numérique",
         "generic-inbox": "Associer une boîte de réception",
-        "pec": "Saisis ta PEC",
-        "email": "Associe une adresse e-mail",
         "io": "Active les avis sur IO",
         "summary": "Vérifie les options choisies"
       },

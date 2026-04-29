@@ -437,8 +437,6 @@
       "steps": {
         "choice": "Wähle ein digitales Domizil",
         "generic-inbox": "Ein Postfach verknüpfen",
-        "pec": "Gib deine PEC ein",
-        "email": "Verknüpfe eine E-Mail-Adresse",
         "io": "Aktiviere Benachrichtigungen auf IO",
         "summary": "Überprüfe die gewählten Optionen"
       },
