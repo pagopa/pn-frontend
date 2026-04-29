@@ -113,23 +113,16 @@ const getInitialWizardSetup = (
 const shouldShowNextButton = ({
   isChoiceStep,
   isPecActivating,
-  isIoStep,
-  isIoEnabled,
   isContactStep,
   isSendMode,
   hasSendEmailValue,
 }: {
   isChoiceStep: boolean;
   isPecActivating: boolean;
-  isIoStep: boolean;
-  isIoEnabled: boolean;
   isContactStep: boolean;
   isSendMode: boolean;
   hasSendEmailValue: boolean;
-}) =>
-  (!isChoiceStep || isPecActivating) &&
-  !(isIoStep && isIoEnabled) &&
-  !(isContactStep && isSendMode && !hasSendEmailValue);
+}) => (!isChoiceStep || isPecActivating) && !(isContactStep && isSendMode && !hasSendEmailValue);
 
 const getWizardActionsSlotProps = ({
   isChoiceStep,
@@ -208,8 +201,6 @@ const DigitalDomicileWizard: React.FC = () => {
   const showNextButton = shouldShowNextButton({
     isChoiceStep,
     isPecActivating,
-    isIoStep,
-    isIoEnabled,
     isContactStep,
     isSendMode,
     hasSendEmailValue,
@@ -284,7 +275,9 @@ const DigitalDomicileWizard: React.FC = () => {
 
   const getNextButtonLabel = () => {
     if (isIoStep) {
-      return t('onboarding.digital-domicile.buttons.continue-without-io');
+      return isIoEnabled
+        ? t('button.continue', { ns: 'common' })
+        : t('onboarding.digital-domicile.buttons.continue-without-io');
     }
     if (!isSummaryStep) {
       return t('button.continue', { ns: 'common' });
@@ -382,7 +375,9 @@ const DigitalDomicileWizard: React.FC = () => {
     }
 
     if (isIoStep) {
-      if (!isIoEnabled) {
+      if (isIoEnabled) {
+        trackDigitalDomicile(PFEventsType.SEND_ONBOARDING_IO_CONFIRMED);
+      } else {
         trackDigitalDomicile(PFEventsType.SEND_ONBOARDING_IO_DOWNLOAD_DECLINED);
       }
 
