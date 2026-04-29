@@ -135,7 +135,7 @@ const getWizardActionsSlotProps = ({
 }) =>
   isChoiceStep && !isPecActivating
     ? { sx: { display: 'none' } }
-    : { justifyContent: showNextButton ? 'space-between' : 'center' };
+    : { justifyContent: showNextButton ? 'space-between' : 'flex-start' };
 
 const DigitalDomicileWizard: React.FC = () => {
   const { t } = useTranslation(['recapiti', 'common']);
