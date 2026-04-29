@@ -142,7 +142,7 @@ const CourtesyContactHandler: React.FC<Props> = ({
         collapse={
           onCollapse ? { onClick: onCollapse, label: labels.insert.collapseLabel } : undefined
         }
-        prefix={<ChannelTypeIcon fontSize="small" sx={{ color: 'text.secondary' }} />}
+        prefix={<ChannelTypeIcon fontSize="small" color="disabled" />}
       />
     );
   }
