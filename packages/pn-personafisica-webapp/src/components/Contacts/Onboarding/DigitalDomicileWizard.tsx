@@ -283,17 +283,14 @@ const DigitalDomicileWizard: React.FC = () => {
   };
 
   const getNextButtonLabel = () => {
-    if (isContactStep) {
-      return t('button.continue', { ns: 'common' });
-    }
     if (isIoStep) {
       return t('onboarding.digital-domicile.buttons.continue-without-io');
     }
-    if (isSummaryStep) {
-      return t('onboarding.digital-domicile.buttons.confirm-activation');
+    if (!isSummaryStep) {
+      return t('button.continue', { ns: 'common' });
     }
 
-    return t('button.continue', { ns: 'common' });
+    return t('button.conferma', { ns: 'common' });
   };
 
   const handlePrevious = () => {
