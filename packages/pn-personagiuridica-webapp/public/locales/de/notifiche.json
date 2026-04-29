@@ -469,11 +469,11 @@
     },
     "enable-sercq": {
       "message": {
-        "default": "Aktiviere eine digitale Adresse, um künftige Zustellungen nur noch digital zu erhalten.",
-        "analog": "Aktivieren Sie SEND als digitale Adresse, um sich Kosten wie diese zu ersparen.",
-        "external-pec": "Aktiviere eine digitale Adresse, um zu wählen, wo du deine SEND-Zustellungen erhalten möchtest."
+        "default": "Aktivieren Sie ein digitales Domizil, um zukünftige Benachrichtigungen nur noch digital zu erhalten.",
+        "analog": "Aktivieren Sie ein digitales Domizil, um Kosten wie diese zu sparen.",
+        "external-pec": "Aktivieren Sie ein digitales Domizil, um auszuwählen, wo Sie SEND-Benachrichtigungen erhalten möchten."
       },
-      "cta": "Digitale Adresse aktivieren"
+      "cta": "Digitales Domizil aktivieren"
     }
   },
   "notification-alert": {

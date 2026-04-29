@@ -469,11 +469,11 @@
     },
     "enable-sercq": {
       "message": {
-        "default": "Activate a digital address to receive future notifications digitally only.",
-        "analog": "Activate SEND as your digital address to save on costs like this.",
-        "external-pec": "Activate a digital address to choose where to receive your SEND notifications."
+        "default": "Activate a digital domicile to receive future notifications only digitally.",
+        "analog": "Activate a digital domicile to save on costs like this one.",
+        "external-pec": "Activate a digital domicile to choose where to receive SEND notifications."
       },
-      "cta": "Activate digital address"
+      "cta": "Activate digital domicile"
     }
   },
   "notification-alert": {
