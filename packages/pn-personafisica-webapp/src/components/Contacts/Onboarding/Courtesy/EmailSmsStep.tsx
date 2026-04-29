@@ -1,6 +1,6 @@
 import { useFormik } from 'formik';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { useTranslation } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 
 import { Divider, Stack, Typography } from '@mui/material';
@@ -92,7 +92,6 @@ const EmailSmsStep = ({
     open: false,
     channel: null,
   });
-
 
   const currentAddress = useRef<{ channelType: ChannelType; value: string }>({
     channelType: ChannelType.EMAIL,
@@ -346,9 +345,14 @@ const EmailSmsStep = ({
         }}
       >
         <Typography variant="body2">
-          {verifyModal.channel === ChannelType.EMAIL
-            ? t('onboarding.courtesy.email.verify-before-continue-content')
-            : t('onboarding.courtesy.sms.verify-before-continue-content')}
+          <Trans
+            i18nKey={
+              verifyModal.channel === ChannelType.EMAIL
+                ? t('onboarding.courtesy.email.verify-before-continue-content')
+                : t('onboarding.courtesy.sms.verify-before-continue-content')
+            }
+            ns="recapiti"
+          />
         </Typography>
       </ConfirmationModal>
     </Stack>

@@ -437,8 +437,6 @@
       "steps": {
         "choice": "Izberi digitalni naslov",
         "generic-inbox": "Povežite poštni predal",
-        "pec": "Vnesi svoj PEC",
-        "email": "Poveži e-poštni naslov",
         "io": "Aktiviraj obvestila v IO",
         "summary": "Preveri izbrane možnosti"
       },
@@ -483,7 +481,7 @@
           "description": "Obvestilo boš prejel na naslov:"
         },
         "verify-before-continue-title": "Preveri svojo e-pošto",
-        "verify-before-continue-content": "Preden nadaljuješ, izberi Preveri e-pošto in sledi navodilom."
+        "verify-before-continue-content": "Preden nadaljuješ, izberi <strong>Preveri e-pošto</strong> in sledi navodilom."
       },
       "sms": {
         "readonly": {
@@ -507,7 +505,7 @@
           "description": "Obvestilo boš prejel na številko:"
         },
         "verify-before-continue-title": "Preveri svojo številko",
-        "verify-before-continue-content": "Preden nadaljuješ, izberi Preveri številko in sledi navodilom."
+        "verify-before-continue-content": "Preden nadaljuješ, izberi <strong>Preveri številko</strong> in sledi navodilom."
       }
     },
     "notification-exit-dialog": {
