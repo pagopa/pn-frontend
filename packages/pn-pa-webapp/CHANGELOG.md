@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.23.0-RC.2](https://github.com/pagopa/pn-frontend/compare/v2.22.3...v2.23.0-RC.2) (2026-04-29)
+
+
+### Bug Fixes
+
+* **PN-17961:** fixed group overflow in the notifications page on mobile devices ([#1843](https://github.com/pagopa/pn-frontend/issues/1843)) ([850be2d](https://github.com/pagopa/pn-frontend/commit/850be2deeb83e562488a44bfe80258b81f473df0))
+
+
+
+
+
 ## [2.22.3](https://github.com/pagopa/pn-frontend/compare/v2.22.3-RC.0...v2.22.3) (2026-04-24)
 
 **Note:** Version bump only for package @pagopa-pn/pn-pa-webapp

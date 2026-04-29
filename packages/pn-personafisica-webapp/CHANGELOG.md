@@ -3,6 +3,25 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.23.0-RC.2](https://github.com/pagopa/pn-frontend/compare/v2.22.3...v2.23.0-RC.2) (2026-04-29)
+
+
+### Bug Fixes
+
+* **PN-19617, PN-19659:** move notification and address dispatching inside OnboardingGuard ([#1854](https://github.com/pagopa/pn-frontend/issues/1854)) ([d726e0f](https://github.com/pagopa/pn-frontend/commit/d726e0f28ce746c8cbe047d2e64d8b52ccccfd5c))
+* **PN-19626:** show courtesy banner even if email is already set ([#1849](https://github.com/pagopa/pn-frontend/issues/1849)) ([02afc8d](https://github.com/pagopa/pn-frontend/commit/02afc8d004ca9794159a9810462e7ea19ef5fcfc))
+* **PN-19628, PN-19639:** replace IOContactStatus with IOAllowedValues in contacts utility and tests ([#1848](https://github.com/pagopa/pn-frontend/issues/1848)) ([99b80f5](https://github.com/pagopa/pn-frontend/commit/99b80f59444477445ef2ab5f61892bd3b040e375))
+* **PN-19645, PN-19646:** refine onboarding CTA layout on desktop and IO activation flow ([#1855](https://github.com/pagopa/pn-frontend/issues/1855)) ([97c2df6](https://github.com/pagopa/pn-frontend/commit/97c2df630832de82733bec716b0e3b7150146281))
+* **PN-19648, PN-19675:** graphical fixes on onboarding summary step ([#1852](https://github.com/pagopa/pn-frontend/issues/1852)) ([1b89d32](https://github.com/pagopa/pn-frontend/commit/1b89d32cfbc67d2c3defeb2d930eb78b53dbb84f))
+* **PN-19655, PN-19656, PN-19676:** show PEC value in onboarding PecStep when available after insert and fix copy ([#1851](https://github.com/pagopa/pn-frontend/issues/1851)) ([d7046ee](https://github.com/pagopa/pn-frontend/commit/d7046ee1bc18c3437e0593a0aba1deb8619b8d42))
+* **PN-19655:** use shared stepper label for email and PEC steps in digital domicile onboarding ([#1857](https://github.com/pagopa/pn-frontend/issues/1857)) ([6317a12](https://github.com/pagopa/pn-frontend/commit/6317a12ebfd644ed685e51b67487f6aadb896ae5))
+* **PN-19690:** use correct channel type icon on readonly mode of courtesy onboarding wizard ([#1856](https://github.com/pagopa/pn-frontend/issues/1856)) ([8a3f3bb](https://github.com/pagopa/pn-frontend/commit/8a3f3bb22c32331bace2d181a4dfc95be27967c0))
+* **PN-19708:** bold verify email and phone copy in courtesy onboarding modal ([#1858](https://github.com/pagopa/pn-frontend/issues/1858)) ([deb11ff](https://github.com/pagopa/pn-frontend/commit/deb11ffcbe2df74db02428d285cd2f87f85350d4))
+
+
+
+
+
 ## [2.22.3](https://github.com/pagopa/pn-frontend/compare/v2.22.3-RC.0...v2.22.3) (2026-04-24)
 
 **Note:** Version bump only for package @pagopa-pn/pn-personafisica-webapp
