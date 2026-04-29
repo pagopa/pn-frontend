@@ -3,16 +3,13 @@ import { Suspense } from 'react';
 import { vi } from 'vitest';
 
 import { ThemeProvider } from '@mui/material';
-import { formatToTimezoneString, tenYearsAgo, today } from '@pagopa-pn/pn-commons';
 import { theme } from '@pagopa/mui-italia';
 
 import App from '../App';
 import { currentStatusDTO } from '../__mocks__/AppStatus.mock';
 import { userResponse } from '../__mocks__/Auth.mock';
 import { tosPrivacyConsentMock } from '../__mocks__/Consents.mock';
-import { digitalAddresses } from '../__mocks__/Contacts.mock';
 import { mandatesByDelegate } from '../__mocks__/Delegations.mock';
-import { notificationsDTO } from '../__mocks__/Notifications.mock';
 import { apiClient, authClient } from '../api/apiClients';
 import { LoginProvider } from '../models/User';
 import { LOGOUT, LOGOUT_OI } from '../navigation/routes.const';
@@ -103,15 +100,7 @@ describe('App', async () => {
   it('render component - user logged in', async () => {
     mock.onGet(/\/bff\/v2\/tos-privacy.*/).reply(200, tosPrivacyConsentMock(true, true));
     mock.onGet('/bff/v1/downtime/status').reply(200, currentStatusDTO);
-    mock.onGet('/bff/v1/addresses').reply(200, digitalAddresses);
     mock.onGet('/bff/v1/mandate/delegate').reply(200, mandatesByDelegate);
-    mock
-      .onGet(
-        `/bff/v1/notifications/received?startDate=${encodeURIComponent(
-          formatToTimezoneString(tenYearsAgo)
-        )}&endDate=${encodeURIComponent(formatToTimezoneString(today))}&size=10`
-      )
-      .reply(200, notificationsDTO);
     await act(async () => {
       result = render(<Component />, { preloadedState: reduxInitialState });
     });
@@ -122,21 +111,13 @@ describe('App', async () => {
     const sideMenu = result.queryByTestId('side-menu');
     expect(sideMenu).toBeInTheDocument();
     expect(result.container).toHaveTextContent('Generic Page');
-    expect(mock.history.get).toHaveLength(5);
+    expect(mock.history.get).toHaveLength(4);
   });
 
   it('check header actions - user logged in', async () => {
     mock.onGet(/\/bff\/v2\/tos-privacy.*/).reply(200, tosPrivacyConsentMock(true, true));
     mock.onGet('/bff/v1/downtime/status').reply(200, currentStatusDTO);
-    mock.onGet('/bff/v1/addresses').reply(200, digitalAddresses);
     mock.onGet('/bff/v1/mandate/delegate').reply(200, mandatesByDelegate);
-    mock
-      .onGet(
-        `/bff/v1/notifications/received?startDate=${encodeURIComponent(
-          formatToTimezoneString(tenYearsAgo)
-        )}&endDate=${encodeURIComponent(formatToTimezoneString(today))}&size=10`
-      )
-      .reply(200, notificationsDTO);
     mockAuth.onPost('/logout').reply(200);
 
     await act(async () => {
@@ -178,15 +159,7 @@ describe('App', async () => {
   it('redirect to One Identity login portal on logout', async () => {
     mock.onGet(/\/bff\/v2\/tos-privacy.*/).reply(200, tosPrivacyConsentMock(true, true));
     mock.onGet('/bff/v1/downtime/status').reply(200, currentStatusDTO);
-    mock.onGet('/bff/v1/addresses').reply(200, digitalAddresses);
     mock.onGet('/bff/v1/mandate/delegate').reply(200, mandatesByDelegate);
-    mock
-      .onGet(
-        `/bff/v1/notifications/received?startDate=${encodeURIComponent(
-          formatToTimezoneString(tenYearsAgo)
-        )}&endDate=${encodeURIComponent(formatToTimezoneString(today))}&size=10`
-      )
-      .reply(200, notificationsDTO);
     mockAuth.onPost('/logout').reply(200);
 
     await act(async () => {
@@ -236,36 +209,22 @@ describe('App', async () => {
   it('sidemenu not included if error in API call to fetch TOS and Privacy', async () => {
     mock.onGet(/\/bff\/v2\/tos-privacy.*/).reply(500);
     mock.onGet('/bff/v1/downtime/status').reply(200, currentStatusDTO);
-    mock.onGet('/bff/v1/addresses').reply(200, digitalAddresses);
     mock.onGet('/bff/v1/mandate/delegate').reply(200, mandatesByDelegate);
-    mock
-      .onGet(
-        `/bff/v1/notifications/received?startDate=${encodeURIComponent(
-          formatToTimezoneString(tenYearsAgo)
-        )}&endDate=${encodeURIComponent(formatToTimezoneString(today))}&size=10`
-      )
-      .reply(200, notificationsDTO);
+
     await act(async () => {
       result = render(<Component />, { preloadedState: reduxInitialState });
     });
     const sideMenu = result.queryByTestId('side-menu');
     expect(sideMenu).not.toBeInTheDocument();
     expect(result.container).not.toHaveTextContent('Generic Page');
-    expect(mock.history.get).toHaveLength(5);
+    expect(mock.history.get).toHaveLength(3);
   });
 
   it('sidemenu not included if user has not accepted the TOS and PRIVACY', async () => {
     mock.onGet(/\/bff\/v2\/tos-privacy.*/).reply(200, tosPrivacyConsentMock(false, false));
     mock.onGet('/bff/v1/downtime/status').reply(200, currentStatusDTO);
-    mock.onGet('/bff/v1/addresses').reply(200, digitalAddresses);
     mock.onGet('/bff/v1/mandate/delegate').reply(200, mandatesByDelegate);
-    mock
-      .onGet(
-        `/bff/v1/notifications/received?startDate=${encodeURIComponent(
-          formatToTimezoneString(tenYearsAgo)
-        )}&endDate=${encodeURIComponent(formatToTimezoneString(today))}&size=10`
-      )
-      .reply(200, notificationsDTO);
+
     await act(async () => {
       result = render(<Component />, { preloadedState: reduxInitialState });
     });
@@ -274,21 +233,14 @@ describe('App', async () => {
     const tosPage = result.queryByTestId('tos-acceptance-page');
     expect(tosPage).toBeInTheDocument();
     expect(result.container).not.toHaveTextContent('Generic Page');
-    expect(mock.history.get).toHaveLength(5);
+    expect(mock.history.get).toHaveLength(3);
   });
 
   it('check header actions - user has not accepted the TOS and PRIVACY', async () => {
     mock.onGet(/\/bff\/v2\/tos-privacy.*/).reply(200, tosPrivacyConsentMock(false, false));
     mock.onGet('/bff/v1/downtime/status').reply(200, currentStatusDTO);
-    mock.onGet('/bff/v1/addresses').reply(200, digitalAddresses);
     mock.onGet('/bff/v1/mandate/delegate').reply(200, mandatesByDelegate);
-    mock
-      .onGet(
-        `/bff/v1/notifications/received?startDate=${encodeURIComponent(
-          formatToTimezoneString(tenYearsAgo)
-        )}&endDate=${encodeURIComponent(formatToTimezoneString(today))}&size=10`
-      )
-      .reply(200, notificationsDTO);
+
     await act(async () => {
       render(<Component />, { preloadedState: reduxInitialState });
     });
@@ -306,15 +258,8 @@ describe('App', async () => {
   it('sidemenu items if there are delegators', async () => {
     mock.onGet(/\/bff\/v2\/tos-privacy.*/).reply(200, tosPrivacyConsentMock(true, true));
     mock.onGet('/bff/v1/downtime/status').reply(200, currentStatusDTO);
-    mock.onGet('/bff/v1/addresses').reply(200, digitalAddresses);
     mock.onGet('/bff/v1/mandate/delegate').reply(200, mandatesByDelegate);
-    mock
-      .onGet(
-        `/bff/v1/notifications/received?startDate=${encodeURIComponent(
-          formatToTimezoneString(tenYearsAgo)
-        )}&endDate=${encodeURIComponent(formatToTimezoneString(today))}&size=10`
-      )
-      .reply(200, notificationsDTO);
+
     await act(async () => {
       result = render(<Component />, { preloadedState: reduxInitialState });
     });
@@ -328,15 +273,8 @@ describe('App', async () => {
   it('sidemenu items if there are no delegators', async () => {
     mock.onGet(/\/bff\/v2\/tos-privacy.*/).reply(200, tosPrivacyConsentMock(true, true));
     mock.onGet('/bff/v1/downtime/status').reply(200, currentStatusDTO);
-    mock.onGet('/bff/v1/addresses').reply(200, digitalAddresses);
     mock.onGet('/bff/v1/mandate/delegate').reply(200, []);
-    mock
-      .onGet(
-        `/bff/v1/notifications/received?startDate=${encodeURIComponent(
-          formatToTimezoneString(tenYearsAgo)
-        )}&endDate=${encodeURIComponent(formatToTimezoneString(today))}&size=10`
-      )
-      .reply(200, notificationsDTO);
+
     await act(async () => {
       result = render(<Component />, { preloadedState: reduxInitialState });
     });

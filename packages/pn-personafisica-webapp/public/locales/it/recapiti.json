@@ -437,14 +437,11 @@
       "steps": {
         "choice": "Scegli un domicilio digitale",
         "generic-inbox": "Associa una casella di posta",
-        "pec": "Inserisci la tua PEC",
-        "email": "Associa un indirizzo email",
         "io": "Attiva gli avvisi su IO",
         "summary": "Controlla le opzioni scelte"
       },
       "buttons": {
-        "continue-without-io": "Continua senza l’app IO",
-        "confirm-activation": "Conferma attivazione"
+        "continue-without-io": "Continua senza l’app IO"
       }
     },
     "io-activation": {
@@ -484,7 +481,7 @@
           "description": "Riceverai un avviso all’indirizzo:"
         },
         "verify-before-continue-title": "Verifica la tua email",
-        "verify-before-continue-content": "Prima di procedere, seleziona Verifica email e segui le istruzioni."
+        "verify-before-continue-content": "Prima di procedere, seleziona <strong>Verifica email</strong> e segui le istruzioni."
       },
       "sms": {
         "readonly": {
@@ -508,7 +505,7 @@
           "description": "Riceverai un avviso al numero:"
         },
         "verify-before-continue-title": "Verifica il tuo numero",
-        "verify-before-continue-content": "Prima di procedere, seleziona Verifica numero e segui le istruzioni."
+        "verify-before-continue-content": "Prima di procedere, seleziona <strong>Verifica numero</strong> e segui le istruzioni."
       }
     },
     "notification-exit-dialog": {

@@ -437,14 +437,11 @@
       "steps": {
         "choice": "Choisis un domicile numérique",
         "generic-inbox": "Associer une boîte de réception",
-        "pec": "Saisis ta PEC",
-        "email": "Associe une adresse e-mail",
         "io": "Active les avis sur IO",
         "summary": "Vérifie les options choisies"
       },
       "buttons": {
-        "continue-without-io": "Continuer sans l’app IO",
-        "confirm-activation": "Confirmer l’activation"
+        "continue-without-io": "Continuer sans l’app IO"
       }
     },
     "io-activation": {
@@ -484,7 +481,7 @@
           "description": "Tu recevras un avis à l’adresse :"
         },
         "verify-before-continue-title": "Vérifie ton e-mail",
-        "verify-before-continue-content": "Avant de continuer, sélectionne Vérifier l’e-mail et suis les instructions."
+        "verify-before-continue-content": "Avant de continuer, sélectionne <strong>Vérifier l’e-mail</strong> et suis les instructions."
       },
       "sms": {
         "readonly": {
@@ -508,7 +505,7 @@
           "description": "Tu recevras un avis au numéro :"
         },
         "verify-before-continue-title": "Vérifie ton numéro",
-        "verify-before-continue-content": "Avant de continuer, sélectionne Vérifier le numéro et suis les instructions."
+        "verify-before-continue-content": "Avant de continuer, sélectionne <strong>Vérifier le numéro</strong> et suis les instructions."
       }
     },
     "notification-exit-dialog": {

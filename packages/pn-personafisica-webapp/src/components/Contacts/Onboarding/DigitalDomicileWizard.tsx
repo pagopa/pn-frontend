@@ -274,19 +274,16 @@ const DigitalDomicileWizard: React.FC = () => {
   };
 
   const getNextButtonLabel = () => {
-    if (isContactStep) {
-      return t('button.continue', { ns: 'common' });
-    }
     if (isIoStep) {
       return isIoEnabled
         ? t('button.continue', { ns: 'common' })
         : t('onboarding.digital-domicile.buttons.continue-without-io');
     }
-    if (isSummaryStep) {
-      return t('onboarding.digital-domicile.buttons.confirm-activation');
+    if (!isSummaryStep) {
+      return t('button.continue', { ns: 'common' });
     }
 
-    return t('button.continue', { ns: 'common' });
+    return t('button.conferma', { ns: 'common' });
   };
 
   const handlePrevious = () => {
@@ -295,15 +292,6 @@ const DigitalDomicileWizard: React.FC = () => {
     }
 
     trackBackSelected();
-
-    if (isContactStep && !isPecActivating) {
-      setWizardState((prev) => ({
-        ...prev,
-        mode: null,
-        showOptionalEmail: Boolean(prev.email.value),
-      }));
-    }
-
     goToPreviousStep();
   };
 
@@ -484,19 +472,7 @@ const DigitalDomicileWizard: React.FC = () => {
     ? t('onboarding.digital-domicile.feedback.pec.content')
     : t('onboarding.digital-domicile.feedback.send.content');
 
-  const getContactStepLabel = () => {
-    if (isPecMode || isPecActivating) {
-      return t('onboarding.digital-domicile.steps.pec');
-    }
-
-    if (isSendMode) {
-      return t('onboarding.digital-domicile.steps.email');
-    }
-
-    return t('onboarding.digital-domicile.steps.generic-inbox');
-  };
-
-  const contactStepLabel = getContactStepLabel();
+  const contactStepLabel = t('onboarding.digital-domicile.steps.generic-inbox');
 
   // Start Mixpanel
   const trackDigitalDomicile = useCallback(
