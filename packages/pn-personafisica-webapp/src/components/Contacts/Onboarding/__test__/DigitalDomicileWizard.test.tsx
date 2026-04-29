@@ -6,7 +6,7 @@ import {
   acceptTosSercqSendBodyMock,
   sercqSendTosConsentMock,
 } from '../../../../__mocks__/Consents.mock';
-import { act, fireEvent, render, waitFor } from '../../../../__test__/test-utils';
+import { act, fireEvent, render, waitFor, within } from '../../../../__test__/test-utils';
 import { apiClient } from '../../../../api/apiClients';
 import { AddressType, ChannelType, IOAllowedValues } from '../../../../models/contacts';
 import { PRIVACY_POLICY, TERMS_OF_SERVICE_SERCQ_SEND } from '../../../../navigation/routes.const';
@@ -30,13 +30,17 @@ describe('DigitalDomicileWizard', () => {
   });
 
   it('shows the SEND CTA when no PEC activation state exists', () => {
-    const { getByText, getByRole, queryByText } = render(<DigitalDomicileWizard />, {
+    const { getByTestId, getByText, getByRole, queryByText } = render(<DigitalDomicileWizard />, {
       preloadedState: {
         contactsState: {
           digitalAddresses: [],
         },
       },
     });
+
+    expect(
+      within(getByTestId('step-1')).getByText(`${labelPrefix}.steps.generic-inbox`)
+    ).toBeInTheDocument();
 
     expect(getByText(`${labelPrefix}.title`)).toBeInTheDocument();
     expect(getByRole('button', { name: `${labelPrefix}.choice.cta` })).toBeInTheDocument();
@@ -47,7 +51,7 @@ describe('DigitalDomicileWizard', () => {
   });
 
   it('starts from the PEC step and shows the pending PEC content when a default PEC is in activation', () => {
-    const { getByText, queryByRole } = render(<DigitalDomicileWizard />, {
+    const { getByTestId, getByText, queryByRole } = render(<DigitalDomicileWizard />, {
       preloadedState: {
         contactsState: {
           digitalAddresses: [
@@ -61,6 +65,8 @@ describe('DigitalDomicileWizard', () => {
         },
       },
     });
+
+    expect(within(getByTestId('step-1')).getByText(`${labelPrefix}.steps.pec`)).toBeInTheDocument();
 
     expect(getByText(`${labelPrefix}.pec.pending.title`)).toBeInTheDocument();
     expect(getByText(`${labelPrefix}.pec.pending.description`)).toBeInTheDocument();
@@ -137,7 +143,7 @@ describe('DigitalDomicileWizard', () => {
   });
 
   it('does not show the next button in the SEND contact step when no email is available', () => {
-    const { getByRole, queryByRole } = render(<DigitalDomicileWizard />, {
+    const { getByTestId, getByRole, queryByRole } = render(<DigitalDomicileWizard />, {
       preloadedState: {
         contactsState: {
           digitalAddresses: [],
@@ -146,6 +152,10 @@ describe('DigitalDomicileWizard', () => {
     });
 
     fireEvent.click(getByRole('button', { name: `${labelPrefix}.choice.cta` }));
+
+    expect(
+      within(getByTestId('step-1')).getByText(`${labelPrefix}.steps.email`)
+    ).toBeInTheDocument();
     expect(queryByRole('button', { name: 'button.continue' })).not.toBeInTheDocument();
   });
 
@@ -335,10 +345,13 @@ describe('DigitalDomicileWizard', () => {
       });
     });
 
-    expect(await findByText(`${labelPrefix}.pec.pending.title`)).toBeInTheDocument();
-    expect(await findByText(`${labelPrefix}.pec.pending.description`)).toBeInTheDocument();
-    expect(await findByText(`${labelPrefix}.pec.pending.badge`)).toBeInTheDocument();
-    expect(queryByText(mockPec)).not.toBeInTheDocument();
+    expect(await findByText(`${labelPrefix}.pec.title`)).toBeInTheDocument();
+    expect(await findByText(`${labelPrefix}.pec.description`)).toBeInTheDocument();
+    expect(queryByText(`${labelPrefix}.pec.pending.title`)).not.toBeInTheDocument();
+    expect(queryByText(`${labelPrefix}.pec.pending.description`)).not.toBeInTheDocument();
+    expect(queryByText(`${labelPrefix}.pec.pending.badge`)).not.toBeInTheDocument();
+    expect(await findByText(`${labelPrefix}.pec.label-summary`)).toBeInTheDocument();
+    expect(await findByText(mockPec)).toBeInTheDocument();
 
     await act(async () => {
       fireEvent.click(getByRole('button', { name: 'button.continue' }));
