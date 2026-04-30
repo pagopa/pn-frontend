@@ -1,7 +1,8 @@
 {
   "loginPage": {
-    "title": "Wie möchtest du dich anmelden?",
-    "description": "Wähle deine bevorzugte Methode.",
+    "title": "Zugriff auf SEND für Ihre rechtsverbindlichen Mitteilungen",
+    "description": "Wählen Sie die gewünschte Zugriffsmethode. ",
+    "missing-spid-cie": "Non hai SPID o CIE? <0>Scopri di più</0>",
     "loginBox": {
       "title": "Anmelden",
       "spidLogin": "Mit SPID anmelden",

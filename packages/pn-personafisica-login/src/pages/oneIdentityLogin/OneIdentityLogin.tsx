@@ -1,7 +1,7 @@
 import React from 'react';
-import { useTranslation } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 
-import { Box, Button, Divider, Grid, Typography, styled } from '@mui/material';
+import { Box, Button, Divider, Grid, Link, Typography, styled } from '@mui/material';
 import {
   Layout,
   PRIVACY_LINK_RELATIVE_PATH as PRIVACY_POLICY,
@@ -38,6 +38,7 @@ const OneIdentityLogin: React.FC = () => {
     IS_SMART_APP_BANNER_ENABLED,
     ACCESSIBILITY_LINK,
     SERCQ_SERVICE_STATEMENT_LINK,
+    DIGITAL_IDENTITY_LINK,
   } = getConfiguration();
 
   const smartBannerHeight = IS_SMART_APP_BANNER_ENABLED ? SMART_BANNER_HEIGHT_PX : 0;
@@ -103,7 +104,7 @@ const OneIdentityLogin: React.FC = () => {
             alignContent={{ xs: 'center', lg: 'normal' }}
             id="loginPage"
           >
-            <Grid item px={3}>
+            <Grid item px={3} width={{ xs: '100%', lg: '520px' }}>
               <Typography
                 id="login-mode-page-title"
                 component="h1"
@@ -150,6 +151,23 @@ const OneIdentityLogin: React.FC = () => {
                 {t('loginPage.loginBox.cieLogin')}
               </LoginButton>
             </Grid>
+
+            <Typography fontSize="16px" sx={{ mt: 3 }}>
+              <Trans
+                ns="login"
+                i18nKey={'loginPage.missing-spid-cie'}
+                components={[
+                  <Link
+                    key="spid-cie-link"
+                    href={DIGITAL_IDENTITY_LINK}
+                    target="_blank"
+                    rel="noopener"
+                    data-testid="spic-cie-link"
+                    sx={{ cursor: 'pointer', fontWeight: 600, textDecoration: 'underline' }}
+                  />,
+                ]}
+              />
+            </Typography>
           </Grid>
         </Box>
       </Layout>
