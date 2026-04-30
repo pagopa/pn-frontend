@@ -1,7 +1,7 @@
 {
   "loginPage": {
     "title": "Accedi a SEND per le tue comunicazioni a valore legale",
-    "description": "Scegli la modalità che preferisci.",
+    "description": "Lo spazio dedicato agli enti che utilizzano i prodotti di PagoPA.",
     "loginBox": {
       "title": "Accedi",
       "spidLogin": "Entra con SPID",
