@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.23.0-RC.3](https://github.com/pagopa/pn-frontend/compare/v2.23.0-RC.2...v2.23.0-RC.3) (2026-04-30)
+
+
+### Bug Fixes
+
+* **PN-19721:** back button alignment on digital domicile wizard ([#1861](https://github.com/pagopa/pn-frontend/issues/1861)) ([368c443](https://github.com/pagopa/pn-frontend/commit/368c443b519faedced71afa2712776d389838b78))
+
+
+
+
+
 # [2.23.0-RC.2](https://github.com/pagopa/pn-frontend/compare/v2.22.3...v2.23.0-RC.2) (2026-04-29)
 
 

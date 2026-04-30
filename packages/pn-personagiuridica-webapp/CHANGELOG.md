@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.23.0-RC.3](https://github.com/pagopa/pn-frontend/compare/v2.23.0-RC.2...v2.23.0-RC.3) (2026-04-30)
+
+
+### Bug Fixes
+
+* **PN-18742:** typo bugs on notification costs of PG ([#1860](https://github.com/pagopa/pn-frontend/issues/1860)) ([55c491f](https://github.com/pagopa/pn-frontend/commit/55c491f5db19827a780b0814f3f5440535567f42))
+
+
+
+
+
 # [2.23.0-RC.2](https://github.com/pagopa/pn-frontend/compare/v2.22.3...v2.23.0-RC.2) (2026-04-29)
 
 **Note:** Version bump only for package @pagopa-pn/pn-personagiuridica-webapp
