@@ -15,27 +15,22 @@ import { PFLoginEventsType } from '../../models/PFLoginEventsType';
 import { getConfiguration } from '../../services/configuration.service';
 import PFLoginEventStrategyFactory from '../../utility/MixpanelUtils/PFLoginEventStrategyFactory';
 
-const LoginButton = styled(Button)(() => ({
+const HEADER_HEIGHT_PX = 44;
+const SMART_BANNER_HEIGHT_PX = 66;
+const LOGO_HEADER_HEIGHT_PX = 81;
+
+const unloggedUser = { id: '', name: undefined, surname: undefined, email: undefined };
+
+const LoginButton = styled(Button)({
   borderRadius: '4px',
   width: '100%',
   height: '50px',
-  '& .MuiButton-startIcon': {
-    svg: {
-      fontSize: '25px',
-    },
-  },
-}));
-
-const unloggedUser = {
-  id: '',
-  name: undefined,
-  surname: undefined,
-  email: undefined,
-};
+  '& .MuiButton-startIcon': { svg: { fontSize: '25px' } },
+});
 
 const OneIdentityLogin: React.FC = () => {
-  const isMobile = useIsMobile();
   const { t, i18n } = useTranslation(['login']);
+  const isMobile = useIsMobile();
   const {
     SPID_CIE_ENTITY_ID,
     PAGOPA_HELP_EMAIL,
@@ -45,19 +40,18 @@ const OneIdentityLogin: React.FC = () => {
     SERCQ_SERVICE_STATEMENT_LINK,
   } = getConfiguration();
 
+  const smartBannerHeight = IS_SMART_APP_BANNER_ENABLED ? SMART_BANNER_HEIGHT_PX : 0;
+  const contentMinHeight = `calc(100dvh - ${HEADER_HEIGHT_PX}px - ${smartBannerHeight}px - ${LOGO_HEADER_HEIGHT_PX}px)`;
   const privacyPolicyUrl = `${PF_URL}${PRIVACY_POLICY}`;
-  const smartBannerHeight = IS_SMART_APP_BANNER_ENABLED ? 66 : 0;
 
-  const changeLanguageHandler = async (langCode: string) => {
-    await i18n.changeLanguage(langCode);
-  };
+  const handleLanguageChange = (langCode: string) => i18n.changeLanguage(langCode);
 
   const handleAssistanceClick = () => {
     // eslint-disable-next-line functional/immutable-data
     window.location.href = `mailto:${PAGOPA_HELP_EMAIL}`;
   };
 
-  const goCIE = () => {
+  const handleCieClick = () => {
     PFLoginEventStrategyFactory.triggerEvent(PFLoginEventsType.SEND_IDP_SELECTED, {
       SPID_IDP_NAME: 'CIE',
       SPID_IDP_ID: SPID_CIE_ENTITY_ID,
@@ -66,12 +60,12 @@ const OneIdentityLogin: React.FC = () => {
 
   return (
     <>
-      {isMobile && IS_SMART_APP_BANNER_ENABLED && <IOSmartAppBanner />}
+      {IS_SMART_APP_BANNER_ENABLED && <IOSmartAppBanner />}
       <Layout
         productsList={[]}
         onAssistanceClick={handleAssistanceClick}
         currentLanguage={i18n.language}
-        onLanguageChanged={changeLanguageHandler}
+        onLanguageChanged={handleLanguageChange}
         showSideMenu={false}
         privacyPolicyHref={privacyPolicyUrl}
         accessibilityLink={ACCESSIBILITY_LINK}
@@ -80,37 +74,34 @@ const OneIdentityLogin: React.FC = () => {
         slotsProps={{
           content: {
             bgcolor: 'white',
-            minHeight: isMobile ? `calc(100dvh - 44px - ${smartBannerHeight}px)` : undefined,
+            minHeight: isMobile
+              ? `calc(100dvh - ${HEADER_HEIGHT_PX}px - ${smartBannerHeight}px)`
+              : undefined,
           },
         }}
       >
-        <Box
-          sx={isMobile ? { position: 'sticky', top: 0, bgcolor: 'white', zIndex: 1 } : undefined}
-        >
+        <Box sx={{ position: { xs: 'sticky', lg: 'static' }, top: 0, bgcolor: 'white', zIndex: 1 }}>
           <Box px={3} py={2}>
             <img src={sendLogo} alt="" height={isMobile ? '48px' : '70px'} aria-hidden />
           </Box>
           <Divider />
         </Box>
+
         <Box
-          sx={
-            isMobile
-              ? {
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  minHeight: `calc(100dvh - 44px - ${smartBannerHeight}px - 81px)`,
-                }
-              : undefined
-          }
+          sx={{
+            display: { xs: 'flex', lg: 'block' },
+            alignItems: 'center',
+            justifyContent: 'center',
+            minHeight: { xs: contentMinHeight, lg: 'auto' },
+          }}
         >
           <Grid
             container
             direction="column"
-            my={isMobile ? 0 : 10}
+            my={{ xs: 0, lg: 10 }}
             alignItems="center"
+            alignContent={{ xs: 'center', lg: 'normal' }}
             id="loginPage"
-            alignContent={isMobile ? 'center' : 'normal'}
           >
             <Grid item px={3}>
               <Typography
@@ -118,22 +109,13 @@ const OneIdentityLogin: React.FC = () => {
                 component="h1"
                 textAlign="center"
                 fontWeight={700}
-                fontSize="36px"
-                sx={{
-                  color: '#0E0F13',
-                }}
+                fontSize={{ xs: '28px', lg: '36px' }}
+                lineHeight={{ xs: '40px', lg: '50px' }}
+                sx={{ color: '#0E0F13' }}
               >
                 {t('loginPage.title')}
               </Typography>
-              <Typography
-                component="h2"
-                textAlign="center"
-                sx={{
-                  mb: 5,
-                  mt: 1,
-                  color: '#555C70',
-                }}
-              >
+              <Typography component="h2" textAlign="center" sx={{ mb: 5, mt: 1, color: '#555C70' }}>
                 {t('loginPage.description')}
               </Typography>
             </Grid>
@@ -155,16 +137,14 @@ const OneIdentityLogin: React.FC = () => {
                 variant="contained"
                 onClick={() => void 0}
                 startIcon={<SpidIcon />}
-                sx={{
-                  mb: 3,
-                }}
+                sx={{ mb: 3 }}
               >
                 {t('loginPage.loginBox.spidLogin')}
               </LoginButton>
               <LoginButton
                 id="cieButton"
                 variant="contained"
-                onClick={() => goCIE()}
+                onClick={handleCieClick}
                 startIcon={<CieIcon />}
               >
                 {t('loginPage.loginBox.cieLogin')}
@@ -172,7 +152,6 @@ const OneIdentityLogin: React.FC = () => {
             </Grid>
           </Grid>
         </Box>
-        {/* <SpidSelect onClose={closeIDPS} show={showIDPS} rapidAccess={rapidAccess} /> */}
       </Layout>
     </>
   );
