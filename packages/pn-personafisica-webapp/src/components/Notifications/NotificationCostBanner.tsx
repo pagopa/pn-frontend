@@ -1,5 +1,5 @@
 import type { TFunction } from 'i18next';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
@@ -113,10 +113,14 @@ const getBannerContent = (
     return { title, message };
   }
 
-  const isExternalPec =
-    key === 'digital_special' || key === 'digital_registry' || key === 'digital_failure';
+  const isExternalPec = key === 'digital_special' || key === 'digital_failure';
+
+  const isRegistryPec = key === 'digital_registry';
 
   const getEnableSercqMessage = () => {
+    if (isRegistryPec) {
+      return '';
+    }
     if (key === 'analog') {
       return t('notification-cost-banner.enable-sercq.message.analog');
     } else {
@@ -125,7 +129,7 @@ const getBannerContent = (
         : t('notification-cost-banner.enable-sercq.message.default');
     }
   };
-  const ctaLabel = t('notification-cost-banner.enable-sercq.cta');
+  const ctaLabel = isRegistryPec ? '' : t('notification-cost-banner.enable-sercq.cta');
 
   return {
     title,
@@ -135,17 +139,14 @@ const getBannerContent = (
 };
 
 export const NotificationCostBanner: React.FC<Props> = ({ deliveryOutcome, notificationCost }) => {
-  const { defaultSERCQ_SENDAddress, defaultPECAddress, addresses } = useAppSelector(
+  const { defaultSERCQ_SENDAddress, defaultPECAddress } = useAppSelector(
     contactsSelectors.selectAddresses
   );
   const isDDomActive = Boolean(defaultSERCQ_SENDAddress || defaultPECAddress);
 
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const { t } = useTranslation(['notifiche', 'recapiti', 'common']);
-  const [isVisible, setIsVisible] = useState(true);
-
-  const handleClose = () => setIsVisible(false);
+  const { t } = useTranslation(['notifiche']);
 
   const bannerKey = resolveBannerKey(deliveryOutcome);
   const { title, message, ctaLabel } = getBannerContent(
@@ -177,7 +178,7 @@ export const NotificationCostBanner: React.FC<Props> = ({ deliveryOutcome, notif
         operation: ContactOperation.ADD,
       })
     );
-  }, [addresses, dispatch, navigate]);
+  }, [dispatch, navigate]);
 
   const isDigital = deliveryOutcome?.type === DeliveryOutcomeType.DIGITAL;
 
@@ -193,20 +194,9 @@ export const NotificationCostBanner: React.FC<Props> = ({ deliveryOutcome, notif
     digital_registry: 'savings_success_pec',
   };
 
-  const handleBannerClose = () => {
-    triggerMixpanelEvent(PFEventsType.SEND_CLOSE_BANNER, EventAction.ACTION);
-    handleClose();
-  };
-
   useEffect(() => {
-    if (isVisible) {
-      triggerMixpanelEvent(PFEventsType.SEND_BANNER, EventAction.SCREEN_VIEW);
-    }
+    triggerMixpanelEvent(PFEventsType.SEND_BANNER, EventAction.SCREEN_VIEW);
   }, []);
-
-  if (!isVisible) {
-    return null;
-  }
 
   return (
     <Box my={4}>
@@ -223,8 +213,6 @@ export const NotificationCostBanner: React.FC<Props> = ({ deliveryOutcome, notif
             onClick: handleActivateDigitalDomicile,
           },
         })}
-        onClose={handleBannerClose}
-        closeAriaLabel={t('button.close', { ns: 'common' })}
       />
     </Box>
   );

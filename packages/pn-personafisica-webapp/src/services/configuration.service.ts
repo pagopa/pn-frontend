@@ -29,6 +29,8 @@ export interface PfConfiguration {
   FEEDBACK_SURVEY_URL: string;
   NOTIFICATION_CANCELLED_HELP_LINK: string;
   NOTIFICATION_COST_DETAILS_ASSISTANCE_LINK: string;
+  SERCQ_SERVICE_STATEMENT_LINK: string;
+  IS_ONBOARDING_ENABLED: boolean;
 }
 
 class PfConfigurationValidator extends Validator<PfConfiguration> {
@@ -69,6 +71,8 @@ class PfConfigurationValidator extends Validator<PfConfiguration> {
       .isString()
       .isRequired()
       .matches(dataRegex.htmlPageUrl);
+    this.ruleFor('SERCQ_SERVICE_STATEMENT_LINK').isString().isRequired();
+    this.ruleFor('IS_ONBOARDING_ENABLED').isBoolean();
   }
 }
 

@@ -171,6 +171,8 @@ const PecContactWizard: React.FC<Props> = ({
           <TextField
             id="pec"
             name="pec"
+            type="email"
+            autoComplete="email"
             label={t('legal-contacts.pec-contact-wizard.input-label')}
             size="small"
             fullWidth

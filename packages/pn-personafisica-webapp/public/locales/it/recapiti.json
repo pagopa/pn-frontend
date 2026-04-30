@@ -313,5 +313,208 @@
     "no-courtesy-no-sercq-send-title": "Non perderti le comunicazioni importanti ",
     "no-courtesy-no-sercq-send-description": "Aggiungi un indirizzo email per ricevere un avviso quando hai una nuova notifica su SEND.",
     "no-courtesy-no-sercq-send-cta": "Conferma la tua email"
+  },
+  "onboarding": {
+    "title": "Configura SEND",
+    "description": "Ottieni il massimo e risparmi!",
+    "cards": {
+      "send": {
+        "title": "Scelgo il meglio di SEND",
+        "cta": "Attiva il meglio di SEND",
+        "label": "Consigliato",
+        "item_1": "Attivi il domicilio digitale e risparmi i costi di notifica legati alle raccomandate.",
+        "item_2": "Ti avvisiamo alla ricezione di una notifica SEND via email e su IO."
+      },
+      "contacts": {
+        "title": "Voglio solo gli avvisi",
+        "cta": "Attiva solo gli avvisi",
+        "item_1": "Ricevi avvisi via email, SMS e sull’app IO, così hai più possibilità di leggere in tempo la comunicazione ed evitare i costi di notifica legati alle raccomandate.",
+        "item_2": "Se non apri la notifica SEND entro 5 giorni dalla ricezione, riceverai comunque una raccomandata con i relativi costi aggiuntivi."
+      },
+      "io": {
+        "title": "Preferisco attivare solo SEND sull’app IO",
+        "cta": "Attiva SEND su IO",
+        "label": "Consigliato",
+        "item_1": "Ricevi avvisi e l’accesso alle comunicazioni a valore legale direttamente attraverso IO.",
+        "item_2": "Se non apri la notifica SEND entro 5 giorni dalla ricezione, riceverai comunque una raccomandata con i relativi costi aggiuntivi."
+      }
+    },
+    "exit-flow": "Salta e vai alle tue notifiche",
+    "exit-flow-dialog": {
+      "title": "Vuoi davvero saltare la configurazione di SEND?",
+      "description": "Rischi di non leggere le notifiche SEND in tempo e di dover pagare i costi per l’invio della raccomandata.",
+      "cancel": "Torna alla configurazione"
+    },
+    "digital-domicile": {
+      "title": "Il meglio di SEND",
+      "choice": {
+        "title": "Attiva il domicilio digitale su SEND",
+        "description": "Riceverai le comunicazioni a valore legale su SEND, solo in digitale, ed eviterai l’invio di una raccomandata con i relativi costi aggiuntivi.",
+        "cta": "Attiva su SEND",
+        "pec": {
+          "description": "In alternativa, puoi decidere di ricevere le notifiche SEND al tuo indirizzo PEC. Potresti evitare così l’invio di una raccomandata con i relativi costi aggiuntivi.",
+          "cta": "Attiva su una PEC"
+        },
+        "pec-activating": {
+          "title": "L’attivazione del domicilio digitale su PEC è in corso",
+          "description": "Dopo l’attivazione, riceverai le notifiche SEND al tuo indirizzo PEC. Potresti evitare così l’invio di una raccomandata con i relativi costi aggiuntivi.",
+          "badge": "Attivazione in corso",
+          "img-alt-text": ""
+        },
+        "img-alt-text": ""
+      },
+      "email": {
+        "title": "Associa un indirizzo email al domicilio digitale",
+        "title-existing": "Hai già associato un indirizzo email al domicilio digitale",
+        "description": "Riceverai un’email alla ricezione di ogni notifica SEND.",
+        "label": "Email:",
+        "input-label": "Indirizzo email",
+        "verify-cta": "Verifica email",
+        "confirm-cta": "Conferma email"
+      },
+      "io": {
+        "title": "Attiva SEND sull’app IO",
+        "description": "C’è una notifica SEND per te?  Riceverai un avviso su IO e potrai consultarla direttamente in app!",
+        "not-installed": {
+          "primary-cta": "Scarica l’app IO",
+          "refresh-cta": "Ho già scaricato e installato l’app"
+        },
+        "disabled": {
+          "primary-cta": "Attiva gli avvisi su IO"
+        },
+        "enabled": {
+          "title": "Hai già attivato SEND sull’app IO",
+          "primary-cta": "Continua"
+        },
+        "img-alt-text": ""
+      },
+      "summary": {
+        "title": "Il tuo riepilogo",
+        "legal-title": "Le comunicazioni a valore legale verranno recapitate su:",
+        "courtesy-title": "Riceverai un avviso via:",
+        "info-box": "Monitora i recapiti che hai scelto: una notifica digitale SEND inizia a produrre effetti giuridici anche se non l’hai consultata.",
+        "disclaimer": "Premendo <strong>Conferma</strong> dichiari di aver letto l'<0>Informativa privacy</0> e di accettare i <1>Termini del servizio</1>.",
+        "ddom-label": "Domicilio digitale",
+        "io-label": "IO, l’app dei servizi pubblici",
+        "io-value": "Servizio SEND su IO attivo",
+        "email-label": "Email",
+        "send-badge": "SEND",
+        "pec-badge": "PEC"
+      },
+      "pec": {
+        "title": "La tua PEC come domicilio digitale SEND",
+        "description": "Riceverai le comunicazioni a valore legale sulla tua PEC, solo in digitale, e potrai evitare l’invio di una raccomandata con i relativi costi aggiuntivi.",
+        "label-choose-address": "Scegli un indirizzo PEC:",
+        "label-summary": "Indirizzo PEC",
+        "input-label": "Indirizzo PEC",
+        "verify-cta": "Verifica PEC",
+        "disclaimer": "Accetto che l’indirizzo PEC indicato sia utilizzato in via prioritaria rispetto a eventuali PEC registrate presso un ente mittente o presenti nei pubblici registri.",
+        "email-cta": "Attiva gli avvisi via email",
+        "optional-email-description": "Vuoi ricevere anche un’email alla ricezione di una notifica SEND?",
+        "optional-email-title": "Attiva gli avvisi via email",
+        "optional-email-label": "Scegli un indirizzo email:",
+        "cancel-email-cta": "Annulla attivazione email",
+        "email-present-description": "Alla ricezione di una notifica SEND, riceverai anche un avviso all’indirizzo:",
+        "edit-email-cta": "Modifica indirizzo",
+        "verify-before-continue-title": "Verifica la tua PEC",
+        "verify-before-continue-content": "Prima di procedere, seleziona <strong>Verifica PEC</strong> e segui le istruzioni.",
+        "pending": {
+          "title": "La PEC inserita è in fase di validazione",
+          "description": "Riceverai le comunicazioni a valore legale sulla PEC scelta, solo in digitale, e potrai evitare l’invio di una raccomandata con i relativi costi aggiuntivi. Dopo la validazione, potrai modificarla nella sezione \"I tuoi recapiti\".",
+          "badge": "Attivazione in corso"
+        }
+      },
+      "feedback": {
+        "send": {
+          "title": "Hai attivato il domicilio digitale e gli avvisi",
+          "content": "Riceverai le notifiche SEND e i relativi avvisi sui canali che hai scelto."
+        },
+        "pec": {
+          "title": "L’attivazione del domicilio digitale è in corso",
+          "content": "La PEC che hai inserito è in fase di validazione. Una volta confermata, riceverai tutte le notifiche SEND all’indirizzo che hai scelto. Gli avvisi, invece, sono già attivi."
+        }
+      },
+      "steps": {
+        "choice": "Scegli un domicilio digitale",
+        "generic-inbox": "Associa una casella di posta",
+        "io": "Attiva gli avvisi su IO",
+        "summary": "Controlla le opzioni scelte"
+      },
+      "buttons": {
+        "continue-without-io": "Continua senza l’app IO"
+      }
+    },
+    "io-activation": {
+      "title": "Tutto, sull'app IO",
+      "feedback": {
+        "title": "Hai attivato gli avvisi",
+        "content": "Riceverai un avviso sull’app IO quando ricevi una notifica SEND."
+      }
+    },
+    "courtesy": {
+      "title": "Attivazione avvisi",
+      "step-1-label": "Attiva gli avvisi su IO",
+      "step-2-label": "Email e SMS",
+      "proceed-without-io": "Continua senza l'app IO",
+      "banner-description": "Più avvisi attivi, più possibilità hai di leggere la notifica digitale in tempo ed evitare la raccomandata!",
+      "success-title": "Hai attivato gli avvisi",
+      "success-description": "Riceverai un avviso sui canali che hai scelto quando ricevi una notifica SEND.",
+      "email": {
+        "readonly": {
+          "title": "Attiva gli avvisi via email",
+          "description": "Riceverai un avviso all’indirizzo:"
+        },
+        "insert": {
+          "title": "Attiva gli avvisi via email",
+          "description": "Scegli un indirizzo email:",
+          "input-label": "Indirizzo email",
+          "button-label": "Verifica email",
+          "collapse-label": "Annulla attivazione email"
+        },
+        "collapsed": {
+          "label": "Vuoi ricevere anche un’email alla ricezione di una notifica SEND?",
+          "button-label": "Attiva gli avvisi via email"
+        },
+        "edit": {
+          "input-label": "Indirizzo email",
+          "title": "Avvisi via email attivi",
+          "description": "Riceverai un avviso all’indirizzo:"
+        },
+        "verify-before-continue-title": "Verifica la tua email",
+        "verify-before-continue-content": "Prima di procedere, seleziona <strong>Verifica email</strong> e segui le istruzioni."
+      },
+      "sms": {
+        "readonly": {
+          "title": "Attiva gli avvisi via SMS",
+          "description": "Riceverai un avviso al numero:"
+        },
+        "insert": {
+          "title": "Attiva gli avvisi via SMS",
+          "description": "Scegli un numero di cellulare:",
+          "input-label": "Numero di cellulare",
+          "button-label": "Verifica numero",
+          "collapse-label": "Annulla attivazione SMS"
+        },
+        "collapsed": {
+          "label": "Vuoi ricevere un avviso anche sul tuo smartphone?",
+          "button-label": "Attiva gli avvisi via SMS"
+        },
+        "edit": {
+          "input-label": "Numero di cellulare",
+          "title": "Avvisi via SMS attivi",
+          "description": "Riceverai un avviso al numero:"
+        },
+        "verify-before-continue-title": "Verifica il tuo numero",
+        "verify-before-continue-content": "Prima di procedere, seleziona <strong>Verifica numero</strong> e segui le istruzioni."
+      }
+    },
+    "notification-exit-dialog": {
+      "title": "Come vuoi ricevere le comunicazioni a valore legale?",
+      "description": "Configura al meglio SEND e risparmi!",
+      "buttons": {
+        "configure": "Configura SEND",
+        "skip": "Salta la configurazione"
+      }
+    }
   }
 }

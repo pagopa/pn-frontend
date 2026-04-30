@@ -1,9 +1,12 @@
 // import { visualizer } from 'rollup-plugin-visualizer';
+import type { IncomingMessage, ServerResponse } from 'node:http';
 import { defineConfig, loadEnv, mergeConfig } from 'vite';
 import { configDefaults, defineConfig as defineVitestConfig } from 'vitest/config';
 
 import basicSsl from '@vitejs/plugin-basic-ssl';
 import react from '@vitejs/plugin-react';
+
+import type { IncomingMessage, ServerResponse } from 'node:http';
 
 const vitestConfig = defineVitestConfig({
   test: {
@@ -53,6 +56,21 @@ export default defineConfig(({ mode }) => {
       port: 443,
       strictPort: true,
       open: true,
+      proxy: {
+        '/mock-mixpanel': {
+          target: env.HOST, // Fake target
+          bypass: (_: IncomingMessage, res: ServerResponse) => {
+            res.statusCode = 200;
+            res.setHeader('Content-Type', 'text/plain');
+
+            // Mixpanel wants that server responds with number 1 for success
+            res.end('1');
+
+            // Return false to block vite because we have already handled the response
+            return false;
+          },
+        },
+      },
     },
     build: {
       outDir: 'build',
@@ -81,10 +99,6 @@ export default defineConfig(({ mode }) => {
         // formik an yup use lodash and without this, also this library will be into the build
         lodash: 'lodash-es',
       },
-      // This tells vite to use only the istance of the react-router-dom that is installed in the current app
-      // This is useful now that pa has a different version of the react-router-dom from the other apps
-      // This can be removed when all the apps will have the same version installed
-      dedupe: ['react-router', 'react-router-dom'],
     },
   });
 });

@@ -135,6 +135,7 @@
     "company": "Transparent Company",
     "disclosure": "Responsible Disclosure Policy",
     "321-model": "Model 231",
+    "sercq-service-statement": "Service practice statement - SERCQ",
     "accessibility": "Accessibility",
     "social": "Go to PagoPA S.p.A. {{social}} website",
     "resources": "Resources",
@@ -235,13 +236,7 @@
     "action": "Keep access"
   },
   "code-modal": {
-    "digits": [
-      "first digit",
-      "second digit",
-      "third digit",
-      "fourth digit",
-      "last digit"
-    ]
+    "digits": ["first digit", "second digit", "third digit", "fourth digit", "last digit"]
   },
   "user-validation-failed": {
     "title": "The data entered is invalid",

@@ -13,7 +13,7 @@ import {
 } from '@mui/material';
 import { ButtonNaked, IllusCompleted, IllustrationProps } from '@pagopa/mui-italia';
 
-import checkChildren from '../../utility/children.utility';
+import { checkChildren } from '../../utility/children.utility';
 import { getLocalizedOrDefaultLabel } from '../../utility/localization.utility';
 import PnWizardStep, { PnWizardStepProps } from './PnWizardStep';
 import PnWizardStepper from './PnWizardStepper';
@@ -33,6 +33,7 @@ type Props = {
     stepContainer?: Partial<PaperProps>;
     nextButton?: Omit<ButtonProps, 'onClick'> & {
       onClick?: (next: () => void, step: number) => void;
+      label?: string;
     };
     prevButton?: Omit<ButtonProps, 'onClick'> & {
       onClick?: (previous: () => void, step: number) => void;
@@ -48,6 +49,7 @@ type Props = {
       onClick: () => void;
       onFeedbackShow?: () => void;
     };
+    belowStepContent?: ReactNode;
   };
 };
 
@@ -157,9 +159,15 @@ const PnWizard: React.FC<Props> = ({
 
         {steps.length > 0 && <PnWizardStepper steps={steps} activeStep={activeStep} />}
 
-        <Paper sx={{ p: 3, mb: '20px', mt: 3 }} elevation={0} {...slotsProps?.stepContainer}>
+        <Paper
+          elevation={0}
+          {...slotsProps?.stepContainer}
+          sx={{ p: 3, mb: '20px', mt: 3, ...slotsProps?.stepContainer?.sx }}
+        >
           {childrens[activeStep]}
         </Paper>
+
+        {slotsProps?.belowStepContent}
 
         <Stack
           direction={{ xs: 'column-reverse', md: 'row' }}
@@ -182,7 +190,8 @@ const PnWizard: React.FC<Props> = ({
             {...slotsProps?.nextButton}
             onClick={handleNextStep}
           >
-            {getLocalizedOrDefaultLabel('common', 'button.conferma', 'Conferma')}
+            {slotsProps?.nextButton?.label ||
+              getLocalizedOrDefaultLabel('common', 'button.conferma', 'Conferma')}
           </NextButton>
         </Stack>
       </Box>

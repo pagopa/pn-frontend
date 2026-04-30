@@ -3,9 +3,36 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.23.0-RC.2](https://github.com/pagopa/pn-frontend/compare/v2.22.3...v2.23.0-RC.2) (2026-04-29)
+
+**Note:** Version bump only for package @pagopa-pn/pn-personafisica-login
+
+
+
+
+
 ## [2.22.3](https://github.com/pagopa/pn-frontend/compare/v2.22.3-RC.0...v2.22.3) (2026-04-24)
 
 **Note:** Version bump only for package @pagopa-pn/pn-personafisica-login
+
+
+
+
+
+# [2.23.0-RC.0](https://fbianchicodermine-github/pagopa/pn-frontend/compare/v2.22.2...v2.23.0-RC.0) (2026-04-22)
+
+
+### Bug Fixes
+
+* **PN-18026:** save rapid access params in local storage on iOS devices ([#1816](https://fbianchicodermine-github/pagopa/pn-frontend/issues/1816)) ([5e0c9de](https://fbianchicodermine-github/pagopa/pn-frontend/commit/5e0c9de0d73406ba040717b34635fbdea1957354))
+* **PN-19097:** keep ToS confirm button enabled and show inline validation error ([#1803](https://fbianchicodermine-github/pagopa/pn-frontend/issues/1803)) ([302037e](https://fbianchicodermine-github/pagopa/pn-frontend/commit/302037e3ff5f14ffd2abca23da748f5c5f210e42))
+
+
+### Features
+
+* **PN-11774:** use optional path param in new api key ([#1809](https://fbianchicodermine-github/pagopa/pn-frontend/issues/1809)) ([3a13539](https://fbianchicodermine-github/pagopa/pn-frontend/commit/3a1353925e78061fc4a38c8ead2ad16d0de05263))
+* **PN-18800:** Inject UTM params for AAR QR code and TPP landing ([#1774](https://fbianchicodermine-github/pagopa/pn-frontend/issues/1774)) ([ad3ce7f](https://fbianchicodermine-github/pagopa/pn-frontend/commit/ad3ce7f5eeefe31cf85f67884c848158546bc30a))
+* **PN-19006:** add SERCQ service practice statement link on footer ([#1804](https://fbianchicodermine-github/pagopa/pn-frontend/issues/1804)) ([654a848](https://fbianchicodermine-github/pagopa/pn-frontend/commit/654a848ab5605dbec7e6c55f96516a9313ffe7ec))
 
 
 

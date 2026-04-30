@@ -1,7 +1,7 @@
 import MockAdapter from 'axios-mock-adapter';
 import { Route, Routes } from 'react-router-dom';
 
-import { userResponse } from '../../__mocks__/Auth.mock';
+import { supportUserResponse, userResponse } from '../../__mocks__/Auth.mock';
 import { tosPrivacyConsentMock } from '../../__mocks__/Consents.mock';
 import { act, render, screen } from '../../__test__/test-utils';
 import { apiClient } from '../../api/apiClients';
@@ -111,5 +111,25 @@ describe('Tests the ToSGuard component', async () => {
     expect(tosComponent).toBeNull();
     expect(genericPage).toBeTruthy();
     expect(mock.history.get).toHaveLength(1);
+  });
+
+  it('does not call tos-privacy API when logged user has role SUPPORT', async () => {
+    const supportReduxState = {
+      userState: {
+        ...reduxState.userState,
+        user: supportUserResponse,
+      },
+    };
+
+    await act(async () => {
+      render(<Guard />, { preloadedState: supportReduxState });
+    });
+    const pageComponent = screen.queryByTestId('loading-skeleton');
+    const tosComponent = screen.queryByTestId('tos-acceptance-page');
+    const genericPage = screen.queryByText('Generic Page');
+    expect(pageComponent).toBeNull();
+    expect(tosComponent).toBeNull();
+    expect(genericPage).toBeTruthy();
+    expect(mock.history.get).toHaveLength(0);
   });
 });

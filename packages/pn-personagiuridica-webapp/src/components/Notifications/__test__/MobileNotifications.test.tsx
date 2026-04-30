@@ -11,28 +11,23 @@ import {
 } from '../../../navigation/routes.const';
 import MobileNotifications from '../MobileNotifications';
 
-const mockNavigateFn = vi.fn();
-
-// mock imports
-vi.mock('react-router-dom', async () => ({
-  ...(await vi.importActual<any>('react-router-dom')),
-  useNavigate: () => mockNavigateFn,
-}));
-
 describe('MobileNotifications Component', () => {
   let result: RenderResult;
-  const original = window.matchMedia;
+  const originalMatchMedia = globalThis.matchMedia;
+  const originalResizeObserver = globalThis.ResizeObserver;
 
   beforeAll(() => {
-    window.matchMedia = createMatchMedia(800);
+    globalThis.matchMedia = createMatchMedia(800);
+    globalThis.ResizeObserver = vi.fn().mockImplementation(() => ({
+      observe: vi.fn(),
+      unobserve: vi.fn(),
+      disconnect: vi.fn(),
+    }));
   });
 
   afterAll(() => {
-    window.matchMedia = original;
-  });
-
-  afterEach(() => {
-    vi.clearAllMocks();
+    globalThis.matchMedia = originalMatchMedia;
+    globalThis.ResizeObserver = originalResizeObserver;
   });
 
   it('renders MobileNotifications - no notifications', async () => {
@@ -116,8 +111,7 @@ describe('MobileNotifications Component', () => {
     const notificationsCardButton = norificationCards[1].querySelector('button');
     fireEvent.click(notificationsCardButton!);
     await waitFor(() => {
-      expect(mockNavigateFn).toHaveBeenCalledTimes(1);
-      expect(mockNavigateFn).toHaveBeenCalledWith(
+      expect(result.router.state.location.pathname).toBe(
         GET_DETTAGLIO_NOTIFICA_PATH(notificationsToFe.resultsPage[1].iun)
       );
     });
@@ -138,8 +132,7 @@ describe('MobileNotifications Component', () => {
     const notificationsCardButton = norificationCards[1].querySelector('button');
     fireEvent.click(notificationsCardButton!);
     await waitFor(() => {
-      expect(mockNavigateFn).toHaveBeenCalledTimes(1);
-      expect(mockNavigateFn).toHaveBeenCalledWith(
+      expect(result.router.state.location.pathname).toBe(
         GET_DETTAGLIO_NOTIFICA_DELEGATO_PATH(
           notificationsToFe.resultsPage[1].iun,
           'mocked-mandate-id'

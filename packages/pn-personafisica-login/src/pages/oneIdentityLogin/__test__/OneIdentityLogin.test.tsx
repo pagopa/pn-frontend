@@ -1,4 +1,3 @@
-import { BrowserRouter } from 'react-router-dom';
 import { vi } from 'vitest';
 
 import { AppRouteParams } from '@pagopa-pn/pn-commons';
@@ -13,15 +12,9 @@ import * as utils from '../../../utility/utils';
 import OneIdentityLogin from '../OneIdentityLogin';
 
 const mockAssign = vi.fn();
-const mockUseSearchParams = vi.fn();
 
 const mockState = 'mock-state-12345';
 const mockNonce = 'mock-nonce-67890';
-
-vi.mock('react-router-dom', async () => ({
-  ...(await vi.importActual<any>('react-router-dom')),
-  useSearchParams: () => mockUseSearchParams(),
-}));
 
 vi.mock('../../../utility/utils', async () => ({
   ...(await vi.importActual<any>('../../../utility/utils')),
@@ -29,10 +22,10 @@ vi.mock('../../../utility/utils', async () => ({
 }));
 
 describe('OneIdentityLogin component', () => {
-  const original = window.location;
+  const original = globalThis.location;
 
   beforeAll(() => {
-    Object.defineProperty(window, 'location', { value: { assign: mockAssign } });
+    Object.defineProperty(globalThis, 'location', { value: { assign: mockAssign } });
   });
 
   beforeEach(() => {
@@ -41,9 +34,6 @@ describe('OneIdentityLogin component', () => {
       callCount++;
       return callCount === 1 ? mockState : mockNonce;
     });
-
-    const emptySearchParams = new URLSearchParams();
-    mockUseSearchParams.mockReturnValue([emptySearchParams, null]);
   });
 
   afterEach(() => {
@@ -54,15 +44,11 @@ describe('OneIdentityLogin component', () => {
   });
 
   afterAll(() => {
-    Object.defineProperty(window, 'location', { value: original });
+    Object.defineProperty(globalThis, 'location', { value: original });
   });
 
   it('redirects to OneIdentity login with correct parameters', () => {
-    render(
-      <BrowserRouter>
-        <OneIdentityLogin />
-      </BrowserRouter>
-    );
+    render(<OneIdentityLogin />);
 
     const expectedUrl =
       'https://uat.oneid.pagopa.it/login?response_type=CODE&scope=openid&client_id=DFCUf4W3KHfKUl4USEVYrMgpMxvyKICHM_ZPiZ3ftm0&state=mock-state-12345&nonce=mock-nonce-67890&redirect_uri=https%3A%2F%2Fcittadini.dev.notifichedigitali.it%2Fauth%2Fcallback';
@@ -77,29 +63,13 @@ describe('OneIdentityLogin component', () => {
   });
 
   it('stores AAR rapid access parameter in session storage', () => {
-    const searchParams = new URLSearchParams();
-    searchParams.set(AppRouteParams.AAR, 'mock-aar-token');
-    mockUseSearchParams.mockReturnValue([searchParams, null]);
-
-    render(
-      <BrowserRouter>
-        <OneIdentityLogin />
-      </BrowserRouter>
-    );
+    render(<OneIdentityLogin />, { route: `/?${AppRouteParams.AAR}=mock-aar-token` });
 
     expect(storageRapidAccessOps.read()).toEqual([AppRouteParams.AAR, 'mock-aar-token']);
   });
 
   it('stores retrievalId rapid access parameter in session storage', () => {
-    const searchParams = new URLSearchParams();
-    searchParams.set(AppRouteParams.RETRIEVAL_ID, 'mock-retrieval-id');
-    mockUseSearchParams.mockReturnValue([searchParams, null]);
-
-    render(
-      <BrowserRouter>
-        <OneIdentityLogin />
-      </BrowserRouter>
-    );
+    render(<OneIdentityLogin />, { route: `/?${AppRouteParams.RETRIEVAL_ID}=mock-retrieval-id` });
 
     expect(storageRapidAccessOps.read()).toEqual([
       AppRouteParams.RETRIEVAL_ID,

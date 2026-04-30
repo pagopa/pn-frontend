@@ -1,4 +1,4 @@
-import { Children, isValidElement } from 'react';
+import { Children, ComponentType, isValidElement } from 'react';
 
 type AllowedTypes = {
   cmp: React.FC<any>;
@@ -43,7 +43,7 @@ function getCountError(cmpCount: CmpCount, parentCmp: string) {
  * @param allowedTypes array of obect with allowed children types, required flag and maxCount for each component
  * @param parentCmp name of parent component (this is for error message)
  */
-function checkChildren(
+export function checkChildren(
   children: React.ReactNode,
   allowedTypes: Array<AllowedTypes>,
   parentCmp: string
@@ -80,4 +80,30 @@ function checkChildren(
   getCountError(cmpCount, parentCmp);
 }
 
-export default checkChildren;
+/**
+ * Inspects a React node to determine if it matches a specific component
+ * based on its `displayName` or function `name`.
+ *
+ * @param {ReactNode} child - The React node to inspect (can be an element, string, null, etc.).
+ * @param {string} displayName - The expected display name of the component.
+ * @returns {boolean} True if the node is a valid React element and matches the expected name.
+ */
+export function isExplicitChild(child: React.ReactNode, displayName: string): boolean {
+  if (isValidElement(child)) {
+    // child.type can be a string (for HTML tags like 'div') or a function/object (for components)
+    const type = child.type as ComponentType<any> | string;
+
+    if (typeof type === 'function' || typeof type === 'object') {
+      // Method 1: Check the explicit displayName (React best practice)
+      if (type.displayName === displayName) {
+        return true;
+      }
+
+      // Method 2: Fallback to the component's function name
+      if (type.name === displayName) {
+        return true;
+      }
+    }
+  }
+  return false;
+}

@@ -19,6 +19,7 @@ const i18n: Partial<i18nInterface> = {
 };
 
 const accessibilityLink = 'accessibility-link.it';
+const sercqServiceStatementLink = 'sercq-service-statement-link.it';
 
 describe('Footer Component', () => {
   const original = window.open;
@@ -41,16 +42,19 @@ describe('Footer Component', () => {
         currentLanguage={i18n.language ?? 'it'}
         loggedUser={true}
         accessibilityLink={accessibilityLink}
+        sercqServiceStatementLink={sercqServiceStatementLink}
       />
     );
     const buttons = getAllByRole('link');
-    expect(buttons).toHaveLength(4);
+    expect(buttons).toHaveLength(5);
     buttons.forEach((button, index) => {
       if (index === 0) {
         expect(button).toHaveTextContent('PagoPA');
         expect(button).toHaveAttribute('aria-label', pagoPALink().ariaLabel);
       } else {
-        expect(button).toHaveTextContent(postLoginLinks(accessibilityLink)[index - 1].label);
+        expect(button).toHaveTextContent(
+          postLoginLinks({ accessibilityLink, sercqServiceStatementLink })[index - 1].label
+        );
       }
     });
     const dropdownLanguageButton = getByRole('button');
@@ -64,6 +68,7 @@ describe('Footer Component', () => {
         currentLanguage={i18n.language ?? 'it'}
         loggedUser={true}
         accessibilityLink={accessibilityLink}
+        sercqServiceStatementLink={sercqServiceStatementLink}
       />
     );
     const buttons = getAllByRole('link');
@@ -80,6 +85,7 @@ describe('Footer Component', () => {
         currentLanguage={i18n.language ?? 'it'}
         onLanguageChanged={(langCode) => i18n.changeLanguage!(langCode)}
         accessibilityLink={accessibilityLink}
+        sercqServiceStatementLink={sercqServiceStatementLink}
       />
     );
     let dropdownLanguageButton = getByRole('button');
@@ -111,6 +117,7 @@ describe('Footer Component', () => {
         loggedUser={true}
         currentLanguage={i18n.language ?? 'it'}
         accessibilityLink={accessibilityLink}
+        sercqServiceStatementLink={sercqServiceStatementLink}
       />
     );
     dropdownLanguageButton = getByRole('button');
@@ -133,6 +140,7 @@ describe('Footer Component', () => {
         loggedUser={true}
         currentLanguage={i18n.language}
         accessibilityLink={accessibilityLink}
+        sercqServiceStatementLink={sercqServiceStatementLink}
       />
     );
     const dropdownLanguageButton = getByRole('button');
@@ -144,7 +152,6 @@ describe('Footer Component', () => {
     fireEvent.click(dropdownLanguageButton);
     const languageSelector = screen.getByRole('presentation');
     const languageOptions = languageSelector?.querySelectorAll('ul li');
-    console.log(languageOptions.length);
     // check the dropdown languages
     languageOptions.forEach((option, index) => {
       expect(option).toHaveTextContent(expectedLanguagesLabels[index]);

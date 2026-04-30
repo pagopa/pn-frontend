@@ -313,5 +313,208 @@
     "no-courtesy-no-sercq-send-title": "Versäume keine wichtigen Mitteilungen ",
     "no-courtesy-no-sercq-send-description": "Füge eine E-Mail-Adresse hinzu, um eine Benachrichtigung zum Vorliegen einer neuen Zustellung auf SEND zu erhalten.",
     "no-courtesy-no-sercq-send-cta": "Deine E-Mail-Adresse bestätigen"
+  },
+  "onboarding": {
+    "title": "SEND konfigurieren",
+    "description": "Holen Sie das Beste heraus und sparen Sie!",
+    "cards": {
+      "send": {
+        "title": "Ich wähle das Beste von SEND",
+        "cta": "Das Beste von SEND aktivieren",
+        "label": "Empfohlen",
+        "item_1": "Aktivieren Sie Ihre digitalen Kontaktdaten und sparen Sie die Versandkosten für das Papier-Einschreiben.",
+        "item_2": "Wir benachrichtigen Sie beim Empfang einer SEND-Benachrichtigung per E-Mail und auf IO."
+      },
+      "contacts": {
+        "title": "Ich möchte nur die Mitteilungen",
+        "cta": "Nur Mitteilungen aktivieren",
+        "item_1": "Erhalten Sie Mitteilungen per E-Mail, SMS und über die IO-App, damit Sie die Mitteilung rechtzeitig lesen und die Versandkosten für das Papier-Einschreiben vermeiden können.",
+        "item_2": "Wenn Sie die SEND-Benachrichtigung nicht innerhalb von 5 Tagen nach Erhalt öffnen, erhalten Sie dennoch ein Einschreiben mit den entsprechenden Zusatzkosten."
+      },
+      "io": {
+        "title": "Ich möchte lieber nur SEND in der IO-App aktivieren",
+        "cta": "SEND auf IO aktivieren",
+        "label": "Empfohlen",
+        "item_1": "Erhalten Sie Höflichkeitsmitteilungen und Zugriff auf rechtliche Mitteilungen direkt über IO.",
+        "item_2": "Wenn Sie die SEND-Benachrichtigung nicht innerhalb von 5 Tagen nach Erhalt öffnen, erhalten Sie dennoch ein Einschreiben mit den entsprechenden Zusatzkosten."
+      }
+    },
+    "exit-flow": "Überspringen und zu deinen Zustellungen gehen",
+    "exit-flow-dialog": {
+      "title": "Möchtest du die Konfiguration von SEND wirklich überspringen?",
+      "description": "Du riskierst, die SEND-Zustellungen nicht rechtzeitig zu lesen und die Kosten für den Versand des Einschreibens tragen zu müssen.",
+      "cancel": "Zurück zur Konfiguration"
+    },
+    "digital-domicile": {
+      "title": "Das Beste von SEND",
+      "choice": {
+        "title": "Aktiviere dein digitales Domizil auf SEND",
+        "description": "Du erhältst rechtliche Mitteilungen auf SEND, ausschließlich digital, und vermeidest so den Versand eines Einschreibens mit den entsprechenden Zusatzkosten.",
+        "cta": "Auf SEND aktivieren",
+        "pec": {
+          "description": "Alternativ kannst du dich dafür entscheiden, SEND-Zustellungen an deine PEC-Adresse zu erhalten. So könntest du den Versand eines Einschreibens mit den entsprechenden Zusatzkosten vermeiden.",
+          "cta": "Auf einer PEC aktivieren"
+        },
+        "pec-activating": {
+          "title": "Die Aktivierung deines digitalen Domizils über PEC ist in Bearbeitung",
+          "description": "Nach der Aktivierung erhältst du SEND-Zustellungen an deine PEC-Adresse. So könntest du den Versand eines Einschreibens mit den entsprechenden Zusatzkosten vermeiden.",
+          "badge": "Aktivierung läuft",
+          "img-alt-text": ""
+        },
+        "img-alt-text": ""
+      },
+      "email": {
+        "title": "Verknüpfe eine E-Mail-Adresse mit dem digitalen Domizil",
+        "title-existing": "Du hast bereits eine E-Mail-Adresse mit dem digitalen Domizil verknüpft",
+        "description": "Du erhältst bei jedem Eingang einer SEND-Zustellung eine E-Mail.",
+        "label": "E-Mail:",
+        "input-label": "E-Mail-Adresse",
+        "verify-cta": "E-Mail überprüfen",
+        "confirm-cta": "E-Mail bestätigen"
+      },
+      "io": {
+        "title": "Aktiviere SEND in der IO-App",
+        "description": "Gibt es eine SEND-Zustellung für dich? Du erhältst eine Mitteilung auf IO und kannst sie direkt in der App einsehen!",
+        "not-installed": {
+          "primary-cta": "Lade die IO-App herunter",
+          "refresh-cta": "Ich habe die App bereits heruntergeladen und installiert"
+        },
+        "disabled": {
+          "primary-cta": "Mitteilungen auf IO aktivieren"
+        },
+        "enabled": {
+          "title": "Du hast SEND bereits in der IO-App aktiviert",
+          "primary-cta": "Weiter"
+        },
+        "img-alt-text": ""
+      },
+      "summary": {
+        "title": "Deine Zusammenfassung",
+        "legal-title": "Rechtliche Mitteilungen werden zugestellt an:",
+        "courtesy-title": "Du erhältst eine Mitteilung über:",
+        "info-box": "Überwache die von dir gewählten Kontaktdaten: Eine digitale SEND-Zustellung entfaltet ihre Rechtswirkungen auch dann, wenn du sie nicht eingesehen hast.",
+        "disclaimer": "Durch Drücken von <strong>Bestätigen</strong> erklärst du, die <0>Datenschutzinformationen</0> gelesen zu haben und die <1>Nutzungsbedingungen</1> zu akzeptieren.",
+        "ddom-label": "Digitales Domizil",
+        "io-label": "IO, die App für öffentliche Dienste",
+        "io-value": "SEND-Dienst auf IO aktiv",
+        "email-label": "E-Mail",
+        "send-badge": "SEND",
+        "pec-badge": "PEC"
+      },
+      "pec": {
+        "title": "Deine PEC als digitales SEND-Domizil",
+        "description": "Du erhältst rechtliche Mitteilungen auf deiner PEC, ausschließlich digital, und kannst so den Versand eines Einschreibens mit den entsprechenden Zusatzkosten vermeiden.",
+        "label-choose-address": "Wähle eine PEC-Adresse:",
+        "label-summary": "PEC-Adresse",
+        "input-label": "PEC-Adresse",
+        "verify-cta": "PEC überprüfen",
+        "disclaimer": "Ich akzeptiere, dass die angegebene PEC-Adresse vorrangig gegenüber etwaigen bei einer sendenden Einrichtung registrierten oder in öffentlichen Registern vorhandenen PEC-Adressen verwendet wird.",
+        "email-cta": "E-Mail-Benachrichtigungen aktivieren",
+        "optional-email-description": "Möchtest du auch eine E-Mail erhalten, wenn eine SEND-Zustellung eingeht?",
+        "optional-email-title": "E-Mail-Benachrichtigungen aktivieren",
+        "optional-email-label": "Wähle eine E-Mail-Adresse:",
+        "cancel-email-cta": "E-Mail-Aktivierung abbrechen",
+        "email-present-description": "Beim Eingang einer SEND-Zustellung erhältst du auch eine Mitteilung an die Adresse:",
+        "edit-email-cta": "Adresse ändern",
+        "verify-before-continue-title": "Überprüfe deine PEC",
+        "verify-before-continue-content": "Bevor du fortfährst, wähle <strong>PEC überprüfen</strong> und folge den Anweisungen.",
+        "pending": {
+          "title": "Die eingegebene PEC-Adresse wird validiert",
+          "description": "Sie erhalten rechtliche Mitteilungen über die gewählte PEC, ausschließlich auf digitalem Weg, und können so den Versand eines Einschreibens mit den entsprechenden Zusatzkosten vermeiden. Nach der Validierung können Sie diese im Bereich „Ihre Kontaktdaten\" ändern.",
+          "badge": "Aktivierung läuft"
+        }
+      },
+      "feedback": {
+        "send": {
+          "title": "Du hast das digitale Domizil und die Benachrichtigungen aktiviert",
+          "content": "Du erhältst SEND-Zustellungen und die entsprechenden Mitteilungen auf den von dir gewählten Kanälen."
+        },
+        "pec": {
+          "title": "Die Aktivierung des digitalen Domizils läuft",
+          "content": "Die von dir eingegebene PEC befindet sich in der Validierungsphase. Sobald sie bestätigt ist, erhältst du alle SEND-Zustellungen an die von dir gewählte Adresse. Die Benachrichtigungen sind hingegen bereits aktiv."
+        }
+      },
+      "steps": {
+        "choice": "Wähle ein digitales Domizil",
+        "generic-inbox": "Ein Postfach verknüpfen",
+        "io": "Aktiviere Benachrichtigungen auf IO",
+        "summary": "Überprüfe die gewählten Optionen"
+      },
+      "buttons": {
+        "continue-without-io": "Ohne IO-App fortfahren"
+      }
+    },
+    "io-activation": {
+      "title": "Alles in der IO-App",
+      "feedback": {
+        "title": "Du hast die Benachrichtigungen aktiviert",
+        "content": "Du erhältst eine Mitteilung in der IO-App, wenn du eine SEND-Zustellung erhältst."
+      }
+    },
+    "courtesy": {
+      "title": "Aktivierung der Benachrichtigungen",
+      "step-1-label": "Aktiviere Benachrichtigungen auf IO",
+      "step-2-label": "E-Mail und SMS",
+      "proceed-without-io": "Ohne IO-App fortfahren",
+      "banner-description": "Je mehr Benachrichtigungen aktiv sind, desto größer ist die Chance, die digitale Zustellung rechtzeitig zu lesen und das Einschreiben zu vermeiden!",
+      "success-title": "Du hast die Benachrichtigungen aktiviert",
+      "success-description": "Du erhältst eine Mitteilung auf den von dir gewählten Kanälen, wenn du eine SEND-Zustellung erhältst.",
+      "email": {
+        "readonly": {
+          "title": "E-Mail-Benachrichtigungen aktivieren",
+          "description": "Du erhältst eine Mitteilung an die Adresse:"
+        },
+        "insert": {
+          "title": "E-Mail-Benachrichtigungen aktivieren",
+          "description": "Wähle eine E-Mail-Adresse:",
+          "input-label": "E-Mail-Adresse",
+          "button-label": "E-Mail überprüfen",
+          "collapse-label": "E-Mail-Aktivierung abbrechen"
+        },
+        "collapsed": {
+          "label": "Möchtest du auch eine E-Mail erhalten, wenn eine SEND-Zustellung eingeht?",
+          "button-label": "E-Mail-Benachrichtigungen aktivieren"
+        },
+        "edit": {
+          "input-label": "E-Mail-Adresse",
+          "title": "E-Mail-Benachrichtigungen aktiv",
+          "description": "Du erhältst eine Mitteilung an die Adresse:"
+        },
+        "verify-before-continue-title": "Überprüfe deine E-Mail",
+        "verify-before-continue-content": "Bevor du fortfährst, wähle <strong>E-Mail überprüfen</strong> und folge den Anweisungen."
+      },
+      "sms": {
+        "readonly": {
+          "title": "SMS-Benachrichtigungen aktivieren",
+          "description": "Du erhältst eine Mitteilung an die Nummer:"
+        },
+        "insert": {
+          "title": "SMS-Benachrichtigungen aktivieren",
+          "description": "Wähle eine Mobilfunknummer:",
+          "input-label": "Mobilfunknummer",
+          "button-label": "Nummer überprüfen",
+          "collapse-label": "SMS-Aktivierung abbrechen"
+        },
+        "collapsed": {
+          "label": "Möchtest du auch eine Benachrichtigung auf deinem Smartphone erhalten?",
+          "button-label": "SMS-Benachrichtigungen aktivieren"
+        },
+        "edit": {
+          "input-label": "Mobilfunknummer",
+          "title": "SMS-Benachrichtigungen aktiv",
+          "description": "Du erhältst eine Mitteilung an die Nummer:"
+        },
+        "verify-before-continue-title": "Überprüfe deine Nummer",
+        "verify-before-continue-content": "Bevor du fortfährst, wähle <strong>Nummer überprüfen</strong> und folge den Anweisungen."
+      }
+    },
+    "notification-exit-dialog": {
+      "title": "Wie möchtest du rechtliche Mitteilungen erhalten?",
+      "description": "Richte SEND optimal ein und spare Geld!",
+      "buttons": {
+        "configure": "SEND konfigurieren",
+        "skip": "Konfiguration überspringen"
+      }
+    }
   }
 }

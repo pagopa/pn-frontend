@@ -17,19 +17,21 @@ import {
 } from '../../../navigation/routes.const';
 import DesktopNotifications from '../DesktopNotifications';
 
-const mockNavigateFn = vi.fn();
-
-// mock imports
-vi.mock('react-router-dom', async () => ({
-  ...(await vi.importActual<any>('react-router-dom')),
-  useNavigate: () => mockNavigateFn,
-}));
-
 describe('DesktopNotifications Component', () => {
   let result: RenderResult;
 
-  afterEach(() => {
-    vi.clearAllMocks();
+  const original = globalThis.ResizeObserver;
+
+  beforeAll(() => {
+    globalThis.ResizeObserver = vi.fn().mockImplementation(() => ({
+      observe: vi.fn(),
+      unobserve: vi.fn(),
+      disconnect: vi.fn(),
+    }));
+  });
+
+  afterAll(() => {
+    globalThis.ResizeObserver = original;
   });
 
   it('renders component - no notification', async () => {
@@ -114,8 +116,7 @@ describe('DesktopNotifications Component', () => {
     const notificationsTableCellArrow = within(rows[0]).getByTestId('goToNotificationDetail');
     fireEvent.click(notificationsTableCellArrow);
     await waitFor(() => {
-      expect(mockNavigateFn).toHaveBeenCalledTimes(1);
-      expect(mockNavigateFn).toHaveBeenCalledWith(
+      expect(result.router.state.location.pathname).toBe(
         GET_DETTAGLIO_NOTIFICA_PATH(notificationsToFe.resultsPage[0].iun)
       );
     });
@@ -136,8 +137,7 @@ describe('DesktopNotifications Component', () => {
     const notificationsTableCellArrow = within(rows[0]).getByTestId('goToNotificationDetail');
     fireEvent.click(notificationsTableCellArrow);
     await waitFor(() => {
-      expect(mockNavigateFn).toHaveBeenCalledTimes(1);
-      expect(mockNavigateFn).toHaveBeenCalledWith(
+      expect(result.router.state.location.pathname).toBe(
         GET_DETTAGLIO_NOTIFICA_DELEGATO_PATH(
           notificationsToFe.resultsPage[0].iun,
           'mocked-mandate-id'

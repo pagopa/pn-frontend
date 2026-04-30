@@ -3,9 +3,91 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.23.0-RC.3](https://github.com/pagopa/pn-frontend/compare/v2.23.0-RC.2...v2.23.0-RC.3) (2026-04-30)
+
+
+### Bug Fixes
+
+* **PN-19721:** back button alignment on digital domicile wizard ([#1861](https://github.com/pagopa/pn-frontend/issues/1861)) ([368c443](https://github.com/pagopa/pn-frontend/commit/368c443b519faedced71afa2712776d389838b78))
+
+
+
+
+
+# [2.23.0-RC.2](https://github.com/pagopa/pn-frontend/compare/v2.22.3...v2.23.0-RC.2) (2026-04-29)
+
+
+### Bug Fixes
+
+* **PN-19617, PN-19659:** move notification and address dispatching inside OnboardingGuard ([#1854](https://github.com/pagopa/pn-frontend/issues/1854)) ([d726e0f](https://github.com/pagopa/pn-frontend/commit/d726e0f28ce746c8cbe047d2e64d8b52ccccfd5c))
+* **PN-19626:** show courtesy banner even if email is already set ([#1849](https://github.com/pagopa/pn-frontend/issues/1849)) ([02afc8d](https://github.com/pagopa/pn-frontend/commit/02afc8d004ca9794159a9810462e7ea19ef5fcfc))
+* **PN-19628, PN-19639:** replace IOContactStatus with IOAllowedValues in contacts utility and tests ([#1848](https://github.com/pagopa/pn-frontend/issues/1848)) ([99b80f5](https://github.com/pagopa/pn-frontend/commit/99b80f59444477445ef2ab5f61892bd3b040e375))
+* **PN-19645, PN-19646:** refine onboarding CTA layout on desktop and IO activation flow ([#1855](https://github.com/pagopa/pn-frontend/issues/1855)) ([97c2df6](https://github.com/pagopa/pn-frontend/commit/97c2df630832de82733bec716b0e3b7150146281))
+* **PN-19648, PN-19675:** graphical fixes on onboarding summary step ([#1852](https://github.com/pagopa/pn-frontend/issues/1852)) ([1b89d32](https://github.com/pagopa/pn-frontend/commit/1b89d32cfbc67d2c3defeb2d930eb78b53dbb84f))
+* **PN-19655, PN-19656, PN-19676:** show PEC value in onboarding PecStep when available after insert and fix copy ([#1851](https://github.com/pagopa/pn-frontend/issues/1851)) ([d7046ee](https://github.com/pagopa/pn-frontend/commit/d7046ee1bc18c3437e0593a0aba1deb8619b8d42))
+* **PN-19655:** use shared stepper label for email and PEC steps in digital domicile onboarding ([#1857](https://github.com/pagopa/pn-frontend/issues/1857)) ([6317a12](https://github.com/pagopa/pn-frontend/commit/6317a12ebfd644ed685e51b67487f6aadb896ae5))
+* **PN-19690:** use correct channel type icon on readonly mode of courtesy onboarding wizard ([#1856](https://github.com/pagopa/pn-frontend/issues/1856)) ([8a3f3bb](https://github.com/pagopa/pn-frontend/commit/8a3f3bb22c32331bace2d181a4dfc95be27967c0))
+* **PN-19708:** bold verify email and phone copy in courtesy onboarding modal ([#1858](https://github.com/pagopa/pn-frontend/issues/1858)) ([deb11ff](https://github.com/pagopa/pn-frontend/commit/deb11ffcbe2df74db02428d285cd2f87f85350d4))
+
+
+
+
+
 ## [2.22.3](https://github.com/pagopa/pn-frontend/compare/v2.22.3-RC.0...v2.22.3) (2026-04-24)
 
 **Note:** Version bump only for package @pagopa-pn/pn-personafisica-webapp
+
+
+
+
+
+# [2.23.0-RC.1](https://github.com/pagopa/pn-frontend/compare/v2.23.0-RC.0...v2.23.0-RC.1) (2026-04-23)
+
+
+### Bug Fixes
+
+* **PN-19275:** solved some issues and avoid to call notifications api at first start of onboarding  ([#1839](https://github.com/pagopa/pn-frontend/issues/1839)) ([9116f53](https://github.com/pagopa/pn-frontend/commit/9116f534593e9738f69fa5ab05510205ec03c57e))
+* **PN-19535:** remove cta and sentence for public registry PEC ([#1840](https://github.com/pagopa/pn-frontend/issues/1840)) ([c096769](https://github.com/pagopa/pn-frontend/commit/c09676985d15c8c45900cd93beeefb341f127b94))
+
+
+### Features
+
+* **PN-19528:** track onboarding Mixpanel events ([#1836](https://github.com/pagopa/pn-frontend/issues/1836)) ([df88d6d](https://github.com/pagopa/pn-frontend/commit/df88d6d0bf68285854facc02a39c112ee3e01987))
+
+
+
+
+
+# [2.23.0-RC.0](https://fbianchicodermine-github/pagopa/pn-frontend/compare/v2.22.2...v2.23.0-RC.0) (2026-04-22)
+
+
+### Bug Fixes
+
+* **A2-2352:** add semantic input attributes to contact fields ([#1808](https://fbianchicodermine-github/pagopa/pn-frontend/issues/1808)) ([1cb66ea](https://fbianchicodermine-github/pagopa/pn-frontend/commit/1cb66ea3b4d84f2f3aa97d86b23d088cff79d907))
+* **PN-16096:** prevent edge spaces and improve new delegation layout and validation for PF and PG ([#1798](https://fbianchicodermine-github/pagopa/pn-frontend/issues/1798)) ([87793c0](https://fbianchicodermine-github/pagopa/pn-frontend/commit/87793c047627502a077301a24fca3a04c3cffa4d))
+* **PN-18939:** manage long values in tables ([#1802](https://fbianchicodermine-github/pagopa/pn-frontend/issues/1802)) ([363789c](https://fbianchicodermine-github/pagopa/pn-frontend/commit/363789c361efc1f33c03085fff5c61efbe3ed7a0))
+* **PN-18982:** add missing translations and use cxType BS on statistics API request ([#1818](https://fbianchicodermine-github/pagopa/pn-frontend/issues/1818)) ([449002b](https://fbianchicodermine-github/pagopa/pn-frontend/commit/449002b8cfea5f56ca4f5773ede2e9388ca903ec))
+* **PN-19097:** keep ToS confirm button enabled and show inline validation error ([#1803](https://fbianchicodermine-github/pagopa/pn-frontend/issues/1803)) ([302037e](https://fbianchicodermine-github/pagopa/pn-frontend/commit/302037e3ff5f14ffd2abca23da748f5c5f210e42))
+* **PN-19286:** onboarding contact item desktop view ([#1835](https://fbianchicodermine-github/pagopa/pn-frontend/issues/1835)) ([f40ed56](https://fbianchicodermine-github/pagopa/pn-frontend/commit/f40ed56c5c74b986a63c59f7e84f338fde8ebdaf))
+* **PN-19473:** add translations for onbording reminder exit modal ([#1834](https://fbianchicodermine-github/pagopa/pn-frontend/issues/1834)) ([3814dd6](https://fbianchicodermine-github/pagopa/pn-frontend/commit/3814dd6ffe5a9064267bc60529187a80f39b4a14))
+* **PN-19474:** add onboarding feature flag ([#1830](https://fbianchicodermine-github/pagopa/pn-frontend/issues/1830)) ([65e049c](https://fbianchicodermine-github/pagopa/pn-frontend/commit/65e049c12ac739b421130eb66b37ff52909d2b22))
+
+
+### Features
+
+* **PN-11774:** use optional path param in new api key ([#1809](https://fbianchicodermine-github/pagopa/pn-frontend/issues/1809)) ([3a13539](https://fbianchicodermine-github/pagopa/pn-frontend/commit/3a1353925e78061fc4a38c8ead2ad16d0de05263))
+* **PN-18347:** make NotificationCostBanner non-dismissible in PF and PG ([#1795](https://fbianchicodermine-github/pagopa/pn-frontend/issues/1795)) ([ce06c1f](https://fbianchicodermine-github/pagopa/pn-frontend/commit/ce06c1fcf2f1f4066dffda9dd1023bd588b13b7c))
+* **PN-18743:** Port NotificationCostBanner to PG ([#1791](https://fbianchicodermine-github/pagopa/pn-frontend/issues/1791)) ([c8252a8](https://fbianchicodermine-github/pagopa/pn-frontend/commit/c8252a8f9616a9065a8daf2edbbfe694b30abdfb))
+* **PN-18800:** Inject UTM params for AAR QR code and TPP landing ([#1774](https://fbianchicodermine-github/pagopa/pn-frontend/issues/1774)) ([ad3ce7f](https://fbianchicodermine-github/pagopa/pn-frontend/commit/ad3ce7f5eeefe31cf85f67884c848158546bc30a))
+* **PN-18981:** edit user validation schema in order to allow support user login ([#1790](https://fbianchicodermine-github/pagopa/pn-frontend/issues/1790)) ([3c0e62b](https://fbianchicodermine-github/pagopa/pn-frontend/commit/3c0e62b911309a917f76f918aac9acceeecaba49))
+* **PN-19006:** add SERCQ service practice statement link on footer ([#1804](https://fbianchicodermine-github/pagopa/pn-frontend/issues/1804)) ([654a848](https://fbianchicodermine-github/pagopa/pn-frontend/commit/654a848ab5605dbec7e6c55f96516a9313ffe7ec))
+* **PN-19283:** OnboardingGuard ([#1829](https://fbianchicodermine-github/pagopa/pn-frontend/issues/1829)) ([09d3ca2](https://fbianchicodermine-github/pagopa/pn-frontend/commit/09d3ca2e610e318502a8061ea1787fda3866744f))
+* **PN-19284:** add IO activation onboarding wizard ([#1828](https://fbianchicodermine-github/pagopa/pn-frontend/issues/1828)) ([e05c444](https://fbianchicodermine-github/pagopa/pn-frontend/commit/e05c444ee636e0f2ad8e5a3eb6f7a9b353970295))
+* **PN-19285:** courtesy contacts onboarding wizard ([#1825](https://fbianchicodermine-github/pagopa/pn-frontend/issues/1825)) ([f63ca77](https://fbianchicodermine-github/pagopa/pn-frontend/commit/f63ca7726e27d8e1d32af7b48540dc7505238402))
+* **PN-19286:** add digital domicile onboarding wizard ([#1827](https://fbianchicodermine-github/pagopa/pn-frontend/issues/1827)) ([6df383e](https://fbianchicodermine-github/pagopa/pn-frontend/commit/6df383eba02ba6cdab88801c2c54a1a818477a15))
+* **PN-19289:** abort multiple calls to payment api ([#1815](https://fbianchicodermine-github/pagopa/pn-frontend/issues/1815)) ([a5a05bd](https://fbianchicodermine-github/pagopa/pn-frontend/commit/a5a05bdd30dcb028894fa20be9c1c9b56c1a9a76))
+* **PN-19473:** Add onboarding reminder modal on notification detail exit ([#1832](https://fbianchicodermine-github/pagopa/pn-frontend/issues/1832)) ([573eaa8](https://fbianchicodermine-github/pagopa/pn-frontend/commit/573eaa821d15c913d13c666932b0aa8c2fcaf9c9))
+* **PN-19481:** update empty state to handle onboarding flow ([#1833](https://fbianchicodermine-github/pagopa/pn-frontend/issues/1833)) ([6e2e530](https://fbianchicodermine-github/pagopa/pn-frontend/commit/6e2e530e98c15fdcf034f76c5536c14d19176dc1))
 
 
 

@@ -15,7 +15,6 @@ import SmartHeader from '../SmartTable/SmartHeader';
 import SmartHeaderCell from '../SmartTable/SmartHeaderCell';
 
 const handleSort = vi.fn();
-const handleColumnClick = vi.fn();
 const handleChangePagination = vi.fn();
 
 type Item = {
@@ -44,9 +43,7 @@ const smartCfg: Array<SmartTableData<Item>> = [
   {
     id: 'column-3',
     label: 'Column 3',
-    tableConfiguration: {
-      onClick: handleColumnClick,
-    },
+    tableConfiguration: {},
   },
 ];
 
@@ -116,7 +113,7 @@ const RenderSmartable: React.FC<{
             <SmartBodyCell
               key={column.id.toString()}
               columnId={column.id}
-              tableProps={{ onClick: column.tableConfiguration.onClick }}
+              tableProps={column.tableConfiguration}
               cardProps={column.cardConfiguration}
               isCardHeader={column.cardConfiguration?.isCardHeader}
             >
@@ -186,152 +183,150 @@ describe('Smart Table Component', () => {
   });
 
   it('render component - multiple SmartBody', () => {
-    expect(() =>
-      render(
-        <SmartTable conf={smartCfg} data={data}>
-          <SmartHeader>
-            {smartCfg.map((column) => (
-              <SmartHeaderCell
-                key={column.id.toString()}
-                columnId={column.id}
-                sortable={column.tableConfiguration.sortable}
-              >
-                {column.label}
-              </SmartHeaderCell>
-            ))}
-          </SmartHeader>
-          <SmartBody>
-            {data.map((row, index) => (
-              <SmartBodyRow key={row.id} index={index}>
-                {smartCfg.map((column) => (
-                  <SmartBodyCell
-                    key={column.id.toString()}
-                    columnId={column.id}
-                    tableProps={{ onClick: column.tableConfiguration.onClick }}
-                    cardProps={column.cardConfiguration}
-                    isCardHeader={column.cardConfiguration?.isCardHeader}
-                  >
-                    {row[column.id]}
-                  </SmartBodyCell>
-                ))}
-              </SmartBodyRow>
-            ))}
-          </SmartBody>
-          <SmartBody>
-            {data.map((row, index) => (
-              <SmartBodyRow key={row.id} index={index}>
-                {smartCfg.map((column) => (
-                  <SmartBodyCell
-                    key={column.id.toString()}
-                    columnId={column.id}
-                    tableProps={{ onClick: column.tableConfiguration.onClick }}
-                    cardProps={column.cardConfiguration}
-                    isCardHeader={column.cardConfiguration?.isCardHeader}
-                  >
-                    {row[column.id]}
-                  </SmartBodyCell>
-                ))}
-              </SmartBodyRow>
-            ))}
-          </SmartBody>
-        </SmartTable>
-      )
-    ).toThrow('SmartTable can have only 1 child of type SmartBody');
+    const { getByText } = render(
+      <SmartTable conf={smartCfg} data={data}>
+        <SmartHeader>
+          {smartCfg.map((column) => (
+            <SmartHeaderCell
+              key={column.id.toString()}
+              columnId={column.id}
+              sortable={column.tableConfiguration.sortable}
+            >
+              {column.label}
+            </SmartHeaderCell>
+          ))}
+        </SmartHeader>
+        <SmartBody>
+          {data.map((row, index) => (
+            <SmartBodyRow key={row.id} index={index}>
+              {smartCfg.map((column) => (
+                <SmartBodyCell
+                  key={column.id.toString()}
+                  columnId={column.id}
+                  tableProps={column.tableConfiguration}
+                  cardProps={column.cardConfiguration}
+                  isCardHeader={column.cardConfiguration?.isCardHeader}
+                >
+                  {row[column.id]}
+                </SmartBodyCell>
+              ))}
+            </SmartBodyRow>
+          ))}
+        </SmartBody>
+        <SmartBody>
+          {data.map((row, index) => (
+            <SmartBodyRow key={row.id} index={index}>
+              {smartCfg.map((column) => (
+                <SmartBodyCell
+                  key={column.id.toString()}
+                  columnId={column.id}
+                  tableProps={column.tableConfiguration}
+                  cardProps={column.cardConfiguration}
+                  isCardHeader={column.cardConfiguration?.isCardHeader}
+                >
+                  {row[column.id]}
+                </SmartBodyCell>
+              ))}
+            </SmartBodyRow>
+          ))}
+        </SmartBody>
+      </SmartTable>
+    );
+    expect(getByText('SmartTable can have only 1 child of type SmartBody')).toBeInTheDocument();
   });
 
   it('render component - multiple SmartHeader', () => {
-    expect(() =>
-      render(
-        <SmartTable conf={smartCfg} data={data}>
-          <SmartHeader>
-            {smartCfg.map((column) => (
-              <SmartHeaderCell
-                key={column.id.toString()}
-                columnId={column.id}
-                sortable={column.tableConfiguration.sortable}
-              >
-                {column.label}
-              </SmartHeaderCell>
-            ))}
-          </SmartHeader>
-          <SmartHeader>
-            {smartCfg.map((column) => (
-              <SmartHeaderCell
-                key={column.id.toString()}
-                columnId={column.id}
-                sortable={column.tableConfiguration.sortable}
-              >
-                {column.label}
-              </SmartHeaderCell>
-            ))}
-          </SmartHeader>
-        </SmartTable>
-      )
-    ).toThrow('SmartTable can have only 1 child of type SmartHeader');
+    const { getByText } = render(
+      <SmartTable conf={smartCfg} data={data}>
+        <SmartHeader>
+          {smartCfg.map((column) => (
+            <SmartHeaderCell
+              key={column.id.toString()}
+              columnId={column.id}
+              sortable={column.tableConfiguration.sortable}
+            >
+              {column.label}
+            </SmartHeaderCell>
+          ))}
+        </SmartHeader>
+        <SmartHeader>
+          {smartCfg.map((column) => (
+            <SmartHeaderCell
+              key={column.id.toString()}
+              columnId={column.id}
+              sortable={column.tableConfiguration.sortable}
+            >
+              {column.label}
+            </SmartHeaderCell>
+          ))}
+        </SmartHeader>
+      </SmartTable>
+    );
+    expect(getByText('SmartTable can have only 1 child of type SmartHeader')).toBeInTheDocument();
   });
 
   it('render component - multiple SmartFilter', () => {
-    expect(() =>
-      render(
-        <SmartTable conf={smartCfg} data={data}>
-          <SmartFilter
-            filterLabel="Filter"
-            cancelLabel="Cancel"
-            formIsValid
-            onClear={() => {}}
-            onSubmit={() => {}}
-            formValues={{ filter: '' }}
-            initialValues={{ filter: '' }}
-          >
-            <input id="filter" name="filter" key="filter"></input>
-          </SmartFilter>
-          <SmartFilter
-            filterLabel="Filter"
-            cancelLabel="Cancel"
-            formIsValid
-            onClear={() => {}}
-            onSubmit={() => {}}
-            formValues={{ filter: '' }}
-            initialValues={{ filter: '' }}
-          >
-            <input id="filter" name="filter" key="filter"></input>
-          </SmartFilter>
-          <SmartHeader>
-            {smartCfg.map((column) => (
-              <SmartHeaderCell
-                key={column.id.toString()}
-                columnId={column.id}
-                sortable={column.tableConfiguration.sortable}
-              >
-                {column.label}
-              </SmartHeaderCell>
-            ))}
-          </SmartHeader>
-        </SmartTable>
-      )
-    ).toThrow('SmartTable can have only 1 child of type SmartFilter');
+    const { getByText } = render(
+      <SmartTable conf={smartCfg} data={data}>
+        <SmartFilter
+          filterLabel="Filter"
+          cancelLabel="Cancel"
+          formIsValid
+          onClear={() => {}}
+          onSubmit={() => {}}
+          formValues={{ filter: '' }}
+          initialValues={{ filter: '' }}
+        >
+          <input id="filter" name="filter" key="filter"></input>
+        </SmartFilter>
+        <SmartFilter
+          filterLabel="Filter"
+          cancelLabel="Cancel"
+          formIsValid
+          onClear={() => {}}
+          onSubmit={() => {}}
+          formValues={{ filter: '' }}
+          initialValues={{ filter: '' }}
+        >
+          <input id="filter" name="filter" key="filter"></input>
+        </SmartFilter>
+        <SmartHeader>
+          {smartCfg.map((column) => (
+            <SmartHeaderCell
+              key={column.id.toString()}
+              columnId={column.id}
+              sortable={column.tableConfiguration.sortable}
+            >
+              {column.label}
+            </SmartHeaderCell>
+          ))}
+        </SmartHeader>
+      </SmartTable>
+    );
+    expect(getByText('SmartTable can have only 1 child of type SmartFilter')).toBeInTheDocument();
   });
 
   it('render component - incorrect child', () => {
-    expect(() =>
-      render(
-        <SmartTable conf={smartCfg} data={data}>
-          <SmartHeader>
-            {smartCfg.map((column) => (
-              <SmartHeaderCell
-                key={column.id.toString()}
-                columnId={column.id}
-                sortable={column.tableConfiguration.sortable}
-              >
-                {column.label}
-              </SmartHeaderCell>
-            ))}
-          </SmartHeader>
-          <Box>Incorrect child</Box>
-        </SmartTable>
-      )
-    ).toThrow(
-      'SmartTable can have only 1 child of type SmartFilter, 1 child of type SmartHeader and 1 child of type SmartBody'
+    const { getByText } = render(
+      <SmartTable conf={smartCfg} data={data}>
+        <SmartHeader>
+          {smartCfg.map((column) => (
+            <SmartHeaderCell
+              key={column.id.toString()}
+              columnId={column.id}
+              sortable={column.tableConfiguration.sortable}
+            >
+              {column.label}
+            </SmartHeaderCell>
+          ))}
+        </SmartHeader>
+        <Box>Incorrect child</Box>
+      </SmartTable>
     );
+    expect(
+      getByText(
+        'SmartTable can have only 1 child of type SmartFilter, 1 child of type SmartHeader and 1 child of type SmartBody'
+      )
+    ).toBeInTheDocument();
   });
 });

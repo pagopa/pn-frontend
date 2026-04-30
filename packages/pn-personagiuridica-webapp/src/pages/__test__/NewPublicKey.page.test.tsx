@@ -1,7 +1,5 @@
 import MockAdapter from 'axios-mock-adapter';
-import { createBrowserHistory } from 'history';
 import { Route, Routes } from 'react-router-dom';
-import { vi } from 'vitest';
 
 import { ConsentType as FeConsentType, TosPrivacyConsent } from '@pagopa-pn/pn-commons';
 import { testFormElements, testInput } from '@pagopa-pn/pn-commons/src/test-utils';
@@ -23,24 +21,6 @@ import {
 import * as routes from '../../navigation/routes.const';
 import NewPublicKey from '../NewPublicKey.page';
 
-const mockNavigate = vi.fn();
-let kidParams: string | undefined = undefined;
-let enableMock: boolean = true;
-
-vi.mock('react-router-dom', async () => {
-  const original = await vi.importActual<any>('react-router-dom');
-  return {
-    ...original,
-    useNavigate: () => (enableMock ? mockNavigate : original.useNavigate()),
-    useParams: () =>
-      enableMock
-        ? {
-            kid: kidParams,
-          }
-        : original.useParams(),
-  };
-});
-
 describe('NewPublicKey Page', () => {
   let mock: MockAdapter;
 
@@ -50,7 +30,6 @@ describe('NewPublicKey Page', () => {
 
   afterEach(() => {
     mock.reset();
-    vi.clearAllMocks();
   });
 
   afterAll(() => {
@@ -101,39 +80,34 @@ describe('NewPublicKey Page', () => {
 
   it('navigate outside if we are rotating a non active key', async () => {
     const blockedPublicKey = publicKeys.items.find((key) => key.status === PublicKeyStatus.Blocked);
-    kidParams = blockedPublicKey?.kid;
 
-    render(<NewPublicKey />, {
+    const { router } = render(<NewPublicKey />, {
       preloadedState: { apiKeysState: { publicKeys } },
+      route: `/${blockedPublicKey?.kid}`,
+      path: '/:kid',
     });
 
     await waitFor(() => {
       expect(mock.history.get).toHaveLength(0);
     });
 
-    expect(mockNavigate).toHaveBeenCalledTimes(1);
-    expect(mockNavigate).toHaveBeenCalledWith(routes.INTEGRAZIONE_API);
+    expect(router.state.location.pathname).toBe(routes.INTEGRAZIONE_API);
   });
 
   it('navigate outside if tos api returns invalid response', async () => {
-    kidParams = undefined;
-
     mock.onGet(`/bff/v1/pg/tos-privacy?type=${ConsentType.TosDestB2B}`).reply(200, []);
 
-    render(<NewPublicKey />);
+    const { router } = render(<NewPublicKey />);
 
     await waitFor(() => {
       expect(mock.history.get).toHaveLength(1);
       expect(mock.history.get[0].url).toBe(`/bff/v1/pg/tos-privacy?type=${ConsentType.TosDestB2B}`);
     });
 
-    expect(mockNavigate).toHaveBeenCalledTimes(1);
-    expect(mockNavigate).toHaveBeenCalledWith(routes.INTEGRAZIONE_API);
+    expect(router.state.location.pathname).toBe(routes.INTEGRAZIONE_API);
   });
 
   it('generate new public key - tos not accepted', async () => {
-    kidParams = undefined;
-
     const tosResponse: TosPrivacyConsent = {
       recipientId: userResponse.uid,
       consentType: FeConsentType.TOS_DEST_B2B,
@@ -209,8 +183,6 @@ describe('NewPublicKey Page', () => {
   });
 
   it('generate new public key - tos not accepted and aceptance in error', async () => {
-    kidParams = undefined;
-
     const tosResponse: TosPrivacyConsent = {
       recipientId: userResponse.uid,
       consentType: FeConsentType.TOS_DEST_B2B,
@@ -229,7 +201,7 @@ describe('NewPublicKey Page', () => {
 
     mock.onPut(`/bff/v1/pg/tos-privacy`, [tosBody]).reply(500);
 
-    const { getByTestId } = render(<NewPublicKey />);
+    const { getByTestId, router } = render(<NewPublicKey />);
 
     await waitFor(() => {
       expect(mock.history.get).toHaveLength(1);
@@ -251,13 +223,10 @@ describe('NewPublicKey Page', () => {
       expect(JSON.parse(mock.history.put[0].data)).toStrictEqual([tosBody]);
     });
 
-    expect(mockNavigate).toHaveBeenCalledTimes(1);
-    expect(mockNavigate).toHaveBeenCalledWith(routes.INTEGRAZIONE_API);
+    expect(router.state.location.pathname).toBe(routes.INTEGRAZIONE_API);
   });
 
   it('generate new public key - tos accepted', async () => {
-    kidParams = undefined;
-
     const tosResponse: TosPrivacyConsent = {
       recipientId: userResponse.uid,
       consentType: FeConsentType.TOS_DEST_B2B,
@@ -329,7 +298,6 @@ describe('NewPublicKey Page', () => {
     const activePublicKey = notRotatedPublicKeys.find(
       (key) => key.status === PublicKeyStatus.Active
     );
-    kidParams = activePublicKey?.kid;
 
     const tosResponse: TosPrivacyConsent = {
       recipientId: userResponse.uid,
@@ -362,6 +330,8 @@ describe('NewPublicKey Page', () => {
           issuerState: { tosAccepted: false },
         },
       },
+      route: `/${activePublicKey?.kid}`,
+      path: '/:kid',
     });
 
     await waitFor(() => {
@@ -407,13 +377,6 @@ describe('NewPublicKey Page', () => {
   });
 
   it('click on exit button', async () => {
-    // disable the mock on router dom
-    enableMock = false;
-
-    // simulate the current URL
-    const history = createBrowserHistory();
-    history.push(routes.REGISTRA_CHIAVE_PUBBLICA);
-
     mock.onGet(`/bff/v1/pg/tos-privacy?type=${ConsentType.TosDestB2B}`).reply(200, [
       {
         recipientId: userResponse.uid,
@@ -431,7 +394,8 @@ describe('NewPublicKey Page', () => {
           path={routes.INTEGRAZIONE_API}
           element={<div data-testid="mock-api-keys-page">hello</div>}
         />
-      </Routes>
+      </Routes>,
+      { route: [routes.INTEGRAZIONE_API, routes.REGISTRA_CHIAVE_PUBBLICA] }
     );
 
     await waitFor(() => {

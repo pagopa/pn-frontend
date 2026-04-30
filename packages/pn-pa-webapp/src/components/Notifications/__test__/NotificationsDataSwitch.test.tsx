@@ -13,10 +13,20 @@ const data = {
 };
 
 describe('NotificationsDataSwitch Component', () => {
-  const original = window.matchMedia;
+  const originalMatchMedia = globalThis.matchMedia;
+  const originalResizeObserver = globalThis.ResizeObserver;
+
+  beforeAll(() => {
+    globalThis.ResizeObserver = vi.fn().mockImplementation(() => ({
+      observe: vi.fn(),
+      unobserve: vi.fn(),
+      disconnect: vi.fn(),
+    }));
+  });
 
   afterAll(() => {
-    window.matchMedia = original;
+    globalThis.matchMedia = originalMatchMedia;
+    globalThis.ResizeObserver = originalResizeObserver;
   });
 
   it('renders component - sentAt', () => {
@@ -59,7 +69,7 @@ describe('NotificationsDataSwitch Component', () => {
   });
 
   it('renders component - group - mobile', () => {
-    window.matchMedia = createMatchMedia(800);
+    globalThis.matchMedia = createMatchMedia(800);
     const { container } = render(<NotificationsDataSwitch data={data} type="group" />);
     const regexp = new RegExp(`^${data.group}$`, 'ig');
     expect(container).toHaveTextContent(regexp);

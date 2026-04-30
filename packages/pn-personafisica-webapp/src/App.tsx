@@ -40,10 +40,10 @@ import Router from './navigation/routes';
 import * as routes from './navigation/routes.const';
 import { getCurrentAppStatus } from './redux/appStatus/actions';
 import { apiLogout } from './redux/auth/actions';
-import { resetState } from './redux/auth/reducers';
-import { getDigitalAddresses } from './redux/contact/actions';
+import { resetState as resetUserState } from './redux/auth/reducers';
 import { useAppDispatch, useAppSelector } from './redux/hooks';
 import { getSidemenuInformation } from './redux/sidemenu/actions';
+import { resetState as resetGeneralState } from './redux/sidemenu/reducers';
 import { RootState } from './redux/store';
 import { getConfiguration } from './services/configuration.service';
 import { PFAppErrorFactory } from './utility/AppError/PFAppErrorFactory';
@@ -88,7 +88,8 @@ const App = () => {
   const currentStatus = useAppSelector((state: RootState) => state.appStatus.currentStatus);
   const navigate = useNavigate();
   const { pathname } = useLocation();
-  const { MIXPANEL_TOKEN, PAGOPA_HELP_EMAIL, ACCESSIBILITY_LINK } = getConfiguration();
+  const { MIXPANEL_TOKEN, PAGOPA_HELP_EMAIL, ACCESSIBILITY_LINK, SERCQ_SERVICE_STATEMENT_LINK } =
+    getConfiguration();
 
   const sessionToken = loggedUser.sessionToken;
   const jwtUser = useMemo(
@@ -269,14 +270,14 @@ const App = () => {
 
   const performLogout = async () => {
     await dispatch(apiLogout(loggedUser.sessionToken));
-    dispatch(resetState());
+    dispatch(resetUserState());
+    dispatch(resetGeneralState());
     goToLoginPortal({ loginProvider });
     setOpenModal(false);
   };
 
   useEffect(() => {
     if (sessionToken !== '') {
-      void dispatch(getDigitalAddresses());
       void dispatch(getSidemenuInformation());
       void dispatch(getCurrentAppStatus());
     }
@@ -318,6 +319,7 @@ const App = () => {
         eventTrackingCallbackRefreshPage={handleEventTrackingCallbackRefreshPage}
         enableAssistanceButton={showAssistanceButton}
         accessibilityLink={ACCESSIBILITY_LINK}
+        sercqServiceStatementLink={SERCQ_SERVICE_STATEMENT_LINK}
       >
         <PnDialog open={openModal}>
           <DialogTitle sx={{ mb: 2 }}>{t('header.logout-message')}</DialogTitle>

@@ -11,6 +11,12 @@ export enum IOAllowedValues {
   DISABLED = 'DISABLED',
 }
 
+export enum IOContactStatus {
+  UNAVAILABLE = 'unavailable',
+  ENABLED = 'enabled',
+  DISABLED = 'disabled',
+}
+
 export enum AddressType {
   LEGAL = 'LEGAL',
   COURTESY = 'COURTESY',

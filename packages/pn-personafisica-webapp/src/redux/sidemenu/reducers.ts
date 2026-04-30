@@ -1,23 +1,68 @@
 import { PaymentTpp } from '@pagopa-pn/pn-commons';
-import { createSlice } from '@reduxjs/toolkit';
+import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 
+import { OnboardingAvailableFlows, OnboardingSource } from '../../models/Onboarding';
 import { acceptMandate, rejectMandate } from '../delegation/actions';
 import { Delegator } from '../delegation/types';
 import { exchangeNotificationRetrievalId, getSidemenuInformation } from './actions';
 
+type OnboardingDataState = {
+  hasBeenShown: boolean;
+  hasSkippedOnboarding: boolean;
+  exitReminderShown: boolean;
+  source?: OnboardingSource;
+  onboardingSelectedFlow?: OnboardingAvailableFlows;
+};
+
+type GeneralInfoState = {
+  pendingDelegators: number;
+  delegators: Array<Delegator>;
+  domicileBannerOpened: boolean;
+  paymentTpp: PaymentTpp;
+  onboardingData: OnboardingDataState;
+};
+
+const initialState: GeneralInfoState = {
+  pendingDelegators: 0,
+  delegators: [],
+  domicileBannerOpened: true,
+  paymentTpp: {} as PaymentTpp,
+  onboardingData: {
+    hasBeenShown: false,
+    hasSkippedOnboarding: false,
+    exitReminderShown: false,
+    source: undefined,
+    onboardingSelectedFlow: undefined,
+  },
+};
+
 /* eslint-disable functional/immutable-data */
 const generalInfoSlice = createSlice({
   name: 'generalInfoSlice',
-  initialState: {
-    pendingDelegators: 0,
-    delegators: [] as Array<Delegator>,
-    domicileBannerOpened: true,
-    paymentTpp: {} as PaymentTpp,
-  },
+  initialState,
   reducers: {
     closeDomicileBanner: (state) => {
       state.domicileBannerOpened = false;
     },
+    setOnboardingHasBeenShown: (state, action: PayloadAction<boolean>) => {
+      state.onboardingData.hasBeenShown = action.payload;
+    },
+    setHasSkippedOnboarding: (state, action: PayloadAction<boolean>) => {
+      state.onboardingData.hasSkippedOnboarding = action.payload;
+    },
+    setOnboardingExitReminderShown: (state, action: PayloadAction<boolean>) => {
+      state.onboardingData.exitReminderShown = action.payload;
+    },
+    setOnboardingSource: (state, action: PayloadAction<OnboardingSource | undefined>) => {
+      state.onboardingData.source = action.payload;
+    },
+    setOnboardingSelectedFlow: (
+      state,
+      action: PayloadAction<OnboardingAvailableFlows | undefined>
+    ) => {
+      state.onboardingData.onboardingSelectedFlow = action.payload;
+    },
+    resetState: () => initialState,
   },
   extraReducers: (builder) => {
     builder.addCase(getSidemenuInformation.fulfilled, (state, action) => {
@@ -52,6 +97,14 @@ const generalInfoSlice = createSlice({
   },
 });
 
-export const { closeDomicileBanner } = generalInfoSlice.actions;
+export const {
+  closeDomicileBanner,
+  setOnboardingHasBeenShown,
+  setHasSkippedOnboarding,
+  setOnboardingExitReminderShown,
+  setOnboardingSource,
+  setOnboardingSelectedFlow,
+  resetState,
+} = generalInfoSlice.actions;
 
 export default generalInfoSlice;

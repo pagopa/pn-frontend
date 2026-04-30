@@ -55,16 +55,13 @@ export function trackEvent(
 ): void {
   if (nodeEnv === 'test') {
     return;
-  } else if (!nodeEnv || nodeEnv === 'development') {
+  }
+
+  try {
+    callMixpanelTrackingMethod(propertyType, event_name, properties);
+  } catch {
     // eslint-disable-next-line no-console
-    console.log(event_name, properties, propertyType);
-  } else {
-    try {
-      callMixpanelTrackingMethod(propertyType, event_name, properties);
-    } catch (_) {
-      // eslint-disable-next-line no-console
-      console.log(event_name, properties);
-    }
+    console.log(event_name, properties);
   }
 }
 
