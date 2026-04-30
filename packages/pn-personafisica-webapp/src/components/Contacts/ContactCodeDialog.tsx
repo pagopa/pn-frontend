@@ -72,7 +72,7 @@ const ContactCodeDialog: React.FC<Props> = ({
       codeSectionTitle={t(`insert-code`, { ns: 'recapiti' })}
       codeSectionAdditional={
         <Typography component={Box} variant="body2">
-          
+          <Trans
             i18nKey={`${labelRoot}.${contactType}-new-code`}
             ns="recapiti"
             components={[
