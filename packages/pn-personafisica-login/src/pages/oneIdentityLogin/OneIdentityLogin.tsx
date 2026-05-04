@@ -26,8 +26,8 @@ const unloggedUser = { id: '', name: undefined, surname: undefined, email: undef
 
 const LoginButton = styled(Button)({
   borderRadius: '4px',
-  width: '100%',
-  height: '50px',
+  width: '272px',
+  height: '48px',
   '& .MuiButton-startIcon': { svg: { fontSize: '25px' } },
 });
 
@@ -136,6 +136,9 @@ const OneIdentityLogin: React.FC = () => {
             <Grid
               item
               sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
                 width: {
                   xs: `${(100 / 12) * 10}%`,
                   sm: `${(100 / 12) * 6}%`,
