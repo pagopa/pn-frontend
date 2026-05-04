@@ -2,6 +2,7 @@
   "loginPage": {
     "title": "Accedi a SEND per le tue comunicazioni a valore legale",
     "description": "Scegli la modalità che preferisci.",
+    "missing-spid-cie": "Non hai SPID o CIE? <0>Scopri di più</0>",
     "loginBox": {
       "title": "Accedi",
       "spidLogin": "Entra con SPID",
