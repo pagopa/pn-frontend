@@ -1,7 +1,8 @@
 {
   "loginPage": {
-    "title": "How do you want to log in?",
-    "description": "Select your preferred mode.",
+    "title": "Access SEND for your legally binding communications",
+    "description": "Select your preferred log in method.",
+    "missing-spid-cie": "Don't have SPID or CIE? <0>Find out more</0>",
     "loginBox": {
       "title": "Login",
       "spidLogin": "Log in with SPID",

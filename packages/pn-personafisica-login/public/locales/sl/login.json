@@ -1,11 +1,12 @@
 {
   "loginPage": {
-    "title": "Kako se želite prijaviti?",
-    "description": "Izberite želeni način.",
+    "title": "Dostop do SEND za vaša pravno zavezujoča sporočila",
+    "description": "Izberite želeni način dostopa.",
+    "missing-spid-cie": "Nimate SPID ali CIE? <0>Izvedite več</0>",
     "loginBox": {
       "title": "Prijava",
-      "spidLogin": "Vstopite s SPID",
-      "cieLogin": "Vstopite s CIE"
+      "spidLogin": "Prijava s SPID",
+      "cieLogin": "Prijava s CIE"
     }
   },
   "spidSelect": {

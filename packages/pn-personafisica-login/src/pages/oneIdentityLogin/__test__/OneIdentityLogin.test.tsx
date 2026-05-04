@@ -1,45 +1,45 @@
 import { vi } from 'vitest';
 
 import { AppRouteParams } from '@pagopa-pn/pn-commons';
+import {
+  createMatchMedia,
+  fireEvent,
+  getById,
+  queryById,
+  waitFor,
+} from '@pagopa-pn/pn-commons/src/test-utils';
 
 import { render } from '../../../__test__/test-utils';
-import {
-  storageOneIdentityNonce,
-  storageOneIdentityState,
-  storageRapidAccessOps,
-} from '../../../utility/storage';
-import * as utils from '../../../utility/utils';
+import { storageRapidAccessOps } from '../../../utility/storage';
 import OneIdentityLogin from '../OneIdentityLogin';
 
 const mockAssign = vi.fn();
+let isSmartAppBannerEnabled = true;
 
-const mockState = 'mock-state-12345';
-const mockNonce = 'mock-nonce-67890';
+// mock imports
+vi.mock('../../../services/configuration.service', async () => {
+  return {
+    ...(await vi.importActual<any>('../../../services/configuration.service')),
+    getConfiguration: () => ({
+      IS_SMART_APP_BANNER_ENABLED: isSmartAppBannerEnabled,
+    }),
+  };
+});
 
 vi.mock('../../../utility/utils', async () => ({
   ...(await vi.importActual<any>('../../../utility/utils')),
-  generateRandomUniqueString: vi.fn(),
+  isIOSMobile: vi.fn().mockReturnValue(false),
 }));
 
-describe('OneIdentityLogin component', () => {
+describe('test login page', () => {
   const original = globalThis.location;
 
   beforeAll(() => {
     Object.defineProperty(globalThis, 'location', { value: { assign: mockAssign } });
   });
 
-  beforeEach(() => {
-    let callCount = 0;
-    vi.mocked(utils.generateRandomUniqueString).mockImplementation(() => {
-      callCount++;
-      return callCount === 1 ? mockState : mockNonce;
-    });
-  });
-
   afterEach(() => {
     storageRapidAccessOps.delete();
-    storageOneIdentityState.delete();
-    storageOneIdentityNonce.delete();
     vi.clearAllMocks();
   });
 
@@ -47,33 +47,42 @@ describe('OneIdentityLogin component', () => {
     Object.defineProperty(globalThis, 'location', { value: original });
   });
 
-  it('redirects to OneIdentity login with correct parameters', () => {
-    render(<OneIdentityLogin />);
-
-    const expectedUrl =
-      'https://uat.oneid.pagopa.it/login?response_type=CODE&scope=openid&client_id=DFCUf4W3KHfKUl4USEVYrMgpMxvyKICHM_ZPiZ3ftm0&state=mock-state-12345&nonce=mock-nonce-67890&redirect_uri=https%3A%2F%2Fcittadini.dev.notifichedigitali.it%2Fauth%2Fcallback';
-
-    expect(storageOneIdentityState.read()).toBe(mockState);
-    expect(storageOneIdentityNonce.read()).toBe(mockNonce);
-
-    expect(storageRapidAccessOps.read()).toBeUndefined();
-
-    expect(mockAssign).toHaveBeenCalledTimes(1);
-    expect(mockAssign).toHaveBeenCalledWith(expectedUrl);
+  it('renders page', () => {
+    const { container } = render(<OneIdentityLogin />, {
+      route: `/?${AppRouteParams.AAR}=fake-aar-token`,
+    });
+    expect(container).toHaveTextContent(/loginPage.title/i);
+    expect(container).toHaveTextContent(/loginPage.description/i);
+    const spidButton = getById(container, 'spidButton');
+    expect(spidButton).toBeInTheDocument();
+    const cieButton = getById(container, 'cieButton');
+    expect(cieButton).toBeInTheDocument();
+    const spidSelect = queryById(container, 'spidSelect');
+    expect(spidSelect).not.toBeInTheDocument();
   });
 
-  it('stores AAR rapid access parameter in session storage', () => {
-    render(<OneIdentityLogin />, { route: `/?${AppRouteParams.AAR}=mock-aar-token` });
-
-    expect(storageRapidAccessOps.read()).toEqual([AppRouteParams.AAR, 'mock-aar-token']);
+  it('renders page - with smart banner enabled', () => {
+    // enable mobile view
+    globalThis.matchMedia = createMatchMedia(800);
+    const { container } = render(<OneIdentityLogin />);
+    const ioSmartAppBanner = getById(container, 'ioSmartAppBanner');
+    expect(ioSmartAppBanner).toBeInTheDocument();
   });
 
-  it('stores retrievalId rapid access parameter in session storage', () => {
-    render(<OneIdentityLogin />, { route: `/?${AppRouteParams.RETRIEVAL_ID}=mock-retrieval-id` });
+  it('renders page - whitout smart banner enabled', () => {
+    isSmartAppBannerEnabled = false;
+    const { container } = render(<OneIdentityLogin />);
+    const ioSmartAppBanner = queryById(container, 'ioSmartAppBanner');
+    expect(ioSmartAppBanner).not.toBeInTheDocument();
+    // disable mobile view
+    globalThis.matchMedia = createMatchMedia(1202);
+  });
 
-    expect(storageRapidAccessOps.read()).toEqual([
-      AppRouteParams.RETRIEVAL_ID,
-      'mock-retrieval-id',
-    ]);
+  it('select spid login', async () => {
+    const { container } = render(<OneIdentityLogin />);
+    const spidButton = getById(container, 'spidButton');
+    fireEvent.click(spidButton);
+    const spidSelect = await waitFor(() => document.querySelector('#spidSelect'));
+    expect(spidSelect).toBeInTheDocument();
   });
 });
