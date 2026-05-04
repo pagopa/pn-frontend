@@ -10,6 +10,8 @@ import {
 } from '@pagopa-pn/pn-commons/src/test-utils';
 
 import { render } from '../../../__test__/test-utils';
+import { IDPS_MOCK } from '../../../__mocks__/IDPS.mock';
+import { OneIdentityApi } from '../../../api/OneIdentity/OneIdentity.api';
 import { storageRapidAccessOps } from '../../../utility/storage';
 import OneIdentityLogin from '../OneIdentityLogin';
 
@@ -29,6 +31,12 @@ vi.mock('../../../services/configuration.service', async () => {
 vi.mock('../../../utility/utils', async () => ({
   ...(await vi.importActual<any>('../../../utility/utils')),
   isIOSMobile: vi.fn().mockReturnValue(false),
+}));
+
+vi.mock('../../../api/OneIdentity/OneIdentity.api', () => ({
+  OneIdentityApi: {
+    getIdps: vi.fn().mockResolvedValue([]),
+  },
 }));
 
 describe('test login page', () => {
@@ -84,5 +92,46 @@ describe('test login page', () => {
     fireEvent.click(spidButton);
     const spidSelect = await waitFor(() => document.querySelector('#spidSelect'));
     expect(spidSelect).toBeInTheDocument();
+  });
+
+  describe('IDPS fetch', () => {
+    beforeEach(() => {
+      vi.mocked(OneIdentityApi.getIdps).mockResolvedValue(IDPS_MOCK);
+    });
+
+    it('calls getIdps on mount', async () => {
+      render(<OneIdentityLogin />);
+      await waitFor(() => expect(OneIdentityApi.getIdps).toHaveBeenCalledTimes(1));
+    });
+
+    it('shows loading spinner in dialog while fetch is pending', async () => {
+      vi.mocked(OneIdentityApi.getIdps).mockImplementation(() => new Promise(() => {}));
+      const { container } = render(<OneIdentityLogin />);
+      fireEvent.click(getById(container, 'spidButton'));
+      await waitFor(() => expect(queryById(document.body, 'spidSelect')).toBeInTheDocument());
+      expect(document.body.querySelector('[data-testid="spid-loader"]')).toBeInTheDocument();
+    });
+
+    it('shows IDPs in dialog after successful fetch', async () => {
+      const { container } = render(<OneIdentityLogin />);
+      await waitFor(() => expect(OneIdentityApi.getIdps).toHaveBeenCalled());
+      fireEvent.click(getById(container, 'spidButton'));
+      await waitFor(() => expect(queryById(document.body, 'spidSelect')).toBeInTheDocument());
+      IDPS_MOCK.forEach((idp) => {
+        expect(document.getElementById(`spid-select-${idp.entityID}`)).toBeInTheDocument();
+      });
+    });
+
+    it('shows no IDPs and no spinner in dialog after failed fetch', async () => {
+      vi.mocked(OneIdentityApi.getIdps).mockRejectedValue(new Error('Network error'));
+      const { container } = render(<OneIdentityLogin />);
+      await waitFor(() => expect(OneIdentityApi.getIdps).toHaveBeenCalled());
+      fireEvent.click(getById(container, 'spidButton'));
+      await waitFor(() => expect(queryById(document.body, 'spidSelect')).toBeInTheDocument());
+      expect(document.body.querySelector('[data-testid="spid-loader"]')).not.toBeInTheDocument();
+      IDPS_MOCK.forEach((idp) => {
+        expect(document.getElementById(`spid-select-${idp.entityID}`)).not.toBeInTheDocument();
+      });
+    });
   });
 });
