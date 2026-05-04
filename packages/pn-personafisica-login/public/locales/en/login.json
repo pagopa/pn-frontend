@@ -2,7 +2,7 @@
   "loginPage": {
     "title": "Access SEND for your legally binding communications",
     "description": "Select your preferred log in method.",
-    "missing-spid-cie": "Non hai SPID o CIE? <0>Scopri di più</0>",
+    "missing-spid-cie": "Don't have SPID or CIE? <0>Find out more</0>",
     "loginBox": {
       "title": "Login",
       "spidLogin": "Log in with SPID",

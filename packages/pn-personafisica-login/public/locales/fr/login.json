@@ -2,11 +2,11 @@
   "loginPage": {
     "title": "Connectez-vous à SEND pour vos communications juridiquement contraignantes",
     "description": "Sélectionnez le mode d’accès souhaité.",
-    "missing-spid-cie": "Non hai SPID o CIE? <0>Scopri di più</0>",
+    "missing-spid-cie": "Vous n'avez pas le SPID ou la CIE ? <0>En savoir plus</0>",
     "loginBox": {
       "title": "Se connecter",
-      "spidLogin": "Connectez-vous avec SPID",
-      "cieLogin": "Entrez avec CIE"
+      "spidLogin": "Se connecter avec SPID",
+      "cieLogin": "Se connecter avec CIE"
     }
   },
   "spidSelect": {

@@ -2,7 +2,7 @@
   "loginPage": {
     "title": "Zugriff auf SEND für Ihre rechtsverbindlichen Mitteilungen",
     "description": "Wählen Sie die gewünschte Zugriffsmethode. ",
-    "missing-spid-cie": "Non hai SPID o CIE? <0>Scopri di più</0>",
+    "missing-spid-cie": "Hast du kein SPID oder CIE? <0>Mehr erfahren</0>",
     "loginBox": {
       "title": "Anmelden",
       "spidLogin": "Mit SPID anmelden",
