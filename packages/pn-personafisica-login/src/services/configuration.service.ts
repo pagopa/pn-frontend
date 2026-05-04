@@ -21,6 +21,8 @@ export interface LoginConfiguration {
   ONE_IDENTITY_BASE_URL: string;
   SERCQ_SERVICE_STATEMENT_LINK: string;
   DIGITAL_IDENTITY_LINK: string;
+  ONE_IDENTITY_CDN_URL: string;
+  SPID_REQUEST_LINK: string;
 }
 
 class LoginConfigurationValidator extends Validator<LoginConfiguration> {
@@ -55,6 +57,8 @@ class LoginConfigurationValidator extends Validator<LoginConfiguration> {
     this.ruleFor('ONE_IDENTITY_BASE_URL').isString().isRequired();
     this.ruleFor('SERCQ_SERVICE_STATEMENT_LINK').isString().isRequired();
     this.ruleFor('DIGITAL_IDENTITY_LINK').isString().isRequired();
+    this.ruleFor('ONE_IDENTITY_CDN_URL').isString().isRequired();
+    this.ruleFor('SPID_REQUEST_LINK').isString().isRequired();
   }
 }
 

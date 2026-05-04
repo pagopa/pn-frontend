@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 
 import { Box, Button, Divider, Grid, Link, Typography, styled } from '@mui/material';
@@ -9,8 +9,11 @@ import {
 } from '@pagopa-pn/pn-commons';
 import { CieIcon, SpidIcon } from '@pagopa/mui-italia/icons';
 
+import { OneIdentityApi } from '../../api/OneIdentity/OneIdentity.api';
 import sendLogo from '../../assets/send.svg';
 import IOSmartAppBanner from '../../components/IoSmartAppBanner';
+import OneIdentitySpidSelect from '../../components/OneIdentitySpidSelect';
+import { IDP } from '../../models/IDPS';
 import { PFLoginEventsType } from '../../models/PFLoginEventsType';
 import { getConfiguration } from '../../services/configuration.service';
 import PFLoginEventStrategyFactory from '../../utility/MixpanelUtils/PFLoginEventStrategyFactory';
@@ -41,16 +44,17 @@ const OneIdentityLogin: React.FC = () => {
     DIGITAL_IDENTITY_LINK,
   } = getConfiguration();
 
+  const [showIdpSelect, setShowIdpSelect] = useState(false);
+  const [idpList, setIdpList] = useState<Array<IDP>>([]);
+
   const smartBannerHeight = IS_SMART_APP_BANNER_ENABLED ? SMART_BANNER_HEIGHT_PX : 0;
   const contentMinHeight = `calc(100dvh - ${HEADER_HEIGHT_PX}px - ${smartBannerHeight}px - ${LOGO_HEADER_HEIGHT_PX}px)`;
   const privacyPolicyUrl = `${PF_URL}${PRIVACY_POLICY}`;
 
   const handleLanguageChange = (langCode: string) => i18n.changeLanguage(langCode);
 
-  const handleAssistanceClick = () => {
-    // eslint-disable-next-line functional/immutable-data
-    window.location.href = `mailto:${PAGOPA_HELP_EMAIL}`;
-  };
+  // eslint-disable-next-line functional/immutable-data
+  const handleAssistanceClick = () => (window.location.href = `mailto:${PAGOPA_HELP_EMAIL}`);
 
   const handleCieClick = () => {
     PFLoginEventStrategyFactory.triggerEvent(PFLoginEventsType.SEND_IDP_SELECTED, {
@@ -58,6 +62,14 @@ const OneIdentityLogin: React.FC = () => {
       SPID_IDP_ID: SPID_CIE_ENTITY_ID,
     });
   };
+
+  const fetchIDPS = () => {
+    void OneIdentityApi.getIdps().then((response) => setIdpList(response));
+  };
+
+  useEffect(() => {
+    fetchIDPS();
+  }, []);
 
   return (
     <>
@@ -136,7 +148,7 @@ const OneIdentityLogin: React.FC = () => {
               <LoginButton
                 id="spidButton"
                 variant="contained"
-                onClick={() => void 0}
+                onClick={() => setShowIdpSelect(true)}
                 startIcon={<SpidIcon />}
                 sx={{ mb: 3 }}
               >
@@ -171,6 +183,13 @@ const OneIdentityLogin: React.FC = () => {
           </Grid>
         </Box>
       </Layout>
+
+      <OneIdentitySpidSelect
+        show={showIdpSelect}
+        IDPS={idpList}
+        handleSelectIDP={(idp) => console.log(idp)}
+        onClose={() => setShowIdpSelect(false)}
+      />
     </>
   );
 };
