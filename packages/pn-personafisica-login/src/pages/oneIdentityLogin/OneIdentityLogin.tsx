@@ -12,7 +12,7 @@ import { CieIcon, SpidIcon } from '@pagopa/mui-italia/icons';
 import { OneIdentityApi } from '../../api/OneIdentity/OneIdentity.api';
 import sendLogo from '../../assets/send.svg';
 import IOSmartAppBanner from '../../components/IoSmartAppBanner';
-import OneIdentitySpidSelect from '../../components/OneIdentitySpidSelect';
+import OneIdentitySpidSelectDialog from '../../components/OneIdentity/SpidSelectDialog';
 import { IDP } from '../../models/IDPS';
 import { PFLoginEventsType } from '../../models/PFLoginEventsType';
 import { getConfiguration } from '../../services/configuration.service';
@@ -45,7 +45,10 @@ const OneIdentityLogin: React.FC = () => {
   } = getConfiguration();
 
   const [showIdpSelect, setShowIdpSelect] = useState(false);
-  const [idpList, setIdpList] = useState<Array<IDP>>([]);
+  const [idpsState, setIdpsState] = useState<{ idps: Array<IDP>; loading: boolean }>({
+    idps: [],
+    loading: true,
+  });
 
   const smartBannerHeight = IS_SMART_APP_BANNER_ENABLED ? SMART_BANNER_HEIGHT_PX : 0;
   const contentMinHeight = `calc(100dvh - ${HEADER_HEIGHT_PX}px - ${smartBannerHeight}px - ${LOGO_HEADER_HEIGHT_PX}px)`;
@@ -64,7 +67,16 @@ const OneIdentityLogin: React.FC = () => {
   };
 
   const fetchIDPS = () => {
-    void OneIdentityApi.getIdps().then((response) => setIdpList(response));
+    void OneIdentityApi.getIdps()
+      .then((response) =>
+        setIdpsState({
+          idps: response,
+          loading: false,
+        })
+      )
+      .catch(() => {
+        setIdpsState({ idps: [], loading: false });
+      });
   };
 
   useEffect(() => {
@@ -187,9 +199,10 @@ const OneIdentityLogin: React.FC = () => {
         </Box>
       </Layout>
 
-      <OneIdentitySpidSelect
+      <OneIdentitySpidSelectDialog
         show={showIdpSelect}
-        IDPS={idpList}
+        IDPS={idpsState.idps}
+        loading={idpsState.loading}
         handleSelectIDP={(idp) => console.log(idp)}
         onClose={() => setShowIdpSelect(false)}
       />

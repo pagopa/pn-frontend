@@ -2,37 +2,30 @@ import React from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 
 import ClearOutlinedIcon from '@mui/icons-material/ClearOutlined';
-import {
-  Button,
-  Dialog,
-  DialogContent,
-  Grid,
-  Icon,
-  IconButton,
-  Link,
-  Typography,
-} from '@mui/material';
+import { Button, Dialog, DialogContent, Grid, IconButton, Link, Typography } from '@mui/material';
 
-import SpidBig from '../assets/spid_big.svg';
-import { IDP } from '../models/IDPS';
-import { getConfiguration } from '../services/configuration.service';
-import { shuffleList } from '../utility/utils';
+import SpidBig from '../../assets/spid_big.svg';
+import { IDP } from '../../models/IDPS';
+import { getConfiguration } from '../../services/configuration.service';
+import SpidList from './SpidList';
 
 type Props = {
   show: boolean;
   IDPS: Array<IDP>;
+  loading: boolean;
   onClose: () => void;
   handleSelectIDP: (idp: IDP) => void;
 };
 
-const OneIdentitySpidSelect: React.FC<Props> = ({ show, IDPS, onClose, handleSelectIDP }) => {
+const OneIdentitySpidSelectDialog: React.FC<Props> = ({
+  show,
+  IDPS,
+  loading,
+  onClose,
+  handleSelectIDP,
+}) => {
   const { t } = useTranslation(['login']);
-  const { ONE_IDENTITY_CDN_URL, SPID_REQUEST_LINK } = getConfiguration();
-
-  const shuffledIDPS = shuffleList<IDP>(IDPS);
-
-  const getImageUrl = (entityID: string) =>
-    `${ONE_IDENTITY_CDN_URL}/assets/idps/${btoa(entityID)}.png`;
+  const { SPID_REQUEST_LINK } = getConfiguration();
 
   return (
     <Dialog
@@ -76,29 +69,9 @@ const OneIdentitySpidSelect: React.FC<Props> = ({ show, IDPS, onClose, handleSel
               {t('spidSelect.title')}
             </Typography>
           </Grid>
-          <Grid item>
-            <Grid container direction="row" justifyItems="center" spacing={2}>
-              {shuffledIDPS.map((IDP, i) => (
-                <Grid
-                  item
-                  key={IDP.entityID}
-                  xs={6}
-                  sx={{ minWidth: '100px', textAlign: i % 2 === 0 ? 'right' : 'left' }}
-                >
-                  <Button
-                    id={`spid-select-${IDP.entityID}`}
-                    onClick={() => handleSelectIDP(IDP)}
-                    sx={{ width: '100px', padding: '0' }}
-                    aria-label={IDP.friendlyName}
-                  >
-                    <Icon sx={{ width: '100px', height: '48px' }}>
-                      <img width="100px" src={getImageUrl(IDP.entityID)} alt={IDP.friendlyName} />
-                    </Icon>
-                  </Button>
-                </Grid>
-              ))}
-            </Grid>
-          </Grid>
+
+          <SpidList idps={IDPS} loading={loading} onSelect={handleSelectIDP} />
+
           <Grid item>
             <Typography
               color="textPrimary"
@@ -137,4 +110,4 @@ const OneIdentitySpidSelect: React.FC<Props> = ({ show, IDPS, onClose, handleSel
   );
 };
 
-export default OneIdentitySpidSelect;
+export default OneIdentitySpidSelectDialog;
