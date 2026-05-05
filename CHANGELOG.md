@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.23.0-RC.4](https://github.com/pagopa/pn-frontend/compare/v2.23.0-RC.3...v2.23.0-RC.4) (2026-05-05)
+
+
+### Bug Fixes
+
+* **PN-19644:** onboarding unit tests and summary step copy ([#1865](https://github.com/pagopa/pn-frontend/issues/1865)) ([0d5ea7f](https://github.com/pagopa/pn-frontend/commit/0d5ea7f12562068a94f18f06ea07699c3a30f98f))
+
+
+
+
+
 # [2.23.0-RC.3](https://github.com/pagopa/pn-frontend/compare/v2.23.0-RC.2...v2.23.0-RC.3) (2026-04-30)
 
 
