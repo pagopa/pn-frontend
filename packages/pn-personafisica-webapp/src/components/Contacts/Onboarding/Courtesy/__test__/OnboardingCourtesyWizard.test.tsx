@@ -95,7 +95,7 @@ describe('OnboardingCourtesyWizard', () => {
   });
 
   it('reaches the success step after completing both wizard steps', async () => {
-    const { getByRole, getByText } = render(<OnboardingCourtesyWizard />, {
+    const { getByRole, getByText, getByTestId } = render(<OnboardingCourtesyWizard />, {
       preloadedState: {
         contactsState: {
           digitalAddresses: [
@@ -121,7 +121,7 @@ describe('OnboardingCourtesyWizard', () => {
 
     // Email/SMS step → confirm (an email is set)
     await waitFor(() => {
-      fireEvent.click(getByRole('button', { name: 'button.conferma' }));
+      fireEvent.click(getByTestId('next-button'));
     });
 
     await waitFor(() => {

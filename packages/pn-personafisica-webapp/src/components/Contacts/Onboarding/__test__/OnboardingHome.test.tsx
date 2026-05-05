@@ -1,23 +1,13 @@
-import { vi } from 'vitest';
-
 import { fireEvent, render } from '../../../../__test__/test-utils';
 import { OnboardingAvailableFlows } from '../../../../models/Onboarding';
 import { AddressType, ChannelType, IOAllowedValues } from '../../../../models/contacts';
 import * as routes from '../../../../navigation/routes.const';
 import OnboardingHome from '../OnboardingHome';
 
-vi.mock('../../../../utility/MixpanelUtils/PFEventStrategyFactory', () => ({
-  default: { triggerEvent: vi.fn() },
-}));
-
 describe('OnboardingHome', () => {
   const labelPrefix = 'onboarding';
 
   const emptyContactsState = { contactsState: { digitalAddresses: [] } };
-
-  beforeEach(() => {
-    vi.clearAllMocks();
-  });
 
   it('renders title, description and exit button', () => {
     const { getByText, getByRole } = render(<OnboardingHome />, {
