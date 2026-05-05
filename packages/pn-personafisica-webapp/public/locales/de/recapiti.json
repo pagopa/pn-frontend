@@ -390,7 +390,8 @@
       },
       "summary": {
         "title": "Deine Zusammenfassung",
-        "legal-title": "Rechtliche Mitteilungen werden nur zugestellt an:",
+        "legal-title-sercq": "Rechtliche Mitteilungen werden nur zugestellt an:",
+        "legal-title-pec": "Rechtliche Mitteilungen werden zugestellt an:",
         "courtesy-title": "Du erhältst eine Mitteilung über:",
         "info-box": "Überwache die von dir gewählten Kontaktdaten: Eine digitale SEND-Zustellung entfaltet ihre Rechtswirkungen auch dann, wenn du sie nicht eingesehen hast.",
         "disclaimer": "Durch Klicken auf <strong>Bestätigen</strong> erklärst du, dass du die <0>Datenschutzerklärung</0> gelesen hast und die <1>Nutzungsbedingungen</1> akzeptierst, und dass du verstanden hast, dass SEND Benachrichtigungen nicht an andere digitale Domizile weitergeleitet werden.",

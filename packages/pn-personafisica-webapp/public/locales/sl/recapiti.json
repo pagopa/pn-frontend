@@ -390,7 +390,8 @@
       },
       "summary": {
         "title": "Tvoj povzetek",
-        "legal-title": "Uradna sporočila bodo dostavljena samo na:",
+        "legal-title-sercq": "Uradna sporočila bodo dostavljena samo na:",
+        "legal-title-pec": "Pravno veljavna sporočila bodo dostavljena na:",
         "courtesy-title": "Obvestilo boš prejel prek:",
         "info-box": "Spremljaj izbrane kontaktne podatke: digitalno uradno obvestilo SEND začne pravno učinkovati, tudi če si ga nisi ogledal.",
         "disclaimer": "S klikom na <strong>Potrdi</strong> izjavljate, da ste prebrali <0>Politiko zasebnosti</0> in sprejemate <1>Pogoje storitve</1>, ter da razumete, da vam obvestila SEND ne bodo posredovana na druge digitalne domicile.",

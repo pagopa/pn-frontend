@@ -30,25 +30,26 @@ const SummaryStep: React.FC<Props> = ({ mode, email, pec, io }) => {
   const sendLabel = t('onboarding.digital-domicile.summary.send-badge');
   const pecLabel = t('onboarding.digital-domicile.summary.pec-badge');
 
-  const legalRow: SummaryRow =
-    mode === 'send'
-      ? {
-          id: 'sercqSend',
-          label: t('onboarding.digital-domicile.summary.ddom-label'),
-          secondaryContent: (
-            <Chip
-              label={sendLabel}
-              size="small"
-              sx={{ mt: 0.75, '& .MuiChip-label': { fontSize: '12px' } }}
-            />
-          ),
-        }
-      : {
-          id: 'pec',
-          label: t('onboarding.digital-domicile.summary.ddom-label'),
-          value: pec,
-          secondaryContent: <Chip label={pecLabel} size="small" sx={{ mt: 0.75 }} />,
-        };
+  const isSendFlow = mode === 'send';
+
+  const legalRow: SummaryRow = isSendFlow
+    ? {
+        id: 'sercqSend',
+        label: t('onboarding.digital-domicile.summary.ddom-label'),
+        secondaryContent: (
+          <Chip
+            label={sendLabel}
+            size="small"
+            sx={{ mt: 0.75, '& .MuiChip-label': { fontSize: '12px' } }}
+          />
+        ),
+      }
+    : {
+        id: 'pec',
+        label: t('onboarding.digital-domicile.summary.ddom-label'),
+        value: pec,
+        secondaryContent: <Chip label={pecLabel} size="small" sx={{ mt: 0.75 }} />,
+      };
 
   const courtesyRows: Array<SummaryRow> = [
     ...(email
@@ -79,7 +80,7 @@ const SummaryStep: React.FC<Props> = ({ mode, email, pec, io }) => {
 
       <Stack spacing={2} mb={3}>
         <Typography variant="body2" color="text.secondary">
-          {t('onboarding.digital-domicile.summary.legal-title')}
+          {t(`onboarding.digital-domicile.summary.legal-title-${isSendFlow ? 'sercq' : 'pec'}`)}
         </Typography>
         <OnboardingContactItem
           mode="view"

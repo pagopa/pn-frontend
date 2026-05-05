@@ -390,7 +390,8 @@
       },
       "summary": {
         "title": "Ton récapitulatif",
-        "legal-title": "Les communications à valeur juridique seront envoyées uniquement sur :",
+        "legal-title-sercq": "Les communications à valeur juridique seront envoyées uniquement sur :",
+        "legal-title-pec": "Les communications à valeur juridique seront remises sur :",
         "courtesy-title": "Tu recevras un avis via :",
         "info-box": "Surveille les coordonnées que tu as choisies : une notification numérique SEND commence à produire des effets juridiques même si tu ne l’as pas consultée.",
         "disclaimer": "En cliquant sur <strong>Confirmer</strong>, vous déclarez avoir lu la <0>Politique de confidentialité</0> et accepter les <1>Conditions d'utilisation</1>, et avoir compris que les notifications SEND ne vous seront pas transférées sur d'autres domiciles numériques.",
