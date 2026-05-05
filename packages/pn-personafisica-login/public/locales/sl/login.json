@@ -12,7 +12,8 @@
   "spidSelect": {
     "title": "Izberite svoj SPID",
     "hintText": "Nimate SPID?<0> Izvedite več</0>",
-    "cancelButton": "Prekliči"
+    "cancelButton": "Prekliči",
+    "emptyState": "Ni najdenega IDP-ja"
   },
   "loginError": {
     "title": "Zaradi sistemske napake postopka ni mogoče dokončati.",

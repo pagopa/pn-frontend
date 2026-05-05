@@ -12,7 +12,8 @@
   "spidSelect": {
     "title": "Wähle deinen SPID-Anbieter",
     "hintText": "Keine SPID-Identität?<0> Mehr hierzu</0>",
-    "cancelButton": "Abbrechen"
+    "cancelButton": "Abbrechen",
+    "emptyState": "Kein IDP gefunden"
   },
   "loginError": {
     "title": "Aufgrund eines Systemfehlers kann der Vorgang nicht abgeschlossen werden.",
