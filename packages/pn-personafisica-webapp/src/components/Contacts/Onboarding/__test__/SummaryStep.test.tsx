@@ -13,7 +13,7 @@ describe('SummaryStep', () => {
     );
 
     expect(getByText(`${labelPrefix}.title`)).toBeInTheDocument();
-    expect(getByText(`${labelPrefix}.legal-title`)).toBeInTheDocument();
+    expect(getByText(`${labelPrefix}.legal-title-sercq`)).toBeInTheDocument();
     expect(getByText(`${labelPrefix}.courtesy-title`)).toBeInTheDocument();
 
     expect(getByText(`${labelPrefix}.ddom-label`)).toBeInTheDocument();
@@ -34,6 +34,7 @@ describe('SummaryStep', () => {
       <SummaryStep mode="pec" pec={mockPec} email={mockEmail} io={IOAllowedValues.ENABLED} />
     );
 
+    expect(getByText(`${labelPrefix}.legal-title-pec`)).toBeInTheDocument();
     expect(getByText(`${labelPrefix}.pec-badge`)).toBeInTheDocument();
     expect(getByText(mockPec)).toBeInTheDocument();
     expect(getByText(mockEmail)).toBeInTheDocument();
