@@ -3,7 +3,7 @@ import { Fragment, ReactNode, useCallback, useEffect, useMemo, useState } from '
 import { useTranslation } from 'react-i18next';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 
-import { Alert, AlertTitle, Box, Grid, Paper, Stack, Typography } from '@mui/material';
+import { Box, Grid, Paper, Stack, Typography } from '@mui/material';
 import {
   ApiError,
   ApiErrorWrapper,
@@ -423,19 +423,18 @@ const NotificationDetail = () => {
   );
 
   const cancelledAlert = isCancelledOrCancelling && (
-    <Box sx={{ mb: { xs: 2, lg: 0 } }}>
-      <MIAlert
-        data-testid="cancelledAlertText"
-        severity="warning"
-        description={t('detail.cancelled.message', { ns: 'notifiche' })}
-        action={{
-          label: t('detail.cancelled.cta', { ns: 'notifiche' }),
-          href: NOTIFICATION_CANCELLED_HELP_LINK,
-          rel: 'noopener noreferrer',
-          target: '_blank',
-        }}
-      />
-    </Box>
+    <MIAlert
+      data-testid="cancelledAlertText"
+      severity="warning"
+      sx={{ mb: { xs: 2, lg: 0 } }}
+      description={t('detail.cancelled.message', { ns: 'notifiche' })}
+      action={{
+        label: t('detail.cancelled.cta', { ns: 'notifiche' }),
+        href: NOTIFICATION_CANCELLED_HELP_LINK,
+        rel: 'noopener noreferrer',
+        target: '_blank',
+      }}
+    />
   );
 
   const pecUnreachableAlert = isNotificationCostBanner &&
@@ -492,12 +491,13 @@ const NotificationDetail = () => {
                     titleVariant="h6"
                   />
                   {notification.radd && (
-                    <Alert severity={'success'} sx={{ mb: 3, mt: 2 }} data-testid="raddAlert">
-                      <AlertTitle>
-                        {t('detail.timeline.radd.title', { ns: 'notifiche' })}
-                      </AlertTitle>
-                      {t('detail.timeline.radd.description', { ns: 'notifiche' })}
-                    </Alert>
+                    <MIAlert
+                      severity="success"
+                      title={t('detail.timeline.radd.title', { ns: 'notifiche' })}
+                      sx={{ mb: 3, mt: 2 }}
+                      description={t('detail.timeline.radd.description', { ns: 'notifiche' })}
+                      data-testid="raddAlert"
+                    />
                   )}
                 </Paper>
 

@@ -1,7 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { Alert, Typography } from '@mui/material';
+import { MIAlert } from '@pagopa/mui-italia';
 
 import { contactsSelectors } from '../../redux/contact/reducers';
 import { useAppSelector } from '../../redux/hooks';
@@ -46,16 +46,15 @@ const ValidatingPecBanner: React.FC = () => {
   }
 
   return (
-    <Alert data-testid="PecVerificationAlert" severity="warning" sx={{ my: { xs: 2, lg: 4 } }}>
-      <Typography variant="inherit" sx={{ fontWeight: '600' }}>
-        {t('legal-contacts.pec-validation-banner.title')}
-      </Typography>
-      <Typography variant="inherit">
-        {t(`legal-contacts.pec-validation-banner.${bannerMessage}`, {
-          list: validatingSpecialPecList.join(', '),
-        })}
-      </Typography>
-    </Alert>
+    <MIAlert
+      severity="warning"
+      data-testid="PecVerificationAlert"
+      sx={{ my: { xs: 2, lg: 4 } }}
+      title={t('legal-contacts.pec-validation-banner.title')}
+      description={t(`legal-contacts.pec-validation-banner.${bannerMessage}`, {
+        list: validatingSpecialPecList.join(', '),
+      })}
+    />
   );
 };
 
