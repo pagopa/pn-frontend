@@ -60,10 +60,9 @@ describe('SpidList', () => {
     });
   });
 
-  it('renders no buttons when idps list is empty', () => {
-    const { queryAllByRole } = render(
-      <SpidList idps={[]} loading={false} onSelect={handleSelect} />
-    );
-    expect(queryAllByRole('button')).toHaveLength(0);
+  it('renders no empty state when idps list is empty', () => {
+    const { getByTestId } = render(<SpidList idps={[]} loading={false} onSelect={handleSelect} />);
+
+    expect(getByTestId('idp-empty-state')).toBeInTheDocument();
   });
 });

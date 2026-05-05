@@ -1,4 +1,6 @@
-import { Button, CircularProgress, Grid, Icon } from '@mui/material';
+import { useTranslation } from 'react-i18next';
+
+import { Button, Grid, Icon, Skeleton, Typography } from '@mui/material';
 
 import { IDP } from '../../models/IDPS';
 import { getConfiguration } from '../../services/configuration.service';
@@ -11,6 +13,7 @@ type Props = {
 };
 
 const SpidList: React.FC<Props> = ({ idps, loading, onSelect }) => {
+  const { t } = useTranslation(['login']);
   const { ONE_IDENTITY_CDN_URL } = getConfiguration();
 
   const shuffledIDPS = shuffleList<IDP>(idps);
@@ -19,7 +22,29 @@ const SpidList: React.FC<Props> = ({ idps, loading, onSelect }) => {
     `${ONE_IDENTITY_CDN_URL}/assets/idps/${btoa(entityID)}.png`;
 
   if (loading) {
-    return <CircularProgress data-testid="spid-loader" />;
+    return (
+      <Grid
+        data-testid="spid-loader"
+        sx={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(2, 100px)',
+          gap: 2,
+          justifyContent: 'center',
+        }}
+      >
+        {Array.from({ length: 6 }).map((_, i) => (
+          <Skeleton key={i} variant="rectangular" width="100px" height={48} />
+        ))}
+      </Grid>
+    );
+  }
+
+  if (!idps.length) {
+    return (
+      <Typography variant="body2" data-testid="idp-empty-state">
+        {t('spidSelect.emptyState')}
+      </Typography>
+    );
   }
 
   return (
@@ -30,7 +55,8 @@ const SpidList: React.FC<Props> = ({ idps, loading, onSelect }) => {
             item
             key={idp.entityID}
             xs={6}
-            sx={{ minWidth: '100px', textAlign: i % 2 === 0 ? 'right' : 'left' }}
+            textAlign={i % 2 === 0 ? 'right' : 'left'}
+            sx={{ minWidth: '100px' }}
           >
             <Button
               id={`spid-select-${idp.entityID}`}

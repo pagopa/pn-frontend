@@ -12,7 +12,8 @@
   "spidSelect": {
     "title": "Choisissez votre SPID",
     "hintText": "Pas de SPID ?<0> En savoir plus</0>",
-    "cancelButton": "Annuler"
+    "cancelButton": "Annuler",
+    "emptyState": "Aucun IDP trouvé"
   },
   "loginError": {
     "title": "En raison d’une erreur du système, il n’est pas possible de terminer la procédure.",
