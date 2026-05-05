@@ -2,17 +2,9 @@ import { FieldMetaProps } from 'formik';
 import { useTranslation } from 'react-i18next';
 
 import DeleteIcon from '@mui/icons-material/Delete';
-import {
-  Alert,
-  Box,
-  FormControlLabel,
-  FormHelperText,
-  Stack,
-  Switch,
-  TextField,
-} from '@mui/material';
+import { Box, FormControlLabel, FormHelperText, Stack, Switch, TextField } from '@mui/material';
 import { FileUpload, useIsMobile } from '@pagopa-pn/pn-commons';
-import { ButtonNaked } from '@pagopa/mui-italia';
+import { ButtonNaked, MIAlert } from '@pagopa/mui-italia';
 
 import { NewNotificationF24Payment, NotificationFeePolicy } from '../../models/NewNotification';
 
@@ -144,9 +136,14 @@ const F24PaymentBox: React.FC<PaymentBoxProps> = ({
       )}
 
       {showDeleteButton && notificationFeePolicy === NotificationFeePolicy.DELIVERY_MODE && (
-        <Alert severity="warning" sx={{ mt: 4 }} data-testid="f24-installment-alert">
-          {t('new-notification.steps.debt-position-detail.payment-methods.apply-cost-installment')}
-        </Alert>
+        <MIAlert
+          severity="warning"
+          data-testid="f24-installment-alert"
+          sx={{ mt: 4 }}
+          description={t(
+            'new-notification.steps.debt-position-detail.payment-methods.apply-cost-installment'
+          )}
+        />
       )}
     </Box>
   );

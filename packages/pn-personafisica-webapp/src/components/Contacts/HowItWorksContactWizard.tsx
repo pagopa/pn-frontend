@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 
 import {
-  Alert,
   Box,
   Button,
   Divider,
@@ -13,7 +12,7 @@ import {
   Typography,
 } from '@mui/material';
 import { EventAction } from '@pagopa-pn/pn-commons';
-import { ButtonNaked } from '@pagopa/mui-italia';
+import { ButtonNaked, MIAlert } from '@pagopa/mui-italia';
 
 import { PFEventsType } from '../../models/PFEventsType';
 import { contactsSelectors } from '../../redux/contact/reducers';
@@ -134,9 +133,12 @@ const HowItWorksContactWizard: React.FC<Props> = ({ goToNextStep, setShowPecWiza
           </List>
 
           {defaultPECAddress && (
-            <Alert severity="info" sx={{ mb: 4 }} data-testid="default-pec-info">
-              {t('legal-contacts.sercq-send-wizard.step_1.pec-info-alert')}
-            </Alert>
+            <MIAlert
+              severity="info"
+              data-testid="default-pec-info"
+              sx={{ mb: 4 }}
+              description={t('legal-contacts.sercq-send-wizard.step_1.pec-info-alert')}
+            />
           )}
 
           <Button

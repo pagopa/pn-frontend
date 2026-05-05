@@ -1974,6 +1974,17 @@
     rxjs "7.8.1"
     tslib "2.6.2"
 
+"@pagopa/mui-italia@2.3.1-beta.1":
+  version "2.3.1-beta.1"
+  resolved "http://localhost:4873/@pagopa/mui-italia/-/mui-italia-2.3.1-beta.1.tgz#f74a7632c1305197946016ea041ce3b7872cb138"
+  integrity sha512-SLJXYq7fkdF6+SHRPiJWdjJDm8hs3kVTaW7FZuAIUZsV1IkDvRmQPO6S3fHmpGQpdhu/pKbGvD2bfJAV7kLcgQ==
+  dependencies:
+    "@fontsource/dm-mono" "^4.5.10"
+    "@fontsource/titillium-web" "^4.5.9"
+    clsx "^1.2.1"
+    fp-ts "^2.12.3"
+    io-ts "^2.2.18"
+
 "@pagopa/mui-italia@2.4.0-RC.1":
   version "2.4.0-RC.1"
   resolved "https://registry.yarnpkg.com/@pagopa/mui-italia/-/mui-italia-2.4.0-RC.1.tgz#6acc87560b432d400186905020b7a3742feda658"

@@ -8,16 +8,8 @@ import {
   useState,
 } from 'react';
 
-import {
-  Alert,
-  AlertTitle,
-  Box,
-  Button,
-  DialogContentText,
-  DialogTitle,
-  Divider,
-} from '@mui/material';
-import { CodeInput, CopyToClipboardButton } from '@pagopa/mui-italia';
+import { Box, Button, DialogContentText, DialogTitle, Divider } from '@mui/material';
+import { CodeInput, CopyToClipboardButton, MIAlert } from '@pagopa/mui-italia';
 
 import { ErrorMessage } from '../../models/AppResponse';
 import { getLocalizedOrDefaultLabel } from '../../utility/localization.utility';
@@ -209,12 +201,13 @@ const CodeModal = forwardRef<ModalHandle, Props>(
           </Box>
           {codeSectionAdditional && <Box sx={{ mt: 2 }}>{codeSectionAdditional}</Box>}
           {internalHasError && (
-            <Alert id="error-alert" data-testid="errorAlert" severity="error" sx={{ mt: 2 }}>
-              <AlertTitle id="codeModalErrorTitle" data-testid="CodeModal error title">
-                {internalErrorTitle}
-              </AlertTitle>
-              {internalErrorMessage}
-            </Alert>
+            <MIAlert
+              data-testid="errorAlert"
+              severity="error"
+              sx={{ mt: 2 }}
+              title={internalErrorTitle}
+              description={internalErrorMessage}
+            />
           )}
         </PnDialogContent>
         <PnDialogActions>

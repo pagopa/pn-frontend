@@ -1,7 +1,7 @@
 import React, { memo, useEffect, useState } from 'react';
 
 import { Download } from '@mui/icons-material/';
-import { Alert, Box, Button, FormControl, RadioGroup, Stack, Typography } from '@mui/material';
+import { Box, Button, FormControl, RadioGroup, Stack, Typography } from '@mui/material';
 import { MIAlert } from '@pagopa/mui-italia';
 
 import { downloadDocument } from '../../hooks/useDownloadDocument';
@@ -263,9 +263,7 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
             </Box>
           )}
           {errorOnPayment && (
-            <Alert severity="error" variant="outlined" data-testid="payment-error">
-              {getErrorMessage()}
-            </Alert>
+            <MIAlert severity="error" data-testid="payment-error" description={getErrorMessage()} />
           )}
           {!allPaymentsIsPaid && (
             <PaymentButtons
