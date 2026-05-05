@@ -390,10 +390,10 @@
       },
       "summary": {
         "title": "Your summary",
-        "legal-title": "Legally-binding communications will be delivered to:",
+        "legal-title": "Legally binding communications will only be delivered to:",
         "courtesy-title": "You will receive a notice via:",
         "info-box": "Monitor the contact details you have chosen: a SEND digital notification starts to produce legal effects even if you have not consulted it.",
-        "disclaimer": "By pressing <strong>Confirm</strong> you declare that you have read the <0>Privacy Policy</0> and accept the <1>Terms of Service</1>.",
+        "disclaimer": "By pressing <strong>Confirm</strong>, you declare that you have read the <0>Privacy Policy</0> and accept the <1>Terms of Service</1>, and that you understand that SEND notifications will not be forwarded to other digital domiciles.",
         "ddom-label": "Digital domicile",
         "io-label": "IO, the public services app",
         "io-value": "SEND service on IO active",
