@@ -28,9 +28,7 @@ describe('CourtesyContactHandler', () => {
     const props = createProps(ChannelType.SMS);
     const labelPrefix = 'onboarding.courtesy.sms.collapsed';
 
-    const { getByText, getByRole } = render(
-      <CourtesyContactHandler {...props} mode="collapsed" />
-    );
+    const { getByText, getByRole } = render(<CourtesyContactHandler {...props} mode="collapsed" />);
 
     expect(getByText(`${labelPrefix}.label`)).toBeInTheDocument();
     expect(getByRole('button', { name: `${labelPrefix}.button-label` })).toBeInTheDocument();
@@ -57,9 +55,7 @@ describe('CourtesyContactHandler', () => {
     expect(getByText(`${labelPrefix}.description`)).toBeInTheDocument();
     expect(getByLabelText(`${labelPrefix}.input-label`)).toBeInTheDocument();
     expect(getByRole('button', { name: `${labelPrefix}.button-label` })).toBeInTheDocument();
-    expect(
-      getByRole('button', { name: `${labelPrefix}.collapse-label` })
-    ).toBeInTheDocument();
+    expect(getByRole('button', { name: `${labelPrefix}.collapse-label` })).toBeInTheDocument();
     expect(getByText('mock-error')).toBeInTheDocument();
 
     fireEvent.click(getByRole('button', { name: `${labelPrefix}.button-label` }));
@@ -69,7 +65,7 @@ describe('CourtesyContactHandler', () => {
     expect(props.onCollapse).toHaveBeenCalledTimes(1);
   });
 
-  it('renders the readonly mode for a contact added during the wizard', () => {
+  it('renders the Email readonly mode for a contact added during the wizard', () => {
     const props = createProps(ChannelType.EMAIL);
     const labelPrefix = 'onboarding.courtesy.email.readonly';
 
@@ -117,5 +113,23 @@ describe('CourtesyContactHandler', () => {
     expect(getByText(`${labelPrefix}.title`)).toBeInTheDocument();
     expect(getByText(`${labelPrefix}.description`)).toBeInTheDocument();
     expect(getByText(mockEmail)).toBeInTheDocument();
+  });
+
+  it('renders the SMS readonly mode for a contact added during the wizard', () => {
+    const mockPhone = '+393331234567';
+    const props = createProps(ChannelType.SMS);
+    const labelPrefix = 'onboarding.courtesy.sms.readonly';
+
+    const { getByText } = render(
+      <CourtesyContactHandler
+        {...props}
+        mode="readonly"
+        contactState={{ value: mockPhone, alreadySet: false }}
+      />
+    );
+
+    expect(getByText(`${labelPrefix}.title`)).toBeInTheDocument();
+    expect(getByText(`${labelPrefix}.description`)).toBeInTheDocument();
+    expect(getByText(mockPhone)).toBeInTheDocument();
   });
 });

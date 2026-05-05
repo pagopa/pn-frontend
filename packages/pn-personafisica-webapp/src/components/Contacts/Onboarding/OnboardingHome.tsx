@@ -252,6 +252,7 @@ const OnboardingHome: React.FC = () => {
                     variant="text"
                     sx={{ padding: 0, textAlign: 'left', justifyContent: 'flex-start' }}
                     size={isMobile ? 'large' : 'medium'}
+                    data-testid={`onboarding-card-cta-${card.mixpanelFlowId}`}
                   >
                     {card.cta}
                   </Button>
