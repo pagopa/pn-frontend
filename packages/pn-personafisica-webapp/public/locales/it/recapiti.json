@@ -390,10 +390,11 @@
       },
       "summary": {
         "title": "Il tuo riepilogo",
-        "legal-title": "Le comunicazioni a valore legale verranno recapitate su:",
+        "legal-title-sercq": "Le comunicazioni a valore legale verranno recapitate solo su:",
+        "legal-title-pec": "Le comunicazioni a valore legale verranno recapitate su:",
         "courtesy-title": "Riceverai un avviso via:",
         "info-box": "Monitora i recapiti che hai scelto: una notifica digitale SEND inizia a produrre effetti giuridici anche se non l’hai consultata.",
-        "disclaimer": "Premendo <strong>Conferma</strong> dichiari di aver letto l'<0>Informativa privacy</0> e di accettare i <1>Termini del servizio</1>.",
+        "disclaimer": "Premendo <strong>Conferma</strong> dichiari di aver letto l’<0>Informativa Privacy</0> e di accettare i <1>Termini del servizio</1>, e di aver compreso che le notifiche SEND non ti verranno inoltrate su altri domicili digitali.",
         "ddom-label": "Domicilio digitale",
         "io-label": "IO, l’app dei servizi pubblici",
         "io-value": "Servizio SEND su IO attivo",
