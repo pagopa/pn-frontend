@@ -1974,10 +1974,10 @@
     rxjs "7.8.1"
     tslib "2.6.2"
 
-"@pagopa/mui-italia@2.4.0":
-  version "2.4.0"
-  resolved "https://registry.yarnpkg.com/@pagopa/mui-italia/-/mui-italia-2.4.0.tgz#077ca31db994960a616d6041a41c4ac467b7d100"
-  integrity sha512-yqDRG+ppPWQC7nH/xspzcnkIyYhfBUyAShpO8f63ooFC55fPIV4lzFb2QCU+ENL7aw3GyVlcpuNd7H71c2HAQg==
+"@pagopa/mui-italia@2.4.1-RC.0":
+  version "2.4.1-RC.0"
+  resolved "https://registry.yarnpkg.com/@pagopa/mui-italia/-/mui-italia-2.4.1-RC.0.tgz#267f3d1613c89062e8a8441c5015aa84a7e8c6a4"
+  integrity sha512-P2afrJguEGmdd5zeeVDOH+Ft/kHKi1hcdsGadKt0cyJmcaI4eMvLl1m5WPG/+OkJBs4kha4vniDhMtw3KPlWzQ==
   dependencies:
     "@fontsource/dm-mono" "^4.5.10"
     "@fontsource/titillium-web" "^4.5.9"
