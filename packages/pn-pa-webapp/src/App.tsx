@@ -336,7 +336,6 @@ const ActualApp = () => {
         <AppResponseMessage />
         <LoadingOverlay />
         <Router />
-        Stringa di Test
       </Layout>
       <Box onClick={clickVersion} sx={{ height: '5px', background: 'white' }}></Box>
     </>
