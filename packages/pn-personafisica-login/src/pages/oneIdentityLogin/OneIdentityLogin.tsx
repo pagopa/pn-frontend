@@ -2,17 +2,17 @@ import React, { useEffect, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
-import { Box, Button, Divider, Grid, Link, Typography, styled } from '@mui/material';
+import { Box, Divider, Grid, Link, Typography } from '@mui/material';
 import {
   Layout,
   PRIVACY_LINK_RELATIVE_PATH as PRIVACY_POLICY,
   useIsMobile,
 } from '@pagopa-pn/pn-commons';
-import { CieIcon, SpidIcon } from '@pagopa/mui-italia/icons';
 
 import { OneIdentityApi } from '../../api/OneIdentity/OneIdentity.api';
 import sendLogo from '../../assets/send.svg';
 import IOSmartAppBanner from '../../components/IoSmartAppBanner';
+import LoginButtons from '../../components/OneIdentity/LoginButtons';
 import OneIdentitySpidSelectDialog from '../../components/OneIdentity/SpidSelectDialog';
 import { IDP } from '../../models/IDPS';
 import { PFLoginEventsType } from '../../models/PFLoginEventsType';
@@ -25,13 +25,6 @@ const SMART_BANNER_HEIGHT_PX = 66;
 const LOGO_HEADER_HEIGHT_PX = 81;
 
 const unloggedUser = { id: '', name: undefined, surname: undefined, email: undefined };
-
-const LoginButton = styled(Button)({
-  borderRadius: '4px',
-  width: '272px',
-  height: '48px',
-  '& .MuiButton-startIcon': { svg: { fontSize: '25px' } },
-});
 
 const OneIdentityLogin: React.FC = () => {
   const { t, i18n } = useTranslation(['login']);
@@ -48,6 +41,7 @@ const OneIdentityLogin: React.FC = () => {
   } = getConfiguration();
 
   const [showIdpSelect, setShowIdpSelect] = useState(false);
+  const [authorizingEntityId, setAuthorizingEntityId] = useState<string | null>(null);
   const [idpsState, setIdpsState] = useState<{ idps: Array<IDP>; loading: boolean }>({
     idps: [],
     loading: true,
@@ -64,6 +58,8 @@ const OneIdentityLogin: React.FC = () => {
 
   const handleCieClick = () => handleIdpLogin('CIE', ONE_IDENTITY_CIE_ENTITY_ID);
 
+  const handleSpidClick = () => setShowIdpSelect(true);
+
   const handleSelectSpid = (idp: IDP) => handleIdpLogin(idp.friendlyName, idp.entityID);
 
   const handleIdpLogin = (spidName: string, entityId: string) => {
@@ -72,6 +68,7 @@ const OneIdentityLogin: React.FC = () => {
       SPID_IDP_ID: entityId,
     });
 
+    setAuthorizingEntityId(entityId);
     OneIdentityApi.authorize(entityId)
       .then(({ location }) => {
         // eslint-disable-next-line functional/immutable-data
@@ -79,7 +76,8 @@ const OneIdentityLogin: React.FC = () => {
       })
       .catch(() => {
         navigate(ROUTE_ONE_IDENTITY_LOGIN_ERROR);
-      });
+      })
+      .finally(() => setAuthorizingEntityId(null));
   };
 
   const fetchIDPS = () => {
@@ -163,39 +161,11 @@ const OneIdentityLogin: React.FC = () => {
               </Typography>
             </Grid>
 
-            <Grid
-              item
-              sx={{
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-                width: {
-                  xs: `${(100 / 12) * 10}%`,
-                  sm: `${(100 / 12) * 6}%`,
-                  md: `${(100 / 12) * 4}%`,
-                  lg: `${(100 / 12) * 4}%`,
-                  xl: `${(100 / 12) * 3}%`,
-                },
-              }}
-            >
-              <LoginButton
-                id="spidButton"
-                variant="contained"
-                onClick={() => setShowIdpSelect(true)}
-                startIcon={<SpidIcon />}
-                sx={{ mb: 3 }}
-              >
-                {t('loginPage.loginBox.spidLogin')}
-              </LoginButton>
-              <LoginButton
-                id="cieButton"
-                variant="contained"
-                onClick={handleCieClick}
-                startIcon={<CieIcon />}
-              >
-                {t('loginPage.loginBox.cieLogin')}
-              </LoginButton>
-            </Grid>
+            <LoginButtons
+              authorizingEntityId={authorizingEntityId}
+              handleCieClick={handleCieClick}
+              handleSpidClick={handleSpidClick}
+            />
 
             <Typography fontSize="16px" sx={{ mt: 3 }}>
               <Trans
@@ -221,6 +191,7 @@ const OneIdentityLogin: React.FC = () => {
         show={showIdpSelect}
         IDPS={idpsState.idps}
         loading={idpsState.loading}
+        authorizingEntityId={authorizingEntityId}
         handleSelectIDP={handleSelectSpid}
         onClose={() => setShowIdpSelect(false)}
       />

@@ -1,6 +1,7 @@
+import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { Button, Grid, Icon, Skeleton, Typography } from '@mui/material';
+import { Box, Button, CircularProgress, Grid, Icon, Skeleton, Typography } from '@mui/material';
 
 import { IDP } from '../../models/IDPS';
 import { getConfiguration } from '../../services/configuration.service';
@@ -9,14 +10,30 @@ import { shuffleList } from '../../utility/utils';
 type Props = {
   idps: Array<IDP>;
   loading: boolean;
+  authorizingEntityId: string | null;
   onSelect: (idp: IDP) => void;
 };
 
-const SpidList: React.FC<Props> = ({ idps, loading, onSelect }) => {
+const SpidLoader: React.FC = () => (
+  <Box
+    sx={{
+      position: 'absolute',
+      inset: 0,
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      bgcolor: 'rgba(255,255,255,0.7)',
+    }}
+  >
+    <CircularProgress size={24} />
+  </Box>
+);
+
+const SpidList: React.FC<Props> = ({ idps, loading, authorizingEntityId, onSelect }) => {
   const { t } = useTranslation(['login']);
   const { ONE_IDENTITY_CDN_URL } = getConfiguration();
 
-  const shuffledIDPS = shuffleList<IDP>(idps);
+  const shuffledIDPS = useMemo(() => shuffleList<IDP>(idps), [idps]);
 
   const getImageUrl = (entityID: string) =>
     `${ONE_IDENTITY_CDN_URL}/assets/idps/${btoa(entityID)}.png`;
@@ -61,12 +78,14 @@ const SpidList: React.FC<Props> = ({ idps, loading, onSelect }) => {
             <Button
               id={`spid-select-${idp.entityID}`}
               onClick={() => onSelect(idp)}
-              sx={{ width: '100px', padding: '0' }}
+              sx={{ width: '100px', padding: '0', position: 'relative' }}
               aria-label={idp.friendlyName}
+              disabled={authorizingEntityId !== null}
             >
               <Icon sx={{ width: '100px', height: '48px' }}>
                 <img width="100px" src={getImageUrl(idp.entityID)} alt={idp.friendlyName} />
               </Icon>
+              {authorizingEntityId === idp.entityID && <SpidLoader />}
             </Button>
           </Grid>
         ))}
