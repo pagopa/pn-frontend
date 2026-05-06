@@ -62,6 +62,7 @@ describe('Auth redux state tests', () => {
       },
       tosPrivacyApiError: false,
       loginProvider: LoginProvider.SPIDHUB,
+      isFreshLogin: false,
     });
   });
 

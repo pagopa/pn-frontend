@@ -46,7 +46,7 @@ const DelegationDataSwitch: React.FC<Props> = ({
         <CustomTagGroup visibleItems={3}>
           {data.groups.map((group) => (
             <Box sx={{ mb: 1, mr: 1, display: 'inline-block' }} key={group.id}>
-              <Tag value={group.name} />
+              <Tag value={group.name} mode="wrap" />
             </Box>
           ))}
         </CustomTagGroup>

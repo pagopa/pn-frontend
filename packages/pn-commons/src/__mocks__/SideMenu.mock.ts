@@ -6,17 +6,17 @@ export const sideMenuItems: Array<SideMenuItem> = [
   {
     label: 'Item 1',
     icon: QuestionMarkIcon,
-    route: 'mocked-route',
+    route: '/mocked-route',
   },
   {
     label: 'Item 2',
     icon: QuestionMarkIcon,
-    route: 'mocked-route-2',
+    route: '/mocked-route-2',
     children: [
       {
         label: 'Item 2-1',
         icon: QuestionMarkIcon,
-        route: 'mocked-route-2/mocked-route-2-1',
+        route: '/mocked-route-2/mocked-route-2-1',
       },
       {
         label: 'Item 2-2',
@@ -28,18 +28,18 @@ export const sideMenuItems: Array<SideMenuItem> = [
   {
     label: 'Item 3',
     icon: QuestionMarkIcon,
-    route: 'mocked-route-3',
+    route: '/mocked-route-3',
     notSelectable: true,
     children: [
       {
         label: 'Item 3-1',
         icon: QuestionMarkIcon,
-        route: 'mocked-route-3/mocked-route-3-1',
+        route: '/mocked-route-3/mocked-route-3-1',
       },
       {
         label: 'Item 3-2',
         icon: QuestionMarkIcon,
-        route: 'mocked-route-3/mocked-route-3-2',
+        route: '/mocked-route-3/mocked-route-3-2',
         notSelectable: true,
       },
     ],

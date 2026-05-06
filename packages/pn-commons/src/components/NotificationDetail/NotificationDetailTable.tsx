@@ -1,4 +1,13 @@
-import { Paper, Table, TableBody, TableCell, TableContainer, TableRow } from '@mui/material';
+import {
+  Paper,
+  SxProps,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableRow,
+} from '@mui/material';
+import { Theme } from '@mui/material/styles';
 
 import { NotificationDetailTableRow } from '../../models/NotificationDetail';
 import { getLocalizedOrDefaultLabel } from '../../utility/localization.utility';
@@ -6,6 +15,26 @@ import { getLocalizedOrDefaultLabel } from '../../utility/localization.utility';
 type Props = {
   rows: Array<NotificationDetailTableRow>;
   children?: React.ReactNode;
+};
+
+const rowSx: SxProps<Theme> = {
+  '& td': { border: 'none' },
+  verticalAlign: 'top',
+  display: { xs: 'flex', lg: 'table-row' },
+  flexDirection: { xs: 'column', lg: 'row' },
+};
+
+const cellLabelSx: SxProps<Theme> = {
+  py: { xs: 0, lg: 1 },
+  width: { lg: 180 },
+  pr: { lg: 4 },
+  whiteSpace: 'nowrap',
+};
+
+const cellValueSx: SxProps<Theme> = {
+  pb: 1,
+  pt: { xs: 0, lg: 1 },
+  overflowWrap: 'anywhere',
 };
 
 /**
@@ -31,24 +60,11 @@ const NotificationDetailTable: React.FC<Props> = ({ children, rows }) => (
     >
       <TableBody>
         {rows.map((row) => (
-          <TableRow
-            key={row.id}
-            sx={{
-              '& td': { border: 'none' },
-              verticalAlign: 'top',
-              display: { xs: 'flex', lg: 'table-row' },
-              flexDirection: { xs: 'column', lg: 'row' },
-            }}
-            data-testid="notificationDetailTableRow"
-          >
-            <TableCell id={`row-label-${row.id}`} padding="none" sx={{ py: { xs: 0, lg: 1 } }}>
+          <TableRow key={row.id} sx={rowSx} data-testid="notificationDetailTableRow">
+            <TableCell id={`row-label-${row.id}`} padding="none" sx={cellLabelSx}>
               {row.label}
             </TableCell>
-            <TableCell
-              id={`row-value-${row.id}`}
-              padding="none"
-              sx={{ pb: 1, pt: { xs: 0, lg: 1 } }}
-            >
+            <TableCell id={`row-value-${row.id}`} padding="none" sx={cellValueSx}>
               {row.value}
             </TableCell>
           </TableRow>

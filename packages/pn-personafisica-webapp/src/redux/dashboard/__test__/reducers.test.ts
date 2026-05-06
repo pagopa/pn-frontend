@@ -14,7 +14,13 @@ import { notificationsDTO, notificationsToFe } from '../../../__mocks__/Notifica
 import { apiClient } from '../../../api/apiClients';
 import { store } from '../../store';
 import { getReceivedNotifications } from '../actions';
-import { setMandateId, setNotificationFilters, setPagination, setSorting } from '../reducers';
+import {
+  setFirstSearch,
+  setMandateId,
+  setNotificationFilters,
+  setPagination,
+  setSorting,
+} from '../reducers';
 
 describe('Dashbaord redux state tests', () => {
   let mock: MockAdapter;
@@ -52,6 +58,7 @@ describe('Dashbaord redux state tests', () => {
         orderBy: '',
         order: 'asc' as 'asc' | 'desc',
       },
+      isFirstSearch: false,
     });
   });
 
@@ -118,5 +125,11 @@ describe('Dashbaord redux state tests', () => {
     const action = store.dispatch(setMandateId('mocked-mandate-id'));
     expect(action.type).toBe('dashboardSlice/setMandateId');
     expect(action.payload).toEqual('mocked-mandate-id');
+  });
+
+  it('Should be able to set first search', () => {
+    const action = store.dispatch(setFirstSearch(true));
+    expect(action.type).toBe('dashboardSlice/setFirstSearch');
+    expect(action.payload).toEqual(true);
   });
 });

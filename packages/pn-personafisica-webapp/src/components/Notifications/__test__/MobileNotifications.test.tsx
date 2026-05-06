@@ -3,50 +3,79 @@ import { vi } from 'vitest';
 import { formatToTimezoneString, tenYearsAgo, today } from '@pagopa-pn/pn-commons';
 import { createMatchMedia } from '@pagopa-pn/pn-commons/src/test-utils';
 
+import { digitalAddressesSercq } from '../../../__mocks__/Contacts.mock';
 import { notificationsToFe } from '../../../__mocks__/Notifications.mock';
 import { RenderResult, act, fireEvent, render, waitFor } from '../../../__test__/test-utils';
 import * as routes from '../../../navigation/routes.const';
 import MobileNotifications from '../MobileNotifications';
 
-const mockNavigateFn = vi.fn();
-
-// mock imports
-vi.mock('react-router-dom', async () => ({
-  ...(await vi.importActual<any>('react-router-dom')),
-  useNavigate: () => mockNavigateFn,
-}));
-
 describe('MobileNotifications Component', () => {
   let result: RenderResult;
-  const original = window.matchMedia;
+  const originalMatchMedia = globalThis.matchMedia;
+  const originalResizeObserver = globalThis.ResizeObserver;
 
   beforeAll(() => {
-    window.matchMedia = createMatchMedia(800);
+    globalThis.matchMedia = createMatchMedia(800);
+    globalThis.ResizeObserver = vi.fn().mockImplementation(() => ({
+      observe: vi.fn(),
+      unobserve: vi.fn(),
+      disconnect: vi.fn(),
+    }));
   });
 
   afterAll(() => {
-    window.matchMedia = original;
+    globalThis.matchMedia = originalMatchMedia;
+    globalThis.ResizeObserver = originalResizeObserver;
   });
 
   afterEach(() => {
     vi.clearAllMocks();
   });
 
-  it('renders MobileNotifications - no notifications', async () => {
+  it('renders MobileNotifications - no notifications - no contacts', async () => {
     // render component
     await act(async () => {
-      result = render(<MobileNotifications notifications={[]} />);
+      result = render(<MobileNotifications notifications={[]} />, {
+        preloadedState: {
+          contactsState: {
+            digitalAddresses: [],
+          },
+        },
+      });
     });
     const filters = result!.queryByTestId('dialogToggle');
     expect(filters).not.toBeInTheDocument();
     const norificationCards = result!.queryAllByTestId('mobileNotificationsCards');
     expect(norificationCards).toHaveLength(0);
-    expect(result!.container).toHaveTextContent(/empty-state.no-notifications/i);
+    expect(result!.container).toHaveTextContent(/empty-state.title/i);
+    expect(result!.container).toHaveTextContent(/empty-state.description-onboarding/i);
+    // clicks on empty state action
+    const button = result.getByTestId('button-route-onboarding');
+    fireEvent.click(button);
+    expect(result.router.state.location.pathname).toBe(routes.ONBOARDING);
+  });
+
+  it('renders MobileNotifications - no notifications - with contacts', async () => {
+    // render component
+    await act(async () => {
+      result = render(<MobileNotifications notifications={[]} />, {
+        preloadedState: {
+          contactsState: {
+            digitalAddresses: digitalAddressesSercq,
+          },
+        },
+      });
+    });
+    const filters = result!.queryByTestId('dialogToggle');
+    expect(filters).not.toBeInTheDocument();
+    const norificationCards = result!.queryAllByTestId('mobileNotificationsCards');
+    expect(norificationCards).toHaveLength(0);
+    expect(result!.container).toHaveTextContent(/empty-state.title/i);
+    expect(result!.container).toHaveTextContent(/empty-state.description/i);
     // clicks on empty state action
     const button = result.getByTestId('link-route-contacts');
     fireEvent.click(button);
-    expect(mockNavigateFn).toBeCalledTimes(1);
-    expect(mockNavigateFn).toBeCalledWith(routes.RECAPITI);
+    expect(result.router.state.location.pathname).toBe(routes.RECAPITI);
   });
 
   it('renders MobileNotifications - notifications', async () => {
@@ -91,8 +120,7 @@ describe('MobileNotifications Component', () => {
     const notificationsCardButton = norificationCards[0].querySelector('button');
     fireEvent.click(notificationsCardButton!);
     await waitFor(() => {
-      expect(mockNavigateFn).toBeCalledTimes(1);
-      expect(mockNavigateFn).toBeCalledWith(
+      expect(result.router.state.location.pathname).toBe(
         routes.GET_DETTAGLIO_NOTIFICA_PATH(notificationsToFe.resultsPage[0].iun)
       );
     });

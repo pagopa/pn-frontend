@@ -551,6 +551,8 @@ const AddSpecialContact = forwardRef<AddSpecialContactRef, Props>(
                 fullWidth
                 id="s_value"
                 name="s_value"
+                type="email"
+                autoComplete="email"
                 label={t(`special-contacts.link-${formik.values.channelType.toLowerCase()}-label`, {
                   ns: 'recapiti',
                 })}

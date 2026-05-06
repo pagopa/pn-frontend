@@ -2,7 +2,7 @@ import { Table, TableContainer } from '@mui/material';
 import { styled } from '@mui/material/styles';
 
 import { SlotProps } from '../../models/PnTable';
-import checkChildren from '../../utility/children.utility';
+import { checkChildren } from '../../utility/children.utility';
 import { getLocalizedOrDefaultLabel } from '../../utility/localization.utility';
 import PnTableBody from './PnTable/PnTableBody';
 import PnTableHeader from './PnTable/PnTableHeader';

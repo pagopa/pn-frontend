@@ -1,6 +1,6 @@
 import { Card } from '@mui/material';
 
-import checkChildren from '../../../utility/children.utility';
+import { checkChildren } from '../../../utility/children.utility';
 import PnCardActions from './PnCardActions';
 import PnCardContent from './PnCardContent';
 import PnCardHeader from './PnCardHeader';

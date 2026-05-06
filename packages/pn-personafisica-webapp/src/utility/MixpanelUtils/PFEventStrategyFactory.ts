@@ -29,6 +29,10 @@ import { SendNotificationCountStrategy } from './Strategies/SendNotificationCoun
 import { SendNotificationDetailStrategy } from './Strategies/SendNotificationDetailStrategy';
 import { SendNotificationExpensesDetailStrategy } from './Strategies/SendNotificationExpensesDetailStrategy';
 import { SendNotificationStatusDetailStrategy } from './Strategies/SendNotificationStatusDetail';
+import { SendOnboardingEmailActivationStrategy } from './Strategies/SendOnboardingEmailActivationStrategy';
+import { SendOnboardingFlowStrategy } from './Strategies/SendOnboardingFlowStrategy';
+import { SendOnboardingScreenActionStrategy } from './Strategies/SendOnboardingScreenActionStrategy';
+import { SendOnboardingStartStrategy } from './Strategies/SendOnboardingStartStrategy';
 import { SendPaymentDetailErrorStrategy } from './Strategies/SendPaymentDetailErrorStrategy';
 import { SendPaymentOutcomeStrategy } from './Strategies/SendPaymentOutcomeStrategy';
 import { SendPaymentStatusStrategy } from './Strategies/SendPaymentStatusStrategy';
@@ -314,6 +318,61 @@ const uxBannerStrategy = [
 
 const uxExternalLinkStrategy = [PFEventsType.SEND_TAP_EXTERNAL_LINK] as const;
 
+const onboardingFlowStrategy = [
+  PFEventsType.SEND_ONBOARDING_FLOW_SELECTED,
+  PFEventsType.SEND_ONBOARDING_FLOW_RECAP,
+  PFEventsType.SEND_ONBOARDING_UX_CONVERSION,
+  PFEventsType.SEND_ONBOARDING_UX_SUCCESS,
+  PFEventsType.SEND_ONBOARDING_SERCQ_ACTIVATION,
+  PFEventsType.SEND_ONBOARDING_SERCQ_SEND_SELECTED,
+  PFEventsType.SEND_ONBOARDING_EMAIL_SELECTED,
+  PFEventsType.SEND_ONBOARDING_EMAIL_ACTIVATION_CANCELED,
+  PFEventsType.SEND_ONBOARDING_EMAIL_VERIFICATION,
+  PFEventsType.SEND_ONBOARDING_EMAIL_EDITING,
+  PFEventsType.SEND_ONBOARDING_EMAIL_OTP,
+  PFEventsType.SEND_ONBOARDING_EMAIL_OTP_VERIFICATION,
+  PFEventsType.SEND_ONBOARDING_EMAIL_CONFIRMED,
+  PFEventsType.SEND_ONBOARDING_EMAIL_ACTIVATED,
+  PFEventsType.SEND_ONBOARDING_IO_DOWNLOAD,
+  PFEventsType.SEND_ONBOARDING_IO_DOWNLOAD_SELECTED,
+  PFEventsType.SEND_ONBOARDING_IO_DOWNLOAD_VERIFICATION,
+  PFEventsType.SEND_ONBOARDING_IO_DOWNLOAD_DECLINED,
+  PFEventsType.SEND_ONBOARDING_IO_ACTIVATION,
+  PFEventsType.SEND_ONBOARDING_IO_ACTIVATION_SELECTED,
+  PFEventsType.SEND_ONBOARDING_IO_ACTIVATED,
+  PFEventsType.SEND_ONBOARDING_IO_VERIFICATION,
+  PFEventsType.SEND_ONBOARDING_IO_CONFIRMED,
+  PFEventsType.SEND_ONBOARDING_PEC_VERIFICATION,
+  PFEventsType.SEND_ONBOARDING_PEC_OTP,
+  PFEventsType.SEND_ONBOARDING_PEC_OTP_VERIFICATION,
+  PFEventsType.SEND_ONBOARDING_PEC_ACTIVATED,
+  PFEventsType.SEND_ONBOARDING_SMS_SELECTED,
+  PFEventsType.SEND_ONBOARDING_SMS_ACTIVATION_CANCELED,
+  PFEventsType.SEND_ONBOARDING_SMS_VERIFICATION,
+  PFEventsType.SEND_ONBOARDING_SMS_OTP,
+  PFEventsType.SEND_ONBOARDING_SMS_OTP_VERIFICATION,
+  PFEventsType.SEND_ONBOARDING_SMS_ACTIVATED,
+  PFEventsType.SEND_ONBOARDING_SMS_EDITING,
+  PFEventsType.SEND_ONBOARDING_SMS_CONFIRMED,
+] as const;
+
+const onboardingScreenActionStrategy = [
+  PFEventsType.SEND_ONBOARDING_EXIT_SELECTED,
+  PFEventsType.SEND_ONBOARDING_BACK_SELECTED,
+  PFEventsType.SEND_ONBOARDING_CONTINUE_SELECTED,
+] as const;
+
+const onboardingEmailActivationStrategy = [
+  PFEventsType.SEND_ONBOARDING_EMAIL_ACTIVATION,
+  PFEventsType.SEND_ONBOARDING_PEC_EMAIL_ACTIVATION,
+  PFEventsType.SEND_ONBOARDING_EMAIL_SMS_ACTIVATION,
+] as const;
+
+const onboardingStartStrategy = [
+  PFEventsType.SEND_ONBOARDING_START_FLOW,
+  PFEventsType.SEND_ONBOARDING_DECLINED,
+] as const;
+
 type ArrayToTuple<T extends ReadonlyArray<PFEventsType>> = keyof {
   [K in T extends ReadonlyArray<infer U> ? U : never]: string;
 };
@@ -496,6 +555,19 @@ class PFEventStrategyFactory extends EventStrategyFactory<PFEventsType> {
 
     if (uxExternalLinkStrategy.findIndex((el) => el === eventType) > -1) {
       return new UxExternalLinkStrategy();
+    }
+
+    if (onboardingFlowStrategy.findIndex((el) => el === eventType) > -1) {
+      return new SendOnboardingFlowStrategy();
+    }
+    if (onboardingScreenActionStrategy.findIndex((el) => el === eventType) > -1) {
+      return new SendOnboardingScreenActionStrategy();
+    }
+    if (onboardingEmailActivationStrategy.findIndex((el) => el === eventType) > -1) {
+      return new SendOnboardingEmailActivationStrategy();
+    }
+    if (onboardingStartStrategy.findIndex((el) => el === eventType) > -1) {
+      return new SendOnboardingStartStrategy();
     }
 
     if (isInEventStrategyMap(eventType)) {

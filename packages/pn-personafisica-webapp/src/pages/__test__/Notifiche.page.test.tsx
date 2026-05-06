@@ -18,24 +18,23 @@ import { apiClient } from '../../api/apiClients';
 import { DASHBOARD_ACTIONS } from '../../redux/dashboard/actions';
 import Notifiche from '../Notifiche.page';
 
-const mockNavigateFn = vi.fn();
-
-// mock imports
-vi.mock('react-router-dom', async () => ({
-  ...(await vi.importActual<any>('react-router-dom')),
-  useNavigate: () => mockNavigateFn,
-}));
-
 describe('Notifiche Page', async () => {
   let result: RenderResult;
   let mock: MockAdapter;
-  const original = window.matchMedia;
+  const originalMatchMedia = globalThis.matchMedia;
+  const originalResizeObserver = globalThis.ResizeObserver;
+
   const notificationsPath = `/bff/v1/notifications/received?startDate=${encodeURIComponent(
     formatToTimezoneString(tenYearsAgo)
   )}&endDate=${encodeURIComponent(formatToTimezoneString(today))}&size=10`;
 
   beforeAll(() => {
     mock = new MockAdapter(apiClient);
+    globalThis.ResizeObserver = vi.fn().mockImplementation(() => ({
+      observe: vi.fn(),
+      unobserve: vi.fn(),
+      disconnect: vi.fn(),
+    }));
   });
 
   afterEach(() => {
@@ -44,7 +43,8 @@ describe('Notifiche Page', async () => {
 
   afterAll(() => {
     mock.restore();
-    window.matchMedia = original;
+    globalThis.matchMedia = originalMatchMedia;
+    globalThis.ResizeObserver = originalResizeObserver;
   });
 
   it('renders page', async () => {
@@ -212,7 +212,7 @@ describe('Notifiche Page', async () => {
   });
 
   it('renders page - mobile', async () => {
-    window.matchMedia = createMatchMedia(800);
+    globalThis.matchMedia = createMatchMedia(800);
     mock.onGet(notificationsPath).reply(200, notificationsDTO);
 
     await act(async () => {

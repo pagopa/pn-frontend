@@ -3,7 +3,7 @@ import MockAdapter from 'axios-mock-adapter';
 import { getById } from '@pagopa-pn/pn-commons/src/test-utils';
 
 import { digitalLegalAddresses } from '../../../__mocks__/Contacts.mock';
-import { fireEvent, render, testStore, waitFor, within } from '../../../__test__/test-utils';
+import { fireEvent, render, waitFor, within } from '../../../__test__/test-utils';
 import { apiClient } from '../../../api/apiClients';
 import { AddressType } from '../../../models/contacts';
 import PecContactItem from '../PecContactItem';
@@ -98,7 +98,7 @@ describe('PecContactItem component', () => {
       expect(validationDialog).not.toBeInTheDocument();
     });
     expect(
-      testStore
+      result.testStore
         .getState()
         .contactsState.digitalAddresses.filter((addr) => addr.addressType === AddressType.LEGAL)
     ).toStrictEqual([{ ...defaultAddress, pecValid: false, value: '', senderName: undefined }]);
@@ -117,7 +117,7 @@ describe('PecContactItem component', () => {
     fireEvent.click(buttons[1]);
     await waitFor(() => {
       expect(
-        testStore
+        result.testStore
           .getState()
           .contactsState.digitalAddresses.filter((addr) => addr.addressType === AddressType.LEGAL)
       ).toStrictEqual([]);
@@ -173,7 +173,7 @@ describe('PecContactItem component', () => {
     // check that contact has been added
     await waitFor(() => expect(dialog).not.toBeInTheDocument());
     expect(
-      testStore
+      result.testStore
         .getState()
         .contactsState.digitalAddresses.filter((addr) => addr.addressType === AddressType.LEGAL)
     ).toStrictEqual([
@@ -273,7 +273,7 @@ describe('PecContactItem component', () => {
     // check that contact has been added
     await waitFor(() => expect(dialog).not.toBeInTheDocument());
     expect(
-      testStore
+      result.testStore
         .getState()
         .contactsState.digitalAddresses.filter((addr) => addr.addressType === AddressType.LEGAL)
     ).toStrictEqual([

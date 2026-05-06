@@ -112,6 +112,7 @@ const DesktopNotifications = ({
     {
       id: 'sentAt',
       label: t('table.date'),
+      mode: 'truncate',
       cellProps: { width: '9%' },
       sortable: false, // TODO: will be re-enabled in PN-1124
     },
@@ -124,6 +125,7 @@ const DesktopNotifications = ({
     {
       id: 'subject',
       label: t('table.subject'),
+      mode: 'truncate',
       cellProps: { width: '18%' },
     },
     {
@@ -216,6 +218,7 @@ const DesktopNotifications = ({
                     {columns.map((column) => (
                       <PnTableBodyCell
                         key={column.id}
+                        mode={column.mode}
                         cellProps={{
                           ...column.cellProps,
                         }}

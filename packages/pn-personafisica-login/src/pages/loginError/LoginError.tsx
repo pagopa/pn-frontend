@@ -1,15 +1,18 @@
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 
 import { Box, Button, Dialog, Typography } from '@mui/material';
+import { sanitizeString } from '@pagopa-pn/pn-commons';
 import { IllusError } from '@pagopa/mui-italia';
 
 import { PFLoginEventsType } from '../../models/PFLoginEventsType';
 import { ROUTE_LOGIN } from '../../navigation/routes.const';
 import PFLoginEventStrategyFactory from '../../utility/MixpanelUtils/PFLoginEventStrategyFactory';
+import { storageRapidAccessOps } from '../../utility/storage';
 
 const handleError = (queryParams: string, errorMessage: string) => {
+  storageRapidAccessOps.delete();
   if (process.env.NODE_ENV !== 'test') {
     const IDP = sessionStorage.getItem('IDP');
     PFLoginEventStrategyFactory.triggerEvent(PFLoginEventsType.SEND_LOGIN_FAILURE, {
@@ -26,6 +29,7 @@ const LoginError = () => {
   const navigate = useNavigate();
   const [urlSearchParams] = useSearchParams();
   const errorCode = urlSearchParams.has('errorCode') ? urlSearchParams.get('errorCode') : null;
+  const rapidAccess = useRef(storageRapidAccessOps.read());
 
   // PN-1989 - per alcune causali di errore, si evita il passaggio transitorio per la pagina di errore
   //           e si fa il redirect verso la pagina di login immediatamente
@@ -62,7 +66,14 @@ const LoginError = () => {
     }
   };
 
-  const goToLogin = () => navigate(ROUTE_LOGIN);
+  const goToLogin = () => {
+    if (rapidAccess.current) {
+      const [key, value] = rapidAccess.current;
+      navigate(`${ROUTE_LOGIN}?${key}=${sanitizeString(value)}`);
+    } else {
+      navigate(ROUTE_LOGIN);
+    }
+  };
 
   // log error
   useEffect(() => {

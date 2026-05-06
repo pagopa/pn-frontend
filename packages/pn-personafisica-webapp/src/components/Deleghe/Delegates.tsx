@@ -64,6 +64,7 @@ const Delegates = () => {
     {
       id: 'name',
       label: t('deleghe.table.name'),
+      mode: 'wrap',
       cellProps: { width: '13%' },
       sortable: true,
     },
@@ -164,7 +165,11 @@ const Delegates = () => {
                 {rows.map((row, index) => (
                   <PnTableBodyRow key={row.id} testId="delegatesTable.body.row" index={index}>
                     {delegatesColumns.map((column) => (
-                      <PnTableBodyCell key={column.id} cellProps={column.cellProps}>
+                      <PnTableBodyCell
+                        key={column.id}
+                        cellProps={column.cellProps}
+                        mode={column.mode}
+                      >
                         <DelegatorsDataSwitch
                           data={row}
                           type={column.id}

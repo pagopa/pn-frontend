@@ -64,6 +64,10 @@ describe('Mixpanel - Send Your Notification Strategy', () => {
         cancelled_count: yourNotification.notifications.filter(
           (n) => n.notificationStatus === NotificationStatus.CANCELLED
         ).length,
+        effective_date_count: yourNotification.notifications.filter(
+          (n) => n.notificationStatus === NotificationStatus.EFFECTIVE_DATE
+        ).length,
+        onboarding: 'not_viewed',
       },
     });
   });

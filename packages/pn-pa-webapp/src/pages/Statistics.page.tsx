@@ -25,12 +25,11 @@ import FiledNotificationsStatistics from '../components/Statistics/FiledNotifica
 import FilterStatistics from '../components/Statistics/FilterStatistics';
 import LastStateStatistics from '../components/Statistics/LastStateStatistics';
 import { CxType, GraphColors, StatisticsDataTypes } from '../models/Statistics';
+import { authSelectors } from '../redux/auth/reducers';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { STATISTICS_ACTIONS, getStatistics } from '../redux/statistics/actions';
 import { hasData } from '../redux/statistics/reducers';
 import { RootState } from '../redux/store';
-
-const cxType = CxType.PA;
 
 const filter = (node: HTMLElement) => {
   const exclusionClasses = ['filter'];
@@ -68,8 +67,10 @@ const Statistics = () => {
   const loggedUserOrganizationParty = useAppSelector(
     (state: RootState) => state.userState.user?.organization
   );
+  const isSupportUser = useAppSelector(authSelectors.selectIsSupportUser);
 
   const cxId = loggedUserOrganizationParty.id;
+  const cxType = isSupportUser ? CxType.BS : CxType.PA;
 
   const getLastUpdateText = (): string => {
     if (statisticsData) {

@@ -5,21 +5,13 @@ import { fireEvent, render, waitFor, within } from '../../../__test__/test-utils
 import * as routes from '../../../navigation/routes.const';
 import MobileDelegates from '../MobileDelegates';
 
-const mockNavigateFn = vi.fn();
-
-// mock imports
-vi.mock('react-router-dom', async () => ({
-  ...(await vi.importActual<any>('react-router-dom')),
-  useNavigate: () => mockNavigateFn,
-}));
-
 describe('MobileDelegates Component', () => {
   afterEach(() => {
     vi.clearAllMocks();
   });
 
   it('renders the empty state', () => {
-    const { container, queryAllByTestId, getByTestId } = render(<MobileDelegates />);
+    const { container, queryAllByTestId, getByTestId, router } = render(<MobileDelegates />);
     expect(container).toHaveTextContent(/deleghe.delegatesTitle/i);
     const addDelegation = getByTestId('add-delegation');
     expect(addDelegation).toBeInTheDocument();
@@ -30,16 +22,14 @@ describe('MobileDelegates Component', () => {
     // clicks on empty state action
     const button = getByTestId('link-add-delegate');
     fireEvent.click(button);
-    expect(mockNavigateFn).toBeCalledTimes(1);
-    expect(mockNavigateFn).toBeCalledWith(routes.NUOVA_DELEGA);
+    expect(router.state.location.pathname).toBe(routes.NUOVA_DELEGA);
   });
 
   it('navigates to the add delegation page', () => {
-    const { getByTestId } = render(<MobileDelegates />);
+    const { getByTestId, router } = render(<MobileDelegates />);
     const addDelegation = getByTestId('add-delegation');
     fireEvent.click(addDelegation);
-    expect(mockNavigateFn).toBeCalledTimes(1);
-    expect(mockNavigateFn).toBeCalledWith(routes.NUOVA_DELEGA);
+    expect(router.state.location.pathname).toBe(routes.NUOVA_DELEGA);
   });
 
   it('renders the delegates', () => {

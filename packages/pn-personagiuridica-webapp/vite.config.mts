@@ -1,8 +1,11 @@
+import type { IncomingMessage, ServerResponse } from 'node:http';
 import { defineConfig, loadEnv, mergeConfig } from 'vite';
 import { configDefaults, defineConfig as defineVitestConfig } from 'vitest/config';
 
 import basicSsl from '@vitejs/plugin-basic-ssl';
 import react from '@vitejs/plugin-react';
+
+import type { IncomingMessage, ServerResponse } from 'node:http';
 
 const vitestConfig = defineVitestConfig({
   test: {
@@ -41,6 +44,19 @@ export default defineConfig(({ mode }) => {
         '^/auth/.*': {
           target: 'https://pnpg.uat.selfcare.pagopa.it',
           changeOrigin: true,
+        },
+       '/mock-mixpanel': {
+          target: env.HOST, // Fake target
+          bypass: (_: IncomingMessage, res: ServerResponse) => {
+            res.statusCode = 200;
+            res.setHeader('Content-Type', 'text/plain');
+
+            // Mixpanel wants that server responds with number 1 for success
+            res.end('1');
+
+            // Return false to block vite because we have already handled the response
+            return false;
+          },
         },
       },
     },

@@ -180,6 +180,11 @@ export const appStateSlice = createSlice({
       .addMatcher(handleError, (state, action) => {
         updateLoadingTask(state, action.meta, action.type, 'remove');
 
+        // if the api call was aborted, avoid to show error
+        if (action.meta.aborted) {
+          return;
+        }
+
         const actionBeingRejected = action.type.slice(0, action.type.indexOf('/'));
         state.messages.errors = doRemoveErrorsByAction(actionBeingRejected, state.messages.errors);
         const response = createAppResponseError(actionBeingRejected, action.payload.response);

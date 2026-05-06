@@ -8,7 +8,11 @@ import {
   IOAllowedValues,
 } from '../../models/contacts';
 import { Party } from '../../models/party';
-import { removeAddress, updateAddressesList } from '../../utility/contacts.utility';
+import {
+  groupDigitalAddresses,
+  removeAddress,
+  updateAddressesList,
+} from '../../utility/contacts.utility';
 import { RootState } from '../store';
 import {
   createOrUpdateAddress,
@@ -129,34 +133,9 @@ export type SelectedAddresses = {
   [key in `special${ChannelType}Addresses`]: Array<DigitalAddress>;
 };
 
-const memoizedSelectAddresses = createSelector([digitalAddresses], (digitalAddresses) => {
-  const initialValue = {
-    addresses: digitalAddresses,
-    legalAddresses: [] as Array<DigitalAddress>,
-    courtesyAddresses: [] as Array<DigitalAddress>,
-    specialAddresses: [] as Array<DigitalAddress>,
-  } as SelectedAddresses;
-  for (const channelType of Object.values(ChannelType)) {
-    initialValue[`default${channelType}Address`] = undefined;
-    initialValue[`special${channelType}Addresses`] = [];
-  }
-  return digitalAddresses.reduce((obj, addr) => {
-    if (addr.addressType === AddressType.LEGAL) {
-      obj.legalAddresses.push(addr);
-    }
-    if (addr.addressType === AddressType.COURTESY) {
-      obj.courtesyAddresses.push(addr);
-    }
-    if (addr.senderId === 'default') {
-      obj[`default${addr.channelType}Address`] = addr;
-    }
-    if (addr.senderId !== 'default') {
-      obj[`special${addr.channelType}Addresses`].push(addr);
-      obj.specialAddresses.push(addr);
-    }
-    return obj;
-  }, initialValue);
-});
+const memoizedSelectAddresses = createSelector([digitalAddresses], (digitalAddresses) =>
+  groupDigitalAddresses(digitalAddresses)
+);
 
 export const contactsSelectors = {
   selectAddresses: memoizedSelectAddresses,

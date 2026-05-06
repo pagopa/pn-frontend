@@ -71,6 +71,7 @@ const DelegatesByCompany = () => {
     {
       id: 'name',
       label: t('deleghe.table.name'),
+      mode: 'wrap',
       tableConfiguration: {
         cellProps: { width: '13%' },
         sortable: true,
@@ -199,6 +200,7 @@ const DelegatesByCompany = () => {
                     <SmartBodyCell
                       key={column.id.toString()}
                       columnId={column.id}
+                      mode={column.mode}
                       tableProps={column.tableConfiguration}
                       cardProps={column.cardConfiguration}
                       isCardHeader={column.cardConfiguration?.isCardHeader}

@@ -30,6 +30,7 @@ const dashboardSlice = createSlice({
       orderBy: '',
       order: 'asc',
     } as Sort<NotificationColumnData>,
+    isFirstSearch: false,
   },
   reducers: {
     setPagination: (state, action: PayloadAction<{ page: number; size: number }>) => {
@@ -65,6 +66,9 @@ const dashboardSlice = createSlice({
       state.pagination.nextPagesKey = [];
       state.pagination.moreResult = false;
     },
+    setFirstSearch: (state, action: PayloadAction<boolean>) => {
+      state.isFirstSearch = action.payload;
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(getReceivedNotifications.fulfilled, (state, action) => {
@@ -82,7 +86,7 @@ const dashboardSlice = createSlice({
   },
 });
 
-export const { setPagination, setSorting, setNotificationFilters, setMandateId } =
+export const { setPagination, setSorting, setNotificationFilters, setMandateId, setFirstSearch } =
   dashboardSlice.actions;
 
 export default dashboardSlice;

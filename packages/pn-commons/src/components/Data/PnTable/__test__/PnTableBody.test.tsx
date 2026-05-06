@@ -20,15 +20,16 @@ describe('PnTableBody', () => {
   });
 
   it('render component - incorrect child', () => {
-    expect(() =>
-      render(
-        <PnTableBody>
-          <PnTableBodyRow index={1}>
-            <PnTableBodyCell>mocked-cell-content</PnTableBodyCell>
-          </PnTableBodyRow>
-          <Box>Incorrect child</Box>
-        </PnTableBody>
-      )
-    ).toThrowError('PnTableBody can have only children of type PnTableBodyRow');
+    const { getByText } = render(
+      <PnTableBody>
+        <PnTableBodyRow index={1}>
+          <PnTableBodyCell>mocked-cell-content</PnTableBodyCell>
+        </PnTableBodyRow>
+        <Box>Incorrect child</Box>
+      </PnTableBody>
+    );
+    expect(
+      getByText('PnTableBody can have only children of type PnTableBodyRow')
+    ).toBeInTheDocument();
   });
 });

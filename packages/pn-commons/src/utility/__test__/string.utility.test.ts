@@ -1,4 +1,4 @@
-import { formatFiscalCode, fromStringToBase64, sanitizeString } from '../string.utility';
+import { dataRegex, formatFiscalCode, fromStringToBase64, sanitizeString } from '../string.utility';
 
 describe('String utility', () => {
   it('formatFiscalCode', () => {
@@ -38,5 +38,58 @@ describe('String utility', () => {
     const srt = 'Hello';
     const result = fromStringToBase64(srt);
     expect(result).toStrictEqual('SGVsbG8=');
+  });
+});
+
+describe('dataRegex.name', () => {
+  const valid = [
+    'Mario Rossi',
+    "Giovanni D'Angelo",
+    'Müller',         // tedesco: umlaut
+    'François',       // francese: cedilla
+    'Škoda',          // ceco: háček
+    'Maša',           // rumeno/slavo: Š
+    'José',           // spagnolo: accento acuto
+    'O\'Brien',       // irlandese: apostrofo
+    'Smith-Jones',    // trattino
+    'Name123',        // cifre
+    'St. John',       // punto
+    'Łukasz',         // polacco: Ł
+    'Ångström',       // svedese: Å
+    'Ñoño',           // spagnolo: tilde
+    'Žan',            // sloveno: Ž
+    'Αλέξης',         // greco
+    'Иван',           // cirillico
+  ];
+
+  const invalid = [
+    'Mario@Rossi',    // @
+    'Name<script>',   // <
+    'Test/Name',      // /
+    'Hello\\World',   // \
+    'Name=Value',     // =
+    'Name!',          // !
+    'Name?',          // ?
+    'Name#tag',       // #
+    'Name$',          // $
+    'Name%20',        // %
+    '(Mario)',        // parentesi
+    '[test]',         // parentesi quadre
+    '{name}',         // parentesi graffe
+    'name_test',      // underscore
+    'name,cognome',   // virgola
+    'name;cognome',   // punto e virgola
+    'name:cognome',   // due punti
+    'name|cognome',   // pipe
+    'name~cognome',   // tilde
+    'name`cognome',   // backtick
+  ];
+
+  it.each(valid)('accetta "%s"', (name) => {
+    expect(dataRegex.name.test(name)).toBe(true);
+  });
+
+  it.each(invalid)('rifiuta "%s"', (name) => {
+    expect(dataRegex.name.test(name)).toBe(false);
   });
 });

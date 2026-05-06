@@ -9,7 +9,6 @@ import App from '../App';
 import { currentStatusDTO } from '../__mocks__/AppStatus.mock';
 import { userResponse } from '../__mocks__/Auth.mock';
 import { tosPrivacyConsentMock } from '../__mocks__/Consents.mock';
-import { digitalAddresses } from '../__mocks__/Contacts.mock';
 import { mandatesByDelegate } from '../__mocks__/Delegations.mock';
 import { apiClient, authClient } from '../api/apiClients';
 import { LoginProvider } from '../models/User';
@@ -19,7 +18,7 @@ import { RenderResult, act, fireEvent, render, screen, waitFor, within } from '.
 vi.mock('../pages/Notifiche.page', () => ({ default: () => <div>Generic Page</div> }));
 vi.mock('../pages/Profile.page', () => ({ default: () => <div>Profile Page</div> }));
 
-const unmockedFetch = global.fetch;
+const unmockedFetch = globalThis.fetch;
 
 const Component = () => (
   <ThemeProvider theme={theme}>
@@ -54,18 +53,18 @@ describe('App', async () => {
   let mockAuth: MockAdapter;
   let result: RenderResult;
   const mockOpenFn = vi.fn();
-  const originalOpen = window.open;
+  const originalOpen = globalThis.open;
 
   beforeAll(() => {
     mock = new MockAdapter(apiClient);
     mockAuth = new MockAdapter(authClient);
     // FooterPreLogin (mui-italia) component calls an api to fetch selfcare products list.
     // this causes an error, so we mock to avoid it
-    global.fetch = () =>
+    globalThis.fetch = () =>
       Promise.resolve({
         json: () => Promise.resolve([]),
       }) as Promise<Response>;
-    Object.defineProperty(window, 'open', {
+    Object.defineProperty(globalThis, 'open', {
       configurable: true,
       value: mockOpenFn,
     });
@@ -80,8 +79,8 @@ describe('App', async () => {
   afterAll(() => {
     mock.restore();
     mockAuth.restore();
-    global.fetch = unmockedFetch;
-    Object.defineProperty(window, 'open', { configurable: true, value: originalOpen });
+    globalThis.fetch = unmockedFetch;
+    Object.defineProperty(globalThis, 'open', { configurable: true, value: originalOpen });
   });
 
   it('render component - user not logged in', async () => {
@@ -100,8 +99,7 @@ describe('App', async () => {
 
   it('render component - user logged in', async () => {
     mock.onGet(/\/bff\/v2\/tos-privacy.*/).reply(200, tosPrivacyConsentMock(true, true));
-    mock.onGet('downtime/v1/status').reply(200, currentStatusDTO);
-    mock.onGet('/bff/v1/addresses').reply(200, digitalAddresses);
+    mock.onGet('/bff/v1/downtime/status').reply(200, currentStatusDTO);
     mock.onGet('/bff/v1/mandate/delegate').reply(200, mandatesByDelegate);
     await act(async () => {
       result = render(<Component />, { preloadedState: reduxInitialState });
@@ -118,8 +116,7 @@ describe('App', async () => {
 
   it('check header actions - user logged in', async () => {
     mock.onGet(/\/bff\/v2\/tos-privacy.*/).reply(200, tosPrivacyConsentMock(true, true));
-    mock.onGet('downtime/v1/status').reply(200, currentStatusDTO);
-    mock.onGet('/bff/v1/addresses').reply(200, digitalAddresses);
+    mock.onGet('/bff/v1/downtime/status').reply(200, currentStatusDTO);
     mock.onGet('/bff/v1/mandate/delegate').reply(200, mandatesByDelegate);
     mockAuth.onPost('/logout').reply(200);
 
@@ -161,8 +158,7 @@ describe('App', async () => {
 
   it('redirect to One Identity login portal on logout', async () => {
     mock.onGet(/\/bff\/v2\/tos-privacy.*/).reply(200, tosPrivacyConsentMock(true, true));
-    mock.onGet('downtime/v1/status').reply(200, currentStatusDTO);
-    mock.onGet('/bff/v1/addresses').reply(200, digitalAddresses);
+    mock.onGet('/bff/v1/downtime/status').reply(200, currentStatusDTO);
     mock.onGet('/bff/v1/mandate/delegate').reply(200, mandatesByDelegate);
     mockAuth.onPost('/logout').reply(200);
 
@@ -212,23 +208,23 @@ describe('App', async () => {
 
   it('sidemenu not included if error in API call to fetch TOS and Privacy', async () => {
     mock.onGet(/\/bff\/v2\/tos-privacy.*/).reply(500);
-    mock.onGet('downtime/v1/status').reply(200, currentStatusDTO);
-    mock.onGet('/bff/v1/addresses').reply(200, digitalAddresses);
+    mock.onGet('/bff/v1/downtime/status').reply(200, currentStatusDTO);
     mock.onGet('/bff/v1/mandate/delegate').reply(200, mandatesByDelegate);
+
     await act(async () => {
       result = render(<Component />, { preloadedState: reduxInitialState });
     });
     const sideMenu = result.queryByTestId('side-menu');
     expect(sideMenu).not.toBeInTheDocument();
     expect(result.container).not.toHaveTextContent('Generic Page');
-    expect(mock.history.get).toHaveLength(4);
+    expect(mock.history.get).toHaveLength(3);
   });
 
   it('sidemenu not included if user has not accepted the TOS and PRIVACY', async () => {
     mock.onGet(/\/bff\/v2\/tos-privacy.*/).reply(200, tosPrivacyConsentMock(false, false));
-    mock.onGet('downtime/v1/status').reply(200, currentStatusDTO);
-    mock.onGet('/bff/v1/addresses').reply(200, digitalAddresses);
+    mock.onGet('/bff/v1/downtime/status').reply(200, currentStatusDTO);
     mock.onGet('/bff/v1/mandate/delegate').reply(200, mandatesByDelegate);
+
     await act(async () => {
       result = render(<Component />, { preloadedState: reduxInitialState });
     });
@@ -237,14 +233,14 @@ describe('App', async () => {
     const tosPage = result.queryByTestId('tos-acceptance-page');
     expect(tosPage).toBeInTheDocument();
     expect(result.container).not.toHaveTextContent('Generic Page');
-    expect(mock.history.get).toHaveLength(4);
+    expect(mock.history.get).toHaveLength(3);
   });
 
   it('check header actions - user has not accepted the TOS and PRIVACY', async () => {
     mock.onGet(/\/bff\/v2\/tos-privacy.*/).reply(200, tosPrivacyConsentMock(false, false));
-    mock.onGet('downtime/v1/status').reply(200, currentStatusDTO);
-    mock.onGet('/bff/v1/addresses').reply(200, digitalAddresses);
+    mock.onGet('/bff/v1/downtime/status').reply(200, currentStatusDTO);
     mock.onGet('/bff/v1/mandate/delegate').reply(200, mandatesByDelegate);
+
     await act(async () => {
       render(<Component />, { preloadedState: reduxInitialState });
     });
@@ -261,24 +257,24 @@ describe('App', async () => {
 
   it('sidemenu items if there are delegators', async () => {
     mock.onGet(/\/bff\/v2\/tos-privacy.*/).reply(200, tosPrivacyConsentMock(true, true));
-    mock.onGet('downtime/v1/status').reply(200, currentStatusDTO);
-    mock.onGet('/bff/v1/addresses').reply(200, digitalAddresses);
+    mock.onGet('/bff/v1/downtime/status').reply(200, currentStatusDTO);
     mock.onGet('/bff/v1/mandate/delegate').reply(200, mandatesByDelegate);
+
     await act(async () => {
       result = render(<Component />, { preloadedState: reduxInitialState });
     });
     const sideMenu = result.getByTestId('side-menu');
     const sideMenuItems = sideMenu.querySelectorAll('[data-testid^=sideMenuItem-]');
-    expect(sideMenuItems).toHaveLength(4);
+    expect(sideMenuItems).toHaveLength(7);
     const collapsibleMenu = sideMenuItems[0].querySelector('[data-testid=collapsible-menu]');
     expect(collapsibleMenu).toBeInTheDocument();
   });
 
   it('sidemenu items if there are no delegators', async () => {
     mock.onGet(/\/bff\/v2\/tos-privacy.*/).reply(200, tosPrivacyConsentMock(true, true));
-    mock.onGet('downtime/v1/status').reply(200, currentStatusDTO);
-    mock.onGet('/bff/v1/addresses').reply(200, digitalAddresses);
+    mock.onGet('/bff/v1/downtime/status').reply(200, currentStatusDTO);
     mock.onGet('/bff/v1/mandate/delegate').reply(200, []);
+
     await act(async () => {
       result = render(<Component />, { preloadedState: reduxInitialState });
     });

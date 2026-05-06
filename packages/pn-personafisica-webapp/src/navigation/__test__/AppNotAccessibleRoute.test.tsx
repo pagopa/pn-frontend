@@ -16,18 +16,12 @@ describe('AppNotAccessibleRoute Component', () => {
     supportEmail = config.PAGOPA_HELP_EMAIL;
   });
 
-  beforeEach(() => {
-    globalThis.history.pushState({}, '', '/');
-  });
-
   afterEach(() => {
     globalThis.location = originalLocation;
   });
 
   it('uses "not-accessible" as default reason when query param is missing', () => {
-    globalThis.history.pushState({}, '', notAccessibleBaseRoute);
-
-    const { container } = render(<AppNotAccessibleRoute />);
+    const { container } = render(<AppNotAccessibleRoute />, { route: notAccessibleBaseRoute });
 
     expect(container).toHaveTextContent('not-accessible.title');
     expect(container).toHaveTextContent('not-accessible.description');
@@ -35,9 +29,9 @@ describe('AppNotAccessibleRoute Component', () => {
   });
 
   it('uses "user-validation-failed" reason when query param is set', () => {
-    globalThis.history.pushState({}, '', `${notAccessibleBaseRoute}?reason=user-validation-failed`);
-
-    const { container } = render(<AppNotAccessibleRoute />);
+    const { container } = render(<AppNotAccessibleRoute />, {
+      route: `${notAccessibleBaseRoute}?reason=user-validation-failed`,
+    });
 
     expect(container).toHaveTextContent('user-validation-failed.title');
     expect(container).toHaveTextContent('user-validation-failed.description');
@@ -45,9 +39,7 @@ describe('AppNotAccessibleRoute Component', () => {
   });
 
   it('redirects to landing site when reason is "not-accessible"', () => {
-    globalThis.history.pushState({}, '', notAccessibleBaseRoute);
-
-    const { getByTestId } = render(<AppNotAccessibleRoute />);
+    const { getByTestId } = render(<AppNotAccessibleRoute />, { route: notAccessibleBaseRoute });
 
     const mockLocation = { href: '' };
     globalThis.location = mockLocation as any;
@@ -59,9 +51,9 @@ describe('AppNotAccessibleRoute Component', () => {
   });
 
   it('opens mailto to support when reason is "user-validation-failed"', () => {
-    globalThis.history.pushState({}, '', `${notAccessibleBaseRoute}?reason=user-validation-failed`);
-
-    const { getByTestId } = render(<AppNotAccessibleRoute />);
+    const { getByTestId } = render(<AppNotAccessibleRoute />, {
+      route: `${notAccessibleBaseRoute}?reason=user-validation-failed`,
+    });
 
     const mockLocation = { href: '' };
     globalThis.location = mockLocation as any;

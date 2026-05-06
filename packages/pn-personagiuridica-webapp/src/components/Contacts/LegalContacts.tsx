@@ -8,7 +8,7 @@ import PowerSettingsNewIcon from '@mui/icons-material/PowerSettingsNew';
 import SavingsIcon from '@mui/icons-material/Savings';
 import TouchAppIcon from '@mui/icons-material/TouchApp';
 import { Alert, Box, Button, Chip, ChipOwnProps, Stack, Typography } from '@mui/material';
-import { PnInfoCard, appStateActions, useIsMobile } from '@pagopa-pn/pn-commons';
+import { PnInfoCard, appStateActions, appStorage, useIsMobile } from '@pagopa-pn/pn-commons';
 
 import { AddressType, ChannelType } from '../../models/contacts';
 import {
@@ -134,7 +134,7 @@ const LegalContacts = () => {
       .unwrap()
       .then(() => {
         if (channelType === ChannelType.SERCQ_SEND) {
-          sessionStorage.removeItem('domicileBannerClosed');
+          appStorage.domicileBanner.enable();
         }
         dispatch(
           appStateActions.addSuccess({

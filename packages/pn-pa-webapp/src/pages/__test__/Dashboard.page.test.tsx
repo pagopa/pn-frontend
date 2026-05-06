@@ -12,24 +12,19 @@ import { createMatchMedia, testInput } from '@pagopa-pn/pn-commons/src/test-util
 
 import { errorMock } from '../../__mocks__/Errors.mock';
 import { emptyNotificationsFromBe, notificationsDTO } from '../../__mocks__/Notifications.mock';
-import {
-  CustomRenderResult,
-  act,
-  fireEvent,
-  render,
-  screen,
-  waitFor,
-} from '../../__test__/test-utils';
+import { RenderResult, act, fireEvent, render, screen, waitFor } from '../../__test__/test-utils';
 import { apiClient } from '../../api/apiClients';
+import { PNRole } from '../../models/user';
 import * as routes from '../../navigation/routes.const';
 import { DASHBOARD_ACTIONS } from '../../redux/dashboard/actions';
 import { ServerResponseErrorCode } from '../../utility/AppError/types';
 import Dashboard from '../Dashboard.page';
 
 describe('Dashboard Page', async () => {
-  let result: CustomRenderResult;
+  let result: RenderResult;
   let mock: MockAdapter;
-  const original = globalThis.matchMedia;
+  const originalMatchMedia = globalThis.matchMedia;
+  const originalResizeObserver = globalThis.ResizeObserver;
 
   const startParam = encodeURIComponent(formatToTimezoneString(tenYearsAgo));
   const endParam = encodeURIComponent(formatToTimezoneString(today));
@@ -51,6 +46,11 @@ describe('Dashboard Page', async () => {
 
   beforeAll(() => {
     mock = new MockAdapter(apiClient);
+    globalThis.ResizeObserver = vi.fn().mockImplementation(() => ({
+      observe: vi.fn(),
+      unobserve: vi.fn(),
+      disconnect: vi.fn(),
+    }));
   });
 
   afterEach(() => {
@@ -60,7 +60,8 @@ describe('Dashboard Page', async () => {
 
   afterAll(() => {
     mock.restore();
-    globalThis.matchMedia = original;
+    globalThis.matchMedia = originalMatchMedia;
+    globalThis.ResizeObserver = originalResizeObserver;
   });
 
   it('Dashboard without notifications, clicks on new notification inside empty state', async () => {
@@ -357,5 +358,26 @@ describe('Dashboard Page', async () => {
     await waitFor(() => {
       expect(screen.queryByTestId('filter-form')).not.toBeInTheDocument();
     });
+  });
+
+  it('should not display new notification and language settings buttons if user has role support', async () => {
+    await act(async () => {
+      result = render(<Dashboard />, {
+        preloadedState: {
+          userState: {
+            user: {
+              organization: {
+                roles: [{ role: PNRole.SUPPORT }],
+              },
+            },
+          },
+        },
+      });
+    });
+
+    const newNotificationBtn = result.queryByTestId('newNotificationBtn');
+    const settingsLangBtn = result.queryByTestId('settingsLangBtn');
+    expect(newNotificationBtn).not.toBeInTheDocument();
+    expect(settingsLangBtn).not.toBeInTheDocument();
   });
 });

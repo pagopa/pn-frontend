@@ -5,10 +5,9 @@ import { useNavigate } from 'react-router-dom';
 import NotificationsActiveOutlinedIcon from '@mui/icons-material/NotificationsActiveOutlined';
 import SavingsOutlinedIcon from '@mui/icons-material/SavingsOutlined';
 import { Box } from '@mui/material';
-import { EventAction } from '@pagopa-pn/pn-commons';
+import { EventAction, appStorage } from '@pagopa-pn/pn-commons';
 import { Banner, BannerCTA } from '@pagopa/mui-italia';
 
-import { useBannerDismiss } from '../../hooks/useBannerDismiss';
 import { PFEventsType } from '../../models/PFEventsType';
 import {
   ChannelType,
@@ -19,6 +18,8 @@ import {
 import * as routes from '../../navigation/routes.const';
 import { contactsSelectors, setExternalEvent } from '../../redux/contact/reducers';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
+import { closeDomicileBanner } from '../../redux/sidemenu/reducers';
+import { RootState } from '../../redux/store';
 import { getConfiguration } from '../../services/configuration.service';
 import PFEventStrategyFactory from '../../utility/MixpanelUtils/PFEventStrategyFactory';
 
@@ -34,15 +35,6 @@ type DomicileBannerData = {
   operation?: ContactOperation;
 };
 
-const getOpenStatusFromSession = () => {
-  const sessionClosed = sessionStorage.getItem('domicileBannerClosed');
-  // validate data
-  if (sessionClosed === 'true' || sessionClosed === 'false') {
-    return Boolean(sessionClosed);
-  }
-  return false;
-};
-
 const getDomicileData = (
   source: ContactSource,
   hasSercqSend: boolean,
@@ -50,7 +42,7 @@ const getDomicileData = (
   hasAppIODisabled: boolean,
   isDodEnabled: boolean
 ): DomicileBannerData | null => {
-  const sessionClosed = getOpenStatusFromSession();
+  const sessionClosed = !appStorage.domicileBanner.isEnabled();
   if (isDodEnabled && source !== ContactSource.RECAPITI && !hasSercqSend && !sessionClosed) {
     return {
       destination: ChannelType.SERCQ_SEND,
@@ -121,6 +113,7 @@ const DomicileBanner: React.FC<Props> = ({ source }) => {
   const { t } = useTranslation(['recapiti', 'common']);
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
+  const open = useAppSelector((state: RootState) => state.generalInfoState.domicileBannerOpened);
   const { IS_DOD_ENABLED } = getConfiguration();
   const {
     defaultPECAddress,
@@ -130,7 +123,10 @@ const DomicileBanner: React.FC<Props> = ({ source }) => {
     addresses,
   } = useAppSelector(contactsSelectors.selectAddresses);
 
-  const { open, handleClose } = useBannerDismiss();
+  const handleClose = () => {
+    dispatch(closeDomicileBanner());
+    appStorage.domicileBanner.disable();
+  };
 
   const hasAppIODisabled = defaultAPPIOAddress?.value === IOAllowedValues.DISABLED;
 

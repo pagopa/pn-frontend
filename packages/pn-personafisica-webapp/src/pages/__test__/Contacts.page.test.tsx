@@ -15,14 +15,6 @@ import { ChannelType } from '../../models/contacts';
 import { CONTACT_ACTIONS } from '../../redux/contact/actions';
 import Contacts from '../Contacts.page';
 
-const mockNavigateFn = vi.fn();
-
-// mock imports
-vi.mock('react-router-dom', async () => ({
-  ...(await vi.importActual<any>('react-router-dom')),
-  useNavigate: () => mockNavigateFn,
-}));
-
 describe('Contacts page', async () => {
   let mock: MockAdapter;
   let result: RenderResult;

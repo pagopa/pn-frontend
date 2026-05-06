@@ -1,4 +1,4 @@
-import { BasicUser } from '@pagopa-pn/pn-commons';
+import { BasicUser, BasicUserClaims } from '@pagopa-pn/pn-commons';
 
 export enum PNRole {
   ADMIN = 'pg-admin', // ref amministrativo
@@ -25,7 +25,7 @@ export interface Organization {
   groups?: Array<string>;
 }
 
-export interface User extends BasicUser {
+export interface User extends BasicUser, BasicUserClaims {
   from_aa: boolean;
   aud: string;
   level: string;

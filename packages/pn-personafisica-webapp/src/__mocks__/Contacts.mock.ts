@@ -2,6 +2,7 @@ import { SERCQ_SEND_VALUE } from '@pagopa-pn/pn-commons';
 
 import { AddressType, ChannelType, DigitalAddress, IOAllowedValues } from '../models/contacts';
 import { Party } from '../models/party';
+import { SelectedAddresses } from '../redux/contact/reducers';
 
 export const digitalAddresses: Array<DigitalAddress> = [
   {
@@ -124,4 +125,37 @@ export const digitalAddressesPecValidation = (
     });
   }
   return retVal;
+};
+
+export const buildSelectedAddresses = (addresses: Array<DigitalAddress>): SelectedAddresses => {
+  const result = {
+    addresses,
+    legalAddresses: [] as Array<DigitalAddress>,
+    courtesyAddresses: [] as Array<DigitalAddress>,
+    specialAddresses: [] as Array<DigitalAddress>,
+  } as SelectedAddresses;
+
+  for (const channelType of Object.values(ChannelType)) {
+    result[`default${channelType}Address`] = undefined;
+    result[`special${channelType}Addresses`] = [];
+  }
+
+  addresses.forEach((addr) => {
+    if (addr.addressType === AddressType.LEGAL) {
+      result.legalAddresses.push(addr);
+    }
+
+    if (addr.addressType === AddressType.COURTESY) {
+      result.courtesyAddresses.push(addr);
+    }
+
+    if (addr.senderId === 'default') {
+      result[`default${addr.channelType}Address`] = addr;
+    } else {
+      result[`special${addr.channelType}Addresses`].push(addr);
+      result.specialAddresses.push(addr);
+    }
+  });
+
+  return result;
 };

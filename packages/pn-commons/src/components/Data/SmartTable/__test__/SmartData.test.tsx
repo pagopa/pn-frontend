@@ -20,7 +20,6 @@ import SmartHeader from '../SmartHeader';
 import SmartHeaderCell from '../SmartHeaderCell';
 
 const handleSort = vi.fn();
-const handleColumnClick = vi.fn();
 const clickActionMockFn = vi.fn();
 
 type Item = {
@@ -49,9 +48,7 @@ const smartCfg: Array<SmartTableData<Item>> = [
   {
     id: 'column-3',
     label: 'Column 3',
-    tableConfiguration: {
-      onClick: handleColumnClick,
-    },
+    tableConfiguration: {},
   },
 ];
 
@@ -93,7 +90,7 @@ const RenderSmartData: React.FC<{
             <SmartBodyCell
               key={column.id.toString()}
               columnId={column.id}
-              tableProps={{ onClick: column.tableConfiguration.onClick }}
+              tableProps={column.tableConfiguration}
               cardProps={column.cardConfiguration}
               isCardHeader={column.cardConfiguration?.isCardHeader}
               testId="rowCell"
@@ -115,10 +112,10 @@ const RenderSmartData: React.FC<{
 describe('SmartData', () => {
   disableConsoleLogging('error');
 
-  const original = window.matchMedia;
+  const original = globalThis.matchMedia;
 
   afterAll(() => {
-    window.matchMedia = original;
+    globalThis.matchMedia = original;
   });
 
   it('render component', () => {
@@ -142,17 +139,11 @@ describe('SmartData', () => {
       const current = data[index];
       cells.forEach((cell, jindex) => {
         expect(cell).toHaveTextContent(current[smartCfg[jindex].id]);
-        const button = within(cell).queryByRole('button');
-        if (smartCfg[jindex].tableConfiguration.onClick) {
-          expect(button).toBeInTheDocument();
-        } else {
-          expect(button).not.toBeInTheDocument();
-        }
       });
     });
   });
 
-  it('interact with table - sort and click', () => {
+  it('interact with table - sort', () => {
     const { getByTestId } = render(<RenderSmartData />);
     const table = getByTestId('containerDesktop');
     expect(table).toBeInTheDocument();
@@ -160,13 +151,6 @@ describe('SmartData', () => {
     const sortToggle = within(table).getByTestId(`headerCellDesktop.sort.${sortableColumn!.id}`);
     fireEvent.click(sortToggle);
     expect(handleSort).toHaveBeenCalledTimes(1);
-    const clickableColumnIdx = smartCfg.findIndex((cfg) => cfg.tableConfiguration.onClick);
-    const rows = within(table).getAllByTestId('bodyRowDesktop');
-    // we can take the row we want
-    const cells = within(rows[0]).getAllByTestId('rowCellDesktop');
-    const button = within(cells[clickableColumnIdx]).getByRole('button');
-    fireEvent.click(button);
-    expect(handleColumnClick).toHaveBeenCalledTimes(1);
   });
 
   it('no sort available (desktop version)', () => {
@@ -179,7 +163,7 @@ describe('SmartData', () => {
   });
 
   it('renders component (mobile version)', () => {
-    window.matchMedia = createMatchMedia(800);
+    globalThis.matchMedia = createMatchMedia(800);
     const { getAllByTestId } = render(<RenderSmartData />);
     const mobileCards = getAllByTestId('containerMobile');
     expect(mobileCards).toHaveLength(data.length);

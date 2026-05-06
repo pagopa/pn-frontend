@@ -38,6 +38,8 @@ type HeaderProps = {
   isLogged?: boolean;
   /** Enable assistance button */
   enableAssistanceButton?: boolean;
+  /** Label of the chip displayed next to product switch */
+  chipLabel?: string;
 };
 
 const Header: React.FC<HeaderProps> = ({
@@ -53,6 +55,7 @@ const Header: React.FC<HeaderProps> = ({
   onAssistanceClick,
   isLogged,
   enableAssistanceButton,
+  chipLabel,
 }) => {
   const pagoPAHeaderLink: RootLinkType = {
     ...pagoPALink(),
@@ -119,6 +122,7 @@ const Header: React.FC<HeaderProps> = ({
           partyId={partyId}
           productsList={productsList}
           partyList={partyList}
+          chipLabel={chipLabel}
           onSelectedProduct={handleProductSelection}
           onSelectedParty={(party) => handlePartySelection(party as PartyEntityWithUrl)}
         />

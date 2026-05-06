@@ -3,28 +3,31 @@ import { vi } from 'vitest';
 import { createMatchMedia } from '@pagopa-pn/pn-commons/src/test-utils';
 
 import { notificationsToFe } from '../../../__mocks__/Notifications.mock';
-import { CustomRenderResult, act, fireEvent, render, waitFor } from '../../../__test__/test-utils';
+import { RenderResult, act, fireEvent, render, waitFor } from '../../../__test__/test-utils';
 import { GET_DETTAGLIO_NOTIFICA_PATH } from '../../../navigation/routes.const';
 import MobileNotifications from '../MobileNotifications';
 
 describe('MobileNotifications Component', () => {
-  const original = globalThis.matchMedia;
+  const originalMatchMedia = globalThis.matchMedia;
+  const originalResizeObserver = globalThis.ResizeObserver;
 
   beforeAll(() => {
     globalThis.matchMedia = createMatchMedia(800);
+    globalThis.ResizeObserver = vi.fn().mockImplementation(() => ({
+      observe: vi.fn(),
+      unobserve: vi.fn(),
+      disconnect: vi.fn(),
+    }));
   });
 
   afterAll(() => {
-    globalThis.matchMedia = original;
-  });
-
-  afterEach(() => {
-    vi.clearAllMocks();
+    globalThis.matchMedia = originalMatchMedia;
+    globalThis.ResizeObserver = originalResizeObserver;
   });
 
   it('renders MobileNotifications - no notifications', async () => {
     // render component
-    let result: CustomRenderResult;
+    let result: RenderResult;
     await act(async () => {
       result = render(
         <MobileNotifications
@@ -46,7 +49,7 @@ describe('MobileNotifications Component', () => {
 
   it('renders MobileNotifications - notifications', async () => {
     // render component
-    let result: CustomRenderResult;
+    let result: RenderResult;
     await act(async () => {
       result = render(
         <MobileNotifications
@@ -68,7 +71,7 @@ describe('MobileNotifications Component', () => {
 
   it('renders component - no notification after filter', async () => {
     // render component
-    let result: CustomRenderResult;
+    let result: RenderResult;
     await act(async () => {
       result = render(
         <MobileNotifications
@@ -87,7 +90,7 @@ describe('MobileNotifications Component', () => {
 
   it('clicks on go to detail action', async () => {
     // render component
-    let result: CustomRenderResult;
+    let result: RenderResult;
     await act(async () => {
       result = render(
         <MobileNotifications

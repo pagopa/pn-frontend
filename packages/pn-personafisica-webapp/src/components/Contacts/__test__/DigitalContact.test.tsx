@@ -41,6 +41,8 @@ describe('DigitalContact Component', () => {
     const input = getById(container, 'default_pec');
     expect(input).toBeInTheDocument();
     expect(input).toHaveValue('');
+    expect(input).toHaveAttribute('type', 'email');
+    expect(input).toHaveAttribute('autocomplete', 'email');
     const button = await waitFor(() => getById(container, 'default_pec-button'));
     expect(button).toHaveTextContent('Button');
     expect(button).toBeEnabled();
@@ -52,6 +54,28 @@ describe('DigitalContact Component', () => {
 
     errorText = getById(container, 'default_pec-helper-text');
     expect(errorText).toBeInTheDocument();
+  });
+
+  it('renders SMS input with tel semantics', () => {
+    const { container } = render(
+      <DigitalContact
+        label="Mocked label"
+        value=""
+        channelType={ChannelType.SMS}
+        inputProps={{
+          label: 'Mocked phone label',
+        }}
+        insertButtonLabel="Button"
+        onSubmit={mockSubmitCbk}
+        onDelete={mockDeleteCbk}
+      />
+    );
+
+    const input = getById(container, 'default_sms');
+    expect(input).toBeInTheDocument();
+    expect(input).toHaveValue('');
+    expect(input).toHaveAttribute('type', 'tel');
+    expect(input).toHaveAttribute('autocomplete', 'tel-national');
   });
 
   it('renders component - empty with cancelInsert button', async () => {
@@ -243,6 +267,8 @@ describe('DigitalContact Component', () => {
     let input = await waitFor(() => container.querySelector('[name="default_pec"]'));
     expect(input).toBeInTheDocument();
     expect(input).toHaveValue('mocked@pec.it');
+    expect(input).toHaveAttribute('type', 'email');
+    expect(input).toHaveAttribute('autocomplete', 'email');
     let newButtons = container.querySelectorAll('button');
     expect(newButtons).toHaveLength(2);
     expect(newButtons[0]).toHaveTextContent('button.conferma');

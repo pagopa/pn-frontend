@@ -1,7 +1,7 @@
 import { vi } from 'vitest';
 
 import { digitalAddresses } from '../../../__mocks__/Contacts.mock';
-import { fireEvent, render, screen, testStore, within } from '../../../__test__/test-utils';
+import { fireEvent, render, screen, within } from '../../../__test__/test-utils';
 import { AddressType } from '../../../models/contacts';
 import CancelVerificationModal from '../CancelVerificationModal';
 
@@ -18,11 +18,11 @@ describe('CancelVerificationModal component', async () => {
     expect(buttons[0]).toHaveTextContent('button.annulla');
     expect(buttons[1]).toHaveTextContent('button.conferma');
     fireEvent.click(buttons[0]);
-    expect(mockCloseHandler).toBeCalledTimes(1);
+    expect(mockCloseHandler).toHaveBeenCalledTimes(1);
   });
 
   it('clicks on confirm button', () => {
-    render(<CancelVerificationModal open handleClose={mockCloseHandler} />, {
+    const { testStore } = render(<CancelVerificationModal open handleClose={mockCloseHandler} />, {
       preloadedState: { contactsState: { digitalAddresses } },
     });
     const dialog = screen.getByTestId('cancelVerificationModal');

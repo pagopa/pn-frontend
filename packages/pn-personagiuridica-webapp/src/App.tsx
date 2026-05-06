@@ -70,6 +70,7 @@ const ActualApp = () => {
     SELFCARE_BASE_URL,
     SELFCARE_CDN_URL,
     ACCESSIBILITY_LINK,
+    SERCQ_SERVICE_STATEMENT_LINK,
   } = getConfiguration();
   const dispatch = useAppDispatch();
   const { t, i18n } = useTranslation(['common', 'notifiche']);
@@ -208,6 +209,7 @@ const ActualApp = () => {
         isLogged={!!sessionToken}
         hasTermsOfService={true}
         accessibilityLink={ACCESSIBILITY_LINK}
+        sercqServiceStatementLink={SERCQ_SERVICE_STATEMENT_LINK}
       >
         <PnDialog open={openModal}>
           <DialogTitle sx={{ mb: 2 }}>{t('header.logout-message')}</DialogTitle>

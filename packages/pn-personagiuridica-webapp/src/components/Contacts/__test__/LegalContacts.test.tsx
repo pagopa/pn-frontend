@@ -7,14 +7,7 @@ import {
   digitalLegalAddresses,
   digitalLegalAddressesSercq,
 } from '../../../__mocks__/Contacts.mock';
-import {
-  fireEvent,
-  render,
-  screen,
-  testStore,
-  waitFor,
-  within,
-} from '../../../__test__/test-utils';
+import { fireEvent, render, screen, waitFor, within } from '../../../__test__/test-utils';
 import { apiClient } from '../../../api/apiClients';
 import { AddressType, ChannelType } from '../../../models/contacts';
 import LegalContacts from '../LegalContacts';
@@ -22,18 +15,12 @@ import LegalContacts from '../LegalContacts';
 const defaultPecAddress = digitalLegalAddresses.find(
   (addr) => addr.senderId === 'default' && addr.pecValid && addr.channelType === ChannelType.PEC
 );
-const assignFn = vi.fn();
 
 describe('LegalContacts Component', async () => {
   let mock: MockAdapter;
-  const originalLocation = window.location;
 
   beforeAll(() => {
     mock = new MockAdapter(apiClient);
-    Object.defineProperty(window, 'location', {
-      configurable: true,
-      value: { assign: assignFn },
-    });
   });
 
   afterEach(() => {
@@ -43,12 +30,11 @@ describe('LegalContacts Component', async () => {
 
   afterAll(() => {
     mock.restore();
-    Object.defineProperty(window, 'location', { configurable: true, value: originalLocation });
   });
 
   it('renders component - PEC enabled', async () => {
     // render component
-    const { container, getByText, getByTestId, getByRole } = render(<LegalContacts />, {
+    const { container, getByText, getByTestId, getByRole, testStore } = render(<LegalContacts />, {
       preloadedState: { contactsState: { digitalAddresses: digitalLegalAddresses } },
     });
 
@@ -172,7 +158,7 @@ describe('LegalContacts Component', async () => {
     const initialAddresses = digitalAddresses.filter(
       (addr) => addr.addressType !== AddressType.LEGAL || addr.senderId === 'default'
     );
-    const { container, getByTestId, getByText, getByRole } = render(<LegalContacts />, {
+    const { container, getByTestId, getByText, getByRole, testStore } = render(<LegalContacts />, {
       preloadedState: {
         contactsState: {
           digitalAddresses: initialAddresses,

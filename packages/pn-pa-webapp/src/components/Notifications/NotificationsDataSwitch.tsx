@@ -47,7 +47,7 @@ const NotificationsDataSwitch: React.FC<{
   const isMobile = useIsMobile();
 
   if (type === 'sentAt') {
-    return <>{formatDate(data.sentAt)}</>;
+    return formatDate(data.sentAt);
   }
   if (type === 'notificationStatus') {
     return <NotificationStatusChip data={data} />;
@@ -64,28 +64,17 @@ const NotificationsDataSwitch: React.FC<{
     );
   }
   if (type === 'subject') {
-    return (
-      <Box
-        sx={{
-          textOverflow: 'ellipsis',
-          overflow: 'hidden',
-          whiteSpace: 'nowrap',
-          color: 'inherit',
-        }}
-      >
-        {data.subject}
-      </Box>
-    );
+    return data.subject;
   }
   if (type === 'iun') {
-    return <>{data.iun}</>;
+    return data.iun;
   }
   if (type === 'group' && isMobile) {
     return data.group ? (
       <CustomTagGroup visibleItems={1}>
         {[
-          <Box sx={{ mb: 1, mr: 1, display: 'inline-block' }} key={data.id}>
-            <Tag value={data.group} />
+          <Box sx={{ mb: 1, mr: 1, display: 'inline-block', maxWidth: '100%' }} key={data.id}>
+            <Tag value={data.group} mode="truncate" />
           </Box>,
         ]}
       </CustomTagGroup>
@@ -96,7 +85,7 @@ const NotificationsDataSwitch: React.FC<{
   if (type === 'group' && !isMobile) {
     return data.group ? (
       <TagGroup visibleItems={4}>
-        <Tag value={data.group} />
+        <Tag value={data.group} mode="truncate" />
       </TagGroup>
     ) : (
       <></>

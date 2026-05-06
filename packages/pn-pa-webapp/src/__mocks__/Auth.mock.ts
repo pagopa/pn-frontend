@@ -4,8 +4,8 @@ import { authClient } from '../api/apiClients';
 import { AUTH_TOKEN_EXCHANGE } from '../api/auth/auth.routes';
 import { PNRole, PartyRole, User } from '../models/user';
 import { exchangeToken } from '../redux/auth/actions';
-import { store } from '../redux/store';
 import { resetState } from '../redux/auth/reducers';
+import { store } from '../redux/store';
 
 export const mockLogin = async (body: User | string = userResponse): Promise<any> => {
   const mock = new MockAdapter(authClient);
@@ -65,6 +65,25 @@ export const userResponse: User = {
     ],
     fiscal_code: '80016350821',
     hasGroups: false,
+  },
+  desired_exp: calcExpirationDate(),
+};
+
+export const supportUserResponse: User = {
+  sessionToken: 'mocked-session-token',
+  email: 'support.user@gmail.com',
+  uid: '72af51b4-fe24-41bd-ad41-335026c2e9df',
+  organization: {
+    id: '5b994d4a-0fa8-47ac-9c7b-354f1d44a1ce',
+    name: 'Comune di Palermo',
+    roles: [
+      {
+        partyRole: PartyRole.SUPPORT,
+        role: PNRole.SUPPORT,
+      },
+    ],
+    fiscal_code: '80016350821',
+    ipaCode: 'c_g273',
   },
   desired_exp: calcExpirationDate(),
 };

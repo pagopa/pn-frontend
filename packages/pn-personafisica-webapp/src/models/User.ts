@@ -1,6 +1,6 @@
-import { AppRouteParams, BasicUser } from '@pagopa-pn/pn-commons';
+import { AppRouteParams, BasicUser, BasicUserClaims } from '@pagopa-pn/pn-commons';
 
-export interface User extends BasicUser {
+export interface User extends BasicUser, BasicUserClaims {
   from_aa: boolean;
   aud: string;
   level: string;

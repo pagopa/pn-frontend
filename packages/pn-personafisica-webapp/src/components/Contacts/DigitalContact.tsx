@@ -20,6 +20,7 @@ import {
   ButtonProps,
   InputAdornment,
   Stack,
+  SvgIconProps,
   TextField,
   TextFieldProps,
   Typography,
@@ -31,6 +32,7 @@ import { ButtonNaked } from '@pagopa/mui-italia';
 import { ChannelType } from '../../models/contacts';
 import {
   emailValidationSchema,
+  getSemanticTextFieldProps,
   pecValidationSchema,
   phoneValidationSchema,
 } from '../../utility/contacts.utility';
@@ -42,11 +44,13 @@ type Props = {
   slots?: {
     label?: JSXElementConstructor<TypographyProps>;
     editButton?: JSXElementConstructor<ButtonProps>;
+    leadingEditIcon?: JSXElementConstructor<SvgIconProps>;
   };
   slotsProps?: {
     container?: CSSProperties;
     textField?: Partial<TextFieldProps>;
     button?: Partial<ButtonProps>;
+    leadingEditIcon?: Partial<SvgIconProps>;
   };
   showLabelOnEdit?: boolean;
   senderId?: string;
@@ -93,6 +97,7 @@ const DigitalContact = forwardRef<{ toggleEdit: () => void }, Props>(
 
     const Label = slots?.label || Typography;
     const EditButton = slots?.editButton || ButtonNaked;
+    const LeadingEditIcon = slots?.leadingEditIcon;
 
     // value contains the prefix
     const contactValue = inputProps.prefix ? value.replace(inputProps.prefix, '') : value;
@@ -127,6 +132,8 @@ const DigitalContact = forwardRef<{ toggleEdit: () => void }, Props>(
         onSubmit(values[`${senderId}_${contactType}`]);
       },
     });
+
+    const semanticTextFieldProps = getSemanticTextFieldProps(channelType);
 
     const handleChangeTouched = async (e: ChangeEvent) => {
       formik.handleChange(e);
@@ -215,6 +222,7 @@ const DigitalContact = forwardRef<{ toggleEdit: () => void }, Props>(
                 formik.errors[`${senderId}_${contactType}`]
               }
               {...slotsProps?.textField}
+              {...semanticTextFieldProps}
             />
             <Button
               id={`${senderId}_${contactType}-button`}
@@ -287,6 +295,7 @@ const DigitalContact = forwardRef<{ toggleEdit: () => void }, Props>(
               }
               sx={{ mb: 2 }}
               autoFocus
+              {...semanticTextFieldProps}
             />
             <Stack direction={{ xs: 'column', lg: 'row' }} spacing={2}>
               <ButtonNaked
@@ -325,8 +334,18 @@ const DigitalContact = forwardRef<{ toggleEdit: () => void }, Props>(
             <Stack
               width={{ xs: '100%', lg: 'auto' }}
               direction="row"
-              justifyContent={{ xs: 'space-between', lg: 'auto' }}
+              alignItems="center"
+              justifyContent={{
+                xs: slots?.leadingEditIcon ? 'normal' : 'space-between',
+                lg: 'auto',
+              }}
             >
+              {LeadingEditIcon && (
+                <LeadingEditIcon
+                  {...slotsProps?.leadingEditIcon}
+                  sx={{ mr: '12px', ...slotsProps?.leadingEditIcon?.sx }}
+                />
+              )}
               <Typography
                 sx={{
                   wordBreak: 'break-word',

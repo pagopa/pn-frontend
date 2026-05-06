@@ -109,9 +109,7 @@ const SideMenuList = ({ menuItems, selfCareItems, handleLinkClick, selectedItem 
                     <SideMenuListItem
                       key={child.label}
                       selected={
-                        selectedIndex &&
-                        childIndex === selectedIndex.index &&
-                        selectedIndex.label === child.label
+                        childIndex === selectedIndex?.index && selectedIndex.label === child.label
                       }
                       item={child}
                       handleLinkClick={handleLinkClick}
@@ -133,9 +131,7 @@ const SideMenuList = ({ menuItems, selfCareItems, handleLinkClick, selectedItem 
               key={item.label}
               item={item}
               handleLinkClick={handleLinkClick}
-              selected={
-                selectedIndex && index === selectedIndex.index && selectedIndex.label === item.label
-              }
+              selected={index === selectedIndex?.index && selectedIndex.label === item.label}
               onSelect={() =>
                 setSelectedIndex({ label: item.label, index, route: item.route || '' })
               }

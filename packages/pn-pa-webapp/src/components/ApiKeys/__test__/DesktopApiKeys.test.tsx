@@ -14,8 +14,22 @@ const defaultProps = {
 };
 
 describe('DesktopApiKeys component', () => {
+  const original = globalThis.ResizeObserver;
+
+  beforeAll(() => {
+    globalThis.ResizeObserver = vi.fn().mockImplementation(() => ({
+      observe: vi.fn(),
+      unobserve: vi.fn(),
+      disconnect: vi.fn(),
+    }));
+  });
+
   afterEach(() => {
     vi.clearAllMocks();
+  });
+
+  afterAll(() => {
+    globalThis.ResizeObserver = original;
   });
 
   it('render component without API keys list', async () => {

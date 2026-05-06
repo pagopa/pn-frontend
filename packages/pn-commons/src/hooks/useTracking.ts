@@ -21,7 +21,7 @@ export function useTracking(mixpanelToken: string, nodeEnv: string) {
     // eslint-disable-next-line functional/immutable-data
     global.OptanonWrapper = function () {
       OneTrust.OnConsentChanged(function () {
-        if (OnetrustActiveGroups.indexOf(targCookiesGroup) > -1) {
+        if (OnetrustActiveGroups.includes(targCookiesGroup)) {
           mixpanelInit(mixpanelToken, nodeEnv);
         }
       });
@@ -31,7 +31,7 @@ export function useTracking(mixpanelToken: string, nodeEnv: string) {
       document.cookie.split('; ').find((row) => row.startsWith('OptanonConsent=')) || '';
     const checkValue = `${targCookiesGroup}%3A1`;
 
-    if (OTCookieValue.indexOf(checkValue) > -1) {
+    if (OTCookieValue.includes(checkValue)) {
       mixpanelInit(mixpanelToken, nodeEnv);
     }
   }, []);

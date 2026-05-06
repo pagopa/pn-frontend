@@ -5,27 +5,17 @@ import userEvent from '@testing-library/user-event';
 
 import { userResponse } from '../../__mocks__/Auth.mock';
 import { render, waitFor } from '../../__test__/test-utils';
-import * as useRapidAccessParamHook from '../../hooks/useRapidAccessParam';
+import * as routes from '../../navigation/routes.const';
+import { TPP_LANDING_UTM, UTM_KEY } from '../../utility/utm.utility';
 import TppLanding from '../TppLanding.page';
 
-const mockNavigateFn = vi.fn();
 const mockOpenFn = vi.fn();
-
-vi.mock('react-router-dom', async () => ({
-  ...(await vi.importActual<any>('react-router-dom')),
-  useNavigate: () => mockNavigateFn,
-  Navigate: ({ to, replace }: { to: string; replace?: boolean }) => {
-    mockNavigateFn(to, { replace });
-    return null;
-  },
-}));
 
 describe('TppLanding page', () => {
   const mockRetrievalId = '123456';
   const original = globalThis.open;
 
   beforeEach(() => {
-    vi.clearAllMocks();
     Object.defineProperty(globalThis, 'open', {
       configurable: true,
       value: mockOpenFn,
@@ -38,12 +28,9 @@ describe('TppLanding page', () => {
   });
 
   it('should renders page with valid params', () => {
-    vi.spyOn(useRapidAccessParamHook, 'useRapidAccessParam').mockReturnValue([
-      AppRouteParams.RETRIEVAL_ID,
-      mockRetrievalId,
-    ]);
-
-    const { getByTestId } = render(<TppLanding />);
+    const { getByTestId } = render(<TppLanding />, {
+      route: `${routes.TPP_LANDING}?${AppRouteParams.RETRIEVAL_ID}=${mockRetrievalId}`,
+    });
 
     const container = getByTestId('tppLandingContainer');
     expect(container).toBeInTheDocument();
@@ -71,48 +58,39 @@ describe('TppLanding page', () => {
     expect(faqTitle).toHaveTextContent(/faq.title/);
   });
 
-  it('should redirects to login when no param is provided', () => {
-    vi.spyOn(useRapidAccessParamHook, 'useRapidAccessParam').mockReturnValue(undefined);
+  it('should redirects to home when no param is provided', () => {
+    const { queryByTestId, router } = render(<TppLanding />);
 
-    const { queryByTestId } = render(<TppLanding />);
-
-    expect(mockNavigateFn).toHaveBeenCalledWith('/', { replace: true });
+    expect(router.state.location.pathname).toBe('/');
+    expect(router.state.historyAction).toBe('REPLACE');
     expect(queryByTestId('tppLandingContainer')).not.toBeInTheDocument();
     expect(queryByTestId('accessButton')).not.toBeInTheDocument();
     expect(queryByTestId('faqSection')).not.toBeInTheDocument();
   });
 
-  it('should redirects to login when param is invalid', () => {
-    vi.spyOn(useRapidAccessParamHook, 'useRapidAccessParam').mockReturnValue([
-      AppRouteParams.AAR,
-      mockRetrievalId,
-    ]);
+  it('should redirects to home when param is invalid', () => {
+    const { queryByTestId, router } = render(<TppLanding />, {
+      route: `${routes.TPP_LANDING}?${AppRouteParams.AAR}=${mockRetrievalId}`,
+    });
 
-    const { queryByTestId } = render(<TppLanding />);
-
-    expect(mockNavigateFn).toHaveBeenCalledWith('/', { replace: true });
+    expect(router.state.location.pathname).toBe('/');
+    expect(router.state.historyAction).toBe('REPLACE');
     expect(queryByTestId('tppLandingContainer')).not.toBeInTheDocument();
   });
 
-  it('should redirects to login when value is missing', () => {
-    vi.spyOn(useRapidAccessParamHook, 'useRapidAccessParam').mockReturnValue([
-      AppRouteParams.RETRIEVAL_ID,
-      '',
-    ]);
+  it('should redirects to home when value is missing', () => {
+    const { queryByTestId, router } = render(<TppLanding />, {
+      route: `/?${AppRouteParams.RETRIEVAL_ID}=`,
+    });
 
-    const { queryByTestId } = render(<TppLanding />);
-
-    expect(mockNavigateFn).toHaveBeenCalledWith('/', { replace: true });
+    expect(router.state.location.pathname).toBe('/');
+    expect(router.state.historyAction).toBe('REPLACE');
     expect(queryByTestId('tppLandingContainer')).not.toBeInTheDocument();
   });
 
-  it('should handle access button click - user logged in', async () => {
-    vi.spyOn(useRapidAccessParamHook, 'useRapidAccessParam').mockReturnValue([
-      AppRouteParams.RETRIEVAL_ID,
-      mockRetrievalId,
-    ]);
-
-    const { getByTestId } = render(<TppLanding />, {
+  it('should handle access button click - user logged in and navigate with retrievalId + TPP UTMs', async () => {
+    const { getByTestId, router } = render(<TppLanding />, {
+      route: `${routes.TPP_LANDING}?${AppRouteParams.RETRIEVAL_ID}=${mockRetrievalId}`,
       preloadedState: {
         userState: {
           user: userResponse,
@@ -125,39 +103,44 @@ describe('TppLanding page', () => {
 
     await userEvent.click(accessButton);
 
-    expect(mockNavigateFn).toHaveBeenCalledWith(
-      `/?${AppRouteParams.RETRIEVAL_ID}=${mockRetrievalId}`
-    );
-    expect(mockNavigateFn).toHaveBeenCalledTimes(1);
+    expect(router.state.location.pathname).toBe('/');
+
+    const sp = new URLSearchParams(router.state.location.search);
+
+    expect(sp.get(AppRouteParams.RETRIEVAL_ID)).toBe(mockRetrievalId);
+    expect(sp.get(UTM_KEY.CAMPAIGN)).toBe(TPP_LANDING_UTM[UTM_KEY.CAMPAIGN]);
+    expect(sp.get(UTM_KEY.SOURCE)).toBe(TPP_LANDING_UTM[UTM_KEY.SOURCE]);
+    expect(sp.get(UTM_KEY.MEDIUM)).toBe(TPP_LANDING_UTM[UTM_KEY.MEDIUM]);
   });
 
   it('should handle access button click - user not logged in', async () => {
-    vi.spyOn(useRapidAccessParamHook, 'useRapidAccessParam').mockReturnValue([
-      AppRouteParams.RETRIEVAL_ID,
-      mockRetrievalId,
-    ]);
-
-    const { getByTestId } = render(<TppLanding />);
+    const { getByTestId } = render(<TppLanding />, {
+      route: `${routes.TPP_LANDING}?${AppRouteParams.RETRIEVAL_ID}=${mockRetrievalId}`,
+    });
 
     const accessButton = getByTestId('accessButton');
     expect(accessButton).toBeEnabled();
 
     await userEvent.click(accessButton);
 
-    expect(mockOpenFn).toHaveBeenCalledWith(
-      `/auth/logout?${AppRouteParams.RETRIEVAL_ID}=${mockRetrievalId}`,
-      '_self'
-    );
     expect(mockOpenFn).toHaveBeenCalledTimes(1);
+
+    const [redirectUrl, target] = mockOpenFn.mock.calls[0];
+    expect(target).toBe('_self');
+
+    const parsed = new URL(redirectUrl, 'https://test.pagopa.it');
+    expect(parsed.pathname).toBe('/auth/logout');
+
+    expect(parsed.searchParams.get(AppRouteParams.RETRIEVAL_ID)).toBe(mockRetrievalId);
+    expect(parsed.searchParams.get(UTM_KEY.CAMPAIGN)).toBe(TPP_LANDING_UTM[UTM_KEY.CAMPAIGN]);
+    expect(parsed.searchParams.get(UTM_KEY.SOURCE)).toBe(TPP_LANDING_UTM[UTM_KEY.SOURCE]);
+    expect(parsed.searchParams.get(UTM_KEY.MEDIUM)).toBe(TPP_LANDING_UTM[UTM_KEY.MEDIUM]);
   });
 
   it('should displays FAQ correctly', async () => {
-    vi.spyOn(useRapidAccessParamHook, 'useRapidAccessParam').mockReturnValue([
-      AppRouteParams.RETRIEVAL_ID,
-      mockRetrievalId,
-    ]);
-
-    const { getByTestId } = render(<TppLanding />);
+    const { getByTestId } = render(<TppLanding />, {
+      route: `${routes.TPP_LANDING}?${AppRouteParams.RETRIEVAL_ID}=${mockRetrievalId}`,
+    });
 
     const notificationsAccordionSummary = getByTestId('notificationsAccordionSummary');
     expect(notificationsAccordionSummary).toHaveTextContent(/faq.what-are-notifications.question/);
@@ -178,5 +161,38 @@ describe('TppLanding page', () => {
       expect(sendAccordionDetails).toBeVisible();
       expect(sendAccordionDetails).toHaveTextContent(/faq.what-is-send.answer/);
     });
+  });
+
+  it('should not add landing UTM params on first render', () => {
+    const { router } = render(<TppLanding />, {
+      route: `${routes.TPP_LANDING}?${AppRouteParams.RETRIEVAL_ID}=${mockRetrievalId}`,
+    });
+
+    const sp = new URLSearchParams(router.state.location.search);
+
+    expect(sp.get(AppRouteParams.RETRIEVAL_ID)).toBe(mockRetrievalId);
+    expect(sp.get(UTM_KEY.CAMPAIGN)).toBeNull();
+    expect(sp.get(UTM_KEY.SOURCE)).toBeNull();
+    expect(sp.get(UTM_KEY.MEDIUM)).toBeNull();
+  });
+
+  it('should override required UTM params on TPP access button click', async () => {
+    const { getByTestId, router } = render(<TppLanding />, {
+      route: `${routes.TPP_LANDING}?${AppRouteParams.RETRIEVAL_ID}=${mockRetrievalId}&${UTM_KEY.SOURCE}=already_present`,
+      preloadedState: {
+        userState: {
+          user: userResponse,
+        },
+      },
+    });
+
+    await userEvent.click(getByTestId('accessButton'));
+
+    const sp = new URLSearchParams(router.state.location.search);
+
+    expect(sp.get(AppRouteParams.RETRIEVAL_ID)).toBe(mockRetrievalId);
+    expect(sp.get(UTM_KEY.CAMPAIGN)).toBe(TPP_LANDING_UTM[UTM_KEY.CAMPAIGN]);
+    expect(sp.get(UTM_KEY.SOURCE)).toBe(TPP_LANDING_UTM[UTM_KEY.SOURCE]);
+    expect(sp.get(UTM_KEY.MEDIUM)).toBe(TPP_LANDING_UTM[UTM_KEY.MEDIUM]);
   });
 });

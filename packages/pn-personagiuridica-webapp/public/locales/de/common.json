@@ -145,6 +145,7 @@
     "company": "Transparente Gesellschaft",
     "disclosure": "Responsible Disclosure Policy",
     "321-model": "Vordruck 231",
+    "sercq-service-statement": "Service practice statement - SERCQ",
     "accessibility": "Zugänglichkeit",
     "social": "Gehe auf die Website {{social}} von PagoPA S.p.A.",
     "resources": "Quellen",
@@ -240,13 +241,7 @@
     "action": "Angemeldet bleiben"
   },
   "code-modal": {
-    "digits": [
-      "Erste Ziffer",
-      "Zweite Ziffer",
-      "Dritte Ziffer",
-      "Vierte Ziffer",
-      "Letzte Ziffer"
-    ]
+    "digits": ["Erste Ziffer", "Zweite Ziffer", "Dritte Ziffer", "Vierte Ziffer", "Letzte Ziffer"]
   },
   "autocomplete": {
     "clear": "Ausgewählte Optionen entfernen",
