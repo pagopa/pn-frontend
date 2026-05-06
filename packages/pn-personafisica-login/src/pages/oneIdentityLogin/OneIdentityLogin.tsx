@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 
 import { Box, Divider, Grid, Link, Typography } from '@mui/material';
 import {
+  AppRouteParams,
   Layout,
   PRIVACY_LINK_RELATIVE_PATH as PRIVACY_POLICY,
   useIsMobile,
@@ -14,6 +15,7 @@ import sendLogo from '../../assets/send.svg';
 import IOSmartAppBanner from '../../components/IoSmartAppBanner';
 import LoginButtons from '../../components/OneIdentity/LoginButtons';
 import OneIdentitySpidSelectDialog from '../../components/OneIdentity/SpidSelectDialog';
+import { useRapidAccessParam } from '../../hooks/useRapidAccessParam';
 import { IDP } from '../../models/IDPS';
 import { PFLoginEventsType } from '../../models/PFLoginEventsType';
 import { ROUTE_ONE_IDENTITY_LOGIN_ERROR } from '../../navigation/routes.const';
@@ -30,6 +32,7 @@ const OneIdentityLogin: React.FC = () => {
   const { t, i18n } = useTranslation(['login']);
   const isMobile = useIsMobile();
   const navigate = useNavigate();
+  const rapidAccess = useRapidAccessParam();
   const {
     PAGOPA_HELP_EMAIL,
     PF_URL,
@@ -69,7 +72,13 @@ const OneIdentityLogin: React.FC = () => {
     });
 
     setAuthorizingEntityId(entityId);
-    OneIdentityApi.authorize(entityId)
+
+    const [rapidAccessKey, rapidAccessValue] = rapidAccess ?? [];
+    const aar = rapidAccessKey === AppRouteParams.AAR ? rapidAccessValue : undefined;
+    const retrievalId =
+      rapidAccessKey === AppRouteParams.RETRIEVAL_ID ? rapidAccessValue : undefined;
+
+    OneIdentityApi.authorize({ entityId, aar, retrievalId })
       .then(({ location }) => {
         // eslint-disable-next-line functional/immutable-data
         window.location.href = location;
