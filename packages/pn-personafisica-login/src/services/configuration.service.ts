@@ -23,6 +23,8 @@ export interface LoginConfiguration {
   DIGITAL_IDENTITY_LINK: string;
   ONE_IDENTITY_CDN_URL: string;
   SPID_REQUEST_LINK: string;
+  API_BASE_URL: string;
+  ONE_IDENTITY_CIE_ENTITY_ID: string;
 }
 
 class LoginConfigurationValidator extends Validator<LoginConfiguration> {
@@ -54,11 +56,19 @@ class LoginConfigurationValidator extends Validator<LoginConfiguration> {
         }
         return null;
       });
-    this.ruleFor('ONE_IDENTITY_BASE_URL').isString().isRequired();
-    this.ruleFor('SERCQ_SERVICE_STATEMENT_LINK').isString().isRequired();
-    this.ruleFor('DIGITAL_IDENTITY_LINK').isString().isRequired();
-    this.ruleFor('ONE_IDENTITY_CDN_URL').isString().isRequired();
-    this.ruleFor('SPID_REQUEST_LINK').isString().isRequired();
+    this.ruleFor('ONE_IDENTITY_BASE_URL').isString().isRequired().matches(dataRegex.htmlPageUrl);
+    this.ruleFor('SERCQ_SERVICE_STATEMENT_LINK')
+      .isString()
+      .isRequired()
+      .matches(dataRegex.htmlPageUrl);
+    this.ruleFor('DIGITAL_IDENTITY_LINK').isString().isRequired().matches(dataRegex.htmlPageUrl);
+    this.ruleFor('ONE_IDENTITY_CDN_URL').isString().isRequired().matches(dataRegex.htmlPageUrl);
+    this.ruleFor('SPID_REQUEST_LINK').isString().isRequired().matches(dataRegex.htmlPageUrl);
+    this.ruleFor('API_BASE_URL').isString().isRequired().matches(dataRegex.htmlPageUrl);
+    this.ruleFor('ONE_IDENTITY_CIE_ENTITY_ID')
+      .isString()
+      .isRequired()
+      .matches(dataRegex.htmlPageUrl);
   }
 }
 

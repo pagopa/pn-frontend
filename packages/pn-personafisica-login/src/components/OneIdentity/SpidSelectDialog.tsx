@@ -13,6 +13,7 @@ type Props = {
   show: boolean;
   IDPS: Array<IDP>;
   loading: boolean;
+  authorizingEntityId: string | null;
   onClose: () => void;
   handleSelectIDP: (idp: IDP) => void;
 };
@@ -21,6 +22,7 @@ const OneIdentitySpidSelectDialog: React.FC<Props> = ({
   show,
   IDPS,
   loading,
+  authorizingEntityId,
   onClose,
   handleSelectIDP,
 }) => {
@@ -70,7 +72,12 @@ const OneIdentitySpidSelectDialog: React.FC<Props> = ({
             </Typography>
           </Grid>
 
-          <SpidList idps={IDPS} loading={loading} onSelect={handleSelectIDP} />
+          <SpidList
+            idps={IDPS}
+            loading={loading}
+            authorizingEntityId={authorizingEntityId}
+            onSelect={handleSelectIDP}
+          />
 
           <Grid item>
             <Typography

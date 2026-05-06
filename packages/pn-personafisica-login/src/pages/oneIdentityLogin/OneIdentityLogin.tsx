@@ -1,20 +1,22 @@
 import React, { useEffect, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 
-import { Box, Button, Divider, Grid, Link, Typography, styled } from '@mui/material';
+import { Box, Divider, Grid, Link, Typography } from '@mui/material';
 import {
   Layout,
   PRIVACY_LINK_RELATIVE_PATH as PRIVACY_POLICY,
   useIsMobile,
 } from '@pagopa-pn/pn-commons';
-import { CieIcon, SpidIcon } from '@pagopa/mui-italia/icons';
 
 import { OneIdentityApi } from '../../api/OneIdentity/OneIdentity.api';
 import sendLogo from '../../assets/send.svg';
 import IOSmartAppBanner from '../../components/IoSmartAppBanner';
+import LoginButtons from '../../components/OneIdentity/LoginButtons';
 import OneIdentitySpidSelectDialog from '../../components/OneIdentity/SpidSelectDialog';
 import { IDP } from '../../models/IDPS';
 import { PFLoginEventsType } from '../../models/PFLoginEventsType';
+import { ROUTE_ONE_IDENTITY_LOGIN_ERROR } from '../../navigation/routes.const';
 import { getConfiguration } from '../../services/configuration.service';
 import PFLoginEventStrategyFactory from '../../utility/MixpanelUtils/PFLoginEventStrategyFactory';
 
@@ -24,27 +26,22 @@ const LOGO_HEADER_HEIGHT_PX = 81;
 
 const unloggedUser = { id: '', name: undefined, surname: undefined, email: undefined };
 
-const LoginButton = styled(Button)({
-  borderRadius: '4px',
-  width: '272px',
-  height: '48px',
-  '& .MuiButton-startIcon': { svg: { fontSize: '25px' } },
-});
-
 const OneIdentityLogin: React.FC = () => {
   const { t, i18n } = useTranslation(['login']);
   const isMobile = useIsMobile();
+  const navigate = useNavigate();
   const {
-    SPID_CIE_ENTITY_ID,
     PAGOPA_HELP_EMAIL,
     PF_URL,
     IS_SMART_APP_BANNER_ENABLED,
     ACCESSIBILITY_LINK,
     SERCQ_SERVICE_STATEMENT_LINK,
     DIGITAL_IDENTITY_LINK,
+    ONE_IDENTITY_CIE_ENTITY_ID,
   } = getConfiguration();
 
   const [showIdpSelect, setShowIdpSelect] = useState(false);
+  const [authorizingEntityId, setAuthorizingEntityId] = useState<string | null>(null);
   const [idpsState, setIdpsState] = useState<{ idps: Array<IDP>; loading: boolean }>({
     idps: [],
     loading: true,
@@ -59,11 +56,28 @@ const OneIdentityLogin: React.FC = () => {
   // eslint-disable-next-line functional/immutable-data
   const handleAssistanceClick = () => (window.location.href = `mailto:${PAGOPA_HELP_EMAIL}`);
 
-  const handleCieClick = () => {
+  const handleCieClick = () => handleIdpLogin('CIE', ONE_IDENTITY_CIE_ENTITY_ID);
+
+  const handleSpidClick = () => setShowIdpSelect(true);
+
+  const handleSelectSpid = (idp: IDP) => handleIdpLogin(idp.friendlyName, idp.entityID);
+
+  const handleIdpLogin = (spidName: string, entityId: string) => {
     PFLoginEventStrategyFactory.triggerEvent(PFLoginEventsType.SEND_IDP_SELECTED, {
-      SPID_IDP_NAME: 'CIE',
-      SPID_IDP_ID: SPID_CIE_ENTITY_ID,
+      SPID_IDP_NAME: spidName,
+      SPID_IDP_ID: entityId,
     });
+
+    setAuthorizingEntityId(entityId);
+    OneIdentityApi.authorize(entityId)
+      .then(({ location }) => {
+        // eslint-disable-next-line functional/immutable-data
+        window.location.href = location;
+      })
+      .catch(() => {
+        navigate(ROUTE_ONE_IDENTITY_LOGIN_ERROR);
+      })
+      .finally(() => setAuthorizingEntityId(null));
   };
 
   const fetchIDPS = () => {
@@ -80,6 +94,8 @@ const OneIdentityLogin: React.FC = () => {
   };
 
   useEffect(() => {
+    PFLoginEventStrategyFactory.triggerEvent(PFLoginEventsType.SEND_LOGIN);
+
     fetchIDPS();
   }, []);
 
@@ -145,39 +161,11 @@ const OneIdentityLogin: React.FC = () => {
               </Typography>
             </Grid>
 
-            <Grid
-              item
-              sx={{
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-                width: {
-                  xs: `${(100 / 12) * 10}%`,
-                  sm: `${(100 / 12) * 6}%`,
-                  md: `${(100 / 12) * 4}%`,
-                  lg: `${(100 / 12) * 4}%`,
-                  xl: `${(100 / 12) * 3}%`,
-                },
-              }}
-            >
-              <LoginButton
-                id="spidButton"
-                variant="contained"
-                onClick={() => setShowIdpSelect(true)}
-                startIcon={<SpidIcon />}
-                sx={{ mb: 3 }}
-              >
-                {t('loginPage.loginBox.spidLogin')}
-              </LoginButton>
-              <LoginButton
-                id="cieButton"
-                variant="contained"
-                onClick={handleCieClick}
-                startIcon={<CieIcon />}
-              >
-                {t('loginPage.loginBox.cieLogin')}
-              </LoginButton>
-            </Grid>
+            <LoginButtons
+              authorizingEntityId={authorizingEntityId}
+              handleCieClick={handleCieClick}
+              handleSpidClick={handleSpidClick}
+            />
 
             <Typography fontSize="16px" sx={{ mt: 3 }}>
               <Trans
@@ -203,7 +191,8 @@ const OneIdentityLogin: React.FC = () => {
         show={showIdpSelect}
         IDPS={idpsState.idps}
         loading={idpsState.loading}
-        handleSelectIDP={(idp) => console.log(idp)}
+        authorizingEntityId={authorizingEntityId}
+        handleSelectIDP={handleSelectSpid}
         onClose={() => setShowIdpSelect(false)}
       />
     </>

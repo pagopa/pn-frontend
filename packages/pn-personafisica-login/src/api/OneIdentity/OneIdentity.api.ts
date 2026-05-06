@@ -1,5 +1,6 @@
 import { IDPS_MOCK } from '../../__mocks__/IDPS.mock';
 import { IDP } from '../../models/IDPS';
+import { OidcAuthorizeResponse } from '../../models/OneIdentity';
 import { getConfiguration } from '../../services/configuration.service';
 
 export const OneIdentityApi = {
@@ -13,5 +14,17 @@ export const OneIdentityApi = {
       // TODO - In attesa di risoluzione problema CORS
       return IDPS_MOCK;
     }
+  },
+  authorize: async (entityId: string): Promise<OidcAuthorizeResponse> => {
+    const { API_BASE_URL } = getConfiguration();
+    const params = new URLSearchParams({ idp: entityId });
+
+    const response = await fetch(`${API_BASE_URL}/oidc-authorize?${params.toString()}`);
+
+    if (!response.ok) {
+      throw new Error('Error during OIDC authorize');
+    }
+
+    return response.json() as Promise<OidcAuthorizeResponse>;
   },
 };

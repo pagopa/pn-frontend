@@ -9,8 +9,8 @@ import {
   waitFor,
 } from '@pagopa-pn/pn-commons/src/test-utils';
 
-import { render } from '../../../__test__/test-utils';
 import { IDPS_MOCK } from '../../../__mocks__/IDPS.mock';
+import { render } from '../../../__test__/test-utils';
 import { OneIdentityApi } from '../../../api/OneIdentity/OneIdentity.api';
 import { storageRapidAccessOps } from '../../../utility/storage';
 import OneIdentityLogin from '../OneIdentityLogin';
@@ -27,11 +27,6 @@ vi.mock('../../../services/configuration.service', async () => {
     }),
   };
 });
-
-vi.mock('../../../utility/utils', async () => ({
-  ...(await vi.importActual<any>('../../../utility/utils')),
-  isIOSMobile: vi.fn().mockReturnValue(false),
-}));
 
 vi.mock('../../../api/OneIdentity/OneIdentity.api', () => ({
   OneIdentityApi: {
@@ -104,7 +99,7 @@ describe('test login page', () => {
       await waitFor(() => expect(OneIdentityApi.getIdps).toHaveBeenCalledTimes(1));
     });
 
-    it('shows loading spinner in dialog while fetch is pending', async () => {
+    it('shows loading spinner in dialog while IDPS fetch is pending', async () => {
       vi.mocked(OneIdentityApi.getIdps).mockImplementation(() => new Promise(() => {}));
       const { container } = render(<OneIdentityLogin />);
       fireEvent.click(getById(container, 'spidButton'));
