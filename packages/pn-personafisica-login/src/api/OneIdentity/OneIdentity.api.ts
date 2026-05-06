@@ -1,6 +1,6 @@
 import { IDPS_MOCK } from '../../__mocks__/IDPS.mock';
 import { IDP } from '../../models/IDPS';
-import { OidcAuthorizeResponse } from '../../models/OneIdentity';
+import { OidcAuthorizeParams, OidcAuthorizeResponse } from '../../models/OneIdentity';
 import { getConfiguration } from '../../services/configuration.service';
 
 export const OneIdentityApi = {
@@ -15,9 +15,19 @@ export const OneIdentityApi = {
       return IDPS_MOCK;
     }
   },
-  authorize: async (entityId: string): Promise<OidcAuthorizeResponse> => {
+  authorize: async ({
+    entityId,
+    aar,
+    retrievalId,
+  }: OidcAuthorizeParams): Promise<OidcAuthorizeResponse> => {
     const { API_BASE_URL } = getConfiguration();
     const params = new URLSearchParams({ idp: entityId });
+
+    if (aar) {
+      params.set('aar', aar);
+    } else if (retrievalId) {
+      params.set('retrievalId', retrievalId);
+    }
 
     const response = await fetch(`${API_BASE_URL}/oidc-authorize?${params.toString()}`);
 

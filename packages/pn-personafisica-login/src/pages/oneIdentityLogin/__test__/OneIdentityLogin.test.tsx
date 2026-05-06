@@ -12,6 +12,7 @@ import {
 import { IDPS_MOCK } from '../../../__mocks__/IDPS.mock';
 import { render } from '../../../__test__/test-utils';
 import { OneIdentityApi } from '../../../api/OneIdentity/OneIdentity.api';
+import { ROUTE_ONE_IDENTITY_LOGIN_ERROR } from '../../../navigation/routes.const';
 import { storageRapidAccessOps } from '../../../utility/storage';
 import OneIdentityLogin from '../OneIdentityLogin';
 
@@ -31,6 +32,7 @@ vi.mock('../../../services/configuration.service', async () => {
 vi.mock('../../../api/OneIdentity/OneIdentity.api', () => ({
   OneIdentityApi: {
     getIdps: vi.fn().mockResolvedValue([]),
+    authorize: vi.fn(),
   },
 }));
 
@@ -87,6 +89,70 @@ describe('test login page', () => {
     fireEvent.click(spidButton);
     const spidSelect = await waitFor(() => document.querySelector('#spidSelect'));
     expect(spidSelect).toBeInTheDocument();
+  });
+
+  describe('authorize', () => {
+    beforeEach(() => {
+      vi.mocked(OneIdentityApi.authorize).mockResolvedValue({
+        location: 'https://idp.example.com/login',
+      });
+    });
+
+    afterEach(() => {
+      // eslint-disable-next-line functional/immutable-data
+      delete (globalThis.location as any).href;
+    });
+
+    it('redirects to location on successful authorize', async () => {
+      const { container } = render(<OneIdentityLogin />);
+      fireEvent.click(getById(container, 'cieButton'));
+      await waitFor(() =>
+        expect(globalThis.location.href).toBe('https://idp.example.com/login')
+      );
+    });
+
+    it('navigates to error page when authorize fails', async () => {
+      vi.mocked(OneIdentityApi.authorize).mockRejectedValue(new Error('Auth failed'));
+      const { container, router } = render(<OneIdentityLogin />);
+      fireEvent.click(getById(container, 'cieButton'));
+      await waitFor(() =>
+        expect(router.state.location.pathname).toBe(ROUTE_ONE_IDENTITY_LOGIN_ERROR)
+      );
+    });
+
+    it('passes aar to authorize when AAR param is in the URL', async () => {
+      const { container } = render(<OneIdentityLogin />, {
+        route: `/?${AppRouteParams.AAR}=fake-aar`,
+      });
+      fireEvent.click(getById(container, 'cieButton'));
+      await waitFor(() =>
+        expect(OneIdentityApi.authorize).toHaveBeenCalledWith(
+          expect.objectContaining({ aar: 'fake-aar', retrievalId: undefined })
+        )
+      );
+    });
+
+    it('passes retrievalId to authorize when RETRIEVAL_ID param is in the URL', async () => {
+      const { container } = render(<OneIdentityLogin />, {
+        route: `/?${AppRouteParams.RETRIEVAL_ID}=fake-retrieval-id`,
+      });
+      fireEvent.click(getById(container, 'cieButton'));
+      await waitFor(() =>
+        expect(OneIdentityApi.authorize).toHaveBeenCalledWith(
+          expect.objectContaining({ retrievalId: 'fake-retrieval-id', aar: undefined })
+        )
+      );
+    });
+
+    it('passes no rapidAccess params to authorize when no query param is present', async () => {
+      const { container } = render(<OneIdentityLogin />);
+      fireEvent.click(getById(container, 'cieButton'));
+      await waitFor(() =>
+        expect(OneIdentityApi.authorize).toHaveBeenCalledWith(
+          expect.objectContaining({ aar: undefined, retrievalId: undefined })
+        )
+      );
+    });
   });
 
   describe('IDPS fetch', () => {
