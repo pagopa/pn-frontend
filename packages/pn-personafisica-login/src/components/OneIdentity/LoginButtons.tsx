@@ -63,7 +63,7 @@ const LoginButtons: React.FC<Props> = ({
       >
         {t('loginPage.loginBox.cieLogin')}
         {authorizingEntityId === ONE_IDENTITY_CIE_ENTITY_ID && (
-          <CircularProgress size={20} sx={{ position: 'absolute' }} />
+          <CircularProgress size={20} sx={{ position: 'absolute' }} data-testid="cie-loader" />
         )}
       </LoginButton>
     </Grid>

@@ -16,7 +16,7 @@ describe('SpidList', () => {
 
   it('shows loading spinner when loading is true', () => {
     const { getByTestId, queryAllByRole } = render(
-      <SpidList idps={IDPS_MOCK} loading={true} onSelect={handleSelect} />
+      <SpidList idps={IDPS_MOCK} loading={true} authorizingEntityId={null} onSelect={handleSelect} />
     );
     expect(getByTestId('spid-loader')).toBeInTheDocument();
     expect(queryAllByRole('button')).toHaveLength(0);
@@ -24,14 +24,14 @@ describe('SpidList', () => {
 
   it('renders idp buttons when not loading', () => {
     const { queryByTestId, getAllByRole } = render(
-      <SpidList idps={IDPS_MOCK} loading={false} onSelect={handleSelect} />
+      <SpidList idps={IDPS_MOCK} loading={false} authorizingEntityId={null} onSelect={handleSelect} />
     );
     expect(queryByTestId('spid-loader')).not.toBeInTheDocument();
     expect(getAllByRole('button')).toHaveLength(IDPS_MOCK.length);
   });
 
   it('renders a button for each idp with correct id and aria-label', () => {
-    render(<SpidList idps={IDPS_MOCK} loading={false} onSelect={handleSelect} />);
+    render(<SpidList idps={IDPS_MOCK} loading={false} authorizingEntityId={null} onSelect={handleSelect} />);
     IDPS_MOCK.forEach((idp) => {
       const btn = document.getElementById(`spid-select-${idp.entityID}`);
       expect(btn).toBeInTheDocument();
@@ -41,7 +41,7 @@ describe('SpidList', () => {
 
   it('calls onSelect with the correct idp when a button is clicked', () => {
     const onSelect = vi.fn();
-    render(<SpidList idps={IDPS_MOCK} loading={false} onSelect={onSelect} />);
+    render(<SpidList idps={IDPS_MOCK} loading={false} authorizingEntityId={null} onSelect={onSelect} />);
     const btn = document.getElementById(`spid-select-${IDPS_MOCK[0].entityID}`)!;
     fireEvent.click(btn);
     expect(onSelect).toHaveBeenCalledTimes(1);
@@ -49,7 +49,7 @@ describe('SpidList', () => {
   });
 
   it('renders images with correct src built from CDN and btoa(entityID)', () => {
-    render(<SpidList idps={IDPS_MOCK} loading={false} onSelect={handleSelect} />);
+    render(<SpidList idps={IDPS_MOCK} loading={false} authorizingEntityId={null} onSelect={handleSelect} />);
     const cdnUrl = Configuration.get<LoginConfiguration>().ONE_IDENTITY_CDN_URL;
 
     IDPS_MOCK.forEach((idp) => {
@@ -61,8 +61,19 @@ describe('SpidList', () => {
   });
 
   it('renders no empty state when idps list is empty', () => {
-    const { getByTestId } = render(<SpidList idps={[]} loading={false} onSelect={handleSelect} />);
-
+    const { getByTestId } = render(
+      <SpidList idps={[]} loading={false} authorizingEntityId={null} onSelect={handleSelect} />
+    );
     expect(getByTestId('idp-empty-state')).toBeInTheDocument();
+  });
+
+  it('disables all buttons and shows overlay spinner on the authorizing idp', () => {
+    const authorizingId = IDPS_MOCK[0].entityID;
+    render(
+      <SpidList idps={IDPS_MOCK} loading={false} authorizingEntityId={authorizingId} onSelect={handleSelect} />
+    );
+    const authorizingBtn = document.getElementById(`spid-select-${authorizingId}`)!;
+    expect(authorizingBtn).toBeDisabled();
+    expect(authorizingBtn.querySelector('[role="progressbar"]')).toBeInTheDocument();
   });
 });
