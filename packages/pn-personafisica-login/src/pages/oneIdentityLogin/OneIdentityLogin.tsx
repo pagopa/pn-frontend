@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 
 import { Box, Button, Divider, Grid, Link, Typography, styled } from '@mui/material';
 import {
@@ -15,6 +16,7 @@ import IOSmartAppBanner from '../../components/IoSmartAppBanner';
 import OneIdentitySpidSelectDialog from '../../components/OneIdentity/SpidSelectDialog';
 import { IDP } from '../../models/IDPS';
 import { PFLoginEventsType } from '../../models/PFLoginEventsType';
+import { ROUTE_ONE_IDENTITY_LOGIN_ERROR } from '../../navigation/routes.const';
 import { getConfiguration } from '../../services/configuration.service';
 import PFLoginEventStrategyFactory from '../../utility/MixpanelUtils/PFLoginEventStrategyFactory';
 
@@ -34,14 +36,15 @@ const LoginButton = styled(Button)({
 const OneIdentityLogin: React.FC = () => {
   const { t, i18n } = useTranslation(['login']);
   const isMobile = useIsMobile();
+  const navigate = useNavigate();
   const {
-    SPID_CIE_ENTITY_ID,
     PAGOPA_HELP_EMAIL,
     PF_URL,
     IS_SMART_APP_BANNER_ENABLED,
     ACCESSIBILITY_LINK,
     SERCQ_SERVICE_STATEMENT_LINK,
     DIGITAL_IDENTITY_LINK,
+    ONE_IDENTITY_CIE_ENTITY_ID,
   } = getConfiguration();
 
   const [showIdpSelect, setShowIdpSelect] = useState(false);
@@ -59,11 +62,24 @@ const OneIdentityLogin: React.FC = () => {
   // eslint-disable-next-line functional/immutable-data
   const handleAssistanceClick = () => (window.location.href = `mailto:${PAGOPA_HELP_EMAIL}`);
 
-  const handleCieClick = () => {
+  const handleCieClick = () => handleIdpLogin('CIE', ONE_IDENTITY_CIE_ENTITY_ID);
+
+  const handleSelectSpid = (idp: IDP) => handleIdpLogin(idp.friendlyName, idp.entityID);
+
+  const handleIdpLogin = (spidName: string, entityId: string) => {
     PFLoginEventStrategyFactory.triggerEvent(PFLoginEventsType.SEND_IDP_SELECTED, {
-      SPID_IDP_NAME: 'CIE',
-      SPID_IDP_ID: SPID_CIE_ENTITY_ID,
+      SPID_IDP_NAME: spidName,
+      SPID_IDP_ID: entityId,
     });
+
+    OneIdentityApi.authorize(entityId)
+      .then(({ location }) => {
+        // eslint-disable-next-line functional/immutable-data
+        window.location.href = location;
+      })
+      .catch(() => {
+        navigate(ROUTE_ONE_IDENTITY_LOGIN_ERROR);
+      });
   };
 
   const fetchIDPS = () => {
@@ -80,6 +96,8 @@ const OneIdentityLogin: React.FC = () => {
   };
 
   useEffect(() => {
+    PFLoginEventStrategyFactory.triggerEvent(PFLoginEventsType.SEND_LOGIN);
+
     fetchIDPS();
   }, []);
 
@@ -203,7 +221,7 @@ const OneIdentityLogin: React.FC = () => {
         show={showIdpSelect}
         IDPS={idpsState.idps}
         loading={idpsState.loading}
-        handleSelectIDP={(idp) => console.log(idp)}
+        handleSelectIDP={handleSelectSpid}
         onClose={() => setShowIdpSelect(false)}
       />
     </>
