@@ -503,6 +503,7 @@
         "pec-address": "Naslov PEC",
         "add-physical-domicile": "Dodajte fizični naslov",
         "address": "Naslov",
+        "physical-address": "Fizični naslov",
         "house-number": "Hišna številka",
         "municipality-details": "Kraj",
         "municipality": "Občina",
@@ -518,7 +519,8 @@
         "address-physical-lookup-radios": {
           "national-registry": "Samodejni vnos iz nacionalnega registra",
           "manual": "Ročni vnos"
-        }
+        },
+        "recipient-info-subtitle": "Te informacije bodo prejemniku pomagale razumeti vsebino in pomembnost sporočila."
       },
       "attachments": {
         "title": "Dokumentacija",

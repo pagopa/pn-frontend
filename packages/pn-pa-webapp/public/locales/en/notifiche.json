@@ -503,6 +503,7 @@
         "pec-address": "PEC Address",
         "add-physical-domicile": "Add a physical address",
         "address": "Address",
+        "physical-address": "Physical address",
         "house-number": "House number",
         "municipality-details": "Location",
         "municipality": "Municipality",
@@ -518,7 +519,8 @@
         "address-physical-lookup-radios": {
           "national-registry": "Automatic entry from national registry",
           "manual": "Manual entry"
-        }
+        },
+        "recipient-info-subtitle": "This information will help the recipient understand the content and importance of the communication."
       },
       "attachments": {
         "title": "Documentation",
