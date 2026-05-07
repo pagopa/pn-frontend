@@ -27,6 +27,12 @@
       "error_25": "Hai annullato l’operazione di login: puoi riprovare quando vuoi.",
       "error_30": "La tipologia di identità SPID che hai usato è diversa da quella richiesta dal Service Provider. Entra di nuovo usando quella corretta.",
       "error_1001": "Accesso negato: non hai l’età minima richiesta per usare la piattaforma."
+    },
+    "oneIdentity": {
+      "invalid_scope": "",
+      "unsupported_response_type": "",
+      "server_error": "",
+      "invalid_request": ""
     }
   },
   "disambiguationPage": {

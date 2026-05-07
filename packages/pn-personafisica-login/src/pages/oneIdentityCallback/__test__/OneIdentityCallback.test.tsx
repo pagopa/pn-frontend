@@ -135,18 +135,55 @@ describe('OneIdentityCallback component', () => {
     expect(aarValue).not.toContain('</script>');
   });
 
-  it('should navigate to error route when code is missing', () => {
+  it('should navigate to error route when code is missing', async () => {
     const { router } = render(<OneIdentityCallback />, { route: `/?state=${mockState}` });
 
-    expect(router.state.location.pathname).toBe(ROUTE_ONE_IDENTITY_LOGIN_ERROR);
+    await waitFor(() => expect(router.state.location.pathname).toBe(ROUTE_ONE_IDENTITY_LOGIN_ERROR));
+    expect(router.state.location.search).toBe(`?state=${mockState}`);
     expect(router.state.historyAction).toBe('REPLACE');
     expect(mockLocationReplace).not.toHaveBeenCalled();
   });
 
-  it('should navigate to error route when state is missing', () => {
+  it('should navigate to error route when state is missing', async () => {
     const { router } = render(<OneIdentityCallback />, { route: `/?code=${mockCode}` });
 
-    expect(router.state.location.pathname).toBe(ROUTE_ONE_IDENTITY_LOGIN_ERROR);
+    await waitFor(() => expect(router.state.location.pathname).toBe(ROUTE_ONE_IDENTITY_LOGIN_ERROR));
+    expect(router.state.location.search).toBe('');
+    expect(router.state.historyAction).toBe('REPLACE');
+    expect(mockLocationReplace).not.toHaveBeenCalled();
+  });
+
+  it('should navigate to error route with error param forwarded', async () => {
+    const { router } = render(<OneIdentityCallback />, {
+      route: '/auth/callback?error=invalid_scope',
+    });
+
+    await waitFor(() => expect(router.state.location.pathname).toBe(ROUTE_ONE_IDENTITY_LOGIN_ERROR));
+    expect(router.state.location.search).toBe('?error=invalid_scope');
+    expect(router.state.historyAction).toBe('REPLACE');
+    expect(mockLocationReplace).not.toHaveBeenCalled();
+  });
+
+  it('should navigate to error route when error param is present alongside code and state', async () => {
+    const { router } = render(<OneIdentityCallback />, {
+      route: `/auth/callback?error=invalid_scope&code=${mockCode}&state=${mockState}`,
+    });
+
+    await waitFor(() => expect(router.state.location.pathname).toBe(ROUTE_ONE_IDENTITY_LOGIN_ERROR));
+    expect(router.state.location.search).toBe(`?state=${mockState}&error=invalid_scope`);
+    expect(router.state.historyAction).toBe('REPLACE');
+    expect(mockLocationReplace).not.toHaveBeenCalled();
+  });
+
+  it('should navigate to error route when API call fails', async () => {
+    vi.mocked(OneIdentityApi.getOidcStateData).mockRejectedValue(new Error('API error'));
+
+    const { router } = render(<OneIdentityCallback />, {
+      route: `/auth/callback?state=${mockState}&code=${mockCode}`,
+    });
+
+    await waitFor(() => expect(router.state.location.pathname).toBe(ROUTE_ONE_IDENTITY_LOGIN_ERROR));
+    expect(router.state.location.search).toBe(`?state=${mockState}`);
     expect(router.state.historyAction).toBe('REPLACE');
     expect(mockLocationReplace).not.toHaveBeenCalled();
   });

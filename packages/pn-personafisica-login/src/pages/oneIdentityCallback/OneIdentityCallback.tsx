@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Navigate, useSearchParams } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 
 import { AppRouteParams, getLangCode, sanitizeString } from '@pagopa-pn/pn-commons';
 
@@ -13,15 +13,34 @@ import PFLoginEventStrategyFactory from '../../utility/MixpanelUtils/PFLoginEven
 const OneIdentityCallback: React.FC = () => {
   const { i18n } = useTranslation();
   const { PF_URL } = getConfiguration();
+  const navigate = useNavigate();
 
   const [searchParams] = useSearchParams();
   const code = searchParams.get('code');
   const state = searchParams.get('state');
+  const error = searchParams.get('error');
 
-  const isValidCallback = code && state;
+  const isValidCallback = !error && !!code && !!state;
+
+  const redirectToLogoutPage = () => {
+    const params = new URLSearchParams();
+    if (state) {
+      params.set('state', state);
+    }
+    if (error) {
+      params.set('error', error);
+    }
+    const query = params.toString();
+    const to = query
+      ? `${ROUTE_ONE_IDENTITY_LOGIN_ERROR}?${query}`
+      : ROUTE_ONE_IDENTITY_LOGIN_ERROR;
+
+    navigate(to, { replace: true });
+  };
 
   async function handleOidcCallback() {
     if (!isValidCallback) {
+      redirectToLogoutPage();
       return;
     }
 
@@ -58,12 +77,8 @@ const OneIdentityCallback: React.FC = () => {
   }
 
   useEffect(() => {
-    void handleOidcCallback();
+    handleOidcCallback().catch(redirectToLogoutPage);
   }, []);
-
-  if (!isValidCallback) {
-    return <Navigate to={ROUTE_ONE_IDENTITY_LOGIN_ERROR} replace />;
-  }
 
   return null;
 };
