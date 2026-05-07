@@ -5,16 +5,12 @@ import { Box, Button, Dialog, Typography } from '@mui/material';
 import { IllusError } from '@pagopa/mui-italia';
 
 import { ROUTE_ONE_IDENTITY_LOGIN } from '../../navigation/routes.const';
-import { storageOneIdentityNonce, storageOneIdentityState } from '../../utility/storage';
 
 const OneIdentityLoginError: React.FC = () => {
   const { t } = useTranslation(['login', 'common']);
   const navigate = useNavigate();
 
   const goToLogin = () => navigate(ROUTE_ONE_IDENTITY_LOGIN);
-
-  storageOneIdentityState.delete();
-  storageOneIdentityNonce.delete();
 
   return (
     <Dialog fullScreen={true} open={true} aria-labelledby="dialog-per-messaggi-di-errore">

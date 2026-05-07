@@ -2,78 +2,66 @@ import React, { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Navigate, useSearchParams } from 'react-router-dom';
 
-import { getLangCode, sanitizeString } from '@pagopa-pn/pn-commons';
+import { AppRouteParams, getLangCode, sanitizeString } from '@pagopa-pn/pn-commons';
 
-import {
-  ROUTE_ONE_IDENTITY_LOGIN_ERROR,
-  oneIdentityRedirectUriPath,
-} from '../../navigation/routes.const';
+import { OneIdentityApi } from '../../api/OneIdentity/OneIdentity.api';
+import { PFLoginEventsType } from '../../models/PFLoginEventsType';
+import { ROUTE_ONE_IDENTITY_LOGIN_ERROR } from '../../navigation/routes.const';
 import { getConfiguration } from '../../services/configuration.service';
-import {
-  storageOneIdentityNonce,
-  storageOneIdentityState,
-  storageRapidAccessOps,
-} from '../../utility/storage';
+import PFLoginEventStrategyFactory from '../../utility/MixpanelUtils/PFLoginEventStrategyFactory';
 
 const OneIdentityCallback: React.FC = () => {
+  const { i18n } = useTranslation();
   const { PF_URL } = getConfiguration();
 
-  const stateFromStorage = storageOneIdentityState.read();
-  const nonceFromStorage = storageOneIdentityNonce.read();
-
   const [searchParams] = useSearchParams();
-  const oneIdentityState = searchParams.get('state');
-  const oneIdentityCode = searchParams.get('code');
+  const code = searchParams.get('code');
+  const state = searchParams.get('state');
 
-  const rapidAccess = storageRapidAccessOps.read();
-  const { i18n } = useTranslation();
+  const isValidCallback = code && state;
 
-  const isValid =
-    oneIdentityCode &&
-    oneIdentityState &&
-    nonceFromStorage &&
-    oneIdentityState === stateFromStorage;
-
-  const calcRedirectUrl = () => {
-    if (!isValid) {
+  async function handleOidcCallback() {
+    if (!isValidCallback) {
       return;
     }
 
-    const redirectUrl = PF_URL;
+    const { nonce, aar, retrievalId, idp } = await OneIdentityApi.getOidcStateData(state);
+
+    PFLoginEventStrategyFactory.triggerEvent(PFLoginEventsType.SEND_LOGIN_METHOD, {
+      entityID: idp,
+    });
 
     // the findIndex check is needed to prevent xss attacks
-    if (redirectUrl && [PF_URL].some((url) => url && redirectUrl.startsWith(url))) {
+    if (PF_URL && [PF_URL].some((url) => url && PF_URL.startsWith(url))) {
       const queryParams = new URLSearchParams();
-      if (rapidAccess) {
-        storageRapidAccessOps.delete();
-        queryParams.set(rapidAccess[0], sanitizeString(rapidAccess[1]));
+
+      if (aar) {
+        queryParams.set(AppRouteParams.AAR, sanitizeString(aar));
+      } else if (retrievalId) {
+        queryParams.set(AppRouteParams.RETRIEVAL_ID, sanitizeString(retrievalId));
       }
 
       const hashParams = new URLSearchParams({
-        code: oneIdentityCode,
-        state: oneIdentityState,
-        nonce: nonceFromStorage,
-        redirect_uri: encodeURIComponent(`${PF_URL}${oneIdentityRedirectUriPath}`),
+        code,
+        state,
+        nonce,
         lang: sanitizeString(getLangCode(i18n.language)),
       });
 
       const queryString = queryParams.size > 0 ? `?${queryParams.toString()}` : '';
       const hashString = hashParams.toString();
 
-      const url = `${redirectUrl}${queryString}#${hashString}`;
-
-      storageOneIdentityState.delete();
-      storageOneIdentityNonce.delete();
+      const url = `${PF_URL}${queryString}#${hashString}`;
 
       window.location.replace(url);
     }
-  };
+  }
 
   useEffect(() => {
-    calcRedirectUrl();
+    void handleOidcCallback();
   }, []);
 
-  if (!isValid) {
+  if (!isValidCallback) {
     return <Navigate to={ROUTE_ONE_IDENTITY_LOGIN_ERROR} replace />;
   }
 
