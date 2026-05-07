@@ -4,7 +4,6 @@ import {
   getByText,
   render,
   screen,
-  testStore,
   waitFor,
   within,
 } from '../../../__test__/test-utils';
@@ -81,7 +80,7 @@ describe('CourtesyContacts Component', async () => {
 
   it('renders component - Email enabled', async () => {
     // render component
-    const { getByText, getByTestId } = render(<CourtesyContacts />, {
+    const { getByText, getByTestId, testStore } = render(<CourtesyContacts />, {
       preloadedState: { contactsState: { digitalAddresses: digitalCourtesyAddresses } },
     });
     const emailContact = getByTestId(`default_emailContact`);
@@ -121,7 +120,7 @@ describe('CourtesyContacts Component', async () => {
 
   it('renders component - Sms enabled', async () => {
     // render component
-    const { getByText, getByTestId } = render(<CourtesyContacts />, {
+    const { getByText, getByTestId, testStore } = render(<CourtesyContacts />, {
       preloadedState: { contactsState: { digitalAddresses: digitalCourtesyAddresses } },
     });
     const smsContact = getByTestId(`default_smsContact`);

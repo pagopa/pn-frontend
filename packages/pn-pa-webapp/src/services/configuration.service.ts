@@ -27,6 +27,7 @@ export interface PaConfiguration {
   DEVELOPER_API_DOCUMENTATION_LINK: string;
   PHYSICAL_ADDRESS_LOOKUP: PhysicalAddressLookupConfig;
   ACCESSIBILITY_LINK: string;
+  SERCQ_SERVICE_STATEMENT_LINK: string;
 }
 
 class PaConfigurationValidator extends Validator<PaConfiguration> {
@@ -61,6 +62,7 @@ class PaConfigurationValidator extends Validator<PaConfiguration> {
       .isRequired()
       .isOneOf(Object.values(PhysicalAddressLookupConfig));
     this.ruleFor('ACCESSIBILITY_LINK').isString().isRequired();
+    this.ruleFor('SERCQ_SERVICE_STATEMENT_LINK').isString().isRequired();
   }
 }
 

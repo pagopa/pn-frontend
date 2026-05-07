@@ -22,17 +22,16 @@ describe('SmartBody', () => {
   });
 
   it('render component - incorrect child', () => {
-    expect(() =>
-      render(
-        <SmartBody>
-          <SmartBodyRow index={1}>
-            <SmartBodyCell columnId={'mock-column-id'} tableProps={{}}>
-              mocked-cell-content
-            </SmartBodyCell>
-          </SmartBodyRow>
-          <Box>Incorrect child</Box>
-        </SmartBody>
-      )
-    ).toThrowError('SmartBody can have only children of type SmartBodyRow');
+    const { getByText } = render(
+      <SmartBody>
+        <SmartBodyRow index={1}>
+          <SmartBodyCell columnId={'mock-column-id'} tableProps={{}}>
+            mocked-cell-content
+          </SmartBodyCell>
+        </SmartBodyRow>
+        <Box>Incorrect child</Box>
+      </SmartBody>
+    );
+    expect(getByText('SmartBody can have only children of type SmartBodyRow')).toBeInTheDocument();
   });
 });

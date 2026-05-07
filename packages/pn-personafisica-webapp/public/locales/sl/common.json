@@ -135,6 +135,7 @@
     "company": "Transparentno podjetje",
     "disclosure": "Politika odgovornega razkrivanja (Responsible Disclosure Policy)",
     "321-model": "Model 231",
+    "sercq-service-statement": "Service practice statement - SERCQ",
     "accessibility": "Dostopnost",
     "social": "Povezava: pojdi na spletno stran {{social}} PagoPA S.p.A.",
     "resources": "Viri",
@@ -235,13 +236,7 @@
     "action": "Ohrani dostop"
   },
   "code-modal": {
-    "digits": [
-      "prva števka",
-      "druga števka",
-      "tretja števka",
-      "četrta števka",
-      "zadnja števka"
-    ]
+    "digits": ["prva števka", "druga števka", "tretja števka", "četrta števka", "zadnja števka"]
   },
   "user-validation-failed": {
     "title": "Vneseni podatki niso veljavni",

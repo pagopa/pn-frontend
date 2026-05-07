@@ -4,22 +4,10 @@ import { sideMenuItems } from '../../../__mocks__/SideMenu.mock';
 import { createMatchMedia, fireEvent, render, waitFor, within } from '../../../test-utils';
 import SideMenu from '../SideMenu';
 
-const mockNavigate = vi.fn();
-let mockPathname = '';
-
-vi.mock('react-router-dom', async () => ({
-  ...(await vi.importActual<any>('react-router-dom')),
-  useNavigate: () => mockNavigate,
-  useLocation: () => ({
-    pathname: mockPathname,
-  }),
-}));
-
 describe('SideMenu', () => {
   const original = globalThis.matchMedia;
 
   beforeEach(() => {
-    mockPathname = '';
     globalThis.matchMedia = original;
   });
 
@@ -46,8 +34,10 @@ describe('SideMenu', () => {
   });
 
   it('checks menu voice selection - route without children', () => {
-    mockPathname = sideMenuItems[0].route;
-    const { getByTestId } = render(<SideMenu menuItems={sideMenuItems} />);
+    const { getByTestId } = render(<SideMenu menuItems={sideMenuItems} />, {
+      route: sideMenuItems[0].route,
+      path: '*',
+    });
     const ul = getByTestId('menu-list');
     const buttons = within(ul).getAllByTestId(/^sideMenuItem-Item \d$/);
     buttons.forEach((button, index) => {
@@ -70,8 +60,10 @@ describe('SideMenu', () => {
   });
 
   it('checks menu voice selection - route with children', () => {
-    mockPathname = sideMenuItems[1].children![0].route;
-    const { getByTestId } = render(<SideMenu menuItems={sideMenuItems} />);
+    const { getByTestId } = render(<SideMenu menuItems={sideMenuItems} />, {
+      route: sideMenuItems[1].children![0].route,
+      path: '*',
+    });
     const ul = getByTestId('menu-list');
     const buttons = within(ul).getAllByTestId(/^sideMenuItem-Item \d$/);
     buttons.forEach((button) => {
@@ -107,22 +99,20 @@ describe('SideMenu', () => {
     const menuItems = sideMenuItems.map((item) =>
       item.action ? { ...item, action: mockedAction } : item
     );
-    const { getByTestId } = render(<SideMenu menuItems={menuItems} />);
+    const { getByTestId, router } = render(<SideMenu menuItems={menuItems} />);
     const ul = getByTestId('menu-list');
     const buttons = within(ul).getAllByTestId(/^sideMenuItem-Item \d$/);
     // no children
     // navigation
     const noChildrenIdx = menuItems.findIndex((item) => !item.children);
     fireEvent.click(buttons[noChildrenIdx]);
-    expect(mockNavigate).toHaveBeenCalledTimes(1);
-    expect(mockNavigate).toHaveBeenCalledWith(menuItems[noChildrenIdx].route);
+    expect(router.state.location.pathname).toBe(menuItems[noChildrenIdx].route);
     expect(buttons[noChildrenIdx]).toHaveClass('Mui-selected');
     // with children and notSelectable set to false
     // navigate and open the accordion
     const withChildrenIdx = menuItems.findIndex((item) => item.children && !item.notSelectable);
     fireEvent.click(buttons[withChildrenIdx]);
-    expect(mockNavigate).toHaveBeenCalledTimes(2);
-    expect(mockNavigate).toHaveBeenCalledWith(menuItems[withChildrenIdx].route);
+    expect(router.state.location.pathname).toBe(menuItems[withChildrenIdx].route);
     const accordion0 = within(ul).getByTestId(`collapse-${menuItems[withChildrenIdx].label}`);
     expect(accordion0).toBeInTheDocument();
     expect(buttons[withChildrenIdx]).toHaveClass('Mui-selected');
@@ -132,7 +122,7 @@ describe('SideMenu', () => {
       (item) => item.children && item.notSelectable
     );
     fireEvent.click(buttons[withChildrenAndNotSelectableIdx]);
-    expect(mockNavigate).toHaveBeenCalledTimes(2);
+    expect(router.state.location.pathname).toBe(menuItems[withChildrenIdx].route);
     const accordion1 = within(ul).getByTestId(
       `collapse-${menuItems[withChildrenAndNotSelectableIdx].label}`
     );
@@ -145,21 +135,25 @@ describe('SideMenu', () => {
     // no navigation and action call
     const noChildrenAndNoRouteIdx = menuItems.findIndex((item) => !item.children && !item.route);
     fireEvent.click(buttons[noChildrenAndNoRouteIdx]);
-    expect(mockNavigate).toHaveBeenCalledTimes(2);
+    expect(router.state.location.pathname).toBe(menuItems[withChildrenIdx].route);
     expect(mockedAction).toHaveBeenCalledTimes(1);
     expect(buttons[noChildrenAndNoRouteIdx]).toHaveClass('Mui-selected');
   });
 
   it('renders component (mobile)', async () => {
     globalThis.matchMedia = createMatchMedia(800);
-    const { getByRole, queryByRole } = render(<SideMenu menuItems={sideMenuItems} />);
+    const { getByRole, router } = render(<SideMenu menuItems={sideMenuItems} />);
     const ul = getByRole('navigation');
     expect(ul).toBeInTheDocument();
     const menuButtons = within(ul).getAllByRole('button');
     expect(menuButtons).toHaveLength(1);
     fireEvent.click(menuButtons[0]);
-    const drawer = await waitFor(() => queryByRole('presentation'));
-    expect(drawer).not.toBeInTheDocument();
+    const drawer = await waitFor(() => getByRole('presentation'));
+    expect(drawer).toBeInTheDocument();
+    const menuItem = within(drawer).getByTestId(`sideMenuItem-${sideMenuItems[0].label}`);
+    fireEvent.click(menuItem);
+    expect(router.state.location.pathname).toBe(sideMenuItems[0].route);
+    await waitFor(() => expect(drawer).not.toBeInTheDocument());
   });
 
   it('renders feedbackBanner when provided (desktop)', () => {

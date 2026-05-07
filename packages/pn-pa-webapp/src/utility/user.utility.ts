@@ -28,9 +28,27 @@ const organizationMatcher: yup.SchemaOf<Organization> = yup.object({
   ipaCode: yup.string().notRequired(),
 });
 
+const isSupportOrganization = (organization: Organization) =>
+  organization?.roles?.some((r) => r.role === PNRole.SUPPORT) ?? false;
+
 export const userDataMatcher = yup
   .object({
     ...basicUserDataMatcherContents,
+    family_name: yup.string().when('organization', {
+      is: isSupportOrganization,
+      then: yup.string().notRequired(),
+      otherwise: yup.string().matches(dataRegex.name),
+    }),
+    fiscal_number: yup.string().when('organization', {
+      is: isSupportOrganization,
+      then: yup.string().notRequired(),
+      otherwise: yup.string().matches(dataRegex.fiscalCode),
+    }),
+    name: yup.string().when('organization', {
+      is: isSupportOrganization,
+      then: yup.string().notRequired(),
+      otherwise: yup.string().matches(dataRegex.name),
+    }),
     organization: organizationMatcher,
     desired_exp: yup.number(),
   })

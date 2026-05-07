@@ -33,7 +33,11 @@
   "empty-state": {
     "filtered": "Wir haben keine Ergebnisse gefunden: Versuche es mit anderen Filtern. <0>Filter entfernen</0>.",
     "delegate": "{{name}} hat keine Zustellung erhalten.",
-    "no-notifications": "Du hast keine Zustellung erhalten. <0>Gehe zu deinen Adressen</0> und gib eine oder mehrere informelle Adressen ein: Wenn du eine Zustellung erhälst, werden wir dich benachrichtigen.",
+    "title": "Hier findest du deine SEND Benachrichtigungen",
+    "description-onboarding": "Wusstest du, dass du Geld sparen kannst, wenn du dich dafür entscheidest, rechtliche Mitteilungen nur digital zu erhalten?",
+    "description": "Aktualisiere jetzt deine Kontaktdaten, damit du sofort erfährst, wenn du eine erhältst.",
+    "go-to-onboarding-cta": "SEND konfigurieren",
+    "go-to-contacts-cta": "Zu deinen Kontaktdaten",
     "aria-label-remove-filters": "Filter entfernen",
     "aria-label-route-contacts": "Zu deinen Adressen"
   },

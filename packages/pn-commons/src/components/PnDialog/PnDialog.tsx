@@ -6,10 +6,23 @@ import { useIsMobile } from '../../hooks/useIsMobile';
 import { ReactComponent } from '../../models/PnDialog';
 import PnDialogActions from './PnDialogActions';
 import PnDialogContent from './PnDialogContent';
+import PnDialogIllustration from './PnDialogIllustration';
 
 const PnDialog: React.FC<DialogProps> = (props) => {
   const isMobile = useIsMobile('sm');
   const paddingSize = isMobile ? 3 : 4;
+
+  const illustration: ReactComponent = Children.toArray(props.children).find(
+    (child) => isValidElement(child) && child.type === PnDialogIllustration
+  );
+
+  const enrichedIllustration = isValidElement(illustration)
+    ? cloneElement(illustration, {
+        ...illustration.props,
+        sx: { px: paddingSize, pt: paddingSize, ...illustration.props.sx },
+      })
+    : illustration;
+
   const title: ReactComponent = Children.toArray(props.children).find(
     (child) => isValidElement(child) && child.type === DialogTitle
   );
@@ -38,6 +51,7 @@ const PnDialog: React.FC<DialogProps> = (props) => {
 
   return (
     <Dialog data-testid="dialog" {...props}>
+      {illustration && enrichedIllustration}
       {title && enrichedTitle}
       {content && enrichedContent}
       {actions}

@@ -1,5 +1,5 @@
 import MockAdapter from 'axios-mock-adapter';
-import { MemoryRouter, Route, Routes } from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
 
 import { userResponse } from '../../__mocks__/Auth.mock';
 import { mandatesByDelegate, mandatesByDelegator } from '../../__mocks__/Delegations.mock';
@@ -34,15 +34,13 @@ describe('Deleghe page', async () => {
     });
     mock.onGet('/bff/v1/pg/groups').reply(200, []);
     const { container, queryByTestId, getByTestId } = render(
-      <MemoryRouter initialEntries={[routes.DELEGHEACARICO]}>
-        <Routes>
-          <Route element={<Deleghe />}>
-            <Route path={routes.DELEGHEACARICO} element={<DelegationsOfTheCompany />} />
-            <Route path={routes.DELEGATI} element={<DelegatesByCompany />} />
-          </Route>
-        </Routes>
-      </MemoryRouter>,
-      { navigationRouter: 'none', preloadedState: { userState: { user: userResponse } } }
+      <Routes>
+        <Route element={<Deleghe />}>
+          <Route path={routes.DELEGHEACARICO} element={<DelegationsOfTheCompany />} />
+          <Route path={routes.DELEGATI} element={<DelegatesByCompany />} />
+        </Route>
+      </Routes>,
+      { preloadedState: { userState: { user: userResponse } }, route: routes.DELEGHEACARICO }
     );
     expect(container).toHaveTextContent(/deleghe.title/i);
     expect(container).toHaveTextContent(/deleghe.description/i);
@@ -67,15 +65,13 @@ describe('Deleghe page', async () => {
     });
     mock.onGet('/bff/v1/pg/groups').reply(200, []);
     const { queryByTestId, getByTestId } = render(
-      <MemoryRouter initialEntries={[routes.DELEGHEACARICO]}>
-        <Routes>
-          <Route element={<Deleghe />}>
-            <Route path={routes.DELEGHEACARICO} element={<DelegationsOfTheCompany />} />
-            <Route path={routes.DELEGATI} element={<DelegatesByCompany />} />
-          </Route>
-        </Routes>
-      </MemoryRouter>,
-      { navigationRouter: 'none', preloadedState: { userState: { user: userResponse } } }
+      <Routes>
+        <Route element={<Deleghe />}>
+          <Route path={routes.DELEGHEACARICO} element={<DelegationsOfTheCompany />} />
+          <Route path={routes.DELEGATI} element={<DelegatesByCompany />} />
+        </Route>
+      </Routes>,
+      { preloadedState: { userState: { user: userResponse } }, route: routes.DELEGHEACARICO }
     );
     const tab2 = getByTestId('tab1');
     fireEvent.click(tab2);
@@ -90,17 +86,17 @@ describe('Deleghe page', async () => {
   it('user with groups', async () => {
     mock.onGet('/bff/v1/mandate/delegator').reply(200, mandatesByDelegator);
     const { container, queryByTestId, getByTestId } = render(
-      <MemoryRouter initialEntries={[routes.DELEGHEACARICO]}>
-        <Routes>
-          <Route element={<Deleghe />}>
-            <Route path={routes.DELEGHEACARICO} element={<DelegationsOfTheCompany />} />
-            <Route path={routes.DELEGATI} element={<DelegatesByCompany />} />
-          </Route>
-        </Routes>
-      </MemoryRouter>,
+      <Routes>
+        <Route element={<Deleghe />}>
+          <Route path={routes.DELEGHEACARICO} element={<DelegationsOfTheCompany />} />
+          <Route path={routes.DELEGATI} element={<DelegatesByCompany />} />
+        </Route>
+      </Routes>,
       {
-        navigationRouter: 'none',
-        preloadedState: { userState: { user: { ...userResponse, hasGroup: true } } },
+        preloadedState: {
+          userState: { user: { ...userResponse, hasGroup: true } },
+        },
+        route: routes.DELEGHEACARICO,
       }
     );
     expect(container).not.toHaveTextContent(/deleghe.tab_delegati/i);

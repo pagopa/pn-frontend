@@ -5,6 +5,7 @@ import { AddressType, ChannelType, DigitalAddress } from '../../models/contacts'
 import { SelectedAddresses } from '../../redux/contact/reducers';
 import {
   contactAlreadyExists,
+  getSemanticTextFieldProps,
   removeAddress,
   specialContactsAvailableAddressTypes,
   updateAddressesList,
@@ -40,16 +41,14 @@ describe('Contacts utility test', () => {
     const defaultPECAddress = digitalAddresses.find(
       (addr) => addr.channelType === ChannelType.PEC && addr.senderId === 'default'
     )!;
-    const result = specialContactsAvailableAddressTypes(
-      {
-        defaultPECAddress,
-        defaultSMSAddress,
-        specialEMAILAddresses: [] as Array<DigitalAddress>,
-        specialPECAddresses: [] as Array<DigitalAddress>,
-        specialSERCQ_SENDAddresses: [] as Array<DigitalAddress>,
-        specialSMSAddresses: [] as Array<DigitalAddress>,
-      } as SelectedAddresses,
-    );
+    const result = specialContactsAvailableAddressTypes({
+      defaultPECAddress,
+      defaultSMSAddress,
+      specialEMAILAddresses: [] as Array<DigitalAddress>,
+      specialPECAddresses: [] as Array<DigitalAddress>,
+      specialSERCQ_SENDAddresses: [] as Array<DigitalAddress>,
+      specialSMSAddresses: [] as Array<DigitalAddress>,
+    } as SelectedAddresses);
 
     expect(result).toStrictEqual([
       {
@@ -70,16 +69,14 @@ describe('Contacts utility test', () => {
     const defaultSERCQ_SENDAddress = digitalAddressesSercq.find(
       (addr) => addr.channelType === ChannelType.SERCQ_SEND && addr.senderId === 'default'
     )!;
-    const result = specialContactsAvailableAddressTypes(
-      {
-        defaultSERCQ_SENDAddress,
-        defaultSMSAddress,
-        specialEMAILAddresses: [] as Array<DigitalAddress>,
-        specialPECAddresses: [] as Array<DigitalAddress>,
-        specialSERCQ_SENDAddresses: [] as Array<DigitalAddress>,
-        specialSMSAddresses: [] as Array<DigitalAddress>,
-      } as SelectedAddresses,
-    );
+    const result = specialContactsAvailableAddressTypes({
+      defaultSERCQ_SENDAddress,
+      defaultSMSAddress,
+      specialEMAILAddresses: [] as Array<DigitalAddress>,
+      specialPECAddresses: [] as Array<DigitalAddress>,
+      specialSERCQ_SENDAddresses: [] as Array<DigitalAddress>,
+      specialSMSAddresses: [] as Array<DigitalAddress>,
+    } as SelectedAddresses);
 
     expect(result).toStrictEqual([
       {
@@ -100,15 +97,13 @@ describe('Contacts utility test', () => {
     const specialPECAddress = digitalAddresses.find(
       (addr) => addr.channelType === ChannelType.PEC && addr.senderId !== 'default'
     )!;
-    const result = specialContactsAvailableAddressTypes(
-      {
-        defaultPECAddress,
-        specialEMAILAddresses: [] as Array<DigitalAddress>,
-        specialPECAddresses: [specialPECAddress] as Array<DigitalAddress>,
-        specialSERCQ_SENDAddresses: [] as Array<DigitalAddress>,
-        specialSMSAddresses: [] as Array<DigitalAddress>,
-      } as SelectedAddresses,
-    );
+    const result = specialContactsAvailableAddressTypes({
+      defaultPECAddress,
+      specialEMAILAddresses: [] as Array<DigitalAddress>,
+      specialPECAddresses: [specialPECAddress] as Array<DigitalAddress>,
+      specialSERCQ_SENDAddresses: [] as Array<DigitalAddress>,
+      specialSMSAddresses: [] as Array<DigitalAddress>,
+    } as SelectedAddresses);
 
     expect(result).toStrictEqual([
       {
@@ -204,5 +199,22 @@ describe('Contacts utility test', () => {
     );
 
     expect(result).toStrictEqual(currentAddresses);
+  });
+
+  it('test getSemanticTextFieldProps function', () => {
+    expect(getSemanticTextFieldProps(ChannelType.EMAIL)).toStrictEqual({
+      type: 'email',
+      autoComplete: 'email',
+    });
+
+    expect(getSemanticTextFieldProps(ChannelType.PEC)).toStrictEqual({
+      type: 'email',
+      autoComplete: 'email',
+    });
+
+    expect(getSemanticTextFieldProps(ChannelType.SMS)).toStrictEqual({
+      type: 'tel',
+      autoComplete: 'tel-national',
+    });
   });
 });

@@ -27,9 +27,11 @@ type AuthInitialState = {
   };
   tosPrivacyApiError: boolean;
   loginProvider: LoginProvider;
+  // isFreshLogin is used to track if the user has just logged in, to show the onboarding only on the first login after authentication
+  isFreshLogin: boolean;
 };
 
-const noLoggedUserData = {
+const noLoggedUserData: User = {
   ...basicNoLoggedUserData,
   from_aa: false,
   level: '',
@@ -38,11 +40,14 @@ const noLoggedUserData = {
   iss: '',
   jti: '',
   aud: '',
-} as User;
+  name: '',
+  family_name: '',
+  fiscal_number: '',
+};
 
 const initialState: AuthInitialState = {
   loading: false,
-  user: basicInitialUserData(userDataMatcher, noLoggedUserData),
+  user: basicInitialUserData<User>(userDataMatcher, noLoggedUserData),
   fetchedTos: false,
   fetchedPrivacy: false,
   tosConsent: {
@@ -57,6 +62,7 @@ const initialState: AuthInitialState = {
   },
   tosPrivacyApiError: false,
   loginProvider: LoginProvider.SPIDHUB,
+  isFreshLogin: false,
 };
 
 /* eslint-disable functional/immutable-data */
@@ -67,6 +73,9 @@ const userSlice = createSlice({
     resetState: () => {
       sessionStorage.clear();
       return initialState;
+    },
+    setIsFreshLogin: (state, action) => {
+      state.isFreshLogin = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -131,5 +140,5 @@ const userSlice = createSlice({
   },
 });
 
-export const { resetState } = userSlice.actions;
+export const { resetState, setIsFreshLogin } = userSlice.actions;
 export default userSlice;

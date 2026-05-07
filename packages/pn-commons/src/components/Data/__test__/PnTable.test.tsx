@@ -12,7 +12,6 @@ import PnTableHeader from '../PnTable/PnTableHeader';
 import PnTableHeaderCell from '../PnTable/PnTableHeaderCell';
 
 const handleSort = vi.fn();
-const handleColumnClick = vi.fn();
 
 type Item = { id: string; 'column-1': string; 'column-2': string; 'column-3': string };
 
@@ -26,7 +25,6 @@ const columns: Array<Column<Item>> = [
   {
     id: 'column-3',
     label: 'Column 3',
-    onClick: handleColumnClick,
   },
 ];
 
@@ -61,11 +59,7 @@ const RenderPnTable: React.FC = () => (
       {rows.map((row, index) => (
         <PnTableBodyRow key={row.id} testId="table-test.body.row" index={index}>
           {columns.map((column) => (
-            <PnTableBodyCell
-              key={column.id}
-              onClick={() => column.onClick?.(row, column.id)}
-              testId="table-test.body.row.cell"
-            >
+            <PnTableBodyCell key={column.id} testId="table-test.body.row.cell">
               {row[column.id]}
             </PnTableBodyCell>
           ))}
@@ -114,105 +108,89 @@ describe('PnTable Component', () => {
     expect(handleSort).toHaveBeenCalledWith({ order: 'desc', orderBy: 'column-1' });
   });
 
-  it('click on a column', () => {
-    const { getByRole } = render(<RenderPnTable />);
-    const table = getByRole('table');
-    const tableBody = within(table).getByTestId('table-test.body');
-    const firstRow = within(tableBody).getAllByTestId('table-test.body.row')[0];
-    const tableColumns = within(firstRow).getAllByTestId('table-test.body.row.cell');
-    fireEvent.click(tableColumns[2].querySelectorAll('button')[0]);
-    expect(handleColumnClick).toHaveBeenCalledTimes(1);
-    expect(handleColumnClick).toHaveBeenCalledWith(rows[0], columns[2].id);
-  });
-
   it('render component - multiple PnTableBody', () => {
-    expect(() =>
-      render(
-        <PnTable>
-          <PnTableBody>
-            {rows.map((row, index) => (
-              <PnTableBodyRow key={row.id} testId="table-test" index={index}>
-                {columns.map((column) => (
-                  <PnTableBodyCell key={column.id} onClick={() => column.onClick?.()}>
-                    {row[column.id]}
-                  </PnTableBodyCell>
-                ))}
-              </PnTableBodyRow>
-            ))}
-          </PnTableBody>
-          <PnTableBody>
-            {rows.map((row, index) => (
-              <PnTableBodyRow key={row.id} testId="table-test" index={index}>
-                {columns.map((column) => (
-                  <PnTableBodyCell key={column.id} onClick={() => column.onClick?.()}>
-                    {row[column.id]}
-                  </PnTableBodyCell>
-                ))}
-              </PnTableBodyRow>
-            ))}
-          </PnTableBody>
-        </PnTable>
-      )
-    ).toThrow('PnTable can have only 1 child of type PnTableHeader');
+    const { getByText } = render(
+      <PnTable>
+        <PnTableBody>
+          {rows.map((row, index) => (
+            <PnTableBodyRow key={row.id} testId="table-test" index={index}>
+              {columns.map((column) => (
+                <PnTableBodyCell key={column.id}>{row[column.id]}</PnTableBodyCell>
+              ))}
+            </PnTableBodyRow>
+          ))}
+        </PnTableBody>
+        <PnTableBody>
+          {rows.map((row, index) => (
+            <PnTableBodyRow key={row.id} testId="table-test" index={index}>
+              {columns.map((column) => (
+                <PnTableBodyCell key={column.id}>{row[column.id]}</PnTableBodyCell>
+              ))}
+            </PnTableBodyRow>
+          ))}
+        </PnTableBody>
+      </PnTable>
+    );
+    expect(getByText('PnTable can have only 1 child of type PnTableHeader')).toBeInTheDocument();
   });
 
   it('render component - multiple PnTableHeader', () => {
-    expect(() =>
-      render(
-        <PnTable>
-          <PnTableHeader>
-            {columns.map((column) => (
-              <PnTableHeaderCell
-                key={column.id}
-                columnId={column.id}
-                sort={sort}
-                sortable={column.sortable}
-                handleClick={() => handleSort({ orderBy: column.id, order: 'desc' })}
-              >
-                {column.label}
-              </PnTableHeaderCell>
-            ))}
-          </PnTableHeader>
-          <PnTableHeader>
-            {columns.map((column) => (
-              <PnTableHeaderCell
-                key={column.id}
-                columnId={column.id}
-                sort={sort}
-                sortable={column.sortable}
-                handleClick={() => handleSort({ orderBy: column.id, order: 'desc' })}
-              >
-                {column.label}
-              </PnTableHeaderCell>
-            ))}
-          </PnTableHeader>
-        </PnTable>
-      )
-    ).toThrow('PnTable can have only 1 child of type PnTableHeader');
+    const { getByText } = render(
+      <PnTable>
+        <PnTableHeader>
+          {columns.map((column) => (
+            <PnTableHeaderCell
+              key={column.id}
+              columnId={column.id}
+              sort={sort}
+              sortable={column.sortable}
+              handleClick={() => handleSort({ orderBy: column.id, order: 'desc' })}
+            >
+              {column.label}
+            </PnTableHeaderCell>
+          ))}
+        </PnTableHeader>
+        <PnTableHeader>
+          {columns.map((column) => (
+            <PnTableHeaderCell
+              key={column.id}
+              columnId={column.id}
+              sort={sort}
+              sortable={column.sortable}
+              handleClick={() => handleSort({ orderBy: column.id, order: 'desc' })}
+            >
+              {column.label}
+            </PnTableHeaderCell>
+          ))}
+        </PnTableHeader>
+      </PnTable>
+    );
+    expect(getByText('PnTable can have only 1 child of type PnTableHeader')).toBeInTheDocument();
   });
 
   it('render component - incorrect child', () => {
-    expect(() =>
-      render(
-        <PnTable>
-          <PnTableHeader>
-            {columns.map((column) => (
-              <PnTableHeaderCell
-                key={column.id}
-                columnId={column.id}
-                sort={sort}
-                sortable={column.sortable}
-                handleClick={() => handleSort({ orderBy: column.id, order: 'desc' })}
-              >
-                {column.label}
-              </PnTableHeaderCell>
-            ))}
-          </PnTableHeader>
-          <Box>Incorrect child</Box>
-        </PnTable>
-      )
-    ).toThrow(
-      'PnTable can have only 1 child of type PnTableHeader and 1 child of type PnTableBody'
+    const { getByText } = render(
+      <PnTable>
+        <PnTableHeader>
+          {columns.map((column) => (
+            <PnTableHeaderCell
+              key={column.id}
+              columnId={column.id}
+              sort={sort}
+              sortable={column.sortable}
+              handleClick={() => handleSort({ orderBy: column.id, order: 'desc' })}
+            >
+              {column.label}
+            </PnTableHeaderCell>
+          ))}
+        </PnTableHeader>
+        <Box>Incorrect child</Box>
+      </PnTable>
     );
+    expect(
+      getByText(
+        'PnTable can have only 1 child of type PnTableHeader and 1 child of type PnTableBody'
+      )
+    ).toBeInTheDocument();
   });
 });

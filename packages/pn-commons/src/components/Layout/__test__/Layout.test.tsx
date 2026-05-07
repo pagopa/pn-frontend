@@ -34,6 +34,7 @@ describe('Layout Component', () => {
         productsList={productsList}
         loggedUser={loggedUser}
         accessibilityLink="link-test"
+        sercqServiceStatementLink="sercq-service-statement-link.it"
       >
         <div data-testid="mockedChild">Mocked Child</div>
       </Layout>

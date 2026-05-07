@@ -4,7 +4,7 @@ import { vi } from 'vitest';
 import { SERCQ_SEND_VALUE } from '@pagopa-pn/pn-commons';
 
 import { digitalCourtesyAddresses } from '../../../__mocks__/Contacts.mock';
-import { fireEvent, render, screen, testStore, waitFor } from '../../../__test__/test-utils';
+import { fireEvent, render, screen, waitFor } from '../../../__test__/test-utils';
 import { apiClient } from '../../../api/apiClients';
 import { AddressType, ChannelType, IOAllowedValues } from '../../../models/contacts';
 import { getConfiguration } from '../../../services/configuration.service';
@@ -15,11 +15,11 @@ const assignFn = vi.fn();
 
 describe('IOContact component', async () => {
   let mock: MockAdapter;
-  const originalLocation = window.location;
+  const originalLocation = globalThis.location;
 
   beforeAll(() => {
     mock = new MockAdapter(apiClient);
-    Object.defineProperty(window, 'location', {
+    Object.defineProperty(globalThis, 'location', {
       configurable: true,
       value: { assign: assignFn },
     });
@@ -32,7 +32,7 @@ describe('IOContact component', async () => {
 
   afterAll(() => {
     mock.restore();
-    Object.defineProperty(window, 'location', { configurable: true, value: originalLocation });
+    Object.defineProperty(globalThis, 'location', { configurable: true, value: originalLocation });
   });
 
   it('renders component - no contacts', () => {
@@ -54,7 +54,7 @@ describe('IOContact component', async () => {
         verificationCode: '00000',
       })
       .reply(204);
-    const { getByTestId, getByRole, getByText } = render(<IOContact />, {
+    const { getByTestId, getByRole, getByText, testStore } = render(<IOContact />, {
       preloadedState: { contactsState: { digitalAddresses: [IOAddress] } },
     });
     const chip = getByText('status.inactive');
@@ -88,7 +88,7 @@ describe('IOContact component', async () => {
 
   it('IO available and enabled', async () => {
     mock.onDelete('/bff/v1/addresses/COURTESY/default/APPIO').reply(200);
-    const { getByRole, getByText } = render(<IOContact />, {
+    const { getByRole, getByText, testStore } = render(<IOContact />, {
       preloadedState: {
         contactsState: {
           digitalAddresses: [{ ...IOAddress!, value: IOAllowedValues.ENABLED }],
@@ -130,7 +130,7 @@ describe('IOContact component', async () => {
   });
 
   it('Click on download AppIO button - IOS', () => {
-    Object.defineProperty(window, 'navigator', {
+    Object.defineProperty(globalThis, 'navigator', {
       value: { userAgent: 'iPhone' },
     });
     const { getByRole } = render(<IOContact />);
@@ -141,7 +141,7 @@ describe('IOContact component', async () => {
   });
 
   it('Click on download AppIO button - Android', () => {
-    Object.defineProperty(window, 'navigator', {
+    Object.defineProperty(globalThis, 'navigator', {
       value: { userAgent: 'Android' },
     });
     const { getByRole } = render(<IOContact />);

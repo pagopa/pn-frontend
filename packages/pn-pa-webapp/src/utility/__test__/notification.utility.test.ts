@@ -45,7 +45,7 @@ describe('Test notification utility', () => {
 
     const response: BffNewNotificationRequest = {
       ...newNotificationForBff,
-      subject: 'Multone esagerato|subject for de',
+      subject: 'subject for de|Multone esagerato',
       abstract: 'abstract for de',
       additionalLanguages: ['DE'],
     };

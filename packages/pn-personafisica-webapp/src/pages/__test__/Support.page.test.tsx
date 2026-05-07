@@ -1,5 +1,4 @@
 import MockAdapter from 'axios-mock-adapter';
-import { createBrowserHistory } from 'history';
 import { Route, Routes } from 'react-router-dom';
 import { vi } from 'vitest';
 
@@ -93,10 +92,6 @@ describe('Support page', async () => {
     // insert two entries into the history, so the initial render will refer to the path /assistenza
     // and when the back button is pressed and so navigate(-1) is invoked,
     // the path will change to /notifiche
-    const history = createBrowserHistory();
-    history.push(routes.NOTIFICHE);
-    history.push(routes.SUPPORT);
-
     // render with an ad-hoc router, will render initially SupportPage
     // since it corresponds to the top of the mocked history stack
     await act(async () => {
@@ -107,7 +102,11 @@ describe('Support page', async () => {
             element={<div data-testid="mocked-dashboard">hello</div>}
           />
           <Route path={routes.SUPPORT} element={<SupportPage />} />
-        </Routes>
+        </Routes>,
+        {
+          route: [routes.NOTIFICHE, routes.SUPPORT],
+          path: '*',
+        }
       );
     });
 
@@ -173,13 +172,14 @@ describe('Support page', async () => {
       return [200, mockResponse];
     });
 
-    const history = createBrowserHistory();
-    history.push(`/support?data=${encodedData}`);
-
     const { getByTestId } = render(
       <Routes>
-        <Route path="/support" element={<SupportPage />} />
-      </Routes>
+        <Route path={routes.SUPPORT} element={<SupportPage />} />
+      </Routes>,
+      {
+        route: [routes.SUPPORT, `${routes.SUPPORT}?data=${encodedData}`],
+        path: '*',
+      }
     );
 
     const form = getByTestId('supportForm');

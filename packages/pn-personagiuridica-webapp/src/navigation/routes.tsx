@@ -34,7 +34,7 @@ const DigitalContactManagement = lazyRetry(
   () => import('../components/Contacts/DigitalContactManagement')
 );
 
-function Router() {
+const Router: React.FC = () => {
   const { organization, hasGroup } = useAppSelector((state: RootState) => state.userState.user);
   const currentRoles = organization?.roles ? organization.roles.map((role) => role.role) : [];
   const { IS_B2B_ENABLED } = getConfiguration();
@@ -45,11 +45,11 @@ function Router() {
   return (
     <Suspense fallback={<LoadingPage />}>
       <Routes>
-        <Route path="/" element={<SessionGuard />}>
+        <Route element={<SessionGuard />}>
           {/* protected routes */}
-          <Route path="/" element={<RouteGuard />}>
-            <Route path="/" element={<ToSGuard />}>
-              <Route path="/" element={<AARGuard />}>
+          <Route element={<RouteGuard />}>
+            <Route element={<ToSGuard />}>
+              <Route element={<AARGuard />}>
                 <Route
                   index
                   element={
@@ -167,34 +167,19 @@ function Router() {
                   }
                 />
 
-                <Route path={routes.REGISTRA_CHIAVE_PUBBLICA}>
-                  <Route
-                    index
-                    element={
-                      <PrivateRoute
-                        currentRoles={currentRoles}
-                        requiredRoles={[PNRole.ADMIN]}
-                        additionalCondition={IS_B2B_ENABLED}
-                        redirectTo={<NotFound goBackAction={navigateToHome} />}
-                      >
-                        <NewPublicKeyPage />
-                      </PrivateRoute>
-                    }
-                  />
-                  <Route
-                    path=":kid"
-                    element={
-                      <PrivateRoute
-                        currentRoles={currentRoles}
-                        requiredRoles={[PNRole.ADMIN]}
-                        additionalCondition={IS_B2B_ENABLED}
-                        redirectTo={<NotFound goBackAction={navigateToHome} />}
-                      >
-                        <NewPublicKeyPage />
-                      </PrivateRoute>
-                    }
-                  />
-                </Route>
+                <Route
+                  path={`${routes.REGISTRA_CHIAVE_PUBBLICA}/:kid?`}
+                  element={
+                    <PrivateRoute
+                      currentRoles={currentRoles}
+                      requiredRoles={[PNRole.ADMIN]}
+                      additionalCondition={IS_B2B_ENABLED}
+                      redirectTo={<NotFound goBackAction={navigateToHome} />}
+                    >
+                      <NewPublicKeyPage />
+                    </PrivateRoute>
+                  }
+                />
 
                 <Route path={routes.APP_STATUS} element={<AppStatus />} />
               </Route>
@@ -217,6 +202,6 @@ function Router() {
       </Routes>
     </Suspense>
   );
-}
+};
 
 export default Router;

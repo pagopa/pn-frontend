@@ -1,6 +1,6 @@
 import { vi } from 'vitest';
 
-import { fireEvent, render, screen, testStore, waitFor } from '../../../__test__/test-utils';
+import { fireEvent, render, screen, waitFor } from '../../../__test__/test-utils';
 import { AcceptButton, Menu, OrganizationsList } from '../DelegationsElements';
 
 const mockOpenCodeModalHandler = vi.fn();
@@ -15,7 +15,7 @@ describe('DelegationElements', async () => {
   });
 
   it('opens the delegate Menu and clicks on menu voices', async () => {
-    const { getByTestId, queryByTestId } = render(
+    const { getByTestId, queryByTestId, testStore } = render(
       <Menu
         menuType={'delegates'}
         id={'111'}
@@ -33,8 +33,8 @@ describe('DelegationElements', async () => {
     expect(menu).toHaveTextContent(/deleghe.show/i);
     const showCode = getByTestId('menuItem-showCode');
     fireEvent.click(showCode);
-    expect(mockOpenCodeModalHandler).toBeCalledTimes(1);
-    expect(mockOpenCodeModalHandler).toBeCalledWith({
+    expect(mockOpenCodeModalHandler).toHaveBeenCalledTimes(1);
+    expect(mockOpenCodeModalHandler).toHaveBeenCalledWith({
       open: true,
       name: 'mocked-name',
       code: '01234',
@@ -53,7 +53,9 @@ describe('DelegationElements', async () => {
   });
 
   it('opens the delegator Menu and clicks on menu voices', async () => {
-    const { getByTestId, queryByTestId } = render(<Menu menuType={'delegators'} id={'111'} />);
+    const { getByTestId, queryByTestId, testStore } = render(
+      <Menu menuType={'delegators'} id={'111'} />
+    );
     const menuIcon = getByTestId('delegationMenuIcon');
     const closedMenu = queryByTestId('delegationMenu');
     expect(closedMenu).toBeNull();
@@ -105,7 +107,7 @@ describe('DelegationElements', async () => {
   });
 
   it('renders the AcceptButton and clicks on button', async () => {
-    const { container, getByTestId } = render(<AcceptButton id={'111'} name={'test'} />);
+    const { container, getByTestId, testStore } = render(<AcceptButton id={'111'} name={'test'} />);
     expect(container).toHaveTextContent(/deleghe.accept/i);
     const acceptButton = getByTestId('acceptButton');
     fireEvent.click(acceptButton);

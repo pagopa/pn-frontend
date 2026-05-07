@@ -50,7 +50,7 @@ const PnBreadcrumb = ({
           color="primary"
           data-testid="breadcrumb-indietro-button"
           startIcon={<ArrowBackIcon />}
-          onClick={goBackAction ? goBackAction : () => navigate(-1)}
+          onClick={goBackAction ?? (() => navigate(-1))}
         >
           {finalBackLabel}
         </ButtonNaked>

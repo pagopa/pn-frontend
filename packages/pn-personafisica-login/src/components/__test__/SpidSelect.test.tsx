@@ -1,10 +1,12 @@
 import { vi } from 'vitest';
 
+import { AppRouteParams } from '@pagopa-pn/pn-commons';
 import { getById } from '@pagopa-pn/pn-commons/src/test-utils';
 
 import { fireEvent, render } from '../../__test__/test-utils';
 import { getConfiguration } from '../../services/configuration.service';
 import { getIDPS } from '../../utility/IDPS';
+import { storageRapidAccessOps } from '../../utility/storage';
 import SpidSelect from '../SpidSelect';
 
 const idps = getIDPS(false, false);
@@ -19,6 +21,7 @@ describe('test spid select page', () => {
   });
 
   afterEach(() => {
+    storageRapidAccessOps.delete();
     vi.clearAllMocks();
   });
 
@@ -63,5 +66,23 @@ describe('test spid select page', () => {
     const container = document.body;
     const requestForSpid = getById(container, 'requestForSpid');
     expect(requestForSpid).toHaveAttribute('href', idps.richiediSpid);
+  });
+
+  it('stores rapidAccess to sessionStorage on SPID provider click', () => {
+    const rapidAccess: [AppRouteParams, string] = [AppRouteParams.AAR, 'fake-aar-token'];
+    render(<SpidSelect onClose={backHandler} show={true} rapidAccess={rapidAccess} />);
+    const idp = idps.identityProviders[0];
+    const spidButton = getById(document.body, `spid-select-${idp.entityId}`);
+    fireEvent.click(spidButton);
+    expect(sessionStorage.getItem(AppRouteParams.AAR)).toBe('fake-aar-token');
+    expect(localStorage.getItem(AppRouteParams.AAR)).toBeNull();
+  });
+
+  it('does not write storage when rapidAccess is undefined', () => {
+    render(<SpidSelect onClose={backHandler} show={true} />);
+    const idp = idps.identityProviders[0];
+    const spidButton = getById(document.body, `spid-select-${idp.entityId}`);
+    fireEvent.click(spidButton);
+    expect(storageRapidAccessOps.read()).toBeUndefined();
   });
 });

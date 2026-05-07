@@ -144,6 +144,7 @@
     "company": "Transparent company",
     "disclosure": "Responsible Disclosure Policy",
     "321-model": "Form 231",
+    "sercq-service-statement": "Service practice statement - SERCQ",
     "accessibility": "Accessibility",
     "social": "Go to the website {{social}} of PagoPA S.p.A.",
     "resources": "Resources",
@@ -239,13 +240,7 @@
     "action": "Keep access"
   },
   "code-modal": {
-    "digits": [
-      "First digit",
-      "Second digit",
-      "Third digit",
-      "Fourth digit",
-      "Last digit"
-    ]
+    "digits": ["First digit", "Second digit", "Third digit", "Fourth digit", "Last digit"]
   },
   "autocomplete": {
     "clear": "Remove selected options",

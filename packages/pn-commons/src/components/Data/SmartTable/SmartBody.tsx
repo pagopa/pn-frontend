@@ -1,4 +1,4 @@
-import checkChildren from '../../../utility/children.utility';
+import { checkChildren } from '../../../utility/children.utility';
 import { PnTableBodyProps } from '../PnTable/PnTableBody';
 import SmartBodyRow from './SmartBodyRow';
 

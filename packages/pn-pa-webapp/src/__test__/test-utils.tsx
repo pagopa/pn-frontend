@@ -14,6 +14,11 @@ interface CustomRenderOptions extends Omit<RenderOptions, 'wrapper'> {
   path?: string;
 }
 
+type CustomRenderResult = RenderResult & {
+  testStore: EnhancedStore<RootState>;
+  router: ReturnType<typeof createMemoryRouter>;
+};
+
 // UiContext and RouterBridge are needed to use wrapper and rerender method
 // the RouterProvider doesn't admit children, so to make rerender work we must use context that triggers every time the ui change
 const UiContext = createContext<ReactElement | null>(null);
@@ -101,9 +106,6 @@ function randomString(length: number) {
 
 export * from '@testing-library/react';
 export { customRender as render, createMockedStore };
-export type CustomRenderResult = RenderResult & {
-  testStore: EnhancedStore<RootState>;
-  router: ReturnType<typeof createMemoryRouter>;
-};
+export type { CustomRenderResult as RenderResult };
 // utility functions
 export { randomString };

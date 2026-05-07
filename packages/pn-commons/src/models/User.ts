@@ -1,20 +1,21 @@
 export interface BasicUser {
   sessionToken: string;
-  name: string;
-  family_name: string;
-  fiscal_number: string;
   email: string;
   uid: string;
 }
 
-export const basicNoLoggedUserData = {
+// User info received from Spid / CIE
+export interface BasicUserClaims {
+  name: string;
+  family_name: string;
+  fiscal_number: string;
+}
+
+export const basicNoLoggedUserData: BasicUser = {
   sessionToken: '',
-  name: '',
-  family_name: '',
-  fiscal_number: '',
   email: '',
   uid: '',
-} as BasicUser;
+};
 
 export interface ConsentUser {
   accepted: boolean;

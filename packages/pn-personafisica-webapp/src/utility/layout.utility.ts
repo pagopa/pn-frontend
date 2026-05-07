@@ -19,6 +19,7 @@ function showSideMenu(
   return (
     pathname !== '/privacy-tos' &&
     pathname !== routes.SUPPORT &&
+    !pathname.startsWith(routes.ONBOARDING) &&
     isLogged &&
     tosAccepted &&
     privacyAccepted &&

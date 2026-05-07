@@ -1,5 +1,4 @@
 import MockAdapter from 'axios-mock-adapter';
-import { vi } from 'vitest';
 
 import { publicKeys, virtualKeys } from '../../__mocks__/ApiKeys.mock';
 import { userResponse } from '../../__mocks__/Auth.mock';
@@ -19,7 +18,6 @@ describe('ApiIntegration page', async () => {
 
   afterEach(() => {
     mock.reset();
-    vi.clearAllMocks();
   });
 
   afterAll(() => {

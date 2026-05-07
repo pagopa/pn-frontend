@@ -2,7 +2,7 @@ import { vi } from 'vitest';
 
 import { notificationsToFe } from '../../../__mocks__/Notifications.mock';
 import {
-  CustomRenderResult,
+  RenderResult,
   act,
   fireEvent,
   render,
@@ -13,10 +13,20 @@ import { GET_DETTAGLIO_NOTIFICA_PATH } from '../../../navigation/routes.const';
 import DesktopNotifications from '../DesktopNotifications';
 
 describe('DesktopNotifications Component', () => {
-  let result: CustomRenderResult;
+  let result: RenderResult;
 
-  afterEach(() => {
-    vi.clearAllMocks();
+  const original = globalThis.ResizeObserver;
+
+  beforeAll(() => {
+    globalThis.ResizeObserver = vi.fn().mockImplementation(() => ({
+      observe: vi.fn(),
+      unobserve: vi.fn(),
+      disconnect: vi.fn(),
+    }));
+  });
+
+  afterAll(() => {
+    globalThis.ResizeObserver = original;
   });
 
   it('renders component - no notification', async () => {

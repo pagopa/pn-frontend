@@ -2,10 +2,11 @@ import MockAdapter from 'axios-mock-adapter';
 
 import { authClient } from '../api/apiClients';
 import { AUTH_TOKEN_EXCHANGE } from '../api/auth/auth.routes';
-import { PNRole, PartyRole, User } from '../models/User';
+import { User } from '../models/User';
 import { exchangeToken } from '../redux/auth/actions';
-import { store } from '../redux/store';
 import { resetState } from '../redux/auth/reducers';
+import { store } from '../redux/store';
+import { adminUser } from './User.mock';
 
 export const mockLogin = async (body: User | string = userResponse): Promise<any> => {
   const mock = new MockAdapter(authClient);
@@ -34,34 +35,7 @@ export const mockAuthentication = () => {
   });
 };
 
-export const userResponse: User = {
-  sessionToken: 'mocked-session-token',
-  name: 'Mario',
-  family_name: 'Rossi',
-  fiscal_number: 'RSSMRA80A01H501U',
-  email: 'info@agid.gov.it',
-  from_aa: false,
-  uid: 'a6c1350d-1d69-4209-8bf8-31de58c79d6f',
-  aud: 'portale-pg.dev.pn.pagopa.it',
-  level: 'L2',
-  iat: 1646394256,
-  exp: 1646397856,
-  iss: 'https://spid-hub-test.dev.pn.pagopa.it',
-  jti: 'mockedJTI004',
-  desired_exp: 0,
-  organization: {
-    id: 'mocked-id',
-    name: 'mocked-organizzation',
-    roles: [
-      {
-        partyRole: PartyRole.MANAGER,
-        role: PNRole.ADMIN,
-      },
-    ],
-    fiscal_code: '12345678910',
-  },
-  hasGroup: false,
-};
+export const userResponse = adminUser;
 
 export const userResponseWithSource: User = {
   ...userResponse,

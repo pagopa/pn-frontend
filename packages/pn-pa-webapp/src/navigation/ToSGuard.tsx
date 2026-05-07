@@ -6,6 +6,7 @@ import { LoadingPage, SessionModal } from '@pagopa-pn/pn-commons';
 
 import ToSAcceptancePage from '../pages/ToSAcceptance.page';
 import { getTosPrivacyApproval } from '../redux/auth/actions';
+import { authSelectors } from '../redux/auth/reducers';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { RootState } from '../redux/store';
 import { goToSelfcareLogin } from './navigation.utility';
@@ -14,14 +15,19 @@ const ToSGuard = () => {
   const dispatch = useAppDispatch();
   const { tosConsent, privacyConsent, fetchedTos, fetchedPrivacy, tosPrivacyApiError } =
     useAppSelector((state: RootState) => state.userState);
+  const isSupportUser = useAppSelector(authSelectors.selectIsSupportUser);
   const { sessionToken } = useAppSelector((state: RootState) => state.userState.user);
   const { t } = useTranslation(['common']);
 
   useEffect(() => {
-    if (sessionToken) {
+    if (sessionToken && !isSupportUser) {
       void dispatch(getTosPrivacyApproval());
     }
-  }, [sessionToken]);
+  }, [sessionToken, isSupportUser]);
+
+  if (isSupportUser) {
+    return <Outlet />;
+  }
 
   if (tosPrivacyApiError || !fetchedTos || !fetchedPrivacy) {
     return (

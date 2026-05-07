@@ -3,16 +3,10 @@ import { vi } from 'vitest';
 import { digitalAddresses, digitalAddressesSercq } from '../../../__mocks__/Contacts.mock';
 import { fireEvent, render } from '../../../__test__/test-utils';
 import { AddressType } from '../../../models/contacts';
+import * as routes from '../../../navigation/routes.const';
 import DigitalContactManagement from '../DigitalContactManagement';
 
-const mockNavigateFn = vi.fn();
-
 const lblPrefix = 'legal-contacts.digital-domicile-management';
-
-vi.mock('react-router-dom', async () => ({
-  ...(await vi.importActual<any>('react-router-dom')),
-  useNavigate: () => mockNavigateFn,
-}));
 
 describe('DigitalContactManagement', () => {
   beforeEach(() => {
@@ -94,17 +88,21 @@ describe('DigitalContactManagement', () => {
   });
 
   it('should go back when clicking on the back button', () => {
-    const { getByText } = render(<DigitalContactManagement />, {
+    const { getByText, router } = render(<DigitalContactManagement />, {
       preloadedState: {
         contactsState: {
           digitalAddresses: digitalAddressesSercq,
         },
       },
+      route: [routes.RECAPITI, routes.DIGITAL_DOMICILE_MANAGEMENT],
     });
     const backButton = getByText('button.indietro');
     expect(backButton).toBeInTheDocument();
+
+    expect(router.state.location.pathname).toBe(routes.DIGITAL_DOMICILE_MANAGEMENT);
+
     fireEvent.click(backButton);
-    expect(mockNavigateFn).toHaveBeenCalledTimes(1);
-    expect(mockNavigateFn).toHaveBeenCalledWith(-1);
+    expect(router.state.location.pathname).toBe(routes.RECAPITI);
+    expect(router.state.historyAction).toBe('POP');
   });
 });

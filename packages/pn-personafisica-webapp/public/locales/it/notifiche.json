@@ -33,7 +33,11 @@
   "empty-state": {
     "filtered": "Non abbiamo trovato risultati: prova con dei filtri diversi. <0>Rimuovi filtri</0>.",
     "delegate": "{{name}} non ha ricevuto nessuna notifica.",
-    "no-notifications": "Non hai ancora ricevuto notifiche. Inserisci un domicilio digitale, uno o più recapiti di cortesia o attiva il servizio <strong>SEND - Notifiche Digitali</strong> sull’app IO nella sezione <strong>I tuoi recapiti</strong>: così, se riceverai una notifica, te lo comunicheremo. <0>Vai ai tuoi recapiti</0>",
+    "title": "Qui troverai le tue notifiche SEND",
+    "description-onboarding": "Sapevi che puoi risparmiare se scegli di ricevere le comunicazioni a valore legale solo in digitale?",
+    "description": "Aggiorna ora i tuoi recapiti e saprai subito quando ne riceverai una.",
+    "go-to-onboarding-cta": "Configura SEND",
+    "go-to-contacts-cta": "Vai ai tuoi recapiti",
     "aria-label-remove-filters": "Rimuovi filtri",
     "aria-label-route-contacts": "Vai ai tuoi recapiti"
   },

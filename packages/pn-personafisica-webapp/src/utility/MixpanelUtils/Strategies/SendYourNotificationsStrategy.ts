@@ -1,7 +1,6 @@
 import {
   EventAction,
   EventCategory,
-  EventNotificationsListType,
   EventPropertyType,
   EventStrategy,
   Notification,
@@ -10,7 +9,13 @@ import {
   isNewNotification,
 } from '@pagopa-pn/pn-commons';
 
+import {
+  OnboardingAvailableFlows,
+  OnboardingStatus,
+  TrackingFlow,
+} from '../../../models/Onboarding';
 import { Delegator } from '../../../redux/delegation/types';
+import { getOnboardingNotificationsPayload } from '../../mixpanel';
 
 type SendYourNotifications = {
   notifications: Array<Notification>;
@@ -22,6 +27,23 @@ type SendYourNotifications = {
     moreResult: boolean;
   };
   domicileBannerType: string;
+};
+
+type EventNotificationsListType = {
+  banner?: string;
+  delegate: boolean;
+  page_number: number;
+  total_count: number;
+  unread_count: number;
+  delivered_count: number;
+  opened_count: number;
+  expired_count: number;
+  not_found_count: number;
+  cancelled_count: number;
+  effective_date_count: number;
+  onboarding: OnboardingStatus;
+  onboarding_selected_flow?: OnboardingAvailableFlows;
+  flow?: TrackingFlow;
 };
 
 export class SendYourNotificationsStrategy implements EventStrategy {
@@ -55,6 +77,10 @@ export class SendYourNotificationsStrategy implements EventStrategy {
         cancelled_count: notifications.filter(
           (n) => n.notificationStatus === NotificationStatus.CANCELLED
         ).length,
+        effective_date_count: notifications.filter(
+          (n) => n.notificationStatus === NotificationStatus.EFFECTIVE_DATE
+        ).length,
+        ...getOnboardingNotificationsPayload(),
       },
     };
   }

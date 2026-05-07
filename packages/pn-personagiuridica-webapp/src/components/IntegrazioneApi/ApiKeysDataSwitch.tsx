@@ -47,7 +47,7 @@ const ApiKeysDataSwitch: React.FC<Props> = ({
       return <Typography sx={{ color: setRowColorByStatus(data) }}>{data.name}</Typography>;
     case 'value':
       if (!data.value) {
-        return <>-</>;
+        return '-';
       }
       return (
         <Stack

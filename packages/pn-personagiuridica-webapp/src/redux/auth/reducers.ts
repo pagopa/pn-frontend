@@ -5,7 +5,7 @@ import { PNRole, PartyRole, User } from '../../models/User';
 import { userDataMatcher } from '../../utility/user.utility';
 import { acceptTosPrivacy, exchangeToken, getTosPrivacyApproval } from './actions';
 
-const noLoggedUserData = {
+const noLoggedUserData: User = {
   ...basicNoLoggedUserData,
   from_aa: false,
   level: '',
@@ -14,8 +14,12 @@ const noLoggedUserData = {
   iss: '',
   jti: '',
   aud: '',
+  name: '',
+  family_name: '',
+  fiscal_number: '',
   organization: {
     id: '',
+    name: '',
     roles: [
       {
         role: PNRole.ADMIN,
@@ -26,11 +30,11 @@ const noLoggedUserData = {
   },
   desired_exp: 0,
   hasGroup: false,
-} as User;
+};
 
 const initialState = {
   loading: false,
-  user: basicInitialUserData(userDataMatcher, noLoggedUserData),
+  user: basicInitialUserData<User>(userDataMatcher, noLoggedUserData),
   fetchedTos: false,
   fetchedPrivacy: false,
   tosConsent: {

@@ -10,6 +10,7 @@ export enum PartyRole {
   MANAGER = 'MANAGER',
   OPERATOR = 'OPERATOR',
   SUB_DELEGATE = 'SUB_DELEGATE', // not managed by PN
+  SUPPORT = 'SUPPORT',
 }
 
 export enum GroupStatus {
@@ -26,9 +27,13 @@ export interface UserGroup {
 export enum PNRole {
   ADMIN = 'admin', // ref amministrativo
   OPERATOR = 'operator', // ref tecnico
+  SUPPORT = 'support',
 }
 
 export interface User extends BasicUser {
+  name?: string;
+  family_name?: string;
+  fiscal_number?: string;
   organization: Organization;
   desired_exp: number;
 }

@@ -17,13 +17,14 @@ describe('SmartHeader Component', () => {
   });
 
   it('render component - incorrect child', () => {
-    expect(() =>
-      render(
-        <SmartHeader>
-          <SmartHeaderCell columnId={'mock-column-id'}>mock-column-label</SmartHeaderCell>
-          <Box>Incorrect child</Box>
-        </SmartHeader>
-      )
-    ).toThrowError('SmartHeader can have only children of type SmartHeaderCell');
+    const { getByText } = render(
+      <SmartHeader>
+        <SmartHeaderCell columnId={'mock-column-id'}>mock-column-label</SmartHeaderCell>
+        <Box>Incorrect child</Box>
+      </SmartHeader>
+    );
+    expect(
+      getByText('SmartHeader can have only children of type SmartHeaderCell')
+    ).toBeInTheDocument();
   });
 });

@@ -6,6 +6,7 @@ import * as yup from 'yup';
 import { Box, Button, Grid, Paper, TextField, Typography } from '@mui/material';
 import {
   PnBreadcrumb,
+  Prompt,
   SectionHeading,
   TitleBox,
   dataRegex,
@@ -13,7 +14,6 @@ import {
 } from '@pagopa-pn/pn-commons';
 import { Autocomplete } from '@pagopa/mui-italia';
 
-import Prompt from '../components-for-migration/Prompt';
 import SyncFeedbackApiKey from '../components/NewApiKey/SyncFeedbackApiKey';
 import { GroupStatus, UserGroup } from '../models/user';
 import * as routes from '../navigation/routes.const';

@@ -9,9 +9,9 @@ import {
 } from '../../../__mocks__/Consents.mock';
 import { errorMock } from '../../../__mocks__/Errors.mock';
 import { apiClient } from '../../../api/apiClients';
+import { PNRole, PartyRole } from '../../../models/User';
 import { store } from '../../store';
 import { acceptTosPrivacy, getTosPrivacyApproval } from '../actions';
-import { PNRole, PartyRole } from '../../../models/User';
 
 describe('Auth redux state tests', () => {
   let mock: MockAdapter;
@@ -51,6 +51,7 @@ describe('Auth redux state tests', () => {
         organization: {
           fiscal_code: '',
           id: '',
+          name: '',
           roles: [
             {
               partyRole: PartyRole.MANAGER,
@@ -103,6 +104,7 @@ describe('Auth redux state tests', () => {
       organization: {
         fiscal_code: '',
         id: '',
+        name: '',
         roles: [
           {
             partyRole: PartyRole.MANAGER,

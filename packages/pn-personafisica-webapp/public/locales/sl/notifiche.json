@@ -33,7 +33,11 @@
   "empty-state": {
     "filtered": "Ni bilo mogoče najti rezultatov: poskusite z različnimi filtri. <0>Odstranite filtre</0>.",
     "delegate": "{{name}} ni prejel nobenega obvestila.",
-    "no-notifications": "Ni prejel nobenega obvestila. <0>Pojdite na svoje kontaktne podatke</0> in vnesite enega ali več kontaktnih podatkov: če prejmete obvestilo, vas bomo o tem obvestili.",
+    "title": "Tukaj boste našli svoja obvestila SEND",
+    "description-onboarding": "Ali ste vedeli, da lahko prihranite, če se odločite za prejemanje uradnih sporočil le v digitalni obliki?",
+    "description": "Posodobite svoje kontaktne podatke zdaj in takoj boste obveščeni, ko prejmete novo.",
+    "go-to-onboarding-cta": "Konfigurirajte SEND",
+    "go-to-contacts-cta": "Pojdite na svoje kontaktne podatke",
     "aria-label-remove-filters": "Odstranite filtre",
     "aria-label-route-contacts": "Pojdite na svoje kontaktne podatke"
   },

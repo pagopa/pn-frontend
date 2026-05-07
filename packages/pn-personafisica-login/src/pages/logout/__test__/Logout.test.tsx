@@ -1,4 +1,3 @@
-import { BrowserRouter } from 'react-router-dom';
 import { vi } from 'vitest';
 
 import { AppRouteParams } from '@pagopa-pn/pn-commons';
@@ -8,13 +7,6 @@ import { ROUTE_LOGIN } from '../../../navigation/routes.const';
 import { storageRapidAccessOps } from '../../../utility/storage';
 import Logout from '../Logout';
 
-const mockNavigateFn = vi.fn();
-
-vi.mock('react-router-dom', async () => ({
-  ...(await vi.importActual<any>('react-router-dom')),
-  useNavigate: () => mockNavigateFn,
-}));
-
 describe('Logout page', () => {
   afterEach(() => {
     vi.clearAllMocks();
@@ -22,13 +14,9 @@ describe('Logout page', () => {
 
   it('test logout', () => {
     storageRapidAccessOps.write([AppRouteParams.AAR, 'aar-test']);
-    render(
-      <BrowserRouter>
-        <Logout />
-      </BrowserRouter>
-    );
+    const { router } = render(<Logout />);
     expect(storageRapidAccessOps.read()).toBeUndefined();
-    expect(mockNavigateFn).toHaveBeenCalledTimes(1);
-    expect(mockNavigateFn).toHaveBeenCalledWith(ROUTE_LOGIN, { replace: true });
+    expect(router.state.location.pathname).toBe(ROUTE_LOGIN);
+    expect(router.state.historyAction).toBe('REPLACE');
   });
 });

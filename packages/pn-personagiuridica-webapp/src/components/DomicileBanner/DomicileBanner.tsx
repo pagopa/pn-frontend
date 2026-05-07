@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 
 import SavingsOutlinedIcon from '@mui/icons-material/SavingsOutlined';
 import { Box } from '@mui/material';
+import { appStorage } from '@pagopa-pn/pn-commons';
 import { Banner, type BannerCTA } from '@pagopa/mui-italia';
 
 import { ChannelType, ContactOperation, ContactSource } from '../../models/contacts';
@@ -26,22 +27,13 @@ type DomicileBannerData = {
   operation?: ContactOperation;
 };
 
-const getOpenStatusFromSession = () => {
-  const sessionClosed = sessionStorage.getItem('domicileBannerClosed');
-  // validate data
-  if (sessionClosed === 'true' || sessionClosed === 'false') {
-    return Boolean(sessionClosed);
-  }
-  return false;
-};
-
 const getDomicileData = (
   source: ContactSource,
   hasSercqSend: boolean,
   hasCourtesyAddresses: boolean,
   isDodEnabled: boolean
 ): DomicileBannerData | null => {
-  const sessionClosed = getOpenStatusFromSession();
+  const sessionClosed = !appStorage.domicileBanner.isEnabled();
   if (isDodEnabled && source !== ContactSource.RECAPITI && !hasSercqSend && !sessionClosed) {
     return {
       destination: ChannelType.SERCQ_SEND,
@@ -108,7 +100,7 @@ const DomicileBanner: React.FC<Props> = ({ source }) => {
 
   const handleClose = () => {
     dispatch(closeDomicileBanner());
-    sessionStorage.setItem('domicileBannerClosed', 'true');
+    appStorage.domicileBanner.disable();
   };
 
   const handleClick = (destination?: ChannelType, operation?: ContactOperation) => {

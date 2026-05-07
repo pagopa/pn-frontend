@@ -1,4 +1,5 @@
 // import { visualizer } from 'rollup-plugin-visualizer';
+import type { IncomingMessage, ServerResponse } from 'node:http';
 import { defineConfig, loadEnv, mergeConfig } from 'vite';
 import { configDefaults, defineConfig as defineVitestConfig } from 'vitest/config';
 
@@ -57,10 +58,25 @@ export default defineConfig(({ mode }) => {
       open: true,
       proxy: {
         '^/auth/.*': {
+          // when you want test the login flux locally, add :port on witch login app is running
           target: `https://login.${webAppEnv}.notifichedigitali.it`,
           changeOrigin: true,
-          // When run login app locally
+          // when you want test the login flux locally, decomment this property
           // secure: false,
+        },
+        // mock mixpanel server for local environment
+        '/mock-mixpanel': {
+          target: env.HOST, // Fake target
+          bypass: (_: IncomingMessage, res: ServerResponse) => {
+            res.statusCode = 200;
+            res.setHeader('Content-Type', 'text/plain');
+
+            // Mixpanel wants that server responds with number 1 for success
+            res.end('1');
+
+            // Return false to block vite because we have already handled the response
+            return false;
+          },
         },
       },
     },

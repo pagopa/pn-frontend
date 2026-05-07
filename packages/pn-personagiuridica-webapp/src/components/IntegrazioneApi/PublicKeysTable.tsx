@@ -39,8 +39,9 @@ const PublicKeysTable: React.FC<Props> = ({ publicKeys, handleModalClick }) => {
     {
       id: 'name',
       label: t('publicKeys.table.name'),
+      mode: 'wrap',
       tableConfiguration: {
-        cellProps: { width: '20%' },
+        cellProps: { width: '18%' },
       },
       cardConfiguration: {
         wrapValueInTypography: false,
@@ -82,7 +83,7 @@ const PublicKeysTable: React.FC<Props> = ({ publicKeys, handleModalClick }) => {
       id: 'menu',
       label: '',
       tableConfiguration: {
-        cellProps: { width: '5%' },
+        cellProps: { width: '7%' },
       },
       cardConfiguration: {
         position: 'right',
@@ -131,6 +132,7 @@ const PublicKeysTable: React.FC<Props> = ({ publicKeys, handleModalClick }) => {
               <SmartBodyCell
                 key={column.id.toString()}
                 columnId={column.id}
+                mode={column.mode}
                 tableProps={column.tableConfiguration}
                 cardProps={column.cardConfiguration}
                 isCardHeader={column.cardConfiguration?.isCardHeader}
