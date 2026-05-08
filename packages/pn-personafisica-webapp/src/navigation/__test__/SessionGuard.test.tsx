@@ -202,7 +202,7 @@ describe('SessionGuard Component', async () => {
     mock.onPost(ONE_IDENTITY_TOKEN_EXCHANGE()).reply(200, userResponse);
     await act(async () => {
       render(<Guard />, {
-        route: '/#code=valid_code&state=some_state&nonce=some_nonce&redirect_uri=some_uri',
+        route: '/#code=valid_code&state=some_state&nonce=some_nonce',
       });
     });
     expect(mock.history.post).toHaveLength(1);
@@ -211,7 +211,6 @@ describe('SessionGuard Component', async () => {
       code: 'valid_code',
       state: 'some_state',
       nonce: 'some_nonce',
-      redirect_uri: 'some_uri',
     });
   });
 
@@ -220,11 +219,10 @@ describe('SessionGuard Component', async () => {
       code: '403_code',
       state: 'some_state',
       nonce: 'some_nonce',
-      redirect_uri: 'some_uri',
     });
     await act(async () => {
       render(<Guard />, {
-        route: '/#code=403_code&state=some_state&nonce=some_nonce&redirect_uri=some_uri',
+        route: '/#code=403_code&state=some_state&nonce=some_nonce',
       });
     });
     expect(mock.history.post).toHaveLength(1);
@@ -233,7 +231,6 @@ describe('SessionGuard Component', async () => {
       code: '403_code',
       state: 'some_state',
       nonce: 'some_nonce',
-      redirect_uri: 'some_uri',
     });
     const logoutComponent = screen.queryByTestId('session-modal');
     expect(logoutComponent).toBeTruthy();
@@ -246,11 +243,10 @@ describe('SessionGuard Component', async () => {
       code: '451_code',
       state: 'some_state',
       nonce: 'some_nonce',
-      redirect_uri: 'some_uri',
     });
     await act(async () => {
       result = render(<Guard />, {
-        route: '/#code=451_code&state=some_state&nonce=some_nonce&redirect_uri=some_uri',
+        route: '/#code=451_code&state=some_state&nonce=some_nonce',
       });
     });
     expect(mock.history.post).toHaveLength(1);
@@ -259,7 +255,6 @@ describe('SessionGuard Component', async () => {
       code: '451_code',
       state: 'some_state',
       nonce: 'some_nonce',
-      redirect_uri: 'some_uri',
     });
     await waitFor(() => {
       expect(result.router.state.location.pathname).toBe(routes.NOT_ACCESSIBLE);
@@ -277,7 +272,7 @@ describe('SessionGuard Component', async () => {
 
     await act(async () => {
       result = render(<Guard />, {
-        route: '/#code=some_code&state=some_state&nonce=some_nonce&redirect_uri=some_uri',
+        route: '/#code=some_code&state=some_state&nonce=some_nonce',
       });
     });
 
@@ -287,7 +282,6 @@ describe('SessionGuard Component', async () => {
       code: 'some_code',
       state: 'some_state',
       nonce: 'some_nonce',
-      redirect_uri: 'some_uri',
     });
 
     await waitFor(() => {
@@ -310,8 +304,7 @@ describe('SessionGuard Component', async () => {
 
     await act(async () => {
       render(<Guard />, {
-        route:
-          '/?aar=mocked-qr-code#code=valid_code&state=some_state&nonce=some_nonce&redirect_uri=some_uri',
+        route: '/?aar=mocked-qr-code#code=valid_code&state=some_state&nonce=some_nonce',
       });
     });
 
@@ -321,7 +314,6 @@ describe('SessionGuard Component', async () => {
       code: 'valid_code',
       state: 'some_state',
       nonce: 'some_nonce',
-      redirect_uri: 'some_uri',
       source: {
         type: 'QR',
         id: 'mocked-qr-code',
@@ -337,7 +329,7 @@ describe('SessionGuard Component', async () => {
 
     await act(async () => {
       render(<Guard />, {
-        route: '/#code=valid_code&state=some_state&nonce=some_nonce&redirect_uri=some_uri',
+        route: '/#code=valid_code&state=some_state&nonce=some_nonce',
       });
     });
 

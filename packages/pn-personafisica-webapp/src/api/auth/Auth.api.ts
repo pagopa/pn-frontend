@@ -29,14 +29,12 @@ export const AuthApi = {
     code,
     state,
     nonce,
-    redirectUri,
     rapidAccess,
   }: OneIdentityCodeExchangeRequest): Promise<User> => {
     const body: OneIdentityExchangeCodeBody = {
       code,
       state,
       nonce,
-      redirect_uri: redirectUri,
     };
     if (rapidAccess) {
       const [param, value] = rapidAccess;
