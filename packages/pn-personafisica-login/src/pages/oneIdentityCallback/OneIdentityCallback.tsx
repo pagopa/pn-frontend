@@ -30,12 +30,10 @@ const OneIdentityCallback: React.FC = () => {
     if (error) {
       params.set('error', error);
     }
-    const query = params.toString();
-    const to = query
-      ? `${ROUTE_ONE_IDENTITY_LOGIN_ERROR}?${query}`
-      : ROUTE_ONE_IDENTITY_LOGIN_ERROR;
-
-    navigate(to, { replace: true });
+    navigate(
+      { pathname: ROUTE_ONE_IDENTITY_LOGIN_ERROR, search: params.toString() },
+      { replace: true }
+    );
   };
 
   async function handleOidcCallback() {
