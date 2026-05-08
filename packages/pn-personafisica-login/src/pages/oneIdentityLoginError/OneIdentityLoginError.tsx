@@ -12,20 +12,21 @@ import { PFLoginEventsType } from '../../models/PFLoginEventsType';
 import { ROUTE_ONE_IDENTITY_LOGIN } from '../../navigation/routes.const';
 import PFLoginEventStrategyFactory from '../../utility/MixpanelUtils/PFLoginEventStrategyFactory';
 
-const getErrorMessage = (error: string | null) => {
-  switch (error) {
-    case 'invalid_scope':
-      return 'loginError.oneIdentity.invalid_scope';
-    case 'unsupported_response_type':
-      return 'loginError.oneIdentity.unsupported_response_type';
-    case 'server_error':
-      return 'loginError.oneIdentity.server_error';
-    case 'invalid_request':
-      return 'loginError.oneIdentity.invalid_request';
-    default:
-      return 'loginError.message';
-  }
-};
+// TODO - Use this once the copy is available
+// const getErrorMessage = (error: string | null) => {
+//   switch (error) {
+//     case 'invalid_scope':
+//       return 'loginError.oneIdentity.invalid_scope';
+//     case 'unsupported_response_type':
+//       return 'loginError.oneIdentity.unsupported_response_type';
+//     case 'server_error':
+//       return 'loginError.oneIdentity.server_error';
+//     case 'invalid_request':
+//       return 'loginError.oneIdentity.invalid_request';
+//     default:
+//       return 'loginError.message';
+//   }
+// };
 
 const OneIdentityLoginError: React.FC = () => {
   const { t } = useTranslation(['login', 'common']);
@@ -86,7 +87,7 @@ const OneIdentityLoginError: React.FC = () => {
           {t('loginError.title')}
         </Typography>
         <Typography variant="body2" id="message" mb={8}>
-          {t(getErrorMessage(error))}
+          {t('loginError.message')}
         </Typography>
         <Button
           id="login-button"
