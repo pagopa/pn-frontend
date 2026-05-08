@@ -98,16 +98,11 @@ describe('test login page', () => {
       });
     });
 
-    afterEach(() => {
-      // eslint-disable-next-line functional/immutable-data
-      delete (globalThis.location as any).href;
-    });
-
     it('redirects to location on successful authorize', async () => {
       const { container } = render(<OneIdentityLogin />);
       fireEvent.click(getById(container, 'cieButton'));
       await waitFor(() =>
-        expect(globalThis.location.href).toBe('https://idp.example.com/login')
+        expect(mockAssign).toHaveBeenCalledWith('https://idp.example.com/login')
       );
     });
 

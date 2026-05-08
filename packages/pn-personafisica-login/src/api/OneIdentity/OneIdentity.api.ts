@@ -1,6 +1,10 @@
 import { IDPS_MOCK } from '../../__mocks__/IDPS.mock';
 import { IDP } from '../../models/IDPS';
-import { OidcAuthorizeParams, OidcAuthorizeResponse } from '../../models/OneIdentity';
+import {
+  OidcAuthorizeParams,
+  OidcAuthorizeResponse,
+  OidcStateDataResponse,
+} from '../../models/OneIdentity';
 import { getConfiguration } from '../../services/configuration.service';
 
 export const OneIdentityApi = {
@@ -36,5 +40,17 @@ export const OneIdentityApi = {
     }
 
     return response.json() as Promise<OidcAuthorizeResponse>;
+  },
+  getOidcStateData: async (state: string): Promise<OidcStateDataResponse> => {
+    const { API_BASE_URL } = getConfiguration();
+    const params = new URLSearchParams({ state });
+
+    const response = await fetch(`${API_BASE_URL}/oidc-state?${params.toString()}`);
+
+    if (!response.ok) {
+      throw new Error('Error during retrieving OIDC state data');
+    }
+
+    return response.json() as Promise<OidcStateDataResponse>;
   },
 };

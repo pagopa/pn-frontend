@@ -80,8 +80,7 @@ const OneIdentityLogin: React.FC = () => {
 
     OneIdentityApi.authorize({ entityId, aar, retrievalId })
       .then(({ location }) => {
-        // eslint-disable-next-line functional/immutable-data
-        window.location.href = location;
+        window.location.assign(location);
       })
       .catch(() => {
         navigate(ROUTE_ONE_IDENTITY_LOGIN_ERROR);

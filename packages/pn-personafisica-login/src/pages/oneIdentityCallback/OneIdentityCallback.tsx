@@ -1,81 +1,78 @@
 import React, { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Navigate, useSearchParams } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 
-import { getLangCode, sanitizeString } from '@pagopa-pn/pn-commons';
+import { AppRouteParams, getLangCode, sanitizeString } from '@pagopa-pn/pn-commons';
 
-import {
-  ROUTE_ONE_IDENTITY_LOGIN_ERROR,
-  oneIdentityRedirectUriPath,
-} from '../../navigation/routes.const';
+import { OneIdentityApi } from '../../api/OneIdentity/OneIdentity.api';
+import { PFLoginEventsType } from '../../models/PFLoginEventsType';
+import { ROUTE_ONE_IDENTITY_LOGIN_ERROR } from '../../navigation/routes.const';
 import { getConfiguration } from '../../services/configuration.service';
-import {
-  storageOneIdentityNonce,
-  storageOneIdentityState,
-  storageRapidAccessOps,
-} from '../../utility/storage';
+import PFLoginEventStrategyFactory from '../../utility/MixpanelUtils/PFLoginEventStrategyFactory';
 
 const OneIdentityCallback: React.FC = () => {
+  const { i18n } = useTranslation();
   const { PF_URL } = getConfiguration();
-
-  const stateFromStorage = storageOneIdentityState.read();
-  const nonceFromStorage = storageOneIdentityNonce.read();
+  const navigate = useNavigate();
 
   const [searchParams] = useSearchParams();
-  const oneIdentityState = searchParams.get('state');
-  const oneIdentityCode = searchParams.get('code');
+  const code = searchParams.get('code');
+  const state = searchParams.get('state');
+  const error = searchParams.get('error');
 
-  const rapidAccess = storageRapidAccessOps.read();
-  const { i18n } = useTranslation();
+  const isValidCallback = !error && !!code && !!state;
 
-  const isValid =
-    oneIdentityCode &&
-    oneIdentityState &&
-    nonceFromStorage &&
-    oneIdentityState === stateFromStorage;
+  const redirectToErrorPage = () => {
+    const params = new URLSearchParams();
+    if (state) {
+      params.set('state', state);
+    }
+    if (error) {
+      params.set('error', error);
+    }
+    navigate(
+      { pathname: ROUTE_ONE_IDENTITY_LOGIN_ERROR, search: params.toString() },
+      { replace: true }
+    );
+  };
 
-  const calcRedirectUrl = () => {
-    if (!isValid) {
+  async function handleOidcCallback() {
+    if (!isValidCallback) {
+      redirectToErrorPage();
       return;
     }
 
-    const redirectUrl = PF_URL;
+    const { nonce, aar, retrievalId, idp } = await OneIdentityApi.getOidcStateData(state);
+
+    PFLoginEventStrategyFactory.triggerEvent(PFLoginEventsType.SEND_LOGIN_METHOD, {
+      entityID: idp,
+    });
 
     // the findIndex check is needed to prevent xss attacks
-    if (redirectUrl && [PF_URL].some((url) => url && redirectUrl.startsWith(url))) {
-      const queryParams = new URLSearchParams();
-      if (rapidAccess) {
-        storageRapidAccessOps.delete();
-        queryParams.set(rapidAccess[0], sanitizeString(rapidAccess[1]));
+    if (PF_URL && [PF_URL].some((url) => url && PF_URL.startsWith(url))) {
+      const url = new URL(PF_URL);
+
+      if (aar) {
+        url.searchParams.set(AppRouteParams.AAR, sanitizeString(aar));
+      } else if (retrievalId) {
+        url.searchParams.set(AppRouteParams.RETRIEVAL_ID, sanitizeString(retrievalId));
       }
 
-      const hashParams = new URLSearchParams({
-        code: oneIdentityCode,
-        state: oneIdentityState,
-        nonce: nonceFromStorage,
-        redirect_uri: encodeURIComponent(`${PF_URL}${oneIdentityRedirectUriPath}`),
+      // eslint-disable-next-line functional/immutable-data
+      url.hash = new URLSearchParams({
+        code,
+        state,
+        nonce,
         lang: sanitizeString(getLangCode(i18n.language)),
-      });
+      }).toString();
 
-      const queryString = queryParams.size > 0 ? `?${queryParams.toString()}` : '';
-      const hashString = hashParams.toString();
-
-      const url = `${redirectUrl}${queryString}#${hashString}`;
-
-      storageOneIdentityState.delete();
-      storageOneIdentityNonce.delete();
-
-      window.location.replace(url);
+      window.location.replace(url.toString());
     }
-  };
+  }
 
   useEffect(() => {
-    calcRedirectUrl();
+    handleOidcCallback().catch(redirectToErrorPage);
   }, []);
-
-  if (!isValid) {
-    return <Navigate to={ROUTE_ONE_IDENTITY_LOGIN_ERROR} replace />;
-  }
 
   return null;
 };
