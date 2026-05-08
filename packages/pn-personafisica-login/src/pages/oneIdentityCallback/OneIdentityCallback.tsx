@@ -22,7 +22,7 @@ const OneIdentityCallback: React.FC = () => {
 
   const isValidCallback = !error && !!code && !!state;
 
-  const redirectToLogoutPage = () => {
+  const redirectToErrorPage = () => {
     const params = new URLSearchParams();
     if (state) {
       params.set('state', state);
@@ -40,7 +40,7 @@ const OneIdentityCallback: React.FC = () => {
 
   async function handleOidcCallback() {
     if (!isValidCallback) {
-      redirectToLogoutPage();
+      redirectToErrorPage();
       return;
     }
 
@@ -52,32 +52,28 @@ const OneIdentityCallback: React.FC = () => {
 
     // the findIndex check is needed to prevent xss attacks
     if (PF_URL && [PF_URL].some((url) => url && PF_URL.startsWith(url))) {
-      const queryParams = new URLSearchParams();
+      const url = new URL(PF_URL);
 
       if (aar) {
-        queryParams.set(AppRouteParams.AAR, sanitizeString(aar));
+        url.searchParams.set(AppRouteParams.AAR, sanitizeString(aar));
       } else if (retrievalId) {
-        queryParams.set(AppRouteParams.RETRIEVAL_ID, sanitizeString(retrievalId));
+        url.searchParams.set(AppRouteParams.RETRIEVAL_ID, sanitizeString(retrievalId));
       }
 
-      const hashParams = new URLSearchParams({
+      // eslint-disable-next-line functional/immutable-data
+      url.hash = new URLSearchParams({
         code,
         state,
         nonce,
         lang: sanitizeString(getLangCode(i18n.language)),
-      });
+      }).toString();
 
-      const queryString = queryParams.size > 0 ? `?${queryParams.toString()}` : '';
-      const hashString = hashParams.toString();
-
-      const url = `${PF_URL}${queryString}#${hashString}`;
-
-      window.location.replace(url);
+      window.location.replace(url.toString());
     }
   }
 
   useEffect(() => {
-    handleOidcCallback().catch(redirectToLogoutPage);
+    handleOidcCallback().catch(redirectToErrorPage);
   }, []);
 
   return null;

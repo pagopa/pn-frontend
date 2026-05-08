@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 
 import { Box, Button, CircularProgress, Dialog, Typography } from '@mui/material';
-import { sanitizeString } from '@pagopa-pn/pn-commons';
+import { AppRouteParams, sanitizeString } from '@pagopa-pn/pn-commons';
 import { IllusError } from '@pagopa/mui-italia';
 
 import { OneIdentityApi } from '../../api/OneIdentity/OneIdentity.api';
@@ -49,14 +49,15 @@ const OneIdentityLoginError: React.FC = () => {
     const params = new URLSearchParams();
 
     if (aar) {
-      params.set('aar', sanitizeString(aar));
+      params.set(AppRouteParams.AAR, sanitizeString(aar));
     } else if (retrievalId) {
-      params.set('retrievalId', sanitizeString(retrievalId));
+      params.set(AppRouteParams.RETRIEVAL_ID, sanitizeString(retrievalId));
     }
 
-    const query = params.size > 0 ? `?${params}` : '';
-
-    navigate(`${ROUTE_ONE_IDENTITY_LOGIN}${query}`);
+    navigate({
+      pathname: ROUTE_ONE_IDENTITY_LOGIN,
+      search: params.toString(),
+    });
   };
 
   const trackMixpanelErrorEvent = (idp: string) => {
