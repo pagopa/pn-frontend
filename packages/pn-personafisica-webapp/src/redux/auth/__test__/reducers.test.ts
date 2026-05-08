@@ -81,7 +81,6 @@ describe('Auth redux state tests', () => {
         code: 'mocked-code',
         state: 'mocked-state',
         nonce: 'mocked-nonce',
-        redirectUri: 'www.test.it',
       })
     );
 

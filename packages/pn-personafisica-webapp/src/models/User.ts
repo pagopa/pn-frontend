@@ -38,7 +38,6 @@ export interface OneIdentityExchangeCodeBody extends BodySourceRequest {
   code: string;
   state: string;
   nonce: string;
-  redirect_uri: string;
 }
 
 export interface TokenExchangeRequest {
@@ -50,7 +49,6 @@ export interface OneIdentityCodeExchangeRequest {
   code: string;
   state: string;
   nonce: string;
-  redirectUri: string;
   rapidAccess?: [AppRouteParams, string];
 }
 

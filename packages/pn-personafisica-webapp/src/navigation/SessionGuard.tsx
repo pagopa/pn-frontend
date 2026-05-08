@@ -59,7 +59,6 @@ const SessionGuard = () => {
   const code = hashParams.get('code');
   const state = hashParams.get('state');
   const nonce = hashParams.get('nonce');
-  const redirectUri = hashParams.get('redirect_uri');
 
   const handleTokenExchangeError = (error: any) => {
     const adaptedError = adaptedTokenExchangeError(error);
@@ -136,12 +135,11 @@ const SessionGuard = () => {
   useEffect(() => {
     if (spidToken) {
       void performExchangeToken({ spidToken, rapidAccess });
-    } else if (code && state && nonce && redirectUri) {
+    } else if (code && state && nonce) {
       void performOneIdentityTokenExchange({
         code,
         state,
         nonce,
-        redirectUri: decodeURIComponent(redirectUri),
         rapidAccess,
       });
     } else if (sessionToken) {
