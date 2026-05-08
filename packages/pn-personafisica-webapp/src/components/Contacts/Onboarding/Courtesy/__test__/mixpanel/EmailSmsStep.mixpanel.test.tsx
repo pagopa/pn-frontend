@@ -1,9 +1,10 @@
+import userEvent from '@testing-library/user-event';
 import MockAdapter from 'axios-mock-adapter';
 import { MockInstance, vi } from 'vitest';
 
 import { EventAction } from '@pagopa-pn/pn-commons';
 
-import { act, fireEvent, render, waitFor } from '../../../../../../__test__/test-utils';
+import { act, fireEvent, render, waitFor, within } from '../../../../../../__test__/test-utils';
 import { apiClient } from '../../../../../../api/apiClients';
 import { OnboardingAvailableFlows } from '../../../../../../models/Onboarding';
 import { PFEventsType } from '../../../../../../models/PFEventsType';
@@ -235,6 +236,42 @@ describe('EmailSmsStep - Mixpanel events', () => {
       ...basePayload,
       event_type: EventAction.SCREEN_VIEW,
     });
+  });
+
+  it('fires SEND_ONBOARDING_SMS_OTP_VERIFICATION when the SMS OTP code is confirmed', async () => {
+    mock
+      .onPost('/bff/v1/addresses/COURTESY/default/SMS')
+      .reply(200, { result: 'CODE_VERIFICATION_REQUIRED' });
+
+    const { getByLabelText, getByRole, getByTestId } = render(<EmailSmsStep {...createProps(false)} />);
+
+    await act(async () => {
+      fireEvent.change(
+        getByLabelText('onboarding.courtesy.sms.insert.input-label'),
+        { target: { value: mockPhone } }
+      );
+    });
+
+    await act(async () => {
+      fireEvent.click(
+        getByRole('button', { name: 'onboarding.courtesy.sms.insert.button-label' })
+      );
+    });
+
+    const dialog = await waitFor(() => getByTestId('codeDialog'));
+    const codeInput = within(dialog).getByRole('textbox');
+    codeInput.focus();
+    await userEvent.keyboard('01234');
+
+    mock.onPost('/bff/v1/addresses/COURTESY/default/SMS').reply(200, { result: 'OK' });
+
+    const dialogButtons = dialog.querySelectorAll('button');
+    await userEvent.click(dialogButtons[1]);
+
+    expect(triggerEventSpy).toHaveBeenCalledWith(
+      PFEventsType.SEND_ONBOARDING_SMS_OTP_VERIFICATION,
+      basePayload
+    );
   });
 
   it('fires SEND_ONBOARDING_SMS_ACTIVATED when the phone number is verified successfully', async () => {
