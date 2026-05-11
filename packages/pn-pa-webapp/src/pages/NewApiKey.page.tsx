@@ -109,10 +109,11 @@ const NewApiKey = () => {
                     <Paper sx={{ padding: '24px', marginTop: '40px' }} elevation={0}>
                       <SectionHeading>{tkp('other-info')}</SectionHeading>
                       <Box sx={{ marginTop: '24px' }}>
-                        <Typography fontWeight="bold">{tkp('form-label-name')}*</Typography>
+                        <Typography fontWeight="bold">{tkp('form-label-name')}</Typography>
                         <TextField
                           id="name"
-                          label={tkp('form-placeholder-name')}
+                          label={`${tkp('form-placeholder-name')}`}
+                          required
                           fullWidth
                           name="name"
                           value={formik.values.name}
@@ -134,7 +135,7 @@ const NewApiKey = () => {
                           onChange={handleGroupClick}
                           noResultsText={tkp('no-groups')}
                           sx={{ mt: '8px' }}
-                          label={tkp('form-placeholder-groups')}
+                          label={`${tkp('form-placeholder-groups')}`}
                           slotProps={{
                             clearButton: {
                               'aria-label': t('autocomplete.clear', { ns: 'common' }),
@@ -156,7 +157,7 @@ const NewApiKey = () => {
                         />
                       </Box>
                     </Paper>
-                    <Box mt={3}>
+                    <Box mt={3} display="flex" justifyContent="flex-end">
                       <Button
                         data-testid="submit-new-api-key"
                         id="continue-button"
