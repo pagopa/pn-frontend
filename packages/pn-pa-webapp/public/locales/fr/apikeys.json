@@ -77,7 +77,7 @@
     "cancel-prompt": "Si vous vous déconnectez, vous perdrez toutes les données saisies jusqu’à présent. Pour générer une nouvelle API key, vous devrez tout recommencer.",
     "page-description": "SEND a généré le code de l’API Key. Maintenant, entrez un nom d’identification et attribuez-le à un ou plusieurs groupes.",
     "other-info": "Informations",
-    "form-label-name": "Donnez un nom à votre API key",
+    "form-label-name": "Donnez un nom à la Clé API",
     "form-placeholder-name": "Nom de la Clé API",
     "form-error-name": "Définir un nom pour l’API Key",
     "form-label-groups": "Choisissez i gruppi a cui rendere visibile l’API Key",

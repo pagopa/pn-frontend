@@ -77,7 +77,7 @@
     "cancel-prompt": "Če zaprete, boste izgubili vse doslej vnesene podatke. Če želite ustvariti nov ključ API, boste morali začeti znova.",
     "page-description": "SEND je ustvaril kodo ključa API. Zdaj vnesite identifikacijsko ime in ga dodelite eni ali več skupinam.",
     "other-info": "Informacije",
-    "form-label-name": "Poimenujte svoj ključ API",
+    "form-label-name": "Poimenujte ključ API",
     "form-placeholder-name": "Ime ključa API",
     "form-error-name": "Določite ime ključa API",
     "form-label-groups": "Izberite skupine, katerim bo viden ključ API",

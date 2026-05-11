@@ -77,7 +77,7 @@
     "cancel-prompt": "Wenn du dich abmeldest, gehen alle bisher eingegebenen Daten verloren. Um einen neuen API-Schlüssel zu generieren, musst du die Daten erneut eingeben.",
     "page-description": "SEND hat den Code für den API-Schlüssel generiert. Gib nun einen identifizierenden Namen ein und weise ihn einer oder mehreren Gruppen zu.",
     "other-info": "Informationen",
-    "form-label-name": "Gib deinem API-Schlüssel einen Namen",
+    "form-label-name": "Benenne den API-Key",
     "form-placeholder-name": "Name des API-Keys",
     "form-error-name": "Definiere einen Namen für den API-Schlüssel",
     "form-label-groups": "Wähle die Gruppen aus, für die der API-Key sichtbar sein soll",

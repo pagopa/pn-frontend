@@ -77,7 +77,7 @@
     "cancel-prompt": "If you exit, you will lose all data entered so far. To generate a new API Key, you'll need to start over.",
     "page-description": "SEND generated the API Key code. Now, enter an identifying name and assign it to one or more groups.",
     "other-info": "Information",
-    "form-label-name": "Name your API Key",
+    "form-label-name": "Name the API Key",
     "form-placeholder-name": "API Key name",
     "form-error-name": "Define a name for the API Key",
     "form-label-groups": "Choose the groups that the API Key will be visible to",
