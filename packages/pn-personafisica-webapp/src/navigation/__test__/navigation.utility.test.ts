@@ -3,6 +3,7 @@ import { vi } from 'vitest';
 import { AppRouteParams, EventPageType } from '@pagopa-pn/pn-commons';
 
 import { LoginProvider } from '../../models/User';
+import { UTM_KEY } from '../../utility/utm.utility';
 import { getCurrentEventTypePage, goToLoginPortal } from '../navigation.utility';
 import {
   APP_STATUS,
@@ -17,7 +18,7 @@ import {
 const mockOpenFn = vi.fn();
 
 describe('Tests navigation utility methods', () => {
-  const original = globalThis.open;
+  const originalOpen = globalThis.open;
 
   beforeAll(() => {
     Object.defineProperty(globalThis, 'open', {
@@ -31,7 +32,7 @@ describe('Tests navigation utility methods', () => {
   });
 
   afterAll((): void => {
-    Object.defineProperty(globalThis, 'open', { configurable: true, value: original });
+    Object.defineProperty(globalThis, 'open', { configurable: true, value: originalOpen });
   });
 
   it('goToLoginPortal', () => {
@@ -44,7 +45,7 @@ describe('Tests navigation utility methods', () => {
     goToLoginPortal({
       rapidAccess: [AppRouteParams.AAR, 'fake-aar-token'],
       loginProvider: LoginProvider.SPIDHUB,
-      search: '?utm_source=s&utm_medium=m&utm_campaign=c&invalid_param=value',
+      search: `?${UTM_KEY.SOURCE}=s&${UTM_KEY.MEDIUM}=m&${UTM_KEY.CAMPAIGN}=c&invalid_param=value`,
     });
 
     expect(mockOpenFn).toHaveBeenCalledTimes(1);
@@ -53,10 +54,10 @@ describe('Tests navigation utility methods', () => {
     const parsed = new URL(redirectUrl as string, 'https://test.pagopa.it');
 
     expect(parsed.pathname).toBe(LOGOUT);
-    expect(parsed.searchParams.get('aar')).toBe('fake-aar-token');
-    expect(parsed.searchParams.get('utm_source')).toBe('s');
-    expect(parsed.searchParams.get('utm_medium')).toBe('m');
-    expect(parsed.searchParams.get('utm_campaign')).toBe('c');
+    expect(parsed.searchParams.get(AppRouteParams.AAR)).toBe('fake-aar-token');
+    expect(parsed.searchParams.get(UTM_KEY.SOURCE)).toBe('s');
+    expect(parsed.searchParams.get(UTM_KEY.MEDIUM)).toBe('m');
+    expect(parsed.searchParams.get(UTM_KEY.CAMPAIGN)).toBe('c');
     expect(parsed.searchParams.has('invalid_param')).toBe(false);
   });
 
@@ -64,7 +65,7 @@ describe('Tests navigation utility methods', () => {
     goToLoginPortal({
       rapidAccess: [AppRouteParams.RETRIEVAL_ID, 'fake-id'],
       loginProvider: LoginProvider.SPIDHUB,
-      search: '?utm_source=s&utm_medium=m&utm_campaign=c&invalid_param=value',
+      search: `?${UTM_KEY.SOURCE}=s&${UTM_KEY.MEDIUM}=m&${UTM_KEY.CAMPAIGN}=c&invalid_param=value`,
     });
 
     expect(mockOpenFn).toHaveBeenCalledTimes(1);
@@ -73,10 +74,10 @@ describe('Tests navigation utility methods', () => {
     const parsed = new URL(redirectUrl as string, 'https://test.pagopa.it');
 
     expect(parsed.pathname).toBe(LOGOUT);
-    expect(parsed.searchParams.get('retrievalId')).toBe('fake-id');
-    expect(parsed.searchParams.get('utm_source')).toBe('s');
-    expect(parsed.searchParams.get('utm_medium')).toBe('m');
-    expect(parsed.searchParams.get('utm_campaign')).toBe('c');
+    expect(parsed.searchParams.get(AppRouteParams.RETRIEVAL_ID)).toBe('fake-id');
+    expect(parsed.searchParams.get(UTM_KEY.SOURCE)).toBe('s');
+    expect(parsed.searchParams.get(UTM_KEY.MEDIUM)).toBe('m');
+    expect(parsed.searchParams.get(UTM_KEY.CAMPAIGN)).toBe('c');
     expect(parsed.searchParams.has('invalid_param')).toBe(false);
   });
 
@@ -92,7 +93,7 @@ describe('Tests navigation utility methods', () => {
     const parsed = new URL(redirectUrl as string, 'https://test.pagopa.it');
 
     expect(parsed.pathname).toBe(LOGOUT);
-    expect(parsed.searchParams.get('aar')).toBe('malicious-aar-token');
+    expect(parsed.searchParams.get(AppRouteParams.AAR)).toBe('malicious-aar-token');
   });
 
   it('goToLoginPortal - from One Identity', () => {
@@ -113,7 +114,7 @@ describe('Tests navigation utility methods', () => {
     const parsed = new URL(redirectUrl as string, 'https://test.pagopa.it');
 
     expect(parsed.pathname).toBe(LOGOUT_OI);
-    expect(parsed.searchParams.get('aar')).toBe('fake-aar-token');
+    expect(parsed.searchParams.get(AppRouteParams.AAR)).toBe('fake-aar-token');
   });
 
   it('goToLoginPortal - from One Identity with retrievalId', () => {
@@ -128,7 +129,7 @@ describe('Tests navigation utility methods', () => {
     const parsed = new URL(redirectUrl as string, 'https://test.pagopa.it');
 
     expect(parsed.pathname).toBe(LOGOUT_OI);
-    expect(parsed.searchParams.get('retrievalId')).toBe('fake-id');
+    expect(parsed.searchParams.get(AppRouteParams.RETRIEVAL_ID)).toBe('fake-id');
   });
 
   it('getCurrentPage - test for notifications list page', () => {
