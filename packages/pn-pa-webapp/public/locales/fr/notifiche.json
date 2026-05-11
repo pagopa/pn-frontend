@@ -524,7 +524,7 @@
         "title": "Documentation",
         "max-attachments": "Ce sont les documents qui seront notifiés via SEND à tous les destinataires. Vous pouvez joindre jusqu'à un maximum de {{maxNumber}} documents.",
         "attach-for-recipients": "Documents joints",
-        "act-attachment": "Joindre un document",
+        "act-attachment": "Joindre les documents à notifier",
         "doc-attachment": "Joindre un autre document",
         "act-name": "Nom de l'acte",
         "doc-name": "Titre du document",

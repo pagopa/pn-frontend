@@ -388,9 +388,9 @@ const Attachments: React.FC<Props> = ({
               color="primary"
               startIcon={<AddIcon />}
               sx={{ mt: 4 }}
-              data-testid="add-another-doc"
+              data-testid="add-doc"
             >
-              {t('add-another-doc')}
+              {t('add-doc')}
             </ButtonNaked>
           )}
         </FormBox>

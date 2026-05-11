@@ -524,7 +524,7 @@
         "title": "Dokumentacija",
         "max-attachments": "To so dokumenti, ki bodo vročeni prek storitve SEND vsem prejemnikom. Priložite lahko največ {{maxNumber}} dokumentov.",
         "attach-for-recipients": "Priloženi dokumenti",
-        "act-attachment": "Priložite dokument",
+        "act-attachment": "Priložite dokumente za vročitev",
         "doc-attachment": "Priložite drug dokument",
         "act-name": "Ime akta",
         "doc-name": "Naslov dokumenta",
