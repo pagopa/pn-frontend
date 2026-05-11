@@ -170,6 +170,11 @@ describe('NotificationDetail.page - Mixpanel events', () => {
     });
   });
 
+  // trackEventPaymentRecipient events (SEND_PAYMENT_OUTCOME, SEND_F24_DOWNLOAD,
+  // SEND_PAYMENT_LIST_CHANGE_PAGE, etc.) are not covered here — they fire through
+  // a callback passed down to NotificationPaymentRecipient (pn-commons), requiring
+  // deep payment UI interaction to trigger.
+
   it('fires SEND_START_PAYMENT when the pay button is clicked', async () => {
     vi.useFakeTimers();
     setupMocks();
