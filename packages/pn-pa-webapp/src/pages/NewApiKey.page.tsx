@@ -112,7 +112,8 @@ const NewApiKey = () => {
                         <Typography fontWeight="bold">{tkp('form-label-name')}</Typography>
                         <TextField
                           id="name"
-                          label={`${tkp('form-placeholder-name')}*`}
+                          label={`${tkp('form-placeholder-name')}`}
+                          required
                           fullWidth
                           name="name"
                           value={formik.values.name}
@@ -134,7 +135,7 @@ const NewApiKey = () => {
                           onChange={handleGroupClick}
                           noResultsText={tkp('no-groups')}
                           sx={{ mt: '8px' }}
-                          label={`${tkp('form-placeholder-groups')}*`}
+                          label={`${tkp('form-placeholder-groups')}`}
                           slotProps={{
                             clearButton: {
                               'aria-label': t('autocomplete.clear', { ns: 'common' }),
