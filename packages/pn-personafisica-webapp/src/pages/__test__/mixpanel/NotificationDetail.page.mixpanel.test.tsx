@@ -57,6 +57,7 @@ describe('NotificationDetail.page - Mixpanel events', () => {
     mock.reset();
     mockAssignFn.mockClear();
     triggerEventSpy.mockRestore();
+    vi.useRealTimers();
   });
 
   afterAll(() => {
