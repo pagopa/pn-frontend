@@ -124,7 +124,7 @@ describe('AddSpecialContact - Mixpanel events', () => {
 
   it('fires SEND_ADD_CUSTOMIZED_CONTACT_UX_CONVERSION when the confirm button is clicked', async () => {
     mock.onGet('/bff/v1/pa-list').reply(200, parties);
-    const result = render(<AddSpecialContactWrapper />, {
+    render(<AddSpecialContactWrapper />, {
       preloadedState: { contactsState: { digitalAddresses: digitalLegalAddresses, parties: [] } },
     });
     fireEvent.click(screen.getByTestId('confirm-btn'));
