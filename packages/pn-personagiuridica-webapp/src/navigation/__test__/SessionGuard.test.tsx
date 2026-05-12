@@ -3,15 +3,17 @@ import { sub } from 'date-fns';
 import { Route, Routes } from 'react-router-dom';
 import { vi } from 'vitest';
 
+import { AppRouteParams } from '@pagopa-pn/pn-commons';
+
 import { userResponse } from '../../__mocks__/Auth.mock';
 import { RenderResult, act, render, screen, waitFor } from '../../__test__/test-utils';
 import { authClient } from '../../api/apiClients';
 import { AUTH_TOKEN_EXCHANGE } from '../../api/auth/auth.routes';
 import { store } from '../../redux/store';
 import { getConfiguration } from '../../services/configuration.service';
+import { AAR_UTM, UTM_KEY } from '../../utility/utm.utility';
 import SessionGuard from '../SessionGuard';
 import * as routes from '../routes.const';
-import { DETTAGLIO_NOTIFICA_QRCODE_QUERY_PARAM } from '../routes.const';
 
 const Guard = () => (
   <Routes>
@@ -40,6 +42,7 @@ describe('SessionGuard Component', async () => {
   afterEach(() => {
     mock.reset();
     vi.clearAllMocks();
+    localStorage.clear();
   });
 
   afterAll(() => {
@@ -201,12 +204,72 @@ describe('SessionGuard Component', async () => {
     expect(pageComponent).toBeTruthy();
   });
 
-  it('store aar in localStorage', async () => {
+  it('store aar in localStorage and injects AAR UTMs when redirecting user to login', async () => {
     const mockQrCode = 'qr-code';
     await act(async () => {
-      render(<Guard />, { route: `/?${DETTAGLIO_NOTIFICA_QRCODE_QUERY_PARAM}=${mockQrCode}` });
+      render(<Guard />, { route: `/?${AppRouteParams.AAR}=${mockQrCode}` });
     });
-    expect(localStorage.getItem(DETTAGLIO_NOTIFICA_QRCODE_QUERY_PARAM)).toBe(mockQrCode);
+    expect(localStorage.getItem(AppRouteParams.AAR)).toBe(mockQrCode);
+
+    expect(mockOpenFn).toHaveBeenCalledTimes(1);
+
+    const [redirectUrl, target] = mockOpenFn.mock.calls[0];
+    expect(target).toBe('_self');
+
+    const parsed = new URL(redirectUrl);
+
+    expect(parsed.origin).toBe(getConfiguration().SELFCARE_BASE_URL);
+    expect(parsed.pathname).toBe(routes.SELFCARE_LOGOUT);
+    expect(parsed.searchParams.get(UTM_KEY.SOURCE)).toBe(AAR_UTM[UTM_KEY.SOURCE]);
+    expect(parsed.searchParams.get(UTM_KEY.MEDIUM)).toBe(AAR_UTM[UTM_KEY.MEDIUM]);
+    expect(parsed.searchParams.get(UTM_KEY.CAMPAIGN)).toBe(AAR_UTM[UTM_KEY.CAMPAIGN]);
+    expect(parsed.searchParams.has(AppRouteParams.AAR)).toBe(false);
+  });
+
+  it('preserves existing UTMs when AAR is present and UTMs are already in query string', async () => {
+    const mockQrCode = 'qr-code';
+    await act(async () => {
+      render(<Guard />, {
+        route: `/?${AppRouteParams.AAR}=${mockQrCode}&${UTM_KEY.SOURCE}=s&${UTM_KEY.MEDIUM}=m&${UTM_KEY.CAMPAIGN}=c`,
+      });
+    });
+    expect(localStorage.getItem(AppRouteParams.AAR)).toBe(mockQrCode);
+
+    expect(mockOpenFn).toHaveBeenCalledTimes(1);
+
+    const [redirectUrl, target] = mockOpenFn.mock.calls[0];
+    expect(target).toBe('_self');
+
+    const parsed = new URL(redirectUrl);
+
+    expect(parsed.origin).toBe(getConfiguration().SELFCARE_BASE_URL);
+    expect(parsed.pathname).toBe(routes.SELFCARE_LOGOUT);
+    expect(parsed.searchParams.get(UTM_KEY.SOURCE)).toBe('s');
+    expect(parsed.searchParams.get(UTM_KEY.MEDIUM)).toBe('m');
+    expect(parsed.searchParams.get(UTM_KEY.CAMPAIGN)).toBe('c');
+    expect(parsed.searchParams.has(AppRouteParams.AAR)).toBe(false);
+  });
+
+  it('preserves UTMs when redirecting a non-logged user without AAR', async () => {
+    await act(async () => {
+      render(<Guard />, {
+        route: `/?${UTM_KEY.SOURCE}=s&${UTM_KEY.MEDIUM}=m&${UTM_KEY.CAMPAIGN}=c`,
+      });
+    });
+
+    expect(mockOpenFn).toHaveBeenCalledTimes(1);
+
+    const [redirectUrl, target] = mockOpenFn.mock.calls[0];
+    expect(target).toBe('_self');
+
+    const parsed = new URL(redirectUrl);
+
+    expect(parsed.origin).toBe(getConfiguration().SELFCARE_BASE_URL);
+    expect(parsed.pathname).toBe(routes.SELFCARE_LOGOUT);
+    expect(parsed.searchParams.get(UTM_KEY.SOURCE)).toBe('s');
+    expect(parsed.searchParams.get(UTM_KEY.MEDIUM)).toBe('m');
+    expect(parsed.searchParams.get(UTM_KEY.CAMPAIGN)).toBe('c');
+    expect(parsed.searchParams.has(AppRouteParams.AAR)).toBe(false);
   });
 
   // expected behavior: does not enter the app, does no navigate, message about logout

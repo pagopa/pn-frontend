@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 
 /* eslint-disable functional/no-let */
-let interval: NodeJS.Timer;
+let interval: NodeJS.Timeout;
 
 export const useSessionCheck = (timer: number, sessionExpiredCbk: () => void) => {
   const initSessionCheck = (expt: number) => {
