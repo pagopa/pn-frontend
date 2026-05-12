@@ -13,7 +13,7 @@
     "@mui/x-date-pickers": "^6.17.0",
     "@pagopa/mui-italia": "2.4.1",
     "@reduxjs/toolkit": "^1.9.5",
-    "axios": "^1.6.0",
+    "axios": "^1.15.0",
     "date-fns": "^2.30.0",
     "formik": "^2.4.6",
     "i18next": "^21.6.14",
