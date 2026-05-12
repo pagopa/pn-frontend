@@ -6,7 +6,6 @@ import { APP_VERSION, initLocalization, useMultiEvent, useTracking } from '@pago
 
 import Router from './navigation/routes';
 import { getConfiguration } from './services/configuration.service';
-import './utility/onetrust';
 
 const App = () => {
   const configuration = useMemo(() => getConfiguration(), []);
