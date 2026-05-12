@@ -176,7 +176,6 @@ describe('NotificationDetail.page - Mixpanel events', () => {
   // deep payment UI interaction to trigger.
 
   it('fires SEND_START_PAYMENT when the pay button is clicked', async () => {
-    vi.useFakeTimers();
     setupMocks();
     mock.onPost('/bff/v1/payments/cart').reply(500);
 
@@ -188,6 +187,8 @@ describe('NotificationDetail.page - Mixpanel events', () => {
     );
 
     await waitFor(() => getByTestId('pay-button'));
+
+    vi.useFakeTimers();
 
     const item = queryAllByTestId('pagopa-item')[requiredPaymentIndex];
     const radioButton = item?.querySelector('[data-testid="radio-button"] input');
