@@ -67,19 +67,6 @@ export type EventPaymentStatusType = {
   count_canceled: number;
 };
 
-export type EventNotificationsListType = {
-  banner?: string;
-  delegate: boolean;
-  page_number: number;
-  total_count: number;
-  unread_count: number;
-  delivered_count: number;
-  opened_count: number;
-  expired_count: number;
-  not_found_count: number;
-  cancelled_count: number;
-};
-
 export type EventNotificationSource = '3Papp' | 'QRcode' | 'LISTA_NOTIFICHE';
 export type EventDeliveryFlowType = 'digital' | 'physical_flow' | 'not_available';
 export type EventDeliveryModeType = 'flat_rate' | 'sync' | 'async' | 'not_set';

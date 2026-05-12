@@ -22,7 +22,6 @@ export type {
   EventCreatedDelegationType,
   EventMandateNotificationsListType,
   EventNotificationDetailType,
-  EventNotificationsListType,
   EventPaymentStatusType,
   EventsType,
   TrackedEvent,

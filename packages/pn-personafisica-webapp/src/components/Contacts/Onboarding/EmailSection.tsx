@@ -28,6 +28,8 @@ type Props = {
     toggleEdit: () => void;
     resetForm: () => Promise<void>;
   }>;
+  onEditButtonClickCallback?: (nextEditMode: boolean) => void;
+  onEditConfirmCallback?: () => void;
 };
 
 const EmailSection: React.FC<Props> = ({
@@ -43,6 +45,8 @@ const EmailSection: React.FC<Props> = ({
   onExpand,
   onCollapse,
   emailContactRef,
+  onEditButtonClickCallback,
+  onEditConfirmCallback,
 }) => {
   const { t } = useTranslation(['recapiti', 'common']);
 
@@ -84,6 +88,7 @@ const EmailSection: React.FC<Props> = ({
           label: t('onboarding.digital-domicile.pec.cancel-email-cta'),
           onClick: onCollapse,
         }}
+        prefix={<MailOutlineIcon fontSize="small" color="disabled" />}
       />
     );
   }
@@ -141,6 +146,8 @@ const EmailSection: React.FC<Props> = ({
               fontSize: 'small',
             },
           }}
+          onEditButtonClickCallback={onEditButtonClickCallback}
+          onEditConfirmCallback={onEditConfirmCallback}
         />
       </Stack>
     );

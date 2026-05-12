@@ -1,16 +1,22 @@
 import { useFormik } from 'formik';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { useTranslation } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 
 import { Divider, Stack, Typography } from '@mui/material';
-import { ConfirmationModal, appStateActions } from '@pagopa-pn/pn-commons';
+import { ConfirmationModal, EventAction, appStateActions } from '@pagopa-pn/pn-commons';
 import { IllusMIMessage, MIAlert } from '@pagopa/mui-italia';
 
-import { EmailContactState, SmsContactState } from '../../../../models/Onboarding';
+import {
+  EmailContactState,
+  OnboardingAvailableFlows,
+  SmsContactState,
+} from '../../../../models/Onboarding';
+import { PFEventsType } from '../../../../models/PFEventsType';
 import { AddressType, ChannelType, SaveDigitalAddressParams } from '../../../../models/contacts';
 import { createOrUpdateAddress } from '../../../../redux/contact/actions';
 import { useAppDispatch } from '../../../../redux/hooks';
+import PFEventStrategyFactory from '../../../../utility/MixpanelUtils/PFEventStrategyFactory';
 import {
   emailValidationSchema,
   internationalPhonePrefix,
@@ -18,6 +24,37 @@ import {
 } from '../../../../utility/contacts.utility';
 import ContactCodeDialog from '../../ContactCodeDialog';
 import CourtesyContactHandler, { CourtesyInputMode } from './CourtesyContactHandler';
+
+type CourtesyChannelType = ChannelType.EMAIL | ChannelType.SMS;
+
+const channelEvents: Record<
+  CourtesyChannelType,
+  {
+    otp: PFEventsType;
+    otpVerification: PFEventsType;
+    verification: PFEventsType;
+    activated: PFEventsType;
+  }
+> = {
+  [ChannelType.EMAIL]: {
+    otp: PFEventsType.SEND_ONBOARDING_EMAIL_OTP,
+    otpVerification: PFEventsType.SEND_ONBOARDING_EMAIL_OTP_VERIFICATION,
+    verification: PFEventsType.SEND_ONBOARDING_EMAIL_VERIFICATION,
+    activated: PFEventsType.SEND_ONBOARDING_EMAIL_ACTIVATED,
+  },
+  [ChannelType.SMS]: {
+    otp: PFEventsType.SEND_ONBOARDING_SMS_OTP,
+    otpVerification: PFEventsType.SEND_ONBOARDING_SMS_OTP_VERIFICATION,
+    verification: PFEventsType.SEND_ONBOARDING_SMS_VERIFICATION,
+    activated: PFEventsType.SEND_ONBOARDING_SMS_ACTIVATED,
+  },
+};
+
+const trackCourtesy = (event: PFEventsType, extra?: Record<string, unknown>) =>
+  PFEventStrategyFactory.triggerEvent(event, {
+    onboarding_selected_flow: OnboardingAvailableFlows.COURTESY,
+    ...extra,
+  });
 
 type Props = {
   ioEnabled: boolean;
@@ -55,8 +92,6 @@ const EmailSmsStep = ({
     open: false,
     channel: null,
   });
-
-  const shouldShowBanner = !ioEnabled && !email.alreadySet;
 
   const currentAddress = useRef<{ channelType: ChannelType; value: string }>({
     channelType: ChannelType.EMAIL,
@@ -111,11 +146,13 @@ const EmailSmsStep = ({
   };
 
   const handleCollapseSms = async () => {
+    trackCourtesy(PFEventsType.SEND_ONBOARDING_SMS_ACTIVATION_CANCELED);
     setSmsMode('collapsed');
     await smsContactRef.current.resetForm();
   };
 
   const handleExpandSms = () => {
+    trackCourtesy(PFEventsType.SEND_ONBOARDING_SMS_SELECTED);
     setSmsMode('insert');
   };
 
@@ -131,10 +168,17 @@ const EmailSmsStep = ({
       code: verificationCode,
     };
 
+    const events = channelEvents[channelType as CourtesyChannelType];
+
+    if (verificationCode) {
+      trackCourtesy(events.otpVerification);
+    }
+
     dispatch(createOrUpdateAddress(digitalAddressParams))
       .unwrap()
       .then((res) => {
         if (!res) {
+          trackCourtesy(events.otp, { event_type: EventAction.SCREEN_VIEW });
           setCodeModalOpen(true);
           return;
         }
@@ -154,6 +198,8 @@ const EmailSmsStep = ({
             ? internationalPhonePrefix + currentAddress.current.value
             : currentAddress.current.value
         );
+
+        trackCourtesy(events.activated, { event_type: EventAction.CONFIRM });
 
         if (channelType === ChannelType.EMAIL && email.alreadySet) {
           emailContactRef.current.toggleEdit();
@@ -175,6 +221,8 @@ const EmailSmsStep = ({
 
     // eslint-disable-next-line functional/immutable-data
     currentAddress.current = { channelType, value };
+
+    trackCourtesy(channelEvents[channelType as CourtesyChannelType].verification);
 
     handleCodeVerification(channelType);
   };
@@ -220,9 +268,18 @@ const EmailSmsStep = ({
     registerContinueHandler?.(handleContinueAttempt);
   }, [handleContinueAttempt, registerContinueHandler]);
 
+  useEffect(() => {
+    PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ONBOARDING_EMAIL_SMS_ACTIVATION, {
+      event_type: EventAction.SCREEN_VIEW,
+      onboarding_selected_flow: OnboardingAvailableFlows.COURTESY,
+      email_value: email.value,
+      sms_value: sms.value,
+    });
+  }, []);
+
   return (
     <Stack data-testid="email-sms-step" spacing={2}>
-      {shouldShowBanner && (
+      {!ioEnabled && (
         <MIAlert
           severity="info"
           data-testid="courtesy-banner"
@@ -288,9 +345,14 @@ const EmailSmsStep = ({
         }}
       >
         <Typography variant="body2">
-          {verifyModal.channel === ChannelType.EMAIL
-            ? t('onboarding.courtesy.email.verify-before-continue-content')
-            : t('onboarding.courtesy.sms.verify-before-continue-content')}
+          <Trans
+            i18nKey={
+              verifyModal.channel === ChannelType.EMAIL
+                ? t('onboarding.courtesy.email.verify-before-continue-content')
+                : t('onboarding.courtesy.sms.verify-before-continue-content')
+            }
+            ns="recapiti"
+          />
         </Typography>
       </ConfirmationModal>
     </Stack>

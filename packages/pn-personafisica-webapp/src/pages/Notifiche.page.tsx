@@ -23,7 +23,12 @@ import MobileNotifications from '../components/Notifications/MobileNotifications
 import { PFEventsType } from '../models/PFEventsType';
 import { ContactSource } from '../models/contacts';
 import { DASHBOARD_ACTIONS, getReceivedNotifications } from '../redux/dashboard/actions';
-import { setMandateId, setPagination, setSorting } from '../redux/dashboard/reducers';
+import {
+  setFirstSearch,
+  setMandateId,
+  setPagination,
+  setSorting,
+} from '../redux/dashboard/reducers';
 import { Delegator } from '../redux/delegation/types';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { RootState } from '../redux/store';
@@ -35,7 +40,7 @@ const Notifiche = () => {
   const { mandateId } = useParams();
   const [pageReady, setPageReady] = useState(false);
   const domicileBannerTypeRef = useRef('');
-  const { notifications, filters, sort, pagination } = useAppSelector(
+  const { notifications, filters, sort, pagination, isFirstSearch } = useAppSelector(
     (state: RootState) => state.dashboardState
   );
   const { delegators } = useAppSelector((state: RootState) => state.generalInfoState);
@@ -110,6 +115,22 @@ const Notifiche = () => {
   useEffect(() => {
     if (filters.mandateId !== currentDelegator?.mandateId) {
       dispatch(setMandateId(currentDelegator?.mandateId));
+      return;
+    }
+    if (isFirstSearch) {
+      dispatch(setFirstSearch(false));
+      setPageReady(true);
+      PFEventStrategyFactory.triggerEvent(
+        currentDelegator
+          ? PFEventsType.SEND_NOTIFICATION_DELEGATED
+          : PFEventsType.SEND_YOUR_NOTIFICATIONS,
+        {
+          notifications,
+          delegators,
+          pagination,
+          domicileBannerType: domicileBannerTypeRef.current,
+        }
+      );
       return;
     }
     fetchNotifications();

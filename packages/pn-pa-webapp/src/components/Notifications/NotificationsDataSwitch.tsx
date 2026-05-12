@@ -73,7 +73,7 @@ const NotificationsDataSwitch: React.FC<{
     return data.group ? (
       <CustomTagGroup visibleItems={1}>
         {[
-          <Box sx={{ mb: 1, mr: 1, display: 'inline-block' }} key={data.id}>
+          <Box sx={{ mb: 1, mr: 1, display: 'inline-block', maxWidth: '100%' }} key={data.id}>
             <Tag value={data.group} mode="truncate" />
           </Box>,
         ]}

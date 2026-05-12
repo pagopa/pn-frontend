@@ -5,9 +5,12 @@ import { EmailOutlined, PhoneOutlined } from '@mui/icons-material';
 import { Stack, Typography } from '@mui/material';
 import { ButtonNaked } from '@pagopa/mui-italia';
 
-import { ContactState } from '../../../../models/Onboarding';
+import { ContactState, OnboardingAvailableFlows } from '../../../../models/Onboarding';
+import { PFEventsType } from '../../../../models/PFEventsType';
 import { ChannelType } from '../../../../models/contacts';
+import PFEventStrategyFactory from '../../../../utility/MixpanelUtils/PFEventStrategyFactory';
 import { internationalPhonePrefix } from '../../../../utility/contacts.utility';
+import { isPFEvent } from '../../../../utility/mixpanel';
 import DigitalContact from '../../DigitalContact';
 import OnboardingContactItem from '../OnboardingContactItem';
 
@@ -74,6 +77,34 @@ const CourtesyContactHandler: React.FC<Props> = ({
     },
   };
 
+  const ChannelTypeIcon = channelType === ChannelType.EMAIL ? EmailOutlined : PhoneOutlined;
+
+  const onEditButtonClick = () => {
+    const editEvent =
+      channelType === ChannelType.EMAIL
+        ? PFEventsType.SEND_ONBOARDING_EMAIL_EDITING
+        : PFEventsType.SEND_ONBOARDING_SMS_EDITING;
+
+    if (isPFEvent(editEvent)) {
+      PFEventStrategyFactory.triggerEvent(editEvent, {
+        onboarding_selected_flow: OnboardingAvailableFlows.COURTESY,
+      });
+    }
+  };
+
+  const onEditConfirmClick = () => {
+    const confirmEditEvent =
+      channelType === ChannelType.EMAIL
+        ? PFEventsType.SEND_ONBOARDING_EMAIL_CONFIRMED
+        : PFEventsType.SEND_ONBOARDING_SMS_CONFIRMED;
+
+    if (isPFEvent(confirmEditEvent)) {
+      PFEventStrategyFactory.triggerEvent(confirmEditEvent, {
+        onboarding_selected_flow: OnboardingAvailableFlows.COURTESY,
+      });
+    }
+  };
+
   if (mode === 'collapsed') {
     return (
       <Stack spacing={2}>
@@ -111,13 +142,7 @@ const CourtesyContactHandler: React.FC<Props> = ({
         collapse={
           onCollapse ? { onClick: onCollapse, label: labels.insert.collapseLabel } : undefined
         }
-        prefix={
-          channelType === ChannelType.SMS ? (
-            <PhoneOutlined fontSize="small" sx={{ color: 'text.secondary' }} />
-          ) : (
-            <EmailOutlined fontSize="small" sx={{ color: 'text.secondary' }} />
-          )
-        }
+        prefix={<ChannelTypeIcon fontSize="small" color="disabled" />}
       />
     );
   }
@@ -129,7 +154,7 @@ const CourtesyContactHandler: React.FC<Props> = ({
         introText={labels.readonly.title}
         description={labels.readonly.description}
         value={contactState.value}
-        icon={<EmailOutlined color="disabled" fontSize="small" aria-hidden="true" />}
+        icon={<ChannelTypeIcon color="disabled" fontSize="small" aria-hidden="true" />}
       />
     );
   }
@@ -157,9 +182,11 @@ const CourtesyContactHandler: React.FC<Props> = ({
           insertButtonLabel={labels.edit.inputLabel}
           onSubmit={onSubmitEdit}
           showLabelOnEdit={false}
+          onEditButtonClickCallback={onEditButtonClick}
+          onEditConfirmCallback={onEditConfirmClick}
           slots={{
             label: () => <></>,
-            leadingEditIcon: channelType === ChannelType.EMAIL ? EmailOutlined : PhoneOutlined,
+            leadingEditIcon: ChannelTypeIcon,
           }}
           slotsProps={{
             textField: {

@@ -469,9 +469,9 @@
     },
     "enable-sercq": {
       "message": {
-        "default": "Aktiviraj digitalni naslov za prejemanje prihodnjih obvestil le v digitalni obliki.",
-        "analog": "Aktivirajte SEND kot digitalni naslov, da si prihranite stroške, kot je ta.",
-        "external-pec": "Aktiviraj digitalni naslov in izberi, kje želiš prejemati obvestila SEND."
+        "default": "Aktivirajte digitalni naslov za prejemanje naslednjih obvestil samo v digitalni obliki.",
+        "analog": "Aktivirajte digitalni naslov, da prihranite pri stroških, kot je ta.",
+        "external-pec": "Aktivirajte digitalni naslov in izberite, kje želite prejemati obvestila SEND."
       },
       "cta": "Aktiviraj digitalni naslov"
     }

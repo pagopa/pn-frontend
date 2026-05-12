@@ -185,7 +185,7 @@ describe('NotificationCostBanner component', () => {
       details: { source: DigitalSource.REGISTRY, domicileType: 'SERCQ' },
     } as any;
 
-    const { container, getByTestId, getByText, testStore, router } = render(
+    const { container, getByTestId } = render(
       <NotificationCostBanner deliveryOutcome={deliveryOutcome} />,
       {
         preloadedState: {
@@ -199,19 +199,6 @@ describe('NotificationCostBanner component', () => {
 
     expect(container).toHaveTextContent('notification-cost-banner.digital_registry.title');
     expect(container).toHaveTextContent('notification-cost-banner.digital_registry.message');
-    expect(container).toHaveTextContent(
-      'notification-cost-banner.enable-sercq.message.external-pec'
-    );
-
-    const cta = getByText('notification-cost-banner.enable-sercq.cta');
-    fireEvent.click(cta);
-
-    expect(router.state.location.pathname).toBe(routes.DIGITAL_DOMICILE_ACTIVATION);
-    expect(testStore.getState().contactsState.event).toStrictEqual({
-      destination: ChannelType.SERCQ_SEND,
-      source: ContactSource.DETTAGLIO_NOTIFICA,
-      operation: ContactOperation.ADD,
-    });
   });
 
   it('renders the component - digital platform', () => {

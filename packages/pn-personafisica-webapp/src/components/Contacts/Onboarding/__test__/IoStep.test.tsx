@@ -3,6 +3,7 @@ import { vi } from 'vitest';
 
 import { act, fireEvent, render, waitFor } from '../../../../__test__/test-utils';
 import { apiClient } from '../../../../api/apiClients';
+import { OnboardingAvailableFlows } from '../../../../models/Onboarding';
 import { AddressType, ChannelType, IOAllowedValues } from '../../../../models/contacts';
 import { getConfiguration } from '../../../../services/configuration.service';
 import { openAppIoDownloadPage } from '../../../../utility/appio.utility';
@@ -33,6 +34,7 @@ describe('IoStep', () => {
     value: undefined as IOAllowedValues | undefined,
     onChange: vi.fn(),
     onContinue: vi.fn(),
+    selectedOnboardingFlow: OnboardingAvailableFlows.DIGITAL_DOMICILE,
   });
 
   it('renders the unavailable state with download and refresh CTAs', () => {
@@ -133,24 +135,21 @@ describe('IoStep', () => {
 
     await waitFor(() => {
       expect(props.onChange).toHaveBeenCalledWith(IOAllowedValues.ENABLED);
-      expect(props.onContinue).not.toHaveBeenCalled();
+      expect(props.onContinue).toHaveBeenCalledTimes(1);
     });
   });
 
-  it('renders the enabled state and calls onContinue on primary CTA click', async () => {
+  it('renders the enabled state without the primary CTA', () => {
     const props = createProps();
 
-    const { getByText, getByRole } = render(<IoStep {...props} value={IOAllowedValues.ENABLED} />);
+    const { getByText, queryByRole } = render(
+      <IoStep {...props} value={IOAllowedValues.ENABLED} />
+    );
 
     expect(getByText(`${labelPrefix}.enabled.title`)).toBeInTheDocument();
     expect(getByText(`${labelPrefix}.description`)).toBeInTheDocument();
-    expect(getByRole('button', { name: `${labelPrefix}.enabled.primary-cta` })).toBeInTheDocument();
-
-    await act(async () => {
-      fireEvent.click(getByRole('button', { name: `${labelPrefix}.enabled.primary-cta` }));
-    });
-
-    expect(props.onContinue).toHaveBeenCalledTimes(1);
-    expect(props.onChange).not.toHaveBeenCalled();
+    expect(
+      queryByRole('button', { name: `${labelPrefix}.enabled.primary-cta` })
+    ).not.toBeInTheDocument();
   });
 });

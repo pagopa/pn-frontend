@@ -356,7 +356,7 @@
           "cta": "Activer sur une PEC"
         },
         "pec-activating": {
-          "title": "Domicile numérique sur PEC en cours d’activation",
+          "title": "L'activation du domicile numérique via PEC est en cours",
           "description": "Après l’activation, tu recevras les notifications SEND à ton adresse PEC. Tu pourrais ainsi éviter l’envoi d’une lettre recommandée avec les frais supplémentaires correspondants.",
           "badge": "Activation en cours",
           "img-alt-text": ""
@@ -390,10 +390,11 @@
       },
       "summary": {
         "title": "Ton récapitulatif",
-        "legal-title": "Les communications à valeur juridique seront remises sur :",
+        "legal-title-sercq": "Les communications à valeur juridique seront envoyées uniquement sur :",
+        "legal-title-pec": "Les communications à valeur juridique seront remises sur :",
         "courtesy-title": "Tu recevras un avis via :",
         "info-box": "Surveille les coordonnées que tu as choisies : une notification numérique SEND commence à produire des effets juridiques même si tu ne l’as pas consultée.",
-        "disclaimer": "En appuyant sur <strong>Confirmer</strong>, tu déclares avoir lu l'<0>Information sur la confidentialité</0> et accepter les <1>Conditions de service</1>.",
+        "disclaimer": "En cliquant sur <strong>Confirmer</strong>, vous déclarez avoir lu la <0>Politique de confidentialité</0> et accepter les <1>Conditions d'utilisation</1>, et avoir compris que les notifications SEND ne vous seront pas transférées sur d'autres domiciles numériques.",
         "ddom-label": "Domicile numérique",
         "io-label": "IO, l’app des services publics",
         "io-value": "Service SEND sur IO actif",
@@ -405,7 +406,7 @@
         "title": "Ta PEC comme domicile numérique SEND",
         "description": "Tu recevras les communications à valeur juridique sur ta PEC, uniquement en format numérique, et tu pourras éviter l’envoi d’une lettre recommandée avec les frais supplémentaires correspondants.",
         "label-choose-address": "Choisis une adresse PEC :",
-        "label-summary": "PEC",
+        "label-summary": "Adresse PEC",
         "input-label": "Adresse PEC",
         "verify-cta": "Vérifier la PEC",
         "disclaimer": "J'accepte que l'adresse PEC indiquée soit utilisée en priorité par rapport aux éventuelles PEC enregistrées auprès d'un organisme émetteur ou présentes dans les registres publics.",
@@ -419,8 +420,8 @@
         "verify-before-continue-title": "Vérifie ta PEC",
         "verify-before-continue-content": "Avant de continuer, sélectionne <strong>Vérifier la PEC</strong> et suis les instructions.",
         "pending": {
-          "title": "Adresse PEC en cours de validation",
-          "description": "Après la validation, tu recevras les communications à valeur juridique sur la PEC que tu as choisie uniquement en format numérique, et tu éviteras l’envoi d’une lettre recommandée avec les frais supplémentaires correspondants.",
+          "title": "L'adresse PEC saisie est en cours de validation",
+          "description": "Vous recevrez les communications à valeur juridique sur l'adresse PEC choisie, uniquement par voie numérique, et vous pourrez éviter l'envoi d'une lettre recommandée et ses frais supplémentaires. Après validation, vous pourrez la modifier dans la section « Vos coordonnées ».",
           "badge": "Activation en cours"
         }
       },
@@ -436,14 +437,12 @@
       },
       "steps": {
         "choice": "Choisis un domicile numérique",
-        "pec": "Saisis ta PEC",
-        "email": "Associe une adresse e-mail",
+        "generic-inbox": "Associer une boîte de réception",
         "io": "Active les avis sur IO",
         "summary": "Vérifie les options choisies"
       },
       "buttons": {
-        "continue-without-io": "Continuer sans l’app IO",
-        "confirm-activation": "Confirmer l’activation"
+        "continue-without-io": "Continuer sans l’app IO"
       }
     },
     "io-activation": {
@@ -483,7 +482,7 @@
           "description": "Tu recevras un avis à l’adresse :"
         },
         "verify-before-continue-title": "Vérifie ton e-mail",
-        "verify-before-continue-content": "Avant de continuer, sélectionne Vérifier l’e-mail et suis les instructions."
+        "verify-before-continue-content": "Avant de continuer, sélectionne <strong>Vérifier l’e-mail</strong> et suis les instructions."
       },
       "sms": {
         "readonly": {
@@ -507,7 +506,7 @@
           "description": "Tu recevras un avis au numéro :"
         },
         "verify-before-continue-title": "Vérifie ton numéro",
-        "verify-before-continue-content": "Avant de continuer, sélectionne Vérifier le numéro et suis les instructions."
+        "verify-before-continue-content": "Avant de continuer, sélectionne <strong>Vérifier le numéro</strong> et suis les instructions."
       }
     },
     "notification-exit-dialog": {

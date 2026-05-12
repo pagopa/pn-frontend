@@ -44,7 +44,7 @@ const ChooseDigitalDomicileStep: React.FC<Props> = ({
           />
         </Box>
         <OnboardingImage
-          src="/imgs/onboarding-choice.png"
+          src="/imgs/onboarding-choice.webp"
           decorative
           height={isMobile ? '160px' : '276px'}
         />
@@ -68,7 +68,7 @@ const ChooseDigitalDomicileStep: React.FC<Props> = ({
           {t('onboarding.digital-domicile.choice.description')}
         </Typography>
         <Button
-          fullWidth
+          fullWidth={isMobile}
           variant="contained"
           onClick={onSelectSend}
           data-testid="select-send-button"
@@ -95,7 +95,7 @@ const ChooseDigitalDomicileStep: React.FC<Props> = ({
         </Box>
       </Box>
       <OnboardingImage
-        src="/imgs/onboarding-choice.png"
+        src="/imgs/onboarding-choice.webp"
         decorative
         height={isMobile ? '160px' : '276px'}
       />

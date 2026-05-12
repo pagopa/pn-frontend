@@ -40,11 +40,10 @@ import Router from './navigation/routes';
 import * as routes from './navigation/routes.const';
 import { getCurrentAppStatus } from './redux/appStatus/actions';
 import { apiLogout } from './redux/auth/actions';
-import { resetState } from './redux/auth/reducers';
-import { getDigitalAddresses } from './redux/contact/actions';
-import { getReceivedNotifications } from './redux/dashboard/actions';
+import { resetState as resetUserState } from './redux/auth/reducers';
 import { useAppDispatch, useAppSelector } from './redux/hooks';
 import { getSidemenuInformation } from './redux/sidemenu/actions';
+import { resetState as resetGeneralState } from './redux/sidemenu/reducers';
 import { RootState } from './redux/store';
 import { getConfiguration } from './services/configuration.service';
 import { PFAppErrorFactory } from './utility/AppError/PFAppErrorFactory';
@@ -271,17 +270,16 @@ const App = () => {
 
   const performLogout = async () => {
     await dispatch(apiLogout(loggedUser.sessionToken));
-    dispatch(resetState());
+    dispatch(resetUserState());
+    dispatch(resetGeneralState());
     goToLoginPortal({ loginProvider });
     setOpenModal(false);
   };
 
   useEffect(() => {
     if (sessionToken !== '') {
-      void dispatch(getDigitalAddresses());
       void dispatch(getSidemenuInformation());
       void dispatch(getCurrentAppStatus());
-      void dispatch(getReceivedNotifications({ size: 10 })); // to do: remove the first one from notifications page
     }
   }, [sessionToken]);
 

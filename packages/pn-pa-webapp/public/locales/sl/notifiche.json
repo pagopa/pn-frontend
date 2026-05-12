@@ -503,6 +503,7 @@
         "pec-address": "Naslov PEC",
         "add-physical-domicile": "Dodajte fizični naslov",
         "address": "Naslov",
+        "physical-address": "Fizični naslov",
         "house-number": "Hišna številka",
         "municipality-details": "Kraj",
         "municipality": "Občina",
@@ -518,18 +519,18 @@
         "address-physical-lookup-radios": {
           "national-registry": "Samodejni vnos iz nacionalnega registra",
           "manual": "Ročni vnos"
-        }
+        },
+        "recipient-info-subtitle": "Te informacije bodo prejemniku pomagale razumeti vsebino in pomembnost sporočila."
       },
       "attachments": {
         "title": "Dokumentacija",
         "max-attachments": "To so dokumenti, ki bodo vročeni prek storitve SEND vsem prejemnikom. Priložite lahko največ {{maxNumber}} dokumentov.",
         "attach-for-recipients": "Priloženi dokumenti",
-        "act-attachment": "Priložite dokument",
+        "act-attachment": "Priložite dokumente za vročitev",
         "doc-attachment": "Priložite drug dokument",
         "act-name": "Ime akta",
         "doc-name": "Naslov dokumenta",
         "add-doc": "Dodajte dokument",
-        "add-another-doc": "Dodajte drug dokument",
         "back-to-recipient": "Nazaj na prejemnika",
         "back-to-debt-position": "Nazaj na dolžniški položaj",
         "back-to-debt-position-detail": "Nazaj na podrobnosti dolžniškega položaja",

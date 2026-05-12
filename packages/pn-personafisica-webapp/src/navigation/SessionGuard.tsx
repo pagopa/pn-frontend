@@ -18,8 +18,9 @@ import {
 import { useRapidAccessParam } from '../hooks/useRapidAccessParam';
 import { OneIdentityCodeExchangeRequest, TokenExchangeRequest } from '../models/User';
 import { apiLogout, exchangeOneIdentityCode, exchangeToken } from '../redux/auth/actions';
-import { resetState, setIsFreshLogin } from '../redux/auth/reducers';
+import { resetState as resetUserState, setIsFreshLogin } from '../redux/auth/reducers';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
+import { resetState as resetGeneralState } from '../redux/sidemenu/reducers';
 import { RootState } from '../redux/store';
 import { getConfiguration } from '../services/configuration.service';
 import { AAR_UTM, buildSearchWithUtm } from '../utility/utm.utility';
@@ -127,7 +128,8 @@ const SessionGuard = () => {
       await dispatch(apiLogout(sessionToken));
     }
 
-    dispatch(resetState());
+    dispatch(resetUserState());
+    dispatch(resetGeneralState());
     goToLoginPortal({ loginProvider, search: location.search });
   };
 

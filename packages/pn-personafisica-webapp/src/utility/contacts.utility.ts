@@ -4,7 +4,7 @@ import * as yup from 'yup';
 import type { TextFieldProps } from '@mui/material';
 import { dataRegex } from '@pagopa-pn/pn-commons';
 
-import { AddressType, ChannelType, DigitalAddress } from '../models/contacts';
+import { AddressType, ChannelType, DigitalAddress, IOAllowedValues } from '../models/contacts';
 import { SelectedAddresses } from '../redux/contact/reducers';
 
 export const internationalPhonePrefix = '+39';
@@ -170,14 +170,72 @@ export const getSemanticTextFieldProps = (channelType: ChannelType): Partial<Tex
   return {};
 };
 
+/**
+ * Function that checks if the user has the required contacts to skip onboarding
+ * The user needs at least a legal address or both email and io as courtesy addresses
+ * @param addresses - The user addresses
+ */
 export const hasRequiredContacts = (addresses: SelectedAddresses): boolean => {
   const hasLegal = addresses.legalAddresses.length > 0;
   const hasEmail = addresses.courtesyAddresses.some(
     (address) => address.channelType === ChannelType.EMAIL
   );
   const hasIo = addresses.courtesyAddresses.some(
-    (address) => address.channelType === ChannelType.IOMSG
+    (address) =>
+      address.channelType === ChannelType.IOMSG && address.value === IOAllowedValues.ENABLED
   );
 
   return hasLegal || (hasEmail && hasIo);
+};
+
+/**
+ * Function that checks if the user has at least one courtesy contact (email, sms or io)
+ * @param addresses - The user addresses
+ */
+export const hasCourtesyContacts = (addresses: Array<DigitalAddress>): boolean => {
+  const hasEmail = addresses.some((address) => address.channelType === ChannelType.EMAIL);
+  const hasSMS = addresses.some((address) => address.channelType === ChannelType.SMS);
+  const hasIo = addresses.some(
+    (address) =>
+      address.channelType === ChannelType.IOMSG && address.value === IOAllowedValues.ENABLED
+  );
+
+  return hasEmail || hasIo || hasSMS;
+};
+
+/**
+ * Groups a flat list of digital addresses into categorized collections,
+ * separating them by type (legal/courtesy) and sender (default/special).
+ * @param digitalAddresses - The user addresses
+ */
+export const groupDigitalAddresses = (digitalAddresses: Array<DigitalAddress>) => {
+  const initialValue = {
+    addresses: digitalAddresses,
+    legalAddresses: [] as Array<DigitalAddress>,
+    courtesyAddresses: [] as Array<DigitalAddress>,
+    specialAddresses: [] as Array<DigitalAddress>,
+  } as SelectedAddresses;
+
+  /* eslint-disable functional/immutable-data */
+  for (const channelType of Object.values(ChannelType)) {
+    initialValue[`default${channelType}Address`] = undefined;
+    initialValue[`special${channelType}Addresses`] = [];
+  }
+
+  return digitalAddresses.reduce((obj, addr) => {
+    if (addr.addressType === AddressType.LEGAL) {
+      obj.legalAddresses.push(addr);
+    }
+    if (addr.addressType === AddressType.COURTESY) {
+      obj.courtesyAddresses.push(addr);
+    }
+    if (addr.senderId === 'default') {
+      obj[`default${addr.channelType}Address`] = addr;
+    }
+    if (addr.senderId !== 'default') {
+      obj[`special${addr.channelType}Addresses`].push(addr);
+      obj.specialAddresses.push(addr);
+    }
+    return obj;
+  }, initialValue);
 };
