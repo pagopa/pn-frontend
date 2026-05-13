@@ -47,6 +47,7 @@ type AttachmentBoxProps = {
   onDelete?: () => void;
   fieldLabel: string;
   fieldValue: string;
+  required?: boolean;
   fieldTouched?: boolean;
   fieldErrors?: string;
   onFieldTouched: (e: ChangeEvent) => void;
@@ -70,6 +71,7 @@ const AttachmentBox: React.FC<AttachmentBoxProps> = ({
   onDelete,
   fieldLabel,
   fieldValue,
+  required = false,
   fieldTouched,
   fieldErrors,
   onFieldTouched,
@@ -111,6 +113,7 @@ const AttachmentBox: React.FC<AttachmentBoxProps> = ({
           error={fieldTouched && Boolean(fieldErrors)}
           helperText={(fieldTouched && fieldErrors) || <NameFocusHelperText />}
           size="small"
+          required={required}
           margin="normal"
           data-testid="attachmentNameInput"
         />
@@ -364,7 +367,8 @@ const Attachments: React.FC<Props> = ({
               }
               canBeDeleted={i > 0}
               onDelete={() => deleteDocumentHandler(i)}
-              fieldLabel={`${t('doc-name')}*`}
+              fieldLabel={t('doc-name')}
+              required
               fieldValue={d.name}
               fileUploaded={d}
               fieldTouched={

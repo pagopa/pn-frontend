@@ -5,20 +5,23 @@ import { useTranslation } from 'react-i18next';
 import { TextField, Typography, useFormControl } from '@mui/material';
 import { LangCode, LangLabels } from '@pagopa/mui-italia';
 
-import { NewNotificationLangOther, PreliminaryInformationsPayload } from '../../models/NewNotification';
+import {
+  NewNotificationLangOther,
+  PreliminaryInformationsPayload,
+} from '../../models/NewNotification';
 import { FormBox, FormBoxSubtitle, FormBoxTitle } from './NewNotificationFormElelements';
 
 type SubjectFocusHelperTextProps = {
   hasOtherLang: boolean | undefined | string;
 };
 
-function SubjectFocusHelperText({hasOtherLang} : SubjectFocusHelperTextProps) {
+function SubjectFocusHelperText({ hasOtherLang }: SubjectFocusHelperTextProps) {
   const { t } = useTranslation(['common']);
   const { focused } = useFormControl() || {};
 
   return useMemo(() => {
     if (focused) {
-      return t('too-long-field-error', { maxLength: hasOtherLang ? 66: 134 });
+      return t('too-long-field-error', { maxLength: hasOtherLang ? 66 : 134 });
     }
     return false;
   }, [focused]);
@@ -49,13 +52,18 @@ const PreliminaryInformationsContent = ({ formik, languages, onChangeTouched }: 
       )}
       <TextField
         id="subject"
-        label={`${t('subject')}*`}
+        label={t('subject')}
+        required
         fullWidth
         name="subject"
         value={formik.values.subject}
         onChange={onChangeTouched}
         error={formik.touched.subject && Boolean(formik.errors.subject)}
-        helperText={(formik.touched.subject && formik.errors.subject) || <SubjectFocusHelperText hasOtherLang ={hasOtherLang} />}
+        helperText={
+          (formik.touched.subject && formik.errors.subject) || (
+            <SubjectFocusHelperText hasOtherLang={hasOtherLang} />
+          )
+        }
         size="small"
         margin="normal"
       />
@@ -78,7 +86,8 @@ const PreliminaryInformationsContent = ({ formik, languages, onChangeTouched }: 
           </Typography>
           <TextField
             id="additionalSubject"
-            label={`${t('subject')}*`}
+            label={t('subject')}
+            required
             fullWidth
             name="additionalSubject"
             value={formik.values.additionalSubject}
