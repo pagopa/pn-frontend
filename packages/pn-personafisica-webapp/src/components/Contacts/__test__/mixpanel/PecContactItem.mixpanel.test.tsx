@@ -1,6 +1,8 @@
 import MockAdapter from 'axios-mock-adapter';
 import { MockInstance, vi } from 'vitest';
 
+import { ResponseEventDispatcher } from '@pagopa-pn/pn-commons';
+
 import { fireEvent, render, waitFor } from '../../../../__test__/test-utils';
 import { apiClient } from '../../../../api/apiClients';
 import { PFEventsType } from '../../../../models/PFEventsType';
@@ -76,6 +78,33 @@ describe('PecContactItem - Mixpanel events', () => {
     });
   });
 
-  // SEND_ADD_PEC_CODE_ERROR fires via AppResponsePublisher (ContactCodeDialog subscribes to
-  // createOrUpdateAddress/rejected). Requires AppResponsePublisher setup — not testable at this level.
+  it('fires SEND_ADD_PEC_CODE_ERROR when the verification code call fails', async () => {
+    mock
+      .onPost('/bff/v1/addresses/LEGAL/default/PEC', { value: VALID_PEC })
+      .reply(200, { result: 'CODE_VERIFICATION_REQUIRED' });
+    mock
+      .onPost('/bff/v1/addresses/LEGAL/default/PEC', {
+        value: VALID_PEC,
+        verificationCode: '01234',
+      })
+      .reply(500);
+
+    const result = render(
+      <>
+        <ResponseEventDispatcher />
+        <PecContactItem />
+      </>
+    );
+
+    const input = result.container.querySelector('input[name="default_pec"]')!;
+    fireEvent.change(input, { target: { value: VALID_PEC } });
+    await waitFor(() => expect(input).toHaveValue(VALID_PEC));
+    fireEvent.click(result.getByTestId('default_pec-button'));
+
+    await fillCodeDialog(result);
+
+    await waitFor(() => {
+      expect(triggerEventSpy).toHaveBeenCalledWith(PFEventsType.SEND_ADD_PEC_CODE_ERROR);
+    });
+  });
 });

@@ -1,6 +1,8 @@
 import MockAdapter from 'axios-mock-adapter';
 import { MockInstance, vi } from 'vitest';
 
+import { ResponseEventDispatcher } from '@pagopa-pn/pn-commons';
+
 import { digitalCourtesyAddresses } from '../../../../__mocks__/Contacts.mock';
 import { fireEvent, render, screen, waitFor } from '../../../../__test__/test-utils';
 import { apiClient } from '../../../../api/apiClients';
@@ -175,6 +177,33 @@ describe('EmailContactItem - Mixpanel events', () => {
     });
   });
 
-  // SEND_ADD_EMAIL_CODE_ERROR fires via AppResponsePublisher (ContactCodeDialog subscribes to
-  // createOrUpdateAddress/rejected). Requires AppResponsePublisher setup — not testable at this level.
+  it('fires SEND_ADD_EMAIL_CODE_ERROR when the verification code call fails', async () => {
+    mock
+      .onPost('/bff/v1/addresses/COURTESY/default/EMAIL', { value: VALID_EMAIL })
+      .reply(200, { result: 'CODE_VERIFICATION_REQUIRED' });
+    mock
+      .onPost('/bff/v1/addresses/COURTESY/default/EMAIL', {
+        value: VALID_EMAIL,
+        verificationCode: '01234',
+      })
+      .reply(500);
+
+    const result = render(
+      <>
+        <ResponseEventDispatcher />
+        <EmailContactItem />
+      </>
+    );
+
+    const input = result.container.querySelector('[name="default_email"]')!;
+    fireEvent.change(input, { target: { value: VALID_EMAIL } });
+    await waitFor(() => expect(input).toHaveValue(VALID_EMAIL));
+    fireEvent.click(result.getByTestId('default_email-button'));
+
+    await fillCodeDialog(result);
+
+    await waitFor(() => {
+      expect(triggerEventSpy).toHaveBeenCalledWith(PFEventsType.SEND_ADD_EMAIL_CODE_ERROR);
+    });
+  });
 });

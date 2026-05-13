@@ -1,6 +1,8 @@
 import MockAdapter from 'axios-mock-adapter';
 import { MockInstance, vi } from 'vitest';
 
+import { ResponseEventDispatcher } from '@pagopa-pn/pn-commons';
+
 import { digitalCourtesyAddresses } from '../../../../__mocks__/Contacts.mock';
 import { fireEvent, render, screen, waitFor } from '../../../../__test__/test-utils';
 import { apiClient } from '../../../../api/apiClients';
@@ -197,6 +199,36 @@ describe('SmsContactItem - Mixpanel events', () => {
     });
   });
 
-  // SEND_ADD_SMS_CODE_ERROR fires via AppResponsePublisher (ContactCodeDialog subscribes to
-  // createOrUpdateAddress/rejected). Requires AppResponsePublisher setup — not testable at this level.
+  it('fires SEND_ADD_SMS_CODE_ERROR when the verification code call fails', async () => {
+    mock
+      .onPost('/bff/v1/addresses/COURTESY/default/SMS', {
+        value: internationalPhonePrefix + VALID_PHONE,
+      })
+      .reply(200, { result: 'CODE_VERIFICATION_REQUIRED' });
+    mock
+      .onPost('/bff/v1/addresses/COURTESY/default/SMS', {
+        value: internationalPhonePrefix + VALID_PHONE,
+        verificationCode: '01234',
+      })
+      .reply(500);
+
+    const result = render(
+      <>
+        <ResponseEventDispatcher />
+        <SmsContactItem />
+      </>
+    );
+
+    fireEvent.click(result.getByRole('button', { name: 'courtesy-contacts.email-sms-add' }));
+    const input = result.container.querySelector('[name="default_sms"]')!;
+    fireEvent.change(input, { target: { value: VALID_PHONE } });
+    await waitFor(() => expect(input).toHaveValue(VALID_PHONE));
+    fireEvent.click(result.getByTestId('default_sms-button'));
+
+    await fillCodeDialog(result);
+
+    await waitFor(() => {
+      expect(triggerEventSpy).toHaveBeenCalledWith(PFEventsType.SEND_ADD_SMS_CODE_ERROR);
+    });
+  });
 });

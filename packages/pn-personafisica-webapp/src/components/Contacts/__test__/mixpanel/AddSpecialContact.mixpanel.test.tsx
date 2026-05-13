@@ -2,6 +2,7 @@ import MockAdapter from 'axios-mock-adapter';
 import React, { useRef } from 'react';
 import { MockInstance, vi } from 'vitest';
 
+import { ResponseEventDispatcher } from '@pagopa-pn/pn-commons';
 import { testAutocomplete, testSelect } from '@pagopa-pn/pn-commons/src/test-utils';
 
 import { digitalLegalAddresses } from '../../../../__mocks__/Contacts.mock';
@@ -195,6 +196,48 @@ describe('AddSpecialContact - Mixpanel events', () => {
     });
   });
 
-  // SEND_ADD_PEC_CODE_ERROR fires via AppResponsePublisher (ContactCodeDialog subscribes to
-  // createOrUpdateAddress/rejected). Requires AppResponsePublisher setup — not testable at this level.
+  it('fires SEND_ADD_PEC_CODE_ERROR when the verification code call fails', async () => {
+    const pecValue = 'special@pec.it';
+    mock.onGet('/bff/v1/pa-list').reply(200, parties);
+    mock
+      .onPost(`/bff/v1/addresses/LEGAL/${parties[2].id}/PEC`, { value: pecValue })
+      .reply(200, { result: 'CODE_VERIFICATION_REQUIRED' });
+    mock
+      .onPost(`/bff/v1/addresses/LEGAL/${parties[2].id}/PEC`, {
+        value: pecValue,
+        verificationCode: '01234',
+      })
+      .reply(500);
+
+    const result = render(
+      <>
+        <ResponseEventDispatcher />
+        <AddSpecialContactWrapper />
+      </>,
+      { preloadedState: { contactsState: { digitalAddresses: digitalLegalAddresses, parties: [] } } }
+    );
+
+    await testAutocomplete(result.container, 'sender', parties, true, 2, true);
+    await testSelect(
+      result.container,
+      'channelType',
+      channelTypesItems,
+      channelTypesItems.findIndex((item) => item.value === ChannelType.PEC)
+    );
+
+    const pecInput = result.container.querySelector('[name="s_value"]')!;
+    fireEvent.change(pecInput, { target: { value: pecValue } });
+    await waitFor(() => expect(pecInput).toHaveValue(pecValue));
+
+    const checkbox = result.container.querySelector('[name="s_disclaimer"]')!;
+    fireEvent.click(checkbox);
+
+    fireEvent.click(screen.getByTestId('confirm-btn'));
+
+    await fillCodeDialog(result);
+
+    await waitFor(() => {
+      expect(triggerEventSpy).toHaveBeenCalledWith(PFEventsType.SEND_ADD_PEC_CODE_ERROR);
+    });
+  });
 });
