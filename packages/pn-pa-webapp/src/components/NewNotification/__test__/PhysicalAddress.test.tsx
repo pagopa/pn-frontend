@@ -30,11 +30,11 @@ describe('PhysicalAddress Component', () => {
         setFieldValue={mockSetValue}
       />
     );
-    testFormElements(container, 'recipients[1].address', 'address*', formTestValues.address);
+    testFormElements(container, 'recipients[1].address', 'address', formTestValues.address);
     testFormElements(
       container,
       'recipients[1].houseNumber',
-      'house-number*',
+      'house-number',
       formTestValues.houseNumber
     );
     testFormElements(
@@ -46,15 +46,15 @@ describe('PhysicalAddress Component', () => {
     testFormElements(
       container,
       'recipients[1].municipality',
-      'municipality*',
+      'municipality',
       formTestValues.municipality
     );
-    testFormElements(container, 'recipients[1].province', 'province*', formTestValues.province);
-    testFormElements(container, 'recipients[1].zip', 'zip*', formTestValues.zip);
+    testFormElements(container, 'recipients[1].province', 'province', formTestValues.province);
+    testFormElements(container, 'recipients[1].zip', 'zip', formTestValues.zip);
     testFormElements(
       container,
       'recipients[1].foreignState',
-      'foreign-state*',
+      'foreign-state',
       formTestValues.foreignState
     );
     testFormElements(

@@ -109,12 +109,12 @@ describe('PreliminaryInformations Component', async () => {
     });
     expect(result.container).toHaveTextContent(/title/i);
     const form = result.getByTestId('preliminaryInformationsForm') as HTMLFormElement;
-    testFormElements(form, 'paProtocolNumber', 'protocol-number*');
-    testFormElements(form, 'subject', 'subject*');
+    testFormElements(form, 'paProtocolNumber', 'protocol-number');
+    testFormElements(form, 'subject', 'subject');
     testFormElements(form, 'abstract', 'abstract');
     testFormElements(form, 'group', 'group');
-    testFormElements(form, 'taxonomyCode', 'taxonomy-id*');
-    testFormElements(form, 'senderDenomination', 'sender-name*');
+    testFormElements(form, 'taxonomyCode', 'taxonomy-id');
+    testFormElements(form, 'senderDenomination', 'sender-name');
     testRadio(form, 'comunicationTypeRadio', ['registered-letter-890', 'simple-registered-letter']);
     const button = within(form).getByTestId('step-submit');
     expect(button).toBeDisabled();
@@ -371,17 +371,12 @@ describe('PreliminaryInformations Component', async () => {
       );
     });
     const form = result.getByTestId('preliminaryInformationsForm') as HTMLFormElement;
-    testFormElements(
-      form,
-      'paProtocolNumber',
-      'protocol-number*',
-      newNotification.paProtocolNumber
-    );
-    testFormElements(form, 'subject', 'subject*', newNotification.subject);
+    testFormElements(form, 'paProtocolNumber', 'protocol-number', newNotification.paProtocolNumber);
+    testFormElements(form, 'subject', 'subject', newNotification.subject);
     testFormElements(form, 'abstract', 'abstract', newNotification.abstract);
     testFormElements(form, 'group', 'group', newNotification.group);
-    testFormElements(form, 'taxonomyCode', 'taxonomy-id*', newNotification.taxonomyCode);
-    testFormElements(form, 'senderDenomination', 'sender-name*', userResponse.organization.name);
+    testFormElements(form, 'taxonomyCode', 'taxonomy-id', newNotification.taxonomyCode);
+    testFormElements(form, 'senderDenomination', 'sender-name', userResponse.organization.name);
     const physicalCommunicationType = form.querySelector(
       `input[name="physicalCommunicationType"][value="${newNotification.physicalCommunicationType}"]`
     );
