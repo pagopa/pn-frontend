@@ -294,6 +294,7 @@ const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
             <CustomDropdown
               id="group"
               label={t('group')}
+              required={hasGroups}
               fullWidth
               name="group"
               size="small"
