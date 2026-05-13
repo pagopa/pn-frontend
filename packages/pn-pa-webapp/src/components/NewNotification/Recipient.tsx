@@ -425,7 +425,7 @@ const Recipient: React.FC<Props> = ({
                         <Grid item xs={12} lg={4}>
                           <FormTextField
                             keyName={`recipients[${index}].firstName`}
-                            label={`${t('name')}`}
+                            label={t('name')}
                             required
                             values={values}
                             touched={touched}
@@ -437,7 +437,7 @@ const Recipient: React.FC<Props> = ({
                         <Grid item xs={12} lg={4}>
                           <FormTextField
                             keyName={`recipients[${index}].lastName`}
-                            label={`${t('surname')}`}
+                            label={t('surname')}
                             values={values}
                             touched={touched}
                             errors={errors}
@@ -451,7 +451,7 @@ const Recipient: React.FC<Props> = ({
                       <Grid item xs={12} lg={8}>
                         <FormTextField
                           keyName={`recipients[${index}].firstName`}
-                          label={`${t('business-name')}`}
+                          label={t('business-name')}
                           required
                           values={values}
                           touched={touched}

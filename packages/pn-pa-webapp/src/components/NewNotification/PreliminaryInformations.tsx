@@ -184,7 +184,7 @@ const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
             <FormBoxTitle text={t('sender-denomination')} />
             <TextField
               id="senderDenomination"
-              label={`${t('sender-name')}`}
+              label={t('sender-name')}
               required
               fullWidth
               name="senderDenomination"
@@ -215,7 +215,7 @@ const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
             <FormBoxSubtitle text={t('protocol-number-subtitle')} />
             <TextField
               id="paProtocolNumber"
-              label={`${t('protocol-number')}`}
+              label={t('protocol-number')}
               fullWidth
               required
               name="paProtocolNumber"
@@ -247,7 +247,7 @@ const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
             </Typography>
             <TextField
               id="taxonomyCode"
-              label={`${t('taxonomy-id')}`}
+              label={t('taxonomy-id')}
               required
               fullWidth
               name="taxonomyCode"

@@ -367,7 +367,7 @@ const Attachments: React.FC<Props> = ({
               }
               canBeDeleted={i > 0}
               onDelete={() => deleteDocumentHandler(i)}
-              fieldLabel={`${t('doc-name')}`}
+              fieldLabel={t('doc-name')}
               required
               fieldValue={d.name}
               fileUploaded={d}

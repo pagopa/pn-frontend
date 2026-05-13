@@ -52,7 +52,7 @@ const PreliminaryInformationsContent = ({ formik, languages, onChangeTouched }: 
       )}
       <TextField
         id="subject"
-        label={`${t('subject')}`}
+        label={t('subject')}
         required
         fullWidth
         name="subject"
@@ -86,7 +86,7 @@ const PreliminaryInformationsContent = ({ formik, languages, onChangeTouched }: 
           </Typography>
           <TextField
             id="additionalSubject"
-            label={`${t('subject')}`}
+            label={t('subject')}
             required
             fullWidth
             name="additionalSubject"
