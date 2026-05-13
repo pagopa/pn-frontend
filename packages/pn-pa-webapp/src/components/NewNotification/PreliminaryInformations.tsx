@@ -293,7 +293,7 @@ const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
             <FormBoxSubtitle text={t('notification-management-subtitle')} />
             <CustomDropdown
               id="group"
-              label={`${t('group')}${hasGroups ? '*' : ''}`}
+              label={t('group')}
               fullWidth
               name="group"
               size="small"
