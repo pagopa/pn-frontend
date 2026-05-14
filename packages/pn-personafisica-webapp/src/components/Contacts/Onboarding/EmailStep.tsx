@@ -9,7 +9,12 @@ import { EventAction, appStateActions } from '@pagopa-pn/pn-commons';
 
 import { OnboardingAvailableFlows } from '../../../models/Onboarding';
 import { PFEventsType } from '../../../models/PFEventsType';
-import { AddressType, ChannelType, SaveDigitalAddressParams } from '../../../models/contacts';
+import {
+  AddressType,
+  ChannelType,
+  SaveDigitalAddressParams,
+  ValidLanguage,
+} from '../../../models/contacts';
 import { createOrUpdateAddress } from '../../../redux/contact/actions';
 import { useAppDispatch } from '../../../redux/hooks';
 import PFEventStrategyFactory from '../../../utility/MixpanelUtils/PFEventStrategyFactory';
@@ -26,7 +31,7 @@ type Props = {
 };
 
 const EmailStep: React.FC<Props> = ({ value, alreadySet, onChange, onVerified }) => {
-  const { t } = useTranslation(['recapiti', 'common']);
+  const { t, i18n } = useTranslation(['recapiti', 'common']);
   const dispatch = useAppDispatch();
 
   const [codeDialogOpen, setCodeDialogOpen] = useState(false);
@@ -101,12 +106,15 @@ const EmailStep: React.FC<Props> = ({ value, alreadySet, onChange, onVerified })
 
   const handleCodeVerification = useCallback(
     async (verificationCode?: string) => {
+      const currentLang = (i18n.language.split('-')[0] || 'IT').toUpperCase() as ValidLanguage;
+
       const digitalAddressParams: SaveDigitalAddressParams = {
         addressType: AddressType.COURTESY,
         senderId: 'default',
         channelType: ChannelType.EMAIL,
         value: currentValueRef.current,
         code: verificationCode,
+        language: currentLang,
       };
 
       try {

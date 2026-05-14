@@ -45,6 +45,7 @@ import {
   ContactSource,
   SaveDigitalAddressParams,
   Sender,
+  ValidLanguage,
 } from '../../models/contacts';
 import { Party } from '../../models/party';
 import { PRIVACY_POLICY, TERMS_OF_SERVICE_SERCQ_SEND } from '../../navigation/routes.const';
@@ -141,7 +142,7 @@ const ErrorBanner: React.FC<{ type: ErrorBannerType | undefined; contactValue?: 
 const AddSpecialContact = forwardRef<AddSpecialContactRef, Props>(
   // eslint-disable-next-line sonarjs/cognitive-complexity
   ({ handleContactAdded }: Props, ref) => {
-    const { t } = useTranslation(['common', 'recapiti']);
+    const { t, i18n } = useTranslation(['common', 'recapiti']);
     const dispatch = useAppDispatch();
     const getOptionLabel = (option: Party) => option.name || '';
     const [errorBanner, setErrorBanner] = useState<ErrorBannerType | undefined>();
@@ -482,6 +483,8 @@ const AddSpecialContact = forwardRef<AddSpecialContactRef, Props>(
         value = SERCQ_SEND_VALUE;
       }
 
+      const currentLang = (i18n.language.split('-')[0] || 'IT').toUpperCase() as ValidLanguage;
+
       const digitalAddressParams: SaveDigitalAddressParams = {
         addressType: AddressType.LEGAL,
         senderId: formik.values.sender.id,
@@ -489,6 +492,7 @@ const AddSpecialContact = forwardRef<AddSpecialContactRef, Props>(
         channelType: formik.values.channelType as ChannelType,
         value,
         code: verificationCode,
+        language: currentLang,
       };
 
       dispatch(createOrUpdateAddress(digitalAddressParams))

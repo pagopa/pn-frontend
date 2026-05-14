@@ -9,6 +9,7 @@ import {
   ChannelType,
   ContactSource,
   SaveDigitalAddressParams,
+  ValidLanguage,
 } from '../../models/contacts';
 import { createOrUpdateAddress } from '../../redux/contact/actions';
 import { contactsSelectors } from '../../redux/contact/reducers';
@@ -30,7 +31,7 @@ enum ModalType {
 }
 
 const PecContactItem: React.FC = () => {
-  const { t } = useTranslation(['common', 'recapiti']);
+  const { t, i18n } = useTranslation(['common', 'recapiti']);
   const { defaultPECAddress, defaultSERCQ_SENDAddress, addresses } = useAppSelector(
     contactsSelectors.selectAddresses
   );
@@ -69,12 +70,15 @@ const PecContactItem: React.FC = () => {
       PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_PEC_UX_CONVERSION, 'default');
     }
 
+    const currentLang = (i18n.language.split('-')[0] || 'IT').toUpperCase() as ValidLanguage;
+
     const digitalAddressParams: SaveDigitalAddressParams = {
       addressType: AddressType.LEGAL,
       senderId: 'default',
       channelType: ChannelType.PEC,
       value: currentAddress.current.value,
       code: verificationCode,
+      language: currentLang,
     };
 
     dispatch(createOrUpdateAddress(digitalAddressParams))

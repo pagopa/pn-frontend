@@ -13,7 +13,12 @@ import {
   SmsContactState,
 } from '../../../../models/Onboarding';
 import { PFEventsType } from '../../../../models/PFEventsType';
-import { AddressType, ChannelType, SaveDigitalAddressParams } from '../../../../models/contacts';
+import {
+  AddressType,
+  ChannelType,
+  SaveDigitalAddressParams,
+  ValidLanguage,
+} from '../../../../models/contacts';
 import { createOrUpdateAddress } from '../../../../redux/contact/actions';
 import { useAppDispatch } from '../../../../redux/hooks';
 import PFEventStrategyFactory from '../../../../utility/MixpanelUtils/PFEventStrategyFactory';
@@ -81,7 +86,7 @@ const EmailSmsStep = ({
   onContactAdded,
   registerContinueHandler,
 }: Props) => {
-  const { t } = useTranslation(['recapiti', 'common']);
+  const { t, i18n } = useTranslation(['recapiti', 'common']);
   const dispatch = useAppDispatch();
 
   const [smsMode, setSmsMode] = React.useState<CourtesyInputMode>(
@@ -157,6 +162,8 @@ const EmailSmsStep = ({
   };
 
   const handleCodeVerification = (channelType: ChannelType, verificationCode?: string) => {
+    const currentLang = (i18n.language.split('-')[0] || 'IT').toUpperCase() as ValidLanguage;
+
     const digitalAddressParams: SaveDigitalAddressParams = {
       addressType: AddressType.COURTESY,
       senderId: 'default',
@@ -166,6 +173,7 @@ const EmailSmsStep = ({
           ? internationalPhonePrefix + currentAddress.current.value
           : currentAddress.current.value,
       code: verificationCode,
+      language: currentLang,
     };
 
     const events = channelEvents[channelType as CourtesyChannelType];

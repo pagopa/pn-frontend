@@ -12,6 +12,7 @@ import {
   ContactSource,
   IOAllowedValues,
   SaveDigitalAddressParams,
+  ValidLanguage,
 } from '../../models/contacts';
 import { createOrUpdateAddress, removeSercqAndEmail } from '../../redux/contact/actions';
 import { contactsSelectors } from '../../redux/contact/reducers';
@@ -34,7 +35,7 @@ enum ModalType {
 }
 
 const EmailContactItem: React.FC = () => {
-  const { t } = useTranslation(['common', 'recapiti']);
+  const { t, i18n } = useTranslation(['common', 'recapiti']);
   const {
     defaultSERCQ_SENDAddress,
     defaultPECAddress,
@@ -116,12 +117,15 @@ const EmailContactItem: React.FC = () => {
       }
     }
 
+    const currentLang = (i18n.language.split('-')[0] || 'IT').toUpperCase() as ValidLanguage;
+
     const digitalAddressParams: SaveDigitalAddressParams = {
       addressType: AddressType.COURTESY,
       senderId: 'default',
       channelType: ChannelType.EMAIL,
       value: currentAddress.current.value,
       code: verificationCode,
+      language: currentLang,
     };
 
     dispatch(createOrUpdateAddress(digitalAddressParams))

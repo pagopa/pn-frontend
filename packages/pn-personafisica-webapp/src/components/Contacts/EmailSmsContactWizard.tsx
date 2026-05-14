@@ -5,7 +5,12 @@ import { Divider, Stack, Typography } from '@mui/material';
 import { EventAction, appStateActions } from '@pagopa-pn/pn-commons';
 
 import { PFEventsType } from '../../models/PFEventsType';
-import { AddressType, ChannelType, SaveDigitalAddressParams } from '../../models/contacts';
+import {
+  AddressType,
+  ChannelType,
+  SaveDigitalAddressParams,
+  ValidLanguage,
+} from '../../models/contacts';
 import { createOrUpdateAddress } from '../../redux/contact/actions';
 import { contactsSelectors } from '../../redux/contact/reducers';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
@@ -37,7 +42,7 @@ const SmsLabelWithDisclaimer = () => {
 };
 
 const EmailSmsContactWizard: React.FC = () => {
-  const { t } = useTranslation('recapiti');
+  const { t, i18n } = useTranslation('recapiti');
   const dispatch = useAppDispatch();
   const [modalOpen, setModalOpen] = useState<ModalType | null>(null);
   const { defaultSMSAddress, defaultEMAILAddress, addresses } = useAppSelector(
@@ -82,6 +87,8 @@ const EmailSmsContactWizard: React.FC = () => {
       );
     }
 
+    const currentLang = (i18n.language.split('-')[0] || 'IT').toUpperCase() as ValidLanguage;
+
     const digitalAddressParams: SaveDigitalAddressParams = {
       addressType: AddressType.COURTESY,
       senderId: 'default',
@@ -91,6 +98,7 @@ const EmailSmsContactWizard: React.FC = () => {
           ? internationalPhonePrefix + currentAddress.current.value
           : currentAddress.current.value,
       code: verificationCode,
+      language: currentLang,
     };
 
     dispatch(createOrUpdateAddress(digitalAddressParams))
