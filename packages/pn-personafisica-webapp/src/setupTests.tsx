@@ -8,6 +8,15 @@ import { initAxiosClients } from './api/apiClients';
 import { initStore } from './redux/store';
 import { PfConfiguration } from './services/configuration.service';
 
+const originalWarn = console.warn;
+// eslint-disable-next-line functional/immutable-data
+console.warn = (...args) => {
+  if (typeof args[0] === 'string' && args[0].includes('React Router Future Flag Warning')) {
+    return;
+  }
+  originalWarn(...args);
+};
+
 // This is a workaround related to this issue https://github.com/nickcolley/jest-axe/issues/147
 const { getComputedStyle } = window;
 // eslint-disable-next-line functional/immutable-data
