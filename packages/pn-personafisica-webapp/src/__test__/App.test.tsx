@@ -48,12 +48,11 @@ const reduxInitialState = {
   },
 };
 
-describe('App', async () => {
+describe('App', () => {
   let mock: MockAdapter;
   let mockAuth: MockAdapter;
   let result: RenderResult;
   const mockOpenFn = vi.fn();
-  const originalOpen = globalThis.open;
 
   beforeAll(() => {
     mock = new MockAdapter(apiClient);
@@ -64,10 +63,7 @@ describe('App', async () => {
       Promise.resolve({
         json: () => Promise.resolve([]),
       }) as Promise<Response>;
-    Object.defineProperty(globalThis, 'open', {
-      configurable: true,
-      value: mockOpenFn,
-    });
+    vi.stubGlobal('open', mockOpenFn);
   });
 
   afterEach(() => {
@@ -80,7 +76,7 @@ describe('App', async () => {
     mock.restore();
     mockAuth.restore();
     globalThis.fetch = unmockedFetch;
-    Object.defineProperty(globalThis, 'open', { configurable: true, value: originalOpen });
+    vi.unstubAllGlobals();
   });
 
   it('render component - user not logged in', async () => {

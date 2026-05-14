@@ -13,7 +13,7 @@ import { AcceptButton, Menu, OrganizationsList } from '../DelegationsElements';
 
 const actionCbk = vi.fn();
 
-describe('DelegationElements', async () => {
+describe('DelegationElements', () => {
   let mock: MockAdapter;
 
   beforeAll(() => {

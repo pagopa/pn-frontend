@@ -22,17 +22,12 @@ const accessibilityLink = 'accessibility-link.it';
 const sercqServiceStatementLink = 'sercq-service-statement-link.it';
 
 describe('Footer Component', () => {
-  const original = window.open;
-
   beforeAll(() => {
-    Object.defineProperty(window, 'open', {
-      configurable: true,
-      value: mockOpenFn,
-    });
+    vi.stubGlobal('open', mockOpenFn);
   });
 
   afterAll((): void => {
-    Object.defineProperty(window, 'open', { configurable: true, value: original });
+    vi.unstubAllGlobals();
   });
 
   it('renders footer', () => {

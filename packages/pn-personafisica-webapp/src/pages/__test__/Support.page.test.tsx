@@ -10,7 +10,7 @@ import { ZENDESK_AUTHORIZATION } from '../../api/support/support.routes';
 import * as routes from '../../navigation/routes.const';
 import SupportPage from '../Support.page';
 
-describe('Support page', async () => {
+describe('Support page', () => {
   let result: RenderResult;
   let mock: MockAdapter;
   const originalSubmit = HTMLFormElement.prototype.submit;

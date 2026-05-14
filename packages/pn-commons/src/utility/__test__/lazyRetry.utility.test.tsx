@@ -10,15 +10,10 @@ import { lazyRetry } from '../lazyRetry.utility';
 // Carlos Lombardi, 2023-11-10
 // ---------------------------------
 describe('test lazy loading retry', () => {
-  const original = window.location;
-
   const reloadFn = vi.fn();
 
   beforeAll(() => {
-    Object.defineProperty(window, 'location', {
-      configurable: true,
-      value: { reload: reloadFn },
-    });
+    vi.stubGlobal('location', { reload: reloadFn });
   });
 
   afterEach(() => {
@@ -28,7 +23,7 @@ describe('test lazy loading retry', () => {
   });
 
   afterAll(() => {
-    Object.defineProperty(window, 'location', { configurable: true, value: original });
+    vi.unstubAllGlobals();
   });
 
   it('test lazyRetry - component loaded at first try', async () => {

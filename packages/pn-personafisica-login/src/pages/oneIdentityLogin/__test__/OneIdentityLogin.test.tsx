@@ -22,10 +22,8 @@ vi.mock('../../../utility/utils', async () => ({
 }));
 
 describe('OneIdentityLogin component', () => {
-  const original = globalThis.location;
-
   beforeAll(() => {
-    Object.defineProperty(globalThis, 'location', { value: { assign: mockAssign } });
+    vi.stubGlobal('location', { assign: mockAssign });
   });
 
   beforeEach(() => {
@@ -44,7 +42,7 @@ describe('OneIdentityLogin component', () => {
   });
 
   afterAll(() => {
-    Object.defineProperty(globalThis, 'location', { value: original });
+    vi.unstubAllGlobals();
   });
 
   it('redirects to OneIdentity login with correct parameters', () => {

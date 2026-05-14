@@ -14,10 +14,8 @@ const mockAssign = vi.fn();
 const backHandler = vi.fn();
 
 describe('test spid select page', () => {
-  const original = window.location;
-
   beforeAll(() => {
-    Object.defineProperty(window, 'location', { value: { assign: mockAssign } });
+    vi.stubGlobal('location', { assign: mockAssign });
   });
 
   afterEach(() => {
@@ -26,7 +24,7 @@ describe('test spid select page', () => {
   });
 
   afterAll(() => {
-    Object.defineProperty(window, 'location', { value: original });
+    vi.unstubAllGlobals();
   });
 
   it('renders page', () => {
