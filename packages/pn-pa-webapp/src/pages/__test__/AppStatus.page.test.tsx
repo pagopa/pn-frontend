@@ -25,17 +25,19 @@ describe('AppStatus page', () => {
 
   beforeAll(() => {
     mock = new MockAdapter(apiClient);
+  });
+
+  beforeEach(() => {
     vi.stubGlobal('location', { href: '' });
   });
 
   afterEach(() => {
     mock.reset();
-    globalThis.location.href = '';
+    vi.unstubAllGlobals();
   });
 
   afterAll(() => {
     mock.restore();
-    vi.unstubAllGlobals();
   });
   /*
    * The intent of the "OK" test is to verify somehow that the result of the API calls

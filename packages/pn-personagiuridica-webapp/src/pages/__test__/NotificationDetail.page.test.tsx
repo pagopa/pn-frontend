@@ -86,6 +86,9 @@ describe('NotificationDetail Page', () => {
 
   beforeAll(() => {
     mock = new MockAdapter(apiClient);
+  });
+
+  beforeEach(() => {
     vi.stubGlobal('location', { href: '', assign: mockAssignFn });
   });
 
@@ -93,12 +96,11 @@ describe('NotificationDetail Page', () => {
     sessionStorage.removeItem(PAYMENT_CACHE_KEY);
     vi.clearAllMocks();
     mock.reset();
-    globalThis.location.href = '';
+    vi.unstubAllGlobals();
   });
 
   afterAll(() => {
     mock.restore();
-    vi.unstubAllGlobals();
   });
 
   const paymentInfoRequest = paymentInfo.map((payment) => ({

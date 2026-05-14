@@ -24,16 +24,12 @@ const userActions = [
 ];
 
 describe('Header Component', () => {
-  beforeAll(() => {
-    vi.stubGlobal('location', { href: '', assign: assignFn });
-  });
-
   beforeEach(() => {
-    globalThis.location.href = '';
+    vi.stubGlobal('location', { href: '', assign: assignFn });
     vi.clearAllMocks();
   });
 
-  afterAll((): void => {
+  afterEach((): void => {
     vi.unstubAllGlobals();
   });
 
