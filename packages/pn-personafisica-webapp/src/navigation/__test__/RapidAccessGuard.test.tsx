@@ -17,7 +17,7 @@ const Guard = () => (
   </Routes>
 );
 
-describe('Rapid access Guard', async () => {
+describe('Rapid access Guard', () => {
   let mock: MockAdapter;
   let result: RenderResult;
 
@@ -33,7 +33,7 @@ describe('Rapid access Guard', async () => {
     mock.restore();
   });
 
-  describe('Notification from QR code', async () => {
+  describe('Notification from QR code', () => {
     it('QR code requested by a recipient', async () => {
       const mockQrCode = 'qr-code';
       mock
@@ -138,7 +138,7 @@ describe('Rapid access Guard', async () => {
     });
   });
 
-  describe('Notification from retrievalId', async () => {
+  describe('Notification from retrievalId', () => {
     it('retrievalId requested by a recipient', async () => {
       const mockRetrievalId = 'retrieval-id';
       const url = `/bff/v1/notifications/received/check-tpp?retrievalId=${mockRetrievalId}`;

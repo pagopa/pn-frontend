@@ -208,7 +208,7 @@ const recipientsWithoutPayments = newNotification.recipients.map(
   })
 );
 
-describe('Recipient Component with payment enabled', async () => {
+describe('Recipient Component with payment enabled', () => {
   const confirmHandlerMk = vi.fn();
   let result: RenderResult;
 
@@ -453,7 +453,7 @@ describe('Recipient Component with payment enabled', async () => {
   }, 10000);
 });
 
-describe('Recipient Component without payment enabled', async () => {
+describe('Recipient Component without payment enabled', () => {
   const confirmHandlerMk = vi.fn();
   let result: RenderResult;
 
@@ -491,7 +491,7 @@ describe('Recipient Component without payment enabled', async () => {
   });
 });
 
-describe('Feature flag for physical address lookup', async () => {
+describe('Feature flag for physical address lookup', () => {
   let result: RenderResult;
 
   it('FF is off', async () => {

@@ -11,17 +11,12 @@ const mockLocationAssign = vi.fn();
 
 // mock imports
 describe('test login page', () => {
-  const original = globalThis.location;
-
   beforeAll(() => {
-    Object.defineProperty(globalThis, 'location', {
-      configurable: true,
-      value: { replace: mockLocationAssign, hash: '#token=fake-token' },
-    });
+    vi.stubGlobal('location', { replace: mockLocationAssign, hash: '#token=fake-token' });
   });
 
   afterAll(() => {
-    Object.defineProperty(globalThis, 'location', { configurable: true, value: original });
+    vi.unstubAllGlobals();
   });
 
   it('test redirect', () => {

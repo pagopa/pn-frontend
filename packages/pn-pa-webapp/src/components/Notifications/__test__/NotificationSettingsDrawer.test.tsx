@@ -7,7 +7,7 @@ import userEvent from '@testing-library/user-event';
 import { RenderResult, render } from '../../../__test__/test-utils';
 import NotificationSettingsDrawer from '../NotificationSettingsDrawer';
 
-describe('Notification Settings Drawer', async () => {
+describe('Notification Settings Drawer', () => {
   let result: RenderResult;
 
   afterEach(() => {

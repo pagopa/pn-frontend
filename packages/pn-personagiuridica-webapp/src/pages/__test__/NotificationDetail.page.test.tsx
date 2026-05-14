@@ -79,18 +79,14 @@ const delegator = mandatesByDelegate.find(
 /*
 ATTENZIONE: un'evenutale modifica al mock potrebbe causare il fallimento di alcuni test
 */
-describe('NotificationDetail Page', async () => {
+describe('NotificationDetail Page', () => {
   let result: RenderResult;
   let mock: MockAdapter;
   const mockLegalIds = getLegalFactIds(notificationToFe, 1);
-  const original = globalThis.location;
 
   beforeAll(() => {
     mock = new MockAdapter(apiClient);
-    Object.defineProperty(globalThis, 'location', {
-      configurable: true,
-      value: { href: '', assign: mockAssignFn },
-    });
+    vi.stubGlobal('location', { href: '', assign: mockAssignFn });
   });
 
   afterEach(() => {
@@ -102,7 +98,7 @@ describe('NotificationDetail Page', async () => {
 
   afterAll(() => {
     mock.restore();
-    Object.defineProperty(globalThis, 'location', { configurable: true, value: original });
+    vi.unstubAllGlobals();
   });
 
   const paymentInfoRequest = paymentInfo.map((payment) => ({

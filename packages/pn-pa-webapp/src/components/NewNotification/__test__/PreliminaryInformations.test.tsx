@@ -68,7 +68,7 @@ const populateForm = async (
   );
 };
 
-describe('PreliminaryInformations Component', async () => {
+describe('PreliminaryInformations Component', () => {
   let result: RenderResult;
   const confirmHandlerMk = vi.fn();
   let mock: MockAdapter;
