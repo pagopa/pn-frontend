@@ -59,7 +59,12 @@ export const createOrUpdateAddress = createAsyncThunk<
         params.addressType,
         params.senderId,
         params.channelType,
-        { value: params.value, verificationCode: params.code }
+        { value: params.value, verificationCode: params.code },
+        {
+          headers: {
+            'x-pagopa-pn-language': params.language,
+          },
+        }
       );
 
       // user must verify contact

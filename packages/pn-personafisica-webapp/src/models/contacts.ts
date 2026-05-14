@@ -39,6 +39,14 @@ export enum ContactOperation {
   SCROLL = 'SCROLL',
 }
 
+export enum ValidLanguage {
+  IT = 'IT',
+  EN = 'EN',
+  FR = 'FR',
+  DE = 'DE',
+  SL = 'SL',
+}
+
 export interface Sender {
   senderId: string;
   senderName?: string;
@@ -63,6 +71,7 @@ export interface SaveDigitalAddressParams extends Sender {
   channelType: ChannelType;
   value: string;
   code?: string;
+  language: ValidLanguage;
 }
 
 export interface ExternalEvent {

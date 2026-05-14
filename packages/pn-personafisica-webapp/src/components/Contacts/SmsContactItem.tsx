@@ -22,6 +22,7 @@ import {
   ContactSource,
   IOAllowedValues,
   SaveDigitalAddressParams,
+  ValidLanguage,
 } from '../../models/contacts';
 import {
   DIGITAL_DOMICILE_ACTIVATION,
@@ -72,7 +73,7 @@ const SmsContactElem: React.FC<SmsElemProps> = ({
   beforeValidationCallback,
   inSERCQWizardContext = false,
 }) => {
-  const { t } = useTranslation(['common', 'recapiti']);
+  const { t, i18n } = useTranslation(['common', 'recapiti']);
   const { defaultSMSAddress, addresses } = useAppSelector(contactsSelectors.selectAddresses);
   const externalEvent = useAppSelector((state: RootState) => state.contactsState.event);
   const digitalContactRef = useRef<{ toggleEdit: () => void; resetForm: () => Promise<void> }>({
@@ -120,12 +121,15 @@ const SmsContactElem: React.FC<SmsElemProps> = ({
       }
     }
 
+    const currentLang = (i18n.language.split('-')[0] || 'IT').toUpperCase() as ValidLanguage;
+
     const digitalAddressParams: SaveDigitalAddressParams = {
       addressType: AddressType.COURTESY,
       senderId: 'default',
       channelType: ChannelType.SMS,
       value: internationalPhonePrefix + currentAddress.current.value,
       code: verificationCode,
+      language: currentLang,
     };
 
     dispatch(createOrUpdateAddress(digitalAddressParams))
