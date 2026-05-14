@@ -34,7 +34,7 @@ const Guard = () => (
   </Routes>
 );
 
-describe('Tests the ToSGuard component', async () => {
+describe('Tests the ToSGuard component', () => {
   let mock: MockAdapter;
 
   beforeAll(() => {

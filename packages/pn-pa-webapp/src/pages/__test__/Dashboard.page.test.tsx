@@ -20,7 +20,7 @@ import { DASHBOARD_ACTIONS } from '../../redux/dashboard/actions';
 import { ServerResponseErrorCode } from '../../utility/AppError/types';
 import Dashboard from '../Dashboard.page';
 
-describe('Dashboard Page', async () => {
+describe('Dashboard Page', () => {
   let result: RenderResult;
   let mock: MockAdapter;
   const originalMatchMedia = globalThis.matchMedia;

@@ -3,7 +3,7 @@ import { fireEvent, render, waitFor, within } from '../../../__test__/test-utils
 import { sortDelegations } from '../../../utility/delegation.utility';
 import Delegators from '../Delegators';
 
-describe('Delegators Component', async () => {
+describe('Delegators Component', () => {
   it('renders the empty state', () => {
     const { container, queryByTestId } = render(<Delegators />);
     expect(container).toHaveTextContent(/deleghe.delegatorsTitle/i);

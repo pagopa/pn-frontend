@@ -14,19 +14,15 @@ vi.mock('../../../hooks/useErrors', () => ({
 }));
 
 describe('ApiErrorWrapper', () => {
-  const original = window.location;
   const reloadText = 'Ricarica';
   const user = userEvent.setup();
 
   beforeAll(() => {
-    Object.defineProperty(window, 'location', {
-      configurable: true,
-      value: { reload: vi.fn() },
-    });
+    vi.stubGlobal('location', { reload: vi.fn() });
   });
 
   afterAll(() => {
-    Object.defineProperty(window, 'location', { configurable: true, value: original });
+    vi.unstubAllGlobals();
   });
 
   it('mocks reload function', () => {

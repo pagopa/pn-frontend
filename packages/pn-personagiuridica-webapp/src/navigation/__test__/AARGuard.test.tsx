@@ -18,7 +18,7 @@ const Guard = () => (
   </Routes>
 );
 
-describe('Notification from QR code', async () => {
+describe('Notification from QR code', () => {
   let mock: MockAdapter;
   let result: RenderResult;
 

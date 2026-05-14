@@ -5,7 +5,7 @@ import { AcceptButton, Menu, OrganizationsList } from '../DelegationsElements';
 
 const mockOpenCodeModalHandler = vi.fn();
 
-describe('DelegationElements', async () => {
+describe('DelegationElements', () => {
   it('renders the Menu closed', () => {
     const { queryByTestId } = render(<Menu />);
     const menuIcon = queryByTestId('delegationMenuIcon');
