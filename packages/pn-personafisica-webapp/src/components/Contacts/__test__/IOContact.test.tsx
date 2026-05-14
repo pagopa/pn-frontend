@@ -18,17 +18,20 @@ describe('IOContact component', () => {
 
   beforeAll(() => {
     mock = new MockAdapter(apiClient);
+  });
+
+  beforeEach(() => {
     vi.stubGlobal('location', { assign: assignFn });
   });
 
   afterEach(() => {
     mock.reset();
     vi.clearAllMocks();
+    vi.unstubAllGlobals();
   });
 
   afterAll(() => {
     mock.restore();
-    vi.unstubAllGlobals();
   });
 
   it('renders component - no contacts', () => {
@@ -132,8 +135,6 @@ describe('IOContact component', () => {
     fireEvent.click(button);
     expect(assignFn).toHaveBeenCalledTimes(1);
     expect(assignFn).toHaveBeenCalledWith(getConfiguration().APP_IO_IOS);
-    vi.unstubAllGlobals();
-    vi.stubGlobal('location', { assign: assignFn });
   });
 
   it('Click on download AppIO button - Android', () => {
@@ -143,8 +144,6 @@ describe('IOContact component', () => {
     fireEvent.click(button);
     expect(assignFn).toHaveBeenCalledTimes(1);
     expect(assignFn).toHaveBeenCalledWith(getConfiguration().APP_IO_ANDROID);
-    vi.unstubAllGlobals();
-    vi.stubGlobal('location', { assign: assignFn });
   });
 
   it('disables IO - Digital Domicile enabled', async () => {
