@@ -115,8 +115,8 @@
             "textDisabled": "Add mobile number"
           }
         },
-        "disclaimer-enable": "By pressing “Activate Digital Domicile” you declare that you have read the <0>Privacy Policy</0> and accept the <1>Terms of Service</1>",
-        "disclaimer-transfer": "By pressing “Transfer Digital Domicile” you declare that you have read the <0>Privacy Policy</0> and accept the <1>Terms of Service</1>",
+        "disclaimer-enable": "By pressing <strong>Activate digital domicile</strong> you declare that you have read the <0>Privacy Policy</0> and accept the <1>Terms of Service</1>, and that you understand that SEND notifications will not be forwarded to other digital domiciles.",
+        "disclaimer-transfer": "By pressing <strong>Transfer digital domicile</strong> you declare that you have read the <0>Privacy Policy</0> and accept the <1>Terms of Service</1>, and that you understand that SEND notifications will not be forwarded to other digital domiciles.",
         "enable": "Activate Digital Domicile",
         "transfer": "Transfer Digital Domicile"
       },

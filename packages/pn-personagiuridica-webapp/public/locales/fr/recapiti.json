@@ -115,8 +115,8 @@
             "textDisabled": "Ajouter un numéro de portable"
           }
         },
-        "disclaimer-enable": "En appuyant sur « Activer le Domicile numérique », vous déclarez avoir lu la <0>Politique de confidentialité</0> et accepter les <1>Conditions d'utilisation</1>",
-        "disclaimer-transfer": "En appuyant sur « Transférer le Domicile numérique », vous déclarez avoir lu la <0>Politique de confidentialité</0> et accepter les <1>Conditions d'utilisation</1>",
+        "disclaimer-enable": "En cliquant sur <strong>Activer le domicile numérique</strong>, vous déclarez avoir lu la <0>Politique de confidentialité</0> et accepter les <1>Conditions d'utilisation</1>, et avoir compris que les notifications SEND ne vous seront pas transférées sur d'autres domiciles numériques.",
+        "disclaimer-transfer": "En cliquant sur <strong>Transférer le domicile numérique</strong>, vous déclarez avoir lu la <0>Politique de confidentialité</0> et accepter les <1>Conditions d'utilisation</1>, et avoir compris que les notifications SEND ne vous seront pas transférées sur d'autres domiciles numériques.",
         "enable": "Activer le Domicile numérique",
         "transfer": "Transférer le Domicile numérique"
       },

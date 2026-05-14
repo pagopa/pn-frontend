@@ -2,7 +2,6 @@ import MockAdapter from 'axios-mock-adapter';
 import { vi } from 'vitest';
 
 import { SERCQ_SEND_VALUE } from '@pagopa-pn/pn-commons';
-import { getById } from '@pagopa-pn/pn-commons/src/test-utils';
 
 import {
   acceptTosSercqSendBodyMock,
@@ -69,8 +68,6 @@ describe('SercqSendContactWizard', () => {
     expect(emailIcon).toHaveAttribute('data-testid', 'CheckCircleIcon');
     expect(smsIcon).toHaveAttribute('data-testid', 'CheckCircleIcon');
 
-    const disclaimerCkb = getById(container, 'disclaimer');
-    expect(disclaimerCkb).not.toBeChecked();
     expect(getByText(`${labelPrefix}.disclaimer-enable`)).toBeInTheDocument();
 
     const activateButton = getByTestId('activateButton');
@@ -181,16 +178,13 @@ describe('SercqSendContactWizard', () => {
     mock.onPut('/bff/v1/pg/tos-privacy', acceptTosSercqSendBodyMock).reply(200);
 
     // render component
-    const { container, findByText, getByTestId, queryByText } = render(
-      <SercqSendContactWizard goToStep={goToStep} />,
-      {
-        preloadedState: {
-          contactsState: {
-            digitalAddresses: initialAddresses,
-          },
+    const { container, getByTestId } = render(<SercqSendContactWizard goToStep={goToStep} />, {
+      preloadedState: {
+        contactsState: {
+          digitalAddresses: initialAddresses,
         },
-      }
-    );
+      },
+    });
 
     const icons = container.querySelectorAll(
       'svg[data-testid="CheckCircleIcon"], svg[data-testid="ErrorIcon"]'
@@ -202,20 +196,6 @@ describe('SercqSendContactWizard', () => {
     expect(smsIcon).toHaveAttribute('data-testid', 'ErrorIcon');
 
     const activateButton = getByTestId('activateButton');
-    let errorMsg = queryByText('required-field');
-    expect(errorMsg).not.toBeInTheDocument();
-
-    fireEvent.click(activateButton);
-
-    errorMsg = await findByText('required-field');
-    expect(errorMsg).toBeInTheDocument();
-
-    const disclaimerCkb = getById(container, 'disclaimer');
-    expect(disclaimerCkb).not.toBeChecked();
-
-    fireEvent.click(disclaimerCkb);
-
-    expect(disclaimerCkb).toBeChecked();
 
     fireEvent.click(activateButton);
 

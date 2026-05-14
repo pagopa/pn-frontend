@@ -1,18 +1,12 @@
-import { useFormik } from 'formik';
-import React, { ChangeEvent, useMemo, useRef } from 'react';
+import React, { useMemo, useRef } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
-import * as yup from 'yup';
 
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import ErrorIcon from '@mui/icons-material/Error';
 import {
   Box,
   Button,
-  Checkbox,
   Divider,
-  FormControl,
-  FormControlLabel,
-  FormHelperText,
   Link,
   List,
   ListItem,
@@ -27,7 +21,6 @@ import {
   TosPrivacyConsent,
   appStorage,
 } from '@pagopa-pn/pn-commons';
-import { theme } from '@pagopa/mui-italia';
 
 import { AddressType, ChannelType, SaveDigitalAddressParams } from '../../models/contacts';
 import { PRIVACY_POLICY, TERMS_OF_SERVICE_SERCQ_SEND } from '../../navigation/routes.const';
@@ -66,23 +59,6 @@ const SercqSendContactWizard: React.FC<Props> = ({ goToStep }) => {
   const labelPrefix = 'legal-contacts.sercq-send-wizard.step_3.contacts-list';
   const isDodEnabled = defaultSERCQ_SENDAddress || defaultPECAddress;
 
-  const validationSchema = yup.object().shape({
-    disclaimer: yup.bool().isTrue(t('required-field', { ns: 'common' })),
-  });
-
-  const formik = useFormik({
-    initialValues: {
-      pec: '',
-      disclaimer: false,
-    },
-    validationSchema,
-    validateOnMount: true,
-    enableReinitialize: true,
-    onSubmit: () => {
-      handleActivation();
-    },
-  });
-
   const contactsRecapData: Array<ContactRecapData> = useMemo(
     () => [
       {
@@ -114,11 +90,6 @@ const SercqSendContactWizard: React.FC<Props> = ({ goToStep }) => {
         handleInfoConfirm();
       })
       .catch(() => {});
-  };
-
-  const handleChangeTouched = async (e: ChangeEvent) => {
-    formik.handleChange(e);
-    await formik.setFieldTouched(e.target.id, true, false);
   };
 
   const handleInfoConfirm = () => {
@@ -224,78 +195,47 @@ const SercqSendContactWizard: React.FC<Props> = ({ goToStep }) => {
         ))}
       </List>
 
-      <FormControl sx={{ my: 3 }}>
-        <FormControlLabel
-          control={
-            <Checkbox
-              name="disclaimer"
-              id="disclaimer"
-              // required
-              onChange={handleChangeTouched}
-              inputProps={{
-                'aria-describedby': 'disclaimer-helper-text',
-                'aria-invalid': formik.touched.disclaimer && Boolean(formik.errors.disclaimer),
-              }}
+      <Typography my={3} variant="body2" fontSize="14px" color="text.secondary">
+        <Trans
+          i18nKey={`legal-contacts.sercq-send-wizard.step_3.disclaimer-${
+            isDodEnabled ? 'transfer' : 'enable'
+          }`}
+          ns="recapiti"
+          components={[
+            <Link
+              key="privacy-policy"
               sx={{
-                color:
-                  formik.touched.disclaimer && Boolean(formik.errors.disclaimer)
-                    ? theme.palette.error.dark
-                    : theme.palette.text.secondary,
+                cursor: 'pointer',
+                textDecoration: 'none !important',
+                fontWeight: 'bold',
               }}
-            />
-          }
-          label={
-            <Typography fontSize="14px" color="text.secondary">
-              <Trans
-                i18nKey={`legal-contacts.sercq-send-wizard.step_3.disclaimer-${
-                  isDodEnabled ? 'transfer' : 'enable'
-                }`}
-                ns="recapiti"
-                components={[
-                  <Link
-                    key="privacy-policy"
-                    sx={{
-                      cursor: 'pointer',
-                      textDecoration: 'none !important',
-                      fontWeight: 'bold',
-                    }}
-                    data-testid="privacy-link"
-                    href={PRIVACY_POLICY}
-                    target="_blank"
-                    rel="noopener"
-                  />,
+              data-testid="privacy-link"
+              href={PRIVACY_POLICY}
+              target="_blank"
+              rel="noopener"
+            />,
 
-                  <Link
-                    key="tos"
-                    sx={{
-                      cursor: 'pointer',
-                      textDecoration: 'none !important',
-                      fontWeight: 'bold',
-                    }}
-                    data-testid="tos-link"
-                    href={TERMS_OF_SERVICE_SERCQ_SEND}
-                    target="_blank"
-                    rel="noopener"
-                  />,
-                ]}
-              />
-            </Typography>
-          }
-          sx={{ alignItems: 'center' }}
-          value={formik.values.disclaimer}
+            <Link
+              key="tos"
+              sx={{
+                cursor: 'pointer',
+                textDecoration: 'none !important',
+                fontWeight: 'bold',
+              }}
+              data-testid="tos-link"
+              href={TERMS_OF_SERVICE_SERCQ_SEND}
+              target="_blank"
+              rel="noopener"
+            />,
+          ]}
         />
-        {formik.touched.disclaimer && Boolean(formik.errors.disclaimer) && (
-          <FormHelperText id="disclaimer-helper-text" error>
-            {formik.errors.disclaimer}
-          </FormHelperText>
-        )}
-      </FormControl>
+      </Typography>
 
       <Button
         fullWidth
         variant="contained"
         color="primary"
-        onClick={() => formik.submitForm()}
+        onClick={handleActivation}
         data-testid="activateButton"
       >
         {isDodEnabled

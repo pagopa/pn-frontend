@@ -135,8 +135,10 @@
             "textDisabled": "Dodaj številko mobilnega telefona"
           }
         },
-        "disclaimer": "S pritiskom na “Aktiviraj digitalno prebivališče” izjavljate, da ste prebrali <0>Informacije o zasebnosti</0> in se strinjate s <1>Pogoji storitve</1>",
-        "enable": "Aktiviraj digitalno prebivališče"
+        "disclaimer-enable": "S klikom na <strong>Aktiviraj digitalni domicil</strong> izjavljate, da ste prebrali <0>Politiko zasebnosti</0> in sprejemate <1>Pogoje storitve</1>, ter da razumete, da vam obvestila SEND ne bodo posredovana na druge digitalne domicile.",
+        "disclaimer-transfer": "S klikom na <strong>Prenesi digitalni domicil</strong> izjavljate, da ste prebrali <0>Politiko zasebnosti</0> in sprejemate <1>Pogoje storitve</1>, ter da razumete, da vam obvestila SEND ne bodo posredovana na druge digitalne domicile.",
+        "enable": "Aktiviraj digitalni naslov",
+        "transfer": "Prenesi digitalni naslov"
       },
       "feedback": {
         "title-transfer": "Posodobil si svoje digitalno prebivališče",

@@ -115,8 +115,8 @@
             "textDisabled": "Handynummer hinzufügen"
           }
         },
-        "disclaimer-enable": "Durch Drücken von „Digitalen Wohnsitz aktivieren“ erklären Sie, dass Sie die <0>Datenschutzerklärung</0> gelesen und die <1>Nutzungsbedingungen</1> akzeptiert haben",
-        "disclaimer-transfer": "Durch Drücken von „Digitalen Wohnsitz übertragen“ erklären Sie, dass Sie die <0>Datenschutzerklärung</0> gelesen und die <1>Nutzungsbedingungen</1> akzeptiert haben",
+        "disclaimer-enable": "Durch Klicken auf <strong>Digitales Domizil aktivieren</strong> erklärst du, dass du die <0>Datenschutzerklärung</0> gelesen hast und die <1>Nutzungsbedingungen</1> akzeptierst, und dass du verstanden hast, dass SEND Benachrichtigungen nicht an andere digitale Domizile weitergeleitet werden.",
+        "disclaimer-transfer": "Durch Klicken auf <strong>Digitales Domizil übertragen</strong> erklärst du, dass du die <0>Datenschutzerklärung</0> gelesen hast und die <1>Nutzungsbedingungen</1> akzeptierst, und dass du verstanden hast, dass SEND Benachrichtigungen nicht an andere digitale Domizile weitergeleitet werden.",
         "enable": "Digitalen Wohnsitz aktivieren",
         "transfer": "Digitalen Wohnsitz übertragen"
       },

@@ -205,14 +205,9 @@ describe('DigitalContactActivation', () => {
 
     fireEvent.click(emailSmsContinueButton);
 
-    // recap step: check disclaimer and press button to enable sercq
+    // recap step: press button to enable sercq
     const enableSercqStepTitle = result.getByText(`${labelPrefix}.step_3.title`);
     expect(enableSercqStepTitle).toBeInTheDocument();
-
-    const disclaimerCkb = getById(result.container, 'disclaimer');
-    expect(disclaimerCkb).not.toBeChecked();
-
-    fireEvent.click(disclaimerCkb);
 
     const enableSercqButton = result.getByTestId('activateButton');
     fireEvent.click(enableSercqButton);
@@ -316,7 +311,7 @@ describe('DigitalContactActivation', () => {
     mock.onGet(/\/bff\/v1\/pg\/tos-privacy.*/).reply(200, sercqSendTosConsentMock(false));
     mock.onPut('/bff/v1/pg/tos-privacy', acceptTosSercqSendBodyMock).reply(200);
 
-    const { container, getByTestId, queryByTestId, getByText } = render(
+    const { getByTestId, queryByTestId, getByText } = render(
       <DigitalContactActivation isTransferring />,
       {
         preloadedState: {
@@ -349,13 +344,7 @@ describe('DigitalContactActivation', () => {
     expect(emailSmsContinueButton).toBeEnabled();
     fireEvent.click(emailSmsContinueButton);
 
-    // recap step: check disclaimer and press button to enable sercq
-    const disclaimerCkb = getById(container, 'disclaimer');
-    expect(disclaimerCkb).not.toBeChecked();
-
-    fireEvent.click(disclaimerCkb);
-
-    expect(disclaimerCkb).toBeChecked();
+    // recap step: press button to enable sercq
     const enableSercqButton = getByTestId('activateButton');
     fireEvent.click(enableSercqButton);
 

@@ -135,8 +135,10 @@
             "textDisabled": "Handynummer hinzufügen"
           }
         },
-        "disclaimer": "Durch Klicken auf „Digitales Domizil aktivieren“ erklärst du, die <0>Datenschutzinformationen</0> gelesen zu haben und die <1>Nutzungsbedingungen des Dienstes</1> zu akzeptieren",
-        "enable": "Digitales Domizil aktivieren"
+        "disclaimer-enable": "Durch Klicken auf <strong>Digitales Domizil aktivieren</strong> erklärst du, dass du die <0>Datenschutzerklärung</0> gelesen hast und die <1>Nutzungsbedingungen</1> akzeptierst, und dass du verstanden hast, dass SEND Benachrichtigungen nicht an andere digitale Domizile weitergeleitet werden.",
+        "disclaimer-transfer": "Durch Klicken auf <strong>Digitales Domizil übertragen</strong> erklärst du, dass du die <0>Datenschutzerklärung</0> gelesen hast und die <1>Nutzungsbedingungen</1> akzeptierst, und dass du verstanden hast, dass SEND Benachrichtigungen nicht an andere digitale Domizile weitergeleitet werden.",
+        "enable": "Digitalen Wohnsitz aktivieren",
+        "transfer": "Digitalen Wohnsitz übertragen"
       },
       "feedback": {
         "title-transfer": "Du hast dein digitales Domizil aktualisiert",

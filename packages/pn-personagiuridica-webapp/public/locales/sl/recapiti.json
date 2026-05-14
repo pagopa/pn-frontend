@@ -115,8 +115,8 @@
             "textDisabled": "Dodaj mobilno številko"
           }
         },
-        "disclaimer-enable": "S pritiskom na »Aktiviraj digitalni naslov« izjavljate, da ste prebrali <0>Politiko zasebnosti</0> in se strinjate z <1>Pogoji storitve</1>",
-        "disclaimer-transfer": "S pritiskom na »Prenesi digitalni naslov« izjavljate, da ste prebrali <0>Politiko zasebnosti</0> in se strinjate z <1>Pogoji storitve</1>",
+        "disclaimer-enable": "S klikom na <strong>Aktiviraj digitalni domicil</strong> izjavljate, da ste prebrali <0>Politiko zasebnosti</0> in sprejemate <1>Pogoje storitve</1>, ter da razumete, da vam obvestila SEND ne bodo posredovana na druge digitalne domicile.",
+        "disclaimer-transfer": "S klikom na <strong>Prenesi digitalni domicil</strong> izjavljate, da ste prebrali <0>Politiko zasebnosti</0> in sprejemate <1>Pogoje storitve</1>, ter da razumete, da vam obvestila SEND ne bodo posredovana na druge digitalne domicile.",
         "enable": "Aktiviraj digitalni naslov",
         "transfer": "Prenesi digitalni naslov"
       },

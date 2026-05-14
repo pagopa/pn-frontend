@@ -135,8 +135,10 @@
             "textDisabled": "Aggiungi numero di cellulare"
           }
         },
-        "disclaimer": "Premendo “Attiva domicilio digitale” dichiari di aver letto la <0>Informativa privacy</0> e di accettare i <1>Termini del servizio</1>",
-        "enable": "Attiva domicilio digitale"
+        "disclaimer-enable": "Premendo <strong>Attiva domicilio digitale</strong> dichiari di aver letto l'<0>Informativa privacy</0> e di accettare i <1>Termini del servizio</1>, e di aver compreso che le notifiche SEND non ti verranno inoltrate su altri domicili digitali.",
+        "disclaimer-transfer": "Premendo <strong>Trasferisci domicilio digitale</strong> dichiari di aver letto l'<0>Informativa privacy</0> e di accettare i <1>Termini del servizio</1>, e di aver compreso che le notifiche SEND non ti verranno inoltrate su altri domicili digitali.",
+        "enable": "Attiva domicilio digitale",
+        "transfer": "Trasferisci domicilio digitale"
       },
       "feedback": {
         "title-transfer": "Hai aggiornato il tuo domicilio digitale",

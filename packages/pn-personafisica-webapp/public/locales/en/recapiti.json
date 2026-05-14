@@ -135,8 +135,10 @@
             "textDisabled": "Add mobile number"
           }
         },
-        "disclaimer": "By pressing “Activate digital domicile” you declare to have read the <0>Privacy Policy</0> and accept the <1>Terms of service</1>",
-        "enable": "Activate digital domicile"
+        "disclaimer-enable": "By pressing <strong>Activate digital domicile</strong> you declare that you have read the <0>Privacy Policy</0> and accept the <1>Terms of Service</1>, and that you understand that SEND notifications will not be forwarded to other digital domiciles.",
+        "disclaimer-transfer": "By pressing <strong>Transfer digital domicile</strong> you declare that you have read the <0>Privacy Policy</0> and accept the <1>Terms of Service</1>, and that you understand that SEND notifications will not be forwarded to other digital domiciles.",
+        "enable": "Activate Digital Domicile",
+        "transfer": "Transfer Digital Domicile"
       },
       "feedback": {
         "title-transfer": "You have updated your digital domicile",
