@@ -18,7 +18,6 @@ import OneIdentityCallback from '../OneIdentityCallback';
 const mockLocationReplace = vi.fn();
 
 describe('OneIdentityCallback component', () => {
-  const original = globalThis.location;
   const mockState = 'mock-state-123';
   const mockCode = 'mock-code-456';
   const mockNonce = 'mock-nonce-789';
@@ -35,12 +34,7 @@ describe('OneIdentityCallback component', () => {
   };
 
   beforeAll(() => {
-    Object.defineProperty(globalThis, 'location', {
-      configurable: true,
-      value: {
-        replace: mockLocationReplace,
-      },
-    });
+    vi.stubGlobal('location', { replace: mockLocationReplace });
   });
 
   beforeEach(() => {
@@ -57,7 +51,7 @@ describe('OneIdentityCallback component', () => {
   });
 
   afterAll(() => {
-    Object.defineProperty(globalThis, 'location', { configurable: true, value: original });
+    vi.unstubAllGlobals();
   });
 
   it('should redirect with correct hash params', () => {

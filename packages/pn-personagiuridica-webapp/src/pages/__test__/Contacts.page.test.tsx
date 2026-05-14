@@ -16,17 +16,13 @@ import Contacts from '../Contacts.page';
 
 const mockOpenFn = vi.fn();
 
-describe('Contacts page', async () => {
+describe('Contacts page', () => {
   let mock: MockAdapter;
   let result: RenderResult;
-  const original = window.open;
 
   beforeAll(() => {
     mock = new MockAdapter(apiClient);
-    Object.defineProperty(window, 'open', {
-      configurable: true,
-      value: mockOpenFn,
-    });
+    vi.stubGlobal('open', mockOpenFn);
   });
 
   afterEach(() => {
@@ -37,7 +33,7 @@ describe('Contacts page', async () => {
   afterAll(() => {
     mock.restore();
     vi.resetAllMocks();
-    Object.defineProperty(window, 'open', { configurable: true, value: original });
+    vi.unstubAllGlobals();
   });
 
   it('renders Contacts (no contacts)', async () => {

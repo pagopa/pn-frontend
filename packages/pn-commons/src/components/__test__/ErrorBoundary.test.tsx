@@ -18,20 +18,15 @@ const mockEventTrackingCallbackRefreshPage = vi.fn();
 const mockReload = vi.fn();
 
 describe('ErrorBoundary Component', () => {
-  const original = window.location;
-
   disableConsoleLogging('error');
 
   beforeAll(() => {
     initLocalizationForTest();
-    Object.defineProperty(window, 'location', {
-      configurable: true,
-      value: { reload: mockReload },
-    });
+    vi.stubGlobal('location', { reload: mockReload });
   });
 
   afterAll(() => {
-    Object.defineProperty(window, 'location', { configurable: true, value: original });
+    vi.unstubAllGlobals();
   });
 
   it('renders ErrorBoundary (no errors)', () => {

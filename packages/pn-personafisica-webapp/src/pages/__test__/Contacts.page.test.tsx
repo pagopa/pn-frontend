@@ -15,7 +15,7 @@ import { ChannelType } from '../../models/contacts';
 import { CONTACT_ACTIONS } from '../../redux/contact/actions';
 import Contacts from '../Contacts.page';
 
-describe('Contacts page', async () => {
+describe('Contacts page', () => {
   let mock: MockAdapter;
   let result: RenderResult;
 

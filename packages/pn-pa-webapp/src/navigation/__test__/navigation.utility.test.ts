@@ -11,13 +11,8 @@ import {
 const mockOpenFn = vi.fn();
 
 describe('Tests notification.utility', () => {
-  const original = window.location;
-
   beforeAll(() => {
-    Object.defineProperty(window, 'open', {
-      configurable: true,
-      value: mockOpenFn,
-    });
+    vi.stubGlobal('open', mockOpenFn);
   });
 
   beforeEach(() => {
@@ -25,7 +20,7 @@ describe('Tests notification.utility', () => {
   });
 
   afterAll((): void => {
-    Object.defineProperty(window, 'open', { configurable: true, value: original });
+    vi.unstubAllGlobals();
   });
 
   it('goToSelfcareLogin', () => {

@@ -17,16 +17,12 @@ const defaultPecAddress = digitalLegalAddresses.find(
 );
 const assignFn = vi.fn();
 
-describe('LegalContacts Component', async () => {
+describe('LegalContacts Component', () => {
   let mock: MockAdapter;
-  const originalLocation = globalThis.location;
 
   beforeAll(() => {
     mock = new MockAdapter(apiClient);
-    Object.defineProperty(globalThis, 'location', {
-      configurable: true,
-      value: { assign: assignFn },
-    });
+    vi.stubGlobal('location', { assign: assignFn });
   });
 
   afterEach(() => {
@@ -36,7 +32,7 @@ describe('LegalContacts Component', async () => {
 
   afterAll(() => {
     mock.restore();
-    Object.defineProperty(globalThis, 'location', { configurable: true, value: originalLocation });
+    vi.unstubAllGlobals();
   });
 
   it('renders component - PEC enabled', async () => {

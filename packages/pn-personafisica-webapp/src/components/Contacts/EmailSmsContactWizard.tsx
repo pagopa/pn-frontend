@@ -188,8 +188,8 @@ const EmailSmsContactWizard: React.FC = () => {
     if (isEmail) {
       if (emailValue) {
         emailContactRef.current.toggleEdit();
-        await emailContactRef.current.resetForm();
       }
+      await emailContactRef.current.resetForm();
     } else if (isSms && smsValue) {
       smsContactRef.current.toggleEdit();
       await smsContactRef.current.resetForm();

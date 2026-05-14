@@ -10,7 +10,7 @@ import DelegationsOfTheCompany from '../../components/Deleghe/DelegationsOfTheCo
 import * as routes from '../../navigation/routes.const';
 import Deleghe from '../Deleghe.page';
 
-describe('Deleghe page', async () => {
+describe('Deleghe page', () => {
   let mock: MockAdapter;
 
   beforeAll(() => {

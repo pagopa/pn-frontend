@@ -22,18 +22,14 @@ const Guard = () => (
   </Routes>
 );
 
-describe('SessionGuard Component', async () => {
+describe('SessionGuard Component', () => {
   let mock: MockAdapter;
   let result: RenderResult;
-  const originalOpen = globalThis.open;
   const mockOpenFn = vi.fn();
 
   beforeAll(() => {
     mock = new MockAdapter(authClient);
-    Object.defineProperty(globalThis, 'open', {
-      configurable: true,
-      value: mockOpenFn,
-    });
+    vi.stubGlobal('open', mockOpenFn);
   });
 
   afterEach(() => {
@@ -43,7 +39,7 @@ describe('SessionGuard Component', async () => {
 
   afterAll(() => {
     mock.restore();
-    Object.defineProperty(globalThis, 'open', { configurable: true, value: originalOpen });
+    vi.unstubAllGlobals();
   });
 
   // expected behavior: enters the app, does a navigate, launches sessionCheck, the user is deleted from redux

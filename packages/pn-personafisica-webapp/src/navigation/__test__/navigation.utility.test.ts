@@ -18,13 +18,8 @@ import {
 const mockOpenFn = vi.fn();
 
 describe('Tests navigation utility methods', () => {
-  const originalOpen = globalThis.open;
-
   beforeAll(() => {
-    Object.defineProperty(globalThis, 'open', {
-      configurable: true,
-      value: mockOpenFn,
-    });
+    vi.stubGlobal('open', mockOpenFn);
   });
 
   beforeEach(() => {
@@ -32,7 +27,7 @@ describe('Tests navigation utility methods', () => {
   });
 
   afterAll((): void => {
-    Object.defineProperty(globalThis, 'open', { configurable: true, value: originalOpen });
+    vi.unstubAllGlobals();
   });
 
   it('goToLoginPortal', () => {

@@ -16,7 +16,7 @@ const specialCourtesyAddresses = digitalCourtesyAddresses.filter(
   (addr) => addr.senderId !== 'default'
 );
 
-describe('SpecialContacts Component', async () => {
+describe('SpecialContacts Component', () => {
   let mock: MockAdapter;
 
   beforeAll(() => {

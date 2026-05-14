@@ -57,13 +57,8 @@ describe('NotificationPaymentF24Item Component', () => {
   const TIMERF24 = 5000;
   const store = createTestStore();
 
-  const original = window.location;
-
   beforeAll(() => {
-    Object.defineProperty(window, 'location', {
-      configurable: true,
-      value: { href: '' },
-    });
+    vi.stubGlobal('location', { href: '' });
   });
 
   beforeEach(() => {
@@ -71,7 +66,7 @@ describe('NotificationPaymentF24Item Component', () => {
   });
 
   afterAll((): void => {
-    Object.defineProperty(window, 'location', { configurable: true, value: original });
+    vi.unstubAllGlobals();
   });
 
   const getPaymentAttachmentActionMk = (
