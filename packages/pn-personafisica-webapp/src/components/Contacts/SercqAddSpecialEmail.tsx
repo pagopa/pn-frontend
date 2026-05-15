@@ -79,15 +79,12 @@ const SercqAddSpecialEmail = () => {
       PFEventStrategyFactory.triggerEvent(eventToTrigger);
     }
 
-    const currentLang = (i18n.language.split('-')[0] || 'IT').toUpperCase() as ValidLanguage;
-
     const digitalAddressParams: SaveDigitalAddressParams = {
       addressType: AddressType.COURTESY,
       senderId: 'default',
       channelType: ChannelType.EMAIL,
       value: currentAddress.current.value,
       code: verificationCode,
-      language: currentLang,
     };
 
     dispatch(createOrUpdateAddress(digitalAddressParams))

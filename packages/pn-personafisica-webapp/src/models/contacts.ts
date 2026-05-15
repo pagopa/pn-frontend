@@ -71,7 +71,6 @@ export interface SaveDigitalAddressParams extends Sender {
   channelType: ChannelType;
   value: string;
   code?: string;
-  language?: ValidLanguage;
 }
 
 export interface ExternalEvent {

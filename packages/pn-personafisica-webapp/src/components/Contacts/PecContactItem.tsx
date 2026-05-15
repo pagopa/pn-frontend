@@ -70,15 +70,12 @@ const PecContactItem: React.FC = () => {
       PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_PEC_UX_CONVERSION, 'default');
     }
 
-    const currentLang = (i18n.language.split('-')[0] || 'IT').toUpperCase() as ValidLanguage;
-
     const digitalAddressParams: SaveDigitalAddressParams = {
       addressType: AddressType.LEGAL,
       senderId: 'default',
       channelType: ChannelType.PEC,
       value: currentAddress.current.value,
       code: verificationCode,
-      language: currentLang,
     };
 
     dispatch(createOrUpdateAddress(digitalAddressParams))

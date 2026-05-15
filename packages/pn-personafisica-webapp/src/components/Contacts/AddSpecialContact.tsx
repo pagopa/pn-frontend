@@ -483,8 +483,6 @@ const AddSpecialContact = forwardRef<AddSpecialContactRef, Props>(
         value = SERCQ_SEND_VALUE;
       }
 
-      const currentLang = (i18n.language.split('-')[0] || 'IT').toUpperCase() as ValidLanguage;
-
       const digitalAddressParams: SaveDigitalAddressParams = {
         addressType: AddressType.LEGAL,
         senderId: formik.values.sender.id,
@@ -492,7 +490,6 @@ const AddSpecialContact = forwardRef<AddSpecialContactRef, Props>(
         channelType: formik.values.channelType as ChannelType,
         value,
         code: verificationCode,
-        language: currentLang,
       };
 
       dispatch(createOrUpdateAddress(digitalAddressParams))

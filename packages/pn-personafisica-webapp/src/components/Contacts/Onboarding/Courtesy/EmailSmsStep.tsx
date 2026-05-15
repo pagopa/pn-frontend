@@ -162,8 +162,6 @@ const EmailSmsStep = ({
   };
 
   const handleCodeVerification = (channelType: ChannelType, verificationCode?: string) => {
-    const currentLang = (i18n.language.split('-')[0] || 'IT').toUpperCase() as ValidLanguage;
-
     const digitalAddressParams: SaveDigitalAddressParams = {
       addressType: AddressType.COURTESY,
       senderId: 'default',
@@ -173,7 +171,6 @@ const EmailSmsStep = ({
           ? internationalPhonePrefix + currentAddress.current.value
           : currentAddress.current.value,
       code: verificationCode,
-      language: currentLang,
     };
 
     const events = channelEvents[channelType as CourtesyChannelType];

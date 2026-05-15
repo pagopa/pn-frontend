@@ -106,15 +106,12 @@ const EmailStep: React.FC<Props> = ({ value, alreadySet, onChange, onVerified })
 
   const handleCodeVerification = useCallback(
     async (verificationCode?: string) => {
-      const currentLang = (i18n.language.split('-')[0] || 'IT').toUpperCase() as ValidLanguage;
-
       const digitalAddressParams: SaveDigitalAddressParams = {
         addressType: AddressType.COURTESY,
         senderId: 'default',
         channelType: ChannelType.EMAIL,
         value: currentValueRef.current,
         code: verificationCode,
-        language: currentLang,
       };
 
       try {

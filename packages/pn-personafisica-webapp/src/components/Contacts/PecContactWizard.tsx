@@ -99,15 +99,12 @@ const PecContactWizard: React.FC<Props> = ({
       PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SERCQ_SEND_PEC_UX_CONVERSION);
     }
 
-    const currentLang = (i18n.language.split('-')[0] || 'IT').toUpperCase() as ValidLanguage;
-
     const digitalAddressParams: SaveDigitalAddressParams = {
       addressType: AddressType.LEGAL,
       senderId: 'default',
       channelType: ChannelType.PEC,
       value: formik.values.pec,
       code: verificationCode,
-      language: currentLang,
     };
 
     dispatch(createOrUpdateAddress(digitalAddressParams))

@@ -87,8 +87,6 @@ const EmailSmsContactWizard: React.FC = () => {
       );
     }
 
-    const currentLang = (i18n.language.split('-')[0] || 'IT').toUpperCase() as ValidLanguage;
-
     const digitalAddressParams: SaveDigitalAddressParams = {
       addressType: AddressType.COURTESY,
       senderId: 'default',
@@ -98,7 +96,6 @@ const EmailSmsContactWizard: React.FC = () => {
           ? internationalPhonePrefix + currentAddress.current.value
           : currentAddress.current.value,
       code: verificationCode,
-      language: currentLang,
     };
 
     dispatch(createOrUpdateAddress(digitalAddressParams))

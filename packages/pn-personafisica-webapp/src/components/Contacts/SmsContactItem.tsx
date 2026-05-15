@@ -121,15 +121,12 @@ const SmsContactElem: React.FC<SmsElemProps> = ({
       }
     }
 
-    const currentLang = (i18n.language.split('-')[0] || 'IT').toUpperCase() as ValidLanguage;
-
     const digitalAddressParams: SaveDigitalAddressParams = {
       addressType: AddressType.COURTESY,
       senderId: 'default',
       channelType: ChannelType.SMS,
       value: internationalPhonePrefix + currentAddress.current.value,
       code: verificationCode,
-      language: currentLang,
     };
 
     dispatch(createOrUpdateAddress(digitalAddressParams))

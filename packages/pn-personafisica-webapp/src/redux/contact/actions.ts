@@ -62,7 +62,7 @@ export const createOrUpdateAddress = createAsyncThunk<
         { value: params.value, verificationCode: params.code },
         {
           headers: {
-            'x-pagopa-pn-language': params.language,
+            'x-pagopa-pn-language': sessionStorage.getItem('lang')?.toUpperCase() || 'IT',
           },
         }
       );

@@ -133,8 +133,6 @@ const SpecialContacts: React.FC<{ addressType: AddressType; channelType?: Channe
       value = SERCQ_SEND_VALUE;
     }
 
-    const currentLang = (i18n.language.split('-')[0] || 'IT').toUpperCase() as ValidLanguage;
-
     const digitalAddressParams: SaveDigitalAddressParams = {
       addressType,
       senderId: currentAddress.current.senderId,
@@ -142,7 +140,6 @@ const SpecialContacts: React.FC<{ addressType: AddressType; channelType?: Channe
       channelType: currentAddress.current.channelType,
       value,
       code: verificationCode,
-      language: currentLang,
     };
 
     dispatch(createOrUpdateAddress(digitalAddressParams))
