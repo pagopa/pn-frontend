@@ -1,4 +1,4 @@
-import { ValidLanguage } from '../models/User';
+import { ValidLanguage } from '../models/Contacts';
 
 type LocalizationNamespacesNames =
   | 'common'

@@ -22,11 +22,3 @@ export interface ConsentUser {
   isFirstAccept: boolean;
   consentVersion: string;
 }
-
-export enum ValidLanguage {
-  IT = 'IT',
-  EN = 'EN',
-  FR = 'FR',
-  DE = 'DE',
-  SL = 'SL',
-}
