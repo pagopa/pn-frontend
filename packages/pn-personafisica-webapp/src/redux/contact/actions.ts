@@ -1,4 +1,9 @@
-import { ConsentType, TosPrivacyConsent, parseError } from '@pagopa-pn/pn-commons';
+import {
+  ConsentType,
+  TosPrivacyConsent,
+  getValidLanguage,
+  parseError,
+} from '@pagopa-pn/pn-commons';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
 import { apiClient } from '../../api/apiClients';
@@ -62,7 +67,7 @@ export const createOrUpdateAddress = createAsyncThunk<
         { value: params.value, verificationCode: params.code },
         {
           headers: {
-            'x-pagopa-pn-language': sessionStorage.getItem('lang')?.toUpperCase() || 'IT',
+            'x-pagopa-pn-language': getValidLanguage(),
           },
         }
       );

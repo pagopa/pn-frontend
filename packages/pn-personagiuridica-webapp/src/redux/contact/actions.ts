@@ -1,4 +1,4 @@
-import { ConsentType, TosPrivacyConsent, parseError } from '@pagopa-pn/pn-commons';
+import { ConsentType, TosPrivacyConsent, parseError, getValidLanguage } from '@pagopa-pn/pn-commons';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
 import { apiClient } from '../../api/apiClients';
@@ -54,7 +54,12 @@ export const createOrUpdateAddress = createAsyncThunk<
         params.addressType,
         params.senderId,
         params.channelType,
-        { value: params.value, verificationCode: params.code }
+        { value: params.value, verificationCode: params.code },
+        {
+          headers: {
+            'x-pagopa-pn-language': getValidLanguage(),
+          },
+        }
       );
 
       // user must verify contact

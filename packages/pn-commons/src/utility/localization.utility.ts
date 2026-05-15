@@ -1,3 +1,5 @@
+import { ValidLanguage } from '../models/User';
+
 type LocalizationNamespacesNames =
   | 'common'
   | 'notifications'
@@ -57,3 +59,11 @@ export function getLocalizedOrDefaultLabel(
   }
   return defaultLabel ?? path;
 }
+
+export const getValidLanguage = (): ValidLanguage => {
+  const currentLang = sessionStorage.getItem('lang');
+  if (currentLang && Object.values(ValidLanguage).includes(currentLang as ValidLanguage)) {
+    return currentLang as ValidLanguage;
+  }
+  return ValidLanguage.IT;
+};
