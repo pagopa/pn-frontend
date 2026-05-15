@@ -12,9 +12,20 @@ import { trackEvent } from '../../services/tracking.service';
  * @abstract
  * @class EventStrategyFactory
  * @typedef {EventStrategyFactory}
- * @template {string} T
+ * @template T - Application event names.
+ * @template P - Event payload map. Defaults to Record<T, unknown> for legacy compatibility.
+ *
+ * TODO: PN-19759 - P defaults to Record<T, unknown> to preserve compatibility with PF
+ * which is currently the only package using the legacy class-based Mixpanel strategies.
+ * Once PF is migrated to the typed functional registry approach, evaluate making
+ * the payload map mandatory and typing EventStrategy.performComputations() as well,
+ * so the remaining legacy unknown typing can be removed.
  */
-export default abstract class EventStrategyFactory<T extends string> {
+
+export default abstract class EventStrategyFactory<
+  T extends string,
+  P extends Record<T, unknown> = Record<T, unknown>
+> {
   /**
    * This method must be implemented by each applications.
    * It defines the event strategy management.
@@ -36,10 +47,10 @@ export default abstract class EventStrategyFactory<T extends string> {
    * @date 20/3/2024 - 10:18:02
    *
    * @public
-   * @param {T} eventType
-   * @param {?unknown} [data]
+   * @param {K} eventType
+   * @param {P[K]} [data]
    */
-  public triggerEvent(eventType: T, data?: unknown) {
+  public triggerEvent<K extends T>(eventType: K, data?: P[K]) {
     try {
       const strategy = this.getStrategy(eventType);
 

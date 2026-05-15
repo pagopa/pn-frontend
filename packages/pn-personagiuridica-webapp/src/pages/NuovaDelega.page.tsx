@@ -39,6 +39,7 @@ import { Autocomplete, IllusCompleted } from '@pagopa/mui-italia';
 import VerificationCodeComponent from '../components/Deleghe/VerificationCodeComponent';
 import LoadingPageWrapper from '../components/LoadingPageWrapper/LoadingPageWrapper';
 import { NewDelegationFormProps } from '../models/Deleghe';
+import { PGEventsType } from '../models/PGEventsType';
 import { Party } from '../models/party';
 import * as routes from '../navigation/routes.const';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
@@ -46,6 +47,7 @@ import { createDelegation, getAllEntities } from '../redux/newDelegation/actions
 import { resetNewDelegation } from '../redux/newDelegation/reducers';
 import { RootState } from '../redux/store';
 import { getConfiguration } from '../services/configuration.service';
+import PGEventStrategyFactory from '../utility/MixpanelUtils/PGEventStrategyFactory';
 import { generateVCode } from '../utility/delegation.utility';
 
 const getOptionLabel = (option: Party) => option.name || '';
@@ -64,8 +66,10 @@ const NuovaDelega = () => {
   const handleSearchStringChangeInput = useSearchStringChangeInput();
   const [senderInputValue, setSenderInputValue] = useState('');
   const { DELEGATIONS_TO_PG_ENABLED } = getConfiguration();
+  const [delegationCreationSubmitted, setDelegationCreationSubmitted] = useState(false);
 
   const handleSubmit = (values: NewDelegationFormProps) => {
+    setDelegationCreationSubmitted(true);
     void dispatch(createDelegation(values));
   };
 
@@ -145,6 +149,13 @@ const NuovaDelega = () => {
   useEffect(() => {
     dispatch(resetNewDelegation());
   }, []);
+
+  useEffect(() => {
+    if (delegationCreationSubmitted && created) {
+      PGEventStrategyFactory.triggerEvent(PGEventsType.SEND_PG_ADD_MANDATE_UX_SUCCESS);
+      setDelegationCreationSubmitted(false);
+    }
+  }, [delegationCreationSubmitted, created]);
 
   const deleteInput = (
     funField: (field: string, setValue: any, validation: boolean | undefined) => void,

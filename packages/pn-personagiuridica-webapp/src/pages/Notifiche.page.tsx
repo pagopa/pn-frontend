@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { Box } from '@mui/material';
@@ -6,11 +6,14 @@ import {
   A11yMessage,
   ApiErrorWrapper,
   CustomPagination,
+  Notification,
   NotificationColumnData,
+  NotificationStatus,
   PaginationData,
   Sort,
   TitleBox,
   calculatePages,
+  isNewNotification,
   useEventEmitter,
   useHasPermissions,
   useIsMobile,
@@ -21,21 +24,56 @@ import LoadingPageWrapper from '../components/LoadingPageWrapper/LoadingPageWrap
 import DesktopNotifications from '../components/Notifications/DesktopNotifications';
 import GroupSelector from '../components/Notifications/GroupSelector';
 import MobileNotifications from '../components/Notifications/MobileNotifications';
+import { PGEventPayloads } from '../models/PGEventPayloads';
+import { PGEventsType } from '../models/PGEventsType';
 import { PNRole } from '../models/User';
 import { ContactSource } from '../models/contacts';
 import { DASHBOARD_ACTIONS, getReceivedNotifications } from '../redux/dashboard/actions';
 import { setNotificationFilters, setPagination, setSorting } from '../redux/dashboard/reducers';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { RootState } from '../redux/store';
+import PGEventStrategyFactory from '../utility/MixpanelUtils/PGEventStrategyFactory';
 
 type Props = {
   isDelegatedPage?: boolean;
 };
 
+const buildYourNotificationTrackingPayload = (
+  notifications: Array<Notification>,
+  pageNumber: number,
+  domicileBannerType?: string
+): PGEventPayloads[PGEventsType.SEND_PG_YOUR_NOTIFICATION] => ({
+  page_number: pageNumber,
+  total_count: notifications.length,
+  unread_count: notifications.filter((notification) =>
+    isNewNotification(notification.notificationStatus)
+  ).length,
+  delivered_count: notifications.filter(
+    (notification) => notification.notificationStatus === NotificationStatus.DELIVERED
+  ).length,
+  opened_count: notifications.filter(
+    (notification) => notification.notificationStatus === NotificationStatus.VIEWED
+  ).length,
+  expired_count: notifications.filter(
+    (notification) => notification.notificationStatus === NotificationStatus.EFFECTIVE_DATE
+  ).length,
+  not_found_count: notifications.filter(
+    (notification) => notification.notificationStatus === NotificationStatus.UNREACHABLE
+  ).length,
+  cancelled_count: notifications.filter(
+    (notification) => notification.notificationStatus === NotificationStatus.CANCELLED
+  ).length,
+  effective_date_count: notifications.filter(
+    (notification) => notification.notificationStatus === NotificationStatus.EFFECTIVE_DATE
+  ).length,
+  ...(domicileBannerType && { banner: domicileBannerType }),
+});
+
 const Notifiche = ({ isDelegatedPage = false }: Props) => {
   const dispatch = useAppDispatch();
   const { t } = useTranslation(['notifiche']);
   const [pageReady, setPageReady] = useState(false);
+  const domicileBannerTypeRef = useRef('');
 
   const { notifications, filters, sort, pagination } = useAppSelector(
     (state: RootState) => state.dashboardState
@@ -86,7 +124,23 @@ const Notifiche = ({ isDelegatedPage = false }: Props) => {
       isDelegatedPage,
     };
 
-    void dispatch(getReceivedNotifications(params)).then(() => setPageReady(true));
+    void dispatch(getReceivedNotifications(params))
+      .unwrap()
+      .then((data) => {
+        setPageReady(true);
+
+        if (!isDelegatedPage) {
+          PGEventStrategyFactory.triggerEvent(
+            PGEventsType.SEND_PG_YOUR_NOTIFICATION,
+            buildYourNotificationTrackingPayload(
+              data.resultsPage,
+              pagination.page,
+              domicileBannerTypeRef.current
+            )
+          );
+        }
+      })
+      .catch(() => setPageReady(true));
   }, [filters, pagination.size, pagination.page]);
 
   // Pagination handlers
@@ -102,6 +156,11 @@ const Notifiche = ({ isDelegatedPage = false }: Props) => {
   const handleGroupSelction = (id: string) => {
     dispatch(setNotificationFilters({ ...filters, group: id }));
   };
+
+  const handleDomicileBannerResolved = useCallback((domicileBannerType: string) => {
+    // eslint-disable-next-line functional/immutable-data
+    domicileBannerTypeRef.current = domicileBannerType;
+  }, []);
 
   useEffect(() => {
     fetchNotifications();
@@ -131,7 +190,10 @@ const Notifiche = ({ isDelegatedPage = false }: Props) => {
     <LoadingPageWrapper isInitialized={pageReady}>
       <Box p={3}>
         {userHasAdminPermissions && !organizationGroup && !isDelegatedPage && (
-          <DomicileBanner source={ContactSource.HOME_NOTIFICHE} />
+          <DomicileBanner
+            source={ContactSource.HOME_NOTIFICHE}
+            onBannerResolved={handleDomicileBannerResolved}
+          />
         )}
         <TitleBox
           variantTitle="h4"
