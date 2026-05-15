@@ -15,10 +15,12 @@ describe('TppLanding.page - Mixpanel events', () => {
   const mockRoute = `${routes.TPP_LANDING}?${AppRouteParams.RETRIEVAL_ID}=${mockRetrievalId}`;
 
   beforeEach(() => {
+    vi.stubGlobal('open', vi.fn());
     triggerEventSpy = vi.spyOn(PFEventStrategyFactory, 'triggerEvent');
   });
 
   afterEach(() => {
+    vi.unstubAllGlobals();
     triggerEventSpy.mockRestore();
   });
 
