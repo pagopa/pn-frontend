@@ -81,11 +81,17 @@ describe('App - Mixpanel events', () => {
     const userButton = header?.querySelector(
       `[aria-label="Area utente ${userResponse.name} ${userResponse.family_name}"]`
     );
-    fireEvent.click(userButton!);
+
+    await act(async () => {
+      fireEvent.click(userButton!);
+    });
 
     const menu = await waitFor(() => screen.getByRole('presentation'));
     const menuItems = within(menu).getAllByRole('menuitem');
-    fireEvent.click(menuItems[0]);
+
+    await act(async () => {
+      fireEvent.click(menuItems[0]);
+    });
 
     expect(triggerEventSpy).toHaveBeenCalledWith(PFEventsType.SEND_VIEW_PROFILE, {
       source: 'user_menu',
