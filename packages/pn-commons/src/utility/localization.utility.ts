@@ -61,9 +61,9 @@ export function getLocalizedOrDefaultLabel(
 }
 
 export const getValidLanguage = (): ValidLanguage => {
-  const currentLang = sessionStorage.getItem('lang');
-  if (currentLang && Object.values(ValidLanguage).includes(currentLang as ValidLanguage)) {
-    return currentLang as ValidLanguage;
+  const currentLang = sessionStorage.getItem('lang')?.toUpperCase() as ValidLanguage;
+  if (currentLang && Object.values(ValidLanguage).includes(currentLang)) {
+    return currentLang;
   }
   return ValidLanguage.IT;
 };
