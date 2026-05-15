@@ -2,11 +2,21 @@ import * as yup from 'yup';
 
 import { LangCode } from '@pagopa/mui-italia';
 
+import { ValidLanguage } from '../models/Contacts';
+
 export const LANGUAGE_SESSION_KEY = 'lang';
 
 export const getSessionLanguage = (): string => {
   const lang = sessionStorage.getItem(LANGUAGE_SESSION_KEY);
   return lang ?? 'it';
+};
+
+export const getValidLanguage = (): ValidLanguage => {
+  const currentLang = getSessionLanguage()?.toUpperCase() as ValidLanguage;
+  if (currentLang && Object.values(ValidLanguage).includes(currentLang)) {
+    return currentLang;
+  }
+  return ValidLanguage.IT;
 };
 
 export const setSessionLanguage = (lang: LangCode) => {

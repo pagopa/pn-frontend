@@ -48,12 +48,13 @@ export { calcUnit8Array } from './file.utility';
 export { filtersApplied, getValidValue, sortArray } from './genericFunctions.utility';
 export { IUN_regex, formatIun } from './iun.utility';
 export { lazyRetry } from './lazyRetry.utility';
-export { initLocalization, getValidLanguage } from './localization.utility';
+export { initLocalization } from './localization.utility';
 export {
   getLangCode,
   getSessionLanguage,
   hashDetectorLookup,
   setSessionLanguage,
+  getValidLanguage,
 } from './multilanguage.utility';
 export { addParamToUrl } from './navigation.utility';
 export {
