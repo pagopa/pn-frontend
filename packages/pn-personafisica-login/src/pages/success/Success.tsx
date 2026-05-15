@@ -39,9 +39,13 @@ const SuccessPage = () => {
 
     const IDP = sessionStorage.getItem('IDP');
 
-    PFLoginEventStrategyFactory.triggerEvent(PFLoginEventsType.SEND_LOGIN_METHOD, {
-      entityID: IDP,
-    });
+    PFLoginEventStrategyFactory.triggerEvent(
+      PFLoginEventsType.SEND_LOGIN_METHOD,
+      {
+        entityID: IDP,
+      },
+      { transport: 'sendBeacon' }
+    );
 
     sessionStorage.removeItem('IDP');
   }, []);

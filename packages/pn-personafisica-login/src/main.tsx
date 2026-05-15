@@ -36,14 +36,14 @@ async function doTheRender() {
     );
 
     root.render(
-      <React.StrictMode>
-        <ThemeProvider theme={theme}>
-          <CssBaseline />
-          <Suspense fallback={<LoadingPage renderType="whole" />}>
-            <RouterProvider router={router} />
-          </Suspense>
-        </ThemeProvider>
-      </React.StrictMode>
+      // <React.StrictMode>
+      <ThemeProvider theme={theme}>
+        <CssBaseline />
+        <Suspense fallback={<LoadingPage renderType="whole" />}>
+          <RouterProvider router={router} />
+        </Suspense>
+      </ThemeProvider>
+      // </React.StrictMode>
     );
 
     reportWebVitals();

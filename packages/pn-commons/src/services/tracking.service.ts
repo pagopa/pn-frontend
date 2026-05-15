@@ -1,6 +1,6 @@
 // leave default import for mixpanel, using named once it won't work
 import { isEmpty, isNil } from 'lodash-es';
-import mixpanel from 'mixpanel-browser';
+import mixpanel, { Callback, RequestOptions } from 'mixpanel-browser';
 
 import { AnyAction, Dispatch, PayloadAction } from '@reduxjs/toolkit';
 
@@ -16,11 +16,12 @@ import EventStrategyFactory from '../utility/MixpanelUtils/EventStrategyFactory'
 function callMixpanelTrackingMethod(
   propertyType: EventPropertyType,
   event_name: string,
-  properties?: any
+  properties?: any,
+  trackOptions?: RequestOptions | Callback
 ) {
   switch (propertyType) {
     case EventPropertyType.TRACK:
-      mixpanel.track(event_name, properties);
+      mixpanel.track(event_name, properties, trackOptions);
       break;
     case EventPropertyType.PROFILE:
       mixpanel.people.set(properties);
@@ -51,17 +52,18 @@ export function trackEvent(
   propertyType: EventPropertyType,
   event_name: string,
   nodeEnv: string,
-  properties?: any
+  properties?: any,
+  trackOptions?: RequestOptions | Callback
 ): void {
   if (nodeEnv === 'test') {
     return;
   }
 
   try {
-    callMixpanelTrackingMethod(propertyType, event_name, properties);
+    callMixpanelTrackingMethod(propertyType, event_name, properties, trackOptions);
   } catch {
     // eslint-disable-next-line no-console
-    console.log(event_name, properties);
+    console.log(event_name, properties, trackOptions);
   }
 }
 
