@@ -12,7 +12,6 @@ import {
   ContactSource,
   IOAllowedValues,
   SaveDigitalAddressParams,
-  ValidLanguage,
 } from '../../models/contacts';
 import { createOrUpdateAddress, removeSercqAndEmail } from '../../redux/contact/actions';
 import { contactsSelectors } from '../../redux/contact/reducers';
@@ -35,7 +34,7 @@ enum ModalType {
 }
 
 const EmailContactItem: React.FC = () => {
-  const { t, i18n } = useTranslation(['common', 'recapiti']);
+  const { t } = useTranslation(['common', 'recapiti']);
   const {
     defaultSERCQ_SENDAddress,
     defaultPECAddress,

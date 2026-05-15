@@ -9,7 +9,6 @@ import {
   ChannelType,
   ContactSource,
   SaveDigitalAddressParams,
-  ValidLanguage,
 } from '../../models/contacts';
 import { createOrUpdateAddress } from '../../redux/contact/actions';
 import { contactsSelectors } from '../../redux/contact/reducers';
@@ -31,7 +30,7 @@ enum ModalType {
 }
 
 const PecContactItem: React.FC = () => {
-  const { t, i18n } = useTranslation(['common', 'recapiti']);
+  const { t } = useTranslation(['common', 'recapiti']);
   const { defaultPECAddress, defaultSERCQ_SENDAddress, addresses } = useAppSelector(
     contactsSelectors.selectAddresses
   );

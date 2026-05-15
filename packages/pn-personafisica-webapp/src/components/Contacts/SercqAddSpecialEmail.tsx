@@ -5,12 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { appStateActions } from '@pagopa-pn/pn-commons';
 
 import { PFEventsType } from '../../models/PFEventsType';
-import {
-  AddressType,
-  ChannelType,
-  SaveDigitalAddressParams,
-  ValidLanguage,
-} from '../../models/contacts';
+import { AddressType, ChannelType, SaveDigitalAddressParams } from '../../models/contacts';
 import { createOrUpdateAddress } from '../../redux/contact/actions';
 import { contactsSelectors } from '../../redux/contact/reducers';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
@@ -26,7 +21,7 @@ enum ModalType {
 }
 
 const SercqAddSpecialEmail = () => {
-  const { t, i18n } = useTranslation(['common', 'recapiti']);
+  const { t } = useTranslation(['common', 'recapiti']);
   const dispatch = useAppDispatch();
   const addressesData = useAppSelector(contactsSelectors.selectAddresses);
   const [modalOpen, setModalOpen] = useState<ModalType | null>(null);

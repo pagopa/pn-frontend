@@ -22,7 +22,6 @@ import {
   ContactSource,
   IOAllowedValues,
   SaveDigitalAddressParams,
-  ValidLanguage,
 } from '../../models/contacts';
 import {
   DIGITAL_DOMICILE_ACTIVATION,
@@ -73,7 +72,7 @@ const SmsContactElem: React.FC<SmsElemProps> = ({
   beforeValidationCallback,
   inSERCQWizardContext = false,
 }) => {
-  const { t, i18n } = useTranslation(['common', 'recapiti']);
+  const { t } = useTranslation(['common', 'recapiti']);
   const { defaultSMSAddress, addresses } = useAppSelector(contactsSelectors.selectAddresses);
   const externalEvent = useAppSelector((state: RootState) => state.contactsState.event);
   const digitalContactRef = useRef<{ toggleEdit: () => void; resetForm: () => Promise<void> }>({

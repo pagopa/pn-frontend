@@ -45,7 +45,6 @@ import {
   ContactSource,
   SaveDigitalAddressParams,
   Sender,
-  ValidLanguage,
 } from '../../models/contacts';
 import { Party } from '../../models/party';
 import { PRIVACY_POLICY, TERMS_OF_SERVICE_SERCQ_SEND } from '../../navigation/routes.const';
@@ -142,7 +141,7 @@ const ErrorBanner: React.FC<{ type: ErrorBannerType | undefined; contactValue?: 
 const AddSpecialContact = forwardRef<AddSpecialContactRef, Props>(
   // eslint-disable-next-line sonarjs/cognitive-complexity
   ({ handleContactAdded }: Props, ref) => {
-    const { t, i18n } = useTranslation(['common', 'recapiti']);
+    const { t } = useTranslation(['common', 'recapiti']);
     const dispatch = useAppDispatch();
     const getOptionLabel = (option: Party) => option.name || '';
     const [errorBanner, setErrorBanner] = useState<ErrorBannerType | undefined>();

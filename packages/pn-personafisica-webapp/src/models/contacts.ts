@@ -39,14 +39,6 @@ export enum ContactOperation {
   SCROLL = 'SCROLL',
 }
 
-export enum ValidLanguage {
-  IT = 'IT',
-  EN = 'EN',
-  FR = 'FR',
-  DE = 'DE',
-  SL = 'SL',
-}
-
 export interface Sender {
   senderId: string;
   senderName?: string;

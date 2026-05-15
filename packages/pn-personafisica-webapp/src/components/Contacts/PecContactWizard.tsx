@@ -18,12 +18,7 @@ import { EventAction, IllusHourglass, PnWizard, PnWizardStep } from '@pagopa-pn/
 import { ButtonNaked } from '@pagopa/mui-italia';
 
 import { PFEventsType } from '../../models/PFEventsType';
-import {
-  AddressType,
-  ChannelType,
-  SaveDigitalAddressParams,
-  ValidLanguage,
-} from '../../models/contacts';
+import { AddressType, ChannelType, SaveDigitalAddressParams } from '../../models/contacts';
 import { NOTIFICHE } from '../../navigation/routes.const';
 import { createOrUpdateAddress } from '../../redux/contact/actions';
 import { contactsSelectors } from '../../redux/contact/reducers';
@@ -44,7 +39,7 @@ const PecContactWizard: React.FC<Props> = ({
   setShowPecWizard,
   onGoBack,
 }) => {
-  const { t, i18n } = useTranslation(['recapiti', 'common']);
+  const { t } = useTranslation(['recapiti', 'common']);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const [activeStep, setActiveStep] = useState(0);

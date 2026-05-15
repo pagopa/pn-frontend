@@ -22,7 +22,6 @@ import {
   DigitalAddress,
   SaveDigitalAddressParams,
   Sender,
-  ValidLanguage,
 } from '../../models/contacts';
 import { createOrUpdateAddress, deleteAddress } from '../../redux/contact/actions';
 import { contactsSelectors, setExternalEvent } from '../../redux/contact/reducers';
@@ -49,7 +48,7 @@ const SpecialContacts: React.FC<{ addressType: AddressType; channelType?: Channe
   addressType,
   channelType,
 }) => {
-  const { t, i18n } = useTranslation(['common', 'recapiti']);
+  const { t } = useTranslation(['common', 'recapiti']);
   const dispatch = useAppDispatch();
   const { addresses, specialAddresses } = useAppSelector(contactsSelectors.selectAddresses);
   const [modalOpen, setModalOpen] = useState<ModalType | null>(null);
