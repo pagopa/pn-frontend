@@ -20,6 +20,7 @@ import {
   IllusQuestion,
   LegalFactId,
   LegalFactType,
+  NotificationDetailBilingualDocuments,
   NotificationDetailDocuments,
   NotificationDetailOtherDocument,
   NotificationDetailPayment,
@@ -41,6 +42,7 @@ import {
   downloadDocument,
   formatDate,
   getPaymentCache,
+  getSessionLanguage,
   useErrors,
   useIsCancelled,
   useIsMobile,
@@ -110,6 +112,8 @@ const NotificationDetail: React.FC = () => {
     (state: RootState) => state.generalInfoState.delegators
   );
   const notification = useAppSelector((state: RootState) => state.notificationState.notification);
+  const notificationLanguage = notification.additionalLanguages?.[0];
+  const isSameLang = notificationLanguage?.includes(getSessionLanguage()?.toUpperCase());
   const downtimeEvents = useAppSelector(
     (state: RootState) => state.notificationState.downtimeEvents
   );
@@ -734,6 +738,15 @@ const NotificationDetail: React.FC = () => {
                     disableDownloads={isCancelled.cancellationInTimeline}
                     downtimeExampleLink={DOWNTIME_EXAMPLE_LINK}
                   />
+                  {!isSameLang && (
+                    <Paper sx={{ p: 3 }} elevation={0}>
+                      <NotificationDetailBilingualDocuments
+                        title={t('detail.bilingual.title', { ns: 'notifiche' })}
+                        description={t('detail.bilingual.description', { ns: 'notifiche' })}
+                        action={t('detail.bilingual.action', { ns: 'notifiche' })}
+                      />
+                    </Paper>
+                  )}
                 </Stack>
               </Grid>
               <Grid item lg={5} xs={12}>
