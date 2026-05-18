@@ -34,16 +34,10 @@ const OneIdentityLoginError: React.FC = () => {
   //   });
   // };
 
-  const trackMixpanelErrorEvent = () => {
-    if (process.env.NODE_ENV !== 'test') {
-      PFLoginEventStrategyFactory.triggerEvent(PFLoginEventsType.SEND_LOGIN_FAILURE, {
-        reason: error,
-      });
-    }
-  };
-
   useEffect(() => {
-    trackMixpanelErrorEvent();
+    PFLoginEventStrategyFactory.triggerEvent(PFLoginEventsType.SEND_LOGIN_FAILURE, {
+      reason: error,
+    });
   }, []);
 
   return (
