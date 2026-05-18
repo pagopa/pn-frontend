@@ -101,6 +101,11 @@ const SessionGuard = () => {
     try {
       const user = await dispatch(exchangeOneIdentityCode(exchangeCodeParams)).unwrap();
       sessionCheck(user.exp);
+
+      // TODO, get IDP from exchangeOneIdentityCode API response
+      // PFLoginEventStrategyFactory.triggerEvent(PFLoginEventsType.SEND_LOGIN_METHOD, {
+      //   entityID: idp,
+      // });
     } catch (error) {
       handleTokenExchangeError(error);
     }
