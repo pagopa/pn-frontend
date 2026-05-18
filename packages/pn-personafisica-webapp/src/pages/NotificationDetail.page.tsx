@@ -112,11 +112,14 @@ const NotificationDetail: React.FC = () => {
     (state: RootState) => state.generalInfoState.delegators
   );
   const notification = useAppSelector((state: RootState) => state.notificationState.notification);
-  const notificationLanguage = notification.additionalLanguages?.[0];
-  const isSameLang = notificationLanguage?.includes(getSessionLanguage()?.toUpperCase());
+  const notificationLanguage = notification.additionalLanguages?.[0] ?? 'IT';
+  const sessionLang = getSessionLanguage()?.toUpperCase();
+  const isSameLang = notificationLanguage?.includes(sessionLang);
   const downtimeEvents = useAppSelector(
     (state: RootState) => state.notificationState.downtimeEvents
   );
+
+  const showBilingualSection = !isSameLang && sessionLang !== 'IT';
 
   const isCancelled = useIsCancelled({ notification });
   const isCancelledOrCancelling = isCancelled.cancelled || isCancelled.cancellationInProgress;
@@ -738,7 +741,7 @@ const NotificationDetail: React.FC = () => {
                     disableDownloads={isCancelled.cancellationInTimeline}
                     downtimeExampleLink={DOWNTIME_EXAMPLE_LINK}
                   />
-                  {!isSameLang && (
+                  {showBilingualSection && (
                     <Paper sx={{ p: 3 }} elevation={0}>
                       <NotificationDetailBilingualDocuments
                         title={t('detail.bilingual.title', { ns: 'notifiche' })}
