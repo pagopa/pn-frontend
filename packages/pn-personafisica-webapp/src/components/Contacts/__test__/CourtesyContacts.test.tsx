@@ -18,7 +18,7 @@ const defaultSmsAddress = digitalCourtesyAddresses.find(
   (addr) => addr.senderId === 'default' && addr.channelType === ChannelType.SMS
 );
 
-describe('CourtesyContacts Component', async () => {
+describe('CourtesyContacts Component', () => {
   it('renders component - no contacts', async () => {
     const { container, getByTestId, getByRole } = render(<CourtesyContacts />);
     const emailContact = getByTestId(`default_emailContact`);

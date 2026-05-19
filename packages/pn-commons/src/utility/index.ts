@@ -87,7 +87,6 @@ export { parseError } from './redux.utility';
 export { AppRouteParams, compileRoute, getRapidAccessParam } from './routes.utility';
 export { storageOpsBuilder } from './storage.utility';
 export { dataRegex, formatFiscalCode, fromStringToBase64, sanitizeString } from './string.utility';
-export { buttonNakedInheritStyle } from './styles.utility';
 export { extractRootTraceId } from './support.utility';
 export {
   adaptedTokenExchangeError,

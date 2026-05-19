@@ -20,6 +20,7 @@ import { resetState } from '../redux/auth/reducers';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { RootState } from '../redux/store';
 import { getConfiguration } from '../services/configuration.service';
+import { AAR_UTM, buildSearchWithUtm } from '../utility/utm.utility';
 import { goToLoginPortal } from './navigation.utility';
 import * as routes from './routes.const';
 
@@ -97,11 +98,16 @@ const SessionGuard = () => {
       await dispatch(apiLogout(sessionToken));
     }
     dispatch(resetState());
-    goToLoginPortal();
+    goToLoginPortal({ search: location.search });
   };
 
   useEffect(() => {
     const aar = params.get(AppRouteParams.AAR);
+
+    const aarSearchWithUtm = aar
+      ? buildSearchWithUtm(location.search, AAR_UTM, { avoidOverride: true })
+      : null;
+
     if (aar) {
       localStorage.setItem(AppRouteParams.AAR, sanitizeString(aar));
     }
@@ -110,8 +116,14 @@ const SessionGuard = () => {
       void performExchangeToken(spidToken);
     } else if (sessionToken) {
       sessionCheck(expDate);
+      if (aarSearchWithUtm) {
+        navigate(
+          { pathname: location.pathname, search: aarSearchWithUtm, hash: location.hash },
+          { replace: true }
+        );
+      }
     } else {
-      goToLoginPortal();
+      goToLoginPortal({ search: aarSearchWithUtm ?? location.search });
     }
     return () => {
       AppResponsePublisher.error.unsubscribe('exchangeToken', manageUnforbiddenError);

@@ -1,4 +1,5 @@
 import MockAdapter from 'axios-mock-adapter';
+import { vi } from 'vitest';
 
 import { ThemeProvider } from '@mui/material';
 import { AppResponseMessage, ResponseEventDispatcher, formatDate } from '@pagopa-pn/pn-commons';
@@ -19,16 +20,12 @@ const AppStatusWithErrorHandling = () => (
   </ThemeProvider>
 );
 
-describe('AppStatus page', async () => {
+describe('AppStatus page', () => {
   let mock: MockAdapter;
-  const original = window.location;
 
   beforeAll(() => {
     mock = new MockAdapter(apiClient);
-    Object.defineProperty(window, 'location', {
-      configurable: true,
-      value: { href: '' },
-    });
+    vi.stubGlobal('location', { href: '' });
   });
 
   afterEach(() => {
@@ -38,7 +35,7 @@ describe('AppStatus page', async () => {
 
   afterAll(() => {
     mock.restore();
-    Object.defineProperty(window, 'location', { configurable: true, value: original });
+    vi.unstubAllGlobals();
   });
   /*
    * The intent of the "OK" test is to verify somehow that the result of the API calls

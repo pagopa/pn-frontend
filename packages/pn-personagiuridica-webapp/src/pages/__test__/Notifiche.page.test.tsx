@@ -28,7 +28,7 @@ import { apiClient } from '../../api/apiClients';
 import { DASHBOARD_ACTIONS } from '../../redux/dashboard/actions';
 import Notifiche from '../Notifiche.page';
 
-describe('Notifiche Page ', async () => {
+describe('Notifiche Page ', () => {
   let result: RenderResult;
   let mock: MockAdapter;
   const originalMatchMedia = globalThis.matchMedia;

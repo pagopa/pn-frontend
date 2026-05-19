@@ -14,7 +14,7 @@ import { apiClient } from '../../api/apiClients';
 import * as routes from '../../navigation/routes.const';
 import NewApiKey from '../NewApiKey.page';
 
-describe('NewApiKey component', async () => {
+describe('NewApiKey component', () => {
   let result: RenderResult;
   let mock: MockAdapter;
 

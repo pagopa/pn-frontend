@@ -6,7 +6,7 @@ import { apiClient } from '../../../api/apiClients';
 import * as routes from '../../../navigation/routes.const';
 import DelegatesByCompany from '../DelegatesByCompany';
 
-describe('Delegates Component - assuming delegates API works properly', async () => {
+describe('Delegates Component - assuming delegates API works properly', () => {
   let mock: MockAdapter;
 
   beforeAll(() => {
