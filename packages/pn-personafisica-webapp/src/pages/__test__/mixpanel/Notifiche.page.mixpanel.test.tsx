@@ -50,6 +50,8 @@ describe('Notifiche.page - Mixpanel events', () => {
         PFEventsType.SEND_YOUR_NOTIFICATIONS,
         expect.objectContaining({
           notifications: expect.any(Array),
+          delegators: expect.any(Array),
+          pagination: expect.any(Object),
         })
       );
     });
@@ -77,6 +79,8 @@ describe('Notifiche.page - Mixpanel events', () => {
         PFEventsType.SEND_NOTIFICATION_DELEGATED,
         expect.objectContaining({
           notifications: expect.any(Array),
+          delegators: expect.any(Array),
+          pagination: expect.any(Object),
         })
       );
     });

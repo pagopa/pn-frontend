@@ -55,7 +55,7 @@ describe('EmailContactItem - Mixpanel events', () => {
     await waitFor(() => expect(mock.history.post).toHaveLength(1));
     expect(triggerEventSpy).toHaveBeenCalledWith(
       PFEventsType.SEND_ADD_EMAIL_START,
-      expect.any(Object)
+      expect.objectContaining({ senderId: expect.any(String), source: expect.any(String) })
     );
   });
 
@@ -99,7 +99,7 @@ describe('EmailContactItem - Mixpanel events', () => {
     await waitFor(() => {
       expect(triggerEventSpy).toHaveBeenCalledWith(
         PFEventsType.SEND_ADD_EMAIL_UX_SUCCESS,
-        expect.any(Object)
+        expect.objectContaining({ senderId: expect.any(String), fromSercqSend: expect.any(Boolean) })
       );
     });
   });
@@ -140,11 +140,11 @@ describe('EmailContactItem - Mixpanel events', () => {
     fireEvent.click(screen.getByTestId('disable-email'));
     expect(triggerEventSpy).toHaveBeenCalledWith(
       PFEventsType.SEND_REMOVE_EMAIL_START,
-      expect.any(Object)
+      expect.objectContaining({ legal_addresses: expect.any(Array), event_type: expect.any(String) })
     );
     expect(triggerEventSpy).toHaveBeenCalledWith(
       PFEventsType.SEND_REMOVE_EMAIL_POP_UP,
-      expect.any(Object)
+      expect.objectContaining({ legal_addresses: expect.any(Array), event_type: expect.any(String) })
     );
   });
 
@@ -157,7 +157,7 @@ describe('EmailContactItem - Mixpanel events', () => {
     fireEvent.click(dialog.querySelectorAll('button')[0]);
     expect(triggerEventSpy).toHaveBeenCalledWith(
       PFEventsType.SEND_REMOVE_EMAIL_POP_UP_CANCEL,
-      expect.any(Object)
+      expect.objectContaining({ legal_addresses: expect.any(Array), event_type: expect.any(String) })
     );
   });
 
@@ -172,7 +172,7 @@ describe('EmailContactItem - Mixpanel events', () => {
     await waitFor(() => {
       expect(triggerEventSpy).toHaveBeenCalledWith(
         PFEventsType.SEND_REMOVE_EMAIL_UX_SUCCESS,
-        expect.any(Object)
+        expect.objectContaining({ legal_addresses: expect.any(Array), event_type: expect.any(String) })
       );
     });
   });

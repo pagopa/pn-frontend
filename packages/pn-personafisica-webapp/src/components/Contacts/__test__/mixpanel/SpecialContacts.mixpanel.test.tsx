@@ -58,7 +58,7 @@ describe('SpecialContacts - Mixpanel events', () => {
     await waitFor(() => {
       expect(triggerEventSpy).toHaveBeenCalledWith(
         PFEventsType.SEND_ADD_PEC_START,
-        expect.any(Object)
+        expect.objectContaining({ senderId: expect.any(String), source: expect.any(String) })
       );
     });
   });
@@ -69,11 +69,11 @@ describe('SpecialContacts - Mixpanel events', () => {
     fireEvent.click(within(firstForm).getByRole('button', { name: 'button.elimina' }));
     expect(triggerEventSpy).toHaveBeenCalledWith(
       PFEventsType.SEND_REMOVE_DIGITAL_DOMICILE_PEC_START,
-      expect.any(Object)
+      expect.objectContaining({ event_type: expect.any(String), addresses: expect.any(Array), other_contact: expect.any(Boolean) })
     );
     expect(triggerEventSpy).toHaveBeenCalledWith(
       PFEventsType.SEND_REMOVE_DIGITAL_DOMICILE_PEC_POP_UP,
-      expect.any(Object)
+      expect.objectContaining({ event_type: expect.any(String), addresses: expect.any(Array), other_contact: expect.any(Boolean) })
     );
   });
 
@@ -86,7 +86,7 @@ describe('SpecialContacts - Mixpanel events', () => {
     fireEvent.click(dialog.querySelectorAll('button')[0]);
     expect(triggerEventSpy).toHaveBeenCalledWith(
       PFEventsType.SEND_REMOVE_DIGITAL_DOMICILE_PEC_POP_UP_CANCEL,
-      expect.any(Object)
+      expect.objectContaining({ event_type: expect.any(String), addresses: expect.any(Array), other_contact: expect.any(Boolean) })
     );
   });
 
@@ -102,7 +102,7 @@ describe('SpecialContacts - Mixpanel events', () => {
 
     expect(triggerEventSpy).toHaveBeenCalledWith(
       PFEventsType.SEND_REMOVE_DIGITAL_DOMICILE_PEC_POP_UP_CONTINUE,
-      expect.any(Object)
+      expect.objectContaining({ event_type: expect.any(String), addresses: expect.any(Array), other_contact: expect.any(Boolean) })
     );
     await waitFor(() => {
       expect(triggerEventSpy).toHaveBeenCalledWith(
@@ -113,7 +113,7 @@ describe('SpecialContacts - Mixpanel events', () => {
     await waitFor(() => {
       expect(triggerEventSpy).toHaveBeenCalledWith(
         PFEventsType.SEND_REMOVE_DIGITAL_DOMICILE_PEC_UX_SUCCESS,
-        expect.any(Object)
+        expect.objectContaining({ event_type: expect.any(String), addresses: expect.any(Array), other_contact: expect.any(Boolean) })
       );
     });
   });

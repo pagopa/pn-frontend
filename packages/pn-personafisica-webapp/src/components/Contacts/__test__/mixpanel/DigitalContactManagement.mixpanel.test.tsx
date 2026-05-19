@@ -23,7 +23,7 @@ describe('DigitalContactManagement - Mixpanel events', () => {
     });
     expect(triggerEventSpy).toHaveBeenCalledWith(
       PFEventsType.SEND_DIGITAL_DOMICILE_MANAGEMENT,
-      expect.any(Object)
+      expect.objectContaining({ legal_addresses: expect.any(Array), event_type: expect.any(String) })
     );
   });
 

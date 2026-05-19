@@ -66,7 +66,7 @@ describe('SmsContactItem - Mixpanel events', () => {
     await waitFor(() => expect(mock.history.post).toHaveLength(1));
     expect(triggerEventSpy).toHaveBeenCalledWith(
       PFEventsType.SEND_ADD_SMS_START,
-      expect.any(Object)
+      expect.objectContaining({ senderId: expect.any(String), source: expect.any(String) })
     );
   });
 
@@ -116,7 +116,7 @@ describe('SmsContactItem - Mixpanel events', () => {
     await waitFor(() => {
       expect(triggerEventSpy).toHaveBeenCalledWith(
         PFEventsType.SEND_ADD_SMS_UX_SUCCESS,
-        expect.any(Object)
+        expect.objectContaining({ senderId: expect.any(String), fromSercqSend: expect.any(Boolean) })
       );
     });
   });
@@ -157,11 +157,11 @@ describe('SmsContactItem - Mixpanel events', () => {
     fireEvent.click(screen.getByRole('button', { name: 'button.disable' }));
     expect(triggerEventSpy).toHaveBeenCalledWith(
       PFEventsType.SEND_REMOVE_SMS_START,
-      expect.any(Object)
+      expect.objectContaining({ legal_addresses: expect.any(Array), event_type: expect.any(String) })
     );
     expect(triggerEventSpy).toHaveBeenCalledWith(
       PFEventsType.SEND_REMOVE_SMS_POP_UP,
-      expect.any(Object)
+      expect.objectContaining({ legal_addresses: expect.any(Array), event_type: expect.any(String) })
     );
   });
 
@@ -175,7 +175,7 @@ describe('SmsContactItem - Mixpanel events', () => {
     fireEvent.click(dialog.querySelectorAll('button')[0]);
     expect(triggerEventSpy).toHaveBeenCalledWith(
       PFEventsType.SEND_REMOVE_SMS_POP_UP_CANCEL,
-      expect.any(Object)
+      expect.objectContaining({ legal_addresses: expect.any(Array), event_type: expect.any(String) })
     );
   });
 
@@ -194,7 +194,7 @@ describe('SmsContactItem - Mixpanel events', () => {
     await waitFor(() => {
       expect(triggerEventSpy).toHaveBeenCalledWith(
         PFEventsType.SEND_REMOVE_SMS_POP_UP_UX_SUCCESS,
-        expect.any(Object)
+        expect.objectContaining({ legal_addresses: expect.any(Array), event_type: expect.any(String) })
       );
     });
   });

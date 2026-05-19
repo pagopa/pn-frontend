@@ -73,7 +73,7 @@ describe('SercqSendContactWizard - Mixpanel events', () => {
     });
     expect(triggerEventSpy).toHaveBeenCalledWith(
       PFEventsType.SEND_ADD_SERCQ_SEND_SUMMARY,
-      expect.any(Object)
+      expect.objectContaining({ event_type: expect.any(String) })
     );
   });
 
@@ -110,7 +110,7 @@ describe('SercqSendContactWizard - Mixpanel events', () => {
     expect(triggerEventSpy).toHaveBeenCalledWith(PFEventsType.SEND_ADD_SERCQ_SEND_TOS_MANDATORY);
     expect(triggerEventSpy).toHaveBeenCalledWith(
       PFEventsType.SEND_ADD_SERCQ_SEND_UX_CONVERSION,
-      expect.any(Object)
+      expect.objectContaining({ tos_validation: expect.any(String) })
     );
   });
 
@@ -132,7 +132,7 @@ describe('SercqSendContactWizard - Mixpanel events', () => {
     await waitFor(() => {
       expect(triggerEventSpy).toHaveBeenCalledWith(
         PFEventsType.SEND_ADD_SERCQ_SEND_UX_SUCCESS,
-        expect.any(Object)
+        expect.objectContaining({ event_type: expect.any(String), other_contact: expect.anything() })
       );
     });
   });

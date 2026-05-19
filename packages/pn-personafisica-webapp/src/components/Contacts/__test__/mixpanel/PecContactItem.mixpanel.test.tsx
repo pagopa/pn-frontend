@@ -46,7 +46,7 @@ describe('PecContactItem - Mixpanel events', () => {
     mock.onPost('/bff/v1/addresses/LEGAL/default/PEC').reply(200, { result: 'CODE_VERIFICATION_REQUIRED' });
     await submitPec();
     await waitFor(() => expect(mock.history.post).toHaveLength(1));
-    expect(triggerEventSpy).toHaveBeenCalledWith(PFEventsType.SEND_ADD_PEC_START, expect.any(Object));
+    expect(triggerEventSpy).toHaveBeenCalledWith(PFEventsType.SEND_ADD_PEC_START, expect.objectContaining({ senderId: expect.any(String), source: expect.any(String) }));
   });
 
   it('fires SEND_ADD_PEC_UX_CONVERSION when the verification code is submitted', async () => {

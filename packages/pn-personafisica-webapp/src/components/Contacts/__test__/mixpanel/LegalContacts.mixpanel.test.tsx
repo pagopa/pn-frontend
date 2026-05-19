@@ -47,7 +47,7 @@ describe('LegalContacts - Mixpanel events', () => {
     fireEvent.click(screen.getByRole('button', { name: 'button.start' }));
     expect(triggerEventSpy).toHaveBeenCalledWith(
       PFEventsType.SEND_ADD_SERCQ_SEND_ENTER_FLOW,
-      expect.any(Object)
+      expect.objectContaining({ event_type: expect.any(String), addresses: expect.any(Array), source: expect.any(String) })
     );
   });
 
@@ -58,7 +58,7 @@ describe('LegalContacts - Mixpanel events', () => {
     fireEvent.click(screen.getByRole('button', { name: 'button.manage' }));
     expect(triggerEventSpy).toHaveBeenCalledWith(
       PFEventsType.SEND_MANAGE_DIGITAL_DOMICILE,
-      expect.any(Object)
+      expect.objectContaining({ legal_addresses: expect.any(Array), event_type: expect.any(String) })
     );
   });
 
@@ -69,11 +69,11 @@ describe('LegalContacts - Mixpanel events', () => {
     fireEvent.click(screen.getByRole('button', { name: 'button.disable' }));
     expect(triggerEventSpy).toHaveBeenCalledWith(
       PFEventsType.SEND_REMOVE_SERCQ_SEND_START,
-      expect.any(Object)
+      expect.objectContaining({ event_type: expect.any(String), addresses: expect.any(Array), other_contact: expect.any(Boolean) })
     );
     expect(triggerEventSpy).toHaveBeenCalledWith(
       PFEventsType.SEND_REMOVE_SERCQ_SEND_POP_UP,
-      expect.any(Object)
+      expect.objectContaining({ event_type: expect.any(String), addresses: expect.any(Array), other_contact: expect.any(Boolean) })
     );
   });
 
@@ -86,7 +86,7 @@ describe('LegalContacts - Mixpanel events', () => {
     fireEvent.click(screen.getByRole('button', { name: 'button.annulla' }));
     expect(triggerEventSpy).toHaveBeenCalledWith(
       PFEventsType.SEND_REMOVE_SERCQ_SEND_POP_UP_CANCEL,
-      expect.any(Object)
+      expect.objectContaining({ event_type: expect.any(String), addresses: expect.any(Array), other_contact: expect.any(Boolean) })
     );
   });
 
@@ -102,7 +102,7 @@ describe('LegalContacts - Mixpanel events', () => {
     );
     expect(triggerEventSpy).toHaveBeenCalledWith(
       PFEventsType.SEND_REMOVE_SERCQ_SEND_POP_UP_CONTINUE,
-      expect.any(Object)
+      expect.objectContaining({ event_type: expect.any(String), addresses: expect.any(Array), other_contact: expect.any(Boolean) })
     );
     await waitFor(() => {
       expect(triggerEventSpy).toHaveBeenCalledWith(
@@ -113,7 +113,7 @@ describe('LegalContacts - Mixpanel events', () => {
     await waitFor(() => {
       expect(triggerEventSpy).toHaveBeenCalledWith(
         PFEventsType.SEND_REMOVE_SERCQ_SEND_UX_SUCCESS,
-        expect.any(Object)
+        expect.objectContaining({ event_type: expect.any(String), addresses: expect.any(Array), other_contact: expect.any(Boolean) })
       );
     });
   });
@@ -125,11 +125,11 @@ describe('LegalContacts - Mixpanel events', () => {
     fireEvent.click(screen.getByRole('button', { name: 'button.disable' }));
     expect(triggerEventSpy).toHaveBeenCalledWith(
       PFEventsType.SEND_REMOVE_DIGITAL_DOMICILE_PEC_START,
-      expect.any(Object)
+      expect.objectContaining({ event_type: expect.any(String), addresses: expect.any(Array), other_contact: expect.any(Boolean) })
     );
     expect(triggerEventSpy).toHaveBeenCalledWith(
       PFEventsType.SEND_REMOVE_DIGITAL_DOMICILE_PEC_POP_UP,
-      expect.any(Object)
+      expect.objectContaining({ event_type: expect.any(String), addresses: expect.any(Array), other_contact: expect.any(Boolean) })
     );
   });
 
@@ -142,7 +142,7 @@ describe('LegalContacts - Mixpanel events', () => {
     fireEvent.click(screen.getByRole('button', { name: 'button.annulla' }));
     expect(triggerEventSpy).toHaveBeenCalledWith(
       PFEventsType.SEND_REMOVE_DIGITAL_DOMICILE_PEC_POP_UP_CANCEL,
-      expect.any(Object)
+      expect.objectContaining({ event_type: expect.any(String), addresses: expect.any(Array), other_contact: expect.any(Boolean) })
     );
   });
 
@@ -156,7 +156,7 @@ describe('LegalContacts - Mixpanel events', () => {
     fireEvent.click(screen.getByRole('button', { name: 'legal-contacts.remove-pec-confirm' }));
     expect(triggerEventSpy).toHaveBeenCalledWith(
       PFEventsType.SEND_REMOVE_DIGITAL_DOMICILE_PEC_POP_UP_CONTINUE,
-      expect.any(Object)
+      expect.objectContaining({ event_type: expect.any(String), addresses: expect.any(Array), other_contact: expect.any(Boolean) })
     );
     await waitFor(() => {
       expect(triggerEventSpy).toHaveBeenCalledWith(PFEventsType.SEND_REMOVE_PEC_SUCCESS, 'default');
@@ -164,7 +164,7 @@ describe('LegalContacts - Mixpanel events', () => {
     await waitFor(() => {
       expect(triggerEventSpy).toHaveBeenCalledWith(
         PFEventsType.SEND_REMOVE_DIGITAL_DOMICILE_PEC_UX_SUCCESS,
-        expect.any(Object)
+        expect.objectContaining({ event_type: expect.any(String), addresses: expect.any(Array), other_contact: expect.any(Boolean) })
       );
     });
   });
