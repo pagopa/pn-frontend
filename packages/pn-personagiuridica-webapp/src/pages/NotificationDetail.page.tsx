@@ -7,10 +7,7 @@ import { Alert, AlertTitle, Box, Grid, Paper, Stack, Typography } from '@mui/mat
 import {
   ApiError,
   ApiErrorWrapper,
-  Downtime,
-  EventDowntimeType,
   GetDowntimeHistoryParams,
-  INotificationDetailTimeline,
   LegalFactId,
   LegalFactType,
   NotificationDetailDocuments,
@@ -23,14 +20,11 @@ import {
   NotificationFeePolicy,
   NotificationPaymentRecipient,
   NotificationRelatedDowntimes,
-  NotificationStatus,
   PagoPaIntegrationMode,
   PaymentAttachmentSName,
   PaymentDetails,
-  PaymentsData,
   PnBreadcrumb,
   StatusHistoryParser,
-  TimelineCategory,
   TitleBox,
   appStateActions,
   dateIsLessThan10Years,
@@ -47,7 +41,6 @@ import { MIAlert } from '@pagopa/mui-italia';
 import DomicileBanner from '../components/DomicileBanner/DomicileBanner';
 import LoadingPageWrapper from '../components/LoadingPageWrapper/LoadingPageWrapper';
 import { NotificationCostBanner } from '../components/Notifications/NotificationCostBanner';
-import { PGEventPayloads } from '../models/PGEventPayloads';
 import { PGEventsType } from '../models/PGEventsType';
 import { PNRole } from '../models/User';
 import { ContactSource } from '../models/contacts';
@@ -67,54 +60,12 @@ import { resetState } from '../redux/notification/reducers';
 import { RootState } from '../redux/store';
 import { getConfiguration } from '../services/configuration.service';
 import PGEventStrategyFactory from '../utility/MixpanelUtils/PGEventStrategyFactory';
+import { mapNotificationDetailToEventPayload } from '../utility/MixpanelUtils/mappers/notificationPayloadMappers';
 
 // state for the invocations to this component
 // (to include in navigation or Link to the route/s arriving to it)
 type LocationState = {
   fromQrCode?: boolean; // indicates whether the user arrived to the notification detail page from the QR code
-};
-
-const getDisserviceStatus = (downtimeEvents: Array<Downtime>): EventDowntimeType => {
-  if (downtimeEvents.length === 0) {
-    return EventDowntimeType.NOT_DISSERVICE;
-  }
-
-  return downtimeEvents.every((downtime) => !!downtime.endDate)
-    ? EventDowntimeType.COMPLETED
-    : EventDowntimeType.IN_PROGRESS;
-};
-
-const buildNotificationDetailTrackingPayload = ({
-  downtimeEvents,
-  mandateId,
-  notificationStatus,
-  checkIfUserHasPayments,
-  userPayments,
-  timeline,
-}: {
-  downtimeEvents: Array<Downtime>;
-  mandateId: string | undefined;
-  notificationStatus: NotificationStatus;
-  checkIfUserHasPayments: boolean;
-  userPayments: PaymentsData;
-  timeline: Array<INotificationDetailTimeline>;
-}): PGEventPayloads[PGEventsType.SEND_PG_NOTIFICATION_DETAIL] => {
-  const hasF24 =
-    userPayments.f24Only.length > 0 || userPayments.pagoPaF24.some((payment) => payment.f24);
-
-  return {
-    notification_owner: !mandateId,
-    notification_status: notificationStatus,
-    contains_payment: checkIfUserHasPayments,
-    disservice_status: getDisserviceStatus(downtimeEvents),
-    contains_multipayment:
-      userPayments.f24Only.length + userPayments.pagoPaF24.length > 1 ? 'yes' : 'no',
-    count_payment: userPayments.pagoPaF24.filter((payment) => payment.pagoPa).length,
-    contains_f24: hasF24 ? 'yes' : 'no',
-    first_time_opening: !timeline.some(
-      (item) => item.category === TimelineCategory.NOTIFICATION_VIEWED
-    ),
-  };
 };
 
 // eslint-disable-next-line complexity
@@ -429,7 +380,7 @@ const NotificationDetail = () => {
     return () => void dispatch(resetState());
   }, []);
 
-  /* function which loads relevant information about donwtimes */
+  /* Loads relevant information about downtimes */
   const fetchDowntimeEvents = useCallback((fromDate: string, toDate: string | undefined) => {
     const fetchParams: GetDowntimeHistoryParams = {
       startDate: fromDate,
@@ -447,7 +398,7 @@ const NotificationDetail = () => {
     if (downtimesReady && pageReady && !hasNotificationReceivedApiError) {
       PGEventStrategyFactory.triggerEvent(
         PGEventsType.SEND_PG_NOTIFICATION_DETAIL,
-        buildNotificationDetailTrackingPayload({
+        mapNotificationDetailToEventPayload({
           downtimeEvents,
           mandateId,
           notificationStatus: notification.notificationStatus,
