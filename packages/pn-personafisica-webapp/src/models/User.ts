@@ -9,7 +9,10 @@ export interface User extends BasicUser, BasicUserClaims {
   iss: string;
   jti: string;
   source?: UserSource;
-  idp?: string;
+}
+
+export interface OneIdentityUser extends User {
+  idp: string;
   aar?: string;
   retrievalId?: string;
 }

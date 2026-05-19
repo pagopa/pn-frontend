@@ -1,6 +1,11 @@
 import MockAdapter from 'axios-mock-adapter';
 
-import { mockLogin, mockLogout, userResponse } from '../../../__mocks__/Auth.mock';
+import {
+  mockLogin,
+  mockLogout,
+  oneIdentityUserResponse,
+  userResponse,
+} from '../../../__mocks__/Auth.mock';
 import {
   acceptTosPrivacyConsentBodyMock,
   privacyConsentMock,
@@ -75,7 +80,7 @@ describe('Auth redux state tests', () => {
 
   it('Should be able to exchange code with One Identity', async () => {
     const mock = new MockAdapter(authClient);
-    mock.onPost(ONE_IDENTITY_TOKEN_EXCHANGE()).reply(200, userResponse);
+    mock.onPost(ONE_IDENTITY_TOKEN_EXCHANGE()).reply(200, oneIdentityUserResponse);
     const action = await store.dispatch(
       exchangeOneIdentityCode({
         code: 'mocked-code',
@@ -84,14 +89,26 @@ describe('Auth redux state tests', () => {
     );
 
     expect(action.type).toBe('exchangeOneIdentityCode/fulfilled');
-    expect(action.payload).toEqual(userResponse);
-
-    const userFromStorage = sessionStorage.getItem('user');
-    expect(userFromStorage).toBeDefined();
-    expect(JSON.parse(userFromStorage!)).toEqual(userResponse);
-
-    expect(store.getState().userState.user).toEqual(userResponse);
+    expect(action.payload).toEqual(oneIdentityUserResponse);
     expect(store.getState().userState.loginProvider).toBe('ONEIDENTITY');
+  });
+
+  it('Should strip idp, aar and retrievalId before saving One Identity user to redux and sessionStorage', async () => {
+    const mock = new MockAdapter(authClient);
+    mock.onPost(ONE_IDENTITY_TOKEN_EXCHANGE()).reply(200, oneIdentityUserResponse);
+    await store.dispatch(exchangeOneIdentityCode({ code: 'mocked-code', state: 'mocked-state' }));
+
+    const userFromStorage = JSON.parse(sessionStorage.getItem('user')!);
+    expect(userFromStorage.idp).toBeUndefined();
+    expect(userFromStorage.aar).toBeUndefined();
+    expect(userFromStorage.retrievalId).toBeUndefined();
+    expect(userFromStorage).toEqual(userResponse);
+
+    const userFromStore = store.getState().userState.user;
+    expect((userFromStore as any).idp).toBeUndefined();
+    expect((userFromStore as any).aar).toBeUndefined();
+    expect((userFromStore as any).retrievalId).toBeUndefined();
+    expect(userFromStore).toEqual(userResponse);
   });
 
   it('Should be able to logout', async () => {

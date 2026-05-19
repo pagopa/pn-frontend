@@ -1,6 +1,7 @@
 /* eslint-disable functional/immutable-data */
 import {
   OneIdentityExchangeCodeBody,
+  OneIdentityUser,
   TokenExchangeBody,
   TokenExchangeRequest,
   User,
@@ -23,8 +24,11 @@ export const AuthApi = {
 
     return response.data;
   },
-  exchangeOneIdentityCode: async ({ code, state }: OneIdentityExchangeCodeBody): Promise<User> => {
-    const response = await authClient.post<User>(ONE_IDENTITY_TOKEN_EXCHANGE(), {
+  exchangeOneIdentityCode: async ({
+    code,
+    state,
+  }: OneIdentityExchangeCodeBody): Promise<OneIdentityUser> => {
+    const response = await authClient.post<OneIdentityUser>(ONE_IDENTITY_TOKEN_EXCHANGE(), {
       code,
       state,
     });
