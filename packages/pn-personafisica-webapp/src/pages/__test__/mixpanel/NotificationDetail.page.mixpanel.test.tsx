@@ -2,7 +2,12 @@ import MockAdapter from 'axios-mock-adapter';
 import { Route, Routes } from 'react-router-dom';
 import { MockInstance, vi } from 'vitest';
 
-import { PaymentStatus, populatePaymentsPagoPaF24 } from '@pagopa-pn/pn-commons';
+import {
+  NotificationStatus,
+  PaymentStatus,
+  TimelineCategory,
+  populatePaymentsPagoPaF24,
+} from '@pagopa-pn/pn-commons';
 
 import { downtimesDTO } from '../../../__mocks__/AppStatus.mock';
 import { paymentInfo } from '../../../__mocks__/ExternalRegistry.mock';
@@ -208,5 +213,42 @@ describe('NotificationDetail.page - Mixpanel events', () => {
     });
 
     vi.useRealTimers();
+  });
+
+  it('fires SEND_CANCELLED_NOTIFICATION_REFOUND_INFO when the cancelled alert CTA is clicked', async () => {
+    mock.onGet(`/bff/v1/notifications/received/${notificationDTO.iun}`).reply(200, {
+      ...notificationDTO,
+      notificationStatus: NotificationStatus.CANCELLED,
+      timeline: [
+        ...notificationDTO.timeline,
+        {
+          elementId: 'NOTIFICATION_CANCELLATION_REQUEST.HYTD-ERPH-WDUE-202308-H-1',
+          timestamp: '2033-08-14T13:42:54.17675939Z',
+          legalFactsIds: [],
+          category: TimelineCategory.NOTIFICATION_CANCELLATION_REQUEST,
+          details: {},
+        },
+      ],
+    });
+    mock.onGet(/\/bff\/v1\/downtime\/history.*/).reply(200, downtimesDTO);
+
+    const { getByTestId } = await act(async () =>
+      render(<Component />, {
+        preloadedState: baseState,
+        route: routes.GET_DETTAGLIO_NOTIFICA_PATH(notificationDTO.iun),
+      })
+    );
+
+    await waitFor(() => getByTestId('cancelledAlertText'));
+    triggerEventSpy.mockClear();
+
+    const ctaLink = within(getByTestId('cancelledAlertText')).getByRole('button', {
+      name: 'detail.cancelled.cta',
+    });
+    fireEvent.click(ctaLink);
+
+    expect(triggerEventSpy).toHaveBeenCalledWith(
+      PFEventsType.SEND_CANCELLED_NOTIFICATION_REFOUND_INFO
+    );
   });
 });
