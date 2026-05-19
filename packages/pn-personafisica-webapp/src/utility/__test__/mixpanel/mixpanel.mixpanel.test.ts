@@ -31,7 +31,10 @@ describe('trackingMiddleware - Mixpanel events', () => {
     dispatch('exchangeToken/fulfilled', { sessionToken: 'mock-token' });
     expect(triggerEventSpy).toHaveBeenCalledWith(
       PFEventsType.SEND_AUTH_SUCCESS,
-      expect.any(Object)
+      expect.objectContaining({
+        payload: expect.anything(),
+        params: expect.any(Object),
+      })
     );
   });
 
@@ -39,7 +42,10 @@ describe('trackingMiddleware - Mixpanel events', () => {
     dispatch('getReceivedNotificationOtherDocument/fulfilled');
     expect(triggerEventSpy).toHaveBeenCalledWith(
       PFEventsType.SEND_DOWNLOAD_RESPONSE,
-      expect.any(Object)
+      expect.objectContaining({
+        payload: expect.anything(),
+        params: expect.any(Object),
+      })
     );
   });
 
@@ -47,7 +53,10 @@ describe('trackingMiddleware - Mixpanel events', () => {
     dispatch('getReceivedNotificationLegalfact/fulfilled');
     expect(triggerEventSpy).toHaveBeenCalledWith(
       PFEventsType.SEND_DOWNLOAD_RESPONSE,
-      expect.any(Object)
+      expect.objectContaining({
+        payload: expect.anything(),
+        params: expect.any(Object),
+      })
     );
   });
 
@@ -55,7 +64,10 @@ describe('trackingMiddleware - Mixpanel events', () => {
     dispatch('getDigitalAddresses/fulfilled', []);
     expect(triggerEventSpy).toHaveBeenCalledWith(
       PFEventsType.SEND_HAS_ADDRESSES,
-      expect.any(Object)
+      expect.objectContaining({
+        payload: expect.anything(),
+        params: expect.any(Object),
+      })
     );
   });
 
@@ -63,7 +75,10 @@ describe('trackingMiddleware - Mixpanel events', () => {
     dispatch('getSidemenuInformation/fulfilled', []);
     expect(triggerEventSpy).toHaveBeenCalledWith(
       PFEventsType.SEND_HAS_MANDATE_LOGIN,
-      expect.any(Object)
+      expect.objectContaining({
+        payload: expect.anything(),
+        params: expect.any(Object),
+      })
     );
   });
 
@@ -71,7 +86,10 @@ describe('trackingMiddleware - Mixpanel events', () => {
     dispatch('getMandatesByDelegator/fulfilled', []);
     expect(triggerEventSpy).toHaveBeenCalledWith(
       PFEventsType.SEND_MANDATE_GIVEN,
-      expect.any(Object)
+      expect.objectContaining({
+        payload: expect.anything(),
+        params: expect.any(Object),
+      })
     );
   });
 
@@ -79,7 +97,10 @@ describe('trackingMiddleware - Mixpanel events', () => {
     dispatch('enableIOAddress/fulfilled');
     expect(triggerEventSpy).toHaveBeenCalledWith(
       PFEventsType.SEND_ENABLE_IO,
-      expect.any(Object)
+      expect.objectContaining({
+        payload: expect.anything(),
+        params: expect.any(Object),
+      })
     );
   });
 
@@ -87,7 +108,10 @@ describe('trackingMiddleware - Mixpanel events', () => {
     dispatch('disableIOAddress/fulfilled');
     expect(triggerEventSpy).toHaveBeenCalledWith(
       PFEventsType.SEND_DISABLE_IO,
-      expect.any(Object)
+      expect.objectContaining({
+        payload: expect.anything(),
+        params: expect.any(Object),
+      })
     );
   });
 
@@ -95,7 +119,10 @@ describe('trackingMiddleware - Mixpanel events', () => {
     dispatch('acceptMandate/fulfilled');
     expect(triggerEventSpy).toHaveBeenCalledWith(
       PFEventsType.SEND_ACCEPT_DELEGATION,
-      expect.any(Object)
+      expect.objectContaining({
+        payload: expect.anything(),
+        params: expect.any(Object),
+      })
     );
   });
 
@@ -103,7 +130,10 @@ describe('trackingMiddleware - Mixpanel events', () => {
     dispatch('createOrUpdateAddress/fulfilled');
     expect(triggerEventSpy).toHaveBeenCalledWith(
       PFEventsType.SEND_ADD_ADDRESS,
-      expect.any(Object)
+      expect.objectContaining({
+        payload: expect.anything(),
+        params: expect.any(Object),
+      })
     );
   });
 
@@ -111,7 +141,10 @@ describe('trackingMiddleware - Mixpanel events', () => {
     dispatch('deleteAddress/fulfilled');
     expect(triggerEventSpy).toHaveBeenCalledWith(
       PFEventsType.SEND_DELETE_ADDRESS,
-      expect.any(Object)
+      expect.objectContaining({
+        payload: expect.anything(),
+        params: expect.any(Object),
+      })
     );
   });
 

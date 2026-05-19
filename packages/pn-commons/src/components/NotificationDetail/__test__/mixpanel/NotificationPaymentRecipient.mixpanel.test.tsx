@@ -51,7 +51,14 @@ describe('NotificationPaymentRecipient - Mixpanel events', () => {
     );
     expect(handleTrackEvent).toHaveBeenCalledWith(
       EventPaymentRecipientType.SEND_PAYMENT_STATUS,
-      expect.any(Object)
+      expect.objectContaining({
+        paginationData: expect.objectContaining({
+          page: expect.any(Number),
+          size: expect.any(Number),
+          totalElements: expect.any(Number),
+        }),
+        paginatedPayments: expect.any(Array),
+      })
     );
   });
 

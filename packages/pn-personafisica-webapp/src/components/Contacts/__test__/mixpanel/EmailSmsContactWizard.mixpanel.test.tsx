@@ -46,7 +46,7 @@ describe('EmailSmsContactWizard - Mixpanel events', () => {
     render(<EmailSmsContactWizard />);
     expect(triggerEventSpy).toHaveBeenCalledWith(
       PFEventsType.SEND_ADD_SERCQ_SEND_EMAIL_SMS,
-      expect.any(Object)
+      expect.objectContaining({ event_type: expect.any(String) })
     );
   });
 
@@ -62,7 +62,7 @@ describe('EmailSmsContactWizard - Mixpanel events', () => {
     await waitFor(() => {
       expect(triggerEventSpy).toHaveBeenCalledWith(
         PFEventsType.SEND_ADD_SERCQ_SEND_ADD_EMAIL_START,
-        expect.any(Object)
+        expect.objectContaining({ email_validation: expect.any(String) })
       );
       expect(triggerEventSpy).toHaveBeenCalledWith(PFEventsType.SEND_ADD_SERCQ_SEND_EMAIL_OTP);
     });
@@ -136,7 +136,7 @@ describe('EmailSmsContactWizard - Mixpanel events', () => {
     await waitFor(() => {
       expect(triggerEventSpy).toHaveBeenCalledWith(
         PFEventsType.SEND_ADD_SERCQ_SEND_ADD_SMS_START,
-        expect.any(Object)
+        expect.objectContaining({ sms_validation: expect.any(String) })
       );
       expect(triggerEventSpy).toHaveBeenCalledWith(PFEventsType.SEND_ADD_SERCQ_SEND_SMS_OTP);
     });

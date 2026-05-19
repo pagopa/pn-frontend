@@ -37,7 +37,7 @@ describe('PecContactWizard - Mixpanel events', () => {
     render(<PecContactWizard setShowPecWizard={setShowPecWizard} />);
     expect(triggerEventSpy).toHaveBeenCalledWith(
       PFEventsType.SEND_ADD_SERCQ_SEND_PEC_ENTER_PEC,
-      expect.any(Object)
+      expect.objectContaining({ event_type: expect.any(String) })
     );
   });
 
@@ -79,7 +79,7 @@ describe('PecContactWizard - Mixpanel events', () => {
     await waitFor(() => {
       expect(triggerEventSpy).toHaveBeenCalledWith(
         PFEventsType.SEND_ADD_SERCQ_SEND_PEC_ERROR,
-        expect.any(Object)
+        expect.objectContaining({ pec_validation: expect.any(String) })
       );
     });
   });
@@ -101,7 +101,7 @@ describe('PecContactWizard - Mixpanel events', () => {
       );
       expect(triggerEventSpy).toHaveBeenCalledWith(
         PFEventsType.SEND_ADD_SERCQ_SEND_PEC_START_ACTIVATION,
-        expect.any(Object)
+        expect.objectContaining({ pec_validation: expect.any(String), tos_validation: expect.any(String) })
       );
     });
   });
@@ -178,11 +178,11 @@ describe('PecContactWizard - Mixpanel events', () => {
     await waitFor(() => {
       expect(triggerEventSpy).toHaveBeenCalledWith(
         PFEventsType.SEND_ADD_SERCQ_SEND_PEC_UX_SUCCESS,
-        expect.any(Object)
+        expect.objectContaining({ event_type: expect.any(String), other_contact: expect.anything() })
       );
       expect(triggerEventSpy).toHaveBeenCalledWith(
         PFEventsType.SEND_ADD_SERCQ_SEND_PEC_THANK_YOU_PAGE,
-        expect.any(Object)
+        expect.objectContaining({ event_type: expect.any(String) })
       );
     });
   });

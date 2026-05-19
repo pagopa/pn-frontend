@@ -28,7 +28,7 @@ describe('LegalContactManager - Mixpanel events', () => {
     );
     expect(triggerEventSpy).toHaveBeenCalledWith(
       PFEventsType.SEND_ADD_CUSTOMIZED_CONTACT,
-      expect.any(Object)
+      expect.objectContaining({ event_type: expect.any(String), addresses: expect.any(Array) })
     );
   });
 });

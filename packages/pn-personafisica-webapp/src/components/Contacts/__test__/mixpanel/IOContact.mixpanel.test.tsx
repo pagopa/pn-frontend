@@ -77,7 +77,7 @@ describe('IOContact - Mixpanel events', () => {
     fireEvent.click(screen.getByRole('button', { name: 'button.disable' }));
     expect(triggerEventSpy).toHaveBeenCalledWith(
       PFEventsType.SEND_DEACTIVE_IO_POP_UP,
-      expect.any(Object)
+      expect.objectContaining({ event_type: expect.any(String), legal_addresses: expect.any(Array) })
     );
   });
 
@@ -88,7 +88,7 @@ describe('IOContact - Mixpanel events', () => {
     fireEvent.click(dialog.querySelectorAll('button')[0]);
     expect(triggerEventSpy).toHaveBeenCalledWith(
       PFEventsType.SEND_DEACTIVE_IO_CANCEL,
-      expect.any(Object)
+      expect.objectContaining({ event_type: expect.any(String), legal_addresses: expect.any(Array) })
     );
   });
 
@@ -102,7 +102,7 @@ describe('IOContact - Mixpanel events', () => {
     fireEvent.click(dialog.querySelectorAll('button')[1]);
     expect(triggerEventSpy).toHaveBeenCalledWith(
       PFEventsType.SEND_DEACTIVE_IO_UX_CONVERSION,
-      expect.any(Object)
+      expect.objectContaining({ event_type: expect.any(String), legal_addresses: expect.any(Array) })
     );
   });
 
@@ -115,7 +115,7 @@ describe('IOContact - Mixpanel events', () => {
     await waitFor(() => {
       expect(triggerEventSpy).toHaveBeenCalledWith(
         PFEventsType.SEND_DEACTIVE_IO_UX_SUCCESS,
-        expect.any(Object)
+        expect.objectContaining({ event_type: expect.any(String), legal_addresses: expect.any(Array) })
       );
     });
   });

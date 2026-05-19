@@ -67,7 +67,7 @@ describe('AddSpecialContact - Mixpanel events', () => {
     });
     expect(triggerEventSpy).toHaveBeenCalledWith(
       PFEventsType.SEND_CUSTOMIZE_CONTACT,
-      expect.any(Object)
+      expect.objectContaining({ event_type: expect.any(String), addresses: expect.any(Array) })
     );
   });
 
@@ -84,7 +84,7 @@ describe('AddSpecialContact - Mixpanel events', () => {
     );
     expect(triggerEventSpy).toHaveBeenCalledWith(
       PFEventsType.SEND_ADD_CUSTOMIZED_CONTACT_START,
-      expect.any(Object)
+      expect.objectContaining({ event_type: expect.any(String), addresses: expect.any(Array), customized_contact_type: expect.any(String), organization_name: expect.any(String) })
     );
   });
 
@@ -132,7 +132,7 @@ describe('AddSpecialContact - Mixpanel events', () => {
     await waitFor(() => {
       expect(triggerEventSpy).toHaveBeenCalledWith(
         PFEventsType.SEND_ADD_CUSTOMIZED_CONTACT_UX_CONVERSION,
-        expect.any(Object)
+        expect.objectContaining({ event_type: expect.any(String), addresses: expect.any(Array), customized_contact_type: expect.any(String), organization_name: expect.any(String), tos_validation: expect.any(String) })
       );
     });
   });
@@ -174,7 +174,7 @@ describe('AddSpecialContact - Mixpanel events', () => {
     await waitFor(() => {
       expect(triggerEventSpy).toHaveBeenCalledWith(
         PFEventsType.SEND_ADD_PEC_START,
-        expect.any(Object)
+        expect.objectContaining({ senderId: expect.any(String), source: expect.any(String) })
       );
     });
 
@@ -188,7 +188,7 @@ describe('AddSpecialContact - Mixpanel events', () => {
     await waitFor(() => {
       expect(triggerEventSpy).toHaveBeenCalledWith(
         PFEventsType.SEND_ADD_CUSTOMIZED_CONTACT_UX_SUCCESS,
-        expect.any(Object)
+        expect.objectContaining({ event_type: expect.any(String), addresses: expect.any(Array), customized_contact_type: expect.any(String), organization_name: expect.any(String) })
       );
     });
     await waitFor(() => {

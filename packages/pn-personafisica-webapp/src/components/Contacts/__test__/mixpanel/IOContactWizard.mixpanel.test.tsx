@@ -53,7 +53,7 @@ describe('IOContactWizard - Mixpanel events', () => {
     render(<IOContactWizard goToNextStep={goToNextStep} />);
     expect(triggerEventSpy).toHaveBeenCalledWith(
       PFEventsType.SEND_ADD_SERCQ_SEND_APP_IO,
-      expect.any(Object)
+      expect.objectContaining({ event_type: expect.any(String) })
     );
   });
 

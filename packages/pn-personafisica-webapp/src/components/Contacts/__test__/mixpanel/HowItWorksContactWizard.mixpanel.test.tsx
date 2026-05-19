@@ -27,7 +27,7 @@ describe('HowItWorksContactWizard - Mixpanel events', () => {
     );
     expect(triggerEventSpy).toHaveBeenCalledWith(
       PFEventsType.SEND_ADD_SERCQ_SEND_INTRO,
-      expect.any(Object)
+      expect.objectContaining({ event_type: expect.any(String) })
     );
   });
 
@@ -46,7 +46,7 @@ describe('HowItWorksContactWizard - Mixpanel events', () => {
     fireEvent.click(getByTestId('continueButton'));
     expect(triggerEventSpy).toHaveBeenCalledWith(
       PFEventsType.SEND_ADD_SERCQ_SEND_START,
-      expect.any(Object)
+      expect.objectContaining({ event_type: expect.any(String) })
     );
   });
 
@@ -57,7 +57,7 @@ describe('HowItWorksContactWizard - Mixpanel events', () => {
     fireEvent.click(getByTestId('pec-section').querySelector('button')!);
     expect(triggerEventSpy).toHaveBeenCalledWith(
       PFEventsType.SEND_ADD_SERCQ_SEND_PEC_START,
-      expect.any(Object)
+      expect.objectContaining({ event_type: expect.any(String) })
     );
   });
 });

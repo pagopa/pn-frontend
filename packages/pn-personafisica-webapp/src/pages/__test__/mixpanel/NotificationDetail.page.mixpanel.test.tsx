@@ -96,13 +96,18 @@ describe('NotificationDetail.page - Mixpanel events', () => {
         expect.objectContaining({
           notificationStatus: expect.any(String),
           timeline: expect.any(Array),
+          notificationStatusHistory: expect.any(Array),
+          flow: expect.any(String),
+          delivery_mode: expect.any(String),
         })
       );
     });
 
     expect(triggerEventSpy).toHaveBeenCalledWith(
       PFEventsType.SEND_NOTIFICATIONS_COUNT,
-      expect.objectContaining({ timeline: expect.any(Array) })
+      expect.objectContaining({
+        timeline: expect.any(Array),
+      })
     );
   });
 
