@@ -51,7 +51,10 @@ describe('Notifiche.page - Mixpanel events', () => {
         expect.objectContaining({
           notifications: expect.any(Array),
           delegators: expect.any(Array),
-          pagination: expect.any(Object),
+          pagination: expect.objectContaining({
+            moreResult: expect.any(Boolean),
+            nextPagesKey: expect.any(Array),
+          }),
         })
       );
     });
@@ -80,7 +83,10 @@ describe('Notifiche.page - Mixpanel events', () => {
         expect.objectContaining({
           notifications: expect.any(Array),
           delegators: expect.any(Array),
-          pagination: expect.any(Object),
+          pagination: expect.objectContaining({
+            moreResult: expect.any(Boolean),
+            nextPagesKey: expect.any(Array),
+          }),
         })
       );
     });
