@@ -66,11 +66,14 @@ const NuovaDelega = () => {
   const handleSearchStringChangeInput = useSearchStringChangeInput();
   const [senderInputValue, setSenderInputValue] = useState('');
   const { DELEGATIONS_TO_PG_ENABLED } = getConfiguration();
-  const [delegationCreationSubmitted, setDelegationCreationSubmitted] = useState(false);
 
   const handleSubmit = (values: NewDelegationFormProps) => {
-    setDelegationCreationSubmitted(true);
-    void dispatch(createDelegation(values));
+    void dispatch(createDelegation(values))
+      .unwrap()
+      .then(() => {
+        PGEventStrategyFactory.triggerEvent(PGEventsType.SEND_PG_ADD_MANDATE_UX_SUCCESS);
+      })
+      .catch(() => {});
   };
 
   const handleDelegationsClick = () => {
@@ -149,13 +152,6 @@ const NuovaDelega = () => {
   useEffect(() => {
     dispatch(resetNewDelegation());
   }, []);
-
-  useEffect(() => {
-    if (delegationCreationSubmitted && created) {
-      PGEventStrategyFactory.triggerEvent(PGEventsType.SEND_PG_ADD_MANDATE_UX_SUCCESS);
-      setDelegationCreationSubmitted(false);
-    }
-  }, [delegationCreationSubmitted, created]);
 
   const deleteInput = (
     funField: (field: string, setValue: any, validation: boolean | undefined) => void,
