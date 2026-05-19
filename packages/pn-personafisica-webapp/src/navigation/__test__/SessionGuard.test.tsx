@@ -202,7 +202,7 @@ describe('SessionGuard Component', async () => {
     mock.onPost(ONE_IDENTITY_TOKEN_EXCHANGE()).reply(200, userResponse);
     await act(async () => {
       render(<Guard />, {
-        route: '/#code=valid_code&state=some_state&nonce=some_nonce',
+        route: '/#code=valid_code&state=some_state',
       });
     });
     expect(mock.history.post).toHaveLength(1);
@@ -210,7 +210,36 @@ describe('SessionGuard Component', async () => {
     expect(JSON.parse(mock.history.post[0].data)).toStrictEqual({
       code: 'valid_code',
       state: 'some_state',
-      nonce: 'some_nonce',
+    });
+  });
+
+  it('One Identity Exchange Token - navigates to aar param when aar is returned', async () => {
+    mock.onPost(ONE_IDENTITY_TOKEN_EXCHANGE()).reply(200, { ...userResponse, aar: 'mock-aar-value' });
+    await act(async () => {
+      result = render(<Guard />, { route: '/#code=valid_code&state=some_state' });
+    });
+    expect(mock.history.post).toHaveLength(1);
+    await waitFor(() => {
+      expect(result.router.state.location.search).toBe(
+        `?${AppRouteParams.AAR}=mock-aar-value`
+      );
+      expect(result.router.state.historyAction).toBe('REPLACE');
+    });
+  });
+
+  it('One Identity Exchange Token - navigates to retrievalId param when retrievalId is returned', async () => {
+    mock
+      .onPost(ONE_IDENTITY_TOKEN_EXCHANGE())
+      .reply(200, { ...userResponse, retrievalId: 'mock-retrieval-id' });
+    await act(async () => {
+      result = render(<Guard />, { route: '/#code=valid_code&state=some_state' });
+    });
+    expect(mock.history.post).toHaveLength(1);
+    await waitFor(() => {
+      expect(result.router.state.location.search).toBe(
+        `?${AppRouteParams.RETRIEVAL_ID}=mock-retrieval-id`
+      );
+      expect(result.router.state.historyAction).toBe('REPLACE');
     });
   });
 
@@ -218,11 +247,10 @@ describe('SessionGuard Component', async () => {
     mock.onPost(ONE_IDENTITY_TOKEN_EXCHANGE()).reply(403, {
       code: '403_code',
       state: 'some_state',
-      nonce: 'some_nonce',
     });
     await act(async () => {
       render(<Guard />, {
-        route: '/#code=403_code&state=some_state&nonce=some_nonce',
+        route: '/#code=403_code&state=some_state',
       });
     });
     expect(mock.history.post).toHaveLength(1);
@@ -230,7 +258,6 @@ describe('SessionGuard Component', async () => {
     expect(JSON.parse(mock.history.post[0].data)).toStrictEqual({
       code: '403_code',
       state: 'some_state',
-      nonce: 'some_nonce',
     });
     const logoutComponent = screen.queryByTestId('session-modal');
     expect(logoutComponent).toBeTruthy();
@@ -242,11 +269,10 @@ describe('SessionGuard Component', async () => {
     mock.onPost(ONE_IDENTITY_TOKEN_EXCHANGE()).reply(451, {
       code: '451_code',
       state: 'some_state',
-      nonce: 'some_nonce',
     });
     await act(async () => {
       result = render(<Guard />, {
-        route: '/#code=451_code&state=some_state&nonce=some_nonce',
+        route: '/#code=451_code&state=some_state',
       });
     });
     expect(mock.history.post).toHaveLength(1);
@@ -254,7 +280,6 @@ describe('SessionGuard Component', async () => {
     expect(JSON.parse(mock.history.post[0].data)).toStrictEqual({
       code: '451_code',
       state: 'some_state',
-      nonce: 'some_nonce',
     });
     await waitFor(() => {
       expect(result.router.state.location.pathname).toBe(routes.NOT_ACCESSIBLE);
@@ -272,7 +297,7 @@ describe('SessionGuard Component', async () => {
 
     await act(async () => {
       result = render(<Guard />, {
-        route: '/#code=some_code&state=some_state&nonce=some_nonce',
+        route: '/#code=some_code&state=some_state',
       });
     });
 
@@ -281,7 +306,6 @@ describe('SessionGuard Component', async () => {
     expect(JSON.parse(mock.history.post[0].data)).toStrictEqual({
       code: 'some_code',
       state: 'some_state',
-      nonce: 'some_nonce',
     });
 
     await waitFor(() => {
@@ -293,32 +317,10 @@ describe('SessionGuard Component', async () => {
 
   it("One Identity Exchange Token - missing params in url doesn't call the api", async () => {
     await act(async () => {
-      render(<Guard />, { route: '/#code=some_code&state=some_state' });
+      render(<Guard />, { route: '/#code=some_code' });
     });
 
     expect(mock.history.post).toHaveLength(0);
-  });
-
-  it('One Identity Exchange Token - successful exchange token with rapid access', async () => {
-    mock.onPost(ONE_IDENTITY_TOKEN_EXCHANGE()).reply(200, userResponse);
-
-    await act(async () => {
-      render(<Guard />, {
-        route: '/?aar=mocked-qr-code#code=valid_code&state=some_state&nonce=some_nonce',
-      });
-    });
-
-    expect(mock.history.post).toHaveLength(1);
-    expect(mock.history.post[0].url).toBe(ONE_IDENTITY_TOKEN_EXCHANGE());
-    expect(JSON.parse(mock.history.post[0].data)).toStrictEqual({
-      code: 'valid_code',
-      state: 'some_state',
-      nonce: 'some_nonce',
-      source: {
-        type: 'QR',
-        id: 'mocked-qr-code',
-      },
-    });
   });
 
   it('One Identity Exchange Token - logout redirects to LOGOUT_OI', async () => {
@@ -329,7 +331,7 @@ describe('SessionGuard Component', async () => {
 
     await act(async () => {
       render(<Guard />, {
-        route: '/#code=valid_code&state=some_state&nonce=some_nonce',
+        route: '/#code=valid_code&state=some_state',
       });
     });
 

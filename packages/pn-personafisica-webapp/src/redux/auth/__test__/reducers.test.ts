@@ -80,7 +80,6 @@ describe('Auth redux state tests', () => {
       exchangeOneIdentityCode({
         code: 'mocked-code',
         state: 'mocked-state',
-        nonce: 'mocked-nonce',
       })
     );
 

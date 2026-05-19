@@ -7,7 +7,7 @@ import {
   BffTosPrivacyActionBody,
   UserConsentsApiFactory,
 } from '../../generated-client/tos-privacy';
-import { OneIdentityCodeExchangeRequest, TokenExchangeRequest, User } from '../../models/User';
+import { OneIdentityExchangeCodeBody, TokenExchangeRequest, User } from '../../models/User';
 import { userDataMatcher } from '../../utility/user.utility';
 
 export enum AUTH_ACTIONS {
@@ -42,9 +42,9 @@ export const exchangeToken = createAsyncThunk<User, TokenExchangeRequest>(
  * Exchange One Identity code for session token
  * If code is valid, user info are set in sessionStorage
  */
-export const exchangeOneIdentityCode = createAsyncThunk<User, OneIdentityCodeExchangeRequest>(
+export const exchangeOneIdentityCode = createAsyncThunk<User, OneIdentityExchangeCodeBody>(
   'exchangeOneIdentityCode',
-  async (request: OneIdentityCodeExchangeRequest, { rejectWithValue }) => {
+  async (request: OneIdentityExchangeCodeBody, { rejectWithValue }) => {
     try {
       const result = await AuthApi.exchangeOneIdentityCode(request);
       userDataMatcher.validateSync(result, { stripUnknown: false });

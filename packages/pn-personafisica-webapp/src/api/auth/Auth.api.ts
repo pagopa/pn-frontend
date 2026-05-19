@@ -1,13 +1,11 @@
 /* eslint-disable functional/immutable-data */
 import {
-  OneIdentityCodeExchangeRequest,
   OneIdentityExchangeCodeBody,
   TokenExchangeBody,
   TokenExchangeRequest,
   User,
   paramsToSourceType,
 } from '../../models/User';
-import { parseTokenExchangeResponse } from '../../utility/user.utility';
 import { authClient } from '../apiClients';
 import { AUTH_LOGOUT, AUTH_TOKEN_EXCHANGE, ONE_IDENTITY_TOKEN_EXCHANGE } from './auth.routes';
 
@@ -23,29 +21,15 @@ export const AuthApi = {
     }
     const response = await authClient.post<User>(AUTH_TOKEN_EXCHANGE(), body);
 
-    return parseTokenExchangeResponse(response.data);
+    return response.data;
   },
-  exchangeOneIdentityCode: async ({
-    code,
-    state,
-    nonce,
-    rapidAccess,
-  }: OneIdentityCodeExchangeRequest): Promise<User> => {
-    const body: OneIdentityExchangeCodeBody = {
+  exchangeOneIdentityCode: async ({ code, state }: OneIdentityExchangeCodeBody): Promise<User> => {
+    const response = await authClient.post<User>(ONE_IDENTITY_TOKEN_EXCHANGE(), {
       code,
       state,
-      nonce,
-    };
-    if (rapidAccess) {
-      const [param, value] = rapidAccess;
-      body.source = {
-        type: paramsToSourceType[param],
-        id: value,
-      };
-    }
-    const response = await authClient.post<User>(ONE_IDENTITY_TOKEN_EXCHANGE(), body);
+    });
 
-    return parseTokenExchangeResponse(response.data);
+    return response.data;
   },
   logout: (token: string): Promise<void> =>
     authClient.post(AUTH_LOGOUT(), null, { headers: { Authorization: `Bearer ${token}` } }),
