@@ -16,13 +16,15 @@ import {
 } from '@pagopa-pn/pn-commons';
 
 import { useRapidAccessParam } from '../hooks/useRapidAccessParam';
-import { OneIdentityCodeExchangeRequest, TokenExchangeRequest } from '../models/User';
+import { PFEventsType } from '../models/PFEventsType';
+import { OneIdentityExchangeCodeBody, TokenExchangeRequest } from '../models/User';
 import { apiLogout, exchangeOneIdentityCode, exchangeToken } from '../redux/auth/actions';
 import { resetState as resetUserState, setIsFreshLogin } from '../redux/auth/reducers';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { resetState as resetGeneralState } from '../redux/sidemenu/reducers';
 import { RootState } from '../redux/store';
 import { getConfiguration } from '../services/configuration.service';
+import PFEventStrategyFactory from '../utility/MixpanelUtils/PFEventStrategyFactory';
 import { AAR_UTM, buildSearchWithUtm } from '../utility/utm.utility';
 import { goToLoginPortal } from './navigation.utility';
 import * as routes from './routes.const';
@@ -58,7 +60,6 @@ const SessionGuard = () => {
   // Get One Identity params from URL hash
   const code = hashParams.get('code');
   const state = hashParams.get('state');
-  const nonce = hashParams.get('nonce');
 
   const handleTokenExchangeError = (error: any) => {
     const adaptedError = adaptedTokenExchangeError(error);
@@ -95,17 +96,28 @@ const SessionGuard = () => {
   };
 
   const performOneIdentityTokenExchange = async (
-    exchangeCodeParams: OneIdentityCodeExchangeRequest
+    exchangeCodeParams: OneIdentityExchangeCodeBody
   ) => {
     AppResponsePublisher.error.subscribe('exchangeTokenOneIdentity', manageUnforbiddenError);
     try {
-      const user = await dispatch(exchangeOneIdentityCode(exchangeCodeParams)).unwrap();
-      sessionCheck(user.exp);
+      const { exp, idp, aar, retrievalId } = await dispatch(
+        exchangeOneIdentityCode(exchangeCodeParams)
+      ).unwrap();
+      sessionCheck(exp);
 
-      // TODO, get IDP from exchangeOneIdentityCode API response
-      // PFLoginEventStrategyFactory.triggerEvent(PFLoginEventsType.SEND_LOGIN_METHOD, {
-      //   entityID: idp,
-      // });
+      PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_LOGIN_METHOD, {
+        entityID: idp,
+      });
+
+      if (aar || retrievalId) {
+        const params = new URLSearchParams(location.search);
+        if (aar) {
+          params.set(AppRouteParams.AAR, aar);
+        } else if (retrievalId) {
+          params.set(AppRouteParams.RETRIEVAL_ID, retrievalId);
+        }
+        navigate({ search: `?${params.toString()}` }, { replace: true });
+      }
     } catch (error) {
       handleTokenExchangeError(error);
     }
@@ -140,13 +152,8 @@ const SessionGuard = () => {
   useEffect(() => {
     if (spidToken) {
       void performExchangeToken({ spidToken, rapidAccess });
-    } else if (code && state && nonce) {
-      void performOneIdentityTokenExchange({
-        code,
-        state,
-        nonce,
-        rapidAccess,
-      });
+    } else if (code && state) {
+      void performOneIdentityTokenExchange({ code, state });
     } else if (sessionToken) {
       sessionCheck(exp);
       if (aarSearchWithUtm) {

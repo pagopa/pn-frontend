@@ -11,6 +11,12 @@ export interface User extends BasicUser, BasicUserClaims {
   source?: UserSource;
 }
 
+export interface OneIdentityUser extends User {
+  idp: string;
+  aar?: string;
+  retrievalId?: string;
+}
+
 export enum SourceChannel {
   B2B = 'B2B',
   WEB = 'WEB',
@@ -34,21 +40,13 @@ export interface TokenExchangeBody extends BodySourceRequest {
   authorizationToken: string;
 }
 
-export interface OneIdentityExchangeCodeBody extends BodySourceRequest {
+export interface OneIdentityExchangeCodeBody {
   code: string;
   state: string;
-  nonce: string;
 }
 
 export interface TokenExchangeRequest {
   spidToken: string;
-  rapidAccess?: [AppRouteParams, string];
-}
-
-export interface OneIdentityCodeExchangeRequest {
-  code: string;
-  state: string;
-  nonce: string;
   rapidAccess?: [AppRouteParams, string];
 }
 
