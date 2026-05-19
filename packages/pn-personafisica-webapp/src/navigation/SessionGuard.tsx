@@ -109,10 +109,14 @@ const SessionGuard = () => {
         entityID: idp,
       });
 
-      if (aar) {
-        navigate({ search: `?${AppRouteParams.AAR}=${aar}` }, { replace: true });
-      } else if (retrievalId) {
-        navigate({ search: `?${AppRouteParams.RETRIEVAL_ID}=${retrievalId}` }, { replace: true });
+      if (aar || retrievalId) {
+        const params = new URLSearchParams(location.search);
+        if (aar) {
+          params.set(AppRouteParams.AAR, aar);
+        } else if (retrievalId) {
+          params.set(AppRouteParams.RETRIEVAL_ID, retrievalId);
+        }
+        navigate({ search: `?${params.toString()}` }, { replace: true });
       }
     } catch (error) {
       handleTokenExchangeError(error);
