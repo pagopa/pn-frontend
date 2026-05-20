@@ -41,11 +41,13 @@ function NameFocusHelperText() {
 type AttachmentBoxProps = {
   id: string;
   title: string;
+  maxAttachmentsLabel?: string;
   sx?: SxProps;
   canBeDeleted?: boolean;
   onDelete?: () => void;
   fieldLabel: string;
   fieldValue: string;
+  required?: boolean;
   fieldTouched?: boolean;
   fieldErrors?: string;
   onFieldTouched: (e: ChangeEvent) => void;
@@ -63,11 +65,13 @@ const MAX_NUMBER_OF_ATTACHMENTS = 10;
 const AttachmentBox: React.FC<AttachmentBoxProps> = ({
   id,
   title,
+  maxAttachmentsLabel,
   sx,
   canBeDeleted = false,
   onDelete,
   fieldLabel,
   fieldValue,
+  required = false,
   fieldTouched,
   fieldErrors,
   onFieldTouched,
@@ -93,6 +97,11 @@ const AttachmentBox: React.FC<AttachmentBoxProps> = ({
           </ButtonNaked>
         )}
       </Box>
+      {maxAttachmentsLabel && (
+        <Typography variant="body2" mt={1}>
+          {maxAttachmentsLabel}
+        </Typography>
+      )}
       <FormControl fullWidth>
         <TextField
           id={`${id}.name`}
@@ -104,6 +113,7 @@ const AttachmentBox: React.FC<AttachmentBoxProps> = ({
           error={fieldTouched && Boolean(fieldErrors)}
           helperText={(fieldTouched && fieldErrors) || <NameFocusHelperText />}
           size="small"
+          required={required}
           margin="normal"
           data-testid="attachmentNameInput"
         />
@@ -338,9 +348,6 @@ const Attachments: React.FC<Props> = ({
         previousStepLabel={getPreviousStepLabel()}
         previousStepOnClick={() => handlePreviousStep()}
       >
-        <Typography variant="body2">
-          {t('max-attachments', { maxNumber: MAX_NUMBER_OF_ATTACHMENTS })}
-        </Typography>
         {hasAdditionalLang && (
           <Alert severity="info" sx={{ mt: 2, mb: 2 }} data-testid="bannerAdditionalLanguages">
             {t('banner-additional-languages')}
@@ -355,9 +362,13 @@ const Attachments: React.FC<Props> = ({
               key={d.id}
               id={d.id}
               title={i === 0 ? `${t('act-attachment')}` : `${t('doc-attachment')}`}
+              maxAttachmentsLabel={
+                i === 0 ? t('max-attachments', { maxNumber: MAX_NUMBER_OF_ATTACHMENTS }) : undefined
+              }
               canBeDeleted={i > 0}
               onDelete={() => deleteDocumentHandler(i)}
-              fieldLabel={`${t('doc-name')}*`}
+              fieldLabel={t('doc-name')}
+              required
               fieldValue={d.name}
               fileUploaded={d}
               fieldTouched={
@@ -381,9 +392,9 @@ const Attachments: React.FC<Props> = ({
               color="primary"
               startIcon={<AddIcon />}
               sx={{ mt: 4 }}
-              data-testid="add-another-doc"
+              data-testid="add-doc"
             >
-              {t('add-another-doc')}
+              {t('add-doc')}
             </ButtonNaked>
           )}
         </FormBox>

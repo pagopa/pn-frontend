@@ -41,14 +41,14 @@ const testRecipientFormRendering = async (
   testFormElements(
     form,
     `recipients[${recipientIndex}].firstName`,
-    'name*',
+    'name',
     recipient ? recipient.firstName : undefined
   );
   if (!recipient || recipient?.recipientType === RecipientType.PF) {
     testFormElements(
       form,
       `recipients[${recipientIndex}].lastName`,
-      'surname*',
+      'surname',
       recipient ? recipient.lastName : undefined
     );
   }
@@ -56,8 +56,8 @@ const testRecipientFormRendering = async (
     form,
     `recipients[${recipientIndex}].taxId`,
     recipient?.recipientType === RecipientType.PG
-      ? 'recipient-organization-tax-id*'
-      : 'recipient-citizen-tax-id*',
+      ? 'recipient-organization-tax-id'
+      : 'recipient-citizen-tax-id',
     recipient ? recipient.taxId : undefined
   );
 
@@ -208,7 +208,7 @@ const recipientsWithoutPayments = newNotification.recipients.map(
   })
 );
 
-describe('Recipient Component with payment enabled', async () => {
+describe('Recipient Component with payment enabled', () => {
   const confirmHandlerMk = vi.fn();
   let result: RenderResult;
 
@@ -453,7 +453,7 @@ describe('Recipient Component with payment enabled', async () => {
   }, 10000);
 });
 
-describe('Recipient Component without payment enabled', async () => {
+describe('Recipient Component without payment enabled', () => {
   const confirmHandlerMk = vi.fn();
   let result: RenderResult;
 
@@ -491,7 +491,7 @@ describe('Recipient Component without payment enabled', async () => {
   });
 });
 
-describe('Feature flag for physical address lookup', async () => {
+describe('Feature flag for physical address lookup', () => {
   let result: RenderResult;
 
   it('FF is off', async () => {

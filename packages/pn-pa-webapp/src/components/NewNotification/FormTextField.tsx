@@ -6,6 +6,7 @@ import { Grid, SxProps, TextField } from '@mui/material';
 type Props = {
   keyName: string;
   label: string;
+  required?: boolean;
   values: FormikValues;
   touched: FormikTouched<any>;
   errors: FormikErrors<FormikValues>;
@@ -18,6 +19,7 @@ type Props = {
 const FormTextField: React.FC<Props> = ({
   keyName,
   label,
+  required = false,
   values,
   setFieldValue,
   touched,
@@ -41,6 +43,7 @@ const FormTextField: React.FC<Props> = ({
         }}
         onBlur={handleBlur}
         label={label}
+        required={required}
         name={keyName}
         error={showErrorIfPresent && Boolean(getIn(errors, keyName))}
         helperText={showErrorIfPresent && getIn(errors, keyName)}

@@ -9,7 +9,7 @@ import { ConsentType } from '../../generated-client/tos-privacy';
 import { PNRole, PartyRole } from '../../models/User';
 import ApiIntegration from '../ApiIntegration.page';
 
-describe('ApiIntegration page', async () => {
+describe('ApiIntegration page', () => {
   let mock: MockAdapter;
 
   beforeAll(() => {

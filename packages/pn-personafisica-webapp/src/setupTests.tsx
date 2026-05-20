@@ -13,6 +13,15 @@ const { getComputedStyle } = window;
 // eslint-disable-next-line functional/immutable-data
 window.getComputedStyle = (elt) => getComputedStyle(elt);
 
+const originalWarn = console.warn;
+// eslint-disable-next-line functional/immutable-data
+console.warn = (...args) => {
+  if (typeof args[0] === 'string' && args[0].includes('React Router Future Flag Warning')) {
+    return;
+  }
+  originalWarn(...args);
+};
+
 beforeAll(() => {
   Configuration.setForTest<PfConfiguration>({
     API_BASE_URL: 'https://webapi.test.notifichedigitali.it/',

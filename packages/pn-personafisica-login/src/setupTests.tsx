@@ -10,6 +10,15 @@ import '@testing-library/jest-dom';
 
 import { LoginConfiguration } from './services/configuration.service';
 
+const originalWarn = console.warn;
+// eslint-disable-next-line functional/immutable-data
+console.warn = (...args) => {
+  if (typeof args[0] === 'string' && args[0].includes('React Router Future Flag Warning')) {
+    return;
+  }
+  originalWarn(...args);
+};
+
 beforeAll(async () => {
   Configuration.setForTest<LoginConfiguration>({
     MIXPANEL_TOKEN: 'ba1f5101fe34a61bb125cbfe587780d8',

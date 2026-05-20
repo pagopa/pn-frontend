@@ -33,10 +33,8 @@ vi.mock('../../../utility/utils', async () => ({
 }));
 
 describe('test login page', () => {
-  const original = globalThis.location;
-
   beforeAll(() => {
-    Object.defineProperty(globalThis, 'location', { value: { assign: mockAssign } });
+    vi.stubGlobal('location', { assign: mockAssign });
   });
 
   afterEach(() => {
@@ -45,7 +43,7 @@ describe('test login page', () => {
   });
 
   afterAll(() => {
-    Object.defineProperty(globalThis, 'location', { value: original });
+    vi.unstubAllGlobals();
   });
 
   it('renders page', () => {

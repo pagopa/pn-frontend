@@ -349,7 +349,7 @@ const Recipient: React.FC<Props> = ({
                 <FormBox testid="RecipientFormBox">
                   {/* Soggetto giuridico */}
                   <Stack direction="row" justifyContent="space-between">
-                    <FormBoxTitle text={`${t('legal-entity')}*`} />
+                    <FormBoxTitle text={`${t('legal-entity')}`} />
                     {values.recipients.length > 1 && (
                       <ButtonNaked
                         data-testid="DeleteRecipientIcon"
@@ -368,6 +368,7 @@ const Recipient: React.FC<Props> = ({
                       </ButtonNaked>
                     )}
                   </Stack>
+                  <FormBoxSubtitle text={t('recipient-info-subtitle')} />
                   <Box mt={3} mb={1}>
                     <FormControl>
                       <RadioGroup
@@ -408,7 +409,8 @@ const Recipient: React.FC<Props> = ({
                           values.recipients[index].recipientType === RecipientType.PG
                             ? 'recipient-organization-tax-id'
                             : 'recipient-citizen-tax-id'
-                        )}*`}
+                        )}`}
+                        required
                         values={values}
                         touched={touched}
                         errors={errors}
@@ -423,7 +425,8 @@ const Recipient: React.FC<Props> = ({
                         <Grid item xs={12} lg={4}>
                           <FormTextField
                             keyName={`recipients[${index}].firstName`}
-                            label={`${t('name')}*`}
+                            label={t('name')}
+                            required
                             values={values}
                             touched={touched}
                             errors={errors}
@@ -434,7 +437,7 @@ const Recipient: React.FC<Props> = ({
                         <Grid item xs={12} lg={4}>
                           <FormTextField
                             keyName={`recipients[${index}].lastName`}
-                            label={`${t('surname')}*`}
+                            label={t('surname')}
                             values={values}
                             touched={touched}
                             errors={errors}
@@ -448,7 +451,8 @@ const Recipient: React.FC<Props> = ({
                       <Grid item xs={12} lg={8}>
                         <FormTextField
                           keyName={`recipients[${index}].firstName`}
-                          label={`${t('business-name')}*`}
+                          label={t('business-name')}
+                          required
                           values={values}
                           touched={touched}
                           errors={errors}
@@ -467,9 +471,16 @@ const Recipient: React.FC<Props> = ({
                       data-testid={`recipients[${index}].physicalAddressLabel`}
                       sx={{ mt: 4 }}
                     >
-                      <FormBoxTitle text={t('address')} />
-                      {PHYSICAL_ADDRESS_LOOKUP !== PhysicalAddressLookupConfig.OFF && (
-                        <FormBoxSubtitle text={t('address-subtitle')} />
+                      {PHYSICAL_ADDRESS_LOOKUP === PhysicalAddressLookupConfig.OFF ? (
+                        <>
+                          <FormBoxTitle text={t('physical-address')} />
+                          <FormBoxSubtitle text={t('recipient-info-subtitle')} />
+                        </>
+                      ) : (
+                        <>
+                          <FormBoxTitle text={t('address')} />
+                          <FormBoxSubtitle text={t('address-subtitle')} />
+                        </>
                       )}
                     </FormLabel>
                     {PHYSICAL_ADDRESS_LOOKUP === PhysicalAddressLookupConfig.DOWN && (

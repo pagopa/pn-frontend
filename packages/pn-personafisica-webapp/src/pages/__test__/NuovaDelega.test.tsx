@@ -32,7 +32,7 @@ const yesterday = new Date(today);
 yesterday.setDate(yesterday.getDate() - 1);
 yesterday.setHours(0, 0, 0, 0);
 
-describe('NuovaDelega page', async () => {
+describe('NuovaDelega page', () => {
   let mock: MockAdapter;
 
   beforeEach(() => {

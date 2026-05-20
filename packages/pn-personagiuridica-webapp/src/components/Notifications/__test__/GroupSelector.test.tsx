@@ -7,7 +7,7 @@ import GroupSelector from '../GroupSelector';
 
 const onGroupSelectionCbk = vi.fn();
 
-describe('GroupSelector component', async () => {
+describe('GroupSelector component', () => {
   let mock: MockAdapter;
 
   beforeAll(() => {

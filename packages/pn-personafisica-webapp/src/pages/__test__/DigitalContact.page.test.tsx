@@ -12,7 +12,7 @@ const DigitalContactPage = () => (
   </Routes>
 );
 
-describe('DigitalContact Page', async () => {
+describe('DigitalContact Page', () => {
   it('renders the component', async () => {
     render(<DigitalContactPage />, {
       route: ['/', '/mocked-route'],

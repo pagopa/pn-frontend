@@ -43,7 +43,7 @@ async function uploadDocument(elem: HTMLElement, index: number, document: NewNot
   });
 }
 
-describe('Attachments Component with payment enabled', async () => {
+describe('Attachments Component with payment enabled', () => {
   let result: RenderResult;
   let mock: MockAdapter;
   let extMock: MockAdapter;
@@ -119,7 +119,7 @@ describe('Attachments Component with payment enabled', async () => {
     await uploadDocument(attachmentBoxes[0], 0, newNotification.documents[0]);
     const buttonSubmit = await waitFor(() => result.getByTestId('step-submit'));
     // add second document form
-    const addButton = result.getByTestId('add-another-doc');
+    const addButton = result.getByTestId('add-doc');
     fireEvent.click(addButton);
     await waitFor(() => {
       attachmentBoxes = within(form!).getAllByTestId('attachmentBox');
@@ -267,7 +267,7 @@ describe('Attachments Component with payment enabled', async () => {
     const buttonSubmit = await waitFor(() => result.getByTestId('step-submit'));
     expect(buttonSubmit).toBeEnabled();
     // add and upload second document
-    const addButton = result.getByTestId('add-another-doc');
+    const addButton = result.getByTestId('add-doc');
     fireEvent.click(addButton);
     attachmentBoxes = await waitFor(() => within(form!).getAllByTestId('attachmentBox'));
     expect(attachmentBoxes).toHaveLength(2);
@@ -331,7 +331,7 @@ describe('Attachments Component with payment enabled', async () => {
     const buttonSubmit = await waitFor(() => result.getByTestId('step-submit'));
     expect(buttonSubmit).toBeEnabled();
     // add and upload second document
-    const addButton = result.getByTestId('add-another-doc');
+    const addButton = result.getByTestId('add-doc');
     fireEvent.click(addButton);
     attachmentBoxes = await waitFor(() => within(form!).getAllByTestId('attachmentBox'));
     expect(attachmentBoxes).toHaveLength(2);
@@ -377,7 +377,7 @@ describe('Attachments Component with payment enabled', async () => {
       result = render(<Attachments isCompleted={false} onConfirm={confirmHandlerMk} />);
     });
     const form = result.container.querySelector('form');
-    const buttonAddAnotherDoc = within(form!).getByTestId('add-another-doc');
+    const buttonAddAnotherDoc = within(form!).getByTestId('add-doc');
     for (let i = 0; i < 10; i++) {
       await act(async () => {
         fireEvent.click(buttonAddAnotherDoc);

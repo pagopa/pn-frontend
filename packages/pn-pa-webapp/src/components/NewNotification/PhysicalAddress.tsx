@@ -27,13 +27,13 @@ const PhysicalAddress = ({
   });
 
   const physicalAddressFields = [
-    { key: 'foreignState', label: `${t('foreign-state')}*`, width: 4 },
-    { key: 'province', label: `${t('province')}*`, width: 4 },
-    { key: 'zip', label: `${t('zip')}*`, width: 4 },
-    { key: 'municipality', label: `${t('municipality')}*`, width: 6 },
+    { key: 'foreignState', label: t('foreign-state'), width: 4, required: true },
+    { key: 'province', label: t('province'), width: 4, required: true },
+    { key: 'zip', label: t('zip'), width: 4, required: true },
+    { key: 'municipality', label: t('municipality'), width: 6, required: true },
     { key: 'municipalityDetails', label: t('municipality-details'), width: 6 },
-    { key: 'address', label: `${t('address')}*`, width: 9 },
-    { key: 'houseNumber', label: `${t('house-number')}*`, width: 3 },
+    { key: 'address', label: t('address'), width: 9, required: true },
+    { key: 'houseNumber', label: t('house-number'), width: 3, required: true },
     { key: 'addressDetails', label: t('address-details'), width: 12 },
   ];
 
@@ -44,6 +44,7 @@ const PhysicalAddress = ({
           <FormTextField
             keyName={`recipients[${recipient}].${field.key}`}
             label={field.label}
+            required={field.required}
             values={values}
             touched={touched}
             errors={errors}

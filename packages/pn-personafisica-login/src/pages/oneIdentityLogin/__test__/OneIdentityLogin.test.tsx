@@ -36,11 +36,9 @@ vi.mock('../../../api/OneIdentity/OneIdentity.api', () => ({
   },
 }));
 
-describe('test login page', () => {
-  const original = globalThis.location;
-
+describe('OneIdentityLogin component', () => {
   beforeAll(() => {
-    Object.defineProperty(globalThis, 'location', { value: { assign: mockAssign } });
+    vi.stubGlobal('location', { assign: mockAssign });
   });
 
   afterEach(() => {
@@ -49,7 +47,7 @@ describe('test login page', () => {
   });
 
   afterAll(() => {
-    Object.defineProperty(globalThis, 'location', { value: original });
+    vi.unstubAllGlobals();
   });
 
   it('renders page', () => {
@@ -101,9 +99,7 @@ describe('test login page', () => {
     it('redirects to location on successful authorize', async () => {
       const { container } = render(<OneIdentityLogin />);
       fireEvent.click(getById(container, 'cieButton'));
-      await waitFor(() =>
-        expect(mockAssign).toHaveBeenCalledWith('https://idp.example.com/login')
-      );
+      await waitFor(() => expect(mockAssign).toHaveBeenCalledWith('https://idp.example.com/login'));
     });
 
     it('navigates to error page when authorize fails', async () => {
