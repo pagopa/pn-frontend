@@ -18,22 +18,6 @@ const OneIdentityLoginError: React.FC = () => {
 
   const goToLogin = () => navigate(ROUTE_ONE_IDENTITY_LOGIN);
 
-  // const goToLogin = () => {
-  //   const { aar, retrievalId } = stateData.data ?? {};
-  //   const params = new URLSearchParams();
-
-  //   if (aar) {
-  //     params.set(AppRouteParams.AAR, sanitizeString(aar));
-  //   } else if (retrievalId) {
-  //     params.set(AppRouteParams.RETRIEVAL_ID, sanitizeString(retrievalId));
-  //   }
-
-  //   navigate({
-  //     pathname: ROUTE_ONE_IDENTITY_LOGIN,
-  //     search: params.toString(),
-  //   });
-  // };
-
   useEffect(() => {
     PFLoginEventStrategyFactory.triggerEvent(PFLoginEventsType.SEND_LOGIN_FAILURE, {
       reason: error,
