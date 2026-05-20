@@ -16,6 +16,7 @@ const OneIdentityCallback: React.FC = () => {
   const code = searchParams.get('code');
   const state = searchParams.get('state');
   const error = searchParams.get('error');
+  const errorDescription = searchParams.get('error_description');
 
   const isValidCallback = !error && !!code && !!state;
 
@@ -26,6 +27,9 @@ const OneIdentityCallback: React.FC = () => {
     }
     if (error) {
       params.set('error', error);
+    }
+    if (errorDescription) {
+      params.set('error_description', errorDescription);
     }
     navigate(
       { pathname: ROUTE_ONE_IDENTITY_LOGIN_ERROR, search: params.toString() },
