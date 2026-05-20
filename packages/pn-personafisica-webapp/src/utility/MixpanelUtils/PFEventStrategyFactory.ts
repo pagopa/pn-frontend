@@ -33,6 +33,7 @@ import { SendOnboardingEmailActivationStrategy } from './Strategies/SendOnboardi
 import { SendOnboardingFlowStrategy } from './Strategies/SendOnboardingFlowStrategy';
 import { SendOnboardingScreenActionStrategy } from './Strategies/SendOnboardingScreenActionStrategy';
 import { SendOnboardingStartStrategy } from './Strategies/SendOnboardingStartStrategy';
+import { SendOneIdentityLoginMethodStrategy } from './Strategies/SendOneIdentityLoginMethonStrategy';
 import { SendPaymentDetailErrorStrategy } from './Strategies/SendPaymentDetailErrorStrategy';
 import { SendPaymentOutcomeStrategy } from './Strategies/SendPaymentOutcomeStrategy';
 import { SendPaymentStatusStrategy } from './Strategies/SendPaymentStatusStrategy';
@@ -438,6 +439,7 @@ const eventStrategy: Record<
   [PFEventsType.SEND_ADD_SERCQ_SEND_ENTER_FLOW]: new SendAddSercqSendEnterFlowStrategy(),
   [PFEventsType.SEND_LANDING_PAGE_FAQ_OPEN]: new SendTppLandingFaqOpenStrategy(),
   [PFEventsType.SEND_NOTIFICATION_EXPENSES_DETAIL]: new SendNotificationExpensesDetailStrategy(),
+  [PFEventsType.SEND_LOGIN_METHOD]: new SendOneIdentityLoginMethodStrategy(),
 };
 
 const isInEventStrategyMap = (value: PFEventsType): value is keyof typeof eventStrategy => {

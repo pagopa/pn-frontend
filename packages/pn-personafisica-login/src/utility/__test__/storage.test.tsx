@@ -1,10 +1,6 @@
 import { AppRouteParams } from '@pagopa-pn/pn-commons';
 
-import {
-  storageOneIdentityNonce,
-  storageOneIdentityState,
-  storageRapidAccessOps,
-} from '../storage';
+import { storageRapidAccessOps } from '../storage';
 
 describe('storage utility test', () => {
   it('storage Aar', () => {
@@ -52,23 +48,5 @@ describe('storage utility test', () => {
     expect(sessionStorage.getItem(AppRouteParams.RETRIEVAL_ID)).toBeNull();
     expect(storageRapidAccessOps.read()).toEqual([AppRouteParams.RETRIEVAL_ID, 'local-retrieval']);
     storageRapidAccessOps.delete();
-  });
-
-  it('storageOneIdentityState test', () => {
-    const state = '123456789';
-    storageOneIdentityState.write(state);
-    expect(sessionStorage.getItem('state')).toBe(state);
-    expect(storageOneIdentityState.read()).toEqual(state);
-    storageOneIdentityState.delete();
-    expect(sessionStorage.getItem('state')).toBeNull();
-  });
-
-  it('storageOneIdentityNonce tests', () => {
-    const nonce = '123456789';
-    storageOneIdentityNonce.write(nonce);
-    expect(sessionStorage.getItem('nonce')).toBe(nonce);
-    expect(storageOneIdentityNonce.read()).toEqual(nonce);
-    storageOneIdentityNonce.delete();
-    expect(sessionStorage.getItem('nonce')).toBeNull();
   });
 });
