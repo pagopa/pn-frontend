@@ -23,7 +23,7 @@ export const OneIdentityApi = {
       params.set('retrievalId', retrievalId);
     }
 
-    const response = await fetch(`${API_BASE_URL}/oidc-authorize?${params.toString()}`);
+    const response = await fetch(`${API_BASE_URL}oidc-authorize?${params.toString()}`);
 
     if (!response.ok) {
       throw new Error('Error during OIDC authorize');
