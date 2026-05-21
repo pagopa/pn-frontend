@@ -2,9 +2,9 @@ import React from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 
 import ClearOutlinedIcon from '@mui/icons-material/ClearOutlined';
-import { Button, Dialog, DialogContent, Grid, IconButton, Link, Typography } from '@mui/material';
+import { Dialog, DialogContent, IconButton, Link, Stack, Typography } from '@mui/material';
+import { useIsMobile } from '@pagopa-pn/pn-commons';
 
-import SpidBig from '../../assets/spid_big.svg';
 import { IDP } from '../../models/IDPS';
 import { getConfiguration } from '../../services/configuration.service';
 import SpidList from './SpidList';
@@ -28,90 +28,67 @@ const OneIdentitySpidSelectDialog: React.FC<Props> = ({
 }) => {
   const { t } = useTranslation(['login']);
   const { SPID_REQUEST_LINK } = getConfiguration();
+  const isMobile = useIsMobile('sm');
 
   return (
     <Dialog
       open={show}
-      fullScreen
       aria-labelledby="spid-select"
+      fullScreen={isMobile}
       transitionDuration={0}
       onClose={onClose}
     >
-      <DialogContent sx={{ p: 0 }}>
-        <Grid
-          container
-          direction="column"
-          id="spidSelect"
-          justifyContent="center"
+      <DialogContent id="spidSelect" sx={{ p: 3, width: { xs: '100%', sm: '410px', lg: '600px' } }}>
+        <Stack
+          direction="row"
+          display="flex"
           alignItems="center"
+          justifyContent="space-between"
+          mb={3}
         >
-          <Grid container direction="row" justifyContent="space-around" mt={3}>
-            <Grid item xs={1}>
-              <img src={SpidBig} aria-hidden />
-            </Grid>
-            <Grid item xs={1} sx={{ textAlign: 'right' }}>
-              <IconButton
-                color="primary"
-                onClick={onClose}
-                id="backIcon"
-                aria-label={t('button.close', { ns: 'common' })}
-              >
-                <ClearOutlinedIcon />
-              </IconButton>
-            </Grid>
-          </Grid>
-          <Grid item>
-            <Typography
-              id="spid-select"
-              color="textPrimary"
-              variant="h3"
-              component="h1"
-              sx={{ textAlign: 'center', py: 5, px: 0 }}
-            >
-              {t('spidSelect.title')}
-            </Typography>
-          </Grid>
+          <Typography
+            id="spid-select"
+            fontWeight="bold"
+            fontSize={{ xs: '18px', sm: '24px', color: '#0E0F13' }}
+          >
+            {t('spidSelect.title')}
+          </Typography>
 
-          <SpidList
-            idps={IDPS}
-            loading={loading}
-            authorizingEntityId={authorizingEntityId}
-            onSelect={handleSelectIDP}
-          />
+          <IconButton
+            onClick={onClose}
+            id="backIcon"
+            size="small"
+            aria-label={t('button.close', { ns: 'common' })}
+            sx={{ color: '#0E0F13' }}
+          >
+            <ClearOutlinedIcon />
+          </IconButton>
+        </Stack>
 
-          <Grid item>
-            <Typography
-              color="textPrimary"
-              variant="body2"
-              sx={{
-                fontSize: '14px',
-                textAlign: 'center',
-                py: 3,
-                px: 0,
-              }}
-              component="div"
-            >
-              <Trans i18nKey="spidSelect.hintText" ns="login">
-                <Link href={SPID_REQUEST_LINK} id="requestForSpid">
-                  {'spidSelect.hintText'}
-                </Link>
-              </Trans>
-            </Typography>
-            <Button
-              type="submit"
-              variant="outlined"
-              id="backButton"
-              sx={{
-                borderRadius: '4px',
-                width: '328px',
-                height: '50px',
-              }}
-              onClick={onClose}
-            >
-              {t('spidSelect.cancelButton')}
-            </Button>
-          </Grid>
-        </Grid>
+        <SpidList
+          idps={IDPS}
+          loading={loading}
+          authorizingEntityId={authorizingEntityId}
+          onSelect={handleSelectIDP}
+        />
+
+        <Typography
+          color="textPrimary"
+          variant="body2"
+          sx={{
+            fontSize: '14px',
+            textAlign: 'center',
+            py: 3,
+            px: 0,
+          }}
+          component="div"
+        >
+          <Trans i18nKey="spidSelect.hintText" ns="login">
+            <Link href={SPID_REQUEST_LINK} id="requestForSpid">
+              {'spidSelect.hintText'}
+            </Link>
+          </Trans>
+        </Typography>
       </DialogContent>
     </Dialog>
   );

@@ -50,9 +50,9 @@ describe('OneIdentitySpidSelectDialog', () => {
     expect(onClose).toHaveBeenCalledTimes(1);
   });
 
-  it('calls onClose when the cancel button is clicked', () => {
+  it('calls onClose when the close modal button is clicked', () => {
     render(<OneIdentitySpidSelectDialog {...defaultProps} />);
-    fireEvent.click(getById(document.body, 'backButton'));
+    fireEvent.click(getById(document.body, 'backIcon'));
     expect(onClose).toHaveBeenCalledTimes(1);
   });
 
@@ -76,11 +76,11 @@ describe('OneIdentitySpidSelectDialog', () => {
     expect(handleSelectIDP).toHaveBeenCalledWith(IDPS_MOCK[0]);
   });
 
-  it('disables idp buttons and shows overlay spinner when authorizingEntityId is set', () => {
+  it('disables idp buttons and shows spinner when authorizingEntityId is set', () => {
     const authorizingId = IDPS_MOCK[0].entityID;
     render(<OneIdentitySpidSelectDialog {...defaultProps} authorizingEntityId={authorizingId} />);
     const btn = document.getElementById(`spid-select-${authorizingId}`)!;
-    expect(btn).toBeDisabled();
+    expect(btn).toHaveAttribute('aria-disabled', 'true');
     expect(btn.querySelector('[role="progressbar"]')).toBeInTheDocument();
   });
 });

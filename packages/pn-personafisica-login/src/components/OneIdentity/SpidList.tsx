@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { Box, Button, CircularProgress, Grid, Icon, Skeleton, Typography } from '@mui/material';
+import { Box, CircularProgress, List, ListItemButton, Skeleton, Typography } from '@mui/material';
 
 import { IDP } from '../../models/IDPS';
 import { getConfiguration } from '../../services/configuration.service';
@@ -14,21 +14,6 @@ type Props = {
   onSelect: (idp: IDP) => void;
 };
 
-const SpidLoader: React.FC = () => (
-  <Box
-    sx={{
-      position: 'absolute',
-      inset: 0,
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      bgcolor: 'rgba(255,255,255,0.7)',
-    }}
-  >
-    <CircularProgress size={24} />
-  </Box>
-);
-
 const SpidList: React.FC<Props> = ({ idps, loading, authorizingEntityId, onSelect }) => {
   const { t } = useTranslation(['login']);
   const { ONE_IDENTITY_CDN_URL } = getConfiguration();
@@ -40,19 +25,20 @@ const SpidList: React.FC<Props> = ({ idps, loading, authorizingEntityId, onSelec
 
   if (loading) {
     return (
-      <Grid
-        data-testid="spid-loader"
-        sx={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(2, 100px)',
-          gap: 2,
-          justifyContent: 'center',
-        }}
-      >
+      <List data-testid="spid-loader">
         {Array.from({ length: 6 }).map((_, i) => (
-          <Skeleton key={i} variant="rectangular" width="100px" height={48} />
+          <Skeleton
+            key={i}
+            variant="rectangular"
+            width="100%"
+            height={60}
+            sx={{
+              borderRadius: '8px',
+              mb: 2,
+            }}
+          />
         ))}
-      </Grid>
+      </List>
     );
   }
 
@@ -65,32 +51,34 @@ const SpidList: React.FC<Props> = ({ idps, loading, authorizingEntityId, onSelec
   }
 
   return (
-    <Grid item>
-      <Grid container direction="row" justifyItems="center" spacing={2}>
-        {shuffledIDPS.map((idp, i) => (
-          <Grid
-            item
-            key={idp.entityID}
-            xs={6}
-            textAlign={i % 2 === 0 ? 'right' : 'left'}
-            sx={{ minWidth: '100px' }}
-          >
-            <Button
-              id={`spid-select-${idp.entityID}`}
-              onClick={() => onSelect(idp)}
-              sx={{ width: '100px', padding: '0', position: 'relative' }}
-              aria-label={idp.friendlyName}
-              disabled={authorizingEntityId !== null}
-            >
-              <Icon sx={{ width: '100px', height: '48px' }}>
-                <img width="100px" src={getImageUrl(idp.entityID)} alt={idp.friendlyName} />
-              </Icon>
-              {authorizingEntityId === idp.entityID && <SpidLoader />}
-            </Button>
-          </Grid>
-        ))}
-      </Grid>
-    </Grid>
+    <List>
+      {shuffledIDPS.map((idp) => (
+        <ListItemButton
+          id={`spid-select-${idp.entityID}`}
+          key={idp.entityID}
+          onClick={() => onSelect(idp)}
+          disabled={authorizingEntityId !== null}
+          sx={{
+            justifyContent: 'space-between',
+            height: '60px',
+            border: '1px solid',
+            borderColor: 'divider',
+            borderRadius: '8px',
+            mb: 2,
+            p: 2,
+          }}
+          aria-label={idp.friendlyName}
+        >
+          <Box display="flex" alignItems="center" gap={2} minWidth={0} sx={{ overflow: 'hidden' }}>
+            {authorizingEntityId === idp.entityID && <CircularProgress size={24} />}
+            <Typography fontSize="14px" fontWeight="500" noWrap sx={{ color: '#555C70' }}>
+              {idp.friendlyName}
+            </Typography>
+          </Box>
+          <img height="100%" src={getImageUrl(idp.entityID)} alt={idp.friendlyName} />
+        </ListItemButton>
+      ))}
+    </List>
   );
 };
 

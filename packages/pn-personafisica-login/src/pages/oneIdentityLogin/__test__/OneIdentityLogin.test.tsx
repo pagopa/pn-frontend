@@ -50,10 +50,11 @@ describe('OneIdentityLogin component', () => {
     vi.unstubAllGlobals();
   });
 
-  it('renders page', () => {
+  it('renders page', async () => {
     const { container } = render(<OneIdentityLogin />, {
       route: `/?${AppRouteParams.AAR}=fake-aar-token`,
     });
+    await waitFor(() => expect(OneIdentityApi.getIdps).toHaveBeenCalledTimes(1));
     expect(container).toHaveTextContent(/loginPage.title/i);
     expect(container).toHaveTextContent(/loginPage.description/i);
     const spidButton = getById(container, 'spidButton');
@@ -64,17 +65,19 @@ describe('OneIdentityLogin component', () => {
     expect(spidSelect).not.toBeInTheDocument();
   });
 
-  it('renders page - with smart banner enabled', () => {
+  it('renders page - with smart banner enabled', async () => {
     // enable mobile view
     globalThis.matchMedia = createMatchMedia(800);
     const { container } = render(<OneIdentityLogin />);
+    await waitFor(() => expect(OneIdentityApi.getIdps).toHaveBeenCalledTimes(1));
     const ioSmartAppBanner = getById(container, 'ioSmartAppBanner');
     expect(ioSmartAppBanner).toBeInTheDocument();
   });
 
-  it('renders page - whitout smart banner enabled', () => {
+  it('renders page - whitout smart banner enabled', async () => {
     isSmartAppBannerEnabled = false;
     const { container } = render(<OneIdentityLogin />);
+    await waitFor(() => expect(OneIdentityApi.getIdps).toHaveBeenCalledTimes(1));
     const ioSmartAppBanner = queryById(container, 'ioSmartAppBanner');
     expect(ioSmartAppBanner).not.toBeInTheDocument();
     // disable mobile view
