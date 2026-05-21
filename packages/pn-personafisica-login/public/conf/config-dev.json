@@ -20,6 +20,6 @@
   "DIGITAL_IDENTITY_LINK": "https://identitadigitale.gov.it/",
   "ONE_IDENTITY_CDN_URL": "https://assets.uat.oneid.pagopa.it",
   "SPID_REQUEST_LINK": "https://www.spid.gov.it/cos-e-spid/come-attivare-spid/",
-  "API_BASE_URL": "https://webapi.dev.notifichedigitali.it",
+  "API_BASE_URL": "https://webapi.dev.notifichedigitali.it/",
   "ONE_IDENTITY_CIE_ENTITY_ID": "https://preproduzione.idserver.servizicie.interno.gov.it/idp/profile/SAML2/POST/SSO"
 }

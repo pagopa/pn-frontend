@@ -42,7 +42,7 @@ beforeAll(async () => {
     DIGITAL_IDENTITY_LINK: 'https://identitadigitale.gov.it/',
     ONE_IDENTITY_CDN_URL: 'https://assets.uat.oneid.pagopa.it',
     SPID_REQUEST_LINK: 'https://www.spid.gov.it/cos-e-spid/come-attivare-spid/',
-    API_BASE_URL: 'https://mock-api-base-url',
+    API_BASE_URL: 'https://mock-api-base-url/',
     ONE_IDENTITY_CIE_ENTITY_ID: 'https://mock-cie-entityID.it',
   });
   // mock translations
