@@ -95,16 +95,17 @@ const Notifiche = ({ isDelegatedPage = false }: Props) => {
       .then((data) => {
         setPageReady(true);
 
-        if (!isDelegatedPage) {
-          PGEventStrategyFactory.triggerEvent(
-            PGEventsType.SEND_PG_YOUR_NOTIFICATION,
-            mapNotificationListToEventPayload(
-              data.resultsPage,
-              pagination.page,
-              domicileBannerTypeRef.current
-            )
-          );
-        }
+        const event_type = isDelegatedPage
+          ? PGEventsType.SEND_PG_NOTIFICATION_DELEGATED
+          : PGEventsType.SEND_PG_YOUR_NOTIFICATION;
+
+        const event_payload = mapNotificationListToEventPayload(
+          data.resultsPage,
+          pagination.page,
+          isDelegatedPage ? undefined : domicileBannerTypeRef.current
+        );
+
+        PGEventStrategyFactory.triggerEvent(event_type, event_payload);
       })
       .catch(() => setPageReady(true));
   }, [filters, pagination.size, pagination.page]);

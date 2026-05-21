@@ -4,16 +4,19 @@ import { PGEventPayloads } from '../../models/PGEventPayloads';
 import { PGEventsType } from '../../models/PGEventsType';
 
 type NotificationTrackingConfigs = {
-  [PGEventsType.SEND_PG_YOUR_NOTIFICATION]: (
-    payload: PGEventPayloads[PGEventsType.SEND_PG_YOUR_NOTIFICATION]
+  [PGEventsType.SEND_PG_NOTIFICATION_DELEGATED]: (
+    payload: PGEventPayloads[PGEventsType.SEND_PG_NOTIFICATION_DELEGATED]
   ) => TrackedEvent;
   [PGEventsType.SEND_PG_NOTIFICATION_DETAIL]: (
     payload: PGEventPayloads[PGEventsType.SEND_PG_NOTIFICATION_DETAIL]
   ) => TrackedEvent;
+  [PGEventsType.SEND_PG_YOUR_NOTIFICATION]: (
+    payload: PGEventPayloads[PGEventsType.SEND_PG_YOUR_NOTIFICATION]
+  ) => TrackedEvent;
 };
 
 export const notificationTrackingConfigs: NotificationTrackingConfigs = {
-  [PGEventsType.SEND_PG_YOUR_NOTIFICATION]: (payload) => uxScreenView(payload),
-
+  [PGEventsType.SEND_PG_NOTIFICATION_DELEGATED]: (payload) => uxScreenView(payload),
   [PGEventsType.SEND_PG_NOTIFICATION_DETAIL]: (payload) => uxScreenView(payload),
+  [PGEventsType.SEND_PG_YOUR_NOTIFICATION]: (payload) => uxScreenView(payload),
 };

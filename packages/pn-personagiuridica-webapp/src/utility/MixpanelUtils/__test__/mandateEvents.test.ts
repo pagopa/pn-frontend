@@ -25,4 +25,26 @@ describe('mandateTrackingConfigs', () => {
       },
     });
   });
+
+  it('shold build SEND_PG_MANDATES_GIVEN screen view event', () => {
+    const result = mandateTrackingConfigs[PGEventsType.SEND_PG_MANDATES_GIVEN](undefined);
+
+    expect(result).toStrictEqual({
+      [EventPropertyType.TRACK]: {
+        event_category: EventCategory.UX,
+        event_type: EventAction.SCREEN_VIEW,
+      },
+    });
+  });
+
+  it('shold build SEND_PG_MANDATES_RECEIVED screen view event', () => {
+    const result = mandateTrackingConfigs[PGEventsType.SEND_PG_MANDATES_RECEIVED](undefined);
+
+    expect(result).toStrictEqual({
+      [EventPropertyType.TRACK]: {
+        event_category: EventCategory.UX,
+        event_type: EventAction.SCREEN_VIEW,
+      },
+    });
+  });
 });

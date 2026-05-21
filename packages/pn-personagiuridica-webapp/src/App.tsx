@@ -24,6 +24,7 @@ import {
 import { PartyEntity, ProductEntity } from '@pagopa/mui-italia';
 
 import { useMenuItems } from './hooks/useMenuItems';
+import { PGEventsType } from './models/PGEventsType';
 import { PNRole } from './models/User';
 import { goToLoginPortal } from './navigation/navigation.utility';
 import Router from './navigation/routes';
@@ -37,6 +38,7 @@ import { getSidemenuInformation } from './redux/sidemenu/actions';
 import { RootState } from './redux/store';
 import { getConfiguration } from './services/configuration.service';
 import { PGAppErrorFactory } from './utility/AppError/PGAppErrorFactory';
+import PGEventStrategyFactory from './utility/MixpanelUtils/PGEventStrategyFactory';
 import showLayoutParts from './utility/layout.utility';
 import './utility/onetrust';
 
@@ -60,6 +62,18 @@ const App = () => {
   }, [isInitialized]);
 
   return isInitialized ? <ActualApp /> : <div />;
+};
+
+const runCallbackOnce = (callback: () => void): (() => void) => {
+  // eslint-disable-next-line functional/no-let
+  let called = false;
+
+  return () => {
+    if (!called) {
+      called = true;
+      callback();
+    }
+  };
 };
 
 // eslint-disable-next-line complexity
@@ -162,8 +176,18 @@ const ActualApp = () => {
 
   const handleAssistanceClick = () => {
     const url = addParamToUrl(`${SELFCARE_BASE_URL}/assistenza`, 'data', JSON.stringify(lastError));
-    /* eslint-disable-next-line functional/immutable-data */
-    window.location.href = sessionToken ? url : `mailto:${PAGOPA_HELP_EMAIL}`;
+
+    const navigateToAssistance = runCallbackOnce(() => {
+      /* eslint-disable-next-line functional/immutable-data */
+      globalThis.location.href = sessionToken ? url : `mailto:${PAGOPA_HELP_EMAIL}`;
+    });
+
+    PGEventStrategyFactory.triggerEvent(PGEventsType.SEND_PG_HELP, undefined, {
+      sendImmediately: true,
+      callback: navigateToAssistance,
+    });
+
+    globalThis.setTimeout(navigateToAssistance, 1000);
   };
 
   const [clickVersion] = useMultiEvent({
@@ -177,6 +201,7 @@ const ActualApp = () => {
   });
 
   const handleUserLogout = () => {
+    PGEventStrategyFactory.triggerEvent(PGEventsType.SEND_PG_EXIT);
     setOpenModal(true);
   };
 

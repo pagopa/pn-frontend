@@ -9,18 +9,24 @@ import LegalContacts from '../components/Contacts/LegalContacts';
 import ValidatingPecBanner from '../components/Contacts/ValidatingPecBanner';
 import DomicileBanner from '../components/DomicileBanner/DomicileBanner';
 import LoadingPageWrapper from '../components/LoadingPageWrapper/LoadingPageWrapper';
+import { PGEventsType } from '../models/PGEventsType';
 import { ChannelType, ContactOperation, ContactSource } from '../models/contacts';
 import { PROFILE } from '../navigation/routes.const';
 import { CONTACT_ACTIONS, getDigitalAddresses } from '../redux/contact/actions';
 import { resetExternalEvent } from '../redux/contact/reducers';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { RootState } from '../redux/store';
+import PGEventStrategyFactory from '../utility/MixpanelUtils/PGEventStrategyFactory';
+import { mapContactDetailsToEventPayload } from '../utility/MixpanelUtils/mappers/contactPayloadMappers';
 
 const Contacts = () => {
   const { t, i18n } = useTranslation(['recapiti']);
   const dispatch = useAppDispatch();
 
   const externalEvent = useAppSelector((state: RootState) => state.contactsState.event);
+  const digitalAddresses = useAppSelector(
+    (state: RootState) => state.contactsState.digitalAddresses
+  );
 
   const organization = useAppSelector((state: RootState) => state.userState.user.organization);
   const profileUrl = PROFILE(organization?.id, i18n.language);
@@ -67,6 +73,13 @@ const Contacts = () => {
       dispatch(resetExternalEvent());
     }
   }, [externalEvent]);
+
+  useEffect(() => {
+    PGEventStrategyFactory.triggerEvent(
+      PGEventsType.SEND_PG_YOUR_CONTACT_DETAILS,
+      mapContactDetailsToEventPayload(digitalAddresses)
+    );
+  }, []);
 
   return (
     <LoadingPageWrapper isInitialized={true}>
