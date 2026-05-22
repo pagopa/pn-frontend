@@ -8,6 +8,7 @@ export interface User extends BasicUser, BasicUserClaims {
   exp: number;
   iss: string;
   jti: string;
+  spid_level?: string;
   source?: UserSource;
 }
 
