@@ -45,6 +45,7 @@ const noLoggedUserData: User = {
   name: '',
   family_name: '',
   fiscal_number: '',
+  spid_level: undefined,
 };
 
 const initialState: AuthInitialState = {

@@ -15,6 +15,7 @@ export const userDataMatcher = yup
     aud: yup.string().matches(dataRegex.simpleServer),
     iss: yup.string().url(),
     jti: yup.string().matches(dataRegex.lettersNumbersAndDashs),
+    spid_level: yup.string().optional(),
     source: yup
       .object({
         channel: yup.string().oneOf(Object.values(SourceChannel)), // UserSource.channel
