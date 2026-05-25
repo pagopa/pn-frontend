@@ -14,10 +14,12 @@ import {
 import { PnInfoCard, appStateActions } from '@pagopa-pn/pn-commons';
 import { ButtonNaked } from '@pagopa/mui-italia';
 
+import { PGEventsType } from '../../models/PGEventsType';
 import { AddressType, ChannelType, SaveDigitalAddressParams } from '../../models/contacts';
 import { createOrUpdateAddress, deleteAddress } from '../../redux/contact/actions';
 import { contactsSelectors } from '../../redux/contact/reducers';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
+import PGEventStrategyFactory from '../../utility/MixpanelUtils/PGEventStrategyFactory';
 import { contactAlreadyExists, internationalPhonePrefix } from '../../utility/contacts.utility';
 import ContactCodeDialog from './ContactCodeDialog';
 import DeleteDialog from './DeleteDialog';
@@ -103,6 +105,7 @@ const SmsContactElem: React.FC<SmsElemProps> = ({ onCancelInsert, slotsProps, sl
         }
 
         // contact has already been verified
+        PGEventStrategyFactory.triggerEvent(PGEventsType.SEND_PG_ADD_SMS_UX_SUCCESS);
         // show success message
         dispatch(
           appStateActions.addSuccess({
@@ -208,6 +211,7 @@ const SmsContactItem: React.FC<SmsItemProps> = ({ slotsProps, slots }) => {
     )
       .unwrap()
       .then(() => {
+        PGEventStrategyFactory.triggerEvent(PGEventsType.SEND_PG_REMOVE_SMS_UX_SUCCESS);
         dispatch(
           appStateActions.addSuccess({
             title: '',
@@ -272,6 +276,7 @@ const SmsContactItem: React.FC<SmsItemProps> = ({ slotsProps, slots }) => {
             color="error"
             startIcon={<PowerSettingsNewIcon />}
             onClick={() => {
+              PGEventStrategyFactory.triggerEvent(PGEventsType.SEND_PG_REMOVE_SMS_START);
               setModalOpen(ModalType.DELETE);
             }}
             sx={{ p: '10px 16px' }}
@@ -360,7 +365,10 @@ const SmsContactItem: React.FC<SmsItemProps> = ({ slotsProps, slots }) => {
           <ButtonNaked
             color="primary"
             sx={{ fontSize: '16px' }}
-            onClick={() => setInsertMode(true)}
+            onClick={() => {
+              PGEventStrategyFactory.triggerEvent(PGEventsType.SEND_PG_ADD_SMS_START);
+              setInsertMode(true);
+            }}
           >
             {t('courtesy-contacts.email-sms-add', { ns: 'recapiti' })}
           </ButtonNaked>

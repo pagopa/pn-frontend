@@ -24,7 +24,7 @@ const notificationListPayload: PGEventPayloads[PGEventsType.SEND_PG_YOUR_NOTIFIC
 };
 
 describe('notificationTrackingConfigs', () => {
-  it('should build SEND_PG_NOTIFICATION_DETAIL screen view event', () => {
+  it('should build SEND_PG_NOTIFICATION_DETAIL event', () => {
     const result = notificationTrackingConfigs[PGEventsType.SEND_PG_NOTIFICATION_DETAIL]({
       notification_owner: true,
       notification_status: NotificationStatus.DELIVERED,
@@ -52,7 +52,7 @@ describe('notificationTrackingConfigs', () => {
     });
   });
 
-  it('should build SEND_PG_NOTIFICATION_DELEGATED screen view event', () => {
+  it('should build SEND_PG_NOTIFICATION_DELEGATED event', () => {
     const result =
       notificationTrackingConfigs[PGEventsType.SEND_PG_NOTIFICATION_DELEGATED](
         notificationListPayload
@@ -67,7 +67,7 @@ describe('notificationTrackingConfigs', () => {
     });
   });
 
-  it('should build SEND_PG_YOUR_NOTIFICATION screen view event', () => {
+  it('should build SEND_PG_YOUR_NOTIFICATION event', () => {
     const result = notificationTrackingConfigs[PGEventsType.SEND_PG_YOUR_NOTIFICATION]({
       ...notificationListPayload,
       banner: ChannelType.SERCQ_SEND,

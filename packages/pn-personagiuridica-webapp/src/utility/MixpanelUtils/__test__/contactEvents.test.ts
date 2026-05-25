@@ -6,7 +6,7 @@ import { ChannelType } from '../../../models/contacts';
 import { contactTrackingConfigs } from '../contactEvents';
 
 describe('contactTrackingConfigs', () => {
-  it('should build SEND_PG_YOUR_CONTACT_DETAILS screen view event', () => {
+  it('should build SEND_PG_YOUR_CONTACT_DETAILS event', () => {
     const payload: PGEventPayloads[PGEventsType.SEND_PG_YOUR_CONTACT_DETAILS] = {
       digital_domicile_exists: true,
       digital_domicile_type: ChannelType.SERCQ_SEND,
@@ -21,6 +21,138 @@ describe('contactTrackingConfigs', () => {
         ...payload,
         event_category: EventCategory.UX,
         event_type: EventAction.SCREEN_VIEW,
+      },
+    });
+  });
+
+  it('should build SEND_PG_ADD_SERCQ_START event', () => {
+    const result = contactTrackingConfigs[PGEventsType.SEND_PG_ADD_SERCQ_START](undefined);
+
+    expect(result).toStrictEqual({
+      [EventPropertyType.TRACK]: {
+        event_category: EventCategory.UX,
+        event_type: EventAction.ACTION,
+      },
+    });
+  });
+
+  it('should build SEND_PG_ADD_SERCQ_UX_SUCCESS event', () => {
+    const result = contactTrackingConfigs[PGEventsType.SEND_PG_ADD_SERCQ_UX_SUCCESS](undefined);
+
+    expect(result).toStrictEqual({
+      [EventPropertyType.TRACK]: {
+        event_category: EventCategory.UX,
+        event_type: EventAction.CONFIRM,
+      },
+    });
+  });
+
+  it('should build SEND_PG_REMOVE_SERCQ_START event', () => {
+    const result = contactTrackingConfigs[PGEventsType.SEND_PG_REMOVE_SERCQ_START](undefined);
+
+    expect(result).toStrictEqual({
+      [EventPropertyType.TRACK]: {
+        event_category: EventCategory.UX,
+        event_type: EventAction.ACTION,
+      },
+    });
+  });
+
+  it('should build SEND_PG_REMOVE_SERCQ_UX_SUCCESS event', () => {
+    const result = contactTrackingConfigs[PGEventsType.SEND_PG_REMOVE_SERCQ_UX_SUCCESS](undefined);
+
+    expect(result).toStrictEqual({
+      [EventPropertyType.TRACK]: {
+        event_category: EventCategory.UX,
+        event_type: EventAction.CONFIRM,
+      },
+    });
+  });
+
+  it('should build SEND_PG_ADD_EMAIL_START event', () => {
+    const result = contactTrackingConfigs[PGEventsType.SEND_PG_ADD_EMAIL_START](undefined);
+
+    expect(result).toStrictEqual({
+      [EventPropertyType.TRACK]: {
+        event_category: EventCategory.UX,
+        event_type: EventAction.ACTION,
+      },
+    });
+  });
+
+  it('should build SEND_PG_ADD_EMAIL_UX_SUCCESS event', () => {
+    const result = contactTrackingConfigs[PGEventsType.SEND_PG_ADD_EMAIL_UX_SUCCESS](undefined);
+
+    expect(result).toStrictEqual({
+      [EventPropertyType.TRACK]: {
+        event_category: EventCategory.UX,
+        event_type: EventAction.CONFIRM,
+      },
+    });
+  });
+
+  it('should build SEND_PG_REMOVE_EMAIL_START event', () => {
+    const result = contactTrackingConfigs[PGEventsType.SEND_PG_REMOVE_EMAIL_START](undefined);
+
+    expect(result).toStrictEqual({
+      [EventPropertyType.TRACK]: {
+        event_category: EventCategory.UX,
+        event_type: EventAction.ACTION,
+      },
+    });
+  });
+
+  it('should build SEND_PG_REMOVE_EMAIL_UX_SUCCESS event', () => {
+    const result = contactTrackingConfigs[PGEventsType.SEND_PG_REMOVE_EMAIL_UX_SUCCESS](undefined);
+
+    expect(result).toStrictEqual({
+      [EventPropertyType.TRACK]: {
+        event_category: EventCategory.UX,
+        event_type: EventAction.CONFIRM,
+      },
+    });
+  });
+
+  it('should build SEND_PG_ADD_SMS_START event', () => {
+    const result = contactTrackingConfigs[PGEventsType.SEND_PG_ADD_SMS_START](undefined);
+
+    expect(result).toStrictEqual({
+      [EventPropertyType.TRACK]: {
+        event_category: EventCategory.UX,
+        event_type: EventAction.ACTION,
+      },
+    });
+  });
+
+  it('should build SEND_PG_ADD_SMS_UX_SUCCESS event', () => {
+    const result = contactTrackingConfigs[PGEventsType.SEND_PG_ADD_SMS_UX_SUCCESS](undefined);
+
+    expect(result).toStrictEqual({
+      [EventPropertyType.TRACK]: {
+        event_category: EventCategory.UX,
+        event_type: EventAction.CONFIRM,
+      },
+    });
+  });
+
+  it('should build SEND_PG_REMOVE_SMS_START event', () => {
+    const result = contactTrackingConfigs[PGEventsType.SEND_PG_REMOVE_SMS_START](undefined);
+
+    expect(result).toStrictEqual({
+      [EventPropertyType.TRACK]: {
+        event_category: EventCategory.UX,
+        event_type: EventAction.ACTION,
+      },
+    });
+  });
+
+  it('should build SEND_PG_REMOVE_SMS_UX_SUCCESS event', () => {
+    const result = contactTrackingConfigs[PGEventsType.SEND_PG_REMOVE_SMS_UX_SUCCESS](undefined);
+
+    expect(result).toStrictEqual({
+      [EventPropertyType.TRACK]: {
+        event_category: EventCategory.UX,
+        event_type: EventAction.CONFIRM,
       },
     });
   });

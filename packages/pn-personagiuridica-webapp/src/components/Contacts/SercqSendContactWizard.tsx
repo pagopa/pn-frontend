@@ -29,6 +29,7 @@ import {
 } from '@pagopa-pn/pn-commons';
 import { theme } from '@pagopa/mui-italia';
 
+import { PGEventsType } from '../../models/PGEventsType';
 import { AddressType, ChannelType, SaveDigitalAddressParams } from '../../models/contacts';
 import { PRIVACY_POLICY, TERMS_OF_SERVICE_SERCQ_SEND } from '../../navigation/routes.const';
 import {
@@ -38,6 +39,7 @@ import {
 } from '../../redux/contact/actions';
 import { contactsSelectors } from '../../redux/contact/reducers';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
+import PGEventStrategyFactory from '../../utility/MixpanelUtils/PGEventStrategyFactory';
 
 type Props = {
   goToStep: (step: number) => void;
@@ -163,6 +165,7 @@ const SercqSendContactWizard: React.FC<Props> = ({ goToStep }) => {
     dispatch(createOrUpdateAddress(digitalAddressParams))
       .unwrap()
       .then(() => {
+        PGEventStrategyFactory.triggerEvent(PGEventsType.SEND_PG_ADD_SERCQ_UX_SUCCESS);
         appStorage.domicileBanner.enable();
         goToStep(thankYouStep);
       })

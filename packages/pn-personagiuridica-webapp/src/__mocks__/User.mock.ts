@@ -46,3 +46,8 @@ export const operatorUser: User = {
     ],
   },
 };
+
+export const operatorUserWithGroup: User = {
+  ...operatorUser,
+  hasGroup: true,
+};

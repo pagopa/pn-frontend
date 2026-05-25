@@ -1,21 +1,14 @@
-import { type TrackedEvent, uxScreenView } from '@pagopa-pn/pn-commons';
+import { uxScreenView } from '@pagopa-pn/pn-commons';
 
-import { PGEventPayloads } from '../../models/PGEventPayloads';
 import { PGEventsType } from '../../models/PGEventsType';
+import { TrackingConfigs } from './trackingTypes';
 
-type NotificationTrackingConfigs = {
-  [PGEventsType.SEND_PG_NOTIFICATION_DELEGATED]: (
-    payload: PGEventPayloads[PGEventsType.SEND_PG_NOTIFICATION_DELEGATED]
-  ) => TrackedEvent;
-  [PGEventsType.SEND_PG_NOTIFICATION_DETAIL]: (
-    payload: PGEventPayloads[PGEventsType.SEND_PG_NOTIFICATION_DETAIL]
-  ) => TrackedEvent;
-  [PGEventsType.SEND_PG_YOUR_NOTIFICATION]: (
-    payload: PGEventPayloads[PGEventsType.SEND_PG_YOUR_NOTIFICATION]
-  ) => TrackedEvent;
-};
+type NotificationEventType =
+  | PGEventsType.SEND_PG_NOTIFICATION_DELEGATED
+  | PGEventsType.SEND_PG_NOTIFICATION_DETAIL
+  | PGEventsType.SEND_PG_YOUR_NOTIFICATION;
 
-export const notificationTrackingConfigs: NotificationTrackingConfigs = {
+export const notificationTrackingConfigs: TrackingConfigs<NotificationEventType> = {
   [PGEventsType.SEND_PG_NOTIFICATION_DELEGATED]: (payload) => uxScreenView(payload),
   [PGEventsType.SEND_PG_NOTIFICATION_DETAIL]: (payload) => uxScreenView(payload),
   [PGEventsType.SEND_PG_YOUR_NOTIFICATION]: (payload) => uxScreenView(payload),

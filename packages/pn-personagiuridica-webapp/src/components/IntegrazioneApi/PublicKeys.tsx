@@ -12,6 +12,7 @@ import {
   PublicKeyStatus,
 } from '../../generated-client/pg-apikeys';
 import { ModalApiKeyView } from '../../models/ApiKeys';
+import { PGEventsType } from '../../models/PGEventsType';
 import * as routes from '../../navigation/routes.const';
 import {
   PUBLIC_APIKEYS_ACTIONS,
@@ -21,6 +22,7 @@ import {
 } from '../../redux/apikeys/actions';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { RootState } from '../../redux/store';
+import PGEventStrategyFactory from '../../utility/MixpanelUtils/PGEventStrategyFactory';
 import ApiKeyModal from './ApiKeyModal';
 import PublicKeysTable from './PublicKeysTable';
 import { ShowCodesInput } from './ShowCodesInput';
@@ -53,6 +55,9 @@ const PublicKeys: React.FC = () => {
   }, []);
 
   const handleGeneratePublicKey = (publicKeyId?: string) => {
+    if (!publicKeyId) {
+      PGEventStrategyFactory.triggerEvent(PGEventsType.SEND_PG_ADD_API_START);
+    }
     handleCloseModal();
     const pathStr = publicKeyId ? `/${publicKeyId}` : '';
     navigate(`${routes.REGISTRA_CHIAVE_PUBBLICA}${pathStr}`);

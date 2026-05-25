@@ -11,7 +11,7 @@ const navigationEventTypes = [
 ] as const;
 
 describe('navigationTrackingConfigs', () => {
-  it.each(navigationEventTypes)('should build %s action event', (EventType) => {
+  it.each(navigationEventTypes)('should build %s event', (EventType) => {
     const result = navigationTrackingConfigs[EventType](undefined);
 
     expect(result).toStrictEqual({

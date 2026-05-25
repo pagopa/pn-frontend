@@ -4,7 +4,7 @@ import { PGEventsType } from '../../../models/PGEventsType';
 import { mandateTrackingConfigs } from '../mandateEvents';
 
 describe('mandateTrackingConfigs', () => {
-  it('should build SEND_PG_ADD_MANDATE_START action event', () => {
+  it('should build SEND_PG_ADD_MANDATE_START event', () => {
     const result = mandateTrackingConfigs[PGEventsType.SEND_PG_ADD_MANDATE_START](undefined);
 
     expect(result).toStrictEqual({
@@ -15,7 +15,7 @@ describe('mandateTrackingConfigs', () => {
     });
   });
 
-  it('shold build SEND_PG_ADD_MANDATE_UX_SUCCESS confirm event', () => {
+  it('shold build SEND_PG_ADD_MANDATE_UX_SUCCESS event', () => {
     const result = mandateTrackingConfigs[PGEventsType.SEND_PG_ADD_MANDATE_UX_SUCCESS](undefined);
 
     expect(result).toStrictEqual({
@@ -26,7 +26,7 @@ describe('mandateTrackingConfigs', () => {
     });
   });
 
-  it('shold build SEND_PG_MANDATES_GIVEN screen view event', () => {
+  it('shold build SEND_PG_MANDATES_GIVEN event', () => {
     const result = mandateTrackingConfigs[PGEventsType.SEND_PG_MANDATES_GIVEN](undefined);
 
     expect(result).toStrictEqual({

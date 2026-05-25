@@ -10,6 +10,7 @@ import TouchAppIcon from '@mui/icons-material/TouchApp';
 import { Alert, Box, Button, Chip, ChipOwnProps, Stack, Typography } from '@mui/material';
 import { PnInfoCard, appStateActions, appStorage, useIsMobile } from '@pagopa-pn/pn-commons';
 
+import { PGEventsType } from '../../models/PGEventsType';
 import { AddressType, ChannelType } from '../../models/contacts';
 import {
   DIGITAL_DOMICILE_ACTIVATION,
@@ -18,6 +19,7 @@ import {
 import { deleteAddress } from '../../redux/contact/actions';
 import { contactsSelectors } from '../../redux/contact/reducers';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
+import PGEventStrategyFactory from '../../utility/MixpanelUtils/PGEventStrategyFactory';
 import DeleteDialog from './DeleteDialog';
 import PecContactItem from './PecContactItem';
 import SpecialContacts from './SpecialContacts';
@@ -67,7 +69,10 @@ const EmptyLegalContacts = () => {
       <Button
         variant="contained"
         fullWidth={isMobile}
-        onClick={() => navigate(DIGITAL_DOMICILE_ACTIVATION)}
+        onClick={() => {
+          PGEventStrategyFactory.triggerEvent(PGEventsType.SEND_PG_ADD_SERCQ_START);
+          navigate(DIGITAL_DOMICILE_ACTIVATION);
+        }}
       >
         {t('button.start')}
       </Button>
@@ -134,6 +139,7 @@ const LegalContacts = () => {
       .unwrap()
       .then(() => {
         if (channelType === ChannelType.SERCQ_SEND) {
+          PGEventStrategyFactory.triggerEvent(PGEventsType.SEND_PG_REMOVE_SERCQ_UX_SUCCESS);
           appStorage.domicileBanner.enable();
         }
         dispatch(
@@ -167,7 +173,12 @@ const LegalContacts = () => {
             variant="naked"
             color="error"
             startIcon={<PowerSettingsNewIcon />}
-            onClick={() => setModalOpen(true)}
+            onClick={() => {
+              if (channelType === ChannelType.SERCQ_SEND) {
+                PGEventStrategyFactory.triggerEvent(PGEventsType.SEND_PG_REMOVE_SERCQ_START);
+              }
+              setModalOpen(true);
+            }}
             sx={{ p: '10px 16px' }}
           >
             {t('button.disable')}
