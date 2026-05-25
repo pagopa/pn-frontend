@@ -262,6 +262,7 @@ const NuovaDelega = () => {
               <Paper sx={{ padding: '24px', marginBottom: '20px' }} elevation={0}>
                 <Typography sx={{ fontWeight: 'bold' }} id="personType">
                   {t('nuovaDelega.form.personType')}
+                  <span aria-hidden="true">*</span>
                 </Typography>
                 <Typography variant="body2" fontSize={'14px'} marginTop={1} marginBottom={1}>
                   {t('nuovaDelega.form.personType-content-subtitle')}
@@ -290,6 +291,7 @@ const NuovaDelega = () => {
                                 );
                               }}
                               aria-labelledby="personType"
+                              aria-required="true"
                             >
                               <FormControlLabel
                                 id="recipient-pf"
@@ -299,6 +301,7 @@ const NuovaDelega = () => {
                                 name={'selectPersonaFisicaOrPersonaGiuridica'}
                                 label={t('nuovaDelega.form.naturalPerson')}
                                 data-testid="recipientType"
+                                required
                               />
                               <FormControlLabel
                                 id="recipent-pg"
@@ -309,6 +312,7 @@ const NuovaDelega = () => {
                                 label={t('nuovaDelega.form.legalPerson')}
                                 disabled={!DELEGATIONS_TO_PG_ENABLED}
                                 data-testid="recipientType"
+                                required
                               />
                             </RadioGroup>
                           </Stack>
@@ -329,6 +333,7 @@ const NuovaDelega = () => {
                                   void setFieldTouched('nome', true, false);
                                   void setFieldValue('nome', event.currentTarget.value);
                                 }}
+                                required
                                 label={t('nuovaDelega.form.firstName')}
                                 name="nome"
                                 error={Boolean(getError(touched.nome, errors.nome))}
@@ -346,6 +351,7 @@ const NuovaDelega = () => {
                                   void setFieldTouched('cognome', true, false);
                                   void setFieldValue('cognome', event.currentTarget.value);
                                 }}
+                                required
                                 label={t('nuovaDelega.form.lastName')}
                                 name="cognome"
                                 error={Boolean(getError(touched.cognome, errors.cognome))}
@@ -364,6 +370,7 @@ const NuovaDelega = () => {
                                 }}
                                 label={t('nuovaDelega.form.businessName')}
                                 name="ragioneSociale"
+                                required
                                 error={Boolean(
                                   getError(touched.ragioneSociale, errors.ragioneSociale)
                                 )}
@@ -385,6 +392,7 @@ const NuovaDelega = () => {
                             event.currentTarget.value.toUpperCase()
                           );
                         }}
+                        required
                         label={t('nuovaDelega.form.fiscalCode')}
                         name="codiceFiscale"
                         error={Boolean(getError(touched.codiceFiscale, errors.codiceFiscale))}
@@ -397,6 +405,7 @@ const NuovaDelega = () => {
                         id="selectEntities"
                       >
                         {t('nuovaDelega.form.viewFrom')}
+                        <span aria-hidden="true">*</span>
                       </Typography>
                       <Typography variant="body2" fontSize={'14px'} marginTop={1} marginBottom={1}>
                         {t('nuovaDelega.form.viewFrom-content-subtitle')}
@@ -418,6 +427,7 @@ const NuovaDelega = () => {
                               }
                             }}
                             aria-labelledby="selectEntities"
+                            aria-required="true"
                           >
                             <FormControlLabel
                               id="tutti-gli-enti-selezionati"
@@ -457,6 +467,7 @@ const NuovaDelega = () => {
                                   }
                                   handleFiltering={(e) => e}
                                   label={entitySearchLabel(senderInputValue)}
+                                  required
                                   error={Boolean(getError(touched.enti, errors.enti))}
                                   helperText={getError(touched.enti, errors.enti)}
                                   noResultsText={t('nuovaDelega.form.party-not-found')}
@@ -500,8 +511,9 @@ const NuovaDelega = () => {
                       <Box sx={{ marginTop: '1rem', width: '100%' }}>
                         <Typography fontWeight="bold" marginBottom={2}>
                           {t('nuovaDelega.form.date-duration')}
+                          <span aria-hidden="true">*</span>
                         </Typography>
-                        <FormControl fullWidth>
+                        <FormControl fullWidth required>
                           <CustomDatePicker
                             language={i18n.language}
                             label={t('nuovaDelega.form.endDate')}
@@ -517,6 +529,7 @@ const NuovaDelega = () => {
                               textField: {
                                 id: 'expirationDate',
                                 name: 'expirationDate',
+                                required: true,
                                 inputProps: {
                                   inputMode: 'text',
                                   'aria-label': t('nuovaDelega.form.endDate-input-aria-label'),
