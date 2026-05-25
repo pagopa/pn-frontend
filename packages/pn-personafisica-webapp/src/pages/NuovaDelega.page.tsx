@@ -301,7 +301,6 @@ const NuovaDelega = () => {
                                 name={'selectPersonaFisicaOrPersonaGiuridica'}
                                 label={t('nuovaDelega.form.naturalPerson')}
                                 data-testid="recipientType"
-                                required
                               />
                               <FormControlLabel
                                 id="recipent-pg"
@@ -312,7 +311,6 @@ const NuovaDelega = () => {
                                 label={t('nuovaDelega.form.legalPerson')}
                                 disabled={!DELEGATIONS_TO_PG_ENABLED}
                                 data-testid="recipientType"
-                                required
                               />
                             </RadioGroup>
                           </Stack>
@@ -333,7 +331,8 @@ const NuovaDelega = () => {
                                   void setFieldTouched('nome', true, false);
                                   void setFieldValue('nome', event.currentTarget.value);
                                 }}
-                                required
+                                InputLabelProps={{ required: true }}
+                                inputProps={{ 'aria-required': 'true' }}
                                 label={t('nuovaDelega.form.firstName')}
                                 name="nome"
                                 error={Boolean(getError(touched.nome, errors.nome))}
@@ -351,7 +350,8 @@ const NuovaDelega = () => {
                                   void setFieldTouched('cognome', true, false);
                                   void setFieldValue('cognome', event.currentTarget.value);
                                 }}
-                                required
+                                InputLabelProps={{ required: true }}
+                                inputProps={{ 'aria-required': 'true' }}
                                 label={t('nuovaDelega.form.lastName')}
                                 name="cognome"
                                 error={Boolean(getError(touched.cognome, errors.cognome))}
@@ -370,7 +370,8 @@ const NuovaDelega = () => {
                                 }}
                                 label={t('nuovaDelega.form.businessName')}
                                 name="ragioneSociale"
-                                required
+                                InputLabelProps={{ required: true }}
+                                inputProps={{ 'aria-required': 'true' }}
                                 error={Boolean(
                                   getError(touched.ragioneSociale, errors.ragioneSociale)
                                 )}
@@ -392,7 +393,8 @@ const NuovaDelega = () => {
                             event.currentTarget.value.toUpperCase()
                           );
                         }}
-                        required
+                        InputLabelProps={{ required: true }}
+                        inputProps={{ 'aria-required': 'true' }}
                         label={t('nuovaDelega.form.fiscalCode')}
                         name="codiceFiscale"
                         error={Boolean(getError(touched.codiceFiscale, errors.codiceFiscale))}
@@ -467,7 +469,6 @@ const NuovaDelega = () => {
                                   }
                                   handleFiltering={(e) => e}
                                   label={entitySearchLabel(senderInputValue)}
-                                  required
                                   error={Boolean(getError(touched.enti, errors.enti))}
                                   helperText={getError(touched.enti, errors.enti)}
                                   noResultsText={t('nuovaDelega.form.party-not-found')}
@@ -513,7 +514,7 @@ const NuovaDelega = () => {
                           {t('nuovaDelega.form.date-duration')}
                           <span aria-hidden="true">*</span>
                         </Typography>
-                        <FormControl fullWidth required>
+                        <FormControl fullWidth>
                           <CustomDatePicker
                             language={i18n.language}
                             label={t('nuovaDelega.form.endDate')}
@@ -529,10 +530,10 @@ const NuovaDelega = () => {
                               textField: {
                                 id: 'expirationDate',
                                 name: 'expirationDate',
-                                required: true,
                                 inputProps: {
                                   inputMode: 'text',
                                   'aria-label': t('nuovaDelega.form.endDate-input-aria-label'),
+                                  'aria-required': 'true',
                                   type: 'text',
                                 },
                                 error: Boolean(
