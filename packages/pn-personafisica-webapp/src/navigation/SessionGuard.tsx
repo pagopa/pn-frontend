@@ -14,6 +14,7 @@ import {
   useErrors,
   useSessionCheck,
 } from '@pagopa-pn/pn-commons';
+import { getRapidAccessSource } from '@pagopa-pn/pn-commons/src/utility/routes.utility';
 
 import { useRapidAccessParam } from '../hooks/useRapidAccessParam';
 import { PFEventsType } from '../models/PFEventsType';
@@ -89,6 +90,11 @@ const SessionGuard = () => {
     try {
       const user = await dispatch(exchangeToken(token)).unwrap();
       dispatch(setIsFreshLogin(true));
+
+      PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_AUTH_SUCCESS, {
+        source: token.rapidAccess?.[0],
+      });
+
       sessionCheck(user.exp);
     } catch (error) {
       handleTokenExchangeError(error);
@@ -105,17 +111,16 @@ const SessionGuard = () => {
       ).unwrap();
       sessionCheck(exp);
 
-      PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_LOGIN_METHOD, {
-        entityID: idp,
+      const rapidAccessSource = getRapidAccessSource(aar, retrievalId);
+
+      PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_LOGIN_METHOD, { entityID: idp });
+      PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_AUTH_SUCCESS, {
+        source: rapidAccessSource,
       });
 
-      if (aar || retrievalId) {
+      if (rapidAccessSource) {
         const params = new URLSearchParams(location.search);
-        if (aar) {
-          params.set(AppRouteParams.AAR, aar);
-        } else if (retrievalId) {
-          params.set(AppRouteParams.RETRIEVAL_ID, retrievalId);
-        }
+        params.set(rapidAccessSource, (aar ?? retrievalId)!);
         navigate({ search: `?${params.toString()}` }, { replace: true });
       }
     } catch (error) {

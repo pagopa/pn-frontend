@@ -50,6 +50,7 @@ import { SendViewProfileStrategy } from './Strategies/SendViewProfileStrategy';
 import { SendYourContactDetailsStrategy } from './Strategies/SendYourContactDetailsStrategy';
 import { SendYourMandatesStrategy } from './Strategies/SendYourMandatesStrategy';
 import { SendYourNotificationsStrategy } from './Strategies/SendYourNotificationsStrategy';
+import { TechRapidAccessStrategy } from './Strategies/TechRapidAccessStrategy';
 import { TechScreenViewStrategy } from './Strategies/TechScreenViewStrategy';
 import { TechStrategy } from './Strategies/TechStrategy';
 import { UXActionStrategy } from './Strategies/UXActionStrategy';
@@ -215,10 +216,13 @@ const uxErrorStrategy = [
 ] as const;
 
 const techStrategy = [
-  PFEventsType.SEND_RAPID_ACCESS,
-  PFEventsType.SEND_AUTH_SUCCESS,
   PFEventsType.SEND_F24_DOWNLOAD_SUCCESS,
   PFEventsType.SEND_F24_DOWNLOAD_TIMEOUT,
+] as const;
+
+const techRapidAccessStrategy = [
+  PFEventsType.SEND_RAPID_ACCESS,
+  PFEventsType.SEND_AUTH_SUCCESS,
 ] as const;
 
 const koErrorStrategy = [
@@ -394,6 +398,7 @@ const eventStrategy: Record<
     | ArrayToTuple<typeof uxWithDDStateContactDetailsAndOtherContactStrategy>
     | ArrayToTuple<typeof uxWithDigitalDomicileStateStrategy>
     | ArrayToTuple<typeof uxBannerStrategy>
+    | ArrayToTuple<typeof techRapidAccessStrategy>
   >,
   EventStrategy
 > = {
@@ -570,6 +575,10 @@ class PFEventStrategyFactory extends EventStrategyFactory<PFEventsType> {
     }
     if (onboardingStartStrategy.findIndex((el) => el === eventType) > -1) {
       return new SendOnboardingStartStrategy();
+    }
+
+    if (techRapidAccessStrategy.findIndex((el) => el === eventType) > -1) {
+      return new TechRapidAccessStrategy();
     }
 
     if (isInEventStrategyMap(eventType)) {

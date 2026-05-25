@@ -41,6 +41,7 @@ import { SendViewProfileStrategy } from '../Strategies/SendViewProfileStrategy';
 import { SendYourContactDetailsStrategy } from '../Strategies/SendYourContactDetailsStrategy';
 import { SendYourMandatesStrategy } from '../Strategies/SendYourMandatesStrategy';
 import { SendYourNotificationsStrategy } from '../Strategies/SendYourNotificationsStrategy';
+import { TechRapidAccessStrategy } from '../Strategies/TechRapidAccessStrategy';
 import { TechScreenViewStrategy } from '../Strategies/TechScreenViewStrategy';
 import { TechStrategy } from '../Strategies/TechStrategy';
 import { UXActionStrategy } from '../Strategies/UXActionStrategy';
@@ -365,13 +366,18 @@ describe('Event Strategy Factory', () => {
 
   it('should return TechStrategy for tech events', () => {
     const eventTypes = [
-      PFEventsType.SEND_RAPID_ACCESS,
-      PFEventsType.SEND_AUTH_SUCCESS,
       PFEventsType.SEND_F24_DOWNLOAD_SUCCESS,
       PFEventsType.SEND_F24_DOWNLOAD_TIMEOUT,
     ];
     eventTypes.forEach((eventType) => {
       expect(factory.getStrategy(eventType)).toBeInstanceOf(TechStrategy);
+    });
+  });
+
+  it('should return TechRapidAccessStrategy for tech with rapid access events', () => {
+    const eventTypes = [PFEventsType.SEND_RAPID_ACCESS, PFEventsType.SEND_AUTH_SUCCESS];
+    eventTypes.forEach((eventType) => {
+      expect(factory.getStrategy(eventType)).toBeInstanceOf(TechRapidAccessStrategy);
     });
   });
 

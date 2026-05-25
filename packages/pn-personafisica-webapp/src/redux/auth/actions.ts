@@ -47,24 +47,24 @@ export const exchangeToken = createAsyncThunk<User, TokenExchangeRequest>(
  * Exchange One Identity code for session token
  * If code is valid, user info are set in sessionStorage
  */
-export const exchangeOneIdentityCode = createAsyncThunk<OneIdentityUser, OneIdentityExchangeCodeBody>(
-  'exchangeOneIdentityCode',
-  async (request: OneIdentityExchangeCodeBody, { rejectWithValue }) => {
-    try {
-      const result = await AuthApi.exchangeOneIdentityCode(request);
-      userDataMatcher.validateSync(result, { stripUnknown: false });
-      return result;
-    } catch (e: any) {
-      if (e?.name === 'ValidationError') {
-        return rejectWithValue({
-          code: 'USER_VALIDATION_FAILED',
-          message: e.message,
-        });
-      }
-      return rejectWithValue(parseError(e));
+export const exchangeOneIdentityCode = createAsyncThunk<
+  OneIdentityUser,
+  OneIdentityExchangeCodeBody
+>('exchangeOneIdentityCode', async (request: OneIdentityExchangeCodeBody, { rejectWithValue }) => {
+  try {
+    const result = await AuthApi.exchangeOneIdentityCode(request);
+    userDataMatcher.validateSync(result, { stripUnknown: false });
+    return result;
+  } catch (e: any) {
+    if (e?.name === 'ValidationError') {
+      return rejectWithValue({
+        code: 'USER_VALIDATION_FAILED',
+        message: e.message,
+      });
     }
+    return rejectWithValue(parseError(e));
   }
-);
+});
 
 /**
  * Call api logout to invalidate access token.
