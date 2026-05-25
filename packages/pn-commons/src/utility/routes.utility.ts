@@ -80,13 +80,3 @@ export function getRapidAccessParam(params: URLSearchParams): [AppRouteParams, s
   const param = key ? params.get(key) : undefined;
   return key && param ? [key, param] : undefined;
 }
-
-export const getRapidAccessSource = (aar?: string, retrievalId?: string) => {
-  if (aar) {
-    return AppRouteParams.AAR;
-  }
-  if (retrievalId) {
-    return AppRouteParams.RETRIEVAL_ID;
-  }
-  return undefined;
-};

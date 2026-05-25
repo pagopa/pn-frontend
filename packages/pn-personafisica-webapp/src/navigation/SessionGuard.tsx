@@ -14,7 +14,6 @@ import {
   useErrors,
   useSessionCheck,
 } from '@pagopa-pn/pn-commons';
-import { getRapidAccessSource } from '@pagopa-pn/pn-commons/src/utility/routes.utility';
 
 import { useRapidAccessParam } from '../hooks/useRapidAccessParam';
 import { PFEventsType } from '../models/PFEventsType';
@@ -27,7 +26,7 @@ import { RootState } from '../redux/store';
 import { getConfiguration } from '../services/configuration.service';
 import PFEventStrategyFactory from '../utility/MixpanelUtils/PFEventStrategyFactory';
 import { AAR_UTM, buildSearchWithUtm } from '../utility/utm.utility';
-import { goToLoginPortal } from './navigation.utility';
+import { getOneIdentityLoginSource, goToLoginPortal } from './navigation.utility';
 import * as routes from './routes.const';
 
 const SessionGuard = () => {
@@ -106,21 +105,21 @@ const SessionGuard = () => {
   ) => {
     AppResponsePublisher.error.subscribe('exchangeTokenOneIdentity', manageUnforbiddenError);
     try {
-      const { exp, idp, aar, retrievalId } = await dispatch(
-        exchangeOneIdentityCode(exchangeCodeParams)
-      ).unwrap();
-      sessionCheck(exp);
+      const response = await dispatch(exchangeOneIdentityCode(exchangeCodeParams)).unwrap();
+      sessionCheck(response.exp);
 
-      const rapidAccessSource = getRapidAccessSource(aar, retrievalId);
+      const rapidAccessSource = getOneIdentityLoginSource(response);
 
-      PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_LOGIN_METHOD, { entityID: idp });
+      PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_LOGIN_METHOD, {
+        entityID: response.idp,
+      });
       PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_AUTH_SUCCESS, {
-        source: rapidAccessSource,
+        source: rapidAccessSource?.[0],
       });
 
       if (rapidAccessSource) {
         const params = new URLSearchParams(location.search);
-        params.set(rapidAccessSource, (aar ?? retrievalId)!);
+        params.set(rapidAccessSource[0], rapidAccessSource[1]);
         navigate({ search: `?${params.toString()}` }, { replace: true });
       }
     } catch (error) {
