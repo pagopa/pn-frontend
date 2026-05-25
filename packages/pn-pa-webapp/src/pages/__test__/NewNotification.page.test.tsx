@@ -31,7 +31,7 @@ vi.mock('../../services/configuration.service', async () => {
   };
 });
 
-describe('NewNotification Page without payment enabled in configuration', async () => {
+describe('NewNotification Page without payment enabled in configuration', () => {
   let result: RenderResult;
   let mock: MockAdapter;
 

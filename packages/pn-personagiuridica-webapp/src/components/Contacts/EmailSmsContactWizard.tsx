@@ -115,8 +115,10 @@ const EmailSmsContactWizard: React.FC = () => {
 
   const handleCancelCode = async () => {
     setModalOpen(null);
-    if (currentAddress.current.channelType === ChannelType.EMAIL && emailValue) {
-      emailContactRef.current.toggleEdit();
+    if (currentAddress.current.channelType === ChannelType.EMAIL) {
+      if (emailValue) {
+        emailContactRef.current.toggleEdit();
+      }
       await emailContactRef.current.resetForm();
     } else if (currentAddress.current.channelType === ChannelType.SMS && smsValue) {
       smsContactRef.current.toggleEdit();

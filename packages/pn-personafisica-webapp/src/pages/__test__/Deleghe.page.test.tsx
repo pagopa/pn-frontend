@@ -11,7 +11,7 @@ import { apiClient } from '../../api/apiClients';
 import { DelegationStatus } from '../../utility/status.utility';
 import Deleghe from '../Deleghe.page';
 
-describe('Deleghe page', async () => {
+describe('Deleghe page', () => {
   const original = window.matchMedia;
   let result: RenderResult;
   let mock: MockAdapter;

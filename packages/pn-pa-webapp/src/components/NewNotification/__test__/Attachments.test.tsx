@@ -43,7 +43,7 @@ async function uploadDocument(elem: HTMLElement, index: number, document: NewNot
   });
 }
 
-describe('Attachments Component with payment enabled', async () => {
+describe('Attachments Component with payment enabled', () => {
   let result: RenderResult;
   let mock: MockAdapter;
   let extMock: MockAdapter;

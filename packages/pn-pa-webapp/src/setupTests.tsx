@@ -14,6 +14,15 @@ import { PhysicalAddressLookupConfig } from './models/NewNotification';
 import { initStore } from './redux/store';
 import { PaConfiguration } from './services/configuration.service';
 
+const originalWarn = console.warn;
+// eslint-disable-next-line functional/immutable-data
+console.warn = (...args) => {
+  if (typeof args[0] === 'string' && args[0].includes('React Router Future Flag Warning')) {
+    return;
+  }
+  originalWarn(...args);
+};
+
 beforeAll(() => {
   Configuration.setForTest<PaConfiguration>({
     API_BASE_URL: 'https://mock-api-base-url',

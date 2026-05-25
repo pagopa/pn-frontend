@@ -76,11 +76,10 @@ const delegator = mandatesByDelegate.find(
 /*
 ATTENZIONE: un'evenutale modifica al mock potrebbe causare il fallimento di alcuni test
 */
-describe('NotificationDetail Page', async () => {
+describe('NotificationDetail Page', () => {
   let result: RenderResult;
   let mock: MockAdapter;
   const mockLegalIds = getLegalFactIds(notificationToFe, 2);
-  const original = globalThis.location;
 
   const defaultOnboardingData = {
     hasBeenShown: false,
@@ -90,23 +89,22 @@ describe('NotificationDetail Page', async () => {
 
   beforeAll(() => {
     mock = new MockAdapter(apiClient);
-    Object.defineProperty(globalThis, 'location', {
-      configurable: true,
-      value: { href: '', assign: mockAssignFn },
-    });
     initLocalizationForTest();
+  });
+
+  beforeEach(() => {
+    vi.stubGlobal('location', { href: '', assign: mockAssignFn });
   });
 
   afterEach(() => {
     sessionStorage.removeItem(PAYMENT_CACHE_KEY);
     vi.clearAllMocks();
     mock.reset();
-    globalThis.location.href = '';
+    vi.unstubAllGlobals();
   });
 
   afterAll(() => {
     mock.restore();
-    Object.defineProperty(globalThis, 'location', { configurable: true, value: original });
   });
 
   const paymentInfoRequest = paymentInfo.map((payment) => ({
@@ -487,8 +485,11 @@ describe('NotificationDetail Page', async () => {
     }
   });
 
-  it('renders CANCELLED alert with help link CTA', async () => {
+  it('renders CANCELLED alert with help link CTA and opens link on click', async () => {
     const { NOTIFICATION_CANCELLED_HELP_LINK } = getConfiguration();
+    const openSpy = vi.fn();
+    vi.stubGlobal('open', openSpy);
+
     mock.onGet(`/bff/v1/notifications/received/${notificationDTO.iun}`).reply(200, {
       ...notificationDTO,
       notificationStatus: NotificationStatus.CANCELLED,
@@ -517,14 +518,16 @@ describe('NotificationDetail Page', async () => {
 
     const cancelledAlert = result.getByTestId('cancelledAlertText');
     expect(cancelledAlert).toBeInTheDocument();
-
     expect(cancelledAlert).toHaveTextContent('detail.cancelled.message');
 
-    const ctaLink = within(cancelledAlert).getByRole('link', { name: 'detail.cancelled.cta' });
-    expect(ctaLink).toHaveAttribute('href', NOTIFICATION_CANCELLED_HELP_LINK);
-    expect(ctaLink).toHaveAttribute('target', '_blank');
-    expect(ctaLink).toHaveAttribute('rel', expect.stringContaining('noopener'));
-    expect(ctaLink).toHaveAttribute('rel', expect.stringContaining('noreferrer'));
+    const ctaButton = within(cancelledAlert).getByRole('button', { name: 'detail.cancelled.cta' });
+    fireEvent.click(ctaButton);
+
+    expect(openSpy).toHaveBeenCalledWith(
+      NOTIFICATION_CANCELLED_HELP_LINK,
+      '_blank',
+      'noopener noreferrer'
+    );
   });
 
   it('checks not available documents', async () => {

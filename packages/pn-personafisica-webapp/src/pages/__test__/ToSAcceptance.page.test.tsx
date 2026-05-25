@@ -28,16 +28,12 @@ const privacyConsent: ConsentUser = {
   consentVersion: 'mocked-version-1',
 };
 
-describe('test Terms of Service page', async () => {
-  const original = globalThis.open;
+describe('test Terms of Service page', () => {
   let mock: MockAdapter;
 
   beforeAll(() => {
     mock = new MockAdapter(apiClient);
-    Object.defineProperty(globalThis, 'open', {
-      configurable: true,
-      value: mockOpenFn,
-    });
+    vi.stubGlobal('open', mockOpenFn);
   });
 
   afterEach(() => {
@@ -47,7 +43,7 @@ describe('test Terms of Service page', async () => {
 
   afterAll(() => {
     mock.restore();
-    Object.defineProperty(globalThis, 'open', { configurable: true, value: original });
+    vi.unstubAllGlobals();
   });
 
   it('checks the texts in the page - First ToS acceptance', () => {

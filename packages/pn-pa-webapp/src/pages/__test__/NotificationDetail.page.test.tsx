@@ -37,19 +37,15 @@ const getLegalFactIds = (notification: NotificationDetailModel, recIndex: number
   return timelineElementDigitalSuccessWorkflow.legalFactsIds![0];
 };
 
-describe('NotificationDetail Page', async () => {
+describe('NotificationDetail Page', () => {
   const mockLegalIds = getLegalFactIds(notificationDTO, 0);
-  const original = globalThis.location;
 
   let result: RenderResult;
   let mock: MockAdapter;
 
   beforeAll(() => {
     mock = new MockAdapter(apiClient);
-    Object.defineProperty(globalThis, 'location', {
-      configurable: true,
-      value: { href: '', assign: vi.fn() },
-    });
+    vi.stubGlobal('location', { href: '', assign: vi.fn() });
   });
 
   afterEach(() => {
@@ -59,7 +55,7 @@ describe('NotificationDetail Page', async () => {
 
   afterAll(() => {
     mock.restore();
-    Object.defineProperty(globalThis, 'location', { configurable: true, value: original });
+    vi.unstubAllGlobals();
   });
 
   it('renders NotificationDetail page - mono recipient', async () => {
