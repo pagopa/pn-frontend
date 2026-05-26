@@ -2,10 +2,10 @@ import MockAdapter from 'axios-mock-adapter';
 import { Route, Routes } from 'react-router-dom';
 import { MockInstance, vi } from 'vitest';
 
+import { oneIdentityUserResponse } from '../../../__mocks__/Auth.mock';
 import { act, render, waitFor } from '../../../__test__/test-utils';
 import { authClient } from '../../../api/apiClients';
 import { ONE_IDENTITY_TOKEN_EXCHANGE } from '../../../api/auth/auth.routes';
-import { oneIdentityUserResponse } from '../../../__mocks__/Auth.mock';
 import { PFEventsType } from '../../../models/PFEventsType';
 import PFEventStrategyFactory from '../../../utility/MixpanelUtils/PFEventStrategyFactory';
 import SessionGuard from '../../SessionGuard';

@@ -62,6 +62,16 @@ export const userResponseWithRetrievalId: User = {
 export const oneIdentityUserResponse: OneIdentityUser = {
   ...userResponse,
   idp: 'mocked-idp',
+};
+
+export const oneIdentityAarUserResponse: OneIdentityUser = {
+  ...userResponse,
+  idp: 'mocked-idp',
   aar: 'mocked-aar',
+};
+
+export const oneIdentityRetriavlIdUserResponse: OneIdentityUser = {
+  ...userResponse,
+  idp: 'mocked-idp',
   retrievalId: 'mocked-retrieval-id',
 };
