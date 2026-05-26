@@ -216,13 +216,9 @@ const uxErrorStrategy = [
 ] as const;
 
 const techStrategy = [
+  PFEventsType.SEND_AUTH_SUCCESS,
   PFEventsType.SEND_F24_DOWNLOAD_SUCCESS,
   PFEventsType.SEND_F24_DOWNLOAD_TIMEOUT,
-] as const;
-
-const techRapidAccessStrategy = [
-  PFEventsType.SEND_RAPID_ACCESS,
-  PFEventsType.SEND_AUTH_SUCCESS,
 ] as const;
 
 const koErrorStrategy = [
@@ -398,7 +394,6 @@ const eventStrategy: Record<
     | ArrayToTuple<typeof uxWithDDStateContactDetailsAndOtherContactStrategy>
     | ArrayToTuple<typeof uxWithDigitalDomicileStateStrategy>
     | ArrayToTuple<typeof uxBannerStrategy>
-    | ArrayToTuple<typeof techRapidAccessStrategy>
   >,
   EventStrategy
 > = {
@@ -445,6 +440,7 @@ const eventStrategy: Record<
   [PFEventsType.SEND_LANDING_PAGE_FAQ_OPEN]: new SendTppLandingFaqOpenStrategy(),
   [PFEventsType.SEND_NOTIFICATION_EXPENSES_DETAIL]: new SendNotificationExpensesDetailStrategy(),
   [PFEventsType.SEND_LOGIN_METHOD]: new SendOneIdentityLoginMethodStrategy(),
+  [PFEventsType.SEND_RAPID_ACCESS]: new TechRapidAccessStrategy(),
 };
 
 const isInEventStrategyMap = (value: PFEventsType): value is keyof typeof eventStrategy => {
@@ -575,10 +571,6 @@ class PFEventStrategyFactory extends EventStrategyFactory<PFEventsType> {
     }
     if (onboardingStartStrategy.findIndex((el) => el === eventType) > -1) {
       return new SendOnboardingStartStrategy();
-    }
-
-    if (techRapidAccessStrategy.findIndex((el) => el === eventType) > -1) {
-      return new TechRapidAccessStrategy();
     }
 
     if (isInEventStrategyMap(eventType)) {

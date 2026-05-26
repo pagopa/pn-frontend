@@ -27,6 +27,28 @@ describe('trackingMiddleware - Mixpanel events', () => {
     triggerEventSpy.mockRestore();
   });
 
+  it('fires SEND_AUTH_SUCCESS on exchangeToken/fulfilled', () => {
+    dispatch('exchangeToken/fulfilled', { sessionToken: 'mock-token' });
+    expect(triggerEventSpy).toHaveBeenCalledWith(
+      PFEventsType.SEND_AUTH_SUCCESS,
+      expect.objectContaining({
+        payload: expect.anything(),
+        params: expect.any(Object),
+      })
+    );
+  });
+
+  it('fires SEND_AUTH_SUCCESS on exchangeOneIdentityCode/fulfilled', () => {
+    dispatch('exchangeOneIdentityCode/fulfilled', { code: 'mock-code', state: 'mock-state' });
+    expect(triggerEventSpy).toHaveBeenCalledWith(
+      PFEventsType.SEND_AUTH_SUCCESS,
+      expect.objectContaining({
+        payload: expect.anything(),
+        params: expect.any(Object),
+      })
+    );
+  });
+
   it('fires SEND_DOWNLOAD_RESPONSE on getReceivedNotificationOtherDocument/fulfilled', () => {
     dispatch('getReceivedNotificationOtherDocument/fulfilled');
     expect(triggerEventSpy).toHaveBeenCalledWith(

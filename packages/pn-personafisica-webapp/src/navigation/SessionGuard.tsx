@@ -89,11 +89,6 @@ const SessionGuard = () => {
     try {
       const user = await dispatch(exchangeToken(token)).unwrap();
       dispatch(setIsFreshLogin(true));
-
-      PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_AUTH_SUCCESS, {
-        source: token.rapidAccess?.[0],
-      });
-
       sessionCheck(user.exp);
     } catch (error) {
       handleTokenExchangeError(error);
@@ -108,14 +103,11 @@ const SessionGuard = () => {
       const response = await dispatch(exchangeOneIdentityCode(exchangeCodeParams)).unwrap();
       sessionCheck(response.exp);
 
-      const rapidAccessSource = getOneIdentityLoginSource(response);
-
       PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_LOGIN_METHOD, {
         entityID: response.idp,
       });
-      PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_AUTH_SUCCESS, {
-        source: rapidAccessSource?.[0],
-      });
+
+      const rapidAccessSource = getOneIdentityLoginSource(response);
 
       if (rapidAccessSource) {
         const params = new URLSearchParams(location.search);

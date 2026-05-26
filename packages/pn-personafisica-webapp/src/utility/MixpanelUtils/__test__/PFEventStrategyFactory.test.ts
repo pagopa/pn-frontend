@@ -368,6 +368,7 @@ describe('Event Strategy Factory', () => {
     const eventTypes = [
       PFEventsType.SEND_F24_DOWNLOAD_SUCCESS,
       PFEventsType.SEND_F24_DOWNLOAD_TIMEOUT,
+      PFEventsType.SEND_AUTH_SUCCESS,
     ];
     eventTypes.forEach((eventType) => {
       expect(factory.getStrategy(eventType)).toBeInstanceOf(TechStrategy);
@@ -375,7 +376,7 @@ describe('Event Strategy Factory', () => {
   });
 
   it('should return TechRapidAccessStrategy for tech with rapid access events', () => {
-    const eventTypes = [PFEventsType.SEND_RAPID_ACCESS, PFEventsType.SEND_AUTH_SUCCESS];
+    const eventTypes = [PFEventsType.SEND_RAPID_ACCESS];
     eventTypes.forEach((eventType) => {
       expect(factory.getStrategy(eventType)).toBeInstanceOf(TechRapidAccessStrategy);
     });
