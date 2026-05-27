@@ -1,4 +1,12 @@
-import { EventDowntimeType, NotificationStatus } from '@pagopa-pn/pn-commons';
+import {
+  EventDowntimeType,
+  EventNotificationSource,
+  NotificationStatus,
+} from '@pagopa-pn/pn-commons';
+import {
+  EventDeliveryFlowType,
+  EventDeliveryModeType,
+} from '@pagopa-pn/pn-commons/src/models/MixpanelEvents';
 
 import { PGEventsType } from './PGEventsType';
 import { ChannelType } from './contacts';
@@ -30,6 +38,10 @@ export type PGNotificationDetailPayload = {
   count_payment: number;
   contains_f24: YesNo;
   first_time_opening: boolean;
+  source: EventNotificationSource;
+  elapsed_time: number;
+  flow: EventDeliveryFlowType;
+  delivery_mode: EventDeliveryModeType;
 };
 
 export type PGContactDetailPayload = {
@@ -39,13 +51,25 @@ export type PGContactDetailPayload = {
   telephone_exists: boolean;
 };
 
+export type DigitalDomicileTypePayload = {
+  digital_domicile_type: DigitalDomicileType;
+};
+
+export type PGMandateSuccessPayload = {
+  person_type: 'PF' | 'PG';
+  mandate_type: 'all' | 'selected_party';
+};
+
 export type PGHasProperty =
   | PGEventsType.SEND_PG_HAS_EMAIL
   | PGEventsType.SEND_PG_HAS_SMS
-  | PGEventsType.SEND_PG_HAS_SERCQ
   | PGEventsType.SEND_PG_HAS_MANDATE
   | PGEventsType.SEND_PG_HAS_MANDATE_GIVEN
   | PGEventsType.SEND_PG_HAS_NOTIFICATIONS;
+
+export type PGDigitalDomicilePayload = {
+  [PGEventsType.SEND_PG_HAS_DIGITAL_DOMICILE]: DigitalDomicileType;
+};
 
 export type PGHasPayload<K extends PGHasProperty> = {
   [P in K]: YesNo;
@@ -64,10 +88,12 @@ export type PGEventPayloads = {
   /* CONTACT */
   [PGEventsType.SEND_PG_YOUR_CONTACT_DETAILS]: PGContactDetailPayload;
   // SERCQ
-  [PGEventsType.SEND_PG_ADD_SERCQ_START]: undefined;
-  [PGEventsType.SEND_PG_ADD_SERCQ_UX_SUCCESS]: undefined;
-  [PGEventsType.SEND_PG_REMOVE_SERCQ_START]: undefined;
-  [PGEventsType.SEND_PG_REMOVE_SERCQ_UX_SUCCESS]: undefined;
+  [PGEventsType.SEND_PG_ADD_DIGITAL_DOMICILE_START]: undefined;
+  [PGEventsType.SEND_PG_ADD_DIGITAL_DOMICILE_UX_SUCCESS]: DigitalDomicileTypePayload;
+  [PGEventsType.SEND_PG_REMOVE_DIGITAL_DOMICILE_START]: undefined;
+  [PGEventsType.SEND_PG_REMOVE_DIGITAL_DOMICILE_UX_SUCCESS]: undefined;
+  [PGEventsType.SEND_PG_ADD_DD_SERCQ_SEND_START]: undefined;
+  [PGEventsType.SEND_PG_ADD_DD_PEC_START]: undefined;
   // EMAIL
   [PGEventsType.SEND_PG_ADD_EMAIL_START]: undefined;
   [PGEventsType.SEND_PG_ADD_EMAIL_UX_SUCCESS]: undefined;
@@ -81,7 +107,7 @@ export type PGEventPayloads = {
 
   /* MANDATE */
   [PGEventsType.SEND_PG_ADD_MANDATE_START]: undefined;
-  [PGEventsType.SEND_PG_ADD_MANDATE_UX_SUCCESS]: undefined;
+  [PGEventsType.SEND_PG_ADD_MANDATE_UX_SUCCESS]: PGMandateSuccessPayload;
   [PGEventsType.SEND_PG_MANDATES_GIVEN]: undefined;
   [PGEventsType.SEND_PG_MANDATES_RECEIVED]: undefined;
 
@@ -103,7 +129,7 @@ export type PGEventPayloads = {
   [PGEventsType.USER_ROLE]: PGUserRolePayload;
   [PGEventsType.SEND_PG_HAS_EMAIL]: PGHasPayload<PGEventsType.SEND_PG_HAS_EMAIL>;
   [PGEventsType.SEND_PG_HAS_SMS]: PGHasPayload<PGEventsType.SEND_PG_HAS_SMS>;
-  [PGEventsType.SEND_PG_HAS_SERCQ]: PGHasPayload<PGEventsType.SEND_PG_HAS_SERCQ>;
+  [PGEventsType.SEND_PG_HAS_DIGITAL_DOMICILE]: PGDigitalDomicilePayload;
   [PGEventsType.SEND_PG_HAS_MANDATE]: PGHasPayload<PGEventsType.SEND_PG_HAS_MANDATE>;
   [PGEventsType.SEND_PG_HAS_MANDATE_GIVEN]: PGHasPayload<PGEventsType.SEND_PG_HAS_MANDATE_GIVEN>;
   [PGEventsType.SEND_PG_HAS_NOTIFICATIONS]: PGHasPayload<PGEventsType.SEND_PG_HAS_NOTIFICATIONS>;

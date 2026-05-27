@@ -34,6 +34,10 @@ describe('notificationTrackingConfigs', () => {
       count_payment: 1,
       contains_f24: 'no',
       first_time_opening: true,
+      source: 'LISTA_NOTIFICHE',
+      elapsed_time: 0,
+      flow: 'digital',
+      delivery_mode: 'async',
     });
 
     expect(result).toStrictEqual({
@@ -46,6 +50,10 @@ describe('notificationTrackingConfigs', () => {
         count_payment: 1,
         contains_f24: 'no',
         first_time_opening: true,
+        source: 'LISTA_NOTIFICHE',
+        elapsed_time: 0,
+        flow: 'digital',
+        delivery_mode: 'async',
         event_category: EventCategory.UX,
         event_type: EventAction.SCREEN_VIEW,
       },

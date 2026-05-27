@@ -1,6 +1,7 @@
 import { EventPropertyType } from '@pagopa-pn/pn-commons';
 
 import { PGEventsType } from '../../../models/PGEventsType';
+import { ChannelType } from '../../../models/contacts';
 import { superPropertyTrackingConfigs } from '../superPropertyEvents';
 
 describe('superPropertyTrackingConfigs', () => {
@@ -40,12 +41,12 @@ describe('superPropertyTrackingConfigs', () => {
     });
   });
 
-  it('should build SEND_PG_HAS_SERCQ super property event', () => {
+  it('should build SEND_PG_HAS_DIGITAL_DOMICILE super property event', () => {
     const payload = {
-      [PGEventsType.SEND_PG_HAS_SERCQ]: 'no',
+      [PGEventsType.SEND_PG_HAS_DIGITAL_DOMICILE]: ChannelType.SERCQ_SEND,
     } as const;
 
-    const result = superPropertyTrackingConfigs[PGEventsType.SEND_PG_HAS_SERCQ](payload);
+    const result = superPropertyTrackingConfigs[PGEventsType.SEND_PG_HAS_DIGITAL_DOMICILE](payload);
 
     expect(result).toStrictEqual({
       [EventPropertyType.SUPER_PROPERTY]: payload,

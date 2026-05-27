@@ -1,6 +1,6 @@
-import { PGEventPayloads, YesNo } from '../../../models/PGEventPayloads';
+import type { PGEventPayloads, YesNo } from '../../../models/PGEventPayloads';
 import { PGEventsType } from '../../../models/PGEventsType';
-import { PNRole, User } from '../../../models/User';
+import { PNRole, type User } from '../../../models/User';
 
 export const mapUserToRole = (user: User): PGEventPayloads[PGEventsType.USER_ROLE] => {
   const role = user.organization?.roles?.[0]?.role;

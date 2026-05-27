@@ -7,6 +7,7 @@ import { Alert, AlertTitle, Box, Grid, Paper, Stack, Typography } from '@mui/mat
 import {
   ApiError,
   ApiErrorWrapper,
+  DeliveryOutcomeType,
   GetDowntimeHistoryParams,
   LegalFactId,
   LegalFactType,
@@ -36,6 +37,11 @@ import {
   useIsCancelled,
   useIsMobile,
 } from '@pagopa-pn/pn-commons';
+import {
+  EventDeliveryFlowType,
+  EventDeliveryModeType,
+  EventNotificationSource,
+} from '@pagopa-pn/pn-commons/src/models/MixpanelEvents';
 import { MIAlert } from '@pagopa/mui-italia';
 
 import DomicileBanner from '../components/DomicileBanner/DomicileBanner';
@@ -191,6 +197,29 @@ const NotificationDetail = () => {
     isBannerVisible,
     notification.notificationCostDetails,
   ]);
+
+  const getFlowType = (): EventDeliveryFlowType => {
+    if (deliveryOutcome?.type === DeliveryOutcomeType.ANALOG) {
+      return 'physical_flow';
+    }
+    if (deliveryOutcome?.type === DeliveryOutcomeType.DIGITAL) {
+      return 'digital';
+    }
+    return 'not_available';
+  };
+
+  const getDeliveryMode = (): EventDeliveryModeType => {
+    if (notification.pagoPaIntMode === PagoPaIntegrationMode.Sync) {
+      return 'sync';
+    }
+    if (notification.pagoPaIntMode === PagoPaIntegrationMode.Async) {
+      return 'async';
+    }
+    if (notification.notificationFeePolicy === NotificationFeePolicy.FlatRate) {
+      return 'flat_rate';
+    }
+    return 'not_set';
+  };
 
   const showInfoMessageIfRetryAfterOrDownload = (response: {
     url: string;
@@ -367,6 +396,9 @@ const NotificationDetail = () => {
     [currentRecipient.payments]
   );
 
+  const getNotificationSource = (): EventNotificationSource =>
+    fromQrCode ? 'QRcode' : 'LISTA_NOTIFICHE';
+
   useEffect(() => {
     if (checkIfUserHasPayments && !isCancelledOrCancelling) {
       // get current page stored in cache
@@ -394,6 +426,11 @@ const NotificationDetail = () => {
       .catch(() => {});
   }, []);
 
+  const fromQrCode = useMemo(
+    () => !!(location.state && (location.state as LocationState).fromQrCode),
+    [location]
+  );
+
   useEffect(() => {
     if (downtimesReady && pageReady && !hasNotificationReceivedApiError) {
       PGEventStrategyFactory.triggerEvent(
@@ -404,11 +441,25 @@ const NotificationDetail = () => {
           notificationStatus: notification.notificationStatus,
           checkIfUserHasPayments,
           userPayments,
-          timeline: notification.timeline,
+          notificationStatusHistory: notification.notificationStatusHistory,
+          source: getNotificationSource(),
+          flow: getFlowType(),
+          deliveryMode: getDeliveryMode(),
         })
       );
     }
-  }, [downtimesReady, pageReady, hasNotificationReceivedApiError]);
+  }, [
+    downtimesReady,
+    pageReady,
+    hasNotificationReceivedApiError,
+    downtimeEvents,
+    mandateId,
+    notification,
+    checkIfUserHasPayments,
+    userPayments,
+    fromQrCode,
+    deliveryOutcome,
+  ]);
 
   const fetchDowntimeLegalFactDocumentDetails = useCallback((legalFactId: string) => {
     if (!isCancelled.cancelled || !isCancelled.cancellationInProgress) {
@@ -418,11 +469,6 @@ const NotificationDetail = () => {
         .catch((e) => console.log(e));
     }
   }, []);
-
-  const fromQrCode = useMemo(
-    () => !!(location.state && (location.state as LocationState).fromQrCode),
-    [location]
-  );
 
   const properBreadcrumb = useMemo(() => {
     const backRoute = mandateId ? routes.NOTIFICHE_DELEGATO : routes.NOTIFICHE;

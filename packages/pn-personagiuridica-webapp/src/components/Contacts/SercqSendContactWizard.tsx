@@ -165,7 +165,12 @@ const SercqSendContactWizard: React.FC<Props> = ({ goToStep }) => {
     dispatch(createOrUpdateAddress(digitalAddressParams))
       .unwrap()
       .then(() => {
-        PGEventStrategyFactory.triggerEvent(PGEventsType.SEND_PG_ADD_SERCQ_UX_SUCCESS);
+        PGEventStrategyFactory.triggerEvent(PGEventsType.SEND_PG_ADD_DIGITAL_DOMICILE_UX_SUCCESS, {
+          digital_domicile_type: ChannelType.SERCQ_SEND,
+        });
+        PGEventStrategyFactory.triggerEvent(PGEventsType.SEND_PG_HAS_DIGITAL_DOMICILE, {
+          [PGEventsType.SEND_PG_HAS_DIGITAL_DOMICILE]: ChannelType.SERCQ_SEND,
+        });
         appStorage.domicileBanner.enable();
         goToStep(thankYouStep);
       })

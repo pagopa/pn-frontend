@@ -25,8 +25,9 @@ describe('contactTrackingConfigs', () => {
     });
   });
 
-  it('should build SEND_PG_ADD_SERCQ_START event', () => {
-    const result = contactTrackingConfigs[PGEventsType.SEND_PG_ADD_SERCQ_START](undefined);
+  it('should build SEND_PG_ADD_DIGITAL_DOMICILE_START event', () => {
+    const result =
+      contactTrackingConfigs[PGEventsType.SEND_PG_ADD_DIGITAL_DOMICILE_START](undefined);
 
     expect(result).toStrictEqual({
       [EventPropertyType.TRACK]: {
@@ -36,19 +37,23 @@ describe('contactTrackingConfigs', () => {
     });
   });
 
-  it('should build SEND_PG_ADD_SERCQ_UX_SUCCESS event', () => {
-    const result = contactTrackingConfigs[PGEventsType.SEND_PG_ADD_SERCQ_UX_SUCCESS](undefined);
+  it('should build SEND_PG_ADD_DIGITAL_DOMICILE_UX_SUCCESS event', () => {
+    const result = contactTrackingConfigs[PGEventsType.SEND_PG_ADD_DIGITAL_DOMICILE_UX_SUCCESS]({
+      digital_domicile_type: ChannelType.SERCQ_SEND,
+    });
 
     expect(result).toStrictEqual({
       [EventPropertyType.TRACK]: {
+        digital_domicile_type: ChannelType.SERCQ_SEND,
         event_category: EventCategory.UX,
         event_type: EventAction.CONFIRM,
       },
     });
   });
 
-  it('should build SEND_PG_REMOVE_SERCQ_START event', () => {
-    const result = contactTrackingConfigs[PGEventsType.SEND_PG_REMOVE_SERCQ_START](undefined);
+  it('should build SEND_PG_REMOVE_DIGITAL_DOMICILE_START event', () => {
+    const result =
+      contactTrackingConfigs[PGEventsType.SEND_PG_REMOVE_DIGITAL_DOMICILE_START](undefined);
 
     expect(result).toStrictEqual({
       [EventPropertyType.TRACK]: {
@@ -58,8 +63,9 @@ describe('contactTrackingConfigs', () => {
     });
   });
 
-  it('should build SEND_PG_REMOVE_SERCQ_UX_SUCCESS event', () => {
-    const result = contactTrackingConfigs[PGEventsType.SEND_PG_REMOVE_SERCQ_UX_SUCCESS](undefined);
+  it('should build SEND_PG_REMOVE_DIGITAL_DOMICILE_UX_SUCCESS event', () => {
+    const result =
+      contactTrackingConfigs[PGEventsType.SEND_PG_REMOVE_DIGITAL_DOMICILE_UX_SUCCESS](undefined);
 
     expect(result).toStrictEqual({
       [EventPropertyType.TRACK]: {
@@ -153,6 +159,28 @@ describe('contactTrackingConfigs', () => {
       [EventPropertyType.TRACK]: {
         event_category: EventCategory.UX,
         event_type: EventAction.CONFIRM,
+      },
+    });
+  });
+
+  it('should build SEND_PG_ADD_DD_SERCQ_SEND_START event', () => {
+    const result = contactTrackingConfigs[PGEventsType.SEND_PG_ADD_DD_SERCQ_SEND_START](undefined);
+
+    expect(result).toStrictEqual({
+      [EventPropertyType.TRACK]: {
+        event_category: EventCategory.UX,
+        event_type: EventAction.ACTION,
+      },
+    });
+  });
+
+  it('should build SEND_PG_ADD_DD_PEC_START event', () => {
+    const result = contactTrackingConfigs[PGEventsType.SEND_PG_ADD_DD_PEC_START](undefined);
+
+    expect(result).toStrictEqual({
+      [EventPropertyType.TRACK]: {
+        event_category: EventCategory.UX,
+        event_type: EventAction.ACTION,
       },
     });
   });

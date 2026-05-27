@@ -48,6 +48,7 @@ import { resetNewDelegation } from '../redux/newDelegation/reducers';
 import { RootState } from '../redux/store';
 import { getConfiguration } from '../services/configuration.service';
 import PGEventStrategyFactory from '../utility/MixpanelUtils/PGEventStrategyFactory';
+import { mapAddMandateSuccessToEventPayload } from '../utility/MixpanelUtils/mappers/mandatePayloadMappers';
 import { generateVCode } from '../utility/delegation.utility';
 
 const getOptionLabel = (option: Party) => option.name || '';
@@ -71,7 +72,14 @@ const NuovaDelega = () => {
     void dispatch(createDelegation(values))
       .unwrap()
       .then(() => {
-        PGEventStrategyFactory.triggerEvent(PGEventsType.SEND_PG_ADD_MANDATE_UX_SUCCESS);
+        PGEventStrategyFactory.triggerEvent(
+          PGEventsType.SEND_PG_ADD_MANDATE_UX_SUCCESS,
+          mapAddMandateSuccessToEventPayload(values)
+        );
+
+        PGEventStrategyFactory.triggerEvent(PGEventsType.SEND_PG_HAS_MANDATE_GIVEN, {
+          [PGEventsType.SEND_PG_HAS_MANDATE_GIVEN]: 'yes',
+        });
       })
       .catch(() => {});
   };

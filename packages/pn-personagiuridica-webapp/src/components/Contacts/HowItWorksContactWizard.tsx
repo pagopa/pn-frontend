@@ -15,9 +15,11 @@ import {
 } from '@mui/material';
 import { ButtonNaked } from '@pagopa/mui-italia';
 
+import { PGEventsType } from '../../models/PGEventsType';
 import { contactsSelectors } from '../../redux/contact/reducers';
 import { useAppSelector } from '../../redux/hooks';
 import { getConfiguration } from '../../services/configuration.service';
+import PGEventStrategyFactory from '../../utility/MixpanelUtils/PGEventStrategyFactory';
 import InformativeDialog from './InformativeDialog';
 
 enum ModalType {
@@ -109,7 +111,10 @@ const HowItWorksContactWizard: React.FC<Props> = ({ goToNextStep, setShowPecWiza
             fullWidth
             variant="contained"
             color="primary"
-            onClick={goToNextStep}
+            onClick={() => {
+              PGEventStrategyFactory.triggerEvent(PGEventsType.SEND_PG_ADD_DD_SERCQ_SEND_START);
+              goToNextStep?.();
+            }}
             sx={{ textTransform: 'none', mb: !defaultPECAddress ? 3 : 0 }}
             data-testid="continueButton"
           >
@@ -134,7 +139,14 @@ const HowItWorksContactWizard: React.FC<Props> = ({ goToNextStep, setShowPecWiza
           <Typography variant="body2" mb={1}>
             {t('legal-contacts.sercq-send-wizard.step_1.have-pec-description')}
           </Typography>
-          <ButtonNaked color="primary" size="medium" onClick={() => setShowPecWizard(true)}>
+          <ButtonNaked
+            color="primary"
+            size="medium"
+            onClick={() => {
+              PGEventStrategyFactory.triggerEvent(PGEventsType.SEND_PG_ADD_DD_PEC_START);
+              setShowPecWizard(true);
+            }}
+          >
             {t('legal-contacts.sercq-send-wizard.step_1.insert-pec')}
           </ButtonNaked>
         </Box>

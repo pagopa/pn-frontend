@@ -39,6 +39,7 @@ import { RootState } from './redux/store';
 import { getConfiguration } from './services/configuration.service';
 import { PGAppErrorFactory } from './utility/AppError/PGAppErrorFactory';
 import PGEventStrategyFactory from './utility/MixpanelUtils/PGEventStrategyFactory';
+import { mapUserToRole } from './utility/MixpanelUtils/mappers/superPropertyMappers';
 import showLayoutParts from './utility/layout.utility';
 import './utility/onetrust';
 
@@ -143,6 +144,12 @@ const ActualApp = () => {
   );
 
   useTracking(MIXPANEL_TOKEN, process.env.NODE_ENV);
+
+  useEffect(() => {
+    if (sessionToken !== '' && loggedUser.organization?.roles?.[0]?.role) {
+      PGEventStrategyFactory.triggerEvent(PGEventsType.USER_ROLE, mapUserToRole(loggedUser));
+    }
+  }, [sessionToken, loggedUser.organization?.roles, loggedUser.hasGroup]);
 
   useEffect(() => {
     if (sessionToken !== '') {

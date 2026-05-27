@@ -109,6 +109,9 @@ const EmailContactItem: React.FC = () => {
         // contact has already been verified
         // show success message
         PGEventStrategyFactory.triggerEvent(PGEventsType.SEND_PG_ADD_EMAIL_UX_SUCCESS);
+        PGEventStrategyFactory.triggerEvent(PGEventsType.SEND_PG_HAS_EMAIL, {
+          [PGEventsType.SEND_PG_HAS_EMAIL]: 'yes',
+        });
         dispatch(
           appStateActions.addSuccess({
             title: '',
@@ -148,6 +151,9 @@ const EmailContactItem: React.FC = () => {
       .unwrap()
       .then(() => {
         PGEventStrategyFactory.triggerEvent(PGEventsType.SEND_PG_REMOVE_EMAIL_UX_SUCCESS);
+        PGEventStrategyFactory.triggerEvent(PGEventsType.SEND_PG_HAS_EMAIL, {
+          [PGEventsType.SEND_PG_HAS_EMAIL]: 'no',
+        });
         dispatch(
           appStateActions.addSuccess({
             title: '',

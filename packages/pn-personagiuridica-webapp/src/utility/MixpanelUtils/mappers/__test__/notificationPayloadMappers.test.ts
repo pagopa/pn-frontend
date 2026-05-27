@@ -1,6 +1,10 @@
 import { EventDowntimeType } from '@pagopa-pn/pn-commons';
 
-import { notificationToFe, paymentsData } from '../../../../__mocks__/NotificationDetail.mock';
+import {
+  notificationToFe,
+  paymentsData,
+  statusHistory,
+} from '../../../../__mocks__/NotificationDetail.mock';
 import { notificationsDTO } from '../../../../__mocks__/Notifications.mock';
 import {
   mapNotificationDetailToEventPayload,
@@ -36,7 +40,10 @@ describe('notificationPayloadMappers', () => {
       notificationStatus: notificationToFe.notificationStatus,
       checkIfUserHasPayments: true,
       userPayments: paymentsData,
-      timeline: notificationToFe.timeline,
+      notificationStatusHistory: statusHistory,
+      source: 'LISTA_NOTIFICHE',
+      flow: 'digital',
+      deliveryMode: 'async',
     });
 
     expect(payload).toStrictEqual({
@@ -48,6 +55,10 @@ describe('notificationPayloadMappers', () => {
       count_payment: 6,
       contains_f24: 'yes',
       first_time_opening: false,
+      source: 'LISTA_NOTIFICHE',
+      elapsed_time: 0,
+      flow: 'digital',
+      delivery_mode: 'async',
     });
   });
 });

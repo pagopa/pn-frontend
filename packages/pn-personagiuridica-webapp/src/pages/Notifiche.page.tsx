@@ -24,12 +24,15 @@ import MobileNotifications from '../components/Notifications/MobileNotifications
 import { PGEventsType } from '../models/PGEventsType';
 import { PNRole } from '../models/User';
 import { ContactSource } from '../models/contacts';
+import { contactsSelectors } from '../redux/contact/reducers';
 import { DASHBOARD_ACTIONS, getReceivedNotifications } from '../redux/dashboard/actions';
 import { setNotificationFilters, setPagination, setSorting } from '../redux/dashboard/reducers';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { RootState } from '../redux/store';
 import PGEventStrategyFactory from '../utility/MixpanelUtils/PGEventStrategyFactory';
+import { mapDigitalDomicileToType } from '../utility/MixpanelUtils/mappers/contactPayloadMappers';
 import { mapNotificationListToEventPayload } from '../utility/MixpanelUtils/mappers/notificationPayloadMappers';
+import { mapBooleanToYesNo } from '../utility/MixpanelUtils/mappers/superPropertyMappers';
 
 type Props = {
   isDelegatedPage?: boolean;
@@ -43,6 +46,12 @@ const Notifiche = ({ isDelegatedPage = false }: Props) => {
 
   const { notifications, filters, sort, pagination } = useAppSelector(
     (state: RootState) => state.dashboardState
+  );
+  const { defaultEMAILAddress, defaultSMSAddress, addresses } = useAppSelector(
+    contactsSelectors.selectAddresses
+  );
+  const { delegates, delegators } = useAppSelector(
+    (state: RootState) => state.delegationsState.delegations
   );
   const loading = useAppSelector((state: RootState) => state.appState.loading.result);
   const { publishEvent } = useEventEmitter<A11yMessage>('a11y-message');
@@ -79,6 +88,45 @@ const Notifiche = ({ isDelegatedPage = false }: Props) => {
     pagination.page + 1
   );
 
+  const registerNotificationSectionSuperProperties = useCallback(
+    (notificationsCount: number) => {
+      if (userHasAdminPermissions && !organizationGroup) {
+        PGEventStrategyFactory.triggerEvent(PGEventsType.SEND_PG_HAS_EMAIL, {
+          [PGEventsType.SEND_PG_HAS_EMAIL]: mapBooleanToYesNo(!!defaultEMAILAddress),
+        });
+
+        PGEventStrategyFactory.triggerEvent(PGEventsType.SEND_PG_HAS_SMS, {
+          [PGEventsType.SEND_PG_HAS_SMS]: mapBooleanToYesNo(!!defaultSMSAddress),
+        });
+
+        PGEventStrategyFactory.triggerEvent(PGEventsType.SEND_PG_HAS_DIGITAL_DOMICILE, {
+          [PGEventsType.SEND_PG_HAS_DIGITAL_DOMICILE]: mapDigitalDomicileToType(addresses),
+        });
+      }
+
+      PGEventStrategyFactory.triggerEvent(PGEventsType.SEND_PG_HAS_MANDATE, {
+        [PGEventsType.SEND_PG_HAS_MANDATE]: mapBooleanToYesNo(delegators.length > 0),
+      });
+
+      PGEventStrategyFactory.triggerEvent(PGEventsType.SEND_PG_HAS_MANDATE_GIVEN, {
+        [PGEventsType.SEND_PG_HAS_MANDATE_GIVEN]: mapBooleanToYesNo(delegates.length > 0),
+      });
+
+      PGEventStrategyFactory.triggerEvent(PGEventsType.SEND_PG_HAS_NOTIFICATIONS, {
+        [PGEventsType.SEND_PG_HAS_NOTIFICATIONS]: mapBooleanToYesNo(notificationsCount > 0),
+      });
+    },
+    [
+      userHasAdminPermissions,
+      organizationGroup,
+      defaultEMAILAddress,
+      defaultSMSAddress,
+      addresses,
+      delegators.length,
+      delegates.length,
+    ]
+  );
+
   // API call, this function is passed to the ApiErrorWrapper component
   const fetchNotifications = useCallback(() => {
     const params = {
@@ -95,6 +143,10 @@ const Notifiche = ({ isDelegatedPage = false }: Props) => {
       .then((data) => {
         setPageReady(true);
 
+        if (!isDelegatedPage) {
+          registerNotificationSectionSuperProperties(data.resultsPage.length);
+        }
+
         const event_type = isDelegatedPage
           ? PGEventsType.SEND_PG_NOTIFICATION_DELEGATED
           : PGEventsType.SEND_PG_YOUR_NOTIFICATION;
@@ -108,7 +160,14 @@ const Notifiche = ({ isDelegatedPage = false }: Props) => {
         PGEventStrategyFactory.triggerEvent(event_type, event_payload);
       })
       .catch(() => setPageReady(true));
-  }, [filters, pagination.size, pagination.page]);
+  }, [
+    filters,
+    pagination.size,
+    pagination.page,
+    group,
+    isDelegatedPage,
+    registerNotificationSectionSuperProperties,
+  ]);
 
   // Pagination handlers
   const handleChangePage = (paginationData: PaginationData) => {

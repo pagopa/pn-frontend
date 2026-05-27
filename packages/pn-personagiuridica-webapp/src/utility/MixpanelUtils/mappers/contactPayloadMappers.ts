@@ -37,3 +37,19 @@ export const mapContactDetailsToEventPayload = (
     ),
   };
 };
+
+export const mapDigitalDomicileToType = (addresses: Array<DigitalAddress>): DigitalDomicileType => {
+  if (addresses.some((address) => address.channelType === ChannelType.SERCQ_SEND)) {
+    return ChannelType.SERCQ_SEND;
+  }
+
+  if (
+    addresses.some(
+      (address) => address.channelType === ChannelType.PEC && address.pecValid === true
+    )
+  ) {
+    return ChannelType.PEC;
+  }
+
+  return 'not_available';
+};

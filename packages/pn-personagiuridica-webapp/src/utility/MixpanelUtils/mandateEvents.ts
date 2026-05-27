@@ -11,7 +11,7 @@ type MandateEventType =
 
 export const mandateTrackingConfigs: TrackingConfigs<MandateEventType> = {
   [PGEventsType.SEND_PG_ADD_MANDATE_START]: () => uxAction(),
-  [PGEventsType.SEND_PG_ADD_MANDATE_UX_SUCCESS]: () => uxConfirm(),
+  [PGEventsType.SEND_PG_ADD_MANDATE_UX_SUCCESS]: (payload) => uxConfirm(payload),
   [PGEventsType.SEND_PG_MANDATES_GIVEN]: () => uxScreenView(),
   [PGEventsType.SEND_PG_MANDATES_RECEIVED]: () => uxScreenView(),
 };

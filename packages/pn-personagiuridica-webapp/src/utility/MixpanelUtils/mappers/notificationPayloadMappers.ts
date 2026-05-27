@@ -1,15 +1,20 @@
 import type {
   Downtime,
-  INotificationDetailTimeline,
+  EventNotificationSource,
   Notification,
+  NotificationStatusHistory,
   PaymentsData,
 } from '@pagopa-pn/pn-commons';
 import {
   EventDowntimeType,
   NotificationStatus,
-  TimelineCategory,
+  getElapsedTime,
   isNewNotification,
 } from '@pagopa-pn/pn-commons';
+import {
+  EventDeliveryFlowType,
+  EventDeliveryModeType,
+} from '@pagopa-pn/pn-commons/src/models/MixpanelEvents';
 
 import type { PGEventPayloads } from '../../../models/PGEventPayloads';
 import type { PGEventsType } from '../../../models/PGEventsType';
@@ -30,17 +35,31 @@ export const mapNotificationDetailToEventPayload = ({
   notificationStatus,
   checkIfUserHasPayments,
   userPayments,
-  timeline,
+  notificationStatusHistory,
+  source,
+  flow,
+  deliveryMode,
 }: {
   downtimeEvents: Array<Downtime>;
   mandateId: string | undefined;
   notificationStatus: NotificationStatus;
   checkIfUserHasPayments: boolean;
   userPayments: PaymentsData;
-  timeline: Array<INotificationDetailTimeline>;
+  notificationStatusHistory: Array<NotificationStatusHistory>;
+  source: EventNotificationSource;
+  flow: EventDeliveryFlowType;
+  deliveryMode: EventDeliveryModeType;
 }): PGEventPayloads[PGEventsType.SEND_PG_NOTIFICATION_DETAIL] => {
   const hasF24 =
     userPayments.f24Only.length > 0 || userPayments.pagoPaF24.some((payment) => payment.f24);
+
+  const viewedEvent = notificationStatusHistory.find(
+    (item) => item.status === NotificationStatus.VIEWED
+  );
+
+  const deliveredEvent = notificationStatusHistory.find(
+    (item) => item.status === NotificationStatus.DELIVERED
+  );
 
   return {
     notification_owner: !mandateId,
@@ -51,9 +70,11 @@ export const mapNotificationDetailToEventPayload = ({
       userPayments.f24Only.length + userPayments.pagoPaF24.length > 1 ? 'yes' : 'no',
     count_payment: userPayments.pagoPaF24.filter((payment) => payment.pagoPa).length,
     contains_f24: hasF24 ? 'yes' : 'no',
-    first_time_opening: !timeline.some(
-      (item) => item.category === TimelineCategory.NOTIFICATION_VIEWED
-    ),
+    first_time_opening: !viewedEvent,
+    source,
+    elapsed_time: getElapsedTime(deliveredEvent?.activeFrom, viewedEvent?.activeFrom),
+    flow,
+    delivery_mode: deliveryMode,
   };
 };
 

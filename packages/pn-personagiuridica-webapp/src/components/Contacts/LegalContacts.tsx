@@ -70,7 +70,7 @@ const EmptyLegalContacts = () => {
         variant="contained"
         fullWidth={isMobile}
         onClick={() => {
-          PGEventStrategyFactory.triggerEvent(PGEventsType.SEND_PG_ADD_SERCQ_START);
+          PGEventStrategyFactory.triggerEvent(PGEventsType.SEND_PG_ADD_DIGITAL_DOMICILE_START);
           navigate(DIGITAL_DOMICILE_ACTIVATION);
         }}
       >
@@ -138,10 +138,17 @@ const LegalContacts = () => {
     )
       .unwrap()
       .then(() => {
+        PGEventStrategyFactory.triggerEvent(
+          PGEventsType.SEND_PG_REMOVE_DIGITAL_DOMICILE_UX_SUCCESS
+        );
+        PGEventStrategyFactory.triggerEvent(PGEventsType.SEND_PG_HAS_DIGITAL_DOMICILE, {
+          [PGEventsType.SEND_PG_HAS_DIGITAL_DOMICILE]: 'not_available',
+        });
+
         if (channelType === ChannelType.SERCQ_SEND) {
-          PGEventStrategyFactory.triggerEvent(PGEventsType.SEND_PG_REMOVE_SERCQ_UX_SUCCESS);
           appStorage.domicileBanner.enable();
         }
+
         dispatch(
           appStateActions.addSuccess({
             title: '',
@@ -174,9 +181,9 @@ const LegalContacts = () => {
             color="error"
             startIcon={<PowerSettingsNewIcon />}
             onClick={() => {
-              if (channelType === ChannelType.SERCQ_SEND) {
-                PGEventStrategyFactory.triggerEvent(PGEventsType.SEND_PG_REMOVE_SERCQ_START);
-              }
+              PGEventStrategyFactory.triggerEvent(
+                PGEventsType.SEND_PG_REMOVE_DIGITAL_DOMICILE_START
+              );
               setModalOpen(true);
             }}
             sx={{ p: '10px 16px' }}
