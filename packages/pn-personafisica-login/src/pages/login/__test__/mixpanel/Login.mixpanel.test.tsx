@@ -1,6 +1,6 @@
-import { MockInstance, vi } from 'vitest';
+import { vi } from 'vitest';
 
-import { fireEvent, render } from '../../../../__test__/test-utils';
+import { PFLoginTriggerEventSpy, fireEvent, render } from '../../../../__test__/test-utils';
 import { PFLoginEventsType } from '../../../../models/PFLoginEventsType';
 import PFLoginEventStrategyFactory from '../../../../utility/MixpanelUtils/PFLoginEventStrategyFactory';
 import Login from '../../Login';
@@ -14,7 +14,7 @@ vi.mock('../../../../services/configuration.service', async () => ({
 }));
 
 describe('Login page - Mixpanel events', () => {
-  let triggerEventSpy: MockInstance<[PFLoginEventsType, unknown?], void>;
+  let triggerEventSpy: PFLoginTriggerEventSpy;
 
   beforeEach(() => {
     vi.stubGlobal('location', { assign: vi.fn() });
@@ -35,9 +35,13 @@ describe('Login page - Mixpanel events', () => {
     const { container } = render(<Login />);
     triggerEventSpy.mockClear();
     fireEvent.click(container.querySelector('#cieButton')!);
-    expect(triggerEventSpy).toHaveBeenCalledWith(PFLoginEventsType.SEND_IDP_SELECTED, {
-      SPID_IDP_NAME: 'CIE',
-      SPID_IDP_ID: 'mock-cie-entity-id',
-    });
+    expect(triggerEventSpy).toHaveBeenCalledWith(
+      PFLoginEventsType.SEND_IDP_SELECTED,
+      {
+        SPID_IDP_NAME: 'CIE',
+        SPID_IDP_ID: 'mock-cie-entity-id',
+      },
+      { transport: 'sendBeacon' }
+    );
   });
 });

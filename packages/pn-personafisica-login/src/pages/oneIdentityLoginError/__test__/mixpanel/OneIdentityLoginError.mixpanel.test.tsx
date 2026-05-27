@@ -1,12 +1,12 @@
-import { MockInstance, vi } from 'vitest';
+import { vi } from 'vitest';
 
-import { act, render } from '../../../../__test__/test-utils';
+import { PFLoginTriggerEventSpy, act, render } from '../../../../__test__/test-utils';
 import { PFLoginEventsType } from '../../../../models/PFLoginEventsType';
 import PFLoginEventStrategyFactory from '../../../../utility/MixpanelUtils/PFLoginEventStrategyFactory';
 import OneIdentityLoginError from '../../OneIdentityLoginError';
 
 describe('One Identity Login Error page - Mixpanel events', () => {
-  let triggerEventSpy: MockInstance<[PFLoginEventsType, unknown?], void>;
+  let triggerEventSpy: PFLoginTriggerEventSpy;
 
   beforeEach(() => {
     triggerEventSpy = vi.spyOn(PFLoginEventStrategyFactory, 'triggerEvent');
