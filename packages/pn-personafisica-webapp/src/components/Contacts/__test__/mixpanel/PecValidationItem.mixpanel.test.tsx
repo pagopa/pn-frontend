@@ -1,12 +1,12 @@
-import { MockInstance, vi } from 'vitest';
+import { vi } from 'vitest';
 
-import { fireEvent, render, screen } from '../../../../__test__/test-utils';
+import { PFTriggerEventSpy, fireEvent, render, screen } from '../../../../__test__/test-utils';
 import { PFEventsType } from '../../../../models/PFEventsType';
 import PFEventStrategyFactory from '../../../../utility/MixpanelUtils/PFEventStrategyFactory';
 import PecValidationItem from '../../PecValidationItem';
 
 describe('PecValidationItem - Mixpanel events', () => {
-  let triggerEventSpy: MockInstance<[PFEventsType, unknown?], void>;
+  let triggerEventSpy: PFTriggerEventSpy;
 
   beforeEach(() => {
     triggerEventSpy = vi.spyOn(PFEventStrategyFactory, 'triggerEvent');

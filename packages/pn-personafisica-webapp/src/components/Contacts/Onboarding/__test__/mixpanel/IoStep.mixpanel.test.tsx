@@ -1,9 +1,15 @@
 import MockAdapter from 'axios-mock-adapter';
-import { MockInstance, vi } from 'vitest';
+import { vi } from 'vitest';
 
 import { EventAction } from '@pagopa-pn/pn-commons';
 
-import { act, fireEvent, render, waitFor } from '../../../../../__test__/test-utils';
+import {
+  PFTriggerEventSpy,
+  act,
+  fireEvent,
+  render,
+  waitFor,
+} from '../../../../../__test__/test-utils';
 import { apiClient } from '../../../../../api/apiClients';
 import { OnboardingAvailableFlows } from '../../../../../models/Onboarding';
 import { PFEventsType } from '../../../../../models/PFEventsType';
@@ -17,7 +23,7 @@ vi.mock('../../../../../utility/appio.utility', () => ({
 }));
 
 describe('IoStep - Mixpanel events', () => {
-  let triggerEventSpy: MockInstance<[PFEventsType, unknown?], void>;
+  let triggerEventSpy: PFTriggerEventSpy;
   let mock: MockAdapter;
 
   beforeAll(() => {
@@ -38,7 +44,10 @@ describe('IoStep - Mixpanel events', () => {
     mock.restore();
   });
 
-  const createProps = (value?: IOAllowedValues, flow = OnboardingAvailableFlows.DIGITAL_DOMICILE) => ({
+  const createProps = (
+    value?: IOAllowedValues,
+    flow = OnboardingAvailableFlows.DIGITAL_DOMICILE
+  ) => ({
     value,
     onChange: vi.fn(),
     onContinue: vi.fn(),

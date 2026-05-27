@@ -1,27 +1,37 @@
 import MockAdapter from 'axios-mock-adapter';
-import { MockInstance, vi } from 'vitest';
+import { vi } from 'vitest';
 
 import { getById } from '@pagopa-pn/pn-commons/src/test-utils';
 
-import { fireEvent, render, waitFor } from '../../../../__test__/test-utils';
+import { PFTriggerEventSpy, fireEvent, render, waitFor } from '../../../../__test__/test-utils';
 import { apiClient } from '../../../../api/apiClients';
-import { AddressType, ChannelType } from '../../../../models/contacts';
 import { PFEventsType } from '../../../../models/PFEventsType';
+import { AddressType, ChannelType } from '../../../../models/contacts';
 import PFEventStrategyFactory from '../../../../utility/MixpanelUtils/PFEventStrategyFactory';
 import { internationalPhonePrefix } from '../../../../utility/contacts.utility';
 import EmailSmsContactWizard from '../../EmailSmsContactWizard';
 import { fillCodeDialog } from '../test-utils';
 
 const existingEmail = [
-  { addressType: AddressType.COURTESY, senderId: 'default', channelType: ChannelType.EMAIL, value: 'nome.utente@mail.it' },
+  {
+    addressType: AddressType.COURTESY,
+    senderId: 'default',
+    channelType: ChannelType.EMAIL,
+    value: 'nome.utente@mail.it',
+  },
 ];
 
 const existingSms = [
-  { addressType: AddressType.COURTESY, senderId: 'default', channelType: ChannelType.SMS, value: '+393333333333' },
+  {
+    addressType: AddressType.COURTESY,
+    senderId: 'default',
+    channelType: ChannelType.SMS,
+    value: '+393333333333',
+  },
 ];
 
 describe('EmailSmsContactWizard - Mixpanel events', () => {
-  let triggerEventSpy: MockInstance<[PFEventsType, unknown?], void>;
+  let triggerEventSpy: PFTriggerEventSpy;
   let mock: MockAdapter;
 
   beforeAll(() => {
@@ -73,7 +83,10 @@ describe('EmailSmsContactWizard - Mixpanel events', () => {
       .onPost('/bff/v1/addresses/COURTESY/default/EMAIL', { value: 'test@mail.it' })
       .reply(200, { result: 'CODE_VERIFICATION_REQUIRED' });
     mock
-      .onPost('/bff/v1/addresses/COURTESY/default/EMAIL', { value: 'test@mail.it', verificationCode: '01234' })
+      .onPost('/bff/v1/addresses/COURTESY/default/EMAIL', {
+        value: 'test@mail.it',
+        verificationCode: '01234',
+      })
       .reply(204);
 
     const result = render(<EmailSmsContactWizard />);

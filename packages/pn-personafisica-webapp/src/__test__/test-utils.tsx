@@ -1,11 +1,14 @@
+import { Callback, RequestOptions } from 'mixpanel-browser';
 import { ReactElement, ReactNode, createContext, useContext } from 'react';
 import { Provider } from 'react-redux';
 import { RouterProvider, createMemoryRouter } from 'react-router-dom';
+import { MockInstance } from 'vitest';
 
 import { EnhancedStore, configureStore } from '@reduxjs/toolkit';
 import { InitialEntry } from '@remix-run/router';
 import { RenderOptions, RenderResult, render } from '@testing-library/react';
 
+import { PFEventsType } from '../models/PFEventsType';
 import { RootState, appReducers } from '../redux/store';
 
 interface CustomRenderOptions extends Omit<RenderOptions, 'wrapper'> {
@@ -19,6 +22,11 @@ type CustomRenderResult = RenderResult & {
   testStore: EnhancedStore<RootState>;
   router: ReturnType<typeof createMemoryRouter>;
 };
+
+export type PFTriggerEventSpy = MockInstance<
+  [eventType: PFEventsType, data?: unknown, trackOptions?: RequestOptions | Callback],
+  void
+>;
 
 // UiContext and RouterBridge are needed to use wrapper and rerender method
 // the RouterProvider doesn't admit children, so to make rerender work we must use context that triggers every time the ui change
@@ -92,5 +100,5 @@ const createMockedStore = (preloadedState: any) =>
   });
 
 export * from '@testing-library/react';
-export { customRender as render, createMockedStore };
+export { createMockedStore, customRender as render };
 export type { CustomRenderResult as RenderResult };

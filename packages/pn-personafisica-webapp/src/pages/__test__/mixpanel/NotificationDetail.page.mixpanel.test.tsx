@@ -1,6 +1,6 @@
 import MockAdapter from 'axios-mock-adapter';
 import { Route, Routes } from 'react-router-dom';
-import { MockInstance, vi } from 'vitest';
+import { vi } from 'vitest';
 
 import {
   NotificationStatus,
@@ -16,7 +16,14 @@ import {
   notificationToFe,
   paymentsData,
 } from '../../../__mocks__/NotificationDetail.mock';
-import { act, fireEvent, render, waitFor, within } from '../../../__test__/test-utils';
+import {
+  PFTriggerEventSpy,
+  act,
+  fireEvent,
+  render,
+  waitFor,
+  within,
+} from '../../../__test__/test-utils';
 import { apiClient } from '../../../api/apiClients';
 import { PFEventsType } from '../../../models/PFEventsType';
 import * as routes from '../../../navigation/routes.const';
@@ -42,7 +49,7 @@ const requiredPaymentIndex = paymentHistory.findIndex(
 );
 
 describe('NotificationDetail.page - Mixpanel events', () => {
-  let triggerEventSpy: MockInstance<[PFEventsType, unknown?], void>;
+  let triggerEventSpy: PFTriggerEventSpy;
   let mock: MockAdapter;
   const original = globalThis.location;
 

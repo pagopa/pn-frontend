@@ -1,15 +1,15 @@
-import { MockInstance, vi } from 'vitest';
+import { vi } from 'vitest';
 
 import { AppRouteParams } from '@pagopa-pn/pn-commons';
 
-import { act, fireEvent, render } from '../../../__test__/test-utils';
-import * as routes from '../../../navigation/routes.const';
+import { PFTriggerEventSpy, act, fireEvent, render } from '../../../__test__/test-utils';
 import { PFEventsType } from '../../../models/PFEventsType';
+import * as routes from '../../../navigation/routes.const';
 import PFEventStrategyFactory from '../../../utility/MixpanelUtils/PFEventStrategyFactory';
 import TppLanding from '../../TppLanding.page';
 
 describe('TppLanding.page - Mixpanel events', () => {
-  let triggerEventSpy: MockInstance<[PFEventsType, unknown?], void>;
+  let triggerEventSpy: PFTriggerEventSpy;
 
   const mockRetrievalId = '123456';
   const mockRoute = `${routes.TPP_LANDING}?${AppRouteParams.RETRIEVAL_ID}=${mockRetrievalId}`;

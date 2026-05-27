@@ -1,9 +1,9 @@
-import { MockInstance, vi } from 'vitest';
+import { vi } from 'vitest';
 
 import { digitalAddressesSercq } from '../../../../__mocks__/Contacts.mock';
-import { fireEvent, render } from '../../../../__test__/test-utils';
-import { ChannelType, ContactSource } from '../../../../models/contacts';
+import { PFTriggerEventSpy, fireEvent, render } from '../../../../__test__/test-utils';
 import { PFEventsType } from '../../../../models/PFEventsType';
+import { ChannelType, ContactSource } from '../../../../models/contacts';
 import PFEventStrategyFactory from '../../../../utility/MixpanelUtils/PFEventStrategyFactory';
 import NotificationsEmptyState from '../../NotificationsEmptyState';
 
@@ -16,7 +16,7 @@ const filterNotificationsRef = {
 };
 
 describe('NotificationsEmptyState component - Mixpanel events', () => {
-  let triggerEventSpy: MockInstance<[PFEventsType, unknown?], void>;
+  let triggerEventSpy: PFTriggerEventSpy;
 
   beforeEach(() => {
     triggerEventSpy = vi.spyOn(PFEventStrategyFactory, 'triggerEvent');

@@ -1,11 +1,15 @@
 import MockAdapter from 'axios-mock-adapter';
-import { MockInstance, vi } from 'vitest';
+import { vi } from 'vitest';
 
 import { PAYMENT_CACHE_KEY, PaymentStatus, setPaymentCache } from '@pagopa-pn/pn-commons';
 
 import { paymentInfo } from '../../../../__mocks__/ExternalRegistry.mock';
-import { notificationToFe, paymentsData, recipients } from '../../../../__mocks__/NotificationDetail.mock';
-import { createMockedStore } from '../../../../__test__/test-utils';
+import {
+  notificationToFe,
+  paymentsData,
+  recipients,
+} from '../../../../__mocks__/NotificationDetail.mock';
+import { PFTriggerEventSpy, createMockedStore } from '../../../../__test__/test-utils';
 import { apiClient } from '../../../../api/apiClients';
 import { PFEventsType } from '../../../../models/PFEventsType';
 import PFEventStrategyFactory from '../../../../utility/MixpanelUtils/PFEventStrategyFactory';
@@ -21,7 +25,7 @@ const currentPayment = {
 
 describe('getReceivedNotificationPaymentInfo - Mixpanel events', () => {
   let mock: MockAdapter;
-  let triggerEventSpy: MockInstance<[PFEventsType, unknown?], void>;
+  let triggerEventSpy: PFTriggerEventSpy;
 
   beforeAll(() => {
     mock = new MockAdapter(apiClient);
@@ -47,7 +51,12 @@ describe('getReceivedNotificationPaymentInfo - Mixpanel events', () => {
     });
 
     setPaymentCache(
-      { iun: notificationToFe.iun, timestamp: new Date().toISOString(), currentPayment, payments: [] },
+      {
+        iun: notificationToFe.iun,
+        timestamp: new Date().toISOString(),
+        currentPayment,
+        payments: [],
+      },
       notificationToFe.iun
     );
 
