@@ -35,8 +35,6 @@ const SuccessPage = () => {
   }, [rapidAccess, token, i18n.language]);
 
   useEffect(() => {
-    calcRedirectUrl();
-
     const IDP = sessionStorage.getItem('IDP');
 
     PFLoginEventStrategyFactory.triggerEvent(
@@ -48,6 +46,8 @@ const SuccessPage = () => {
     );
 
     sessionStorage.removeItem('IDP');
+
+    calcRedirectUrl();
   }, []);
 
   return null;

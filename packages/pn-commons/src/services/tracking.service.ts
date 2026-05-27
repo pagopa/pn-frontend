@@ -38,7 +38,7 @@ function callMixpanelTrackingMethod(
       mixpanel.register(properties);
       break;
     default:
-      mixpanel.track(event_name, properties);
+      mixpanel.track(event_name, properties, trackOptions);
   }
 }
 
