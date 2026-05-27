@@ -8,7 +8,14 @@ export interface User extends BasicUser, BasicUserClaims {
   exp: number;
   iss: string;
   jti: string;
+  spid_level?: string;
   source?: UserSource;
+}
+
+export interface OneIdentityUser extends User {
+  idp: string;
+  aar?: string;
+  retrievalId?: string;
 }
 
 export enum SourceChannel {
@@ -34,23 +41,13 @@ export interface TokenExchangeBody extends BodySourceRequest {
   authorizationToken: string;
 }
 
-export interface OneIdentityExchangeCodeBody extends BodySourceRequest {
+export interface OneIdentityExchangeCodeBody {
   code: string;
   state: string;
-  nonce: string;
-  redirect_uri: string;
 }
 
 export interface TokenExchangeRequest {
   spidToken: string;
-  rapidAccess?: [AppRouteParams, string];
-}
-
-export interface OneIdentityCodeExchangeRequest {
-  code: string;
-  state: string;
-  nonce: string;
-  redirectUri: string;
   rapidAccess?: [AppRouteParams, string];
 }
 
