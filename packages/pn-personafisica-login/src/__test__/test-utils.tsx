@@ -1,7 +1,11 @@
+import { Callback, RequestOptions } from 'mixpanel-browser';
 import { ReactElement, ReactNode, createContext, useContext } from 'react';
 import { RouterProvider, createMemoryRouter } from 'react-router-dom';
+import { MockInstance } from 'vitest';
 
 import { RenderOptions, RenderResult, render } from '@testing-library/react';
+
+import { PFLoginEventsType } from '../models/PFLoginEventsType';
 
 interface CustomRenderOptions extends Omit<RenderOptions, 'wrapper'> {
   preloadedState?: any;
@@ -13,6 +17,11 @@ interface CustomRenderOptions extends Omit<RenderOptions, 'wrapper'> {
 type CustomRenderResult = RenderResult & {
   router: ReturnType<typeof createMemoryRouter>;
 };
+
+export type PFLoginTriggerEventSpy = MockInstance<
+  [eventType: PFLoginEventsType, data?: unknown, trackOptions?: RequestOptions | Callback],
+  void
+>;
 
 // UiContext and RouterBridge are needed to use wrapper and rerender method
 // the RouterProvider doesn't admit children, so to make rerender work we must use context that triggers every time the ui change
