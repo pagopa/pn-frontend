@@ -60,7 +60,6 @@ import { resetState } from '../redux/notification/reducers';
 import { RootState } from '../redux/store';
 import { getConfiguration } from '../services/configuration.service';
 import PGEventStrategyFactory from '../utility/MixpanelUtils/PGEventStrategyFactory';
-import { mapNotificationDetailToEventPayload } from '../utility/MixpanelUtils/mappers/notificationPayloadMappers';
 
 // state for the invocations to this component
 // (to include in navigation or Link to the route/s arriving to it)
@@ -396,17 +395,14 @@ const NotificationDetail = () => {
 
   useEffect(() => {
     if (downtimesReady && pageReady && !hasNotificationReceivedApiError) {
-      PGEventStrategyFactory.triggerEvent(
-        PGEventsType.SEND_PG_NOTIFICATION_DETAIL,
-        mapNotificationDetailToEventPayload({
-          downtimeEvents,
-          mandateId,
-          notificationStatus: notification.notificationStatus,
-          checkIfUserHasPayments,
-          userPayments,
-          timeline: notification.timeline,
-        })
-      );
+      PGEventStrategyFactory.triggerEvent(PGEventsType.SEND_PG_NOTIFICATION_DETAIL, {
+        downtimeEvents,
+        mandateId,
+        notificationStatus: notification.notificationStatus,
+        checkIfUserHasPayments,
+        userPayments,
+        timeline: notification.timeline,
+      });
     }
   }, [downtimesReady, pageReady, hasNotificationReceivedApiError]);
 

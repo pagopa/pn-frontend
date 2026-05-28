@@ -29,7 +29,6 @@ import { setNotificationFilters, setPagination, setSorting } from '../redux/dash
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { RootState } from '../redux/store';
 import PGEventStrategyFactory from '../utility/MixpanelUtils/PGEventStrategyFactory';
-import { mapNotificationListToEventPayload } from '../utility/MixpanelUtils/mappers/notificationPayloadMappers';
 
 type Props = {
   isDelegatedPage?: boolean;
@@ -96,14 +95,11 @@ const Notifiche = ({ isDelegatedPage = false }: Props) => {
         setPageReady(true);
 
         if (!isDelegatedPage) {
-          PGEventStrategyFactory.triggerEvent(
-            PGEventsType.SEND_PG_YOUR_NOTIFICATION,
-            mapNotificationListToEventPayload(
-              data.resultsPage,
-              pagination.page,
-              domicileBannerTypeRef.current
-            )
-          );
+          PGEventStrategyFactory.triggerEvent(PGEventsType.SEND_PG_YOUR_NOTIFICATION, {
+            notifications: data.resultsPage,
+            pageNumber: pagination.page,
+            domicileBannerType: domicileBannerTypeRef.current,
+          });
         }
       })
       .catch(() => setPageReady(true));

@@ -3,7 +3,6 @@ import {
   EventCategory,
   EventDowntimeType,
   EventPropertyType,
-  NotificationStatus,
 } from '@pagopa-pn/pn-commons';
 
 import { notificationToFe, paymentsData } from '../../../__mocks__/NotificationDetail.mock';
