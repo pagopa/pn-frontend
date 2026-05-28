@@ -10,6 +10,7 @@ import { apiClient } from '../../api/apiClients';
 import {
   AddressesApiFactory,
   BffAddressVerificationResponse,
+  CxLanguage,
 } from '../../generated-client/digital-addresses';
 import { InfoRecipientApiFactory } from '../../generated-client/recipient-info';
 import {
@@ -65,11 +66,7 @@ export const createOrUpdateAddress = createAsyncThunk<
         params.senderId,
         params.channelType,
         { value: params.value, verificationCode: params.code },
-        {
-          headers: {
-            'x-pagopa-pn-language': getValidLanguage(),
-          },
-        }
+        getValidLanguage(CxLanguage)
       );
 
       // user must verify contact

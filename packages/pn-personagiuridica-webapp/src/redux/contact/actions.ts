@@ -1,8 +1,13 @@
-import { ConsentType, TosPrivacyConsent, parseError, getValidLanguage } from '@pagopa-pn/pn-commons';
+import {
+  ConsentType,
+  TosPrivacyConsent,
+  getValidLanguage,
+  parseError,
+} from '@pagopa-pn/pn-commons';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
 import { apiClient } from '../../api/apiClients';
-import { AddressesApiFactory } from '../../generated-client/digital-addresses';
+import { AddressesApiFactory, CxLanguage } from '../../generated-client/digital-addresses';
 import { InfoRecipientApiFactory } from '../../generated-client/recipient-info';
 import {
   BffTosPrivacyActionBody,
@@ -57,7 +62,7 @@ export const createOrUpdateAddress = createAsyncThunk<
         { value: params.value, verificationCode: params.code },
         {
           headers: {
-            'x-pagopa-pn-language': getValidLanguage(),
+            'x-pagopa-pn-language': getValidLanguage(CxLanguage),
           },
         }
       );

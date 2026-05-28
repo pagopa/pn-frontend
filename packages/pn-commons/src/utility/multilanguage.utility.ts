@@ -2,8 +2,6 @@ import * as yup from 'yup';
 
 import { LangCode } from '@pagopa/mui-italia';
 
-import { ValidLanguage } from '../models/Contacts';
-
 export const LANGUAGE_SESSION_KEY = 'lang';
 
 export const getSessionLanguage = (): string => {
@@ -11,12 +9,14 @@ export const getSessionLanguage = (): string => {
   return lang ?? 'it';
 };
 
-export const getValidLanguage = (): ValidLanguage => {
-  const currentLang = getSessionLanguage()?.toUpperCase() as ValidLanguage;
-  if (currentLang && Object.values(ValidLanguage).includes(currentLang)) {
+export const getValidLanguage = <T extends Record<string, string>>(
+  validLanguage: T
+): T[keyof T] => {
+  const currentLang = getSessionLanguage()?.toUpperCase() as T[keyof T];
+  if (currentLang && Object.values(validLanguage).includes(currentLang)) {
     return currentLang;
   }
-  return ValidLanguage.IT;
+  return Object.values(validLanguage)[0] as T[keyof T];
 };
 
 export const setSessionLanguage = (lang: LangCode) => {
