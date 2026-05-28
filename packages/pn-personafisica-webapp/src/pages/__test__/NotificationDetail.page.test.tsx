@@ -485,8 +485,11 @@ describe('NotificationDetail Page', () => {
     }
   });
 
-  it('renders CANCELLED alert with help link CTA', async () => {
+  it('renders CANCELLED alert with help link CTA and opens link on click', async () => {
     const { NOTIFICATION_CANCELLED_HELP_LINK } = getConfiguration();
+    const openSpy = vi.fn();
+    vi.stubGlobal('open', openSpy);
+
     mock.onGet(`/bff/v1/notifications/received/${notificationDTO.iun}`).reply(200, {
       ...notificationDTO,
       notificationStatus: NotificationStatus.CANCELLED,
@@ -515,14 +518,16 @@ describe('NotificationDetail Page', () => {
 
     const cancelledAlert = result.getByTestId('cancelledAlertText');
     expect(cancelledAlert).toBeInTheDocument();
-
     expect(cancelledAlert).toHaveTextContent('detail.cancelled.message');
 
-    const ctaLink = within(cancelledAlert).getByRole('link', { name: 'detail.cancelled.cta' });
-    expect(ctaLink).toHaveAttribute('href', NOTIFICATION_CANCELLED_HELP_LINK);
-    expect(ctaLink).toHaveAttribute('target', '_blank');
-    expect(ctaLink).toHaveAttribute('rel', expect.stringContaining('noopener'));
-    expect(ctaLink).toHaveAttribute('rel', expect.stringContaining('noreferrer'));
+    const ctaButton = within(cancelledAlert).getByRole('button', { name: 'detail.cancelled.cta' });
+    fireEvent.click(ctaButton);
+
+    expect(openSpy).toHaveBeenCalledWith(
+      NOTIFICATION_CANCELLED_HELP_LINK,
+      '_blank',
+      'noopener noreferrer'
+    );
   });
 
   it('checks not available documents', async () => {
