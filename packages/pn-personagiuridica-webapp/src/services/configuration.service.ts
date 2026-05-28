@@ -28,6 +28,10 @@ export interface PgConfiguration {
   NOTIFICATION_CANCELLED_HELP_LINK: string;
   NOTIFICATION_COST_DETAILS_ASSISTANCE_LINK: string;
   SERCQ_SERVICE_STATEMENT_LINK: string;
+  FACSIMILE_EN: string;
+  FACSIMILE_FR: string;
+  FACSIMILE_DE: string;
+  FACSIMILE_SL: string;
 }
 
 class PgConfigurationValidator extends Validator<PgConfiguration> {

@@ -31,6 +31,10 @@ export interface PfConfiguration {
   NOTIFICATION_COST_DETAILS_ASSISTANCE_LINK: string;
   SERCQ_SERVICE_STATEMENT_LINK: string;
   IS_ONBOARDING_ENABLED: boolean;
+  FACSIMILE_EN: string;
+  FACSIMILE_FR: string;
+  FACSIMILE_DE: string;
+  FACSIMILE_SL: string;
 }
 
 class PfConfigurationValidator extends Validator<PfConfiguration> {

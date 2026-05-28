@@ -104,6 +104,10 @@ const NotificationDetail: React.FC = () => {
     DOWNTIME_EXAMPLE_LINK,
     NOTIFICATION_COST_DETAILS_ASSISTANCE_LINK,
     NOTIFICATION_CANCELLED_HELP_LINK,
+    FACSIMILE_EN,
+    FACSIMILE_FR,
+    FACSIMILE_DE,
+    FACSIMILE_SL,
   } = getConfiguration();
   const navigate = useNavigate();
 
@@ -638,6 +642,21 @@ const NotificationDetail: React.FC = () => {
     );
   }
 
+  const getFacSimileLink = (): string => {
+    switch (sessionLang) {
+      case 'EN':
+        return FACSIMILE_EN;
+      case 'FR':
+        return FACSIMILE_FR;
+      case 'DE':
+        return FACSIMILE_DE;
+      case 'SL':
+        return FACSIMILE_SL;
+      default:
+        return FACSIMILE_EN;
+    }
+  };
+
   return (
     <NotificationDetailOnboardingPrompt
       iun={notification.iun}
@@ -750,6 +769,7 @@ const NotificationDetail: React.FC = () => {
                         title={t('detail.bilingual.title', { ns: 'notifiche' })}
                         description={t('detail.bilingual.description', { ns: 'notifiche' })}
                         action={t('detail.bilingual.action', { ns: 'notifiche' })}
+                        link={getFacSimileLink()}
                       />
                     </Paper>
                   )}
