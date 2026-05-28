@@ -2,6 +2,10 @@ import { type TrackedEvent, uxScreenView } from '@pagopa-pn/pn-commons';
 
 import { PGEventPayloads } from '../../models/PGEventPayloads';
 import { PGEventsType } from '../../models/PGEventsType';
+import {
+  mapNotificationDetailToEventPayload,
+  mapNotificationListToEventPayload,
+} from './mappers/notificationPayloadMappers';
 
 type NotificationTrackingConfigs = {
   [PGEventsType.SEND_PG_YOUR_NOTIFICATION]: (
@@ -13,7 +17,15 @@ type NotificationTrackingConfigs = {
 };
 
 export const notificationTrackingConfigs: NotificationTrackingConfigs = {
-  [PGEventsType.SEND_PG_YOUR_NOTIFICATION]: (payload) => uxScreenView(payload),
+  [PGEventsType.SEND_PG_YOUR_NOTIFICATION]: (data) =>
+    uxScreenView(
+      mapNotificationListToEventPayload(
+        data.notifications,
+        data.pageNumber,
+        data.domicileBannerType
+      )
+    ),
 
-  [PGEventsType.SEND_PG_NOTIFICATION_DETAIL]: (payload) => uxScreenView(payload),
+  [PGEventsType.SEND_PG_NOTIFICATION_DETAIL]: (data) =>
+    uxScreenView(mapNotificationDetailToEventPayload(data)),
 };

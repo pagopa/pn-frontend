@@ -11,8 +11,10 @@ import {
   isNewNotification,
 } from '@pagopa-pn/pn-commons';
 
-import type { PGEventPayloads } from '../../../models/PGEventPayloads';
-import type { PGEventsType } from '../../../models/PGEventsType';
+import type {
+  PGNotificationDetailPayload,
+  PGNotificationsListPayload,
+} from '../../../models/PGEventPayloads';
 
 const getDisserviceStatus = (downtimeEvents: Array<Downtime>): EventDowntimeType => {
   if (downtimeEvents.length === 0) {
@@ -38,7 +40,7 @@ export const mapNotificationDetailToEventPayload = ({
   checkIfUserHasPayments: boolean;
   userPayments: PaymentsData;
   timeline: Array<INotificationDetailTimeline>;
-}): PGEventPayloads[PGEventsType.SEND_PG_NOTIFICATION_DETAIL] => {
+}): PGNotificationDetailPayload => {
   const hasF24 =
     userPayments.f24Only.length > 0 || userPayments.pagoPaF24.some((payment) => payment.f24);
 
@@ -61,7 +63,7 @@ export const mapNotificationListToEventPayload = (
   notifications: Array<Notification>,
   pageNumber: number,
   domicileBannerType?: string
-): PGEventPayloads[PGEventsType.SEND_PG_YOUR_NOTIFICATION] => ({
+): PGNotificationsListPayload => ({
   page_number: pageNumber,
   total_count: notifications.length,
   unread_count: notifications.filter((notification) =>
