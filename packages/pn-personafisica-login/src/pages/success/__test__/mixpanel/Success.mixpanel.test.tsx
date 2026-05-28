@@ -1,12 +1,12 @@
-import { MockInstance, vi } from 'vitest';
+import { vi } from 'vitest';
 
-import { render } from '../../../../__test__/test-utils';
+import { PFLoginTriggerEventSpy, render } from '../../../../__test__/test-utils';
 import { PFLoginEventsType } from '../../../../models/PFLoginEventsType';
 import PFLoginEventStrategyFactory from '../../../../utility/MixpanelUtils/PFLoginEventStrategyFactory';
 import SuccessPage from '../../Success';
 
 describe('Success page - Mixpanel events', () => {
-  let triggerEventSpy: MockInstance<[PFLoginEventsType, unknown?], void>;
+  let triggerEventSpy: PFLoginTriggerEventSpy;
 
   beforeEach(() => {
     vi.stubGlobal('location', { replace: vi.fn(), hash: '#token=fake-token' });
@@ -22,8 +22,12 @@ describe('Success page - Mixpanel events', () => {
 
   it('fires SEND_LOGIN_METHOD on mount', () => {
     render(<SuccessPage />);
-    expect(triggerEventSpy).toHaveBeenCalledWith(PFLoginEventsType.SEND_LOGIN_METHOD, {
-      entityID: 'test-idp',
-    });
+    expect(triggerEventSpy).toHaveBeenCalledWith(
+      PFLoginEventsType.SEND_LOGIN_METHOD,
+      {
+        entityID: 'test-idp',
+      },
+      { transport: 'sendBeacon' }
+    );
   });
 });

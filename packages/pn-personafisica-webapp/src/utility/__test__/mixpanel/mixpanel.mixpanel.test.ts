@@ -1,8 +1,9 @@
-import { MockInstance, vi } from 'vitest';
+import { vi } from 'vitest';
 
 import { configureStore } from '@reduxjs/toolkit';
 
 import { oneIdentityUserResponse, userResponse } from '../../../__mocks__/Auth.mock';
+import { PFTriggerEventSpy } from '../../../__test__/test-utils';
 import { PFEventsType } from '../../../models/PFEventsType';
 import { AddressType, ChannelType } from '../../../models/contacts';
 import { appReducers } from '../../../redux/store';
@@ -19,7 +20,7 @@ const dispatch = (type: string, payload?: unknown, params?: unknown) =>
   store.dispatch({ type, payload, meta: { arg: params } } as any);
 
 describe('trackingMiddleware - Mixpanel events', () => {
-  let triggerEventSpy: MockInstance<[PFEventsType, unknown?], void>;
+  let triggerEventSpy: PFTriggerEventSpy;
 
   beforeEach(() => {
     triggerEventSpy = vi.spyOn(PFEventStrategyFactory, 'triggerEvent');

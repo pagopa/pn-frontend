@@ -1,11 +1,17 @@
 import MockAdapter from 'axios-mock-adapter';
-import { MockInstance, vi } from 'vitest';
+import { vi } from 'vitest';
 
 import { digitalCourtesyAddresses } from '../../../../__mocks__/Contacts.mock';
-import { fireEvent, render, screen, waitFor } from '../../../../__test__/test-utils';
+import {
+  PFTriggerEventSpy,
+  fireEvent,
+  render,
+  screen,
+  waitFor,
+} from '../../../../__test__/test-utils';
 import { apiClient } from '../../../../api/apiClients';
-import { ChannelType, IOAllowedValues } from '../../../../models/contacts';
 import { PFEventsType } from '../../../../models/PFEventsType';
+import { ChannelType, IOAllowedValues } from '../../../../models/contacts';
 import PFEventStrategyFactory from '../../../../utility/MixpanelUtils/PFEventStrategyFactory';
 import IOContact from '../../IOContact';
 
@@ -13,7 +19,7 @@ const IOAddress = digitalCourtesyAddresses.find((addr) => addr.channelType === C
 const IOAddressEnabled = { ...IOAddress, value: IOAllowedValues.ENABLED };
 
 describe('IOContact - Mixpanel events', () => {
-  let triggerEventSpy: MockInstance<[PFEventsType, unknown?], void>;
+  let triggerEventSpy: PFTriggerEventSpy;
   let mock: MockAdapter;
 
   beforeAll(() => {
@@ -77,7 +83,10 @@ describe('IOContact - Mixpanel events', () => {
     fireEvent.click(screen.getByRole('button', { name: 'button.disable' }));
     expect(triggerEventSpy).toHaveBeenCalledWith(
       PFEventsType.SEND_DEACTIVE_IO_POP_UP,
-      expect.objectContaining({ event_type: expect.any(String), legal_addresses: expect.any(Array) })
+      expect.objectContaining({
+        event_type: expect.any(String),
+        legal_addresses: expect.any(Array),
+      })
     );
   });
 
@@ -88,7 +97,10 @@ describe('IOContact - Mixpanel events', () => {
     fireEvent.click(dialog.querySelectorAll('button')[0]);
     expect(triggerEventSpy).toHaveBeenCalledWith(
       PFEventsType.SEND_DEACTIVE_IO_CANCEL,
-      expect.objectContaining({ event_type: expect.any(String), legal_addresses: expect.any(Array) })
+      expect.objectContaining({
+        event_type: expect.any(String),
+        legal_addresses: expect.any(Array),
+      })
     );
   });
 
@@ -102,7 +114,10 @@ describe('IOContact - Mixpanel events', () => {
     fireEvent.click(dialog.querySelectorAll('button')[1]);
     expect(triggerEventSpy).toHaveBeenCalledWith(
       PFEventsType.SEND_DEACTIVE_IO_UX_CONVERSION,
-      expect.objectContaining({ event_type: expect.any(String), legal_addresses: expect.any(Array) })
+      expect.objectContaining({
+        event_type: expect.any(String),
+        legal_addresses: expect.any(Array),
+      })
     );
   });
 
@@ -115,7 +130,10 @@ describe('IOContact - Mixpanel events', () => {
     await waitFor(() => {
       expect(triggerEventSpy).toHaveBeenCalledWith(
         PFEventsType.SEND_DEACTIVE_IO_UX_SUCCESS,
-        expect.objectContaining({ event_type: expect.any(String), legal_addresses: expect.any(Array) })
+        expect.objectContaining({
+          event_type: expect.any(String),
+          legal_addresses: expect.any(Array),
+        })
       );
     });
   });

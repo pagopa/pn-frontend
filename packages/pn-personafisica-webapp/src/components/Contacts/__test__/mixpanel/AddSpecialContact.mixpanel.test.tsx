@@ -1,16 +1,22 @@
 import MockAdapter from 'axios-mock-adapter';
 import React, { useRef } from 'react';
-import { MockInstance, vi } from 'vitest';
+import { vi } from 'vitest';
 
 import { ResponseEventDispatcher } from '@pagopa-pn/pn-commons';
 import { testAutocomplete, testSelect } from '@pagopa-pn/pn-commons/src/test-utils';
 
 import { digitalLegalAddresses } from '../../../../__mocks__/Contacts.mock';
 import { parties } from '../../../../__mocks__/ExternalRegistry.mock';
-import { fireEvent, render, screen, waitFor } from '../../../../__test__/test-utils';
+import {
+  PFTriggerEventSpy,
+  fireEvent,
+  render,
+  screen,
+  waitFor,
+} from '../../../../__test__/test-utils';
 import { apiClient } from '../../../../api/apiClients';
-import { ChannelType } from '../../../../models/contacts';
 import { PFEventsType } from '../../../../models/PFEventsType';
+import { ChannelType } from '../../../../models/contacts';
 import PFEventStrategyFactory from '../../../../utility/MixpanelUtils/PFEventStrategyFactory';
 import AddSpecialContact from '../../AddSpecialContact';
 import { fillCodeDialog } from '../test-utils';
@@ -39,7 +45,7 @@ const channelTypesItems = [
 ];
 
 describe('AddSpecialContact - Mixpanel events', () => {
-  let triggerEventSpy: MockInstance<[PFEventsType, unknown?], void>;
+  let triggerEventSpy: PFTriggerEventSpy;
   let mock: MockAdapter;
 
   beforeAll(() => {
@@ -84,7 +90,12 @@ describe('AddSpecialContact - Mixpanel events', () => {
     );
     expect(triggerEventSpy).toHaveBeenCalledWith(
       PFEventsType.SEND_ADD_CUSTOMIZED_CONTACT_START,
-      expect.objectContaining({ event_type: expect.any(String), addresses: expect.any(Array), customized_contact_type: expect.any(String), organization_name: expect.any(String) })
+      expect.objectContaining({
+        event_type: expect.any(String),
+        addresses: expect.any(Array),
+        customized_contact_type: expect.any(String),
+        organization_name: expect.any(String),
+      })
     );
   });
 
@@ -101,7 +112,9 @@ describe('AddSpecialContact - Mixpanel events', () => {
     );
     const checkbox = result.container.querySelector('[name="s_disclaimer"]')!;
     fireEvent.click(checkbox);
-    expect(triggerEventSpy).toHaveBeenCalledWith(PFEventsType.SEND_ADD_CUSTOMIZED_CONTACT_TOS_ACCEPTED);
+    expect(triggerEventSpy).toHaveBeenCalledWith(
+      PFEventsType.SEND_ADD_CUSTOMIZED_CONTACT_TOS_ACCEPTED
+    );
   });
 
   it('fires SEND_ADD_CUSTOMIZED_CONTACT_TOS_DISMISSEDD when the TOS checkbox is unchecked', async () => {
@@ -132,7 +145,13 @@ describe('AddSpecialContact - Mixpanel events', () => {
     await waitFor(() => {
       expect(triggerEventSpy).toHaveBeenCalledWith(
         PFEventsType.SEND_ADD_CUSTOMIZED_CONTACT_UX_CONVERSION,
-        expect.objectContaining({ event_type: expect.any(String), addresses: expect.any(Array), customized_contact_type: expect.any(String), organization_name: expect.any(String), tos_validation: expect.any(String) })
+        expect.objectContaining({
+          event_type: expect.any(String),
+          addresses: expect.any(Array),
+          customized_contact_type: expect.any(String),
+          organization_name: expect.any(String),
+          tos_validation: expect.any(String),
+        })
       );
     });
   });
@@ -188,7 +207,12 @@ describe('AddSpecialContact - Mixpanel events', () => {
     await waitFor(() => {
       expect(triggerEventSpy).toHaveBeenCalledWith(
         PFEventsType.SEND_ADD_CUSTOMIZED_CONTACT_UX_SUCCESS,
-        expect.objectContaining({ event_type: expect.any(String), addresses: expect.any(Array), customized_contact_type: expect.any(String), organization_name: expect.any(String) })
+        expect.objectContaining({
+          event_type: expect.any(String),
+          addresses: expect.any(Array),
+          customized_contact_type: expect.any(String),
+          organization_name: expect.any(String),
+        })
       );
     });
     await waitFor(() => {
@@ -214,7 +238,9 @@ describe('AddSpecialContact - Mixpanel events', () => {
         <ResponseEventDispatcher />
         <AddSpecialContactWrapper />
       </>,
-      { preloadedState: { contactsState: { digitalAddresses: digitalLegalAddresses, parties: [] } } }
+      {
+        preloadedState: { contactsState: { digitalAddresses: digitalLegalAddresses, parties: [] } },
+      }
     );
 
     await testAutocomplete(result.container, 'sender', parties, true, 2, true);

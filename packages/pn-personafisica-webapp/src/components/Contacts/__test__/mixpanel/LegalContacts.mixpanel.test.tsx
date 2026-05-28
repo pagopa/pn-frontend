@@ -1,14 +1,20 @@
 import MockAdapter from 'axios-mock-adapter';
-import { MockInstance, vi } from 'vitest';
+import { vi } from 'vitest';
 
 import {
   digitalLegalAddresses,
   digitalLegalAddressesSercq,
 } from '../../../../__mocks__/Contacts.mock';
-import { fireEvent, render, screen, waitFor } from '../../../../__test__/test-utils';
+import {
+  PFTriggerEventSpy,
+  fireEvent,
+  render,
+  screen,
+  waitFor,
+} from '../../../../__test__/test-utils';
 import { apiClient } from '../../../../api/apiClients';
-import { AddressType } from '../../../../models/contacts';
 import { PFEventsType } from '../../../../models/PFEventsType';
+import { AddressType } from '../../../../models/contacts';
 import PFEventStrategyFactory from '../../../../utility/MixpanelUtils/PFEventStrategyFactory';
 import LegalContacts from '../../LegalContacts';
 
@@ -20,7 +26,7 @@ const sercqNoSpecials = digitalLegalAddressesSercq.filter(
 );
 
 describe('LegalContacts - Mixpanel events', () => {
-  let triggerEventSpy: MockInstance<[PFEventsType, unknown?], void>;
+  let triggerEventSpy: PFTriggerEventSpy;
   let mock: MockAdapter;
 
   beforeAll(() => {
@@ -47,7 +53,11 @@ describe('LegalContacts - Mixpanel events', () => {
     fireEvent.click(screen.getByRole('button', { name: 'button.start' }));
     expect(triggerEventSpy).toHaveBeenCalledWith(
       PFEventsType.SEND_ADD_SERCQ_SEND_ENTER_FLOW,
-      expect.objectContaining({ event_type: expect.any(String), addresses: expect.any(Array), source: expect.any(String) })
+      expect.objectContaining({
+        event_type: expect.any(String),
+        addresses: expect.any(Array),
+        source: expect.any(String),
+      })
     );
   });
 
@@ -58,7 +68,10 @@ describe('LegalContacts - Mixpanel events', () => {
     fireEvent.click(screen.getByRole('button', { name: 'button.manage' }));
     expect(triggerEventSpy).toHaveBeenCalledWith(
       PFEventsType.SEND_MANAGE_DIGITAL_DOMICILE,
-      expect.objectContaining({ legal_addresses: expect.any(Array), event_type: expect.any(String) })
+      expect.objectContaining({
+        legal_addresses: expect.any(Array),
+        event_type: expect.any(String),
+      })
     );
   });
 
@@ -69,11 +82,19 @@ describe('LegalContacts - Mixpanel events', () => {
     fireEvent.click(screen.getByRole('button', { name: 'button.disable' }));
     expect(triggerEventSpy).toHaveBeenCalledWith(
       PFEventsType.SEND_REMOVE_SERCQ_SEND_START,
-      expect.objectContaining({ event_type: expect.any(String), addresses: expect.any(Array), other_contact: expect.any(Boolean) })
+      expect.objectContaining({
+        event_type: expect.any(String),
+        addresses: expect.any(Array),
+        other_contact: expect.any(Boolean),
+      })
     );
     expect(triggerEventSpy).toHaveBeenCalledWith(
       PFEventsType.SEND_REMOVE_SERCQ_SEND_POP_UP,
-      expect.objectContaining({ event_type: expect.any(String), addresses: expect.any(Array), other_contact: expect.any(Boolean) })
+      expect.objectContaining({
+        event_type: expect.any(String),
+        addresses: expect.any(Array),
+        other_contact: expect.any(Boolean),
+      })
     );
   });
 
@@ -86,7 +107,11 @@ describe('LegalContacts - Mixpanel events', () => {
     fireEvent.click(screen.getByRole('button', { name: 'button.annulla' }));
     expect(triggerEventSpy).toHaveBeenCalledWith(
       PFEventsType.SEND_REMOVE_SERCQ_SEND_POP_UP_CANCEL,
-      expect.objectContaining({ event_type: expect.any(String), addresses: expect.any(Array), other_contact: expect.any(Boolean) })
+      expect.objectContaining({
+        event_type: expect.any(String),
+        addresses: expect.any(Array),
+        other_contact: expect.any(Boolean),
+      })
     );
   });
 
@@ -102,7 +127,11 @@ describe('LegalContacts - Mixpanel events', () => {
     );
     expect(triggerEventSpy).toHaveBeenCalledWith(
       PFEventsType.SEND_REMOVE_SERCQ_SEND_POP_UP_CONTINUE,
-      expect.objectContaining({ event_type: expect.any(String), addresses: expect.any(Array), other_contact: expect.any(Boolean) })
+      expect.objectContaining({
+        event_type: expect.any(String),
+        addresses: expect.any(Array),
+        other_contact: expect.any(Boolean),
+      })
     );
     await waitFor(() => {
       expect(triggerEventSpy).toHaveBeenCalledWith(
@@ -113,7 +142,11 @@ describe('LegalContacts - Mixpanel events', () => {
     await waitFor(() => {
       expect(triggerEventSpy).toHaveBeenCalledWith(
         PFEventsType.SEND_REMOVE_SERCQ_SEND_UX_SUCCESS,
-        expect.objectContaining({ event_type: expect.any(String), addresses: expect.any(Array), other_contact: expect.any(Boolean) })
+        expect.objectContaining({
+          event_type: expect.any(String),
+          addresses: expect.any(Array),
+          other_contact: expect.any(Boolean),
+        })
       );
     });
   });
@@ -125,11 +158,19 @@ describe('LegalContacts - Mixpanel events', () => {
     fireEvent.click(screen.getByRole('button', { name: 'button.disable' }));
     expect(triggerEventSpy).toHaveBeenCalledWith(
       PFEventsType.SEND_REMOVE_DIGITAL_DOMICILE_PEC_START,
-      expect.objectContaining({ event_type: expect.any(String), addresses: expect.any(Array), other_contact: expect.any(Boolean) })
+      expect.objectContaining({
+        event_type: expect.any(String),
+        addresses: expect.any(Array),
+        other_contact: expect.any(Boolean),
+      })
     );
     expect(triggerEventSpy).toHaveBeenCalledWith(
       PFEventsType.SEND_REMOVE_DIGITAL_DOMICILE_PEC_POP_UP,
-      expect.objectContaining({ event_type: expect.any(String), addresses: expect.any(Array), other_contact: expect.any(Boolean) })
+      expect.objectContaining({
+        event_type: expect.any(String),
+        addresses: expect.any(Array),
+        other_contact: expect.any(Boolean),
+      })
     );
   });
 
@@ -142,7 +183,11 @@ describe('LegalContacts - Mixpanel events', () => {
     fireEvent.click(screen.getByRole('button', { name: 'button.annulla' }));
     expect(triggerEventSpy).toHaveBeenCalledWith(
       PFEventsType.SEND_REMOVE_DIGITAL_DOMICILE_PEC_POP_UP_CANCEL,
-      expect.objectContaining({ event_type: expect.any(String), addresses: expect.any(Array), other_contact: expect.any(Boolean) })
+      expect.objectContaining({
+        event_type: expect.any(String),
+        addresses: expect.any(Array),
+        other_contact: expect.any(Boolean),
+      })
     );
   });
 
@@ -156,7 +201,11 @@ describe('LegalContacts - Mixpanel events', () => {
     fireEvent.click(screen.getByRole('button', { name: 'legal-contacts.remove-pec-confirm' }));
     expect(triggerEventSpy).toHaveBeenCalledWith(
       PFEventsType.SEND_REMOVE_DIGITAL_DOMICILE_PEC_POP_UP_CONTINUE,
-      expect.objectContaining({ event_type: expect.any(String), addresses: expect.any(Array), other_contact: expect.any(Boolean) })
+      expect.objectContaining({
+        event_type: expect.any(String),
+        addresses: expect.any(Array),
+        other_contact: expect.any(Boolean),
+      })
     );
     await waitFor(() => {
       expect(triggerEventSpy).toHaveBeenCalledWith(PFEventsType.SEND_REMOVE_PEC_SUCCESS, 'default');
@@ -164,7 +213,11 @@ describe('LegalContacts - Mixpanel events', () => {
     await waitFor(() => {
       expect(triggerEventSpy).toHaveBeenCalledWith(
         PFEventsType.SEND_REMOVE_DIGITAL_DOMICILE_PEC_UX_SUCCESS,
-        expect.objectContaining({ event_type: expect.any(String), addresses: expect.any(Array), other_contact: expect.any(Boolean) })
+        expect.objectContaining({
+          event_type: expect.any(String),
+          addresses: expect.any(Array),
+          other_contact: expect.any(Boolean),
+        })
       );
     });
   });

@@ -1,13 +1,12 @@
 import { vi } from 'vitest';
-import { MockInstance } from 'vitest';
 
-import { fireEvent, render } from '../../../../__test__/test-utils';
+import { PFTriggerEventSpy, fireEvent, render } from '../../../../__test__/test-utils';
 import { PFEventsType } from '../../../../models/PFEventsType';
 import PFEventStrategyFactory from '../../../../utility/MixpanelUtils/PFEventStrategyFactory';
 import HowItWorksContactWizard from '../../HowItWorksContactWizard';
 
 describe('HowItWorksContactWizard - Mixpanel events', () => {
-  let triggerEventSpy: MockInstance<[PFEventsType, unknown?], void>;
+  let triggerEventSpy: PFTriggerEventSpy;
 
   const goToNextStep = vi.fn();
   const setShowPecWizard = vi.fn();

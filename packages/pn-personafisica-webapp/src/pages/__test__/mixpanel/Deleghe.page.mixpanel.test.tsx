@@ -1,18 +1,18 @@
 import MockAdapter from 'axios-mock-adapter';
-import { MockInstance, vi } from 'vitest';
+import { vi } from 'vitest';
 
 import { ResponseEventDispatcher } from '@pagopa-pn/pn-commons';
 import userEvent from '@testing-library/user-event';
 
 import { mandatesByDelegate, mandatesByDelegator } from '../../../__mocks__/Delegations.mock';
-import { act, render, waitFor, within } from '../../../__test__/test-utils';
+import { PFTriggerEventSpy, act, render, waitFor, within } from '../../../__test__/test-utils';
 import { apiClient } from '../../../api/apiClients';
 import { PFEventsType } from '../../../models/PFEventsType';
 import PFEventStrategyFactory from '../../../utility/MixpanelUtils/PFEventStrategyFactory';
 import Deleghe from '../../Deleghe.page';
 
 describe('Deleghe.page - Mixpanel events', () => {
-  let triggerEventSpy: MockInstance<[PFEventsType, unknown?], void>;
+  let triggerEventSpy: PFTriggerEventSpy;
   let mock: MockAdapter;
 
   beforeAll(() => {
@@ -65,9 +65,17 @@ describe('Deleghe.page - Mixpanel events', () => {
     );
     const menuIcon = within(delegatesRows[0] as HTMLElement).getByTestId('delegationMenuIcon');
     await userEvent.click(menuIcon);
-    await userEvent.click(await waitFor(() => document.querySelector('[data-testid="menuItem-revokeDelegate"]') as HTMLElement));
-    const dialog = await waitFor(() => document.querySelector('[data-testid="confirmationDialog"]') as HTMLElement);
-    const confirmButton = within(dialog).getByRole('button', { name: 'deleghe.confirm_revocation' });
+    await userEvent.click(
+      await waitFor(
+        () => document.querySelector('[data-testid="menuItem-revokeDelegate"]') as HTMLElement
+      )
+    );
+    const dialog = await waitFor(
+      () => document.querySelector('[data-testid="confirmationDialog"]') as HTMLElement
+    );
+    const confirmButton = within(dialog).getByRole('button', {
+      name: 'deleghe.confirm_revocation',
+    });
     await userEvent.click(confirmButton);
 
     await waitFor(() => {
@@ -95,8 +103,14 @@ describe('Deleghe.page - Mixpanel events', () => {
     );
     const menuIcon = within(delegatorsRows[1] as HTMLElement).getByTestId('delegationMenuIcon');
     await userEvent.click(menuIcon);
-    await userEvent.click(await waitFor(() => document.querySelector('[data-testid="menuItem-rejectDelegator"]') as HTMLElement));
-    const dialog = await waitFor(() => document.querySelector('[data-testid="confirmationDialog"]') as HTMLElement);
+    await userEvent.click(
+      await waitFor(
+        () => document.querySelector('[data-testid="menuItem-rejectDelegator"]') as HTMLElement
+      )
+    );
+    const dialog = await waitFor(
+      () => document.querySelector('[data-testid="confirmationDialog"]') as HTMLElement
+    );
     const confirmButton = within(dialog).getByRole('button', { name: 'deleghe.confirm_rejection' });
     await userEvent.click(confirmButton);
 
@@ -128,7 +142,9 @@ describe('Deleghe.page - Mixpanel events', () => {
       document.querySelectorAll('[data-testid="delegatorsTable.body.row"]')
     );
     await userEvent.click(within(delegatorsRows[0] as HTMLElement).getByTestId('acceptButton'));
-    const dialog = await waitFor(() => document.querySelector('[data-testid="codeDialog"]') as HTMLElement);
+    const dialog = await waitFor(
+      () => document.querySelector('[data-testid="codeDialog"]') as HTMLElement
+    );
     const textbox = within(dialog).getByRole('textbox');
     textbox.focus();
     await userEvent.keyboard(mandatesByDelegate[0].verificationCode);
@@ -161,7 +177,9 @@ describe('Deleghe.page - Mixpanel events', () => {
       document.querySelectorAll('[data-testid="delegatorsTable.body.row"]')
     );
     await userEvent.click(within(delegatorsRows[0] as HTMLElement).getByTestId('acceptButton'));
-    const dialog = await waitFor(() => document.querySelector('[data-testid="codeDialog"]') as HTMLElement);
+    const dialog = await waitFor(
+      () => document.querySelector('[data-testid="codeDialog"]') as HTMLElement
+    );
     const textbox = within(dialog).getByRole('textbox');
     textbox.focus();
     await userEvent.keyboard(mandatesByDelegate[0].verificationCode);

@@ -1,8 +1,8 @@
-import { MockInstance, vi } from 'vitest';
+import { vi } from 'vitest';
 
 import { EventAction } from '@pagopa-pn/pn-commons';
 
-import { fireEvent, render } from '../../../../../__test__/test-utils';
+import { PFTriggerEventSpy, fireEvent, render } from '../../../../../__test__/test-utils';
 import { OnboardingAvailableFlows } from '../../../../../models/Onboarding';
 import { PFEventsType } from '../../../../../models/PFEventsType';
 import { AddressType, ChannelType, IOAllowedValues } from '../../../../../models/contacts';
@@ -10,7 +10,7 @@ import PFEventStrategyFactory from '../../../../../utility/MixpanelUtils/PFEvent
 import OnboardingHome from '../../OnboardingHome';
 
 describe('OnboardingHome - Mixpanel events', () => {
-  let triggerEventSpy: MockInstance<[PFEventsType, unknown?], void>;
+  let triggerEventSpy: PFTriggerEventSpy;
 
   const emptyContactsState = { contactsState: { digitalAddresses: [] } };
 
@@ -33,7 +33,9 @@ describe('OnboardingHome - Mixpanel events', () => {
   it('fires SEND_ONBOARDING_FLOW_SELECTED with DIGITAL_DOMICILE when that card CTA is clicked', () => {
     const { getByTestId } = render(<OnboardingHome />, { preloadedState: emptyContactsState });
 
-    fireEvent.click(getByTestId(`onboarding-card-cta-${OnboardingAvailableFlows.DIGITAL_DOMICILE}`));
+    fireEvent.click(
+      getByTestId(`onboarding-card-cta-${OnboardingAvailableFlows.DIGITAL_DOMICILE}`)
+    );
 
     expect(triggerEventSpy).toHaveBeenCalledWith(PFEventsType.SEND_ONBOARDING_FLOW_SELECTED, {
       onboarding_selected_flow: OnboardingAvailableFlows.DIGITAL_DOMICILE,

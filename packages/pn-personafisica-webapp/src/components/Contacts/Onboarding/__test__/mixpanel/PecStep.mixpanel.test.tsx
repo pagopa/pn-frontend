@@ -1,10 +1,17 @@
-import userEvent from '@testing-library/user-event';
 import MockAdapter from 'axios-mock-adapter';
-import { MockInstance, vi } from 'vitest';
+import { vi } from 'vitest';
 
 import { EventAction } from '@pagopa-pn/pn-commons';
+import userEvent from '@testing-library/user-event';
 
-import { act, fireEvent, render, waitFor, within } from '../../../../../__test__/test-utils';
+import {
+  PFTriggerEventSpy,
+  act,
+  fireEvent,
+  render,
+  waitFor,
+  within,
+} from '../../../../../__test__/test-utils';
 import { apiClient } from '../../../../../api/apiClients';
 import { OnboardingAvailableFlows } from '../../../../../models/Onboarding';
 import { PFEventsType } from '../../../../../models/PFEventsType';
@@ -12,7 +19,7 @@ import PFEventStrategyFactory from '../../../../../utility/MixpanelUtils/PFEvent
 import PecStep from '../../PecStep';
 
 describe('PecStep - Mixpanel events', () => {
-  let triggerEventSpy: MockInstance<[PFEventsType, unknown?], void>;
+  let triggerEventSpy: PFTriggerEventSpy;
   let mock: MockAdapter;
 
   const mockPec = 'test@pec.mock.pagopa.it';
@@ -63,9 +70,7 @@ describe('PecStep - Mixpanel events', () => {
     });
 
     await act(async () => {
-      fireEvent.click(
-        getByRole('button', { name: 'onboarding.digital-domicile.pec.verify-cta' })
-      );
+      fireEvent.click(getByRole('button', { name: 'onboarding.digital-domicile.pec.verify-cta' }));
     });
 
     await waitFor(() => {
@@ -95,9 +100,7 @@ describe('PecStep - Mixpanel events', () => {
     });
 
     await act(async () => {
-      fireEvent.click(
-        getByRole('button', { name: 'onboarding.digital-domicile.pec.verify-cta' })
-      );
+      fireEvent.click(getByRole('button', { name: 'onboarding.digital-domicile.pec.verify-cta' }));
     });
 
     await waitFor(() => {
@@ -129,9 +132,7 @@ describe('PecStep - Mixpanel events', () => {
     });
 
     await act(async () => {
-      fireEvent.click(
-        getByRole('button', { name: 'onboarding.digital-domicile.pec.verify-cta' })
-      );
+      fireEvent.click(getByRole('button', { name: 'onboarding.digital-domicile.pec.verify-cta' }));
     });
 
     await waitFor(() => {
@@ -163,9 +164,7 @@ describe('PecStep - Mixpanel events', () => {
     });
 
     await act(async () => {
-      fireEvent.click(
-        getByRole('button', { name: 'onboarding.digital-domicile.pec.verify-cta' })
-      );
+      fireEvent.click(getByRole('button', { name: 'onboarding.digital-domicile.pec.verify-cta' }));
     });
 
     const dialog = await waitFor(() => getByTestId('codeDialog'));
@@ -189,9 +188,7 @@ describe('PecStep - Mixpanel events', () => {
     const { getByRole } = render(<PecStep {...props} />);
 
     await act(async () => {
-      fireEvent.click(
-        getByRole('button', { name: 'onboarding.digital-domicile.pec.email-cta' })
-      );
+      fireEvent.click(getByRole('button', { name: 'onboarding.digital-domicile.pec.email-cta' }));
     });
 
     expect(triggerEventSpy).toHaveBeenCalledWith(
@@ -217,9 +214,7 @@ describe('PecStep - Mixpanel events', () => {
   });
 
   it('fires SEND_ONBOARDING_EMAIL_VERIFICATION when verify is clicked with a valid email in the optional email section', async () => {
-    mock
-      .onPost('/bff/v1/addresses/COURTESY/default/EMAIL')
-      .reply(200, { result: 'OK' });
+    mock.onPost('/bff/v1/addresses/COURTESY/default/EMAIL').reply(200, { result: 'OK' });
 
     const props = { ...createProps(), showOptionalEmail: true };
     const { getByLabelText, getByRole } = render(<PecStep {...props} />);
