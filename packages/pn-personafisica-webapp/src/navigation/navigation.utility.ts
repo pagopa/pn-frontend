@@ -2,7 +2,7 @@ import { matchPath } from 'react-router-dom';
 
 import { AppRouteParams, EventPageType, sanitizeString } from '@pagopa-pn/pn-commons';
 
-import { LoginProvider } from '../models/User';
+import { LoginProvider, OneIdentityUser } from '../models/User';
 import {
   APP_STATUS,
   DELEGHE,
@@ -82,4 +82,18 @@ export const getCurrentEventTypePage = (location: string): EventPageType | undef
   }
 
   return pageType;
+};
+
+export const getOneIdentityLoginSource = (
+  oneIdentityUser: OneIdentityUser
+): [AppRouteParams, string] | undefined => {
+  const { aar, retrievalId } = oneIdentityUser;
+
+  if (aar) {
+    return [AppRouteParams.AAR, aar];
+  }
+  if (retrievalId) {
+    return [AppRouteParams.RETRIEVAL_ID, retrievalId];
+  }
+  return undefined;
 };

@@ -1,20 +1,28 @@
+import React, { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 
 import { Box, Button, Dialog, Typography } from '@mui/material';
 import { IllusError } from '@pagopa/mui-italia';
 
+import { PFLoginEventsType } from '../../models/PFLoginEventsType';
 import { ROUTE_ONE_IDENTITY_LOGIN } from '../../navigation/routes.const';
-import { storageOneIdentityNonce, storageOneIdentityState } from '../../utility/storage';
+import PFLoginEventStrategyFactory from '../../utility/MixpanelUtils/PFLoginEventStrategyFactory';
 
 const OneIdentityLoginError: React.FC = () => {
   const { t } = useTranslation(['login', 'common']);
   const navigate = useNavigate();
 
+  const [searchParams] = useSearchParams();
+  const error = searchParams.get('error');
+
   const goToLogin = () => navigate(ROUTE_ONE_IDENTITY_LOGIN);
 
-  storageOneIdentityState.delete();
-  storageOneIdentityNonce.delete();
+  useEffect(() => {
+    PFLoginEventStrategyFactory.triggerEvent(PFLoginEventsType.SEND_LOGIN_FAILURE, {
+      reason: error,
+    });
+  }, []);
 
   return (
     <Dialog fullScreen={true} open={true} aria-labelledby="dialog-per-messaggi-di-errore">
