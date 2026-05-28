@@ -7,6 +7,8 @@ import {
   A11yMessageAnnouncer,
   APP_VERSION,
   AppMessage,
+  AppResponse,
+  AppResponseError,
   AppResponseMessage,
   Layout,
   PnDialog,
@@ -26,7 +28,7 @@ import { PartyEntity, ProductEntity } from '@pagopa/mui-italia';
 import { useMenuItems } from './hooks/useMenuItems';
 import { PGEventsType } from './models/PGEventsType';
 import { PNRole } from './models/User';
-import { goToLoginPortal } from './navigation/navigation.utility';
+import { getCurrentEventTypePage, goToLoginPortal } from './navigation/navigation.utility';
 import Router from './navigation/routes';
 import * as routes from './navigation/routes.const';
 import { getCurrentAppStatus } from './redux/appStatus/actions';
@@ -212,6 +214,22 @@ const ActualApp = () => {
     setOpenModal(true);
   };
 
+  const handleEventTrackingToastErrorMessages = (
+    error: AppResponseError,
+    response: AppResponse
+  ) => {
+    const { traceId, status, action } = response;
+
+    PGEventStrategyFactory.triggerEvent(PGEventsType.SEND_PG_TOAST_ERROR, {
+      reason: error.code,
+      traceid: traceId,
+      page_name: getCurrentEventTypePage(pathname),
+      action,
+      httpStatusCode: status,
+      message: error.message.content,
+    });
+  };
+
   const performLogout = async () => {
     await dispatch(apiLogout(loggedUser.sessionToken));
     dispatch(resetState());
@@ -257,7 +275,9 @@ const ActualApp = () => {
         {/* <AppMessage sessionRedirect={async () => await dispatch(logout())} /> */}
         <A11yMessageAnnouncer />
         <AppMessage />
-        <AppResponseMessage />
+        <AppResponseMessage
+          eventTrackingToastErrorMessages={handleEventTrackingToastErrorMessages}
+        />
         <Router />
       </Layout>
       <Box onClick={clickVersion} sx={{ height: '5px', background: 'white' }}></Box>

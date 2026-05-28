@@ -1,5 +1,6 @@
 import { apiKeyTrackingConfigs } from '../apiKeyEvents';
 import { contactTrackingConfigs } from '../contactEvents';
+import { errorTrackingConfigs } from '../errorEvents';
 import { mandateTrackingConfigs } from '../mandateEvents';
 import { navigationTrackingConfigs } from '../navigationEvents';
 import { notificationTrackingConfigs } from '../notificationEvents';
@@ -12,6 +13,7 @@ describe('trackingRegistry', () => {
     expect(pgTrackingConfigs).toStrictEqual({
       ...apiKeyTrackingConfigs,
       ...contactTrackingConfigs,
+      ...errorTrackingConfigs,
       ...mandateTrackingConfigs,
       ...navigationTrackingConfigs,
       ...notificationTrackingConfigs,

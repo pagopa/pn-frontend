@@ -1,4 +1,5 @@
-import { EventDowntimeType } from '@pagopa-pn/pn-commons';
+import type { LegalFactId, NotificationDetailOtherDocument } from '@pagopa-pn/pn-commons';
+import { EventDowntimeType, NotificationDocumentType } from '@pagopa-pn/pn-commons';
 
 import {
   notificationToFe,
@@ -7,8 +8,11 @@ import {
 } from '../../../../__mocks__/NotificationDetail.mock';
 import { notificationsDTO } from '../../../../__mocks__/Notifications.mock';
 import {
+  mapNotificationAttachmentToDocumentDownloadPayload,
   mapNotificationDetailToEventPayload,
   mapNotificationListToEventPayload,
+  mapStartPaymentToEventPayload,
+  mapTimelineLegalFactToDocumentDownloadPayload,
 } from '../notificationPayloadMappers';
 
 describe('notificationPayloadMappers', () => {
@@ -59,6 +63,40 @@ describe('notificationPayloadMappers', () => {
       elapsed_time: 0,
       flow: 'digital',
       delivery_mode: 'async',
+    });
+  });
+
+  it('should map notification attachment document to download payload', () => {
+    const payload = mapNotificationAttachmentToDocumentDownloadPayload('0');
+
+    expect(payload).toStrictEqual({
+      document_type: NotificationDocumentType.ATTACHMENT,
+    });
+  });
+
+  it('should map notification AAR document to download payload', () => {
+    const payload = mapNotificationAttachmentToDocumentDownloadPayload({
+      documentId: 'aar-document-id',
+    } as NotificationDetailOtherDocument);
+
+    expect(payload).toStrictEqual({
+      document_type: NotificationDocumentType.AAR,
+    });
+  });
+
+  it('should map timeline legal fact to download payload', () => {
+    const payload = mapTimelineLegalFactToDocumentDownloadPayload({
+      category: 'DIGITAL_DELIVERY',
+    } as LegalFactId);
+
+    expect(payload).toStrictEqual({
+      document_type: 'DIGITAL_DELIVERY',
+    });
+  });
+
+  it('should map start payment to event payload', () => {
+    expect(mapStartPaymentToEventPayload()).toStrictEqual({
+      psp: 'pagopa',
     });
   });
 });

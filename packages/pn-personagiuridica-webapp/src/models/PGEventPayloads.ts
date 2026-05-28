@@ -6,6 +6,7 @@ import {
 import {
   EventDeliveryFlowType,
   EventDeliveryModeType,
+  EventPageType,
 } from '@pagopa-pn/pn-commons/src/models/MixpanelEvents';
 
 import { PGEventsType } from './PGEventsType';
@@ -15,6 +16,23 @@ export type YesNo = 'yes' | 'no';
 export type PGUserRole = 'admin' | 'group_admin' | 'operator' | 'group_operator';
 
 export type DigitalDomicileType = ChannelType.PEC | ChannelType.SERCQ_SEND | 'not_available';
+
+export type PGDocumentDownloadPayload = {
+  document_type: string;
+};
+
+export type PGStartPaymentPayload = {
+  psp: string;
+};
+
+export type PGToastErrorPayload = {
+  reason: string;
+  traceid?: string;
+  page_name?: EventPageType;
+  action: string;
+  httpStatusCode?: number;
+  message?: string;
+};
 
 export type PGNotificationsListPayload = {
   page_number: number;
@@ -105,6 +123,9 @@ export type PGEventPayloads = {
   [PGEventsType.SEND_PG_REMOVE_SMS_START]: undefined;
   [PGEventsType.SEND_PG_REMOVE_SMS_UX_SUCCESS]: undefined;
 
+  /* ERROR */
+  [PGEventsType.SEND_PG_TOAST_ERROR]: PGToastErrorPayload;
+
   /* MANDATE */
   [PGEventsType.SEND_PG_ADD_MANDATE_START]: undefined;
   [PGEventsType.SEND_PG_ADD_MANDATE_UX_SUCCESS]: PGMandateSuccessPayload;
@@ -121,6 +142,11 @@ export type PGEventPayloads = {
   [PGEventsType.SEND_PG_NOTIFICATION_DELEGATED]: PGNotificationsListPayload;
   [PGEventsType.SEND_PG_NOTIFICATION_DETAIL]: PGNotificationDetailPayload;
   [PGEventsType.SEND_PG_YOUR_NOTIFICATION]: PGNotificationsListPayload;
+  [PGEventsType.SEND_PG_NOTIFICATION_DOWNLOAD_ATTACHMENT]: PGDocumentDownloadPayload;
+  [PGEventsType.SEND_PG_START_PAYMENT]: PGStartPaymentPayload;
+  [PGEventsType.SEND_PG_TIMELINE_SHOW_HISTORY]: undefined;
+  [PGEventsType.SEND_PG_TIMELINE_SHOW_MORE]: undefined;
+  [PGEventsType.SEND_PG_TIMELINE_DOWNLOAD]: PGDocumentDownloadPayload;
 
   /* SERVICE STATUS */
   [PGEventsType.SEND_PG_SERVICE_STATUS]: undefined;

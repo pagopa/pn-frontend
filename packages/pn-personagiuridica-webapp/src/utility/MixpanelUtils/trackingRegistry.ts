@@ -4,6 +4,7 @@ import { PGEventPayloads } from '../../models/PGEventPayloads';
 import { PGEventsType } from '../../models/PGEventsType';
 import { apiKeyTrackingConfigs } from './apiKeyEvents';
 import { contactTrackingConfigs } from './contactEvents';
+import { errorTrackingConfigs } from './errorEvents';
 import { mandateTrackingConfigs } from './mandateEvents';
 import { navigationTrackingConfigs } from './navigationEvents';
 import { notificationTrackingConfigs } from './notificationEvents';
@@ -16,6 +17,7 @@ type PGTrackingConfigs = TrackingConfigs<PGEventsType>;
 export const pgTrackingConfigs: PGTrackingConfigs = {
   ...apiKeyTrackingConfigs,
   ...contactTrackingConfigs,
+  ...errorTrackingConfigs,
   ...mandateTrackingConfigs,
   ...navigationTrackingConfigs,
   ...notificationTrackingConfigs,

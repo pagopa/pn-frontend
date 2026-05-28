@@ -66,7 +66,12 @@ import { resetState } from '../redux/notification/reducers';
 import { RootState } from '../redux/store';
 import { getConfiguration } from '../services/configuration.service';
 import PGEventStrategyFactory from '../utility/MixpanelUtils/PGEventStrategyFactory';
-import { mapNotificationDetailToEventPayload } from '../utility/MixpanelUtils/mappers/notificationPayloadMappers';
+import {
+  mapNotificationAttachmentToDocumentDownloadPayload,
+  mapNotificationDetailToEventPayload,
+  mapStartPaymentToEventPayload,
+  mapTimelineLegalFactToDocumentDownloadPayload,
+} from '../utility/MixpanelUtils/mappers/notificationPayloadMappers';
 
 // state for the invocations to this component
 // (to include in navigation or Link to the route/s arriving to it)
@@ -245,6 +250,12 @@ const NotificationDetail = () => {
     if (isCancelledOrCancelling) {
       return;
     }
+
+    PGEventStrategyFactory.triggerEvent(
+      PGEventsType.SEND_PG_NOTIFICATION_DOWNLOAD_ATTACHMENT,
+      mapNotificationAttachmentToDocumentDownloadPayload(document)
+    );
+
     if (isObject(document)) {
       // AAR case
       dispatch(
@@ -278,6 +289,12 @@ const NotificationDetail = () => {
     if (legalFact.category !== LegalFactType.NOTIFICATION_CANCELLED && isCancelledOrCancelling) {
       return;
     }
+
+    PGEventStrategyFactory.triggerEvent(
+      PGEventsType.SEND_PG_TIMELINE_DOWNLOAD,
+      mapTimelineLegalFactToDocumentDownloadPayload(legalFact)
+    );
+
     if (legalFact.category !== 'AAR') {
       // Legal fact case
       dispatch(
@@ -319,6 +336,11 @@ const NotificationDetail = () => {
 
   const onPayClick = (noticeCode?: string, creditorTaxId?: string, amount?: number) => {
     if (noticeCode && creditorTaxId && amount && notification.senderDenomination) {
+      PGEventStrategyFactory.triggerEvent(
+        PGEventsType.SEND_PG_START_PAYMENT,
+        mapStartPaymentToEventPayload()
+      );
+
       dispatch(
         getReceivedNotificationPaymentUrl({
           paymentNotice: {
@@ -518,6 +540,18 @@ const NotificationDetail = () => {
       />
     );
 
+  const trackTimelineShowMore = (collapsed: boolean) => {
+    if (!collapsed) {
+      PGEventStrategyFactory.triggerEvent(PGEventsType.SEND_PG_TIMELINE_SHOW_MORE);
+    }
+  };
+
+  const trackTimelineShowHistory = (open: boolean) => {
+    if (open) {
+      PGEventStrategyFactory.triggerEvent(PGEventsType.SEND_PG_TIMELINE_SHOW_HISTORY);
+    }
+  };
+
   return (
     <LoadingPageWrapper isInitialized={pageReady}>
       {hasNotificationReceivedApiError && (
@@ -638,6 +672,8 @@ const NotificationDetail = () => {
                   showLessButtonLabel={t('detail.show-less', { ns: 'notifiche' })}
                   disableDownloads={isCancelled.cancellationInTimeline}
                   isParty={false}
+                  handleTrackShowMoreLess={trackTimelineShowMore}
+                  handleTrackShowHistory={trackTimelineShowHistory}
                 />
               </Box>
             </Grid>

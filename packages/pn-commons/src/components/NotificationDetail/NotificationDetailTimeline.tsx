@@ -26,6 +26,7 @@ type Props = {
   isParty?: boolean;
   language?: string;
   handleTrackShowMoreLess?: (collapsed: boolean) => void;
+  handleTrackShowHistory?: (open: boolean) => void;
 };
 
 const CustomDrawer = styled(Drawer)(() => ({
@@ -70,6 +71,7 @@ const NotificationDetailTimeline = ({
   isParty = true,
   language = 'it',
   handleTrackShowMoreLess,
+  handleTrackShowHistory,
 }: Props) => {
   const [state, setState] = useState(false);
   const isMobile = useIsMobile();
@@ -79,6 +81,9 @@ const NotificationDetailTimeline = ({
   }
 
   const toggleHistoryDrawer = () => {
+    const open = !state;
+
+    handleTrackShowHistory?.(open);
     setState(!state);
   };
 

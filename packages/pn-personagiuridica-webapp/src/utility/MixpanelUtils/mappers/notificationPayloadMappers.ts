@@ -1,12 +1,17 @@
+import { isObject } from 'lodash-es';
+
 import type {
   Downtime,
   EventNotificationSource,
+  LegalFactId,
   Notification,
+  NotificationDetailOtherDocument,
   NotificationStatusHistory,
   PaymentsData,
 } from '@pagopa-pn/pn-commons';
 import {
   EventDowntimeType,
+  NotificationDocumentType,
   NotificationStatus,
   getElapsedTime,
   isNewNotification,
@@ -108,3 +113,22 @@ export const mapNotificationListToEventPayload = (
   ).length,
   ...(domicileBannerType && { banner: domicileBannerType }),
 });
+
+export const mapNotificationAttachmentToDocumentDownloadPayload = (
+  document: string | NotificationDetailOtherDocument | undefined
+): PGEventPayloads[PGEventsType.SEND_PG_NOTIFICATION_DOWNLOAD_ATTACHMENT] => ({
+  document_type: isObject(document)
+    ? NotificationDocumentType.AAR
+    : NotificationDocumentType.ATTACHMENT,
+});
+
+export const mapTimelineLegalFactToDocumentDownloadPayload = (
+  legalFact: LegalFactId
+): PGEventPayloads[PGEventsType.SEND_PG_TIMELINE_DOWNLOAD] => ({
+  document_type: legalFact.category,
+});
+
+export const mapStartPaymentToEventPayload =
+  (): PGEventPayloads[PGEventsType.SEND_PG_START_PAYMENT] => ({
+    psp: 'pagopa',
+  });
