@@ -338,7 +338,7 @@ const NotificationDetail: React.FC = () => {
         getReceivedNotificationPaymentTppUrl({
           noticeCode,
           creditorTaxId,
-          retrievalId: 'TEUH-QGNT-UPXV-202604-Q-1~KO~13212-abvee1-3332-aaa',
+          retrievalId,
           amount,
         })
       )
