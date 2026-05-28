@@ -541,9 +541,12 @@ const NotificationDetail: React.FC = () => {
         description={t('detail.cancelled.message', { ns: 'notifiche' })}
         action={{
           label: t('detail.cancelled.cta', { ns: 'notifiche' }),
-          href: NOTIFICATION_CANCELLED_HELP_LINK,
-          rel: 'noopener noreferrer',
-          target: '_blank',
+          onClick: () => {
+            PFEventStrategyFactory.triggerEvent(
+              PFEventsType.SEND_CANCELLED_NOTIFICATION_REFOUND_INFO
+            );
+            window.open(NOTIFICATION_CANCELLED_HELP_LINK, '_blank', 'noopener noreferrer');
+          },
         }}
       />
     </Box>

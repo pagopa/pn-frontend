@@ -1,3 +1,5 @@
+import { Callback, RequestOptions } from 'mixpanel-browser';
+
 import EventStrategy from '../../models/EventStrategy';
 import { EventPropertyType } from '../../models/MixpanelEvents';
 import { trackEvent } from '../../services/tracking.service';
@@ -39,7 +41,7 @@ export default abstract class EventStrategyFactory<T extends string> {
    * @param {T} eventType
    * @param {?unknown} [data]
    */
-  public triggerEvent(eventType: T, data?: unknown) {
+  public triggerEvent(eventType: T, data?: unknown, trackOptions?: RequestOptions | Callback) {
     try {
       const strategy = this.getStrategy(eventType);
 
@@ -50,7 +52,13 @@ export default abstract class EventStrategyFactory<T extends string> {
       const eventParameters = strategy.performComputations(data);
 
       for (const [type, parameters] of Object.entries(eventParameters)) {
-        trackEvent(type as EventPropertyType, eventType, process.env.NODE_ENV!, parameters);
+        trackEvent(
+          type as EventPropertyType,
+          eventType,
+          process.env.NODE_ENV!,
+          parameters,
+          trackOptions
+        );
       }
     } catch (error) {
       console.error('MIXPANEL - Tracking error: ', eventType, error);
