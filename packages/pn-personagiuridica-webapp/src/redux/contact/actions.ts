@@ -60,11 +60,7 @@ export const createOrUpdateAddress = createAsyncThunk<
         params.senderId,
         params.channelType,
         { value: params.value, verificationCode: params.code },
-        {
-          headers: {
-            'x-pagopa-pn-language': getValidLanguage(CxLanguage),
-          },
-        }
+        getValidLanguage(CxLanguage)
       );
 
       // user must verify contact
