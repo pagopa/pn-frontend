@@ -1408,6 +1408,63 @@ describe('NotificationDetail Page', () => {
     });
   });
 
+  it('should show payment-error alert when tpp payment URL returns PN_EMD_INTEGRATION_RETRIEVAL_PAYLOAD_MISSING_OR_EXPIRED', async () => {
+    const mockRetrievalId = 'retrieval-id';
+    const paymentTpp: BffCheckTPPResponse = {
+      originId: notificationDTO.iun,
+      retrievalId: mockRetrievalId,
+      pspDenomination: 'MOCK BANK',
+      isPaymentEnabled: true,
+    };
+    const tppPaymentUrlMock = `/bff/v1/payments/tpp?retrievalId=${mockRetrievalId}&noticeCode=${requiredPayment.pagoPa?.noticeCode}&paTaxId=${requiredPayment.pagoPa?.creditorTaxId}&amount=${requiredPayment.pagoPa?.amount}`;
+    const expiredError = {
+      status: 404,
+      data: {
+        errors: [
+          {
+            code: ServerResponseErrorCode.PN_EMD_INTEGRATION_RETRIEVAL_PAYLOAD_MISSING_OR_EXPIRED,
+          },
+        ],
+      },
+    };
+
+    mock.onGet(`/bff/v1/notifications/received/${notificationDTO.iun}`).reply(200, notificationDTO);
+    mock.onPost(`/bff/v1/payments/info`, paymentInfoRequest.slice(0, 5)).reply(200, paymentInfo);
+    mock
+      .onGet(`/bff/v1/notifications/received/check-tpp?retrievalId=${mockRetrievalId}`)
+      .reply(200, paymentTpp);
+    mock.onGet(tppPaymentUrlMock).reply(expiredError.status, expiredError.data);
+
+    await act(async () => {
+      result = render(<Component />, {
+        preloadedState: {
+          userState: {
+            user: {
+              fiscal_number: notificationDTO.recipients[2].taxId,
+              source: {
+                channel: 'TPP',
+                details: 'mock-tpp-id',
+                retrievalId: mockRetrievalId,
+              },
+            },
+          },
+        },
+        route: routes.GET_DETTAGLIO_NOTIFICA_PATH(notificationDTO.iun),
+      });
+    });
+
+    const item = result.queryAllByTestId('pagopa-item')[requiredPaymentIndex];
+    const radioButton = item?.querySelector('[data-testid="radio-button"] input');
+    await userEvent.click(radioButton!);
+
+    const tppPayButton = result.getByTestId('tpp-pay-button');
+    await userEvent.click(tppPayButton);
+
+    await waitFor(() => {
+      expect(result.getByTestId('payment-error')).toBeInTheDocument();
+    });
+  });
+
   it('should show AccessDenied component when user is not authorized to see the notification', async () => {
     const unauthorizedError = {
       status: 404,
