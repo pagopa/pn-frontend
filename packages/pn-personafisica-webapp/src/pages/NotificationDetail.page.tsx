@@ -11,8 +11,6 @@ import {
   AccessDenied,
   ApiError,
   ApiErrorWrapper,
-  AppResponse,
-  AppResponsePublisher,
   AppRouteParams,
   DeliveryOutcomeType,
   EventPaymentRecipientType,
@@ -55,6 +53,7 @@ import NotificationDetailOnboardingPrompt from '../components/Contacts/Onboardin
 import DomicileBanner from '../components/DomicileBanner/DomicileBanner';
 import LoadingPageWrapper from '../components/LoadingPageWrapper/LoadingPageWrapper';
 import { NotificationCostBanner } from '../components/Notifications/NotificationCostBanner';
+import { useDismissToastOnError } from '../hooks/useDismissToastOnError';
 import { NotificationDetailRouteState } from '../models/NotificationDetail';
 import { PFEventsType } from '../models/PFEventsType';
 import { ContactSource } from '../models/contacts';
@@ -332,14 +331,14 @@ const NotificationDetail: React.FC = () => {
     retrievalId?: string,
     tppName?: string,
     amount?: number
-  ) => {
+  ): Promise<void> | void => {
     if (noticeCode && creditorTaxId && retrievalId) {
       PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_START_PAYMENT, { psp: tppName });
-      dispatch(
+      return dispatch(
         getReceivedNotificationPaymentTppUrl({
           noticeCode,
           creditorTaxId,
-          retrievalId,
+          retrievalId: 'TEUH-QGNT-UPXV-202604-Q-1~KO~13212-abvee1-3332-aaa',
           amount,
         })
       )
@@ -349,7 +348,14 @@ const NotificationDetail: React.FC = () => {
             window.location.assign(res.paymentUrl);
           }
         })
-        .catch(() => undefined);
+        .catch((error) => {
+          if (
+            error?.response?.data?.errors?.[0]?.code ===
+            ServerResponseErrorCode.PN_EMD_INTEGRATION_RETRIEVAL_PAYLOAD_MISSING_OR_EXPIRED
+          ) {
+            throw error;
+          }
+        });
     }
   };
 
@@ -423,11 +429,6 @@ const NotificationDetail: React.FC = () => {
     [currentRecipient.payments]
   );
 
-  const handleUserInvalidError = useCallback((e: AppResponse) => {
-    const error = e.errors?.[0];
-    return error?.code !== ServerResponseErrorCode.PN_DELIVERY_USER_ID_NOT_RECIPIENT_OR_DELEGATOR;
-  }, []);
-
   useEffect(() => {
     if (checkIfUserHasPayments && !isCancelledOrCancelling) {
       // get current page stored in cache
@@ -460,20 +461,15 @@ const NotificationDetail: React.FC = () => {
     void dispatch(exchangeNotificationRetrievalId(currentUser.source.retrievalId));
   }, [currentUser, checkIfUserHasPayments]);
 
-  // Dismiss toast if error is PN_DELIVERY_USER_ID_NOT_RECIPIENT_OR_DELEGATOR
-  useEffect(() => {
-    AppResponsePublisher.error.subscribe(
-      NOTIFICATION_ACTIONS.GET_RECEIVED_NOTIFICATION,
-      handleUserInvalidError
-    );
+  useDismissToastOnError(
+    NOTIFICATION_ACTIONS.GET_RECEIVED_NOTIFICATION,
+    ServerResponseErrorCode.PN_DELIVERY_USER_ID_NOT_RECIPIENT_OR_DELEGATOR
+  );
 
-    return () => {
-      AppResponsePublisher.error.unsubscribe(
-        NOTIFICATION_ACTIONS.GET_RECEIVED_NOTIFICATION,
-        handleUserInvalidError
-      );
-    };
-  }, [handleUserInvalidError]);
+  useDismissToastOnError(
+    NOTIFICATION_ACTIONS.GET_RECEIVED_NOTIFICATION_PAYMENT_TPP_URL,
+    ServerResponseErrorCode.PN_EMD_INTEGRATION_RETRIEVAL_PAYLOAD_MISSING_OR_EXPIRED
+  );
 
   /* function which loads relevant information about donwtimes */
   const fetchDowntimeEvents = useCallback((fromDate: string, toDate: string | undefined) => {

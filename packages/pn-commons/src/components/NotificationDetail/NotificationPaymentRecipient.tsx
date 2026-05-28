@@ -1,7 +1,7 @@
 import React, { memo, useEffect, useState } from 'react';
 
 import { Download } from '@mui/icons-material/';
-import { Alert, Box, Button, FormControl, RadioGroup, Stack, Typography } from '@mui/material';
+import { Box, Button, FormControl, RadioGroup, Stack, Typography } from '@mui/material';
 import { MIAlert } from '@pagopa/mui-italia';
 
 import { downloadDocument } from '../../hooks/useDownloadDocument';
@@ -47,7 +47,7 @@ type Props = {
     retrievalId?: string,
     tppName?: string,
     amount?: number
-  ) => void;
+  ) => Promise<void> | void;
   handleTrackEvent?: (event: EventPaymentRecipientType, param?: object) => void;
   handleFetchPaymentsInfo: (payment: Array<PaymentDetails | NotificationDetailPayment>) => void;
 };
@@ -75,6 +75,7 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
   });
   const [areOtherDowloading, setAreOtherDowloading] = useState(false);
   const [errorOnPayment, setErrorOnPayment] = useState(false);
+  const [tppPaymentError, setTppPaymentError] = useState(false);
   const paginatedPayments = pagoPaF24.slice(
     paginationData.page * paginationData.size,
     (paginationData.page + 1) * paginationData.size
@@ -151,14 +152,19 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
   const handleCheckPaymentSelected = (paymentType: 'default' | 'tpp') => {
     if (selectedPayment.pagoPa) {
       setErrorOnPayment(false);
+      setTppPaymentError(false);
       if (paymentType === 'tpp') {
-        onPayTppClick?.(
+        const result = onPayTppClick?.(
           selectedPayment?.pagoPa?.noticeCode,
           selectedPayment?.pagoPa?.creditorTaxId,
           paymentTpp?.retrievalId,
           paymentTpp?.pspDenomination,
           selectedPayment?.pagoPa?.amount
         );
+        result?.catch(() => {
+          setErrorOnPayment(true);
+          setTppPaymentError(true);
+        });
         return;
       }
       onPayClick(
@@ -263,9 +269,26 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
             </Box>
           )}
           {errorOnPayment && (
-            <Alert severity="error" variant="outlined" data-testid="payment-error">
-              {getErrorMessage()}
-            </Alert>
+            <MIAlert
+              severity="error"
+              data-testid="payment-error"
+              title={
+                tppPaymentError
+                  ? getLocalizedOrDefaultLabel(
+                      'notifications',
+                      'detail.payment.tpp-expired-error-title'
+                    )
+                  : undefined
+              }
+              description={
+                tppPaymentError
+                  ? getLocalizedOrDefaultLabel(
+                      'notifications',
+                      'detail.payment.tpp-expired-error-description'
+                    )
+                  : getErrorMessage()
+              }
+            />
           )}
           {!allPaymentsIsPaid && (
             <PaymentButtons
