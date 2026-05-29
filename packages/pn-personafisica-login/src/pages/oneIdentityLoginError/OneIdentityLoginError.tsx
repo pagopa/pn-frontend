@@ -9,6 +9,13 @@ import { PFLoginEventsType } from '../../models/PFLoginEventsType';
 import { ROUTE_ONE_IDENTITY_LOGIN } from '../../navigation/routes.const';
 import PFLoginEventStrategyFactory from '../../utility/MixpanelUtils/PFLoginEventStrategyFactory';
 
+const KNOWN_ERROR_CODES = [
+  'invalid_scope',
+  'unsupported_response_type',
+  'server_error',
+  'invalid_request',
+];
+
 const OneIdentityLoginError: React.FC = () => {
   const { t } = useTranslation(['login', 'common']);
   const navigate = useNavigate();
@@ -22,6 +29,9 @@ const OneIdentityLoginError: React.FC = () => {
     PFLoginEventStrategyFactory.triggerEvent(PFLoginEventsType.SEND_LOGIN_FAILURE, {
       reason: error,
     });
+    if (!error || !KNOWN_ERROR_CODES.includes(error)) {
+      goToLogin();
+    }
   }, []);
 
   return (
