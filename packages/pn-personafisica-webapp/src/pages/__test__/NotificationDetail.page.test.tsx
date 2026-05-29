@@ -1422,7 +1422,7 @@ describe('NotificationDetail Page', () => {
       data: {
         errors: [
           {
-            code: ServerResponseErrorCode.PN_EMD_INTEGRATION_RETRIEVAL_PAYLOAD_MISSING_OR_EXPIRED,
+            code: 'PN_EMD_INTEGRATION_RETRIEVAL_PAYLOAD_MISSING_OR_EXPIRED',
           },
         ],
       },
@@ -1436,21 +1436,27 @@ describe('NotificationDetail Page', () => {
     mock.onGet(tppPaymentUrlMock).reply(expiredError.status, expiredError.data);
 
     await act(async () => {
-      result = render(<Component />, {
-        preloadedState: {
-          userState: {
-            user: {
-              fiscal_number: notificationDTO.recipients[2].taxId,
-              source: {
-                channel: 'TPP',
-                details: 'mock-tpp-id',
-                retrievalId: mockRetrievalId,
+      result = render(
+        <>
+          <ResponseEventDispatcher />
+          <Component />
+        </>,
+        {
+          preloadedState: {
+            userState: {
+              user: {
+                fiscal_number: notificationDTO.recipients[2].taxId,
+                source: {
+                  channel: 'TPP',
+                  details: 'mock-tpp-id',
+                  retrievalId: mockRetrievalId,
+                },
               },
             },
           },
-        },
-        route: routes.GET_DETTAGLIO_NOTIFICA_PATH(notificationDTO.iun),
-      });
+          route: routes.GET_DETTAGLIO_NOTIFICA_PATH(notificationDTO.iun),
+        }
+      );
     });
 
     const item = result.queryAllByTestId('pagopa-item')[requiredPaymentIndex];
