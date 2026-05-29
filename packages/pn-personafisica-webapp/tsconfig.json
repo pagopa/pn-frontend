@@ -23,6 +23,10 @@
     "noFallthroughCasesInSwitch": true,
     "resolveJsonModule": true
   },
-  "include": ["src/**/*"],
+  "include": [
+    "src/**/*",
+    "../pn-commons/src/hooks/useDismissToastOnError.ts",
+    "../pn-commons/src/hooks/__test__/useDismissToastOnError.test.ts"
+  ],
   "exclude": ["dist", "node_modules"]
 }

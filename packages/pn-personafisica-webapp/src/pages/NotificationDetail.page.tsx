@@ -11,6 +11,7 @@ import {
   AccessDenied,
   ApiError,
   ApiErrorWrapper,
+  AppResponse,
   AppRouteParams,
   DeliveryOutcomeType,
   EventPaymentRecipientType,
@@ -43,6 +44,7 @@ import {
   useIsCancelled,
   useIsMobile,
 } from '@pagopa-pn/pn-commons';
+import { useDismissToastOnError } from '@pagopa-pn/pn-commons/src/hooks/useDismissToastOnError';
 import {
   EventDeliveryFlowType,
   EventDeliveryModeType,
@@ -53,7 +55,6 @@ import NotificationDetailOnboardingPrompt from '../components/Contacts/Onboardin
 import DomicileBanner from '../components/DomicileBanner/DomicileBanner';
 import LoadingPageWrapper from '../components/LoadingPageWrapper/LoadingPageWrapper';
 import { NotificationCostBanner } from '../components/Notifications/NotificationCostBanner';
-import { useDismissToastOnError } from '../hooks/useDismissToastOnError';
 import { NotificationDetailRouteState } from '../models/NotificationDetail';
 import { PFEventsType } from '../models/PFEventsType';
 import { ContactSource } from '../models/contacts';
@@ -331,10 +332,10 @@ const NotificationDetail: React.FC = () => {
     retrievalId?: string,
     tppName?: string,
     amount?: number
-  ): Promise<void> | void => {
+  ) => {
     if (noticeCode && creditorTaxId && retrievalId) {
       PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_START_PAYMENT, { psp: tppName });
-      return dispatch(
+      dispatch(
         getReceivedNotificationPaymentTppUrl({
           noticeCode,
           creditorTaxId,
@@ -348,14 +349,7 @@ const NotificationDetail: React.FC = () => {
             window.location.assign(res.paymentUrl);
           }
         })
-        .catch((error) => {
-          if (
-            error?.response?.data?.errors?.[0]?.code ===
-            ServerResponseErrorCode.PN_EMD_INTEGRATION_RETRIEVAL_PAYLOAD_MISSING_OR_EXPIRED
-          ) {
-            throw error;
-          }
-        });
+        .catch(() => undefined);
     }
   };
 
@@ -429,6 +423,11 @@ const NotificationDetail: React.FC = () => {
     [currentRecipient.payments]
   );
 
+  const handleUserInvalidError = useCallback((e: AppResponse) => {
+    const error = e.errors?.[0];
+    return error?.code !== ServerResponseErrorCode.PN_DELIVERY_USER_ID_NOT_RECIPIENT_OR_DELEGATOR;
+  }, []);
+
   useEffect(() => {
     if (checkIfUserHasPayments && !isCancelledOrCancelling) {
       // get current page stored in cache
@@ -461,15 +460,7 @@ const NotificationDetail: React.FC = () => {
     void dispatch(exchangeNotificationRetrievalId(currentUser.source.retrievalId));
   }, [currentUser, checkIfUserHasPayments]);
 
-  useDismissToastOnError(
-    NOTIFICATION_ACTIONS.GET_RECEIVED_NOTIFICATION,
-    ServerResponseErrorCode.PN_DELIVERY_USER_ID_NOT_RECIPIENT_OR_DELEGATOR
-  );
-
-  useDismissToastOnError(
-    NOTIFICATION_ACTIONS.GET_RECEIVED_NOTIFICATION_PAYMENT_TPP_URL,
-    ServerResponseErrorCode.PN_EMD_INTEGRATION_RETRIEVAL_PAYLOAD_MISSING_OR_EXPIRED
-  );
+  useDismissToastOnError(NOTIFICATION_ACTIONS.GET_RECEIVED_NOTIFICATION, handleUserInvalidError);
 
   /* function which loads relevant information about donwtimes */
   const fetchDowntimeEvents = useCallback((fromDate: string, toDate: string | undefined) => {
@@ -704,6 +695,9 @@ const NotificationDetail: React.FC = () => {
                           timerF24={F24_DOWNLOAD_WAIT_TIME}
                           costDetailsAssistanceLink={NOTIFICATION_COST_DETAILS_ASSISTANCE_LINK}
                           costDetails={notification.notificationCostDetails}
+                          paymentTppUrlActionID={
+                            NOTIFICATION_ACTIONS.GET_RECEIVED_NOTIFICATION_PAYMENT_TPP_URL
+                          }
                         />
                       </ApiErrorWrapper>
                     </Paper>

@@ -1,10 +1,13 @@
-import React, { memo, useEffect, useState } from 'react';
+import React, { memo, useCallback, useEffect, useState } from 'react';
 
 import { Download } from '@mui/icons-material/';
 import { Box, Button, FormControl, RadioGroup, Stack, Typography } from '@mui/material';
 import { MIAlert } from '@pagopa/mui-italia';
 
+import { useDismissToastOnError } from '../../hooks';
 import { downloadDocument } from '../../hooks/useDownloadDocument';
+import { AppResponse } from '../../models';
+import { ServerResponseErrorCode } from '../../models/AppResponse';
 import { EventPaymentRecipientType } from '../../models/MixpanelEvents';
 import {
   NotificationCostDetails,
@@ -33,6 +36,7 @@ type Props = {
   costDetailsAssistanceLink: string;
   iun: string;
   costDetails?: NotificationCostDetails;
+  paymentTppUrlActionID?: string;
   getPaymentAttachmentAction: (
     name: PaymentAttachmentSName,
     attachmentIdx?: number
@@ -47,10 +51,15 @@ type Props = {
     retrievalId?: string,
     tppName?: string,
     amount?: number
-  ) => Promise<void> | void;
+  ) => void;
   handleTrackEvent?: (event: EventPaymentRecipientType, param?: object) => void;
   handleFetchPaymentsInfo: (payment: Array<PaymentDetails | NotificationDetailPayment>) => void;
 };
+
+type PaymentError = {
+  title?: string;
+  description: string;
+} | null;
 
 const NotificationPaymentRecipient: React.FC<Props> = ({
   payments,
@@ -60,6 +69,7 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
   costDetailsAssistanceLink,
   iun,
   costDetails,
+  paymentTppUrlActionID,
   getPaymentAttachmentAction,
   onPayClick,
   onPayTppClick,
@@ -74,8 +84,7 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
     totalElements: payments.pagoPaF24.length,
   });
   const [areOtherDowloading, setAreOtherDowloading] = useState(false);
-  const [errorOnPayment, setErrorOnPayment] = useState(false);
-  const [tppPaymentError, setTppPaymentError] = useState(false);
+  const [errorOnPayment, setErrorOnPayment] = useState<PaymentError>(null);
   const paginatedPayments = pagoPaF24.slice(
     paginationData.page * paginationData.size,
     (paginationData.page + 1) * paginationData.size
@@ -95,12 +104,12 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
     setSelectedPayment(
       pagoPaF24.find((item) => item.pagoPa?.noticeCode === radioSelection) ?? { pagoPa: null }
     );
-    setErrorOnPayment(false);
+    setErrorOnPayment(null);
   };
 
   const handleDeselectPayment = () => {
     setSelectedPayment({ pagoPa: null });
-    setErrorOnPayment(true);
+    setErrorOnPayment({ description: getErrorMessage() });
   };
 
   const downloadAttachment = (attachmentName: PaymentAttachmentSName) => {
@@ -151,20 +160,15 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
 
   const handleCheckPaymentSelected = (paymentType: 'default' | 'tpp') => {
     if (selectedPayment.pagoPa) {
-      setErrorOnPayment(false);
-      setTppPaymentError(false);
+      setErrorOnPayment(null);
       if (paymentType === 'tpp') {
-        const result = onPayTppClick?.(
+        onPayTppClick?.(
           selectedPayment?.pagoPa?.noticeCode,
           selectedPayment?.pagoPa?.creditorTaxId,
           paymentTpp?.retrievalId,
           paymentTpp?.pspDenomination,
           selectedPayment?.pagoPa?.amount
         );
-        result?.catch(() => {
-          setErrorOnPayment(true);
-          setTppPaymentError(true);
-        });
         return;
       }
       onPayClick(
@@ -173,7 +177,7 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
         selectedPayment.pagoPa.amount
       );
     } else {
-      setErrorOnPayment(true);
+      setErrorOnPayment({ description: getErrorMessage() });
     }
   };
 
@@ -196,6 +200,29 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
 
     return getLocalizedOrDefaultLabel('notifications', 'detail.payment.error-payment');
   };
+
+  const handleGetTppPaymentUrlError = useCallback((e: AppResponse) => {
+    const isRetrievalExpiredError =
+      e.errors?.[0]?.code ===
+      ServerResponseErrorCode.PN_EMD_INTEGRATION_RETRIEVAL_PAYLOAD_MISSING_OR_EXPIRED;
+
+    if (isRetrievalExpiredError) {
+      setErrorOnPayment({
+        title: getLocalizedOrDefaultLabel(
+          'notifications',
+          'detail.payment.tpp-expired-error-title'
+        ),
+        description: getLocalizedOrDefaultLabel(
+          'notifications',
+          'detail.payment.tpp-expired-error-description'
+        ),
+      });
+    }
+
+    return !isRetrievalExpiredError;
+  }, []);
+
+  useDismissToastOnError(paymentTppUrlActionID, handleGetTppPaymentUrlError);
 
   return (
     <Box display="flex" flexDirection="column" gap={2} data-testid="paymentInfoBox">
@@ -272,22 +299,8 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
             <MIAlert
               severity="error"
               data-testid="payment-error"
-              title={
-                tppPaymentError
-                  ? getLocalizedOrDefaultLabel(
-                      'notifications',
-                      'detail.payment.tpp-expired-error-title'
-                    )
-                  : undefined
-              }
-              description={
-                tppPaymentError
-                  ? getLocalizedOrDefaultLabel(
-                      'notifications',
-                      'detail.payment.tpp-expired-error-description'
-                    )
-                  : getErrorMessage()
-              }
+              title={errorOnPayment.title}
+              description={errorOnPayment.description}
             />
           )}
           {!allPaymentsIsPaid && (
@@ -350,7 +363,7 @@ type PaymentButtonsProps = Pick<
 > & {
   selectedPayment?: PaymentDetails | { pagoPa: null; f24?: null };
   areOtherDowloading: boolean;
-  errorOnPayment: boolean;
+  errorOnPayment: PaymentError;
   setAreOtherDowloading: (value: boolean) => void;
   downloadAttachment: (attachmentName: PaymentAttachmentSName) => void;
   handleTrackEventFn: (event: EventPaymentRecipientType, param?: object) => void;

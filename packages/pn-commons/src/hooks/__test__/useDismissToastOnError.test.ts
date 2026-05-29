@@ -1,9 +1,8 @@
 import { vi } from 'vitest';
 
-import { AppResponsePublisher } from '@pagopa-pn/pn-commons';
+import { AppResponse, AppResponsePublisher } from '@pagopa-pn/pn-commons';
 import { renderHook } from '@testing-library/react';
 
-import { ServerResponseErrorCode } from '../../utility/AppError/types';
 import { useDismissToastOnError } from '../useDismissToastOnError';
 
 describe('useDismissToastOnError', () => {
@@ -17,23 +16,23 @@ describe('useDismissToastOnError', () => {
 
   it('should subscribe to AppResponsePublisher.error on mount', () => {
     const actionId = 'test-action';
-    const errorCode = ServerResponseErrorCode.PN_MANDATE_NOTFOUND;
+    const handler = vi.fn<[AppResponse], boolean>().mockReturnValue(true);
 
-    renderHook(() => useDismissToastOnError(actionId, errorCode));
+    renderHook(() => useDismissToastOnError(actionId, handler));
 
     expect(subscribeSpy).toHaveBeenCalledTimes(1);
-    expect(subscribeSpy).toHaveBeenCalledWith(actionId, expect.any(Function));
+    expect(subscribeSpy).toHaveBeenCalledWith(actionId, handler);
   });
 
   it('should unsubscribe from AppResponsePublisher.error on unmount', () => {
     const actionId = 'test-action';
-    const errorCode = ServerResponseErrorCode.PN_MANDATE_NOTFOUND;
+    const handler = vi.fn<[AppResponse], boolean>().mockReturnValue(true);
 
-    const { unmount } = renderHook(() => useDismissToastOnError(actionId, errorCode));
+    const { unmount } = renderHook(() => useDismissToastOnError(actionId, handler));
 
     unmount();
 
     expect(unsubscribeSpy).toHaveBeenCalledTimes(1);
-    expect(unsubscribeSpy).toHaveBeenCalledWith(actionId, expect.any(Function));
+    expect(unsubscribeSpy).toHaveBeenCalledWith(actionId, handler);
   });
 });
