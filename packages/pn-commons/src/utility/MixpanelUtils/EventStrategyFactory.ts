@@ -51,6 +51,7 @@ export default abstract class EventStrategyFactory<
    * @public
    * @param {K} eventType
    * @param {P[K]} [data]
+   * @param {(RequestOptions | Callback)} [trackOptions]
    */
   public triggerEvent<K extends T>(
     eventType: K,
