@@ -68,7 +68,7 @@ const NuovaDelega = () => {
   const { DELEGATIONS_TO_PG_ENABLED } = getConfiguration();
 
   const handleSubmit = (values: NewDelegationFormProps) => {
-    void dispatch(createDelegation(values))
+    dispatch(createDelegation(values))
       .unwrap()
       .then(() => {
         PGEventStrategyFactory.triggerEvent(PGEventsType.SEND_PG_ADD_MANDATE_UX_SUCCESS);

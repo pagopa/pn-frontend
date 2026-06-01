@@ -89,7 +89,7 @@ const Notifiche = ({ isDelegatedPage = false }: Props) => {
       isDelegatedPage,
     };
 
-    void dispatch(getReceivedNotifications(params))
+    dispatch(getReceivedNotifications(params))
       .unwrap()
       .then((data) => {
         setPageReady(true);

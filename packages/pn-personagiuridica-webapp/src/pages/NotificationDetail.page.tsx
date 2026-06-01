@@ -385,7 +385,7 @@ const NotificationDetail = () => {
       startDate: fromDate,
       endDate: toDate,
     };
-    void dispatch(getDowntimeHistory(fetchParams))
+    dispatch(getDowntimeHistory(fetchParams))
       .unwrap()
       .then(() => {
         setDowntimesReady(true);
