@@ -1,13 +1,19 @@
 import MockAdapter from 'axios-mock-adapter';
-import { MockInstance, vi } from 'vitest';
+import { vi } from 'vitest';
 
 import { ResponseEventDispatcher } from '@pagopa-pn/pn-commons';
 
 import { digitalCourtesyAddresses } from '../../../../__mocks__/Contacts.mock';
-import { fireEvent, render, screen, waitFor } from '../../../../__test__/test-utils';
+import {
+  PFTriggerEventSpy,
+  fireEvent,
+  render,
+  screen,
+  waitFor,
+} from '../../../../__test__/test-utils';
 import { apiClient } from '../../../../api/apiClients';
-import { ChannelType } from '../../../../models/contacts';
 import { PFEventsType } from '../../../../models/PFEventsType';
+import { ChannelType } from '../../../../models/contacts';
 import PFEventStrategyFactory from '../../../../utility/MixpanelUtils/PFEventStrategyFactory';
 import { internationalPhonePrefix } from '../../../../utility/contacts.utility';
 import SmsContactItem from '../../SmsContactItem';
@@ -19,7 +25,7 @@ const defaultAddress = digitalCourtesyAddresses.find(
 )!;
 
 describe('SmsContactItem - Mixpanel events', () => {
-  let triggerEventSpy: MockInstance<[PFEventsType, unknown?], void>;
+  let triggerEventSpy: PFTriggerEventSpy;
   let mock: MockAdapter;
 
   beforeAll(() => {
@@ -96,7 +102,10 @@ describe('SmsContactItem - Mixpanel events', () => {
       .reply(204);
     const result = await submitSms();
     await fillCodeDialog(result);
-    expect(triggerEventSpy).toHaveBeenCalledWith(PFEventsType.SEND_ADD_SMS_UX_CONVERSION, 'default');
+    expect(triggerEventSpy).toHaveBeenCalledWith(
+      PFEventsType.SEND_ADD_SMS_UX_CONVERSION,
+      'default'
+    );
   });
 
   it('fires SEND_ADD_SMS_UX_SUCCESS after the SMS is verified', async () => {
@@ -116,7 +125,10 @@ describe('SmsContactItem - Mixpanel events', () => {
     await waitFor(() => {
       expect(triggerEventSpy).toHaveBeenCalledWith(
         PFEventsType.SEND_ADD_SMS_UX_SUCCESS,
-        expect.objectContaining({ senderId: expect.any(String), fromSercqSend: expect.any(Boolean) })
+        expect.objectContaining({
+          senderId: expect.any(String),
+          fromSercqSend: expect.any(Boolean),
+        })
       );
     });
   });
@@ -157,11 +169,17 @@ describe('SmsContactItem - Mixpanel events', () => {
     fireEvent.click(screen.getByRole('button', { name: 'button.disable' }));
     expect(triggerEventSpy).toHaveBeenCalledWith(
       PFEventsType.SEND_REMOVE_SMS_START,
-      expect.objectContaining({ legal_addresses: expect.any(Array), event_type: expect.any(String) })
+      expect.objectContaining({
+        legal_addresses: expect.any(Array),
+        event_type: expect.any(String),
+      })
     );
     expect(triggerEventSpy).toHaveBeenCalledWith(
       PFEventsType.SEND_REMOVE_SMS_POP_UP,
-      expect.objectContaining({ legal_addresses: expect.any(Array), event_type: expect.any(String) })
+      expect.objectContaining({
+        legal_addresses: expect.any(Array),
+        event_type: expect.any(String),
+      })
     );
   });
 
@@ -175,7 +193,10 @@ describe('SmsContactItem - Mixpanel events', () => {
     fireEvent.click(dialog.querySelectorAll('button')[0]);
     expect(triggerEventSpy).toHaveBeenCalledWith(
       PFEventsType.SEND_REMOVE_SMS_POP_UP_CANCEL,
-      expect.objectContaining({ legal_addresses: expect.any(Array), event_type: expect.any(String) })
+      expect.objectContaining({
+        legal_addresses: expect.any(Array),
+        event_type: expect.any(String),
+      })
     );
   });
 
@@ -194,7 +215,10 @@ describe('SmsContactItem - Mixpanel events', () => {
     await waitFor(() => {
       expect(triggerEventSpy).toHaveBeenCalledWith(
         PFEventsType.SEND_REMOVE_SMS_POP_UP_UX_SUCCESS,
-        expect.objectContaining({ legal_addresses: expect.any(Array), event_type: expect.any(String) })
+        expect.objectContaining({
+          legal_addresses: expect.any(Array),
+          event_type: expect.any(String),
+        })
       );
     });
   });

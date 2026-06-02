@@ -1,5 +1,5 @@
 import MockAdapter from 'axios-mock-adapter';
-import { MockInstance, vi } from 'vitest';
+import { vi } from 'vitest';
 
 import { EventAction, SERCQ_SEND_VALUE } from '@pagopa-pn/pn-commons';
 
@@ -7,7 +7,13 @@ import {
   acceptTosSercqSendBodyMock,
   sercqSendTosConsentMock,
 } from '../../../../../__mocks__/Consents.mock';
-import { act, fireEvent, render, waitFor } from '../../../../../__test__/test-utils';
+import {
+  PFTriggerEventSpy,
+  act,
+  fireEvent,
+  render,
+  waitFor,
+} from '../../../../../__test__/test-utils';
 import { apiClient } from '../../../../../api/apiClients';
 import { OnboardingAvailableFlows, OnboardingScreen } from '../../../../../models/Onboarding';
 import { PFEventsType } from '../../../../../models/PFEventsType';
@@ -16,7 +22,7 @@ import PFEventStrategyFactory from '../../../../../utility/MixpanelUtils/PFEvent
 import DigitalDomicileWizard from '../../DigitalDomicileWizard';
 
 describe('DigitalDomicileWizard - Mixpanel events', () => {
-  let triggerEventSpy: MockInstance<[PFEventsType, unknown?], void>;
+  let triggerEventSpy: PFTriggerEventSpy;
   let mock: MockAdapter;
 
   const emptyContactsState = { contactsState: { digitalAddresses: [] } };

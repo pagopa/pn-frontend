@@ -1,12 +1,12 @@
-import { MockInstance, vi } from 'vitest';
+import { vi } from 'vitest';
 
-import { render } from '../../../../__test__/test-utils';
+import { PFLoginTriggerEventSpy, render } from '../../../../__test__/test-utils';
 import { PFLoginEventsType } from '../../../../models/PFLoginEventsType';
 import PFLoginEventStrategyFactory from '../../../../utility/MixpanelUtils/PFLoginEventStrategyFactory';
 import LoginError from '../../LoginError';
 
 describe('LoginError page - Mixpanel events', () => {
-  let triggerEventSpy: MockInstance<[PFLoginEventsType, unknown?], void>;
+  let triggerEventSpy: PFLoginTriggerEventSpy;
 
   beforeEach(() => {
     sessionStorage.setItem('IDP', 'test-idp');

@@ -1,13 +1,13 @@
-import { MockInstance, vi } from 'vitest';
+import { vi } from 'vitest';
 
 import { userResponse } from '../../../__mocks__/Auth.mock';
-import { render } from '../../../__test__/test-utils';
+import { PFTriggerEventSpy, render } from '../../../__test__/test-utils';
 import { PFEventsType } from '../../../models/PFEventsType';
 import PFEventStrategyFactory from '../../../utility/MixpanelUtils/PFEventStrategyFactory';
 import Profile from '../../Profile.page';
 
 describe('Profile.page - Mixpanel events', () => {
-  let triggerEventSpy: MockInstance<[PFEventsType, unknown?], void>;
+  let triggerEventSpy: PFTriggerEventSpy;
 
   beforeEach(() => {
     triggerEventSpy = vi.spyOn(PFEventStrategyFactory, 'triggerEvent');

@@ -1,16 +1,41 @@
 // leave default import for mixpanel, using named once it won't work
 import { isEmpty, isNil } from 'lodash-es';
-import mixpanel from 'mixpanel-browser';
+import mixpanel, { Callback, RequestOptions } from 'mixpanel-browser';
 
 import { AnyAction, Dispatch, PayloadAction } from '@reduxjs/toolkit';
 
 import { ActionMeta, EventPropertyType } from '../models/MixpanelEvents';
 import EventStrategyFactory from '../utility/MixpanelUtils/EventStrategyFactory';
 
-export type TrackEventOptions = {
-  callback?: () => void;
-  sendImmediately?: boolean;
-};
+export type TrackEventOptions =
+  | Callback
+  | (RequestOptions & {
+      callback?: () => void;
+      sendImmediately?: boolean;
+    });
+
+function trackMixpanelEvent(
+  event_name: string,
+  properties?: any,
+  options?: TrackEventOptions
+): void {
+  if (typeof options === 'function') {
+    mixpanel.track(event_name, properties, options);
+    return;
+  }
+  const { callback, sendImmediately, ...requestOptions } = options ?? {};
+
+  mixpanel.track(
+    event_name,
+    properties,
+    sendImmediately
+      ? { ...requestOptions, send_immediately: true }
+      : isEmpty(requestOptions)
+      ? undefined
+      : requestOptions,
+    callback
+  );
+}
 
 /**
  * Function that calls the mixpanel tracking method based on the property type
@@ -42,12 +67,7 @@ function callMixpanelTrackingMethod(
       break;
     case EventPropertyType.TRACK:
     default:
-      mixpanel.track(
-        event_name,
-        properties,
-        options?.sendImmediately ? { send_immediately: true } : undefined,
-        options?.callback
-      );
+      trackMixpanelEvent(event_name, properties, options);
   }
 }
 
@@ -67,14 +87,19 @@ export function trackEvent(
   options?: TrackEventOptions
 ): void {
   if (nodeEnv === 'test') {
-    options?.callback?.();
+    if (typeof options === 'function') {
+      options(0);
+    } else {
+      options?.callback?.();
+    }
     return;
   }
 
   try {
     callMixpanelTrackingMethod(propertyType, event_name, properties, options);
   } catch {
-    options?.callback?.();
+    // eslint-disable-next-line no-console
+    console.log(event_name, properties, options);
   }
 }
 

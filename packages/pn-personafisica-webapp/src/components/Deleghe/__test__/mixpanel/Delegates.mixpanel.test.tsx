@@ -1,13 +1,13 @@
-import { MockInstance, vi } from 'vitest';
+import { vi } from 'vitest';
 
 import { mandatesByDelegator } from '../../../../__mocks__/Delegations.mock';
-import { fireEvent, render } from '../../../../__test__/test-utils';
+import { PFTriggerEventSpy, fireEvent, render } from '../../../../__test__/test-utils';
 import { PFEventsType } from '../../../../models/PFEventsType';
 import PFEventStrategyFactory from '../../../../utility/MixpanelUtils/PFEventStrategyFactory';
 import Delegates from '../../Delegates';
 
 describe('Delegates component - Mixpanel events', () => {
-  let triggerEventSpy: MockInstance<[PFEventsType, unknown?], void>;
+  let triggerEventSpy: PFTriggerEventSpy;
 
   beforeEach(() => {
     triggerEventSpy = vi.spyOn(PFEventStrategyFactory, 'triggerEvent');

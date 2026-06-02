@@ -72,7 +72,12 @@ export default abstract class EventStrategyFactory<
       }
     } catch (error) {
       console.error('MIXPANEL - Tracking error: ', eventType, error);
-      options?.callback?.();
+
+      if (typeof options === 'function') {
+        options(0);
+      } else {
+        options?.callback?.();
+      }
     }
   }
 }

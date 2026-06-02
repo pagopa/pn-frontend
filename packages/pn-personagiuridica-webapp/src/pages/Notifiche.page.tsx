@@ -138,26 +138,29 @@ const Notifiche = ({ isDelegatedPage = false }: Props) => {
       isDelegatedPage,
     };
 
-    void dispatch(getReceivedNotifications(params))
+    dispatch(getReceivedNotifications(params))
       .unwrap()
       .then((data) => {
         setPageReady(true);
 
         if (!isDelegatedPage) {
           registerNotificationSectionSuperProperties(data.resultsPage.length);
+          PGEventStrategyFactory.triggerEvent(PGEventsType.SEND_PG_YOUR_NOTIFICATION, {
+            notifications: data.resultsPage,
+            pageNumber: pagination.page,
+            domicileBannerType: domicileBannerTypeRef.current,
+          });
+
+          return;
         }
 
-        const event_type = isDelegatedPage
-          ? PGEventsType.SEND_PG_NOTIFICATION_DELEGATED
-          : PGEventsType.SEND_PG_YOUR_NOTIFICATION;
-
-        const event_payload = mapNotificationListToEventPayload(
-          data.resultsPage,
-          pagination.page,
-          isDelegatedPage ? undefined : domicileBannerTypeRef.current
+        PGEventStrategyFactory.triggerEvent(
+          PGEventsType.SEND_PG_NOTIFICATION_DELEGATED,
+          mapNotificationListToEventPayload({
+            notifications: data.resultsPage,
+            pageNumber: pagination.page,
+          })
         );
-
-        PGEventStrategyFactory.triggerEvent(event_type, event_payload);
       })
       .catch(() => setPageReady(true));
   }, [

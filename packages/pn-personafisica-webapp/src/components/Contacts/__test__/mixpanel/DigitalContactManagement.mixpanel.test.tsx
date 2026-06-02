@@ -1,13 +1,13 @@
-import { MockInstance, vi } from 'vitest';
+import { vi } from 'vitest';
 
 import { digitalAddressesSercq } from '../../../../__mocks__/Contacts.mock';
-import { render } from '../../../../__test__/test-utils';
+import { PFTriggerEventSpy, render } from '../../../../__test__/test-utils';
 import { PFEventsType } from '../../../../models/PFEventsType';
 import PFEventStrategyFactory from '../../../../utility/MixpanelUtils/PFEventStrategyFactory';
 import DigitalContactManagement from '../../DigitalContactManagement';
 
 describe('DigitalContactManagement - Mixpanel events', () => {
-  let triggerEventSpy: MockInstance<[PFEventsType, unknown?], void>;
+  let triggerEventSpy: PFTriggerEventSpy;
 
   beforeEach(() => {
     triggerEventSpy = vi.spyOn(PFEventStrategyFactory, 'triggerEvent');
@@ -23,7 +23,10 @@ describe('DigitalContactManagement - Mixpanel events', () => {
     });
     expect(triggerEventSpy).toHaveBeenCalledWith(
       PFEventsType.SEND_DIGITAL_DOMICILE_MANAGEMENT,
-      expect.objectContaining({ legal_addresses: expect.any(Array), event_type: expect.any(String) })
+      expect.objectContaining({
+        legal_addresses: expect.any(Array),
+        event_type: expect.any(String),
+      })
     );
   });
 

@@ -1,14 +1,14 @@
 import MockAdapter from 'axios-mock-adapter';
-import { MockInstance, vi } from 'vitest';
+import { vi } from 'vitest';
 
-import { act, render } from '../../../__test__/test-utils';
+import { PFTriggerEventSpy, act, render } from '../../../__test__/test-utils';
 import { apiClient } from '../../../api/apiClients';
 import { PFEventsType } from '../../../models/PFEventsType';
 import PFEventStrategyFactory from '../../../utility/MixpanelUtils/PFEventStrategyFactory';
 import Contacts from '../../Contacts.page';
 
 describe('Contacts.page - Mixpanel events', () => {
-  let triggerEventSpy: MockInstance<[PFEventsType, unknown?], void>;
+  let triggerEventSpy: PFTriggerEventSpy;
   let mock: MockAdapter;
 
   beforeAll(() => {

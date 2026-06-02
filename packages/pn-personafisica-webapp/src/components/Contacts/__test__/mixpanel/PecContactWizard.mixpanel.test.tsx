@@ -1,7 +1,7 @@
 import MockAdapter from 'axios-mock-adapter';
-import { MockInstance, vi } from 'vitest';
+import { vi } from 'vitest';
 
-import { fireEvent, render, waitFor } from '../../../../__test__/test-utils';
+import { PFTriggerEventSpy, fireEvent, render, waitFor } from '../../../../__test__/test-utils';
 import { apiClient } from '../../../../api/apiClients';
 import { PFEventsType } from '../../../../models/PFEventsType';
 import PFEventStrategyFactory from '../../../../utility/MixpanelUtils/PFEventStrategyFactory';
@@ -11,7 +11,7 @@ import { fillCodeDialog } from '../test-utils';
 const VALID_PEC = 'test@pec.it';
 
 describe('PecContactWizard - Mixpanel events', () => {
-  let triggerEventSpy: MockInstance<[PFEventsType, unknown?], void>;
+  let triggerEventSpy: PFTriggerEventSpy;
   let mock: MockAdapter;
   const setShowPecWizard = vi.fn();
 
@@ -50,9 +50,7 @@ describe('PecContactWizard - Mixpanel events', () => {
   it('fires SEND_ADD_SERCQ_SEND_PEC_TOS_ACCEPTED when the disclaimer is checked', () => {
     const { container } = render(<PecContactWizard setShowPecWizard={setShowPecWizard} />);
     fireEvent.click(container.querySelector('[name="disclaimer"]')!);
-    expect(triggerEventSpy).toHaveBeenCalledWith(
-      PFEventsType.SEND_ADD_SERCQ_SEND_PEC_TOS_ACCEPTED
-    );
+    expect(triggerEventSpy).toHaveBeenCalledWith(PFEventsType.SEND_ADD_SERCQ_SEND_PEC_TOS_ACCEPTED);
   });
 
   it('fires SEND_ADD_SERCQ_SEND_PEC_TOS_DISMISSED when the disclaimer is unchecked', () => {
@@ -72,9 +70,7 @@ describe('PecContactWizard - Mixpanel events', () => {
     fireEvent.change(container.querySelector('[name="pec"]')!, {
       target: { value: 'invalid-pec' },
     });
-    await waitFor(() =>
-      expect(container.querySelector('[name="pec"]')).toHaveValue('invalid-pec')
-    );
+    await waitFor(() => expect(container.querySelector('[name="pec"]')).toHaveValue('invalid-pec'));
     fireEvent.click(getByTestId('next-button'));
     await waitFor(() => {
       expect(triggerEventSpy).toHaveBeenCalledWith(
@@ -91,9 +87,7 @@ describe('PecContactWizard - Mixpanel events', () => {
     fireEvent.change(container.querySelector('[name="pec"]')!, {
       target: { value: VALID_PEC },
     });
-    await waitFor(() =>
-      expect(container.querySelector('[name="pec"]')).toHaveValue(VALID_PEC)
-    );
+    await waitFor(() => expect(container.querySelector('[name="pec"]')).toHaveValue(VALID_PEC));
     fireEvent.click(getByTestId('next-button'));
     await waitFor(() => {
       expect(triggerEventSpy).toHaveBeenCalledWith(
@@ -101,7 +95,10 @@ describe('PecContactWizard - Mixpanel events', () => {
       );
       expect(triggerEventSpy).toHaveBeenCalledWith(
         PFEventsType.SEND_ADD_SERCQ_SEND_PEC_START_ACTIVATION,
-        expect.objectContaining({ pec_validation: expect.any(String), tos_validation: expect.any(String) })
+        expect.objectContaining({
+          pec_validation: expect.any(String),
+          tos_validation: expect.any(String),
+        })
       );
     });
   });
@@ -111,7 +108,10 @@ describe('PecContactWizard - Mixpanel events', () => {
       .onPost('/bff/v1/addresses/LEGAL/default/PEC', { value: VALID_PEC })
       .reply(200, { result: 'CODE_VERIFICATION_REQUIRED' });
     mock
-      .onPost('/bff/v1/addresses/LEGAL/default/PEC', { value: VALID_PEC, verificationCode: '01234' })
+      .onPost('/bff/v1/addresses/LEGAL/default/PEC', {
+        value: VALID_PEC,
+        verificationCode: '01234',
+      })
       .reply(200, { result: 'PEC_VALIDATION_REQUIRED' });
 
     const result = render(<PecContactWizard setShowPecWizard={setShowPecWizard} />);
@@ -152,9 +152,7 @@ describe('PecContactWizard - Mixpanel events', () => {
     await waitFor(() => expect(getByRole('dialog')).toBeInTheDocument());
     fireEvent.click(getByRole('button', { name: 'button.annulla' }));
 
-    expect(triggerEventSpy).toHaveBeenCalledWith(
-      PFEventsType.SEND_ADD_SERCQ_SEND_PEC_OTP_BACK
-    );
+    expect(triggerEventSpy).toHaveBeenCalledWith(PFEventsType.SEND_ADD_SERCQ_SEND_PEC_OTP_BACK);
   });
 
   it('fires SEND_ADD_SERCQ_SEND_PEC_UX_SUCCESS and SEND_ADD_SERCQ_SEND_PEC_THANK_YOU_PAGE after successful activation', async () => {
@@ -162,7 +160,10 @@ describe('PecContactWizard - Mixpanel events', () => {
       .onPost('/bff/v1/addresses/LEGAL/default/PEC', { value: VALID_PEC })
       .reply(200, { result: 'CODE_VERIFICATION_REQUIRED' });
     mock
-      .onPost('/bff/v1/addresses/LEGAL/default/PEC', { value: VALID_PEC, verificationCode: '01234' })
+      .onPost('/bff/v1/addresses/LEGAL/default/PEC', {
+        value: VALID_PEC,
+        verificationCode: '01234',
+      })
       .reply(200, { result: 'PEC_VALIDATION_REQUIRED' });
 
     const result = render(<PecContactWizard setShowPecWizard={setShowPecWizard} />);
@@ -178,7 +179,10 @@ describe('PecContactWizard - Mixpanel events', () => {
     await waitFor(() => {
       expect(triggerEventSpy).toHaveBeenCalledWith(
         PFEventsType.SEND_ADD_SERCQ_SEND_PEC_UX_SUCCESS,
-        expect.objectContaining({ event_type: expect.any(String), other_contact: expect.anything() })
+        expect.objectContaining({
+          event_type: expect.any(String),
+          other_contact: expect.anything(),
+        })
       );
       expect(triggerEventSpy).toHaveBeenCalledWith(
         PFEventsType.SEND_ADD_SERCQ_SEND_PEC_THANK_YOU_PAGE,

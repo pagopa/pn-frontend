@@ -17,11 +17,11 @@ import {
 
 describe('notificationPayloadMappers', () => {
   it('should map notification list data to event payload', () => {
-    const payload = mapNotificationListToEventPayload(
-      notificationsDTO.resultsPage,
-      0,
-      'SERCQ_SEND'
-    );
+    const payload = mapNotificationListToEventPayload({
+      notifications: notificationsDTO.resultsPage,
+      pageNumber: 0,
+      domicileBannerType: 'SERCQ_SEND',
+    });
 
     expect(payload).toStrictEqual({
       page_number: 0,

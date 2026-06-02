@@ -1,14 +1,6 @@
 import { isObject } from 'lodash-es';
 
-import type {
-  Downtime,
-  EventNotificationSource,
-  LegalFactId,
-  Notification,
-  NotificationDetailOtherDocument,
-  NotificationStatusHistory,
-  PaymentsData,
-} from '@pagopa-pn/pn-commons';
+import type { Downtime, LegalFactId, NotificationDetailOtherDocument } from '@pagopa-pn/pn-commons';
 import {
   EventDowntimeType,
   NotificationDocumentType,
@@ -16,13 +8,15 @@ import {
   getElapsedTime,
   isNewNotification,
 } from '@pagopa-pn/pn-commons';
-import {
-  EventDeliveryFlowType,
-  EventDeliveryModeType,
-} from '@pagopa-pn/pn-commons/src/models/MixpanelEvents';
 
-import type { PGEventPayloads } from '../../../models/PGEventPayloads';
-import type { PGEventsType } from '../../../models/PGEventsType';
+import type {
+  PGDocumentDownloadPayload,
+  PGNotificationDetailEventData,
+  PGNotificationDetailPayload,
+  PGNotificationsListEventData,
+  PGNotificationsListPayload,
+  PGStartPaymentPayload,
+} from '../../../models/PGEventPayloads';
 
 const getDisserviceStatus = (downtimeEvents: Array<Downtime>): EventDowntimeType => {
   if (downtimeEvents.length === 0) {
@@ -44,17 +38,7 @@ export const mapNotificationDetailToEventPayload = ({
   source,
   flow,
   deliveryMode,
-}: {
-  downtimeEvents: Array<Downtime>;
-  mandateId: string | undefined;
-  notificationStatus: NotificationStatus;
-  checkIfUserHasPayments: boolean;
-  userPayments: PaymentsData;
-  notificationStatusHistory: Array<NotificationStatusHistory>;
-  source: EventNotificationSource;
-  flow: EventDeliveryFlowType;
-  deliveryMode: EventDeliveryModeType;
-}): PGEventPayloads[PGEventsType.SEND_PG_NOTIFICATION_DETAIL] => {
+}: PGNotificationDetailEventData): PGNotificationDetailPayload => {
   const hasF24 =
     userPayments.f24Only.length > 0 || userPayments.pagoPaF24.some((payment) => payment.f24);
 
@@ -83,11 +67,11 @@ export const mapNotificationDetailToEventPayload = ({
   };
 };
 
-export const mapNotificationListToEventPayload = (
-  notifications: Array<Notification>,
-  pageNumber: number,
-  domicileBannerType?: string
-): PGEventPayloads[PGEventsType.SEND_PG_YOUR_NOTIFICATION] => ({
+export const mapNotificationListToEventPayload = ({
+  notifications,
+  pageNumber,
+  domicileBannerType,
+}: PGNotificationsListEventData): PGNotificationsListPayload => ({
   page_number: pageNumber,
   total_count: notifications.length,
   unread_count: notifications.filter((notification) =>
@@ -116,7 +100,7 @@ export const mapNotificationListToEventPayload = (
 
 export const mapNotificationAttachmentToDocumentDownloadPayload = (
   document: string | NotificationDetailOtherDocument | undefined
-): PGEventPayloads[PGEventsType.SEND_PG_NOTIFICATION_DOWNLOAD_ATTACHMENT] => ({
+): PGDocumentDownloadPayload => ({
   document_type: isObject(document)
     ? NotificationDocumentType.AAR
     : NotificationDocumentType.ATTACHMENT,
@@ -124,11 +108,10 @@ export const mapNotificationAttachmentToDocumentDownloadPayload = (
 
 export const mapTimelineLegalFactToDocumentDownloadPayload = (
   legalFact: LegalFactId
-): PGEventPayloads[PGEventsType.SEND_PG_TIMELINE_DOWNLOAD] => ({
+): PGDocumentDownloadPayload => ({
   document_type: legalFact.category,
 });
 
-export const mapStartPaymentToEventPayload =
-  (): PGEventPayloads[PGEventsType.SEND_PG_START_PAYMENT] => ({
-    psp: 'pagopa',
-  });
+export const mapStartPaymentToEventPayload = (): PGStartPaymentPayload => ({
+  psp: 'pagopa',
+});

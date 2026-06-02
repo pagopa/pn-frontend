@@ -68,7 +68,6 @@ import { getConfiguration } from '../services/configuration.service';
 import PGEventStrategyFactory from '../utility/MixpanelUtils/PGEventStrategyFactory';
 import {
   mapNotificationAttachmentToDocumentDownloadPayload,
-  mapNotificationDetailToEventPayload,
   mapStartPaymentToEventPayload,
   mapTimelineLegalFactToDocumentDownloadPayload,
 } from '../utility/MixpanelUtils/mappers/notificationPayloadMappers';
@@ -440,7 +439,7 @@ const NotificationDetail = () => {
       startDate: fromDate,
       endDate: toDate,
     };
-    void dispatch(getDowntimeHistory(fetchParams))
+    dispatch(getDowntimeHistory(fetchParams))
       .unwrap()
       .then(() => {
         setDowntimesReady(true);
@@ -455,20 +454,17 @@ const NotificationDetail = () => {
 
   useEffect(() => {
     if (downtimesReady && pageReady && !hasNotificationReceivedApiError) {
-      PGEventStrategyFactory.triggerEvent(
-        PGEventsType.SEND_PG_NOTIFICATION_DETAIL,
-        mapNotificationDetailToEventPayload({
-          downtimeEvents,
-          mandateId,
-          notificationStatus: notification.notificationStatus,
-          checkIfUserHasPayments,
-          userPayments,
-          notificationStatusHistory: notification.notificationStatusHistory,
-          source: getNotificationSource(),
-          flow: getFlowType(),
-          deliveryMode: getDeliveryMode(),
-        })
-      );
+      PGEventStrategyFactory.triggerEvent(PGEventsType.SEND_PG_NOTIFICATION_DETAIL, {
+        downtimeEvents,
+        mandateId,
+        notificationStatus: notification.notificationStatus,
+        checkIfUserHasPayments,
+        userPayments,
+        notificationStatusHistory: notification.notificationStatusHistory,
+        source: getNotificationSource(),
+        flow: getFlowType(),
+        deliveryMode: getDeliveryMode(),
+      });
     }
   }, [
     downtimesReady,

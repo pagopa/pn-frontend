@@ -1,14 +1,14 @@
-import { MockInstance, vi } from 'vitest';
+import { vi } from 'vitest';
 
 import { DeliveryOutcomeType, EventAction } from '@pagopa-pn/pn-commons';
 
-import { fireEvent, render } from '../../../../__test__/test-utils';
+import { PFTriggerEventSpy, fireEvent, render } from '../../../../__test__/test-utils';
 import { PFEventsType } from '../../../../models/PFEventsType';
 import PFEventStrategyFactory from '../../../../utility/MixpanelUtils/PFEventStrategyFactory';
 import { NotificationCostBanner } from '../../NotificationCostBanner';
 
 describe('NotificationCostBanner component - Mixpanel events', () => {
-  let triggerEventSpy: MockInstance<[PFEventsType, unknown?], void>;
+  let triggerEventSpy: PFTriggerEventSpy;
 
   beforeEach(() => {
     triggerEventSpy = vi.spyOn(PFEventStrategyFactory, 'triggerEvent');
@@ -30,10 +30,9 @@ describe('NotificationCostBanner component - Mixpanel events', () => {
 
   it('fires SEND_TAP_BANNER when CTA is clicked', () => {
     const deliveryOutcome = { type: DeliveryOutcomeType.ANALOG } as any;
-    const { getByText } = render(
-      <NotificationCostBanner deliveryOutcome={deliveryOutcome} />,
-      { preloadedState: { contactsState: { digitalAddresses: [] } } }
-    );
+    const { getByText } = render(<NotificationCostBanner deliveryOutcome={deliveryOutcome} />, {
+      preloadedState: { contactsState: { digitalAddresses: [] } },
+    });
     fireEvent.click(getByText('notification-cost-banner.enable-sercq.cta'));
     expect(triggerEventSpy).toHaveBeenCalledWith(
       PFEventsType.SEND_TAP_BANNER,

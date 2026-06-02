@@ -1,12 +1,12 @@
 import MockAdapter from 'axios-mock-adapter';
-import { MockInstance, vi } from 'vitest';
+import { vi } from 'vitest';
 
 import { getById } from '@pagopa-pn/pn-commons/src/test-utils';
 
-import { fireEvent, render, waitFor } from '../../../../__test__/test-utils';
+import { PFTriggerEventSpy, fireEvent, render, waitFor } from '../../../../__test__/test-utils';
 import { apiClient } from '../../../../api/apiClients';
-import { AddressType, ChannelType } from '../../../../models/contacts';
 import { PFEventsType } from '../../../../models/PFEventsType';
+import { AddressType, ChannelType } from '../../../../models/contacts';
 import PFEventStrategyFactory from '../../../../utility/MixpanelUtils/PFEventStrategyFactory';
 import SercqAddSpecialEmail from '../../SercqAddSpecialEmail';
 import { fillCodeDialog } from '../test-utils';
@@ -21,7 +21,7 @@ const existingEmail = [
 ];
 
 describe('SercqAddSpecialEmail - Mixpanel events', () => {
-  let triggerEventSpy: MockInstance<[PFEventsType, unknown?], void>;
+  let triggerEventSpy: PFTriggerEventSpy;
   let mock: MockAdapter;
 
   beforeAll(() => {
@@ -151,9 +151,7 @@ describe('SercqAddSpecialEmail - Mixpanel events', () => {
     });
     fireEvent.click(getById(container, 'modifyContact-default_email'));
     fireEvent.change(getById(container, 'default_email'), { target: { value: 'changed@mail.it' } });
-    await waitFor(() =>
-      expect(getById(container, 'default_email')).toHaveValue('changed@mail.it')
-    );
+    await waitFor(() => expect(getById(container, 'default_email')).toHaveValue('changed@mail.it'));
     fireEvent.click(getById(container, 'saveContact-default_email'));
 
     await waitFor(() => {
@@ -180,9 +178,7 @@ describe('SercqAddSpecialEmail - Mixpanel events', () => {
     const { container } = result;
     fireEvent.click(getById(container, 'modifyContact-default_email'));
     fireEvent.change(getById(container, 'default_email'), { target: { value: 'changed@mail.it' } });
-    await waitFor(() =>
-      expect(getById(container, 'default_email')).toHaveValue('changed@mail.it')
-    );
+    await waitFor(() => expect(getById(container, 'default_email')).toHaveValue('changed@mail.it'));
     fireEvent.click(getById(container, 'saveContact-default_email'));
 
     await waitFor(() => {
@@ -210,9 +206,7 @@ describe('SercqAddSpecialEmail - Mixpanel events', () => {
     });
     fireEvent.click(getById(container, 'modifyContact-default_email'));
     fireEvent.change(getById(container, 'default_email'), { target: { value: 'changed@mail.it' } });
-    await waitFor(() =>
-      expect(getById(container, 'default_email')).toHaveValue('changed@mail.it')
-    );
+    await waitFor(() => expect(getById(container, 'default_email')).toHaveValue('changed@mail.it'));
     fireEvent.click(getById(container, 'saveContact-default_email'));
 
     await waitFor(() => expect(getByRole('dialog')).toBeInTheDocument());
