@@ -66,11 +66,6 @@ import { resetState } from '../redux/notification/reducers';
 import { RootState } from '../redux/store';
 import { getConfiguration } from '../services/configuration.service';
 import PGEventStrategyFactory from '../utility/MixpanelUtils/PGEventStrategyFactory';
-import {
-  mapNotificationAttachmentToDocumentDownloadPayload,
-  mapStartPaymentToEventPayload,
-  mapTimelineLegalFactToDocumentDownloadPayload,
-} from '../utility/MixpanelUtils/mappers/notificationPayloadMappers';
 
 // state for the invocations to this component
 // (to include in navigation or Link to the route/s arriving to it)
@@ -250,10 +245,9 @@ const NotificationDetail = () => {
       return;
     }
 
-    PGEventStrategyFactory.triggerEvent(
-      PGEventsType.SEND_PG_NOTIFICATION_DOWNLOAD_ATTACHMENT,
-      mapNotificationAttachmentToDocumentDownloadPayload(document)
-    );
+    PGEventStrategyFactory.triggerEvent(PGEventsType.SEND_PG_NOTIFICATION_DOWNLOAD_ATTACHMENT, {
+      document,
+    });
 
     if (isObject(document)) {
       // AAR case
@@ -289,10 +283,7 @@ const NotificationDetail = () => {
       return;
     }
 
-    PGEventStrategyFactory.triggerEvent(
-      PGEventsType.SEND_PG_TIMELINE_DOWNLOAD,
-      mapTimelineLegalFactToDocumentDownloadPayload(legalFact)
-    );
+    PGEventStrategyFactory.triggerEvent(PGEventsType.SEND_PG_TIMELINE_DOWNLOAD, { legalFact });
 
     if (legalFact.category !== 'AAR') {
       // Legal fact case
@@ -335,10 +326,7 @@ const NotificationDetail = () => {
 
   const onPayClick = (noticeCode?: string, creditorTaxId?: string, amount?: number) => {
     if (noticeCode && creditorTaxId && amount && notification.senderDenomination) {
-      PGEventStrategyFactory.triggerEvent(
-        PGEventsType.SEND_PG_START_PAYMENT,
-        mapStartPaymentToEventPayload()
-      );
+      PGEventStrategyFactory.triggerEvent(PGEventsType.SEND_PG_START_PAYMENT);
 
       dispatch(
         getReceivedNotificationPaymentUrl({

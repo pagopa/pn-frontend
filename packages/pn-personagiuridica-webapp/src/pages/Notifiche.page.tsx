@@ -30,9 +30,6 @@ import { setNotificationFilters, setPagination, setSorting } from '../redux/dash
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { RootState } from '../redux/store';
 import PGEventStrategyFactory from '../utility/MixpanelUtils/PGEventStrategyFactory';
-import { mapDigitalDomicileToType } from '../utility/MixpanelUtils/mappers/contactPayloadMappers';
-import { mapNotificationListToEventPayload } from '../utility/MixpanelUtils/mappers/notificationPayloadMappers';
-import { mapBooleanToYesNo } from '../utility/MixpanelUtils/mappers/superPropertyMappers';
 
 type Props = {
   isDelegatedPage?: boolean;
@@ -92,28 +89,28 @@ const Notifiche = ({ isDelegatedPage = false }: Props) => {
     (notificationsCount: number) => {
       if (userHasAdminPermissions && !organizationGroup) {
         PGEventStrategyFactory.triggerEvent(PGEventsType.SEND_PG_HAS_EMAIL, {
-          [PGEventsType.SEND_PG_HAS_EMAIL]: mapBooleanToYesNo(!!defaultEMAILAddress),
+          value: !!defaultEMAILAddress,
         });
 
         PGEventStrategyFactory.triggerEvent(PGEventsType.SEND_PG_HAS_SMS, {
-          [PGEventsType.SEND_PG_HAS_SMS]: mapBooleanToYesNo(!!defaultSMSAddress),
+          value: !!defaultSMSAddress,
         });
 
         PGEventStrategyFactory.triggerEvent(PGEventsType.SEND_PG_HAS_DIGITAL_DOMICILE, {
-          [PGEventsType.SEND_PG_HAS_DIGITAL_DOMICILE]: mapDigitalDomicileToType(addresses),
+          addresses,
         });
       }
 
       PGEventStrategyFactory.triggerEvent(PGEventsType.SEND_PG_HAS_MANDATE, {
-        [PGEventsType.SEND_PG_HAS_MANDATE]: mapBooleanToYesNo(delegators.length > 0),
+        value: delegators.length > 0,
       });
 
       PGEventStrategyFactory.triggerEvent(PGEventsType.SEND_PG_HAS_MANDATE_GIVEN, {
-        [PGEventsType.SEND_PG_HAS_MANDATE_GIVEN]: mapBooleanToYesNo(delegates.length > 0),
+        value: delegates.length > 0,
       });
 
       PGEventStrategyFactory.triggerEvent(PGEventsType.SEND_PG_HAS_NOTIFICATIONS, {
-        [PGEventsType.SEND_PG_HAS_NOTIFICATIONS]: mapBooleanToYesNo(notificationsCount > 0),
+        value: notificationsCount > 0,
       });
     },
     [
@@ -154,13 +151,10 @@ const Notifiche = ({ isDelegatedPage = false }: Props) => {
           return;
         }
 
-        PGEventStrategyFactory.triggerEvent(
-          PGEventsType.SEND_PG_NOTIFICATION_DELEGATED,
-          mapNotificationListToEventPayload({
-            notifications: data.resultsPage,
-            pageNumber: pagination.page,
-          })
-        );
+        PGEventStrategyFactory.triggerEvent(PGEventsType.SEND_PG_NOTIFICATION_DELEGATED, {
+          notifications: data.resultsPage,
+          pageNumber: pagination.page,
+        });
       })
       .catch(() => setPageReady(true));
   }, [

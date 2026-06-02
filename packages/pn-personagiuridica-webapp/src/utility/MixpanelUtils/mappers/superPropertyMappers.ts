@@ -1,6 +1,15 @@
-import type { PGEventPayloads, YesNo } from '../../../models/PGEventPayloads';
+import type {
+  BooleanSuperPropertyEventData,
+  DigitalDomicileSuperPropertyEventData,
+  PGDigitalDomicilePayload,
+  PGEventPayloads,
+  PGHasPayload,
+  PGHasProperty,
+  YesNo,
+} from '../../../models/PGEventPayloads';
 import { PGEventsType } from '../../../models/PGEventsType';
 import { PNRole, type User } from '../../../models/User';
+import { mapDigitalDomicileToType } from './contactPayloadMappers';
 
 export const mapUserToRole = (user: User): PGEventPayloads[PGEventsType.USER_ROLE] => {
   const role = user.organization?.roles?.[0]?.role;
@@ -17,3 +26,18 @@ export const mapUserToRole = (user: User): PGEventPayloads[PGEventsType.USER_ROL
 };
 
 export const mapBooleanToYesNo = (value: boolean): YesNo => (value ? 'yes' : 'no');
+
+export const mapBooleanSuperPropertyToPayload = <K extends PGHasProperty>(
+  property: K,
+  { value }: BooleanSuperPropertyEventData
+): PGHasPayload<K> =>
+  ({
+    [property]: mapBooleanToYesNo(value),
+  } as PGHasPayload<K>);
+
+export const mapDigitalDomicileSuperPropertyToPayload = (
+  data: DigitalDomicileSuperPropertyEventData
+): PGDigitalDomicilePayload => ({
+  [PGEventsType.SEND_PG_HAS_DIGITAL_DOMICILE]:
+    data.addresses === undefined ? data.value : mapDigitalDomicileToType(data.addresses),
+});

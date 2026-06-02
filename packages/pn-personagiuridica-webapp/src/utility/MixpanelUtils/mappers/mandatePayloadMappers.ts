@@ -1,14 +1,12 @@
-import { PGEventPayloads } from '../../../models/PGEventPayloads';
-import { PGEventsType } from '../../../models/PGEventsType';
+import {
+  PGAddMandateSuccessEventData,
+  PGMandateSuccessPayload,
+} from '../../../models/PGEventPayloads';
 
-type MandateFormValues = {
-  selectPersonaFisicaOrPersonaGiuridica: 'PF' | 'PG';
-  selectTuttiEntiOrSelezionati: string;
-};
-
-export const mapAddMandateSuccessToEventPayload = (
-  values: MandateFormValues
-): PGEventPayloads[PGEventsType.SEND_PG_ADD_MANDATE_UX_SUCCESS] => ({
-  person_type: values.selectPersonaFisicaOrPersonaGiuridica,
-  mandate_type: values.selectTuttiEntiOrSelezionati === 'tuttiGliEnti' ? 'all' : 'selected_party',
+export const mapAddMandateSuccessToEventPayload = ({
+  personType,
+  partySelection,
+}: PGAddMandateSuccessEventData): PGMandateSuccessPayload => ({
+  person_type: personType,
+  mandate_type: partySelection === 'tuttiGliEnti' ? 'all' : 'selected_party',
 });

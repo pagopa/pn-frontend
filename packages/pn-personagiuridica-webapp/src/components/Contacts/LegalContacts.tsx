@@ -142,7 +142,7 @@ const LegalContacts = () => {
           PGEventsType.SEND_PG_REMOVE_DIGITAL_DOMICILE_UX_SUCCESS
         );
         PGEventStrategyFactory.triggerEvent(PGEventsType.SEND_PG_HAS_DIGITAL_DOMICILE, {
-          [PGEventsType.SEND_PG_HAS_DIGITAL_DOMICILE]: 'not_available',
+          value: 'not_available',
         });
 
         if (channelType === ChannelType.SERCQ_SEND) {

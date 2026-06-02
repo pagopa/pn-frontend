@@ -1,6 +1,7 @@
 import { uxAction, uxConfirm, uxScreenView } from '@pagopa-pn/pn-commons';
 
 import { PGEventsType } from '../../models/PGEventsType';
+import { mapContactDetailsToEventPayload } from './mappers/contactPayloadMappers';
 import { TrackingConfigs } from './trackingTypes';
 
 type ContactEventType =
@@ -24,7 +25,8 @@ type ContactEventType =
   | PGEventsType.SEND_PG_REMOVE_SMS_UX_SUCCESS;
 
 export const contactTrackingConfigs: TrackingConfigs<ContactEventType> = {
-  [PGEventsType.SEND_PG_YOUR_CONTACT_DETAILS]: (payload) => uxScreenView(payload),
+  [PGEventsType.SEND_PG_YOUR_CONTACT_DETAILS]: (data) =>
+    uxScreenView(mapContactDetailsToEventPayload(data)),
   // SERCQ
   [PGEventsType.SEND_PG_ADD_DIGITAL_DOMICILE_START]: () => uxAction(),
   [PGEventsType.SEND_PG_ADD_DIGITAL_DOMICILE_UX_SUCCESS]: (payload) => uxConfirm(payload),

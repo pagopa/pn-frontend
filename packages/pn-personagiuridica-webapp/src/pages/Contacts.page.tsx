@@ -17,7 +17,6 @@ import { resetExternalEvent } from '../redux/contact/reducers';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { RootState } from '../redux/store';
 import PGEventStrategyFactory from '../utility/MixpanelUtils/PGEventStrategyFactory';
-import { mapContactDetailsToEventPayload } from '../utility/MixpanelUtils/mappers/contactPayloadMappers';
 
 const Contacts = () => {
   const { t, i18n } = useTranslation(['recapiti']);
@@ -75,10 +74,9 @@ const Contacts = () => {
   }, [externalEvent]);
 
   useEffect(() => {
-    PGEventStrategyFactory.triggerEvent(
-      PGEventsType.SEND_PG_YOUR_CONTACT_DETAILS,
-      mapContactDetailsToEventPayload(digitalAddresses)
-    );
+    PGEventStrategyFactory.triggerEvent(PGEventsType.SEND_PG_YOUR_CONTACT_DETAILS, {
+      addresses: digitalAddresses,
+    });
   }, []);
 
   return (

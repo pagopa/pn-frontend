@@ -10,7 +10,7 @@ import {
 describe('contactPayloadMappers', () => {
   describe('mapContactDetailsToEventPayload', () => {
     it('should map default DDom, email and sms contacts', () => {
-      const payload = mapContactDetailsToEventPayload(digitalAddresses);
+      const payload = mapContactDetailsToEventPayload({ addresses: digitalAddresses });
       expect(payload).toStrictEqual({
         digital_domicile_exists: true,
         digital_domicile_type: ChannelType.PEC,
@@ -20,7 +20,7 @@ describe('contactPayloadMappers', () => {
     });
 
     it('should map empty contacts as not available', () => {
-      const payload = mapContactDetailsToEventPayload([]);
+      const payload = mapContactDetailsToEventPayload({ addresses: [] });
 
       expect(payload).toStrictEqual({
         digital_domicile_exists: false,
@@ -31,20 +31,22 @@ describe('contactPayloadMappers', () => {
     });
 
     it('should map SERCQ DDom and SMS contacts', () => {
-      const payload = mapContactDetailsToEventPayload([
-        {
-          addressType: AddressType.LEGAL,
-          channelType: ChannelType.SERCQ_SEND,
-          senderId: 'default',
-          value: SERCQ_SEND_VALUE,
-        },
-        {
-          addressType: AddressType.COURTESY,
-          channelType: ChannelType.SMS,
-          senderId: 'default',
-          value: '+39333123456',
-        },
-      ]);
+      const payload = mapContactDetailsToEventPayload({
+        addresses: [
+          {
+            addressType: AddressType.LEGAL,
+            channelType: ChannelType.SERCQ_SEND,
+            senderId: 'default',
+            value: SERCQ_SEND_VALUE,
+          },
+          {
+            addressType: AddressType.COURTESY,
+            channelType: ChannelType.SMS,
+            senderId: 'default',
+            value: '+39333123456',
+          },
+        ],
+      });
       expect(payload).toStrictEqual({
         digital_domicile_exists: true,
         digital_domicile_type: ChannelType.SERCQ_SEND,
@@ -55,27 +57,29 @@ describe('contactPayloadMappers', () => {
 
     it('should ignore invalid PEC and custom courtesy contacts', () => {
       // custom contacts and PEC in validation state
-      const payload = mapContactDetailsToEventPayload([
-        {
-          addressType: AddressType.LEGAL,
-          channelType: ChannelType.PEC,
-          senderId: 'default',
-          value: 'test@pec.pagopa.it',
-          pecValid: false,
-        },
-        {
-          addressType: AddressType.COURTESY,
-          channelType: ChannelType.EMAIL,
-          senderId: 'custom-sender',
-          value: 'test@mail.pagopa.it',
-        },
-        {
-          addressType: AddressType.COURTESY,
-          channelType: ChannelType.SMS,
-          senderId: 'another-custom-sender',
-          value: '+39333123456',
-        },
-      ]);
+      const payload = mapContactDetailsToEventPayload({
+        addresses: [
+          {
+            addressType: AddressType.LEGAL,
+            channelType: ChannelType.PEC,
+            senderId: 'default',
+            value: 'test@pec.pagopa.it',
+            pecValid: false,
+          },
+          {
+            addressType: AddressType.COURTESY,
+            channelType: ChannelType.EMAIL,
+            senderId: 'custom-sender',
+            value: 'test@mail.pagopa.it',
+          },
+          {
+            addressType: AddressType.COURTESY,
+            channelType: ChannelType.SMS,
+            senderId: 'another-custom-sender',
+            value: '+39333123456',
+          },
+        ],
+      });
       expect(payload).toStrictEqual({
         digital_domicile_exists: false,
         digital_domicile_type: 'not_available',

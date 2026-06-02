@@ -169,7 +169,7 @@ const SercqSendContactWizard: React.FC<Props> = ({ goToStep }) => {
           digital_domicile_type: ChannelType.SERCQ_SEND,
         });
         PGEventStrategyFactory.triggerEvent(PGEventsType.SEND_PG_HAS_DIGITAL_DOMICILE, {
-          [PGEventsType.SEND_PG_HAS_DIGITAL_DOMICILE]: ChannelType.SERCQ_SEND,
+          value: ChannelType.SERCQ_SEND,
         });
         appStorage.domicileBanner.enable();
         goToStep(thankYouStep);

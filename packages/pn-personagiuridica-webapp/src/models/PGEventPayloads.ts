@@ -1,6 +1,10 @@
 import type {
+  AppResponse,
+  AppResponseError,
   Downtime,
+  LegalFactId,
   Notification,
+  NotificationDetailOtherDocument,
   NotificationStatusHistory,
   PaymentsData,
 } from '@pagopa-pn/pn-commons';
@@ -16,12 +20,16 @@ import {
 } from '@pagopa-pn/pn-commons/src/models/MixpanelEvents';
 
 import { PGEventsType } from './PGEventsType';
-import { ChannelType } from './contacts';
+import type { ChannelType, DigitalAddress } from './contacts';
 
 export type YesNo = 'yes' | 'no';
 export type PGUserRole = 'admin' | 'group_admin' | 'operator' | 'group_operator';
 
 export type DigitalDomicileType = ChannelType.PEC | ChannelType.SERCQ_SEND | 'not_available';
+
+export type MandatePersonType = 'PF' | 'PG';
+
+export type MandatePartySelection = 'tuttiGliEnti' | 'entiSelezionati';
 
 export type PGDocumentDownloadPayload = {
   document_type: string;
@@ -63,6 +71,43 @@ export type PGNotificationDetailEventData = {
   flow: EventDeliveryFlowType;
   deliveryMode: EventDeliveryModeType;
 };
+
+export type PGNotificationAttachmentEventData = {
+  document: string | NotificationDetailOtherDocument | undefined;
+};
+
+export type PGTimelineLegalFactEventData = {
+  legalFact: LegalFactId;
+};
+
+export type PGContactDetailsEventData = {
+  addresses: Array<DigitalAddress>;
+};
+
+export type PGAddMandateSuccessEventData = {
+  personType: MandatePersonType;
+  partySelection: MandatePartySelection;
+};
+
+export type ToastErrorEventData = {
+  error: AppResponseError;
+  response: AppResponse;
+  pageName?: EventPageType;
+};
+
+export type BooleanSuperPropertyEventData = {
+  value: boolean;
+};
+
+export type DigitalDomicileSuperPropertyEventData =
+  | {
+      addresses: Array<DigitalAddress>;
+      value?: never;
+    }
+  | {
+      addresses?: never;
+      value: DigitalDomicileType;
+    };
 
 /**
  * Mixpanel payloads produced by mappers and then enriched by tracking helpers with
@@ -138,7 +183,7 @@ export type PGEventPayloads = {
   [PGEventsType.SEND_PG_ADD_API_UX_SUCCESS]: undefined;
 
   /* CONTACT */
-  [PGEventsType.SEND_PG_YOUR_CONTACT_DETAILS]: PGContactDetailPayload;
+  [PGEventsType.SEND_PG_YOUR_CONTACT_DETAILS]: PGContactDetailsEventData;
   // SERCQ
   [PGEventsType.SEND_PG_ADD_DD_SERCQ_SEND_START]: undefined;
   [PGEventsType.SEND_PG_ADD_DD_PEC_START]: undefined;
@@ -158,11 +203,11 @@ export type PGEventPayloads = {
   [PGEventsType.SEND_PG_REMOVE_SMS_UX_SUCCESS]: undefined;
 
   /* ERROR */
-  [PGEventsType.SEND_PG_TOAST_ERROR]: PGToastErrorPayload;
+  [PGEventsType.SEND_PG_TOAST_ERROR]: ToastErrorEventData;
 
   /* MANDATE */
   [PGEventsType.SEND_PG_ADD_MANDATE_START]: undefined;
-  [PGEventsType.SEND_PG_ADD_MANDATE_UX_SUCCESS]: PGMandateSuccessPayload;
+  [PGEventsType.SEND_PG_ADD_MANDATE_UX_SUCCESS]: PGAddMandateSuccessEventData;
   [PGEventsType.SEND_PG_MANDATES_GIVEN]: undefined;
   [PGEventsType.SEND_PG_MANDATES_RECEIVED]: undefined;
 
@@ -173,11 +218,11 @@ export type PGEventPayloads = {
   [PGEventsType.SEND_PG_OPEN_USERS]: undefined;
 
   /* NOTIFICATION */
-  [PGEventsType.SEND_PG_NOTIFICATION_DELEGATED]: PGNotificationsListPayload;
+  [PGEventsType.SEND_PG_NOTIFICATION_DELEGATED]: PGNotificationsListEventData;
   [PGEventsType.SEND_PG_NOTIFICATION_DETAIL]: PGNotificationDetailEventData;
-  [PGEventsType.SEND_PG_NOTIFICATION_DOWNLOAD_ATTACHMENT]: PGDocumentDownloadPayload;
-  [PGEventsType.SEND_PG_START_PAYMENT]: PGStartPaymentPayload;
-  [PGEventsType.SEND_PG_TIMELINE_DOWNLOAD]: PGDocumentDownloadPayload;
+  [PGEventsType.SEND_PG_NOTIFICATION_DOWNLOAD_ATTACHMENT]: PGNotificationAttachmentEventData;
+  [PGEventsType.SEND_PG_START_PAYMENT]: undefined;
+  [PGEventsType.SEND_PG_TIMELINE_DOWNLOAD]: PGTimelineLegalFactEventData;
   [PGEventsType.SEND_PG_TIMELINE_SHOW_HISTORY]: undefined;
   [PGEventsType.SEND_PG_TIMELINE_SHOW_MORE]: undefined;
   [PGEventsType.SEND_PG_YOUR_NOTIFICATION]: PGNotificationsListEventData;
@@ -186,11 +231,11 @@ export type PGEventPayloads = {
   [PGEventsType.SEND_PG_SERVICE_STATUS]: undefined;
 
   /* SUPER PROPERTIES */
-  [PGEventsType.SEND_PG_HAS_DIGITAL_DOMICILE]: PGDigitalDomicilePayload;
-  [PGEventsType.SEND_PG_HAS_EMAIL]: PGHasPayload<PGEventsType.SEND_PG_HAS_EMAIL>;
-  [PGEventsType.SEND_PG_HAS_MANDATE]: PGHasPayload<PGEventsType.SEND_PG_HAS_MANDATE>;
-  [PGEventsType.SEND_PG_HAS_MANDATE_GIVEN]: PGHasPayload<PGEventsType.SEND_PG_HAS_MANDATE_GIVEN>;
-  [PGEventsType.SEND_PG_HAS_NOTIFICATIONS]: PGHasPayload<PGEventsType.SEND_PG_HAS_NOTIFICATIONS>;
-  [PGEventsType.SEND_PG_HAS_SMS]: PGHasPayload<PGEventsType.SEND_PG_HAS_SMS>;
+  [PGEventsType.SEND_PG_HAS_DIGITAL_DOMICILE]: DigitalDomicileSuperPropertyEventData;
+  [PGEventsType.SEND_PG_HAS_EMAIL]: BooleanSuperPropertyEventData;
+  [PGEventsType.SEND_PG_HAS_MANDATE]: BooleanSuperPropertyEventData;
+  [PGEventsType.SEND_PG_HAS_MANDATE_GIVEN]: BooleanSuperPropertyEventData;
+  [PGEventsType.SEND_PG_HAS_NOTIFICATIONS]: BooleanSuperPropertyEventData;
+  [PGEventsType.SEND_PG_HAS_SMS]: BooleanSuperPropertyEventData;
   [PGEventsType.USER_ROLE]: PGUserRolePayload;
 };

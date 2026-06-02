@@ -17,8 +17,8 @@ describe('mandateTrackingConfigs', () => {
 
   it('shold build SEND_PG_ADD_MANDATE_UX_SUCCESS event', () => {
     const result = mandateTrackingConfigs[PGEventsType.SEND_PG_ADD_MANDATE_UX_SUCCESS]({
-      person_type: 'PG',
-      mandate_type: 'all',
+      personType: 'PG',
+      partySelection: 'tuttiGliEnti',
     });
 
     expect(result).toStrictEqual({

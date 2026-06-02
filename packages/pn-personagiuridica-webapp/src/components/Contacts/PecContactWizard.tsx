@@ -97,7 +97,7 @@ const PecContactWizard: React.FC<Props> = ({
           digital_domicile_type: ChannelType.PEC,
         });
         PGEventStrategyFactory.triggerEvent(PGEventsType.SEND_PG_HAS_DIGITAL_DOMICILE, {
-          [PGEventsType.SEND_PG_HAS_DIGITAL_DOMICILE]: ChannelType.PEC,
+          value: ChannelType.PEC,
         });
         setOpenCodeModal(false);
         return setActiveStep(activeStep + 1);

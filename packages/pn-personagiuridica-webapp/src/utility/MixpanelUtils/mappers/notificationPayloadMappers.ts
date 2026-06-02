@@ -1,6 +1,6 @@
 import { isObject } from 'lodash-es';
 
-import type { Downtime, LegalFactId, NotificationDetailOtherDocument } from '@pagopa-pn/pn-commons';
+import type { Downtime } from '@pagopa-pn/pn-commons';
 import {
   EventDowntimeType,
   NotificationDocumentType,
@@ -11,11 +11,13 @@ import {
 
 import type {
   PGDocumentDownloadPayload,
+  PGNotificationAttachmentEventData,
   PGNotificationDetailEventData,
   PGNotificationDetailPayload,
   PGNotificationsListEventData,
   PGNotificationsListPayload,
   PGStartPaymentPayload,
+  PGTimelineLegalFactEventData,
 } from '../../../models/PGEventPayloads';
 
 const getDisserviceStatus = (downtimeEvents: Array<Downtime>): EventDowntimeType => {
@@ -98,17 +100,17 @@ export const mapNotificationListToEventPayload = ({
   ...(domicileBannerType && { banner: domicileBannerType }),
 });
 
-export const mapNotificationAttachmentToDocumentDownloadPayload = (
-  document: string | NotificationDetailOtherDocument | undefined
-): PGDocumentDownloadPayload => ({
+export const mapNotificationAttachmentToDocumentDownloadPayload = ({
+  document,
+}: PGNotificationAttachmentEventData): PGDocumentDownloadPayload => ({
   document_type: isObject(document)
     ? NotificationDocumentType.AAR
     : NotificationDocumentType.ATTACHMENT,
 });
 
-export const mapTimelineLegalFactToDocumentDownloadPayload = (
-  legalFact: LegalFactId
-): PGDocumentDownloadPayload => ({
+export const mapTimelineLegalFactToDocumentDownloadPayload = ({
+  legalFact,
+}: PGTimelineLegalFactEventData): PGDocumentDownloadPayload => ({
   document_type: legalFact.category,
 });
 

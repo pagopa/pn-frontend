@@ -39,6 +39,7 @@ import { Autocomplete, IllusCompleted } from '@pagopa/mui-italia';
 import VerificationCodeComponent from '../components/Deleghe/VerificationCodeComponent';
 import LoadingPageWrapper from '../components/LoadingPageWrapper/LoadingPageWrapper';
 import { NewDelegationFormProps } from '../models/Deleghe';
+import { MandatePartySelection } from '../models/PGEventPayloads';
 import { PGEventsType } from '../models/PGEventsType';
 import { Party } from '../models/party';
 import * as routes from '../navigation/routes.const';
@@ -48,7 +49,6 @@ import { resetNewDelegation } from '../redux/newDelegation/reducers';
 import { RootState } from '../redux/store';
 import { getConfiguration } from '../services/configuration.service';
 import PGEventStrategyFactory from '../utility/MixpanelUtils/PGEventStrategyFactory';
-import { mapAddMandateSuccessToEventPayload } from '../utility/MixpanelUtils/mappers/mandatePayloadMappers';
 import { generateVCode } from '../utility/delegation.utility';
 
 const getOptionLabel = (option: Party) => option.name || '';
@@ -72,13 +72,13 @@ const NuovaDelega = () => {
     dispatch(createDelegation(values))
       .unwrap()
       .then(() => {
-        PGEventStrategyFactory.triggerEvent(
-          PGEventsType.SEND_PG_ADD_MANDATE_UX_SUCCESS,
-          mapAddMandateSuccessToEventPayload(values)
-        );
+        PGEventStrategyFactory.triggerEvent(PGEventsType.SEND_PG_ADD_MANDATE_UX_SUCCESS, {
+          personType: values.selectPersonaFisicaOrPersonaGiuridica,
+          partySelection: values.selectTuttiEntiOrSelezionati as MandatePartySelection,
+        });
 
         PGEventStrategyFactory.triggerEvent(PGEventsType.SEND_PG_HAS_MANDATE_GIVEN, {
-          [PGEventsType.SEND_PG_HAS_MANDATE_GIVEN]: 'yes',
+          value: true,
         });
       })
       .catch(() => {});

@@ -67,7 +67,9 @@ describe('notificationPayloadMappers', () => {
   });
 
   it('should map notification attachment document to download payload', () => {
-    const payload = mapNotificationAttachmentToDocumentDownloadPayload('0');
+    const payload = mapNotificationAttachmentToDocumentDownloadPayload({
+      document: '0',
+    });
 
     expect(payload).toStrictEqual({
       document_type: NotificationDocumentType.ATTACHMENT,
@@ -76,8 +78,10 @@ describe('notificationPayloadMappers', () => {
 
   it('should map notification AAR document to download payload', () => {
     const payload = mapNotificationAttachmentToDocumentDownloadPayload({
-      documentId: 'aar-document-id',
-    } as NotificationDetailOtherDocument);
+      document: {
+        documentId: 'aar-document-id',
+      } as NotificationDetailOtherDocument,
+    });
 
     expect(payload).toStrictEqual({
       document_type: NotificationDocumentType.AAR,
@@ -86,8 +90,10 @@ describe('notificationPayloadMappers', () => {
 
   it('should map timeline legal fact to download payload', () => {
     const payload = mapTimelineLegalFactToDocumentDownloadPayload({
-      category: 'DIGITAL_DELIVERY',
-    } as LegalFactId);
+      legalFact: {
+        category: 'DIGITAL_DELIVERY',
+      } as LegalFactId,
+    });
 
     expect(payload).toStrictEqual({
       document_type: 'DIGITAL_DELIVERY',

@@ -107,7 +107,7 @@ const SmsContactElem: React.FC<SmsElemProps> = ({ onCancelInsert, slotsProps, sl
         // contact has already been verified
         PGEventStrategyFactory.triggerEvent(PGEventsType.SEND_PG_ADD_SMS_UX_SUCCESS);
         PGEventStrategyFactory.triggerEvent(PGEventsType.SEND_PG_HAS_SMS, {
-          [PGEventsType.SEND_PG_HAS_SMS]: 'yes',
+          value: true,
         });
         // show success message
         dispatch(
@@ -216,7 +216,7 @@ const SmsContactItem: React.FC<SmsItemProps> = ({ slotsProps, slots }) => {
       .then(() => {
         PGEventStrategyFactory.triggerEvent(PGEventsType.SEND_PG_REMOVE_SMS_UX_SUCCESS);
         PGEventStrategyFactory.triggerEvent(PGEventsType.SEND_PG_HAS_SMS, {
-          [PGEventsType.SEND_PG_HAS_SMS]: 'no',
+          value: false,
         });
         dispatch(
           appStateActions.addSuccess({

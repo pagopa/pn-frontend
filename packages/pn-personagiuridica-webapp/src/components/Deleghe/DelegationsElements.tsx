@@ -37,7 +37,6 @@ import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { RootState } from '../../redux/store';
 import { ServerResponseErrorCode } from '../../utility/AppError/types';
 import PGEventStrategyFactory from '../../utility/MixpanelUtils/PGEventStrategyFactory';
-import { mapBooleanToYesNo } from '../../utility/MixpanelUtils/mappers/superPropertyMappers';
 import AcceptDelegationModal from './AcceptDelegationModal';
 
 function handleCustomGenericError(
@@ -148,9 +147,7 @@ export const Menu: React.FC<Props> = ({ menuType, id, userLogged, row, onAction 
         );
 
         PGEventStrategyFactory.triggerEvent(PGEventsType.SEND_PG_HAS_MANDATE_GIVEN, {
-          [PGEventsType.SEND_PG_HAS_MANDATE_GIVEN]: mapBooleanToYesNo(
-            delegates.some((delegate) => delegate.mandateId !== id)
-          ),
+          value: delegates.some((delegate) => delegate.mandateId !== id),
         });
 
         if (onAction) {
@@ -386,7 +383,7 @@ export const AcceptButton: React.FC<AcceptButtonProps> = ({ id, name, onAccept }
         );
 
         PGEventStrategyFactory.triggerEvent(PGEventsType.SEND_PG_HAS_MANDATE, {
-          [PGEventsType.SEND_PG_HAS_MANDATE]: 'yes',
+          value: true,
         });
 
         onAccept();

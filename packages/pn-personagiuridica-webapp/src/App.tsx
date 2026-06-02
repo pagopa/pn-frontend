@@ -218,15 +218,10 @@ const ActualApp = () => {
     error: AppResponseError,
     response: AppResponse
   ) => {
-    const { traceId, status, action } = response;
-
     PGEventStrategyFactory.triggerEvent(PGEventsType.SEND_PG_TOAST_ERROR, {
-      reason: error.code,
-      traceid: traceId,
-      page_name: getCurrentEventTypePage(pathname),
-      action,
-      httpStatusCode: status,
-      message: error.message.content,
+      error,
+      response,
+      pageName: getCurrentEventTypePage(pathname),
     });
   };
 

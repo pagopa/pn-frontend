@@ -1,5 +1,8 @@
-import type { DigitalDomicileType, PGEventPayloads } from '../../../models/PGEventPayloads';
-import type { PGEventsType } from '../../../models/PGEventsType';
+import type {
+  DigitalDomicileType,
+  PGContactDetailPayload,
+  PGContactDetailsEventData,
+} from '../../../models/PGEventPayloads';
 import type { DigitalAddress } from '../../../models/contacts';
 import { AddressType, ChannelType } from '../../../models/contacts';
 
@@ -13,9 +16,9 @@ const mapLegalAddressToDigitalDomicileType = (address?: DigitalAddress): Digital
   }
 };
 
-export const mapContactDetailsToEventPayload = (
-  addresses: Array<DigitalAddress>
-): PGEventPayloads[PGEventsType.SEND_PG_YOUR_CONTACT_DETAILS] => {
+export const mapContactDetailsToEventPayload = ({
+  addresses,
+}: PGContactDetailsEventData): PGContactDetailPayload => {
   const legalAddress = addresses.find(
     (address) =>
       address.senderId === 'default' &&
