@@ -1362,6 +1362,22 @@ describe('NotificationDetail Page', () => {
     expect(bilingualSection).toHaveTextContent('detail.bilingual.title');
   });
 
+  it('does not render bilingual section when lang is same as additional language in notification', async () => {
+    sessionStorage.setItem(LANGUAGE_SESSION_KEY, 'EN');
+    mock
+      .onGet(`/bff/v1/notifications/received/${bilingualNotification.iun}`)
+      .reply(200, bilingualNotification);
+    await act(async () => {
+      result = render(<Component />, {
+        route: routes.GET_DETTAGLIO_NOTIFICA_PATH(bilingualNotification.iun),
+      });
+    });
+
+    await result.findByTestId('detailTable');
+    const bilingualSection = result.queryByTestId('bilingualSection');
+    expect(bilingualSection).not.toBeInTheDocument();
+  });
+
   it('should show pay tpp button after call check-tpp api with retrievalId in user token and get payment URL', async () => {
     const mockRetrievalId = 'retrieval-id';
     const paymentTpp: BffCheckTPPResponse = {
