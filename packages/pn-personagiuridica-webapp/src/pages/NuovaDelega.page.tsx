@@ -39,7 +39,7 @@ import { Autocomplete, IllusCompleted } from '@pagopa/mui-italia';
 import VerificationCodeComponent from '../components/Deleghe/VerificationCodeComponent';
 import LoadingPageWrapper from '../components/LoadingPageWrapper/LoadingPageWrapper';
 import { NewDelegationFormProps } from '../models/Deleghe';
-import { MandatePartySelection } from '../models/PGEventPayloads';
+import type { MandatePartySelection } from '../models/PGEventPayloads';
 import { PGEventsType } from '../models/PGEventsType';
 import { Party } from '../models/party';
 import * as routes from '../navigation/routes.const';
