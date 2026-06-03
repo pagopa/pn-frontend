@@ -165,6 +165,15 @@ describe('NuovaDelega page', () => {
   it('fills form with invalid values', async () => {
     const { container, getByTestId } = render(<NuovaDelega />);
     // the form is validate on submit
+    await testInput(container, 'nome', 'Mario');
+    await testInput(container, 'nome', '');
+
+    await testInput(container, 'cognome', 'Rossi');
+    await testInput(container, 'cognome', '');
+
+    await testInput(container, 'codiceFiscale', 'ABC');
+    await testInput(container, 'codiceFiscale', '');
+
     await testInput(container, 'expirationDate', '');
     const button = getByTestId('createButton');
     fireEvent.click(button);
@@ -185,8 +194,12 @@ describe('NuovaDelega page', () => {
       1,
       true
     );
-    const entiError = container.querySelector('#enti-helper-text');
-    expect(entiError).toHaveTextContent('nuovaDelega.validation.entiSelected.required');
+    await waitFor(() => {
+      expect(mock.history.get).toHaveLength(1);
+      expect(mock.history.get[0].url).toBe('/bff/v1/pa-list');
+    });
+
+    await testAutocomplete(container, 'enti', parties, true, 1);
     // inser wrong data
     await testInput(container, 'codiceFiscale', 'WRONG-FISCAL-CODE');
     expect(fiscalCodeError).toHaveTextContent('nuovaDelega.validation.fiscalCode.wrong');
@@ -209,6 +222,8 @@ describe('NuovaDelega page', () => {
     const businessName = container.querySelector('input[name="ragioneSociale"]');
     expect(businessName).toBeInTheDocument();
     // rerun form submission
+    await testInput(container, 'ragioneSociale', 'ACME');
+    await testInput(container, 'ragioneSociale', '');
     fireEvent.click(button);
     const businessNameError = await waitFor(() =>
       container.querySelector('#ragioneSociale-helper-text')
