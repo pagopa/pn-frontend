@@ -62,6 +62,7 @@ export {
   getSessionLanguage,
   hashDetectorLookup,
   setSessionLanguage,
+  getValidLanguage,
 } from './multilanguage.utility';
 export { addParamToUrl } from './navigation.utility';
 export {

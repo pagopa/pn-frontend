@@ -31,23 +31,6 @@ export type MandatePersonType = 'PF' | 'PG';
 
 export type MandatePartySelection = 'tuttiGliEnti' | 'entiSelezionati';
 
-export type PGDocumentDownloadPayload = {
-  document_type: string;
-};
-
-export type PGStartPaymentPayload = {
-  psp: string;
-};
-
-export type PGToastErrorPayload = {
-  reason: string;
-  traceid?: string;
-  page_name?: EventPageType;
-  action: string;
-  httpStatusCode?: number;
-  message?: string;
-};
-
 /**
  * Application-level data passed by pages/components to the tracking layer.
  * These types should not mirror Mixpanel properties necessarily.
@@ -113,6 +96,24 @@ export type DigitalDomicileSuperPropertyEventData =
  * Mixpanel payloads produced by mappers and then enriched by tracking helpers with
  * event_category/event_type
  */
+
+export type PGDocumentDownloadPayload = {
+  document_type: string;
+};
+
+export type PGStartPaymentPayload = {
+  psp: string;
+};
+
+export type PGToastErrorPayload = {
+  reason: string;
+  traceid?: string;
+  page_name?: EventPageType;
+  action: string;
+  httpStatusCode?: number;
+  message?: string;
+};
+
 export type PGNotificationsListPayload = {
   page_number: number;
   unread_count: number;

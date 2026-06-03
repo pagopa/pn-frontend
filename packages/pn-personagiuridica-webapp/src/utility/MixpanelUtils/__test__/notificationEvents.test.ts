@@ -1,9 +1,9 @@
+import type { LegalFactId } from '@pagopa-pn/pn-commons';
 import {
   EventAction,
   EventCategory,
   EventDowntimeType,
   EventPropertyType,
-  LegalFactId,
   NotificationDocumentType,
 } from '@pagopa-pn/pn-commons';
 
