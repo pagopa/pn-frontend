@@ -24,6 +24,7 @@ import { resetState } from '../reducers';
 const initialState = {
   loading: false,
   notification: {
+    additionalLanguages: [],
     subject: '',
     recipients: [],
     documents: [],
