@@ -171,7 +171,7 @@ describe('NuovaDelega page', () => {
     await testInput(container, 'cognome', 'Rossi');
     await testInput(container, 'cognome', '');
 
-    await testInput(container, 'codiceFiscale', 'ABC');
+    await testInput(container, 'codiceFiscale', 'ABCDE12345');
     await testInput(container, 'codiceFiscale', '');
 
     await testInput(container, 'expirationDate', '');
