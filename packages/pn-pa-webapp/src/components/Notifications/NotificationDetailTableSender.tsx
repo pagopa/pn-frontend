@@ -15,9 +15,11 @@ import {
 } from '@pagopa-pn/pn-commons';
 import { Tag, TagGroup } from '@pagopa/mui-italia';
 
+import { PAEventsType } from '../../models/PAEventsType';
 import { PNRole } from '../../models/user';
 import { useAppSelector } from '../../redux/hooks';
 import { RootState } from '../../redux/store';
+import PAEventStrategyFactory from '../../utility/MixpanelUtils/PAEventStrategyFactory';
 import ConfirmCancellationDialog from './ConfirmCancellationDialog';
 import NotificationRecipientsDetail from './NotificationRecipientsDetail';
 
@@ -39,6 +41,7 @@ const NotificationDetailTableSender: React.FC<Props> = ({ notification, onCancel
   const role = currentUser.organization?.roles ? currentUser.organization?.roles[0] : null;
   const userHasAdminPermissions = useHasPermissions(role ? [role.role] : [], [PNRole.ADMIN]);
   const openModal = () => {
+    PAEventStrategyFactory.triggerEvent(PAEventsType.SEND_PA_CANCEL_NOTIFICATION);
     setShowModal(true);
   };
 

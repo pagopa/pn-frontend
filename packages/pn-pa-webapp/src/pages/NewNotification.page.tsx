@@ -12,12 +12,14 @@ import PreliminaryInformations from '../components/NewNotification/PreliminaryIn
 import Recipient from '../components/NewNotification/Recipient';
 import SyncFeedback from '../components/NewNotification/SyncFeedback';
 import { NewNotificationLangOther, PaymentModel } from '../models/NewNotification';
+import { PAEventsType } from '../models/PAEventsType';
 import * as routes from '../navigation/routes.const';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { createNewNotification } from '../redux/newNotification/actions';
 import { resetState, setSenderInfos } from '../redux/newNotification/reducers';
 import { RootState } from '../redux/store';
 import { getConfiguration } from '../services/configuration.service';
+import PAEventStrategyFactory from '../utility/MixpanelUtils/PAEventStrategyFactory';
 
 const SubTitle = () => {
   const { t } = useTranslation(['common', 'notifiche']);
@@ -72,6 +74,28 @@ const NewNotification = () => {
 
   const childRef = useRef<{ confirm: () => void }>();
 
+  const trackNewNotificationStepView = (step: number) => {
+    if (step === 0) {
+      PAEventStrategyFactory.triggerEvent(PAEventsType.SEND_PA_PRELIMINARY_INFORMATION);
+      return;
+    }
+    if (step === 1) {
+      PAEventStrategyFactory.triggerEvent(PAEventsType.SEND_PA_RECIPIENTS);
+      return;
+    }
+    if (IS_PAYMENT_ENABLED && step === 2) {
+      PAEventStrategyFactory.triggerEvent(PAEventsType.SEND_PA_DEBT_POSITION);
+      return;
+    }
+    if (IS_PAYMENT_ENABLED && step === 3) {
+      PAEventStrategyFactory.triggerEvent(PAEventsType.SEND_PA_DEBT_POSITION_DETAIL);
+      return;
+    }
+    if ((IS_PAYMENT_ENABLED && step === 4) || (!IS_PAYMENT_ENABLED && step === 2)) {
+      PAEventStrategyFactory.triggerEvent(PAEventsType.SEND_PA_DOCUMENTATION);
+    }
+  };
+
   const goToNextStep = () => {
     setActiveStep((previousStep) => previousStep + 1);
   };
@@ -92,7 +116,10 @@ const NewNotification = () => {
     if (activeStep === steps.length - 1 && isCompleted) {
       void dispatch(createNewNotification(notification))
         .unwrap()
-        .then(() => setActiveStep((previousStep) => previousStep + 1))
+        .then(() => {
+          PAEventStrategyFactory.triggerEvent(PAEventsType.SEND_PA_NEW_NOTIFICATION_UX_SUCCESS);
+          setActiveStep((previousStep) => previousStep + 1);
+        })
         .catch(() => {
           /** Without this catch vitest return errors of unhandle errors.
            * The error is handled in other parts of the application with
@@ -127,6 +154,12 @@ const NewNotification = () => {
   }, [organization]);
 
   useEffect(() => () => void dispatch(resetState()), []);
+
+  useEffect(() => {
+    if (activeStep < steps.length) {
+      trackNewNotificationStepView(activeStep);
+    }
+  }, [activeStep, steps.length]);
 
   if (activeStep === steps.length) {
     return <SyncFeedback />;
