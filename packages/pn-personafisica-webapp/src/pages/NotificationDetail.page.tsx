@@ -125,6 +125,12 @@ const NotificationDetail: React.FC = () => {
 
   const showBilingualSection = !isSameLang && sessionLang !== 'IT';
 
+  console.log(
+    'showBilingualSection, notificationLanguage, sessionLang',
+    showBilingualSection,
+    notificationLanguage,
+    sessionLang
+  );
   const isCancelled = useIsCancelled({ notification });
   const isCancelledOrCancelling = isCancelled.cancelled || isCancelled.cancellationInProgress;
   const currentRecipient = notification?.currentRecipient;

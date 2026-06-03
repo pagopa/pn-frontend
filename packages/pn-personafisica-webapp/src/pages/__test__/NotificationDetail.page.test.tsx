@@ -23,6 +23,7 @@ import {
   setPaymentCache,
 } from '@pagopa-pn/pn-commons';
 import { initLocalizationForTest } from '@pagopa-pn/pn-commons/src/test-utils';
+import { LANGUAGE_SESSION_KEY } from '@pagopa-pn/pn-commons/src/utility/multilanguage.utility';
 import userEvent from '@testing-library/user-event';
 
 import { downtimesDTO } from '../../__mocks__/AppStatus.mock';
@@ -30,6 +31,7 @@ import { mandatesByDelegate } from '../../__mocks__/Delegations.mock';
 import { errorMock } from '../../__mocks__/Errors.mock';
 import { paymentInfo } from '../../__mocks__/ExternalRegistry.mock';
 import {
+  bilingualNotification,
   cachedPayments,
   notificationDTO,
   notificationToFe,
@@ -1342,6 +1344,22 @@ describe('NotificationDetail Page', () => {
     const alertRadd = result.getByTestId('raddAlert');
     expect(alertRadd).toBeInTheDocument();
     expect(alertRadd).toHaveTextContent('detail.timeline.radd.title');
+  });
+
+  it('render bilingual section when lang is different from additional language in notification', async () => {
+    sessionStorage.setItem(LANGUAGE_SESSION_KEY, 'DE');
+    mock
+      .onGet(`/bff/v1/notifications/received/${bilingualNotification.iun}`)
+      .reply(200, bilingualNotification);
+    await act(async () => {
+      result = render(<Component />, {
+        route: routes.GET_DETTAGLIO_NOTIFICA_PATH(bilingualNotification.iun),
+      });
+    });
+
+    const bilingualSection = await result.findByTestId('bilingualSection');
+    expect(bilingualSection).toBeInTheDocument();
+    expect(bilingualSection).toHaveTextContent('detail.bilingual.title');
   });
 
   it('should show pay tpp button after call check-tpp api with retrievalId in user token and get payment URL', async () => {

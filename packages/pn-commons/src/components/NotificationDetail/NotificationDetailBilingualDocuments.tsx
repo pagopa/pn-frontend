@@ -31,6 +31,7 @@ const NotificationDetailBilingualDocuments: React.FC<Props> = ({
       direction="row"
       justifyContent="space-between"
       alignItems="center"
+      data-testid="bilingualSection"
     >
       <Grid key="detail-bilingual-documents-title" item sx={{ mb: 3 }}>
         <Typography
