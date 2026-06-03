@@ -331,8 +331,7 @@ const NuovaDelega = () => {
                                   void setFieldTouched('nome', true, false);
                                   void setFieldValue('nome', event.currentTarget.value);
                                 }}
-                                InputLabelProps={{ required: true }}
-                                inputProps={{ 'aria-required': 'true' }}
+                                required
                                 label={t('nuovaDelega.form.firstName')}
                                 name="nome"
                                 error={Boolean(getError(touched.nome, errors.nome))}
@@ -350,8 +349,7 @@ const NuovaDelega = () => {
                                   void setFieldTouched('cognome', true, false);
                                   void setFieldValue('cognome', event.currentTarget.value);
                                 }}
-                                InputLabelProps={{ required: true }}
-                                inputProps={{ 'aria-required': 'true' }}
+                                required
                                 label={t('nuovaDelega.form.lastName')}
                                 name="cognome"
                                 error={Boolean(getError(touched.cognome, errors.cognome))}
@@ -370,8 +368,7 @@ const NuovaDelega = () => {
                                 }}
                                 label={t('nuovaDelega.form.businessName')}
                                 name="ragioneSociale"
-                                InputLabelProps={{ required: true }}
-                                inputProps={{ 'aria-required': 'true' }}
+                                required
                                 error={Boolean(
                                   getError(touched.ragioneSociale, errors.ragioneSociale)
                                 )}
@@ -393,8 +390,7 @@ const NuovaDelega = () => {
                             event.currentTarget.value.toUpperCase()
                           );
                         }}
-                        InputLabelProps={{ required: true }}
-                        inputProps={{ 'aria-required': 'true' }}
+                        required
                         label={t('nuovaDelega.form.fiscalCode')}
                         name="codiceFiscale"
                         error={Boolean(getError(touched.codiceFiscale, errors.codiceFiscale))}
