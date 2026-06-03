@@ -26,7 +26,7 @@ import { RootState } from '../redux/store';
 import { getConfiguration } from '../services/configuration.service';
 import PFEventStrategyFactory from '../utility/MixpanelUtils/PFEventStrategyFactory';
 import { AAR_UTM, buildSearchWithUtm } from '../utility/utm.utility';
-import { goToLoginPortal } from './navigation.utility';
+import { getOneIdentityLoginSource, goToLoginPortal } from './navigation.utility';
 import * as routes from './routes.const';
 
 const SessionGuard = () => {
@@ -100,22 +100,18 @@ const SessionGuard = () => {
   ) => {
     AppResponsePublisher.error.subscribe('exchangeTokenOneIdentity', manageUnforbiddenError);
     try {
-      const { exp, idp, aar, retrievalId } = await dispatch(
-        exchangeOneIdentityCode(exchangeCodeParams)
-      ).unwrap();
-      sessionCheck(exp);
+      const response = await dispatch(exchangeOneIdentityCode(exchangeCodeParams)).unwrap();
+      sessionCheck(response.exp);
 
       PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_LOGIN_METHOD, {
-        entityID: idp,
+        entityID: response.idp,
       });
 
-      if (aar || retrievalId) {
+      const rapidAccessSource = getOneIdentityLoginSource(response);
+
+      if (rapidAccessSource) {
         const params = new URLSearchParams(location.search);
-        if (aar) {
-          params.set(AppRouteParams.AAR, aar);
-        } else if (retrievalId) {
-          params.set(AppRouteParams.RETRIEVAL_ID, retrievalId);
-        }
+        params.set(rapidAccessSource[0], rapidAccessSource[1]);
         navigate({ search: `?${params.toString()}` }, { replace: true });
       }
     } catch (error) {

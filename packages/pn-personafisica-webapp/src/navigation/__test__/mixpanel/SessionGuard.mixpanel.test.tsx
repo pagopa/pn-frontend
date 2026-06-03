@@ -1,11 +1,11 @@
 import MockAdapter from 'axios-mock-adapter';
 import { Route, Routes } from 'react-router-dom';
-import { MockInstance, vi } from 'vitest';
+import { vi } from 'vitest';
 
-import { act, render, waitFor } from '../../../__test__/test-utils';
+import { oneIdentityUserResponse } from '../../../__mocks__/Auth.mock';
+import { PFTriggerEventSpy, act, render, waitFor } from '../../../__test__/test-utils';
 import { authClient } from '../../../api/apiClients';
 import { ONE_IDENTITY_TOKEN_EXCHANGE } from '../../../api/auth/auth.routes';
-import { oneIdentityUserResponse } from '../../../__mocks__/Auth.mock';
 import { PFEventsType } from '../../../models/PFEventsType';
 import PFEventStrategyFactory from '../../../utility/MixpanelUtils/PFEventStrategyFactory';
 import SessionGuard from '../../SessionGuard';
@@ -19,7 +19,7 @@ const Guard = () => (
 );
 
 describe('SessionGuard - Mixpanel events', () => {
-  let triggerEventSpy: MockInstance<[PFEventsType, unknown?], void>;
+  let triggerEventSpy: PFTriggerEventSpy;
   let mock: MockAdapter;
 
   beforeAll(() => {

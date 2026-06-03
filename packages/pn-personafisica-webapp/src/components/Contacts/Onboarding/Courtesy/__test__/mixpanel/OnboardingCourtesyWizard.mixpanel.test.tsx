@@ -1,8 +1,13 @@
-import { MockInstance, vi } from 'vitest';
+import { vi } from 'vitest';
 
 import { EventAction } from '@pagopa-pn/pn-commons';
 
-import { fireEvent, render, waitFor } from '../../../../../../__test__/test-utils';
+import {
+  PFTriggerEventSpy,
+  fireEvent,
+  render,
+  waitFor,
+} from '../../../../../../__test__/test-utils';
 import { OnboardingAvailableFlows, OnboardingScreen } from '../../../../../../models/Onboarding';
 import { PFEventsType } from '../../../../../../models/PFEventsType';
 import { AddressType, ChannelType, IOAllowedValues } from '../../../../../../models/contacts';
@@ -10,7 +15,7 @@ import PFEventStrategyFactory from '../../../../../../utility/MixpanelUtils/PFEv
 import OnboardingCourtesyWizard from '../../OnboardingCourtesyWizard';
 
 describe('OnboardingCourtesyWizard - Mixpanel events', () => {
-  let triggerEventSpy: MockInstance<[PFEventsType, unknown?], void>;
+  let triggerEventSpy: PFTriggerEventSpy;
 
   const basePayload = { onboarding_selected_flow: OnboardingAvailableFlows.COURTESY };
 

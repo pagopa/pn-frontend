@@ -9,6 +9,16 @@ export const getSessionLanguage = (): string => {
   return lang ?? 'it';
 };
 
+export const getValidLanguage = <T extends Record<string, string>>(
+  validLanguage: T
+): T[keyof T] => {
+  const currentLang = getSessionLanguage()?.toUpperCase() as T[keyof T];
+  if (currentLang && Object.values(validLanguage).includes(currentLang)) {
+    return currentLang;
+  }
+  return Object.values(validLanguage)[0] as T[keyof T];
+};
+
 export const setSessionLanguage = (lang: LangCode) => {
   sessionStorage.setItem(LANGUAGE_SESSION_KEY, lang);
 };

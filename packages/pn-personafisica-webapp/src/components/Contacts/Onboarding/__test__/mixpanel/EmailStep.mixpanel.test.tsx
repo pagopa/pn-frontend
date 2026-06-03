@@ -1,10 +1,17 @@
-import userEvent from '@testing-library/user-event';
 import MockAdapter from 'axios-mock-adapter';
-import { MockInstance, vi } from 'vitest';
+import { vi } from 'vitest';
 
 import { EventAction } from '@pagopa-pn/pn-commons';
+import userEvent from '@testing-library/user-event';
 
-import { act, fireEvent, render, waitFor, within } from '../../../../../__test__/test-utils';
+import {
+  PFTriggerEventSpy,
+  act,
+  fireEvent,
+  render,
+  waitFor,
+  within,
+} from '../../../../../__test__/test-utils';
 import { apiClient } from '../../../../../api/apiClients';
 import { OnboardingAvailableFlows } from '../../../../../models/Onboarding';
 import { PFEventsType } from '../../../../../models/PFEventsType';
@@ -12,7 +19,7 @@ import PFEventStrategyFactory from '../../../../../utility/MixpanelUtils/PFEvent
 import EmailStep from '../../EmailStep';
 
 describe('EmailStep - Mixpanel events', () => {
-  let triggerEventSpy: MockInstance<[PFEventsType, unknown?], void>;
+  let triggerEventSpy: PFTriggerEventSpy;
   let mock: MockAdapter;
 
   const mockEmail = 'test@mock.pagopa.it';
@@ -55,7 +62,9 @@ describe('EmailStep - Mixpanel events', () => {
     });
 
     await act(async () => {
-      fireEvent.click(getByRole('button', { name: 'onboarding.digital-domicile.email.verify-cta' }));
+      fireEvent.click(
+        getByRole('button', { name: 'onboarding.digital-domicile.email.verify-cta' })
+      );
     });
 
     await waitFor(() => {
@@ -81,7 +90,9 @@ describe('EmailStep - Mixpanel events', () => {
     });
 
     await act(async () => {
-      fireEvent.click(getByRole('button', { name: 'onboarding.digital-domicile.email.verify-cta' }));
+      fireEvent.click(
+        getByRole('button', { name: 'onboarding.digital-domicile.email.verify-cta' })
+      );
     });
 
     await waitFor(() => {
@@ -109,7 +120,9 @@ describe('EmailStep - Mixpanel events', () => {
     });
 
     await act(async () => {
-      fireEvent.click(getByRole('button', { name: 'onboarding.digital-domicile.email.verify-cta' }));
+      fireEvent.click(
+        getByRole('button', { name: 'onboarding.digital-domicile.email.verify-cta' })
+      );
     });
 
     await waitFor(() => {
@@ -137,7 +150,9 @@ describe('EmailStep - Mixpanel events', () => {
     });
 
     await act(async () => {
-      fireEvent.click(getByRole('button', { name: 'onboarding.digital-domicile.email.verify-cta' }));
+      fireEvent.click(
+        getByRole('button', { name: 'onboarding.digital-domicile.email.verify-cta' })
+      );
     });
 
     const dialog = await waitFor(() => getByTestId('codeDialog'));

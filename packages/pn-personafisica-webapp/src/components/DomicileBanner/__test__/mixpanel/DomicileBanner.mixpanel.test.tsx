@@ -1,15 +1,15 @@
-import { MockInstance, vi } from 'vitest';
+import { vi } from 'vitest';
 
 import { appStorage } from '@pagopa-pn/pn-commons';
 
-import { fireEvent, render } from '../../../../__test__/test-utils';
-import { ContactSource } from '../../../../models/contacts';
+import { PFTriggerEventSpy, fireEvent, render } from '../../../../__test__/test-utils';
 import { PFEventsType } from '../../../../models/PFEventsType';
+import { ContactSource } from '../../../../models/contacts';
 import PFEventStrategyFactory from '../../../../utility/MixpanelUtils/PFEventStrategyFactory';
 import DomicileBanner from '../../DomicileBanner';
 
 describe('DomicileBanner component - Mixpanel events', () => {
-  let triggerEventSpy: MockInstance<[PFEventsType, unknown?], void>;
+  let triggerEventSpy: PFTriggerEventSpy;
 
   beforeEach(() => {
     triggerEventSpy = vi.spyOn(PFEventStrategyFactory, 'triggerEvent');
