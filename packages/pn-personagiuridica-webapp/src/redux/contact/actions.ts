@@ -1,8 +1,13 @@
-import { ConsentType, TosPrivacyConsent, parseError } from '@pagopa-pn/pn-commons';
+import {
+  ConsentType,
+  TosPrivacyConsent,
+  getValidLanguage,
+  parseError,
+} from '@pagopa-pn/pn-commons';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
 import { apiClient } from '../../api/apiClients';
-import { AddressesApiFactory } from '../../generated-client/digital-addresses';
+import { AddressesApiFactory, CxLanguage } from '../../generated-client/digital-addresses';
 import { InfoRecipientApiFactory } from '../../generated-client/recipient-info';
 import {
   BffTosPrivacyActionBody,
@@ -54,7 +59,8 @@ export const createOrUpdateAddress = createAsyncThunk<
         params.addressType,
         params.senderId,
         params.channelType,
-        { value: params.value, verificationCode: params.code }
+        { value: params.value, verificationCode: params.code },
+        getValidLanguage(CxLanguage)
       );
 
       // user must verify contact
