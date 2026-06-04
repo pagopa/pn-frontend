@@ -6,7 +6,6 @@ import {
   Box,
   Button,
   Divider,
-  Link,
   List,
   ListItem,
   ListItemText,
@@ -81,14 +80,21 @@ const HowItWorksContactWizard: React.FC<Props> = ({ goToNextStep, setShowPecWiza
                         ns="recapiti"
                         t={(s: string) => s}
                         components={[
-                          <Link
-                            data-testid="deliveredLink"
+                          <ButtonNaked
                             key="delivered"
-                            sx={{
-                              cursor: 'pointer',
-                              textDecoration: 'underline',
-                            }}
+                            data-testid="deliveredLink"
+                            size="medium"
                             onClick={() => setModalOpen(ModalType.DELIVERED)}
+                            color="primary"
+                            aria-describedby={t(
+                              'legal-contacts.sercq-send-wizard.step_1.info-list.0.aria-describedby'
+                            )}
+                            sx={{
+                              textDecoration: 'underline',
+                              display: 'inline',
+                              fontWeight: 400,
+                              verticalAlign: 'baseline',
+                            }}
                           />,
                         ]}
                       />

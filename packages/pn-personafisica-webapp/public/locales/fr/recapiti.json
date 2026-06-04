@@ -76,7 +76,8 @@
         "info-list": [
           {
             "title": "Un organisme vous envoie une notification sur SEND",
-            "description": "La notification vous est <0>livrée</0> de manière sécurisée et avec valeur légale via la plateforme"
+            "description": "La notification vous est <0>livrée</0> de manière sécurisée et avec valeur légale via la plateforme",
+            "aria-describedby": "Activer pour lire l'explication du terme"
           },
           {
             "title": "Vous recevez un message",

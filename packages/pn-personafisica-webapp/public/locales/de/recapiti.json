@@ -76,7 +76,8 @@
         "info-list": [
           {
             "title": "Eine Körperschaft sendet dir eine Mitteilung auf SEND",
-            "description": "Die Zustellung wird dir sicher und mit Rechtswert über die Plattform <0>zugestellt</0>"
+            "description": "Die Zustellung wird dir sicher und mit Rechtswert über die Plattform <0>zugestellt</0>",
+            "aria-describedby": "Aktivieren, um die Erklärung des Begriffs zu lesen"
           },
           {
             "title": "Du erhältst eine Nachricht",

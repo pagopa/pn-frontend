@@ -48,7 +48,7 @@ const HowItWorksContactWizard: React.FC<Props> = ({ goToNextStep, setShowPecWiza
 
   const handleShowDeliveredDialog = () => {
     PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SERCQ_SEND_POP_UP);
-    setModalOpen(ModalType.DELIVERED);
+    ;
   };
 
   const handleNextStep = () => {
@@ -117,6 +117,9 @@ const HowItWorksContactWizard: React.FC<Props> = ({ goToNextStep, setShowPecWiza
                             size="medium"
                             onClick={handleShowDeliveredDialog}
                             color="primary"
+                            aria-describedby={t(
+                              'legal-contacts.sercq-send-wizard.step_1.info-list.0.aria-describedby'
+                            )}
                             sx={{
                               textDecoration: 'underline',
                               display: 'inline',
