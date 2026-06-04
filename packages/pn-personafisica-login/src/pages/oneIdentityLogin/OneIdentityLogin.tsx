@@ -9,14 +9,13 @@ import {
   PRIVACY_LINK_RELATIVE_PATH as PRIVACY_POLICY,
   useIsMobile,
 } from '@pagopa-pn/pn-commons';
+import { type IDP, MISpidSelectOIDialog } from '@pagopa/mui-italia';
 
 import { OneIdentityApi } from '../../api/OneIdentity/OneIdentity.api';
 import sendLogo from '../../assets/send.svg';
 import IOSmartAppBanner from '../../components/IoSmartAppBanner';
 import LoginButtons from '../../components/OneIdentity/LoginButtons';
-import OneIdentitySpidSelectDialog from '../../components/OneIdentity/SpidSelectDialog';
 import { useRapidAccessParam } from '../../hooks/useRapidAccessParam';
-import { IDP } from '../../models/IDPS';
 import { PFLoginEventsType } from '../../models/PFLoginEventsType';
 import { ROUTE_ONE_IDENTITY_LOGIN_ERROR } from '../../navigation/routes.const';
 import { getConfiguration } from '../../services/configuration.service';
@@ -41,13 +40,19 @@ const OneIdentityLogin: React.FC = () => {
     SERCQ_SERVICE_STATEMENT_LINK,
     DIGITAL_IDENTITY_LINK,
     ONE_IDENTITY_CIE_ENTITY_ID,
+    ONE_IDENTITY_CDN_URL,
   } = getConfiguration();
 
   const [showIdpSelect, setShowIdpSelect] = useState(false);
   const [authorizingEntityId, setAuthorizingEntityId] = useState<string | null>(null);
-  const [idpsState, setIdpsState] = useState<{ idps: Array<IDP>; loading: boolean }>({
+  const [idpsState, setIdpsState] = useState<{
+    idps: Array<IDP>;
+    loading: boolean;
+    error: boolean;
+  }>({
     idps: [],
     loading: true,
+    error: false,
   });
 
   const smartBannerHeight = IS_SMART_APP_BANNER_ENABLED ? SMART_BANNER_HEIGHT_PX : 0;
@@ -94,10 +99,11 @@ const OneIdentityLogin: React.FC = () => {
         setIdpsState({
           idps: response,
           loading: false,
+          error: false,
         })
       )
       .catch(() => {
-        setIdpsState({ idps: [], loading: false });
+        setIdpsState({ idps: [], loading: false, error: true });
       });
   };
 
@@ -195,11 +201,12 @@ const OneIdentityLogin: React.FC = () => {
         </Box>
       </Layout>
 
-      <OneIdentitySpidSelectDialog
+      <MISpidSelectOIDialog
         show={showIdpSelect}
-        IDPS={idpsState.idps}
+        idps={idpsState.idps}
         loading={idpsState.loading}
-        authorizingEntityId={authorizingEntityId}
+        error={idpsState.error}
+        oneIdentityCdnBaseUrl={ONE_IDENTITY_CDN_URL}
         handleSelectIDP={handleSelectSpid}
         onClose={() => setShowIdpSelect(false)}
       />
