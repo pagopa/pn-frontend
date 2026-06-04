@@ -72,7 +72,7 @@ describe('SercqSendContactWizard', () => {
 
     const activateButton = getByTestId('activateButton');
     expect(activateButton).toBeInTheDocument();
-    expect(activateButton).toHaveTextContent(`${labelPrefix}.enable`);
+    expect(activateButton).toHaveTextContent('legal-contacts.sercq-send-wizard.step_3.enable');
   });
 
   it('should show links to relative steps - no email', async () => {

@@ -345,6 +345,9 @@ describe('DigitalContactActivation', () => {
     fireEvent.click(emailSmsContinueButton);
 
     // recap step: press button to enable sercq
+    const sercqDisclaimer = getByTestId('sercq-send-disclaimer');
+    expect(sercqDisclaimer).toBeInTheDocument();
+
     const enableSercqButton = getByTestId('activateButton');
     fireEvent.click(enableSercqButton);
 
