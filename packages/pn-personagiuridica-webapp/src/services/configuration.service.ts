@@ -28,6 +28,10 @@ export interface PgConfiguration {
   NOTIFICATION_CANCELLED_HELP_LINK: string;
   NOTIFICATION_COST_DETAILS_ASSISTANCE_LINK: string;
   SERCQ_SERVICE_STATEMENT_LINK: string;
+  FACSIMILE_EN: string;
+  FACSIMILE_FR: string;
+  FACSIMILE_DE: string;
+  FACSIMILE_SL: string;
 }
 
 class PgConfigurationValidator extends Validator<PgConfiguration> {
@@ -68,6 +72,10 @@ class PgConfigurationValidator extends Validator<PgConfiguration> {
       .isRequired()
       .matches(dataRegex.htmlPageUrl);
     this.ruleFor('SERCQ_SERVICE_STATEMENT_LINK').isString().isRequired();
+    this.ruleFor('FACSIMILE_EN').isString().isRequired().matches(dataRegex.htmlPageUrl);
+    this.ruleFor('FACSIMILE_FR').isString().isRequired().matches(dataRegex.htmlPageUrl);
+    this.ruleFor('FACSIMILE_DE').isString().isRequired().matches(dataRegex.htmlPageUrl);
+    this.ruleFor('FACSIMILE_SL').isString().isRequired().matches(dataRegex.htmlPageUrl);
   }
 }
 

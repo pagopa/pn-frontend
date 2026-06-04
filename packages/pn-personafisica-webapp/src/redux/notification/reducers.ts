@@ -38,6 +38,7 @@ const initialState = {
     otherDocuments: [] as Array<NotificationDetailDocument>,
     notificationFeePolicy: '',
     pagoPaIntMode: '',
+    additionalLanguages: [] as Array<string>,
     iun: '',
     sentAt: '',
     notificationStatus: '' as NotificationStatus,
@@ -106,6 +107,10 @@ const notificationSlice = createSlice({
 
           if (f24Payments) {
             state.paymentsData.f24Only = f24Payments;
+          }
+          const additionalLanguages = action.payload.additionalLanguages;
+          if (additionalLanguages && additionalLanguages.length > 0) {
+            state.notification.additionalLanguages = additionalLanguages;
           }
         }
       }
