@@ -9,7 +9,7 @@ import {
   PRIVACY_LINK_RELATIVE_PATH as PRIVACY_POLICY,
   useIsMobile,
 } from '@pagopa-pn/pn-commons';
-import { type IDP, OISpidSelectDialog } from '@pagopa/mui-italia';
+import { type IDP, MISpidSelectOIDialog } from '@pagopa/mui-italia';
 
 import { OneIdentityApi } from '../../api/OneIdentity/OneIdentity.api';
 import sendLogo from '../../assets/send.svg';
@@ -201,7 +201,7 @@ const OneIdentityLogin: React.FC = () => {
         </Box>
       </Layout>
 
-      <OISpidSelectDialog
+      <MISpidSelectOIDialog
         show={showIdpSelect}
         idps={idpsState.idps}
         loading={idpsState.loading}
