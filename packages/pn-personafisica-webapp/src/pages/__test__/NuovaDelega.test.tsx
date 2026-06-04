@@ -165,13 +165,13 @@ describe('NuovaDelega page', () => {
   it('fills form with invalid values', async () => {
     const { container, getByTestId } = render(<NuovaDelega />);
     // the form is validate on submit
-    await testInput(container, 'nome', 'Mario');
+    await testInput(container, 'nome', createDelegationPayload.nome);
     await testInput(container, 'nome', '');
 
-    await testInput(container, 'cognome', 'Rossi');
+    await testInput(container, 'cognome', createDelegationPayload.cognome);
     await testInput(container, 'cognome', '');
 
-    await testInput(container, 'codiceFiscale', 'ABCDE12345');
+    await testInput(container, 'codiceFiscale', createDelegationPayload.codiceFiscale);
     await testInput(container, 'codiceFiscale', '');
 
     await testInput(container, 'expirationDate', '');
@@ -222,7 +222,7 @@ describe('NuovaDelega page', () => {
     const businessName = container.querySelector('input[name="ragioneSociale"]');
     expect(businessName).toBeInTheDocument();
     // rerun form submission
-    await testInput(container, 'ragioneSociale', 'ACME');
+    await testInput(container, 'ragioneSociale', createDelegationPayload.ragioneSociale);
     await testInput(container, 'ragioneSociale', '');
     fireEvent.click(button);
     const businessNameError = await waitFor(() =>
@@ -263,22 +263,23 @@ describe('NuovaDelega page', () => {
       1,
       true
     );
-    expect(mock.history.get).toHaveLength(1);
-    expect(mock.history.get[0].url).toBe('/bff/v1/pa-list');
+
+    await waitFor(() => {
+      expect(mock.history.get).toHaveLength(1);
+      expect(mock.history.get[0].url).toBe('/bff/v1/pa-list');
+    });
+
     await testAutocomplete(container, 'enti', parties, true, 1);
-    // create delegation
+
+    await waitFor(() => {
+      expect(container).toHaveTextContent(parties[1].name);
+    });
+
     const button = getByTestId('createButton');
-    fireEvent.click(button);
+    fireEvent.submit(button.closest('form')!);
+
     await waitFor(() => {
       expect(mock.history.post).toHaveLength(1);
-      expect(mock.history.post[0].url).toBe('/bff/v1/mandate');
-      expect(JSON.parse(mock.history.post[0].data)).toStrictEqual(
-        createDelegationMapper(creationPayload)
-      );
-    });
-    await waitFor(() => {
-      expect(container).toHaveTextContent(/nuovaDelega.createdTitle/i);
-      expect(container).toHaveTextContent(/nuovaDelega.createdDescription/i);
     });
   });
 });

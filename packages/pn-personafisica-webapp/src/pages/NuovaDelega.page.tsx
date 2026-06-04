@@ -464,6 +464,7 @@ const NuovaDelega = () => {
                                     handleChangeInput(newInputValue)
                                   }
                                   handleFiltering={(e) => e}
+                                  required
                                   label={entitySearchLabel(senderInputValue)}
                                   error={Boolean(getError(touched.enti, errors.enti))}
                                   helperText={getError(touched.enti, errors.enti)}
