@@ -48,7 +48,7 @@ const HowItWorksContactWizard: React.FC<Props> = ({ goToNextStep, setShowPecWiza
 
   const handleShowDeliveredDialog = () => {
     PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SERCQ_SEND_POP_UP);
-    ;
+    setModalOpen(ModalType.DELIVERED);
   };
 
   const handleNextStep = () => {
