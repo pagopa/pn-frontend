@@ -1,10 +1,10 @@
 import MockAdapter from 'axios-mock-adapter';
 import { Route, Routes } from 'react-router-dom';
-import { MockInstance, vi } from 'vitest';
+import { vi } from 'vitest';
 
 import { AppRouteParams } from '@pagopa-pn/pn-commons';
 
-import { act, render, waitFor } from '../../../__test__/test-utils';
+import { PFTriggerEventSpy, act, render, waitFor } from '../../../__test__/test-utils';
 import { apiClient } from '../../../api/apiClients';
 import { BffCheckTPPResponse } from '../../../generated-client/notifications';
 import { PFEventsType } from '../../../models/PFEventsType';
@@ -20,7 +20,7 @@ const Guard = () => (
 );
 
 describe('RapidAccessGuard - Mixpanel events', () => {
-  let triggerEventSpy: MockInstance<[PFEventsType, unknown?], void>;
+  let triggerEventSpy: PFTriggerEventSpy;
   let mock: MockAdapter;
 
   beforeAll(() => {

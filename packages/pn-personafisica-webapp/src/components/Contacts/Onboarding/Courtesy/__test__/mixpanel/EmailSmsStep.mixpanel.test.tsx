@@ -1,10 +1,17 @@
-import userEvent from '@testing-library/user-event';
 import MockAdapter from 'axios-mock-adapter';
-import { MockInstance, vi } from 'vitest';
+import { vi } from 'vitest';
 
 import { EventAction } from '@pagopa-pn/pn-commons';
+import userEvent from '@testing-library/user-event';
 
-import { act, fireEvent, render, waitFor, within } from '../../../../../../__test__/test-utils';
+import {
+  PFTriggerEventSpy,
+  act,
+  fireEvent,
+  render,
+  waitFor,
+  within,
+} from '../../../../../../__test__/test-utils';
 import { apiClient } from '../../../../../../api/apiClients';
 import { OnboardingAvailableFlows } from '../../../../../../models/Onboarding';
 import { PFEventsType } from '../../../../../../models/PFEventsType';
@@ -12,7 +19,7 @@ import PFEventStrategyFactory from '../../../../../../utility/MixpanelUtils/PFEv
 import EmailSmsStep from '../../EmailSmsStep';
 
 describe('EmailSmsStep - Mixpanel events', () => {
-  let triggerEventSpy: MockInstance<[PFEventsType, unknown?], void>;
+  let triggerEventSpy: PFTriggerEventSpy;
   let mock: MockAdapter;
 
   const mockEmail = 'test@mock.pagopa.it';
@@ -98,10 +105,9 @@ describe('EmailSmsStep - Mixpanel events', () => {
     const { getByLabelText, getByRole } = render(<EmailSmsStep {...createProps()} />);
 
     await act(async () => {
-      fireEvent.change(
-        getByLabelText('onboarding.courtesy.email.insert.input-label'),
-        { target: { value: mockEmail } }
-      );
+      fireEvent.change(getByLabelText('onboarding.courtesy.email.insert.input-label'), {
+        target: { value: mockEmail },
+      });
     });
 
     await act(async () => {
@@ -127,10 +133,9 @@ describe('EmailSmsStep - Mixpanel events', () => {
     const { getByLabelText, getByRole } = render(<EmailSmsStep {...props} />);
 
     await act(async () => {
-      fireEvent.change(
-        getByLabelText('onboarding.courtesy.email.insert.input-label'),
-        { target: { value: mockEmail } }
-      );
+      fireEvent.change(getByLabelText('onboarding.courtesy.email.insert.input-label'), {
+        target: { value: mockEmail },
+      });
     });
 
     await act(async () => {
@@ -157,10 +162,9 @@ describe('EmailSmsStep - Mixpanel events', () => {
     const { getByLabelText, getByRole } = render(<EmailSmsStep {...createProps()} />);
 
     await act(async () => {
-      fireEvent.change(
-        getByLabelText('onboarding.courtesy.email.insert.input-label'),
-        { target: { value: mockEmail } }
-      );
+      fireEvent.change(getByLabelText('onboarding.courtesy.email.insert.input-label'), {
+        target: { value: mockEmail },
+      });
     });
 
     await act(async () => {
@@ -186,16 +190,13 @@ describe('EmailSmsStep - Mixpanel events', () => {
     const { getByLabelText, getByRole } = render(<EmailSmsStep {...createProps(false)} />);
 
     await act(async () => {
-      fireEvent.change(
-        getByLabelText('onboarding.courtesy.sms.insert.input-label'),
-        { target: { value: mockPhone } }
-      );
+      fireEvent.change(getByLabelText('onboarding.courtesy.sms.insert.input-label'), {
+        target: { value: mockPhone },
+      });
     });
 
     await act(async () => {
-      fireEvent.click(
-        getByRole('button', { name: 'onboarding.courtesy.sms.insert.button-label' })
-      );
+      fireEvent.click(getByRole('button', { name: 'onboarding.courtesy.sms.insert.button-label' }));
     });
 
     await waitFor(() => {
@@ -216,16 +217,13 @@ describe('EmailSmsStep - Mixpanel events', () => {
     const { getByLabelText, getByRole } = render(<EmailSmsStep {...createProps(false)} />);
 
     await act(async () => {
-      fireEvent.change(
-        getByLabelText('onboarding.courtesy.sms.insert.input-label'),
-        { target: { value: mockPhone } }
-      );
+      fireEvent.change(getByLabelText('onboarding.courtesy.sms.insert.input-label'), {
+        target: { value: mockPhone },
+      });
     });
 
     await act(async () => {
-      fireEvent.click(
-        getByRole('button', { name: 'onboarding.courtesy.sms.insert.button-label' })
-      );
+      fireEvent.click(getByRole('button', { name: 'onboarding.courtesy.sms.insert.button-label' }));
     });
 
     await waitFor(() => {
@@ -243,19 +241,18 @@ describe('EmailSmsStep - Mixpanel events', () => {
       .onPost('/bff/v1/addresses/COURTESY/default/SMS')
       .reply(200, { result: 'CODE_VERIFICATION_REQUIRED' });
 
-    const { getByLabelText, getByRole, getByTestId } = render(<EmailSmsStep {...createProps(false)} />);
+    const { getByLabelText, getByRole, getByTestId } = render(
+      <EmailSmsStep {...createProps(false)} />
+    );
 
     await act(async () => {
-      fireEvent.change(
-        getByLabelText('onboarding.courtesy.sms.insert.input-label'),
-        { target: { value: mockPhone } }
-      );
+      fireEvent.change(getByLabelText('onboarding.courtesy.sms.insert.input-label'), {
+        target: { value: mockPhone },
+      });
     });
 
     await act(async () => {
-      fireEvent.click(
-        getByRole('button', { name: 'onboarding.courtesy.sms.insert.button-label' })
-      );
+      fireEvent.click(getByRole('button', { name: 'onboarding.courtesy.sms.insert.button-label' }));
     });
 
     const dialog = await waitFor(() => getByTestId('codeDialog'));
@@ -281,16 +278,13 @@ describe('EmailSmsStep - Mixpanel events', () => {
     const { getByLabelText, getByRole } = render(<EmailSmsStep {...props} />);
 
     await act(async () => {
-      fireEvent.change(
-        getByLabelText('onboarding.courtesy.sms.insert.input-label'),
-        { target: { value: mockPhone } }
-      );
+      fireEvent.change(getByLabelText('onboarding.courtesy.sms.insert.input-label'), {
+        target: { value: mockPhone },
+      });
     });
 
     await act(async () => {
-      fireEvent.click(
-        getByRole('button', { name: 'onboarding.courtesy.sms.insert.button-label' })
-      );
+      fireEvent.click(getByRole('button', { name: 'onboarding.courtesy.sms.insert.button-label' }));
     });
 
     await waitFor(() => {

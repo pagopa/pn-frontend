@@ -1,15 +1,15 @@
 import MockAdapter from 'axios-mock-adapter';
-import { MockInstance, vi } from 'vitest';
+import { vi } from 'vitest';
 
 import { currentStatusDTO, downtimesDTO } from '../../../__mocks__/AppStatus.mock';
-import { act, render } from '../../../__test__/test-utils';
+import { PFTriggerEventSpy, act, render } from '../../../__test__/test-utils';
 import { apiClient } from '../../../api/apiClients';
 import { PFEventsType } from '../../../models/PFEventsType';
 import PFEventStrategyFactory from '../../../utility/MixpanelUtils/PFEventStrategyFactory';
 import AppStatus from '../../AppStatus.page';
 
 describe('AppStatus.page - Mixpanel events', () => {
-  let triggerEventSpy: MockInstance<[PFEventsType, unknown?], void>;
+  let triggerEventSpy: PFTriggerEventSpy;
   let mock: MockAdapter;
 
   beforeAll(() => {

@@ -1,6 +1,6 @@
 import MockAdapter from 'axios-mock-adapter';
 import { Suspense } from 'react';
-import { MockInstance, vi } from 'vitest';
+import { vi } from 'vitest';
 
 import { ThemeProvider } from '@mui/material';
 import { theme } from '@pagopa/mui-italia';
@@ -11,10 +11,10 @@ import { userResponse } from '../../__mocks__/Auth.mock';
 import { tosPrivacyConsentMock } from '../../__mocks__/Consents.mock';
 import { mandatesByDelegate } from '../../__mocks__/Delegations.mock';
 import { apiClient, authClient } from '../../api/apiClients';
-import { LoginProvider } from '../../models/User';
 import { PFEventsType } from '../../models/PFEventsType';
+import { LoginProvider } from '../../models/User';
 import PFEventStrategyFactory from '../../utility/MixpanelUtils/PFEventStrategyFactory';
-import { act, fireEvent, render, screen, waitFor, within } from '../test-utils';
+import { PFTriggerEventSpy, act, fireEvent, render, screen, waitFor, within } from '../test-utils';
 
 vi.mock('../../pages/Notifiche.page', () => ({ default: () => <div>Generic Page</div> }));
 vi.mock('../../pages/Profile.page', () => ({ default: () => <div>Profile Page</div> }));
@@ -42,7 +42,7 @@ const reduxInitialState = {
 const unmockedFetch = globalThis.fetch;
 
 describe('App - Mixpanel events', () => {
-  let triggerEventSpy: MockInstance<[PFEventsType, unknown?], void>;
+  let triggerEventSpy: PFTriggerEventSpy;
   let mock: MockAdapter;
   let mockAuth: MockAdapter;
 

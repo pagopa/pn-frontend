@@ -1,10 +1,16 @@
 import MockAdapter from 'axios-mock-adapter';
-import { MockInstance, vi } from 'vitest';
+import { vi } from 'vitest';
 
-import { fireEvent, render, waitFor, within } from '../../../../__test__/test-utils';
+import {
+  PFTriggerEventSpy,
+  fireEvent,
+  render,
+  waitFor,
+  within,
+} from '../../../../__test__/test-utils';
 import { apiClient } from '../../../../api/apiClients';
-import { AddressType, ChannelType, IOAllowedValues } from '../../../../models/contacts';
 import { PFEventsType } from '../../../../models/PFEventsType';
+import { AddressType, ChannelType, IOAllowedValues } from '../../../../models/contacts';
 import PFEventStrategyFactory from '../../../../utility/MixpanelUtils/PFEventStrategyFactory';
 import IOContactWizard from '../../IOContactWizard';
 
@@ -27,7 +33,7 @@ const ioDisabled = [
 ];
 
 describe('IOContactWizard - Mixpanel events', () => {
-  let triggerEventSpy: MockInstance<[PFEventsType, unknown?], void>;
+  let triggerEventSpy: PFTriggerEventSpy;
   let mock: MockAdapter;
   const goToNextStep = vi.fn();
 
@@ -83,9 +89,7 @@ describe('IOContactWizard - Mixpanel events', () => {
       preloadedState: { contactsState: { digitalAddresses: ioEnabled } },
     });
     fireEvent.click(getByTestId('skipButton'));
-    expect(triggerEventSpy).toHaveBeenCalledWith(
-      PFEventsType.SEND_ADD_SERCQ_SEND_APP_IO_NEXT_STEP
-    );
+    expect(triggerEventSpy).toHaveBeenCalledWith(PFEventsType.SEND_ADD_SERCQ_SEND_APP_IO_NEXT_STEP);
   });
 
   it('fires SEND_ADD_SERCQ_SEND_REMOVE_IO and SEND_ADD_SERCQ_SEND_POP_UP_REMOVE_APP_IO when deactivate is clicked', () => {

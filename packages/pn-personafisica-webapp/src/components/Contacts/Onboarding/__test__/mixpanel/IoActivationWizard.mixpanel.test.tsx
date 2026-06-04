@@ -1,9 +1,15 @@
 import MockAdapter from 'axios-mock-adapter';
-import { MockInstance, vi } from 'vitest';
+import { vi } from 'vitest';
 
 import { EventAction } from '@pagopa-pn/pn-commons';
 
-import { act, fireEvent, render, waitFor } from '../../../../../__test__/test-utils';
+import {
+  PFTriggerEventSpy,
+  act,
+  fireEvent,
+  render,
+  waitFor,
+} from '../../../../../__test__/test-utils';
 import { apiClient } from '../../../../../api/apiClients';
 import { OnboardingAvailableFlows, OnboardingScreen } from '../../../../../models/Onboarding';
 import { PFEventsType } from '../../../../../models/PFEventsType';
@@ -12,7 +18,7 @@ import PFEventStrategyFactory from '../../../../../utility/MixpanelUtils/PFEvent
 import IoActivationWizard from '../../IoActivationWizard';
 
 describe('IoActivationWizard - Mixpanel events', () => {
-  let triggerEventSpy: MockInstance<[PFEventsType, unknown?], void>;
+  let triggerEventSpy: PFTriggerEventSpy;
   let mock: MockAdapter;
 
   const basePayload = { onboarding_selected_flow: OnboardingAvailableFlows.IO };

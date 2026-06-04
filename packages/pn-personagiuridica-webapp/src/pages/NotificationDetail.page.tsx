@@ -10,6 +10,7 @@ import {
   GetDowntimeHistoryParams,
   LegalFactId,
   LegalFactType,
+  NotificationDetailBilingualFacsimileDocuments,
   NotificationDetailDocuments,
   NotificationDetailOtherDocument,
   NotificationDetailPayment,
@@ -31,6 +32,7 @@ import {
   downloadDocument,
   formatDate,
   getPaymentCache,
+  getSessionLanguage,
   useErrors,
   useHasPermissions,
   useIsCancelled,
@@ -41,6 +43,7 @@ import { MIAlert } from '@pagopa/mui-italia';
 import DomicileBanner from '../components/DomicileBanner/DomicileBanner';
 import LoadingPageWrapper from '../components/LoadingPageWrapper/LoadingPageWrapper';
 import { NotificationCostBanner } from '../components/Notifications/NotificationCostBanner';
+import { PGEventsType } from '../models/PGEventsType';
 import { PNRole } from '../models/User';
 import { ContactSource } from '../models/contacts';
 import * as routes from '../navigation/routes.const';
@@ -58,6 +61,7 @@ import {
 import { resetState } from '../redux/notification/reducers';
 import { RootState } from '../redux/store';
 import { getConfiguration } from '../services/configuration.service';
+import PGEventStrategyFactory from '../utility/MixpanelUtils/PGEventStrategyFactory';
 
 // state for the invocations to this component
 // (to include in navigation or Link to the route/s arriving to it)
@@ -83,6 +87,7 @@ const NotificationDetail = () => {
   const isMobile = useIsMobile();
   const { hasApiErrors } = useErrors();
   const [pageReady, setPageReady] = useState(false);
+  const [downtimesReady, setDowntimesReady] = useState(false);
   const {
     F24_DOWNLOAD_WAIT_TIME,
     DOWNTIME_EXAMPLE_LINK,
@@ -96,6 +101,11 @@ const NotificationDetail = () => {
 
   const userHasAdminPermissions = useHasPermissions(role ? [role.role] : [], [PNRole.ADMIN]);
   const notification = useAppSelector((state: RootState) => state.notificationState.notification);
+  const notificationLanguage = notification.additionalLanguages?.[0] ?? 'IT';
+  const sessionLang = getSessionLanguage()?.toUpperCase();
+  const isSameLang = notificationLanguage?.includes(sessionLang);
+
+  const showBilingualFacsimileSection = !isSameLang && sessionLang !== 'IT';
   const downtimeEvents = useAppSelector(
     (state: RootState) => state.notificationState.downtimeEvents
   );
@@ -355,7 +365,7 @@ const NotificationDetail = () => {
       if (paymentInfoRequest.length === 0) {
         return;
       }
-      safeDispatch(getReceivedNotificationPaymentInfo, {
+      void safeDispatch(getReceivedNotificationPaymentInfo, {
         taxId: currentRecipient.taxId,
         paymentInfoRequest,
       });
@@ -376,14 +386,32 @@ const NotificationDetail = () => {
     return () => void dispatch(resetState());
   }, []);
 
-  /* function which loads relevant information about donwtimes */
+  /* Loads relevant information about downtimes */
   const fetchDowntimeEvents = useCallback((fromDate: string, toDate: string | undefined) => {
     const fetchParams: GetDowntimeHistoryParams = {
       startDate: fromDate,
       endDate: toDate,
     };
-    void dispatch(getDowntimeHistory(fetchParams));
+    dispatch(getDowntimeHistory(fetchParams))
+      .unwrap()
+      .then(() => {
+        setDowntimesReady(true);
+      })
+      .catch(() => {});
   }, []);
+
+  useEffect(() => {
+    if (downtimesReady && pageReady && !hasNotificationReceivedApiError) {
+      PGEventStrategyFactory.triggerEvent(PGEventsType.SEND_PG_NOTIFICATION_DETAIL, {
+        downtimeEvents,
+        mandateId,
+        notificationStatus: notification.notificationStatus,
+        checkIfUserHasPayments,
+        userPayments,
+        timeline: notification.timeline,
+      });
+    }
+  }, [downtimesReady, pageReady, hasNotificationReceivedApiError]);
 
   const fetchDowntimeLegalFactDocumentDetails = useCallback((legalFactId: string) => {
     if (!isCancelled.cancelled || !isCancelled.cancellationInProgress) {
@@ -548,6 +576,15 @@ const NotificationDetail = () => {
                   disableDownloads={isCancelled.cancellationInTimeline}
                   downtimeExampleLink={DOWNTIME_EXAMPLE_LINK}
                 />
+                {showBilingualFacsimileSection && (
+                  <Paper sx={{ p: 3 }} elevation={0}>
+                    <NotificationDetailBilingualFacsimileDocuments
+                      title={t('detail.bilingual.title', { ns: 'notifiche' })}
+                      description={t('detail.bilingual.description', { ns: 'notifiche' })}
+                      action={t('detail.bilingual.action', { ns: 'notifiche' })}
+                    />
+                  </Paper>
+                )}
               </Stack>
             </Grid>
             <Grid item lg={5} xs={12}>

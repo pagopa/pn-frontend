@@ -1,7 +1,13 @@
-import { MockInstance, vi } from 'vitest';
+import { vi } from 'vitest';
 
 import { IDPS_MOCK } from '../../../../__mocks__/IDPS.mock';
-import { act, fireEvent, render, waitFor } from '../../../../__test__/test-utils';
+import {
+  PFLoginTriggerEventSpy,
+  act,
+  fireEvent,
+  render,
+  waitFor,
+} from '../../../../__test__/test-utils';
 import { OneIdentityApi } from '../../../../api/OneIdentity/OneIdentity.api';
 import { PFLoginEventsType } from '../../../../models/PFLoginEventsType';
 import PFLoginEventStrategyFactory from '../../../../utility/MixpanelUtils/PFLoginEventStrategyFactory';
@@ -15,7 +21,7 @@ vi.mock('../../../../api/OneIdentity/OneIdentity.api', () => ({
 }));
 
 describe('One Identity Login page - Mixpanel events', () => {
-  let triggerEventSpy: MockInstance<[PFLoginEventsType, unknown?], void>;
+  let triggerEventSpy: PFLoginTriggerEventSpy;
 
   beforeEach(() => {
     vi.stubGlobal('location', { assign: vi.fn() });

@@ -1,5 +1,13 @@
 export { Configuration } from '../services/configuration.service';
 export { default as EventStrategyFactory } from './MixpanelUtils/EventStrategyFactory';
+export {
+  koError,
+  superProperty,
+  uxAction,
+  uxConfirm,
+  uxScreenView,
+} from './MixpanelUtils/CommonTrackingEvents';
+export type { TrackingProperties } from './MixpanelUtils/CommonTrackingEvents';
 export { default as AppError } from './AppError/AppError';
 export { default as AppErrorFactory } from './AppError/AppErrorFactory';
 export { default as errorFactoryManager } from './AppError/ErrorFactoryManager';
@@ -54,6 +62,7 @@ export {
   getSessionLanguage,
   hashDetectorLookup,
   setSessionLanguage,
+  getValidLanguage,
 } from './multilanguage.utility';
 export { addParamToUrl } from './navigation.utility';
 export {

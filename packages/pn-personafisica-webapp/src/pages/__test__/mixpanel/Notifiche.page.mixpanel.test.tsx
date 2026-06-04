@@ -1,9 +1,9 @@
 import MockAdapter from 'axios-mock-adapter';
-import { MockInstance, vi } from 'vitest';
+import { vi } from 'vitest';
 
 import { mandatesByDelegate } from '../../../__mocks__/Delegations.mock';
 import { notificationsDTO } from '../../../__mocks__/Notifications.mock';
-import { act, render, waitFor } from '../../../__test__/test-utils';
+import { PFTriggerEventSpy, act, render, waitFor } from '../../../__test__/test-utils';
 import { apiClient } from '../../../api/apiClients';
 import { PFEventsType } from '../../../models/PFEventsType';
 import * as routes from '../../../navigation/routes.const';
@@ -11,7 +11,7 @@ import PFEventStrategyFactory from '../../../utility/MixpanelUtils/PFEventStrate
 import Notifiche from '../../Notifiche.page';
 
 describe('Notifiche.page - Mixpanel events', () => {
-  let triggerEventSpy: MockInstance<[PFEventsType, unknown?], void>;
+  let triggerEventSpy: PFTriggerEventSpy;
   let mock: MockAdapter;
   const originalResizeObserver = globalThis.ResizeObserver;
 

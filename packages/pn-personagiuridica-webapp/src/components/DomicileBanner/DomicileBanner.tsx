@@ -1,4 +1,5 @@
 import { TFunction } from 'i18next';
+import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
@@ -17,6 +18,7 @@ import { getConfiguration } from '../../services/configuration.service';
 
 type Props = {
   source: ContactSource;
+  onBannerResolved?: (domicileBannerType: string) => void;
 };
 
 type DomicileBannerData = {
@@ -82,7 +84,10 @@ const resolveCta = (
   };
 };
 
-const DomicileBanner: React.FC<Props> = ({ source }) => {
+const getBannerType = (open: boolean, data: DomicileBannerData | null): string =>
+  open && data?.destination ? data.destination : '';
+
+const DomicileBanner: React.FC<Props> = ({ source, onBannerResolved }) => {
   const { t } = useTranslation(['recapiti', 'common']);
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
@@ -97,6 +102,12 @@ const DomicileBanner: React.FC<Props> = ({ source }) => {
   const domicileBannerData: DomicileBannerData | null = defaultPECAddress
     ? null
     : getDomicileData(source, !!defaultSERCQ_SENDAddress, hasCourtesyAddresses, IS_DOD_ENABLED);
+
+  const bannerType = getBannerType(open, domicileBannerData);
+
+  useEffect(() => {
+    onBannerResolved?.(bannerType);
+  }, [bannerType, onBannerResolved]);
 
   const handleClose = () => {
     dispatch(closeDomicileBanner());

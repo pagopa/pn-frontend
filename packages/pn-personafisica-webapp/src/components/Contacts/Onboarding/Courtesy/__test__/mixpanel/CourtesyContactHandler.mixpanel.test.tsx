@@ -1,7 +1,7 @@
 import { createRef } from 'react';
-import { MockInstance, vi } from 'vitest';
+import { vi } from 'vitest';
 
-import { act, fireEvent, render } from '../../../../../../__test__/test-utils';
+import { PFTriggerEventSpy, act, fireEvent, render } from '../../../../../../__test__/test-utils';
 import { OnboardingAvailableFlows } from '../../../../../../models/Onboarding';
 import { PFEventsType } from '../../../../../../models/PFEventsType';
 import { ChannelType } from '../../../../../../models/contacts';
@@ -9,7 +9,7 @@ import PFEventStrategyFactory from '../../../../../../utility/MixpanelUtils/PFEv
 import CourtesyContactHandler from '../../CourtesyContactHandler';
 
 describe('CourtesyContactHandler - Mixpanel events', () => {
-  let triggerEventSpy: MockInstance<[PFEventsType, unknown?], void>;
+  let triggerEventSpy: PFTriggerEventSpy;
 
   const mockEmail = 'test@mock.pagopa.it';
   const mockPhone = '+393331234567';

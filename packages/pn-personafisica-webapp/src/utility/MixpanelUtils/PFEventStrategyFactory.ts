@@ -50,6 +50,7 @@ import { SendViewProfileStrategy } from './Strategies/SendViewProfileStrategy';
 import { SendYourContactDetailsStrategy } from './Strategies/SendYourContactDetailsStrategy';
 import { SendYourMandatesStrategy } from './Strategies/SendYourMandatesStrategy';
 import { SendYourNotificationsStrategy } from './Strategies/SendYourNotificationsStrategy';
+import { TechRapidAccessStrategy } from './Strategies/TechRapidAccessStrategy';
 import { TechScreenViewStrategy } from './Strategies/TechScreenViewStrategy';
 import { TechStrategy } from './Strategies/TechStrategy';
 import { UXActionStrategy } from './Strategies/UXActionStrategy';
@@ -215,7 +216,6 @@ const uxErrorStrategy = [
 ] as const;
 
 const techStrategy = [
-  PFEventsType.SEND_RAPID_ACCESS,
   PFEventsType.SEND_AUTH_SUCCESS,
   PFEventsType.SEND_F24_DOWNLOAD_SUCCESS,
   PFEventsType.SEND_F24_DOWNLOAD_TIMEOUT,
@@ -440,6 +440,7 @@ const eventStrategy: Record<
   [PFEventsType.SEND_LANDING_PAGE_FAQ_OPEN]: new SendTppLandingFaqOpenStrategy(),
   [PFEventsType.SEND_NOTIFICATION_EXPENSES_DETAIL]: new SendNotificationExpensesDetailStrategy(),
   [PFEventsType.SEND_LOGIN_METHOD]: new SendOneIdentityLoginMethodStrategy(),
+  [PFEventsType.SEND_RAPID_ACCESS]: new TechRapidAccessStrategy(),
 };
 
 const isInEventStrategyMap = (value: PFEventsType): value is keyof typeof eventStrategy => {

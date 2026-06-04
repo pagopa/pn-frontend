@@ -1,5 +1,5 @@
 import MockAdapter from 'axios-mock-adapter';
-import { MockInstance, vi } from 'vitest';
+import { vi } from 'vitest';
 
 import { SERCQ_SEND_VALUE } from '@pagopa-pn/pn-commons';
 import { getById } from '@pagopa-pn/pn-commons/src/test-utils';
@@ -8,10 +8,10 @@ import {
   acceptTosSercqSendBodyMock,
   sercqSendTosConsentMock,
 } from '../../../../__mocks__/Consents.mock';
-import { fireEvent, render, waitFor } from '../../../../__test__/test-utils';
+import { PFTriggerEventSpy, fireEvent, render, waitFor } from '../../../../__test__/test-utils';
 import { apiClient } from '../../../../api/apiClients';
-import { AddressType, ChannelType, IOAllowedValues } from '../../../../models/contacts';
 import { PFEventsType } from '../../../../models/PFEventsType';
+import { AddressType, ChannelType, IOAllowedValues } from '../../../../models/contacts';
 import PFEventStrategyFactory from '../../../../utility/MixpanelUtils/PFEventStrategyFactory';
 import SercqSendContactWizard from '../../SercqSendContactWizard';
 
@@ -45,7 +45,7 @@ const courtesyEmailAndSms = [
 ];
 
 describe('SercqSendContactWizard - Mixpanel events', () => {
-  let triggerEventSpy: MockInstance<[PFEventsType, unknown?], void>;
+  let triggerEventSpy: PFTriggerEventSpy;
   let mock: MockAdapter;
   const goToStep = vi.fn();
 
@@ -100,10 +100,9 @@ describe('SercqSendContactWizard - Mixpanel events', () => {
   });
 
   it('fires SEND_ADD_SERCQ_SEND_TOS_MANDATORY and SEND_ADD_SERCQ_SEND_UX_CONVERSION when activate is clicked without disclaimer', async () => {
-    const { getByTestId, findByTestId } = render(
-      <SercqSendContactWizard goToStep={goToStep} />,
-      { preloadedState: { contactsState: { digitalAddresses: courtesyEmailOnly } } }
-    );
+    const { getByTestId, findByTestId } = render(<SercqSendContactWizard goToStep={goToStep} />, {
+      preloadedState: { contactsState: { digitalAddresses: courtesyEmailOnly } },
+    });
     // wait for validateOnMount async Yup validation to settle before clicking
     await findByTestId('activateButton');
     fireEvent.click(getByTestId('activateButton'));
@@ -121,10 +120,9 @@ describe('SercqSendContactWizard - Mixpanel events', () => {
     mock.onGet(/\/bff\/v2\/tos-privacy.*/).reply(200, sercqSendTosConsentMock(false));
     mock.onPut('/bff/v2/tos-privacy', acceptTosSercqSendBodyMock).reply(200);
 
-    const { container, getByTestId } = render(
-      <SercqSendContactWizard goToStep={goToStep} />,
-      { preloadedState: { contactsState: { digitalAddresses: courtesyEmailOnly } } }
-    );
+    const { container, getByTestId } = render(<SercqSendContactWizard goToStep={goToStep} />, {
+      preloadedState: { contactsState: { digitalAddresses: courtesyEmailOnly } },
+    });
 
     fireEvent.click(getById(container, 'disclaimer'));
     fireEvent.click(getByTestId('activateButton'));
@@ -132,7 +130,10 @@ describe('SercqSendContactWizard - Mixpanel events', () => {
     await waitFor(() => {
       expect(triggerEventSpy).toHaveBeenCalledWith(
         PFEventsType.SEND_ADD_SERCQ_SEND_UX_SUCCESS,
-        expect.objectContaining({ event_type: expect.any(String), other_contact: expect.anything() })
+        expect.objectContaining({
+          event_type: expect.any(String),
+          other_contact: expect.anything(),
+        })
       );
     });
   });
@@ -154,13 +155,10 @@ describe('SercqSendContactWizard - Mixpanel events', () => {
   });
 
   it('fires SEND_ADD_SERCQ_SEND_GO_TO_APP_IO when the IO link is clicked', () => {
-    const { getByTestId } = render(
-      <SercqSendContactWizard goToStep={goToStep} showIOStep />,
-      { preloadedState: { contactsState: { digitalAddresses: courtesyEmailAndSms } } }
-    );
+    const { getByTestId } = render(<SercqSendContactWizard goToStep={goToStep} showIOStep />, {
+      preloadedState: { contactsState: { digitalAddresses: courtesyEmailAndSms } },
+    });
     fireEvent.click(getByTestId('backToContactStep'));
-    expect(triggerEventSpy).toHaveBeenCalledWith(
-      PFEventsType.SEND_ADD_SERCQ_SEND_GO_TO_APP_IO
-    );
+    expect(triggerEventSpy).toHaveBeenCalledWith(PFEventsType.SEND_ADD_SERCQ_SEND_GO_TO_APP_IO);
   });
 });

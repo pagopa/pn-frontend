@@ -35,15 +35,19 @@ const SuccessPage = () => {
   }, [rapidAccess, token, i18n.language]);
 
   useEffect(() => {
-    calcRedirectUrl();
-
     const IDP = sessionStorage.getItem('IDP');
 
-    PFLoginEventStrategyFactory.triggerEvent(PFLoginEventsType.SEND_LOGIN_METHOD, {
-      entityID: IDP,
-    });
+    PFLoginEventStrategyFactory.triggerEvent(
+      PFLoginEventsType.SEND_LOGIN_METHOD,
+      {
+        entityID: IDP,
+      },
+      { transport: 'sendBeacon' }
+    );
 
     sessionStorage.removeItem('IDP');
+
+    calcRedirectUrl();
   }, []);
 
   return null;
