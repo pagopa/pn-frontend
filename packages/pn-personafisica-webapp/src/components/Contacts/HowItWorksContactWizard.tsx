@@ -12,6 +12,7 @@ import {
   Stack,
   Typography,
 } from '@mui/material';
+import { visuallyHidden } from '@mui/utils';
 import { EventAction } from '@pagopa-pn/pn-commons';
 import { ButtonNaked } from '@pagopa/mui-italia';
 
@@ -117,9 +118,7 @@ const HowItWorksContactWizard: React.FC<Props> = ({ goToNextStep, setShowPecWiza
                             size="medium"
                             onClick={handleShowDeliveredDialog}
                             color="primary"
-                            aria-describedby={t(
-                              'legal-contacts.sercq-send-wizard.step_1.info-list.0.aria-describedby'
-                            )}
+                            aria-describedby="descriptionHidden"
                             sx={{
                               textDecoration: 'underline',
                               display: 'inline',
@@ -129,6 +128,13 @@ const HowItWorksContactWizard: React.FC<Props> = ({ goToNextStep, setShowPecWiza
                           />,
                         ]}
                       />
+                    </Typography>
+                    <Typography
+                      key="description-hidden"
+                      id="descriptionHidden"
+                      style={visuallyHidden}
+                    >
+                      {t('legal-contacts.sercq-send-wizard.step_1.info-list.0.aria-describedby')}
                     </Typography>
                   </ListItemText>
                 </ListItem>
