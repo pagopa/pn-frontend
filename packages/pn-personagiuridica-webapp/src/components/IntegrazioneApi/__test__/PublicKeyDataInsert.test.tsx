@@ -23,13 +23,8 @@ const duplicateKeyMock = vi.fn().mockImplementation((publicKey: string | undefin
 const mockOpenFn = vi.fn();
 
 describe('PublicKeyDataInsert', () => {
-  const original = globalThis.open;
-
   beforeAll(() => {
-    Object.defineProperty(globalThis, 'open', {
-      configurable: true,
-      value: mockOpenFn,
-    });
+    vi.stubGlobal('open', mockOpenFn);
   });
 
   afterEach(() => {
@@ -37,7 +32,7 @@ describe('PublicKeyDataInsert', () => {
   });
 
   afterAll((): void => {
-    Object.defineProperty(globalThis, 'open', { configurable: true, value: original });
+    vi.unstubAllGlobals();
   });
 
   it('render component', async () => {

@@ -41,7 +41,7 @@ async function setFormValues(
   await testInput(form, 'iunMatch', iunMatch);
 }
 
-describe('Filter Notifications Table Component', async () => {
+describe('Filter Notifications Table Component', () => {
   let result: RenderResult;
   let form: HTMLFormElement;
 

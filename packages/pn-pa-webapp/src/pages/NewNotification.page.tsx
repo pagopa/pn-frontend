@@ -63,7 +63,7 @@ const NewNotification = () => {
     // eslint-disable-next-line functional/immutable-data
     baseSteps.push(t('new-notification.steps.attachments.title', { ns: 'notifiche' }));
     return baseSteps;
-  }, []);
+  }, [t]);
 
   const hasDebtPosition =
     IS_PAYMENT_ENABLED &&

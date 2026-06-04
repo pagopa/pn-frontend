@@ -7,7 +7,7 @@ import CancelVerificationModal from '../CancelVerificationModal';
 
 const mockCloseHandler = vi.fn();
 
-describe('CancelVerificationModal component', async () => {
+describe('CancelVerificationModal component', () => {
   afterEach(() => {
     vi.clearAllMocks();
   });

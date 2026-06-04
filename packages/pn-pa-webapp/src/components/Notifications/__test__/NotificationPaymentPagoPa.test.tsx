@@ -22,7 +22,7 @@ vi.mock('@pagopa-pn/pn-commons', async () => {
   };
 });
 
-describe('NotificationPaymentPagoPa Component', async () => {
+describe('NotificationPaymentPagoPa Component', () => {
   let mock: MockAdapter;
 
   beforeAll(() => {

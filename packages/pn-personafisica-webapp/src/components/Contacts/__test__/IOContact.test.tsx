@@ -13,26 +13,25 @@ import IOContact from '../IOContact';
 const IOAddress = digitalCourtesyAddresses.find((addr) => addr.channelType === ChannelType.IOMSG);
 const assignFn = vi.fn();
 
-describe('IOContact component', async () => {
+describe('IOContact component', () => {
   let mock: MockAdapter;
-  const originalLocation = globalThis.location;
 
   beforeAll(() => {
     mock = new MockAdapter(apiClient);
-    Object.defineProperty(globalThis, 'location', {
-      configurable: true,
-      value: { assign: assignFn },
-    });
+  });
+
+  beforeEach(() => {
+    vi.stubGlobal('location', { assign: assignFn });
   });
 
   afterEach(() => {
     mock.reset();
     vi.clearAllMocks();
+    vi.unstubAllGlobals();
   });
 
   afterAll(() => {
     mock.restore();
-    Object.defineProperty(globalThis, 'location', { configurable: true, value: originalLocation });
   });
 
   it('renders component - no contacts', () => {
@@ -130,9 +129,7 @@ describe('IOContact component', async () => {
   });
 
   it('Click on download AppIO button - IOS', () => {
-    Object.defineProperty(globalThis, 'navigator', {
-      value: { userAgent: 'iPhone' },
-    });
+    vi.stubGlobal('navigator', { userAgent: 'iPhone' });
     const { getByRole } = render(<IOContact />);
     const button = getByRole('button', { name: 'io-contact.download' });
     fireEvent.click(button);
@@ -141,9 +138,7 @@ describe('IOContact component', async () => {
   });
 
   it('Click on download AppIO button - Android', () => {
-    Object.defineProperty(globalThis, 'navigator', {
-      value: { userAgent: 'Android' },
-    });
+    vi.stubGlobal('navigator', { userAgent: 'Android' });
     const { getByRole } = render(<IOContact />);
     const button = getByRole('button', { name: 'io-contact.download' });
     fireEvent.click(button);

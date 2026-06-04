@@ -6,7 +6,7 @@ import * as routes from '../../../navigation/routes.const';
 import { sortDelegations } from '../../../utility/delegation.utility';
 import Delegates from '../Delegates';
 
-describe('Delegates Component', async () => {
+describe('Delegates Component', () => {
   afterEach(() => {
     vi.clearAllMocks();
   });

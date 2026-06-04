@@ -16,7 +16,7 @@ const defaultPecAddress = digitalLegalAddresses.find(
   (addr) => addr.senderId === 'default' && addr.pecValid && addr.channelType === ChannelType.PEC
 );
 
-describe('LegalContacts Component', async () => {
+describe('LegalContacts Component', () => {
   let mock: MockAdapter;
 
   beforeAll(() => {

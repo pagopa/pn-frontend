@@ -32,7 +32,7 @@ const yesterday = new Date(today);
 yesterday.setDate(yesterday.getDate() - 1);
 yesterday.setHours(0, 0, 0, 0);
 
-describe('NuovaDelega page', async () => {
+describe('NuovaDelega page', () => {
   let mock: MockAdapter;
   let result: RenderResult;
 
@@ -54,7 +54,7 @@ describe('NuovaDelega page', async () => {
   });
 
   it('renders the component desktop view', async () => {
-    const { container, getAllByTestId, getByTestId } = render(<NuovaDelega />);
+    const { container, getByTestId } = render(<NuovaDelega />);
     expect(container).toHaveTextContent(/nuovaDelega.title/i);
     expect(container).toHaveTextContent(/nuovaDelega.subtitle/i);
     expect(mock.history.get).toHaveLength(0);
@@ -81,11 +81,12 @@ describe('NuovaDelega page', async () => {
       'nuovaDelega.form.endDate',
       formatDate(tomorrow.toISOString())
     );
-    const codeDigit = getAllByTestId('codeDigit');
-    const codes = '34153'.split('');
-    codeDigit.forEach((code, index) => {
-      expect(code).toHaveTextContent(codes[index]);
-    });
+    const verificationCode = getByTestId('verificationCode');
+
+    const input = verificationCode.querySelector('input');
+
+    expect(input).toBeInTheDocument();
+    expect(input).toHaveValue('34153');
     const createButton = getByTestId('createButton');
     expect(createButton).toBeEnabled();
   });

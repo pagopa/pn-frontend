@@ -24,22 +24,13 @@ const userActions = [
 ];
 
 describe('Header Component', () => {
-  const original = globalThis.location;
-
-  beforeAll(() => {
-    Object.defineProperty(globalThis, 'location', {
-      configurable: true,
-      value: { href: '', assign: assignFn },
-    });
-  });
-
   beforeEach(() => {
-    globalThis.location.href = '';
+    vi.stubGlobal('location', { href: '', assign: assignFn });
     vi.clearAllMocks();
   });
 
-  afterAll((): void => {
-    Object.defineProperty(globalThis, 'location', { configurable: true, value: original });
+  afterEach((): void => {
+    vi.unstubAllGlobals();
   });
 
   it('renders header (one product, no parties and no user dropdown)', async () => {
