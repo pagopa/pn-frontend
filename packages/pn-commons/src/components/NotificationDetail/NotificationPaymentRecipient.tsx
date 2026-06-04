@@ -59,6 +59,7 @@ type Props = {
 type PaymentError = {
   title?: string;
   description: string;
+  source?: 'tpp' | 'default';
 } | null;
 
 const NotificationPaymentRecipient: React.FC<Props> = ({
@@ -216,6 +217,7 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
           'notifications',
           'detail.payment.tpp-expired-error-description'
         ),
+        source: 'tpp',
       });
     }
 
@@ -420,7 +422,7 @@ const PaymentButtons = ({
         </Stack>
       )}
       <Button
-        color={errorOnPayment ? 'error' : 'primary'}
+        color={errorOnPayment && errorOnPayment.source !== 'tpp' ? 'error' : 'primary'}
         fullWidth
         variant={errorOnPayment || hasPaymentTpp ? 'outlined' : 'contained'}
         data-testid="pay-button"
