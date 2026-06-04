@@ -49,6 +49,7 @@ const LoginButtons: React.FC<Props> = ({
         variant="contained"
         onClick={handleSpidClick}
         startIcon={<SpidIcon />}
+        disabled={authorizingEntityId !== null}
         sx={{ mb: 3 }}
       >
         {t('loginPage.loginBox.spidLogin')}
