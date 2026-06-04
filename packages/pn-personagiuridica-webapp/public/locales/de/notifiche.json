@@ -377,6 +377,11 @@
         "title": "Das Dokument ist nicht verfügbar",
         "message": "Beim Abrufen des Dokuments ist ein Problem aufgetreten. Bitte versuchen Sie es später erneut. Wenn der Fehler weiterhin besteht, kontaktieren Sie den Support und geben Sie die Fehlerinformationen an."
       }
+    },
+    "bilingual": {
+      "title": "SUPPORT-FAKSIMILE-VORLAGEN auf Deutsch",
+      "description": "Die Sprache der beigefügten Akte kann von der Sprache abweichen, mit der du das Portal nutzt. Um den Inhalt dieser Dokumente zu verstehen, kannst du die Faksimile-Vorlagen verwenden, die du hier findest.",
+      "action": "Konsultiere die Vorlagen"
     }
   },
   "delegatorTitle": "Bescheide von {{name}}",

@@ -377,6 +377,11 @@
         "title": "Document not available",
         "message": "There was a problem retrieving the document. Please try again later. If the error persists, contact support and provide the error information."
       }
+    },
+    "bilingual": {
+      "title": "SUPPORT FACSIMILE TEMPLATES in English",
+      "description": "The language of the attached documents may differ from the one you are using to browse the portal. To understand the content of these documents, you can use the facsimile templates found here.",
+      "action": "Consult the templates"
     }
   },
   "delegatorTitle": "Notifications of {{name}} ",

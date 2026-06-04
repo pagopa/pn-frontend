@@ -384,6 +384,11 @@
         "title": "Dokument ni na voljo",
         "message": "Pri pridobivanju dokumenta je prišlo do težave. Poskusite znova pozneje. Če se napaka ponovi, stopite v stik s podporo in sporočite podatke o napaki."
       }
+    },
+    "bilingual": {
+      "title": "PODPORNI FAKSIMILNI VZORCI v slovenščini",
+      "description": "Jezik priloženih aktov se lahko razlikuje od jezika, v katerem brskaš po portalu. Če želiš razumeti vsebino teh dokumentov, lahko uporabiš faksimilne vzorce, ki jih najdeš tukaj.",
+      "action": "Preglej vzorce"
     }
   },
   "delegatorTitle": "Obvestila {{name}}",

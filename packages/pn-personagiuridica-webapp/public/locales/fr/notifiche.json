@@ -377,6 +377,11 @@
         "title": "Le document n'est pas disponible",
         "message": "Un problème est survenu lors de la récupération du document. Veuillez réessayer plus tard. Si l'erreur persiste, contactez l'assistance et communiquez les informations d'erreur."
       }
+    },
+    "bilingual": {
+      "title": "modèles de FAC-SIMILÉ DE SUPPORT en français",
+      "description": "La langue des actes joints peut différer de celle avec laquelle tu navigues sur le portail. Pour comprendre le contenu de ces documents, tu peux utiliser les modèles de fac-similé que tu trouves ici.",
+      "action": "Consulte les modèles"
     }
   },
   "delegatorTitle": "Les notifications de {{name}} ",

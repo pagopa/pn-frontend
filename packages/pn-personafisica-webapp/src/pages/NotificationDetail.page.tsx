@@ -20,6 +20,7 @@ import {
   IllusQuestion,
   LegalFactId,
   LegalFactType,
+  NotificationDetailBilingualFacsimileDocuments,
   NotificationDetailDocuments,
   NotificationDetailOtherDocument,
   NotificationDetailPayment,
@@ -41,6 +42,7 @@ import {
   downloadDocument,
   formatDate,
   getPaymentCache,
+  getSessionLanguage,
   useErrors,
   useIsCancelled,
   useIsMobile,
@@ -102,6 +104,10 @@ const NotificationDetail: React.FC = () => {
     DOWNTIME_EXAMPLE_LINK,
     NOTIFICATION_COST_DETAILS_ASSISTANCE_LINK,
     NOTIFICATION_CANCELLED_HELP_LINK,
+    FACSIMILE_EN,
+    FACSIMILE_FR,
+    FACSIMILE_DE,
+    FACSIMILE_SL,
   } = getConfiguration();
   const navigate = useNavigate();
 
@@ -110,10 +116,14 @@ const NotificationDetail: React.FC = () => {
     (state: RootState) => state.generalInfoState.delegators
   );
   const notification = useAppSelector((state: RootState) => state.notificationState.notification);
+  const notificationLanguage = notification.additionalLanguages?.[0] ?? 'IT';
+  const sessionLang = getSessionLanguage()?.toUpperCase();
+  const isSameLang = notificationLanguage?.includes(sessionLang);
   const downtimeEvents = useAppSelector(
     (state: RootState) => state.notificationState.downtimeEvents
   );
 
+  const showBilingualFacsimileSection = !isSameLang && sessionLang !== 'IT';
   const isCancelled = useIsCancelled({ notification });
   const isCancelledOrCancelling = isCancelled.cancelled || isCancelled.cancellationInProgress;
   const currentRecipient = notification?.currentRecipient;
@@ -631,6 +641,21 @@ const NotificationDetail: React.FC = () => {
     );
   }
 
+  const getFacSimileLink = (): string => {
+    switch (sessionLang) {
+      case 'EN':
+        return FACSIMILE_EN;
+      case 'FR':
+        return FACSIMILE_FR;
+      case 'DE':
+        return FACSIMILE_DE;
+      case 'SL':
+        return FACSIMILE_SL;
+      default:
+        return FACSIMILE_EN;
+    }
+  };
+
   return (
     <NotificationDetailOnboardingPrompt
       iun={notification.iun}
@@ -737,6 +762,16 @@ const NotificationDetail: React.FC = () => {
                     disableDownloads={isCancelled.cancellationInTimeline}
                     downtimeExampleLink={DOWNTIME_EXAMPLE_LINK}
                   />
+                  {showBilingualFacsimileSection && (
+                    <Paper sx={{ p: 3 }} elevation={0}>
+                      <NotificationDetailBilingualFacsimileDocuments
+                        title={t('detail.bilingual.title', { ns: 'notifiche' })}
+                        description={t('detail.bilingual.description', { ns: 'notifiche' })}
+                        action={t('detail.bilingual.action', { ns: 'notifiche' })}
+                        link={getFacSimileLink()}
+                      />
+                    </Paper>
+                  )}
                 </Stack>
               </Grid>
               <Grid item lg={5} xs={12}>

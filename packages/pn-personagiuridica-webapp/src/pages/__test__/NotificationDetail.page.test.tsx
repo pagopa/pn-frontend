@@ -21,12 +21,14 @@ import {
   populatePaymentsPagoPaF24,
   setPaymentCache,
 } from '@pagopa-pn/pn-commons';
+import { LANGUAGE_SESSION_KEY } from '@pagopa-pn/pn-commons/src/utility/multilanguage.utility';
 
 import { downtimesDTO } from '../../__mocks__/AppStatus.mock';
 import { mandatesByDelegate } from '../../__mocks__/Delegations.mock';
 import { errorMock } from '../../__mocks__/Errors.mock';
 import { paymentInfo } from '../../__mocks__/ExternalRegistry.mock';
 import {
+  bilingualNotification,
   cachedPayments,
   notificationDTO,
   notificationToFe,
@@ -559,6 +561,38 @@ describe('NotificationDetail Page', () => {
     expect(ctaLink).toHaveAttribute('target', '_blank');
     expect(ctaLink).toHaveAttribute('rel', expect.stringContaining('noopener'));
     expect(ctaLink).toHaveAttribute('rel', expect.stringContaining('noreferrer'));
+  });
+
+  it('render bilingual section when lang is different from additional language in notification', async () => {
+    sessionStorage.setItem(LANGUAGE_SESSION_KEY, 'DE');
+    mock
+      .onGet(`/bff/v1/notifications/received/${bilingualNotification.iun}`)
+      .reply(200, bilingualNotification);
+    await act(async () => {
+      result = render(<Component />, {
+        route: routes.GET_DETTAGLIO_NOTIFICA_PATH(bilingualNotification.iun),
+      });
+    });
+
+    const bilingualSection = await result.findByTestId('bilingualSection');
+    expect(bilingualSection).toBeInTheDocument();
+    expect(bilingualSection).toHaveTextContent('detail.bilingual.title');
+  });
+
+  it('does not render bilingual section when lang is same as additional language in notification', async () => {
+    sessionStorage.setItem(LANGUAGE_SESSION_KEY, 'FR');
+    mock
+      .onGet(`/bff/v1/notifications/received/${bilingualNotification.iun}`)
+      .reply(200, bilingualNotification);
+    await act(async () => {
+      result = render(<Component />, {
+        route: routes.GET_DETTAGLIO_NOTIFICA_PATH(bilingualNotification.iun),
+      });
+    });
+
+    await result.findByTestId('detailTable');
+    const bilingualSection = result.queryByTestId('bilingualSection');
+    expect(bilingualSection).not.toBeInTheDocument();
   });
 
   it('checks not available documents', async () => {
