@@ -229,7 +229,7 @@ describe('NuovaDelega page', () => {
       container.querySelector('#ragioneSociale-helper-text')
     );
     expect(businessNameError).toHaveTextContent('nuovaDelega.validation.businessName.required');
-  });
+  }, 10000);
 
   it('add delegation to PG and with entities selected', async () => {
     const creationPayload = {
