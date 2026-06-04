@@ -121,7 +121,9 @@
       },
       "error-payment": "Select a Payment Notice",
       "error-payment-failed-single": "There was a problem with a Payment Notice. Press Reload to try again. If the error persists, contact the support team.",
-      "error-payment-failed-multiple": "There was a problem with multiple Payment Notices. Press Reload to try again. If the error persists, contact the support team."
+      "error-payment-failed-multiple": "There was a problem with multiple Payment Notices. Press Reload to try again. If the error persists, contact the support team.",
+      "tpp-expired-error-title": "The connection with the bank has expired.",
+      "tpp-expired-error-description": "To restore it, access this notification again using the message you received on your bank's app."
     },
     "acts_files": {
       "downloadable_acts": "Documents are available online for 120 days from the finalization of the notification.",
