@@ -999,6 +999,34 @@ export const raddNotificationDTO: NotificationDetail = {
   },
 };
 
+export const bilingualNotification: NotificationDetail = {
+  abstract: 'Testa notifica bilingue',
+  additionalLanguages: ['EN'],
+  subject: 'Testa notifica bilingue',
+  recipients,
+  documents: [
+    {
+      digests: {
+        sha256: '7f3Nr8Yhkv4tH40iOrtMr4Y9fPR0vmCCt9BIwvH8fxs=',
+      },
+      contentType: 'application/pdf',
+      ref: {
+        key: 'PN_NOTIFICATION_ATTACHMENTS-c433d019acaa485288974021237beb8e.pdf',
+        versionToken: 'l0pwhTshqzIIdVKnCqiV1BlQBZA_LC7r',
+      },
+      title: 'RATA SCADUTA IMU',
+      docIdx: '0',
+    },
+  ],
+  senderDenomination: 'Comune di Palermo',
+  group: '6467344676f10c7617353c90',
+  iun: 'DAPQ-LWQV-DKQH-202308-A-1',
+  sentAt: '2023-08-23T07:38:49.601270863Z',
+  notificationStatus: NotificationStatus.VIEWED,
+  notificationStatusHistory,
+  timeline,
+};
+
 export const paymentsData: PaymentsData = {
   pagoPaF24: getPagoPaF24Payments(payments, 2),
   f24Only: getF24Payments(payments, 2),

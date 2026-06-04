@@ -1,0 +1,12 @@
+{
+  "hbbtv.js": "sha384-xbldlQlavTv3HrvaA/XO69iPZxPPGv85ZmPpBwTK0pyTdO7zhLVXgQEpiUdPQK9E",
+  "otBannerSdk.js": "sha384-BWtGc+msg5y8GktfQI4Cd+fk2yD/IaEZ31gcsFTO4x2gpyxbf/KyV/f9lyQbQDUp",
+  "otConfirmDialog.js": "sha384-7v41ysMI+B8xqApmCloQZgcD6r9PnVs99cEt4n/tP1qe9CHFQ6eF2r9rTp8/Ro3e",
+  "otGPP.js": "sha384-h9IXndcwVxk1CiIDp91sw1fZgYzJeGLgPQTqxZokUgaxlnl/UJP0FiT5EoPlPYrR",
+  "otSDKBlock.js": "sha384-65yMB9oIEJp5Evyq7dymPEy7GjEEVrYhHsDGf+6ZivwUah2sucVdvq7qT6m7Op82",
+  "otSDKStub.js": "sha384-+dRE7HB4L+deIbDhHkpfnkdfplLCWHEs9RkiPRtHN4PilMBj3Zy+RV6/QKr6qeMi",
+  "otSDKTelemetry.js": "sha384-lh7E0mpfE1KIfPJR2/KhlwV67YQH0IixK5OgZH7UYJtjNnaSstFKrHW7wNuGiMLc",
+  "otStub.js": "sha384-D56OQlFWpqGhkFGz0gaiyI/q+5unSiygGE0y5aYsPv/U2cv0Ts1aqXCz/bax/Udn",
+  "otTCF.js": "sha384-deV7aJ/y90kGLyV0cDm2UE8MOYOyxeLvwwvlBZ00hj6LWhp5PK2cL4tNhw476I+X",
+  "trackingTechnologies.js": "sha384-1Enr/dzgKMRDXUbEcMPuG2uuHdOQOTcvoO/GwuaSJIZPK7YqZv5VVJYBRmwhwcb6"
+}
