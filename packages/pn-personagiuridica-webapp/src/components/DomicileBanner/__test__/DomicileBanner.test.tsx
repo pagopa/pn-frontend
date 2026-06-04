@@ -1,3 +1,5 @@
+import { vi } from 'vitest';
+
 import { appStorage } from '@pagopa-pn/pn-commons';
 
 import { digitalAddressesSercq, digitalCourtesyAddresses } from '../../../__mocks__/Contacts.mock';
@@ -14,16 +16,21 @@ const emailDefault = digitalCourtesyAddresses.find(
 );
 
 describe('DomicileBanner component', () => {
+  const onBannerResolved = vi.fn();
+
   afterEach(() => {
     appStorage.domicileBanner.enable();
+    vi.clearAllMocks();
   });
 
   it('renders the component - no SERCQ SEND enabled', () => {
     const { container, getByTestId, getByText, testStore, router } = render(
-      <DomicileBanner source={ContactSource.HOME_NOTIFICHE} />
+      <DomicileBanner source={ContactSource.HOME_NOTIFICHE} onBannerResolved={onBannerResolved} />
     );
     const dialog = getByTestId('addDomicileBanner');
     expect(dialog).toBeInTheDocument();
+    expect(onBannerResolved).toHaveBeenCalledWith(ChannelType.SERCQ_SEND);
+
     expect(container).toHaveTextContent('domicile-banner.no-sercq-send-title');
     expect(container).toHaveTextContent('domicile-banner.no-sercq-send-description');
     const closeButton = getByTestId('CloseIcon');
@@ -41,10 +48,12 @@ describe('DomicileBanner component', () => {
   it('renders the component - no SERCQ SEND enabled - banner closed', () => {
     appStorage.domicileBanner.disable();
     const { container, getByTestId, getByText, queryByTestId, testStore, router } = render(
-      <DomicileBanner source={ContactSource.HOME_NOTIFICHE} />
+      <DomicileBanner source={ContactSource.HOME_NOTIFICHE} onBannerResolved={onBannerResolved} />
     );
     const dialog = getByTestId('addDomicileBanner');
     expect(dialog).toBeInTheDocument();
+    expect(onBannerResolved).toHaveBeenCalledWith(ChannelType.EMAIL);
+
     expect(container).toHaveTextContent('domicile-banner.no-courtesy-no-sercq-send-title');
     expect(container).toHaveTextContent('domicile-banner.no-courtesy-no-sercq-send-description');
     const closeButton = queryByTestId('CloseIcon');
@@ -61,7 +70,7 @@ describe('DomicileBanner component', () => {
 
   it('renders the component - SERCQ SEND enabled, no courtesy address', () => {
     const { container, getByTestId, getByText, queryByTestId, testStore, router } = render(
-      <DomicileBanner source={ContactSource.HOME_NOTIFICHE} />,
+      <DomicileBanner source={ContactSource.HOME_NOTIFICHE} onBannerResolved={onBannerResolved} />,
       {
         preloadedState: {
           contactsState: { digitalAddresses: [sercqSendDefault] },
@@ -71,6 +80,8 @@ describe('DomicileBanner component', () => {
     );
     const dialog = getByTestId('addDomicileBanner');
     expect(dialog).toBeInTheDocument();
+    expect(onBannerResolved).toHaveBeenCalledWith(ChannelType.EMAIL);
+
     expect(container).toHaveTextContent('domicile-banner.no-courtesy-title');
     expect(container).toHaveTextContent('domicile-banner.no-courtesy-description');
     const closeButton = queryByTestId('CloseIcon');
@@ -106,23 +117,31 @@ describe('DomicileBanner component', () => {
   });
 
   it('renders the component - SERCQ SEND enabled, email added', () => {
-    const { queryByTestId } = render(<DomicileBanner source={ContactSource.HOME_NOTIFICHE} />, {
-      preloadedState: {
-        contactsState: { digitalAddresses: [sercqSendDefault, emailDefault] },
-        generalInfoState: { domicileBannerOpened: true },
-      },
-    });
+    const { queryByTestId } = render(
+      <DomicileBanner source={ContactSource.HOME_NOTIFICHE} onBannerResolved={onBannerResolved} />,
+      {
+        preloadedState: {
+          contactsState: { digitalAddresses: [sercqSendDefault, emailDefault] },
+          generalInfoState: { domicileBannerOpened: true },
+        },
+      }
+    );
     const dialog = queryByTestId('addDomicileBanner');
     expect(dialog).not.toBeInTheDocument();
+    expect(onBannerResolved).toHaveBeenCalledWith('');
   });
 
   it('clicks on the close button', () => {
     const { getByTestId, queryByTestId } = render(
-      <DomicileBanner source={ContactSource.HOME_NOTIFICHE} />
+      <DomicileBanner source={ContactSource.HOME_NOTIFICHE} onBannerResolved={onBannerResolved} />
     );
+
+    expect(onBannerResolved).toHaveBeenCalledWith(ChannelType.SERCQ_SEND);
+
     const closeButton = getByTestId('CloseIcon');
     fireEvent.click(closeButton);
     const dialog = queryByTestId('addDomicileBanner');
     expect(dialog).toBeNull();
+    expect(onBannerResolved).toHaveBeenCalledWith('');
   });
 });

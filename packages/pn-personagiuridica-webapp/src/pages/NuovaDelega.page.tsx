@@ -39,6 +39,7 @@ import { Autocomplete, IllusCompleted } from '@pagopa/mui-italia';
 import VerificationCodeComponent from '../components/Deleghe/VerificationCodeComponent';
 import LoadingPageWrapper from '../components/LoadingPageWrapper/LoadingPageWrapper';
 import { NewDelegationFormProps } from '../models/Deleghe';
+import { PGEventsType } from '../models/PGEventsType';
 import { Party } from '../models/party';
 import * as routes from '../navigation/routes.const';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
@@ -46,6 +47,7 @@ import { createDelegation, getAllEntities } from '../redux/newDelegation/actions
 import { resetNewDelegation } from '../redux/newDelegation/reducers';
 import { RootState } from '../redux/store';
 import { getConfiguration } from '../services/configuration.service';
+import PGEventStrategyFactory from '../utility/MixpanelUtils/PGEventStrategyFactory';
 import { generateVCode } from '../utility/delegation.utility';
 
 const getOptionLabel = (option: Party) => option.name || '';
@@ -66,7 +68,12 @@ const NuovaDelega = () => {
   const { DELEGATIONS_TO_PG_ENABLED } = getConfiguration();
 
   const handleSubmit = (values: NewDelegationFormProps) => {
-    void dispatch(createDelegation(values));
+    dispatch(createDelegation(values))
+      .unwrap()
+      .then(() => {
+        PGEventStrategyFactory.triggerEvent(PGEventsType.SEND_PG_ADD_MANDATE_UX_SUCCESS);
+      })
+      .catch(() => {});
   };
 
   const handleDelegationsClick = () => {
