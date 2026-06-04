@@ -570,9 +570,7 @@ describe('test AddSpecialContact', () => {
     const digitalContentEl = result.getByTestId('default_emailContact');
     expect(digitalContentEl).toBeInTheDocument();
 
-    // check disclaimer
-    const disclaimerCheckbox = result.container.querySelector('[name="s_disclaimer"]');
-    fireEvent.click(disclaimerCheckbox!);
+    expect(result.getByTestId('sercq-send-disclaimer')).toBeInTheDocument();
 
     const confirmButton = result.getByRole('button', { name: 'conferma' });
     fireEvent.click(confirmButton);

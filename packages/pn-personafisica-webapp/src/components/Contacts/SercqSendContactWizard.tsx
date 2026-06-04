@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useRef } from 'react';
-import { Trans, useTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import ErrorIcon from '@mui/icons-material/Error';
@@ -22,6 +22,7 @@ import {
   TosPrivacyConsent,
   appStorage,
 } from '@pagopa-pn/pn-commons';
+import { MIAlert } from '@pagopa/mui-italia';
 
 import { PFEventsType } from '../../models/PFEventsType';
 import {
@@ -30,7 +31,6 @@ import {
   IOAllowedValues,
   SaveDigitalAddressParams,
 } from '../../models/contacts';
-import { PRIVACY_POLICY, TERMS_OF_SERVICE_SERCQ_SEND } from '../../navigation/routes.const';
 import {
   acceptSercqSendTos,
   createOrUpdateAddress,
@@ -40,6 +40,7 @@ import { contactsSelectors } from '../../redux/contact/reducers';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import PFEventStrategyFactory from '../../utility/MixpanelUtils/PFEventStrategyFactory';
 import { isPFEvent } from '../../utility/mixpanel';
+import SercqSendDisclaimer from './SercqSendDisclaimer';
 
 type Props = {
   goToStep: (step: number) => void;
@@ -267,41 +268,18 @@ const SercqSendContactWizard: React.FC<Props> = ({ goToStep, showIOStep }) => {
         ))}
       </List>
 
-      <Typography my={3} variant="body2" fontSize="14px" color="text.secondary">
-        <Trans
-          i18nKey={`legal-contacts.sercq-send-wizard.step_4.disclaimer-${
-            isDodEnabled ? 'transfer' : 'enable'
-          }`}
-          ns="recapiti"
-          components={[
-            <Link
-              key="privacy-policy"
-              sx={{
-                cursor: 'pointer',
-                textDecoration: 'none !important',
-                fontWeight: 'bold',
-              }}
-              data-testid="privacy-link"
-              href={PRIVACY_POLICY}
-              target="_blank"
-              rel="noopener"
-            />,
-
-            <Link
-              key="tos"
-              sx={{
-                cursor: 'pointer',
-                textDecoration: 'none !important',
-                fontWeight: 'bold',
-              }}
-              data-testid="tos-link"
-              href={TERMS_OF_SERVICE_SERCQ_SEND}
-              target="_blank"
-              rel="noopener"
-            />,
-          ]}
+      <Box sx={{ my: 3 }}>
+        <MIAlert
+          severity="info"
+          description={t('legal-contacts.sercq-send-wizard.step_4.sercq-send-contacts-alert')}
         />
-      </Typography>
+      </Box>
+
+      <SercqSendDisclaimer
+        i18nKey={`legal-contacts.sercq-send-wizard.step_4.disclaimer-${
+          isDodEnabled ? 'transfer' : 'enable'
+        }`}
+      />
 
       <Button
         fullWidth
@@ -311,7 +289,7 @@ const SercqSendContactWizard: React.FC<Props> = ({ goToStep, showIOStep }) => {
         data-testid="activateButton"
       >
         {isDodEnabled
-          ? t('legal-contacts.sercq-send-wizard.step_4.transfer', { ns: 'recapiti' })
+          ? t('button.conferma', { ns: 'common' })
           : t('legal-contacts.sercq-send-wizard.step_4.enable', { ns: 'recapiti' })}
       </Button>
     </Box>
