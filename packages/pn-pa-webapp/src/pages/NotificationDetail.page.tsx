@@ -55,17 +55,16 @@ const AlertNotificationCancel: React.FC<Props> = (notification) => {
 
   if (cancelled || cancellationInProgress) {
     return (
-      <Box sx={{ mt: 1 }}>
-        <MIAlert
-          severity="warning"
-          data-testid="alert"
-          description={
-            cancellationInProgress
-              ? t('detail.alert-cancellation-in-progress')
-              : t('detail.alert-cancellation-confirmed')
-          }
-        />
-      </Box>
+      <MIAlert
+        severity="warning"
+        sx={{ mt: 1 }}
+        data-testid="alert"
+        description={
+          cancellationInProgress
+            ? t('detail.alert-cancellation-in-progress')
+            : t('detail.alert-cancellation-confirmed')
+        }
+      />
     );
   }
 
