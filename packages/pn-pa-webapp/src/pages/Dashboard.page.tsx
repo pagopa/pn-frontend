@@ -2,7 +2,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
-import { Alert, Box, Button, Typography } from '@mui/material';
+import { Box, Button, Typography } from '@mui/material';
 import {
   A11yMessage,
   ApiErrorWrapper,
@@ -15,7 +15,7 @@ import {
   useEventEmitter,
   useIsMobile,
 } from '@pagopa-pn/pn-commons';
-import { ButtonNaked } from '@pagopa/mui-italia';
+import { MIAlert } from '@pagopa/mui-italia';
 
 import DesktopNotifications from '../components/Notifications/DesktopNotifications';
 import FilterNotifications from '../components/Notifications/FilterNotifications';
@@ -99,16 +99,14 @@ const Dashboard = () => {
         </Button>
       </Box>
     ) : (
-      <Alert
+      <MIAlert
         severity="warning"
-        action={
-          <ButtonNaked color="inherit" size="small" onClick={() => navigate(routes.APP_STATUS)}>
-            {t('manual-send-disabled-action')}
-          </ButtonNaked>
-        }
-      >
-        {t('manual-send-disabled-message')}
-      </Alert>
+        description={t('manual-send-disabled-message')}
+        action={{
+          label: t('manual-send-disabled-action'),
+          onClick: () => navigate(routes.APP_STATUS),
+        }}
+      />
     );
   };
 
