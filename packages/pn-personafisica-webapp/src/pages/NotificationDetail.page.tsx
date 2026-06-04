@@ -20,7 +20,7 @@ import {
   IllusQuestion,
   LegalFactId,
   LegalFactType,
-  NotificationDetailBilingualDocuments,
+  NotificationDetailBilingualFacsimileDocuments,
   NotificationDetailDocuments,
   NotificationDetailOtherDocument,
   NotificationDetailPayment,
@@ -123,14 +123,7 @@ const NotificationDetail: React.FC = () => {
     (state: RootState) => state.notificationState.downtimeEvents
   );
 
-  const showBilingualSection = !isSameLang && sessionLang !== 'IT';
-
-  console.log(
-    'showBilingualSection, notificationLanguage, sessionLang',
-    showBilingualSection,
-    notificationLanguage,
-    sessionLang
-  );
+  const showBilingualFacsimileSection = !isSameLang && sessionLang !== 'IT';
   const isCancelled = useIsCancelled({ notification });
   const isCancelledOrCancelling = isCancelled.cancelled || isCancelled.cancellationInProgress;
   const currentRecipient = notification?.currentRecipient;
@@ -769,9 +762,9 @@ const NotificationDetail: React.FC = () => {
                     disableDownloads={isCancelled.cancellationInTimeline}
                     downtimeExampleLink={DOWNTIME_EXAMPLE_LINK}
                   />
-                  {showBilingualSection && (
+                  {showBilingualFacsimileSection && (
                     <Paper sx={{ p: 3 }} elevation={0}>
-                      <NotificationDetailBilingualDocuments
+                      <NotificationDetailBilingualFacsimileDocuments
                         title={t('detail.bilingual.title', { ns: 'notifiche' })}
                         description={t('detail.bilingual.description', { ns: 'notifiche' })}
                         action={t('detail.bilingual.action', { ns: 'notifiche' })}

@@ -10,7 +10,7 @@ import {
   GetDowntimeHistoryParams,
   LegalFactId,
   LegalFactType,
-  NotificationDetailBilingualDocuments,
+  NotificationDetailBilingualFacsimileDocuments,
   NotificationDetailDocuments,
   NotificationDetailOtherDocument,
   NotificationDetailPayment,
@@ -105,7 +105,7 @@ const NotificationDetail = () => {
   const sessionLang = getSessionLanguage()?.toUpperCase();
   const isSameLang = notificationLanguage?.includes(sessionLang);
 
-  const showBilingualSection = !isSameLang && sessionLang !== 'IT';
+  const showBilingualFacsimileSection = !isSameLang && sessionLang !== 'IT';
   const downtimeEvents = useAppSelector(
     (state: RootState) => state.notificationState.downtimeEvents
   );
@@ -576,9 +576,9 @@ const NotificationDetail = () => {
                   disableDownloads={isCancelled.cancellationInTimeline}
                   downtimeExampleLink={DOWNTIME_EXAMPLE_LINK}
                 />
-                {showBilingualSection && (
+                {showBilingualFacsimileSection && (
                   <Paper sx={{ p: 3 }} elevation={0}>
-                    <NotificationDetailBilingualDocuments
+                    <NotificationDetailBilingualFacsimileDocuments
                       title={t('detail.bilingual.title', { ns: 'notifiche' })}
                       description={t('detail.bilingual.description', { ns: 'notifiche' })}
                       action={t('detail.bilingual.action', { ns: 'notifiche' })}

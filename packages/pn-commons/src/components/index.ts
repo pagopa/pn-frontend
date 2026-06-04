@@ -59,7 +59,7 @@ export { default as Layout } from './Layout/Layout';
 export { LoadingOverlay } from './Loading/LoadingOverlay';
 export { default as LoadingPage } from './LoadingPage';
 export { default as NotificationDetailDocuments } from './NotificationDetail/NotificationDetailDocuments';
-export { default as NotificationDetailBilingualDocuments } from './NotificationDetail/NotificationDetailBilingualDocuments';
+export { default as NotificationDetailBilingualFacsimileDocuments } from './NotificationDetail/NotificationDetailBilingualFacsimileDocuments';
 export { default as NotificationDetailTable } from './NotificationDetail/NotificationDetailTable';
 export { default as NotificationDetailTimeline } from './NotificationDetail/NotificationDetailTimeline';
 export { default as NotificationPaymentRecipient } from './NotificationDetail/NotificationPaymentRecipient';

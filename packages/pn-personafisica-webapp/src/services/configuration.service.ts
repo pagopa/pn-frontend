@@ -77,6 +77,10 @@ class PfConfigurationValidator extends Validator<PfConfiguration> {
       .matches(dataRegex.htmlPageUrl);
     this.ruleFor('SERCQ_SERVICE_STATEMENT_LINK').isString().isRequired();
     this.ruleFor('IS_ONBOARDING_ENABLED').isBoolean();
+    this.ruleFor('FACSIMILE_EN').isString().isRequired();
+    this.ruleFor('FACSIMILE_FR').isString().isRequired();
+    this.ruleFor('FACSIMILE_DE').isString().isRequired();
+    this.ruleFor('FACSIMILE_SL').isString().isRequired();
   }
 }
 

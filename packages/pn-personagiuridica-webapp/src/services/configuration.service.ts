@@ -72,6 +72,10 @@ class PgConfigurationValidator extends Validator<PgConfiguration> {
       .isRequired()
       .matches(dataRegex.htmlPageUrl);
     this.ruleFor('SERCQ_SERVICE_STATEMENT_LINK').isString().isRequired();
+    this.ruleFor('FACSIMILE_EN').isString().isRequired();
+    this.ruleFor('FACSIMILE_FR').isString().isRequired();
+    this.ruleFor('FACSIMILE_DE').isString().isRequired();
+    this.ruleFor('FACSIMILE_SL').isString().isRequired();
   }
 }
 

@@ -18,7 +18,7 @@ interface Props {
   link?: string;
 }
 
-const NotificationDetailBilingualDocuments: React.FC<Props> = ({
+const NotificationDetailBilingualFacsimileDocuments: React.FC<Props> = ({
   title,
   description,
   action,
@@ -80,4 +80,4 @@ const NotificationDetailBilingualDocuments: React.FC<Props> = ({
   </>
 );
 
-export default NotificationDetailBilingualDocuments;
+export default NotificationDetailBilingualFacsimileDocuments;
