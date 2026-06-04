@@ -433,9 +433,9 @@
     "returned-to-sender-description-multirecipient": "Vsi prejemniki so umrli.",
     "notification-timeline-reworked": "Posodobljen dogodek ali več dogodkov",
     "notification-timeline-reworked-tooltip": "Posodobljen dogodek ali več dogodkov",
-    "notification-timeline-reworked-description": "Dogodkov, označenih z NEVALIDIRAN DOGODEK, ne upoštevajte, saj so jih nadomestili naslednji dogodki, označeni z VALIDIRAN DOGODEK.",
-    "reworked-status-valid": "Validiran dogodek",
-    "reworked-status-not-valid": "Nevalidiran dogodek",
+    "notification-timeline-reworked-description": "Dogodki, označeni kot POPRAVLJENI, nadomeščajo prejšnje dogodke, označene kot NEVELJAVNI.",
+    "reworked-status-valid": "Popravljen dogodek",
+    "reworked-status-not-valid": "Neveljaven dogodek",
     "cancellation-in-progress": "Preklicano",
     "cancellation-in-progress-tooltip": "Preklic poteka. Stanje bo kmalu posodobljeno.",
     "cancellation-in-progress-description": "Preklic poteka. Stanje bo kmalu posodobljeno."

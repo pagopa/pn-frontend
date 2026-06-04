@@ -433,9 +433,9 @@
     "returned-to-sender-description-multirecipient": "Alle Empfänger sind verstorben.",
     "notification-timeline-reworked": "Aktualisiertes Ereignis oder mehrere aktualisierte Ereignisse",
     "notification-timeline-reworked-tooltip": "Aktualisiertes Ereignis oder mehrere aktualisierte Ereignisse",
-    "notification-timeline-reworked-description": "Ereignisse, die als INVALIDIERTES EREIGNIS gekennzeichnet sind, sind nicht zu berücksichtigen, da sie durch nachfolgende Ereignisse ersetzt wurden, die als VALIDIERTES EREIGNIS gekennzeichnet sind.",
-    "reworked-status-valid": "Validiertes Ereignis",
-    "reworked-status-not-valid": "Invalidiertes Ereignis",
+    "notification-timeline-reworked-description": "Als BERICHTIGT markierte Ereignisse ersetzen die vorherigen, als UNGÜLTIG gekennzeichneten Ereignisse.",
+    "reworked-status-valid": "Berichtigtes Ereignis",
+    "reworked-status-not-valid": "Ungültiges Ereignis",
     "cancellation-in-progress": "Annulliert",
     "cancellation-in-progress-tooltip": "Annullierung in Bearbeitung. Der Status wird in Kürze aktualisiert.",
     "cancellation-in-progress-description": "Annullierung in Bearbeitung. Der Status wird in Kürze aktualisiert."
