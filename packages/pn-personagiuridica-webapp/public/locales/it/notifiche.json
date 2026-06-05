@@ -438,7 +438,7 @@
     "returned-to-sender-description-multirecipient": "Tutti i destinatari risultano deceduti.",
     "notification-timeline-reworked": "Uno o più eventi aggiornati",
     "notification-timeline-reworked-tooltip": "Uno o più eventi aggiornati",
-    "notification-timeline-reworked-description": "Gli eventi contrassegnati come RETTIFICATI sostituiscono gli eventi precedenti indicati come NON VALIDI.",
+    "notification-timeline-reworked-description": "Gli eventi contrassegnati come rettificati sostituiscono gli eventi precedenti indicati come non validi.",
     "reworked-status-valid": "Evento rettificato",
     "reworked-status-not-valid": "Evento non valido",
     "cancellation-in-progress": "Annullata",

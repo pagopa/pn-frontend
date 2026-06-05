@@ -447,7 +447,7 @@
     "returned-to-sender-description-multirecipient": "Vsi prejemniki so umrli.",
     "notification-timeline-reworked": "Posodobljen en ali več dogodkov",
     "notification-timeline-reworked-tooltip": "Posodobljen en ali več dogodkov",
-    "notification-timeline-reworked-description": "Dogodki, označeni kot POPRAVLJENI, nadomeščajo prejšnje dogodke, označene kot NEVELJAVNI.",
+    "notification-timeline-reworked-description": "Dogodki, označeni kot popravljeni, nadomeščajo prejšnje dogodke, navedene kot neveljavne.",
     "reworked-status-valid": "Popravljen dogodek",
     "reworked-status-not-valid": "Neveljaven dogodek",
     "cancellation-in-progress": "Preklicano",
