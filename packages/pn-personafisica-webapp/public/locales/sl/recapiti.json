@@ -77,7 +77,7 @@
           {
             "title": "Organizacija vam pošlje obvestilo na SEND",
             "description": "Obvestilo vam je <0>dostavljeno</0> varno in z zakonsko vrednostjo prek platforme",
-            "aria-describedby": "Aktivirajte za branje razlage izraza"
+            "aria-description": "Aktivirajte za branje razlage izraza"
           },
           {
             "title": "Prejmeš sporočilo",

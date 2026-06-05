@@ -77,7 +77,7 @@
           {
             "title": "An institution sends you a notification on SEND",
             "description": "The notification is <0>delivered</0> to you securely and with legal value through the platform",
-            "aria-describedby": "Activate to read the explanation of the term"
+            "aria-description": "Activate to read the explanation of the term"
           },
           {
             "title": "You receive a message",

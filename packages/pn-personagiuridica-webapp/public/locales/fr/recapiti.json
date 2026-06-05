@@ -74,7 +74,7 @@
           {
             "title": "Une entité envoie une notification SEND pour l'entreprise",
             "description": "La notification est <0>délivrée</0> de manière sécurisée et avec valeur légale par la plateforme",
-            "aria-describedby": "Activer pour lire l'explication du terme"
+            "aria-description": "Activer pour lire l'explication du terme"
           },
           {
             "title": "Vous recevez un message",
