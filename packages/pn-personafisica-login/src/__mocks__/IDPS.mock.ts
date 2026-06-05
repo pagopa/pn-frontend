@@ -1,4 +1,4 @@
-import { IDP } from '../models/IDPS';
+import type { IDP } from '@pagopa/mui-italia';
 
 export const IDPS_MOCK: Array<IDP> = [
   {

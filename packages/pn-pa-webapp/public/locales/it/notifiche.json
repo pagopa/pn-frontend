@@ -423,9 +423,9 @@
     "returned-to-sender-description-multirecipient": "Tutti i destinatari risultano deceduti.",
     "notification-timeline-reworked": "Evento o più eventi aggiornati",
     "notification-timeline-reworked-tooltip": "Evento o più eventi aggiornati",
-    "notification-timeline-reworked-description": "Gli eventi contrassegnati con EVENTO INVALIDATO non vanno considerati in quanto sostituiti dagli eventi successivi contrassegnati con EVENTO VALIDATO.",
-    "reworked-status-valid": "Evento validato",
-    "reworked-status-not-valid": "Evento invalidato",
+    "notification-timeline-reworked-description": "Gli eventi contrassegnati come RETTIFICATI sostituiscono gli eventi precedenti indicati come NON VALIDI.",
+    "reworked-status-valid": "Evento rettificato",
+    "reworked-status-not-valid": "Evento non valido",
     "cancellation-in-progress": "Annullata",
     "cancellation-in-progress-tooltip": "Annullamento in corso. Lo stato sarà aggiornato a breve.",
     "cancellation-in-progress-description": "Annullamento in corso. Lo stato sarà aggiornato a breve."
