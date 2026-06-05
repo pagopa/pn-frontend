@@ -49,6 +49,7 @@ const SideMenuListItem = ({
         onSelect();
       }
       if (goOutside) {
+        item.action?.();
         window.open(item.route);
       } else {
         handleLinkClick(item);

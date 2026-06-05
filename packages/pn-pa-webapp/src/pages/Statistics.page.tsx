@@ -24,12 +24,14 @@ import EmptyStatistics from '../components/Statistics/EmptyStatistics';
 import FiledNotificationsStatistics from '../components/Statistics/FiledNotificationsStatistics';
 import FilterStatistics from '../components/Statistics/FilterStatistics';
 import LastStateStatistics from '../components/Statistics/LastStateStatistics';
+import { PAEventsType } from '../models/PAEventsType';
 import { CxType, GraphColors, StatisticsDataTypes } from '../models/Statistics';
 import { authSelectors } from '../redux/auth/reducers';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { STATISTICS_ACTIONS, getStatistics } from '../redux/statistics/actions';
 import { hasData } from '../redux/statistics/reducers';
 import { RootState } from '../redux/store';
+import PAEventStrategyFactory from '../utility/MixpanelUtils/PAEventStrategyFactory';
 
 const filter = (node: HTMLElement) => {
   const exclusionClasses = ['filter'];
@@ -109,6 +111,10 @@ const Statistics = () => {
   useEffect(() => {
     fetchStatistics();
   }, [fetchStatistics]);
+
+  useEffect(() => {
+    PAEventStrategyFactory.triggerEvent(PAEventsType.SEND_PA_STATISTICS);
+  }, []);
 
   return (
     <Box p={3}>

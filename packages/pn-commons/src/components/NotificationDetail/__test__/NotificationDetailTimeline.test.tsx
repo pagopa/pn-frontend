@@ -1,3 +1,5 @@
+import { vi } from 'vitest';
+
 import { notificationDTO } from '../../../__mocks__/NotificationDetail.mock';
 import { NotificationStatus } from '../../../models';
 import { ReworkedStatus } from '../../../models/NotificationDetail';
@@ -60,6 +62,7 @@ describe('NotificationDetailTimeline', () => {
 
   it('toggles the history drawer when the summary step is clicked (mobile)', async () => {
     window.matchMedia = createMatchMedia(390);
+    const handleTrackShowHistory = vi.fn();
     const { queryByTestId, getByTestId } = render(
       <NotificationDetailTimeline
         recipients={recipients}
@@ -71,6 +74,7 @@ describe('NotificationDetailTimeline', () => {
         clickHandler={function (): void {
           throw new Error('Function not implemented.');
         }}
+        handleTrackShowHistory={handleTrackShowHistory}
       />
     );
     // Initially, the drawer should not be visible
@@ -80,6 +84,7 @@ describe('NotificationDetailTimeline', () => {
     const summaryStep = getByTestId('historyButton');
     expect(summaryStep).toBeInTheDocument();
     fireEvent.click(summaryStep);
+    expect(handleTrackShowHistory).toHaveBeenCalledWith(true);
     await waitFor(() => {
       // Now, the drawer should be visible
       expect(getByTestId('notification-history-drawer-content')).toBeInTheDocument();
@@ -88,6 +93,7 @@ describe('NotificationDetailTimeline', () => {
     const closeIcon = getByTestId('notification-drawer-close');
     expect(closeIcon).toBeInTheDocument();
     fireEvent.click(closeIcon);
+    expect(handleTrackShowHistory).toHaveBeenCalledWith(false);
     await waitFor(() => {
       // Now, the drawer should be hidden
       expect(queryByTestId('notification-history-drawer')).not.toBeInTheDocument();

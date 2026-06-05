@@ -13,15 +13,13 @@ import { storageRapidAccessOps } from '../../utility/storage';
 
 const handleError = (queryParams: string, errorMessage: string) => {
   storageRapidAccessOps.delete();
-  if (process.env.NODE_ENV !== 'test') {
-    const IDP = sessionStorage.getItem('IDP');
-    PFLoginEventStrategyFactory.triggerEvent(PFLoginEventsType.SEND_LOGIN_FAILURE, {
-      reason: errorMessage,
-      IDP,
-    });
-    sessionStorage.removeItem('IDP');
-    console.error(`login unsuccessfull! query params obtained from idp: ${queryParams}`);
-  }
+  const IDP = sessionStorage.getItem('IDP');
+  PFLoginEventStrategyFactory.triggerEvent(PFLoginEventsType.SEND_LOGIN_FAILURE, {
+    reason: errorMessage,
+    IDP,
+  });
+  sessionStorage.removeItem('IDP');
+  console.error(`login unsuccessfull! query params obtained from idp: ${queryParams}`);
 };
 
 const LoginError = () => {

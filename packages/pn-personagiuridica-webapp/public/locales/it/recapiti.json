@@ -73,7 +73,8 @@
         "info-list": [
           {
             "title": "Un ente invia una notifica SEND per l’impresa",
-            "description": "La notifica viene <0>consegnata</0> in modo sicuro e con valore legale tramite la piattaforma"
+            "description": "La notifica viene <0>consegnata</0> in modo sicuro e con valore legale tramite la piattaforma",
+            "aria-description": "Attiva per leggere la spiegazione del termine"
           },
           {
             "title": "Ricevi un messaggio",

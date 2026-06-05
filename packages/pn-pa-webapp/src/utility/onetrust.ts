@@ -1,5 +1,3 @@
-import { IS_DEVELOP } from '@pagopa-pn/pn-commons';
-
 import { getConfiguration } from '../services/configuration.service';
 
 function initNoticeScript(OT_SETTINGS_TOKEN: string): Promise<void> {
@@ -24,13 +22,13 @@ function initNoticeScript(OT_SETTINGS_TOKEN: string): Promise<void> {
   });
 }
 
-function initSdkScript(OT_DOMAIN_ID: string, domainScript: string): Promise<void> {
+function initSdkScript(OT_DOMAIN_ID: string): Promise<void> {
   return new Promise((resolve, reject) => {
     const scriptEl = document.createElement('script');
     scriptEl.setAttribute('src', '/onetrust/scripttemplates/otSDKStub.js');
     scriptEl.setAttribute('type', 'text/javascript');
     scriptEl.setAttribute('charset', 'UTF-8');
-    scriptEl.setAttribute('data-domain-script', OT_DOMAIN_ID + domainScript);
+    scriptEl.setAttribute('data-domain-script', OT_DOMAIN_ID);
     // scriptEl.setAttribute('nonce', (window as unknown as ExtendedWindow).nonce)
     // eslint-disable-next-line functional/immutable-data
     scriptEl.onload = () => {
@@ -47,7 +45,6 @@ function initSdkScript(OT_DOMAIN_ID: string, domainScript: string): Promise<void
 
 export async function initOneTrust() {
   const { OT_DOMAIN_ID, OT_SETTINGS_TOKEN } = getConfiguration();
-  const domainScript = IS_DEVELOP ? '-test' : '';
   await initNoticeScript(OT_SETTINGS_TOKEN);
-  await initSdkScript(OT_DOMAIN_ID, domainScript);
+  await initSdkScript(OT_DOMAIN_ID);
 }

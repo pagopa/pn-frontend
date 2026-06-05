@@ -2,6 +2,7 @@
   "loginPage": {
     "title": "Accedi a SEND per le tue comunicazioni a valore legale",
     "description": "Scegli la modalità che preferisci.",
+    "missing-spid-cie": "Non hai SPID o CIE? <0>Scopri di più</0>",
     "loginBox": {
       "title": "Accedi",
       "spidLogin": "Entra con SPID",
@@ -11,7 +12,8 @@
   "spidSelect": {
     "title": "Scegli il tuo SPID",
     "hintText": "Non hai SPID?<0> Scopri di più</0>",
-    "cancelButton": "Annulla"
+    "cancelButton": "Annulla",
+    "emptyState": "Nessun IDP trovato"
   },
   "loginError": {
     "title": "A causa di un errore del sistema non è possibile completare la procedura.",
@@ -25,6 +27,12 @@
       "error_25": "Hai annullato l’operazione di login: puoi riprovare quando vuoi.",
       "error_30": "La tipologia di identità SPID che hai usato è diversa da quella richiesta dal Service Provider. Entra di nuovo usando quella corretta.",
       "error_1001": "Accesso negato: non hai l’età minima richiesta per usare la piattaforma."
+    },
+    "oneIdentity": {
+      "invalid_scope": "",
+      "unsupported_response_type": "",
+      "server_error": "",
+      "invalid_request": ""
     }
   },
   "disambiguationPage": {

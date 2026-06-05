@@ -73,7 +73,8 @@
         "info-list": [
           {
             "title": "Organ pošlje obvestilo SEND za podjetje",
-            "description": "Obvestilo je <0>dostavljeno</0> varno in s pravno veljavnostjo prek platforme"
+            "description": "Obvestilo je <0>dostavljeno</0> varno in s pravno veljavnostjo prek platforme",
+            "aria-description": "Aktivirajte za branje razlage izraza"
           },
           {
             "title": "Prejmete sporočilo",

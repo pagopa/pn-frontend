@@ -73,7 +73,8 @@
         "info-list": [
           {
             "title": "Eine Behörde sendet eine SEND-Mitteilung für das Unternehmen",
-            "description": "Die Benachrichtigung wird sicher und mit Rechtswert über die Plattform <0>zugestellt</0>"
+            "description": "Die Benachrichtigung wird sicher und mit Rechtswert über die Plattform <0>zugestellt</0>",
+            "aria-description": "Aktivieren, um die Erklärung des Begriffs zu lesen"
           },
           {
             "title": "Sie erhalten eine Nachricht",

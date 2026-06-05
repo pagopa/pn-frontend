@@ -1,3 +1,5 @@
+import { omit } from 'lodash-es';
+
 import { ConsentType, basicInitialUserData, basicNoLoggedUserData } from '@pagopa-pn/pn-commons';
 import { createSlice, isAnyOf } from '@reduxjs/toolkit';
 
@@ -43,6 +45,7 @@ const noLoggedUserData: User = {
   name: '',
   family_name: '',
   fiscal_number: '',
+  spid_level: undefined,
 };
 
 const initialState: AuthInitialState = {
@@ -128,7 +131,11 @@ const userSlice = createSlice({
       .addMatcher(
         isAnyOf(exchangeToken.fulfilled, exchangeOneIdentityCode.fulfilled),
         (state, action) => {
-          const user = action.payload;
+          const user =
+            action.type === exchangeOneIdentityCode.fulfilled.type
+              ? (omit(action.payload, ['idp', 'aar', 'retrievalId']) as User)
+              : action.payload;
+
           sessionStorage.setItem('user', JSON.stringify(user));
           state.user = user;
           state.loading = false;

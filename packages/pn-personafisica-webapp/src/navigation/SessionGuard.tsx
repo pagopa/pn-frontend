@@ -16,15 +16,17 @@ import {
 } from '@pagopa-pn/pn-commons';
 
 import { useRapidAccessParam } from '../hooks/useRapidAccessParam';
-import { OneIdentityCodeExchangeRequest, TokenExchangeRequest } from '../models/User';
+import { PFEventsType } from '../models/PFEventsType';
+import { OneIdentityExchangeCodeBody, TokenExchangeRequest } from '../models/User';
 import { apiLogout, exchangeOneIdentityCode, exchangeToken } from '../redux/auth/actions';
 import { resetState as resetUserState, setIsFreshLogin } from '../redux/auth/reducers';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { resetState as resetGeneralState } from '../redux/sidemenu/reducers';
 import { RootState } from '../redux/store';
 import { getConfiguration } from '../services/configuration.service';
+import PFEventStrategyFactory from '../utility/MixpanelUtils/PFEventStrategyFactory';
 import { AAR_UTM, buildSearchWithUtm } from '../utility/utm.utility';
-import { goToLoginPortal } from './navigation.utility';
+import { getOneIdentityLoginSource, goToLoginPortal } from './navigation.utility';
 import * as routes from './routes.const';
 
 const SessionGuard = () => {
@@ -58,8 +60,6 @@ const SessionGuard = () => {
   // Get One Identity params from URL hash
   const code = hashParams.get('code');
   const state = hashParams.get('state');
-  const nonce = hashParams.get('nonce');
-  const redirectUri = hashParams.get('redirect_uri');
 
   const handleTokenExchangeError = (error: any) => {
     const adaptedError = adaptedTokenExchangeError(error);
@@ -96,12 +96,24 @@ const SessionGuard = () => {
   };
 
   const performOneIdentityTokenExchange = async (
-    exchangeCodeParams: OneIdentityCodeExchangeRequest
+    exchangeCodeParams: OneIdentityExchangeCodeBody
   ) => {
     AppResponsePublisher.error.subscribe('exchangeTokenOneIdentity', manageUnforbiddenError);
     try {
-      const user = await dispatch(exchangeOneIdentityCode(exchangeCodeParams)).unwrap();
-      sessionCheck(user.exp);
+      const response = await dispatch(exchangeOneIdentityCode(exchangeCodeParams)).unwrap();
+      sessionCheck(response.exp);
+
+      PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_LOGIN_METHOD, {
+        entityID: response.idp,
+      });
+
+      const rapidAccessSource = getOneIdentityLoginSource(response);
+
+      if (rapidAccessSource) {
+        const params = new URLSearchParams(location.search);
+        params.set(rapidAccessSource[0], rapidAccessSource[1]);
+        navigate({ search: `?${params.toString()}` }, { replace: true });
+      }
     } catch (error) {
       handleTokenExchangeError(error);
     }
@@ -136,14 +148,8 @@ const SessionGuard = () => {
   useEffect(() => {
     if (spidToken) {
       void performExchangeToken({ spidToken, rapidAccess });
-    } else if (code && state && nonce && redirectUri) {
-      void performOneIdentityTokenExchange({
-        code,
-        state,
-        nonce,
-        redirectUri: decodeURIComponent(redirectUri),
-        rapidAccess,
-      });
+    } else if (code && state) {
+      void performOneIdentityTokenExchange({ code, state });
     } else if (sessionToken) {
       sessionCheck(exp);
       if (aarSearchWithUtm) {

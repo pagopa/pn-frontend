@@ -121,7 +121,9 @@
       },
       "error-payment": "Select a Payment Notice",
       "error-payment-failed-single": "There was a problem with a Payment Notice. Press Reload to try again. If the error persists, contact the support team.",
-      "error-payment-failed-multiple": "There was a problem with multiple Payment Notices. Press Reload to try again. If the error persists, contact the support team."
+      "error-payment-failed-multiple": "There was a problem with multiple Payment Notices. Press Reload to try again. If the error persists, contact the support team.",
+      "tpp-expired-error-title": "The connection with the bank has expired.",
+      "tpp-expired-error-description": "To restore it, access this notification again using the message you received on your bank's app."
     },
     "acts_files": {
       "downloadable_acts": "Documents are available online for 120 days from the finalization of the notification.",
@@ -384,6 +386,11 @@
         "title": "The document is not available",
         "message": "A problem occurred while retrieving the document. Please try again later. If the error persists, contact the support team and provide the error details."
       }
+    },
+    "bilingual": {
+      "title": "SUPPORT FACSIMILE TEMPLATES in English",
+      "description": "The language of the attached documents may differ from the one you are using to browse the portal. To understand the content of these documents, you can use the facsimile templates found here.",
+      "action": "Consult the templates"
     }
   },
   "delegatorTitle": "The notifications for {{name}}",
@@ -438,11 +445,11 @@
     "returned-to-sender-tooltip-multirecipient": "All recipients are deceased",
     "returned-to-sender-description": "The recipient is deceased.",
     "returned-to-sender-description-multirecipient": "All recipients are deceased.",
-    "notification-timeline-reworked": "Updated event or events",
-    "notification-timeline-reworked-tooltip": "Updated event or events",
-    "notification-timeline-reworked-description": "Events marked as INVALIDATED EVENT are not to be considered as they have been replaced by the subsequent events marked as VALIDATED EVENT.",
-    "reworked-status-valid": "Validated event",
-    "reworked-status-not-valid": "Invalidated event",
+    "notification-timeline-reworked": "One or more events updated",
+    "notification-timeline-reworked-tooltip": "One or more events updated",
+    "notification-timeline-reworked-description": "Events marked as rectified replace the previous events indicated as invalid.",
+    "reworked-status-valid": "Rectified event",
+    "reworked-status-not-valid": "Invalid event",
     "cancellation-in-progress": "Cancelled",
     "cancellation-in-progress-tooltip": "Cancellation in progress. The status will be updated shortly.",
     "cancellation-in-progress-description": "Cancellation in progress. The status will be updated shortly."

@@ -7,9 +7,11 @@ import { Alert, AlertTitle, Box, Grid, Paper, Stack, Typography } from '@mui/mat
 import {
   ApiError,
   ApiErrorWrapper,
+  DeliveryOutcomeType,
   GetDowntimeHistoryParams,
   LegalFactId,
   LegalFactType,
+  NotificationDetailBilingualFacsimileDocuments,
   NotificationDetailDocuments,
   NotificationDetailOtherDocument,
   NotificationDetailPayment,
@@ -31,16 +33,23 @@ import {
   downloadDocument,
   formatDate,
   getPaymentCache,
+  getSessionLanguage,
   useErrors,
   useHasPermissions,
   useIsCancelled,
   useIsMobile,
 } from '@pagopa-pn/pn-commons';
+import {
+  EventDeliveryFlowType,
+  EventDeliveryModeType,
+  EventNotificationSource,
+} from '@pagopa-pn/pn-commons/src/models/MixpanelEvents';
 import { MIAlert } from '@pagopa/mui-italia';
 
 import DomicileBanner from '../components/DomicileBanner/DomicileBanner';
 import LoadingPageWrapper from '../components/LoadingPageWrapper/LoadingPageWrapper';
 import { NotificationCostBanner } from '../components/Notifications/NotificationCostBanner';
+import { PGEventsType } from '../models/PGEventsType';
 import { PNRole } from '../models/User';
 import { ContactSource } from '../models/contacts';
 import * as routes from '../navigation/routes.const';
@@ -58,6 +67,7 @@ import {
 import { resetState } from '../redux/notification/reducers';
 import { RootState } from '../redux/store';
 import { getConfiguration } from '../services/configuration.service';
+import PGEventStrategyFactory from '../utility/MixpanelUtils/PGEventStrategyFactory';
 
 // state for the invocations to this component
 // (to include in navigation or Link to the route/s arriving to it)
@@ -83,6 +93,7 @@ const NotificationDetail = () => {
   const isMobile = useIsMobile();
   const { hasApiErrors } = useErrors();
   const [pageReady, setPageReady] = useState(false);
+  const [downtimesReady, setDowntimesReady] = useState(false);
   const {
     F24_DOWNLOAD_WAIT_TIME,
     DOWNTIME_EXAMPLE_LINK,
@@ -96,6 +107,11 @@ const NotificationDetail = () => {
 
   const userHasAdminPermissions = useHasPermissions(role ? [role.role] : [], [PNRole.ADMIN]);
   const notification = useAppSelector((state: RootState) => state.notificationState.notification);
+  const notificationLanguage = notification.additionalLanguages?.[0] ?? 'IT';
+  const sessionLang = getSessionLanguage()?.toUpperCase();
+  const isSameLang = notificationLanguage?.includes(sessionLang);
+
+  const showBilingualFacsimileSection = !isSameLang && sessionLang !== 'IT';
   const downtimeEvents = useAppSelector(
     (state: RootState) => state.notificationState.downtimeEvents
   );
@@ -188,6 +204,29 @@ const NotificationDetail = () => {
     notification.notificationCostDetails,
   ]);
 
+  const getFlowType = (): EventDeliveryFlowType => {
+    if (deliveryOutcome?.type === DeliveryOutcomeType.ANALOG) {
+      return 'physical_flow';
+    }
+    if (deliveryOutcome?.type === DeliveryOutcomeType.DIGITAL) {
+      return 'digital';
+    }
+    return 'not_available';
+  };
+
+  const getDeliveryMode = (): EventDeliveryModeType => {
+    if (notification.pagoPaIntMode === PagoPaIntegrationMode.Sync) {
+      return 'sync';
+    }
+    if (notification.pagoPaIntMode === PagoPaIntegrationMode.Async) {
+      return 'async';
+    }
+    if (notification.notificationFeePolicy === NotificationFeePolicy.FlatRate) {
+      return 'flat_rate';
+    }
+    return 'not_set';
+  };
+
   const showInfoMessageIfRetryAfterOrDownload = (response: {
     url: string;
     retryAfter?: number | undefined;
@@ -212,6 +251,11 @@ const NotificationDetail = () => {
     if (isCancelledOrCancelling) {
       return;
     }
+
+    PGEventStrategyFactory.triggerEvent(PGEventsType.SEND_PG_NOTIFICATION_DOWNLOAD_ATTACHMENT, {
+      document,
+    });
+
     if (isObject(document)) {
       // AAR case
       dispatch(
@@ -245,6 +289,9 @@ const NotificationDetail = () => {
     if (legalFact.category !== LegalFactType.NOTIFICATION_CANCELLED && isCancelledOrCancelling) {
       return;
     }
+
+    PGEventStrategyFactory.triggerEvent(PGEventsType.SEND_PG_TIMELINE_DOWNLOAD, { legalFact });
+
     if (legalFact.category !== 'AAR') {
       // Legal fact case
       dispatch(
@@ -286,6 +333,8 @@ const NotificationDetail = () => {
 
   const onPayClick = (noticeCode?: string, creditorTaxId?: string, amount?: number) => {
     if (noticeCode && creditorTaxId && amount && notification.senderDenomination) {
+      PGEventStrategyFactory.triggerEvent(PGEventsType.SEND_PG_START_PAYMENT);
+
       dispatch(
         getReceivedNotificationPaymentUrl({
           paymentNotice: {
@@ -355,13 +404,16 @@ const NotificationDetail = () => {
       if (paymentInfoRequest.length === 0) {
         return;
       }
-      safeDispatch(getReceivedNotificationPaymentInfo, {
+      void safeDispatch(getReceivedNotificationPaymentInfo, {
         taxId: currentRecipient.taxId,
         paymentInfoRequest,
       });
     },
     [currentRecipient.payments]
   );
+
+  const getNotificationSource = (): EventNotificationSource =>
+    fromQrCode ? 'QRcode' : 'LISTA_NOTIFICHE';
 
   useEffect(() => {
     if (checkIfUserHasPayments && !isCancelledOrCancelling) {
@@ -376,14 +428,51 @@ const NotificationDetail = () => {
     return () => void dispatch(resetState());
   }, []);
 
-  /* function which loads relevant information about donwtimes */
+  /* Loads relevant information about downtimes */
   const fetchDowntimeEvents = useCallback((fromDate: string, toDate: string | undefined) => {
     const fetchParams: GetDowntimeHistoryParams = {
       startDate: fromDate,
       endDate: toDate,
     };
-    void dispatch(getDowntimeHistory(fetchParams));
+    dispatch(getDowntimeHistory(fetchParams))
+      .unwrap()
+      .then(() => {
+        setDowntimesReady(true);
+      })
+      .catch(() => {});
   }, []);
+
+  const fromQrCode = useMemo(
+    () => !!(location.state && (location.state as LocationState).fromQrCode),
+    [location]
+  );
+
+  useEffect(() => {
+    if (downtimesReady && pageReady && !hasNotificationReceivedApiError) {
+      PGEventStrategyFactory.triggerEvent(PGEventsType.SEND_PG_NOTIFICATION_DETAIL, {
+        downtimeEvents,
+        mandateId,
+        notificationStatus: notification.notificationStatus,
+        checkIfUserHasPayments,
+        userPayments,
+        notificationStatusHistory: notification.notificationStatusHistory,
+        source: getNotificationSource(),
+        flow: getFlowType(),
+        deliveryMode: getDeliveryMode(),
+      });
+    }
+  }, [
+    downtimesReady,
+    pageReady,
+    hasNotificationReceivedApiError,
+    downtimeEvents,
+    mandateId,
+    notification,
+    checkIfUserHasPayments,
+    userPayments,
+    fromQrCode,
+    deliveryOutcome,
+  ]);
 
   const fetchDowntimeLegalFactDocumentDetails = useCallback((legalFactId: string) => {
     if (!isCancelled.cancelled || !isCancelled.cancellationInProgress) {
@@ -393,11 +482,6 @@ const NotificationDetail = () => {
         .catch((e) => console.log(e));
     }
   }, []);
-
-  const fromQrCode = useMemo(
-    () => !!(location.state && (location.state as LocationState).fromQrCode),
-    [location]
-  );
 
   const properBreadcrumb = useMemo(() => {
     const backRoute = mandateId ? routes.NOTIFICHE_DELEGATO : routes.NOTIFICHE;
@@ -446,6 +530,18 @@ const NotificationDetail = () => {
         description={t('detail.pec-unreachable', { ns: 'notifiche' })}
       />
     );
+
+  const trackTimelineShowMore = (collapsed: boolean) => {
+    if (!collapsed) {
+      PGEventStrategyFactory.triggerEvent(PGEventsType.SEND_PG_TIMELINE_SHOW_MORE);
+    }
+  };
+
+  const trackTimelineShowHistory = (open: boolean) => {
+    if (open) {
+      PGEventStrategyFactory.triggerEvent(PGEventsType.SEND_PG_TIMELINE_SHOW_HISTORY);
+    }
+  };
 
   return (
     <LoadingPageWrapper isInitialized={pageReady}>
@@ -548,6 +644,15 @@ const NotificationDetail = () => {
                   disableDownloads={isCancelled.cancellationInTimeline}
                   downtimeExampleLink={DOWNTIME_EXAMPLE_LINK}
                 />
+                {showBilingualFacsimileSection && (
+                  <Paper sx={{ p: 3 }} elevation={0}>
+                    <NotificationDetailBilingualFacsimileDocuments
+                      title={t('detail.bilingual.title', { ns: 'notifiche' })}
+                      description={t('detail.bilingual.description', { ns: 'notifiche' })}
+                      action={t('detail.bilingual.action', { ns: 'notifiche' })}
+                    />
+                  </Paper>
+                )}
               </Stack>
             </Grid>
             <Grid item lg={5} xs={12}>
@@ -567,6 +672,8 @@ const NotificationDetail = () => {
                   showLessButtonLabel={t('detail.show-less', { ns: 'notifiche' })}
                   disableDownloads={isCancelled.cancellationInTimeline}
                   isParty={false}
+                  handleTrackShowMoreLess={trackTimelineShowMore}
+                  handleTrackShowHistory={trackTimelineShowHistory}
                 />
               </Box>
             </Grid>
