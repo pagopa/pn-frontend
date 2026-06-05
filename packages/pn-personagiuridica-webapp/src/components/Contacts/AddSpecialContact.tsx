@@ -622,6 +622,11 @@ const AddSpecialContact = forwardRef<AddSpecialContactRef, Props>(
             <SercqAddSpecialEmail />
           </>
         )}
+
+        {formik.values.channelType === ChannelType.SERCQ_SEND && (
+          <SercqSendDisclaimer i18nKey="special-contacts.sercq-disclaimer" />
+        )}
+
         <ErrorBanner
           type={errorBanner}
           contactValue={
@@ -630,9 +635,6 @@ const AddSpecialContact = forwardRef<AddSpecialContactRef, Props>(
               : t('special-contacts.sercq_send', { ns: 'recapiti' })
           }
         />
-        {formik.values.channelType === ChannelType.SERCQ_SEND && (
-          <SercqSendDisclaimer i18nKey="special-contacts.sercq-disclaimer" />
-        )}
       </Paper>
     );
   }
