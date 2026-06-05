@@ -73,7 +73,8 @@
         "info-list": [
           {
             "title": "An entity sends a SEND notification for the business",
-            "description": "The notification is <0>delivered</0> securely and with legal value through the platform"
+            "description": "The notification is <0>delivered</0> securely and with legal value through the platform",
+            "aria-description": "Activate to read the explanation of the term"
           },
           {
             "title": "You receive a message",
