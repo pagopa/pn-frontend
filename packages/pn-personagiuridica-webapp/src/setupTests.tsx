@@ -55,6 +55,10 @@ beforeAll(async () => {
     NOTIFICATION_COST_DETAILS_ASSISTANCE_LINK:
       'https://fake.notification-cost-details-assistance.pagopa.it',
     SERCQ_SERVICE_STATEMENT_LINK: 'https://fake.sercq-service-statement.pagopa.it',
+    FACSIMILE_EN: 'https://fake.facsimile-en.pagopa.it',
+    FACSIMILE_FR: 'https://fake.facsimile-fr.pagopa.it',
+    FACSIMILE_DE: 'https://fake.facsimile-de.pagopa.it',
+    FACSIMILE_SL: 'https://fake.facsimile-sl.pagopa.it',
   });
   initStore(false);
   initAxiosClients();

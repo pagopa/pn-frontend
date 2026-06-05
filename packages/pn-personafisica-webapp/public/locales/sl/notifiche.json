@@ -121,7 +121,9 @@
       },
       "error-payment": "Izberite obvestilo o plačilu",
       "error-payment-failed-single": "Prišlo je do težave z obvestilom o plačilu. Pritisnite Ponovno naloži za nov poskus. Če se napaka ponovi, se obrnite na podporo.",
-      "error-payment-failed-multiple": "Prišlo je do težave z več obvestili o plačilu. Pritisnite Ponovno naloži za nov poskus. Če se napaka ponovi, se obrnite na podporo."
+      "error-payment-failed-multiple": "Prišlo je do težave z več obvestili o plačilu. Pritisnite Ponovno naloži za nov poskus. Če se napaka ponovi, se obrnite na podporo.",
+      "tpp-expired-error-title": "Povezava z banko je potekla.",
+      "tpp-expired-error-description": "Za ponovno vzpostavitev ponovno dostopajte do tega obvestila prek sporočila, ki ste ga prejeli v aplikaciji vaše banke."
     },
     "acts_files": {
       "downloadable_acts": "Dokumenti so na voljo na spletu 120 dni od zaključka obvestila.",
@@ -384,6 +386,11 @@
         "title": "Dokument ni na voljo",
         "message": "Pri pridobivanju dokumenta je prišlo do težave. Poskusite znova pozneje. Če se napaka ponovi, stopite v stik s podporo in sporočite podatke o napaki."
       }
+    },
+    "bilingual": {
+      "title": "PODPORNI FAKSIMILNI VZORCI v slovenščini",
+      "description": "Jezik priloženih aktov se lahko razlikuje od jezika, v katerem brskaš po portalu. Če želiš razumeti vsebino teh dokumentov, lahko uporabiš faksimilne vzorce, ki jih najdeš tukaj.",
+      "action": "Preglej vzorce"
     }
   },
   "delegatorTitle": "Obvestila {{name}}",
@@ -440,9 +447,9 @@
     "returned-to-sender-description-multirecipient": "Vsi prejemniki so umrli.",
     "notification-timeline-reworked": "Posodobljen dogodek ali več dogodkov",
     "notification-timeline-reworked-tooltip": "Posodobljen dogodek ali več dogodkov",
-    "notification-timeline-reworked-description": "Dogodkov, označenih z NEVALIDIRAN DOGODEK, ne upoštevajte, saj so jih nadomestili naslednji dogodki, označeni z VALIDIRAN DOGODEK.",
-    "reworked-status-valid": "Validiran dogodek",
-    "reworked-status-not-valid": "Nevalidiran dogodek",
+    "notification-timeline-reworked-description": "Dogodki, označeni kot POPRAVLJENI, nadomeščajo prejšnje dogodke, označene kot NEVELJAVNI.",
+    "reworked-status-valid": "Popravljen dogodek",
+    "reworked-status-not-valid": "Neveljaven dogodek",
     "cancellation-in-progress": "Preklicano",
     "cancellation-in-progress-tooltip": "Preklic poteka. Stanje bo kmalu posodobljeno.",
     "cancellation-in-progress-description": "Preklic poteka. Stanje bo kmalu posodobljeno."

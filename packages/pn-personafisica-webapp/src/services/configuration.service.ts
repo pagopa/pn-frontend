@@ -31,6 +31,10 @@ export interface PfConfiguration {
   NOTIFICATION_COST_DETAILS_ASSISTANCE_LINK: string;
   SERCQ_SERVICE_STATEMENT_LINK: string;
   IS_ONBOARDING_ENABLED: boolean;
+  FACSIMILE_EN: string;
+  FACSIMILE_FR: string;
+  FACSIMILE_DE: string;
+  FACSIMILE_SL: string;
 }
 
 class PfConfigurationValidator extends Validator<PfConfiguration> {
@@ -73,6 +77,10 @@ class PfConfigurationValidator extends Validator<PfConfiguration> {
       .matches(dataRegex.htmlPageUrl);
     this.ruleFor('SERCQ_SERVICE_STATEMENT_LINK').isString().isRequired();
     this.ruleFor('IS_ONBOARDING_ENABLED').isBoolean();
+    this.ruleFor('FACSIMILE_EN').isString().isRequired().matches(dataRegex.htmlPageUrl);
+    this.ruleFor('FACSIMILE_FR').isString().isRequired().matches(dataRegex.htmlPageUrl);
+    this.ruleFor('FACSIMILE_DE').isString().isRequired().matches(dataRegex.htmlPageUrl);
+    this.ruleFor('FACSIMILE_SL').isString().isRequired().matches(dataRegex.htmlPageUrl);
   }
 }
 
