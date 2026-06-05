@@ -423,7 +423,7 @@
     "returned-to-sender-description-multirecipient": "All recipients are deceased.",
     "notification-timeline-reworked": "One or more events updated",
     "notification-timeline-reworked-tooltip": "One or more events updated",
-    "notification-timeline-reworked-description": "Events marked as RECTIFIED replace the previous events indicated as INVALID.",
+    "notification-timeline-reworked-description": "Events marked as rectified replace the previous events indicated as invalid.",
     "reworked-status-valid": "Rectified event",
     "reworked-status-not-valid": "Invalid event",
     "cancellation-in-progress": "Cancelled",

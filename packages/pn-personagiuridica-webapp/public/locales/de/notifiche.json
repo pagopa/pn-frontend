@@ -438,7 +438,7 @@
     "returned-to-sender-description-multirecipient": "Alle Empfänger sind verstorben.",
     "notification-timeline-reworked": "Ein oder mehrere Ereignisse aktualisiert",
     "notification-timeline-reworked-tooltip": "Ein oder mehrere Ereignisse aktualisiert",
-    "notification-timeline-reworked-description": "Als BERICHTIGT markierte Ereignisse ersetzen die vorherigen, als UNGÜLTIG gekennzeichneten Ereignisse.",
+    "notification-timeline-reworked-description": "Als berichtigt gekennzeichnete Ereignisse ersetzen die vorherigen, als ungültig angegebenen Ereignisse.",
     "reworked-status-valid": "Berichtigtes Ereignis",
     "reworked-status-not-valid": "Ungültiges Ereignis",
     "cancellation-in-progress": "Annulliert",
