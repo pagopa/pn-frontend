@@ -12,7 +12,6 @@ import {
   ApiError,
   ApiErrorWrapper,
   AppResponse,
-  AppResponsePublisher,
   AppRouteParams,
   DeliveryOutcomeType,
   EventPaymentRecipientType,
@@ -47,6 +46,7 @@ import {
   useIsCancelled,
   useIsMobile,
 } from '@pagopa-pn/pn-commons';
+import { useDismissToastOnError } from '@pagopa-pn/pn-commons/src/hooks/useDismissToastOnError';
 import {
   EventDeliveryFlowType,
   EventDeliveryModeType,
@@ -470,20 +470,7 @@ const NotificationDetail: React.FC = () => {
     void dispatch(exchangeNotificationRetrievalId(currentUser.source.retrievalId));
   }, [currentUser, checkIfUserHasPayments]);
 
-  // Dismiss toast if error is PN_DELIVERY_USER_ID_NOT_RECIPIENT_OR_DELEGATOR
-  useEffect(() => {
-    AppResponsePublisher.error.subscribe(
-      NOTIFICATION_ACTIONS.GET_RECEIVED_NOTIFICATION,
-      handleUserInvalidError
-    );
-
-    return () => {
-      AppResponsePublisher.error.unsubscribe(
-        NOTIFICATION_ACTIONS.GET_RECEIVED_NOTIFICATION,
-        handleUserInvalidError
-      );
-    };
-  }, [handleUserInvalidError]);
+  useDismissToastOnError(NOTIFICATION_ACTIONS.GET_RECEIVED_NOTIFICATION, handleUserInvalidError);
 
   /* function which loads relevant information about donwtimes */
   const fetchDowntimeEvents = useCallback((fromDate: string, toDate: string | undefined) => {
@@ -733,6 +720,9 @@ const NotificationDetail: React.FC = () => {
                           timerF24={F24_DOWNLOAD_WAIT_TIME}
                           costDetailsAssistanceLink={NOTIFICATION_COST_DETAILS_ASSISTANCE_LINK}
                           costDetails={notification.notificationCostDetails}
+                          paymentTppUrlActionID={
+                            NOTIFICATION_ACTIONS.GET_RECEIVED_NOTIFICATION_PAYMENT_TPP_URL
+                          }
                         />
                       </ApiErrorWrapper>
                     </Paper>

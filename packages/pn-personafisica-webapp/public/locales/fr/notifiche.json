@@ -121,7 +121,9 @@
       },
       "error-payment": "Sélectionnez un avis de paiement",
       "error-payment-failed-single": "Un problème est survenu avec un avis de paiement. Appuyez sur Recharger pour réessayer. Si l’erreur persiste, contactez l’assistance.",
-      "error-payment-failed-multiple": "Un problème est survenu avec plusieurs avis de paiement. Appuyez sur Recharger pour réessayer. Si l’erreur persiste, contactez l’assistance."
+      "error-payment-failed-multiple": "Un problème est survenu avec plusieurs avis de paiement. Appuyez sur Recharger pour réessayer. Si l’erreur persiste, contactez l’assistance.",
+      "tpp-expired-error-title": "La connexion avec la banque a expiré.",
+      "tpp-expired-error-description": "Pour la rétablir, accédez de nouveau à cette notification via le message que vous avez reçu sur l'application de votre banque."
     },
     "acts_files": {
       "downloadable_acts": "Les documents sont disponibles en ligne pendant 120 jours à compter de la finalisation de la notification.",
