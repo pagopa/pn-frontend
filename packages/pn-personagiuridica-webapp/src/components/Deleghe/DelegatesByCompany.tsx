@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
@@ -142,6 +142,10 @@ const DelegatesByCompany = () => {
       // getDelegatorsData();
     }
   };
+
+  useEffect(() => {
+    PGEventStrategyFactory.triggerEvent(PGEventsType.SEND_PG_MANDATES_GIVEN);
+  }, []);
 
   return (
     <Box mb={8} data-testid="delegatesByCompany">

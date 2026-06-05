@@ -19,6 +19,7 @@ import {
   Consent,
   ConsentType,
 } from '../generated-client/tos-privacy';
+import { PGEventsType } from '../models/PGEventsType';
 import * as routes from '../navigation/routes.const';
 import {
   acceptTosPrivacy,
@@ -28,6 +29,7 @@ import {
 } from '../redux/apikeys/actions';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { RootState } from '../redux/store';
+import PGEventStrategyFactory from '../utility/MixpanelUtils/PGEventStrategyFactory';
 
 const StepperContainer: React.FC<{ children: React.ReactNode; activeStep: number }> = ({
   children,
@@ -183,6 +185,9 @@ const NewPublicKey = () => {
       .unwrap()
       .then((response: BffPublicKeyResponse) => {
         if (response.issuer) {
+          if (!kid) {
+            PGEventStrategyFactory.triggerEvent(PGEventsType.SEND_PG_ADD_API_UX_SUCCESS);
+          }
           setActiveStep((previousStep) => previousStep + 1);
           setCreationResponse(response);
           showSuccessMessage();
