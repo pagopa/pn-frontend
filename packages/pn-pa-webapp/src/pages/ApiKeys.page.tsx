@@ -18,6 +18,7 @@ import { CopyToClipboardButton } from '@pagopa/mui-italia';
 import ApiKeyModal from '../components/ApiKeys/ApiKeyModal';
 import DesktopApiKeys from '../components/ApiKeys/DesktopApiKeys';
 import { ApiKey, ApiKeySetStatus, ModalApiKeyView } from '../models/ApiKeys';
+import { PAEventsType } from '../models/PAEventsType';
 import * as routes from '../navigation/routes.const';
 import {
   API_KEYS_ACTIONS,
@@ -29,6 +30,7 @@ import { setPagination } from '../redux/apiKeys/reducers';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { RootState } from '../redux/store';
 import { getConfiguration } from '../services/configuration.service';
+import PAEventStrategyFactory from '../utility/MixpanelUtils/PAEventStrategyFactory';
 
 const LinkApiB2b: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
   const { API_B2B_LINK } = getConfiguration();
@@ -117,12 +119,17 @@ const ApiKeys = () => {
   };
 
   const handleNewApiKeyClick = () => {
+    PAEventStrategyFactory.triggerEvent(PAEventsType.SEND_PA_ADD_API_START);
     navigate(routes.NUOVA_API_KEY);
   };
 
   useEffect(() => {
     fetchApiKeys();
   }, [fetchApiKeys]);
+
+  useEffect(() => {
+    PAEventStrategyFactory.triggerEvent(PAEventsType.SEND_PA_API_INTEGRATIONS);
+  }, []);
 
   const apiKeyBlocked = (apiKeyId: string) => {
     handleCloseModal();

@@ -1,4 +1,4 @@
-import { useCallback } from 'react';
+import { useCallback, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import {
@@ -9,6 +9,7 @@ import {
   downloadDocument,
 } from '@pagopa-pn/pn-commons';
 
+import { PAEventsType } from '../models/PAEventsType';
 import {
   getCurrentAppStatus,
   getDowntimeHistory,
@@ -19,6 +20,7 @@ import { clearPagination, setPagination } from '../redux/appStatus/reducers';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { RootState } from '../redux/store';
 import { getConfiguration } from '../services/configuration.service';
+import PAEventStrategyFactory from '../utility/MixpanelUtils/PAEventStrategyFactory';
 
 const AppStatus = () => {
   const dispatch = useAppDispatch();
@@ -59,6 +61,10 @@ const AppStatus = () => {
     },
     [dispatch, getDowntimeLegalFact]
   );
+
+  useEffect(() => {
+    PAEventStrategyFactory.triggerEvent(PAEventsType.SEND_PA_SERVICE_STATUS);
+  }, []);
 
   return (
     <AppStatusRender

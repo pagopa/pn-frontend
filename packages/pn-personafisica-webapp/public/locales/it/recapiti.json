@@ -76,7 +76,8 @@
         "info-list": [
           {
             "title": "Un ente ti invia una notifica su SEND",
-            "description": "La notifica ti viene <0>consegnata</0> in modo sicuro e con valore legale tramite la piattaforma"
+            "description": "La notifica ti viene <0>consegnata</0> in modo sicuro e con valore legale tramite la piattaforma",
+            "aria-description": "Attiva per leggere la spiegazione del termine"
           },
           {
             "title": "Ricevi un messaggio",
