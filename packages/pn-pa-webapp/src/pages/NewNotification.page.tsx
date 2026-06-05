@@ -35,6 +35,23 @@ const SubTitle = () => {
   );
 };
 
+const PAYMENT_ENABLED_STEP_EVENTS: Partial<Record<number, PAEventsType>> = {
+  0: PAEventsType.SEND_PA_PRELIMINARY_INFORMATION,
+  1: PAEventsType.SEND_PA_RECIPIENTS,
+  2: PAEventsType.SEND_PA_DEBT_POSITION,
+  3: PAEventsType.SEND_PA_DEBT_POSITION_DETAIL,
+  4: PAEventsType.SEND_PA_DOCUMENTATION,
+};
+
+const PAYMENT_DISABLED_STEP_EVENTS: Partial<Record<number, PAEventsType>> = {
+  0: PAEventsType.SEND_PA_PRELIMINARY_INFORMATION,
+  1: PAEventsType.SEND_PA_RECIPIENTS,
+  2: PAEventsType.SEND_PA_DOCUMENTATION,
+};
+
+const getStepEvent = (step: number, isPaymentEnabled: boolean): PAEventsType | undefined =>
+  (isPaymentEnabled ? PAYMENT_ENABLED_STEP_EVENTS : PAYMENT_DISABLED_STEP_EVENTS)[step];
+
 const NewNotification = () => {
   const [activeStep, setActiveStep] = useState(0);
   const isMobile = useIsMobile();
@@ -73,28 +90,6 @@ const NewNotification = () => {
     );
 
   const childRef = useRef<{ confirm: () => void }>();
-
-  const trackNewNotificationStepView = (step: number) => {
-    if (step === 0) {
-      PAEventStrategyFactory.triggerEvent(PAEventsType.SEND_PA_PRELIMINARY_INFORMATION);
-      return;
-    }
-    if (step === 1) {
-      PAEventStrategyFactory.triggerEvent(PAEventsType.SEND_PA_RECIPIENTS);
-      return;
-    }
-    if (IS_PAYMENT_ENABLED && step === 2) {
-      PAEventStrategyFactory.triggerEvent(PAEventsType.SEND_PA_DEBT_POSITION);
-      return;
-    }
-    if (IS_PAYMENT_ENABLED && step === 3) {
-      PAEventStrategyFactory.triggerEvent(PAEventsType.SEND_PA_DEBT_POSITION_DETAIL);
-      return;
-    }
-    if ((IS_PAYMENT_ENABLED && step === 4) || (!IS_PAYMENT_ENABLED && step === 2)) {
-      PAEventStrategyFactory.triggerEvent(PAEventsType.SEND_PA_DOCUMENTATION);
-    }
-  };
 
   const goToNextStep = () => {
     setActiveStep((previousStep) => previousStep + 1);
@@ -156,10 +151,12 @@ const NewNotification = () => {
   useEffect(() => () => void dispatch(resetState()), []);
 
   useEffect(() => {
-    if (activeStep < steps.length) {
-      trackNewNotificationStepView(activeStep);
+    const event = getStepEvent(activeStep, IS_PAYMENT_ENABLED);
+
+    if (event) {
+      PAEventStrategyFactory.triggerEvent(event);
     }
-  }, [activeStep, steps.length]);
+  }, [activeStep]);
 
   if (activeStep === steps.length) {
     return <SyncFeedback />;
