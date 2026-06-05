@@ -114,19 +114,19 @@
         "sms-disclaimer": "Si vous appuyez sur <strong>Ajouter un numéro</strong>, vous enregistrez cette adresse pour recevoir des avis sur vos notifications SEND. Vous pouvez la gérer dans la section <strong>Adresses.</strong>"
       },
       "step_4": {
-        "title": "Vous êtes en train d'activer votre Domicile Numérique sur SEND",
+        "title": "Votre récapitulatif",
         "step-title": "Récapitulatif",
-        "content": "Vos communications à valeur légale seront livrées à:",
+        "content": "Vos communications à valeur juridique seront envoyées uniquement sur :",
         "digital-domicile": "Domicile Numérique",
         "send": "SEND",
-        "courtesy-content": "Vous avez choisi de recevoir un message sur:",
+        "courtesy-content": "Vous recevrez un avis via :",
         "contacts-list": {
           "email": {
-            "title": "Adresse e-mail",
+            "title": "E-mail",
             "textDisabled": "Ajouter un e-mail"
           },
           "io": {
-            "title": "App IO",
+            "title-app-io": "IO, l'application des services publics",
             "textDisabled": "Connecter SEND à IO",
             "textEnabled": "Service SEND activé"
           },
@@ -135,10 +135,10 @@
             "textDisabled": "Ajouter un numéro de téléphone portable"
           }
         },
-        "disclaimer-enable": "En cliquant sur <strong>Activer le domicile numérique</strong>, vous déclarez avoir lu la <0>Politique de confidentialité</0> et accepter les <1>Conditions d'utilisation</1>, et avoir compris que les notifications SEND ne vous seront pas transférées sur d'autres domiciles numériques.",
-        "disclaimer-transfer": "En cliquant sur <strong>Transférer le domicile numérique</strong>, vous déclarez avoir lu la <0>Politique de confidentialité</0> et accepter les <1>Conditions d'utilisation</1>, et avoir compris que les notifications SEND ne vous seront pas transférées sur d'autres domiciles numériques.",
-        "enable": "Activer le Domicile numérique",
-        "transfer": "Transférer le Domicile numérique"
+        "disclaimer-enable": "En cliquant sur <strong>« Activer le Domicile numérique »</strong>, vous déclarez avoir lu la <0>Politique de confidentialité</0>, accepter les <1>Conditions d'utilisation</1>, et avoir compris que les notifications SEND ne vous seront pas transférées sur d'autres domiciles numériques.",
+        "disclaimer-transfer": "En cliquant sur <strong>« Confirmer »</strong>, vous déclarez avoir lu la <0>Politique de confidentialité</0>, accepter les <1>Conditions d'utilisation</1>, et avoir compris que les notifications SEND ne vous seront pas transférées sur d'autres domiciles numériques.",
+        "sercq-send-contacts-alert": "Surveillez les coordonnées que vous avez choisies : une notification numérique SEND commence à produire des effets juridiques même si vous ne l'avez pas consultée.",
+        "enable": "Activer le Domicile numérique"
       },
       "feedback": {
         "title-transfer": "Vous avez mis à jour votre Domicile Numérique",
@@ -274,8 +274,8 @@
       "title": "Fonctionnalité désactivée",
       "description": "Vous ne pouvez plus insérer d'adresses de courtoisie personnalisées par organisme ni modifier les adresses existantes. Si vous supprimez une adresse personnalisée, vous ne pourrez plus la récupérer ni l'insérer à nouveau."
     },
-    "email-description": "L'e-mail où nous vous aviserons lorsque vous recevrez une communication à valeur légale pour vous sur SEND.",
-    "sercq-disclaimer": "En appuyant sur « Confirmer », vous déclarez avoir lu la <0>Politique de confidentialité</0> et accepter les <1>Conditions d’utilisation du service</1>"
+    "email-description": "L'e-mail auquel nous vous informerons lorsque vous recevrez une communication à valeur juridique sur SEND.",
+    "sercq-disclaimer": "En cliquant sur <strong>« Confirmer »</strong>, vous déclarez avoir lu la <0>Politique de confidentialité</0>, accepter les <1>Conditions d'utilisation</1>, et avoir compris que les notifications SEND de l'organisme ne vous seront pas transférées sur d'autres domiciles numériques."
   },
   "common": {
     "duplicate-contact-title": "Adresse déjà présente",
@@ -396,7 +396,7 @@
         "legal-title-pec": "Les communications à valeur juridique seront remises sur :",
         "courtesy-title": "Tu recevras un avis via :",
         "info-box": "Surveille les coordonnées que tu as choisies : une notification numérique SEND commence à produire des effets juridiques même si tu ne l’as pas consultée.",
-        "disclaimer": "En cliquant sur <strong>Confirmer</strong>, vous déclarez avoir lu la <0>Politique de confidentialité</0> et accepter les <1>Conditions d'utilisation</1>, et avoir compris que les notifications SEND ne vous seront pas transférées sur d'autres domiciles numériques.",
+        "disclaimer": "En cliquant sur <strong>\"Confirmer\"</strong>, vous déclarez avoir lu la <0>Politique de confidentialité</0>, accepter les <1>Conditions d'utilisation</1>, et avoir compris que les notifications SEND ne vous seront pas transférées sur d'autres domiciles numériques.",
         "ddom-label": "Domicile numérique",
         "io-label": "IO, l’app des services publics",
         "io-value": "Service SEND sur IO actif",
