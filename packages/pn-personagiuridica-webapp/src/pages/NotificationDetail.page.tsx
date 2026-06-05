@@ -7,6 +7,7 @@ import { Alert, AlertTitle, Box, Grid, Paper, Stack, Typography } from '@mui/mat
 import {
   ApiError,
   ApiErrorWrapper,
+  DeliveryOutcomeType,
   GetDowntimeHistoryParams,
   LegalFactId,
   LegalFactType,
@@ -38,6 +39,11 @@ import {
   useIsCancelled,
   useIsMobile,
 } from '@pagopa-pn/pn-commons';
+import {
+  EventDeliveryFlowType,
+  EventDeliveryModeType,
+  EventNotificationSource,
+} from '@pagopa-pn/pn-commons/src/models/MixpanelEvents';
 import { MIAlert } from '@pagopa/mui-italia';
 
 import DomicileBanner from '../components/DomicileBanner/DomicileBanner';
@@ -198,6 +204,29 @@ const NotificationDetail = () => {
     notification.notificationCostDetails,
   ]);
 
+  const getFlowType = (): EventDeliveryFlowType => {
+    if (deliveryOutcome?.type === DeliveryOutcomeType.ANALOG) {
+      return 'physical_flow';
+    }
+    if (deliveryOutcome?.type === DeliveryOutcomeType.DIGITAL) {
+      return 'digital';
+    }
+    return 'not_available';
+  };
+
+  const getDeliveryMode = (): EventDeliveryModeType => {
+    if (notification.pagoPaIntMode === PagoPaIntegrationMode.Sync) {
+      return 'sync';
+    }
+    if (notification.pagoPaIntMode === PagoPaIntegrationMode.Async) {
+      return 'async';
+    }
+    if (notification.notificationFeePolicy === NotificationFeePolicy.FlatRate) {
+      return 'flat_rate';
+    }
+    return 'not_set';
+  };
+
   const showInfoMessageIfRetryAfterOrDownload = (response: {
     url: string;
     retryAfter?: number | undefined;
@@ -222,6 +251,11 @@ const NotificationDetail = () => {
     if (isCancelledOrCancelling) {
       return;
     }
+
+    PGEventStrategyFactory.triggerEvent(PGEventsType.SEND_PG_NOTIFICATION_DOWNLOAD_ATTACHMENT, {
+      document,
+    });
+
     if (isObject(document)) {
       // AAR case
       dispatch(
@@ -255,6 +289,9 @@ const NotificationDetail = () => {
     if (legalFact.category !== LegalFactType.NOTIFICATION_CANCELLED && isCancelledOrCancelling) {
       return;
     }
+
+    PGEventStrategyFactory.triggerEvent(PGEventsType.SEND_PG_TIMELINE_DOWNLOAD, { legalFact });
+
     if (legalFact.category !== 'AAR') {
       // Legal fact case
       dispatch(
@@ -296,6 +333,8 @@ const NotificationDetail = () => {
 
   const onPayClick = (noticeCode?: string, creditorTaxId?: string, amount?: number) => {
     if (noticeCode && creditorTaxId && amount && notification.senderDenomination) {
+      PGEventStrategyFactory.triggerEvent(PGEventsType.SEND_PG_START_PAYMENT);
+
       dispatch(
         getReceivedNotificationPaymentUrl({
           paymentNotice: {
@@ -373,6 +412,9 @@ const NotificationDetail = () => {
     [currentRecipient.payments]
   );
 
+  const getNotificationSource = (): EventNotificationSource =>
+    fromQrCode ? 'QRcode' : 'LISTA_NOTIFICHE';
+
   useEffect(() => {
     if (checkIfUserHasPayments && !isCancelledOrCancelling) {
       // get current page stored in cache
@@ -400,6 +442,11 @@ const NotificationDetail = () => {
       .catch(() => {});
   }, []);
 
+  const fromQrCode = useMemo(
+    () => !!(location.state && (location.state as LocationState).fromQrCode),
+    [location]
+  );
+
   useEffect(() => {
     if (downtimesReady && pageReady && !hasNotificationReceivedApiError) {
       PGEventStrategyFactory.triggerEvent(PGEventsType.SEND_PG_NOTIFICATION_DETAIL, {
@@ -408,10 +455,24 @@ const NotificationDetail = () => {
         notificationStatus: notification.notificationStatus,
         checkIfUserHasPayments,
         userPayments,
-        timeline: notification.timeline,
+        notificationStatusHistory: notification.notificationStatusHistory,
+        source: getNotificationSource(),
+        flow: getFlowType(),
+        deliveryMode: getDeliveryMode(),
       });
     }
-  }, [downtimesReady, pageReady, hasNotificationReceivedApiError]);
+  }, [
+    downtimesReady,
+    pageReady,
+    hasNotificationReceivedApiError,
+    downtimeEvents,
+    mandateId,
+    notification,
+    checkIfUserHasPayments,
+    userPayments,
+    fromQrCode,
+    deliveryOutcome,
+  ]);
 
   const fetchDowntimeLegalFactDocumentDetails = useCallback((legalFactId: string) => {
     if (!isCancelled.cancelled || !isCancelled.cancellationInProgress) {
@@ -421,11 +482,6 @@ const NotificationDetail = () => {
         .catch((e) => console.log(e));
     }
   }, []);
-
-  const fromQrCode = useMemo(
-    () => !!(location.state && (location.state as LocationState).fromQrCode),
-    [location]
-  );
 
   const properBreadcrumb = useMemo(() => {
     const backRoute = mandateId ? routes.NOTIFICHE_DELEGATO : routes.NOTIFICHE;
@@ -474,6 +530,18 @@ const NotificationDetail = () => {
         description={t('detail.pec-unreachable', { ns: 'notifiche' })}
       />
     );
+
+  const trackTimelineShowMore = (collapsed: boolean) => {
+    if (!collapsed) {
+      PGEventStrategyFactory.triggerEvent(PGEventsType.SEND_PG_TIMELINE_SHOW_MORE);
+    }
+  };
+
+  const trackTimelineShowHistory = (open: boolean) => {
+    if (open) {
+      PGEventStrategyFactory.triggerEvent(PGEventsType.SEND_PG_TIMELINE_SHOW_HISTORY);
+    }
+  };
 
   return (
     <LoadingPageWrapper isInitialized={pageReady}>
@@ -604,6 +672,8 @@ const NotificationDetail = () => {
                   showLessButtonLabel={t('detail.show-less', { ns: 'notifiche' })}
                   disableDownloads={isCancelled.cancellationInTimeline}
                   isParty={false}
+                  handleTrackShowMoreLess={trackTimelineShowMore}
+                  handleTrackShowHistory={trackTimelineShowHistory}
                 />
               </Box>
             </Grid>

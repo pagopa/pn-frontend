@@ -40,11 +40,13 @@ import {
   DelegatorsFormFilters,
   GetDelegatorsFilters,
 } from '../../models/Deleghe';
+import { PGEventsType } from '../../models/PGEventsType';
 import { GroupStatus } from '../../models/groups';
 import { DELEGATION_ACTIONS, searchMandatesByDelegate } from '../../redux/delegation/actions';
 import { setFilters } from '../../redux/delegation/reducers';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { RootState } from '../../redux/store';
+import PGEventStrategyFactory from '../../utility/MixpanelUtils/PGEventStrategyFactory';
 import delegationToItem from '../../utility/delegation.utility';
 import DelegationDataSwitch from './DelegationDataSwitch';
 
@@ -296,6 +298,10 @@ const DelegationsOfTheCompany = () => {
     }
     getDelegatorsData();
   }, [filters]);
+
+  useEffect(() => {
+    PGEventStrategyFactory.triggerEvent(PGEventsType.SEND_PG_MANDATES_RECEIVED);
+  }, []);
 
   return (
     <Box data-testid="delegationsOfTheCompany">

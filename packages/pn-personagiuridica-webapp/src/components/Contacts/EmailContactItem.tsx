@@ -5,10 +5,12 @@ import PowerSettingsNewIcon from '@mui/icons-material/PowerSettingsNew';
 import { Button, Chip, Divider, Typography } from '@mui/material';
 import { PnInfoCard, appStateActions } from '@pagopa-pn/pn-commons';
 
+import { PGEventsType } from '../../models/PGEventsType';
 import { AddressType, ChannelType, SaveDigitalAddressParams } from '../../models/contacts';
 import { createOrUpdateAddress, removeSercqAndEmail } from '../../redux/contact/actions';
 import { contactsSelectors } from '../../redux/contact/reducers';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
+import PGEventStrategyFactory from '../../utility/MixpanelUtils/PGEventStrategyFactory';
 import { contactAlreadyExists } from '../../utility/contacts.utility';
 import ContactCodeDialog from './ContactCodeDialog';
 import DeleteDialog from './DeleteDialog';
@@ -81,6 +83,7 @@ const EmailContactItem: React.FC = () => {
       setModalOpen(ModalType.EXISTING);
       return;
     }
+    PGEventStrategyFactory.triggerEvent(PGEventsType.SEND_PG_ADD_EMAIL_START);
     handleCodeVerification();
   };
 
@@ -105,6 +108,10 @@ const EmailContactItem: React.FC = () => {
 
         // contact has already been verified
         // show success message
+        PGEventStrategyFactory.triggerEvent(PGEventsType.SEND_PG_ADD_EMAIL_UX_SUCCESS);
+        PGEventStrategyFactory.triggerEvent(PGEventsType.SEND_PG_HAS_EMAIL, {
+          value: true,
+        });
         dispatch(
           appStateActions.addSuccess({
             title: '',
@@ -143,6 +150,10 @@ const EmailContactItem: React.FC = () => {
     dispatch(removeSercqAndEmail({ senderIds: sercqSenderIds }))
       .unwrap()
       .then(() => {
+        PGEventStrategyFactory.triggerEvent(PGEventsType.SEND_PG_REMOVE_EMAIL_UX_SUCCESS);
+        PGEventStrategyFactory.triggerEvent(PGEventsType.SEND_PG_HAS_EMAIL, {
+          value: false,
+        });
         dispatch(
           appStateActions.addSuccess({
             title: '',
@@ -254,6 +265,7 @@ const EmailContactItem: React.FC = () => {
             onClick={() => {
               // eslint-disable-next-line functional/immutable-data
               currentAddress.current = { value: currentValue };
+              PGEventStrategyFactory.triggerEvent(PGEventsType.SEND_PG_REMOVE_EMAIL_START);
               // If any SERCQ is active (and not blocked), open a pre-confirm step first
               setModalOpen(
                 !blockDelete && hasAnySERCQAddrEnabled && !blockDueToSercqDefaultAndPecSpecials

@@ -17,12 +17,14 @@ import {
 import { IllusHourglass, PnWizard, PnWizardStep } from '@pagopa-pn/pn-commons';
 import { ButtonNaked } from '@pagopa/mui-italia';
 
+import { PGEventsType } from '../../models/PGEventsType';
 import { AddressType, ChannelType, SaveDigitalAddressParams } from '../../models/contacts';
 import { NOTIFICHE } from '../../navigation/routes.const';
 import { createOrUpdateAddress } from '../../redux/contact/actions';
 import { contactsSelectors } from '../../redux/contact/reducers';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { getConfiguration } from '../../services/configuration.service';
+import PGEventStrategyFactory from '../../utility/MixpanelUtils/PGEventStrategyFactory';
 import { pecValidationSchema } from '../../utility/contacts.utility';
 import ContactCodeDialog from './ContactCodeDialog';
 
@@ -90,6 +92,13 @@ const PecContactWizard: React.FC<Props> = ({
           setOpenCodeModal(true);
           return;
         }
+
+        PGEventStrategyFactory.triggerEvent(PGEventsType.SEND_PG_ADD_DIGITAL_DOMICILE_UX_SUCCESS, {
+          digital_domicile_type: ChannelType.PEC,
+        });
+        PGEventStrategyFactory.triggerEvent(PGEventsType.SEND_PG_HAS_DIGITAL_DOMICILE, {
+          value: ChannelType.PEC,
+        });
         setOpenCodeModal(false);
         return setActiveStep(activeStep + 1);
       })
