@@ -79,7 +79,7 @@ describe('SercqSendContactWizard', () => {
 
     const activateButton = getByTestId('activateButton');
     expect(activateButton).toBeInTheDocument();
-    expect(activateButton).toHaveTextContent('legal-contacts.sercq-send-wizard.step_4.enable');
+    expect(activateButton).toHaveTextContent(`${labelPrefix}.enable`);
   });
 
   it('should not show IO when user does not have app IO installed', async () => {
