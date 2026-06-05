@@ -23,6 +23,7 @@ import {
   setPaymentCache,
 } from '@pagopa-pn/pn-commons';
 import { initLocalizationForTest } from '@pagopa-pn/pn-commons/src/test-utils';
+import { LANGUAGE_SESSION_KEY } from '@pagopa-pn/pn-commons/src/utility/multilanguage.utility';
 import userEvent from '@testing-library/user-event';
 
 import { downtimesDTO } from '../../__mocks__/AppStatus.mock';
@@ -30,6 +31,7 @@ import { mandatesByDelegate } from '../../__mocks__/Delegations.mock';
 import { errorMock } from '../../__mocks__/Errors.mock';
 import { paymentInfo } from '../../__mocks__/ExternalRegistry.mock';
 import {
+  bilingualNotification,
   cachedPayments,
   notificationDTO,
   notificationToFe,
@@ -1344,6 +1346,38 @@ describe('NotificationDetail Page', () => {
     expect(alertRadd).toHaveTextContent('detail.timeline.radd.title');
   });
 
+  it('render bilingual section when lang is different from additional language in notification', async () => {
+    sessionStorage.setItem(LANGUAGE_SESSION_KEY, 'DE');
+    mock
+      .onGet(`/bff/v1/notifications/received/${bilingualNotification.iun}`)
+      .reply(200, bilingualNotification);
+    await act(async () => {
+      result = render(<Component />, {
+        route: routes.GET_DETTAGLIO_NOTIFICA_PATH(bilingualNotification.iun),
+      });
+    });
+
+    const bilingualSection = await result.findByTestId('bilingualSection');
+    expect(bilingualSection).toBeInTheDocument();
+    expect(bilingualSection).toHaveTextContent('detail.bilingual.title');
+  });
+
+  it('does not render bilingual section when lang is same as additional language in notification', async () => {
+    sessionStorage.setItem(LANGUAGE_SESSION_KEY, 'EN');
+    mock
+      .onGet(`/bff/v1/notifications/received/${bilingualNotification.iun}`)
+      .reply(200, bilingualNotification);
+    await act(async () => {
+      result = render(<Component />, {
+        route: routes.GET_DETTAGLIO_NOTIFICA_PATH(bilingualNotification.iun),
+      });
+    });
+
+    await result.findByTestId('detailTable');
+    const bilingualSection = result.queryByTestId('bilingualSection');
+    expect(bilingualSection).not.toBeInTheDocument();
+  });
+
   it('should show pay tpp button after call check-tpp api with retrievalId in user token and get payment URL', async () => {
     const mockRetrievalId = 'retrieval-id';
     const paymentTpp: BffCheckTPPResponse = {
@@ -1405,6 +1439,69 @@ describe('NotificationDetail Page', () => {
     await vi.waitFor(() => {
       expect(mockAssignFn).toHaveBeenCalledTimes(1);
       expect(mockAssignFn).toHaveBeenCalledWith(tppPaymentUrl);
+    });
+  });
+
+  it('should show payment-error alert when tpp payment URL returns PN_EMD_INTEGRATION_RETRIEVAL_PAYLOAD_MISSING_OR_EXPIRED', async () => {
+    const mockRetrievalId = 'retrieval-id';
+    const paymentTpp: BffCheckTPPResponse = {
+      originId: notificationDTO.iun,
+      retrievalId: mockRetrievalId,
+      pspDenomination: 'MOCK BANK',
+      isPaymentEnabled: true,
+    };
+    const tppPaymentUrlMock = `/bff/v1/payments/tpp?retrievalId=${mockRetrievalId}&noticeCode=${requiredPayment.pagoPa?.noticeCode}&paTaxId=${requiredPayment.pagoPa?.creditorTaxId}&amount=${requiredPayment.pagoPa?.amount}`;
+    const expiredError = {
+      status: 404,
+      data: {
+        errors: [
+          {
+            code: 'PN_EMD_INTEGRATION_RETRIEVAL_PAYLOAD_MISSING_OR_EXPIRED',
+          },
+        ],
+      },
+    };
+
+    mock.onGet(`/bff/v1/notifications/received/${notificationDTO.iun}`).reply(200, notificationDTO);
+    mock.onPost(`/bff/v1/payments/info`, paymentInfoRequest.slice(0, 5)).reply(200, paymentInfo);
+    mock
+      .onGet(`/bff/v1/notifications/received/check-tpp?retrievalId=${mockRetrievalId}`)
+      .reply(200, paymentTpp);
+    mock.onGet(tppPaymentUrlMock).reply(expiredError.status, expiredError.data);
+
+    await act(async () => {
+      result = render(
+        <>
+          <ResponseEventDispatcher />
+          <Component />
+        </>,
+        {
+          preloadedState: {
+            userState: {
+              user: {
+                fiscal_number: notificationDTO.recipients[2].taxId,
+                source: {
+                  channel: 'TPP',
+                  details: 'mock-tpp-id',
+                  retrievalId: mockRetrievalId,
+                },
+              },
+            },
+          },
+          route: routes.GET_DETTAGLIO_NOTIFICA_PATH(notificationDTO.iun),
+        }
+      );
+    });
+
+    const item = result.queryAllByTestId('pagopa-item')[requiredPaymentIndex];
+    const radioButton = item?.querySelector('[data-testid="radio-button"] input');
+    await userEvent.click(radioButton!);
+
+    const tppPayButton = result.getByTestId('tpp-pay-button');
+    await userEvent.click(tppPayButton);
+
+    await waitFor(() => {
+      expect(result.getByTestId('payment-error')).toBeInTheDocument();
     });
   });
 

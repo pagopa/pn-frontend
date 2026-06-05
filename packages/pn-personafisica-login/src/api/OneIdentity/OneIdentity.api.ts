@@ -1,4 +1,5 @@
-import { IDP } from '../../models/IDPS';
+import type { IDP } from '@pagopa/mui-italia';
+
 import { OidcAuthorizeParams, OidcAuthorizeResponse } from '../../models/OneIdentity';
 import { getConfiguration } from '../../services/configuration.service';
 

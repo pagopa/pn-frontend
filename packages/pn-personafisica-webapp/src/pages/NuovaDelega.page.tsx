@@ -262,6 +262,7 @@ const NuovaDelega = () => {
               <Paper sx={{ padding: '24px', marginBottom: '20px' }} elevation={0}>
                 <Typography sx={{ fontWeight: 'bold' }} id="personType">
                   {t('nuovaDelega.form.personType')}
+                  <span aria-hidden="true">*</span>
                 </Typography>
                 <Typography variant="body2" fontSize={'14px'} marginTop={1} marginBottom={1}>
                   {t('nuovaDelega.form.personType-content-subtitle')}
@@ -290,6 +291,7 @@ const NuovaDelega = () => {
                                 );
                               }}
                               aria-labelledby="personType"
+                              aria-required="true"
                             >
                               <FormControlLabel
                                 id="recipient-pf"
@@ -329,6 +331,7 @@ const NuovaDelega = () => {
                                   void setFieldTouched('nome', true, false);
                                   void setFieldValue('nome', event.currentTarget.value);
                                 }}
+                                required
                                 label={t('nuovaDelega.form.firstName')}
                                 name="nome"
                                 error={Boolean(getError(touched.nome, errors.nome))}
@@ -346,6 +349,7 @@ const NuovaDelega = () => {
                                   void setFieldTouched('cognome', true, false);
                                   void setFieldValue('cognome', event.currentTarget.value);
                                 }}
+                                required
                                 label={t('nuovaDelega.form.lastName')}
                                 name="cognome"
                                 error={Boolean(getError(touched.cognome, errors.cognome))}
@@ -364,6 +368,7 @@ const NuovaDelega = () => {
                                 }}
                                 label={t('nuovaDelega.form.businessName')}
                                 name="ragioneSociale"
+                                required
                                 error={Boolean(
                                   getError(touched.ragioneSociale, errors.ragioneSociale)
                                 )}
@@ -385,6 +390,7 @@ const NuovaDelega = () => {
                             event.currentTarget.value.toUpperCase()
                           );
                         }}
+                        required
                         label={t('nuovaDelega.form.fiscalCode')}
                         name="codiceFiscale"
                         error={Boolean(getError(touched.codiceFiscale, errors.codiceFiscale))}
@@ -397,6 +403,7 @@ const NuovaDelega = () => {
                         id="selectEntities"
                       >
                         {t('nuovaDelega.form.viewFrom')}
+                        <span aria-hidden="true">*</span>
                       </Typography>
                       <Typography variant="body2" fontSize={'14px'} marginTop={1} marginBottom={1}>
                         {t('nuovaDelega.form.viewFrom-content-subtitle')}
@@ -418,6 +425,7 @@ const NuovaDelega = () => {
                               }
                             }}
                             aria-labelledby="selectEntities"
+                            aria-required="true"
                           >
                             <FormControlLabel
                               id="tutti-gli-enti-selezionati"
@@ -456,6 +464,7 @@ const NuovaDelega = () => {
                                     handleChangeInput(newInputValue)
                                   }
                                   handleFiltering={(e) => e}
+                                  required
                                   label={entitySearchLabel(senderInputValue)}
                                   error={Boolean(getError(touched.enti, errors.enti))}
                                   helperText={getError(touched.enti, errors.enti)}
@@ -500,6 +509,7 @@ const NuovaDelega = () => {
                       <Box sx={{ marginTop: '1rem', width: '100%' }}>
                         <Typography fontWeight="bold" marginBottom={2}>
                           {t('nuovaDelega.form.date-duration')}
+                          <span aria-hidden="true">*</span>
                         </Typography>
                         <FormControl fullWidth>
                           <CustomDatePicker
@@ -520,6 +530,7 @@ const NuovaDelega = () => {
                                 inputProps: {
                                   inputMode: 'text',
                                   'aria-label': t('nuovaDelega.form.endDate-input-aria-label'),
+                                  'aria-required': 'true',
                                   type: 'text',
                                 },
                                 error: Boolean(

@@ -12,7 +12,6 @@ import {
   ApiError,
   ApiErrorWrapper,
   AppResponse,
-  AppResponsePublisher,
   AppRouteParams,
   DeliveryOutcomeType,
   EventPaymentRecipientType,
@@ -20,6 +19,7 @@ import {
   IllusQuestion,
   LegalFactId,
   LegalFactType,
+  NotificationDetailBilingualFacsimileDocuments,
   NotificationDetailDocuments,
   NotificationDetailOtherDocument,
   NotificationDetailPayment,
@@ -41,10 +41,12 @@ import {
   downloadDocument,
   formatDate,
   getPaymentCache,
+  getSessionLanguage,
   useErrors,
   useIsCancelled,
   useIsMobile,
 } from '@pagopa-pn/pn-commons';
+import { useDismissToastOnError } from '@pagopa-pn/pn-commons/src/hooks/useDismissToastOnError';
 import {
   EventDeliveryFlowType,
   EventDeliveryModeType,
@@ -102,6 +104,10 @@ const NotificationDetail: React.FC = () => {
     DOWNTIME_EXAMPLE_LINK,
     NOTIFICATION_COST_DETAILS_ASSISTANCE_LINK,
     NOTIFICATION_CANCELLED_HELP_LINK,
+    FACSIMILE_EN,
+    FACSIMILE_FR,
+    FACSIMILE_DE,
+    FACSIMILE_SL,
   } = getConfiguration();
   const navigate = useNavigate();
 
@@ -110,10 +116,14 @@ const NotificationDetail: React.FC = () => {
     (state: RootState) => state.generalInfoState.delegators
   );
   const notification = useAppSelector((state: RootState) => state.notificationState.notification);
+  const notificationLanguage = notification.additionalLanguages?.[0] ?? 'IT';
+  const sessionLang = getSessionLanguage()?.toUpperCase();
+  const isSameLang = notificationLanguage?.includes(sessionLang);
   const downtimeEvents = useAppSelector(
     (state: RootState) => state.notificationState.downtimeEvents
   );
 
+  const showBilingualFacsimileSection = !isSameLang && sessionLang !== 'IT';
   const isCancelled = useIsCancelled({ notification });
   const isCancelledOrCancelling = isCancelled.cancelled || isCancelled.cancellationInProgress;
   const currentRecipient = notification?.currentRecipient;
@@ -460,20 +470,7 @@ const NotificationDetail: React.FC = () => {
     void dispatch(exchangeNotificationRetrievalId(currentUser.source.retrievalId));
   }, [currentUser, checkIfUserHasPayments]);
 
-  // Dismiss toast if error is PN_DELIVERY_USER_ID_NOT_RECIPIENT_OR_DELEGATOR
-  useEffect(() => {
-    AppResponsePublisher.error.subscribe(
-      NOTIFICATION_ACTIONS.GET_RECEIVED_NOTIFICATION,
-      handleUserInvalidError
-    );
-
-    return () => {
-      AppResponsePublisher.error.unsubscribe(
-        NOTIFICATION_ACTIONS.GET_RECEIVED_NOTIFICATION,
-        handleUserInvalidError
-      );
-    };
-  }, [handleUserInvalidError]);
+  useDismissToastOnError(NOTIFICATION_ACTIONS.GET_RECEIVED_NOTIFICATION, handleUserInvalidError);
 
   /* function which loads relevant information about donwtimes */
   const fetchDowntimeEvents = useCallback((fromDate: string, toDate: string | undefined) => {
@@ -631,6 +628,21 @@ const NotificationDetail: React.FC = () => {
     );
   }
 
+  const getFacSimileLink = (): string => {
+    switch (sessionLang) {
+      case 'EN':
+        return FACSIMILE_EN;
+      case 'FR':
+        return FACSIMILE_FR;
+      case 'DE':
+        return FACSIMILE_DE;
+      case 'SL':
+        return FACSIMILE_SL;
+      default:
+        return FACSIMILE_EN;
+    }
+  };
+
   return (
     <NotificationDetailOnboardingPrompt
       iun={notification.iun}
@@ -708,6 +720,9 @@ const NotificationDetail: React.FC = () => {
                           timerF24={F24_DOWNLOAD_WAIT_TIME}
                           costDetailsAssistanceLink={NOTIFICATION_COST_DETAILS_ASSISTANCE_LINK}
                           costDetails={notification.notificationCostDetails}
+                          paymentTppUrlActionID={
+                            NOTIFICATION_ACTIONS.GET_RECEIVED_NOTIFICATION_PAYMENT_TPP_URL
+                          }
                         />
                       </ApiErrorWrapper>
                     </Paper>
@@ -737,6 +752,16 @@ const NotificationDetail: React.FC = () => {
                     disableDownloads={isCancelled.cancellationInTimeline}
                     downtimeExampleLink={DOWNTIME_EXAMPLE_LINK}
                   />
+                  {showBilingualFacsimileSection && (
+                    <Paper sx={{ p: 3 }} elevation={0}>
+                      <NotificationDetailBilingualFacsimileDocuments
+                        title={t('detail.bilingual.title', { ns: 'notifiche' })}
+                        description={t('detail.bilingual.description', { ns: 'notifiche' })}
+                        action={t('detail.bilingual.action', { ns: 'notifiche' })}
+                        link={getFacSimileLink()}
+                      />
+                    </Paper>
+                  )}
                 </Stack>
               </Grid>
               <Grid item lg={5} xs={12}>

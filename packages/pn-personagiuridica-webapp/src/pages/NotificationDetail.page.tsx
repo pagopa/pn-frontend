@@ -11,6 +11,7 @@ import {
   GetDowntimeHistoryParams,
   LegalFactId,
   LegalFactType,
+  NotificationDetailBilingualFacsimileDocuments,
   NotificationDetailDocuments,
   NotificationDetailOtherDocument,
   NotificationDetailPayment,
@@ -32,6 +33,7 @@ import {
   downloadDocument,
   formatDate,
   getPaymentCache,
+  getSessionLanguage,
   useErrors,
   useHasPermissions,
   useIsCancelled,
@@ -105,6 +107,11 @@ const NotificationDetail = () => {
 
   const userHasAdminPermissions = useHasPermissions(role ? [role.role] : [], [PNRole.ADMIN]);
   const notification = useAppSelector((state: RootState) => state.notificationState.notification);
+  const notificationLanguage = notification.additionalLanguages?.[0] ?? 'IT';
+  const sessionLang = getSessionLanguage()?.toUpperCase();
+  const isSameLang = notificationLanguage?.includes(sessionLang);
+
+  const showBilingualFacsimileSection = !isSameLang && sessionLang !== 'IT';
   const downtimeEvents = useAppSelector(
     (state: RootState) => state.notificationState.downtimeEvents
   );
@@ -637,6 +644,15 @@ const NotificationDetail = () => {
                   disableDownloads={isCancelled.cancellationInTimeline}
                   downtimeExampleLink={DOWNTIME_EXAMPLE_LINK}
                 />
+                {showBilingualFacsimileSection && (
+                  <Paper sx={{ p: 3 }} elevation={0}>
+                    <NotificationDetailBilingualFacsimileDocuments
+                      title={t('detail.bilingual.title', { ns: 'notifiche' })}
+                      description={t('detail.bilingual.description', { ns: 'notifiche' })}
+                      action={t('detail.bilingual.action', { ns: 'notifiche' })}
+                    />
+                  </Paper>
+                )}
               </Stack>
             </Grid>
             <Grid item lg={5} xs={12}>

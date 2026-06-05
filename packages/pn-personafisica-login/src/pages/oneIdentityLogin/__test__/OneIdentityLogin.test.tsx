@@ -50,10 +50,11 @@ describe('OneIdentityLogin component', () => {
     vi.unstubAllGlobals();
   });
 
-  it('renders page', () => {
+  it('renders page', async () => {
     const { container } = render(<OneIdentityLogin />, {
       route: `/?${AppRouteParams.AAR}=fake-aar-token`,
     });
+    await waitFor(() => expect(OneIdentityApi.getIdps).toHaveBeenCalledTimes(1));
     expect(container).toHaveTextContent(/loginPage.title/i);
     expect(container).toHaveTextContent(/loginPage.description/i);
     const spidButton = getById(container, 'spidButton');
@@ -64,17 +65,19 @@ describe('OneIdentityLogin component', () => {
     expect(spidSelect).not.toBeInTheDocument();
   });
 
-  it('renders page - with smart banner enabled', () => {
+  it('renders page - with smart banner enabled', async () => {
     // enable mobile view
     globalThis.matchMedia = createMatchMedia(800);
     const { container } = render(<OneIdentityLogin />);
+    await waitFor(() => expect(OneIdentityApi.getIdps).toHaveBeenCalledTimes(1));
     const ioSmartAppBanner = getById(container, 'ioSmartAppBanner');
     expect(ioSmartAppBanner).toBeInTheDocument();
   });
 
-  it('renders page - whitout smart banner enabled', () => {
+  it('renders page - whitout smart banner enabled', async () => {
     isSmartAppBannerEnabled = false;
     const { container } = render(<OneIdentityLogin />);
+    await waitFor(() => expect(OneIdentityApi.getIdps).toHaveBeenCalledTimes(1));
     const ioSmartAppBanner = queryById(container, 'ioSmartAppBanner');
     expect(ioSmartAppBanner).not.toBeInTheDocument();
     // disable mobile view
@@ -156,12 +159,17 @@ describe('OneIdentityLogin component', () => {
       await waitFor(() => expect(OneIdentityApi.getIdps).toHaveBeenCalledTimes(1));
     });
 
-    it('shows loading spinner in dialog while IDPS fetch is pending', async () => {
+    it('shows skeletons in dialog while IDPS fetch is pending', async () => {
       vi.mocked(OneIdentityApi.getIdps).mockImplementation(() => new Promise(() => {}));
       const { container } = render(<OneIdentityLogin />);
       fireEvent.click(getById(container, 'spidButton'));
       await waitFor(() => expect(queryById(document.body, 'spidSelect')).toBeInTheDocument());
-      expect(document.body.querySelector('[data-testid="spid-loader"]')).toBeInTheDocument();
+      // expect 6 skeletons
+      for (let i = 0; i < 6; i++) {
+        expect(
+          document.body.querySelector(`[data-testid="spid-select-skeleton-${i}"]`)
+        ).toBeInTheDocument();
+      }
     });
 
     it('shows IDPs in dialog after successful fetch', async () => {
@@ -171,10 +179,13 @@ describe('OneIdentityLogin component', () => {
       await waitFor(() => expect(queryById(document.body, 'spidSelect')).toBeInTheDocument());
       IDPS_MOCK.forEach((idp) => {
         expect(document.getElementById(`spid-select-${idp.entityID}`)).toBeInTheDocument();
+        expect(
+          document.querySelector(`[data-testid="spid-select-${idp.entityID}-logo"]`)
+        ).toBeInTheDocument();
       });
     });
 
-    it('shows no IDPs and no spinner in dialog after failed fetch', async () => {
+    it('shows error state on dialog after failed fetch', async () => {
       vi.mocked(OneIdentityApi.getIdps).mockRejectedValue(new Error('Network error'));
       const { container } = render(<OneIdentityLogin />);
       await waitFor(() => expect(OneIdentityApi.getIdps).toHaveBeenCalled());
@@ -184,6 +195,16 @@ describe('OneIdentityLogin component', () => {
       IDPS_MOCK.forEach((idp) => {
         expect(document.getElementById(`spid-select-${idp.entityID}`)).not.toBeInTheDocument();
       });
+      expect(
+        document.body.querySelector('[data-testid="spid-select-error-state"]')
+      ).toBeInTheDocument();
+
+      const closeButton = document.body.querySelector(
+        '[data-testid="spid-select-error-state-close-button"]'
+      );
+      expect(closeButton).toBeInTheDocument();
+      fireEvent.click(closeButton!);
+      await waitFor(() => expect(queryById(document.body, 'spidSelect')).not.toBeInTheDocument());
     });
   });
 });
