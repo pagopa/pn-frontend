@@ -15,11 +15,13 @@ import {
 import { Autocomplete } from '@pagopa/mui-italia';
 
 import SyncFeedbackApiKey from '../components/NewApiKey/SyncFeedbackApiKey';
+import { PAEventsType } from '../models/PAEventsType';
 import { GroupStatus, UserGroup } from '../models/user';
 import * as routes from '../navigation/routes.const';
 import { getApiKeyUserGroups, newApiKey } from '../redux/apiKeys/actions';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { RootState } from '../redux/store';
+import PAEventStrategyFactory from '../utility/MixpanelUtils/PAEventStrategyFactory';
 
 const NewApiKey = () => {
   const dispatch = useAppDispatch();
@@ -66,7 +68,10 @@ const NewApiKey = () => {
       if (formik.isValid) {
         void dispatch(newApiKey({ ...newApiKeyValues }))
           .unwrap()
-          .then(() => setApiKeySent(true));
+          .then(() => {
+            PAEventStrategyFactory.triggerEvent(PAEventsType.SEND_PA_ADD_API_UX_SUCCESS);
+            setApiKeySent(true);
+          });
       }
     },
   });
