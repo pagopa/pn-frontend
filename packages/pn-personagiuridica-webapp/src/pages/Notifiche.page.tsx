@@ -24,6 +24,7 @@ import MobileNotifications from '../components/Notifications/MobileNotifications
 import { PGEventsType } from '../models/PGEventsType';
 import { PNRole } from '../models/User';
 import { ContactSource } from '../models/contacts';
+import { contactsSelectors } from '../redux/contact/reducers';
 import { DASHBOARD_ACTIONS, getReceivedNotifications } from '../redux/dashboard/actions';
 import { setNotificationFilters, setPagination, setSorting } from '../redux/dashboard/reducers';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
@@ -42,6 +43,12 @@ const Notifiche = ({ isDelegatedPage = false }: Props) => {
 
   const { notifications, filters, sort, pagination } = useAppSelector(
     (state: RootState) => state.dashboardState
+  );
+  const { defaultEMAILAddress, defaultSMSAddress, addresses } = useAppSelector(
+    contactsSelectors.selectAddresses
+  );
+  const { delegates, delegators } = useAppSelector(
+    (state: RootState) => state.delegationsState.delegations
   );
   const loading = useAppSelector((state: RootState) => state.appState.loading.result);
   const { publishEvent } = useEventEmitter<A11yMessage>('a11y-message');
@@ -78,6 +85,45 @@ const Notifiche = ({ isDelegatedPage = false }: Props) => {
     pagination.page + 1
   );
 
+  const registerNotificationSectionSuperProperties = useCallback(
+    (notificationsCount: number) => {
+      if (userHasAdminPermissions && !organizationGroup) {
+        PGEventStrategyFactory.triggerEvent(PGEventsType.SEND_PG_HAS_EMAIL, {
+          value: !!defaultEMAILAddress,
+        });
+
+        PGEventStrategyFactory.triggerEvent(PGEventsType.SEND_PG_HAS_SMS, {
+          value: !!defaultSMSAddress,
+        });
+
+        PGEventStrategyFactory.triggerEvent(PGEventsType.SEND_PG_HAS_DIGITAL_DOMICILE, {
+          addresses,
+        });
+      }
+
+      PGEventStrategyFactory.triggerEvent(PGEventsType.SEND_PG_HAS_MANDATE, {
+        value: delegators.length > 0,
+      });
+
+      PGEventStrategyFactory.triggerEvent(PGEventsType.SEND_PG_HAS_MANDATE_GIVEN, {
+        value: delegates.length > 0,
+      });
+
+      PGEventStrategyFactory.triggerEvent(PGEventsType.SEND_PG_HAS_NOTIFICATIONS, {
+        value: notificationsCount > 0,
+      });
+    },
+    [
+      userHasAdminPermissions,
+      organizationGroup,
+      defaultEMAILAddress,
+      defaultSMSAddress,
+      addresses,
+      delegators.length,
+      delegates.length,
+    ]
+  );
+
   // API call, this function is passed to the ApiErrorWrapper component
   const fetchNotifications = useCallback(() => {
     const params = {
@@ -95,15 +141,30 @@ const Notifiche = ({ isDelegatedPage = false }: Props) => {
         setPageReady(true);
 
         if (!isDelegatedPage) {
+          registerNotificationSectionSuperProperties(data.resultsPage.length);
           PGEventStrategyFactory.triggerEvent(PGEventsType.SEND_PG_YOUR_NOTIFICATION, {
             notifications: data.resultsPage,
             pageNumber: pagination.page,
             domicileBannerType: domicileBannerTypeRef.current,
           });
+
+          return;
         }
+
+        PGEventStrategyFactory.triggerEvent(PGEventsType.SEND_PG_NOTIFICATION_DELEGATED, {
+          notifications: data.resultsPage,
+          pageNumber: pagination.page,
+        });
       })
       .catch(() => setPageReady(true));
-  }, [filters, pagination.size, pagination.page]);
+  }, [
+    filters,
+    pagination.size,
+    pagination.page,
+    group,
+    isDelegatedPage,
+    registerNotificationSectionSuperProperties,
+  ]);
 
   // Pagination handlers
   const handleChangePage = (paginationData: PaginationData) => {

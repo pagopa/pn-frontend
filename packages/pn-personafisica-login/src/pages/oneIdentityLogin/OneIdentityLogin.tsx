@@ -61,6 +61,8 @@ const OneIdentityLogin: React.FC = () => {
 
   const handleLanguageChange = (langCode: string) => i18n.changeLanguage(langCode);
 
+  const handleCloseIdpSelect = () => setShowIdpSelect(false);
+
   // eslint-disable-next-line functional/immutable-data
   const handleAssistanceClick = () => (window.location.href = `mailto:${PAGOPA_HELP_EMAIL}`);
 
@@ -90,7 +92,10 @@ const OneIdentityLogin: React.FC = () => {
       .catch(() => {
         navigate(ROUTE_ONE_IDENTITY_LOGIN_ERROR);
       })
-      .finally(() => setAuthorizingEntityId(null));
+      .finally(() => {
+        handleCloseIdpSelect();
+        setAuthorizingEntityId(null);
+      });
   };
 
   const fetchIDPS = () => {
@@ -208,7 +213,7 @@ const OneIdentityLogin: React.FC = () => {
         error={idpsState.error}
         oneIdentityCdnBaseUrl={ONE_IDENTITY_CDN_URL}
         handleSelectIDP={handleSelectSpid}
-        onClose={() => setShowIdpSelect(false)}
+        onClose={handleCloseIdpSelect}
       />
     </>
   );

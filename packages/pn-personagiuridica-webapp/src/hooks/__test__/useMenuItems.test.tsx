@@ -37,11 +37,13 @@ describe('useMenuItems', () => {
         label: 'menu.users',
         icon: expect.anything(),
         route: `${getConfiguration().SELFCARE_BASE_URL}/dashboard/mocked-id/users?lang=it`,
+        action: expect.any(Function),
       },
       {
         label: 'menu.groups',
         icon: expect.anything(),
         route: `${getConfiguration().SELFCARE_BASE_URL}/dashboard/mocked-id/groups?lang=it`,
+        action: expect.any(Function),
       },
     ];
   });

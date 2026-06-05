@@ -39,6 +39,7 @@ import { Autocomplete, IllusCompleted } from '@pagopa/mui-italia';
 import VerificationCodeComponent from '../components/Deleghe/VerificationCodeComponent';
 import LoadingPageWrapper from '../components/LoadingPageWrapper/LoadingPageWrapper';
 import { NewDelegationFormProps } from '../models/Deleghe';
+import type { MandatePartySelection } from '../models/PGEventPayloads';
 import { PGEventsType } from '../models/PGEventsType';
 import { Party } from '../models/party';
 import * as routes from '../navigation/routes.const';
@@ -71,7 +72,14 @@ const NuovaDelega = () => {
     dispatch(createDelegation(values))
       .unwrap()
       .then(() => {
-        PGEventStrategyFactory.triggerEvent(PGEventsType.SEND_PG_ADD_MANDATE_UX_SUCCESS);
+        PGEventStrategyFactory.triggerEvent(PGEventsType.SEND_PG_ADD_MANDATE_UX_SUCCESS, {
+          personType: values.selectPersonaFisicaOrPersonaGiuridica,
+          partySelection: values.selectTuttiEntiOrSelezionati as MandatePartySelection,
+        });
+
+        PGEventStrategyFactory.triggerEvent(PGEventsType.SEND_PG_HAS_MANDATE_GIVEN, {
+          value: true,
+        });
       })
       .catch(() => {});
   };

@@ -11,10 +11,12 @@ import MarkunreadMailboxIcon from '@mui/icons-material/MarkunreadMailbox';
 import SettingsEthernet from '@mui/icons-material/SettingsEthernet';
 import { SideMenuItem } from '@pagopa-pn/pn-commons';
 
+import { PGEventsType } from '../models/PGEventsType';
 import * as routes from '../navigation/routes.const';
 import { useAppSelector } from '../redux/hooks';
 import { RootState } from '../redux/store';
 import { getConfiguration } from '../services/configuration.service';
+import PGEventStrategyFactory from '../utility/MixpanelUtils/PGEventStrategyFactory';
 
 export const useMenuItems = (userHasAdminPermissions: boolean) => {
   const { IS_B2B_ENABLED } = getConfiguration();
@@ -93,11 +95,13 @@ export const useMenuItems = (userHasAdminPermissions: boolean) => {
       label: t('menu.users'),
       icon: People,
       route: routes.USERS(organization?.id, i18n.language),
+      action: () => PGEventStrategyFactory.triggerEvent(PGEventsType.SEND_PG_OPEN_USERS),
     },
     {
       label: t('menu.groups'),
       icon: SupervisedUserCircle,
       route: routes.GROUPS(organization?.id, i18n.language),
+      action: () => PGEventStrategyFactory.triggerEvent(PGEventsType.SEND_PG_OPEN_GROUPS),
     },
   ];
   return { menuItems, selfCareMenuItems };

@@ -12,6 +12,7 @@ import {
   PublicKeyStatus,
   PublicKeysIssuerResponseIssuerStatusEnum,
 } from '../generated-client/pg-apikeys';
+import { PGEventsType } from '../models/PGEventsType';
 import { PNRole } from '../models/User';
 import {
   checkPublicKeyIssuer,
@@ -21,6 +22,7 @@ import {
 } from '../redux/apikeys/actions';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { RootState } from '../redux/store';
+import PGEventStrategyFactory from '../utility/MixpanelUtils/PGEventStrategyFactory';
 
 const ApiIntegration: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -47,6 +49,7 @@ const ApiIntegration: React.FC = () => {
     virtualKeys.items.length > 0;
 
   useEffect(() => {
+    PGEventStrategyFactory.triggerEvent(PGEventsType.SEND_PG_API_INTEGRATION);
     // Issuer object has two keys: isPresent and issuerStatus.
     // isPresent is a boolean that is true when there is a public key (with any state)
     // isStatus is an enumeration and can has value is ACTIVE if there is an active or rotated public key,
