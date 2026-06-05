@@ -40,5 +40,15 @@
     "title": "IO - Aplikacija za javne storitve",
     "subtitle": "Odpri v aplikaciji IO",
     "cta": "ODPRI"
+  },
+  "one-identity-spid-select": {
+    "title": "Prijava s SPID",
+    "close-button-aria-label": "Zapri",
+    "unavailable-idp-warning": "Dostop prek %s trenutno ni na voljo, poskusite znova pozneje ali se prijavite z drugim ponudnikom identitete",
+    "error": {
+      "title": "Seznama ni mogoče naložiti",
+      "description": "Prosimo, poskusite znova pozneje.",
+      "close-button": "Zapri"
+    }
   }
 }

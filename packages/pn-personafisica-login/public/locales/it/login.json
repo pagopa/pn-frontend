@@ -27,12 +27,6 @@
       "error_25": "Hai annullato l’operazione di login: puoi riprovare quando vuoi.",
       "error_30": "La tipologia di identità SPID che hai usato è diversa da quella richiesta dal Service Provider. Entra di nuovo usando quella corretta.",
       "error_1001": "Accesso negato: non hai l’età minima richiesta per usare la piattaforma."
-    },
-    "oneIdentity": {
-      "invalid_scope": "",
-      "unsupported_response_type": "",
-      "server_error": "",
-      "invalid_request": ""
     }
   },
   "disambiguationPage": {
@@ -46,5 +40,15 @@
     "title": "IO - L'app dei servizi pubblici",
     "subtitle": "Apri nell'app IO",
     "cta": "APRI"
+  },
+  "one-identity-spid-select": {
+    "title": "Accedi con SPID",
+    "close-button-aria-label": "Chiudi",
+    "unavailable-idp-warning": "L'accesso tramite %s non è al momento disponibile, riprova più tardi o entra con un altro Identity Provider",
+    "error": {
+      "title": "Non riusciamo a caricare la lista",
+      "description": "Ti chiediamo di riprovare più tardi.",
+      "close-button": "Chiudi"
+    }
   }
 }

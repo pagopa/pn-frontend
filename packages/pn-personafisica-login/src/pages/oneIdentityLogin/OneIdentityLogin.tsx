@@ -98,6 +98,13 @@ const OneIdentityLogin: React.FC = () => {
       });
   };
 
+  const trackUnivailableIDPEvent = (idp: IDP) => {
+    PFLoginEventStrategyFactory.triggerEvent(PFLoginEventsType.SEND_IDP_NOT_AVAILABLE, {
+      SPID_IDP_ID: idp.entityID,
+      SPID_IDP_NAME: idp.friendlyName,
+    });
+  };
+
   const fetchIDPS = () => {
     void OneIdentityApi.getIdps()
       .then((response) =>
@@ -214,6 +221,17 @@ const OneIdentityLogin: React.FC = () => {
         oneIdentityCdnBaseUrl={ONE_IDENTITY_CDN_URL}
         handleSelectIDP={handleSelectSpid}
         onClose={handleCloseIdpSelect}
+        onUnavailableIdpClick={trackUnivailableIDPEvent}
+        translationsMap={{
+          title: t('one-identity-spid-select.title'),
+          closeButtonAriaLabel: t('one-identity-spid-select.close-button-aria-label'),
+          unavailableIdpWarning: t('one-identity-spid-select.unavailable-idp-warning'),
+          error: {
+            title: t('one-identity-spid-select.error.title'),
+            description: t('one-identity-spid-select.error.description'),
+            closeButton: t('one-identity-spid-select.error.close-button'),
+          },
+        }}
       />
     </>
   );

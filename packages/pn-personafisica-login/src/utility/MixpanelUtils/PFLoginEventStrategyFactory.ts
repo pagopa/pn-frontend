@@ -1,6 +1,7 @@
 import { EventStrategy, EventStrategyFactory } from '@pagopa-pn/pn-commons';
 
 import { PFLoginEventsType } from '../../models/PFLoginEventsType';
+import { SendIDPNotAvailableStrategy } from './Strategies/SendIDPNotAvailableStrategy';
 import { SendIDPSelectedStrategy } from './Strategies/SendIDPSelectedStrategy';
 import { SendLoginFailureStrategy } from './Strategies/SendLoginFailureStrategy';
 import { SendLoginMethodStrategy } from './Strategies/SendLoginMethodStrategy';
@@ -17,6 +18,8 @@ class PFLoginEventStrategyFactory extends EventStrategyFactory<PFLoginEventsType
         return new SendLoginFailureStrategy();
       case PFLoginEventsType.SEND_LOGIN_METHOD:
         return new SendLoginMethodStrategy();
+      case PFLoginEventsType.SEND_IDP_NOT_AVAILABLE:
+        return new SendIDPNotAvailableStrategy();
       default:
         return null;
     }
