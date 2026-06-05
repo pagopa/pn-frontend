@@ -1,3 +1,4 @@
+import i18next from 'i18next';
 import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router-dom';
@@ -26,6 +27,7 @@ import {
 import { PartyEntity, ProductEntity } from '@pagopa/mui-italia';
 
 import { useMenuItems } from './hooks/useMenuItems';
+import i18n from './i18n';
 import { PGEventsType } from './models/PGEventsType';
 import { PNRole } from './models/User';
 import { getCurrentEventTypePage, goToLoginPortal } from './navigation/navigation.utility';
@@ -63,6 +65,21 @@ const App = () => {
       errorFactoryManager.factory = new PGAppErrorFactory((path, ns) => t(path, { ns }));
     }
   }, [isInitialized]);
+
+  useEffect(() => {
+    const trackLanguage = (language: string) => {
+      PGEventStrategyFactory.triggerEvent(PGEventsType.SEND_LANGUAGE, {
+        language,
+      });
+    };
+    trackLanguage(i18n.resolvedLanguage ?? i18n.language);
+
+    i18next.on('languageChanged', trackLanguage);
+
+    return () => {
+      i18next.off('languageChanged', trackLanguage);
+    };
+  }, [i18n]);
 
   return isInitialized ? <ActualApp /> : <div />;
 };

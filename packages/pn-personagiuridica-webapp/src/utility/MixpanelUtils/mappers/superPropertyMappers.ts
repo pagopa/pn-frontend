@@ -1,10 +1,14 @@
+import { getLangCode } from '@pagopa-pn/pn-commons';
+
 import type {
   BooleanSuperPropertyEventData,
   DigitalDomicileSuperPropertyEventData,
+  LanguageSuperPropertyEventData,
   PGDigitalDomicilePayload,
   PGEventPayloads,
   PGHasPayload,
   PGHasProperty,
+  PGLanguagePayload,
   YesNo,
 } from '../../../models/PGEventPayloads';
 import { PGEventsType } from '../../../models/PGEventsType';
@@ -40,4 +44,10 @@ export const mapDigitalDomicileSuperPropertyToPayload = (
 ): PGDigitalDomicilePayload => ({
   [PGEventsType.SEND_PG_HAS_DIGITAL_DOMICILE]:
     data.addresses === undefined ? data.value : mapDigitalDomicileToType(data.addresses),
+});
+
+export const mapLanguageSuperPropertyToPayload = ({
+  language,
+}: LanguageSuperPropertyEventData): PGLanguagePayload => ({
+  [PGEventsType.SEND_LANGUAGE]: getLangCode(language),
 });

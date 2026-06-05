@@ -92,6 +92,10 @@ export type DigitalDomicileSuperPropertyEventData =
       value: DigitalDomicileType;
     };
 
+export type LanguageSuperPropertyEventData = {
+  language: string;
+};
+
 /**
  * Mixpanel payloads produced by mappers and then enriched by tracking helpers with
  * event_category/event_type
@@ -156,6 +160,10 @@ export type DigitalDomicileTypePayload = {
 export type PGMandateSuccessPayload = {
   person_type: 'PF' | 'PG';
   mandate_type: 'all' | 'selected_party';
+};
+
+export type PGLanguagePayload = {
+  [PGEventsType.SEND_LANGUAGE]: string;
 };
 
 export type PGHasProperty =
@@ -239,4 +247,5 @@ export type PGEventPayloads = {
   [PGEventsType.SEND_PG_HAS_NOTIFICATIONS]: BooleanSuperPropertyEventData;
   [PGEventsType.SEND_PG_HAS_SMS]: BooleanSuperPropertyEventData;
   [PGEventsType.USER_ROLE]: PGUserRolePayload;
+  [PGEventsType.SEND_LANGUAGE]: LanguageSuperPropertyEventData;
 };
