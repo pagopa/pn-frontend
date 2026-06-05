@@ -101,7 +101,7 @@
       "step_3": {
         "title": "Il tuo riepilogo",
         "step-title": "Riepilogo",
-        "content": "Le tue comunicazioni a valore legale saranno recapitate solo su:",
+        "content": "Le comunicazioni a valore legale per l’impresa saranno recapitate solo su:",
         "digital-domicile": "Domicilio digitale",
         "send": "SEND",
         "courtesy-content": "Riceverai un avviso via:",
@@ -115,8 +115,8 @@
             "textDisabled": "Aggiungi numero di cellulare"
           }
         },
-        "disclaimer-enable": "Premendo <strong>“Attiva domicilio digitale”</strong> dichiari di aver letto l'<0>Informativa Privacy</0>, di accettare i <1>Termini del servizio</1>, e di aver compreso che le notifiche SEND non ti verranno inoltrate su altri domicili digitali.",
-        "disclaimer-transfer": "Premendo <strong>“Conferma”</strong> dichiari di aver letto l'<0>Informativa Privacy</0>, di accettare i <1>Termini del servizio</1>, e di aver compreso che le notifiche SEND non ti verranno inoltrate su altri domicili digitali.",
+        "disclaimer-enable": "Premendo <strong>“Attiva domicilio digitale”</strong> dichiari di aver letto l'<0>Informativa Privacy</0>, di accettare i <1>Termini del servizio</1>, e di aver compreso che le notifiche SEND non verranno inoltrate su altri domicili digitali.",
+        "disclaimer-transfer": "Premendo <strong>“Conferma”</strong> dichiari di aver letto l'<0>Informativa Privacy</0>, di accettare i <1>Termini del servizio</1>, e di aver compreso che le notifiche SEND non verranno inoltrate su altri domicili digitali.",
         "enable": "Attiva domicilio digitale",
         "sercq-send-contacts-alert": "Monitora i recapiti che hai scelto: una notifica digitale SEND inizia a produrre effetti giuridici anche se non l’hai consultata."
       },
@@ -233,7 +233,7 @@
       "description": "Non puoi più inserire recapiti di cortesia personalizzati per ente o modificare recapiti già esistenti. Se elimini un recapito personalizzato non potrai più recuperarlo o inserirlo di nuovo. "
     },
     "email-description": "L’email dove avviseremo la tua impresa quando riceve una comunicazione a valore legale su SEND.",
-    "sercq-disclaimer": "Premendo <strong>“Conferma”</strong> dichiari di aver letto l'<0>Informativa Privacy</0>, di accettare i <1>Termini del servizio</1>, e di aver compreso che le notifiche SEND dell'ente non ti verranno inoltrate su altri domicili digitali."
+    "sercq-disclaimer": "Premendo <strong>“Conferma”</strong> dichiari di aver letto l'<0>Informativa Privacy</0>, di accettare i <1>Termini del servizio</1>, e di aver compreso che le notifiche SEND dell'ente non verranno inoltrate su altri domicili digitali."
   },
   "common": {
     "duplicate-contact-title": "Recapito già presente",
