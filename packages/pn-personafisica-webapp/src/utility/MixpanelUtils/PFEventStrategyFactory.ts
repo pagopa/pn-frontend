@@ -25,6 +25,7 @@ import { SendHasAddressesStrategy } from './Strategies/SendHasAddressesStrategy'
 import { SendHasMandateGivenStrategy } from './Strategies/SendHasMandateGivensStrategy';
 import { SendHasMandateLoginStrategy } from './Strategies/SendHasMandateLoginStrategy';
 import { SendHasMandateStrategy } from './Strategies/SendHasMandateStrategy';
+import { SendLanguageStrategy } from './Strategies/SendLanguageStrategy';
 import { SendNotificationCountStrategy } from './Strategies/SendNotificationCount';
 import { SendNotificationDetailStrategy } from './Strategies/SendNotificationDetailStrategy';
 import { SendNotificationExpensesDetailStrategy } from './Strategies/SendNotificationExpensesDetailStrategy';
@@ -439,6 +440,7 @@ const eventStrategy: Record<
   [PFEventsType.SEND_NOTIFICATION_EXPENSES_DETAIL]: new SendNotificationExpensesDetailStrategy(),
   [PFEventsType.SEND_LOGIN_METHOD]: new SendOneIdentityLoginMethodStrategy(),
   [PFEventsType.SEND_RAPID_ACCESS]: new TechRapidAccessStrategy(),
+  [PFEventsType.SEND_LANGUAGE]: new SendLanguageStrategy(),
 };
 
 const isInEventStrategyMap = (value: PFEventsType): value is keyof typeof eventStrategy => {

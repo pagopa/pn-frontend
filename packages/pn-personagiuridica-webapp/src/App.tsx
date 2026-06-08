@@ -26,6 +26,7 @@ import {
 import { PartyEntity, ProductEntity } from '@pagopa/mui-italia';
 
 import { useMenuItems } from './hooks/useMenuItems';
+import i18n from './i18n';
 import { PGEventsType } from './models/PGEventsType';
 import { PNRole } from './models/User';
 import { getCurrentEventTypePage, goToLoginPortal } from './navigation/navigation.utility';
@@ -63,6 +64,12 @@ const App = () => {
       errorFactoryManager.factory = new PGAppErrorFactory((path, ns) => t(path, { ns }));
     }
   }, [isInitialized]);
+
+  useEffect(() => {
+    PGEventStrategyFactory.triggerEvent(PGEventsType.SEND_LANGUAGE, {
+      language: i18n.resolvedLanguage ?? i18n.language,
+    });
+  }, [i18n.language]);
 
   return isInitialized ? <ActualApp /> : <div />;
 };
