@@ -1,4 +1,3 @@
-import i18next from 'i18next';
 import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router-dom';
@@ -67,19 +66,10 @@ const App = () => {
   }, [isInitialized]);
 
   useEffect(() => {
-    const trackLanguage = (language: string) => {
-      PGEventStrategyFactory.triggerEvent(PGEventsType.SEND_LANGUAGE, {
-        language,
-      });
-    };
-    trackLanguage(i18n.resolvedLanguage ?? i18n.language);
-
-    i18next.on('languageChanged', trackLanguage);
-
-    return () => {
-      i18next.off('languageChanged', trackLanguage);
-    };
-  }, [i18n]);
+    PGEventStrategyFactory.triggerEvent(PGEventsType.SEND_LANGUAGE, {
+      language: i18n.resolvedLanguage ?? i18n.language,
+    });
+  }, [i18n.language]);
 
   return isInitialized ? <ActualApp /> : <div />;
 };
