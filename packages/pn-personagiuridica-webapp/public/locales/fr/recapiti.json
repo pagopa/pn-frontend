@@ -100,12 +100,12 @@
         "sms-disclaimer": "Si vous appuyez sur <strong>Ajouter numéro</strong>, vous enregistrez ces coordonnées pour recevoir des alertes sur les notifications SEND pour l'entreprise. Vous pouvez les gérer dans la section <strong>Coordonnées.</strong>"
       },
       "step_3": {
-        "title": "Vous êtes en train d'activer le Domicile numérique sur SEND",
+        "title": "Votre récapitulatif",
         "step-title": "Résumé",
-        "content": "Les communications à valeur légale pour l'entreprise seront délivrées à :",
+        "content": "Les communications à valeur juridique pour l'entreprise seront envoyées uniquement sur :",
         "digital-domicile": "Domicile numérique",
         "send": "SEND",
-        "courtesy-content": "Vous avez choisi de recevoir un message sur :",
+        "courtesy-content": "Vous recevrez un avis via :",
         "contacts-list": {
           "email": {
             "title": "Courriel de l'entreprise",
@@ -116,10 +116,10 @@
             "textDisabled": "Ajouter un numéro de portable"
           }
         },
-        "disclaimer-enable": "En appuyant sur « Activer le Domicile numérique », vous déclarez avoir lu la <0>Politique de confidentialité</0> et accepter les <1>Conditions d'utilisation</1>",
-        "disclaimer-transfer": "En appuyant sur « Transférer le Domicile numérique », vous déclarez avoir lu la <0>Politique de confidentialité</0> et accepter les <1>Conditions d'utilisation</1>",
-        "enable": "Activer le Domicile numérique",
-        "transfer": "Transférer le Domicile numérique"
+        "disclaimer-enable": "En cliquant sur <strong>« Activer le Domicile numérique »</strong>, vous déclarez avoir lu la <0>Politique de confidentialité</0>, accepter les <1>Conditions d'utilisation</1>, et avoir compris que les notifications SEND ne seront pas transférées sur d'autres domiciles numériques.",
+        "disclaimer-transfer": "En cliquant sur <strong>« Confirmer »</strong>, vous déclarez avoir lu la <0>Politique de confidentialité</0>, accepter les <1>Conditions d'utilisation</1>, et avoir compris que les notifications SEND ne seront pas transférées sur d'autres domiciles numériques.",
+        "sercq-send-contacts-alert": "Surveillez les coordonnées que vous avez choisies : une notification numérique SEND commence à produire des effets juridiques même si vous ne l'avez pas consultée.",
+        "enable": "Activer le Domicile numérique"
       },
       "feedback": {
         "title-transfer": "Vous avez mis à jour le Domicile numérique de votre entreprise",
@@ -234,7 +234,7 @@
       "description": "Vous ne pouvez plus insérer de coordonnées de courtoisie personnalisées par entité ou modifier des coordonnées existantes. Si vous supprimez des coordonnées personnalisées, vous ne pourrez plus les récupérer ni les insérer à nouveau."
     },
     "email-description": "Le courriel où nous informerons votre entreprise lorsqu'elle recevra une communication à valeur légale sur SEND.",
-    "sercq-disclaimer": "En appuyant sur « Confirmer », vous déclarez avoir lu la <0>Politique de confidentialité</0> et accepter les <1>Conditions d'utilisation</1>"
+    "sercq-disclaimer": "En cliquant sur <strong>« Confirmer »</strong>, vous déclarez avoir lu la <0>Politique de confidentialité</0>, accepter les <1>Conditions d'utilisation</1>, et avoir compris que les notifications SEND de l'organisme ne seront pas transférées sur d'autres domiciles numériques."
   },
   "common": {
     "duplicate-contact-title": "Coordonnées déjà présentes",
