@@ -61,6 +61,8 @@ const OneIdentityLogin: React.FC = () => {
 
   const handleLanguageChange = (langCode: string) => i18n.changeLanguage(langCode);
 
+  const handleCloseIdpSelect = () => setShowIdpSelect(false);
+
   // eslint-disable-next-line functional/immutable-data
   const handleAssistanceClick = () => (window.location.href = `mailto:${PAGOPA_HELP_EMAIL}`);
 
@@ -90,7 +92,17 @@ const OneIdentityLogin: React.FC = () => {
       .catch(() => {
         navigate(ROUTE_ONE_IDENTITY_LOGIN_ERROR);
       })
-      .finally(() => setAuthorizingEntityId(null));
+      .finally(() => {
+        handleCloseIdpSelect();
+        setAuthorizingEntityId(null);
+      });
+  };
+
+  const trackUnivailableIDPEvent = (idp: IDP) => {
+    PFLoginEventStrategyFactory.triggerEvent(PFLoginEventsType.SEND_IDP_NOT_AVAILABLE, {
+      SPID_IDP_ID: idp.entityID,
+      SPID_IDP_NAME: idp.friendlyName,
+    });
   };
 
   const fetchIDPS = () => {
@@ -208,7 +220,18 @@ const OneIdentityLogin: React.FC = () => {
         error={idpsState.error}
         oneIdentityCdnBaseUrl={ONE_IDENTITY_CDN_URL}
         handleSelectIDP={handleSelectSpid}
-        onClose={() => setShowIdpSelect(false)}
+        onClose={handleCloseIdpSelect}
+        onUnavailableIdpClick={trackUnivailableIDPEvent}
+        translationsMap={{
+          title: t('one-identity-spid-select.title'),
+          closeButtonAriaLabel: t('one-identity-spid-select.close-button-aria-label'),
+          unavailableIdpWarning: t('one-identity-spid-select.unavailable-idp-warning'),
+          error: {
+            title: t('one-identity-spid-select.error.title'),
+            description: t('one-identity-spid-select.error.description'),
+            closeButton: t('one-identity-spid-select.error.close-button'),
+          },
+        }}
       />
     </>
   );

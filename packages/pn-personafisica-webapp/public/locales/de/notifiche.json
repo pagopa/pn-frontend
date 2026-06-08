@@ -121,7 +121,9 @@
       },
       "error-payment": "Wählen Sie eine Zahlungsaufforderung aus",
       "error-payment-failed-single": "Es ist ein Problem mit einer Zahlungsaufforderung aufgetreten. Drücken Sie auf Neu laden, um es erneut zu versuchen. Wenn der Fehler weiterhin besteht, kontaktieren Sie den Support.",
-      "error-payment-failed-multiple": "Es ist ein Problem mit mehreren Zahlungsaufforderungen aufgetreten. Drücken Sie auf Neu laden, um es erneut zu versuchen. Wenn der Fehler weiterhin besteht, kontaktieren Sie den Support."
+      "error-payment-failed-multiple": "Es ist ein Problem mit mehreren Zahlungsaufforderungen aufgetreten. Drücken Sie auf Neu laden, um es erneut zu versuchen. Wenn der Fehler weiterhin besteht, kontaktieren Sie den Support.",
+      "tpp-expired-error-title": "Die Verbindung zur Bank ist abgelaufen.",
+      "tpp-expired-error-description": "Um sie wiederherzustellen, greife über die Nachricht, die du in deiner Bank-App erhalten hast, erneut auf diese Benachrichtigung zu."
     },
     "acts_files": {
       "downloadable_acts": "Die Dokumente sind 120 Tage nach Vervollständigung der Zustellung online verfügbar.",
@@ -443,11 +445,11 @@
     "returned-to-sender-tooltip-multirecipient": "Alle Empfänger sind verstorben",
     "returned-to-sender-description": "Der Empfänger ist verstorben.",
     "returned-to-sender-description-multirecipient": "Alle Empfänger sind verstorben.",
-    "notification-timeline-reworked": "Aktualisiertes Ereignis oder mehrere aktualisierte Ereignisse",
-    "notification-timeline-reworked-tooltip": "Aktualisiertes Ereignis oder mehrere aktualisierte Ereignisse",
-    "notification-timeline-reworked-description": "Ereignisse, die als INVALIDIERTES EREIGNIS gekennzeichnet sind, sind nicht zu berücksichtigen, da sie durch nachfolgende Ereignisse ersetzt wurden, die als VALIDIERTES EREIGNIS gekennzeichnet sind.",
-    "reworked-status-valid": "Validiertes Ereignis",
-    "reworked-status-not-valid": "Invalidiertes Ereignis",
+    "notification-timeline-reworked": "Ein oder mehrere Ereignisse aktualisiert",
+    "notification-timeline-reworked-tooltip": "Ein oder mehrere Ereignisse aktualisiert",
+    "notification-timeline-reworked-description": "Als berichtigt gekennzeichnete Ereignisse ersetzen die vorherigen, als ungültig angegebenen Ereignisse.",
+    "reworked-status-valid": "Berichtigtes Ereignis",
+    "reworked-status-not-valid": "Ungültiges Ereignis",
     "cancellation-in-progress": "Annulliert",
     "cancellation-in-progress-tooltip": "Annullierung in Bearbeitung. Der Status wird in Kürze aktualisiert.",
     "cancellation-in-progress-description": "Annullierung in Bearbeitung. Der Status wird in Kürze aktualisiert."

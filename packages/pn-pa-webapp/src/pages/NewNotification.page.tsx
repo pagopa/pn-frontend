@@ -13,12 +13,14 @@ import PreliminaryInformations from '../components/NewNotification/PreliminaryIn
 import Recipient from '../components/NewNotification/Recipient';
 import SyncFeedback from '../components/NewNotification/SyncFeedback';
 import { NewNotificationLangOther, PaymentModel } from '../models/NewNotification';
+import { PAEventsType } from '../models/PAEventsType';
 import * as routes from '../navigation/routes.const';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { createNewNotification } from '../redux/newNotification/actions';
 import { resetState, setSenderInfos } from '../redux/newNotification/reducers';
 import { RootState } from '../redux/store';
 import { getConfiguration } from '../services/configuration.service';
+import PAEventStrategyFactory from '../utility/MixpanelUtils/PAEventStrategyFactory';
 
 const SubTitle = () => {
   const { t } = useTranslation(['common', 'notifiche']);
@@ -33,6 +35,23 @@ const SubTitle = () => {
     </>
   );
 };
+
+const PAYMENT_ENABLED_STEP_EVENTS: Partial<Record<number, PAEventsType>> = {
+  0: PAEventsType.SEND_PA_PRELIMINARY_INFORMATION,
+  1: PAEventsType.SEND_PA_RECIPIENTS,
+  2: PAEventsType.SEND_PA_DEBT_POSITION,
+  3: PAEventsType.SEND_PA_DEBT_POSITION_DETAIL,
+  4: PAEventsType.SEND_PA_DOCUMENTATION,
+};
+
+const PAYMENT_DISABLED_STEP_EVENTS: Partial<Record<number, PAEventsType>> = {
+  0: PAEventsType.SEND_PA_PRELIMINARY_INFORMATION,
+  1: PAEventsType.SEND_PA_RECIPIENTS,
+  2: PAEventsType.SEND_PA_DOCUMENTATION,
+};
+
+const getStepEvent = (step: number, isPaymentEnabled: boolean): PAEventsType | undefined =>
+  (isPaymentEnabled ? PAYMENT_ENABLED_STEP_EVENTS : PAYMENT_DISABLED_STEP_EVENTS)[step];
 
 const NewNotification = () => {
   const [activeStep, setActiveStep] = useState(0);
@@ -93,7 +112,10 @@ const NewNotification = () => {
     if (activeStep === steps.length - 1 && isCompleted) {
       void dispatch(createNewNotification(notification))
         .unwrap()
-        .then(() => setActiveStep((previousStep) => previousStep + 1))
+        .then(() => {
+          PAEventStrategyFactory.triggerEvent(PAEventsType.SEND_PA_NEW_NOTIFICATION_UX_SUCCESS);
+          setActiveStep((previousStep) => previousStep + 1);
+        })
         .catch(() => {
           /** Without this catch vitest return errors of unhandle errors.
            * The error is handled in other parts of the application with
@@ -128,6 +150,14 @@ const NewNotification = () => {
   }, [organization]);
 
   useEffect(() => () => void dispatch(resetState()), []);
+
+  useEffect(() => {
+    const event = getStepEvent(activeStep, IS_PAYMENT_ENABLED);
+
+    if (event) {
+      PAEventStrategyFactory.triggerEvent(event);
+    }
+  }, [activeStep]);
 
   if (activeStep === steps.length) {
     return <SyncFeedback />;

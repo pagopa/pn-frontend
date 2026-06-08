@@ -1,19 +1,23 @@
-import type {
-  Downtime,
-  INotificationDetailTimeline,
-  Notification,
-  PaymentsData,
-} from '@pagopa-pn/pn-commons';
+import { isObject } from 'lodash-es';
+
+import type { Downtime } from '@pagopa-pn/pn-commons';
 import {
   EventDowntimeType,
+  NotificationDocumentType,
   NotificationStatus,
-  TimelineCategory,
+  getElapsedTime,
   isNewNotification,
 } from '@pagopa-pn/pn-commons';
 
 import type {
+  PGDocumentDownloadPayload,
+  PGNotificationAttachmentEventData,
+  PGNotificationDetailEventData,
   PGNotificationDetailPayload,
+  PGNotificationsListEventData,
   PGNotificationsListPayload,
+  PGStartPaymentPayload,
+  PGTimelineLegalFactEventData,
 } from '../../../models/PGEventPayloads';
 
 const getDisserviceStatus = (downtimeEvents: Array<Downtime>): EventDowntimeType => {
@@ -32,17 +36,21 @@ export const mapNotificationDetailToEventPayload = ({
   notificationStatus,
   checkIfUserHasPayments,
   userPayments,
-  timeline,
-}: {
-  downtimeEvents: Array<Downtime>;
-  mandateId: string | undefined;
-  notificationStatus: NotificationStatus;
-  checkIfUserHasPayments: boolean;
-  userPayments: PaymentsData;
-  timeline: Array<INotificationDetailTimeline>;
-}): PGNotificationDetailPayload => {
+  notificationStatusHistory,
+  source,
+  flow,
+  deliveryMode,
+}: PGNotificationDetailEventData): PGNotificationDetailPayload => {
   const hasF24 =
     userPayments.f24Only.length > 0 || userPayments.pagoPaF24.some((payment) => payment.f24);
+
+  const viewedEvent = notificationStatusHistory.find(
+    (item) => item.status === NotificationStatus.VIEWED
+  );
+
+  const deliveredEvent = notificationStatusHistory.find(
+    (item) => item.status === NotificationStatus.DELIVERED
+  );
 
   return {
     notification_owner: !mandateId,
@@ -53,17 +61,19 @@ export const mapNotificationDetailToEventPayload = ({
       userPayments.f24Only.length + userPayments.pagoPaF24.length > 1 ? 'yes' : 'no',
     count_payment: userPayments.pagoPaF24.filter((payment) => payment.pagoPa).length,
     contains_f24: hasF24 ? 'yes' : 'no',
-    first_time_opening: !timeline.some(
-      (item) => item.category === TimelineCategory.NOTIFICATION_VIEWED
-    ),
+    first_time_opening: !viewedEvent,
+    source,
+    elapsed_time: getElapsedTime(deliveredEvent?.activeFrom, viewedEvent?.activeFrom),
+    flow,
+    delivery_mode: deliveryMode,
   };
 };
 
-export const mapNotificationListToEventPayload = (
-  notifications: Array<Notification>,
-  pageNumber: number,
-  domicileBannerType?: string
-): PGNotificationsListPayload => ({
+export const mapNotificationListToEventPayload = ({
+  notifications,
+  pageNumber,
+  domicileBannerType,
+}: PGNotificationsListEventData): PGNotificationsListPayload => ({
   page_number: pageNumber,
   total_count: notifications.length,
   unread_count: notifications.filter((notification) =>
@@ -88,4 +98,22 @@ export const mapNotificationListToEventPayload = (
     (notification) => notification.notificationStatus === NotificationStatus.EFFECTIVE_DATE
   ).length,
   ...(domicileBannerType && { banner: domicileBannerType }),
+});
+
+export const mapNotificationAttachmentToDocumentDownloadPayload = ({
+  document,
+}: PGNotificationAttachmentEventData): PGDocumentDownloadPayload => ({
+  document_type: isObject(document)
+    ? NotificationDocumentType.AAR
+    : NotificationDocumentType.ATTACHMENT,
+});
+
+export const mapTimelineLegalFactToDocumentDownloadPayload = ({
+  legalFact,
+}: PGTimelineLegalFactEventData): PGDocumentDownloadPayload => ({
+  document_type: legalFact.category,
+});
+
+export const mapStartPaymentToEventPayload = (): PGStartPaymentPayload => ({
+  psp: 'pagopa',
 });

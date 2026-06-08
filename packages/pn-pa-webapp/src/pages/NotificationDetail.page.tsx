@@ -30,6 +30,7 @@ import { MIAlert } from '@pagopa/mui-italia';
 
 import NotificationDetailTableSender from '../components/Notifications/NotificationDetailTableSender';
 import NotificationPaymentSender from '../components/Notifications/NotificationPaymentSender';
+import { PAEventsType } from '../models/PAEventsType';
 import * as routes from '../navigation/routes.const';
 import { getDowntimeLegalFact } from '../redux/appStatus/actions';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
@@ -44,6 +45,7 @@ import { resetState } from '../redux/notification/reducers';
 import { RootState } from '../redux/store';
 import { getConfiguration } from '../services/configuration.service';
 import { ServerResponseErrorCode } from '../utility/AppError/types';
+import PAEventStrategyFactory from '../utility/MixpanelUtils/PAEventStrategyFactory';
 
 type Props = {
   notification: NotificationDetailType;
@@ -116,6 +118,10 @@ const NotificationDetail: React.FC = () => {
   const documentDowloadHandler = (
     document: string | NotificationDetailOtherDocument | undefined
   ) => {
+    PAEventStrategyFactory.triggerEvent(PAEventsType.SEND_PA_NOTIFICATION_DOWNLOAD_ATTACHMENT, {
+      document,
+    });
+
     if (isObject(document)) {
       // AAR case
       dispatch(
@@ -144,6 +150,7 @@ const NotificationDetail: React.FC = () => {
   };
 
   const legalFactDownloadHandler = (legalFact: LegalFactId) => {
+    PAEventStrategyFactory.triggerEvent(PAEventsType.SEND_PA_TIMELINE_DOWNLOAD, { legalFact });
     if (legalFact.category !== 'AAR') {
       // Legal fact case
       dispatch(
@@ -238,6 +245,12 @@ const NotificationDetail: React.FC = () => {
   }, [fetchSentNotification]);
 
   useEffect(() => {
+    if (!hasNotificationSentApiError && notification.iun) {
+      PAEventStrategyFactory.triggerEvent(PAEventsType.SEND_PA_NOTIFICATION_DETAIL);
+    }
+  }, [hasNotificationSentApiError, notification.iun]);
+
+  useEffect(() => {
     AppResponsePublisher.error.subscribe('cancelNotification', handleCancellationError);
 
     return () => {
@@ -260,6 +273,18 @@ const NotificationDetail: React.FC = () => {
       .then(showInfoMessageIfRetryAfterOrDownload)
       .catch((e) => console.log(e));
   }, []);
+
+  const trackTimelineShowMore = (collapsed: boolean) => {
+    if (!collapsed) {
+      PAEventStrategyFactory.triggerEvent(PAEventsType.SEND_PA_TIMELINE_SHOW_MORE);
+    }
+  };
+
+  const trackTimelineShowHistory = (open: boolean) => {
+    if (open) {
+      PAEventStrategyFactory.triggerEvent(PAEventsType.SEND_PA_TIMELINE_SHOW_HISTORY);
+    }
+  };
 
   const properBreadcrumb = (
     <PnBreadcrumb
@@ -372,6 +397,8 @@ const NotificationDetail: React.FC = () => {
                   historyButtonLabel={t('detail.show-history', { ns: 'notifiche' })}
                   showMoreButtonLabel={t('detail.show-more', { ns: 'notifiche' })}
                   showLessButtonLabel={t('detail.show-less', { ns: 'notifiche' })}
+                  handleTrackShowMoreLess={trackTimelineShowMore}
+                  handleTrackShowHistory={trackTimelineShowHistory}
                 />
               </Box>
             </Grid>

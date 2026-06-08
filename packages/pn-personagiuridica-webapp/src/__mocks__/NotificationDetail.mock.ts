@@ -117,7 +117,7 @@ export const payments: Array<NotificationDetailPayment> = [
   },
 ];
 
-const statusHistory: Array<NotificationStatusHistory> = [
+export const statusHistory: Array<NotificationStatusHistory> = [
   {
     status: NotificationStatus.VIEWED,
     activeFrom: '2023-05-09T13:22:09.863901492Z',

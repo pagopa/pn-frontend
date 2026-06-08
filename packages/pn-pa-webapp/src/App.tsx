@@ -13,6 +13,8 @@ import {
   A11yMessageAnnouncer,
   APP_VERSION,
   AppMessage,
+  AppResponse,
+  AppResponseError,
   AppResponseMessage,
   ConsentUser,
   Layout,
@@ -31,7 +33,8 @@ import {
 } from '@pagopa-pn/pn-commons';
 import { LinkType, ProductEntity } from '@pagopa/mui-italia';
 
-import { goToSelfcareLogout } from './navigation/navigation.utility';
+import { PAEventsType } from './models/PAEventsType';
+import { getCurrentEventTypePage, goToSelfcareLogout } from './navigation/navigation.utility';
 import Router from './navigation/routes';
 import * as routes from './navigation/routes.const';
 import { getCurrentAppStatus } from './redux/appStatus/actions';
@@ -46,6 +49,7 @@ import { useAppDispatch, useAppSelector } from './redux/hooks';
 import { RootState } from './redux/store';
 import { getConfiguration } from './services/configuration.service';
 import { PAAppErrorFactory } from './utility/AppError/PAAppErrorFactory';
+import PAEventStrategyFactory from './utility/MixpanelUtils/PAEventStrategyFactory';
 import './utility/onetrust';
 import { getMenuItems } from './utility/role.utility';
 
@@ -265,6 +269,17 @@ const ActualApp = () => {
     window.location.href = sessionToken ? url : `mailto:${configuration.PAGOPA_HELP_EMAIL}`;
   };
 
+  const handleEventTrackingToastErrorMessages = (
+    error: AppResponseError,
+    response: AppResponse
+  ) => {
+    PAEventStrategyFactory.triggerEvent(PAEventsType.SEND_PA_TOAST_ERROR, {
+      error,
+      response,
+      pageName: getCurrentEventTypePage(pathname),
+    });
+  };
+
   const changeLanguageHandler = async (langCode: string) => {
     await i18n.changeLanguage(langCode);
   };
@@ -334,7 +349,9 @@ const ActualApp = () => {
 
         <A11yMessageAnnouncer />
         <AppMessage />
-        <AppResponseMessage />
+        <AppResponseMessage
+          eventTrackingToastErrorMessages={handleEventTrackingToastErrorMessages}
+        />
         <LoadingOverlay />
         <Router />
       </Layout>

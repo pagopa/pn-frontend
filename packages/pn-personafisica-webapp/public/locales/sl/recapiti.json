@@ -76,7 +76,8 @@
         "info-list": [
           {
             "title": "Organizacija vam pošlje obvestilo na SEND",
-            "description": "Obvestilo vam je <0>dostavljeno</0> varno in z zakonsko vrednostjo prek platforme"
+            "description": "Obvestilo vam je <0>dostavljeno</0> varno in z zakonsko vrednostjo prek platforme",
+            "aria-description": "Aktivirajte za branje razlage izraza"
           },
           {
             "title": "Prejmeš sporočilo",
@@ -114,19 +115,19 @@
         "sms-disclaimer": "Če pritisnete <strong>Dodaj številko</strong>, shranite ta kontakt za prejemanje opozoril o obvestilih SEND. Upravljate ga lahko v razdelku <strong>Kontaktni podatki.</strong>"
       },
       "step_4": {
-        "title": "Aktivirate digitalno prebivališče na SEND",
+        "title": "Vaš povzetek",
         "step-title": "Povzetek",
-        "content": "Tvoje komunikacije z zakonsko vrednostjo bodo dostavljene na:",
+        "content": "Vaša uradna sporočila bodo dostavljena samo na:",
         "digital-domicile": "Digitalno prebivališče",
         "send": "SEND",
-        "courtesy-content": "Izbral si prejemanje sporočila na:",
+        "courtesy-content": "Obvestilo boste prejeli prek:",
         "contacts-list": {
           "email": {
-            "title": "E-poštni naslov",
+            "title": "E-pošta:",
             "textDisabled": "Dodaj e-pošto"
           },
           "io": {
-            "title": "Aplikacija IO",
+            "title-app-io": "IO, aplikacija za javne storitve",
             "textDisabled": "Poveži SEND z IO",
             "textEnabled": "Storitev SEND aktivirana"
           },
@@ -135,8 +136,10 @@
             "textDisabled": "Dodaj številko mobilnega telefona"
           }
         },
-        "disclaimer": "S pritiskom na “Aktiviraj digitalno prebivališče” izjavljate, da ste prebrali <0>Informacije o zasebnosti</0> in se strinjate s <1>Pogoji storitve</1>",
-        "enable": "Aktiviraj digitalno prebivališče"
+        "disclaimer-enable": "S klikom na <strong>“Aktiviraj digitalni naslov”</strong> izjavljate, da ste prebrali <0>Politiko zasebnosti</0>, sprejemate <1>Pogoje storitve</1>, ter da razumete, da vam obvestila SEND ne bodo posredovana na druge digitalne domicile.",
+        "disclaimer-transfer": "S klikom na <strong>“Potrdi”</strong> izjavljate, da ste prebrali <0>Politiko zasebnosti</0>, sprejemate <1>Pogoje storitve</1>, ter da razumete, da vam obvestila SEND ne bodo posredovana na druge digitalne domicile.",
+        "sercq-send-contacts-alert": "Spremljajte izbrane kontaktne podatke: digitalno obvestilo SEND začne ustvarjati pravne učinke, tudi če ga niste prebrali.",
+        "enable": "Aktiviraj digitalni naslov"
       },
       "feedback": {
         "title-transfer": "Posodobil si svoje digitalno prebivališče",
@@ -272,8 +275,8 @@
       "title": "Funkcionalnost je ukinjena",
       "description": "Ne morete več vnašati vljudnostnih kontaktnih podatkov, prilagojenih za organizacijo, ali spreminjati že obstoječih kontaktnih podatkov. Če izbrišete prilagojen kontaktni podatek, ga ne boste mogli več obnoviti ali znova vnesti. "
     },
-    "email-description": "E-pošta, na katero vas bomo opozorili, ko prejmete komunikacijo z zakonsko vrednostjo za vas na SEND.",
-    "sercq-disclaimer": "S pritiskom na “Potrdi” izjavljate, da ste prebrali <0>Informacije o zasebnosti</0> in se strinjate s <1>Pogoji storitve</1>"
+    "email-description": "E-poštni naslov, na katerega vas bomo obvestili, ko boste prek SEND prejeli uradno sporočilo.",
+    "sercq-disclaimer": "S klikom na <strong>“Potrdi”</strong> izjavljate, da ste prebrali <0>Politiko zasebnosti</0>, sprejemate <1>Pogoje storitve</1>, ter da razumete, da vam obvestila SEND organa ne bodo posredovana na druge digitalne domicile."
   },
   "common": {
     "duplicate-contact-title": "Kontaktni podatek je že prisoten",
@@ -394,7 +397,7 @@
         "legal-title-pec": "Pravno veljavna sporočila bodo dostavljena na:",
         "courtesy-title": "Obvestilo boš prejel prek:",
         "info-box": "Spremljaj izbrane kontaktne podatke: digitalno uradno obvestilo SEND začne pravno učinkovati, tudi če si ga nisi ogledal.",
-        "disclaimer": "S klikom na <strong>Potrdi</strong> izjavljate, da ste prebrali <0>Politiko zasebnosti</0> in sprejemate <1>Pogoje storitve</1>, ter da razumete, da vam obvestila SEND ne bodo posredovana na druge digitalne domicile.",
+        "disclaimer": "S klikom na <strong>\"Potrdi\"</strong> izjavljate, da ste prebrali <0>Politiko zasebnosti</0>, sprejemate <1>Pogoje storitve</1>, ter da razumete, da vam obvestila SEND ne bodo posredovana na druge digitalne domicile.",
         "ddom-label": "Digitalni naslov",
         "io-label": "IO, aplikacija javnih storitev",
         "io-value": "Storitev SEND v IO je aktivna",
