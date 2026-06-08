@@ -40,5 +40,15 @@
     "title": "IO - L'app des services publics",
     "subtitle": "Ouvrir dans l'app IO",
     "cta": "OUVRIR"
+  },
+  "one-identity-spid-select": {
+    "title": "Se connecter avec SPID",
+    "close-button-aria-label": "Fermer",
+    "unavailable-idp-warning": "L'accès via %s n'est pas disponible pour le moment, veuillez réessayer plus tard ou vous connecter avec un autre fournisseur d'identité",
+    "error": {
+      "title": "Nous ne parvenons pas à charger la liste",
+      "description": "Veuillez réessayer plus tard.",
+      "close-button": "Fermer"
+    }
   }
 }

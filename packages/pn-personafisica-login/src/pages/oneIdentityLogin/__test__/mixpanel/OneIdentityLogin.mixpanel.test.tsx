@@ -69,4 +69,25 @@ describe('One Identity Login page - Mixpanel events', () => {
       SPID_IDP_ID: idp.entityID,
     });
   });
+
+  it('fires SEND_IDP_NOT_AVAILABLE when an unavailable SPID IDP is selected', async () => {
+    vi.mocked(OneIdentityApi.getIdps).mockResolvedValue([{ ...IDPS_MOCK[0], active: false }]);
+    const { container } = await act(async () => render(<OneIdentityLogin />));
+
+    fireEvent.click(container.querySelector('#spidButton')!);
+
+    const idp = IDPS_MOCK[0];
+    const idpButton = await waitFor(() => {
+      const btn = document.getElementById(`spid-select-${idp.entityID}`);
+      if (!btn) throw new Error('IDP button not found');
+      return btn;
+    });
+
+    await act(async () => fireEvent.click(idpButton));
+
+    expect(triggerEventSpy).toHaveBeenCalledWith(PFLoginEventsType.SEND_IDP_NOT_AVAILABLE, {
+      SPID_IDP_NAME: idp.friendlyName,
+      SPID_IDP_ID: idp.entityID,
+    });
+  });
 });
