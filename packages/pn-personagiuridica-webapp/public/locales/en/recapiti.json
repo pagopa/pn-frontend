@@ -100,12 +100,12 @@
         "sms-disclaimer": "If you press <strong>Add number</strong> you save this contact to receive alerts about SEND notifications for the business. You can manage it in the <strong>Contacts</strong> section."
       },
       "step_3": {
-        "title": "You are activating the Digital Domicile on SEND",
+        "title": "Your summary",
         "step-title": "Summary",
-        "content": "Legal value communications for the business will be delivered to:",
+        "content": "Legally-binding communications for the business will only be delivered to:",
         "digital-domicile": "Digital Domicile",
         "send": "SEND",
-        "courtesy-content": "You have chosen to receive a message on:",
+        "courtesy-content": "You will receive a notice via:",
         "contacts-list": {
           "email": {
             "title": "Company email",
@@ -116,10 +116,10 @@
             "textDisabled": "Add mobile number"
           }
         },
-        "disclaimer-enable": "By pressing “Activate Digital Domicile” you declare that you have read the <0>Privacy Policy</0> and accept the <1>Terms of Service</1>",
-        "disclaimer-transfer": "By pressing “Transfer Digital Domicile” you declare that you have read the <0>Privacy Policy</0> and accept the <1>Terms of Service</1>",
-        "enable": "Activate Digital Domicile",
-        "transfer": "Transfer Digital Domicile"
+        "disclaimer-enable": "By pressing <strong>“Activate digital domicile”</strong> you declare that you have read the <0>Privacy Policy</0>, accept the <1>Terms of Service</1>, and that you understand that SEND notifications will not be forwarded to other digital domiciles.",
+        "disclaimer-transfer": "By pressing <strong>“Confirm”</strong> you declare that you have read the <0>Privacy Policy</0>, accept the <1>Terms of Service</1>, and that you understand that SEND notifications will not be forwarded to other digital domiciles.",
+        "sercq-send-contacts-alert": "Monitor the contact details you have chosen: a SEND digital notification begins to produce legal effects even if you have not viewed it.",
+        "enable": "Activate digital domicile"
       },
       "feedback": {
         "title-transfer": "You have updated your business's Digital Domicile",
@@ -234,7 +234,7 @@
       "description": "You can no longer insert personalized courtesy contacts per entity or modify existing contacts. If you delete a personalized contact you will not be able to recover it or insert it again."
     },
     "email-description": "The email where we will notify your business when it receives a legal value communication on SEND.",
-    "sercq-disclaimer": "By pressing “Confirm” you declare that you have read the <0>Privacy Policy</0> and accept the <1>Terms of Service</1>"
+    "sercq-disclaimer": "By pressing <strong>“Confirm”</strong> you declare that you have read the <0>Privacy Policy</0>, accept the <1>Terms of Service</1>, and that you understand that the institution's SEND notifications will not be forwarded to other digital domiciles."
   },
   "common": {
     "duplicate-contact-title": "Contact already present",
