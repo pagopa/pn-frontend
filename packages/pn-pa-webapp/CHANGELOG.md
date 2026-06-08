@@ -3,6 +3,32 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.24.0-RC.0](https://github.com/pagopa/pn-frontend/compare/v2.23.0...v2.24.0-RC.0) (2026-06-08)
+
+
+### Bug Fixes
+
+* **PN-15937:** move max attachments label below attachment box title ([#1859](https://github.com/pagopa/pn-frontend/issues/1859)) ([b7bfb13](https://github.com/pagopa/pn-frontend/commit/b7bfb13ebb04cc7a240989eecc7a0d5190ede966))
+* **PN-15979:** align button and update new api key modal copy ([#1826](https://github.com/pagopa/pn-frontend/issues/1826)) ([36ccf18](https://github.com/pagopa/pn-frontend/commit/36ccf18c612f611e5e10e3f055c79fa5a0a9f76f))
+* **PN-16004:** add text description in recipient step ([d480624](https://github.com/pagopa/pn-frontend/commit/d480624289095cc3a9d9f93863b544553481147d))
+* **PN-18983:** improve required fields accessibility on new notification form ([#1885](https://github.com/pagopa/pn-frontend/issues/1885)) ([c007f82](https://github.com/pagopa/pn-frontend/commit/c007f8239ef1784b23fb69512b59040ae67c3af3))
+* **PN-19990:** fix content copy for reworked timeline ([#1915](https://github.com/pagopa/pn-frontend/issues/1915)) ([bcfe94e](https://github.com/pagopa/pn-frontend/commit/bcfe94eda8c598b27d9c141ca172b20f541426a9))
+* **PN-20014:** update translations of MISpidSelectOIDialog and track mixpanel event of unavailable IDP ([#1919](https://github.com/pagopa/pn-frontend/issues/1919)) ([ef9ada9](https://github.com/pagopa/pn-frontend/commit/ef9ada9aa9d1033d1250e6851435943269ffcc0d))
+* reduce to lowcase the content in timeline  ([#1917](https://github.com/pagopa/pn-frontend/issues/1917)) ([ae0c566](https://github.com/pagopa/pn-frontend/commit/ae0c56673f7fb2b5c69e2f3d5f4c3ca590867bf9))
+
+
+### Features
+
+* **PN-19760:** Add PA mixpanel tracking foundation and events ([#1911](https://github.com/pagopa/pn-frontend/issues/1911)) ([6a3be17](https://github.com/pagopa/pn-frontend/commit/6a3be17c8b035a48c87833e76d8a179dac07d900))
+* **PN-19856:** implement section for fac-simile document ([#1895](https://github.com/pagopa/pn-frontend/issues/1895)) ([22b5dc7](https://github.com/pagopa/pn-frontend/commit/22b5dc7b013f020e18e8b74e21a7a809601a359c))
+* **PN-19905:** add new header to set language for createOrUpdateAddress action ([#1888](https://github.com/pagopa/pn-frontend/issues/1888)) ([0a8e431](https://github.com/pagopa/pn-frontend/commit/0a8e4310034a805f972632e866022425a0793eb6))
+* **PN-19967:** update PG OneTrust cookie banner assets ([#1908](https://github.com/pagopa/pn-frontend/issues/1908)) ([b62ddea](https://github.com/pagopa/pn-frontend/commit/b62ddeae31857092d6b3c38eed80e585cfeaa64f))
+* **PN-20014:** import new MISpidSelectOIDialog component from mui-italia ([#1902](https://github.com/pagopa/pn-frontend/issues/1902)) ([4f97aa7](https://github.com/pagopa/pn-frontend/commit/4f97aa79508f529b49e7b67eb66b24f938895433))
+
+
+
+
+
 # [2.23.0](https://github.com/pagopa/pn-frontend/compare/v2.23.0-RC.4...v2.23.0) (2026-05-06)
 
 **Note:** Version bump only for package @pagopa-pn/pn-pa-webapp

@@ -3,6 +3,33 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.24.0-RC.0](https://github.com/pagopa/pn-frontend/compare/v2.23.0...v2.24.0-RC.0) (2026-06-08)
+
+
+### Bug Fixes
+
+* **PN-19419:** enhance mixpanel tracking with transport option ([#1891](https://github.com/pagopa/pn-frontend/issues/1891)) ([1b348c5](https://github.com/pagopa/pn-frontend/commit/1b348c544325972a9ab8a31394ade9e5aa4f7f86))
+* **PN-19701:** add error_description to error callback ([4c9c5da](https://github.com/pagopa/pn-frontend/commit/4c9c5daf5d79a63f8d8cabb4c638aa6e9db83521))
+* **PN-19701:** remove oidc-state API ([#1894](https://github.com/pagopa/pn-frontend/issues/1894)) ([dc67247](https://github.com/pagopa/pn-frontend/commit/dc672474c2cbf952bb8071beac3f9ff3436098c2))
+* **PN-19839:** append rapid access params to oidc-authorize ([#1870](https://github.com/pagopa/pn-frontend/issues/1870)) ([2749fd0](https://github.com/pagopa/pn-frontend/commit/2749fd0ee08317258a18f3f3cf5e77eabb4b172e))
+* **PN-20014:** close IDP select dialog before navigating ([#1916](https://github.com/pagopa/pn-frontend/issues/1916)) ([a4868c6](https://github.com/pagopa/pn-frontend/commit/a4868c654dcefd4298e34910ac9ec1b36ae46542))
+* **PN-20014:** update translations of MISpidSelectOIDialog and track mixpanel event of unavailable IDP ([#1919](https://github.com/pagopa/pn-frontend/issues/1919)) ([ef9ada9](https://github.com/pagopa/pn-frontend/commit/ef9ada9aa9d1033d1250e6851435943269ffcc0d))
+* **PN-20069:** redirect to login when error is already handled by OneIdentity ([#1906](https://github.com/pagopa/pn-frontend/issues/1906)) ([bb916fd](https://github.com/pagopa/pn-frontend/commit/bb916fdc971c79c65c398826333db909aab5c644))
+
+
+### Features
+
+* **PN-17000:** empty state and skeletons on spid select dialog ([#1866](https://github.com/pagopa/pn-frontend/issues/1866)) ([e2beaac](https://github.com/pagopa/pn-frontend/commit/e2beaac2583affb5f1199f781997496c349a3e2f))
+* **PN-19699, PN-19700:** UI of OneIdentity login page and fetch IDPS ([#1862](https://github.com/pagopa/pn-frontend/issues/1862)) ([6b0cbda](https://github.com/pagopa/pn-frontend/commit/6b0cbda3bce28e7ca22bf69559caf18adf561286))
+* **PN-19701:** handle OneIdentity callback and errors ([#1873](https://github.com/pagopa/pn-frontend/issues/1873)) ([2d0889f](https://github.com/pagopa/pn-frontend/commit/2d0889fbb8b181383182e59b96c5de7c9e066836))
+* **PN-19839:** fetch oidc-authorize and redirect to IDP login page ([#1869](https://github.com/pagopa/pn-frontend/issues/1869)) ([7211969](https://github.com/pagopa/pn-frontend/commit/721196983e95f3b1920f5e182c77aa31d56f7778))
+* **PN-19967:** update PG OneTrust cookie banner assets ([#1908](https://github.com/pagopa/pn-frontend/issues/1908)) ([b62ddea](https://github.com/pagopa/pn-frontend/commit/b62ddeae31857092d6b3c38eed80e585cfeaa64f))
+* **PN-20014:** import new MISpidSelectOIDialog component from mui-italia ([#1902](https://github.com/pagopa/pn-frontend/issues/1902)) ([4f97aa7](https://github.com/pagopa/pn-frontend/commit/4f97aa79508f529b49e7b67eb66b24f938895433))
+
+
+
+
+
 # [2.23.0](https://github.com/pagopa/pn-frontend/compare/v2.23.0-RC.4...v2.23.0) (2026-05-06)
 
 **Note:** Version bump only for package @pagopa-pn/pn-personafisica-login

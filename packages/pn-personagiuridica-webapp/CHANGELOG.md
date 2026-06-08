@@ -3,6 +3,36 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.24.0-RC.0](https://github.com/pagopa/pn-frontend/compare/v2.23.0...v2.24.0-RC.0) (2026-06-08)
+
+
+### Bug Fixes
+
+* **A2-2350:** add aria-description and fix pg version ([#1913](https://github.com/pagopa/pn-frontend/issues/1913)) ([4df8c13](https://github.com/pagopa/pn-frontend/commit/4df8c1305d93493811a750b5d97cccee5657a21c))
+* **PN-15746:** reset email field on OTP cancel for PF and PG ([#1845](https://github.com/pagopa/pn-frontend/issues/1845)) ([b4546e1](https://github.com/pagopa/pn-frontend/commit/b4546e1c6380d6034591fc52df02ae7620883140))
+* **PN-18983:** required fields accessibility on new delegation flow ([#1904](https://github.com/pagopa/pn-frontend/issues/1904)) ([3444103](https://github.com/pagopa/pn-frontend/commit/34441031cc88175410da1c832c7323be2f1b12bf))
+* **PN-19857:** remove checkbox from SERCQ activation and fix copy ([#1889](https://github.com/pagopa/pn-frontend/issues/1889)) ([4e00291](https://github.com/pagopa/pn-frontend/commit/4e00291ffe44a807240b236ba6c1614cea50573a))
+* **PN-19990:** fix content copy for reworked timeline ([#1915](https://github.com/pagopa/pn-frontend/issues/1915)) ([bcfe94e](https://github.com/pagopa/pn-frontend/commit/bcfe94eda8c598b27d9c141ca172b20f541426a9))
+* **PN-20014:** update translations of MISpidSelectOIDialog and track mixpanel event of unavailable IDP ([#1919](https://github.com/pagopa/pn-frontend/issues/1919)) ([ef9ada9](https://github.com/pagopa/pn-frontend/commit/ef9ada9aa9d1033d1250e6851435943269ffcc0d))
+* reduce to lowcase the content in timeline  ([#1917](https://github.com/pagopa/pn-frontend/issues/1917)) ([ae0c566](https://github.com/pagopa/pn-frontend/commit/ae0c56673f7fb2b5c69e2f3d5f4c3ca590867bf9))
+
+
+### Features
+
+* **PN-19099:** use MUI Italia code input and add copy action ([#1899](https://github.com/pagopa/pn-frontend/issues/1899)) ([eab71f3](https://github.com/pagopa/pn-frontend/commit/eab71f303b27ae4d3d9a210a2771885abb7bf84e))
+* **PN-19759:** Add Mixpanel functional tracking foundation ([#1893](https://github.com/pagopa/pn-frontend/issues/1893)) ([2d1b877](https://github.com/pagopa/pn-frontend/commit/2d1b8777c6476b48323cf147123fec586663099b))
+* **PN-19761:** mixpanel event tracking (PG) ([#1910](https://github.com/pagopa/pn-frontend/issues/1910)) ([f36328a](https://github.com/pagopa/pn-frontend/commit/f36328a05ab4ffdc5824935b7a351e6a12b77cb0))
+* **PN-19762:** Add UTM support to PG login flow ([#1878](https://github.com/pagopa/pn-frontend/issues/1878)) ([87ae862](https://github.com/pagopa/pn-frontend/commit/87ae8622b4a2adbb8e9e86f7dd0c20b5b416335e))
+* **PN-19856:** implement section for fac-simile document ([#1895](https://github.com/pagopa/pn-frontend/issues/1895)) ([22b5dc7](https://github.com/pagopa/pn-frontend/commit/22b5dc7b013f020e18e8b74e21a7a809601a359c))
+* **PN-19905:** add new header to set language for createOrUpdateAddress action ([#1888](https://github.com/pagopa/pn-frontend/issues/1888)) ([0a8e431](https://github.com/pagopa/pn-frontend/commit/0a8e4310034a805f972632e866022425a0793eb6))
+* **PN-19967:** update PG OneTrust cookie banner assets ([#1908](https://github.com/pagopa/pn-frontend/issues/1908)) ([b62ddea](https://github.com/pagopa/pn-frontend/commit/b62ddeae31857092d6b3c38eed80e585cfeaa64f))
+* **PN-19993:** implement mixpanel event for bilinguism ([#1918](https://github.com/pagopa/pn-frontend/issues/1918)) ([386e7ca](https://github.com/pagopa/pn-frontend/commit/386e7ca47849b5e8fef7537c615d48f9532fb772))
+* **PN-20014:** import new MISpidSelectOIDialog component from mui-italia ([#1902](https://github.com/pagopa/pn-frontend/issues/1902)) ([4f97aa7](https://github.com/pagopa/pn-frontend/commit/4f97aa79508f529b49e7b67eb66b24f938895433))
+
+
+
+
+
 # [2.23.0](https://github.com/pagopa/pn-frontend/compare/v2.23.0-RC.4...v2.23.0) (2026-05-06)
 
 **Note:** Version bump only for package @pagopa-pn/pn-personagiuridica-webapp
