@@ -26,7 +26,7 @@ describe('HowItWorksContactWizard', () => {
   });
 
   it('should not show pec section if default pec address is present', async () => {
-    const { getByTestId, queryByTestId } = render(
+    const { getByTestId, queryByTestId, getByRole } = render(
       <HowItWorksContactWizard goToNextStep={goToNextStep} setShowPecWizard={setShowPecWizard} />,
       {
         preloadedState: {
@@ -50,7 +50,7 @@ describe('HowItWorksContactWizard', () => {
     expect(pecSection).not.toBeInTheDocument();
     const continueButton = getByTestId('continueButton');
     expect(continueButton).toBeInTheDocument();
-    const alertMessage = getByTestId('default-pec-info');
+    const alertMessage = getByRole('alert');
     expect(alertMessage).toBeInTheDocument();
   });
 

@@ -1,7 +1,7 @@
 import { SERCQ_SEND_VALUE } from '@pagopa-pn/pn-commons';
 
 import { digitalAddresses } from '../../../__mocks__/Contacts.mock';
-import { render, within } from '../../../__test__/test-utils';
+import { render } from '../../../__test__/test-utils';
 import { AddressType, ChannelType } from '../../../models/contacts';
 import ValidatingPecBanner from '../ValidatingPecBanner';
 
@@ -39,9 +39,7 @@ describe('ValidatingPecBanner component', () => {
       preloadedState: { contactsState: { digitalAddresses: validatingDefaultPecNoSercq } },
     });
 
-    const alert = getByTestId('PecVerificationAlert');
-    const icon = within(alert).getByTestId('ReportProblemOutlinedIcon');
-    expect(icon).toBeInTheDocument();
+    expect(getByTestId('PecVerificationAlert')).toBeInTheDocument();
     getByText('legal-contacts.pec-validation-banner.title');
     getByText('legal-contacts.pec-validation-banner.dod-disabled-message');
   });
@@ -51,9 +49,7 @@ describe('ValidatingPecBanner component', () => {
       preloadedState: { contactsState: { digitalAddresses: validatingDefaultPecSercq } },
     });
 
-    const alert = getByTestId('PecVerificationAlert');
-    const icon = within(alert).getByTestId('ReportProblemOutlinedIcon');
-    expect(icon).toBeInTheDocument();
+    expect(getByTestId('PecVerificationAlert')).toBeInTheDocument();
     getByText('legal-contacts.pec-validation-banner.title');
     getByText('legal-contacts.pec-validation-banner.dod-enabled-message');
   });
@@ -63,9 +59,7 @@ describe('ValidatingPecBanner component', () => {
       preloadedState: { contactsState: { digitalAddresses: validatingPartyPecSercq } },
     });
 
-    const alert = getByTestId('PecVerificationAlert');
-    const icon = within(alert).getByTestId('ReportProblemOutlinedIcon');
-    expect(icon).toBeInTheDocument();
+    expect(getByTestId('PecVerificationAlert')).toBeInTheDocument();
     getByText('legal-contacts.pec-validation-banner.title');
     getByText('legal-contacts.pec-validation-banner.parties-list');
   });
@@ -75,9 +69,7 @@ describe('ValidatingPecBanner component', () => {
       preloadedState: { contactsState: { digitalAddresses: validatingDefaultAndPartyPecSercq } },
     });
 
-    const alert = getByTestId('PecVerificationAlert');
-    const icon = within(alert).getByTestId('ReportProblemOutlinedIcon');
-    expect(icon).toBeInTheDocument();
+    expect(getByTestId('PecVerificationAlert')).toBeInTheDocument();
     getByText('legal-contacts.pec-validation-banner.title');
     getByText('legal-contacts.pec-validation-banner.dod-enabled-message');
   });

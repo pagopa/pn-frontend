@@ -129,7 +129,7 @@ describe('ApiIntegration page', () => {
       },
     ]);
 
-    const { container, getByTestId } = render(<ApiIntegration />, {
+    const { container, getByTestId, getByRole } = render(<ApiIntegration />, {
       preloadedState: {
         userState: {
           user: userResponse,
@@ -150,7 +150,7 @@ describe('ApiIntegration page', () => {
     expect(publicKeysSection).toBeInTheDocument();
     const virtualKeysSection = getByTestId('virtualKeys');
     expect(virtualKeysSection).toBeInTheDocument();
-    const banner = getByTestId('integrationApiBanner');
+    const banner = getByRole('alert');
     expect(banner).toBeInTheDocument();
     expect(banner).toHaveTextContent('banner.description-admin');
   });
@@ -248,7 +248,7 @@ describe('ApiIntegration page', () => {
       },
     });
 
-    const { container, queryByTestId, getByTestId } = render(<ApiIntegration />, {
+    const { container, queryByTestId, getByTestId, getByRole } = render(<ApiIntegration />, {
       preloadedState: {
         userState: {
           user: {
@@ -279,7 +279,7 @@ describe('ApiIntegration page', () => {
     expect(publicKeys).not.toBeInTheDocument();
     const virtualKeysSection = getByTestId('virtualKeys');
     expect(virtualKeysSection).toBeInTheDocument();
-    const banner = getByTestId('integrationApiBanner');
+    const banner = getByRole('alert');
     expect(banner).toBeInTheDocument();
     expect(banner).toHaveTextContent('banner.description-operator');
   });
