@@ -103,7 +103,7 @@ describe('PecContactWizard', () => {
   });
 
   it('should show alert when SERCQ SEND is enabled', async () => {
-    const { getByRole } = render(<PecContactWizard setShowPecWizard={setShowPecWizardMock} />, {
+    const { getByTestId } = render(<PecContactWizard setShowPecWizard={setShowPecWizardMock} />, {
       preloadedState: {
         contactsState: {
           digitalAddresses: digitalAddressesSercq.filter(
@@ -113,7 +113,7 @@ describe('PecContactWizard', () => {
       },
     });
 
-    const alertMessage = getByRole('alert');
+    const alertMessage = getByTestId('sercq-info-alert');
     expect(alertMessage).toBeInTheDocument();
     expect(alertMessage).toHaveTextContent('legal-contacts.pec-contact-wizard.sercq-info-alert');
   });

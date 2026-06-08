@@ -35,11 +35,11 @@ const validatingDefaultAndPartyPecSercq = validatingPartyPecSercq.map((addr) =>
 
 describe('ValidatingPecBanner component', () => {
   it('shows the component while validating default PEC - SERCQ SEND not enabled', () => {
-    const { getByText, getByRole } = render(<ValidatingPecBanner />, {
+    const { getByText, getByTestId } = render(<ValidatingPecBanner />, {
       preloadedState: { contactsState: { digitalAddresses: validatingDefaultPecNoSercq } },
     });
 
-    const alert = getByRole('alert');
+    const alert = getByTestId('PecVerificationAlert');
 
     expect(alert).toBeInTheDocument();
     expect(alert).toHaveTextContent('legal-contacts.pec-validation-banner.title');
@@ -49,11 +49,11 @@ describe('ValidatingPecBanner component', () => {
   });
 
   it('shows the component while validating default PEC - SERCQ SEND previously enabled', () => {
-    const { getByText, getByRole } = render(<ValidatingPecBanner />, {
+    const { getByText, getByTestId } = render(<ValidatingPecBanner />, {
       preloadedState: { contactsState: { digitalAddresses: validatingDefaultPecSercq } },
     });
 
-    const alert = getByRole('alert');
+    const alert = getByTestId('PecVerificationAlert');
 
     expect(alert).toBeInTheDocument();
     expect(alert).toHaveTextContent('legal-contacts.pec-validation-banner.title');
@@ -63,11 +63,11 @@ describe('ValidatingPecBanner component', () => {
   });
 
   it("shows the component while validating a party's PEC - default SERCQ SEND enabled", () => {
-    const { getByText, getByRole } = render(<ValidatingPecBanner />, {
+    const { getByText, getByTestId } = render(<ValidatingPecBanner />, {
       preloadedState: { contactsState: { digitalAddresses: validatingPartyPecSercq } },
     });
 
-    const alert = getByRole('alert');
+    const alert = getByTestId('PecVerificationAlert');
 
     expect(alert).toBeInTheDocument();
     expect(alert).toHaveTextContent('legal-contacts.pec-validation-banner.title');
@@ -77,11 +77,11 @@ describe('ValidatingPecBanner component', () => {
   });
 
   it("shows the component while validating default and party's PEC - default SERCQ SEND enabled", () => {
-    const { getByText, getByRole } = render(<ValidatingPecBanner />, {
+    const { getByTestId, getByText } = render(<ValidatingPecBanner />, {
       preloadedState: { contactsState: { digitalAddresses: validatingDefaultAndPartyPecSercq } },
     });
 
-    const alert = getByRole('alert');
+    const alert = getByTestId('PecVerificationAlert');
 
     expect(alert).toBeInTheDocument();
     expect(alert).toHaveTextContent('legal-contacts.pec-validation-banner.title');

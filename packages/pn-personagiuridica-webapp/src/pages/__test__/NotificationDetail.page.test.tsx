@@ -304,7 +304,7 @@ describe('NotificationDetail Page', () => {
     });
 
     expect(result.getByTestId('notificationCostBanner')).toBeInTheDocument();
-    expect(result.getAllByRole('alert')[0]).toBeInTheDocument();
+    expect(result.getByTestId('pecUnreachableAlertText')).toBeInTheDocument();
 
     spy.mockRestore();
   });
@@ -551,7 +551,7 @@ describe('NotificationDetail Page', () => {
       });
     });
 
-    const cancelledAlert = result.getAllByRole('alert')[0];
+    const cancelledAlert = result.getByTestId('cancelledAlertText');
     expect(cancelledAlert).toBeInTheDocument();
 
     expect(cancelledAlert).toHaveTextContent('detail.cancelled.message');
@@ -1358,7 +1358,7 @@ describe('NotificationDetail Page', () => {
       });
     });
 
-    const alertRadd = result.getAllByRole('alert')[0];
+    const alertRadd = result.getAllByTestId('raddAlert')[0];
     expect(alertRadd).toBeInTheDocument();
     expect(alertRadd).toHaveTextContent('detail.timeline.radd.title');
   });

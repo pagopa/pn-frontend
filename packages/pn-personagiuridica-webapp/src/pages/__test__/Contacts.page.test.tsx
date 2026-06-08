@@ -117,7 +117,7 @@ describe('Contacts page', () => {
       });
     });
 
-    const banner = result.getAllByRole('alert')[0];
+    const banner = result.getByTestId('PecVerificationAlert');
 
     expect(banner).toBeInTheDocument();
     expect(banner).toHaveTextContent('legal-contacts.pec-validation-banner.title');
