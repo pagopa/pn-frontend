@@ -202,6 +202,7 @@ const CodeModal = forwardRef<ModalHandle, Props>(
           {codeSectionAdditional && <Box sx={{ mt: 2 }}>{codeSectionAdditional}</Box>}
           {internalHasError && (
             <MIAlert
+              id="error-alert"
               data-testid="errorAlert"
               severity="error"
               sx={{ mt: 2 }}
