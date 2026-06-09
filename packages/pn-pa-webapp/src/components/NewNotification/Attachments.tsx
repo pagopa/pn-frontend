@@ -5,17 +5,9 @@ import * as yup from 'yup';
 
 import AddIcon from '@mui/icons-material/Add';
 import DeleteIcon from '@mui/icons-material/Delete';
-import {
-  Alert,
-  Box,
-  FormControl,
-  SxProps,
-  TextField,
-  Typography,
-  useFormControl,
-} from '@mui/material';
+import { Box, FormControl, SxProps, TextField, Typography, useFormControl } from '@mui/material';
 import { FileUpload, useIsMobile } from '@pagopa-pn/pn-commons';
-import { ButtonNaked } from '@pagopa/mui-italia';
+import { ButtonNaked, MIAlert } from '@pagopa/mui-italia';
 
 import { NewNotificationDocument } from '../../models/NewNotification';
 import { useAppDispatch } from '../../redux/hooks';
@@ -349,9 +341,12 @@ const Attachments: React.FC<Props> = ({
         previousStepOnClick={() => handlePreviousStep()}
       >
         {hasAdditionalLang && (
-          <Alert severity="info" sx={{ mt: 2, mb: 2 }} data-testid="bannerAdditionalLanguages">
-            {t('banner-additional-languages')}
-          </Alert>
+          <MIAlert
+            severity="info"
+            sx={{ mt: 2, mb: 2 }}
+            data-testid="bannerAdditionalLanguages"
+            description={t('banner-additional-languages')}
+          />
         )}
         <Typography variant="body2" mt={2}>
           {tc('required-fields')}

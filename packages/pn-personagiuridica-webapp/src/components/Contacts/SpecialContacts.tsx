@@ -1,17 +1,9 @@
 import React, { useRef, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 
-import {
-  Alert,
-  AlertTitle,
-  Box,
-  Card,
-  CardContent,
-  Divider,
-  Stack,
-  Typography,
-} from '@mui/material';
+import { Box, Card, CardContent, Divider, Stack, Typography } from '@mui/material';
 import { SERCQ_SEND_VALUE, appStateActions } from '@pagopa-pn/pn-commons';
+import { MIAlert } from '@pagopa/mui-italia';
 
 import {
   AddressType,
@@ -243,16 +235,16 @@ const SpecialContacts: React.FC<{ addressType: AddressType; channelType?: Channe
             {t('special-contacts.card-title', { ns: 'recapiti' })}
           </Typography>
           {addressType === AddressType.COURTESY && (
-            <Alert severity="warning" sx={{ mb: 3 }}>
-              <AlertTitle>
-                {t(`special-contacts.courtesy-banner.title`, {
-                  ns: 'recapiti',
-                })}
-              </AlertTitle>
-              {t(`special-contacts.courtesy-banner.description`, {
+            <MIAlert
+              severity="warning"
+              sx={{ mb: 3 }}
+              title={t('special-contacts.courtesy-banner.title', {
                 ns: 'recapiti',
               })}
-            </Alert>
+              description={t('special-contacts.courtesy-banner.description', {
+                ns: 'recapiti',
+              })}
+            />
           )}
           <Stack
             spacing={3}

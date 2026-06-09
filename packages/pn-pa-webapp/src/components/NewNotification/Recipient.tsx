@@ -12,7 +12,6 @@ import * as yup from 'yup';
 
 import { Add, Delete } from '@mui/icons-material';
 import {
-  Alert,
   Box,
   FormControl,
   FormControlLabel,
@@ -24,7 +23,7 @@ import {
   Typography,
 } from '@mui/material';
 import { PhysicalAddressLookup, RecipientType, dataRegex } from '@pagopa-pn/pn-commons';
-import { ButtonNaked } from '@pagopa/mui-italia';
+import { ButtonNaked, MIAlert } from '@pagopa/mui-italia';
 
 import {
   NewNotificationDigitalAddressType,
@@ -484,14 +483,14 @@ const Recipient: React.FC<Props> = ({
                       )}
                     </FormLabel>
                     {PHYSICAL_ADDRESS_LOOKUP === PhysicalAddressLookupConfig.DOWN && (
-                      <Alert
+                      <MIAlert
                         severity="error"
                         sx={{ mb: 2 }}
+                        description={t('address-physical-lookup-down')}
                         data-testid="alert-physicalAddressLookupDown"
-                      >
-                        {t('address-physical-lookup-down')}
-                      </Alert>
+                      />
                     )}
+
                     {PHYSICAL_ADDRESS_LOOKUP !== PhysicalAddressLookupConfig.OFF && (
                       <RadioGroup
                         aria-labelledby={`recipients[${index}].physicalAddressLabel`}

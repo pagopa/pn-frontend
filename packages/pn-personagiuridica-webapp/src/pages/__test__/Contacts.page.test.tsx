@@ -118,9 +118,8 @@ describe('Contacts page', () => {
     });
 
     const banner = result.getByTestId('PecVerificationAlert');
+
     expect(banner).toBeInTheDocument();
-    const alertIcon = within(banner).getByTestId('ReportProblemOutlinedIcon');
-    expect(alertIcon).toBeInTheDocument();
     expect(banner).toHaveTextContent('legal-contacts.pec-validation-banner.title');
     expect(banner).toHaveTextContent('legal-contacts.pec-validation-banner.parties-list');
 
