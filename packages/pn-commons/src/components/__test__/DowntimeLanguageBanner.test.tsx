@@ -1,4 +1,4 @@
-import { render } from '../../test-utils';
+import { render, within } from '../../test-utils';
 import DowntimeLanguageBanner from '../DowntimeLanguageBanner';
 
 describe('DowntimeLanguageBanner Component', () => {
@@ -8,7 +8,11 @@ describe('DowntimeLanguageBanner Component', () => {
     );
 
     expect(container).toHaveTextContent('downtime_language_banner.message');
-    const link = getByTestId('link-downtime-example');
+
+    const alert = getByTestId('downtimeLanguageBanner');
+    expect(alert).toBeInTheDocument();
+
+    const link = within(alert).getByRole('link');
     expect(link).toBeInTheDocument();
     expect(link).toHaveTextContent('downtime_language_banner.link');
   });
