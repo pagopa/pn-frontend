@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.24.0-RC.1](https://github.com/pagopa/pn-frontend/compare/v2.24.0-RC.0...v2.24.0-RC.1) (2026-06-09)
+
+
+### Features
+
+* **PN-19310:** migrate alerts to MIAlert ([#1914](https://github.com/pagopa/pn-frontend/issues/1914)) ([3ca9b6f](https://github.com/pagopa/pn-frontend/commit/3ca9b6f48a6570581834b3137c6ea68525a1ca6a))
+
+
+
+
+
 # [2.24.0-RC.0](https://github.com/pagopa/pn-frontend/compare/v2.23.0...v2.24.0-RC.0) (2026-06-08)
 
 
