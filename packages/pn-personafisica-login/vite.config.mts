@@ -6,6 +6,8 @@ import { defineConfig as defineVitestConfig } from 'vitest/config';
 import basicSsl from '@vitejs/plugin-basic-ssl';
 import react from '@vitejs/plugin-react';
 
+import { getLocalHttpsOptions } from '../../bin/local-https.mjs';
+
 const vitestConfig = defineVitestConfig({
   test: {
     globals: true,
@@ -27,14 +29,22 @@ const vitestConfig = defineVitestConfig({
   },
 });
 
-export default defineConfig(({ mode }) => {
+export default defineConfig(({ command, mode }) => {
   const env = loadEnv(mode, process.cwd(), '');
+
+  const host = env.HOST?.trim() || 'localhost';
+
+  const shouldConfigureHttps = command === 'serve' && mode !== 'test';
+
+  const https = shouldConfigureHttps ? getLocalHttpsOptions(host) : undefined;
+
+  const useBasicSslFallback = shouldConfigureHttps && !https;
 
   return mergeConfig(vitestConfig, {
     base: '/auth/',
     plugins: [
       react(),
-      basicSsl(),
+      ...(useBasicSslFallback ? [basicSsl()] : []),
       // this plugin shows the build files in a html file that can be opened with the browser
       // it is needed to check the build files size and check that in the build there are only the files needed
       // to use this plugin run yarn add -D rollup-plugin-visualizer, decomment the import above and the decomment the code below
@@ -49,10 +59,10 @@ export default defineConfig(({ mode }) => {
       */
     ],
     server: {
-      host: env.HOST,
+      host,
       // when you want test the login flux locally, change the port here
       port: 443,
-      https: true,
+      https: https ?? true,
       strictPort: true,
       open: true,
       proxy: {
@@ -88,8 +98,8 @@ export default defineConfig(({ mode }) => {
     },
     preview: {
       port: 443,
-      host: env.HOST,
-      https: true,
+      host,
+      https: https ?? true,
     },
     // Exclude the test and the mock folders from being processed by Vite
     exclude: ['**/__test__/**', '**/__mocks__/**'],

@@ -9,12 +9,44 @@ In project root run
 If you get an authentication error, please use this command:
 `yarn config set "strict-ssl" false -g`
 
-Starting applications
+### Local HTTPS
+
+To use locally trusted HTTPS certificates and avoid browser certificate warnings install [mkcert](https://github.com/FiloSottile/mkcert), a system tool used to generate locally-trusted HTTPS certificates.
+
+Install `mkcert` using one of the following suggested options or follow the [official installation guide](https://github.com/FiloSottile/mkcert#installation):
+
+- macOS:
+  - Homebrew: `brew install mkcert`
+  - MacPorts: `sudo port selfupdate && sudo port install mkcert`
+- Linux: follow the official installation guide for your distribution
+- Windows:
+  - Chocolatey: `choco install mkcert`
+  - Scoop: `scoop bucket add extras && scoop install mkcert`
+
+Then configure the local CA (Certificate Authority) once:
+
+```shell
+mkcert -install
+```
+
+When a dev server starts, the certificate for the configured `HOST` is automatically generated or renewed when necessary. If `HOST` is not configured `localhost` is used.
+
+If a trusted certificate cannot be generated (`mkcert` not installed, filesystem is inaccessible, etc.) the dev server falls back to Vite basic SSL and the browser may display a certificate warning.
+
+Certificates are stored outside the repository in:
+
+```text
+~/.pn-local-https/certificates/<host>/
+```
+
+> Never share or commit private keys, including the generated `key.pem` files and the local CA private key.
+
+### Starting applications
 
 - `yarn start:pf` to start app for citizens in local
 - `yarn start:pa` to start app for public administration in local
 - `yarn start:pg` to start app for legal entities in local
-- `yarn start:login` to start the login section for citizens in local (url: localhost:3000)
+- `yarn start:login` to start the login section for citizens in local (url: https://localhost:443/auth)
 
 You can also run `yarn dev` in the relative package folder:
 
