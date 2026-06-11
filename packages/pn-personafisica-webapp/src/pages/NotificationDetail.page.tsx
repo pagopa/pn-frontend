@@ -115,13 +115,13 @@ const NotificationDetail: React.FC = () => {
   const delegatorsFromStore = useAppSelector(
     (state: RootState) => state.generalInfoState.delegators
   );
+  const downtimeEvents = useAppSelector(
+    (state: RootState) => state.notificationState.downtimeEvents
+  );
   const notification = useAppSelector((state: RootState) => state.notificationState.notification);
   const notificationLanguage = notification.additionalLanguages?.[0] ?? 'IT';
   const sessionLang = getSessionLanguage()?.toUpperCase();
   const isSameLang = notificationLanguage?.includes(sessionLang);
-  const downtimeEvents = useAppSelector(
-    (state: RootState) => state.notificationState.downtimeEvents
-  );
 
   const showBilingualFacsimileSection = !isSameLang && sessionLang !== 'IT';
   const isCancelled = useIsCancelled({ notification });
@@ -627,7 +627,7 @@ const NotificationDetail: React.FC = () => {
     );
   }
 
-  const getFacSimileLink = (): string => {
+  const getFacSimileLink = (): string | undefined => {
     switch (sessionLang) {
       case 'EN':
         return FACSIMILE_EN;
@@ -638,7 +638,7 @@ const NotificationDetail: React.FC = () => {
       case 'SL':
         return FACSIMILE_SL;
       default:
-        return FACSIMILE_EN;
+        return undefined;
     }
   };
 
