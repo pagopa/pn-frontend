@@ -123,7 +123,10 @@ const NotificationDetail: React.FC = () => {
   const sessionLang = getSessionLanguage()?.toUpperCase();
   const isSameLang = notificationLanguage?.includes(sessionLang);
 
-  const showBilingualFacsimileSection = !isSameLang && sessionLang !== 'IT';
+  const BILINGUAL_ALLOWED_LANGUAGES = new Set(['EN', 'FR', 'DE', 'SL']);
+  const isBilingualAllowed = BILINGUAL_ALLOWED_LANGUAGES.has(sessionLang);
+
+  const showBilingualFacsimileSection = !isSameLang && sessionLang !== 'IT' && isBilingualAllowed;
   const isCancelled = useIsCancelled({ notification });
   const isCancelledOrCancelling = isCancelled.cancelled || isCancelled.cancellationInProgress;
   const currentRecipient = notification?.currentRecipient;
@@ -628,14 +631,14 @@ const NotificationDetail: React.FC = () => {
   }
 
   const getFacSimileLink = (): string | undefined => {
-    switch (sessionLang) {
-      case 'EN':
+    switch (i18n.language) {
+      case 'en':
         return FACSIMILE_EN;
-      case 'FR':
+      case 'fr':
         return FACSIMILE_FR;
-      case 'DE':
+      case 'de':
         return FACSIMILE_DE;
-      case 'SL':
+      case 'sl':
         return FACSIMILE_SL;
       default:
         return undefined;

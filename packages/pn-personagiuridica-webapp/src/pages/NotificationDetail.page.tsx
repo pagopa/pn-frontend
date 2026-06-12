@@ -117,8 +117,10 @@ const NotificationDetail = () => {
   const notificationLanguage = notification.additionalLanguages?.[0] ?? 'IT';
   const sessionLang = getSessionLanguage()?.toUpperCase();
   const isSameLang = notificationLanguage?.includes(sessionLang);
+  const BILINGUAL_ALLOWED_LANGUAGES = new Set(['EN', 'FR', 'DE', 'SL']);
+  const isBilingualAllowed = BILINGUAL_ALLOWED_LANGUAGES.has(sessionLang);
 
-  const showBilingualFacsimileSection = !isSameLang && sessionLang !== 'IT';
+  const showBilingualFacsimileSection = !isSameLang && sessionLang !== 'IT' && isBilingualAllowed;
 
   console.log(showBilingualFacsimileSection, notificationLanguage, sessionLang, isSameLang);
 
@@ -549,14 +551,14 @@ const NotificationDetail = () => {
   };
 
   const getFacSimileLink = (): string | undefined => {
-    switch (sessionLang) {
-      case 'EN':
+    switch (i18n.language) {
+      case 'en':
         return FACSIMILE_EN;
-      case 'FR':
+      case 'fr':
         return FACSIMILE_FR;
-      case 'DE':
+      case 'de':
         return FACSIMILE_DE;
-      case 'SL':
+      case 'sl':
         return FACSIMILE_SL;
       default:
         return undefined;
