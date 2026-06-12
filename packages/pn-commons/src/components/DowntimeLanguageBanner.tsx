@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Alert, Link, Typography } from '@mui/material';
+import { MIAlert } from '@pagopa/mui-italia';
 
 import { getLocalizedOrDefaultLabel } from '../utility/localization.utility';
 
@@ -9,21 +9,18 @@ type Props = {
 };
 
 const DowntimeLanguageBanner: React.FC<Props> = ({ downtimeExampleLink }) => (
-  <Alert severity="info" variant="outlined" data-testid="downtimeLanguageBanner" sx={{ mt: 2 }}>
-    <Typography variant="body2">
-      {getLocalizedOrDefaultLabel('common', 'downtime_language_banner.message')}
-      &nbsp;
-      <Link
-        target="_blank"
-        fontWeight="bold"
-        data-testid="link-downtime-example"
-        href={downtimeExampleLink}
-        sx={{ cursor: 'pointer' }}
-      >
-        {getLocalizedOrDefaultLabel('common', 'downtime_language_banner.link')}
-      </Link>
-    </Typography>
-  </Alert>
+  <MIAlert
+    severity="info"
+    description={getLocalizedOrDefaultLabel('common', 'downtime_language_banner.message')}
+    data-testid="downtimeLanguageBanner"
+    sx={{ mt: 2 }}
+    action={{
+      label: getLocalizedOrDefaultLabel('common', 'downtime_language_banner.link'),
+      href: downtimeExampleLink,
+      rel: 'noopener noreferrer',
+      target: '_blank',
+    }}
+  />
 );
 
 export default DowntimeLanguageBanner;

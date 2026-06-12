@@ -18,7 +18,6 @@ import {
   FormControl,
   FormControlLabel,
   FormHelperText,
-  Link,
   MenuItem,
   Paper,
   Stack,
@@ -47,7 +46,6 @@ import {
   Sender,
 } from '../../models/contacts';
 import { Party } from '../../models/party';
-import { PRIVACY_POLICY, TERMS_OF_SERVICE_SERCQ_SEND } from '../../navigation/routes.const';
 import {
   CONTACT_ACTIONS,
   acceptSercqSendTos,
@@ -69,6 +67,7 @@ import { isPFEvent } from '../../utility/mixpanel';
 import ContactCodeDialog from './ContactCodeDialog';
 import ExistingContactDialog from './ExistingContactDialog';
 import SercqAddSpecialEmail from './SercqAddSpecialEmail';
+import SercqSendDisclaimer from './SercqSendDisclaimer';
 
 enum ModalType {
   EXISTING = 'existing',
@@ -245,7 +244,7 @@ const AddSpecialContact = forwardRef<AddSpecialContactRef, Props>(
           then: yup.string().nullable(),
         }),
       s_disclaimer: yup.boolean().when('channelType', {
-        is: (val: ChannelType) => [ChannelType.PEC, ChannelType.SERCQ_SEND].includes(val),
+        is: (val: ChannelType) => [ChannelType.PEC].includes(val),
         then: (schema) => schema.isTrue(t('required-field')),
         otherwise: (schema) => schema.notRequired(),
       }),
@@ -578,7 +577,7 @@ const AddSpecialContact = forwardRef<AddSpecialContactRef, Props>(
           {t(`special-contacts.add-title`, { ns: 'recapiti' })}
         </Typography>
         <form onSubmit={formik.handleSubmit}>
-          <Typography variant="body1" mb={4}>
+          <Typography variant="body1" mb={2}>
             {t(`special-contacts.contact-to-add-description`, { ns: 'recapiti' })}
           </Typography>
 
@@ -744,81 +743,19 @@ const AddSpecialContact = forwardRef<AddSpecialContactRef, Props>(
             </Stack>
           )}
         </form>
-        {formik.values.channelType === ChannelType.SERCQ_SEND && (
+        {formik.values.channelType === ChannelType.SERCQ_SEND && !canEditEmail && (
           <>
-            {!canEditEmail && (
-              <>
-                <Typography sx={{ mb: 2 }}>
-                  {t(`special-contacts.email-description`, { ns: 'recapiti' })}
-                </Typography>
-                <SercqAddSpecialEmail />
-              </>
-            )}
-            <FormControl>
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    name="s_disclaimer"
-                    id="s_disclaimer"
-                    required
-                    onChange={handleChangeTouched}
-                    inputProps={{
-                      'aria-describedby': 'sercq_disclaimer-helper-text',
-                      'aria-invalid':
-                        formik.touched.s_disclaimer && Boolean(formik.errors.s_disclaimer),
-                    }}
-                    sx={{
-                      color:
-                        formik.touched.s_disclaimer && Boolean(formik.errors.s_disclaimer)
-                          ? theme.palette.error.dark
-                          : theme.palette.text.secondary,
-                    }}
-                  />
-                }
-                label={
-                  <Trans
-                    i18nKey="special-contacts.sercq-disclaimer"
-                    ns="recapiti"
-                    components={[
-                      <Link
-                        key="privacy-policy"
-                        sx={{
-                          cursor: 'pointer',
-                          textDecoration: 'none !important',
-                          fontWeight: 'bold',
-                        }}
-                        data-testid="privacy-link"
-                        href={PRIVACY_POLICY}
-                        target="_blank"
-                        rel="noopener"
-                      />,
-
-                      <Link
-                        key="tos"
-                        sx={{
-                          cursor: 'pointer',
-                          textDecoration: 'none !important',
-                          fontWeight: 'bold',
-                        }}
-                        data-testid="tos-link"
-                        href={TERMS_OF_SERVICE_SERCQ_SEND}
-                        target="_blank"
-                        rel="noopener"
-                      />,
-                    ]}
-                  />
-                }
-                sx={{ mt: 2 }}
-                value={formik.values.s_disclaimer}
-              />
-              {formik.touched.s_disclaimer && Boolean(formik.errors.s_disclaimer) && (
-                <FormHelperText id="s_disclaimer-helper-text" error>
-                  {formik.errors.s_disclaimer}
-                </FormHelperText>
-              )}
-            </FormControl>
+            <Typography sx={{ mb: 2 }}>
+              {t(`special-contacts.email-description`, { ns: 'recapiti' })}
+            </Typography>
+            <SercqAddSpecialEmail />
           </>
         )}
+
+        {formik.values.channelType === ChannelType.SERCQ_SEND && (
+          <SercqSendDisclaimer i18nKey="special-contacts.sercq-disclaimer" />
+        )}
+
         <ErrorBanner
           type={errorBanner}
           contactValue={

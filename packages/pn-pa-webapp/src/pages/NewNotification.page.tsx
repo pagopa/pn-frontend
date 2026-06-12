@@ -1,9 +1,10 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { Alert, Box, Grid, Link, Step, StepLabel, Stepper, Typography } from '@mui/material';
+import { Box, Grid, Link, Step, StepLabel, Stepper } from '@mui/material';
 import { visuallyHidden } from '@mui/utils';
 import { PnBreadcrumb, Prompt, TitleBox, useIsMobile } from '@pagopa-pn/pn-commons';
+import { MIAlert } from '@pagopa/mui-italia';
 
 import Attachments from '../components/NewNotification/Attachments';
 import DebtPosition from '../components/NewNotification/DebtPosition';
@@ -184,11 +185,14 @@ const NewNotification = () => {
               variantSubTitle="body1"
             ></TitleBox>
             {!IS_PAYMENT_ENABLED && (
-              <Alert role="alert" data-testid="alert" sx={{ mt: 3 }} severity={'warning'}>
-                <Typography component="span" variant="body1">
-                  {t('new-notification.warning-payment-disabled', { ns: 'notifiche' })}
-                </Typography>
-              </Alert>
+              <MIAlert
+                severity="warning"
+                data-testid="alert"
+                sx={{ mt: 3 }}
+                description={t('new-notification.warning-payment-disabled', {
+                  ns: 'notifiche',
+                })}
+              />
             )}
             <Stepper
               activeStep={activeStep}

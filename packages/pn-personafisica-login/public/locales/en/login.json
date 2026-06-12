@@ -40,5 +40,15 @@
     "title": "IO - The public services app",
     "subtitle": "Open in the IO app",
     "cta": "OPEN"
+  },
+  "one-identity-spid-select": {
+    "title": "Login with SPID",
+    "close-button-aria-label": "Close",
+    "unavailable-idp-warning": "Access via %s is currently unavailable, please try again later or log in with another Identity Provider",
+    "error": {
+      "title": "We cannot load the list",
+      "description": "Please try again later.",
+      "close-button": "Close"
+    }
   }
 }

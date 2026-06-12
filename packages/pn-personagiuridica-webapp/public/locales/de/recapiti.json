@@ -100,12 +100,12 @@
         "sms-disclaimer": "Wenn Sie auf <strong>Nummer hinzufügen</strong> klicken, speichern Sie diesen Kontakt, um Benachrichtigungen über SEND-Mitteilungen für das Unternehmen zu erhalten. Sie können ihn im Abschnitt <strong>Kontakte</strong> verwalten."
       },
       "step_3": {
-        "title": "Sie aktivieren den Digitalen Wohnsitz auf SEND",
+        "title": "Deine Zusammenfassung",
         "step-title": "Zusammenfassung",
-        "content": "Rechtliche Mitteilungen  für das Unternehmen werden zugestellt an:",
+        "content": "Die rechtsgültigen Mitteilungen für das Unternehmen werden nur zugestellt an:",
         "digital-domicile": "Digitaler Wohnsitz",
         "send": "SEND",
-        "courtesy-content": "Sie haben gewählt, eine Nachricht zu erhalten unter:",
+        "courtesy-content": "Du erhältst eine Mitteilung über:",
         "contacts-list": {
           "email": {
             "title": "E-Mail des Unternehmens",
@@ -116,10 +116,10 @@
             "textDisabled": "Handynummer hinzufügen"
           }
         },
-        "disclaimer-enable": "Durch Drücken von „Digitalen Wohnsitz aktivieren“ erklären Sie, dass Sie die <0>Datenschutzerklärung</0> gelesen und die <1>Nutzungsbedingungen</1> akzeptiert haben",
-        "disclaimer-transfer": "Durch Drücken von „Digitalen Wohnsitz übertragen“ erklären Sie, dass Sie die <0>Datenschutzerklärung</0> gelesen und die <1>Nutzungsbedingungen</1> akzeptiert haben",
-        "enable": "Digitalen Wohnsitz aktivieren",
-        "transfer": "Digitalen Wohnsitz übertragen"
+        "disclaimer-enable": "Durch Klicken auf <strong>„Digitales Wohnsitz aktivieren“</strong> erklärst du, dass du die <0>Datenschutzerklärung</0> gelesen hast, die <1>Nutzungsbedingungen</1> akzeptierst, und dass du verstanden hast, dass SEND Benachrichtigungen nicht an andere digitale Domizile weitergeleitet werden.",
+        "disclaimer-transfer": "Durch Klicken auf <strong>„Bestätigen“</strong> erklärst du, dass du die <0>Datenschutzerklärung</0> gelesen hast, die <1>Nutzungsbedingungen</1> akzeptierst, und dass du verstanden hast, dass SEND Benachrichtigungen nicht an andere digitale Domizile weitergeleitet werden.",
+        "sercq-send-contacts-alert": "Überwache die von dir gewählten Kontaktdaten: Eine digitale SEND Benachrichtigung entfaltet ihre Rechtswirkungen, auch wenn du sie nicht abgerufen hast.",
+        "enable": "Digitalen Wohnsitz aktivieren"
       },
       "feedback": {
         "title-transfer": "Sie haben den Digitalen Wohnsitz Ihres Unternehmens aktualisiert",
@@ -234,7 +234,7 @@
       "description": "Sie können keine personalisierten Höflichkeitskontakte mehr pro Behörde eingeben oder bestehende Kontakte ändern. Wenn Sie einen personalisierten Kontakt löschen, können Sie ihn nicht wiederherstellen oder erneut eingeben."
     },
     "email-description": "Die E-Mail, über die wir Ihr Unternehmen benachrichtigen, wenn es eine rechtliche Mitteilung  auf SEND erhält.",
-    "sercq-disclaimer": "Durch Drücken von „Bestätigen“ erklären Sie, dass Sie die <0>Datenschutzerklärung</0> gelesen und die <1>Nutzungsbedingungen</1> akzeptiert haben"
+    "sercq-disclaimer": "Durch Klicken auf <strong>„Bestätigen“</strong> erklärst du, dass du die <0>Datenschutzerklärung</0> gelesen hast, die <1>Nutzungsbedingungen</1> akzeptierst, und dass du verstanden hast, dass SEND Benachrichtigungen der Entität nicht an andere digitale Domizile weitergeleitet werden."
   },
   "common": {
     "duplicate-contact-title": "Kontakt bereits vorhanden",

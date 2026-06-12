@@ -7,8 +7,9 @@ import LaptopChromebookIcon from '@mui/icons-material/LaptopChromebook';
 import PowerSettingsNewIcon from '@mui/icons-material/PowerSettingsNew';
 import SavingsIcon from '@mui/icons-material/Savings';
 import TouchAppIcon from '@mui/icons-material/TouchApp';
-import { Alert, Box, Button, Chip, ChipOwnProps, Stack, Typography } from '@mui/material';
+import { Box, Button, Chip, ChipOwnProps, Stack, Typography } from '@mui/material';
 import { PnInfoCard, appStateActions, appStorage, useIsMobile } from '@pagopa-pn/pn-commons';
+import { MIAlert } from '@pagopa/mui-italia';
 
 import { PGEventsType } from '../../models/PGEventsType';
 import { AddressType, ChannelType } from '../../models/contacts';
@@ -227,9 +228,11 @@ const LegalContacts = () => {
         </Typography>
       )}
       {(isValidatingPec || hasPecActive) && (
-        <Alert severity="info" sx={{ mt: 2 }}>
-          {t(`legal-contacts.pec-disclaimer`, { ns: 'recapiti' })}
-        </Alert>
+        <MIAlert
+          severity="info"
+          sx={{ mt: 2 }}
+          description={t(`legal-contacts.pec-disclaimer`, { ns: 'recapiti' })}
+        />
       )}
       {showSpecialContactsSection && <SpecialContacts addressType={AddressType.LEGAL} />}
       <DeleteDialog

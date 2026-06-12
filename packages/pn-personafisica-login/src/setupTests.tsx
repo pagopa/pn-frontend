@@ -10,6 +10,10 @@ import '@testing-library/jest-dom';
 
 import { LoginConfiguration } from './services/configuration.service';
 
+// jsdom does not implement Element.scrollTo, which is used by some MUI components
+// eslint-disable-next-line functional/immutable-data
+Element.prototype.scrollTo = vi.fn() as unknown as typeof Element.prototype.scrollTo;
+
 const originalWarn = console.warn;
 // eslint-disable-next-line functional/immutable-data
 console.warn = (...args) => {

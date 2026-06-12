@@ -6,7 +6,6 @@ import * as yup from 'yup';
 
 import EuroIcon from '@mui/icons-material/Euro';
 import {
-  Alert,
   FormControlLabel,
   InputAdornment,
   Link,
@@ -20,6 +19,7 @@ import {
   useFormControl,
 } from '@mui/material';
 import { CustomDropdown, useIsMobile } from '@pagopa-pn/pn-commons';
+import { MIAlert } from '@pagopa/mui-italia';
 
 import {
   NewNotification,
@@ -533,9 +533,13 @@ const DebtPositionDetail: React.FC<Props> = ({
                   ]}
                 />
               </Typography>
-              <Alert severity={'warning'} sx={{ mb: 3, mt: 2 }} data-testid="pagoPaIntModeAlert">
-                {t('alert', { ns: 'notifiche' })}
-              </Alert>
+              <MIAlert
+                severity="warning"
+                data-testid="pagoPaIntModeAlert"
+                sx={{ mb: 3, mt: 2 }}
+                description={t('alert', { ns: 'notifiche' })}
+              />
+
               <RadioGroup
                 aria-labelledby="pagopaIntMode"
                 name="pagoPaIntMode"

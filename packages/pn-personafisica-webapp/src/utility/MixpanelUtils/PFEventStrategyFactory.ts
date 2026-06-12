@@ -25,6 +25,7 @@ import { SendHasAddressesStrategy } from './Strategies/SendHasAddressesStrategy'
 import { SendHasMandateGivenStrategy } from './Strategies/SendHasMandateGivensStrategy';
 import { SendHasMandateLoginStrategy } from './Strategies/SendHasMandateLoginStrategy';
 import { SendHasMandateStrategy } from './Strategies/SendHasMandateStrategy';
+import { SendLanguageStrategy } from './Strategies/SendLanguageStrategy';
 import { SendNotificationCountStrategy } from './Strategies/SendNotificationCount';
 import { SendNotificationDetailStrategy } from './Strategies/SendNotificationDetailStrategy';
 import { SendNotificationExpensesDetailStrategy } from './Strategies/SendNotificationExpensesDetailStrategy';
@@ -118,8 +119,6 @@ const uxActionStrategy = [
   PFEventsType.SEND_ADD_SERCQ_SEND_GO_TO_SMS,
   PFEventsType.SEND_ADD_SERCQ_SEND_GO_TO_EMAIL,
   PFEventsType.SEND_ADD_SERCQ_SEND_GO_TO_APP_IO,
-  PFEventsType.SEND_ADD_SERCQ_SEND_SUMMARY_TOS_ACCEPTED,
-  PFEventsType.SEND_ADD_SERCQ_SEND_SUMMARY_TOS_DISMISSED,
   PFEventsType.SEND_ADD_SERCQ_SEND_THANK_YOU_PAGE_CLOSE,
   PFEventsType.SEND_ACTIVE_IO_CANCEL,
   PFEventsType.SEND_ADD_CUSTOMIZED_CONTACT_SERCQ_SEND_ADD_EMAIL_BACK,
@@ -441,6 +440,7 @@ const eventStrategy: Record<
   [PFEventsType.SEND_NOTIFICATION_EXPENSES_DETAIL]: new SendNotificationExpensesDetailStrategy(),
   [PFEventsType.SEND_LOGIN_METHOD]: new SendOneIdentityLoginMethodStrategy(),
   [PFEventsType.SEND_RAPID_ACCESS]: new TechRapidAccessStrategy(),
+  [PFEventsType.SEND_LANGUAGE]: new SendLanguageStrategy(),
 };
 
 const isInEventStrategyMap = (value: PFEventsType): value is keyof typeof eventStrategy => {
