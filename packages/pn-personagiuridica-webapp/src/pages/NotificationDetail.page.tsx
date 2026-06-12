@@ -33,7 +33,6 @@ import {
   downloadDocument,
   formatDate,
   getPaymentCache,
-  getSessionLanguage,
   useErrors,
   useHasPermissions,
   useIsCancelled,
@@ -115,14 +114,10 @@ const NotificationDetail = () => {
   );
   const notification = useAppSelector((state: RootState) => state.notificationState.notification);
   const notificationLanguage = notification.additionalLanguages?.[0] ?? 'IT';
-  const sessionLang = getSessionLanguage()?.toUpperCase();
-  const isSameLang = notificationLanguage?.includes(sessionLang);
-  const BILINGUAL_ALLOWED_LANGUAGES = new Set(['EN', 'FR', 'DE', 'SL']);
-  const isBilingualAllowed = BILINGUAL_ALLOWED_LANGUAGES.has(sessionLang);
+  const i18nLang = i18n.language.toUpperCase();
+  const isSameLang = notificationLanguage === i18nLang;
 
-  const showBilingualFacsimileSection = !isSameLang && sessionLang !== 'IT' && isBilingualAllowed;
-
-  console.log(showBilingualFacsimileSection, notificationLanguage, sessionLang, isSameLang);
+  const showBilingualFacsimileSection = !isSameLang && i18nLang !== 'IT';
 
   const currentRecipient = notification?.currentRecipient;
   const isCancelled = useIsCancelled({ notification });
