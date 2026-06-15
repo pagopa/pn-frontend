@@ -77,7 +77,7 @@ beforeAll(async () => {
         return str;
       },
       i18n: {
-        language: 'it',
+        language: mockLanguageConfig.current,
         changeLanguage: () => new Promise(() => {}),
       },
     }),
