@@ -31,11 +31,17 @@ export type MandatePersonType = 'PF' | 'PG';
 
 export type MandatePartySelection = 'tuttiGliEnti' | 'entiSelezionati';
 
+export type ApiKeyType = 'personal' | 'public';
+
 /**
  * Application-level data passed by pages/components to the tracking layer.
  * These types should not mirror Mixpanel properties necessarily.
  * They, instead, follow the domain model.
  */
+
+export type PGApiKeyEventData = {
+  API_type: ApiKeyType;
+};
 
 export type PGNotificationsListEventData = {
   notifications: Array<Notification>;
@@ -128,6 +134,7 @@ export type PGNotificationsListPayload = {
   not_found_count: number;
   cancelled_count: number;
   effective_date_count: number;
+  filed_count: number;
   banner?: string;
 };
 
@@ -188,8 +195,8 @@ export type PGUserRolePayload = {
 export type PGEventPayloads = {
   /* API KEYS */
   [PGEventsType.SEND_PG_API_INTEGRATION]: undefined;
-  [PGEventsType.SEND_PG_ADD_API_START]: undefined;
-  [PGEventsType.SEND_PG_ADD_API_UX_SUCCESS]: undefined;
+  [PGEventsType.SEND_PG_ADD_API_START]: PGApiKeyEventData;
+  [PGEventsType.SEND_PG_ADD_API_UX_SUCCESS]: PGApiKeyEventData;
 
   /* CONTACT */
   [PGEventsType.SEND_PG_YOUR_CONTACT_DETAILS]: PGContactDetailsEventData;

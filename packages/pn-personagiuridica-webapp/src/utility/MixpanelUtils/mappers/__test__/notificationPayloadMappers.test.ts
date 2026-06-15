@@ -33,6 +33,7 @@ describe('notificationPayloadMappers', () => {
       not_found_count: 0,
       cancelled_count: 0,
       effective_date_count: 1,
+      filed_count: 0,
       banner: 'SERCQ_SEND',
     });
   });
