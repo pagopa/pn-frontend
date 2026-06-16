@@ -282,7 +282,6 @@ const PecContactWizard: React.FC<Props> = ({
                   }}
                 />
               }
-              //AKDAKALKçDA
               label={<Trans ns="recapiti" i18nKey="legal-contacts.pec-contact-wizard.disclaimer" />}
               sx={{ mt: 2 }}
               value={formik.values.disclaimer}
