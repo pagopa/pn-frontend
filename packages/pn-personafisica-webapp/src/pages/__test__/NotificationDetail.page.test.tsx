@@ -52,6 +52,7 @@ import { BffCheckTPPResponse } from '../../generated-client/notifications';
 import * as routes from '../../navigation/routes.const';
 import { NOTIFICATION_ACTIONS } from '../../redux/notification/actions';
 import { getConfiguration } from '../../services/configuration.service';
+import { mockLanguageConfig } from '../../setupTests';
 import { ServerResponseErrorCode } from '../../utility/AppError/types';
 import NotificationDetail from '../NotificationDetail.page';
 
@@ -96,6 +97,7 @@ describe('NotificationDetail Page', () => {
 
   beforeEach(() => {
     vi.stubGlobal('location', { href: '', assign: mockAssignFn });
+    mockLanguageConfig.current = 'it';
   });
 
   afterEach(() => {
@@ -1347,7 +1349,7 @@ describe('NotificationDetail Page', () => {
   });
 
   it('render bilingual section when lang is different from additional language in notification', async () => {
-    sessionStorage.setItem(LANGUAGE_SESSION_KEY, 'DE');
+    mockLanguageConfig.current = 'DE';
     mock
       .onGet(`/bff/v1/notifications/received/${bilingualNotification.iun}`)
       .reply(200, bilingualNotification);

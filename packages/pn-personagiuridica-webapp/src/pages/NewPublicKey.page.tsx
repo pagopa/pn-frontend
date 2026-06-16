@@ -186,7 +186,9 @@ const NewPublicKey = () => {
       .then((response: BffPublicKeyResponse) => {
         if (response.issuer) {
           if (!kid) {
-            PGEventStrategyFactory.triggerEvent(PGEventsType.SEND_PG_ADD_API_UX_SUCCESS);
+            PGEventStrategyFactory.triggerEvent(PGEventsType.SEND_PG_ADD_API_UX_SUCCESS, {
+              API_type: 'public',
+            });
           }
           setActiveStep((previousStep) => previousStep + 1);
           setCreationResponse(response);

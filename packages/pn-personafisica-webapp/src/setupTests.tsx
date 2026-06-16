@@ -1,3 +1,4 @@
+/* eslint-disable functional/no-let */
 import { ReactNode } from 'react';
 import { vi } from 'vitest';
 
@@ -20,6 +21,10 @@ console.warn = (...args) => {
     return;
   }
   originalWarn(...args);
+};
+
+export const mockLanguageConfig = {
+  current: 'it',
 };
 
 beforeAll(() => {
@@ -60,6 +65,7 @@ beforeAll(() => {
   });
   initStore(false);
   initAxiosClients();
+
   // mock translations
   vi.mock('react-i18next', () => ({
     // this mock makes sure any components using the translate hook can use it without a warning being shown
@@ -71,7 +77,7 @@ beforeAll(() => {
         return str;
       },
       i18n: {
-        language: 'it',
+        language: mockLanguageConfig.current,
         changeLanguage: () => new Promise(() => {}),
       },
     }),
