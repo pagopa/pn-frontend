@@ -112,6 +112,11 @@ const PecContactWizard: React.FC<Props> = ({
     }
   };
 
+  const handleCloseCodeModal = () => {
+    setOpenCodeModal(false);
+    formik.setFieldValue('pec', '');
+  };
+
   return (
     <>
       <PnWizard
@@ -246,7 +251,7 @@ const PecContactWizard: React.FC<Props> = ({
         channelType={ChannelType.PEC}
         open={openCodeModal}
         onConfirm={(code) => handleCodeVerification(code)}
-        onDiscard={() => setOpenCodeModal(false)}
+        onDiscard={handleCloseCodeModal}
       />
     </>
   );
