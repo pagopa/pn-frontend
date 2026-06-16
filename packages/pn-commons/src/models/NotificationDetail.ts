@@ -27,6 +27,7 @@ export interface NotificationDetail {
   documents: Array<NotificationDetailDocument>;
   cancelledIun?: string;
   senderDenomination?: string;
+  senderPaId?: string;
   paymentExpirationDate?: string;
   group?: string;
   notificationFeePolicy?: NotificationFeePolicy | '';

@@ -1,4 +1,6 @@
 {
+  "iun": "IUN-Code",
+  "logo": "Logo von",
   "button": {
     "filtra": "Filtern",
     "annulla filtro": "Filter entfernen",
@@ -74,7 +76,19 @@
   },
   "date-time": {
     "today-uppercase-initial": "Heute",
-    "hour-of-day": "Uhr"
+    "hour-of-day": "Uhr",
+    "january": "Januar",
+    "february": "Februar",
+    "march": "März",
+    "april": "April",
+    "may": "Mai",
+    "june": "Juni",
+    "july": "Juli",
+    "august": "August",
+    "september": "September",
+    "october": "Oktober",
+    "november": "November",
+    "december": "Dezember"
   },
   "error-boundary": {
     "title": "Es ist etwas schiefgelaufen",
@@ -236,7 +250,13 @@
     "action": "Zugang beibehalten"
   },
   "code-modal": {
-    "digits": ["erste Ziffer", "zweite Ziffer", "dritte Ziffer", "vierte Ziffer", "letzte Ziffer"]
+    "digits": [
+      "erste Ziffer",
+      "zweite Ziffer",
+      "dritte Ziffer",
+      "vierte Ziffer",
+      "letzte Ziffer"
+    ]
   },
   "user-validation-failed": {
     "title": "Die eingegebenen Daten sind ungültig",

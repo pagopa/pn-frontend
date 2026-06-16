@@ -33,6 +33,7 @@ const initialState = {
     subject: '',
     recipients: [] as Array<NotificationDetailRecipient>,
     senderDenomination: '',
+    senderPaId: '',
     paymentExpirationDate: '',
     documents: [] as Array<NotificationDetailDocument>,
     otherDocuments: [] as Array<NotificationDetailDocument>,
