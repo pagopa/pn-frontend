@@ -18,6 +18,7 @@ import {
   VirtualKeyStatus,
 } from '../../generated-client/pg-apikeys';
 import { ModalApiKeyView } from '../../models/ApiKeys';
+import { PGEventsType } from '../../models/PGEventsType';
 import { PNRole } from '../../models/User';
 import {
   changeVirtualApiKeyStatus,
@@ -27,6 +28,7 @@ import {
 } from '../../redux/apikeys/actions';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { RootState } from '../../redux/store';
+import PGEventStrategyFactory from '../../utility/MixpanelUtils/PGEventStrategyFactory';
 import ApiKeyModal from './ApiKeyModal';
 import { ShowCodesInput } from './ShowCodesInput';
 import VirtualKeysTable from './VirtualKeysTable';
@@ -69,6 +71,10 @@ const VirtualKeys: React.FC = () => {
   }, []);
 
   const handleGenerateVirtualKey = () => {
+    PGEventStrategyFactory.triggerEvent(PGEventsType.SEND_PG_ADD_API_START, {
+      API_type: 'personal',
+    });
+
     dispatch(
       createVirtualApiKey({
         name: `${t('virtualKeys.default')}${formatDate(today.toISOString(), false, '')}`,
@@ -76,6 +82,10 @@ const VirtualKeys: React.FC = () => {
     )
       .unwrap()
       .then((response) => {
+        PGEventStrategyFactory.triggerEvent(PGEventsType.SEND_PG_ADD_API_UX_SUCCESS, {
+          API_type: 'personal',
+        });
+
         const newVirtualKey: VirtualKey = { value: response.virtualKey };
         setModal({ view: ModalApiKeyView.VIEW, virtualKey: newVirtualKey });
         fetchVirtualKeys();

@@ -10,6 +10,6 @@ type ApiKeyEventType =
 
 export const apiKeyTrackingConfigs: TrackingConfigs<ApiKeyEventType> = {
   [PGEventsType.SEND_PG_API_INTEGRATION]: () => uxScreenView(),
-  [PGEventsType.SEND_PG_ADD_API_START]: () => uxAction(),
-  [PGEventsType.SEND_PG_ADD_API_UX_SUCCESS]: () => uxConfirm(),
+  [PGEventsType.SEND_PG_ADD_API_START]: (data) => uxAction(data),
+  [PGEventsType.SEND_PG_ADD_API_UX_SUCCESS]: (data) => uxConfirm(data),
 };
