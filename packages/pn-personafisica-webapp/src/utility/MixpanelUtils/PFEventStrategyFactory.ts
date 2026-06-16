@@ -25,6 +25,7 @@ import { SendHasAddressesStrategy } from './Strategies/SendHasAddressesStrategy'
 import { SendHasMandateGivenStrategy } from './Strategies/SendHasMandateGivensStrategy';
 import { SendHasMandateLoginStrategy } from './Strategies/SendHasMandateLoginStrategy';
 import { SendHasMandateStrategy } from './Strategies/SendHasMandateStrategy';
+import { SendLanguageStrategy } from './Strategies/SendLanguageStrategy';
 import { SendNotificationCountStrategy } from './Strategies/SendNotificationCount';
 import { SendNotificationDetailStrategy } from './Strategies/SendNotificationDetailStrategy';
 import { SendNotificationExpensesDetailStrategy } from './Strategies/SendNotificationExpensesDetailStrategy';
@@ -33,6 +34,7 @@ import { SendOnboardingEmailActivationStrategy } from './Strategies/SendOnboardi
 import { SendOnboardingFlowStrategy } from './Strategies/SendOnboardingFlowStrategy';
 import { SendOnboardingScreenActionStrategy } from './Strategies/SendOnboardingScreenActionStrategy';
 import { SendOnboardingStartStrategy } from './Strategies/SendOnboardingStartStrategy';
+import { SendOneIdentityLoginMethodStrategy } from './Strategies/SendOneIdentityLoginMethonStrategy';
 import { SendPaymentDetailErrorStrategy } from './Strategies/SendPaymentDetailErrorStrategy';
 import { SendPaymentOutcomeStrategy } from './Strategies/SendPaymentOutcomeStrategy';
 import { SendPaymentStatusStrategy } from './Strategies/SendPaymentStatusStrategy';
@@ -49,6 +51,7 @@ import { SendViewProfileStrategy } from './Strategies/SendViewProfileStrategy';
 import { SendYourContactDetailsStrategy } from './Strategies/SendYourContactDetailsStrategy';
 import { SendYourMandatesStrategy } from './Strategies/SendYourMandatesStrategy';
 import { SendYourNotificationsStrategy } from './Strategies/SendYourNotificationsStrategy';
+import { TechRapidAccessStrategy } from './Strategies/TechRapidAccessStrategy';
 import { TechScreenViewStrategy } from './Strategies/TechScreenViewStrategy';
 import { TechStrategy } from './Strategies/TechStrategy';
 import { UXActionStrategy } from './Strategies/UXActionStrategy';
@@ -116,8 +119,6 @@ const uxActionStrategy = [
   PFEventsType.SEND_ADD_SERCQ_SEND_GO_TO_SMS,
   PFEventsType.SEND_ADD_SERCQ_SEND_GO_TO_EMAIL,
   PFEventsType.SEND_ADD_SERCQ_SEND_GO_TO_APP_IO,
-  PFEventsType.SEND_ADD_SERCQ_SEND_SUMMARY_TOS_ACCEPTED,
-  PFEventsType.SEND_ADD_SERCQ_SEND_SUMMARY_TOS_DISMISSED,
   PFEventsType.SEND_ADD_SERCQ_SEND_THANK_YOU_PAGE_CLOSE,
   PFEventsType.SEND_ACTIVE_IO_CANCEL,
   PFEventsType.SEND_ADD_CUSTOMIZED_CONTACT_SERCQ_SEND_ADD_EMAIL_BACK,
@@ -214,7 +215,6 @@ const uxErrorStrategy = [
 ] as const;
 
 const techStrategy = [
-  PFEventsType.SEND_RAPID_ACCESS,
   PFEventsType.SEND_AUTH_SUCCESS,
   PFEventsType.SEND_F24_DOWNLOAD_SUCCESS,
   PFEventsType.SEND_F24_DOWNLOAD_TIMEOUT,
@@ -438,6 +438,9 @@ const eventStrategy: Record<
   [PFEventsType.SEND_ADD_SERCQ_SEND_ENTER_FLOW]: new SendAddSercqSendEnterFlowStrategy(),
   [PFEventsType.SEND_LANDING_PAGE_FAQ_OPEN]: new SendTppLandingFaqOpenStrategy(),
   [PFEventsType.SEND_NOTIFICATION_EXPENSES_DETAIL]: new SendNotificationExpensesDetailStrategy(),
+  [PFEventsType.SEND_LOGIN_METHOD]: new SendOneIdentityLoginMethodStrategy(),
+  [PFEventsType.SEND_RAPID_ACCESS]: new TechRapidAccessStrategy(),
+  [PFEventsType.SEND_LANGUAGE]: new SendLanguageStrategy(),
 };
 
 const isInEventStrategyMap = (value: PFEventsType): value is keyof typeof eventStrategy => {

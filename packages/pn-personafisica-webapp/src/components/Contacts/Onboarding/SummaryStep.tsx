@@ -2,6 +2,7 @@ import { ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { Chip, Stack, Typography } from '@mui/material';
+import { useIsMobile } from '@pagopa-pn/pn-commons';
 import { MIAlert } from '@pagopa/mui-italia';
 
 import { WizardMode } from '../../../models/Onboarding';
@@ -24,46 +25,48 @@ type SummaryRow = {
 
 const SummaryStep: React.FC<Props> = ({ mode, email, pec, io }) => {
   const { t } = useTranslation(['recapiti']);
+  const isMobile = useIsMobile();
 
   const sendLabel = t('onboarding.digital-domicile.summary.send-badge');
   const pecLabel = t('onboarding.digital-domicile.summary.pec-badge');
 
-  const legalRow: SummaryRow =
-    mode === 'send'
-      ? {
-          id: 'sercqSend',
-          label: t('onboarding.digital-domicile.summary.ddom-label'),
-          secondaryContent: (
-            <Chip
-              label={sendLabel}
-              size="small"
-              sx={{ mt: 0.75, '& .MuiChip-label': { fontSize: '12px' } }}
-            />
-          ),
-        }
-      : {
-          id: 'pec',
-          label: t('onboarding.digital-domicile.summary.ddom-label'),
-          value: pec,
-          secondaryContent: <Chip label={pecLabel} size="small" sx={{ mt: 0.75 }} />,
-        };
+  const isSendFlow = mode === 'send';
+
+  const legalRow: SummaryRow = isSendFlow
+    ? {
+        id: 'sercqSend',
+        label: t('onboarding.digital-domicile.summary.ddom-label'),
+        secondaryContent: (
+          <Chip
+            label={sendLabel}
+            size="small"
+            sx={{ mt: 0.75, '& .MuiChip-label': { fontSize: '12px' } }}
+          />
+        ),
+      }
+    : {
+        id: 'pec',
+        label: t('onboarding.digital-domicile.summary.ddom-label'),
+        value: pec,
+        secondaryContent: <Chip label={pecLabel} size="small" sx={{ mt: 0.75 }} />,
+      };
 
   const courtesyRows: Array<SummaryRow> = [
-    ...(io === IOAllowedValues.ENABLED
-      ? [
-          {
-            id: 'io',
-            label: t('onboarding.digital-domicile.summary.io-label'),
-            value: t('onboarding.digital-domicile.summary.io-value'),
-          },
-        ]
-      : []),
     ...(email
       ? [
           {
             id: 'email',
             label: t('onboarding.digital-domicile.summary.email-label'),
             value: email,
+          },
+        ]
+      : []),
+    ...(io === IOAllowedValues.ENABLED
+      ? [
+          {
+            id: 'io',
+            label: t('onboarding.digital-domicile.summary.io-label'),
+            value: t('onboarding.digital-domicile.summary.io-value'),
           },
         ]
       : []),
@@ -75,9 +78,9 @@ const SummaryStep: React.FC<Props> = ({ mode, email, pec, io }) => {
         {t('onboarding.digital-domicile.summary.title')}
       </Typography>
 
-      <Stack spacing={2}>
+      <Stack spacing={2} mb={3}>
         <Typography variant="body2" color="text.secondary">
-          {t('onboarding.digital-domicile.summary.legal-title')}
+          {t(`onboarding.digital-domicile.summary.legal-title-${isSendFlow ? 'sercq' : 'pec'}`)}
         </Typography>
         <OnboardingContactItem
           mode="view"
@@ -87,12 +90,12 @@ const SummaryStep: React.FC<Props> = ({ mode, email, pec, io }) => {
         />
       </Stack>
       {courtesyRows.length > 0 && (
-        <Stack spacing={2} my={3}>
+        <Stack spacing={2} mb={3}>
           <Typography variant="body2" color="text.secondary">
             {t('onboarding.digital-domicile.summary.courtesy-title')}
           </Typography>
 
-          <Stack spacing={2}>
+          <Stack spacing={2} direction={isMobile ? 'column' : 'row'}>
             {courtesyRows.map((row) => (
               <OnboardingContactItem
                 mode="view"
@@ -100,6 +103,13 @@ const SummaryStep: React.FC<Props> = ({ mode, email, pec, io }) => {
                 label={row.label}
                 value={row.value}
                 secondaryContent={row.secondaryContent}
+                slotProps={{
+                  container: {
+                    sx: {
+                      flex: isMobile ? '1 1 100%' : '1 1 50%',
+                    },
+                  },
+                }}
               />
             ))}
           </Stack>

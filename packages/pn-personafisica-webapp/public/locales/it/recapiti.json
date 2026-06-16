@@ -76,7 +76,8 @@
         "info-list": [
           {
             "title": "Un ente ti invia una notifica su SEND",
-            "description": "La notifica ti viene <0>consegnata</0> in modo sicuro e con valore legale tramite la piattaforma"
+            "description": "La notifica ti viene <0>consegnata</0> in modo sicuro e con valore legale tramite la piattaforma",
+            "aria-description": "Attiva per leggere la spiegazione del termine"
           },
           {
             "title": "Ricevi un messaggio",
@@ -114,19 +115,19 @@
         "sms-disclaimer": "Se premi <strong>Aggiungi numero</strong> salvi questo recapito per ricevere avvisi sulle tue notifiche SEND. Puoi gestirlo nella sezione <strong>Recapiti.</strong>"
       },
       "step_4": {
-        "title": "Stai attivando il tuo domicilio digitale su SEND",
+        "title": "Il tuo riepilogo",
         "step-title": "Riepilogo",
-        "content": "Le tue comunicazioni a valore legale saranno recapitate a:",
+        "content": "Le tue comunicazioni a valore legale saranno recapitate solo su:",
         "digital-domicile": "Domicilio digitale",
         "send": "SEND",
-        "courtesy-content": "Hai scelto di ricevere un messaggio su:",
+        "courtesy-content": "Riceverai un avviso via:",
         "contacts-list": {
           "email": {
-            "title": "Indirizzo email",
+            "title": "Email",
             "textDisabled": "Aggiungi email"
           },
           "io": {
-            "title": "App IO",
+            "title": "IO, l’app dei servizi pubblici",
             "textDisabled": "Collega SEND a IO",
             "textEnabled": "Servizio SEND attivato"
           },
@@ -135,7 +136,9 @@
             "textDisabled": "Aggiungi numero di cellulare"
           }
         },
-        "disclaimer": "Premendo “Attiva domicilio digitale” dichiari di aver letto la <0>Informativa privacy</0> e di accettare i <1>Termini del servizio</1>",
+        "disclaimer-enable": "Premendo <strong>“Attiva domicilio digitale”</strong> dichiari di aver letto l’<0>Informativa Privacy</0>, di accettare i <1>Termini del servizio</1>, e di aver compreso che le notifiche SEND non ti verranno inoltrate su altri domicili digitali.",
+        "disclaimer-transfer": "Premendo <strong>Conferma</strong> dichiari di aver letto l’<0>Informativa Privacy</0>, di accettare i <1>Termini del servizio</1>, e di aver compreso che le notifiche SEND non ti verranno inoltrate su altri domicili digitali.",
+        "sercq-send-contacts-alert": "Monitora i recapiti che hai scelto: una notifica digitale SEND inizia a produrre effetti giuridici anche se non l'hai consultata.",
         "enable": "Attiva domicilio digitale"
       },
       "feedback": {
@@ -272,8 +275,8 @@
       "title": "Funzionalità dismessa",
       "description": "Non puoi più inserire recapiti di cortesia personalizzati per ente o modificare recapiti già esistenti. Se elimini un recapito personalizzato non potrai più recuperarlo o inserirlo di nuovo. "
     },
-    "email-description": "L’email dove ti avviseremo quando ricevi una comunicazione a valore legale per te su SEND.",
-    "sercq-disclaimer": "Premendo “Conferma” dichiari di aver letto la <0>Informativa privacy</0> e di accettare i <1>Termini del servizio</1>"
+    "email-description": "L’email dove ti avviseremo quando ricevi una comunicazione a valore legale su SEND.",
+    "sercq-disclaimer": "Premendo <strong>“Conferma”</strong> dichiari di aver letto l'<0>Informativa Privacy</0>, di accettare i <1>Termini del servizio</1>, e di aver compreso che le notifiche SEND dell'ente non ti verranno inoltrate su altri domicili digitali."
   },
   "common": {
     "duplicate-contact-title": "Recapito già presente",
@@ -356,7 +359,7 @@
           "cta": "Attiva su una PEC"
         },
         "pec-activating": {
-          "title": "Domicilio digitale su PEC in attivazione",
+          "title": "L’attivazione del domicilio digitale su PEC è in corso",
           "description": "Dopo l’attivazione, riceverai le notifiche SEND al tuo indirizzo PEC. Potresti evitare così l’invio di una raccomandata con i relativi costi aggiuntivi.",
           "badge": "Attivazione in corso",
           "img-alt-text": ""
@@ -390,10 +393,11 @@
       },
       "summary": {
         "title": "Il tuo riepilogo",
-        "legal-title": "Le comunicazioni a valore legale verranno recapitate su:",
+        "legal-title-sercq": "Le comunicazioni a valore legale verranno recapitate solo su:",
+        "legal-title-pec": "Le comunicazioni a valore legale verranno recapitate su:",
         "courtesy-title": "Riceverai un avviso via:",
         "info-box": "Monitora i recapiti che hai scelto: una notifica digitale SEND inizia a produrre effetti giuridici anche se non l’hai consultata.",
-        "disclaimer": "Premendo <strong>Conferma</strong> dichiari di aver letto l'<0>Informativa privacy</0> e di accettare i <1>Termini del servizio</1>.",
+        "disclaimer": "Premendo <strong>Conferma</strong> dichiari di aver letto l’<0>Informativa Privacy</0>, di accettare i <1>Termini del servizio</1>, e di aver compreso che le notifiche SEND non ti verranno inoltrate su altri domicili digitali.",
         "ddom-label": "Domicilio digitale",
         "io-label": "IO, l’app dei servizi pubblici",
         "io-value": "Servizio SEND su IO attivo",
@@ -405,7 +409,7 @@
         "title": "La tua PEC come domicilio digitale SEND",
         "description": "Riceverai le comunicazioni a valore legale sulla tua PEC, solo in digitale, e potrai evitare l’invio di una raccomandata con i relativi costi aggiuntivi.",
         "label-choose-address": "Scegli un indirizzo PEC:",
-        "label-summary": "PEC",
+        "label-summary": "Indirizzo PEC",
         "input-label": "Indirizzo PEC",
         "verify-cta": "Verifica PEC",
         "disclaimer": "Accetto che l’indirizzo PEC indicato sia utilizzato in via prioritaria rispetto a eventuali PEC registrate presso un ente mittente o presenti nei pubblici registri.",
@@ -419,8 +423,8 @@
         "verify-before-continue-title": "Verifica la tua PEC",
         "verify-before-continue-content": "Prima di procedere, seleziona <strong>Verifica PEC</strong> e segui le istruzioni.",
         "pending": {
-          "title": "Indirizzo PEC in validazione",
-          "description": "Dopo la validazione, riceverai le comunicazioni a valore legale sulla PEC che hai scelto solo in digitale, ed eviterai l’invio di una raccomandata con i relativi costi aggiuntivi.",
+          "title": "La PEC inserita è in fase di validazione",
+          "description": "Riceverai le comunicazioni a valore legale sulla PEC scelta, solo in digitale, e potrai evitare l’invio di una raccomandata con i relativi costi aggiuntivi. Dopo la validazione, potrai modificarla nella sezione \"I tuoi recapiti\".",
           "badge": "Attivazione in corso"
         }
       },
@@ -436,14 +440,12 @@
       },
       "steps": {
         "choice": "Scegli un domicilio digitale",
-        "pec": "Inserisci la tua PEC",
-        "email": "Associa un indirizzo email",
+        "generic-inbox": "Associa una casella di posta",
         "io": "Attiva gli avvisi su IO",
         "summary": "Controlla le opzioni scelte"
       },
       "buttons": {
-        "continue-without-io": "Continua senza l’app IO",
-        "confirm-activation": "Conferma attivazione"
+        "continue-without-io": "Continua senza l’app IO"
       }
     },
     "io-activation": {
@@ -483,7 +485,7 @@
           "description": "Riceverai un avviso all’indirizzo:"
         },
         "verify-before-continue-title": "Verifica la tua email",
-        "verify-before-continue-content": "Prima di procedere, seleziona Verifica email e segui le istruzioni."
+        "verify-before-continue-content": "Prima di procedere, seleziona <strong>Verifica email</strong> e segui le istruzioni."
       },
       "sms": {
         "readonly": {
@@ -507,7 +509,7 @@
           "description": "Riceverai un avviso al numero:"
         },
         "verify-before-continue-title": "Verifica il tuo numero",
-        "verify-before-continue-content": "Prima di procedere, seleziona Verifica numero e segui le istruzioni."
+        "verify-before-continue-content": "Prima di procedere, seleziona <strong>Verifica numero</strong> e segui le istruzioni."
       }
     },
     "notification-exit-dialog": {

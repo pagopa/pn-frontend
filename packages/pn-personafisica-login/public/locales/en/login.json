@@ -1,7 +1,8 @@
 {
   "loginPage": {
-    "title": "How do you want to log in?",
-    "description": "Select your preferred mode.",
+    "title": "Access SEND for your legally binding communications",
+    "description": "Select your preferred log in method.",
+    "missing-spid-cie": "Don't have SPID or CIE? <0>Find out more</0>",
     "loginBox": {
       "title": "Login",
       "spidLogin": "Log in with SPID",
@@ -11,7 +12,8 @@
   "spidSelect": {
     "title": "Select your SPID",
     "hintText": "Do you not have a SPID?<0> Discover more</0>",
-    "cancelButton": "Cancel"
+    "cancelButton": "Cancel",
+    "emptyState": "No IDP found"
   },
   "loginError": {
     "title": "Due to a system error, the procedure cannot be completed.",
@@ -38,5 +40,15 @@
     "title": "IO - The public services app",
     "subtitle": "Open in the IO app",
     "cta": "OPEN"
+  },
+  "one-identity-spid-select": {
+    "title": "Login with SPID",
+    "close-button-aria-label": "Close",
+    "unavailable-idp-warning": "Access via %s is currently unavailable, please try again later or log in with another Identity Provider",
+    "error": {
+      "title": "We cannot load the list",
+      "description": "Please try again later.",
+      "close-button": "Close"
+    }
   }
 }

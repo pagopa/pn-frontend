@@ -2,22 +2,22 @@ import React, { useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 
 import {
-  Alert,
   Box,
   Button,
   Divider,
-  Link,
   List,
   ListItem,
   ListItemText,
   Stack,
   Typography,
 } from '@mui/material';
-import { ButtonNaked } from '@pagopa/mui-italia';
+import { ButtonNaked, MIAlert } from '@pagopa/mui-italia';
 
+import { PGEventsType } from '../../models/PGEventsType';
 import { contactsSelectors } from '../../redux/contact/reducers';
 import { useAppSelector } from '../../redux/hooks';
 import { getConfiguration } from '../../services/configuration.service';
+import PGEventStrategyFactory from '../../utility/MixpanelUtils/PGEventStrategyFactory';
 import InformativeDialog from './InformativeDialog';
 
 enum ModalType {
@@ -81,14 +81,21 @@ const HowItWorksContactWizard: React.FC<Props> = ({ goToNextStep, setShowPecWiza
                         ns="recapiti"
                         t={(s: string) => s}
                         components={[
-                          <Link
-                            data-testid="deliveredLink"
+                          <ButtonNaked
                             key="delivered"
-                            sx={{
-                              cursor: 'pointer',
-                              textDecoration: 'underline',
-                            }}
+                            data-testid="deliveredLink"
+                            size="medium"
                             onClick={() => setModalOpen(ModalType.DELIVERED)}
+                            color="primary"
+                            aria-description={t(
+                              'legal-contacts.sercq-send-wizard.step_1.info-list.0.aria-description'
+                            )}
+                            sx={{
+                              textDecoration: 'underline',
+                              display: 'inline',
+                              fontWeight: 400,
+                              verticalAlign: 'baseline',
+                            }}
                           />,
                         ]}
                       />
@@ -100,16 +107,22 @@ const HowItWorksContactWizard: React.FC<Props> = ({ goToNextStep, setShowPecWiza
           </List>
 
           {defaultPECAddress && (
-            <Alert severity="info" sx={{ mb: 4 }} data-testid="default-pec-info">
-              {t('legal-contacts.sercq-send-wizard.step_1.pec-info-alert')}
-            </Alert>
+            <MIAlert
+              severity="info"
+              data-testid="default-pec-info"
+              sx={{ mb: 4 }}
+              description={t('legal-contacts.sercq-send-wizard.step_1.pec-info-alert')}
+            />
           )}
 
           <Button
             fullWidth
             variant="contained"
             color="primary"
-            onClick={goToNextStep}
+            onClick={() => {
+              PGEventStrategyFactory.triggerEvent(PGEventsType.SEND_PG_ADD_DD_SERCQ_SEND_START);
+              goToNextStep?.();
+            }}
             sx={{ textTransform: 'none', mb: !defaultPECAddress ? 3 : 0 }}
             data-testid="continueButton"
           >
@@ -134,7 +147,14 @@ const HowItWorksContactWizard: React.FC<Props> = ({ goToNextStep, setShowPecWiza
           <Typography variant="body2" mb={1}>
             {t('legal-contacts.sercq-send-wizard.step_1.have-pec-description')}
           </Typography>
-          <ButtonNaked color="primary" size="medium" onClick={() => setShowPecWizard(true)}>
+          <ButtonNaked
+            color="primary"
+            size="medium"
+            onClick={() => {
+              PGEventStrategyFactory.triggerEvent(PGEventsType.SEND_PG_ADD_DD_PEC_START);
+              setShowPecWizard(true);
+            }}
+          >
             {t('legal-contacts.sercq-send-wizard.step_1.insert-pec')}
           </ButtonNaked>
         </Box>

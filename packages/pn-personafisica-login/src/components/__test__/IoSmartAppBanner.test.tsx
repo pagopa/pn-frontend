@@ -15,7 +15,7 @@ vi.mock('@pagopa-pn/pn-commons', async (importActual) => {
   };
 });
 
-describe('test IO Smart App Banner', async () => {
+describe('test IO Smart App Banner', () => {
   afterEach(() => {
     vi.clearAllMocks();
   });

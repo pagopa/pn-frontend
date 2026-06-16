@@ -73,7 +73,8 @@
         "info-list": [
           {
             "title": "Organ pošlje obvestilo SEND za podjetje",
-            "description": "Obvestilo je <0>dostavljeno</0> varno in s pravno veljavnostjo prek platforme"
+            "description": "Obvestilo je <0>dostavljeno</0> varno in s pravno veljavnostjo prek platforme",
+            "aria-description": "Aktivirajte za branje razlage izraza"
           },
           {
             "title": "Prejmete sporočilo",
@@ -99,12 +100,12 @@
         "sms-disclaimer": "Če pritisnete <strong>Dodaj številko</strong>, shranite ta naslov za prejemanje opozoril o obvestilih SEND za podjetje. Upravljate ga lahko v razdelku <strong>Naslovi.</strong>"
       },
       "step_3": {
-        "title": "Aktivirate digitalni naslov na SEND",
+        "title": "Vaš povzetek",
         "step-title": "Povzetek",
-        "content": "Pravno veljavne komunikacije za podjetje bodo dostavljene na:",
+        "content": "Uradna sporočila za podjetje bodo dostavljena samo na:",
         "digital-domicile": "Digitalni naslov",
         "send": "SEND",
-        "courtesy-content": "Izbrali ste prejemanje sporočila na:",
+        "courtesy-content": "Obvestilo boste prejeli prek:",
         "contacts-list": {
           "email": {
             "title": "Poslovna e-pošta",
@@ -115,10 +116,10 @@
             "textDisabled": "Dodaj mobilno številko"
           }
         },
-        "disclaimer-enable": "S pritiskom na »Aktiviraj digitalni naslov« izjavljate, da ste prebrali <0>Politiko zasebnosti</0> in se strinjate z <1>Pogoji storitve</1>",
-        "disclaimer-transfer": "S pritiskom na »Prenesi digitalni naslov« izjavljate, da ste prebrali <0>Politiko zasebnosti</0> in se strinjate z <1>Pogoji storitve</1>",
-        "enable": "Aktiviraj digitalni naslov",
-        "transfer": "Prenesi digitalni naslov"
+        "disclaimer-enable": "S klikom na <strong>»Aktiviraj digitalni naslov«</strong> izjavljate, da ste prebrali <0>Politiko zasebnosti</0>, sprejemate <1>Pogoje storitve</1>, ter da razumete, da obvestila SEND ne bodo posredovana na druge digitalne domicile.",
+        "disclaimer-transfer": "S klikom na <strong>»Potrdi«</strong> izjavljate, da ste prebrali <0>Politiko zasebnosti</0>, sprejemate <1>Pogoje storitve</1>, ter da razumete, da obvestila SEND ne bodo posredovana na druge digitalne domicile.",
+        "sercq-send-contacts-alert": "Spremljajte izbrane kontaktne podatke: digitalno obvestilo SEND začne ustvarjati pravne učinke, tudi če ga niste prebrali.",
+        "enable": "Aktiviraj digitalni naslov"
       },
       "feedback": {
         "title-transfer": "Posodobili ste digitalni naslov vašega podjetja",
@@ -233,7 +234,7 @@
       "description": "Ne morete več vnašati personaliziranih vljudnostnih naslovov za posameznega pošiljatelja ali spreminjati obstoječih naslovov. Če izbrišete personaliziran naslov, ga ne boste mogli obnoviti ali ponovno vnesti."
     },
     "email-description": "E-pošta, na katero bomo vaše podjetje obvestili, ko prejme pravno veljavno komunikacijo na SEND.",
-    "sercq-disclaimer": "S pritiskom na »Potrdi« izjavljate, da ste prebrali <0>Politiko zasebnosti</0> in se strinjate z <1>Pogoji storitve</1>"
+    "sercq-disclaimer": "S klikom na <strong>»Potrdi«</strong> izjavljate, da ste prebrali <0>Politiko zasebnosti</0>, sprejemate <1>Pogoje storitve</1>, ter da razumete, da obvestila SEND organa ne bodo posredovana na druge digitalne domicile."
   },
   "common": {
     "duplicate-contact-title": "Naslov že obstaja",

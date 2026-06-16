@@ -115,6 +115,7 @@ describe('PecContactWizard', () => {
 
     const alertMessage = getByTestId('sercq-info-alert');
     expect(alertMessage).toBeInTheDocument();
+    expect(alertMessage).toHaveTextContent('legal-contacts.pec-contact-wizard.sercq-info-alert');
   });
 
   it('submits form and opens the code modal on valid PEC input', async () => {

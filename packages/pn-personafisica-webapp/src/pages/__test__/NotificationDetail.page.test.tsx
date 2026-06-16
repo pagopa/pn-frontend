@@ -23,6 +23,7 @@ import {
   setPaymentCache,
 } from '@pagopa-pn/pn-commons';
 import { initLocalizationForTest } from '@pagopa-pn/pn-commons/src/test-utils';
+import { LANGUAGE_SESSION_KEY } from '@pagopa-pn/pn-commons/src/utility/multilanguage.utility';
 import userEvent from '@testing-library/user-event';
 
 import { downtimesDTO } from '../../__mocks__/AppStatus.mock';
@@ -30,6 +31,7 @@ import { mandatesByDelegate } from '../../__mocks__/Delegations.mock';
 import { errorMock } from '../../__mocks__/Errors.mock';
 import { paymentInfo } from '../../__mocks__/ExternalRegistry.mock';
 import {
+  bilingualNotification,
   cachedPayments,
   notificationDTO,
   notificationToFe,
@@ -50,6 +52,7 @@ import { BffCheckTPPResponse } from '../../generated-client/notifications';
 import * as routes from '../../navigation/routes.const';
 import { NOTIFICATION_ACTIONS } from '../../redux/notification/actions';
 import { getConfiguration } from '../../services/configuration.service';
+import { mockLanguageConfig } from '../../setupTests';
 import { ServerResponseErrorCode } from '../../utility/AppError/types';
 import NotificationDetail from '../NotificationDetail.page';
 
@@ -76,11 +79,10 @@ const delegator = mandatesByDelegate.find(
 /*
 ATTENZIONE: un'evenutale modifica al mock potrebbe causare il fallimento di alcuni test
 */
-describe('NotificationDetail Page', async () => {
+describe('NotificationDetail Page', () => {
   let result: RenderResult;
   let mock: MockAdapter;
   const mockLegalIds = getLegalFactIds(notificationToFe, 2);
-  const original = globalThis.location;
 
   const defaultOnboardingData = {
     hasBeenShown: false,
@@ -90,23 +92,23 @@ describe('NotificationDetail Page', async () => {
 
   beforeAll(() => {
     mock = new MockAdapter(apiClient);
-    Object.defineProperty(globalThis, 'location', {
-      configurable: true,
-      value: { href: '', assign: mockAssignFn },
-    });
     initLocalizationForTest();
+  });
+
+  beforeEach(() => {
+    vi.stubGlobal('location', { href: '', assign: mockAssignFn });
+    mockLanguageConfig.current = 'it';
   });
 
   afterEach(() => {
     sessionStorage.removeItem(PAYMENT_CACHE_KEY);
     vi.clearAllMocks();
     mock.reset();
-    globalThis.location.href = '';
+    vi.unstubAllGlobals();
   });
 
   afterAll(() => {
     mock.restore();
-    Object.defineProperty(globalThis, 'location', { configurable: true, value: original });
   });
 
   const paymentInfoRequest = paymentInfo.map((payment) => ({
@@ -487,8 +489,11 @@ describe('NotificationDetail Page', async () => {
     }
   });
 
-  it('renders CANCELLED alert with help link CTA', async () => {
+  it('renders CANCELLED alert with help link CTA and opens link on click', async () => {
     const { NOTIFICATION_CANCELLED_HELP_LINK } = getConfiguration();
+    const openSpy = vi.fn();
+    vi.stubGlobal('open', openSpy);
+
     mock.onGet(`/bff/v1/notifications/received/${notificationDTO.iun}`).reply(200, {
       ...notificationDTO,
       notificationStatus: NotificationStatus.CANCELLED,
@@ -517,14 +522,16 @@ describe('NotificationDetail Page', async () => {
 
     const cancelledAlert = result.getByTestId('cancelledAlertText');
     expect(cancelledAlert).toBeInTheDocument();
-
     expect(cancelledAlert).toHaveTextContent('detail.cancelled.message');
 
-    const ctaLink = within(cancelledAlert).getByRole('link', { name: 'detail.cancelled.cta' });
-    expect(ctaLink).toHaveAttribute('href', NOTIFICATION_CANCELLED_HELP_LINK);
-    expect(ctaLink).toHaveAttribute('target', '_blank');
-    expect(ctaLink).toHaveAttribute('rel', expect.stringContaining('noopener'));
-    expect(ctaLink).toHaveAttribute('rel', expect.stringContaining('noreferrer'));
+    const ctaButton = within(cancelledAlert).getByRole('button', { name: 'detail.cancelled.cta' });
+    fireEvent.click(ctaButton);
+
+    expect(openSpy).toHaveBeenCalledWith(
+      NOTIFICATION_CANCELLED_HELP_LINK,
+      '_blank',
+      'noopener noreferrer'
+    );
   });
 
   it('checks not available documents', async () => {
@@ -1341,6 +1348,38 @@ describe('NotificationDetail Page', async () => {
     expect(alertRadd).toHaveTextContent('detail.timeline.radd.title');
   });
 
+  it('render bilingual section when lang is different from additional language in notification', async () => {
+    mockLanguageConfig.current = 'DE';
+    mock
+      .onGet(`/bff/v1/notifications/received/${bilingualNotification.iun}`)
+      .reply(200, bilingualNotification);
+    await act(async () => {
+      result = render(<Component />, {
+        route: routes.GET_DETTAGLIO_NOTIFICA_PATH(bilingualNotification.iun),
+      });
+    });
+
+    const bilingualSection = await result.findByTestId('bilingualSection');
+    expect(bilingualSection).toBeInTheDocument();
+    expect(bilingualSection).toHaveTextContent('detail.bilingual.title');
+  });
+
+  it('does not render bilingual section when lang is same as additional language in notification', async () => {
+    sessionStorage.setItem(LANGUAGE_SESSION_KEY, 'EN');
+    mock
+      .onGet(`/bff/v1/notifications/received/${bilingualNotification.iun}`)
+      .reply(200, bilingualNotification);
+    await act(async () => {
+      result = render(<Component />, {
+        route: routes.GET_DETTAGLIO_NOTIFICA_PATH(bilingualNotification.iun),
+      });
+    });
+
+    await result.findByTestId('detailTable');
+    const bilingualSection = result.queryByTestId('bilingualSection');
+    expect(bilingualSection).not.toBeInTheDocument();
+  });
+
   it('should show pay tpp button after call check-tpp api with retrievalId in user token and get payment URL', async () => {
     const mockRetrievalId = 'retrieval-id';
     const paymentTpp: BffCheckTPPResponse = {
@@ -1402,6 +1441,69 @@ describe('NotificationDetail Page', async () => {
     await vi.waitFor(() => {
       expect(mockAssignFn).toHaveBeenCalledTimes(1);
       expect(mockAssignFn).toHaveBeenCalledWith(tppPaymentUrl);
+    });
+  });
+
+  it('should show payment-error alert when tpp payment URL returns PN_EMD_INTEGRATION_RETRIEVAL_PAYLOAD_MISSING_OR_EXPIRED', async () => {
+    const mockRetrievalId = 'retrieval-id';
+    const paymentTpp: BffCheckTPPResponse = {
+      originId: notificationDTO.iun,
+      retrievalId: mockRetrievalId,
+      pspDenomination: 'MOCK BANK',
+      isPaymentEnabled: true,
+    };
+    const tppPaymentUrlMock = `/bff/v1/payments/tpp?retrievalId=${mockRetrievalId}&noticeCode=${requiredPayment.pagoPa?.noticeCode}&paTaxId=${requiredPayment.pagoPa?.creditorTaxId}&amount=${requiredPayment.pagoPa?.amount}`;
+    const expiredError = {
+      status: 404,
+      data: {
+        errors: [
+          {
+            code: 'PN_EMD_INTEGRATION_RETRIEVAL_PAYLOAD_MISSING_OR_EXPIRED',
+          },
+        ],
+      },
+    };
+
+    mock.onGet(`/bff/v1/notifications/received/${notificationDTO.iun}`).reply(200, notificationDTO);
+    mock.onPost(`/bff/v1/payments/info`, paymentInfoRequest.slice(0, 5)).reply(200, paymentInfo);
+    mock
+      .onGet(`/bff/v1/notifications/received/check-tpp?retrievalId=${mockRetrievalId}`)
+      .reply(200, paymentTpp);
+    mock.onGet(tppPaymentUrlMock).reply(expiredError.status, expiredError.data);
+
+    await act(async () => {
+      result = render(
+        <>
+          <ResponseEventDispatcher />
+          <Component />
+        </>,
+        {
+          preloadedState: {
+            userState: {
+              user: {
+                fiscal_number: notificationDTO.recipients[2].taxId,
+                source: {
+                  channel: 'TPP',
+                  details: 'mock-tpp-id',
+                  retrievalId: mockRetrievalId,
+                },
+              },
+            },
+          },
+          route: routes.GET_DETTAGLIO_NOTIFICA_PATH(notificationDTO.iun),
+        }
+      );
+    });
+
+    const item = result.queryAllByTestId('pagopa-item')[requiredPaymentIndex];
+    const radioButton = item?.querySelector('[data-testid="radio-button"] input');
+    await userEvent.click(radioButton!);
+
+    const tppPayButton = result.getByTestId('tpp-pay-button');
+    await userEvent.click(tppPayButton);
+
+    await waitFor(() => {
+      expect(result.getByTestId('payment-error')).toBeInTheDocument();
     });
   });
 

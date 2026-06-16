@@ -25,6 +25,7 @@ import { Tag } from '@pagopa/mui-italia';
 import { AnyAction } from '@reduxjs/toolkit';
 
 import { DelegationColumnData, DelegationStatus } from '../../models/Deleghe';
+import { PGEventsType } from '../../models/PGEventsType';
 import { User } from '../../models/User';
 import {
   acceptMandate,
@@ -35,6 +36,7 @@ import {
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { RootState } from '../../redux/store';
 import { ServerResponseErrorCode } from '../../utility/AppError/types';
+import PGEventStrategyFactory from '../../utility/MixpanelUtils/PGEventStrategyFactory';
 import AcceptDelegationModal from './AcceptDelegationModal';
 
 function handleCustomGenericError(
@@ -86,6 +88,10 @@ export const Menu: React.FC<Props> = ({ menuType, id, userLogged, row, onAction 
   const [showUpdateModal, setShowUpdateModal] = useState(false);
 
   const groups = useAppSelector((state: RootState) => state.delegationsState.groups);
+
+  const delegates = useAppSelector(
+    (state: RootState) => state.delegationsState.delegations.delegates
+  );
 
   const titleModal =
     menuType === 'delegates'
@@ -139,6 +145,11 @@ export const Menu: React.FC<Props> = ({ menuType, id, userLogged, row, onAction 
             message,
           })
         );
+
+        PGEventStrategyFactory.triggerEvent(PGEventsType.SEND_PG_HAS_MANDATE_GIVEN, {
+          value: delegates.some((delegate) => delegate.mandateId !== id),
+        });
+
         if (onAction) {
           onAction(id);
         }
@@ -370,6 +381,11 @@ export const AcceptButton: React.FC<AcceptButtonProps> = ({ id, name, onAccept }
             message: t('deleghe.accepted-successfully'),
           })
         );
+
+        PGEventStrategyFactory.triggerEvent(PGEventsType.SEND_PG_HAS_MANDATE, {
+          value: true,
+        });
+
         onAccept();
       });
   };

@@ -23,7 +23,7 @@ vi.mock('react-i18next', () => ({
   }),
 }));
 
-describe('DebtPosition Component', async () => {
+describe('DebtPosition Component', () => {
   afterEach(() => {
     vi.clearAllMocks();
   });

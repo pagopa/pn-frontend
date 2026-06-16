@@ -15,7 +15,7 @@ import DebtPositionDetail from '../DebtPositionDetail';
 const confirmHandlerMk = vi.fn();
 const previousStepMk = vi.fn();
 
-describe('DebtPositionDetail Component', async () => {
+describe('DebtPositionDetail Component', () => {
   describe('Render Payment Boxes', () => {
     afterEach(() => {
       vi.clearAllMocks();

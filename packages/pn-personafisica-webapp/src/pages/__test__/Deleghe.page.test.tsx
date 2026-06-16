@@ -11,7 +11,7 @@ import { apiClient } from '../../api/apiClients';
 import { DelegationStatus } from '../../utility/status.utility';
 import Deleghe from '../Deleghe.page';
 
-describe('Deleghe page', async () => {
+describe('Deleghe page', () => {
   const original = window.matchMedia;
   let result: RenderResult;
   let mock: MockAdapter;
@@ -250,8 +250,10 @@ describe('Deleghe page', async () => {
         verificationCode: mandatesByDelegate[0].verificationCode,
       });
     });
-    const error = await waitFor(() => within(dialog).getByTestId('errorAlert'));
-    expect(error).toBeInTheDocument();
+
+    await waitFor(() => {
+      expect(within(dialog).getByRole('alert')).toBeInTheDocument();
+    });
     // check that accept button is still active in deleghe page
     delegatorsRows = result.getAllByTestId('delegatorsTable.body.row');
     expect(delegatorsRows).toHaveLength(mandatesByDelegate.length);

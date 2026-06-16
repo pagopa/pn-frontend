@@ -88,6 +88,7 @@ const EmailSection: React.FC<Props> = ({
           label: t('onboarding.digital-domicile.pec.cancel-email-cta'),
           onClick: onCollapse,
         }}
+        prefix={<MailOutlineIcon fontSize="small" color="disabled" />}
       />
     );
   }

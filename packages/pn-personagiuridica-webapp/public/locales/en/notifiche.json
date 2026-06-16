@@ -377,6 +377,11 @@
         "title": "Document not available",
         "message": "There was a problem retrieving the document. Please try again later. If the error persists, contact support and provide the error information."
       }
+    },
+    "bilingual": {
+      "title": "SUPPORT FACSIMILE TEMPLATES in English",
+      "description": "The language of the attached documents may differ from the one you are using to browse the portal. To understand the content of these documents, you can use the facsimile templates found here.",
+      "action": "Consult the templates"
     }
   },
   "delegatorTitle": "Notifications of {{name}} ",
@@ -431,11 +436,11 @@
     "returned-to-sender-tooltip-multirecipient": "All recipients are deceased",
     "returned-to-sender-description": "The recipient is deceased.",
     "returned-to-sender-description-multirecipient": "All recipients are deceased.",
-    "notification-timeline-reworked": "Updated event or events",
-    "notification-timeline-reworked-tooltip": "Updated event or events",
-    "notification-timeline-reworked-description": "Events marked as INVALIDATED EVENT are not to be considered as they have been replaced by the subsequent events marked as VALIDATED EVENT.",
-    "reworked-status-valid": "Validated event",
-    "reworked-status-not-valid": "Invalidated event",
+    "notification-timeline-reworked": "One or more events updated",
+    "notification-timeline-reworked-tooltip": "One or more events updated",
+    "notification-timeline-reworked-description": "Events marked as rectified replace the previous events indicated as invalid.",
+    "reworked-status-valid": "Rectified event",
+    "reworked-status-not-valid": "Invalid event",
     "cancellation-in-progress": "Cancelled",
     "cancellation-in-progress-tooltip": "Cancellation in progress. The status will be updated shortly.",
     "cancellation-in-progress-description": "Cancellation in progress. The status will be updated shortly."
@@ -469,11 +474,11 @@
     },
     "enable-sercq": {
       "message": {
-        "default": "Activate a digital address to receive future notifications digitally only.",
-        "analog": "Activate SEND as your digital address to save on costs like this.",
-        "external-pec": "Activate a digital address to choose where to receive your SEND notifications."
+        "default": "Activate a digital domicile to receive future notifications only digitally.",
+        "analog": "Activate a digital domicile to save on costs like this one.",
+        "external-pec": "Activate a digital domicile to choose where to receive SEND notifications."
       },
-      "cta": "Activate digital address"
+      "cta": "Activate digital domicile"
     }
   },
   "notification-alert": {

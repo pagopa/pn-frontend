@@ -31,6 +31,7 @@ export interface NotificationDetail {
   group?: string;
   notificationFeePolicy?: NotificationFeePolicy | '';
   pagoPaIntMode?: PagoPaIntegrationMode | '';
+  additionalLanguages?: Array<string>;
   iun: string;
   sentAt: string;
   documentsAvailable?: boolean;

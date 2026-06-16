@@ -10,6 +10,19 @@ import '@testing-library/jest-dom';
 
 import { LoginConfiguration } from './services/configuration.service';
 
+// jsdom does not implement Element.scrollTo, which is used by some MUI components
+// eslint-disable-next-line functional/immutable-data
+Element.prototype.scrollTo = vi.fn() as unknown as typeof Element.prototype.scrollTo;
+
+const originalWarn = console.warn;
+// eslint-disable-next-line functional/immutable-data
+console.warn = (...args) => {
+  if (typeof args[0] === 'string' && args[0].includes('React Router Future Flag Warning')) {
+    return;
+  }
+  originalWarn(...args);
+};
+
 beforeAll(async () => {
   Configuration.setForTest<LoginConfiguration>({
     MIXPANEL_TOKEN: 'ba1f5101fe34a61bb125cbfe587780d8',
@@ -30,6 +43,11 @@ beforeAll(async () => {
     ONE_IDENTITY_CLIENT_ID: 'DFCUf4W3KHfKUl4USEVYrMgpMxvyKICHM_ZPiZ3ftm0',
     ONE_IDENTITY_BASE_URL: 'https://uat.oneid.pagopa.it',
     SERCQ_SERVICE_STATEMENT_LINK: 'https://fake.sercq-service-statement.pagopa.it',
+    DIGITAL_IDENTITY_LINK: 'https://identitadigitale.gov.it/',
+    ONE_IDENTITY_CDN_URL: 'https://assets.uat.oneid.pagopa.it',
+    SPID_REQUEST_LINK: 'https://www.spid.gov.it/cos-e-spid/come-attivare-spid/',
+    API_BASE_URL: 'https://mock-api-base-url/',
+    ONE_IDENTITY_CIE_ENTITY_ID: 'https://mock-cie-entityID.it',
   });
   // mock translations
   vi.mock('react-i18next', () => ({

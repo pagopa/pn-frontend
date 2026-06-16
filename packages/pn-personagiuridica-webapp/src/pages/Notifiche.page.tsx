@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { Box } from '@mui/material';
@@ -21,12 +21,15 @@ import LoadingPageWrapper from '../components/LoadingPageWrapper/LoadingPageWrap
 import DesktopNotifications from '../components/Notifications/DesktopNotifications';
 import GroupSelector from '../components/Notifications/GroupSelector';
 import MobileNotifications from '../components/Notifications/MobileNotifications';
+import { PGEventsType } from '../models/PGEventsType';
 import { PNRole } from '../models/User';
 import { ContactSource } from '../models/contacts';
+import { contactsSelectors } from '../redux/contact/reducers';
 import { DASHBOARD_ACTIONS, getReceivedNotifications } from '../redux/dashboard/actions';
 import { setNotificationFilters, setPagination, setSorting } from '../redux/dashboard/reducers';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { RootState } from '../redux/store';
+import PGEventStrategyFactory from '../utility/MixpanelUtils/PGEventStrategyFactory';
 
 type Props = {
   isDelegatedPage?: boolean;
@@ -36,9 +39,16 @@ const Notifiche = ({ isDelegatedPage = false }: Props) => {
   const dispatch = useAppDispatch();
   const { t } = useTranslation(['notifiche']);
   const [pageReady, setPageReady] = useState(false);
+  const domicileBannerTypeRef = useRef('');
 
   const { notifications, filters, sort, pagination } = useAppSelector(
     (state: RootState) => state.dashboardState
+  );
+  const { defaultEMAILAddress, defaultSMSAddress, addresses } = useAppSelector(
+    contactsSelectors.selectAddresses
+  );
+  const { delegates, delegators } = useAppSelector(
+    (state: RootState) => state.delegationsState.delegations
   );
   const loading = useAppSelector((state: RootState) => state.appState.loading.result);
   const { publishEvent } = useEventEmitter<A11yMessage>('a11y-message');
@@ -75,6 +85,45 @@ const Notifiche = ({ isDelegatedPage = false }: Props) => {
     pagination.page + 1
   );
 
+  const registerNotificationSectionSuperProperties = useCallback(
+    (notificationsCount: number) => {
+      if (userHasAdminPermissions && !organizationGroup) {
+        PGEventStrategyFactory.triggerEvent(PGEventsType.SEND_PG_HAS_EMAIL, {
+          value: !!defaultEMAILAddress,
+        });
+
+        PGEventStrategyFactory.triggerEvent(PGEventsType.SEND_PG_HAS_SMS, {
+          value: !!defaultSMSAddress,
+        });
+
+        PGEventStrategyFactory.triggerEvent(PGEventsType.SEND_PG_HAS_DIGITAL_DOMICILE, {
+          addresses,
+        });
+      }
+
+      PGEventStrategyFactory.triggerEvent(PGEventsType.SEND_PG_HAS_MANDATE, {
+        value: delegators.length > 0,
+      });
+
+      PGEventStrategyFactory.triggerEvent(PGEventsType.SEND_PG_HAS_MANDATE_GIVEN, {
+        value: delegates.length > 0,
+      });
+
+      PGEventStrategyFactory.triggerEvent(PGEventsType.SEND_PG_HAS_NOTIFICATIONS, {
+        value: notificationsCount > 0,
+      });
+    },
+    [
+      userHasAdminPermissions,
+      organizationGroup,
+      defaultEMAILAddress,
+      defaultSMSAddress,
+      addresses,
+      delegators.length,
+      delegates.length,
+    ]
+  );
+
   // API call, this function is passed to the ApiErrorWrapper component
   const fetchNotifications = useCallback(() => {
     const params = {
@@ -86,8 +135,36 @@ const Notifiche = ({ isDelegatedPage = false }: Props) => {
       isDelegatedPage,
     };
 
-    void dispatch(getReceivedNotifications(params)).then(() => setPageReady(true));
-  }, [filters, pagination.size, pagination.page]);
+    dispatch(getReceivedNotifications(params))
+      .unwrap()
+      .then((data) => {
+        setPageReady(true);
+
+        if (!isDelegatedPage) {
+          registerNotificationSectionSuperProperties(data.resultsPage.length);
+          PGEventStrategyFactory.triggerEvent(PGEventsType.SEND_PG_YOUR_NOTIFICATION, {
+            notifications: data.resultsPage,
+            pageNumber: pagination.page,
+            domicileBannerType: domicileBannerTypeRef.current,
+          });
+
+          return;
+        }
+
+        PGEventStrategyFactory.triggerEvent(PGEventsType.SEND_PG_NOTIFICATION_DELEGATED, {
+          notifications: data.resultsPage,
+          pageNumber: pagination.page,
+        });
+      })
+      .catch(() => setPageReady(true));
+  }, [
+    filters,
+    pagination.size,
+    pagination.page,
+    group,
+    isDelegatedPage,
+    registerNotificationSectionSuperProperties,
+  ]);
 
   // Pagination handlers
   const handleChangePage = (paginationData: PaginationData) => {
@@ -102,6 +179,11 @@ const Notifiche = ({ isDelegatedPage = false }: Props) => {
   const handleGroupSelction = (id: string) => {
     dispatch(setNotificationFilters({ ...filters, group: id }));
   };
+
+  const handleDomicileBannerResolved = useCallback((domicileBannerType: string) => {
+    // eslint-disable-next-line functional/immutable-data
+    domicileBannerTypeRef.current = domicileBannerType;
+  }, []);
 
   useEffect(() => {
     fetchNotifications();
@@ -131,7 +213,10 @@ const Notifiche = ({ isDelegatedPage = false }: Props) => {
     <LoadingPageWrapper isInitialized={pageReady}>
       <Box p={3}>
         {userHasAdminPermissions && !organizationGroup && !isDelegatedPage && (
-          <DomicileBanner source={ContactSource.HOME_NOTIFICHE} />
+          <DomicileBanner
+            source={ContactSource.HOME_NOTIFICHE}
+            onBannerResolved={handleDomicileBannerResolved}
+          />
         )}
         <TitleBox
           variantTitle="h4"

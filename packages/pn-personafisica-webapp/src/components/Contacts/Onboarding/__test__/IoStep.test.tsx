@@ -135,24 +135,21 @@ describe('IoStep', () => {
 
     await waitFor(() => {
       expect(props.onChange).toHaveBeenCalledWith(IOAllowedValues.ENABLED);
-      expect(props.onContinue).not.toHaveBeenCalled();
+      expect(props.onContinue).toHaveBeenCalledTimes(1);
     });
   });
 
-  it('renders the enabled state and calls onContinue on primary CTA click', async () => {
+  it('renders the enabled state without the primary CTA', () => {
     const props = createProps();
 
-    const { getByText, getByRole } = render(<IoStep {...props} value={IOAllowedValues.ENABLED} />);
+    const { getByText, queryByRole } = render(
+      <IoStep {...props} value={IOAllowedValues.ENABLED} />
+    );
 
     expect(getByText(`${labelPrefix}.enabled.title`)).toBeInTheDocument();
     expect(getByText(`${labelPrefix}.description`)).toBeInTheDocument();
-    expect(getByRole('button', { name: `${labelPrefix}.enabled.primary-cta` })).toBeInTheDocument();
-
-    await act(async () => {
-      fireEvent.click(getByRole('button', { name: `${labelPrefix}.enabled.primary-cta` }));
-    });
-
-    expect(props.onContinue).toHaveBeenCalledTimes(1);
-    expect(props.onChange).not.toHaveBeenCalled();
+    expect(
+      queryByRole('button', { name: `${labelPrefix}.enabled.primary-cta` })
+    ).not.toBeInTheDocument();
   });
 });

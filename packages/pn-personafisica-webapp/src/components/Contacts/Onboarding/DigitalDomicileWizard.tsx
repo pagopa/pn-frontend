@@ -1,9 +1,9 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { Trans, useTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import { Button, Link, Typography } from '@mui/material';
+import { Button, Typography } from '@mui/material';
 import {
   ConsentActionType,
   ConsentType,
@@ -31,12 +31,7 @@ import {
   IOAllowedValues,
   SaveDigitalAddressParams,
 } from '../../../models/contacts';
-import {
-  NOTIFICHE,
-  ONBOARDING,
-  PRIVACY_POLICY,
-  TERMS_OF_SERVICE_SERCQ_SEND,
-} from '../../../navigation/routes.const';
+import { NOTIFICHE, ONBOARDING } from '../../../navigation/routes.const';
 import {
   acceptSercqSendTos,
   createOrUpdateAddress,
@@ -46,6 +41,7 @@ import { contactsSelectors } from '../../../redux/contact/reducers';
 import { useAppDispatch, useAppSelector } from '../../../redux/hooks';
 import PFEventStrategyFactory from '../../../utility/MixpanelUtils/PFEventStrategyFactory';
 import { normalizeContactValue } from '../../../utility/contacts.utility';
+import SercqSendDisclaimer from '../SercqSendDisclaimer';
 import ChooseDigitalDomicileStep from './ChooseDigitalDomicileStep';
 import EmailStep from './EmailStep';
 import IoStep from './IoStep';
@@ -113,23 +109,16 @@ const getInitialWizardSetup = (
 const shouldShowNextButton = ({
   isChoiceStep,
   isPecActivating,
-  isIoStep,
-  isIoEnabled,
   isContactStep,
   isSendMode,
   hasSendEmailValue,
 }: {
   isChoiceStep: boolean;
   isPecActivating: boolean;
-  isIoStep: boolean;
-  isIoEnabled: boolean;
   isContactStep: boolean;
   isSendMode: boolean;
   hasSendEmailValue: boolean;
-}) =>
-  (!isChoiceStep || isPecActivating) &&
-  !(isIoStep && isIoEnabled) &&
-  !(isContactStep && isSendMode && !hasSendEmailValue);
+}) => (!isChoiceStep || isPecActivating) && !(isContactStep && isSendMode && !hasSendEmailValue);
 
 const getWizardActionsSlotProps = ({
   isChoiceStep,
@@ -142,7 +131,7 @@ const getWizardActionsSlotProps = ({
 }) =>
   isChoiceStep && !isPecActivating
     ? { sx: { display: 'none' } }
-    : { justifyContent: showNextButton ? 'space-between' : 'center' };
+    : { justifyContent: showNextButton ? 'space-between' : 'flex-start' };
 
 const DigitalDomicileWizard: React.FC = () => {
   const { t } = useTranslation(['recapiti', 'common']);
@@ -208,8 +197,6 @@ const DigitalDomicileWizard: React.FC = () => {
   const showNextButton = shouldShowNextButton({
     isChoiceStep,
     isPecActivating,
-    isIoStep,
-    isIoEnabled,
     isContactStep,
     isSendMode,
     hasSendEmailValue,
@@ -283,17 +270,16 @@ const DigitalDomicileWizard: React.FC = () => {
   };
 
   const getNextButtonLabel = () => {
-    if (isContactStep) {
+    if (isIoStep) {
+      return isIoEnabled
+        ? t('button.continue', { ns: 'common' })
+        : t('onboarding.digital-domicile.buttons.continue-without-io');
+    }
+    if (!isSummaryStep) {
       return t('button.continue', { ns: 'common' });
     }
-    if (isIoStep) {
-      return t('onboarding.digital-domicile.buttons.continue-without-io');
-    }
-    if (isSummaryStep) {
-      return t('onboarding.digital-domicile.buttons.confirm-activation');
-    }
 
-    return t('button.continue', { ns: 'common' });
+    return t('button.conferma', { ns: 'common' });
   };
 
   const handlePrevious = () => {
@@ -385,7 +371,9 @@ const DigitalDomicileWizard: React.FC = () => {
     }
 
     if (isIoStep) {
-      if (!isIoEnabled) {
+      if (isIoEnabled) {
+        trackDigitalDomicile(PFEventsType.SEND_ONBOARDING_IO_CONFIRMED);
+      } else {
         trackDigitalDomicile(PFEventsType.SEND_ONBOARDING_IO_DOWNLOAD_DECLINED);
       }
 
@@ -436,42 +424,6 @@ const DigitalDomicileWizard: React.FC = () => {
     );
   };
 
-  const getSendDisclaimer = () => (
-    <Typography mb={3} variant="body2" fontSize="14px" color="text.secondary">
-      <Trans
-        i18nKey="onboarding.digital-domicile.summary.disclaimer"
-        ns="recapiti"
-        components={[
-          <Link
-            key="privacy-policy"
-            sx={{
-              cursor: 'pointer',
-              textDecoration: 'none !important',
-              fontWeight: 'bold',
-            }}
-            data-testid="privacy-link"
-            href={PRIVACY_POLICY}
-            target="_blank"
-            rel="noopener"
-          />,
-
-          <Link
-            key="tos"
-            sx={{
-              cursor: 'pointer',
-              textDecoration: 'none !important',
-              fontWeight: 'bold',
-            }}
-            data-testid="tos-link"
-            href={TERMS_OF_SERVICE_SERCQ_SEND}
-            target="_blank"
-            rel="noopener"
-          />,
-        ]}
-      />
-    </Typography>
-  );
-
   const feedbackTitle = isPecMode
     ? t('onboarding.digital-domicile.feedback.pec.title')
     : t('onboarding.digital-domicile.feedback.send.title');
@@ -480,9 +432,7 @@ const DigitalDomicileWizard: React.FC = () => {
     ? t('onboarding.digital-domicile.feedback.pec.content')
     : t('onboarding.digital-domicile.feedback.send.content');
 
-  const contactStepLabel = isPecMode
-    ? t('onboarding.digital-domicile.steps.pec')
-    : t('onboarding.digital-domicile.steps.email');
+  const contactStepLabel = t('onboarding.digital-domicile.steps.generic-inbox');
 
   // Start Mixpanel
   const trackDigitalDomicile = useCallback(
@@ -622,7 +572,9 @@ const DigitalDomicileWizard: React.FC = () => {
           buttonText: t('button.understand', { ns: 'common' }),
           onClick: goToNotifications,
         },
-        belowStepContent: showSummaryDisclaimer ? getSendDisclaimer() : undefined,
+        belowStepContent: showSummaryDisclaimer ? (
+          <SercqSendDisclaimer i18nKey="onboarding.digital-domicile.summary.disclaimer" />
+        ) : undefined,
         ...(isChoiceStep || isIoStep
           ? {
               stepContainer: {

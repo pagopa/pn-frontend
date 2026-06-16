@@ -24,5 +24,11 @@ export function mixpanelInit(mixpanelToken: string, nodeEnv: string): void {
     property_blacklist: ['$current_url', '$initial_referrer', '$referrer'],
     debug: isLocal,
   });
+
   mixpanel.identify(mixpanel.get_distinct_id());
+
+  // Remove dirty data saved on localStorage
+  mixpanel.unregister('utm_source');
+  mixpanel.unregister('utm_campaign');
+  mixpanel.unregister('utm_medium');
 }

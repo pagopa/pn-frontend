@@ -42,29 +42,7 @@ describe('IoActivationWizard', () => {
     expect(queryByRole('button', { name: 'button.indietro' })).not.toBeInTheDocument();
   });
 
-  it('shows the enabled IO state when IO is already active', () => {
-    const { getByText, getByRole } = render(<IoActivationWizard />, {
-      preloadedState: {
-        contactsState: {
-          digitalAddresses: [
-            {
-              addressType: AddressType.COURTESY,
-              senderId: 'default',
-              channelType: ChannelType.IOMSG,
-              value: IOAllowedValues.ENABLED,
-            },
-          ],
-        },
-      },
-    });
-
-    expect(getByText(`${ioStepPrefix}.enabled.title`)).toBeInTheDocument();
-    expect(
-      getByRole('button', { name: `${ioStepPrefix}.enabled.primary-cta` })
-    ).toBeInTheDocument();
-  });
-
-  it('activates IO and shows the final feedback after continuing from the enabled state', async () => {
+  it('activates IO and shows the final feedback automatically', async () => {
     mock.onPost('/bff/v1/addresses/COURTESY/default/APPIO').reply(200, {
       result: 'OK',
     });
@@ -94,12 +72,6 @@ describe('IoActivationWizard', () => {
         value: 'APPIO',
         verificationCode: '00000',
       });
-    });
-
-    expect(await findByText(`${ioStepPrefix}.enabled.title`)).toBeInTheDocument();
-
-    await act(async () => {
-      fireEvent.click(getByRole('button', { name: `${ioStepPrefix}.enabled.primary-cta` }));
     });
 
     expect(await findByText(`${labelPrefix}.feedback.title`)).toBeInTheDocument();

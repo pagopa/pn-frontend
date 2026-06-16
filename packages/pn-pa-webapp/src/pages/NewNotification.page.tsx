@@ -1,9 +1,10 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { Alert, Box, Grid, Link, Step, StepLabel, Stepper, Typography } from '@mui/material';
+import { Box, Grid, Link, Step, StepLabel, Stepper } from '@mui/material';
 import { visuallyHidden } from '@mui/utils';
 import { PnBreadcrumb, Prompt, TitleBox, useIsMobile } from '@pagopa-pn/pn-commons';
+import { MIAlert } from '@pagopa/mui-italia';
 
 import Attachments from '../components/NewNotification/Attachments';
 import DebtPosition from '../components/NewNotification/DebtPosition';
@@ -12,12 +13,14 @@ import PreliminaryInformations from '../components/NewNotification/PreliminaryIn
 import Recipient from '../components/NewNotification/Recipient';
 import SyncFeedback from '../components/NewNotification/SyncFeedback';
 import { NewNotificationLangOther, PaymentModel } from '../models/NewNotification';
+import { PAEventsType } from '../models/PAEventsType';
 import * as routes from '../navigation/routes.const';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { createNewNotification } from '../redux/newNotification/actions';
 import { resetState, setSenderInfos } from '../redux/newNotification/reducers';
 import { RootState } from '../redux/store';
 import { getConfiguration } from '../services/configuration.service';
+import PAEventStrategyFactory from '../utility/MixpanelUtils/PAEventStrategyFactory';
 
 const SubTitle = () => {
   const { t } = useTranslation(['common', 'notifiche']);
@@ -32,6 +35,23 @@ const SubTitle = () => {
     </>
   );
 };
+
+const PAYMENT_ENABLED_STEP_EVENTS: Partial<Record<number, PAEventsType>> = {
+  0: PAEventsType.SEND_PA_PRELIMINARY_INFORMATION,
+  1: PAEventsType.SEND_PA_RECIPIENTS,
+  2: PAEventsType.SEND_PA_DEBT_POSITION,
+  3: PAEventsType.SEND_PA_DEBT_POSITION_DETAIL,
+  4: PAEventsType.SEND_PA_DOCUMENTATION,
+};
+
+const PAYMENT_DISABLED_STEP_EVENTS: Partial<Record<number, PAEventsType>> = {
+  0: PAEventsType.SEND_PA_PRELIMINARY_INFORMATION,
+  1: PAEventsType.SEND_PA_RECIPIENTS,
+  2: PAEventsType.SEND_PA_DOCUMENTATION,
+};
+
+const getStepEvent = (step: number, isPaymentEnabled: boolean): PAEventsType | undefined =>
+  (isPaymentEnabled ? PAYMENT_ENABLED_STEP_EVENTS : PAYMENT_DISABLED_STEP_EVENTS)[step];
 
 const NewNotification = () => {
   const [activeStep, setActiveStep] = useState(0);
@@ -62,7 +82,7 @@ const NewNotification = () => {
     // eslint-disable-next-line functional/immutable-data
     baseSteps.push(t('new-notification.steps.attachments.title', { ns: 'notifiche' }));
     return baseSteps;
-  }, []);
+  }, [t]);
 
   const hasDebtPosition =
     IS_PAYMENT_ENABLED &&
@@ -92,7 +112,10 @@ const NewNotification = () => {
     if (activeStep === steps.length - 1 && isCompleted) {
       void dispatch(createNewNotification(notification))
         .unwrap()
-        .then(() => setActiveStep((previousStep) => previousStep + 1))
+        .then(() => {
+          PAEventStrategyFactory.triggerEvent(PAEventsType.SEND_PA_NEW_NOTIFICATION_UX_SUCCESS);
+          setActiveStep((previousStep) => previousStep + 1);
+        })
         .catch(() => {
           /** Without this catch vitest return errors of unhandle errors.
            * The error is handled in other parts of the application with
@@ -128,6 +151,14 @@ const NewNotification = () => {
 
   useEffect(() => () => void dispatch(resetState()), []);
 
+  useEffect(() => {
+    const event = getStepEvent(activeStep, IS_PAYMENT_ENABLED);
+
+    if (event) {
+      PAEventStrategyFactory.triggerEvent(event);
+    }
+  }, [activeStep]);
+
   if (activeStep === steps.length) {
     return <SyncFeedback />;
   }
@@ -154,11 +185,14 @@ const NewNotification = () => {
               variantSubTitle="body1"
             ></TitleBox>
             {!IS_PAYMENT_ENABLED && (
-              <Alert role="alert" data-testid="alert" sx={{ mt: 3 }} severity={'warning'}>
-                <Typography component="span" variant="body1">
-                  {t('new-notification.warning-payment-disabled', { ns: 'notifiche' })}
-                </Typography>
-              </Alert>
+              <MIAlert
+                severity="warning"
+                data-testid="alert"
+                sx={{ mt: 3 }}
+                description={t('new-notification.warning-payment-disabled', {
+                  ns: 'notifiche',
+                })}
+              />
             )}
             <Stepper
               activeStep={activeStep}

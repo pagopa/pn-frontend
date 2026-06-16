@@ -13,18 +13,14 @@ const mockOpenFn = vi.fn();
 
 describe('TppLanding page', () => {
   const mockRetrievalId = '123456';
-  const original = globalThis.open;
 
   beforeEach(() => {
-    Object.defineProperty(globalThis, 'open', {
-      configurable: true,
-      value: mockOpenFn,
-    });
+    vi.stubGlobal('open', mockOpenFn);
   });
 
   afterEach(() => {
     vi.clearAllMocks();
-    Object.defineProperty(globalThis, 'open', { configurable: true, value: original });
+    vi.unstubAllGlobals();
   });
 
   it('should renders page with valid params', () => {

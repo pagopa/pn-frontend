@@ -9,7 +9,7 @@ import {
   AddressType,
   ChannelType,
   DigitalAddress,
-  IOContactStatus,
+  IOAllowedValues
 } from '../../../../models/contacts';
 import * as routes from '../../../../navigation/routes.const';
 import type { PfConfiguration } from '../../../../services/configuration.service';
@@ -223,7 +223,7 @@ describe('NotificationDetailOnboardingPrompt', () => {
           addressType: AddressType.COURTESY,
           channelType: ChannelType.IOMSG,
           senderId: 'default',
-          value: IOContactStatus.ENABLED,
+          value: IOAllowedValues.ENABLED,
         },
       ],
     });

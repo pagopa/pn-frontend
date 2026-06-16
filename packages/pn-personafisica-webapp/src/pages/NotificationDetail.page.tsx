@@ -6,13 +6,12 @@ import { Fragment, ReactNode, useCallback, useEffect, useMemo, useState } from '
 import { useTranslation } from 'react-i18next';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 
-import { Alert, AlertTitle, Box, Grid, Paper, Stack, Typography } from '@mui/material';
+import { Box, Grid, Paper, Stack, Typography } from '@mui/material';
 import {
   AccessDenied,
   ApiError,
   ApiErrorWrapper,
   AppResponse,
-  AppResponsePublisher,
   AppRouteParams,
   DeliveryOutcomeType,
   EventPaymentRecipientType,
@@ -20,6 +19,7 @@ import {
   IllusQuestion,
   LegalFactId,
   LegalFactType,
+  NotificationDetailBilingualFacsimileDocuments,
   NotificationDetailDocuments,
   NotificationDetailOtherDocument,
   NotificationDetailPayment,
@@ -45,6 +45,7 @@ import {
   useIsCancelled,
   useIsMobile,
 } from '@pagopa-pn/pn-commons';
+import { useDismissToastOnError } from '@pagopa-pn/pn-commons/src/hooks/useDismissToastOnError';
 import {
   EventDeliveryFlowType,
   EventDeliveryModeType,
@@ -102,6 +103,10 @@ const NotificationDetail: React.FC = () => {
     DOWNTIME_EXAMPLE_LINK,
     NOTIFICATION_COST_DETAILS_ASSISTANCE_LINK,
     NOTIFICATION_CANCELLED_HELP_LINK,
+    FACSIMILE_EN,
+    FACSIMILE_FR,
+    FACSIMILE_DE,
+    FACSIMILE_SL,
   } = getConfiguration();
   const navigate = useNavigate();
 
@@ -109,11 +114,15 @@ const NotificationDetail: React.FC = () => {
   const delegatorsFromStore = useAppSelector(
     (state: RootState) => state.generalInfoState.delegators
   );
-  const notification = useAppSelector((state: RootState) => state.notificationState.notification);
   const downtimeEvents = useAppSelector(
     (state: RootState) => state.notificationState.downtimeEvents
   );
+  const notification = useAppSelector((state: RootState) => state.notificationState.notification);
+  const notificationLanguage = notification.additionalLanguages?.[0] ?? 'IT';
+  const i18nLang = i18n.language.toUpperCase();
+  const isSameLang = notificationLanguage === i18nLang;
 
+  const showBilingualFacsimileSection = !isSameLang && i18nLang !== 'IT';
   const isCancelled = useIsCancelled({ notification });
   const isCancelledOrCancelling = isCancelled.cancelled || isCancelled.cancellationInProgress;
   const currentRecipient = notification?.currentRecipient;
@@ -460,20 +469,7 @@ const NotificationDetail: React.FC = () => {
     void dispatch(exchangeNotificationRetrievalId(currentUser.source.retrievalId));
   }, [currentUser, checkIfUserHasPayments]);
 
-  // Dismiss toast if error is PN_DELIVERY_USER_ID_NOT_RECIPIENT_OR_DELEGATOR
-  useEffect(() => {
-    AppResponsePublisher.error.subscribe(
-      NOTIFICATION_ACTIONS.GET_RECEIVED_NOTIFICATION,
-      handleUserInvalidError
-    );
-
-    return () => {
-      AppResponsePublisher.error.unsubscribe(
-        NOTIFICATION_ACTIONS.GET_RECEIVED_NOTIFICATION,
-        handleUserInvalidError
-      );
-    };
-  }, [handleUserInvalidError]);
+  useDismissToastOnError(NOTIFICATION_ACTIONS.GET_RECEIVED_NOTIFICATION, handleUserInvalidError);
 
   /* function which loads relevant information about donwtimes */
   const fetchDowntimeEvents = useCallback((fromDate: string, toDate: string | undefined) => {
@@ -527,19 +523,21 @@ const NotificationDetail: React.FC = () => {
   );
 
   const cancelledAlert = isCancelledOrCancelling && (
-    <Box sx={{ mb: { xs: 2, lg: 0 } }}>
-      <MIAlert
-        data-testid="cancelledAlertText"
-        severity="warning"
-        description={t('detail.cancelled.message', { ns: 'notifiche' })}
-        action={{
-          label: t('detail.cancelled.cta', { ns: 'notifiche' }),
-          href: NOTIFICATION_CANCELLED_HELP_LINK,
-          rel: 'noopener noreferrer',
-          target: '_blank',
-        }}
-      />
-    </Box>
+    <MIAlert
+      data-testid="cancelledAlertText"
+      severity="warning"
+      sx={{ mb: { xs: 2, lg: 0 } }}
+      description={t('detail.cancelled.message', { ns: 'notifiche' })}
+      action={{
+        label: t('detail.cancelled.cta', { ns: 'notifiche' }),
+        onClick: () => {
+          PFEventStrategyFactory.triggerEvent(
+            PFEventsType.SEND_CANCELLED_NOTIFICATION_REFOUND_INFO
+          );
+          window.open(NOTIFICATION_CANCELLED_HELP_LINK, '_blank', 'noopener noreferrer');
+        },
+      }}
+    />
   );
 
   const pecUnreachableAlert = isNotificationCostBanner &&
@@ -628,6 +626,21 @@ const NotificationDetail: React.FC = () => {
     );
   }
 
+  const getFacSimileLink = (): string | undefined => {
+    switch (i18n.language) {
+      case 'en':
+        return FACSIMILE_EN;
+      case 'fr':
+        return FACSIMILE_FR;
+      case 'de':
+        return FACSIMILE_DE;
+      case 'sl':
+        return FACSIMILE_SL;
+      default:
+        return undefined;
+    }
+  };
+
   return (
     <NotificationDetailOnboardingPrompt
       iun={notification.iun}
@@ -675,12 +688,13 @@ const NotificationDetail: React.FC = () => {
                       titleVariant="h6"
                     />
                     {notification.radd && (
-                      <Alert severity={'success'} sx={{ mb: 3, mt: 2 }} data-testid="raddAlert">
-                        <AlertTitle>
-                          {t('detail.timeline.radd.title', { ns: 'notifiche' })}
-                        </AlertTitle>
-                        {t('detail.timeline.radd.description', { ns: 'notifiche' })}
-                      </Alert>
+                      <MIAlert
+                        severity="success"
+                        data-testid="raddAlert"
+                        sx={{ mb: 3, mt: 2 }}
+                        title={t('detail.timeline.radd.title', { ns: 'notifiche' })}
+                        description={t('detail.timeline.radd.description', { ns: 'notifiche' })}
+                      />
                     )}
                   </Paper>
                   {checkIfUserHasPayments && (
@@ -705,6 +719,9 @@ const NotificationDetail: React.FC = () => {
                           timerF24={F24_DOWNLOAD_WAIT_TIME}
                           costDetailsAssistanceLink={NOTIFICATION_COST_DETAILS_ASSISTANCE_LINK}
                           costDetails={notification.notificationCostDetails}
+                          paymentTppUrlActionID={
+                            NOTIFICATION_ACTIONS.GET_RECEIVED_NOTIFICATION_PAYMENT_TPP_URL
+                          }
                         />
                       </ApiErrorWrapper>
                     </Paper>
@@ -734,6 +751,16 @@ const NotificationDetail: React.FC = () => {
                     disableDownloads={isCancelled.cancellationInTimeline}
                     downtimeExampleLink={DOWNTIME_EXAMPLE_LINK}
                   />
+                  {showBilingualFacsimileSection && (
+                    <Paper sx={{ p: 3 }} elevation={0}>
+                      <NotificationDetailBilingualFacsimileDocuments
+                        title={t('detail.bilingual.title', { ns: 'notifiche' })}
+                        description={t('detail.bilingual.description', { ns: 'notifiche' })}
+                        action={t('detail.bilingual.action', { ns: 'notifiche' })}
+                        link={getFacSimileLink()}
+                      />
+                    </Paper>
+                  )}
                 </Stack>
               </Grid>
               <Grid item lg={5} xs={12}>

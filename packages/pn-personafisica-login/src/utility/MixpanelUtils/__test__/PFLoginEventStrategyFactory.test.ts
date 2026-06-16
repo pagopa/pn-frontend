@@ -1,5 +1,6 @@
 import { PFLoginEventsType } from '../../../models/PFLoginEventsType';
 import PFLoginEventStrategyFactory from '../PFLoginEventStrategyFactory';
+import { SendIDPNotAvailableStrategy } from '../Strategies/SendIDPNotAvailableStrategy';
 import { SendIDPSelectedStrategy } from '../Strategies/SendIDPSelectedStrategy';
 import { SendLoginFailureStrategy } from '../Strategies/SendLoginFailureStrategy';
 import { SendLoginMethodStrategy } from '../Strategies/SendLoginMethodStrategy';
@@ -27,6 +28,12 @@ describe('Event Strategy Factory', () => {
   it('should return SendLoginMethodStrategy for SEND_LOGIN_METHOD event', () => {
     expect(factory.getStrategy(PFLoginEventsType.SEND_LOGIN_METHOD)).toBeInstanceOf(
       SendLoginMethodStrategy
+    );
+  });
+
+  it('should return SendIDPNotAvailableStrategy for SEND_IDP_NOT_AVAILABLE event', () => {
+    expect(factory.getStrategy(PFLoginEventsType.SEND_IDP_NOT_AVAILABLE)).toBeInstanceOf(
+      SendIDPNotAvailableStrategy
     );
   });
 

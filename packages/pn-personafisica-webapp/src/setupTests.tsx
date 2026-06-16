@@ -1,3 +1,4 @@
+/* eslint-disable functional/no-let */
 import { ReactNode } from 'react';
 import { vi } from 'vitest';
 
@@ -12,6 +13,19 @@ import { PfConfiguration } from './services/configuration.service';
 const { getComputedStyle } = window;
 // eslint-disable-next-line functional/immutable-data
 window.getComputedStyle = (elt) => getComputedStyle(elt);
+
+const originalWarn = console.warn;
+// eslint-disable-next-line functional/immutable-data
+console.warn = (...args) => {
+  if (typeof args[0] === 'string' && args[0].includes('React Router Future Flag Warning')) {
+    return;
+  }
+  originalWarn(...args);
+};
+
+export const mockLanguageConfig = {
+  current: 'it',
+};
 
 beforeAll(() => {
   Configuration.setForTest<PfConfiguration>({
@@ -44,9 +58,14 @@ beforeAll(() => {
       'https://fake.notification-cost-details-assistance.pagopa.it',
     SERCQ_SERVICE_STATEMENT_LINK: 'https://fake.sercq-service-statement.pagopa.it',
     IS_ONBOARDING_ENABLED: true,
+    FACSIMILE_EN: 'https://fake.facsimile-en.pagopa.it',
+    FACSIMILE_FR: 'https://fake.facsimile-fr.pagopa.it',
+    FACSIMILE_DE: 'https://fake.facsimile-de.pagopa.it',
+    FACSIMILE_SL: 'https://fake.facsimile-sl.pagopa.it',
   });
   initStore(false);
   initAxiosClients();
+
   // mock translations
   vi.mock('react-i18next', () => ({
     // this mock makes sure any components using the translate hook can use it without a warning being shown
@@ -58,7 +77,7 @@ beforeAll(() => {
         return str;
       },
       i18n: {
-        language: 'it',
+        language: mockLanguageConfig.current,
         changeLanguage: () => new Promise(() => {}),
       },
     }),

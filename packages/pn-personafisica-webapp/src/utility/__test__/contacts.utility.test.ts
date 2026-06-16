@@ -6,7 +6,7 @@ import {
   digitalAddressesSercq,
   digitalCourtesyAddresses,
 } from '../../__mocks__/Contacts.mock';
-import { AddressType, ChannelType, DigitalAddress, IOContactStatus } from '../../models/contacts';
+import { AddressType, ChannelType, DigitalAddress, IOAllowedValues } from '../../models/contacts';
 import { SelectedAddresses } from '../../redux/contact/reducers';
 import {
   contactAlreadyExists,
@@ -254,7 +254,7 @@ describe('Contacts utility test', () => {
         addressType: AddressType.COURTESY,
         channelType: ChannelType.IOMSG,
         senderId: 'default',
-        value: IOContactStatus.ENABLED,
+        value: IOAllowedValues.ENABLED,
       },
     ];
 
@@ -273,7 +273,7 @@ describe('Contacts utility test', () => {
         addressType: AddressType.COURTESY,
         channelType: ChannelType.IOMSG,
         senderId: 'default',
-        value: IOContactStatus.ENABLED,
+        value: IOAllowedValues.ENABLED,
       },
     ];
 

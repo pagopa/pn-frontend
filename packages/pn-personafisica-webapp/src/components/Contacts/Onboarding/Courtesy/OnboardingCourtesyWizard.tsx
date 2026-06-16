@@ -91,9 +91,14 @@ const OnboardingCourtesyWizard: React.FC = () => {
   const handleClickNextButton = async (step: number) => {
     trackContinueSelected();
 
-    if (isIoStep && !isIoEnabled) {
-      trackCourtesy(PFEventsType.SEND_ONBOARDING_IO_DOWNLOAD_DECLINED);
+    if (isIoStep) {
+      if (isIoEnabled) {
+        trackCourtesy(PFEventsType.SEND_ONBOARDING_IO_CONFIRMED);
+      } else {
+        trackCourtesy(PFEventsType.SEND_ONBOARDING_IO_DOWNLOAD_DECLINED);
+      }
     }
+
     if (step === 1) {
       const canProceed = await emailSmsContinueHandlerRef.current?.();
       if (canProceed !== true) {
@@ -115,6 +120,26 @@ const OnboardingCourtesyWizard: React.FC = () => {
         value,
       },
     }));
+  };
+
+  const getNextButtonLabel = () => {
+    if (!isIoStep) {
+      return undefined;
+    }
+
+    if (isIoEnabled) {
+      return t('button.continue', { ns: 'common' });
+    }
+
+    return t('onboarding.courtesy.proceed-without-io');
+  };
+
+  const getNextButtonVariant = () => {
+    if (isIoStep && !isIoEnabled) {
+      return 'outlined';
+    }
+
+    return 'contained';
   };
 
   // START Mixpanel
@@ -187,9 +212,9 @@ const OnboardingCourtesyWizard: React.FC = () => {
           onClick: goToNotifications,
         },
         nextButton: {
-          variant: isIoStep && !isIoEnabled ? 'outlined' : 'contained',
-          label: isIoStep && !isIoEnabled ? t('onboarding.courtesy.proceed-without-io') : undefined,
-          sx: isIoStep && isIoEnabled ? { display: 'none' } : { ml: { md: 'auto' } },
+          variant: getNextButtonVariant(),
+          label: getNextButtonLabel(),
+          sx: { ml: { md: 'auto' } },
           onClick: async (_, step) => await handleClickNextButton(step),
         },
         prevButton: {
@@ -209,7 +234,7 @@ const OnboardingCourtesyWizard: React.FC = () => {
     >
       <PnWizardStep label={t('onboarding.courtesy.step-1-label')}>
         <IoStep
-          value={defaultAPPIOAddress?.value as IOAllowedValues | undefined}
+          value={wizardState.io.value}
           onChange={(value) => updateContactValue('io', value)}
           onContinue={goToNextStep}
           selectedOnboardingFlow={OnboardingAvailableFlows.COURTESY}

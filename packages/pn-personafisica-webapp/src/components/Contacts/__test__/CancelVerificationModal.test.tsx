@@ -7,7 +7,7 @@ import CancelVerificationModal from '../CancelVerificationModal';
 
 const mockCloseHandler = vi.fn();
 
-describe('CancelVerificationModal component', async () => {
+describe('CancelVerificationModal component', () => {
   it('renders component and clicks on cancel button', () => {
     render(<CancelVerificationModal open handleClose={mockCloseHandler} />);
     const dialog = screen.getByTestId('cancelVerificationModal');

@@ -48,7 +48,7 @@ const initialState = {
   },
 };
 
-describe('DelegationsOfTheCompany Component', async () => {
+describe('DelegationsOfTheCompany Component', () => {
   let mock: MockAdapter;
 
   beforeAll(() => {

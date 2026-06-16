@@ -9,13 +9,8 @@ const handleOnSelect = vi.fn();
 const mockOpenFn = vi.fn();
 
 describe('SideMenuListItem', () => {
-  const original = window.open;
-
   beforeAll(() => {
-    Object.defineProperty(window, 'open', {
-      configurable: true,
-      value: mockOpenFn,
-    });
+    vi.stubGlobal('open', mockOpenFn);
   });
 
   afterEach(() => {
@@ -23,7 +18,7 @@ describe('SideMenuListItem', () => {
   });
 
   afterAll((): void => {
-    Object.defineProperty(window, 'open', { configurable: true, value: original });
+    vi.unstubAllGlobals();
   });
 
   it('renders component', () => {

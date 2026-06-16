@@ -11,3 +11,4 @@ export { useTracking } from './useTracking';
 export { useUnload } from './useUnload';
 export { useEventEmitter } from './useEventEmitter';
 export { useSafeDispatch } from './useSafeDispatch';
+export { useDismissToastOnError } from './useDismissToastOnError';

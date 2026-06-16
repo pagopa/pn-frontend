@@ -2,7 +2,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
-import { Alert, Box, Button, Typography } from '@mui/material';
+import { Box, Button, Typography } from '@mui/material';
 import {
   A11yMessage,
   ApiErrorWrapper,
@@ -15,12 +15,13 @@ import {
   useEventEmitter,
   useIsMobile,
 } from '@pagopa-pn/pn-commons';
-import { ButtonNaked } from '@pagopa/mui-italia';
+import { MIAlert } from '@pagopa/mui-italia';
 
 import DesktopNotifications from '../components/Notifications/DesktopNotifications';
 import FilterNotifications from '../components/Notifications/FilterNotifications';
 import MobileNotifications from '../components/Notifications/MobileNotifications';
 import NotificationSettingsDrawer from '../components/Notifications/NotificationSettingsDrawer';
+import { PAEventsType } from '../models/PAEventsType';
 import * as routes from '../navigation/routes.const';
 import { authSelectors } from '../redux/auth/reducers';
 import { DASHBOARD_ACTIONS, getSentNotifications } from '../redux/dashboard/actions';
@@ -29,6 +30,7 @@ import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { RootState } from '../redux/store';
 import { getConfiguration } from '../services/configuration.service';
 import { ServerResponseErrorCode } from '../utility/AppError/types';
+import PAEventStrategyFactory from '../utility/MixpanelUtils/PAEventStrategyFactory';
 
 const Dashboard = () => {
   const dispatch = useAppDispatch();
@@ -73,6 +75,7 @@ const Dashboard = () => {
 
   // route to Manual Send
   const handleRouteManualSend = () => {
+    PAEventStrategyFactory.triggerEvent(PAEventsType.SEND_PA_NEW_NOTIFICATION);
     navigate(routes.NUOVA_NOTIFICA);
   };
 
@@ -99,16 +102,14 @@ const Dashboard = () => {
         </Button>
       </Box>
     ) : (
-      <Alert
+      <MIAlert
         severity="warning"
-        action={
-          <ButtonNaked color="inherit" size="small" onClick={() => navigate(routes.APP_STATUS)}>
-            {t('manual-send-disabled-action')}
-          </ButtonNaked>
-        }
-      >
-        {t('manual-send-disabled-message')}
-      </Alert>
+        description={t('manual-send-disabled-message')}
+        action={{
+          label: t('manual-send-disabled-action'),
+          onClick: () => navigate(routes.APP_STATUS),
+        }}
+      />
     );
   };
 
@@ -122,7 +123,19 @@ const Dashboard = () => {
 
     setHasTimeoutError(false);
 
-    void dispatch(getSentNotifications(params));
+    dispatch(getSentNotifications(params))
+      .unwrap()
+      .then((data) => {
+        PAEventStrategyFactory.triggerEvent(PAEventsType.SEND_PA_HAS_NOTIFICATIONS, {
+          value: data.resultsPage.length > 0,
+        });
+
+        PAEventStrategyFactory.triggerEvent(PAEventsType.SEND_PA_NOTIFICATIONS, {
+          notifications: data.resultsPage,
+          pageNumber: pagination.page,
+        });
+      })
+      .catch(() => {});
   }, [filters, pagination.size, pagination.page, sort]);
 
   useEffect(() => {
