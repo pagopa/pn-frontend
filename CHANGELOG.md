@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.24.0-RC.3](https://github.com/pagopa/pn-frontend/compare/v2.24.0-RC.2...v2.24.0-RC.3) (2026-06-17)
+
+
+### Bug Fixes
+
+* **PN-15746:** clear PEC field on OTP modal close ([#1929](https://github.com/pagopa/pn-frontend/issues/1929)) ([1def9b9](https://github.com/pagopa/pn-frontend/commit/1def9b94ce9fbb7e326f92cba01f553b9acdc3ee))
+
+
+
+
+
 # [2.24.0-RC.2](https://github.com/pagopa/pn-frontend/compare/v2.24.0-RC.1...v2.24.0-RC.2) (2026-06-16)
 
 
