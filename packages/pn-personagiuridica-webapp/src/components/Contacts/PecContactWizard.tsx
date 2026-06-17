@@ -115,6 +115,7 @@ const PecContactWizard: React.FC<Props> = ({
   const handleCloseCodeModal = () => {
     setOpenCodeModal(false);
     formik.setFieldValue('pec', '');
+    formik.setFieldTouched('pec', false, false);
   };
 
   return (

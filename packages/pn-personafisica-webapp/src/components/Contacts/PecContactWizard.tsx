@@ -133,7 +133,8 @@ const PecContactWizard: React.FC<Props> = ({
   const handleCloseCodeModal = () => {
     PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SERCQ_SEND_PEC_OTP_BACK);
     setOpenCodeModal(false);
-    formik.setFieldValue('pec', '');
+    formik.setFieldValue('pec', '', false);
+    formik.setFieldTouched('pec', false, false);
   };
 
   const handleSubmitForm = async () => {
