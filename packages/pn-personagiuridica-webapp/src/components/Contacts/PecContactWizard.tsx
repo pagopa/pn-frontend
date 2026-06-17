@@ -58,11 +58,13 @@ const PecContactWizard: React.FC<Props> = ({
     disclaimer: yup.bool().isTrue(t('required-field', { ns: 'common' })),
   });
 
+  const initialValues = {
+    pec: '',
+    disclaimer: false,
+  };
+
   const formik = useFormik({
-    initialValues: {
-      pec: '',
-      disclaimer: false,
-    },
+    initialValues,
     validationSchema,
     validateOnMount: true,
     enableReinitialize: true,
@@ -114,8 +116,8 @@ const PecContactWizard: React.FC<Props> = ({
 
   const handleCloseCodeModal = () => {
     setOpenCodeModal(false);
-    formik.setFieldValue('pec', '');
-    formik.setFieldTouched('pec', false, false);
+    void formik.setFieldValue('pec', '');
+    void formik.setFieldTouched('pec', false, false);
   };
 
   return (
