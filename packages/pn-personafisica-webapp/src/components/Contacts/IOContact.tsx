@@ -212,6 +212,7 @@ const IOContact: React.FC = () => {
     <PnInfoCard
       title={
         <Typography
+          component="span"
           variant="h6"
           fontSize={{ xs: '22px', lg: '24px' }}
           fontWeight={700}
@@ -223,6 +224,7 @@ const IOContact: React.FC = () => {
       }
       subtitle={
         <Chip
+          component="span"
           label={t(`status.${isAppIOEnabled ? 'active' : 'inactive'}`, { ns: 'recapiti' })}
           color={getChipColor()}
           size="small"
@@ -232,20 +234,17 @@ const IOContact: React.FC = () => {
       actions={
         isAppIOEnabled
           ? [
-              <Button
-                key="disable"
-                variant="naked"
-                color="error"
-                startIcon={<PowerSettingsNewIcon />}
-                onClick={handleOpenDeleteModal}
-                sx={{ p: '10px 16px' }}
-              >
-                {t('button.disable')}
-              </Button>,
+              {
+                key: 'disable',
+                label: t('button.disable'),
+                icon: <PowerSettingsNewIcon />,
+                destructive: true,
+                onClick: handleOpenDeleteModal,
+              },
             ]
           : undefined
       }
-      expanded={isAppIOEnabled}
+      mobileCollapsible={!isAppIOEnabled}
       slotProps={{ Card: { id: 'ioContactSection' } }}
     >
       <Stack direction="row" alignItems="center" data-testid="ioContact">

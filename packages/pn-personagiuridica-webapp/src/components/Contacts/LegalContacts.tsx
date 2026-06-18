@@ -125,7 +125,7 @@ const LegalContacts = () => {
         color: 'success',
       };
     }
-    return <Chip {...params} sx={{ mb: 2 }} />;
+    return <Chip component="span" {...params} sx={{ mb: 2 }} />;
   };
 
   const deleteConfirmHandler = () => {
@@ -166,31 +166,24 @@ const LegalContacts = () => {
   const getActions = () =>
     isActive
       ? [
-          <Button
-            key="manage"
-            variant="naked"
-            color="primary"
-            startIcon={<ConstructionIcon />}
-            onClick={() => navigate(DIGITAL_DOMICILE_MANAGEMENT)}
-            sx={{ p: '10px 16px' }}
-          >
-            {t('button.manage')}
-          </Button>,
-          <Button
-            key="disable"
-            variant="naked"
-            color="error"
-            startIcon={<PowerSettingsNewIcon />}
-            onClick={() => {
+          {
+            key: 'manage',
+            label: t('button.manage'),
+            icon: <ConstructionIcon />,
+            onClick: () => navigate(DIGITAL_DOMICILE_MANAGEMENT),
+          },
+          {
+            key: 'disable',
+            label: t('button.disable'),
+            icon: <PowerSettingsNewIcon />,
+            destructive: true,
+            onClick: () => {
               PGEventStrategyFactory.triggerEvent(
                 PGEventsType.SEND_PG_REMOVE_DIGITAL_DOMICILE_START
               );
               setModalOpen(true);
-            }}
-            sx={{ p: '10px 16px' }}
-          >
-            {t('button.disable')}
-          </Button>,
+            },
+          },
         ]
       : undefined;
 
@@ -200,6 +193,7 @@ const LegalContacts = () => {
     <PnInfoCard
       title={
         <Typography
+          component="span"
           variant="h6"
           fontSize={{ xs: '22px', lg: '24px' }}
           fontWeight={700}
@@ -211,7 +205,7 @@ const LegalContacts = () => {
       }
       subtitle={getSubtitle()}
       actions={getActions()}
-      expanded={isActive}
+      mobileCollapsible={!isActive}
       slotProps={{ Card: { 'data-testid': 'legalContacts' } }}
     >
       {(isValidatingPec || hasPecActive) && <PecContactItem />}
