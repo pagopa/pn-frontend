@@ -97,6 +97,9 @@ export const mapNotificationListToEventPayload = ({
   effective_date_count: notifications.filter(
     (notification) => notification.notificationStatus === NotificationStatus.EFFECTIVE_DATE
   ).length,
+  filed_count: notifications.filter(
+    (notification) => notification.notificationStatus === NotificationStatus.ACCEPTED
+  ).length,
   ...(domicileBannerType && { banner: domicileBannerType }),
 });
 

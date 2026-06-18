@@ -58,11 +58,13 @@ const PecContactWizard: React.FC<Props> = ({
     disclaimer: yup.bool().isTrue(t('required-field', { ns: 'common' })),
   });
 
+  const initialValues = {
+    pec: '',
+    disclaimer: false,
+  };
+
   const formik = useFormik({
-    initialValues: {
-      pec: '',
-      disclaimer: false,
-    },
+    initialValues,
     validationSchema,
     validateOnMount: true,
     enableReinitialize: true,
@@ -110,6 +112,12 @@ const PecContactWizard: React.FC<Props> = ({
     } else {
       return !IS_DOD_ENABLED ? navigate(-1) : setShowPecWizard(false);
     }
+  };
+
+  const handleCloseCodeModal = () => {
+    setOpenCodeModal(false);
+    void formik.setFieldValue('pec', '');
+    void formik.setFieldTouched('pec', false, false);
   };
 
   return (
@@ -246,7 +254,7 @@ const PecContactWizard: React.FC<Props> = ({
         channelType={ChannelType.PEC}
         open={openCodeModal}
         onConfirm={(code) => handleCodeVerification(code)}
-        onDiscard={() => setOpenCodeModal(false)}
+        onDiscard={handleCloseCodeModal}
       />
     </>
   );

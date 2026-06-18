@@ -56,7 +56,9 @@ const PublicKeys: React.FC = () => {
 
   const handleGeneratePublicKey = (publicKeyId?: string) => {
     if (!publicKeyId) {
-      PGEventStrategyFactory.triggerEvent(PGEventsType.SEND_PG_ADD_API_START);
+      PGEventStrategyFactory.triggerEvent(PGEventsType.SEND_PG_ADD_API_START, {
+        API_type: 'public',
+      });
     }
     handleCloseModal();
     const pathStr = publicKeyId ? `/${publicKeyId}` : '';

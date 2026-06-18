@@ -41,7 +41,6 @@ import {
   downloadDocument,
   formatDate,
   getPaymentCache,
-  getSessionLanguage,
   useErrors,
   useIsCancelled,
   useIsMobile,
@@ -115,15 +114,15 @@ const NotificationDetail: React.FC = () => {
   const delegatorsFromStore = useAppSelector(
     (state: RootState) => state.generalInfoState.delegators
   );
-  const notification = useAppSelector((state: RootState) => state.notificationState.notification);
-  const notificationLanguage = notification.additionalLanguages?.[0] ?? 'IT';
-  const sessionLang = getSessionLanguage()?.toUpperCase();
-  const isSameLang = notificationLanguage?.includes(sessionLang);
   const downtimeEvents = useAppSelector(
     (state: RootState) => state.notificationState.downtimeEvents
   );
+  const notification = useAppSelector((state: RootState) => state.notificationState.notification);
+  const notificationLanguage = notification.additionalLanguages?.[0] ?? 'IT';
+  const i18nLang = i18n.language.toUpperCase();
+  const isSameLang = notificationLanguage === i18nLang;
 
-  const showBilingualFacsimileSection = !isSameLang && sessionLang !== 'IT';
+  const showBilingualFacsimileSection = !isSameLang && i18nLang !== 'IT';
   const isCancelled = useIsCancelled({ notification });
   const isCancelledOrCancelling = isCancelled.cancelled || isCancelled.cancellationInProgress;
   const currentRecipient = notification?.currentRecipient;
@@ -627,18 +626,18 @@ const NotificationDetail: React.FC = () => {
     );
   }
 
-  const getFacSimileLink = (): string => {
-    switch (sessionLang) {
-      case 'EN':
+  const getFacSimileLink = (): string | undefined => {
+    switch (i18n.language) {
+      case 'en':
         return FACSIMILE_EN;
-      case 'FR':
+      case 'fr':
         return FACSIMILE_FR;
-      case 'DE':
+      case 'de':
         return FACSIMILE_DE;
-      case 'SL':
+      case 'sl':
         return FACSIMILE_SL;
       default:
-        return FACSIMILE_EN;
+        return undefined;
     }
   };
 

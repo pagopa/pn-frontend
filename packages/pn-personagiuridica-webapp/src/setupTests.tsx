@@ -26,6 +26,10 @@ console.warn = (...args) => {
   originalWarn(...args);
 };
 
+export const mockLanguageConfig = {
+  current: 'it',
+};
+
 beforeAll(async () => {
   Configuration.setForTest<PgConfiguration>({
     API_BASE_URL: 'https://webapi.test.notifichedigitali.it/',
@@ -73,7 +77,7 @@ beforeAll(async () => {
         return str;
       },
       i18n: {
-        language: 'it',
+        language: mockLanguageConfig.current,
         changeLanguage: () => new Promise(() => {}),
       },
     }),

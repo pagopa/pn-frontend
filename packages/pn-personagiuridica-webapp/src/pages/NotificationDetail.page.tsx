@@ -33,7 +33,6 @@ import {
   downloadDocument,
   formatDate,
   getPaymentCache,
-  getSessionLanguage,
   useErrors,
   useHasPermissions,
   useIsCancelled,
@@ -99,6 +98,10 @@ const NotificationDetail = () => {
     DOWNTIME_EXAMPLE_LINK,
     NOTIFICATION_CANCELLED_HELP_LINK,
     NOTIFICATION_COST_DETAILS_ASSISTANCE_LINK,
+    FACSIMILE_EN,
+    FACSIMILE_FR,
+    FACSIMILE_DE,
+    FACSIMILE_SL,
   } = getConfiguration();
   const navigate = useNavigate();
 
@@ -106,15 +109,15 @@ const NotificationDetail = () => {
   const role = currentUser.organization?.roles ? currentUser.organization?.roles[0] : null;
 
   const userHasAdminPermissions = useHasPermissions(role ? [role.role] : [], [PNRole.ADMIN]);
-  const notification = useAppSelector((state: RootState) => state.notificationState.notification);
-  const notificationLanguage = notification.additionalLanguages?.[0] ?? 'IT';
-  const sessionLang = getSessionLanguage()?.toUpperCase();
-  const isSameLang = notificationLanguage?.includes(sessionLang);
-
-  const showBilingualFacsimileSection = !isSameLang && sessionLang !== 'IT';
   const downtimeEvents = useAppSelector(
     (state: RootState) => state.notificationState.downtimeEvents
   );
+  const notification = useAppSelector((state: RootState) => state.notificationState.notification);
+  const notificationLanguage = notification.additionalLanguages?.[0] ?? 'IT';
+  const i18nLang = i18n.language.toUpperCase();
+  const isSameLang = notificationLanguage === i18nLang;
+
+  const showBilingualFacsimileSection = !isSameLang && i18nLang !== 'IT';
 
   const currentRecipient = notification?.currentRecipient;
   const isCancelled = useIsCancelled({ notification });
@@ -542,6 +545,21 @@ const NotificationDetail = () => {
     }
   };
 
+  const getFacSimileLink = (): string | undefined => {
+    switch (i18n.language) {
+      case 'en':
+        return FACSIMILE_EN;
+      case 'fr':
+        return FACSIMILE_FR;
+      case 'de':
+        return FACSIMILE_DE;
+      case 'sl':
+        return FACSIMILE_SL;
+      default:
+        return undefined;
+    }
+  };
+
   return (
     <LoadingPageWrapper isInitialized={pageReady}>
       {hasNotificationReceivedApiError && (
@@ -650,6 +668,7 @@ const NotificationDetail = () => {
                       title={t('detail.bilingual.title', { ns: 'notifiche' })}
                       description={t('detail.bilingual.description', { ns: 'notifiche' })}
                       action={t('detail.bilingual.action', { ns: 'notifiche' })}
+                      link={getFacSimileLink()}
                     />
                   </Paper>
                 )}
