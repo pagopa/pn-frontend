@@ -23,7 +23,7 @@ export const mapNotificationListToEventPayload = ({
     (notification) => notification.notificationStatus === NotificationStatus.VIEWED
   ).length,
   not_found_count: notifications.filter(
-    (notification) => notification.notificationStatus === NotificationStatus.RETURNED_TO_SENDER
+    (notification) => notification.notificationStatus === NotificationStatus.UNREACHABLE
   ).length,
   cancelled_count: notifications.filter(
     (notification) => notification.notificationStatus === NotificationStatus.CANCELLED
@@ -36,6 +36,9 @@ export const mapNotificationListToEventPayload = ({
   ).length,
   sending_count: notifications.filter(
     (notification) => notification.notificationStatus === NotificationStatus.DELIVERING
+  ).length,
+  back_to_sender_count: notifications.filter(
+    (notification) => notification.notificationStatus === NotificationStatus.RETURNED_TO_SENDER
   ).length,
 });
 
