@@ -100,6 +100,12 @@ export const mapNotificationListToEventPayload = ({
   filed_count: notifications.filter(
     (notification) => notification.notificationStatus === NotificationStatus.ACCEPTED
   ).length,
+  sending_count: notifications.filter(
+    (notification) => notification.notificationStatus === NotificationStatus.DELIVERING
+  ).length,
+  back_to_sender_count: notifications.filter(
+    (notification) => notification.notificationStatus === NotificationStatus.RETURNED_TO_SENDER
+  ).length,
   ...(domicileBannerType && { banner: domicileBannerType }),
 });
 

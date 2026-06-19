@@ -135,6 +135,8 @@ export type PGNotificationsListPayload = {
   cancelled_count: number;
   effective_date_count: number;
   filed_count: number;
+  sending_count: number;
+  back_to_sender_count: number;
   banner?: string;
 };
 
