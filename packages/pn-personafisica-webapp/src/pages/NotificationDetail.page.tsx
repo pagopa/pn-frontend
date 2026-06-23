@@ -2,11 +2,11 @@
 
 /* eslint-disable complexity */
 import { isObject } from 'lodash-es';
-import { Fragment, ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
+import { Fragment, useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 
-import { Box, Grid, Paper, Stack, Typography } from '@mui/material';
+import { Box, Grid, Paper, Stack } from '@mui/material';
 import {
   AccessDenied,
   ApiError,
@@ -17,15 +17,10 @@ import {
   EventPaymentRecipientType,
   GetDowntimeHistoryParams,
   IllusQuestion,
-  LegalFactId,
-  LegalFactType,
   NotificationDetailBilingualFacsimileDocuments,
   NotificationDetailDocuments,
   NotificationDetailOtherDocument,
   NotificationDetailPayment,
-  NotificationDetailTable,
-  NotificationDetailTableRow,
-  NotificationDetailTimeline,
   NotificationDocumentType,
   NotificationFeePolicy,
   NotificationPaymentRecipient,
@@ -35,11 +30,9 @@ import {
   PaymentDetails,
   PnBreadcrumb,
   StatusHistoryParser,
-  TitleBox,
   appStateActions,
   dateIsLessThan10Years,
   downloadDocument,
-  formatDate,
   getPaymentCache,
   useErrors,
   useIsCancelled,
@@ -55,6 +48,7 @@ import { MIAlert } from '@pagopa/mui-italia';
 import NotificationDetailOnboardingPrompt from '../components/Contacts/Onboarding/NotificationDetailOnboardingPrompt';
 import DomicileBanner from '../components/DomicileBanner/DomicileBanner';
 import LoadingPageWrapper from '../components/LoadingPageWrapper/LoadingPageWrapper';
+import AbstractPaper from '../components/Notifications/AbstractPaper';
 import { NotificationCostBanner } from '../components/Notifications/NotificationCostBanner';
 import { NotificationDetailRouteState } from '../models/NotificationDetail';
 import { PFEventsType } from '../models/PFEventsType';
@@ -129,46 +123,6 @@ const NotificationDetail: React.FC = () => {
 
   const userPayments = useAppSelector((state: RootState) => state.notificationState.paymentsData);
   const paymentTpp = useAppSelector((state: RootState) => state.generalInfoState.paymentTpp);
-
-  const unfilteredDetailTableRows: Array<{
-    label: string;
-    rawValue: string | undefined;
-    value: ReactNode;
-  }> = [
-    {
-      label: t('detail.sender', { ns: 'notifiche' }),
-      rawValue: notification.senderDenomination,
-      value: <Box fontWeight={600}>{notification.senderDenomination}</Box>,
-    },
-    {
-      label: t('detail.recipient', { ns: 'notifiche' }),
-      rawValue: currentRecipient?.denomination,
-      value: <Box fontWeight={600}>{currentRecipient?.denomination}</Box>,
-    },
-    {
-      label: t('detail.date', { ns: 'notifiche' }),
-      rawValue: formatDate(notification.sentAt),
-      value: <Box fontWeight={600}>{formatDate(notification.sentAt)}</Box>,
-    },
-    {
-      label: t('detail.iun', { ns: 'notifiche' }),
-      rawValue: notification.iun,
-      value: <Box fontWeight={600}>{notification.iun}</Box>,
-    },
-    {
-      label: t('detail.cancelled-iun', { ns: 'notifiche' }),
-      rawValue: notification.cancelledIun,
-      value: <Box fontWeight={600}>{notification.cancelledIun}</Box>,
-    },
-  ];
-
-  const detailTableRows: Array<NotificationDetailTableRow> = unfilteredDetailTableRows
-    .filter((row) => row.rawValue)
-    .map((row, index) => ({
-      id: index + 1,
-      label: row.label,
-      value: row.value,
-    }));
 
   const checkIfUserHasPayments: boolean =
     !!currentRecipient.payments && currentRecipient.payments.length > 0;
@@ -263,44 +217,44 @@ const NotificationDetail: React.FC = () => {
     }
   };
 
-  const legalFactDownloadHandler = (legalFact: LegalFactId) => {
-    if (legalFact.category !== LegalFactType.NOTIFICATION_CANCELLED && isCancelledOrCancelling) {
-      return;
-    }
-    if (legalFact.category !== 'AAR') {
-      // Legal fact case
-      dispatch(
-        getReceivedNotificationDocument({
-          iun: notification.iun,
-          documentType: NotificationDocumentType.LEGAL_FACT,
-          documentId: legalFact.key.substring(legalFact.key.lastIndexOf('/') + 1),
-          mandateId,
-        })
-      )
-        .unwrap()
-        .then(showInfoMessageIfRetryAfterOrDownload)
-        .catch(() => {});
-      PFEventStrategyFactory.triggerEvent(
-        PFEventsType.SEND_DOWNLOAD_CERTIFICATE_OPPOSABLE_TO_THIRD_PARTIES,
-        {
-          source: 'dettaglio_notifica',
-        }
-      );
-    } else {
-      // AAR in timeline case
-      dispatch(
-        getReceivedNotificationDocument({
-          iun: notification.iun,
-          documentType: NotificationDocumentType.AAR,
-          documentId: legalFact.key,
-          mandateId,
-        })
-      )
-        .unwrap()
-        .then(showInfoMessageIfRetryAfterOrDownload)
-        .catch(() => {});
-    }
-  };
+  // const legalFactDownloadHandler = (legalFact: LegalFactId) => {
+  //   if (legalFact.category !== LegalFactType.NOTIFICATION_CANCELLED && isCancelledOrCancelling) {
+  //     return;
+  //   }
+  //   if (legalFact.category !== 'AAR') {
+  //     // Legal fact case
+  //     dispatch(
+  //       getReceivedNotificationDocument({
+  //         iun: notification.iun,
+  //         documentType: NotificationDocumentType.LEGAL_FACT,
+  //         documentId: legalFact.key.substring(legalFact.key.lastIndexOf('/') + 1),
+  //         mandateId,
+  //       })
+  //     )
+  //       .unwrap()
+  //       .then(showInfoMessageIfRetryAfterOrDownload)
+  //       .catch(() => {});
+  //     PFEventStrategyFactory.triggerEvent(
+  //       PFEventsType.SEND_DOWNLOAD_CERTIFICATE_OPPOSABLE_TO_THIRD_PARTIES,
+  //       {
+  //         source: 'dettaglio_notifica',
+  //       }
+  //     );
+  //   } else {
+  //     // AAR in timeline case
+  //     dispatch(
+  //       getReceivedNotificationDocument({
+  //         iun: notification.iun,
+  //         documentType: NotificationDocumentType.AAR,
+  //         documentId: legalFact.key,
+  //         mandateId,
+  //       })
+  //     )
+  //       .unwrap()
+  //       .then(showInfoMessageIfRetryAfterOrDownload)
+  //       .catch(() => {});
+  //   }
+  // };
 
   const getPaymentAttachmentAction = (name: PaymentAttachmentSName, attachmentIdx?: number) =>
     dispatch(
@@ -512,15 +466,7 @@ const NotificationDetail: React.FC = () => {
     );
   }, [rapidAccessSource, i18n.language]);
 
-  const breadcrumb = (
-    <Fragment>
-      {properBreadcrumb}
-      <TitleBox variantTitle="h4" title={notification.subject} sx={{ pt: 3, mb: 2 }} mbTitle={0} />
-      <Typography variant="body1" mb={{ xs: 3, md: 4 }} sx={{ overflowWrap: 'anywhere' }}>
-        {notification.abstract}
-      </Typography>
-    </Fragment>
-  );
+  const breadcrumb = <Fragment>{properBreadcrumb}</Fragment>;
 
   const cancelledAlert = isCancelledOrCancelling && (
     <MIAlert
@@ -556,12 +502,6 @@ const NotificationDetail: React.FC = () => {
   const reloadPaymentsInfo = (data: Array<NotificationDetailPayment>) => {
     fetchPaymentsInfo(data);
     PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_PAYMENT_DETAIL_REFRESH);
-  };
-
-  const trackShowMoreLess = (collapsed: boolean) => {
-    PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_NOTIFICATION_STATUS_DETAIL, {
-      accordion: collapsed ? 'collapsed' : 'expanded',
-    });
   };
 
   const getFlowType = (): EventDeliveryFlowType => {
@@ -660,22 +600,21 @@ const NotificationDetail: React.FC = () => {
         )}
         {!hasNotificationReceivedApiError && (
           <Box sx={{ p: { xs: 3, lg: 0 } }}>
-            {isMobile && breadcrumb}
-            {isMobile && pecUnreachableAlert}
-            {isMobile && cancelledAlert}
-            <Grid
-              container
-              direction={isMobile ? 'column-reverse' : 'row'}
-              spacing={isMobile ? 3 : 0}
-            >
-              <Grid item lg={7} xs={12} sx={{ p: { xs: 0, lg: 3 } }}>
-                {!isMobile && breadcrumb}
+            <Grid container direction={isMobile ? 'column' : 'row'}>
+              <Grid item lg={7} xs={12} sx={{ p: { xs: 0, lg: 3 }, pb: { xs: 3 } }}>
+                {breadcrumb}
+                {pecUnreachableAlert}
+                {cancelledAlert}
+                {banner}
+                <AbstractPaper
+                  title={notification.subject}
+                  senderPaId={notification.senderPaId}
+                  senderDenomination={notification.senderDenomination}
+                  sentAt={notification.sentAt}
+                  iun={notification.iun}
+                  abstract={notification.abstract}
+                />
                 <Stack spacing={3}>
-                  {!isMobile && cancelledAlert}
-                  {!isMobile && pecUnreachableAlert}
-                  {!isMobile && banner}
-
-                  <NotificationDetailTable rows={detailTableRows} />
                   <Paper sx={{ p: 3 }} elevation={0}>
                     <NotificationDetailDocuments
                       title={t('detail.acts', { ns: 'notifiche' })}
@@ -763,25 +702,12 @@ const NotificationDetail: React.FC = () => {
                   )}
                 </Stack>
               </Grid>
-              <Grid item lg={5} xs={12}>
-                {isMobile && banner}
+              <Grid item lg={5} xs={12} component="aside">
                 <Box
                   component="section"
                   sx={{ backgroundColor: 'white', height: '100%', p: 3, pb: { xs: 0, lg: 3 } }}
                 >
-                  <NotificationDetailTimeline
-                    language={i18n.language}
-                    recipients={notification.recipients}
-                    statusHistory={notification.notificationStatusHistory}
-                    title={t('detail.timeline-title', { ns: 'notifiche' })}
-                    clickHandler={legalFactDownloadHandler}
-                    historyButtonLabel={t('detail.show-history', { ns: 'notifiche' })}
-                    showMoreButtonLabel={t('detail.show-more', { ns: 'notifiche' })}
-                    showLessButtonLabel={t('detail.show-less', { ns: 'notifiche' })}
-                    handleTrackShowMoreLess={trackShowMoreLess}
-                    disableDownloads={isCancelled.cancellationInTimeline}
-                    isParty={false}
-                  />
+                  hello
                 </Box>
               </Grid>
             </Grid>

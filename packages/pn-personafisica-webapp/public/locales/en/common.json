@@ -1,4 +1,6 @@
 {
+  "iun": "IUN code",
+  "logo": "Logo of",
   "button": {
     "filtra": "Filter",
     "annulla filtro": "Remove filters",
@@ -74,7 +76,19 @@
   },
   "date-time": {
     "today-uppercase-initial": "Today",
-    "hour-of-day": "o'clock"
+    "hour-of-day": "o'clock",
+    "january": "January",
+    "february": "February",
+    "march": "March",
+    "april": "April",
+    "may": "May",
+    "june": "June",
+    "july": "July",
+    "august": "August",
+    "september": "September",
+    "october": "October",
+    "november": "November",
+    "december": "December"
   },
   "error-boundary": {
     "title": "Something went wrong",
@@ -236,7 +250,13 @@
     "action": "Keep access"
   },
   "code-modal": {
-    "digits": ["first digit", "second digit", "third digit", "fourth digit", "last digit"]
+    "digits": [
+      "first digit",
+      "second digit",
+      "third digit",
+      "fourth digit",
+      "last digit"
+    ]
   },
   "user-validation-failed": {
     "title": "The data entered is invalid",
