@@ -421,11 +421,11 @@
     "returned-to-sender-tooltip-multirecipient": "All recipients are deceased",
     "returned-to-sender-description": "The recipient is deceased.",
     "returned-to-sender-description-multirecipient": "All recipients are deceased.",
-    "notification-timeline-reworked": "Updated event or events",
-    "notification-timeline-reworked-tooltip": "Updated event or events",
-    "notification-timeline-reworked-description": "Events marked as INVALIDATED EVENT are not to be considered as they have been replaced by the subsequent events marked as VALIDATED EVENT.",
-    "reworked-status-valid": "Validated event",
-    "reworked-status-not-valid": "Invalidated event",
+    "notification-timeline-reworked": "One or more events updated",
+    "notification-timeline-reworked-tooltip": "One or more events updated",
+    "notification-timeline-reworked-description": "Events marked as rectified replace the previous events indicated as invalid.",
+    "reworked-status-valid": "Rectified event",
+    "reworked-status-not-valid": "Invalid event",
     "cancellation-in-progress": "Cancelled",
     "cancellation-in-progress-tooltip": "Cancellation in progress. The status will be updated shortly.",
     "cancellation-in-progress-description": "Cancellation in progress. The status will be updated shortly."
@@ -503,6 +503,7 @@
         "pec-address": "PEC Address",
         "add-physical-domicile": "Add a physical address",
         "address": "Address",
+        "physical-address": "Physical address",
         "house-number": "House number",
         "municipality-details": "Location",
         "municipality": "Municipality",
@@ -518,18 +519,18 @@
         "address-physical-lookup-radios": {
           "national-registry": "Automatic entry from national registry",
           "manual": "Manual entry"
-        }
+        },
+        "recipient-info-subtitle": "This information will help the recipient understand the content and importance of the communication."
       },
       "attachments": {
         "title": "Documentation",
         "max-attachments": "These are the documents that will be notified via SEND to all recipients. You can attach up to a maximum of {{maxNumber}} documents.",
         "attach-for-recipients": "Attached documents",
-        "act-attachment": "Attach document",
+        "act-attachment": "Attach the documents to be notified",
         "doc-attachment": "Attach another document",
         "act-name": "Act name",
         "doc-name": "Document title",
-        "add-doc": "Add a document",
-        "add-another-doc": "Add another document",
+        "add-doc": "Add document",
         "back-to-recipient": "Back to Recipient",
         "back-to-debt-position": "Back to Debt position",
         "back-to-debt-position-detail": "Back to Debt position detail",

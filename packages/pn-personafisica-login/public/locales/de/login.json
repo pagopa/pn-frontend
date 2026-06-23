@@ -1,7 +1,8 @@
 {
   "loginPage": {
-    "title": "Wie möchtest du dich anmelden?",
-    "description": "Wähle deine bevorzugte Methode.",
+    "title": "Zugriff auf SEND für Ihre rechtsverbindlichen Mitteilungen",
+    "description": "Wählen Sie die gewünschte Zugriffsmethode. ",
+    "missing-spid-cie": "Hast du kein SPID oder CIE? <0>Mehr erfahren</0>",
     "loginBox": {
       "title": "Anmelden",
       "spidLogin": "Mit SPID anmelden",
@@ -11,7 +12,8 @@
   "spidSelect": {
     "title": "Wähle deinen SPID-Anbieter",
     "hintText": "Keine SPID-Identität?<0> Mehr hierzu</0>",
-    "cancelButton": "Abbrechen"
+    "cancelButton": "Abbrechen",
+    "emptyState": "Kein IDP gefunden"
   },
   "loginError": {
     "title": "Aufgrund eines Systemfehlers kann der Vorgang nicht abgeschlossen werden.",
@@ -38,5 +40,15 @@
     "title": "IO - Die App für öffentliche Dienste",
     "subtitle": "In der IO-App öffnen",
     "cta": "ÖFFNEN"
+  },
+  "one-identity-spid-select": {
+    "title": "Login mit SPID",
+    "close-button-aria-label": "Schließen",
+    "unavailable-idp-warning": "Der Zugriff über %s ist derzeit nicht verfügbar. Bitte versuche es später noch einmal oder melde dich mit einem anderen Identitätsanbieter an",
+    "error": {
+      "title": "Wir können die Liste nicht laden",
+      "description": "Bitte versuche es später noch einmal.",
+      "close-button": "Schließen"
+    }
   }
 }

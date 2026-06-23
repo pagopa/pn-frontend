@@ -1,18 +1,12 @@
-import { useFormik } from 'formik';
-import React, { ChangeEvent, useEffect, useMemo, useRef } from 'react';
-import { Trans, useTranslation } from 'react-i18next';
-import * as yup from 'yup';
+import React, { useEffect, useMemo, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import ErrorIcon from '@mui/icons-material/Error';
 import {
   Box,
   Button,
-  Checkbox,
   Divider,
-  FormControl,
-  FormControlLabel,
-  FormHelperText,
   Link,
   List,
   ListItem,
@@ -28,7 +22,7 @@ import {
   TosPrivacyConsent,
   appStorage,
 } from '@pagopa-pn/pn-commons';
-import { theme } from '@pagopa/mui-italia';
+import { MIAlert } from '@pagopa/mui-italia';
 
 import { PFEventsType } from '../../models/PFEventsType';
 import {
@@ -37,7 +31,6 @@ import {
   IOAllowedValues,
   SaveDigitalAddressParams,
 } from '../../models/contacts';
-import { PRIVACY_POLICY, TERMS_OF_SERVICE_SERCQ_SEND } from '../../navigation/routes.const';
 import {
   acceptSercqSendTos,
   createOrUpdateAddress,
@@ -47,6 +40,7 @@ import { contactsSelectors } from '../../redux/contact/reducers';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import PFEventStrategyFactory from '../../utility/MixpanelUtils/PFEventStrategyFactory';
 import { isPFEvent } from '../../utility/mixpanel';
+import SercqSendDisclaimer from './SercqSendDisclaimer';
 
 type Props = {
   goToStep: (step: number) => void;
@@ -67,10 +61,18 @@ const SercqSendContactWizard: React.FC<Props> = ({ goToStep, showIOStep }) => {
   const dispatch = useAppDispatch();
 
   const tosConsent = useRef<Array<TosPrivacyConsent>>();
-  const { defaultEMAILAddress, defaultAPPIOAddress, defaultSMSAddress, legalAddresses, addresses } =
-    useAppSelector(contactsSelectors.selectAddresses);
+  const {
+    defaultEMAILAddress,
+    defaultAPPIOAddress,
+    defaultSMSAddress,
+    defaultSERCQ_SENDAddress,
+    defaultPECAddress,
+    legalAddresses,
+    addresses,
+  } = useAppSelector(contactsSelectors.selectAddresses);
 
   const isIOInstalled = !!defaultAPPIOAddress;
+  const isDodEnabled = defaultSERCQ_SENDAddress || defaultPECAddress;
 
   const normalizedShowIOStep = showIOStep ?? false;
 
@@ -79,22 +81,6 @@ const SercqSendContactWizard: React.FC<Props> = ({ goToStep, showIOStep }) => {
   const thankYouStep = ioStep + 3;
 
   const labelPrefix = 'legal-contacts.sercq-send-wizard.step_4.contacts-list';
-
-  const validationSchema = yup.object().shape({
-    disclaimer: yup.bool().isTrue(t('required-field', { ns: 'common' })),
-  });
-
-  const formik = useFormik({
-    initialValues: {
-      disclaimer: false,
-    },
-    validationSchema,
-    validateOnMount: true,
-    enableReinitialize: true,
-    onSubmit: () => {
-      handleActivation();
-    },
-  });
 
   const handleGoToStep = (channelType: ChannelType) => {
     if (channelType === ChannelType.IOMSG) {
@@ -151,22 +137,12 @@ const SercqSendContactWizard: React.FC<Props> = ({ goToStep, showIOStep }) => {
     t,
   ]);
 
-  const handleSubmitForm = async () => {
-    const errors = formik.errors;
-
-    if (errors?.disclaimer) {
-      PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SERCQ_SEND_TOS_MANDATORY);
-    }
-
+  const handleActivation = () => {
     PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SERCQ_SEND_UX_CONVERSION, {
-      tos_validation: errors?.disclaimer ? 'missing' : 'valid',
+      tos_validation: 'valid',
       legal_addresses: legalAddresses,
     });
 
-    await formik.submitForm();
-  };
-
-  const handleActivation = () => {
     dispatch(getSercqSendTosApproval())
       .unwrap()
       .then((consent) => {
@@ -175,18 +151,6 @@ const SercqSendContactWizard: React.FC<Props> = ({ goToStep, showIOStep }) => {
         handleInfoConfirm();
       })
       .catch(() => {});
-  };
-
-  const handleChangeTouched = async (e: ChangeEvent<HTMLInputElement>) => {
-    if (e.target.id === 'disclaimer') {
-      const event = e.target.checked
-        ? PFEventsType.SEND_ADD_SERCQ_SEND_SUMMARY_TOS_ACCEPTED
-        : PFEventsType.SEND_ADD_SERCQ_SEND_SUMMARY_TOS_DISMISSED;
-      PFEventStrategyFactory.triggerEvent(event);
-    }
-
-    formik.handleChange(e);
-    await formik.setFieldTouched(e.target.id, true, false);
   };
 
   const handleInfoConfirm = () => {
@@ -304,79 +268,29 @@ const SercqSendContactWizard: React.FC<Props> = ({ goToStep, showIOStep }) => {
         ))}
       </List>
 
-      <FormControl sx={{ my: 3 }}>
-        <FormControlLabel
-          control={
-            <Checkbox
-              name="disclaimer"
-              id="disclaimer"
-              // required
-              onChange={handleChangeTouched}
-              inputProps={{
-                'aria-describedby': 'disclaimer-helper-text',
-                'aria-invalid': formik.touched.disclaimer && Boolean(formik.errors.disclaimer),
-              }}
-              sx={{
-                color:
-                  formik.touched.disclaimer && Boolean(formik.errors.disclaimer)
-                    ? theme.palette.error.dark
-                    : theme.palette.text.secondary,
-              }}
-            />
-          }
-          label={
-            <Typography fontSize="14px" color="text.secondary">
-              <Trans
-                i18nKey="legal-contacts.sercq-send-wizard.step_4.disclaimer"
-                ns="recapiti"
-                components={[
-                  <Link
-                    key="privacy-policy"
-                    sx={{
-                      cursor: 'pointer',
-                      textDecoration: 'none !important',
-                      fontWeight: 'bold',
-                    }}
-                    data-testid="privacy-link"
-                    href={PRIVACY_POLICY}
-                    target="_blank"
-                    rel="noopener"
-                  />,
-
-                  <Link
-                    key="tos"
-                    sx={{
-                      cursor: 'pointer',
-                      textDecoration: 'none !important',
-                      fontWeight: 'bold',
-                    }}
-                    data-testid="tos-link"
-                    href={TERMS_OF_SERVICE_SERCQ_SEND}
-                    target="_blank"
-                    rel="noopener"
-                  />,
-                ]}
-              />
-            </Typography>
-          }
-          sx={{ alignItems: 'center' }}
-          value={formik.values.disclaimer}
+      <Box sx={{ my: 3 }}>
+        <MIAlert
+          severity="info"
+          description={t('legal-contacts.sercq-send-wizard.step_4.sercq-send-contacts-alert')}
         />
-        {formik.touched.disclaimer && Boolean(formik.errors.disclaimer) && (
-          <FormHelperText id="disclaimer-helper-text" error>
-            {formik.errors.disclaimer}
-          </FormHelperText>
-        )}
-      </FormControl>
+      </Box>
+
+      <SercqSendDisclaimer
+        i18nKey={`legal-contacts.sercq-send-wizard.step_4.disclaimer-${
+          isDodEnabled ? 'transfer' : 'enable'
+        }`}
+      />
 
       <Button
         fullWidth
         variant="contained"
         color="primary"
-        onClick={handleSubmitForm}
+        onClick={handleActivation}
         data-testid="activateButton"
       >
-        {t('legal-contacts.sercq-send-wizard.step_4.enable', { ns: 'recapiti' })}
+        {isDodEnabled
+          ? t('button.conferma', { ns: 'common' })
+          : t('legal-contacts.sercq-send-wizard.step_4.enable', { ns: 'recapiti' })}
       </Button>
     </Box>
   );

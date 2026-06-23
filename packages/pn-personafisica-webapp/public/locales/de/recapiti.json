@@ -76,7 +76,8 @@
         "info-list": [
           {
             "title": "Eine Körperschaft sendet dir eine Mitteilung auf SEND",
-            "description": "Die Zustellung wird dir sicher und mit Rechtswert über die Plattform <0>zugestellt</0>"
+            "description": "Die Zustellung wird dir sicher und mit Rechtswert über die Plattform <0>zugestellt</0>",
+            "aria-description": "Aktivieren, um die Erklärung des Begriffs zu lesen"
           },
           {
             "title": "Du erhältst eine Nachricht",
@@ -114,19 +115,19 @@
         "sms-disclaimer": "Wenn du <strong>Nummer hinzufügen</strong> klickst, speicherst du diesen Kontakt, um Benachrichtigungen über deine SEND-Mitteilungen zu erhalten. Du kannst ihn im Bereich <strong>Adressen</strong> verwalten."
       },
       "step_4": {
-        "title": "Du aktivierst dein digitales Domizil auf SEND",
+        "title": "Deine Zusammenfassung",
         "step-title": "Zusammenfassung",
-        "content": "Deine rechtsgültigen Mitteilungen werden zugestellt an:",
+        "content": "Deine rechtsgültigen Mitteilungen werden nur zugestellt an:",
         "digital-domicile": "Digitales Domizil",
         "send": "SEND",
-        "courtesy-content": "Du hast ausgewählt, eine Nachricht zu erhalten auf:",
+        "courtesy-content": "Du erhältst eine Mitteilung über:",
         "contacts-list": {
           "email": {
-            "title": "E-Mail-Adresse",
+            "title": "E-Mail",
             "textDisabled": "E-Mail-Adresse hinzufügen"
           },
           "io": {
-            "title": "IO-App",
+            "title-app-io": "IO, die App der öffentlichen Dienste",
             "textDisabled": "SEND mit IO verbinden",
             "textEnabled": "SEND-Dienst aktiviert"
           },
@@ -135,8 +136,10 @@
             "textDisabled": "Handynummer hinzufügen"
           }
         },
-        "disclaimer": "Durch Klicken auf „Digitales Domizil aktivieren“ erklärst du, die <0>Datenschutzinformationen</0> gelesen zu haben und die <1>Nutzungsbedingungen des Dienstes</1> zu akzeptieren",
-        "enable": "Digitales Domizil aktivieren"
+        "disclaimer-enable": "Durch Klicken auf <strong>„Digitalen Wohnsitz aktivieren“</strong> erklärst du, dass du die <0>Datenschutzerklärung</0> gelesen hast, die <1>Nutzungsbedingungen</1> akzeptierst, und dass du verstanden hast, dass SEND Benachrichtigungen nicht an andere digitale Domizile weitergeleitet werden.",
+        "disclaimer-transfer": "Durch Klicken auf <strong>„Bestätigen“</strong> erklärst du, dass du die <0>Datenschutzerklärung</0> gelesen hast, die <1>Nutzungsbedingungen</1> akzeptierst, und dass du verstanden hast, dass SEND Benachrichtigungen nicht an andere digitale Domizile weitergeleitet werden.",
+        "sercq-send-contacts-alert": "Überwache die von dir gewählten Kontaktdaten: Eine digitale SEND Benachrichtigung entfaltet ihre Rechtswirkungen, auch wenn du sie nicht abgerufen hast.",
+        "enable": "Digitalen Wohnsitz aktivieren"
       },
       "feedback": {
         "title-transfer": "Du hast dein digitales Domizil aktualisiert",
@@ -272,8 +275,8 @@
       "title": "Funktion eingestellt",
       "description": "Du kannst keine personalisierten Benachrichtigungsadressen mehr für Körperschaften eingeben oder bestehende ändern. Wenn du eine personalisierte Adresse löschst, kannst du sie nicht wiederherstellen oder erneut eingeben."
     },
-    "email-description": "Die E-Mail-Adresse, über die wir dich benachrichtigen, wenn eine rechtsgültige Mitteilung für dich auf SEND vorliegt.",
-    "sercq-disclaimer": "Durch Klicken auf „Bestätigen“ erklärst du, die <0>Datenschutzinformationen</0> gelesen zu haben und die <1>Nutzungsbedingungen des Dienstes</1> zu akzeptieren"
+    "email-description": "Die E-Mail-Adresse, über die wir dich benachrichtigen, wenn du eine rechtsgültige Mitteilung über SEND erhältst.",
+    "sercq-disclaimer": "Durch Klicken auf <strong>„Bestätigen“</strong> erklärst du, dass du die <0>Datenschutzerklärung</0> gelesen hast, die <1>Nutzungsbedingungen</1> akzeptierst, und dass du verstanden hast, dass SEND Benachrichtigungen der Entität nicht an andere digitale Domizile weitergeleitet werden."
   },
   "common": {
     "duplicate-contact-title": "Adresse bereits vorhanden",
@@ -394,7 +397,7 @@
         "legal-title-pec": "Rechtliche Mitteilungen werden zugestellt an:",
         "courtesy-title": "Du erhältst eine Mitteilung über:",
         "info-box": "Überwache die von dir gewählten Kontaktdaten: Eine digitale SEND-Zustellung entfaltet ihre Rechtswirkungen auch dann, wenn du sie nicht eingesehen hast.",
-        "disclaimer": "Durch Klicken auf <strong>Bestätigen</strong> erklärst du, dass du die <0>Datenschutzerklärung</0> gelesen hast und die <1>Nutzungsbedingungen</1> akzeptierst, und dass du verstanden hast, dass SEND Benachrichtigungen nicht an andere digitale Domizile weitergeleitet werden.",
+        "disclaimer": "Durch Klicken auf <strong>\"Bestätigen\"</strong> erklärst du, dass du die <0>Datenschutzerklärung</0> gelesen hast, die <1>Nutzungsbedingungen</1> akzeptierst, und dass du verstanden hast, dass SEND Benachrichtigungen nicht an andere digitale Domizile weitergeleitet werden.",
         "ddom-label": "Digitales Domizil",
         "io-label": "IO, die App für öffentliche Dienste",
         "io-value": "SEND-Dienst auf IO aktiv",

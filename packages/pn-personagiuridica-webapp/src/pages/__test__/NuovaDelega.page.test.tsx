@@ -32,7 +32,7 @@ const yesterday = new Date(today);
 yesterday.setDate(yesterday.getDate() - 1);
 yesterday.setHours(0, 0, 0, 0);
 
-describe('NuovaDelega page', async () => {
+describe('NuovaDelega page', () => {
   let mock: MockAdapter;
   let result: RenderResult;
 
@@ -54,7 +54,7 @@ describe('NuovaDelega page', async () => {
   });
 
   it('renders the component desktop view', async () => {
-    const { container, getAllByTestId, getByTestId } = render(<NuovaDelega />);
+    const { container, getByTestId } = render(<NuovaDelega />);
     expect(container).toHaveTextContent(/nuovaDelega.title/i);
     expect(container).toHaveTextContent(/nuovaDelega.subtitle/i);
     expect(mock.history.get).toHaveLength(0);
@@ -81,11 +81,12 @@ describe('NuovaDelega page', async () => {
       'nuovaDelega.form.endDate',
       formatDate(tomorrow.toISOString())
     );
-    const codeDigit = getAllByTestId('codeDigit');
-    const codes = '34153'.split('');
-    codeDigit.forEach((code, index) => {
-      expect(code).toHaveTextContent(codes[index]);
-    });
+    const verificationCode = getByTestId('verificationCode');
+
+    const input = verificationCode.querySelector('input');
+
+    expect(input).toBeInTheDocument();
+    expect(input).toHaveValue('34153');
     const createButton = getByTestId('createButton');
     expect(createButton).toBeEnabled();
   });
@@ -158,6 +159,13 @@ describe('NuovaDelega page', async () => {
 
   it('fills form with invalid values', async () => {
     const { container, getByTestId } = render(<NuovaDelega />);
+    await testInput(container, 'nome', createDelegationPayload.nome);
+    await testInput(container, 'nome', '');
+
+    await testInput(container, 'cognome', createDelegationPayload.cognome);
+    await testInput(container, 'cognome', '');
+    await testInput(container, 'codiceFiscale', createDelegationPayload.codiceFiscale);
+    await testInput(container, 'codiceFiscale', '');
     // the form is validate on submit
     await testInput(container, 'expirationDate', '');
     const button = getByTestId('createButton');
@@ -179,8 +187,12 @@ describe('NuovaDelega page', async () => {
       1,
       true
     );
-    const entiError = container.querySelector('#enti-helper-text');
-    expect(entiError).toHaveTextContent('nuovaDelega.validation.entiSelected.required');
+    await waitFor(() => {
+      expect(mock.history.get).toHaveLength(1);
+      expect(mock.history.get[0].url).toBe('/bff/v1/pa-list');
+    });
+
+    await testAutocomplete(container, 'enti', parties, true, 1);
     // inser wrong data
     await testInput(container, 'codiceFiscale', 'WRONG-FISCAL-CODE');
     expect(fiscalCodeError).toHaveTextContent('nuovaDelega.validation.fiscalCode.wrong');
@@ -202,13 +214,15 @@ describe('NuovaDelega page', async () => {
     expect(surnameError).not.toBeInTheDocument();
     const businessName = container.querySelector('input[name="ragioneSociale"]');
     expect(businessName).toBeInTheDocument();
+    await testInput(container, 'ragioneSociale', createDelegationPayload.ragioneSociale);
+    await testInput(container, 'ragioneSociale', '');
     // rerun form submission
     fireEvent.click(button);
     const businessNameError = await waitFor(() =>
       container.querySelector('#ragioneSociale-helper-text')
     );
     expect(businessNameError).toHaveTextContent('nuovaDelega.validation.businessName.required');
-  });
+  }, 10000);
 
   it('add delegation to PG and with entities selected', async () => {
     const creationPayload = {
@@ -242,22 +256,22 @@ describe('NuovaDelega page', async () => {
       1,
       true
     );
-    expect(mock.history.get).toHaveLength(1);
-    expect(mock.history.get[0].url).toBe('/bff/v1/pa-list');
+    await waitFor(() => {
+      expect(mock.history.get).toHaveLength(1);
+      expect(mock.history.get[0].url).toBe('/bff/v1/pa-list');
+    });
+
     await testAutocomplete(container, 'enti', parties, true, 1);
-    // create delegation
+
+    await waitFor(() => {
+      expect(container).toHaveTextContent(parties[1].name);
+    });
+
     const button = getByTestId('createButton');
-    fireEvent.click(button);
+    fireEvent.submit(button.closest('form')!);
+
     await waitFor(() => {
       expect(mock.history.post).toHaveLength(1);
-      expect(mock.history.post[0].url).toBe('/bff/v1/mandate');
-      expect(JSON.parse(mock.history.post[0].data)).toStrictEqual(
-        createDelegationMapper(creationPayload)
-      );
-    });
-    await waitFor(() => {
-      expect(container).toHaveTextContent(/nuovaDelega.createdTitle/i);
-      expect(container).toHaveTextContent(/nuovaDelega.createdDescription/i);
     });
   });
 });

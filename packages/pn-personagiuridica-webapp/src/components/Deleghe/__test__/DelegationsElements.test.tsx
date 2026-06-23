@@ -5,15 +5,41 @@ import { Row } from '@pagopa-pn/pn-commons';
 import { testAutocomplete } from '@pagopa-pn/pn-commons/src/test-utils';
 import userEvent from '@testing-library/user-event';
 
-import { mandatesByDelegate } from '../../../__mocks__/Delegations.mock';
+import { mandatesByDelegate, mandatesByDelegator } from '../../../__mocks__/Delegations.mock';
 import { render, screen, waitFor, within } from '../../../__test__/test-utils';
 import { apiClient } from '../../../api/apiClients';
-import { DelegationColumnData, DelegationStatus } from '../../../models/Deleghe';
+import {
+  Delegate,
+  DelegationColumnData,
+  DelegationStatus,
+  Delegator,
+} from '../../../models/Deleghe';
+import { GroupStatus, Groups } from '../../../models/groups';
 import { AcceptButton, Menu, OrganizationsList } from '../DelegationsElements';
 
 const actionCbk = vi.fn();
 
-describe('DelegationElements', async () => {
+type DelegationsPreloadedStateOptions = {
+  groups?: Array<Groups>;
+  delegators?: Array<Delegator>;
+  delegates?: Array<Delegate>;
+};
+
+const buildDelegationsPreloadedState = ({
+  groups = [],
+  delegators = [],
+  delegates = [],
+}: DelegationsPreloadedStateOptions = {}) => ({
+  delegationsState: {
+    groups,
+    delegations: {
+      delegators,
+      delegates,
+    },
+  },
+});
+
+describe('DelegationElements', () => {
   let mock: MockAdapter;
 
   beforeAll(() => {
@@ -30,7 +56,9 @@ describe('DelegationElements', async () => {
   });
 
   it('renders the Menu closed', () => {
-    const { queryByTestId, getByTestId } = render(<Menu menuType="delegates" id="111" />);
+    const { queryByTestId, getByTestId } = render(<Menu menuType="delegates" id="111" />, {
+      preloadedState: buildDelegationsPreloadedState(),
+    });
     const menuIcon = getByTestId('delegationMenuIcon');
     const closedMenu = queryByTestId('delegationMenu');
     expect(menuIcon).not.toBeNull();
@@ -38,7 +66,9 @@ describe('DelegationElements', async () => {
   });
 
   it('opens the delegate Menu', async () => {
-    const { queryByTestId, getByTestId } = render(<Menu menuType="delegates" id="111" />);
+    const { queryByTestId, getByTestId } = render(<Menu menuType="delegates" id="111" />, {
+      preloadedState: buildDelegationsPreloadedState(),
+    });
     const menuIcon = getByTestId('delegationMenuIcon');
     const closedMenu = queryByTestId('delegationMenu');
     expect(closedMenu).toBeNull();
@@ -49,7 +79,9 @@ describe('DelegationElements', async () => {
   });
 
   it('opens the delegator Menu', async () => {
-    const { queryByTestId, getByTestId } = render(<Menu menuType="delegators" id="111" />);
+    const { queryByTestId, getByTestId } = render(<Menu menuType="delegators" id="111" />, {
+      preloadedState: buildDelegationsPreloadedState(),
+    });
     const menuIcon = getByTestId('delegationMenuIcon');
     const closedMenu = queryByTestId('delegationMenu');
     expect(closedMenu).toBeNull();
@@ -119,21 +151,18 @@ describe('DelegationElements', async () => {
 
   it('renders the AcceptButton - accept the delegation', async () => {
     const groups = [
-      { id: 'group-1', name: 'Group 1', status: 'ACTIVE' },
-      { id: 'group-2', name: 'Group 2', status: 'ACTIVE' },
+      { id: 'group-1', name: 'Group 1', status: GroupStatus.ACTIVE },
+      { id: 'group-2', name: 'Group 2', status: GroupStatus.ACTIVE },
     ];
     mock.onPatch(`/bff/v1/mandate/4/accept`).reply(204);
     const { container, getByTestId } = render(
       <AcceptButton id="4" name="test" onAccept={actionCbk} />,
       {
-        preloadedState: {
-          delegationsState: {
-            groups,
-            delegations: {
-              delegators: mandatesByDelegate,
-            },
-          },
-        },
+        preloadedState: buildDelegationsPreloadedState({
+          groups,
+          delegators: mandatesByDelegate,
+          delegates: mandatesByDelegator,
+        }),
       }
     );
     expect(container).toHaveTextContent(/deleghe.accept/i);
@@ -178,7 +207,10 @@ describe('DelegationElements', async () => {
         menuType="delegates"
         id="111"
         row={{ id: 'row-id', name: 'Mario Rossi', verificationCode } as Row<DelegationColumnData>}
-      />
+      />,
+      {
+        preloadedState: buildDelegationsPreloadedState(),
+      }
     );
     const menuIcon = getByTestId('delegationMenuIcon');
 
@@ -205,7 +237,10 @@ describe('DelegationElements', async () => {
         id="111"
         row={{ id: 'row-id', name: 'Mario Rossi' } as Row<DelegationColumnData>}
         onAction={actionCbk}
-      />
+      />,
+      {
+        preloadedState: buildDelegationsPreloadedState(),
+      }
     );
     const menuIcon = getByTestId('delegationMenuIcon');
     await userEvent.click(menuIcon);
@@ -229,7 +264,10 @@ describe('DelegationElements', async () => {
         menuType="delegates"
         id="111"
         row={{ id: 'row-id', name: 'Mario Rossi' } as Row<DelegationColumnData>}
-      />
+      />,
+      {
+        preloadedState: buildDelegationsPreloadedState(),
+      }
     );
     const menuIcon = getByTestId('delegationMenuIcon');
     await userEvent.click(menuIcon);
@@ -251,7 +289,10 @@ describe('DelegationElements', async () => {
         menuType="delegators"
         id="111"
         row={{ id: 'row-id', name: 'Mario Rossi' } as Row<DelegationColumnData>}
-      />
+      />,
+      {
+        preloadedState: buildDelegationsPreloadedState(),
+      }
     );
     const menuIcon = getByTestId('delegationMenuIcon');
     await userEvent.click(menuIcon);
@@ -280,7 +321,10 @@ describe('DelegationElements', async () => {
             status: DelegationStatus.ACTIVE,
           } as Row<DelegationColumnData>
         }
-      />
+      />,
+      {
+        preloadedState: buildDelegationsPreloadedState(),
+      }
     );
     const menuIcon = getByTestId('delegationMenuIcon');
     await userEvent.click(menuIcon);
@@ -291,29 +335,32 @@ describe('DelegationElements', async () => {
 
   it('shows the update button and modal - delegator', async () => {
     const groups = [
-      { id: 'group-1', name: 'Group 1' },
-      { id: 'group-2', name: 'Group 2' },
-      { id: 'group-3', name: 'Group 3' },
+      { id: 'group-1', name: 'Group 1', status: GroupStatus.ACTIVE },
+      { id: 'group-2', name: 'Group 2', status: GroupStatus.ACTIVE },
+      { id: 'group-3', name: 'Group 3', status: GroupStatus.ACTIVE },
     ];
     const { getByTestId } = render(
       <Menu
         menuType="delegators"
         id="111"
-        row={
-          {
-            id: 'row-id',
-            name: 'Mario Rossi',
-            status: DelegationStatus.ACTIVE,
-            groups: [groups[1]],
-          } as Row<DelegationColumnData>
-        }
+        row={{
+          id: 'row-id',
+          name: 'Mario Rossi',
+          status: DelegationStatus.ACTIVE,
+          startDate: '2024-01-01',
+          endDate: '2024-12-31',
+          visibilityIds: [],
+          verificationCode: '12345',
+          groups: [groups[1]],
+          menu: '',
+        }}
       />,
       {
-        preloadedState: {
-          delegationsState: {
-            groups,
-          },
-        },
+        preloadedState: buildDelegationsPreloadedState({
+          groups,
+          delegators: mandatesByDelegate,
+          delegates: mandatesByDelegator,
+        }),
       }
     );
     const menuIcon = getByTestId('delegationMenuIcon');
@@ -333,9 +380,9 @@ describe('DelegationElements', async () => {
 
   it('update groups - delegator', async () => {
     const groups = [
-      { id: 'group-1', name: 'Group 1', status: 'ACTIVE' },
-      { id: 'group-2', name: 'Group 2', status: 'ACTIVE' },
-      { id: 'group-3', name: 'Group 3', status: 'ACTIVE' },
+      { id: 'group-1', name: 'Group 1', status: GroupStatus.ACTIVE },
+      { id: 'group-2', name: 'Group 2', status: GroupStatus.ACTIVE },
+      { id: 'group-3', name: 'Group 3', status: GroupStatus.ACTIVE },
     ];
     mock.onPatch(`/bff/v1/mandate/4/update`).reply(204);
     const { getByTestId } = render(
@@ -353,14 +400,11 @@ describe('DelegationElements', async () => {
         onAction={actionCbk}
       />,
       {
-        preloadedState: {
-          delegationsState: {
-            groups,
-            delegations: {
-              delegators: mandatesByDelegate,
-            },
-          },
-        },
+        preloadedState: buildDelegationsPreloadedState({
+          groups,
+          delegators: mandatesByDelegate,
+          delegates: mandatesByDelegator,
+        }),
       }
     );
     const menuIcon = getByTestId('delegationMenuIcon');

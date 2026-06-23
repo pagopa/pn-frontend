@@ -117,7 +117,7 @@ export const payments: Array<NotificationDetailPayment> = [
   },
 ];
 
-const statusHistory: Array<NotificationStatusHistory> = [
+export const statusHistory: Array<NotificationStatusHistory> = [
   {
     status: NotificationStatus.VIEWED,
     activeFrom: '2023-05-09T13:22:09.863901492Z',
@@ -866,6 +866,35 @@ export const notificationDTO: NotificationDetail = {
       contentType: '',
     },
   ],
+};
+
+export const bilingualNotification: NotificationDetail = {
+  abstract: 'Test notification with bilingual content',
+  subject: 'Test notification with bilingual content',
+  additionalLanguages: ['FR'],
+  recipients,
+  documents: [
+    {
+      digests: {
+        sha256: '7f3Nr8Yhkv4tH40iOrtMr4Y9fPR0vmCCt9BIwvH8fxs=',
+      },
+      contentType: 'application/pdf',
+      ref: {
+        key: 'PN_NOTIFICATION_ATTACHMENTS-c433d019acaa485288974021237beb8e.pdf',
+        versionToken: 'l0pwhTshqzIIdVKnCqiV1BlQBZA_LC7r',
+      },
+      title: 'RATA SCADUTA IMU',
+      docIdx: '0',
+    },
+  ],
+  senderDenomination: 'Comune di Palermo',
+  group: '63f359bc72337440a40f537e',
+  iun: 'RPTH-YULD-WKMA-202305-T-1',
+  sentAt: '2023-05-09T13:17:31.401700947Z',
+  documentsAvailable: true,
+  notificationStatus: NotificationStatus.VIEWED,
+  notificationStatusHistory: statusHistory,
+  timeline,
 };
 
 export const cancelledNotificationDTO: NotificationDetail = {

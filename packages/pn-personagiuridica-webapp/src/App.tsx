@@ -7,6 +7,8 @@ import {
   A11yMessageAnnouncer,
   APP_VERSION,
   AppMessage,
+  AppResponse,
+  AppResponseError,
   AppResponseMessage,
   Layout,
   PnDialog,
@@ -24,8 +26,10 @@ import {
 import { PartyEntity, ProductEntity } from '@pagopa/mui-italia';
 
 import { useMenuItems } from './hooks/useMenuItems';
+import i18n from './i18n';
+import { PGEventsType } from './models/PGEventsType';
 import { PNRole } from './models/User';
-import { goToLoginPortal } from './navigation/navigation.utility';
+import { getCurrentEventTypePage, goToLoginPortal } from './navigation/navigation.utility';
 import Router from './navigation/routes';
 import * as routes from './navigation/routes.const';
 import { getCurrentAppStatus } from './redux/appStatus/actions';
@@ -37,6 +41,8 @@ import { getSidemenuInformation } from './redux/sidemenu/actions';
 import { RootState } from './redux/store';
 import { getConfiguration } from './services/configuration.service';
 import { PGAppErrorFactory } from './utility/AppError/PGAppErrorFactory';
+import PGEventStrategyFactory from './utility/MixpanelUtils/PGEventStrategyFactory';
+import { mapUserToRole } from './utility/MixpanelUtils/mappers/superPropertyMappers';
 import showLayoutParts from './utility/layout.utility';
 import './utility/onetrust';
 
@@ -59,7 +65,25 @@ const App = () => {
     }
   }, [isInitialized]);
 
+  useEffect(() => {
+    PGEventStrategyFactory.triggerEvent(PGEventsType.SEND_LANGUAGE, {
+      language: i18n.resolvedLanguage ?? i18n.language,
+    });
+  }, [i18n.language]);
+
   return isInitialized ? <ActualApp /> : <div />;
+};
+
+const runCallbackOnce = (callback: () => void): (() => void) => {
+  // eslint-disable-next-line functional/no-let
+  let called = false;
+
+  return () => {
+    if (!called) {
+      called = true;
+      callback();
+    }
+  };
 };
 
 // eslint-disable-next-line complexity
@@ -131,6 +155,12 @@ const ActualApp = () => {
   useTracking(MIXPANEL_TOKEN, process.env.NODE_ENV);
 
   useEffect(() => {
+    if (sessionToken !== '' && loggedUser.organization?.roles?.[0]?.role) {
+      PGEventStrategyFactory.triggerEvent(PGEventsType.USER_ROLE, mapUserToRole(loggedUser));
+    }
+  }, [sessionToken, loggedUser.organization?.roles, loggedUser.hasGroup]);
+
+  useEffect(() => {
     if (sessionToken !== '') {
       if (userHasAdminPermissions) {
         void dispatch(getSidemenuInformation());
@@ -162,8 +192,18 @@ const ActualApp = () => {
 
   const handleAssistanceClick = () => {
     const url = addParamToUrl(`${SELFCARE_BASE_URL}/assistenza`, 'data', JSON.stringify(lastError));
-    /* eslint-disable-next-line functional/immutable-data */
-    window.location.href = sessionToken ? url : `mailto:${PAGOPA_HELP_EMAIL}`;
+
+    const navigateToAssistance = runCallbackOnce(() => {
+      /* eslint-disable-next-line functional/immutable-data */
+      globalThis.location.href = sessionToken ? url : `mailto:${PAGOPA_HELP_EMAIL}`;
+    });
+
+    PGEventStrategyFactory.triggerEvent(PGEventsType.SEND_PG_HELP, undefined, {
+      sendImmediately: true,
+      callback: navigateToAssistance,
+    });
+
+    globalThis.setTimeout(navigateToAssistance, 1000);
   };
 
   const [clickVersion] = useMultiEvent({
@@ -177,7 +217,19 @@ const ActualApp = () => {
   });
 
   const handleUserLogout = () => {
+    PGEventStrategyFactory.triggerEvent(PGEventsType.SEND_PG_EXIT);
     setOpenModal(true);
+  };
+
+  const handleEventTrackingToastErrorMessages = (
+    error: AppResponseError,
+    response: AppResponse
+  ) => {
+    PGEventStrategyFactory.triggerEvent(PGEventsType.SEND_PG_TOAST_ERROR, {
+      error,
+      response,
+      pageName: getCurrentEventTypePage(pathname),
+    });
   };
 
   const performLogout = async () => {
@@ -225,7 +277,9 @@ const ActualApp = () => {
         {/* <AppMessage sessionRedirect={async () => await dispatch(logout())} /> */}
         <A11yMessageAnnouncer />
         <AppMessage />
-        <AppResponseMessage />
+        <AppResponseMessage
+          eventTrackingToastErrorMessages={handleEventTrackingToastErrorMessages}
+        />
         <Router />
       </Layout>
       <Box onClick={clickVersion} sx={{ height: '5px', background: 'white' }}></Box>

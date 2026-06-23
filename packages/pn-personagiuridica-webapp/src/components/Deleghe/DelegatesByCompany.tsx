@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
@@ -21,10 +21,12 @@ import {
 } from '@pagopa-pn/pn-commons';
 
 import { DelegationColumnData } from '../../models/Deleghe';
+import { PGEventsType } from '../../models/PGEventsType';
 import * as routes from '../../navigation/routes.const';
 import { DELEGATION_ACTIONS, getMandatesByDelegator } from '../../redux/delegation/actions';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { RootState } from '../../redux/store';
+import PGEventStrategyFactory from '../../utility/MixpanelUtils/PGEventStrategyFactory';
 import delegationToItem from '../../utility/delegation.utility';
 import DelegationDataSwitch from './DelegationDataSwitch';
 
@@ -64,6 +66,7 @@ const DelegatesByCompany = () => {
   const rows = sortArray(sort.order, sort.orderBy, data);
 
   const handleAddDelegationClick = () => {
+    PGEventStrategyFactory.triggerEvent(PGEventsType.SEND_PG_ADD_MANDATE_START);
     navigate(routes.NUOVA_DELEGA);
   };
 
@@ -139,6 +142,10 @@ const DelegatesByCompany = () => {
       // getDelegatorsData();
     }
   };
+
+  useEffect(() => {
+    PGEventStrategyFactory.triggerEvent(PGEventsType.SEND_PG_MANDATES_GIVEN);
+  }, []);
 
   return (
     <Box mb={8} data-testid="delegatesByCompany">

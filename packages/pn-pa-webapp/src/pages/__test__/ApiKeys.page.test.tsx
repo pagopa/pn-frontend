@@ -64,7 +64,7 @@ async function testApiKeyChangeStatus(
   });
 }
 
-describe('ApiKeys Page', async () => {
+describe('ApiKeys Page', () => {
   let result: RenderResult;
   let mock: MockAdapter;
   const original = globalThis.ResizeObserver;

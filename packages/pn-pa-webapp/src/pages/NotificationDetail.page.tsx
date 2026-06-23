@@ -3,7 +3,7 @@ import React, { Fragment, useCallback, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 
-import { Alert, AlertTitle, Box, Grid, Paper, Stack, Typography } from '@mui/material';
+import { Box, Grid, Paper, Stack, Typography } from '@mui/material';
 import {
   ApiError,
   AppResponse,
@@ -26,9 +26,11 @@ import {
   useIsCancelled,
   useIsMobile,
 } from '@pagopa-pn/pn-commons';
+import { MIAlert } from '@pagopa/mui-italia';
 
 import NotificationDetailTableSender from '../components/Notifications/NotificationDetailTableSender';
 import NotificationPaymentSender from '../components/Notifications/NotificationPaymentSender';
+import { PAEventsType } from '../models/PAEventsType';
 import * as routes from '../navigation/routes.const';
 import { getDowntimeLegalFact } from '../redux/appStatus/actions';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
@@ -43,6 +45,7 @@ import { resetState } from '../redux/notification/reducers';
 import { RootState } from '../redux/store';
 import { getConfiguration } from '../services/configuration.service';
 import { ServerResponseErrorCode } from '../utility/AppError/types';
+import PAEventStrategyFactory from '../utility/MixpanelUtils/PAEventStrategyFactory';
 
 type Props = {
   notification: NotificationDetailType;
@@ -54,13 +57,16 @@ const AlertNotificationCancel: React.FC<Props> = (notification) => {
 
   if (cancelled || cancellationInProgress) {
     return (
-      <Alert data-testid="alert" sx={{ mt: 1 }} severity="warning">
-        <Typography component="span" variant="body1">
-          {cancellationInProgress
+      <MIAlert
+        severity="warning"
+        sx={{ mt: 1 }}
+        data-testid="alert"
+        description={
+          cancellationInProgress
             ? t('detail.alert-cancellation-in-progress')
-            : t('detail.alert-cancellation-confirmed')}
-        </Typography>
-      </Alert>
+            : t('detail.alert-cancellation-confirmed')
+        }
+      />
     );
   }
 
@@ -112,6 +118,10 @@ const NotificationDetail: React.FC = () => {
   const documentDowloadHandler = (
     document: string | NotificationDetailOtherDocument | undefined
   ) => {
+    PAEventStrategyFactory.triggerEvent(PAEventsType.SEND_PA_NOTIFICATION_DOWNLOAD_ATTACHMENT, {
+      document,
+    });
+
     if (isObject(document)) {
       // AAR case
       dispatch(
@@ -140,6 +150,7 @@ const NotificationDetail: React.FC = () => {
   };
 
   const legalFactDownloadHandler = (legalFact: LegalFactId) => {
+    PAEventStrategyFactory.triggerEvent(PAEventsType.SEND_PA_TIMELINE_DOWNLOAD, { legalFact });
     if (legalFact.category !== 'AAR') {
       // Legal fact case
       dispatch(
@@ -234,6 +245,12 @@ const NotificationDetail: React.FC = () => {
   }, [fetchSentNotification]);
 
   useEffect(() => {
+    if (!hasNotificationSentApiError && notification.iun) {
+      PAEventStrategyFactory.triggerEvent(PAEventsType.SEND_PA_NOTIFICATION_DETAIL);
+    }
+  }, [hasNotificationSentApiError, notification.iun]);
+
+  useEffect(() => {
     AppResponsePublisher.error.subscribe('cancelNotification', handleCancellationError);
 
     return () => {
@@ -256,6 +273,18 @@ const NotificationDetail: React.FC = () => {
       .then(showInfoMessageIfRetryAfterOrDownload)
       .catch((e) => console.log(e));
   }, []);
+
+  const trackTimelineShowMore = (collapsed: boolean) => {
+    if (!collapsed) {
+      PAEventStrategyFactory.triggerEvent(PAEventsType.SEND_PA_TIMELINE_SHOW_MORE);
+    }
+  };
+
+  const trackTimelineShowHistory = (open: boolean) => {
+    if (open) {
+      PAEventStrategyFactory.triggerEvent(PAEventsType.SEND_PA_TIMELINE_SHOW_HISTORY);
+    }
+  };
 
   const properBreadcrumb = (
     <PnBreadcrumb
@@ -319,16 +348,21 @@ const NotificationDetail: React.FC = () => {
                     downloadFilesLink={t('detail.download-files-link', { ns: 'notifiche' })}
                   />
                   {notification.radd && (
-                    <Alert severity={'success'} sx={{ mb: 3, mt: 2 }} data-testid="raddAlert">
-                      <AlertTitle>
-                        {t('detail.timeline.radd.title', { ns: 'notifiche' })}
-                      </AlertTitle>
-                      {notification.recipients.length === 1
-                        ? t('detail.timeline.radd.description-mono-recipient', { ns: 'notifiche' })
-                        : t('detail.timeline.radd.description-multi-recipients', {
-                            ns: 'notifiche',
-                          })}
-                    </Alert>
+                    <MIAlert
+                      severity="success"
+                      data-testid="raddAlert"
+                      sx={{ mb: 3, mt: 2 }}
+                      title={t('detail.timeline.radd.title', { ns: 'notifiche' })}
+                      description={
+                        notification.recipients.length === 1
+                          ? t('detail.timeline.radd.description-mono-recipient', {
+                              ns: 'notifiche',
+                            })
+                          : t('detail.timeline.radd.description-multi-recipients', {
+                              ns: 'notifiche',
+                            })
+                      }
+                    />
                   )}
                 </Paper>
                 <Paper sx={{ p: 3, mb: 3 }} elevation={0} data-testid="aarDownload">
@@ -363,6 +397,8 @@ const NotificationDetail: React.FC = () => {
                   historyButtonLabel={t('detail.show-history', { ns: 'notifiche' })}
                   showMoreButtonLabel={t('detail.show-more', { ns: 'notifiche' })}
                   showLessButtonLabel={t('detail.show-less', { ns: 'notifiche' })}
+                  handleTrackShowMoreLess={trackTimelineShowMore}
+                  handleTrackShowHistory={trackTimelineShowHistory}
                 />
               </Box>
             </Grid>

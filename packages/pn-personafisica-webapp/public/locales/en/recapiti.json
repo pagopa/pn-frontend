@@ -76,7 +76,8 @@
         "info-list": [
           {
             "title": "An institution sends you a notification on SEND",
-            "description": "The notification is <0>delivered</0> to you securely and with legal value through the platform"
+            "description": "The notification is <0>delivered</0> to you securely and with legal value through the platform",
+            "aria-description": "Activate to read the explanation of the term"
           },
           {
             "title": "You receive a message",
@@ -114,19 +115,19 @@
         "sms-disclaimer": "If you press <strong>Add number</strong> you save this address to receive alerts on your SEND notifications. You can manage it in the <strong>Addresses.</strong> section"
       },
       "step_4": {
-        "title": "You are activating your digital domicile on SEND",
+        "title": "Your summary",
         "step-title": "Summary",
-        "content": "Your legally-binding communications will be delivered to:",
+        "content": "Your legally-binding communications will only be delivered to:",
         "digital-domicile": "Digital Domicile",
         "send": "SEND",
-        "courtesy-content": "You have chosen to receive a message on:",
+        "courtesy-content": "You will receive a notice via:",
         "contacts-list": {
           "email": {
-            "title": "Email address",
+            "title": "Email",
             "textDisabled": "Add email"
           },
           "io": {
-            "title": "IO App",
+            "title-app-io": "IO, the public services app",
             "textDisabled": "Connect SEND to IO",
             "textEnabled": "SEND service activated"
           },
@@ -135,7 +136,9 @@
             "textDisabled": "Add mobile number"
           }
         },
-        "disclaimer": "By pressing “Activate digital domicile” you declare to have read the <0>Privacy Policy</0> and accept the <1>Terms of service</1>",
+        "disclaimer-enable": "By pressing <strong>“Activate digital domicile”</strong> you declare that you have read the <0>Privacy Policy</0>, accept the <1>Terms of Service</1>, and that you understand that SEND notifications will not be forwarded to other digital domiciles.",
+        "disclaimer-transfer": "By pressing <strong>“Confirm”</strong> you declare that you have read the <0>Privacy Policy</0>, accept the <1>Terms of Service</1>, and that you understand that SEND notifications will not be forwarded to other digital domiciles.",
+        "sercq-send-contacts-alert": "Monitor the contact details you have chosen: a SEND digital notification begins to produce legal effects even if you have not viewed it.",
         "enable": "Activate digital domicile"
       },
       "feedback": {
@@ -272,8 +275,8 @@
       "title": "Feature dismissed",
       "description": "You can no longer enter personalized courtesy addresses per institution or modify existing addresses. If you delete a personalized address, you will not be able to recover it or re-enter it."
     },
-    "email-description": "The email where we will notify you when you receive a legally-binding communication for you on SEND.",
-    "sercq-disclaimer": "By pressing “Confirm” you declare to have read the <0>Privacy Policy</0> and accept the <1>Terms of service</1>"
+    "email-description": "The email where we will notify you when you receive a legally-binding communication on SEND.",
+    "sercq-disclaimer": "By pressing <strong>“Confirm”</strong> you declare that you have read the <0>Privacy Policy</0>, accept the <1>Terms of Service</1>, and that you understand that the institution's SEND notifications will not be forwarded to other digital domiciles."
   },
   "common": {
     "duplicate-contact-title": "Address already present",
@@ -394,7 +397,7 @@
         "legal-title-pec": "Legally binding communications will be delivered to:",
         "courtesy-title": "You will receive a notice via:",
         "info-box": "Monitor the contact details you have chosen: a SEND digital notification starts to produce legal effects even if you have not consulted it.",
-        "disclaimer": "By pressing <strong>Confirm</strong>, you declare that you have read the <0>Privacy Policy</0> and accept the <1>Terms of Service</1>, and that you understand that SEND notifications will not be forwarded to other digital domiciles.",
+        "disclaimer": "By pressing <strong>\"Confirm\"</strong> you declare that you have read the <0>Privacy Policy</0>, accept the <1>Terms of Service</1>, and that you understand that SEND notifications will not be forwarded to other digital domiciles.",
         "ddom-label": "Digital domicile",
         "io-label": "IO, the public services app",
         "io-value": "SEND service on IO active",

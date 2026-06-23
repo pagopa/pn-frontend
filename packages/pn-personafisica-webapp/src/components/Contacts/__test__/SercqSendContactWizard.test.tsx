@@ -2,7 +2,6 @@ import MockAdapter from 'axios-mock-adapter';
 import { vi } from 'vitest';
 
 import { SERCQ_SEND_VALUE } from '@pagopa-pn/pn-commons';
-import { getById } from '@pagopa-pn/pn-commons/src/test-utils';
 
 import {
   acceptTosSercqSendBodyMock,
@@ -76,9 +75,7 @@ describe('SercqSendContactWizard', () => {
     expect(ioIcon).toHaveAttribute('data-testid', 'ErrorIcon');
     expect(smsIcon).toHaveAttribute('data-testid', 'CheckCircleIcon');
 
-    const disclaimerCkb = getById(container, 'disclaimer');
-    expect(disclaimerCkb).not.toBeChecked();
-    expect(getByText(`${labelPrefix}.disclaimer`)).toBeInTheDocument();
+    expect(getByText(`${labelPrefix}.disclaimer-enable`)).toBeInTheDocument();
 
     const activateButton = getByTestId('activateButton');
     expect(activateButton).toBeInTheDocument();
@@ -270,7 +267,7 @@ describe('SercqSendContactWizard', () => {
     mock.onPut('/bff/v2/tos-privacy', acceptTosSercqSendBodyMock).reply(200);
 
     // render component
-    const { container, findByText, getByTestId, getByText, queryByText } = render(
+    const { container, getByTestId, getByText } = render(
       <SercqSendContactWizard goToStep={goToStep} showIOStep />,
       {
         preloadedState: {
@@ -297,20 +294,6 @@ describe('SercqSendContactWizard', () => {
     expect(smsIcon).toHaveAttribute('data-testid', 'ErrorIcon');
 
     const activateButton = getByTestId('activateButton');
-    let errorMsg = queryByText('required-field');
-    expect(errorMsg).not.toBeInTheDocument();
-
-    fireEvent.click(activateButton);
-
-    errorMsg = await findByText('required-field');
-    expect(errorMsg).toBeInTheDocument();
-
-    const disclaimerCkb = getById(container, 'disclaimer');
-    expect(disclaimerCkb).not.toBeChecked();
-
-    fireEvent.click(disclaimerCkb);
-
-    expect(disclaimerCkb).toBeChecked();
 
     fireEvent.click(activateButton);
 

@@ -377,6 +377,11 @@
         "title": "Il documento non è disponibile",
         "message": "Si è verificato un problema con il recupero del documento. Riprova più tardi. Se l’errore si ripete, contatta l’assistenza e comunica le informazioni errore."
       }
+    },
+    "bilingual": {
+      "title": "modelli FACSIMILE DI SUPPORTO in italiano",
+      "description": "La lingua degli atti allegati potrebbe differire da quella con cui stai navigando il portale. Per capire il contenuto di tali documenti, puoi utilizzare i modelli facsimile che trovi qui.",
+      "action": "Consulta i modelli"
     }
   },
   "delegatorTitle": "Le notifiche di {{name}}",
@@ -431,11 +436,11 @@
     "returned-to-sender-tooltip-multirecipient": "Tutti i destinatari risultano deceduti",
     "returned-to-sender-description": "Il destinatario risulta deceduto.",
     "returned-to-sender-description-multirecipient": "Tutti i destinatari risultano deceduti.",
-    "notification-timeline-reworked": "Evento o più eventi aggiornati",
-    "notification-timeline-reworked-tooltip": "Evento o più eventi aggiornati",
-    "notification-timeline-reworked-description": "Gli eventi contrassegnati con EVENTO INVALIDATO non vanno considerati in quanto sostituiti dagli eventi successivi contrassegnati con EVENTO VALIDATO.",
-    "reworked-status-valid": "Evento validato",
-    "reworked-status-not-valid": "Evento invalidato",
+    "notification-timeline-reworked": "Uno o più eventi aggiornati",
+    "notification-timeline-reworked-tooltip": "Uno o più eventi aggiornati",
+    "notification-timeline-reworked-description": "Gli eventi contrassegnati come rettificati sostituiscono gli eventi precedenti indicati come non validi.",
+    "reworked-status-valid": "Evento rettificato",
+    "reworked-status-not-valid": "Evento non valido",
     "cancellation-in-progress": "Annullata",
     "cancellation-in-progress-tooltip": "Annullamento in corso. Lo stato sarà aggiornato a breve.",
     "cancellation-in-progress-description": "Annullamento in corso. Lo stato sarà aggiornato a breve."

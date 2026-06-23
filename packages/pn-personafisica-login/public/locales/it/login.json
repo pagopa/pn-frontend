@@ -2,6 +2,7 @@
   "loginPage": {
     "title": "Accedi a SEND per le tue comunicazioni a valore legale",
     "description": "Scegli la modalità che preferisci.",
+    "missing-spid-cie": "Non hai SPID o CIE? <0>Scopri di più</0>",
     "loginBox": {
       "title": "Accedi",
       "spidLogin": "Entra con SPID",
@@ -11,7 +12,8 @@
   "spidSelect": {
     "title": "Scegli il tuo SPID",
     "hintText": "Non hai SPID?<0> Scopri di più</0>",
-    "cancelButton": "Annulla"
+    "cancelButton": "Annulla",
+    "emptyState": "Nessun IDP trovato"
   },
   "loginError": {
     "title": "A causa di un errore del sistema non è possibile completare la procedura.",
@@ -38,5 +40,15 @@
     "title": "IO - L'app dei servizi pubblici",
     "subtitle": "Apri nell'app IO",
     "cta": "APRI"
+  },
+  "one-identity-spid-select": {
+    "title": "Accedi con SPID",
+    "close-button-aria-label": "Chiudi",
+    "unavailable-idp-warning": "L'accesso tramite %s non è al momento disponibile, riprova più tardi o entra con un altro Identity Provider",
+    "error": {
+      "title": "Non riusciamo a caricare la lista",
+      "description": "Ti chiediamo di riprovare più tardi.",
+      "close-button": "Chiudi"
+    }
   }
 }

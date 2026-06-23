@@ -377,6 +377,11 @@
         "title": "Le document n'est pas disponible",
         "message": "Un problème est survenu lors de la récupération du document. Veuillez réessayer plus tard. Si l'erreur persiste, contactez l'assistance et communiquez les informations d'erreur."
       }
+    },
+    "bilingual": {
+      "title": "modèles de FAC-SIMILÉ DE SUPPORT en français",
+      "description": "La langue des actes joints peut différer de celle avec laquelle tu navigues sur le portail. Pour comprendre le contenu de ces documents, tu peux utiliser les modèles de fac-similé que tu trouves ici.",
+      "action": "Consulte les modèles"
     }
   },
   "delegatorTitle": "Les notifications de {{name}} ",
@@ -431,11 +436,11 @@
     "returned-to-sender-tooltip-multirecipient": "Tous les destinataires sono décédés",
     "returned-to-sender-description": "Le destinataire est décédé.",
     "returned-to-sender-description-multirecipient": "Tous les destinataires sont décédés.",
-    "notification-timeline-reworked": "Événement ou plusieurs événements mis à jour",
-    "notification-timeline-reworked-tooltip": "Événement ou plusieurs événements mis à jour",
-    "notification-timeline-reworked-description": "Les événements marqués ÉVÉNEMENT INVALIDÉ ne doivent pas être pris en compte car ils ont été remplacés par les événements suivants marqués ÉVÉNEMENT VALIDÉ.",
-    "reworked-status-valid": "Événement validé",
-    "reworked-status-not-valid": "Événement invalidé",
+    "notification-timeline-reworked": "Un ou plusieurs événements mis à jour",
+    "notification-timeline-reworked-tooltip": "Un ou plusieurs événements mis à jour",
+    "notification-timeline-reworked-description": "Les événements marqués comme rectifiés remplacent les événements précédents indiqués comme non valides.",
+    "reworked-status-valid": "Événement rectifié",
+    "reworked-status-not-valid": "Événement non valide",
     "cancellation-in-progress": "Annulée",
     "cancellation-in-progress-tooltip": "Annulation en cours. Le statut sera mis à jour sous peu.",
     "cancellation-in-progress-description": "Annulation en cours. Le statut sera mis à jour sous peu."

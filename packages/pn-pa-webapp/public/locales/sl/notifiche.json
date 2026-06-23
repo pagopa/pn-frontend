@@ -421,11 +421,11 @@
     "returned-to-sender-tooltip-multirecipient": "Vsi prejemniki so umrli",
     "returned-to-sender-description": "Prejemnik je umrl.",
     "returned-to-sender-description-multirecipient": "Vsi prejemniki so umrli.",
-    "notification-timeline-reworked": "Posodobljen dogodek ali več dogodkov",
-    "notification-timeline-reworked-tooltip": "Posodobljen dogodek ali več dogodkov",
-    "notification-timeline-reworked-description": "Dogodkov, označenih z NEVALIDIRAN DOGODEK, ne upoštevajte, saj so jih nadomestili naslednji dogodki, označeni z VALIDIRAN DOGODEK.",
-    "reworked-status-valid": "Validiran dogodek",
-    "reworked-status-not-valid": "Nevalidiran dogodek",
+    "notification-timeline-reworked": "Posodobljen en ali več dogodkov",
+    "notification-timeline-reworked-tooltip": "Posodobljen en ali več dogodkov",
+    "notification-timeline-reworked-description": "Dogodki, označeni kot popravljeni, nadomeščajo prejšnje dogodke, navedene kot neveljavne.",
+    "reworked-status-valid": "Popravljen dogodek",
+    "reworked-status-not-valid": "Neveljaven dogodek",
     "cancellation-in-progress": "Preklicano",
     "cancellation-in-progress-tooltip": "Preklic poteka. Stanje bo kmalu posodobljeno.",
     "cancellation-in-progress-description": "Preklic poteka. Stanje bo kmalu posodobljeno."
@@ -503,6 +503,7 @@
         "pec-address": "Naslov PEC",
         "add-physical-domicile": "Dodajte fizični naslov",
         "address": "Naslov",
+        "physical-address": "Fizični naslov",
         "house-number": "Hišna številka",
         "municipality-details": "Kraj",
         "municipality": "Občina",
@@ -518,18 +519,18 @@
         "address-physical-lookup-radios": {
           "national-registry": "Samodejni vnos iz nacionalnega registra",
           "manual": "Ročni vnos"
-        }
+        },
+        "recipient-info-subtitle": "Te informacije bodo prejemniku pomagale razumeti vsebino in pomembnost sporočila."
       },
       "attachments": {
         "title": "Dokumentacija",
         "max-attachments": "To so dokumenti, ki bodo vročeni prek storitve SEND vsem prejemnikom. Priložite lahko največ {{maxNumber}} dokumentov.",
         "attach-for-recipients": "Priloženi dokumenti",
-        "act-attachment": "Priložite dokument",
+        "act-attachment": "Priložite dokumente za vročitev",
         "doc-attachment": "Priložite drug dokument",
         "act-name": "Ime akta",
         "doc-name": "Naslov dokumenta",
         "add-doc": "Dodajte dokument",
-        "add-another-doc": "Dodajte drug dokument",
         "back-to-recipient": "Nazaj na prejemnika",
         "back-to-debt-position": "Nazaj na dolžniški položaj",
         "back-to-debt-position-detail": "Nazaj na podrobnosti dolžniškega položaja",

@@ -121,7 +121,9 @@
       },
       "error-payment": "Sélectionnez un avis de paiement",
       "error-payment-failed-single": "Un problème est survenu avec un avis de paiement. Appuyez sur Recharger pour réessayer. Si l’erreur persiste, contactez l’assistance.",
-      "error-payment-failed-multiple": "Un problème est survenu avec plusieurs avis de paiement. Appuyez sur Recharger pour réessayer. Si l’erreur persiste, contactez l’assistance."
+      "error-payment-failed-multiple": "Un problème est survenu avec plusieurs avis de paiement. Appuyez sur Recharger pour réessayer. Si l’erreur persiste, contactez l’assistance.",
+      "tpp-expired-error-title": "La connexion avec la banque a expiré.",
+      "tpp-expired-error-description": "Pour la rétablir, accédez de nouveau à cette notification via le message que vous avez reçu sur l'application de votre banque."
     },
     "acts_files": {
       "downloadable_acts": "Les documents sont disponibles en ligne pendant 120 jours à compter de la finalisation de la notification.",
@@ -384,6 +386,11 @@
         "title": "Le document n'est pas disponible",
         "message": "Un problème est survenu lors de la récupération du document. Veuillez réessayer plus tard. Si l'erreur persiste, contactez l'assistance et communiquez les informazioni sur l'erreur."
       }
+    },
+    "bilingual": {
+      "title": "modèles de FAC-SIMILÉ DE SUPPORT en français",
+      "description": "La langue des actes joints peut différer de celle avec laquelle tu navigues sur le portail. Pour comprendre le contenu de ces documents, tu peux utiliser les modèles de fac-similé que tu trouves ici.",
+      "action": "Consulte les modèles"
     }
   },
   "delegatorTitle": "Les notifications de {{name}}",
@@ -438,11 +445,11 @@
     "returned-to-sender-tooltip-multirecipient": "Tous les destinataires sont décédés",
     "returned-to-sender-description": "Le destinataire est décédé.",
     "returned-to-sender-description-multirecipient": "Tous les destinataires sono décédés.",
-    "notification-timeline-reworked": "Événement ou plusieurs événements mis à jour",
-    "notification-timeline-reworked-tooltip": "Événement ou plusieurs événements mis à jour",
-    "notification-timeline-reworked-description": "Les événements marqués ÉVÉNEMENT INVALIDÉ ne devono pas être pris en compte, car ils ont été remplacés par les événements suivants marqués ÉVÉNEMENT VALIDÉ.",
-    "reworked-status-valid": "Événement validé",
-    "reworked-status-not-valid": "Événement invalidé",
+    "notification-timeline-reworked": "Un ou plusieurs événements mis à jour",
+    "notification-timeline-reworked-tooltip": "Un ou plusieurs événements mis à jour",
+    "notification-timeline-reworked-description": "Les événements marqués comme rectifiés remplacent les événements précédents indiqués comme non valides.",
+    "reworked-status-valid": "Événement rectifié",
+    "reworked-status-not-valid": "Événement non valide",
     "cancellation-in-progress": "Annulée",
     "cancellation-in-progress-tooltip": "Annulation en cours. Le statut sera mis à jour sous peu.",
     "cancellation-in-progress-description": "Annulation en cours. Le statut sera mis à jour sous peu."

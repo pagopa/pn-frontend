@@ -293,6 +293,12 @@ const App = () => {
     }
   }, [isInitialized]);
 
+  useEffect(() => {
+    PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_LANGUAGE, {
+      language: i18n.resolvedLanguage ?? i18n.language,
+    });
+  }, [i18n.language]);
+
   if (!isInitialized) {
     return <div></div>;
   }

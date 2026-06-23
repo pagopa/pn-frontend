@@ -2,17 +2,9 @@ import { FieldMetaProps } from 'formik';
 import { useTranslation } from 'react-i18next';
 
 import DeleteIcon from '@mui/icons-material/Delete';
-import {
-  Alert,
-  Box,
-  FormControlLabel,
-  FormHelperText,
-  Stack,
-  Switch,
-  TextField,
-} from '@mui/material';
+import { Box, FormControlLabel, FormHelperText, Stack, Switch, TextField } from '@mui/material';
 import { FileUpload, useIsMobile } from '@pagopa-pn/pn-commons';
-import { ButtonNaked } from '@pagopa/mui-italia';
+import { ButtonNaked, MIAlert } from '@pagopa/mui-italia';
 
 import { NewNotificationPagoPaPayment, NotificationFeePolicy } from '../../models/NewNotification';
 
@@ -162,9 +154,14 @@ const PagoPaPaymentBox: React.FC<PaymentBoxProps> = ({
       )}
 
       {showDeleteButton && notificationFeePolicy === NotificationFeePolicy.DELIVERY_MODE && (
-        <Alert severity="warning" sx={{ mt: 4 }} data-testid="pagopa-installment-alert">
-          {t('new-notification.steps.debt-position-detail.payment-methods.apply-cost-installment')}
-        </Alert>
+        <MIAlert
+          severity="warning"
+          sx={{ mt: 4 }}
+          data-testid="pagopa-installment-alert"
+          description={t(
+            'new-notification.steps.debt-position-detail.payment-methods.apply-cost-installment'
+          )}
+        />
       )}
     </Box>
   );

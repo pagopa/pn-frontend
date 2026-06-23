@@ -27,7 +27,7 @@ const Guard = () => (
   </Routes>
 );
 
-describe('OnboardingGuard', async () => {
+describe('OnboardingGuard', () => {
   let mock: MockAdapter;
   let result: RenderResult;
 

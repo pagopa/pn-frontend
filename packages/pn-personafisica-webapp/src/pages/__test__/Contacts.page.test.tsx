@@ -15,7 +15,7 @@ import { ChannelType } from '../../models/contacts';
 import { CONTACT_ACTIONS } from '../../redux/contact/actions';
 import Contacts from '../Contacts.page';
 
-describe('Contacts page', async () => {
+describe('Contacts page', () => {
   let mock: MockAdapter;
   let result: RenderResult;
 
@@ -133,8 +133,6 @@ describe('Contacts page', async () => {
 
     const banner = result.getByTestId('PecVerificationAlert');
     expect(banner).toBeInTheDocument();
-    const alertIcon = within(banner).getByTestId('ReportProblemOutlinedIcon');
-    expect(alertIcon).toBeInTheDocument();
     expect(banner).toHaveTextContent('legal-contacts.pec-validation-banner.title');
     expect(banner).toHaveTextContent('legal-contacts.pec-validation-banner.parties-list');
 

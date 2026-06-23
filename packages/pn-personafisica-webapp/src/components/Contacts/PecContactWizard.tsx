@@ -5,7 +5,6 @@ import { useNavigate } from 'react-router-dom';
 import * as yup from 'yup';
 
 import {
-  Alert,
   Button,
   Checkbox,
   FormControl,
@@ -15,7 +14,7 @@ import {
   Typography,
 } from '@mui/material';
 import { EventAction, IllusHourglass, PnWizard, PnWizardStep } from '@pagopa-pn/pn-commons';
-import { ButtonNaked } from '@pagopa/mui-italia';
+import { ButtonNaked, MIAlert } from '@pagopa/mui-italia';
 
 import { PFEventsType } from '../../models/PFEventsType';
 import { AddressType, ChannelType, SaveDigitalAddressParams } from '../../models/contacts';
@@ -134,6 +133,8 @@ const PecContactWizard: React.FC<Props> = ({
   const handleCloseCodeModal = () => {
     PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_SERCQ_SEND_PEC_OTP_BACK);
     setOpenCodeModal(false);
+    void formik.setFieldValue('pec', '', false);
+    void formik.setFieldTouched('pec', false, false);
   };
 
   const handleSubmitForm = async () => {
@@ -228,9 +229,12 @@ const PecContactWizard: React.FC<Props> = ({
           </Typography>
 
           {defaultSERCQ_SENDAddress && (
-            <Alert severity="info" sx={{ mb: 3 }} data-testid="sercq-info-alert">
-              {t('legal-contacts.pec-contact-wizard.sercq-info-alert')}
-            </Alert>
+            <MIAlert
+              severity="info"
+              sx={{ mb: 3 }}
+              data-testid="sercq-info-alert"
+              description={t('legal-contacts.pec-contact-wizard.sercq-info-alert')}
+            />
           )}
 
           <Typography

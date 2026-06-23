@@ -17,6 +17,19 @@ const { getComputedStyle } = window;
 // eslint-disable-next-line functional/immutable-data
 window.getComputedStyle = (elt) => getComputedStyle(elt);
 
+const originalWarn = console.warn;
+// eslint-disable-next-line functional/immutable-data
+console.warn = (...args) => {
+  if (typeof args[0] === 'string' && args[0].includes('React Router Future Flag Warning')) {
+    return;
+  }
+  originalWarn(...args);
+};
+
+export const mockLanguageConfig = {
+  current: 'it',
+};
+
 beforeAll(async () => {
   Configuration.setForTest<PgConfiguration>({
     API_BASE_URL: 'https://webapi.test.notifichedigitali.it/',
@@ -46,6 +59,10 @@ beforeAll(async () => {
     NOTIFICATION_COST_DETAILS_ASSISTANCE_LINK:
       'https://fake.notification-cost-details-assistance.pagopa.it',
     SERCQ_SERVICE_STATEMENT_LINK: 'https://fake.sercq-service-statement.pagopa.it',
+    FACSIMILE_EN: 'https://fake.facsimile-en.pagopa.it',
+    FACSIMILE_FR: 'https://fake.facsimile-fr.pagopa.it',
+    FACSIMILE_DE: 'https://fake.facsimile-de.pagopa.it',
+    FACSIMILE_SL: 'https://fake.facsimile-sl.pagopa.it',
   });
   initStore(false);
   initAxiosClients();
@@ -60,7 +77,7 @@ beforeAll(async () => {
         return str;
       },
       i18n: {
-        language: 'it',
+        language: mockLanguageConfig.current,
         changeLanguage: () => new Promise(() => {}),
       },
     }),

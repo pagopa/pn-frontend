@@ -5,7 +5,6 @@ import { useNavigate } from 'react-router-dom';
 import * as yup from 'yup';
 
 import {
-  Alert,
   Button,
   Checkbox,
   FormControl,
@@ -15,14 +14,16 @@ import {
   Typography,
 } from '@mui/material';
 import { IllusHourglass, PnWizard, PnWizardStep } from '@pagopa-pn/pn-commons';
-import { ButtonNaked } from '@pagopa/mui-italia';
+import { ButtonNaked, MIAlert } from '@pagopa/mui-italia';
 
+import { PGEventsType } from '../../models/PGEventsType';
 import { AddressType, ChannelType, SaveDigitalAddressParams } from '../../models/contacts';
 import { NOTIFICHE } from '../../navigation/routes.const';
 import { createOrUpdateAddress } from '../../redux/contact/actions';
 import { contactsSelectors } from '../../redux/contact/reducers';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { getConfiguration } from '../../services/configuration.service';
+import PGEventStrategyFactory from '../../utility/MixpanelUtils/PGEventStrategyFactory';
 import { pecValidationSchema } from '../../utility/contacts.utility';
 import ContactCodeDialog from './ContactCodeDialog';
 
@@ -57,11 +58,13 @@ const PecContactWizard: React.FC<Props> = ({
     disclaimer: yup.bool().isTrue(t('required-field', { ns: 'common' })),
   });
 
+  const initialValues = {
+    pec: '',
+    disclaimer: false,
+  };
+
   const formik = useFormik({
-    initialValues: {
-      pec: '',
-      disclaimer: false,
-    },
+    initialValues,
     validationSchema,
     validateOnMount: true,
     enableReinitialize: true,
@@ -90,6 +93,13 @@ const PecContactWizard: React.FC<Props> = ({
           setOpenCodeModal(true);
           return;
         }
+
+        PGEventStrategyFactory.triggerEvent(PGEventsType.SEND_PG_ADD_DIGITAL_DOMICILE_UX_SUCCESS, {
+          digital_domicile_type: ChannelType.PEC,
+        });
+        PGEventStrategyFactory.triggerEvent(PGEventsType.SEND_PG_HAS_DIGITAL_DOMICILE, {
+          value: ChannelType.PEC,
+        });
         setOpenCodeModal(false);
         return setActiveStep(activeStep + 1);
       })
@@ -102,6 +112,12 @@ const PecContactWizard: React.FC<Props> = ({
     } else {
       return !IS_DOD_ENABLED ? navigate(-1) : setShowPecWizard(false);
     }
+  };
+
+  const handleCloseCodeModal = () => {
+    setOpenCodeModal(false);
+    void formik.setFieldValue('pec', '');
+    void formik.setFieldTouched('pec', false, false);
   };
 
   return (
@@ -153,9 +169,12 @@ const PecContactWizard: React.FC<Props> = ({
           </Typography>
 
           {defaultSERCQ_SENDAddress && (
-            <Alert severity="info" sx={{ mb: 3 }} data-testid="sercq-info-alert">
-              {t('legal-contacts.pec-contact-wizard.sercq-info-alert')}
-            </Alert>
+            <MIAlert
+              severity="info"
+              sx={{ mb: 3 }}
+              data-testid="sercq-info-alert"
+              description={t('legal-contacts.pec-contact-wizard.sercq-info-alert')}
+            />
           )}
 
           <Typography
@@ -235,7 +254,7 @@ const PecContactWizard: React.FC<Props> = ({
         channelType={ChannelType.PEC}
         open={openCodeModal}
         onConfirm={(code) => handleCodeVerification(code)}
-        onDiscard={() => setOpenCodeModal(false)}
+        onDiscard={handleCloseCodeModal}
       />
     </>
   );
