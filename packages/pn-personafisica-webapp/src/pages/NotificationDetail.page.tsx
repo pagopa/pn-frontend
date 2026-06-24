@@ -8,6 +8,7 @@ import { useLocation, useNavigate, useParams } from 'react-router-dom';
 
 import { Box, Grid, Paper, Stack } from '@mui/material';
 import {
+  AbstractPaper,
   AccessDenied,
   ApiError,
   ApiErrorWrapper,
@@ -48,7 +49,6 @@ import { MIAlert } from '@pagopa/mui-italia';
 import NotificationDetailOnboardingPrompt from '../components/Contacts/Onboarding/NotificationDetailOnboardingPrompt';
 import DomicileBanner from '../components/DomicileBanner/DomicileBanner';
 import LoadingPageWrapper from '../components/LoadingPageWrapper/LoadingPageWrapper';
-import AbstractPaper from '../components/Notifications/AbstractPaper';
 import { NotificationCostBanner } from '../components/Notifications/NotificationCostBanner';
 import { NotificationDetailRouteState } from '../models/NotificationDetail';
 import { PFEventsType } from '../models/PFEventsType';

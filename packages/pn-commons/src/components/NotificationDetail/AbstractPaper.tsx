@@ -1,13 +1,14 @@
 import { useState } from 'react';
-import { useTranslation } from 'react-i18next';
 
 import AccountBalanceOutlinedIcon from '@mui/icons-material/AccountBalanceOutlined';
 import VerifiedRoundedIcon from '@mui/icons-material/VerifiedRounded';
-import { Avatar, Box, Divider, Grid, Paper, Typography } from '@mui/material';
+import { Avatar, Box, Divider, Grid, Typography } from '@mui/material';
 import { visuallyHidden } from '@mui/utils';
 import { TitleBox, formatDate, getAccessibleIun, useIsMobile } from '@pagopa-pn/pn-commons';
 import { getAccessibleDate } from '@pagopa-pn/pn-commons/src/utility/accessibility.utility';
-import { Tag } from '@pagopa/mui-italia';
+import { MIPaper, Tag, theme } from '@pagopa/mui-italia';
+
+import { getLocalizedOrDefaultLabel } from '../../utility/localization.utility';
 
 interface AbstractPaperProps {
   title?: string;
@@ -16,7 +17,6 @@ interface AbstractPaperProps {
   sentAt: string;
   iun: string;
   abstract?: string; // todo: to sanitize and format the abstract content before passing it to the component
-  isLegal?: boolean;
 }
 
 const AbstractPaper = ({
@@ -26,37 +26,31 @@ const AbstractPaper = ({
   sentAt,
   iun,
   abstract,
-  isLegal = true,
 }: AbstractPaperProps) => {
   const isMobile = useIsMobile();
-  const { t } = useTranslation(['common']);
   const [hasError, setHasError] = useState(false);
 
+  const borderTopStyle = `2px solid ${theme.palette.primary.main}`;
+
   return (
-    <Paper
+    <MIPaper
       sx={{
-        p: 3,
         my: 3,
-        borderTop: isLegal ? '2px solid var(--Color-Blue-Blue-500, #0B3EE3)' : undefined,
-        borderRadius: '8px',
+        borderTop: borderTopStyle,
       }}
-      elevation={0}
+      borderRadius={8}
     >
-      {isLegal && (
-        <Tag variant="default" icon={VerifiedRoundedIcon} value="Comunicazione a valore legale" />
-      )}
-      <TitleBox
-        variantTitle="h4"
-        componentTitle="h1"
-        title={title}
-        sx={{ mt: isLegal ? 2 : 0 }}
-        mbTitle={0}
+      <Tag
+        variant="default"
+        icon={VerifiedRoundedIcon}
+        value={getLocalizedOrDefaultLabel('notifications', 'detail.legal-value')}
       />
+      <TitleBox variantTitle="h4" componentTitle="h1" title={title} sx={{ mt: 2 }} mbTitle={0} />
       <Divider aria-hidden sx={{ my: 2 }} />
       <Grid container>
         <Grid item xs={12} md={6} display="flex" alignItems="center" gap={2}>
           <Avatar
-            alt={`${t('logo', { ns: 'common' })} ${senderDenomination}`}
+            alt={`${getLocalizedOrDefaultLabel('common', 'logo')} ${senderDenomination}`}
             variant="rounded"
             src={
               hasError
@@ -76,7 +70,7 @@ const AbstractPaper = ({
               {formatDate(sentAt)}
             </Typography>
             <Typography component="span" sx={{ ...visuallyHidden }}>
-              {getAccessibleDate(sentAt, { t, ns: 'common' })}
+              {getAccessibleDate(sentAt)}
             </Typography>
           </Box>
         </Grid>
@@ -88,7 +82,7 @@ const AbstractPaper = ({
         <Grid item xs={12} md={6} display="flex" alignItems="center" gap={2}>
           <Box>
             <Typography variant="body2" color="text.secondary">
-              {t('iun', { ns: 'common' })}
+              {getLocalizedOrDefaultLabel('common', 'iun')}
             </Typography>
             <Typography variant="body2" color="text" fontWeight={600} aria-hidden="true">
               {iun}
@@ -103,7 +97,7 @@ const AbstractPaper = ({
       <Typography variant="body1" sx={{ overflowWrap: 'anywhere' }}>
         {abstract}
       </Typography>
-    </Paper>
+    </MIPaper>
   );
 };
 

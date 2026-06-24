@@ -1,12 +1,10 @@
 import { getDateInfo } from './date.utility';
+import { getLocalizedOrDefaultLabel } from './localization.utility';
 
 export const getAccessibleIun = (iun: string): string => iun.split('').join(' ');
 
-export const getAccessibleDate = (
-  dateString: string,
-  { t, ns }: { t: any; ns: string }
-): string => {
+export const getAccessibleDate = (dateString: string): string => {
   const dateInfo = getDateInfo(dateString);
-  const month = t(`date-time.${dateInfo.month}`, { ns });
+  const month = getLocalizedOrDefaultLabel('common', `date-time.${dateInfo.month}`);
   return `${dateInfo.day} ${month} ${dateInfo.year}`;
 };
