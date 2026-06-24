@@ -34,6 +34,7 @@ const AbstractPaper = ({
 
   return (
     <MIPaper
+      padding={24}
       sx={{
         my: 3,
         borderTop: borderTopStyle,

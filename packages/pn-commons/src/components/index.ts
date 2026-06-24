@@ -84,6 +84,8 @@ export { default as SnackBar } from './SnackBar/SnackBar';
 export { default as TabPanel } from './TabPanel';
 export { default as TitleBox } from './TitleBox';
 export { default as AbstractPaper } from './NotificationDetail/AbstractPaper';
+export { default as NotificationTimelineBox } from './NotificationDetail/NotificationTimelineBox';
+export { default as NotificationDetailSection } from './NotificationDetail/NotificationDetailSection';
 
 export { default as A11yMessageAnnouncer } from './A11yMessageAnnouncer';
 export type { AppNotAccessibleReason } from './AppNotAccessible';

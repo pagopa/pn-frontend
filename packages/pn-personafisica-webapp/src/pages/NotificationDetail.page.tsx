@@ -6,7 +6,7 @@ import { Fragment, useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 
-import { Box, Grid, Paper, Stack } from '@mui/material';
+import { Box, Grid, Stack } from '@mui/material';
 import {
   AbstractPaper,
   AccessDenied,
@@ -22,10 +22,12 @@ import {
   NotificationDetailDocuments,
   NotificationDetailOtherDocument,
   NotificationDetailPayment,
+  NotificationDetailSection,
   NotificationDocumentType,
   NotificationFeePolicy,
   NotificationPaymentRecipient,
   NotificationRelatedDowntimes,
+  NotificationTimelineBox,
   PagoPaIntegrationMode,
   PaymentAttachmentSName,
   PaymentDetails,
@@ -44,7 +46,7 @@ import {
   EventDeliveryFlowType,
   EventDeliveryModeType,
 } from '@pagopa-pn/pn-commons/src/models/MixpanelEvents';
-import { MIAlert } from '@pagopa/mui-italia';
+import { MIAlert, MIPaper } from '@pagopa/mui-italia';
 
 import NotificationDetailOnboardingPrompt from '../components/Contacts/Onboarding/NotificationDetailOnboardingPrompt';
 import DomicileBanner from '../components/DomicileBanner/DomicileBanner';
@@ -504,6 +506,12 @@ const NotificationDetail: React.FC = () => {
     PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_PAYMENT_DETAIL_REFRESH);
   };
 
+  // const trackShowMoreLess = (collapsed: boolean) => {
+  //   PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_NOTIFICATION_STATUS_DETAIL, {
+  //     accordion: collapsed ? 'collapsed' : 'expanded',
+  //   });
+  // };
+
   const getFlowType = (): EventDeliveryFlowType => {
     if (deliveryOutcome?.type === DeliveryOutcomeType.ANALOG) {
       return 'physical_flow';
@@ -599,23 +607,28 @@ const NotificationDetail: React.FC = () => {
           </Box>
         )}
         {!hasNotificationReceivedApiError && (
-          <Box sx={{ p: { xs: 3, lg: 0 } }}>
-            <Grid container direction={isMobile ? 'column' : 'row'}>
-              <Grid item lg={7} xs={12} sx={{ p: { xs: 0, lg: 3 }, pb: { xs: 3 } }}>
-                {breadcrumb}
-                {pecUnreachableAlert}
-                {cancelledAlert}
-                {banner}
-                <AbstractPaper
-                  title={notification.subject}
-                  senderPaId={notification.senderPaId}
-                  senderDenomination={notification.senderDenomination}
-                  sentAt={notification.sentAt}
-                  iun={notification.iun}
-                  abstract={notification.abstract}
-                />
+          <Box sx={{ p: 3 }}>
+            {/* start breadcrumb, intro and banner */}
+            {breadcrumb}
+            {cancelledAlert}
+            <AbstractPaper
+              title={notification.subject}
+              senderPaId={notification.senderPaId}
+              senderDenomination={notification.senderDenomination}
+              sentAt={notification.sentAt}
+              iun={notification.iun}
+              abstract={notification.abstract}
+            />
+            {banner}
+            {pecUnreachableAlert}
+            {/* end breadcrumb, intro and banner */}
+
+            {/* start document, payment and aside */}
+            <Grid container direction={isMobile ? 'column' : 'row'} spacing={2}>
+              {/* start document and payment section */}
+              <Grid item lg={8} md={7} xs={12} sx={{ pb: { xs: 3 } }}>
                 <Stack spacing={3}>
-                  <Paper sx={{ p: 3 }} elevation={0}>
+                  <MIPaper padding={24}>
                     <NotificationDetailDocuments
                       title={t('detail.acts', { ns: 'notifiche' })}
                       documents={notification.documents}
@@ -624,7 +637,7 @@ const NotificationDetail: React.FC = () => {
                       downloadFilesMessage={getDownloadFilesMessage('attachments')}
                       downloadFilesLink={t('detail.acts_files.effected_faq', { ns: 'notifiche' })}
                       disableDownloads={isCancelled.cancellationInTimeline}
-                      titleVariant="h6"
+                      titleVariant="h5"
                     />
                     {notification.radd && (
                       <MIAlert
@@ -635,9 +648,9 @@ const NotificationDetail: React.FC = () => {
                         description={t('detail.timeline.radd.description', { ns: 'notifiche' })}
                       />
                     )}
-                  </Paper>
+                  </MIPaper>
                   {checkIfUserHasPayments && (
-                    <Paper sx={{ p: 3 }} elevation={0}>
+                    <MIPaper padding={24}>
                       <ApiErrorWrapper
                         apiId={NOTIFICATION_ACTIONS.GET_RECEIVED_NOTIFICATION_PAYMENT_INFO}
                         reloadAction={() => fetchPaymentsInfo(currentRecipient.payments ?? [])}
@@ -663,9 +676,9 @@ const NotificationDetail: React.FC = () => {
                           }
                         />
                       </ApiErrorWrapper>
-                    </Paper>
+                    </MIPaper>
                   )}
-                  <Paper sx={{ p: 3, mb: 3 }} elevation={0} data-testid="aarBox">
+                  <MIPaper padding={24} sx={{ mb: 3 }} data-testid="aarBox">
                     <NotificationDetailDocuments
                       title={t('detail.aar-acts', { ns: 'notifiche' })}
                       documents={notification.otherDocuments ?? []}
@@ -678,7 +691,7 @@ const NotificationDetail: React.FC = () => {
                         !dateIsLessThan10Years(notification.sentAt)
                       }
                     />
-                  </Paper>
+                  </MIPaper>
                   <NotificationRelatedDowntimes
                     downtimeEvents={downtimeEvents}
                     fetchDowntimeEvents={(fromDate, toDate) =>
@@ -691,26 +704,34 @@ const NotificationDetail: React.FC = () => {
                     downtimeExampleLink={DOWNTIME_EXAMPLE_LINK}
                   />
                   {showBilingualFacsimileSection && (
-                    <Paper sx={{ p: 3 }} elevation={0}>
+                    <MIPaper sx={{ p: 3 }}>
                       <NotificationDetailBilingualFacsimileDocuments
                         title={t('detail.bilingual.title', { ns: 'notifiche' })}
                         description={t('detail.bilingual.description', { ns: 'notifiche' })}
                         action={t('detail.bilingual.action', { ns: 'notifiche' })}
                         link={getFacSimileLink()}
                       />
-                    </Paper>
+                    </MIPaper>
                   )}
                 </Stack>
               </Grid>
-              <Grid item lg={5} xs={12} component="aside">
-                <Box
-                  component="section"
-                  sx={{ backgroundColor: 'white', height: '100%', p: 3, pb: { xs: 0, lg: 3 } }}
-                >
-                  hello
-                </Box>
+              {/* end document and payment section */}
+
+              {/* start aside section */}
+              <Grid
+                item
+                lg={4}
+                md={5}
+                xs={12}
+                component="aside"
+                sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}
+              >
+                <NotificationTimelineBox />
+                <NotificationDetailSection />
               </Grid>
+              {/* end aside section */}
             </Grid>
+            {/* end document, payment and aside */}
           </Box>
         )}
       </LoadingPageWrapper>
