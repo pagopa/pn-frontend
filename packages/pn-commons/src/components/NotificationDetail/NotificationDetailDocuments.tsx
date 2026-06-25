@@ -134,6 +134,7 @@ const NotificationDetailDocuments: React.FC<Props> = (
             id="notification-detail-document-attached"
             color="text.primary"
             variant={titleVariant}
+            component="h2"
           >
             {title}
           </Typography>
