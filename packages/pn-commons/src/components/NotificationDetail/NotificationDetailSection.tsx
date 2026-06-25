@@ -1,6 +1,6 @@
-import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
+import OpenInBrowserRoundedIcon from '@mui/icons-material/OpenInBrowserRounded';
 import { Divider, IconButton, List, ListItem, ListItemText, Typography } from '@mui/material';
-import { MIPaper } from '@pagopa/mui-italia';
+import { MIPaper, theme } from '@pagopa/mui-italia';
 
 const NotificationDetailSection = () => {
   console.log('NotificationDetailSection rendered');
@@ -25,11 +25,17 @@ const NotificationDetailSection = () => {
           disableGutters
           secondaryAction={
             <IconButton edge="end" aria-label="delete">
-              <ArrowForwardIosIcon />
+              <OpenInBrowserRoundedIcon />
             </IconButton>
           }
         >
-          <ListItemText primary="Single-line item" secondary={'Secondary text'} />
+          <ListItemText
+            primary="Avviso di Avvenuta ricezione"
+            sx={{ color: theme.palette.primary.light }}
+            secondary={
+              'Disponibile online per 10 anni dalla data in cui la notifica assume valore di legge'
+            }
+          />
         </ListItem>
       </List>
     </MIPaper>

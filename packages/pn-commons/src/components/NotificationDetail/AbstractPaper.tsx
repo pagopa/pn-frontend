@@ -19,7 +19,7 @@ interface AbstractPaperProps {
   abstract?: string; // todo: to sanitize and format the abstract content before passing it to the component
 }
 
-const AbstractPaper = ({
+const AbstractMIPaper = ({
   title,
   senderPaId,
   senderDenomination,
@@ -36,7 +36,6 @@ const AbstractPaper = ({
     <MIPaper
       padding={24}
       sx={{
-        my: 3,
         borderTop: borderTopStyle,
       }}
       borderRadius={8}
@@ -102,4 +101,4 @@ const AbstractPaper = ({
   );
 };
 
-export default AbstractPaper;
+export default AbstractMIPaper;

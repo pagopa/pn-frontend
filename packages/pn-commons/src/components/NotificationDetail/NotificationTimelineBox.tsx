@@ -2,8 +2,18 @@ import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import { Grid, IconButton, Typography } from '@mui/material';
 import { MIAlert, MIChip, MIPaper } from '@pagopa/mui-italia';
 
-const NotificationTimelineBox = () => {
-  console.log('NotificationTimelineBox rendered');
+type NotificationTimelineBoxProps = {
+  isCancelled: boolean;
+  refinementDate: string | null;
+  downtimeEvent?: boolean;
+};
+
+const NotificationTimelineBox = ({
+  isCancelled,
+  refinementDate,
+  downtimeEvent,
+}: NotificationTimelineBoxProps) => {
+  console.log('NotificationTimelineBox rendered', refinementDate, downtimeEvent);
   return (
     <MIPaper padding={24}>
       <Grid container direction="row" alignItems="center">
@@ -12,14 +22,14 @@ const NotificationTimelineBox = () => {
             Stato della timeline
           </Typography>
           <MIChip
-            color="success"
+            color={isCancelled ? 'warning' : 'success'}
             variant="filled"
-            label="Notifica a valore di legge"
+            label={isCancelled ? 'Notifica annullata' : 'Notifica a valore di legge'}
             sx={{ my: 1 }}
           />
-          <Typography variant="body1">
-            Hai effettuato un accesso alla notifica, che si è quindi perfezionata il giorno
-            DD/MM/YYYY.
+          <Typography variant="body2">
+            L’ente ha annullato l’invio della notifica SEND, che quindi dannullamento non produrrà
+            più effetti giuridici.
           </Typography>
           <MIAlert
             title="Disservizi"
