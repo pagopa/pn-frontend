@@ -15,7 +15,7 @@ interface AbstractPaperProps {
   senderDenomination?: string;
   sentAt: string;
   iun: string;
-  abstract?: string;
+  abstract?: string; // todo: to sanitize and format the abstract content before passing it to the component
   isLegal?: boolean;
 }
 
