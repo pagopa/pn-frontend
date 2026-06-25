@@ -1,19 +1,17 @@
 import OpenInBrowserRoundedIcon from '@mui/icons-material/OpenInBrowserRounded';
-import {
-  Divider,
-  IconButton,
-  List,
-  ListItem,
-  ListItemText,
-  Paper as MIPaper,
-  Typography,
-} from '@mui/material';
-import { theme } from '@pagopa/mui-italia';
+import { Divider, IconButton, List, ListItem, ListItemText, Typography } from '@mui/material';
+import { MIPaper, theme } from '@pagopa/mui-italia';
 
-const NotificationDetailSection = () => {
-  console.log('NotificationDetailSection rendered');
+import { NotificationDetailRecipient } from '../../models';
+
+interface Props {
+  recipient: NotificationDetailRecipient; // Replace 'any' with the actual type of recipient
+}
+
+const NotificationDetailSection = ({ recipient }: Props) => {
+  console.log('NotificationDetailSection rendered', recipient);
   return (
-    <MIPaper>
+    <MIPaper padding={24}>
       <Typography component="h2" variant="h5">
         Dettagli della notifica
       </Typography>
@@ -23,7 +21,7 @@ const NotificationDetailSection = () => {
           <ListItemText sx={{ p: 0 }}>
             <Typography variant="body2">Persona destinataria</Typography>
             <Typography variant="sidenav" color="text.primary">
-              Maria Rossi - MRARSS08S05I480N
+              {recipient.denomination} - {recipient.taxId}
             </Typography>
           </ListItemText>
         </ListItem>
@@ -32,7 +30,7 @@ const NotificationDetailSection = () => {
         <ListItem
           disableGutters
           secondaryAction={
-            <IconButton edge="end" aria-label="delete">
+            <IconButton edge="end" aria-label="Apri Avviso di Avvenuta ricezione">
               <OpenInBrowserRoundedIcon />
             </IconButton>
           }

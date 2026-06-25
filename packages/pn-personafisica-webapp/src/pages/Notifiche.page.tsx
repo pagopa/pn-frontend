@@ -159,7 +159,7 @@ const Notifiche = () => {
   return (
     <LoadingPageWrapper isInitialized={pageReady}>
       <Box p={3}>
-        {!mandateId && <DomicileBanner source={ContactSource.HOME_NOTIFICHE} />}
+        {!mandateId && <DomicileBanner source={ContactSource.HOME_NOTIFICHE} my={4} />}
         <TitleBox variantTitle="h4" title={pageTitle} mbTitle={isMobile ? 3 : undefined} />
         <ApiErrorWrapper
           apiId={DASHBOARD_ACTIONS.GET_RECEIVED_NOTIFICATIONS}

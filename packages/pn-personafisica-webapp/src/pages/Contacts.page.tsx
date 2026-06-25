@@ -113,7 +113,7 @@ const Contacts = () => {
           apiId={CONTACT_ACTIONS.GET_DIGITAL_ADDRESSES}
           reloadAction={fetchAddresses}
         >
-          <DomicileBanner source={ContactSource.RECAPITI} />
+          <DomicileBanner source={ContactSource.RECAPITI} my={4} />
           <ValidatingPecBanner />
           <Stack direction="column" spacing={2} mt={2}>
             <LegalContacts />
