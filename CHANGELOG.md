@@ -3,6 +3,113 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.24.0](https://github.com/pagopa/pn-frontend/compare/v2.24.0-RC.4...v2.24.0) (2026-06-22)
+
+**Note:** Version bump only for package pn-frontend
+
+
+
+
+
+# [2.24.0-RC.4](https://github.com/pagopa/pn-frontend/compare/v2.24.0-RC.3...v2.24.0-RC.4) (2026-06-19)
+
+
+### Features
+
+* **PN-19761:** add missing properties to notification status tracking counts ([#1931](https://github.com/pagopa/pn-frontend/issues/1931)) ([8aa0d32](https://github.com/pagopa/pn-frontend/commit/8aa0d325fa385c3bcab559f1a532a6ae475ff06a))
+
+
+
+
+
+# [2.24.0-RC.3](https://github.com/pagopa/pn-frontend/compare/v2.24.0-RC.2...v2.24.0-RC.3) (2026-06-17)
+
+
+### Bug Fixes
+
+* **PN-15746:** clear PEC field on OTP modal close ([#1929](https://github.com/pagopa/pn-frontend/issues/1929)) ([1def9b9](https://github.com/pagopa/pn-frontend/commit/1def9b94ce9fbb7e326f92cba01f553b9acdc3ee))
+
+
+
+
+
+# [2.24.0-RC.2](https://github.com/pagopa/pn-frontend/compare/v2.24.0-RC.1...v2.24.0-RC.2) (2026-06-16)
+
+
+### Bug Fixes
+
+* **PN-20200:** remove EN as default ([#1923](https://github.com/pagopa/pn-frontend/issues/1923)) ([b807c0b](https://github.com/pagopa/pn-frontend/commit/b807c0b47aecd1138529884f43e7485e2a38ce13))
+
+
+### Features
+
+* **PN-19761:** refine PG notification and API key tracking ([#1925](https://github.com/pagopa/pn-frontend/issues/1925)) ([537b6e3](https://github.com/pagopa/pn-frontend/commit/537b6e3e3ef6f3bddaceb9787b1865ac406e0008))
+
+
+
+
+
+# [2.24.0-RC.1](https://github.com/pagopa/pn-frontend/compare/v2.24.0-RC.0...v2.24.0-RC.1) (2026-06-09)
+
+
+### Features
+
+* **PN-19310:** migrate alerts to MIAlert ([#1914](https://github.com/pagopa/pn-frontend/issues/1914)) ([3ca9b6f](https://github.com/pagopa/pn-frontend/commit/3ca9b6f48a6570581834b3137c6ea68525a1ca6a))
+
+
+
+
+
+# [2.24.0-RC.0](https://github.com/pagopa/pn-frontend/compare/v2.23.0...v2.24.0-RC.0) (2026-06-08)
+
+
+### Bug Fixes
+
+* **A2-2350:** add aria-description and fix pg version ([#1913](https://github.com/pagopa/pn-frontend/issues/1913)) ([4df8c13](https://github.com/pagopa/pn-frontend/commit/4df8c1305d93493811a750b5d97cccee5657a21c))
+* **PN-15746:** reset email field on OTP cancel for PF and PG ([#1845](https://github.com/pagopa/pn-frontend/issues/1845)) ([b4546e1](https://github.com/pagopa/pn-frontend/commit/b4546e1c6380d6034591fc52df02ae7620883140))
+* **PN-15937:** move max attachments label below attachment box title ([#1859](https://github.com/pagopa/pn-frontend/issues/1859)) ([b7bfb13](https://github.com/pagopa/pn-frontend/commit/b7bfb13ebb04cc7a240989eecc7a0d5190ede966))
+* **PN-15979:** align button and update new api key modal copy ([#1826](https://github.com/pagopa/pn-frontend/issues/1826)) ([36ccf18](https://github.com/pagopa/pn-frontend/commit/36ccf18c612f611e5e10e3f055c79fa5a0a9f76f))
+* **PN-16004:** add text description in recipient step ([d480624](https://github.com/pagopa/pn-frontend/commit/d480624289095cc3a9d9f93863b544553481147d))
+* **PN-18983:** improve required fields accessibility on new notification form ([#1885](https://github.com/pagopa/pn-frontend/issues/1885)) ([c007f82](https://github.com/pagopa/pn-frontend/commit/c007f8239ef1784b23fb69512b59040ae67c3af3))
+* **PN-18983:** required fields accessibility on new delegation flow ([#1904](https://github.com/pagopa/pn-frontend/issues/1904)) ([3444103](https://github.com/pagopa/pn-frontend/commit/34441031cc88175410da1c832c7323be2f1b12bf))
+* **PN-19419:** enhance mixpanel tracking with transport option ([#1891](https://github.com/pagopa/pn-frontend/issues/1891)) ([1b348c5](https://github.com/pagopa/pn-frontend/commit/1b348c544325972a9ab8a31394ade9e5aa4f7f86))
+* **PN-19455:** show error on payment if retrieval ID is expired ([#1907](https://github.com/pagopa/pn-frontend/issues/1907)) ([ab5d8ef](https://github.com/pagopa/pn-frontend/commit/ab5d8ef2db493d9f7c719141fc96b3235953bf92))
+* **PN-19689:** user validation with spid_level ([#1903](https://github.com/pagopa/pn-frontend/issues/1903)) ([7a90ef5](https://github.com/pagopa/pn-frontend/commit/7a90ef598f9162defac0e68987d6132178e457f4))
+* **PN-19701:** add error_description to error callback ([4c9c5da](https://github.com/pagopa/pn-frontend/commit/4c9c5daf5d79a63f8d8cabb4c638aa6e9db83521))
+* **PN-19701:** remove oidc-state API ([#1894](https://github.com/pagopa/pn-frontend/issues/1894)) ([dc67247](https://github.com/pagopa/pn-frontend/commit/dc672474c2cbf952bb8071beac3f9ff3436098c2))
+* **PN-19702:** update oidc token exchange path and remove redirect_uri parameter ([#1876](https://github.com/pagopa/pn-frontend/issues/1876)) ([b43ab46](https://github.com/pagopa/pn-frontend/commit/b43ab464455c8b1bf5d8e332c5c59672bb1c9e57))
+* **PN-19702:** update oidc-token params, mixpanel event and redirect with rapid access params ([#1896](https://github.com/pagopa/pn-frontend/issues/1896)) ([a30d6d0](https://github.com/pagopa/pn-frontend/commit/a30d6d0cccfe99469daffd72fd03bc28bd0fa0b9))
+* **PN-19839:** append rapid access params to oidc-authorize ([#1870](https://github.com/pagopa/pn-frontend/issues/1870)) ([2749fd0](https://github.com/pagopa/pn-frontend/commit/2749fd0ee08317258a18f3f3cf5e77eabb4b172e))
+* **PN-19857:** remove checkbox from SERCQ activation and fix copy ([#1889](https://github.com/pagopa/pn-frontend/issues/1889)) ([4e00291](https://github.com/pagopa/pn-frontend/commit/4e00291ffe44a807240b236ba6c1614cea50573a))
+* **PN-19990:** fix content copy for reworked timeline ([#1915](https://github.com/pagopa/pn-frontend/issues/1915)) ([bcfe94e](https://github.com/pagopa/pn-frontend/commit/bcfe94eda8c598b27d9c141ca172b20f541426a9))
+* **PN-20014:** close IDP select dialog before navigating ([#1916](https://github.com/pagopa/pn-frontend/issues/1916)) ([a4868c6](https://github.com/pagopa/pn-frontend/commit/a4868c654dcefd4298e34910ac9ec1b36ae46542))
+* **PN-20014:** update translations of MISpidSelectOIDialog and track mixpanel event of unavailable IDP ([#1919](https://github.com/pagopa/pn-frontend/issues/1919)) ([ef9ada9](https://github.com/pagopa/pn-frontend/commit/ef9ada9aa9d1033d1250e6851435943269ffcc0d))
+* **PN-20036:** remove useless source property from Mixpanel Tech events ([#1905](https://github.com/pagopa/pn-frontend/issues/1905)) ([7d32d13](https://github.com/pagopa/pn-frontend/commit/7d32d13c981d2070962cab3b53c2c4860835e1d1))
+* **PN-20069:** redirect to login when error is already handled by OneIdentity ([#1906](https://github.com/pagopa/pn-frontend/issues/1906)) ([bb916fd](https://github.com/pagopa/pn-frontend/commit/bb916fdc971c79c65c398826333db909aab5c644))
+* reduce to lowcase the content in timeline  ([#1917](https://github.com/pagopa/pn-frontend/issues/1917)) ([ae0c566](https://github.com/pagopa/pn-frontend/commit/ae0c56673f7fb2b5c69e2f3d5f4c3ca590867bf9))
+
+
+### Features
+
+* **PN-17000:** empty state and skeletons on spid select dialog ([#1866](https://github.com/pagopa/pn-frontend/issues/1866)) ([e2beaac](https://github.com/pagopa/pn-frontend/commit/e2beaac2583affb5f1199f781997496c349a3e2f))
+* **PN-19099:** use MUI Italia code input and add copy action ([#1899](https://github.com/pagopa/pn-frontend/issues/1899)) ([eab71f3](https://github.com/pagopa/pn-frontend/commit/eab71f303b27ae4d3d9a210a2771885abb7bf84e))
+* **PN-19699, PN-19700:** UI of OneIdentity login page and fetch IDPS ([#1862](https://github.com/pagopa/pn-frontend/issues/1862)) ([6b0cbda](https://github.com/pagopa/pn-frontend/commit/6b0cbda3bce28e7ca22bf69559caf18adf561286))
+* **PN-19701:** handle OneIdentity callback and errors ([#1873](https://github.com/pagopa/pn-frontend/issues/1873)) ([2d0889f](https://github.com/pagopa/pn-frontend/commit/2d0889fbb8b181383182e59b96c5de7c9e066836))
+* **PN-19759:** Add Mixpanel functional tracking foundation ([#1893](https://github.com/pagopa/pn-frontend/issues/1893)) ([2d1b877](https://github.com/pagopa/pn-frontend/commit/2d1b8777c6476b48323cf147123fec586663099b))
+* **PN-19760:** Add PA mixpanel tracking foundation and events ([#1911](https://github.com/pagopa/pn-frontend/issues/1911)) ([6a3be17](https://github.com/pagopa/pn-frontend/commit/6a3be17c8b035a48c87833e76d8a179dac07d900))
+* **PN-19761:** mixpanel event tracking (PG) ([#1910](https://github.com/pagopa/pn-frontend/issues/1910)) ([f36328a](https://github.com/pagopa/pn-frontend/commit/f36328a05ab4ffdc5824935b7a351e6a12b77cb0))
+* **PN-19762:** Add UTM support to PG login flow ([#1878](https://github.com/pagopa/pn-frontend/issues/1878)) ([87ae862](https://github.com/pagopa/pn-frontend/commit/87ae8622b4a2adbb8e9e86f7dd0c20b5b416335e))
+* **PN-19839:** fetch oidc-authorize and redirect to IDP login page ([#1869](https://github.com/pagopa/pn-frontend/issues/1869)) ([7211969](https://github.com/pagopa/pn-frontend/commit/721196983e95f3b1920f5e182c77aa31d56f7778))
+* **PN-19856:** implement section for fac-simile document ([#1895](https://github.com/pagopa/pn-frontend/issues/1895)) ([22b5dc7](https://github.com/pagopa/pn-frontend/commit/22b5dc7b013f020e18e8b74e21a7a809601a359c))
+* **PN-19905:** add new header to set language for createOrUpdateAddress action ([#1888](https://github.com/pagopa/pn-frontend/issues/1888)) ([0a8e431](https://github.com/pagopa/pn-frontend/commit/0a8e4310034a805f972632e866022425a0793eb6))
+* **PN-19967:** update PG OneTrust cookie banner assets ([#1908](https://github.com/pagopa/pn-frontend/issues/1908)) ([b62ddea](https://github.com/pagopa/pn-frontend/commit/b62ddeae31857092d6b3c38eed80e585cfeaa64f))
+* **PN-19993:** implement mixpanel event for bilinguism ([#1918](https://github.com/pagopa/pn-frontend/issues/1918)) ([386e7ca](https://github.com/pagopa/pn-frontend/commit/386e7ca47849b5e8fef7537c615d48f9532fb772))
+* **PN-20014:** import new MISpidSelectOIDialog component from mui-italia ([#1902](https://github.com/pagopa/pn-frontend/issues/1902)) ([4f97aa7](https://github.com/pagopa/pn-frontend/commit/4f97aa79508f529b49e7b67eb66b24f938895433))
+
+
+
+
+
 # [2.23.0](https://github.com/pagopa/pn-frontend/compare/v2.23.0-RC.4...v2.23.0) (2026-05-06)
 
 **Note:** Version bump only for package pn-frontend
