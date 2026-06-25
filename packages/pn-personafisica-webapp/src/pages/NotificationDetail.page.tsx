@@ -6,9 +6,8 @@ import { Fragment, useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 
-import { Box, Stack } from '@mui/material';
+import { Box, Paper as MIPaper, Stack } from '@mui/material';
 import {
-  AbstractPaper,
   AccessDenied,
   ApiError,
   ApiErrorWrapper,
@@ -22,12 +21,10 @@ import {
   NotificationDetailDocuments,
   NotificationDetailOtherDocument,
   NotificationDetailPayment,
-  NotificationDetailSection,
   NotificationDocumentType,
   NotificationFeePolicy,
   NotificationPaymentRecipient,
   NotificationRelatedDowntimes,
-  NotificationTimelineBox,
   PagoPaIntegrationMode,
   PaymentAttachmentSName,
   PaymentDetails,
@@ -46,7 +43,7 @@ import {
   EventDeliveryModeType,
 } from '@pagopa-pn/pn-commons/src/models/MixpanelEvents';
 import { theme } from '@pagopa-pn/pn-commons/src/test-utils';
-import { MIAlert, MIPaper } from '@pagopa/mui-italia';
+import { MIAlert } from '@pagopa/mui-italia';
 
 import NotificationDetailOnboardingPrompt from '../components/Contacts/Onboarding/NotificationDetailOnboardingPrompt';
 import DomicileBanner from '../components/DomicileBanner/DomicileBanner';
@@ -623,24 +620,24 @@ const NotificationDetail: React.FC = () => {
               {/* start intro, banner and aside */}
               <Stack
                 sx={{
-                  display: { xs: 'flex', md: 'contents', max: 'flex' },
+                  display: { xs: 'flex', md: 'contents' },
                   flexDirection: 'column',
                   gap: 3,
-                  width: { xs: '100%', max: 'calc(58% - 12px)' },
+                  width: { xs: '100%', xxl: 'calc(58% - 12px)' },
                 }}
               >
                 {/* ELEMENTO 1: intro and banner */}
-                <Stack sx={{ width: { xs: '100%', md: '100%', max: '58%' } }}>
+                <Stack sx={{ width: { xs: '100%', md: '100%' } }}>
                   {/* start intro and banner */}
                   {cancelledAlert}
-                  <AbstractPaper
+                  {/* <AbstractPaper
                     title={notification.subject}
                     senderPaId={notification.senderPaId}
                     senderDenomination={notification.senderDenomination}
                     sentAt={notification.sentAt}
                     iun={notification.iun}
                     abstract={notification.abstract}
-                  />
+                  /> */}
                   {banner}
                   {pecUnreachableAlert}
                   {/* end intro and banner */}
@@ -649,13 +646,13 @@ const NotificationDetail: React.FC = () => {
                 {/* ELEMENTO 2: document and payment */}
                 <Stack
                   sx={{
-                    width: { xs: '100%', md: 'calc(58% - 12px)', max: '100%' },
-                    background: { md: 'red', max: 'green' },
+                    width: { xs: '100%', md: 'calc(58% - 12px)' },
+                    background: { md: 'red' },
                   }}
                 >
                   {/* start document and payment section */}
                   <Stack spacing={3}>
-                    <MIPaper padding={24}>
+                    <MIPaper>
                       <NotificationDetailDocuments
                         title={t('detail.acts', { ns: 'notifiche' })}
                         documents={notification.documents}
@@ -677,7 +674,7 @@ const NotificationDetail: React.FC = () => {
                       )}
                     </MIPaper>
                     {checkIfUserHasPayments && (
-                      <MIPaper padding={24}>
+                      <MIPaper>
                         <ApiErrorWrapper
                           apiId={NOTIFICATION_ACTIONS.GET_RECEIVED_NOTIFICATION_PAYMENT_INFO}
                           reloadAction={() => fetchPaymentsInfo(currentRecipient.payments ?? [])}
@@ -705,7 +702,7 @@ const NotificationDetail: React.FC = () => {
                         </ApiErrorWrapper>
                       </MIPaper>
                     )}
-                    <MIPaper padding={24} sx={{ mb: 3 }} data-testid="aarBox">
+                    <MIPaper sx={{ mb: 3 }} data-testid="aarBox">
                       <NotificationDetailDocuments
                         title={t('detail.aar-acts', { ns: 'notifiche' })}
                         documents={notification.otherDocuments ?? []}
@@ -747,15 +744,15 @@ const NotificationDetail: React.FC = () => {
 
               {/* ELEMENTO 3: aside */}
               <Stack
-                order={{ xs: 3, md: 3, max: 2 }}
+                order={{ xs: 3, md: 3 }}
                 component="aside"
                 sx={{
-                  width: { xs: '100%', md: 'calc(42% - 12px)', max: 'calc(42% - 12px)' },
+                  width: { xs: '100%', md: 'calc(42% - 12px)' },
                 }}
               >
                 {/* start aside section */}
-                <NotificationTimelineBox isCancelled={false} refinementDate={null} />
-                <NotificationDetailSection />
+                {/* <NotificationTimelineBox isCancelled={false} refinementDate={null} />
+                <NotificationDetailSection /> */}
                 {/* end aside section */}
               </Stack>
               {/* end document, payment and aside */}
