@@ -1,6 +1,6 @@
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
-import { Grid, IconButton, Typography } from '@mui/material';
-import { MIAlert, MIChip, MIPaper } from '@pagopa/mui-italia';
+import { Grid, IconButton, Paper as MIPaper, Typography } from '@mui/material';
+import { MIAlert, MIChip } from '@pagopa/mui-italia';
 
 type NotificationTimelineBoxProps = {
   isCancelled: boolean;
@@ -15,7 +15,7 @@ const NotificationTimelineBox = ({
 }: NotificationTimelineBoxProps) => {
   console.log('NotificationTimelineBox rendered', refinementDate, downtimeEvent);
   return (
-    <MIPaper padding={24}>
+    <MIPaper>
       <Grid container direction="row" alignItems="center">
         <Grid item xs={10} lg={10}>
           <Typography component="h2" variant="h5">

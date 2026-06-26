@@ -2,13 +2,15 @@ import { useState } from 'react';
 
 import AccountBalanceOutlinedIcon from '@mui/icons-material/AccountBalanceOutlined';
 import VerifiedRoundedIcon from '@mui/icons-material/VerifiedRounded';
-import { Avatar, Box, Divider, Grid, Typography } from '@mui/material';
+import { Avatar, Box, Divider, Grid, Paper as MIPaper, Typography } from '@mui/material';
 import { visuallyHidden } from '@mui/utils';
-import { TitleBox, formatDate, getAccessibleIun, useIsMobile } from '@pagopa-pn/pn-commons';
-import { getAccessibleDate } from '@pagopa-pn/pn-commons/src/utility/accessibility.utility';
-import { MIPaper, Tag, theme } from '@pagopa/mui-italia';
+import { Tag, theme } from '@pagopa/mui-italia';
 
+import { useIsMobile } from '../../hooks';
+import { formatDate } from '../../utility';
+import { getAccessibleDate, getAccessibleIun } from '../../utility/accessibility.utility';
 import { getLocalizedOrDefaultLabel } from '../../utility/localization.utility';
+import TitleBox from '../TitleBox';
 
 interface AbstractPaperProps {
   title?: string;
@@ -19,7 +21,7 @@ interface AbstractPaperProps {
   abstract?: string; // todo: to sanitize and format the abstract content before passing it to the component
 }
 
-const AbstractMIPaper = ({
+const AbstractPaper = ({
   title,
   senderPaId,
   senderDenomination,
@@ -34,11 +36,9 @@ const AbstractMIPaper = ({
 
   return (
     <MIPaper
-      padding={24}
       sx={{
         borderTop: borderTopStyle,
       }}
-      borderRadius={8}
     >
       <Tag
         variant="default"
@@ -101,4 +101,4 @@ const AbstractMIPaper = ({
   );
 };
 
-export default AbstractMIPaper;
+export default AbstractPaper;

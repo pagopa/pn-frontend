@@ -1,11 +1,19 @@
 import OpenInBrowserRoundedIcon from '@mui/icons-material/OpenInBrowserRounded';
-import { Divider, IconButton, List, ListItem, ListItemText, Typography } from '@mui/material';
-import { MIPaper, theme } from '@pagopa/mui-italia';
+import {
+  Divider,
+  IconButton,
+  List,
+  ListItem,
+  ListItemText,
+  Paper as MIPaper,
+  Typography,
+} from '@mui/material';
+import { theme } from '@pagopa/mui-italia';
 
 const NotificationDetailSection = () => {
   console.log('NotificationDetailSection rendered');
   return (
-    <MIPaper padding={24}>
+    <MIPaper>
       <Typography component="h2" variant="h5">
         Dettagli della notifica
       </Typography>
