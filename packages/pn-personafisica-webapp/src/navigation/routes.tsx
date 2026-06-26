@@ -20,6 +20,7 @@ import { NOTIFICHE } from './routes.const';
 const Profile = lazyRetry(() => import('../pages/Profile.page'));
 const Notifiche = lazyRetry(() => import('../pages/Notifiche.page'));
 const NotificationDetail = lazyRetry(() => import('../pages/NotificationDetail.page'));
+const ComBoDetail = lazyRetry(() => import('../pages/ComBoDetail.page'));
 const Contacts = lazyRetry(() => import('../pages/Contacts.page'));
 const Deleghe = lazyRetry(() => import('../pages/Deleghe.page'));
 const NuovaDelega = lazyRetry(() => import('../pages/NuovaDelega.page'));
@@ -53,6 +54,7 @@ const Router: React.FC = () => {
                 <Route path={routes.NOTIFICHE} element={<Notifiche />} />
                 <Route path={routes.NOTIFICHE_DELEGATO} element={<Notifiche />} />
                 <Route path={routes.DETTAGLIO_NOTIFICA} element={<NotificationDetail />} />
+                <Route path={routes.DETTAGLIO_COMBO} element={<ComBoDetail />} />
                 <Route path={routes.DETTAGLIO_NOTIFICA_DELEGATO} element={<NotificationDetail />} />
                 <Route path={routes.DELEGHE} element={<Deleghe />} />
                 <Route path={routes.NUOVA_DELEGA} element={<NuovaDelega />} />
