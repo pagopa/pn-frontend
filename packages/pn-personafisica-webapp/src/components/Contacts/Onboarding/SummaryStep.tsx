@@ -115,11 +115,9 @@ const SummaryStep: React.FC<Props> = ({ mode, email, pec, io }) => {
           </Stack>
         </Stack>
       )}
-      <MIAlert
-        data-testid="onboardingDDomAlert"
-        severity="info"
-        description={t('onboarding.digital-domicile.summary.info-box')}
-      />
+      <MIAlert data-testid="onboardingDDomAlert" severity="info">
+        {t('onboarding.digital-domicile.summary.info-box')}
+      </MIAlert>
     </Stack>
   );
 };
