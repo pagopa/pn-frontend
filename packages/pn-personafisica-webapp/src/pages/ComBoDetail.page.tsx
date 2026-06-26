@@ -207,7 +207,7 @@ const ComBoDetail: React.FC = () => {
       <Stack direction={{ xs: 'column', md: 'row' }} spacing={2}>
         <MIPaper sx={{ p: 3, flex: 1 }} variant="outlined">
           <NotificationDetailDocuments
-            title="Documenti allegati"
+            title={t('detail.acts', { ns: 'notifiche' })}
             documents={mockDocuments}
             clickHandler={handleDocumentDownload}
             documentsAvailable={true}
