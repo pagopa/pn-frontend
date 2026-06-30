@@ -14,6 +14,7 @@ import {
   PnBreadcrumb,
 } from '@pagopa-pn/pn-commons';
 
+import { informalNotificationMock } from '../__mocks__/InformalNotification.mock';
 import { BffFullInformalNotificationV1 } from '../generated-client/informal-notifications';
 import { PFEventsType } from '../models/PFEventsType';
 import * as routes from '../navigation/routes.const';
@@ -22,30 +23,15 @@ import {
   NOTIFICATION_ACTIONS,
   getReceivedNotificationPayment,
 } from '../redux/notification/actions';
-import { getReceivedInformalNotification } from '../redux/notification/informalActions';
 import { RootState } from '../redux/store';
 import { getConfiguration } from '../services/configuration.service';
 import PFEventStrategyFactory from '../utility/MixpanelUtils/PFEventStrategyFactory';
-
-const mockDocuments = [
-  {
-    title: 'Bolletta servizio idrico 76543210',
-    ref: {
-      key: 'mock-document-key',
-      versionToken: 'mock-version-token',
-    },
-    digests: {
-      sha256: 'mock-sha256',
-    },
-    contentType: 'application/pdf',
-  },
-];
 
 const mockPaymentsData: PaymentsData = {
   pagoPaF24: [
     {
       pagoPa: {
-        amount: 57,
+        amount: 999,
         noticeCode: '302000100000019421',
         creditorTaxId: '12345678901',
         applyCost: false,
@@ -65,16 +51,29 @@ const InformalNotificationDetail: React.FC = () => {
   const dispatch = useAppDispatch();
   const paymentTpp = useAppSelector((state: RootState) => state.generalInfoState.paymentTpp);
 
-  const [comboNotification, setComboNotification] = React.useState<BffFullInformalNotificationV1>();
+  const [informalNotification, setInformalNotification] =
+    React.useState<BffFullInformalNotificationV1>();
 
+  /*   
+  
+   // TODO: rimuovere quando il BE sarà disponibile
   useEffect(() => {
     if (id) {
       void dispatch(getReceivedInformalNotification(id))
         .unwrap()
-        .then(setComboNotification)
+        .then(setInformalNotification)
         .catch(() => {});
     }
-  }, [id, dispatch]);
+  }, [id, dispatch]); */
+
+  useEffect(() => {
+    if (!id) {
+      return;
+    }
+
+    // TODO: rimuovere quando il BE sarà disponibile
+    setInformalNotification(informalNotificationMock);
+  }, [id]);
 
   const properBreadcrumb = useMemo(() => {
     const backRoute = routes.NOTIFICHE;
@@ -83,20 +82,18 @@ const InformalNotificationDetail: React.FC = () => {
       <PnBreadcrumb
         linkRoute={backRoute}
         linkLabel={t('title', { ns: 'notifiche' })}
-        currentLocationLabel={
-          comboNotification?.subject ?? 'Avviso di pagamento per la fornitura idrica'
-        }
+        currentLocationLabel={informalNotification?.subject ?? ''}
         showBackAction={false}
       />
     );
-  }, [i18n.language, comboNotification?.subject]);
+  }, [i18n.language, informalNotification?.subject]);
 
   const breadcrumb = <Fragment>{properBreadcrumb}</Fragment>;
 
   const getPaymentAttachmentAction = (name: PaymentAttachmentSName, attachmentIdx?: number) =>
     dispatch(
       getReceivedNotificationPayment({
-        iun: comboNotification?.iun ?? '',
+        iun: informalNotification?.iun ?? '',
         attachmentName: name,
         mandateId,
         attachmentIdx,
@@ -117,10 +114,10 @@ const InformalNotificationDetail: React.FC = () => {
 
       <MIPaper sx={{ p: 3, display: 'flex', flexDirection: 'column', gap: 2 }} variant="outlined">
         <AbstractPaper
-          title={comboNotification?.subject ?? 'Avviso di pagamento per la fornitura idrica'}
-          senderDenomination={comboNotification?.senderDenomination ?? 'Sorical S.p.A.'}
-          sentAt={comboNotification?.sentAt ?? '2026-04-12T00:00:00.000Z'}
-          iun={comboNotification?.iun ?? 'YYYYMM-1-ABCD-EFGH-X'}
+          title={informalNotification?.subject}
+          senderDenomination={informalNotification?.senderDenomination}
+          sentAt={informalNotification?.sentAt ?? ''}
+          iun={informalNotification?.iun ?? ''}
           abstract=""
         />
       </MIPaper>
@@ -129,7 +126,7 @@ const InformalNotificationDetail: React.FC = () => {
         <MIPaper sx={{ p: 3, flex: 1 }} variant="outlined">
           <NotificationDetailDocuments
             title={t('detail.acts', { ns: 'notifiche' })}
-            documents={comboNotification?.documents ?? mockDocuments}
+            documents={informalNotification?.documents}
             clickHandler={handleDocumentDownload}
             documentsAvailable={true}
             downloadFilesMessage=""
@@ -168,7 +165,7 @@ const InformalNotificationDetail: React.FC = () => {
           payments={mockPaymentsData}
           paymentTpp={paymentTpp}
           isCancelled={false}
-          iun={comboNotification?.iun ?? ''}
+          iun={informalNotification?.iun ?? ''}
           handleTrackEvent={trackEventPaymentRecipient}
           onPayClick={() => {}}
           onPayTppClick={() => {}}
