@@ -6,7 +6,7 @@ import { PnBreadcrumb, TitleBox } from '@pagopa-pn/pn-commons';
 
 import * as routes from '../navigation/routes.const';
 
-const ComBoDetail: React.FC = () => {
+const InformalNotificationDetail: React.FC = () => {
   const { t } = useTranslation(['common', 'notifiche']);
 
   return (
@@ -32,4 +32,4 @@ const ComBoDetail: React.FC = () => {
   );
 };
 
-export default ComBoDetail;
+export default InformalNotificationDetail;
