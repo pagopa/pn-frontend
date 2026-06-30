@@ -118,7 +118,8 @@ const InformalNotificationDetail: React.FC = () => {
           senderDenomination={informalNotification?.senderDenomination}
           sentAt={informalNotification?.sentAt ?? ''}
           iun={informalNotification?.iun ?? ''}
-          abstract=""
+          isLegal={false}
+          abstract="Ciao Gervasia,\n\nSorical S.p.A. ti informa che è stata emessa una fattura per l’utenza n. 182140 relativa al periodo 23 dicembre 2025 / 31 marzo 2026.\n\nDi seguito trovi le informazioni principali per il pagamento:\n\nImporto: 60,68 €\n\nScadenza: 26 maggio 2026\n\nPer avere maggiori informazioni prendi visione degli allegati, che possono fornirti dettagli importanti.\n\nPuoi effettuare il pagamento direttamente premendo Paga. In alternativa, puoi utilizzare l’avviso allegato per saldare l’importo tramite tutti i canali abilitati a pagoPA.\n\nIn ogni caso, qualora avessi bisogno di assistenza, contatta Sorical S.p.A. attraverso i suoi canali ufficiali."
         />
       </MIPaper>
 

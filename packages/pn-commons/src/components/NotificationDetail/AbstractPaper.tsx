@@ -19,6 +19,7 @@ interface AbstractPaperProps {
   sentAt: string;
   iun: string;
   abstract?: string; // todo: to sanitize and format the abstract content before passing it to the component
+  isLegal?: boolean;
 }
 
 const AbstractPaper = ({
@@ -28,23 +29,26 @@ const AbstractPaper = ({
   sentAt,
   iun,
   abstract,
+  isLegal = true,
 }: AbstractPaperProps) => {
   const isMobile = useIsMobile();
   const [hasError, setHasError] = useState(false);
 
-  const borderTopStyle = `2px solid ${theme.palette.primary.main}`;
-
   return (
     <MIPaper
       sx={{
-        borderTop: borderTopStyle,
+        ...(isLegal && {
+          borderTop: `2px solid ${theme.palette.primary.main}`,
+        }),
       }}
     >
-      <Tag
-        variant="default"
-        icon={VerifiedRoundedIcon}
-        value={getLocalizedOrDefaultLabel('notifications', 'detail.legal-value')}
-      />
+      {isLegal && (
+        <Tag
+          variant="default"
+          icon={VerifiedRoundedIcon}
+          value={getLocalizedOrDefaultLabel('notifications', 'detail.legal-value')}
+        />
+      )}
       <TitleBox variantTitle="h4" componentTitle="h1" title={title} sx={{ mt: 2 }} mbTitle={0} />
       <Divider aria-hidden sx={{ my: 2 }} />
       <Grid container>
