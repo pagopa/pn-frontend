@@ -122,20 +122,39 @@ const InformalNotificationDetail: React.FC = () => {
         />
       </MIPaper>
 
-      <Stack direction={{ xs: 'column', md: 'row' }} spacing={2}>
-        <MIPaper sx={{ p: 3, flex: 1 }} variant="outlined">
-          <NotificationDetailDocuments
-            title={t('detail.acts', { ns: 'notifiche' })}
-            documents={informalNotification?.documents}
-            clickHandler={handleDocumentDownload}
-            documentsAvailable={true}
-            downloadFilesMessage=""
-            downloadFilesLink=""
-            titleVariant="h5"
-          />
-        </MIPaper>
+      <Stack direction={{ xs: 'column', md: 'row' }} spacing={2} alignItems="flex-start">
+        <Stack spacing={2} sx={{ width: { xs: '100%', md: '65%' } }}>
+          <MIPaper sx={{ p: 3, flex: 1 }} variant="outlined">
+            <NotificationDetailDocuments
+              title={t('detail.acts', { ns: 'notifiche' })}
+              documents={informalNotification?.documents}
+              clickHandler={handleDocumentDownload}
+              documentsAvailable={true}
+              downloadFilesMessage=""
+              downloadFilesLink=""
+              titleVariant="h5"
+            />
+          </MIPaper>
+          <MIPaper sx={{ p: 3 }} variant="outlined">
+            <NotificationPaymentRecipient
+              payments={mockPaymentsData}
+              paymentTpp={paymentTpp}
+              isCancelled={false}
+              iun={informalNotification?.iun ?? ''}
+              handleTrackEvent={trackEventPaymentRecipient}
+              onPayClick={() => {}}
+              onPayTppClick={() => {}}
+              handleFetchPaymentsInfo={() => {}}
+              getPaymentAttachmentAction={getPaymentAttachmentAction}
+              timerF24={F24_DOWNLOAD_WAIT_TIME}
+              costDetailsAssistanceLink={NOTIFICATION_COST_DETAILS_ASSISTANCE_LINK}
+              costDetails={undefined}
+              paymentTppUrlActionID={NOTIFICATION_ACTIONS.GET_RECEIVED_NOTIFICATION_PAYMENT_TPP_URL}
+            />
+          </MIPaper>
+        </Stack>
 
-        <MIPaper sx={{ p: 3, width: { xs: '100%', md: 360 } }} variant="outlined">
+        <MIPaper sx={{ p: 3, width: { xs: '100%', md: '35%' } }} variant="outlined">
           <Stack spacing={2}>
             <Typography variant="h5">Contatta il mittente</Typography>
 
@@ -159,24 +178,6 @@ const InformalNotificationDetail: React.FC = () => {
           </Stack>
         </MIPaper>
       </Stack>
-
-      <MIPaper sx={{ p: 3 }} variant="outlined">
-        <NotificationPaymentRecipient
-          payments={mockPaymentsData}
-          paymentTpp={paymentTpp}
-          isCancelled={false}
-          iun={informalNotification?.iun ?? ''}
-          handleTrackEvent={trackEventPaymentRecipient}
-          onPayClick={() => {}}
-          onPayTppClick={() => {}}
-          handleFetchPaymentsInfo={() => {}}
-          getPaymentAttachmentAction={getPaymentAttachmentAction}
-          timerF24={F24_DOWNLOAD_WAIT_TIME}
-          costDetailsAssistanceLink={NOTIFICATION_COST_DETAILS_ASSISTANCE_LINK}
-          costDetails={undefined}
-          paymentTppUrlActionID={NOTIFICATION_ACTIONS.GET_RECEIVED_NOTIFICATION_PAYMENT_TPP_URL}
-        />
-      </MIPaper>
     </Box>
   );
 };
