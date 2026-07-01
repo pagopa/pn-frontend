@@ -353,7 +353,7 @@
       "tpp-type": "a third-party digital channel"
     },
     "downtimes": {
-      "title": "DISRUPTIONS",
+      "title": "Disruptions",
       "textWithEndDate": "Disruption started {{startDate}} and ended {{endDate}} on the following functionalities:",
       "textWithoutEndDate": "Disruption started {{startDate}} and not yet ended on the following functionalities:",
       "datePrefix": "the ",
@@ -379,7 +379,7 @@
       }
     },
     "bilingual": {
-      "title": "SUPPORT FACSIMILE TEMPLATES in English",
+      "title": "Support facsimile templates in English",
       "description": "The language of the attached documents may differ from the one you are using to browse the portal. To understand the content of these documents, you can use the facsimile templates found here.",
       "action": "Consult the templates"
     }

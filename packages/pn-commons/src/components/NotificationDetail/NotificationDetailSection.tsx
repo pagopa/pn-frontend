@@ -1,41 +1,62 @@
 import OpenInBrowserRoundedIcon from '@mui/icons-material/OpenInBrowserRounded';
-import {
-  Divider,
-  IconButton,
-  List,
-  ListItem,
-  ListItemText,
-  Paper as MIPaper,
-  Typography,
-} from '@mui/material';
-import { theme } from '@pagopa/mui-italia';
+import { IconButton, List, ListItem, ListItemText, Typography } from '@mui/material';
+import { MIPaper, theme } from '@pagopa/mui-italia';
 
-const NotificationDetailSection = () => {
-  console.log('NotificationDetailSection rendered');
+import { NotificationDetailOtherDocument, NotificationDetailRecipient } from '../../models';
+
+interface Props {
+  recipient: NotificationDetailRecipient;
+  clickHandler: (document: string | NotificationDetailOtherDocument | undefined) => void;
+  documents: Array<NotificationDetailOtherDocument> | undefined;
+  downloadFilesLink: string;
+  disableDownloads: boolean;
+}
+
+const NotificationDetailSection = ({
+  recipient,
+  clickHandler,
+  documents,
+  downloadFilesLink,
+  disableDownloads,
+}: Props) => {
+  console.log('NotificationDetailSection recipients:', recipient);
+  console.log(downloadFilesLink);
+  console.log(disableDownloads);
   return (
-    <MIPaper>
-      <Typography component="h2" variant="h5">
+    <MIPaper padding={24}>
+      <Typography component="h2" variant="h5" sx={{ mb: 1 }}>
         Dettagli della notifica
       </Typography>
 
-      <List>
-        <ListItem disableGutters>
+      <List sx={{ p: 0 }}>
+        <ListItem
+          disableGutters
+          sx={{
+            alignItems: 'flex-start',
+            borderBottom: `1px solid ${theme.palette.divider}`,
+          }}
+        >
           <ListItemText sx={{ p: 0 }}>
             <Typography variant="body2">Persona destinataria</Typography>
             <Typography variant="sidenav" color="text.primary">
-              Maria Rossi - MRARSS08S05I480N
+              {recipient.denomination} - {recipient.taxId}
             </Typography>
           </ListItemText>
         </ListItem>
-        <Divider />
 
         <ListItem
+          data-testid="aarBox"
           disableGutters
           secondaryAction={
-            <IconButton edge="end" aria-label="delete">
+            <IconButton
+              edge="end"
+              aria-label="Apri avviso di Avvenuta ricezione"
+              onClick={() => clickHandler(documents?.find((d) => d.documentType === 'AAR'))}
+            >
               <OpenInBrowserRoundedIcon />
             </IconButton>
           }
+          sx={{ alignItems: 'flex-start', pb: 0 }}
         >
           <ListItemText
             primary="Avviso di Avvenuta ricezione"

@@ -1,49 +1,39 @@
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
-import { Grid, IconButton, Paper as MIPaper, Typography } from '@mui/material';
-import { MIAlert, MIChip } from '@pagopa/mui-italia';
+import { IconButton, Stack, Typography } from '@mui/material';
+import { MIChip, MIPaper } from '@pagopa/mui-italia';
+
+import { useIsMobile } from '../../hooks';
 
 type NotificationTimelineBoxProps = {
   isCancelled: boolean;
-  refinementDate: string | null;
-  downtimeEvent?: boolean;
+  timelineSummary: string;
 };
 
 const NotificationTimelineBox = ({
   isCancelled,
-  refinementDate,
-  downtimeEvent,
+  timelineSummary,
 }: NotificationTimelineBoxProps) => {
-  console.log('NotificationTimelineBox rendered', refinementDate, downtimeEvent);
+  const isMobile = useIsMobile('sm');
+  console.log('isMobile', isMobile);
   return (
-    <MIPaper>
-      <Grid container direction="row" alignItems="center">
-        <Grid item xs={10} lg={10}>
-          <Typography component="h2" variant="h5">
+    <MIPaper padding={24}>
+      <Stack direction="row" alignItems="center" justifyContent="space-between" width="100%">
+        <Stack width="85%">
+          <Typography component="h2" variant="h5" sx={{ mb: 1 }}>
             Stato della timeline
           </Typography>
           <MIChip
             color={isCancelled ? 'warning' : 'success'}
             variant="filled"
             label={isCancelled ? 'Notifica annullata' : 'Notifica a valore di legge'}
-            sx={{ my: 1 }}
+            sx={{ my: 1, width: 'fit-content' }}
           />
-          <Typography variant="body2">
-            L’ente ha annullato l’invio della notifica SEND, che quindi dannullamento non produrrà
-            più effetti giuridici.
-          </Typography>
-          <MIAlert
-            title="Disservizi"
-            severity="warning"
-            description="Disservizio iniziato il 11/06/2026 e non ancora concluso sulle seguenti funzionalità: Invio delle notifiche. L'attestazione sarà disponibile al termine del disservizio."
-            sx={{ mt: 2 }}
-          />
-        </Grid>
-        <Grid item xs={2} lg={2} sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-          <IconButton size="small" aria-label="Vai alla timeline" onClick={() => {}}>
-            <ArrowForwardIosIcon />
-          </IconButton>
-        </Grid>
-      </Grid>
+          {!isMobile && <Typography variant="body2">{timelineSummary}</Typography>}
+        </Stack>
+        <IconButton size="small" aria-label="Vai alla timeline" onClick={() => {}}>
+          <ArrowForwardIosIcon />
+        </IconButton>
+      </Stack>
     </MIPaper>
   );
 };

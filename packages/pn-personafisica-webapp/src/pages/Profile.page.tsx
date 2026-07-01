@@ -21,7 +21,7 @@ const Profile = () => {
 
   return (
     <Box p={3}>
-      <DomicileBanner source={ContactSource.PROFILO} />
+      <DomicileBanner source={ContactSource.PROFILO} my={4} />
 
       <TitleBox
         variantTitle="h4"

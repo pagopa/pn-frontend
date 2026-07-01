@@ -2,9 +2,9 @@ import { useState } from 'react';
 
 import AccountBalanceOutlinedIcon from '@mui/icons-material/AccountBalanceOutlined';
 import VerifiedRoundedIcon from '@mui/icons-material/VerifiedRounded';
-import { Avatar, Box, Divider, Grid, Paper as MIPaper, Typography } from '@mui/material';
+import { Avatar, Box, Divider, Grid, Typography } from '@mui/material';
 import { visuallyHidden } from '@mui/utils';
-import { Tag, theme } from '@pagopa/mui-italia';
+import { MIPaper, Tag, theme } from '@pagopa/mui-italia';
 
 import { useIsMobile } from '../../hooks';
 import { formatDate } from '../../utility';
@@ -36,6 +36,7 @@ const AbstractPaper = ({
 
   return (
     <MIPaper
+      padding={24}
       sx={{
         ...(isLegal && {
           borderTop: `2px solid ${theme.palette.primary.main}`,

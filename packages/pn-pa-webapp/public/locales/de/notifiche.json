@@ -353,7 +353,7 @@
       "tpp-type": "ein digitaler Kanal von Drittanbietern"
     },
     "downtimes": {
-      "title": "FEHLFUNKTIONEN",
+      "title": "Fehlfunktionen",
       "textWithEndDate": "Fehlfunktion begonnen {{startDate}} und behoben {{endDate}} an folgenden Funktionen:",
       "textWithoutEndDate": "Beginn der Fehlfunktion {{startDate}} und noch nicht vollständig behoben an folgenden Funktionen:",
       "datePrefix": "am ",

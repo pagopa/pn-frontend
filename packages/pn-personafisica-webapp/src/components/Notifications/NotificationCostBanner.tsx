@@ -32,6 +32,7 @@ import PFEventStrategyFactory from '../../utility/MixpanelUtils/PFEventStrategyF
 type Props = {
   deliveryOutcome: DeliveryOutcome | null;
   notificationCost?: NotificationCostDetails;
+  my?: number;
 };
 
 type BannerContent = {
@@ -138,7 +139,11 @@ const getBannerContent = (
   };
 };
 
-export const NotificationCostBanner: React.FC<Props> = ({ deliveryOutcome, notificationCost }) => {
+export const NotificationCostBanner: React.FC<Props> = ({
+  deliveryOutcome,
+  notificationCost,
+  my,
+}) => {
   const { defaultSERCQ_SENDAddress, defaultPECAddress } = useAppSelector(
     contactsSelectors.selectAddresses
   );
@@ -199,7 +204,7 @@ export const NotificationCostBanner: React.FC<Props> = ({ deliveryOutcome, notif
   }, []);
 
   return (
-    <Box my={4}>
+    <Box my={my}>
       <Banner
         data-testid="notificationCostBanner"
         variant="tertiary"
