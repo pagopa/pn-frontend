@@ -2,7 +2,18 @@ import React, { Fragment, useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 
-import { Box, Paper as MIPaper, Stack, Typography } from '@mui/material';
+import OpenInBrowserRoundedIcon from '@mui/icons-material/OpenInBrowserRounded';
+import {
+  Box,
+  Divider,
+  IconButton,
+  List,
+  ListItem,
+  ListItemText,
+  Paper as MIPaper,
+  Stack,
+  Typography,
+} from '@mui/material';
 import {
   AbstractPaper,
   EventPaymentRecipientType,
@@ -13,6 +24,7 @@ import {
   PaymentsData,
   PnBreadcrumb,
 } from '@pagopa-pn/pn-commons';
+import { theme } from '@pagopa/mui-italia';
 
 import { informalNotificationMock } from '../__mocks__/InformalNotification.mock';
 import { BffFullInformalNotificationV1 } from '../generated-client/informal-notifications';
@@ -157,25 +169,41 @@ const InformalNotificationDetail: React.FC = () => {
 
         <MIPaper sx={{ p: 3, width: { xs: '100%', md: '35%' } }} variant="outlined">
           <Stack spacing={2}>
-            <Typography variant="h5">Contatta il mittente</Typography>
+            <Typography component="h2" variant="h5">
+              Contatta il mittente
+            </Typography>
 
-            <Stack spacing={0.5}>
-              <Typography variant="caption" color="text.secondary">
-                Numero di telefono dell&apos;ente
-              </Typography>
-              <Typography variant="body2" fontWeight={700}>
-                +39 123 456 4444
-              </Typography>
-            </Stack>
-
-            <Stack spacing={0.5}>
-              <Typography variant="caption" color="text.secondary">
-                Sito web dell&apos;ente
-              </Typography>
-              <Typography variant="body2" fontWeight={700}>
-                www.soricalspa.com
-              </Typography>
-            </Stack>
+            <List>
+              <ListItem
+                disableGutters
+                secondaryAction={
+                  <IconButton edge="end" aria-label="delete">
+                    <OpenInBrowserRoundedIcon />
+                  </IconButton>
+                }
+              >
+                <ListItemText
+                  primary="Numero di telefono dell'ente"
+                  sx={{ color: theme.palette.primary.light }}
+                  secondary={'+39 123 456 4444'}
+                />
+              </ListItem>
+              <Divider />
+              <ListItem
+                disableGutters
+                secondaryAction={
+                  <IconButton edge="end" aria-label="delete">
+                    <OpenInBrowserRoundedIcon />
+                  </IconButton>
+                }
+              >
+                <ListItemText
+                  primary="Sito web dell'ente"
+                  sx={{ color: theme.palette.primary.light }}
+                  secondary={'www.soricalspa.com'}
+                />
+              </ListItem>
+            </List>
           </Stack>
         </MIPaper>
       </Stack>
