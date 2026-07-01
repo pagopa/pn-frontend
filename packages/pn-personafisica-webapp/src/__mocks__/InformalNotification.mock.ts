@@ -1,45 +1,87 @@
-import {
-  BffFullInformalNotificationV1,
-  InformalNotificationRecipientV1RecipientTypeEnum,
-  InformalNotificationStatusV1,
-} from '../generated-client/informal-notifications';
+import { BffFullInformalNotificationV1 } from '../generated-client/informal-notifications';
 
 export const informalNotificationMock: BffFullInformalNotificationV1 = {
-  iun: 'GDVE-LTZD-ZQMY-202606-J-A',
-  senderDenomination: 'Comune di Palermo',
-  campaignId: 'campaign-1',
-  additionalLanguages: ['IT'],
-  subject: 'Test notifica..302110110074337552',
+  senderDenomination: 'Xr94TD?>A]Rz>s,SSP2[2/B',
+  campaignId: 'string',
+  additionalLanguages: ['string'],
+  subject: 'string',
   recipients: [
     {
-      recipientType: InformalNotificationRecipientV1RecipientTypeEnum.Pf,
-      taxId: 'PF-aa0c4556-5a6f-45b1-800c-0f4f3c5a57b6',
-      denomination: 'Adalgisa Centini',
-      messageId: '24db3c58-a664-44b3-aefa-40b0df34fa08',
+      recipientType: 'PF',
+      taxId: '34601227120',
+      internalId: 'string',
+      denomination: "Gz`:>mnu!L*P5pAmx'J9Zd\"%B}}y!/O')!~ZJ$`[g[d_[|SPgz4h5 0>",
+      digitalDomicile: {
+        type: 'PEC',
+        address: 'account@domain.it',
+      },
+      physicalAddress: {
+        at: 'p|fPYz"5q}G4"yZR6_rE:p%W_H=7&XfQjbdYJJLX8xP$qTg%',
+        address: 'G&$Hm%l/upYfTH8F=|v|i{Uq Jm-Eb?I|{Zdel/O_\\gcqs%D5*\\XL]',
+        addressDetails: '>tcIT3(oX0M4TI',
+        zip: 'SW ',
+        municipality: '4tM,d]Y/d<C\\v"Ql(vF,Z0ZMW:( C=q ]?&{rS[y3Y_v"]-2',
+        municipalityDetails: "Qd:BF_1bUpX-MP&`)hFm'Qbc72=6_N.,O]LU> h&}LZ0s}L+Uj+z?N)* q",
+        province: "hXqx)NG*&$/zPK;3>KMFSu-pa1<kq0is'?*e]AC_i",
+        foreignState: 's}Gd_o<uFwyE;H{,ao;F51r8gHO5r4R%A5&KvTl_k99Ckf/tpB>X|3k',
+      },
       payments: [
         {
           pagoPa: {
+            noticeCode: '302000100000019421',
             creditorTaxId: '77777777777',
-            noticeCode: '302010110074341700',
+            attachment: {
+              digests: {
+                sha256: 'jezIVxlG1M1woCSUngM6KipUN3/p8cG5RMIPnuEanlE=',
+              },
+              contentType: 'application/pdf',
+              ref: {
+                key: 'e_MwBg7QM-eKFAn3PwunJvcMKGVWEjGVNGcwQXkf1PNhdGyv1.77DHfsj5tjXsg1l6aYuwAtgZ0oWtIZIpbkw3thD5TlF',
+                versionToken:
+                  'R%<-okyZYY5Y^HU9#t%d~QB9WX+\\lTRxIB#$,>E=W=\\7(yg3@6y((br9u^UE)n:b. ^u!)pa71=6hm*',
+              },
+            },
           },
         },
       ],
+      messageId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
+      email: 'account@domain.it',
+      phoneNumber: '3900000000',
+      // TODO: remove ts-ignore when BFF OpenAPI is aligned with message field
+      // @ts-ignore
+      message: {
+        primaryMessage: {
+          subject: 'Sollecito di pagamento Tari 2023',
+          longBody: 'Gentile cittadino, la informiamo che...',
+          shortBody: 'Sollecito Tari: hai una nuova comunicazione da SEND.',
+          language: 'string',
+        },
+        additionalMessage: {
+          subject: 'Sollecito di pagamento Tari 2023',
+          longBody: 'Gentile cittadino, la informiamo che...',
+          shortBody: 'Sollecito Tari: hai una nuova comunicazione da SEND.',
+          language: 'string',
+        },
+      },
     },
   ],
   documents: [
     {
-      contentType: 'application/pdf',
       digests: {
-        sha256: 'SmHRur4+IVEaMHrYoof4mwzhxh3r2D/+WeVnMQnokgw=',
+        sha256: 'jezIVxlG1M1woCSUngM6KipUN3/p8cG5RMIPnuEanlE=',
       },
+      contentType: 'application/pdf',
       ref: {
-        key: 'PN_NOTIFICATION_ATTACHMENTS-1e0b22f1770945a8895275785d831ab6.pdf',
-        versionToken: 'v1',
+        key: 'WcNPoozzeINgVPM6jTCwNnnhQ7NsM1WuMBlKwbRXkHNJWXEjkK18OoTt3KQ44p82Y_n3336jgearZemwzr6GTtJN8cr1Ex7MWdR1f',
+        versionToken:
+          'obz_WRtNp2j!|4 DEjtuI~vr$wSX`K*D"QzZXEQ.[8=S<W@^H={4D3@s$nU4SRVWi\')<],IjYU~i&',
       },
-      title: 'Titolo documento 1',
+      title: 'V{v=EYzT:6|(\'xSNnJ37 hj|+UHpwa_"@g',
+      docIdx: '141',
     },
   ],
-  group: '63f359bc72337440a40f537e',
-  notificationStatus: InformalNotificationStatusV1.Accepted,
-  sentAt: '2026-06-24T08:24:00.724598714Z',
+  group: 'fH3WxlE=.7qJeO.epIlIbcZUkjQr5mypG:NU=[3*ZSg1wn\\pjb',
+  iun: 'UUDE-FVGR-ERLR-640815-N-7',
+  sentAt: '2026-07-01T13:03:22.493Z',
+  notificationStatus: 'IN_VALIDATION',
 };

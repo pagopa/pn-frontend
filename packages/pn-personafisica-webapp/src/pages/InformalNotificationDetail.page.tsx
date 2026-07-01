@@ -2,11 +2,9 @@ import React, { Fragment, useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 
-import OpenInBrowserRoundedIcon from '@mui/icons-material/OpenInBrowserRounded';
 import {
   Box,
   Divider,
-  IconButton,
   List,
   ListItem,
   ListItemText,
@@ -18,6 +16,7 @@ import {
   AbstractPaper,
   EventPaymentRecipientType,
   NotificationDetailDocuments,
+  NotificationDetailOtherDocument,
   NotificationPaymentRecipient,
   PaymentAttachmentSName,
   PaymentStatus,
@@ -32,9 +31,11 @@ import { PFEventsType } from '../models/PFEventsType';
 import * as routes from '../navigation/routes.const';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import {
-  NOTIFICATION_ACTIONS,
-  getReceivedNotificationPayment,
-} from '../redux/notification/actions';
+  INFORMAL_NOTIFICATION_ACTIONS,
+  getReceivedInformalNotificationDocument,
+  getReceivedInformalNotificationPayment,
+  getReceivedInformalNotificationPaymentInfo,
+} from '../redux/notification/informalActions';
 import { RootState } from '../redux/store';
 import { getConfiguration } from '../services/configuration.service';
 import PFEventStrategyFactory from '../utility/MixpanelUtils/PFEventStrategyFactory';
@@ -55,7 +56,7 @@ const mockPaymentsData: PaymentsData = {
 };
 
 const InformalNotificationDetail: React.FC = () => {
-  const { id, mandateId } = useParams();
+  const { id } = useParams();
   const { t, i18n } = useTranslation(['common', 'notifiche']);
 
   const { F24_DOWNLOAD_WAIT_TIME, NOTIFICATION_COST_DETAILS_ASSISTANCE_LINK } = getConfiguration();
@@ -65,6 +66,11 @@ const InformalNotificationDetail: React.FC = () => {
 
   const [informalNotification, setInformalNotification] =
     React.useState<BffFullInformalNotificationV1>();
+
+  const [paymentsData, setPaymentsData] = React.useState<PaymentsData>({
+    pagoPaF24: [],
+    f24Only: [],
+  });
 
   /*   
   
@@ -87,6 +93,41 @@ const InformalNotificationDetail: React.FC = () => {
     setInformalNotification(informalNotificationMock);
   }, [id]);
 
+  const currentRecipient = informalNotification?.recipients?.[0];
+
+  useEffect(() => {
+    const payments = currentRecipient?.payments;
+
+    if (!payments?.length) {
+      return;
+    }
+
+    const paymentInfoRequest = payments.map((payment) => ({
+      noticeCode: payment.pagoPa.noticeCode,
+      creditorTaxId: payment.pagoPa.creditorTaxId,
+    }));
+
+    void dispatch(getReceivedInformalNotificationPaymentInfo({ paymentInfoRequest }))
+      .unwrap()
+      .then((paymentInfo) => {
+        setPaymentsData({
+          pagoPaF24: paymentInfo.map((info, index) => ({
+            pagoPa: {
+              ...currentRecipient?.payments?.[index]?.pagoPa,
+              ...info,
+              applyCost: false,
+            },
+          })),
+          f24Only: [],
+        });
+      })
+      .catch(() => {});
+  }, [currentRecipient?.payments, dispatch]);
+
+  const primaryMessage = currentRecipient
+    ? (currentRecipient as any).message?.primaryMessage
+    : undefined;
+
   const properBreadcrumb = useMemo(() => {
     const backRoute = routes.NOTIFICHE;
 
@@ -94,20 +135,19 @@ const InformalNotificationDetail: React.FC = () => {
       <PnBreadcrumb
         linkRoute={backRoute}
         linkLabel={t('title', { ns: 'notifiche' })}
-        currentLocationLabel={informalNotification?.subject ?? ''}
+        currentLocationLabel={primaryMessage?.subject ?? ''}
         showBackAction={false}
       />
     );
-  }, [i18n.language, informalNotification?.subject]);
+  }, [i18n.language, primaryMessage?.subject]);
 
   const breadcrumb = <Fragment>{properBreadcrumb}</Fragment>;
 
   const getPaymentAttachmentAction = (name: PaymentAttachmentSName, attachmentIdx?: number) =>
     dispatch(
-      getReceivedNotificationPayment({
+      getReceivedInformalNotificationPayment({
         iun: informalNotification?.iun ?? '',
         attachmentName: name,
-        mandateId,
         attachmentIdx,
       })
     );
@@ -116,8 +156,17 @@ const InformalNotificationDetail: React.FC = () => {
     PFEventStrategyFactory.triggerEvent(PFEventsType[event], param);
   };
 
-  const handleDocumentDownload = () => {
-    console.log('download documento combo');
+  const handleDocumentDownload = (document?: string | NotificationDetailOtherDocument) => {
+    if (!informalNotification?.iun || !document || typeof document !== 'string') {
+      return;
+    }
+
+    void dispatch(
+      getReceivedInformalNotificationDocument({
+        iun: informalNotification.iun,
+        docIdx: Number(document),
+      })
+    );
   };
 
   return (
@@ -126,12 +175,12 @@ const InformalNotificationDetail: React.FC = () => {
 
       <MIPaper sx={{ p: 3, display: 'flex', flexDirection: 'column', gap: 2 }} variant="outlined">
         <AbstractPaper
-          title={informalNotification?.subject}
-          senderDenomination={informalNotification?.senderDenomination}
+          title={primaryMessage?.subject ?? ''}
+          senderDenomination={informalNotification?.senderDenomination ?? ''}
           sentAt={informalNotification?.sentAt ?? ''}
           iun={informalNotification?.iun ?? ''}
           isLegal={false}
-          abstract="Ciao Gervasia,\n\nSorical S.p.A. ti informa che è stata emessa una fattura per l’utenza n. 182140 relativa al periodo 23 dicembre 2025 / 31 marzo 2026.\n\nDi seguito trovi le informazioni principali per il pagamento:\n\nImporto: 60,68 €\n\nScadenza: 26 maggio 2026\n\nPer avere maggiori informazioni prendi visione degli allegati, che possono fornirti dettagli importanti.\n\nPuoi effettuare il pagamento direttamente premendo Paga. In alternativa, puoi utilizzare l’avviso allegato per saldare l’importo tramite tutti i canali abilitati a pagoPA.\n\nIn ogni caso, qualora avessi bisogno di assistenza, contatta Sorical S.p.A. attraverso i suoi canali ufficiali."
+          abstract={primaryMessage?.longBody ?? ''}
         />
       </MIPaper>
 
@@ -150,7 +199,11 @@ const InformalNotificationDetail: React.FC = () => {
           </MIPaper>
           <MIPaper sx={{ p: 3 }} variant="outlined">
             <NotificationPaymentRecipient
-              payments={mockPaymentsData}
+              payments={
+                paymentsData.pagoPaF24.length || paymentsData.f24Only.length
+                  ? paymentsData
+                  : mockPaymentsData
+              }
               paymentTpp={paymentTpp}
               isCancelled={false}
               iun={informalNotification?.iun ?? ''}
@@ -162,7 +215,9 @@ const InformalNotificationDetail: React.FC = () => {
               timerF24={F24_DOWNLOAD_WAIT_TIME}
               costDetailsAssistanceLink={NOTIFICATION_COST_DETAILS_ASSISTANCE_LINK}
               costDetails={undefined}
-              paymentTppUrlActionID={NOTIFICATION_ACTIONS.GET_RECEIVED_NOTIFICATION_PAYMENT_TPP_URL}
+              paymentTppUrlActionID={
+                INFORMAL_NOTIFICATION_ACTIONS.GET_RECEIVED_INFORMAL_NOTIFICATION_PAYMENT
+              }
             />
           </MIPaper>
         </Stack>
@@ -174,33 +229,21 @@ const InformalNotificationDetail: React.FC = () => {
             </Typography>
 
             <List>
-              <ListItem
-                disableGutters
-                secondaryAction={
-                  <IconButton edge="end" aria-label="delete">
-                    <OpenInBrowserRoundedIcon />
-                  </IconButton>
-                }
-              >
+              <ListItem disableGutters>
                 <ListItemText
                   primary="Numero di telefono dell'ente"
                   sx={{ color: theme.palette.primary.light }}
-                  secondary={'+39 123 456 4444'}
+                  secondary={currentRecipient?.phoneNumber ?? '-'}
                 />
               </ListItem>
+
               <Divider />
-              <ListItem
-                disableGutters
-                secondaryAction={
-                  <IconButton edge="end" aria-label="delete">
-                    <OpenInBrowserRoundedIcon />
-                  </IconButton>
-                }
-              >
+
+              <ListItem disableGutters>
                 <ListItemText
-                  primary="Sito web dell'ente"
+                  primary="Email dell'ente"
                   sx={{ color: theme.palette.primary.light }}
-                  secondary={'www.soricalspa.com'}
+                  secondary={currentRecipient?.email ?? '-'}
                 />
               </ListItem>
             </List>
