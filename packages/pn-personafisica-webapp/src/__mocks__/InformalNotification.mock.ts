@@ -10,7 +10,7 @@ export const informalNotificationMock: BffFullInformalNotificationV1 = {
       recipientType: 'PF',
       taxId: '34601227120',
       internalId: 'string',
-      denomination: "Gz`:>mnu!L*P5pAmx'J9Zd\"%B}}y!/O')!~ZJ$`[g[d_[|SPgz4h5 0>",
+      denomination: "Documento di prova dell'ente",
       digitalDomicile: {
         type: 'PEC',
         address: 'account@domain.it',
@@ -46,6 +46,7 @@ export const informalNotificationMock: BffFullInformalNotificationV1 = {
       ],
       messageId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
       email: 'account@domain.it',
+      //TODO manca web site
       phoneNumber: '3900000000',
       // TODO: remove ts-ignore when BFF OpenAPI is aligned with message field
       // @ts-ignore

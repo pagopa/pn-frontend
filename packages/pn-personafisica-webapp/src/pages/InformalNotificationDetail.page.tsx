@@ -2,11 +2,15 @@ import React, { Fragment, useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 
+import CallOutlinedIcon from '@mui/icons-material/CallOutlined';
+import LanguageRoundedIcon from '@mui/icons-material/LanguageRounded';
 import {
   Box,
   Divider,
   List,
   ListItem,
+  ListItemAvatar,
+  ListItemIcon,
   ListItemText,
   Paper as MIPaper,
   Stack,
@@ -19,11 +23,9 @@ import {
   NotificationDetailOtherDocument,
   NotificationPaymentRecipient,
   PaymentAttachmentSName,
-  PaymentStatus,
   PaymentsData,
   PnBreadcrumb,
 } from '@pagopa-pn/pn-commons';
-import { theme } from '@pagopa/mui-italia';
 
 import { informalNotificationMock } from '../__mocks__/InformalNotification.mock';
 import { BffFullInformalNotificationV1 } from '../generated-client/informal-notifications';
@@ -39,21 +41,6 @@ import {
 import { RootState } from '../redux/store';
 import { getConfiguration } from '../services/configuration.service';
 import PFEventStrategyFactory from '../utility/MixpanelUtils/PFEventStrategyFactory';
-
-const mockPaymentsData: PaymentsData = {
-  pagoPaF24: [
-    {
-      pagoPa: {
-        amount: 999,
-        noticeCode: '302000100000019421',
-        creditorTaxId: '12345678901',
-        applyCost: false,
-        status: PaymentStatus.REQUIRED,
-      },
-    },
-  ],
-  f24Only: [],
-};
 
 const InformalNotificationDetail: React.FC = () => {
   const { id } = useParams();
@@ -199,11 +186,7 @@ const InformalNotificationDetail: React.FC = () => {
           </MIPaper>
           <MIPaper sx={{ p: 3 }} variant="outlined">
             <NotificationPaymentRecipient
-              payments={
-                paymentsData.pagoPaF24.length || paymentsData.f24Only.length
-                  ? paymentsData
-                  : mockPaymentsData
-              }
+              payments={paymentsData}
               paymentTpp={paymentTpp}
               isCancelled={false}
               iun={informalNotification?.iun ?? ''}
@@ -230,21 +213,33 @@ const InformalNotificationDetail: React.FC = () => {
 
             <List>
               <ListItem disableGutters>
-                <ListItemText
-                  primary="Numero di telefono dell'ente"
-                  sx={{ color: theme.palette.primary.light }}
-                  secondary={currentRecipient?.phoneNumber ?? '-'}
-                />
+                <ListItemAvatar>
+                  <ListItemIcon sx={{ minWidth: 40 }}>
+                    <CallOutlinedIcon />
+                  </ListItemIcon>
+                </ListItemAvatar>
+                <ListItemText sx={{ p: 0 }}>
+                  <Typography variant="body2">Numero di telefono dell&apos;ente</Typography>
+                  <Typography variant="sidenav" color="text.primary">
+                    {currentRecipient?.phoneNumber ?? '-'}
+                  </Typography>
+                </ListItemText>
               </ListItem>
 
               <Divider />
 
               <ListItem disableGutters>
-                <ListItemText
-                  primary="Email dell'ente"
-                  sx={{ color: theme.palette.primary.light }}
-                  secondary={currentRecipient?.email ?? '-'}
-                />
+                <ListItemAvatar>
+                  <ListItemIcon sx={{ minWidth: 40 }}>
+                    <LanguageRoundedIcon />
+                  </ListItemIcon>
+                </ListItemAvatar>
+                <ListItemText sx={{ p: 0 }}>
+                  <Typography variant="body2">Sito web dell&apos;ente</Typography>
+                  <Typography variant="sidenav" color="text.primary">
+                    {currentRecipient?.email ?? '-'}
+                  </Typography>
+                </ListItemText>
               </ListItem>
             </List>
           </Stack>
