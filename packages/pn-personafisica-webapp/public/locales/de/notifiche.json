@@ -363,7 +363,7 @@
       "tpp-type": "ein digitaler Kanal von Drittanbietern"
     },
     "downtimes": {
-      "title": "FEHLFUNKTIONEN",
+      "title": "Fehlfunktionen",
       "textWithEndDate": "Fehlfunktion begonnen {{startDate}} und behoben {{endDate}} an folgenden Funktionen:",
       "textWithoutEndDate": "Beginn der Fehlfunktion {{startDate}} und noch nicht vollständig behoben an folgenden Funktionen:",
       "datePrefix": "am ",
@@ -389,7 +389,7 @@
       }
     },
     "bilingual": {
-      "title": "SUPPORT-FAKSIMILE-VORLAGEN auf Deutsch",
+      "title": "Support-Faksimile-Vorlagen auf Deutsch",
       "description": "Die Sprache der beigefügten Akte kann von der Sprache abweichen, mit der du das Portal nutzt. Um den Inhalt dieser Dokumente zu verstehen, kannst du die Faksimile-Vorlagen verwenden, die du hier findest.",
       "action": "Konsultiere die Vorlagen"
     }

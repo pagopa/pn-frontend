@@ -36,6 +36,7 @@ import {
   appStateActions,
   dateIsLessThan10Years,
   downloadDocument,
+  getDateFromString,
   getPaymentCache,
   useErrors,
   useIsCancelled,
@@ -588,6 +589,22 @@ const NotificationDetail: React.FC = () => {
     }
   };
 
+  const getTimelineSummary = (): string => {
+    console.log('hello');
+    const timelineStatus = notification.notificationStatus;
+    const refinementDate = notification.notificationStatusHistory.find(
+      (el) => el.status === 'EFFECTIVE_DATE'
+    )?.activeFrom;
+    console.log('refinementDate', refinementDate);
+    if (timelineStatus === 'CANCELLED') {
+      return t('detail.timeline.summary.cancelled.description', { ns: 'notifiche' });
+    }
+    return t('detail.timeline.summary.effectiveDate.description', {
+      ns: 'notifiche',
+      refinementDate: refinementDate ? getDateFromString(refinementDate, 'dd/MM/yyyy') : undefined,
+    });
+  };
+
   return (
     <NotificationDetailOnboardingPrompt
       iun={notification.iun}
@@ -700,41 +717,6 @@ const NotificationDetail: React.FC = () => {
                       </ApiErrorWrapper>
                     </MIPaper>
                   )}
-                  <MIPaper padding={24} sx={{ mb: 3 }} data-testid="aarBox">
-                    <NotificationDetailDocuments
-                      title={t('detail.aar-acts', { ns: 'notifiche' })}
-                      documents={notification.otherDocuments ?? []}
-                      recipients={notification.recipients}
-                      clickHandler={documentDowloadHandler}
-                      downloadFilesMessage={getDownloadFilesMessage('aar')}
-                      downloadFilesLink={t('detail.acts_files.effected_faq', { ns: 'notifiche' })}
-                      disableDownloads={
-                        isCancelled.cancellationInTimeline ||
-                        !dateIsLessThan10Years(notification.sentAt)
-                      }
-                    />
-                  </MIPaper>
-                  <NotificationRelatedDowntimes
-                    downtimeEvents={downtimeEvents}
-                    fetchDowntimeEvents={(fromDate, toDate) =>
-                      fetchDowntimeEvents(fromDate, toDate)
-                    }
-                    notificationStatusHistory={notification.notificationStatusHistory}
-                    fetchDowntimeLegalFactDocumentDetails={fetchDowntimeLegalFactDocumentDetails}
-                    apiId={NOTIFICATION_ACTIONS.GET_DOWNTIME_HISTORY}
-                    disableDownloads={isCancelled.cancellationInTimeline}
-                    downtimeExampleLink={DOWNTIME_EXAMPLE_LINK}
-                  />
-                  {showBilingualFacsimileSection && (
-                    <MIPaper padding={24}>
-                      <NotificationDetailBilingualFacsimileDocuments
-                        title={t('detail.bilingual.title', { ns: 'notifiche' })}
-                        description={t('detail.bilingual.description', { ns: 'notifiche' })}
-                        action={t('detail.bilingual.action', { ns: 'notifiche' })}
-                        link={getFacSimileLink()}
-                      />
-                    </MIPaper>
-                  )}
                   {/* end document and payment section */}
                 </Stack>
               </Stack>
@@ -751,11 +733,36 @@ const NotificationDetail: React.FC = () => {
               >
                 {/* start aside section */}
                 <NotificationTimelineBox
-                  isCancelled={true}
-                  refinementDate={'01/01/2024'}
-                  isMalfuction={true}
+                  isCancelled={notification.notificationStatus === 'CANCELLED'}
+                  timelineSummary={getTimelineSummary()}
                 />
-                <NotificationDetailSection recipient={currentRecipient} />
+                <NotificationDetailSection
+                  recipient={currentRecipient}
+                  documents={notification.otherDocuments ?? []}
+                  clickHandler={documentDowloadHandler}
+                  downloadFilesLink={t('detail.acts_files.effected_faq', { ns: 'notifiche' })}
+                  disableDownloads={
+                    isCancelled.cancellationInTimeline ||
+                    !dateIsLessThan10Years(notification.sentAt)
+                  }
+                />
+                <NotificationRelatedDowntimes
+                  downtimeEvents={downtimeEvents}
+                  fetchDowntimeEvents={(fromDate, toDate) => fetchDowntimeEvents(fromDate, toDate)}
+                  notificationStatusHistory={notification.notificationStatusHistory}
+                  fetchDowntimeLegalFactDocumentDetails={fetchDowntimeLegalFactDocumentDetails}
+                  apiId={NOTIFICATION_ACTIONS.GET_DOWNTIME_HISTORY}
+                  disableDownloads={isCancelled.cancellationInTimeline}
+                  downtimeExampleLink={DOWNTIME_EXAMPLE_LINK}
+                />
+                {showBilingualFacsimileSection && (
+                  <NotificationDetailBilingualFacsimileDocuments
+                    title={t('detail.bilingual.title', { ns: 'notifiche' })}
+                    description={t('detail.bilingual.description', { ns: 'notifiche' })}
+                    action={t('detail.bilingual.action', { ns: 'notifiche' })}
+                    link={getFacSimileLink()}
+                  />
+                )}
                 {/* end aside section */}
               </Stack>
               {/* end document, payment and aside */}

@@ -360,10 +360,20 @@
         "title": "I documenti sono stati ritirati",
         "description": "Il destinatario o un suo delegato ha ritirato i documenti notificati presso un operatore abilitato alla consegna degli stessi."
       },
-      "tpp-type": "un canale digitale di terze parti"
+      "tpp-type": "un canale digitale di terze parti",
+      "summary": {
+        "effectiveDate": {
+          "title": "Notifica a valore di legge",
+          "description": "Hai effettuato un accesso alla notifica, che si è quindi perfezionata il giorno {{refinementDate}}."
+        },
+        "cancelled": {
+          "title": "Annullata",
+          "description": "L’ente ha annullato l’invio della notifica SEND, che quindi dall'annullamento non produrrà più effetti giuridici."
+        }
+      }
     },
     "downtimes": {
-      "title": "DISSERVIZI",
+      "title": "Disservizi",
       "textWithEndDate": "Disservizio iniziato {{startDate}} e concluso {{endDate}} sulle seguenti funzionalità:",
       "textWithoutEndDate": "Disservizio iniziato {{startDate}} e non ancora concluso sulle seguenti funzionalità:",
       "datePrefix": "il ",

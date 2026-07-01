@@ -363,7 +363,7 @@
       "tpp-type": "digitalni kanal tretje osebe"
     },
     "downtimes": {
-      "title": "MOTNJE",
+      "title": "Motnje",
       "textWithEndDate": "Motnja se je začela {{startDate}} in končala {{endDate}} pri naslednjih funkcijah:",
       "textWithoutEndDate": "Motnja se je začela {{startDate}} in še ni končana pri naslednjih funkcijah:",
       "datePrefix": "dne ",
@@ -389,7 +389,7 @@
       }
     },
     "bilingual": {
-      "title": "PODPORNI FAKSIMILNI VZORCI v slovenščini",
+      "title": "Podporni Faksimilni vzorci v slovenščini",
       "description": "Jezik priloženih aktov se lahko razlikuje od jezika, v katerem brskaš po portalu. Če želiš razumeti vsebino teh dokumentov, lahko uporabiš faksimilne vzorce, ki jih najdeš tukaj.",
       "action": "Preglej vzorce"
     }
