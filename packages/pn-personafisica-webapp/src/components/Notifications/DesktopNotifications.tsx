@@ -4,15 +4,16 @@ import { useNavigate } from 'react-router-dom';
 
 import {
   Column,
-  Notification,
   NotificationColumnData,
-  NotificationsDataSwitch,
+  NotificationCommunicationType,
+  NotificationsRecipientDataSwitch,
   PnTable,
   PnTableBody,
   PnTableBodyCell,
   PnTableBodyRow,
   PnTableHeader,
   PnTableHeaderCell,
+  RecipientNotification,
   Row,
   Sort,
 } from '@pagopa-pn/pn-commons';
@@ -23,11 +24,11 @@ import FilterNotifications from './FilterNotifications';
 import NotificationsEmptyState from './NotificationsEmptyState';
 
 type Props = {
-  notifications: Array<Notification>;
+  notifications: Array<RecipientNotification>;
   /** Table sort */
-  sort?: Sort<NotificationColumnData>;
+  sort?: Sort<NotificationColumnData<RecipientNotification>>;
   /** The function to be invoked if the user change sorting */
-  onChangeSorting?: (s: Sort<NotificationColumnData>) => void;
+  onChangeSorting?: (s: Sort<NotificationColumnData<RecipientNotification>>) => void;
   /** Delegator */
   currentDelegator?: Delegator;
 };
@@ -52,32 +53,24 @@ const DesktopNotifications = ({
       id: 'sentAt',
       label: t('table.data'),
       mode: 'truncate',
-      cellProps: { width: '10%' },
-      sortable: false, // TODO: will be re-enabled in PN-1124
+      cellProps: { width: '8%' },
     },
     {
       id: 'sender',
       label: t('table.mittente'),
       mode: 'truncate',
-      cellProps: { width: '15%' },
-      sortable: false, // TODO: will be re-enabled in PN-1124
+      cellProps: { width: '12%' },
     },
     {
       id: 'subject',
       label: t('table.oggetto'),
       mode: 'truncate',
-      cellProps: { width: '19%' },
+      cellProps: { width: '26%' },
     },
     {
       id: 'iun',
       label: t('table.iun'),
-      cellProps: { width: '24%' },
-    },
-    {
-      id: 'notificationStatus',
-      label: t('table.status'),
-      cellProps: { width: '17%' },
-      sortable: false, // TODO: will be re-enabled in PN-1124
+      cellProps: { width: '22%', sx: { display: { xs: 'none', xl: 'table-cell' } } },
     },
     {
       id: 'action',
@@ -86,7 +79,7 @@ const DesktopNotifications = ({
     },
   ];
 
-  const rows: Array<Row<Notification>> = notifications.map((n) => ({
+  const rows: Array<Row<RecipientNotification>> = notifications.map((n) => ({
     ...n,
     id: n.iun,
   }));
@@ -95,13 +88,14 @@ const DesktopNotifications = ({
 
   const showFilters = notifications?.length > 0 || filtersApplied;
 
-  // Navigation handlers
-  const handleRowClick = (iun: string) => {
+  const handleRowClick = (iun: string, communicationType: NotificationCommunicationType) => {
     if (currentDelegator) {
-      navigate(routes.GET_DETTAGLIO_NOTIFICA_DELEGATO_PATH(iun, currentDelegator.mandateId));
-    } else {
-      navigate(routes.GET_DETTAGLIO_NOTIFICA_PATH(iun));
+      return navigate(routes.GET_DETTAGLIO_NOTIFICA_DELEGATO_PATH(iun, currentDelegator.mandateId));
     }
+
+    return communicationType === 'LEGAL'
+      ? navigate(routes.GET_DETTAGLIO_NOTIFICA_PATH(iun))
+      : navigate(`/comunicazione/${iun}`); // TODO - FIX PATH
   };
 
   return (
@@ -132,7 +126,17 @@ const DesktopNotifications = ({
           </PnTableHeader>
           <PnTableBody>
             {rows.map((row, index) => (
-              <PnTableBodyRow key={row.id} index={index} testId="notificationsTable.body.row">
+              <PnTableBodyRow
+                key={row.id}
+                index={index}
+                testId="notificationsTable.body.row"
+                sx={{
+                  '& .MuiTableCell-root': { verticalAlign: 'top' },
+                  ...(row.isNewNotification && {
+                    '& .MuiTableCell-root, & .MuiTypography-root': { fontWeight: 600 },
+                  }),
+                }}
+              >
                 {columns.map((column) => (
                   <PnTableBodyCell
                     key={column.id}
@@ -141,7 +145,7 @@ const DesktopNotifications = ({
                       ...column.cellProps,
                     }}
                   >
-                    <NotificationsDataSwitch
+                    <NotificationsRecipientDataSwitch
                       handleRowClick={handleRowClick}
                       data={row}
                       type={column.id}

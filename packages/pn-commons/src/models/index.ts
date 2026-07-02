@@ -32,6 +32,8 @@ export type {
   GetNotificationsResponse,
   Notification,
   NotificationColumnData,
+  RecipientNotification,
+  NotificationCommunicationType,
 } from './Notifications';
 export type { PaginationData } from './Pagination';
 export type { PaymentCache } from './PaymentCache';

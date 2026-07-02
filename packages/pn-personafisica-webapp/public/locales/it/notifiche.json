@@ -7,7 +7,9 @@
     "iun": "Codice IUN",
     "status": "Stato",
     "show-detail": "Vedi dettaglio",
-    "aria-action-table": "Vedi dettaglio notifica con iun: {{iun}}"
+    "open": "Apri",
+    "aria-action-table": "Vedi dettaglio notifica con iun: {{iun}}",
+    "legal-value": "Notifica a valore legale"
   },
   "filters": {
     "iun": "Cerca per Codice IUN",

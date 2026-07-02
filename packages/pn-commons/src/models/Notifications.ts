@@ -1,5 +1,7 @@
 import { NotificationStatus } from './NotificationStatus';
 
+export type NotificationCommunicationType = 'LEGAL' | 'INFORMAL';
+
 export interface Notification {
   iun: string;
   paProtocolNumber: string;
@@ -12,8 +14,17 @@ export interface Notification {
   mandateId?: string;
 }
 
-export interface GetNotificationsResponse {
-  resultsPage: Array<Notification>;
+export interface RecipientNotification extends Notification {
+  communicationType: NotificationCommunicationType;
+  communicationOutcomes: {
+    viewed: boolean;
+    delivered: boolean;
+  };
+  isNewNotification: boolean;
+}
+
+export interface GetNotificationsResponse<T extends Notification = Notification> {
+  resultsPage: Array<T>;
   moreResult: boolean;
   nextPagesKey: Array<string>;
 }
@@ -31,4 +42,7 @@ export interface GetNotificationsParams {
   group?: string;
 }
 
-export type NotificationColumnData = Notification & { badge?: string; action: string };
+export type NotificationColumnData<T extends Notification = Notification> = T & {
+  badge?: string;
+  action: string;
+};

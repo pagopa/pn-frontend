@@ -1,6 +1,7 @@
 import {
   GetNotificationsParams,
   GetNotificationsResponse,
+  RecipientNotification,
   formatFiscalCode,
   formatToTimezoneString,
   getEndOfDay,
@@ -66,7 +67,7 @@ export const getReceivedNotifications = createAsyncThunk(
             apiParams.size,
             apiParams.nextPagesKey
           );
-      return response.data as GetNotificationsResponse;
+      return response.data as GetNotificationsResponse<RecipientNotification>;
     } catch (e) {
       return rejectWithValue(parseError(e));
     }

@@ -10,7 +10,7 @@ import {
   MobileNotificationsSort,
   Notification,
   NotificationColumnData,
-  NotificationsDataSwitch,
+  NotificationsRecipientDataSwitch,
   PnCard,
   PnCardActions,
   PnCardContent,
@@ -18,6 +18,7 @@ import {
   PnCardHeader,
   PnCardHeaderItem,
   PnCardsList,
+  RecipientNotification,
   Row,
   Sort,
 } from '@pagopa-pn/pn-commons';
@@ -29,11 +30,11 @@ import FilterNotifications from './FilterNotifications';
 import NotificationsEmptyState from './NotificationsEmptyState';
 
 type Props = {
-  notifications: Array<Notification>;
+  notifications: Array<RecipientNotification>;
   /** Card sort */
-  sort?: Sort<NotificationColumnData>;
+  sort?: Sort<NotificationColumnData<RecipientNotification>>;
   /** The function to be invoked if the user change sorting */
-  onChangeSorting?: (s: Sort<NotificationColumnData>) => void;
+  onChangeSorting?: (s: Sort<NotificationColumnData<RecipientNotification>>) => void;
   /** Delegator */
   currentDelegator?: Delegator;
 };
@@ -55,7 +56,7 @@ const MobileNotifications = ({ notifications, sort, onChangeSorting, currentDele
   const { t } = useTranslation('notifiche');
   const filterNotificationsRef = useRef({ filtersApplied: false, cleanFilters: () => void 0 });
 
-  const cardBody: Array<CardElement<Notification>> = [
+  const cardBody: Array<CardElement<RecipientNotification>> = [
     {
       id: 'sender',
       label: t('table.mittente'),
@@ -72,7 +73,7 @@ const MobileNotifications = ({ notifications, sort, onChangeSorting, currentDele
     },
   ];
 
-  const cardData: Array<Row<Notification>> = notifications.map((n) => ({
+  const cardData: Array<Row<RecipientNotification>> = notifications.map((n) => ({
     ...n,
     id: n.iun,
   }));
@@ -100,17 +101,21 @@ const MobileNotifications = ({ notifications, sort, onChangeSorting, currentDele
     );
     /* eslint-enable functional/immutable-data */
     return arr;
-  }, [] as Array<CardSort<Notification>>);
+  }, [] as Array<CardSort<RecipientNotification>>);
 
   const filtersApplied: boolean = filterNotificationsRef.current.filtersApplied;
 
   // Navigation handlers
-  const handleRowClick = (row: Row<Notification>) => {
+  const handleRowClick = (row: Row<RecipientNotification>) => {
+    const { iun, communicationType } = row;
+
     if (currentDelegator) {
-      navigate(routes.GET_DETTAGLIO_NOTIFICA_DELEGATO_PATH(row.iun, currentDelegator.mandateId));
-    } else {
-      navigate(routes.GET_DETTAGLIO_NOTIFICA_PATH(row.iun));
+      return navigate(routes.GET_DETTAGLIO_NOTIFICA_DELEGATO_PATH(iun, currentDelegator.mandateId));
     }
+
+    return communicationType === 'LEGAL'
+      ? navigate(routes.GET_DETTAGLIO_NOTIFICA_PATH(iun))
+      : navigate(`/comunicazione/${iun}`); // TODO - FIX PATH
   };
 
   const showFilters = notifications?.length > 0 || filtersApplied;
@@ -159,22 +164,13 @@ const MobileNotifications = ({ notifications, sort, onChangeSorting, currentDele
                   }}
                   position="left"
                 >
-                  <NotificationsDataSwitch data={data} type="sentAt" />
-                </PnCardHeaderItem>
-                <PnCardHeaderItem
-                  gridProps={{
-                    xs: 8,
-                    sm: 7,
-                  }}
-                  position="right"
-                >
-                  <NotificationsDataSwitch data={data} type="notificationStatus" />
+                  <NotificationsRecipientDataSwitch data={data} type="sentAt" />
                 </PnCardHeaderItem>
               </PnCardHeader>
               <PnCardContent>
                 {cardBody.map((body) => (
                   <PnCardContentItem key={body.id} label={body.label} mode={body.mode}>
-                    <NotificationsDataSwitch data={data} type={body.id} />
+                    <NotificationsRecipientDataSwitch data={data} type={body.id} />
                   </PnCardContentItem>
                 ))}
               </PnCardContent>
@@ -185,7 +181,7 @@ const MobileNotifications = ({ notifications, sort, onChangeSorting, currentDele
                   endIcon={<ArrowForwardIcon />}
                   color="primary"
                 >
-                  {t('table.show-detail')}
+                  {t('table.open')}
                 </ButtonNaked>
               </PnCardActions>
             </PnCard>
