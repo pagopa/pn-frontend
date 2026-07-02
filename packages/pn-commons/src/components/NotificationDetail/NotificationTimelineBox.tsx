@@ -1,4 +1,4 @@
-import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
+import KeyboardArrowRightRoundedIcon from '@mui/icons-material/KeyboardArrowRightRounded';
 import { IconButton, Stack, Typography } from '@mui/material';
 import { MIChip, MIPaper } from '@pagopa/mui-italia';
 
@@ -25,7 +25,6 @@ const NotificationTimelineBox = ({
     recipients,
     isParty,
   });
-  console.log(notificationStatusInfos, 'notificationStatusInfos');
 
   return (
     <MIPaper padding={24}>
@@ -55,7 +54,7 @@ const NotificationTimelineBox = ({
           )}
           onClick={() => {}}
         >
-          <ArrowForwardIosIcon />
+          <KeyboardArrowRightRoundedIcon />
         </IconButton>
       </Stack>
     </MIPaper>
