@@ -56,7 +56,10 @@ const NotificationDetailSection = ({
           secondaryAction={
             <IconButton
               edge="end"
-              aria-label="Apri avviso di Avvenuta ricezione"
+              aria-label={getLocalizedOrDefaultLabel(
+                'notifications',
+                'detail.notification-detail-section.aria-label'
+              )}
               onClick={() => clickHandler(documents?.find((d) => d.documentType === 'AAR'))}
             >
               <OpenInBrowserRoundedIcon />

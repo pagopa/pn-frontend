@@ -18,7 +18,7 @@ const NotificationTimelineBox = ({
   recipients,
   isParty,
 }: NotificationTimelineBoxProps) => {
-  const isMobile = useIsMobile();
+  const isMobile = useIsMobile('sm');
 
   const notificationStatusInfos = getNotificationStatusInfos(statusHistory[0], {
     statusHistory,
@@ -47,7 +47,14 @@ const NotificationTimelineBox = ({
             <Typography variant="body2">{notificationStatusInfos.description}</Typography>
           )}
         </Stack>
-        <IconButton size="small" aria-label="Vai alla timeline" onClick={() => {}}>
+        <IconButton
+          size="small"
+          aria-label={getLocalizedOrDefaultLabel(
+            'notifications',
+            'detail.notification-timeline-section.aria-label'
+          )}
+          onClick={() => {}}
+        >
           <ArrowForwardIosIcon />
         </IconButton>
       </Stack>

@@ -51,12 +51,14 @@
   },
   "detail": {
     "notification-timeline-section": {
-      "title": "Stato della notifica"
+      "title": "Stato della notifica",
+      "aria-label": "Vai alla timeline della notifica"
     },
     "notification-detail-section": {
       "title": "Dettaglio della notifica",
       "recipient": "Persona destinataria",
       "aar": "Avviso di Avvenuta Ricezione",
+      "aria-label": "Vai all'avviso di avvenuta ricezione",
       "availability": "Disponibile online per 10 anni dalla data in cui la notifica assume valore di legge."
     },
     "document-not-available": "Al momento non è possibile scaricare il documento, riprova più tardi. Per riprovare, ricarica la pagina o premi sul link del documento.",
