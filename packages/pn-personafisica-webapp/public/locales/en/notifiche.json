@@ -126,6 +126,12 @@
       "tpp-expired-error-title": "The connection with the bank has expired.",
       "tpp-expired-error-description": "To restore it, access this notification again using the message you received on your bank's app."
     },
+    "contact_sender": {
+      "title": "Contact the issuing institution",
+      "phone": "Institution's phone number",
+      "email": "Institution's email address",
+      "website": "Institution's website"
+    },
     "acts_files": {
       "downloadable_acts": "Documents are available online for 120 days from the finalization of the notification.",
       "not_downloadable_acts": "Since 120 days have passed since the finalization date, if you want to obtain the documents you must contact the sender.",

@@ -126,6 +126,12 @@
       "tpp-expired-error-title": "Die Verbindung zur Bank ist abgelaufen.",
       "tpp-expired-error-description": "Um sie wiederherzustellen, greife über die Nachricht, die du in deiner Bank-App erhalten hast, erneut auf diese Benachrichtigung zu."
     },
+    "contact_sender": {
+      "title": "Kontaktiere die sendende Körperschaft",
+      "phone": "Telefonnummer der Körperschaft",
+      "email": "E-Mail der Körperschaft",
+      "website": "Website der Körperschaft"
+    },
     "acts_files": {
       "downloadable_acts": "Die Dokumente sind 120 Tage nach Vervollständigung der Zustellung online verfügbar.",
       "not_downloadable_acts": "Da seit der Vervollständigung 120 Tage vergangen sind, musst du dich für den Erhalt der Akten an den Absender wenden.",

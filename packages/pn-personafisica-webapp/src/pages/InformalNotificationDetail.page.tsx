@@ -33,6 +33,10 @@ import { PFEventsType } from '../models/PFEventsType';
 import * as routes from '../navigation/routes.const';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import {
+  getReceivedNotificationPaymentTppUrl,
+  getReceivedNotificationPaymentUrl,
+} from '../redux/notification/actions';
+import {
   INFORMAL_NOTIFICATION_ACTIONS,
   getReceivedInformalNotificationDocument,
   getReceivedInformalNotificationPayment,
@@ -130,6 +134,56 @@ const InformalNotificationDetail: React.FC = () => {
 
   const breadcrumb = <Fragment>{properBreadcrumb}</Fragment>;
 
+  const onPayClick = (noticeCode?: string, creditorTaxId?: string, amount?: number) => {
+    if (noticeCode && creditorTaxId && amount && informalNotification?.senderDenomination) {
+      PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_START_PAYMENT, { psp: 'pagopa' });
+      dispatch(
+        getReceivedNotificationPaymentUrl({
+          paymentNotice: {
+            noticeNumber: noticeCode,
+            fiscalCode: creditorTaxId,
+            amount,
+            companyName: informalNotification.senderDenomination,
+            description: informalNotification.subject,
+          },
+          returnUrl: window.location.href,
+        })
+      )
+        .unwrap()
+        .then((res: { checkoutUrl: string }) => {
+          window.location.assign(res.checkoutUrl);
+        })
+        .catch(() => undefined);
+    }
+  };
+
+  const onPayTppClick = (
+    noticeCode?: string,
+    creditorTaxId?: string,
+    retrievalId?: string,
+    tppName?: string,
+    amount?: number
+  ) => {
+    if (noticeCode && creditorTaxId && retrievalId) {
+      PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_START_PAYMENT, { psp: tppName });
+      dispatch(
+        getReceivedNotificationPaymentTppUrl({
+          noticeCode,
+          creditorTaxId,
+          retrievalId,
+          amount,
+        })
+      )
+        .unwrap()
+        .then((res) => {
+          if (res.paymentUrl) {
+            window.location.assign(res.paymentUrl);
+          }
+        })
+        .catch(() => undefined);
+    }
+  };
+
   const getPaymentAttachmentAction = (name: PaymentAttachmentSName, attachmentIdx?: number) =>
     dispatch(
       getReceivedInformalNotificationPayment({
@@ -174,25 +228,31 @@ const InformalNotificationDetail: React.FC = () => {
       <Stack direction={{ xs: 'column', md: 'row' }} spacing={2} alignItems="flex-start">
         <Stack spacing={2} sx={{ width: { xs: '100%', md: '65%' } }}>
           <MIPaper sx={{ p: 3, flex: 1 }} variant="outlined">
+            {/* 
+            TODO da capire il campo downloadFilesLink
+            */}
             <NotificationDetailDocuments
               title={t('detail.acts', { ns: 'notifiche' })}
               documents={informalNotification?.documents}
               clickHandler={handleDocumentDownload}
-              documentsAvailable={true}
-              downloadFilesMessage=""
+              documentsAvailable={(informalNotification?.documents?.length ?? 0) > 0}
+              downloadFilesMessage={t('detail.acts_files.effected_faq', { ns: 'notifiche' })}
               downloadFilesLink=""
               titleVariant="h5"
             />
           </MIPaper>
           <MIPaper sx={{ p: 3 }} variant="outlined">
+            {/* 
+            TODO da capire i campi isCanceled, handleFetchPaymentsInfo e  costDetails come vanno popolati
+            */}
             <NotificationPaymentRecipient
               payments={paymentsData}
               paymentTpp={paymentTpp}
               isCancelled={false}
               iun={informalNotification?.iun ?? ''}
               handleTrackEvent={trackEventPaymentRecipient}
-              onPayClick={() => {}}
-              onPayTppClick={() => {}}
+              onPayClick={onPayClick}
+              onPayTppClick={onPayTppClick}
               handleFetchPaymentsInfo={() => {}}
               getPaymentAttachmentAction={getPaymentAttachmentAction}
               timerF24={F24_DOWNLOAD_WAIT_TIME}
@@ -208,7 +268,7 @@ const InformalNotificationDetail: React.FC = () => {
         <MIPaper sx={{ p: 3, width: { xs: '100%', md: '35%' } }} variant="outlined">
           <Stack spacing={2}>
             <Typography component="h2" variant="h5">
-              Contatta il mittente
+              {t('detail.contact_sender.title', { ns: 'notifiche' })}
             </Typography>
 
             <List>
@@ -219,7 +279,9 @@ const InformalNotificationDetail: React.FC = () => {
                   </ListItemIcon>
                 </ListItemAvatar>
                 <ListItemText sx={{ p: 0 }}>
-                  <Typography variant="body2">Numero di telefono dell&apos;ente</Typography>
+                  <Typography variant="body2">
+                    {t('detail.contact_sender.phone', { ns: 'notifiche' })}
+                  </Typography>
                   <Typography variant="sidenav" color="text.primary">
                     {currentRecipient?.phoneNumber ?? '-'}
                   </Typography>
@@ -235,7 +297,9 @@ const InformalNotificationDetail: React.FC = () => {
                   </ListItemIcon>
                 </ListItemAvatar>
                 <ListItemText sx={{ p: 0 }}>
-                  <Typography variant="body2">Sito web dell&apos;ente</Typography>
+                  <Typography variant="body2">
+                    {t('detail.contact_sender.website', { ns: 'notifiche' })}
+                  </Typography>
                   <Typography variant="sidenav" color="text.primary">
                     {currentRecipient?.email ?? '-'}
                   </Typography>

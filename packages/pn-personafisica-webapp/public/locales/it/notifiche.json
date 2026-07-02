@@ -126,6 +126,12 @@
       "tpp-expired-error-title": "La connesione con la banca è scaduta.",
       "tpp-expired-error-description": "Per ripristinarla, accedi di nuovo a questa notifica tramite il messaggio che hai ricevuto sull'app della banca."
     },
+    "contact_sender": {
+      "title": "Contatta il mittente",
+      "phone": "Numero di telefono dell'ente",
+      "email": "Email dell'ente",
+      "website": "Sito web dell'ente"
+    },
     "acts_files": {
       "downloadable_acts": "I documenti sono disponibili online per 120 giorni dal perfezionamento della notifica.",
       "not_downloadable_acts": "Poiché sono trascorsi 120 giorni dalla data di perfezionamento, se vuoi ottenere gli atti devi rivolgerti al mittente.",

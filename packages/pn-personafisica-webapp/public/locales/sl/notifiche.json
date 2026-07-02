@@ -126,6 +126,12 @@
       "tpp-expired-error-title": "Povezava z banko je potekla.",
       "tpp-expired-error-description": "Za ponovno vzpostavitev ponovno dostopajte do tega obvestila prek sporočila, ki ste ga prejeli v aplikaciji vaše banke."
     },
+    "contact_sender": {
+      "title": "Stopite in stik z izdajateljem",
+      "phone": "Telefonska številka organa",
+      "email": "E-pošta organa",
+      "website": "Spletno mesto organa"
+    },
     "acts_files": {
       "downloadable_acts": "Dokumenti so na voljo na spletu 120 dni od zaključka obvestila.",
       "not_downloadable_acts": "Ker je od datuma zaključka minilo 120 dni, se morate za pridobitev listin obrniti na pošiljatelja.",
