@@ -3,32 +3,49 @@ import { IconButton, Stack, Typography } from '@mui/material';
 import { MIChip, MIPaper } from '@pagopa/mui-italia';
 
 import { useIsMobile } from '../../hooks';
+import { NotificationDetailRecipient, NotificationStatusHistory } from '../../models';
+import { getNotificationStatusInfos } from '../../utility';
+import { getLocalizedOrDefaultLabel } from '../../utility/localization.utility';
 
 type NotificationTimelineBoxProps = {
-  isCancelled: boolean;
-  timelineSummary: string;
+  statusHistory: Array<NotificationStatusHistory>;
+  recipients: Array<NotificationDetailRecipient>;
+  isParty: boolean;
 };
 
 const NotificationTimelineBox = ({
-  isCancelled,
-  timelineSummary,
+  statusHistory,
+  recipients,
+  isParty,
 }: NotificationTimelineBoxProps) => {
-  const isMobile = useIsMobile('sm');
-  console.log('isMobile', isMobile);
+  const isMobile = useIsMobile();
+
+  const notificationStatusInfos = getNotificationStatusInfos(statusHistory[0], {
+    statusHistory,
+    recipients,
+    isParty,
+  });
+  console.log(notificationStatusInfos, 'notificationStatusInfos');
+
   return (
     <MIPaper padding={24}>
       <Stack direction="row" alignItems="center" justifyContent="space-between" width="100%">
         <Stack width="85%">
           <Typography component="h2" variant="h5" sx={{ mb: 1 }}>
-            Stato della timeline
+            {getLocalizedOrDefaultLabel(
+              'notifications',
+              'detail.notification-timeline-section.title'
+            )}
           </Typography>
           <MIChip
-            color={isCancelled ? 'warning' : 'success'}
+            color={statusHistory[0].status === 'CANCELLED' ? 'warning' : 'success'}
             variant="filled"
-            label={isCancelled ? 'Notifica annullata' : 'Notifica a valore di legge'}
+            label={notificationStatusInfos.label}
             sx={{ my: 1, width: 'fit-content' }}
           />
-          {!isMobile && <Typography variant="body2">{timelineSummary}</Typography>}
+          {!isMobile && (
+            <Typography variant="body2">{notificationStatusInfos.description}</Typography>
+          )}
         </Stack>
         <IconButton size="small" aria-label="Vai alla timeline" onClick={() => {}}>
           <ArrowForwardIosIcon />

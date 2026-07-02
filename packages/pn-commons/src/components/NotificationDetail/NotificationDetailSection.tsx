@@ -3,6 +3,7 @@ import { IconButton, List, ListItem, ListItemText, Typography } from '@mui/mater
 import { MIPaper, theme } from '@pagopa/mui-italia';
 
 import { NotificationDetailOtherDocument, NotificationDetailRecipient } from '../../models';
+import { getLocalizedOrDefaultLabel } from '../../utility/localization.utility';
 
 interface Props {
   recipient: NotificationDetailRecipient;
@@ -25,7 +26,7 @@ const NotificationDetailSection = ({
   return (
     <MIPaper padding={24}>
       <Typography component="h2" variant="h5" sx={{ mb: 1 }}>
-        Dettagli della notifica
+        {getLocalizedOrDefaultLabel('notifications', 'detail.notification-detail-section.title')}
       </Typography>
 
       <List sx={{ p: 0 }}>
@@ -37,7 +38,12 @@ const NotificationDetailSection = ({
           }}
         >
           <ListItemText sx={{ p: 0 }}>
-            <Typography variant="body2">Persona destinataria</Typography>
+            <Typography variant="body2">
+              {getLocalizedOrDefaultLabel(
+                'notifications',
+                'detail.notification-detail-section.recipient'
+              )}
+            </Typography>
             <Typography variant="sidenav" color="text.primary">
               {recipient.denomination} - {recipient.taxId}
             </Typography>
@@ -59,11 +65,15 @@ const NotificationDetailSection = ({
           sx={{ alignItems: 'flex-start', pb: 0 }}
         >
           <ListItemText
-            primary="Avviso di Avvenuta ricezione"
+            primary={getLocalizedOrDefaultLabel(
+              'notifications',
+              'detail.notification-detail-section.aar'
+            )}
             sx={{ color: theme.palette.primary.light }}
-            secondary={
-              'Disponibile online per 10 anni dalla data in cui la notifica assume valore di legge'
-            }
+            secondary={getLocalizedOrDefaultLabel(
+              'notifications',
+              'detail.notification-detail-section.availability'
+            )}
           />
         </ListItem>
       </List>
