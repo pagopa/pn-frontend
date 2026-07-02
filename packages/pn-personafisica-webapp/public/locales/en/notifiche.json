@@ -50,6 +50,17 @@
     "not-found-subtitle": "This notification can only be read by the recipient."
   },
   "detail": {
+    "notification-timeline-section": {
+      "title": "Notification status",
+      "aria-label": "Go to the notification timeline"
+    },
+    "notification-detail-section": {
+      "title": "Notification details",
+      "recipient": "Recipient",
+      "aar": "Notification of receipt",
+      "aria-label": "Go to the notification of receipt",
+      "availability": "Available online for 10 years from the date the notification becomes legally binding."
+    },
     "document-not-available": "The document will be available for download in a few minutes. You can try again by reloading the page or clicking on the link of the requested document",
     "table-aria-label": "Notification details",
     "payment-table-aria-label": "Payment details",
