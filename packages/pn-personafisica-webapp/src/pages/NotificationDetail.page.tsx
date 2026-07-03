@@ -79,7 +79,6 @@ const NotificationDetail: React.FC = () => {
   const location = useLocation();
   const dispatch = useAppDispatch();
   const safeDispatch = useSafeAppDispatch();
-
   /*
    * appStatus is included since it is used inside NotificationRelatedDowntimes, a component
    * in pn-commons (hence cannot access the i18n files) used in this page
@@ -543,6 +542,13 @@ const NotificationDetail: React.FC = () => {
     }
   };
 
+  const handleGoToTimeline = () => {
+    if (id) {
+      const targetUrl = routes.TIMELINE.replace(':id', id);
+      navigate(targetUrl);
+    }
+  };
+
   return (
     <NotificationDetailOnboardingPrompt
       iun={notification.iun}
@@ -672,6 +678,7 @@ const NotificationDetail: React.FC = () => {
                     statusHistory={notification.notificationStatusHistory}
                     recipients={notification.recipients}
                     isParty={false}
+                    onTimelineClick={handleGoToTimeline}
                   />
                 )}
                 <NotificationDetailSection
