@@ -26,7 +26,7 @@ import {
   SendPaperDetails,
   TimelineCategory,
 } from '../models/NotificationDetail';
-import { NotificationStatus } from '../models/NotificationStatus';
+import { NotificationStatus, UnifiedNotificationStatus } from '../models/NotificationStatus';
 import { getLocalizedOrDefaultLabel } from '../utility/localization.utility';
 import { TimelineStepInfo } from './TimelineUtils/TimelineStep';
 import { TimelineStepFactory } from './TimelineUtils/TimelineStepFactory';
@@ -704,3 +704,15 @@ export const populatePaymentsPagoPaF24 = (
 export const isNotificationDetailOtherDocument = (
   value: NotificationDetailDocument | NotificationDetailOtherDocument
 ): value is NotificationDetailOtherDocument => value.documentType === 'AAR';
+
+export const isNewNotification = (value: UnifiedNotificationStatus) => {
+  switch (value) {
+    case NotificationStatus.VIEWED:
+    case NotificationStatus.PAID:
+    case NotificationStatus.CANCELLED:
+    case NotificationStatus.RETURNED_TO_SENDER:
+      return false;
+    default:
+      return true;
+  }
+};

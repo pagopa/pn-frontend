@@ -1,5 +1,5 @@
 import VerifiedRoundedIcon from '@mui/icons-material/VerifiedRounded';
-import { Badge, Box, Typography } from '@mui/material';
+import { Box, Stack, Typography } from '@mui/material';
 import { Tag } from '@pagopa/mui-italia';
 
 import { useIsMobile } from '../../hooks/useIsMobile';
@@ -19,7 +19,17 @@ import {
 
 const NewNotificationBadge: React.FC<{ isNew: boolean }> = ({ isNew }) =>
   isNew ? (
-    <Badge data-testid="new-notification-badge" color="primary" variant="dot" sx={{ ml: 0.5 }} />
+    <Box
+      data-testid="new-notification-badge"
+      sx={{
+        width: 8,
+        height: 8,
+        borderRadius: '50%',
+        bgcolor: 'primary.main',
+        flexShrink: 0,
+        mr: 1,
+      }}
+    />
   ) : null;
 
 const NotificationsRecipientDataSwitch: React.FC<{
@@ -35,11 +45,13 @@ const NotificationsRecipientDataSwitch: React.FC<{
 
   const isNewNotification = data.isNewNotification;
 
-  if (type === 'badge') {
-    return <NewNotificationBadge isNew={isNewNotification} />;
-  }
   if (type === 'sentAt' && !isMobile) {
-    return formatDate(data.sentAt);
+    return (
+      <Stack direction="row" alignItems="center">
+        <NewNotificationBadge isNew={isNewNotification} />
+        <Typography variant="body2">{formatDate(data.sentAt)}</Typography>
+      </Stack>
+    );
   }
   if (type === 'sentAt' && isMobile) {
     return (

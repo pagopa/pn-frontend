@@ -45,15 +45,10 @@ const DesktopNotifications = ({
 
   const columns: Array<Column<NotificationColumnData>> = [
     {
-      id: 'badge',
-      label: '',
-      cellProps: { width: '1%' },
-    },
-    {
       id: 'sentAt',
       label: t('table.data'),
       mode: 'truncate',
-      cellProps: { width: '8%' },
+      cellProps: { width: '10%' },
     },
     {
       id: 'sender',
@@ -75,7 +70,7 @@ const DesktopNotifications = ({
     {
       id: 'action',
       label: '',
-      cellProps: { width: '14%', align: 'right' },
+      cellProps: { width: '13%', align: 'right' },
     },
   ];
 

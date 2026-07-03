@@ -65,7 +65,6 @@ export { default as NotificationDetailTimeline } from './NotificationDetail/Noti
 export { default as NotificationPaymentRecipient } from './NotificationDetail/NotificationPaymentRecipient';
 export { default as NotificationRelatedDowntimes } from './NotificationDetail/NotificationRelatedDowntimes';
 export { default as MobileNotificationsSort } from './Notifications/MobileNotificationsSort';
-export { isNewNotification } from './Notifications/NewNotificationBadge';
 export { default as NotificationsRecipientDataSwitch } from './Notifications/NotificationsRecipientDataSwitch';
 export { default as StatusTooltip } from './Notifications/StatusTooltip';
 export { default as CustomPagination } from './Pagination/CustomPagination';

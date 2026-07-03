@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 
-import type { Notification } from '@pagopa-pn/pn-commons';
+import type { RecipientNotification, UnifiedNotificationStatus } from '@pagopa-pn/pn-commons';
 import { LoadingPage, NotificationStatus } from '@pagopa-pn/pn-commons';
 
 import { OnboardingSource } from '../models/Onboarding';
@@ -15,8 +15,8 @@ import { getConfiguration } from '../services/configuration.service';
 import { groupDigitalAddresses, hasRequiredContacts } from '../utility/contacts.utility';
 import * as routes from './routes.const';
 
-const hasNotificationsToRead = (notifications: Array<Notification>): boolean => {
-  const managedStatuses = new Set([
+const hasNotificationsToRead = (notifications: Array<RecipientNotification>): boolean => {
+  const managedStatuses = new Set<UnifiedNotificationStatus>([
     NotificationStatus.VIEWED,
     NotificationStatus.CANCELLED,
     NotificationStatus.RETURNED_TO_SENDER,

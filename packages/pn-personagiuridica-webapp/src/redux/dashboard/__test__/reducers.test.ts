@@ -3,6 +3,7 @@ import MockAdapter from 'axios-mock-adapter';
 import {
   NotificationColumnData,
   NotificationStatus,
+  RecipientNotification,
   Sort,
   formatToTimezoneString,
   tenYearsAgo,
@@ -61,7 +62,9 @@ describe('Dashbaord redux state tests', () => {
       .onGet(
         `/bff/v1/notifications/received?startDate=${encodeURIComponent(
           formatToTimezoneString(tenYearsAgo)
-        )}&endDate=${encodeURIComponent(formatToTimezoneString(today))}&size=10`
+        )}&endDate=${encodeURIComponent(
+          formatToTimezoneString(today)
+        )}&size=10&communicationType=ALL`
       )
       .reply(200, notificationsDTO);
     const action = await store.dispatch(
@@ -111,7 +114,7 @@ describe('Dashbaord redux state tests', () => {
   });
 
   it('Should be able to change sort', () => {
-    const sort: Sort<NotificationColumnData> = {
+    const sort: Sort<NotificationColumnData<RecipientNotification>> = {
       orderBy: 'notificationStatus',
       order: 'desc',
     };

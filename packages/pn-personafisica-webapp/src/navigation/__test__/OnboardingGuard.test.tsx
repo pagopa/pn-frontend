@@ -54,7 +54,9 @@ describe('OnboardingGuard', () => {
       .onGet(
         `/bff/v1/notifications/received?startDate=${encodeURIComponent(
           formatToTimezoneString(tenYearsAgo)
-        )}&endDate=${encodeURIComponent(formatToTimezoneString(today))}&size=10`
+        )}&endDate=${encodeURIComponent(
+          formatToTimezoneString(today)
+        )}&size=10&communicationType=ALL`
       )
       .reply(200, response);
   };

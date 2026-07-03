@@ -108,5 +108,6 @@ export {
   ResponseStatus,
   TimelineCategory,
 } from './NotificationDetail';
-export { NotificationStatus } from './NotificationStatus';
+export { NotificationStatus, InformalNotificationStatus } from './NotificationStatus';
+export type { UnifiedNotificationStatus } from './NotificationStatus';
 export { basicNoLoggedUserData } from './User';

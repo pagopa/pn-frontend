@@ -14,3 +14,12 @@ export enum NotificationStatus {
   // only fe
   CANCELLATION_IN_PROGRESS = 'CANCELLATION_IN_PROGRESS',
 }
+
+export enum InformalNotificationStatus {
+  READY_TO_SEND = 'READY_TO_SEND',
+  PROCESSING = 'PROCESSING',
+  SUCCESSFUL_SENDING = 'SUCCESSFUL_SENDING',
+  UNSUCCESSFUL_SENDING = 'UNSUCCESSFUL_SENDING',
+}
+
+export type UnifiedNotificationStatus = NotificationStatus | InformalNotificationStatus;

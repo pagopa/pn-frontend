@@ -17,10 +17,6 @@ export const notificationsDTO: GetNotificationsResponse<RecipientNotification> =
       group: '6467344676f10c7617353c90',
       communicationType: 'LEGAL',
       isNewNotification: false,
-      communicationOutcomes: {
-        viewed: true,
-        delivered: true,
-      },
     },
     {
       iun: 'HRTX-GZQZ-DZDX-202308-G-1',
@@ -33,10 +29,6 @@ export const notificationsDTO: GetNotificationsResponse<RecipientNotification> =
       group: '6467344676f10c7617353c90',
       communicationType: 'INFORMAL',
       isNewNotification: false,
-      communicationOutcomes: {
-        viewed: true,
-        delivered: true,
-      },
     },
     {
       iun: 'DKRU-XUDK-UERQ-202308-X-1',
@@ -49,10 +41,6 @@ export const notificationsDTO: GetNotificationsResponse<RecipientNotification> =
       group: '6467344676f10c7617353c90',
       communicationType: 'INFORMAL',
       isNewNotification: true,
-      communicationOutcomes: {
-        viewed: false,
-        delivered: true,
-      },
     },
   ],
   moreResult: false,

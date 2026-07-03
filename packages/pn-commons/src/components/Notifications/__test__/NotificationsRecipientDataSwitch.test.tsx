@@ -22,7 +22,6 @@ const data: Row<RecipientNotification> = {
   recipients: ['CLMCST42R12D969Z', 'DRCGNN12A46A326K', 'LVLDAA85T50G702B'],
   group: '6467344676f10c7617353c90',
   communicationType: 'LEGAL',
-  communicationOutcomes: { viewed: false, delivered: true },
   isNewNotification: true,
 };
 
