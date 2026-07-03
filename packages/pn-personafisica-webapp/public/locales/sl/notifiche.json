@@ -50,6 +50,17 @@
     "not-found-subtitle": "To obvestilo lahko prebere samo prejemnik."
   },
   "detail": {
+    "notification-timeline-section": {
+      "title": "Stanje obvestila",
+      "aria-label": "Pojdi na časovnico obvestila"
+    },
+    "notification-detail-section": {
+      "title": "Podrobnosti obvestila",
+      "recipient": "Prejemnik",
+      "aar": "Potrdilo o prejemu",
+      "aria-label": "Pojdi na potrdilo o prejemu",
+      "availability": "Na voljo na spletu 10 let od datuma, ko obvestilo začne pravno veljati."
+    },
     "document-not-available": "Dokument bo mogoče prenesti v nekaj minutah. Poskusite lahko znova tako, da ponovno naložite stran ali kliknete povezavo zahtevanega dokumenta",
     "table-aria-label": "Podrobnosti o obvestilu",
     "payment-table-aria-label": "Podrobnosti o plačilih",

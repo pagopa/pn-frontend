@@ -98,7 +98,7 @@ const AbstractPaper = ({
           </Box>
         </Grid>
       </Grid>
-      <Divider aria-hidden sx={{ my: 2 }} />
+      {abstract && <Divider aria-hidden sx={{ my: 2 }} />}
       <Typography variant="body1" sx={{ overflowWrap: 'anywhere' }}>
         {abstract}
       </Typography>

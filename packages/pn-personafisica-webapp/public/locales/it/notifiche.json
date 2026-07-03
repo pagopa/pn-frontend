@@ -50,6 +50,17 @@
     "not-found-subtitle": "Questa notifica può essere letta solo dal destinatario."
   },
   "detail": {
+    "notification-timeline-section": {
+      "title": "Stato della notifica",
+      "aria-label": "Vai alla timeline della notifica"
+    },
+    "notification-detail-section": {
+      "title": "Dettaglio della notifica",
+      "recipient": "Persona destinataria",
+      "aar": "Avviso di Avvenuta Ricezione",
+      "aria-label": "Vai all'avviso di avvenuta ricezione",
+      "availability": "Disponibile online per 10 anni dalla data in cui la notifica assume valore di legge."
+    },
     "document-not-available": "Al momento non è possibile scaricare il documento, riprova più tardi. Per riprovare, ricarica la pagina o premi sul link del documento.",
     "table-aria-label": "Dettaglio notifica",
     "payment-table-aria-label": "Dettaglio pagamenti",
@@ -366,17 +377,7 @@
         "title": "I documenti sono stati ritirati",
         "description": "Il destinatario o un suo delegato ha ritirato i documenti notificati presso un operatore abilitato alla consegna degli stessi."
       },
-      "tpp-type": "un canale digitale di terze parti",
-      "summary": {
-        "effectiveDate": {
-          "title": "Notifica a valore di legge",
-          "description": "Hai effettuato un accesso alla notifica, che si è quindi perfezionata il giorno {{refinementDate}}."
-        },
-        "cancelled": {
-          "title": "Annullata",
-          "description": "L’ente ha annullato l’invio della notifica SEND, che quindi dall'annullamento non produrrà più effetti giuridici."
-        }
-      }
+      "tpp-type": "un canale digitale di terze parti"
     },
     "downtimes": {
       "title": "Disservizi",

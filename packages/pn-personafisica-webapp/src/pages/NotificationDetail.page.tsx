@@ -36,7 +36,6 @@ import {
   appStateActions,
   dateIsLessThan10Years,
   downloadDocument,
-  getDateFromString,
   getPaymentCache,
   useErrors,
   useIsCancelled,
@@ -218,45 +217,6 @@ const NotificationDetail: React.FC = () => {
       PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_DOWNLOAD_ATTACHMENT);
     }
   };
-
-  // const legalFactDownloadHandler = (legalFact: LegalFactId) => {
-  //   if (legalFact.category !== LegalFactType.NOTIFICATION_CANCELLED && isCancelledOrCancelling) {
-  //     return;
-  //   }
-  //   if (legalFact.category !== 'AAR') {
-  //     // Legal fact case
-  //     dispatch(
-  //       getReceivedNotificationDocument({
-  //         iun: notification.iun,
-  //         documentType: NotificationDocumentType.LEGAL_FACT,
-  //         documentId: legalFact.key.substring(legalFact.key.lastIndexOf('/') + 1),
-  //         mandateId,
-  //       })
-  //     )
-  //       .unwrap()
-  //       .then(showInfoMessageIfRetryAfterOrDownload)
-  //       .catch(() => {});
-  //     PFEventStrategyFactory.triggerEvent(
-  //       PFEventsType.SEND_DOWNLOAD_CERTIFICATE_OPPOSABLE_TO_THIRD_PARTIES,
-  //       {
-  //         source: 'dettaglio_notifica',
-  //       }
-  //     );
-  //   } else {
-  //     // AAR in timeline case
-  //     dispatch(
-  //       getReceivedNotificationDocument({
-  //         iun: notification.iun,
-  //         documentType: NotificationDocumentType.AAR,
-  //         documentId: legalFact.key,
-  //         mandateId,
-  //       })
-  //     )
-  //       .unwrap()
-  //       .then(showInfoMessageIfRetryAfterOrDownload)
-  //       .catch(() => {});
-  //   }
-  // };
 
   const getPaymentAttachmentAction = (name: PaymentAttachmentSName, attachmentIdx?: number) =>
     dispatch(
@@ -506,12 +466,6 @@ const NotificationDetail: React.FC = () => {
     PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_PAYMENT_DETAIL_REFRESH);
   };
 
-  // const trackShowMoreLess = (collapsed: boolean) => {
-  //   PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_NOTIFICATION_STATUS_DETAIL, {
-  //     accordion: collapsed ? 'collapsed' : 'expanded',
-  //   });
-  // };
-
   const getFlowType = (): EventDeliveryFlowType => {
     if (deliveryOutcome?.type === DeliveryOutcomeType.ANALOG) {
       return 'physical_flow';
@@ -589,22 +543,6 @@ const NotificationDetail: React.FC = () => {
     }
   };
 
-  const getTimelineSummary = (): string => {
-    console.log('hello');
-    const timelineStatus = notification.notificationStatus;
-    const refinementDate = notification.notificationStatusHistory.find(
-      (el) => el.status === 'EFFECTIVE_DATE'
-    )?.activeFrom;
-    console.log('refinementDate', refinementDate);
-    if (timelineStatus === 'CANCELLED') {
-      return t('detail.timeline.summary.cancelled.description', { ns: 'notifiche' });
-    }
-    return t('detail.timeline.summary.effectiveDate.description', {
-      ns: 'notifiche',
-      refinementDate: refinementDate ? getDateFromString(refinementDate, 'dd/MM/yyyy') : undefined,
-    });
-  };
-
   return (
     <NotificationDetailOnboardingPrompt
       iun={notification.iun}
@@ -644,7 +582,6 @@ const NotificationDetail: React.FC = () => {
               >
                 {/* ELEMENT 1: intro and banner */}
                 <Stack sx={{ width: { xs: '100%', md: '100%' } }} gap={2}>
-                  {/* start intro and banner */}
                   {cancelledAlert}
                   <AbstractPaper
                     title={notification.subject}
@@ -656,8 +593,8 @@ const NotificationDetail: React.FC = () => {
                   />
                   {banner}
                   {pecUnreachableAlert}
-                  {/* end intro and banner */}
                 </Stack>
+                {/* end ELEMENT 1: intro and banner */}
 
                 {/* ELEMENT 2: document and payment */}
                 <Stack
@@ -666,7 +603,6 @@ const NotificationDetail: React.FC = () => {
                   }}
                   gap={2}
                 >
-                  {/* start document and payment section */}
                   <MIPaper padding={24}>
                     <NotificationDetailDocuments
                       title={t('detail.acts', { ns: 'notifiche' })}
@@ -717,8 +653,8 @@ const NotificationDetail: React.FC = () => {
                       </ApiErrorWrapper>
                     </MIPaper>
                   )}
-                  {/* end document and payment section */}
                 </Stack>
+                {/* end ELEMENT 2: document and payment */}
               </Stack>
               {/* end intro, banner, document and payment */}
 
@@ -731,11 +667,13 @@ const NotificationDetail: React.FC = () => {
                 }}
                 gap={2}
               >
-                {/* start aside section */}
-                <NotificationTimelineBox
-                  isCancelled={notification.notificationStatus === 'CANCELLED'}
-                  timelineSummary={getTimelineSummary()}
-                />
+                {notification.notificationStatusHistory.length > 0 && (
+                  <NotificationTimelineBox
+                    statusHistory={notification.notificationStatusHistory}
+                    recipients={notification.recipients}
+                    isParty={false}
+                  />
+                )}
                 <NotificationDetailSection
                   recipient={currentRecipient}
                   documents={notification.otherDocuments ?? []}
@@ -763,8 +701,8 @@ const NotificationDetail: React.FC = () => {
                     link={getFacSimileLink()}
                   />
                 )}
-                {/* end aside section */}
               </Stack>
+              {/* end ELEMENT 3: aside */}
               {/* end document, payment and aside */}
             </Box>
           </Box>

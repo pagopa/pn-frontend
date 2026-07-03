@@ -50,6 +50,17 @@
     "not-found-subtitle": "Seul le destinataire peut lire cette notification."
   },
   "detail": {
+    "notification-timeline-section": {
+      "title": "Statut de la notification",
+      "aria-label": "Accède à la timeline de la notification"
+    },
+    "notification-detail-section": {
+      "title": "Détail de la notification",
+      "recipient": "Destinataire",
+      "aar": "Avis de réception",
+      "aria-label": "Accède à l'avis de réception",
+      "availability": "Disponible en ligne pendant 10 ans à compter de la date à laquelle la notification prend valeur de loi."
+    },
     "document-not-available": "Le document sera téléchargeable dans quelques minutes. Vous pouvez réessayer en rechargeant la page ou en cliquant sur le lien du document requis",
     "table-aria-label": "Détail de la notification",
     "payment-table-aria-label": "Détail des paiements",
