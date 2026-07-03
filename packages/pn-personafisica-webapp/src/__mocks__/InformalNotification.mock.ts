@@ -4,6 +4,7 @@ export const informalNotificationMock: BffFullInformalNotificationV1 = {
   senderDenomination: 'Xr94TD?>A]Rz>s,SSP2[2/B',
   campaignId: 'string',
   additionalLanguages: ['string'],
+  documentsAvailable: false,
   subject: 'string',
   recipients: [
     {

@@ -18,9 +18,9 @@ import {
 } from '@mui/material';
 import {
   AbstractPaper,
-  EventPaymentRecipientType,
   NotificationDetailDocuments,
   NotificationDetailOtherDocument,
+  NotificationDetailPayment,
   NotificationPaymentRecipient,
   PaymentAttachmentSName,
   PaymentsData,
@@ -31,18 +31,15 @@ import { informalNotificationMock } from '../__mocks__/InformalNotification.mock
 import { BffFullInformalNotificationV1 } from '../generated-client/informal-notifications';
 import { PFEventsType } from '../models/PFEventsType';
 import * as routes from '../navigation/routes.const';
-import { useAppDispatch, useAppSelector } from '../redux/hooks';
+import { useAppDispatch } from '../redux/hooks';
 import {
-  getReceivedNotificationPaymentTppUrl,
+  getReceivedNotificationPayment,
   getReceivedNotificationPaymentUrl,
 } from '../redux/notification/actions';
 import {
-  INFORMAL_NOTIFICATION_ACTIONS,
   getReceivedInformalNotificationDocument,
-  getReceivedInformalNotificationPayment,
   getReceivedInformalNotificationPaymentInfo,
 } from '../redux/notification/informalActions';
-import { RootState } from '../redux/store';
 import { getConfiguration } from '../services/configuration.service';
 import PFEventStrategyFactory from '../utility/MixpanelUtils/PFEventStrategyFactory';
 
@@ -53,7 +50,6 @@ const InformalNotificationDetail: React.FC = () => {
   const { F24_DOWNLOAD_WAIT_TIME, NOTIFICATION_COST_DETAILS_ASSISTANCE_LINK } = getConfiguration();
 
   const dispatch = useAppDispatch();
-  const paymentTpp = useAppSelector((state: RootState) => state.generalInfoState.paymentTpp);
 
   const [informalNotification, setInformalNotification] =
     React.useState<BffFullInformalNotificationV1>();
@@ -86,17 +82,23 @@ const InformalNotificationDetail: React.FC = () => {
 
   const currentRecipient = informalNotification?.recipients?.[0];
 
-  useEffect(() => {
-    const payments = currentRecipient?.payments;
+  const fetchPaymentsInfo = (payments: Array<NotificationDetailPayment>) => {
+    const paymentInfoRequest = payments.reduce((acc, payment) => {
+      if (payment.pagoPa && Object.keys(payment.pagoPa).length > 0) {
+        return [
+          ...acc,
+          {
+            noticeCode: payment.pagoPa.noticeCode,
+            creditorTaxId: payment.pagoPa.creditorTaxId,
+          },
+        ];
+      }
+      return acc;
+    }, [] as Array<{ noticeCode: string; creditorTaxId: string }>);
 
-    if (!payments?.length) {
+    if (paymentInfoRequest.length === 0) {
       return;
     }
-
-    const paymentInfoRequest = payments.map((payment) => ({
-      noticeCode: payment.pagoPa.noticeCode,
-      creditorTaxId: payment.pagoPa.creditorTaxId,
-    }));
 
     void dispatch(getReceivedInformalNotificationPaymentInfo({ paymentInfoRequest }))
       .unwrap()
@@ -104,7 +106,7 @@ const InformalNotificationDetail: React.FC = () => {
         setPaymentsData({
           pagoPaF24: paymentInfo.map((info, index) => ({
             pagoPa: {
-              ...currentRecipient?.payments?.[index]?.pagoPa,
+              ...payments[index]?.pagoPa,
               ...info,
               applyCost: false,
             },
@@ -113,7 +115,26 @@ const InformalNotificationDetail: React.FC = () => {
         });
       })
       .catch(() => {});
-  }, [currentRecipient?.payments, dispatch]);
+  };
+
+  const reloadPaymentsInfo = (data: Array<NotificationDetailPayment>) => {
+    fetchPaymentsInfo(data);
+    PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_PAYMENT_DETAIL_REFRESH);
+  };
+
+  useEffect(() => {
+    const payments = currentRecipient?.payments;
+
+    if (!payments?.length) {
+      return;
+    }
+
+    if (!payments?.length) {
+      return;
+    }
+
+    fetchPaymentsInfo(payments as Array<NotificationDetailPayment>);
+  }, [currentRecipient?.payments]);
 
   const primaryMessage = currentRecipient
     ? (currentRecipient as any).message?.primaryMessage
@@ -157,45 +178,14 @@ const InformalNotificationDetail: React.FC = () => {
     }
   };
 
-  const onPayTppClick = (
-    noticeCode?: string,
-    creditorTaxId?: string,
-    retrievalId?: string,
-    tppName?: string,
-    amount?: number
-  ) => {
-    if (noticeCode && creditorTaxId && retrievalId) {
-      PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_START_PAYMENT, { psp: tppName });
-      dispatch(
-        getReceivedNotificationPaymentTppUrl({
-          noticeCode,
-          creditorTaxId,
-          retrievalId,
-          amount,
-        })
-      )
-        .unwrap()
-        .then((res) => {
-          if (res.paymentUrl) {
-            window.location.assign(res.paymentUrl);
-          }
-        })
-        .catch(() => undefined);
-    }
-  };
-
   const getPaymentAttachmentAction = (name: PaymentAttachmentSName, attachmentIdx?: number) =>
     dispatch(
-      getReceivedInformalNotificationPayment({
+      getReceivedNotificationPayment({
         iun: informalNotification?.iun ?? '',
         attachmentName: name,
         attachmentIdx,
       })
     );
-
-  const trackEventPaymentRecipient = (event: EventPaymentRecipientType, param?: object) => {
-    PFEventStrategyFactory.triggerEvent(PFEventsType[event], param);
-  };
 
   const handleDocumentDownload = (document?: string | NotificationDetailOtherDocument) => {
     if (!informalNotification?.iun || !document || typeof document !== 'string') {
@@ -228,39 +218,27 @@ const InformalNotificationDetail: React.FC = () => {
       <Stack direction={{ xs: 'column', md: 'row' }} spacing={2} alignItems="flex-start">
         <Stack spacing={2} sx={{ width: { xs: '100%', md: '65%' } }}>
           <MIPaper sx={{ p: 3, flex: 1 }} variant="outlined">
-            {/* 
-            TODO da capire il campo downloadFilesLink
-            */}
             <NotificationDetailDocuments
               title={t('detail.acts', { ns: 'notifiche' })}
               documents={informalNotification?.documents}
               clickHandler={handleDocumentDownload}
-              documentsAvailable={(informalNotification?.documents?.length ?? 0) > 0}
+              /* va aggiunto il campo all API */
+              documentsAvailable={false}
               downloadFilesMessage={t('detail.acts_files.effected_faq', { ns: 'notifiche' })}
-              downloadFilesLink=""
               titleVariant="h5"
             />
           </MIPaper>
           <MIPaper sx={{ p: 3 }} variant="outlined">
-            {/* 
-            TODO da capire i campi isCanceled, handleFetchPaymentsInfo e  costDetails come vanno popolati
-            */}
             <NotificationPaymentRecipient
               payments={paymentsData}
-              paymentTpp={paymentTpp}
               isCancelled={false}
               iun={informalNotification?.iun ?? ''}
-              handleTrackEvent={trackEventPaymentRecipient}
               onPayClick={onPayClick}
-              onPayTppClick={onPayTppClick}
-              handleFetchPaymentsInfo={() => {}}
+              handleFetchPaymentsInfo={reloadPaymentsInfo}
               getPaymentAttachmentAction={getPaymentAttachmentAction}
+              /* QUESTI 2 ULTIMI CAMPI VANNO RESI OPZIONALI */
               timerF24={F24_DOWNLOAD_WAIT_TIME}
               costDetailsAssistanceLink={NOTIFICATION_COST_DETAILS_ASSISTANCE_LINK}
-              costDetails={undefined}
-              paymentTppUrlActionID={
-                INFORMAL_NOTIFICATION_ACTIONS.GET_RECEIVED_INFORMAL_NOTIFICATION_PAYMENT
-              }
             />
           </MIPaper>
         </Stack>
