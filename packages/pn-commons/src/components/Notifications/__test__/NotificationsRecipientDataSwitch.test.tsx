@@ -3,8 +3,8 @@ import { vi } from 'vitest';
 import { ThemeProvider } from '@mui/material';
 import { theme } from '@pagopa/mui-italia';
 
-import { RecipientNotification } from '../../../models/Notifications';
 import { NotificationStatus } from '../../../models/NotificationStatus';
+import { RecipientNotification } from '../../../models/Notifications';
 import { Row } from '../../../models/PnTable';
 import { createMatchMedia, fireEvent, render } from '../../../test-utils';
 import { formatDate } from '../../../utility/date.utility';
@@ -33,14 +33,17 @@ describe('NotificationsRecipientDataSwitch Component', () => {
   });
 
   it('renders component - badge - new notification', () => {
-    const { getByTestId } = render(<NotificationsRecipientDataSwitch data={data} type="badge" />);
+    const { getByTestId } = render(<NotificationsRecipientDataSwitch data={data} type="sentAt" />);
     const badge = getByTestId('new-notification-badge');
     expect(badge).toBeInTheDocument();
   });
 
   it('renders component - badge - already read notification', () => {
     const { queryByTestId } = render(
-      <NotificationsRecipientDataSwitch data={{ ...data, isNewNotification: false }} type="badge" />
+      <NotificationsRecipientDataSwitch
+        data={{ ...data, isNewNotification: false }}
+        type="sentAt"
+      />
     );
     const badge = queryByTestId('new-notification-badge');
     expect(badge).not.toBeInTheDocument();
@@ -116,7 +119,9 @@ describe('NotificationsRecipientDataSwitch Component', () => {
   });
 
   it('renders component - recipients', () => {
-    const { container } = render(<NotificationsRecipientDataSwitch data={data} type="recipients" />);
+    const { container } = render(
+      <NotificationsRecipientDataSwitch data={data} type="recipients" />
+    );
     const regexp = new RegExp(`^${data.recipients.join('')}$`, 'ig');
     expect(container).toHaveTextContent(regexp);
   });

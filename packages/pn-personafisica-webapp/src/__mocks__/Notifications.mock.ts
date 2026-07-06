@@ -49,7 +49,7 @@ export const notificationsDTO: GetNotificationsResponse<RecipientNotification> =
   ],
 };
 
-export const emptyNotificationsFromBe: GetNotificationsResponse = {
+export const emptyNotificationsFromBe: GetNotificationsResponse<RecipientNotification> = {
   resultsPage: [],
   moreResult: false,
   nextPagesKey: [],
