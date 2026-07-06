@@ -14,6 +14,20 @@ type NotificationTimelineBoxProps = {
   onTimelineClick?: () => void;
 };
 
+// 1. Definiamo quali sono i colori accettati da MIChip (presi dall'errore)
+type MIChipColors = 'default' | 'info' | 'warning' | 'error' | 'success' | 'highlight' | 'neutral';
+
+// 2. Creiamo una mappa di conversione
+const statusColorMap: Record<string, MIChipColors> = {
+  primary: 'info',
+  secondary: 'neutral',
+  info: 'info',
+  warning: 'warning',
+  error: 'error',
+  success: 'success',
+  default: 'default',
+};
+
 const NotificationTimelineBox = ({
   statusHistory,
   recipients,
@@ -28,6 +42,8 @@ const NotificationTimelineBox = ({
     isParty,
   });
 
+  const chipColor = statusColorMap[notificationStatusInfos.color || 'default'] || 'default';
+
   return (
     <MIPaper padding={24}>
       <Stack direction="row" alignItems="center" justifyContent="space-between" width="100%">
@@ -39,7 +55,7 @@ const NotificationTimelineBox = ({
             )}
           </Typography>
           <MIChip
-            color={statusHistory[0].status === 'CANCELLED' ? 'warning' : 'success'}
+            color={chipColor}
             variant="filled"
             label={notificationStatusInfos.label}
             sx={{ my: 1, width: 'fit-content' }}

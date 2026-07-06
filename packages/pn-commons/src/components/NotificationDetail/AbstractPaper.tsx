@@ -21,6 +21,37 @@ interface AbstractPaperProps {
   abstract?: string; // todo: to sanitize and format the abstract content before passing it to the component
 }
 
+interface InstitutionLogoProps {
+  id?: string;
+  name?: string;
+}
+
+const InstitutionLogo = ({ id, name }: InstitutionLogoProps) => {
+  const [hasError, setHasError] = useState(false);
+
+  const logoSrc =
+    id && !hasError
+      ? `https://selcucheckoutsa.z6.web.core.windows.net/institutions/${id}/logo.png`
+      : undefined;
+
+  return (
+    <Avatar
+      src={logoSrc}
+      alt={`${getLocalizedOrDefaultLabel('common', 'logo')} ${name}`}
+      imgProps={{
+        onError: () => setHasError(true),
+      }}
+      sx={{
+        width: { xs: 40, md: 56 },
+        height: { xs: 40, md: 56 },
+        backgroundColor: '#f4f5f8',
+      }}
+      variant="rounded"
+    >
+      <AccountBalanceOutlinedIcon sx={{ color: '#bbc2d6ff' }} />
+    </Avatar>
+  );
+};
 const AbstractPaper = ({
   title,
   senderPaId,
@@ -30,7 +61,6 @@ const AbstractPaper = ({
   abstract,
 }: AbstractPaperProps) => {
   const isMobile = useIsMobile();
-  const [hasError, setHasError] = useState(false);
 
   const borderTopStyle = `2px solid ${theme.palette.primary.main}`;
 
@@ -45,19 +75,7 @@ const AbstractPaper = ({
       <Divider aria-hidden sx={{ my: 2 }} />
       <Grid container>
         <Grid item xs={12} md={6} display="flex" alignItems="center" gap={2}>
-          <Avatar
-            alt={`${getLocalizedOrDefaultLabel('common', 'logo')} ${senderDenomination}`}
-            variant="rounded"
-            src={
-              hasError
-                ? undefined
-                : `https://selcucheckoutsa.z6.web.core.windows.net/institutions/${senderPaId}/logo.png`
-            }
-            onError={() => setHasError(true)}
-            sx={{ bgcolor: '#f4f5f8', color: '#bbc2d6ff' }}
-          >
-            <AccountBalanceOutlinedIcon />
-          </Avatar>
+          <InstitutionLogo id={senderPaId} name={senderDenomination} />
           <Box>
             <Typography variant="sidenav" color="text">
               {senderDenomination}
