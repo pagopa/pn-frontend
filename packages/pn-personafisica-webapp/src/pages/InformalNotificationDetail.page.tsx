@@ -40,14 +40,11 @@ import {
   getReceivedInformalNotificationDocument,
   getReceivedInformalNotificationPaymentInfo,
 } from '../redux/notification/informalActions';
-import { getConfiguration } from '../services/configuration.service';
 import PFEventStrategyFactory from '../utility/MixpanelUtils/PFEventStrategyFactory';
 
 const InformalNotificationDetail: React.FC = () => {
   const { id } = useParams();
   const { t, i18n } = useTranslation(['common', 'notifiche']);
-
-  const { F24_DOWNLOAD_WAIT_TIME, NOTIFICATION_COST_DETAILS_ASSISTANCE_LINK } = getConfiguration();
 
   const dispatch = useAppDispatch();
 
@@ -236,9 +233,6 @@ const InformalNotificationDetail: React.FC = () => {
               onPayClick={onPayClick}
               handleFetchPaymentsInfo={reloadPaymentsInfo}
               getPaymentAttachmentAction={getPaymentAttachmentAction}
-              /* QUESTI 2 ULTIMI CAMPI VANNO RESI OPZIONALI */
-              timerF24={F24_DOWNLOAD_WAIT_TIME}
-              costDetailsAssistanceLink={NOTIFICATION_COST_DETAILS_ASSISTANCE_LINK}
             />
           </MIPaper>
         </Stack>

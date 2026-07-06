@@ -38,8 +38,8 @@ import { GetReceivedNotificationParams } from './types';
 export enum NOTIFICATION_ACTIONS {
   GET_RECEIVED_NOTIFICATION = 'getReceivedNotification',
   GET_RECEIVED_NOTIFICATION_DOCUMENT = 'getReceivedNotificationDocument',
-  GET_RECEIVED_NOTIFICATION_PAYMENT = 'getReceivedNotificationPayment', // Per i pagamenti come parametro notice code e creditorTaxID (allegato)// For payments, the parameters are noticeCode and creditorTaxId (attachment).
-  GET_RECEIVED_NOTIFICATION_PAYMENT_INFO = 'getReceivedNotificationPaymentInfo', // per ottene info del pagamento come importo
+  GET_RECEIVED_NOTIFICATION_PAYMENT = 'getReceivedNotificationPayment',
+  GET_RECEIVED_NOTIFICATION_PAYMENT_INFO = 'getReceivedNotificationPaymentInfo',
   GET_RECEIVED_NOTIFICATION_PAYMENT_URL = 'getReceivedNotificationPaymentUrl',
   GET_DOWNTIME_HISTORY = 'getNotificationDowntimeHistory',
   EXCHANGE_NOTIFICATION_QR_CODE = 'exchangeNotificationQrCode',
