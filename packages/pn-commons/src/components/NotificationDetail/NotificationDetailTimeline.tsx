@@ -124,18 +124,6 @@ const NotificationDetailTimeline = ({
         alignItems="center"
         data-testid="NotificationDetailTimeline"
       >
-        <Grid item>
-          <Typography
-            id="notification-state"
-            component="h5"
-            color="text.primary"
-            fontWeight={700}
-            textTransform="uppercase"
-            fontSize={14}
-          >
-            {title}
-          </Typography>
-        </Grid>
         {/* TODO: ripristinare quando sarà completata la issue pn-719 */}
         {/* <Grid item>
           <Button startIcon={<DownloadIcon />}>Scarica tutti gli allegati</Button>

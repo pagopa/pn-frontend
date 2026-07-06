@@ -11,12 +11,14 @@ type NotificationTimelineBoxProps = {
   statusHistory: Array<NotificationStatusHistory>;
   recipients: Array<NotificationDetailRecipient>;
   isParty: boolean;
+  onTimelineClick?: () => void;
 };
 
 const NotificationTimelineBox = ({
   statusHistory,
   recipients,
   isParty,
+  onTimelineClick,
 }: NotificationTimelineBoxProps) => {
   const isMobile = useIsMobile('sm');
 
@@ -52,7 +54,7 @@ const NotificationTimelineBox = ({
             'notifications',
             'detail.notification-timeline-section.aria-label'
           )}
-          onClick={() => {}}
+          onClick={onTimelineClick}
         >
           <KeyboardArrowRightRoundedIcon />
         </IconButton>

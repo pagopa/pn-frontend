@@ -11,6 +11,7 @@ const NOTIFICA = '/dettaglio';
 const COMUNICAZIONE = '/comunicazione';
 export const DETTAGLIO_NOTIFICA = `${NOTIFICHE}/:id${NOTIFICA}`;
 export const DETTAGLIO_COMBO = `${COMUNICAZIONE}/:id${NOTIFICA}`;
+export const TIMELINE = `${NOTIFICHE}/:id${NOTIFICA}/timeline`;
 export const DETTAGLIO_NOTIFICA_DELEGATO = `${NOTIFICHE_DELEGATO}/:id${NOTIFICA}`;
 export const NUOVA_DELEGA = `${DELEGHE}/nuova`;
 export const GET_DETTAGLIO_NOTIFICA_PATH = (id: string) => `${NOTIFICHE}/${id}${NOTIFICA}`;

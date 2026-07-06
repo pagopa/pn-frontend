@@ -7,6 +7,7 @@ import OnboardingCourtesyWizard from '../components/Contacts/Onboarding/Courtesy
 import DigitalDomicileWizard from '../components/Contacts/Onboarding/DigitalDomicileWizard';
 import IoActivationWizard from '../components/Contacts/Onboarding/IoActivationWizard';
 import OnboardingHome from '../components/Contacts/Onboarding/OnboardingHome';
+import NotificationTimeline from '../pages/NotificationTimeline.page';
 import TppLanding from '../pages/TppLanding.page';
 import { getConfiguration } from '../services/configuration.service';
 import AppNotAccessibleRoute from './AppNotAccessibleRoute';
@@ -57,6 +58,7 @@ const Router: React.FC = () => {
                 <Route path={routes.NOTIFICHE_DELEGATO} element={<Notifiche />} />
                 <Route path={routes.DETTAGLIO_NOTIFICA} element={<NotificationDetail />} />
                 <Route path={routes.DETTAGLIO_COMBO} element={<InformalNotificationDetail />} />
+                <Route path={routes.TIMELINE} element={<NotificationTimeline />} />
                 <Route path={routes.DETTAGLIO_NOTIFICA_DELEGATO} element={<NotificationDetail />} />
                 <Route path={routes.DELEGHE} element={<Deleghe />} />
                 <Route path={routes.NUOVA_DELEGA} element={<NuovaDelega />} />
