@@ -15,7 +15,9 @@ export const INTEGRAZIONE_API = '/integrazione-api';
 export const REGISTRA_CHIAVE_PUBBLICA = `${INTEGRAZIONE_API}/registra-chiave-pubblica`;
 
 const NOTIFICA = '/dettaglio';
+const COMUNICAZIONE = '/comunicazione';
 export const DETTAGLIO_NOTIFICA = `${NOTIFICHE}/:id${NOTIFICA}`;
+export const DETTAGLIO_COMBO = `${COMUNICAZIONE}/:id${NOTIFICA}`;
 export const DETTAGLIO_NOTIFICA_DELEGATO = `${NOTIFICHE_DELEGATO}/:mandateId/:id${NOTIFICA}`;
 export const DETTAGLIO_NOTIFICA_QRCODE_QUERY_PARAM = AppRouteParams.AAR;
 export const NUOVA_DELEGA = `${DELEGATI}/nuova`;

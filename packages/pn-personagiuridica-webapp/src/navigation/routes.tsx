@@ -86,6 +86,7 @@ const Router: React.FC = () => {
                     </PrivateRoute>
                   }
                 />
+
                 <Route path={routes.DETTAGLIO_NOTIFICA_DELEGATO} element={<NotificationDetail />} />
                 <Route
                   path={routes.DELEGHE}
