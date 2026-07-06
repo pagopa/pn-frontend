@@ -1,12 +1,9 @@
 import { useRef } from 'react';
-import { Trans, useTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
-import { Link } from '@mui/material';
 import {
   Column,
-  EmptyState,
-  KnownSentiment,
   NotificationColumnData,
   NotificationCommunicationType,
   NotificationsRecipientDataSwitch,
@@ -22,9 +19,8 @@ import {
 } from '@pagopa-pn/pn-commons';
 
 import * as routes from '../../navigation/routes.const';
-import { useAppSelector } from '../../redux/hooks';
-import { RootState } from '../../redux/store';
 import FilterNotifications from './FilterNotifications';
+import NotificationsEmptyState from './NotificationsEmptyState';
 
 type Props = {
   notifications: Array<RecipientNotification>;
@@ -36,24 +32,6 @@ type Props = {
   isDelegatedPage?: boolean;
 };
 
-type LinkRemoveFiltersProps = {
-  cleanFilters: () => void;
-  children?: React.ReactNode;
-};
-
-const LinkRemoveFilters: React.FC<LinkRemoveFiltersProps> = ({ children, cleanFilters }) => (
-  <Link
-    component={'button'}
-    variant="body1"
-    id="call-to-action-first"
-    key="remove-filters"
-    data-testid="link-remove-filters"
-    onClick={cleanFilters}
-  >
-    {children}
-  </Link>
-);
-
 const DesktopNotifications = ({
   notifications,
   sort,
@@ -63,8 +41,6 @@ const DesktopNotifications = ({
   const navigate = useNavigate();
   const { t } = useTranslation(['notifiche', 'common']);
   const filterNotificationsRef = useRef({ filtersApplied: false, cleanFilters: () => void 0 });
-
-  const organization = useAppSelector((state: RootState) => state.userState.user.organization);
 
   const columns: Array<Column<NotificationColumnData<RecipientNotification>>> = [
     {
@@ -194,36 +170,11 @@ const DesktopNotifications = ({
           </PnTableBody>
         </PnTable>
       ) : (
-        <EmptyState
-          sentimentIcon={filtersApplied ? KnownSentiment.DISSATISFIED : KnownSentiment.NONE}
-        >
-          {filtersApplied && (
-            <Trans
-              i18nKey={'empty-state.filtered'}
-              ns={'notifiche'}
-              components={[
-                <LinkRemoveFilters
-                  key={'remove-filters'}
-                  cleanFilters={filterNotificationsRef.current.cleanFilters}
-                />,
-              ]}
-            />
-          )}
-          {!filtersApplied && isDelegatedPage && (
-            <Trans
-              i18nKey={'empty-state.delegate'}
-              ns={'notifiche'}
-              values={{ name: organization.name }}
-            />
-          )}
-          {!filtersApplied && !isDelegatedPage && (
-            <Trans
-              i18nKey={'empty-state.no-notifications'}
-              ns={'notifiche'}
-              values={{ name: organization.name }}
-            />
-          )}
-        </EmptyState>
+        <NotificationsEmptyState
+          filtersApplied={filtersApplied}
+          filterNotificationsRef={filterNotificationsRef}
+          isDelegatedPage={isDelegatedPage}
+        />
       )}
     </>
   );

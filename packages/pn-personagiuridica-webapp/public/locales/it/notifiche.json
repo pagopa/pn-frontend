@@ -39,9 +39,13 @@
     "options": "Opzioni sort"
   },
   "empty-state": {
-    "filtered": "Non abbiamo trovato risultati: prova con dei filtri diversi. <0>Rimuovi filtri</0>",
-    "no-notifications": "Non ci sono notifiche per {{name}}.",
-    "delegate": "Non ci sono notifiche in delega a {{name}} da leggere.",
+    "filtered": "Nessuna notifica o comunicazione per i filtri selezionati",
+    "filtered-description": "Rimuovili o prova con un’altra combinazione.",
+    "clean-filters-cta": "Rimuovi filtri",
+    "delegate": "Qui vedrai le comunicazioni a valore legale di {{name}}",
+    "title": "Qui vedrai le tue notifiche a valore legale e le altre comunicazioni",
+    "description": "Aggiorna ora i tuoi recapiti e saprai subito quando ne riceverai una.",
+    "go-to-contacts-cta": "Vai ai tuoi recapiti",
     "aria-label-remove-filters": "Rimuovi filtri"
   },
   "from-qrcode": {
