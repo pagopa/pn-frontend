@@ -209,7 +209,7 @@ const PnInfoCardAccordion: React.FC<PnInfoCardContentProps> = ({ title, subtitle
         </ButtonBase>
       </Box>
 
-      <Collapse in={expanded} timeout="auto">
+      <Collapse in={expanded} timeout="auto" mountOnEnter unmountOnExit>
         <CardContent
           id={panelId}
           role="region"

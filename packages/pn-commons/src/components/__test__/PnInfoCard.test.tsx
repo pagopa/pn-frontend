@@ -1,6 +1,6 @@
 import { vi } from 'vitest';
 
-import { createMatchMedia, queryByTestId } from '@pagopa-pn/pn-commons/src/test-utils';
+import { createMatchMedia } from '@pagopa-pn/pn-commons/src/test-utils';
 import userEvent from '@testing-library/user-event';
 
 import { fireEvent, render, waitFor, within } from '../../test-utils';
@@ -43,12 +43,12 @@ describe('PnInfoCard Component', () => {
 
   it('renders component', async () => {
     // render component
-    const { container, getByTestId, queryByTestId } = render(
+    const { container, getByTestId } = render(
       <PnInfoCard title={title} subtitle={subTitle} actions={actions}>
         {body}
       </PnInfoCard>
     );
-    const headerEl = queryByTestId('PnInfoCardHeader');
+    const headerEl = getByTestId('PnInfoCardHeader');
     expect(headerEl).toBeInTheDocument();
     const titleEl = getByTestId('PnInfoCardTitle');
     expect(titleEl).toBeInTheDocument();
@@ -70,7 +70,7 @@ describe('PnInfoCard Component', () => {
 
   it('renders component - no actions', () => {
     // render component
-    const { container, getByTestId } = render(
+    const { container, getByTestId, queryByTestId } = render(
       <PnInfoCard title={title} subtitle={subTitle}>
         {body}
       </PnInfoCard>
@@ -85,9 +85,9 @@ describe('PnInfoCard Component', () => {
     expect(bodyEl).toBeInTheDocument();
     expect(bodyEl).toHaveTextContent(/Body/i);
 
-    const btnOne = queryByTestId(container, 'btn-one');
+    const btnOne = queryByTestId('btn-one');
     expect(btnOne).not.toBeInTheDocument();
-    const btnTwo = queryByTestId(container, 'btn-two');
+    const btnTwo = queryByTestId('btn-two');
     expect(btnTwo).not.toBeInTheDocument();
   });
 
@@ -95,7 +95,7 @@ describe('PnInfoCard Component', () => {
     globalThis.matchMedia = createMatchMedia(800);
     const user = userEvent.setup();
 
-    const { getByRole, getByTestId } = render(
+    const { getByRole, queryByRole, queryByTestId } = render(
       <PnInfoCard title={title} subtitle={subTitle} mobileCollapsible>
         {body}
       </PnInfoCard>
@@ -107,28 +107,31 @@ describe('PnInfoCard Component', () => {
     });
 
     const panelId = accordionButton.getAttribute('aria-controls');
-    const panel = getByTestId('PnInfoCardBody');
 
     expect(accordionButton).toHaveAttribute('aria-expanded', 'false');
     expect(panelId).toBeTruthy();
 
-    expect(panel).toHaveAttribute('id', panelId);
-    expect(panel).toHaveAttribute('role', 'region');
-    expect(panel).toHaveAttribute('aria-labelledby', accordionButton.id);
-    expect(panel).not.toBeVisible();
+    expect(queryByTestId('PnInfoCardBody')).not.toBeInTheDocument();
+    expect(queryByRole('region')).not.toBeInTheDocument();
 
     await user.click(accordionButton);
 
     await waitFor(() => {
       expect(accordionButton).toHaveAttribute('aria-expanded', 'true');
-      expect(panel).toBeVisible();
     });
+
+    const panel = getByRole('region');
+
+    expect(panel).toHaveAttribute('id', panelId);
+    expect(panel).toHaveAttribute('aria-labelledby', accordionButton.id);
+    expect(panel).toBeVisible();
 
     await user.click(accordionButton);
 
     await waitFor(() => {
       expect(accordionButton).toHaveAttribute('aria-expanded', 'false');
-      expect(panel).not.toBeVisible();
+      expect(queryByTestId('PnInfoCardBody')).not.toBeInTheDocument();
+      expect(queryByRole('region')).not.toBeInTheDocument();
     });
   });
 
