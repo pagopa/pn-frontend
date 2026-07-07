@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.24.1-RC.0](https://fbianchicodermine-github/pagopa/pn-frontend/compare/v2.24.0...v2.24.1-RC.0) (2026-07-07)
+
+
+### Bug Fixes
+
+* **PN-20522:** validate comma in name from spid ([#1941](https://fbianchicodermine-github/pagopa/pn-frontend/issues/1941)) ([0537242](https://fbianchicodermine-github/pagopa/pn-frontend/commit/053724229c1b2973640a9916c261fad8f55b7425))
+
+
+
+
+
 # [2.24.0](https://github.com/pagopa/pn-frontend/compare/v2.24.0-RC.4...v2.24.0) (2026-06-22)
 
 **Note:** Version bump only for package @pagopa-pn/pn-commons
