@@ -6,9 +6,7 @@
     "oggetto": "Oggetto",
     "iun": "Codice IUN",
     "status": "Stato",
-    "show-detail": "Vedi dettaglio",
     "open": "Apri",
-    "aria-action-table": "Vedi dettaglio notifica con iun: {{iun}}",
     "legal-value": "Notifica a valore legale"
   },
   "filters": {

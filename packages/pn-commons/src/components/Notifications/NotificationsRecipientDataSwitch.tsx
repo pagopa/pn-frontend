@@ -67,8 +67,19 @@ const NotificationsRecipientDataSwitch: React.FC<{
   }
   if (type === 'subject') {
     return (
-      <Box display="flex" flexDirection="column" alignItems="flex-start" gap={0.5}>
-        <Typography variant="body2">{data.subject}</Typography>
+      <Box display="flex" flexDirection="column" alignItems="flex-start" gap={0.5} width="100%">
+        <Typography
+          variant="body2"
+          title={data.subject}
+          sx={{
+            width: '100%',
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
+            wordBreak: 'break-word',
+          }}
+        >
+          {data.subject}
+        </Typography>
         {data.communicationType === 'LEGAL' && (
           <Tag
             variant="default"

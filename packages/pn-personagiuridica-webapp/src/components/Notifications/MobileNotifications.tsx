@@ -222,7 +222,7 @@ const MobileNotifications = ({
                   endIcon={<ArrowForwardIcon />}
                   color="primary"
                 >
-                  {t('table.show-detail')}
+                  {t('table.open')}
                 </ButtonNaked>
               </PnCardActions>
             </PnCard>
