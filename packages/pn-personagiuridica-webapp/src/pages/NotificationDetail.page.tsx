@@ -514,23 +514,22 @@ const NotificationDetail = () => {
       data-testid="cancelledAlertText"
       severity="warning"
       sx={{ mb: { xs: 2, lg: 0 } }}
-      description={t('detail.cancelled.message', { ns: 'notifiche' })}
       action={{
         label: t('detail.cancelled.cta', { ns: 'notifiche' }),
         href: NOTIFICATION_CANCELLED_HELP_LINK,
         rel: 'noopener noreferrer',
         target: '_blank',
       }}
-    />
+    >
+      {t('detail.cancelled.message', { ns: 'notifiche' })}
+    </MIAlert>
   );
 
   const pecUnreachableAlert = isNotificationCostBanner &&
     historyParser.hasSimpleRegisteredLetter() && (
-      <MIAlert
-        data-testid="pecUnreachableAlertText"
-        severity="warning"
-        description={t('detail.pec-unreachable', { ns: 'notifiche' })}
-      />
+      <MIAlert data-testid="pecUnreachableAlertText" severity="warning">
+        {t('detail.pec-unreachable', { ns: 'notifiche' })}
+      </MIAlert>
     );
 
   const trackTimelineShowMore = (collapsed: boolean) => {
@@ -609,9 +608,10 @@ const NotificationDetail = () => {
                       severity="success"
                       title={t('detail.timeline.radd.title', { ns: 'notifiche' })}
                       sx={{ mb: 3, mt: 2 }}
-                      description={t('detail.timeline.radd.description', { ns: 'notifiche' })}
                       data-testid="raddAlert"
-                    />
+                    >
+                      {t('detail.timeline.radd.description', { ns: 'notifiche' })}
+                    </MIAlert>
                   )}
                 </Paper>
 
