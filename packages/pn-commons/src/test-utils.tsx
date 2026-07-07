@@ -416,7 +416,6 @@ export {
   getById,
   queryById,
   createTestStore,
-  theme,
   disableConsoleLogging,
 };
 export type { CustomRenderResult as RenderResult };
