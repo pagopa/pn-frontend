@@ -1,7 +1,7 @@
 {
   "name": "@pagopa-pn/pn-pa-webapp",
   "description": "Backoffice di SEND per la Pubblica Amministrazione",
-  "version": "2.23.0",
+  "version": "2.24.0",
   "private": true,
   "dependencies": {
     "@emotion/react": "^11.14.0",
@@ -11,7 +11,7 @@
     "@mui/material": "^5.14.5",
     "@mui/system": "^5.14.5",
     "@mui/x-date-pickers": "^6.17.0",
-    "@pagopa/mui-italia": "2.5.0",
+    "@pagopa/mui-italia": "2.6.0-RC.0",
     "@reduxjs/toolkit": "^1.9.5",
     "axios": "^1.15.0",
     "date-fns": "^2.30.0",
@@ -80,11 +80,10 @@
     "eslint-plugin-sonarjs": "^0.10.0",
     "jsdom": "^29.0.0",
     "prettier": "^2.8.8",
-    "sonarqube-scanner": "^3.3.0",
+    "sonarqube-scanner": "^4.3.8",
     "vite": "^5.1.4",
     "vitest": "^1.6.1",
     "vitest-canvas-mock": "^0.3.3",
     "vitest-sonar-reporter": "^2.0.0"
   }
 }
-

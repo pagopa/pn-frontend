@@ -34,6 +34,8 @@ describe('notificationPayloadMappers', () => {
       cancelled_count: 0,
       effective_date_count: 1,
       filed_count: 0,
+      sending_count: 0,
+      back_to_sender_count: 0,
       banner: 'SERCQ_SEND',
     });
   });

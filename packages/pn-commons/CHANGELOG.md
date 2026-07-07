@@ -3,6 +3,55 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.24.0](https://github.com/pagopa/pn-frontend/compare/v2.24.0-RC.4...v2.24.0) (2026-06-22)
+
+**Note:** Version bump only for package @pagopa-pn/pn-commons
+
+
+
+
+
+# [2.24.0-RC.2](https://github.com/pagopa/pn-frontend/compare/v2.24.0-RC.1...v2.24.0-RC.2) (2026-06-16)
+
+**Note:** Version bump only for package @pagopa-pn/pn-commons
+
+
+
+
+
+# [2.24.0-RC.1](https://github.com/pagopa/pn-frontend/compare/v2.24.0-RC.0...v2.24.0-RC.1) (2026-06-09)
+
+
+### Features
+
+* **PN-19310:** migrate alerts to MIAlert ([#1914](https://github.com/pagopa/pn-frontend/issues/1914)) ([3ca9b6f](https://github.com/pagopa/pn-frontend/commit/3ca9b6f48a6570581834b3137c6ea68525a1ca6a))
+
+
+
+
+
+# [2.24.0-RC.0](https://github.com/pagopa/pn-frontend/compare/v2.23.0...v2.24.0-RC.0) (2026-06-08)
+
+
+### Bug Fixes
+
+* **PN-19419:** enhance mixpanel tracking with transport option ([#1891](https://github.com/pagopa/pn-frontend/issues/1891)) ([1b348c5](https://github.com/pagopa/pn-frontend/commit/1b348c544325972a9ab8a31394ade9e5aa4f7f86))
+* **PN-19455:** show error on payment if retrieval ID is expired ([#1907](https://github.com/pagopa/pn-frontend/issues/1907)) ([ab5d8ef](https://github.com/pagopa/pn-frontend/commit/ab5d8ef2db493d9f7c719141fc96b3235953bf92))
+* **PN-20014:** update translations of MISpidSelectOIDialog and track mixpanel event of unavailable IDP ([#1919](https://github.com/pagopa/pn-frontend/issues/1919)) ([ef9ada9](https://github.com/pagopa/pn-frontend/commit/ef9ada9aa9d1033d1250e6851435943269ffcc0d))
+
+
+### Features
+
+* **PN-19759:** Add Mixpanel functional tracking foundation ([#1893](https://github.com/pagopa/pn-frontend/issues/1893)) ([2d1b877](https://github.com/pagopa/pn-frontend/commit/2d1b8777c6476b48323cf147123fec586663099b))
+* **PN-19761:** mixpanel event tracking (PG) ([#1910](https://github.com/pagopa/pn-frontend/issues/1910)) ([f36328a](https://github.com/pagopa/pn-frontend/commit/f36328a05ab4ffdc5824935b7a351e6a12b77cb0))
+* **PN-19856:** implement section for fac-simile document ([#1895](https://github.com/pagopa/pn-frontend/issues/1895)) ([22b5dc7](https://github.com/pagopa/pn-frontend/commit/22b5dc7b013f020e18e8b74e21a7a809601a359c))
+* **PN-19905:** add new header to set language for createOrUpdateAddress action ([#1888](https://github.com/pagopa/pn-frontend/issues/1888)) ([0a8e431](https://github.com/pagopa/pn-frontend/commit/0a8e4310034a805f972632e866022425a0793eb6))
+* **PN-20014:** import new MISpidSelectOIDialog component from mui-italia ([#1902](https://github.com/pagopa/pn-frontend/issues/1902)) ([4f97aa7](https://github.com/pagopa/pn-frontend/commit/4f97aa79508f529b49e7b67eb66b24f938895433))
+
+
+
+
+
 # [2.23.0](https://github.com/pagopa/pn-frontend/compare/v2.23.0-RC.4...v2.23.0) (2026-05-06)
 
 **Note:** Version bump only for package @pagopa-pn/pn-commons

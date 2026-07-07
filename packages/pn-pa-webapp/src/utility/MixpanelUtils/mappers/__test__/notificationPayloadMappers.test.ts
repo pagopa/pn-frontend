@@ -25,6 +25,7 @@ describe('notificationPayloadMappers', () => {
       effective_date_count: 2,
       filed_count: 1,
       sending_count: 0,
+      back_to_sender_count: 0,
     });
   });
 

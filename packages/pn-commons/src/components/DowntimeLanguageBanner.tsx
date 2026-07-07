@@ -11,7 +11,6 @@ type Props = {
 const DowntimeLanguageBanner: React.FC<Props> = ({ downtimeExampleLink }) => (
   <MIAlert
     severity="info"
-    description={getLocalizedOrDefaultLabel('common', 'downtime_language_banner.message')}
     data-testid="downtimeLanguageBanner"
     sx={{ mt: 2 }}
     action={{
@@ -20,7 +19,9 @@ const DowntimeLanguageBanner: React.FC<Props> = ({ downtimeExampleLink }) => (
       rel: 'noopener noreferrer',
       target: '_blank',
     }}
-  />
+  >
+    {getLocalizedOrDefaultLabel('common', 'downtime_language_banner.message')}
+  </MIAlert>
 );
 
 export default DowntimeLanguageBanner;

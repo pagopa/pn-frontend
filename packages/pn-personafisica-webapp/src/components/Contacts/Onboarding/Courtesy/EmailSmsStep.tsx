@@ -280,11 +280,9 @@ const EmailSmsStep = ({
   return (
     <Stack data-testid="email-sms-step" spacing={2}>
       {!ioEnabled && (
-        <MIAlert
-          severity="info"
-          data-testid="courtesy-banner"
-          description={t('onboarding.courtesy.banner-description')}
-        />
+        <MIAlert severity="info" data-testid="courtesy-banner">
+          {t('onboarding.courtesy.banner-description')}
+        </MIAlert>
       )}
 
       <CourtesyContactHandler

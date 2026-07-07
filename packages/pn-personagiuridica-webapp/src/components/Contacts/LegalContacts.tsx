@@ -222,11 +222,9 @@ const LegalContacts = () => {
         </Typography>
       )}
       {(isValidatingPec || hasPecActive) && (
-        <MIAlert
-          severity="info"
-          sx={{ mt: 2 }}
-          description={t(`legal-contacts.pec-disclaimer`, { ns: 'recapiti' })}
-        />
+        <MIAlert severity="info" sx={{ mt: 2 }}>
+          {t(`legal-contacts.pec-disclaimer`, { ns: 'recapiti' })}
+        </MIAlert>
       )}
       {showSpecialContactsSection && <SpecialContacts addressType={AddressType.LEGAL} />}
       <DeleteDialog
