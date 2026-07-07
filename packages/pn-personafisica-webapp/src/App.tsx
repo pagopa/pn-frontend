@@ -82,7 +82,7 @@ const App = () => {
   const { tosConsent, fetchedTos, privacyConsent, fetchedPrivacy, loginProvider } = useAppSelector(
     (state: RootState) => state.userState
   );
-  const { pendingDelegators, delegators } = useAppSelector(
+  const { pendingDelegators, delegators, hasNewNotifications } = useAppSelector(
     (state: RootState) => state.generalInfoState
   );
   const currentStatus = useAppSelector((state: RootState) => state.appStatus.currentStatus);
@@ -157,6 +157,7 @@ const App = () => {
       const myNotifications = {
         label: t('title', { ns: 'notifiche' }),
         route: routes.NOTIFICHE,
+        dotNotification: hasNewNotifications,
       };
       const mappedDelegators = delegators.map((delegator) => ({
         label:
@@ -184,6 +185,7 @@ const App = () => {
       route: routes.NOTIFICHE,
       children: sideMenuDelegators,
       notSelectable: sideMenuDelegators && sideMenuDelegators.length > 0,
+      dotNotification: hasNewNotifications,
     },
     { label: t('menu.contacts'), icon: MarkunreadMailboxIcon, route: routes.RECAPITI },
     {

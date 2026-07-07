@@ -26,6 +26,9 @@ export const useMenuItems = (userHasAdminPermissions: boolean) => {
   const pendingDelegators = useAppSelector(
     (state: RootState) => state.generalInfoState.pendingDelegators
   );
+  const hasNewNotifications = useAppSelector(
+    (state: RootState) => state.generalInfoState.hasNewNotifications
+  );
   const organization = loggedUser.organization;
 
   const notificationMenuItems: Array<SideMenuItem> | undefined = !loggedUser.hasGroup
@@ -33,6 +36,7 @@ export const useMenuItems = (userHasAdminPermissions: boolean) => {
         {
           label: t('menu.notifiche-impresa'),
           route: routes.NOTIFICHE,
+          dotNotification: hasNewNotifications,
         },
         {
           label: t('menu.notifiche-delegato'),

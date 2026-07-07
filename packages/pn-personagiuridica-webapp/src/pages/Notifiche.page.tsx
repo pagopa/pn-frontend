@@ -29,6 +29,7 @@ import { contactsSelectors } from '../redux/contact/reducers';
 import { DASHBOARD_ACTIONS, getReceivedNotifications } from '../redux/dashboard/actions';
 import { setNotificationFilters, setPagination, setSorting } from '../redux/dashboard/reducers';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
+import { setHasNewNotifications } from '../redux/sidemenu/reducers';
 import { RootState } from '../redux/store';
 import PGEventStrategyFactory from '../utility/MixpanelUtils/PGEventStrategyFactory';
 
@@ -140,6 +141,14 @@ const Notifiche = ({ isDelegatedPage = false }: Props) => {
       .unwrap()
       .then((data) => {
         setPageReady(true);
+
+        if (pagination.page === 0 && !isDelegatedPage) {
+          dispatch(
+            setHasNewNotifications(
+              data.resultsPage.some((notifications) => notifications.isNewNotification)
+            )
+          );
+        }
 
         if (!isDelegatedPage) {
           registerNotificationSectionSuperProperties(data.resultsPage.length);
