@@ -341,12 +341,9 @@ const Attachments: React.FC<Props> = ({
         previousStepOnClick={() => handlePreviousStep()}
       >
         {hasAdditionalLang && (
-          <MIAlert
-            severity="info"
-            sx={{ mt: 2, mb: 2 }}
-            data-testid="bannerAdditionalLanguages"
-            description={t('banner-additional-languages')}
-          />
+          <MIAlert severity="info" sx={{ mt: 2, mb: 2 }} data-testid="bannerAdditionalLanguages">
+            {t('banner-additional-languages')}
+          </MIAlert>
         )}
         <Typography variant="body2" mt={2}>
           {tc('required-fields')}

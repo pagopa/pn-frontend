@@ -154,14 +154,9 @@ const PagoPaPaymentBox: React.FC<PaymentBoxProps> = ({
       )}
 
       {showDeleteButton && notificationFeePolicy === NotificationFeePolicy.DELIVERY_MODE && (
-        <MIAlert
-          severity="warning"
-          sx={{ mt: 4 }}
-          data-testid="pagopa-installment-alert"
-          description={t(
-            'new-notification.steps.debt-position-detail.payment-methods.apply-cost-installment'
-          )}
-        />
+        <MIAlert severity="warning" sx={{ mt: 4 }} data-testid="pagopa-installment-alert">
+          {t('new-notification.steps.debt-position-detail.payment-methods.apply-cost-installment')}
+        </MIAlert>
       )}
     </Box>
   );
