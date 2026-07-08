@@ -36,6 +36,13 @@ describe('Tests navigation utility methods', () => {
     expect(mockOpenFn).toHaveBeenCalledWith(`${LOGOUT}`, '_self');
   });
 
+  it('goToLoginPortal - from FIMS', () => {
+    goToLoginPortal({ loginProvider: LoginProvider.FIMS });
+
+    expect(mockOpenFn).toHaveBeenCalledTimes(1);
+    expect(mockOpenFn).toHaveBeenCalledWith(LOGOUT, '_self');
+  });
+
   it('goToLoginPortal - aar (preserves only utm_*)', () => {
     goToLoginPortal({
       rapidAccess: [AppRouteParams.AAR, 'fake-aar-token'],
