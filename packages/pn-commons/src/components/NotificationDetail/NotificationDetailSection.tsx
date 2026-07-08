@@ -55,6 +55,7 @@ const NotificationDetailSection = ({
           disableGutters
           secondaryAction={
             <IconButton
+              data-testid="documentButton"
               edge="end"
               aria-label={getLocalizedOrDefaultLabel(
                 'notifications',

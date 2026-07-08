@@ -45,7 +45,7 @@ const NotificationTimelineBox = ({
   const chipColor = statusColorMap[notificationStatusInfos.color || 'default'] || 'default';
 
   return (
-    <MIPaper padding={24}>
+    <MIPaper padding={24} data-testid="NotificationDetailTimeline">
       <Stack direction="row" alignItems="center" justifyContent="space-between" width="100%">
         <Stack width="85%">
           <Typography component="h2" variant="h5" sx={{ mb: 1 }}>
