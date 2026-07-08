@@ -183,7 +183,6 @@ const NotificationTimeline: React.FC = () => {
       data-testid="cancelledAlertText"
       severity="warning"
       sx={{ mb: { xs: 2, lg: 0 } }}
-      description={t('detail.cancelled.message', { ns: 'notifiche' })}
       action={{
         label: t('detail.cancelled.cta', { ns: 'notifiche' }),
         onClick: () => {
@@ -193,7 +192,9 @@ const NotificationTimeline: React.FC = () => {
           window.open(NOTIFICATION_CANCELLED_HELP_LINK, '_blank', 'noopener noreferrer');
         },
       }}
-    />
+    >
+      {t('detail.cancelled.message', { ns: 'notifiche' })}
+    </MIAlert>
   );
 
   /**
