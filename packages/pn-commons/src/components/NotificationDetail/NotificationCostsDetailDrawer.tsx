@@ -26,13 +26,9 @@ const getDrawerContent = (costDetails: NotificationCostDetails) => {
       return <CostsBreakdown costDetails={costDetails} />;
     case NotificationCostDetailsStatus.ERROR:
       return (
-        <MIAlert
-          severity="warning"
-          description={getLocalizedOrDefaultLabel(
-            'notifications',
-            'notification-alert.details.error'
-          )}
-        />
+        <MIAlert severity="warning">
+          {getLocalizedOrDefaultLabel('notifications', 'notification-alert.details.error')}
+        </MIAlert>
       );
     case NotificationCostDetailsStatus.UNAVAILABLE:
       return <UnavailableDataDrawerContent />;
@@ -90,13 +86,14 @@ const NotificationCostsDetailDrawer: React.FC<Props> = ({
     <>
       <MIAlert
         severity="info"
-        description={getLocalizedOrDefaultLabel('notifications', 'notification-alert.description')}
         action={{
           label: getLocalizedOrDefaultLabel('notifications', 'notification-alert.cta'),
           onClick: handleOpenDrawer,
         }}
         data-testid="notification-costs-alert"
-      />
+      >
+        {getLocalizedOrDefaultLabel('notifications', 'notification-alert.description')}
+      </MIAlert>
 
       <Drawer
         open={openDrawer}
