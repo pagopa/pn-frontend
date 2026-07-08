@@ -45,6 +45,7 @@ const initialState = {
     subject: '',
     recipients: [],
     senderDenomination: '',
+    senderPaId: '',
     paymentExpirationDate: '',
     documents: [],
     otherDocuments: [],
