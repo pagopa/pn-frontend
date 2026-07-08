@@ -104,12 +104,13 @@ const Dashboard = () => {
     ) : (
       <MIAlert
         severity="warning"
-        description={t('manual-send-disabled-message')}
         action={{
           label: t('manual-send-disabled-action'),
           onClick: () => navigate(routes.APP_STATUS),
         }}
-      />
+      >
+        {t('manual-send-disabled-message')}
+      </MIAlert>
     );
   };
 

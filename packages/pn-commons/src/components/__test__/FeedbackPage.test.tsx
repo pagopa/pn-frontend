@@ -3,10 +3,14 @@ import { vi } from 'vitest';
 import { fireEvent, render } from '../../test-utils';
 import FeedbackPage from '../FeedbackPage';
 
-vi.mock('@pagopa/mui-italia', () => ({
-  IllusCompleted: () => <div data-testid="success-illustration" />,
-  IllusError: () => <div data-testid="error-illustration" />,
-}));
+vi.mock('@pagopa/mui-italia', async (importOriginal) => {
+  const actual = await importOriginal<any>();
+  return {
+    ...actual,
+    IllusCompleted: () => <div data-testid="success-illustration" />,
+    IllusError: () => <div data-testid="error-illustration" />,
+  };
+});
 
 describe('FeedbackPage', () => {
   let onClickHandler = vi.fn();

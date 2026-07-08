@@ -486,9 +486,10 @@ const Recipient: React.FC<Props> = ({
                       <MIAlert
                         severity="error"
                         sx={{ mb: 2 }}
-                        description={t('address-physical-lookup-down')}
                         data-testid="alert-physicalAddressLookupDown"
-                      />
+                      >
+                        {t('address-physical-lookup-down')}
+                      </MIAlert>
                     )}
 
                     {PHYSICAL_ADDRESS_LOOKUP !== PhysicalAddressLookupConfig.OFF && (

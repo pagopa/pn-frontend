@@ -51,10 +51,11 @@ const ValidatingPecBanner: React.FC = () => {
       sx={{ my: { xs: 2, lg: 4 } }}
       data-testid="PecVerificationAlert"
       title={t('legal-contacts.pec-validation-banner.title')}
-      description={t(`legal-contacts.pec-validation-banner.${bannerMessage}`, {
+    >
+      {t(`legal-contacts.pec-validation-banner.${bannerMessage}`, {
         list: validatingSpecialPecList.join(', '),
       })}
-    />
+    </MIAlert>
   );
 };
 
