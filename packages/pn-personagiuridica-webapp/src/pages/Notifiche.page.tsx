@@ -32,6 +32,7 @@ import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { setHasNewNotifications } from '../redux/sidemenu/reducers';
 import { RootState } from '../redux/store';
 import PGEventStrategyFactory from '../utility/MixpanelUtils/PGEventStrategyFactory';
+import { hasActiveFilters } from '../utility/notification.utility';
 
 type Props = {
   isDelegatedPage?: boolean;
@@ -142,7 +143,7 @@ const Notifiche = ({ isDelegatedPage = false }: Props) => {
       .then((data) => {
         setPageReady(true);
 
-        if (pagination.page === 0 && !isDelegatedPage) {
+        if (pagination.page === 0 && !isDelegatedPage && !hasActiveFilters(filters)) {
           dispatch(
             setHasNewNotifications(
               data.resultsPage.some((notifications) => notifications.isNewNotification)
