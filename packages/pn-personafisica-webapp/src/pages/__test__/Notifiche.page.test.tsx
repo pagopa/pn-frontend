@@ -40,6 +40,7 @@ describe('Notifiche Page', () => {
 
   afterEach(() => {
     mock.reset();
+    globalThis.matchMedia = originalMatchMedia;
   });
 
   afterAll(() => {

@@ -36,9 +36,7 @@ describe('Notifiche Page ', () => {
 
   const notificationsPath = `/bff/v1/notifications/received?startDate=${encodeURIComponent(
     formatToTimezoneString(tenYearsAgo)
-  )}&endDate=${encodeURIComponent(
-    formatToTimezoneString(today)
-  )}&size=10&communicationType=ALL`;
+  )}&endDate=${encodeURIComponent(formatToTimezoneString(today))}&size=10&communicationType=ALL`;
   const notificationsDelegatedPath = `/bff/v1/notifications/received/delegated?startDate=${encodeURIComponent(
     formatToTimezoneString(tenYearsAgo)
   )}&endDate=${encodeURIComponent(formatToTimezoneString(today))}&size=10`;
@@ -54,6 +52,7 @@ describe('Notifiche Page ', () => {
 
   afterEach(() => {
     mock.reset();
+    globalThis.matchMedia = originalMatchMedia;
   });
 
   afterAll(() => {
@@ -354,7 +353,6 @@ describe('Notifiche Page ', () => {
 
   describe('new notifications dot', () => {
     const receivedRegExp = new RegExp('/bff/v1/notifications/received');
-    // notificationsDTO already contains one entry with isNewNotification: true
     const notificationsWithNew = notificationsDTO;
     const notificationsWithoutNew = {
       ...notificationsDTO,
@@ -386,7 +384,6 @@ describe('Notifiche Page ', () => {
     });
 
     it('does not update the dot on the delegated page', async () => {
-      // even though the fetched page has unread notifications, the delegated view must not touch the flag
       mock.onGet(receivedRegExp).reply(200, notificationsWithNew);
       await act(async () => {
         result = render(<Notifiche isDelegatedPage />, {
@@ -397,7 +394,6 @@ describe('Notifiche Page ', () => {
     });
 
     it('keeps the dot value when navigating to another page', async () => {
-      // page 1 has unread -> dot true; page 2 has none but the dot must stay true
       mock.onGet(receivedRegExp).replyOnce(200, notificationsWithNew);
       mock.onGet(receivedRegExp).replyOnce(200, notificationsWithoutNew);
       await act(async () => {
@@ -416,7 +412,6 @@ describe('Notifiche Page ', () => {
     });
 
     it('recomputes the dot when the page size changes', async () => {
-      // page size 10 -> no unread (false); after size change -> unread (true)
       mock.onGet(receivedRegExp).replyOnce(200, notificationsWithoutNew);
       mock.onGet(receivedRegExp).replyOnce(200, notificationsWithNew);
       await act(async () => {
@@ -436,7 +431,6 @@ describe('Notifiche Page ', () => {
     });
 
     it('does not recompute the dot when a filter is active', async () => {
-      // unfiltered page 1 has unread -> dot true; filtered result has none but the dot must stay true
       mock.onGet(receivedRegExp).replyOnce(200, notificationsWithNew);
       mock.onGet(receivedRegExp).replyOnce(200, notificationsWithoutNew);
       await act(async () => {
