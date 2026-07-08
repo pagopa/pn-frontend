@@ -8,7 +8,7 @@ import { MIPaper, Tag, theme } from '@pagopa/mui-italia';
 
 import { useIsMobile } from '../../hooks';
 import { formatDate } from '../../utility';
-import { getAccessibleDate, getAccessibleIun } from '../../utility/accessibility.utility';
+import { getAccessibleIun } from '../../utility/accessibility.utility';
 import { getLocalizedOrDefaultLabel } from '../../utility/localization.utility';
 import TitleBox from '../TitleBox';
 
@@ -80,11 +80,8 @@ const AbstractPaper = ({
             <Typography variant="sidenav" color="text">
               {senderDenomination}
             </Typography>
-            <Typography variant="body1" color="text.secondary" aria-hidden="true">
+            <Typography variant="body1" color="text.secondary">
               {formatDate(sentAt)}
-            </Typography>
-            <Typography component="span" sx={{ ...visuallyHidden }}>
-              {getAccessibleDate(sentAt)}
             </Typography>
           </Box>
         </Grid>
