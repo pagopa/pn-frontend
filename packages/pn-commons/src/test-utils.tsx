@@ -4,7 +4,8 @@ import { Provider } from 'react-redux';
 import { RouterProvider, createMemoryRouter } from 'react-router-dom';
 import { vi } from 'vitest';
 
-import { ThemeProvider, createTheme } from '@mui/material';
+import { ThemeProvider } from '@mui/material';
+import { theme } from '@pagopa/mui-italia';
 import { EnhancedStore, configureStore } from '@reduxjs/toolkit';
 import {
   Matcher,
@@ -23,8 +24,6 @@ import userEvent from '@testing-library/user-event';
 import { AppStateState, appStateSlice } from './redux/slices/appStateSlice';
 import { formatDate } from './utility/date.utility';
 import { initLocalization } from './utility/localization.utility';
-
-const theme = createTheme({});
 
 interface CustomRenderOptions extends Omit<RenderOptions, 'wrapper'> {
   preloadedState?: any;
@@ -417,7 +416,6 @@ export {
   getById,
   queryById,
   createTestStore,
-  theme,
   disableConsoleLogging,
 };
 export type { CustomRenderResult as RenderResult };

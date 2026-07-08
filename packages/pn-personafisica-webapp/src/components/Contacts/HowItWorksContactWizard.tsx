@@ -136,12 +136,9 @@ const HowItWorksContactWizard: React.FC<Props> = ({ goToNextStep, setShowPecWiza
           </List>
 
           {defaultPECAddress && (
-            <MIAlert
-              severity="info"
-              data-testid="default-pec-info"
-              sx={{ mb: 4 }}
-              description={t('legal-contacts.sercq-send-wizard.step_1.pec-info-alert')}
-            />
+            <MIAlert severity="info" data-testid="default-pec-info" sx={{ mb: 4 }}>
+              {t('legal-contacts.sercq-send-wizard.step_1.pec-info-alert')}
+            </MIAlert>
           )}
 
           <Button

@@ -185,14 +185,11 @@ const NewNotification = () => {
               variantSubTitle="body1"
             ></TitleBox>
             {!IS_PAYMENT_ENABLED && (
-              <MIAlert
-                severity="warning"
-                data-testid="alert"
-                sx={{ mt: 3 }}
-                description={t('new-notification.warning-payment-disabled', {
+              <MIAlert severity="warning" data-testid="alert" sx={{ mt: 3 }}>
+                {t('new-notification.warning-payment-disabled', {
                   ns: 'notifiche',
                 })}
-              />
+              </MIAlert>
             )}
             <Stepper
               activeStep={activeStep}

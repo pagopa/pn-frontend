@@ -26,10 +26,23 @@ const data: Row<RecipientNotification> = {
 };
 
 describe('NotificationsRecipientDataSwitch Component', () => {
-  const original = window.matchMedia;
+  const originalWatchMedia = window.matchMedia;
+  const originalResizeObserver = globalThis.ResizeObserver;
+
+  beforeAll(() => {
+    globalThis.ResizeObserver = vi.fn().mockImplementation(() => ({
+      observe: vi.fn(),
+      unobserve: vi.fn(),
+      disconnect: vi.fn(),
+    }));
+  });
 
   afterAll(() => {
-    window.matchMedia = original;
+    globalThis.ResizeObserver = originalResizeObserver;
+  });
+
+  afterAll(() => {
+    window.matchMedia = originalWatchMedia;
   });
 
   it('renders component - badge - new notification', () => {

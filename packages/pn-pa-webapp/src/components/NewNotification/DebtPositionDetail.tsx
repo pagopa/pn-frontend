@@ -533,12 +533,9 @@ const DebtPositionDetail: React.FC<Props> = ({
                   ]}
                 />
               </Typography>
-              <MIAlert
-                severity="warning"
-                data-testid="pagoPaIntModeAlert"
-                sx={{ mb: 3, mt: 2 }}
-                description={t('alert', { ns: 'notifiche' })}
-              />
+              <MIAlert severity="warning" data-testid="pagoPaIntModeAlert" sx={{ mb: 3, mt: 2 }}>
+                {t('alert', { ns: 'notifiche' })}
+              </MIAlert>
 
               <RadioGroup
                 aria-labelledby="pagopaIntMode"
