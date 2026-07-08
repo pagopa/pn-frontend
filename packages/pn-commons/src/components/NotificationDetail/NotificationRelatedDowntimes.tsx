@@ -173,6 +173,7 @@ const NotificationRelatedDowntimes: React.FC<Props> = ({
             {/* Render each downtime event */}
             {downtimeEvents.map((event, ix) => (
               <ListItem
+                data-testid="notification-related-downtime-detail"
                 disableGutters
                 key={ix}
                 sx={{

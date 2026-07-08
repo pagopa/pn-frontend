@@ -55,9 +55,9 @@
       "aria-label": "Vai alla timeline della notifica"
     },
     "notification-detail-section": {
-      "title": "Dettaglio della notifica",
+      "title": "Dettaglio della notifica", 
       "recipient": "Persona destinataria",
-      "aar": "Avviso di Avvenuta Ricezione",
+      "aar": "Avviso di avvenuta ricezione",
       "aria-label": "Vai all'avviso di avvenuta ricezione",
       "availability": "Disponibile online per 10 anni dalla data in cui la notifica assume valore di legge."
     },

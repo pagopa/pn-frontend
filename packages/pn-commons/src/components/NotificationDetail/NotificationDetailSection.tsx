@@ -1,6 +1,7 @@
+import BlockRoundedIcon from '@mui/icons-material/BlockRounded';
 import OpenInBrowserRoundedIcon from '@mui/icons-material/OpenInBrowserRounded';
 import { IconButton, List, ListItem, ListItemText, Typography } from '@mui/material';
-import { MIPaper, theme } from '@pagopa/mui-italia';
+import { MIPaper, Tag, theme } from '@pagopa/mui-italia';
 
 import { NotificationDetailOtherDocument, NotificationDetailRecipient } from '../../models';
 import { getLocalizedOrDefaultLabel } from '../../utility/localization.utility';
@@ -54,17 +55,19 @@ const NotificationDetailSection = ({
           data-testid="aarBox"
           disableGutters
           secondaryAction={
-            <IconButton
-              data-testid="documentButton"
-              edge="end"
-              aria-label={getLocalizedOrDefaultLabel(
-                'notifications',
-                'detail.notification-detail-section.aria-label'
-              )}
-              onClick={() => clickHandler(documents?.find((d) => d.documentType === 'AAR'))}
-            >
-              <OpenInBrowserRoundedIcon />
-            </IconButton>
+            !disableDownloads && (
+              <IconButton
+                data-testid="documentButton"
+                edge="end"
+                aria-label={getLocalizedOrDefaultLabel(
+                  'notifications',
+                  'detail.notification-detail-section.aria-label'
+                )}
+                onClick={() => clickHandler(documents?.find((d) => d.documentType === 'AAR'))}
+              >
+                <OpenInBrowserRoundedIcon />
+              </IconButton>
+            )
           }
           sx={{ alignItems: 'flex-start', pb: 0 }}
         >
@@ -73,11 +76,23 @@ const NotificationDetailSection = ({
               'notifications',
               'detail.notification-detail-section.aar'
             )}
-            sx={{ color: theme.palette.primary.light }}
-            secondary={getLocalizedOrDefaultLabel(
-              'notifications',
-              'detail.notification-detail-section.availability'
-            )}
+            primaryTypographyProps={{ paddingBottom: disableDownloads ? 1 : 0 }}
+            sx={{
+              color: !disableDownloads ? theme.palette.primary.light : theme.palette.text.primary,
+            }}
+            secondary={
+              !disableDownloads ? (
+                getLocalizedOrDefaultLabel(
+                  'notifications',
+                  'detail.notification-detail-section.availability'
+                )
+              ) : (
+                <Tag
+                  value={getLocalizedOrDefaultLabel('common', 'not-available')}
+                  icon={BlockRoundedIcon}
+                />
+              )
+            }
           />
         </ListItem>
       </List>

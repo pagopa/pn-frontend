@@ -15,7 +15,7 @@ import NotificationRelatedDowntimes from '../NotificationRelatedDowntimes';
 const fakePalette = {
   success: { main: '#00FF00' },
   error: { main: '#FF0000' },
-  text: { primary: '#AAAAAA', secondary: '#BBBBBB' },
+  text: { primary: '#AAAAAA', secondary: '#17324D' },
 };
 
 vi.mock('@mui/material', async () => {
