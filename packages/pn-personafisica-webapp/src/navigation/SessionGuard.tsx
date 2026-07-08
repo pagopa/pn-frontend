@@ -108,22 +108,6 @@ const SessionGuard = () => {
     }
   };
 
-  const removeFimsTokenFromHash = () => {
-    const nextHashParams = new URLSearchParams(location.hash.substring(1));
-    nextHashParams.delete('fimsToken');
-
-    const nextHash = nextHashParams.toString();
-
-    navigate(
-      {
-        pathname: location.pathname,
-        search: location.search,
-        hash: nextHash ? `#${nextHash}` : '',
-      },
-      { replace: true }
-    );
-  };
-
   const performOneIdentityTokenExchange = async (
     exchangeCodeParams: OneIdentityExchangeCodeBody
   ) => {
@@ -176,7 +160,6 @@ const SessionGuard = () => {
 
   useEffect(() => {
     if (fimsToken) {
-      removeFimsTokenFromHash();
       void performFimsTokenExchange({ fimsToken });
     } else if (spidToken) {
       void performExchangeToken({ spidToken, rapidAccess });

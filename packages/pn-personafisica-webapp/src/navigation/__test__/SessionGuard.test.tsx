@@ -188,7 +188,7 @@ describe('SessionGuard Component', () => {
       expect(result.router.state.location.search).toBe(
         '?utm_source=ioapp&utm_medium=app&utm_campaign=visita_send'
       );
-      expect(result.router.state.location.hash).toBe('');
+      expect(result.router.state.location.hash).toBe(`#fimsToken=${fimsToken}`);
     });
   });
 
@@ -198,7 +198,7 @@ describe('SessionGuard Component', () => {
     mock.onPost(FIMS_TOKEN_EXCHANGE()).reply(403, { authorizationToken: fimsToken });
 
     await act(async () => {
-      render(<Guard />, {
+      result = render(<Guard />, {
         route: `/#fimsToken=${fimsToken}`,
       });
     });
@@ -211,7 +211,7 @@ describe('SessionGuard Component', () => {
       });
     });
 
-    expect(result.router.state.location.hash).toBe('');
+    expect(result.router.state.location.hash).toBe(`#fimsToken=${fimsToken}`);
 
     const logoutComponent = screen.queryByTestId('session-modal');
     expect(logoutComponent).toBeTruthy();
