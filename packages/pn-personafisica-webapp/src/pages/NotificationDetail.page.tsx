@@ -685,7 +685,6 @@ const NotificationDetail: React.FC = () => {
                   recipient={currentRecipient}
                   documents={notification.otherDocuments ?? []}
                   clickHandler={documentDowloadHandler}
-                  downloadFilesLink={t('detail.acts_files.effected_faq', { ns: 'notifiche' })}
                   disableDownloads={
                     isCancelled.cancellationInTimeline ||
                     !dateIsLessThan10Years(notification.sentAt)
