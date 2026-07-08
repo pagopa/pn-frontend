@@ -6,7 +6,6 @@ import {
   NotificationDocumentType,
   NotificationStatus,
   getElapsedTime,
-  isNewNotification,
 } from '@pagopa-pn/pn-commons';
 
 import type {
@@ -76,9 +75,7 @@ export const mapNotificationListToEventPayload = ({
 }: PGNotificationsListEventData): PGNotificationsListPayload => ({
   page_number: pageNumber,
   total_count: notifications.length,
-  unread_count: notifications.filter((notification) =>
-    isNewNotification(notification.notificationStatus)
-  ).length,
+  unread_count: notifications.filter((notification) => notification.isNewNotification).length,
   delivered_count: notifications.filter(
     (notification) => notification.notificationStatus === NotificationStatus.DELIVERED
   ).length,

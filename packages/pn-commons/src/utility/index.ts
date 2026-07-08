@@ -73,7 +73,6 @@ export {
   getNotificationTimelineStatusInfos,
   getPagoPaF24Payments,
   populatePaymentsPagoPaF24,
-  isNewNotification,
 } from './notification.utility';
 export * from './StatusHistory';
 export { compileOneTrustPath, rewriteLinks } from './onetrust.utility';

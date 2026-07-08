@@ -94,7 +94,6 @@ const MobileNotifications = ({
     {
       id: 'subject',
       label: t('table.oggetto'),
-      mode: 'truncate',
     },
     {
       id: 'iun',
@@ -155,7 +154,7 @@ const MobileNotifications = ({
 
     return communicationType === 'LEGAL'
       ? navigate(routes.GET_DETTAGLIO_NOTIFICA_PATH(iun))
-      : navigate(`/comunicazione/${iun}`); // TODO - FIX PATH
+      : navigate(routes.GET_DETTAGLIO_COMUNICAZIONE_PATH(iun));
   };
 
   const showFilters = notifications?.length > 0 || filtersApplied;
@@ -222,7 +221,7 @@ const MobileNotifications = ({
                   endIcon={<ArrowForwardIcon />}
                   color="primary"
                 >
-                  {t('table.show-detail')}
+                  {t('table.open')}
                 </ButtonNaked>
               </PnCardActions>
             </PnCard>

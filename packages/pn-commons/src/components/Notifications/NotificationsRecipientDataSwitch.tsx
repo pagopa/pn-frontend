@@ -11,6 +11,7 @@ import {
 import { Row } from '../../models/PnTable';
 import { formatDate } from '../../utility/date.utility';
 import { getLocalizedOrDefaultLabel } from '../../utility/localization.utility';
+import DataValue from '../Data/DataValue';
 import {
   MobileSentAtCell,
   NotificationActionButton,
@@ -67,8 +68,14 @@ const NotificationsRecipientDataSwitch: React.FC<{
   }
   if (type === 'subject') {
     return (
-      <Box display="flex" flexDirection="column" alignItems="flex-start" gap={0.5}>
-        <Typography variant="body2">{data.subject}</Typography>
+      <>
+        <DataValue
+          mode="truncate"
+          slots={{ root: Typography }}
+          slotProps={{ root: { variant: 'body2', mb: 0.5 } }}
+        >
+          {data.subject}
+        </DataValue>
         {data.communicationType === 'LEGAL' && (
           <Tag
             variant="default"
@@ -76,7 +83,7 @@ const NotificationsRecipientDataSwitch: React.FC<{
             value={getLocalizedOrDefaultLabel('notifications', 'table.legal-value')}
           />
         )}
-      </Box>
+      </>
     );
   }
   if (type === 'iun') {

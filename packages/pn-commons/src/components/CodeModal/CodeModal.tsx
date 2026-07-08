@@ -207,8 +207,9 @@ const CodeModal = forwardRef<ModalHandle, Props>(
               severity="error"
               sx={{ mt: 2 }}
               title={internalErrorTitle}
-              description={internalErrorMessage}
-            />
+            >
+              {internalErrorMessage}
+            </MIAlert>
           )}
         </PnDialogContent>
         <PnDialogActions>
