@@ -89,7 +89,6 @@ const DesktopNotifications = ({
     {
       id: 'subject',
       label: t('table.oggetto'),
-      mode: 'truncate',
       cellProps: { width: '26%' },
     },
     {
@@ -136,7 +135,7 @@ const DesktopNotifications = ({
 
     return communicationType === 'LEGAL'
       ? navigate(routes.GET_DETTAGLIO_NOTIFICA_PATH(iun))
-      : navigate(`/comunicazione/${iun}`); // TODO - FIX PATH
+      : navigate(routes.GET_DETTAGLIO_COMUNICAZIONE_PATH(iun));
   };
 
   return (
