@@ -19,7 +19,7 @@ const getValidationDebugDetails = (e: any) => {
     path: validationError.path ?? '(root)',
     message: validationError.message,
     type: validationError.type,
-    unknown: validationError.params?.unknown
+    unknown: validationError.params?.unknown,
   }));
 };
 
@@ -32,14 +32,13 @@ export const exchangeToken = createAsyncThunk<User, TokenExchangeRequest>(
   async (request: TokenExchangeRequest, { rejectWithValue }) => {
     try {
       const result = await AuthApi.exchangeToken(request);
-      userDataMatcher.validateSync(result, { stripUnknown: false, abortEarly: false });
+      userDataMatcher.validateSync(result, { stripUnknown: false });
       return result;
     } catch (e: any) {
       if (e?.name === 'ValidationError') {
         return rejectWithValue({
           code: 'USER_VALIDATION_FAILED',
           message: e.message,
-          validationDetails: getValidationDebugDetails(e)
         });
       }
       return rejectWithValue(parseError(e));
@@ -55,13 +54,14 @@ export const exchangeFimsToken = createAsyncThunk<User, FimsTokenExchangeRequest
   async (request: FimsTokenExchangeRequest, { rejectWithValue }) => {
     try {
       const result = await AuthApi.exchangeFimsToken(request);
-      userDataMatcher.validateSync(result, { stripUnknown: false });
+      userDataMatcher.validateSync(result, { stripUnknown: false, abortEarly: false });
       return result;
     } catch (e: any) {
       if (e?.name === 'ValidationError') {
         return rejectWithValue({
           code: 'USER_VALIDATION_FAILED',
           message: e.message,
+          validationDetails: getValidationDebugDetails(e),
         });
       }
       return rejectWithValue(parseError(e));
