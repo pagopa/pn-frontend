@@ -28,7 +28,9 @@
     "understand": "OK, ich habe verstanden"
   },
   "menu": {
-    "notifiche": "Zustellungen",
+    "notifiche": "Posteingang",
+    "notifiche-utente": "Dein Posteingang",
+    "notifiche-delegato": "Posteingang für {{delegator}}",
     "deleghe": "Vollmachten",
     "profilo": "Deine Daten",
     "contacts": "Deine Kontaktdaten",

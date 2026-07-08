@@ -67,7 +67,7 @@ const Notifiche = ({ isDelegatedPage = false }: Props) => {
   const isMobile = useIsMobile();
   const pageTitle = !isDelegatedPage
     ? t('title', { recipient: organization.name })
-    : t('title-delegated-notifications', { recipient: organization.name });
+    : t('title-delegated-notifications');
 
   const pageSubTitle = !isDelegatedPage
     ? t('subtitle', { recipient: organization.name })

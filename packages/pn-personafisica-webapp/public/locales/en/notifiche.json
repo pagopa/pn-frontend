@@ -1,5 +1,5 @@
 {
-  "title": "Your notifications",
+  "title": "Inbox",
   "table": {
     "data": "Date",
     "mittente": "Sender",
@@ -393,7 +393,7 @@
       "action": "Consult the templates"
     }
   },
-  "delegatorTitle": "The notifications for {{name}}",
+  "delegatorTitle": "Inbox for {{name}}",
   "status": {
     "recipient": "recipient",
     "delegate": "delegate {{name}}",

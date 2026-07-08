@@ -74,7 +74,7 @@ const productsList: Array<ProductEntity> = [
 // ----------------------------------------
 const App = () => {
   const dispatch = useAppDispatch();
-  const { t, i18n } = useTranslation(['common', 'notifiche']);
+  const { t, i18n } = useTranslation('common');
   const [isInitialized, setIsInitialized] = useState(false);
   const [openModal, setOpenModal] = useState(false);
   const loggedUser = useAppSelector((state: RootState) => state.userState.user);
@@ -155,14 +155,14 @@ const App = () => {
     // } else
     if (delegators.length > 0) {
       const myNotifications = {
-        label: t('title', { ns: 'notifiche' }),
+        label: t('menu.notifiche-utente'),
         route: routes.NOTIFICHE,
         dotNotification: hasNewNotifications,
       };
       const mappedDelegators = delegators.map((delegator) => ({
         label:
           'delegator' in delegator && delegator.delegator
-            ? `${delegator.delegator.displayName}`
+            ? t('menu.notifiche-delegato', { delegator: delegator.delegator.displayName })
             : 'No Name Found',
         route:
           'delegator' in delegator && delegator.delegator
