@@ -10,6 +10,7 @@ import { useIsMobile } from '../../hooks';
 import { formatDate } from '../../utility';
 import { getAccessibleDate, getAccessibleIun } from '../../utility/accessibility.utility';
 import { getLocalizedOrDefaultLabel } from '../../utility/localization.utility';
+import PNMarkdown from '../PnMarkdown/PnMarkdown';
 import TitleBox from '../TitleBox';
 
 interface AbstractPaperProps {
@@ -117,9 +118,9 @@ const AbstractPaper = ({
         </Grid>
       </Grid>
       {abstract && <Divider aria-hidden sx={{ my: 2 }} />}
-      <Typography variant="body1" sx={{ overflowWrap: 'anywhere' }}>
-        {abstract}
-      </Typography>
+      <Box sx={{ overflowWrap: 'anywhere' }}>
+        <PNMarkdown content={abstract ?? ''} />
+      </Box>
     </MIPaper>
   );
 };
