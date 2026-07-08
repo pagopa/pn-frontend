@@ -11,6 +11,7 @@ interface Props {
   clickHandler: (document: string | NotificationDetailOtherDocument | undefined) => void;
   documents: Array<NotificationDetailOtherDocument> | undefined;
   disableDownloads: boolean;
+  isDelegate: boolean;
 }
 
 const NotificationDetailSection = ({
@@ -18,6 +19,7 @@ const NotificationDetailSection = ({
   clickHandler,
   documents,
   disableDownloads,
+  isDelegate = true,
 }: Props) => (
   <MIPaper padding={24}>
     <Typography component="h2" variant="h5" sx={{ mb: 1 }}>
@@ -25,25 +27,27 @@ const NotificationDetailSection = ({
     </Typography>
 
     <List sx={{ p: 0 }}>
-      <ListItem
-        disableGutters
-        sx={{
-          alignItems: 'flex-start',
-          borderBottom: `1px solid ${theme.palette.divider}`,
-        }}
-      >
-        <ListItemText sx={{ p: 0 }}>
-          <Typography variant="body2">
-            {getLocalizedOrDefaultLabel(
-              'notifications',
-              'detail.notification-detail-section.recipient'
-            )}
-          </Typography>
-          <Typography variant="sidenav" color="text.primary">
-            {recipient.denomination} - {recipient.taxId}
-          </Typography>
-        </ListItemText>
-      </ListItem>
+      {isDelegate && (
+        <ListItem
+          disableGutters
+          sx={{
+            alignItems: 'flex-start',
+            borderBottom: `1px solid ${theme.palette.divider}`,
+          }}
+        >
+          <ListItemText sx={{ p: 0 }}>
+            <Typography variant="body2">
+              {getLocalizedOrDefaultLabel(
+                'notifications',
+                'detail.notification-detail-section.recipient'
+              )}
+            </Typography>
+            <Typography variant="sidenav" color="text.primary">
+              {recipient.denomination} - {recipient.taxId}
+            </Typography>
+          </ListItemText>
+        </ListItem>
+      )}
 
       <ListItem
         data-testid="aarBox"

@@ -682,6 +682,7 @@ const NotificationDetail: React.FC = () => {
                   />
                 )}
                 <NotificationDetailSection
+                  isDelegate={delegatorsFromStore.length > 0}
                   recipient={currentRecipient}
                   documents={notification.otherDocuments ?? []}
                   clickHandler={documentDowloadHandler}
