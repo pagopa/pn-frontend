@@ -3,10 +3,7 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 
 import { apiClient } from '../../api/apiClients';
 import { AuthApi } from '../../api/auth/Auth.api';
-import {
-  BffTosPrivacyActionBody,
-  UserConsentsApiFactory,
-} from '../../generated-client/tos-privacy';
+import { BffTosPrivacyActionBody, UserConsentsApiFactory } from '../../generated-client/tos-privacy';
 import { FimsTokenExchangeRequest, OneIdentityExchangeCodeBody, OneIdentityUser, TokenExchangeRequest, User } from '../../models/User';
 import { userDataMatcher } from '../../utility/user.utility';
 
@@ -14,6 +11,17 @@ export enum AUTH_ACTIONS {
   GET_TOS_PRIVACY_APPROVAL = 'getTosPrivacyApproval',
   ACCEPT_TOS_PRIVACY = 'acceptTosPrivacy',
 }
+
+const getValidationDebugDetails = (e: any) => {
+  const validationErrors = Array.isArray(e?.inner) && e.inner.length > 0 ? e.inner : [e];
+
+  return validationErrors.map((validationError: any) => ({
+    path: validationError.path ?? '(root)',
+    message: validationError.message,
+    type: validationError.type,
+    unknown: validationError.params?.unknown
+  }));
+};
 
 /**
  * Exchange token action between selfcare and pn.
@@ -24,13 +32,14 @@ export const exchangeToken = createAsyncThunk<User, TokenExchangeRequest>(
   async (request: TokenExchangeRequest, { rejectWithValue }) => {
     try {
       const result = await AuthApi.exchangeToken(request);
-      userDataMatcher.validateSync(result, { stripUnknown: false });
+      userDataMatcher.validateSync(result, { stripUnknown: false, abortEarly: false });
       return result;
     } catch (e: any) {
       if (e?.name === 'ValidationError') {
         return rejectWithValue({
           code: 'USER_VALIDATION_FAILED',
           message: e.message,
+          validationDetails: getValidationDebugDetails(e)
         });
       }
       return rejectWithValue(parseError(e));

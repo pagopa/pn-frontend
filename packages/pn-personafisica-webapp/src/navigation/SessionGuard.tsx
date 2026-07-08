@@ -98,12 +98,26 @@ const SessionGuard = () => {
 
   const performFimsTokenExchange = async (token: FimsTokenExchangeRequest) => {
     AppResponsePublisher.error.subscribe('exchangeFimsToken', manageUnforbiddenError);
+    sessionStorage.removeItem('fimsValidationDebug');
 
     try {
       const user = await dispatch(exchangeFimsToken(token)).unwrap();
       dispatch(setIsFreshLogin(true));
       sessionCheck(user.exp);
     } catch (error) {
+      if((error as any)?.code === 'USER_VALIDATION_FAILED'){
+        sessionStorage.setItem(
+          'fimsValidationDebug',
+          JSON.stringify(
+            (error as any)?.validationDetails ?? [
+              {
+                message: (error as any)?.message
+              },
+            ]
+          )
+        );
+      }
+
       handleTokenExchangeError(error);
     }
   };
