@@ -150,7 +150,8 @@
       "not_downloadable_aar": "As 10 years have passed since the finalization date, the notification of receipt is no longer available.",
       "notification_cancelled_aar": "As this notification has been canceled, the download of the Notification of Receipt has been disabled.",
       "notification_cancelled_acts": "As this notification has been canceled, the download of the documents has been disabled.",
-      "effected_faq": "When is a notification finalized?"
+      "effected_faq": "When is a notification finalized?",
+      "informal_downloadable_acts": "Save the attachments to your device: they will be available online <0>for up to 180 days from the filing date</0> shown at the top!"
     },
     "timeline": {
       "schedule-digital-workflow": "Further sending digitally",

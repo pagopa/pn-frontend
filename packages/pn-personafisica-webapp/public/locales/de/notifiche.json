@@ -150,7 +150,8 @@
       "not_downloadable_aar": "Da seit der Vervollständigung 10 Jahre vergangen sind, steht die Empfangsbestätigung nicht mehr zur Verfügung.",
       "notification_cancelled_aar": "Da diese Zustellung storniert wurde, wurde der Download der Empfangsbestätigung deaktiviert.",
       "notification_cancelled_acts": "Da diese Zustellung storniert wurde, wurde der Download der Dokumente deaktiviert.",
-      "effected_faq": "Wann ist die Bearbeitung einer Zustellung vervollständigt?"
+      "effected_faq": "Wann ist die Bearbeitung einer Zustellung vervollständigt?",
+      "informal_downloadable_acts": "Speichere die Anhänge auf deinem Gerät: Sie sind online <0>bis zu 180 Tage ab dem Hinterlegungsdatum</0> verfügbar, das du oben findest!"
     },
     "timeline": {
       "schedule-digital-workflow": "Weiterer digitaler Versand",

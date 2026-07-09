@@ -221,7 +221,9 @@ const InformalNotificationDetail: React.FC = () => {
               clickHandler={handleDocumentDownload}
               /* va aggiunto il campo all API */
               documentsAvailable={false}
-              downloadFilesMessage={t('detail.acts_files.effected_faq', { ns: 'notifiche' })}
+              downloadFilesMessage={t('detail.acts_files.informal_downloadable_acts', {
+                ns: 'notifiche',
+              })}
               titleVariant="h5"
             />
           </MIPaper>

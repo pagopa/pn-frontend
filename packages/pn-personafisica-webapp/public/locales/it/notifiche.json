@@ -150,7 +150,8 @@
       "not_downloadable_aar": "Poiché sono trascorsi 10 anni dalla data di perfezionamento, l’avviso di avvenuta ricezione non è più disponibile.",
       "notification_cancelled_aar": "Poiché questa notifica è stata annullata, il download dell’Avviso di Avvenuta Ricezione è stato disabilitato.",
       "notification_cancelled_acts": "Poiché questa notifica è stata annullata, il download dei documenti è stato disabilitato.",
-      "effected_faq": "Quando si perfeziona una notifica?"
+      "effected_faq": "Quando si perfeziona una notifica?",
+      "informal_downloadable_acts": "Conserva gli allegati sul tuo dispositivo: saranno disponibili online <0>fino a 180 giorni dalla data di deposito</0> che trovi in alto!"
     },
     "timeline": {
       "schedule-digital-workflow": "Ulteriore invio per via digitale",
