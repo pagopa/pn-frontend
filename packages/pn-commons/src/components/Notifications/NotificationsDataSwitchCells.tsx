@@ -1,9 +1,10 @@
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
-import { Box, Typography } from '@mui/material';
+import { Stack, Typography } from '@mui/material';
 import { ButtonNaked } from '@pagopa/mui-italia';
 
 import { formatDate } from '../../utility/date.utility';
 import { getLocalizedOrDefaultLabel } from '../../utility/localization.utility';
+import DataValue from '../Data/DataValue';
 
 /**
  * Shared presentational cells used by the notifications data switches
@@ -26,17 +27,18 @@ export const MobileSentAtCell: React.FC<{
   date: string;
   isNew: boolean;
   badge: React.ReactNode;
-}> = ({ date, isNew, badge }) =>
-  isNew ? (
-    <Box display="flex" alignItems="center">
-      {badge}
-      <Typography display="inline" variant="body2">
-        {formatDate(date)}
-      </Typography>
-    </Box>
-  ) : (
-    <Typography variant="body2">{formatDate(date)}</Typography>
-  );
+}> = ({ date, isNew, badge }) => (
+  <Stack direction="row" alignItems="center">
+    {!!isNew && badge}
+    <DataValue
+      mode="truncate"
+      slots={{ root: Typography }}
+      slotProps={{ root: { variant: 'body2' } }}
+    >
+      {formatDate(date)}
+    </DataValue>
+  </Stack>
+);
 
 export const NotificationActionButton: React.FC<{
   iun: string;
