@@ -2,7 +2,7 @@ import { Fragment, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
-import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+import ArrowForward from '@mui/icons-material/ArrowForward';
 import { Grid } from '@mui/material';
 import {
   CardElement,
@@ -20,7 +20,7 @@ import {
   Row,
   Sort,
 } from '@pagopa-pn/pn-commons';
-import { ButtonNaked } from '@pagopa/mui-italia';
+import { MIButton } from '@pagopa/mui-italia';
 
 import * as routes from '../../navigation/routes.const';
 import { Delegator } from '../../redux/delegation/types';
@@ -160,14 +160,15 @@ const MobileNotifications = ({ notifications, sort, onChangeSorting, currentDele
                 ))}
               </PnCardContent>
               <PnCardActions>
-                <ButtonNaked
-                  id="go-to-detail"
-                  onClick={() => handleRowClick(data)}
-                  endIcon={<ArrowForwardIcon />}
+                <MIButton
+                  variant="text"
                   color="primary"
+                  onClick={() => handleRowClick(data)}
+                  endIcon={<ArrowForward />}
+                  data-testid="go-to-detail"
                 >
                   {t('table.open')}
-                </ButtonNaked>
+                </MIButton>
               </PnCardActions>
             </PnCard>
           ))}

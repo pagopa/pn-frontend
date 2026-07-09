@@ -1,6 +1,6 @@
-import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
+import { ArrowForward } from '@mui/icons-material';
 import { Stack, Typography } from '@mui/material';
-import { ButtonNaked } from '@pagopa/mui-italia';
+import { MIButton } from '@pagopa/mui-italia';
 
 import { formatDate } from '../../utility/date.utility';
 import { getLocalizedOrDefaultLabel } from '../../utility/localization.utility';
@@ -45,15 +45,16 @@ export const NotificationActionButton: React.FC<{
   label: string;
   onClick?: () => void;
 }> = ({ iun, label, onClick }) => (
-  <ButtonNaked
+  <MIButton
+    variant="text"
     color="primary"
     data-testid="goToNotificationDetail"
     onClick={onClick}
-    endIcon={<ArrowForwardIosIcon />}
+    endIcon={<ArrowForward />}
     aria-label={getLocalizedOrDefaultLabel('notifications', 'table.aria-action-table', undefined, {
       iun,
     })}
   >
     {label}
-  </ButtonNaked>
+  </MIButton>
 );
