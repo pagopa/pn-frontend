@@ -44,23 +44,15 @@ const DesktopNotifications = ({
 
   const columns: Array<Column<NotificationColumnData<RecipientNotification>>> = [
     {
-      id: 'badge',
-      label: '',
-      cellProps: { width: '1%' },
-    },
-    {
       id: 'sentAt',
       label: t('table.data'),
-      mode: 'truncate',
-      cellProps: { width: '8%' },
-      sortable: false,
+      cellProps: { width: '10%' },
     },
     {
       id: 'sender',
       label: t('table.mittente'),
       mode: 'truncate',
       cellProps: { width: '12%' },
-      sortable: false,
     },
     {
       id: 'subject',
@@ -75,7 +67,7 @@ const DesktopNotifications = ({
     {
       id: 'action',
       label: '',
-      cellProps: { width: '14%', align: 'right' },
+      cellProps: { width: '13%', align: 'right' },
     },
   ];
 

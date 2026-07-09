@@ -47,7 +47,6 @@ const DesktopNotifications = ({
     {
       id: 'sentAt',
       label: t('table.data'),
-      mode: 'truncate',
       cellProps: { width: '10%' },
     },
     {

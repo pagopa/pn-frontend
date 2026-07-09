@@ -2,7 +2,7 @@ import { Fragment, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
-import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+import ArrowForward from '@mui/icons-material/ArrowForward';
 import { Grid } from '@mui/material';
 import {
   CardElement,
@@ -15,14 +15,12 @@ import {
   PnCardActions,
   PnCardContent,
   PnCardContentItem,
-  PnCardHeader,
-  PnCardHeaderItem,
   PnCardsList,
   RecipientNotification,
   Row,
   Sort,
 } from '@pagopa-pn/pn-commons';
-import { ButtonNaked } from '@pagopa/mui-italia';
+import { MIButton } from '@pagopa/mui-italia';
 
 import * as routes from '../../navigation/routes.const';
 import { Delegator } from '../../redux/delegation/types';
@@ -57,6 +55,10 @@ const MobileNotifications = ({ notifications, sort, onChangeSorting, currentDele
   const filterNotificationsRef = useRef({ filtersApplied: false, cleanFilters: () => void 0 });
 
   const cardBody: Array<CardElement<RecipientNotification>> = [
+    {
+      id: 'sentAt',
+      label: t('table.data'),
+    },
     {
       id: 'sender',
       label: t('table.mittente'),
@@ -150,23 +152,7 @@ const MobileNotifications = ({ notifications, sort, onChangeSorting, currentDele
         <PnCardsList>
           {cardData.map((data) => (
             <PnCard key={data.id} testId="mobileNotificationsCards">
-              <PnCardHeader
-                headerGridProps={{
-                  direction: { xs: 'row', sm: 'row' },
-                  alignItems: { xs: 'flex-start', sm: 'center' },
-                }}
-              >
-                <PnCardHeaderItem
-                  gridProps={{
-                    xs: 4,
-                    sm: 5,
-                  }}
-                  position="left"
-                >
-                  <NotificationsRecipientDataSwitch data={data} type="sentAt" />
-                </PnCardHeaderItem>
-              </PnCardHeader>
-              <PnCardContent>
+              <PnCardContent sx={{ mt: 0 }}>
                 {cardBody.map((body) => (
                   <PnCardContentItem key={body.id} label={body.label} mode={body.mode}>
                     <NotificationsRecipientDataSwitch data={data} type={body.id} />
@@ -174,14 +160,15 @@ const MobileNotifications = ({ notifications, sort, onChangeSorting, currentDele
                 ))}
               </PnCardContent>
               <PnCardActions>
-                <ButtonNaked
-                  id="go-to-detail"
-                  onClick={() => handleRowClick(data)}
-                  endIcon={<ArrowForwardIcon />}
+                <MIButton
+                  variant="text"
                   color="primary"
+                  onClick={() => handleRowClick(data)}
+                  endIcon={<ArrowForward />}
+                  data-testid="go-to-detail"
                 >
                   {t('table.open')}
-                </ButtonNaked>
+                </MIButton>
               </PnCardActions>
             </PnCard>
           ))}
