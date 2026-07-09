@@ -156,14 +156,14 @@ const NotificationDetailDocuments: React.FC<Props> = (
         </MIPaper>
       )}
 
-      {/* Notification sent 120 days earlier */}
+      {/* Notification sent after expiration date (120 legal and 180 combo) */}
       {!disableDownloads && !documentsAvailable && downloadFilesMessage && (
         <MIAlert severity="warning" data-testid="documentsDisabled">
           <Trans parent={React.Fragment} i18nKey={downloadFilesMessage} />
         </MIAlert>
       )}
 
-      {/* Notification sent within 120 days */}
+      {/* Notification sent before expiration date (120 legal and 180 combo) */}
       {documentsAvailable && downloadFilesMessage && (
         <MIPaper
           data-testid="documentsMessage"
