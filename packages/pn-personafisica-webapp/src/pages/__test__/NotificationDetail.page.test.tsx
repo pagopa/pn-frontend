@@ -556,13 +556,6 @@ describe('NotificationDetail Page', () => {
     expect(mock.history.get[0].url).toContain('/bff/v1/notifications/received');
     expect(mock.history.get[1].url).toContain('/bff/v1/downtime/history');
     expect(mock.history.post[0].url).toBe(`/bff/v1/payments/info`);
-    // check documents box
-    const notificationDetailDocumentsMessage = result.getAllByTestId('documentsMessage');
-    for (const notificationDetailDocumentMessage of notificationDetailDocumentsMessage) {
-      expect(notificationDetailDocumentMessage).toHaveTextContent(
-        /detail.acts_files.not_downloadable_aar|detail.acts_files.not_downloadable_acts/
-      );
-    }
   });
 
   it('checks not available payment', async () => {

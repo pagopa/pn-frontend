@@ -1,6 +1,6 @@
 import KeyboardArrowRightRoundedIcon from '@mui/icons-material/KeyboardArrowRightRounded';
-import { IconButton, Stack, Typography } from '@mui/material';
-import { MIChip, MIPaper } from '@pagopa/mui-italia';
+import { Stack, Typography } from '@mui/material';
+import { ButtonNaked, MIChip, MIPaper } from '@pagopa/mui-italia';
 
 import { useIsMobile } from '../../hooks';
 import { NotificationDetailRecipient, NotificationStatusHistory } from '../../models';
@@ -14,10 +14,8 @@ type NotificationTimelineBoxProps = {
   onTimelineClick?: () => void;
 };
 
-// 1. Definiamo quali sono i colori accettati da MIChip (presi dall'errore)
 type MIChipColors = 'default' | 'info' | 'warning' | 'error' | 'success' | 'highlight' | 'neutral';
 
-// 2. Creiamo una mappa di conversione
 const statusColorMap: Record<string, MIChipColors> = {
   primary: 'info',
   secondary: 'neutral',
@@ -46,34 +44,33 @@ const NotificationTimelineBox = ({
 
   return (
     <MIPaper padding={24} data-testid="NotificationDetailTimeline">
-      <Stack direction="row" alignItems="center" justifyContent="space-between" width="100%">
-        <Stack width="85%">
-          <Typography component="h2" variant="h5" sx={{ mb: 1 }}>
-            {getLocalizedOrDefaultLabel(
-              'notifications',
-              'detail.notification-timeline-section.title'
-            )}
-          </Typography>
-          <MIChip
-            color={chipColor}
-            variant="filled"
-            label={notificationStatusInfos.label}
-            sx={{ my: 1, width: 'fit-content' }}
-          />
-          {!isMobile && (
-            <Typography variant="body2">{notificationStatusInfos.description}</Typography>
+      <Stack spacing={1} alignItems="flex-start">
+        <Typography component="h2" variant="h5" sx={{ mb: 1 }}>
+          {getLocalizedOrDefaultLabel(
+            'notifications',
+            'detail.notification-timeline-section.title'
           )}
-        </Stack>
-        <IconButton
-          size="small"
+        </Typography>
+        <MIChip
+          color={chipColor}
+          variant="filled"
+          label={notificationStatusInfos.label}
+          sx={{ my: 1, width: 'fit-content' }}
+        />
+        {!isMobile && (
+          <Typography variant="body2">{notificationStatusInfos.description}</Typography>
+        )}
+        <ButtonNaked
           aria-label={getLocalizedOrDefaultLabel(
             'notifications',
             'detail.notification-timeline-section.aria-label'
           )}
+          color="primary"
           onClick={onTimelineClick}
         >
+          {getLocalizedOrDefaultLabel('notifications', 'go-to-detail')}{' '}
           <KeyboardArrowRightRoundedIcon />
-        </IconButton>
+        </ButtonNaked>
       </Stack>
     </MIPaper>
   );
