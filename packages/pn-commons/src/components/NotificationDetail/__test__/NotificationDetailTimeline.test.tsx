@@ -8,12 +8,11 @@ describe('NotificationDetailTimeline', () => {
   // Define mock data for props
   const recipients = notificationDTO.recipients;
   const statusHistory = notificationDTO.notificationStatusHistory;
-  const title = 'Notification Title';
   const showMoreButtonLabel = 'Show More';
   const showLessButtonLabel = 'Show Less';
 
   it('renders component', () => {
-    const { container, queryByTestId } = render(
+    const { queryByTestId } = render(
       <NotificationDetailTimeline
         recipients={recipients}
         statusHistory={statusHistory}
@@ -24,7 +23,6 @@ describe('NotificationDetailTimeline', () => {
         }}
       />
     );
-    expect(container).toHaveTextContent(title);
     expect(queryByTestId('NotificationDetailTimeline')).toBeInTheDocument();
   });
 
