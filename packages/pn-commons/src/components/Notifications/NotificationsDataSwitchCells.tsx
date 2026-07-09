@@ -1,5 +1,5 @@
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
-import { Typography } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import { ButtonNaked } from '@pagopa/mui-italia';
 
 import { formatDate } from '../../utility/date.utility';
@@ -28,14 +28,12 @@ export const MobileSentAtCell: React.FC<{
   badge: React.ReactNode;
 }> = ({ date, isNew, badge }) =>
   isNew ? (
-    <>
-      <Typography display="inline" sx={{ marginRight: '10px' }}>
-        {badge}
-      </Typography>
+    <Box display="flex" alignItems="center">
+      {badge}
       <Typography display="inline" variant="body2">
         {formatDate(date)}
       </Typography>
-    </>
+    </Box>
   ) : (
     <Typography variant="body2">{formatDate(date)}</Typography>
   );

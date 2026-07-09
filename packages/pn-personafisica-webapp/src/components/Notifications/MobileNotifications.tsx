@@ -15,8 +15,6 @@ import {
   PnCardActions,
   PnCardContent,
   PnCardContentItem,
-  PnCardHeader,
-  PnCardHeaderItem,
   PnCardsList,
   RecipientNotification,
   Row,
@@ -57,6 +55,10 @@ const MobileNotifications = ({ notifications, sort, onChangeSorting, currentDele
   const filterNotificationsRef = useRef({ filtersApplied: false, cleanFilters: () => void 0 });
 
   const cardBody: Array<CardElement<RecipientNotification>> = [
+    {
+      id: 'sentAt',
+      label: t('table.data'),
+    },
     {
       id: 'sender',
       label: t('table.mittente'),
@@ -150,23 +152,7 @@ const MobileNotifications = ({ notifications, sort, onChangeSorting, currentDele
         <PnCardsList>
           {cardData.map((data) => (
             <PnCard key={data.id} testId="mobileNotificationsCards">
-              <PnCardHeader
-                headerGridProps={{
-                  direction: { xs: 'row', sm: 'row' },
-                  alignItems: { xs: 'flex-start', sm: 'center' },
-                }}
-              >
-                <PnCardHeaderItem
-                  gridProps={{
-                    xs: 4,
-                    sm: 5,
-                  }}
-                  position="left"
-                >
-                  <NotificationsRecipientDataSwitch data={data} type="sentAt" />
-                </PnCardHeaderItem>
-              </PnCardHeader>
-              <PnCardContent>
+              <PnCardContent sx={{ mt: 0 }}>
                 {cardBody.map((body) => (
                   <PnCardContentItem key={body.id} label={body.label} mode={body.mode}>
                     <NotificationsRecipientDataSwitch data={data} type={body.id} />

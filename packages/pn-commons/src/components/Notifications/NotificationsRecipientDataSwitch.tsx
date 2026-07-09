@@ -70,7 +70,7 @@ const NotificationsRecipientDataSwitch: React.FC<{
     return (
       <>
         <DataValue
-          mode="truncate"
+          mode={isMobile ? 'wrap' : 'truncate'}
           slots={{ root: Typography }}
           slotProps={{ root: { variant: 'body2', mb: 0.5 } }}
         >

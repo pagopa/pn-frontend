@@ -16,8 +16,6 @@ import {
   PnCardActions,
   PnCardContent,
   PnCardContentItem,
-  PnCardHeader,
-  PnCardHeaderItem,
   PnCardsList,
   RecipientNotification,
   Row,
@@ -86,6 +84,10 @@ const MobileNotifications = ({
   const organization = useAppSelector((state: RootState) => state.userState.user.organization);
 
   const cardBody: Array<CardElement<RecipientNotification>> = [
+    {
+      id: 'sentAt',
+      label: t('table.data'),
+    },
     {
       id: 'sender',
       label: t('table.mittente'),
@@ -186,23 +188,7 @@ const MobileNotifications = ({
         <PnCardsList>
           {cardData.map((data) => (
             <PnCard key={data.id} testId="mobileNotificationsCards">
-              <PnCardHeader
-                headerGridProps={{
-                  direction: { xs: 'row', sm: 'row' },
-                  alignItems: { xs: 'flex-start', sm: 'center' },
-                }}
-              >
-                <PnCardHeaderItem
-                  gridProps={{
-                    xs: 4,
-                    sm: 5,
-                  }}
-                  position="left"
-                >
-                  <NotificationsRecipientDataSwitch data={data} type="sentAt" />
-                </PnCardHeaderItem>
-              </PnCardHeader>
-              <PnCardContent>
+              <PnCardContent sx={{ mt: 0 }}>
                 {cardBody.map((body) => (
                   <PnCardContentItem
                     key={body.id}
