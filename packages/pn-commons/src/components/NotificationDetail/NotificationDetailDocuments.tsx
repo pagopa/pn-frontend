@@ -162,7 +162,7 @@ const NotificationDetailDocuments: React.FC<Props> = (
           <Trans parent={React.Fragment} i18nKey={downloadFilesMessage} />
         </MIAlert>
       )}
-      
+
       {/* Notification sent within 120 days */}
       {documentsAvailable && downloadFilesMessage && (
         <MIPaper

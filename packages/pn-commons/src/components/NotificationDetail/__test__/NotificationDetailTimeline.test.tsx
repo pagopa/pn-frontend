@@ -20,7 +20,6 @@ describe('NotificationDetailTimeline', () => {
       <NotificationDetailTimeline
         recipients={recipients}
         statusHistory={statusHistory}
-        title={title}
         historyButtonLabel={historyButtonLabel}
         showMoreButtonLabel={showMoreButtonLabel}
         showLessButtonLabel={showLessButtonLabel}
@@ -39,7 +38,6 @@ describe('NotificationDetailTimeline', () => {
       <NotificationDetailTimeline
         recipients={recipients}
         statusHistory={statusHistory}
-        title={title}
         historyButtonLabel={historyButtonLabel}
         showMoreButtonLabel={showMoreButtonLabel}
         showLessButtonLabel={showLessButtonLabel}
@@ -67,7 +65,6 @@ describe('NotificationDetailTimeline', () => {
       <NotificationDetailTimeline
         recipients={recipients}
         statusHistory={statusHistory}
-        title={title}
         historyButtonLabel={historyButtonLabel}
         showMoreButtonLabel={showMoreButtonLabel}
         showLessButtonLabel={showLessButtonLabel}
@@ -125,7 +122,6 @@ describe('NotificationDetailTimeline', () => {
             reworkedStatus: ReworkedStatus.NOT_VALID,
           },
         ]}
-        title={''}
         historyButtonLabel={''}
         showMoreButtonLabel={''}
         showLessButtonLabel={''}
