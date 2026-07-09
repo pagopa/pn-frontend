@@ -56,6 +56,16 @@ const InformalNotificationDetail: React.FC = () => {
     f24Only: [],
   });
 
+  const documentsAvailable = true; // TODO: rimuovere quando il BE sarà disponibile
+
+  const getDownloadFilesMessage = (): string =>
+    t(
+      documentsAvailable
+        ? 'detail.acts_files.informal_downloadable_acts'
+        : 'detail.acts_files.not_downloadable_acts',
+      { ns: 'notifiche' }
+    );
+
   /*   
   
    // TODO: rimuovere quando il BE sarà disponibile
@@ -220,10 +230,8 @@ const InformalNotificationDetail: React.FC = () => {
               documents={informalNotification?.documents}
               clickHandler={handleDocumentDownload}
               /* va aggiunto il campo all API */
-              documentsAvailable={false}
-              downloadFilesMessage={t('detail.acts_files.informal_downloadable_acts', {
-                ns: 'notifiche',
-              })}
+              documentsAvailable={documentsAvailable}
+              downloadFilesMessage={getDownloadFilesMessage()}
               titleVariant="h5"
             />
           </MIPaper>
