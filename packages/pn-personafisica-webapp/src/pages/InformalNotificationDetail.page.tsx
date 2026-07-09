@@ -213,7 +213,7 @@ const InformalNotificationDetail: React.FC = () => {
       </MIPaper>
 
       <Stack direction={{ xs: 'column', md: 'row' }} spacing={2} alignItems="flex-start">
-        <Stack spacing={2} sx={{ width: { xs: '100%', md: '65%' } }}>
+        <Stack spacing={2} sx={{ width: { xs: '100%', md: '58%' } }}>
           <MIPaper sx={{ p: 3, flex: 1 }} variant="outlined">
             <NotificationDetailDocuments
               title={t('detail.acts', { ns: 'notifiche' })}
@@ -239,7 +239,7 @@ const InformalNotificationDetail: React.FC = () => {
           </MIPaper>
         </Stack>
 
-        <MIPaper sx={{ p: 3, width: { xs: '100%', md: '35%' } }} variant="outlined">
+        <MIPaper sx={{ p: 3, width: { xs: '100%', md: '42%' } }} variant="outlined">
           <Stack spacing={2}>
             <Typography component="h2" variant="h5">
               {t('detail.contact_sender.title', { ns: 'notifiche' })}
