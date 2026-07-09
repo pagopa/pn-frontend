@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from 'react';
 
 import AttachFileIcon from '@mui/icons-material/AttachFile';
 import { Box, List, ListItem, Typography, useTheme } from '@mui/material';
-import { ButtonNaked, MIPaper } from '@pagopa/mui-italia';
+import { ButtonNaked, MIPaper, Tag } from '@pagopa/mui-italia';
 
 import { Downtime } from '../../models/AppStatus';
 import { NotificationStatusHistory } from '../../models/NotificationDetail';
@@ -173,6 +173,7 @@ const NotificationRelatedDowntimes: React.FC<Props> = ({
             {/* Render each downtime event */}
             {downtimeEvents.map((event, ix) => (
               <ListItem
+                data-testid="notification-related-downtime-detail"
                 disableGutters
                 key={ix}
                 sx={{
@@ -207,7 +208,7 @@ const NotificationRelatedDowntimes: React.FC<Props> = ({
                 {/* Link to download related file, or message about non-availability of such file */}
                 {/* beware! - tests rely on the default texts */}
                 <Box>
-                  {event.fileAvailable ? (
+                  {event.fileAvailable && !disableDownloads ? (
                     <ButtonNaked
                       sx={{ px: 0 }}
                       color="primary"
@@ -215,7 +216,6 @@ const NotificationRelatedDowntimes: React.FC<Props> = ({
                       onClick={() => {
                         void fetchDowntimeLegalFactDocumentDetails(event.legalFactId as string);
                       }}
-                      disabled={disableDownloads}
                     >
                       {getLocalizedOrDefaultLabel(
                         'notifications',
@@ -231,6 +231,15 @@ const NotificationRelatedDowntimes: React.FC<Props> = ({
                         'File non disponibile'
                       )}
                     </Typography>
+                  )}
+                  {disableDownloads && (
+                    <Tag
+                      value={getLocalizedOrDefaultLabel(
+                        'common',
+                        'not-available',
+                        'Non disponibile'
+                      )}
+                    />
                   )}
                 </Box>
               </ListItem>

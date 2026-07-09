@@ -270,5 +270,6 @@
     "selection-box": "Selected options",
     "selection-done": "%s selected",
     "delete-selection": "Remove %s"
-  }
+  },
+  "not-available": "Not available"
 }
