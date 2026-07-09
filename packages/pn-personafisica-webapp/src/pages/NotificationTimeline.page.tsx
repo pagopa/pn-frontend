@@ -245,7 +245,6 @@ const NotificationTimeline: React.FC = () => {
                   language={i18n.language}
                   recipients={notification.recipients}
                   statusHistory={notification.notificationStatusHistory}
-                  title={t('detail.timeline-title', { ns: 'notifiche' })}
                   clickHandler={legalFactDownloadHandler}
                   historyButtonLabel={t('detail.show-history', { ns: 'notifiche' })}
                   showMoreButtonLabel={t('detail.show-more', { ns: 'notifiche' })}
