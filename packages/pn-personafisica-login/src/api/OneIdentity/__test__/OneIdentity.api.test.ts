@@ -36,7 +36,7 @@ describe('OneIdentity api tests', () => {
       const res = await OneIdentityApi.authorize({ entityId: 'spid-idp-test' });
 
       expect(fetch).toHaveBeenCalledWith(
-        'https://mock-api-base-url/oidc-authorize?idp=spid-idp-test'
+        'https://mock-api-base-url/oidc/authorize?idp=spid-idp-test'
       );
       expect(res).toStrictEqual(mockResponse);
     });
@@ -50,7 +50,7 @@ describe('OneIdentity api tests', () => {
       await OneIdentityApi.authorize({ entityId: 'spid-idp-test', aar: 'aar-token-123' });
 
       expect(fetch).toHaveBeenCalledWith(
-        'https://mock-api-base-url/oidc-authorize?idp=spid-idp-test&aar=aar-token-123'
+        'https://mock-api-base-url/oidc/authorize?idp=spid-idp-test&aar=aar-token-123'
       );
     });
 
@@ -66,7 +66,7 @@ describe('OneIdentity api tests', () => {
       });
 
       expect(fetch).toHaveBeenCalledWith(
-        'https://mock-api-base-url/oidc-authorize?idp=spid-idp-test&retrievalId=retrieval-id-456'
+        'https://mock-api-base-url/oidc/authorize?idp=spid-idp-test&retrievalId=retrieval-id-456'
       );
     });
 
