@@ -686,10 +686,9 @@ const NotificationDetail: React.FC = () => {
                   recipient={currentRecipient}
                   documents={notification.otherDocuments ?? []}
                   clickHandler={documentDowloadHandler}
-                  disableDownloads={
-                    isCancelled.cancellationInTimeline ||
-                    !dateIsLessThan10Years(notification.sentAt)
-                  }
+                  isCancelled={isCancelled.cancellationInTimeline}
+                  isLessThan10Years={dateIsLessThan10Years(notification.sentAt)}
+                  downloadFilesMessage={getDownloadFilesMessage('aar')}
                 />
                 <NotificationRelatedDowntimes
                   downtimeEvents={downtimeEvents}
