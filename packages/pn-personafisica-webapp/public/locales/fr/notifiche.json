@@ -1,5 +1,6 @@
 {
   "title": "Vos notifications",
+  "go-to-detail": "Voir le détail",
   "table": {
     "data": "Date",
     "mittente": "Expéditeur",

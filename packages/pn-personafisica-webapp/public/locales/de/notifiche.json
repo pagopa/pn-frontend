@@ -1,5 +1,6 @@
 {
   "title": "Deine Zustellungen",
+  "go-to-detail": "Zur Detailansicht",
   "table": {
     "data": "Datum",
     "mittente": "Absender",

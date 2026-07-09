@@ -1,5 +1,6 @@
 {
   "title": "Your notifications",
+  "go-to-detail": "Go to details",
   "table": {
     "data": "Date",
     "mittente": "Sender",
