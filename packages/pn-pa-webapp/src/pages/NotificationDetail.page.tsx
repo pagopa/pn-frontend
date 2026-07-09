@@ -57,16 +57,11 @@ const AlertNotificationCancel: React.FC<Props> = (notification) => {
 
   if (cancelled || cancellationInProgress) {
     return (
-      <MIAlert
-        severity="warning"
-        sx={{ mt: 1 }}
-        data-testid="alert"
-        description={
-          cancellationInProgress
-            ? t('detail.alert-cancellation-in-progress')
-            : t('detail.alert-cancellation-confirmed')
-        }
-      />
+      <MIAlert severity="warning" sx={{ mt: 1 }} data-testid="alert">
+        {cancellationInProgress
+          ? t('detail.alert-cancellation-in-progress')
+          : t('detail.alert-cancellation-confirmed')}
+      </MIAlert>
     );
   }
 
@@ -353,16 +348,15 @@ const NotificationDetail: React.FC = () => {
                       data-testid="raddAlert"
                       sx={{ mb: 3, mt: 2 }}
                       title={t('detail.timeline.radd.title', { ns: 'notifiche' })}
-                      description={
-                        notification.recipients.length === 1
-                          ? t('detail.timeline.radd.description-mono-recipient', {
-                              ns: 'notifiche',
-                            })
-                          : t('detail.timeline.radd.description-multi-recipients', {
-                              ns: 'notifiche',
-                            })
-                      }
-                    />
+                    >
+                      {notification.recipients.length === 1
+                        ? t('detail.timeline.radd.description-mono-recipient', {
+                            ns: 'notifiche',
+                          })
+                        : t('detail.timeline.radd.description-multi-recipients', {
+                            ns: 'notifiche',
+                          })}
+                    </MIAlert>
                   )}
                 </Paper>
                 <Paper sx={{ p: 3, mb: 3 }} elevation={0} data-testid="aarDownload">

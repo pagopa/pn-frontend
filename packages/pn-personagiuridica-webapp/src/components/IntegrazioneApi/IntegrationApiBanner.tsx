@@ -14,10 +14,9 @@ const IntegrationApiBanner = ({ isAdminWithoutGroups }: Props) => {
       data-testid="integrationApiBanner"
       title={t('banner.title')}
       sx={{ mt: 2 }}
-      description={t(
-        isAdminWithoutGroups ? 'banner.description-admin' : 'banner.description-operator'
-      )}
-    />
+    >
+      {t(isAdminWithoutGroups ? 'banner.description-admin' : 'banner.description-operator')}
+    </MIAlert>
   );
 };
 

@@ -136,14 +136,9 @@ const F24PaymentBox: React.FC<PaymentBoxProps> = ({
       )}
 
       {showDeleteButton && notificationFeePolicy === NotificationFeePolicy.DELIVERY_MODE && (
-        <MIAlert
-          severity="warning"
-          data-testid="f24-installment-alert"
-          sx={{ mt: 4 }}
-          description={t(
-            'new-notification.steps.debt-position-detail.payment-methods.apply-cost-installment'
-          )}
-        />
+        <MIAlert severity="warning" data-testid="f24-installment-alert" sx={{ mt: 4 }}>
+          {t('new-notification.steps.debt-position-detail.payment-methods.apply-cost-installment')}
+        </MIAlert>
       )}
     </Box>
   );

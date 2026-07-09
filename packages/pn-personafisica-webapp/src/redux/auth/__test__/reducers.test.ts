@@ -14,24 +14,28 @@ import {
 } from '../../../__mocks__/Consents.mock';
 import { errorMock } from '../../../__mocks__/Errors.mock';
 import { apiClient, authClient } from '../../../api/apiClients';
-import { ONE_IDENTITY_TOKEN_EXCHANGE } from '../../../api/auth/auth.routes';
-import { LoginProvider } from '../../../models/User';
+import { FIMS_TOKEN_EXCHANGE, ONE_IDENTITY_TOKEN_EXCHANGE } from '../../../api/auth/auth.routes';
+import { LoginProvider, SourceChannel } from '../../../models/User';
 import { store } from '../../store';
-import { acceptTosPrivacy, exchangeOneIdentityCode, getTosPrivacyApproval } from '../actions';
+import { acceptTosPrivacy, exchangeFimsToken, exchangeOneIdentityCode, getTosPrivacyApproval } from '../actions';
 
 describe('Auth redux state tests', () => {
-  let mock: MockAdapter;
+  let apiMock: MockAdapter;
+  let authMock: MockAdapter;
 
   beforeAll(() => {
-    mock = new MockAdapter(apiClient);
+    apiMock = new MockAdapter(apiClient);
+    authMock = new MockAdapter(authClient);
   });
 
   afterEach(() => {
-    mock.reset();
+    apiMock.reset();
+    authMock.reset();
   });
 
   afterAll(() => {
-    mock.restore();
+    apiMock.restore();
+    authMock.restore();
   });
 
   it('Initial state', () => {
@@ -75,12 +79,31 @@ describe('Auth redux state tests', () => {
     const action = await mockLogin();
     expect(action.type).toBe('exchangeToken/fulfilled');
     expect(action.payload).toEqual(userResponse);
-    expect(store.getState().userState.loginProvider).toBe('SPIDHUB');
+    expect(store.getState().userState.loginProvider).toBe(LoginProvider.SPIDHUB);
+  });
+
+  it('Should be able to exchange FIMS token', async () => {
+    const fimsToken = 'mocked-fims-token';
+    const fimsUserResponse = {
+      ...userResponse,
+      source: {
+        channel: SourceChannel.WEB,
+        details: 'FIMS',
+      },
+    };
+
+    authMock
+      .onPost(FIMS_TOKEN_EXCHANGE(), { authorizationToken: fimsToken })
+      .reply(200, fimsUserResponse);
+    const action = await store.dispatch(exchangeFimsToken({ fimsToken }));
+
+    expect(action.type).toBe('exchangeFimsToken/fulfilled');
+    expect(action.payload).toEqual(fimsUserResponse);
+    expect(store.getState().userState.loginProvider).toBe(LoginProvider.FIMS);
   });
 
   it('Should be able to exchange code with One Identity', async () => {
-    const mock = new MockAdapter(authClient);
-    mock.onPost(ONE_IDENTITY_TOKEN_EXCHANGE()).reply(200, oneIdentityUserResponse);
+    authMock.onPost(ONE_IDENTITY_TOKEN_EXCHANGE()).reply(200, oneIdentityUserResponse);
     const action = await store.dispatch(
       exchangeOneIdentityCode({
         code: 'mocked-code',
@@ -90,12 +113,11 @@ describe('Auth redux state tests', () => {
 
     expect(action.type).toBe('exchangeOneIdentityCode/fulfilled');
     expect(action.payload).toEqual(oneIdentityUserResponse);
-    expect(store.getState().userState.loginProvider).toBe('ONEIDENTITY');
+    expect(store.getState().userState.loginProvider).toBe(LoginProvider.ONEIDENTITY);
   });
 
   it('Should strip idp, aar and retrievalId before saving One Identity user to redux and sessionStorage', async () => {
-    const mock = new MockAdapter(authClient);
-    mock.onPost(ONE_IDENTITY_TOKEN_EXCHANGE()).reply(200, oneIdentityUserResponse);
+    authMock.onPost(ONE_IDENTITY_TOKEN_EXCHANGE()).reply(200, oneIdentityUserResponse);
     await store.dispatch(exchangeOneIdentityCode({ code: 'mocked-code', state: 'mocked-state' }));
 
     const userFromStorage = JSON.parse(sessionStorage.getItem('user')!);
@@ -132,7 +154,7 @@ describe('Auth redux state tests', () => {
   });
 
   it('Should fetch ToS and Privacy approved', async () => {
-    mock.onGet(/\/bff\/v2\/tos-privacy.*/).reply(200, tosPrivacyConsentMock(true, true));
+    apiMock.onGet(/\/bff\/v2\/tos-privacy.*/).reply(200, tosPrivacyConsentMock(true, true));
 
     const action = await store.dispatch(getTosPrivacyApproval());
     expect(action.type).toBe('getTosPrivacyApproval/fulfilled');
@@ -145,7 +167,7 @@ describe('Auth redux state tests', () => {
     const tosPrivacyErrorResponse = {
       response: errorMock,
     };
-    mock.onGet(/\/bff\/v2\/tos-privacy.*/).reply(errorMock.status, errorMock.data);
+    apiMock.onGet(/\/bff\/v2\/tos-privacy.*/).reply(errorMock.status, errorMock.data);
     const action = await store.dispatch(getTosPrivacyApproval());
     expect(action.type).toBe('getTosPrivacyApproval/rejected');
     expect(action.payload).toEqual(tosPrivacyErrorResponse);
@@ -160,7 +182,7 @@ describe('Auth redux state tests', () => {
   });
 
   it('Should be able to fetch tos and privacy acceptance', async () => {
-    mock.onPut('/bff/v2/tos-privacy').reply(200);
+    apiMock.onPut('/bff/v2/tos-privacy').reply(200);
 
     const action = await store.dispatch(acceptTosPrivacy(acceptTosPrivacyConsentBodyMock()));
 
@@ -170,7 +192,7 @@ describe('Auth redux state tests', () => {
   });
 
   it('Should NOT be able to fetch tos and privacy acceptance', async () => {
-    mock.onPut('/bff/v2/tos-privacy').reply(errorMock.status, errorMock.data);
+    apiMock.onPut('/bff/v2/tos-privacy').reply(errorMock.status, errorMock.data);
 
     const action = await store.dispatch(acceptTosPrivacy(acceptTosPrivacyConsentBodyMock()));
 

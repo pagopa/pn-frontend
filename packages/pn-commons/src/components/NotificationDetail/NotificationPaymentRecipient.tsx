@@ -233,14 +233,9 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
       </Typography>
 
       {isCancelled && (
-        <MIAlert
-          data-testid="cancelledAlertPayment"
-          severity="info"
-          description={getLocalizedOrDefaultLabel(
-            'notifications',
-            'detail.payment.cancelled-message'
-          )}
-        />
+        <MIAlert data-testid="cancelledAlertPayment" severity="info">
+          {getLocalizedOrDefaultLabel('notifications', 'detail.payment.cancelled-message')}
+        </MIAlert>
       )}
 
       {!isCancelled && costDetails && (
@@ -298,12 +293,9 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
             </Box>
           )}
           {errorOnPayment && (
-            <MIAlert
-              severity="error"
-              data-testid="payment-error"
-              title={errorOnPayment.title}
-              description={errorOnPayment.description}
-            />
+            <MIAlert severity="error" data-testid="payment-error" title={errorOnPayment.title}>
+              {errorOnPayment.description}
+            </MIAlert>
           )}
           {!allPaymentsIsPaid && (
             <PaymentButtons

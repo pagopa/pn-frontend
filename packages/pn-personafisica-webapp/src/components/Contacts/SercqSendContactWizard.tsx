@@ -269,10 +269,9 @@ const SercqSendContactWizard: React.FC<Props> = ({ goToStep, showIOStep }) => {
       </List>
 
       <Box sx={{ my: 3 }}>
-        <MIAlert
-          severity="info"
-          description={t('legal-contacts.sercq-send-wizard.step_4.sercq-send-contacts-alert')}
-        />
+        <MIAlert severity="info">
+          {t('legal-contacts.sercq-send-wizard.step_4.sercq-send-contacts-alert')}
+        </MIAlert>
       </Box>
 
       <SercqSendDisclaimer

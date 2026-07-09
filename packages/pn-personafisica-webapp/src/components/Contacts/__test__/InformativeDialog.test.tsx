@@ -41,7 +41,7 @@ describe('InformativeDialog', () => {
       <InformativeDialog {...defaultProps} content="Styled Content" slotProps={{ contentProps }} />
     );
     const contentElement = getByText('Styled Content');
-    expect(contentElement).toHaveStyle('color: rgba(0, 0, 0, 0.6)');
+    expect(contentElement).toHaveStyle('color: rgb(92, 111, 130)');
     expect(contentElement).toHaveStyle('font-size: 16px');
   });
 
