@@ -15,7 +15,7 @@ type Props = {
   recipients: Array<NotificationDetailRecipient>;
   statusHistory: Array<NotificationStatusHistory>;
   clickHandler: (legalFactId: LegalFactId) => void;
-  historyButtonLabel: string;
+  historyButtonLabel?: string;
   showMoreButtonLabel: string;
   showLessButtonLabel: string;
   disableDownloads?: boolean;

@@ -11,7 +11,6 @@ describe('NotificationDetailTimeline', () => {
   const recipients = notificationDTO.recipients;
   const statusHistory = notificationDTO.notificationStatusHistory;
   const title = 'Notification Title';
-  const historyButtonLabel = 'History';
   const showMoreButtonLabel = 'Show More';
   const showLessButtonLabel = 'Show Less';
 
@@ -20,7 +19,6 @@ describe('NotificationDetailTimeline', () => {
       <NotificationDetailTimeline
         recipients={recipients}
         statusHistory={statusHistory}
-        historyButtonLabel={historyButtonLabel}
         showMoreButtonLabel={showMoreButtonLabel}
         showLessButtonLabel={showLessButtonLabel}
         clickHandler={function (): void {
@@ -38,7 +36,6 @@ describe('NotificationDetailTimeline', () => {
       <NotificationDetailTimeline
         recipients={recipients}
         statusHistory={statusHistory}
-        historyButtonLabel={historyButtonLabel}
         showMoreButtonLabel={showMoreButtonLabel}
         showLessButtonLabel={showLessButtonLabel}
         clickHandler={function (): void {
@@ -65,7 +62,6 @@ describe('NotificationDetailTimeline', () => {
       <NotificationDetailTimeline
         recipients={recipients}
         statusHistory={statusHistory}
-        historyButtonLabel={historyButtonLabel}
         showMoreButtonLabel={showMoreButtonLabel}
         showLessButtonLabel={showLessButtonLabel}
         clickHandler={function (): void {
