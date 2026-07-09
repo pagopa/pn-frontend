@@ -139,10 +139,10 @@
       "tpp-expired-error-description": "Pour la rétablir, accédez de nouveau à cette notification via le message que vous avez reçu sur l'application de votre banque."
     },
     "acts_files": {
-      "downloadable_acts": "Les documents sont disponibles en ligne pendant 120 jours à compter de la finalisation de la notification.",
-      "not_downloadable_acts": "Étant donné que 120 jours se sont écoulés depuis la date de finalisation, si vous souhaitez obtenir les actes, vous devez vous adresser à l’expéditeur.",
+      "downloadable_acts": "<0>Les documents seront disponibles en ligne jusqu'à 120 jours</0> à compter de la date à laquelle la notification SEND a pris valeur de loi. Enregistrez-les sur votre appareil !",
+      "not_downloadable_acts": "Les documents ne sont plus disponibles en ligne. Pour les demander, veuillez vous adresser à l'organisme qui vous les a envoyés.",
+      "not_downloadable_aar": "L'avis de réception n'est plus disponible. Pour le demander, veuillez vous adresser à l'organisme qui vous l'a envoyé.",
       "downloadable_aar": "L’avis de réception est disponible en ligne pendant 10 ans à compter de la finalisation de la notification.",
-      "not_downloadable_aar": "Comme 10 ans se sont écoulés depuis la date de finalisation, l’accusé de réception n’est plus disponible.",
       "notification_cancelled_aar": "Cette notification ayant été annulée, le téléchargement de l’accusé de réception a été désactivé.",
       "notification_cancelled_acts": "Cette notification ayant été annulée, le téléchargement des documents a été désactivé.",
       "effected_faq": "Quand une notification est-elle finalisée ?"

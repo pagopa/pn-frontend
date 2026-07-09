@@ -139,10 +139,10 @@
       "tpp-expired-error-description": "Um sie wiederherzustellen, greife über die Nachricht, die du in deiner Bank-App erhalten hast, erneut auf diese Benachrichtigung zu."
     },
     "acts_files": {
-      "downloadable_acts": "Die Dokumente sind 120 Tage nach Vervollständigung der Zustellung online verfügbar.",
-      "not_downloadable_acts": "Da seit der Vervollständigung 120 Tage vergangen sind, musst du dich für den Erhalt der Akten an den Absender wenden.",
+      "downloadable_acts": "<0>Die Dokumente sind bis zu 120 Tage lang online verfügbar</0> ab dem Datum, an dem die SEND-Benachrichtigung rechtlich wirksam wurde. Speichern Sie sie auf Ihrem Gerät!",
+      "not_downloadable_acts": "Die Dokumente sind online nicht mehr verfügbar. Um sie anzufordern, wenden Sie sich bitte an die Behörde, die sie Ihnen zugesendet hat.",
+      "not_downloadable_aar": "Der Zustellungsnachweis ist nicht mehr verfügbar. Um ihn anzufordern, wenden Sie sich bitte an die Behörde, die ihn Ihnen zugesendet hat.",
       "downloadable_aar": "Die Empfangsbestätigung ist 10 Jahre ab Vervollständigung der Zustellung online verfügbar.",
-      "not_downloadable_aar": "Da seit der Vervollständigung 10 Jahre vergangen sind, steht die Empfangsbestätigung nicht mehr zur Verfügung.",
       "notification_cancelled_aar": "Da diese Zustellung storniert wurde, wurde der Download der Empfangsbestätigung deaktiviert.",
       "notification_cancelled_acts": "Da diese Zustellung storniert wurde, wurde der Download der Dokumente deaktiviert.",
       "effected_faq": "Wann ist die Bearbeitung einer Zustellung vervollständigt?"

@@ -139,10 +139,10 @@
       "tpp-expired-error-description": "Za ponovno vzpostavitev ponovno dostopajte do tega obvestila prek sporočila, ki ste ga prejeli v aplikaciji vaše banke."
     },
     "acts_files": {
-      "downloadable_acts": "Dokumenti so na voljo na spletu 120 dni od zaključka obvestila.",
-      "not_downloadable_acts": "Ker je od datuma zaključka minilo 120 dni, se morate za pridobitev listin obrniti na pošiljatelja.",
+      "downloadable_acts": "<0>Dokumenti bodo na voljo na spletu do 120 dni</0> od dneva, ko je uradno obvestilo SEND postalo pravno veljavno. Shranite jih v svojo napravo!",
+      "not_downloadable_acts": "Dokumenti niso več na voljo na spletu. Če jih želite zahtevati, se obrnite na organ, ki vam jih je poslal.",
+      "not_downloadable_aar": "Obvestilo o prejemu ni več na voljo. Če ga želite zahtevati, se obrnite na organ, ki vam ga je poslal.",
       "downloadable_aar": "Obvestilo o prejemu je na voljo na spletu 10 let od zaključka obvestila.",
-      "not_downloadable_aar": "Ker je od datuma zaključka minilo 10 let, obvestilo o prejemu ni več na voljo.",
       "notification_cancelled_aar": "Ker je bilo to obvestilo preklicano, je bil prenos obvestila o prejemu onemogočen.",
       "notification_cancelled_acts": "Ker je bilo to obvestilo preklicano, je bil prenos dokumenta onemogočen.",
       "effected_faq": "Kdaj se obvestilo zaključi?"
