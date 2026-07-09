@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 
-import type { Notification } from '@pagopa-pn/pn-commons';
+import type { RecipientNotification } from '@pagopa-pn/pn-commons';
 import { LoadingPage, NotificationStatus } from '@pagopa-pn/pn-commons';
 
 import { OnboardingSource } from '../models/Onboarding';
@@ -15,15 +15,10 @@ import { getConfiguration } from '../services/configuration.service';
 import { groupDigitalAddresses, hasRequiredContacts } from '../utility/contacts.utility';
 import * as routes from './routes.const';
 
-const hasNotificationsToRead = (notifications: Array<Notification>): boolean => {
-  const managedStatuses = new Set([
-    NotificationStatus.VIEWED,
-    NotificationStatus.CANCELLED,
-    NotificationStatus.RETURNED_TO_SENDER,
-    NotificationStatus.EFFECTIVE_DATE,
-  ]);
-  return notifications.some((n) => !managedStatuses.has(n.notificationStatus));
-};
+const hasNotificationsToRead = (notifications: Array<RecipientNotification>): boolean =>
+  notifications.some(
+    (n) => n.isNewNotification || n.notificationStatus === NotificationStatus.EFFECTIVE_DATE
+  );
 
 const OnboardingGuard: React.FC = () => {
   const navigate = useNavigate();

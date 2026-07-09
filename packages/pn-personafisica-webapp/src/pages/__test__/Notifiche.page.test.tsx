@@ -26,7 +26,7 @@ describe('Notifiche Page', () => {
 
   const notificationsPath = `/bff/v1/notifications/received?startDate=${encodeURIComponent(
     formatToTimezoneString(tenYearsAgo)
-  )}&endDate=${encodeURIComponent(formatToTimezoneString(today))}&size=10`;
+  )}&endDate=${encodeURIComponent(formatToTimezoneString(today))}&size=10&communicationType=ALL`;
 
   beforeAll(() => {
     mock = new MockAdapter(apiClient);
@@ -70,7 +70,9 @@ describe('Notifiche Page', () => {
     mock.onGet(notificationsPath).reply(200, notificationsDTO);
     const notificationsPathFiltered = `/bff/v1/notifications/received?startDate=${encodeURIComponent(
       formatToTimezoneString(tenYearsAgo)
-    )}&endDate=${encodeURIComponent(formatToTimezoneString(getEndOfDay(tenYearsAgo)))}&size=10`;
+    )}&endDate=${encodeURIComponent(
+      formatToTimezoneString(getEndOfDay(tenYearsAgo))
+    )}&size=10&communicationType=ALL`;
     mock.onGet(notificationsPathFiltered).reply(200, emptyNotificationsFromBe);
     await act(async () => {
       result = render(<Notifiche />);
@@ -105,7 +107,7 @@ describe('Notifiche Page', () => {
       .reply(200, { ...notificationsDTO, resultsPage: [notificationsDTO.resultsPage[0]] });
     const notificationPathWithSize = `/bff/v1/notifications/received?startDate=${encodeURIComponent(
       formatToTimezoneString(tenYearsAgo)
-    )}&endDate=${encodeURIComponent(formatToTimezoneString(today))}&size=20`;
+    )}&endDate=${encodeURIComponent(formatToTimezoneString(today))}&size=20&communicationType=ALL`;
     mock.onGet(notificationPathWithSize).reply(200, notificationsDTO);
     await act(async () => {
       result = render(<Notifiche />);
@@ -132,8 +134,11 @@ describe('Notifiche Page', () => {
     mock
       .onGet(notificationsPath)
       .reply(200, { ...notificationsDTO, resultsPage: [notificationsDTO.resultsPage[0]] });
-    const notificationPathSecondPage =
-      notificationsPath + '&nextPagesKey=' + notificationsDTO.nextPagesKey[0];
+    const notificationPathSecondPage = `/bff/v1/notifications/received?startDate=${encodeURIComponent(
+      formatToTimezoneString(tenYearsAgo)
+    )}&endDate=${encodeURIComponent(formatToTimezoneString(today))}&size=10&nextPagesKey=${
+      notificationsDTO.nextPagesKey[0]
+    }&communicationType=ALL`;
     mock
       .onGet(notificationPathSecondPage)
       .reply(200, { ...notificationsDTO, resultsPage: [notificationsDTO.resultsPage[1]] });
@@ -165,7 +170,7 @@ describe('Notifiche Page', () => {
       formatToTimezoneString(tenYearsAgo)
     )}&endDate=${encodeURIComponent(
       formatToTimezoneString(today)
-    )}&iunMatch=ABCD-EFGH-ILMN-123456-A-1&size=10`;
+    )}&iunMatch=ABCD-EFGH-ILMN-123456-A-1&size=10&communicationType=ALL`;
     mock
       .onGet(notificationPathFiltered)
       .reply(200, { ...notificationsDTO, resultsPage: [notificationsDTO.resultsPage[1]] });

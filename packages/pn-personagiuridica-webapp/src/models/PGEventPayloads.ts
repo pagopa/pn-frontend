@@ -3,7 +3,7 @@ import type {
   AppResponseError,
   Downtime,
   LegalFactId,
-  Notification,
+  RecipientNotification,
   NotificationDetailOtherDocument,
   NotificationStatusHistory,
   PaymentsData,
@@ -44,7 +44,7 @@ export type PGApiKeyEventData = {
 };
 
 export type PGNotificationsListEventData = {
-  notifications: Array<Notification>;
+  notifications: Array<RecipientNotification>;
   pageNumber: number;
   domicileBannerType?: string;
 };
