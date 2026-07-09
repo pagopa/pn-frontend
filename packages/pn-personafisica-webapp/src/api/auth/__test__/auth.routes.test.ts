@@ -13,7 +13,7 @@ describe('Authentication routes', () => {
 
   it('should compile ONE_IDENTITY_TOKEN_EXCHANGE', () => {
     const route = ONE_IDENTITY_TOKEN_EXCHANGE();
-    expect(route).toEqual('/oidc-token');
+    expect(route).toEqual('/oidc/token');
   });
 
   it('should compile AUTH_LOGOUT', () => {
