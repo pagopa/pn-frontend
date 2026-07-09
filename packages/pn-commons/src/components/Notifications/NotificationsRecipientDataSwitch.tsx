@@ -50,7 +50,13 @@ const NotificationsRecipientDataSwitch: React.FC<{
     return (
       <Stack direction="row" alignItems="center">
         <NewNotificationBadge isNew={isNewNotification} />
-        <Typography variant="body2">{formatDate(data.sentAt)}</Typography>
+        <DataValue
+          mode="truncate"
+          slots={{ root: Typography }}
+          slotProps={{ root: { variant: 'body2' } }}
+        >
+          {formatDate(data.sentAt)}
+        </DataValue>
       </Stack>
     );
   }
@@ -70,7 +76,7 @@ const NotificationsRecipientDataSwitch: React.FC<{
     return (
       <>
         <DataValue
-          mode="truncate"
+          mode={isMobile ? 'wrap' : 'truncate'}
           slots={{ root: Typography }}
           slotProps={{ root: { variant: 'body2', mb: 0.5 } }}
         >
