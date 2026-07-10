@@ -27,7 +27,7 @@ export enum SourceChannel {
 export interface UserSource {
   channel: SourceChannel;
   details: string;
-  retrievalId: string;
+  retrievalId?: string;
 }
 
 export interface BodySourceRequest {
@@ -51,6 +51,10 @@ export interface TokenExchangeRequest {
   rapidAccess?: [AppRouteParams, string];
 }
 
+export interface FimsTokenExchangeRequest {
+  fimsToken: string;
+}
+
 export const paramsToSourceType: Record<AppRouteParams, 'TPP' | 'QR'> = {
   [AppRouteParams.AAR]: 'QR',
   [AppRouteParams.RETRIEVAL_ID]: 'TPP',
@@ -58,5 +62,6 @@ export const paramsToSourceType: Record<AppRouteParams, 'TPP' | 'QR'> = {
 
 export enum LoginProvider {
   SPIDHUB = 'SPIDHUB',
+  FIMS = 'FIMS',
   ONEIDENTITY = 'ONEIDENTITY',
 }

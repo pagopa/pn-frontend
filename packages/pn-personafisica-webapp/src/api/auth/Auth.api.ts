@@ -1,5 +1,6 @@
 /* eslint-disable functional/immutable-data */
 import {
+  FimsTokenExchangeRequest,
   OneIdentityExchangeCodeBody,
   OneIdentityUser,
   TokenExchangeBody,
@@ -8,7 +9,7 @@ import {
   paramsToSourceType,
 } from '../../models/User';
 import { authClient } from '../apiClients';
-import { AUTH_LOGOUT, AUTH_TOKEN_EXCHANGE, ONE_IDENTITY_TOKEN_EXCHANGE } from './auth.routes';
+import { AUTH_LOGOUT, AUTH_TOKEN_EXCHANGE, FIMS_TOKEN_EXCHANGE, ONE_IDENTITY_TOKEN_EXCHANGE } from './auth.routes';
 
 export const AuthApi = {
   exchangeToken: async ({ spidToken, rapidAccess }: TokenExchangeRequest): Promise<User> => {
@@ -21,6 +22,13 @@ export const AuthApi = {
       };
     }
     const response = await authClient.post<User>(AUTH_TOKEN_EXCHANGE(), body);
+
+    return response.data;
+  },
+  exchangeFimsToken: async ({ fimsToken }: FimsTokenExchangeRequest): Promise<User> => {
+    const response = await authClient.post<User>(FIMS_TOKEN_EXCHANGE(), {
+      authorizationToken: fimsToken,
+    });
 
     return response.data;
   },

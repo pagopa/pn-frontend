@@ -7,6 +7,7 @@ import { LoginProvider, User } from '../../models/User';
 import { userDataMatcher } from '../../utility/user.utility';
 import {
   acceptTosPrivacy,
+  exchangeFimsToken,
   exchangeOneIdentityCode,
   exchangeToken,
   getTosPrivacyApproval,
@@ -117,7 +118,7 @@ const userSlice = createSlice({
 
     builder
       .addMatcher(
-        isAnyOf(exchangeToken.pending, exchangeOneIdentityCode.pending),
+        isAnyOf(exchangeToken.pending, exchangeFimsToken.pending, exchangeOneIdentityCode.pending),
         (state, action) => {
           state.loading = true;
 
@@ -125,11 +126,13 @@ const userSlice = createSlice({
             state.loginProvider = LoginProvider.SPIDHUB;
           } else if (action.type === exchangeOneIdentityCode.pending.type) {
             state.loginProvider = LoginProvider.ONEIDENTITY;
+          } else if (action.type === exchangeFimsToken.pending.type) {
+            state.loginProvider = LoginProvider.FIMS;
           }
         }
       )
       .addMatcher(
-        isAnyOf(exchangeToken.fulfilled, exchangeOneIdentityCode.fulfilled),
+        isAnyOf(exchangeToken.fulfilled, exchangeFimsToken.fulfilled, exchangeOneIdentityCode.fulfilled),
         (state, action) => {
           const user =
             action.type === exchangeOneIdentityCode.fulfilled.type
@@ -141,7 +144,7 @@ const userSlice = createSlice({
           state.loading = false;
         }
       )
-      .addMatcher(isAnyOf(exchangeToken.rejected, exchangeOneIdentityCode.rejected), (state) => {
+      .addMatcher(isAnyOf(exchangeToken.rejected, exchangeFimsToken.rejected, exchangeOneIdentityCode.rejected), (state) => {
         state.loading = false;
       });
   },

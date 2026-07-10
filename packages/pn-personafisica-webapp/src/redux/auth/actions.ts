@@ -7,12 +7,7 @@ import {
   BffTosPrivacyActionBody,
   UserConsentsApiFactory,
 } from '../../generated-client/tos-privacy';
-import {
-  OneIdentityExchangeCodeBody,
-  OneIdentityUser,
-  TokenExchangeRequest,
-  User,
-} from '../../models/User';
+import { FimsTokenExchangeRequest, OneIdentityExchangeCodeBody, OneIdentityUser, TokenExchangeRequest, User } from '../../models/User';
 import { userDataMatcher } from '../../utility/user.utility';
 
 export enum AUTH_ACTIONS {
@@ -29,6 +24,28 @@ export const exchangeToken = createAsyncThunk<User, TokenExchangeRequest>(
   async (request: TokenExchangeRequest, { rejectWithValue }) => {
     try {
       const result = await AuthApi.exchangeToken(request);
+      userDataMatcher.validateSync(result, { stripUnknown: false });
+      return result;
+    } catch (e: any) {
+      if (e?.name === 'ValidationError') {
+        return rejectWithValue({
+          code: 'USER_VALIDATION_FAILED',
+          message: e.message,
+        });
+      }
+      return rejectWithValue(parseError(e));
+    }
+  }
+);
+
+/**
+ * Exchange the short-lived FIMS token for a SEND token.
+ */
+export const exchangeFimsToken = createAsyncThunk<User, FimsTokenExchangeRequest>(
+  'exchangeFimsToken',
+  async (request: FimsTokenExchangeRequest, { rejectWithValue }) => {
+    try {
+      const result = await AuthApi.exchangeFimsToken(request);
       userDataMatcher.validateSync(result, { stripUnknown: false });
       return result;
     } catch (e: any) {
