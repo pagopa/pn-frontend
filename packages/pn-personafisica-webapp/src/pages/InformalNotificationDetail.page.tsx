@@ -115,7 +115,8 @@ const InformalNotificationDetail: React.FC = () => {
             pagoPa: {
               ...payments[index]?.pagoPa,
               ...info,
-              applyCost: false, // TODO PagoPAPaymentDetails ha come parametro obbligatorio applyCost, ma non è presente nella risposta del BE. Da rimuovere quando il BE sarà allineato
+              // applyCost is false because informal notifications do not have notification costs.
+              applyCost: false,
             },
           })),
           f24Only: [],
@@ -134,7 +135,8 @@ const InformalNotificationDetail: React.FC = () => {
       ...payment,
       pagoPa: {
         ...payment.pagoPa,
-        applyCost: false, // TODO PagoPAPaymentDetails ha come parametro obbligatorio applyCost, ma non è presente nella risposta del BE. Da rimuovere quando il BE sarà allineato
+        // applyCost is false because informal notifications do not have notification costs.
+        applyCost: false,
       },
     }));
 
