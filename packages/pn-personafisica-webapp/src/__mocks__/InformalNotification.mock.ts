@@ -5,7 +5,7 @@ export const informalNotificationMock: BffFullInformalNotificationV1 = {
   senderPaId: 'string',
   campaignId: 'string',
   additionalLanguages: ['string'],
-  documentsAvailable: false,
+  documentsAvailable: true,
   subject: 'string',
   recipients: [
     {
@@ -50,10 +50,8 @@ export const informalNotificationMock: BffFullInformalNotificationV1 = {
       ],
       messageId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
       email: 'account@domain.it',
-      //TODO manca web site
+      //TODO manca contatti mittente // Creazione API NUOVA
       phoneNumber: '3900000000',
-      // TODO: remove ts-ignore when BFF OpenAPI is aligned with message field
-      // @ts-ignore
       message: {
         primaryMessage: {
           subject: 'Sollecito di pagamento Tari 2023',
