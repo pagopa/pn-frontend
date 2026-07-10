@@ -2,6 +2,7 @@ import { BffFullInformalNotificationV1 } from '../generated-client/informal-noti
 
 export const informalNotificationMock: BffFullInformalNotificationV1 = {
   senderDenomination: 'Xr94TD?>A]Rz>s,SSP2[2/B',
+  senderPaId: 'string',
   campaignId: 'string',
   additionalLanguages: ['string'],
   documentsAvailable: false,
@@ -31,6 +32,8 @@ export const informalNotificationMock: BffFullInformalNotificationV1 = {
           pagoPa: {
             noticeCode: '302000100000019421',
             creditorTaxId: '77777777777',
+            amount: 60.68,
+            dueDate: '2026-05-26',
             attachment: {
               digests: {
                 sha256: 'jezIVxlG1M1woCSUngM6KipUN3/p8cG5RMIPnuEanlE=',

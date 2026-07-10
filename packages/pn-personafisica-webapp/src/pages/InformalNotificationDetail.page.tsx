@@ -56,7 +56,7 @@ const InformalNotificationDetail: React.FC = () => {
     f24Only: [],
   });
 
-  const documentsAvailable = true; // TODO: rimuovere quando il BE sarà disponibile
+  const documentsAvailable = informalNotification?.documentsAvailable ?? false;
 
   const getDownloadFilesMessage = (): string =>
     t(
@@ -115,7 +115,7 @@ const InformalNotificationDetail: React.FC = () => {
             pagoPa: {
               ...payments[index]?.pagoPa,
               ...info,
-              applyCost: false,
+              applyCost: false, // TODO PagoPAPaymentDetails ha come parametro obbligatorio applyCost, ma non è presente nella risposta del BE. Da rimuovere quando il BE sarà allineato
             },
           })),
           f24Only: [],
@@ -130,11 +130,13 @@ const InformalNotificationDetail: React.FC = () => {
   };
 
   useEffect(() => {
-    const payments = currentRecipient?.payments;
-
-    if (!payments?.length) {
-      return;
-    }
+    const payments = currentRecipient?.payments?.map((payment) => ({
+      ...payment,
+      pagoPa: {
+        ...payment.pagoPa,
+        applyCost: false, // TODO PagoPAPaymentDetails ha come parametro obbligatorio applyCost, ma non è presente nella risposta del BE. Da rimuovere quando il BE sarà allineato
+      },
+    }));
 
     if (!payments?.length) {
       return;
@@ -214,6 +216,7 @@ const InformalNotificationDetail: React.FC = () => {
       <MIPaper sx={{ p: 3, display: 'flex', flexDirection: 'column', gap: 2 }} variant="outlined">
         <AbstractPaper
           title={primaryMessage?.subject ?? ''}
+          senderPaId={informalNotification?.senderPaId}
           senderDenomination={informalNotification?.senderDenomination ?? ''}
           sentAt={informalNotification?.sentAt ?? ''}
           iun={informalNotification?.iun ?? ''}
@@ -229,7 +232,6 @@ const InformalNotificationDetail: React.FC = () => {
               title={t('detail.acts', { ns: 'notifiche' })}
               documents={informalNotification?.documents}
               clickHandler={handleDocumentDownload}
-              /* va aggiunto il campo all API */
               documentsAvailable={documentsAvailable}
               downloadFilesMessage={getDownloadFilesMessage()}
               titleVariant="h5"
