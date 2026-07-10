@@ -73,7 +73,7 @@ const NotificationRelatedDowntimes: React.FC<Props> = ({
 }) => {
   const theme = useTheme();
 
-  const title = getLocalizedOrDefaultLabel('notifications', 'detail.downtimes.title', 'Disservizi');
+  const title = getLocalizedOrDefaultLabel('notifications', 'detail.downtimes.title');
   const unknownFunctinalityLabel = (event: Downtime) =>
     getLocalizedOrDefaultLabel('appStatus', `legends.unknownFunctionality`, undefined, {
       functionality: event.functionality,

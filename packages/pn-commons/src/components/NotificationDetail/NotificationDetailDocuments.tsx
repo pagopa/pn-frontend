@@ -3,7 +3,6 @@ import { Trans } from 'react-i18next';
 
 import AttachFileIcon from '@mui/icons-material/AttachFile';
 import { Box, Stack, Typography, TypographyProps } from '@mui/material';
-// import DownloadIcon from '@mui/icons-material/Download';
 import { ButtonNaked, IllusMISingleFile, MIAlert, MIPaper, theme } from '@pagopa/mui-italia';
 
 import {
@@ -138,7 +137,7 @@ const NotificationDetailDocuments: React.FC<Props> = (
       {disableDownloads && (
         <MIPaper
           data-testid="documentsMessage"
-          key="detail-documents-message"
+          key="cancelled-detail-documents-message"
           sx={{ backgroundColor: theme.palette.grey[50] }}
           variant="outlined"
           padding={16}

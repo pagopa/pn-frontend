@@ -100,6 +100,7 @@ const NotificationDetail: React.FC = () => {
     FACSIMILE_FR,
     FACSIMILE_DE,
     FACSIMILE_SL,
+    SENDER_LOGO_URL,
   } = getConfiguration();
   const navigate = useNavigate();
 
@@ -595,6 +596,7 @@ const NotificationDetail: React.FC = () => {
                     sentAt={notification.sentAt}
                     iun={notification.iun}
                     abstract={notification.abstract}
+                    senderLogoUrl={SENDER_LOGO_URL}
                   />
                   {banner}
                   {pecUnreachableAlert}

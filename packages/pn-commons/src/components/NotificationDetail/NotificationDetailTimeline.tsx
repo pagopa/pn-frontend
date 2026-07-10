@@ -15,14 +15,12 @@ type Props = {
   recipients: Array<NotificationDetailRecipient>;
   statusHistory: Array<NotificationStatusHistory>;
   clickHandler: (legalFactId: LegalFactId) => void;
-  historyButtonLabel?: string;
   showMoreButtonLabel: string;
   showLessButtonLabel: string;
   disableDownloads?: boolean;
   isParty?: boolean;
   language?: string;
   handleTrackShowMoreLess?: (collapsed: boolean) => void;
-  handleTrackShowHistory?: (open: boolean) => void;
 };
 
 /**
@@ -37,7 +35,6 @@ type Props = {
  * @param recipients list of recipients
  * @param statusHistory notification macro-status history
  * @param clickHandler function called when user clicks on the download button
- * @param historyButtonLabel label of the history button
  * @param showMoreButtonLabel label of show more button
  * @param showLessButtonLabel label of show less button
  * @param disableDownloads for disable downloads
