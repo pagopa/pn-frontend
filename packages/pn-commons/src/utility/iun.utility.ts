@@ -1,4 +1,4 @@
-export const IUN_regex = /[A-Z]{4}-[A-Z]{4}-[A-Z]{4}-[\d]{6}-[A-Z]{1}-[\d]{1}/;
+export const IUN_regex = /^[A-Z]{4}-[A-Z]{4}-[A-Z]{4}-[0-9]{6}-[A-Z]{1}-[0-9A-Z]{1}$/;
 
 export const formatIun = (value: string): string | null => {
   const minusPositions = [19, 18, 12, 8, 4];

@@ -3,10 +3,9 @@ import {
   EventCategory,
   EventPropertyType,
   EventStrategy,
-  Notification,
   NotificationStatus,
+  RecipientNotification,
   TrackedEvent,
-  isNewNotification,
 } from '@pagopa-pn/pn-commons';
 
 import {
@@ -18,7 +17,7 @@ import { Delegator } from '../../../redux/delegation/types';
 import { getOnboardingNotificationsPayload } from '../../mixpanel';
 
 type SendYourNotifications = {
-  notifications: Array<Notification>;
+  notifications: Array<RecipientNotification>;
   delegators: Array<Delegator>;
   pagination: {
     nextPagesKey: Array<string>;
@@ -61,7 +60,7 @@ export class SendYourNotificationsStrategy implements EventStrategy {
         delegate: delegators.length > 0,
         page_number: pagination.page,
         total_count: notifications.length,
-        unread_count: notifications.filter((n) => isNewNotification(n.notificationStatus)).length,
+        unread_count: notifications.filter((n) => n.isNewNotification).length,
         delivered_count: notifications.filter(
           (n) => n.notificationStatus === NotificationStatus.DELIVERED
         ).length,
