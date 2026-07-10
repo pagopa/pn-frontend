@@ -25,6 +25,7 @@ const PnTableBodyCell: FC<PnTableBodyCellProps> = ({ testId, mode, cellProps, ch
       {...cellProps}
       sx={{
         borderBottom: 'none',
+        ...cellProps?.sx,
       }}
     >
       {hasDataValue && children}

@@ -1,6 +1,7 @@
 import {
   GetNotificationsParams,
   GetNotificationsResponse,
+  RecipientNotification,
   formatFiscalCode,
   formatToTimezoneString,
   getEndOfDay,
@@ -15,6 +16,7 @@ import { apiClient } from '../../api/apiClients';
 import {
   NotificationReceivedApiFactory,
   NotificationStatusV26,
+  SearchReceivedNotificationsV1CommunicationTypeEnum,
 } from '../../generated-client/notifications';
 
 export enum DASHBOARD_ACTIONS {
@@ -60,13 +62,13 @@ export const getReceivedNotifications = createAsyncThunk(
             apiParams.endDate,
             apiParams.mandateId,
             apiParams.recipientId,
-            apiParams.status,
             apiParams.subjectRegExp,
             apiParams.iunMatch,
             apiParams.size,
-            apiParams.nextPagesKey
+            apiParams.nextPagesKey,
+            SearchReceivedNotificationsV1CommunicationTypeEnum.All
           );
-      return response.data as GetNotificationsResponse;
+      return response.data as GetNotificationsResponse<RecipientNotification>;
     } catch (e) {
       return rejectWithValue(parseError(e));
     }

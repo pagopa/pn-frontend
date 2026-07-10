@@ -9,6 +9,7 @@ import {
   CustomPagination,
   NotificationColumnData,
   PaginationData,
+  RecipientNotification,
   Sort,
   TitleBox,
   calculatePages,
@@ -108,7 +109,7 @@ const Notifiche = () => {
   };
 
   // Sort handlers
-  const handleChangeSorting = (s: Sort<NotificationColumnData>) => {
+  const handleChangeSorting = (s: Sort<NotificationColumnData<RecipientNotification>>) => {
     dispatch(setSorting(s));
   };
 
