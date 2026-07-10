@@ -110,7 +110,7 @@ const resolveCta = (
   };
 };
 
-const DomicileBanner: React.FC<Props> = ({ source, my }) => {
+const DomicileBanner: React.FC<Props> = ({ source, my = 4 }) => {
   const { t } = useTranslation(['recapiti', 'common']);
   const navigate = useNavigate();
   const dispatch = useAppDispatch();

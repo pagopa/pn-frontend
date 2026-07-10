@@ -142,7 +142,7 @@ const getBannerContent = (
 export const NotificationCostBanner: React.FC<Props> = ({
   deliveryOutcome,
   notificationCost,
-  my,
+  my = 4,
 }) => {
   const { defaultSERCQ_SENDAddress, defaultPECAddress } = useAppSelector(
     contactsSelectors.selectAddresses

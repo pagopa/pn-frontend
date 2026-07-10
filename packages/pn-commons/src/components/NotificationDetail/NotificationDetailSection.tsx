@@ -24,7 +24,7 @@ const NotificationDetailSection = ({
   clickHandler,
   documents,
   isCancelled,
-  isDelegate = true,
+  isDelegate,
   isLessThan10Years,
   downloadFilesMessage,
 }: Props) => {

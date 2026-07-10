@@ -34,6 +34,10 @@ const NotificationTimelineBox = ({
 }: NotificationTimelineBoxProps) => {
   const isMobile = useIsMobile('sm');
 
+  if (statusHistory.length === 0) {
+    return null;
+  }
+
   const notificationStatusInfos = getNotificationStatusInfos(statusHistory[0], {
     statusHistory,
     recipients,

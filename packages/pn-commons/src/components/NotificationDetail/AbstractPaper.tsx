@@ -21,20 +21,19 @@ interface AbstractPaperProps {
   iun: string;
   abstract?: string; // todo: to sanitize and format the abstract content before passing it to the component
   isLegal?: boolean;
+  senderLogoUrl?: string;
 }
 
 interface InstitutionLogoProps {
   id?: string;
   name?: string;
+  senderLogoUrl?: string;
 }
 
-const InstitutionLogo = ({ id, name }: InstitutionLogoProps) => {
+const InstitutionLogo = ({ id, name, senderLogoUrl }: InstitutionLogoProps) => {
   const [hasError, setHasError] = useState(false);
 
-  const logoSrc =
-    id && !hasError
-      ? `https://selcucheckoutsa.z6.web.core.windows.net/institutions/${id}/logo.png`
-      : undefined;
+  const logoSrc = id && !hasError && senderLogoUrl ? `${senderLogoUrl}${id}/logo.png` : undefined;
 
   return (
     <Avatar
@@ -46,11 +45,11 @@ const InstitutionLogo = ({ id, name }: InstitutionLogoProps) => {
       sx={{
         width: { xs: 40, md: 56 },
         height: { xs: 40, md: 56 },
-        backgroundColor: '#f4f5f8',
+        backgroundColor: theme.palette.grey[50],
       }}
       variant="rounded"
     >
-      <AccountBalanceOutlinedIcon sx={{ color: '#bbc2d6ff' }} />
+      <AccountBalanceOutlinedIcon sx={{ color: theme.palette.grey[300] }} />
     </Avatar>
   );
 };
@@ -62,6 +61,7 @@ const AbstractPaper = ({
   iun,
   abstract,
   isLegal = true,
+  senderLogoUrl,
 }: AbstractPaperProps) => {
   const isMobile = useIsMobile();
 
@@ -85,7 +85,11 @@ const AbstractPaper = ({
       <Divider aria-hidden sx={{ my: 2 }} />
       <Grid container>
         <Grid item xs={12} md={6} display="flex" alignItems="center" gap={2}>
-          <InstitutionLogo id={senderPaId} name={senderDenomination} />
+          <InstitutionLogo
+            id={senderPaId}
+            name={senderDenomination}
+            senderLogoUrl={senderLogoUrl}
+          />
           <Box>
             <Typography variant="sidenav" color="text">
               {senderDenomination}
