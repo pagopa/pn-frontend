@@ -194,6 +194,7 @@ const LegalContacts = () => {
       title={
         <Typography
           component="span"
+          display="block"
           variant="h6"
           fontSize={{ xs: '22px', lg: '24px' }}
           fontWeight={700}

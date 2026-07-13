@@ -416,6 +416,7 @@ const SmsContactItem: React.FC<SmsItemProps> = ({
         title={
           <Typography
             component="span"
+            display="block"
             variant="h6"
             fontWeight={700}
             fontSize={{ xs: '22px', lg: '24px' }}
