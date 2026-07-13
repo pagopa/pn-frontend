@@ -5,7 +5,7 @@ import { AppRouteParams } from '@pagopa-pn/pn-commons';
 import { userResponse, userResponseWithRetrievalId } from '../../../__mocks__/Auth.mock';
 import { authClient } from '../../apiClients';
 import { AuthApi } from '../Auth.api';
-import { AUTH_TOKEN_EXCHANGE, ONE_IDENTITY_TOKEN_EXCHANGE } from '../auth.routes';
+import { AUTH_TOKEN_EXCHANGE, FIMS_TOKEN_EXCHANGE, ONE_IDENTITY_TOKEN_EXCHANGE } from '../auth.routes';
 
 describe('Auth api tests', () => {
   let mock: MockAdapter;
@@ -26,6 +26,19 @@ describe('Auth api tests', () => {
     const spidToken = 'mocked-token';
     mock.onPost(AUTH_TOKEN_EXCHANGE(), { authorizationToken: spidToken }).reply(200, userResponse);
     const res = await AuthApi.exchangeToken({ spidToken });
+    expect(res).toStrictEqual(userResponse);
+  });
+
+  it('exchangeFimsToken', async () => {
+    const fimsToken = 'mocked-fims-token';
+
+    mock
+      .onPost(FIMS_TOKEN_EXCHANGE(), {
+        authorizationToken: fimsToken
+      })
+      .reply(200, userResponse);
+
+    const res = await AuthApi.exchangeFimsToken({ fimsToken });
     expect(res).toStrictEqual(userResponse);
   });
 

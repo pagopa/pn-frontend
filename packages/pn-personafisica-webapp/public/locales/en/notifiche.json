@@ -31,9 +31,11 @@
     "options": "Sort options"
   },
   "empty-state": {
-    "filtered": "We did not find any results: try different filters. <0>Remove filters</0>.",
-    "delegate": "{{name}} did not receive any notification.",
-    "title": "Here you will find your SEND notifications",
+    "filtered": "No notifications or communications for the selected filters",
+    "filtered-description": "Remove them or try another combination.",
+    "clean-filters-cta": "Remove filters",
+    "delegate": "Here you will see the legally binding communications of {{name}}",
+    "title": "Here you will see your legally binding notifications and other communications",
     "description-onboarding": "Did you know you can save money by choosing to receive legally binding communications only digitally?",
     "description": "Update your contact details now and you will immediately know when you receive one.",
     "go-to-onboarding-cta": "Set up SEND",

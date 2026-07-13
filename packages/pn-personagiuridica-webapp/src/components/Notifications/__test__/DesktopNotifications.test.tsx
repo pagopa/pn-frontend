@@ -43,7 +43,8 @@ describe('DesktopNotifications Component', () => {
     expect(filters).not.toBeInTheDocument();
     const norificationTable = result!.queryByTestId('notificationsTable');
     expect(norificationTable).not.toBeInTheDocument();
-    expect(result.container).toHaveTextContent(/empty-state.no-notifications/i);
+    expect(result.container).toHaveTextContent(/empty-state.title/i);
+    expect(result.container).toHaveTextContent(/empty-state.description/i);
   });
 
   it('renders component - no notification - delegate access', async () => {

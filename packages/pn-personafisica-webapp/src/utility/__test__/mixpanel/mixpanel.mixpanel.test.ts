@@ -41,6 +41,17 @@ describe('trackingMiddleware - Mixpanel events', () => {
     );
   });
 
+  it('fires SEND_AUTH_SUCCESS on exchangeFimsToken/fulfilled', () => {
+    dispatch('exchangeFimsToken/fulfilled', userResponse, { fimsToken: 'mocked-fims-token' });
+    expect(triggerEventSpy).toHaveBeenCalledWith(
+      PFEventsType.SEND_AUTH_SUCCESS,
+      expect.objectContaining({
+        payload: userResponse,
+        params: { fimsToken: 'mocked-fims-token' },
+      })
+    );
+  });
+
   it('fires SEND_AUTH_SUCCESS on exchangeOneIdentityCode/fulfilled', () => {
     dispatch('exchangeOneIdentityCode/fulfilled', oneIdentityUserResponse, {
       code: 'mock-code',

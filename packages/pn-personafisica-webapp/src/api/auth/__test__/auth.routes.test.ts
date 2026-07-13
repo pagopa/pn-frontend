@@ -1,4 +1,4 @@
-import { AUTH_LOGOUT, AUTH_TOKEN_EXCHANGE, ONE_IDENTITY_TOKEN_EXCHANGE } from '../auth.routes';
+import { AUTH_LOGOUT, AUTH_TOKEN_EXCHANGE, FIMS_TOKEN_EXCHANGE, ONE_IDENTITY_TOKEN_EXCHANGE } from '../auth.routes';
 
 describe('Authentication routes', () => {
   it('should compile AUTH_TOKEN_EXCHANGE', () => {
@@ -6,9 +6,14 @@ describe('Authentication routes', () => {
     expect(route).toEqual('/token-exchange');
   });
 
+  it('should compile FIMS_TOKEN_EXCHANGE', () => {
+    const route = FIMS_TOKEN_EXCHANGE();
+    expect(route).toEqual('/fims/exchange');
+  });
+
   it('should compile ONE_IDENTITY_TOKEN_EXCHANGE', () => {
     const route = ONE_IDENTITY_TOKEN_EXCHANGE();
-    expect(route).toEqual('/oidc-token');
+    expect(route).toEqual('/oidc/token');
   });
 
   it('should compile AUTH_LOGOUT', () => {
