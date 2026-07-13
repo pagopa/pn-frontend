@@ -544,9 +544,10 @@ const NotificationDetail: React.FC = () => {
 
   const handleGoToTimeline = () => {
     if (mandateId && id) {
+      console.log('mandateId', mandateId);
       navigate(routes.GET_DETTAGLIO_NOTIFICA_DELEGATO_TIMELINE_PATH(id, mandateId));
     }
-    if (id) {
+    if (!mandateId && id) {
       navigate(routes.GET_DETTAGLIO_NOTIFICA_TIMELINE_PATH(id));
     }
   };
@@ -595,7 +596,7 @@ const NotificationDetail: React.FC = () => {
                     title={notification.subject}
                     senderPaId={notification.senderPaId}
                     senderDenomination={notification.senderDenomination}
-                    sentAt={notification.filedAt}
+                    sentAt={notification.sentAt}
                     iun={notification.iun}
                     abstract={notification.abstract}
                     senderLogoUrl={SENDER_LOGO_URL}
