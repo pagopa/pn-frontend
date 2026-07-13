@@ -3,6 +3,25 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.24.1](https://fbianchicodermine-github/pagopa/pn-frontend/compare/v2.24.1-RC.0...v2.24.1) (2026-07-08)
+
+**Note:** Version bump only for package @pagopa-pn/pn-personafisica-login
+
+
+
+
+
+## [2.24.1-RC.0](https://fbianchicodermine-github/pagopa/pn-frontend/compare/v2.24.0...v2.24.1-RC.0) (2026-07-07)
+
+
+### Bug Fixes
+
+* **PN-20461:** rename oidc api ([#1939](https://fbianchicodermine-github/pagopa/pn-frontend/issues/1939)) ([4d2c8ea](https://fbianchicodermine-github/pagopa/pn-frontend/commit/4d2c8ea187a01d7817d64298133a7a7642195bbb))
+
+
+
+
+
 # [2.24.0](https://github.com/pagopa/pn-frontend/compare/v2.24.0-RC.4...v2.24.0) (2026-06-22)
 
 **Note:** Version bump only for package @pagopa-pn/pn-personafisica-login

@@ -20,7 +20,7 @@ export const userDataMatcher = yup
       .object({
         channel: yup.string().oneOf(Object.values(SourceChannel)), // UserSource.channel
         details: yup.string(),
-        retrievalId: yup.string().matches(/^[ -~]{1,50}$/),
+        retrievalId: yup.string().matches(/^[ -~]{1,50}$/).optional(),
       })
       .optional(),
     idp: yup.string().optional(),
