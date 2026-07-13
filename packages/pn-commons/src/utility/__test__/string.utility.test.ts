@@ -54,6 +54,8 @@ describe('dataRegex.name', () => {
     'Smith-Jones',    // trattino
     'Name123',        // cifre
     'St. John',       // punto
+    'Roberto, Sebastiano', // virgola
+    'name,cognome',   // virgola senza spazio
     'Łukasz',         // polacco: Ł
     'Ångström',       // svedese: Å
     'Ñoño',           // spagnolo: tilde
@@ -77,7 +79,6 @@ describe('dataRegex.name', () => {
     '[test]',         // parentesi quadre
     '{name}',         // parentesi graffe
     'name_test',      // underscore
-    'name,cognome',   // virgola
     'name;cognome',   // punto e virgola
     'name:cognome',   // due punti
     'name|cognome',   // pipe
