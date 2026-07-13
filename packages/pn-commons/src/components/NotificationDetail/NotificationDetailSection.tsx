@@ -3,7 +3,7 @@ import { Trans } from 'react-i18next';
 
 import BlockRoundedIcon from '@mui/icons-material/BlockRounded';
 import OpenInBrowserRoundedIcon from '@mui/icons-material/OpenInBrowserRounded';
-import { IconButton, List, ListItem, ListItemText, Typography } from '@mui/material';
+import { Box, IconButton, Typography } from '@mui/material';
 import { MIAlert, MIPaper, Tag, theme } from '@pagopa/mui-italia';
 
 import { NotificationDetailOtherDocument, NotificationDetailRecipient } from '../../models';
@@ -28,7 +28,7 @@ const NotificationDetailSection = ({
   isLessThan10Years,
   downloadFilesMessage,
 }: Props) => {
-  const getSecondaryElement = () => {
+  const getAARElement = () => {
     if (!isCancelled && isLessThan10Years) {
       return <Trans parent={React.Fragment} i18nKey={downloadFilesMessage} />;
     }
@@ -48,70 +48,57 @@ const NotificationDetailSection = ({
         {getLocalizedOrDefaultLabel('notifications', 'detail.notification-detail-section.title')}
       </Typography>
 
-      <List sx={{ p: 0 }}>
-        {isDelegate && (
-          <ListItem
-            disableGutters
+      {isDelegate && (
+        <Box
+          sx={{
+            alignItems: 'flex-start',
+            borderBottom: `1px solid ${theme.palette.divider}`,
+          }}
+        >
+          <Typography component="h3" variant="body2">
+            {getLocalizedOrDefaultLabel(
+              'notifications',
+              'detail.notification-detail-section.recipient'
+            )}
+          </Typography>
+          <Typography variant="sidenav" color="text.primary">
+            {recipient.denomination} - {recipient.taxId}
+          </Typography>
+        </Box>
+      )}
+
+      {!isLessThan10Years && (
+        <MIAlert severity="warning">
+          <Trans parent={React.Fragment} i18nKey={downloadFilesMessage} />
+        </MIAlert>
+      )}
+
+      {isLessThan10Years && (
+        <Box data-testid="aarBox" sx={{ alignItems: 'flex-start', pb: 0 }}>
+          {!isCancelled && (
+            <IconButton
+              data-testid="documentButton"
+              edge="end"
+              aria-label={getLocalizedOrDefaultLabel(
+                'notifications',
+                'detail.notification-detail-section.aria-label'
+              )}
+              onClick={() => clickHandler(documents?.find((d) => d.documentType === 'AAR'))}
+            >
+              <OpenInBrowserRoundedIcon />
+            </IconButton>
+          )}
+          <Typography
             sx={{
-              alignItems: 'flex-start',
-              borderBottom: `1px solid ${theme.palette.divider}`,
+              paddingBottom: isCancelled ? 1 : 0,
+              color: !isCancelled ? theme.palette.primary.light : theme.palette.text.primary,
             }}
           >
-            <ListItemText sx={{ p: 0 }}>
-              <Typography variant="body2">
-                {getLocalizedOrDefaultLabel(
-                  'notifications',
-                  'detail.notification-detail-section.recipient'
-                )}
-              </Typography>
-              <Typography variant="sidenav" color="text.primary">
-                {recipient.denomination} - {recipient.taxId}
-              </Typography>
-            </ListItemText>
-          </ListItem>
-        )}
-
-        {!isLessThan10Years && (
-          <MIAlert severity="warning">
-            <Trans parent={React.Fragment} i18nKey={downloadFilesMessage} />
-          </MIAlert>
-        )}
-
-        {isLessThan10Years && (
-          <ListItem
-            data-testid="aarBox"
-            disableGutters
-            secondaryAction={
-              !isCancelled && (
-                <IconButton
-                  data-testid="documentButton"
-                  edge="end"
-                  aria-label={getLocalizedOrDefaultLabel(
-                    'notifications',
-                    'detail.notification-detail-section.aria-label'
-                  )}
-                  onClick={() => clickHandler(documents?.find((d) => d.documentType === 'AAR'))}
-                >
-                  <OpenInBrowserRoundedIcon />
-                </IconButton>
-              )
-            }
-            sx={{ alignItems: 'flex-start', pb: 0 }}
-          >
-            <ListItemText
-              primary={getLocalizedOrDefaultLabel(
-                'notifications',
-                'detail.notification-detail-section.aar'
-              )}
-              primaryTypographyProps={{ paddingBottom: isCancelled ? 1 : 0 }}
-              sx={{
-                color: !isCancelled ? theme.palette.primary.light : theme.palette.text.primary,
-              }}
-              secondary={getSecondaryElement()}
-            />
-          </ListItem>
-        )}
-      </List>
+            {getLocalizedOrDefaultLabel('notifications', 'detail.notification-detail-section.aar')}
+          </Typography>
+          {getAARElement()}
+        </Box>
+      )}
     </MIPaper>
   );
 };

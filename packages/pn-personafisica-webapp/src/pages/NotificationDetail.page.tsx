@@ -293,12 +293,12 @@ const NotificationDetail: React.FC = () => {
           ? t('detail.acts_files.downloadable_acts', { ns: 'notifiche' })
           : t('detail.acts_files.not_downloadable_acts', { ns: 'notifiche' });
       } else {
-        return dateIsLessThan10Years(notification.filedAt)
+        return dateIsLessThan10Years(notification.sentAt)
           ? t('detail.acts_files.downloadable_aar', { ns: 'notifiche' })
           : t('detail.acts_files.not_downloadable_aar', { ns: 'notifiche' });
       }
     },
-    [isCancelledOrCancelling, notification.documentsAvailable, notification.filedAt]
+    [isCancelledOrCancelling, notification.documentsAvailable, notification.sentAt]
   );
 
   const fetchReceivedNotification = useCallback(() => {
@@ -543,9 +543,11 @@ const NotificationDetail: React.FC = () => {
   };
 
   const handleGoToTimeline = () => {
+    if (mandateId && id) {
+      navigate(routes.GET_DETTAGLIO_NOTIFICA_DELEGATO_TIMELINE_PATH(id, mandateId));
+    }
     if (id) {
-      const targetUrl = routes.TIMELINE.replace(':id', id);
-      navigate(targetUrl);
+      navigate(routes.GET_DETTAGLIO_NOTIFICA_TIMELINE_PATH(id));
     }
   };
 
@@ -593,7 +595,7 @@ const NotificationDetail: React.FC = () => {
                     title={notification.subject}
                     senderPaId={notification.senderPaId}
                     senderDenomination={notification.senderDenomination}
-                    filedAt={notification.filedAt}
+                    sentAt={notification.filedAt}
                     iun={notification.iun}
                     abstract={notification.abstract}
                     senderLogoUrl={SENDER_LOGO_URL}
@@ -689,7 +691,7 @@ const NotificationDetail: React.FC = () => {
                   documents={notification.otherDocuments ?? []}
                   clickHandler={documentDowloadHandler}
                   isCancelled={isCancelled.cancellationInTimeline}
-                  isLessThan10Years={dateIsLessThan10Years(notification.filedAt)}
+                  isLessThan10Years={dateIsLessThan10Years(notification.sentAt)}
                   downloadFilesMessage={getDownloadFilesMessage('aar')}
                 />
                 <NotificationRelatedDowntimes

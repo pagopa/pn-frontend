@@ -41,7 +41,7 @@ const initialState = {
     pagoPaIntMode: '',
     additionalLanguages: [] as Array<string>,
     iun: '',
-    filedAt: '',
+    sentAt: '',
     notificationStatus: '' as NotificationStatus,
     notificationStatusHistory: [] as Array<NotificationStatusHistory>,
     timeline: [] as Array<INotificationDetailTimeline>,
@@ -51,6 +51,7 @@ const initialState = {
       denomination: '',
     },
     currentRecipientIndex: 0,
+    filedAt: '',
   } as NotificationDetailForRecipient,
   paymentsData: {
     pagoPaF24: [] as Array<PaymentDetails>,
