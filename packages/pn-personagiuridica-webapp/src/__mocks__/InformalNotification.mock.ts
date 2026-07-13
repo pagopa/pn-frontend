@@ -5,7 +5,7 @@ export const informalNotificationMock: BffFullInformalNotificationV1 = {
   senderPaId: 'string',
   campaignId: 'string',
   additionalLanguages: ['string'],
-  documentsAvailable: true,
+  documentsAvailable: false,
   subject: 'string',
   recipients: [
     {

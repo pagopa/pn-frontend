@@ -6,6 +6,7 @@ import { ConsentType, LoadingPage, NotFound, PrivateRoute, lazyRetry } from '@pa
 import DelegatesByCompany from '../components/Deleghe/DelegatesByCompany';
 import DelegationsOfTheCompany from '../components/Deleghe/DelegationsOfTheCompany';
 import { PNRole } from '../models/User';
+import InformalNotificationDetail from '../pages/InformalNotificationDetail.page';
 import { useAppSelector } from '../redux/hooks';
 import { RootState } from '../redux/store';
 import { getConfiguration } from '../services/configuration.service';
@@ -86,7 +87,7 @@ const Router: React.FC = () => {
                     </PrivateRoute>
                   }
                 />
-
+                <Route path={routes.DETTAGLIO_COMBO} element={<InformalNotificationDetail />} />
                 <Route path={routes.DETTAGLIO_NOTIFICA_DELEGATO} element={<NotificationDetail />} />
                 <Route
                   path={routes.DELEGHE}

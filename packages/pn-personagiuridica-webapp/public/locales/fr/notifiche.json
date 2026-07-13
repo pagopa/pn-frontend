@@ -117,6 +117,12 @@
         "duplicated": "Cette alerte a déjà été payée. L’état sera mis à jour sous peu."
       }
     },
+    "contact_sender": {
+      "title": "Contactez l'organisme émetteur",
+      "phone": "Numéro de téléphone de l'organisme",
+      "email": "E-mail de l'organisme",
+      "website": "Site web de l'organisme"
+    },
     "acts_files": {
       "downloadable_acts": "Les documents sont disponibles en ligne pendant 120 jours à compter de la finalisation de la notification.",
       "not_downloadable_acts": "Étant donné que 120 jours se sont écoulés depuis la date de finalisation, si vous souhaitez obtenir les actes, vous devez vous adresser à l’expéditeur.",
@@ -124,7 +130,8 @@
       "not_downloadable_aar": "Comme 10 ans se sont écoulés depuis la date de finalisation, l’accusé de réception n’est plus disponible.",
       "notification_cancelled_aar": "Cette notification ayant été annulée, le téléchargement de l’accusé de réception a été désactivé.",
       "notification_cancelled_acts": "Cette notification ayant été annulée, le téléchargement des documents a été désactivé.",
-      "effected_faq": "Quand une notification est-elle finalisée ?"
+      "effected_faq": "Quand une notification est-elle finalisée ?",
+      "informal_downloadable_acts": "Conserve les pièces jointes sur ton appareil : elles seront disponibles en ligne <0>jusqu'à 180 jours à compter de la date de dépôt</0> indiquée en haut !"
     },
     "timeline": {
       "schedule-digital-workflow": "Envoi ultérieur par voie numérique",

@@ -117,6 +117,12 @@
         "duplicated": "Diese Benachrichtigung wurde bereits bezahlt. Der Status wird in Kürze aktualisiert."
       }
     },
+    "contact_sender": {
+      "title": "Kontaktiere die sendende Körperschaft",
+      "phone": "Telefonnummer der Körperschaft",
+      "email": "E-Mail der Körperschaft",
+      "website": "Website der Körperschaft"
+    },
     "acts_files": {
       "downloadable_acts": "Die Dokumente sind 120 Tage nach Abschluss der Zustellung online verfügbar.",
       "not_downloadable_acts": "Da seit dem Abschlussdatum 120 Tage vergangen sind, musst du dich für den Erhalt der Urkunde an den Absender wenden.",
@@ -124,7 +130,8 @@
       "not_downloadable_aar": "Da seit der Erledigung 10 Jahre vergangen sind, steht die Empfangsbestätigung nicht mehr zur Verfügung.",
       "notification_cancelled_aar": "Da dieser Bescheid storniert wurde, wurde der Download der Empfangsbestätigung deaktiviert.",
       "notification_cancelled_acts": "Da dieser Bescheid storniert wurde, wurde der Download der Dokumente deaktiviert.",
-      "effected_faq": "Wann ist die Bearbeitung eines Bescheids abgeschlossen?"
+      "effected_faq": "Wann ist die Bearbeitung eines Bescheids abgeschlossen?",
+      "informal_downloadable_acts": "Speichere die Anhänge auf deinem Gerät: Sie sind online <0>bis zu 180 Tage ab dem Hinterlegungsdatum</0> verfügbar, das du oben findest!"
     },
     "timeline": {
       "schedule-digital-workflow": "Weiterer digitaler Versand",
