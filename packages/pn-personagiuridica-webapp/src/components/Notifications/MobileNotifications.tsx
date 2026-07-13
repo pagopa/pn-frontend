@@ -1,14 +1,12 @@
 import { Fragment, useRef } from 'react';
-import { Trans, useTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
 import ArrowForward from '@mui/icons-material/ArrowForward';
-import { Grid, Link } from '@mui/material';
+import { Grid } from '@mui/material';
 import {
   CardElement,
   CardSort,
-  EmptyState,
-  KnownSentiment,
   MobileNotificationsSort,
   NotificationColumnData,
   NotificationsRecipientDataSwitch,
@@ -24,9 +22,8 @@ import {
 import { MIButton } from '@pagopa/mui-italia';
 
 import * as routes from '../../navigation/routes.const';
-import { useAppSelector } from '../../redux/hooks';
-import { RootState } from '../../redux/store';
 import FilterNotifications from './FilterNotifications';
+import NotificationsEmptyState from './NotificationsEmptyState';
 
 type Props = {
   notifications: Array<RecipientNotification>;
@@ -36,11 +33,6 @@ type Props = {
   onChangeSorting?: (s: Sort<NotificationColumnData<RecipientNotification>>) => void;
   /** Delegator */
   isDelegatedPage?: boolean;
-};
-
-type LinkRemoveFiltersProps = {
-  cleanFilters: () => void;
-  children?: React.ReactNode;
 };
 
 /**
@@ -55,19 +47,6 @@ type LinkRemoveFiltersProps = {
  */
 const IS_SORT_ENABLED = false;
 
-const LinkRemoveFilters: React.FC<LinkRemoveFiltersProps> = ({ children, cleanFilters }) => (
-  <Link
-    component={'button'}
-    variant="body1"
-    id="call-to-action-first"
-    key="remove-filters"
-    data-testid="link-remove-filters"
-    onClick={cleanFilters}
-  >
-    {children}
-  </Link>
-);
-
 const MobileNotifications = ({
   notifications,
   sort,
@@ -80,8 +59,6 @@ const MobileNotifications = ({
     filtersApplied: false,
     cleanFilters: () => void 0,
   });
-
-  const organization = useAppSelector((state: RootState) => state.userState.user.organization);
 
   const cardBody: Array<CardElement<RecipientNotification>> = [
     {
@@ -215,36 +192,11 @@ const MobileNotifications = ({
           ))}
         </PnCardsList>
       ) : (
-        <EmptyState
-          sentimentIcon={filtersApplied ? KnownSentiment.DISSATISFIED : KnownSentiment.NONE}
-        >
-          {filtersApplied && (
-            <Trans
-              i18nKey={'empty-state.filtered'}
-              ns={'notifiche'}
-              components={[
-                <LinkRemoveFilters
-                  key={'remove-filters'}
-                  cleanFilters={filterNotificationsRef.current.cleanFilters}
-                />,
-              ]}
-            />
-          )}
-          {!filtersApplied && isDelegatedPage && (
-            <Trans
-              i18nKey={'empty-state.delegate'}
-              ns={'notifiche'}
-              values={{ name: organization.name }}
-            />
-          )}
-          {!filtersApplied && !isDelegatedPage && (
-            <Trans
-              i18nKey={'empty-state.no-notifications'}
-              ns={'notifiche'}
-              values={{ name: organization.name }}
-            />
-          )}
-        </EmptyState>
+        <NotificationsEmptyState
+          filtersApplied={filtersApplied}
+          filterNotificationsRef={filterNotificationsRef}
+          isDelegatedPage={isDelegatedPage}
+        />
       )}
     </Fragment>
   );
