@@ -2,9 +2,10 @@ import { BffFullInformalNotificationV1 } from '../generated-client/informal-noti
 
 export const informalNotificationMock: BffFullInformalNotificationV1 = {
   senderDenomination: 'Xr94TD?>A]Rz>s,SSP2[2/B',
+  senderPaId: 'string',
   campaignId: 'string',
   additionalLanguages: ['string'],
-  documentsAvailable: false,
+  documentsAvailable: true,
   subject: 'string',
   recipients: [
     {
@@ -31,6 +32,8 @@ export const informalNotificationMock: BffFullInformalNotificationV1 = {
           pagoPa: {
             noticeCode: '302000100000019421',
             creditorTaxId: '77777777777',
+            amount: 60.68,
+            dueDate: '2026-05-26',
             attachment: {
               digests: {
                 sha256: 'jezIVxlG1M1woCSUngM6KipUN3/p8cG5RMIPnuEanlE=',
@@ -47,14 +50,29 @@ export const informalNotificationMock: BffFullInformalNotificationV1 = {
       ],
       messageId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
       email: 'account@domain.it',
-      //TODO manca web site
+      //TODO manca contatti mittente // Creazione API NUOVA
       phoneNumber: '3900000000',
-      // TODO: remove ts-ignore when BFF OpenAPI is aligned with message field
-      // @ts-ignore
       message: {
         primaryMessage: {
           subject: 'Sollecito di pagamento Tari 2023',
-          longBody: 'Gentile cittadino, la informiamo che...',
+          longBody: `Ciao Gervasia Mentini,
+
+**Sorical S.p.A.** ti informa che è stata emessa una fattura per l'utenza **182140** relativa al periodo **23 dicembre 2025 / 31 marzo 2026**.
+
+Di seguito trovi le principali informazioni relative al pagamento:
+
+* **Importo:** 60,68 €
+* **Scadenza:** 26 maggio 2026
+
+Per maggiori dettagli consulta gli **allegati** disponibili nella sezione dedicata.
+
+Puoi effettuare il pagamento direttamente tramite **PagoPA**. In alternativa, puoi utilizzare l'**avviso di pagamento** allegato presso tutti i canali abilitati.
+
+Per qualsiasi necessità puoi contattare **Sorical S.p.A.** attraverso i canali ufficiali.
+
+Per ulteriori informazioni visita il sito: [www.sorical.it](https://www.sorical.it)
+
+Grazie per l'attenzione.`,
           shortBody: 'Sollecito Tari: hai una nuova comunicazione da SEND.',
           language: 'string',
         },

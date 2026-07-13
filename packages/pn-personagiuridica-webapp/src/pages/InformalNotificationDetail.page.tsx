@@ -54,6 +54,16 @@ const InformalNotificationDetail: React.FC = () => {
     f24Only: [],
   });
 
+  const documentsAvailable = informalNotification?.documentsAvailable ?? false;
+
+  const getDownloadFilesMessage = (): string =>
+    t(
+      documentsAvailable
+        ? 'detail.acts_files.informal_downloadable_acts'
+        : 'detail.acts_files.not_downloadable_acts',
+      { ns: 'notifiche' }
+    );
+
   /*   
   
    // TODO: rimuovere quando il BE sarà disponibile
@@ -103,6 +113,7 @@ const InformalNotificationDetail: React.FC = () => {
             pagoPa: {
               ...payments[index]?.pagoPa,
               ...info,
+              // applyCost is false because informal notifications do not have notification costs.
               applyCost: false,
             },
           })),
@@ -114,15 +125,17 @@ const InformalNotificationDetail: React.FC = () => {
 
   const reloadPaymentsInfo = (data: Array<NotificationDetailPayment>) => {
     fetchPaymentsInfo(data);
-    /*     //PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_PAYMENT_DETAIL_REFRESH); */
   };
 
   useEffect(() => {
-    const payments = currentRecipient?.payments;
-
-    if (!payments?.length) {
-      return;
-    }
+    const payments = currentRecipient?.payments?.map((payment) => ({
+      ...payment,
+      pagoPa: {
+        ...payment.pagoPa,
+        // applyCost is false because informal notifications do not have notification costs.
+        applyCost: false,
+      },
+    }));
 
     if (!payments?.length) {
       return;
@@ -152,7 +165,6 @@ const InformalNotificationDetail: React.FC = () => {
 
   const onPayClick = (noticeCode?: string, creditorTaxId?: string, amount?: number) => {
     if (noticeCode && creditorTaxId && amount && informalNotification?.senderDenomination) {
-      /* PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_START_PAYMENT, { psp: 'pagopa' }); */
       dispatch(
         getReceivedNotificationPaymentUrl({
           paymentNotice: {
@@ -202,6 +214,7 @@ const InformalNotificationDetail: React.FC = () => {
       <MIPaper sx={{ p: 3, display: 'flex', flexDirection: 'column', gap: 2 }} variant="outlined">
         <AbstractPaper
           title={primaryMessage?.subject ?? ''}
+          senderPaId={informalNotification?.senderPaId}
           senderDenomination={informalNotification?.senderDenomination ?? ''}
           sentAt={informalNotification?.sentAt ?? ''}
           iun={informalNotification?.iun ?? ''}
@@ -211,15 +224,14 @@ const InformalNotificationDetail: React.FC = () => {
       </MIPaper>
 
       <Stack direction={{ xs: 'column', md: 'row' }} spacing={2} alignItems="flex-start">
-        <Stack spacing={2} sx={{ width: { xs: '100%', md: '65%' } }}>
+        <Stack spacing={2} sx={{ width: { xs: '100%', md: '58%' } }}>
           <MIPaper sx={{ p: 3, flex: 1 }} variant="outlined">
             <NotificationDetailDocuments
               title={t('detail.acts', { ns: 'notifiche' })}
               documents={informalNotification?.documents}
               clickHandler={handleDocumentDownload}
-              /* va aggiunto il campo all API */
-              documentsAvailable={false}
-              downloadFilesMessage={t('detail.acts_files.effected_faq', { ns: 'notifiche' })}
+              documentsAvailable={documentsAvailable}
+              downloadFilesMessage={getDownloadFilesMessage()}
               titleVariant="h5"
             />
           </MIPaper>
@@ -235,7 +247,7 @@ const InformalNotificationDetail: React.FC = () => {
           </MIPaper>
         </Stack>
 
-        <MIPaper sx={{ p: 3, width: { xs: '100%', md: '35%' } }} variant="outlined">
+        <MIPaper sx={{ p: 3, width: { xs: '100%', md: '42%' } }} variant="outlined">
           <Stack spacing={2}>
             <Typography component="h2" variant="h5">
               {t('detail.contact_sender.title', { ns: 'notifiche' })}
