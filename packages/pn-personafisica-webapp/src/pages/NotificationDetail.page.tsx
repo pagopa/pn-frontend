@@ -293,12 +293,12 @@ const NotificationDetail: React.FC = () => {
           ? t('detail.acts_files.downloadable_acts', { ns: 'notifiche' })
           : t('detail.acts_files.not_downloadable_acts', { ns: 'notifiche' });
       } else {
-        return dateIsLessThan10Years(notification.sentAt)
+        return dateIsLessThan10Years(notification.filedAt)
           ? t('detail.acts_files.downloadable_aar', { ns: 'notifiche' })
           : t('detail.acts_files.not_downloadable_aar', { ns: 'notifiche' });
       }
     },
-    [isCancelledOrCancelling, notification.documentsAvailable, notification.sentAt]
+    [isCancelledOrCancelling, notification.documentsAvailable, notification.filedAt]
   );
 
   const fetchReceivedNotification = useCallback(() => {
@@ -593,7 +593,7 @@ const NotificationDetail: React.FC = () => {
                     title={notification.subject}
                     senderPaId={notification.senderPaId}
                     senderDenomination={notification.senderDenomination}
-                    sentAt={notification.sentAt}
+                    filedAt={notification.filedAt}
                     iun={notification.iun}
                     abstract={notification.abstract}
                     senderLogoUrl={SENDER_LOGO_URL}
@@ -689,7 +689,7 @@ const NotificationDetail: React.FC = () => {
                   documents={notification.otherDocuments ?? []}
                   clickHandler={documentDowloadHandler}
                   isCancelled={isCancelled.cancellationInTimeline}
-                  isLessThan10Years={dateIsLessThan10Years(notification.sentAt)}
+                  isLessThan10Years={dateIsLessThan10Years(notification.filedAt)}
                   downloadFilesMessage={getDownloadFilesMessage('aar')}
                 />
                 <NotificationRelatedDowntimes
