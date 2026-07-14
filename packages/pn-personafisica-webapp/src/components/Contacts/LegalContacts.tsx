@@ -140,7 +140,7 @@ const LegalContacts = () => {
         color: 'success',
       };
     }
-    return <Chip {...params} sx={{ mb: 2 }} />;
+    return <Chip component="span" {...params} sx={{ mb: 2 }} />;
   };
 
   const deleteAbortHandler = () => {
@@ -222,46 +222,43 @@ const LegalContacts = () => {
   const getActions = () =>
     isActive
       ? [
-          <Button
-            key="manage"
-            variant="naked"
-            color="primary"
-            startIcon={<ConstructionIcon />}
-            onClick={handleStartManagement}
-            sx={{ p: '10px 16px' }}
-          >
-            {t('button.manage')}
-          </Button>,
-          <Button
-            key="disable"
-            variant="naked"
-            color="error"
-            startIcon={<PowerSettingsNewIcon />}
-            onClick={() => {
+          {
+            key: 'manage',
+            label: t('button.manage'),
+            icon: <ConstructionIcon />,
+            onClick: handleStartManagement,
+          },
+          {
+            key: 'disable',
+            label: t('button.disable'),
+            icon: <PowerSettingsNewIcon />,
+            destructive: true,
+            onClick: () => {
               const event = hasSercqSendActive
                 ? PFEventsType.SEND_REMOVE_SERCQ_SEND_START
                 : PFEventsType.SEND_REMOVE_DIGITAL_DOMICILE_PEC_START;
+
               PFEventStrategyFactory.triggerEvent(event, {
                 event_type: EventAction.ACTION,
                 addresses,
                 other_contact: false,
               });
+
               setModalOpen(true);
+
               if (!showSpecialContactsSection) {
                 const event = hasSercqSendActive
                   ? PFEventsType.SEND_REMOVE_SERCQ_SEND_POP_UP
                   : PFEventsType.SEND_REMOVE_DIGITAL_DOMICILE_PEC_POP_UP;
+
                 PFEventStrategyFactory.triggerEvent(event, {
                   event_type: EventAction.SCREEN_VIEW,
                   addresses,
                   other_contact: false,
                 });
               }
-            }}
-            sx={{ p: '10px 16px' }}
-          >
-            {t('button.disable')}
-          </Button>,
+            },
+          },
         ]
       : undefined;
 
@@ -271,6 +268,8 @@ const LegalContacts = () => {
     <PnInfoCard
       title={
         <Typography
+          component="span"
+          display="block"
           variant="h6"
           fontSize={{ xs: '22px', lg: '24px' }}
           fontWeight={700}
@@ -282,7 +281,7 @@ const LegalContacts = () => {
       }
       subtitle={getSubtitle()}
       actions={getActions()}
-      expanded={isActive}
+      mobileCollapsible={!isActive}
       slotProps={{ Card: { 'data-testid': 'legalContacts' } }}
     >
       {(isValidatingPec || hasPecActive) && <PecContactItem />}
