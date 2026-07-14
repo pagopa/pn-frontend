@@ -28,9 +28,9 @@
     "understand": "Ok, I understand"
   },
   "menu": {
-    "notifiche": "Notifications",
-    "notifiche-impresa": "Company notifications",
-    "notifiche-delegato": "Delegated notifications",
+    "notifiche": "Inbox",
+    "notifiche-impresa": "Inbox for {{organization}}",
+    "notifiche-delegato": "Inbox for delegators",
     "deleghe": "Delegations of authority",
     "profilo": "Your details",
     "contacts": "Contact details",

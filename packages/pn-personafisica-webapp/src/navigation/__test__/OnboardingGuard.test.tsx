@@ -5,6 +5,7 @@ import {
   Configuration,
   GetNotificationsResponse,
   NotificationStatus,
+  RecipientNotification,
   formatToTimezoneString,
   tenYearsAgo,
   today,
@@ -49,12 +50,16 @@ describe('OnboardingGuard', () => {
     mock.restore();
   });
 
-  const fetchReceivedNotifications = (response: GetNotificationsResponse) => {
+  const fetchReceivedNotifications = (
+    response: GetNotificationsResponse<RecipientNotification>
+  ) => {
     mock
       .onGet(
         `/bff/v1/notifications/received?startDate=${encodeURIComponent(
           formatToTimezoneString(tenYearsAgo)
-        )}&endDate=${encodeURIComponent(formatToTimezoneString(today))}&size=10`
+        )}&endDate=${encodeURIComponent(
+          formatToTimezoneString(today)
+        )}&size=10&communicationType=ALL`
       )
       .reply(200, response);
   };
@@ -132,7 +137,33 @@ describe('OnboardingGuard', () => {
       resultsPage: [
         {
           ...notificationsDTO.resultsPage[0],
-          notificationStatus: NotificationStatus.DELIVERED,
+          isNewNotification: true,
+        },
+      ],
+    };
+    mock.onGet('/bff/v1/addresses').reply(200, []);
+    fetchReceivedNotifications(unreadNotificationsResponse);
+
+    await act(async () => {
+      result = render(<Guard />, {
+        preloadedState: { userState: { isFreshLogin: true } },
+      });
+    });
+
+    await waitFor(() => {
+      expect(screen.queryByText('Onboarding Page')).toBeInTheDocument();
+    });
+    expect(result.router.state.location.pathname).toBe('/');
+  });
+
+  it('does not redirect when user has EFFECTIVE_DATE notifications', async () => {
+    const unreadNotificationsResponse = {
+      ...emptyNotificationsFromBe,
+      resultsPage: [
+        {
+          ...notificationsDTO.resultsPage[0],
+          isNewNotification: false,
+          notificationStatus: NotificationStatus.EFFECTIVE_DATE,
         },
       ],
     };

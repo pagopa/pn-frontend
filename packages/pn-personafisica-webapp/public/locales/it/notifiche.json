@@ -1,13 +1,13 @@
 {
-  "title": "Le tue notifiche",
+  "title": "In arrivo",
   "table": {
     "data": "Data",
     "mittente": "Mittente",
     "oggetto": "Oggetto",
     "iun": "Codice IUN",
     "status": "Stato",
-    "show-detail": "Vedi dettaglio",
-    "aria-action-table": "Vedi dettaglio notifica con iun: {{iun}}"
+    "open": "Apri",
+    "legal-value": "Notifica a valore legale"
   },
   "filters": {
     "iun": "Cerca per Codice IUN",
@@ -31,9 +31,11 @@
     "options": "Opzioni sort"
   },
   "empty-state": {
-    "filtered": "Non abbiamo trovato risultati: prova con dei filtri diversi. <0>Rimuovi filtri</0>.",
-    "delegate": "{{name}} non ha ricevuto nessuna notifica.",
-    "title": "Qui troverai le tue notifiche SEND",
+    "filtered": "Nessuna notifica o comunicazione per i filtri selezionati",
+    "filtered-description": "Rimuovili o prova con un’altra combinazione.",
+    "clean-filters-cta": "Rimuovi filtri",
+    "delegate": "Qui vedrai le comunicazioni a valore legale di {{name}}",
+    "title": "Qui vedrai le tue notifiche a valore legale e le altre comunicazioni",
     "description-onboarding": "Sapevi che puoi risparmiare se scegli di ricevere le comunicazioni a valore legale solo in digitale?",
     "description": "Aggiorna ora i tuoi recapiti e saprai subito quando ne riceverai una.",
     "go-to-onboarding-cta": "Configura SEND",
@@ -393,7 +395,7 @@
       "action": "Consulta i modelli"
     }
   },
-  "delegatorTitle": "Le notifiche di {{name}}",
+  "delegatorTitle": "In arrivo per {{name}}",
   "status": {
     "recipient": "destinatario",
     "delegate": "delegato {{name}}",

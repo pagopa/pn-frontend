@@ -1,6 +1,10 @@
-import { GetNotificationsResponse, NotificationStatus } from '@pagopa-pn/pn-commons';
+import {
+  GetNotificationsResponse,
+  NotificationStatus,
+  RecipientNotification,
+} from '@pagopa-pn/pn-commons';
 
-export const notificationsDTO: GetNotificationsResponse = {
+export const notificationsDTO: GetNotificationsResponse<RecipientNotification> = {
   resultsPage: [
     {
       iun: 'DAPQ-LWQV-DKQH-202308-A-1',
@@ -11,6 +15,8 @@ export const notificationsDTO: GetNotificationsResponse = {
       notificationStatus: NotificationStatus.VIEWED,
       recipients: ['CLMCST42R12D969Z', 'DRCGNN12A46A326K', 'LVLDAA85T50G702B'],
       group: 'group-1',
+      communicationType: 'LEGAL',
+      isNewNotification: false,
     },
     {
       iun: 'HRTX-GZQZ-DZDX-202308-G-1',
@@ -21,6 +27,8 @@ export const notificationsDTO: GetNotificationsResponse = {
       notificationStatus: NotificationStatus.EFFECTIVE_DATE,
       recipients: ['LVLDAA85T50G702B'],
       group: 'group-3',
+      communicationType: 'LEGAL',
+      isNewNotification: false,
     },
     {
       iun: 'DKRU-XUDK-UERQ-202308-X-1',
@@ -31,6 +39,8 @@ export const notificationsDTO: GetNotificationsResponse = {
       notificationStatus: NotificationStatus.VIEWED,
       recipients: ['LVLDAA85T50G702B'],
       group: 'group-1',
+      communicationType: 'INFORMAL',
+      isNewNotification: true,
     },
   ],
   moreResult: false,
@@ -39,12 +49,12 @@ export const notificationsDTO: GetNotificationsResponse = {
   ],
 };
 
-export const emptyNotificationsFromBe: GetNotificationsResponse = {
+export const emptyNotificationsFromBe: GetNotificationsResponse<RecipientNotification> = {
   resultsPage: [],
   moreResult: false,
   nextPagesKey: [],
 };
 
-export const notificationsToFe: GetNotificationsResponse = {
+export const notificationsToFe: GetNotificationsResponse<RecipientNotification> = {
   ...notificationsDTO,
 };

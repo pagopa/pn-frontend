@@ -28,9 +28,9 @@
     "understand": "OK, verstanden"
   },
   "menu": {
-    "notifiche": "Bescheide",
-    "notifiche-impresa": "Bescheide des Unternehmens",
-    "notifiche-delegato": "Bescheide mit Vollmacht",
+    "notifiche": "Posteingang",
+    "notifiche-impresa": "Posteingang für {{organization}}",
+    "notifiche-delegato": "Posteingang für Vollmachtgeber",
     "deleghe": "Vollmachten",
     "profilo": "Deine Daten",
     "contacts": "Anschriften",

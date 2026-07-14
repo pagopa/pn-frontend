@@ -1,6 +1,6 @@
 {
-  "title": "Notifications de {{recipient}} ",
-  "title-delegated-notifications": "Notifications mandatées à {{recipient}}",
+  "title": "Boîte de réception pour {{recipient}} ",
+  "title-delegated-notifications": "Boîte de réception des délégants",
   "subtitle": "Lire les notifications de {{recipient}}. Vous pouvez les filtrer par code IUN et date d’envoi.",
   "subtitle-delegated-notifications": "Lire les notifications mandatées à {{recipient}}. Vous pouvez les filtrer par code IUN et date d’envoi.",
   "table": {
