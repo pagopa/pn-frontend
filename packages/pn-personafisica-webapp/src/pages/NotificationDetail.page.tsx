@@ -596,7 +596,7 @@ const NotificationDetail: React.FC = () => {
                     title={notification.subject}
                     senderPaId={notification.senderPaId}
                     senderDenomination={notification.senderDenomination}
-                    filedAt={notification.sentAt}
+                    filedAt={notification.filedAt}
                     iun={notification.iun}
                     abstract={notification.abstract}
                     senderLogoUrl={SENDER_LOGO_URL}
