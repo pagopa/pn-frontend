@@ -1,6 +1,6 @@
 {
-  "title": "Notifiche di {{recipient}}",
-  "title-delegated-notifications": "Notifiche delegate a {{recipient}}",
+  "title": "In arrivo per {{recipient}}",
+  "title-delegated-notifications": "In arrivo per i deleganti",
   "subtitle": "Leggi le notifiche di {{recipient}}. Puoi filtrarle per Codice IUN e data di invio.",
   "subtitle-delegated-notifications": "Leggi le notifiche delegate a {{recipient}}. Puoi filtrarle per Codice IUN e data di invio.",
   "table": {

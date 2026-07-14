@@ -101,4 +101,30 @@ describe('SideMenuListItem', () => {
     expect(badge).toBeInTheDocument();
     expect(badge).toHaveTextContent('10');
   });
+
+  it('renders link with new notification dot', () => {
+    const { getByRole } = render(
+      <SideMenuListItem
+        item={{ ...sideMenuItems[0], dotNotification: true }}
+        handleLinkClick={handleLinkClick}
+        onSelect={handleOnSelect}
+      />
+    );
+    const link = getByRole('button');
+    const dot = within(link).getByTestId('new-notification-badge');
+    expect(dot).toBeInTheDocument();
+  });
+
+  it('does not render new notification dot when dotNotification is false', () => {
+    const { getByRole } = render(
+      <SideMenuListItem
+        item={{ ...sideMenuItems[0], dotNotification: false }}
+        handleLinkClick={handleLinkClick}
+        onSelect={handleOnSelect}
+      />
+    );
+    const link = getByRole('button');
+    const dot = within(link).queryByTestId('new-notification-badge');
+    expect(dot).not.toBeInTheDocument();
+  });
 });

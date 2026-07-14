@@ -1,5 +1,5 @@
 {
-  "title": "Deine Zustellungen",
+  "title": "Posteingang",
   "table": {
     "data": "Datum",
     "mittente": "Absender",
@@ -395,7 +395,7 @@
       "action": "Konsultiere die Vorlagen"
     }
   },
-  "delegatorTitle": "Zustellungen von {{name}}",
+  "delegatorTitle": "Posteingang für {{name}}",
   "status": {
     "recipient": "Empfänger",
     "delegate": "Bevollmächtigter {{name}}",

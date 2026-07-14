@@ -29,8 +29,10 @@ import { contactsSelectors } from '../redux/contact/reducers';
 import { DASHBOARD_ACTIONS, getReceivedNotifications } from '../redux/dashboard/actions';
 import { setNotificationFilters, setPagination, setSorting } from '../redux/dashboard/reducers';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
+import { setHasNewNotifications } from '../redux/sidemenu/reducers';
 import { RootState } from '../redux/store';
 import PGEventStrategyFactory from '../utility/MixpanelUtils/PGEventStrategyFactory';
+import { hasActiveFilters } from '../utility/notification.utility';
 
 type Props = {
   isDelegatedPage?: boolean;
@@ -65,7 +67,7 @@ const Notifiche = ({ isDelegatedPage = false }: Props) => {
   const isMobile = useIsMobile();
   const pageTitle = !isDelegatedPage
     ? t('title', { recipient: organization.name })
-    : t('title-delegated-notifications', { recipient: organization.name });
+    : t('title-delegated-notifications');
 
   const pageSubTitle = !isDelegatedPage
     ? t('subtitle', { recipient: organization.name })
@@ -140,6 +142,14 @@ const Notifiche = ({ isDelegatedPage = false }: Props) => {
       .unwrap()
       .then((data) => {
         setPageReady(true);
+
+        if (pagination.page === 0 && !isDelegatedPage && !hasActiveFilters(filters)) {
+          dispatch(
+            setHasNewNotifications(
+              data.resultsPage.some((notifications) => notifications.isNewNotification)
+            )
+          );
+        }
 
         if (!isDelegatedPage) {
           registerNotificationSectionSuperProperties(data.resultsPage.length);

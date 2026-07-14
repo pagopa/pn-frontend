@@ -10,7 +10,7 @@ import { getDigitalAddresses } from '../redux/contact/actions';
 import { getReceivedNotifications } from '../redux/dashboard/actions';
 import { setFirstSearch } from '../redux/dashboard/reducers';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
-import { setOnboardingSource } from '../redux/sidemenu/reducers';
+import { setHasNewNotifications, setOnboardingSource } from '../redux/sidemenu/reducers';
 import { getConfiguration } from '../services/configuration.service';
 import { groupDigitalAddresses, hasRequiredContacts } from '../utility/contacts.utility';
 import * as routes from './routes.const';
@@ -51,10 +51,14 @@ const OnboardingGuard: React.FC = () => {
           !hasNotificationsToRead(notifications) &&
           IS_ONBOARDING_ENABLED;
 
+        const hasNewNotifications = notifications.some((n) => n.isNewNotification);
+
         if (shouldRedirectToOnboarding) {
           dispatch(setOnboardingSource(OnboardingSource.LOGIN));
           navigate(routes.ONBOARDING, { replace: true });
         }
+
+        dispatch(setHasNewNotifications(hasNewNotifications));
       })
       .catch((error) => {
         console.error('OnboardingGuard - Failed to fetch onboarding data', error);
