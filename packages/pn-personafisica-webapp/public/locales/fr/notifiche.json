@@ -409,7 +409,7 @@
       "action": "Consulte les modèles"
     }
   },
-  "delegatorTitle": "Les notifications de {{name}}",
+  "delegatorTitle": "Boîte de réception pour {{name}}",
   "status": {
     "recipient": "destinataire",
     "delegate": "délégué {{name}}",

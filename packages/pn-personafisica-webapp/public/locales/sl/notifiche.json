@@ -409,7 +409,7 @@
       "action": "Preglej vzorce"
     }
   },
-  "delegatorTitle": "Obvestila {{name}}",
+  "delegatorTitle": "Prejeto za {{name}}",
   "status": {
     "recipient": "prejemnik",
     "delegate": "pooblaščenec {{name}}",

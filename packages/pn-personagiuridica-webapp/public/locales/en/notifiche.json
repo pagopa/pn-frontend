@@ -1,6 +1,6 @@
 {
-  "title": "Notifications of {{recipient}}",
-  "title-delegated-notifications": "Notifications delegated to {{recipient}}",
+  "title": "Inbox for {{organization}}",
+  "title-delegated-notifications": "Inbox for delegators",
   "subtitle": "Read notifications of {{recipient}}. You can filter them by IUN Code and send date.",
   "subtitle-delegated-notifications": "Read the notifications delegated to {{recipient}}. You can filter them by IUN Code and send date.",
   "table": {

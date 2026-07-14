@@ -409,7 +409,7 @@
       "action": "Consult the templates"
     }
   },
-  "delegatorTitle": "The notifications for {{name}}",
+  "delegatorTitle": "Inbox for {{name}}",
   "status": {
     "recipient": "recipient",
     "delegate": "delegate {{name}}",

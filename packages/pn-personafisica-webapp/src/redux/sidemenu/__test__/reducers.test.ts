@@ -15,6 +15,7 @@ const initialState = {
   delegators: [],
   domicileBannerOpened: true,
   paymentTpp: {},
+  hasNewNotifications: false,
   onboardingData: {
     exitReminderShown: false,
     hasBeenShown: false,

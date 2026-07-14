@@ -1,4 +1,4 @@
-import { createSlice, isAnyOf } from '@reduxjs/toolkit';
+import { PayloadAction, createSlice, isAnyOf } from '@reduxjs/toolkit';
 
 import { acceptMandate, rejectMandate } from '../delegation/actions';
 import { getSidemenuInformation } from './actions';
@@ -9,10 +9,14 @@ const generalInfoSlice = createSlice({
   initialState: {
     pendingDelegators: 0,
     domicileBannerOpened: true,
+    hasNewNotifications: false,
   },
   reducers: {
     closeDomicileBanner: (state) => {
       state.domicileBannerOpened = false;
+    },
+    setHasNewNotifications: (state, action: PayloadAction<boolean>) => {
+      state.hasNewNotifications = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -27,6 +31,6 @@ const generalInfoSlice = createSlice({
   },
 });
 
-export const { closeDomicileBanner } = generalInfoSlice.actions;
+export const { closeDomicileBanner, setHasNewNotifications } = generalInfoSlice.actions;
 
 export default generalInfoSlice;

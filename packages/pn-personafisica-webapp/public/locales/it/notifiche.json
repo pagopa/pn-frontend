@@ -408,7 +408,7 @@
       "action": "Consulta i modelli"
     }
   },
-  "delegatorTitle": "Le notifiche di {{name}}",
+  "delegatorTitle": "In arrivo per {{name}}",
   "status": {
     "recipient": "destinatario",
     "delegate": "delegato {{name}}",

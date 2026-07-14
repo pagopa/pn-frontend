@@ -30,7 +30,9 @@
     "understand": "V redu, razumem"
   },
   "menu": {
-    "notifiche": "Obvestila",
+    "notifiche": "Prejeto",
+    "notifiche-utente": "Prejeto za vas",
+    "notifiche-delegato": "Prejeto za {{delegator}}",
     "deleghe": "Pooblastila",
     "profilo": "Tvoji podatki",
     "contacts": "Tvoji kontaktni podatki",

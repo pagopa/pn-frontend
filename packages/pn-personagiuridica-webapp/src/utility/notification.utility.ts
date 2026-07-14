@@ -1,4 +1,4 @@
-import { NotificationDetail } from '@pagopa-pn/pn-commons';
+import { GetNotificationsParams, NotificationDetail } from '@pagopa-pn/pn-commons';
 
 import { NotificationDetailForRecipient } from '../models/NotificationDetail';
 
@@ -32,3 +32,6 @@ export function parseNotificationDetailForRecipient(
     currentRecipientIndex,
   };
 }
+
+export const hasActiveFilters = (filters: GetNotificationsParams): boolean =>
+  Boolean(filters.startDate || filters.endDate || filters.iunMatch);

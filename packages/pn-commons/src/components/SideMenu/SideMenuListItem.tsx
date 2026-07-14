@@ -1,5 +1,5 @@
 import { ExitToApp } from '@mui/icons-material';
-import { ListItemButton, ListItemIcon, ListItemText } from '@mui/material';
+import { Box, ListItemButton, ListItemIcon, ListItemText } from '@mui/material';
 import Badge from '@mui/material/Badge';
 
 import { SideMenuItem } from '../../models/SideMenuItem';
@@ -74,6 +74,19 @@ const SideMenuListItem = ({
       primary={item.label}
       data-testid={`menu-item(${item.label.toLowerCase()})`}
     />
+    {item.dotNotification && (
+      <Box
+        data-testid="new-notification-badge"
+        sx={{
+          width: 8,
+          height: 8,
+          borderRadius: '50%',
+          bgcolor: 'primary.main',
+          flexShrink: 0,
+          mr: 1,
+        }}
+      />
+    )}
     {item.rightBadgeNotification && (
       <NotificationBadge numberOfNotification={item.rightBadgeNotification} />
     )}

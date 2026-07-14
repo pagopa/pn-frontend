@@ -1,6 +1,6 @@
 {
-  "title": "Obvestila za {{recipient}}",
-  "title-delegated-notifications": "Obvestila, delegirana na {{recipient}}",
+  "title": "Prejeto za {{recipient}}",
+  "title-delegated-notifications": "Prejeto za pooblastitelje",
   "subtitle": "Preberite obvestila za {{recipient}}. Filtrirate jih lahko po kodi IUN in datumu pošiljanja.",
   "subtitle-delegated-notifications": "Preberite obvestila, delegirana na {{recipient}}. Filtrirate jih lahko po kodi IUN in datumu pošiljanja.",
   "table": {
