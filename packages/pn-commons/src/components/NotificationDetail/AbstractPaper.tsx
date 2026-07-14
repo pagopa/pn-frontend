@@ -16,7 +16,7 @@ interface AbstractPaperProps {
   title?: string;
   senderPaId?: string;
   senderDenomination?: string;
-  sentAt: string;
+  filedAt: string;
   iun: string;
   abstract?: string; // todo: to sanitize and format the abstract content before passing it to the component
   senderLogoUrl?: string;
@@ -55,7 +55,7 @@ const AbstractPaper = ({
   title,
   senderPaId,
   senderDenomination,
-  sentAt,
+  filedAt,
   iun,
   abstract,
   senderLogoUrl,
@@ -63,7 +63,6 @@ const AbstractPaper = ({
   const isMobile = useIsMobile();
 
   const borderTopStyle = `2px solid ${theme.palette.primary.main}`;
-  console.log(sentAt, 'sentAt');
   return (
     <MIPaper padding={24} sx={{ borderTop: borderTopStyle }}>
       <Tag
@@ -85,7 +84,7 @@ const AbstractPaper = ({
               {senderDenomination}
             </Typography>
             <Typography variant="body1" color="text.secondary">
-              {formatDate(sentAt)}
+              {formatDate(filedAt)}
             </Typography>
           </Box>
         </Grid>
