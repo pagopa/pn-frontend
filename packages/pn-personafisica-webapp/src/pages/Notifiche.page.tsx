@@ -9,6 +9,7 @@ import {
   CustomPagination,
   NotificationColumnData,
   PaginationData,
+  RecipientNotification,
   Sort,
   TitleBox,
   calculatePages,
@@ -31,8 +32,10 @@ import {
 } from '../redux/dashboard/reducers';
 import { Delegator } from '../redux/delegation/types';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
+import { setHasNewNotifications } from '../redux/sidemenu/reducers';
 import { RootState } from '../redux/store';
 import PFEventStrategyFactory from '../utility/MixpanelUtils/PFEventStrategyFactory';
+import { hasActiveFilters } from '../utility/notification.utility';
 
 const Notifiche = () => {
   const dispatch = useAppDispatch();
@@ -87,6 +90,10 @@ const Notifiche = () => {
       .unwrap()
       .then((data) => {
         setPageReady(true);
+        if (pagination.page === 0 && !currentDelegator && !hasActiveFilters(filters)) {
+          dispatch(setHasNewNotifications(data.resultsPage.some((n) => n.isNewNotification)));
+        }
+
         PFEventStrategyFactory.triggerEvent(
           currentDelegator
             ? PFEventsType.SEND_NOTIFICATION_DELEGATED
@@ -100,7 +107,7 @@ const Notifiche = () => {
         );
       })
       .catch(() => setPageReady(true));
-  }, [filters, pagination.size, pagination.page]);
+  }, [filters, pagination.size, pagination.page, currentDelegator?.mandateId]);
 
   // Pagination handlers
   const handleChangePage = (paginationData: PaginationData) => {
@@ -108,7 +115,7 @@ const Notifiche = () => {
   };
 
   // Sort handlers
-  const handleChangeSorting = (s: Sort<NotificationColumnData>) => {
+  const handleChangeSorting = (s: Sort<NotificationColumnData<RecipientNotification>>) => {
     dispatch(setSorting(s));
   };
 

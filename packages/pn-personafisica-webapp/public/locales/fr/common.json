@@ -28,7 +28,9 @@
     "understand": "OK, j'ai compris"
   },
   "menu": {
-    "notifiche": "Notifications",
+    "notifiche": "Boîte de réception",
+    "notifiche-utente": "Votre boîte de réception",
+    "notifiche-delegato": "Boîte de réception pour {{delegator}}",
     "deleghe": "Délégations",
     "profilo": "Tes données",
     "contacts": "Tes coordonnées",

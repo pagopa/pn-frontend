@@ -28,9 +28,9 @@
     "understand": "OK, j'ai compris"
   },
   "menu": {
-    "notifiche": "Notifications",
-    "notifiche-impresa": "Notifications de l’entreprise",
-    "notifiche-delegato": "Notifications mandatées",
+    "notifiche": "Boîte de réception",
+    "notifiche-impresa": "Boîte de réception pour {{organization}}",
+    "notifiche-delegato": "Boîte de réception des délégants",
     "deleghe": "Procurations",
     "profilo": "Vos données",
     "contacts": "Coordonnées",

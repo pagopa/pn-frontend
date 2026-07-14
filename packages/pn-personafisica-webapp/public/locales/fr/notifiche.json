@@ -1,5 +1,5 @@
 {
-  "title": "Vos notifications",
+  "title": "Boîte de réception",
   "table": {
     "data": "Date",
     "mittente": "Expéditeur",
@@ -31,9 +31,11 @@
     "options": "Options de tri"
   },
   "empty-state": {
-    "filtered": "Nous n’avons pas trouvé de résultats : essayez avec des filtres différents. <0>Supprimer filtres</0>.",
-    "delegate": "{{name}} n’a reçu aucune notification.",
-    "title": "Ici, vous trouverez vos notifications SEND",
+    "filtered": "No notifications or communications for the selected filters",
+    "filtered-description": "Remove them or try another combination.",
+    "clean-filters-cta": "Remove filters",
+    "delegate": "Here you will see the legally binding communications of {{name}}",
+    "title": "Here you will see your legally binding notifications and other communications",
     "description-onboarding": "Saviez-vous que vous pouvez économiser en choisissant de recevoir les communications à valeur juridique uniquement au format numérique ?",
     "description": "Mettez à jour vos coordonnées dès maintenant et vous saurez immédiatement quand vous en recevrez une.",
     "go-to-onboarding-cta": "Configurer SEND",
@@ -393,7 +395,7 @@
       "action": "Consulte les modèles"
     }
   },
-  "delegatorTitle": "Les notifications de {{name}}",
+  "delegatorTitle": "Boîte de réception pour {{name}}",
   "status": {
     "recipient": "destinataire",
     "delegate": "délégué {{name}}",
