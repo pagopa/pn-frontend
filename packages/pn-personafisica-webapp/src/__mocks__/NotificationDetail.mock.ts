@@ -908,6 +908,7 @@ export const notificationDTO: NotificationDetail = {
   abstract: 'PAGAMENTO RATA IMU',
   subject: 'Pagamento rata IMU',
   recipients,
+  filedAt: '2023-08-23T07:38:49.601270863Z',
   documents: [
     {
       digests: {
@@ -1004,6 +1005,7 @@ export const bilingualNotification: NotificationDetail = {
   additionalLanguages: ['EN'],
   subject: 'Testa notifica bilingue',
   recipients,
+  filedAt: '2023-08-23T07:38:49.601270863Z',
   documents: [
     {
       digests: {
