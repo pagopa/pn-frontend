@@ -12,7 +12,6 @@ const DowntimeLanguageBanner: React.FC<Props> = ({ downtimeExampleLink }) => (
   <MIAlert
     severity="info"
     data-testid="downtimeLanguageBanner"
-    ctaWrapSize="wide"
     sx={{ mt: 2 }}
     action={{
       label: getLocalizedOrDefaultLabel('common', 'downtime_language_banner.link'),
