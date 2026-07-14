@@ -2,7 +2,7 @@ import { useRef, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 
 import PowerSettingsNewIcon from '@mui/icons-material/PowerSettingsNew';
-import { Button, Chip, Divider, Typography } from '@mui/material';
+import { Chip, Divider, Typography } from '@mui/material';
 import { PnInfoCard, appStateActions } from '@pagopa-pn/pn-commons';
 
 import { PGEventsType } from '../../models/PGEventsType';
@@ -256,13 +256,13 @@ const EmailContactItem: React.FC = () => {
   const getActions = () =>
     isEmailActive
       ? [
-          <Button
-            data-testid="disable-email"
-            key="disable"
-            variant="naked"
-            color="error"
-            startIcon={<PowerSettingsNewIcon />}
-            onClick={() => {
+          {
+            key: 'disable',
+            label: t('button.disable'),
+            icon: <PowerSettingsNewIcon />,
+            destructive: true,
+            testId: 'disable-email',
+            onClick: () => {
               // eslint-disable-next-line functional/immutable-data
               currentAddress.current = { value: currentValue };
               PGEventStrategyFactory.triggerEvent(PGEventsType.SEND_PG_REMOVE_EMAIL_START);
@@ -272,11 +272,8 @@ const EmailContactItem: React.FC = () => {
                   ? ModalType.DELETE_PRECONFIRM
                   : ModalType.DELETE
               );
-            }}
-            sx={{ p: '10px 16px' }}
-          >
-            {t('button.disable')}
-          </Button>,
+            },
+          },
         ]
       : undefined;
 
@@ -292,6 +289,8 @@ const EmailContactItem: React.FC = () => {
     <PnInfoCard
       title={
         <Typography
+          component="span"
+          display="block"
           variant="h6"
           fontSize={{ xs: '22px', lg: '24px' }}
           fontWeight={700}
@@ -303,6 +302,7 @@ const EmailContactItem: React.FC = () => {
       }
       subtitle={
         <Chip
+          component="span"
           label={t(`status.${isEmailActive ? 'active' : 'inactive'}`, { ns: 'recapiti' })}
           color={getChipColor()}
           size="small"
@@ -310,7 +310,7 @@ const EmailContactItem: React.FC = () => {
         />
       }
       actions={getActions()}
-      expanded={isEmailActive}
+      mobileCollapsible={!isEmailActive}
       data-testid="emailContact"
       slotProps={{ Card: { id: 'emailContactSection' } }}
     >
