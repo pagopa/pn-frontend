@@ -3,8 +3,8 @@ import { Trans } from 'react-i18next';
 
 import BlockRoundedIcon from '@mui/icons-material/BlockRounded';
 import OpenInBrowserRoundedIcon from '@mui/icons-material/OpenInBrowserRounded';
-import { Box, IconButton, Stack, Typography } from '@mui/material';
-import { MIAlert, MIPaper, Tag, theme } from '@pagopa/mui-italia';
+import { Box, Stack, Typography } from '@mui/material';
+import { MIAlert, MIIconButton, MIPaper, Tag, theme, themeNext } from '@pagopa/mui-italia';
 
 import { NotificationDetailOtherDocument, NotificationDetailRecipient } from '../../models';
 import { getLocalizedOrDefaultLabel } from '../../utility/localization.utility';
@@ -52,9 +52,8 @@ const NotificationDetailSection = ({
 
         {isDelegate && (
           <Box
+            pb={2}
             sx={{
-              alignItems: 'flex-start',
-              paddingBottom: 2,
               borderBottom: `1px solid ${theme.palette.divider}`,
             }}
           >
@@ -79,15 +78,20 @@ const NotificationDetailSection = ({
         {isLessThan10Years && (
           <Stack
             data-testid="aarBox"
-            sx={{ flexDirection: 'row', justifyContent: 'space-between', pb: 0 }}
+            flexDirection="row"
+            justifyContent="space-between"
+            alignItems="center"
+            pb={0}
           >
             <Stack>
               <Typography
                 variant="body2"
                 fontWeight={600}
+                color={
+                  !isCancelled ? themeNext.palette.primary.main : themeNext.palette.text.primary
+                }
                 sx={{
                   paddingBottom: isCancelled ? 1 : 0,
-                  color: !isCancelled ? theme.palette.primary.light : theme.palette.text.primary,
                 }}
               >
                 {getLocalizedOrDefaultLabel(
@@ -100,7 +104,7 @@ const NotificationDetailSection = ({
               </Typography>
             </Stack>
             {!isCancelled && (
-              <IconButton
+              <MIIconButton
                 data-testid="documentButton"
                 edge="end"
                 aria-label={getLocalizedOrDefaultLabel(
@@ -110,7 +114,7 @@ const NotificationDetailSection = ({
                 onClick={() => clickHandler(documents?.find((d) => d.documentType === 'AAR'))}
               >
                 <OpenInBrowserRoundedIcon />
-              </IconButton>
+              </MIIconButton>
             )}
           </Stack>
         )}

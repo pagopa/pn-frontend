@@ -8,7 +8,8 @@
     "iun": "IUN-Code",
     "status": "Status",
     "show-detail": "Siehe Detail",
-    "aria-action-table": "Benachrichtigungsdetails mit IUN anzeigen: {{iun}}"
+    "aria-action-table": "Benachrichtigungsdetails mit IUN anzeigen: {{iun}}",
+    "legal-value": "Rechtsgültige Zustellung"
   },
   "filters": {
     "iun": "Suche nach IUN-Code",
@@ -88,7 +89,7 @@
     "show-less": "Weniger Details anzeigen",
     "disclaimer-link": "Mehr hierzu",
     "pec-unreachable": "Halten Sie Ihr zertifiziertes E-Mail-Postfach (PEC) frei und aktiv, um alles digital zu erhalten!",
-    "legal-value": "Rechtswirksamkeit",
+    "legal-value": "Rechtsgültige Zustellung",
     "cancelled": {
       "message": "Diese Zustellung wurde von der sendenden Körperschaft storniert.",
       "cta": "Was muss ich tun?"

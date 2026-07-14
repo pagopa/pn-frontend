@@ -8,7 +8,8 @@
     "iun": "Koda IUN",
     "status": "Država",
     "show-detail": "Ogled podrobnosti",
-    "aria-action-table": "Oglejte si podrobnosti obvestila z IUN: {{iun}}"
+    "aria-action-table": "Oglejte si podrobnosti obvestila z IUN: {{iun}}",
+    "legal-value": "Pravno zavezujoča vročitev"
   },
   "filters": {
     "iun": "Iskanje po kodi IUN",
@@ -88,7 +89,7 @@
     "show-less": "Prikaži manj podrobnosti",
     "disclaimer-link": "Izvedite več",
     "pec-unreachable": "Vaš predal PEC naj bo prost in aktiven, da boste vse prejemali v digitalni obliki!",
-    "legal-value": "Pravna veljavnost",
+    "legal-value": "Pravno zavezujoča vročitev",
     "cancelled": {
       "message": "To obvestilo je preklical organ pošiljatelj.",
       "cta": "Kaj moram storiti?"
