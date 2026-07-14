@@ -45,7 +45,6 @@ describe('Notifiche Page', () => {
 
   afterAll(() => {
     mock.restore();
-    globalThis.matchMedia = originalMatchMedia;
     globalThis.ResizeObserver = originalResizeObserver;
   });
 
