@@ -1,9 +1,9 @@
 import { Trans, useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
-import { Box, Button, Link, Typography } from '@mui/material';
-import { EmptyState, KnownSentiment } from '@pagopa-pn/pn-commons';
-import { IllusMIMessage } from '@pagopa/mui-italia';
+import { Box, Button, Typography } from '@mui/material';
+import { EmptyState } from '@pagopa-pn/pn-commons';
+import { ButtonNaked, IllusMIInbox, IllusMIMessage } from '@pagopa/mui-italia';
 
 import { PFEventsType } from '../../models/PFEventsType';
 import { ContactSource } from '../../models/contacts';
@@ -24,25 +24,71 @@ type Props = {
   currentDelegator?: Delegator;
 };
 
-type LinkRemoveFiltersProps = {
-  cleanFilters: () => void;
-  children?: React.ReactNode;
+const CONTENT_CONTAINER_PROPS = {
+  display: 'flex',
+  textAlign: 'center',
+  flexDirection: 'column',
+  alignItems: 'center',
+} as const;
+
+const FilteredEmptyStateContent: React.FC<{ cleanFilters: () => void }> = ({ cleanFilters }) => {
+  const { t } = useTranslation('notifiche');
+
+  return (
+    <>
+      <Typography variant="subtitle2" fontSize="16px" sx={{ color: '#636B82' }}>
+        {t('empty-state.filtered')}
+      </Typography>
+      <Typography variant="body2" fontSize="14px" color="text.secondary" sx={{ mb: 2 }}>
+        {t('empty-state.filtered-description')}
+      </Typography>
+
+      <ButtonNaked
+        size="medium"
+        color="primary"
+        id="call-to-action-first"
+        data-testid="link-remove-filters"
+        onClick={cleanFilters}
+      >
+        {t('empty-state.clean-filters-cta')}
+      </ButtonNaked>
+    </>
+  );
 };
 
-const LinkRemoveFilters: React.FC<LinkRemoveFiltersProps> = ({ children, cleanFilters }) => (
-  <Link
-    component="button"
-    variant="body1"
-    id="call-to-action-first"
-    key="remove-filters"
-    data-testid="link-remove-filters"
-    onClick={cleanFilters}
-  >
-    {children}
-  </Link>
+const DelegatorEmptyStateContent: React.FC<{ currentDelegator: Delegator }> = ({
+  currentDelegator,
+}) => (
+  <Typography variant="subtitle2" fontSize="16px" sx={{ color: '#636B82' }}>
+    <Trans
+      values={{ name: currentDelegator.delegator?.displayName }}
+      ns="notifiche"
+      i18nKey="empty-state.delegate"
+    />
+  </Typography>
 );
 
-const EmptyStateCTA: React.FC<{ showOnboardingCta: boolean }> = ({ showOnboardingCta }) => {
+const DefaultEmptyStateContent: React.FC<{ showOnboardingContent: boolean }> = ({
+  showOnboardingContent,
+}) => {
+  const { t } = useTranslation('notifiche');
+
+  return (
+    <>
+      <Typography variant="subtitle2" fontSize="16px" sx={{ color: '#636B82' }}>
+        {t('empty-state.title')}
+      </Typography>
+      <Typography variant="body2" fontSize="14px" color="text.secondary" sx={{ mb: 2 }}>
+        {showOnboardingContent
+          ? t('empty-state.description-onboarding')
+          : t('empty-state.description')}
+      </Typography>
+      <EmptyStateCTA showOnboardingContent={showOnboardingContent} />
+    </>
+  );
+};
+
+const EmptyStateCTA: React.FC<{ showOnboardingContent: boolean }> = ({ showOnboardingContent }) => {
   const { t } = useTranslation('notifiche');
   const navigate = useNavigate();
   const goToContactsPage = () => {
@@ -56,7 +102,7 @@ const EmptyStateCTA: React.FC<{ showOnboardingCta: boolean }> = ({ showOnboardin
     navigate(routes.ONBOARDING);
   };
 
-  if (showOnboardingCta) {
+  if (showOnboardingContent) {
     return (
       <Button
         variant="contained"
@@ -71,18 +117,15 @@ const EmptyStateCTA: React.FC<{ showOnboardingCta: boolean }> = ({ showOnboardin
   }
 
   return (
-    <Link
-      component="button"
-      variant="body1"
-      fontSize="16px"
-      fontWeight={600}
+    <ButtonNaked
+      size="medium"
+      color="primary"
       id="call-to-action-first"
       data-testid="link-route-contacts"
-      sx={{ textDecoration: 'none' }}
       onClick={goToContactsPage}
     >
       {t('empty-state.go-to-contacts-cta')}
-    </Link>
+    </ButtonNaked>
   );
 };
 
@@ -91,7 +134,6 @@ const NotificationsEmptyState: React.FC<Props> = ({
   filterNotificationsRef,
   currentDelegator,
 }) => {
-  const { t } = useTranslation('notifiche');
   const addresses = useAppSelector(contactsSelectors.selectAddresses);
   const { IS_ONBOARDING_ENABLED } = getConfiguration();
   const hasEnoughContacts = hasRequiredContacts(addresses);
@@ -100,29 +142,12 @@ const NotificationsEmptyState: React.FC<Props> = ({
 
   if (filtersApplied) {
     return (
-      <EmptyState sentimentIcon={KnownSentiment.DISSATISFIED}>
-        <Trans
-          ns="notifiche"
-          i18nKey="empty-state.filtered"
-          components={[
-            <LinkRemoveFilters
-              key="remove-filters"
-              cleanFilters={filterNotificationsRef.current.cleanFilters}
-            />,
-          ]}
-        />
-      </EmptyState>
-    );
-  }
-
-  if (currentDelegator) {
-    return (
-      <EmptyState sentimentIcon={KnownSentiment.NONE}>
-        <Trans
-          values={{ name: currentDelegator.delegator?.displayName }}
-          ns="notifiche"
-          i18nKey="empty-state.delegate"
-        />
+      <EmptyState
+        slots={{ contentContainer: Box }}
+        slotProps={{ contentContainer: CONTENT_CONTAINER_PROPS }}
+        sentimentIcon={<IllusMIInbox size={56} />}
+      >
+        <FilteredEmptyStateContent cleanFilters={filterNotificationsRef.current.cleanFilters} />
       </EmptyState>
     );
   }
@@ -130,25 +155,14 @@ const NotificationsEmptyState: React.FC<Props> = ({
   return (
     <EmptyState
       slots={{ contentContainer: Box }}
-      slotProps={{
-        contentContainer: {
-          display: 'flex',
-          textAlign: 'center',
-          flexDirection: 'column',
-          alignItems: 'center',
-        },
-      }}
+      slotProps={{ contentContainer: CONTENT_CONTAINER_PROPS }}
       sentimentIcon={<IllusMIMessage size={56} />}
     >
-      <Typography variant="subtitle2" fontSize="16px" color="text.primary">
-        {t('empty-state.title')}
-      </Typography>
-      <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-        {showOnboardingContent
-          ? t('empty-state.description-onboarding')
-          : t('empty-state.description')}
-      </Typography>
-      <EmptyStateCTA showOnboardingCta={showOnboardingContent} />
+      {currentDelegator ? (
+        <DelegatorEmptyStateContent currentDelegator={currentDelegator} />
+      ) : (
+        <DefaultEmptyStateContent showOnboardingContent={showOnboardingContent} />
+      )}
     </EmptyState>
   );
 };
