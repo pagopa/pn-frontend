@@ -102,6 +102,6 @@ Grazie per l'attenzione.`,
   ],
   group: 'fH3WxlE=.7qJeO.epIlIbcZUkjQr5mypG:NU=[3*ZSg1wn\\pjb',
   iun: 'UUDE-FVGR-ERLR-640815-N-7',
-  sentAt: '2026-07-01T13:03:22.493Z',
+  filedAt: '2026-07-01T13:03:22.493Z',
   notificationStatus: 'IN_VALIDATION',
 };

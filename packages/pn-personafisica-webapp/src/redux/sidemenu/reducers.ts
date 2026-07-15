@@ -19,6 +19,7 @@ type GeneralInfoState = {
   delegators: Array<Delegator>;
   domicileBannerOpened: boolean;
   paymentTpp: PaymentTpp;
+  hasNewNotifications: boolean;
   onboardingData: OnboardingDataState;
 };
 
@@ -27,6 +28,7 @@ const initialState: GeneralInfoState = {
   delegators: [],
   domicileBannerOpened: true,
   paymentTpp: {} as PaymentTpp,
+  hasNewNotifications: false,
   onboardingData: {
     hasBeenShown: false,
     hasSkippedOnboarding: false,
@@ -61,6 +63,9 @@ const generalInfoSlice = createSlice({
       action: PayloadAction<OnboardingAvailableFlows | undefined>
     ) => {
       state.onboardingData.onboardingSelectedFlow = action.payload;
+    },
+    setHasNewNotifications: (state, action: PayloadAction<boolean>) => {
+      state.hasNewNotifications = action.payload;
     },
     resetState: () => initialState,
   },
@@ -105,6 +110,7 @@ export const {
   setOnboardingSource,
   setOnboardingSelectedFlow,
   resetState,
+  setHasNewNotifications,
 } = generalInfoSlice.actions;
 
 export default generalInfoSlice;

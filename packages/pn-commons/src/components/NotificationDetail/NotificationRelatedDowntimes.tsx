@@ -1,8 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 
-import AttachFileIcon from '@mui/icons-material/AttachFile';
 import { Box, List, ListItem, Typography, useTheme } from '@mui/material';
-import { ButtonNaked, MIPaper, Tag } from '@pagopa/mui-italia';
+import { MIButton, MIPaper, Tag } from '@pagopa/mui-italia';
 
 import { Downtime } from '../../models/AppStatus';
 import { NotificationStatusHistory } from '../../models/NotificationDetail';
@@ -209,20 +208,18 @@ const NotificationRelatedDowntimes: React.FC<Props> = ({
                 {/* beware! - tests rely on the default texts */}
                 <Box>
                   {event.fileAvailable && !disableDownloads ? (
-                    <ButtonNaked
-                      sx={{ px: 0 }}
+                    <MIButton
+                      variant="text"
                       color="primary"
-                      startIcon={<AttachFileIcon />}
                       onClick={() => {
                         void fetchDowntimeLegalFactDocumentDetails(event.legalFactId as string);
                       }}
                     >
                       {getLocalizedOrDefaultLabel(
                         'notifications',
-                        'detail.downtimes.legalFactDownload',
-                        'Scaricare'
+                        'detail.downtimes.legalFactDownload'
                       )}
-                    </ButtonNaked>
+                    </MIButton>
                   ) : (
                     <Typography variant="body1">
                       {getLocalizedOrDefaultLabel(
@@ -233,13 +230,7 @@ const NotificationRelatedDowntimes: React.FC<Props> = ({
                     </Typography>
                   )}
                   {disableDownloads && (
-                    <Tag
-                      value={getLocalizedOrDefaultLabel(
-                        'common',
-                        'not-available',
-                        'Non disponibile'
-                      )}
-                    />
+                    <Tag value={getLocalizedOrDefaultLabel('common', 'not-available')} />
                   )}
                 </Box>
               </ListItem>

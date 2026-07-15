@@ -8,7 +8,9 @@
     "iun": "Koda IUN",
     "status": "Država",
     "show-detail": "Ogled podrobnosti",
-    "aria-action-table": "Oglejte si podrobnosti obvestila z IUN: {{iun}}"
+    "aria-action-table": "Oglejte si podrobnosti obvestila z IUN: {{iun}}",
+    "open": "Odpri",
+    "legal-value": "Pravno zavezujoča vročitev"
   },
   "filters": {
     "iun": "Iskanje po kodi IUN",
@@ -32,9 +34,11 @@
     "options": "Možnosti razvrščanja"
   },
   "empty-state": {
-    "filtered": "Ni bilo mogoče najti rezultatov: poskusite z različnimi filtri. <0>Odstranite filtre</0>.",
-    "delegate": "{{name}} ni prejel nobenega obvestila.",
-    "title": "Tukaj boste našli svoja obvestila SEND",
+    "filtered": "Ni obvestil ali sporočil za izbrane filtre",
+    "filtered-description": "Odstranite jih ali poskusite z drugo kombinacijo.",
+    "clean-filters-cta": "Odstranite filtre",
+    "delegate": "Tukaj boste videli uradna sporočila od {{name}}",
+    "title": "Tukaj boste videli svoja uradna obvestila in druga sporočila",
     "description-onboarding": "Ali ste vedeli, da lahko prihranite, če se odločite za prejemanje uradnih sporočil le v digitalni obliki?",
     "description": "Posodobite svoje kontaktne podatke zdaj in takoj boste obveščeni, ko prejmete novo.",
     "go-to-onboarding-cta": "Konfigurirajte SEND",
@@ -86,7 +90,7 @@
     "show-less": "Prikaži manj podrobnosti",
     "disclaimer-link": "Izvedite več",
     "pec-unreachable": "Vaš predal PEC naj bo prost in aktiven, da boste vse prejemali v digitalni obliki!",
-    "legal-value": "Pravna veljavnost",
+    "legal-value": "Pravno zavezujoča vročitev",
     "cancelled": {
       "message": "To obvestilo je preklical organ pošiljatelj.",
       "cta": "Kaj moram storiti?"
@@ -413,7 +417,7 @@
       "action": "Preglej vzorce"
     }
   },
-  "delegatorTitle": "Obvestila {{name}}",
+  "delegatorTitle": "Prejeto za {{name}}",
   "status": {
     "recipient": "prejemnik",
     "delegate": "pooblaščenec {{name}}",

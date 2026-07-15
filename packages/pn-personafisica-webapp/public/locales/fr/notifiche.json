@@ -8,7 +8,9 @@
     "iun": "Code IUN",
     "status": "État",
     "show-detail": "Voir le détail",
-    "aria-action-table": "Voir les détails de la notification avec IUN : {{iun}}"
+    "aria-action-table": "Voir les détails de la notification avec IUN : {{iun}}",
+    "open": "Ouvrir",
+    "legal-value": "Notification à valeur juridique"
   },
   "filters": {
     "iun": "Recherche par code IUN",
@@ -32,9 +34,11 @@
     "options": "Options de tri"
   },
   "empty-state": {
-    "filtered": "Nous n’avons pas trouvé de résultats : essayez avec des filtres différents. <0>Supprimer filtres</0>.",
-    "delegate": "{{name}} n’a reçu aucune notification.",
-    "title": "Ici, vous trouverez vos notifications SEND",
+    "filtered": "No notifications or communications for the selected filters",
+    "filtered-description": "Remove them or try another combination.",
+    "clean-filters-cta": "Remove filters",
+    "delegate": "Here you will see the legally binding communications of {{name}}",
+    "title": "Here you will see your legally binding notifications and other communications",
     "description-onboarding": "Saviez-vous que vous pouvez économiser en choisissant de recevoir les communications à valeur juridique uniquement au format numérique ?",
     "description": "Mettez à jour vos coordonnées dès maintenant et vous saurez immédiatement quand vous en recevrez une.",
     "go-to-onboarding-cta": "Configurer SEND",
@@ -86,7 +90,7 @@
     "show-less": "Voir moins de détails",
     "disclaimer-link": "En savoir plus",
     "pec-unreachable": "Maintenez votre adresse PEC libre et active pour tout recevoir au format numérique !",
-    "legal-value": "Valeur juridique",
+    "legal-value": "Notification à valeur juridique",
     "cancelled": {
       "message": "Cette notification a été annulée par l'organisme émetteur.",
       "cta": "Que dois-je faire ?"
@@ -413,7 +417,7 @@
       "action": "Consulte les modèles"
     }
   },
-  "delegatorTitle": "Les notifications de {{name}}",
+  "delegatorTitle": "Boîte de réception pour {{name}}",
   "status": {
     "recipient": "destinataire",
     "delegate": "délégué {{name}}",

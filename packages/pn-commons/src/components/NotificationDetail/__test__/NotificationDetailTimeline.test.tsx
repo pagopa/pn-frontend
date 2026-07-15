@@ -50,7 +50,6 @@ describe('NotificationDetailTimeline', () => {
             reworkedStatus: ReworkedStatus.NOT_VALID,
           },
         ]}
-        historyButtonLabel={''}
         showMoreButtonLabel={''}
         showLessButtonLabel={''}
         clickHandler={function (): void {

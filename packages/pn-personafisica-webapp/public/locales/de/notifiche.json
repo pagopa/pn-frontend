@@ -1,6 +1,7 @@
 {
   "title": "Deine Zustellungen",
   "go-to-detail": "Zur Detailansicht",
+  "go-to-detail": "Zur Detailansicht",
   "table": {
     "data": "Datum",
     "mittente": "Absender",
@@ -8,7 +9,9 @@
     "iun": "IUN-Code",
     "status": "Status",
     "show-detail": "Siehe Detail",
-    "aria-action-table": "Benachrichtigungsdetails mit IUN anzeigen: {{iun}}"
+    "aria-action-table": "Benachrichtigungsdetails mit IUN anzeigen: {{iun}}",
+    "open": "Öffnen",
+    "legal-value": "Rechtsgültige Zustellung"
   },
   "filters": {
     "iun": "Suche nach IUN-Code",
@@ -32,9 +35,11 @@
     "options": "Optionen Sortieren"
   },
   "empty-state": {
-    "filtered": "Wir haben keine Ergebnisse gefunden: Versuche es mit anderen Filtern. <0>Filter entfernen</0>.",
-    "delegate": "{{name}} hat keine Zustellung erhalten.",
-    "title": "Hier findest du deine SEND Benachrichtigungen",
+    "filtered": "Keine Benachrichtigungen oder Mitteilungen für die ausgewählten Filter",
+    "filtered-description": "Entferne sie oder versuche es mit einer anderen Kombination.",
+    "clean-filters-cta": "Filter entfernen",
+    "delegate": "Hier siehst du die rechtlichen Mitteilungen von {{name}}",
+    "title": "Hier siehst du deine rechtlichen Benachrichtigungen und andere Mitteilungen",
     "description-onboarding": "Wusstest du, dass du Geld sparen kannst, wenn du dich dafür entscheidest, rechtliche Mitteilungen nur digital zu erhalten?",
     "description": "Aktualisiere jetzt deine Kontaktdaten, damit du sofort erfährst, wenn du eine erhältst.",
     "go-to-onboarding-cta": "SEND konfigurieren",
@@ -51,6 +56,17 @@
     "not-found-subtitle": "Diese Benachrichtigung kann nur vom Empfänger gelesen werden."
   },
   "detail": {
+    "notification-timeline-section": {
+      "title": "Status der Zustellung",
+      "aria-label": "Gehe zur Timeline der Zustellung"
+    },
+    "notification-detail-section": {
+      "title": "Details der Zustellung",
+      "recipient": "Empfänger",
+      "aar": "Empfangsbestätigung",
+      "aria-label": "Gehe zur Empfangsbestätigung",
+      "availability": "Online verfügbar für 10 Jahre ab dem Datum, an dem die Zustellung rechtswirksam wird."
+    },
     "notification-timeline-section": {
       "title": "Status der Zustellung",
       "aria-label": "Gehe zur Timeline der Zustellung"
@@ -86,7 +102,7 @@
     "show-less": "Weniger Details anzeigen",
     "disclaimer-link": "Mehr hierzu",
     "pec-unreachable": "Halten Sie Ihr zertifiziertes E-Mail-Postfach (PEC) frei und aktiv, um alles digital zu erhalten!",
-    "legal-value": "Rechtswirksamkeit",
+    "legal-value": "Rechtsgültige Zustellung",
     "cancelled": {
       "message": "Diese Zustellung wurde von der sendenden Körperschaft storniert.",
       "cta": "Was muss ich tun?"
@@ -145,6 +161,9 @@
       "website": "Website der Körperschaft"
     },
     "acts_files": {
+      "downloadable_acts": "<0>Die Dokumente sind bis zu 120 Tage lang online verfügbar</0> ab dem Datum, an dem die SEND-Benachrichtigung rechtlich wirksam wurde. Speichern Sie sie auf Ihrem Gerät!",
+      "not_downloadable_acts": "Die Dokumente sind online nicht mehr verfügbar. Um sie anzufordern, wenden Sie sich bitte an die Behörde, die sie Ihnen zugesendet hat.",
+      "not_downloadable_aar": "Der Zustellungsnachweis ist nicht mehr verfügbar. Um ihn anzufordern, wenden Sie sich bitte an die Behörde, die ihn Ihnen zugesendet hat.",
       "downloadable_acts": "<0>Die Dokumente sind bis zu 120 Tage lang online verfügbar</0> ab dem Datum, an dem die SEND-Benachrichtigung rechtlich wirksam wurde. Speichern Sie sie auf Ihrem Gerät!",
       "not_downloadable_acts": "Die Dokumente sind online nicht mehr verfügbar. Um sie anzufordern, wenden Sie sich bitte an die Behörde, die sie Ihnen zugesendet hat.",
       "not_downloadable_aar": "Der Zustellungsnachweis ist nicht mehr verfügbar. Um ihn anzufordern, wenden Sie sich bitte an die Behörde, die ihn Ihnen zugesendet hat.",
@@ -413,7 +432,7 @@
       "action": "Konsultiere die Vorlagen"
     }
   },
-  "delegatorTitle": "Zustellungen von {{name}}",
+  "delegatorTitle": "Posteingang für {{name}}",
   "status": {
     "recipient": "Empfänger",
     "delegate": "Bevollmächtigter {{name}}",

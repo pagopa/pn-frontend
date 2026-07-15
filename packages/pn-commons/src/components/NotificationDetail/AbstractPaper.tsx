@@ -17,10 +17,10 @@ interface AbstractPaperProps {
   title?: string;
   senderPaId?: string;
   senderDenomination?: string;
-  sentAt: string;
   iun: string;
   abstract?: string; // todo: to sanitize and format the abstract content before passing it to the component
   isLegal?: boolean;
+  filedAt: string;
   senderLogoUrl?: string;
 }
 
@@ -33,7 +33,8 @@ interface InstitutionLogoProps {
 const InstitutionLogo = ({ id, name, senderLogoUrl }: InstitutionLogoProps) => {
   const [hasError, setHasError] = useState(false);
 
-  const logoSrc = id && !hasError && senderLogoUrl ? `${senderLogoUrl}${id}/logo.png` : undefined;
+  const logoSrc =
+    id && !hasError && senderLogoUrl ? `${senderLogoUrl}${id}/institutions/logo.png` : undefined;
 
   return (
     <Avatar
@@ -57,10 +58,10 @@ const AbstractPaper = ({
   title,
   senderPaId,
   senderDenomination,
-  sentAt,
   iun,
   abstract,
   isLegal = true,
+  filedAt,
   senderLogoUrl,
 }: AbstractPaperProps) => {
   const isMobile = useIsMobile();
@@ -95,7 +96,7 @@ const AbstractPaper = ({
               {senderDenomination}
             </Typography>
             <Typography variant="body1" color="text.secondary">
-              {formatDate(sentAt)}
+              {formatDate(filedAt)}
             </Typography>
           </Box>
         </Grid>

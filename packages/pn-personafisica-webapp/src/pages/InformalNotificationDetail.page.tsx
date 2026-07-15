@@ -220,7 +220,7 @@ const InformalNotificationDetail: React.FC = () => {
           title={primaryMessage?.subject ?? ''}
           senderPaId={informalNotification?.senderPaId}
           senderDenomination={informalNotification?.senderDenomination ?? ''}
-          sentAt={informalNotification?.sentAt ?? ''}
+          filedAt={informalNotification?.filedAt ?? ''}
           iun={informalNotification?.iun ?? ''}
           isLegal={false}
           abstract={primaryMessage?.longBody ?? ''}

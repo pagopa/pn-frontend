@@ -163,8 +163,19 @@ const NotificationTimeline: React.FC = () => {
 
   useDismissToastOnError(NOTIFICATION_ACTIONS.GET_RECEIVED_NOTIFICATION, handleUserInvalidError);
 
+  const trackShowMoreLess = (collapsed: boolean) => {
+    PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_NOTIFICATION_STATUS_DETAIL, {
+      accordion: collapsed ? 'collapsed' : 'expanded',
+    });
+  };
+
   const properBreadcrumb = useMemo(() => {
-    const backRoute = id ? routes.GET_DETTAGLIO_NOTIFICA_PATH(id) : routes.NOTIFICHE;
+    if (!id) {
+      return null;
+    }
+    const backRoute = mandateId
+      ? routes.GET_DETTAGLIO_NOTIFICA_DELEGATO_PATH(id, mandateId)
+      : routes.GET_DETTAGLIO_NOTIFICA_PATH(id);
 
     return (
       <PnBreadcrumb
@@ -246,7 +257,7 @@ const NotificationTimeline: React.FC = () => {
                   recipients={notification.recipients}
                   statusHistory={notification.notificationStatusHistory}
                   clickHandler={legalFactDownloadHandler}
-                  historyButtonLabel={t('detail.show-history', { ns: 'notifiche' })}
+                  handleTrackShowMoreLess={trackShowMoreLess}
                   showMoreButtonLabel={t('detail.show-more', { ns: 'notifiche' })}
                   showLessButtonLabel={t('detail.show-less', { ns: 'notifiche' })}
                   disableDownloads={isCancelled.cancellationInTimeline}

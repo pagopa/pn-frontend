@@ -1,6 +1,6 @@
 import KeyboardArrowRightRoundedIcon from '@mui/icons-material/KeyboardArrowRightRounded';
 import { Stack, Typography } from '@mui/material';
-import { ButtonNaked, MIChip, MIPaper } from '@pagopa/mui-italia';
+import { MIButton, MIChip, MIPaper } from '@pagopa/mui-italia';
 
 import { useIsMobile } from '../../hooks';
 import { NotificationDetailRecipient, NotificationStatusHistory } from '../../models';
@@ -64,17 +64,17 @@ const NotificationTimelineBox = ({
         {!isMobile && (
           <Typography variant="body2">{notificationStatusInfos.description}</Typography>
         )}
-        <ButtonNaked
+        <MIButton
           aria-label={getLocalizedOrDefaultLabel(
             'notifications',
             'detail.notification-timeline-section.aria-label'
           )}
-          color="primary"
           onClick={onTimelineClick}
+          variant="text"
         >
           {getLocalizedOrDefaultLabel('notifications', 'go-to-detail')}{' '}
           <KeyboardArrowRightRoundedIcon />
-        </ButtonNaked>
+        </MIButton>
       </Stack>
     </MIPaper>
   );

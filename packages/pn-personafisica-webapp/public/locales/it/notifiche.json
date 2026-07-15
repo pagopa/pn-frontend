@@ -7,6 +7,7 @@
     "oggetto": "Oggetto",
     "iun": "Codice IUN",
     "status": "Stato",
+    "aria-action-table": "Vedi dettaglio notifica con iun: {{iun}}",
     "open": "Apri",
     "legal-value": "Notifica a valore legale"
   },
@@ -32,9 +33,11 @@
     "options": "Opzioni sort"
   },
   "empty-state": {
-    "filtered": "Non abbiamo trovato risultati: prova con dei filtri diversi. <0>Rimuovi filtri</0>.",
-    "delegate": "{{name}} non ha ricevuto nessuna notifica.",
-    "title": "Qui troverai le tue notifiche SEND",
+    "filtered": "Nessuna notifica o comunicazione per i filtri selezionati",
+    "filtered-description": "Rimuovili o prova con un’altra combinazione.",
+    "clean-filters-cta": "Rimuovi filtri",
+    "delegate": "Qui vedrai le comunicazioni a valore legale di {{name}}",
+    "title": "Qui vedrai le tue notifiche a valore legale e le altre comunicazioni",
     "description-onboarding": "Sapevi che puoi risparmiare se scegli di ricevere le comunicazioni a valore legale solo in digitale?",
     "description": "Aggiorna ora i tuoi recapiti e saprai subito quando ne riceverai una.",
     "go-to-onboarding-cta": "Configura SEND",
@@ -51,6 +54,17 @@
     "not-found-subtitle": "Questa notifica può essere letta solo dal destinatario."
   },
   "detail": {
+    "notification-timeline-section": {
+      "title": "Stato della notifica",
+      "aria-label": "Vai alla timeline della notifica"
+    },
+    "notification-detail-section": {
+      "title": "Dettaglio della notifica",
+      "recipient": "Persona destinataria",
+      "aar": "Avviso di avvenuta ricezione",
+      "aria-label": "Vai all'avviso di avvenuta ricezione",
+      "availability": "Disponibile online per 10 anni dalla data in cui la notifica assume valore di legge."
+    },
     "notification-timeline-section": {
       "title": "Stato della notifica",
       "aria-label": "Vai alla timeline della notifica"
@@ -86,7 +100,7 @@
     "show-less": "Mostra meno dettagli",
     "disclaimer-link": "Scopri di più",
     "pec-unreachable": "Mantieni la PEC libera e attiva per ricevere tutto in digitale!",
-    "legal-value": "Valore legale",
+    "legal-value": "Notifica a valore legale",
     "cancelled": {
       "message": "Questa notifica è stata annullata dall’ente mittente.",
       "cta": "Cosa devo fare?"
@@ -413,7 +427,7 @@
       "action": "Consulta i modelli"
     }
   },
-  "delegatorTitle": "Le notifiche di {{name}}",
+  "delegatorTitle": "In arrivo per {{name}}",
   "status": {
     "recipient": "destinatario",
     "delegate": "delegato {{name}}",

@@ -51,6 +51,7 @@ const initialState = {
       denomination: '',
     },
     currentRecipientIndex: 0,
+    filedAt: '',
   } as NotificationDetailForRecipient,
   paymentsData: {
     pagoPaF24: [] as Array<PaymentDetails>,

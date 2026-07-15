@@ -1,8 +1,9 @@
 import { vi } from 'vitest';
 
-import { createMatchMedia, queryByTestId } from '@pagopa-pn/pn-commons/src/test-utils';
+import { createMatchMedia } from '@pagopa-pn/pn-commons/src/test-utils';
+import userEvent from '@testing-library/user-event';
 
-import { fireEvent, render, waitFor } from '../../test-utils';
+import { fireEvent, render, waitFor, within } from '../../test-utils';
 import PnInfoCard from '../PnInfoCard';
 
 const mockBtnOneCbk = vi.fn();
@@ -11,16 +12,27 @@ const mockBtnTwoCbk = vi.fn();
 const title = 'Mocked title';
 const subTitle = 'Mocked subtitle';
 const body = <div data-testid="body">Body</div>;
+
 const actions = [
-  <button key="one" data-testid="btn-one" onClick={mockBtnOneCbk}>
-    One
-  </button>,
-  <button key="two" data-testid="btn-two" onClick={mockBtnTwoCbk}>
-    Two
-  </button>,
+  {
+    key: 'one',
+    label: 'One',
+    testId: 'btn-one',
+    onClick: mockBtnOneCbk,
+  },
+  {
+    key: 'two',
+    label: 'Two',
+    testId: 'btn-two',
+    onClick: mockBtnTwoCbk,
+  },
 ];
 
 describe('PnInfoCard Component', () => {
+  beforeEach(() => {
+    globalThis.matchMedia = createMatchMedia(1280);
+  });
+
   afterEach(() => {
     vi.clearAllMocks();
   });
@@ -31,12 +43,12 @@ describe('PnInfoCard Component', () => {
 
   it('renders component', async () => {
     // render component
-    const { container, getByTestId, queryByTestId } = render(
+    const { container, getByTestId } = render(
       <PnInfoCard title={title} subtitle={subTitle} actions={actions}>
         {body}
       </PnInfoCard>
     );
-    const headerEl = queryByTestId('PnInfoCardHeader');
+    const headerEl = getByTestId('PnInfoCardHeader');
     expect(headerEl).toBeInTheDocument();
     const titleEl = getByTestId('PnInfoCardTitle');
     expect(titleEl).toBeInTheDocument();
@@ -58,7 +70,7 @@ describe('PnInfoCard Component', () => {
 
   it('renders component - no actions', () => {
     // render component
-    const { container, getByTestId } = render(
+    const { container, getByTestId, queryByTestId } = render(
       <PnInfoCard title={title} subtitle={subTitle}>
         {body}
       </PnInfoCard>
@@ -73,58 +85,91 @@ describe('PnInfoCard Component', () => {
     expect(bodyEl).toBeInTheDocument();
     expect(bodyEl).toHaveTextContent(/Body/i);
 
-    const btnOne = queryByTestId(container, 'btn-one');
+    const btnOne = queryByTestId('btn-one');
     expect(btnOne).not.toBeInTheDocument();
-    const btnTwo = queryByTestId(container, 'btn-two');
+    const btnTwo = queryByTestId('btn-two');
     expect(btnTwo).not.toBeInTheDocument();
   });
 
-  it('renders component - mobile', async () => {
-    window.matchMedia = createMatchMedia(800);
-    const { container, getByTestId } = render(
-      <PnInfoCard title={title} subtitle={subTitle}>
+  it('renders an accessible accordion on mobile', async () => {
+    globalThis.matchMedia = createMatchMedia(800);
+    const user = userEvent.setup();
+
+    const { getByRole, queryByRole, queryByTestId } = render(
+      <PnInfoCard title={title} subtitle={subTitle} mobileCollapsible>
         {body}
       </PnInfoCard>
     );
-    const titleEl = getByTestId('PnInfoCardTitle');
-    expect(titleEl).toBeInTheDocument();
-    expect(titleEl).toHaveTextContent(title);
-    expect(container).toHaveTextContent(subTitle);
-    let bodyEl = queryByTestId(container, 'body');
-    expect(bodyEl).not.toBeInTheDocument();
-    const expandIcon = getByTestId('KeyboardArrowDownOutlinedIcon');
-    expect(expandIcon).toBeInTheDocument();
-    fireEvent.click(expandIcon);
-    await waitFor(() => expect(container).toHaveTextContent(subTitle));
-    expect(expandIcon).not.toBeInTheDocument();
-    const collapseIcon = getByTestId('KeyboardArrowUpOutlinedIcon');
-    expect(collapseIcon).toBeInTheDocument();
-    bodyEl = getByTestId('body');
-    expect(bodyEl).toBeInTheDocument();
-    expect(bodyEl).toHaveTextContent(/Body/i);
+
+    const heading = getByRole('heading', { level: 5 });
+    const accordionButton = within(heading).getByRole('button', {
+      name: new RegExp(title, 'i'),
+    });
+
+    const panelId = accordionButton.getAttribute('aria-controls');
+
+    expect(accordionButton).toHaveAttribute('aria-expanded', 'false');
+    expect(panelId).toBeTruthy();
+
+    expect(queryByTestId('PnInfoCardBody')).not.toBeInTheDocument();
+    expect(queryByRole('region')).not.toBeInTheDocument();
+
+    await user.click(accordionButton);
+
+    await waitFor(() => {
+      expect(accordionButton).toHaveAttribute('aria-expanded', 'true');
+    });
+
+    const panel = getByRole('region');
+
+    expect(panel).toHaveAttribute('id', panelId);
+    expect(panel).toHaveAttribute('aria-labelledby', accordionButton.id);
+    expect(panel).toBeVisible();
+
+    await user.click(accordionButton);
+
+    await waitFor(() => {
+      expect(accordionButton).toHaveAttribute('aria-expanded', 'false');
+      expect(queryByTestId('PnInfoCardBody')).not.toBeInTheDocument();
+      expect(queryByRole('region')).not.toBeInTheDocument();
+    });
   });
 
-  it('renders component - mobile with actions', async () => {
-    window.matchMedia = createMatchMedia(800);
-    const { getByTestId } = render(
+  it('activates mobile menu actions using the keyboard', async () => {
+    globalThis.matchMedia = createMatchMedia(800);
+    const user = userEvent.setup();
+
+    const { getByTestId, queryByRole } = render(
       <PnInfoCard title={title} subtitle={subTitle} actions={actions}>
         {body}
       </PnInfoCard>
     );
 
-    const menuBtn = getByTestId('contextMenuButton');
-    expect(menuBtn).toBeInTheDocument();
-    fireEvent.click(menuBtn);
+    const menuButton = getByTestId('contextMenuButton');
 
-    const btnOne = getByTestId('btn-one');
-    expect(btnOne).toBeInTheDocument();
-    fireEvent.click(btnOne);
+    menuButton.focus();
+    await user.keyboard('{Enter}');
 
-    const btnTwo = getByTestId('btn-two');
-    expect(btnTwo).toBeInTheDocument();
-    fireEvent.click(btnTwo);
+    const firstAction = getByTestId('btn-one');
+
+    expect(firstAction).toBeInTheDocument();
+
+    firstAction.focus();
+    await user.keyboard('{Enter}');
 
     expect(mockBtnOneCbk).toHaveBeenCalledTimes(1);
+
+    await waitFor(() => {
+      expect(queryByRole('menu')).not.toBeInTheDocument();
+    });
+
+    await user.click(menuButton);
+
+    const secondAction = getByTestId('btn-two');
+
+    secondAction.focus();
+    await user.keyboard(' ');
+
     expect(mockBtnTwoCbk).toHaveBeenCalledTimes(1);
   });
 });

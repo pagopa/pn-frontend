@@ -11,6 +11,7 @@ import {
 import { createMatchMedia, testInput } from '@pagopa-pn/pn-commons/src/test-utils';
 import { getEndOfDay, today } from '@pagopa-pn/pn-commons/src/utility/date.utility';
 
+import { mandatesByDelegate } from '../../__mocks__/Delegations.mock';
 import { errorMock } from '../../__mocks__/Errors.mock';
 import { emptyNotificationsFromBe, notificationsDTO } from '../../__mocks__/Notifications.mock';
 import { RenderResult, act, fireEvent, render, screen, waitFor } from '../../__test__/test-utils';
@@ -39,11 +40,11 @@ describe('Notifiche Page', () => {
 
   afterEach(() => {
     mock.reset();
+    globalThis.matchMedia = originalMatchMedia;
   });
 
   afterAll(() => {
     mock.restore();
-    globalThis.matchMedia = originalMatchMedia;
     globalThis.ResizeObserver = originalResizeObserver;
   });
 
@@ -234,5 +235,113 @@ describe('Notifiche Page', () => {
     expect(itemsPerPageSelector).toBeInTheDocument();
     const pageSelector = result.queryByTestId('pageSelector');
     expect(pageSelector).toBeInTheDocument();
+  });
+
+  describe('new notifications dot', () => {
+    const receivedRegExp = new RegExp('/bff/v1/notifications/received');
+    const notificationsWithNew = notificationsDTO;
+    const notificationsWithoutNew = {
+      ...notificationsDTO,
+      resultsPage: notificationsDTO.resultsPage.map((n) => ({ ...n, isNewNotification: false })),
+    };
+    const generalInfoState = (overrides: Record<string, unknown>) => ({
+      pendingDelegators: 0,
+      delegators: [],
+      domicileBannerOpened: true,
+      paymentTpp: {},
+      hasNewNotifications: false,
+      onboardingData: {
+        hasBeenShown: false,
+        hasSkippedOnboarding: false,
+        exitReminderShown: false,
+      },
+      ...overrides,
+    });
+
+    it('sets hasNewNotifications to true when the first page has unread notifications', async () => {
+      mock.onGet(receivedRegExp).reply(200, notificationsWithNew);
+      await act(async () => {
+        result = render(<Notifiche />);
+      });
+      expect(result.testStore.getState().generalInfoState.hasNewNotifications).toBe(true);
+    });
+
+    it('sets hasNewNotifications to false when the first page has no unread notifications', async () => {
+      mock.onGet(receivedRegExp).reply(200, notificationsWithoutNew);
+      await act(async () => {
+        result = render(<Notifiche />, {
+          preloadedState: { generalInfoState: generalInfoState({ hasNewNotifications: true }) },
+        });
+      });
+      expect(result.testStore.getState().generalInfoState.hasNewNotifications).toBe(false);
+    });
+
+    it('does not update the dot on a delegated page', async () => {
+      mock.onGet(receivedRegExp).reply(200, notificationsWithNew);
+      await act(async () => {
+        result = render(<Notifiche />, {
+          route: `/notifiche/${mandatesByDelegate[1].mandateId}`,
+          path: '/notifiche/:mandateId',
+          preloadedState: {
+            generalInfoState: generalInfoState({ delegators: mandatesByDelegate }),
+          },
+        });
+      });
+      expect(result.testStore.getState().generalInfoState.hasNewNotifications).toBe(false);
+    });
+
+    it('keeps the dot value when navigating to another page', async () => {
+      mock.onGet(receivedRegExp).replyOnce(200, notificationsWithNew);
+      mock.onGet(receivedRegExp).replyOnce(200, notificationsWithoutNew);
+      await act(async () => {
+        result = render(<Notifiche />);
+      });
+      expect(result.testStore.getState().generalInfoState.hasNewNotifications).toBe(true);
+
+      const pageSelector = result.getByTestId('pageSelector');
+      const pageButtons = pageSelector?.querySelectorAll('button');
+      fireEvent.click(pageButtons[2]);
+      await waitFor(() => {
+        expect(mock.history.get).toHaveLength(2);
+      });
+      expect(result.testStore.getState().generalInfoState.hasNewNotifications).toBe(true);
+    });
+
+    it('recomputes the dot when the page size changes', async () => {
+      mock.onGet(receivedRegExp).replyOnce(200, notificationsWithoutNew);
+      mock.onGet(receivedRegExp).replyOnce(200, notificationsWithNew);
+      await act(async () => {
+        result = render(<Notifiche />);
+      });
+      expect(result.testStore.getState().generalInfoState.hasNewNotifications).toBe(false);
+
+      const itemsPerPageSelector = result.getByTestId('itemsPerPageSelector');
+      const itemsPerPageSelectorBtn = itemsPerPageSelector?.querySelector('button');
+      fireEvent.click(itemsPerPageSelectorBtn!);
+      const itemsPerPageList = screen.getAllByRole('menuitem');
+      fireEvent.click(itemsPerPageList[1]);
+      await waitFor(() => {
+        expect(mock.history.get).toHaveLength(2);
+      });
+      expect(result.testStore.getState().generalInfoState.hasNewNotifications).toBe(true);
+    });
+
+    it('does not recompute the dot when a filter is active', async () => {
+      mock.onGet(receivedRegExp).replyOnce(200, notificationsWithNew);
+      mock.onGet(receivedRegExp).replyOnce(200, notificationsWithoutNew);
+      await act(async () => {
+        result = render(<Notifiche />);
+      });
+      expect(result.testStore.getState().generalInfoState.hasNewNotifications).toBe(true);
+      // apply a filter
+      const form = result.container.querySelector('form') as HTMLFormElement;
+      await testInput(form, 'iunMatch', 'ABCD-EFGH-ILMN-123456-A-1');
+      const submitButton = form.querySelector(`button[type="submit"]`);
+      fireEvent.click(submitButton!);
+      await waitFor(() => {
+        expect(mock.history.get).toHaveLength(2);
+      });
+      expect(result.testStore.getState().generalInfoState.hasNewNotifications).toBe(true);
+    });
   });
 });

@@ -1116,6 +1116,7 @@ export const notificationDTOMultiRecipient: NotificationDetail = {
   abstract: 'Abstract della notifica',
   subject: 'notifica analogica con cucumber',
   recipients,
+  filedAt: '2023-08-25T09:33:58.709695008Z',
   documents: [
     {
       title: 'Document 0',

@@ -30,7 +30,9 @@
     "understand": "Ok, ho capito"
   },
   "menu": {
-    "notifiche": "Notifiche",
+    "notifiche": "In arrivo",
+    "notifiche-utente": "In arrivo per te",
+    "notifiche-delegato": "In arrivo per {{delegator}}",
     "deleghe": "Deleghe",
     "profilo": "I tuoi dati",
     "contacts": "I tuoi recapiti",

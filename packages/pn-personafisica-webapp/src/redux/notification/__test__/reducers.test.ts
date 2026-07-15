@@ -53,6 +53,7 @@ const initialState = {
     pagoPaIntMode: '',
     iun: '',
     sentAt: '',
+    filedAt: '',
     notificationStatus: '',
     notificationStatusHistory: [],
     timeline: [],
