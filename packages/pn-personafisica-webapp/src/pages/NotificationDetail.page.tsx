@@ -2,7 +2,7 @@
 
 /* eslint-disable complexity */
 import { isObject } from 'lodash-es';
-import { Fragment, useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 
@@ -428,8 +428,6 @@ const NotificationDetail: React.FC = () => {
     );
   }, [rapidAccessSource, i18n.language]);
 
-  const breadcrumb = <Fragment>{properBreadcrumb}</Fragment>;
-
   const cancelledAlert = isCancelledOrCancelling && (
     <MIAlert
       data-testid="cancelledAlertText"
@@ -570,7 +568,7 @@ const NotificationDetail: React.FC = () => {
         )}
         {!hasNotificationReceivedApiError && (
           <Box sx={{ p: 3, display: 'flex', flexDirection: 'column' }} gap={3}>
-            {breadcrumb}
+            {properBreadcrumb}
             <Box
               sx={{
                 display: 'flex',

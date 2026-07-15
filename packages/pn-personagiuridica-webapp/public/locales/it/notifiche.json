@@ -1,5 +1,6 @@
 {
   "title": "In arrivo per {{recipient}}",
+  "go-to-detail": "Vai al dettaglio",
   "title-delegated-notifications": "In arrivo per i deleganti",
   "subtitle": "Leggi le notifiche di {{recipient}}. Puoi filtrarle per Codice IUN e data di invio.",
   "subtitle-delegated-notifications": "Leggi le notifiche delegate a {{recipient}}. Puoi filtrarle per Codice IUN e data di invio.",
@@ -51,6 +52,17 @@
     "not-found-subtitle": "Può essere letta solo dagli utenti censiti dall’impresa destinataria o da un suo delegato."
   },
   "detail": {
+    "notification-timeline-section": {
+      "title": "Stato della notifica",
+      "aria-label": "Vai alla timeline della notifica"
+    },
+    "notification-detail-section": {
+      "title": "Dettaglio della notifica",
+      "recipient": "Persona destinataria",
+      "aar": "Avviso di avvenuta ricezione",
+      "aria-label": "Vai all'avviso di avvenuta ricezione",
+      "availability": "Disponibile online per 10 anni dalla data in cui la notifica assume valore di legge."
+    },
     "document-not-available": "Al momento non è possibile scaricare il documento, riprova più tardi. Per riprovare, ricarica la pagina o premi sul link del documento.",
     "table-aria-label": "Dettaglio notifica",
     "payment-table-aria-label": "Dettaglio pagamenti",

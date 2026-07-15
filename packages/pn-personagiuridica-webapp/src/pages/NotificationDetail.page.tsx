@@ -1,9 +1,9 @@
 import { isObject } from 'lodash-es';
-import { Fragment, useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 
-import { Box, Stack, Typography } from '@mui/material';
+import { Box, Stack } from '@mui/material';
 import {
   AbstractPaper,
   ApiError,
@@ -25,7 +25,6 @@ import {
   PaymentDetails,
   PnBreadcrumb,
   StatusHistoryParser,
-  TitleBox,
   appStateActions,
   dateIsLessThan10Years,
   downloadDocument,
@@ -419,16 +418,6 @@ const NotificationDetail = () => {
     );
   }, [fromQrCode, i18n.language]);
 
-  const breadcrumb = (
-    <Fragment>
-      {properBreadcrumb}
-      <TitleBox variantTitle="h4" title={notification.subject} sx={{ pt: 3, mb: 2 }} mbTitle={0} />
-      <Typography variant="body1" mb={{ xs: 3, md: 4 }} sx={{ overflowWrap: 'anywhere' }}>
-        {notification.abstract}
-      </Typography>
-    </Fragment>
-  );
-
   const cancelledAlert = isCancelledOrCancelling && (
     <MIAlert
       data-testid="cancelledAlertText"
@@ -490,7 +479,7 @@ const NotificationDetail = () => {
       )}
       {!hasNotificationReceivedApiError && (
         <Box sx={{ p: 3, display: 'flex', flexDirection: 'column' }} gap={3}>
-          {breadcrumb}
+          {properBreadcrumb}
           <Box
             sx={{
               display: 'flex',
