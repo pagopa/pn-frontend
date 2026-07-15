@@ -357,7 +357,7 @@
       "tpp-type": "un canale digitale di terze parti"
     },
     "downtimes": {
-      "title": "DISSERVIZI",
+      "title": "Disservizi",
       "textWithEndDate": "Disservizio iniziato {{startDate}} e concluso {{endDate}} sulle seguenti funzionalità:",
       "textWithoutEndDate": "Disservizio iniziato {{startDate}} e non ancora concluso sulle seguenti funzionalità:",
       "datePrefix": "il ",

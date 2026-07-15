@@ -33,6 +33,7 @@ const initialState = {
     subject: '',
     recipients: [] as Array<NotificationDetailRecipient>,
     senderDenomination: '',
+    senderPaId: '',
     paymentExpirationDate: '',
     documents: [] as Array<NotificationDetailDocument>,
     otherDocuments: [] as Array<NotificationDetailDocument>,
@@ -50,6 +51,7 @@ const initialState = {
       denomination: '',
     },
     currentRecipientIndex: 0,
+    filedAt: '',
   } as NotificationDetailForRecipient,
   paymentsData: {
     pagoPaF24: [] as Array<PaymentDetails>,

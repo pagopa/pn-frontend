@@ -1,5 +1,6 @@
 {
-  "title": "Posteingang",
+  "title": "Deine Zustellungen",
+  "go-to-detail": "Zur Detailansicht",
   "table": {
     "data": "Datum",
     "mittente": "Absender",
@@ -7,7 +8,9 @@
     "iun": "IUN-Code",
     "status": "Status",
     "show-detail": "Siehe Detail",
-    "aria-action-table": "Benachrichtigungsdetails mit IUN anzeigen: {{iun}}"
+    "aria-action-table": "Benachrichtigungsdetails mit IUN anzeigen: {{iun}}",
+    "open": "Öffnen",
+    "legal-value": "Rechtsgültige Zustellung"
   },
   "filters": {
     "iun": "Suche nach IUN-Code",
@@ -52,6 +55,17 @@
     "not-found-subtitle": "Diese Benachrichtigung kann nur vom Empfänger gelesen werden."
   },
   "detail": {
+    "notification-timeline-section": {
+      "title": "Status der Zustellung",
+      "aria-label": "Gehe zur Timeline der Zustellung"
+    },
+    "notification-detail-section": {
+      "title": "Details der Zustellung",
+      "recipient": "Empfänger",
+      "aar": "Empfangsbestätigung",
+      "aria-label": "Gehe zur Empfangsbestätigung",
+      "availability": "Online verfügbar für 10 Jahre ab dem Datum, an dem die Zustellung rechtswirksam wird."
+    },
     "document-not-available": "Das Dokument kann in wenigen Minuten heruntergeladen werden. Du kannst es erneut versuchen, indem du die Seite neu lädst oder auf den Link des angeforderten Dokuments klickst",
     "table-aria-label": "Einzelheiten zur Zustellung",
     "payment-table-aria-label": "Einzelheiten zu Zahlungen",
@@ -76,6 +90,7 @@
     "show-less": "Weniger Details anzeigen",
     "disclaimer-link": "Mehr hierzu",
     "pec-unreachable": "Halten Sie Ihr zertifiziertes E-Mail-Postfach (PEC) frei und aktiv, um alles digital zu erhalten!",
+    "legal-value": "Rechtsgültige Zustellung",
     "cancelled": {
       "message": "Diese Zustellung wurde von der sendenden Körperschaft storniert.",
       "cta": "Was muss ich tun?"
@@ -128,10 +143,10 @@
       "tpp-expired-error-description": "Um sie wiederherzustellen, greife über die Nachricht, die du in deiner Bank-App erhalten hast, erneut auf diese Benachrichtigung zu."
     },
     "acts_files": {
-      "downloadable_acts": "Die Dokumente sind 120 Tage nach Vervollständigung der Zustellung online verfügbar.",
-      "not_downloadable_acts": "Da seit der Vervollständigung 120 Tage vergangen sind, musst du dich für den Erhalt der Akten an den Absender wenden.",
+      "downloadable_acts": "<0>Die Dokumente sind bis zu 120 Tage lang online verfügbar</0> ab dem Datum, an dem die SEND-Benachrichtigung rechtlich wirksam wurde. Speichern Sie sie auf Ihrem Gerät!",
+      "not_downloadable_acts": "Die Dokumente sind online nicht mehr verfügbar. Um sie anzufordern, wenden Sie sich bitte an die Behörde, die sie Ihnen zugesendet hat.",
+      "not_downloadable_aar": "Der Zustellungsnachweis ist nicht mehr verfügbar. Um ihn anzufordern, wenden Sie sich bitte an die Behörde, die ihn Ihnen zugesendet hat.",
       "downloadable_aar": "Die Empfangsbestätigung ist 10 Jahre ab Vervollständigung der Zustellung online verfügbar.",
-      "not_downloadable_aar": "Da seit der Vervollständigung 10 Jahre vergangen sind, steht die Empfangsbestätigung nicht mehr zur Verfügung.",
       "notification_cancelled_aar": "Da diese Zustellung storniert wurde, wurde der Download der Empfangsbestätigung deaktiviert.",
       "notification_cancelled_acts": "Da diese Zustellung storniert wurde, wurde der Download der Dokumente deaktiviert.",
       "effected_faq": "Wann ist die Bearbeitung einer Zustellung vervollständigt?"
@@ -364,7 +379,7 @@
       "tpp-type": "ein digitaler Kanal von Drittanbietern"
     },
     "downtimes": {
-      "title": "FEHLFUNKTIONEN",
+      "title": "Fehlfunktionen",
       "textWithEndDate": "Fehlfunktion begonnen {{startDate}} und behoben {{endDate}} an folgenden Funktionen:",
       "textWithoutEndDate": "Beginn der Fehlfunktion {{startDate}} und noch nicht vollständig behoben an folgenden Funktionen:",
       "datePrefix": "am ",
@@ -390,7 +405,7 @@
       }
     },
     "bilingual": {
-      "title": "SUPPORT-FAKSIMILE-VORLAGEN auf Deutsch",
+      "title": "Support-Faksimile-Vorlagen auf Deutsch",
       "description": "Die Sprache der beigefügten Akte kann von der Sprache abweichen, mit der du das Portal nutzt. Um den Inhalt dieser Dokumente zu verstehen, kannst du die Faksimile-Vorlagen verwenden, die du hier findest.",
       "action": "Konsultiere die Vorlagen"
     }

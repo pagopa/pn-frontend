@@ -1,4 +1,6 @@
 {
+  "iun": "Code IUN",
+  "logo": "Logo de",
   "button": {
     "filtra": "Filtrer",
     "annulla filtro": "Supprimer les filtres",
@@ -76,7 +78,19 @@
   },
   "date-time": {
     "today-uppercase-initial": "Aujourd'hui",
-    "hour-of-day": "heures"
+    "hour-of-day": "heures",
+    "january": "janvier",
+    "february": "février",
+    "march": "mars",
+    "april": "avril",
+    "may": "mai",
+    "june": "juin",
+    "july": "juillet",
+    "august": "août",
+    "september": "septembre",
+    "october": "octobre",
+    "november": "novembre",
+    "december": "décembre"
   },
   "error-boundary": {
     "title": "Quelque chose n'a pas fonctionné",
@@ -258,5 +272,6 @@
     "selection-box": "Options sélectionnées",
     "selection-done": "%s sélectionnés",
     "delete-selection": "Supprime %s"
-  }
+  },
+  "not-available": "Non disponible"
 }

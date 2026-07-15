@@ -96,3 +96,4 @@ export {
   removeNullProperties,
 } from './user.utility';
 export { searchStringLimitReachedText, useSearchStringChangeInput } from './searchString.utility';
+export { getAccessibleIun } from './accessibility.utility';

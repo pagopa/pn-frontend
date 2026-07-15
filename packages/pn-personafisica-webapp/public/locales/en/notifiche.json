@@ -1,5 +1,6 @@
 {
-  "title": "Inbox",
+  "title": "Your notifications",
+  "go-to-detail": "Go to details",
   "table": {
     "data": "Date",
     "mittente": "Sender",
@@ -7,7 +8,9 @@
     "iun": "IUN code",
     "status": "Status",
     "show-detail": "See details",
-    "aria-action-table": "View notification details with IUN: {{iun}}"
+    "aria-action-table": "View notification details with IUN: {{iun}}",
+    "open": "Open",
+    "legal-value": "Legally-binding notification"
   },
   "filters": {
     "iun": "Search by IUN Code",
@@ -52,6 +55,17 @@
     "not-found-subtitle": "This notification can only be read by the recipient."
   },
   "detail": {
+    "notification-timeline-section": {
+      "title": "Notification status",
+      "aria-label": "Go to the notification timeline"
+    },
+    "notification-detail-section": {
+      "title": "Notification details",
+      "recipient": "Recipient",
+      "aar": "Notification of receipt",
+      "aria-label": "Go to the notification of receipt",
+      "availability": "Available online for 10 years from the date the notification becomes legally binding."
+    },
     "document-not-available": "The document will be available for download in a few minutes. You can try again by reloading the page or clicking on the link of the requested document",
     "table-aria-label": "Notification details",
     "payment-table-aria-label": "Payment details",
@@ -76,6 +90,7 @@
     "show-less": "See fewer details",
     "disclaimer-link": "Discover more",
     "pec-unreachable": "Keep your certified email (PEC) mailbox free and active to receive everything digitally!",
+    "legal-value": "Legally-binding notification",
     "cancelled": {
       "message": "This notification has been cancelled by the issuing institution.",
       "cta": "What should I do?"
@@ -128,10 +143,10 @@
       "tpp-expired-error-description": "To restore it, access this notification again using the message you received on your bank's app."
     },
     "acts_files": {
-      "downloadable_acts": "Documents are available online for 120 days from the finalization of the notification.",
-      "not_downloadable_acts": "Since 120 days have passed since the finalization date, if you want to obtain the documents you must contact the sender.",
+      "downloadable_acts": "<0>Documents will be available online for up to 120 days</0> from the date the SEND notification became legally effective. Save them to your device!",
+      "not_downloadable_acts": "Documents are no longer available online. To request them, please contact the institution that sent them to you.",
+      "not_downloadable_aar": "The acknowledgment of receipt is no longer available. To request it, please contact the institution that sent it to you.",
       "downloadable_aar": "The notification of receipt is available online for 10 years from the finalization of the notification.",
-      "not_downloadable_aar": "As 10 years have passed since the finalization date, the notification of receipt is no longer available.",
       "notification_cancelled_aar": "As this notification has been canceled, the download of the Notification of Receipt has been disabled.",
       "notification_cancelled_acts": "As this notification has been canceled, the download of the documents has been disabled.",
       "effected_faq": "When is a notification finalized?"
@@ -364,7 +379,7 @@
       "tpp-type": "a third-party digital channel"
     },
     "downtimes": {
-      "title": "DISRUPTIONS",
+      "title": "Disruptions",
       "textWithEndDate": "Disruption started {{startDate}} and ended {{endDate}} for the following functions:",
       "textWithoutEndDate": "Disruption started {{startDate}} and not yet ended for the following functions:",
       "datePrefix": "the ",
@@ -390,7 +405,7 @@
       }
     },
     "bilingual": {
-      "title": "SUPPORT FACSIMILE TEMPLATES in English",
+      "title": "Support facsimile templates in English",
       "description": "The language of the attached documents may differ from the one you are using to browse the portal. To understand the content of these documents, you can use the facsimile templates found here.",
       "action": "Consult the templates"
     }

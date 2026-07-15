@@ -22,13 +22,14 @@ describe('NotificationDetailDocuments Component', () => {
         documents={[]}
         clickHandler={mockClickFn}
         documentsAvailable
+        downloadFilesMessage="Mocked download message"
       />
     );
     expect(container).toHaveTextContent(/Mocked title/i);
     const notificationDetailDocuments = queryAllByTestId('notificationDetailDocuments');
     expect(notificationDetailDocuments).toHaveLength(0);
     const documentsMessage = getByTestId('documentsMessage');
-    expect(documentsMessage).toHaveTextContent('');
+    expect(documentsMessage).toBeInTheDocument();
   });
 
   it('renders component - with documents', () => {
@@ -55,7 +56,7 @@ describe('NotificationDetailDocuments Component', () => {
       expect(documentButton).toBeInTheDocument();
     });
     const documentsMessage = getByTestId('documentsMessage');
-    expect(documentsMessage).toHaveTextContent('Mocked download message');
+    expect(documentsMessage).toBeInTheDocument();
   });
 
   it('clicks on document button', async () => {

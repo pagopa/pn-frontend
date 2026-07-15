@@ -1,8 +1,7 @@
 import React from 'react';
 
-import DescriptionRoundedIcon from '@mui/icons-material/DescriptionRounded';
-import { Box, Grid, Stack, Typography } from '@mui/material';
-import { ButtonNaked } from '@pagopa/mui-italia';
+import { Box, Stack, Typography } from '@mui/material';
+import { ButtonNaked, MIPaper } from '@pagopa/mui-italia';
 
 /**
  *  Notification detail bilingual documents
@@ -24,38 +23,23 @@ const NotificationDetailBilingualFacsimileDocuments: React.FC<Props> = ({
   action,
   link,
 }) => (
-  <>
-    <Grid
-      key="bilingual-section"
-      container
-      direction="row"
-      justifyContent="space-between"
-      alignItems="center"
-      data-testid="bilingualSection"
-    >
-      <Grid key="detail-bilingual-documents-title" item sx={{ mb: 3 }}>
-        <Typography
-          id="notification-detail-bilingual-document-attached"
-          color="text.primary"
-          variant="overline"
-        >
-          {title}
-        </Typography>
-      </Grid>
-    </Grid>
-    <Grid key="detail-bilingual-documents-message" item data-testid="bilingualDocumentsMessage">
-      <Stack direction="row">
-        <Typography variant="body2" sx={{ mb: 3 }}>
-          {description}
-        </Typography>
-      </Stack>
-    </Grid>
-    <Grid key="download-bilingual-files-section" item>
+  <MIPaper padding={24}>
+    <Stack key="bilingual-section" data-testid="bilingualSection" alignItems={'start'}>
+      <Typography
+        component="h2"
+        variant="h5"
+        id="notification-detail-bilingual-document-attached"
+        sx={{ mb: 1 }}
+      >
+        {title}
+      </Typography>
+      <Typography variant="body2" sx={{ mb: 3 }} data-testid="bilingualDocumentsMessage">
+        {description}
+      </Typography>
       <ButtonNaked
         id="download-bilingual-files-button"
         data-testid="downloadBilingualFilesButton"
         color={'primary'}
-        startIcon={<DescriptionRoundedIcon />}
         onClick={() => link && window.open(link, '_blank', 'noopener,noreferrer')}
         disabled={false}
       >
@@ -76,8 +60,8 @@ const NotificationDetailBilingualFacsimileDocuments: React.FC<Props> = ({
           {action}
         </Box>
       </ButtonNaked>
-    </Grid>
-  </>
+    </Stack>
+  </MIPaper>
 );
 
 export default NotificationDetailBilingualFacsimileDocuments;

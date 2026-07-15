@@ -1,5 +1,6 @@
 {
-  "title": "Prejeto",
+  "title": "Vaša obvestila",
+  "go-to-detail": "Pojdi na podrobnosti",
   "table": {
     "data": "Datum",
     "mittente": "Pošiljatelj",
@@ -7,7 +8,9 @@
     "iun": "Koda IUN",
     "status": "Država",
     "show-detail": "Ogled podrobnosti",
-    "aria-action-table": "Oglejte si podrobnosti obvestila z IUN: {{iun}}"
+    "aria-action-table": "Oglejte si podrobnosti obvestila z IUN: {{iun}}",
+    "open": "Odpri",
+    "legal-value": "Pravno zavezujoča vročitev"
   },
   "filters": {
     "iun": "Iskanje po kodi IUN",
@@ -52,6 +55,17 @@
     "not-found-subtitle": "To obvestilo lahko prebere samo prejemnik."
   },
   "detail": {
+    "notification-timeline-section": {
+      "title": "Stanje obvestila",
+      "aria-label": "Pojdi na časovnico obvestila"
+    },
+    "notification-detail-section": {
+      "title": "Podrobnosti obvestila",
+      "recipient": "Prejemnik",
+      "aar": "Potrdilo o prejemu",
+      "aria-label": "Pojdi na potrdilo o prejemu",
+      "availability": "Na voljo na spletu 10 let od datuma, ko obvestilo začne pravno veljati."
+    },
     "document-not-available": "Dokument bo mogoče prenesti v nekaj minutah. Poskusite lahko znova tako, da ponovno naložite stran ali kliknete povezavo zahtevanega dokumenta",
     "table-aria-label": "Podrobnosti o obvestilu",
     "payment-table-aria-label": "Podrobnosti o plačilih",
@@ -76,6 +90,7 @@
     "show-less": "Prikaži manj podrobnosti",
     "disclaimer-link": "Izvedite več",
     "pec-unreachable": "Vaš predal PEC naj bo prost in aktiven, da boste vse prejemali v digitalni obliki!",
+    "legal-value": "Pravno zavezujoča vročitev",
     "cancelled": {
       "message": "To obvestilo je preklical organ pošiljatelj.",
       "cta": "Kaj moram storiti?"
@@ -128,10 +143,10 @@
       "tpp-expired-error-description": "Za ponovno vzpostavitev ponovno dostopajte do tega obvestila prek sporočila, ki ste ga prejeli v aplikaciji vaše banke."
     },
     "acts_files": {
-      "downloadable_acts": "Dokumenti so na voljo na spletu 120 dni od zaključka obvestila.",
-      "not_downloadable_acts": "Ker je od datuma zaključka minilo 120 dni, se morate za pridobitev listin obrniti na pošiljatelja.",
+      "downloadable_acts": "<0>Dokumenti bodo na voljo na spletu do 120 dni</0> od dneva, ko je uradno obvestilo SEND postalo pravno veljavno. Shranite jih v svojo napravo!",
+      "not_downloadable_acts": "Dokumenti niso več na voljo na spletu. Če jih želite zahtevati, se obrnite na organ, ki vam jih je poslal.",
+      "not_downloadable_aar": "Obvestilo o prejemu ni več na voljo. Če ga želite zahtevati, se obrnite na organ, ki vam ga je poslal.",
       "downloadable_aar": "Obvestilo o prejemu je na voljo na spletu 10 let od zaključka obvestila.",
-      "not_downloadable_aar": "Ker je od datuma zaključka minilo 10 let, obvestilo o prejemu ni več na voljo.",
       "notification_cancelled_aar": "Ker je bilo to obvestilo preklicano, je bil prenos obvestila o prejemu onemogočen.",
       "notification_cancelled_acts": "Ker je bilo to obvestilo preklicano, je bil prenos dokumenta onemogočen.",
       "effected_faq": "Kdaj se obvestilo zaključi?"
@@ -364,7 +379,7 @@
       "tpp-type": "digitalni kanal tretje osebe"
     },
     "downtimes": {
-      "title": "MOTNJE",
+      "title": "Motnje",
       "textWithEndDate": "Motnja se je začela {{startDate}} in končala {{endDate}} pri naslednjih funkcijah:",
       "textWithoutEndDate": "Motnja se je začela {{startDate}} in še ni končana pri naslednjih funkcijah:",
       "datePrefix": "dne ",
@@ -390,7 +405,7 @@
       }
     },
     "bilingual": {
-      "title": "PODPORNI FAKSIMILNI VZORCI v slovenščini",
+      "title": "Podporni Faksimilni vzorci v slovenščini",
       "description": "Jezik priloženih aktov se lahko razlikuje od jezika, v katerem brskaš po portalu. Če želiš razumeti vsebino teh dokumentov, lahko uporabiš faksimilne vzorce, ki jih najdeš tukaj.",
       "action": "Preglej vzorce"
     }
