@@ -37,6 +37,7 @@ const initialState = {
     otherDocuments: [] as Array<NotificationDetailDocument>,
     iun: '',
     sentAt: '',
+    filedAt: '',
     notificationStatus: '' as NotificationStatus,
     notificationStatusHistory: [] as Array<NotificationStatusHistory>,
     timeline: [] as Array<INotificationDetailTimeline>,
