@@ -16,7 +16,6 @@ type NotificationEventType =
   | PGEventsType.SEND_PG_NOTIFICATION_DOWNLOAD_ATTACHMENT
   | PGEventsType.SEND_PG_START_PAYMENT
   | PGEventsType.SEND_PG_TIMELINE_DOWNLOAD
-  | PGEventsType.SEND_PG_TIMELINE_SHOW_HISTORY
   | PGEventsType.SEND_PG_TIMELINE_SHOW_MORE
   | PGEventsType.SEND_PG_YOUR_NOTIFICATION;
 
@@ -30,7 +29,6 @@ export const notificationTrackingConfigs: TrackingConfigs<NotificationEventType>
   [PGEventsType.SEND_PG_START_PAYMENT]: () => uxAction(mapStartPaymentToEventPayload()),
   [PGEventsType.SEND_PG_TIMELINE_DOWNLOAD]: (data) =>
     uxAction(mapTimelineLegalFactToDocumentDownloadPayload(data)),
-  [PGEventsType.SEND_PG_TIMELINE_SHOW_HISTORY]: () => uxAction(),
   [PGEventsType.SEND_PG_TIMELINE_SHOW_MORE]: () => uxAction(),
   [PGEventsType.SEND_PG_YOUR_NOTIFICATION]: (data) =>
     uxScreenView(mapNotificationListToEventPayload(data)),
