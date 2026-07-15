@@ -170,7 +170,12 @@ const NotificationTimeline: React.FC = () => {
   };
 
   const properBreadcrumb = useMemo(() => {
-    const backRoute = mandateId ? routes.GET_NOTIFICHE_DELEGATO_PATH(mandateId) : routes.NOTIFICHE;
+    if (!id) {
+      return null;
+    }
+    const backRoute = mandateId
+      ? routes.GET_DETTAGLIO_NOTIFICA_DELEGATO_PATH(id, mandateId)
+      : routes.GET_DETTAGLIO_NOTIFICA_PATH(id);
 
     return (
       <PnBreadcrumb

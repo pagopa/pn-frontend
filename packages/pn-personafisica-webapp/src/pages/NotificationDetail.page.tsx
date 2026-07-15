@@ -100,7 +100,7 @@ const NotificationDetail: React.FC = () => {
     FACSIMILE_FR,
     FACSIMILE_DE,
     FACSIMILE_SL,
-    SENDER_LOGO_URL,
+    SELFCARE_CDN_URL,
   } = getConfiguration();
   const navigate = useNavigate();
 
@@ -543,13 +543,12 @@ const NotificationDetail: React.FC = () => {
   };
 
   const handleGoToTimeline = () => {
-    if (mandateId && id) {
-      console.log('mandateId', mandateId);
-      navigate(routes.GET_DETTAGLIO_NOTIFICA_DELEGATO_TIMELINE_PATH(id, mandateId));
+    if (!id) {
+      return;
     }
-    if (!mandateId && id) {
-      navigate(routes.GET_DETTAGLIO_NOTIFICA_TIMELINE_PATH(id));
-    }
+    return mandateId
+      ? navigate(routes.GET_DETTAGLIO_NOTIFICA_DELEGATO_TIMELINE_PATH(id, mandateId))
+      : navigate(routes.GET_DETTAGLIO_NOTIFICA_TIMELINE_PATH(id));
   };
 
   return (
@@ -596,10 +595,10 @@ const NotificationDetail: React.FC = () => {
                     title={notification.subject}
                     senderPaId={notification.senderPaId}
                     senderDenomination={notification.senderDenomination}
-                    filedAt={notification.filedAt}
+                    filedAt={notification.sentAt}
                     iun={notification.iun}
                     abstract={notification.abstract}
-                    senderLogoUrl={SENDER_LOGO_URL}
+                    senderLogoUrl={SELFCARE_CDN_URL}
                   />
                   {banner}
                   {pecUnreachableAlert}
@@ -687,7 +686,7 @@ const NotificationDetail: React.FC = () => {
                   />
                 )}
                 <NotificationDetailSection
-                  isDelegate={delegatorsFromStore.length > 0}
+                  isDelegate={!!mandateId}
                   recipient={currentRecipient}
                   documents={notification.otherDocuments ?? []}
                   clickHandler={documentDowloadHandler}
