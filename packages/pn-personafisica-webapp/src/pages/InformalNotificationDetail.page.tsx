@@ -269,7 +269,8 @@ const InformalNotificationDetail: React.FC = () => {
                     {t('detail.contact_sender.phone', { ns: 'notifiche' })}
                   </Typography>
                   <Typography variant="sidenav" color="text.primary">
-                    {currentRecipient?.phoneNumber ?? '-'}
+                    {/* TODO da sistemare */}
+                    {(currentRecipient as any)?.senderContacts?.phone ?? '-'}
                   </Typography>
                 </ListItemText>
               </ListItem>
@@ -287,7 +288,8 @@ const InformalNotificationDetail: React.FC = () => {
                     {t('detail.contact_sender.website', { ns: 'notifiche' })}
                   </Typography>
                   <Typography variant="sidenav" color="text.primary">
-                    {currentRecipient?.email ?? '-'}
+                    {/* TODO da sistemare */}
+                    {(currentRecipient as any)?.senderContacts?.site ?? '-'}
                   </Typography>
                 </ListItemText>
               </ListItem>

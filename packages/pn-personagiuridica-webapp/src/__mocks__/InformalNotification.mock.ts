@@ -100,8 +100,17 @@ Grazie per l'attenzione.`,
       docIdx: '141',
     },
   ],
+  // @ts-ignore - senderContacts non è ancora presente nel modello OpenAPI
+  senderContacts: {
+    senderId: '1234567890',
+    email: 'email@email.com',
+    pec: 'pec@pec.it',
+    phone: '123456789',
+    site: 'www.test.com',
+  },
   group: 'fH3WxlE=.7qJeO.epIlIbcZUkjQr5mypG:NU=[3*ZSg1wn\\pjb',
   iun: 'UUDE-FVGR-ERLR-640815-N-7',
+  sentAt: '2026-07-01T13:03:22.493Z',
   filedAt: '2026-07-01T13:03:22.493Z',
   notificationStatus: 'IN_VALIDATION',
 };
