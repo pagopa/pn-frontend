@@ -9,6 +9,7 @@
     "status": "Status",
     "show-detail": "See details",
     "aria-action-table": "View notification details with IUN: {{iun}}",
+    "open": "Open",
     "legal-value": "Legally-binding notification"
   },
   "filters": {
