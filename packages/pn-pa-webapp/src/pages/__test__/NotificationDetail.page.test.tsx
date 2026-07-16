@@ -233,13 +233,13 @@ describe('NotificationDetail Page', () => {
       });
     });
 
-    const notificationDetailDocumentsMessage = result.getAllByTestId('documentsMessage');
-    expect(notificationDetailDocumentsMessage[1]).toHaveTextContent('detail.download-aar-expired');
+    const aarSection = result.getByTestId('aarDownload');
 
-    const documentButton = result.getAllByTestId('documentButton');
-    expect(documentButton[1].getAttributeNames()).toContain('disabled');
+    const notificationDetailDocumentsMessage = within(aarSection).getByTestId('documentsMessage');
+    expect(notificationDetailDocumentsMessage).toHaveTextContent('detail.download-aar-expired');
 
-    fireEvent.click(documentButton[1]);
+    const documentButton = within(aarSection).queryAllByTestId('documentButton');
+    expect(documentButton).toHaveLength(0);
   });
 
   it('executes the document download handler - mono recipient', async () => {
