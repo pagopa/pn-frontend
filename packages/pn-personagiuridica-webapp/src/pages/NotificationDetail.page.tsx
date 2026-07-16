@@ -538,12 +538,6 @@ const NotificationDetail = () => {
     }
   };
 
-  const trackTimelineShowHistory = (open: boolean) => {
-    if (open) {
-      PGEventStrategyFactory.triggerEvent(PGEventsType.SEND_PG_TIMELINE_SHOW_HISTORY);
-    }
-  };
-
   const getFacSimileLink = (): string | undefined => {
     switch (i18n.language) {
       case 'en':
@@ -684,15 +678,12 @@ const NotificationDetail = () => {
                   language={i18n.language}
                   recipients={notification.recipients}
                   statusHistory={notification.notificationStatusHistory}
-                  title={t('detail.timeline-title', { ns: 'notifiche' })}
                   clickHandler={legalFactDownloadHandler}
-                  historyButtonLabel={t('detail.show-history', { ns: 'notifiche' })}
                   showMoreButtonLabel={t('detail.show-more', { ns: 'notifiche' })}
                   showLessButtonLabel={t('detail.show-less', { ns: 'notifiche' })}
                   disableDownloads={isCancelled.cancellationInTimeline}
                   isParty={false}
                   handleTrackShowMoreLess={trackTimelineShowMore}
-                  handleTrackShowHistory={trackTimelineShowHistory}
                 />
               </Box>
             </Grid>

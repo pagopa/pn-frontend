@@ -42,6 +42,7 @@ const initialState = {
     additionalLanguages: [] as Array<string>,
     iun: '',
     sentAt: '',
+    filedAt: '',
     notificationStatus: '' as NotificationStatus,
     notificationStatusHistory: [] as Array<NotificationStatusHistory>,
     timeline: [] as Array<INotificationDetailTimeline>,
@@ -51,7 +52,6 @@ const initialState = {
       denomination: '',
     },
     currentRecipientIndex: 0,
-    filedAt: '',
   } as NotificationDetailForRecipient,
   paymentsData: {
     pagoPaF24: [] as Array<PaymentDetails>,
