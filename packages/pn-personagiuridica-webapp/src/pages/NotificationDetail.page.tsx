@@ -74,7 +74,7 @@ type LocationState = {
   fromQrCode?: boolean; // indicates whether the user arrived to the notification detail page from the QR code
 };
 
-// eslint-disable-next-line complexity
+// eslint-disable-next-line complexity, sonarjs/cognitive-complexity
 const NotificationDetail = () => {
   const { id, mandateId } = useParams();
   const location = useLocation();
@@ -364,11 +364,7 @@ const NotificationDetail = () => {
 
   const getDownloadFilesMessage = useCallback(
     (type: 'aar' | 'attachments'): string => {
-      if (isCancelledOrCancelling) {
-        return type === 'aar'
-          ? t('detail.acts_files.notification_cancelled_aar', { ns: 'notifiche' })
-          : t('detail.acts_files.notification_cancelled_acts', { ns: 'notifiche' });
-      } else if (type === 'attachments') {
+      if (type === 'attachments') {
         return notification.documentsAvailable
           ? t('detail.acts_files.downloadable_acts', { ns: 'notifiche' })
           : t('detail.acts_files.not_downloadable_acts', { ns: 'notifiche' });

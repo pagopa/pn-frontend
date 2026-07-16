@@ -517,11 +517,9 @@ describe('NotificationDetail Page', () => {
     expect(mock.history.get[0].url).toContain('/bff/v1/notifications/received');
     expect(mock.history.get[1].url).toContain('/bff/v1/downtime/history');
     // check documents box
-    const notificationDetailDocumentsMessage = result?.getAllByTestId('documentsMessage');
-    for (const notificationDetailDocumentMessage of notificationDetailDocumentsMessage) {
-      expect(notificationDetailDocumentMessage).toHaveTextContent(
-        /detail.acts_files.notification_cancelled_aar|detail.acts_files.notification_cancelled_acts/
-      );
+    const notificationDetailDocuments = result.getAllByTestId('notificationDetailDocuments');
+    for (const notificationDetailDocument of notificationDetailDocuments) {
+      expect(notificationDetailDocument).toHaveTextContent('not-available');
     }
   });
 

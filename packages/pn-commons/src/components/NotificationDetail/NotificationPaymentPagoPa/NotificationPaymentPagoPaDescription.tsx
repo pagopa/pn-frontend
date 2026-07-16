@@ -1,50 +1,108 @@
 import { Box, Typography } from '@mui/material';
 
-import { PagoPAPaymentFullDetails } from '../../../models/NotificationDetail';
+import {
+  PagoPAPaymentFullDetails,
+  PaymentInfoDetail,
+  PaymentStatus,
+} from '../../../models/NotificationDetail';
 import { formatDate } from '../../../utility/date.utility';
 import { getLocalizedOrDefaultLabel } from '../../../utility/localization.utility';
+import StatusTooltip from '../../Notifications/StatusTooltip';
+
+type StatusVisualInfo = {
+  color: 'warning' | 'error' | 'success' | 'info';
+  key: string;
+};
 
 type Props = {
   pagoPAItem: PagoPAPaymentFullDetails;
   isCancelled: boolean;
 };
 
-const NotificationPaymentPagoPaDescription: React.FC<Props> = ({ pagoPAItem, isCancelled }) => (
-  <Box flexGrow={1}>
-    {pagoPAItem.causaleVersamento && (
-      <Typography variant="sidenav" color="text.primary">
-        {pagoPAItem.causaleVersamento}
-      </Typography>
-    )}
-    <Box lineHeight="1.4rem">
-      <Typography variant="caption" color="text.secondary" mr={0.5}>
-        {getLocalizedOrDefaultLabel('notifications', 'detail.payment.notice-code')}
-      </Typography>
-      <Typography variant="caption-semibold" color="text.secondary">
-        {pagoPAItem.noticeCode}
-      </Typography>
-    </Box>
-    {isCancelled && (
+const getStatusVisualInfo = (
+  status: PaymentStatus,
+  detail?: PaymentInfoDetail
+): StatusVisualInfo | undefined => {
+  switch (status) {
+    case PaymentStatus.SUCCEEDED:
+      return { color: 'success', key: 'succeeded' };
+
+    case PaymentStatus.FAILED:
+      if (detail === PaymentInfoDetail.PAYMENT_CANCELED) {
+        return { color: 'warning', key: 'canceled' };
+      }
+      if (detail === PaymentInfoDetail.PAYMENT_EXPIRED) {
+        return { color: 'error', key: 'failed' };
+      }
+      return undefined;
+
+    case PaymentStatus.INPROGRESS:
+      return { color: 'info', key: 'inprogress' };
+
+    case PaymentStatus.REQUIRED:
+    default:
+      return undefined;
+  }
+};
+
+const NotificationPaymentPagoPaDescription: React.FC<Props> = ({ pagoPAItem, isCancelled }) => {
+  const statusVisualInfo = getStatusVisualInfo(pagoPAItem.status, pagoPAItem.detail);
+  return (
+    <Box>
+      {pagoPAItem.causaleVersamento && (
+        <Typography variant="sidenav" color="text.primary">
+          {pagoPAItem.causaleVersamento}
+        </Typography>
+      )}
       <Box lineHeight="1.4rem">
         <Typography variant="caption" color="text.secondary" mr={0.5}>
-          {getLocalizedOrDefaultLabel('notifications', 'detail.creditor-tax-id')}
-        </Typography>
-        <Typography variant="caption-semibold" color="text.secondary" data-testid="creditorTaxId">
-          {pagoPAItem.creditorTaxId}
-        </Typography>
-      </Box>
-    )}
-    {pagoPAItem.dueDate && (
-      <Box lineHeight="1.4rem">
-        <Typography variant="caption" color="text.secondary" mr={0.5}>
-          {getLocalizedOrDefaultLabel('notifications', 'detail.payment.due')}
+          {getLocalizedOrDefaultLabel('notifications', 'detail.payment.notice-code')}
         </Typography>
         <Typography variant="caption-semibold" color="text.secondary">
-          {formatDate(pagoPAItem.dueDate, false)}
+          {pagoPAItem.noticeCode}
         </Typography>
       </Box>
-    )}
-  </Box>
-);
+      {isCancelled && (
+        <Box lineHeight="1.4rem">
+          <Typography variant="caption" color="text.secondary" mr={0.5}>
+            {getLocalizedOrDefaultLabel('notifications', 'detail.creditor-tax-id')}
+          </Typography>
+          <Typography variant="caption-semibold" color="text.secondary" data-testid="creditorTaxId">
+            {pagoPAItem.creditorTaxId}
+          </Typography>
+        </Box>
+      )}
+      {pagoPAItem.dueDate && (
+        <Box lineHeight="1.4rem">
+          <Typography variant="caption" color="text.secondary" mr={0.5}>
+            {getLocalizedOrDefaultLabel('notifications', 'detail.payment.due')}
+          </Typography>
+          <Typography variant="caption-semibold" color="text.secondary">
+            {formatDate(pagoPAItem.dueDate, false)}
+          </Typography>
+        </Box>
+      )}
+      {statusVisualInfo && (
+        <Box lineHeight="1.4rem">
+          <Typography variant="caption" color="text.secondary" mr={0.5}>
+            {getLocalizedOrDefaultLabel('notifications', 'detail.payment.status.title')}
+          </Typography>
+          <StatusTooltip
+            label={getLocalizedOrDefaultLabel(
+              'notifications',
+              `detail.payment.status.${statusVisualInfo.key}`
+            )}
+            color={statusVisualInfo.color}
+            tooltip={getLocalizedOrDefaultLabel(
+              'notifications',
+              `detail.payment.status.${statusVisualInfo.key}-tooltip`
+            )}
+            tooltipProps={{ placement: 'top' }}
+          />
+        </Box>
+      )}
+    </Box>
+  );
+};
 
 export default NotificationPaymentPagoPaDescription;

@@ -263,21 +263,17 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
             >
               {paginatedPayments.map((payment) =>
                 payment.pagoPa ? (
-                  <Box
+                  <NotificationPaymentPagoPAItem
                     key={`payment-${payment.pagoPa.noticeCode}-${payment.pagoPa.creditorTaxId}`}
-                    data-testid="pagopa-item"
-                  >
-                    <NotificationPaymentPagoPAItem
-                      pagoPAItem={payment.pagoPa}
-                      loading={payment.isLoading ?? false}
-                      isSelected={payment.pagoPa.noticeCode === selectedPayment?.pagoPa?.noticeCode}
-                      handleFetchPaymentsInfo={() => handleFetchPaymentsInfo([payment])}
-                      handleDeselectPayment={handleDeselectPayment}
-                      isSinglePayment={isSinglePayment}
-                      isCancelled={isCancelled}
-                      handleTrackEventDetailPaymentError={handleTrackEventFn}
-                    />
-                  </Box>
+                    pagoPAItem={payment.pagoPa}
+                    loading={payment.isLoading ?? false}
+                    isSelected={payment.pagoPa.noticeCode === selectedPayment?.pagoPa?.noticeCode}
+                    handleFetchPaymentsInfo={() => handleFetchPaymentsInfo([payment])}
+                    handleDeselectPayment={handleDeselectPayment}
+                    isSinglePayment={isSinglePayment}
+                    isCancelled={isCancelled}
+                    handleTrackEventDetailPaymentError={handleTrackEventFn}
+                  />
                 ) : null
               )}
             </RadioGroup>

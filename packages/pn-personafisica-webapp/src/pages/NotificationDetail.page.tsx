@@ -284,11 +284,7 @@ const NotificationDetail: React.FC = () => {
 
   const getDownloadFilesMessage = useCallback(
     (type: 'aar' | 'attachments'): string => {
-      if (isCancelledOrCancelling) {
-        return type === 'aar'
-          ? t('detail.acts_files.notification_cancelled_aar', { ns: 'notifiche' })
-          : t('detail.acts_files.notification_cancelled_acts', { ns: 'notifiche' });
-      } else if (type === 'attachments') {
+      if (type === 'attachments') {
         return notification.documentsAvailable
           ? t('detail.acts_files.downloadable_acts', { ns: 'notifiche' })
           : t('detail.acts_files.not_downloadable_acts', { ns: 'notifiche' });

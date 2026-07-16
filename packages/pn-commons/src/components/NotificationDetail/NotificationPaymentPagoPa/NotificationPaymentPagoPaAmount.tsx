@@ -7,14 +7,20 @@ import { getLocalizedOrDefaultLabel } from '../../../utility/localization.utilit
 
 type Props = {
   pagoPAItem: PagoPAPaymentFullDetails;
+  isSelectable?: boolean;
 };
 
-const NotificationPaymentPagoPaAmount: React.FC<Props> = ({ pagoPAItem }) => {
-  const isMobile = useIsMobile();
-  const align = isMobile ? 'flex-start' : 'flex-end';
+const NotificationPaymentPagoPaAmount: React.FC<Props> = ({ pagoPAItem, isSelectable }) => {
+  const isMobile = useIsMobile('sm');
 
   return (
-    <Box mr={1} display="flex" flexDirection="column" alignItems={align} mb={isMobile ? 1 : 0}>
+    <Box
+      mr={1}
+      textAlign="right"
+      width={isMobile ? '100%' : 'auto'}
+      position="relative"
+      left={isMobile && isSelectable ? '35px' : 0}
+    >
       {pagoPAItem.amount && (
         <Typography
           variant="body2"
