@@ -828,6 +828,7 @@ export const notificationDTO: NotificationDetail = {
   abstract: 'Dritto devi andare!',
   subject: 'Inadequatezza nel camminare',
   recipients,
+  filedAt: '2023-05-09T13:17:31.401700947Z',
   documents: [
     {
       digests: {
@@ -873,6 +874,7 @@ export const bilingualNotification: NotificationDetail = {
   subject: 'Test notification with bilingual content',
   additionalLanguages: ['FR'],
   recipients,
+  filedAt: '2023-05-09T13:17:31.401700947Z',
   documents: [
     {
       digests: {
