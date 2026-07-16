@@ -214,15 +214,21 @@ const NotificationDetail: React.FC = () => {
   }, []);
 
   const getDownloadFilesMessage = useCallback(
-    (type: 'aar' | 'attachments'): string => {
+    (type: 'aar' | 'attachments'): { key: string; ns: string } => {
       if (type === 'attachments') {
-        return notification.documentsAvailable
-          ? t('detail.download-message-available', { ns: 'notifiche' })
-          : t('detail.download-message-expired', { ns: 'notifiche' });
+        return {
+          key: notification.documentsAvailable
+            ? 'detail.download-message-available'
+            : 'detail.download-message-expired',
+          ns: 'notifiche',
+        };
       } else {
-        return dateIsLessThan10Years(notification.sentAt) // 10 years
-          ? t('detail.download-aar-available', { ns: 'notifiche' })
-          : t('detail.download-aar-expired', { ns: 'notifiche' });
+        return {
+          key: dateIsLessThan10Years(notification.sentAt) // 10 years
+            ? 'detail.download-aar-available'
+            : 'detail.download-aar-expired',
+          ns: 'notifiche',
+        };
       }
     },
     [notification.documentsAvailable]
@@ -272,12 +278,6 @@ const NotificationDetail: React.FC = () => {
   const trackTimelineShowMore = (collapsed: boolean) => {
     if (!collapsed) {
       PAEventStrategyFactory.triggerEvent(PAEventsType.SEND_PA_TIMELINE_SHOW_MORE);
-    }
-  };
-
-  const trackTimelineShowHistory = (open: boolean) => {
-    if (open) {
-      PAEventStrategyFactory.triggerEvent(PAEventsType.SEND_PA_TIMELINE_SHOW_HISTORY);
     }
   };
 
@@ -386,13 +386,10 @@ const NotificationDetail: React.FC = () => {
                   language={i18n.language}
                   recipients={recipients}
                   statusHistory={notification.notificationStatusHistory}
-                  title={t('detail.timeline-title', { ns: 'notifiche' })}
                   clickHandler={legalFactDownloadHandler}
-                  historyButtonLabel={t('detail.show-history', { ns: 'notifiche' })}
                   showMoreButtonLabel={t('detail.show-more', { ns: 'notifiche' })}
                   showLessButtonLabel={t('detail.show-less', { ns: 'notifiche' })}
                   handleTrackShowMoreLess={trackTimelineShowMore}
-                  handleTrackShowHistory={trackTimelineShowHistory}
                 />
               </Box>
             </Grid>

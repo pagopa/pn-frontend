@@ -282,19 +282,29 @@ const NotificationDetail = () => {
   );
 
   const getDownloadFilesMessage = useCallback(
-    (type: 'aar' | 'attachments'): string => {
+    (type: 'aar' | 'attachments'): { key: string; ns: string } => {
       if (isCancelledOrCancelling) {
-        return type === 'aar'
-          ? t('detail.acts_files.notification_cancelled_aar', { ns: 'notifiche' })
-          : t('detail.acts_files.notification_cancelled_acts', { ns: 'notifiche' });
+        return {
+          key:
+            type === 'aar'
+              ? 'detail.acts_files.notification_cancelled_aar'
+              : 'detail.acts_files.notification_cancelled_acts',
+          ns: 'notifiche',
+        };
       } else if (type === 'attachments') {
-        return notification.documentsAvailable
-          ? t('detail.acts_files.downloadable_acts', { ns: 'notifiche' })
-          : t('detail.acts_files.not_downloadable_acts', { ns: 'notifiche' });
+        return {
+          key: notification.documentsAvailable
+            ? 'detail.acts_files.downloadable_acts'
+            : 'detail.acts_files.not_downloadable_acts',
+          ns: 'notifiche',
+        };
       } else {
-        return dateIsLessThan10Years(notification.sentAt)
-          ? t('detail.acts_files.downloadable_aar', { ns: 'notifiche' })
-          : t('detail.acts_files.not_downloadable_aar', { ns: 'notifiche' });
+        return {
+          key: dateIsLessThan10Years(notification.sentAt)
+            ? 'detail.acts_files.downloadable_aar'
+            : 'detail.acts_files.not_downloadable_aar',
+          ns: 'notifiche',
+        };
       }
     },
     [isCancelledOrCancelling, notification.documentsAvailable, notification.sentAt]
