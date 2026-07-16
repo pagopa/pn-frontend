@@ -7,7 +7,6 @@
     "oggetto": "Objet",
     "iun": "Code IUN",
     "status": "État",
-    "show-detail": "Voir le détail",
     "aria-action-table": "Voir les détails de la notification avec IUN : {{iun}}",
     "open": "Ouvrir",
     "legal-value": "Notification à valeur juridique"

@@ -7,7 +7,6 @@
     "oggetto": "Betreff",
     "iun": "IUN-Code",
     "status": "Status",
-    "show-detail": "Siehe Detail",
     "aria-action-table": "Benachrichtigungsdetails mit IUN anzeigen: {{iun}}",
     "open": "Öffnen",
     "legal-value": "Rechtsgültige Zustellung"
