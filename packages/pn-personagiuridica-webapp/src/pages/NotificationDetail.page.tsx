@@ -151,7 +151,7 @@ const NotificationDetail = () => {
     }
 
     return canManageContacts && isBannerVisible && historyParser.hasViewedStatus() ? (
-      <DomicileBanner source={ContactSource.DETTAGLIO_NOTIFICA} />
+      <DomicileBanner source={ContactSource.DETTAGLIO_NOTIFICA} my={0} />
     ) : null;
   }, [
     canManageContacts,

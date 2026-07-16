@@ -1,5 +1,6 @@
 {
   "title": "Inbox for {{organization}}",
+  "go-to-detail": "Go to details",
   "title-delegated-notifications": "Inbox for delegators",
   "subtitle": "Read notifications of {{recipient}}. You can filter them by IUN Code and send date.",
   "subtitle-delegated-notifications": "Read the notifications delegated to {{recipient}}. You can filter them by IUN Code and send date.",
@@ -11,9 +12,10 @@
     "oggetto": "Subject",
     "iun": "IUN code",
     "status": "Status",
-    "show-detail": "See details",
+    "open": "Open",
     "group-selector-title": "Group selection menu",
-    "aria-action-table": "View notification details with IUN: {{iun}}"
+    "aria-action-table": "Open notification details with IUN: {{iun}}",
+    "legal-value": "Notification with legal value"
   },
   "filters": {
     "iun": "Search by IUN Code",
@@ -37,16 +39,32 @@
     "options": "Sort options"
   },
   "empty-state": {
-    "filtered": "We couldn't find any results: try different filters. <0>Remove filters</0>",
-    "no-notifications": "There are no notifications for {{name}}.",
-    "delegate": "There are no notifications delegated to {{name}} to read.",
-    "aria-label-remove-filters": "Reset filters"
+    "filtered": "No notifications or communications for the selected filters",
+    "filtered-description": "Remove them or try another combination.",
+    "clean-filters-cta": "Remove filters",
+    "delegate": "Here you will see the legally binding communications of {{name}}",
+    "title": "Here you will see your notifications with legal value and other communications",
+    "description": "Update your contact details now and you will immediately know when you receive one.",
+    "go-to-contacts-cta": "Go to your contact details",
+    "aria-label-remove-filters": "Remove filters"
   },
   "from-qrcode": {
     "not-found": "Notification link not found",
     "not-found-subtitle": "It can only be read by users registered by the recipient company or by its delegate."
   },
   "detail": {
+    "legal-value": "Notification with legal value",
+    "notification-timeline-section": {
+      "title": "Notification status",
+      "aria-label": "Go to notification timeline"
+    },
+    "notification-detail-section": {
+      "title": "Notification details",
+      "recipient": "Recipient",
+      "aar": "Notification of receipt",
+      "aria-label": "Go to notification of receipt",
+      "availability": "Available online for 10 years from the date on which the notification becomes legally binding."
+    },
     "document-not-available": "The document will be available for download in a few minutes. You can try again by reloading the page or clicking on the link of the requested document",
     "table-aria-label": "Notification details",
     "payment-table-aria-label": "Payment details",

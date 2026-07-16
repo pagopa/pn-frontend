@@ -14,6 +14,7 @@
     "status": "Stato",
     "open": "Apri",
     "group-selector-title": "Menu selezione gruppo",
+    "aria-action-table": "Apri dettaglio notifica con IUN: {{iun}}",
     "legal-value": "Notifica a valore legale"
   },
   "filters": {
@@ -52,6 +53,7 @@
     "not-found-subtitle": "Può essere letta solo dagli utenti censiti dall’impresa destinataria o da un suo delegato."
   },
   "detail": {
+    "legal-value": "Notifica a valore legale",
     "notification-timeline-section": {
       "title": "Stato della notifica",
       "aria-label": "Vai alla timeline della notifica"

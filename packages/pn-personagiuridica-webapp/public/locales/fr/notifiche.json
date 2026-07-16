@@ -1,5 +1,6 @@
 {
   "title": "Boîte de réception pour {{recipient}} ",
+  "go-to-detail": "Accéder aux détails",
   "title-delegated-notifications": "Boîte de réception des délégants",
   "subtitle": "Lire les notifications de {{recipient}}. Vous pouvez les filtrer par code IUN et date d’envoi.",
   "subtitle-delegated-notifications": "Lire les notifications mandatées à {{recipient}}. Vous pouvez les filtrer par code IUN et date d’envoi.",
@@ -11,9 +12,10 @@
     "oggetto": "Objet",
     "iun": "Code IUN",
     "status": "État",
-    "show-detail": "Voir le détail",
+    "open": "Ouvrir",
     "group-selector-title": "Menu sélection Groupe",
-    "aria-action-table": "Voir le détail de la notification con IUN : {{iun}}"
+    "aria-action-table": "Ouvrir le détail de la notification avec l'IUN : {{iun}}",
+    "legal-value": "Notification à valeur légale"
   },
   "filters": {
     "iun": "Recherche par code IUN",
@@ -37,9 +39,13 @@
     "options": "Options de tri"
   },
   "empty-state": {
-    "filtered": "Nous n’avons pas trouvé de résultats : essayez avec des filtres différents. <0>Supprimer les filtres</0>",
-    "no-notifications": "Il n’y a pas de notifications pour {{name}}.",
-    "delegate": "Il n’y a pas de notifications mandatées à {{name}} à lire.",
+    "filtered": "Aucune notification ou communication pour les filtres sélectionnés",
+    "filtered-description": "Supprimez-les ou essayez une autre combinaison.",
+    "clean-filters-cta": "Supprimer les filtres",
+    "delegate": "Ici, vous verrez les communications à valeur juridique de {{name}}",
+    "title": "Ici, vous verrez vos notifications à valeur légale et autres communications",
+    "description": "Mettez à jour vos coordonnées dès maintenant pour savoir immédiatement quand vous en recevrez une.",
+    "go-to-contacts-cta": "Accéder à vos coordonnées",
     "aria-label-remove-filters": "Supprimer les filtres"
   },
   "from-qrcode": {
@@ -47,6 +53,18 @@
     "not-found-subtitle": "Elle ne peut être lue que par les utilisateurs recensés par l'entreprise destinataire ou par son délégué."
   },
   "detail": {
+    "legal-value": "Notification à valeur légale",
+    "notification-timeline-section": {
+      "title": "Statut de la notification",
+      "aria-label": "Accéder à l'historique de la notification"
+    },
+    "notification-detail-section": {
+      "title": "Détail de la notification",
+      "recipient": "Destinataire",
+      "aar": "Avis de réception",
+      "aria-label": "Accéder à l'avis de réception",
+      "availability": "Disponible en ligne pendant 10 ans à compter de la date à laquelle la notification devient légalement valide."
+    },
     "document-not-available": "Le document sera téléchargeable dans quelques minutes. Vous pouvez réessayer en rechargeant la page ou en cliquant sur le lien du document requis",
     "table-aria-label": "Détail de la notification",
     "payment-table-aria-label": "Détail des paiements",
