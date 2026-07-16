@@ -102,6 +102,7 @@ describe('DesktopNotifications Component', () => {
     });
     const rows = result!.getAllByTestId('notificationsTable.body.row');
     const notificationsTableCellArrow = within(rows[0]).getByTestId('goToNotificationDetail');
+    expect(notificationsTableCellArrow).toHaveTextContent('table.open');
     fireEvent.click(notificationsTableCellArrow);
     await waitFor(() => {
       expect(result.router.state.location.pathname).toBe(

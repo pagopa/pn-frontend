@@ -66,6 +66,7 @@ export { default as NotificationPaymentRecipient } from './NotificationDetail/No
 export { default as NotificationRelatedDowntimes } from './NotificationDetail/NotificationRelatedDowntimes';
 export { default as MobileNotificationsSort } from './Notifications/MobileNotificationsSort';
 export { default as NotificationsRecipientDataSwitch } from './Notifications/NotificationsRecipientDataSwitch';
+export { NotificationActionButton } from './Notifications/NotificationsDataSwitchCells';
 export { default as StatusTooltip } from './Notifications/StatusTooltip';
 export { default as CustomPagination } from './Pagination/CustomPagination';
 export { default as PnBreadcrumb } from './PnBreadcrumb';

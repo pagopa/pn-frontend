@@ -6,7 +6,6 @@ import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import Email from '@mui/icons-material/Email';
 import ErrorIcon from '@mui/icons-material/Error';
 import HelpIcon from '@mui/icons-material/Help';
-import StatisticsIcon from '@mui/icons-material/ShowChart';
 import VpnKey from '@mui/icons-material/VpnKey';
 import { Box, Button, DialogTitle } from '@mui/material';
 import {
@@ -165,8 +164,28 @@ const ActualApp = () => {
   const configuration = useMemo(() => getConfiguration(), []);
 
   const menuItems = useMemo(() => {
+    const notificationMenuItems: Array<SideMenuItem> = [
+      {
+        label: t('menu.notifications'),
+        route: routes.DASHBOARD,
+      },
+    ];
+
+    if (IS_STATISTICS_ENABLED) {
+      // eslint-disable-next-line functional/immutable-data
+      notificationMenuItems.push({
+        label: t('menu.statistics'),
+        route: routes.STATISTICHE,
+      });
+    }
     const basicMenuItems: Array<SideMenuItem> = [
-      { label: 'menu.notifications', icon: Email, route: routes.DASHBOARD },
+      {
+        label: t('menu.notifications-send'),
+        icon: Email,
+        route: routes.DASHBOARD,
+        children: notificationMenuItems,
+        notSelectable: notificationMenuItems.length > 0,
+      },
       /**
        * Refers to PN-1741
        * Commented out because beyond MVP scope
@@ -175,9 +194,9 @@ const ActualApp = () => {
        * - "<Route path={routes.API_KEYS}.../>" in packages/pn-pa-webapp/src/navigation/routes.tsx
        * - BasicMenuItems in packages/pn-pa-webapp/src/utility/__TEST__/role.utilitytest.ts
        */
-      { label: 'menu.api-key', icon: VpnKey, route: routes.API_KEYS },
+      { label: t('menu.api-key'), icon: VpnKey, route: routes.API_KEYS },
       {
-        label: 'menu.app-status',
+        label: t('menu.app-status'),
         // ATTENTION - a similar logic to choose the icon and its color is implemented in AppStatusBar (in pn-commons)
         icon: () =>
           currentStatus ? (
@@ -203,19 +222,8 @@ const ActualApp = () => {
     // Carlos Lombardi, 2022.11.08
     // -------------------------------
 
-    // TODO fix positioning for this item PN-10851
-    if (IS_STATISTICS_ENABLED) {
-      // eslint-disable-next-line functional/immutable-data
-      basicMenuItems.splice(2, 0, {
-        label: 'menu.statistics',
-        icon: StatisticsIcon,
-        route: routes.STATISTICHE,
-      });
-    }
     const items = { ...getMenuItems(basicMenuItems, idOrganization, i18n.language, role?.role) };
-    // localize menu items
-    /* eslint-disable-next-line functional/immutable-data */
-    items.menuItems = items.menuItems.map((item) => ({ ...item, label: t(item.label) }));
+
     if (items.selfCareItems) {
       /* eslint-disable-next-line functional/immutable-data */
       items.selfCareItems = items.selfCareItems.map((item) => ({ ...item, label: t(item.label) }));

@@ -44,7 +44,8 @@
     "groups": "Groupes",
     "status": "État",
     "show-detail": "Voir le détail",
-    "aria-action-table": "Voir les détails de la notification avec IUN : {{iun}}"
+    "aria-action-table": "Ouvrir la notification avec l'IUN : {{iun}}",
+    "open": "Ouvrir"
   },
   "sort": {
     "title": "Trier",
@@ -54,8 +55,10 @@
     "options": "Options de tri"
   },
   "empty-state": {
-    "filtered": "Nous n’avons pas trouvé de résultats : essayez avec des filtres différents. <0>Supprimer filtres</0>.",
-    "no-notifications": "L’organisme n’a pas encore envoyé de notification. Utilisez les <0>API Key</0> ou faites un <1>envoi manuel</1>.",
+    "filtered": "Aucune notification pour les filtres sélectionnés",
+    "filtered-description": "Supprimez-les ou essayez une autre combinaison.",
+    "clean-filters-cta": "Supprimer les filtres",
+    "no-notifications": "L'organisme n'a encore envoyé aucune notification. Utilisez les <0>Clés API</0> ou effectuez un <1>envoi manuel</1>.",
     "timeout": "Aucun résultat trouvé ; réessayez con des filtres différents",
     "aria-label-remove-filters": "Supprimer les filtres",
     "aria-label-api-keys": "API Key",

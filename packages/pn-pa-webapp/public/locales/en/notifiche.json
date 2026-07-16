@@ -44,7 +44,8 @@
     "groups": "Groups",
     "status": "Status",
     "show-detail": "See details",
-    "aria-action-table": "View notification details with IUN: {{iun}}"
+    "aria-action-table": "Open notification with IUN: {{iun}}",
+    "open": "Open"
   },
   "sort": {
     "title": "Sort",
@@ -54,8 +55,10 @@
     "options": "Sort options"
   },
   "empty-state": {
-    "filtered": "We did not find any results: try different filters. <0>Remove filters</0>.",
-    "no-notifications": "The agency has not yet sent any notifications. Use the <0>API Keys</0> or <1>send manually</1>.",
+    "filtered": "No notifications for the selected filters",
+    "filtered-description": "Remove them or try another combination.",
+    "clean-filters-cta": "Remove filters",
+    "no-notifications": "The institution has not yet sent any notifications. Use the <0>API Keys</0> or send <1>manually</1>.",
     "timeout": "No results found; try again with different filters",
     "aria-label-remove-filters": "Remove filters",
     "aria-label-api-keys": "API Key",

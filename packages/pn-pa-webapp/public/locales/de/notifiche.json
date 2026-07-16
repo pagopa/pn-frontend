@@ -44,7 +44,8 @@
     "groups": "Gruppen",
     "status": "Status",
     "show-detail": "Siehe Detail",
-    "aria-action-table": "Benachrichtigungsdetails mit IUN anzeigen: {{iun}}"
+    "aria-action-table": "Zustellung mit IUN öffnen: {{iun}}",
+    "open": "Öffnen"
   },
   "sort": {
     "title": "Sortieren",
@@ -54,8 +55,10 @@
     "options": "Optionen Sortieren"
   },
   "empty-state": {
-    "filtered": "Wir haben keine Ergebnisse gefunden: Versuche es mit anderen Filtern. <0>Filter entfernen</0>.",
-    "no-notifications": "Die Körperschaft hat noch keine Zustellung gesendet. Verwende die <0>API-Schlüssel</0> oder sende sie <1>manuell</1>.",
+    "filtered": "Keine Zustellungen für die ausgewählten Filter",
+    "filtered-description": "Entferne sie oder versuche es mit einer anderen Kombination.",
+    "clean-filters-cta": "Filter entfernen",
+    "no-notifications": "Die Entität hat noch keine Zustellungen gesendet. Verwende die <0>API-Schlüssel</0> oder führe einen <1>manuellen Versand</1> durch.",
     "timeout": "Keine Ergebnisse gefunden; versuchen Sie es mit anderen Filtern",
     "aria-label-remove-filters": "Filter entfernen",
     "aria-label-api-keys": "API-Schlüssel",
