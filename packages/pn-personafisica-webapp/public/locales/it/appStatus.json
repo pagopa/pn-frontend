@@ -34,7 +34,7 @@
     },
     "noFileAvailableByStatus": {
       "OK": "L'attestazione sarà disponibile a breve",
-      "KO": "L'attestazione sarà disponibile al termine del disservizio"
+      "KO": "L'attestazione sarà disponibile al termine del disservizio."
     },
     "legalFactDownload": "Scarica l'attestazione"
   }

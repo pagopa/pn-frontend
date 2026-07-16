@@ -1,6 +1,6 @@
 {
-  "title": "Obvestila za {{recipient}}",
-  "title-delegated-notifications": "Obvestila, delegirana na {{recipient}}",
+  "title": "Prejeto za {{recipient}}",
+  "title-delegated-notifications": "Prejeto za pooblastitelje",
   "subtitle": "Preberite obvestila za {{recipient}}. Filtrirate jih lahko po kodi IUN in datumu pošiljanja.",
   "subtitle-delegated-notifications": "Preberite obvestila, delegirana na {{recipient}}. Filtrirate jih lahko po kodi IUN in datumu pošiljanja.",
   "table": {
@@ -353,7 +353,7 @@
       "tpp-type": "digitalni kanal tretje osebe"
     },
     "downtimes": {
-      "title": "MOTNJE",
+      "title": "Motnje",
       "textWithEndDate": "Motnja se je začela {{startDate}} in končala {{endDate}} pri naslednjih funkcijah:",
       "textWithoutEndDate": "Motnja se je začela {{startDate}} in še ni končana pri naslednjih funkcijah:",
       "datePrefix": "ta ",
@@ -379,7 +379,7 @@
       }
     },
     "bilingual": {
-      "title": "PODPORNI FAKSIMILNI VZORCI v slovenščini",
+      "title": "Podporni Faksimilni vzorci v slovenščini",
       "description": "Jezik priloženih aktov se lahko razlikuje od jezika, v katerem brskaš po portalu. Če želiš razumeti vsebino teh dokumentov, lahko uporabiš faksimilne vzorce, ki jih najdeš tukaj.",
       "action": "Preglej vzorce"
     }

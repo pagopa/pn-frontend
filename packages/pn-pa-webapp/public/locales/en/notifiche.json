@@ -353,7 +353,7 @@
       "tpp-type": "a third-party digital channel"
     },
     "downtimes": {
-      "title": "DISRUPTIONS",
+      "title": "Disruptions",
       "textWithEndDate": "Disruption started {{startDate}} and ended {{endDate}} for the following functions:",
       "textWithoutEndDate": "Disruption started {{startDate}} and not yet ended for the following functions:",
       "datePrefix": "the ",

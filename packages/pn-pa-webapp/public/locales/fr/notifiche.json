@@ -353,7 +353,7 @@
       "tpp-type": "un canal numérique tiers"
     },
     "downtimes": {
-      "title": "DYSFONCTIONNEMENTS",
+      "title": "Dysfonctionnements",
       "textWithEndDate": "Dysfonctionnement commencé {{startDate}} et terminé {{endDate}} sur les fonctionnalités suivantes :",
       "textWithoutEndDate": "Dysfonctionnement commencé {{startDate}} et pas encore terminé sur les fonctionnalités suivantes :",
       "datePrefix": "le ",

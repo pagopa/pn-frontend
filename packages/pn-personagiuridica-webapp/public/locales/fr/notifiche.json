@@ -1,6 +1,6 @@
 {
-  "title": "Notifications de {{recipient}} ",
-  "title-delegated-notifications": "Notifications mandatées à {{recipient}}",
+  "title": "Boîte de réception pour {{recipient}} ",
+  "title-delegated-notifications": "Boîte de réception des délégants",
   "subtitle": "Lire les notifications de {{recipient}}. Vous pouvez les filtrer par code IUN et date d’envoi.",
   "subtitle-delegated-notifications": "Lire les notifications mandatées à {{recipient}}. Vous pouvez les filtrer par code IUN et date d’envoi.",
   "table": {
@@ -353,7 +353,7 @@
       "tpp-type": "un canal numérique tiers"
     },
     "downtimes": {
-      "title": "DYSFONCTIONNEMENTS",
+      "title": "Dysfonctionnements",
       "textWithEndDate": "Dysfonctionnement commencé {{startDate}} et terminé {{endDate}} sur les fonctionnalités suivantes :",
       "textWithoutEndDate": "Dysfonctionnement commencé {{startDate}} et non encore terminé sur les fonctionnalités suivantes :",
       "datePrefix": "le ",
@@ -379,7 +379,7 @@
       }
     },
     "bilingual": {
-      "title": "modèles de FAC-SIMILÉ DE SUPPORT en français",
+      "title": "Modèles de Fac-similé de support en français",
       "description": "La langue des actes joints peut différer de celle avec laquelle tu navigues sur le portail. Pour comprendre le contenu de ces documents, tu peux utiliser les modèles de fac-similé que tu trouves ici.",
       "action": "Consulte les modèles"
     }

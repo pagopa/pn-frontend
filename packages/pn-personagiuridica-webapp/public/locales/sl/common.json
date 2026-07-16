@@ -28,9 +28,9 @@
     "understand": "V redu, razumem"
   },
   "menu": {
-    "notifiche": "Obvestila",
-    "notifiche-impresa": "Obvestila podjetja",
-    "notifiche-delegato": "Delegirana obvestila",
+    "notifiche": "Prejeto",
+    "notifiche-impresa": "Prejeto za {{organization}}",
+    "notifiche-delegato": "Prejeto za pooblastitelje",
     "deleghe": "Prenosi pooblastil",
     "profilo": "Vaši podatki",
     "contacts": "Kontaktni podatki",

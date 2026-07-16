@@ -1,13 +1,15 @@
 {
   "title": "Le tue notifiche",
+  "go-to-detail": "Vai al dettaglio",
   "table": {
     "data": "Data",
     "mittente": "Mittente",
     "oggetto": "Oggetto",
     "iun": "Codice IUN",
     "status": "Stato",
-    "show-detail": "Vedi dettaglio",
-    "aria-action-table": "Vedi dettaglio notifica con iun: {{iun}}"
+    "aria-action-table": "Vedi dettaglio notifica con iun: {{iun}}",
+    "open": "Apri",
+    "legal-value": "Notifica a valore legale"
   },
   "filters": {
     "iun": "Cerca per Codice IUN",
@@ -31,9 +33,11 @@
     "options": "Opzioni sort"
   },
   "empty-state": {
-    "filtered": "Non abbiamo trovato risultati: prova con dei filtri diversi. <0>Rimuovi filtri</0>.",
-    "delegate": "{{name}} non ha ricevuto nessuna notifica.",
-    "title": "Qui troverai le tue notifiche SEND",
+    "filtered": "Nessuna notifica o comunicazione per i filtri selezionati",
+    "filtered-description": "Rimuovili o prova con un’altra combinazione.",
+    "clean-filters-cta": "Rimuovi filtri",
+    "delegate": "Qui vedrai le comunicazioni a valore legale di {{name}}",
+    "title": "Qui vedrai le tue notifiche a valore legale e le altre comunicazioni",
     "description-onboarding": "Sapevi che puoi risparmiare se scegli di ricevere le comunicazioni a valore legale solo in digitale?",
     "description": "Aggiorna ora i tuoi recapiti e saprai subito quando ne riceverai una.",
     "go-to-onboarding-cta": "Configura SEND",
@@ -50,6 +54,17 @@
     "not-found-subtitle": "Questa notifica può essere letta solo dal destinatario."
   },
   "detail": {
+    "notification-timeline-section": {
+      "title": "Stato della notifica",
+      "aria-label": "Vai alla timeline della notifica"
+    },
+    "notification-detail-section": {
+      "title": "Dettaglio della notifica",
+      "recipient": "Persona destinataria",
+      "aar": "Avviso di avvenuta ricezione",
+      "aria-label": "Vai all'avviso di avvenuta ricezione",
+      "availability": "Disponibile online per 10 anni dalla data in cui la notifica assume valore di legge."
+    },
     "document-not-available": "Al momento non è possibile scaricare il documento, riprova più tardi. Per riprovare, ricarica la pagina o premi sul link del documento.",
     "table-aria-label": "Dettaglio notifica",
     "payment-table-aria-label": "Dettaglio pagamenti",
@@ -74,6 +89,7 @@
     "show-less": "Mostra meno dettagli",
     "disclaimer-link": "Scopri di più",
     "pec-unreachable": "Mantieni la PEC libera e attiva per ricevere tutto in digitale!",
+    "legal-value": "Notifica a valore legale",
     "cancelled": {
       "message": "Questa notifica è stata annullata dall’ente mittente.",
       "cta": "Cosa devo fare?"
@@ -126,10 +142,10 @@
       "tpp-expired-error-description": "Per ripristinarla, accedi di nuovo a questa notifica tramite il messaggio che hai ricevuto sull'app della banca."
     },
     "acts_files": {
-      "downloadable_acts": "I documenti sono disponibili online per 120 giorni dal perfezionamento della notifica.",
-      "not_downloadable_acts": "Poiché sono trascorsi 120 giorni dalla data di perfezionamento, se vuoi ottenere gli atti devi rivolgerti al mittente.",
+      "downloadable_acts": "<0>I documenti saranno disponibili online fino a 120 giorni</0> dalla data in cui la notifica SEND ha assunto valore di legge. Salvali sul tuo dispositivo!",
+      "not_downloadable_acts": "I documenti non sono più disponibili online. Per richiederli, rivolgiti all’ente che te li ha inviati.",
       "downloadable_aar": "L’avviso di avvenuta ricezione è disponibile online per 10 anni dal perfezionamento della notifica.",
-      "not_downloadable_aar": "Poiché sono trascorsi 10 anni dalla data di perfezionamento, l’avviso di avvenuta ricezione non è più disponibile.",
+      "not_downloadable_aar": "L’avviso di avvenuta ricezione non è più disponibile. Per richiederlo, rivolgiti all’ente che te lo ha inviato.",
       "notification_cancelled_aar": "Poiché questa notifica è stata annullata, il download dell’Avviso di Avvenuta Ricezione è stato disabilitato.",
       "notification_cancelled_acts": "Poiché questa notifica è stata annullata, il download dei documenti è stato disabilitato.",
       "effected_faq": "Quando si perfeziona una notifica?"
@@ -362,7 +378,7 @@
       "tpp-type": "un canale digitale di terze parti"
     },
     "downtimes": {
-      "title": "DISSERVIZI",
+      "title": "Disservizi",
       "textWithEndDate": "Disservizio iniziato {{startDate}} e concluso {{endDate}} sulle seguenti funzionalità:",
       "textWithoutEndDate": "Disservizio iniziato {{startDate}} e non ancora concluso sulle seguenti funzionalità:",
       "datePrefix": "il ",
@@ -393,7 +409,7 @@
       "action": "Consulta i modelli"
     }
   },
-  "delegatorTitle": "Le notifiche di {{name}}",
+  "delegatorTitle": "In arrivo per {{name}}",
   "status": {
     "recipient": "destinatario",
     "delegate": "delegato {{name}}",

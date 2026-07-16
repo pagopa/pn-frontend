@@ -54,7 +54,7 @@ describe('useMenuItems', () => {
     expect(result.current.menuItems).toEqual([
       {
         children: [
-          { label: 'menu.notifiche-impresa', route: routes.NOTIFICHE },
+          { label: 'menu.notifiche-impresa', route: routes.NOTIFICHE, dotNotification: false },
           { label: 'menu.notifiche-delegato', route: routes.NOTIFICHE_DELEGATO },
         ],
         icon: expect.anything(),
@@ -92,7 +92,7 @@ describe('useMenuItems', () => {
     expect(result.current.menuItems).toEqual([
       {
         children: [
-          { label: 'menu.notifiche-impresa', route: routes.NOTIFICHE },
+          { label: 'menu.notifiche-impresa', route: routes.NOTIFICHE, dotNotification: false },
           { label: 'menu.notifiche-delegato', route: routes.NOTIFICHE_DELEGATO },
         ],
         icon: expect.anything(),

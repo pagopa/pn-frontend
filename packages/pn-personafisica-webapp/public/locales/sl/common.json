@@ -1,4 +1,6 @@
 {
+  "iun": "Koda IUN",
+  "logo": "Logotip",
   "button": {
     "filtra": "Filtriraj",
     "annulla filtro": "Odstrani filtre",
@@ -28,7 +30,9 @@
     "understand": "V redu, razumem"
   },
   "menu": {
-    "notifiche": "Obvestila",
+    "notifiche": "Prejeto",
+    "notifiche-utente": "Prejeto za vas",
+    "notifiche-delegato": "Prejeto za {{delegator}}",
     "deleghe": "Pooblastila",
     "profilo": "Tvoji podatki",
     "contacts": "Tvoji kontaktni podatki",
@@ -74,7 +78,19 @@
   },
   "date-time": {
     "today-uppercase-initial": "Danes",
-    "hour-of-day": "ure"
+    "hour-of-day": "ure",
+    "january": "januar",
+    "february": "februar",
+    "march": "marec",
+    "april": "april",
+    "may": "maj",
+    "june": "junij",
+    "july": "julij",
+    "august": "avgust",
+    "september": "september",
+    "october": "oktober",
+    "november": "november",
+    "december": "december"
   },
   "error-boundary": {
     "title": "Nekaj je šlo narobe",
@@ -236,7 +252,13 @@
     "action": "Ohrani dostop"
   },
   "code-modal": {
-    "digits": ["prva števka", "druga števka", "tretja števka", "četrta števka", "zadnja števka"]
+    "digits": [
+      "prva števka",
+      "druga števka",
+      "tretja števka",
+      "četrta števka",
+      "zadnja števka"
+    ]
   },
   "user-validation-failed": {
     "title": "Vneseni podatki niso veljavni",
@@ -250,5 +272,6 @@
     "selection-box": "Izbrane možnosti",
     "selection-done": "%s izbranih",
     "delete-selection": "Odstrani %s"
-  }
+  },
+  "not-available": "Ni na voljo"
 }

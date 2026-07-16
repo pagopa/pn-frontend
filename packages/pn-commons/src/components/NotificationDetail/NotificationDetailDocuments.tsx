@@ -1,7 +1,9 @@
+import React from 'react';
+import { Trans } from 'react-i18next';
+
 import AttachFileIcon from '@mui/icons-material/AttachFile';
-import { Box, Grid, Stack, Typography, TypographyProps } from '@mui/material';
-// import DownloadIcon from '@mui/icons-material/Download';
-import { ButtonNaked } from '@pagopa/mui-italia';
+import { Box, Stack, Typography, TypographyProps } from '@mui/material';
+import { ButtonNaked, IllusMISingleFile, MIAlert, MIPaper, theme } from '@pagopa/mui-italia';
 
 import {
   NotificationDetailDocument,
@@ -121,46 +123,69 @@ const NotificationDetailDocuments: React.FC<Props> = (
     });
 
   return (
-    <>
-      <Grid
-        key="files-section"
-        container
-        direction="row"
-        justifyContent="space-between"
-        alignItems="center"
+    <Stack spacing={3}>
+      <Typography
+        id="notification-detail-document-attached"
+        color="text.primary"
+        variant={titleVariant}
+        component="h2"
       >
-        <Grid key="detail-documents-title" item sx={{ mb: 3 }}>
-          <Typography
-            id="notification-detail-document-attached"
-            color="text.primary"
-            variant={titleVariant}
-          >
-            {title}
-          </Typography>
-        </Grid>
-        {/* TODO: ripristinare quando sarà completata la issue pn-720 */}
-        {/* !documentsAvailable &&
-        <Grid item>
-          <Button startIcon={<DownloadIcon />}>Scarica tutti i Documenti</Button>
-        </Grid>
-      */}
-      </Grid>
-      <Grid key="detail-documents-message" item data-testid="documentsMessage">
-        <Stack direction="row">
-          {downloadFilesMessage && (
-            <Typography variant="body2" sx={{ mb: 3 }}>
-              {downloadFilesMessage}
+        {title}
+      </Typography>
+
+      {/* Notification cancelled */}
+      {disableDownloads && (
+        <MIPaper
+          data-testid="documentsMessage"
+          key="cancelled-detail-documents-message"
+          sx={{ backgroundColor: theme.palette.grey[50] }}
+          variant="outlined"
+          padding={16}
+        >
+          <Stack direction="row" spacing={1}>
+            <IllusMISingleFile size={40} />
+            <Typography>
+              <Trans
+                parent={React.Fragment}
+                i18nKey={downloadFilesMessage}
+                components={[<strong key="0" />]}
+              />
             </Typography>
-          )}
-          {/* TODO: remove comment when link ready downloadFilesLink &&
-          <Typography onClick={() => console.log('link')}>{downloadFilesLink}</Typography>
-        */}
-        </Stack>
-      </Grid>
-      <Grid key="download-files-section" item>
-        {documents && mapOtherDocuments(documents)}
-      </Grid>
-    </>
+          </Stack>
+        </MIPaper>
+      )}
+
+      {/* Notification sent after expiration date (120 legal and 180 combo) */}
+      {!disableDownloads && !documentsAvailable && downloadFilesMessage && (
+        <MIAlert severity="warning" data-testid="documentsDisabled">
+          <Trans parent={React.Fragment} i18nKey={downloadFilesMessage} />
+        </MIAlert>
+      )}
+
+      {/* Notification sent before expiration date (120 legal and 180 combo) */}
+      {documentsAvailable && downloadFilesMessage && (
+        <MIPaper
+          data-testid="documentsMessage"
+          key="detail-documents-message"
+          sx={{ backgroundColor: theme.palette.grey[50] }}
+          variant="outlined"
+          padding={16}
+        >
+          <Stack direction="row" spacing={1}>
+            <IllusMISingleFile size={40} />
+            <Typography>
+              <Trans
+                parent={React.Fragment}
+                i18nKey={downloadFilesMessage}
+                components={[<strong key="0" />]}
+              />
+            </Typography>
+          </Stack>
+        </MIPaper>
+      )}
+
+      {documents && mapOtherDocuments(documents)}
+    </Stack>
   );
 };
 

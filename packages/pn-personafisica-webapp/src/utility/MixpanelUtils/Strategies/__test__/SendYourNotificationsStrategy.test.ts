@@ -3,10 +3,10 @@ import {
   EventCategory,
   EventPropertyType,
   NotificationStatus,
-  isNewNotification,
 } from '@pagopa-pn/pn-commons';
 
 import { mandatesByDelegate } from '../../../../__mocks__/Delegations.mock';
+import { notificationsDTO } from '../../../../__mocks__/Notifications.mock';
 import { SendYourNotificationsStrategy } from '../SendYourNotificationsStrategy';
 
 describe('Mixpanel - Send Your Notification Strategy', () => {
@@ -14,19 +14,7 @@ describe('Mixpanel - Send Your Notification Strategy', () => {
     const strategy = new SendYourNotificationsStrategy();
 
     const yourNotification = {
-      notifications: [
-        {
-          iun: 'PDJL-WNLU-QEVX-202403-X-1',
-          paProtocolNumber: '202403221213',
-          sender: 'Comune di Sappada',
-          sentAt: '2024-03-22T11:14:31.634488517Z',
-          subject: 'test mixpanel',
-          notificationStatus: NotificationStatus.VIEWED,
-          recipients: ['LVLDAA85T50G702B'],
-          requestAcceptedAt: '2024-03-22T11:17:40.361638886Z',
-          group: '',
-        },
-      ],
+      notifications: notificationsDTO.resultsPage,
       delegators: mandatesByDelegate,
       pagination: {
         nextPagesKey: [],
@@ -46,9 +34,7 @@ describe('Mixpanel - Send Your Notification Strategy', () => {
         delegate: yourNotification.delegators.length > 0,
         page_number: yourNotification.pagination.page,
         total_count: yourNotification.notifications.length,
-        unread_count: yourNotification.notifications.filter((n) =>
-          isNewNotification(n.notificationStatus)
-        ).length,
+        unread_count: yourNotification.notifications.filter((n) => n.isNewNotification).length,
         delivered_count: yourNotification.notifications.filter(
           (n) => n.notificationStatus === NotificationStatus.DELIVERED
         ).length,

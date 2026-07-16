@@ -6,6 +6,7 @@ export interface SideMenuItem {
   route: string;
   children?: Array<SideMenuItem>;
   dotBadge?: boolean;
+  dotNotification?: boolean;
   rightBadgeNotification? : number;
   notSelectable?: boolean;
   action?: () => void;

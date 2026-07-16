@@ -1,48 +1,38 @@
 import { Fragment, useRef } from 'react';
-import { Trans, useTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
-import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
-import { Grid, Link } from '@mui/material';
+import ArrowForward from '@mui/icons-material/ArrowForward';
+import { Grid } from '@mui/material';
 import {
   CardElement,
   CardSort,
-  EmptyState,
-  KnownSentiment,
   MobileNotificationsSort,
-  Notification,
   NotificationColumnData,
-  NotificationsDataSwitch,
+  NotificationsRecipientDataSwitch,
   PnCard,
   PnCardActions,
   PnCardContent,
   PnCardContentItem,
-  PnCardHeader,
-  PnCardHeaderItem,
   PnCardsList,
+  RecipientNotification,
   Row,
   Sort,
 } from '@pagopa-pn/pn-commons';
-import { ButtonNaked } from '@pagopa/mui-italia';
+import { MIButton } from '@pagopa/mui-italia';
 
 import * as routes from '../../navigation/routes.const';
-import { useAppSelector } from '../../redux/hooks';
-import { RootState } from '../../redux/store';
 import FilterNotifications from './FilterNotifications';
+import NotificationsEmptyState from './NotificationsEmptyState';
 
 type Props = {
-  notifications: Array<Notification>;
+  notifications: Array<RecipientNotification>;
   /** Card sort */
-  sort?: Sort<NotificationColumnData>;
+  sort?: Sort<NotificationColumnData<RecipientNotification>>;
   /** The function to be invoked if the user change sorting */
-  onChangeSorting?: (s: Sort<NotificationColumnData>) => void;
+  onChangeSorting?: (s: Sort<NotificationColumnData<RecipientNotification>>) => void;
   /** Delegator */
   isDelegatedPage?: boolean;
-};
-
-type LinkRemoveFiltersProps = {
-  cleanFilters: () => void;
-  children?: React.ReactNode;
 };
 
 /**
@@ -57,19 +47,6 @@ type LinkRemoveFiltersProps = {
  */
 const IS_SORT_ENABLED = false;
 
-const LinkRemoveFilters: React.FC<LinkRemoveFiltersProps> = ({ children, cleanFilters }) => (
-  <Link
-    component={'button'}
-    variant="body1"
-    id="call-to-action-first"
-    key="remove-filters"
-    data-testid="link-remove-filters"
-    onClick={cleanFilters}
-  >
-    {children}
-  </Link>
-);
-
 const MobileNotifications = ({
   notifications,
   sort,
@@ -83,9 +60,11 @@ const MobileNotifications = ({
     cleanFilters: () => void 0,
   });
 
-  const organization = useAppSelector((state: RootState) => state.userState.user.organization);
-
-  const cardBody: Array<CardElement<Notification>> = [
+  const cardBody: Array<CardElement<RecipientNotification>> = [
+    {
+      id: 'sentAt',
+      label: t('table.data'),
+    },
     {
       id: 'sender',
       label: t('table.mittente'),
@@ -94,7 +73,6 @@ const MobileNotifications = ({
     {
       id: 'subject',
       label: t('table.oggetto'),
-      mode: 'truncate',
     },
     {
       id: 'iun',
@@ -103,7 +81,7 @@ const MobileNotifications = ({
   ];
 
   if (isDelegatedPage) {
-    const recipientField: CardElement<Notification> = {
+    const recipientField: CardElement<RecipientNotification> = {
       id: 'recipients',
       label: t('table.destinatario'),
       wrapValueInTypography: false,
@@ -113,7 +91,7 @@ const MobileNotifications = ({
     cardBody.splice(3, 0, recipientField);
   }
 
-  const cardData: Array<Row<Notification>> = notifications.map((n) => ({
+  const cardData: Array<Row<RecipientNotification>> = notifications.map((n) => ({
     ...n,
     id: n.iun,
   }));
@@ -122,7 +100,7 @@ const MobileNotifications = ({
     [
       { id: 'sentAt', label: t('table.data') },
       { id: 'senderId', label: t('table.mittente') },
-    ] as Array<{ id: keyof Notification; label: string }>
+    ] as Array<{ id: keyof RecipientNotification; label: string }>
   ).reduce((arr, item) => {
     /* eslint-disable functional/immutable-data */
     arr.push(
@@ -141,17 +119,21 @@ const MobileNotifications = ({
     );
     /* eslint-enable functional/immutable-data */
     return arr;
-  }, [] as Array<CardSort<Notification>>);
+  }, [] as Array<CardSort<RecipientNotification>>);
 
   const filtersApplied: boolean = filterNotificationsRef.current.filtersApplied;
 
   // Navigation handlers
-  const handleRowClick = (row: Row<Notification>) => {
-    if (isDelegatedPage && row.mandateId) {
-      navigate(routes.GET_DETTAGLIO_NOTIFICA_DELEGATO_PATH(row.iun, row.mandateId));
-    } else {
-      navigate(routes.GET_DETTAGLIO_NOTIFICA_PATH(row.iun));
+  const handleRowClick = (row: Row<RecipientNotification>) => {
+    const { iun, communicationType, mandateId } = row;
+
+    if (isDelegatedPage && mandateId) {
+      return navigate(routes.GET_DETTAGLIO_NOTIFICA_DELEGATO_PATH(iun, mandateId));
     }
+
+    return communicationType === 'LEGAL'
+      ? navigate(routes.GET_DETTAGLIO_NOTIFICA_PATH(iun))
+      : navigate(routes.GET_DETTAGLIO_COMUNICAZIONE_PATH(iun));
   };
 
   const showFilters = notifications?.length > 0 || filtersApplied;
@@ -183,32 +165,7 @@ const MobileNotifications = ({
         <PnCardsList>
           {cardData.map((data) => (
             <PnCard key={data.id} testId="mobileNotificationsCards">
-              <PnCardHeader
-                headerGridProps={{
-                  direction: { xs: 'row', sm: 'row' },
-                  alignItems: { xs: 'flex-start', sm: 'center' },
-                }}
-              >
-                <PnCardHeaderItem
-                  gridProps={{
-                    xs: 4,
-                    sm: 5,
-                  }}
-                  position="left"
-                >
-                  <NotificationsDataSwitch data={data} type="sentAt" />
-                </PnCardHeaderItem>
-                <PnCardHeaderItem
-                  gridProps={{
-                    xs: 8,
-                    sm: 7,
-                  }}
-                  position="right"
-                >
-                  <NotificationsDataSwitch data={data} type="notificationStatus" />
-                </PnCardHeaderItem>
-              </PnCardHeader>
-              <PnCardContent>
+              <PnCardContent sx={{ mt: 0 }}>
                 {cardBody.map((body) => (
                   <PnCardContentItem
                     key={body.id}
@@ -216,54 +173,30 @@ const MobileNotifications = ({
                     mode={body.mode}
                     wrapValueInTypography={body.wrapValueInTypography}
                   >
-                    <NotificationsDataSwitch data={data} type={body.id} />
+                    <NotificationsRecipientDataSwitch data={data} type={body.id} />
                   </PnCardContentItem>
                 ))}
               </PnCardContent>
               <PnCardActions>
-                <ButtonNaked
-                  id="go-to-detail"
-                  onClick={() => handleRowClick(data)}
-                  endIcon={<ArrowForwardIcon />}
+                <MIButton
+                  variant="text"
                   color="primary"
+                  onClick={() => handleRowClick(data)}
+                  endIcon={<ArrowForward />}
+                  data-testid="go-to-detail"
                 >
-                  {t('table.show-detail')}
-                </ButtonNaked>
+                  {t('table.open')}
+                </MIButton>
               </PnCardActions>
             </PnCard>
           ))}
         </PnCardsList>
       ) : (
-        <EmptyState
-          sentimentIcon={filtersApplied ? KnownSentiment.DISSATISFIED : KnownSentiment.NONE}
-        >
-          {filtersApplied && (
-            <Trans
-              i18nKey={'empty-state.filtered'}
-              ns={'notifiche'}
-              components={[
-                <LinkRemoveFilters
-                  key={'remove-filters'}
-                  cleanFilters={filterNotificationsRef.current.cleanFilters}
-                />,
-              ]}
-            />
-          )}
-          {!filtersApplied && isDelegatedPage && (
-            <Trans
-              i18nKey={'empty-state.delegate'}
-              ns={'notifiche'}
-              values={{ name: organization.name }}
-            />
-          )}
-          {!filtersApplied && !isDelegatedPage && (
-            <Trans
-              i18nKey={'empty-state.no-notifications'}
-              ns={'notifiche'}
-              values={{ name: organization.name }}
-            />
-          )}
-        </EmptyState>
+        <NotificationsEmptyState
+          filtersApplied={filtersApplied}
+          filterNotificationsRef={filterNotificationsRef}
+          isDelegatedPage={isDelegatedPage}
+        />
       )}
     </Fragment>
   );

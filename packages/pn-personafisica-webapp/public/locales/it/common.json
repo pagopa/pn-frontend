@@ -1,4 +1,6 @@
 {
+  "iun":"Codice IUN",
+  "logo":"Logo di",
   "button": {
     "filtra": "Filtra",
     "annulla filtro": "Rimuovi filtri",
@@ -28,7 +30,9 @@
     "understand": "Ok, ho capito"
   },
   "menu": {
-    "notifiche": "Notifiche",
+    "notifiche": "In arrivo",
+    "notifiche-utente": "In arrivo per te",
+    "notifiche-delegato": "In arrivo per {{delegator}}",
     "deleghe": "Deleghe",
     "profilo": "I tuoi dati",
     "contacts": "I tuoi recapiti",
@@ -74,7 +78,19 @@
   },
   "date-time": {
     "today-uppercase-initial": "Oggi",
-    "hour-of-day": "ore"
+    "hour-of-day": "ore",
+    "january": "gennaio",
+    "february": "febbraio",
+    "march": "marzo",
+    "april": "aprile",
+    "may": "maggio",
+    "june": "giugno",
+    "july": "luglio",
+    "august": "agosto",
+    "september": "settembre",
+    "october": "ottobre",
+    "november": "novembre",
+    "december": "dicembre"
   },
   "error-boundary": {
     "title": "Qualcosa è andato storto",
@@ -236,7 +252,13 @@
     "action": "Mantieni l’accesso"
   },
   "code-modal": {
-    "digits": ["prima cifra", "seconda cifra", "terza cifra", "quarta cifra", "ultima cifra"]
+    "digits": [
+      "prima cifra",
+      "seconda cifra",
+      "terza cifra",
+      "quarta cifra",
+      "ultima cifra"
+    ]
   },
   "user-validation-failed": {
     "title": "I dati inseriti non sono validi",
@@ -250,5 +272,6 @@
     "selection-box": "Opzioni selezionate",
     "selection-done": "%s selezionati",
     "delete-selection": "Elimina %s"
-  }
+  },
+  "not-available": "Non disponibile"
 }

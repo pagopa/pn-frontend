@@ -20,19 +20,23 @@ import PGEventStrategyFactory from '../utility/MixpanelUtils/PGEventStrategyFact
 
 export const useMenuItems = (userHasAdminPermissions: boolean) => {
   const { IS_B2B_ENABLED } = getConfiguration();
-  const { t, i18n } = useTranslation(['common', 'notifiche']);
+  const { t, i18n } = useTranslation('common');
   const loggedUser = useAppSelector((state: RootState) => state.userState.user);
   const currentStatus = useAppSelector((state: RootState) => state.appStatus.currentStatus);
   const pendingDelegators = useAppSelector(
     (state: RootState) => state.generalInfoState.pendingDelegators
+  );
+  const hasNewNotifications = useAppSelector(
+    (state: RootState) => state.generalInfoState.hasNewNotifications
   );
   const organization = loggedUser.organization;
 
   const notificationMenuItems: Array<SideMenuItem> | undefined = !loggedUser.hasGroup
     ? [
         {
-          label: t('menu.notifiche-impresa'),
+          label: t('menu.notifiche-impresa', { organization: organization?.name }),
           route: routes.NOTIFICHE,
+          dotNotification: hasNewNotifications,
         },
         {
           label: t('menu.notifiche-delegato'),

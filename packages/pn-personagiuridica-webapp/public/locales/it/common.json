@@ -28,9 +28,9 @@
     "understand": "Ok, ho capito"
   },
   "menu": {
-    "notifiche": "Notifiche",
-    "notifiche-impresa": "Notifiche dell'impresa",
-    "notifiche-delegato": "Notifiche delegate",
+    "notifiche": "In arrivo",
+    "notifiche-impresa": "In arrivo per {{organization}}",
+    "notifiche-delegato": "In arrivo per i deleganti",
     "deleghe": "Deleghe",
     "profilo": "I tuoi dati",
     "contacts": "Recapiti",

@@ -1,6 +1,6 @@
 {
-  "title": "Notifiche di {{recipient}}",
-  "title-delegated-notifications": "Notifiche delegate a {{recipient}}",
+  "title": "In arrivo per {{recipient}}",
+  "title-delegated-notifications": "In arrivo per i deleganti",
   "subtitle": "Leggi le notifiche di {{recipient}}. Puoi filtrarle per Codice IUN e data di invio.",
   "subtitle-delegated-notifications": "Leggi le notifiche delegate a {{recipient}}. Puoi filtrarle per Codice IUN e data di invio.",
   "table": {
@@ -11,9 +11,9 @@
     "oggetto": "Oggetto",
     "iun": "Codice IUN",
     "status": "Stato",
-    "show-detail": "Vedi dettaglio",
+    "open": "Apri",
     "group-selector-title": "Menu selezione gruppo",
-    "aria-action-table": "Vedi dettaglio notifica con iun: {{iun}}"
+    "legal-value": "Notifica a valore legale"
   },
   "filters": {
     "iun": "Cerca per Codice IUN",
@@ -37,9 +37,13 @@
     "options": "Opzioni sort"
   },
   "empty-state": {
-    "filtered": "Non abbiamo trovato risultati: prova con dei filtri diversi. <0>Rimuovi filtri</0>",
-    "no-notifications": "Non ci sono notifiche per {{name}}.",
-    "delegate": "Non ci sono notifiche in delega a {{name}} da leggere.",
+    "filtered": "Nessuna notifica o comunicazione per i filtri selezionati",
+    "filtered-description": "Rimuovili o prova con un’altra combinazione.",
+    "clean-filters-cta": "Rimuovi filtri",
+    "delegate": "Qui vedrai le comunicazioni a valore legale di {{name}}",
+    "title": "Qui vedrai le tue notifiche a valore legale e le altre comunicazioni",
+    "description": "Aggiorna ora i tuoi recapiti e saprai subito quando ne riceverai una.",
+    "go-to-contacts-cta": "Vai ai tuoi recapiti",
     "aria-label-remove-filters": "Rimuovi filtri"
   },
   "from-qrcode": {
@@ -353,7 +357,7 @@
       "tpp-type": "un canale digitale di terze parti"
     },
     "downtimes": {
-      "title": "DISSERVIZI",
+      "title": "Disservizi",
       "textWithEndDate": "Disservizio iniziato {{startDate}} e concluso {{endDate}} sulle seguenti funzionalità:",
       "textWithoutEndDate": "Disservizio iniziato {{startDate}} e non ancora concluso sulle seguenti funzionalità:",
       "datePrefix": "il ",

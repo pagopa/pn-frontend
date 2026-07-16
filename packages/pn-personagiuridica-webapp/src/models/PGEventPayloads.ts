@@ -3,7 +3,7 @@ import type {
   AppResponseError,
   Downtime,
   LegalFactId,
-  Notification,
+  RecipientNotification,
   NotificationDetailOtherDocument,
   NotificationStatusHistory,
   PaymentsData,
@@ -44,7 +44,7 @@ export type PGApiKeyEventData = {
 };
 
 export type PGNotificationsListEventData = {
-  notifications: Array<Notification>;
+  notifications: Array<RecipientNotification>;
   pageNumber: number;
   domicileBannerType?: string;
 };
@@ -241,7 +241,6 @@ export type PGEventPayloads = {
   [PGEventsType.SEND_PG_NOTIFICATION_DOWNLOAD_ATTACHMENT]: PGNotificationAttachmentEventData;
   [PGEventsType.SEND_PG_START_PAYMENT]: undefined;
   [PGEventsType.SEND_PG_TIMELINE_DOWNLOAD]: PGTimelineLegalFactEventData;
-  [PGEventsType.SEND_PG_TIMELINE_SHOW_HISTORY]: undefined;
   [PGEventsType.SEND_PG_TIMELINE_SHOW_MORE]: undefined;
   [PGEventsType.SEND_PG_YOUR_NOTIFICATION]: PGNotificationsListEventData;
 

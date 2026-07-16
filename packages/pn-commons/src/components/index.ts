@@ -65,8 +65,7 @@ export { default as NotificationDetailTimeline } from './NotificationDetail/Noti
 export { default as NotificationPaymentRecipient } from './NotificationDetail/NotificationPaymentRecipient';
 export { default as NotificationRelatedDowntimes } from './NotificationDetail/NotificationRelatedDowntimes';
 export { default as MobileNotificationsSort } from './Notifications/MobileNotificationsSort';
-export { isNewNotification } from './Notifications/NewNotificationBadge';
-export { default as NotificationsDataSwitch } from './Notifications/NotificationsDataSwitch';
+export { default as NotificationsRecipientDataSwitch } from './Notifications/NotificationsRecipientDataSwitch';
 export { default as StatusTooltip } from './Notifications/StatusTooltip';
 export { default as CustomPagination } from './Pagination/CustomPagination';
 export { default as PnBreadcrumb } from './PnBreadcrumb';
@@ -83,7 +82,10 @@ export { default as SideMenu } from './SideMenu/SideMenu';
 export { default as SnackBar } from './SnackBar/SnackBar';
 export { default as TabPanel } from './TabPanel';
 export { default as TitleBox } from './TitleBox';
-export { default as A11yMessageAnnouncer } from './A11yMessageAnnouncer';
+export { default as AbstractPaper } from './NotificationDetail/AbstractPaper';
+export { default as NotificationTimelineBox } from './NotificationDetail/NotificationTimelineBox';
+export { default as NotificationDetailSection } from './NotificationDetail/NotificationDetailSection';
 
+export { default as A11yMessageAnnouncer } from './A11yMessageAnnouncer';
 export type { AppNotAccessibleReason } from './AppNotAccessible';
 export type { A11yMessage } from './A11yMessageAnnouncer';
