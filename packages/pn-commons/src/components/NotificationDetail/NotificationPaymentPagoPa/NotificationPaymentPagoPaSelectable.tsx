@@ -58,6 +58,7 @@ const NotificationPaymentPagoPaSelectable: React.FC<Props> = ({
         label={formLabel}
         labelPlacement="start"
         sx={{
+          margin: 0,
           alignItems: isMobile ? 'flex-start' : 'center',
           width: '100%',
           justifyContent: 'space-between',

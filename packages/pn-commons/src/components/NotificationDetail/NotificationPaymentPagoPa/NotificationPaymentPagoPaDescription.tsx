@@ -50,6 +50,14 @@ const NotificationPaymentPagoPaDescription: React.FC<Props> = ({ pagoPAItem, isC
   const statusVisualInfo = getStatusVisualInfo(pagoPAItem.status, pagoPAItem.detail);
   const isMobile = useIsMobile('sm');
 
+  const dataContainerStyle = {
+    mb: isMobile ? 1 : 0,
+  };
+  const dataLabelStyle = {
+    mr: isMobile ? 0 : 0.5,
+    display: isMobile ? 'block' : 'initial',
+  };
+
   return (
     <Box>
       {pagoPAItem.causaleVersamento && (
@@ -62,13 +70,8 @@ const NotificationPaymentPagoPaDescription: React.FC<Props> = ({ pagoPAItem, isC
           {pagoPAItem.causaleVersamento}
         </Typography>
       )}
-      <Box lineHeight="1.4rem" mb={isMobile ? 1 : 0}>
-        <Typography
-          variant="caption"
-          color="text.secondary"
-          mr={isMobile ? 0 : 0.5}
-          display={isMobile ? 'block' : 'initial'}
-        >
+      <Box lineHeight="1.4rem" {...dataContainerStyle}>
+        <Typography variant="caption" color="text.secondary" {...dataLabelStyle}>
           {getLocalizedOrDefaultLabel('notifications', 'detail.payment.notice-code')}
         </Typography>
         <Typography variant="caption-semibold" color="text.secondary">
@@ -76,13 +79,8 @@ const NotificationPaymentPagoPaDescription: React.FC<Props> = ({ pagoPAItem, isC
         </Typography>
       </Box>
       {isCancelled && (
-        <Box lineHeight="1.4rem" mb={isMobile ? 1 : 0}>
-          <Typography
-            variant="caption"
-            color="text.secondary"
-            mr={isMobile ? 0 : 0.5}
-            display={isMobile ? 'block' : 'initial'}
-          >
+        <Box lineHeight="1.4rem" {...dataContainerStyle}>
+          <Typography variant="caption" color="text.secondary" {...dataLabelStyle}>
             {getLocalizedOrDefaultLabel('notifications', 'detail.creditor-tax-id')}
           </Typography>
           <Typography variant="caption-semibold" color="text.secondary" data-testid="creditorTaxId">
@@ -91,13 +89,8 @@ const NotificationPaymentPagoPaDescription: React.FC<Props> = ({ pagoPAItem, isC
         </Box>
       )}
       {pagoPAItem.dueDate && (
-        <Box lineHeight="1.4rem" mb={isMobile ? 1 : 0}>
-          <Typography
-            variant="caption"
-            color="text.secondary"
-            mr={isMobile ? 0 : 0.5}
-            display={isMobile ? 'block' : 'initial'}
-          >
+        <Box lineHeight="1.4rem" {...dataContainerStyle}>
+          <Typography variant="caption" color="text.secondary" {...dataLabelStyle}>
             {getLocalizedOrDefaultLabel('notifications', 'detail.payment.due')}
           </Typography>
           <Typography variant="caption-semibold" color="text.secondary">
@@ -107,12 +100,7 @@ const NotificationPaymentPagoPaDescription: React.FC<Props> = ({ pagoPAItem, isC
       )}
       {statusVisualInfo && (
         <Box lineHeight="1.4rem">
-          <Typography
-            variant="caption"
-            color="text.secondary"
-            mr={isMobile ? 0 : 0.5}
-            display={isMobile ? 'block' : 'initial'}
-          >
+          <Typography variant="caption" color="text.secondary" {...dataLabelStyle}>
             {getLocalizedOrDefaultLabel('notifications', 'detail.payment.status.title')}
           </Typography>
           <StatusTooltip
