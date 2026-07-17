@@ -132,7 +132,6 @@ describe('Dashbaord redux state tests', () => {
       endDate: new Date('2022-02-27T14:20:20.566Z'),
       recipientId: 'mocked-recipientId',
       status: NotificationStatus.PAID,
-      subjectRegExp: 'mocked-regexp',
     };
     const action = store.dispatch(setNotificationFilters(filters));
     expect(action.type).toBe('dashboardSlice/setNotificationFilters');

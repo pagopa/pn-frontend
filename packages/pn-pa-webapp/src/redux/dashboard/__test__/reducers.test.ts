@@ -114,7 +114,6 @@ describe('Dashboard redux state tests', () => {
         endDate: new Date('2022-02-27T14:20:20.566Z'),
         recipientId: 'mocked-recipientId',
         status: NotificationStatus.PAID,
-        subjectRegExp: 'mocked-regexp',
         iunMatch: '',
       })
     );
@@ -125,7 +124,6 @@ describe('Dashboard redux state tests', () => {
       endDate: new Date('2022-02-27T14:20:20.566Z'),
       recipientId: 'mocked-recipientId',
       status: NotificationStatus.PAID,
-      subjectRegExp: 'mocked-regexp',
       iunMatch: '',
     });
   });
