@@ -27,7 +27,6 @@ import {
   PnBreadcrumb,
 } from '@pagopa-pn/pn-commons';
 
-import { informalNotificationMock } from '../__mocks__/InformalNotification.mock';
 import { BffFullInformalNotificationV1 } from '../generated-client/informal-notifications';
 import * as routes from '../navigation/routes.const';
 import { useAppDispatch } from '../redux/hooks';
@@ -36,6 +35,7 @@ import {
   getReceivedNotificationPaymentUrl,
 } from '../redux/notification/actions';
 import {
+  getReceivedInformalNotification,
   getReceivedInformalNotificationDocument,
   getReceivedInformalNotificationPaymentInfo,
 } from '../redux/notification/informalActions';
@@ -64,26 +64,16 @@ const InformalNotificationDetail: React.FC = () => {
       { ns: 'notifiche' }
     );
 
-  /*   
-  
-   // TODO: rimuovere quando il BE sarà disponibile
-  useEffect(() => {
-    if (id) {
-      void dispatch(getReceivedInformalNotification(id))
-        .unwrap()
-        .then(setInformalNotification)
-        .catch(() => {});
-    }
-  }, [id, dispatch]); */
-
   useEffect(() => {
     if (!id) {
       return;
     }
 
-    // TODO: rimuovere quando il BE sarà disponibile
-    setInformalNotification(informalNotificationMock);
-  }, [id]);
+    void dispatch(getReceivedInformalNotification(id))
+      .unwrap()
+      .then(setInformalNotification)
+      .catch(() => {});
+  }, [id, dispatch]);
 
   const currentRecipient = informalNotification?.recipients?.[0];
 
