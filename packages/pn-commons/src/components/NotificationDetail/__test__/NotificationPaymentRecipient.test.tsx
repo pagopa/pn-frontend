@@ -43,7 +43,7 @@ describe('NotificationPaymentRecipient Component', () => {
         getPaymentAttachmentAction={vi.fn()}
         onPayClick={() => void 0}
         handleFetchPaymentsInfo={() => void 0}
-        costDetailsAssistanceLink=""
+        costDetailsAssistanceLink="test-costassistance-link"
         costDetails={notificationCostDetailsMock}
       />
     );
