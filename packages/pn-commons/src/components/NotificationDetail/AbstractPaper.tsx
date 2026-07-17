@@ -120,9 +120,15 @@ const AbstractPaper = ({
         </Grid>
       </Grid>
       {abstract && <Divider aria-hidden sx={{ my: 2 }} />}
-      <Box sx={{ overflowWrap: 'anywhere' }}>
-        <PNMarkdown content={abstract ?? ''} />
-      </Box>
+      {isLegal ? (
+        <Typography variant="body1" sx={{ overflowWrap: 'anywhere' }}>
+          {abstract}
+        </Typography>
+      ) : (
+        <Box sx={{ overflowWrap: 'anywhere' }}>
+          <PNMarkdown content={abstract ?? ''} />
+        </Box>
+      )}
     </MIPaper>
   );
 };
