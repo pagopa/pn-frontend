@@ -169,7 +169,8 @@ const NotificationDetailDocuments: React.FC<Props> = (
       </MIPaper>
     )}
 
-    {documentsAvailable && documents && (
+    {/* Documents must be shown if the are documents and document is available or is not available but is cancelled */}
+    {documents && (documentsAvailable || (!documentsAvailable && disableDownloads)) && (
       <Documents
         documents={documents}
         recipients={recipients}

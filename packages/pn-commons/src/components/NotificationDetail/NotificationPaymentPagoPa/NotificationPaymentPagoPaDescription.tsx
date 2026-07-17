@@ -114,6 +114,7 @@ const NotificationPaymentPagoPaDescription: React.FC<Props> = ({ pagoPAItem, isC
               `detail.payment.status.${statusVisualInfo.key}-tooltip`
             )}
             tooltipProps={{ placement: 'top' }}
+            useNewChip
           />
         </Box>
       )}
