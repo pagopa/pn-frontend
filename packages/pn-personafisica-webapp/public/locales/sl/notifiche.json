@@ -7,7 +7,6 @@
     "oggetto": "Zadeva",
     "iun": "Koda IUN",
     "status": "Država",
-    "show-detail": "Ogled podrobnosti",
     "aria-action-table": "Oglejte si podrobnosti obvestila z IUN: {{iun}}",
     "open": "Odpri",
     "legal-value": "Pravno zavezujoča vročitev"
@@ -29,7 +28,9 @@
       "date-range": "Vnesite datum med {{fromDate}} in {{toDate}}",
       "date-start": "Začetni datum mora biti pred končnim datumom",
       "date-end": "Končni datum mora biti za začetnim datumom"
-    }
+    },
+    "loading_completed_with_results": "Nalaganje končano. Iskanje je vrnilo rezultate",
+    "loading_completed_no_results": "Nalaganje končano. Nobeno obvestilo ni bilo najdeno"
   },
   "sort": {
     "title": "Razvrsti",

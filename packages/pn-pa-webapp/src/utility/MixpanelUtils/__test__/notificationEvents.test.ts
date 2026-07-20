@@ -46,6 +46,18 @@ describe('notificationTrackingConfigs', () => {
     });
   });
 
+  it('should build SEND_PA_TIMELINE_SHOW_HISTORY event', () => {
+    const result =
+      notificationTrackingConfigs[PAEventsType.SEND_PA_TIMELINE_SHOW_HISTORY](undefined);
+
+    expect(result).toStrictEqual({
+      [EventPropertyType.TRACK]: {
+        event_category: EventCategory.UX,
+        event_type: EventAction.ACTION,
+      },
+    });
+  });
+
   it('should build SEND_PA_TIMELINE_SHOW_MORE event', () => {
     const result = notificationTrackingConfigs[PAEventsType.SEND_PA_TIMELINE_SHOW_MORE](undefined);
 
