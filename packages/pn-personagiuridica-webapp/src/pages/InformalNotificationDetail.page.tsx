@@ -77,6 +77,12 @@ const InformalNotificationDetail: React.FC = () => {
 
   const currentRecipient = informalNotification?.recipients?.[0];
 
+  // TODO da sistemare quando ci saranno i contatti
+  const phone = (currentRecipient as any)?.senderContacts?.phone;
+  const site = (currentRecipient as any)?.senderContacts?.site;
+
+  const hasContactInfo = Boolean(phone || site);
+
   const fetchPaymentsInfo = (payments: Array<NotificationDetailPayment>) => {
     const paymentInfoRequest = payments.reduce((acc, payment) => {
       if (payment.pagoPa && Object.keys(payment.pagoPa).length > 0) {
@@ -237,49 +243,57 @@ const InformalNotificationDetail: React.FC = () => {
           </MIPaper>
         </Stack>
 
-        <MIPaper sx={{ p: 3, width: { xs: '100%', md: '42%' } }} variant="outlined">
-          <Stack spacing={2}>
-            <Typography component="h2" variant="h5">
-              {t('detail.contact_sender.title', { ns: 'notifiche' })}
-            </Typography>
+        {hasContactInfo && (
+          <MIPaper sx={{ p: 3, width: { xs: '100%', md: '42%' } }} variant="outlined">
+            <Stack spacing={2}>
+              <Typography component="h2" variant="h5">
+                {t('detail.contact_sender.title', { ns: 'notifiche' })}
+              </Typography>
 
-            <List>
-              <ListItem disableGutters>
-                <ListItemAvatar>
-                  <ListItemIcon sx={{ minWidth: 40 }}>
-                    <CallOutlinedIcon />
-                  </ListItemIcon>
-                </ListItemAvatar>
-                <ListItemText sx={{ p: 0 }}>
-                  <Typography variant="body2">
-                    {t('detail.contact_sender.phone', { ns: 'notifiche' })}
-                  </Typography>
-                  <Typography variant="sidenav" color="text.primary">
-                    {currentRecipient?.phoneNumber ?? '-'}
-                  </Typography>
-                </ListItemText>
-              </ListItem>
+              <List>
+                {phone && (
+                  <>
+                    <ListItem disableGutters>
+                      <ListItemAvatar>
+                        <ListItemIcon sx={{ minWidth: 40 }}>
+                          <CallOutlinedIcon />
+                        </ListItemIcon>
+                      </ListItemAvatar>
+                      <ListItemText sx={{ p: 0 }}>
+                        <Typography variant="body2">
+                          {t('detail.contact_sender.phone', { ns: 'notifiche' })}
+                        </Typography>
+                        <Typography variant="sidenav" color="text.primary">
+                          {phone}
+                        </Typography>
+                      </ListItemText>
+                    </ListItem>
 
-              <Divider />
+                    {site && <Divider />}
+                  </>
+                )}
 
-              <ListItem disableGutters>
-                <ListItemAvatar>
-                  <ListItemIcon sx={{ minWidth: 40 }}>
-                    <LanguageRoundedIcon />
-                  </ListItemIcon>
-                </ListItemAvatar>
-                <ListItemText sx={{ p: 0 }}>
-                  <Typography variant="body2">
-                    {t('detail.contact_sender.website', { ns: 'notifiche' })}
-                  </Typography>
-                  <Typography variant="sidenav" color="text.primary">
-                    {currentRecipient?.email ?? '-'}
-                  </Typography>
-                </ListItemText>
-              </ListItem>
-            </List>
-          </Stack>
-        </MIPaper>
+                {site && (
+                  <ListItem disableGutters>
+                    <ListItemAvatar>
+                      <ListItemIcon sx={{ minWidth: 40 }}>
+                        <LanguageRoundedIcon />
+                      </ListItemIcon>
+                    </ListItemAvatar>
+                    <ListItemText sx={{ p: 0 }}>
+                      <Typography variant="body2">
+                        {t('detail.contact_sender.website', { ns: 'notifiche' })}
+                      </Typography>
+                      <Typography variant="sidenav" color="text.primary">
+                        {site}
+                      </Typography>
+                    </ListItemText>
+                  </ListItem>
+                )}
+              </List>
+            </Stack>
+          </MIPaper>
+        )}
       </Stack>
     </Box>
   );
