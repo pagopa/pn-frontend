@@ -213,6 +213,7 @@ const FilterNotifications = forwardRef(({ showFilters, currentDelegator }: Props
             <FilterNotificationsFormBody
               formikInstance={formik}
               showRemoveFilters={showRemoveFilters}
+              showCommunicationType={!currentDelegator}
             />
           </DialogContent>
           <DialogActions>
@@ -240,6 +241,7 @@ const FilterNotifications = forwardRef(({ showFilters, currentDelegator }: Props
           <FilterNotificationsFormBody
             formikInstance={formik}
             showRemoveFilters={showRemoveFilters}
+            showCommunicationType={!currentDelegator}
           />
           <FilterNotificationsFormActions
             cleanFilters={cleanFilters}

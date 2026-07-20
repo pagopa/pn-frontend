@@ -28,9 +28,14 @@ type Props = {
     setErrors: (errors: FormikErrors<FormikValues>) => void;
   };
   showRemoveFilters: boolean;
+  showCommunicationType: boolean;
 };
 
-const FilterNotificationsFormBody = ({ formikInstance, showRemoveFilters }: Props) => {
+const FilterNotificationsFormBody = ({
+  formikInstance,
+  showRemoveFilters,
+  showCommunicationType,
+}: Props) => {
   const { t, i18n } = useTranslation(['notifiche']);
   const isMobile = useIsMobile();
   const communicationTypeLabels = {
@@ -75,47 +80,46 @@ const FilterNotificationsFormBody = ({ formikInstance, showRemoveFilters }: Prop
 
   return (
     <Fragment>
-      <Grid item lg={showRemoveFilters ? 3 : 3.75} xs={12}>
-        <TextField
-          id="communicationType"
-          data-testid="communicationType"
-          name="communicationType"
-          label={t('filters.communication-type')}
-          select
-          value={formikInstance.values.communicationType}
-          onChange={(e) => {
-            void formikInstance.setFieldValue('communicationType', e.target.value, false);
-          }}
-          SelectProps={{
-            renderValue: (value) =>
-              value === 'LEGAL' ? (
-                <Box component="span" sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                  <VerifiedRounded sx={{ color: 'primary.main', fontSize: '16px' }} />
-                  {communicationTypeLabels.LEGAL}
-                </Box>
-              ) : (
-                communicationTypeLabels[value as keyof typeof communicationTypeLabels] || ''
-              ),
-            MenuProps: {
-              disableAutoFocusItem: true,
-            },
-          }}
-          fullWidth
-          sx={{ marginBottom: isMobile ? '20px' : '0' }}
-          size="small"
-        >
-          <MenuItem value="LEGAL">
-            <ListItemIcon>
-              <VerifiedRounded sx={{ color: 'primary.main', fontSize: '16px' }} />
-            </ListItemIcon>
-            <ListItemText>{communicationTypeLabels.LEGAL}</ListItemText>
-          </MenuItem>
-          <MenuItem value="INFORMAL">
-            <ListItemText>{communicationTypeLabels.INFORMAL}</ListItemText>
-          </MenuItem>
-        </TextField>
-      </Grid>
-      <Grid item lg={showRemoveFilters ? 3 : 3.75} xs={12}>
+      {showCommunicationType && (
+        <Grid item lg={showRemoveFilters ? 3 : 3.75} xs={12}>
+          <TextField
+            id="communicationType"
+            data-testid="communicationType"
+            name="communicationType"
+            label={t('filters.communication-type')}
+            select
+            value={formikInstance.values.communicationType}
+            onChange={(e) => {
+              void formikInstance.setFieldValue('communicationType', e.target.value, false);
+            }}
+            SelectProps={{
+              renderValue: (value) =>
+                value === 'LEGAL' ? (
+                  <Box component="span" sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                    <VerifiedRounded sx={{ color: 'primary.main', fontSize: '16px' }} />
+                    {communicationTypeLabels.LEGAL}
+                  </Box>
+                ) : (
+                  communicationTypeLabels[value as keyof typeof communicationTypeLabels] || ''
+                ),
+            }}
+            fullWidth
+            sx={{ marginBottom: isMobile ? '20px' : '0' }}
+            size="small"
+          >
+            <MenuItem value="LEGAL">
+              <ListItemIcon>
+                <VerifiedRounded sx={{ color: 'primary.main', fontSize: '16px' }} />
+              </ListItemIcon>
+              <ListItemText>{communicationTypeLabels.LEGAL}</ListItemText>
+            </MenuItem>
+            <MenuItem value="INFORMAL">
+              <ListItemText>{communicationTypeLabels.INFORMAL}</ListItemText>
+            </MenuItem>
+          </TextField>
+        </Grid>
+      )}
+      <Grid item lg={showCommunicationType ? (showRemoveFilters ? 3 : 3.75) : true} xs={12}>
         <TextField
           id="iunMatch"
           value={formikInstance.values.iunMatch}
@@ -135,7 +139,7 @@ const FilterNotificationsFormBody = ({ formikInstance, showRemoveFilters }: Prop
           inputProps={{ maxLength: 25 }}
         />
       </Grid>
-      <Grid item lg={1.75} xs={12}>
+      <Grid item lg={showCommunicationType ? 1.75 : 2} xs={12}>
         <CustomDatePicker
           language={i18n.language}
           label={t('filters.data_da', { ns: 'notifiche' })}
@@ -166,7 +170,7 @@ const FilterNotificationsFormBody = ({ formikInstance, showRemoveFilters }: Prop
           maxDate={formikInstance.values.endDate ?? null}
         />
       </Grid>
-      <Grid item lg={1.75} xs={12}>
+      <Grid item lg={showCommunicationType ? 1.75 : 2} xs={12}>
         <CustomDatePicker
           language={i18n.language}
           label={t('filters.data_a', { ns: 'notifiche' })}

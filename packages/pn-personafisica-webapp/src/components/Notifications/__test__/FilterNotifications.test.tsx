@@ -8,6 +8,7 @@ import {
   testSelect,
 } from '@pagopa-pn/pn-commons/src/test-utils';
 
+import { mandatesByDelegate } from '../../../__mocks__/Delegations.mock';
 import {
   RenderResult,
   act,
@@ -70,6 +71,18 @@ describe('Filter Notifications Table Component', () => {
     expect(submitButton).toBeInTheDocument();
     expect(submitButton).toHaveTextContent(/button.filtra/i);
     expect(within(form).queryByTestId('cancelButton')).not.toBeInTheDocument();
+  });
+
+  it('does not show the communication type filter for delegated notifications', async () => {
+    await act(async () => {
+      result = render(<FilterNotifications showFilters currentDelegator={mandatesByDelegate[1]} />);
+    });
+    form = result.container.querySelector('form') as HTMLFormElement;
+
+    expect(form.querySelector('input[name="communicationType"]')).not.toBeInTheDocument();
+    testFormElements(form, 'iunMatch', 'filters.iun', '');
+    testFormElements(form, 'startDate', 'filters.data_da', '');
+    testFormElements(form, 'endDate', 'filters.data_a', '');
   });
 
   it('test iunMatch input', async () => {
