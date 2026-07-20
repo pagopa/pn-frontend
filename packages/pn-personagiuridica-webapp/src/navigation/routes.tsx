@@ -6,7 +6,6 @@ import { ConsentType, LoadingPage, NotFound, PrivateRoute, lazyRetry } from '@pa
 import DelegatesByCompany from '../components/Deleghe/DelegatesByCompany';
 import DelegationsOfTheCompany from '../components/Deleghe/DelegationsOfTheCompany';
 import { PNRole } from '../models/User';
-import NotificationTimeline from '../pages/NotificationTimeline.page';
 import { useAppSelector } from '../redux/hooks';
 import { RootState } from '../redux/store';
 import { getConfiguration } from '../services/configuration.service';
@@ -34,6 +33,7 @@ const DigitalContactActivation = lazyRetry(
 const DigitalContactManagement = lazyRetry(
   () => import('../components/Contacts/DigitalContactManagement')
 );
+const NotificationTimeline = lazyRetry(() => import('../pages/NotificationTimeline.page'));
 
 const Router: React.FC = () => {
   const { organization, hasGroup } = useAppSelector((state: RootState) => state.userState.user);
@@ -89,12 +89,30 @@ const Router: React.FC = () => {
                 />
                 <Route
                   path={routes.DETTAGLIO_NOTIFICA_TIMELINE}
-                  element={<NotificationTimeline />}
+                  element={
+                    <PrivateRoute
+                      currentRoles={[]}
+                      requiredRoles={[]}
+                      additionalCondition={!hasGroup}
+                      redirectTo={<NotFound goBackAction={navigateToHome} />}
+                    >
+                      <NotificationTimeline />
+                    </PrivateRoute>
+                  }
                 />
                 <Route path={routes.DETTAGLIO_NOTIFICA_DELEGATO} element={<NotificationDetail />} />
                 <Route
                   path={routes.DETTAGLIO_NOTIFICA_DELEGATO_TIMELINE}
-                  element={<NotificationTimeline />}
+                  element={
+                    <PrivateRoute
+                      currentRoles={[]}
+                      requiredRoles={[]}
+                      additionalCondition={!hasGroup}
+                      redirectTo={<NotFound goBackAction={navigateToHome} />}
+                    >
+                      <NotificationTimeline />
+                    </PrivateRoute>
+                  }
                 />
                 <Route
                   path={routes.DELEGHE}
