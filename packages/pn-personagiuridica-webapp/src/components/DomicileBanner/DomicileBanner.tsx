@@ -19,6 +19,7 @@ import { getConfiguration } from '../../services/configuration.service';
 type Props = {
   source: ContactSource;
   onBannerResolved?: (domicileBannerType: string) => void;
+  my?: number;
 };
 
 type DomicileBannerData = {
@@ -87,7 +88,7 @@ const resolveCta = (
 const getBannerType = (open: boolean, data: DomicileBannerData | null): string =>
   open && data?.destination ? data.destination : '';
 
-const DomicileBanner: React.FC<Props> = ({ source, onBannerResolved }) => {
+const DomicileBanner: React.FC<Props> = ({ source, onBannerResolved, my = 4 }) => {
   const { t } = useTranslation(['recapiti', 'common']);
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
@@ -126,7 +127,7 @@ const DomicileBanner: React.FC<Props> = ({ source, onBannerResolved }) => {
   };
 
   return open && domicileBannerData ? (
-    <Box my={4}>
+    <Box my={my}>
       <Banner
         variant="tertiary"
         color="info"

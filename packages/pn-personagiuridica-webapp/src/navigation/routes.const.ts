@@ -17,8 +17,11 @@ export const REGISTRA_CHIAVE_PUBBLICA = `${INTEGRAZIONE_API}/registra-chiave-pub
 const DETTAGLIO = '/dettaglio';
 const COMUNICAZIONE = '/comunicazione';
 export const DETTAGLIO_NOTIFICA = `${NOTIFICHE}/:id${DETTAGLIO}`;
+export const DETTAGLIO_NOTIFICA_TIMELINE = `${NOTIFICHE}/:id${DETTAGLIO}/timeline`;
 export const DETTAGLIO_COMBO = `${COMUNICAZIONE}/:id${DETTAGLIO}`;
 export const DETTAGLIO_NOTIFICA_DELEGATO = `${NOTIFICHE_DELEGATO}/:mandateId/:id${DETTAGLIO}`;
+export const DETTAGLIO_NOTIFICA_DELEGATO_TIMELINE = `${NOTIFICHE_DELEGATO}/:mandateId/:id${DETTAGLIO}/timeline`;
+
 export const DETTAGLIO_NOTIFICA_QRCODE_QUERY_PARAM = AppRouteParams.AAR;
 export const NUOVA_DELEGA = `${DELEGATI}/nuova`;
 export const GET_DETTAGLIO_NOTIFICA_PATH = (id: string) => `${NOTIFICHE}/${id}${DETTAGLIO}`;
@@ -28,6 +31,10 @@ export const GET_DETTAGLIO_NOTIFICA_DELEGATO_PATH = (id: string, mandateId: stri
   `${NOTIFICHE_DELEGATO}/${mandateId}/${id}${DETTAGLIO}`;
 export const RECAPITI = '/recapiti';
 export const GET_NOTIFICHE_DELEGATO_PATH = (mandateId: string) => `${NOTIFICHE}/${mandateId}`;
+export const GET_DETTAGLIO_NOTIFICA_TIMELINE_PATH = (id: string) =>
+  `${NOTIFICHE}/${id}${DETTAGLIO}/timeline`;
+export const GET_DETTAGLIO_NOTIFICA_DELEGATO_TIMELINE_PATH = (id: string, mandateId: string) =>
+  `${NOTIFICHE_DELEGATO}/${mandateId}/${id}${DETTAGLIO}/timeline`;
 export const APP_STATUS = '/app-status';
 export { PRIVACY_POLICY, TERMS_OF_SERVICE };
 export const NOT_ACCESSIBLE = '/non-accessibile';

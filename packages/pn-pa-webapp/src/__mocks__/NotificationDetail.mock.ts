@@ -1058,6 +1058,7 @@ export const notificationDTOMultiRecipient: NotificationDetail = {
   abstract: 'Abstract della notifica',
   subject: 'notifica analogica con cucumber',
   recipients,
+  filedAt: '2023-08-25T09:33:58.709695008Z',
   documents: [
     {
       digests: {
@@ -1075,7 +1076,6 @@ export const notificationDTOMultiRecipient: NotificationDetail = {
   group: '000',
   iun: 'RTRD-UDGU-QTQY-202308-P-1',
   sentAt: '2023-08-25T09:33:58.709695008Z',
-  filedAt: '2023-08-25T09:33:58.709695008Z',
   documentsAvailable: true,
   notificationStatus: NotificationStatus.EFFECTIVE_DATE,
   notificationStatusHistory,

@@ -19,7 +19,7 @@ type Props = {
   recipients?: Array<NotificationDetailRecipient>;
   clickHandler: (document: string | NotificationDetailOtherDocument | undefined) => void;
   documentsAvailable?: boolean;
-  downloadFilesMessage?: string;
+  downloadFilesMessage?: { key: string; ns: string };
   downloadFilesLink?: string;
   disableDownloads?: boolean;
   titleVariant?: TypographyProps['variant'];
@@ -147,7 +147,8 @@ const NotificationDetailDocuments: React.FC<Props> = (
             <Typography>
               <Trans
                 parent={React.Fragment}
-                i18nKey={downloadFilesMessage}
+                i18nKey={downloadFilesMessage?.key}
+                ns={downloadFilesMessage?.ns}
                 components={[<strong key="0" />]}
               />
             </Typography>
@@ -158,7 +159,11 @@ const NotificationDetailDocuments: React.FC<Props> = (
       {/* Notification sent after expiration date (120 legal and 180 combo) */}
       {!disableDownloads && !documentsAvailable && downloadFilesMessage && (
         <MIAlert severity="warning" data-testid="documentsDisabled">
-          <Trans parent={React.Fragment} i18nKey={downloadFilesMessage} />
+          <Trans
+            parent={React.Fragment}
+            i18nKey={downloadFilesMessage?.key}
+            ns={downloadFilesMessage?.ns}
+          />
         </MIAlert>
       )}
 
@@ -176,7 +181,8 @@ const NotificationDetailDocuments: React.FC<Props> = (
             <Typography>
               <Trans
                 parent={React.Fragment}
-                i18nKey={downloadFilesMessage}
+                i18nKey={downloadFilesMessage?.key}
+                ns={downloadFilesMessage?.ns}
                 components={[<strong key="0" />]}
               />
             </Typography>

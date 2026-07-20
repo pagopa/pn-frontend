@@ -1,5 +1,6 @@
 {
   "title": "Prejeto za {{recipient}}",
+  "go-to-detail": "Prikaži podrobnosti",
   "title-delegated-notifications": "Prejeto za pooblastitelje",
   "subtitle": "Preberite obvestila za {{recipient}}. Filtrirate jih lahko po kodi IUN in datumu pošiljanja.",
   "subtitle-delegated-notifications": "Preberite obvestila, delegirana na {{recipient}}. Filtrirate jih lahko po kodi IUN in datumu pošiljanja.",
@@ -11,9 +12,10 @@
     "oggetto": "Zadeva",
     "iun": "Koda IUN",
     "status": "Stanje",
-    "show-detail": "Ogled podrobnosti",
+    "open": "Odpri",
     "group-selector-title": "Meni za izbiro skupine",
-    "aria-action-table": "Oglejte si podrobnosti obvestila z IUN: {{iun}}"
+    "aria-action-table": "Odpri podrobnosti obvestila z IUN: {{iun}}",
+    "legal-value": "Obvestilo s pravno veljavnostjo"
   },
   "filters": {
     "iun": "Iskanje po kodi IUN",
@@ -37,9 +39,13 @@
     "options": "Možnosti razvrščanja"
   },
   "empty-state": {
-    "filtered": "Ni bilo mogoče najti rezultatov: poskusite z različnimi filtri. <0>Odstranite filtre</0>",
-    "no-notifications": "Ni obvestil za {{name}}.",
-    "delegate": "Ni obvestil s prenosom pooblastila na {{name}} za branje.",
+    "filtered": "Za izbrane filtre ni obvestil ali sporočil",
+    "filtered-description": "Odstranite jih ali poskusite z drugo kombinacijo.",
+    "clean-filters-cta": "Odstrani filtre",
+    "delegate": "Tukaj boste videli sporočila s pravno veljavnostjo osebe {{name}}",
+    "title": "Tukaj boste videli svoja obvestila s pravno veljavnostjo in druga sporočila",
+    "description": "Posodobite svoje kontaktne podatke zdaj in takoj boste izvedeli, ko jih prejmete.",
+    "go-to-contacts-cta": "Pojdi na svoje kontaktne podatke",
     "aria-label-remove-filters": "Odstrani filtre"
   },
   "from-qrcode": {
@@ -47,6 +53,18 @@
     "not-found-subtitle": "Preberejo jo lahko le uporabniki, ki jih je evidentiralo podjetje prejemnik, ali njegov pooblaščenec."
   },
   "detail": {
+    "legal-value": "Obvestilo s pravno veljavnostjo",
+    "notification-timeline-section": {
+      "title": "Stanje obvestila",
+      "aria-label": "Prikaži časovnico obvestila"
+    },
+    "notification-detail-section": {
+      "title": "Podrobnosti obvestila",
+      "recipient": "Prejemnik",
+      "aar": "Potrdilo o prejemu",
+      "aria-label": "Prikaži potrdilo o prejemu",
+      "availability": "Na voljo na spletu 10 let od datuma, ko obvestilo začne pravno veljati."
+    },
     "document-not-available": "Dokument bo mogoče prenesti v nekaj minutah. Poskusite lahko znova tako, da ponovno naložite stran ali kliknete povezavo zahtevanega dokumenta",
     "table-aria-label": "Podrobnosti o obvestilu",
     "payment-table-aria-label": "Podrobnosti o plačilu",
