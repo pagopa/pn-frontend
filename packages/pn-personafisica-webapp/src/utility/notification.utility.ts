@@ -59,4 +59,4 @@ export const appRouteParamToEventSource = (
 };
 
 export const hasActiveFilters = (filters: GetNotificationsParams): boolean =>
-  Boolean(filters.startDate || filters.endDate || filters.iunMatch);
+  Boolean(filters.startDate || filters.endDate || filters.iunMatch || filters.communicationType);

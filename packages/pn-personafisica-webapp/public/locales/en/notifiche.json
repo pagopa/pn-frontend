@@ -13,7 +13,12 @@
     "legal-value": "Legally-binding notification"
   },
   "filters": {
-    "iun": "Search by IUN Code",
+    "communication-type": "Type",
+    "communication-type-options": {
+      "legal": "Legally-binding notifications",
+      "informal": "Communications"
+    },
+    "iun": "IUN code",
     "data_da": "From",
     "data_da-input-aria-label": "Enter the search start date",
     "data_a": "To",

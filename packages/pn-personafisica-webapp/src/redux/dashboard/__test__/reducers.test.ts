@@ -47,6 +47,7 @@ describe('Dashbaord redux state tests', () => {
       filters: {
         startDate: undefined,
         endDate: undefined,
+        communicationType: '',
         iunMatch: '',
       },
       pagination: {
