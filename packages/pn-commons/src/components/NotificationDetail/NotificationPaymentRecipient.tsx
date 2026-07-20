@@ -1,8 +1,8 @@
 import React, { memo, useCallback, useEffect, useState } from 'react';
 
-import { Download } from '@mui/icons-material/';
-import { Box, Button, FormControl, RadioGroup, Stack, Typography } from '@mui/material';
-import { MIAlert } from '@pagopa/mui-italia';
+import SaveAltIcon from '@mui/icons-material/SaveAlt';
+import { Box, Divider, FormControl, RadioGroup, Stack, Typography } from '@mui/material';
+import { MIAlert, MIButton } from '@pagopa/mui-italia';
 
 import { useDismissToastOnError } from '../../hooks';
 import { downloadDocument } from '../../hooks/useDownloadDocument';
@@ -312,6 +312,12 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
       )}
 
       {!isCancelled && f24Only.length > 0 && (
+        <Divider sx={{ my: 2, color: (theme) => theme.palette.grey[700] }}>
+          {getLocalizedOrDefaultLabel('common', 'conjunctions.or')}
+        </Divider>
+      )}
+
+      {!isCancelled && f24Only.length > 0 && pagoPaF24.length > 0 && (
         <Box data-testid="f24only-box">
           {f24Only.length > 0 && pagoPaF24.length > 0 && (
             <Typography variant="overline" mt={3}>
@@ -398,7 +404,7 @@ const PaymentButtons = ({
             )}
           </Typography>
 
-          <Button
+          <MIButton
             color={errorOnPayment ? 'error' : 'primary'}
             fullWidth
             variant={errorOnPayment ? 'outlined' : 'contained'}
@@ -406,10 +412,10 @@ const PaymentButtons = ({
             onClick={() => handleCheckPaymentSelected('tpp')}
           >
             {getLocalizedOrDefaultLabel('notifications', 'detail.payment.submit-tpp')}
-          </Button>
+          </MIButton>
         </Stack>
       )}
-      <Button
+      <MIButton
         color={errorOnPayment && errorOnPayment.source !== 'tpp' ? 'error' : 'primary'}
         fullWidth
         variant={errorOnPayment || hasPaymentTpp ? 'outlined' : 'contained'}
@@ -427,18 +433,17 @@ const PaymentButtons = ({
               : null}
           </>
         )}
-      </Button>
+      </MIButton>
       {selectedPayment?.pagoPa?.attachment && (
-        <Button
+        <MIButton
           fullWidth
           variant={hasPaymentTpp ? 'text' : 'outlined'}
           data-testid="download-pagoPA-notice-button"
-          disabled={!selectedPayment.pagoPa}
           onClick={() => downloadAttachment(PaymentAttachmentSName.PAGOPA)}
         >
-          <Download fontSize="small" sx={{ mr: 1 }} />
+          <SaveAltIcon fontSize="small" sx={{ mr: 1 }} />
           {getLocalizedOrDefaultLabel('notifications', 'detail.payment.download-pagoPA-notice')}
-        </Button>
+        </MIButton>
       )}
       {selectedPayment?.f24 && (
         <Box key="attachment" data-testid="f24-download">
