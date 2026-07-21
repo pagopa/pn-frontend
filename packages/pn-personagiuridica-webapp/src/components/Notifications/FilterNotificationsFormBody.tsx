@@ -27,7 +27,6 @@ type Props = {
     errors: FormikErrors<FormikValues>;
     setErrors: (errors: FormikErrors<FormikValues>) => void;
   };
-  showRemoveFilters: boolean;
   showCommunicationType: boolean;
 };
 
@@ -51,27 +50,20 @@ const renderCommunicationTypeValue = (
   return communicationTypeLabels[value as keyof CommunicationTypeLabels] || '';
 };
 
-const getGridSizes = (showCommunicationType: boolean, showRemoveFilters: boolean) => {
-  const communicationType = showRemoveFilters ? 3 : 3.75;
-  return {
-    communicationType,
-    iun: showCommunicationType ? communicationType : true,
-    date: showCommunicationType ? 1.75 : 2,
-  };
-};
+const getGridSizes = (showCommunicationType: boolean) => ({
+  communicationType: true,
+  iun: true,
+  date: showCommunicationType ? 1.75 : 2,
+});
 
-const FilterNotificationsFormBody = ({
-  formikInstance,
-  showRemoveFilters,
-  showCommunicationType,
-}: Props) => {
+const FilterNotificationsFormBody = ({ formikInstance, showCommunicationType }: Props) => {
   const { t, i18n } = useTranslation(['notifiche']);
   const isMobile = useIsMobile();
   const communicationTypeLabels = {
     LEGAL: t('filters.communication-type-options.legal'),
     INFORMAL: t('filters.communication-type-options.informal'),
   };
-  const gridSizes = getGridSizes(showCommunicationType, showRemoveFilters);
+  const gridSizes = getGridSizes(showCommunicationType);
 
   const handlePaste = async (e: React.ClipboardEvent) => {
     e.preventDefault();

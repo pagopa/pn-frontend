@@ -27,15 +27,10 @@ type Props = {
     errors: FormikErrors<FormikValues>;
     setErrors: (errors: FormikErrors<FormikValues>) => void;
   };
-  showRemoveFilters: boolean;
   showCommunicationType: boolean;
 };
 
-const FilterNotificationsFormBody = ({
-  formikInstance,
-  showRemoveFilters,
-  showCommunicationType,
-}: Props) => {
+const FilterNotificationsFormBody = ({ formikInstance, showCommunicationType }: Props) => {
   const { t, i18n } = useTranslation(['notifiche']);
   const isMobile = useIsMobile();
   const communicationTypeLabels = {
@@ -81,7 +76,7 @@ const FilterNotificationsFormBody = ({
   return (
     <Fragment>
       {showCommunicationType && (
-        <Grid item lg={showRemoveFilters ? 3 : 3.75} xs={12}>
+        <Grid item lg xs={12}>
           <TextField
             id="communicationType"
             data-testid="communicationType"
@@ -119,7 +114,7 @@ const FilterNotificationsFormBody = ({
           </TextField>
         </Grid>
       )}
-      <Grid item lg={showCommunicationType ? (showRemoveFilters ? 3 : 3.75) : true} xs={12}>
+      <Grid item lg xs={12}>
         <TextField
           id="iunMatch"
           value={formikInstance.values.iunMatch}

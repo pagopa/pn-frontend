@@ -217,7 +217,6 @@ const FilterNotifications = forwardRef(({ showFilters, isDelegatedPage = false }
           <DialogContent>
             <FilterNotificationsFormBody
               formikInstance={formik}
-              showRemoveFilters={showRemoveFilters}
               showCommunicationType={!isDelegatedPage}
             />
           </DialogContent>
@@ -245,7 +244,6 @@ const FilterNotifications = forwardRef(({ showFilters, isDelegatedPage = false }
         >
           <FilterNotificationsFormBody
             formikInstance={formik}
-            showRemoveFilters={showRemoveFilters}
             showCommunicationType={!isDelegatedPage}
           />
           <FilterNotificationsFormActions
