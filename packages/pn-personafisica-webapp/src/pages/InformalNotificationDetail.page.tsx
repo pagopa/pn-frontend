@@ -16,7 +16,6 @@ import {
 } from '@pagopa-pn/pn-commons';
 
 import { BffFullInformalNotificationV1 } from '../generated-client/informal-notifications';
-import { PFEventsType } from '../models/PFEventsType';
 import * as routes from '../navigation/routes.const';
 import { useAppDispatch } from '../redux/hooks';
 import {
@@ -28,7 +27,6 @@ import {
   getReceivedInformalNotificationDocument,
   getReceivedInformalNotificationPaymentInfo,
 } from '../redux/notification/informalActions';
-import PFEventStrategyFactory from '../utility/MixpanelUtils/PFEventStrategyFactory';
 
 const InformalNotificationDetail: React.FC = () => {
   const { id } = useParams();
@@ -107,7 +105,6 @@ const InformalNotificationDetail: React.FC = () => {
 
   const reloadPaymentsInfo = (data: Array<NotificationDetailPayment>) => {
     fetchPaymentsInfo(data);
-    PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_PAYMENT_DETAIL_REFRESH);
   };
 
   useEffect(() => {
@@ -148,7 +145,6 @@ const InformalNotificationDetail: React.FC = () => {
 
   const onPayClick = (noticeCode?: string, creditorTaxId?: string, amount?: number) => {
     if (noticeCode && creditorTaxId && amount && informalNotification?.senderDenomination) {
-      PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_START_PAYMENT, { psp: 'pagopa' });
       dispatch(
         getReceivedNotificationPaymentUrl({
           paymentNotice: {
