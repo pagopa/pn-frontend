@@ -101,7 +101,7 @@
       "title": "Zahlung",
       "f24Models": "Vordruck F24",
       "pagoPANotices": "Benachrichtigungen pagoPA",
-      "download-pagoPA-notice": "Benachrichtigung pagoPA herunterladen",
+      "download-pagoPA-notice": "Lade die pagoPA-Mitteilung herunter",
       "notice-code": "Benachrichtigungscode",
       "due": "Läuft ab",
       "included-costs": "Einschließlich Zustellungsgebühren",
@@ -123,6 +123,7 @@
       "cancelled-message": "Für Informationen zu einer eventuellen Rückerstattung wende dich bitte an die sendende Körperschaft.",
       "f24-download-error": "Download fehlgeschlagen. Erneut versuchen.",
       "status": {
+        "title": "Status",
         "succeded": "Bezahlt",
         "succeded-tooltip": "Die Zahlung wurde erfolgreich gesendet.",
         "failed": "Abgelaufen",
@@ -151,9 +152,6 @@
       "website": "Website der Körperschaft"
     },
     "acts_files": {
-      "downloadable_acts": "<0>Die Dokumente sind bis zu 120 Tage lang online verfügbar</0> ab dem Datum, an dem die SEND-Benachrichtigung rechtlich wirksam wurde. Speichern Sie sie auf Ihrem Gerät!",
-      "not_downloadable_acts": "Die Dokumente sind online nicht mehr verfügbar. Um sie anzufordern, wenden Sie sich bitte an die Behörde, die sie Ihnen zugesendet hat.",
-      "not_downloadable_aar": "Der Zustellungsnachweis ist nicht mehr verfügbar. Um ihn anzufordern, wenden Sie sich bitte an die Behörde, die ihn Ihnen zugesendet hat.",
       "downloadable_acts": "<0>Die Dokumente sind bis zu 120 Tage lang online verfügbar</0> ab dem Datum, an dem die SEND-Benachrichtigung rechtlich wirksam wurde. Speichern Sie sie auf Ihrem Gerät!",
       "not_downloadable_acts": "Die Dokumente sind online nicht mehr verfügbar. Um sie anzufordern, wenden Sie sich bitte an die Behörde, die sie Ihnen zugesendet hat.",
       "not_downloadable_aar": "Der Zustellungsnachweis ist nicht mehr verfügbar. Um ihn anzufordern, wenden Sie sich bitte an die Behörde, die ihn Ihnen zugesendet hat.",

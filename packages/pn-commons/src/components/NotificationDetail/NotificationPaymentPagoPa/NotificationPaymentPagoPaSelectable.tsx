@@ -1,4 +1,5 @@
-import { Box, FormControlLabel, Radio } from '@mui/material';
+import { FormControlLabel, Radio, Stack } from '@mui/material';
+import { MIBoxedModule } from '@pagopa/mui-italia';
 
 import { useIsMobile } from '../../../hooks/useIsMobile';
 import { PagoPAPaymentFullDetails } from '../../../models/NotificationDetail';
@@ -18,7 +19,7 @@ const NotificationPaymentPagoPaSelectable: React.FC<Props> = ({
   isCancelled,
   handleDeselectPayment,
 }) => {
-  const isMobile = useIsMobile();
+  const isMobile = useIsMobile('sm');
 
   const radioId = `radio-${pagoPAItem.noticeCode}`;
 
@@ -34,42 +35,39 @@ const NotificationPaymentPagoPaSelectable: React.FC<Props> = ({
           handleDeselectPayment();
         }
       }}
-      sx={{ alignSelf: isMobile ? 'flex-start' : 'center' }}
     />
   );
 
   const formLabel = (
-    <Box
+    <Stack
       id={`label-${radioId}`}
-      display="flex"
-      flexDirection={isMobile ? 'column-reverse' : 'row'}
+      direction={isMobile ? 'column' : 'row'}
+      justifyContent={'space-between'}
       alignItems={isMobile ? 'flex-start' : 'center'}
-      justifyContent="space-between"
-      width="100%"
+      rowGap={1}
     >
-      <Box flex={1} display="flex" flexDirection="column" gap={0.5}>
-        <NotificationPaymentPagoPaDescription pagoPAItem={pagoPAItem} isCancelled={isCancelled} />
-      </Box>
-      <NotificationPaymentPagoPaAmount pagoPAItem={pagoPAItem} />
-    </Box>
+      <NotificationPaymentPagoPaDescription pagoPAItem={pagoPAItem} isCancelled={isCancelled} />
+      <NotificationPaymentPagoPaAmount pagoPAItem={pagoPAItem} isSelectable />
+    </Stack>
   );
 
   return (
-    <FormControlLabel
-      control={formControl}
-      label={formLabel}
-      labelPlacement="start"
-      sx={{
-        m: 0,
-        width: '100%',
-        alignItems: 'flex-start',
-        '.MuiFormControlLabel-label': {
-          flex: 1,
-          display: 'flex',
+    <MIBoxedModule id={`paymentPagoPa-${pagoPAItem.noticeCode}`} data-testid="pagopa-item">
+      <FormControlLabel
+        control={formControl}
+        label={formLabel}
+        labelPlacement="start"
+        sx={{
+          margin: 0,
+          alignItems: isMobile ? 'flex-start' : 'center',
           width: '100%',
-        },
-      }}
-    />
+          justifyContent: 'space-between',
+          '& .MuiFormControlLabel-label': {
+            width: '100%',
+          },
+        }}
+      />
+    </MIBoxedModule>
   );
 };
 

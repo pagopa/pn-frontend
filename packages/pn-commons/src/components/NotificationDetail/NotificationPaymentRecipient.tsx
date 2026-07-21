@@ -1,8 +1,8 @@
 import React, { memo, useCallback, useEffect, useState } from 'react';
 
-import { Download } from '@mui/icons-material/';
-import { Box, Button, FormControl, RadioGroup, Stack, Typography } from '@mui/material';
-import { MIAlert } from '@pagopa/mui-italia';
+import SaveAltRoundedIcon from '@mui/icons-material/SaveAltRounded';
+import { Box, Divider, FormControl, RadioGroup, Stack, Typography } from '@mui/material';
+import { MIAlert, MIButton } from '@pagopa/mui-italia';
 
 import { useDismissToastOnError } from '../../hooks';
 import { downloadDocument } from '../../hooks/useDownloadDocument';
@@ -247,7 +247,7 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
       )}
 
       {f24Only.length > 0 && pagoPaF24.length > 0 && (
-        <Typography variant="overline" mt={3}>
+        <Typography variant="overline" mt={3} component="h3">
           {getLocalizedOrDefaultLabel('notifications', 'detail.payment.pagoPANotices')}
         </Typography>
       )}
@@ -263,21 +263,17 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
             >
               {paginatedPayments.map((payment) =>
                 payment.pagoPa ? (
-                  <Box
+                  <NotificationPaymentPagoPAItem
                     key={`payment-${payment.pagoPa.noticeCode}-${payment.pagoPa.creditorTaxId}`}
-                    data-testid="pagopa-item"
-                  >
-                    <NotificationPaymentPagoPAItem
-                      pagoPAItem={payment.pagoPa}
-                      loading={payment.isLoading ?? false}
-                      isSelected={payment.pagoPa.noticeCode === selectedPayment?.pagoPa?.noticeCode}
-                      handleFetchPaymentsInfo={() => handleFetchPaymentsInfo([payment])}
-                      handleDeselectPayment={handleDeselectPayment}
-                      isSinglePayment={isSinglePayment}
-                      isCancelled={isCancelled}
-                      handleTrackEventDetailPaymentError={handleTrackEventFn}
-                    />
-                  </Box>
+                    pagoPAItem={payment.pagoPa}
+                    loading={payment.isLoading ?? false}
+                    isSelected={payment.pagoPa.noticeCode === selectedPayment?.pagoPa?.noticeCode}
+                    handleFetchPaymentsInfo={() => handleFetchPaymentsInfo([payment])}
+                    handleDeselectPayment={handleDeselectPayment}
+                    isSinglePayment={isSinglePayment}
+                    isCancelled={isCancelled}
+                    handleTrackEventDetailPaymentError={handleTrackEventFn}
+                  />
                 ) : null
               )}
             </RadioGroup>
@@ -316,34 +312,43 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
       )}
 
       {!isCancelled && f24Only.length > 0 && (
-        <Box data-testid="f24only-box">
+        <Divider
+          component="div"
+          role="presentation"
+          sx={{ color: (theme) => theme.palette.grey[700] }}
+        >
+          {getLocalizedOrDefaultLabel('common', 'conjunctions.or')}
+        </Divider>
+      )}
+
+      {!isCancelled && f24Only.length > 0 && pagoPaF24.length > 0 && (
+        <>
           {f24Only.length > 0 && pagoPaF24.length > 0 && (
-            <Typography variant="overline" mt={3}>
+            <Typography variant="overline" component="h3">
               {getLocalizedOrDefaultLabel('notifications', 'detail.payment.f24Models')}
             </Typography>
           )}
 
           {f24Only.map((f24Item, index) => (
-            <Box mb={2} key={index}>
-              <NotificationPaymentF24Item
-                f24Item={f24Item}
-                getPaymentAttachmentAction={getPaymentAttachmentAction}
-                handleTrackDownloadF24={() =>
-                  handleTrackEventFn(EventPaymentRecipientType.SEND_F24_DOWNLOAD)
-                }
-                handleTrackDownloadF24Success={() =>
-                  handleTrackEventFn(EventPaymentRecipientType.SEND_F24_DOWNLOAD_SUCCESS)
-                }
-                handleTrackDownloadF24Timeout={() =>
-                  handleTrackEventFn(EventPaymentRecipientType.SEND_F24_DOWNLOAD_TIMEOUT)
-                }
-                timerF24={timerF24 ?? 0}
-                disableDownload={areOtherDowloading}
-                handleDownload={setAreOtherDowloading}
-              />
-            </Box>
+            <NotificationPaymentF24Item
+              key={index}
+              f24Item={f24Item}
+              getPaymentAttachmentAction={getPaymentAttachmentAction}
+              handleTrackDownloadF24={() =>
+                handleTrackEventFn(EventPaymentRecipientType.SEND_F24_DOWNLOAD)
+              }
+              handleTrackDownloadF24Success={() =>
+                handleTrackEventFn(EventPaymentRecipientType.SEND_F24_DOWNLOAD_SUCCESS)
+              }
+              handleTrackDownloadF24Timeout={() =>
+                handleTrackEventFn(EventPaymentRecipientType.SEND_F24_DOWNLOAD_TIMEOUT)
+              }
+              timerF24={timerF24 ?? 0}
+              disableDownload={areOtherDowloading}
+              handleDownload={setAreOtherDowloading}
+            />
           ))}
-        </Box>
+        </>
       )}
     </Box>
   );
@@ -402,7 +407,7 @@ const PaymentButtons = ({
             )}
           </Typography>
 
-          <Button
+          <MIButton
             color={errorOnPayment ? 'error' : 'primary'}
             fullWidth
             variant={errorOnPayment ? 'outlined' : 'contained'}
@@ -410,10 +415,10 @@ const PaymentButtons = ({
             onClick={() => handleCheckPaymentSelected('tpp')}
           >
             {getLocalizedOrDefaultLabel('notifications', 'detail.payment.submit-tpp')}
-          </Button>
+          </MIButton>
         </Stack>
       )}
-      <Button
+      <MIButton
         color={errorOnPayment && errorOnPayment.source !== 'tpp' ? 'error' : 'primary'}
         fullWidth
         variant={errorOnPayment || hasPaymentTpp ? 'outlined' : 'contained'}
@@ -431,18 +436,17 @@ const PaymentButtons = ({
               : null}
           </>
         )}
-      </Button>
+      </MIButton>
       {selectedPayment?.pagoPa?.attachment && (
-        <Button
+        <MIButton
           fullWidth
           variant={hasPaymentTpp ? 'text' : 'outlined'}
           data-testid="download-pagoPA-notice-button"
-          disabled={!selectedPayment.pagoPa}
           onClick={() => downloadAttachment(PaymentAttachmentSName.PAGOPA)}
         >
-          <Download fontSize="small" sx={{ mr: 1 }} />
+          <SaveAltRoundedIcon fontSize="small" sx={{ mr: 1 }} />
           {getLocalizedOrDefaultLabel('notifications', 'detail.payment.download-pagoPA-notice')}
-        </Button>
+        </MIButton>
       )}
       {selectedPayment?.f24 && (
         <Box key="attachment" data-testid="f24-download">

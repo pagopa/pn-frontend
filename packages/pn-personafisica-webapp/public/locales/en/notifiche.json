@@ -100,7 +100,7 @@
       "title": "Payment",
       "f24Models": "F24 forms",
       "pagoPANotices": "pagoPA notifications",
-      "download-pagoPA-notice": "Download the pagoPA notification",
+      "download-pagoPA-notice": "Download the pagoPA notice",
       "notice-code": "Notice code",
       "due": "Expires on",
       "included-costs": "Notification costs included",
@@ -122,6 +122,7 @@
       "cancelled-message": "For information regarding a possible refund, please contact the issuing institution.",
       "f24-download-error": "The download was not successful. Try again.",
       "status": {
+        "title": "Status",
         "succeded": "Paid",
         "succeded-tooltip": "The payment has been sent successfully.",
         "failed": "Expired",
@@ -154,8 +155,6 @@
       "not_downloadable_acts": "Documents are no longer available online. To request them, please contact the institution that sent them to you.",
       "not_downloadable_aar": "The acknowledgment of receipt is no longer available. To request it, please contact the institution that sent it to you.",
       "downloadable_aar": "The notification of receipt is available online for 10 years from the finalization of the notification.",
-      "notification_cancelled_aar": "As this notification has been canceled, the download of the Notification of Receipt has been disabled.",
-      "notification_cancelled_acts": "As this notification has been canceled, the download of the documents has been disabled.",
       "effected_faq": "When is a notification finalized?",
       "informal_downloadable_acts": "Save the attachments to your device: they will be available online <0>for up to 180 days from the filing date</0> shown at the top!"
     },
