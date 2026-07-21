@@ -27,7 +27,7 @@ const NotificationDetailBilingualFacsimileDocuments: React.FC<Props> = ({
     <Stack key="bilingual-section" data-testid="bilingualSection" alignItems={'start'}>
       <Typography
         component="h2"
-        variant="h5"
+        variant="h6"
         id="notification-detail-bilingual-document-attached"
         sx={{ mb: 1 }}
       >

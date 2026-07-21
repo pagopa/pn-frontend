@@ -49,7 +49,7 @@ const NotificationDetailSection = ({
   return (
     <MIPaper padding={24}>
       <Stack spacing={2}>
-        <Typography component="h2" variant="h5" sx={{ mb: 1 }}>
+        <Typography component="h2" variant="h6" sx={{ mb: 1 }}>
           {getLocalizedOrDefaultLabel('notifications', 'detail.notification-detail-section.title')}
         </Typography>
 
