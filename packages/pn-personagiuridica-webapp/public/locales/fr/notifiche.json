@@ -18,7 +18,12 @@
     "legal-value": "Notification à valeur légale"
   },
   "filters": {
-    "iun": "Recherche par code IUN",
+    "communication-type": "Type",
+    "communication-type-options": {
+      "legal": "Notifications à valeur juridique",
+      "informal": "Communications"
+    },
+    "iun": "Code IUN",
     "data_da": "Du",
     "data_da-input-aria-label": "Entrez la date de début de la recherche",
     "data_a": "Au",

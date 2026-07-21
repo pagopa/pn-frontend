@@ -71,6 +71,7 @@ describe('Notifiche Page ', () => {
     expect(mock.history.get[0].url).toContain('/bff/v1/notifications/received');
     const filterForm = result.getByTestId('filter-form');
     expect(filterForm).toBeInTheDocument();
+    expect(filterForm.querySelector('input[name="communicationType"]')).toBeInTheDocument();
     const notificationsTable = result.container.querySelector('table');
     expect(notificationsTable).toBeInTheDocument();
     const itemsPerPageSelector = result.queryByTestId('itemsPerPageSelector');
@@ -253,6 +254,7 @@ describe('Notifiche Page ', () => {
     expect(mock.history.get[0].url).toContain('/bff/v1/notifications/received/delegated');
     const filterForm = result.getByTestId('filter-form');
     expect(filterForm).toBeInTheDocument();
+    expect(filterForm.querySelector('input[name="communicationType"]')).not.toBeInTheDocument();
     const notificationsTable = result.container.querySelector('table');
     expect(notificationsTable).toBeInTheDocument();
     const itemsPerPageSelector = result.queryByTestId('itemsPerPageSelector');

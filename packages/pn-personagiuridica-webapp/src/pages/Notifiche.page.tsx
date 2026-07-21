@@ -197,8 +197,12 @@ const Notifiche = ({ isDelegatedPage = false }: Props) => {
   }, []);
 
   useEffect(() => {
+    if (isDelegatedPage && filters.communicationType) {
+      dispatch(setNotificationFilters({ ...filters, communicationType: '' }));
+      return;
+    }
     fetchNotifications();
-  }, [fetchNotifications]);
+  }, [fetchNotifications, isDelegatedPage, filters, dispatch]);
 
   // Announce every time loading goes from true -> false
   useEffect(() => {
