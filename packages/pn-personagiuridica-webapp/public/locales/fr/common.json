@@ -1,4 +1,6 @@
 {
+  "iun": "Code IUN",
+  "logo": "Logo de",
   "button": {
     "filtra": "Filtrer",
     "annulla filtro": "Supprimer les filtres",
@@ -248,6 +250,11 @@
       "Quatrième chiffre",
       "Dernier chiffre"
     ]
+  },
+  "user-validation-failed": {
+    "title": "Les données saisies ne sont pas valides",
+    "description": "Une ou plusieurs données associées à votre compte utilisateur ne sont pas valides. Contactez l'assistance pour résoudre le problème.",
+    "cta": "Contacter l'assistance"
   },
   "autocomplete": {
     "clear": "Supprimer les options sélectionnées",

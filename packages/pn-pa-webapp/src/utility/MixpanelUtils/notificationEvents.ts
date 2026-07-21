@@ -14,6 +14,7 @@ type NotificationEventType =
   | PAEventsType.SEND_PA_NOTIFICATION_DOWNLOAD_ATTACHMENT
   | PAEventsType.SEND_PA_NOTIFICATIONS
   | PAEventsType.SEND_PA_TIMELINE_DOWNLOAD
+  | PAEventsType.SEND_PA_TIMELINE_SHOW_HISTORY
   | PAEventsType.SEND_PA_TIMELINE_SHOW_MORE;
 
 export const notificationTrackingConfigs: TrackingConfigs<NotificationEventType> = {
@@ -25,5 +26,6 @@ export const notificationTrackingConfigs: TrackingConfigs<NotificationEventType>
     uxScreenView(mapNotificationListToEventPayload(data)),
   [PAEventsType.SEND_PA_TIMELINE_DOWNLOAD]: (data) =>
     uxAction(mapTimelineLegalFactToDocumentDownloadPayload(data)),
+  [PAEventsType.SEND_PA_TIMELINE_SHOW_HISTORY]: () => uxAction(),
   [PAEventsType.SEND_PA_TIMELINE_SHOW_MORE]: () => uxAction(),
 };

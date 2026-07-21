@@ -34,6 +34,7 @@ const DigitalContactActivation = lazyRetry(
 const DigitalContactManagement = lazyRetry(
   () => import('../components/Contacts/DigitalContactManagement')
 );
+const NotificationTimeline = lazyRetry(() => import('../pages/NotificationTimeline.page'));
 
 const Router: React.FC = () => {
   const { organization, hasGroup } = useAppSelector((state: RootState) => state.userState.user);
@@ -87,8 +88,34 @@ const Router: React.FC = () => {
                     </PrivateRoute>
                   }
                 />
+                <Route
+                  path={routes.DETTAGLIO_NOTIFICA_TIMELINE}
+                  element={
+                    <PrivateRoute
+                      currentRoles={[]}
+                      requiredRoles={[]}
+                      additionalCondition={!hasGroup}
+                      redirectTo={<NotFound goBackAction={navigateToHome} />}
+                    >
+                      <NotificationTimeline />
+                    </PrivateRoute>
+                  }
+                />
                 <Route path={routes.DETTAGLIO_COMBO} element={<InformalNotificationDetail />} />
                 <Route path={routes.DETTAGLIO_NOTIFICA_DELEGATO} element={<NotificationDetail />} />
+                <Route
+                  path={routes.DETTAGLIO_NOTIFICA_DELEGATO_TIMELINE}
+                  element={
+                    <PrivateRoute
+                      currentRoles={[]}
+                      requiredRoles={[]}
+                      additionalCondition={!hasGroup}
+                      redirectTo={<NotFound goBackAction={navigateToHome} />}
+                    >
+                      <NotificationTimeline />
+                    </PrivateRoute>
+                  }
+                />
                 <Route
                   path={routes.DELEGHE}
                   element={

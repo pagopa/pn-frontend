@@ -3,10 +3,10 @@ import type {
   AppResponseError,
   Downtime,
   LegalFactId,
-  RecipientNotification,
   NotificationDetailOtherDocument,
   NotificationStatusHistory,
   PaymentsData,
+  RecipientNotification,
 } from '@pagopa-pn/pn-commons';
 import {
   EventDowntimeType,

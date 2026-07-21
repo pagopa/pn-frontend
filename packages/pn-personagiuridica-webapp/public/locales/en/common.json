@@ -1,4 +1,6 @@
 {
+  "iun": "IUN Code",
+  "logo": "Logo of",
   "button": {
     "filtra": "Filter",
     "annulla filtro": "Reset filters",
@@ -101,7 +103,8 @@
   "loading": "Loading",
   "not-found": {
     "title": "What you were looking for is not here.",
-    "description": "The page you were looking for does not exist or is no longer available."
+    "description": "The page you were looking for does not exist or is no longer available.",
+    "back-to-home": "Back to home"
   },
   "leaving-app": {
     "title": "You are exiting SEND",
@@ -240,7 +243,18 @@
     "action": "Keep access"
   },
   "code-modal": {
-    "digits": ["First digit", "Second digit", "Third digit", "Fourth digit", "Last digit"]
+    "digits": [
+      "First digit",
+      "Second digit",
+      "Third digit",
+      "Fourth digit",
+      "Last digit"
+    ]
+  },
+  "user-validation-failed": {
+    "title": "The data entered is invalid",
+    "description": "One or more details associated with your account are invalid. Contact support to resolve the issue.",
+    "cta": "Contact support"
   },
   "autocomplete": {
     "clear": "Remove selected options",

@@ -157,7 +157,8 @@
     "resources": "Viri",
     "follow": "Spremljaj nas na",
     "legal-part-1": "delniška družba z edinim družbenikom - osnovni kapital 1.000.000 evrov v celoti vplačan - sedež v Rimu, Piazza Colonna 370",
-    "legal-part-2": "CAP 00187 - št. vpisa v Register podjetij v Rimu, davčna in ID številka 15376371009"
+    "legal-part-2": "CAP 00187 - št. vpisa v Register podjetij v Rimu, davčna in ID številka 15376371009",
+    "products-title": "Izdelki in storitve"
   },
   "required-fields": "*Obvezna polja",
   "required-field": "Obvezno polje",
