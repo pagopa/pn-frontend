@@ -34,7 +34,7 @@ describe('NotificationPaymentRecipient Component', () => {
   const iun = notificationDTO.iun;
 
   it('should render component', () => {
-    const { getByTestId, queryByTestId, queryAllByTestId } = render(
+    const { getByTestId, getAllByTestId, queryByTestId, queryAllByTestId } = render(
       <NotificationPaymentRecipient
         payments={paymentsData}
         isCancelled={false}
@@ -53,7 +53,7 @@ describe('NotificationPaymentRecipient Component', () => {
     const pagoPABox = queryAllByTestId('pagopa-item');
     const downloadPagoPANotice = queryByTestId('download-pagoPA-notice-button');
     const payButton = getByTestId('pay-button');
-    const f24OnlyBox = getByTestId('f24only-box');
+    const f24OnlyBoxes = getAllByTestId('f24only-box');
     const paginationBox = getByTestId('pagination-box');
 
     const pageLength = paymentsData.pagoPaF24.filter((payment) => payment.pagoPa).length;
@@ -66,7 +66,7 @@ describe('NotificationPaymentRecipient Component', () => {
     expect(downloadPagoPANotice).not.toBeInTheDocument();
     expect(payButton).toBeInTheDocument();
     expect(payButton).toBeEnabled();
-    expect(f24OnlyBox).toBeInTheDocument();
+    expect(f24OnlyBoxes).toBeInTheDocument();
     expect(paginationBox).toBeInTheDocument();
   });
 
@@ -279,7 +279,7 @@ describe('NotificationPaymentRecipient Component', () => {
     );
 
     // download isolated f24
-    const isolatedF24Item = result.getByTestId('f24only-box');
+    const isolatedF24Item = result.getByTestId('f24attachment-box');
     const isolatedF24RadioButton = within(isolatedF24Item).getAllByTestId('download-f24-button');
     fireEvent.click(isolatedF24RadioButton[0]);
     expect(getPaymentAttachmentActionMk).toHaveBeenCalledTimes(1);

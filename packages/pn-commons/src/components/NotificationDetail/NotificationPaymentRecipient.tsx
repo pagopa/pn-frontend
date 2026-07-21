@@ -312,40 +312,39 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
       )}
 
       {!isCancelled && f24Only.length > 0 && (
-        <Divider sx={{ my: 2, color: (theme) => theme.palette.grey[700] }}>
+        <Divider sx={{ color: (theme) => theme.palette.grey[700] }}>
           {getLocalizedOrDefaultLabel('common', 'conjunctions.or')}
         </Divider>
       )}
 
       {!isCancelled && f24Only.length > 0 && pagoPaF24.length > 0 && (
-        <Box data-testid="f24only-box">
+        <>
           {f24Only.length > 0 && pagoPaF24.length > 0 && (
-            <Typography variant="overline" mt={3}>
+            <Typography variant="overline">
               {getLocalizedOrDefaultLabel('notifications', 'detail.payment.f24Models')}
             </Typography>
           )}
 
           {f24Only.map((f24Item, index) => (
-            <Box mb={2} key={index}>
-              <NotificationPaymentF24Item
-                f24Item={f24Item}
-                getPaymentAttachmentAction={getPaymentAttachmentAction}
-                handleTrackDownloadF24={() =>
-                  handleTrackEventFn(EventPaymentRecipientType.SEND_F24_DOWNLOAD)
-                }
-                handleTrackDownloadF24Success={() =>
-                  handleTrackEventFn(EventPaymentRecipientType.SEND_F24_DOWNLOAD_SUCCESS)
-                }
-                handleTrackDownloadF24Timeout={() =>
-                  handleTrackEventFn(EventPaymentRecipientType.SEND_F24_DOWNLOAD_TIMEOUT)
-                }
-                timerF24={timerF24}
-                disableDownload={areOtherDowloading}
-                handleDownload={setAreOtherDowloading}
-              />
-            </Box>
+            <NotificationPaymentF24Item
+              key={index}
+              f24Item={f24Item}
+              getPaymentAttachmentAction={getPaymentAttachmentAction}
+              handleTrackDownloadF24={() =>
+                handleTrackEventFn(EventPaymentRecipientType.SEND_F24_DOWNLOAD)
+              }
+              handleTrackDownloadF24Success={() =>
+                handleTrackEventFn(EventPaymentRecipientType.SEND_F24_DOWNLOAD_SUCCESS)
+              }
+              handleTrackDownloadF24Timeout={() =>
+                handleTrackEventFn(EventPaymentRecipientType.SEND_F24_DOWNLOAD_TIMEOUT)
+              }
+              timerF24={timerF24}
+              disableDownload={areOtherDowloading}
+              handleDownload={setAreOtherDowloading}
+            />
           ))}
-        </Box>
+        </>
       )}
     </Box>
   );

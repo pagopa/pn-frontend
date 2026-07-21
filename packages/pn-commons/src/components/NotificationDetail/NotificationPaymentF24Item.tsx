@@ -1,8 +1,8 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 
-import { Download, InfoRounded } from '@mui/icons-material';
-import { CircularProgress, Stack, Typography } from '@mui/material';
-import { ButtonNaked } from '@pagopa/mui-italia';
+import { InfoRounded, SaveAlt } from '@mui/icons-material';
+import { Stack, Typography } from '@mui/material';
+import { MIBoxedModule, MIButton } from '@pagopa/mui-italia';
 
 import { downloadDocument } from '../../hooks/useDownloadDocument';
 import {
@@ -29,6 +29,78 @@ type Props = {
   disableDownload: boolean;
   handleDownload: (param: boolean) => any;
 };
+
+const NotificationPaymentF24ItemContent: React.FC<
+  Pick<Props, 'isPagoPaAttachment' | 'f24Item'> & {
+    maxTimeError: string | null;
+    downloadingMessage: string | null;
+    downloadF24: () => void;
+  }
+> = ({ isPagoPaAttachment, f24Item, maxTimeError, downloadingMessage, downloadF24 }) => (
+  <Stack
+    justifyContent={{ xs: 'flex-start', sm: 'inherit' }}
+    gap={0.5}
+    direction="column"
+    flexGrow="1"
+  >
+    {isPagoPaAttachment ? (
+      <Stack direction="row" justifyContent="space-between">
+        <Typography variant="body2">
+          {getLocalizedOrDefaultLabel('notifications', 'detail.payment.pay-with-f24')}
+        </Typography>
+        <MIButton
+          variant="text"
+          data-testid="download-f24-button"
+          isLoading={!!downloadingMessage}
+          loadingAriaLabel={
+            downloadingMessage
+              ? getLocalizedOrDefaultLabel('notifications', downloadingMessage)
+              : undefined
+          }
+          onClick={downloadF24}
+          startIcon={<SaveAlt />}
+        >
+          {getLocalizedOrDefaultLabel('notifications', 'detail.payment.download-f24')}
+        </MIButton>
+      </Stack>
+    ) : (
+      <>
+        <Typography variant="sidenav" color="text.primary" sx={{ overflowWrap: 'anywhere' }}>
+          {f24Item.title}
+        </Typography>
+        {f24Item.applyCost && (
+          <Typography
+            fontSize="0.625rem"
+            fontWeight="600"
+            lineHeight="0.875rem"
+            color="text.secondary"
+            data-testid="f24-apply-costs-caption"
+          >
+            {getLocalizedOrDefaultLabel('notifications', 'detail.payment.included-costs')}
+          </Typography>
+        )}
+      </>
+    )}
+    {maxTimeError && (
+      <Stack
+        direction="row"
+        alignItems={{ xs: 'center' }}
+        gap={0.5}
+        data-testid="f24-maxTime-error"
+      >
+        <InfoRounded
+          sx={{
+            color: 'error.dark',
+            width: '16px',
+          }}
+        />
+        <Typography fontSize="12px" lineHeight="12px" fontWeight="600" color="error.dark">
+          {getLocalizedOrDefaultLabel('notifications', maxTimeError)}
+        </Typography>
+      </Stack>
+    )}
+  </Stack>
+);
 
 const NotificationPaymentF24Item: React.FC<Props> = ({
   f24Item,
@@ -98,7 +170,7 @@ const NotificationPaymentF24Item: React.FC<Props> = ({
           handleDownload(false);
         }
       }
-    } catch (error) {
+    } catch {
       setMaxTimeError('detail.payment.f24-download-error');
 
       if (handleTrackDownloadF24Timeout) {
@@ -139,99 +211,47 @@ const NotificationPaymentF24Item: React.FC<Props> = ({
     []
   );
 
-  const getElement = () => {
-    if (!downloadingMessage) {
-      return (
-        <ButtonNaked
-          color="primary"
-          onClick={downloadF24}
-          disabled={disableDownload}
-          data-testid="download-f24-button"
-          sx={{ mt: { xs: 1, sm: 0 } }}
-        >
-          <Download fontSize="small" sx={{ mr: 0.5 }} />
-          {getLocalizedOrDefaultLabel('notifications', 'detail.payment.download-f24')}
-        </ButtonNaked>
-      );
-    }
-
+  if (isPagoPaAttachment) {
     return (
-      <Stack
-        alignItems="center"
-        justifyContent="center"
-        gap={0.5}
-        direction="row"
-        sx={{ mt: { xs: 1, sm: 0 } }}
-      >
-        <Typography variant="caption" color="text.secondary" data-testid="f24-download-message">
-          {getLocalizedOrDefaultLabel('notifications', downloadingMessage)}
-        </Typography>
-        <CircularProgress size="1.125rem" role="loadingSpinner" sx={{ color: 'text.secondary' }} />
-      </Stack>
+      <NotificationPaymentF24ItemContent
+        isPagoPaAttachment={isPagoPaAttachment}
+        f24Item={f24Item}
+        maxTimeError={maxTimeError}
+        downloadingMessage={downloadingMessage}
+        downloadF24={downloadF24}
+      />
     );
-  };
+  }
 
   return (
-    <Stack
-      py={isPagoPaAttachment ? 0 : 1}
-      px={isPagoPaAttachment ? 0 : 2}
-      alignItems={{ xs: 'flex-start', sm: 'center' }}
-      direction={{ xs: 'column', sm: 'row' }}
-      sx={{
-        backgroundColor: isPagoPaAttachment ? 'transparent' : 'grey.50',
-        borderRadius: '6px',
-      }}
-      spacing={1}
+    <MIBoxedModule
+      action={
+        <MIButton
+          variant="text"
+          data-testid="download-f24-button"
+          isLoading={!!downloadingMessage}
+          loadingAriaLabel={
+            downloadingMessage
+              ? getLocalizedOrDefaultLabel('notifications', downloadingMessage)
+              : undefined
+          }
+          onClick={downloadF24}
+          startIcon={<SaveAlt />}
+        >
+          {getLocalizedOrDefaultLabel('notifications', 'detail.payment.download-f24')}
+        </MIButton>
+      }
+      direction="horizontal"
+      data-testid={isPagoPaAttachment ? 'f24attachment-box' : 'f24only-box'}
     >
-      <Stack
-        justifyContent={{ xs: 'flex-start', sm: 'inherit' }}
-        gap={0.5}
-        direction="column"
-        flexGrow="1"
-      >
-        {isPagoPaAttachment ? (
-          <Typography variant="body2">
-            {getLocalizedOrDefaultLabel('notifications', 'detail.payment.pay-with-f24')}
-          </Typography>
-        ) : (
-          <>
-            <Typography variant="sidenav" color="text.primary" sx={{ overflowWrap: 'anywhere' }}>
-              {f24Item.title}
-            </Typography>
-            {f24Item.applyCost && (
-              <Typography
-                fontSize="0.625rem"
-                fontWeight="600"
-                lineHeight="0.875rem"
-                color="text.secondary"
-                data-testid="f24-apply-costs-caption"
-              >
-                {getLocalizedOrDefaultLabel('notifications', 'detail.payment.included-costs')}
-              </Typography>
-            )}
-          </>
-        )}
-        {maxTimeError && (
-          <Stack
-            direction="row"
-            alignItems={{ xs: 'center' }}
-            gap={0.5}
-            data-testid="f24-maxTime-error"
-          >
-            <InfoRounded
-              sx={{
-                color: 'error.dark',
-                width: '16px',
-              }}
-            />
-            <Typography fontSize="12px" lineHeight="12px" fontWeight="600" color="error.dark">
-              {getLocalizedOrDefaultLabel('notifications', maxTimeError)}
-            </Typography>
-          </Stack>
-        )}
-      </Stack>
-      {getElement()}
-    </Stack>
+      <NotificationPaymentF24ItemContent
+        isPagoPaAttachment={isPagoPaAttachment}
+        f24Item={f24Item}
+        maxTimeError={maxTimeError}
+        downloadingMessage={downloadingMessage}
+        downloadF24={downloadF24}
+      />
+    </MIBoxedModule>
   );
 };
 
