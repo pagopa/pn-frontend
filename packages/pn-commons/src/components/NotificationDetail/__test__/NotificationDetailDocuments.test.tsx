@@ -104,7 +104,7 @@ describe('NotificationDetailDocuments Component', () => {
         documents={notificationDTO.documents}
         clickHandler={mockClickFn}
         documentsAvailable={false}
-        downloadFilesMessage={'Mocked message'}
+        downloadFilesMessage={{ key: 'Mocked message', ns: 'mocked-ns' }}
       />
     );
     const notificationDetailDocuments = queryAllByTestId('notificationDetailDocuments');

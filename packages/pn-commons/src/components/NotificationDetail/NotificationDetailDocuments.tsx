@@ -144,18 +144,11 @@ const NotificationDetailDocuments: React.FC<Props> = (
       {title}
     </Typography>
 
-    {/* Notification sent after expiration date (120 legal and 180 combo) */}
-    {!disableDownloads && !documentsAvailable && downloadFilesMessage && (
-      <MIAlert severity="warning" data-testid="documentsDisabled">
-        <Trans i18nKey={downloadFilesMessage?.key} ns={downloadFilesMessage?.ns} />
-      </MIAlert>
-    )}
-
-    {/* Notification sent before expiration date (120 legal and 180 combo) */}
-    {documentsAvailable && downloadFilesMessage && (
+    {/* Notification cancelled */}
+    {disableDownloads && (
       <MIPaper
         data-testid="documentsMessage"
-        key="detail-documents-message"
+        key="cancelled-detail-documents-message"
         sx={{ backgroundColor: (theme) => theme.palette.grey[50] }}
         variant="outlined"
         padding={16}
@@ -173,11 +166,18 @@ const NotificationDetailDocuments: React.FC<Props> = (
       </MIPaper>
     )}
 
-    {/* Notification cancelled */}
-    {disableDownloads && (
+    {/* Notification sent after expiration date (120 legal and 180 combo) */}
+    {!disableDownloads && !documentsAvailable && downloadFilesMessage && (
+      <MIAlert severity="warning" data-testid="documentsDisabled">
+        <Trans i18nKey={downloadFilesMessage?.key} ns={downloadFilesMessage?.ns} />
+      </MIAlert>
+    )}
+
+    {/* Notification sent before expiration date (120 legal and 180 combo) */}
+    {documentsAvailable && downloadFilesMessage && (
       <MIPaper
         data-testid="documentsMessage"
-        key="cancelled-detail-documents-message"
+        key="detail-documents-message"
         sx={{ backgroundColor: (theme) => theme.palette.grey[50] }}
         variant="outlined"
         padding={16}

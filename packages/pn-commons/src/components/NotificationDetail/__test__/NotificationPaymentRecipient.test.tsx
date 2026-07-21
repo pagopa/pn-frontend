@@ -66,7 +66,7 @@ describe('NotificationPaymentRecipient Component', () => {
     expect(downloadPagoPANotice).not.toBeInTheDocument();
     expect(payButton).toBeInTheDocument();
     expect(payButton).toBeEnabled();
-    expect(f24OnlyBoxes).toBeInTheDocument();
+    expect(f24OnlyBoxes).toHaveLength(paymentsData.f24Only.length);
     expect(paginationBox).toBeInTheDocument();
   });
 
@@ -279,9 +279,9 @@ describe('NotificationPaymentRecipient Component', () => {
     );
 
     // download isolated f24
-    const isolatedF24Item = result.getByTestId('f24attachment-box');
-    const isolatedF24RadioButton = within(isolatedF24Item).getAllByTestId('download-f24-button');
-    fireEvent.click(isolatedF24RadioButton[0]);
+    const isolatedF24Item = result.getAllByTestId('f24only-box');
+    const isolatedF24Button = within(isolatedF24Item[0]).getByTestId('download-f24-button');
+    fireEvent.click(isolatedF24Button);
     expect(getPaymentAttachmentActionMk).toHaveBeenCalledTimes(1);
     expect(getPaymentAttachmentActionMk).toHaveBeenCalledWith(
       PaymentAttachmentSName.F24,
