@@ -494,11 +494,9 @@ describe('NotificationDetail Page', () => {
     expect(mock.history.get[0].url).toContain('/bff/v1/notifications/received');
     expect(mock.history.get[1].url).toContain('/bff/v1/downtime/history');
     // check documents box
-    const notificationDetailDocumentsMessage = result?.getAllByTestId('documentsMessage');
-    for (const notificationDetailDocumentMessage of notificationDetailDocumentsMessage) {
-      expect(notificationDetailDocumentMessage).toHaveTextContent(
-        /detail.acts_files.notification_cancelled_aar|detail.acts_files.notification_cancelled_acts/
-      );
+    const notificationDetailDocuments = result.getAllByTestId('notificationDetailDocuments');
+    for (const notificationDetailDocument of notificationDetailDocuments) {
+      expect(notificationDetailDocument).toHaveTextContent('not-available');
     }
   });
 
@@ -967,7 +965,6 @@ describe('NotificationDetail Page', () => {
   });
 
   it('should dispatch getReceivedNotificationPaymentUrl on pay button click', async () => {
-    vi.useFakeTimers();
     const paymentHistory = populatePaymentsPagoPaF24(
       notificationToFe.timeline,
       paymentsData.pagoPaF24,
@@ -1008,28 +1005,21 @@ describe('NotificationDetail Page', () => {
     expect(item).toBeInTheDocument();
     const radioButton = item?.querySelector('[data-testid="radio-button"] input');
     fireEvent.click(radioButton!);
-    // after radio button click, there is a timer of 1 second after that the paymeny is enabled
-    // wait...
-    await act(async () => {
-      vi.advanceTimersByTime(1000);
-    });
     expect(payButton).toBeEnabled();
-    // we need the act method, because the loading overlay is shown at button click
-    await act(async () => {
-      fireEvent.click(payButton);
+    fireEvent.click(payButton);
+
+    await waitFor(() => {
+      expect(mock.history.post).toHaveLength(2);
+      expect(mock.history.post[0].url).toBe(`/bff/v1/payments/info`);
+      expect(mock.history.post[1].url).toBe(`/bff/v1/payments/cart`);
     });
-    expect(mock.history.post).toHaveLength(2);
-    expect(mock.history.post[0].url).toBe(`/bff/v1/payments/info`);
-    expect(mock.history.post[1].url).toBe(`/bff/v1/payments/cart`);
-    await vi.waitFor(() => {
+    await waitFor(() => {
       expect(mockAssignFn).toHaveBeenCalledTimes(1);
       expect(mockAssignFn).toHaveBeenCalledWith('https://mocked-url.com');
     });
-    vi.useRealTimers();
   });
 
   it('should not duplicate payments when api call to cart respond with an error', async () => {
-    vi.useFakeTimers();
     const paymentHistory = populatePaymentsPagoPaF24(
       notificationToFe.timeline,
       paymentsData.pagoPaF24,
@@ -1063,32 +1053,29 @@ describe('NotificationDetail Page', () => {
       });
     });
 
-    expect(result.testStore.getState().notificationState.paymentsData.pagoPaF24.length).toBe(6);
+    expect(result.testStore.getState().notificationState.paymentsData.pagoPaF24).toHaveLength(6);
 
     const payButton = result.getByTestId('pay-button');
-    const item = result.queryAllByTestId('pagopa-item')[requiredPaymentIndex];
+    let item = result.getAllByTestId('pagopa-item')[requiredPaymentIndex];
     expect(item).toBeInTheDocument();
     const radioButton = item?.querySelector('[data-testid="radio-button"] input');
     fireEvent.click(radioButton!);
-    // after radio button click, there is a timer of 1 second after that the paymeny is enabled
-    // wait...
-    await act(async () => {
-      vi.advanceTimersByTime(1000);
-    });
     expect(payButton).toBeEnabled();
-    // we need the act method, because the loading overlay is shown at button click
-    await act(async () => {
-      fireEvent.click(payButton);
+    fireEvent.click(payButton);
+
+    await waitFor(() => {
+      expect(mock.history.post).toHaveLength(2);
+      expect(mock.history.post[0].url).toBe(`/bff/v1/payments/info`);
+      expect(mock.history.post[1].url).toBe(`/bff/v1/payments/cart`);
     });
 
+    item = await waitFor(() => result.getAllByTestId('pagopa-item')[requiredPaymentIndex]);
     const errorMessage = item?.querySelector('[data-testid="generic-error-message"]');
     const reloadButton = item?.querySelector('[data-testid="reload-button"]');
 
     expect(errorMessage).toBeVisible();
     expect(reloadButton).toBeVisible();
-    expect(result.testStore.getState().notificationState.paymentsData.pagoPaF24.length).toBe(6);
-
-    vi.useRealTimers();
+    expect(result.testStore.getState().notificationState.paymentsData.pagoPaF24).toHaveLength(6);
   });
 
   it('should show correct paginated payments', async () => {

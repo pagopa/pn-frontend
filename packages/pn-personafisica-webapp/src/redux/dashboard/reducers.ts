@@ -17,6 +17,7 @@ const dashboardSlice = createSlice({
     filters: {
       startDate: undefined,
       endDate: undefined,
+      communicationType: '',
       iunMatch: '',
       mandateId: undefined,
     } as GetNotificationsParams,
@@ -59,6 +60,7 @@ const dashboardSlice = createSlice({
       state.notifications = [];
       state.filters = {
         iunMatch: '',
+        communicationType: '',
         mandateId: action.payload,
         startDate: undefined,
         endDate: undefined,

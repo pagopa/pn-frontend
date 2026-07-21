@@ -1,10 +1,9 @@
-import React from 'react';
 import { Trans } from 'react-i18next';
 
-import BlockRoundedIcon from '@mui/icons-material/BlockRounded';
+import DoNotDisturbIcon from '@mui/icons-material/DoNotDisturb';
 import OpenInBrowserRoundedIcon from '@mui/icons-material/OpenInBrowserRounded';
-import { Box, Stack, Typography } from '@mui/material';
-import { MIAlert, MIIconButton, MIPaper, Tag, theme, themeNext } from '@pagopa/mui-italia';
+import { Box, Stack, Typography, useTheme } from '@mui/material';
+import { MIAlert, MIIconButton, MIPaper, Tag } from '@pagopa/mui-italia';
 
 import { NotificationDetailOtherDocument, NotificationDetailRecipient } from '../../models';
 import { getLocalizedOrDefaultLabel } from '../../utility/localization.utility';
@@ -28,21 +27,19 @@ const NotificationDetailSection = ({
   isLessThan10Years,
   downloadFilesMessage,
 }: Props) => {
+  const theme = useTheme();
+
   const getAARElement = () => {
     if (!isCancelled && isLessThan10Years) {
-      return (
-        <Trans
-          parent={React.Fragment}
-          i18nKey={downloadFilesMessage.key}
-          ns={downloadFilesMessage.ns}
-        />
-      );
+      return <Trans i18nKey={downloadFilesMessage.key} ns={downloadFilesMessage.ns} />;
     }
     if (isCancelled) {
       return (
         <Tag
+          icon={DoNotDisturbIcon}
+          variant="default"
           value={getLocalizedOrDefaultLabel('common', 'not-available')}
-          icon={BlockRoundedIcon}
+          slotProps={{ icon: { color: theme.palette.grey[300] } }}
         />
       );
     }
@@ -60,7 +57,7 @@ const NotificationDetailSection = ({
           <Box
             pb={2}
             sx={{
-              borderBottom: `1px solid ${theme.palette.divider}`,
+              borderBottom: (theme) => `1px solid ${theme.palette.divider}`,
             }}
           >
             <Typography component="h3" variant="body2">
@@ -77,11 +74,7 @@ const NotificationDetailSection = ({
 
         {!isLessThan10Years && (
           <MIAlert severity="warning">
-            <Trans
-              parent={React.Fragment}
-              i18nKey={downloadFilesMessage.key}
-              ns={downloadFilesMessage.ns}
-            />
+            <Trans i18nKey={downloadFilesMessage.key} ns={downloadFilesMessage.ns} />
           </MIAlert>
         )}
 
@@ -97,8 +90,8 @@ const NotificationDetailSection = ({
               <Typography
                 variant="body2"
                 fontWeight={600}
-                color={
-                  !isCancelled ? themeNext.palette.primary.main : themeNext.palette.text.primary
+                color={(theme) =>
+                  !isCancelled ? theme.palette.primary.main : theme.palette.text.primary
                 }
                 sx={{
                   paddingBottom: isCancelled ? 1 : 0,

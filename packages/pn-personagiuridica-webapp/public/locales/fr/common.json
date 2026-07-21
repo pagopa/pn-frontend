@@ -32,7 +32,7 @@
   "menu": {
     "notifiche": "Boîte de réception",
     "notifiche-impresa": "Boîte de réception pour {{organization}}",
-    "notifiche-delegato": "Boîte de réception des délégants",
+    "notifiche-delegato": "En provenance des délégations",
     "deleghe": "Procurations",
     "profilo": "Vos données",
     "contacts": "Coordonnées",

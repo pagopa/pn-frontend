@@ -1,9 +1,7 @@
 {
   "title": "Inbox for {{organization}}",
   "go-to-detail": "Go to details",
-  "title-delegated-notifications": "Inbox for delegators",
-  "subtitle": "Read notifications of {{recipient}}. You can filter them by IUN Code and send date.",
-  "subtitle-delegated-notifications": "Read the notifications delegated to {{recipient}}. You can filter them by IUN Code and send date.",
+  "title-delegated-notifications": "Incoming from delegations",
   "table": {
     "data": "Date",
     "gruppo": "Groups",
@@ -18,7 +16,12 @@
     "legal-value": "Notification with legal value"
   },
   "filters": {
-    "iun": "Search by IUN Code",
+    "communication-type": "Type",
+    "communication-type-options": {
+      "legal": "Legally-binding notifications",
+      "informal": "Communications"
+    },
+    "iun": "IUN code",
     "data_da": "From",
     "data_da-input-aria-label": "Enter the search start date",
     "data_a": "To",
@@ -42,10 +45,10 @@
     "filtered": "No notifications or communications for the selected filters",
     "filtered-description": "Remove them or try another combination.",
     "clean-filters-cta": "Remove filters",
-    "delegate": "Here you will see the legally binding communications of {{name}}",
-    "title": "Here you will see your notifications with legal value and other communications",
-    "description": "Update your contact details now and you will immediately know when you receive one.",
-    "go-to-contacts-cta": "Go to your contact details",
+    "delegate": "Here you will see the legally-binding communications that have been delegated to your business.",
+    "title": "Here you will see legally-binding notifications and other communications",
+    "description": "Update your digital contact details now to immediately know when your business receives one.",
+    "go-to-contacts-cta": "Go to contact details",
     "aria-label-remove-filters": "Remove filters"
   },
   "from-qrcode": {
@@ -97,7 +100,7 @@
       "title": "Payment",
       "f24Models": "F24 forms",
       "pagoPANotices": "pagoPA notices",
-      "download-pagoPA-notice": "Download pagoPA notice",
+      "download-pagoPA-notice": "Download the pagoPA notice",
       "notice-code": "Notice code",
       "due": "Expires on",
       "included-costs": "Notification costs included",
@@ -119,6 +122,7 @@
       "error-payment-failed-single": "There was a problem with a Payment Notice. Press Reload to try again. If the error persists, contact the support team.",
       "error-payment-failed-multiple": "There was a problem with multiple Payment Notices. Press Reload to try again. If the error persists, contact the support team.",
       "status": {
+        "title": "Status",
         "succeded": "Paid",
         "succeded-tooltip": "Your payment has been sent successfully.",
         "failed": "Expired",
@@ -140,8 +144,6 @@
       "not_downloadable_acts": "120 days have passed since the completion date. If you want to obtain the documents, please contact the sender.",
       "downloadable_aar": "The acknowledgement of receipt is available online for 10 years from completion of the notification.",
       "not_downloadable_aar": "As 10 years have passed since the completion date, the acknowledgement of receipt is no longer available.",
-      "notification_cancelled_aar": "As this notification has been cancelled, the download of the Acknowledgement of Receipt has been disabled.",
-      "notification_cancelled_acts": "Since this notification has been cancelled, the document download has been disabled.",
       "effected_faq": "When do I complete a notification?"
     },
     "timeline": {
