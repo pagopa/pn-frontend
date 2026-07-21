@@ -48,6 +48,7 @@ const initialState = {
     otherDocuments: [],
     iun: '',
     sentAt: '',
+    filedAt: '',
     notificationStatus: '',
     notificationStatusHistory: [],
     timeline: [],

@@ -1,5 +1,6 @@
 {
   "title": "Posteingang für {{organization}}",
+  "go-to-detail": "Zu den Details",
   "title-delegated-notifications": "Posteingang für Vollmachtgeber",
   "subtitle": "Bescheide anzeigen mit Vollmacht an {{recipient}}. Du kannst sie nach IUN-Code und Sendedatum filtern.",
   "subtitle-delegated-notifications": "Bescheide anzeigen mit Vollmacht an {{recipient}} Du kannst sie nach IUN-Code und Sendedatum filtern.",
@@ -11,9 +12,10 @@
     "oggetto": "Betreff",
     "iun": "IUN-Code",
     "status": "Staat",
-    "show-detail": "Siehe Detail",
+    "open": "Öffnen",
     "group-selector-title": "Gruppenauswahlmenü",
-    "aria-action-table": "Benachrichtigungsdetails mit IUN anzeigen: {{iun}}"
+    "aria-action-table": "Details der Benachrichtigung mit IUN: {{iun}} öffnen",
+    "legal-value": "Zustellung mit rechtlicher Wirkung"
   },
   "filters": {
     "iun": "Suche nach IUN-Code",
@@ -37,9 +39,13 @@
     "options": "Optionen Sortieren"
   },
   "empty-state": {
-    "filtered": "Wir haben keine Ergebnisse gefunden: Versuche es mit anderen Filtern. <0>Filter entfernen</0>",
-    "no-notifications": "Kein Bescheid vorhanden für {{name}}.",
-    "delegate": "Keine Bescheide mit Vollmacht an {{name}} anzuzeigen.",
+    "filtered": "Keine Benachrichtigungen oder Mitteilungen für die ausgewählten Filter",
+    "filtered-description": "Entferne sie oder versuche es mit einer anderen Kombination.",
+    "clean-filters-cta": "Filter entfernen",
+    "delegate": "Hier siehst du die rechtlichen Mitteilungen von {{name}}",
+    "title": "Hier siehst du deine Zustellungen mit rechtlicher Wirkung und andere Mitteilungen",
+    "description": "Aktualisiere jetzt deine Kontaktdaten und du erfährst sofort, wenn du eine erhältst.",
+    "go-to-contacts-cta": "Zu deinen Kontaktdaten",
     "aria-label-remove-filters": "Filter entfernen"
   },
   "from-qrcode": {
@@ -47,6 +53,18 @@
     "not-found-subtitle": "Sie kann nur von den vom Empfängerunternehmen erfassten Benutzern oder von deren Bevollmächtigten gelesen werden."
   },
   "detail": {
+    "legal-value": "Zustellung mit rechtlicher Wirkung",
+    "notification-timeline-section": {
+      "title": "Status der Benachrichtigung",
+      "aria-label": "Zur Chronik der Benachrichtigung"
+    },
+    "notification-detail-section": {
+      "title": "Details der Benachrichtigung",
+      "recipient": "Empfänger",
+      "aar": "Empfangsbestätigung",
+      "aria-label": "Zur Empfangsbestätigung",
+      "availability": "10 Jahre lang online verfügbar ab dem Datum, an dem die Benachrichtigung rechtsgültig wird."
+    },
     "document-not-available": "Das Dokument kann in wenigen Minuten heruntergeladen werden. Du kannst es erneut versuchen, indem du die Seite neu lädst oder auf den Link des angeforderten Dokuments klickst",
     "table-aria-label": "Einzelheiten zum Bescheid",
     "payment-table-aria-label": "Einzelheiten zu Zahlungen",
@@ -79,7 +97,7 @@
       "title": "Zahlung",
       "f24Models": "Vordruck F24",
       "pagoPANotices": "Benachrichtigungen pagoPA",
-      "download-pagoPA-notice": "Benachrichtigung pagoPA herunterladen",
+      "download-pagoPA-notice": "Lade die pagoPA-Mitteilung herunter",
       "notice-code": "Benachrichtigungscode",
       "due": "Läuft ab",
       "included-costs": "Einschließlich Notifizierungsgebühren",
@@ -101,6 +119,7 @@
       "error-payment-failed-single": "Es ist ein Problem mit einer Zahlungsaufforderung aufgetreten. Drücken Sie auf Neu laden, um es erneut zu versuchen. Wenn der Fehler weiterhin besteht, kontaktieren Sie den Support.",
       "error-payment-failed-multiple": "Es ist ein Problem mit mehreren Zahlungsaufforderungen aufgetreten. Drücken Sie auf Neu laden, um es erneut zu versuchen. Wenn der Fehler weiterhin besteht, kontaktieren Sie den Support.",
       "status": {
+        "title": "Status",
         "succeded": "Bezahlt",
         "succeded-tooltip": "Die Zahlung wurde erfolgreich gesendet.",
         "failed": "Abgelaufen",
@@ -122,8 +141,6 @@
       "not_downloadable_acts": "Da seit dem Abschlussdatum 120 Tage vergangen sind, musst du dich für den Erhalt der Urkunde an den Absender wenden.",
       "downloadable_aar": "Die Empfangsbestätigung ist 10 Jahre ab Erledigung des Bescheids verfügbar.",
       "not_downloadable_aar": "Da seit der Erledigung 10 Jahre vergangen sind, steht die Empfangsbestätigung nicht mehr zur Verfügung.",
-      "notification_cancelled_aar": "Da dieser Bescheid storniert wurde, wurde der Download der Empfangsbestätigung deaktiviert.",
-      "notification_cancelled_acts": "Da dieser Bescheid storniert wurde, wurde der Download der Dokumente deaktiviert.",
       "effected_faq": "Wann ist die Bearbeitung eines Bescheids abgeschlossen?"
     },
     "timeline": {

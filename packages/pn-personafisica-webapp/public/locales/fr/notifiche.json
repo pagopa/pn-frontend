@@ -7,7 +7,6 @@
     "oggetto": "Objet",
     "iun": "Code IUN",
     "status": "État",
-    "show-detail": "Voir le détail",
     "aria-action-table": "Voir les détails de la notification avec IUN : {{iun}}",
     "open": "Ouvrir",
     "legal-value": "Notification à valeur juridique"
@@ -24,7 +23,9 @@
       "date-range": "Saisissez une date comprise entre {{fromDate}} et {{toDate}}",
       "date-start": "La date de début doit être antérieure à la date de fin",
       "date-end": "La date de fin doit être postérieure à la date de début"
-    }
+    },
+    "loading_completed_with_results": "Chargement terminé. La recherche a donné des résultats",
+    "loading_completed_no_results": "Chargement terminé. Aucune notification trouvée"
   },
   "sort": {
     "title": "Trier",
@@ -121,6 +122,7 @@
       "cancelled-message": "Pour toute information concernant un éventuel remboursement, contacte l'organisme émetteur.",
       "f24-download-error": "Le téléchargement a échoué. Réessayer.",
       "status": {
+        "title": "Statut",
         "succeded": "Payé",
         "succeded-tooltip": "Le paiement a bien été envoyé.",
         "failed": "Expiré",
@@ -147,8 +149,6 @@
       "not_downloadable_acts": "Les documents ne sont plus disponibles en ligne. Pour les demander, veuillez vous adresser à l'organisme qui vous les a envoyés.",
       "not_downloadable_aar": "L'avis de réception n'est plus disponible. Pour le demander, veuillez vous adresser à l'organisme qui vous l'a envoyé.",
       "downloadable_aar": "L’avis de réception est disponible en ligne pendant 10 ans à compter de la finalisation de la notification.",
-      "notification_cancelled_aar": "Cette notification ayant été annulée, le téléchargement de l’accusé de réception a été désactivé.",
-      "notification_cancelled_acts": "Cette notification ayant été annulée, le téléchargement des documents a été désactivé.",
       "effected_faq": "Quand une notification est-elle finalisée ?"
     },
     "timeline": {

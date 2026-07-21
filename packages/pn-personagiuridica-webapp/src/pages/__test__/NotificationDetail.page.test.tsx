@@ -6,7 +6,6 @@ import {
   AppMessage,
   AppResponseMessage,
   DeliveryOutcomeType,
-  NotificationDetail as NotificationDetailModel,
   NotificationDetailOtherDocument,
   NotificationFeePolicy,
   NotificationStatus,
@@ -16,7 +15,6 @@ import {
   ResponseEventDispatcher,
   StatusHistoryParser,
   TimelineCategory,
-  formatDate,
   getPaymentCache,
   populatePaymentsPagoPaF24,
   setPaymentCache,
@@ -64,17 +62,6 @@ const Component = () => (
   </Routes>
 );
 
-const getLegalFactIds = (notification: NotificationDetailModel, recIndex: number) => {
-  const timelineElementDigitalSuccessWorkflow = notification.timeline.find(
-    (t) =>
-      t.category === TimelineCategory.SEND_ANALOG_PROGRESS &&
-      t.legalFactsIds &&
-      t.legalFactsIds?.length > 0 &&
-      t.details.recIndex === recIndex
-  );
-  return timelineElementDigitalSuccessWorkflow!.legalFactsIds![0];
-};
-
 const delegator = mandatesByDelegate.find(
   (delegator) => delegator.delegator?.fiscalCode === pgRecipient.taxId
 );
@@ -85,7 +72,6 @@ ATTENZIONE: un'evenutale modifica al mock potrebbe causare il fallimento di alcu
 describe('NotificationDetail Page', () => {
   let result: RenderResult;
   let mock: MockAdapter;
-  const mockLegalIds = getLegalFactIds(notificationToFe, 1);
 
   beforeAll(() => {
     mock = new MockAdapter(apiClient);
@@ -130,19 +116,10 @@ describe('NotificationDetail Page', () => {
     expect(mock.history.post[0].url).toBe(`/bff/v1/payments/info`);
     expect(result?.getByTestId('breadcrumb-link')).toHaveTextContent(/detail.breadcrumb-root/i);
     expect(result?.container).toHaveTextContent(notificationToFe.abstract!);
-    // check summary table
-    const notificationDetailTable = result?.getByTestId('notificationDetailTable');
-    expect(notificationDetailTable).toBeInTheDocument();
-    const tableRows = notificationDetailTable?.querySelectorAll('tr');
-    expect(tableRows[0]).toHaveTextContent(`detail.sender${notificationToFe.senderDenomination}`);
-    expect(tableRows[1]).toHaveTextContent(`detail.recipient${pgRecipient.denomination}`);
-    expect(tableRows[2]).toHaveTextContent(`detail.date${formatDate(notificationToFe.sentAt)}`);
-    expect(tableRows[3]).toHaveTextContent(`detail.iun${notificationToFe.iun}`);
+
     // check documents box
     const notificationDetailDocuments = result?.getAllByTestId('notificationDetailDocuments');
-    expect(notificationDetailDocuments).toHaveLength(
-      notificationToFe.documents.length + notificationToFe.otherDocuments?.length!
-    );
+    expect(notificationDetailDocuments).toHaveLength(notificationToFe.documents.length);
     const notificationDetailDocumentsMessage = result?.getAllByTestId('documentsMessage');
     for (const notificationDetailDocumentMessage of notificationDetailDocumentsMessage) {
       expect(notificationDetailDocumentMessage).toHaveTextContent(
@@ -517,11 +494,9 @@ describe('NotificationDetail Page', () => {
     expect(mock.history.get[0].url).toContain('/bff/v1/notifications/received');
     expect(mock.history.get[1].url).toContain('/bff/v1/downtime/history');
     // check documents box
-    const notificationDetailDocumentsMessage = result?.getAllByTestId('documentsMessage');
-    for (const notificationDetailDocumentMessage of notificationDetailDocumentsMessage) {
-      expect(notificationDetailDocumentMessage).toHaveTextContent(
-        /detail.acts_files.notification_cancelled_aar|detail.acts_files.notification_cancelled_acts/
-      );
+    const notificationDetailDocuments = result.getAllByTestId('notificationDetailDocuments');
+    for (const notificationDetailDocument of notificationDetailDocuments) {
+      expect(notificationDetailDocument).toHaveTextContent('not-available');
     }
   });
 
@@ -592,7 +567,6 @@ describe('NotificationDetail Page', () => {
       });
     });
 
-    await result.findByTestId('detailTable');
     const bilingualSection = result.queryByTestId('bilingualSection');
     expect(bilingualSection).not.toBeInTheDocument();
   });
@@ -684,66 +658,6 @@ describe('NotificationDetail Page', () => {
     });
     await waitFor(() => {
       expect(globalThis.location.href).toBe('https://mocked-url.com');
-    });
-  });
-
-  it('executes the legal fact download handler', async () => {
-    mock.onGet(`/bff/v1/notifications/received/${notificationDTO.iun}`).reply(200, notificationDTO);
-    mock.onPost(`/bff/v1/payments/info`, paymentInfoRequest).reply(200, paymentInfo);
-    // we use regexp to not set the query parameters
-    mock.onGet(/\/bff\/v1\/downtime\/history.*/).reply(200, downtimesDTO);
-    mock
-      .onGet(
-        `/bff/v1/notifications/received/${notificationToFe.iun}/documents/LEGAL_FACT?documentId=${mockLegalIds.key}`
-      )
-      .reply(200, {
-        retryAfter: 1,
-      });
-    await act(async () => {
-      result = render(
-        <>
-          <AppMessage />
-          <Component />
-        </>,
-        {
-          preloadedState: {
-            userState: { user: adminUser },
-          },
-          route: routes.GET_DETTAGLIO_NOTIFICA_PATH(notificationDTO.iun),
-        }
-      );
-    });
-    expect(mock.history.get).toHaveLength(2);
-    const legalFactButton = result?.getAllByTestId('download-legalfact');
-    fireEvent.click(legalFactButton[0]);
-    await waitFor(() => {
-      expect(mock.history.get).toHaveLength(3);
-      expect(mock.history.get[2].url).toContain(
-        `/bff/v1/notifications/received/${notificationToFe.iun}/documents/LEGAL_FACT?documentId=${mockLegalIds.key}`
-      );
-    });
-    const docNotAvailableAlert = await waitFor(() => result?.getByTestId('snackBarContainer'));
-    expect(docNotAvailableAlert).toBeInTheDocument();
-    mock
-      .onGet(
-        `/bff/v1/notifications/received/${notificationToFe.iun}/documents/LEGAL_FACT?documentId=${mockLegalIds.key}`
-      )
-      .reply(200, {
-        filename: 'mocked-filename',
-        contentLength: 1000,
-        retryAfter: null,
-        url: 'https://mocked-url-com',
-      });
-    // simulate that legal fact is now available
-    fireEvent.click(legalFactButton[0]);
-    await waitFor(() => {
-      expect(mock.history.get).toHaveLength(4);
-      expect(mock.history.get[3].url).toContain(
-        `/bff/v1/notifications/received/${notificationToFe.iun}/documents/LEGAL_FACT?documentId=${mockLegalIds.key}`
-      );
-    });
-    await waitFor(() => {
-      expect(globalThis.location.href).toBe('https://mocked-url-com');
     });
   });
 
@@ -952,19 +866,10 @@ describe('NotificationDetail Page', () => {
     expect(mock.history.get[1].url).toContain('/bff/v1/downtime/history');
     expect(result?.getByTestId('breadcrumb-link')).toHaveTextContent(/detail.breadcrumb-root/i);
     expect(result?.container).toHaveTextContent(notificationToFe.abstract!);
-    // check summary table
-    const notificationDetailTable = result?.getByTestId('notificationDetailTable');
-    expect(notificationDetailTable).toBeInTheDocument();
-    const tableRows = notificationDetailTable?.querySelectorAll('tr');
-    expect(tableRows[0]).toHaveTextContent(`detail.sender${notificationToFe.senderDenomination}`);
-    expect(tableRows[1]).toHaveTextContent(`detail.recipient${pgRecipient.denomination}`);
-    expect(tableRows[2]).toHaveTextContent(`detail.date${formatDate(notificationToFe.sentAt)}`);
-    expect(tableRows[3]).toHaveTextContent(`detail.iun${notificationToFe.iun}`);
+
     // check documents box
     const notificationDetailDocuments = result?.getAllByTestId('notificationDetailDocuments');
-    expect(notificationDetailDocuments).toHaveLength(
-      notificationToFe.documents.length + notificationToFe.otherDocuments?.length!
-    );
+    expect(notificationDetailDocuments).toHaveLength(notificationToFe.documents.length);
     const notificationDetailDocumentsMessage = result?.getAllByTestId('documentsMessage');
     for (const notificationDetailDocumentMessage of notificationDetailDocumentsMessage) {
       expect(notificationDetailDocumentMessage).toHaveTextContent(
@@ -1036,19 +941,9 @@ describe('NotificationDetail Page', () => {
     expect(mock.history.post[0].url).toBe(`/bff/v1/payments/info`);
     expect(result?.getByTestId('breadcrumb-link')).toHaveTextContent(/detail.breadcrumb-root/i);
     expect(result?.container).toHaveTextContent(notificationToFe.abstract!);
-    // check summary table
-    const notificationDetailTable = result?.getByTestId('notificationDetailTable');
-    expect(notificationDetailTable).toBeInTheDocument();
-    const tableRows = notificationDetailTable?.querySelectorAll('tr');
-    expect(tableRows[0]).toHaveTextContent(`detail.sender${notificationToFe.senderDenomination}`);
-    expect(tableRows[1]).toHaveTextContent(`detail.recipient${pgRecipient.denomination}`);
-    expect(tableRows[2]).toHaveTextContent(`detail.date${formatDate(notificationToFe.sentAt)}`);
-    expect(tableRows[3]).toHaveTextContent(`detail.iun${notificationToFe.iun}`);
     // check documents box
     const notificationDetailDocuments = result?.getAllByTestId('notificationDetailDocuments');
-    expect(notificationDetailDocuments).toHaveLength(
-      notificationToFe.documents.length + notificationToFe.otherDocuments?.length!
-    );
+    expect(notificationDetailDocuments).toHaveLength(notificationToFe.documents.length);
     const notificationDetailDocumentsMessage = result?.getAllByTestId('documentsMessage');
     for (const notificationDetailDocumentMessage of notificationDetailDocumentsMessage) {
       expect(notificationDetailDocumentMessage).toHaveTextContent(
@@ -1070,7 +965,6 @@ describe('NotificationDetail Page', () => {
   });
 
   it('should dispatch getReceivedNotificationPaymentUrl on pay button click', async () => {
-    vi.useFakeTimers();
     const paymentHistory = populatePaymentsPagoPaF24(
       notificationToFe.timeline,
       paymentsData.pagoPaF24,
@@ -1111,28 +1005,21 @@ describe('NotificationDetail Page', () => {
     expect(item).toBeInTheDocument();
     const radioButton = item?.querySelector('[data-testid="radio-button"] input');
     fireEvent.click(radioButton!);
-    // after radio button click, there is a timer of 1 second after that the paymeny is enabled
-    // wait...
-    await act(async () => {
-      vi.advanceTimersByTime(1000);
-    });
     expect(payButton).toBeEnabled();
-    // we need the act method, because the loading overlay is shown at button click
-    await act(async () => {
-      fireEvent.click(payButton);
+    fireEvent.click(payButton);
+
+    await waitFor(() => {
+      expect(mock.history.post).toHaveLength(2);
+      expect(mock.history.post[0].url).toBe(`/bff/v1/payments/info`);
+      expect(mock.history.post[1].url).toBe(`/bff/v1/payments/cart`);
     });
-    expect(mock.history.post).toHaveLength(2);
-    expect(mock.history.post[0].url).toBe(`/bff/v1/payments/info`);
-    expect(mock.history.post[1].url).toBe(`/bff/v1/payments/cart`);
-    await vi.waitFor(() => {
+    await waitFor(() => {
       expect(mockAssignFn).toHaveBeenCalledTimes(1);
       expect(mockAssignFn).toHaveBeenCalledWith('https://mocked-url.com');
     });
-    vi.useRealTimers();
   });
 
   it('should not duplicate payments when api call to cart respond with an error', async () => {
-    vi.useFakeTimers();
     const paymentHistory = populatePaymentsPagoPaF24(
       notificationToFe.timeline,
       paymentsData.pagoPaF24,
@@ -1166,32 +1053,29 @@ describe('NotificationDetail Page', () => {
       });
     });
 
-    expect(result.testStore.getState().notificationState.paymentsData.pagoPaF24.length).toBe(6);
+    expect(result.testStore.getState().notificationState.paymentsData.pagoPaF24).toHaveLength(6);
 
     const payButton = result.getByTestId('pay-button');
-    const item = result.queryAllByTestId('pagopa-item')[requiredPaymentIndex];
+    let item = result.getAllByTestId('pagopa-item')[requiredPaymentIndex];
     expect(item).toBeInTheDocument();
     const radioButton = item?.querySelector('[data-testid="radio-button"] input');
     fireEvent.click(radioButton!);
-    // after radio button click, there is a timer of 1 second after that the paymeny is enabled
-    // wait...
-    await act(async () => {
-      vi.advanceTimersByTime(1000);
-    });
     expect(payButton).toBeEnabled();
-    // we need the act method, because the loading overlay is shown at button click
-    await act(async () => {
-      fireEvent.click(payButton);
+    fireEvent.click(payButton);
+
+    await waitFor(() => {
+      expect(mock.history.post).toHaveLength(2);
+      expect(mock.history.post[0].url).toBe(`/bff/v1/payments/info`);
+      expect(mock.history.post[1].url).toBe(`/bff/v1/payments/cart`);
     });
 
+    item = await waitFor(() => result.getAllByTestId('pagopa-item')[requiredPaymentIndex]);
     const errorMessage = item?.querySelector('[data-testid="generic-error-message"]');
     const reloadButton = item?.querySelector('[data-testid="reload-button"]');
 
     expect(errorMessage).toBeVisible();
     expect(reloadButton).toBeVisible();
-    expect(result.testStore.getState().notificationState.paymentsData.pagoPaF24.length).toBe(6);
-
-    vi.useRealTimers();
+    expect(result.testStore.getState().notificationState.paymentsData.pagoPaF24).toHaveLength(6);
   });
 
   it('should show correct paginated payments', async () => {
