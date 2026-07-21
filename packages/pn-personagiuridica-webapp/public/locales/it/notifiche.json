@@ -53,6 +53,9 @@
     "not-found-subtitle": "Può essere letta solo dagli utenti censiti dall’impresa destinataria o da un suo delegato."
   },
   "detail": {
+    "legal-date": "Notifica depositata il",
+    "informal-date": "Comunicazione depositata il",
+    "legal-disclaimer": "Notifica inviata tramite SEND, la piattaforma disciplinata dall’art. 26 del D.L 76/2020",
     "legal-value": "Notifica a valore legale",
     "notification-timeline-section": {
       "title": "Stato della notifica",
