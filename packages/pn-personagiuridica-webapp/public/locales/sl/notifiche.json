@@ -384,7 +384,7 @@
       "textWithEndDate": "Motnja se je začela {{startDate}} in končala {{endDate}} pri naslednjih funkcijah:",
       "textWithoutEndDate": "Motnja se je začela {{startDate}} in še ni končana pri naslednjih funkcijah:",
       "datePrefix": "ta ",
-      "legalFactDownload": "Potrdilo o okvari",
+      "legalFactDownload": "Odpri potrdilo o motnjah v delovanju",
       "apiErrorMessage": "Ni bilo mogoče naložiti morebitnih motenj, ki so vplivale na to obvestilo."
     },
     "help": {

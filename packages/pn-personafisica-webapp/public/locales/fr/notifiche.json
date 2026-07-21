@@ -390,7 +390,7 @@
       "textWithEndDate": "Dysfonctionnement commencé {{startDate}} et terminé {{endDate}} sur les fonctionnalités suivantes :",
       "textWithoutEndDate": "Dysfonctionnement commencé {{startDate}} et pas encore terminé sur les fonctionnalités suivantes :",
       "datePrefix": "le ",
-      "legalFactDownload": "Attestation de dysfonctionnement",
+      "legalFactDownload": "Ouvrir l'attestation de dysfonctionnement",
       "apiErrorMessage": "Nous n’avons pas pu charger les éventuels dysfonctionnements qui ont affecté cette notification."
     },
     "help": {

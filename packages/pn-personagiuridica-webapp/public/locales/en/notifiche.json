@@ -384,7 +384,7 @@
       "textWithEndDate": "Disruption started {{startDate}} and ended {{endDate}} on the following functionalities:",
       "textWithoutEndDate": "Disruption started {{startDate}} and not yet ended on the following functionalities:",
       "datePrefix": "the ",
-      "legalFactDownload": "Attestation of malfunction",
+      "legalFactDownload": "Open the malfunction certificate",
       "apiErrorMessage": "We were unable to load any disruptions that affected this notification."
     },
     "help": {

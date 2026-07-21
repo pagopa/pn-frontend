@@ -384,7 +384,7 @@
       "textWithEndDate": "Beginn der Fehlfunktion {{startDate}} und Behebung {{endDate}} an folgenden Funktionen:",
       "textWithoutEndDate": "Beginn der Fehlfunktion {{startDate}} und noch nicht vollständig behoben an folgenden Funktionen:",
       "datePrefix": "die ",
-      "legalFactDownload": "Bescheinigung der Fehlfunktion",
+      "legalFactDownload": "Störungsbescheinigung öffnen",
       "apiErrorMessage": "Wir konnten noch keinen Bericht über Fehlfunktionen hochladen, die diesen Bescheid betrafen."
     },
     "help": {
