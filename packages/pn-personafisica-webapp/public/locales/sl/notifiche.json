@@ -12,7 +12,12 @@
     "legal-value": "Pravno zavezujoča vročitev"
   },
   "filters": {
-    "iun": "Iskanje po kodi IUN",
+    "communication-type": "Vrsta",
+    "communication-type-options": {
+      "legal": "Uradna obvestila",
+      "informal": "Sporočila"
+    },
+    "iun": "Koda IUN",
     "data_da": "Od",
     "data_da-input-aria-label": "Vnesite začetni datum iskanja",
     "data_a": "Do",

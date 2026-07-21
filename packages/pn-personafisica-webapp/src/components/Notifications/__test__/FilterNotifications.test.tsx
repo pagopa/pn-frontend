@@ -5,8 +5,10 @@ import {
   testCalendar,
   testFormElements,
   testInput,
+  testSelect,
 } from '@pagopa-pn/pn-commons/src/test-utils';
 
+import { mandatesByDelegate } from '../../../__mocks__/Delegations.mock';
 import {
   RenderResult,
   act,
@@ -21,6 +23,7 @@ import FilterNotifications from '../FilterNotifications';
 const initialState = {
   startDate: undefined,
   endDate: undefined,
+  communicationType: '',
   iunMatch: '',
   mandateId: undefined,
 };
@@ -60,15 +63,26 @@ describe('Filter Notifications Table Component', () => {
     form = result.container.querySelector('form') as HTMLFormElement;
     expect(form).toBeInTheDocument();
     expect(form).toBeInTheDocument();
+    testFormElements(form, 'communicationType', 'filters.communication-type', '');
     testFormElements(form, 'iunMatch', 'filters.iun', '');
     testFormElements(form, 'startDate', 'filters.data_da', '');
     testFormElements(form, 'endDate', 'filters.data_a', '');
     const submitButton = form.querySelector(`button[type="submit"]`);
     expect(submitButton).toBeInTheDocument();
     expect(submitButton).toHaveTextContent(/button.filtra/i);
-    const cancelButton = within(form).getByTestId('cancelButton');
-    expect(cancelButton).toBeInTheDocument();
-    expect(cancelButton).toHaveTextContent(/button.annulla filtro/i);
+    expect(within(form).queryByTestId('cancelButton')).not.toBeInTheDocument();
+  });
+
+  it('does not show the communication type filter for delegated notifications', async () => {
+    await act(async () => {
+      result = render(<FilterNotifications showFilters currentDelegator={mandatesByDelegate[1]} />);
+    });
+    form = result.container.querySelector('form') as HTMLFormElement;
+
+    expect(form.querySelector('input[name="communicationType"]')).not.toBeInTheDocument();
+    testFormElements(form, 'iunMatch', 'filters.iun', '');
+    testFormElements(form, 'startDate', 'filters.data_da', '');
+    testFormElements(form, 'endDate', 'filters.data_a', '');
   });
 
   it('test iunMatch input', async () => {
@@ -78,6 +92,31 @@ describe('Filter Notifications Table Component', () => {
     });
     form = result.container.querySelector('form') as HTMLFormElement;
     await testInput(form, 'iunMatch', 'MOCK-EDIU-NMAT-CH');
+  });
+
+  it('shows filter removal only after applying a communication type', async () => {
+    await act(async () => {
+      result = render(<FilterNotifications showFilters />);
+    });
+    form = result.container.querySelector('form') as HTMLFormElement;
+    expect(within(form).queryByTestId('cancelButton')).not.toBeInTheDocument();
+
+    await testSelect(
+      form,
+      'communicationType',
+      [
+        { label: 'filters.communication-type-options.legal', value: 'LEGAL' },
+        { label: 'filters.communication-type-options.informal', value: 'INFORMAL' },
+      ],
+      0
+    );
+
+    expect(within(form).getByRole('combobox').querySelector('svg')).toBeInTheDocument();
+    expect(within(form).queryByTestId('cancelButton')).not.toBeInTheDocument();
+    fireEvent.click(form.querySelector(`button[type="submit"]`)!);
+
+    const cancelButton = await waitFor(() => within(form).getByTestId('cancelButton'));
+    expect(cancelButton).toBeEnabled();
   });
 
   it('test iunMatch input onPaste event', async () => {
@@ -135,6 +174,7 @@ describe('Filter Notifications Table Component', () => {
       expect(result.testStore.getState().dashboardState.filters).toStrictEqual({
         startDate: nineYearsAgo,
         endDate: oneYearAgo,
+        communicationType: '',
         iunMatch: 'ABCD-EFGH-ILMN-123456-A-1',
         mandateId: undefined,
       });
@@ -242,6 +282,7 @@ describe('Filter Notifications Table Component', () => {
       expect(result.testStore.getState().dashboardState.filters).toStrictEqual({
         startDate: nineYearsAgo,
         endDate: oneYearAgo,
+        communicationType: '',
         iunMatch: 'ABCD-EFGH-ILMN-123456-A-1',
         mandateId: undefined,
       });

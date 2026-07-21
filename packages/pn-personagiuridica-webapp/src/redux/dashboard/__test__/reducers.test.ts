@@ -42,6 +42,7 @@ describe('Dashbaord redux state tests', () => {
       filters: {
         startDate: undefined,
         endDate: undefined,
+        communicationType: '',
         iunMatch: '',
       },
       pagination: {
@@ -75,6 +76,31 @@ describe('Dashbaord redux state tests', () => {
         size: 10,
       })
     );
+    expect(action.type).toBe('getReceivedNotifications/fulfilled');
+    expect(action.payload).toEqual(notificationsToFe);
+  });
+
+  it('Should filter the notifications list by communication type', async () => {
+    mock
+      .onGet(
+        `/bff/v1/notifications/received?startDate=${encodeURIComponent(
+          formatToTimezoneString(tenYearsAgo)
+        )}&endDate=${encodeURIComponent(
+          formatToTimezoneString(today)
+        )}&size=10&communicationType=LEGAL`
+      )
+      .reply(200, notificationsDTO);
+
+    const action = await store.dispatch(
+      getReceivedNotifications({
+        startDate: tenYearsAgo,
+        endDate: today,
+        communicationType: 'LEGAL',
+        isDelegatedPage: false,
+        size: 10,
+      })
+    );
+
     expect(action.type).toBe('getReceivedNotifications/fulfilled');
     expect(action.payload).toEqual(notificationsToFe);
   });

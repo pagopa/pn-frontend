@@ -13,7 +13,12 @@
     "legal-value": "Rechtsgültige Zustellung"
   },
   "filters": {
-    "iun": "Suche nach IUN-Code",
+    "communication-type": "Typ",
+    "communication-type-options": {
+      "legal": "Rechtsgültige Zustellungen",
+      "informal": "Mitteilungen"
+    },
+    "iun": "IUN-Code",
     "data_da": "Vom",
     "data_da-input-aria-label": "Startdatum der Suche eingeben",
     "data_a": "Bis",

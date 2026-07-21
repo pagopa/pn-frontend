@@ -8,7 +8,7 @@ import {
   formatToTimezoneString,
   tenYearsAgo,
 } from '@pagopa-pn/pn-commons';
-import { createMatchMedia, testInput } from '@pagopa-pn/pn-commons/src/test-utils';
+import { createMatchMedia, testInput, testSelect } from '@pagopa-pn/pn-commons/src/test-utils';
 import { getEndOfDay, today } from '@pagopa-pn/pn-commons/src/utility/date.utility';
 
 import { mandatesByDelegate } from '../../__mocks__/Delegations.mock';
@@ -198,6 +198,36 @@ describe('Notifiche Page', () => {
     rows = result.getAllByTestId('notificationsTable.body.row');
     expect(rows).toHaveLength(1);
     expect(rows[0]).toHaveTextContent(notificationsDTO.resultsPage[1].iun);
+  });
+
+  it('filters notifications by communication type', async () => {
+    mock.onGet(notificationsPath).reply(200, notificationsDTO);
+    const legalNotificationsPath = `/bff/v1/notifications/received?startDate=${encodeURIComponent(
+      formatToTimezoneString(tenYearsAgo)
+    )}&endDate=${encodeURIComponent(
+      formatToTimezoneString(today)
+    )}&size=10&communicationType=LEGAL`;
+    mock.onGet(legalNotificationsPath).reply(200, notificationsDTO);
+
+    await act(async () => {
+      result = render(<Notifiche />);
+    });
+    const form = result.container.querySelector('form') as HTMLFormElement;
+    await testSelect(
+      form,
+      'communicationType',
+      [
+        { label: 'filters.communication-type-options.legal', value: 'LEGAL' },
+        { label: 'filters.communication-type-options.informal', value: 'INFORMAL' },
+      ],
+      0
+    );
+    fireEvent.click(form.querySelector(`button[type="submit"]`)!);
+
+    await waitFor(() => {
+      expect(mock.history.get).toHaveLength(2);
+      expect(mock.history.get[1].url).toBe(legalNotificationsPath);
+    });
   });
 
   it('errors on api', async () => {
