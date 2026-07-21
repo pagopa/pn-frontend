@@ -69,6 +69,9 @@ const Notifiche = ({ isDelegatedPage = false }: Props) => {
     ? t('title', { organization: organization.name })
     : t('title-delegated-notifications');
 
+  const hasGroupSelector =
+    isDelegatedPage && organization.groups && organization.groups?.length > 0;
+
   // back end return at most the next three pages
   // we have flag moreResult to check if there are more pages
   // the minum number of pages, to have ellipsis in the paginator, is 8
@@ -233,10 +236,16 @@ const Notifiche = ({ isDelegatedPage = false }: Props) => {
           variantTitle="h4"
           title={pageTitle}
           mbTitle={isMobile ? 3 : undefined}
+          propsTitle={
+            hasGroupSelector
+              ? {
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                }
+              : undefined
+          }
           titleButton={
-            isDelegatedPage &&
-            organization.groups &&
-            organization.groups?.length > 0 && (
+            hasGroupSelector && (
               <GroupSelector currentGroup={group ?? ''} onGroupSelection={handleGroupSelction} />
             )
           }
