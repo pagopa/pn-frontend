@@ -161,9 +161,12 @@ describe('NotificationPaymentF24Item Component', () => {
     const downloadButton = getByTestId('download-f24-button');
     fireEvent.click(downloadButton);
     // if the api immediatly returns the url, we dowload the file
-    const downloadingMessage = getByTestId('f24-download-message');
+    const downloadingMessage = downloadButton.querySelector('[aria-label]');
     expect(downloadingMessage).toBeInTheDocument();
-    expect(downloadingMessage).toHaveTextContent('detail.payment.download-f24-in-progress');
+    expect(downloadingMessage).toHaveAttribute(
+      'aria-label',
+      'detail.payment.download-f24-in-progress'
+    );
     await waitFor(() => {
       expect(downloadingMessage).not.toBeInTheDocument();
     });
@@ -188,15 +191,18 @@ describe('NotificationPaymentF24Item Component', () => {
     const downloadButton = getByTestId('download-f24-button');
     fireEvent.click(downloadButton);
     // show downloading message and after recall the api to download the file
-    const downloadingMessage = getByTestId('f24-download-message');
+    const downloadingMessage = downloadButton.querySelector('[aria-label]');
     expect(downloadingMessage).toBeInTheDocument();
-    expect(downloadingMessage).toHaveTextContent('detail.payment.download-f24-in-progress');
+    expect(downloadingMessage).toHaveAttribute(
+      'aria-label',
+      'detail.payment.download-f24-in-progress'
+    );
     // wait...
     await act(() => vi.advanceTimersToNextTimerAsync());
-    expect(downloadingMessage).toHaveTextContent('detail.payment.download-f24-waiting');
+    expect(downloadingMessage).toHaveAttribute('aria-label', 'detail.payment.download-f24-waiting');
     // wait...
     await act(() => vi.advanceTimersToNextTimerAsync());
-    expect(downloadingMessage).toHaveTextContent('detail.payment.download-f24-ongoing');
+    expect(downloadingMessage).toHaveAttribute('aria-label', 'detail.payment.download-f24-ongoing');
     // download the file
     await act(() => vi.advanceTimersByTime(1000));
     await vi.waitFor(() => {
@@ -224,15 +230,18 @@ describe('NotificationPaymentF24Item Component', () => {
     const downloadButton = getByTestId('download-f24-button');
     fireEvent.click(downloadButton);
     // show downloading message and after recall the api to download the file
-    const downloadingMessage = await vi.waitFor(() => getByTestId('f24-download-message'));
+    const downloadingMessage = downloadButton.querySelector('[aria-label]');
     expect(downloadingMessage).toBeInTheDocument();
-    expect(downloadingMessage).toHaveTextContent('detail.payment.download-f24-in-progress');
+    expect(downloadingMessage).toHaveAttribute(
+      'aria-label',
+      'detail.payment.download-f24-in-progress'
+    );
     // wait...
     await act(() => vi.advanceTimersToNextTimerAsync());
-    expect(downloadingMessage).toHaveTextContent('detail.payment.download-f24-waiting');
+    expect(downloadingMessage).toHaveAttribute('aria-label', 'detail.payment.download-f24-waiting');
     // wait...
     await act(() => vi.advanceTimersToNextTimerAsync());
-    expect(downloadingMessage).toHaveTextContent('detail.payment.download-f24-ongoing');
+    expect(downloadingMessage).toHaveAttribute('aria-label', 'detail.payment.download-f24-ongoing');
     // show the error
     await act(() => vi.advanceTimersByTimeAsync(1000));
     const error = await vi.waitFor(() => getByTestId('f24-maxTime-error'));

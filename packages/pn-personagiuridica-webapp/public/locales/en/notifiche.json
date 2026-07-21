@@ -97,7 +97,7 @@
       "title": "Payment",
       "f24Models": "F24 forms",
       "pagoPANotices": "pagoPA notices",
-      "download-pagoPA-notice": "Download pagoPA notice",
+      "download-pagoPA-notice": "Download the pagoPA notice",
       "notice-code": "Notice code",
       "due": "Expires on",
       "included-costs": "Notification costs included",
@@ -119,6 +119,7 @@
       "error-payment-failed-single": "There was a problem with a Payment Notice. Press Reload to try again. If the error persists, contact the support team.",
       "error-payment-failed-multiple": "There was a problem with multiple Payment Notices. Press Reload to try again. If the error persists, contact the support team.",
       "status": {
+        "title": "Status",
         "succeded": "Paid",
         "succeded-tooltip": "Your payment has been sent successfully.",
         "failed": "Expired",
@@ -140,8 +141,6 @@
       "not_downloadable_acts": "120 days have passed since the completion date. If you want to obtain the documents, please contact the sender.",
       "downloadable_aar": "The acknowledgement of receipt is available online for 10 years from completion of the notification.",
       "not_downloadable_aar": "As 10 years have passed since the completion date, the acknowledgement of receipt is no longer available.",
-      "notification_cancelled_aar": "As this notification has been cancelled, the download of the Acknowledgement of Receipt has been disabled.",
-      "notification_cancelled_acts": "Since this notification has been cancelled, the document download has been disabled.",
       "effected_faq": "When do I complete a notification?"
     },
     "timeline": {

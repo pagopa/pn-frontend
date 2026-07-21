@@ -122,6 +122,7 @@
       "cancelled-message": "Za informacije o morebitnem povračilu se obrni na organ pošiljatelja.",
       "f24-download-error": "Prenos ni uspel. Poskusite znova.",
       "status": {
+        "title": "Stanje",
         "succeded": "Plačano",
         "succeded-tooltip": "Plačilo je bilo uspešno poslano.",
         "failed": "Zapadlo",
@@ -148,8 +149,6 @@
       "not_downloadable_acts": "Dokumenti niso več na voljo na spletu. Če jih želite zahtevati, se obrnite na organ, ki vam jih je poslal.",
       "not_downloadable_aar": "Obvestilo o prejemu ni več na voljo. Če ga želite zahtevati, se obrnite na organ, ki vam ga je poslal.",
       "downloadable_aar": "Obvestilo o prejemu je na voljo na spletu 10 let od zaključka obvestila.",
-      "notification_cancelled_aar": "Ker je bilo to obvestilo preklicano, je bil prenos obvestila o prejemu onemogočen.",
-      "notification_cancelled_acts": "Ker je bilo to obvestilo preklicano, je bil prenos dokumenta onemogočen.",
       "effected_faq": "Kdaj se obvestilo zaključi?"
     },
     "timeline": {
