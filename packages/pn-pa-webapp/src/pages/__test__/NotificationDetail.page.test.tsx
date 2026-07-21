@@ -73,7 +73,7 @@ describe('NotificationDetail Page', () => {
     expect(mock.history.get[0].url).toContain('/bff/v1/notifications/sent');
     expect(mock.history.get[1].url).toContain('/bff/v1/downtime/history');
     expect(result.getByRole('link')).toHaveTextContent(/detail.breadcrumb-root/i);
-    expect(result.container.querySelector('h2')).toHaveTextContent(notificationDTO.subject);
+    expect(result.container.querySelector('h4')).toHaveTextContent(notificationDTO.subject);
     expect(result.container).toHaveTextContent(notificationDTO.abstract!);
     // check summary table
     const notificationDetailTable = result.getByTestId('notificationDetailTable');

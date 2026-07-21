@@ -99,6 +99,7 @@ export type PAEventPayloads = {
   [PAEventsType.SEND_PA_NOTIFICATION_DOWNLOAD_ATTACHMENT]: PANotificationAttachmentEventData;
   [PAEventsType.SEND_PA_NOTIFICATIONS]: PANotificationsListEventData;
   [PAEventsType.SEND_PA_TIMELINE_DOWNLOAD]: PATimelineLegalFactEventData;
+  [PAEventsType.SEND_PA_TIMELINE_SHOW_HISTORY]: undefined;
   [PAEventsType.SEND_PA_TIMELINE_SHOW_MORE]: undefined;
 
   /* SERVICE STATUS */
