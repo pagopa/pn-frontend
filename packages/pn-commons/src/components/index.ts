@@ -75,6 +75,7 @@ export { default as PnDialogContent } from './PnDialog/PnDialogContent';
 export { default as PnInfoCard } from './PnInfoCard';
 export { default as PnWizard } from './PnWizard/PnWizard';
 export { default as PnWizardStep } from './PnWizard/PnWizardStep';
+export { default as PnSenderContacts } from './PnSenderContacts/PnSenderContacts';
 export { default as Prompt } from './Prompt';
 export { default as SectionHeading } from './SectionHeading';
 export { default as SessionModal } from './SessionModal';
