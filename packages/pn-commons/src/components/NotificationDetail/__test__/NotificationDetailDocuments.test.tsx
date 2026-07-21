@@ -7,6 +7,7 @@ import NotificationDetailDocuments from '../NotificationDetailDocuments';
 describe('NotificationDetailDocuments Component', () => {
   let mockClickFn: Mock;
 
+  const filesMessage = { key: 'Mocked download message', ns: 'mockedNamespace' };
   beforeEach(() => {
     mockClickFn = vi.fn();
   });
@@ -22,7 +23,7 @@ describe('NotificationDetailDocuments Component', () => {
         documents={[]}
         clickHandler={mockClickFn}
         documentsAvailable
-        downloadFilesMessage="Mocked download message"
+        downloadFilesMessage={filesMessage}
       />
     );
     expect(container).toHaveTextContent(/Mocked title/i);
@@ -39,7 +40,7 @@ describe('NotificationDetailDocuments Component', () => {
         documents={notificationDTO.documents}
         clickHandler={mockClickFn}
         documentsAvailable
-        downloadFilesMessage="Mocked download message"
+        downloadFilesMessage={filesMessage}
       />
     );
     expect(container).toHaveTextContent(/Mocked title/i);

@@ -828,6 +828,7 @@ export const notificationDTO: NotificationDetail = {
   abstract: 'Dritto devi andare!',
   subject: 'Inadequatezza nel camminare',
   recipients,
+  filedAt: '2023-05-09T13:17:31.401700947Z',
   documents: [
     {
       digests: {
@@ -846,7 +847,6 @@ export const notificationDTO: NotificationDetail = {
   group: '63f359bc72337440a40f537e',
   iun: 'RPTH-YULD-WKMA-202305-T-1',
   sentAt: '2023-05-09T13:17:31.401700947Z',
-  filedAt: '2023-05-09T13:17:31.401700947Z',
   documentsAvailable: true,
   notificationStatus: NotificationStatus.VIEWED,
   notificationStatusHistory: statusHistory,
@@ -874,6 +874,7 @@ export const bilingualNotification: NotificationDetail = {
   subject: 'Test notification with bilingual content',
   additionalLanguages: ['FR'],
   recipients,
+  filedAt: '2023-05-09T13:17:31.401700947Z',
   documents: [
     {
       digests: {
@@ -892,7 +893,6 @@ export const bilingualNotification: NotificationDetail = {
   group: '63f359bc72337440a40f537e',
   iun: 'RPTH-YULD-WKMA-202305-T-1',
   sentAt: '2023-05-09T13:17:31.401700947Z',
-  filedAt: '2023-05-09T13:17:31.401700947Z',
   documentsAvailable: true,
   notificationStatus: NotificationStatus.VIEWED,
   notificationStatusHistory: statusHistory,

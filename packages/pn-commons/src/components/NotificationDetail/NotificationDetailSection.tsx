@@ -15,7 +15,7 @@ interface Props {
   isCancelled: boolean;
   isDelegate: boolean;
   isLessThan10Years: boolean;
-  downloadFilesMessage: string;
+  downloadFilesMessage: { key: string; ns: string };
 }
 
 const NotificationDetailSection = ({
@@ -31,7 +31,7 @@ const NotificationDetailSection = ({
 
   const getAARElement = () => {
     if (!isCancelled && isLessThan10Years) {
-      return <Trans i18nKey={downloadFilesMessage} />;
+      return <Trans i18nKey={downloadFilesMessage.key} ns={downloadFilesMessage.ns} />;
     }
     if (isCancelled) {
       return (
@@ -74,7 +74,7 @@ const NotificationDetailSection = ({
 
         {!isLessThan10Years && (
           <MIAlert severity="warning">
-            <Trans i18nKey={downloadFilesMessage} />
+            <Trans i18nKey={downloadFilesMessage.key} ns={downloadFilesMessage.ns} />
           </MIAlert>
         )}
 

@@ -32,7 +32,7 @@ type DocumentsProps = {
 interface Props extends DocumentsProps {
   title: string;
   documentsAvailable?: boolean;
-  downloadFilesMessage?: string;
+  downloadFilesMessage?: { key: string; ns: string };
   downloadFilesLink?: string;
   titleVariant?: TypographyProps['variant'];
 }
@@ -147,7 +147,7 @@ const NotificationDetailDocuments: React.FC<Props> = (
     {/* Notification sent after expiration date (120 legal and 180 combo) */}
     {!disableDownloads && !documentsAvailable && downloadFilesMessage && (
       <MIAlert severity="warning" data-testid="documentsDisabled">
-        <Trans i18nKey={downloadFilesMessage} />
+        <Trans i18nKey={downloadFilesMessage?.key} ns={downloadFilesMessage?.ns} />
       </MIAlert>
     )}
 
@@ -163,7 +163,33 @@ const NotificationDetailDocuments: React.FC<Props> = (
         <Stack direction="row" spacing={1}>
           <IllusMISingleFile size={40} />
           <Typography>
-            <Trans i18nKey={downloadFilesMessage} components={[<strong key="0" />]} />
+            <Trans
+              i18nKey={downloadFilesMessage?.key}
+              ns={downloadFilesMessage?.ns}
+              components={[<strong key="0" />]}
+            />
+          </Typography>
+        </Stack>
+      </MIPaper>
+    )}
+
+    {/* Notification cancelled */}
+    {disableDownloads && (
+      <MIPaper
+        data-testid="documentsMessage"
+        key="cancelled-detail-documents-message"
+        sx={{ backgroundColor: (theme) => theme.palette.grey[50] }}
+        variant="outlined"
+        padding={16}
+      >
+        <Stack direction="row" spacing={1}>
+          <IllusMISingleFile size={40} />
+          <Typography>
+            <Trans
+              i18nKey={downloadFilesMessage?.key}
+              ns={downloadFilesMessage?.ns}
+              components={[<strong key="0" />]}
+            />
           </Typography>
         </Stack>
       </MIPaper>

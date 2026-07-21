@@ -157,7 +157,8 @@
     "resources": "Ressourcen",
     "follow": "Folge uns auf",
     "legal-part-1": "Aktiengesellschaft mit alleinigem Gesellschafter – Stammkapital von 1.000.000 Euro voll eingezahlt – Rechtssitz in Rom, Piazza Colonna 370",
-    "legal-part-2": "PLZ 00187 – Nr. der Eintragung im Handelsregister von Rom, St.Nr. und USt-ID 15376371009"
+    "legal-part-2": "PLZ 00187 – Nr. der Eintragung im Handelsregister von Rom, St.Nr. und USt-ID 15376371009",
+    "products-title": "Produkte und Dienstleistungen"
   },
   "required-fields": "*Pflichtfelder",
   "required-field": "Pflichtfeld",

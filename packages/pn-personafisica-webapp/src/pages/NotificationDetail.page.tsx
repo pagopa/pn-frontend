@@ -2,7 +2,7 @@
 
 /* eslint-disable complexity */
 import { isObject } from 'lodash-es';
-import { Fragment, useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 
@@ -283,16 +283,21 @@ const NotificationDetail: React.FC = () => {
   );
 
   const getDownloadFilesMessage = useCallback(
-    (type: 'aar' | 'attachments'): string => {
+    (type: 'aar' | 'attachments'): { key: string; ns: string } => {
       if (type === 'attachments') {
-        return notification.documentsAvailable
-          ? t('detail.acts_files.downloadable_acts', { ns: 'notifiche' })
-          : t('detail.acts_files.not_downloadable_acts', { ns: 'notifiche' });
-      } else {
-        return dateIsLessThan10Years(notification.sentAt)
-          ? t('detail.acts_files.downloadable_aar', { ns: 'notifiche' })
-          : t('detail.acts_files.not_downloadable_aar', { ns: 'notifiche' });
+        return {
+          key: notification.documentsAvailable
+            ? 'detail.acts_files.downloadable_acts'
+            : 'detail.acts_files.not_downloadable_acts',
+          ns: 'notifiche',
+        };
       }
+      return {
+        key: dateIsLessThan10Years(notification.sentAt)
+          ? 'detail.acts_files.downloadable_aar'
+          : 'detail.acts_files.not_downloadable_aar',
+        ns: 'notifiche',
+      };
     },
     [isCancelledOrCancelling, notification.documentsAvailable, notification.sentAt]
   );
@@ -423,8 +428,6 @@ const NotificationDetail: React.FC = () => {
       />
     );
   }, [rapidAccessSource, i18n.language]);
-
-  const breadcrumb = <Fragment>{properBreadcrumb}</Fragment>;
 
   const cancelledAlert = isCancelledOrCancelling && (
     <MIAlert
@@ -566,7 +569,7 @@ const NotificationDetail: React.FC = () => {
         )}
         {!hasNotificationReceivedApiError && (
           <Box sx={{ p: 3, display: 'flex', flexDirection: 'column' }} gap={3}>
-            {breadcrumb}
+            {properBreadcrumb}
             <Box
               sx={{
                 display: 'flex',
@@ -591,7 +594,7 @@ const NotificationDetail: React.FC = () => {
                     title={notification.subject}
                     senderPaId={notification.senderPaId}
                     senderDenomination={notification.senderDenomination}
-                    filedAt={notification.filedAt}
+                    filedAt={notification.sentAt}
                     iun={notification.iun}
                     abstract={notification.abstract}
                     senderLogoUrl={SELFCARE_CDN_URL}
