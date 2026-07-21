@@ -60,9 +60,8 @@
     "clean-filters-cta": "Remove filters",
     "no-notifications": "The institution has not yet sent any notifications. Use the <0>API Keys</0> or send <1>manually</1>.",
     "timeout": "No results found; try again with different filters",
-    "aria-label-remove-filters": "Remove filters",
-    "aria-label-api-keys": "API Key",
-    "aria-label-create-notification": "Manual sending"
+    "generic-error": "The notifications could not be retrieved.",
+    "generic-error-cta": "Try again"
   },
   "detail": {
     "document-not-available": "The document will be available for download in a few minutes. You can try again by reloading the page or clicking on the link of the requested document",

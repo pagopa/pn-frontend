@@ -60,9 +60,8 @@
     "clean-filters-cta": "Supprimer les filtres",
     "no-notifications": "L'organisme n'a encore envoyé aucune notification. Utilisez les <0>Clés API</0> ou effectuez un <1>envoi manuel</1>.",
     "timeout": "Aucun résultat trouvé ; réessayez con des filtres différents",
-    "aria-label-remove-filters": "Supprimer les filtres",
-    "aria-label-api-keys": "API Key",
-    "aria-label-create-notification": "Envoi manuel"
+    "generic-error": "Impossible de récupérer les notifications.",
+    "generic-error-cta": "Réessayer"
   },
   "detail": {
     "document-not-available": "Le document sera téléchargeable dans quelques minutes. Vous pouvez réessayer en rechargeant la page ou en cliquant sur le lien du document requis",

@@ -60,9 +60,8 @@
     "clean-filters-cta": "Filter entfernen",
     "no-notifications": "Die Entität hat noch keine Zustellungen gesendet. Verwende die <0>API-Schlüssel</0> oder führe einen <1>manuellen Versand</1> durch.",
     "timeout": "Keine Ergebnisse gefunden; versuchen Sie es mit anderen Filtern",
-    "aria-label-remove-filters": "Filter entfernen",
-    "aria-label-api-keys": "API-Schlüssel",
-    "aria-label-create-notification": "Manuelle Sendung"
+    "generic-error": "Die Zustellungen konnten nicht abgerufen werden.",
+    "generic-error-cta": "Versuche es erneut"
   },
   "detail": {
     "document-not-available": "Das Dokument kann in wenigen Minuten heruntergeladen werden. Du kannst es erneut versuchen, indem du die Seite neu lädst oder auf den Link des angeforderten Dokuments klickst",

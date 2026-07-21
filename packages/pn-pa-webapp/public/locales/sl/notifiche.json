@@ -60,9 +60,8 @@
     "clean-filters-cta": "Odstrani filtre",
     "no-notifications": "Organ še ni poslal nobenega obvestila. Uporabite <0>Ključe API</0> ali izvedite <1>ročno pošiljanje</1>.",
     "timeout": "Ni najdenih rezultatov; poskusite z drugimi filtri",
-    "aria-label-remove-filters": "Odstranite filtre",
-    "aria-label-api-keys": "Ključ API",
-    "aria-label-create-notification": "Ročno pošiljanje"
+    "generic-error": "Obvestil ni bilo mogoče pridobiti.",
+    "generic-error-cta": "Poskusite znova"
   },
   "detail": {
     "document-not-available": "Dokument bo mogoče prenesti v nekaj minutah. Poskusite lahko znova tako, da ponovno naložite stran ali kliknete povezavo zahtevanega dokumenta",

@@ -34,6 +34,10 @@ type Props = {
   onCleanFilters: () => void;
   /** True if the API returned a timeout error */
   hasTimeoutError?: boolean;
+  /** True while notifications are being loaded */
+  loading: boolean;
+  /** The function to be invoked if the user retries loading notifications */
+  onRetry: () => void;
 };
 
 const DesktopNotifications = ({
@@ -45,6 +49,8 @@ const DesktopNotifications = ({
   filtersApplied,
   onCleanFilters,
   hasTimeoutError = false,
+  loading,
+  onRetry,
 }: Props) => {
   const { t } = useTranslation(['notifiche']);
   const navigate = useNavigate();
@@ -105,62 +111,63 @@ const DesktopNotifications = ({
     navigate(routes.GET_DETTAGLIO_NOTIFICA_PATH(iun));
   };
 
+  const hasNotifications = notifications.length > 0 && !hasTimeoutError;
+  const showNotificationsEmptyState = !loading && !hasNotifications;
+
   return (
     <>
-      {notifications && (
-        <>
-          {notifications.length > 0 ? (
-            <PnTable
-              ariaTitle={t('table.title')}
-              testId="notificationsTable"
-              slotProps={{ table: { sx: { tableLayout: 'fixed' } } }}
-            >
-              <PnTableHeader>
+      {hasNotifications && (
+        <PnTable
+          ariaTitle={t('table.title')}
+          testId="notificationsTable"
+          slotProps={{ table: { sx: { tableLayout: 'fixed' } } }}
+        >
+          <PnTableHeader>
+            {columns.map((column) => (
+              <PnTableHeaderCell
+                key={column.id}
+                sort={sort}
+                columnId={column.id}
+                sortable={column.sortable}
+                handleClick={onChangeSorting}
+                cellProps={column.cellProps}
+              >
+                {column.label}
+              </PnTableHeaderCell>
+            ))}
+          </PnTableHeader>
+          <PnTableBody>
+            {rows.map((row, index) => (
+              <PnTableBodyRow key={row.id} index={index} testId="notificationsTable.body.row">
                 {columns.map((column) => (
-                  <PnTableHeaderCell
+                  <PnTableBodyCell
                     key={column.id}
-                    sort={sort}
-                    columnId={column.id}
-                    sortable={column.sortable}
-                    handleClick={onChangeSorting}
-                    cellProps={column.cellProps}
+                    mode={column.mode}
+                    cellProps={{
+                      ...column.cellProps,
+                    }}
                   >
-                    {column.label}
-                  </PnTableHeaderCell>
+                    <NotificationsDataSwitch
+                      handleRowClick={handleRowClick}
+                      data={row}
+                      type={column.id}
+                    />
+                  </PnTableBodyCell>
                 ))}
-              </PnTableHeader>
-              <PnTableBody>
-                {rows.map((row, index) => (
-                  <PnTableBodyRow key={row.id} index={index} testId="notificationsTable.body.row">
-                    {columns.map((column) => (
-                      <PnTableBodyCell
-                        key={column.id}
-                        mode={column.mode}
-                        cellProps={{
-                          ...column.cellProps,
-                        }}
-                      >
-                        <NotificationsDataSwitch
-                          handleRowClick={handleRowClick}
-                          data={row}
-                          type={column.id}
-                        />
-                      </PnTableBodyCell>
-                    ))}
-                  </PnTableBodyRow>
-                ))}
-              </PnTableBody>
-            </PnTable>
-          ) : (
-            <NotificationsEmptyState
-              filtersApplied={filtersApplied}
-              hasTimeoutError={hasTimeoutError}
-              onCleanFilters={onCleanFilters}
-              onApiKeys={onApiKeys}
-              onManualSend={onManualSend}
-            />
-          )}
-        </>
+              </PnTableBodyRow>
+            ))}
+          </PnTableBody>
+        </PnTable>
+      )}
+      {showNotificationsEmptyState && (
+        <NotificationsEmptyState
+          filtersApplied={filtersApplied}
+          hasTimeoutError={hasTimeoutError}
+          onCleanFilters={onCleanFilters}
+          onApiKeys={onApiKeys}
+          onManualSend={onManualSend}
+          onRetry={onRetry}
+        />
       )}
     </>
   );

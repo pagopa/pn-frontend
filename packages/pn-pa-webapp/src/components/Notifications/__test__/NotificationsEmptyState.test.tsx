@@ -1,7 +1,9 @@
 import { vi } from 'vitest';
 
 import { fireEvent, render } from '../../../__test__/test-utils';
-import NotificationsEmptyState from '../NotificationsEmptyState';
+import NotificationsEmptyState, {
+  NotificationsGenericErrorState,
+} from '../NotificationsEmptyState';
 
 describe('NotificationsEmptyState Component', () => {
   it('renders component - no notification after filter', () => {
@@ -13,6 +15,7 @@ describe('NotificationsEmptyState Component', () => {
         onCleanFilters={onCleanFilters}
         onApiKeys={() => {}}
         onManualSend={() => {}}
+        onRetry={() => {}}
       />
     );
 
@@ -34,6 +37,7 @@ describe('NotificationsEmptyState Component', () => {
         onCleanFilters={() => {}}
         onApiKeys={onApiKeys}
         onManualSend={onManualSend}
+        onRetry={() => {}}
       />
     );
 
@@ -49,6 +53,7 @@ describe('NotificationsEmptyState Component', () => {
   });
 
   it('renders component - timeout error', () => {
+    const onRetry = vi.fn();
     const result = render(
       <NotificationsEmptyState
         filtersApplied={false}
@@ -56,11 +61,28 @@ describe('NotificationsEmptyState Component', () => {
         onCleanFilters={() => {}}
         onApiKeys={() => {}}
         onManualSend={() => {}}
+        onRetry={onRetry}
       />
     );
 
     expect(result.container).toHaveTextContent(/empty-state.timeout/i);
     expect(result.queryByTestId('link-api-keys')).not.toBeInTheDocument();
     expect(result.queryByTestId('link-create-notification')).not.toBeInTheDocument();
+    expect(onRetry).toHaveBeenCalledTimes(0);
+
+    fireEvent.click(result.getByTestId('link-retry'));
+    expect(onRetry).toHaveBeenCalledTimes(1);
+  });
+
+  it('renders generic error and retries', () => {
+    const onRetry = vi.fn();
+
+    const result = render(<NotificationsGenericErrorState onRetry={onRetry} />);
+
+    expect(result.container).toHaveTextContent(/empty-state.generic-error/i);
+
+    fireEvent.click(result.getByTestId('link-retry'));
+
+    expect(onRetry).toHaveBeenCalledTimes(1);
   });
 });
