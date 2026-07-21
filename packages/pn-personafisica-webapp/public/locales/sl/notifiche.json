@@ -100,7 +100,7 @@
       "cta": "Kaj moram storiti?"
     },
     "payment": {
-      "title": "Plačilo",
+      "title": "Plačila",
       "f24Models": "Obrazci F24",
       "pagoPANotices": "Opozorila pagoPA",
       "download-pagoPA-notice": "Prenesite obvestilo pagoPA",
@@ -157,7 +157,7 @@
       "downloadable_acts": "<0>Dokumenti bodo na voljo na spletu do 120 dni</0> od dneva, ko je uradno obvestilo SEND postalo pravno veljavno. Shranite jih v svojo napravo!",
       "not_downloadable_acts": "Dokumenti niso več na voljo na spletu. Če jih želite zahtevati, se obrnite na organ, ki vam jih je poslal.",
       "not_downloadable_aar": "Obvestilo o prejemu ni več na voljo. Če ga želite zahtevati, se obrnite na organ, ki vam ga je poslal.",
-      "downloadable_aar": "Obvestilo o prejemu je na voljo na spletu 10 let od zaključka obvestila.",
+      "downloadable_aar": "<0>Na voljo na spletu 10 let</0> od datuma, ko je vročitev SEND postala pravno veljavna.",
       "effected_faq": "Kdaj se obvestilo zaključi?",
       "informal_downloadable_acts": "Shranite priloge v svojo napravo: na spletu bodo na voljo <0>do 180 dni od datuma vložitve</0>, ki ga najdete zgoraj!"
     },

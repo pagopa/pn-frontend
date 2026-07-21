@@ -100,7 +100,7 @@
       "cta": "What should I do?"
     },
     "payment": {
-      "title": "Payment",
+      "title": "Payments",
       "f24Models": "F24 forms",
       "pagoPANotices": "pagoPA notifications",
       "download-pagoPA-notice": "Download the pagoPA notice",
@@ -157,7 +157,7 @@
       "downloadable_acts": "<0>Documents will be available online for up to 120 days</0> from the date the SEND notification became legally effective. Save them to your device!",
       "not_downloadable_acts": "Documents are no longer available online. To request them, please contact the institution that sent them to you.",
       "not_downloadable_aar": "The acknowledgment of receipt is no longer available. To request it, please contact the institution that sent it to you.",
-      "downloadable_aar": "The notification of receipt is available online for 10 years from the finalization of the notification.",
+      "downloadable_aar": "<0>Available online for 10 years</0> from the date the SEND notification became legally binding.",
       "effected_faq": "When is a notification finalized?",
       "informal_downloadable_acts": "Save the attachments to your device: they will be available online <0>for up to 180 days from the filing date</0> shown at the top!"
     },

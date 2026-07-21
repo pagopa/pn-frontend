@@ -100,7 +100,7 @@
       "cta": "Cosa devo fare?"
     },
     "payment": {
-      "title": "Pagamento",
+      "title": "Pagamenti",
       "f24Models": "Modelli F24",
       "pagoPANotices": "Avvisi pagoPA",
       "download-pagoPA-notice": "Scarica l'avviso pagoPA",
@@ -156,7 +156,7 @@
     "acts_files": {
       "downloadable_acts": "<0>I documenti saranno disponibili online fino a 120 giorni</0> dalla data in cui la notifica SEND ha assunto valore di legge. Salvali sul tuo dispositivo!",
       "not_downloadable_acts": "I documenti non sono più disponibili online. Per richiederli, rivolgiti all’ente che te li ha inviati.",
-      "downloadable_aar": "L’avviso di avvenuta ricezione è disponibile online per 10 anni dal perfezionamento della notifica.",
+      "downloadable_aar": "<0>Disponibile online per 10 anni</0> dalla data in cui la notifica SEND ha assunto valore di legge.",
       "not_downloadable_aar": "L’avviso di avvenuta ricezione non è più disponibile. Per richiederlo, rivolgiti all’ente che te lo ha inviato.",
       "effected_faq": "Quando si perfeziona una notifica?",
       "informal_downloadable_acts": "Conserva gli allegati sul tuo dispositivo: saranno disponibili online <0>fino a 180 giorni dalla data di deposito</0> che trovi in alto!"
