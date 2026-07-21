@@ -381,7 +381,7 @@
       },
       "radd": {
         "title": "pour détérioration de l’enveloppe",
-        "description": "Le destinataire ou son délégué a retiré les documents notifiés auprès d’un opérateur autorisé à les délivrer."
+        "description": "Le destinataire, ou la personne déléguée, a retiré les documents notifiés auprès d'un opérateur habilité à leur remise."
       },
       "tpp-type": "un canal numérique tiers"
     },

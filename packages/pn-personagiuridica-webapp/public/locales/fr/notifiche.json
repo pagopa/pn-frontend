@@ -375,7 +375,7 @@
       },
       "radd": {
         "title": "Les documents ont été retirés",
-        "description": "Le destinataire ou son délégué a retiré les documents notifiés auprès d'un opérateur habilité à la remise de ceux-ci."
+        "description": "Le destinataire, ou la personne déléguée, a retiré les documents notifiés auprès d'un opérateur habilité à leur remise."
       },
       "tpp-type": "un canal numérique tiers"
     },

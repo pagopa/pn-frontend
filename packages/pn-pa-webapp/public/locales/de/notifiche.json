@@ -347,7 +347,7 @@
       },
       "radd": {
         "title": "Die Dokumente wurden abgeholt",
-        "description-mono-recipient": "Der Empfänger oder sein Bevollmächtigter hat die zugestellten Dokumente bei einer zur Zustellung berechtigten Person abgeholt.",
+        "description-mono-recipient": "Der Empfänger oder die bevollmächtigte Person hat die zugestellten Dokumente bei einem zur Aushändigung befugten Betreiber abgeholt.",
         "description-multi-recipients": "Einer der Empfänger oder sein Bevollmächtigter hat die zugestellten Dokumente bei einer zur Zustellung berechtigten Person abgeholt."
       },
       "tpp-type": "ein digitaler Kanal von Drittanbietern"

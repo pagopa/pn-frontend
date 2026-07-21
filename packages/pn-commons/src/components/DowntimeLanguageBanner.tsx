@@ -20,7 +20,6 @@ const DowntimeLanguageBanner: React.FC<Props> = ({ downtimeExampleLink }) => (
       rel: 'noopener noreferrer',
       target: '_blank',
     }}
-    ctaWrapSize="wide"
   >
     {getLocalizedOrDefaultLabel('common', 'downtime_language_banner.message')}
   </MIAlert>

@@ -347,7 +347,7 @@
       },
       "radd": {
         "title": "The documents were collected",
-        "description-mono-recipient": "The recipient or their delegate collected the notified documents from an operator enabled to deliver them.",
+        "description-mono-recipient": "The recipient, or their delegate, collected the notified documents from an operator authorized to deliver them.",
         "description-multi-recipients": "due to theft of the envelope"
       },
       "tpp-type": "a third-party digital channel"

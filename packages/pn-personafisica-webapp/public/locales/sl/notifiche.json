@@ -384,7 +384,7 @@
       },
       "radd": {
         "title": "Dokumenti so bili prevzeti",
-        "description": "Prejemnik ali njegov pooblaščenec je prevzel priglašene dokumente od operaterja, pooblaščenega za njihovo dostavo."
+        "description": "Prejemnik ali pooblaščena oseba je prevzela vročene dokumente pri izvajalcu, pooblaščenem za njihovo dostavo."
       },
       "tpp-type": "digitalni kanal tretje osebe"
     },

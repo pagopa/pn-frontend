@@ -384,7 +384,7 @@
       },
       "radd": {
         "title": "The documents were collected",
-        "description": "The recipient or their delegate collected the notified documents from an operator enabled to deliver them."
+        "description": "The recipient, or their delegate, collected the notified documents from an operator authorized to deliver them."
       },
       "tpp-type": "a third-party digital channel"
     },
