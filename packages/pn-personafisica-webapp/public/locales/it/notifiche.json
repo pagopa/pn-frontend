@@ -105,7 +105,7 @@
       "title": "Pagamento",
       "f24Models": "Modelli F24",
       "pagoPANotices": "Avvisi pagoPA",
-      "download-pagoPA-notice": "Scarica avviso pagoPA",
+      "download-pagoPA-notice": "Scarica l'avviso pagoPA",
       "notice-code": "Codice avviso",
       "due": "Scade il",
       "included-costs": "Costi di notifica inclusi",
@@ -127,6 +127,7 @@
       "cancelled-message": "Per informazioni in merito a un eventuale rimborso, contatta l'ente mittente.",
       "f24-download-error": "Il download non è riuscito. Riprova.",
       "status": {
+        "title": "Stato",
         "succeeded": "Pagato",
         "succeeded-tooltip": "Il pagamento è stato inviato correttamente.",
         "failed": "Scaduto",
@@ -153,8 +154,6 @@
       "not_downloadable_acts": "I documenti non sono più disponibili online. Per richiederli, rivolgiti all’ente che te li ha inviati.",
       "downloadable_aar": "L’avviso di avvenuta ricezione è disponibile online per 10 anni dal perfezionamento della notifica.",
       "not_downloadable_aar": "L’avviso di avvenuta ricezione non è più disponibile. Per richiederlo, rivolgiti all’ente che te lo ha inviato.",
-      "notification_cancelled_aar": "Poiché questa notifica è stata annullata, il download dell’Avviso di Avvenuta Ricezione è stato disabilitato.",
-      "notification_cancelled_acts": "Poiché questa notifica è stata annullata, il download dei documenti è stato disabilitato.",
       "effected_faq": "Quando si perfeziona una notifica?"
     },
     "timeline": {

@@ -105,7 +105,7 @@
       "title": "Zahlung",
       "f24Models": "Vordruck F24",
       "pagoPANotices": "Benachrichtigungen pagoPA",
-      "download-pagoPA-notice": "Benachrichtigung pagoPA herunterladen",
+      "download-pagoPA-notice": "Lade die pagoPA-Mitteilung herunter",
       "notice-code": "Benachrichtigungscode",
       "due": "Läuft ab",
       "included-costs": "Einschließlich Zustellungsgebühren",
@@ -127,6 +127,7 @@
       "cancelled-message": "Für Informationen zu einer eventuellen Rückerstattung wende dich bitte an die sendende Körperschaft.",
       "f24-download-error": "Download fehlgeschlagen. Erneut versuchen.",
       "status": {
+        "title": "Status",
         "succeded": "Bezahlt",
         "succeded-tooltip": "Die Zahlung wurde erfolgreich gesendet.",
         "failed": "Abgelaufen",
@@ -153,8 +154,6 @@
       "not_downloadable_acts": "Die Dokumente sind online nicht mehr verfügbar. Um sie anzufordern, wenden Sie sich bitte an die Behörde, die sie Ihnen zugesendet hat.",
       "not_downloadable_aar": "Der Zustellungsnachweis ist nicht mehr verfügbar. Um ihn anzufordern, wenden Sie sich bitte an die Behörde, die ihn Ihnen zugesendet hat.",
       "downloadable_aar": "Die Empfangsbestätigung ist 10 Jahre ab Vervollständigung der Zustellung online verfügbar.",
-      "notification_cancelled_aar": "Da diese Zustellung storniert wurde, wurde der Download der Empfangsbestätigung deaktiviert.",
-      "notification_cancelled_acts": "Da diese Zustellung storniert wurde, wurde der Download der Dokumente deaktiviert.",
       "effected_faq": "Wann ist die Bearbeitung einer Zustellung vervollständigt?"
     },
     "timeline": {

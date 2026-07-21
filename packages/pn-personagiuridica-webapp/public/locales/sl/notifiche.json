@@ -122,6 +122,7 @@
       "error-payment-failed-single": "Prišlo je do težave z obvestilom o plačilu. Pritisnite Ponovno naloži za nov poskus. Če se napaka ponovi, se obrnite na podporo.",
       "error-payment-failed-multiple": "Prišlo je do težave z več obvestili o plačilu. Pritisnite Ponovno naloži za nov poskus. Če se napaka ponovi, se obrnite na podporo.",
       "status": {
+        "title": "Stanje",
         "succeded": "Plačano",
         "succeded-tooltip": "Vaše plačilo je bilo uspešno poslano.",
         "failed": "Zapadlo",
@@ -143,8 +144,6 @@
       "not_downloadable_acts": "Ker je od datuma zaključka minilo 120 dni, se morate za pridobitev listin obrniti na pošiljatelja.",
       "downloadable_aar": "Obvestilo o prejemu je na voljo na spletu 10 let od zaključka obvestila.",
       "not_downloadable_aar": "Ker je od datuma zaključka minilo 10 let, obvestilo o prejemu ni več na voljo.",
-      "notification_cancelled_aar": "Ker je bilo to obvestilo preklicano, je bil prenos obvestila o prejemu onemogočen.",
-      "notification_cancelled_acts": "Ker je bilo to obvestilo preklicano, je bil prenos dokumenta onemogočen.",
       "effected_faq": "Kdaj se obvestilo zaključi?"
     },
     "timeline": {

@@ -283,29 +283,20 @@ const NotificationDetail = () => {
 
   const getDownloadFilesMessage = useCallback(
     (type: 'aar' | 'attachments'): { key: string; ns: string } => {
-      if (isCancelledOrCancelling) {
-        return {
-          key:
-            type === 'aar'
-              ? 'detail.acts_files.notification_cancelled_aar'
-              : 'detail.acts_files.notification_cancelled_acts',
-          ns: 'notifiche',
-        };
-      } else if (type === 'attachments') {
+      if (type === 'attachments') {
         return {
           key: notification.documentsAvailable
             ? 'detail.acts_files.downloadable_acts'
             : 'detail.acts_files.not_downloadable_acts',
           ns: 'notifiche',
         };
-      } else {
-        return {
-          key: dateIsLessThan10Years(notification.sentAt)
-            ? 'detail.acts_files.downloadable_aar'
-            : 'detail.acts_files.not_downloadable_aar',
-          ns: 'notifiche',
-        };
       }
+      return {
+        key: dateIsLessThan10Years(notification.sentAt)
+          ? 'detail.acts_files.downloadable_aar'
+          : 'detail.acts_files.not_downloadable_aar',
+        ns: 'notifiche',
+      };
     },
     [isCancelledOrCancelling, notification.documentsAvailable, notification.sentAt]
   );

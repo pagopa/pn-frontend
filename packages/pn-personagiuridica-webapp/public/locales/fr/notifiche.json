@@ -122,6 +122,7 @@
       "error-payment-failed-single": "Un problème est survenu avec un avis de paiement. Appuyez sur Recharger pour réessayer. Si l’erreur persiste, contactez l’assistance.",
       "error-payment-failed-multiple": "Un problème est survenu avec plusieurs avis de paiement. Appuyez sur Recharger pour réessayer. Si l’erreur persiste, contactez l’assistance.",
       "status": {
+        "title": "Statut",
         "succeded": "Payé",
         "succeded-tooltip": "Le paiement a bien été envoyé.",
         "failed": "Expiré",
@@ -143,8 +144,6 @@
       "not_downloadable_acts": "Étant donné que 120 jours se sont écoulés depuis la date de finalisation, si vous souhaitez obtenir les actes, vous devez vous adresser à l’expéditeur.",
       "downloadable_aar": "L’accusé de réception est disponible en ligne pendant 10 ans à compter de la finalisation de la notification.",
       "not_downloadable_aar": "Comme 10 ans se sont écoulés depuis la date de finalisation, l’accusé de réception n’est plus disponible.",
-      "notification_cancelled_aar": "Cette notification ayant été annulée, le téléchargement de l’accusé de réception a été désactivé.",
-      "notification_cancelled_acts": "Cette notification ayant été annulée, le téléchargement des documents a été désactivé.",
       "effected_faq": "Quand une notification est-elle finalisée ?"
     },
     "timeline": {
