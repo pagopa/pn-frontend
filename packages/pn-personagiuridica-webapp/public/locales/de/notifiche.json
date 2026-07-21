@@ -2,8 +2,6 @@
   "title": "Posteingang für {{organization}}",
   "go-to-detail": "Zu den Details",
   "title-delegated-notifications": "Posteingang für Vollmachtgeber",
-  "subtitle": "Bescheide anzeigen mit Vollmacht an {{recipient}}. Du kannst sie nach IUN-Code und Sendedatum filtern.",
-  "subtitle-delegated-notifications": "Bescheide anzeigen mit Vollmacht an {{recipient}} Du kannst sie nach IUN-Code und Sendedatum filtern.",
   "table": {
     "data": "Datum",
     "gruppo": "Gruppen",
@@ -47,10 +45,10 @@
     "filtered": "Keine Benachrichtigungen oder Mitteilungen für die ausgewählten Filter",
     "filtered-description": "Entferne sie oder versuche es mit einer anderen Kombination.",
     "clean-filters-cta": "Filter entfernen",
-    "delegate": "Hier siehst du die rechtlichen Mitteilungen von {{name}}",
-    "title": "Hier siehst du deine Zustellungen mit rechtlicher Wirkung und andere Mitteilungen",
-    "description": "Aktualisiere jetzt deine Kontaktdaten und du erfährst sofort, wenn du eine erhältst.",
-    "go-to-contacts-cta": "Zu deinen Kontaktdaten",
+    "delegate": "Hier siehst du die rechtsgültigen Mitteilungen, die an dein Unternehmen delegiert wurden.",
+    "title": "Hier siehst du die rechtsgültigen Zustellungen und andere Mitteilungen",
+    "description": "Aktualisiere jetzt die digitalen Kontaktdaten, damit du sofort erfährst, wenn dein Unternehmen eine erhält.",
+    "go-to-contacts-cta": "Zu den Kontaktdaten",
     "aria-label-remove-filters": "Filter entfernen"
   },
   "from-qrcode": {

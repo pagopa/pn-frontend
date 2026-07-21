@@ -1,9 +1,7 @@
 {
-  "title": "In arrivo per {{recipient}}",
+  "title": "In arrivo per {{organization}}",
   "go-to-detail": "Vai al dettaglio",
-  "title-delegated-notifications": "In arrivo per i deleganti",
-  "subtitle": "Leggi le notifiche di {{recipient}}. Puoi filtrarle per Codice IUN e data di invio.",
-  "subtitle-delegated-notifications": "Leggi le notifiche delegate a {{recipient}}. Puoi filtrarle per Codice IUN e data di invio.",
+  "title-delegated-notifications": "In arrivo dalle deleghe",
   "table": {
     "data": "Data",
     "gruppo": "Gruppi",
@@ -47,10 +45,10 @@
     "filtered": "Nessuna notifica o comunicazione per i filtri selezionati",
     "filtered-description": "Rimuovili o prova con un’altra combinazione.",
     "clean-filters-cta": "Rimuovi filtri",
-    "delegate": "Qui vedrai le comunicazioni a valore legale di {{name}}",
-    "title": "Qui vedrai le tue notifiche a valore legale e le altre comunicazioni",
-    "description": "Aggiorna ora i tuoi recapiti e saprai subito quando ne riceverai una.",
-    "go-to-contacts-cta": "Vai ai tuoi recapiti",
+    "delegate": "Qui vedrai le comunicazioni a valore legale che sono state delegate alla tua impresa.",
+    "title": "Qui vedrai le notifiche a valore legale e le altre comunicazioni",
+    "description": "Aggiorna ora i recapiti digitali per sapere subito quando la tua impresa ne riceverà una.",
+    "go-to-contacts-cta": "Vai ai recapiti",
     "aria-label-remove-filters": "Rimuovi filtri"
   },
   "from-qrcode": {

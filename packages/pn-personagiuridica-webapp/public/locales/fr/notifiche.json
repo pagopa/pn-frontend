@@ -1,9 +1,7 @@
 {
-  "title": "Boîte de réception pour {{recipient}} ",
+  "title": "Boîte de réception pour {{organization}}",
   "go-to-detail": "Accéder aux détails",
   "title-delegated-notifications": "Boîte de réception des délégants",
-  "subtitle": "Lire les notifications de {{recipient}}. Vous pouvez les filtrer par code IUN et date d’envoi.",
-  "subtitle-delegated-notifications": "Lire les notifications mandatées à {{recipient}}. Vous pouvez les filtrer par code IUN et date d’envoi.",
   "table": {
     "data": "Date",
     "gruppo": "Groupes",
@@ -47,10 +45,10 @@
     "filtered": "Aucune notification ou communication pour les filtres sélectionnés",
     "filtered-description": "Supprimez-les ou essayez une autre combinaison.",
     "clean-filters-cta": "Supprimer les filtres",
-    "delegate": "Ici, vous verrez les communications à valeur juridique de {{name}}",
-    "title": "Ici, vous verrez vos notifications à valeur légale et autres communications",
-    "description": "Mettez à jour vos coordonnées dès maintenant pour savoir immédiatement quand vous en recevrez une.",
-    "go-to-contacts-cta": "Accéder à vos coordonnées",
+    "delegate": "Ici, vous verrez les communications à valeur juridique qui ont été déléguées à votre entreprise.",
+    "title": "Ici, vous verrez les notifications à valeur juridique et les autres communications",
+    "description": "Mettez à jour vos coordonnées numériques dès maintenant pour savoir immédiatement quand votre entreprise en recevra une.",
+    "go-to-contacts-cta": "Aller aux coordonnées",
     "aria-label-remove-filters": "Supprimer les filtres"
   },
   "from-qrcode": {

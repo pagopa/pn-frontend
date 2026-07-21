@@ -1,4 +1,4 @@
-import { Trans, useTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
 import { Box, Typography } from '@mui/material';
@@ -6,8 +6,6 @@ import { EmptyState } from '@pagopa-pn/pn-commons';
 import { ButtonNaked, IllusMIInbox, IllusMIMessage } from '@pagopa/mui-italia';
 
 import * as routes from '../../navigation/routes.const';
-import { useAppSelector } from '../../redux/hooks';
-import { RootState } from '../../redux/store';
 
 type Props = {
   filtersApplied: boolean;
@@ -49,14 +47,6 @@ const FilteredEmptyStateContent: React.FC<{ cleanFilters: () => void }> = ({ cle
   );
 };
 
-const DelegatorEmptyStateContent: React.FC<{ organizationName: string }> = ({
-  organizationName,
-}) => (
-  <Typography variant="subtitle2" fontSize="16px" sx={{ color: '#636B82' }}>
-    <Trans values={{ name: organizationName }} ns="notifiche" i18nKey="empty-state.delegate" />
-  </Typography>
-);
-
 const DefaultEmptyStateContent: React.FC = () => {
   const { t } = useTranslation('notifiche');
 
@@ -92,7 +82,7 @@ const NotificationsEmptyState: React.FC<Props> = ({
   filterNotificationsRef,
   isDelegatedPage,
 }) => {
-  const organization = useAppSelector((state: RootState) => state.userState.user.organization);
+  const { t } = useTranslation('notifiche');
 
   if (filtersApplied) {
     return (
@@ -113,7 +103,9 @@ const NotificationsEmptyState: React.FC<Props> = ({
       sentimentIcon={<IllusMIMessage size={56} />}
     >
       {isDelegatedPage ? (
-        <DelegatorEmptyStateContent organizationName={organization.name} />
+        <Typography fontSize="16px" fontWeight="500" color="text.secondary">
+          {t('empty-state.delegate')}
+        </Typography>
       ) : (
         <DefaultEmptyStateContent />
       )}

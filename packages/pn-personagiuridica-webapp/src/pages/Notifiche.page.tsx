@@ -66,12 +66,8 @@ const Notifiche = ({ isDelegatedPage = false }: Props) => {
 
   const isMobile = useIsMobile();
   const pageTitle = !isDelegatedPage
-    ? t('title', { recipient: organization.name })
+    ? t('title', { organization: organization.name })
     : t('title-delegated-notifications');
-
-  const pageSubTitle = !isDelegatedPage
-    ? t('subtitle', { recipient: organization.name })
-    : t('subtitle-delegated-notifications', { recipient: organization.name });
 
   // back end return at most the next three pages
   // we have flag moreResult to check if there are more pages
@@ -236,8 +232,6 @@ const Notifiche = ({ isDelegatedPage = false }: Props) => {
         <TitleBox
           variantTitle="h4"
           title={pageTitle}
-          subTitle={pageSubTitle}
-          variantSubTitle={'body1'}
           mbTitle={isMobile ? 3 : undefined}
           titleButton={
             isDelegatedPage &&
