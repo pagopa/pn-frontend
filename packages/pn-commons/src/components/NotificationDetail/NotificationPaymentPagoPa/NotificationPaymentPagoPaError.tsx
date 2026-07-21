@@ -54,7 +54,7 @@ const getErrorMessage = (pagoPAItem: PagoPAPaymentFullDetails) => {
                 {`${getLocalizedOrDefaultLabel(
                   'notifications',
                   'detail.payment.error.assistence'
-                )} ${pagoPAItem.detail_v2}`}
+                )} ${pagoPAItem.detail_v2 ?? ''}`}
               </Typography>
               <CopyToClipboardButton
                 value={() => pagoPAItem.detail_v2 ?? ''}

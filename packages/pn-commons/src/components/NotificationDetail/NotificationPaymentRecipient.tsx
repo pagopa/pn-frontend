@@ -1,6 +1,6 @@
 import React, { memo, useCallback, useEffect, useState } from 'react';
 
-import SaveAltIcon from '@mui/icons-material/SaveAlt';
+import SaveAltRoundedIcon from '@mui/icons-material/SaveAltRounded';
 import { Box, Divider, FormControl, RadioGroup, Stack, Typography } from '@mui/material';
 import { MIAlert, MIButton } from '@pagopa/mui-italia';
 
@@ -247,7 +247,7 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
       )}
 
       {f24Only.length > 0 && pagoPaF24.length > 0 && (
-        <Typography variant="overline" mt={3}>
+        <Typography variant="overline" mt={3} component="h3">
           {getLocalizedOrDefaultLabel('notifications', 'detail.payment.pagoPANotices')}
         </Typography>
       )}
@@ -312,7 +312,11 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
       )}
 
       {!isCancelled && f24Only.length > 0 && (
-        <Divider sx={{ color: (theme) => theme.palette.grey[700] }}>
+        <Divider
+          component="div"
+          role="presentation"
+          sx={{ color: (theme) => theme.palette.grey[700] }}
+        >
           {getLocalizedOrDefaultLabel('common', 'conjunctions.or')}
         </Divider>
       )}
@@ -320,7 +324,7 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
       {!isCancelled && f24Only.length > 0 && pagoPaF24.length > 0 && (
         <>
           {f24Only.length > 0 && pagoPaF24.length > 0 && (
-            <Typography variant="overline">
+            <Typography variant="overline" component="h3">
               {getLocalizedOrDefaultLabel('notifications', 'detail.payment.f24Models')}
             </Typography>
           )}
@@ -440,7 +444,7 @@ const PaymentButtons = ({
           data-testid="download-pagoPA-notice-button"
           onClick={() => downloadAttachment(PaymentAttachmentSName.PAGOPA)}
         >
-          <SaveAltIcon fontSize="small" sx={{ mr: 1 }} />
+          <SaveAltRoundedIcon fontSize="small" sx={{ mr: 1 }} />
           {getLocalizedOrDefaultLabel('notifications', 'detail.payment.download-pagoPA-notice')}
         </MIButton>
       )}

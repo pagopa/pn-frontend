@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 
-import { InfoRounded, SaveAlt } from '@mui/icons-material';
+import { InfoRounded, SaveAltRounded } from '@mui/icons-material';
 import { Stack, Typography } from '@mui/material';
 import { MIBoxedModule, MIButton } from '@pagopa/mui-italia';
 
@@ -58,7 +58,7 @@ const NotificationPaymentF24ItemContent: React.FC<
               : undefined
           }
           onClick={downloadF24}
-          startIcon={<SaveAlt />}
+          startIcon={<SaveAltRounded />}
         >
           {getLocalizedOrDefaultLabel('notifications', 'detail.payment.download-f24')}
         </MIButton>
@@ -236,7 +236,7 @@ const NotificationPaymentF24Item: React.FC<Props> = ({
               : undefined
           }
           onClick={downloadF24}
-          startIcon={<SaveAlt />}
+          startIcon={<SaveAltRounded />}
         >
           {getLocalizedOrDefaultLabel('notifications', 'detail.payment.download-f24')}
         </MIButton>
