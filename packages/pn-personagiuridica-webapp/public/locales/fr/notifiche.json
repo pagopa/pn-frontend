@@ -54,6 +54,9 @@
   },
   "detail": {
     "legal-value": "Notification à valeur légale",
+    "legal-date": "Notification déposée le",
+    "informal-date": "Communication déposée le",
+    "legal-disclaimer": "Notification envoyée via SEND, la plateforme régie par l’art. 26 du D.L. 76/2020",
     "notification-timeline-section": {
       "title": "Statut de la notification",
       "aria-label": "Accéder à l'historique de la notification"

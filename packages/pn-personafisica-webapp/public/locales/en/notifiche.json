@@ -56,6 +56,10 @@
     "not-found-subtitle": "This notification can only be read by the recipient."
   },
   "detail": {
+    "legal-value": "Legally-binding notification",
+    "legal-date": "Notification deposited on",
+    "informal-date": "Communication deposited on",
+    "legal-disclaimer": "Notification sent via SEND, the platform governed by Art. 26 of Law Decree 76/2020",
     "notification-timeline-section": {
       "title": "Notification status",
       "aria-label": "Go to the notification timeline"
@@ -91,7 +95,6 @@
     "show-less": "See fewer details",
     "disclaimer-link": "Discover more",
     "pec-unreachable": "Keep your certified email (PEC) mailbox free and active to receive everything digitally!",
-    "legal-value": "Legally-binding notification",
     "cancelled": {
       "message": "This notification has been cancelled by the issuing institution.",
       "cta": "What should I do?"

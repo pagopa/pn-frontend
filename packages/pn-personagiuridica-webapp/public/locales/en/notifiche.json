@@ -53,6 +53,9 @@
     "not-found-subtitle": "It can only be read by users registered by the recipient company or by its delegate."
   },
   "detail": {
+    "legal-date": "Notification deposited on",
+    "informal-date": "Communication deposited on",
+    "legal-disclaimer": "Notification sent via SEND, the platform governed by Art. 26 of Law Decree 76/2020",
     "legal-value": "Notification with legal value",
     "notification-timeline-section": {
       "title": "Notification status",

@@ -1,7 +1,6 @@
 {
   "title": "Deine Zustellungen",
   "go-to-detail": "Zur Detailansicht",
-  "go-to-detail": "Zur Detailansicht",
   "table": {
     "data": "Datum",
     "mittente": "Absender",
@@ -57,6 +56,10 @@
     "not-found-subtitle": "Diese Benachrichtigung kann nur vom Empfänger gelesen werden."
   },
   "detail": {
+    "legal-value": "Rechtsgültige Zustellung",
+    "legal-date": "Notification déposée le",
+    "informal-date": "Communication déposée le",
+    "legal-disclaimer": "Notification envoyée via SEND, la plateforme régie par l’art. 26 du D.L. 76/2020",
     "notification-timeline-section": {
       "title": "Status der Zustellung",
       "aria-label": "Gehe zur Timeline der Zustellung"
@@ -92,7 +95,6 @@
     "show-less": "Weniger Details anzeigen",
     "disclaimer-link": "Mehr hierzu",
     "pec-unreachable": "Halten Sie Ihr zertifiziertes E-Mail-Postfach (PEC) frei und aktiv, um alles digital zu erhalten!",
-    "legal-value": "Rechtsgültige Zustellung",
     "cancelled": {
       "message": "Diese Zustellung wurde von der sendenden Körperschaft storniert.",
       "cta": "Was muss ich tun?"

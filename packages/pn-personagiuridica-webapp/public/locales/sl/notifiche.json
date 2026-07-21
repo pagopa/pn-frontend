@@ -54,6 +54,9 @@
   },
   "detail": {
     "legal-value": "Obvestilo s pravno veljavnostjo",
+    "legal-date": "Vročitev odložena dne",
+    "informal-date": "Sporočilo odloženo dne",
+    "legal-disclaimer": "Vročitev poslana preko SEND, platforme, ki jo ureja 26. člen Zakonske uredbe 76/2020",
     "notification-timeline-section": {
       "title": "Stanje obvestila",
       "aria-label": "Prikaži časovnico obvestila"

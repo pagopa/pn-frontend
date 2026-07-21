@@ -56,6 +56,10 @@
     "not-found-subtitle": "To obvestilo lahko prebere samo prejemnik."
   },
   "detail": {
+    "legal-value": "Pravno zavezujoča vročitev",
+    "legal-date": "Vročitev odložena dne",
+    "informal-date": "Sporočilo odloženo dne",
+    "legal-disclaimer": "Vročitev poslana preko SEND, platforme, ki jo ureja 26. člen Zakonske uredbe 76/2020",
     "notification-timeline-section": {
       "title": "Stanje obvestila",
       "aria-label": "Pojdi na časovnico obvestila"
@@ -91,7 +95,6 @@
     "show-less": "Prikaži manj podrobnosti",
     "disclaimer-link": "Izvedite več",
     "pec-unreachable": "Vaš predal PEC naj bo prost in aktiven, da boste vse prejemali v digitalni obliki!",
-    "legal-value": "Pravno zavezujoča vročitev",
     "cancelled": {
       "message": "To obvestilo je preklical organ pošiljatelj.",
       "cta": "Kaj moram storiti?"
