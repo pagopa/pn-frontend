@@ -56,6 +56,9 @@
     "not-found-subtitle": "Questa notifica può essere letta solo dal destinatario."
   },
   "detail": {
+    "legal-date": "Notifica depositata il",
+    "informal-date": "Comunicazione depositata il",
+    "legal-disclaimer": "Notifica inviata tramite SEND, la piattaforma disciplinata dall’art. 26 del D.L 76/2020",
     "notification-timeline-section": {
       "title": "Stato della notifica",
       "aria-label": "Vai alla timeline della notifica"
