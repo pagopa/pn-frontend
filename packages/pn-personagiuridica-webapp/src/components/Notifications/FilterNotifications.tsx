@@ -30,11 +30,13 @@ import FilterNotificationsFormBody from './FilterNotificationsFormBody';
 
 type Props = {
   showFilters: boolean;
+  isDelegatedPage?: boolean;
 };
 
 const emptyValues = {
   startDate: undefined,
   endDate: undefined,
+  communicationType: '' as const,
   iunMatch: '',
 };
 
@@ -49,11 +51,17 @@ function validateDate(startDate: Date | undefined, endDate: Date | undefined) {
   return isBefore(startDate, endDate) || isEqualDate(startDate, endDate);
 }
 
+const getCommunicationType = (
+  communicationType: GetNotificationsParams['communicationType'],
+  isDelegatedPage: boolean
+): GetNotificationsParams['communicationType'] => (isDelegatedPage ? '' : communicationType);
+
 const initialValues = (
   filters: GetNotificationsParams,
   emptyValues: {
     startDate: Date | undefined;
     endDate: Date | undefined;
+    communicationType: string;
     iunMatch: string;
   }
 ) => {
@@ -63,16 +71,21 @@ const initialValues = (
   return {
     startDate: filters.startDate ? new Date(filters.startDate) : undefined,
     endDate: filters.endDate ? new Date(filters.endDate) : undefined,
+    communicationType: getValidValue(filters.communicationType),
     iunMatch: getValidValue(filters.iunMatch),
   };
 };
 
-const FilterNotifications = forwardRef(({ showFilters }: Props, ref) => {
+const FilterNotifications = forwardRef(({ showFilters, isDelegatedPage = false }: Props, ref) => {
   const dispatch = useDispatch();
   const filters = useAppSelector((state: RootState) => state.dashboardState.filters);
   const { t } = useTranslation(['common', 'notifiche']);
   const isMobile = useIsMobile();
   const dialogRef = useRef<{ toggleOpen: () => void }>(null);
+  const currentPageFilters = {
+    ...filters,
+    communicationType: getCommunicationType(filters.communicationType, isDelegatedPage),
+  };
 
   const validationSchema = yup.object({
     iunMatch: yup.string().matches(IUN_regex, t('filters.errors.iun', { ns: 'notifiche' })),
@@ -126,17 +139,18 @@ const FilterNotifications = forwardRef(({ showFilters }: Props, ref) => {
       .typeError(t('filters.errors.date-format', { ns: 'notifiche' })),
   });
 
-  const [prevFilters, setPrevFilters] = useState(filters || emptyValues);
+  const [prevFilters, setPrevFilters] = useState(currentPageFilters || emptyValues);
   const filtersCount = filtersApplied(prevFilters, emptyValues);
 
   const formik = useFormik({
-    initialValues: initialValues(filters, emptyValues),
+    initialValues: initialValues(currentPageFilters, emptyValues),
     validationSchema,
     /** onSubmit populates filters */
     onSubmit: (values) => {
       const currentFilters = {
         startDate: values.startDate,
         endDate: values.endDate,
+        communicationType: getCommunicationType(values.communicationType, isDelegatedPage),
         iunMatch: values.iunMatch,
       };
       if (isEqual(prevFilters, currentFilters)) {
@@ -157,6 +171,13 @@ const FilterNotifications = forwardRef(({ showFilters }: Props, ref) => {
   }, []);
 
   useEffect(() => {
+    if (isDelegatedPage && formik.values.communicationType) {
+      void formik.setFieldValue('communicationType', '', false);
+      setPrevFilters((currentFilters) => ({ ...currentFilters, communicationType: '' }));
+    }
+  }, [isDelegatedPage, formik.values.communicationType]);
+
+  useEffect(() => {
     if (filters && isEqual(filters, emptyValues)) {
       formik.resetForm({
         values: emptyValues,
@@ -175,6 +196,7 @@ const FilterNotifications = forwardRef(({ showFilters }: Props, ref) => {
   }
 
   const isInitialSearch = isEqual(formik.values, emptyValues);
+  const showRemoveFilters = isFilterApplied(filtersCount);
   return isMobile ? (
     <CustomMobileDialog>
       <CustomMobileDialogToggle
@@ -193,12 +215,15 @@ const FilterNotifications = forwardRef(({ showFilters }: Props, ref) => {
       <CustomMobileDialogContent title={t('button.filtra')} ref={dialogRef}>
         <form onSubmit={formik.handleSubmit} data-testid="filter-form">
           <DialogContent>
-            <FilterNotificationsFormBody formikInstance={formik} />
+            <FilterNotificationsFormBody
+              formikInstance={formik}
+              showCommunicationType={!isDelegatedPage}
+            />
           </DialogContent>
           <DialogActions>
             <FilterNotificationsFormActions
               cleanFilters={cleanFilters}
-              filtersApplied={isFilterApplied(filtersCount)}
+              filtersApplied={showRemoveFilters}
               isInitialSearch={isInitialSearch}
               isInDialog
             />
@@ -208,7 +233,7 @@ const FilterNotifications = forwardRef(({ showFilters }: Props, ref) => {
     </CustomMobileDialog>
   ) : (
     <form onSubmit={formik.handleSubmit} data-testid="filter-form">
-      <Box sx={{ flexGrow: 1, mt: 3 }}>
+      <Box sx={{ flexGrow: 1, mt: 2 }}>
         <Grid
           container
           spacing={1}
@@ -217,10 +242,13 @@ const FilterNotifications = forwardRef(({ showFilters }: Props, ref) => {
             alignItems: 'flex',
           }}
         >
-          <FilterNotificationsFormBody formikInstance={formik} />
+          <FilterNotificationsFormBody
+            formikInstance={formik}
+            showCommunicationType={!isDelegatedPage}
+          />
           <FilterNotificationsFormActions
             cleanFilters={cleanFilters}
-            filtersApplied={isFilterApplied(filtersCount)}
+            filtersApplied={showRemoveFilters}
             isInitialSearch={isInitialSearch}
           />
         </Grid>

@@ -32,7 +32,7 @@
   "menu": {
     "notifiche": "In arrivo",
     "notifiche-impresa": "In arrivo per {{organization}}",
-    "notifiche-delegato": "In arrivo per i deleganti",
+    "notifiche-delegato": "In arrivo dalle deleghe",
     "deleghe": "Deleghe",
     "profilo": "I tuoi dati",
     "contacts": "Recapiti",
@@ -243,13 +243,7 @@
     "action": "Mantieni l’accesso"
   },
   "code-modal": {
-    "digits": [
-      "prima cifra",
-      "seconda cifra",
-      "terza cifra",
-      "quarta cifra",
-      "ultima cifra"
-    ]
+    "digits": ["prima cifra", "seconda cifra", "terza cifra", "quarta cifra", "ultima cifra"]
   },
   "user-validation-failed": {
     "title": "I dati inseriti non sono validi",

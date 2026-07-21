@@ -12,7 +12,12 @@
     "legal-value": "Notifica a valore legale"
   },
   "filters": {
-    "iun": "Cerca per Codice IUN",
+    "communication-type": "Tipologia",
+    "communication-type-options": {
+      "legal": "Notifiche a valore legale",
+      "informal": "Comunicazioni"
+    },
+    "iun": "Codice IUN",
     "data_da": "Dal",
     "data_da-input-aria-label": "Inserisci la data iniziale della ricerca",
     "data_a": "Al",

@@ -75,9 +75,11 @@ const TitleBox: React.FC<Props> = ({
         </Typography>
       </Grid>
     )}
-    <Grid item xs={12}>
-      <Typography sx={{ fontSize: '18px' }}>{children}</Typography>
-    </Grid>
+    {children && (
+      <Grid item xs={12}>
+        <Typography sx={{ fontSize: '18px' }}>{children}</Typography>
+      </Grid>
+    )}
   </Grid>
 );
 

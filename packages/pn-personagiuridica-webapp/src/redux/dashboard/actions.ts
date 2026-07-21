@@ -44,6 +44,8 @@ export const getReceivedNotifications = createAsyncThunk(
         recipientId: params.recipientId ? formatFiscalCode(params.recipientId) : undefined,
         status: params.status as NotificationStatusV26 | undefined,
         iunMatch: params.iunMatch || undefined,
+        communicationType:
+          params.communicationType || SearchReceivedNotificationsV1CommunicationTypeEnum.All,
       };
       const response = params.isDelegatedPage
         ? await receivedNotificationsFactory.searchReceivedDelegatedNotificationsV1(
@@ -66,7 +68,7 @@ export const getReceivedNotifications = createAsyncThunk(
             apiParams.iunMatch,
             apiParams.size,
             apiParams.nextPagesKey,
-            SearchReceivedNotificationsV1CommunicationTypeEnum.All
+            apiParams.communicationType
           );
       return response.data as GetNotificationsResponse<RecipientNotification>;
     } catch (e) {
