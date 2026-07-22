@@ -40,7 +40,7 @@ describe('ApiErrorWrapper', () => {
     expect(childElement).toBeInTheDocument();
   });
 
-  it('renders errorComponent when there are API errors', () => {
+  it('renders ApiError with custom mainText when there are API errors', () => {
     const errorText = 'Error Text';
     render(
       <ApiErrorWrapper apiId={mockApiError} mainText={errorText}>
@@ -48,12 +48,27 @@ describe('ApiErrorWrapper', () => {
       </ApiErrorWrapper>
     );
 
-    const errorComponent = screen.getByTestId(`api-error-${mockApiError}`);
-    expect(errorComponent).toBeInTheDocument();
-    expect(errorComponent).toHaveTextContent(errorText);
+    const apiError = screen.getByTestId(`api-error-${mockApiError}`);
+    expect(apiError).toBeInTheDocument();
+    expect(apiError).toHaveTextContent(errorText);
   });
 
-  it('calls reloadAction when errorComponent is clicked and if a reloadAcion is specified', async () => {
+  it('renders the custom error component when there are API errors', () => {
+    render(
+      <ApiErrorWrapper
+        apiId={mockApiError}
+        customErrorComponent={<div data-testid="custom-error">Custom error</div>}
+      >
+        <div data-testid="child-element">Child content</div>
+      </ApiErrorWrapper>
+    );
+
+    expect(screen.getByTestId('custom-error')).toBeInTheDocument();
+    expect(screen.queryByTestId(`api-error-${mockApiError}`)).not.toBeInTheDocument();
+    expect(screen.queryByTestId('child-element')).not.toBeInTheDocument();
+  });
+
+  it('calls reloadAction when the ApiError reload action is clicked', async () => {
     const reloadActionMock = vi.fn();
 
     render(
@@ -71,7 +86,7 @@ describe('ApiErrorWrapper', () => {
     });
   });
 
-  it('calls reloadAction when errorComponent is clicked - no reloadAction Defined ', async () => {
+  it('reloads the page when no reloadAction is provided', async () => {
     render(
       <ApiErrorWrapper apiId={mockApiError}>
         <div data-testid="child-element">Child content</div>

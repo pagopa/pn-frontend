@@ -1,18 +1,15 @@
 import { useTranslation } from 'react-i18next';
 
-import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
-import { Box, Typography } from '@mui/material';
+import { Typography } from '@mui/material';
 import {
-  CustomTagGroup,
   Notification,
+  NotificationActionButton,
   NotificationColumnData,
   Row,
   StatusTooltip,
   formatDate,
   getNotificationStatusInfos,
-  useIsMobile,
 } from '@pagopa-pn/pn-commons';
-import { ButtonNaked, Tag, TagGroup } from '@pagopa/mui-italia';
 
 const NotificationStatusChip: React.FC<{ data: Row<Notification> }> = ({ data }) => {
   const { label, tooltip, color } = getNotificationStatusInfos(data.notificationStatus, {
@@ -21,30 +18,12 @@ const NotificationStatusChip: React.FC<{ data: Row<Notification> }> = ({ data })
   return <StatusTooltip label={label} tooltip={tooltip} color={color}></StatusTooltip>;
 };
 
-const ActionButton: React.FC<{ iun: string; handleRowClick?: (iun: string) => void }> = ({
-  iun,
-  handleRowClick,
-}) => {
-  const { t } = useTranslation(['notifiche']);
-  return (
-    <ButtonNaked
-      color="primary"
-      data-testid="goToNotificationDetail"
-      onClick={() => handleRowClick?.(iun)}
-      aria-label={t('table.aria-action-table', { iun })}
-      endIcon={<ArrowForwardIosIcon />}
-    >
-      {t('table.show-detail')}
-    </ButtonNaked>
-  );
-};
-
 const NotificationsDataSwitch: React.FC<{
   data: Row<Notification>;
   type: keyof NotificationColumnData;
   handleRowClick?: (iun: string) => void;
 }> = ({ data, type, handleRowClick }) => {
-  const isMobile = useIsMobile();
+  const { t } = useTranslation(['notifiche']);
 
   if (type === 'sentAt') {
     return formatDate(data.sentAt);
@@ -69,30 +48,14 @@ const NotificationsDataSwitch: React.FC<{
   if (type === 'iun') {
     return data.iun;
   }
-  if (type === 'group' && isMobile) {
-    return data.group ? (
-      <CustomTagGroup visibleItems={1}>
-        {[
-          <Box sx={{ mb: 1, mr: 1, display: 'inline-block', maxWidth: '100%' }} key={data.id}>
-            <Tag value={data.group} mode="truncate" />
-          </Box>,
-        ]}
-      </CustomTagGroup>
-    ) : (
-      <></>
-    );
-  }
-  if (type === 'group' && !isMobile) {
-    return data.group ? (
-      <TagGroup visibleItems={4}>
-        <Tag value={data.group} mode="truncate" />
-      </TagGroup>
-    ) : (
-      <></>
-    );
-  }
   if (type === 'action') {
-    return <ActionButton iun={data.iun} handleRowClick={handleRowClick} />;
+    return (
+      <NotificationActionButton
+        iun={data.iun}
+        label={t('table.open')}
+        onClick={() => handleRowClick?.(data.iun)}
+      />
+    );
   }
 
   return <></>;

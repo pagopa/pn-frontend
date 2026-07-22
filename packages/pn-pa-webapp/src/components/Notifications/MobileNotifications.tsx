@@ -1,13 +1,11 @@
-import { Trans, useTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
-import { Grid, Link, Typography } from '@mui/material';
+import { Grid, Typography } from '@mui/material';
 import {
   CardElement,
   CardSort,
-  EmptyState,
-  KnownSentiment,
   MobileNotificationsSort,
   Notification,
   PnCard,
@@ -21,10 +19,11 @@ import {
   Sort,
   formatDate,
 } from '@pagopa-pn/pn-commons';
-import { ButtonNaked } from '@pagopa/mui-italia';
+import { MIButton } from '@pagopa/mui-italia';
 
 import * as routes from '../../navigation/routes.const';
 import NotificationsDataSwitch from './NotificationsDataSwitch';
+import NotificationsEmptyState from './NotificationsEmptyState';
 
 type Props = {
   notifications: Array<Notification>;
@@ -42,64 +41,11 @@ type Props = {
   onCleanFilters: () => void;
   /** True if the API returned a timeout error */
   hasTimeoutError?: boolean;
+  /** True while notifications are being loaded */
+  loading: boolean;
+  /** The function to be invoked if the user retries loading notifications */
+  onRetry: () => void;
 };
-
-type LinkRemoveFiltersProps = {
-  cleanFilters: () => void;
-  children?: React.ReactNode;
-};
-
-type LinkApiKeyProps = {
-  onApiKeys: () => void;
-  children?: React.ReactNode;
-};
-
-type LinkCreateNotificationProps = {
-  onManualSend: () => void;
-  children?: React.ReactNode;
-};
-
-const LinkRemoveFilters: React.FC<LinkRemoveFiltersProps> = ({ children, cleanFilters }) => (
-  <Link
-    component={'button'}
-    variant="body1"
-    id="call-to-action-first"
-    key="remove-filters"
-    data-testid="link-remove-filters"
-    onClick={cleanFilters}
-  >
-    {children}
-  </Link>
-);
-
-const LinkApiKey: React.FC<LinkApiKeyProps> = ({ children, onApiKeys }) => (
-  <Link
-    component={'button'}
-    variant="body1"
-    id="call-to-action-first"
-    key="api-keys"
-    data-testid="link-api-keys"
-    onClick={onApiKeys}
-  >
-    {children}
-  </Link>
-);
-
-const LinkCreateNotification: React.FC<LinkCreateNotificationProps> = ({
-  children,
-  onManualSend,
-}) => (
-  <Link
-    component={'button'}
-    variant="body1"
-    id="call-to-action-second"
-    key="create-notification"
-    data-testid="link-create-notification"
-    onClick={onManualSend}
-  >
-    {children}
-  </Link>
-);
 
 const MobileNotifications = ({
   notifications,
@@ -110,6 +56,8 @@ const MobileNotifications = ({
   filtersApplied,
   onCleanFilters,
   hasTimeoutError = false,
+  loading,
+  onRetry,
 }: Props) => {
   const navigate = useNavigate();
   const { t } = useTranslation(['notifiche', 'common']);
@@ -128,11 +76,6 @@ const MobileNotifications = ({
     {
       id: 'iun',
       label: t('table.iun'),
-    },
-    {
-      id: 'group',
-      label: t('table.groups'),
-      wrapValueInTypography: false,
     },
   ];
 
@@ -172,32 +115,8 @@ const MobileNotifications = ({
     return arr;
   }, [] as Array<CardSort<Notification>>);
 
-  const emptyStateContent = (() => {
-    if (hasTimeoutError) {
-      return <Trans ns="notifiche" i18nKey="empty-state.timeout" />;
-    }
-
-    if (filtersApplied) {
-      return (
-        <Trans
-          ns={'notifiche'}
-          i18nKey={'empty-state.filtered'}
-          components={[<LinkRemoveFilters key={'remove-filters'} cleanFilters={onCleanFilters} />]}
-        />
-      );
-    }
-
-    return (
-      <Trans
-        ns={'notifiche'}
-        i18nKey={'empty-state.no-notifications'}
-        components={[
-          <LinkApiKey key={'api-keys'} onApiKeys={onApiKeys} />,
-          <LinkCreateNotification key={'create-notification'} onManualSend={onManualSend} />,
-        ]}
-      />
-    );
-  })();
+  const hasNotifications = notifications.length > 0 && !hasTimeoutError;
+  const showNotificationsEmptyState = !loading && !hasNotifications;
 
   return (
     <>
@@ -215,7 +134,7 @@ const MobileNotifications = ({
           )}
         </Grid>
       </Grid>
-      {cardData.length ? (
+      {hasNotifications && (
         <PnCardsList>
           {cardData.map((data) => (
             <PnCard key={data.id} testId="mobileCards">
@@ -259,26 +178,29 @@ const MobileNotifications = ({
                   ))}
               </PnCardContent>
               <PnCardActions>
-                <ButtonNaked
-                  endIcon={<ArrowForwardIcon />}
+                <MIButton
+                  variant="text"
                   color="primary"
-                  id="go-to-detail"
                   onClick={() => handleRowClick(data)}
+                  endIcon={<ArrowForwardIcon />}
+                  data-testid="go-to-detail"
                 >
-                  {t('table.show-detail')}
-                </ButtonNaked>
+                  {t('table.open')}
+                </MIButton>
               </PnCardActions>
             </PnCard>
           ))}
         </PnCardsList>
-      ) : (
-        <EmptyState
-          sentimentIcon={
-            hasTimeoutError || filtersApplied ? KnownSentiment.DISSATISFIED : KnownSentiment.NONE
-          }
-        >
-          {emptyStateContent}
-        </EmptyState>
+      )}
+      {showNotificationsEmptyState && (
+        <NotificationsEmptyState
+          filtersApplied={filtersApplied}
+          hasTimeoutError={hasTimeoutError}
+          onCleanFilters={onCleanFilters}
+          onApiKeys={onApiKeys}
+          onManualSend={onManualSend}
+          onRetry={onRetry}
+        />
       )}
     </>
   );

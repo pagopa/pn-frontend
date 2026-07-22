@@ -8,10 +8,20 @@ type ApiErrorProps = {
   mt?: number;
   mainText?: string;
   apiId?: string;
+  customErrorComponent?: React.ReactNode;
   children?: React.ReactNode;
 };
 
-const ApiError: React.FC<ApiErrorProps> = ({ onClick, mt = 0, mainText, apiId }) => {
+const ApiError: React.FC<ApiErrorProps> = ({
+  onClick,
+  mt = 0,
+  mainText,
+  apiId,
+  customErrorComponent,
+}) => {
+  if (customErrorComponent) {
+    return <>{customErrorComponent}</>;
+  }
   const dataTestId = `api-error${apiId ? `-${apiId}` : ''}`;
   const text =
     mainText ||

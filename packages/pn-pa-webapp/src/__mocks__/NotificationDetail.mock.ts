@@ -29,6 +29,11 @@ function getOneRecipientNotification(): NotificationDetail {
         (elem) => elem.indexOf('RECINDEX_0') > -1
       ),
     }));
+  if (oneRecipientNotification.otherDocuments) {
+    oneRecipientNotification.otherDocuments = oneRecipientNotification.otherDocuments.filter(
+      (doc) => doc.recIndex === 0
+    );
+  }
   return oneRecipientNotification;
 }
 

@@ -13,6 +13,7 @@
     "close": "Schließen"
   },
   "menu": {
+    "notifications-send": "Benachrichtigung mit SEND",
     "notifications": "Zustellungen",
     "users": "Benutzer",
     "groups": "Gruppen",

@@ -21,6 +21,7 @@ import DesktopNotifications from '../components/Notifications/DesktopNotificatio
 import FilterNotifications from '../components/Notifications/FilterNotifications';
 import MobileNotifications from '../components/Notifications/MobileNotifications';
 import NotificationSettingsDrawer from '../components/Notifications/NotificationSettingsDrawer';
+import { NotificationsGenericErrorState } from '../components/Notifications/NotificationsEmptyState';
 import { PAEventsType } from '../models/PAEventsType';
 import * as routes from '../navigation/routes.const';
 import { authSelectors } from '../redux/auth/reducers';
@@ -122,11 +123,11 @@ const Dashboard = () => {
         pagination.page === 0 ? undefined : pagination.nextPagesKey[pagination.page - 1],
     };
 
-    setHasTimeoutError(false);
-
     dispatch(getSentNotifications(params))
       .unwrap()
       .then((data) => {
+        setHasTimeoutError(false);
+
         PAEventStrategyFactory.triggerEvent(PAEventsType.SEND_PA_HAS_NOTIFICATIONS, {
           value: data.resultsPage.length > 0,
         });
@@ -215,8 +216,9 @@ const Dashboard = () => {
 
       <ApiErrorWrapper
         apiId={DASHBOARD_ACTIONS.GET_SENT_NOTIFICATIONS}
-        reloadAction={() => fetchNotifications()}
+        reloadAction={fetchNotifications}
         mt={3}
+        customErrorComponent={<NotificationsGenericErrorState onRetry={fetchNotifications} />}
       >
         {isMobile ? (
           <MobileNotifications
@@ -227,6 +229,8 @@ const Dashboard = () => {
             filtersApplied={filterNotificationsRef.current.filtersApplied}
             onCleanFilters={filterNotificationsRef.current.cleanFilters}
             hasTimeoutError={hasTimeoutError}
+            loading={loading}
+            onRetry={fetchNotifications}
           />
         ) : (
           <DesktopNotifications
@@ -237,9 +241,11 @@ const Dashboard = () => {
             filtersApplied={filterNotificationsRef.current.filtersApplied}
             onCleanFilters={filterNotificationsRef.current.cleanFilters}
             hasTimeoutError={hasTimeoutError}
+            loading={loading}
+            onRetry={fetchNotifications}
           />
         )}
-        {notifications.length > 0 && (
+        {notifications.length > 0 && !hasTimeoutError && (
           <CustomPagination
             paginationData={{
               size: pagination.size,
