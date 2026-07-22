@@ -14,6 +14,7 @@
     "delete": "Elimina"
   },
   "menu": {
+    "notifications-send": "Notifica con SEND",
     "notifications": "Notifiche",
     "users": "Utenti",
     "groups": "Gruppi",

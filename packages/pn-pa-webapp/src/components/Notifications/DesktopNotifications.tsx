@@ -1,11 +1,8 @@
-import { Trans, useTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
-import { Link } from '@mui/material';
 import {
   Column,
-  EmptyState,
-  KnownSentiment,
   Notification,
   NotificationColumnData,
   PnTable,
@@ -19,6 +16,7 @@ import {
 
 import * as routes from '../../navigation/routes.const';
 import NotificationsDataSwitch from './NotificationsDataSwitch';
+import NotificationsEmptyState from './NotificationsEmptyState';
 
 type Props = {
   notifications: Array<Notification>;
@@ -36,64 +34,11 @@ type Props = {
   onCleanFilters: () => void;
   /** True if the API returned a timeout error */
   hasTimeoutError?: boolean;
+  /** True while notifications are being loaded */
+  loading: boolean;
+  /** The function to be invoked if the user retries loading notifications */
+  onRetry: () => void;
 };
-
-type LinkRemoveFiltersProps = {
-  cleanFilters: () => void;
-  children?: React.ReactNode;
-};
-
-type LinkApiKeyProps = {
-  onApiKeys: () => void;
-  children?: React.ReactNode;
-};
-
-type LinkCreateNotificationProps = {
-  onManualSend: () => void;
-  children?: React.ReactNode;
-};
-
-const LinkRemoveFilters: React.FC<LinkRemoveFiltersProps> = ({ children, cleanFilters }) => (
-  <Link
-    component={'button'}
-    variant="body1"
-    id="call-to-action-first"
-    key="remove-filters"
-    data-testid="link-remove-filters"
-    onClick={cleanFilters}
-  >
-    {children}
-  </Link>
-);
-
-const LinkApiKey: React.FC<LinkApiKeyProps> = ({ children, onApiKeys }) => (
-  <Link
-    component={'button'}
-    variant="body1"
-    id="call-to-action-first"
-    key="api-keys"
-    data-testid="link-api-keys"
-    onClick={onApiKeys}
-  >
-    {children}
-  </Link>
-);
-
-const LinkCreateNotification: React.FC<LinkCreateNotificationProps> = ({
-  children,
-  onManualSend,
-}) => (
-  <Link
-    component={'button'}
-    variant="body1"
-    id="call-to-action-second"
-    key="create-notification"
-    data-testid="link-create-notification"
-    onClick={onManualSend}
-  >
-    {children}
-  </Link>
-);
 
 const DesktopNotifications = ({
   notifications,
@@ -104,6 +49,8 @@ const DesktopNotifications = ({
   filtersApplied,
   onCleanFilters,
   hasTimeoutError = false,
+  loading,
+  onRetry,
 }: Props) => {
   const { t } = useTranslation(['notifiche']);
   const navigate = useNavigate();
@@ -113,7 +60,7 @@ const DesktopNotifications = ({
       id: 'sentAt',
       label: t('table.date'),
       mode: 'truncate',
-      cellProps: { width: '9%' },
+      cellProps: { width: '10%' },
       sortable: false, // TODO: will be re-enabled in PN-1124
     },
     {
@@ -126,17 +73,20 @@ const DesktopNotifications = ({
       id: 'subject',
       label: t('table.subject'),
       mode: 'truncate',
-      cellProps: { width: '18%' },
+      cellProps: { width: '24%' },
     },
     {
       id: 'iun',
       label: t('table.iun'),
-      cellProps: { width: '24%' },
-    },
-    {
-      id: 'group',
-      label: t('table.groups'),
-      cellProps: { width: '6%' },
+      cellProps: {
+        width: '22%',
+        sx: {
+          display: {
+            xs: 'none',
+            xl: 'table-cell',
+          },
+        },
+      },
     },
     {
       id: 'notificationStatus',
@@ -147,7 +97,7 @@ const DesktopNotifications = ({
     {
       id: 'action',
       label: '',
-      cellProps: { width: '12%', align: 'right' },
+      cellProps: { width: '13%', align: 'right' },
       sortable: false,
     },
   ];
@@ -161,91 +111,63 @@ const DesktopNotifications = ({
     navigate(routes.GET_DETTAGLIO_NOTIFICA_PATH(iun));
   };
 
-  const emptyStateContent = (() => {
-    if (hasTimeoutError) {
-      return <Trans ns="notifiche" i18nKey="empty-state.timeout" />;
-    }
-
-    if (filtersApplied) {
-      return (
-        <Trans
-          ns={'notifiche'}
-          i18nKey={'empty-state.filtered'}
-          components={[<LinkRemoveFilters key={'remove-filters'} cleanFilters={onCleanFilters} />]}
-        />
-      );
-    }
-
-    return (
-      <Trans
-        ns={'notifiche'}
-        i18nKey={'empty-state.no-notifications'}
-        components={[
-          <LinkApiKey key={'api-keys'} onApiKeys={onApiKeys} />,
-          <LinkCreateNotification key={'create-notification'} onManualSend={onManualSend} />,
-        ]}
-      />
-    );
-  })();
+  const hasNotifications = notifications.length > 0 && !hasTimeoutError;
+  const showNotificationsEmptyState = !loading && !hasNotifications;
 
   return (
     <>
-      {notifications && (
-        <>
-          {notifications.length > 0 ? (
-            <PnTable
-              ariaTitle={t('table.title')}
-              testId="notificationsTable"
-              slotProps={{ table: { sx: { tableLayout: 'fixed' } } }}
-            >
-              <PnTableHeader>
+      {hasNotifications && (
+        <PnTable
+          ariaTitle={t('table.title')}
+          testId="notificationsTable"
+          slotProps={{ table: { sx: { tableLayout: 'fixed' } } }}
+        >
+          <PnTableHeader>
+            {columns.map((column) => (
+              <PnTableHeaderCell
+                key={column.id}
+                sort={sort}
+                columnId={column.id}
+                sortable={column.sortable}
+                handleClick={onChangeSorting}
+                cellProps={column.cellProps}
+              >
+                {column.label}
+              </PnTableHeaderCell>
+            ))}
+          </PnTableHeader>
+          <PnTableBody>
+            {rows.map((row, index) => (
+              <PnTableBodyRow key={row.id} index={index} testId="notificationsTable.body.row">
                 {columns.map((column) => (
-                  <PnTableHeaderCell
+                  <PnTableBodyCell
                     key={column.id}
-                    sort={sort}
-                    columnId={column.id}
-                    sortable={column.sortable}
-                    handleClick={onChangeSorting}
-                    cellProps={column.cellProps}
+                    mode={column.mode}
+                    cellProps={{
+                      ...column.cellProps,
+                    }}
                   >
-                    {column.label}
-                  </PnTableHeaderCell>
+                    <NotificationsDataSwitch
+                      handleRowClick={handleRowClick}
+                      data={row}
+                      type={column.id}
+                    />
+                  </PnTableBodyCell>
                 ))}
-              </PnTableHeader>
-              <PnTableBody>
-                {rows.map((row, index) => (
-                  <PnTableBodyRow key={row.id} index={index} testId="notificationsTable.body.row">
-                    {columns.map((column) => (
-                      <PnTableBodyCell
-                        key={column.id}
-                        mode={column.mode}
-                        cellProps={{
-                          ...column.cellProps,
-                        }}
-                      >
-                        <NotificationsDataSwitch
-                          handleRowClick={handleRowClick}
-                          data={row}
-                          type={column.id}
-                        />
-                      </PnTableBodyCell>
-                    ))}
-                  </PnTableBodyRow>
-                ))}
-              </PnTableBody>
-            </PnTable>
-          ) : (
-            <EmptyState
-              sentimentIcon={
-                hasTimeoutError || filtersApplied
-                  ? KnownSentiment.DISSATISFIED
-                  : KnownSentiment.NONE
-              }
-            >
-              {emptyStateContent}
-            </EmptyState>
-          )}
-        </>
+              </PnTableBodyRow>
+            ))}
+          </PnTableBody>
+        </PnTable>
+      )}
+      {showNotificationsEmptyState && (
+        <NotificationsEmptyState
+          filtersApplied={filtersApplied}
+          hasTimeoutError={hasTimeoutError}
+          onCleanFilters={onCleanFilters}
+          onApiKeys={onApiKeys}
+          onManualSend={onManualSend}
+          onRetry={onRetry}
+        />
       )}
     </>
   );

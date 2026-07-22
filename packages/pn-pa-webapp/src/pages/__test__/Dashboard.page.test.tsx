@@ -241,10 +241,14 @@ describe('Dashboard Page', () => {
       );
     });
 
-    const statusApiErrorComponent = screen.queryByTestId(
-      `api-error-${DASHBOARD_ACTIONS.GET_SENT_NOTIFICATIONS}`
-    );
-    expect(statusApiErrorComponent).toBeInTheDocument();
+    expect(screen.getByText('empty-state.generic-error')).toBeInTheDocument();
+    expect(screen.getByText('empty-state.generic-error-cta')).toBeInTheDocument();
+
+    expect(
+      screen.queryByTestId(`api-error-${DASHBOARD_ACTIONS.GET_SENT_NOTIFICATIONS}`)
+    ).not.toBeInTheDocument();
+
+    expect(screen.getByTestId('link-retry')).toBeInTheDocument();
 
     // filters should be visible on desktop
     const filterForm = screen.getByTestId('filter-form');
@@ -308,10 +312,14 @@ describe('Dashboard Page', () => {
       );
     });
 
-    const statusApiErrorComponent = screen.queryByTestId(
-      `api-error-${DASHBOARD_ACTIONS.GET_SENT_NOTIFICATIONS}`
-    );
-    expect(statusApiErrorComponent).toBeInTheDocument();
+    expect(result.getByText('empty-state.generic-error')).toBeInTheDocument();
+    expect(result.getByText('empty-state.generic-error-cta')).toBeInTheDocument();
+
+    expect(
+      screen.queryByTestId(`api-error-${DASHBOARD_ACTIONS.GET_SENT_NOTIFICATIONS}`)
+    ).not.toBeInTheDocument();
+
+    expect(screen.getByTestId('link-retry')).toBeInTheDocument();
 
     // On mobile we expect the toggle for filters to be visible
     const toggle = screen.getByTestId('dialogToggle');

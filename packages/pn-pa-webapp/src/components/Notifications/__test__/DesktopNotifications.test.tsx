@@ -39,6 +39,8 @@ describe('DesktopNotifications Component', () => {
           onApiKeys={() => {}}
           filtersApplied={false}
           onCleanFilters={() => {}}
+          loading={false}
+          onRetry={() => {}}
         />
       );
     });
@@ -59,6 +61,8 @@ describe('DesktopNotifications Component', () => {
           onApiKeys={() => {}}
           filtersApplied={false}
           onCleanFilters={() => {}}
+          loading={false}
+          onRetry={() => {}}
         />
       );
     });
@@ -80,6 +84,8 @@ describe('DesktopNotifications Component', () => {
           onApiKeys={() => {}}
           filtersApplied={true} // <- simulate "filtered" empty state
           onCleanFilters={() => {}}
+          loading={false}
+          onRetry={() => {}}
         />
       );
     });
@@ -97,11 +103,14 @@ describe('DesktopNotifications Component', () => {
           onApiKeys={() => {}}
           filtersApplied={false}
           onCleanFilters={() => {}}
+          loading={false}
+          onRetry={() => {}}
         />
       );
     });
     const rows = result!.getAllByTestId('notificationsTable.body.row');
     const notificationsTableCellArrow = within(rows[0]).getByTestId('goToNotificationDetail');
+    expect(notificationsTableCellArrow).toHaveTextContent('table.open');
     fireEvent.click(notificationsTableCellArrow);
     await waitFor(() => {
       expect(result.router.state.location.pathname).toBe(
