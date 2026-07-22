@@ -38,7 +38,6 @@ import {
   RenderResult,
   act,
   fireEvent,
-  prettyDOM,
   render,
   screen,
   waitFor,
@@ -595,7 +594,6 @@ describe('NotificationDetail Page', () => {
     expect(mock.history.get[1].url).toContain('/bff/v1/downtime/history');
     expect(mock.history.post[0].url).toBe(`/bff/v1/payments/info`);
     // check documents box
-    console.log(prettyDOM(result.container, 100000000));
     const notificationDetailDocumentsMessage = result.getAllByTestId('documentsDisabled');
     for (const notificationDetailDocumentMessage of notificationDetailDocumentsMessage) {
       expect(notificationDetailDocumentMessage).toHaveTextContent(
