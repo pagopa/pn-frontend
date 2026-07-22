@@ -152,7 +152,7 @@ const InformalNotificationDetail: React.FC = () => {
       <PnBreadcrumb
         showBackAction
         linkRoute={backRoute}
-        linkLabel={t('title', { ns: 'notifiche' })}
+        linkLabel={t('menu.notifiche')}
         currentLocationLabel={primaryMessage?.subject ?? ''}
         goBackAction={() => navigate(backRoute)}
       />
