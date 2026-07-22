@@ -1,5 +1,5 @@
 import { Box, Button, Stack, Typography } from '@mui/material';
-import { IllusError } from '@pagopa/mui-italia';
+import { IllusMIError } from '@pagopa/mui-italia';
 
 import { getLocalizedOrDefaultLabel } from '../utility/localization.utility';
 
@@ -18,7 +18,7 @@ const NotFound: React.FC<Props> = ({ isLogged = true, goBackAction }) => (
     data-testid="not-found"
   >
     <Box mt={11}>
-      <IllusError />
+      <IllusMIError />
     </Box>
 
     <Typography

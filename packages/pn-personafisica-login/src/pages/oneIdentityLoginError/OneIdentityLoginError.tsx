@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 
 import { Box, Button, Dialog, Typography } from '@mui/material';
-import { IllusError } from '@pagopa/mui-italia';
+import { IllusMIError } from '@pagopa/mui-italia';
 
 import { PFLoginEventsType } from '../../models/PFLoginEventsType';
 import { ROUTE_ONE_IDENTITY_LOGIN } from '../../navigation/routes.const';
@@ -37,7 +37,7 @@ const OneIdentityLoginError: React.FC = () => {
   return (
     <Dialog fullScreen={true} open={true} aria-labelledby="dialog-per-messaggi-di-errore">
       <Box m="auto" sx={{ textAlign: 'center', width: '100%' }} id="oneIdentityErrorDialog">
-        <IllusError />
+        <IllusMIError />
         <Typography variant="h5" sx={{ fontSize: '18px', fontWeight: '600' }} mt={5}>
           {t('loginError.title')}
         </Typography>

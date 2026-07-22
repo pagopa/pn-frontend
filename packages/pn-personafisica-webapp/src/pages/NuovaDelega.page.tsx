@@ -35,7 +35,7 @@ import {
   useIsMobile,
   useSearchStringChangeInput,
 } from '@pagopa-pn/pn-commons';
-import { Autocomplete, IllusCompleted } from '@pagopa/mui-italia';
+import { Autocomplete, IllusMICompleted } from '@pagopa/mui-italia';
 
 import VerificationCodeComponent from '../components/Deleghe/VerificationCodeComponent';
 import LoadingPageWrapper from '../components/LoadingPageWrapper/LoadingPageWrapper';
@@ -585,7 +585,7 @@ const NuovaDelega = () => {
       )}
       {created && (
         <CourtesyPage
-          icon={<IllusCompleted />}
+          icon={<IllusMICompleted />}
           title={t('nuovaDelega.createdTitle')}
           subtitle={t('nuovaDelega.createdDescription')}
           onClick={handleDelegationsClick}

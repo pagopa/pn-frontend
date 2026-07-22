@@ -1,7 +1,7 @@
 import { FC, ReactNode } from 'react';
 
 import { Box, Button, Typography } from '@mui/material';
-import { IllusCompleted, IllusError } from '@pagopa/mui-italia';
+import { IllusMICompleted, IllusMIError } from '@pagopa/mui-italia';
 
 type FeedbackPageProps = {
   /** Visual outcome to render a suitable illustration */
@@ -39,7 +39,7 @@ const FeedbackPage: FC<FeedbackPageProps> = ({ outcome, title, description, acti
   return (
     <Box sx={{ minHeight: '350px', height: '100%', display: 'flex' }}>
       <Box sx={{ margin: 'auto', textAlign: 'center', width: '80vw' }}>
-        {slots?.headingIcon ?? (outcome === 'success' ? <IllusCompleted /> : <IllusError />)}
+        {slots?.headingIcon ?? (outcome === 'success' ? <IllusMICompleted /> : <IllusMIError />)}
         <Typography variant="h4" color="text.primary" sx={{ mt: 2, mb: 1 }}>
           {title}
         </Typography>

@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 
 import { Box, Button, InputAdornment, TextField, Typography } from '@mui/material';
 import { CopyToClipboard, useIsMobile } from '@pagopa-pn/pn-commons';
-import { IllusCompleted } from '@pagopa/mui-italia';
+import { IllusMICompleted } from '@pagopa/mui-italia';
 
 import * as routes from '../../navigation/routes.const';
 
@@ -29,7 +29,7 @@ const SyncFeedbackApiKey = ({ newApiKey = '' }) => {
           marginTop: isMobile ? '0' : 'auto',
         }}
       >
-        <IllusCompleted />
+        <IllusMICompleted />
         <Typography
           id="api-key-succesfully-generated"
           variant="h4"
