@@ -350,7 +350,7 @@
       "radd": {
         "title": "Dokumenti so bili prevzeti",
         "description-mono-recipient": "Prejemnik ali pooblaščena oseba je prevzela vročene dokumente pri izvajalcu, pooblaščenem za njihovo dostavo.",
-        "description-multi-recipients": "Eden od prejemnikov ali njegov pooblaščenec je prevzel priglašene dokumente od operaterja, pooblaščenega za njihovo dostavo."
+        "description-multi-recipients": "Eden od prejemnikov ali njegov pooblaščenec je prevzel vročene dokumente pri operaterju, pooblaščenem za njihovo dostavo."
       },
       "tpp-type": "digitalni kanal tretje osebe"
     },
