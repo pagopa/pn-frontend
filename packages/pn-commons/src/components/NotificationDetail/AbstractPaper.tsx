@@ -99,7 +99,7 @@ const AbstractPaper = ({
               {isLegal
                 ? getLocalizedOrDefaultLabel('notifications', 'detail.legal-date')
                 : getLocalizedOrDefaultLabel('notifications', 'detail.informal-date')}{' '}
-              {formatDate(filedAt)}
+              {formatDate(filedAt, false)}
             </Typography>
           </Box>
         </Grid>
