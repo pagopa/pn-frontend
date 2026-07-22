@@ -84,8 +84,6 @@
     "groups": "Gruppen",
     "notice-code": "Benachrichtigungscode",
     "creditor-tax-id": "Steuernummer der Körperschaft",
-    "breadcrumb-root": "Zustellungen",
-    "breadcrumb-leaf": "Einzelheiten zur Zustellung",
     "acts": "Beigefügte Anlagen",
     "aar-acts": "Empfangsbestätigung",
     "timeline-title": "Status der Zustellung",
@@ -149,12 +147,19 @@
       "tpp-expired-error-title": "Die Verbindung zur Bank ist abgelaufen.",
       "tpp-expired-error-description": "Um sie wiederherzustellen, greife über die Nachricht, die du in deiner Bank-App erhalten hast, erneut auf diese Benachrichtigung zu."
     },
+    "contact_sender": {
+      "title": "Kontaktiere die sendende Körperschaft",
+      "phone": "Telefonnummer der Körperschaft",
+      "email": "E-Mail der Körperschaft",
+      "website": "Website der Körperschaft"
+    },
     "acts_files": {
       "downloadable_acts": "<0>Die Dokumente sind bis zu 120 Tage lang online verfügbar</0> ab dem Datum, an dem die SEND-Benachrichtigung rechtlich wirksam wurde. Speichern Sie sie auf Ihrem Gerät!",
       "not_downloadable_acts": "Die Dokumente sind online nicht mehr verfügbar. Um sie anzufordern, wenden Sie sich bitte an die Behörde, die sie Ihnen zugesendet hat.",
       "not_downloadable_aar": "Der Zustellungsnachweis ist nicht mehr verfügbar. Um ihn anzufordern, wenden Sie sich bitte an die Behörde, die ihn Ihnen zugesendet hat.",
       "downloadable_aar": "Die Empfangsbestätigung ist 10 Jahre ab Vervollständigung der Zustellung online verfügbar.",
-      "effected_faq": "Wann ist die Bearbeitung einer Zustellung vervollständigt?"
+      "effected_faq": "Wann ist die Bearbeitung einer Zustellung vervollständigt?",
+      "informal_downloadable_acts": "Speichere die Anhänge auf deinem Gerät: Sie sind online <0>bis zu 180 Tage ab dem Hinterlegungsdatum</0> verfügbar, das du oben findest!"
     },
     "timeline": {
       "schedule-digital-workflow": "Weiterer digitaler Versand",

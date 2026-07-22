@@ -84,8 +84,6 @@
     "groups": "Groups",
     "notice-code": "Notice code",
     "creditor-tax-id": "Institution Tax Code",
-    "breadcrumb-root": "Notifications",
-    "breadcrumb-leaf": "Notification details",
     "acts": "Attached documents",
     "aar-acts": "Notification of receipt",
     "timeline-title": "Notification status",
@@ -149,12 +147,19 @@
       "tpp-expired-error-title": "The connection with the bank has expired.",
       "tpp-expired-error-description": "To restore it, access this notification again using the message you received on your bank's app."
     },
+    "contact_sender": {
+      "title": "Contact the issuing institution",
+      "phone": "Institution's phone number",
+      "email": "Institution's email address",
+      "website": "Institution's website"
+    },
     "acts_files": {
       "downloadable_acts": "<0>Documents will be available online for up to 120 days</0> from the date the SEND notification became legally effective. Save them to your device!",
       "not_downloadable_acts": "Documents are no longer available online. To request them, please contact the institution that sent them to you.",
       "not_downloadable_aar": "The acknowledgment of receipt is no longer available. To request it, please contact the institution that sent it to you.",
       "downloadable_aar": "The notification of receipt is available online for 10 years from the finalization of the notification.",
-      "effected_faq": "When is a notification finalized?"
+      "effected_faq": "When is a notification finalized?",
+      "informal_downloadable_acts": "Save the attachments to your device: they will be available online <0>for up to 180 days from the filing date</0> shown at the top!"
     },
     "timeline": {
       "schedule-digital-workflow": "Further sending digitally",

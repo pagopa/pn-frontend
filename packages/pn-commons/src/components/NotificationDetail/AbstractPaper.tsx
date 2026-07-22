@@ -10,15 +10,17 @@ import { useIsMobile } from '../../hooks';
 import { formatDate } from '../../utility';
 import { getAccessibleIun } from '../../utility/accessibility.utility';
 import { getLocalizedOrDefaultLabel } from '../../utility/localization.utility';
+import PNMarkdown from '../PnMarkdown/PnMarkdown';
 import TitleBox from '../TitleBox';
 
 interface AbstractPaperProps {
   title?: string;
   senderPaId?: string;
   senderDenomination?: string;
-  filedAt: string;
   iun: string;
   abstract?: string; // todo: to sanitize and format the abstract content before passing it to the component
+  isLegal?: boolean;
+  filedAt: string;
   senderLogoUrl?: string;
 }
 
@@ -56,21 +58,30 @@ const AbstractPaper = ({
   title,
   senderPaId,
   senderDenomination,
-  filedAt,
   iun,
   abstract,
+  isLegal = true,
+  filedAt,
   senderLogoUrl,
 }: AbstractPaperProps) => {
   const isMobile = useIsMobile();
 
-  const borderTopStyle = `2px solid ${theme.palette.primary.main}`;
   return (
-    <MIPaper padding={24} sx={{ borderTop: borderTopStyle }}>
-      <Tag
-        variant="default"
-        icon={VerifiedRoundedIcon}
-        value={getLocalizedOrDefaultLabel('notifications', 'detail.legal-value')}
-      />
+    <MIPaper
+      padding={24}
+      sx={{
+        ...(isLegal && {
+          borderTop: `2px solid ${theme.palette.primary.main}`,
+        }),
+      }}
+    >
+      {isLegal && (
+        <Tag
+          variant="default"
+          icon={VerifiedRoundedIcon}
+          value={getLocalizedOrDefaultLabel('notifications', 'detail.legal-value')}
+        />
+      )}
       <TitleBox variantTitle="h4" componentTitle="h1" title={title} sx={{ mt: 2 }} mbTitle={0} />
       <Divider aria-hidden sx={{ my: 2 }} />
       <Grid container>
@@ -109,9 +120,15 @@ const AbstractPaper = ({
         </Grid>
       </Grid>
       {abstract && <Divider aria-hidden sx={{ my: 2 }} />}
-      <Typography variant="body1" sx={{ overflowWrap: 'anywhere' }}>
-        {abstract}
-      </Typography>
+      {isLegal ? (
+        <Typography variant="body1" sx={{ overflowWrap: 'anywhere' }}>
+          {abstract}
+        </Typography>
+      ) : (
+        <Box sx={{ overflowWrap: 'anywhere' }}>
+          <PNMarkdown content={abstract ?? ''} />
+        </Box>
+      )}
     </MIPaper>
   );
 };

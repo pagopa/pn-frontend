@@ -84,8 +84,6 @@
     "groups": "Skupine",
     "notice-code": "Št. obvestila",
     "creditor-tax-id": "Davčna številka organizacije",
-    "breadcrumb-root": "Obvestila",
-    "breadcrumb-leaf": "Podrobnosti o obvestilu",
     "acts": "Priloženi dokumenti",
     "aar-acts": "Potrdilo o prejemu",
     "timeline-title": "Stanje obvestila",
@@ -149,12 +147,19 @@
       "tpp-expired-error-title": "Povezava z banko je potekla.",
       "tpp-expired-error-description": "Za ponovno vzpostavitev ponovno dostopajte do tega obvestila prek sporočila, ki ste ga prejeli v aplikaciji vaše banke."
     },
+    "contact_sender": {
+      "title": "Stopite in stik z izdajateljem",
+      "phone": "Telefonska številka organa",
+      "email": "E-pošta organa",
+      "website": "Spletno mesto organa"
+    },
     "acts_files": {
       "downloadable_acts": "<0>Dokumenti bodo na voljo na spletu do 120 dni</0> od dneva, ko je uradno obvestilo SEND postalo pravno veljavno. Shranite jih v svojo napravo!",
       "not_downloadable_acts": "Dokumenti niso več na voljo na spletu. Če jih želite zahtevati, se obrnite na organ, ki vam jih je poslal.",
       "not_downloadable_aar": "Obvestilo o prejemu ni več na voljo. Če ga želite zahtevati, se obrnite na organ, ki vam ga je poslal.",
       "downloadable_aar": "Obvestilo o prejemu je na voljo na spletu 10 let od zaključka obvestila.",
-      "effected_faq": "Kdaj se obvestilo zaključi?"
+      "effected_faq": "Kdaj se obvestilo zaključi?",
+      "informal_downloadable_acts": "Shranite priloge v svojo napravo: na spletu bodo na voljo <0>do 180 dni od datuma vložitve</0>, ki ga najdete zgoraj!"
     },
     "timeline": {
       "schedule-digital-workflow": "Nadaljnje pošiljanje z digitalnimi sredstvi",

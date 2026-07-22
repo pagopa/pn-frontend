@@ -422,12 +422,12 @@ const NotificationDetail: React.FC = () => {
       <PnBreadcrumb
         showBackAction={!rapidAccessSource}
         linkRoute={backRoute}
-        linkLabel={t('detail.breadcrumb-root', { ns: 'notifiche' })}
-        currentLocationLabel={`${t('detail.breadcrumb-leaf', { ns: 'notifiche' })}`}
+        linkLabel={t('menu.notifiche')}
+        currentLocationLabel={notification.subject ?? ''}
         goBackAction={() => navigate(backRoute)}
       />
     );
-  }, [rapidAccessSource, i18n.language]);
+  }, [rapidAccessSource, i18n.language, notification.subject]);
 
   const cancelledAlert = isCancelledOrCancelling && (
     <MIAlert

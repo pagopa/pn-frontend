@@ -39,7 +39,6 @@ export const getSentNotifications = createAsyncThunk(
             | NotificationStatus.CANCELLATION_IN_PROGRESS
             | NotificationStatus.NOTIFICATION_TIMELINE_REWORKED
           >) || undefined,
-        subjectRegExp: params.subjectRegExp || undefined,
         iunMatch: params.iunMatch || undefined,
       };
       const response = await sentNotificationsFactory.searchSentNotificationsV1(
@@ -47,7 +46,6 @@ export const getSentNotifications = createAsyncThunk(
         apiParams.endDate,
         apiParams.recipientId,
         apiParams.status,
-        apiParams.subjectRegExp,
         apiParams.iunMatch,
         apiParams.size,
         apiParams.nextPagesKey

@@ -80,8 +80,6 @@
     "groups": "Skupine",
     "notice-code": "Koda obvestila",
     "creditor-tax-id": "Davčna številka organizacije",
-    "breadcrumb-root": "Obvestila",
-    "breadcrumb-leaf": "Podrobnosti o obvestilu",
     "acts": "Priloženi dokumenti",
     "aar-acts": "Potrdilo o prejemu",
     "timeline-title": "Stanje obvestila",
@@ -139,12 +137,19 @@
         "duplicated": "To opozorilo je bilo že plačano. Stanje bo kmalu posodobljeno."
       }
     },
+    "contact_sender": {
+      "title": "Stopite in stik z izdajateljem",
+      "phone": "Telefonska številka organa",
+      "email": "E-pošta organa",
+      "website": "Spletno mesto organa"
+    },
     "acts_files": {
       "downloadable_acts": "Dokumenti so na voljo na spletu 120 dni od zaključka obvestila.",
       "not_downloadable_acts": "Ker je od datuma zaključka minilo 120 dni, se morate za pridobitev listin obrniti na pošiljatelja.",
       "downloadable_aar": "Obvestilo o prejemu je na voljo na spletu 10 let od zaključka obvestila.",
       "not_downloadable_aar": "Ker je od datuma zaključka minilo 10 let, obvestilo o prejemu ni več na voljo.",
-      "effected_faq": "Kdaj se obvestilo zaključi?"
+      "effected_faq": "Kdaj se obvestilo zaključi?",
+      "informal_downloadable_acts": "Shranite priloge v svojo napravo: na spletu bodo na voljo <0>do 180 dni od datuma vložitve</0>, ki ga najdete zgoraj!"
     },
     "timeline": {
       "schedule-digital-workflow": "Nadaljnje pošiljanje z digitalnimi sredstvi",

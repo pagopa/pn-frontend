@@ -34,6 +34,7 @@ const Router: React.FC = () => {
             <Route path={routes.DASHBOARD} element={<Dashboard />} />
             {IS_STATISTICS_ENABLED && <Route path={routes.STATISTICHE} element={<Statistics />} />}
             <Route path={routes.DETTAGLIO_NOTIFICA} element={<NotificationDetail />} />
+            {/*  <Route path={routes.DETTAGLIO_COMBO} element={<InformalNotificationDetail />} /> */}
             <Route path={routes.APP_STATUS} element={<AppStatus />} />
             <Route path="/" element={<Navigate to={routes.DASHBOARD} />} />
 

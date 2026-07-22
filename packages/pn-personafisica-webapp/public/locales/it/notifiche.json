@@ -84,8 +84,6 @@
     "groups": "Gruppi",
     "notice-code": "Codice Avviso",
     "creditor-tax-id": "Codice Fiscale Ente",
-    "breadcrumb-root": "Notifiche",
-    "breadcrumb-leaf": "Dettaglio notifica",
     "acts": "Documenti allegati",
     "aar-acts": "Avviso di avvenuta ricezione",
     "timeline-title": "Stato della notifica",
@@ -149,12 +147,19 @@
       "tpp-expired-error-title": "La connesione con la banca è scaduta.",
       "tpp-expired-error-description": "Per ripristinarla, accedi di nuovo a questa notifica tramite il messaggio che hai ricevuto sull'app della banca."
     },
+    "contact_sender": {
+      "title": "Contatta il mittente",
+      "phone": "Numero di telefono dell'ente",
+      "email": "Email dell'ente",
+      "website": "Sito web dell'ente"
+    },
     "acts_files": {
       "downloadable_acts": "<0>I documenti saranno disponibili online fino a 120 giorni</0> dalla data in cui la notifica SEND ha assunto valore di legge. Salvali sul tuo dispositivo!",
       "not_downloadable_acts": "I documenti non sono più disponibili online. Per richiederli, rivolgiti all’ente che te li ha inviati.",
       "downloadable_aar": "L’avviso di avvenuta ricezione è disponibile online per 10 anni dal perfezionamento della notifica.",
       "not_downloadable_aar": "L’avviso di avvenuta ricezione non è più disponibile. Per richiederlo, rivolgiti all’ente che te lo ha inviato.",
-      "effected_faq": "Quando si perfeziona una notifica?"
+      "effected_faq": "Quando si perfeziona una notifica?",
+      "informal_downloadable_acts": "Conserva gli allegati sul tuo dispositivo: saranno disponibili online <0>fino a 180 giorni dalla data di deposito</0> che trovi in alto!"
     },
     "timeline": {
       "schedule-digital-workflow": "Ulteriore invio per via digitale",

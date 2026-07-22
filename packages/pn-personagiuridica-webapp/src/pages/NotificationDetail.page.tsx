@@ -412,12 +412,12 @@ const NotificationDetail = () => {
       <PnBreadcrumb
         showBackAction={!fromQrCode}
         linkRoute={backRoute}
-        linkLabel={t('detail.breadcrumb-root', { ns: 'notifiche' })}
-        currentLocationLabel={`${t('detail.breadcrumb-leaf', { ns: 'notifiche' })}`}
+        linkLabel={t('menu.notifiche')}
+        currentLocationLabel={notification.subject ?? ''}
         goBackAction={() => navigate(backRoute)}
       />
     );
-  }, [fromQrCode, i18n.language]);
+  }, [fromQrCode, i18n.language, notification.subject]);
 
   const cancelledAlert = isCancelledOrCancelling && (
     <MIAlert
@@ -530,10 +530,7 @@ const NotificationDetail = () => {
                     documentsAvailable={notification.documentsAvailable}
                     downloadFilesMessage={getDownloadFilesMessage('attachments')}
                     downloadFilesLink={t('detail.acts_files.effected_faq', { ns: 'notifiche' })}
-                    disableDownloads={
-                      isCancelled.cancellationInTimeline ||
-                      !dateIsLessThan10Years(notification.sentAt)
-                    }
+                    disableDownloads={isCancelled.cancellationInTimeline}
                     titleVariant="h5"
                   />
                   {notification.radd && (

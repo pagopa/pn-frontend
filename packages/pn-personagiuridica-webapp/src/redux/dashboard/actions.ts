@@ -64,7 +64,6 @@ export const getReceivedNotifications = createAsyncThunk(
             apiParams.endDate,
             apiParams.mandateId,
             apiParams.recipientId,
-            apiParams.subjectRegExp,
             apiParams.iunMatch,
             apiParams.size,
             apiParams.nextPagesKey,
