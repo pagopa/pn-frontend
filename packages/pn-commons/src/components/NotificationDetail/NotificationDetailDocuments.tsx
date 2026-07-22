@@ -174,7 +174,7 @@ const NotificationDetailDocuments: React.FC<Props> = (
     )}
 
     {/* Notification sent before expiration date (120 legal and 180 combo) */}
-    {documentsAvailable && downloadFilesMessage && (
+    {!disableDownloads && documentsAvailable && downloadFilesMessage && (
       <MIPaper
         data-testid="documentsMessage"
         key="detail-documents-message"

@@ -241,7 +241,8 @@ describe('Dashboard Page', () => {
       );
     });
 
-    expect(screen.getByText(/empty-state\.generic-error/i)).toBeInTheDocument();
+    expect(screen.getByText('empty-state.generic-error')).toBeInTheDocument();
+    expect(screen.getByText('empty-state.generic-error-cta')).toBeInTheDocument();
 
     expect(
       screen.queryByTestId(`api-error-${DASHBOARD_ACTIONS.GET_SENT_NOTIFICATIONS}`)
@@ -311,7 +312,8 @@ describe('Dashboard Page', () => {
       );
     });
 
-    expect(screen.getByText(/empty-state\.generic-error/i)).toBeInTheDocument();
+    expect(result.getByText('empty-state.generic-error')).toBeInTheDocument();
+    expect(result.getByText('empty-state.generic-error-cta')).toBeInTheDocument();
 
     expect(
       screen.queryByTestId(`api-error-${DASHBOARD_ACTIONS.GET_SENT_NOTIFICATIONS}`)
