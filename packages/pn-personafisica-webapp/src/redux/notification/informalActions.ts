@@ -1,6 +1,8 @@
 import {
   ExtRegistriesPaymentDetails,
   NotificationDocumentResponse,
+  PaymentAttachment,
+  PaymentAttachmentSName,
   parseError,
 } from '@pagopa-pn/pn-commons';
 import { createAsyncThunk } from '@reduxjs/toolkit';
@@ -16,6 +18,7 @@ export enum INFORMAL_NOTIFICATION_ACTIONS {
   GET_RECEIVED_INFORMAL_NOTIFICATION = 'getReceivedInformalNotification',
   GET_RECEIVED_INFORMAL_NOTIFICATION_DOCUMENT = 'getReceivedInformalNotificationDocument',
   GET_RECEIVED_INFORMAL_NOTIFICATION_PAYMENT_INFO = 'getReceivedInformalNotificationPaymentInfo',
+  GET_RECEIVED_INFORMAL_NOTIFICATION_PAYMENT = 'getReceivedInformalNotificationPayment',
 }
 
 export const getReceivedInformalNotification = createAsyncThunk<
@@ -63,6 +66,46 @@ export const getReceivedInformalNotificationDocument = createAsyncThunk<
     } catch (e) {
       return rejectWithValue(parseError(e));
     }
+  }
+);
+
+export const getReceivedInformalNotificationPayment = createAsyncThunk<
+  PaymentAttachment,
+  {
+    iun: string;
+    attachmentName: PaymentAttachmentSName;
+    mandateId?: string;
+    attachmentIdx?: number;
+  }
+>(
+  INFORMAL_NOTIFICATION_ACTIONS.GET_RECEIVED_INFORMAL_NOTIFICATION_PAYMENT,
+  async (
+    params: {
+      iun: string;
+      attachmentName: PaymentAttachmentSName;
+      attachmentIdx?: number;
+    },
+    { rejectWithValue }
+  ) => {
+    try {
+      const informalNotificationsApiFactory = RecipientInformalNotificationsApiFactory(
+        undefined,
+        undefined,
+        apiClient
+      );
+      const response =
+        await informalNotificationsApiFactory.getReceivedInformalNotificationPaymentAttachmentV1(
+          params.iun,
+          params.attachmentName,
+          params.attachmentIdx
+        );
+      return response.data as PaymentAttachment;
+    } catch (e: any) {
+      return rejectWithValue(parseError(e));
+    }
+  },
+  {
+    getPendingMeta: () => ({ blockLoading: true }),
   }
 );
 

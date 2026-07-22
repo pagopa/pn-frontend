@@ -146,12 +146,12 @@ const NotificationTimeline: React.FC = () => {
     return (
       <PnBreadcrumb
         linkRoute={backRoute}
-        linkLabel={t('detail.breadcrumb-root', { ns: 'notifiche' })}
-        currentLocationLabel={`${t('detail.breadcrumb-leaf', { ns: 'notifiche' })}`}
+        linkLabel={t('menu.notifiche')}
+        currentLocationLabel={notification.subject ?? ''}
         goBackAction={() => navigate(backRoute)}
       />
     );
-  }, [i18n.language]);
+  }, [i18n.language, notification.subject]);
 
   const breadcrumb = <Fragment>{properBreadcrumb}</Fragment>;
 
