@@ -64,6 +64,8 @@ const InformalNotificationDetail: React.FC = () => {
 
   const currentRecipient = informalNotification?.recipients?.[0];
 
+  const hasPayments = (currentRecipient?.payments?.length ?? 0) > 0;
+
   // TODO da sistemare quando ci saranno i contatti
   const phone = (currentRecipient as any)?.senderContacts?.phone;
   const site = (currentRecipient as any)?.senderContacts?.site;
@@ -206,26 +208,30 @@ const InformalNotificationDetail: React.FC = () => {
 
       <Stack direction={{ xs: 'column', md: 'row' }} spacing={2} alignItems="flex-start">
         <Stack spacing={2} sx={{ width: { xs: '100%', md: '58%' } }}>
-          <MIPaper sx={{ p: 3, flex: 1 }} variant="outlined">
-            <NotificationDetailDocuments
-              title={t('detail.acts', { ns: 'notifiche' })}
-              documents={informalNotification?.documents}
-              clickHandler={handleDocumentDownload}
-              documentsAvailable={documentsAvailable}
-              downloadFilesMessage={getDownloadFilesMessage()}
-              titleVariant="h5"
-            />
-          </MIPaper>
-          <MIPaper sx={{ p: 3 }} variant="outlined">
-            <NotificationPaymentRecipient
-              payments={paymentsData}
-              isCancelled={false}
-              iun={informalNotification?.iun ?? ''}
-              onPayClick={onPayClick}
-              handleFetchPaymentsInfo={reloadPaymentsInfo}
-              getPaymentAttachmentAction={getPaymentAttachmentAction}
-            />
-          </MIPaper>
+          {documentsAvailable && (
+            <MIPaper sx={{ p: 3, flex: 1 }} variant="outlined">
+              <NotificationDetailDocuments
+                title={t('detail.acts', { ns: 'notifiche' })}
+                documents={informalNotification?.documents}
+                clickHandler={handleDocumentDownload}
+                documentsAvailable={documentsAvailable}
+                downloadFilesMessage={getDownloadFilesMessage()}
+                titleVariant="h5"
+              />
+            </MIPaper>
+          )}
+          {hasPayments && (
+            <MIPaper sx={{ p: 3 }} variant="outlined">
+              <NotificationPaymentRecipient
+                payments={paymentsData}
+                isCancelled={false}
+                iun={informalNotification?.iun ?? ''}
+                onPayClick={onPayClick}
+                handleFetchPaymentsInfo={reloadPaymentsInfo}
+                getPaymentAttachmentAction={getPaymentAttachmentAction}
+              />
+            </MIPaper>
+          )}
         </Stack>
 
         <PnSenderContacts phone={phone} site={site} />
