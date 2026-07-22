@@ -1,14 +1,14 @@
 import { isNil } from 'lodash-es';
 import { useTranslation } from 'react-i18next';
 
-import { Chip, Grid, Typography } from '@mui/material';
+import { Grid, Typography } from '@mui/material';
 import {
   PagoPAPaymentFullDetails,
   PaymentAttachmentSName,
   PaymentStatus,
   downloadDocument,
 } from '@pagopa-pn/pn-commons';
-import { ButtonNaked } from '@pagopa/mui-italia';
+import { ButtonNaked, MIChip } from '@pagopa/mui-italia';
 
 import { useAppDispatch } from '../../redux/hooks';
 import { getSentNotificationPayment } from '../../redux/notification/actions';
@@ -72,7 +72,7 @@ const NotificationPaymentPagoPa: React.FC<Props> = ({ iun, payment }) => {
       </Grid>
       {payment.status === PaymentStatus.SUCCEEDED && (
         <Grid item xs="auto">
-          <Chip
+          <MIChip
             data-testid="payment-succeded"
             label={t('payment.paid')}
             color="success"

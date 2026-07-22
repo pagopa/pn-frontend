@@ -3,7 +3,7 @@ import { Trans, useTranslation } from 'react-i18next';
 
 import CompareArrowsIcon from '@mui/icons-material/CompareArrows';
 import PowerSettingsNewIcon from '@mui/icons-material/PowerSettingsNew';
-import { Avatar, Button, Chip, Stack, Typography } from '@mui/material';
+import { Avatar, Button, Stack, Typography } from '@mui/material';
 import {
   EventAction,
   IllusAppIO,
@@ -13,6 +13,7 @@ import {
   appStateActions,
   useIsMobile,
 } from '@pagopa-pn/pn-commons';
+import { MIChip } from '@pagopa/mui-italia';
 
 import { PFEventsType } from '../../models/PFEventsType';
 import { AddressType, IOAllowedValues, IOContactStatus } from '../../models/contacts';
@@ -224,11 +225,10 @@ const IOContact: React.FC = () => {
         </Typography>
       }
       subtitle={
-        <Chip
+        <MIChip
           component="span"
           label={t(`status.${isAppIOEnabled ? 'active' : 'inactive'}`, { ns: 'recapiti' })}
           color={getChipColor()}
-          size="small"
           sx={{ mb: 2 }}
         />
       }

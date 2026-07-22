@@ -6,7 +6,6 @@ import * as yup from 'yup';
 import MailOutlineIcon from '@mui/icons-material/MailOutline';
 import {
   Checkbox,
-  Chip,
   Divider,
   FormControl,
   FormControlLabel,
@@ -15,7 +14,7 @@ import {
   Typography,
 } from '@mui/material';
 import { ConfirmationModal, EventAction, appStateActions } from '@pagopa-pn/pn-commons';
-import { IllusMIMessage } from '@pagopa/mui-italia';
+import { IllusMIMessage, MIChip } from '@pagopa/mui-italia';
 
 import {
   EmailContactState,
@@ -431,7 +430,7 @@ const PecStep: React.FC<Props> = ({
 
     if (isPecPendingValidation) {
       return (
-        <Chip
+        <MIChip
           label={t('onboarding.digital-domicile.pec.pending.badge')}
           color="warning"
           sx={{ width: 'fit-content', '& .MuiChip-label': { fontSize: '12px' } }}

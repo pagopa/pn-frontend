@@ -4,9 +4,10 @@ import AttachFileIcon from '@mui/icons-material/AttachFile';
 import UnfoldLessIcon from '@mui/icons-material/UnfoldLess';
 import UnfoldMoreIcon from '@mui/icons-material/UnfoldMore';
 import { TimelineConnector } from '@mui/lab';
-import { Box, Button, Chip, Typography } from '@mui/material';
+import { Box, Button, Typography } from '@mui/material';
 import {
   ButtonNaked,
+  MIChip,
   TimelineNotificationContent,
   TimelineNotificationDot,
   TimelineNotificationItem,
@@ -160,7 +161,7 @@ const NotificationDetailTimelineStep = ({
   const getChipColor = (
     position: string,
     status: NotificationStatus,
-    color?: 'warning' | 'error' | 'success' | 'info' | 'default' | 'primary' | 'secondary'
+    color?: 'default' | 'warning' | 'success' | 'info' | 'error' | 'highlight' | 'neutral'
   ) => {
     if (position === 'first') {
       return color;
@@ -191,12 +192,11 @@ const NotificationDetailTimelineStep = ({
             {formatTime(timelineStep.activeFrom)}
           </Typography>
           <ReworkedStatusTag reworkedStatus={reworkedStatus} />
-          <Chip
+          <MIChip
             id={`${notificationStatusInfos.label}-status`}
             data-testid="itemStatus"
             label={notificationStatusInfos.label}
             color={getChipColor(position, timelineStep.status, notificationStatusInfos.color)}
-            size={position === 'first' ? 'medium' : 'small'}
             sx={{
               opacity:
                 timelineStep.status === NotificationStatus.CANCELLATION_IN_PROGRESS && isParty

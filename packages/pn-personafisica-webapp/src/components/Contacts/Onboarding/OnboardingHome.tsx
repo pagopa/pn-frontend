@@ -8,7 +8,6 @@ import ErrorOutlineOutlinedIcon from '@mui/icons-material/ErrorOutlineOutlined';
 import {
   Box,
   Button,
-  Chip,
   List,
   ListItem,
   ListItemIcon,
@@ -23,6 +22,7 @@ import {
   IllusMIBell,
   IllusMIMessage,
   IllusMISmartphoneValidation,
+  MIChip,
 } from '@pagopa/mui-italia';
 
 import { OnboardingAvailableFlows } from '../../../models/Onboarding';
@@ -61,7 +61,10 @@ type CardConfig = Array<{
   description: React.ReactNode;
   cta: string;
   path: string;
-  chip?: { label: string; color: ChipColors };
+  chip?: {
+    label: string;
+    color: 'default' | 'warning' | 'success' | 'info' | 'error' | 'highlight' | 'neutral';
+  };
   hide?: boolean;
   mixpanelFlowId: OnboardingAvailableFlows;
 }>;
@@ -237,9 +240,7 @@ const OnboardingHome: React.FC = () => {
                         {card.title}
                       </Typography>
 
-                      {card.chip && (
-                        <Chip label={card.chip.label} color={card.chip.color} size="small" />
-                      )}
+                      {card.chip && <MIChip label={card.chip.label} color={card.chip.color} />}
                     </Box>
                   </Stack>
 

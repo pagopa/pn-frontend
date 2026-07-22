@@ -1,8 +1,8 @@
 import { useTranslation } from 'react-i18next';
 
-import { Box, Button, Chip, Divider, Stack, Typography } from '@mui/material';
+import { Box, Button, Divider, Stack, Typography } from '@mui/material';
 import { useIsMobile } from '@pagopa-pn/pn-commons';
-import { ButtonNaked } from '@pagopa/mui-italia';
+import { ButtonNaked, MIChip } from '@pagopa/mui-italia';
 
 import OnboardingImage from './OnboardingImage';
 
@@ -37,7 +37,7 @@ const ChooseDigitalDomicileStep: React.FC<Props> = ({
             {t('onboarding.digital-domicile.choice.pec-activating.description')}
           </Typography>
 
-          <Chip
+          <MIChip
             label={t('onboarding.digital-domicile.choice.pec-activating.badge')}
             color="warning"
             sx={{ width: 'fit-content', '& .MuiChip-label': { fontSize: '12px' } }}

@@ -1,6 +1,7 @@
 import DownloadIcon from '@mui/icons-material/Download';
-import { Button, Chip, Typography } from '@mui/material';
+import { Button, Typography } from '@mui/material';
 import { Stack } from '@mui/system';
+import { MIChip } from '@pagopa/mui-italia';
 
 import { Downtime, DowntimeStatus } from '../../models/AppStatus';
 import { Row } from '../../models/PnTable';
@@ -85,7 +86,7 @@ const DowntimeLogDataSwitch: React.FC<{
   }
   if (type === 'status') {
     return (
-      <Chip
+      <MIChip
         data-testid="downtime-status"
         label={getLocalizedOrDefaultLabel('appStatus', `legends.status.${data.status}`)}
         color={data.status === DowntimeStatus.OK ? 'success' : 'error'}

@@ -3,9 +3,9 @@ import { Trans, useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router-dom';
 
 import PowerSettingsNewIcon from '@mui/icons-material/PowerSettingsNew';
-import { Box, ButtonProps, Chip, TextFieldProps, Typography, TypographyProps } from '@mui/material';
+import { Box, ButtonProps, TextFieldProps, Typography, TypographyProps } from '@mui/material';
 import { EventAction, PnInfoCard, appStateActions } from '@pagopa-pn/pn-commons';
-import { ButtonNaked } from '@pagopa/mui-italia';
+import { ButtonNaked, MIChip } from '@pagopa/mui-italia';
 
 import { PFEventsType } from '../../models/PFEventsType';
 import {
@@ -427,11 +427,9 @@ const SmsContactItem: React.FC<SmsItemProps> = ({
           </Typography>
         }
         subtitle={
-          <Chip
-            component="span"
+          <MIChip
             label={t(`status.${isActive ? 'active' : 'inactive'}`, { ns: 'recapiti' })}
             color={getChipColor()}
-            size="small"
             sx={{ mb: 2 }}
           />
         }

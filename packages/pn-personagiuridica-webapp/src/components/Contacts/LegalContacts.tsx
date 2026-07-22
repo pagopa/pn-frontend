@@ -7,9 +7,9 @@ import LaptopChromebookIcon from '@mui/icons-material/LaptopChromebook';
 import PowerSettingsNewIcon from '@mui/icons-material/PowerSettingsNew';
 import SavingsIcon from '@mui/icons-material/Savings';
 import TouchAppIcon from '@mui/icons-material/TouchApp';
-import { Box, Button, Chip, ChipOwnProps, Stack, Typography } from '@mui/material';
+import { Box, Button, Stack, Typography } from '@mui/material';
 import { PnInfoCard, appStateActions, appStorage, useIsMobile } from '@pagopa-pn/pn-commons';
-import { MIAlert } from '@pagopa/mui-italia';
+import { MIAlert, MIChip } from '@pagopa/mui-italia';
 
 import { PGEventsType } from '../../models/PGEventsType';
 import { AddressType, ChannelType } from '../../models/contacts';
@@ -103,7 +103,7 @@ const LegalContacts = () => {
 
   type SubtitleParams = {
     label: string;
-    color: ChipOwnProps['color'];
+    color: 'default' | 'warning' | 'success' | 'info' | 'error' | 'highlight' | 'neutral';
   };
 
   const getSubtitle = () => {
@@ -125,7 +125,7 @@ const LegalContacts = () => {
         color: 'success',
       };
     }
-    return <Chip component="span" {...params} sx={{ mb: 2 }} />;
+    return <MIChip {...params} sx={{ mb: 2 }} />;
   };
 
   const deleteConfirmHandler = () => {

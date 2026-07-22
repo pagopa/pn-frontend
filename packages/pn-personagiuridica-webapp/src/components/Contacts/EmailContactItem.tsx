@@ -2,8 +2,9 @@ import { useRef, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 
 import PowerSettingsNewIcon from '@mui/icons-material/PowerSettingsNew';
-import { Chip, Divider, Typography } from '@mui/material';
+import { Divider, Typography } from '@mui/material';
 import { PnInfoCard, appStateActions } from '@pagopa-pn/pn-commons';
+import { MIChip } from '@pagopa/mui-italia';
 
 import { PGEventsType } from '../../models/PGEventsType';
 import { AddressType, ChannelType, SaveDigitalAddressParams } from '../../models/contacts';
@@ -301,11 +302,9 @@ const EmailContactItem: React.FC = () => {
         </Typography>
       }
       subtitle={
-        <Chip
-          component="span"
+        <MIChip
           label={t(`status.${isEmailActive ? 'active' : 'inactive'}`, { ns: 'recapiti' })}
           color={getChipColor()}
-          size="small"
           sx={{ mb: 2 }}
         />
       }

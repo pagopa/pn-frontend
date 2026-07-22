@@ -50,7 +50,7 @@ export function getApiKeyStatusInfos(
   status: PublicKeyStatus | ExtendedVirtualKeyStatus,
   statusHistory?: Array<PublicKeyStatusHistory>
 ): {
-  color: 'warning' | 'error' | 'success' | 'info' | 'default' | 'primary' | 'secondary' | undefined;
+  color: 'default' | 'warning' | 'success' | 'info' | 'error' | 'highlight' | 'neutral';
   label: string;
   tooltip?: ReactNode;
 } {

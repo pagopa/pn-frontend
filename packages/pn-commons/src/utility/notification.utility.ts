@@ -184,7 +184,7 @@ export function getNotificationStatusInfos(
     isParty?: boolean;
   }
 ): {
-  color: 'warning' | 'error' | 'success' | 'info' | 'default' | 'primary' | 'secondary' | undefined;
+  color: 'default' | 'warning' | 'success' | 'info' | 'error' | 'highlight' | 'neutral' | undefined;
   label: string;
   tooltip: string;
   description: string;

@@ -2,7 +2,7 @@ import { ErrorInfo, ReactNode } from 'react';
 
 import { Stack } from '@mui/material';
 import { Box, BoxOwnProps, StackProps } from '@mui/system';
-import { JwtUser, PartyEntity, ProductEntity, UserAction } from '@pagopa/mui-italia';
+import { JwtUser, PartyEntity, ProductEntity, UserAction, theme } from '@pagopa/mui-italia';
 
 import ErrorBoundary from '../ErrorBoundary';
 import Footer from '../Footer/Footer';
@@ -105,7 +105,7 @@ const Layout: React.FC<Props> = ({
     {/* calc fixes the layout discrepancy given by the version box */}
     <Stack
       direction="column"
-      sx={{ minHeight: 'calc(100vh - 5px)' }} // 100vh per sticky footer
+      sx={{ minHeight: 'calc(100vh - 5px)', background: theme.palette.background.default }} // 100vh per sticky footer
     >
       <>
         {showHeader && (

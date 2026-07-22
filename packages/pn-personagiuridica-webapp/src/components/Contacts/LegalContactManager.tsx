@@ -2,8 +2,8 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
-import { Chip, ChipProps, Paper, Stack, Typography } from '@mui/material';
-import { ButtonNaked } from '@pagopa/mui-italia';
+import { Paper, Stack, Typography } from '@mui/material';
+import { ButtonNaked, MIChip } from '@pagopa/mui-italia';
 
 import { ChannelType } from '../../models/contacts';
 import { contactsSelectors } from '../../redux/contact/reducers';
@@ -62,7 +62,7 @@ const LegalContactManager: React.FC<Props> = ({ setAction }) => {
 
   const getConfig = (): {
     label: string;
-    color: ChipProps['color'];
+    color: 'default' | 'warning' | 'success' | 'info' | 'error' | 'highlight' | 'neutral';
     value: string;
   } => {
     if (isValidatingPec) {
@@ -94,7 +94,7 @@ const LegalContactManager: React.FC<Props> = ({ setAction }) => {
   return (
     <Stack data-testid="legalContactManager" spacing={2}>
       <Paper sx={{ p: { xs: 2, lg: 3 } }}>
-        <Chip label={config.label} color={config.color} />
+        <MIChip label={config.label} color={config.color} />
         <Typography variant="body1" fontSize="18px" fontWeight={600} mt={2}>
           {config.value}
         </Typography>
