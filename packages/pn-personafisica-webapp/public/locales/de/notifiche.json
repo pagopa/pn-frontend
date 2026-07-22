@@ -88,8 +88,6 @@
     "groups": "Gruppen",
     "notice-code": "Benachrichtigungscode",
     "creditor-tax-id": "Steuernummer der Körperschaft",
-    "breadcrumb-root": "Zustellungen",
-    "breadcrumb-leaf": "Einzelheiten zur Zustellung",
     "acts": "Beigefügte Anlagen",
     "aar-acts": "Empfangsbestätigung",
     "timeline-title": "Status der Zustellung",
@@ -163,8 +161,6 @@
       "not_downloadable_acts": "Die Dokumente sind online nicht mehr verfügbar. Um sie anzufordern, wenden Sie sich bitte an die Behörde, die sie Ihnen zugesendet hat.",
       "not_downloadable_aar": "Der Zustellungsnachweis ist nicht mehr verfügbar. Um ihn anzufordern, wenden Sie sich bitte an die Behörde, die ihn Ihnen zugesendet hat.",
       "downloadable_aar": "<0>10 Jahre lang online verfügbar</0> ab dem Datum, an dem die SEND-Zustellung Rechtskraft erlangt hat.",
-      "notification_cancelled_aar": "Da diese Zustellung storniert wurde, wurde der Download der Empfangsbestätigung deaktiviert.",
-      "notification_cancelled_acts": "Da diese Zustellung storniert wurde, wurde der Download der Dokumente deaktiviert.",
       "effected_faq": "Wann ist die Bearbeitung einer Zustellung vervollständigt?",
       "informal_downloadable_acts": "Speichere die Anhänge auf deinem Gerät: Sie sind online <0>bis zu 180 Tage ab dem Hinterlegungsdatum</0> verfügbar, das du oben findest!"
     },
