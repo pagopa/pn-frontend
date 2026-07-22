@@ -46,7 +46,6 @@ const FilterNotificationsFormActions = ({
       }}
       size="small"
       onClick={cleanFilters}
-      disabled={!filtersApplied}
     >
       {t('button.annulla filtro')}
     </Button>
@@ -59,11 +58,12 @@ const FilterNotificationsFormActions = ({
       ) : (
         confirmAction
       )}
-      {isInDialog ? (
-        <CustomMobileDialogAction closeOnClick>{cancelAction}</CustomMobileDialogAction>
-      ) : (
-        cancelAction
-      )}
+      {filtersApplied &&
+        (isInDialog ? (
+          <CustomMobileDialogAction closeOnClick>{cancelAction}</CustomMobileDialogAction>
+        ) : (
+          cancelAction
+        ))}
     </Fragment>
   );
 };

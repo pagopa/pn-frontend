@@ -108,7 +108,11 @@ const DesktopNotifications = ({
 
   return (
     <>
-      <FilterNotifications ref={filterNotificationsRef} showFilters={showFilters} />
+      <FilterNotifications
+        ref={filterNotificationsRef}
+        showFilters={showFilters}
+        isDelegatedPage={isDelegatedPage}
+      />
       {rows.length ? (
         <PnTable
           testId="notificationsTable"

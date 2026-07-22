@@ -38,6 +38,7 @@ export interface GetNotificationsParams {
   nextPagesKey?: string;
   iunMatch?: string;
   group?: string;
+  communicationType?: NotificationCommunicationType | '';
 }
 
 export type NotificationColumnData<T extends Notification | RecipientNotification = Notification> =

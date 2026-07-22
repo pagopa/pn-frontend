@@ -142,7 +142,11 @@ const MobileNotifications = ({
     <Fragment>
       <Grid container direction="row" sx={{ marginBottom: '16px' }}>
         <Grid item xs={6}>
-          <FilterNotifications ref={filterNotificationsRef} showFilters={showFilters} />
+          <FilterNotifications
+            ref={filterNotificationsRef}
+            showFilters={showFilters}
+            isDelegatedPage={isDelegatedPage}
+          />
         </Grid>
         <Grid item xs={6} textAlign="right">
           {/**

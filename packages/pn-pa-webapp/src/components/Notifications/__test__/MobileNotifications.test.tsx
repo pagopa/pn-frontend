@@ -37,6 +37,8 @@ describe('MobileNotifications Component', () => {
           onApiKeys={() => {}}
           filtersApplied={false}
           onCleanFilters={() => {}}
+          loading={false}
+          onRetry={() => {}}
         />
       );
     });
@@ -59,6 +61,8 @@ describe('MobileNotifications Component', () => {
           onApiKeys={() => {}}
           filtersApplied={false}
           onCleanFilters={() => {}}
+          loading={false}
+          onRetry={() => {}}
         />
       );
     });
@@ -80,6 +84,8 @@ describe('MobileNotifications Component', () => {
           onApiKeys={() => {}}
           filtersApplied={true} // simulate "filtered" empty state
           onCleanFilters={() => {}}
+          loading={false}
+          onRetry={() => {}}
         />
       );
     });
@@ -99,12 +105,16 @@ describe('MobileNotifications Component', () => {
           onApiKeys={() => {}}
           filtersApplied={false}
           onCleanFilters={() => {}}
+          loading={false}
+          onRetry={() => {}}
         />
       );
     });
-    const notificationCards = result!.getAllByTestId('mobileCards');
-    const notificationsCardButton = notificationCards[0].querySelector('button');
-    fireEvent.click(notificationsCardButton!);
+
+    const notificationsCardButton = result!.getAllByTestId('go-to-detail')[0];
+    expect(notificationsCardButton).toHaveTextContent('table.open');
+    fireEvent.click(notificationsCardButton);
+
     await waitFor(() => {
       expect(result.router.state.location.pathname).toBe(
         GET_DETTAGLIO_NOTIFICA_PATH(notificationsToFe.resultsPage[0].iun)
