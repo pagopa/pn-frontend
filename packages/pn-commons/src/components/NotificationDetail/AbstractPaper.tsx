@@ -124,18 +124,18 @@ const AbstractPaper = ({
       </Grid>
       <Divider aria-hidden sx={{ my: 2 }} />
       {isLegal ? (
-        <Typography variant="body1" sx={{ overflowWrap: 'anywhere' }}>
-          {abstract}
-        </Typography>
+        <>
+          <Typography variant="body1" sx={{ overflowWrap: 'anywhere' }}>
+            {abstract}
+          </Typography>
+          <Typography variant="body2" color="text.secondary" sx={{ mt: 2 }}>
+            {getLocalizedOrDefaultLabel('notifications', 'detail.legal-disclaimer')}
+          </Typography>
+        </>
       ) : (
         <Box sx={{ overflowWrap: 'anywhere' }}>
           <PNMarkdown content={abstract ?? ''} />
         </Box>
-      )}
-      {isLegal && (
-        <Typography variant="body2" color="text.secondary" sx={{ mt: 2 }}>
-          {getLocalizedOrDefaultLabel('notifications', 'detail.legal-disclaimer')}
-        </Typography>
       )}
     </MIPaper>
   );
