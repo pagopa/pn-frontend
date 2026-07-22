@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
 
-import { Box, Paper as MIPaper, Stack } from '@mui/material';
+import { Box, Stack } from '@mui/material';
 import {
   AbstractPaper,
   ApiError,
@@ -16,6 +16,7 @@ import {
   PnSenderContacts,
   useErrors,
 } from '@pagopa-pn/pn-commons';
+import { MIPaper } from '@pagopa/mui-italia';
 
 import LoadingPageWrapper from '../components/LoadingPageWrapper/LoadingPageWrapper';
 import { BffFullInformalNotificationV1 } from '../generated-client/informal-notifications';
@@ -220,25 +221,20 @@ const InformalNotificationDetail: React.FC = () => {
         <Box sx={{ p: 3, display: 'flex', flexDirection: 'column', gap: 2 }}>
           {properBreadcrumb}
 
-          <MIPaper
-            sx={{ p: 3, display: 'flex', flexDirection: 'column', gap: 2 }}
-            variant="outlined"
-          >
-            <AbstractPaper
-              title={primaryMessage?.subject ?? ''}
-              senderPaId={informalNotification?.senderPaId}
-              senderDenomination={informalNotification?.senderDenomination ?? ''}
-              filedAt={informalNotification?.filedAt ?? ''}
-              iun={informalNotification?.iun ?? ''}
-              isLegal={false}
-              abstract={primaryMessage?.longBody ?? ''}
-            />
-          </MIPaper>
+          <AbstractPaper
+            title={primaryMessage?.subject ?? ''}
+            senderPaId={informalNotification?.senderPaId}
+            senderDenomination={informalNotification?.senderDenomination ?? ''}
+            filedAt={informalNotification?.filedAt ?? ''}
+            iun={informalNotification?.iun ?? ''}
+            isLegal={false}
+            abstract={primaryMessage?.longBody ?? ''}
+          />
 
           <Stack direction={{ xs: 'column', md: 'row' }} spacing={2} alignItems="flex-start">
             <Stack spacing={2} sx={{ width: { xs: '100%', md: '58%' } }}>
               {documentsAvailable && (
-                <MIPaper sx={{ p: 3, flex: 1 }} variant="outlined">
+                <MIPaper sx={{ flex: 1 }} padding={24}>
                   <NotificationDetailDocuments
                     title={t('detail.acts', { ns: 'notifiche' })}
                     documents={informalNotification?.documents}
@@ -250,7 +246,7 @@ const InformalNotificationDetail: React.FC = () => {
                 </MIPaper>
               )}
               {hasPayments && (
-                <MIPaper sx={{ p: 3 }} variant="outlined">
+                <MIPaper padding={24}>
                   <NotificationPaymentRecipient
                     payments={paymentsData}
                     isCancelled={false}
