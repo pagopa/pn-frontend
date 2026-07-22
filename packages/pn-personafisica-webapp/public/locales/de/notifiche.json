@@ -160,7 +160,6 @@
       "not_downloadable_acts": "Die Dokumente sind online nicht mehr verfügbar. Um sie anzufordern, wenden Sie sich bitte an die Behörde, die sie Ihnen zugesendet hat.",
       "not_downloadable_aar": "Der Zustellungsnachweis ist nicht mehr verfügbar. Um ihn anzufordern, wenden Sie sich bitte an die Behörde, die ihn Ihnen zugesendet hat.",
       "downloadable_aar": "Die Empfangsbestätigung ist 10 Jahre ab Vervollständigung der Zustellung online verfügbar.",
-      "notification_cancelled_acts": "Da diese Zustellung storniert wurde, wurde der Download der Dokumente deaktiviert.",
       "effected_faq": "Wann ist die Bearbeitung einer Zustellung vervollständigt?",
       "informal_downloadable_acts": "Speichere die Anhänge auf deinem Gerät: Sie sind online <0>bis zu 180 Tage ab dem Hinterlegungsdatum</0> verfügbar, das du oben findest!"
     },
