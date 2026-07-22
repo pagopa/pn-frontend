@@ -14,6 +14,8 @@ import {
   PaymentsData,
   PnBreadcrumb,
   PnSenderContacts,
+  appStateActions,
+  downloadDocument,
   useErrors,
 } from '@pagopa-pn/pn-commons';
 import { MIPaper } from '@pagopa/mui-italia';
@@ -22,14 +24,12 @@ import LoadingPageWrapper from '../components/LoadingPageWrapper/LoadingPageWrap
 import { BffFullInformalNotificationV1 } from '../generated-client/informal-notifications';
 import * as routes from '../navigation/routes.const';
 import { useAppDispatch } from '../redux/hooks';
-import {
-  getReceivedNotificationPayment,
-  getReceivedNotificationPaymentUrl,
-} from '../redux/notification/actions';
+import { getReceivedNotificationPaymentUrl } from '../redux/notification/actions';
 import {
   INFORMAL_NOTIFICATION_ACTIONS,
   getReceivedInformalNotification,
   getReceivedInformalNotificationDocument,
+  getReceivedInformalNotificationPayment,
   getReceivedInformalNotificationPaymentInfo,
 } from '../redux/notification/informalActions';
 
@@ -184,24 +184,45 @@ const InformalNotificationDetail: React.FC = () => {
 
   const getPaymentAttachmentAction = (name: PaymentAttachmentSName, attachmentIdx?: number) =>
     dispatch(
-      getReceivedNotificationPayment({
+      getReceivedInformalNotificationPayment({
         iun: informalNotification?.iun ?? '',
         attachmentName: name,
         attachmentIdx,
       })
     );
 
+  const showInfoMessageIfRetryAfterOrDownload = (response: {
+    url: string;
+    retryAfter?: number;
+  }) => {
+    if (response.retryAfter) {
+      dispatch(
+        appStateActions.addInfo({
+          title: '',
+          message: t(`detail.document-not-available`, {
+            ns: 'notifiche',
+          }),
+        })
+      );
+    } else if (response.url) {
+      downloadDocument(response.url);
+    }
+  };
+
   const handleDocumentDownload = (document?: string | NotificationDetailOtherDocument) => {
     if (!informalNotification?.iun || !document || typeof document !== 'string') {
       return;
     }
 
-    void dispatch(
+    dispatch(
       getReceivedInformalNotificationDocument({
         iun: informalNotification.iun,
         docIdx: Number(document),
       })
-    );
+    )
+      .unwrap()
+      .then(showInfoMessageIfRetryAfterOrDownload)
+      .catch(() => {});
   };
 
   return (

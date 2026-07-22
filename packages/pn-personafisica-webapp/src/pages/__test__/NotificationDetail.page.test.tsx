@@ -144,7 +144,7 @@ describe('NotificationDetail Page', () => {
     expect(mock.history.get[0].url).toContain('/bff/v1/notifications/received');
     expect(mock.history.post[0].url).toBe(`/bff/v1/payments/info`);
     expect(mock.history.get[1].url).toContain('/bff/v1/downtime/history');
-    expect(result.getByTestId('breadcrumb-link')).toHaveTextContent(/detail.breadcrumb-root/i);
+    expect(result.getByTestId('breadcrumb-link')).toHaveTextContent(/menu.notifiche/i);
     expect(result.container).toHaveTextContent(notificationToFe.abstract!);
 
     // SKIPPED because it's not a table anymore, update unit test with new implementation
@@ -554,6 +554,13 @@ describe('NotificationDetail Page', () => {
     expect(mock.history.get[0].url).toContain('/bff/v1/notifications/received');
     expect(mock.history.get[1].url).toContain('/bff/v1/downtime/history');
     expect(mock.history.post[0].url).toBe(`/bff/v1/payments/info`);
+    // check documents box
+    const notificationDetailDocumentsMessage = result.getAllByTestId('documentsDisabled');
+    for (const notificationDetailDocumentMessage of notificationDetailDocumentsMessage) {
+      expect(notificationDetailDocumentMessage).toHaveTextContent(
+        /detail.acts_files.not_downloadable_aar|detail.acts_files.not_downloadable_acts/
+      );
+    }
   });
 
   it('checks not available payment', async () => {
@@ -987,7 +994,7 @@ describe('NotificationDetail Page', () => {
     expect(mock.history.get[0].url).toContain('/bff/v1/notifications/received');
     expect(mock.history.post[0].url).toBe(`/bff/v1/payments/info`);
     expect(mock.history.get[1].url).toContain('/bff/v1/downtime/history');
-    expect(result.getByTestId('breadcrumb-link')).toHaveTextContent(/detail.breadcrumb-root/i);
+    expect(result.getByTestId('breadcrumb-link')).toHaveTextContent(/menu.notifiche/i);
     expect(result.container).toHaveTextContent(notificationToFe.abstract!);
 
     // SKIPPED because it's not a table anymore, update unit test with new implementation

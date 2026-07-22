@@ -530,10 +530,7 @@ const NotificationDetail = () => {
                     documentsAvailable={notification.documentsAvailable}
                     downloadFilesMessage={getDownloadFilesMessage('attachments')}
                     downloadFilesLink={t('detail.acts_files.effected_faq', { ns: 'notifiche' })}
-                    disableDownloads={
-                      isCancelled.cancellationInTimeline ||
-                      !dateIsLessThan10Years(notification.sentAt)
-                    }
+                    disableDownloads={isCancelled.cancellationInTimeline}
                     titleVariant="h5"
                   />
                   {notification.radd && (
