@@ -5,7 +5,7 @@ import { configDefaults, defineConfig as defineVitestConfig } from 'vitest/confi
 import basicSsl from '@vitejs/plugin-basic-ssl';
 import react from '@vitejs/plugin-react';
 
-import type { IncomingMessage, ServerResponse } from 'node:http';
+import { getLocalHttpsOptions } from '../../bin/local-https.mjs';
 
 const vitestConfig = defineVitestConfig({
   test: {
@@ -29,14 +29,22 @@ const vitestConfig = defineVitestConfig({
   },
 });
 
-export default defineConfig(({ mode }) => {
+export default defineConfig(({ command, mode }) => {
   const env = loadEnv(mode, process.cwd(), '');
 
+  const host = env.HOST?.trim() || 'localhost';
+
+  const shouldConfigureHttps = command === 'serve' && mode !== 'test';
+
+  const https = shouldConfigureHttps ? getLocalHttpsOptions(host) : undefined;
+
+  const useBasicSslFallback = shouldConfigureHttps && !https;
+
   return mergeConfig(vitestConfig, {
-    plugins: [react(), basicSsl()],
+    plugins: [react(), ...(useBasicSslFallback ? [basicSsl()] : [])],
     server: {
-      host: env.HOST,
-      https: true,
+      host,
+      https: https ?? true,
       port: 443,
       strictPort: true,
       open: true,
@@ -45,7 +53,7 @@ export default defineConfig(({ mode }) => {
           target: 'https://pnpg.uat.selfcare.pagopa.it',
           changeOrigin: true,
         },
-       '/mock-mixpanel': {
+        '/mock-mixpanel': {
           target: env.HOST, // Fake target
           bypass: (_: IncomingMessage, res: ServerResponse) => {
             res.statusCode = 200;
@@ -77,8 +85,8 @@ export default defineConfig(({ mode }) => {
     },
     preview: {
       port: 443,
-      host: env.HOST,
-      https: true,
+      host,
+      https: https ?? true,
     },
     // Exclude the test and the mock folders from being processed by Vite
     exclude: ['**/__test__/**', '**/__mocks__/**'],
