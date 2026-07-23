@@ -61,6 +61,10 @@
     "not-found-subtitle": "Seul le destinataire peut lire cette notification."
   },
   "detail": {
+    "legal-value": "Notification à valeur juridique",
+    "legal-date": "Notification déposée le",
+    "informal-date": "Communication déposée le",
+    "legal-disclaimer": "Notification envoyée via SEND, la plateforme régie par l'art. 26 du D.L. 76/2020",
     "notification-timeline-section": {
       "title": "Statut de la notification",
       "aria-label": "Accède à la timeline de la notification"
@@ -94,7 +98,6 @@
     "show-less": "Voir moins de détails",
     "disclaimer-link": "En savoir plus",
     "pec-unreachable": "Maintenez votre adresse PEC libre et active pour tout recevoir au format numérique !",
-    "legal-value": "Notification à valeur juridique",
     "cancelled": {
       "message": "Cette notification a été annulée par l'organisme émetteur.",
       "cta": "Que dois-je faire ?"

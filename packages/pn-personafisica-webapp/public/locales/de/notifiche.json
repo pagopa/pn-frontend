@@ -62,9 +62,9 @@
   },
   "detail": {
     "legal-value": "Rechtsgültige Zustellung",
-    "legal-date": "Notification déposée le",
-    "informal-date": "Communication déposée le",
-    "legal-disclaimer": "Notification envoyée via SEND, la plateforme régie par l’art. 26 du D.L. 76/2020",
+    "legal-date": "Zustellung hinterlegt am",
+    "informal-date": "Mitteilung hinterlegt am",
+    "legal-disclaimer": "Zustellung über SEND gesendet, die durch Art. 26 des Gesetzesdekrets 76/2020 geregelte Plattform",
     "notification-timeline-section": {
       "title": "Status der Zustellung",
       "aria-label": "Gehe zur Timeline der Zustellung"
