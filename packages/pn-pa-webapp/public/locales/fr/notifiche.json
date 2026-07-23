@@ -1,6 +1,7 @@
 {
   "title": "Notifications",
   "subtitle": "Vous trouverez ici toutes les notifications envoyées par l’organisme. Vous pouvez les filtrer par code fiscal, code IUN, date d’envoi et état.",
+  "go-to-detail": "Voir les détails",
   "new-notification-button": "Envoyer une notification",
   "manual-send-disabled-message": "Impossible d’envoyer de nouvelles notifications pour le moment.",
   "manual-send-disabled-action": "Contrôler l’état de la plateforme",
@@ -25,12 +26,11 @@
   },
   "payment": {
     "title": "Paiements",
-    "subtitle-single": "Ici, vous pouvez surveiller l’état de paiement des avis de pagoPA joints à la notification.",
-    "subtitle-single-f24": "Ici, vous pouvez voir les modèles F24 joints à la notification.",
-    "subtitle-multiple": "Pour voir l’état de paiement des avis de pagoPA joints à la notification, sélectionnez un destinataire.",
-    "subtitle-multiple-f24": "Pour voir les modèles F24 joints à la notification, sélectionnez un destinataire.",
     "pagopa-notice": "Avis de pagoPA",
-    "paid": "Payé",
+    "status": {
+      "to-pay": "À payer",
+      "succeeded": "Payé"
+    },
     "f24-attached": "Modèles F24 joints",
     "attachments": "annexes",
     "f24-dialog-title": "Modèles F24 joints à la notification {{iun}}"
@@ -65,12 +65,28 @@
     "aria-label-create-notification": "Envoi manuel"
   },
   "detail": {
+    "protocol-number": "Numéro de protocole",
+    "subject": "Objet de la notification",
+    "notification-details-aria-label": "Accéder aux détails de la notification",
+    "legal-value": "Notification à valeur juridique",
+    "notification-timeline-section": {
+      "title": "Statut de la notification",
+      "aria-label": "Accéder à la chronologie de la notification"
+    },
+    "notification-detail-section": {
+      "title": "Détails de la notification",
+      "aar": "Avis de réception",
+      "aria-label": "Accéder à l'avis de réception"
+    },
     "document-not-available": "Le document sera téléchargeable dans quelques minutes. Vous pouvez réessayer en rechargeant la page ou en cliquant sur le lien du document requis",
     "table-aria-label": "Détail de la notification",
     "payment-table-aria-label": "Détail des paiements",
     "sender": "Expéditeur",
     "recipient": "Destinataire",
     "recipients": "Destinataires",
+    "recipient-list-mono": "Destinataire",
+    "recipient-list-multi": "Destinataires",
+    "notification-text": "Texte de la notification",
     "tax-id-citizen-recipient": "Code fiscal destinataire",
     "tax-id-organization-recipient": "Code fiscal destinataire",
     "date": "Date d’envoi",
@@ -115,12 +131,11 @@
       }
     },
     "acts": "Pièces jointes",
-    "download-message-available": "Les documents sont disponibles en ligne pendant 120 jours à compter de la finalisation de la notification.",
+    "download-message-available": "<0>Disponible en ligne jusqu'à 120 jours</0> à compter de la date à laquelle la notification SEND a pris valeur juridique.",
     "download-message-expired": "Étant donné que 120 jours se sont écoulés depuis la date de finalisation, les documents ne sont plus disponibles.",
     "download-aar-available": "L’accusé de réception est disponible en ligne pendant 10 ans à compter de la finalisation de la notification.",
     "download-aar-expired": "Comme 10 ans se sont écoulés depuis la date de finalisation, l’accusé de réception n’est plus disponible.",
     "download-files-link": "Quand une notification est-elle finalisée ?",
-    "aar-acts": "Accusé de réception",
     "timeline-title": "État de la notification",
     "legalfact": "Attestation opposable aux tiers",
     "receipt": "Reçu",

@@ -5,11 +5,9 @@ import { vi } from 'vitest';
 import {
   AppMessage,
   AppResponseMessage,
-  NotificationDetail as NotificationDetailModel,
   NotificationDetailOtherDocument,
   NotificationStatus,
   ResponseEventDispatcher,
-  TimelineCategory,
   formatDate,
   formatToTimezoneString,
   today,
@@ -29,17 +27,7 @@ import { apiClient } from '../../api/apiClients';
 import { NOTIFICATION_ACTIONS } from '../../redux/notification/actions';
 import NotificationDetail from '../NotificationDetail.page';
 
-const getLegalFactIds = (notification: NotificationDetailModel, recIndex: number) => {
-  const timelineElementDigitalSuccessWorkflow = notification.timeline.filter(
-    (t) =>
-      t.category === TimelineCategory.DIGITAL_SUCCESS_WORKFLOW && t.details.recIndex === recIndex
-  )[0];
-  return timelineElementDigitalSuccessWorkflow.legalFactsIds![0];
-};
-
 describe('NotificationDetail Page', () => {
-  const mockLegalIds = getLegalFactIds(notificationDTO, 0);
-
   let result: RenderResult;
   let mock: MockAdapter;
 
@@ -182,13 +170,11 @@ describe('NotificationDetail Page', () => {
       );
     });
 
-    const notificationDetailDocumentsMessage = result.getAllByTestId('documentsMessage');
-    expect(notificationDetailDocumentsMessage[1]).toHaveTextContent(
-      'detail.download-aar-available'
-    );
+    const aarBox = result.getAllByTestId('aarBox')[0];
+    expect(aarBox).toHaveTextContent('detail.download-aar-available');
 
-    const documentButton = result.getAllByTestId('documentButton');
-    fireEvent.click(documentButton[1]);
+    const documentButton = within(aarBox).getByTestId('documentButton');
+    fireEvent.click(documentButton);
 
     await waitFor(() => {
       const alertMessage = result.getAllByTestId('snackBarContainer')[0];
@@ -205,7 +191,7 @@ describe('NotificationDetail Page', () => {
         retryAfter: null,
         url: 'https://mocked-aar-com',
       });
-    fireEvent.click(documentButton[1]);
+    fireEvent.click(documentButton);
     await waitFor(() => {
       expect(mock.history.get).toHaveLength(4);
       expect(mock.history.get[3].url).toContain(
@@ -235,8 +221,8 @@ describe('NotificationDetail Page', () => {
 
     const aarSection = result.getByTestId('aarDownload');
 
-    const notificationDetailDocumentsMessage = within(aarSection).getByTestId('documentsMessage');
-    expect(notificationDetailDocumentsMessage).toHaveTextContent('detail.download-aar-expired');
+    const aarDisabled = within(aarSection).getByTestId('aarDisabled');
+    expect(aarDisabled).toHaveTextContent('detail.download-aar-expired');
 
     const documentButton = within(aarSection).queryAllByTestId('documentButton');
     expect(documentButton).toHaveLength(0);
@@ -274,69 +260,7 @@ describe('NotificationDetail Page', () => {
     });
   });
 
-  it('executes the legal fact download handler - mono recipient', async () => {
-    mock.onGet(`/bff/v1/notifications/sent/${notificationDTO.iun}`).reply(200, notificationDTO);
-    // we use regexp to not set the query parameters
-    mock.onGet(/\/bff\/v1\/downtime\/history.*/).reply(200, downtimesDTO);
-    mock
-      .onGet(
-        `/bff/v1/notifications/sent/${notificationDTO.iun}/documents/LEGAL_FACT?documentId=${mockLegalIds.key}`
-      )
-      .reply(200, {
-        retryAfter: 1,
-      });
-    await act(async () => {
-      result = render(
-        <>
-          <AppMessage />
-          <NotificationDetail />
-        </>,
-        {
-          route: `/${notificationDTO.iun}`,
-          path: '/:id',
-        }
-      );
-    });
-    expect(mock.history.get).toHaveLength(2);
-    expect(mock.history.get[0].url).toContain('/bff/v1/notifications/sent');
-    expect(mock.history.get[1].url).toContain('/bff/v1/downtime/history');
-    const legalFactButton = result.getAllByTestId('download-legalfact');
-
-    fireEvent.click(legalFactButton[0]);
-    await waitFor(() => {
-      expect(mock.history.get).toHaveLength(3);
-      expect(mock.history.get[2].url).toContain(
-        `/bff/v1/notifications/sent/${notificationDTO.iun}/documents/LEGAL_FACT?documentId=${mockLegalIds.key}`
-      );
-    });
-    const docNotAvailableAlert = await waitFor(() => result.getByTestId('snackBarContainer'));
-    expect(docNotAvailableAlert).toBeInTheDocument();
-
-    mock
-      .onGet(
-        `/bff/v1/notifications/sent/${notificationDTO.iun}/documents/LEGAL_FACT?documentId=${mockLegalIds.key}`
-      )
-      .reply(200, {
-        filename: 'mocked-filename',
-        contentLength: 1000,
-        retryAfter: null,
-        url: 'https://mocked-url-com',
-      });
-    // simulate that legal fact is now available
-    fireEvent.click(legalFactButton[0]);
-
-    await waitFor(() => {
-      expect(mock.history.get).toHaveLength(4);
-      expect(mock.history.get[3].url).toContain(
-        `/bff/v1/notifications/sent/${notificationDTO.iun}/documents/LEGAL_FACT?documentId=${mockLegalIds.key}`
-      );
-    });
-    await waitFor(() => {
-      expect(globalThis.location.href).toBe('https://mocked-url-com');
-    });
-  });
-
-  it('executes the downtimws legal fact download handler - mono recipient', async () => {
+  it('executes the downtimes legal fact download handler - mono recipient', async () => {
     mock.onGet(`/bff/v1/notifications/sent/${notificationDTO.iun}`).reply(200, notificationDTO);
     // we use regexp to not set the query parameters
     mock.onGet(/\/bff\/v1\/downtime\/history.*/).reply(200, downtimesDTO);
@@ -519,43 +443,29 @@ describe('NotificationDetail Page', () => {
     expect(mock.history.get).toHaveLength(2);
     expect(mock.history.get[0].url).toContain('/bff/v1/notifications/sent');
     expect(mock.history.get[1].url).toContain('/bff/v1/downtime/history');
-    // the only thing that change from mono to multi recipient is the data shown in the table and the payments number
-    // check summary table
-    const notificationDetailTable = result.getByTestId('notificationDetailTable');
-    expect(notificationDetailTable).toBeInTheDocument();
-    const tableRows = notificationDetailTable?.querySelectorAll('tr');
-    expect(tableRows[0]).toHaveTextContent(
-      `detail.sender${notificationDTOMultiRecipient.senderDenomination}`
-    );
-    notificationDTOMultiRecipient.recipients.forEach((recipient, index) => {
-      expect(tableRows[1]).toHaveTextContent(
-        index === 0
-          ? `detail.recipients${recipient.denomination} - ${recipient.taxId}`
-          : `${recipient.denomination} - ${recipient.taxId}`
-      );
+    // check summary card
+    expect(result.container).toHaveTextContent(notificationDTOMultiRecipient.iun);
+    expect(result.container).toHaveTextContent(notificationDTOMultiRecipient.paProtocolNumber!);
+    expect(result.container).toHaveTextContent(notificationDTOMultiRecipient.subject);
+    expect(result.container).toHaveTextContent(notificationDTOMultiRecipient.senderDenomination!);
+
+    notificationDTOMultiRecipient.recipients.forEach((recipient) => {
+      expect(result.container).toHaveTextContent(`${recipient.denomination} - ${recipient.taxId}`);
     });
-    expect(tableRows[2]).toHaveTextContent(
-      `detail.date${formatDate(notificationDTOMultiRecipient.sentAt)}`
-    );
-    expect(tableRows[3]).toHaveTextContent(`detail.iun${notificationDTOMultiRecipient.iun}`);
-    expect(tableRows[4]).toHaveTextContent(`detail.groups${notificationDTOMultiRecipient.group}`);
     // check payment history box
     const paymentsTable = result.getByTestId('paymentInfoBox');
     expect(paymentsTable).toBeInTheDocument();
     // check documents box
-    let notificationDocumentLength: number;
     const notificationDetailDocuments = result.getAllByTestId('notificationDetailDocuments');
-    if (notificationDTOMultiRecipient.otherDocuments) {
-      notificationDocumentLength = notificationDTOMultiRecipient.documents.length;
-      +notificationDTOMultiRecipient.otherDocuments.length;
-    } else {
-      notificationDocumentLength = notificationDTOMultiRecipient.documents.length;
-    }
-
-    expect(notificationDetailDocuments?.length).toBeGreaterThanOrEqual(notificationDocumentLength);
-    // check timeline box
-    const NotificationDetailTimeline = result.getByTestId('NotificationDetailTimeline');
-    expect(NotificationDetailTimeline).toBeInTheDocument();
+    expect(notificationDetailDocuments).toHaveLength(
+      notificationDTOMultiRecipient.documents.length
+    );
+    expect(result.getAllByTestId('aarBox')).toHaveLength(
+      notificationDTOMultiRecipient.otherDocuments?.length ?? 0
+    );
+    // check timeline summary box
+    const notificationTimelineBox = result.getByTestId('NotificationDetailTimeline');
+    expect(notificationTimelineBox).toBeInTheDocument();
     // check downtimes box
     const downtimesBox = result.getByTestId('downtimesBox');
     expect(downtimesBox).toBeInTheDocument();

@@ -1,7 +1,7 @@
 import { ChangeEvent, useState } from 'react';
 import { TFunction, useTranslation } from 'react-i18next';
 
-import { Box, Divider, MenuItem, Paper, TextField, Typography } from '@mui/material';
+import { Box, Divider, MenuItem, TextField, Typography } from '@mui/material';
 import {
   CustomPagination,
   F24PaymentDetails,
@@ -15,6 +15,7 @@ import {
   getPagoPaF24Payments,
   populatePaymentsPagoPaF24,
 } from '@pagopa-pn/pn-commons';
+import { MIPaper } from '@pagopa/mui-italia';
 
 import NotificationPaymentF24 from './NotificationPaymentF24';
 import NotificationPaymentPagoPa from './NotificationPaymentPagoPa';
@@ -116,24 +117,10 @@ const NotificationPaymentSender: React.FC<Props> = ({ iun, recipients, timeline 
     );
 
   return (
-    <Paper sx={{ p: 3, mb: 3 }} elevation={0} data-testid="paymentInfoBox">
-      <Typography variant="h6">{t('payment.title', { ns: 'notifiche' })}</Typography>
-      {recipients.length === 1 && (
-        <Typography variant="body2" my={2}>
-          {f24PaymentDetails.length > 0 && pagoPAPaymentFullDetails.length === 0
-            ? t('payment.subtitle-single-f24', { ns: 'notifiche' })
-            : t('payment.subtitle-single', { ns: 'notifiche' })}
-        </Typography>
-      )}
-      {recipients.length > 1 && (
-        <Typography variant="body2" my={2}>
-          {f24PaymentDetails.length > 0 &&
-          pagoPAPaymentFullDetails.length === 0 &&
-          recipientSelected
-            ? t('payment.subtitle-multiple-f24', { ns: 'notifiche' })
-            : t('payment.subtitle-multiple', { ns: 'notifiche' })}
-        </Typography>
-      )}
+    <MIPaper padding={24} data-testid="paymentInfoBox">
+      <Typography variant="h5" component="h2" mb={2}>
+        {t('payment.title', { ns: 'notifiche' })}
+      </Typography>
       {recipients.length > 1 && (
         <TextField
           id="recipients-select"
@@ -174,7 +161,7 @@ const NotificationPaymentSender: React.FC<Props> = ({ iun, recipients, timeline 
       {f24PaymentDetails.length > 0 && (
         <NotificationPaymentF24 iun={iun} payments={f24PaymentDetails} />
       )}
-    </Paper>
+    </MIPaper>
   );
 };
 

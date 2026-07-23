@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { ReactElement } from 'react';
 import { Trans } from 'react-i18next';
 
 import DoNotDisturbIcon from '@mui/icons-material/DoNotDisturb';
@@ -22,25 +22,64 @@ import {
 import { getLocalizedOrDefaultLabel } from '../../utility/localization.utility';
 import { isNotificationDetailOtherDocument } from '../../utility/notification.utility';
 
+export type DocumentsDownloadFilesMessage = {
+  key: string;
+  ns: string;
+  components?: Array<ReactElement>;
+};
+
 type DocumentsProps = {
   documents?: Array<NotificationDetailDocument>;
   recipients?: Array<NotificationDetailRecipient>;
   clickHandler: (document: string | NotificationDetailOtherDocument | undefined) => void;
   disableDownloads?: boolean;
+  downloadFilesMessage?: DocumentsDownloadFilesMessage;
 };
 
 interface Props extends DocumentsProps {
   title: string;
   documentsAvailable?: boolean;
-  downloadFilesMessage?: { key: string; ns: string };
   downloadFilesLink?: string;
   titleVariant?: TypographyProps['variant'];
+  inlineDownloadFilesMessage?: boolean;
 }
+
+type DocumentButtonContentProps = {
+  documentName: string;
+  downloadFilesMessage?: DocumentsDownloadFilesMessage;
+};
+
+const DocumentButtonContent: React.FC<DocumentButtonContentProps> = ({
+  documentName,
+  downloadFilesMessage,
+}) => {
+  if (!downloadFilesMessage) {
+    return <>{documentName}</>;
+  }
+
+  return (
+    <Box sx={{ textAlign: 'left', overflowWrap: 'anywhere' }}>
+      <Typography variant="caption-semibold" fontSize={16} color="primary" component="span">
+        {documentName}
+      </Typography>
+      <Typography variant="caption" color="text.secondary" component="div" sx={{ mt: 0.5 }}>
+        <Trans
+          i18nKey={downloadFilesMessage.key}
+          ns={downloadFilesMessage.ns}
+          {...(downloadFilesMessage.components
+            ? { components: downloadFilesMessage.components }
+            : {})}
+        />
+      </Typography>
+    </Box>
+  );
+};
 
 const Documents: React.FC<DocumentsProps> = ({
   documents,
   recipients = [],
   disableDownloads,
+  downloadFilesMessage,
   clickHandler,
 }) => {
   const theme = useTheme();
@@ -89,7 +128,10 @@ const Documents: React.FC<DocumentsProps> = ({
               },
             }}
           >
-            {document.name}
+            <DocumentButtonContent
+              documentName={document.name}
+              downloadFilesMessage={downloadFilesMessage}
+            />
           </Box>
         )}
         {disableDownloads && (
@@ -132,6 +174,7 @@ const NotificationDetailDocuments: React.FC<Props> = (
     downloadFilesMessage,
     disableDownloads = false,
     titleVariant = 'overline',
+    inlineDownloadFilesMessage = false,
   } // TODO: remove comment when link ready downloadFilesLink
 ) => (
   <Stack spacing={3}>
@@ -174,7 +217,7 @@ const NotificationDetailDocuments: React.FC<Props> = (
     )}
 
     {/* Notification sent before expiration date (120 legal and 180 combo) */}
-    {documentsAvailable && downloadFilesMessage && (
+    {documentsAvailable && downloadFilesMessage && !inlineDownloadFilesMessage && (
       <MIPaper
         data-testid="documentsMessage"
         key="detail-documents-message"
@@ -201,6 +244,7 @@ const NotificationDetailDocuments: React.FC<Props> = (
         documents={documents}
         recipients={recipients}
         disableDownloads={disableDownloads}
+        downloadFilesMessage={inlineDownloadFilesMessage ? downloadFilesMessage : undefined}
         clickHandler={clickHandler}
       />
     )}

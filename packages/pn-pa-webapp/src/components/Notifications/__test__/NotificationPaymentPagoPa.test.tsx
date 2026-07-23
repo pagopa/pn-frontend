@@ -52,11 +52,10 @@ describe('NotificationPaymentPagoPa Component', () => {
     );
     expect(container).toHaveTextContent('detail.notice-code');
     expect(container).toHaveTextContent(paymentHistory[0].pagoPa?.noticeCode!);
-    expect(container).toHaveTextContent('payment.pagopa-notice');
-    // payment without status succeded
-    let paymentChip = queryByTestId('payment-succeded');
-    expect(paymentChip).not.toBeInTheDocument();
-    // payment with status succeded
+    expect(container).toHaveTextContent('payment.status.to-pay');
+    // payment without status defaults to required
+    expect(queryByTestId('payment-required')).toBeInTheDocument();
+    // payment with status succeeded
     paymentHistory[0].pagoPa!.status = PaymentStatus.SUCCEEDED;
     rerender(
       <NotificationPaymentPagoPa
@@ -64,11 +63,10 @@ describe('NotificationPaymentPagoPa Component', () => {
         payment={paymentHistory[0].pagoPa!}
       />
     );
-    paymentChip = queryByTestId('payment-succeded');
-    expect(paymentChip).toBeInTheDocument();
+    expect(queryByTestId('payment-succeeded')).toBeInTheDocument();
   });
 
-  it('dowload payment attachment', async () => {
+  it('download payment attachment', async () => {
     const iun = notificationDTOMultiRecipient.iun;
     const attachmentName = PaymentAttachmentSName.PAGOPA;
     const paymentHistory = populatePaymentsPagoPaF24(
@@ -87,8 +85,8 @@ describe('NotificationPaymentPagoPa Component', () => {
         payment={paymentHistory[0].pagoPa!}
       />
     );
-    const dowloadButton = getByRole('button');
-    fireEvent.click(dowloadButton);
+    const downloadButton = getByRole('button');
+    fireEvent.click(downloadButton);
     await waitFor(() => {
       expect(mock.history.get).toHaveLength(1);
       expect(mock.history.get[0].url).toBe(
@@ -111,8 +109,8 @@ describe('NotificationPaymentPagoPa Component', () => {
         payment={paymentHistory[0].pagoPa!}
       />
     );
-    const dowloadButton = getByRole('button');
-    fireEvent.click(dowloadButton);
+    const downloadButton = getByRole('button');
+    fireEvent.click(downloadButton);
     await waitFor(() => {
       expect(mock.history.get).toHaveLength(0);
       expect(downloadDocument).toHaveBeenCalledTimes(0);
@@ -132,6 +130,7 @@ describe('NotificationPaymentPagoPa Component', () => {
         payment={paymentHistory[indexItem].pagoPa!}
       />
     );
+    expect(container).toHaveTextContent('payment.status.to-pay');
     expect(container).not.toHaveTextContent('payment.pagopa-notice');
   });
 });
