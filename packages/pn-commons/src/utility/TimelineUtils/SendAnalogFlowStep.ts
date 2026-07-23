@@ -25,6 +25,27 @@ const SEND_ANALOG_FEEDBACK_KO_DETAIL_CODES = [
   'RECRI004C',
 ];
 
+// CODES with "C'è un nuovo documento allegato." description
+const SEND_ANALOG_FLOW_NEW_ATTACHMENT_DETAIL_CODES = [
+  'RECRN001B',
+  'RECRN002B',
+  'RECRN002E',
+  'RECRN003B',
+  'RECRN004B',
+  'RECRN005B',
+  'RECAG001B',
+  'RECAG002B',
+  'RECAG003B',
+  'RECAG003E',
+  'RECAG005B',
+  'RECAG006B',
+  'RECAG007B',
+  'RECAG008B',
+  'RECAG011B',
+  'RECRI003B',
+  'RECRI004B',
+];
+
 function i18nLabelEntry(category: TimelineCategory, deliveryDetailCode: string | undefined) {
   const sendAnalogFeedbackEntry = () =>
     deliveryDetailCode
@@ -111,21 +132,30 @@ export class SendAnalogFlowStep extends TimelineStep {
       ? this.completePhysicalAddressFromStep(originatingStep)
       : {};
 
+    const attachments = (payload.step.details as SendPaperDetails).attachments;
+    const hideDescriptionNewAttachment =
+      !!deliveryDetailCode &&
+      SEND_ANALOG_FLOW_NEW_ATTACHMENT_DETAIL_CODES.includes(deliveryDetailCode) &&
+      !(attachments && attachments.length > 0);
+
+    const multiRecipientSuffix = payload.isMultiRecipient ? '-multirecipient' : '';
+
     // eslint-disable-next-line functional/no-let
-    let description = getLocalizedOrDefaultLabel(
-      'notifications',
-      `detail.timeline.send-analog-flow-${deliveryDetailCode}-description${
-        payload.isMultiRecipient ? '-multirecipient' : ''
-      }`,
-      '',
-      {
-        ...this.nameAndTaxId(payload),
-        ...physicalAddress,
-        registeredLetterKind: registeredLetterKindText,
-        deliveryFailureCause: deliveryFailureCauseText,
-        registeredLetterNumber,
-      }
-    );
+    let description = '';
+    if (!hideDescriptionNewAttachment) {
+      description = getLocalizedOrDefaultLabel(
+        'notifications',
+        `detail.timeline.send-analog-flow-${deliveryDetailCode}-description${multiRecipientSuffix}`,
+        '',
+        {
+          ...this.nameAndTaxId(payload),
+          ...physicalAddress,
+          registeredLetterKind: registeredLetterKindText,
+          deliveryFailureCause: deliveryFailureCauseText,
+          registeredLetterNumber,
+        }
+      );
+    }
 
     if (description.length === 0) {
       description = getLocalizedOrDefaultLabel(
