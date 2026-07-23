@@ -17,6 +17,7 @@ const dashboardSlice = createSlice({
     filters: {
       startDate: undefined,
       endDate: undefined,
+      communicationType: '',
       iunMatch: '',
     } as GetNotificationsParams,
     pagination: {

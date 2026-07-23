@@ -32,7 +32,7 @@
   "menu": {
     "notifiche": "Inbox",
     "notifiche-impresa": "Inbox for {{organization}}",
-    "notifiche-delegato": "Inbox for delegators",
+    "notifiche-delegato": "Incoming from delegations",
     "deleghe": "Delegations of authority",
     "profilo": "Your details",
     "contacts": "Contact details",
@@ -243,13 +243,7 @@
     "action": "Keep access"
   },
   "code-modal": {
-    "digits": [
-      "First digit",
-      "Second digit",
-      "Third digit",
-      "Fourth digit",
-      "Last digit"
-    ]
+    "digits": ["First digit", "Second digit", "Third digit", "Fourth digit", "Last digit"]
   },
   "user-validation-failed": {
     "title": "The data entered is invalid",

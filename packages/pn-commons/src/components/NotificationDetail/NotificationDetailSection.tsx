@@ -53,7 +53,15 @@ const NotificationDetailSection = ({
 
   const getAARElement = () => {
     if (!isCancelled && isLessThan10Years) {
-      return <Trans i18nKey={downloadFilesMessage.key} ns={downloadFilesMessage.ns} />;
+      return (
+        <Typography variant="body2" color="text.secondary">
+          <Trans
+            i18nKey={downloadFilesMessage.key}
+            ns={downloadFilesMessage.ns}
+            components={[<strong key="strong" />]}
+          />
+        </Typography>
+      );
     }
     if (isCancelled) {
       return (
@@ -71,7 +79,7 @@ const NotificationDetailSection = ({
   return (
     <MIPaper padding={24} data-testid="aarDownload">
       <Stack spacing={2}>
-        <Typography component="h2" variant="h5" sx={{ mb: 1 }}>
+        <Typography component="h2" variant="h6" sx={{ mb: 1 }}>
           {getLocalizedOrDefaultLabel('notifications', 'detail.notification-detail-section.title')}
         </Typography>
 

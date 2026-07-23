@@ -32,8 +32,8 @@ type Props = {
   payments: PaymentsData;
   paymentTpp?: PaymentTpp;
   isCancelled: boolean;
-  timerF24: number;
-  costDetailsAssistanceLink: string;
+  timerF24?: number;
+  costDetailsAssistanceLink?: string;
   iun: string;
   costDetails?: NotificationCostDetails;
   paymentTppUrlActionID?: string;
@@ -238,7 +238,7 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
         </MIAlert>
       )}
 
-      {!isCancelled && costDetails && (
+      {!isCancelled && costDetails && costDetailsAssistanceLink && (
         <NotificationCostsDetailDrawer
           costDetails={costDetails}
           costDetailsAssistanceLink={costDetailsAssistanceLink}
@@ -343,7 +343,7 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
               handleTrackDownloadF24Timeout={() =>
                 handleTrackEventFn(EventPaymentRecipientType.SEND_F24_DOWNLOAD_TIMEOUT)
               }
-              timerF24={timerF24}
+              timerF24={timerF24 ?? 0}
               disableDownload={areOtherDowloading}
               handleDownload={setAreOtherDowloading}
             />
@@ -463,7 +463,7 @@ const PaymentButtons = ({
             handleTrackDownloadF24Timeout={() =>
               handleTrackEventFn(EventPaymentRecipientType.SEND_F24_DOWNLOAD_TIMEOUT)
             }
-            timerF24={timerF24}
+            timerF24={timerF24 ?? 0}
             disableDownload={areOtherDowloading}
             handleDownload={setAreOtherDowloading}
           />

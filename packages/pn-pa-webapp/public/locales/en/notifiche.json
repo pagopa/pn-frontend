@@ -60,9 +60,8 @@
     "clean-filters-cta": "Remove filters",
     "no-notifications": "The institution has not yet sent any notifications. Use the <0>API Keys</0> or send <1>manually</1>.",
     "timeout": "No results found; try again with different filters",
-    "aria-label-remove-filters": "Remove filters",
-    "aria-label-api-keys": "API Key",
-    "aria-label-create-notification": "Manual sending"
+    "generic-error": "The notifications could not be retrieved.",
+    "generic-error-cta": "Try again"
   },
   "detail": {
     "protocol-number": "Protocol number",
@@ -365,8 +364,8 @@
       },
       "radd": {
         "title": "The documents were collected",
-        "description-mono-recipient": "The recipient or their delegate collected the notified documents from an operator enabled to deliver them.",
-        "description-multi-recipients": "due to theft of the envelope"
+        "description-mono-recipient": "The recipient, or their delegate, collected the notified documents from an operator authorized to deliver them.",
+        "description-multi-recipients": "One of the recipients, or their delegate, collected the notified documents from an operator authorized to deliver them."
       },
       "tpp-type": "a third-party digital channel"
     },

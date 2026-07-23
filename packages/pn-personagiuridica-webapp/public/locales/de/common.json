@@ -32,7 +32,7 @@
   "menu": {
     "notifiche": "Posteingang",
     "notifiche-impresa": "Posteingang für {{organization}}",
-    "notifiche-delegato": "Posteingang für Vollmachtgeber",
+    "notifiche-delegato": "Posteingang aus Vollmachten",
     "deleghe": "Vollmachten",
     "profilo": "Deine Daten",
     "contacts": "Anschriften",

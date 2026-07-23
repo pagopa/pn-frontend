@@ -1,9 +1,7 @@
 {
-  "title": "Prejeto za {{recipient}}",
+  "title": "Prejeto za {{organization}}",
   "go-to-detail": "Prikaži podrobnosti",
   "title-delegated-notifications": "Prejeto za pooblastitelje",
-  "subtitle": "Preberite obvestila za {{recipient}}. Filtrirate jih lahko po kodi IUN in datumu pošiljanja.",
-  "subtitle-delegated-notifications": "Preberite obvestila, delegirana na {{recipient}}. Filtrirate jih lahko po kodi IUN in datumu pošiljanja.",
   "table": {
     "data": "Datum",
     "gruppo": "Skupine",
@@ -18,7 +16,12 @@
     "legal-value": "Obvestilo s pravno veljavnostjo"
   },
   "filters": {
-    "iun": "Iskanje po kodi IUN",
+    "communication-type": "Vrsta",
+    "communication-type-options": {
+      "legal": "Uradna obvestila",
+      "informal": "Sporočila"
+    },
+    "iun": "Koda IUN",
     "data_da": "Od",
     "data_da-input-aria-label": "Vnesite začetni datum iskanja",
     "data_a": "Do",
@@ -42,10 +45,10 @@
     "filtered": "Za izbrane filtre ni obvestil ali sporočil",
     "filtered-description": "Odstranite jih ali poskusite z drugo kombinacijo.",
     "clean-filters-cta": "Odstrani filtre",
-    "delegate": "Tukaj boste videli sporočila s pravno veljavnostjo osebe {{name}}",
-    "title": "Tukaj boste videli svoja obvestila s pravno veljavnostjo in druga sporočila",
-    "description": "Posodobite svoje kontaktne podatke zdaj in takoj boste izvedeli, ko jih prejmete.",
-    "go-to-contacts-cta": "Pojdi na svoje kontaktne podatke",
+    "delegate": "Tukaj boste videli uradna sporočila, ki so bila pooblaščena za vaše podjetje.",
+    "title": "Tukaj boste videli uradna obvestila in druga sporočila",
+    "description": "Posodobite digitalne kontaktne podatke zdaj in takoj boste izvedeli, ko bo vaše podjetje prejelo novo.",
+    "go-to-contacts-cta": "Pojdite na kontaktne podatke",
     "aria-label-remove-filters": "Odstrani filtre"
   },
   "from-qrcode": {
@@ -54,6 +57,9 @@
   },
   "detail": {
     "legal-value": "Obvestilo s pravno veljavnostjo",
+    "legal-date": "Vročitev odložena dne",
+    "informal-date": "Sporočilo odloženo dne",
+    "legal-disclaimer": "Vročitev poslana preko SEND, platforme, ki jo ureja 26. člen Zakonske uredbe 76/2020",
     "notification-timeline-section": {
       "title": "Stanje obvestila",
       "aria-label": "Prikaži časovnico obvestila"
@@ -77,8 +83,6 @@
     "groups": "Skupine",
     "notice-code": "Koda obvestila",
     "creditor-tax-id": "Davčna številka organizacije",
-    "breadcrumb-root": "Obvestila",
-    "breadcrumb-leaf": "Podrobnosti o obvestilu",
     "acts": "Priloženi dokumenti",
     "aar-acts": "Potrdilo o prejemu",
     "timeline-title": "Stanje obvestila",
@@ -94,7 +98,7 @@
       "cta": "Kaj moram storiti?"
     },
     "payment": {
-      "title": "Plačilo",
+      "title": "Plačila",
       "f24Models": "Obrazci F24",
       "pagoPANotices": "Opozorila pagoPA",
       "download-pagoPA-notice": "Prenesite obvestilo pagoPA",
@@ -136,12 +140,19 @@
         "duplicated": "To opozorilo je bilo že plačano. Stanje bo kmalu posodobljeno."
       }
     },
+    "contact_sender": {
+      "title": "Stopite in stik z izdajateljem",
+      "phone": "Telefonska številka organa",
+      "email": "E-pošta organa",
+      "website": "Spletno mesto organa"
+    },
     "acts_files": {
       "downloadable_acts": "Dokumenti so na voljo na spletu 120 dni od zaključka obvestila.",
       "not_downloadable_acts": "Ker je od datuma zaključka minilo 120 dni, se morate za pridobitev listin obrniti na pošiljatelja.",
-      "downloadable_aar": "Obvestilo o prejemu je na voljo na spletu 10 let od zaključka obvestila.",
+      "downloadable_aar": "<0>Na voljo na spletu 10 let</0> od datuma, ko je vročitev SEND postala pravno veljavna.",
       "not_downloadable_aar": "Ker je od datuma zaključka minilo 10 let, obvestilo o prejemu ni več na voljo.",
-      "effected_faq": "Kdaj se obvestilo zaključi?"
+      "effected_faq": "Kdaj se obvestilo zaključi?",
+      "informal_downloadable_acts": "Shranite priloge v svojo napravo: na spletu bodo na voljo <0>do 180 dni od datuma vložitve</0>, ki ga najdete zgoraj!"
     },
     "timeline": {
       "schedule-digital-workflow": "Nadaljnje pošiljanje z digitalnimi sredstvi",
@@ -365,7 +376,7 @@
       },
       "radd": {
         "title": "Dokumenti so bili prevzeti",
-        "description": "Prejemnik ali njegov pooblaščenec je vročene dokumente prevzel pri izvajalcu, ki je pooblaščen za njihovo vročanje."
+        "description": "Prejemnik ali pooblaščena oseba je prevzela vročene dokumente pri izvajalcu, pooblaščenem za njihovo dostavo."
       },
       "tpp-type": "digitalni kanal tretje osebe"
     },
@@ -374,7 +385,7 @@
       "textWithEndDate": "Motnja se je začela {{startDate}} in končala {{endDate}} pri naslednjih funkcijah:",
       "textWithoutEndDate": "Motnja se je začela {{startDate}} in še ni končana pri naslednjih funkcijah:",
       "datePrefix": "ta ",
-      "legalFactDownload": "Potrdilo o okvari",
+      "legalFactDownload": "Odpri potrdilo o motnjah v delovanju",
       "apiErrorMessage": "Ni bilo mogoče naložiti morebitnih motenj, ki so vplivale na to obvestilo."
     },
     "help": {

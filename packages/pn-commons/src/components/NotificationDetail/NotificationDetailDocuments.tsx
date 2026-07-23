@@ -187,28 +187,6 @@ const NotificationDetailDocuments: React.FC<Props> = (
       {title}
     </Typography>
 
-    {/* Notification cancelled */}
-    {disableDownloads && (
-      <MIPaper
-        data-testid="documentsMessage"
-        key="cancelled-detail-documents-message"
-        sx={{ backgroundColor: (theme) => theme.palette.grey[50] }}
-        variant="outlined"
-        padding={16}
-      >
-        <Stack direction="row" spacing={1}>
-          <IllusMISingleFile size={40} />
-          <Typography>
-            <Trans
-              i18nKey={downloadFilesMessage?.key}
-              ns={downloadFilesMessage?.ns}
-              components={[<strong key="0" />]}
-            />
-          </Typography>
-        </Stack>
-      </MIPaper>
-    )}
-
     {/* Notification sent after expiration date (120 legal and 180 combo) */}
     {!disableDownloads && !documentsAvailable && downloadFilesMessage && (
       <MIAlert severity="warning" data-testid="documentsDisabled">

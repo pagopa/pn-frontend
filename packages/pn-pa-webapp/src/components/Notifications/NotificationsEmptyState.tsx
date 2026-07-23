@@ -1,3 +1,4 @@
+import { ReactNode } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 
 import { Box, Link, Typography } from '@mui/material';
@@ -10,6 +11,18 @@ type Props = {
   onCleanFilters: () => void;
   onApiKeys: () => void;
   onManualSend: () => void;
+  onRetry: () => void;
+};
+
+type NotificationsEmptyStateViewProps = {
+  title: ReactNode;
+  description?: ReactNode;
+  action?: ReactNode;
+  illustration?: ReactNode;
+};
+
+type NotificationsGenericErrorStateProps = {
+  onRetry: () => void;
 };
 
 type LinkApiKeyProps = {
@@ -34,30 +47,42 @@ const INLINE_LINK_STYLE = {
   verticalAlign: 'baseline',
 };
 
-const FilteredEmptyStateContent: React.FC<{ cleanFilters: () => void }> = ({ cleanFilters }) => {
-  const { t } = useTranslation('notifiche');
+const NotificationsEmptyStateView: React.FC<NotificationsEmptyStateViewProps> = ({
+  title,
+  description,
+  action,
+  illustration = <IllusMIError size={56} />,
+}) => (
+  <EmptyState
+    slots={{ contentContainer: Box }}
+    slotProps={{ contentContainer: CONTENT_CONTAINER_PROPS }}
+    sentimentIcon={illustration}
+  >
+    <Typography
+      variant="subtitle2"
+      fontSize="16px"
+      sx={{
+        color: '#636B82',
+        mb: description ? 1 : action ? 2 : 0,
+      }}
+    >
+      {title}
+    </Typography>
 
-  return (
-    <>
-      <Typography variant="subtitle2" fontSize="16px" sx={{ color: '#636B82', mb: 1 }}>
-        {t('empty-state.filtered')}
-      </Typography>
-      <Typography variant="body2" fontSize="14px" color="text.secondary" sx={{ mb: 2 }}>
-        {t('empty-state.filtered-description')}
-      </Typography>
-
-      <ButtonNaked
-        size="medium"
-        color="primary"
-        id="call-to-action-first"
-        data-testid="link-remove-filters"
-        onClick={cleanFilters}
+    {description && (
+      <Typography
+        variant="body2"
+        fontSize="14px"
+        color="text.secondary"
+        sx={{ mb: action ? 2 : 0 }}
       >
-        {t('empty-state.clean-filters-cta')}
-      </ButtonNaked>
-    </>
-  );
-};
+        {description}
+      </Typography>
+    )}
+
+    {action}
+  </EmptyState>
+);
 
 const LinkApiKey: React.FC<LinkApiKeyProps> = ({ children, onApiKeys }) => (
   <Link
@@ -86,29 +111,26 @@ const LinkCreateNotification: React.FC<LinkCreateNotificationProps> = ({
   </Link>
 );
 
-const DefaultEmptyStateContent: React.FC<{
-  onApiKeys: () => void;
-  onManualSend: () => void;
-}> = ({ onApiKeys, onManualSend }) => (
-  <Typography variant="subtitle2" fontSize="16px" sx={{ color: '#636B82' }}>
-    <Trans
-      ns="notifiche"
-      i18nKey="empty-state.no-notifications"
-      components={[
-        <LinkApiKey key="api-keys" onApiKeys={onApiKeys} />,
-        <LinkCreateNotification key="create-notification" onManualSend={onManualSend} />,
-      ]}
-    />
-  </Typography>
-);
-
-const TimeoutEmptyStateContent: React.FC = () => {
+export const NotificationsGenericErrorState: React.FC<NotificationsGenericErrorStateProps> = ({
+  onRetry,
+}) => {
   const { t } = useTranslation('notifiche');
 
   return (
-    <Typography variant="subtitle2" fontSize="16px" sx={{ color: '#636B82' }}>
-      {t('empty-state.timeout')}
-    </Typography>
+    <NotificationsEmptyStateView
+      title={t('empty-state.generic-error')}
+      action={
+        <ButtonNaked
+          size="medium"
+          color="primary"
+          id="call-to-action-first"
+          data-testid="link-retry"
+          onClick={onRetry}
+        >
+          {t('empty-state.generic-error-cta')}
+        </ButtonNaked>
+      }
+    />
   );
 };
 
@@ -118,31 +140,62 @@ const NotificationsEmptyState: React.FC<Props> = ({
   onCleanFilters,
   onApiKeys,
   onManualSend,
+  onRetry,
 }) => {
+  const { t } = useTranslation(['notifiche', 'common']);
+  if (hasTimeoutError) {
+    return (
+      <NotificationsEmptyStateView
+        title={t('notifiche:empty-state.timeout')}
+        action={
+          <ButtonNaked
+            size="medium"
+            color="primary"
+            id="call-to-action-first"
+            data-testid="link-retry"
+            onClick={onRetry}
+          >
+            {t('common:messages.generic-api-error-action-text')}
+          </ButtonNaked>
+        }
+      />
+    );
+  }
+
   if (filtersApplied) {
     return (
-      <EmptyState
-        slots={{ contentContainer: Box }}
-        slotProps={{ contentContainer: CONTENT_CONTAINER_PROPS }}
-        sentimentIcon={<IllusMIError size={56} />}
-      >
-        <FilteredEmptyStateContent cleanFilters={onCleanFilters} />
-      </EmptyState>
+      <NotificationsEmptyStateView
+        title={t('notifiche:empty-state.filtered')}
+        description={t('notifiche:empty-state.filtered-description')}
+        action={
+          <ButtonNaked
+            size="medium"
+            color="primary"
+            id="call-to-action-first"
+            data-testid="link-remove-filters"
+            onClick={onCleanFilters}
+          >
+            {t('notifiche:empty-state.clean-filters-cta')}
+          </ButtonNaked>
+        }
+      />
     );
   }
 
   return (
-    <EmptyState
-      slots={{ contentContainer: Box }}
-      slotProps={{ contentContainer: CONTENT_CONTAINER_PROPS }}
-      sentimentIcon={<IllusMIMessage size={56} />}
-    >
-      {hasTimeoutError ? (
-        <TimeoutEmptyStateContent />
-      ) : (
-        <DefaultEmptyStateContent onApiKeys={onApiKeys} onManualSend={onManualSend} />
-      )}
-    </EmptyState>
+    <NotificationsEmptyStateView
+      illustration={<IllusMIMessage size={56} />}
+      title={
+        <Trans
+          ns="notifiche"
+          i18nKey="empty-state.no-notifications"
+          components={[
+            <LinkApiKey key="api-keys" onApiKeys={onApiKeys} />,
+            <LinkCreateNotification key="create-notification" onManualSend={onManualSend} />,
+          ]}
+        />
+      }
+    />
   );
 };
 

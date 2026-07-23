@@ -1,9 +1,7 @@
 {
-  "title": "Boîte de réception pour {{recipient}} ",
+  "title": "Boîte de réception pour {{organization}}",
   "go-to-detail": "Accéder aux détails",
   "title-delegated-notifications": "Boîte de réception des délégants",
-  "subtitle": "Lire les notifications de {{recipient}}. Vous pouvez les filtrer par code IUN et date d’envoi.",
-  "subtitle-delegated-notifications": "Lire les notifications mandatées à {{recipient}}. Vous pouvez les filtrer par code IUN et date d’envoi.",
   "table": {
     "data": "Date",
     "gruppo": "Groupes",
@@ -18,7 +16,12 @@
     "legal-value": "Notification à valeur légale"
   },
   "filters": {
-    "iun": "Recherche par code IUN",
+    "communication-type": "Type",
+    "communication-type-options": {
+      "legal": "Notifications à valeur juridique",
+      "informal": "Communications"
+    },
+    "iun": "Code IUN",
     "data_da": "Du",
     "data_da-input-aria-label": "Entrez la date de début de la recherche",
     "data_a": "Au",
@@ -42,10 +45,10 @@
     "filtered": "Aucune notification ou communication pour les filtres sélectionnés",
     "filtered-description": "Supprimez-les ou essayez une autre combinaison.",
     "clean-filters-cta": "Supprimer les filtres",
-    "delegate": "Ici, vous verrez les communications à valeur juridique de {{name}}",
-    "title": "Ici, vous verrez vos notifications à valeur légale et autres communications",
-    "description": "Mettez à jour vos coordonnées dès maintenant pour savoir immédiatement quand vous en recevrez une.",
-    "go-to-contacts-cta": "Accéder à vos coordonnées",
+    "delegate": "Ici, vous verrez les communications à valeur juridique qui ont été déléguées à votre entreprise.",
+    "title": "Ici, vous verrez les notifications à valeur juridique et les autres communications",
+    "description": "Mettez à jour vos coordonnées numériques dès maintenant pour savoir immédiatement quand votre entreprise en recevra une.",
+    "go-to-contacts-cta": "Aller aux coordonnées",
     "aria-label-remove-filters": "Supprimer les filtres"
   },
   "from-qrcode": {
@@ -54,6 +57,9 @@
   },
   "detail": {
     "legal-value": "Notification à valeur légale",
+    "legal-date": "Notification déposée le",
+    "informal-date": "Communication déposée le",
+    "legal-disclaimer": "Notification envoyée via SEND, la plateforme régie par l’art. 26 du D.L. 76/2020",
     "notification-timeline-section": {
       "title": "Statut de la notification",
       "aria-label": "Accéder à l'historique de la notification"
@@ -77,8 +83,6 @@
     "groups": "Groupes",
     "notice-code": "Code de l’alerte",
     "creditor-tax-id": "Code fiscal de l’organisme",
-    "breadcrumb-root": "Notifications",
-    "breadcrumb-leaf": "Détail de la notification",
     "acts": "Pièces jointes",
     "aar-acts": "Accusé de réception",
     "timeline-title": "État de la notification",
@@ -94,7 +98,7 @@
       "cta": "Que dois-je faire ?"
     },
     "payment": {
-      "title": "Paiement",
+      "title": "Paiements",
       "f24Models": "Formulaires F24",
       "pagoPANotices": "Alertes pagoPA",
       "download-pagoPA-notice": "Télécharger l’alerte pagoPA",
@@ -136,12 +140,19 @@
         "duplicated": "Cette alerte a déjà été payée. L’état sera mis à jour sous peu."
       }
     },
+    "contact_sender": {
+      "title": "Contactez l'organisme émetteur",
+      "phone": "Numéro de téléphone de l'organisme",
+      "email": "E-mail de l'organisme",
+      "website": "Site web de l'organisme"
+    },
     "acts_files": {
       "downloadable_acts": "Les documents sont disponibles en ligne pendant 120 jours à compter de la finalisation de la notification.",
       "not_downloadable_acts": "Étant donné que 120 jours se sont écoulés depuis la date de finalisation, si vous souhaitez obtenir les actes, vous devez vous adresser à l’expéditeur.",
-      "downloadable_aar": "L’accusé de réception est disponible en ligne pendant 10 ans à compter de la finalisation de la notification.",
+      "downloadable_aar": "<0>Disponible en ligne pendant 10 ans</0> à compter de la date à laquelle la notification SEND a pris valeur juridique.",
       "not_downloadable_aar": "Comme 10 ans se sont écoulés depuis la date de finalisation, l’accusé de réception n’est plus disponible.",
-      "effected_faq": "Quand une notification est-elle finalisée ?"
+      "effected_faq": "Quand une notification est-elle finalisée ?",
+      "informal_downloadable_acts": "Conserve les pièces jointes sur ton appareil : elles seront disponibles en ligne <0>jusqu'à 180 jours à compter de la date de dépôt</0> indiquée en haut !"
     },
     "timeline": {
       "schedule-digital-workflow": "Envoi ultérieur par voie numérique",
@@ -365,7 +376,7 @@
       },
       "radd": {
         "title": "Les documents ont été retirés",
-        "description": "Le destinataire ou son délégué a retiré les documents notifiés auprès d'un opérateur habilité à la remise de ceux-ci."
+        "description": "Le destinataire, ou la personne déléguée, a retiré les documents notifiés auprès d'un opérateur habilité à leur remise."
       },
       "tpp-type": "un canal numérique tiers"
     },
@@ -374,7 +385,7 @@
       "textWithEndDate": "Dysfonctionnement commencé {{startDate}} et terminé {{endDate}} sur les fonctionnalités suivantes :",
       "textWithoutEndDate": "Dysfonctionnement commencé {{startDate}} et non encore terminé sur les fonctionnalités suivantes :",
       "datePrefix": "le ",
-      "legalFactDownload": "Attestation de dysfonctionnement",
+      "legalFactDownload": "Ouvrir l'attestation de dysfonctionnement",
       "apiErrorMessage": "Nous n’avons pas pu charger les éventuels dysfonctionnements qui ont affecté cette notification."
     },
     "help": {

@@ -60,9 +60,8 @@
     "clean-filters-cta": "Filter entfernen",
     "no-notifications": "Die Entität hat noch keine Zustellungen gesendet. Verwende die <0>API-Schlüssel</0> oder führe einen <1>manuellen Versand</1> durch.",
     "timeout": "Keine Ergebnisse gefunden; versuchen Sie es mit anderen Filtern",
-    "aria-label-remove-filters": "Filter entfernen",
-    "aria-label-api-keys": "API-Schlüssel",
-    "aria-label-create-notification": "Manuelle Sendung"
+    "generic-error": "Die Zustellungen konnten nicht abgerufen werden.",
+    "generic-error-cta": "Versuche es erneut"
   },
   "detail": {
     "protocol-number": "Protokollnummer",
@@ -365,8 +364,8 @@
       },
       "radd": {
         "title": "Die Dokumente wurden abgeholt",
-        "description-mono-recipient": "Der Empfänger oder sein Bevollmächtigter hat die zugestellten Dokumente bei einer zur Zustellung berechtigten Person abgeholt.",
-        "description-multi-recipients": "Einer der Empfänger oder sein Bevollmächtigter hat die zugestellten Dokumente bei einer zur Zustellung berechtigten Person abgeholt."
+        "description-mono-recipient": "Der Empfänger oder die bevollmächtigte Person hat die zugestellten Dokumente bei einem zur Aushändigung befugten Betreiber abgeholt.",
+        "description-multi-recipients": "Einer der Empfänger oder eine bevollmächtigte Person hat die zugestellten Dokumente bei einem für die Übergabe befugten Betreiber abgeholt."
       },
       "tpp-type": "ein digitaler Kanal von Drittanbietern"
     },

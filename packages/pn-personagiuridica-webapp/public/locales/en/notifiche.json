@@ -1,9 +1,7 @@
 {
   "title": "Inbox for {{organization}}",
   "go-to-detail": "Go to details",
-  "title-delegated-notifications": "Inbox for delegators",
-  "subtitle": "Read notifications of {{recipient}}. You can filter them by IUN Code and send date.",
-  "subtitle-delegated-notifications": "Read the notifications delegated to {{recipient}}. You can filter them by IUN Code and send date.",
+  "title-delegated-notifications": "Incoming from delegations",
   "table": {
     "data": "Date",
     "gruppo": "Groups",
@@ -18,7 +16,12 @@
     "legal-value": "Notification with legal value"
   },
   "filters": {
-    "iun": "Search by IUN Code",
+    "communication-type": "Type",
+    "communication-type-options": {
+      "legal": "Legally-binding notifications",
+      "informal": "Communications"
+    },
+    "iun": "IUN code",
     "data_da": "From",
     "data_da-input-aria-label": "Enter the search start date",
     "data_a": "To",
@@ -42,10 +45,10 @@
     "filtered": "No notifications or communications for the selected filters",
     "filtered-description": "Remove them or try another combination.",
     "clean-filters-cta": "Remove filters",
-    "delegate": "Here you will see the legally binding communications of {{name}}",
-    "title": "Here you will see your notifications with legal value and other communications",
-    "description": "Update your contact details now and you will immediately know when you receive one.",
-    "go-to-contacts-cta": "Go to your contact details",
+    "delegate": "Here you will see the legally-binding communications that have been delegated to your business.",
+    "title": "Here you will see legally-binding notifications and other communications",
+    "description": "Update your digital contact details now to immediately know when your business receives one.",
+    "go-to-contacts-cta": "Go to contact details",
     "aria-label-remove-filters": "Remove filters"
   },
   "from-qrcode": {
@@ -53,6 +56,9 @@
     "not-found-subtitle": "It can only be read by users registered by the recipient company or by its delegate."
   },
   "detail": {
+    "legal-date": "Notification deposited on",
+    "informal-date": "Communication deposited on",
+    "legal-disclaimer": "Notification sent via SEND, the platform governed by Art. 26 of Law Decree 76/2020",
     "legal-value": "Notification with legal value",
     "notification-timeline-section": {
       "title": "Notification status",
@@ -77,8 +83,6 @@
     "groups": "Groups",
     "notice-code": "Notice Code",
     "creditor-tax-id": "Company Fiscal Code",
-    "breadcrumb-root": "Notifications",
-    "breadcrumb-leaf": "Notification details",
     "acts": "Attachments",
     "aar-acts": "Acknowledgement of receipt",
     "timeline-title": "Notification status",
@@ -94,7 +98,7 @@
       "cta": "What should I do?"
     },
     "payment": {
-      "title": "Payment",
+      "title": "Payments",
       "f24Models": "F24 forms",
       "pagoPANotices": "pagoPA notices",
       "download-pagoPA-notice": "Download the pagoPA notice",
@@ -136,12 +140,19 @@
         "duplicated": "This notice has already been paid for. The status will be updated shortly."
       }
     },
+    "contact_sender": {
+      "title": "Contact the issuing institution",
+      "phone": "Institution's phone number",
+      "email": "Institution's email address",
+      "website": "Institution's website"
+    },
     "acts_files": {
       "downloadable_acts": "Documents are available online for 120 days from the completion of the notification.",
       "not_downloadable_acts": "120 days have passed since the completion date. If you want to obtain the documents, please contact the sender.",
-      "downloadable_aar": "The acknowledgement of receipt is available online for 10 years from completion of the notification.",
+      "downloadable_aar": "<0>Available online for 10 years</0> from the date the SEND notification became legally binding.",
       "not_downloadable_aar": "As 10 years have passed since the completion date, the acknowledgement of receipt is no longer available.",
-      "effected_faq": "When do I complete a notification?"
+      "effected_faq": "When do I complete a notification?",
+      "informal_downloadable_acts": "Save the attachments to your device: they will be available online <0>for up to 180 days from the filing date</0> shown at the top!"
     },
     "timeline": {
       "schedule-digital-workflow": "Send again digitally",
@@ -365,7 +376,7 @@
       },
       "radd": {
         "title": "The documents have been collected",
-        "description": "The recipient or their delegate has collected the notified documents from an operator authorized to deliver them."
+        "description": "The recipient, or their delegate, collected the notified documents from an operator authorized to deliver them."
       },
       "tpp-type": "a third-party digital channel"
     },
@@ -374,7 +385,7 @@
       "textWithEndDate": "Disruption started {{startDate}} and ended {{endDate}} on the following functionalities:",
       "textWithoutEndDate": "Disruption started {{startDate}} and not yet ended on the following functionalities:",
       "datePrefix": "the ",
-      "legalFactDownload": "Attestation of malfunction",
+      "legalFactDownload": "Open the malfunction certificate",
       "apiErrorMessage": "We were unable to load any disruptions that affected this notification."
     },
     "help": {

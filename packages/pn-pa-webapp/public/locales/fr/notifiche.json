@@ -60,9 +60,8 @@
     "clean-filters-cta": "Supprimer les filtres",
     "no-notifications": "L'organisme n'a encore envoyé aucune notification. Utilisez les <0>Clés API</0> ou effectuez un <1>envoi manuel</1>.",
     "timeout": "Aucun résultat trouvé ; réessayez con des filtres différents",
-    "aria-label-remove-filters": "Supprimer les filtres",
-    "aria-label-api-keys": "API Key",
-    "aria-label-create-notification": "Envoi manuel"
+    "generic-error": "Impossible de récupérer les notifications.",
+    "generic-error-cta": "Réessayer"
   },
   "detail": {
     "protocol-number": "Numéro de protocole",
@@ -365,8 +364,8 @@
       },
       "radd": {
         "title": "Les documents ont été retirés",
-        "description-mono-recipient": "Le destinataire ou son délégué a retiré les documents notifiés auprès d’un opérateur autorisé à les délivrer.",
-        "description-multi-recipients": "Un des destinataires ou son délégué a retiré les documents notifiés auprès d’un opérateur autorisé à les délivrer."
+        "description-mono-recipient": "Le destinataire, ou la personne déléguée, a retiré les documents notifiés auprès d'un opérateur habilité à leur remise.",
+        "description-multi-recipients": "L'un des destinataires, ou son délégué, a retiré les documents notifiés auprès d'un opérateur habilité à leur remise."
       },
       "tpp-type": "un canal numérique tiers"
     },

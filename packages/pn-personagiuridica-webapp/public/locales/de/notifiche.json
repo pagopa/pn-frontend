@@ -2,8 +2,6 @@
   "title": "Posteingang für {{organization}}",
   "go-to-detail": "Zu den Details",
   "title-delegated-notifications": "Posteingang für Vollmachtgeber",
-  "subtitle": "Bescheide anzeigen mit Vollmacht an {{recipient}}. Du kannst sie nach IUN-Code und Sendedatum filtern.",
-  "subtitle-delegated-notifications": "Bescheide anzeigen mit Vollmacht an {{recipient}} Du kannst sie nach IUN-Code und Sendedatum filtern.",
   "table": {
     "data": "Datum",
     "gruppo": "Gruppen",
@@ -18,7 +16,12 @@
     "legal-value": "Zustellung mit rechtlicher Wirkung"
   },
   "filters": {
-    "iun": "Suche nach IUN-Code",
+    "communication-type": "Typ",
+    "communication-type-options": {
+      "legal": "Rechtsgültige Zustellungen",
+      "informal": "Mitteilungen"
+    },
+    "iun": "IUN-Code",
     "data_da": "Vom",
     "data_da-input-aria-label": "Startdatum der Suche eingeben",
     "data_a": "bis",
@@ -42,10 +45,10 @@
     "filtered": "Keine Benachrichtigungen oder Mitteilungen für die ausgewählten Filter",
     "filtered-description": "Entferne sie oder versuche es mit einer anderen Kombination.",
     "clean-filters-cta": "Filter entfernen",
-    "delegate": "Hier siehst du die rechtlichen Mitteilungen von {{name}}",
-    "title": "Hier siehst du deine Zustellungen mit rechtlicher Wirkung und andere Mitteilungen",
-    "description": "Aktualisiere jetzt deine Kontaktdaten und du erfährst sofort, wenn du eine erhältst.",
-    "go-to-contacts-cta": "Zu deinen Kontaktdaten",
+    "delegate": "Hier siehst du die rechtsgültigen Mitteilungen, die an dein Unternehmen delegiert wurden.",
+    "title": "Hier siehst du die rechtsgültigen Zustellungen und andere Mitteilungen",
+    "description": "Aktualisiere jetzt die digitalen Kontaktdaten, damit du sofort erfährst, wenn dein Unternehmen eine erhält.",
+    "go-to-contacts-cta": "Zu den Kontaktdaten",
     "aria-label-remove-filters": "Filter entfernen"
   },
   "from-qrcode": {
@@ -54,6 +57,9 @@
   },
   "detail": {
     "legal-value": "Zustellung mit rechtlicher Wirkung",
+    "legal-date": "Zustellung hinterlegt am",
+    "informal-date": "Mitteilung hinterlegt am",
+    "legal-disclaimer": "Zustellung über SEND gesendet, die durch Art. 26 des Gesetzesdekrets 76/2020 geregelte Plattform",
     "notification-timeline-section": {
       "title": "Status der Benachrichtigung",
       "aria-label": "Zur Chronik der Benachrichtigung"
@@ -77,8 +83,6 @@
     "groups": "Gruppen",
     "notice-code": "Benachrichtigungscode",
     "creditor-tax-id": "Steuernummer der Körperschaft",
-    "breadcrumb-root": "Bescheide",
-    "breadcrumb-leaf": "Einzelheiten zum Bescheid",
     "acts": "Beigefügte Anlagen",
     "aar-acts": "Empfangsbestätigung",
     "timeline-title": "Status des Bescheids",
@@ -94,7 +98,7 @@
       "cta": "Was muss ich tun?"
     },
     "payment": {
-      "title": "Zahlung",
+      "title": "Zahlungen",
       "f24Models": "Vordruck F24",
       "pagoPANotices": "Benachrichtigungen pagoPA",
       "download-pagoPA-notice": "Lade die pagoPA-Mitteilung herunter",
@@ -136,12 +140,19 @@
         "duplicated": "Diese Benachrichtigung wurde bereits bezahlt. Der Status wird in Kürze aktualisiert."
       }
     },
+    "contact_sender": {
+      "title": "Kontaktiere die sendende Körperschaft",
+      "phone": "Telefonnummer der Körperschaft",
+      "email": "E-Mail der Körperschaft",
+      "website": "Website der Körperschaft"
+    },
     "acts_files": {
       "downloadable_acts": "Die Dokumente sind 120 Tage nach Abschluss der Zustellung online verfügbar.",
       "not_downloadable_acts": "Da seit dem Abschlussdatum 120 Tage vergangen sind, musst du dich für den Erhalt der Urkunde an den Absender wenden.",
-      "downloadable_aar": "Die Empfangsbestätigung ist 10 Jahre ab Erledigung des Bescheids verfügbar.",
+      "downloadable_aar": "<0>10 Jahre lang online verfügbar</0> ab dem Datum, an dem die SEND-Zustellung Rechtskraft erlangt hat.",
       "not_downloadable_aar": "Da seit der Erledigung 10 Jahre vergangen sind, steht die Empfangsbestätigung nicht mehr zur Verfügung.",
-      "effected_faq": "Wann ist die Bearbeitung eines Bescheids abgeschlossen?"
+      "effected_faq": "Wann ist die Bearbeitung eines Bescheids abgeschlossen?",
+      "informal_downloadable_acts": "Speichere die Anhänge auf deinem Gerät: Sie sind online <0>bis zu 180 Tage ab dem Hinterlegungsdatum</0> verfügbar, das du oben findest!"
     },
     "timeline": {
       "schedule-digital-workflow": "Weiterer digitaler Versand",
@@ -365,7 +376,7 @@
       },
       "radd": {
         "title": "Die Dokumente wurden abgeholt",
-        "description": "Der Empfänger oder sein Bevollmächtigter hat die zugestellten Dokumente bei einem zur Zustellung befugten Betreiber abgeholt."
+        "description": "Der Empfänger oder die bevollmächtigte Person hat die zugestellten Dokumente bei einem zur Aushändigung befugten Betreiber abgeholt."
       },
       "tpp-type": "ein digitaler Drittanbieter-Kanal"
     },
@@ -374,7 +385,7 @@
       "textWithEndDate": "Beginn der Fehlfunktion {{startDate}} und Behebung {{endDate}} an folgenden Funktionen:",
       "textWithoutEndDate": "Beginn der Fehlfunktion {{startDate}} und noch nicht vollständig behoben an folgenden Funktionen:",
       "datePrefix": "die ",
-      "legalFactDownload": "Bescheinigung der Fehlfunktion",
+      "legalFactDownload": "Störungsbescheinigung öffnen",
       "apiErrorMessage": "Wir konnten noch keinen Bericht über Fehlfunktionen hochladen, die diesen Bescheid betrafen."
     },
     "help": {

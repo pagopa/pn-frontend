@@ -60,9 +60,8 @@
     "clean-filters-cta": "Odstrani filtre",
     "no-notifications": "Organ še ni poslal nobenega obvestila. Uporabite <0>Ključe API</0> ali izvedite <1>ročno pošiljanje</1>.",
     "timeout": "Ni najdenih rezultatov; poskusite z drugimi filtri",
-    "aria-label-remove-filters": "Odstranite filtre",
-    "aria-label-api-keys": "Ključ API",
-    "aria-label-create-notification": "Ročno pošiljanje"
+    "generic-error": "Obvestil ni bilo mogoče pridobiti.",
+    "generic-error-cta": "Poskusite znova"
   },
   "detail": {
     "protocol-number": "Številka protokola",
@@ -365,8 +364,8 @@
       },
       "radd": {
         "title": "Dokumenti so bili prevzeti",
-        "description-mono-recipient": "Prejemnik ali njegov pooblaščenec je prevzel priglašene dokumente od operaterja, pooblaščenega za njihovo dostavo.",
-        "description-multi-recipients": "Eden od prejemnikov ali njegov pooblaščenec je prevzel priglašene dokumente od operaterja, pooblaščenega za njihovo dostavo."
+        "description-mono-recipient": "Prejemnik ali pooblaščena oseba je prevzela vročene dokumente pri izvajalcu, pooblaščenem za njihovo dostavo.",
+        "description-multi-recipients": "Eden od prejemnikov ali njegov pooblaščenec je prevzel vročene dokumente pri operaterju, pooblaščenem za njihovo dostavo."
       },
       "tpp-type": "digitalni kanal tretje osebe"
     },

@@ -41,6 +41,10 @@ type Props = {
   onCleanFilters: () => void;
   /** True if the API returned a timeout error */
   hasTimeoutError?: boolean;
+  /** True while notifications are being loaded */
+  loading: boolean;
+  /** The function to be invoked if the user retries loading notifications */
+  onRetry: () => void;
 };
 
 const MobileNotifications = ({
@@ -52,6 +56,8 @@ const MobileNotifications = ({
   filtersApplied,
   onCleanFilters,
   hasTimeoutError = false,
+  loading,
+  onRetry,
 }: Props) => {
   const navigate = useNavigate();
   const { t } = useTranslation(['notifiche', 'common']);
@@ -109,6 +115,9 @@ const MobileNotifications = ({
     return arr;
   }, [] as Array<CardSort<Notification>>);
 
+  const hasNotifications = notifications.length > 0 && !hasTimeoutError;
+  const showNotificationsEmptyState = !loading && !hasNotifications;
+
   return (
     <>
       <Grid container direction="row" sx={{ marginBottom: '16px' }}>
@@ -125,7 +134,7 @@ const MobileNotifications = ({
           )}
         </Grid>
       </Grid>
-      {cardData.length ? (
+      {hasNotifications && (
         <PnCardsList>
           {cardData.map((data) => (
             <PnCard key={data.id} testId="mobileCards">
@@ -182,13 +191,15 @@ const MobileNotifications = ({
             </PnCard>
           ))}
         </PnCardsList>
-      ) : (
+      )}
+      {showNotificationsEmptyState && (
         <NotificationsEmptyState
           filtersApplied={filtersApplied}
           hasTimeoutError={hasTimeoutError}
           onCleanFilters={onCleanFilters}
           onApiKeys={onApiKeys}
           onManualSend={onManualSend}
+          onRetry={onRetry}
         />
       )}
     </>

@@ -37,6 +37,8 @@ describe('MobileNotifications Component', () => {
           onApiKeys={() => {}}
           filtersApplied={false}
           onCleanFilters={() => {}}
+          loading={false}
+          onRetry={() => {}}
         />
       );
     });
@@ -59,6 +61,8 @@ describe('MobileNotifications Component', () => {
           onApiKeys={() => {}}
           filtersApplied={false}
           onCleanFilters={() => {}}
+          loading={false}
+          onRetry={() => {}}
         />
       );
     });
@@ -80,6 +84,8 @@ describe('MobileNotifications Component', () => {
           onApiKeys={() => {}}
           filtersApplied={true} // simulate "filtered" empty state
           onCleanFilters={() => {}}
+          loading={false}
+          onRetry={() => {}}
         />
       );
     });
@@ -99,6 +105,8 @@ describe('MobileNotifications Component', () => {
           onApiKeys={() => {}}
           filtersApplied={false}
           onCleanFilters={() => {}}
+          loading={false}
+          onRetry={() => {}}
         />
       );
     });

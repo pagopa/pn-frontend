@@ -34,11 +34,11 @@ export interface GetNotificationsParams {
   mandateId?: string;
   recipientId?: string;
   status?: string;
-  subjectRegExp?: string;
   size?: number;
   nextPagesKey?: string;
   iunMatch?: string;
   group?: string;
+  communicationType?: NotificationCommunicationType | '';
 }
 
 export type NotificationColumnData<T extends Notification | RecipientNotification = Notification> =

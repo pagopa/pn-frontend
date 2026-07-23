@@ -11,6 +11,7 @@ import { useIsMobile } from '../../hooks';
 import { formatDate } from '../../utility';
 import { getAccessibleIun } from '../../utility/accessibility.utility';
 import { getLocalizedOrDefaultLabel } from '../../utility/localization.utility';
+import PNMarkdown from '../PnMarkdown/PnMarkdown';
 import TitleBox from '../TitleBox';
 
 interface AbstractPaperDetail {
@@ -22,9 +23,10 @@ interface AbstractPaperProps {
   title?: string;
   senderPaId?: string;
   senderDenomination?: string;
-  filedAt: string;
   iun: string;
   abstract?: string; // todo: to sanitize and format the abstract content before passing it to the component
+  isLegal?: boolean;
+  filedAt: string;
   senderLogoUrl?: string;
   details?: Array<AbstractPaperDetail>;
   onDetailsClick?: () => void;
@@ -65,9 +67,10 @@ const AbstractPaper = ({
   title,
   senderPaId,
   senderDenomination,
-  filedAt,
   iun,
   abstract,
+  isLegal = true,
+  filedAt,
   senderLogoUrl,
   details,
   onDetailsClick,
@@ -75,16 +78,30 @@ const AbstractPaper = ({
 }: AbstractPaperProps) => {
   const isMobile = useIsMobile();
 
-  const borderTopStyle = `2px solid ${theme.palette.primary.main}`;
   const hasDetails = !!details?.length;
   return (
-    <MIPaper padding={24} sx={{ borderTop: borderTopStyle }}>
-      <Tag
-        variant="default"
-        icon={VerifiedRoundedIcon}
-        value={getLocalizedOrDefaultLabel('notifications', 'detail.legal-value')}
+    <MIPaper
+      padding={24}
+      sx={{
+        ...(isLegal && {
+          borderTop: `2px solid ${theme.palette.primary.main}`,
+        }),
+      }}
+    >
+      {isLegal && (
+        <Tag
+          variant="default"
+          icon={VerifiedRoundedIcon}
+          value={getLocalizedOrDefaultLabel('notifications', 'detail.legal-value')}
+        />
+      )}
+      <TitleBox
+        variantTitle="h4"
+        componentTitle="h1"
+        title={title}
+        mtGrid={isLegal ? 2 : 0}
+        mbTitle={0}
       />
-      <TitleBox variantTitle="h4" componentTitle="h1" title={title} sx={{ mt: 2 }} mbTitle={0} />
       <Divider aria-hidden sx={{ my: 2 }} />
       {hasDetails ? (
         <Stack spacing={2}>
@@ -121,7 +138,7 @@ const AbstractPaper = ({
         </Stack>
       ) : (
         <>
-          <Grid container>
+          <Grid container spacing={2}>
             <Grid item xs={12} md={6} display="flex" alignItems="center" gap={2}>
               <InstitutionLogo
                 id={senderPaId}
@@ -132,8 +149,11 @@ const AbstractPaper = ({
                 <Typography variant="sidenav" color="text">
                   {senderDenomination}
                 </Typography>
-                <Typography variant="body1" color="text.secondary">
-                  {formatDate(filedAt)}
+                <Typography variant="body2" color="text.secondary">
+                  {isLegal
+                    ? getLocalizedOrDefaultLabel('notifications', 'detail.legal-date')
+                    : getLocalizedOrDefaultLabel('notifications', 'detail.informal-date')}{' '}
+                  {formatDate(filedAt, false)}
                 </Typography>
               </Box>
             </Grid>
@@ -156,10 +176,25 @@ const AbstractPaper = ({
               </Box>
             </Grid>
           </Grid>
-          {abstract && <Divider aria-hidden sx={{ my: 2 }} />}
-          <Typography variant="body1" sx={{ overflowWrap: 'anywhere' }}>
-            {abstract}
-          </Typography>
+          {abstract && (
+            <>
+              <Divider aria-hidden sx={{ my: 2 }} />
+              {isLegal ? (
+                <>
+                  <Typography variant="body1" sx={{ overflowWrap: 'anywhere' }}>
+                    {abstract}
+                  </Typography>
+                  <Typography variant="body2" color="text.secondary" sx={{ mt: 2 }}>
+                    {getLocalizedOrDefaultLabel('notifications', 'detail.legal-disclaimer')}
+                  </Typography>
+                </>
+              ) : (
+                <Box sx={{ overflowWrap: 'anywhere' }}>
+                  <PNMarkdown content={abstract ?? ''} />
+                </Box>
+              )}
+            </>
+          )}
         </>
       )}
     </MIPaper>

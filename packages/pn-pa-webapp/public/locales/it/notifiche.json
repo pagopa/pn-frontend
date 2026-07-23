@@ -58,7 +58,9 @@
     "filtered-description": "Rimuovili o prova con un'altra combinazione.",
     "clean-filters-cta": "Rimuovi filtri",
     "no-notifications": "L'ente non ha ancora inviato nessuna notifica. Usa le <0>Chiavi API</0> o fai un <1>invio manuale</1>.",
-    "timeout": "Non abbiamo trovato risultati prova con filtri diversi"
+    "timeout": "Non abbiamo trovato risultati prova con filtri diversi",
+    "generic-error": "Non è stato possibile recuperare le notifiche.",
+    "generic-error-cta": "Prova di nuovo"
   },
   "detail": {
     "protocol-number": "Numero protocollo",
@@ -361,8 +363,8 @@
       },
       "radd": {
         "title": "I documenti sono stati ritirati",
-        "description-mono-recipient": "Il destinatario o un suo delegato ha ritirato i documenti notificati presso un operatore abilitato alla consegna degli stessi.",
-        "description-multi-recipients": "Uno dei destinatari o un suo delegato ha ritirato i documenti notificati presso un operatore abilitato alla consegna degli stessi."
+        "description-mono-recipient": "La persona destinataria, o chi è stato delegato, ha ritirato i documenti notificati presso un operatore abilitato alla consegna degli stessi.",
+        "description-multi-recipients": "Una delle persone destinatarie, o un suo delegato, ha ritirato i documenti notificati presso un operatore abilitato alla consegna degli stessi."
       },
       "tpp-type": "un canale digitale di terze parti"
     },

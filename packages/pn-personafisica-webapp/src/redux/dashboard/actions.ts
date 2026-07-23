@@ -42,17 +42,18 @@ export const getReceivedNotifications = createAsyncThunk(
         endDate: formatToTimezoneString(getEndOfDay(endDate)),
         recipientId: params.recipientId ? formatFiscalCode(params.recipientId) : undefined,
         iunMatch: params.iunMatch || undefined,
+        communicationType:
+          params.communicationType || SearchReceivedNotificationsV1CommunicationTypeEnum.All,
       };
       const response = await receivedNotificationsFactory.searchReceivedNotificationsV1(
         apiParams.startDate,
         apiParams.endDate,
         apiParams.mandateId,
         apiParams.recipientId,
-        apiParams.subjectRegExp,
         apiParams.iunMatch,
         apiParams.size,
         apiParams.nextPagesKey,
-        SearchReceivedNotificationsV1CommunicationTypeEnum.All
+        apiParams.communicationType
       );
       return response.data as GetNotificationsResponse<RecipientNotification>;
     } catch (e) {

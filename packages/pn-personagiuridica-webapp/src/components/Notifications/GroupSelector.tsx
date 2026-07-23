@@ -2,7 +2,8 @@ import { MouseEvent, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
-import { Box, Button, Menu, MenuItem } from '@mui/material';
+import { Box, Menu, MenuItem } from '@mui/material';
+import { MIButton } from '@pagopa/mui-italia';
 
 import { getGroups } from '../../redux/delegation/actions';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
@@ -38,10 +39,10 @@ const GroupSelector: React.FC<Props> = ({ currentGroup, onGroupSelection }) => {
       display={{ xs: 'block', lg: 'inline-block' }}
       sx={{ verticalAlign: 'middle', mx: { xs: 0, lg: 2 }, mt: { xs: 1, lg: 0 } }}
     >
-      <Button
+      <MIButton
         onClick={handleMenuClick}
         size="small"
-        variant="contained"
+        variant="outlined"
         data-testid="groupSelectorButton"
         aria-label={t('table.group-selector-title')}
         aria-controls={open ? 'group-selector' : undefined}
@@ -50,7 +51,7 @@ const GroupSelector: React.FC<Props> = ({ currentGroup, onGroupSelection }) => {
         endIcon={<ArrowDropDownIcon />}
       >
         {currentGroup && groups.find((group) => group.id === currentGroup)?.name}
-      </Button>
+      </MIButton>
 
       <Menu
         open={open}

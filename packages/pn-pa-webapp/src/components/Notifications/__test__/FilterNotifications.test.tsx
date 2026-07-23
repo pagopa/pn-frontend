@@ -74,9 +74,8 @@ describe('Filter Notifications Table Component', () => {
     const submitButton = form.querySelector(`button[type="submit"]`);
     expect(submitButton).toBeInTheDocument();
     expect(submitButton).toHaveTextContent(/button.filtra/i);
-    const cancelButton = within(form).getByTestId('cancelButton');
-    expect(cancelButton).toBeInTheDocument();
-    expect(cancelButton).toHaveTextContent(/button.annulla filtro/i);
+    const cancelButton = within(form).queryByTestId('cancelButton');
+    expect(cancelButton).not.toBeInTheDocument();
   });
 
   it('test recipientId input', async () => {
@@ -177,10 +176,12 @@ describe('Filter Notifications Table Component', () => {
     });
     // cancel filters
     const cancelButton = await waitFor(() => within(form!).getByTestId('cancelButton'));
+    expect(cancelButton).toHaveTextContent(/button.annulla filtro/i);
     expect(cancelButton).toBeEnabled();
     fireEvent.click(cancelButton);
     await waitFor(() => {
       expect(result.testStore.getState().dashboardState.filters).toStrictEqual(initialState);
+      expect(cancelButton).not.toBeInTheDocument();
     });
   });
 
