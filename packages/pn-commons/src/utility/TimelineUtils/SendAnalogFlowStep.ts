@@ -25,7 +25,7 @@ const SEND_ANALOG_FEEDBACK_KO_DETAIL_CODES = [
   'RECRI004C',
 ];
 
-// CODES with "C'è un nuovo documento allegato." description
+// CODES (PF,PG,PA) with description: "C'è un nuovo documento allegato." 
 const SEND_ANALOG_FLOW_NEW_ATTACHMENT_DETAIL_CODES = [
   'RECRN001B',
   'RECRN002B',
