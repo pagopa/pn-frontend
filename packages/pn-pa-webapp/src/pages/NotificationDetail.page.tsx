@@ -428,7 +428,6 @@ const NotificationDetail: React.FC = () => {
                     downloadFilesLink={t('detail.download-files-link', { ns: 'notifiche' })}
                     titleVariant="h5"
                     inlineDownloadFilesMessage
-                    disableDownloads
                   />
                   {notification.radd && (
                     <MIAlert
