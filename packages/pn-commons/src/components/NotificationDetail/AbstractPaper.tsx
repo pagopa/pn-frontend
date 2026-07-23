@@ -82,7 +82,13 @@ const AbstractPaper = ({
           value={getLocalizedOrDefaultLabel('notifications', 'detail.legal-value')}
         />
       )}
-      <TitleBox variantTitle="h4" componentTitle="h1" title={title} sx={{ mt: 2 }} mbTitle={0} />
+      <TitleBox
+        variantTitle="h4"
+        componentTitle="h1"
+        title={title}
+        mtGrid={isLegal ? 2 : 0}
+        mbTitle={0}
+      />
       <Divider aria-hidden sx={{ my: 2 }} />
       <Grid container spacing={2}>
         <Grid item xs={12} md={6} display="flex" alignItems="center" gap={2}>
