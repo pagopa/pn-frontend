@@ -290,10 +290,9 @@ describe('NotificationDetail Page', () => {
   });
 
   it('clicks on the back button - mono recipient', async () => {
-    // insert two entries into the history, so the initial render will refer to the path /
-    // and when the back button is pressed and so navigate(-1) is invoked,
-    // the path will change to /mock-path
-    // render with an ad-hoc router
+    // Seed history to verify that the back action uses the previous location.
+    mock.onGet(`/bff/v1/notifications/sent/${notificationDTO.iun}`).reply(200, notificationDTO);
+    mock.onGet(/\/bff\/v1\/downtime\/history.*/).reply(200, downtimesDTO);
     await act(async () => {
       result = render(
         <Routes>
@@ -353,9 +352,12 @@ describe('NotificationDetail Page', () => {
     // we use regexp to not set the query parameters
     mock.onGet(/\/bff\/v1\/downtime\/history.*/).reply(200, downtimesDTO);
     await act(async () => {
-      result = render(<NotificationDetail />);
+      result = result = render(<NotificationDetail />, {
+        route: `/${notificationDTO.iun}`,
+        path: '/:id',
+      });
     });
-    const cancelNotificationBtn = result.getByTestId('cancelNotificationBtn');
+    const cancelNotificationBtn = await waitFor(() => result.getByTestId('cancelNotificationBtn'));
     fireEvent.click(cancelNotificationBtn);
     const modal = await waitFor(() => result.getByTestId('cancel-notification-modal'));
     expect(modal).toBeInTheDocument();

@@ -93,9 +93,9 @@ const NotificationDetail: React.FC = () => {
    */
   const { t } = useTranslation(['common', 'notifiche', 'appStatus']);
   const [openDetailsDrawer, setOpenDetailsDrawer] = useState(false);
+  const [pageReady, setPageReady] = useState(false);
 
   const hasNotificationSentApiError = hasApiErrors(NOTIFICATION_ACTIONS.GET_SENT_NOTIFICATION);
-  const pageReady = notification.iun === id;
 
   const checkIfNotificationHasPayments = notification.recipients.some(
     (recipient) => recipient.payments && recipient.payments.length > 0
@@ -214,7 +214,11 @@ const NotificationDetail: React.FC = () => {
 
   const fetchSentNotification = useCallback(() => {
     if (id) {
-      void dispatch(getSentNotification(id));
+      setPageReady(false);
+      void dispatch(getSentNotification(id))
+        .unwrap()
+        .catch(() => {})
+        .finally(() => setPageReady(true));
     }
   }, [id]);
 

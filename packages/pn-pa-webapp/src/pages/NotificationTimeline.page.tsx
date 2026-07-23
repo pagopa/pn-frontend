@@ -1,4 +1,4 @@
-import { Fragment, useCallback, useEffect, useMemo } from 'react';
+import { Fragment, useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 
@@ -39,11 +39,16 @@ const NotificationTimeline: React.FC = () => {
   const notification = useAppSelector((state: RootState) => state.notificationState.notification);
 
   const hasNotificationSentApiError = hasApiErrors(NOTIFICATION_ACTIONS.GET_SENT_NOTIFICATION);
-  const pageReady = notification.iun === id;
+  const [pageReady, setPageReady] = useState(false);
 
   const fetchSentNotification = useCallback(() => {
     if (id) {
-      void dispatch(getSentNotification(id));
+      setPageReady(false);
+
+      void dispatch(getSentNotification(id))
+        .unwrap()
+        .catch(() => {})
+        .finally(() => setPageReady(true));
     }
   }, [id]);
 
