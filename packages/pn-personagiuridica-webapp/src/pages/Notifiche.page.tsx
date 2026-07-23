@@ -226,16 +226,10 @@ const Notifiche = ({ isDelegatedPage = false }: Props) => {
   return (
     <LoadingPageWrapper isInitialized={pageReady}>
       <Box p={3}>
-        {userHasAdminPermissions && !organizationGroup && !isDelegatedPage && (
-          <DomicileBanner
-            source={ContactSource.HOME_NOTIFICHE}
-            onBannerResolved={handleDomicileBannerResolved}
-          />
-        )}
         <TitleBox
           variantTitle="h4"
           title={pageTitle}
-          mbTitle={isMobile ? 3 : undefined}
+          mbTitle={isMobile ? 3 : 0}
           propsTitle={
             hasGroupSelector
               ? {
@@ -250,6 +244,13 @@ const Notifiche = ({ isDelegatedPage = false }: Props) => {
             )
           }
         />
+        {userHasAdminPermissions && !organizationGroup && !isDelegatedPage && (
+          <DomicileBanner
+            source={ContactSource.HOME_NOTIFICHE}
+            onBannerResolved={handleDomicileBannerResolved}
+            my={3}
+          />
+        )}
         <ApiErrorWrapper
           apiId={DASHBOARD_ACTIONS.GET_RECEIVED_NOTIFICATIONS}
           reloadAction={fetchNotifications}
