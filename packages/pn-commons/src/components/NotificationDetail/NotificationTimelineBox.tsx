@@ -49,7 +49,7 @@ const NotificationTimelineBox = ({
   return (
     <MIPaper padding={24} data-testid="NotificationDetailTimeline">
       <Stack spacing={1} alignItems="flex-start">
-        <Typography component="h2" variant="h5" sx={{ mb: 1 }}>
+        <Typography component="h2" variant="h6" sx={{ mb: 1 }}>
           {getLocalizedOrDefaultLabel(
             'notifications',
             'detail.notification-timeline-section.title'

@@ -159,7 +159,7 @@ const NotificationRelatedDowntimes: React.FC<Props> = ({
     >
       {shouldFetchEvents && downtimeEvents.length > 0 ? (
         <MIPaper padding={24} data-testid="downtimesBox">
-          <Typography component="h2" variant="h5">
+          <Typography component="h2" variant="h6">
             {title}
           </Typography>
           {!isItalianLanguage && (

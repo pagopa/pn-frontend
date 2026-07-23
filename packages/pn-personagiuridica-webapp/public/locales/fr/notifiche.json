@@ -57,6 +57,9 @@
   },
   "detail": {
     "legal-value": "Notification à valeur légale",
+    "legal-date": "Notification déposée le",
+    "informal-date": "Communication déposée le",
+    "legal-disclaimer": "Notification envoyée via SEND, la plateforme régie par l’art. 26 du D.L. 76/2020",
     "notification-timeline-section": {
       "title": "Statut de la notification",
       "aria-label": "Accéder à l'historique de la notification"
@@ -95,7 +98,7 @@
       "cta": "Que dois-je faire ?"
     },
     "payment": {
-      "title": "Paiement",
+      "title": "Paiements",
       "f24Models": "Formulaires F24",
       "pagoPANotices": "Alertes pagoPA",
       "download-pagoPA-notice": "Télécharger l’alerte pagoPA",
@@ -146,7 +149,7 @@
     "acts_files": {
       "downloadable_acts": "Les documents sont disponibles en ligne pendant 120 jours à compter de la finalisation de la notification.",
       "not_downloadable_acts": "Étant donné que 120 jours se sont écoulés depuis la date de finalisation, si vous souhaitez obtenir les actes, vous devez vous adresser à l’expéditeur.",
-      "downloadable_aar": "L’accusé de réception est disponible en ligne pendant 10 ans à compter de la finalisation de la notification.",
+      "downloadable_aar": "<0>Disponible en ligne pendant 10 ans</0> à compter de la date à laquelle la notification SEND a pris valeur juridique.",
       "not_downloadable_aar": "Comme 10 ans se sont écoulés depuis la date de finalisation, l’accusé de réception n’est plus disponible.",
       "effected_faq": "Quand une notification est-elle finalisée ?",
       "informal_downloadable_acts": "Conserve les pièces jointes sur ton appareil : elles seront disponibles en ligne <0>jusqu'à 180 jours à compter de la date de dépôt</0> indiquée en haut !"
@@ -373,7 +376,7 @@
       },
       "radd": {
         "title": "Les documents ont été retirés",
-        "description": "Le destinataire ou son délégué a retiré les documents notifiés auprès d'un opérateur habilité à la remise de ceux-ci."
+        "description": "Le destinataire, ou la personne déléguée, a retiré les documents notifiés auprès d'un opérateur habilité à leur remise."
       },
       "tpp-type": "un canal numérique tiers"
     },
@@ -382,7 +385,7 @@
       "textWithEndDate": "Dysfonctionnement commencé {{startDate}} et terminé {{endDate}} sur les fonctionnalités suivantes :",
       "textWithoutEndDate": "Dysfonctionnement commencé {{startDate}} et non encore terminé sur les fonctionnalités suivantes :",
       "datePrefix": "le ",
-      "legalFactDownload": "Attestation de dysfonctionnement",
+      "legalFactDownload": "Ouvrir l'attestation de dysfonctionnement",
       "apiErrorMessage": "Nous n’avons pas pu charger les éventuels dysfonctionnements qui ont affecté cette notification."
     },
     "help": {

@@ -349,8 +349,8 @@
       },
       "radd": {
         "title": "Les documents ont été retirés",
-        "description-mono-recipient": "Le destinataire ou son délégué a retiré les documents notifiés auprès d’un opérateur autorisé à les délivrer.",
-        "description-multi-recipients": "Un des destinataires ou son délégué a retiré les documents notifiés auprès d’un opérateur autorisé à les délivrer."
+        "description-mono-recipient": "Le destinataire, ou la personne déléguée, a retiré les documents notifiés auprès d'un opérateur habilité à leur remise.",
+        "description-multi-recipients": "L'un des destinataires, ou son délégué, a retiré les documents notifiés auprès d'un opérateur habilité à leur remise."
       },
       "tpp-type": "un canal numérique tiers"
     },

@@ -61,6 +61,10 @@
     "not-found-subtitle": "Questa notifica può essere letta solo dal destinatario."
   },
   "detail": {
+    "legal-value": "Notifica a valore legale",
+    "legal-date": "Notifica depositata il",
+    "informal-date": "Comunicazione depositata il",
+    "legal-disclaimer": "Notifica inviata tramite SEND, la piattaforma disciplinata dall’art. 26 del D.L 76/2020",
     "notification-timeline-section": {
       "title": "Stato della notifica",
       "aria-label": "Vai alla timeline della notifica"
@@ -94,13 +98,12 @@
     "show-less": "Mostra meno dettagli",
     "disclaimer-link": "Scopri di più",
     "pec-unreachable": "Mantieni la PEC libera e attiva per ricevere tutto in digitale!",
-    "legal-value": "Notifica a valore legale",
     "cancelled": {
       "message": "Questa notifica è stata annullata dall’ente mittente.",
       "cta": "Cosa devo fare?"
     },
     "payment": {
-      "title": "Pagamento",
+      "title": "Pagamenti",
       "f24Models": "Modelli F24",
       "pagoPANotices": "Avvisi pagoPA",
       "download-pagoPA-notice": "Scarica l'avviso pagoPA",
@@ -156,7 +159,7 @@
     "acts_files": {
       "downloadable_acts": "<0>I documenti saranno disponibili online fino a 120 giorni</0> dalla data in cui la notifica SEND ha assunto valore di legge. Salvali sul tuo dispositivo!",
       "not_downloadable_acts": "I documenti non sono più disponibili online. Per richiederli, rivolgiti all’ente che te li ha inviati.",
-      "downloadable_aar": "L’avviso di avvenuta ricezione è disponibile online per 10 anni dal perfezionamento della notifica.",
+      "downloadable_aar": "<0>Disponibile online per 10 anni</0> dalla data in cui la notifica SEND ha assunto valore di legge.",
       "not_downloadable_aar": "L’avviso di avvenuta ricezione non è più disponibile. Per richiederlo, rivolgiti all’ente che te lo ha inviato.",
       "effected_faq": "Quando si perfeziona una notifica?",
       "informal_downloadable_acts": "Conserva gli allegati sul tuo dispositivo: saranno disponibili online <0>fino a 180 giorni dalla data di deposito</0> che trovi in alto!"
@@ -384,7 +387,7 @@
       },
       "radd": {
         "title": "I documenti sono stati ritirati",
-        "description": "Il destinatario o un suo delegato ha ritirato i documenti notificati presso un operatore abilitato alla consegna degli stessi."
+        "description": "La persona destinataria, o chi è stato delegato, ha ritirato i documenti notificati presso un operatore abilitato alla consegna degli stessi."
       },
       "tpp-type": "un canale digitale di terze parti"
     },
@@ -393,7 +396,7 @@
       "textWithEndDate": "Disservizio iniziato {{startDate}} e concluso {{endDate}} sulle seguenti funzionalità:",
       "textWithoutEndDate": "Disservizio iniziato {{startDate}} e non ancora concluso sulle seguenti funzionalità:",
       "datePrefix": "il ",
-      "legalFactDownload": "Attestazione di malfunzionamento",
+      "legalFactDownload": "Apri l'attestazione di malfunzionamento",
       "apiErrorMessage": "Non siamo riusciti a caricare gli eventuali disservizi che hanno interessato questa notifica."
     },
     "help": {
