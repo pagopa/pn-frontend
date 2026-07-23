@@ -233,7 +233,7 @@ const FilterNotifications = forwardRef(({ showFilters, isDelegatedPage = false }
     </CustomMobileDialog>
   ) : (
     <form onSubmit={formik.handleSubmit} data-testid="filter-form">
-      <Box sx={{ flexGrow: 1, mt: 2 }}>
+      <Box sx={{ flexGrow: 1, mt: 3 }}>
         <Grid
           container
           spacing={1}
