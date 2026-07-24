@@ -132,7 +132,7 @@
     "acts": "Pièces jointes",
     "download-message-available": "<0>Disponible en ligne jusqu'à 120 jours</0> à compter de la date à laquelle la notification SEND a pris valeur juridique.",
     "download-message-expired": "Étant donné que 120 jours se sont écoulés depuis la date de finalisation, les documents ne sont plus disponibles.",
-    "download-aar-available": "L’accusé de réception est disponible en ligne pendant 10 ans à compter de la finalisation de la notification.",
+    "download-aar-available": "<0>Disponible en ligne pendant 10 ans</0> à compter de la date à laquelle la notification SEND a pris valeur juridique.",
     "download-aar-expired": "Comme 10 ans se sont écoulés depuis la date de finalisation, l’accusé de réception n’est plus disponible.",
     "download-files-link": "Quand une notification est-elle finalisée ?",
     "timeline-title": "État de la notification",
