@@ -4,6 +4,7 @@ import CallOutlinedIcon from '@mui/icons-material/CallOutlined';
 import LanguageRoundedIcon from '@mui/icons-material/LanguageRounded';
 import {
   Divider,
+  Link,
   List,
   ListItem,
   ListItemAvatar,
@@ -25,6 +26,7 @@ const PnSenderContacts = ({ phone, site }: SenderContactsProps) => {
   if (!phone && !site) {
     return null;
   }
+  const websiteUrl = site && /^https?:\/\//i.test(site) ? site : `https://${site}`;
 
   return (
     <MIPaper sx={{ p: 3, width: { xs: '100%', md: '42%' } }} variant="outlined">
@@ -71,9 +73,15 @@ const PnSenderContacts = ({ phone, site }: SenderContactsProps) => {
                   {t('detail.contact_sender.website', { ns: 'notifiche' })}
                 </Typography>
 
-                <Typography variant="sidenav" color="text.primary">
+                <Link
+                  href={websiteUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  variant="sidenav"
+                  underline="always"
+                >
                   {site}
-                </Typography>
+                </Link>
               </ListItemText>
             </ListItem>
           )}
