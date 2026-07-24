@@ -175,26 +175,6 @@ describe('NotificationDetail.page - Mixpanel events', () => {
     );
   });
 
-  // NB: skipped because the timeline is migrated in another page
-  // -> restore it when FE unit test debt is done
-  it.skip('fires SEND_NOTIFICATION_STATUS_DETAIL when the timeline accordion is toggled', async () => {
-    setupMocks();
-
-    const { getAllByTestId } = await act(async () =>
-      render(<Component />, {
-        preloadedState: baseState,
-        route: routes.GET_DETTAGLIO_NOTIFICA_PATH(notificationDTO.iun),
-      })
-    );
-
-    await waitFor(() => getAllByTestId('more-less-timeline-step'));
-    fireEvent.click(getAllByTestId('more-less-timeline-step')[0]);
-
-    expect(triggerEventSpy).toHaveBeenCalledWith(PFEventsType.SEND_NOTIFICATION_STATUS_DETAIL, {
-      accordion: 'expanded',
-    });
-  });
-
   // trackEventPaymentRecipient events (SEND_PAYMENT_OUTCOME, SEND_F24_DOWNLOAD,
   // SEND_PAYMENT_LIST_CHANGE_PAGE, etc.) are not covered here — they fire through
   // a callback passed down to NotificationPaymentRecipient (pn-commons), requiring

@@ -163,12 +163,6 @@ const NotificationTimeline: React.FC = () => {
 
   useDismissToastOnError(NOTIFICATION_ACTIONS.GET_RECEIVED_NOTIFICATION, handleUserInvalidError);
 
-  const trackShowMoreLess = (collapsed: boolean) => {
-    PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_NOTIFICATION_STATUS_DETAIL, {
-      accordion: collapsed ? 'collapsed' : 'expanded',
-    });
-  };
-
   const properBreadcrumb = useMemo(() => {
     if (!id) {
       return null;
@@ -257,9 +251,6 @@ const NotificationTimeline: React.FC = () => {
                   recipients={notification.recipients}
                   statusHistory={notification.notificationStatusHistory}
                   clickHandler={legalFactDownloadHandler}
-                  handleTrackShowMoreLess={trackShowMoreLess}
-                  showMoreButtonLabel={t('detail.show-more', { ns: 'notifiche' })}
-                  showLessButtonLabel={t('detail.show-less', { ns: 'notifiche' })}
                   disableDownloads={isCancelled.cancellationInTimeline}
                   isParty={false}
                 />

@@ -14,8 +14,7 @@ type NotificationEventType =
   | PAEventsType.SEND_PA_NOTIFICATION_DOWNLOAD_ATTACHMENT
   | PAEventsType.SEND_PA_NOTIFICATIONS
   | PAEventsType.SEND_PA_TIMELINE_DOWNLOAD
-  | PAEventsType.SEND_PA_TIMELINE_SHOW_HISTORY
-  | PAEventsType.SEND_PA_TIMELINE_SHOW_MORE;
+  | PAEventsType.SEND_PA_TIMELINE_SHOW_HISTORY;
 
 export const notificationTrackingConfigs: TrackingConfigs<NotificationEventType> = {
   [PAEventsType.SEND_PA_CANCEL_NOTIFICATION]: () => uxAction(),
@@ -27,5 +26,4 @@ export const notificationTrackingConfigs: TrackingConfigs<NotificationEventType>
   [PAEventsType.SEND_PA_TIMELINE_DOWNLOAD]: (data) =>
     uxAction(mapTimelineLegalFactToDocumentDownloadPayload(data)),
   [PAEventsType.SEND_PA_TIMELINE_SHOW_HISTORY]: () => uxAction(),
-  [PAEventsType.SEND_PA_TIMELINE_SHOW_MORE]: () => uxAction(),
 };

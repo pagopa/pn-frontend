@@ -275,12 +275,6 @@ const NotificationDetail: React.FC = () => {
       .catch((e) => console.log(e));
   }, []);
 
-  const trackTimelineShowMore = (collapsed: boolean) => {
-    if (!collapsed) {
-      PAEventStrategyFactory.triggerEvent(PAEventsType.SEND_PA_TIMELINE_SHOW_MORE);
-    }
-  };
-
   const properBreadcrumb = (
     <PnBreadcrumb
       linkRoute={routes.DASHBOARD}
@@ -387,9 +381,6 @@ const NotificationDetail: React.FC = () => {
                   recipients={recipients}
                   statusHistory={notification.notificationStatusHistory}
                   clickHandler={legalFactDownloadHandler}
-                  showMoreButtonLabel={t('detail.show-more', { ns: 'notifiche' })}
-                  showLessButtonLabel={t('detail.show-less', { ns: 'notifiche' })}
-                  handleTrackShowMoreLess={trackTimelineShowMore}
                 />
               </Box>
             </Grid>
