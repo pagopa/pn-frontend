@@ -450,14 +450,6 @@ const NotificationDetail: React.FC = () => {
                     </MIAlert>
                   )}
                 </MIPaper>
-                <NotificationRelatedDowntimes
-                  downtimeEvents={downtimeEvents}
-                  fetchDowntimeEvents={fetchDowntimeEvents}
-                  notificationStatusHistory={notification.notificationStatusHistory}
-                  fetchDowntimeLegalFactDocumentDetails={fetchDowntimeLegalFactDocumentDetails}
-                  apiId={NOTIFICATION_ACTIONS.GET_DOWNTIME_HISTORY}
-                  downtimeExampleLink={DOWNTIME_EXAMPLE_LINK}
-                />
                 <NotificationCancellationAction
                   notification={notification}
                   onCancelNotification={handleCancelNotification}
@@ -491,6 +483,15 @@ const NotificationDetail: React.FC = () => {
                 downloadFilesMessage={getDownloadFilesMessage('aar')}
                 showAllAarDocuments
                 useDocumentTitle
+              />
+
+              <NotificationRelatedDowntimes
+                downtimeEvents={downtimeEvents}
+                fetchDowntimeEvents={fetchDowntimeEvents}
+                notificationStatusHistory={notification.notificationStatusHistory}
+                fetchDowntimeLegalFactDocumentDetails={fetchDowntimeLegalFactDocumentDetails}
+                apiId={NOTIFICATION_ACTIONS.GET_DOWNTIME_HISTORY}
+                downtimeExampleLink={DOWNTIME_EXAMPLE_LINK}
               />
             </Stack>
           </Box>

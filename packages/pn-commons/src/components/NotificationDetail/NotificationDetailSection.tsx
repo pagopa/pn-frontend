@@ -54,7 +54,7 @@ const NotificationDetailSection = ({
   const getAARElement = () => {
     if (!isCancelled && isLessThan10Years) {
       return (
-        <Typography variant="body2" color="text.secondary">
+        <Typography variant="caption" color="text.secondary">
           <Trans
             i18nKey={downloadFilesMessage.key}
             ns={downloadFilesMessage.ns}
@@ -140,9 +140,7 @@ const NotificationDetailSection = ({
                   >
                     {documentTitle}
                   </Typography>
-                  <Typography variant="caption" color="text.primary">
-                    {getAARElement()}
-                  </Typography>
+                  {getAARElement()}
                 </Stack>
                 {!isCancelled && (
                   <MIIconButton
