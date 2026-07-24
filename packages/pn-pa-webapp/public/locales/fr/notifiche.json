@@ -26,6 +26,10 @@
   },
   "payment": {
     "title": "Paiements",
+    "subtitle-single": "Ici, vous pouvez surveiller l’état de paiement des avis de pagoPA joints à la notification.",
+    "subtitle-single-f24": "Ici, vous pouvez voir les modèles F24 joints à la notification.",
+    "subtitle-multiple": "Pour voir l’état de paiement des avis de pagoPA joints à la notification, sélectionnez un destinataire.",
+    "subtitle-multiple-f24": "Pour voir les modèles F24 joints à la notification, sélectionnez un destinataire.",
     "pagopa-notice": "Avis de pagoPA",
     "status": {
       "to-pay": "À payer",

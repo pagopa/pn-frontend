@@ -26,6 +26,10 @@
   },
   "payment": {
     "title": "Payments",
+    "subtitle-single": "Here, you can track the payment status of the pagoPA alerts attached to the notification.",
+    "subtitle-single-f24": "Here, you can see the F24 forms attached to the notification.",
+    "subtitle-multiple": "To see the payment status of the pagoPA alerts attached to the notification, select a recipient.",
+    "subtitle-multiple-f24": "To see the F24 forms attached to the notification, select a recipient.",
     "pagopa-notice": "pagoPA notice",
     "status": {
       "to-pay": "To pay",

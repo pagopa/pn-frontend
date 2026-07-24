@@ -26,6 +26,10 @@
   },
   "payment": {
     "title": "Zahlungen",
+    "subtitle-single": "Hier kannst du den pagoPA Zahlungsstatus der angehängten Bescheide überwachen.",
+    "subtitle-single-f24": "Hier kannst du die dem Bescheid angehängten F24-Vordrucke anzeigen.",
+    "subtitle-multiple": "Zur Anzeige des Zahlungsstatus der an die Bescheid angehängten pagoPA-Benachrichtigungen, Empfänger auswählen.",
+    "subtitle-multiple-f24": "Zur Anzeige der dem Bescheid beigefügten angehängten Vordrucke F24 Empfänger auswählen.",
     "pagopa-notice": "Bescheid pagoPA",
     "status": {
       "to-pay": "Zu zahlen",

@@ -9,7 +9,7 @@ import {
   PnDialogActions,
   PnDialogContent,
 } from '@pagopa-pn/pn-commons';
-import { MIBoxedModule, MIButton } from '@pagopa/mui-italia';
+import { MIButton } from '@pagopa/mui-italia';
 
 type Props = {
   iun: string;
@@ -47,45 +47,43 @@ const NotificationPaymentF24: React.FC<Props> = ({ iun, payments }) => {
           </MIButton>
         </PnDialogActions>
       </PnDialog>
-      <MIBoxedModule>
-        <Box width="100%">
-          <Typography variant="caption" fontWeight={600} color="text.secondary">
-            {t('payment.f24-attached')}
-          </Typography>
+      <Box width="100%">
+        <Typography variant="caption" fontWeight={600} color="text.secondary">
+          {t('payment.f24-attached')}
+        </Typography>
 
-          <Box display="flex" flexWrap="wrap" alignItems="center">
-            <CollapsedList
-              maxNumberOfItems={5}
-              items={payments}
-              renderItem={(f24) => (
-                <Typography
-                  variant="caption"
-                  color="text.secondary"
-                  mr={1}
-                  key={`${f24.recIndex} - ${f24.attachmentIdx}`}
-                  data-testid="f24"
-                  sx={{ wordBreak: 'break-all' }}
+        <Box display="flex" flexWrap="wrap" alignItems="center">
+          <CollapsedList
+            maxNumberOfItems={5}
+            items={payments}
+            renderItem={(f24) => (
+              <Typography
+                variant="caption"
+                color="text.secondary"
+                mr={1}
+                key={`${f24.recIndex} - ${f24.attachmentIdx}`}
+                data-testid="f24"
+                sx={{ wordBreak: 'break-all' }}
+              >
+                {f24.title}
+              </Typography>
+            )}
+            renderRemainingItem={(count) => (
+              <Typography variant="caption" color="text.secondary" data-testid="remaining-f24">
+                &nbsp;+&nbsp;{count}&nbsp;{t('payment.attachments')}
+                <MIButton
+                  variant="text"
+                  sx={{ ml: 1 }}
+                  data-testid="show-all-attachments"
+                  onClick={() => setOpen(true)}
                 >
-                  {f24.title}
-                </Typography>
-              )}
-              renderRemainingItem={(count) => (
-                <Typography variant="caption" color="text.secondary" data-testid="remaining-f24">
-                  &nbsp;+&nbsp;{count}&nbsp;{t('payment.attachments')}
-                  <MIButton
-                    variant="text"
-                    sx={{ ml: 1 }}
-                    data-testid="show-all-attachments"
-                    onClick={() => setOpen(true)}
-                  >
-                    {t('detail.show-all')}
-                  </MIButton>
-                </Typography>
-              )}
-            />
-          </Box>
+                  {t('detail.show-all')}
+                </MIButton>
+              </Typography>
+            )}
+          />
         </Box>
-      </MIBoxedModule>
+      </Box>
     </>
   );
 };

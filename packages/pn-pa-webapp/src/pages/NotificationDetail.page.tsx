@@ -481,8 +481,6 @@ const NotificationDetail: React.FC = () => {
                 isCancelled={false}
                 isLessThan10Years={dateIsLessThan10Years(notification.sentAt)}
                 downloadFilesMessage={getDownloadFilesMessage('aar')}
-                showAllAarDocuments
-                useDocumentTitle
               />
 
               <NotificationRelatedDowntimes

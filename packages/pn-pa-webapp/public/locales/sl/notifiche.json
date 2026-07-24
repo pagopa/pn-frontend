@@ -26,6 +26,10 @@
   },
   "payment": {
     "title": "Plačila",
+    "subtitle-single": "Tukaj lahko spremljate stanje plačila opozoril pagoPA, ki so priložena obvestilu.",
+    "subtitle-single-f24": "Tukaj si lahko ogledate obrazce F24, ki so priloženi obvestilu.",
+    "subtitle-multiple": "Če si želite ogledati stanje plačila opozoril pagoPA, priloženih obvestilu, izberite prejemnika.",
+    "subtitle-multiple-f24": "Če si želite ogledati obrazce F24, priložene obvestilu, izberite prejemnika.",
     "pagopa-notice": "Opozorilo pagoPA",
     "status": {
       "to-pay": "Za plačilo",

@@ -1,7 +1,7 @@
 import { ChangeEvent, useState } from 'react';
 import { TFunction, useTranslation } from 'react-i18next';
 
-import { Box, Divider, MenuItem, TextField, Typography } from '@mui/material';
+import { Box, Divider, MenuItem, Stack, TextField, Typography } from '@mui/material';
 import {
   CustomPagination,
   F24PaymentDetails,
@@ -121,6 +121,22 @@ const NotificationPaymentSender: React.FC<Props> = ({ iun, recipients, timeline 
       <Typography variant="h5" component="h2" mb={2}>
         {t('payment.title', { ns: 'notifiche' })}
       </Typography>
+      {recipients.length === 1 && (
+        <Typography variant="body2" my={2}>
+          {f24PaymentDetails.length > 0 && pagoPAPaymentFullDetails.length === 0
+            ? t('payment.subtitle-single-f24', { ns: 'notifiche' })
+            : t('payment.subtitle-single', { ns: 'notifiche' })}
+        </Typography>
+      )}
+      {recipients.length > 1 && (
+        <Typography variant="body2" my={2}>
+          {f24PaymentDetails.length > 0 &&
+          pagoPAPaymentFullDetails.length === 0 &&
+          recipientSelected
+            ? t('payment.subtitle-multiple-f24', { ns: 'notifiche' })
+            : t('payment.subtitle-multiple', { ns: 'notifiche' })}
+        </Typography>
+      )}
       {recipients.length > 1 && (
         <TextField
           id="recipients-select"
@@ -142,10 +158,13 @@ const NotificationPaymentSender: React.FC<Props> = ({ iun, recipients, timeline 
           {recipients.map((recipient, index) => renderRecipientMenuItem(index, recipient, t))}
         </TextField>
       )}
-      {pagoPAPaymentFullDetails.length > 0 &&
-        pagoPAPaymentFullDetails.map((payment) => (
-          <NotificationPaymentPagoPa iun={iun} payment={payment} key={payment.noticeCode} />
-        ))}
+      {pagoPAPaymentFullDetails.length > 0 && (
+        <Stack gap={2}>
+          {pagoPAPaymentFullDetails.map((payment) => (
+            <NotificationPaymentPagoPa iun={iun} payment={payment} key={payment.noticeCode} />
+          ))}
+        </Stack>
+      )}
       {paginationData.totalElements > paginationData.size && (
         <Box width="full" display="flex" justifyContent="right" mt={1} data-testid="pagination-box">
           <CustomPagination

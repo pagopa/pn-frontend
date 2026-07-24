@@ -20,8 +20,6 @@ interface Props {
   isDelegate: boolean;
   isLessThan10Years: boolean;
   downloadFilesMessage: { key: string; ns: string };
-  showAllAarDocuments?: boolean;
-  useDocumentTitle?: boolean;
 }
 
 const NotificationDetailSection = ({
@@ -32,24 +30,23 @@ const NotificationDetailSection = ({
   isDelegate,
   isLessThan10Years,
   downloadFilesMessage,
-  showAllAarDocuments = false,
-  useDocumentTitle = false,
 }: Props) => {
   const theme = useTheme();
 
-  const getAarDocuments = (): Array<NotificationDetailOtherDocument> => {
-    const filteredDocuments = documents?.filter(
-      (document) => document.documentType === NotificationDocumentType.AAR
-    );
+  const aarDocuments =
+    documents?.filter((doc) => doc.documentType === NotificationDocumentType.AAR) ?? [];
 
-    if (!filteredDocuments?.length) {
-      return [];
+  const getAARTitle = (document: NotificationDetailOtherDocument) => {
+    const aarTitle =
+      document.title ||
+      getLocalizedOrDefaultLabel('notifications', 'detail.notification-detail-section.aar');
+
+    if (aarDocuments.length <= 1 || !document.recipient) {
+      return aarTitle;
     }
 
-    return showAllAarDocuments ? filteredDocuments : [filteredDocuments[0]];
+    return `${aarTitle} - ${document.recipient.denomination} (${document.recipient.taxId})`;
   };
-
-  const aarDocuments = getAarDocuments();
 
   const getAARElement = () => {
     if (!isCancelled && isLessThan10Years) {
@@ -110,13 +107,7 @@ const NotificationDetailSection = ({
 
         {isLessThan10Years &&
           aarDocuments.map((document) => {
-            const documentTitle =
-              useDocumentTitle && document.title
-                ? document.title
-                : getLocalizedOrDefaultLabel(
-                    'notifications',
-                    'detail.notification-detail-section.aar'
-                  );
+            const documentTitle = getAARTitle(document);
 
             return (
               <Stack
