@@ -1,5 +1,3 @@
-import { ReactNode } from 'react';
-
 import { NotificationStatus } from './NotificationStatus';
 
 export const NotificationFeePolicy = {
@@ -23,6 +21,7 @@ export type PagoPaIntegrationMode =
 export interface NotificationDetail {
   subject: string;
   abstract?: string;
+  paProtocolNumber?: string;
   recipients: Array<NotificationDetailRecipient>;
   documents: Array<NotificationDetailDocument>;
   cancelledIun?: string;
@@ -355,12 +354,6 @@ export interface NotificationDetailOtherDocument extends NotificationDetailDocum
 export enum PhysicalCommunicationType {
   AR_REGISTERED_LETTER = 'AR_REGISTERED_LETTER',
   REGISTERED_LETTER_890 = 'REGISTERED_LETTER_890',
-}
-
-export interface NotificationDetailTableRow {
-  id: number;
-  label: string;
-  value: ReactNode;
 }
 
 export type DigitalDetails = SendCourtesyMessageDetails | SendDigitalDetails;

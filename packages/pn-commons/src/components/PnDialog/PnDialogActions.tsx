@@ -1,6 +1,7 @@
 import { Children, cloneElement, isValidElement } from 'react';
 
 import { Button, DialogActions, DialogActionsProps } from '@mui/material';
+import { MIButton } from '@pagopa/mui-italia';
 
 import { useIsMobile } from '../../hooks/useIsMobile';
 import { ReactComponent } from '../../models/PnDialog';
@@ -8,7 +9,7 @@ import { ReactComponent } from '../../models/PnDialog';
 const PnDialogActions: React.FC<DialogActionsProps> = (props) => {
   const isMobile = useIsMobile('sm');
   const buttons: Array<ReactComponent> | undefined = Children.toArray(props.children).filter(
-    (child) => isValidElement(child) && child.type === Button
+    (child) => isValidElement(child) && (child.type === Button || child.type === MIButton)
   );
 
   const enrichedButtons = buttons.map((button, index) =>
