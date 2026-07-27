@@ -153,7 +153,7 @@
       "downloadable_aar": "<0>Available online for 10 years</0> from the date the SEND notification became legally binding.",
       "not_downloadable_aar": "As 10 years have passed since the completion date, the acknowledgement of receipt is no longer available.",
       "effected_faq": "When do I complete a notification?",
-      "informal_downloadable_acts": "Save the attachments to your device: they will be available online <0>for up to 180 days from the filing date</0> shown at the top!"
+      "informal_downloadable_acts": "Save the attachments to your device: they will be available online for up to <0>180 days from the filing date</0> shown at the top!"
     },
     "timeline": {
       "schedule-digital-workflow": "Send again digitally",

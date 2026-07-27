@@ -163,7 +163,7 @@
       "not_downloadable_aar": "L'avis de réception n'est plus disponible. Pour le demander, veuillez vous adresser à l'organisme qui vous l'a envoyé.",
       "downloadable_aar": "<0>Disponible en ligne pendant 10 ans</0> à compter de la date à laquelle la notification SEND a pris valeur juridique.",
       "effected_faq": "Quand une notification est-elle finalisée ?",
-      "informal_downloadable_acts": "Conserve les pièces jointes sur ton appareil : elles seront disponibles en ligne <0>jusqu'à 180 jours à compter de la date de dépôt</0> indiquée en haut !"
+      "informal_downloadable_acts": "Conserve les pièces jointes sur ton appareil : elles seront disponibles en ligne jusqu'à <0>180 jours à compter de la date de dépôt</0> indiquée en haut !"
     },
     "timeline": {
       "schedule-digital-workflow": "Envoi ultérieur par voie numérique",

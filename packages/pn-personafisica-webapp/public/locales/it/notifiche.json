@@ -163,7 +163,7 @@
       "downloadable_aar": "<0>Disponibile online per 10 anni</0> dalla data in cui la notifica SEND ha assunto valore di legge.",
       "not_downloadable_aar": "L’avviso di avvenuta ricezione non è più disponibile. Per richiederlo, rivolgiti all’ente che te lo ha inviato.",
       "effected_faq": "Quando si perfeziona una notifica?",
-      "informal_downloadable_acts": "Conserva gli allegati sul tuo dispositivo: saranno disponibili online <0>fino a 180 giorni dalla data di deposito</0> che trovi in alto!"
+      "informal_downloadable_acts": "Conserva gli allegati sul tuo dispositivo: saranno disponibili online fino a <0>180 giorni dalla data di deposito</0> che trovi in alto!"
     },
     "timeline": {
       "schedule-digital-workflow": "Ulteriore invio per via digitale",

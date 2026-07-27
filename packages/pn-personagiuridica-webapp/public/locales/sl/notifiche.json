@@ -153,7 +153,7 @@
       "downloadable_aar": "<0>Na voljo na spletu 10 let</0> od datuma, ko je vročitev SEND postala pravno veljavna.",
       "not_downloadable_aar": "Ker je od datuma zaključka minilo 10 let, obvestilo o prejemu ni več na voljo.",
       "effected_faq": "Kdaj se obvestilo zaključi?",
-      "informal_downloadable_acts": "Shranite priloge v svojo napravo: na spletu bodo na voljo <0>do 180 dni od datuma vložitve</0>, ki ga najdete zgoraj!"
+      "informal_downloadable_acts": "Shranite priloge v svojo napravo: na spletu bodo na voljo do <0>180 dni od datuma vložitve</0>, ki ga najdete zgoraj!"
     },
     "timeline": {
       "schedule-digital-workflow": "Nadaljnje pošiljanje z digitalnimi sredstvi",
