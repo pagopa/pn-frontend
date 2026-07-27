@@ -144,7 +144,8 @@
       "title": "Kontaktiere die sendende Körperschaft",
       "phone": "Telefonnummer der Körperschaft",
       "email": "E-Mail der Körperschaft",
-      "website": "Website der Körperschaft"
+      "website": "Website der Körperschaft",
+      "copy_phone": "Telefonnummer kopiert"
     },
     "acts_files": {
       "downloadable_acts": "Die Dokumente sind 120 Tage nach Abschluss der Zustellung online verfügbar.",
@@ -152,7 +153,7 @@
       "downloadable_aar": "<0>10 Jahre lang online verfügbar</0> ab dem Datum, an dem die SEND-Zustellung Rechtskraft erlangt hat.",
       "not_downloadable_aar": "Da seit der Erledigung 10 Jahre vergangen sind, steht die Empfangsbestätigung nicht mehr zur Verfügung.",
       "effected_faq": "Wann ist die Bearbeitung eines Bescheids abgeschlossen?",
-      "informal_downloadable_acts": "Speichere die Anhänge auf deinem Gerät: Sie sind online <0>bis zu 180 Tage ab dem Hinterlegungsdatum</0> verfügbar, das du oben findest!"
+      "informal_downloadable_acts": "Speichere die Anhänge auf deinem Gerät: Sie sind online bis zu <0>180 Tage ab dem Hinterlegungsdatum</0> verfügbar, das du oben findest!"
     },
     "timeline": {
       "schedule-digital-workflow": "Weiterer digitaler Versand",
