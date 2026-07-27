@@ -1,5 +1,4 @@
 {
-  "title": "Le tue notifiche",
   "go-to-detail": "Vai al dettaglio",
   "table": {
     "data": "Data",
@@ -423,7 +422,6 @@
       "action": "Consulta i modelli"
     }
   },
-  "delegatorTitle": "In arrivo per {{name}}",
   "status": {
     "recipient": "destinatario",
     "delegate": "delegato {{name}}",

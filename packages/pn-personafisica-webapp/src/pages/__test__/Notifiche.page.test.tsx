@@ -29,6 +29,20 @@ describe('Notifiche Page', () => {
     formatToTimezoneString(tenYearsAgo)
   )}&endDate=${encodeURIComponent(formatToTimezoneString(today))}&size=10&communicationType=ALL`;
 
+  const generalInfoState = (overrides: Record<string, unknown>) => ({
+    pendingDelegators: 0,
+    delegators: [],
+    domicileBannerOpened: true,
+    paymentTpp: {},
+    hasNewNotifications: false,
+    onboardingData: {
+      hasBeenShown: false,
+      hasSkippedOnboarding: false,
+      exitReminderShown: false,
+    },
+    ...overrides,
+  });
+
   beforeAll(() => {
     mock = new MockAdapter(apiClient);
     globalThis.ResizeObserver = vi.fn().mockImplementation(() => ({
@@ -54,7 +68,7 @@ describe('Notifiche Page', () => {
     await act(async () => {
       result = render(<Notifiche />);
     });
-    expect(screen.getByTestId('titleBox')).toHaveTextContent(/title/i);
+    expect(screen.getByTestId('titleBox')).toHaveTextContent('menu.notifiche');
     expect(mock.history.get).toHaveLength(1);
     expect(mock.history.get[0].url).toContain('/bff/v1/notifications/received');
     const filterForm = result.getByTestId('filter-form');
@@ -254,7 +268,7 @@ describe('Notifiche Page', () => {
     await act(async () => {
       result = render(<Notifiche />);
     });
-    expect(screen.getByTestId('titleBox')).toHaveTextContent(/title/i);
+    expect(screen.getByTestId('titleBox')).toHaveTextContent('menu.notifiche');
     expect(mock.history.get).toHaveLength(1);
     expect(mock.history.get[0].url).toContain('/bff/v1/notifications/received');
     const filterForm = result.getByTestId('dialogToggle');
@@ -267,6 +281,42 @@ describe('Notifiche Page', () => {
     expect(pageSelector).toBeInTheDocument();
   });
 
+  it('renders personal notifications title when delegators are available', async () => {
+    mock.onGet(notificationsPath).reply(200, notificationsDTO);
+
+    await act(async () => {
+      result = render(<Notifiche />, {
+        preloadedState: {
+          generalInfoState: generalInfoState({
+            delegators: [mandatesByDelegate[1]],
+          }),
+        },
+      });
+    });
+
+    expect(screen.getByTestId('titleBox')).toHaveTextContent('menu.notifiche-utente');
+  });
+
+  it('renders delegated notifications title', async () => {
+    const delegator = mandatesByDelegate[1];
+
+    mock.onGet(/\/bff\/v1\/notifications\/received.*/).reply(200, notificationsDTO);
+
+    await act(async () => {
+      result = render(<Notifiche />, {
+        route: `/notifiche/${delegator.mandateId}`,
+        path: '/notifiche/:mandateId',
+        preloadedState: {
+          generalInfoState: generalInfoState({
+            delegators: [delegator],
+          }),
+        },
+      });
+    });
+
+    expect(screen.getByTestId('titleBox')).toHaveTextContent('menu.notifiche-delegato');
+  });
+
   describe('new notifications dot', () => {
     const receivedRegExp = new RegExp('/bff/v1/notifications/received');
     const notificationsWithNew = notificationsDTO;
@@ -274,19 +324,6 @@ describe('Notifiche Page', () => {
       ...notificationsDTO,
       resultsPage: notificationsDTO.resultsPage.map((n) => ({ ...n, isNewNotification: false })),
     };
-    const generalInfoState = (overrides: Record<string, unknown>) => ({
-      pendingDelegators: 0,
-      delegators: [],
-      domicileBannerOpened: true,
-      paymentTpp: {},
-      hasNewNotifications: false,
-      onboardingData: {
-        hasBeenShown: false,
-        hasSkippedOnboarding: false,
-        exitReminderShown: false,
-      },
-      ...overrides,
-    });
 
     it('sets hasNewNotifications to true when the first page has unread notifications', async () => {
       mock.onGet(receivedRegExp).reply(200, notificationsWithNew);
