@@ -61,12 +61,7 @@ const PnSenderContacts = ({ phone, site }: SenderContactsProps) => {
                   </Typography>
 
                   {isMobile ? (
-                    <Link
-                      href={`tel:${phone}`}
-                      variant="sidenav"
-                      underline="always"
-                      color="primary"
-                    >
+                    <Link href={`tel:${phone}`} underline="always" color="primary">
                       {phone}
                     </Link>
                   ) : (
@@ -113,7 +108,6 @@ const PnSenderContacts = ({ phone, site }: SenderContactsProps) => {
                   href={websiteUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  variant="sidenav"
                   underline="always"
                 >
                   {site}
