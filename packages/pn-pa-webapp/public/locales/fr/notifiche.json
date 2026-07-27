@@ -30,6 +30,7 @@
     "subtitle-single-f24": "Ici, vous pouvez voir les modèles F24 joints à la notification.",
     "subtitle-multiple": "Pour voir l’état de paiement des avis de pagoPA joints à la notification, sélectionnez un destinataire.",
     "subtitle-multiple-f24": "Pour voir les modèles F24 joints à la notification, sélectionnez un destinataire.",
+    "recipient": "Destinataire",
     "pagopa-notice": "Avis de pagoPA",
     "status": {
       "to-pay": "À payer",
@@ -87,8 +88,6 @@
     "sender": "Expéditeur",
     "recipient": "Destinataire",
     "recipients": "Destinataires",
-    "recipient-list-mono": "Destinataire",
-    "recipient-list-multi": "Destinataires",
     "notification-text": "Texte de la notification",
     "tax-id-citizen-recipient": "Code fiscal destinataire",
     "tax-id-organization-recipient": "Code fiscal destinataire",

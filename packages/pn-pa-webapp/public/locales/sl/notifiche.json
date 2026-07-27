@@ -30,6 +30,7 @@
     "subtitle-single-f24": "Tukaj si lahko ogledate obrazce F24, ki so priloženi obvestilu.",
     "subtitle-multiple": "Če si želite ogledati stanje plačila opozoril pagoPA, priloženih obvestilu, izberite prejemnika.",
     "subtitle-multiple-f24": "Če si želite ogledati obrazce F24, priložene obvestilu, izberite prejemnika.",
+    "recipient": "Prejemnik",
     "pagopa-notice": "Opozorilo pagoPA",
     "status": {
       "to-pay": "Za plačilo",
@@ -87,8 +88,6 @@
     "sender": "Pošiljatelj",
     "recipient": "Prejemnik",
     "recipients": "Prejemniki",
-    "recipient-list-mono": "Prejemnik",
-    "recipient-list-multi": "Prejemniki",
     "notification-text": "Besedilo obvestila",
     "tax-id-citizen-recipient": "Davčna številka prejemnika",
     "tax-id-organization-recipient": "Davčna številka prejemnika",

@@ -118,6 +118,7 @@ const AbstractPaper = ({
                 {detail.label}
               </Typography>
               <Typography
+                component="div"
                 variant="body2"
                 color="text"
                 fontWeight={600}
