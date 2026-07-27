@@ -154,7 +154,8 @@
       "title": "Contact the issuing institution",
       "phone": "Institution's phone number",
       "email": "Institution's email address",
-      "website": "Institution's website"
+      "website": "Institution's website",
+      "copy_phone": "Phone number copied"
     },
     "acts_files": {
       "downloadable_acts": "<0>Documents will be available online for up to 120 days</0> from the date the SEND notification became legally effective. Save them to your device!",
@@ -162,7 +163,7 @@
       "not_downloadable_aar": "The acknowledgment of receipt is no longer available. To request it, please contact the institution that sent it to you.",
       "downloadable_aar": "<0>Available online for 10 years</0> from the date the SEND notification became legally binding.",
       "effected_faq": "When is a notification finalized?",
-      "informal_downloadable_acts": "Save the attachments to your device: they will be available online <0>for up to 180 days from the filing date</0> shown at the top!"
+      "informal_downloadable_acts": "Save the attachments to your device: they will be available online for up to <0>180 days from the filing date</0> shown at the top!"
     },
     "timeline": {
       "schedule-digital-workflow": "Further sending digitally",

@@ -1,5 +1,4 @@
 {
-  "title": "Le tue notifiche",
   "go-to-detail": "Vai al dettaglio",
   "table": {
     "data": "Data",
@@ -154,7 +153,8 @@
       "title": "Contatta il mittente",
       "phone": "Numero di telefono dell'ente",
       "email": "Email dell'ente",
-      "website": "Sito web dell'ente"
+      "website": "Sito web dell'ente",
+      "copy_phone": "Numero di telefono copiato"
     },
     "acts_files": {
       "downloadable_acts": "<0>I documenti saranno disponibili online fino a 120 giorni</0> dalla data in cui la notifica SEND ha assunto valore di legge. Salvali sul tuo dispositivo!",
@@ -162,7 +162,7 @@
       "downloadable_aar": "<0>Disponibile online per 10 anni</0> dalla data in cui la notifica SEND ha assunto valore di legge.",
       "not_downloadable_aar": "L’avviso di avvenuta ricezione non è più disponibile. Per richiederlo, rivolgiti all’ente che te lo ha inviato.",
       "effected_faq": "Quando si perfeziona una notifica?",
-      "informal_downloadable_acts": "Conserva gli allegati sul tuo dispositivo: saranno disponibili online <0>fino a 180 giorni dalla data di deposito</0> che trovi in alto!"
+      "informal_downloadable_acts": "Conserva gli allegati sul tuo dispositivo: saranno disponibili online fino a <0>180 giorni dalla data di deposito</0> che trovi in alto!"
     },
     "timeline": {
       "schedule-digital-workflow": "Ulteriore invio per via digitale",
@@ -423,7 +423,6 @@
       "action": "Consulta i modelli"
     }
   },
-  "delegatorTitle": "In arrivo per {{name}}",
   "status": {
     "recipient": "destinatario",
     "delegate": "delegato {{name}}",

@@ -283,6 +283,28 @@ const NotificationDetail: React.FC = () => {
     setOpenDetailsDrawer(false);
   };
 
+  const renderRecipients = () => {
+    if (recipients.length === 1) {
+      const [recipient] = recipients;
+
+      return `${recipient.denomination} - ${recipient.taxId}`;
+    }
+
+    if (recipients.length > 1) {
+      return (
+        <Box component="ul" sx={{ pl: 3, m: 0 }}>
+          {recipients.map((recipient) => (
+            <Box component="li" key={recipient.taxId}>
+              {recipient.denomination} - {recipient.taxId}
+            </Box>
+          ))}
+        </Box>
+      );
+    }
+
+    return null;
+  };
+
   const notificationSummaryDetails = [
     {
       label: t('detail.protocol-number', { ns: 'notifiche' }),
@@ -301,9 +323,7 @@ const NotificationDetail: React.FC = () => {
         recipients.length > 1
           ? t('detail.recipients', { ns: 'notifiche' })
           : t('detail.recipient', { ns: 'notifiche' }),
-      value: recipients
-        .map((recipient) => `${recipient.denomination} - ${recipient.taxId}`)
-        .join(', '),
+      value: renderRecipients(),
     },
   ].filter((detail) => detail.value);
 
@@ -327,17 +347,9 @@ const NotificationDetail: React.FC = () => {
     {
       label:
         recipients.length > 1
-          ? t('detail.recipient-list-multi', { ns: 'notifiche' })
-          : t('detail.recipient-list-mono', { ns: 'notifiche' }),
-      value: (
-        <Box component="ul" sx={{ pl: 3, m: 0 }}>
-          {recipients.map((recipient) => (
-            <Box component="li" key={recipient.taxId}>
-              {recipient.denomination} - {recipient.taxId}
-            </Box>
-          ))}
-        </Box>
-      ),
+          ? t('detail.recipients', { ns: 'notifiche' })
+          : t('detail.recipient', { ns: 'notifiche' }),
+      value: renderRecipients(),
     },
     {
       label: t('detail.notification-text', { ns: 'notifiche' }),
@@ -442,11 +454,11 @@ const NotificationDetail: React.FC = () => {
                     >
                       {notification.recipients.length === 1
                         ? t('detail.timeline.radd.description-mono-recipient', {
-                            ns: 'notifiche',
-                          })
+                          ns: 'notifiche',
+                        })
                         : t('detail.timeline.radd.description-multi-recipients', {
-                            ns: 'notifiche',
-                          })}
+                          ns: 'notifiche',
+                        })}
                     </MIAlert>
                   )}
                 </MIPaper>
