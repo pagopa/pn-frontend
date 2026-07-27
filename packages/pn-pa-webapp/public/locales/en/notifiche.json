@@ -1,6 +1,7 @@
 {
   "title": "Notifications",
   "subtitle": "Here, you will find all the notifications sent by the institution. You can filter them by Fiscal Code, IUN Code, send date and status.",
+  "go-to-detail": "Go to details",
   "new-notification-button": "Send a notification",
   "manual-send-disabled-message": "It is not possible to send new notifications at this moment.",
   "manual-send-disabled-action": "Check the status of the platform",
@@ -30,7 +31,10 @@
     "subtitle-multiple": "To see the payment status of the pagoPA alerts attached to the notification, select a recipient.",
     "subtitle-multiple-f24": "To see the F24 forms attached to the notification, select a recipient.",
     "pagopa-notice": "pagoPA notice",
-    "paid": "Paid",
+    "status": {
+      "to-pay": "To pay",
+      "succeeded": "Paid"
+    },
     "f24-attached": "Attached F24 forms",
     "attachments": "attachments",
     "f24-dialog-title": "F24 forms attached to the notification {{iun}}"
@@ -64,12 +68,28 @@
     "generic-error-cta": "Try again"
   },
   "detail": {
+    "protocol-number": "Protocol number",
+    "subject": "Notification subject",
+    "notification-details-aria-label": "Go to notification details",
+    "legal-value": "Legally binding notification",
+    "notification-timeline-section": {
+      "title": "Notification status",
+      "aria-label": "Go to notification timeline"
+    },
+    "notification-detail-section": {
+      "title": "Notification details",
+      "aar": "Notice of receipt",
+      "aria-label": "Go to notice of receipt"
+    },
     "document-not-available": "The document will be available for download in a few minutes. You can try again by reloading the page or clicking on the link of the requested document",
     "table-aria-label": "Notification details",
     "payment-table-aria-label": "Payment details",
     "sender": "Sender",
     "recipient": "Recipient",
     "recipients": "Recipients",
+    "recipient-list-mono": "Recipient",
+    "recipient-list-multi": "Recipients",
+    "notification-text": "Notification text",
     "tax-id-citizen-recipient": "Recipient Fiscal Code",
     "tax-id-organization-recipient": "Recipient Fiscal Code",
     "date": "Date sent",
@@ -114,12 +134,11 @@
       }
     },
     "acts": "Attached documents",
-    "download-message-available": "Documents are available online for 120 days from the finalization of the notification.",
+    "download-message-available": "<0>Available online for up to 120 days</0> from the date the SEND notification became legally binding.",
     "download-message-expired": "As 120 days have passed since the completion date, the documents are no longer available.",
-    "download-aar-available": "The notification of receipt is available online for 10 years from the finalization of the notification.",
+    "download-aar-available": "<0>Available online for 10 years</0> from the date the SEND notification became legally binding.",
     "download-aar-expired": "As 10 years have passed since the finalization date, the notification of receipt is no longer available.",
     "download-files-link": "When is a notification finalized?",
-    "aar-acts": "Notification of receipt",
     "timeline-title": "Notification status",
     "legalfact": "Certificate enforceable against third parties",
     "receipt": "Received",

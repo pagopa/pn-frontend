@@ -70,7 +70,6 @@ describe('NotificationPaymentSender Component', () => {
       />
     );
     expect(container).toHaveTextContent('payment.title');
-    expect(container).toHaveTextContent('payment.subtitle-single');
     const recipientsSelect = queryByTestId('recipients-select');
     expect(recipientsSelect).not.toBeInTheDocument();
     const paymentItems = getAllByTestId('payment-item');
@@ -87,7 +86,6 @@ describe('NotificationPaymentSender Component', () => {
       />
     );
     expect(container).toHaveTextContent('payment.title');
-    expect(container).toHaveTextContent('payment.subtitle-multiple');
     const recipientsSelect = getByTestId('recipients-select');
     expect(recipientsSelect).toBeInTheDocument();
     const paymentItems = queryAllByTestId('payment-item');

@@ -58,7 +58,6 @@ export type {
   NotificationDetailOtherDocument,
   NotificationDetailPayment,
   NotificationDetailRecipient,
-  NotificationDetailTableRow,
   NotificationDetailTimelineDetails,
   NotificationDocumentRequest,
   NotificationDocumentResponse,
