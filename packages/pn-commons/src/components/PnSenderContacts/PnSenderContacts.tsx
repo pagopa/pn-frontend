@@ -71,7 +71,7 @@ const PnSenderContacts = ({ phone, site }: SenderContactsProps) => {
                       justifyContent="space-between"
                       sx={{ width: '100%' }}
                     >
-                      <Typography variant="sidenav" color="text.primary">
+                      <Typography variant="body2" color="text.primary">
                         {phone}
                       </Typography>
 
