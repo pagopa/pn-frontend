@@ -154,7 +154,8 @@
       "title": "Contact the issuing institution",
       "phone": "Institution's phone number",
       "email": "Institution's email address",
-      "website": "Institution's website"
+      "website": "Institution's website",
+      "copy_phone": "Phone number copied"
     },
     "acts_files": {
       "downloadable_acts": "<0>Documents will be available online for up to 120 days</0> from the date the SEND notification became legally effective. Save them to your device!",

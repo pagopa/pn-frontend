@@ -144,7 +144,8 @@
       "title": "Kontaktiere die sendende Körperschaft",
       "phone": "Telefonnummer der Körperschaft",
       "email": "E-Mail der Körperschaft",
-      "website": "Website der Körperschaft"
+      "website": "Website der Körperschaft",
+      "copy_phone": "Telefonnummer kopiert"
     },
     "acts_files": {
       "downloadable_acts": "Die Dokumente sind 120 Tage nach Abschluss der Zustellung online verfügbar.",

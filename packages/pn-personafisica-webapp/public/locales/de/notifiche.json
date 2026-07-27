@@ -154,7 +154,8 @@
       "title": "Kontaktiere die sendende Körperschaft",
       "phone": "Telefonnummer der Körperschaft",
       "email": "E-Mail der Körperschaft",
-      "website": "Website der Körperschaft"
+      "website": "Website der Körperschaft",
+      "copy_phone": "Telefonnummer kopiert"
     },
     "acts_files": {
       "downloadable_acts": "<0>Die Dokumente sind bis zu 120 Tage lang online verfügbar</0> ab dem Datum, an dem die SEND-Benachrichtigung rechtlich wirksam wurde. Speichern Sie sie auf Ihrem Gerät!",

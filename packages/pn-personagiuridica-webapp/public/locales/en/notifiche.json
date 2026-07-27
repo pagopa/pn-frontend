@@ -144,7 +144,8 @@
       "title": "Contact the issuing institution",
       "phone": "Institution's phone number",
       "email": "Institution's email address",
-      "website": "Institution's website"
+      "website": "Institution's website",
+      "copy_phone": "Phone number copied"
     },
     "acts_files": {
       "downloadable_acts": "Documents are available online for 120 days from the completion of the notification.",

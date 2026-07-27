@@ -144,7 +144,8 @@
       "title": "Contactez l'organisme émetteur",
       "phone": "Numéro de téléphone de l'organisme",
       "email": "E-mail de l'organisme",
-      "website": "Site web de l'organisme"
+      "website": "Site web de l'organisme",
+      "copy_phone": "Numéro de téléphone copié"
     },
     "acts_files": {
       "downloadable_acts": "Les documents sont disponibles en ligne pendant 120 jours à compter de la finalisation de la notification.",

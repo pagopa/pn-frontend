@@ -154,7 +154,8 @@
       "title": "Contatta il mittente",
       "phone": "Numero di telefono dell'ente",
       "email": "Email dell'ente",
-      "website": "Sito web dell'ente"
+      "website": "Sito web dell'ente",
+      "copy_phone": "Numero di telefono copiato"
     },
     "acts_files": {
       "downloadable_acts": "<0>I documenti saranno disponibili online fino a 120 giorni</0> dalla data in cui la notifica SEND ha assunto valore di legge. Salvali sul tuo dispositivo!",

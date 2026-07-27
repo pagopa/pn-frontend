@@ -154,7 +154,8 @@
       "title": "Stopite in stik z izdajateljem",
       "phone": "Telefonska številka organa",
       "email": "E-pošta organa",
-      "website": "Spletno mesto organa"
+      "website": "Spletno mesto organa",
+      "copy_phone": "Telefonska številka je kopirana"
     },
     "acts_files": {
       "downloadable_acts": "<0>Dokumenti bodo na voljo na spletu do 120 dni</0> od dneva, ko je uradno obvestilo SEND postalo pravno veljavno. Shranite jih v svojo napravo!",
