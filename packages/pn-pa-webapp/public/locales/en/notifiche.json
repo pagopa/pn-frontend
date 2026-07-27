@@ -30,6 +30,7 @@
     "subtitle-single-f24": "Here, you can see the F24 forms attached to the notification.",
     "subtitle-multiple": "To see the payment status of the pagoPA alerts attached to the notification, select a recipient.",
     "subtitle-multiple-f24": "To see the F24 forms attached to the notification, select a recipient.",
+    "recipient": "Recipient",
     "pagopa-notice": "pagoPA notice",
     "status": {
       "to-pay": "To pay",
@@ -87,8 +88,6 @@
     "sender": "Sender",
     "recipient": "Recipient",
     "recipients": "Recipients",
-    "recipient-list-mono": "Recipient",
-    "recipient-list-multi": "Recipients",
     "notification-text": "Notification text",
     "tax-id-citizen-recipient": "Recipient Fiscal Code",
     "tax-id-organization-recipient": "Recipient Fiscal Code",
