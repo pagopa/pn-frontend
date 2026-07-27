@@ -3,7 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
-# [2.25.0](https://github.com/pagopa/pn-frontend/compare/v2.24.1...v2.25.0) (2026-07-24)
+## [2.25.0-RC.1](https://github.com/pagopa/pn-frontend/compare/v2.25.0-RC.0...v2.25.1-RC.0) (2026-07-27)
+
+
+### Bug Fixes
+
+* **PN-20828:** align PF notifications title with navigation labels ([#1967](https://github.com/pagopa/pn-frontend/issues/1967)) ([7003660](https://github.com/pagopa/pn-frontend/commit/7003660c8777630014fd8f751e04f44108fecf21))
+
+
+
+
+
+# [2.25.0-RC.0](https://github.com/pagopa/pn-frontend/compare/v2.24.1...v2.25.0) (2026-07-24)
 
 
 ### Bug Fixes

@@ -3,7 +3,19 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
-# [2.25.0](https://github.com/pagopa/pn-frontend/compare/v2.24.1...v2.25.0) (2026-07-24)
+## [2.25.0-RC.1](https://github.com/pagopa/pn-frontend/compare/v2.25.0-RC.0...v2.25.1-RC.0) (2026-07-27)
+
+
+### Bug Fixes
+
+* **PN-20240:** fix PA notification detail recipients rendering ([#1966](https://github.com/pagopa/pn-frontend/issues/1966)) ([4a61efd](https://github.com/pagopa/pn-frontend/commit/4a61efdd82ccbccb27e5a77eb8566c1179fc9884))
+* **PN-20781:** hide "new attachment" timeline message when the analog event has no attachments ([#1958](https://github.com/pagopa/pn-frontend/issues/1958)) ([759d10c](https://github.com/pagopa/pn-frontend/commit/759d10cc10b8182fe0b367385c3ca3b65ebfc6d9))
+
+
+
+
+
+# [2.25.0-RC.0](https://github.com/pagopa/pn-frontend/compare/v2.24.1...v2.25.0) (2026-07-24)
 
 
 ### Bug Fixes
