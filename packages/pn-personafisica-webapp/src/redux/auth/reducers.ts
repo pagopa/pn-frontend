@@ -3,7 +3,7 @@ import { omit } from 'lodash-es';
 import { ConsentType, basicInitialUserData, basicNoLoggedUserData } from '@pagopa-pn/pn-commons';
 import { createSlice, isAnyOf } from '@reduxjs/toolkit';
 
-import { LoginProvider, User } from '../../models/User';
+import { User } from '../../models/User';
 import { userDataMatcher } from '../../utility/user.utility';
 import {
   acceptTosPrivacy,
@@ -29,7 +29,6 @@ type AuthInitialState = {
     consentVersion: string;
   };
   tosPrivacyApiError: boolean;
-  loginProvider: LoginProvider;
   // isFreshLogin is used to track if the user has just logged in, to show the onboarding only on the first login after authentication
   isFreshLogin: boolean;
 };
@@ -65,7 +64,6 @@ const initialState: AuthInitialState = {
     consentVersion: '',
   },
   tosPrivacyApiError: false,
-  loginProvider: LoginProvider.SPIDHUB,
   isFreshLogin: false,
 };
 
@@ -119,16 +117,8 @@ const userSlice = createSlice({
     builder
       .addMatcher(
         isAnyOf(exchangeToken.pending, exchangeFimsToken.pending, exchangeOneIdentityCode.pending),
-        (state, action) => {
+        (state) => {
           state.loading = true;
-
-          if (action.type === exchangeToken.pending.type) {
-            state.loginProvider = LoginProvider.SPIDHUB;
-          } else if (action.type === exchangeOneIdentityCode.pending.type) {
-            state.loginProvider = LoginProvider.ONEIDENTITY;
-          } else if (action.type === exchangeFimsToken.pending.type) {
-            state.loginProvider = LoginProvider.FIMS;
-          }
         }
       )
       .addMatcher(
