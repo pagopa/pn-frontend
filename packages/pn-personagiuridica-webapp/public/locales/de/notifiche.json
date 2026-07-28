@@ -147,6 +147,12 @@
       "website": "Website der Körperschaft",
       "copy_phone": "Telefonnummer kopiert"
     },
+    "informal_notification_markdown": {
+      "hello": "Hallo",
+      "attachments_info": "Für weitere Informationen <0>sieh dir die Anhänge an,</0> die dir wichtige Details liefern können.",
+      "payment_instructions": "Du kannst die Zahlung direkt ausführen, indem du auf <0>Bezahlen</0> klickst. Alternativ kannst du den <0>beigefügten Zahlungsavis</0> nutzen, um den Betrag über alle für pagoPA aktivierten Kanäle zu begleichen.",
+      "assistance": "Solltest du Hilfe benötigen, wende dich in jedem Fall über die offiziellen Kanäle an {{senderDenomination}}."
+    },
     "acts_files": {
       "downloadable_acts": "Die Dokumente sind 120 Tage nach Abschluss der Zustellung online verfügbar.",
       "not_downloadable_acts": "Da seit dem Abschlussdatum 120 Tage vergangen sind, musst du dich für den Erhalt der Urkunde an den Absender wenden.",

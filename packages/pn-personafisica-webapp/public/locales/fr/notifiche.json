@@ -157,6 +157,12 @@
       "website": "Site web de l'organisme",
       "copy_phone": "Numéro de téléphone copié"
     },
+    "informal_notification_markdown": {
+      "hello": "Salut",
+      "attachments_info": "Pour plus d'informations, <0>consulte les pièces jointes,</0> qui peuvent te fournir des détails importants.",
+      "payment_instructions": "Tu peux effectuer le paiement directement en appuyant sur <0>Payer</0>. Alternativement, tu peux utiliser l'<0>avis joint</0> pour régler le montant via tous les canaux habilités à pagoPA.",
+      "assistance": "Dans tous les cas, si tu as besoin d'assistance, contacte {{senderDenomination}} via ses canaux officiels."
+    },
     "acts_files": {
       "downloadable_acts": "<0>Les documents seront disponibles en ligne jusqu'à 120 jours</0> à compter de la date à laquelle la notification SEND a pris valeur de loi. Enregistrez-les sur votre appareil !",
       "not_downloadable_acts": "Les documents ne sont plus disponibles en ligne. Pour les demander, veuillez vous adresser à l'organisme qui vous les a envoyés.",

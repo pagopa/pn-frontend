@@ -157,6 +157,12 @@
       "website": "Website der Körperschaft",
       "copy_phone": "Telefonnummer kopiert"
     },
+    "informal_notification_markdown": {
+      "hello": "Hallo",
+      "attachments_info": "Für weitere Informationen <0>sieh dir die Anhänge an,</0> die dir wichtige Details liefern können.",
+      "payment_instructions": "Du kannst die Zahlung direkt ausführen, indem du auf <0>Bezahlen</0> klickst. Alternativ kannst du den <0>beigefügten Zahlungsavis</0> nutzen, um den Betrag über alle für pagoPA aktivierten Kanäle zu begleichen.",
+      "assistance": "Solltest du Hilfe benötigen, wende dich in jedem Fall über die offiziellen Kanäle an {{senderDenomination}}."
+    },
     "acts_files": {
       "downloadable_acts": "<0>Die Dokumente sind bis zu 120 Tage lang online verfügbar</0> ab dem Datum, an dem die SEND-Benachrichtigung rechtlich wirksam wurde. Speichern Sie sie auf Ihrem Gerät!",
       "not_downloadable_acts": "Die Dokumente sind online nicht mehr verfügbar. Um sie anzufordern, wenden Sie sich bitte an die Behörde, die sie Ihnen zugesendet hat.",

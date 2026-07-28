@@ -157,6 +157,12 @@
       "website": "Spletno mesto organa",
       "copy_phone": "Telefonska številka je kopirana"
     },
+    "informal_notification_markdown": {
+      "hello": "Živjo",
+      "attachments_info": "Za več informacij <0>si oglejte priloge,</0> ki vam lahko ponudijo pomembne podrobnosti.",
+      "payment_instructions": "Plačilo lahko izvedete neposredno s pritiskom na <0>Plačaj</0>. Lahko pa uporabite <0>priloženo obvestilo</0> za poravnavo zneska prek vseh kanalov, omogočenih za pagoPA.",
+      "assistance": "Če boste v vsakem primeru potrebovali pomoč, stopite v stik z {{senderDenomination}} prek njegovih uradnih kanalov."
+    },
     "acts_files": {
       "downloadable_acts": "<0>Dokumenti bodo na voljo na spletu do 120 dni</0> od dneva, ko je uradno obvestilo SEND postalo pravno veljavno. Shranite jih v svojo napravo!",
       "not_downloadable_acts": "Dokumenti niso več na voljo na spletu. Če jih želite zahtevati, se obrnite na organ, ki vam jih je poslal.",

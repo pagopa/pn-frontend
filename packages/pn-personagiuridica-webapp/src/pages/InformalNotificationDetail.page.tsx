@@ -248,6 +248,8 @@ const InformalNotificationDetail: React.FC = () => {
             iun={informalNotification?.iun ?? ''}
             isLegal={false}
             abstract={primaryMessage?.longBody ?? ''}
+            recipientDenomination={currentRecipient?.denomination}
+            hasAttachments={documentsAvailable}
           />
 
           <Stack direction={{ xs: 'column', md: 'row' }} spacing={2} alignItems="flex-start">

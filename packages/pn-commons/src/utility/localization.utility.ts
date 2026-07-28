@@ -57,3 +57,10 @@ export function getLocalizedOrDefaultLabel(
   }
   return defaultLabel ?? path;
 }
+
+export function getTranslationMessage(key: string): { key: string; ns: string } {
+  return {
+    key,
+    ns: 'notifiche',
+  };
+}
