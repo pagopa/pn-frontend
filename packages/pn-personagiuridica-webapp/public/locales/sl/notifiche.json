@@ -148,10 +148,10 @@
       "copy_phone": "Telefonska številka je kopirana"
     },
     "informal_notification_markdown": {
-      "hello": "Živjo",
-      "attachments_info": "Za več informacij <0>si oglejte priloge,</0> ki vam lahko ponudijo pomembne podrobnosti.",
-      "payment_instructions": "Plačilo lahko izvedete neposredno s pritiskom na <0>Plačaj</0>. Lahko pa uporabite <0>priloženo obvestilo</0> za poravnavo zneska prek vseh kanalov, omogočenih za pagoPA.",
-      "assistance": "Če boste v vsakem primeru potrebovali pomoč, stopite v stik z {{senderDenomination}} prek njegovih uradnih kanalov."
+      "greeting": "Na znanje {{recipientDenomination}}",
+      "attachments_info": "Za več informacij <0>priporočamo ogled prilog</0>, ki lahko ponudijo pomembne podrobnosti.",
+      "payment_instructions": "Plačilo lahko dokončate s pritiskom na <0>Plačaj</0>. Lahko pa uporabite <1>priloženo obvestilo</1> za poravnavo zneska prek vseh kanalov, omogočenih za pagoPA.",
+      "assistance": "Če boste v vsakem primeru potrebovali pomoč, lahko <0>stopite v stik z {{senderDenomination}} prek njegovih uradnih kanalov.</0>"
     },
     "acts_files": {
       "downloadable_acts": "Dokumenti so na voljo na spletu 120 dni od zaključka obvestila.",

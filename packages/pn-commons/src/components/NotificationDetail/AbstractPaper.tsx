@@ -89,6 +89,8 @@ const AbstractPaper = ({
 
   const hasDetails = !!details?.length;
 
+  const greetingMessage = getTranslationMessage('detail.informal_notification_markdown.greeting');
+
   const attachmentsInfoMessage = getTranslationMessage(
     'detail.informal_notification_markdown.attachments_info'
   );
@@ -213,10 +215,13 @@ const AbstractPaper = ({
                 <Stack>
                   {recipientDenomination && (
                     <Typography variant="body1" color="text.primary">
-                      {`${getLocalizedOrDefaultLabel(
-                        'notifications',
-                        'detail.informal_notification_markdown.hello'
-                      )} ${recipientDenomination},`}
+                      <Trans
+                        i18nKey={greetingMessage.key}
+                        ns={greetingMessage.ns}
+                        values={{
+                          recipientDenomination,
+                        }}
+                      />
                     </Typography>
                   )}
 

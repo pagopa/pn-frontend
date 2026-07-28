@@ -158,7 +158,7 @@
       "copy_phone": "Numéro de téléphone copié"
     },
     "informal_notification_markdown": {
-      "hello": "Salut",
+      "greeting": "Salut {{recipientDenomination}},",
       "attachments_info": "Pour plus d'informations, <0>consulte les pièces jointes,</0> qui peuvent te fournir des détails importants.",
       "payment_instructions": "Tu peux effectuer le paiement directement en appuyant sur <0>Payer</0>. Alternativement, tu peux utiliser l'<0>avis joint</0> pour régler le montant via tous les canaux habilités à pagoPA.",
       "assistance": "Dans tous les cas, si tu as besoin d'assistance, contacte {{senderDenomination}} via ses canaux officiels."

@@ -158,7 +158,7 @@
       "copy_phone": "Telefonska številka je kopirana"
     },
     "informal_notification_markdown": {
-      "hello": "Živjo",
+      "greeting": "Živjo {{recipientDenomination}},",
       "attachments_info": "Za več informacij <0>si oglejte priloge,</0> ki vam lahko ponudijo pomembne podrobnosti.",
       "payment_instructions": "Plačilo lahko izvedete neposredno s pritiskom na <0>Plačaj</0>. Lahko pa uporabite <0>priloženo obvestilo</0> za poravnavo zneska prek vseh kanalov, omogočenih za pagoPA.",
       "assistance": "Če boste v vsakem primeru potrebovali pomoč, stopite v stik z {{senderDenomination}} prek njegovih uradnih kanalov."

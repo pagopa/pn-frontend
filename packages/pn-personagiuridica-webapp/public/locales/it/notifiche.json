@@ -148,10 +148,10 @@
       "copy_phone": "Numero di telefono copiato"
     },
     "informal_notification_markdown": {
-      "hello": "Ciao",
-      "attachments_info": "Per avere maggiori informazioni <0>prendi visione degli allegati,</0> che possono fornirti dettagli importanti.",
-      "payment_instructions": "Puoi effettuare il pagamento direttamente premendo <0>Paga</0>. In alternativa, puoi utilizzare l'<0>avviso allegato</0> per saldare l'importo tramite tutti i canali abilitati a pagoPA.",
-      "assistance": "In ogni caso, qualora avessi bisogno di assistenza, contatta {{senderDenomination}} attraverso i suoi canali ufficiali."
+      "greeting": "All'attenzione di {{recipientDenomination}}",
+      "attachments_info": "Per avere maggiori informazioni <0>è consigliato prendere visione degli allegati</0>, che possono fornire dettagli importanti.",
+      "payment_instructions": "È possibile completare il pagamento premendo <0>Paga</0>. In alternativa, si può utilizzare l'<1>avviso allegato</1> per saldare l'importo tramite tutti i canali abilitati a pagoPA.",
+      "assistance": "In ogni caso, qualora si avesse bisogno di assistenza, è possibile <0>contattare {{senderDenomination}} attraverso i suoi canali ufficiali.</0>"
     },
     "acts_files": {
       "downloadable_acts": "<0>I documenti saranno disponibili online fino a 120 giorni</0> dalla data in cui la notifica SEND ha assunto valore di legge. Salvali sul tuo dispositivo!",

@@ -250,6 +250,7 @@ const InformalNotificationDetail: React.FC = () => {
             abstract={primaryMessage?.longBody ?? ''}
             recipientDenomination={currentRecipient?.denomination}
             hasAttachments={documentsAvailable}
+            hasPayment={hasPayments}
           />
 
           <Stack direction={{ xs: 'column', md: 'row' }} spacing={2} alignItems="flex-start">
