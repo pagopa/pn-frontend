@@ -131,25 +131,23 @@ const Notifiche = () => {
   };
 
   useEffect(() => {
-    if (filters.mandateId !== currentDelegator?.mandateId) {
-      dispatch(setMandateId(currentDelegator?.mandateId));
+    if (filters.mandateId !== mandateId) {
+      setPageReady(false);
+      dispatch(setMandateId(mandateId));
       return;
     }
     if (isFirstSearch) {
       dispatch(setFirstSearch(false));
-      setPageReady(true);
-      PFEventStrategyFactory.triggerEvent(
-        currentDelegator
-          ? PFEventsType.SEND_NOTIFICATION_DELEGATED
-          : PFEventsType.SEND_YOUR_NOTIFICATIONS,
-        {
+      if (!mandateId) {
+        setPageReady(true);
+        PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_YOUR_NOTIFICATIONS, {
           notifications,
           delegators,
           pagination,
           domicileBannerType: domicileBannerTypeRef.current,
-        }
-      );
-      return;
+        });
+        return;
+      }
     }
     fetchNotifications();
   }, [fetchNotifications, currentDelegator]);
@@ -176,52 +174,54 @@ const Notifiche = () => {
 
   return (
     <LoadingPageWrapper isInitialized={pageReady}>
-      <Box p={3}>
-        <TitleBox variantTitle="h4" title={getPageTitle()} mbTitle={isMobile ? 3 : 0} />
-        {!mandateId && <DomicileBanner source={ContactSource.HOME_NOTIFICHE} my={3} />}
-        <ApiErrorWrapper
-          apiId={DASHBOARD_ACTIONS.GET_RECEIVED_NOTIFICATIONS}
-          reloadAction={fetchNotifications}
-        >
-          {isMobile ? (
-            <MobileNotifications
-              notifications={notifications}
-              sort={sort}
-              onChangeSorting={handleChangeSorting}
-              currentDelegator={currentDelegator}
-            />
-          ) : (
-            <DesktopNotifications
-              notifications={notifications}
-              sort={sort}
-              onChangeSorting={handleChangeSorting}
-              currentDelegator={currentDelegator}
-            />
-          )}
-          {notifications.length > 0 && (
-            <CustomPagination
-              paginationData={{
-                size: pagination.size,
-                page: pagination.page,
-                totalElements,
-              }}
-              onPageRequest={handleChangePage}
-              pagesToShow={pagesToShow}
-              sx={
-                isMobile
-                  ? {
-                      padding: '0',
-                      '& .items-per-page-selector button': {
-                        paddingLeft: 0,
-                        height: '24px',
-                      },
-                    }
-                  : { padding: '0' }
-              }
-            />
-          )}
-        </ApiErrorWrapper>
-      </Box>
+      {pageReady && !loading && (
+        <Box p={3}>
+          <TitleBox variantTitle="h4" title={getPageTitle()} mbTitle={isMobile ? 3 : 0} />
+          {!mandateId && <DomicileBanner source={ContactSource.HOME_NOTIFICHE} my={3} />}
+          <ApiErrorWrapper
+            apiId={DASHBOARD_ACTIONS.GET_RECEIVED_NOTIFICATIONS}
+            reloadAction={fetchNotifications}
+          >
+            {isMobile ? (
+              <MobileNotifications
+                notifications={notifications}
+                sort={sort}
+                onChangeSorting={handleChangeSorting}
+                currentDelegator={currentDelegator}
+              />
+            ) : (
+              <DesktopNotifications
+                notifications={notifications}
+                sort={sort}
+                onChangeSorting={handleChangeSorting}
+                currentDelegator={currentDelegator}
+              />
+            )}
+            {notifications.length > 0 && (
+              <CustomPagination
+                paginationData={{
+                  size: pagination.size,
+                  page: pagination.page,
+                  totalElements,
+                }}
+                onPageRequest={handleChangePage}
+                pagesToShow={pagesToShow}
+                sx={
+                  isMobile
+                    ? {
+                        padding: '0',
+                        '& .items-per-page-selector button': {
+                          paddingLeft: 0,
+                          height: '24px',
+                        },
+                      }
+                    : { padding: '0' }
+                }
+              />
+            )}
+          </ApiErrorWrapper>
+        </Box>
+      )}
     </LoadingPageWrapper>
   );
 };
