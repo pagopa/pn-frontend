@@ -114,17 +114,14 @@ const CustomPagination: React.FC<Props> = ({
           className="items-per-page-selector"
         >
           <MIButton
-            sx={{ color: 'text.primary', fontWeight: 400 }}
+            variant="text"
+            sx={{ fontWeight: 400 }}
             aria-controls={open ? 'basic-menu' : undefined}
             aria-haspopup="true"
             aria-expanded={open ? 'true' : undefined}
             onClick={handleClick}
             endIcon={<ArrowDropDown />}
-            aria-label={getLocalizedOrDefaultLabel(
-              'common',
-              'paginator.rows-per-page',
-              'Righe per pagina'
-            )}
+            aria-label={getLocalizedOrDefaultLabel('common', 'paginator.rows-per-page')}
             id="rows-per-page"
           >
             {size}
@@ -135,13 +132,8 @@ const CustomPagination: React.FC<Props> = ({
             open={open}
             onClose={handleClose}
             MenuListProps={{
-              'aria-labelledby': getLocalizedOrDefaultLabel(
-                'common',
-                'paginator.rows-per-page',
-                'Righe per pagina'
-              ),
+              'aria-labelledby': getLocalizedOrDefaultLabel('common', 'paginator.rows-per-page'),
             }}
-            data-testid=""
           >
             {elementsPerPage.map((ep) => (
               <MenuItem

@@ -1,7 +1,7 @@
 import { vi } from 'vitest';
 
 import { ThemeProvider } from '@mui/material';
-import { theme } from '@pagopa/mui-italia';
+import { themeNext } from '@pagopa/mui-italia';
 
 import { NotificationStatus } from '../../../models/NotificationStatus';
 import { RecipientNotification } from '../../../models/Notifications';
@@ -102,7 +102,7 @@ describe('NotificationsRecipientDataSwitch Component', () => {
 
   it('renders component - subject - legal communication', () => {
     const { container } = render(
-      <ThemeProvider theme={theme}>
+      <ThemeProvider theme={themeNext}>
         <NotificationsRecipientDataSwitch data={data} type="subject" />
       </ThemeProvider>
     );
@@ -113,7 +113,7 @@ describe('NotificationsRecipientDataSwitch Component', () => {
 
   it('renders component - subject - informal communication (no legal tag)', () => {
     const { container } = render(
-      <ThemeProvider theme={theme}>
+      <ThemeProvider theme={themeNext}>
         <NotificationsRecipientDataSwitch
           data={{ ...data, communicationType: 'INFORMAL' }}
           type="subject"

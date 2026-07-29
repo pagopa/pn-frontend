@@ -67,6 +67,7 @@ const DowntimeLogDataSwitch: React.FC<{
     return data.fileAvailable ? (
       <MIButton
         sx={{ px: 0 }}
+        variant="text"
         startIcon={<DownloadIcon />}
         data-testid="download-legal-fact"
         onClick={() => {

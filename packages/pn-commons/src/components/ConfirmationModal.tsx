@@ -74,7 +74,6 @@ const ConfirmationModal: React.FC<Props> = ({
         {CloseButton && (
           <CloseButton
             id="dialog-close-button"
-            color="primary"
             variant="outlined"
             data-testid="closeButton"
             {...slotsProps?.closeButton}

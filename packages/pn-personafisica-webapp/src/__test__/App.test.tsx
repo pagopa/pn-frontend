@@ -3,7 +3,7 @@ import { Suspense } from 'react';
 import { vi } from 'vitest';
 
 import { ThemeProvider } from '@mui/material';
-import { theme } from '@pagopa/mui-italia';
+import { themeNext } from '@pagopa/mui-italia';
 
 import App from '../App';
 import { currentStatusDTO } from '../__mocks__/AppStatus.mock';
@@ -21,7 +21,7 @@ vi.mock('../pages/Profile.page', () => ({ default: () => <div>Profile Page</div>
 const unmockedFetch = globalThis.fetch;
 
 const Component = () => (
-  <ThemeProvider theme={theme}>
+  <ThemeProvider theme={themeNext}>
     <Suspense fallback="loading...">
       <App />
     </Suspense>
