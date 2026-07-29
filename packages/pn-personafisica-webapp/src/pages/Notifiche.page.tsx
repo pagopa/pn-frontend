@@ -131,25 +131,22 @@ const Notifiche = () => {
   };
 
   useEffect(() => {
-    if (filters.mandateId !== currentDelegator?.mandateId) {
-      dispatch(setMandateId(currentDelegator?.mandateId));
+    if (filters.mandateId !== mandateId) {
+      dispatch(setMandateId(mandateId));
       return;
     }
     if (isFirstSearch) {
       dispatch(setFirstSearch(false));
-      setPageReady(true);
-      PFEventStrategyFactory.triggerEvent(
-        currentDelegator
-          ? PFEventsType.SEND_NOTIFICATION_DELEGATED
-          : PFEventsType.SEND_YOUR_NOTIFICATIONS,
-        {
+      if (!mandateId) {
+        setPageReady(true);
+        PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_YOUR_NOTIFICATIONS, {
           notifications,
           delegators,
           pagination,
           domicileBannerType: domicileBannerTypeRef.current,
-        }
-      );
-      return;
+        });
+        return;
+      }
     }
     fetchNotifications();
   }, [fetchNotifications, currentDelegator]);
