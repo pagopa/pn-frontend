@@ -56,13 +56,18 @@ const SmartFilter = <FormValues extends object>({
   };
 
   const confirmAction = (
-    <MIButton id="confirm-button" data-testid="confirmButton" variant="outlined" size="small">
+    <MIButton
+      id="confirm-button"
+      data-testid="confirmButton"
+      variant="outlined"
+      {...({ type: 'button' } as any)}
+    >
       {filterLabel}
     </MIButton>
   );
 
   const cancelAction = (
-    <MIButton data-testid="cancelButton" size="small" onClick={clearHandler}>
+    <MIButton variant="text" data-testid="cancelButton" onClick={clearHandler}>
       {cancelLabel}
     </MIButton>
   );

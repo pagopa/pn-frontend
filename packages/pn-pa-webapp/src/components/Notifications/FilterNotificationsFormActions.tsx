@@ -23,7 +23,7 @@ const FilterNotificationsFormActions = ({
       id="filter-button"
       data-testid="filterButton"
       variant="outlined"
-      size="small"
+      {...({ type: 'submit' } as any)}
       sx={{
         height: '43px !important',
         marginRight: '8px !important',
@@ -41,7 +41,7 @@ const FilterNotificationsFormActions = ({
         padding: '0 16px !important',
         minWidth: '130px !important',
       }}
-      size="small"
+      variant="text"
       onClick={cleanFilters}
     >
       {t('button.annulla filtro')}
