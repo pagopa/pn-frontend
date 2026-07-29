@@ -48,7 +48,6 @@ const PnBreadcrumb = ({
         <MIButton
           variant="text"
           id="breadcrumb-indietro-button"
-          color="primary"
           data-testid="breadcrumb-indietro-button"
           startIcon={<ArrowBackIcon />}
           onClick={goBackAction ?? (() => navigate(-1))}
@@ -62,7 +61,6 @@ const PnBreadcrumb = ({
         </BreadcrumbLink>
         <MuiLink
           id="title-of-page"
-          color="text.primary"
           sx={{ display: 'flex', alignItems: 'center', fontWeight: 600 }}
           aria-current="page"
           underline="none"

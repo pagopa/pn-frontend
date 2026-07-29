@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
-import { Box, Button, Typography } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import { IllusMICompleted, MIButton } from '@pagopa/mui-italia';
 
 import * as routes from '../../navigation/routes.const';

@@ -227,9 +227,11 @@ const DigitalContact = forwardRef<{ toggleEdit: () => void }, Props>(
               variant="contained"
               fullWidth={isMobile}
               data-testid={`${senderId}_${contactType}-button`}
-              sx={{ height: '43px', fontWeight: 700, flexBasis: { xs: 'unset', lg: '16.67%' } }}
-              {...({ type: 'submit' } as any)}
               {...slotsProps?.button}
+              sx={{
+                height: '43px',
+              }}
+              {...({ type: 'submit' } as any)}
             >
               {insertButtonLabel}
             </MIButton>

@@ -195,10 +195,9 @@ const DigitalContact = forwardRef<{ toggleEdit: () => void }, Props>(
               id={`${senderId}_${contactType}-button`}
               variant="contained"
               fullWidth={isMobile}
-              type="submit"
               data-testid={`${senderId}_${contactType}-button`}
-              sx={{ height: '43px', fontWeight: 700, flexBasis: { xs: 'unset', lg: '16.67%' } }}
-              size="small"
+              sx={{ height: '43px', flexBasis: { xs: 'unset', lg: '16.67%' } }}
+              {...({ type: 'submit' } as any)}
               {...slotsProps?.button}
             >
               {insertButtonLabel}
@@ -269,11 +268,8 @@ const DigitalContact = forwardRef<{ toggleEdit: () => void }, Props>(
               <MIButton
                 variant="text"
                 key="saveButton"
-                color="primary"
-                type="submit"
                 sx={{ fontWeight: 700, justifyContent: 'left' }}
                 id={`saveContact-${senderId}_${contactType}`}
-                size="medium"
                 startIcon={<CheckIcon />}
               >
                 {t('button.conferma')}

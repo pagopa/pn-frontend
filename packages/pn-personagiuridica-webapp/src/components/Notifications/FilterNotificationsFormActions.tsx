@@ -16,19 +16,12 @@ const FilterNotificationsFormActions = ({
   filtersApplied,
   cleanFilters,
   isInDialog = false,
-  isInitialSearch,
 }: Props) => {
   const { t } = useTranslation(['common']);
 
   const confirmAction = (
     <Grid item lg="auto" xs={12}>
-      <MIButton
-        id="filter-notifications-button"
-        variant="outlined"
-        type="submit"
-        size="small"
-        disabled={isInitialSearch && !filtersApplied}
-      >
+      <MIButton id="filter-notifications-button" variant="outlined" size="small">
         {t('button.filtra')}
       </MIButton>
     </Grid>

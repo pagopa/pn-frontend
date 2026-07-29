@@ -4,6 +4,7 @@ import KeyboardArrowDownOutlinedIcon from '@mui/icons-material/KeyboardArrowDown
 import MoreVert from '@mui/icons-material/MoreVert';
 import {
   Box,
+  ButtonBase,
   Card,
   CardContent,
   CardHeader,
@@ -77,7 +78,6 @@ const PnInfoCardActions: React.FC<Pick<Props, 'actions'>> = ({ actions }) => {
       <IconButton
         onClick={handleClick}
         size="small"
-        color="primary"
         data-testid="contextMenuButton"
         aria-label="Context menu"
         aria-controls={open ? menuId : undefined}
@@ -131,9 +131,9 @@ const PnInfoCardActions: React.FC<Pick<Props, 'actions'>> = ({ actions }) => {
     <Stack direction="row" alignItems="end" spacing={3}>
       {actions?.map((action) => (
         <MIButton
+          variant="text"
           key={action.key}
           data-testid={action.testId}
-          variant="text"
           color={action.destructive ? 'error' : 'primary'}
           startIcon={action.icon}
           onClick={action.onClick}
@@ -162,8 +162,9 @@ const PnInfoCardAccordion: React.FC<PnInfoCardContentProps> = ({ title, subtitle
   return (
     <>
       <Box component="h5" data-testid="PnInfoCardHeader" sx={{ m: 0 }}>
-        <MIButton
+        <ButtonBase
           id={headerId}
+          type="button"
           aria-expanded={expanded}
           aria-controls={panelId}
           onClick={() => setExpanded((currentValue) => !currentValue)}
@@ -204,7 +205,7 @@ const PnInfoCardAccordion: React.FC<PnInfoCardContentProps> = ({ title, subtitle
               }),
             })}
           />
-        </MIButton>
+        </ButtonBase>
       </Box>
 
       <Collapse in={expanded} timeout="auto" mountOnEnter unmountOnExit>

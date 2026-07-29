@@ -15,7 +15,6 @@ const FilterNotificationsFormActions = ({
   filtersApplied,
   cleanFilters,
   isInDialog = false,
-  isInitialSearch,
 }: Props) => {
   const { t } = useTranslation(['common']);
 
@@ -24,13 +23,11 @@ const FilterNotificationsFormActions = ({
       id="filter-button"
       data-testid="filterButton"
       variant="outlined"
-      type="submit"
       size="small"
       sx={{
         height: '43px !important',
         marginRight: '8px !important',
       }}
-      disabled={isInitialSearch && !filtersApplied}
     >
       {t('button.filtra')}
     </MIButton>

@@ -1,4 +1,3 @@
-import { isEqual } from 'lodash-es';
 import { FormEvent, PropsWithChildren, useRef } from 'react';
 
 import { Box, DialogActions, DialogContent, Grid } from '@mui/material';
@@ -20,8 +19,6 @@ type Props<FormValues> = {
   onSubmit: (event?: FormEvent<HTMLFormElement> | undefined) => void;
   /** function to be called when filters are cleaned */
   onClear: () => void;
-  /** flag to check if the form is valid */
-  formIsValid: boolean;
   /** current form values */
   formValues: FormValues;
   /** initial form values */
@@ -37,13 +34,11 @@ const SmartFilter = <FormValues extends object>({
   onSubmit,
   onClear,
   children,
-  formIsValid,
   formValues,
   initialValues,
 }: PropsWithChildren<Props<FormValues>>) => {
   const isMobile = useIsMobile();
   const currentFilters = useRef<FormValues>(formValues);
-  const isPreviousSearch = isEqual(formValues, currentFilters.current);
   const filtersCount = filtersApplied(currentFilters.current, initialValues);
   const dialogRef = useRef<{ toggleOpen: () => void }>(null);
 
@@ -61,25 +56,13 @@ const SmartFilter = <FormValues extends object>({
   };
 
   const confirmAction = (
-    <MIButton
-      id="confirm-button"
-      data-testid="confirmButton"
-      variant="outlined"
-      type="submit"
-      size="small"
-      disabled={!formIsValid || isPreviousSearch}
-    >
+    <MIButton id="confirm-button" data-testid="confirmButton" variant="outlined" size="small">
       {filterLabel}
     </MIButton>
   );
 
   const cancelAction = (
-    <MIButton
-      data-testid="cancelButton"
-      size="small"
-      onClick={clearHandler}
-      disabled={!filtersCount}
-    >
+    <MIButton data-testid="cancelButton" size="small" onClick={clearHandler}>
       {cancelLabel}
     </MIButton>
   );

@@ -167,8 +167,6 @@ const NewApiKey = () => {
                         data-testid="submit-new-api-key"
                         id="continue-button"
                         variant="contained"
-                        type="submit"
-                        disabled={!formik.isValid}
                       >
                         {tkp('continue-button')}
                       </MIButton>

@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 
 import { EmailOutlined, PhoneOutlined } from '@mui/icons-material';
 import { Stack, Typography } from '@mui/material';
-import { ButtonNaked, MIButton } from '@pagopa/mui-italia';
+import { MIButton } from '@pagopa/mui-italia';
 
 import { ContactState, OnboardingAvailableFlows } from '../../../../models/Onboarding';
 import { PFEventsType } from '../../../../models/PFEventsType';

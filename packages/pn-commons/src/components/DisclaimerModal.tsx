@@ -28,7 +28,6 @@ const DisclaimerModal: React.FC<Props> = ({
   checkboxLabel,
 }) => {
   const [checked, setChecked] = useState(false);
-  const disabledConfirm = !checked && !!checkboxLabel;
 
   const handleChange = () => {
     setChecked(!checked);
@@ -78,7 +77,6 @@ const DisclaimerModal: React.FC<Props> = ({
           id="confirmButton"
           variant="contained"
           onClick={handleConfirm}
-          disabled={disabledConfirm}
           data-testid="disclaimer-confirm-button"
         >
           {confirmLabel}

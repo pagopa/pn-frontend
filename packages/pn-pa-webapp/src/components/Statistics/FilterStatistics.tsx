@@ -188,9 +188,8 @@ const FilterStatistics: React.FC<Props> = ({ filter, lastDate, className, sx }) 
           id="filter-button"
           data-testid="filterButton"
           variant="outlined"
-          type="button"
+          {...({ type: 'button' } as any)}
           onClick={applyCustomFilter}
-          size="small"
           sx={{
             height: '43px !important',
             mr: 1,
@@ -208,7 +207,6 @@ const FilterStatistics: React.FC<Props> = ({ filter, lastDate, className, sx }) 
           }}
           size="small"
           onClick={cleanFilter}
-          disabled={isInitialSearch}
         >
           {t('filter.buttons.clear_filter')}
         </MIButton>

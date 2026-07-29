@@ -22,7 +22,6 @@ import {
   NotificationDetailRecipient,
   NotificationStatusHistory,
   ReworkedStatus,
-  TimelineCategory,
 } from '../../models/NotificationDetail';
 import { NotificationStatus } from '../../models/NotificationStatus';
 import { formatDay, formatMonthString, formatTime } from '../../utility/date.utility';
@@ -125,7 +124,6 @@ const NotificationDetailTimelineStep = ({
   historyButtonLabel,
   historyButtonClickHandler,
   handleTrackShowMoreLess,
-  disableDownloads,
   isParty = true,
   language = 'it',
   reworkedStatus,
@@ -230,10 +228,11 @@ const NotificationDetailTimelineStep = ({
                     sx={{ marginTop: '10px', textAlign: 'left' }}
                     data-testid="download-legalfact"
                     variant="text"
-                    disabled={
-                      lf.step.category !== TimelineCategory.NOTIFICATION_CANCELLED &&
-                      disableDownloads
-                    }
+                    // MIButton does not support the disabled prop, so we need to handle it differently in the new timeline layout
+                    // disabled={
+                    //   lf.step.category !== TimelineCategory.NOTIFICATION_CANCELLED &&
+                    //   disableDownloads
+                    // }
                   >
                     {getLegalFactLabel(lf.step, lf.file.category, lf.file.key || '')}
                   </MIButton>
@@ -257,6 +256,7 @@ const NotificationDetailTimelineStep = ({
       content={
         <Box data-testid="moreLessButton">
           <MIButton
+            variant="text"
             id="more-less-timeline-step"
             data-testid="more-less-timeline-step"
             startIcon={collapsed ? <UnfoldMoreIcon /> : <UnfoldLessIcon />}
@@ -316,15 +316,15 @@ const NotificationDetailTimelineStep = ({
                 s.legalFactsIds.map((lf) => (
                   <MIButton
                     variant="text"
-                    fontSize={14}
-                    color="primary"
                     onClick={() => clickHandler(lf)}
-                    disabled={disableDownloads}
+                    // MIButton does not support the disabled prop, so we need to handle it differently in the new timeline layout
+                    // disabled={disableDownloads}
                     key={lf.key}
                     data-testid="download-legalfact-micro"
                     sx={{
                       justifyContent: 'flex-start',
                       textAlign: 'left',
+                      fontSize: '14px',
                     }}
                   >
                     {getLegalFactLabel(s, lf.category, lf.key || '')}

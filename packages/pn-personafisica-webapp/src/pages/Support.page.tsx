@@ -205,7 +205,6 @@ const SupportPage: React.FC = () => {
               variant="contained"
               size="small"
               sx={{ width: { xs: 1, sm: 'auto' } }}
-              disabled={!!formData.errors}
               onClick={handleConfirm}
               data-testid="continueButton"
             >

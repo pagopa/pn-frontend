@@ -112,7 +112,6 @@ const SmartSort = <T,>({
               variant="outlined"
               onClick={handleConfirmSort}
               data-testid="confirmButton"
-              disabled={!isSorted}
             >
               {title}
             </MIButton>

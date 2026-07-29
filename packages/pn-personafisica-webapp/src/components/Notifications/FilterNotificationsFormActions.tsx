@@ -16,7 +16,6 @@ const FilterNotificationsFormActions = ({
   filtersApplied,
   cleanFilters,
   isInDialog = false,
-  isInitialSearch,
 }: Props) => {
   const { t } = useTranslation(['common']);
 
@@ -25,9 +24,9 @@ const FilterNotificationsFormActions = ({
       <MIButton
         id="filter-notifications-button"
         variant="outlined"
-        type="submit"
         size="small"
-        disabled={isInitialSearch && !filtersApplied}
+        // MIButton does not support the disabled prop, so we need to handle it differently in the new timeline layout
+        // disabled={isInitialSearch && !filtersApplied}
       >
         {t('button.filtra')}
       </MIButton>

@@ -18,7 +18,6 @@ type Props = {
 
 const NewNotificationCard = ({
   children,
-  isContinueDisabled,
   title,
   subtitle,
   noPaper = false,
@@ -53,8 +52,6 @@ const NewNotificationCard = ({
         <MIButton
           id="step-submit"
           variant="contained"
-          type="submit"
-          disabled={isContinueDisabled}
           data-testid="step-submit"
           fullWidth={isMobile}
         >
@@ -64,7 +61,7 @@ const NewNotificationCard = ({
           <MIButton
             id="previous-step"
             variant="outlined"
-            type="button"
+            {...({ type: 'button' } as any)}
             onClick={previousStepOnClick}
             data-testid="previous-step"
             fullWidth={isMobile}

@@ -268,7 +268,6 @@ const AcceptDelegationModal: React.FC<Props> = ({
           variant="contained"
           data-testid="groupConfirmButton"
           onClick={() => handleConfirm(code, groupForm.value)}
-          disabled={groupForm.value.length === 0 && associateGroup}
         >
           {t('button.conferma', { ns: 'common' })}
         </MIButton>

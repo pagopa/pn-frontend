@@ -28,9 +28,6 @@ const SpecialContactItem: React.FC<Props> = ({
 }) => {
   const { t } = useTranslation(['recapiti', 'common']);
 
-  const hasPecInValidationForEntity = (senderId: string) =>
-    address.channelType === ChannelType.PEC && !address.pecValid && address.senderId === senderId;
-
   const { value, channelType, senderId, senderName, pecValid, addressType } = address;
   const isVerifyingPec = channelType === ChannelType.PEC && !pecValid;
   const isSercq = channelType === ChannelType.SERCQ_SEND;
@@ -94,8 +91,6 @@ const SpecialContactItem: React.FC<Props> = ({
                   justifyContent: 'left',
                   pl: { xs: 0, lg: 3 },
                 }}
-                size="medium"
-                disabled={hasPecInValidationForEntity(senderId)}
               >
                 {t('button.disable', { ns: 'common' })}
               </MIButton>

@@ -571,8 +571,6 @@ const Recipient: React.FC<Props> = ({
                       onClick={() => {
                         handleAddRecipient(values, setFieldValue);
                       }}
-                      color="primary"
-                      disabled={values.recipients.length >= 5}
                       data-testid="add-recipient"
                     >
                       {t('add-recipient')}

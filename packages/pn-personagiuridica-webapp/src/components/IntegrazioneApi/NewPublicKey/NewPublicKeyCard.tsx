@@ -18,7 +18,6 @@ type Props = {
 
 const NewPublicKeyCard: React.FC<Props> = ({
   children,
-  isContinueDisabled,
   title,
   content,
   submitLabel,
@@ -48,7 +47,6 @@ const NewPublicKeyCard: React.FC<Props> = ({
           id="step-submit"
           variant="contained"
           onClick={onContinueClick}
-          disabled={isContinueDisabled}
           data-testid="step-submit"
           fullWidth={isMobile}
         >
@@ -58,7 +56,6 @@ const NewPublicKeyCard: React.FC<Props> = ({
           <MIButton
             id="previous-step"
             variant="outlined"
-            type="button"
             onClick={onBackClick}
             data-testid="previous-step"
             fullWidth={isMobile}

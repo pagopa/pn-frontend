@@ -40,7 +40,7 @@ const CustomMobileDialogToggle: React.FC<Props> = ({
 
   return (
     <Box data-testid="dialogToggle">
-      <MIButton onClick={handleClickOpen} sx={sx} data-testid="dialogToggleButton">
+      <MIButton variant="text" onClick={handleClickOpen} sx={sx} data-testid="dialogToggleButton">
         {children}
       </MIButton>
       {hasCounterBadge && bagdeCount > 0 && (

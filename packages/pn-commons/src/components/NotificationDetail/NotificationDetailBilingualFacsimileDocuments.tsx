@@ -40,7 +40,6 @@ const NotificationDetailBilingualFacsimileDocuments: React.FC<Props> = ({
         variant="text"
         id="download-bilingual-files-button"
         data-testid="downloadBilingualFilesButton"
-        color={'primary'}
         onClick={() => link && window.open(link, '_blank', 'noopener,noreferrer')}
       >
         <Box

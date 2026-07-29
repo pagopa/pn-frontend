@@ -105,9 +105,7 @@ const HowItWorksContactWizard: React.FC<Props> = ({ goToNextStep, setShowPecWiza
                             variant="text"
                             key="delivered"
                             data-testid="deliveredLink"
-                            size="medium"
                             onClick={handleShowDeliveredDialog}
-                            color="primary"
                             aria-description={t(
                               'legal-contacts.sercq-send-wizard.step_1.info-list.0.aria-description'
                             )}
