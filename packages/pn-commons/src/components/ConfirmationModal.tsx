@@ -1,8 +1,8 @@
 import React, { JSXElementConstructor, ReactNode } from 'react';
 
-import { Box, Button, DialogActionsProps, DialogTitle } from '@mui/material';
+import { Box, DialogActionsProps, DialogTitle } from '@mui/material';
 import { PnDialog, PnDialogActions, PnDialogContent } from '@pagopa-pn/pn-commons';
-import { MIButtonProps } from '@pagopa/mui-italia';
+import { MIButton, MIButtonProps } from '@pagopa/mui-italia';
 
 import PnDialogIllustration from './PnDialog/PnDialogIllustration';
 
@@ -32,7 +32,7 @@ const ConfirmationModal: React.FC<Props> = ({
   children,
 }: Props) => {
   const illustration = slots?.illustration;
-  const ConfirmButton = slots?.confirmButton || Button;
+  const ConfirmButton = slots?.confirmButton || MIButton;
   const CloseButton = slots?.closeButton;
 
   const actionsProps: DialogActionsProps = {
@@ -82,7 +82,6 @@ const ConfirmationModal: React.FC<Props> = ({
         )}
         <ConfirmButton
           id="dialog-confirm-button"
-          color="primary"
           variant="contained"
           data-testid="confirmButton"
           {...slotsProps?.confirmButton}

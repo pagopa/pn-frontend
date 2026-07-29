@@ -415,8 +415,6 @@ const DigitalDomicileWizard: React.FC = () => {
       <MIButton
         variant={isIoStep && !isIoEnabled ? 'outlined' : 'contained'}
         onClick={() => void handleNext()}
-        color="primary"
-        size="medium"
         sx={{ width: { xs: '100%', md: 'auto' }, ml: { md: 'auto' } }}
         data-testid="next-button"
       >

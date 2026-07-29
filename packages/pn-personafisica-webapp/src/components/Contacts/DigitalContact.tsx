@@ -226,10 +226,9 @@ const DigitalContact = forwardRef<{ toggleEdit: () => void }, Props>(
               id={`${senderId}_${contactType}-button`}
               variant="contained"
               fullWidth={isMobile}
-              type="submit"
               data-testid={`${senderId}_${contactType}-button`}
               sx={{ height: '43px', fontWeight: 700, flexBasis: { xs: 'unset', lg: '16.67%' } }}
-              size="small"
+              {...({ type: 'submit' } as any)}
               {...slotsProps?.button}
             >
               {insertButtonLabel}
@@ -240,7 +239,6 @@ const DigitalContact = forwardRef<{ toggleEdit: () => void }, Props>(
                 color="error"
                 onClick={onCancelInsert}
                 sx={{ fontWeight: 700, color: 'error.dark' }}
-                size="medium"
               >
                 {t('button.annulla')}
               </MIButton>
@@ -301,7 +299,7 @@ const DigitalContact = forwardRef<{ toggleEdit: () => void }, Props>(
                 variant="text"
                 key="saveButton"
                 color="primary"
-                type="submit"
+                {...({ type: 'submit' } as any)}
                 sx={{ fontWeight: 700, justifyContent: 'left' }}
                 id={`saveContact-${senderId}_${contactType}`}
                 size="medium"
@@ -317,7 +315,7 @@ const DigitalContact = forwardRef<{ toggleEdit: () => void }, Props>(
                   color: 'error.dark',
                   justifyContent: 'left',
                 }}
-                size="medium"
+                variant="text"
                 startIcon={<CloseIcon />}
               >
                 {t('button.annulla')}
@@ -371,7 +369,7 @@ const DigitalContact = forwardRef<{ toggleEdit: () => void }, Props>(
             >
               <EditButton
                 key="editButton"
-                color="primary"
+                variant="text"
                 onClick={() => {
                   if (onEditButtonClickCallback) {
                     onEditButtonClickCallback(!editMode);
@@ -381,7 +379,6 @@ const DigitalContact = forwardRef<{ toggleEdit: () => void }, Props>(
                 startIcon={<CreateIcon />}
                 sx={{ fontWeight: 700, justifyContent: 'left' }}
                 id={`modifyContact-${senderId}_${contactType}`}
-                size="medium"
               >
                 {t('button.modifica')}
               </EditButton>

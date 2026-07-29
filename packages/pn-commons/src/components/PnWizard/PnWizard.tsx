@@ -136,11 +136,11 @@ const PnWizard: React.FC<Props> = ({
       <Box p={3}>
         <ExitButton
           data-testid="exit-button"
-          type="button"
-          size="medium"
-          color="primary"
           startIcon={<ArrowBackIcon />}
+          {...({ type: 'button' } as any)}
           {...slotsProps?.exitButton}
+          variant="text"
+          sx={{ p: 0 }}
         >
           {getLocalizedOrDefaultLabel('common', 'button.exit', 'Esci')}
         </ExitButton>
@@ -168,7 +168,7 @@ const PnWizard: React.FC<Props> = ({
           <PrevButton
             data-testid="prev-button"
             sx={{ mt: { xs: 2, md: 0 } }}
-            {...slotsProps?.prevButton}
+            {...(slotsProps?.prevButton as MIButtonProps)}
             onClick={handlePrevStep}
           >
             {getLocalizedOrDefaultLabel('common', 'button.indietro', 'Indietro')}
@@ -178,7 +178,7 @@ const PnWizard: React.FC<Props> = ({
             data-testid="next-button"
             variant="contained"
             sx={{ ml: { md: 'auto' } }}
-            {...slotsProps?.nextButton}
+            {...(slotsProps?.nextButton as MIButtonProps)}
             onClick={handleNextStep}
           >
             {slotsProps?.nextButton?.label ||
