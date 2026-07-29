@@ -148,10 +148,10 @@
       "copy_phone": "Phone number copied"
     },
     "informal_notification_markdown": {
-      "greeting": "For the attention of {{recipientDenomination}}",
-      "attachments_info": "For more information, <0>we recommend viewing the attachments</0>, which can provide important details.",
-      "payment_instructions": "You can complete the payment by pressing <0>Pay</0>. Alternatively, you can use the <1>attached notice</1> to settle the amount through all channels enabled for pagoPA.",
-      "assistance": "In any case, should you need assistance, you can <0>contact {{senderDenomination}} through its official channels.</0>"
+      "greeting": "All'attenzione di {{recipientDenomination}}",
+      "attachments_info": "Per avere maggiori informazioni <0>è consigliato prendere visione degli allegati</0>, che possono fornire dettagli importanti.",
+      "payment_instructions": "È possibile completare il pagamento premendo <0>Paga</0>. In alternativa, si può utilizzare l'<1>avviso allegato</1> per saldare l'importo tramite tutti i canali abilitati a pagoPA.",
+      "assistance": "In ogni caso, qualora si avesse bisogno di assistenza, è possibile <0>contattare {{senderDenomination}} attraverso i suoi canali ufficiali.</0>"
     },
     "acts_files": {
       "downloadable_acts": "Documents are available online for 120 days from the completion of the notification.",

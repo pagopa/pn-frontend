@@ -158,10 +158,10 @@
       "copy_phone": "Phone number copied"
     },
     "informal_notification_markdown": {
-      "greeting": "Hello {{recipientDenomination}},",
-      "attachments_info": "For more information, <0>view the attachments,</0> which can provide you with important details.",
-      "payment_instructions": "You can make the payment directly by pressing <0>Pay</0>. Alternatively, you can use the <0>attached notice</0> to settle the amount through all channels enabled for pagoPA.",
-      "assistance": "In any case, should you need assistance, contact {{senderDenomination}} through its official channels."
+      "greeting": "Ciao {{recipientDenomination}},",
+      "attachments_info": "Per avere maggiori informazioni <0>prendi visione degli allegati,</0> che possono fornirti dettagli importanti.",
+      "payment_instructions": "Puoi effettuare il pagamento direttamente premendo <0>Paga</0>. In alternativa, puoi utilizzare l'<0>avviso allegato</0> per saldare l'importo tramite tutti i canali abilitati a pagoPA.",
+      "assistance": "In ogni caso, qualora avessi bisogno di assistenza, <0>contatta {{senderDenomination}} attraverso i suoi canali ufficiali.</0>"
     },
     "acts_files": {
       "downloadable_acts": "<0>Documents will be available online for up to 120 days</0> from the date the SEND notification became legally effective. Save them to your device!",

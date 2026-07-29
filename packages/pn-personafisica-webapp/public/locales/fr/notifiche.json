@@ -158,10 +158,10 @@
       "copy_phone": "Numéro de téléphone copié"
     },
     "informal_notification_markdown": {
-      "greeting": "Salut {{recipientDenomination}},",
-      "attachments_info": "Pour plus d'informations, <0>consulte les pièces jointes,</0> qui peuvent te fournir des détails importants.",
-      "payment_instructions": "Tu peux effectuer le paiement directement en appuyant sur <0>Payer</0>. Alternativement, tu peux utiliser l'<0>avis joint</0> pour régler le montant via tous les canaux habilités à pagoPA.",
-      "assistance": "Dans tous les cas, si tu as besoin d'assistance, contacte {{senderDenomination}} via ses canaux officiels."
+      "greeting": "Ciao {{recipientDenomination}},",
+      "attachments_info": "Per avere maggiori informazioni <0>prendi visione degli allegati,</0> che possono fornirti dettagli importanti.",
+      "payment_instructions": "Puoi effettuare il pagamento direttamente premendo <0>Paga</0>. In alternativa, puoi utilizzare l'<0>avviso allegato</0> per saldare l'importo tramite tutti i canali abilitati a pagoPA.",
+      "assistance": "In ogni caso, qualora avessi bisogno di assistenza, <0>contatta {{senderDenomination}} attraverso i suoi canali ufficiali.</0>"
     },
     "acts_files": {
       "downloadable_acts": "<0>Les documents seront disponibles en ligne jusqu'à 120 jours</0> à compter de la date à laquelle la notification SEND a pris valeur de loi. Enregistrez-les sur votre appareil !",

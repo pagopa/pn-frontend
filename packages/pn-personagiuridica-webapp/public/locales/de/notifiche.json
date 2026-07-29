@@ -148,10 +148,10 @@
       "copy_phone": "Telefonnummer kopiert"
     },
     "informal_notification_markdown": {
-      "greeting": "Zu Händen von {{recipientDenomination}}",
-      "attachments_info": "Für weitere Informationen <0>wird empfohlen, die Anhänge einzusehen</0>, die wichtige Details enthalten können.",
-      "payment_instructions": "Du kannst die Zahlung abschließen, indem du auf <0>Bezahlen</0> klickst. Alternativ kannst du den <1>beigefügten Zahlungsavis</1> nutzen, um den Betrag über alle für pagoPA aktivierten Kanäle zu begleichen.",
-      "assistance": "Solltest du Hilfe benötigen, kannst du <0>dich über die offiziellen Kanäle an {{senderDenomination}} wenden.</0>"
+      "greeting": "All'attenzione di {{recipientDenomination}}",
+      "attachments_info": "Per avere maggiori informazioni <0>è consigliato prendere visione degli allegati</0>, che possono fornire dettagli importanti.",
+      "payment_instructions": "È possibile completare il pagamento premendo <0>Paga</0>. In alternativa, si può utilizzare l'<1>avviso allegato</1> per saldare l'importo tramite tutti i canali abilitati a pagoPA.",
+      "assistance": "In ogni caso, qualora si avesse bisogno di assistenza, è possibile <0>contattare {{senderDenomination}} attraverso i suoi canali ufficiali.</0>"
     },
     "acts_files": {
       "downloadable_acts": "Die Dokumente sind 120 Tage nach Abschluss der Zustellung online verfügbar.",

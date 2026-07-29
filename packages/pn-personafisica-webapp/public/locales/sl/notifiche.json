@@ -158,10 +158,10 @@
       "copy_phone": "Telefonska številka je kopirana"
     },
     "informal_notification_markdown": {
-      "greeting": "Živjo {{recipientDenomination}},",
-      "attachments_info": "Za več informacij <0>si oglejte priloge,</0> ki vam lahko ponudijo pomembne podrobnosti.",
-      "payment_instructions": "Plačilo lahko izvedete neposredno s pritiskom na <0>Plačaj</0>. Lahko pa uporabite <0>priloženo obvestilo</0> za poravnavo zneska prek vseh kanalov, omogočenih za pagoPA.",
-      "assistance": "Če boste v vsakem primeru potrebovali pomoč, stopite v stik z {{senderDenomination}} prek njegovih uradnih kanalov."
+      "greeting": "Ciao {{recipientDenomination}},",
+      "attachments_info": "Per avere maggiori informazioni <0>prendi visione degli allegati,</0> che possono fornirti dettagli importanti.",
+      "payment_instructions": "Puoi effettuare il pagamento direttamente premendo <0>Paga</0>. In alternativa, puoi utilizzare l'<0>avviso allegato</0> per saldare l'importo tramite tutti i canali abilitati a pagoPA.",
+      "assistance": "In ogni caso, qualora avessi bisogno di assistenza, <0>contatta {{senderDenomination}} attraverso i suoi canali ufficiali.</0>"
     },
     "acts_files": {
       "downloadable_acts": "<0>Dokumenti bodo na voljo na spletu do 120 dni</0> od dneva, ko je uradno obvestilo SEND postalo pravno veljavno. Shranite jih v svojo napravo!",
