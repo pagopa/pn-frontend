@@ -81,9 +81,8 @@ const InformalNotificationDetail: React.FC = () => {
     INFORMAL_NOTIFICATION_ACTIONS.GET_RECEIVED_INFORMAL_NOTIFICATION
   );
 
-  // TODO da sistemare quando ci saranno i contatti
-  const phone = (currentRecipient as any)?.senderContacts?.phone;
-  const site = (currentRecipient as any)?.senderContacts?.site;
+  const phone = informalNotification?.senderContacts?.phone;
+  const site = informalNotification?.senderContacts?.site;
 
   const fetchPaymentsInfo = (payments: Array<NotificationDetailPayment>) => {
     const paymentInfoRequest = payments.reduce((acc, payment) => {

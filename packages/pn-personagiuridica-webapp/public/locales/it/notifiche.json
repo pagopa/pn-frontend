@@ -56,6 +56,9 @@
     "not-found-subtitle": "Può essere letta solo dagli utenti censiti dall’impresa destinataria o da un suo delegato."
   },
   "detail": {
+    "legal-date": "Notifica depositata il",
+    "informal-date": "Comunicazione depositata il",
+    "legal-disclaimer": "Notifica inviata tramite SEND, la piattaforma disciplinata dall’art. 26 del D.L 76/2020",
     "legal-value": "Notifica a valore legale",
     "notification-timeline-section": {
       "title": "Stato della notifica",
@@ -95,7 +98,7 @@
       "cta": "Cosa devo fare?"
     },
     "payment": {
-      "title": "Pagamento",
+      "title": "Pagamenti",
       "f24Models": "Modelli F24",
       "pagoPANotices": "Avvisi pagoPA",
       "download-pagoPA-notice": "Scarica l'avviso pagoPA",
@@ -141,15 +144,16 @@
       "title": "Contatta il mittente",
       "phone": "Numero di telefono dell'ente",
       "email": "Email dell'ente",
-      "website": "Sito web dell'ente"
+      "website": "Sito web dell'ente",
+      "copy_phone": "Numero di telefono copiato"
     },
     "acts_files": {
       "downloadable_acts": "<0>I documenti saranno disponibili online fino a 120 giorni</0> dalla data in cui la notifica SEND ha assunto valore di legge. Salvali sul tuo dispositivo!",
       "not_downloadable_acts": "Poiché sono trascorsi 120 giorni dalla data di perfezionamento, se vuoi ottenere gli atti devi rivolgerti al mittente.",
-      "downloadable_aar": "L’avviso di avvenuta ricezione è disponibile online per 10 anni dal perfezionamento della notifica.",
+      "downloadable_aar": "<0>Disponibile online per 10 anni</0> dalla data in cui la notifica SEND ha assunto valore di legge.",
       "not_downloadable_aar": "Poiché sono trascorsi 10 anni dalla data di perfezionamento, l’avviso di avvenuta ricezione non è più disponibile.",
       "effected_faq": "Quando si perfeziona una notifica?",
-      "informal_downloadable_acts": "Conserva gli allegati sul tuo dispositivo: saranno disponibili online <0>fino a 180 giorni dalla data di deposito</0> che trovi in alto!"
+      "informal_downloadable_acts": "Conserva gli allegati sul tuo dispositivo: saranno disponibili online fino a <0>180 giorni dalla data di deposito</0> che trovi in alto!"
     },
     "timeline": {
       "schedule-digital-workflow": "Ulteriore invio per via digitale",
@@ -373,7 +377,7 @@
       },
       "radd": {
         "title": "I documenti sono stati ritirati",
-        "description": "Il destinatario o un suo delegato ha ritirato i documenti notificati presso un operatore abilitato alla consegna degli stessi."
+        "description": "La persona destinataria, o chi è stato delegato, ha ritirato i documenti notificati presso un operatore abilitato alla consegna degli stessi."
       },
       "tpp-type": "un canale digitale di terze parti"
     },
@@ -382,7 +386,7 @@
       "textWithEndDate": "Disservizio iniziato {{startDate}} e concluso {{endDate}} sulle seguenti funzionalità:",
       "textWithoutEndDate": "Disservizio iniziato {{startDate}} e non ancora concluso sulle seguenti funzionalità:",
       "datePrefix": "il ",
-      "legalFactDownload": "Attestazione di malfunzionamento",
+      "legalFactDownload": "Apri l'attestazione di malfunzionamento",
       "apiErrorMessage": "Non siamo riusciti a caricare gli eventuali disservizi che hanno interessato questa notifica."
     },
     "help": {

@@ -177,5 +177,6 @@
     "selection-box": "Izbrane možnosti",
     "selection-done": "%s izbranih",
     "delete-selection": "Odstrani %s"
-  }
+  },
+  "not-available": "Ni na voljo"
 }

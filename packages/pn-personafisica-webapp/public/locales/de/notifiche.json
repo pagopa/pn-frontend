@@ -61,6 +61,10 @@
     "not-found-subtitle": "Diese Benachrichtigung kann nur vom Empfänger gelesen werden."
   },
   "detail": {
+    "legal-value": "Rechtsgültige Zustellung",
+    "legal-date": "Zustellung hinterlegt am",
+    "informal-date": "Mitteilung hinterlegt am",
+    "legal-disclaimer": "Zustellung über SEND gesendet, die durch Art. 26 des Gesetzesdekrets 76/2020 geregelte Plattform",
     "notification-timeline-section": {
       "title": "Status der Zustellung",
       "aria-label": "Gehe zur Timeline der Zustellung"
@@ -94,13 +98,12 @@
     "show-less": "Weniger Details anzeigen",
     "disclaimer-link": "Mehr hierzu",
     "pec-unreachable": "Halten Sie Ihr zertifiziertes E-Mail-Postfach (PEC) frei und aktiv, um alles digital zu erhalten!",
-    "legal-value": "Rechtsgültige Zustellung",
     "cancelled": {
       "message": "Diese Zustellung wurde von der sendenden Körperschaft storniert.",
       "cta": "Was muss ich tun?"
     },
     "payment": {
-      "title": "Zahlung",
+      "title": "Zahlungen",
       "f24Models": "Vordruck F24",
       "pagoPANotices": "Benachrichtigungen pagoPA",
       "download-pagoPA-notice": "Lade die pagoPA-Mitteilung herunter",
@@ -151,15 +154,16 @@
       "title": "Kontaktiere die sendende Körperschaft",
       "phone": "Telefonnummer der Körperschaft",
       "email": "E-Mail der Körperschaft",
-      "website": "Website der Körperschaft"
+      "website": "Website der Körperschaft",
+      "copy_phone": "Telefonnummer kopiert"
     },
     "acts_files": {
       "downloadable_acts": "<0>Die Dokumente sind bis zu 120 Tage lang online verfügbar</0> ab dem Datum, an dem die SEND-Benachrichtigung rechtlich wirksam wurde. Speichern Sie sie auf Ihrem Gerät!",
       "not_downloadable_acts": "Die Dokumente sind online nicht mehr verfügbar. Um sie anzufordern, wenden Sie sich bitte an die Behörde, die sie Ihnen zugesendet hat.",
       "not_downloadable_aar": "Der Zustellungsnachweis ist nicht mehr verfügbar. Um ihn anzufordern, wenden Sie sich bitte an die Behörde, die ihn Ihnen zugesendet hat.",
-      "downloadable_aar": "Die Empfangsbestätigung ist 10 Jahre ab Vervollständigung der Zustellung online verfügbar.",
+      "downloadable_aar": "<0>10 Jahre lang online verfügbar</0> ab dem Datum, an dem die SEND-Zustellung Rechtskraft erlangt hat.",
       "effected_faq": "Wann ist die Bearbeitung einer Zustellung vervollständigt?",
-      "informal_downloadable_acts": "Speichere die Anhänge auf deinem Gerät: Sie sind online <0>bis zu 180 Tage ab dem Hinterlegungsdatum</0> verfügbar, das du oben findest!"
+      "informal_downloadable_acts": "Speichere die Anhänge auf deinem Gerät: Sie sind online bis zu <0>180 Tage ab dem Hinterlegungsdatum</0> verfügbar, das du oben findest!"
     },
     "timeline": {
       "schedule-digital-workflow": "Weiterer digitaler Versand",
@@ -384,7 +388,7 @@
       },
       "radd": {
         "title": "Die Dokumente wurden abgeholt",
-        "description": "Der Empfänger oder sein Bevollmächtigter hat die zugestellten Dokumente bei einer zur Zustellung berechtigten Person abgeholt."
+        "description": "Der Empfänger oder die bevollmächtigte Person hat die zugestellten Dokumente bei einem zur Aushändigung befugten Betreiber abgeholt."
       },
       "tpp-type": "ein digitaler Kanal von Drittanbietern"
     },
@@ -393,7 +397,7 @@
       "textWithEndDate": "Fehlfunktion begonnen {{startDate}} und behoben {{endDate}} an folgenden Funktionen:",
       "textWithoutEndDate": "Beginn der Fehlfunktion {{startDate}} und noch nicht vollständig behoben an folgenden Funktionen:",
       "datePrefix": "am ",
-      "legalFactDownload": "Bescheinigung der Fehlfunktion",
+      "legalFactDownload": "Störungsbescheinigung öffnen",
       "apiErrorMessage": "Wir konnten noch keinen Bericht über Fehlfunktionen hochladen, die diese Zustellung betrafen."
     },
     "help": {

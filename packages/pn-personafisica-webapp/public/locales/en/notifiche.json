@@ -61,6 +61,10 @@
     "not-found-subtitle": "This notification can only be read by the recipient."
   },
   "detail": {
+    "legal-value": "Legally-binding notification",
+    "legal-date": "Notification deposited on",
+    "informal-date": "Communication deposited on",
+    "legal-disclaimer": "Notification sent via SEND, the platform governed by Art. 26 of Law Decree 76/2020",
     "notification-timeline-section": {
       "title": "Notification status",
       "aria-label": "Go to the notification timeline"
@@ -94,13 +98,12 @@
     "show-less": "See fewer details",
     "disclaimer-link": "Discover more",
     "pec-unreachable": "Keep your certified email (PEC) mailbox free and active to receive everything digitally!",
-    "legal-value": "Legally-binding notification",
     "cancelled": {
       "message": "This notification has been cancelled by the issuing institution.",
       "cta": "What should I do?"
     },
     "payment": {
-      "title": "Payment",
+      "title": "Payments",
       "f24Models": "F24 forms",
       "pagoPANotices": "pagoPA notifications",
       "download-pagoPA-notice": "Download the pagoPA notice",
@@ -151,15 +154,16 @@
       "title": "Contact the issuing institution",
       "phone": "Institution's phone number",
       "email": "Institution's email address",
-      "website": "Institution's website"
+      "website": "Institution's website",
+      "copy_phone": "Phone number copied"
     },
     "acts_files": {
       "downloadable_acts": "<0>Documents will be available online for up to 120 days</0> from the date the SEND notification became legally effective. Save them to your device!",
       "not_downloadable_acts": "Documents are no longer available online. To request them, please contact the institution that sent them to you.",
       "not_downloadable_aar": "The acknowledgment of receipt is no longer available. To request it, please contact the institution that sent it to you.",
-      "downloadable_aar": "The notification of receipt is available online for 10 years from the finalization of the notification.",
+      "downloadable_aar": "<0>Available online for 10 years</0> from the date the SEND notification became legally binding.",
       "effected_faq": "When is a notification finalized?",
-      "informal_downloadable_acts": "Save the attachments to your device: they will be available online <0>for up to 180 days from the filing date</0> shown at the top!"
+      "informal_downloadable_acts": "Save the attachments to your device: they will be available online for up to <0>180 days from the filing date</0> shown at the top!"
     },
     "timeline": {
       "schedule-digital-workflow": "Further sending digitally",
@@ -384,7 +388,7 @@
       },
       "radd": {
         "title": "The documents were collected",
-        "description": "The recipient or their delegate collected the notified documents from an operator enabled to deliver them."
+        "description": "The recipient, or their delegate, collected the notified documents from an operator authorized to deliver them."
       },
       "tpp-type": "a third-party digital channel"
     },
@@ -393,7 +397,7 @@
       "textWithEndDate": "Disruption started {{startDate}} and ended {{endDate}} for the following functions:",
       "textWithoutEndDate": "Disruption started {{startDate}} and not yet ended for the following functions:",
       "datePrefix": "the ",
-      "legalFactDownload": "Certificate of malfunction",
+      "legalFactDownload": "Open the malfunction certificate",
       "apiErrorMessage": "We were unable to load any disruptions that affected this notification."
     },
     "help": {
