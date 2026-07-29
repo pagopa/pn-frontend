@@ -2,10 +2,10 @@ import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import MoreVertIcon from '@mui/icons-material/MoreVert';
-import { Box, Button, IconButton, Menu as MUIMenu, MenuItem, Typography } from '@mui/material';
+import { Box, IconButton, Menu as MUIMenu, MenuItem, Typography } from '@mui/material';
 import { Variant } from '@mui/material/styles/createTypography';
 import { CustomTagGroup } from '@pagopa-pn/pn-commons';
-import { Tag } from '@pagopa/mui-italia';
+import { MIButton, Tag } from '@pagopa/mui-italia';
 
 import { PFEventsType } from '../../models/PFEventsType';
 import { openAcceptModal, openRevocationModal } from '../../redux/delegation/reducers';
@@ -138,7 +138,7 @@ export const AcceptButton = ({ id, name }: { id: string; name: string }) => {
   };
 
   return (
-    <Button
+    <MIButton
       id="accept-button"
       onClick={handleAcceptClick}
       variant={'contained'}
@@ -146,6 +146,6 @@ export const AcceptButton = ({ id, name }: { id: string; name: string }) => {
       data-testid="acceptButton"
     >
       {t('deleghe.accept')}
-    </Button>
+    </MIButton>
   );
 };

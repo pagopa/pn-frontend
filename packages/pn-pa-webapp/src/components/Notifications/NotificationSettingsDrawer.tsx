@@ -16,7 +16,7 @@ import {
   Typography,
 } from '@mui/material';
 import { CustomDropdown, LANGUAGES, useIsMobile } from '@pagopa-pn/pn-commons';
-import { ButtonNaked, LangCode, LangLabels } from '@pagopa/mui-italia';
+import { LangCode, LangLabels, MIButton } from '@pagopa/mui-italia';
 
 import { BILINGUALISM_LANGUAGES, NewNotificationLangOther } from '../../models/NewNotification';
 import { setAdditionalLanguages } from '../../redux/auth/actions';
@@ -87,14 +87,15 @@ const NotificationSettingsDrawer = () => {
 
   return (
     <>
-      <ButtonNaked
+      <MIButton
+        variant="text"
         color="primary"
         sx={{ fontSize: '16px', fontWeight: 700 }}
         onClick={toggleDrawer}
         data-testid="settingsLangBtn"
       >
         {t('settings.language-settings-title')}
-      </ButtonNaked>
+      </MIButton>
       <Drawer
         anchor="right"
         open={openDrawer}

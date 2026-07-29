@@ -1,17 +1,8 @@
 import React, { useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 
-import {
-  Box,
-  Button,
-  Divider,
-  List,
-  ListItem,
-  ListItemText,
-  Stack,
-  Typography,
-} from '@mui/material';
-import { ButtonNaked, MIAlert } from '@pagopa/mui-italia';
+import { Box, Divider, List, ListItem, ListItemText, Stack, Typography } from '@mui/material';
+import { MIAlert, MIButton } from '@pagopa/mui-italia';
 
 import { PGEventsType } from '../../models/PGEventsType';
 import { contactsSelectors } from '../../redux/contact/reducers';
@@ -81,7 +72,8 @@ const HowItWorksContactWizard: React.FC<Props> = ({ goToNextStep, setShowPecWiza
                         ns="recapiti"
                         t={(s: string) => s}
                         components={[
-                          <ButtonNaked
+                          <MIButton
+                            variant="text"
                             key="delivered"
                             data-testid="deliveredLink"
                             size="medium"
@@ -112,7 +104,7 @@ const HowItWorksContactWizard: React.FC<Props> = ({ goToNextStep, setShowPecWiza
             </MIAlert>
           )}
 
-          <Button
+          <MIButton
             fullWidth
             variant="contained"
             color="primary"
@@ -124,7 +116,7 @@ const HowItWorksContactWizard: React.FC<Props> = ({ goToNextStep, setShowPecWiza
             data-testid="continueButton"
           >
             {t('button.continue', { ns: 'common' })}
-          </Button>
+          </MIButton>
 
           {!defaultPECAddress && (
             <Divider
@@ -144,7 +136,8 @@ const HowItWorksContactWizard: React.FC<Props> = ({ goToNextStep, setShowPecWiza
           <Typography variant="body2" mb={1}>
             {t('legal-contacts.sercq-send-wizard.step_1.have-pec-description')}
           </Typography>
-          <ButtonNaked
+          <MIButton
+            variant="text"
             color="primary"
             size="medium"
             onClick={() => {
@@ -153,7 +146,7 @@ const HowItWorksContactWizard: React.FC<Props> = ({ goToNextStep, setShowPecWiza
             }}
           >
             {t('legal-contacts.sercq-send-wizard.step_1.insert-pec')}
-          </ButtonNaked>
+          </MIButton>
         </Box>
       )}
 

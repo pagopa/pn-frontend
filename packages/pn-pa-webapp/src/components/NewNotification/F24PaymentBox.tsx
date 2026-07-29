@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { Box, FormControlLabel, FormHelperText, Stack, Switch, TextField } from '@mui/material';
 import { FileUpload, useIsMobile } from '@pagopa-pn/pn-commons';
-import { ButtonNaked, MIAlert } from '@pagopa/mui-italia';
+import { MIAlert, MIButton } from '@pagopa/mui-italia';
 
 import { NewNotificationF24Payment, NotificationFeePolicy } from '../../models/NewNotification';
 
@@ -119,7 +119,8 @@ const F24PaymentBox: React.FC<PaymentBoxProps> = ({
           )}
 
           {showDeleteButton && (
-            <ButtonNaked
+            <MIButton
+              variant="text"
               color="primary"
               startIcon={<DeleteIcon />}
               onClick={onDeletePayment}
@@ -130,7 +131,7 @@ const F24PaymentBox: React.FC<PaymentBoxProps> = ({
               data-testid="f24-delete-button"
             >
               {t('button.delete', { ns: 'common' })}
-            </ButtonNaked>
+            </MIButton>
           )}
         </Stack>
       )}

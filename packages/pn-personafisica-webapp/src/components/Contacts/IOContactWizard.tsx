@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 
 import CompareArrowsIcon from '@mui/icons-material/CompareArrows';
-import { Avatar, Button, List, ListItem, ListItemText, Stack, Typography } from '@mui/material';
+import { Avatar, List, ListItem, ListItemText, Stack, Typography } from '@mui/material';
 import {
   ConfirmationModal,
   EventAction,
@@ -11,7 +11,7 @@ import {
   appStateActions,
   useIsMobile,
 } from '@pagopa-pn/pn-commons';
-import { ButtonNaked } from '@pagopa/mui-italia';
+import { MIButton } from '@pagopa/mui-italia';
 
 import { PFEventsType } from '../../models/PFEventsType';
 import { IOAllowedValues } from '../../models/contacts';
@@ -168,7 +168,7 @@ const IOContactWizard: React.FC<Props> = ({ goToNextStep }) => {
 
         {isIOEnabled ? (
           <>
-            <Button
+            <MIButton
               variant="outlined"
               onClick={handleConfirmIODeactivation}
               color="primary"
@@ -177,8 +177,9 @@ const IOContactWizard: React.FC<Props> = ({ goToNextStep }) => {
               data-testid="disableIOButton"
             >
               {t('legal-contacts.sercq-send-wizard.step_2.disable')}
-            </Button>
-            <ButtonNaked
+            </MIButton>
+            <MIButton
+              variant="text"
               sx={{ fontSize: '16px' }}
               onClick={handleGoToNextStep}
               color="primary"
@@ -186,11 +187,11 @@ const IOContactWizard: React.FC<Props> = ({ goToNextStep }) => {
               data-testid="skipButton"
             >
               {t('button.continue', { ns: 'common' })}
-            </ButtonNaked>
+            </MIButton>
           </>
         ) : (
           <>
-            <Button
+            <MIButton
               variant="contained"
               onClick={handleConfirmIOActivation}
               color="primary"
@@ -199,8 +200,9 @@ const IOContactWizard: React.FC<Props> = ({ goToNextStep }) => {
               data-testid="confirmButton"
             >
               {t('legal-contacts.sercq-send-wizard.step_2.confirm')}
-            </Button>
-            <ButtonNaked
+            </MIButton>
+            <MIButton
+              variant="text"
               sx={{ fontSize: '16px' }}
               onClick={handleSkip}
               color="primary"
@@ -208,7 +210,7 @@ const IOContactWizard: React.FC<Props> = ({ goToNextStep }) => {
               data-testid="skipButton"
             >
               {t('legal-contacts.sercq-send-wizard.step_2.skip-io')}
-            </ButtonNaked>
+            </MIButton>
           </>
         )}
       </Stack>
@@ -216,8 +218,8 @@ const IOContactWizard: React.FC<Props> = ({ goToNextStep }) => {
         open={modal.open}
         title={t('courtesy-contacts.confirmation-modal-io-title')}
         slots={{
-          confirmButton: Button,
-          closeButton: Button,
+          confirmButton: MIButton,
+          closeButton: MIButton,
         }}
         slotsProps={
           isIOEnabled

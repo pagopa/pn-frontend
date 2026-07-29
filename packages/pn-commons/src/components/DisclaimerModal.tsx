@@ -1,6 +1,7 @@
 import { useState } from 'react';
 
-import { Box, Button, Checkbox, DialogTitle, FormControlLabel } from '@mui/material';
+import { Box, Checkbox, DialogTitle, FormControlLabel } from '@mui/material';
+import { MIButton } from '@pagopa/mui-italia';
 
 import { getLocalizedOrDefaultLabel } from '../utility/localization.utility';
 import PnDialog from './PnDialog/PnDialog';
@@ -65,15 +66,15 @@ const DisclaimerModal: React.FC<Props> = ({
         )}
       </PnDialogContent>
       <PnDialogActions>
-        <Button
+        <MIButton
           id="cancelButton"
           variant="outlined"
           onClick={handleCancel}
           data-testid="disclaimer-cancel-button"
         >
           {getLocalizedOrDefaultLabel('common', 'button.annulla', 'Annulla')}
-        </Button>
-        <Button
+        </MIButton>
+        <MIButton
           id="confirmButton"
           variant="contained"
           onClick={handleConfirm}
@@ -81,7 +82,7 @@ const DisclaimerModal: React.FC<Props> = ({
           data-testid="disclaimer-confirm-button"
         >
           {confirmLabel}
-        </Button>
+        </MIButton>
       </PnDialogActions>
     </PnDialog>
   );

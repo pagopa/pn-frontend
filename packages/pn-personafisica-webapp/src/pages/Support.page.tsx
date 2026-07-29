@@ -1,13 +1,12 @@
 import { useReducer, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-
 import * as yup from 'yup';
 
-import { Box, Button, Paper, Stack, TextField, Typography } from '@mui/material';
+import { Box, Paper, Stack, TextField, Typography } from '@mui/material';
 import { Prompt, TitleBox } from '@pagopa-pn/pn-commons';
 import { ValidationError } from '@pagopa-pn/pn-validator';
-import { ButtonNaked } from '@pagopa/mui-italia';
+import { MIButton } from '@pagopa/mui-italia';
 
 import ZendeskForm from '../components/Support/ZendeskForm';
 import { SupportForm, ZendeskAuthorizationDTO } from '../models/Support';
@@ -66,11 +65,11 @@ const SupportPPButton: React.FC<{ children?: React.ReactNode }> = ({ children })
   };
 
   return (
-    <ButtonNaked sx={{ verticalAlign: 'top' }} onClick={handleClick}>
+    <MIButton variant="text" sx={{ verticalAlign: 'top' }} onClick={handleClick}>
       <Typography variant="body2" color="primary" display="inline">
         {children}
       </Typography>
-    </ButtonNaked>
+    </MIButton>
   );
 };
 
@@ -78,7 +77,7 @@ const SupportPage: React.FC = () => {
   const { t } = useTranslation(['support', 'common']);
   const [params] = useSearchParams();
   const rawData = params.get('data');
-  
+
   const dataSchema = yup.object({
     traceId: yup.string().required(),
     errorCode: yup.string().required(),
@@ -86,13 +85,13 @@ const SupportPage: React.FC = () => {
   // eslint-disable-next-line functional/no-let
   let data: { traceId: string; errorCode: string } | null = null;
   if (rawData !== null) {
-    try{
+    try {
       const parsed = JSON.parse(decodeURIComponent(rawData));
       data = dataSchema.validateSync(parsed);
-    } catch(e){
+    } catch (e) {
       console.error('Param "data" is not properly formatted:', e);
       data = null;
-    };
+    }
   }
   const [formData, formDispatch] = useReducer(reducer, {
     email: {
@@ -202,7 +201,7 @@ const SupportPage: React.FC = () => {
             justifyContent="space-between"
             alignItems="center"
           >
-            <Button
+            <MIButton
               variant="contained"
               size="small"
               sx={{ width: { xs: 1, sm: 'auto' } }}
@@ -211,8 +210,8 @@ const SupportPage: React.FC = () => {
               data-testid="continueButton"
             >
               {t('button.go-on', { ns: 'common' })}
-            </Button>
-            <Button
+            </MIButton>
+            <MIButton
               variant="outlined"
               size="small"
               sx={{ mt: { xs: 2, sm: 0 }, width: { xs: 1, sm: 'auto' } }}
@@ -220,7 +219,7 @@ const SupportPage: React.FC = () => {
               data-testid="backButton"
             >
               {t('button.indietro', { ns: 'common' })}
-            </Button>
+            </MIButton>
           </Box>
         </Box>
         <ZendeskForm data={zendeskAuthData} />

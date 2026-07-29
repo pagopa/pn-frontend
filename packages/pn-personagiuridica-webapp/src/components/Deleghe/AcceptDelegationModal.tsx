@@ -2,7 +2,6 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import {
-  Button,
   DialogContentText,
   DialogTitle,
   Divider,
@@ -20,7 +19,7 @@ import {
   PnDialogActions,
   PnDialogContent,
 } from '@pagopa-pn/pn-commons';
-import { Autocomplete } from '@pagopa/mui-italia';
+import { Autocomplete, MIButton } from '@pagopa/mui-italia';
 
 import { GroupStatus } from '../../models/groups';
 import { useAppSelector } from '../../redux/hooks';
@@ -255,7 +254,7 @@ const AcceptDelegationModal: React.FC<Props> = ({
         )}
       </PnDialogContent>
       <PnDialogActions>
-        <Button
+        <MIButton
           variant="outlined"
           onClick={isEditMode ? handleClose : handleBack}
           data-testid="groupCancelButton"
@@ -263,8 +262,8 @@ const AcceptDelegationModal: React.FC<Props> = ({
           {isEditMode
             ? t('button.annulla', { ns: 'common' })
             : t('button.indietro', { ns: 'common' })}
-        </Button>
-        <Button
+        </MIButton>
+        <MIButton
           id="group-confirm-button"
           variant="contained"
           data-testid="groupConfirmButton"
@@ -272,7 +271,7 @@ const AcceptDelegationModal: React.FC<Props> = ({
           disabled={groupForm.value.length === 0 && associateGroup}
         >
           {t('button.conferma', { ns: 'common' })}
-        </Button>
+        </MIButton>
       </PnDialogActions>
     </PnDialog>
   );

@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 
 import DownloadIcon from '@mui/icons-material/Download';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
-import { Box, Button, Grid, IconButton, Paper, Stack, Typography } from '@mui/material';
+import { Box, Grid, IconButton, Paper, Stack, Typography } from '@mui/material';
 import {
   ApiErrorWrapper,
   CustomTooltip,
@@ -15,6 +15,7 @@ import {
   screenshot,
   today,
 } from '@pagopa-pn/pn-commons';
+import { MIButton } from '@pagopa/mui-italia';
 
 import DeliveryModeStatistics from '../components/Statistics/DeliveryModeStatistics';
 import DigitalErrorsDetailStatistics from '../components/Statistics/DigitalErrorsDetailStatistics';
@@ -85,7 +86,7 @@ const Statistics = () => {
   const Subtitle = (
     <Stack direction={'row'} display="flex" justifyContent="space-between" alignItems="center">
       <Typography>{t('subtitle', { organization: loggedUserOrganizationParty?.name })}</Typography>
-      <Button
+      <MIButton
         onClick={() => handleDownloadJpeg(exportJpgNode.current)}
         variant="outlined"
         endIcon={<DownloadIcon />}
@@ -93,7 +94,7 @@ const Statistics = () => {
         data-testid="exportJpgButton"
       >
         {t('export_all')}
-      </Button>
+      </MIButton>
     </Stack>
   );
 

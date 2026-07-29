@@ -1,5 +1,6 @@
-import { Badge, BadgeProps, Box, Button } from '@mui/material';
+import { Badge, BadgeProps, Box } from '@mui/material';
 import { SxProps, Theme, styled } from '@mui/material/styles';
+import { MIButton } from '@pagopa/mui-italia';
 
 import { useCustomMobileDialogContext } from './CustomMobileDialog.context';
 
@@ -39,9 +40,9 @@ const CustomMobileDialogToggle: React.FC<Props> = ({
 
   return (
     <Box data-testid="dialogToggle">
-      <Button onClick={handleClickOpen} sx={sx} data-testid="dialogToggleButton">
+      <MIButton onClick={handleClickOpen} sx={sx} data-testid="dialogToggleButton">
         {children}
-      </Button>
+      </MIButton>
       {hasCounterBadge && bagdeCount > 0 && (
         <StyledBadge
           id="dialogToggleBadge"

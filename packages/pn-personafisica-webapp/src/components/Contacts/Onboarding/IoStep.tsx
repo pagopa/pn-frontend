@@ -2,9 +2,9 @@ import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import FileDownloadOutlinedIcon from '@mui/icons-material/FileDownloadOutlined';
-import { Box, Button, Stack, Typography } from '@mui/material';
+import { Box, Stack, Typography } from '@mui/material';
 import { EventAction, appStateActions, useIsMobile } from '@pagopa-pn/pn-commons';
-import { ButtonNaked } from '@pagopa/mui-italia';
+import { MIButton } from '@pagopa/mui-italia';
 
 import { OnboardingAvailableFlows } from '../../../models/Onboarding';
 import { PFEventsType } from '../../../models/PFEventsType';
@@ -169,7 +169,7 @@ const IoStep: React.FC<Props> = ({ value, selectedOnboardingFlow, onChange, onCo
             spacing={2}
             justifyContent={isMobile ? undefined : 'space-between'}
           >
-            <Button
+            <MIButton
               fullWidth={isMobile}
               variant="contained"
               onClick={handlePrimaryAction}
@@ -179,10 +179,11 @@ const IoStep: React.FC<Props> = ({ value, selectedOnboardingFlow, onChange, onCo
               }
             >
               {t(`${labelPrefixByStatus}.primary-cta`)}
-            </Button>
+            </MIButton>
 
             {status === IOContactStatus.UNAVAILABLE && (
-              <ButtonNaked
+              <MIButton
+                variant="text"
                 color="primary"
                 size="medium"
                 onClick={() => void handleRefreshState()}
@@ -193,7 +194,7 @@ const IoStep: React.FC<Props> = ({ value, selectedOnboardingFlow, onChange, onCo
                 }}
               >
                 {t(`${labelPrefixByStatus}.refresh-cta`)}
-              </ButtonNaked>
+              </MIButton>
             )}
           </Stack>
         )}

@@ -5,7 +5,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { Box, Stack, Step, StepLabel, Stepper } from '@mui/material';
 import { AppResponsePublisher, Prompt, TitleBox, appStateActions } from '@pagopa-pn/pn-commons';
-import { ButtonNaked } from '@pagopa/mui-italia';
+import { MIButton } from '@pagopa/mui-italia';
 
 import PublicKeyDataInsert from '../components/IntegrazioneApi/NewPublicKey/PublicKeyDataInsert';
 import ShowPublicKeyParams from '../components/IntegrazioneApi/NewPublicKey/ShowPublicKeyParams';
@@ -45,7 +45,8 @@ const StepperContainer: React.FC<{ children: React.ReactNode; activeStep: number
   return (
     <Stack display={'flex'} alignItems={'center'} justifyContent={'center'}>
       <Box p={3} sx={{ maxWidth: { xs: '100%', lg: '90%' } }}>
-        <ButtonNaked
+        <MIButton
+          variant="text"
           size="medium"
           color="primary"
           startIcon={<ArrowBackIcon />}
@@ -53,7 +54,7 @@ const StepperContainer: React.FC<{ children: React.ReactNode; activeStep: number
           data-testid="exitBtn"
         >
           {t('button.exit', { ns: 'common' })}
-        </ButtonNaked>
+        </MIButton>
 
         <TitleBox
           variantTitle="h4"

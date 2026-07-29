@@ -4,8 +4,6 @@ import KeyboardArrowDownOutlinedIcon from '@mui/icons-material/KeyboardArrowDown
 import MoreVert from '@mui/icons-material/MoreVert';
 import {
   Box,
-  Button,
-  ButtonBase,
   Card,
   CardContent,
   CardHeader,
@@ -19,6 +17,7 @@ import {
   TypographyProps,
 } from '@mui/material';
 import { useIsMobile } from '@pagopa-pn/pn-commons';
+import { MIButton } from '@pagopa/mui-italia';
 
 type PnInfoCardAction = {
   key: string;
@@ -131,17 +130,17 @@ const PnInfoCardActions: React.FC<Pick<Props, 'actions'>> = ({ actions }) => {
   ) : (
     <Stack direction="row" alignItems="end" spacing={3}>
       {actions?.map((action) => (
-        <Button
+        <MIButton
           key={action.key}
           data-testid={action.testId}
-          variant="naked"
+          variant="text"
           color={action.destructive ? 'error' : 'primary'}
           startIcon={action.icon}
           onClick={action.onClick}
           sx={{ p: '10px 16px' }}
         >
           {action.label}
-        </Button>
+        </MIButton>
       ))}
     </Stack>
   );
@@ -163,9 +162,8 @@ const PnInfoCardAccordion: React.FC<PnInfoCardContentProps> = ({ title, subtitle
   return (
     <>
       <Box component="h5" data-testid="PnInfoCardHeader" sx={{ m: 0 }}>
-        <ButtonBase
+        <MIButton
           id={headerId}
-          type="button"
           aria-expanded={expanded}
           aria-controls={panelId}
           onClick={() => setExpanded((currentValue) => !currentValue)}
@@ -206,7 +204,7 @@ const PnInfoCardAccordion: React.FC<PnInfoCardContentProps> = ({ title, subtitle
               }),
             })}
           />
-        </ButtonBase>
+        </MIButton>
       </Box>
 
       <Collapse in={expanded} timeout="auto" mountOnEnter unmountOnExit>

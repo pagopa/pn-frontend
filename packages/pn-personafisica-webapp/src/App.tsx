@@ -10,7 +10,7 @@ import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded';
 import MailOutlineIcon from '@mui/icons-material/MailOutline';
 import MarkunreadMailboxIcon from '@mui/icons-material/MarkunreadMailbox';
 import SettingsIcon from '@mui/icons-material/Settings';
-import { Box, Button, DialogTitle } from '@mui/material';
+import { Box, DialogTitle } from '@mui/material';
 import {
   A11yMessageAnnouncer,
   APP_VERSION,
@@ -31,7 +31,7 @@ import {
   useMultiEvent,
   useTracking,
 } from '@pagopa-pn/pn-commons';
-import { ProductEntity } from '@pagopa/mui-italia';
+import { MIButton, ProductEntity } from '@pagopa/mui-italia';
 
 import SideMenuBanner from './components/SideMenuBanner/SideMenuBanner';
 import { PFEventsType } from './models/PFEventsType';
@@ -332,12 +332,12 @@ const App = () => {
         <PnDialog open={openModal}>
           <DialogTitle sx={{ mb: 2 }}>{t('header.logout-message')}</DialogTitle>
           <PnDialogActions>
-            <Button id="cancelButton" variant="outlined" onClick={() => setOpenModal(false)}>
+            <MIButton id="cancelButton" variant="outlined" onClick={() => setOpenModal(false)}>
               {t('button.annulla')}
-            </Button>
-            <Button data-testid="confirm-button" variant="contained" onClick={performLogout}>
+            </MIButton>
+            <MIButton data-testid="confirm-button" variant="contained" onClick={performLogout}>
               {t('header.logout')}
-            </Button>
+            </MIButton>
           </PnDialogActions>
         </PnDialog>
         {/* <AppMessage sessionRedirect={async () => await dispatch(logout())} /> */}

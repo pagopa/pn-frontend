@@ -1,8 +1,9 @@
 import { Fragment } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { Button, Grid } from '@mui/material';
+import { Grid } from '@mui/material';
 import { CustomMobileDialogAction } from '@pagopa-pn/pn-commons';
+import { MIButton } from '@pagopa/mui-italia';
 
 type Props = {
   filtersApplied: boolean;
@@ -21,7 +22,7 @@ const FilterNotificationsFormActions = ({
 
   const confirmAction = (
     <Grid item lg="auto" xs={12}>
-      <Button
+      <MIButton
         id="filter-notifications-button"
         variant="outlined"
         type="submit"
@@ -29,15 +30,15 @@ const FilterNotificationsFormActions = ({
         disabled={isInitialSearch && !filtersApplied}
       >
         {t('button.filtra')}
-      </Button>
+      </MIButton>
     </Grid>
   );
 
   const cancelAction = (
     <Grid item lg="auto" xs={12}>
-      <Button data-testid="cancelButton" size="small" onClick={cleanFilters}>
+      <MIButton data-testid="cancelButton" size="small" onClick={cleanFilters}>
         {t('button.annulla filtro')}
-      </Button>
+      </MIButton>
     </Grid>
   );
 

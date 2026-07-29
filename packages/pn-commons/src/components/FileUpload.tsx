@@ -5,7 +5,6 @@ import CloseIcon from '@mui/icons-material/Close';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import {
   Box,
-  Button,
   FormHelperText,
   Input,
   LinearProgress,
@@ -14,7 +13,7 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
-import { ButtonNaked, CopyToClipboardButton } from '@pagopa/mui-italia';
+import { CopyToClipboardButton, MIButton } from '@pagopa/mui-italia';
 
 import { useIsMobile } from '../hooks/useIsMobile';
 import { calcSha256String, parseFileSize } from '../utility/file.utility';
@@ -310,14 +309,14 @@ const FileUpload = ({
               {uploadText}&nbsp;{getLocalizedOrDefaultLabel('common', 'upload-file.or')}
               &nbsp;
             </Typography>
-            <Button
+            <MIButton
               variant="contained"
               onClick={chooseFileHandler}
               data-testid="loadFromPc"
               sx={{ margin: isMobile ? '10px 0' : '0 10px' }}
             >
               {getLocalizedOrDefaultLabel('common', 'upload-file.select-file')}
-            </Button>
+            </MIButton>
             <Input
               id="file-input"
               type="file"
@@ -372,7 +371,8 @@ const FileUpload = ({
                 {parseFileSize(fileData.file.size)}
               </Typography>
             </Box>
-            <ButtonNaked
+            <MIButton
+              variant="text"
               data-testid="removeDocument"
               onClick={removeFileHandler}
               aria-label={getLocalizedOrDefaultLabel(
@@ -383,7 +383,7 @@ const FileUpload = ({
               sx={{ flexShrink: 0, ml: 2 }}
             >
               <CloseIcon />
-            </ButtonNaked>
+            </MIButton>
           </Box>
         )}
       </Box>

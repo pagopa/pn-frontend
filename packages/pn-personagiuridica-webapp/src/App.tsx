@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router-dom';
 
-import { Box, Button, DialogTitle } from '@mui/material';
+import { Box, DialogTitle } from '@mui/material';
 import {
   A11yMessageAnnouncer,
   APP_VERSION,
@@ -23,7 +23,7 @@ import {
   useMultiEvent,
   useTracking,
 } from '@pagopa-pn/pn-commons';
-import { PartyEntity, ProductEntity } from '@pagopa/mui-italia';
+import { MIButton, PartyEntity, ProductEntity } from '@pagopa/mui-italia';
 
 import { useMenuItems } from './hooks/useMenuItems';
 import i18n from './i18n';
@@ -266,12 +266,12 @@ const ActualApp = () => {
         <PnDialog open={openModal}>
           <DialogTitle sx={{ mb: 2 }}>{t('header.logout-message')}</DialogTitle>
           <PnDialogActions>
-            <Button id="cancelButton" variant="outlined" onClick={() => setOpenModal(false)}>
+            <MIButton id="cancelButton" variant="outlined" onClick={() => setOpenModal(false)}>
               {t('button.annulla')}
-            </Button>
-            <Button data-testid="confirm-button" variant="contained" onClick={performLogout}>
+            </MIButton>
+            <MIButton data-testid="confirm-button" variant="contained" onClick={performLogout}>
               {t('header.logout')}
-            </Button>
+            </MIButton>
           </PnDialogActions>
         </PnDialog>
         {/* <AppMessage sessionRedirect={async () => await dispatch(logout())} /> */}

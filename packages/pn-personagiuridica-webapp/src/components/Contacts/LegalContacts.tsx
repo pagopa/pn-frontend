@@ -7,9 +7,9 @@ import LaptopChromebookIcon from '@mui/icons-material/LaptopChromebook';
 import PowerSettingsNewIcon from '@mui/icons-material/PowerSettingsNew';
 import SavingsIcon from '@mui/icons-material/Savings';
 import TouchAppIcon from '@mui/icons-material/TouchApp';
-import { Box, Button, Stack, Typography } from '@mui/material';
+import { Box, Stack, Typography } from '@mui/material';
 import { PnInfoCard, appStateActions, appStorage, useIsMobile } from '@pagopa-pn/pn-commons';
-import { MIAlert, MIChip } from '@pagopa/mui-italia';
+import { MIAlert, MIButton, MIChip } from '@pagopa/mui-italia';
 
 import { PGEventsType } from '../../models/PGEventsType';
 import { AddressType, ChannelType } from '../../models/contacts';
@@ -67,7 +67,7 @@ const EmptyLegalContacts = () => {
           );
         })}
       </Stack>
-      <Button
+      <MIButton
         variant="contained"
         fullWidth={isMobile}
         onClick={() => {
@@ -76,7 +76,7 @@ const EmptyLegalContacts = () => {
         }}
       >
         {t('button.start')}
-      </Button>
+      </MIButton>
     </>
   );
 };

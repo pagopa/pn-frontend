@@ -1,18 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 
-import {
-  Box,
-  Button,
-  Divider,
-  List,
-  ListItem,
-  ListItemText,
-  Stack,
-  Typography,
-} from '@mui/material';
+import { Box, Divider, List, ListItem, ListItemText, Stack, Typography } from '@mui/material';
 import { EventAction } from '@pagopa-pn/pn-commons';
-import { ButtonNaked, MIAlert } from '@pagopa/mui-italia';
+import { MIAlert, MIButton } from '@pagopa/mui-italia';
 
 import { PFEventsType } from '../../models/PFEventsType';
 import { contactsSelectors } from '../../redux/contact/reducers';
@@ -110,7 +101,8 @@ const HowItWorksContactWizard: React.FC<Props> = ({ goToNextStep, setShowPecWiza
                         ns="recapiti"
                         t={(s: string) => s}
                         components={[
-                          <ButtonNaked
+                          <MIButton
+                            variant="text"
                             key="delivered"
                             data-testid="deliveredLink"
                             size="medium"
@@ -141,7 +133,7 @@ const HowItWorksContactWizard: React.FC<Props> = ({ goToNextStep, setShowPecWiza
             </MIAlert>
           )}
 
-          <Button
+          <MIButton
             fullWidth
             variant="contained"
             color="primary"
@@ -150,7 +142,7 @@ const HowItWorksContactWizard: React.FC<Props> = ({ goToNextStep, setShowPecWiza
             data-testid="continueButton"
           >
             {t('button.continue', { ns: 'common' })}
-          </Button>
+          </MIButton>
 
           {!defaultPECAddress && (
             <Divider
@@ -170,9 +162,9 @@ const HowItWorksContactWizard: React.FC<Props> = ({ goToNextStep, setShowPecWiza
           <Typography variant="body2" mb={1}>
             {t('legal-contacts.sercq-send-wizard.step_1.have-pec-description')}
           </Typography>
-          <ButtonNaked color="primary" size="medium" onClick={handleShowPecWizard}>
+          <MIButton variant="text" color="primary" size="medium" onClick={handleShowPecWizard}>
             {t('legal-contacts.sercq-send-wizard.step_1.insert-pec')}
-          </ButtonNaked>
+          </MIButton>
         </Box>
       )}
 

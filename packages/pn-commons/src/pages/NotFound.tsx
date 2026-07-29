@@ -1,5 +1,5 @@
-import { Box, Button, Stack, Typography } from '@mui/material';
-import { IllusMIError } from '@pagopa/mui-italia';
+import { Box, Stack, Typography } from '@mui/material';
+import { IllusMIError, MIButton } from '@pagopa/mui-italia';
 
 import { getLocalizedOrDefaultLabel } from '../utility/localization.utility';
 
@@ -47,7 +47,7 @@ const NotFound: React.FC<Props> = ({ isLogged = true, goBackAction }) => (
       )}
     </Typography>
 
-    <Button
+    <MIButton
       variant="contained"
       onClick={goBackAction}
       sx={{ my: 4 }}
@@ -56,7 +56,7 @@ const NotFound: React.FC<Props> = ({ isLogged = true, goBackAction }) => (
       {isLogged
         ? getLocalizedOrDefaultLabel('common', 'not-found.back-to-home', 'Torna alla home')
         : getLocalizedOrDefaultLabel('common', 'button.go-to-login', 'Accedi')}
-    </Button>
+    </MIButton>
   </Stack>
 );
 export default NotFound;

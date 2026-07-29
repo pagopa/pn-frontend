@@ -1,7 +1,8 @@
 import React, { JSXElementConstructor, ReactNode } from 'react';
 
-import { Box, Button, ButtonProps, DialogActionsProps, DialogTitle } from '@mui/material';
+import { Box, Button, DialogActionsProps, DialogTitle } from '@mui/material';
 import { PnDialog, PnDialogActions, PnDialogContent } from '@pagopa-pn/pn-commons';
+import { MIButtonProps } from '@pagopa/mui-italia';
 
 import PnDialogIllustration from './PnDialog/PnDialogIllustration';
 
@@ -11,12 +12,12 @@ type Props = {
   contentAlign?: 'left' | 'center';
   slots?: {
     illustration?: ReactNode;
-    confirmButton?: JSXElementConstructor<ButtonProps>;
-    closeButton?: JSXElementConstructor<ButtonProps>;
+    confirmButton?: JSXElementConstructor<MIButtonProps>;
+    closeButton?: JSXElementConstructor<MIButtonProps>;
   };
   slotsProps?: {
-    confirmButton?: ButtonProps;
-    closeButton?: ButtonProps;
+    confirmButton?: MIButtonProps;
+    closeButton?: MIButtonProps;
     actions?: DialogActionsProps;
   };
   children?: React.ReactNode;

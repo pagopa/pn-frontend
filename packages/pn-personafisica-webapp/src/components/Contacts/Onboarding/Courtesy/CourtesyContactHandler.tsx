@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 
 import { EmailOutlined, PhoneOutlined } from '@mui/icons-material';
 import { Stack, Typography } from '@mui/material';
-import { ButtonNaked } from '@pagopa/mui-italia';
+import { ButtonNaked, MIButton } from '@pagopa/mui-italia';
 
 import { ContactState, OnboardingAvailableFlows } from '../../../../models/Onboarding';
 import { PFEventsType } from '../../../../models/PFEventsType';
@@ -112,14 +112,15 @@ const CourtesyContactHandler: React.FC<Props> = ({
           {labels.collapsed.label}
         </Typography>
 
-        <ButtonNaked
+        <MIButton
+          variant="text"
           color="primary"
           size="medium"
           onClick={onExpand}
           sx={{ alignSelf: 'flex-start', fontWeight: 700 }}
         >
           {labels.collapsed.buttonLabel}
-        </ButtonNaked>
+        </MIButton>
       </Stack>
     );
   }

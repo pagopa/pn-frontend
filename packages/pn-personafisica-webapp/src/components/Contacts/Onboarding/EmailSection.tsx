@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 
 import MailOutlineIcon from '@mui/icons-material/MailOutline';
 import { Stack, Typography } from '@mui/material';
-import { ButtonNaked } from '@pagopa/mui-italia';
+import { MIButton } from '@pagopa/mui-italia';
 
 import { EmailContactState } from '../../../models/Onboarding';
 import { ChannelType } from '../../../models/contacts';
@@ -57,14 +57,15 @@ const EmailSection: React.FC<Props> = ({
           {t('onboarding.digital-domicile.pec.optional-email-description')}
         </Typography>
 
-        <ButtonNaked
+        <MIButton
+          variant="text"
           color="primary"
           size="medium"
           onClick={onExpand}
           sx={{ alignSelf: 'flex-start', fontWeight: 700 }}
         >
           {t('onboarding.digital-domicile.pec.email-cta')}
-        </ButtonNaked>
+        </MIButton>
       </Stack>
     );
   }

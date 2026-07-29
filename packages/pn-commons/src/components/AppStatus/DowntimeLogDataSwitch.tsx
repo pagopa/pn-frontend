@@ -1,7 +1,7 @@
 import DownloadIcon from '@mui/icons-material/Download';
-import { Button, Typography } from '@mui/material';
+import { Typography } from '@mui/material';
 import { Stack } from '@mui/system';
-import { MIChip } from '@pagopa/mui-italia';
+import { MIButton, MIChip } from '@pagopa/mui-italia';
 
 import { Downtime, DowntimeStatus } from '../../models/AppStatus';
 import { Row } from '../../models/PnTable';
@@ -65,7 +65,7 @@ const DowntimeLogDataSwitch: React.FC<{
   }
   if (type === 'legalFactId') {
     return data.fileAvailable ? (
-      <Button
+      <MIButton
         sx={{ px: 0 }}
         startIcon={<DownloadIcon />}
         data-testid="download-legal-fact"
@@ -77,7 +77,7 @@ const DowntimeLogDataSwitch: React.FC<{
         }}
       >
         {getLocalizedOrDefaultLabel('appStatus', 'legends.legalFactDownload')}
-      </Button>
+      </MIButton>
     ) : (
       <Typography variant="body2" sx={{ color: 'text.secondary' }}>
         {getLocalizedOrDefaultLabel('appStatus', `legends.noFileAvailableByStatus.${data.status}`)}

@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 
 import { Typography } from '@mui/material';
 import { EventAction, PnWizard, PnWizardStep } from '@pagopa-pn/pn-commons';
-import { ButtonNaked } from '@pagopa/mui-italia';
+import { MIButton } from '@pagopa/mui-italia';
 
 import LegalContactManager, {
   DigitalDomicileManagementAction,
@@ -47,25 +47,25 @@ const DigitalContactManagement: React.FC = () => {
 
   const getPreviouButton = () =>
     currentAction === DigitalDomicileManagementAction.ADD_SPECIAL_CONTACT ? (
-      <ButtonNaked
+      <MIButton
+        variant="text"
         data-testid="prev-button"
         color={'primary'}
         fullWidth
         sx={{ fontSize: '16px', width: { xs: 'unset', md: 'auto' }, mt: { xs: 3, md: 'unset' } }}
         onClick={() => setCurrentAction(DigitalDomicileManagementAction.DEFAULT)}
-        variant="naked"
       >
         {t('button.indietro', { ns: 'common' })}
-      </ButtonNaked>
+      </MIButton>
     ) : (
-      <ButtonNaked
+      <MIButton
         onClick={() => navigate(-1)}
         color="primary"
         size="medium"
         sx={{ fontSize: '16px', width: { xs: 'unset', md: 'auto' }, mx: 'auto' }}
       >
         {t('button.indietro', { ns: 'common' })}
-      </ButtonNaked>
+      </MIButton>
     );
 
   const handleSpecialContactAdded = (meta: { channelType: ChannelType; senderName: string }) => {

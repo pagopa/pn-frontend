@@ -1,8 +1,9 @@
 import { Fragment, ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { Box, Button, Paper, Typography } from '@mui/material';
+import { Box, Paper, Typography } from '@mui/material';
 import { SectionHeading, useIsMobile } from '@pagopa-pn/pn-commons';
+import { MIButton } from '@pagopa/mui-italia';
 
 type Props = {
   children: ReactNode;
@@ -49,7 +50,7 @@ const NewNotificationCard = ({
         alignItems="center"
         sx={{ marginTop: '40px', marginBottom: '20px' }}
       >
-        <Button
+        <MIButton
           id="step-submit"
           variant="contained"
           type="submit"
@@ -58,9 +59,9 @@ const NewNotificationCard = ({
           fullWidth={isMobile}
         >
           {submitLabel || t('button.continue')}
-        </Button>
+        </MIButton>
         {previousStepLabel && (
-          <Button
+          <MIButton
             id="previous-step"
             variant="outlined"
             type="button"
@@ -70,7 +71,7 @@ const NewNotificationCard = ({
             sx={{ marginTop: isMobile ? 2 : 0 }}
           >
             {previousStepLabel}
-          </Button>
+          </MIButton>
         )}
       </Box>
     </Fragment>

@@ -16,8 +16,6 @@ import CloseIcon from '@mui/icons-material/Close';
 import CreateIcon from '@mui/icons-material/Create';
 import DeleteIcon from '@mui/icons-material/Delete';
 import {
-  Button,
-  ButtonProps,
   InputAdornment,
   Stack,
   SvgIconProps,
@@ -27,7 +25,7 @@ import {
   TypographyProps,
 } from '@mui/material';
 import { useIsMobile } from '@pagopa-pn/pn-commons';
-import { ButtonNaked } from '@pagopa/mui-italia';
+import { MIButton, MIButtonProps } from '@pagopa/mui-italia';
 
 import { ChannelType } from '../../models/contacts';
 import {
@@ -43,13 +41,13 @@ type Props = {
   channelType: ChannelType;
   slots?: {
     label?: JSXElementConstructor<TypographyProps>;
-    editButton?: JSXElementConstructor<ButtonProps>;
+    editButton?: JSXElementConstructor<MIButtonProps>;
     leadingEditIcon?: JSXElementConstructor<SvgIconProps>;
   };
   slotsProps?: {
     container?: CSSProperties;
     textField?: Partial<TextFieldProps>;
-    button?: Partial<ButtonProps>;
+    button?: Partial<MIButtonProps>;
     leadingEditIcon?: Partial<SvgIconProps>;
   };
   showLabelOnEdit?: boolean;
@@ -96,7 +94,7 @@ const DigitalContact = forwardRef<{ toggleEdit: () => void }, Props>(
     const contactType = channelType.toLowerCase();
 
     const Label = slots?.label || Typography;
-    const EditButton = slots?.editButton || ButtonNaked;
+    const EditButton = slots?.editButton || MIButton;
     const LeadingEditIcon = slots?.leadingEditIcon;
 
     // value contains the prefix
@@ -224,7 +222,7 @@ const DigitalContact = forwardRef<{ toggleEdit: () => void }, Props>(
               {...slotsProps?.textField}
               {...semanticTextFieldProps}
             />
-            <Button
+            <MIButton
               id={`${senderId}_${contactType}-button`}
               variant="contained"
               fullWidth={isMobile}
@@ -235,16 +233,17 @@ const DigitalContact = forwardRef<{ toggleEdit: () => void }, Props>(
               {...slotsProps?.button}
             >
               {insertButtonLabel}
-            </Button>
+            </MIButton>
             {onCancelInsert && (
-              <ButtonNaked
+              <MIButton
+                variant="text"
                 color="error"
                 onClick={onCancelInsert}
                 sx={{ fontWeight: 700, color: 'error.dark' }}
                 size="medium"
               >
                 {t('button.annulla')}
-              </ButtonNaked>
+              </MIButton>
             )}
           </Stack>
         </form>
@@ -298,7 +297,8 @@ const DigitalContact = forwardRef<{ toggleEdit: () => void }, Props>(
               {...semanticTextFieldProps}
             />
             <Stack direction={{ xs: 'column', lg: 'row' }} spacing={2}>
-              <ButtonNaked
+              <MIButton
+                variant="text"
                 key="saveButton"
                 color="primary"
                 type="submit"
@@ -308,8 +308,8 @@ const DigitalContact = forwardRef<{ toggleEdit: () => void }, Props>(
                 startIcon={<CheckIcon />}
               >
                 {t('button.conferma')}
-              </ButtonNaked>
-              <ButtonNaked
+              </MIButton>
+              <MIButton
                 color="error"
                 onClick={onCancelEdit}
                 sx={{
@@ -321,7 +321,7 @@ const DigitalContact = forwardRef<{ toggleEdit: () => void }, Props>(
                 startIcon={<CloseIcon />}
               >
                 {t('button.annulla')}
-              </ButtonNaked>
+              </MIButton>
             </Stack>
           </>
         )}
@@ -386,7 +386,8 @@ const DigitalContact = forwardRef<{ toggleEdit: () => void }, Props>(
                 {t('button.modifica')}
               </EditButton>
               {onDelete && (
-                <ButtonNaked
+                <MIButton
+                  variant="text"
                   id={`cancelContact-${senderId}_${contactType}`}
                   color="error"
                   onClick={onDelete}
@@ -395,7 +396,7 @@ const DigitalContact = forwardRef<{ toggleEdit: () => void }, Props>(
                   size="medium"
                 >
                   {t('button.elimina')}
-                </ButtonNaked>
+                </MIButton>
               )}
             </Stack>
           </Stack>

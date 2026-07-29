@@ -1,17 +1,9 @@
 import { Trans, useTranslation } from 'react-i18next';
 
 import ClearOutlinedIcon from '@mui/icons-material/ClearOutlined';
-import {
-  Button,
-  Dialog,
-  DialogContent,
-  Grid,
-  Icon,
-  IconButton,
-  Link,
-  Typography,
-} from '@mui/material';
+import { Dialog, DialogContent, Grid, Icon, IconButton, Link, Typography } from '@mui/material';
 import { AppRouteParams } from '@pagopa-pn/pn-commons';
+import { MIButton } from '@pagopa/mui-italia';
 
 import SpidBig from '../assets/spid_big.svg';
 import { PFLoginEventsType } from '../models/PFLoginEventsType';
@@ -108,7 +100,7 @@ const SpidSelect = ({ show, onClose, rapidAccess }: Props) => {
                   textAlign={i % 2 === 0 ? 'right' : 'left'}
                   sx={{ minWidth: '100px' }}
                 >
-                  <Button
+                  <MIButton
                     id={`spid-select-${IDP.entityId}`}
                     onClick={() => getSPID(IDP)}
                     sx={{ width: '100px', padding: '0' }}
@@ -117,7 +109,7 @@ const SpidSelect = ({ show, onClose, rapidAccess }: Props) => {
                     <Icon sx={{ width: '100px', height: '48px' }}>
                       <img width="100px" src={IDP.imageUrl} alt={IDP.name} />
                     </Icon>
-                  </Button>
+                  </MIButton>
                 </Grid>
               ))}
             </Grid>
@@ -140,7 +132,7 @@ const SpidSelect = ({ show, onClose, rapidAccess }: Props) => {
                 </Link>
               </Trans>
             </Typography>
-            <Button
+            <MIButton
               type="submit"
               variant="outlined"
               id="backButton"
@@ -152,7 +144,7 @@ const SpidSelect = ({ show, onClose, rapidAccess }: Props) => {
               onClick={onClose}
             >
               {t('spidSelect.cancelButton')}
-            </Button>
+            </MIButton>
           </Grid>
         </Grid>
       </DialogContent>

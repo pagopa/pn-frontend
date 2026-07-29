@@ -3,7 +3,7 @@ import { Trans, useTranslation } from 'react-i18next';
 
 import { Box, Link, Typography } from '@mui/material';
 import { EmptyState } from '@pagopa-pn/pn-commons';
-import { ButtonNaked, IllusMIError, IllusMIMessage } from '@pagopa/mui-italia';
+import { IllusMIError, IllusMIMessage, MIButton } from '@pagopa/mui-italia';
 
 type Props = {
   filtersApplied: boolean;
@@ -120,7 +120,8 @@ export const NotificationsGenericErrorState: React.FC<NotificationsGenericErrorS
     <NotificationsEmptyStateView
       title={t('empty-state.generic-error')}
       action={
-        <ButtonNaked
+        <MIButton
+          variant="text"
           size="medium"
           color="primary"
           id="call-to-action-first"
@@ -128,7 +129,7 @@ export const NotificationsGenericErrorState: React.FC<NotificationsGenericErrorS
           onClick={onRetry}
         >
           {t('empty-state.generic-error-cta')}
-        </ButtonNaked>
+        </MIButton>
       }
     />
   );
@@ -148,7 +149,8 @@ const NotificationsEmptyState: React.FC<Props> = ({
       <NotificationsEmptyStateView
         title={t('notifiche:empty-state.timeout')}
         action={
-          <ButtonNaked
+          <MIButton
+            variant="text"
             size="medium"
             color="primary"
             id="call-to-action-first"
@@ -156,7 +158,7 @@ const NotificationsEmptyState: React.FC<Props> = ({
             onClick={onRetry}
           >
             {t('common:messages.generic-api-error-action-text')}
-          </ButtonNaked>
+          </MIButton>
         }
       />
     );
@@ -168,7 +170,8 @@ const NotificationsEmptyState: React.FC<Props> = ({
         title={t('notifiche:empty-state.filtered')}
         description={t('notifiche:empty-state.filtered-description')}
         action={
-          <ButtonNaked
+          <MIButton
+            variant="text"
             size="medium"
             color="primary"
             id="call-to-action-first"
@@ -176,7 +179,7 @@ const NotificationsEmptyState: React.FC<Props> = ({
             onClick={onCleanFilters}
           >
             {t('notifiche:empty-state.clean-filters-cta')}
-          </ButtonNaked>
+          </MIButton>
         }
       />
     );

@@ -1,17 +1,8 @@
 import React, { JSXElementConstructor, ReactElement, ReactNode } from 'react';
 
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import {
-  Box,
-  Button,
-  ButtonProps,
-  Paper,
-  PaperProps,
-  Stack,
-  StackProps,
-  Typography,
-} from '@mui/material';
-import { ButtonNaked, IllusCompleted, IllustrationProps } from '@pagopa/mui-italia';
+import { Box, Paper, PaperProps, Stack, StackProps, Typography } from '@mui/material';
+import { IllusCompleted, IllustrationProps, MIButton, MIButtonProps } from '@pagopa/mui-italia';
 
 import { checkChildren } from '../../utility/children.utility';
 import { getLocalizedOrDefaultLabel } from '../../utility/localization.utility';
@@ -24,21 +15,21 @@ type Props = {
   title: ReactNode;
   children: ReactNode;
   slots?: {
-    nextButton?: JSXElementConstructor<ButtonProps>;
-    prevButton?: JSXElementConstructor<ButtonProps>;
-    exitButton?: JSXElementConstructor<ButtonProps>;
+    nextButton?: JSXElementConstructor<MIButtonProps>;
+    prevButton?: JSXElementConstructor<MIButtonProps>;
+    exitButton?: JSXElementConstructor<MIButtonProps>;
     feedbackIcon?: JSXElementConstructor<IllustrationProps>;
   };
   slotsProps?: {
     stepContainer?: Partial<PaperProps>;
-    nextButton?: Omit<ButtonProps, 'onClick'> & {
+    nextButton?: Omit<MIButtonProps, 'onClick'> & {
       onClick?: (next: () => void, step: number) => void;
       label?: string;
     };
-    prevButton?: Omit<ButtonProps, 'onClick'> & {
+    prevButton?: Omit<MIButtonProps, 'onClick'> & {
       onClick?: (previous: () => void, step: number) => void;
     };
-    exitButton?: ButtonProps;
+    exitButton?: MIButtonProps;
     actions?: StackProps;
     container?: Omit<StackProps, 'children'> & { 'data-testid'?: string };
     feedback?: {
@@ -62,9 +53,9 @@ const PnWizard: React.FC<Props> = ({
   slotsProps,
 }) => {
   checkChildren(children, [{ cmp: PnWizardStep }], 'PnWizard');
-  const PrevButton = slots?.prevButton || Button;
-  const NextButton = slots?.nextButton || Button;
-  const ExitButton = slots?.exitButton || ButtonNaked;
+  const PrevButton = slots?.prevButton || MIButton;
+  const NextButton = slots?.nextButton || MIButton;
+  const ExitButton = slots?.exitButton || MIButton;
   const FeedbackIcon = slots?.feedbackIcon || IllusCompleted;
 
   const childrens = React.Children.toArray(children);
@@ -127,14 +118,14 @@ const PnWizard: React.FC<Props> = ({
             {feedback.content}
           </Typography>
 
-          <Button
+          <MIButton
             data-testid="wizard-feedback-button"
             variant="contained"
             sx={{ mt: 2, mb: 11 }}
             onClick={feedback.onClick}
           >
             {feedback.buttonText}
-          </Button>
+          </MIButton>
         </Box>
       </Box>
     );

@@ -1,8 +1,9 @@
 import { ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { Box, Button, Paper, Stack, Typography } from '@mui/material';
+import { Box, Paper, Stack, Typography } from '@mui/material';
 import { useIsMobile } from '@pagopa-pn/pn-commons';
+import { MIButton } from '@pagopa/mui-italia';
 
 type Props = {
   children: ReactNode;
@@ -43,7 +44,7 @@ const NewPublicKeyCard: React.FC<Props> = ({
         alignItems="center"
         sx={{ mt: 3, mb: 5 }}
       >
-        <Button
+        <MIButton
           id="step-submit"
           variant="contained"
           onClick={onContinueClick}
@@ -52,9 +53,9 @@ const NewPublicKeyCard: React.FC<Props> = ({
           fullWidth={isMobile}
         >
           {submitLabel ?? t('button.end')}
-        </Button>
+        </MIButton>
         {previousStepLabel && (
-          <Button
+          <MIButton
             id="previous-step"
             variant="outlined"
             type="button"
@@ -64,7 +65,7 @@ const NewPublicKeyCard: React.FC<Props> = ({
             sx={{ mt: { xs: 2, lg: 0 } }}
           >
             {previousStepLabel}
-          </Button>
+          </MIButton>
         )}
       </Stack>
     </>

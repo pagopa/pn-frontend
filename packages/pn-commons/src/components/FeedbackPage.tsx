@@ -1,7 +1,7 @@
 import { FC, ReactNode } from 'react';
 
-import { Box, Button, Typography } from '@mui/material';
-import { IllusMICompleted, IllusMIError } from '@pagopa/mui-italia';
+import { Box, Typography } from '@mui/material';
+import { IllusMICompleted, IllusMIError, MIButton } from '@pagopa/mui-italia';
 
 type FeedbackPageProps = {
   /** Visual outcome to render a suitable illustration */
@@ -45,7 +45,7 @@ const FeedbackPage: FC<FeedbackPageProps> = ({ outcome, title, description, acti
         </Typography>
         {getDescription()}
         {action && (
-          <Button
+          <MIButton
             id="actionButton"
             variant="contained"
             sx={{ mt: 4 }}
@@ -53,7 +53,7 @@ const FeedbackPage: FC<FeedbackPageProps> = ({ outcome, title, description, acti
             data-testid="feedback-button"
           >
             {action.text}
-          </Button>
+          </MIButton>
         )}
       </Box>
     </Box>

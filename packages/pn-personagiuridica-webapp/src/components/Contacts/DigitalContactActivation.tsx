@@ -2,9 +2,9 @@ import React, { useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
-import { Button, DialogContentText, Typography } from '@mui/material';
+import { DialogContentText, Typography } from '@mui/material';
 import { ConfirmationModal, PnWizard, PnWizardStep } from '@pagopa-pn/pn-commons';
-import { ButtonNaked } from '@pagopa/mui-italia';
+import { MIButton } from '@pagopa/mui-italia';
 
 import PecContactWizard from '../../components/Contacts/PecContactWizard';
 import { NOTIFICHE } from '../../navigation/routes.const';
@@ -67,18 +67,20 @@ const DigitalContactActivation: React.FC<Props> = ({ isTransferring = false, onG
   const getPreviousButton = () => {
     if (activeStep === 0) {
       return (
-        <ButtonNaked
+        <MIButton
+          variant="text"
           onClick={onGoBack ? () => onGoBack() : () => navigate(-1)}
           color="primary"
           size="medium"
           sx={{ mx: 'auto' }}
         >
           {t('button.annulla', { ns: 'common' })}
-        </ButtonNaked>
+        </MIButton>
       );
     } else {
       return (
-        <ButtonNaked
+        <MIButton
+          variant="text"
           onClick={goToPreviousStep}
           color="primary"
           size="medium"
@@ -86,7 +88,7 @@ const DigitalContactActivation: React.FC<Props> = ({ isTransferring = false, onG
           sx={isEmailSmsStep ? { mt: { xs: 2, md: 0 } } : { mt: 0 }}
         >
           {t('button.indietro', { ns: 'common' })}
-        </ButtonNaked>
+        </MIButton>
       );
     }
   };
@@ -94,7 +96,7 @@ const DigitalContactActivation: React.FC<Props> = ({ isTransferring = false, onG
   const getNextButton = () => {
     if (isEmailSmsStep) {
       return (
-        <Button
+        <MIButton
           variant="contained"
           onClick={handleConfirmEmailSmsStep}
           color="primary"
@@ -102,7 +104,7 @@ const DigitalContactActivation: React.FC<Props> = ({ isTransferring = false, onG
           sx={{ width: { xs: '100%', md: 'auto' } }}
         >
           {t('button.continue', { ns: 'common' })}
-        </Button>
+        </MIButton>
       );
     }
 

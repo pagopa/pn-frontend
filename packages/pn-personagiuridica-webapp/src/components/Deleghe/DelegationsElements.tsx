@@ -4,7 +4,6 @@ import { useTranslation } from 'react-i18next';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import {
   Box,
-  Button,
   DialogContentText,
   IconButton,
   Menu as MUIMenu,
@@ -21,7 +20,7 @@ import {
   Row,
   appStateActions,
 } from '@pagopa-pn/pn-commons';
-import { Tag } from '@pagopa/mui-italia';
+import { MIButton, Tag } from '@pagopa/mui-italia';
 import { AnyAction } from '@reduxjs/toolkit';
 
 import { DelegationColumnData, DelegationStatus } from '../../models/Deleghe';
@@ -255,8 +254,8 @@ export const Menu: React.FC<Props> = ({ menuType, id, userLogged, row, onAction 
         open={showConfirmationModal}
         title={titleModal}
         slots={{
-          confirmButton: Button,
-          closeButton: Button,
+          confirmButton: MIButton,
+          closeButton: MIButton,
         }}
         slotsProps={{
           closeButton: {
@@ -413,7 +412,7 @@ export const AcceptButton: React.FC<AcceptButtonProps> = ({ id, name, onAccept }
         handleCloseAcceptModal={handleCloseAcceptModal}
         handleConfirm={handleConfirm}
       />
-      <Button
+      <MIButton
         id="accept-button"
         onClick={handleAcceptClick}
         variant={'contained'}
@@ -422,7 +421,7 @@ export const AcceptButton: React.FC<AcceptButtonProps> = ({ id, name, onAccept }
         size="small"
       >
         {t('deleghe.accept')}
-      </Button>
+      </MIButton>
     </>
   );
 };

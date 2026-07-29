@@ -23,7 +23,7 @@ import {
   Typography,
 } from '@mui/material';
 import { PhysicalAddressLookup, RecipientType, dataRegex } from '@pagopa-pn/pn-commons';
-import { ButtonNaked, MIAlert } from '@pagopa/mui-italia';
+import { MIAlert, MIButton } from '@pagopa/mui-italia';
 
 import {
   NewNotificationDigitalAddressType,
@@ -350,7 +350,8 @@ const Recipient: React.FC<Props> = ({
                   <Stack direction="row" justifyContent="space-between">
                     <FormBoxTitle text={`${t('legal-entity')}`} />
                     {values.recipients.length > 1 && (
-                      <ButtonNaked
+                      <MIButton
+                        variant="text"
                         data-testid="DeleteRecipientIcon"
                         aria-label={t('remove-recipient')}
                         onClick={() =>
@@ -364,7 +365,7 @@ const Recipient: React.FC<Props> = ({
                         }
                       >
                         <Delete color="error" />
-                      </ButtonNaked>
+                      </MIButton>
                     )}
                   </Stack>
                   <FormBoxSubtitle text={t('recipient-info-subtitle')} />
@@ -563,7 +564,8 @@ const Recipient: React.FC<Props> = ({
                 </FormBox>
                 {values.recipients.length < 5 && values.recipients.length - 1 === index && (
                   <Stack mt={2} direction="row" justifyContent="space-between">
-                    <ButtonNaked
+                    <MIButton
+                      variant="text"
                       id="add-recipient"
                       startIcon={<Add />}
                       onClick={() => {
@@ -574,7 +576,7 @@ const Recipient: React.FC<Props> = ({
                       data-testid="add-recipient"
                     >
                       {t('add-recipient')}
-                    </ButtonNaked>
+                    </MIButton>
                   </Stack>
                 )}
               </Fragment>

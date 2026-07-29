@@ -3,7 +3,7 @@ import { Trans, useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
 import AddIcon from '@mui/icons-material/Add';
-import { Box, Button, Link, Stack, Typography } from '@mui/material';
+import { Box, Link, Stack, Typography } from '@mui/material';
 import {
   ApiErrorWrapper,
   CodeModal,
@@ -18,6 +18,7 @@ import {
   Row,
   Sort,
 } from '@pagopa-pn/pn-commons';
+import { MIButton } from '@pagopa/mui-italia';
 
 import { DelegationColumnData, DelegationData } from '../../models/Deleghe';
 import { PFEventsType } from '../../models/PFEventsType';
@@ -126,7 +127,7 @@ const Delegates = () => {
         <Stack mb={2} direction={'row'} justifyContent={'space-between'} alignItems={'center'}>
           <Typography variant="h5">{t('deleghe.delegatesTitle')}</Typography>
           <Box>
-            <Button
+            <MIButton
               id="add-delegation-button"
               variant="outlined"
               onClick={() => handleAddDelegationClick()}
@@ -134,7 +135,7 @@ const Delegates = () => {
             >
               <AddIcon fontSize={'small'} sx={{ marginRight: 1 }} />
               {t('deleghe.add')}
-            </Button>
+            </MIButton>
           </Box>
         </Stack>
         <ApiErrorWrapper

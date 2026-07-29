@@ -3,7 +3,7 @@ import { Trans, useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
 import AddIcon from '@mui/icons-material/Add';
-import { Box, Button, Link, Typography } from '@mui/material';
+import { Box, Link, Typography } from '@mui/material';
 import {
   ApiErrorWrapper,
   CardElement,
@@ -17,6 +17,7 @@ import {
   PnCardsList,
   Row,
 } from '@pagopa-pn/pn-commons';
+import { MIButton } from '@pagopa/mui-italia';
 
 import { DelegationColumnData, DelegationData } from '../../models/Deleghe';
 import { PFEventsType } from '../../models/PFEventsType';
@@ -106,7 +107,7 @@ const MobileDelegates = () => {
           {t('deleghe.delegatesTitle')}
         </Typography>
         <Box mb={2}>
-          <Button
+          <MIButton
             id="add-delegation-button"
             variant="outlined"
             onClick={() => handleAddDelegationClick()}
@@ -115,7 +116,7 @@ const MobileDelegates = () => {
           >
             <AddIcon fontSize={'small'} sx={{ marginRight: 1 }} />
             {t('deleghe.add')}
-          </Button>
+          </MIButton>
         </Box>
         <ApiErrorWrapper
           apiId={DELEGATION_ACTIONS.GET_MANDATES_BY_DELEGATOR}

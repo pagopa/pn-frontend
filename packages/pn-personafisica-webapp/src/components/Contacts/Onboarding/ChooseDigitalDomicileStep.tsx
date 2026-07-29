@@ -1,8 +1,8 @@
 import { useTranslation } from 'react-i18next';
 
-import { Box, Button, Divider, Stack, Typography } from '@mui/material';
+import { Box, Divider, Stack, Typography } from '@mui/material';
 import { useIsMobile } from '@pagopa-pn/pn-commons';
-import { ButtonNaked, MIChip } from '@pagopa/mui-italia';
+import { MIButton, MIChip } from '@pagopa/mui-italia';
 
 import OnboardingImage from './OnboardingImage';
 
@@ -67,14 +67,14 @@ const ChooseDigitalDomicileStep: React.FC<Props> = ({
         <Typography variant="body2" color="text.secondary" mb={2}>
           {t('onboarding.digital-domicile.choice.description')}
         </Typography>
-        <Button
+        <MIButton
           fullWidth={isMobile}
           variant="contained"
           onClick={onSelectSend}
           data-testid="select-send-button"
         >
           {t('onboarding.digital-domicile.choice.cta')}
-        </Button>
+        </MIButton>
 
         <Divider sx={{ my: 2 }} />
 
@@ -83,7 +83,8 @@ const ChooseDigitalDomicileStep: React.FC<Props> = ({
             {t('onboarding.digital-domicile.choice.pec.description')}
           </Typography>
 
-          <ButtonNaked
+          <MIButton
+            variant="text"
             color="primary"
             size="medium"
             onClick={onSelectPec}
@@ -91,7 +92,7 @@ const ChooseDigitalDomicileStep: React.FC<Props> = ({
             sx={{ fontWeight: 700 }}
           >
             {t('onboarding.digital-domicile.choice.pec.cta')}
-          </ButtonNaked>
+          </MIButton>
         </Box>
       </Box>
       <OnboardingImage

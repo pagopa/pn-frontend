@@ -1,7 +1,8 @@
 import { isEqual } from 'lodash-es';
 import { FormEvent, PropsWithChildren, useRef } from 'react';
 
-import { Box, Button, DialogActions, DialogContent, Grid } from '@mui/material';
+import { Box, DialogActions, DialogContent, Grid } from '@mui/material';
+import { MIButton } from '@pagopa/mui-italia';
 
 import { useIsMobile } from '../../../hooks/useIsMobile';
 import { filtersApplied } from '../../../utility/genericFunctions.utility';
@@ -60,7 +61,7 @@ const SmartFilter = <FormValues extends object>({
   };
 
   const confirmAction = (
-    <Button
+    <MIButton
       id="confirm-button"
       data-testid="confirmButton"
       variant="outlined"
@@ -69,13 +70,18 @@ const SmartFilter = <FormValues extends object>({
       disabled={!formIsValid || isPreviousSearch}
     >
       {filterLabel}
-    </Button>
+    </MIButton>
   );
 
   const cancelAction = (
-    <Button data-testid="cancelButton" size="small" onClick={clearHandler} disabled={!filtersCount}>
+    <MIButton
+      data-testid="cancelButton"
+      size="small"
+      onClick={clearHandler}
+      disabled={!filtersCount}
+    >
       {cancelLabel}
-    </Button>
+    </MIButton>
   );
 
   if (isMobile) {

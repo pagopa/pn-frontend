@@ -3,7 +3,7 @@ import { Trans, useTranslation } from 'react-i18next';
 
 import CompareArrowsIcon from '@mui/icons-material/CompareArrows';
 import PowerSettingsNewIcon from '@mui/icons-material/PowerSettingsNew';
-import { Avatar, Button, Stack, Typography } from '@mui/material';
+import { Avatar, Stack, Typography } from '@mui/material';
 import {
   EventAction,
   IllusAppIO,
@@ -13,7 +13,7 @@ import {
   appStateActions,
   useIsMobile,
 } from '@pagopa-pn/pn-commons';
-import { MIChip } from '@pagopa/mui-italia';
+import { MIButton, MIChip } from '@pagopa/mui-italia';
 
 import { PFEventsType } from '../../models/PFEventsType';
 import { AddressType, IOAllowedValues, IOContactStatus } from '../../models/contacts';
@@ -155,7 +155,7 @@ const IOContact: React.FC = () => {
   const getButton = () => {
     if (status === IOContactStatus.UNAVAILABLE) {
       return (
-        <Button
+        <MIButton
           variant="contained"
           onClick={handleDownload}
           color="primary"
@@ -163,12 +163,12 @@ const IOContact: React.FC = () => {
           sx={{ mt: 3 }}
         >
           {t('io-contact.download', { ns: 'recapiti' })}
-        </Button>
+        </MIButton>
       );
     }
     if (status === IOContactStatus.DISABLED) {
       return (
-        <Button
+        <MIButton
           variant="contained"
           onClick={handleOpenInfoModal}
           color="primary"
@@ -177,7 +177,7 @@ const IOContact: React.FC = () => {
           id="ioContactButton"
         >
           {t('io-contact.enable', { ns: 'recapiti' })}
-        </Button>
+        </MIButton>
       );
     }
     return null;

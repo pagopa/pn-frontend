@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import { Paper, Stack, Typography } from '@mui/material';
 import { EventAction } from '@pagopa-pn/pn-commons';
-import { ButtonNaked, MIChip } from '@pagopa/mui-italia';
+import { MIButton, MIChip } from '@pagopa/mui-italia';
 
 import { PFEventsType } from '../../models/PFEventsType';
 import { ChannelType } from '../../models/contacts';
@@ -40,7 +40,8 @@ const DigitalDomicileOption: React.FC<DigitalDomicileOption> = ({ title, content
     <Typography flexGrow={1} variant="body1" fontSize="14px" mt={1} mb={3}>
       {content}
     </Typography>
-    <ButtonNaked
+    <MIButton
+      variant="text"
       endIcon={<ArrowForwardIcon />}
       color="primary"
       size="small"
@@ -48,7 +49,7 @@ const DigitalDomicileOption: React.FC<DigitalDomicileOption> = ({ title, content
       onClick={action.callback}
     >
       {action.text}
-    </ButtonNaked>
+    </MIButton>
   </Stack>
 );
 

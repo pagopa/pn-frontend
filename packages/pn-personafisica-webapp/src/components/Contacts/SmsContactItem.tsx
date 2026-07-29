@@ -3,9 +3,9 @@ import { Trans, useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router-dom';
 
 import PowerSettingsNewIcon from '@mui/icons-material/PowerSettingsNew';
-import { Box, ButtonProps, TextFieldProps, Typography, TypographyProps } from '@mui/material';
+import { Box, TextFieldProps, Typography, TypographyProps } from '@mui/material';
 import { EventAction, PnInfoCard, appStateActions } from '@pagopa-pn/pn-commons';
-import { ButtonNaked, MIChip } from '@pagopa/mui-italia';
+import { MIButton, MIButtonProps, MIChip } from '@pagopa/mui-italia';
 
 import { PFEventsType } from '../../models/PFEventsType';
 import {
@@ -44,7 +44,7 @@ interface SmsSlots {
 
 interface SmsSlotsProps {
   textField?: Partial<TextFieldProps>;
-  button?: Partial<ButtonProps>;
+  button?: Partial<MIButtonProps>;
 }
 
 interface SmsElemProps {
@@ -489,9 +489,14 @@ const SmsContactItem: React.FC<SmsItemProps> = ({
           <Typography variant="body1" fontWeight={600} fontSize="16px" mb={1}>
             {t('courtesy-contacts.email-sms-updates', { ns: 'recapiti' })}
           </Typography>
-          <ButtonNaked color="primary" sx={{ fontSize: '16px' }} onClick={handleSetInsertMode}>
+          <MIButton
+            variant="text"
+            color="primary"
+            sx={{ fontSize: '16px' }}
+            onClick={handleSetInsertMode}
+          >
             {t('courtesy-contacts.email-sms-add', { ns: 'recapiti' })}
-          </ButtonNaked>
+          </MIButton>
         </>
       )}
     </Box>

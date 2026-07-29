@@ -3,7 +3,7 @@ import { isEqual } from 'lodash-es';
 import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 
-import { Button, Chip, SxProps } from '@mui/material';
+import { Chip, SxProps } from '@mui/material';
 import { Box, Stack } from '@mui/system';
 import {
   CustomDatePicker,
@@ -15,6 +15,7 @@ import {
   today,
   useIsMobile,
 } from '@pagopa-pn/pn-commons';
+import { MIButton } from '@pagopa/mui-italia';
 
 import {
   GraphColors,
@@ -183,7 +184,7 @@ const FilterStatistics: React.FC<Props> = ({ filter, lastDate, className, sx }) 
           minDate={formik.values.startDate ?? tenYearsAgo}
           maxDate={maxEndDate}
         />
-        <Button
+        <MIButton
           id="filter-button"
           data-testid="filterButton"
           variant="outlined"
@@ -197,8 +198,8 @@ const FilterStatistics: React.FC<Props> = ({ filter, lastDate, className, sx }) 
           disabled={isInitialSearch || !formik.dirty || !formik.isValid}
         >
           {t('filter.buttons.filter')}
-        </Button>
-        <Button
+        </MIButton>
+        <MIButton
           data-testid="cancelButton"
           sx={{
             height: '43px !important',
@@ -210,7 +211,7 @@ const FilterStatistics: React.FC<Props> = ({ filter, lastDate, className, sx }) 
           disabled={isInitialSearch}
         >
           {t('filter.buttons.clear_filter')}
-        </Button>
+        </MIButton>
       </Box>
     </Stack>
   );

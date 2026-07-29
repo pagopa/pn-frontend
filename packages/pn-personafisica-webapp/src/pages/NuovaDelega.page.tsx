@@ -8,7 +8,6 @@ import AccountBalanceIcon from '@mui/icons-material/AccountBalance';
 import PeopleIcon from '@mui/icons-material/People';
 import {
   Box,
-  Button,
   Divider,
   FormControl,
   FormControlLabel,
@@ -35,7 +34,7 @@ import {
   useIsMobile,
   useSearchStringChangeInput,
 } from '@pagopa-pn/pn-commons';
-import { Autocomplete, IllusMICompleted } from '@pagopa/mui-italia';
+import { Autocomplete, IllusMICompleted, MIButton } from '@pagopa/mui-italia';
 
 import VerificationCodeComponent from '../components/Deleghe/VerificationCodeComponent';
 import LoadingPageWrapper from '../components/LoadingPageWrapper/LoadingPageWrapper';
@@ -564,7 +563,7 @@ const NuovaDelega = () => {
                         justifyContent={'flex-start'}
                       >
                         <Stack>
-                          <Button
+                          <MIButton
                             id="create-button"
                             sx={{ marginTop: '1rem', margin: 'auto' }}
                             type={'submit'}
@@ -572,7 +571,7 @@ const NuovaDelega = () => {
                             data-testid="createButton"
                           >
                             {t('nuovaDelega.form.submit')}
-                          </Button>
+                          </MIButton>
                         </Stack>
                       </Stack>
                     </Form>

@@ -2,8 +2,8 @@ import React, { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 
-import { Box, Button, Dialog, Typography } from '@mui/material';
-import { IllusMIError } from '@pagopa/mui-italia';
+import { Box, Dialog, Typography } from '@mui/material';
+import { IllusMIError, MIButton } from '@pagopa/mui-italia';
 
 import { PFLoginEventsType } from '../../models/PFLoginEventsType';
 import { ROUTE_ONE_IDENTITY_LOGIN } from '../../navigation/routes.const';
@@ -44,9 +44,9 @@ const OneIdentityLoginError: React.FC = () => {
         <Typography variant="body2" id="message" mb={8}>
           {t('loginError.message')}
         </Typography>
-        <Button id="login-button" variant="contained" onClick={goToLogin}>
+        <MIButton id="login-button" variant="contained" onClick={goToLogin}>
           {t('button.go-to-login', { ns: 'common' })}
-        </Button>
+        </MIButton>
       </Box>
     </Dialog>
   );

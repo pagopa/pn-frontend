@@ -2,7 +2,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
-import { Box, Button, Typography } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import {
   A11yMessage,
   ApiErrorWrapper,
@@ -15,7 +15,7 @@ import {
   useEventEmitter,
   useIsMobile,
 } from '@pagopa-pn/pn-commons';
-import { MIAlert } from '@pagopa/mui-italia';
+import { MIAlert, MIButton } from '@pagopa/mui-italia';
 
 import DesktopNotifications from '../components/Notifications/DesktopNotifications';
 import FilterNotifications from '../components/Notifications/FilterNotifications';
@@ -93,14 +93,14 @@ const Dashboard = () => {
     return IS_MANUAL_SEND_ENABLED ? (
       <Box display="flex" gap={5}>
         <NotificationSettingsDrawer />
-        <Button
+        <MIButton
           id="new-notification-btn"
           variant="contained"
           onClick={handleRouteManualSend}
           data-testid="newNotificationBtn"
         >
           {t('new-notification-button')}
-        </Button>
+        </MIButton>
       </Box>
     ) : (
       <MIAlert

@@ -2,9 +2,9 @@ import { useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 
-import { Box, Button, Dialog, Typography } from '@mui/material';
+import { Box, Dialog, Typography } from '@mui/material';
 import { sanitizeString } from '@pagopa-pn/pn-commons';
-import { IllusMIError } from '@pagopa/mui-italia';
+import { IllusMIError, MIButton } from '@pagopa/mui-italia';
 
 import { PFLoginEventsType } from '../../models/PFLoginEventsType';
 import { ROUTE_LOGIN } from '../../navigation/routes.const';
@@ -88,9 +88,9 @@ const LoginError = () => {
         <Typography variant="body2" id="message" mb={8}>
           {getErrorMessage()}
         </Typography>
-        <Button id="login-button" variant="contained" onClick={goToLogin}>
+        <MIButton id="login-button" variant="contained" onClick={goToLogin}>
           {t('button.go-to-login', { ns: 'common' })}
-        </Button>
+        </MIButton>
       </Box>
     </Dialog>
   );

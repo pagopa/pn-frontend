@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 
 import DeleteIcon from '@mui/icons-material/Delete';
 import { Box, Stack, Typography } from '@mui/material';
-import { ButtonNaked, MIChip } from '@pagopa/mui-italia';
+import { MIButton, MIChip } from '@pagopa/mui-italia';
 
 import { AddressType, ChannelType, DigitalAddress, Sender } from '../../models/contacts';
 import DigitalContact from './DigitalContact';
@@ -83,7 +83,8 @@ const SpecialContactItem: React.FC<Props> = ({
               >
                 {t('special-contacts.sercq_send')}
               </Typography>
-              <ButtonNaked
+              <MIButton
+                variant="text"
                 data-testid={`cancelContact-special_${channelType}`}
                 color="error"
                 onClick={handleDelete}
@@ -98,7 +99,7 @@ const SpecialContactItem: React.FC<Props> = ({
                 disabled={hasPecInValidationForEntity(senderId)}
               >
                 {t('button.disable', { ns: 'common' })}
-              </ButtonNaked>
+              </MIButton>
             </Stack>
           ) : (
             <DigitalContact

@@ -1,15 +1,9 @@
 import React, { MouseEventHandler, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import {
-  Button,
-  Checkbox,
-  DialogTitle,
-  FormControl,
-  FormControlLabel,
-  Typography,
-} from '@mui/material';
+import { Checkbox, DialogTitle, FormControl, FormControlLabel, Typography } from '@mui/material';
 import { PnDialog, PnDialogActions, PnDialogContent } from '@pagopa-pn/pn-commons';
+import { MIButton } from '@pagopa/mui-italia';
 
 type Props = {
   showModal: boolean;
@@ -65,17 +59,17 @@ const ConfirmCancellationDialog: React.FC<Props> = ({ showModal, onClose, onConf
         )}
       </PnDialogContent>
       <PnDialogActions>
-        <Button onClick={onClose} variant="outlined" data-testid="modalCloseBtnId">
+        <MIButton onClick={onClose} variant="outlined" data-testid="modalCloseBtnId">
           {t('button.indietro', { ns: 'common' })}
-        </Button>
-        <Button
+        </MIButton>
+        <MIButton
           onClick={onConfirm}
           disabled={payment ? !checked : false}
           variant="contained"
           data-testid="modalCloseAndProceedBtnId"
         >
           {t('detail.cancel-notification')}
-        </Button>
+        </MIButton>
       </PnDialogActions>
     </PnDialog>
   );

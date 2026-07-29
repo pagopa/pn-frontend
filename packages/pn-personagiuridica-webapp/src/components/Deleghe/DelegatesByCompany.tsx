@@ -3,7 +3,7 @@ import { Trans, useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
 import AddIcon from '@mui/icons-material/Add';
-import { Box, Button, Link, Stack, Typography } from '@mui/material';
+import { Box, Link, Stack, Typography } from '@mui/material';
 import {
   ApiErrorWrapper,
   EmptyState,
@@ -19,6 +19,7 @@ import {
   sortArray,
   useIsMobile,
 } from '@pagopa-pn/pn-commons';
+import { MIButton } from '@pagopa/mui-italia';
 
 import { DelegationColumnData } from '../../models/Deleghe';
 import { PGEventsType } from '../../models/PGEventsType';
@@ -158,7 +159,7 @@ const DelegatesByCompany = () => {
         <Typography variant="h6" mb={3}>
           {t('deleghe.delegatesTitle')}
         </Typography>
-        <Button
+        <MIButton
           id="add-deleghe"
           variant="outlined"
           onClick={handleAddDelegationClick}
@@ -166,7 +167,7 @@ const DelegatesByCompany = () => {
         >
           <AddIcon fontSize={'small'} sx={{ marginRight: 1 }} />
           {t('deleghe.add')}
-        </Button>
+        </MIButton>
       </Stack>
       <ApiErrorWrapper
         apiId={DELEGATION_ACTIONS.GET_MANDATES_BY_DELEGATOR}

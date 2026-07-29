@@ -1,7 +1,7 @@
 import { vi } from 'vitest';
 
 import BalconyIcon from '@mui/icons-material/Balcony';
-import { Button } from '@mui/material';
+import { MIButton } from '@pagopa/mui-italia';
 
 import { KnownSentiment } from '../../models/EmptyState';
 import { fireEvent, render } from '../../test-utils';
@@ -14,9 +14,9 @@ describe('EmptyState component', () => {
     const { container, getByTestId } = render(
       <EmptyState>
         empty-state-message{' '}
-        <Button data-testid="emptyStateButton" onClick={mockAction}>
+        <MIButton data-testid="emptyStateButton" onClick={mockAction}>
           empty-state-button
-        </Button>
+        </MIButton>
       </EmptyState>
     );
     expect(container).toHaveTextContent('empty-state-message empty-state-button');

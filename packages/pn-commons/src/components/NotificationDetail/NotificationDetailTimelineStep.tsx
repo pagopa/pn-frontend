@@ -4,9 +4,9 @@ import AttachFileIcon from '@mui/icons-material/AttachFile';
 import UnfoldLessIcon from '@mui/icons-material/UnfoldLess';
 import UnfoldMoreIcon from '@mui/icons-material/UnfoldMore';
 import { TimelineConnector } from '@mui/lab';
-import { Box, Button, Typography } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import {
-  ButtonNaked,
+  MIButton,
   MIChip,
   TimelineNotificationContent,
   TimelineNotificationDot,
@@ -205,14 +205,15 @@ const NotificationDetailTimelineStep = ({
             }}
           />
           {showHistoryButton && historyButtonLabel ? (
-            <Button
+            <MIButton
+              variant="text"
               data-testid="historyButton"
               sx={{ paddingLeft: 0, paddingRight: 0, marginTop: '5px' }}
               startIcon={<UnfoldMoreIcon />}
               onClick={historyButtonClickHandler}
             >
               {historyButtonLabel}
-            </Button>
+            </MIButton>
           ) : (
             <Box style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
               <Typography color="text.primary" variant="caption">
@@ -221,20 +222,21 @@ const NotificationDetailTimelineStep = ({
               {legalFactsIds &&
                 legalFactsIds.length > 0 &&
                 legalFactsIds.map((lf) => (
-                  <ButtonNaked
+                  <MIButton
                     key={lf.file.key}
                     startIcon={<AttachFileIcon />}
                     onClick={() => clickHandler(lf.file)}
                     color="primary"
                     sx={{ marginTop: '10px', textAlign: 'left' }}
                     data-testid="download-legalfact"
+                    variant="text"
                     disabled={
                       lf.step.category !== TimelineCategory.NOTIFICATION_CANCELLED &&
                       disableDownloads
                     }
                   >
                     {getLegalFactLabel(lf.step, lf.file.category, lf.file.key || '')}
-                  </ButtonNaked>
+                  </MIButton>
                 ))}
             </Box>
           )}
@@ -254,14 +256,14 @@ const NotificationDetailTimelineStep = ({
     <TimelineStepCmp
       content={
         <Box data-testid="moreLessButton">
-          <ButtonNaked
+          <MIButton
             id="more-less-timeline-step"
             data-testid="more-less-timeline-step"
             startIcon={collapsed ? <UnfoldMoreIcon /> : <UnfoldLessIcon />}
             onClick={handleShowMoreClick}
           >
             {collapsed ? showMoreButtonLabel : showLessButtonLabel}
-          </ButtonNaked>
+          </MIButton>
         </Box>
       }
       stepPosition="middle"
@@ -312,7 +314,8 @@ const NotificationDetailTimelineStep = ({
               {s.legalFactsIds &&
                 s.legalFactsIds.length > 0 &&
                 s.legalFactsIds.map((lf) => (
-                  <ButtonNaked
+                  <MIButton
+                    variant="text"
                     fontSize={14}
                     color="primary"
                     onClick={() => clickHandler(lf)}
@@ -325,7 +328,7 @@ const NotificationDetailTimelineStep = ({
                     }}
                   >
                     {getLegalFactLabel(s, lf.category, lf.key || '')}
-                  </ButtonNaked>
+                  </MIButton>
                 ))}
             </Box>
           </Fragment>

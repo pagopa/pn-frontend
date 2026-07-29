@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 
 import { Box, Stack, SxProps, Theme, Typography } from '@mui/material';
 import { IllusStatistics } from '@pagopa-pn/pn-commons';
-import { ButtonNaked } from '@pagopa/mui-italia';
+import { MIButton } from '@pagopa/mui-italia';
 
 import * as routes from '../../navigation/routes.const';
 
@@ -21,14 +21,15 @@ const LinkDashboard: React.FC<LinkDashboardProps> = ({ children }) => {
   const navigate = useNavigate();
 
   return (
-    <ButtonNaked
+    <MIButton
+      variant="text"
       onClick={() => navigate(routes.DASHBOARD)}
       color="primary"
       data-testid="link-to-dashboard"
       sx={{ display: 'inline', verticalAlign: 'unset', fontSize: 'inherit' }}
     >
       {children}
-    </ButtonNaked>
+    </MIButton>
   );
 };
 

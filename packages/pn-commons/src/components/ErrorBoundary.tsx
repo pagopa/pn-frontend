@@ -1,7 +1,7 @@
 import { Component, ErrorInfo } from 'react';
 
-import { Box, Button, SxProps, Typography } from '@mui/material';
-import { IllusMIError } from '@pagopa/mui-italia';
+import { Box, SxProps, Typography } from '@mui/material';
+import { IllusMIError, MIButton } from '@pagopa/mui-italia';
 
 import { getLocalizedOrDefaultLabel } from '../utility/localization.utility';
 
@@ -59,14 +59,14 @@ class ErrorBoundary extends Component<Props, State> {
                 'Non siamo riusciti a caricare la pagina. Ricaricala, oppure prova più tardi.'
               )}
             </Typography>
-            <Button
+            <MIButton
               id="reloadButton"
               variant="contained"
               sx={{ marginTop: '30px' }}
               onClick={this.handleRefreshPage}
             >
               {getLocalizedOrDefaultLabel('common', 'error-boundary.action', 'Ricarica la pagina')}
-            </Button>
+            </MIButton>
           </Box>
         </Box>
       );

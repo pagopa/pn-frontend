@@ -7,7 +7,6 @@ import CheckRoundedIcon from '@mui/icons-material/CheckRounded';
 import ErrorOutlineOutlinedIcon from '@mui/icons-material/ErrorOutlineOutlined';
 import {
   Box,
-  Button,
   List,
   ListItem,
   ListItemIcon,
@@ -22,6 +21,7 @@ import {
   IllusMIBell,
   IllusMIMessage,
   IllusMISmartphoneValidation,
+  MIButton,
   MIChip,
 } from '@pagopa/mui-italia';
 
@@ -246,7 +246,7 @@ const OnboardingHome: React.FC = () => {
 
                   <Box my={1}>{card.description}</Box>
 
-                  <Button
+                  <MIButton
                     fullWidth
                     onClick={() => handleSelectFlow(card.path, card.mixpanelFlowId)}
                     endIcon={<ArrowForwardRoundedIcon />}
@@ -256,23 +256,23 @@ const OnboardingHome: React.FC = () => {
                     data-testid={`onboarding-card-cta-${card.mixpanelFlowId}`}
                   >
                     {card.cta}
-                  </Button>
+                  </MIButton>
                 </Paper>
               </Box>
             );
           })}
       </Stack>
       <Box display="flex" justifyContent="center" mt={3}>
-        <Button variant="text" onClick={handleExitFlow}>
+        <MIButton variant="text" onClick={handleExitFlow}>
           {t('onboarding.exit-flow')}
-        </Button>
+        </MIButton>
       </Box>
       <ConfirmationModal
         open={openModal}
         contentAlign="center"
         slots={{
           illustration: <IllusMIBell size={48} />,
-          closeButton: Button,
+          closeButton: MIButton,
         }}
         title={t('onboarding.exit-flow-dialog.title')}
         slotsProps={{

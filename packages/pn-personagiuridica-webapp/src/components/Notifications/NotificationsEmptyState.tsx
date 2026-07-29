@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 
 import { Box, Typography } from '@mui/material';
 import { EmptyState } from '@pagopa-pn/pn-commons';
-import { ButtonNaked, IllusMIInbox, IllusMIMessage } from '@pagopa/mui-italia';
+import { IllusMIInbox, IllusMIMessage, MIButton } from '@pagopa/mui-italia';
 
 import * as routes from '../../navigation/routes.const';
 
@@ -34,7 +34,8 @@ const FilteredEmptyStateContent: React.FC<{ cleanFilters: () => void }> = ({ cle
         {t('empty-state.filtered-description')}
       </Typography>
 
-      <ButtonNaked
+      <MIButton
+        variant="text"
         size="medium"
         color="primary"
         id="call-to-action-first"
@@ -42,7 +43,7 @@ const FilteredEmptyStateContent: React.FC<{ cleanFilters: () => void }> = ({ cle
         onClick={cleanFilters}
       >
         {t('empty-state.clean-filters-cta')}
-      </ButtonNaked>
+      </MIButton>
     </>
   );
 };
@@ -64,7 +65,8 @@ const DefaultEmptyStateContent: React.FC = () => {
         {t('empty-state.description')}
       </Typography>
 
-      <ButtonNaked
+      <MIButton
+        variant="text"
         size="medium"
         color="primary"
         id="call-to-action-first"
@@ -72,7 +74,7 @@ const DefaultEmptyStateContent: React.FC = () => {
         onClick={goToContactsPage}
       >
         {t('empty-state.go-to-contacts-cta')}
-      </ButtonNaked>
+      </MIButton>
     </>
   );
 };

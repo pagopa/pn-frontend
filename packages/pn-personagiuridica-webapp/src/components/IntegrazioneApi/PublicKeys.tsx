@@ -3,8 +3,9 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
 import { Block, Delete, Sync } from '@mui/icons-material';
-import { Button, Stack, Typography } from '@mui/material';
+import { Stack, Typography } from '@mui/material';
 import { ApiErrorWrapper, appStateActions } from '@pagopa-pn/pn-commons';
+import { MIButton } from '@pagopa/mui-italia';
 
 import {
   ChangeStatusPublicKeyV1StatusEnum,
@@ -121,7 +122,7 @@ const PublicKeys: React.FC = () => {
           {t('publicKeys.title')}
         </Typography>
         {!hasOneActiveKey && (
-          <Button
+          <MIButton
             id="generate-public-key"
             data-testid="generatePublicKey"
             variant="contained"
@@ -129,7 +130,7 @@ const PublicKeys: React.FC = () => {
             onClick={() => handleGeneratePublicKey()}
           >
             {t('publicKeys.new-key-button')}
-          </Button>
+          </MIButton>
         )}
       </Stack>
       <ApiErrorWrapper

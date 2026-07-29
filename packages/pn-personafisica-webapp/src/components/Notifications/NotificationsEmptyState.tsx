@@ -1,9 +1,9 @@
 import { Trans, useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
-import { Box, Button, Typography } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import { EmptyState } from '@pagopa-pn/pn-commons';
-import { ButtonNaked, IllusMIInbox, IllusMIMessage } from '@pagopa/mui-italia';
+import { IllusMIInbox, IllusMIMessage, MIButton } from '@pagopa/mui-italia';
 
 import { PFEventsType } from '../../models/PFEventsType';
 import { ContactSource } from '../../models/contacts';
@@ -43,7 +43,8 @@ const FilteredEmptyStateContent: React.FC<{ cleanFilters: () => void }> = ({ cle
         {t('empty-state.filtered-description')}
       </Typography>
 
-      <ButtonNaked
+      <MIButton
+        variant="text"
         size="medium"
         color="primary"
         id="call-to-action-first"
@@ -51,7 +52,7 @@ const FilteredEmptyStateContent: React.FC<{ cleanFilters: () => void }> = ({ cle
         onClick={cleanFilters}
       >
         {t('empty-state.clean-filters-cta')}
-      </ButtonNaked>
+      </MIButton>
     </>
   );
 };
@@ -104,7 +105,7 @@ const EmptyStateCTA: React.FC<{ showOnboardingContent: boolean }> = ({ showOnboa
 
   if (showOnboardingContent) {
     return (
-      <Button
+      <MIButton
         variant="contained"
         key="route-onboarding"
         data-testid="button-route-onboarding"
@@ -112,12 +113,13 @@ const EmptyStateCTA: React.FC<{ showOnboardingContent: boolean }> = ({ showOnboa
         fullWidth={false}
       >
         {t('empty-state.go-to-onboarding-cta')}
-      </Button>
+      </MIButton>
     );
   }
 
   return (
-    <ButtonNaked
+    <MIButton
+      variant="text"
       size="medium"
       color="primary"
       id="call-to-action-first"
@@ -125,7 +127,7 @@ const EmptyStateCTA: React.FC<{ showOnboardingContent: boolean }> = ({ showOnboa
       onClick={goToContactsPage}
     >
       {t('empty-state.go-to-contacts-cta')}
-    </ButtonNaked>
+    </MIButton>
   );
 };
 

@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { Box, Stack, Typography } from '@mui/material';
-import { ButtonNaked, MIPaper } from '@pagopa/mui-italia';
+import { MIButton, MIPaper } from '@pagopa/mui-italia';
 
 /**
  *  Notification detail bilingual documents
@@ -36,12 +36,12 @@ const NotificationDetailBilingualFacsimileDocuments: React.FC<Props> = ({
       <Typography variant="body2" sx={{ mb: 3 }} data-testid="bilingualDocumentsMessage">
         {description}
       </Typography>
-      <ButtonNaked
+      <MIButton
+        variant="text"
         id="download-bilingual-files-button"
         data-testid="downloadBilingualFilesButton"
         color={'primary'}
         onClick={() => link && window.open(link, '_blank', 'noopener,noreferrer')}
-        disabled={false}
       >
         <Box
           sx={{
@@ -59,7 +59,7 @@ const NotificationDetailBilingualFacsimileDocuments: React.FC<Props> = ({
         >
           {action}
         </Box>
-      </ButtonNaked>
+      </MIButton>
     </Stack>
   </MIPaper>
 );
