@@ -15,7 +15,7 @@ import {
 import { errorMock } from '../../../__mocks__/Errors.mock';
 import { apiClient, authClient } from '../../../api/apiClients';
 import { FIMS_TOKEN_EXCHANGE, ONE_IDENTITY_TOKEN_EXCHANGE } from '../../../api/auth/auth.routes';
-import { LoginProvider, SourceChannel } from '../../../models/User';
+import { SourceChannel } from '../../../models/User';
 import { store } from '../../store';
 import { acceptTosPrivacy, exchangeFimsToken, exchangeOneIdentityCode, getTosPrivacyApproval } from '../actions';
 
@@ -70,7 +70,6 @@ describe('Auth redux state tests', () => {
         consentVersion: '',
       },
       tosPrivacyApiError: false,
-      loginProvider: LoginProvider.SPIDHUB,
       isFreshLogin: false,
     });
   });
@@ -79,7 +78,6 @@ describe('Auth redux state tests', () => {
     const action = await mockLogin();
     expect(action.type).toBe('exchangeToken/fulfilled');
     expect(action.payload).toEqual(userResponse);
-    expect(store.getState().userState.loginProvider).toBe(LoginProvider.SPIDHUB);
   });
 
   it('Should be able to exchange FIMS token', async () => {
@@ -99,7 +97,6 @@ describe('Auth redux state tests', () => {
 
     expect(action.type).toBe('exchangeFimsToken/fulfilled');
     expect(action.payload).toEqual(fimsUserResponse);
-    expect(store.getState().userState.loginProvider).toBe(LoginProvider.FIMS);
   });
 
   it('Should be able to exchange code with One Identity', async () => {
@@ -113,7 +110,6 @@ describe('Auth redux state tests', () => {
 
     expect(action.type).toBe('exchangeOneIdentityCode/fulfilled');
     expect(action.payload).toEqual(oneIdentityUserResponse);
-    expect(store.getState().userState.loginProvider).toBe(LoginProvider.ONEIDENTITY);
   });
 
   it('Should strip idp, aar and retrievalId before saving One Identity user to redux and sessionStorage', async () => {
