@@ -184,14 +184,17 @@ const InformalNotificationDetail: React.FC = () => {
     }
   };
 
-  const getPaymentAttachmentAction = (name: PaymentAttachmentSName, attachmentIdx?: number) =>
-    dispatch(
+  const getPaymentAttachmentAction = (name: PaymentAttachmentSName, attachmentIdx?: number) => {
+    PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_DOWNLOAD_PAYMENT_NOTICE);
+
+    return dispatch(
       getReceivedInformalNotificationPayment({
         iun: informalNotification?.iun ?? '',
         attachmentName: name,
         attachmentIdx,
       })
     );
+  };
 
   const showInfoMessageIfRetryAfterOrDownload = (response: {
     url: string;
