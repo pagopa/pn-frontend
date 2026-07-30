@@ -77,7 +77,7 @@ const DesktopNotifications = ({
     id: n.iun,
   }));
 
-  const filtersApplied: boolean = filterNotificationsRef.current.filtersApplied;
+  const filtersApplied: boolean = filterNotificationsRef.current?.filtersApplied ?? false;
 
   const showFilters = notifications?.length > 0 || filtersApplied;
 
