@@ -233,7 +233,7 @@ describe('SessionGuard Component', () => {
     });
   });
 
-  // expected behavior: enters the app, exp token -> logout message, redirects to LOGOUT (not OI)
+  // expected behavior: enters the app, exp token -> logout message, redirects to LOGOUT
   it('logout', async () => {
     vi.useFakeTimers({ shouldAdvanceTime: true });
 
@@ -384,7 +384,7 @@ describe('SessionGuard Component', () => {
     expect(mock.history.post).toHaveLength(0);
   });
 
-  it('One Identity Exchange Token - logout redirects to LOGOUT_OI', async () => {
+  it('One Identity Exchange Token - logout redirects to LOGOUT', async () => {
     vi.useFakeTimers({ shouldAdvanceTime: true });
 
     const exp = sub(new Date(), { minutes: 5 }).getTime() / 1000;
@@ -404,7 +404,7 @@ describe('SessionGuard Component', () => {
     await act(async () => {
       await vi.advanceTimersByTimeAsync(2500);
     });
-    expect(mockOpenFn).toHaveBeenCalledWith(routes.LOGOUT_OI, '_self');
+    expect(mockOpenFn).toHaveBeenCalledWith(routes.LOGOUT, '_self');
     vi.useRealTimers();
   });
 

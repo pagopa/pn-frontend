@@ -45,7 +45,7 @@
     "filtered": "Nessuna notifica o comunicazione per i filtri selezionati",
     "filtered-description": "Rimuovili o prova con un’altra combinazione.",
     "clean-filters-cta": "Rimuovi filtri",
-    "delegate": "Qui vedrai le comunicazioni a valore legale che sono state delegate alla tua impresa.",
+    "delegate": "Qui vedrai le notifiche a valore legale che sono state delegate alla tua impresa.",
     "title": "Qui vedrai le notifiche a valore legale e le altre comunicazioni",
     "description": "Aggiorna ora i recapiti digitali per sapere subito quando la tua impresa ne riceverà una.",
     "go-to-contacts-cta": "Vai ai recapiti",
@@ -56,8 +56,8 @@
     "not-found-subtitle": "Può essere letta solo dagli utenti censiti dall’impresa destinataria o da un suo delegato."
   },
   "detail": {
-    "legal-date": "Notifica depositata il",
-    "informal-date": "Comunicazione depositata il",
+    "legal-date": "Notifica depositata il giorno",
+    "informal-date": "Comunicazione depositata il giorno",
     "legal-disclaimer": "Notifica inviata tramite SEND, la piattaforma disciplinata dall’art. 26 del D.L 76/2020",
     "legal-value": "Notifica a valore legale",
     "notification-timeline-section": {
@@ -146,6 +146,12 @@
       "email": "Email dell'ente",
       "website": "Sito web dell'ente",
       "copy_phone": "Numero di telefono copiato"
+    },
+    "informal_notification_markdown": {
+      "greeting": "All'attenzione di {{recipientDenomination}}",
+      "attachments_info": "Per avere maggiori informazioni <0>è consigliato prendere visione degli allegati</0>, che possono fornire dettagli importanti.",
+      "payment_instructions": "È possibile completare il pagamento premendo <0>Paga</0>. In alternativa, si può utilizzare l'<1>avviso allegato</1> per saldare l'importo tramite tutti i canali abilitati a pagoPA.",
+      "assistance": "In ogni caso, qualora si avesse bisogno di assistenza, è possibile <0>contattare {{senderDenomination}} attraverso i suoi canali ufficiali.</0>"
     },
     "acts_files": {
       "downloadable_acts": "<0>I documenti saranno disponibili online fino a 120 giorni</0> dalla data in cui la notifica SEND ha assunto valore di legge. Salvali sul tuo dispositivo!",
