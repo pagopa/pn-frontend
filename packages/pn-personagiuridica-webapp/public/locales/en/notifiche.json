@@ -147,6 +147,12 @@
       "website": "Institution's website",
       "copy_phone": "Phone number copied"
     },
+    "informal_notification_markdown": {
+      "greeting": "All'attenzione di {{recipientDenomination}}",
+      "attachments_info": "Per avere maggiori informazioni <0>è consigliato prendere visione degli allegati</0>, che possono fornire dettagli importanti.",
+      "payment_instructions": "È possibile completare il pagamento premendo <0>Paga</0>. In alternativa, si può utilizzare l'<1>avviso allegato</1> per saldare l'importo tramite tutti i canali abilitati a pagoPA.",
+      "assistance": "In ogni caso, qualora si avesse bisogno di assistenza, è possibile <0>contattare {{senderDenomination}} attraverso i suoi canali ufficiali.</0>"
+    },
     "acts_files": {
       "downloadable_acts": "Documents are available online for 120 days from the completion of the notification.",
       "not_downloadable_acts": "120 days have passed since the completion date. If you want to obtain the documents, please contact the sender.",

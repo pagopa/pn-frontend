@@ -147,6 +147,12 @@
       "website": "Spletno mesto organa",
       "copy_phone": "Telefonska številka je kopirana"
     },
+    "informal_notification_markdown": {
+      "greeting": "All'attenzione di {{recipientDenomination}}",
+      "attachments_info": "Per avere maggiori informazioni <0>è consigliato prendere visione degli allegati</0>, che possono fornire dettagli importanti.",
+      "payment_instructions": "È possibile completare il pagamento premendo <0>Paga</0>. In alternativa, si può utilizzare l'<1>avviso allegato</1> per saldare l'importo tramite tutti i canali abilitati a pagoPA.",
+      "assistance": "In ogni caso, qualora si avesse bisogno di assistenza, è possibile <0>contattare {{senderDenomination}} attraverso i suoi canali ufficiali.</0>"
+    },
     "acts_files": {
       "downloadable_acts": "Dokumenti so na voljo na spletu 120 dni od zaključka obvestila.",
       "not_downloadable_acts": "Ker je od datuma zaključka minilo 120 dni, se morate za pridobitev listin obrniti na pošiljatelja.",

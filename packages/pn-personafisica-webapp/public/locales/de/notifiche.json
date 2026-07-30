@@ -157,6 +157,12 @@
       "website": "Website der Körperschaft",
       "copy_phone": "Telefonnummer kopiert"
     },
+    "informal_notification_markdown": {
+      "greeting": "Ciao {{recipientDenomination}},",
+      "attachments_info": "Per avere maggiori informazioni <0>prendi visione degli allegati,</0> che possono fornirti dettagli importanti.",
+      "payment_instructions": "Puoi effettuare il pagamento direttamente premendo <0>Paga</0>. In alternativa, puoi utilizzare l'<0>avviso allegato</0> per saldare l'importo tramite tutti i canali abilitati a pagoPA.",
+      "assistance": "In ogni caso, qualora avessi bisogno di assistenza, <0>contatta {{senderDenomination}} attraverso i suoi canali ufficiali.</0>"
+    },
     "acts_files": {
       "downloadable_acts": "<0>Die Dokumente sind bis zu 120 Tage lang online verfügbar</0> ab dem Datum, an dem die SEND-Benachrichtigung rechtlich wirksam wurde. Speichern Sie sie auf Ihrem Gerät!",
       "not_downloadable_acts": "Die Dokumente sind online nicht mehr verfügbar. Um sie anzufordern, wenden Sie sich bitte an die Behörde, die sie Ihnen zugesendet hat.",

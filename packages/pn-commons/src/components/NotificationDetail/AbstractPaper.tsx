@@ -1,4 +1,5 @@
 import { ReactNode, useState } from 'react';
+import { Trans } from 'react-i18next';
 
 import AccountBalanceOutlinedIcon from '@mui/icons-material/AccountBalanceOutlined';
 import KeyboardArrowRightRoundedIcon from '@mui/icons-material/KeyboardArrowRightRounded';
@@ -10,7 +11,10 @@ import { MIButton, MIPaper, Tag, theme } from '@pagopa/mui-italia';
 import { useIsMobile } from '../../hooks';
 import { formatDate } from '../../utility';
 import { getAccessibleIun } from '../../utility/accessibility.utility';
-import { getLocalizedOrDefaultLabel } from '../../utility/localization.utility';
+import {
+  getLocalizedOrDefaultLabel,
+  getTranslationMessage,
+} from '../../utility/localization.utility';
 import PNMarkdown from '../PnMarkdown/PnMarkdown';
 import TitleBox from '../TitleBox';
 
@@ -31,6 +35,9 @@ interface AbstractPaperProps {
   details?: Array<AbstractPaperDetail>;
   onDetailsClick?: () => void;
   detailsAriaLabel?: string;
+  recipientDenomination?: string;
+  hasAttachments?: boolean;
+  hasPayment?: boolean;
 }
 
 interface InstitutionLogoProps {
@@ -41,7 +48,6 @@ interface InstitutionLogoProps {
 
 const InstitutionLogo = ({ id, name, senderLogoUrl }: InstitutionLogoProps) => {
   const [hasError, setHasError] = useState(false);
-
   const logoSrc =
     id && !hasError && senderLogoUrl ? `${senderLogoUrl}${id}/institutions/logo.png` : undefined;
 
@@ -75,10 +81,27 @@ const AbstractPaper = ({
   details,
   onDetailsClick,
   detailsAriaLabel,
+  recipientDenomination,
+  hasAttachments = false,
+  hasPayment = false,
 }: AbstractPaperProps) => {
   const isMobile = useIsMobile();
 
   const hasDetails = !!details?.length;
+
+  const attachmentsInfoMessage = getTranslationMessage(
+    'detail.informal_notification_markdown.attachments_info',
+    'notifiche'
+  );
+
+  const paymentInstructionsMessage = getTranslationMessage(
+    'detail.informal_notification_markdown.payment_instructions',
+    'notifiche'
+  );
+  const assistanceMessage = getTranslationMessage(
+    'detail.informal_notification_markdown.assistance',
+    'notifiche'
+  );
   return (
     <MIPaper
       padding={24}
@@ -190,9 +213,66 @@ const AbstractPaper = ({
                   </Typography>
                 </>
               ) : (
-                <Box sx={{ overflowWrap: 'anywhere' }}>
-                  <PNMarkdown content={abstract ?? ''} />
-                </Box>
+                <Stack>
+                  {recipientDenomination && (
+                    <Typography variant="body1" color="text.primary">
+                      {getLocalizedOrDefaultLabel(
+                        'notifications',
+                        'detail.informal_notification_markdown.greeting',
+                        undefined,
+                        { recipientDenomination }
+                      )}
+                    </Typography>
+                  )}
+
+                  <Box
+                    sx={{
+                      overflowWrap: 'anywhere',
+                      '& p': {
+                        m: 0,
+                        typography: 'body1',
+                        color: 'text.primary',
+                        mt: 4,
+                      },
+                    }}
+                  >
+                    <PNMarkdown content={abstract} />
+                  </Box>
+
+                  {hasAttachments && (
+                    <Typography variant="body1" color="text.primary" mt={4}>
+                      <Trans
+                        i18nKey={attachmentsInfoMessage.key}
+                        ns={attachmentsInfoMessage.ns}
+                        components={[<strong key="0" />]}
+                      />
+                    </Typography>
+                  )}
+
+                  {hasPayment && (
+                    <Typography variant="body1" color="text.primary" mt={hasAttachments ? 2 : 4}>
+                      <Trans
+                        i18nKey={paymentInstructionsMessage.key}
+                        ns={paymentInstructionsMessage.ns}
+                        components={[<strong key="0" />]}
+                      />
+                    </Typography>
+                  )}
+                  <Typography
+                    variant="body1"
+                    color="text.primary"
+                    mt={hasAttachments || hasPayment ? 2 : 4}
+                  >
+                    <Trans
+                      i18nKey={assistanceMessage.key}
+                      ns={assistanceMessage.ns}
+                      values={{
+                        senderDenomination,
+                      }}
+                      components={[<strong key="0" />]}
+                    />
+                  </Typography>
+                </Stack>
               )}
             </>
           )}
