@@ -40,11 +40,11 @@
     "options": "Options de tri"
   },
   "empty-state": {
-    "filtered": "No notifications or communications for the selected filters",
-    "filtered-description": "Remove them or try another combination.",
-    "clean-filters-cta": "Remove filters",
-    "delegate": "Here you will see the legally binding communications of {{name}}",
-    "title": "Here you will see your legally binding notifications and other communications",
+    "filtered": "Aucune notification ou communication pour les filtres sélectionnés",
+    "filtered-description": "Supprime-les ou essaie une autre combinaison.",
+    "clean-filters-cta": "Supprimer les filtres",
+    "delegate": "Ici, tu verras les notifications à valeur juridique de {{name}}",
+    "title": "Ici, tu verras tes notifications à valeur juridique et les autres communications",
     "description-onboarding": "Saviez-vous que vous pouvez économiser en choisissant de recevoir les communications à valeur juridique uniquement au format numérique ?",
     "description": "Mettez à jour vos coordonnées dès maintenant et vous saurez immédiatement quand vous en recevrez une.",
     "go-to-onboarding-cta": "Configurer SEND",
