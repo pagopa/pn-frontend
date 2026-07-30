@@ -89,17 +89,23 @@ const AbstractPaper = ({
 
   const hasDetails = !!details?.length;
 
-  const greetingMessage = getTranslationMessage('detail.informal_notification_markdown.greeting');
+  const greetingMessage = getTranslationMessage(
+    'detail.informal_notification_markdown.greeting',
+    'notifiche'
+  );
 
   const attachmentsInfoMessage = getTranslationMessage(
-    'detail.informal_notification_markdown.attachments_info'
+    'detail.informal_notification_markdown.attachments_info',
+    'notifiche'
   );
 
   const paymentInstructionsMessage = getTranslationMessage(
-    'detail.informal_notification_markdown.payment_instructions'
+    'detail.informal_notification_markdown.payment_instructions',
+    'notifiche'
   );
   const assistanceMessage = getTranslationMessage(
-    'detail.informal_notification_markdown.assistance'
+    'detail.informal_notification_markdown.assistance',
+    'notifiche'
   );
   return (
     <MIPaper
@@ -215,13 +221,12 @@ const AbstractPaper = ({
                 <Stack>
                   {recipientDenomination && (
                     <Typography variant="body1" color="text.primary">
-                      <Trans
-                        i18nKey={greetingMessage.key}
-                        ns={greetingMessage.ns}
-                        values={{
-                          recipientDenomination,
-                        }}
-                      />
+                      {getLocalizedOrDefaultLabel(
+                        'notifications',
+                        'detail.informal_notification_markdown.greeting',
+                        undefined,
+                        { recipientDenomination }
+                      )}
                     </Typography>
                   )}
 
