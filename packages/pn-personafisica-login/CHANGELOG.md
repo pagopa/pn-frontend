@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.25.0-RC.2](https://fbianchicodermine-github/pagopa/pn-frontend/compare/v2.25.0-RC.1...v2.25.0-RC.2) (2026-07-30)
+
+
+### Features
+
+* **PN-20879:** serve the OneIdentity login flow from the institutional /login route ([#1968](https://fbianchicodermine-github/pagopa/pn-frontend/issues/1968)) ([f93ab98](https://fbianchicodermine-github/pagopa/pn-frontend/commit/f93ab98f5ae247acf8e0cffca908ebb29748d6ae))
+
+
+
+
+
 # [2.25.0](https://github.com/pagopa/pn-frontend/compare/v2.24.1...v2.25.0) (2026-07-24)
 
 

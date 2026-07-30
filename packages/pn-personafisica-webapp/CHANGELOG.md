@@ -3,6 +3,24 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.25.0-RC.2](https://fbianchicodermine-github/pagopa/pn-frontend/compare/v2.25.0-RC.1...v2.25.0-RC.2) (2026-07-30)
+
+
+### Bug Fixes
+
+* **PN-20748:** update content and tag ([#1970](https://fbianchicodermine-github/pagopa/pn-frontend/issues/1970)) ([5447854](https://fbianchicodermine-github/pagopa/pn-frontend/commit/54478544a9512e6a19e615e08d5712cf947eb0aa))
+* **PN-20848:** Add missing static sections to PF informal notification details ([#1969](https://fbianchicodermine-github/pagopa/pn-frontend/issues/1969)) ([d5debf5](https://fbianchicodermine-github/pagopa/pn-frontend/commit/d5debf5f35e5ec0f011e6fe3d17af0c7f6176f51))
+* **PN-20900:** fix notification list loading flow and empty states ([#1973](https://fbianchicodermine-github/pagopa/pn-frontend/issues/1973)) ([f16d1bc](https://fbianchicodermine-github/pagopa/pn-frontend/commit/f16d1bc65d1e26bd2ede2b08493ef5a052309b87))
+
+
+### Features
+
+* **PN-20879:** serve the OneIdentity login flow from the institutional /login route ([#1968](https://fbianchicodermine-github/pagopa/pn-frontend/issues/1968)) ([f93ab98](https://fbianchicodermine-github/pagopa/pn-frontend/commit/f93ab98f5ae247acf8e0cffca908ebb29748d6ae))
+
+
+
+
+
 ## [2.25.0-RC.1](https://github.com/pagopa/pn-frontend/compare/v2.25.0-RC.0...v2.25.1-RC.0) (2026-07-27)
 
 
