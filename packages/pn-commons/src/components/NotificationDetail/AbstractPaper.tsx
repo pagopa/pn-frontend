@@ -89,11 +89,6 @@ const AbstractPaper = ({
 
   const hasDetails = !!details?.length;
 
-  const greetingMessage = getTranslationMessage(
-    'detail.informal_notification_markdown.greeting',
-    'notifiche'
-  );
-
   const attachmentsInfoMessage = getTranslationMessage(
     'detail.informal_notification_markdown.attachments_info',
     'notifiche'
