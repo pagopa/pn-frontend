@@ -12,7 +12,7 @@ import {
 import { IDPS_MOCK } from '../../../__mocks__/IDPS.mock';
 import { render } from '../../../__test__/test-utils';
 import { OneIdentityApi } from '../../../api/OneIdentity/OneIdentity.api';
-import { ROUTE_ONE_IDENTITY_LOGIN_ERROR } from '../../../navigation/routes.const';
+import { ROUTE_LOGIN_ERROR } from '../../../navigation/routes.const';
 import { storageRapidAccessOps } from '../../../utility/storage';
 import OneIdentityLogin from '../OneIdentityLogin';
 
@@ -109,9 +109,7 @@ describe('OneIdentityLogin component', () => {
       vi.mocked(OneIdentityApi.authorize).mockRejectedValue(new Error('Auth failed'));
       const { container, router } = render(<OneIdentityLogin />);
       fireEvent.click(getById(container, 'cieButton'));
-      await waitFor(() =>
-        expect(router.state.location.pathname).toBe(ROUTE_ONE_IDENTITY_LOGIN_ERROR)
-      );
+      await waitFor(() => expect(router.state.location.pathname).toBe(ROUTE_LOGIN_ERROR));
     });
 
     it('passes aar to authorize when AAR param is in the URL', async () => {

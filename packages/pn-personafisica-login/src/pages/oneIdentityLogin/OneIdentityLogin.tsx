@@ -17,7 +17,7 @@ import IOSmartAppBanner from '../../components/IoSmartAppBanner';
 import LoginButtons from '../../components/OneIdentity/LoginButtons';
 import { useRapidAccessParam } from '../../hooks/useRapidAccessParam';
 import { PFLoginEventsType } from '../../models/PFLoginEventsType';
-import { ROUTE_ONE_IDENTITY_LOGIN_ERROR } from '../../navigation/routes.const';
+import { ROUTE_LOGIN_ERROR } from '../../navigation/routes.const';
 import { getConfiguration } from '../../services/configuration.service';
 import PFLoginEventStrategyFactory from '../../utility/MixpanelUtils/PFLoginEventStrategyFactory';
 
@@ -90,7 +90,7 @@ const OneIdentityLogin: React.FC = () => {
         window.location.assign(location);
       })
       .catch(() => {
-        navigate(ROUTE_ONE_IDENTITY_LOGIN_ERROR);
+        navigate(ROUTE_LOGIN_ERROR);
       })
       .finally(() => {
         handleCloseIdpSelect();

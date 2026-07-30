@@ -2,7 +2,6 @@ import { vi } from 'vitest';
 
 import { AppRouteParams, EventPageType } from '@pagopa-pn/pn-commons';
 
-import { LoginProvider } from '../../models/User';
 import { UTM_KEY } from '../../utility/utm.utility';
 import { getCurrentEventTypePage, goToLoginPortal } from '../navigation.utility';
 import {
@@ -10,7 +9,6 @@ import {
   DELEGHE,
   DETTAGLIO_NOTIFICA,
   LOGOUT,
-  LOGOUT_OI,
   NOTIFICHE,
   RECAPITI,
 } from '../routes.const';
@@ -31,22 +29,14 @@ describe('Tests navigation utility methods', () => {
   });
 
   it('goToLoginPortal', () => {
-    goToLoginPortal({ loginProvider: LoginProvider.SPIDHUB });
+    goToLoginPortal();
     expect(mockOpenFn).toHaveBeenCalledTimes(1);
     expect(mockOpenFn).toHaveBeenCalledWith(`${LOGOUT}`, '_self');
-  });
-
-  it('goToLoginPortal - from FIMS', () => {
-    goToLoginPortal({ loginProvider: LoginProvider.FIMS });
-
-    expect(mockOpenFn).toHaveBeenCalledTimes(1);
-    expect(mockOpenFn).toHaveBeenCalledWith(LOGOUT, '_self');
   });
 
   it('goToLoginPortal - aar (preserves only utm_*)', () => {
     goToLoginPortal({
       rapidAccess: [AppRouteParams.AAR, 'fake-aar-token'],
-      loginProvider: LoginProvider.SPIDHUB,
       search: `?${UTM_KEY.SOURCE}=s&${UTM_KEY.MEDIUM}=m&${UTM_KEY.CAMPAIGN}=c&invalid_param=value`,
     });
 
@@ -66,7 +56,6 @@ describe('Tests navigation utility methods', () => {
   it('goToLoginPortal - retrievalId (preserves only utm_*)', () => {
     goToLoginPortal({
       rapidAccess: [AppRouteParams.RETRIEVAL_ID, 'fake-id'],
-      loginProvider: LoginProvider.SPIDHUB,
       search: `?${UTM_KEY.SOURCE}=s&${UTM_KEY.MEDIUM}=m&${UTM_KEY.CAMPAIGN}=c&invalid_param=value`,
     });
 
@@ -86,7 +75,6 @@ describe('Tests navigation utility methods', () => {
   it('goToLoginPortal - aar with malicious code', () => {
     goToLoginPortal({
       rapidAccess: [AppRouteParams.AAR, '<script>malicious code</script>malicious-aar-token'],
-      loginProvider: LoginProvider.SPIDHUB,
     });
 
     expect(mockOpenFn).toHaveBeenCalledTimes(1);
@@ -96,42 +84,6 @@ describe('Tests navigation utility methods', () => {
 
     expect(parsed.pathname).toBe(LOGOUT);
     expect(parsed.searchParams.get(AppRouteParams.AAR)).toBe('malicious-aar-token');
-  });
-
-  it('goToLoginPortal - from One Identity', () => {
-    goToLoginPortal({ loginProvider: LoginProvider.ONEIDENTITY });
-    expect(mockOpenFn).toHaveBeenCalledTimes(1);
-    expect(mockOpenFn).toHaveBeenCalledWith(`${LOGOUT_OI}`, '_self');
-  });
-
-  it('goToLoginPortal - from One Identity with aar', () => {
-    goToLoginPortal({
-      rapidAccess: [AppRouteParams.AAR, 'fake-aar-token'],
-      loginProvider: LoginProvider.ONEIDENTITY,
-    });
-
-    expect(mockOpenFn).toHaveBeenCalledTimes(1);
-
-    const [redirectUrl] = mockOpenFn.mock.calls[0];
-    const parsed = new URL(redirectUrl as string, 'https://test.pagopa.it');
-
-    expect(parsed.pathname).toBe(LOGOUT_OI);
-    expect(parsed.searchParams.get(AppRouteParams.AAR)).toBe('fake-aar-token');
-  });
-
-  it('goToLoginPortal - from One Identity with retrievalId', () => {
-    goToLoginPortal({
-      rapidAccess: [AppRouteParams.RETRIEVAL_ID, 'fake-id'],
-      loginProvider: LoginProvider.ONEIDENTITY,
-    });
-
-    expect(mockOpenFn).toHaveBeenCalledTimes(1);
-
-    const [redirectUrl] = mockOpenFn.mock.calls[0];
-    const parsed = new URL(redirectUrl as string, 'https://test.pagopa.it');
-
-    expect(parsed.pathname).toBe(LOGOUT_OI);
-    expect(parsed.searchParams.get(AppRouteParams.RETRIEVAL_ID)).toBe('fake-id');
   });
 
   it('getCurrentPage - test for notifications list page', () => {
