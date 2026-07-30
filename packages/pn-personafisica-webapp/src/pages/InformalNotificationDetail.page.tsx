@@ -22,6 +22,7 @@ import { MIPaper } from '@pagopa/mui-italia';
 
 import LoadingPageWrapper from '../components/LoadingPageWrapper/LoadingPageWrapper';
 import { BffFullInformalNotificationV1 } from '../generated-client/informal-notifications';
+import { PFEventsType } from '../models/PFEventsType';
 import * as routes from '../navigation/routes.const';
 import { useAppDispatch } from '../redux/hooks';
 import { getReceivedNotificationPaymentUrl } from '../redux/notification/actions';
@@ -32,6 +33,7 @@ import {
   getReceivedInformalNotificationPayment,
   getReceivedInformalNotificationPaymentInfo,
 } from '../redux/notification/informalActions';
+import PFEventStrategyFactory from '../utility/MixpanelUtils/PFEventStrategyFactory';
 
 const InformalNotificationDetail: React.FC = () => {
   const { id } = useParams();
@@ -222,6 +224,8 @@ const InformalNotificationDetail: React.FC = () => {
       .unwrap()
       .then(showInfoMessageIfRetryAfterOrDownload)
       .catch(() => {});
+
+    PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_DOWNLOAD_ATTACHMENT);
   };
 
   return (
