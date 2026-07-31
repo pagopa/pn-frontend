@@ -42,8 +42,9 @@
   },
   "table": {
     "title": "Tableau des notifications",
+    "mobile-title": "Liste des communications",
     "date": "Date",
-    "recipient": "Destinataire",
+    "recipient": "Code fiscal",
     "subject": "Objet",
     "iun": "Code IUN",
     "groups": "Groupes",

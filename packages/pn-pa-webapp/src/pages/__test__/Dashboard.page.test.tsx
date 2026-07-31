@@ -285,7 +285,8 @@ describe('Dashboard Page', () => {
     await act(async () => {
       result = render(<Dashboard />);
     });
-    expect(screen.getByRole('heading')).toHaveTextContent(/title/i);
+    expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent(/title/i);
+    expect(screen.getByRole('heading', { level: 2 })).toHaveTextContent(/table.mobile-title/i);
     expect(mock.history.get).toHaveLength(1);
     expect(mock.history.get[0].url).toContain('/bff/v1/notifications/sent');
     const filterForm = result.getByTestId('dialogToggle');

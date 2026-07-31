@@ -42,8 +42,9 @@
   },
   "table": {
     "title": "Notification table",
+    "mobile-title": "List of communications",
     "date": "Date",
-    "recipient": "Recipient",
+    "recipient": "Fiscal Code",
     "subject": "Subject",
     "iun": "IUN code",
     "groups": "Groups",

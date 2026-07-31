@@ -43,6 +43,7 @@ const Dashboard = () => {
   const isSupportUser = useAppSelector(authSelectors.selectIsSupportUser);
   const navigate = useNavigate();
   const isMobile = useIsMobile();
+  const isSmallScreen = useIsMobile('sm');
   const { t } = useTranslation(['notifiche']);
   const { publishEvent } = useEventEmitter<A11yMessage>('a11y-message');
 
@@ -91,7 +92,14 @@ const Dashboard = () => {
     }
 
     return IS_MANUAL_SEND_ENABLED ? (
-      <Box display="flex" gap={5}>
+      <Box
+        display="flex"
+        sx={{
+          flexDirection: { xs: 'column-reverse', sm: 'row' },
+          gap: { xs: 2, sm: 5 },
+          width: { xs: '100%', sm: 'auto' },
+        }}
+      >
         <NotificationSettingsDrawer />
         <Button
           id="new-notification-btn"
@@ -188,7 +196,8 @@ const Dashboard = () => {
       <TitleBox
         title={t('title')}
         variantTitle="h4"
-        mbTitle={3}
+        variantSubTitle="body2"
+        mbTitle={1}
         propsTitle={{
           display: 'flex',
           justifyContent: 'space-between',
@@ -196,19 +205,23 @@ const Dashboard = () => {
           flexWrap: 'wrap',
           gap: 3,
         }}
-        titleButton={getTitleButtonContent()}
-        subTitle={
-          <Box
-            display={isMobile ? 'block' : 'flex'}
-            justifyContent="space-between"
-            alignItems="center"
-          >
-            <Typography variant="body1" sx={{ marginBottom: isMobile ? 3 : undefined }}>
-              {t('subtitle')}
-            </Typography>
-          </Box>
-        }
+        titleButton={!isSmallScreen ? getTitleButtonContent() : undefined}
+        subTitle={!isSmallScreen ? t('subtitle') : undefined}
       />
+      {isSmallScreen && (
+        <Box mb={3}>
+          <Typography variant="body2" mb={3}>
+            {t('subtitle')}
+          </Typography>
+          {getTitleButtonContent()}
+        </Box>
+      )}
+
+      {isMobile && (
+        <Typography variant="sidenav" component="h2" mt={4} mb={2}>
+          {t('table.mobile-title')}
+        </Typography>
+      )}
 
       <Box sx={{ mb: { xs: 0, lg: 3 } }}>
         <FilterNotifications ref={filterNotificationsRef} showFilters />
