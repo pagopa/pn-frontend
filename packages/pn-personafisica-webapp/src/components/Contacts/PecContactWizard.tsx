@@ -188,8 +188,6 @@ const PecContactWizard: React.FC<Props> = ({
             <MIButton
               variant="text"
               onClick={handlePreviousBtnClick}
-              color="primary"
-              size="medium"
               data-testid="prev-button"
               sx={{ mt: { xs: 2, lg: 0 } }}
             >

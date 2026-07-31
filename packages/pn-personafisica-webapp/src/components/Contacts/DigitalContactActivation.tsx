@@ -118,8 +118,7 @@ const DigitalContactActivation: React.FC<Props> = ({ isTransferring = false, onG
       return (
         <MIButton
           onClick={goToPreviousStep}
-          color="primary"
-          size="medium"
+          variant="text"
           data-testid="prev-button"
           sx={isEmailSmsStep ? { mt: { xs: 2, md: 0 } } : { mt: 0 }}
         >

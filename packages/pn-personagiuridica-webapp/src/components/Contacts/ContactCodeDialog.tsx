@@ -76,9 +76,7 @@ const ContactCodeDialog: React.FC<Props> = ({
               <MIButton
                 variant="text"
                 key="newCodeBtn"
-                size="medium"
                 onClick={() => onConfirm()}
-                color="primary"
                 sx={{
                   textDecoration: 'underline',
                   display: 'inline',
