@@ -163,7 +163,10 @@ const InformalNotificationDetail: React.FC = () => {
 
   const onPayClick = (noticeCode?: string, creditorTaxId?: string, amount?: number) => {
     if (noticeCode && creditorTaxId && amount && informalNotification?.senderDenomination) {
-      PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_START_PAYMENT, { psp: 'pagopa' });
+      PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_START_PAYMENT, {
+        psp: 'pagopa',
+        notification_type: 'comunicazione bonaria',
+      });
       dispatch(
         getReceivedNotificationPaymentUrl({
           paymentNotice: {
@@ -185,7 +188,9 @@ const InformalNotificationDetail: React.FC = () => {
   };
 
   const getPaymentAttachmentAction = (name: PaymentAttachmentSName, attachmentIdx?: number) => {
-    PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_DOWNLOAD_PAYMENT_NOTICE);
+    PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_DOWNLOAD_PAYMENT_NOTICE, {
+      notification_type: 'comunicazione bonaria',
+    });
 
     return dispatch(
       getReceivedInformalNotificationPayment({
@@ -229,7 +234,9 @@ const InformalNotificationDetail: React.FC = () => {
       .then(showInfoMessageIfRetryAfterOrDownload)
       .catch(() => {});
 
-    PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_DOWNLOAD_ATTACHMENT);
+    PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_DOWNLOAD_ATTACHMENT, {
+      notification_type: 'comunicazione bonaria',
+    });
   };
 
   return (

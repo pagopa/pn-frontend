@@ -214,7 +214,9 @@ const NotificationDetail: React.FC = () => {
         .unwrap()
         .then(showInfoMessageIfRetryAfterOrDownload)
         .catch(() => {});
-      PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_DOWNLOAD_ATTACHMENT);
+      PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_DOWNLOAD_ATTACHMENT, {
+        notification_type: 'notifica',
+      });
     }
   };
 
@@ -230,7 +232,10 @@ const NotificationDetail: React.FC = () => {
 
   const onPayClick = (noticeCode?: string, creditorTaxId?: string, amount?: number) => {
     if (noticeCode && creditorTaxId && amount && notification.senderDenomination) {
-      PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_START_PAYMENT, { psp: 'pagopa' });
+      PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_START_PAYMENT, {
+        psp: 'pagopa',
+        notification_type: 'notifica',
+      });
       dispatch(
         getReceivedNotificationPaymentUrl({
           paymentNotice: {
@@ -259,7 +264,10 @@ const NotificationDetail: React.FC = () => {
     amount?: number
   ) => {
     if (noticeCode && creditorTaxId && retrievalId) {
-      PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_START_PAYMENT, { psp: tppName });
+      PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_START_PAYMENT, {
+        psp: tppName,
+        notification_type: 'notifica',
+      });
       dispatch(
         getReceivedNotificationPaymentTppUrl({
           noticeCode,
