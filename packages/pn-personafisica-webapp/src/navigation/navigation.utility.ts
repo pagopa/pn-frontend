@@ -2,32 +2,28 @@ import { matchPath } from 'react-router-dom';
 
 import { AppRouteParams, EventPageType, sanitizeString } from '@pagopa-pn/pn-commons';
 
-import { LoginProvider, OneIdentityUser } from '../models/User';
+import { OneIdentityUser } from '../models/User';
 import {
   APP_STATUS,
   DELEGHE,
   DETTAGLIO_NOTIFICA,
   DETTAGLIO_NOTIFICA_DELEGATO,
   LOGOUT,
-  LOGOUT_OI,
   NOTIFICHE,
   NOTIFICHE_DELEGATO,
   RECAPITI,
 } from './routes.const';
 
 type GoToLoginProps = {
-  loginProvider: LoginProvider;
   rapidAccess?: [AppRouteParams, string];
   search?: string;
 };
 
-export function goToLoginPortal({ rapidAccess, loginProvider, search = '' }: GoToLoginProps) {
-  const logoutPath = loginProvider === LoginProvider.ONEIDENTITY ? `${LOGOUT_OI}` : `${LOGOUT}`;
-
+export function goToLoginPortal({ rapidAccess, search = '' }: GoToLoginProps = {}) {
   // eslint-disable-next-line functional/no-let
-  let urlToRedirect = `${logoutPath}`;
+  let urlToRedirect = `${LOGOUT}`;
   // the startsWith check is to prevent xss attacks
-  if (urlToRedirect.startsWith(logoutPath)) {
+  if (urlToRedirect.startsWith(LOGOUT)) {
     const currentParams = new URLSearchParams(search);
     const filteredParams = new URLSearchParams();
 

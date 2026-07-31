@@ -118,7 +118,7 @@ const NotificationDetailSection = ({
                 alignItems="center"
                 pb={0}
               >
-                <Stack>
+                <Stack alignItems="flex-start">
                   <Typography
                     variant="body2"
                     fontWeight={600}

@@ -30,7 +30,6 @@ const TppLanding: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { sessionToken } = useAppSelector((state: RootState) => state.userState.user);
-  const { loginProvider } = useAppSelector((state: RootState) => state.userState);
 
   const whatIsSendFaqTitle = t('faq.what-is-send.question');
   const whatAreNotificationsFaqTitle = t('faq.what-are-notifications.question');
@@ -48,7 +47,6 @@ const TppLanding: React.FC = () => {
     } else {
       goToLoginPortal({
         rapidAccess: [AppRouteParams.RETRIEVAL_ID, value],
-        loginProvider,
         search: nextSearch,
       });
     }

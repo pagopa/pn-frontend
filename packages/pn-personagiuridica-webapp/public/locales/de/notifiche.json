@@ -45,7 +45,7 @@
     "filtered": "Keine Benachrichtigungen oder Mitteilungen für die ausgewählten Filter",
     "filtered-description": "Entferne sie oder versuche es mit einer anderen Kombination.",
     "clean-filters-cta": "Filter entfernen",
-    "delegate": "Hier siehst du die rechtsgültigen Mitteilungen, die an dein Unternehmen delegiert wurden.",
+    "delegate": "Hier siehst du die rechtsgültigen Zustellungen, die an dein Unternehmen übertragen wurden.",
     "title": "Hier siehst du die rechtsgültigen Zustellungen und andere Mitteilungen",
     "description": "Aktualisiere jetzt die digitalen Kontaktdaten, damit du sofort erfährst, wenn dein Unternehmen eine erhält.",
     "go-to-contacts-cta": "Zu den Kontaktdaten",
@@ -146,6 +146,12 @@
       "email": "E-Mail der Körperschaft",
       "website": "Website der Körperschaft",
       "copy_phone": "Telefonnummer kopiert"
+    },
+    "informal_notification_markdown": {
+      "greeting": "All'attenzione di {{recipientDenomination}}",
+      "attachments_info": "Per avere maggiori informazioni <0>è consigliato prendere visione degli allegati</0>, che possono fornire dettagli importanti.",
+      "payment_instructions": "È possibile completare il pagamento premendo <0>Paga</0>. In alternativa, si può utilizzare l'<1>avviso allegato</1> per saldare l'importo tramite tutti i canali abilitati a pagoPA.",
+      "assistance": "In ogni caso, qualora si avesse bisogno di assistenza, è possibile <0>contattare {{senderDenomination}} attraverso i suoi canali ufficiali.</0>"
     },
     "acts_files": {
       "downloadable_acts": "Die Dokumente sind 120 Tage nach Abschluss der Zustellung online verfügbar.",

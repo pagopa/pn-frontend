@@ -6,6 +6,8 @@ import App from '../App';
 import { ROUTE_LOGIN_ERROR, ROUTE_LOGOUT } from '../navigation/routes.const';
 import { render } from './test-utils';
 
+let oneIdentityLoginEnabled = true;
+
 // mock imports
 // This is needed to test the logout page.
 // If we don't mock the useNavigate, when logout page is shown an immediate redirect happens and the test fails.
@@ -14,28 +16,75 @@ vi.mock('react-router-dom', async () => ({
   useNavigate: () => vi.fn(),
 }));
 
+vi.mock('../services/configuration.service', async () => {
+  const actual = await vi.importActual<any>('../services/configuration.service');
+  return {
+    ...actual,
+    getConfiguration: () => ({
+      ...actual.getConfiguration(),
+      ONE_IDENTITY_LOGIN_ENABLED: oneIdentityLoginEnabled,
+    }),
+  };
+});
+
 describe('App', () => {
-  it('inital page', () => {
-    const { container } = render(<App />);
-    const loginPage = getById(container, 'loginPage');
-    expect(loginPage).toBeInTheDocument();
-    const errorDialog = queryById(document.body, 'errorDialog');
-    expect(errorDialog).not.toBeInTheDocument();
+  describe('with one identity login enabled', () => {
+    beforeAll(() => {
+      oneIdentityLoginEnabled = true;
+    });
+
+    it('inital page', () => {
+      const { container } = render(<App />);
+      const loginPage = getById(container, 'loginPage');
+      expect(loginPage).toBeInTheDocument();
+      const errorDialog = queryById(document.body, 'oneIdentityErrorDialog');
+      expect(errorDialog).not.toBeInTheDocument();
+    });
+
+    it('logout page', () => {
+      const { container } = render(<App />, { route: ROUTE_LOGOUT });
+      const loginPage = queryById(container, 'loginPage');
+      expect(loginPage).not.toBeInTheDocument();
+      const errorDialog = queryById(document.body, 'oneIdentityErrorDialog');
+      expect(errorDialog).not.toBeInTheDocument();
+    });
+
+    it('login error', () => {
+      const { container } = render(<App />, { route: ROUTE_LOGIN_ERROR });
+      const loginPage = queryById(container, 'loginPage');
+      expect(loginPage).not.toBeInTheDocument();
+      const errorDialog = getById(document.body, 'oneIdentityErrorDialog');
+      expect(errorDialog).toBeInTheDocument();
+    });
   });
 
-  it('logout page', () => {
-    const { container } = render(<App />, { route: ROUTE_LOGOUT });
-    const loginPage = queryById(container, 'loginPage');
-    expect(loginPage).not.toBeInTheDocument();
-    const errorDialog = queryById(document.body, 'errorDialog');
-    expect(errorDialog).not.toBeInTheDocument();
-  });
+  describe('with one identity login disabled', () => {
+    beforeAll(() => {
+      oneIdentityLoginEnabled = false;
+    });
 
-  it('login error', () => {
-    const { container } = render(<App />, { route: ROUTE_LOGIN_ERROR });
-    const loginPage = queryById(container, 'loginPage');
-    expect(loginPage).not.toBeInTheDocument();
-    const errorDialog = getById(document.body, 'errorDialog');
-    expect(errorDialog).toBeInTheDocument();
+    it('inital page', () => {
+      const { container } = render(<App />);
+      const loginPage = getById(container, 'loginPage');
+      expect(loginPage).toBeInTheDocument();
+      const errorDialog = queryById(document.body, 'errorDialog');
+      expect(errorDialog).not.toBeInTheDocument();
+    });
+
+    it('logout page', () => {
+      const { container } = render(<App />, { route: ROUTE_LOGOUT });
+      const loginPage = queryById(container, 'loginPage');
+      expect(loginPage).not.toBeInTheDocument();
+      const errorDialog = queryById(document.body, 'errorDialog');
+      expect(errorDialog).not.toBeInTheDocument();
+    });
+
+    it('login error', () => {
+      const { container } = render(<App />, { route: ROUTE_LOGIN_ERROR });
+      const loginPage = queryById(container, 'loginPage');
+      expect(loginPage).not.toBeInTheDocument();
+      const errorDialog = getById(document.body, 'errorDialog');
+      expect(errorDialog).toBeInTheDocument();
+    });
   });
 });

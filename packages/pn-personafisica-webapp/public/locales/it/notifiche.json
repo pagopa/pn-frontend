@@ -42,7 +42,7 @@
     "filtered": "Nessuna notifica o comunicazione per i filtri selezionati",
     "filtered-description": "Rimuovili o prova con un’altra combinazione.",
     "clean-filters-cta": "Rimuovi filtri",
-    "delegate": "Qui vedrai le comunicazioni a valore legale di {{name}}",
+    "delegate": "Qui vedrai le notifiche a valore legale di {{name}}",
     "title": "Qui vedrai le tue notifiche a valore legale e le altre comunicazioni",
     "description-onboarding": "Sapevi che puoi risparmiare se scegli di ricevere le comunicazioni a valore legale solo in digitale?",
     "description": "Aggiorna ora i tuoi recapiti e saprai subito quando ne riceverai una.",
@@ -61,8 +61,8 @@
   },
   "detail": {
     "legal-value": "Notifica a valore legale",
-    "legal-date": "Notifica depositata il",
-    "informal-date": "Comunicazione depositata il",
+    "legal-date": "Notifica depositata il giorno",
+    "informal-date": "Comunicazione depositata il giorno",
     "legal-disclaimer": "Notifica inviata tramite SEND, la piattaforma disciplinata dall’art. 26 del D.L 76/2020",
     "notification-timeline-section": {
       "title": "Stato della notifica",
@@ -155,6 +155,12 @@
       "email": "Email dell'ente",
       "website": "Sito web dell'ente",
       "copy_phone": "Numero di telefono copiato"
+    },
+    "informal_notification_markdown": {
+      "greeting": "Ciao {{recipientDenomination}},",
+      "attachments_info": "Per avere maggiori informazioni <0>prendi visione degli allegati,</0> che possono fornirti dettagli importanti.",
+      "payment_instructions": "Puoi effettuare il pagamento direttamente premendo <0>Paga</0>. In alternativa, puoi utilizzare l'<0>avviso allegato</0> per saldare l'importo tramite tutti i canali abilitati a pagoPA.",
+      "assistance": "In ogni caso, qualora avessi bisogno di assistenza, <0>contatta {{senderDenomination}} attraverso i suoi canali ufficiali.</0>"
     },
     "acts_files": {
       "downloadable_acts": "<0>I documenti saranno disponibili online fino a 120 giorni</0> dalla data in cui la notifica SEND ha assunto valore di legge. Salvali sul tuo dispositivo!",

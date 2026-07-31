@@ -43,7 +43,7 @@
     "filtered": "Ni obvestil ali sporočil za izbrane filtre",
     "filtered-description": "Odstranite jih ali poskusite z drugo kombinacijo.",
     "clean-filters-cta": "Odstranite filtre",
-    "delegate": "Tukaj boste videli uradna sporočila od {{name}}",
+    "delegate": "Tukaj boš videl/a pravno veljavna obvestila osebe {{name}}",
     "title": "Tukaj boste videli svoja uradna obvestila in druga sporočila",
     "description-onboarding": "Ali ste vedeli, da lahko prihranite, če se odločite za prejemanje uradnih sporočil le v digitalni obliki?",
     "description": "Posodobite svoje kontaktne podatke zdaj in takoj boste obveščeni, ko prejmete novo.",
@@ -156,6 +156,12 @@
       "email": "E-pošta organa",
       "website": "Spletno mesto organa",
       "copy_phone": "Telefonska številka je kopirana"
+    },
+    "informal_notification_markdown": {
+      "greeting": "Ciao {{recipientDenomination}},",
+      "attachments_info": "Per avere maggiori informazioni <0>prendi visione degli allegati,</0> che possono fornirti dettagli importanti.",
+      "payment_instructions": "Puoi effettuare il pagamento direttamente premendo <0>Paga</0>. In alternativa, puoi utilizzare l'<0>avviso allegato</0> per saldare l'importo tramite tutti i canali abilitati a pagoPA.",
+      "assistance": "In ogni caso, qualora avessi bisogno di assistenza, <0>contatta {{senderDenomination}} attraverso i suoi canali ufficiali.</0>"
     },
     "acts_files": {
       "downloadable_acts": "<0>Dokumenti bodo na voljo na spletu do 120 dni</0> od dneva, ko je uradno obvestilo SEND postalo pravno veljavno. Shranite jih v svojo napravo!",
