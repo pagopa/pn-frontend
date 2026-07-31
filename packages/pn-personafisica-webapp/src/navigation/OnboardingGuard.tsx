@@ -17,7 +17,7 @@ import * as routes from './routes.const';
 
 const hasNotificationsToRead = (notifications: Array<RecipientNotification>): boolean =>
   notifications.some(
-    (n) => n.isNewNotification || n.notificationStatus === NotificationStatus.EFFECTIVE_DATE
+    (n) => n.isNewNotification || n.notificationStatus !== NotificationStatus.EFFECTIVE_DATE
   );
 
 const OnboardingGuard: React.FC = () => {
