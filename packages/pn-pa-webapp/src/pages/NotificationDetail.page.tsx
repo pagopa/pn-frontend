@@ -25,6 +25,7 @@ import {
   downloadDocument,
   useErrors,
   useIsCancelled,
+  useIsMobile,
 } from '@pagopa-pn/pn-commons';
 import type { DocumentsDownloadFilesMessage } from '@pagopa-pn/pn-commons/src/components/NotificationDetail/NotificationDetailDocuments';
 import { MIAlert, MIPaper, Tag } from '@pagopa/mui-italia';
@@ -34,6 +35,7 @@ import NotificationDetailsDrawer, {
   NotificationDetailsDrawerItem,
 } from '../components/Notifications/NotificationDetailsDrawer';
 import NotificationPaymentSender from '../components/Notifications/NotificationPaymentSender';
+import NotificationRecipientsDetail from '../components/Notifications/NotificationRecipientsDetail';
 import { PAEventsType } from '../models/PAEventsType';
 import * as routes from '../navigation/routes.const';
 import { getDowntimeLegalFact } from '../redux/appStatus/actions';
@@ -79,6 +81,7 @@ const NotificationDetail: React.FC = () => {
   const { hasApiErrors } = useErrors();
   const notification = useAppSelector((state: RootState) => state.notificationState.notification);
   const { DOWNTIME_EXAMPLE_LINK } = getConfiguration();
+  const isMobile = useIsMobile('md');
 
   const downtimeEvents = useAppSelector(
     (state: RootState) => state.notificationState.downtimeEvents
@@ -283,28 +286,6 @@ const NotificationDetail: React.FC = () => {
     setOpenDetailsDrawer(false);
   };
 
-  const renderRecipients = () => {
-    if (recipients.length === 1) {
-      const [recipient] = recipients;
-
-      return `${recipient.denomination} - ${recipient.taxId}`;
-    }
-
-    if (recipients.length > 1) {
-      return (
-        <Box component="ul" sx={{ pl: 3, m: 0 }}>
-          {recipients.map((recipient) => (
-            <Box component="li" key={recipient.taxId}>
-              {recipient.denomination} - {recipient.taxId}
-            </Box>
-          ))}
-        </Box>
-      );
-    }
-
-    return null;
-  };
-
   const notificationSummaryDetails = [
     {
       label: t('detail.protocol-number', { ns: 'notifiche' }),
@@ -323,7 +304,7 @@ const NotificationDetail: React.FC = () => {
         recipients.length > 1
           ? t('detail.recipients', { ns: 'notifiche' })
           : t('detail.recipient', { ns: 'notifiche' }),
-      value: renderRecipients(),
+      value: <NotificationRecipientsDetail recipients={recipients} />,
     },
   ].filter((detail) => detail.value);
 
@@ -349,7 +330,7 @@ const NotificationDetail: React.FC = () => {
         recipients.length > 1
           ? t('detail.recipients', { ns: 'notifiche' })
           : t('detail.recipient', { ns: 'notifiche' }),
-      value: renderRecipients(),
+      value: <NotificationRecipientsDetail recipients={recipients} showAll />,
     },
     {
       label: t('detail.notification-text', { ns: 'notifiche' }),
@@ -364,6 +345,43 @@ const NotificationDetail: React.FC = () => {
       ) : undefined,
     },
   ].filter((detail) => detail.value);
+
+  const notificationAside = (
+    <Stack
+      component="aside"
+      sx={{
+        width: { xs: '100%', md: 'calc(42% - 8px)', xxl: 'calc(42% - 8px)' },
+      }}
+      gap={2}
+    >
+      {notification.notificationStatusHistory.length > 0 && (
+        <NotificationTimelineBox
+          statusHistory={notification.notificationStatusHistory}
+          recipients={notification.recipients}
+          isParty={true}
+          onTimelineClick={handleGoToTimeline}
+        />
+      )}
+      <NotificationDetailSection
+        isDelegate={false}
+        recipient={recipients[0]}
+        documents={notification.otherDocuments ?? []}
+        clickHandler={documentDownloadHandler}
+        isCancelled={false}
+        isLessThan10Years={dateIsLessThan10Years(notification.sentAt)}
+        downloadFilesMessage={getDownloadFilesMessage('aar')}
+      />
+
+      <NotificationRelatedDowntimes
+        downtimeEvents={downtimeEvents}
+        fetchDowntimeEvents={fetchDowntimeEvents}
+        notificationStatusHistory={notification.notificationStatusHistory}
+        fetchDowntimeLegalFactDocumentDetails={fetchDowntimeLegalFactDocumentDetails}
+        apiId={NOTIFICATION_ACTIONS.GET_DOWNTIME_HISTORY}
+        downtimeExampleLink={DOWNTIME_EXAMPLE_LINK}
+      />
+    </Stack>
+  );
 
   return (
     <>
@@ -454,14 +472,17 @@ const NotificationDetail: React.FC = () => {
                     >
                       {notification.recipients.length === 1
                         ? t('detail.timeline.radd.description-mono-recipient', {
-                          ns: 'notifiche',
-                        })
+                            ns: 'notifiche',
+                          })
                         : t('detail.timeline.radd.description-multi-recipients', {
-                          ns: 'notifiche',
-                        })}
+                            ns: 'notifiche',
+                          })}
                     </MIAlert>
                   )}
                 </MIPaper>
+
+                {isMobile && notificationAside}
+
                 <NotificationCancellationAction
                   notification={notification}
                   onCancelNotification={handleCancelNotification}
@@ -469,41 +490,7 @@ const NotificationDetail: React.FC = () => {
               </Stack>
             </Stack>
 
-            <Stack
-              order={{ xs: 3, md: 3, xxl: 2 }}
-              component="aside"
-              sx={{
-                width: { xs: '100%', md: 'calc(42% - 8px)', xxl: 'calc(42% - 8px)' },
-              }}
-              gap={2}
-            >
-              {notification.notificationStatusHistory.length > 0 && (
-                <NotificationTimelineBox
-                  statusHistory={notification.notificationStatusHistory}
-                  recipients={notification.recipients}
-                  isParty={false}
-                  onTimelineClick={handleGoToTimeline}
-                />
-              )}
-              <NotificationDetailSection
-                isDelegate={false}
-                recipient={recipients[0]}
-                documents={notification.otherDocuments ?? []}
-                clickHandler={documentDownloadHandler}
-                isCancelled={false}
-                isLessThan10Years={dateIsLessThan10Years(notification.sentAt)}
-                downloadFilesMessage={getDownloadFilesMessage('aar')}
-              />
-
-              <NotificationRelatedDowntimes
-                downtimeEvents={downtimeEvents}
-                fetchDowntimeEvents={fetchDowntimeEvents}
-                notificationStatusHistory={notification.notificationStatusHistory}
-                fetchDowntimeLegalFactDocumentDetails={fetchDowntimeLegalFactDocumentDetails}
-                apiId={NOTIFICATION_ACTIONS.GET_DOWNTIME_HISTORY}
-                downtimeExampleLink={DOWNTIME_EXAMPLE_LINK}
-              />
-            </Stack>
+            {!isMobile && notificationAside}
           </Box>
         </Box>
       )}

@@ -82,7 +82,7 @@ const NotificationPaymentPagoPa: React.FC<Props> = ({ iun, payment }) => {
             },
           }}
         >
-          <Grid container alignItems="center" columnSpacing={2}>
+          <Grid container alignItems="center" columnSpacing={2} rowSpacing={1}>
             <Grid item>
               <Typography variant="caption" color="text.secondary">
                 {t('detail.notice-code')}
@@ -102,7 +102,7 @@ const NotificationPaymentPagoPa: React.FC<Props> = ({ iun, payment }) => {
           </Grid>
         </Box>
       ) : (
-        <Grid container alignItems="center" width="100%" columnSpacing={2}>
+        <Grid container alignItems="center" width="100%" columnSpacing={2} rowSpacing={1}>
           <Grid item>
             <Typography variant="caption" color="text.secondary">
               {t('detail.notice-code')}
