@@ -37,7 +37,7 @@ import { apiLogout } from './redux/auth/actions';
 import { resetState } from './redux/auth/reducers';
 import { getDigitalAddresses } from './redux/contact/actions';
 import { useAppDispatch, useAppSelector } from './redux/hooks';
-import { getSidemenuInformation } from './redux/sidemenu/actions';
+import { getHasNewNotifications, getSidemenuInformation } from './redux/sidemenu/actions';
 import { RootState } from './redux/store';
 import { getConfiguration } from './services/configuration.service';
 import { PGAppErrorFactory } from './utility/AppError/PGAppErrorFactory';
@@ -162,6 +162,8 @@ const ActualApp = () => {
 
   useEffect(() => {
     if (sessionToken !== '') {
+      void dispatch(getHasNewNotifications());
+
       if (userHasAdminPermissions) {
         void dispatch(getSidemenuInformation());
       }
