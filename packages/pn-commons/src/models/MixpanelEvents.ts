@@ -57,6 +57,8 @@ export enum EventPropertyType {
   SUPER_PROPERTY = 'superProperty',
 }
 
+export type EventNotificationType = 'notifica' | 'comunicazione bonaria';
+
 export type EventPaymentStatusType = {
   page_number: number;
   count_payment: number;

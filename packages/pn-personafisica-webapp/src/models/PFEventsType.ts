@@ -276,6 +276,9 @@ export enum PFEventsType {
   SEND_BANNER = 'SEND_BANNER',
   SEND_TAP_BANNER = 'SEND_TAP_BANNER',
   SEND_CLOSE_BANNER = 'SEND_CLOSE_BANNER',
+
+  // --- NOTIFICATION_DETAIL
+  SEND_NOTIFICATION_VIEW_DETAIL = 'SEND_NOTIFICATION_VIEW_DETAIL',
 }
 
 export const eventsActionsMap: Record<string, PFEventsType> = {

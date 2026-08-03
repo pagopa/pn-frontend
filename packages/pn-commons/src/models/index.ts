@@ -26,6 +26,7 @@ export type {
   EventsType,
   TrackedEvent,
   EventNotificationSource,
+  EventNotificationType,
 } from './MixpanelEvents';
 export type {
   GetNotificationsParams,
