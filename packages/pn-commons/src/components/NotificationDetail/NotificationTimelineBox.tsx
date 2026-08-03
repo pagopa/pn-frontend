@@ -2,7 +2,6 @@ import KeyboardArrowRightRoundedIcon from '@mui/icons-material/KeyboardArrowRigh
 import { Stack, Typography } from '@mui/material';
 import { MIButton, MIChip, MIPaper } from '@pagopa/mui-italia';
 
-import { useIsMobile } from '../../hooks';
 import { NotificationDetailRecipient, NotificationStatusHistory } from '../../models';
 import { getNotificationStatusInfos } from '../../utility';
 import { getLocalizedOrDefaultLabel } from '../../utility/localization.utility';
@@ -32,8 +31,6 @@ const NotificationTimelineBox = ({
   isParty,
   onTimelineClick,
 }: NotificationTimelineBoxProps) => {
-  const isMobile = useIsMobile('sm');
-
   if (statusHistory.length === 0) {
     return null;
   }
@@ -61,9 +58,7 @@ const NotificationTimelineBox = ({
           label={notificationStatusInfos.label}
           sx={{ my: 1, width: 'fit-content' }}
         />
-        {!isMobile && (
-          <Typography variant="body2">{notificationStatusInfos.description}</Typography>
-        )}
+        <Typography variant="body2">{notificationStatusInfos.description}</Typography>
         <MIButton
           aria-label={getLocalizedOrDefaultLabel(
             'notifications',
