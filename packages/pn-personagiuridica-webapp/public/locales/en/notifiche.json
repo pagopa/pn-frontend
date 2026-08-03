@@ -155,9 +155,9 @@
     },
     "acts_files": {
       "downloadable_acts": "Documents are available online for 120 days from the completion of the notification.",
-      "not_downloadable_acts": "120 days have passed since the completion date. If you want to obtain the documents, please contact the sender.",
+      "not_downloadable_acts": "The documents are no longer available online. To request them, contact the institution that sent them to you.",
       "downloadable_aar": "<0>Available online for 10 years</0> from the date the SEND notification became legally binding.",
-      "not_downloadable_aar": "As 10 years have passed since the completion date, the acknowledgement of receipt is no longer available.",
+      "not_downloadable_aar": "The notification of receipt is no longer available. To request it, contact the institution that sent it to you.",
       "effected_faq": "When do I complete a notification?",
       "informal_downloadable_acts": "Save the attachments to your device: they will be available online for up to <0>180 days from the filing date</0> shown at the top!"
     },

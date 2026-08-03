@@ -43,7 +43,7 @@
   "table": {
     "title": "Notification table",
     "date": "Date",
-    "recipient": "Recipient",
+    "recipient": "Fiscal Code",
     "subject": "Subject",
     "iun": "IUN code",
     "groups": "Groups",

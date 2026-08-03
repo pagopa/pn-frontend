@@ -43,7 +43,7 @@
   "table": {
     "title": "Tabelle der Zustellungen",
     "date": "Datum",
-    "recipient": "Empfänger",
+    "recipient": "Steuernummer",
     "subject": "Betreff",
     "iun": "IUN-Code",
     "groups": "Gruppen",
