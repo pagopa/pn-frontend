@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { Box } from '@mui/material';
+import { Box, SxProps } from '@mui/material';
 import {
   INotificationDetailTimeline,
   NotificationDetail,
@@ -21,11 +21,13 @@ import ConfirmCancellationDialog from './ConfirmCancellationDialog';
 type Props = {
   notification: NotificationDetail;
   onCancelNotification: () => void;
+  sx?: SxProps;
 };
 
 const NotificationCancellationAction: React.FC<Props> = ({
   notification,
   onCancelNotification,
+  sx,
 }) => {
   const { t } = useTranslation(['notifiche']);
   const [showModal, setShowModal] = useState(false);
@@ -61,7 +63,7 @@ const NotificationCancellationAction: React.FC<Props> = ({
   }
 
   return (
-    <Box>
+    <Box sx={sx}>
       <MIButton
         variant="outlined"
         color="error"

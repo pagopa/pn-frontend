@@ -6,8 +6,6 @@ import { configDefaults, defineConfig as defineVitestConfig } from 'vitest/confi
 import basicSsl from '@vitejs/plugin-basic-ssl';
 import react from '@vitejs/plugin-react';
 
-import type { IncomingMessage, ServerResponse } from 'node:http';
-
 const vitestConfig = defineVitestConfig({
   test: {
     globals: true,

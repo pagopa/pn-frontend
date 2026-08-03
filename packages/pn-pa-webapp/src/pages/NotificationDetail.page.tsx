@@ -34,6 +34,7 @@ import NotificationDetailsDrawer, {
   NotificationDetailsDrawerItem,
 } from '../components/Notifications/NotificationDetailsDrawer';
 import NotificationPaymentSender from '../components/Notifications/NotificationPaymentSender';
+import NotificationRecipientsDetail from '../components/Notifications/NotificationRecipientsDetail';
 import { PAEventsType } from '../models/PAEventsType';
 import * as routes from '../navigation/routes.const';
 import { getDowntimeLegalFact } from '../redux/appStatus/actions';
@@ -283,28 +284,6 @@ const NotificationDetail: React.FC = () => {
     setOpenDetailsDrawer(false);
   };
 
-  const renderRecipients = () => {
-    if (recipients.length === 1) {
-      const [recipient] = recipients;
-
-      return `${recipient.denomination} - ${recipient.taxId}`;
-    }
-
-    if (recipients.length > 1) {
-      return (
-        <Box component="ul" sx={{ pl: 3, m: 0 }}>
-          {recipients.map((recipient) => (
-            <Box component="li" key={recipient.taxId}>
-              {recipient.denomination} - {recipient.taxId}
-            </Box>
-          ))}
-        </Box>
-      );
-    }
-
-    return null;
-  };
-
   const notificationSummaryDetails = [
     {
       label: t('detail.protocol-number', { ns: 'notifiche' }),
@@ -323,7 +302,7 @@ const NotificationDetail: React.FC = () => {
         recipients.length > 1
           ? t('detail.recipients', { ns: 'notifiche' })
           : t('detail.recipient', { ns: 'notifiche' }),
-      value: renderRecipients(),
+      value: <NotificationRecipientsDetail recipients={recipients} />,
     },
   ].filter((detail) => detail.value);
 
@@ -349,7 +328,7 @@ const NotificationDetail: React.FC = () => {
         recipients.length > 1
           ? t('detail.recipients', { ns: 'notifiche' })
           : t('detail.recipient', { ns: 'notifiche' }),
-      value: renderRecipients(),
+      value: <NotificationRecipientsDetail recipients={recipients} showAll />,
     },
     {
       label: t('detail.notification-text', { ns: 'notifiche' }),
@@ -400,13 +379,14 @@ const NotificationDetail: React.FC = () => {
           >
             <Stack
               sx={{
-                display: { xs: 'flex', md: 'contents', xxl: 'flex' },
+                display: { xs: 'contents', md: 'contents', xxl: 'flex' },
                 flexDirection: 'column',
                 width: { xs: '100%', xxl: 'calc(58% - 8px)' },
               }}
               gap={2}
             >
-              <Stack sx={{ width: { xs: '100%', md: '100%' } }} gap={2}>
+              {/* ELEMENT 1: intro and alert */}
+              <Stack sx={{ width: { xs: '100%', md: '100%' }, order: { xs: 1 } }} gap={2}>
                 <AlertNotificationCancel notification={notification} />
                 <AbstractPaper
                   title={notification.iun}
@@ -420,10 +400,14 @@ const NotificationDetail: React.FC = () => {
                   })}
                 />
               </Stack>
+              {/* end ELEMENT 1: intro and alert */}
 
+              {/* ELEMENT 2: document, payment and cancel action */}
               <Stack
                 sx={{
+                  display: { xs: 'contents', md: 'flex' },
                   width: { xs: '100%', md: 'calc(58% - 8px)', xxl: '100%' },
+                  order: { xs: 2 },
                 }}
                 gap={2}
               >
@@ -432,9 +416,10 @@ const NotificationDetail: React.FC = () => {
                     iun={notification.iun}
                     recipients={recipients}
                     timeline={notification.timeline}
+                    sx={{ width: '100%', order: { xs: 2 } }}
                   />
                 )}
-                <MIPaper padding={24}>
+                <MIPaper padding={24} sx={{ width: '100%', order: { xs: 3 } }}>
                   <NotificationDetailDocuments
                     title={t('detail.acts', { ns: 'notifiche' })}
                     documents={notification.documents}
@@ -454,26 +439,30 @@ const NotificationDetail: React.FC = () => {
                     >
                       {notification.recipients.length === 1
                         ? t('detail.timeline.radd.description-mono-recipient', {
-                          ns: 'notifiche',
-                        })
+                            ns: 'notifiche',
+                          })
                         : t('detail.timeline.radd.description-multi-recipients', {
-                          ns: 'notifiche',
-                        })}
+                            ns: 'notifiche',
+                          })}
                     </MIAlert>
                   )}
                 </MIPaper>
+
                 <NotificationCancellationAction
                   notification={notification}
                   onCancelNotification={handleCancelNotification}
+                  sx={{ width: '100%', order: { xs: 5 } }}
                 />
               </Stack>
+              {/* end ELEMENT 2: document, payment and cancel action */}
             </Stack>
 
+            {/* ELEMENT 3: aside */}
             <Stack
-              order={{ xs: 3, md: 3, xxl: 2 }}
               component="aside"
               sx={{
                 width: { xs: '100%', md: 'calc(42% - 8px)', xxl: 'calc(42% - 8px)' },
+                order: { xs: 4, md: 3, xxl: 2 },
               }}
               gap={2}
             >
@@ -481,7 +470,7 @@ const NotificationDetail: React.FC = () => {
                 <NotificationTimelineBox
                   statusHistory={notification.notificationStatusHistory}
                   recipients={notification.recipients}
-                  isParty={false}
+                  isParty={true}
                   onTimelineClick={handleGoToTimeline}
                 />
               )}
@@ -504,6 +493,7 @@ const NotificationDetail: React.FC = () => {
                 downtimeExampleLink={DOWNTIME_EXAMPLE_LINK}
               />
             </Stack>
+            {/* end ELEMENT 3: aside */}
           </Box>
         </Box>
       )}
