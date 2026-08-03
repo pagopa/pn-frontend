@@ -98,6 +98,7 @@ const Dashboard = () => {
           flexDirection: { xs: 'column-reverse', sm: 'row' },
           gap: { xs: 2, sm: 5 },
           width: { xs: '100%', sm: 'auto' },
+          mt: { xs: 3 },
         }}
       >
         <NotificationSettingsDrawer />
@@ -206,16 +207,10 @@ const Dashboard = () => {
           gap: 3,
         }}
         titleButton={!isSmallScreen ? getTitleButtonContent() : undefined}
-        subTitle={!isSmallScreen ? t('subtitle') : undefined}
+        subTitle={t('subtitle')}
       />
-      {isSmallScreen && (
-        <Box mb={3}>
-          <Typography variant="body2" mb={3}>
-            {t('subtitle')}
-          </Typography>
-          {getTitleButtonContent()}
-        </Box>
-      )}
+
+      {isSmallScreen && getTitleButtonContent()}
 
       {isMobile && (
         <Typography variant="sidenav" component="h2" mt={4} mb={2}>
