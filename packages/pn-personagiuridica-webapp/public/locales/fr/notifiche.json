@@ -155,9 +155,9 @@
     },
     "acts_files": {
       "downloadable_acts": "Les documents sont disponibles en ligne pendant 120 jours à compter de la finalisation de la notification.",
-      "not_downloadable_acts": "Étant donné que 120 jours se sont écoulés depuis la date de finalisation, si vous souhaitez obtenir les actes, vous devez vous adresser à l’expéditeur.",
+      "not_downloadable_acts": "Les documents ne sont plus disponibles en ligne. Pour les demander, adresse-toi à l’organisme qui te les a envoyés.",
       "downloadable_aar": "<0>Disponible en ligne pendant 10 ans</0> à compter de la date à laquelle la notification SEND a pris valeur juridique.",
-      "not_downloadable_aar": "Comme 10 ans se sont écoulés depuis la date de finalisation, l’accusé de réception n’est plus disponible.",
+      "not_downloadable_aar": "L’avis de réception n'est plus disponible. Pour le demander, adresse-toi à l’organisme qui te l’a envoyé.",
       "effected_faq": "Quand une notification est-elle finalisée ?",
       "informal_downloadable_acts": "Conserve les pièces jointes sur ton appareil : elles seront disponibles en ligne jusqu'à <0>180 jours à compter de la date de dépôt</0> indiquée en haut !"
     },

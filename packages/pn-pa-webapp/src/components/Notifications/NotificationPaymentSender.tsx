@@ -1,7 +1,7 @@
 import { ChangeEvent, useState } from 'react';
 import { TFunction, useTranslation } from 'react-i18next';
 
-import { Box, Divider, MenuItem, Stack, TextField, Typography } from '@mui/material';
+import { Box, Divider, MenuItem, Stack, SxProps, TextField, Typography } from '@mui/material';
 import {
   CustomPagination,
   F24PaymentDetails,
@@ -24,6 +24,7 @@ type Props = {
   iun: string;
   recipients: Array<NotificationDetailRecipient>;
   timeline: Array<INotificationDetailTimeline>;
+  sx?: SxProps;
 };
 
 const renderRecipientMenuItem = (
@@ -56,7 +57,7 @@ const renderSelectValue = (
   return recipient ? `${recipient.denomination} - ${recipient.taxId}` : '';
 };
 
-const NotificationPaymentSender: React.FC<Props> = ({ iun, recipients, timeline }) => {
+const NotificationPaymentSender: React.FC<Props> = ({ iun, recipients, timeline, sx }) => {
   const { t } = useTranslation(['notifiche']);
   const [recipientSelected, setRecipientSelected] = useState<string>('');
   const [paymentDetails, setPaymentDetails] = useState<Array<PaymentDetails>>(
@@ -117,7 +118,7 @@ const NotificationPaymentSender: React.FC<Props> = ({ iun, recipients, timeline 
     );
 
   return (
-    <MIPaper padding={24} data-testid="paymentInfoBox">
+    <MIPaper padding={24} data-testid="paymentInfoBox" sx={sx}>
       <Typography variant="h5" component="h2" mb={2}>
         {t('payment.title', { ns: 'notifiche' })}
       </Typography>
