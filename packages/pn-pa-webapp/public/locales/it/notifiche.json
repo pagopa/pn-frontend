@@ -43,7 +43,7 @@
   "table": {
     "title": "Tabella delle notifiche",
     "date": "Data",
-    "recipient": "Destinatario",
+    "recipient": "Codice fiscale",
     "subject": "Oggetto",
     "iun": "Codice IUN",
     "groups": "Gruppi",

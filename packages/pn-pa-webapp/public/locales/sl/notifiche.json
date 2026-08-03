@@ -43,7 +43,7 @@
   "table": {
     "title": "Tabela obvestil",
     "date": "Datum",
-    "recipient": "Prejemnik",
+    "recipient": "Davčna številka",
     "subject": "Zadeva",
     "iun": "Koda IUN",
     "groups": "Skupine",
