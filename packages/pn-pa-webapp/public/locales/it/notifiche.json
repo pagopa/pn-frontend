@@ -42,7 +42,6 @@
   },
   "table": {
     "title": "Tabella delle notifiche",
-    "mobile-title": "Elenco delle comunicazioni",
     "date": "Data",
     "recipient": "Codice fiscale",
     "subject": "Oggetto",

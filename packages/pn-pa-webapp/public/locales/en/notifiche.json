@@ -42,7 +42,6 @@
   },
   "table": {
     "title": "Notification table",
-    "mobile-title": "List of communications",
     "date": "Date",
     "recipient": "Fiscal Code",
     "subject": "Subject",

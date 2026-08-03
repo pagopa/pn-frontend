@@ -2,7 +2,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
-import { Box, Button, Typography } from '@mui/material';
+import { Box, Button } from '@mui/material';
 import {
   A11yMessage,
   ApiErrorWrapper,
@@ -211,12 +211,6 @@ const Dashboard = () => {
       />
 
       {isSmallScreen && getTitleButtonContent()}
-
-      {isMobile && (
-        <Typography variant="sidenav" component="h2" mt={4} mb={2}>
-          {t('table.mobile-title')}
-        </Typography>
-      )}
 
       <Box sx={{ mb: { xs: 0, lg: 3 } }}>
         <FilterNotifications ref={filterNotificationsRef} showFilters />

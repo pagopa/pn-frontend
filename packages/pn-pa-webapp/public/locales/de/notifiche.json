@@ -42,7 +42,6 @@
   },
   "table": {
     "title": "Tabelle der Zustellungen",
-    "mobile-title": "Liste der Mitteilungen",
     "date": "Datum",
     "recipient": "Steuernummer",
     "subject": "Betreff",
