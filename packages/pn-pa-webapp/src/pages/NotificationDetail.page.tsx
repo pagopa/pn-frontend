@@ -25,7 +25,6 @@ import {
   downloadDocument,
   useErrors,
   useIsCancelled,
-  useIsMobile,
 } from '@pagopa-pn/pn-commons';
 import type { DocumentsDownloadFilesMessage } from '@pagopa-pn/pn-commons/src/components/NotificationDetail/NotificationDetailDocuments';
 import { MIAlert, MIPaper, Tag } from '@pagopa/mui-italia';
@@ -81,7 +80,6 @@ const NotificationDetail: React.FC = () => {
   const { hasApiErrors } = useErrors();
   const notification = useAppSelector((state: RootState) => state.notificationState.notification);
   const { DOWNTIME_EXAMPLE_LINK } = getConfiguration();
-  const isMobile = useIsMobile('md');
 
   const downtimeEvents = useAppSelector(
     (state: RootState) => state.notificationState.downtimeEvents
@@ -346,43 +344,6 @@ const NotificationDetail: React.FC = () => {
     },
   ].filter((detail) => detail.value);
 
-  const notificationAside = (
-    <Stack
-      component="aside"
-      sx={{
-        width: { xs: '100%', md: 'calc(42% - 8px)', xxl: 'calc(42% - 8px)' },
-      }}
-      gap={2}
-    >
-      {notification.notificationStatusHistory.length > 0 && (
-        <NotificationTimelineBox
-          statusHistory={notification.notificationStatusHistory}
-          recipients={notification.recipients}
-          isParty={true}
-          onTimelineClick={handleGoToTimeline}
-        />
-      )}
-      <NotificationDetailSection
-        isDelegate={false}
-        recipient={recipients[0]}
-        documents={notification.otherDocuments ?? []}
-        clickHandler={documentDownloadHandler}
-        isCancelled={false}
-        isLessThan10Years={dateIsLessThan10Years(notification.sentAt)}
-        downloadFilesMessage={getDownloadFilesMessage('aar')}
-      />
-
-      <NotificationRelatedDowntimes
-        downtimeEvents={downtimeEvents}
-        fetchDowntimeEvents={fetchDowntimeEvents}
-        notificationStatusHistory={notification.notificationStatusHistory}
-        fetchDowntimeLegalFactDocumentDetails={fetchDowntimeLegalFactDocumentDetails}
-        apiId={NOTIFICATION_ACTIONS.GET_DOWNTIME_HISTORY}
-        downtimeExampleLink={DOWNTIME_EXAMPLE_LINK}
-      />
-    </Stack>
-  );
-
   return (
     <>
       {hasNotificationSentApiError && (
@@ -418,13 +379,14 @@ const NotificationDetail: React.FC = () => {
           >
             <Stack
               sx={{
-                display: { xs: 'flex', md: 'contents', xxl: 'flex' },
+                display: { xs: 'contents', md: 'contents', xxl: 'flex' },
                 flexDirection: 'column',
                 width: { xs: '100%', xxl: 'calc(58% - 8px)' },
               }}
               gap={2}
             >
-              <Stack sx={{ width: { xs: '100%', md: '100%' } }} gap={2}>
+              {/* ELEMENT 1: intro and alert */}
+              <Stack sx={{ width: { xs: '100%', md: '100%' }, order: { xs: 1 } }} gap={2}>
                 <AlertNotificationCancel notification={notification} />
                 <AbstractPaper
                   title={notification.iun}
@@ -438,10 +400,14 @@ const NotificationDetail: React.FC = () => {
                   })}
                 />
               </Stack>
+              {/* end ELEMENT 1: intro and alert */}
 
+              {/* ELEMENT 2: document, payment and cancel action */}
               <Stack
                 sx={{
+                  display: { xs: 'contents', md: 'flex' },
                   width: { xs: '100%', md: 'calc(58% - 8px)', xxl: '100%' },
+                  order: { xs: 2 },
                 }}
                 gap={2}
               >
@@ -450,9 +416,10 @@ const NotificationDetail: React.FC = () => {
                     iun={notification.iun}
                     recipients={recipients}
                     timeline={notification.timeline}
+                    sx={{ width: '100%', order: { xs: 2 } }}
                   />
                 )}
-                <MIPaper padding={24}>
+                <MIPaper padding={24} sx={{ width: '100%', order: { xs: 3 } }}>
                   <NotificationDetailDocuments
                     title={t('detail.acts', { ns: 'notifiche' })}
                     documents={notification.documents}
@@ -481,16 +448,52 @@ const NotificationDetail: React.FC = () => {
                   )}
                 </MIPaper>
 
-                {isMobile && notificationAside}
-
                 <NotificationCancellationAction
                   notification={notification}
                   onCancelNotification={handleCancelNotification}
+                  sx={{ width: '100%', order: { xs: 5 } }}
                 />
               </Stack>
+              {/* end ELEMENT 2: document, payment and cancel action */}
             </Stack>
 
-            {!isMobile && notificationAside}
+            {/* ELEMENT 3: aside */}
+            <Stack
+              component="aside"
+              sx={{
+                width: { xs: '100%', md: 'calc(42% - 8px)', xxl: 'calc(42% - 8px)' },
+                order: { xs: 4, md: 3, xxl: 2 },
+              }}
+              gap={2}
+            >
+              {notification.notificationStatusHistory.length > 0 && (
+                <NotificationTimelineBox
+                  statusHistory={notification.notificationStatusHistory}
+                  recipients={notification.recipients}
+                  isParty={true}
+                  onTimelineClick={handleGoToTimeline}
+                />
+              )}
+              <NotificationDetailSection
+                isDelegate={false}
+                recipient={recipients[0]}
+                documents={notification.otherDocuments ?? []}
+                clickHandler={documentDownloadHandler}
+                isCancelled={false}
+                isLessThan10Years={dateIsLessThan10Years(notification.sentAt)}
+                downloadFilesMessage={getDownloadFilesMessage('aar')}
+              />
+
+              <NotificationRelatedDowntimes
+                downtimeEvents={downtimeEvents}
+                fetchDowntimeEvents={fetchDowntimeEvents}
+                notificationStatusHistory={notification.notificationStatusHistory}
+                fetchDowntimeLegalFactDocumentDetails={fetchDowntimeLegalFactDocumentDetails}
+                apiId={NOTIFICATION_ACTIONS.GET_DOWNTIME_HISTORY}
+                downtimeExampleLink={DOWNTIME_EXAMPLE_LINK}
+              />
+            </Stack>
+            {/* end ELEMENT 3: aside */}
           </Box>
         </Box>
       )}
