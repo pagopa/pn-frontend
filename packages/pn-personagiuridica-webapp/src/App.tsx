@@ -36,8 +36,10 @@ import { getCurrentAppStatus } from './redux/appStatus/actions';
 import { apiLogout } from './redux/auth/actions';
 import { resetState } from './redux/auth/reducers';
 import { getDigitalAddresses } from './redux/contact/actions';
+import { getReceivedNotifications } from './redux/dashboard/actions';
 import { useAppDispatch, useAppSelector } from './redux/hooks';
 import { getSidemenuInformation } from './redux/sidemenu/actions';
+import { setHasNewNotifications } from './redux/sidemenu/reducers';
 import { RootState } from './redux/store';
 import { getConfiguration } from './services/configuration.service';
 import { PGAppErrorFactory } from './utility/AppError/PGAppErrorFactory';
@@ -162,6 +164,27 @@ const ActualApp = () => {
 
   useEffect(() => {
     if (sessionToken !== '') {
+      // this api call it is needed to populate the notification side menu dot
+      // to avoid double api call (one here and another in the notification page) we have to do the call
+      // only if the current page is the delegated page
+      if (pathname !== routes.NOTIFICHE) {
+        dispatch(
+          getReceivedNotifications({
+            size: 10,
+            isDelegatedPage: false,
+          })
+        )
+          .unwrap()
+          .then((data) => {
+            dispatch(
+              setHasNewNotifications(
+                data.resultsPage.some((notification) => notification.isNewNotification)
+              )
+            );
+          })
+          .catch(() => {});
+      }
+
       if (userHasAdminPermissions) {
         void dispatch(getSidemenuInformation());
       }
