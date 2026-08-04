@@ -1,0 +1,83 @@
+name: Push locales to Lokalise
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      # - develop
+      # TODO: RIMUOVERE PRIMA DEL MERGE IN develop - serve solo per testare sul branch di feature
+      - feature/PN-19913
+    paths:
+      - 'packages/pn-personafisica-login/public/locales/it/**'
+      - 'packages/pn-personafisica-webapp/public/locales/it/**'
+      - 'packages/pn-pa-webapp/public/locales/it/**'
+      - 'packages/pn-personagiuridica-webapp/public/locales/it/**'
+
+concurrency:
+  group: lokalise-push-${{ github.head_ref || github.run_id }}
+  cancel-in-progress: false
+
+permissions:
+  # write serve al primo run per creare/pushare il tag 'lokalise-upload-complete'.
+  # Dopo che il tag esiste si puo' tornare a 'contents: read' (come io-app).
+  contents: write
+
+jobs:
+  detect-changes:
+    runs-on: ubuntu-latest
+    outputs:
+      pfl: ${{ steps.filter.outputs.pfl }}
+      pf: ${{ steps.filter.outputs.pf }}
+      pa: ${{ steps.filter.outputs.pa }}
+      pg: ${{ steps.filter.outputs.pg }}
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - name: Detect changed apps
+        id: filter
+        uses: dorny/paths-filter@7b450fff21473bca461d4b92ce414b9d0420d706 # v4.0.2
+        with:
+          filters: |
+            pfl:
+              - 'packages/pn-personafisica-login/public/locales/it/**'
+            pf:
+              - 'packages/pn-personafisica-webapp/public/locales/it/**'
+            pa:
+              - 'packages/pn-pa-webapp/public/locales/it/**'
+            pg:
+              - 'packages/pn-personagiuridica-webapp/public/locales/it/**'
+
+  push-locale:
+    needs: detect-changes
+    if: needs.detect-changes.outputs[matrix.key] == 'true' || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - key: pfl
+            secret_suffix: PFL
+            translations_path: packages/pn-personafisica-login/public/locales
+          - key: pf
+            secret_suffix: PF
+            translations_path: packages/pn-personafisica-webapp/public/locales
+          - key: pa
+            secret_suffix: PA
+            translations_path: packages/pn-pa-webapp/public/locales
+          - key: pg
+            secret_suffix: PG
+            translations_path: packages/pn-personagiuridica-webapp/public/locales
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - name: Push ${{ matrix.key }} to Lokalise
+        uses: lokalise/lokalise-push-action@bb67ba45a739acf22e3c00f05dc50a55737fa5c8 #v5.3.1
+        with:
+          api_token: ${{ secrets.LOKALISE_API_TOKEN }}
+          project_id: ${{ secrets[format('LOKALISE_PROJECT_ID_{0}', matrix.secret_suffix)] }}
+          base_lang: it
+          translations_path: |
+            ${{ matrix.translations_path }}
+          file_ext: json
+          additional_params: |
+            cleanup_mode: true
