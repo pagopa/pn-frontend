@@ -203,7 +203,7 @@ const ActualApp = () => {
         name: organization?.name,
         // productRole: role?.role,
         productRole: t(`roles.${role?.role}`),
-        logoUrl: `${SELFCARE_CDN_URL}/institutions/${organization?.id}/logo.png`,
+        logoUrl: `${SELFCARE_CDN_URL}institutions/${organization?.id}/logo.png`,
       },
     ],
     [role, organization, i18n.language]

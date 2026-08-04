@@ -49,7 +49,7 @@ interface InstitutionLogoProps {
 const InstitutionLogo = ({ id, name, senderLogoUrl }: InstitutionLogoProps) => {
   const [hasError, setHasError] = useState(false);
   const logoSrc =
-    id && !hasError && senderLogoUrl ? `${senderLogoUrl}${id}/institutions/logo.png` : undefined;
+    id && !hasError && senderLogoUrl ? `${senderLogoUrl}institutions/${id}/logo.png` : undefined;
 
   return (
     <Avatar
