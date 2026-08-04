@@ -55,7 +55,6 @@ describe('Dashbaord redux state tests', () => {
         orderBy: '',
         order: 'asc' as 'asc' | 'desc',
       },
-      isFirstSearch: false,
     });
   });
 
