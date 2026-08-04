@@ -1,7 +1,7 @@
 import { ReactNode, useState } from 'react';
 import { Trans } from 'react-i18next';
 
-import AccountBalanceOutlinedIcon from '@mui/icons-material/AccountBalanceOutlined';
+import AccountBalanceRoundedIcon from '@mui/icons-material/AccountBalanceRounded';
 import KeyboardArrowRightRoundedIcon from '@mui/icons-material/KeyboardArrowRightRounded';
 import VerifiedRoundedIcon from '@mui/icons-material/VerifiedRounded';
 import { Avatar, Box, Divider, Grid, Stack, Typography } from '@mui/material';
@@ -59,13 +59,16 @@ const InstitutionLogo = ({ id, name, senderLogoUrl }: InstitutionLogoProps) => {
         onError: () => setHasError(true),
       }}
       sx={{
-        width: { xs: 40, md: 56 },
-        height: { xs: 40, md: 56 },
-        backgroundColor: theme.palette.grey[50],
+        width: { xs: 64 },
+        height: { xs: 64 },
+        backgroundColor: logoSrc ? undefined : theme.palette.grey[50],
+        border: logoSrc ? `1px solid ${theme.palette.grey[300]}` : undefined,
+        borderRadius: 2,
+        padding: logoSrc ? 1 : 0,
       }}
       variant="rounded"
     >
-      <AccountBalanceOutlinedIcon sx={{ color: theme.palette.grey[300] }} />
+      <AccountBalanceRoundedIcon sx={{ width: 40, height: 40, color: theme.palette.grey[300] }} />
     </Avatar>
   );
 };
@@ -251,7 +254,7 @@ const AbstractPaper = ({
         </Stack>
       ) : (
         <>
-          <Grid container spacing={2}>
+          <Grid container spacing={isMobile ? 0 : 2}>
             <Grid item xs={12} md={6} display="flex" alignItems="center" gap={2}>
               <InstitutionLogo
                 id={senderPaId}
