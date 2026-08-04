@@ -200,6 +200,7 @@ const Notifiche = ({ isDelegatedPage = false }: Props) => {
       dispatch(setNotificationFilters({ ...filters, communicationType: '' }));
       return;
     }
+
     fetchNotifications();
   }, [fetchNotifications, isDelegatedPage, filters, dispatch]);
 
