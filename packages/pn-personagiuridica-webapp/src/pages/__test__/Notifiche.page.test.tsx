@@ -84,6 +84,50 @@ describe('Notifiche Page ', () => {
     expect(groupSelector).not.toBeInTheDocument();
   });
 
+  it('renders page using notifications loaded during bootstrap', async () => {
+    await act(async () => {
+      result = render(<Notifiche />, {
+        preloadedState: {
+          userState: {
+            user: userResponse,
+          },
+          dashboardState: {
+            loading: false,
+            notifications: notificationsDTO.resultsPage,
+            filters: {
+              startDate: undefined,
+              endDate: undefined,
+              communicationType: '',
+              iunMatch: '',
+            },
+            pagination: {
+              nextPagesKey: notificationsDTO.nextPagesKey,
+              size: 10,
+              page: 0,
+              moreResult: notificationsDTO.moreResult,
+            },
+            sort: {
+              orderBy: '',
+              order: 'asc',
+            },
+            isFirstSearch: true,
+          },
+        },
+      });
+    });
+
+    expect(mock.history.get).toHaveLength(0);
+
+    const rows = result.getAllByTestId('notificationsTable.body.row');
+    expect(rows).toHaveLength(notificationsDTO.resultsPage.length);
+
+    rows.forEach((row, index) => {
+      expect(row).toHaveTextContent(notificationsDTO.resultsPage[index].iun);
+    });
+
+    expect(result.testStore.getState().dashboardState.isFirstSearch).toBe(false);
+  });
+
   it('render page without notifications after filtering and remove filters', async () => {
     mock.onGet(notificationsPath).reply(200, notificationsDTO);
     mock

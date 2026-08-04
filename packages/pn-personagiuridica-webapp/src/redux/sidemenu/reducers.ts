@@ -1,7 +1,7 @@
 import { PayloadAction, createSlice, isAnyOf } from '@reduxjs/toolkit';
 
 import { acceptMandate, rejectMandate } from '../delegation/actions';
-import { getHasNewNotifications, getSidemenuInformation } from './actions';
+import { getSidemenuInformation } from './actions';
 
 /* eslint-disable functional/immutable-data */
 const generalInfoSlice = createSlice({
@@ -22,9 +22,6 @@ const generalInfoSlice = createSlice({
   extraReducers: (builder) => {
     builder.addCase(getSidemenuInformation.fulfilled, (state, action) => {
       state.pendingDelegators = action.payload;
-    });
-    builder.addCase(getHasNewNotifications.fulfilled, (state, action) => {
-      state.hasNewNotifications = action.payload;
     });
     builder.addMatcher(isAnyOf(acceptMandate.fulfilled, rejectMandate.fulfilled), (state) => {
       if (state.pendingDelegators > 0) {

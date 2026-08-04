@@ -36,8 +36,11 @@ import { getCurrentAppStatus } from './redux/appStatus/actions';
 import { apiLogout } from './redux/auth/actions';
 import { resetState } from './redux/auth/reducers';
 import { getDigitalAddresses } from './redux/contact/actions';
+import { getReceivedNotifications } from './redux/dashboard/actions';
+import { setFirstSearch } from './redux/dashboard/reducers';
 import { useAppDispatch, useAppSelector } from './redux/hooks';
-import { getHasNewNotifications, getSidemenuInformation } from './redux/sidemenu/actions';
+import { getSidemenuInformation } from './redux/sidemenu/actions';
+import { setHasNewNotifications } from './redux/sidemenu/reducers';
 import { RootState } from './redux/store';
 import { getConfiguration } from './services/configuration.service';
 import { PGAppErrorFactory } from './utility/AppError/PGAppErrorFactory';
@@ -162,7 +165,21 @@ const ActualApp = () => {
 
   useEffect(() => {
     if (sessionToken !== '') {
-      void dispatch(getHasNewNotifications());
+      void dispatch(
+        getReceivedNotifications({
+          size: 10,
+          isDelegatedPage: false,
+        })
+      )
+        .unwrap()
+        .then((data) => {
+          dispatch(
+            setHasNewNotifications(
+              data.resultsPage.some((notification) => notification.isNewNotification)
+            )
+          );
+          dispatch(setFirstSearch(true));
+        });
 
       if (userHasAdminPermissions) {
         void dispatch(getSidemenuInformation());

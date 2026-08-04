@@ -27,7 +27,12 @@ import { PNRole } from '../models/User';
 import { ContactSource } from '../models/contacts';
 import { contactsSelectors } from '../redux/contact/reducers';
 import { DASHBOARD_ACTIONS, getReceivedNotifications } from '../redux/dashboard/actions';
-import { setNotificationFilters, setPagination, setSorting } from '../redux/dashboard/reducers';
+import {
+  setFirstSearch,
+  setNotificationFilters,
+  setPagination,
+  setSorting,
+} from '../redux/dashboard/reducers';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { setHasNewNotifications } from '../redux/sidemenu/reducers';
 import { RootState } from '../redux/store';
@@ -44,7 +49,7 @@ const Notifiche = ({ isDelegatedPage = false }: Props) => {
   const [pageReady, setPageReady] = useState(false);
   const domicileBannerTypeRef = useRef('');
 
-  const { notifications, filters, sort, pagination } = useAppSelector(
+  const { notifications, filters, sort, pagination, isFirstSearch } = useAppSelector(
     (state: RootState) => state.dashboardState
   );
   const { defaultEMAILAddress, defaultSMSAddress, addresses } = useAppSelector(
@@ -200,7 +205,27 @@ const Notifiche = ({ isDelegatedPage = false }: Props) => {
       dispatch(setNotificationFilters({ ...filters, communicationType: '' }));
       return;
     }
+
+    if (isFirstSearch) {
+      dispatch(setFirstSearch(false));
+
+      if (!isDelegatedPage) {
+        setPageReady(true);
+
+        registerNotificationSectionSuperProperties(notifications.length);
+
+        PGEventStrategyFactory.triggerEvent(PGEventsType.SEND_PG_YOUR_NOTIFICATION, {
+          notifications,
+          pageNumber: pagination.page,
+          domicileBannerType: domicileBannerTypeRef.current,
+        });
+
+        return;
+      }
+    }
     fetchNotifications();
+    // Keep these dependencies unchanged: adding isFirstSearch, notifications, or pagination
+    // would re-run the effect after setFirstSearch(false) and trigger a second fetch.
   }, [fetchNotifications, isDelegatedPage, filters, dispatch]);
 
   // Announce every time loading goes from true -> false
