@@ -110,7 +110,7 @@ describe('App', () => {
     expect(logo).toBeInTheDocument();
     expect(logo).toHaveAttribute(
       'src',
-      `${getConfiguration().SELFCARE_CDN_URL}/institutions/${organizationId}/logo.png`
+      `${getConfiguration().SELFCARE_CDN_URL}institutions/${organizationId}/logo.png`
     );
     const footer = document.querySelector('footer');
     expect(footer).toBeInTheDocument();
