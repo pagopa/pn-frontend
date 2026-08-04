@@ -2,11 +2,6 @@ name: Push locales to Lokalise
 
 on:
   workflow_dispatch:
-    inputs:
-      full_upload:
-        description: 'Carica tutti i file di tutte le app (seeding iniziale dei progetti), non solo quelli modificati'
-        type: boolean
-        default: false
   push:
     branches:
       # - develop
@@ -78,10 +73,13 @@ jobs:
           base_lang: it
           translations_path: packages/${{ fromJson(env.PACKAGES)[matrix.app] }}/public/locales
           file_ext: json
-          # Il tag 'lokalise-upload-complete' con cui l'action riconosce il primo run e'
-          # unico per repository, non per progetto: dopo il primo push di una qualsiasi
-          # app le altre non fanno piu' l'upload iniziale completo. Per il seeding dei
-          # progetti lanciare il workflow a mano con full_upload = true.
-          rambo_mode: ${{ inputs.full_upload || false }}
+          # Carica sempre TUTTI i file it/ dell'app in esecuzione, non solo quelli
+          # modificati: se cambia common.json vogliamo che l'intero progetto Lokalise
+          # dell'app resti allineato (login.json incluso). Lo scope resta comunque la
+          # singola app, perche' translations_path punta solo al suo package.
+          # Nota: cosi' evitiamo anche il tag 'lokalise-upload-complete', che l'action
+          # usa per riconoscere il primo run ma tiene unico per repository e non per
+          # progetto (con 4 progetti sarebbe inaffidabile).
+          rambo_mode: true
           additional_params: |
             cleanup_mode: true
