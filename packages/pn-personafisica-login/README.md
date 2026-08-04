@@ -4,5 +4,3 @@ Copy the content of the file located in `public/conf/config-dev.json` in a file 
 
 
 Now you can run `yarn start` to run your application.
-
-trigger lokalise

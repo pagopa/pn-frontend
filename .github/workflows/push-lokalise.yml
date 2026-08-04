@@ -2,16 +2,18 @@ name: Push locales to Lokalise
 
 on:
   workflow_dispatch:
+    inputs:
+      full_upload:
+        description: 'Carica tutti i file di tutte le app (seeding iniziale dei progetti), non solo quelli modificati'
+        type: boolean
+        default: false
   push:
     branches:
       # - develop
       # TODO: RIMUOVERE PRIMA DEL MERGE IN develop - serve solo per testare sul branch di feature
       - feature/PN-19913
     paths:
-      - 'packages/pn-personafisica-login/public/locales/it/**'
-      - 'packages/pn-personafisica-webapp/public/locales/it/**'
-      - 'packages/pn-pa-webapp/public/locales/it/**'
-      - 'packages/pn-personagiuridica-webapp/public/locales/it/**'
+      - 'packages/*/public/locales/it/**'
 
 concurrency:
   group: lokalise-push-${{ github.head_ref || github.run_id }}
@@ -23,61 +25,63 @@ permissions:
   contents: write
 
 jobs:
+  # Ogni app ha il suo progetto Lokalise, quindi qui rileviamo quali app hanno
+  # traduzioni italiane modificate. L'output 'changes' di paths-filter e' gia' un
+  # array JSON con i nomi dei filtri che hanno fatto match: lo passiamo tale e quale
+  # come matrix del job successivo, cosi' le app non toccate non generano un job.
   detect-changes:
     runs-on: ubuntu-latest
     outputs:
-      pfl: ${{ steps.filter.outputs.pfl }}
-      pf: ${{ steps.filter.outputs.pf }}
-      pa: ${{ steps.filter.outputs.pa }}
-      pg: ${{ steps.filter.outputs.pg }}
+      apps: ${{ github.event_name == 'workflow_dispatch' && '["PFL","PF","PA","PG"]' || steps.filter.outputs.changes }}
     steps:
       - name: Checkout Repo
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
-      - name: Detect changed apps
+      - name: Detect apps with changed locales
         id: filter
+        if: github.event_name != 'workflow_dispatch'
         uses: dorny/paths-filter@7b450fff21473bca461d4b92ce414b9d0420d706 # v4.0.2
         with:
           filters: |
-            pfl:
-              - 'packages/pn-personafisica-login/public/locales/it/**'
-            pf:
-              - 'packages/pn-personafisica-webapp/public/locales/it/**'
-            pa:
-              - 'packages/pn-pa-webapp/public/locales/it/**'
-            pg:
-              - 'packages/pn-personagiuridica-webapp/public/locales/it/**'
+            PFL: ['packages/pn-personafisica-login/public/locales/it/**']
+            PF: ['packages/pn-personafisica-webapp/public/locales/it/**']
+            PA: ['packages/pn-pa-webapp/public/locales/it/**']
+            PG: ['packages/pn-personagiuridica-webapp/public/locales/it/**']
 
   push-locale:
     needs: detect-changes
-    if: needs.detect-changes.outputs[matrix.key] == 'true' || github.event_name == 'workflow_dispatch'
+    if: needs.detect-changes.outputs.apps != '' && needs.detect-changes.outputs.apps != '[]'
     runs-on: ubuntu-latest
+    # TODO: RIPRISTINARE PRIMA DEL MERGE - usa i secret di repository durante il test.
+    #       Riallineare a io-app con "environment: lokalise" quando l'environment sara' disponibile.
+    # environment: lokalise
     strategy:
       fail-fast: false
       matrix:
-        include:
-          - key: pfl
-            secret_suffix: PFL
-            translations_path: packages/pn-personafisica-login/public/locales
-          - key: pf
-            secret_suffix: PF
-            translations_path: packages/pn-personafisica-webapp/public/locales
-          - key: pa
-            secret_suffix: PA
-            translations_path: packages/pn-pa-webapp/public/locales
-          - key: pg
-            secret_suffix: PG
-            translations_path: packages/pn-personagiuridica-webapp/public/locales
+        app: ${{ fromJson(needs.detect-changes.outputs.apps) }}
+    env:
+      # I codici app sono anche il suffisso dei secret LOKALISE_PROJECT_ID_<CODICE>.
+      PACKAGES: >-
+        {
+          "PFL": "pn-personafisica-login",
+          "PF": "pn-personafisica-webapp",
+          "PA": "pn-pa-webapp",
+          "PG": "pn-personagiuridica-webapp"
+        }
     steps:
       - name: Checkout Repo
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
-      - name: Push ${{ matrix.key }} to Lokalise
+      - name: Push ${{ matrix.app }} locales to Lokalise
         uses: lokalise/lokalise-push-action@bb67ba45a739acf22e3c00f05dc50a55737fa5c8 #v5.3.1
         with:
           api_token: ${{ secrets.LOKALISE_API_TOKEN }}
-          project_id: ${{ secrets[format('LOKALISE_PROJECT_ID_{0}', matrix.secret_suffix)] }}
+          project_id: ${{ secrets[format('LOKALISE_PROJECT_ID_{0}', matrix.app)] }}
           base_lang: it
-          translations_path: |
-            ${{ matrix.translations_path }}
+          translations_path: packages/${{ fromJson(env.PACKAGES)[matrix.app] }}/public/locales
           file_ext: json
+          # Il tag 'lokalise-upload-complete' con cui l'action riconosce il primo run e'
+          # unico per repository, non per progetto: dopo il primo push di una qualsiasi
+          # app le altre non fanno piu' l'upload iniziale completo. Per il seeding dei
+          # progetti lanciare il workflow a mano con full_upload = true.
+          rambo_mode: ${{ inputs.full_upload || false }}
           additional_params: |
             cleanup_mode: true
