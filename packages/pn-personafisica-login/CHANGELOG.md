@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.25.0-RC.3](https://github.com/pagopa/pn-frontend/compare/v2.25.0-RC.2...v2.25.0-RC.3) (2026-08-04)
+
+
+### Bug Fixes
+
+* **PN-20931:** preserve PG unread notifications indicator after refresh ([#1980](https://github.com/pagopa/pn-frontend/issues/1980)) ([57804fd](https://github.com/pagopa/pn-frontend/commit/57804fddd5bfbd0127b829eeab19a90385b183f1))
+* **PN-20933:** PG - added missed localization for not available tag ([#1978](https://github.com/pagopa/pn-frontend/issues/1978)) ([8884762](https://github.com/pagopa/pn-frontend/commit/88847622dc1984b50379e509e57ed11079a79673))
+
+
+
+
+
 # [2.25.0-RC.2](https://fbianchicodermine-github/pagopa/pn-frontend/compare/v2.25.0-RC.1...v2.25.0-RC.2) (2026-07-30)
 
 

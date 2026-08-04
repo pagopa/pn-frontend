@@ -3,6 +3,20 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.25.0-RC.3](https://github.com/pagopa/pn-frontend/compare/v2.25.0-RC.2...v2.25.0-RC.3) (2026-08-04)
+
+
+### Bug Fixes
+
+* **PN-20849:** resolve PA notification list issues ([#1979](https://github.com/pagopa/pn-frontend/issues/1979)) ([c415550](https://github.com/pagopa/pn-frontend/commit/c415550b422e1678dbfefde7964ae3894fe6661a))
+* **PN-20854:** resolve PA notification detail issues ([#1975](https://github.com/pagopa/pn-frontend/issues/1975)) ([5abb8a8](https://github.com/pagopa/pn-frontend/commit/5abb8a813e34b728da60af9b1dcbcd9140e37167))
+* **PN-20931:** preserve PG unread notifications indicator after refresh ([#1980](https://github.com/pagopa/pn-frontend/issues/1980)) ([57804fd](https://github.com/pagopa/pn-frontend/commit/57804fddd5bfbd0127b829eeab19a90385b183f1))
+* **PN-20933:** PG - added missed localization for not available tag ([#1978](https://github.com/pagopa/pn-frontend/issues/1978)) ([8884762](https://github.com/pagopa/pn-frontend/commit/88847622dc1984b50379e509e57ed11079a79673))
+
+
+
+
+
 # [2.25.0-RC.2](https://fbianchicodermine-github/pagopa/pn-frontend/compare/v2.25.0-RC.1...v2.25.0-RC.2) (2026-07-30)
 
 **Note:** Version bump only for package @pagopa-pn/pn-pa-webapp
