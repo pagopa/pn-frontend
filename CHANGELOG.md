@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.25.0-RC.5](https://github.com/pagopa/pn-frontend/compare/v2.25.0-RC.4...v2.25.0-RC.5) (2026-08-05)
+
+
+### Bug Fixes
+
+* **PN-21019:** redirects to the notifications list when clicking the breadcrumb on the timeline page ([#1989](https://github.com/pagopa/pn-frontend/issues/1989)) ([70ee2d3](https://github.com/pagopa/pn-frontend/commit/70ee2d376ddcb6dea275b0e50b6a0896044a9d9a))
+* **PN-21037:** add link to informal notification and update cancelled content ([#1988](https://github.com/pagopa/pn-frontend/issues/1988)) ([b17d12d](https://github.com/pagopa/pn-frontend/commit/b17d12d059a9cb46e6805b8922d7c47f5d9669b7))
+
+
+
+
+
 # [2.25.0-RC.4](https://github.com/pagopa/pn-frontend/compare/v2.25.0-RC.3...v2.25.0-RC.4) (2026-08-05)
 
 
