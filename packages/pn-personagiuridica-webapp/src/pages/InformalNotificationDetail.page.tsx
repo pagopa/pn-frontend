@@ -32,6 +32,7 @@ import {
   getReceivedInformalNotificationPayment,
   getReceivedInformalNotificationPaymentInfo,
 } from '../redux/notification/informalActions';
+import { getConfiguration } from '../services/configuration.service';
 
 const InformalNotificationDetail: React.FC = () => {
   const { id } = useParams();
@@ -40,6 +41,7 @@ const InformalNotificationDetail: React.FC = () => {
   const [pageReady, setPageReady] = useState(false);
   const { hasApiErrors } = useErrors();
   const navigate = useNavigate();
+  const { SELFCARE_CDN_URL } = getConfiguration();
 
   const [informalNotification, setInformalNotification] =
     React.useState<BffFullInformalNotificationV1>();
@@ -248,6 +250,10 @@ const InformalNotificationDetail: React.FC = () => {
             iun={informalNotification?.iun ?? ''}
             isLegal={false}
             abstract={primaryMessage?.longBody ?? ''}
+            recipientDenomination={currentRecipient?.denomination}
+            hasAttachments={documentsAvailable}
+            hasPayment={hasPayments}
+            selfcareCdnUrl={SELFCARE_CDN_URL}
           />
 
           <Stack direction={{ xs: 'column', md: 'row' }} spacing={2} alignItems="flex-start">

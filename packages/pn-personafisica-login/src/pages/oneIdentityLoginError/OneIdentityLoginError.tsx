@@ -6,7 +6,7 @@ import { Box, Dialog, Typography } from '@mui/material';
 import { IllusMIError, MIButton } from '@pagopa/mui-italia';
 
 import { PFLoginEventsType } from '../../models/PFLoginEventsType';
-import { ROUTE_ONE_IDENTITY_LOGIN } from '../../navigation/routes.const';
+import { ROUTE_LOGIN } from '../../navigation/routes.const';
 import PFLoginEventStrategyFactory from '../../utility/MixpanelUtils/PFLoginEventStrategyFactory';
 
 const KNOWN_ERROR_CODES = [
@@ -23,7 +23,7 @@ const OneIdentityLoginError: React.FC = () => {
   const [searchParams] = useSearchParams();
   const error = searchParams.get('error');
 
-  const goToLogin = () => navigate(ROUTE_ONE_IDENTITY_LOGIN);
+  const goToLogin = () => navigate(ROUTE_LOGIN);
 
   useEffect(() => {
     PFLoginEventStrategyFactory.triggerEvent(PFLoginEventsType.SEND_LOGIN_FAILURE, {

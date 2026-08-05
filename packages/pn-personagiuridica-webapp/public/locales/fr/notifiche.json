@@ -45,7 +45,7 @@
     "filtered": "Aucune notification ou communication pour les filtres sélectionnés",
     "filtered-description": "Supprimez-les ou essayez une autre combinaison.",
     "clean-filters-cta": "Supprimer les filtres",
-    "delegate": "Ici, vous verrez les communications à valeur juridique qui ont été déléguées à votre entreprise.",
+    "delegate": "Ici, tu verras les notifications à valeur juridique qui ont été déléguées à ton entreprise.",
     "title": "Ici, vous verrez les notifications à valeur juridique et les autres communications",
     "description": "Mettez à jour vos coordonnées numériques dès maintenant pour savoir immédiatement quand votre entreprise en recevra une.",
     "go-to-contacts-cta": "Aller aux coordonnées",
@@ -94,7 +94,7 @@
     "disclaimer-link": "En savoir plus",
     "pec-unreachable": "Maintenez votre adresse PEC libre et active pour tout recevoir au format numérique !",
     "cancelled": {
-      "message": "Cette notification a été annulée par l'organisme émetteur.",
+      "message": "Cette notification a été annulée par l'organisme expéditeur, les documents ne sont donc plus disponibles.",
       "cta": "Que dois-je faire ?"
     },
     "payment": {
@@ -147,11 +147,17 @@
       "website": "Site web de l'organisme",
       "copy_phone": "Numéro de téléphone copié"
     },
+    "informal_notification_markdown": {
+      "greeting": "All'attenzione di {{recipientDenomination}}",
+      "attachments_info": "Per avere maggiori informazioni <0>è consigliato prendere visione degli allegati</0>, che possono fornire dettagli importanti.",
+      "payment_instructions": "È possibile completare il pagamento premendo <0>Paga</0>. In alternativa, si può utilizzare l'<1>avviso allegato</1> per saldare l'importo tramite tutti i canali abilitati a pagoPA.",
+      "assistance": "In ogni caso, qualora si avesse bisogno di assistenza, è possibile <0>contattare {{senderDenomination}} attraverso i suoi canali ufficiali.</0>"
+    },
     "acts_files": {
       "downloadable_acts": "Les documents sont disponibles en ligne pendant 120 jours à compter de la finalisation de la notification.",
-      "not_downloadable_acts": "Étant donné que 120 jours se sont écoulés depuis la date de finalisation, si vous souhaitez obtenir les actes, vous devez vous adresser à l’expéditeur.",
+      "not_downloadable_acts": "Les documents ne sont plus disponibles en ligne. Pour les demander, adresse-toi à l’organisme qui te les a envoyés.",
       "downloadable_aar": "<0>Disponible en ligne pendant 10 ans</0> à compter de la date à laquelle la notification SEND a pris valeur juridique.",
-      "not_downloadable_aar": "Comme 10 ans se sont écoulés depuis la date de finalisation, l’accusé de réception n’est plus disponible.",
+      "not_downloadable_aar": "L’avis de réception n'est plus disponible. Pour le demander, adresse-toi à l’organisme qui te l’a envoyé.",
       "effected_faq": "Quand une notification est-elle finalisée ?",
       "informal_downloadable_acts": "Conserve les pièces jointes sur ton appareil : elles seront disponibles en ligne jusqu'à <0>180 jours à compter de la date de dépôt</0> indiquée en haut !"
     },

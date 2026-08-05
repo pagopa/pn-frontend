@@ -45,7 +45,7 @@
     "filtered": "No notifications or communications for the selected filters",
     "filtered-description": "Remove them or try another combination.",
     "clean-filters-cta": "Remove filters",
-    "delegate": "Here you will see the legally-binding communications that have been delegated to your business.",
+    "delegate": "Here you will see the legally binding notifications that have been delegated to your company.",
     "title": "Here you will see legally-binding notifications and other communications",
     "description": "Update your digital contact details now to immediately know when your business receives one.",
     "go-to-contacts-cta": "Go to contact details",
@@ -94,7 +94,7 @@
     "disclaimer-link": "Learn more",
     "pec-unreachable": "Keep your certified email (PEC) mailbox free and active to receive everything digitally!",
     "cancelled": {
-      "message": "This notification has been cancelled by the issuing institution.",
+      "message": "This notification was cancelled by the sending authority, so the documents are no longer available.",
       "cta": "What should I do?"
     },
     "payment": {
@@ -147,11 +147,17 @@
       "website": "Institution's website",
       "copy_phone": "Phone number copied"
     },
+    "informal_notification_markdown": {
+      "greeting": "All'attenzione di {{recipientDenomination}}",
+      "attachments_info": "Per avere maggiori informazioni <0>è consigliato prendere visione degli allegati</0>, che possono fornire dettagli importanti.",
+      "payment_instructions": "È possibile completare il pagamento premendo <0>Paga</0>. In alternativa, si può utilizzare l'<1>avviso allegato</1> per saldare l'importo tramite tutti i canali abilitati a pagoPA.",
+      "assistance": "In ogni caso, qualora si avesse bisogno di assistenza, è possibile <0>contattare {{senderDenomination}} attraverso i suoi canali ufficiali.</0>"
+    },
     "acts_files": {
       "downloadable_acts": "Documents are available online for 120 days from the completion of the notification.",
-      "not_downloadable_acts": "120 days have passed since the completion date. If you want to obtain the documents, please contact the sender.",
+      "not_downloadable_acts": "The documents are no longer available online. To request them, contact the institution that sent them to you.",
       "downloadable_aar": "<0>Available online for 10 years</0> from the date the SEND notification became legally binding.",
-      "not_downloadable_aar": "As 10 years have passed since the completion date, the acknowledgement of receipt is no longer available.",
+      "not_downloadable_aar": "The notification of receipt is no longer available. To request it, contact the institution that sent it to you.",
       "effected_faq": "When do I complete a notification?",
       "informal_downloadable_acts": "Save the attachments to your device: they will be available online for up to <0>180 days from the filing date</0> shown at the top!"
     },

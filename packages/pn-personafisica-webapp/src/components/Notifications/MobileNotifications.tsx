@@ -104,7 +104,7 @@ const MobileNotifications = ({ notifications, sort, onChangeSorting, currentDele
     return arr;
   }, [] as Array<CardSort<RecipientNotification>>);
 
-  const filtersApplied: boolean = filterNotificationsRef.current.filtersApplied;
+  const filtersApplied: boolean = filterNotificationsRef.current?.filtersApplied ?? false;
 
   // Navigation handlers
   const handleRowClick = (row: Row<RecipientNotification>) => {

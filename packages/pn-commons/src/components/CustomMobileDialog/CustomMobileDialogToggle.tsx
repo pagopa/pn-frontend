@@ -1,3 +1,5 @@
+import { ReactNode } from 'react';
+
 import { Badge, BadgeProps, Box } from '@mui/material';
 import { SxProps, Theme, styled } from '@mui/material/styles';
 import { MIButton } from '@pagopa/mui-italia';
@@ -9,6 +11,7 @@ type Props = {
   hasCounterBadge?: boolean;
   bagdeCount?: number;
   children?: React.ReactNode;
+  startIcon?: ReactNode;
 };
 
 const StyledBadge = styled(Badge)<BadgeProps>(({ theme }) => ({
@@ -31,6 +34,7 @@ const CustomMobileDialogToggle: React.FC<Props> = ({
   hasCounterBadge,
   bagdeCount = 0,
   sx,
+  startIcon,
 }) => {
   const { toggleOpen } = useCustomMobileDialogContext();
 
@@ -40,7 +44,13 @@ const CustomMobileDialogToggle: React.FC<Props> = ({
 
   return (
     <Box data-testid="dialogToggle">
-      <MIButton variant="text" onClick={handleClickOpen} sx={sx} data-testid="dialogToggleButton">
+      <MIButton
+        variant="text"
+        startIcon={startIcon}
+        onClick={handleClickOpen}
+        sx={sx}
+        data-testid="dialogToggleButton"
+      >
         {children}
       </MIButton>
       {hasCounterBadge && bagdeCount > 0 && (

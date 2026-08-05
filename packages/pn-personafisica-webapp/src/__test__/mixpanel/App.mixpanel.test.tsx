@@ -12,7 +12,6 @@ import { tosPrivacyConsentMock } from '../../__mocks__/Consents.mock';
 import { mandatesByDelegate } from '../../__mocks__/Delegations.mock';
 import { apiClient, authClient } from '../../api/apiClients';
 import { PFEventsType } from '../../models/PFEventsType';
-import { LoginProvider } from '../../models/User';
 import PFEventStrategyFactory from '../../utility/MixpanelUtils/PFEventStrategyFactory';
 import { PFTriggerEventSpy, act, fireEvent, render, screen, waitFor, within } from '../test-utils';
 
@@ -35,7 +34,6 @@ const reduxInitialState = {
     tosConsent: { accepted: false, isFirstAccept: false, currentVersion: 'mocked-version-1' },
     privacyConsent: { accepted: false, isFirstAccept: false, currentVersion: 'mocked-version-1' },
     tosPrivacyApiError: false,
-    loginProvider: LoginProvider.SPIDHUB,
   },
 };
 

@@ -263,5 +263,6 @@
     "selection-box": "Options sélectionnées",
     "selection-done": "%s sélectionnés",
     "delete-selection": "Supprime %s"
-  }
+  },
+  "not-available": "Non disponible"
 }
