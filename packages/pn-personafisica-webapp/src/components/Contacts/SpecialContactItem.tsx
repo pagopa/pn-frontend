@@ -2,8 +2,8 @@ import { RefObject } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import DeleteIcon from '@mui/icons-material/Delete';
-import { Box, Stack, Typography } from '@mui/material';
-import { MIButton, MIChip } from '@pagopa/mui-italia';
+import { Box, Button, Stack, Typography } from '@mui/material';
+import { MIChip } from '@pagopa/mui-italia';
 
 import { AddressType, ChannelType, DigitalAddress, Sender } from '../../models/contacts';
 import DigitalContact from './DigitalContact';
@@ -27,6 +27,9 @@ const SpecialContactItem: React.FC<Props> = ({
   onCancelValidation,
 }) => {
   const { t } = useTranslation(['recapiti', 'common']);
+
+  const hasPecInValidationForEntity = (senderId: string) =>
+    address.channelType === ChannelType.PEC && !address.pecValid && address.senderId === senderId;
 
   const { value, channelType, senderId, senderName, pecValid, addressType } = address;
   const isVerifyingPec = channelType === ChannelType.PEC && !pecValid;
@@ -80,11 +83,12 @@ const SpecialContactItem: React.FC<Props> = ({
               >
                 {t('special-contacts.sercq_send')}
               </Typography>
-              <MIButton
+              <Button
                 data-testid={`cancelContact-special_${channelType}`}
                 color="error"
                 onClick={handleDelete}
                 startIcon={<DeleteIcon />}
+                disabled={hasPecInValidationForEntity(senderId)}
                 sx={{
                   color: 'error.dark',
                   fontWeight: 700,
@@ -93,7 +97,7 @@ const SpecialContactItem: React.FC<Props> = ({
                 }}
               >
                 {t('button.disable', { ns: 'common' })}
-              </MIButton>
+              </Button>
             </Stack>
           ) : (
             <DigitalContact

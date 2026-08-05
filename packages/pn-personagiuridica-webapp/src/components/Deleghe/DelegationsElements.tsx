@@ -416,9 +416,7 @@ export const AcceptButton: React.FC<AcceptButtonProps> = ({ id, name, onAccept }
         id="accept-button"
         onClick={handleAcceptClick}
         variant={'contained'}
-        color={'primary'}
         data-testid="acceptButton"
-        size="small"
       >
         {t('deleghe.accept')}
       </MIButton>

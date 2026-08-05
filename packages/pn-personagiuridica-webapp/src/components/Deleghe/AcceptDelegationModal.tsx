@@ -2,6 +2,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import {
+  Button,
   DialogContentText,
   DialogTitle,
   Divider,
@@ -263,14 +264,15 @@ const AcceptDelegationModal: React.FC<Props> = ({
             ? t('button.annulla', { ns: 'common' })
             : t('button.indietro', { ns: 'common' })}
         </MIButton>
-        <MIButton
+        <Button
           id="group-confirm-button"
           variant="contained"
           data-testid="groupConfirmButton"
           onClick={() => handleConfirm(code, groupForm.value)}
+          disabled={groupForm.value.length === 0 && associateGroup}
         >
           {t('button.conferma', { ns: 'common' })}
-        </MIButton>
+        </Button>
       </PnDialogActions>
     </PnDialog>
   );

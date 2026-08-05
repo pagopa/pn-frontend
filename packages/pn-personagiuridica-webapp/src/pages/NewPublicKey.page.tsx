@@ -47,8 +47,6 @@ const StepperContainer: React.FC<{ children: React.ReactNode; activeStep: number
       <Box p={3} sx={{ maxWidth: { xs: '100%', lg: '90%' } }}>
         <MIButton
           variant="text"
-          size="medium"
-          color="primary"
           startIcon={<ArrowBackIcon />}
           onClick={() => navigate(routes.INTEGRAZIONE_API)}
           data-testid="exitBtn"

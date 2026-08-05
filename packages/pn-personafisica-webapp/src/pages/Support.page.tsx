@@ -3,7 +3,7 @@ import { Trans, useTranslation } from 'react-i18next';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import * as yup from 'yup';
 
-import { Box, Paper, Stack, TextField, Typography } from '@mui/material';
+import { Box, Button, Link, Paper, Stack, TextField, Typography } from '@mui/material';
 import { Prompt, TitleBox } from '@pagopa-pn/pn-commons';
 import { ValidationError } from '@pagopa-pn/pn-validator';
 import { MIButton } from '@pagopa/mui-italia';
@@ -58,18 +58,12 @@ const reducer = (state: FormState, action: { type: string; payload: string }) =>
   }
 };
 
-const SupportPPButton: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
+const SupportPPLink: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
   const { PAGOPA_HELP_PP } = getConfiguration();
-  const handleClick = () => {
-    window.location.assign(PAGOPA_HELP_PP);
-  };
-
   return (
-    <MIButton variant="text" sx={{ verticalAlign: 'top' }} onClick={handleClick}>
-      <Typography variant="body2" color="primary" display="inline">
-        {children}
-      </Typography>
-    </MIButton>
+    <Link href={PAGOPA_HELP_PP} target="_blank" rel="noopener noreferrer">
+      {children}
+    </Link>
   );
 };
 
@@ -190,7 +184,7 @@ const SupportPage: React.FC = () => {
             <Trans
               ns={'support'}
               i18nKey={'disclaimer'}
-              components={[<SupportPPButton key="support-pp-button" />]}
+              components={[<SupportPPLink key="support-pp-link" />]}
               variant="body2"
             />
           </Typography>
@@ -201,7 +195,8 @@ const SupportPage: React.FC = () => {
             justifyContent="space-between"
             alignItems="center"
           >
-            <MIButton
+            <Button
+              disabled={!!formData.errors}
               variant="contained"
               size="small"
               sx={{ width: { xs: 1, sm: 'auto' } }}
@@ -209,7 +204,7 @@ const SupportPage: React.FC = () => {
               data-testid="continueButton"
             >
               {t('button.go-on', { ns: 'common' })}
-            </MIButton>
+            </Button>
             <MIButton
               variant="outlined"
               size="small"

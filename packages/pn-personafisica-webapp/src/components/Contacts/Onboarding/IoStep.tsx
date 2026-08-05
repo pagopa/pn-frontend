@@ -184,8 +184,6 @@ const IoStep: React.FC<Props> = ({ value, selectedOnboardingFlow, onChange, onCo
             {status === IOContactStatus.UNAVAILABLE && (
               <MIButton
                 variant="text"
-                color="primary"
-                size="medium"
                 onClick={() => void handleRefreshState()}
                 data-testid="io-refresh-link"
                 sx={{

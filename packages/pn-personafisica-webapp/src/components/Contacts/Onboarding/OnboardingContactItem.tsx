@@ -75,7 +75,6 @@ const EntryMode: React.FC<Omit<EntryModeProps, 'mode'>> = ({
       fullWidth={isMobile}
       sx={isMobile ? { mt: 2 } : { height: '43px', fontWeight: 700, flexShrink: 0 }}
       variant={buttonVariant}
-      color="primary"
       onClick={() => void onSubmit()}
     >
       {buttonLabel}
@@ -122,8 +121,6 @@ const EntryMode: React.FC<Omit<EntryModeProps, 'mode'>> = ({
       {collapse && (
         <MIButton
           variant="text"
-          color="primary"
-          size="medium"
           onClick={collapse.onClick}
           sx={{ alignSelf: isMobile ? 'center' : 'flex-start', fontWeight: 700, mt: 2 }}
         >
@@ -177,8 +174,6 @@ const ViewMode: React.FC<Omit<ViewModeProps, 'mode'>> = ({
     {action && (
       <MIButton
         variant="text"
-        color="primary"
-        size="medium"
         onClick={action.onClick}
         sx={{ alignSelf: 'flex-start', fontWeight: 700 }}
       >

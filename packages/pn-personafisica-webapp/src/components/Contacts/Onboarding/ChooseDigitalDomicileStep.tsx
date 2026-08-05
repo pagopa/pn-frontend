@@ -85,8 +85,6 @@ const ChooseDigitalDomicileStep: React.FC<Props> = ({
 
           <MIButton
             variant="text"
-            color="primary"
-            size="medium"
             onClick={onSelectPec}
             data-testid="select-pec-button"
             sx={{ fontWeight: 700 }}

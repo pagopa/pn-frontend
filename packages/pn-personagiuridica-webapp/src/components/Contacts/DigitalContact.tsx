@@ -271,6 +271,7 @@ const DigitalContact = forwardRef<{ toggleEdit: () => void }, Props>(
                 sx={{ fontWeight: 700, justifyContent: 'left' }}
                 id={`saveContact-${senderId}_${contactType}`}
                 startIcon={<CheckIcon />}
+                {...({ type: 'submit' } as any)}
               >
                 {t('button.conferma')}
               </MIButton>

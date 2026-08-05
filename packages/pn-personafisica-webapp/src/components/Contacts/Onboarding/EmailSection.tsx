@@ -59,8 +59,6 @@ const EmailSection: React.FC<Props> = ({
 
         <MIButton
           variant="text"
-          color="primary"
-          size="medium"
           onClick={onExpand}
           sx={{ alignSelf: 'flex-start', fontWeight: 700 }}
         >

@@ -3,7 +3,7 @@ import { ChangeEvent, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 
-import { Box, Grid, Paper, TextField, Typography } from '@mui/material';
+import { Box, Button, Grid, Paper, TextField, Typography } from '@mui/material';
 import {
   PnBreadcrumb,
   Prompt,
@@ -12,7 +12,7 @@ import {
   dataRegex,
   useIsMobile,
 } from '@pagopa-pn/pn-commons';
-import { Autocomplete, MIButton } from '@pagopa/mui-italia';
+import { Autocomplete } from '@pagopa/mui-italia';
 
 import SyncFeedbackApiKey from '../components/NewApiKey/SyncFeedbackApiKey';
 import { PAEventsType } from '../models/PAEventsType';
@@ -163,13 +163,15 @@ const NewApiKey = () => {
                       </Box>
                     </Paper>
                     <Box mt={3} display="flex" justifyContent="flex-end">
-                      <MIButton
+                      <Button
                         data-testid="submit-new-api-key"
                         id="continue-button"
                         variant="contained"
+                        disabled={!formik.isValid}
+                        {...({ type: 'submit' } as any)}
                       >
                         {tkp('continue-button')}
-                      </MIButton>
+                      </Button>
                     </Box>
                   </Box>
                 </form>

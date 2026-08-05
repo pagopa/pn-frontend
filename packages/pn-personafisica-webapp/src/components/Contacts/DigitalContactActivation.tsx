@@ -104,13 +104,7 @@ const DigitalContactActivation: React.FC<Props> = ({ isTransferring = false, onG
   const getPreviousButton = () => {
     if (activeStep === 0) {
       return (
-        <MIButton
-          variant="text"
-          onClick={handleExit}
-          color="primary"
-          size="medium"
-          sx={{ mx: 'auto' }}
-        >
+        <MIButton variant="text" onClick={handleExit} sx={{ mx: 'auto' }}>
           {t('button.annulla', { ns: 'common' })}
         </MIButton>
       );
@@ -134,8 +128,6 @@ const DigitalContactActivation: React.FC<Props> = ({ isTransferring = false, onG
         <MIButton
           variant="contained"
           onClick={handleConfirmEmailSmsStep}
-          color="primary"
-          size="medium"
           sx={{ width: { xs: '100%', md: 'auto' } }}
         >
           {t('button.continue', { ns: 'common' })}

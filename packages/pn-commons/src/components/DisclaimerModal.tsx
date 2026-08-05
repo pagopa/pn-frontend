@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-import { Box, Checkbox, DialogTitle, FormControlLabel } from '@mui/material';
+import { Box, Button, Checkbox, DialogTitle, FormControlLabel } from '@mui/material';
 import { MIButton } from '@pagopa/mui-italia';
 
 import { getLocalizedOrDefaultLabel } from '../utility/localization.utility';
@@ -28,6 +28,7 @@ const DisclaimerModal: React.FC<Props> = ({
   checkboxLabel,
 }) => {
   const [checked, setChecked] = useState(false);
+  const disabledConfirm = !checked && !!checkboxLabel;
 
   const handleChange = () => {
     setChecked(!checked);
@@ -73,14 +74,15 @@ const DisclaimerModal: React.FC<Props> = ({
         >
           {getLocalizedOrDefaultLabel('common', 'button.annulla', 'Annulla')}
         </MIButton>
-        <MIButton
+        <Button
           id="confirmButton"
           variant="contained"
           onClick={handleConfirm}
           data-testid="disclaimer-confirm-button"
+          disabled={disabledConfirm}
         >
           {confirmLabel}
-        </MIButton>
+        </Button>
       </PnDialogActions>
     </PnDialog>
   );

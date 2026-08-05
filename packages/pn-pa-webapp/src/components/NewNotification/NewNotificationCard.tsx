@@ -1,7 +1,7 @@
 import { Fragment, ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { Box, Paper, Typography } from '@mui/material';
+import { Box, Button, Paper, Typography } from '@mui/material';
 import { SectionHeading, useIsMobile } from '@pagopa-pn/pn-commons';
 import { MIButton } from '@pagopa/mui-italia';
 
@@ -18,6 +18,7 @@ type Props = {
 
 const NewNotificationCard = ({
   children,
+  isContinueDisabled,
   title,
   subtitle,
   noPaper = false,
@@ -49,14 +50,16 @@ const NewNotificationCard = ({
         alignItems="center"
         sx={{ marginTop: '40px', marginBottom: '20px' }}
       >
-        <MIButton
-          id="step-submit"
+        <Button
+          id="step-subt"
+          disabled={isContinueDisabled}
           variant="contained"
           data-testid="step-submit"
+          {...({ type: 'submit' } as any)}
           fullWidth={isMobile}
         >
           {submitLabel || t('button.continue')}
-        </MIButton>
+        </Button>
         {previousStepLabel && (
           <MIButton
             id="previous-step"

@@ -1,7 +1,7 @@
+import { isEqual } from 'lodash-es';
 import { FormEvent, PropsWithChildren, useRef } from 'react';
 
-import { Box, DialogActions, DialogContent, Grid } from '@mui/material';
-import { MIButton } from '@pagopa/mui-italia';
+import { Box, Button, DialogActions, DialogContent, Grid } from '@mui/material';
 
 import { useIsMobile } from '../../../hooks/useIsMobile';
 import { filtersApplied } from '../../../utility/genericFunctions.utility';
@@ -19,6 +19,8 @@ type Props<FormValues> = {
   onSubmit: (event?: FormEvent<HTMLFormElement> | undefined) => void;
   /** function to be called when filters are cleaned */
   onClear: () => void;
+  /** flag to check if the form is valid */
+  formIsValid: boolean;
   /** current form values */
   formValues: FormValues;
   /** initial form values */
@@ -34,11 +36,13 @@ const SmartFilter = <FormValues extends object>({
   onSubmit,
   onClear,
   children,
+  formIsValid,
   formValues,
   initialValues,
 }: PropsWithChildren<Props<FormValues>>) => {
   const isMobile = useIsMobile();
   const currentFilters = useRef<FormValues>(formValues);
+  const isPreviousSearch = isEqual(formValues, currentFilters.current);
   const filtersCount = filtersApplied(currentFilters.current, initialValues);
   const dialogRef = useRef<{ toggleOpen: () => void }>(null);
 
@@ -56,20 +60,26 @@ const SmartFilter = <FormValues extends object>({
   };
 
   const confirmAction = (
-    <MIButton
+    <Button
       id="confirm-button"
       data-testid="confirmButton"
       variant="outlined"
-      {...({ type: 'button' } as any)}
+      disabled={!formIsValid || isPreviousSearch}
+      {...({ type: 'submit' } as any)}
     >
       {filterLabel}
-    </MIButton>
+    </Button>
   );
 
   const cancelAction = (
-    <MIButton variant="text" data-testid="cancelButton" onClick={clearHandler}>
+    <Button
+      variant="text"
+      data-testid="cancelButton"
+      onClick={clearHandler}
+      disabled={!filtersCount}
+    >
       {cancelLabel}
-    </MIButton>
+    </Button>
   );
 
   if (isMobile) {

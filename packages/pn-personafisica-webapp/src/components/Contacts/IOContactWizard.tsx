@@ -171,7 +171,6 @@ const IOContactWizard: React.FC<Props> = ({ goToNextStep }) => {
             <MIButton
               variant="outlined"
               onClick={handleConfirmIODeactivation}
-              color="primary"
               fullWidth
               sx={{ mt: 3 }}
               data-testid="disableIOButton"
@@ -182,7 +181,6 @@ const IOContactWizard: React.FC<Props> = ({ goToNextStep }) => {
               variant="text"
               sx={{ fontSize: '16px' }}
               onClick={handleGoToNextStep}
-              color="primary"
               fullWidth
               data-testid="skipButton"
             >
@@ -194,7 +192,6 @@ const IOContactWizard: React.FC<Props> = ({ goToNextStep }) => {
             <MIButton
               variant="contained"
               onClick={handleConfirmIOActivation}
-              color="primary"
               fullWidth
               sx={{ mt: 3 }}
               data-testid="confirmButton"
@@ -205,7 +202,6 @@ const IOContactWizard: React.FC<Props> = ({ goToNextStep }) => {
               variant="text"
               sx={{ fontSize: '16px' }}
               onClick={handleSkip}
-              color="primary"
               fullWidth
               data-testid="skipButton"
             >

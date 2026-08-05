@@ -344,6 +344,7 @@ const DelegationsOfTheCompany = () => {
               cancelLabel={t('button.annulla filtro', { ns: 'common' })}
               onSubmit={formik.handleSubmit}
               onClear={clearFiltersHandler}
+              formIsValid={formik.isValid}
               formValues={formik.values}
               initialValues={initialEmptyValues}
             >

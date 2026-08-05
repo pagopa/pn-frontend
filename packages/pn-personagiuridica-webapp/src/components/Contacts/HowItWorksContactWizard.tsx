@@ -105,7 +105,6 @@ const HowItWorksContactWizard: React.FC<Props> = ({ goToNextStep, setShowPecWiza
           <MIButton
             fullWidth
             variant="contained"
-            color="primary"
             onClick={() => {
               PGEventStrategyFactory.triggerEvent(PGEventsType.SEND_PG_ADD_DD_SERCQ_SEND_START);
               goToNextStep?.();

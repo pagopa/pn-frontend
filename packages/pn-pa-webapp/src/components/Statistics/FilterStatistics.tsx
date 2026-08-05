@@ -3,7 +3,7 @@ import { isEqual } from 'lodash-es';
 import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 
-import { Chip, SxProps } from '@mui/material';
+import { Button, Chip, SxProps } from '@mui/material';
 import { Box, Stack } from '@mui/system';
 import {
   CustomDatePicker,
@@ -198,7 +198,7 @@ const FilterStatistics: React.FC<Props> = ({ filter, lastDate, className, sx }) 
         >
           {t('filter.buttons.filter')}
         </MIButton>
-        <MIButton
+        <Button
           data-testid="cancelButton"
           sx={{
             height: '43px !important',
@@ -207,9 +207,10 @@ const FilterStatistics: React.FC<Props> = ({ filter, lastDate, className, sx }) 
           }}
           size="small"
           onClick={cleanFilter}
+          disabled={isInitialSearch}
         >
           {t('filter.buttons.clear_filter')}
-        </MIButton>
+        </Button>
       </Box>
     </Stack>
   );

@@ -1,6 +1,7 @@
 import { Fragment } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { Button } from '@mui/material';
 import { CustomMobileDialogAction } from '@pagopa-pn/pn-commons';
 import { MIButton } from '@pagopa/mui-italia';
 
@@ -14,23 +15,25 @@ type Props = {
 const FilterNotificationsFormActions = ({
   filtersApplied,
   cleanFilters,
+  isInitialSearch,
   isInDialog = false,
 }: Props) => {
   const { t } = useTranslation(['common']);
 
   const confirmAction = (
-    <MIButton
+    <Button
       id="filter-button"
       data-testid="filterButton"
       variant="outlined"
-      {...({ type: 'submit' } as any)}
+      {...({ type: 'sut' } as any)}
       sx={{
         height: '43px !important',
         marginRight: '8px !important',
       }}
+      disabled={isInitialSearch && !filtersApplied}
     >
       {t('button.filtra')}
-    </MIButton>
+    </Button>
   );
 
   const cancelAction = (

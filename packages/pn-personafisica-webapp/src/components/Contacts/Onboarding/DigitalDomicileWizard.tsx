@@ -395,8 +395,6 @@ const DigitalDomicileWizard: React.FC = () => {
       <MIButton
         variant="text"
         onClick={handlePrevious}
-        color="primary"
-        size="medium"
         data-testid="prev-button"
         startIcon={<ArrowBackIcon />}
         sx={{ mt: { xs: 2, md: 0 } }}

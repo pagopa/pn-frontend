@@ -273,7 +273,6 @@ const SercqSendContactWizard: React.FC<Props> = ({ goToStep, showIOStep }) => {
       <MIButton
         fullWidth
         variant="contained"
-        color="primary"
         onClick={handleActivation}
         data-testid="activateButton"
       >

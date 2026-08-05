@@ -36,8 +36,6 @@ const FilteredEmptyStateContent: React.FC<{ cleanFilters: () => void }> = ({ cle
 
       <MIButton
         variant="text"
-        size="medium"
-        color="primary"
         id="call-to-action-first"
         data-testid="link-remove-filters"
         onClick={cleanFilters}
@@ -67,8 +65,6 @@ const DefaultEmptyStateContent: React.FC = () => {
 
       <MIButton
         variant="text"
-        size="medium"
-        color="primary"
         id="call-to-action-first"
         data-testid="link-route-contacts"
         onClick={goToContactsPage}

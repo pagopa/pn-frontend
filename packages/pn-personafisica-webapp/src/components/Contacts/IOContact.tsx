@@ -155,13 +155,7 @@ const IOContact: React.FC = () => {
   const getButton = () => {
     if (status === IOContactStatus.UNAVAILABLE) {
       return (
-        <MIButton
-          variant="contained"
-          onClick={handleDownload}
-          color="primary"
-          fullWidth={isMobile}
-          sx={{ mt: 3 }}
-        >
+        <MIButton variant="contained" onClick={handleDownload} fullWidth={isMobile} sx={{ mt: 3 }}>
           {t('io-contact.download', { ns: 'recapiti' })}
         </MIButton>
       );
@@ -171,7 +165,6 @@ const IOContact: React.FC = () => {
         <MIButton
           variant="contained"
           onClick={handleOpenInfoModal}
-          color="primary"
           fullWidth={isMobile}
           sx={{ mt: 3 }}
           id="ioContactButton"

@@ -359,7 +359,6 @@ const SmsContactItem: React.FC<SmsItemProps> = ({ slotsProps, slots }) => {
           </Typography>
           <MIButton
             variant="text"
-            color="primary"
             sx={{ fontSize: '16px' }}
             onClick={() => {
               PGEventStrategyFactory.triggerEvent(PGEventsType.SEND_PG_ADD_SMS_START);

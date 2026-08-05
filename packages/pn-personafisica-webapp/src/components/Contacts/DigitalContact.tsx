@@ -300,11 +300,9 @@ const DigitalContact = forwardRef<{ toggleEdit: () => void }, Props>(
               <MIButton
                 variant="text"
                 key="saveButton"
-                color="primary"
                 {...({ type: 'submit' } as any)}
                 sx={{ fontWeight: 700, justifyContent: 'left' }}
                 id={`saveContact-${senderId}_${contactType}`}
-                size="medium"
                 startIcon={<CheckIcon />}
               >
                 {t('button.conferma')}
@@ -392,7 +390,6 @@ const DigitalContact = forwardRef<{ toggleEdit: () => void }, Props>(
                   onClick={onDelete}
                   startIcon={<DeleteIcon />}
                   sx={{ fontWeight: 700, justifyContent: 'left', color: 'error.dark' }}
-                  size="medium"
                 >
                   {t('button.elimina')}
                 </MIButton>

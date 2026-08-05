@@ -1,7 +1,7 @@
 import { ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { Box, Paper, Stack, Typography } from '@mui/material';
+import { Box, Button, Paper, Stack, Typography } from '@mui/material';
 import { useIsMobile } from '@pagopa-pn/pn-commons';
 import { MIButton } from '@pagopa/mui-italia';
 
@@ -18,6 +18,7 @@ type Props = {
 
 const NewPublicKeyCard: React.FC<Props> = ({
   children,
+  isContinueDisabled,
   title,
   content,
   submitLabel,
@@ -43,15 +44,16 @@ const NewPublicKeyCard: React.FC<Props> = ({
         alignItems="center"
         sx={{ mt: 3, mb: 5 }}
       >
-        <MIButton
+        <Button
           id="step-submit"
           variant="contained"
           onClick={onContinueClick}
+          disabled={isContinueDisabled}
           data-testid="step-submit"
           fullWidth={isMobile}
         >
           {submitLabel ?? t('button.end')}
-        </MIButton>
+        </Button>
         {previousStepLabel && (
           <MIButton
             id="previous-step"

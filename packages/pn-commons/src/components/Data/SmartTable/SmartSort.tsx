@@ -1,6 +1,13 @@
 import { PropsWithChildren, useRef, useState } from 'react';
 
-import { DialogActions, DialogContent, FormControlLabel, Radio, RadioGroup } from '@mui/material';
+import {
+  Button,
+  DialogActions,
+  DialogContent,
+  FormControlLabel,
+  Radio,
+  RadioGroup,
+} from '@mui/material';
 import { MIButton } from '@pagopa/mui-italia';
 
 import { CardSort } from '../../../models/PnCard';
@@ -107,14 +114,15 @@ const SmartSort = <T,>({
         </DialogContent>
         <DialogActions>
           <CustomMobileDialogAction closeOnClick>
-            <MIButton
+            <Button
               id="confirm-button"
               variant="outlined"
               onClick={handleConfirmSort}
               data-testid="confirmButton"
+              disabled={!isSorted}
             >
               {title}
-            </MIButton>
+            </Button>
           </CustomMobileDialogAction>
           <CustomMobileDialogAction closeOnClick>
             <MIButton onClick={handleCancelSort} data-testid="cancelButton">

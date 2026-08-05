@@ -134,7 +134,6 @@ const HowItWorksContactWizard: React.FC<Props> = ({ goToNextStep, setShowPecWiza
           <MIButton
             fullWidth
             variant="contained"
-            color="primary"
             onClick={handleNextStep}
             sx={{ textTransform: 'none', mb: !defaultPECAddress ? 3 : 0 }}
             data-testid="continueButton"
@@ -160,7 +159,7 @@ const HowItWorksContactWizard: React.FC<Props> = ({ goToNextStep, setShowPecWiza
           <Typography variant="body2" mb={1}>
             {t('legal-contacts.sercq-send-wizard.step_1.have-pec-description')}
           </Typography>
-          <MIButton variant="text" color="primary" size="medium" onClick={handleShowPecWizard}>
+          <MIButton variant="text" onClick={handleShowPecWizard}>
             {t('legal-contacts.sercq-send-wizard.step_1.insert-pec')}
           </MIButton>
         </Box>

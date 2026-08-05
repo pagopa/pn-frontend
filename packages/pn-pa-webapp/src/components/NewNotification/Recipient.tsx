@@ -13,6 +13,7 @@ import * as yup from 'yup';
 import { Add, Delete } from '@mui/icons-material';
 import {
   Box,
+  Button,
   FormControl,
   FormControlLabel,
   FormLabel,
@@ -564,7 +565,7 @@ const Recipient: React.FC<Props> = ({
                 </FormBox>
                 {values.recipients.length < 5 && values.recipients.length - 1 === index && (
                   <Stack mt={2} direction="row" justifyContent="space-between">
-                    <MIButton
+                    <Button
                       variant="text"
                       id="add-recipient"
                       startIcon={<Add />}
@@ -572,9 +573,10 @@ const Recipient: React.FC<Props> = ({
                         handleAddRecipient(values, setFieldValue);
                       }}
                       data-testid="add-recipient"
+                      disabled={values.recipients.length >= 5}
                     >
                       {t('add-recipient')}
-                    </MIButton>
+                    </Button>
                   </Stack>
                 )}
               </Fragment>
