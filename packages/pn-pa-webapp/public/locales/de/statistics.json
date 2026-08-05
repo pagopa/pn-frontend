@@ -90,5 +90,9 @@
     "no_data_found": "Für das gewählte Zeitintervall stehen keine Daten zur Verfügung",
     "not_enough_data": "Die Anzahl der von der Körperschaft auf SEND geladenen Zustellungen reicht derzeit nicht aus, um die Versandstatistiken zu verarbeiten und anzuzeigen. Erkunde den <0>Abschnitt Zustellungen</0>, um die bisher geladenen einzusehen.",
     "notification_section_aria_label": "Abschnitt Zustellungen"
+  },
+  "maintenance_alert": {
+    "title": "Wartungsarbeiten im Gange",
+    "description": "Aufgrund einer geplanten Wartung kann es zu Verzögerungen bei der Aktualisierung der Daten im Dashboard. Bitte beachten Sie das auf dieser Seite angegebene Datum für den Stand der letzten Aktualisierung. Nach Abschluss der Wartung werden die Daten wieder regelmäßig aktualisiert."
   }
 }

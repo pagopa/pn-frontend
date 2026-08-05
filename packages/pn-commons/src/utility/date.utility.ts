@@ -244,3 +244,33 @@ export function subtractMonthsFromDate(
 export function clampMax(date: Date, max: Date): Date {
   return date.getTime() > max.getTime() ? max : date;
 }
+
+/**
+ * Checks if the date is within a date range
+ *
+ * @param {Date} date current date
+ * @param {string} startDate start date in format YYYY-MM-DD
+ * @param {string} endDate end date in format YYYY-MM-DD
+ * @returns {boolean} True if the date is in the date range, false otherwise
+ */
+export const isDateInRange = (date: Date, startDate: string, endDate: string): boolean => {
+  const current = new Date(date);
+
+  // Note: Month is 0-based in JavaScript Date constructor (August = 7)
+  // const startDate = new Date(2026, 7, 14, 0, 0, 0);
+  // const endDate = new Date(2026, 7, 25, 23, 59, 59);
+  const start = new Date(startDate);
+  // If startDate does NOT contain 'T', set it to the beginning of the day (00:00:00.000)
+  if (!startDate.includes('T')) {
+    start.setHours(0, 0, 0, 0);
+  }
+
+  // at the end of the day
+  const end = new Date(endDate);
+  // If endDate does NOT contain 'T', set it to the end of the day (23:59:59.999)
+  if (!endDate.includes('T')) {
+    end.setHours(23, 59, 59, 999);
+  }
+
+  return current >= start && current <= end;
+};

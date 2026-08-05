@@ -11,10 +11,12 @@ import {
   formatDate,
   formatToSlicedISOString,
   getDateFromString,
+  isDateInRange,
   oneYearAgo,
   screenshot,
   today,
 } from '@pagopa-pn/pn-commons';
+import { MIAlert } from '@pagopa/mui-italia';
 
 import DeliveryModeStatistics from '../components/Statistics/DeliveryModeStatistics';
 import DigitalErrorsDetailStatistics from '../components/Statistics/DigitalErrorsDetailStatistics';
@@ -31,6 +33,7 @@ import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { STATISTICS_ACTIONS, getStatistics } from '../redux/statistics/actions';
 import { hasData } from '../redux/statistics/reducers';
 import { RootState } from '../redux/store';
+import { getConfiguration } from '../services/configuration.service';
 import PAEventStrategyFactory from '../utility/MixpanelUtils/PAEventStrategyFactory';
 
 const filter = (node: HTMLElement) => {
@@ -70,6 +73,9 @@ const Statistics = () => {
     (state: RootState) => state.userState.user?.organization
   );
   const isSupportUser = useAppSelector(authSelectors.selectIsSupportUser);
+  const dataLakeMaintenanceDates = getConfiguration().DATA_LAKE_MAINTENANCE_DATES;
+  const [dataLakeMaintenanceStartDate, dataLakeMaintenanceEndDate] =
+    dataLakeMaintenanceDates.split('_');
 
   const cxId = loggedUserOrganizationParty.id;
   const cxType = isSupportUser ? CxType.BS : CxType.PA;
@@ -135,6 +141,15 @@ const Statistics = () => {
             <Typography variant="caption" sx={{ color: GraphColors.greyBlue }}>
               {getLastUpdateText()}
             </Typography>
+            {isDateInRange(
+              new Date(),
+              dataLakeMaintenanceStartDate,
+              dataLakeMaintenanceEndDate
+            ) && (
+              <MIAlert severity="warning" title={t('maintenance_alert.title')} sx={{ mt: 4 }}>
+                {t('maintenance_alert.description')}
+              </MIAlert>
+            )}
             <Box ref={exportJpgNode}>
               <Typography variant="h6" component="h5" mt={7}>
                 {t('section_1')}
