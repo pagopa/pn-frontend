@@ -99,7 +99,7 @@
     "disclaimer-link": "Izvedite več",
     "pec-unreachable": "Vaš predal PEC naj bo prost in aktiven, da boste vse prejemali v digitalni obliki!",
     "cancelled": {
-      "message": "To obvestilo je preklical organ pošiljatelj.",
+      "message": "To obvestilo je preklical organ pošiljatelj, zato dokumenti niso več na voljo.",
       "cta": "Kaj moram storiti?"
     },
     "payment": {
