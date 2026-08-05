@@ -2,6 +2,11 @@ import { NotificationStatus, UnifiedNotificationStatus } from './NotificationSta
 
 export type NotificationCommunicationType = 'LEGAL' | 'INFORMAL';
 
+export const NOTIFICATION_COMMUNICATION_TYPE = {
+  LEGAL: 'LEGAL',
+  INFORMAL: 'INFORMAL',
+} as const;
+
 export interface Notification {
   iun: string;
   paProtocolNumber: string;
