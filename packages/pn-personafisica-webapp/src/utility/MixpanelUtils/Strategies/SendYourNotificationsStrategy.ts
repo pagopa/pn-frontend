@@ -3,7 +3,6 @@ import {
   EventCategory,
   EventPropertyType,
   EventStrategy,
-  NOTIFICATION_COMMUNICATION_TYPE,
   NotificationStatus,
   RecipientNotification,
   TrackedEvent,
@@ -60,11 +59,11 @@ export class SendYourNotificationsStrategy implements EventStrategy {
     domicileBannerType,
   }: SendYourNotifications): TrackedEvent<EventNotificationsListType> {
     const legalNotifications = notifications.filter(
-      (notification) => notification.communicationType === NOTIFICATION_COMMUNICATION_TYPE.LEGAL
+      (notification) => notification.communicationType === 'LEGAL'
     );
 
     const comboNotifications = notifications.filter(
-      (notification) => notification.communicationType === NOTIFICATION_COMMUNICATION_TYPE.INFORMAL
+      (notification) => notification.communicationType === 'INFORMAL'
     );
 
     return {
