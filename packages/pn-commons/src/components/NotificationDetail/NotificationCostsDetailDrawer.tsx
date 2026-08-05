@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 
 import CloseIcon from '@mui/icons-material/Close';
 import { Drawer, IconButton, Link, Stack, Typography } from '@mui/material';
-import { MIAlert } from '@pagopa/mui-italia';
+import { MIAlert, themeNext } from '@pagopa/mui-italia';
 
 import { useIsMobile } from '../../hooks';
 import { EventAction, EventPaymentRecipientType } from '../../models';
@@ -118,7 +118,7 @@ const NotificationCostsDetailDrawer: React.FC<Props> = ({
           </Stack>
 
           <Stack spacing={3}>
-            <Typography variant="body1" color="#555C70" fontSize="16px">
+            <Typography variant="body1" color={themeNext.palette.text.secondary} fontSize="16px">
               {getLocalizedOrDefaultLabel(
                 'notifications',
                 'notification-alert.details.description'
