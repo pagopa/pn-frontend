@@ -34,8 +34,6 @@ import {
 } from '../redux/notification/informalActions';
 import { getConfiguration } from '../services/configuration.service';
 
-const { SELFCARE_CDN_URL } = getConfiguration();
-
 const InformalNotificationDetail: React.FC = () => {
   const { id } = useParams();
   const { t, i18n } = useTranslation(['common', 'notifiche']);
@@ -43,6 +41,7 @@ const InformalNotificationDetail: React.FC = () => {
   const [pageReady, setPageReady] = useState(false);
   const { hasApiErrors } = useErrors();
   const navigate = useNavigate();
+  const { SELFCARE_CDN_URL } = getConfiguration();
 
   const [informalNotification, setInformalNotification] =
     React.useState<BffFullInformalNotificationV1>();
