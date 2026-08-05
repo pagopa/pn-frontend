@@ -1,13 +1,14 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { Box } from '@mui/material';
+import { Box, SxProps } from '@mui/material';
 import {
   INotificationDetailTimeline,
   NotificationDetail,
   TimelineCategory,
   useHasPermissions,
   useIsCancelled,
+  useIsMobile,
 } from '@pagopa-pn/pn-commons';
 import { MIButton } from '@pagopa/mui-italia';
 
@@ -21,15 +22,18 @@ import ConfirmCancellationDialog from './ConfirmCancellationDialog';
 type Props = {
   notification: NotificationDetail;
   onCancelNotification: () => void;
+  sx?: SxProps;
 };
 
 const NotificationCancellationAction: React.FC<Props> = ({
   notification,
   onCancelNotification,
+  sx,
 }) => {
   const { t } = useTranslation(['notifiche']);
   const [showModal, setShowModal] = useState(false);
   const { cancellationInProgress, cancelled } = useIsCancelled({ notification });
+  const isMobile = useIsMobile('md');
 
   const withPayment =
     notification.timeline.findIndex(
@@ -61,12 +65,13 @@ const NotificationCancellationAction: React.FC<Props> = ({
   }
 
   return (
-    <Box>
+    <Box sx={sx}>
       <MIButton
         variant="outlined"
         color="error"
         onClick={openModal}
         data-testid="cancelNotificationBtn"
+        fullWidth={isMobile}
       >
         {t('detail.cancel-notification', { ns: 'notifiche' })}
       </MIButton>

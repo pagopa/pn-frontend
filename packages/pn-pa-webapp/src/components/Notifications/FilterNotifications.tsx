@@ -5,6 +5,7 @@ import { forwardRef, useEffect, useImperativeHandle, useRef, useState } from 're
 import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 
+import FilterIcon from '@mui/icons-material/FilterAltOutlined';
 import { DialogActions, DialogContent, Stack } from '@mui/material';
 import {
   CustomMobileDialog,
@@ -197,6 +198,7 @@ const FilterNotifications = forwardRef(({ showFilters }: Props, ref) => {
         }}
         hasCounterBadge
         bagdeCount={filtersCount}
+        startIcon={<FilterIcon fontSize="small" />}
       >
         {t('button.filtra')}
       </CustomMobileDialogToggle>
@@ -221,8 +223,8 @@ const FilterNotifications = forwardRef(({ showFilters }: Props, ref) => {
       <Stack
         direction={'row'}
         sx={{
-          marginTop: 5,
-          marginBottom: 5,
+          marginTop: 3,
+          marginBottom: 3,
           verticalAlign: 'top',
           '& .MuiTextField-root': { mr: 1, width: '100%' },
         }}

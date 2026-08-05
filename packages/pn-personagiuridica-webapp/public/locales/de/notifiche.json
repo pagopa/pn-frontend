@@ -147,11 +147,17 @@
       "website": "Website der Körperschaft",
       "copy_phone": "Telefonnummer kopiert"
     },
+    "informal_notification_markdown": {
+      "greeting": "All'attenzione di {{recipientDenomination}}",
+      "attachments_info": "Per avere maggiori informazioni <0>è consigliato prendere visione degli allegati</0>, che possono fornire dettagli importanti.",
+      "payment_instructions": "È possibile completare il pagamento premendo <0>Paga</0>. In alternativa, si può utilizzare l'<1>avviso allegato</1> per saldare l'importo tramite tutti i canali abilitati a pagoPA.",
+      "assistance": "In ogni caso, qualora si avesse bisogno di assistenza, è possibile <0>contattare {{senderDenomination}} attraverso i suoi canali ufficiali.</0>"
+    },
     "acts_files": {
       "downloadable_acts": "Die Dokumente sind 120 Tage nach Abschluss der Zustellung online verfügbar.",
-      "not_downloadable_acts": "Da seit dem Abschlussdatum 120 Tage vergangen sind, musst du dich für den Erhalt der Urkunde an den Absender wenden.",
+      "not_downloadable_acts": "Die Dokumente sind online nicht mehr verfügbar. Um sie anzufordern, wende dich an die Einrichtung, die sie dir gesendet hat.",
       "downloadable_aar": "<0>10 Jahre lang online verfügbar</0> ab dem Datum, an dem die SEND-Zustellung Rechtskraft erlangt hat.",
-      "not_downloadable_aar": "Da seit der Erledigung 10 Jahre vergangen sind, steht die Empfangsbestätigung nicht mehr zur Verfügung.",
+      "not_downloadable_aar": "Die Empfangsbestätigung ist nicht mehr verfügbar. Um sie anzufordern, wende dich an die Einrichtung, die sie dir gesendet hat.",
       "effected_faq": "Wann ist die Bearbeitung eines Bescheids abgeschlossen?",
       "informal_downloadable_acts": "Speichere die Anhänge auf deinem Gerät: Sie sind online bis zu <0>180 Tage ab dem Hinterlegungsdatum</0> verfügbar, das du oben findest!"
     },

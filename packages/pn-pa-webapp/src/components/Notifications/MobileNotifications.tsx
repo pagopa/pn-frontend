@@ -2,7 +2,7 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
-import { Grid, Typography } from '@mui/material';
+import { Grid } from '@mui/material';
 import {
   CardElement,
   CardSort,
@@ -12,12 +12,9 @@ import {
   PnCardActions,
   PnCardContent,
   PnCardContentItem,
-  PnCardHeader,
-  PnCardHeaderItem,
   PnCardsList,
   Row,
   Sort,
-  formatDate,
 } from '@pagopa-pn/pn-commons';
 import { MIButton } from '@pagopa/mui-italia';
 
@@ -64,6 +61,10 @@ const MobileNotifications = ({
 
   const cardBody: Array<CardElement<Notification>> = [
     {
+      id: 'sentAt',
+      label: t('table.date'),
+    },
+    {
       id: 'recipients',
       label: t('table.recipient'),
       wrapValueInTypography: false,
@@ -76,6 +77,11 @@ const MobileNotifications = ({
     {
       id: 'iun',
       label: t('table.iun'),
+    },
+    {
+      id: 'notificationStatus',
+      label: t('table.status'),
+      wrapValueInTypography: false,
     },
   ];
 
@@ -138,32 +144,7 @@ const MobileNotifications = ({
         <PnCardsList>
           {cardData.map((data) => (
             <PnCard key={data.id} testId="mobileCards">
-              <PnCardHeader
-                headerGridProps={{
-                  direction: { xs: 'row', sm: 'row' },
-                  alignItems: { xs: 'flex-start', sm: 'center' },
-                }}
-              >
-                <PnCardHeaderItem
-                  gridProps={{
-                    xs: 4,
-                    sm: 5,
-                  }}
-                  position="left"
-                >
-                  <Typography>{formatDate(data.sentAt)}</Typography>
-                </PnCardHeaderItem>
-                <PnCardHeaderItem
-                  gridProps={{
-                    xs: 8,
-                    sm: 7,
-                  }}
-                  position="right"
-                >
-                  <NotificationsDataSwitch data={data} type="notificationStatus" />
-                </PnCardHeaderItem>
-              </PnCardHeader>
-              <PnCardContent>
+              <PnCardContent sx={{ mt: 0 }}>
                 {cardBody
                   .filter((body) => data[body.id]?.length)
                   .map((body) => (

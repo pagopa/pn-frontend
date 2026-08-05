@@ -311,7 +311,7 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
         </>
       )}
 
-      {!isCancelled && f24Only.length > 0 && (
+      {!isCancelled && f24Only.length > 0 && pagoPaF24.length > 0 && (
         <Divider
           component="div"
           role="presentation"
@@ -321,9 +321,9 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
         </Divider>
       )}
 
-      {!isCancelled && f24Only.length > 0 && pagoPaF24.length > 0 && (
+      {!isCancelled && f24Only.length > 0 && (
         <>
-          {f24Only.length > 0 && pagoPaF24.length > 0 && (
+          {pagoPaF24.length > 0 && (
             <Typography variant="overline" component="h3">
               {getLocalizedOrDefaultLabel('notifications', 'detail.payment.f24Models')}
             </Typography>

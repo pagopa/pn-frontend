@@ -243,13 +243,7 @@
     "action": "Angemeldet bleiben"
   },
   "code-modal": {
-    "digits": [
-      "Erste Ziffer",
-      "Zweite Ziffer",
-      "Dritte Ziffer",
-      "Vierte Ziffer",
-      "Letzte Ziffer"
-    ]
+    "digits": ["Erste Ziffer", "Zweite Ziffer", "Dritte Ziffer", "Vierte Ziffer", "Letzte Ziffer"]
   },
   "user-validation-failed": {
     "title": "Die eingegebenen Daten sind ungültig",
@@ -263,5 +257,6 @@
     "selection-box": "Ausgewählte Optionen",
     "selection-done": "%s ausgewählt",
     "delete-selection": "Entferne %s"
-  }
+  },
+  "not-available": "Nicht verfügbar"
 }

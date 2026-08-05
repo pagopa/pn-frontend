@@ -1,6 +1,7 @@
 import { ReactNode, useState } from 'react';
+import { Trans } from 'react-i18next';
 
-import AccountBalanceOutlinedIcon from '@mui/icons-material/AccountBalanceOutlined';
+import AccountBalanceRoundedIcon from '@mui/icons-material/AccountBalanceRounded';
 import KeyboardArrowRightRoundedIcon from '@mui/icons-material/KeyboardArrowRightRounded';
 import VerifiedRoundedIcon from '@mui/icons-material/VerifiedRounded';
 import { Avatar, Box, Divider, Grid, Stack, Typography } from '@mui/material';
@@ -10,7 +11,10 @@ import { MIButton, MIPaper, Tag, theme } from '@pagopa/mui-italia';
 import { useIsMobile } from '../../hooks';
 import { formatDate } from '../../utility';
 import { getAccessibleIun } from '../../utility/accessibility.utility';
-import { getLocalizedOrDefaultLabel } from '../../utility/localization.utility';
+import {
+  getLocalizedOrDefaultLabel,
+  getTranslationMessage,
+} from '../../utility/localization.utility';
 import PNMarkdown from '../PnMarkdown/PnMarkdown';
 import TitleBox from '../TitleBox';
 
@@ -31,6 +35,9 @@ interface AbstractPaperProps {
   details?: Array<AbstractPaperDetail>;
   onDetailsClick?: () => void;
   detailsAriaLabel?: string;
+  recipientDenomination?: string;
+  hasAttachments?: boolean;
+  hasPayment?: boolean;
 }
 
 interface InstitutionLogoProps {
@@ -41,9 +48,8 @@ interface InstitutionLogoProps {
 
 const InstitutionLogo = ({ id, name, senderLogoUrl }: InstitutionLogoProps) => {
   const [hasError, setHasError] = useState(false);
-
   const logoSrc =
-    id && !hasError && senderLogoUrl ? `${senderLogoUrl}${id}/institutions/logo.png` : undefined;
+    id && !hasError && senderLogoUrl ? `${senderLogoUrl}/institutions/${id}/logo.png` : undefined;
 
   return (
     <Avatar
@@ -53,13 +59,16 @@ const InstitutionLogo = ({ id, name, senderLogoUrl }: InstitutionLogoProps) => {
         onError: () => setHasError(true),
       }}
       sx={{
-        width: { xs: 40, md: 56 },
-        height: { xs: 40, md: 56 },
-        backgroundColor: theme.palette.grey[50],
+        width: { xs: 64 },
+        height: { xs: 64 },
+        backgroundColor: logoSrc ? undefined : theme.palette.grey[50],
+        border: logoSrc ? `1px solid ${theme.palette.grey[300]}` : undefined,
+        borderRadius: 2,
+        padding: logoSrc ? 1 : 0,
       }}
       variant="rounded"
     >
-      <AccountBalanceOutlinedIcon sx={{ color: theme.palette.grey[300] }} />
+      <AccountBalanceRoundedIcon sx={{ width: 40, height: 40, color: theme.palette.grey[300] }} />
     </Avatar>
   );
 };
@@ -75,10 +84,116 @@ const AbstractPaper = ({
   details,
   onDetailsClick,
   detailsAriaLabel,
+  recipientDenomination,
+  hasAttachments = false,
+  hasPayment = false,
 }: AbstractPaperProps) => {
   const isMobile = useIsMobile();
 
   const hasDetails = !!details?.length;
+
+  const attachmentsInfoMessage = getTranslationMessage(
+    'detail.informal_notification_markdown.attachments_info',
+    'notifiche'
+  );
+
+  const paymentInstructionsMessage = getTranslationMessage(
+    'detail.informal_notification_markdown.payment_instructions',
+    'notifiche'
+  );
+  const assistanceMessage = getTranslationMessage(
+    'detail.informal_notification_markdown.assistance',
+    'notifiche'
+  );
+
+  const renderAbstractSection = () => {
+    if (isLegal) {
+      return (
+        <>
+          <Divider aria-hidden sx={{ my: 2 }} />
+          {abstract && (
+            <Typography variant="body1" sx={{ overflowWrap: 'anywhere' }}>
+              {abstract}
+            </Typography>
+          )}
+          <Typography variant="body2" color="text.secondary" sx={{ mt: abstract ? 2 : 0 }}>
+            {getLocalizedOrDefaultLabel('notifications', 'detail.legal-disclaimer')}
+          </Typography>
+        </>
+      );
+    }
+
+    if (!abstract) {
+      return null;
+    }
+
+    return (
+      <>
+        <Divider aria-hidden sx={{ my: 2 }} />
+        <Stack>
+          {recipientDenomination && (
+            <Typography variant="body1" color="text.primary">
+              {getLocalizedOrDefaultLabel(
+                'notifications',
+                'detail.informal_notification_markdown.greeting',
+                undefined,
+                { recipientDenomination }
+              )}
+            </Typography>
+          )}
+
+          <Box
+            sx={{
+              overflowWrap: 'anywhere',
+              '& p': {
+                m: 0,
+                typography: 'body1',
+                color: 'text.primary',
+                mt: 4,
+              },
+            }}
+          >
+            <PNMarkdown content={abstract} />
+          </Box>
+
+          {hasAttachments && (
+            <Typography variant="body1" color="text.primary" mt={4}>
+              <Trans
+                i18nKey={attachmentsInfoMessage.key}
+                ns={attachmentsInfoMessage.ns}
+                components={[<strong key="0" />]}
+              />
+            </Typography>
+          )}
+
+          {hasPayment && (
+            <Typography variant="body1" color="text.primary" mt={hasAttachments ? 2 : 4}>
+              <Trans
+                i18nKey={paymentInstructionsMessage.key}
+                ns={paymentInstructionsMessage.ns}
+                components={[<strong key="0" />]}
+              />
+            </Typography>
+          )}
+          <Typography
+            variant="body1"
+            color="text.primary"
+            mt={hasAttachments || hasPayment ? 2 : 4}
+          >
+            <Trans
+              i18nKey={assistanceMessage.key}
+              ns={assistanceMessage.ns}
+              values={{
+                senderDenomination,
+              }}
+              components={[<strong key="0" />]}
+            />
+          </Typography>
+        </Stack>
+      </>
+    );
+  };
+
   return (
     <MIPaper
       padding={24}
@@ -139,7 +254,7 @@ const AbstractPaper = ({
         </Stack>
       ) : (
         <>
-          <Grid container spacing={2}>
+          <Grid container spacing={isMobile ? 0 : 2}>
             <Grid item xs={12} md={6} display="flex" alignItems="center" gap={2}>
               <InstitutionLogo
                 id={senderPaId}
@@ -177,25 +292,7 @@ const AbstractPaper = ({
               </Box>
             </Grid>
           </Grid>
-          {abstract && (
-            <>
-              <Divider aria-hidden sx={{ my: 2 }} />
-              {isLegal ? (
-                <>
-                  <Typography variant="body1" sx={{ overflowWrap: 'anywhere' }}>
-                    {abstract}
-                  </Typography>
-                  <Typography variant="body2" color="text.secondary" sx={{ mt: 2 }}>
-                    {getLocalizedOrDefaultLabel('notifications', 'detail.legal-disclaimer')}
-                  </Typography>
-                </>
-              ) : (
-                <Box sx={{ overflowWrap: 'anywhere' }}>
-                  <PNMarkdown content={abstract ?? ''} />
-                </Box>
-              )}
-            </>
-          )}
+          {renderAbstractSection()}
         </>
       )}
     </MIPaper>
