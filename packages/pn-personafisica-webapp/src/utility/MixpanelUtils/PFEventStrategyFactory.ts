@@ -30,7 +30,6 @@ import { SendNotificationCountStrategy } from './Strategies/SendNotificationCoun
 import { SendNotificationDetailStrategy } from './Strategies/SendNotificationDetailStrategy';
 import { SendNotificationExpensesDetailStrategy } from './Strategies/SendNotificationExpensesDetailStrategy';
 import { SendNotificationStatusDetailStrategy } from './Strategies/SendNotificationStatusDetail';
-import { SendNotificationViewDetailStrategy } from './Strategies/SendNotificationViewDetailStrategy';
 import { SendOnboardingEmailActivationStrategy } from './Strategies/SendOnboardingEmailActivationStrategy';
 import { SendOnboardingFlowStrategy } from './Strategies/SendOnboardingFlowStrategy';
 import { SendOnboardingScreenActionStrategy } from './Strategies/SendOnboardingScreenActionStrategy';
@@ -400,7 +399,6 @@ const eventStrategy: Record<
   [PFEventsType.SEND_VIEW_PROFILE]: new SendViewProfileStrategy(),
   [PFEventsType.SEND_VIEW_CONTACT_DETAILS]: new SendViewContactDetailsStrategy(),
   [PFEventsType.SEND_NOTIFICATION_DETAIL]: new SendNotificationDetailStrategy(),
-  [PFEventsType.SEND_NOTIFICATION_VIEW_DETAIL]: new SendNotificationViewDetailStrategy(),
   [PFEventsType.SEND_DOWNLOAD_CERTIFICATE_OPPOSABLE_TO_THIRD_PARTIES]:
     new SendDownloadCertificateOpposable(),
   [PFEventsType.SEND_YOUR_NOTIFICATIONS]: new SendYourNotificationsStrategy(),

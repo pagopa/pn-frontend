@@ -18,10 +18,8 @@ import {
   Sort,
 } from '@pagopa-pn/pn-commons';
 
-import { PFEventsType } from '../../models/PFEventsType';
 import * as routes from '../../navigation/routes.const';
 import { Delegator } from '../../redux/delegation/types';
-import PFEventStrategyFactory from '../../utility/MixpanelUtils/PFEventStrategyFactory';
 import FilterNotifications from './FilterNotifications';
 import NotificationsEmptyState from './NotificationsEmptyState';
 
@@ -84,11 +82,6 @@ const DesktopNotifications = ({
   const showFilters = notifications?.length > 0 || filtersApplied;
 
   const handleRowClick = (iun: string, communicationType: NotificationCommunicationType) => {
-    PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_NOTIFICATION_VIEW_DETAIL, {
-      delegate: Boolean(currentDelegator),
-      notification_type: communicationType === 'LEGAL' ? 'notifica' : 'comunicazione bonaria',
-    });
-
     if (currentDelegator) {
       return navigate(routes.GET_DETTAGLIO_NOTIFICA_DELEGATO_PATH(iun, currentDelegator.mandateId));
     }
