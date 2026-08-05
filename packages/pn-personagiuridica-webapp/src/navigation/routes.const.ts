@@ -30,7 +30,6 @@ export const GET_DETTAGLIO_COMUNICAZIONE_PATH = (id: string) =>
 export const GET_DETTAGLIO_NOTIFICA_DELEGATO_PATH = (id: string, mandateId: string) =>
   `${NOTIFICHE_DELEGATO}/${mandateId}/${id}${DETTAGLIO}`;
 export const RECAPITI = '/recapiti';
-export const GET_NOTIFICHE_DELEGATO_PATH = (mandateId: string) => `${NOTIFICHE}/${mandateId}`;
 export const GET_DETTAGLIO_NOTIFICA_TIMELINE_PATH = (id: string) =>
   `${NOTIFICHE}/${id}${DETTAGLIO}/timeline`;
 export const GET_DETTAGLIO_NOTIFICA_DELEGATO_TIMELINE_PATH = (id: string, mandateId: string) =>

@@ -94,7 +94,7 @@
     "disclaimer-link": "Scopri di più",
     "pec-unreachable": "Mantieni la PEC libera e attiva per ricevere tutto in digitale!",
     "cancelled": {
-      "message": "Questa notifica è stata annullata dall’ente mittente.",
+      "message": "Questa notifica è stata annullata dall’ente mittente per cui i documenti non sono più disponibili.",
       "cta": "Cosa devo fare?"
     },
     "payment": {
