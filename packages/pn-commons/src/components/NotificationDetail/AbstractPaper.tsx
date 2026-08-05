@@ -31,7 +31,7 @@ interface AbstractPaperProps {
   abstract?: string; // todo: to sanitize and format the abstract content before passing it to the component
   isLegal?: boolean;
   filedAt: string;
-  senderLogoUrl?: string;
+  selfcareCdnUrl?: string;
   details?: Array<AbstractPaperDetail>;
   onDetailsClick?: () => void;
   detailsAriaLabel?: string;
@@ -43,13 +43,13 @@ interface AbstractPaperProps {
 interface InstitutionLogoProps {
   id?: string;
   name?: string;
-  senderLogoUrl?: string;
+  selfcareCdnUrl?: string;
 }
 
-const InstitutionLogo = ({ id, name, senderLogoUrl }: InstitutionLogoProps) => {
+const InstitutionLogo = ({ id, name, selfcareCdnUrl }: InstitutionLogoProps) => {
   const [hasError, setHasError] = useState(false);
   const logoSrc =
-    id && !hasError && senderLogoUrl ? `${senderLogoUrl}/institutions/${id}/logo.png` : undefined;
+    id && !hasError && selfcareCdnUrl ? `${selfcareCdnUrl}/institutions/${id}/logo.png` : undefined;
 
   return (
     <Avatar
@@ -80,7 +80,7 @@ const AbstractPaper = ({
   abstract,
   isLegal = true,
   filedAt,
-  senderLogoUrl,
+  selfcareCdnUrl,
   details,
   onDetailsClick,
   detailsAriaLabel,
@@ -259,7 +259,7 @@ const AbstractPaper = ({
               <InstitutionLogo
                 id={senderPaId}
                 name={senderDenomination}
-                senderLogoUrl={senderLogoUrl}
+                selfcareCdnUrl={selfcareCdnUrl}
               />
               <Box>
                 <Typography variant="sidenav" color="text">

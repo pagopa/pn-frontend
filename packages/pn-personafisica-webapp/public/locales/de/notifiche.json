@@ -99,7 +99,7 @@
     "disclaimer-link": "Mehr hierzu",
     "pec-unreachable": "Halten Sie Ihr zertifiziertes E-Mail-Postfach (PEC) frei und aktiv, um alles digital zu erhalten!",
     "cancelled": {
-      "message": "Diese Zustellung wurde von der sendenden Körperschaft storniert.",
+      "message": "Diese Zustellung wurde von der Absenderbehörde annulliert, daher sind die Dokumente nicht mehr verfügbar.",
       "cta": "Was muss ich tun?"
     },
     "payment": {
