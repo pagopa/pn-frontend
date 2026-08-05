@@ -26,24 +26,6 @@ const dateFormatter = (date: Date) => {
   return `${day}/${month}/${date.getFullYear()}`;
 };
 
-let statisticsUnderMaintenance = false;
-const now = new Date();
-const futureDateDays = new Date(now);
-futureDateDays.setDate(now.getDate() + 7);
-const pastDateDays = new Date(now);
-pastDateDays.setDate(now.getDate() - 5);
-
-vi.mock('../../services/configuration.service', async () => {
-  return {
-    ...(await vi.importActual<any>('../../services/configuration.service')),
-    getConfiguration: () => ({
-      STATISTICS_MAINTENANCE_DATES: statisticsUnderMaintenance
-        ? `${pastDateDays.toISOString()}_${futureDateDays.toISOString()}`
-        : '2025-08-14_2025-08-25',
-    }),
-  };
-});
-
 describe('Statistics Page tests', () => {
   let mock: MockAdapter;
 
@@ -331,7 +313,7 @@ describe('Statistics Page tests', () => {
   });
 
   it('show maintenance alert', async () => {
-    statisticsUnderMaintenance = true;
+    vi.setSystemTime(new Date('2025-08-20'));
     mock.onGet(/\/bff\/v1\/sender-dashboard\/dashboard-data-request*/).reply(200, rawResponseMock);
 
     const { findByTestId } = render(<Statistics />, {
@@ -344,6 +326,7 @@ describe('Statistics Page tests', () => {
     expect(maintenanceAlert).toBeInTheDocument();
     expect(maintenanceAlert).toHaveTextContent('maintenance_alert.title');
     expect(maintenanceAlert).toHaveTextContent('maintenance_alert.description');
+    vi.getRealSystemTime();
   });
 
   it('api returns error', async () => {

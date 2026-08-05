@@ -1,4 +1,4 @@
-import { add, addDays, compareAsc } from 'date-fns';
+import { add, addDays, compareAsc, parseISO } from 'date-fns';
 
 import DateFnsAdapter from '@date-io/date-fns';
 
@@ -256,21 +256,11 @@ export function clampMax(date: Date, max: Date): Date {
 export const isDateInRange = (date: Date, startDate: string, endDate: string): boolean => {
   const current = new Date(date);
 
-  // Note: Month is 0-based in JavaScript Date constructor (August = 7)
-  // const startDate = new Date(2026, 7, 14, 0, 0, 0);
-  // const endDate = new Date(2026, 7, 25, 23, 59, 59);
-  const start = new Date(startDate);
   // If startDate does NOT contain 'T', set it to the beginning of the day (00:00:00.000)
-  if (!startDate.includes('T')) {
-    start.setHours(0, 0, 0, 0);
-  }
+  const start = startDate.includes('T') ? parseISO(startDate) : getStartOfDay(parseISO(startDate));
 
-  // at the end of the day
-  const end = new Date(endDate);
   // If endDate does NOT contain 'T', set it to the end of the day (23:59:59.999)
-  if (!endDate.includes('T')) {
-    end.setHours(23, 59, 59, 999);
-  }
+  const end = endDate.includes('T') ? parseISO(endDate) : getEndOfDay(parseISO(endDate));
 
   return current >= start && current <= end;
 };

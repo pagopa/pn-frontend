@@ -93,6 +93,6 @@
   },
   "maintenance_alert": {
     "title": "Wartungsarbeiten im Gange",
-    "description": "Aufgrund einer geplanten Wartung kann es zu Verzögerungen bei der Aktualisierung der Daten im Dashboard. Bitte beachten Sie das auf dieser Seite angegebene Datum für den Stand der letzten Aktualisierung. Nach Abschluss der Wartung werden die Daten wieder regelmäßig aktualisiert."
+    "description": "Aufgrund einer geplanten Wartung kann es zu Verzögerungen bei der Aktualisierung der Daten im Dashboard kommen. Bitte beachten Sie das auf dieser Seite angegebene Datum für den Stand der letzten Aktualisierung. Nach Abschluss der Wartung werden die Daten wieder regelmäßig aktualisiert."
   }
 }

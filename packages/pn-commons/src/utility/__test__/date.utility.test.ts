@@ -290,9 +290,26 @@ describe('Date utility', () => {
     futureDateDays.setDate(now.getDate() + 7);
 
     const futureDateMonth = new Date(now);
-    futureDateMonth.setDate(now.getMonth() + 1);
+    futureDateMonth.setMonth(now.getMonth() + 1);
 
     const result = isDateInRange(now, futureDateDays.toISOString(), futureDateMonth.toISOString());
+    expect(result).toBeFalsy();
+  });
+
+  it('isDateInRange - returns true when date is not in range (no time specified)', () => {
+    const now = new Date();
+
+    const futureDateDays = new Date(now);
+    futureDateDays.setDate(now.getDate() + 7);
+
+    const futureDateMonth = new Date(now);
+    futureDateMonth.setMonth(now.getMonth() + 1);
+
+    const result = isDateInRange(
+      now,
+      formatToSlicedISOString(futureDateDays),
+      formatToSlicedISOString(futureDateMonth)
+    );
     expect(result).toBeFalsy();
   });
 });
