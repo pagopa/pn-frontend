@@ -73,9 +73,9 @@ const Statistics = () => {
     (state: RootState) => state.userState.user?.organization
   );
   const isSupportUser = useAppSelector(authSelectors.selectIsSupportUser);
-  const dataLakeMaintenanceDates = getConfiguration().DATA_LAKE_MAINTENANCE_DATES;
-  const [dataLakeMaintenanceStartDate, dataLakeMaintenanceEndDate] =
-    dataLakeMaintenanceDates.split('_');
+  const statisticsMaintenanceDates = getConfiguration().STATISTICS_MAINTENANCE_DATES;
+  const [statisticsMaintenanceStartDate, statisticsMaintenanceEndDate] =
+    statisticsMaintenanceDates.split('_');
 
   const cxId = loggedUserOrganizationParty.id;
   const cxType = isSupportUser ? CxType.BS : CxType.PA;
@@ -143,12 +143,16 @@ const Statistics = () => {
             </Typography>
             {isDateInRange(
               new Date(),
-              dataLakeMaintenanceStartDate,
-              dataLakeMaintenanceEndDate
+              statisticsMaintenanceStartDate,
+              statisticsMaintenanceEndDate
             ) && (
-              <MIAlert severity="warning" title={t('maintenance_alert.title')} sx={{ mt: 4 }}>
-                {t('maintenance_alert.description')}
-              </MIAlert>
+              <MIAlert
+                data-testid="maintenanceAlert"
+                severity="warning"
+                title={t('maintenance_alert.title')}
+                sx={{ mt: 4 }}
+                description={t('maintenance_alert.description')}
+              />
             )}
             <Box ref={exportJpgNode}>
               <Typography variant="h6" component="h5" mt={7}>

@@ -28,14 +28,14 @@ export interface PaConfiguration {
   PHYSICAL_ADDRESS_LOOKUP: PhysicalAddressLookupConfig;
   ACCESSIBILITY_LINK: string;
   SERCQ_SERVICE_STATEMENT_LINK: string;
-  DATA_LAKE_MAINTENANCE_DATES: string;
+  STATISTICS_MAINTENANCE_DATES: string;
 }
 
-function dataLakeMaintenanceDatesValidator(value: string): ValidationResult<string> {
+function statisticsMaintenanceDatesValidator(value: string): ValidationResult<string> {
   // 1. Split the string by the underscore separator
   const parts = value.split('_');
   if (parts.length !== 2) {
-    return 'Wrong DATA_LAKE_MAINTENANCE_DATES format';
+    return 'Wrong STATISTICS_MAINTENANCE_DATES format';
   }
 
   const [startDateStr, endDateStr] = parts;
@@ -46,7 +46,7 @@ function dataLakeMaintenanceDatesValidator(value: string): ValidationResult<stri
 
   // 3. Verify that both dates are valid Date objects (not NaN)
   if (Number.isNaN(start.getTime()) || Number.isNaN(end.getTime())) {
-    return 'Invalid DATA_LAKE_MAINTENANCE_DATES values';
+    return 'Invalid STATISTICS_MAINTENANCE_DATES values';
   }
 
   return null;
@@ -85,10 +85,10 @@ class PaConfigurationValidator extends Validator<PaConfiguration> {
       .isOneOf(Object.values(PhysicalAddressLookupConfig));
     this.ruleFor('ACCESSIBILITY_LINK').isString().isRequired();
     this.ruleFor('SERCQ_SERVICE_STATEMENT_LINK').isString().isRequired();
-    this.ruleFor('DATA_LAKE_MAINTENANCE_DATES')
+    this.ruleFor('STATISTICS_MAINTENANCE_DATES')
       .isString()
       .isRequired()
-      .customValidator(dataLakeMaintenanceDatesValidator);
+      .customValidator(statisticsMaintenanceDatesValidator);
   }
 }
 

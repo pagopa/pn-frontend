@@ -18,6 +18,7 @@ import {
   getEndOfDay,
   getStartOfDay,
   getWeeksFromDateRange,
+  isDateInRange,
   isToday,
   minutesBeforeNow,
   subtractMonthsFromDate,
@@ -267,5 +268,31 @@ describe('Date utility', () => {
 
     const result = clampMax(dateBefore, max);
     expect(result).toBe(dateBefore);
+  });
+
+  it('isDateInRange - returns true when date is in range', () => {
+    const now = new Date();
+
+    const futureDateDays = new Date(now);
+    futureDateDays.setDate(now.getDate() + 7);
+
+    const pastDateDays = new Date(now);
+    pastDateDays.setDate(now.getDate() - 5);
+
+    const result = isDateInRange(now, pastDateDays.toISOString(), futureDateDays.toISOString());
+    expect(result).toBeTruthy();
+  });
+
+  it('isDateInRange - returns false when date is not in range', () => {
+    const now = new Date();
+
+    const futureDateDays = new Date(now);
+    futureDateDays.setDate(now.getDate() + 7);
+
+    const futureDateMonth = new Date(now);
+    futureDateMonth.setDate(now.getMonth() + 1);
+
+    const result = isDateInRange(now, futureDateDays.toISOString(), futureDateMonth.toISOString());
+    expect(result).toBeFalsy();
   });
 });

@@ -26,6 +26,24 @@ const dateFormatter = (date: Date) => {
   return `${day}/${month}/${date.getFullYear()}`;
 };
 
+let statisticsUnderMaintenance = false;
+const now = new Date();
+const futureDateDays = new Date(now);
+futureDateDays.setDate(now.getDate() + 7);
+const pastDateDays = new Date(now);
+pastDateDays.setDate(now.getDate() - 5);
+
+vi.mock('../../services/configuration.service', async () => {
+  return {
+    ...(await vi.importActual<any>('../../services/configuration.service')),
+    getConfiguration: () => ({
+      STATISTICS_MAINTENANCE_DATES: statisticsUnderMaintenance
+        ? `${pastDateDays.toISOString()}_${futureDateDays.toISOString()}`
+        : '2025-08-14_2025-08-25',
+    }),
+  };
+});
+
 describe('Statistics Page tests', () => {
   let mock: MockAdapter;
 
@@ -310,6 +328,22 @@ describe('Statistics Page tests', () => {
           `&endDate=${rawResponseMock.lastDate}`
       );
     });
+  });
+
+  it('show maintenance alert', async () => {
+    statisticsUnderMaintenance = true;
+    mock.onGet(/\/bff\/v1\/sender-dashboard\/dashboard-data-request*/).reply(200, rawResponseMock);
+
+    const { findByTestId } = render(<Statistics />, {
+      preloadedState: {
+        userState: { user: userResponse },
+      },
+    });
+
+    const maintenanceAlert = await findByTestId('maintenanceAlert');
+    expect(maintenanceAlert).toBeInTheDocument();
+    expect(maintenanceAlert).toHaveTextContent('maintenance_alert.title');
+    expect(maintenanceAlert).toHaveTextContent('maintenance_alert.description');
   });
 
   it('api returns error', async () => {
