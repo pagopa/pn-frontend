@@ -1,5 +1,6 @@
 import ReportGmailerrorredIcon from '@mui/icons-material/ReportGmailerrorred';
 import { Link, Stack, Typography } from '@mui/material';
+import { themeNext } from '@pagopa/mui-italia';
 
 import { getLocalizedOrDefaultLabel } from '../../utility/localization.utility';
 
@@ -38,7 +39,13 @@ const ApiError: React.FC<ApiErrorProps> = ({
 
   return (
     <Stack
-      sx={{ fontSize: '16px', mt, borderRadius: '4px', backgroundColor: '#ffffff', p: 2 }}
+      sx={{
+        fontSize: '16px',
+        mt,
+        borderRadius: '4px',
+        backgroundColor: themeNext.palette.background.paper,
+        p: 2,
+      }}
       direction={'row'}
       justifyContent={'center'}
       alignItems={'center'}

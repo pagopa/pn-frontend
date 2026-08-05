@@ -13,7 +13,7 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
-import { CopyToClipboardButton, MIButton } from '@pagopa/mui-italia';
+import { CopyToClipboardButton, MIButton, themeNext } from '@pagopa/mui-italia';
 
 import { useIsMobile } from '../hooks/useIsMobile';
 import { calcSha256String, parseFileSize } from '../utility/file.utility';
@@ -144,7 +144,7 @@ const FilenameBox = ({ filename }: { filename: string }) => {
 };
 
 /**
- * This component allows file upload
+ *  This component allows file upload
  * @param uploadText text to display
  * @param vertical text orientation
  * @param accept file types accepted
@@ -203,7 +203,7 @@ const FileUpload = ({
     return {
       border: '1px dashed',
       borderColor: fileData.error ? 'error.main' : 'primary.main',
-      backgroundColor: fileData.error ? '#fe66661a' : 'primaryAction.selected',
+      backgroundColor: fileData.error ? themeNext.colors.error[100] : 'primaryAction.selected',
     };
   }, [fileData.status, fileData.error]);
 

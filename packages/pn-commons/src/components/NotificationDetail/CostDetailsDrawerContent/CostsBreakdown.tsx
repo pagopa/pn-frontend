@@ -1,5 +1,6 @@
 import { SavingsOutlined } from '@mui/icons-material';
 import { Box, Divider, List, ListItem, ListItemText, Typography } from '@mui/material';
+import { themeNext } from '@pagopa/mui-italia';
 
 import {
   NotificationCostDetails,
@@ -142,7 +143,7 @@ const CostsBreakdown: React.FC<Props> = ({ costDetails }) => {
         hint={buildHintMessage(costDetails)}
       />
 
-      <Divider sx={{ color: '#E8EBF1' }} />
+      <Divider sx={{ color: themeNext.palette.divider }} />
 
       {totalCost && (
         <CostRow

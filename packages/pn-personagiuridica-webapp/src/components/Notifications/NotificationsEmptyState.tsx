@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 
 import { Box, Typography } from '@mui/material';
 import { EmptyState } from '@pagopa-pn/pn-commons';
-import { IllusMIInbox, IllusMIMessage, MIButton } from '@pagopa/mui-italia';
+import { IllusMIInbox, IllusMIMessage, MIButton, themeNext } from '@pagopa/mui-italia';
 
 import * as routes from '../../navigation/routes.const';
 
@@ -27,7 +27,11 @@ const FilteredEmptyStateContent: React.FC<{ cleanFilters: () => void }> = ({ cle
 
   return (
     <>
-      <Typography variant="subtitle2" fontSize="16px" sx={{ color: '#636B82' }}>
+      <Typography
+        variant="subtitle2"
+        fontSize="16px"
+        sx={{ color: themeNext.palette.text.secondary, mb: 1 }}
+      >
         {t('empty-state.filtered')}
       </Typography>
       <Typography variant="body2" fontSize="14px" color="text.secondary" sx={{ mb: 2 }}>
@@ -56,7 +60,11 @@ const DefaultEmptyStateContent: React.FC = () => {
 
   return (
     <>
-      <Typography variant="subtitle2" fontSize="16px" sx={{ color: '#636B82' }}>
+      <Typography
+        variant="subtitle2"
+        fontSize="16px"
+        sx={{ color: themeNext.palette.text.secondary, mb: 1 }}
+      >
         {t('empty-state.title')}
       </Typography>
       <Typography variant="body2" fontSize="14px" color="text.secondary" sx={{ mb: 2 }}>

@@ -33,7 +33,7 @@ import {
   TosPrivacyConsent,
   searchStringLimitReachedText,
 } from '@pagopa-pn/pn-commons';
-import { Autocomplete, MIAlert, theme } from '@pagopa/mui-italia';
+import { Autocomplete, MIAlert, theme, themeNext } from '@pagopa/mui-italia';
 
 import { AddressType, ChannelType, SaveDigitalAddressParams, Sender } from '../../models/contacts';
 import { Party } from '../../models/party';
@@ -193,7 +193,7 @@ const AddSpecialContact = forwardRef<AddSpecialContactRef, Props>(
 
     const renderOption = (option: Party) => (
       <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-        <AccountBalanceIcon fontSize="small" sx={{ color: '#BBC2D6' }} />
+        <AccountBalanceIcon fontSize="small" sx={{ color: themeNext.colors.neutral.grey[300] }} />
         {option.name}
       </Box>
     );

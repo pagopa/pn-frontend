@@ -1,4 +1,5 @@
 import { Box, Typography } from '@mui/material';
+import { themeNext } from '@pagopa/mui-italia';
 
 type Props = {
   numberOfNotification: number;
@@ -11,7 +12,7 @@ const NotificationBadge: React.FC<Props> = ({ numberOfNotification }) => (
       height: '18px',
       borderRadius: '56px',
       padding: '3px, 8px, 3px, 8px',
-      backgroundColor: '#0073E6',
+      backgroundColor: themeNext.palette.primary.main,
       display: 'flex',
       justifyContent: 'center',
       alignItems: 'center',
