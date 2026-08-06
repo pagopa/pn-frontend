@@ -3,6 +3,25 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.24.2](https://github.com/pagopa/pn-frontend/compare/v2.24.2-RC.0...v2.24.2) (2026-08-06)
+
+**Note:** Version bump only for package @pagopa-pn/pn-personafisica-webapp
+
+
+
+
+
+## [2.24.2-RC.0](https://github.com/pagopa/pn-frontend/compare/v2.24.1...v2.24.2-RC.0) (2026-08-06)
+
+
+### Features
+
+* **PN-20886:** implemented statistics maintenance alert ([#1990](https://github.com/pagopa/pn-frontend/issues/1990)) ([4760e5e](https://github.com/pagopa/pn-frontend/commit/4760e5e72daa91d636e2f9e28b9094df45bb1114))
+
+
+
+
+
 ## [2.24.1](https://fbianchicodermine-github/pagopa/pn-frontend/compare/v2.24.1-RC.0...v2.24.1) (2026-07-08)
 
 **Note:** Version bump only for package @pagopa-pn/pn-personafisica-webapp
