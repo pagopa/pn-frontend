@@ -241,10 +241,11 @@ const SpecialContacts: React.FC<{ addressType: AddressType; channelType?: Channe
               title={t('special-contacts.courtesy-banner.title', {
                 ns: 'recapiti',
               })}
-              description={t('special-contacts.courtesy-banner.description', {
+            >
+              {t('special-contacts.courtesy-banner.description', {
                 ns: 'recapiti',
               })}
-            />
+            </MIAlert>
           )}
           <Stack
             spacing={3}

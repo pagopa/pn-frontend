@@ -3,10 +3,11 @@ import { omit } from 'lodash-es';
 import { ConsentType, basicInitialUserData, basicNoLoggedUserData } from '@pagopa-pn/pn-commons';
 import { createSlice, isAnyOf } from '@reduxjs/toolkit';
 
-import { LoginProvider, User } from '../../models/User';
+import { User } from '../../models/User';
 import { userDataMatcher } from '../../utility/user.utility';
 import {
   acceptTosPrivacy,
+  exchangeFimsToken,
   exchangeOneIdentityCode,
   exchangeToken,
   getTosPrivacyApproval,
@@ -28,7 +29,6 @@ type AuthInitialState = {
     consentVersion: string;
   };
   tosPrivacyApiError: boolean;
-  loginProvider: LoginProvider;
   // isFreshLogin is used to track if the user has just logged in, to show the onboarding only on the first login after authentication
   isFreshLogin: boolean;
 };
@@ -64,7 +64,6 @@ const initialState: AuthInitialState = {
     consentVersion: '',
   },
   tosPrivacyApiError: false,
-  loginProvider: LoginProvider.SPIDHUB,
   isFreshLogin: false,
 };
 
@@ -117,19 +116,13 @@ const userSlice = createSlice({
 
     builder
       .addMatcher(
-        isAnyOf(exchangeToken.pending, exchangeOneIdentityCode.pending),
-        (state, action) => {
+        isAnyOf(exchangeToken.pending, exchangeFimsToken.pending, exchangeOneIdentityCode.pending),
+        (state) => {
           state.loading = true;
-
-          if (action.type === exchangeToken.pending.type) {
-            state.loginProvider = LoginProvider.SPIDHUB;
-          } else if (action.type === exchangeOneIdentityCode.pending.type) {
-            state.loginProvider = LoginProvider.ONEIDENTITY;
-          }
         }
       )
       .addMatcher(
-        isAnyOf(exchangeToken.fulfilled, exchangeOneIdentityCode.fulfilled),
+        isAnyOf(exchangeToken.fulfilled, exchangeFimsToken.fulfilled, exchangeOneIdentityCode.fulfilled),
         (state, action) => {
           const user =
             action.type === exchangeOneIdentityCode.fulfilled.type
@@ -141,7 +134,7 @@ const userSlice = createSlice({
           state.loading = false;
         }
       )
-      .addMatcher(isAnyOf(exchangeToken.rejected, exchangeOneIdentityCode.rejected), (state) => {
+      .addMatcher(isAnyOf(exchangeToken.rejected, exchangeFimsToken.rejected, exchangeOneIdentityCode.rejected), (state) => {
         state.loading = false;
       });
   },

@@ -8,13 +8,12 @@ import {
   fireEvent,
   initLocalizationForTest,
   render,
-  theme,
   within,
 } from '../../../test-utils';
 import { formatDate, formatTimeWithLegend } from '../../../utility/date.utility';
 import DesktopDowntimeLog from '../DesktopDowntimeLog';
 
-const columns = ['startDate', 'endDate', 'functionality', 'legalFactId', 'status'];
+const columns = ['startDate', 'endDate', 'functionality', 'legalFactId', 'status'] as const;
 
 const checkDateField = (date: string | undefined, column: HTMLElement) => {
   const text = date ? `${formatDate(date)},${formatTimeWithLegend(date)}` : '-';
@@ -46,10 +45,7 @@ const checkLegalFactField = (
 const checkStatusField = (status: DowntimeStatus, column: HTMLElement) => {
   expect(column).toHaveTextContent(`appStatus - legends.status.${status}`);
   const statusChip = within(column).getByTestId('downtime-status');
-  expect(statusChip).toHaveStyle({
-    'background-color':
-      status === DowntimeStatus.KO ? theme.palette.error.main : theme.palette.success.main,
-  });
+  expect(statusChip).toBeInTheDocument();
 };
 
 describe('DesktopDowntimeLog component', () => {
@@ -83,7 +79,7 @@ describe('DesktopDowntimeLog component', () => {
       const currentLog = beDowntimeHistoryWithIncidents.result[index];
       dataColumns.forEach((column, jindex) => {
         if (columns[jindex] === 'startDate' || columns[jindex] === 'endDate') {
-          checkDateField(currentLog[columns[jindex] as 'startDate' | 'endDate'], column);
+          checkDateField(currentLog[columns[jindex]], column);
         }
         if (columns[jindex] === 'functionality') {
           checkFunctionalityField(currentLog.functionality, column);

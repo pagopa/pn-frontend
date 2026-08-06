@@ -1,8 +1,6 @@
 import { Fragment, useState } from 'react';
 
-import CloseIcon from '@mui/icons-material/Close';
-import { Box, Button, Drawer, Grid, Typography } from '@mui/material';
-import { styled } from '@mui/material/styles';
+import { Grid } from '@mui/material';
 import { TimelineNotification } from '@pagopa/mui-italia';
 
 import { useIsMobile } from '../../hooks/useIsMobile';
@@ -11,33 +9,19 @@ import {
   NotificationDetailRecipient,
   NotificationStatusHistory,
 } from '../../models/NotificationDetail';
-import { getLocalizedOrDefaultLabel } from '../../utility/localization.utility';
 import NotificationDetailTimelineStep from './NotificationDetailTimelineStep';
 
 type Props = {
   recipients: Array<NotificationDetailRecipient>;
   statusHistory: Array<NotificationStatusHistory>;
-  title: string;
   clickHandler: (legalFactId: LegalFactId) => void;
-  historyButtonLabel: string;
   showMoreButtonLabel: string;
   showLessButtonLabel: string;
   disableDownloads?: boolean;
   isParty?: boolean;
   language?: string;
   handleTrackShowMoreLess?: (collapsed: boolean) => void;
-  handleTrackShowHistory?: (open: boolean) => void;
 };
-
-const CustomDrawer = styled(Drawer)(() => ({
-  '& .MuiDrawer-paper': {
-    width: '100%',
-  },
-  '& .MuiTimeline-root': {
-    marginTop: 0,
-    paddingTop: 0,
-  },
-}));
 
 /**
  * This component is responsible for rendering a timeline of notification details,
@@ -51,8 +35,6 @@ const CustomDrawer = styled(Drawer)(() => ({
  * @param recipients list of recipients
  * @param statusHistory notification macro-status history
  * @param clickHandler function called when user clicks on the download button
- * @param title title to show
- * @param historyButtonLabel label of the history button
  * @param showMoreButtonLabel label of show more button
  * @param showLessButtonLabel label of show less button
  * @param disableDownloads for disable downloads
@@ -63,15 +45,12 @@ const NotificationDetailTimeline = ({
   recipients,
   statusHistory,
   clickHandler,
-  title,
-  historyButtonLabel,
   showMoreButtonLabel,
   showLessButtonLabel,
   disableDownloads = false,
   isParty = true,
   language = 'it',
   handleTrackShowMoreLess,
-  handleTrackShowHistory,
 }: Props) => {
   const [state, setState] = useState(false);
   const isMobile = useIsMobile();
@@ -79,13 +58,6 @@ const NotificationDetailTimeline = ({
   if (!isMobile && state) {
     setState(false);
   }
-
-  const toggleHistoryDrawer = () => {
-    const open = !state;
-
-    handleTrackShowHistory?.(open);
-    setState(!state);
-  };
 
   const getPosition = (index: number): 'first' | 'last' | undefined => {
     if (index === 0) {
@@ -124,18 +96,6 @@ const NotificationDetailTimeline = ({
         alignItems="center"
         data-testid="NotificationDetailTimeline"
       >
-        <Grid item>
-          <Typography
-            id="notification-state"
-            component="h5"
-            color="text.primary"
-            fontWeight={700}
-            textTransform="uppercase"
-            fontSize={14}
-          >
-            {title}
-          </Typography>
-        </Grid>
         {/* TODO: ripristinare quando sarà completata la issue pn-719 */}
         {/* <Grid item>
           <Button startIcon={<DownloadIcon />}>Scarica tutti gli allegati</Button>
@@ -145,69 +105,8 @@ const NotificationDetailTimeline = ({
       If is mobile, then render a small preview of timeline with the possibility to open the customDrawer
       */}
       <TimelineNotification sx={{ my: isMobile ? 0 : 3, py: 0 }}>
-        {isMobile && statusHistory.length > 0 ? (
-          <NotificationDetailTimelineStep
-            timelineStep={statusHistory[0]}
-            statusHistory={statusHistory}
-            recipients={recipients}
-            position="first"
-            clickHandler={clickHandler}
-            historyButtonLabel={historyButtonLabel}
-            showHistoryButton
-            historyButtonClickHandler={toggleHistoryDrawer}
-            disableDownloads={disableDownloads}
-            isParty={isParty}
-            reworkedStatus={statusHistory[0].reworkedStatus}
-          />
-        ) : (
-          timelineComponent
-        )}
+        {timelineComponent}
       </TimelineNotification>
-      <CustomDrawer
-        anchor="bottom"
-        open={state}
-        onClose={toggleHistoryDrawer}
-        data-testid="notification-history-drawer"
-      >
-        <Grid
-          container
-          direction="row"
-          justifyContent="space-between"
-          alignItems="center"
-          sx={{ p: 3, pb: 0 }}
-          data-testid="notification-history-drawer-content"
-        >
-          <Grid item>
-            <Typography
-              id="notification-state"
-              color="text.primary"
-              fontWeight={700}
-              textTransform="uppercase"
-              fontSize={14}
-            >
-              {title}
-            </Typography>
-          </Grid>
-          <Grid item>
-            <Button
-              aria-label={getLocalizedOrDefaultLabel('common', 'button.close')}
-              onClick={toggleHistoryDrawer}
-            >
-              <CloseIcon
-                data-testid="notification-drawer-close"
-                sx={{
-                  color: 'action.active',
-                  width: '2rem',
-                  height: '2rem',
-                }}
-              />
-            </Button>
-          </Grid>
-        </Grid>
-        <Box sx={{ px: 3, height: 'calc(100vh - 87px)', overflowY: 'scroll' }}>
-          <TimelineNotification>{timelineComponent}</TimelineNotification>
-        </Box>
-      </CustomDrawer>
     </Fragment>
   );
 };

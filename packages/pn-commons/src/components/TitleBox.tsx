@@ -19,6 +19,8 @@ type Props = {
   mbSubTitle?: number;
   /** Typography variant for title */
   variantTitle?: Variant;
+  /** Typography component for title */
+  componentTitle?: React.ElementType;
   /** Typography variant for subtitle */
   variantSubTitle?: Variant;
   /** style to apply */
@@ -38,12 +40,13 @@ const TitleBox: React.FC<Props> = ({
   propsTitle,
   mtGrid,
   mbSubTitle,
-  variantTitle = 'h1',
+  variantTitle = 'h4',
+  componentTitle = 'h1',
   variantSubTitle = 'h5',
   sx,
   children,
 }) => (
-  <Grid id="page-header-container" aria-orientation="horizontal" container mt={mtGrid} sx={sx}>
+  <Grid id="page-header-container" container mt={mtGrid} sx={sx}>
     {title && (
       <Grid id="item" item xs={12} mb={mbTitle} {...propsTitle}>
         <Typography
@@ -51,6 +54,7 @@ const TitleBox: React.FC<Props> = ({
           data-testid="titleBox"
           role="heading"
           variant={variantTitle}
+          component={componentTitle}
           display="inline-block"
           sx={{ verticalAlign: 'middle', overflowWrap: 'anywhere' }}
         >
@@ -60,7 +64,7 @@ const TitleBox: React.FC<Props> = ({
       </Grid>
     )}
     {subTitle && (
-      <Grid aria-orientation="horizontal" item xs={12} mb={mbSubTitle}>
+      <Grid item xs={12} mb={mbSubTitle}>
         <Typography
           id="subtitle-page"
           variant={variantSubTitle}
@@ -71,9 +75,11 @@ const TitleBox: React.FC<Props> = ({
         </Typography>
       </Grid>
     )}
-    <Grid aria-orientation="vertical" item xs={12}>
-      <Typography sx={{ fontSize: '18px' }}>{children}</Typography>
-    </Grid>
+    {children && (
+      <Grid item xs={12}>
+        <Typography sx={{ fontSize: '18px' }}>{children}</Typography>
+      </Grid>
+    )}
   </Grid>
 );
 

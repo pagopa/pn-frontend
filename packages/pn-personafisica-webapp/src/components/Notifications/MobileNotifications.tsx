@@ -2,7 +2,7 @@ import { Fragment, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
-import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+import ArrowForward from '@mui/icons-material/ArrowForward';
 import { Grid } from '@mui/material';
 import {
   CardElement,
@@ -10,18 +10,17 @@ import {
   MobileNotificationsSort,
   Notification,
   NotificationColumnData,
-  NotificationsDataSwitch,
+  NotificationsRecipientDataSwitch,
   PnCard,
   PnCardActions,
   PnCardContent,
   PnCardContentItem,
-  PnCardHeader,
-  PnCardHeaderItem,
   PnCardsList,
+  RecipientNotification,
   Row,
   Sort,
 } from '@pagopa-pn/pn-commons';
-import { ButtonNaked } from '@pagopa/mui-italia';
+import { MIButton } from '@pagopa/mui-italia';
 
 import * as routes from '../../navigation/routes.const';
 import { Delegator } from '../../redux/delegation/types';
@@ -29,11 +28,11 @@ import FilterNotifications from './FilterNotifications';
 import NotificationsEmptyState from './NotificationsEmptyState';
 
 type Props = {
-  notifications: Array<Notification>;
+  notifications: Array<RecipientNotification>;
   /** Card sort */
-  sort?: Sort<NotificationColumnData>;
+  sort?: Sort<NotificationColumnData<RecipientNotification>>;
   /** The function to be invoked if the user change sorting */
-  onChangeSorting?: (s: Sort<NotificationColumnData>) => void;
+  onChangeSorting?: (s: Sort<NotificationColumnData<RecipientNotification>>) => void;
   /** Delegator */
   currentDelegator?: Delegator;
 };
@@ -55,7 +54,11 @@ const MobileNotifications = ({ notifications, sort, onChangeSorting, currentDele
   const { t } = useTranslation('notifiche');
   const filterNotificationsRef = useRef({ filtersApplied: false, cleanFilters: () => void 0 });
 
-  const cardBody: Array<CardElement<Notification>> = [
+  const cardBody: Array<CardElement<RecipientNotification>> = [
+    {
+      id: 'sentAt',
+      label: t('table.data'),
+    },
     {
       id: 'sender',
       label: t('table.mittente'),
@@ -64,7 +67,6 @@ const MobileNotifications = ({ notifications, sort, onChangeSorting, currentDele
     {
       id: 'subject',
       label: t('table.oggetto'),
-      mode: 'truncate',
     },
     {
       id: 'iun',
@@ -72,7 +74,7 @@ const MobileNotifications = ({ notifications, sort, onChangeSorting, currentDele
     },
   ];
 
-  const cardData: Array<Row<Notification>> = notifications.map((n) => ({
+  const cardData: Array<Row<RecipientNotification>> = notifications.map((n) => ({
     ...n,
     id: n.iun,
   }));
@@ -100,17 +102,21 @@ const MobileNotifications = ({ notifications, sort, onChangeSorting, currentDele
     );
     /* eslint-enable functional/immutable-data */
     return arr;
-  }, [] as Array<CardSort<Notification>>);
+  }, [] as Array<CardSort<RecipientNotification>>);
 
-  const filtersApplied: boolean = filterNotificationsRef.current.filtersApplied;
+  const filtersApplied: boolean = filterNotificationsRef.current?.filtersApplied ?? false;
 
   // Navigation handlers
-  const handleRowClick = (row: Row<Notification>) => {
+  const handleRowClick = (row: Row<RecipientNotification>) => {
+    const { iun, communicationType } = row;
+
     if (currentDelegator) {
-      navigate(routes.GET_DETTAGLIO_NOTIFICA_DELEGATO_PATH(row.iun, currentDelegator.mandateId));
-    } else {
-      navigate(routes.GET_DETTAGLIO_NOTIFICA_PATH(row.iun));
+      return navigate(routes.GET_DETTAGLIO_NOTIFICA_DELEGATO_PATH(iun, currentDelegator.mandateId));
     }
+
+    return communicationType === 'LEGAL'
+      ? navigate(routes.GET_DETTAGLIO_NOTIFICA_PATH(iun))
+      : navigate(routes.GET_DETTAGLIO_COMUNICAZIONE_PATH(iun));
   };
 
   const showFilters = notifications?.length > 0 || filtersApplied;
@@ -146,47 +152,23 @@ const MobileNotifications = ({ notifications, sort, onChangeSorting, currentDele
         <PnCardsList>
           {cardData.map((data) => (
             <PnCard key={data.id} testId="mobileNotificationsCards">
-              <PnCardHeader
-                headerGridProps={{
-                  direction: { xs: 'row', sm: 'row' },
-                  alignItems: { xs: 'flex-start', sm: 'center' },
-                }}
-              >
-                <PnCardHeaderItem
-                  gridProps={{
-                    xs: 4,
-                    sm: 5,
-                  }}
-                  position="left"
-                >
-                  <NotificationsDataSwitch data={data} type="sentAt" />
-                </PnCardHeaderItem>
-                <PnCardHeaderItem
-                  gridProps={{
-                    xs: 8,
-                    sm: 7,
-                  }}
-                  position="right"
-                >
-                  <NotificationsDataSwitch data={data} type="notificationStatus" />
-                </PnCardHeaderItem>
-              </PnCardHeader>
-              <PnCardContent>
+              <PnCardContent sx={{ mt: 0 }}>
                 {cardBody.map((body) => (
                   <PnCardContentItem key={body.id} label={body.label} mode={body.mode}>
-                    <NotificationsDataSwitch data={data} type={body.id} />
+                    <NotificationsRecipientDataSwitch data={data} type={body.id} />
                   </PnCardContentItem>
                 ))}
               </PnCardContent>
               <PnCardActions>
-                <ButtonNaked
-                  id="go-to-detail"
-                  onClick={() => handleRowClick(data)}
-                  endIcon={<ArrowForwardIcon />}
+                <MIButton
+                  variant="text"
                   color="primary"
+                  onClick={() => handleRowClick(data)}
+                  endIcon={<ArrowForward />}
+                  data-testid="go-to-detail"
                 >
-                  {t('table.show-detail')}
-                </ButtonNaked>
+                  {t('table.open')}
+                </MIButton>
               </PnCardActions>
             </PnCard>
           ))}

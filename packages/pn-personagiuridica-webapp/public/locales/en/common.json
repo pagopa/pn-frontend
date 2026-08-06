@@ -1,4 +1,6 @@
 {
+  "iun": "IUN Code",
+  "logo": "Logo of",
   "button": {
     "filtra": "Filter",
     "annulla filtro": "Reset filters",
@@ -28,9 +30,9 @@
     "understand": "Ok, I understand"
   },
   "menu": {
-    "notifiche": "Notifications",
-    "notifiche-impresa": "Company notifications",
-    "notifiche-delegato": "Delegated notifications",
+    "notifiche": "Inbox",
+    "notifiche-impresa": "Inbox for {{organization}}",
+    "notifiche-delegato": "Incoming from delegations",
     "deleghe": "Delegations of authority",
     "profilo": "Your details",
     "contacts": "Contact details",
@@ -101,7 +103,8 @@
   "loading": "Loading",
   "not-found": {
     "title": "What you were looking for is not here.",
-    "description": "The page you were looking for does not exist or is no longer available."
+    "description": "The page you were looking for does not exist or is no longer available.",
+    "back-to-home": "Back to home"
   },
   "leaving-app": {
     "title": "You are exiting SEND",
@@ -242,6 +245,11 @@
   "code-modal": {
     "digits": ["First digit", "Second digit", "Third digit", "Fourth digit", "Last digit"]
   },
+  "user-validation-failed": {
+    "title": "The data entered is invalid",
+    "description": "One or more details associated with your account are invalid. Contact support to resolve the issue.",
+    "cta": "Contact support"
+  },
   "autocomplete": {
     "clear": "Remove selected options",
     "toggle-open": "Open option selection menu",
@@ -249,5 +257,6 @@
     "selection-box": "Selected options",
     "selection-done": "%s selected",
     "delete-selection": "Remove %s"
-  }
+  },
+  "not-available": "Not available"
 }

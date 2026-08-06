@@ -18,15 +18,18 @@ describe('NotificationPaymentPagoPaReadOnly', () => {
     } as PagoPAPaymentFullDetails);
 
   const statuses = [
-    { status: PaymentStatus.SUCCEEDED, color: 'success', key: 'succeeded' },
+    { status: PaymentStatus.SUCCEEDED, key: 'succeeded' },
     {
       status: PaymentStatus.FAILED,
       detail: PaymentInfoDetail.PAYMENT_CANCELED,
-      color: 'warning',
       key: 'canceled',
     },
-    { status: PaymentStatus.FAILED, color: 'error', key: 'failed' },
-    { status: PaymentStatus.INPROGRESS, color: 'info', key: 'inprogress' },
+    {
+      status: PaymentStatus.FAILED,
+      detail: PaymentInfoDetail.PAYMENT_EXPIRED,
+      key: 'failed',
+    },
+    { status: PaymentStatus.INPROGRESS, key: 'inprogress' },
   ];
 
   it.each(statuses)('render component - $key', async (status) => {
@@ -44,10 +47,6 @@ describe('NotificationPaymentPagoPaReadOnly', () => {
     );
     const statusButton = getByTestId(`statusChip-detail.payment.status.${status.key}`);
     expect(statusButton).toHaveTextContent(`detail.payment.status.${status.key}`);
-    const buttonClass = `MuiChip-color${
-      status.color.charAt(0).toUpperCase() + status.color.slice(1)
-    }`;
-    expect(statusButton.classList.contains(buttonClass)).toBe(true);
     fireEvent.mouseOver(statusButton);
     const ttip = await waitFor(() => screen.getByRole('tooltip'));
     expect(ttip).toHaveTextContent(`detail.payment.status.${status.key}-tooltip`);

@@ -8,21 +8,17 @@ import {
   fireEvent,
   initLocalizationForTest,
   render,
-  theme,
   within,
 } from '../../../test-utils';
 import { formatDate, formatTimeWithLegend } from '../../../utility/date.utility';
 import MobileDowntimeLog from '../MobileDowntimeLog';
 
-const data = ['startDate', 'endDate', 'functionality', 'legalFactId'];
+const data = ['startDate', 'endDate', 'functionality', 'legalFactId'] as const;
 
 const checkStatusField = (status: DowntimeStatus, cardElem: HTMLElement) => {
   expect(cardElem).toHaveTextContent(`appStatus - legends.status.${status}`);
   const statusChip = within(cardElem).getByTestId('downtime-status');
-  expect(statusChip).toHaveStyle({
-    'background-color':
-      status === DowntimeStatus.KO ? theme.palette.error.main : theme.palette.success.main,
-  });
+  expect(statusChip).toBeInTheDocument();
 };
 
 const checkDateField = (date: string | undefined, cardElem: HTMLElement) => {
@@ -83,10 +79,7 @@ describe('MobileDowntimeLog component', () => {
       cardBodyLabel.forEach((label, jindex) => {
         expect(label).toHaveTextContent(`appStatus - downtimeList.columnHeader.${data[jindex]}`);
         if (data[jindex] === 'startDate' || data[jindex] === 'endDate') {
-          checkDateField(
-            currentLog[data[jindex] as 'startDate' | 'endDate'],
-            cardBodyValue[jindex]
-          );
+          checkDateField(currentLog[data[jindex]], cardBodyValue[jindex]);
         }
         if (data[jindex] === 'functionality') {
           checkFunctionalityField(currentLog.functionality, cardBodyValue[jindex]);

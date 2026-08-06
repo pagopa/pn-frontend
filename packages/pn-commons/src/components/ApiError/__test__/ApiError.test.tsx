@@ -48,4 +48,18 @@ describe('ApiError', () => {
 
     expect(apiErrorElement).toBeInTheDocument();
   });
+
+  it('renders the custom error component instead of the default error', () => {
+    const apiId = 'customApiId';
+
+    render(
+      <ApiError
+        apiId={apiId}
+        customErrorComponent={<div data-testid="custom-error">Custom error</div>}
+      />
+    );
+
+    expect(screen.getByTestId('custom-error')).toBeInTheDocument();
+    expect(screen.queryByTestId(`api-error-${apiId}`)).not.toBeInTheDocument();
+  });
 });

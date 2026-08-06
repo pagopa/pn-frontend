@@ -1,6 +1,7 @@
 {
   "title": "Notifications",
   "subtitle": "Vous trouverez ici toutes les notifications envoyées par l’organisme. Vous pouvez les filtrer par code fiscal, code IUN, date d’envoi et état.",
+  "go-to-detail": "Voir les détails",
   "new-notification-button": "Envoyer une notification",
   "manual-send-disabled-message": "Impossible d’envoyer de nouvelles notifications pour le moment.",
   "manual-send-disabled-action": "Contrôler l’état de la plateforme",
@@ -29,8 +30,12 @@
     "subtitle-single-f24": "Ici, vous pouvez voir les modèles F24 joints à la notification.",
     "subtitle-multiple": "Pour voir l’état de paiement des avis de pagoPA joints à la notification, sélectionnez un destinataire.",
     "subtitle-multiple-f24": "Pour voir les modèles F24 joints à la notification, sélectionnez un destinataire.",
+    "recipient": "Destinataire",
     "pagopa-notice": "Avis de pagoPA",
-    "paid": "Payé",
+    "status": {
+      "to-pay": "À payer",
+      "succeeded": "Payé"
+    },
     "f24-attached": "Modèles F24 joints",
     "attachments": "annexes",
     "f24-dialog-title": "Modèles F24 joints à la notification {{iun}}"
@@ -38,13 +43,14 @@
   "table": {
     "title": "Tableau des notifications",
     "date": "Date",
-    "recipient": "Destinataire",
+    "recipient": "Code fiscal",
     "subject": "Objet",
     "iun": "Code IUN",
     "groups": "Groupes",
     "status": "État",
     "show-detail": "Voir le détail",
-    "aria-action-table": "Voir les détails de la notification avec IUN : {{iun}}"
+    "aria-action-table": "Ouvrir la notification avec l'IUN : {{iun}}",
+    "open": "Ouvrir"
   },
   "sort": {
     "title": "Trier",
@@ -54,20 +60,35 @@
     "options": "Options de tri"
   },
   "empty-state": {
-    "filtered": "Nous n’avons pas trouvé de résultats : essayez avec des filtres différents. <0>Supprimer filtres</0>.",
-    "no-notifications": "L’organisme n’a pas encore envoyé de notification. Utilisez les <0>API Key</0> ou faites un <1>envoi manuel</1>.",
+    "filtered": "Aucune notification pour les filtres sélectionnés",
+    "filtered-description": "Supprimez-les ou essayez une autre combinaison.",
+    "clean-filters-cta": "Supprimer les filtres",
+    "no-notifications": "L'organisme n'a encore envoyé aucune notification. Utilisez les <0>Clés API</0> ou effectuez un <1>envoi manuel</1>.",
     "timeout": "Aucun résultat trouvé ; réessayez con des filtres différents",
-    "aria-label-remove-filters": "Supprimer les filtres",
-    "aria-label-api-keys": "API Key",
-    "aria-label-create-notification": "Envoi manuel"
+    "generic-error": "Impossible de récupérer les notifications.",
+    "generic-error-cta": "Réessayer"
   },
   "detail": {
+    "protocol-number": "Numéro de protocole",
+    "subject": "Objet de la notification",
+    "notification-details-aria-label": "Accéder aux détails de la notification",
+    "legal-value": "Notification à valeur juridique",
+    "notification-timeline-section": {
+      "title": "Statut de la notification",
+      "aria-label": "Accéder à la chronologie de la notification"
+    },
+    "notification-detail-section": {
+      "title": "Détails de la notification",
+      "aar": "Avis de réception",
+      "aria-label": "Accéder à l'avis de réception"
+    },
     "document-not-available": "Le document sera téléchargeable dans quelques minutes. Vous pouvez réessayer en rechargeant la page ou en cliquant sur le lien du document requis",
     "table-aria-label": "Détail de la notification",
     "payment-table-aria-label": "Détail des paiements",
     "sender": "Expéditeur",
     "recipient": "Destinataire",
     "recipients": "Destinataires",
+    "notification-text": "Texte de la notification",
     "tax-id-citizen-recipient": "Code fiscal destinataire",
     "tax-id-organization-recipient": "Code fiscal destinataire",
     "date": "Date d’envoi",
@@ -112,12 +133,11 @@
       }
     },
     "acts": "Pièces jointes",
-    "download-message-available": "Les documents sont disponibles en ligne pendant 120 jours à compter de la finalisation de la notification.",
-    "download-message-expired": "Étant donné que 120 jours se sont écoulés depuis la date de finalisation, les documents ne sont plus disponibles.",
-    "download-aar-available": "L’accusé de réception est disponible en ligne pendant 10 ans à compter de la finalisation de la notification.",
-    "download-aar-expired": "Comme 10 ans se sont écoulés depuis la date de finalisation, l’accusé de réception n’est plus disponible.",
+    "download-message-available": "<0>Disponible en ligne jusqu'à 120 jours</0> à compter de la date à laquelle la notification SEND a pris valeur juridique.",
+    "download-message-expired": "Les documents ne sont plus disponibles en ligne.",
+    "download-aar-available": "<0>Disponible en ligne pendant 10 ans</0> à compter de la date à laquelle la notification SEND a pris valeur juridique.",
+    "download-aar-expired": "L'accusé de réception n'est plus disponible en ligne.",
     "download-files-link": "Quand une notification est-elle finalisée ?",
-    "aar-acts": "Accusé de réception",
     "timeline-title": "État de la notification",
     "legalfact": "Attestation opposable aux tiers",
     "receipt": "Reçu",
@@ -347,13 +367,13 @@
       },
       "radd": {
         "title": "Les documents ont été retirés",
-        "description-mono-recipient": "Le destinataire ou son délégué a retiré les documents notifiés auprès d’un opérateur autorisé à les délivrer.",
-        "description-multi-recipients": "Un des destinataires ou son délégué a retiré les documents notifiés auprès d’un opérateur autorisé à les délivrer."
+        "description-mono-recipient": "Le destinataire, ou la personne déléguée, a retiré les documents notifiés auprès d'un opérateur habilité à leur remise.",
+        "description-multi-recipients": "L'un des destinataires, ou son délégué, a retiré les documents notifiés auprès d'un opérateur habilité à leur remise."
       },
       "tpp-type": "un canal numérique tiers"
     },
     "downtimes": {
-      "title": "DYSFONCTIONNEMENTS",
+      "title": "Dysfonctionnements",
       "textWithEndDate": "Dysfonctionnement commencé {{startDate}} et terminé {{endDate}} sur les fonctionnalités suivantes :",
       "textWithoutEndDate": "Dysfonctionnement commencé {{startDate}} et pas encore terminé sur les fonctionnalités suivantes :",
       "datePrefix": "le ",

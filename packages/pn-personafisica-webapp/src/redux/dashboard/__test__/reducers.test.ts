@@ -3,6 +3,7 @@ import MockAdapter from 'axios-mock-adapter';
 import {
   NotificationColumnData,
   NotificationStatus,
+  RecipientNotification,
   Sort,
   formatToTimezoneString,
   tenYearsAgo,
@@ -46,6 +47,7 @@ describe('Dashbaord redux state tests', () => {
       filters: {
         startDate: undefined,
         endDate: undefined,
+        communicationType: '',
         iunMatch: '',
       },
       pagination: {
@@ -67,7 +69,9 @@ describe('Dashbaord redux state tests', () => {
       .onGet(
         `/bff/v1/notifications/received?startDate=${encodeURIComponent(
           formatToTimezoneString(tenYearsAgo)
-        )}&endDate=${encodeURIComponent(formatToTimezoneString(today))}&size=10`
+        )}&endDate=${encodeURIComponent(
+          formatToTimezoneString(today)
+        )}&size=10&communicationType=ALL`
       )
       .reply(200, notificationsDTO);
     const action = await store.dispatch(
@@ -96,7 +100,7 @@ describe('Dashbaord redux state tests', () => {
   });
 
   it('Should be able to change sort', () => {
-    const sort: Sort<NotificationColumnData> = {
+    const sort: Sort<NotificationColumnData<RecipientNotification>> = {
       orderBy: 'notificationStatus',
       order: 'desc',
     };
@@ -114,7 +118,6 @@ describe('Dashbaord redux state tests', () => {
       endDate: new Date('2021-02-27T14:20:20.566Z'),
       recipientId: 'mocked-recipientId',
       status: NotificationStatus.PAID,
-      subjectRegExp: 'mocked-regexp',
     };
     const action = store.dispatch(setNotificationFilters(filters));
     expect(action.type).toBe('dashboardSlice/setNotificationFilters');

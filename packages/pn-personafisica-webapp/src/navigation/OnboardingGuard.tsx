@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 
-import type { Notification } from '@pagopa-pn/pn-commons';
+import type { RecipientNotification } from '@pagopa-pn/pn-commons';
 import { LoadingPage, NotificationStatus } from '@pagopa-pn/pn-commons';
 
 import { OnboardingSource } from '../models/Onboarding';
@@ -10,20 +10,15 @@ import { getDigitalAddresses } from '../redux/contact/actions';
 import { getReceivedNotifications } from '../redux/dashboard/actions';
 import { setFirstSearch } from '../redux/dashboard/reducers';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
-import { setOnboardingSource } from '../redux/sidemenu/reducers';
+import { setHasNewNotifications, setOnboardingSource } from '../redux/sidemenu/reducers';
 import { getConfiguration } from '../services/configuration.service';
 import { groupDigitalAddresses, hasRequiredContacts } from '../utility/contacts.utility';
 import * as routes from './routes.const';
 
-const hasNotificationsToRead = (notifications: Array<Notification>): boolean => {
-  const managedStatuses = new Set([
-    NotificationStatus.VIEWED,
-    NotificationStatus.CANCELLED,
-    NotificationStatus.RETURNED_TO_SENDER,
-    NotificationStatus.EFFECTIVE_DATE,
-  ]);
-  return notifications.some((n) => !managedStatuses.has(n.notificationStatus));
-};
+const hasNotificationsToRead = (notifications: Array<RecipientNotification>): boolean =>
+  notifications.some(
+    (n) => n.isNewNotification && n.notificationStatus !== NotificationStatus.EFFECTIVE_DATE
+  );
 
 const OnboardingGuard: React.FC = () => {
   const navigate = useNavigate();
@@ -56,10 +51,14 @@ const OnboardingGuard: React.FC = () => {
           !hasNotificationsToRead(notifications) &&
           IS_ONBOARDING_ENABLED;
 
+        const hasNewNotifications = notifications.some((n) => n.isNewNotification);
+
         if (shouldRedirectToOnboarding) {
           dispatch(setOnboardingSource(OnboardingSource.LOGIN));
           navigate(routes.ONBOARDING, { replace: true });
         }
+
+        dispatch(setHasNewNotifications(hasNewNotifications));
       })
       .catch((error) => {
         console.error('OnboardingGuard - Failed to fetch onboarding data', error);

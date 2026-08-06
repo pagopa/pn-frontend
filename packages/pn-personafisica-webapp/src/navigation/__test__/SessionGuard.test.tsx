@@ -8,7 +8,8 @@ import { AppRouteParams } from '@pagopa-pn/pn-commons';
 import { userResponse } from '../../__mocks__/Auth.mock';
 import { RenderResult, act, render, screen, waitFor } from '../../__test__/test-utils';
 import { authClient } from '../../api/apiClients';
-import { AUTH_TOKEN_EXCHANGE, ONE_IDENTITY_TOKEN_EXCHANGE } from '../../api/auth/auth.routes';
+import { AUTH_TOKEN_EXCHANGE, FIMS_TOKEN_EXCHANGE, ONE_IDENTITY_TOKEN_EXCHANGE } from '../../api/auth/auth.routes';
+import { SourceChannel } from '../../models/User';
 import { AAR_UTM, UTM_KEY } from '../../utility/utm.utility';
 import SessionGuard from '../SessionGuard';
 import * as routes from '../routes.const';
@@ -152,6 +153,72 @@ describe('SessionGuard Component', () => {
     expect(pageComponent).toBeTruthy();
   });
 
+  it('FIMS token exchange - successful', async () => {
+    const fimsToken = 'mocked-fims-token';
+    const fimsUserResponse = {
+      ...userResponse,
+      source: {
+        channel: SourceChannel.WEB,
+        details: 'FIMS',
+      },
+    };
+
+    mock
+      .onPost(FIMS_TOKEN_EXCHANGE(), { authorizationToken: fimsToken })
+      .reply(200, fimsUserResponse);
+
+    await act(async () => {
+      result = render(<Guard />, {
+        route: `/?utm_source=ioapp&utm_medium=app&utm_campaign=visita_send#fimsToken=${fimsToken}`,
+      });
+    });
+
+    await waitFor(() => {
+      expect(mock.history.post).toHaveLength(1);
+      expect(mock.history.post[0].url).toBe(FIMS_TOKEN_EXCHANGE());
+      expect(JSON.parse(mock.history.post[0].data)).toStrictEqual({
+        authorizationToken: fimsToken,
+      });
+    });
+
+    const pageComponent = screen.queryByText('Generic Page');
+    expect(pageComponent).toBeTruthy();
+
+    await waitFor(() => {
+      expect(result.router.state.location.search).toBe(
+        '?utm_source=ioapp&utm_medium=app&utm_campaign=visita_send'
+      );
+      expect(result.router.state.location.hash).toBe(`#fimsToken=${fimsToken}`);
+    });
+  });
+
+  it('FIMS token exchange - error', async () => {
+    const fimsToken = '403-fims-token';
+
+    mock.onPost(FIMS_TOKEN_EXCHANGE()).reply(403, { authorizationToken: fimsToken });
+
+    await act(async () => {
+      result = render(<Guard />, {
+        route: `/#fimsToken=${fimsToken}`,
+      });
+    });
+
+    await waitFor(() => {
+      expect(mock.history.post).toHaveLength(1);
+      expect(mock.history.post[0].url).toBe(FIMS_TOKEN_EXCHANGE());
+      expect(JSON.parse(mock.history.post[0].data)).toStrictEqual({
+        authorizationToken: fimsToken,
+      });
+    });
+
+    expect(result.router.state.location.hash).toBe(`#fimsToken=${fimsToken}`);
+
+    const logoutComponent = screen.queryByTestId('session-modal');
+    expect(logoutComponent).toBeTruthy();
+    const logoutTitleComponent = screen.queryByText('leaving-app.title');
+    expect(logoutTitleComponent).toBeNull();
+  });
+
   // expected behavior: enters the app with session token already present
   it('reload - session token already present', async () => {
     const mockReduxState = {
@@ -166,7 +233,7 @@ describe('SessionGuard Component', () => {
     });
   });
 
-  // expected behavior: enters the app, exp token -> logout message, redirects to LOGOUT (not OI)
+  // expected behavior: enters the app, exp token -> logout message, redirects to LOGOUT
   it('logout', async () => {
     vi.useFakeTimers({ shouldAdvanceTime: true });
 
@@ -216,9 +283,7 @@ describe('SessionGuard Component', () => {
     });
     expect(mock.history.post).toHaveLength(1);
     await waitFor(() => {
-      expect(result.router.state.location.search).toBe(
-        `?${AppRouteParams.AAR}=mock-aar-value`
-      );
+      expect(result.router.state.location.search).toBe(`?${AppRouteParams.AAR}=mock-aar-value`);
       expect(result.router.state.historyAction).toBe('REPLACE');
     });
   });
@@ -319,7 +384,7 @@ describe('SessionGuard Component', () => {
     expect(mock.history.post).toHaveLength(0);
   });
 
-  it('One Identity Exchange Token - logout redirects to LOGOUT_OI', async () => {
+  it('One Identity Exchange Token - logout redirects to LOGOUT', async () => {
     vi.useFakeTimers({ shouldAdvanceTime: true });
 
     const exp = sub(new Date(), { minutes: 5 }).getTime() / 1000;
@@ -339,7 +404,7 @@ describe('SessionGuard Component', () => {
     await act(async () => {
       await vi.advanceTimersByTimeAsync(2500);
     });
-    expect(mockOpenFn).toHaveBeenCalledWith(routes.LOGOUT_OI, '_self');
+    expect(mockOpenFn).toHaveBeenCalledWith(routes.LOGOUT, '_self');
     vi.useRealTimers();
   });
 

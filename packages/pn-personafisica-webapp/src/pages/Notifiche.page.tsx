@@ -9,6 +9,7 @@ import {
   CustomPagination,
   NotificationColumnData,
   PaginationData,
+  RecipientNotification,
   Sort,
   TitleBox,
   calculatePages,
@@ -31,12 +32,14 @@ import {
 } from '../redux/dashboard/reducers';
 import { Delegator } from '../redux/delegation/types';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
+import { setHasNewNotifications } from '../redux/sidemenu/reducers';
 import { RootState } from '../redux/store';
 import PFEventStrategyFactory from '../utility/MixpanelUtils/PFEventStrategyFactory';
+import { hasActiveFilters } from '../utility/notification.utility';
 
 const Notifiche = () => {
   const dispatch = useAppDispatch();
-  const { t } = useTranslation(['notifiche']);
+  const { t } = useTranslation(['notifiche', 'common']);
   const { mandateId } = useParams();
   const [pageReady, setPageReady] = useState(false);
   const domicileBannerTypeRef = useRef('');
@@ -50,12 +53,23 @@ const Notifiche = () => {
   const currentDelegator = delegators.find(
     (delegation: Delegator) => delegation.mandateId === mandateId
   );
+
   const isMobile = useIsMobile();
-  const pageTitle = currentDelegator
-    ? t('delegatorTitle', {
-        name: currentDelegator.delegator ? currentDelegator.delegator.displayName : '',
-      })
-    : t('title');
+
+  const getPageTitle = () => {
+    if (currentDelegator) {
+      return t('menu.notifiche-delegato', {
+        ns: 'common',
+        delegator: currentDelegator.delegator ? currentDelegator.delegator.displayName : '',
+      });
+    }
+    if (delegators.length > 0) {
+      return t('menu.notifiche-utente', { ns: 'common' });
+    }
+
+    return t('menu.notifiche', { ns: 'common' });
+  };
+
   // back end return at most the next three pages
   // we have flag moreResult to check if there are more pages
   // the minum number of pages, to have ellipsis in the paginator, is 8
@@ -87,8 +101,12 @@ const Notifiche = () => {
       .unwrap()
       .then((data) => {
         setPageReady(true);
+        if (pagination.page === 0 && !mandateId && !hasActiveFilters(filters)) {
+          dispatch(setHasNewNotifications(data.resultsPage.some((n) => n.isNewNotification)));
+        }
+
         PFEventStrategyFactory.triggerEvent(
-          currentDelegator
+          mandateId
             ? PFEventsType.SEND_NOTIFICATION_DELEGATED
             : PFEventsType.SEND_YOUR_NOTIFICATIONS,
           {
@@ -100,7 +118,7 @@ const Notifiche = () => {
         );
       })
       .catch(() => setPageReady(true));
-  }, [filters, pagination.size, pagination.page]);
+  }, [filters, pagination.size, pagination.page, mandateId]);
 
   // Pagination handlers
   const handleChangePage = (paginationData: PaginationData) => {
@@ -108,33 +126,30 @@ const Notifiche = () => {
   };
 
   // Sort handlers
-  const handleChangeSorting = (s: Sort<NotificationColumnData>) => {
+  const handleChangeSorting = (s: Sort<NotificationColumnData<RecipientNotification>>) => {
     dispatch(setSorting(s));
   };
 
   useEffect(() => {
-    if (filters.mandateId !== currentDelegator?.mandateId) {
-      dispatch(setMandateId(currentDelegator?.mandateId));
+    if (filters.mandateId !== mandateId) {
+      dispatch(setMandateId(mandateId));
       return;
     }
     if (isFirstSearch) {
       dispatch(setFirstSearch(false));
-      setPageReady(true);
-      PFEventStrategyFactory.triggerEvent(
-        currentDelegator
-          ? PFEventsType.SEND_NOTIFICATION_DELEGATED
-          : PFEventsType.SEND_YOUR_NOTIFICATIONS,
-        {
+      if (!mandateId) {
+        setPageReady(true);
+        PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_YOUR_NOTIFICATIONS, {
           notifications,
           delegators,
           pagination,
           domicileBannerType: domicileBannerTypeRef.current,
-        }
-      );
-      return;
+        });
+        return;
+      }
     }
     fetchNotifications();
-  }, [fetchNotifications, currentDelegator]);
+  }, [fetchNotifications, mandateId]);
 
   // Announce every time loading goes from true -> false
   useEffect(() => {
@@ -159,8 +174,8 @@ const Notifiche = () => {
   return (
     <LoadingPageWrapper isInitialized={pageReady}>
       <Box p={3}>
-        {!mandateId && <DomicileBanner source={ContactSource.HOME_NOTIFICHE} />}
-        <TitleBox variantTitle="h4" title={pageTitle} mbTitle={isMobile ? 3 : undefined} />
+        <TitleBox variantTitle="h4" title={getPageTitle()} mbTitle={isMobile ? 3 : 0} />
+        {!mandateId && <DomicileBanner source={ContactSource.HOME_NOTIFICHE} my={3} />}
         <ApiErrorWrapper
           apiId={DASHBOARD_ACTIONS.GET_RECEIVED_NOTIFICATIONS}
           reloadAction={fetchNotifications}

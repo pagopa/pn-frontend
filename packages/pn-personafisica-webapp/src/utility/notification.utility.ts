@@ -1,4 +1,9 @@
-import { AppRouteParams, EventNotificationSource, NotificationDetail } from '@pagopa-pn/pn-commons';
+import {
+  AppRouteParams,
+  EventNotificationSource,
+  GetNotificationsParams,
+  NotificationDetail,
+} from '@pagopa-pn/pn-commons';
 
 import { NotificationDetailForRecipient } from '../models/NotificationDetail';
 import { Delegator } from '../redux/delegation/types';
@@ -52,3 +57,6 @@ export const appRouteParamToEventSource = (
   }
   return undefined;
 };
+
+export const hasActiveFilters = (filters: GetNotificationsParams): boolean =>
+  Boolean(filters.startDate || filters.endDate || filters.iunMatch || filters.communicationType);

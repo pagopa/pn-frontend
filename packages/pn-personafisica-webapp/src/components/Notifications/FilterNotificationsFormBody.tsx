@@ -2,7 +2,8 @@ import { FormikErrors, FormikTouched, FormikValues } from 'formik';
 import { ChangeEvent, Fragment } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { Grid, TextField } from '@mui/material';
+import VerifiedRounded from '@mui/icons-material/VerifiedRounded';
+import { Box, Grid, ListItemIcon, ListItemText, MenuItem, TextField } from '@mui/material';
 import {
   CustomDatePicker,
   DATE_FORMAT,
@@ -26,11 +27,16 @@ type Props = {
     errors: FormikErrors<FormikValues>;
     setErrors: (errors: FormikErrors<FormikValues>) => void;
   };
+  showCommunicationType: boolean;
 };
 
-const FilterNotificationsFormBody = ({ formikInstance }: Props) => {
+const FilterNotificationsFormBody = ({ formikInstance, showCommunicationType }: Props) => {
   const { t, i18n } = useTranslation(['notifiche']);
   const isMobile = useIsMobile();
+  const communicationTypeLabels = {
+    LEGAL: t('filters.communication-type-options.legal'),
+    INFORMAL: t('filters.communication-type-options.informal'),
+  };
 
   const handlePaste = async (e: React.ClipboardEvent) => {
     e.preventDefault();
@@ -69,6 +75,45 @@ const FilterNotificationsFormBody = ({ formikInstance }: Props) => {
 
   return (
     <Fragment>
+      {showCommunicationType && (
+        <Grid item lg xs={12}>
+          <TextField
+            id="communicationType"
+            data-testid="communicationType"
+            name="communicationType"
+            label={t('filters.communication-type')}
+            select
+            value={formikInstance.values.communicationType}
+            onChange={(e) => {
+              void formikInstance.setFieldValue('communicationType', e.target.value, false);
+            }}
+            SelectProps={{
+              renderValue: (value) =>
+                value === 'LEGAL' ? (
+                  <Box component="span" sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                    <VerifiedRounded sx={{ color: 'primary.main', fontSize: '16px' }} />
+                    {communicationTypeLabels.LEGAL}
+                  </Box>
+                ) : (
+                  communicationTypeLabels[value as keyof typeof communicationTypeLabels] || ''
+                ),
+            }}
+            fullWidth
+            sx={{ marginBottom: isMobile ? '20px' : '0' }}
+            size="small"
+          >
+            <MenuItem value="LEGAL">
+              <ListItemIcon>
+                <VerifiedRounded sx={{ color: 'primary.main', fontSize: '16px' }} />
+              </ListItemIcon>
+              <ListItemText>{communicationTypeLabels.LEGAL}</ListItemText>
+            </MenuItem>
+            <MenuItem value="INFORMAL">
+              <ListItemText>{communicationTypeLabels.INFORMAL}</ListItemText>
+            </MenuItem>
+          </TextField>
+        </Grid>
+      )}
       <Grid item lg xs={12}>
         <TextField
           id="iunMatch"
@@ -89,7 +134,7 @@ const FilterNotificationsFormBody = ({ formikInstance }: Props) => {
           inputProps={{ maxLength: 25 }}
         />
       </Grid>
-      <Grid item lg={2} xs={12}>
+      <Grid item lg={showCommunicationType ? 1.75 : 2} xs={12}>
         <CustomDatePicker
           language={i18n.language}
           label={t('filters.data_da', { ns: 'notifiche' })}
@@ -120,7 +165,7 @@ const FilterNotificationsFormBody = ({ formikInstance }: Props) => {
           maxDate={formikInstance.values.endDate ?? null}
         />
       </Grid>
-      <Grid item lg={2} xs={12}>
+      <Grid item lg={showCommunicationType ? 1.75 : 2} xs={12}>
         <CustomDatePicker
           language={i18n.language}
           label={t('filters.data_a', { ns: 'notifiche' })}

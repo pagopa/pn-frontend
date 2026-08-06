@@ -36,7 +36,7 @@ describe('Notifiche Page ', () => {
 
   const notificationsPath = `/bff/v1/notifications/received?startDate=${encodeURIComponent(
     formatToTimezoneString(tenYearsAgo)
-  )}&endDate=${encodeURIComponent(formatToTimezoneString(today))}&size=10`;
+  )}&endDate=${encodeURIComponent(formatToTimezoneString(today))}&size=10&communicationType=ALL`;
   const notificationsDelegatedPath = `/bff/v1/notifications/received/delegated?startDate=${encodeURIComponent(
     formatToTimezoneString(tenYearsAgo)
   )}&endDate=${encodeURIComponent(formatToTimezoneString(today))}&size=10`;
@@ -52,11 +52,11 @@ describe('Notifiche Page ', () => {
 
   afterEach(() => {
     mock.reset();
+    globalThis.matchMedia = originalMatchMedia;
   });
 
   afterAll(() => {
     mock.restore();
-    globalThis.matchMedia = originalMatchMedia;
     globalThis.ResizeObserver = originalResizeObserver;
   });
 
@@ -71,6 +71,7 @@ describe('Notifiche Page ', () => {
     expect(mock.history.get[0].url).toContain('/bff/v1/notifications/received');
     const filterForm = result.getByTestId('filter-form');
     expect(filterForm).toBeInTheDocument();
+    expect(filterForm.querySelector('input[name="communicationType"]')).toBeInTheDocument();
     const notificationsTable = result.container.querySelector('table');
     expect(notificationsTable).toBeInTheDocument();
     const itemsPerPageSelector = result.queryByTestId('itemsPerPageSelector');
@@ -89,7 +90,9 @@ describe('Notifiche Page ', () => {
       .onGet(
         `/bff/v1/notifications/received?startDate=${encodeURIComponent(
           formatToTimezoneString(tenYearsAgo)
-        )}&endDate=${encodeURIComponent(formatToTimezoneString(getEndOfDay(tenYearsAgo)))}&size=10`
+        )}&endDate=${encodeURIComponent(
+          formatToTimezoneString(getEndOfDay(tenYearsAgo))
+        )}&size=10&communicationType=ALL`
       )
       .reply(200, emptyNotificationsFromBe);
     await act(async () => {
@@ -125,7 +128,7 @@ describe('Notifiche Page ', () => {
       .reply(200, { ...notificationsDTO, resultsPage: [notificationsDTO.resultsPage[0]] });
     const notificationsPathWithSize = `/bff/v1/notifications/received?startDate=${encodeURIComponent(
       formatToTimezoneString(tenYearsAgo)
-    )}&endDate=${encodeURIComponent(formatToTimezoneString(today))}&size=20`;
+    )}&endDate=${encodeURIComponent(formatToTimezoneString(today))}&size=20&communicationType=ALL`;
     mock.onGet(notificationsPathWithSize).reply(200, notificationsDTO);
     await act(async () => {
       result = render(<Notifiche />);
@@ -152,8 +155,11 @@ describe('Notifiche Page ', () => {
     mock
       .onGet(notificationsPath)
       .reply(200, { ...notificationsDTO, resultsPage: [notificationsDTO.resultsPage[0]] });
-    const notificationsPathPageTwo =
-      notificationsPath + '&nextPagesKey=' + notificationsDTO.nextPagesKey[0];
+    const notificationsPathPageTwo = `/bff/v1/notifications/received?startDate=${encodeURIComponent(
+      formatToTimezoneString(tenYearsAgo)
+    )}&endDate=${encodeURIComponent(formatToTimezoneString(today))}&size=10&nextPagesKey=${
+      notificationsDTO.nextPagesKey[0]
+    }&communicationType=ALL`;
     mock
       .onGet(notificationsPathPageTwo)
       .reply(200, { ...notificationsDTO, resultsPage: [notificationsDTO.resultsPage[1]] });
@@ -185,7 +191,7 @@ describe('Notifiche Page ', () => {
       formatToTimezoneString(tenYearsAgo)
     )}&endDate=${encodeURIComponent(
       formatToTimezoneString(today)
-    )}&iunMatch=ABCD-EFGH-ILMN-123456-A-1&size=10`;
+    )}&iunMatch=ABCD-EFGH-ILMN-123456-A-1&size=10&communicationType=ALL`;
     mock
       .onGet(notificationsPathFiltered)
       .reply(200, { ...notificationsDTO, resultsPage: [notificationsDTO.resultsPage[1]] });
@@ -248,6 +254,7 @@ describe('Notifiche Page ', () => {
     expect(mock.history.get[0].url).toContain('/bff/v1/notifications/received/delegated');
     const filterForm = result.getByTestId('filter-form');
     expect(filterForm).toBeInTheDocument();
+    expect(filterForm.querySelector('input[name="communicationType"]')).not.toBeInTheDocument();
     const notificationsTable = result.container.querySelector('table');
     expect(notificationsTable).toBeInTheDocument();
     const itemsPerPageSelector = result.queryByTestId('itemsPerPageSelector');
@@ -343,5 +350,103 @@ describe('Notifiche Page ', () => {
     expect(itemsPerPageSelector).toBeInTheDocument();
     const pageSelector = result.queryByTestId('pageSelector');
     expect(pageSelector).toBeInTheDocument();
+  });
+
+  describe('new notifications dot', () => {
+    const receivedRegExp = new RegExp('/bff/v1/notifications/received');
+    const notificationsWithNew = notificationsDTO;
+    const notificationsWithoutNew = {
+      ...notificationsDTO,
+      resultsPage: notificationsDTO.resultsPage.map((n) => ({ ...n, isNewNotification: false })),
+    };
+
+    it('sets hasNewNotifications to true when the first page has unread notifications', async () => {
+      mock.onGet(receivedRegExp).reply(200, notificationsWithNew);
+      await act(async () => {
+        result = render(<Notifiche />);
+      });
+      expect(result.testStore.getState().generalInfoState.hasNewNotifications).toBe(true);
+    });
+
+    it('sets hasNewNotifications to false when the first page has no unread notifications', async () => {
+      mock.onGet(receivedRegExp).reply(200, notificationsWithoutNew);
+      await act(async () => {
+        result = render(<Notifiche />, {
+          preloadedState: {
+            generalInfoState: {
+              pendingDelegators: 0,
+              domicileBannerOpened: true,
+              hasNewNotifications: true,
+            },
+          },
+        });
+      });
+      expect(result.testStore.getState().generalInfoState.hasNewNotifications).toBe(false);
+    });
+
+    it('does not update the dot on the delegated page', async () => {
+      mock.onGet(receivedRegExp).reply(200, notificationsWithNew);
+      await act(async () => {
+        result = render(<Notifiche isDelegatedPage />, {
+          preloadedState: { userState: { user: userResponse } },
+        });
+      });
+      expect(result.testStore.getState().generalInfoState.hasNewNotifications).toBe(false);
+    });
+
+    it('keeps the dot value when navigating to another page', async () => {
+      mock.onGet(receivedRegExp).replyOnce(200, notificationsWithNew);
+      mock.onGet(receivedRegExp).replyOnce(200, notificationsWithoutNew);
+      await act(async () => {
+        result = render(<Notifiche />);
+      });
+      expect(result.testStore.getState().generalInfoState.hasNewNotifications).toBe(true);
+      // change page
+      const pageSelector = result.getByTestId('pageSelector');
+      const pageButtons = pageSelector?.querySelectorAll('button');
+      // the buttons are < 1 2 >
+      fireEvent.click(pageButtons[2]);
+      await waitFor(() => {
+        expect(mock.history.get).toHaveLength(2);
+      });
+      expect(result.testStore.getState().generalInfoState.hasNewNotifications).toBe(true);
+    });
+
+    it('recomputes the dot when the page size changes', async () => {
+      mock.onGet(receivedRegExp).replyOnce(200, notificationsWithoutNew);
+      mock.onGet(receivedRegExp).replyOnce(200, notificationsWithNew);
+      await act(async () => {
+        result = render(<Notifiche />);
+      });
+      expect(result.testStore.getState().generalInfoState.hasNewNotifications).toBe(false);
+      // change size
+      const itemsPerPageSelector = result.getByTestId('itemsPerPageSelector');
+      const itemsPerPageSelectorBtn = itemsPerPageSelector?.querySelector('button');
+      fireEvent.click(itemsPerPageSelectorBtn!);
+      const itemsPerPageList = screen.getAllByRole('menuitem');
+      fireEvent.click(itemsPerPageList[1]);
+      await waitFor(() => {
+        expect(mock.history.get).toHaveLength(2);
+      });
+      expect(result.testStore.getState().generalInfoState.hasNewNotifications).toBe(true);
+    });
+
+    it('does not recompute the dot when a filter is active', async () => {
+      mock.onGet(receivedRegExp).replyOnce(200, notificationsWithNew);
+      mock.onGet(receivedRegExp).replyOnce(200, notificationsWithoutNew);
+      await act(async () => {
+        result = render(<Notifiche />);
+      });
+      expect(result.testStore.getState().generalInfoState.hasNewNotifications).toBe(true);
+      // apply a filter
+      const form = result.container.querySelector('form') as HTMLFormElement;
+      await testInput(form, 'iunMatch', 'ABCD-EFGH-ILMN-123456-A-1');
+      const submitButton = form.querySelector(`button[type="submit"]`);
+      fireEvent.click(submitButton!);
+      await waitFor(() => {
+        expect(mock.history.get).toHaveLength(2);
+      });
+      expect(result.testStore.getState().generalInfoState.hasNewNotifications).toBe(true);
+    });
   });
 });

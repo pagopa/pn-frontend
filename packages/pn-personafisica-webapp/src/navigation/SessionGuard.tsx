@@ -17,8 +17,17 @@ import {
 
 import { useRapidAccessParam } from '../hooks/useRapidAccessParam';
 import { PFEventsType } from '../models/PFEventsType';
-import { OneIdentityExchangeCodeBody, TokenExchangeRequest } from '../models/User';
-import { apiLogout, exchangeOneIdentityCode, exchangeToken } from '../redux/auth/actions';
+import {
+  FimsTokenExchangeRequest,
+  OneIdentityExchangeCodeBody,
+  TokenExchangeRequest,
+} from '../models/User';
+import {
+  apiLogout,
+  exchangeFimsToken,
+  exchangeOneIdentityCode,
+  exchangeToken,
+} from '../redux/auth/actions';
 import { resetState as resetUserState, setIsFreshLogin } from '../redux/auth/reducers';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { resetState as resetGeneralState } from '../redux/sidemenu/reducers';
@@ -33,7 +42,7 @@ const SessionGuard = () => {
   const location = useLocation();
   const dispatch = useAppDispatch();
   const rapidAccess = useRapidAccessParam();
-  const { loading, loginProvider } = useAppSelector((state: RootState) => state.userState);
+  const { loading } = useAppSelector((state: RootState) => state.userState);
   const { sessionToken, exp } = useAppSelector((state: RootState) => state.userState.user);
   const navigate = useNavigate();
   const { WORK_IN_PROGRESS, INACTIVITY_HANDLER_MINUTES } = getConfiguration();
@@ -56,6 +65,7 @@ const SessionGuard = () => {
   const hashParams = new URLSearchParams(location.hash.substring(1)); // https://github.com/remix-run/history/blob/main/docs/api-reference.md#location.hash
 
   const spidToken = hashParams.get('token');
+  const fimsToken = hashParams.get('fimsToken');
 
   // Get One Identity params from URL hash
   const code = hashParams.get('code');
@@ -95,12 +105,25 @@ const SessionGuard = () => {
     }
   };
 
+  const performFimsTokenExchange = async (token: FimsTokenExchangeRequest) => {
+    AppResponsePublisher.error.subscribe('exchangeFimsToken', manageUnforbiddenError);
+
+    try {
+      const user = await dispatch(exchangeFimsToken(token)).unwrap();
+      dispatch(setIsFreshLogin(true));
+      sessionCheck(user.exp);
+    } catch (error) {
+      handleTokenExchangeError(error);
+    }
+  };
+
   const performOneIdentityTokenExchange = async (
     exchangeCodeParams: OneIdentityExchangeCodeBody
   ) => {
     AppResponsePublisher.error.subscribe('exchangeTokenOneIdentity', manageUnforbiddenError);
     try {
       const response = await dispatch(exchangeOneIdentityCode(exchangeCodeParams)).unwrap();
+      dispatch(setIsFreshLogin(true));
       sessionCheck(response.exp);
 
       PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_LOGIN_METHOD, {
@@ -142,11 +165,13 @@ const SessionGuard = () => {
 
     dispatch(resetUserState());
     dispatch(resetGeneralState());
-    goToLoginPortal({ loginProvider, search: location.search });
+    goToLoginPortal({ search: location.search });
   };
 
   useEffect(() => {
-    if (spidToken) {
+    if (fimsToken) {
+      void performFimsTokenExchange({ fimsToken });
+    } else if (spidToken) {
       void performExchangeToken({ spidToken, rapidAccess });
     } else if (code && state) {
       void performOneIdentityTokenExchange({ code, state });
@@ -161,13 +186,13 @@ const SessionGuard = () => {
     } else {
       goToLoginPortal({
         rapidAccess,
-        loginProvider,
         search: aarSearchWithUtm ?? location.search,
       });
     }
 
     return () => {
       AppResponsePublisher.error.unsubscribe('exchangeToken', manageUnforbiddenError);
+      AppResponsePublisher.error.unsubscribe('exchangeFimsToken', manageUnforbiddenError);
       AppResponsePublisher.error.unsubscribe('exchangeTokenOneIdentity', manageUnforbiddenError);
     };
   }, []);

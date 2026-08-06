@@ -13,6 +13,7 @@
     "close": "Fermer"
   },
   "menu": {
+    "notifications-send": "Notification avec SEND",
     "notifications": "Notifications",
     "users": "Utilisateurs",
     "groups": "Groupes",
@@ -176,5 +177,6 @@
     "selection-box": "Options sélectionnées",
     "selection-done": "%s sélectionnés",
     "delete-selection": "Supprime %s"
-  }
+  },
+  "not-available": "Non disponible"
 }

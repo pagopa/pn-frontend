@@ -264,3 +264,23 @@ export const isDateInRange = (date: Date, startDate: string, endDate: string): b
 
   return current >= start && current <= end;
 };
+
+export function getDateInfo(date: string): { day: string; month: string; year: string } {
+  const [day, month, year] = formatDate(date).split('/');
+  const months = [
+    'january',
+    'february',
+    'march',
+    'april',
+    'may',
+    'june',
+    'july',
+    'august',
+    'september',
+    'october',
+    'november',
+    'december',
+  ];
+
+  return { day, month: months[parseInt(month, 10) - 1], year };
+}

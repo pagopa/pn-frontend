@@ -13,6 +13,7 @@
     "close": "Zapri"
   },
   "menu": {
+    "notifications-send": "Obvestilo s SEND",
     "notifications": "Obvestila",
     "users": "Uporabniki",
     "groups": "Skupine",
@@ -176,5 +177,6 @@
     "selection-box": "Izbrane možnosti",
     "selection-done": "%s izbranih",
     "delete-selection": "Odstrani %s"
-  }
+  },
+  "not-available": "Ni na voljo"
 }

@@ -1,8 +1,7 @@
 {
-  "title": "Obvestila za {{recipient}}",
-  "title-delegated-notifications": "Obvestila, delegirana na {{recipient}}",
-  "subtitle": "Preberite obvestila za {{recipient}}. Filtrirate jih lahko po kodi IUN in datumu pošiljanja.",
-  "subtitle-delegated-notifications": "Preberite obvestila, delegirana na {{recipient}}. Filtrirate jih lahko po kodi IUN in datumu pošiljanja.",
+  "title": "Prejeto za {{organization}}",
+  "go-to-detail": "Prikaži podrobnosti",
+  "title-delegated-notifications": "Prejeto za pooblastitelje",
   "table": {
     "data": "Datum",
     "gruppo": "Skupine",
@@ -11,12 +10,18 @@
     "oggetto": "Zadeva",
     "iun": "Koda IUN",
     "status": "Stanje",
-    "show-detail": "Ogled podrobnosti",
+    "open": "Odpri",
     "group-selector-title": "Meni za izbiro skupine",
-    "aria-action-table": "Oglejte si podrobnosti obvestila z IUN: {{iun}}"
+    "aria-action-table": "Odpri podrobnosti obvestila z IUN: {{iun}}",
+    "legal-value": "Obvestilo s pravno veljavnostjo"
   },
   "filters": {
-    "iun": "Iskanje po kodi IUN",
+    "communication-type": "Vrsta",
+    "communication-type-options": {
+      "legal": "Uradna obvestila",
+      "informal": "Sporočila"
+    },
+    "iun": "Koda IUN",
     "data_da": "Od",
     "data_da-input-aria-label": "Vnesite začetni datum iskanja",
     "data_a": "Do",
@@ -37,9 +42,13 @@
     "options": "Možnosti razvrščanja"
   },
   "empty-state": {
-    "filtered": "Ni bilo mogoče najti rezultatov: poskusite z različnimi filtri. <0>Odstranite filtre</0>",
-    "no-notifications": "Ni obvestil za {{name}}.",
-    "delegate": "Ni obvestil s prenosom pooblastila na {{name}} za branje.",
+    "filtered": "Za izbrane filtre ni obvestil ali sporočil",
+    "filtered-description": "Odstranite jih ali poskusite z drugo kombinacijo.",
+    "clean-filters-cta": "Odstrani filtre",
+    "delegate": "Tukaj boš videl/a pravno veljavna obvestila, ki so bila dodeljena tvojemu podjetju.",
+    "title": "Tukaj boste videli uradna obvestila in druga sporočila",
+    "description": "Posodobite digitalne kontaktne podatke zdaj in takoj boste izvedeli, ko bo vaše podjetje prejelo novo.",
+    "go-to-contacts-cta": "Pojdite na kontaktne podatke",
     "aria-label-remove-filters": "Odstrani filtre"
   },
   "from-qrcode": {
@@ -47,6 +56,21 @@
     "not-found-subtitle": "Preberejo jo lahko le uporabniki, ki jih je evidentiralo podjetje prejemnik, ali njegov pooblaščenec."
   },
   "detail": {
+    "legal-value": "Obvestilo s pravno veljavnostjo",
+    "legal-date": "Vročitev odložena dne",
+    "informal-date": "Sporočilo odloženo dne",
+    "legal-disclaimer": "Vročitev poslana preko SEND, platforme, ki jo ureja 26. člen Zakonske uredbe 76/2020",
+    "notification-timeline-section": {
+      "title": "Stanje obvestila",
+      "aria-label": "Prikaži časovnico obvestila"
+    },
+    "notification-detail-section": {
+      "title": "Podrobnosti obvestila",
+      "recipient": "Prejemnik",
+      "aar": "Potrdilo o prejemu",
+      "aria-label": "Prikaži potrdilo o prejemu",
+      "availability": "Na voljo na spletu 10 let od datuma, ko obvestilo začne pravno veljati."
+    },
     "document-not-available": "Dokument bo mogoče prenesti v nekaj minutah. Poskusite lahko znova tako, da ponovno naložite stran ali kliknete povezavo zahtevanega dokumenta",
     "table-aria-label": "Podrobnosti o obvestilu",
     "payment-table-aria-label": "Podrobnosti o plačilu",
@@ -59,8 +83,6 @@
     "groups": "Skupine",
     "notice-code": "Koda obvestila",
     "creditor-tax-id": "Davčna številka organizacije",
-    "breadcrumb-root": "Obvestila",
-    "breadcrumb-leaf": "Podrobnosti o obvestilu",
     "acts": "Priloženi dokumenti",
     "aar-acts": "Potrdilo o prejemu",
     "timeline-title": "Stanje obvestila",
@@ -72,11 +94,11 @@
     "disclaimer-link": "Izvedite več",
     "pec-unreachable": "Vaš predal PEC naj bo prost in aktiven, da boste vse prejemali v digitalni obliki!",
     "cancelled": {
-      "message": "To obvestilo je preklical organ pošiljatelj.",
+      "message": "To obvestilo je preklical organ pošiljatelj, zato dokumenti niso več na voljo.",
       "cta": "Kaj moram storiti?"
     },
     "payment": {
-      "title": "Plačilo",
+      "title": "Plačila",
       "f24Models": "Obrazci F24",
       "pagoPANotices": "Opozorila pagoPA",
       "download-pagoPA-notice": "Prenesite obvestilo pagoPA",
@@ -101,6 +123,7 @@
       "error-payment-failed-single": "Prišlo je do težave z obvestilom o plačilu. Pritisnite Ponovno naloži za nov poskus. Če se napaka ponovi, se obrnite na podporo.",
       "error-payment-failed-multiple": "Prišlo je do težave z več obvestili o plačilu. Pritisnite Ponovno naloži za nov poskus. Če se napaka ponovi, se obrnite na podporo.",
       "status": {
+        "title": "Stanje",
         "succeded": "Plačano",
         "succeded-tooltip": "Vaše plačilo je bilo uspešno poslano.",
         "failed": "Zapadlo",
@@ -117,14 +140,26 @@
         "duplicated": "To opozorilo je bilo že plačano. Stanje bo kmalu posodobljeno."
       }
     },
+    "contact_sender": {
+      "title": "Stopite in stik z izdajateljem",
+      "phone": "Telefonska številka organa",
+      "email": "E-pošta organa",
+      "website": "Spletno mesto organa",
+      "copy_phone": "Telefonska številka je kopirana"
+    },
+    "informal_notification_markdown": {
+      "greeting": "All'attenzione di {{recipientDenomination}}",
+      "attachments_info": "Per avere maggiori informazioni <0>è consigliato prendere visione degli allegati</0>, che possono fornire dettagli importanti.",
+      "payment_instructions": "È possibile completare il pagamento premendo <0>Paga</0>. In alternativa, si può utilizzare l'<1>avviso allegato</1> per saldare l'importo tramite tutti i canali abilitati a pagoPA.",
+      "assistance": "In ogni caso, qualora si avesse bisogno di assistenza, è possibile <0>contattare {{senderDenomination}} attraverso i suoi canali ufficiali.</0>"
+    },
     "acts_files": {
       "downloadable_acts": "Dokumenti so na voljo na spletu 120 dni od zaključka obvestila.",
-      "not_downloadable_acts": "Ker je od datuma zaključka minilo 120 dni, se morate za pridobitev listin obrniti na pošiljatelja.",
-      "downloadable_aar": "Obvestilo o prejemu je na voljo na spletu 10 let od zaključka obvestila.",
-      "not_downloadable_aar": "Ker je od datuma zaključka minilo 10 let, obvestilo o prejemu ni več na voljo.",
-      "notification_cancelled_aar": "Ker je bilo to obvestilo preklicano, je bil prenos obvestila o prejemu onemogočen.",
-      "notification_cancelled_acts": "Ker je bilo to obvestilo preklicano, je bil prenos dokumenta onemogočen.",
-      "effected_faq": "Kdaj se obvestilo zaključi?"
+      "not_downloadable_acts": "Dokumenti na spletu niso več na voljo. Če jih želiš zahtevati, se obrni na organ, ki ti jih je poslal.",
+      "downloadable_aar": "<0>Na voljo na spletu 10 let</0> od datuma, ko je vročitev SEND postala pravno veljavna.",
+      "not_downloadable_aar": "Obvestilo o prejemu ni več na voljo. Če ga želiš zahtevati, se obrni na organ, ki ti ga je poslal.",
+      "effected_faq": "Kdaj se obvestilo zaključi?",
+      "informal_downloadable_acts": "Shranite priloge v svojo napravo: na spletu bodo na voljo do <0>180 dni od datuma vložitve</0>, ki ga najdete zgoraj!"
     },
     "timeline": {
       "schedule-digital-workflow": "Nadaljnje pošiljanje z digitalnimi sredstvi",
@@ -348,16 +383,16 @@
       },
       "radd": {
         "title": "Dokumenti so bili prevzeti",
-        "description": "Prejemnik ali njegov pooblaščenec je vročene dokumente prevzel pri izvajalcu, ki je pooblaščen za njihovo vročanje."
+        "description": "Prejemnik ali pooblaščena oseba je prevzela vročene dokumente pri izvajalcu, pooblaščenem za njihovo dostavo."
       },
       "tpp-type": "digitalni kanal tretje osebe"
     },
     "downtimes": {
-      "title": "MOTNJE",
+      "title": "Motnje",
       "textWithEndDate": "Motnja se je začela {{startDate}} in končala {{endDate}} pri naslednjih funkcijah:",
       "textWithoutEndDate": "Motnja se je začela {{startDate}} in še ni končana pri naslednjih funkcijah:",
       "datePrefix": "ta ",
-      "legalFactDownload": "Potrdilo o okvari",
+      "legalFactDownload": "Odpri potrdilo o motnjah v delovanju",
       "apiErrorMessage": "Ni bilo mogoče naložiti morebitnih motenj, ki so vplivale na to obvestilo."
     },
     "help": {
@@ -379,7 +414,7 @@
       }
     },
     "bilingual": {
-      "title": "PODPORNI FAKSIMILNI VZORCI v slovenščini",
+      "title": "Podporni Faksimilni vzorci v slovenščini",
       "description": "Jezik priloženih aktov se lahko razlikuje od jezika, v katerem brskaš po portalu. Če želiš razumeti vsebino teh dokumentov, lahko uporabiš faksimilne vzorce, ki jih najdeš tukaj.",
       "action": "Preglej vzorce"
     }

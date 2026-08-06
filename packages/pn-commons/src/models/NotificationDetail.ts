@@ -1,5 +1,3 @@
-import { ReactNode } from 'react';
-
 import { NotificationStatus } from './NotificationStatus';
 
 export const NotificationFeePolicy = {
@@ -23,10 +21,12 @@ export type PagoPaIntegrationMode =
 export interface NotificationDetail {
   subject: string;
   abstract?: string;
+  paProtocolNumber?: string;
   recipients: Array<NotificationDetailRecipient>;
   documents: Array<NotificationDetailDocument>;
   cancelledIun?: string;
   senderDenomination?: string;
+  senderPaId?: string;
   paymentExpirationDate?: string;
   group?: string;
   notificationFeePolicy?: NotificationFeePolicy | '';
@@ -34,6 +34,7 @@ export interface NotificationDetail {
   additionalLanguages?: Array<string>;
   iun: string;
   sentAt: string;
+  filedAt: string;
   documentsAvailable?: boolean;
   notificationStatus: NotificationStatus;
   notificationStatusHistory: Array<NotificationStatusHistory>;
@@ -353,12 +354,6 @@ export interface NotificationDetailOtherDocument extends NotificationDetailDocum
 export enum PhysicalCommunicationType {
   AR_REGISTERED_LETTER = 'AR_REGISTERED_LETTER',
   REGISTERED_LETTER_890 = 'REGISTERED_LETTER_890',
-}
-
-export interface NotificationDetailTableRow {
-  id: number;
-  label: string;
-  value: ReactNode;
 }
 
 export type DigitalDetails = SendCourtesyMessageDetails | SendDigitalDetails;

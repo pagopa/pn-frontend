@@ -75,8 +75,7 @@ const Footer: React.FC<Props> = ({
       onLanguageChanged={changeLanguageHandler}
       productsTitle={getLocalizedOrDefaultLabel(
         'common',
-        'footer.products-title',
-        'Prodotti e servizi'
+        'footer.products-title'
       )}
     />
   );

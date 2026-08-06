@@ -1,16 +1,23 @@
 {
   "title": "Deine Zustellungen",
+  "go-to-detail": "Zur Detailansicht",
   "table": {
     "data": "Datum",
     "mittente": "Absender",
     "oggetto": "Betreff",
     "iun": "IUN-Code",
     "status": "Status",
-    "show-detail": "Siehe Detail",
-    "aria-action-table": "Benachrichtigungsdetails mit IUN anzeigen: {{iun}}"
+    "aria-action-table": "Benachrichtigungsdetails mit IUN anzeigen: {{iun}}",
+    "open": "Öffnen",
+    "legal-value": "Rechtsgültige Zustellung"
   },
   "filters": {
-    "iun": "Suche nach IUN-Code",
+    "communication-type": "Typ",
+    "communication-type-options": {
+      "legal": "Rechtsgültige Zustellungen",
+      "informal": "Mitteilungen"
+    },
+    "iun": "IUN-Code",
     "data_da": "Vom",
     "data_da-input-aria-label": "Startdatum der Suche eingeben",
     "data_a": "Bis",
@@ -21,7 +28,9 @@
       "date-range": "Geben Sie ein Datum zwischen {{fromDate}} und {{toDate}} ein",
       "date-start": "Das Startdatum muss vor dem Enddatum liegen",
       "date-end": "Das Enddatum muss nach dem Startdatum liegen"
-    }
+    },
+    "loading_completed_with_results": "Laden abgeschlossen. Die Suche hat Ergebnisse geliefert",
+    "loading_completed_no_results": "Laden abgeschlossen. Keine Zustellung gefunden"
   },
   "sort": {
     "title": "Sortieren",
@@ -31,9 +40,11 @@
     "options": "Optionen Sortieren"
   },
   "empty-state": {
-    "filtered": "Wir haben keine Ergebnisse gefunden: Versuche es mit anderen Filtern. <0>Filter entfernen</0>.",
-    "delegate": "{{name}} hat keine Zustellung erhalten.",
-    "title": "Hier findest du deine SEND Benachrichtigungen",
+    "filtered": "Keine Benachrichtigungen oder Mitteilungen für die ausgewählten Filter",
+    "filtered-description": "Entferne sie oder versuche es mit einer anderen Kombination.",
+    "clean-filters-cta": "Filter entfernen",
+    "delegate": "Hier siehst du die rechtsgültigen Zustellungen von {{name}}",
+    "title": "Hier siehst du deine rechtlichen Benachrichtigungen und andere Mitteilungen",
     "description-onboarding": "Wusstest du, dass du Geld sparen kannst, wenn du dich dafür entscheidest, rechtliche Mitteilungen nur digital zu erhalten?",
     "description": "Aktualisiere jetzt deine Kontaktdaten, damit du sofort erfährst, wenn du eine erhältst.",
     "go-to-onboarding-cta": "SEND konfigurieren",
@@ -50,6 +61,21 @@
     "not-found-subtitle": "Diese Benachrichtigung kann nur vom Empfänger gelesen werden."
   },
   "detail": {
+    "legal-value": "Rechtsgültige Zustellung",
+    "legal-date": "Zustellung hinterlegt am",
+    "informal-date": "Mitteilung hinterlegt am",
+    "legal-disclaimer": "Zustellung über SEND gesendet, die durch Art. 26 des Gesetzesdekrets 76/2020 geregelte Plattform",
+    "notification-timeline-section": {
+      "title": "Status der Zustellung",
+      "aria-label": "Gehe zur Timeline der Zustellung"
+    },
+    "notification-detail-section": {
+      "title": "Details der Zustellung",
+      "recipient": "Empfänger",
+      "aar": "Empfangsbestätigung",
+      "aria-label": "Gehe zur Empfangsbestätigung",
+      "availability": "Online verfügbar für 10 Jahre ab dem Datum, an dem die Zustellung rechtswirksam wird."
+    },
     "document-not-available": "Das Dokument kann in wenigen Minuten heruntergeladen werden. Du kannst es erneut versuchen, indem du die Seite neu lädst oder auf den Link des angeforderten Dokuments klickst",
     "table-aria-label": "Einzelheiten zur Zustellung",
     "payment-table-aria-label": "Einzelheiten zu Zahlungen",
@@ -62,8 +88,6 @@
     "groups": "Gruppen",
     "notice-code": "Benachrichtigungscode",
     "creditor-tax-id": "Steuernummer der Körperschaft",
-    "breadcrumb-root": "Zustellungen",
-    "breadcrumb-leaf": "Einzelheiten zur Zustellung",
     "acts": "Beigefügte Anlagen",
     "aar-acts": "Empfangsbestätigung",
     "timeline-title": "Status der Zustellung",
@@ -75,14 +99,14 @@
     "disclaimer-link": "Mehr hierzu",
     "pec-unreachable": "Halten Sie Ihr zertifiziertes E-Mail-Postfach (PEC) frei und aktiv, um alles digital zu erhalten!",
     "cancelled": {
-      "message": "Diese Zustellung wurde von der sendenden Körperschaft storniert.",
+      "message": "Diese Zustellung wurde von der Absenderbehörde annulliert, daher sind die Dokumente nicht mehr verfügbar.",
       "cta": "Was muss ich tun?"
     },
     "payment": {
-      "title": "Zahlung",
+      "title": "Zahlungen",
       "f24Models": "Vordruck F24",
       "pagoPANotices": "Benachrichtigungen pagoPA",
-      "download-pagoPA-notice": "Benachrichtigung pagoPA herunterladen",
+      "download-pagoPA-notice": "Lade die pagoPA-Mitteilung herunter",
       "notice-code": "Benachrichtigungscode",
       "due": "Läuft ab",
       "included-costs": "Einschließlich Zustellungsgebühren",
@@ -104,6 +128,7 @@
       "cancelled-message": "Für Informationen zu einer eventuellen Rückerstattung wende dich bitte an die sendende Körperschaft.",
       "f24-download-error": "Download fehlgeschlagen. Erneut versuchen.",
       "status": {
+        "title": "Status",
         "succeded": "Bezahlt",
         "succeded-tooltip": "Die Zahlung wurde erfolgreich gesendet.",
         "failed": "Abgelaufen",
@@ -125,14 +150,26 @@
       "tpp-expired-error-title": "Die Verbindung zur Bank ist abgelaufen.",
       "tpp-expired-error-description": "Um sie wiederherzustellen, greife über die Nachricht, die du in deiner Bank-App erhalten hast, erneut auf diese Benachrichtigung zu."
     },
+    "contact_sender": {
+      "title": "Kontaktiere die sendende Körperschaft",
+      "phone": "Telefonnummer der Körperschaft",
+      "email": "E-Mail der Körperschaft",
+      "website": "Website der Körperschaft",
+      "copy_phone": "Telefonnummer kopiert"
+    },
+    "informal_notification_markdown": {
+      "greeting": "Ciao {{recipientDenomination}},",
+      "attachments_info": "Per avere maggiori informazioni <0>prendi visione degli allegati,</0> che possono fornirti dettagli importanti.",
+      "payment_instructions": "Puoi effettuare il pagamento direttamente premendo <0>Paga</0>. In alternativa, puoi utilizzare l'<0>avviso allegato</0> per saldare l'importo tramite tutti i canali abilitati a pagoPA.",
+      "assistance": "In ogni caso, qualora avessi bisogno di assistenza, <0>contatta {{senderDenomination}} attraverso i suoi canali ufficiali.</0>"
+    },
     "acts_files": {
-      "downloadable_acts": "Die Dokumente sind 120 Tage nach Vervollständigung der Zustellung online verfügbar.",
-      "not_downloadable_acts": "Da seit der Vervollständigung 120 Tage vergangen sind, musst du dich für den Erhalt der Akten an den Absender wenden.",
-      "downloadable_aar": "Die Empfangsbestätigung ist 10 Jahre ab Vervollständigung der Zustellung online verfügbar.",
-      "not_downloadable_aar": "Da seit der Vervollständigung 10 Jahre vergangen sind, steht die Empfangsbestätigung nicht mehr zur Verfügung.",
-      "notification_cancelled_aar": "Da diese Zustellung storniert wurde, wurde der Download der Empfangsbestätigung deaktiviert.",
-      "notification_cancelled_acts": "Da diese Zustellung storniert wurde, wurde der Download der Dokumente deaktiviert.",
-      "effected_faq": "Wann ist die Bearbeitung einer Zustellung vervollständigt?"
+      "downloadable_acts": "<0>Die Dokumente sind bis zu 120 Tage lang online verfügbar</0> ab dem Datum, an dem die SEND-Benachrichtigung rechtlich wirksam wurde. Speichern Sie sie auf Ihrem Gerät!",
+      "not_downloadable_acts": "Die Dokumente sind online nicht mehr verfügbar. Um sie anzufordern, wenden Sie sich bitte an die Behörde, die sie Ihnen zugesendet hat.",
+      "not_downloadable_aar": "Der Zustellungsnachweis ist nicht mehr verfügbar. Um ihn anzufordern, wenden Sie sich bitte an die Behörde, die ihn Ihnen zugesendet hat.",
+      "downloadable_aar": "<0>10 Jahre lang online verfügbar</0> ab dem Datum, an dem die SEND-Zustellung Rechtskraft erlangt hat.",
+      "effected_faq": "Wann ist die Bearbeitung einer Zustellung vervollständigt?",
+      "informal_downloadable_acts": "Speichere die Anhänge auf deinem Gerät: Sie sind online bis zu <0>180 Tage ab dem Hinterlegungsdatum</0> verfügbar, das du oben findest!"
     },
     "timeline": {
       "schedule-digital-workflow": "Weiterer digitaler Versand",
@@ -357,16 +394,16 @@
       },
       "radd": {
         "title": "Die Dokumente wurden abgeholt",
-        "description": "Der Empfänger oder sein Bevollmächtigter hat die zugestellten Dokumente bei einer zur Zustellung berechtigten Person abgeholt."
+        "description": "Der Empfänger oder die bevollmächtigte Person hat die zugestellten Dokumente bei einem zur Aushändigung befugten Betreiber abgeholt."
       },
       "tpp-type": "ein digitaler Kanal von Drittanbietern"
     },
     "downtimes": {
-      "title": "FEHLFUNKTIONEN",
+      "title": "Fehlfunktionen",
       "textWithEndDate": "Fehlfunktion begonnen {{startDate}} und behoben {{endDate}} an folgenden Funktionen:",
       "textWithoutEndDate": "Beginn der Fehlfunktion {{startDate}} und noch nicht vollständig behoben an folgenden Funktionen:",
       "datePrefix": "am ",
-      "legalFactDownload": "Bescheinigung der Fehlfunktion",
+      "legalFactDownload": "Störungsbescheinigung öffnen",
       "apiErrorMessage": "Wir konnten noch keinen Bericht über Fehlfunktionen hochladen, die diese Zustellung betrafen."
     },
     "help": {
@@ -388,12 +425,12 @@
       }
     },
     "bilingual": {
-      "title": "SUPPORT-FAKSIMILE-VORLAGEN auf Deutsch",
+      "title": "Support-Faksimile-Vorlagen auf Deutsch",
       "description": "Die Sprache der beigefügten Akte kann von der Sprache abweichen, mit der du das Portal nutzt. Um den Inhalt dieser Dokumente zu verstehen, kannst du die Faksimile-Vorlagen verwenden, die du hier findest.",
       "action": "Konsultiere die Vorlagen"
     }
   },
-  "delegatorTitle": "Zustellungen von {{name}}",
+  "delegatorTitle": "Posteingang für {{name}}",
   "status": {
     "recipient": "Empfänger",
     "delegate": "Bevollmächtigter {{name}}",

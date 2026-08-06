@@ -3,6 +3,7 @@ import MockAdapter from 'axios-mock-adapter';
 import {
   NotificationColumnData,
   NotificationStatus,
+  RecipientNotification,
   Sort,
   formatToTimezoneString,
   tenYearsAgo,
@@ -41,6 +42,7 @@ describe('Dashbaord redux state tests', () => {
       filters: {
         startDate: undefined,
         endDate: undefined,
+        communicationType: '',
         iunMatch: '',
       },
       pagination: {
@@ -61,7 +63,9 @@ describe('Dashbaord redux state tests', () => {
       .onGet(
         `/bff/v1/notifications/received?startDate=${encodeURIComponent(
           formatToTimezoneString(tenYearsAgo)
-        )}&endDate=${encodeURIComponent(formatToTimezoneString(today))}&size=10`
+        )}&endDate=${encodeURIComponent(
+          formatToTimezoneString(today)
+        )}&size=10&communicationType=ALL`
       )
       .reply(200, notificationsDTO);
     const action = await store.dispatch(
@@ -72,6 +76,31 @@ describe('Dashbaord redux state tests', () => {
         size: 10,
       })
     );
+    expect(action.type).toBe('getReceivedNotifications/fulfilled');
+    expect(action.payload).toEqual(notificationsToFe);
+  });
+
+  it('Should filter the notifications list by communication type', async () => {
+    mock
+      .onGet(
+        `/bff/v1/notifications/received?startDate=${encodeURIComponent(
+          formatToTimezoneString(tenYearsAgo)
+        )}&endDate=${encodeURIComponent(
+          formatToTimezoneString(today)
+        )}&size=10&communicationType=LEGAL`
+      )
+      .reply(200, notificationsDTO);
+
+    const action = await store.dispatch(
+      getReceivedNotifications({
+        startDate: tenYearsAgo,
+        endDate: today,
+        communicationType: 'LEGAL',
+        isDelegatedPage: false,
+        size: 10,
+      })
+    );
+
     expect(action.type).toBe('getReceivedNotifications/fulfilled');
     expect(action.payload).toEqual(notificationsToFe);
   });
@@ -111,7 +140,7 @@ describe('Dashbaord redux state tests', () => {
   });
 
   it('Should be able to change sort', () => {
-    const sort: Sort<NotificationColumnData> = {
+    const sort: Sort<NotificationColumnData<RecipientNotification>> = {
       orderBy: 'notificationStatus',
       order: 'desc',
     };
@@ -129,7 +158,6 @@ describe('Dashbaord redux state tests', () => {
       endDate: new Date('2022-02-27T14:20:20.566Z'),
       recipientId: 'mocked-recipientId',
       status: NotificationStatus.PAID,
-      subjectRegExp: 'mocked-regexp',
     };
     const action = store.dispatch(setNotificationFilters(filters));
     expect(action.type).toBe('dashboardSlice/setNotificationFilters');

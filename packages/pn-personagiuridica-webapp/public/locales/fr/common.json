@@ -1,4 +1,6 @@
 {
+  "iun": "Code IUN",
+  "logo": "Logo de",
   "button": {
     "filtra": "Filtrer",
     "annulla filtro": "Supprimer les filtres",
@@ -28,9 +30,9 @@
     "understand": "OK, j'ai compris"
   },
   "menu": {
-    "notifiche": "Notifications",
-    "notifiche-impresa": "Notifications de l’entreprise",
-    "notifiche-delegato": "Notifications mandatées",
+    "notifiche": "Boîte de réception",
+    "notifiche-impresa": "Boîte de réception pour {{organization}}",
+    "notifiche-delegato": "En provenance des délégations",
     "deleghe": "Procurations",
     "profilo": "Vos données",
     "contacts": "Coordonnées",
@@ -249,6 +251,11 @@
       "Dernier chiffre"
     ]
   },
+  "user-validation-failed": {
+    "title": "Les données saisies ne sont pas valides",
+    "description": "Une ou plusieurs données associées à votre compte utilisateur ne sont pas valides. Contactez l'assistance pour résoudre le problème.",
+    "cta": "Contacter l'assistance"
+  },
   "autocomplete": {
     "clear": "Supprimer les options sélectionnées",
     "toggle-open": "Ouvre le menu de sélection",
@@ -256,5 +263,6 @@
     "selection-box": "Options sélectionnées",
     "selection-done": "%s sélectionnés",
     "delete-selection": "Supprime %s"
-  }
+  },
+  "not-available": "Non disponible"
 }

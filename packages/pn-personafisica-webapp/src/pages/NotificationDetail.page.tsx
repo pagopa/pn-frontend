@@ -2,12 +2,13 @@
 
 /* eslint-disable complexity */
 import { isObject } from 'lodash-es';
-import { Fragment, ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 
-import { Box, Grid, Paper, Stack, Typography } from '@mui/material';
+import { Box, Stack } from '@mui/material';
 import {
+  AbstractPaper,
   AccessDenied,
   ApiError,
   ApiErrorWrapper,
@@ -17,40 +18,34 @@ import {
   EventPaymentRecipientType,
   GetDowntimeHistoryParams,
   IllusQuestion,
-  LegalFactId,
-  LegalFactType,
   NotificationDetailBilingualFacsimileDocuments,
   NotificationDetailDocuments,
   NotificationDetailOtherDocument,
   NotificationDetailPayment,
-  NotificationDetailTable,
-  NotificationDetailTableRow,
-  NotificationDetailTimeline,
+  NotificationDetailSection,
   NotificationDocumentType,
   NotificationFeePolicy,
   NotificationPaymentRecipient,
   NotificationRelatedDowntimes,
+  NotificationTimelineBox,
   PagoPaIntegrationMode,
   PaymentAttachmentSName,
   PaymentDetails,
   PnBreadcrumb,
   StatusHistoryParser,
-  TitleBox,
   appStateActions,
   dateIsLessThan10Years,
   downloadDocument,
-  formatDate,
   getPaymentCache,
   useErrors,
   useIsCancelled,
-  useIsMobile,
 } from '@pagopa-pn/pn-commons';
 import { useDismissToastOnError } from '@pagopa-pn/pn-commons/src/hooks/useDismissToastOnError';
 import {
   EventDeliveryFlowType,
   EventDeliveryModeType,
 } from '@pagopa-pn/pn-commons/src/models/MixpanelEvents';
-import { MIAlert } from '@pagopa/mui-italia';
+import { MIAlert, MIPaper } from '@pagopa/mui-italia';
 
 import NotificationDetailOnboardingPrompt from '../components/Contacts/Onboarding/NotificationDetailOnboardingPrompt';
 import DomicileBanner from '../components/DomicileBanner/DomicileBanner';
@@ -84,7 +79,6 @@ const NotificationDetail: React.FC = () => {
   const location = useLocation();
   const dispatch = useAppDispatch();
   const safeDispatch = useSafeAppDispatch();
-
   /*
    * appStatus is included since it is used inside NotificationRelatedDowntimes, a component
    * in pn-commons (hence cannot access the i18n files) used in this page
@@ -93,7 +87,6 @@ const NotificationDetail: React.FC = () => {
    */
   const { t, i18n } = useTranslation(['common', 'notifiche', 'appStatus']);
 
-  const isMobile = useIsMobile();
   const { hasApiErrors } = useErrors();
   const [pageReady, setPageReady] = useState(false);
   const [isUserForbidden, setIsUserForbidden] = useState(false);
@@ -107,6 +100,7 @@ const NotificationDetail: React.FC = () => {
     FACSIMILE_FR,
     FACSIMILE_DE,
     FACSIMILE_SL,
+    SELFCARE_CDN_URL,
   } = getConfiguration();
   const navigate = useNavigate();
 
@@ -130,46 +124,6 @@ const NotificationDetail: React.FC = () => {
   const userPayments = useAppSelector((state: RootState) => state.notificationState.paymentsData);
   const paymentTpp = useAppSelector((state: RootState) => state.generalInfoState.paymentTpp);
 
-  const unfilteredDetailTableRows: Array<{
-    label: string;
-    rawValue: string | undefined;
-    value: ReactNode;
-  }> = [
-    {
-      label: t('detail.sender', { ns: 'notifiche' }),
-      rawValue: notification.senderDenomination,
-      value: <Box fontWeight={600}>{notification.senderDenomination}</Box>,
-    },
-    {
-      label: t('detail.recipient', { ns: 'notifiche' }),
-      rawValue: currentRecipient?.denomination,
-      value: <Box fontWeight={600}>{currentRecipient?.denomination}</Box>,
-    },
-    {
-      label: t('detail.date', { ns: 'notifiche' }),
-      rawValue: formatDate(notification.sentAt),
-      value: <Box fontWeight={600}>{formatDate(notification.sentAt)}</Box>,
-    },
-    {
-      label: t('detail.iun', { ns: 'notifiche' }),
-      rawValue: notification.iun,
-      value: <Box fontWeight={600}>{notification.iun}</Box>,
-    },
-    {
-      label: t('detail.cancelled-iun', { ns: 'notifiche' }),
-      rawValue: notification.cancelledIun,
-      value: <Box fontWeight={600}>{notification.cancelledIun}</Box>,
-    },
-  ];
-
-  const detailTableRows: Array<NotificationDetailTableRow> = unfilteredDetailTableRows
-    .filter((row) => row.rawValue)
-    .map((row, index) => ({
-      id: index + 1,
-      label: row.label,
-      value: row.value,
-    }));
-
   const checkIfUserHasPayments: boolean =
     !!currentRecipient.payments && currentRecipient.payments.length > 0;
 
@@ -190,6 +144,7 @@ const NotificationDetail: React.FC = () => {
     if (isNotificationCostBanner) {
       return (
         <NotificationCostBanner
+          my={0}
           deliveryOutcome={deliveryOutcome}
           notificationCost={notification.notificationCostDetails}
         />
@@ -197,7 +152,7 @@ const NotificationDetail: React.FC = () => {
     }
 
     return isBannerVisible && historyParser.hasViewedStatus() ? (
-      <DomicileBanner source={ContactSource.DETTAGLIO_NOTIFICA} />
+      <DomicileBanner source={ContactSource.DETTAGLIO_NOTIFICA} my={0} />
     ) : null;
   }, [
     isNotificationCostBanner,
@@ -260,45 +215,6 @@ const NotificationDetail: React.FC = () => {
         .then(showInfoMessageIfRetryAfterOrDownload)
         .catch(() => {});
       PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_DOWNLOAD_ATTACHMENT);
-    }
-  };
-
-  const legalFactDownloadHandler = (legalFact: LegalFactId) => {
-    if (legalFact.category !== LegalFactType.NOTIFICATION_CANCELLED && isCancelledOrCancelling) {
-      return;
-    }
-    if (legalFact.category !== 'AAR') {
-      // Legal fact case
-      dispatch(
-        getReceivedNotificationDocument({
-          iun: notification.iun,
-          documentType: NotificationDocumentType.LEGAL_FACT,
-          documentId: legalFact.key.substring(legalFact.key.lastIndexOf('/') + 1),
-          mandateId,
-        })
-      )
-        .unwrap()
-        .then(showInfoMessageIfRetryAfterOrDownload)
-        .catch(() => {});
-      PFEventStrategyFactory.triggerEvent(
-        PFEventsType.SEND_DOWNLOAD_CERTIFICATE_OPPOSABLE_TO_THIRD_PARTIES,
-        {
-          source: 'dettaglio_notifica',
-        }
-      );
-    } else {
-      // AAR in timeline case
-      dispatch(
-        getReceivedNotificationDocument({
-          iun: notification.iun,
-          documentType: NotificationDocumentType.AAR,
-          documentId: legalFact.key,
-          mandateId,
-        })
-      )
-        .unwrap()
-        .then(showInfoMessageIfRetryAfterOrDownload)
-        .catch(() => {});
     }
   };
 
@@ -367,20 +283,21 @@ const NotificationDetail: React.FC = () => {
   );
 
   const getDownloadFilesMessage = useCallback(
-    (type: 'aar' | 'attachments'): string => {
-      if (isCancelledOrCancelling) {
-        return type === 'aar'
-          ? t('detail.acts_files.notification_cancelled_aar', { ns: 'notifiche' })
-          : t('detail.acts_files.notification_cancelled_acts', { ns: 'notifiche' });
-      } else if (type === 'attachments') {
-        return notification.documentsAvailable
-          ? t('detail.acts_files.downloadable_acts', { ns: 'notifiche' })
-          : t('detail.acts_files.not_downloadable_acts', { ns: 'notifiche' });
-      } else {
-        return dateIsLessThan10Years(notification.sentAt)
-          ? t('detail.acts_files.downloadable_aar', { ns: 'notifiche' })
-          : t('detail.acts_files.not_downloadable_aar', { ns: 'notifiche' });
+    (type: 'aar' | 'attachments'): { key: string; ns: string } => {
+      if (type === 'attachments') {
+        return {
+          key: notification.documentsAvailable
+            ? 'detail.acts_files.downloadable_acts'
+            : 'detail.acts_files.not_downloadable_acts',
+          ns: 'notifiche',
+        };
       }
+      return {
+        key: dateIsLessThan10Years(notification.sentAt)
+          ? 'detail.acts_files.downloadable_aar'
+          : 'detail.acts_files.not_downloadable_aar',
+        ns: 'notifiche',
+      };
     },
     [isCancelledOrCancelling, notification.documentsAvailable, notification.sentAt]
   );
@@ -505,29 +422,18 @@ const NotificationDetail: React.FC = () => {
       <PnBreadcrumb
         showBackAction={!rapidAccessSource}
         linkRoute={backRoute}
-        linkLabel={t('detail.breadcrumb-root', { ns: 'notifiche' })}
-        currentLocationLabel={`${t('detail.breadcrumb-leaf', { ns: 'notifiche' })}`}
+        linkLabel={t('menu.notifiche')}
+        currentLocationLabel={notification.subject ?? ''}
         goBackAction={() => navigate(backRoute)}
       />
     );
-  }, [rapidAccessSource, i18n.language]);
-
-  const breadcrumb = (
-    <Fragment>
-      {properBreadcrumb}
-      <TitleBox variantTitle="h4" title={notification.subject} sx={{ pt: 3, mb: 2 }} mbTitle={0} />
-      <Typography variant="body1" mb={{ xs: 3, md: 4 }} sx={{ overflowWrap: 'anywhere' }}>
-        {notification.abstract}
-      </Typography>
-    </Fragment>
-  );
+  }, [rapidAccessSource, i18n.language, notification.subject]);
 
   const cancelledAlert = isCancelledOrCancelling && (
     <MIAlert
       data-testid="cancelledAlertText"
       severity="warning"
       sx={{ mb: { xs: 2, lg: 0 } }}
-      description={t('detail.cancelled.message', { ns: 'notifiche' })}
       action={{
         label: t('detail.cancelled.cta', { ns: 'notifiche' }),
         onClick: () => {
@@ -537,16 +443,16 @@ const NotificationDetail: React.FC = () => {
           window.open(NOTIFICATION_CANCELLED_HELP_LINK, '_blank', 'noopener noreferrer');
         },
       }}
-    />
+    >
+      {t('detail.cancelled.message', { ns: 'notifiche' })}
+    </MIAlert>
   );
 
   const pecUnreachableAlert = isNotificationCostBanner &&
     historyParser.hasSimpleRegisteredLetter() && (
-      <MIAlert
-        data-testid="pecUnreachableAlertText"
-        severity="warning"
-        description={t('detail.pec-unreachable', { ns: 'notifiche' })}
-      />
+      <MIAlert data-testid="pecUnreachableAlertText" severity="warning">
+        {t('detail.pec-unreachable', { ns: 'notifiche' })}
+      </MIAlert>
     );
 
   const trackEventPaymentRecipient = (event: EventPaymentRecipientType, param?: object) => {
@@ -556,12 +462,6 @@ const NotificationDetail: React.FC = () => {
   const reloadPaymentsInfo = (data: Array<NotificationDetailPayment>) => {
     fetchPaymentsInfo(data);
     PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_PAYMENT_DETAIL_REFRESH);
-  };
-
-  const trackShowMoreLess = (collapsed: boolean) => {
-    PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_NOTIFICATION_STATUS_DETAIL, {
-      accordion: collapsed ? 'collapsed' : 'expanded',
-    });
   };
 
   const getFlowType = (): EventDeliveryFlowType => {
@@ -641,6 +541,15 @@ const NotificationDetail: React.FC = () => {
     }
   };
 
+  const handleGoToTimeline = () => {
+    if (!id) {
+      return;
+    }
+    return mandateId
+      ? navigate(routes.GET_DETTAGLIO_NOTIFICA_DELEGATO_TIMELINE_PATH(id, mandateId))
+      : navigate(routes.GET_DETTAGLIO_NOTIFICA_TIMELINE_PATH(id));
+  };
+
   return (
     <NotificationDetailOnboardingPrompt
       iun={notification.iun}
@@ -659,24 +568,50 @@ const NotificationDetail: React.FC = () => {
           </Box>
         )}
         {!hasNotificationReceivedApiError && (
-          <Box sx={{ p: { xs: 3, lg: 0 } }}>
-            {isMobile && breadcrumb}
-            {isMobile && pecUnreachableAlert}
-            {isMobile && cancelledAlert}
-            <Grid
-              container
-              direction={isMobile ? 'column-reverse' : 'row'}
-              spacing={isMobile ? 3 : 0}
+          <Box sx={{ p: 3, display: 'flex', flexDirection: 'column' }} gap={3}>
+            {properBreadcrumb}
+            <Box
+              sx={{
+                display: 'flex',
+                flexWrap: 'wrap',
+                alignItems: 'start',
+              }}
+              gap={2}
             >
-              <Grid item lg={7} xs={12} sx={{ p: { xs: 0, lg: 3 } }}>
-                {!isMobile && breadcrumb}
-                <Stack spacing={3}>
-                  {!isMobile && cancelledAlert}
-                  {!isMobile && pecUnreachableAlert}
-                  {!isMobile && banner}
+              {/* start intro, banner, document and payment */}
+              <Stack
+                sx={{
+                  display: { xs: 'flex', md: 'contents', xxl: 'flex' },
+                  flexDirection: 'column',
+                  width: { xs: '100%', xxl: 'calc(58% - 8px)' },
+                }}
+                gap={2}
+              >
+                {/* ELEMENT 1: intro and banner */}
+                <Stack sx={{ width: { xs: '100%', md: '100%' } }} gap={2}>
+                  {cancelledAlert}
+                  <AbstractPaper
+                    title={notification.subject}
+                    senderPaId={notification.senderPaId}
+                    senderDenomination={notification.senderDenomination}
+                    filedAt={notification.sentAt}
+                    iun={notification.iun}
+                    abstract={notification.abstract}
+                    selfcareCdnUrl={SELFCARE_CDN_URL}
+                  />
+                  {banner}
+                  {pecUnreachableAlert}
+                </Stack>
+                {/* end ELEMENT 1: intro and banner */}
 
-                  <NotificationDetailTable rows={detailTableRows} />
-                  <Paper sx={{ p: 3 }} elevation={0}>
+                {/* ELEMENT 2: document and payment */}
+                <Stack
+                  sx={{
+                    width: { xs: '100%', md: 'calc(58% - 8px)', xxl: '100%' },
+                  }}
+                  gap={2}
+                >
+                  <MIPaper padding={24}>
                     <NotificationDetailDocuments
                       title={t('detail.acts', { ns: 'notifiche' })}
                       documents={notification.documents}
@@ -685,7 +620,7 @@ const NotificationDetail: React.FC = () => {
                       downloadFilesMessage={getDownloadFilesMessage('attachments')}
                       downloadFilesLink={t('detail.acts_files.effected_faq', { ns: 'notifiche' })}
                       disableDownloads={isCancelled.cancellationInTimeline}
-                      titleVariant="h6"
+                      titleVariant="h5"
                     />
                     {notification.radd && (
                       <MIAlert
@@ -693,12 +628,13 @@ const NotificationDetail: React.FC = () => {
                         data-testid="raddAlert"
                         sx={{ mb: 3, mt: 2 }}
                         title={t('detail.timeline.radd.title', { ns: 'notifiche' })}
-                        description={t('detail.timeline.radd.description', { ns: 'notifiche' })}
-                      />
+                      >
+                        {t('detail.timeline.radd.description', { ns: 'notifiche' })}
+                      </MIAlert>
                     )}
-                  </Paper>
+                  </MIPaper>
                   {checkIfUserHasPayments && (
-                    <Paper sx={{ p: 3 }} elevation={0}>
+                    <MIPaper padding={24}>
                       <ApiErrorWrapper
                         apiId={NOTIFICATION_ACTIONS.GET_RECEIVED_NOTIFICATION_PAYMENT_INFO}
                         reloadAction={() => fetchPaymentsInfo(currentRecipient.payments ?? [])}
@@ -724,67 +660,60 @@ const NotificationDetail: React.FC = () => {
                           }
                         />
                       </ApiErrorWrapper>
-                    </Paper>
-                  )}
-                  <Paper sx={{ p: 3, mb: 3 }} elevation={0} data-testid="aarBox">
-                    <NotificationDetailDocuments
-                      title={t('detail.aar-acts', { ns: 'notifiche' })}
-                      documents={notification.otherDocuments ?? []}
-                      recipients={notification.recipients}
-                      clickHandler={documentDowloadHandler}
-                      downloadFilesMessage={getDownloadFilesMessage('aar')}
-                      downloadFilesLink={t('detail.acts_files.effected_faq', { ns: 'notifiche' })}
-                      disableDownloads={
-                        isCancelled.cancellationInTimeline ||
-                        !dateIsLessThan10Years(notification.sentAt)
-                      }
-                    />
-                  </Paper>
-                  <NotificationRelatedDowntimes
-                    downtimeEvents={downtimeEvents}
-                    fetchDowntimeEvents={(fromDate, toDate) =>
-                      fetchDowntimeEvents(fromDate, toDate)
-                    }
-                    notificationStatusHistory={notification.notificationStatusHistory}
-                    fetchDowntimeLegalFactDocumentDetails={fetchDowntimeLegalFactDocumentDetails}
-                    apiId={NOTIFICATION_ACTIONS.GET_DOWNTIME_HISTORY}
-                    disableDownloads={isCancelled.cancellationInTimeline}
-                    downtimeExampleLink={DOWNTIME_EXAMPLE_LINK}
-                  />
-                  {showBilingualFacsimileSection && (
-                    <Paper sx={{ p: 3 }} elevation={0}>
-                      <NotificationDetailBilingualFacsimileDocuments
-                        title={t('detail.bilingual.title', { ns: 'notifiche' })}
-                        description={t('detail.bilingual.description', { ns: 'notifiche' })}
-                        action={t('detail.bilingual.action', { ns: 'notifiche' })}
-                        link={getFacSimileLink()}
-                      />
-                    </Paper>
+                    </MIPaper>
                   )}
                 </Stack>
-              </Grid>
-              <Grid item lg={5} xs={12}>
-                {isMobile && banner}
-                <Box
-                  component="section"
-                  sx={{ backgroundColor: 'white', height: '100%', p: 3, pb: { xs: 0, lg: 3 } }}
-                >
-                  <NotificationDetailTimeline
-                    language={i18n.language}
-                    recipients={notification.recipients}
+                {/* end ELEMENT 2: document and payment */}
+              </Stack>
+              {/* end intro, banner, document and payment */}
+
+              {/* ELEMENT 3: aside */}
+              <Stack
+                order={{ xs: 3, md: 3, xxl: 2 }}
+                component="aside"
+                sx={{
+                  width: { xs: '100%', md: 'calc(42% - 8px)', xxl: 'calc(42% - 8px)' },
+                }}
+                gap={2}
+              >
+                {notification.notificationStatusHistory.length > 0 && (
+                  <NotificationTimelineBox
                     statusHistory={notification.notificationStatusHistory}
-                    title={t('detail.timeline-title', { ns: 'notifiche' })}
-                    clickHandler={legalFactDownloadHandler}
-                    historyButtonLabel={t('detail.show-history', { ns: 'notifiche' })}
-                    showMoreButtonLabel={t('detail.show-more', { ns: 'notifiche' })}
-                    showLessButtonLabel={t('detail.show-less', { ns: 'notifiche' })}
-                    handleTrackShowMoreLess={trackShowMoreLess}
-                    disableDownloads={isCancelled.cancellationInTimeline}
+                    recipients={notification.recipients}
                     isParty={false}
+                    onTimelineClick={handleGoToTimeline}
                   />
-                </Box>
-              </Grid>
-            </Grid>
+                )}
+                <NotificationDetailSection
+                  isDelegate={!!mandateId}
+                  recipient={currentRecipient}
+                  documents={notification.otherDocuments ?? []}
+                  clickHandler={documentDowloadHandler}
+                  isCancelled={isCancelled.cancellationInTimeline}
+                  isLessThan10Years={dateIsLessThan10Years(notification.sentAt)}
+                  downloadFilesMessage={getDownloadFilesMessage('aar')}
+                />
+                <NotificationRelatedDowntimes
+                  downtimeEvents={downtimeEvents}
+                  fetchDowntimeEvents={(fromDate, toDate) => fetchDowntimeEvents(fromDate, toDate)}
+                  notificationStatusHistory={notification.notificationStatusHistory}
+                  fetchDowntimeLegalFactDocumentDetails={fetchDowntimeLegalFactDocumentDetails}
+                  apiId={NOTIFICATION_ACTIONS.GET_DOWNTIME_HISTORY}
+                  disableDownloads={isCancelled.cancellationInTimeline}
+                  downtimeExampleLink={DOWNTIME_EXAMPLE_LINK}
+                />
+                {showBilingualFacsimileSection && (
+                  <NotificationDetailBilingualFacsimileDocuments
+                    title={t('detail.bilingual.title', { ns: 'notifiche' })}
+                    description={t('detail.bilingual.description', { ns: 'notifiche' })}
+                    action={t('detail.bilingual.action', { ns: 'notifiche' })}
+                    link={getFacSimileLink()}
+                  />
+                )}
+              </Stack>
+              {/* end ELEMENT 3: aside */}
+              {/* end document, payment and aside */}
+            </Box>
           </Box>
         )}
       </LoadingPageWrapper>

@@ -1,4 +1,6 @@
 {
+  "iun": "IUN code",
+  "logo": "Logo of",
   "button": {
     "filtra": "Filter",
     "annulla filtro": "Remove filters",
@@ -28,7 +30,9 @@
     "understand": "OK, I understand"
   },
   "menu": {
-    "notifiche": "Notifications",
+    "notifiche": "Inbox",
+    "notifiche-utente": "Your inbox",
+    "notifiche-delegato": "Inbox for {{delegator}}",
     "deleghe": "Delegations",
     "profilo": "Your data",
     "contacts": "Your contact details",
@@ -74,7 +78,19 @@
   },
   "date-time": {
     "today-uppercase-initial": "Today",
-    "hour-of-day": "o'clock"
+    "hour-of-day": "o'clock",
+    "january": "January",
+    "february": "February",
+    "march": "March",
+    "april": "April",
+    "may": "May",
+    "june": "June",
+    "july": "July",
+    "august": "August",
+    "september": "September",
+    "october": "October",
+    "november": "November",
+    "december": "December"
   },
   "error-boundary": {
     "title": "Something went wrong",
@@ -141,7 +157,8 @@
     "resources": "Resources",
     "follow": "Follow us on",
     "legal-part-1": "società per azioni with sole shareholder - share capital of euro 1,000,000 fully paid up - registered office in Rome, Piazza Colonna 370",
-    "legal-part-2": "CAP 00187 - n. of registration in the Rome Business Register, FC and VAT 15376371009"
+    "legal-part-2": "CAP 00187 - n. of registration in the Rome Business Register, FC and VAT 15376371009",
+    "products-title": "Products and services"
   },
   "required-fields": "*Required fields",
   "required-field": "Required field",
@@ -236,7 +253,13 @@
     "action": "Keep access"
   },
   "code-modal": {
-    "digits": ["first digit", "second digit", "third digit", "fourth digit", "last digit"]
+    "digits": [
+      "first digit",
+      "second digit",
+      "third digit",
+      "fourth digit",
+      "last digit"
+    ]
   },
   "user-validation-failed": {
     "title": "The data entered is invalid",
@@ -250,5 +273,6 @@
     "selection-box": "Selected options",
     "selection-done": "%s selected",
     "delete-selection": "Remove %s"
-  }
+  },
+  "not-available": "Not available"
 }

@@ -32,6 +32,8 @@ export type {
   GetNotificationsResponse,
   Notification,
   NotificationColumnData,
+  RecipientNotification,
+  NotificationCommunicationType,
 } from './Notifications';
 export type { PaginationData } from './Pagination';
 export type { PaymentCache } from './PaymentCache';
@@ -56,7 +58,6 @@ export type {
   NotificationDetailOtherDocument,
   NotificationDetailPayment,
   NotificationDetailRecipient,
-  NotificationDetailTableRow,
   NotificationDetailTimelineDetails,
   NotificationDocumentRequest,
   NotificationDocumentResponse,
@@ -106,5 +107,6 @@ export {
   ResponseStatus,
   TimelineCategory,
 } from './NotificationDetail';
-export { NotificationStatus } from './NotificationStatus';
+export { NotificationStatus, InformalNotificationStatus } from './NotificationStatus';
+export type { UnifiedNotificationStatus } from './NotificationStatus';
 export { basicNoLoggedUserData } from './User';

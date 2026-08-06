@@ -1,6 +1,7 @@
 import {
   GetNotificationsParams,
   GetNotificationsResponse,
+  RecipientNotification,
   formatFiscalCode,
   formatToTimezoneString,
   getEndOfDay,
@@ -15,6 +16,7 @@ import { apiClient } from '../../api/apiClients';
 import {
   NotificationReceivedApiFactory,
   NotificationStatusV26,
+  SearchReceivedNotificationsV1CommunicationTypeEnum,
 } from '../../generated-client/notifications';
 
 export enum DASHBOARD_ACTIONS {
@@ -42,6 +44,8 @@ export const getReceivedNotifications = createAsyncThunk(
         recipientId: params.recipientId ? formatFiscalCode(params.recipientId) : undefined,
         status: params.status as NotificationStatusV26 | undefined,
         iunMatch: params.iunMatch || undefined,
+        communicationType:
+          params.communicationType || SearchReceivedNotificationsV1CommunicationTypeEnum.All,
       };
       const response = params.isDelegatedPage
         ? await receivedNotificationsFactory.searchReceivedDelegatedNotificationsV1(
@@ -60,13 +64,12 @@ export const getReceivedNotifications = createAsyncThunk(
             apiParams.endDate,
             apiParams.mandateId,
             apiParams.recipientId,
-            apiParams.status,
-            apiParams.subjectRegExp,
             apiParams.iunMatch,
             apiParams.size,
-            apiParams.nextPagesKey
+            apiParams.nextPagesKey,
+            apiParams.communicationType
           );
-      return response.data as GetNotificationsResponse;
+      return response.data as GetNotificationsResponse<RecipientNotification>;
     } catch (e) {
       return rejectWithValue(parseError(e));
     }
