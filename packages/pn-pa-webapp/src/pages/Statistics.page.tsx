@@ -16,8 +16,7 @@ import {
   screenshot,
   today,
 } from '@pagopa-pn/pn-commons';
-import { MIButton } from '@pagopa/mui-italia';
-import { MIAlert } from '@pagopa/mui-italia';
+import { MIAlert, MIButton } from '@pagopa/mui-italia';
 
 import DeliveryModeStatistics from '../components/Statistics/DeliveryModeStatistics';
 import DigitalErrorsDetailStatistics from '../components/Statistics/DigitalErrorsDetailStatistics';
