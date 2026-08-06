@@ -161,7 +161,6 @@ const MobileNotifications = ({
               <PnCardActions>
                 <MIButton
                   variant="text"
-                  color="primary"
                   onClick={() => handleRowClick(data)}
                   endIcon={<ArrowForwardIcon />}
                   data-testid="go-to-detail"

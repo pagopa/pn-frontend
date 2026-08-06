@@ -91,7 +91,6 @@ const SpecialContactItem: React.FC<Props> = ({
                 disabled={hasPecInValidationForEntity(senderId)}
                 sx={{
                   color: 'error.dark',
-                  fontWeight: 700,
                   justifyContent: 'left',
                   pl: { xs: 0, lg: 3 },
                 }}

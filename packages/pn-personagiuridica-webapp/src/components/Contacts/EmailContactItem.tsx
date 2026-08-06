@@ -179,7 +179,7 @@ const EmailContactItem: React.FC = () => {
     if (defaultSERCQ_SENDAddress && !hasCourtesyAddresses) {
       return 'warning';
     }
-    return 'default';
+    return 'neutral';
   };
 
   const getRemoveModalTitle = () => {

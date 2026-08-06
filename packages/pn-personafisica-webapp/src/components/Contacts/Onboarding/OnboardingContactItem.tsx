@@ -73,7 +73,7 @@ const EntryMode: React.FC<Omit<EntryModeProps, 'mode'>> = ({
   const submitButton = (
     <MIButton
       fullWidth={isMobile}
-      sx={isMobile ? { mt: 2 } : { height: '43px', fontWeight: 700, flexShrink: 0 }}
+      sx={isMobile ? { mt: 2 } : { height: '43px', flexShrink: 0 }}
       variant={buttonVariant}
       onClick={() => void onSubmit()}
     >

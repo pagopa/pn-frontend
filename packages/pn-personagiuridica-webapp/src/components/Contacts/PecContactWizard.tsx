@@ -231,7 +231,6 @@ const PecContactWizard: React.FC<Props> = ({
           <MIButton
             fullWidth
             variant="contained"
-            color="primary"
             onClick={formik.submitForm}
             sx={{ mt: 3 }}
             data-testid="next-button"

@@ -139,7 +139,6 @@ const PagoPaPaymentBox: React.FC<PaymentBoxProps> = ({
           {showDeleteButton && (
             <MIButton
               variant="text"
-              color="primary"
               startIcon={<DeleteIcon />}
               onClick={onDeletePayment}
               sx={{

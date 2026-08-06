@@ -4,7 +4,7 @@ import AttachFileIcon from '@mui/icons-material/AttachFile';
 import UnfoldLessIcon from '@mui/icons-material/UnfoldLess';
 import UnfoldMoreIcon from '@mui/icons-material/UnfoldMore';
 import { TimelineConnector } from '@mui/lab';
-import { Box, Typography } from '@mui/material';
+import { Box, Button, Typography } from '@mui/material';
 import {
   MIButton,
   MIChip,
@@ -22,6 +22,7 @@ import {
   NotificationDetailRecipient,
   NotificationStatusHistory,
   ReworkedStatus,
+  TimelineCategory,
 } from '../../models/NotificationDetail';
 import { NotificationStatus } from '../../models/NotificationStatus';
 import { formatDay, formatMonthString, formatTime } from '../../utility/date.utility';
@@ -127,6 +128,7 @@ const NotificationDetailTimelineStep = ({
   isParty = true,
   language = 'it',
   reworkedStatus,
+  disableDownloads,
 }: Props) => {
   const [collapsed, setCollapsed] = useState(true);
   /* eslint-disable functional/no-let */
@@ -168,7 +170,7 @@ const NotificationDetailTimelineStep = ({
       return 'warning';
     }
 
-    return 'default';
+    return 'neutral';
   };
 
   const macroStep = (
@@ -220,22 +222,20 @@ const NotificationDetailTimelineStep = ({
               {legalFactsIds &&
                 legalFactsIds.length > 0 &&
                 legalFactsIds.map((lf) => (
-                  <MIButton
+                  <Button
                     key={lf.file.key}
                     startIcon={<AttachFileIcon />}
                     onClick={() => clickHandler(lf.file)}
-                    color="primary"
-                    sx={{ marginTop: '10px', textAlign: 'left' }}
+                    size="small"
+                    sx={{ textAlign: 'left', paddingLeft: 0 }}
                     data-testid="download-legalfact"
-                    variant="text"
-                    // MIButton does not support the disabled prop, so we need to handle it differently in the new timeline layout
-                    // disabled={
-                    //   lf.step.category !== TimelineCategory.NOTIFICATION_CANCELLED &&
-                    //   disableDownloads
-                    // }
+                    disabled={
+                      lf.step.category !== TimelineCategory.NOTIFICATION_CANCELLED &&
+                      disableDownloads
+                    }
                   >
                     {getLegalFactLabel(lf.step, lf.file.category, lf.file.key || '')}
-                  </MIButton>
+                  </Button>
                 ))}
             </Box>
           )}

@@ -383,7 +383,6 @@ const Attachments: React.FC<Props> = ({
             <MIButton
               variant="text"
               onClick={addDocumentHandler}
-              color="primary"
               startIcon={<AddIcon />}
               sx={{ mt: 4 }}
               data-testid="add-doc"

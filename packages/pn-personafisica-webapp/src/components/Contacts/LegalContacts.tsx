@@ -132,7 +132,7 @@ const LegalContacts = () => {
     } else if (hasNoDefaultLegalAddress) {
       params = {
         label: t('status.inactive', { ns: 'recapiti' }),
-        color: 'default',
+        color: 'neutral',
       };
     } else {
       params = {

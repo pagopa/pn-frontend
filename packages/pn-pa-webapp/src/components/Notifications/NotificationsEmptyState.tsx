@@ -122,8 +122,6 @@ export const NotificationsGenericErrorState: React.FC<NotificationsGenericErrorS
       action={
         <MIButton
           variant="text"
-          size="medium"
-          color="primary"
           id="call-to-action-first"
           data-testid="link-retry"
           onClick={onRetry}
@@ -151,8 +149,6 @@ const NotificationsEmptyState: React.FC<Props> = ({
         action={
           <MIButton
             variant="text"
-            size="medium"
-            color="primary"
             id="call-to-action-first"
             data-testid="link-retry"
             onClick={onRetry}
@@ -172,8 +168,6 @@ const NotificationsEmptyState: React.FC<Props> = ({
         action={
           <MIButton
             variant="text"
-            size="medium"
-            color="primary"
             id="call-to-action-first"
             data-testid="link-remove-filters"
             onClick={onCleanFilters}

@@ -207,7 +207,7 @@ const DigitalContact = forwardRef<{ toggleEdit: () => void }, Props>(
                 variant="text"
                 color="error"
                 onClick={onCancelInsert}
-                sx={{ fontWeight: 700, color: 'error.dark' }}
+                sx={{ color: 'error.dark' }}
                 size="medium"
               >
                 {t('button.annulla')}
@@ -268,7 +268,7 @@ const DigitalContact = forwardRef<{ toggleEdit: () => void }, Props>(
               <MIButton
                 variant="text"
                 key="saveButton"
-                sx={{ fontWeight: 700, justifyContent: 'left' }}
+                sx={{ justifyContent: 'left' }}
                 id={`saveContact-${senderId}_${contactType}`}
                 startIcon={<CheckIcon />}
                 {...({ type: 'submit' } as any)}
@@ -280,7 +280,6 @@ const DigitalContact = forwardRef<{ toggleEdit: () => void }, Props>(
                 color="error"
                 onClick={onCancelEdit}
                 sx={{
-                  fontWeight: 700,
                   color: 'error.dark',
                   justifyContent: 'left',
                 }}
@@ -328,12 +327,10 @@ const DigitalContact = forwardRef<{ toggleEdit: () => void }, Props>(
             >
               <EditButton
                 key="editButton"
-                color="primary"
                 onClick={toggleEdit}
                 startIcon={<CreateIcon />}
-                sx={{ fontWeight: 700, justifyContent: 'left' }}
+                sx={{ justifyContent: 'left' }}
                 id={`modifyContact-${senderId}_${contactType}`}
-                size="medium"
               >
                 {t('button.modifica')}
               </EditButton>
@@ -344,7 +341,7 @@ const DigitalContact = forwardRef<{ toggleEdit: () => void }, Props>(
                   color="error"
                   onClick={onDelete}
                   startIcon={<DeleteIcon />}
-                  sx={{ fontWeight: 700, justifyContent: 'left', color: 'error.dark' }}
+                  sx={{ justifyContent: 'left', color: 'error.dark' }}
                   size="medium"
                 >
                   {t('button.elimina')}

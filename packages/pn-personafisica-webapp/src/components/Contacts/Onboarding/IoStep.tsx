@@ -187,7 +187,6 @@ const IoStep: React.FC<Props> = ({ value, selectedOnboardingFlow, onChange, onCo
                 onClick={() => void handleRefreshState()}
                 data-testid="io-refresh-link"
                 sx={{
-                  fontWeight: 700,
                   alignSelf: isMobile ? 'flex-start' : undefined,
                 }}
               >

@@ -210,7 +210,6 @@ const NotificationRelatedDowntimes: React.FC<Props> = ({
                   {event.fileAvailable && !disableDownloads ? (
                     <MIButton
                       variant="text"
-                      color="primary"
                       onClick={() => {
                         void fetchDowntimeLegalFactDocumentDetails(event.legalFactId as string);
                       }}

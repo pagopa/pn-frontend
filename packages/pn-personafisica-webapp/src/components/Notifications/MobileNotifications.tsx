@@ -162,7 +162,6 @@ const MobileNotifications = ({ notifications, sort, onChangeSorting, currentDele
               <PnCardActions>
                 <MIButton
                   variant="text"
-                  color="primary"
                   onClick={() => handleRowClick(data)}
                   endIcon={<ArrowForward />}
                   data-testid="go-to-detail"

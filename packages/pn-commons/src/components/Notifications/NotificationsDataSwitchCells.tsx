@@ -47,7 +47,6 @@ export const NotificationActionButton: React.FC<{
 }> = ({ iun, label, onClick }) => (
   <MIButton
     variant="text"
-    color="primary"
     data-testid="goToNotificationDetail"
     onClick={onClick}
     endIcon={<ArrowForward />}

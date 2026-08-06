@@ -70,8 +70,6 @@ const DigitalContactActivation: React.FC<Props> = ({ isTransferring = false, onG
         <MIButton
           variant="text"
           onClick={onGoBack ? () => onGoBack() : () => navigate(-1)}
-          color="primary"
-          size="medium"
           sx={{ mx: 'auto' }}
         >
           {t('button.annulla', { ns: 'common' })}
@@ -97,8 +95,6 @@ const DigitalContactActivation: React.FC<Props> = ({ isTransferring = false, onG
         <MIButton
           variant="contained"
           onClick={handleConfirmEmailSmsStep}
-          color="primary"
-          size="medium"
           sx={{ width: { xs: '100%', md: 'auto' } }}
         >
           {t('button.continue', { ns: 'common' })}

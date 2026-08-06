@@ -112,13 +112,7 @@ const CourtesyContactHandler: React.FC<Props> = ({
           {labels.collapsed.label}
         </Typography>
 
-        <MIButton
-          variant="text"
-          color="primary"
-          size="medium"
-          onClick={onExpand}
-          sx={{ alignSelf: 'flex-start', fontWeight: 700 }}
-        >
+        <MIButton variant="text" onClick={onExpand} sx={{ alignSelf: 'flex-start' }}>
           {labels.collapsed.buttonLabel}
         </MIButton>
       </Stack>
@@ -197,7 +191,6 @@ const CourtesyContactHandler: React.FC<Props> = ({
               variant: 'outlined',
               sx: {
                 height: '43px',
-                fontWeight: 700,
                 flexBasis: { xs: 'unset', lg: '25%' },
               },
             },

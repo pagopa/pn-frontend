@@ -45,8 +45,6 @@ const FilteredEmptyStateContent: React.FC<{ cleanFilters: () => void }> = ({ cle
 
       <MIButton
         variant="text"
-        size="medium"
-        color="primary"
         id="call-to-action-first"
         data-testid="link-remove-filters"
         onClick={cleanFilters}
@@ -120,8 +118,6 @@ const EmptyStateCTA: React.FC<{ showOnboardingContent: boolean }> = ({ showOnboa
   return (
     <MIButton
       variant="text"
-      size="medium"
-      color="primary"
       id="call-to-action-first"
       data-testid="link-route-contacts"
       onClick={goToContactsPage}

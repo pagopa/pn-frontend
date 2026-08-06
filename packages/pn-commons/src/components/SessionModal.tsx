@@ -78,7 +78,6 @@ const SessionModal: React.FC<Props> = ({
         <PnDialogActions>
           <MIButton
             sx={{ width: '100%' }}
-            color="primary"
             variant="contained"
             data-testid="buttonOfSessionModal"
             onClick={onConfirm}

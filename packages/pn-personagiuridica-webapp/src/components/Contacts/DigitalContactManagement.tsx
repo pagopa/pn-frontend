@@ -43,8 +43,6 @@ const DigitalContactManagement: React.FC = () => {
       <MIButton
         variant="text"
         onClick={() => navigate(-1)}
-        color="primary"
-        size="medium"
         sx={{ fontSize: '16px', width: { xs: 'unset', md: 'auto' }, mx: 'auto' }}
       >
         {t('button.indietro', { ns: 'common' })}

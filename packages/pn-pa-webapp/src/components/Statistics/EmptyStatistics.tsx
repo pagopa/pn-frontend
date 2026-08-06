@@ -1,10 +1,8 @@
 import React from 'react';
 import { Trans, useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
 
-import { Box, Stack, SxProps, Theme, Typography } from '@mui/material';
+import { Box, Link, Stack, SxProps, Theme, Typography } from '@mui/material';
 import { IllusStatistics } from '@pagopa-pn/pn-commons';
-import { MIButton } from '@pagopa/mui-italia';
 
 import * as routes from '../../navigation/routes.const';
 
@@ -17,21 +15,11 @@ type LinkDashboardProps = {
   children?: React.ReactNode;
 };
 
-const LinkDashboard: React.FC<LinkDashboardProps> = ({ children }) => {
-  const navigate = useNavigate();
-
-  return (
-    <MIButton
-      variant="text"
-      onClick={() => navigate(routes.DASHBOARD)}
-      color="primary"
-      data-testid="link-to-dashboard"
-      sx={{ display: 'inline', verticalAlign: 'unset', fontSize: 'inherit' }}
-    >
-      {children}
-    </MIButton>
-  );
-};
+const LinkDashboard: React.FC<LinkDashboardProps> = ({ children }) => (
+  <Link href={routes.DASHBOARD} data-testid="link-to-dashboard">
+    {children}
+  </Link>
+);
 
 const EmptyStatistics: React.FC<Props> = ({ description = 'empty.no_data_found', sx }) => {
   const { t } = useTranslation(['statistics']);

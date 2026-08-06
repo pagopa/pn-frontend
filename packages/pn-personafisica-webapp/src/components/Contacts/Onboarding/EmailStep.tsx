@@ -227,7 +227,6 @@ const EmailStep: React.FC<Props> = ({ value, alreadySet, onChange, onVerified })
             button: {
               sx: {
                 height: '43px',
-                fontWeight: 700,
                 flexBasis: { xs: 'unset', lg: '25%' },
               },
             },

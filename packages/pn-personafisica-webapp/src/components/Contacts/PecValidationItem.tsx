@@ -29,7 +29,7 @@ const PecValidationItem: React.FC<Props> = ({ senderId, onCancelValidation }) =>
         onClick={handleCancelValidation}
         data-testid="cancelValidation"
         size="medium"
-        sx={{ color: 'error.dark', fontWeight: 700 }}
+        sx={{ color: 'error.dark' }}
         startIcon={<CloseIcon sx={{ width: '18px', height: '18px' }} />}
       >
         {t('legal-contacts.cancel-pec-validation', { ns: 'recapiti' })}

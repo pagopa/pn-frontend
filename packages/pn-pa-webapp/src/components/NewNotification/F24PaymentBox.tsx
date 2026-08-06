@@ -121,7 +121,6 @@ const F24PaymentBox: React.FC<PaymentBoxProps> = ({
           {showDeleteButton && (
             <MIButton
               variant="text"
-              color="primary"
               startIcon={<DeleteIcon />}
               onClick={onDeletePayment}
               sx={{

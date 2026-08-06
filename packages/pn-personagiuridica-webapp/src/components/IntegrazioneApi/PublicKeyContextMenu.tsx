@@ -34,8 +34,6 @@ const PublicKeyContextMenu: React.FC<Props> = ({ data, keys, handleModalClick })
     <Box data-testid="contextMenu">
       <IconButton
         onClick={handleClick}
-        size="small"
-        color="primary"
         data-testid="contextMenuButton"
         aria-label={t('context-menu.title')}
         aria-controls={open ? 'context-menu' : undefined}

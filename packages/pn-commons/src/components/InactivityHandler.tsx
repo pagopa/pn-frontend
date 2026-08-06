@@ -84,7 +84,6 @@ const InactivityHandler: React.FC<Props> = ({ inactivityTimer, onTimerExpired, c
           <PnDialogActions>
             <MIButton
               fullWidth
-              color="primary"
               variant="outlined"
               data-testid="inactivity-button"
               onClick={confirmModal}

@@ -83,12 +83,7 @@ const ChooseDigitalDomicileStep: React.FC<Props> = ({
             {t('onboarding.digital-domicile.choice.pec.description')}
           </Typography>
 
-          <MIButton
-            variant="text"
-            onClick={onSelectPec}
-            data-testid="select-pec-button"
-            sx={{ fontWeight: 700 }}
-          >
+          <MIButton variant="text" onClick={onSelectPec} data-testid="select-pec-button">
             {t('onboarding.digital-domicile.choice.pec.cta')}
           </MIButton>
         </Box>

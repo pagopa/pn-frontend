@@ -240,7 +240,7 @@ const DigitalContact = forwardRef<{ toggleEdit: () => void }, Props>(
                 variant="text"
                 color="error"
                 onClick={onCancelInsert}
-                sx={{ fontWeight: 700, color: 'error.dark' }}
+                sx={{ color: 'error.dark' }}
               >
                 {t('button.annulla')}
               </MIButton>
@@ -301,7 +301,7 @@ const DigitalContact = forwardRef<{ toggleEdit: () => void }, Props>(
                 variant="text"
                 key="saveButton"
                 {...({ type: 'submit' } as any)}
-                sx={{ fontWeight: 700, justifyContent: 'left' }}
+                sx={{ justifyContent: 'left' }}
                 id={`saveContact-${senderId}_${contactType}`}
                 startIcon={<CheckIcon />}
               >
@@ -311,7 +311,6 @@ const DigitalContact = forwardRef<{ toggleEdit: () => void }, Props>(
                 color="error"
                 onClick={onCancelEdit}
                 sx={{
-                  fontWeight: 700,
                   color: 'error.dark',
                   justifyContent: 'left',
                 }}
@@ -377,7 +376,7 @@ const DigitalContact = forwardRef<{ toggleEdit: () => void }, Props>(
                   toggleEdit();
                 }}
                 startIcon={<CreateIcon />}
-                sx={{ fontWeight: 700, justifyContent: 'left' }}
+                sx={{ justifyContent: 'left' }}
                 id={`modifyContact-${senderId}_${contactType}`}
               >
                 {t('button.modifica')}
@@ -389,7 +388,7 @@ const DigitalContact = forwardRef<{ toggleEdit: () => void }, Props>(
                   color="error"
                   onClick={onDelete}
                   startIcon={<DeleteIcon />}
-                  sx={{ fontWeight: 700, justifyContent: 'left', color: 'error.dark' }}
+                  sx={{ justifyContent: 'left', color: 'error.dark' }}
                 >
                   {t('button.elimina')}
                 </MIButton>

@@ -172,7 +172,6 @@ const PaymentMethods: React.FC<Props> = ({ notification, formik, hasFieldError }
 
                   <MIButton
                     variant="text"
-                    color="primary"
                     startIcon={<AddIcon />}
                     onClick={() => handleAddNewPagoPa(recipientKey)}
                     sx={{ justifyContent: 'start' }}
@@ -217,7 +216,6 @@ const PaymentMethods: React.FC<Props> = ({ notification, formik, hasFieldError }
 
                   <MIButton
                     variant="text"
-                    color="primary"
                     startIcon={<AddIcon />}
                     onClick={() => handleAddNewF24(recipientKey)}
                     sx={{ justifyContent: 'start' }}

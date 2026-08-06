@@ -227,7 +227,7 @@ const SmsContactItem: React.FC<SmsItemProps> = ({ slotsProps, slots }) => {
     if (defaultSERCQ_SENDAddress && !hasCourtesyAddresses) {
       return 'warning';
     }
-    return 'default';
+    return 'neutral';
   };
 
   const getRemoveModalTitle = () => {

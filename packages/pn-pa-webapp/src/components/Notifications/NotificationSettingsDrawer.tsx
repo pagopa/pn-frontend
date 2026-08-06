@@ -89,8 +89,7 @@ const NotificationSettingsDrawer = () => {
     <>
       <MIButton
         variant="text"
-        color="primary"
-        sx={{ fontSize: '16px', fontWeight: 700 }}
+        sx={{ fontSize: '16px' }}
         onClick={toggleDrawer}
         data-testid="settingsLangBtn"
       >

@@ -318,7 +318,7 @@ const SmsContactItem: React.FC<SmsItemProps> = ({
     if (defaultSERCQ_SENDAddress && !hasCourtesyAddresses) {
       return 'warning';
     }
-    return 'default';
+    return 'neutral';
   };
 
   const getRemoveModalTitle = () => {
@@ -489,12 +489,7 @@ const SmsContactItem: React.FC<SmsItemProps> = ({
           <Typography variant="body1" fontWeight={600} fontSize="16px" mb={1}>
             {t('courtesy-contacts.email-sms-updates', { ns: 'recapiti' })}
           </Typography>
-          <MIButton
-            variant="text"
-            color="primary"
-            sx={{ fontSize: '16px' }}
-            onClick={handleSetInsertMode}
-          >
+          <MIButton variant="text" sx={{ fontSize: '16px' }} onClick={handleSetInsertMode}>
             {t('courtesy-contacts.email-sms-add', { ns: 'recapiti' })}
           </MIButton>
         </>
