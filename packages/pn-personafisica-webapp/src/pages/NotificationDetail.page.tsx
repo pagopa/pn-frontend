@@ -508,6 +508,7 @@ const NotificationDetail: React.FC = () => {
         notificationStatusHistory: notification.notificationStatusHistory,
         flow: getFlowType(),
         delivery_mode: getDeliveryMode(),
+        notification_type: 'notifica',
       });
 
       PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_NOTIFICATIONS_COUNT, {

@@ -39,7 +39,7 @@ import PFEventStrategyFactory from '../utility/MixpanelUtils/PFEventStrategyFact
 const { SELFCARE_CDN_URL } = getConfiguration();
 
 const InformalNotificationDetail: React.FC = () => {
-  const { id } = useParams();
+  const { id, mandateId } = useParams();
   const { t, i18n } = useTranslation(['common', 'notifiche']);
   const dispatch = useAppDispatch();
   const [pageReady, setPageReady] = useState(false);
@@ -145,6 +145,25 @@ const InformalNotificationDetail: React.FC = () => {
 
     fetchPaymentsInfo(payments as Array<NotificationDetailPayment>);
   }, [currentRecipient?.payments]);
+
+  // TODO in legali ci sono le proprietà downtimesReady isUserForbidden vanno messe anche per le bonarie??
+  useEffect(() => {
+    if (pageReady) {
+      PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_NOTIFICATION_DETAIL, {
+        downtimeEvents: [], // TODO al momento non abbiamo i downtime
+        mandateId,
+        notificationStatus: informalNotification?.notificationStatus,
+        hasUserPayments: hasPayments,
+        userPayments: paymentsData,
+        source: 'LISTA_NOTIFICHE', // TODO cablato temporaneamente nella lista notifiche
+        timeline: [], // TODO al momento non abbiamo la timeline
+        notificationStatusHistory: [],
+        flow: 'not_available', // TODO al momento non abbiamo il flow
+        delivery_mode: 'not_set',
+        notification_type: 'comunicazione bonaria',
+      });
+    }
+  }, [pageReady]);
 
   const primaryMessage = currentRecipient
     ? (currentRecipient as any).message?.primaryMessage

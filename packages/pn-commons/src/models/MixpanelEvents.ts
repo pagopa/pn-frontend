@@ -86,6 +86,7 @@ export type EventNotificationDetailType = {
   elapsed_time: number;
   flow: EventDeliveryFlowType;
   delivery_mode: EventDeliveryModeType;
+  notification_type: EventNotificationType;
 };
 
 export type EventMandateNotificationsListType = {

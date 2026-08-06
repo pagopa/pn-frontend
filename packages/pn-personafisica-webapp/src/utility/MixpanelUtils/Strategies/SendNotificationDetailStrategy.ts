@@ -19,6 +19,7 @@ import {
 import {
   EventDeliveryFlowType,
   EventDeliveryModeType,
+  EventNotificationType,
 } from '@pagopa-pn/pn-commons/src/models/MixpanelEvents';
 
 import { appRouteParamToEventSource } from '../../notification.utility';
@@ -34,6 +35,7 @@ type NotificationData = {
   notificationStatusHistory: Array<NotificationStatusHistory>;
   flow: EventDeliveryFlowType;
   delivery_mode: EventDeliveryModeType;
+  notification_type: EventNotificationType;
 };
 
 export class SendNotificationDetailStrategy implements EventStrategy {
@@ -48,6 +50,7 @@ export class SendNotificationDetailStrategy implements EventStrategy {
     notificationStatusHistory,
     flow,
     delivery_mode,
+    notification_type,
   }: NotificationData): TrackedEvent<EventNotificationDetailType> {
     // eslint-disable-next-line functional/no-let
     let typeDowntime: EventDowntimeType;
@@ -91,6 +94,7 @@ export class SendNotificationDetailStrategy implements EventStrategy {
         elapsed_time: getElapsedTime(deliveredEvent?.activeFrom, viewedEvent?.activeFrom),
         flow,
         delivery_mode,
+        notification_type,
       },
     };
   }

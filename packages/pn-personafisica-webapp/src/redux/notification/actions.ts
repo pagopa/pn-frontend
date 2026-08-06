@@ -173,6 +173,8 @@ export const getReceivedNotificationPaymentInfo = createAsyncThunk<
 
           PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_PAYMENT_OUTCOME, {
             outcome: updatedPayment[0].status,
+            // TODO qui va capito come recuperare se è legale o meno
+            notification_type: '',
           });
 
           if (updatedPayment[0].status === PaymentStatus.SUCCEEDED) {
