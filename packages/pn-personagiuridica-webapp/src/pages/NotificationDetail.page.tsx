@@ -532,7 +532,7 @@ const NotificationDetail = () => {
                   filedAt={notification.filedAt}
                   iun={notification.iun}
                   abstract={notification.abstract}
-                  senderLogoUrl={SELFCARE_CDN_URL}
+                  selfcareCdnUrl={SELFCARE_CDN_URL}
                 />
                 {banner}
                 {pecUnreachableAlert}

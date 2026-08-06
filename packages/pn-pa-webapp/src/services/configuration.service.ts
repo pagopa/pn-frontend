@@ -1,5 +1,5 @@
 import { Configuration, IS_DEVELOP, dataRegex } from '@pagopa-pn/pn-commons';
-import { Validator } from '@pagopa-pn/pn-validator';
+import { ValidationResult, Validator } from '@pagopa-pn/pn-validator';
 
 import { PhysicalAddressLookupConfig } from '../models/NewNotification';
 
@@ -28,6 +28,31 @@ export interface PaConfiguration {
   PHYSICAL_ADDRESS_LOOKUP: PhysicalAddressLookupConfig;
   ACCESSIBILITY_LINK: string;
   SERCQ_SERVICE_STATEMENT_LINK: string;
+  STATISTICS_MAINTENANCE_DATES?: string;
+}
+
+function statisticsMaintenanceDatesValidator(value: string): ValidationResult<string> {
+  if (!value) {
+    return null;
+  }
+  // 1. Split the string by the underscore separator
+  const parts = value.split('_');
+  if (parts.length !== 2) {
+    return 'Wrong STATISTICS_MAINTENANCE_DATES format';
+  }
+
+  const [startDateStr, endDateStr] = parts;
+
+  // 2. Parse both dates
+  const start = new Date(startDateStr);
+  const end = new Date(endDateStr);
+
+  // 3. Verify that both dates are valid Date objects (not NaN)
+  if (Number.isNaN(start.getTime()) || Number.isNaN(end.getTime())) {
+    return 'Invalid STATISTICS_MAINTENANCE_DATES values';
+  }
+
+  return null;
 }
 
 class PaConfigurationValidator extends Validator<PaConfiguration> {
@@ -63,6 +88,9 @@ class PaConfigurationValidator extends Validator<PaConfiguration> {
       .isOneOf(Object.values(PhysicalAddressLookupConfig));
     this.ruleFor('ACCESSIBILITY_LINK').isString().isRequired();
     this.ruleFor('SERCQ_SERVICE_STATEMENT_LINK').isString().isRequired();
+    this.ruleFor('STATISTICS_MAINTENANCE_DATES')
+      .isString()
+      .customValidator(statisticsMaintenanceDatesValidator);
   }
 }
 

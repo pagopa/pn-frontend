@@ -32,6 +32,9 @@ import {
   getReceivedInformalNotificationPayment,
   getReceivedInformalNotificationPaymentInfo,
 } from '../redux/notification/informalActions';
+import { getConfiguration } from '../services/configuration.service';
+
+const { SELFCARE_CDN_URL } = getConfiguration();
 
 const InformalNotificationDetail: React.FC = () => {
   const { id } = useParams();
@@ -252,6 +255,7 @@ const InformalNotificationDetail: React.FC = () => {
             recipientDenomination={currentRecipient?.denomination}
             hasAttachments={documentsAvailable}
             hasPayment={hasPayments}
+            selfcareCdnUrl={SELFCARE_CDN_URL}
           />
 
           <Stack direction={{ xs: 'column', md: 'row' }} spacing={2} alignItems="flex-start">

@@ -90,5 +90,9 @@
     "no_data_found": "Za izbrano časovno obdobje ni podatkov",
     "not_enough_data": "Število obvestil, ki jih je organizacija naložila na SEND, trenutno ne zadostuje za obdelavo in prikaz statistike pošiljanja. Raziščite <0>razdelek Obvestil</0> in si oglejte do zdaj naložena obvestila.",
     "notification_section_aria_label": "Razdelek obvestil"
+  },
+  "maintenance_alert": {
+    "title": "Vzdrževanje v teku",
+    "description": "Poteka načrtovano vzdrževanje, ki lahko povzroči zamude pri razpoložljivosti podatkov na nadzorni plošči. Za preverjanje zadnje razpoložljive posodobitve glejte datum, naveden na tej strani. Posodobitve se bodo normalno nadaljevale po končanem vzdrževanju."
   }
 }
