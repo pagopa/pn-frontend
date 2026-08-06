@@ -2,7 +2,7 @@
   "packages": [
     "packages/*"
   ],
-  "version": "2.25.0-RC.5",
+  "version": "2.25.0",
   "npmClient": "yarn",
   "useNx": false,
   "command": {
