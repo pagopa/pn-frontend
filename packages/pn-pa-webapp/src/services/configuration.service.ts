@@ -28,10 +28,13 @@ export interface PaConfiguration {
   PHYSICAL_ADDRESS_LOOKUP: PhysicalAddressLookupConfig;
   ACCESSIBILITY_LINK: string;
   SERCQ_SERVICE_STATEMENT_LINK: string;
-  STATISTICS_MAINTENANCE_DATES: string;
+  STATISTICS_MAINTENANCE_DATES?: string;
 }
 
 function statisticsMaintenanceDatesValidator(value: string): ValidationResult<string> {
+  if (!value) {
+    return null;
+  }
   // 1. Split the string by the underscore separator
   const parts = value.split('_');
   if (parts.length !== 2) {
@@ -87,7 +90,6 @@ class PaConfigurationValidator extends Validator<PaConfiguration> {
     this.ruleFor('SERCQ_SERVICE_STATEMENT_LINK').isString().isRequired();
     this.ruleFor('STATISTICS_MAINTENANCE_DATES')
       .isString()
-      .isRequired()
       .customValidator(statisticsMaintenanceDatesValidator);
   }
 }

@@ -74,8 +74,9 @@ const Statistics = () => {
   );
   const isSupportUser = useAppSelector(authSelectors.selectIsSupportUser);
   const statisticsMaintenanceDates = getConfiguration().STATISTICS_MAINTENANCE_DATES;
-  const [statisticsMaintenanceStartDate, statisticsMaintenanceEndDate] =
-    statisticsMaintenanceDates.split('_');
+  const [statisticsMaintenanceStartDate, statisticsMaintenanceEndDate] = statisticsMaintenanceDates
+    ? statisticsMaintenanceDates.split('_')
+    : [];
 
   const cxId = loggedUserOrganizationParty.id;
   const cxType = isSupportUser ? CxType.BS : CxType.PA;
@@ -141,19 +142,20 @@ const Statistics = () => {
             <Typography variant="caption" sx={{ color: GraphColors.greyBlue }}>
               {getLastUpdateText()}
             </Typography>
-            {isDateInRange(
-              new Date(),
-              statisticsMaintenanceStartDate,
-              statisticsMaintenanceEndDate
-            ) && (
-              <MIAlert
-                data-testid="maintenanceAlert"
-                severity="warning"
-                title={t('maintenance_alert.title')}
-                sx={{ mt: 4 }}
-                description={t('maintenance_alert.description')}
-              />
-            )}
+            {statisticsMaintenanceDates &&
+              isDateInRange(
+                new Date(),
+                statisticsMaintenanceStartDate,
+                statisticsMaintenanceEndDate
+              ) && (
+                <MIAlert
+                  data-testid="maintenanceAlert"
+                  severity="warning"
+                  title={t('maintenance_alert.title')}
+                  sx={{ mt: 4 }}
+                  description={t('maintenance_alert.description')}
+                />
+              )}
             <Box ref={exportJpgNode}>
               <Typography variant="h6" component="h5" mt={7}>
                 {t('section_1')}

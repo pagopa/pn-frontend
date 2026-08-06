@@ -326,7 +326,7 @@ describe('Statistics Page tests', () => {
     expect(maintenanceAlert).toBeInTheDocument();
     expect(maintenanceAlert).toHaveTextContent('maintenance_alert.title');
     expect(maintenanceAlert).toHaveTextContent('maintenance_alert.description');
-    vi.getRealSystemTime();
+    vi.useRealTimers();
   });
 
   it('api returns error', async () => {
