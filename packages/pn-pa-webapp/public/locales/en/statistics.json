@@ -90,5 +90,9 @@
     "no_data_found": "No data is available for the selected time period",
     "not_enough_data": "The number of notifications uploaded on SEND by the institution at the moment is not sufficient for processing and displaying sending statistics. Explore the <0>Notifications section</0> to consult those uploaded up until now.",
     "notification_section_aria_label": "Notifications section"
+  },
+  "maintenance_alert": {
+    "title": "Maintenance in progress",
+    "description": "Scheduled maintenance is in progress and may delay data updates on the dashboard. Please refer to the date shown on this page to check the latest update. Regular updates will resume once maintenance is complete."
   }
 }
