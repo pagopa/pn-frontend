@@ -9,6 +9,9 @@ import {
   ApiError,
   ApiErrorWrapper,
   DeliveryOutcomeType,
+  EventDeliveryFlowType,
+  EventDeliveryModeType,
+  EventNotificationSource,
   GetDowntimeHistoryParams,
   NotificationDetailBilingualFacsimileDocuments,
   NotificationDetailDocuments,
@@ -33,11 +36,6 @@ import {
   useHasPermissions,
   useIsCancelled,
 } from '@pagopa-pn/pn-commons';
-import {
-  EventDeliveryFlowType,
-  EventDeliveryModeType,
-  EventNotificationSource,
-} from '@pagopa-pn/pn-commons/src/models/MixpanelEvents';
 import { MIAlert, MIPaper } from '@pagopa/mui-italia';
 
 import DomicileBanner from '../components/DomicileBanner/DomicileBanner';
@@ -210,9 +208,16 @@ const NotificationDetail = () => {
       return;
     }
 
-    PGEventStrategyFactory.triggerEvent(PGEventsType.SEND_PG_NOTIFICATION_DOWNLOAD_ATTACHMENT, {
-      document,
-    });
+    PGEventStrategyFactory.triggerEvent(
+      PGEventsType.SEND_PG_NOTIFICATION_DOWNLOAD_ATTACHMENT,
+      {
+        notificationType: 'LEGAL',
+        documentType: isObject(document)
+          ? NotificationDocumentType.AAR
+          : NotificationDocumentType.ATTACHMENT,
+      },
+      { sendImmediately: true }
+    );
 
     if (isObject(document)) {
       // AAR case
@@ -243,8 +248,14 @@ const NotificationDetail = () => {
     }
   };
 
-  const getPaymentAttachmentAction = (name: PaymentAttachmentSName, attachmentIdx?: number) =>
-    dispatch(
+  const getPaymentAttachmentAction = (name: PaymentAttachmentSName, attachmentIdx?: number) => {
+    PGEventStrategyFactory.triggerEvent(
+      PGEventsType.SEND_PG_NOTIFICATION_DOWNLOAD_ATTACHMENT,
+      { notificationType: 'LEGAL', documentType: name },
+      { sendImmediately: true }
+    );
+
+    return dispatch(
       getReceivedNotificationPayment({
         iun: notification.iun,
         attachmentName: name,
@@ -252,10 +263,15 @@ const NotificationDetail = () => {
         attachmentIdx,
       })
     );
+  };
 
   const onPayClick = (noticeCode?: string, creditorTaxId?: string, amount?: number) => {
     if (noticeCode && creditorTaxId && amount && notification.senderDenomination) {
-      PGEventStrategyFactory.triggerEvent(PGEventsType.SEND_PG_START_PAYMENT);
+      PGEventStrategyFactory.triggerEvent(
+        PGEventsType.SEND_PG_START_PAYMENT,
+        { notificationType: 'LEGAL' },
+        { sendImmediately: true }
+      );
 
       dispatch(
         getReceivedNotificationPaymentUrl({
@@ -370,9 +386,17 @@ const NotificationDetail = () => {
     [location]
   );
 
+  /**
+   * Wait for payment info loading to complete before tracking the detail event
+   * so it is emitted once with stable payment data
+   */
+  const paymentsReady =
+    !checkIfUserHasPayments || userPayments.pagoPaF24.every((payment) => !payment.isLoading);
+
   useEffect(() => {
-    if (downtimesReady && pageReady && !hasNotificationReceivedApiError) {
+    if (downtimesReady && pageReady && !hasNotificationReceivedApiError && paymentsReady) {
       PGEventStrategyFactory.triggerEvent(PGEventsType.SEND_PG_NOTIFICATION_DETAIL, {
+        notificationType: 'LEGAL',
         downtimeEvents,
         mandateId,
         notificationStatus: notification.notificationStatus,

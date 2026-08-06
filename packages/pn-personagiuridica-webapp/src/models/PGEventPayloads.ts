@@ -2,27 +2,42 @@ import type {
   AppResponse,
   AppResponseError,
   Downtime,
+  EventDeliveryFlowType,
+  EventDeliveryModeType,
+  EventPageType,
+  InformalNotificationStatus,
   LegalFactId,
-  NotificationDetailOtherDocument,
+  NotificationCommunicationType,
+  NotificationDocumentType,
   NotificationStatusHistory,
+  PaymentAttachmentSName,
   PaymentsData,
   RecipientNotification,
+  UnifiedNotificationStatus,
 } from '@pagopa-pn/pn-commons';
 import {
   EventDowntimeType,
   EventNotificationSource,
   NotificationStatus,
 } from '@pagopa-pn/pn-commons';
-import {
-  EventDeliveryFlowType,
-  EventDeliveryModeType,
-  EventPageType,
-} from '@pagopa-pn/pn-commons/src/models/MixpanelEvents';
 
 import { PGEventsType } from './PGEventsType';
 import type { ChannelType, DigitalAddress } from './contacts';
 
 export type YesNo = 'yes' | 'no';
+
+export enum EventDefaultValue {
+  NOT_SET = 'not_set',
+}
+
+export const MIXPANEL_NOTIFICATION_TYPE_MAP = {
+  LEGAL: 'notifica',
+  INFORMAL: 'comunicazione bonaria',
+} as const satisfies Record<NotificationCommunicationType, string>;
+
+export type MixpanelNotificationType =
+  (typeof MIXPANEL_NOTIFICATION_TYPE_MAP)[keyof typeof MIXPANEL_NOTIFICATION_TYPE_MAP];
+
 export type PGUserRole = 'admin' | 'group_admin' | 'operator' | 'group_operator';
 
 export type DigitalDomicileType = ChannelType.PEC | ChannelType.SERCQ_SEND | 'not_available';
@@ -49,20 +64,41 @@ export type PGNotificationsListEventData = {
   domicileBannerType?: string;
 };
 
-export type PGNotificationDetailEventData = {
-  downtimeEvents: Array<Downtime>;
-  mandateId: string | undefined;
-  notificationStatus: NotificationStatus;
-  checkIfUserHasPayments: boolean;
-  userPayments: PaymentsData;
-  notificationStatusHistory: Array<NotificationStatusHistory>;
-  source: EventNotificationSource;
-  flow: EventDeliveryFlowType;
-  deliveryMode: EventDeliveryModeType;
-};
+export type PGNotificationDetailEventData =
+  | {
+      notificationType: 'LEGAL';
+      downtimeEvents: Array<Downtime>;
+      mandateId: string | undefined;
+      notificationStatus: NotificationStatus;
+      checkIfUserHasPayments: boolean;
+      userPayments: PaymentsData;
+      notificationStatusHistory: Array<NotificationStatusHistory>;
+      source: EventNotificationSource;
+      flow: EventDeliveryFlowType;
+      deliveryMode: EventDeliveryModeType;
+    }
+  | {
+      notificationType: 'INFORMAL';
+      notificationStatus: InformalNotificationStatus;
+      paymentCount: number;
+    };
 
-export type PGNotificationAttachmentEventData = {
-  document: string | NotificationDetailOtherDocument | undefined;
+type PGInformalNotificationAttachmentType =
+  | NotificationDocumentType.ATTACHMENT
+  | PaymentAttachmentSName;
+
+export type PGNotificationAttachmentEventData =
+  | {
+      notificationType: 'LEGAL';
+      documentType: PGInformalNotificationAttachmentType | NotificationDocumentType.AAR;
+    }
+  | {
+      notificationType: 'INFORMAL';
+      documentType: PGInformalNotificationAttachmentType;
+    };
+
+export type PGStartPaymentEventData = {
+  notificationType: NotificationCommunicationType;
 };
 
 export type PGTimelineLegalFactEventData = {
@@ -111,7 +147,12 @@ export type PGDocumentDownloadPayload = {
   document_type: string;
 };
 
+export type PGNotificationAttachmentPayload = PGDocumentDownloadPayload & {
+  notification_type: MixpanelNotificationType;
+};
+
 export type PGStartPaymentPayload = {
+  notification_type: MixpanelNotificationType;
   psp: string;
 };
 
@@ -137,21 +178,31 @@ export type PGNotificationsListPayload = {
   filed_count: number;
   sending_count: number;
   back_to_sender_count: number;
+
+  total_combo_count: number;
+  unread_combo_count: number;
+  delivered_combo_count: number;
+  opened_combo_count: number;
+  not_found_combo_count: number;
+
   banner?: string;
 };
 
 export type PGNotificationDetailPayload = {
+  notification_type: MixpanelNotificationType;
   notification_owner: boolean;
-  notification_status: NotificationStatus;
+  notification_status: UnifiedNotificationStatus;
   contains_payment: boolean;
-  disservice_status: EventDowntimeType;
+  disservice_status: EventDowntimeType | EventDefaultValue.NOT_SET;
   contains_multipayment: YesNo;
   count_payment: number;
   contains_f24: YesNo;
-  first_time_opening: boolean;
+  // TODO: make mandatory after updating the generated BFF client with the informal timeline.
+  first_time_opening?: boolean;
   source: EventNotificationSource;
-  elapsed_time: number;
-  flow: EventDeliveryFlowType;
+  // TODO: make mandatory after updating the generated BFF client with the informal timeline.
+  elapsed_time?: number;
+  flow: EventDeliveryFlowType | EventDefaultValue.NOT_SET;
   delivery_mode: EventDeliveryModeType;
 };
 
@@ -239,7 +290,7 @@ export type PGEventPayloads = {
   [PGEventsType.SEND_PG_NOTIFICATION_DELEGATED]: PGNotificationsListEventData;
   [PGEventsType.SEND_PG_NOTIFICATION_DETAIL]: PGNotificationDetailEventData;
   [PGEventsType.SEND_PG_NOTIFICATION_DOWNLOAD_ATTACHMENT]: PGNotificationAttachmentEventData;
-  [PGEventsType.SEND_PG_START_PAYMENT]: undefined;
+  [PGEventsType.SEND_PG_START_PAYMENT]: PGStartPaymentEventData;
   [PGEventsType.SEND_PG_TIMELINE_DOWNLOAD]: PGTimelineLegalFactEventData;
   [PGEventsType.SEND_PG_TIMELINE_SHOW_MORE]: undefined;
   [PGEventsType.SEND_PG_YOUR_NOTIFICATION]: PGNotificationsListEventData;
