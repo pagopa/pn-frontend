@@ -68,7 +68,7 @@ export function getApiKeyStatusInfos(
   status: ApiKeyStatus,
   statusHistoryLines: Array<string>
 ): {
-  color: 'warning' | 'error' | 'success' | 'info' | 'default' | 'primary' | 'secondary' | undefined;
+  color: 'default' | 'info' | 'warning' | 'error' | 'success' | 'highlight' | 'neutral' | undefined;
   label: string;
   tooltip: ReactNode;
   description: string;
