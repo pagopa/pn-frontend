@@ -2,7 +2,7 @@
   "packages": [
     "packages/*"
   ],
-  "version": "2.24.2-RC.0",
+  "version": "2.24.2",
   "npmClient": "yarn",
   "useNx": false,
   "command": {
@@ -11,8 +11,7 @@
         "main",
         "release/*",
         "develop",
-        "hotfix/*",
-        "techfix/*"
+        "hotfix/*"
       ]
     }
   }
