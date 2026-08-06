@@ -53,6 +53,7 @@ const NotificationPaymentPagoPAItem: React.FC<Props> = ({
       handleTrackEventDetailPaymentError(EventPaymentRecipientType.SEND_PAYMENT_DETAIL_ERROR, {
         detail: pagoPAItem.detail,
         errorCode: pagoPAItem.errorCode,
+        notification_type: '', // TODO qui va capito come recuperare se è legale o meno
       });
     }
 
