@@ -5,7 +5,7 @@ export const notificationsDTO: GetNotificationsResponse = {
     {
       iun: 'XGPG-LXPA-YXRL-202308-M-1',
       paProtocolNumber: '302271690965154541',
-      sender: 'Comune di palermo',
+      sender: 'Comune di Test 1',
       sentAt: '2023-08-02T08:32:36.450806949Z',
       subject: 'notifica analogica con cucumber',
       notificationStatus: NotificationStatus.EFFECTIVE_DATE,
@@ -15,7 +15,7 @@ export const notificationsDTO: GetNotificationsResponse = {
     {
       iun: 'ZEXV-XVNG-HKNY-202308-D-1',
       paProtocolNumber: '302211690965154570',
-      sender: 'Comune di palermo',
+      sender: 'Comune di Test 1',
       sentAt: '2023-08-02T08:32:36.339328494Z',
       subject: 'notifica analogica con cucumber',
       notificationStatus: NotificationStatus.DELIVERED,
@@ -25,7 +25,7 @@ export const notificationsDTO: GetNotificationsResponse = {
     {
       iun: 'LQJA-EHAM-DGAU-202308-E-1',
       paProtocolNumber: '302201690965154413',
-      sender: 'Comune di palermo',
+      sender: 'Comune di Test 1',
       sentAt: '2023-08-02T08:32:36.305528014Z',
       subject: 'notifica analogica con cucumber',
       notificationStatus: NotificationStatus.EFFECTIVE_DATE,
@@ -35,7 +35,7 @@ export const notificationsDTO: GetNotificationsResponse = {
     {
       iun: 'PYRH-VGJR-GXTW-202308-V-1',
       paProtocolNumber: '302231690965154350',
-      sender: 'Comune di palermo',
+      sender: 'Comune di Test 1',
       sentAt: '2023-08-02T08:32:36.226986345Z',
       subject: 'notifica analogica con cucumber',
       notificationStatus: NotificationStatus.ACCEPTED,

@@ -97,30 +97,30 @@ describe('DelegationElements', () => {
 
   it('renders the OrganizationList with one organization', () => {
     const { container } = render(
-      <OrganizationsList organizations={['Bollate', 'Comune di Milano', 'Comune di Palermo']} />
+      <OrganizationsList organizations={['Ente Test', 'Comune di Test 2', 'Comune di Test 1']} />
     );
     expect(container).toHaveTextContent(/deleghe.table.notificationsFrom/i);
-    expect(container).toHaveTextContent(/Bollate/i);
-    expect(container).toHaveTextContent(/Comune di Milano/i);
-    expect(container).toHaveTextContent(/Comune di Palermo/i);
+    expect(container).toHaveTextContent(/Ente Test/i);
+    expect(container).toHaveTextContent(/Comune di Test 2/i);
+    expect(container).toHaveTextContent(/Comune di Test 1/i);
   });
 
   it('renders the OrganizationList with multiple organizations and visibleItems set to 3', async () => {
     const { container, getByTestId } = render(
       <OrganizationsList
-        organizations={['Bollate', 'Milano', 'Abbiategrasso', 'Malpensa']}
+        organizations={['Ente Test Alfa', 'Ente Test Beta', 'Ente Test Gamma', 'Ente Test Delta']}
         visibleItems={3}
       />
     );
     const organizationsList = getByTestId('custom-tooltip-indicator');
     expect(container).toHaveTextContent(/deleghe.table.notificationsFrom/i);
-    expect(container).toHaveTextContent(/Bollate/i);
-    expect(container).toHaveTextContent(/Milano/i);
-    expect(container).toHaveTextContent(/Abbiategrasso/i);
+    expect(container).toHaveTextContent(/Ente Test/i);
+    expect(container).toHaveTextContent(/Ente Test Beta/i);
+    expect(container).toHaveTextContent(/Ente Test Gamma/i);
     expect(container).toHaveTextContent(/\+1/i);
-    expect(container).not.toHaveTextContent(/Malpesa/i);
+    expect(container).not.toHaveTextContent(/Ente Test Delta/i);
     await userEvent.hover(organizationsList);
-    await waitFor(() => expect(screen.getByText(/Malpensa/i)).toBeInTheDocument());
+    await waitFor(() => expect(screen.getByText(/Ente Test Delta/i)).toBeInTheDocument());
   });
 
   it('renders the AcceptButton - open the modal', async () => {
@@ -206,7 +206,9 @@ describe('DelegationElements', () => {
       <Menu
         menuType="delegates"
         id="111"
-        row={{ id: 'row-id', name: 'Mario Rossi', verificationCode } as Row<DelegationColumnData>}
+        row={
+          { id: 'row-id', name: 'Utente Test Uno', verificationCode } as Row<DelegationColumnData>
+        }
       />,
       {
         preloadedState: buildDelegationsPreloadedState(),
@@ -235,7 +237,7 @@ describe('DelegationElements', () => {
       <Menu
         menuType="delegates"
         id="111"
-        row={{ id: 'row-id', name: 'Mario Rossi' } as Row<DelegationColumnData>}
+        row={{ id: 'row-id', name: 'Utente Test Uno' } as Row<DelegationColumnData>}
         onAction={actionCbk}
       />,
       {
@@ -263,7 +265,7 @@ describe('DelegationElements', () => {
       <Menu
         menuType="delegates"
         id="111"
-        row={{ id: 'row-id', name: 'Mario Rossi' } as Row<DelegationColumnData>}
+        row={{ id: 'row-id', name: 'Utente Test Uno' } as Row<DelegationColumnData>}
       />,
       {
         preloadedState: buildDelegationsPreloadedState(),
@@ -288,7 +290,7 @@ describe('DelegationElements', () => {
       <Menu
         menuType="delegators"
         id="111"
-        row={{ id: 'row-id', name: 'Mario Rossi' } as Row<DelegationColumnData>}
+        row={{ id: 'row-id', name: 'Utente Test Uno' } as Row<DelegationColumnData>}
       />,
       {
         preloadedState: buildDelegationsPreloadedState(),
@@ -317,7 +319,7 @@ describe('DelegationElements', () => {
         row={
           {
             id: 'row-id',
-            name: 'Mario Rossi',
+            name: 'Utente Test Uno',
             status: DelegationStatus.ACTIVE,
           } as Row<DelegationColumnData>
         }
@@ -345,7 +347,7 @@ describe('DelegationElements', () => {
         id="111"
         row={{
           id: 'row-id',
-          name: 'Mario Rossi',
+          name: 'Utente Test Uno',
           status: DelegationStatus.ACTIVE,
           startDate: '2024-01-01',
           endDate: '2024-12-31',
@@ -392,7 +394,7 @@ describe('DelegationElements', () => {
         row={
           {
             id: 'row-id',
-            name: 'Mario Rossi',
+            name: 'Utente Test Uno',
             status: DelegationStatus.ACTIVE,
             groups: [groups[1]] as Array<{ id: string; name: string }>,
           } as Row<DelegationColumnData>

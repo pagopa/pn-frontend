@@ -4,9 +4,9 @@ import { NewDelegationFormProps } from '../models/Deleghe';
 
 export const createDelegationPayload: NewDelegationFormProps = {
   selectPersonaFisicaOrPersonaGiuridica: RecipientType.PF,
-  codiceFiscale: 'RSSMRA01A01A111A',
-  nome: 'Mario',
-  cognome: 'Rossi',
+  codiceFiscale: 'TSTUTN00A02A001B',
+  nome: 'Utente',
+  cognome: 'Test Uno',
   ragioneSociale: 'Foo SAS di Anonimo',
   selectTuttiEntiOrSelezionati: 'tuttiGliEnti',
   expirationDate: new Date(),

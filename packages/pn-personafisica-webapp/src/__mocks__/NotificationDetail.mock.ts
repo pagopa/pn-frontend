@@ -888,8 +888,8 @@ export const recipients: Array<NotificationDetailRecipient> = [
   } as NotificationDetailRecipient,
   {
     recipientType: RecipientType.PF,
-    taxId: 'LVLDAA85T50G702B',
-    denomination: 'Ada Lovelace',
+    taxId: 'TSTUTN00A07A001G',
+    denomination: 'Utente Test Otto',
     physicalAddress: {
       at: '',
       address: 'VIATORINO 15',
@@ -923,7 +923,7 @@ export const notificationDTO: NotificationDetail = {
       docIdx: '0',
     },
   ],
-  senderDenomination: 'Comune di Palermo',
+  senderDenomination: 'Comune di Test 1',
   group: '6467344676f10c7617353c90',
   iun: 'DAPQ-LWQV-DKQH-202308-A-1',
   sentAt: '2023-08-23T07:38:49.601270863Z',
@@ -1020,7 +1020,7 @@ export const bilingualNotification: NotificationDetail = {
       docIdx: '0',
     },
   ],
-  senderDenomination: 'Comune di Palermo',
+  senderDenomination: 'Comune di Test 1',
   group: '6467344676f10c7617353c90',
   iun: 'DAPQ-LWQV-DKQH-202308-A-1',
   sentAt: '2023-08-23T07:38:49.601270863Z',

@@ -60,9 +60,9 @@ describe('NuovaDelega.page - Mixpanel events', () => {
     const { container, getByTestId } = await act(async () => render(<NuovaDelega />));
 
     const form = container.querySelector('form') as HTMLFormElement;
-    await testInput(form, 'nome', 'Mario');
-    await testInput(form, 'cognome', 'Rossi');
-    await testInput(form, 'codiceFiscale', 'RSSMRA01A01A111A');
+    await testInput(form, 'nome', 'Utente');
+    await testInput(form, 'cognome', 'Test Due');
+    await testInput(form, 'codiceFiscale', 'TSTUTN00A02A001B');
     await testInput(form, 'expirationDate', '01/01/2122');
 
     await act(async () => {

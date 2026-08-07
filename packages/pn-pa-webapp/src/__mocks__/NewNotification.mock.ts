@@ -119,12 +119,12 @@ export const newNotificationRecipients: Array<NewNotificationRecipient> = [
   {
     id: 'recipient.0',
     idx: 0,
-    taxId: 'MRARSS90P08H501Q',
-    firstName: 'Mario',
-    lastName: 'Rossi',
+    taxId: 'TSTUTN00A04A001D',
+    firstName: 'Utente',
+    lastName: 'Test Uno',
     recipientType: RecipientType.PF,
     type: NewNotificationDigitalAddressType.PEC,
-    digitalDomicile: 'mario.rossi@pec.it',
+    digitalDomicile: 'utente.uno@pec.it',
     address: 'via del corso',
     addressDetails: '',
     houseNumber: '49',
@@ -145,7 +145,7 @@ export const newNotificationRecipients: Array<NewNotificationRecipient> = [
     id: 'recipient.1',
     idx: 1,
     taxId: '12345678901',
-    firstName: 'Sara Gallo srl',
+    firstName: 'Impresa Test Srl',
     lastName: '',
     recipientType: RecipientType.PG,
     type: NewNotificationDigitalAddressType.PEC,
@@ -172,12 +172,12 @@ export const newNotificationRecipients: Array<NewNotificationRecipient> = [
   {
     id: 'recipient.2',
     idx: 2,
-    taxId: 'LVLDAA85T50G702B',
-    firstName: 'Ada',
-    lastName: 'Lovelace',
+    taxId: 'TSTUTN00A07A001G',
+    firstName: 'Utente',
+    lastName: 'Test Otto',
     recipientType: RecipientType.PF,
     type: NewNotificationDigitalAddressType.PEC,
-    digitalDomicile: 'ada@pec.it',
+    digitalDomicile: 'utente.otto@pec.it',
     address: 'Via Roma',
     addressDetails: '',
     houseNumber: '2',
@@ -198,12 +198,12 @@ export const newNotificationRecipients: Array<NewNotificationRecipient> = [
 
 const newNotificationRecipientsForBff: Array<NotificationRecipientV24> = [
   {
-    taxId: 'MRARSS90P08H501Q',
-    denomination: 'Mario Rossi',
+    taxId: 'TSTUTN00A04A001D',
+    denomination: 'Utente Test Uno',
     recipientType: RecipientType.PF,
     digitalDomicile: {
       type: NotificationDigitalAddressTypeEnum.Pec,
-      address: 'mario.rossi@pec.it',
+      address: 'utente.uno@pec.it',
     },
     physicalAddress: {
       address: 'via del corso 49',
@@ -220,7 +220,7 @@ const newNotificationRecipientsForBff: Array<NotificationRecipientV24> = [
   },
   {
     taxId: '12345678901',
-    denomination: 'Sara Gallo srl',
+    denomination: 'Impresa Test Srl',
     recipientType: RecipientType.PG,
     payments: [
       {
@@ -232,12 +232,12 @@ const newNotificationRecipientsForBff: Array<NotificationRecipientV24> = [
     ],
   },
   {
-    taxId: 'LVLDAA85T50G702B',
-    denomination: 'Ada Lovelace',
+    taxId: 'TSTUTN00A07A001G',
+    denomination: 'Utente Test Otto',
     recipientType: RecipientType.PF,
     digitalDomicile: {
       type: NotificationDigitalAddressTypeEnum.Pec,
-      address: 'ada@pec.it',
+      address: 'utente.otto@pec.it',
     },
     physicalAddress: {
       address: 'Via Roma 2',
