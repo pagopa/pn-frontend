@@ -1,4 +1,4 @@
-import { add, addDays, compareAsc } from 'date-fns';
+import { add, addDays, compareAsc, parseISO } from 'date-fns';
 
 import DateFnsAdapter from '@date-io/date-fns';
 
@@ -264,3 +264,23 @@ export function getDateInfo(date: string): { day: string; month: string; year: s
 
   return { day, month: months[parseInt(month, 10) - 1], year };
 }
+
+/**
+ * Checks if the date is within a date range
+ *
+ * @param {Date} date current date
+ * @param {string} startDate start date in format YYYY-MM-DD
+ * @param {string} endDate end date in format YYYY-MM-DD
+ * @returns {boolean} True if the date is in the date range, false otherwise
+ */
+export const isDateInRange = (date: Date, startDate: string, endDate: string): boolean => {
+  const current = new Date(date);
+
+  // If startDate does NOT contain 'T', set it to the beginning of the day (00:00:00.000)
+  const start = startDate.includes('T') ? parseISO(startDate) : getStartOfDay(parseISO(startDate));
+
+  // If endDate does NOT contain 'T', set it to the end of the day (23:59:59.999)
+  const end = endDate.includes('T') ? parseISO(endDate) : getEndOfDay(parseISO(endDate));
+
+  return current >= start && current <= end;
+};

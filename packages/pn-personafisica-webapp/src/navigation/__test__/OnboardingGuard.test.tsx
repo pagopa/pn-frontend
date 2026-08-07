@@ -156,7 +156,7 @@ describe('OnboardingGuard', () => {
     expect(result.router.state.location.pathname).toBe('/');
   });
 
-  it('does not redirect when user has EFFECTIVE_DATE notifications', async () => {
+  it('redirects to onboarding when user has EFFECTIVE_DATE notifications', async () => {
     const unreadNotificationsResponse = {
       ...emptyNotificationsFromBe,
       resultsPage: [
@@ -177,9 +177,8 @@ describe('OnboardingGuard', () => {
     });
 
     await waitFor(() => {
-      expect(screen.queryByText('Onboarding Page')).toBeInTheDocument();
+      expect(result.router.state.location.pathname).toBe(routes.ONBOARDING);
     });
-    expect(result.router.state.location.pathname).toBe('/');
   });
 
   it('does not redirect when IS_ONBOARDING_ENABLED is false', async () => {

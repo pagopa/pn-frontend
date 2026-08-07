@@ -94,7 +94,7 @@
     "disclaimer-link": "Izvedite več",
     "pec-unreachable": "Vaš predal PEC naj bo prost in aktiven, da boste vse prejemali v digitalni obliki!",
     "cancelled": {
-      "message": "To obvestilo je preklical organ pošiljatelj.",
+      "message": "To obvestilo je preklical organ pošiljatelj, zato dokumenti niso več na voljo.",
       "cta": "Kaj moram storiti?"
     },
     "payment": {
@@ -155,9 +155,9 @@
     },
     "acts_files": {
       "downloadable_acts": "Dokumenti so na voljo na spletu 120 dni od zaključka obvestila.",
-      "not_downloadable_acts": "Ker je od datuma zaključka minilo 120 dni, se morate za pridobitev listin obrniti na pošiljatelja.",
+      "not_downloadable_acts": "Dokumenti na spletu niso več na voljo. Če jih želiš zahtevati, se obrni na organ, ki ti jih je poslal.",
       "downloadable_aar": "<0>Na voljo na spletu 10 let</0> od datuma, ko je vročitev SEND postala pravno veljavna.",
-      "not_downloadable_aar": "Ker je od datuma zaključka minilo 10 let, obvestilo o prejemu ni več na voljo.",
+      "not_downloadable_aar": "Obvestilo o prejemu ni več na voljo. Če ga želiš zahtevati, se obrni na organ, ki ti ga je poslal.",
       "effected_faq": "Kdaj se obvestilo zaključi?",
       "informal_downloadable_acts": "Shranite priloge v svojo napravo: na spletu bodo na voljo do <0>180 dni od datuma vložitve</0>, ki ga najdete zgoraj!"
     },
