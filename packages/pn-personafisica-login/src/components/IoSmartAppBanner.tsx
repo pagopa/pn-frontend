@@ -1,16 +1,15 @@
 import { useTranslation } from 'react-i18next';
 
 import { Avatar, Link, Stack, StackProps, Typography } from '@mui/material';
-import { IllusAppIoLogo, useMobileOS } from '@pagopa-pn/pn-commons';
+import { IllusAppIoLogo, isMobileDevice } from '@pagopa-pn/pn-commons';
 
 import { getConfiguration } from '../services/configuration.service';
 
 const IOSmartAppBanner: React.FC<StackProps> = (props) => {
   const { APP_IO_DOWNLOAD, APP_IO_SITE } = getConfiguration();
-  const os = useMobileOS();
   const { t } = useTranslation(['login']);
 
-  const actionUrl = os === 'Unknown' ? APP_IO_SITE : APP_IO_DOWNLOAD;
+  const actionUrl = isMobileDevice() ? APP_IO_DOWNLOAD : APP_IO_SITE;
 
   return (
     <Stack id="ioSmartAppBanner" direction="row" alignItems="center" p={2} {...props}>

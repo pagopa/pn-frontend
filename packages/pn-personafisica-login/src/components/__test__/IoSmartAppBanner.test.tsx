@@ -1,6 +1,6 @@
 import { vi } from 'vitest';
 
-import { useMobileOS } from '@pagopa-pn/pn-commons';
+import { isMobileDevice } from '@pagopa-pn/pn-commons';
 import { getByRole } from '@pagopa-pn/pn-commons/src/test-utils';
 
 import { render } from '../../__test__/test-utils';
@@ -11,7 +11,7 @@ vi.mock('@pagopa-pn/pn-commons', async (importActual) => {
   const actual = await importActual<typeof import('@pagopa-pn/pn-commons')>();
   return {
     ...actual,
-    useMobileOS: vi.fn(), // Mock useMobileOS only
+    isMobileDevice: vi.fn(), // Mock isMobileDevice only
   };
 });
 
@@ -25,7 +25,7 @@ describe('test IO Smart App Banner', () => {
   });
 
   it('renders the component', () => {
-    (useMobileOS as jest.Mock).mockReturnValue('Android');
+    (isMobileDevice as jest.Mock).mockReturnValue(true);
     render(<IOSmartAppBanner />);
     const container = document.body;
     expect(container).toHaveTextContent('ioSmartAppBanner.title');
@@ -36,8 +36,8 @@ describe('test IO Smart App Banner', () => {
     expect(container).toHaveTextContent('ioSmartAppBanner.cta');
   });
 
-  it("sets proper url for the 'open' link on Unknown devices", () => {
-    (useMobileOS as jest.Mock).mockReturnValue('Unknown');
+  it("sets proper url for the 'open' link on desktop devices", () => {
+    (isMobileDevice as jest.Mock).mockReturnValue(false);
     render(<IOSmartAppBanner />);
     const container = document.body;
 
@@ -45,15 +45,12 @@ describe('test IO Smart App Banner', () => {
     expect(openLink).toHaveAttribute('href', getConfiguration().APP_IO_SITE);
   });
 
-  it.each(['Android', 'iOS'] as const)(
-    "sets proper url for the 'open' link on %s devices",
-    (os) => {
-      (useMobileOS as jest.Mock).mockReturnValue(os);
-      render(<IOSmartAppBanner />);
-      const container = document.body;
+  it("sets proper url for the 'open' link on mobile devices", () => {
+    (isMobileDevice as jest.Mock).mockReturnValue(true);
+    render(<IOSmartAppBanner />);
+    const container = document.body;
 
-      const openLink = getByRole(container, 'link');
-      expect(openLink).toHaveAttribute('href', getConfiguration().APP_IO_DOWNLOAD);
-    }
-  );
+    const openLink = getByRole(container, 'link');
+    expect(openLink).toHaveAttribute('href', getConfiguration().APP_IO_DOWNLOAD);
+  });
 });
