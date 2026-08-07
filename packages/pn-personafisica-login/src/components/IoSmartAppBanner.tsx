@@ -6,20 +6,11 @@ import { IllusAppIoLogo, useMobileOS } from '@pagopa-pn/pn-commons';
 import { getConfiguration } from '../services/configuration.service';
 
 const IOSmartAppBanner: React.FC<StackProps> = (props) => {
-  const { APP_IO_ANDROID, APP_IO_IOS, APP_IO_SITE } = getConfiguration();
+  const { APP_IO_DOWNLOAD, APP_IO_SITE } = getConfiguration();
   const os = useMobileOS();
   const { t } = useTranslation(['login']);
 
-  const getActionUrl = () => {
-    switch (os) {
-      case 'iOS':
-        return APP_IO_IOS;
-      case 'Android':
-        return APP_IO_ANDROID;
-      default:
-        return APP_IO_SITE;
-    }
-  };
+  const actionUrl = os === 'Unknown' ? APP_IO_SITE : APP_IO_DOWNLOAD;
 
   return (
     <Stack id="ioSmartAppBanner" direction="row" alignItems="center" p={2} {...props}>
@@ -36,7 +27,7 @@ const IOSmartAppBanner: React.FC<StackProps> = (props) => {
       </Stack>
       <Link
         ml="auto"
-        href={getActionUrl()}
+        href={actionUrl}
         fontWeight={600}
         fontSize="16px"
         px={4}

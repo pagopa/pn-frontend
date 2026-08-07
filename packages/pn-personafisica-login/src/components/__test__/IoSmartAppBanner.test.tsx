@@ -45,21 +45,15 @@ describe('test IO Smart App Banner', () => {
     expect(openLink).toHaveAttribute('href', getConfiguration().APP_IO_SITE);
   });
 
-  it("sets proper url for the 'open' link on Android devices", () => {
-    (useMobileOS as jest.Mock).mockReturnValue('Android');
-    render(<IOSmartAppBanner />);
-    const container = document.body;
+  it.each(['Android', 'iOS'] as const)(
+    "sets proper url for the 'open' link on %s devices",
+    (os) => {
+      (useMobileOS as jest.Mock).mockReturnValue(os);
+      render(<IOSmartAppBanner />);
+      const container = document.body;
 
-    const openLink = getByRole(container, 'link');
-    expect(openLink).toHaveAttribute('href', getConfiguration().APP_IO_ANDROID);
-  });
-
-  it("sets proper url for the 'open' link on iOS devices", () => {
-    (useMobileOS as jest.Mock).mockReturnValue('iOS');
-    render(<IOSmartAppBanner />);
-    const container = document.body;
-
-    const openLink = getByRole(container, 'link');
-    expect(openLink).toHaveAttribute('href', getConfiguration().APP_IO_IOS);
-  });
+      const openLink = getByRole(container, 'link');
+      expect(openLink).toHaveAttribute('href', getConfiguration().APP_IO_DOWNLOAD);
+    }
+  );
 });
