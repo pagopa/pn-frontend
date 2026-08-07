@@ -597,7 +597,7 @@ const NotificationDetail: React.FC = () => {
                     filedAt={notification.sentAt}
                     iun={notification.iun}
                     abstract={notification.abstract}
-                    senderLogoUrl={SELFCARE_CDN_URL}
+                    selfcareCdnUrl={SELFCARE_CDN_URL}
                   />
                   {banner}
                   {pecUnreachableAlert}
