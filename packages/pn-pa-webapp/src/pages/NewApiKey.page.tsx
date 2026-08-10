@@ -168,7 +168,7 @@ const NewApiKey = () => {
                         id="continue-button"
                         variant="contained"
                         disabled={!formik.isValid}
-                        {...({ type: 'submit' } as any)}
+                        type="submit"
                       >
                         {tkp('continue-button')}
                       </Button>

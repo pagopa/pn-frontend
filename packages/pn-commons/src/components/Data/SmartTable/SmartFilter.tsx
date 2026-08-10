@@ -65,7 +65,7 @@ const SmartFilter = <FormValues extends object>({
       data-testid="confirmButton"
       variant="outlined"
       disabled={!formIsValid || isPreviousSearch}
-      {...({ type: 'submit' } as any)}
+      type="submit"
     >
       {filterLabel}
     </Button>

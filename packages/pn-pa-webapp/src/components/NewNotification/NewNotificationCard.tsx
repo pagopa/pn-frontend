@@ -55,7 +55,7 @@ const NewNotificationCard = ({
           disabled={isContinueDisabled}
           variant="contained"
           data-testid="step-submit"
-          {...({ type: 'submit' } as any)}
+          type="submit"
           fullWidth={isMobile}
         >
           {submitLabel || t('button.continue')}

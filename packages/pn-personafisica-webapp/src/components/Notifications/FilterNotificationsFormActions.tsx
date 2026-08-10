@@ -23,7 +23,7 @@ const FilterNotificationsFormActions = ({
   const confirmAction = (
     <Grid item lg="auto" xs={12}>
       <Button
-        {...({ type: 'submit' } as any)}
+        type="submit"
         id="filter-notifications-button"
         variant="outlined"
         size="small"
