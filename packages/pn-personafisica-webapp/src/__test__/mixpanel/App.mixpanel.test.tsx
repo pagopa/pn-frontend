@@ -2,8 +2,7 @@ import MockAdapter from 'axios-mock-adapter';
 import { Suspense } from 'react';
 import { vi } from 'vitest';
 
-import { ThemeProvider } from '@mui/material';
-import { themeNext } from '@pagopa/mui-italia';
+import { ThemeProvider, useTheme } from '@mui/material';
 
 import App from '../../App';
 import { currentStatusDTO } from '../../__mocks__/AppStatus.mock';
@@ -18,13 +17,16 @@ import { PFTriggerEventSpy, act, fireEvent, render, screen, waitFor, within } fr
 vi.mock('../../pages/Notifiche.page', () => ({ default: () => <div>Generic Page</div> }));
 vi.mock('../../pages/Profile.page', () => ({ default: () => <div>Profile Page</div> }));
 
-const Component = () => (
-  <ThemeProvider theme={themeNext}>
-    <Suspense fallback="loading...">
-      <App />
-    </Suspense>
-  </ThemeProvider>
-);
+const Component = () => {
+  const theme = useTheme();
+  return (
+    <ThemeProvider theme={theme}>
+      <Suspense fallback="loading...">
+        <App />
+      </Suspense>
+    </ThemeProvider>
+  );
+};
 
 const reduxInitialState = {
   userState: {

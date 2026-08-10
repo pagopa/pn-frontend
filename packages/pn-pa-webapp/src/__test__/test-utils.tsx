@@ -2,8 +2,7 @@ import { ReactElement, ReactNode, createContext, useContext } from 'react';
 import { Provider } from 'react-redux';
 import { RouterProvider, createMemoryRouter } from 'react-router-dom';
 
-import { ThemeProvider } from '@mui/material';
-import { themeNext } from '@pagopa/mui-italia';
+import { ThemeProvider, useTheme } from '@mui/material';
 import { EnhancedStore, configureStore } from '@reduxjs/toolkit';
 import { RenderOptions, RenderResult, render } from '@testing-library/react';
 
@@ -67,15 +66,18 @@ const customRender = (
   );
 
   // test view
-  const Wrapper = ({ children }: { children: ReactNode }) => (
-    <Provider store={testStore}>
-      <ThemeProvider theme={themeNext}>
-        <UiContext.Provider value={children as ReactElement}>
-          <RouterProvider router={router} />
-        </UiContext.Provider>
-      </ThemeProvider>
-    </Provider>
-  );
+  const Wrapper = ({ children }: { children: ReactNode }) => {
+    const theme = useTheme();
+    return (
+      <Provider store={testStore}>
+        <ThemeProvider theme={theme}>
+          <UiContext.Provider value={children as ReactElement}>
+            <RouterProvider router={router} />
+          </UiContext.Provider>
+        </ThemeProvider>
+      </Provider>
+    );
+  };
   const view = render(ui, {
     wrapper: Wrapper,
     ...renderOptions,

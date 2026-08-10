@@ -4,8 +4,9 @@ import AttachFileIcon from '@mui/icons-material/AttachFile';
 import UnfoldLessIcon from '@mui/icons-material/UnfoldLess';
 import UnfoldMoreIcon from '@mui/icons-material/UnfoldMore';
 import { TimelineConnector } from '@mui/lab';
-import { Box, Button, Typography } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import {
+  ButtonNaked,
   MIButton,
   MIChip,
   TimelineNotificationContent,
@@ -41,9 +42,6 @@ type Props = {
   position?: 'first' | 'last' | 'middle';
   showMoreButtonLabel?: string;
   showLessButtonLabel?: string;
-  showHistoryButton?: boolean;
-  historyButtonLabel?: string;
-  historyButtonClickHandler?: () => void;
   handleTrackShowMoreLess?: (collapsed: boolean) => void;
   disableDownloads?: boolean;
   isParty?: boolean;
@@ -101,9 +99,6 @@ const TimelineStepCmp: React.FC<StepProps> = ({
  * @param recipients list of recipients
  * @param clickHandler function called when user clicks on the download button
  * @param position step position
- * @param showHistoryButton show history button
- * @param historyButtonLabel label for history button
- * @param historyButtonClickHandler function called when user clicks on the history button
  * @param showMoreButtonLabel label of show more button
  * @param showLessButtonLabel label of show less button
  * @param completeStatusHistory the whole history, sometimes some information from a different status must be retrieved
@@ -121,9 +116,6 @@ const NotificationDetailTimelineStep = ({
   position = 'middle',
   showMoreButtonLabel,
   showLessButtonLabel,
-  showHistoryButton = false,
-  historyButtonLabel,
-  historyButtonClickHandler,
   handleTrackShowMoreLess,
   isParty = true,
   language = 'it',
@@ -204,41 +196,30 @@ const NotificationDetailTimelineStep = ({
                   : '1',
             }}
           />
-          {showHistoryButton && historyButtonLabel ? (
-            <MIButton
-              variant="text"
-              data-testid="historyButton"
-              sx={{ paddingLeft: 0, paddingRight: 0, marginTop: '5px' }}
-              startIcon={<UnfoldMoreIcon />}
-              onClick={historyButtonClickHandler}
-            >
-              {historyButtonLabel}
-            </MIButton>
-          ) : (
-            <Box style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
-              <Typography color="text.primary" variant="caption">
-                {notificationStatusInfos.description}
-              </Typography>
-              {legalFactsIds &&
-                legalFactsIds.length > 0 &&
-                legalFactsIds.map((lf) => (
-                  <Button
-                    key={lf.file.key}
-                    startIcon={<AttachFileIcon />}
-                    onClick={() => clickHandler(lf.file)}
-                    size="small"
-                    sx={{ textAlign: 'left', paddingLeft: 0 }}
-                    data-testid="download-legalfact"
-                    disabled={
-                      lf.step.category !== TimelineCategory.NOTIFICATION_CANCELLED &&
-                      disableDownloads
-                    }
-                  >
-                    {getLegalFactLabel(lf.step, lf.file.category, lf.file.key || '')}
-                  </Button>
-                ))}
-            </Box>
-          )}
+
+          <Box style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
+            <Typography color="text.primary" variant="caption">
+              {notificationStatusInfos.description}
+            </Typography>
+            {legalFactsIds &&
+              legalFactsIds.length > 0 &&
+              legalFactsIds.map((lf) => (
+                <ButtonNaked
+                  key={lf.file.key}
+                  startIcon={<AttachFileIcon />}
+                  onClick={() => clickHandler(lf.file)}
+                  size="small"
+                  color="primary"
+                  sx={{ textAlign: 'left', paddingLeft: 0 }}
+                  data-testid="download-legalfact"
+                  disabled={
+                    lf.step.category !== TimelineCategory.NOTIFICATION_CANCELLED && disableDownloads
+                  }
+                >
+                  {getLegalFactLabel(lf.step, lf.file.category, lf.file.key || '')}
+                </ButtonNaked>
+              ))}
+          </Box>
         </Fragment>
       }
       stepPosition={position}
@@ -314,11 +295,10 @@ const NotificationDetailTimelineStep = ({
               {s.legalFactsIds &&
                 s.legalFactsIds.length > 0 &&
                 s.legalFactsIds.map((lf) => (
-                  <MIButton
+                  <ButtonNaked
                     variant="text"
                     onClick={() => clickHandler(lf)}
-                    // MIButton does not support the disabled prop, so we need to handle it differently in the new timeline layout
-                    // disabled={disableDownloads}
+                    disabled={disableDownloads}
                     key={lf.key}
                     data-testid="download-legalfact-micro"
                     sx={{
@@ -328,7 +308,7 @@ const NotificationDetailTimelineStep = ({
                     }}
                   >
                     {getLegalFactLabel(s, lf.category, lf.key || '')}
-                  </MIButton>
+                  </ButtonNaked>
                 ))}
             </Box>
           </Fragment>
@@ -342,7 +322,7 @@ const NotificationDetailTimelineStep = ({
   return (
     <Fragment>
       {macroStep}
-      {!showHistoryButton && visibleSteps.length > 0 && moreLessButton}
+      {visibleSteps.length > 0 && moreLessButton}
       {!collapsed && visibleSteps.map((s) => microStep(s))}
     </Fragment>
   );

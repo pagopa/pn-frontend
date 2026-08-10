@@ -1,7 +1,6 @@
 import { vi } from 'vitest';
 
-import { ThemeProvider } from '@mui/material';
-import { themeNext } from '@pagopa/mui-italia';
+import { ThemeProvider, useTheme } from '@mui/material';
 
 import { NotificationStatus } from '../../../models/NotificationStatus';
 import { RecipientNotification } from '../../../models/Notifications';
@@ -28,6 +27,7 @@ const data: Row<RecipientNotification> = {
 describe('NotificationsRecipientDataSwitch Component', () => {
   const originalWatchMedia = window.matchMedia;
   const originalResizeObserver = globalThis.ResizeObserver;
+  const theme = useTheme();
 
   beforeAll(() => {
     globalThis.ResizeObserver = vi.fn().mockImplementation(() => ({
@@ -102,7 +102,7 @@ describe('NotificationsRecipientDataSwitch Component', () => {
 
   it('renders component - subject - legal communication', () => {
     const { container } = render(
-      <ThemeProvider theme={themeNext}>
+      <ThemeProvider theme={theme}>
         <NotificationsRecipientDataSwitch data={data} type="subject" />
       </ThemeProvider>
     );
@@ -113,7 +113,7 @@ describe('NotificationsRecipientDataSwitch Component', () => {
 
   it('renders component - subject - informal communication (no legal tag)', () => {
     const { container } = render(
-      <ThemeProvider theme={themeNext}>
+      <ThemeProvider theme={theme}>
         <NotificationsRecipientDataSwitch
           data={{ ...data, communicationType: 'INFORMAL' }}
           type="subject"
