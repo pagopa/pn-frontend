@@ -54,6 +54,7 @@ type Props = {
   ) => void;
   handleTrackEvent?: (event: EventPaymentRecipientType, param?: object) => void;
   handleFetchPaymentsInfo: (payment: Array<PaymentDetails | NotificationDetailPayment>) => void;
+  notificationType?: string;
 };
 
 type PaymentError = {
@@ -76,6 +77,7 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
   onPayTppClick,
   handleTrackEvent,
   handleFetchPaymentsInfo,
+  notificationType = 'notifica',
 }) => {
   const { pagoPaF24, f24Only } = payments;
   const pageFromCache = getPaymentCache(iun)?.currentPaymentPage;
@@ -273,6 +275,7 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
                     isSinglePayment={isSinglePayment}
                     isCancelled={isCancelled}
                     handleTrackEventDetailPaymentError={handleTrackEventFn}
+                    notificationType={notificationType}
                   />
                 ) : null
               )}

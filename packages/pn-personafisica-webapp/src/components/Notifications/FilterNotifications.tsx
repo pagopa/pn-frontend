@@ -22,10 +22,12 @@ import {
   useIsMobile,
 } from '@pagopa-pn/pn-commons';
 
+import { PFEventsType } from '../../models/PFEventsType';
 import { setNotificationFilters } from '../../redux/dashboard/reducers';
 import { Delegator } from '../../redux/delegation/types';
 import { useAppSelector } from '../../redux/hooks';
 import { RootState } from '../../redux/store';
+import PFEventStrategyFactory from '../../utility/MixpanelUtils/PFEventStrategyFactory';
 import FilterNotificationsFormActions from './FilterNotificationsFormActions';
 import FilterNotificationsFormBody from './FilterNotificationsFormBody';
 
@@ -149,7 +151,11 @@ const FilterNotifications = forwardRef(({ showFilters, currentDelegator }: Props
     validationSchema,
     /** onSubmit populates filters */
     onSubmit: (values) => {
-      // TODO evento qui dentro controllare se e sia mobile che desktop
+      PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_NOTIFICATION_SEARCH, {
+        filter: filters,
+        delegate: currentDelegator != null,
+      });
+
       const currentFilters = {
         startDate: values.startDate,
         endDate: values.endDate,

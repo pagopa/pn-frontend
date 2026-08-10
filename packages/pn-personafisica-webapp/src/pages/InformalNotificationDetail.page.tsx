@@ -39,7 +39,7 @@ import PFEventStrategyFactory from '../utility/MixpanelUtils/PFEventStrategyFact
 const { SELFCARE_CDN_URL } = getConfiguration();
 
 const InformalNotificationDetail: React.FC = () => {
-  const { id, mandateId } = useParams();
+  const { id } = useParams();
   const { t, i18n } = useTranslation(['common', 'notifiche']);
   const dispatch = useAppDispatch();
   const [pageReady, setPageReady] = useState(false);
@@ -150,13 +150,12 @@ const InformalNotificationDetail: React.FC = () => {
   useEffect(() => {
     if (pageReady) {
       PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_NOTIFICATION_DETAIL, {
-        downtimeEvents: [], // TODO al momento non abbiamo i downtime
-        mandateId, // se nn glielo passo mette notificationOWner a true
+        downtimeEvents: [], // TODO al momento non abbiamo i downtime,
         notificationStatus: informalNotification?.notificationStatus,
         hasUserPayments: hasPayments,
         userPayments: paymentsData,
         source: 'LISTA_NOTIFICHE',
-        timeline: [], // TODO al momento non abbiamo la timeline informalNotification.timeline
+        timeline: informalNotification?.timeline,
         flow: 'not_set',
         delivery_mode: 'not_set',
         notification_type: 'comunicazione bonaria',
