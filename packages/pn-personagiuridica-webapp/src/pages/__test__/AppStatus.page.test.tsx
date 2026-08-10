@@ -1,9 +1,8 @@
 import MockAdapter from 'axios-mock-adapter';
 import { vi } from 'vitest';
 
-import { ThemeProvider } from '@mui/material';
+import { ThemeProvider, useTheme } from '@mui/material';
 import { AppResponseMessage, ResponseEventDispatcher, formatDate } from '@pagopa-pn/pn-commons';
-import { themeNext } from '@pagopa/mui-italia';
 
 import { currentStatusDTO, downtimesDTO } from '../../__mocks__/AppStatus.mock';
 import { errorMock } from '../../__mocks__/Errors.mock';
@@ -12,8 +11,10 @@ import { apiClient } from '../../api/apiClients';
 import { APP_STATUS_ACTIONS } from '../../redux/appStatus/actions';
 import AppStatus from '../AppStatus.page';
 
+const theme = useTheme();
+
 const AppStatusWithErrorHandling = () => (
-  <ThemeProvider theme={themeNext}>
+  <ThemeProvider theme={theme}>
     <ResponseEventDispatcher />
     <AppResponseMessage />
     <AppStatus />
@@ -53,7 +54,7 @@ describe('AppStatus page', () => {
     expect(mock.history.get).toHaveLength(2);
     const appStatusBarComponent = screen.queryByTestId('app-status-bar');
     expect(appStatusBarComponent).toBeInTheDocument();
-    expect(appStatusBarComponent).toHaveStyle({ 'border-color': themeNext.palette.success.main });
+    expect(appStatusBarComponent).toHaveStyle({ 'border-color': theme.palette.success.main });
     const downtimeLogTable = screen.queryByTestId('tableDowntimeLog');
     expect(downtimeLogTable).toBeInTheDocument();
     const downtimeLogTableRows = screen.queryAllByTestId('tableDowntimeLog.row');
@@ -74,7 +75,7 @@ describe('AppStatus page', () => {
     expect(mock.history.get).toHaveLength(2);
     const appStatusBarComponent = screen.queryByTestId('app-status-bar');
     expect(appStatusBarComponent).toBeInTheDocument();
-    expect(appStatusBarComponent).toHaveStyle({ 'border-color': themeNext.palette.error.main });
+    expect(appStatusBarComponent).toHaveStyle({ 'border-color': theme.palette.error.main });
     const downtimeLogTable = screen.queryByTestId('tableDowntimeLog');
     expect(downtimeLogTable).toBeInTheDocument();
     const downtimeLogTableRows = screen.queryAllByTestId('tableDowntimeLog.row');

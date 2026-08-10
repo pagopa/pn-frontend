@@ -22,6 +22,7 @@ import {
   Stack,
   TextField,
   Typography,
+  useTheme,
 } from '@mui/material';
 import {
   ApiErrorWrapper,
@@ -33,7 +34,7 @@ import {
   TosPrivacyConsent,
   searchStringLimitReachedText,
 } from '@pagopa-pn/pn-commons';
-import { Autocomplete, MIAlert, theme, themeNext } from '@pagopa/mui-italia';
+import { Autocomplete, MIAlert } from '@pagopa/mui-italia';
 
 import { AddressType, ChannelType, SaveDigitalAddressParams, Sender } from '../../models/contacts';
 import { Party } from '../../models/party';
@@ -135,6 +136,7 @@ const AddSpecialContact = forwardRef<AddSpecialContactRef, Props>(
   // eslint-disable-next-line sonarjs/cognitive-complexity
   ({ handleContactAdded }: Props, ref) => {
     const { t } = useTranslation(['common', 'recapiti']);
+    const theme = useTheme();
     const dispatch = useAppDispatch();
     const getOptionLabel = (option: Party) => option.name || '';
     const [errorBanner, setErrorBanner] = useState<ErrorBannerType | undefined>();
@@ -193,7 +195,7 @@ const AddSpecialContact = forwardRef<AddSpecialContactRef, Props>(
 
     const renderOption = (option: Party) => (
       <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-        <AccountBalanceIcon fontSize="small" sx={{ color: themeNext.colors.neutral.grey[300] }} />
+        <AccountBalanceIcon fontSize="small" sx={{ color: theme.colors.neutral.grey[300] }} />
         {option.name}
       </Box>
     );

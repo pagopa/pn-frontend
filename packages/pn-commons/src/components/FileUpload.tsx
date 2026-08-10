@@ -12,8 +12,9 @@ import {
   SxProps,
   TextField,
   Typography,
+  useTheme,
 } from '@mui/material';
-import { CopyToClipboardButton, MIButton, themeNext } from '@pagopa/mui-italia';
+import { CopyToClipboardButton, MIButton } from '@pagopa/mui-italia';
 
 import { useIsMobile } from '../hooks/useIsMobile';
 import { calcSha256String, parseFileSize } from '../utility/file.utility';
@@ -184,6 +185,7 @@ const FileUpload = ({
   const attachmentExists = fileUploaded?.file?.data;
 
   const isMobile = useIsMobile();
+  const theme = useTheme();
 
   const containerStyle = useMemo(() => {
     if (fileData.status === UploadStatus.IN_PROGRESS || fileData.status === UploadStatus.SENDING) {
@@ -203,7 +205,7 @@ const FileUpload = ({
     return {
       border: '1px dashed',
       borderColor: fileData.error ? 'error.main' : 'primary.main',
-      backgroundColor: fileData.error ? themeNext.colors.error[100] : 'primaryAction.selected',
+      backgroundColor: fileData.error ? theme.colors.error[100] : 'primaryAction.selected',
     };
   }, [fileData.status, fileData.error]);
 

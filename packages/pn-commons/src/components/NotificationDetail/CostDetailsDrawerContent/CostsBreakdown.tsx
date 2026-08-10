@@ -1,6 +1,5 @@
 import { SavingsOutlined } from '@mui/icons-material';
-import { Box, Divider, List, ListItem, ListItemText, Typography } from '@mui/material';
-import { themeNext } from '@pagopa/mui-italia';
+import { Box, Divider, List, ListItem, ListItemText, Typography, useTheme } from '@mui/material';
 
 import {
   NotificationCostDetails,
@@ -114,6 +113,7 @@ const HintLabel = ({
 
 const CostsBreakdown: React.FC<Props> = ({ costDetails }) => {
   const { status, baseCost, analogCost = 0, totalCost } = costDetails;
+  const theme = useTheme();
 
   if (
     status !== NotificationCostDetailsStatus.OK &&
@@ -143,7 +143,7 @@ const CostsBreakdown: React.FC<Props> = ({ costDetails }) => {
         hint={buildHintMessage(costDetails)}
       />
 
-      <Divider sx={{ color: themeNext.palette.divider }} />
+      <Divider sx={{ color: theme.palette.divider }} />
 
       {totalCost && (
         <CostRow

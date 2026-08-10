@@ -1,6 +1,5 @@
 import ReportGmailerrorredIcon from '@mui/icons-material/ReportGmailerrorred';
-import { Link, Stack, Typography } from '@mui/material';
-import { themeNext } from '@pagopa/mui-italia';
+import { Link, Stack, Typography, useTheme } from '@mui/material';
 
 import { getLocalizedOrDefaultLabel } from '../../utility/localization.utility';
 
@@ -20,6 +19,8 @@ const ApiError: React.FC<ApiErrorProps> = ({
   apiId,
   customErrorComponent,
 }) => {
+  const theme = useTheme();
+
   if (customErrorComponent) {
     return <>{customErrorComponent}</>;
   }
@@ -43,7 +44,7 @@ const ApiError: React.FC<ApiErrorProps> = ({
         fontSize: '16px',
         mt,
         borderRadius: '4px',
-        backgroundColor: themeNext.palette.background.paper,
+        backgroundColor: theme.palette.background.paper,
         p: 2,
       }}
       direction={'row'}

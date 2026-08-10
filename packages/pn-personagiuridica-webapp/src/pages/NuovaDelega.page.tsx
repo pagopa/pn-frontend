@@ -18,6 +18,7 @@ import {
   Stack,
   TextField,
   Typography,
+  useTheme,
 } from '@mui/material';
 import {
   CourtesyPage,
@@ -33,7 +34,7 @@ import {
   useIsMobile,
   useSearchStringChangeInput,
 } from '@pagopa-pn/pn-commons';
-import { Autocomplete, IllusMICompleted, MIButton, themeNext } from '@pagopa/mui-italia';
+import { Autocomplete, IllusMICompleted, MIButton } from '@pagopa/mui-italia';
 
 import VerificationCodeComponent from '../components/Deleghe/VerificationCodeComponent';
 import LoadingPageWrapper from '../components/LoadingPageWrapper/LoadingPageWrapper';
@@ -61,6 +62,7 @@ const NuovaDelega = () => {
   const { t, i18n } = useTranslation(['deleghe', 'common']);
   const navigate = useNavigate();
   const isMobile = useIsMobile();
+  const theme = useTheme();
   const dispatch = useAppDispatch();
   const { entities, created } = useAppSelector((state: RootState) => state.newDelegationState);
   const handleSearchStringChangeInput = useSearchStringChangeInput();
@@ -174,7 +176,7 @@ const NuovaDelega = () => {
 
   const renderOption = (option: Party) => (
     <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-      <AccountBalanceIcon fontSize="small" sx={{ color: themeNext.colors.neutral.grey[300] }} />
+      <AccountBalanceIcon fontSize="small" sx={{ color: theme.colors.neutral.grey[300] }} />
       {option.name}
     </Box>
   );

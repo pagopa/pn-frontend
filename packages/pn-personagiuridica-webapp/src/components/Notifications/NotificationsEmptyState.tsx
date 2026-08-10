@@ -1,9 +1,9 @@
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
-import { Box, Typography } from '@mui/material';
+import { Box, Typography, useTheme } from '@mui/material';
 import { EmptyState } from '@pagopa-pn/pn-commons';
-import { IllusMIInbox, IllusMIMessage, MIButton, themeNext } from '@pagopa/mui-italia';
+import { IllusMIInbox, IllusMIMessage, MIButton, theme } from '@pagopa/mui-italia';
 
 import * as routes from '../../navigation/routes.const';
 
@@ -24,13 +24,14 @@ const CONTENT_CONTAINER_PROPS = {
 
 const FilteredEmptyStateContent: React.FC<{ cleanFilters: () => void }> = ({ cleanFilters }) => {
   const { t } = useTranslation('notifiche');
+  const theme = useTheme();
 
   return (
     <>
       <Typography
         variant="subtitle2"
         fontSize="16px"
-        sx={{ color: themeNext.palette.text.secondary, mb: 1 }}
+        sx={{ color: theme.palette.text.secondary, mb: 1 }}
       >
         {t('empty-state.filtered')}
       </Typography>
@@ -63,7 +64,7 @@ const DefaultEmptyStateContent: React.FC = () => {
       <Typography
         variant="subtitle2"
         fontSize="16px"
-        sx={{ color: themeNext.palette.text.secondary, mb: 1 }}
+        sx={{ color: theme.palette.text.secondary, mb: 1 }}
       >
         {t('empty-state.title')}
       </Typography>
