@@ -20,6 +20,8 @@ type Props = {
   handleTrackEventFn: (event: EventPaymentRecipientType, param?: object) => void;
 };
 
+//
+
 const getDrawerContent = (costDetails: NotificationCostDetails) => {
   switch (costDetails.status) {
     case NotificationCostDetailsStatus.OK:

@@ -17,12 +17,15 @@ import {
 import { CopyToClipboard, useIsMobile } from '@pagopa-pn/pn-commons';
 import { MIPaper } from '@pagopa/mui-italia';
 
+import { EventPaymentRecipientType } from '../../models';
+
 type SenderContactsProps = {
   phone?: string;
   site?: string;
+  handleTrackEventFn: (event: EventPaymentRecipientType, param?: object) => void;
 };
 
-const PnSenderContacts = ({ phone, site }: SenderContactsProps) => {
+const PnSenderContacts = ({ phone, site, handleTrackEventFn }: SenderContactsProps) => {
   const { t } = useTranslation();
   const isMobile = useIsMobile();
   const theme = useTheme();
@@ -31,6 +34,19 @@ const PnSenderContacts = ({ phone, site }: SenderContactsProps) => {
     return null;
   }
   const websiteUrl = site && /^https?:\/\//i.test(site) ? site : `https://${site}`;
+
+  const trackWebsiteClick = () => {
+    handleTrackEventFn(EventPaymentRecipientType.SEND_TAP_EXTERNAL_LINK, {
+      link: websiteUrl,
+      notification_type: 'comunicazione bonaria',
+    });
+  };
+  const trackPhoneClick = () => {
+    handleTrackEventFn(EventPaymentRecipientType.SEND_TAP_EXTERNAL_LINK, {
+      link: `tel:${phone}`,
+      notification_type: 'comunicazione bonaria',
+    });
+  };
 
   return (
     <MIPaper sx={{ width: { xs: '100%', md: '42%' } }} padding={24}>
@@ -61,7 +77,12 @@ const PnSenderContacts = ({ phone, site }: SenderContactsProps) => {
                   </Typography>
 
                   {isMobile ? (
-                    <Link href={`tel:${phone}`} underline="always" color="primary">
+                    <Link
+                      onClick={trackPhoneClick}
+                      href={`tel:${phone}`}
+                      underline="always"
+                      color="primary"
+                    >
                       {phone}
                     </Link>
                   ) : (
@@ -106,6 +127,7 @@ const PnSenderContacts = ({ phone, site }: SenderContactsProps) => {
 
                 <Link
                   href={websiteUrl}
+                  onClick={trackWebsiteClick}
                   target="_blank"
                   rel="noopener noreferrer"
                   underline="always"

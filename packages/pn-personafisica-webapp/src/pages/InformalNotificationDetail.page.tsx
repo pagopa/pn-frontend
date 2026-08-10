@@ -6,6 +6,7 @@ import { Box, Stack } from '@mui/material';
 import {
   AbstractPaper,
   ApiError,
+  EventPaymentRecipientType,
   NotificationDetailDocuments,
   NotificationDetailOtherDocument,
   NotificationDetailPayment,
@@ -85,6 +86,17 @@ const InformalNotificationDetail: React.FC = () => {
   const hasInformalReceivedApiError = hasApiErrors(
     INFORMAL_NOTIFICATION_ACTIONS.GET_RECEIVED_INFORMAL_NOTIFICATION
   );
+
+  const handleExternalLinkEvent = (event: EventPaymentRecipientType, param?: object) => {
+    PFEventStrategyFactory.triggerEvent(PFEventsType[event], param);
+  };
+
+  const handleExternalLinkClick = (href: string) => {
+    PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_TAP_EXTERNAL_LINK, {
+      link: href,
+      notification_type: 'comunicazione bonaria',
+    });
+  };
 
   const phone = informalNotification?.senderContacts?.phone;
   const site = informalNotification?.senderContacts?.site;
@@ -288,6 +300,7 @@ const InformalNotificationDetail: React.FC = () => {
             hasAttachments={documentsAvailable}
             hasPayment={hasPayments}
             selfcareCdnUrl={SELFCARE_CDN_URL}
+            onExternalLinkClick={handleExternalLinkClick}
           />
 
           <Stack direction={{ xs: 'column', md: 'row' }} spacing={2} alignItems="flex-start">
@@ -318,7 +331,11 @@ const InformalNotificationDetail: React.FC = () => {
               )}
             </Stack>
 
-            <PnSenderContacts phone={phone} site={site} />
+            <PnSenderContacts
+              phone={phone}
+              site={site}
+              handleTrackEventFn={handleExternalLinkEvent}
+            />
           </Stack>
         </Box>
       )}

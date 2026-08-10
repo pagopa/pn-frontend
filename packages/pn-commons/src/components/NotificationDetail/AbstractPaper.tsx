@@ -38,6 +38,7 @@ interface AbstractPaperProps {
   recipientDenomination?: string;
   hasAttachments?: boolean;
   hasPayment?: boolean;
+  onExternalLinkClick?: (href: string) => void;
 }
 
 interface InstitutionLogoProps {
@@ -87,6 +88,7 @@ const AbstractPaper = ({
   recipientDenomination,
   hasAttachments = false,
   hasPayment = false,
+  onExternalLinkClick,
 }: AbstractPaperProps) => {
   const isMobile = useIsMobile();
 
@@ -153,7 +155,7 @@ const AbstractPaper = ({
               },
             }}
           >
-            <PNMarkdown content={abstract} />
+            <PNMarkdown content={abstract} onExternalLinkClick={onExternalLinkClick} />
           </Box>
 
           {hasAttachments && (
