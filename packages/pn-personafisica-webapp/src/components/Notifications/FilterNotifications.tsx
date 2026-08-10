@@ -149,6 +149,7 @@ const FilterNotifications = forwardRef(({ showFilters, currentDelegator }: Props
     validationSchema,
     /** onSubmit populates filters */
     onSubmit: (values) => {
+      // TODO evento qui dentro controllare se e sia mobile che desktop
       const currentFilters = {
         startDate: values.startDate,
         endDate: values.endDate,

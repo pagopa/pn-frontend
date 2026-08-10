@@ -151,14 +151,13 @@ const InformalNotificationDetail: React.FC = () => {
     if (pageReady) {
       PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_NOTIFICATION_DETAIL, {
         downtimeEvents: [], // TODO al momento non abbiamo i downtime
-        mandateId,
+        mandateId, // se nn glielo passo mette notificationOWner a true
         notificationStatus: informalNotification?.notificationStatus,
         hasUserPayments: hasPayments,
         userPayments: paymentsData,
-        source: 'LISTA_NOTIFICHE', // TODO cablato temporaneamente nella lista notifiche
-        timeline: [], // TODO al momento non abbiamo la timeline
-        notificationStatusHistory: [],
-        flow: 'not_available', // TODO al momento non abbiamo il flow
+        source: 'LISTA_NOTIFICHE',
+        timeline: [], // TODO al momento non abbiamo la timeline informalNotification.timeline
+        flow: 'not_set',
         delivery_mode: 'not_set',
         notification_type: 'comunicazione bonaria',
       });

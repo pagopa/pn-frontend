@@ -152,6 +152,7 @@ export const getReceivedNotificationPaymentInfo = createAsyncThunk<
     params: {
       taxId: string;
       paymentInfoRequest: Array<{ noticeCode: string; creditorTaxId: string }>;
+      notification_type?: string;
     },
     { rejectWithValue, getState, signal }
   ) => {
@@ -173,8 +174,7 @@ export const getReceivedNotificationPaymentInfo = createAsyncThunk<
 
           PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_PAYMENT_OUTCOME, {
             outcome: updatedPayment[0].status,
-            // TODO qui va capito come recuperare se è legale o meno
-            notification_type: '',
+            notification_type: params.notification_type ?? 'notifica',
           });
 
           if (updatedPayment[0].status === PaymentStatus.SUCCEEDED) {

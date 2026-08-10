@@ -10,6 +10,7 @@ type Props = {
   cleanFilters: () => void;
   isInDialog?: boolean;
 };
+// TODO va messo dove fa fatto il submit della form
 
 const FilterNotificationsFormActions = ({
   filtersApplied,

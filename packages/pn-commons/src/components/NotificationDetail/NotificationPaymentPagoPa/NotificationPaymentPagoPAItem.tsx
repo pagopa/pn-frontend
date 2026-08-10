@@ -18,6 +18,7 @@ type Props = {
   isSinglePayment?: boolean;
   isCancelled: boolean;
   handleTrackEventDetailPaymentError?: (event: EventPaymentRecipientType, param?: object) => void;
+  notificationType?: string;
 };
 
 const NotificationPaymentPagoPAItem: React.FC<Props> = ({
@@ -29,6 +30,7 @@ const NotificationPaymentPagoPAItem: React.FC<Props> = ({
   isSinglePayment,
   isCancelled,
   handleTrackEventDetailPaymentError,
+  notificationType = 'notifica',
 }) => {
   // the PagoPa payment has 4 different state:
   // 1 - the loading state in which we show a skeleton
@@ -53,7 +55,7 @@ const NotificationPaymentPagoPAItem: React.FC<Props> = ({
       handleTrackEventDetailPaymentError(EventPaymentRecipientType.SEND_PAYMENT_DETAIL_ERROR, {
         detail: pagoPAItem.detail,
         errorCode: pagoPAItem.errorCode,
-        notification_type: '', // TODO qui va capito come recuperare se è legale o meno
+        notification_type: notificationType, // TODO va aggiornato quando lo uso in bonarie
       });
     }
 

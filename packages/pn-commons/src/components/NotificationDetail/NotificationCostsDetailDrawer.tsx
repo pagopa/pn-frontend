@@ -70,10 +70,9 @@ const NotificationCostsDetailDrawer: React.FC<Props> = ({
   };
 
   const trackExternalLinkClickEvent = () => {
-    // TODO: aggiungere il tipo di notifica (legale o informale) come parametro dell'evento
     handleTrackEventFn(EventPaymentRecipientType.SEND_TAP_EXTERNAL_LINK, {
       link: costDetailsAssistanceLink,
-      notification_type: '',
+      notification_type: 'notifica',
     });
   };
 
