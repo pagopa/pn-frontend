@@ -76,6 +76,11 @@ export class SendNotificationDetailStrategy implements EventStrategy {
       (el) => el.status === NotificationStatus.DELIVERED
     );
 
+    const viewedTimelineCategory =
+      notification_type === 'comunicazione bonaria'
+        ? TimelineCategory.INFORMAL_NOTIFICATION_VIEWED
+        : TimelineCategory.NOTIFICATION_VIEWED;
+
     return {
       [EventPropertyType.TRACK]: {
         event_category: EventCategory.UX,
@@ -89,7 +94,7 @@ export class SendNotificationDetailStrategy implements EventStrategy {
         count_payment: userPayments.pagoPaF24.filter((payment) => payment.pagoPa).length,
         contains_f24: hasF24 ? 'yes' : 'no',
         first_time_opening:
-          timeline.findIndex((el) => el.category === TimelineCategory.NOTIFICATION_VIEWED) === -1,
+          timeline.findIndex((el) => el.category === viewedTimelineCategory) === -1,
         source: appRouteParamToEventSource(source) || 'LISTA_NOTIFICHE',
         elapsed_time: getElapsedTime(deliveredEvent?.activeFrom, viewedEvent?.activeFrom),
         flow,
