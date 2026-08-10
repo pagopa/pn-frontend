@@ -25,7 +25,7 @@ const FilterNotificationsFormActions = ({
       id="filter-button"
       data-testid="filterButton"
       variant="outlined"
-      {...({ type: 'sut' } as any)}
+      type="submit"
       sx={{
         height: '43px !important',
         marginRight: '8px !important',
