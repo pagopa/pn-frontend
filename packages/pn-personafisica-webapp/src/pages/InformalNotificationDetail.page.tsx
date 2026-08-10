@@ -6,6 +6,7 @@ import { Box, Stack } from '@mui/material';
 import {
   AbstractPaper,
   ApiError,
+  EventNotificationTypes,
   EventPaymentRecipientType,
   NotificationDetailDocuments,
   NotificationDetailOtherDocument,
@@ -94,7 +95,7 @@ const InformalNotificationDetail: React.FC = () => {
   const handleExternalLinkClick = (href: string) => {
     PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_TAP_EXTERNAL_LINK, {
       link: href,
-      notification_type: 'comunicazione bonaria',
+      notification_type: EventNotificationTypes.INFORMAL,
     });
   };
 
@@ -170,7 +171,7 @@ const InformalNotificationDetail: React.FC = () => {
         timeline: informalNotification?.timeline,
         flow: 'not_set',
         delivery_mode: 'not_set',
-        notification_type: 'comunicazione bonaria',
+        notification_type: EventNotificationTypes.INFORMAL,
       });
     }
   }, [pageReady]);
@@ -197,7 +198,7 @@ const InformalNotificationDetail: React.FC = () => {
     if (noticeCode && creditorTaxId && amount && informalNotification?.senderDenomination) {
       PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_START_PAYMENT, {
         psp: 'pagopa',
-        notification_type: 'comunicazione bonaria',
+        notification_type: EventNotificationTypes.INFORMAL,
       });
       dispatch(
         getReceivedNotificationPaymentUrl({
@@ -221,7 +222,7 @@ const InformalNotificationDetail: React.FC = () => {
 
   const getPaymentAttachmentAction = (name: PaymentAttachmentSName, attachmentIdx?: number) => {
     PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_DOWNLOAD_PAYMENT_NOTICE, {
-      notification_type: 'comunicazione bonaria',
+      notification_type: EventNotificationTypes.INFORMAL,
     });
 
     return dispatch(
@@ -267,7 +268,7 @@ const InformalNotificationDetail: React.FC = () => {
       .catch(() => {});
 
     PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_DOWNLOAD_ATTACHMENT, {
-      notification_type: 'comunicazione bonaria',
+      notification_type: EventNotificationTypes.INFORMAL,
     });
   };
 

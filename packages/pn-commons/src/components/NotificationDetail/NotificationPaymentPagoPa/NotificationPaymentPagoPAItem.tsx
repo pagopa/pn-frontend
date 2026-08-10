@@ -1,4 +1,4 @@
-import { EventPaymentRecipientType } from '../../../models/MixpanelEvents';
+import { EventNotificationTypes, EventPaymentRecipientType } from '../../../models/MixpanelEvents';
 import {
   PagoPAPaymentFullDetails,
   PaymentInfoDetail,
@@ -30,7 +30,7 @@ const NotificationPaymentPagoPAItem: React.FC<Props> = ({
   isSinglePayment,
   isCancelled,
   handleTrackEventDetailPaymentError,
-  notificationType = 'notifica',
+  notificationType = EventNotificationTypes.NOTIFICATION,
 }) => {
   // the PagoPa payment has 4 different state:
   // 1 - the loading state in which we show a skeleton

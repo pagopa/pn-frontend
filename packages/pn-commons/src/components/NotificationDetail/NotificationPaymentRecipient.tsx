@@ -8,7 +8,7 @@ import { useDismissToastOnError } from '../../hooks';
 import { downloadDocument } from '../../hooks/useDownloadDocument';
 import { AppResponse } from '../../models';
 import { ServerResponseErrorCode } from '../../models/AppResponse';
-import { EventPaymentRecipientType } from '../../models/MixpanelEvents';
+import { EventNotificationTypes, EventPaymentRecipientType } from '../../models/MixpanelEvents';
 import {
   NotificationCostDetails,
   NotificationDetailPayment,
@@ -77,7 +77,7 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
   onPayTppClick,
   handleTrackEvent,
   handleFetchPaymentsInfo,
-  notificationType = 'notifica',
+  notificationType = EventNotificationTypes.NOTIFICATION,
 }) => {
   const { pagoPaF24, f24Only } = payments;
   const pageFromCache = getPaymentCache(iun)?.currentPaymentPage;

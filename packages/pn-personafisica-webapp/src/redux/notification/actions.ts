@@ -1,5 +1,6 @@
 import {
   DowntimeLogHistory,
+  EventNotificationTypes,
   ExtRegistriesPaymentDetails,
   GetDowntimeHistoryParams,
   NotificationDetail,
@@ -174,7 +175,7 @@ export const getReceivedNotificationPaymentInfo = createAsyncThunk<
 
           PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_PAYMENT_OUTCOME, {
             outcome: updatedPayment[0].status,
-            notification_type: params.notification_type ?? 'notifica',
+            notification_type: params.notification_type ?? EventNotificationTypes.NOTIFICATION,
           });
 
           if (updatedPayment[0].status === PaymentStatus.SUCCEEDED) {

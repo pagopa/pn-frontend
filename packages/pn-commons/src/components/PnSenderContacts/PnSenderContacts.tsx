@@ -17,7 +17,7 @@ import {
 import { CopyToClipboard, useIsMobile } from '@pagopa-pn/pn-commons';
 import { MIPaper } from '@pagopa/mui-italia';
 
-import { EventPaymentRecipientType } from '../../models';
+import { EventNotificationTypes, EventPaymentRecipientType } from '../../models';
 
 type SenderContactsProps = {
   phone?: string;
@@ -38,13 +38,13 @@ const PnSenderContacts = ({ phone, site, handleTrackEventFn }: SenderContactsPro
   const trackWebsiteClick = () => {
     handleTrackEventFn(EventPaymentRecipientType.SEND_TAP_EXTERNAL_LINK, {
       link: websiteUrl,
-      notification_type: 'comunicazione bonaria',
+      notification_type: EventNotificationTypes.INFORMAL,
     });
   };
   const trackPhoneClick = () => {
     handleTrackEventFn(EventPaymentRecipientType.SEND_TAP_EXTERNAL_LINK, {
       link: `tel:${phone}`,
-      notification_type: 'comunicazione bonaria',
+      notification_type: EventNotificationTypes.INFORMAL,
     });
   };
 

@@ -5,6 +5,7 @@ import {
   EventCategory,
   EventDowntimeType,
   EventNotificationDetailType,
+  EventNotificationTypes,
   EventPropertyType,
   EventStrategy,
   F24PaymentDetails,
@@ -77,7 +78,7 @@ export class SendNotificationDetailStrategy implements EventStrategy {
     );
 
     const viewedTimelineCategory =
-      notification_type === 'comunicazione bonaria'
+      notification_type === EventNotificationTypes.INFORMAL
         ? TimelineCategory.INFORMAL_NOTIFICATION_VIEWED
         : TimelineCategory.NOTIFICATION_VIEWED;
 

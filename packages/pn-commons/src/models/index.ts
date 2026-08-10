@@ -89,6 +89,7 @@ export {
   EventDowntimeType,
   EventPageType,
   EventPaymentRecipientType,
+  EventNotificationTypes,
   EventPropertyType,
 } from './MixpanelEvents';
 export {

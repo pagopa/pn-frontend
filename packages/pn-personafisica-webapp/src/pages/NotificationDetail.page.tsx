@@ -15,6 +15,7 @@ import {
   AppResponse,
   AppRouteParams,
   DeliveryOutcomeType,
+  EventNotificationTypes,
   EventPaymentRecipientType,
   GetDowntimeHistoryParams,
   IllusQuestion,
@@ -215,7 +216,7 @@ const NotificationDetail: React.FC = () => {
         .then(showInfoMessageIfRetryAfterOrDownload)
         .catch(() => {});
       PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_DOWNLOAD_ATTACHMENT, {
-        notification_type: 'notifica',
+        notification_type: EventNotificationTypes.NOTIFICATION,
       });
     }
   };
@@ -234,7 +235,7 @@ const NotificationDetail: React.FC = () => {
     if (noticeCode && creditorTaxId && amount && notification.senderDenomination) {
       PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_START_PAYMENT, {
         psp: 'pagopa',
-        notification_type: 'notifica',
+        notification_type: EventNotificationTypes.NOTIFICATION,
       });
       dispatch(
         getReceivedNotificationPaymentUrl({
@@ -266,7 +267,7 @@ const NotificationDetail: React.FC = () => {
     if (noticeCode && creditorTaxId && retrievalId) {
       PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_START_PAYMENT, {
         psp: tppName,
-        notification_type: 'notifica',
+        notification_type: EventNotificationTypes.NOTIFICATION,
       });
       dispatch(
         getReceivedNotificationPaymentTppUrl({
@@ -508,7 +509,7 @@ const NotificationDetail: React.FC = () => {
         notificationStatusHistory: notification.notificationStatusHistory,
         flow: getFlowType(),
         delivery_mode: getDeliveryMode(),
-        notification_type: 'notifica',
+        notification_type: EventNotificationTypes.NOTIFICATION,
       });
 
       PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_NOTIFICATIONS_COUNT, {

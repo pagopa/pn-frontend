@@ -57,7 +57,13 @@ export enum EventPropertyType {
   SUPER_PROPERTY = 'superProperty',
 }
 
-export type EventNotificationType = 'notifica' | 'comunicazione bonaria';
+export const EventNotificationTypes = {
+  NOTIFICATION: 'notifica',
+  INFORMAL: 'comunicazione bonaria',
+} as const;
+
+export type EventNotificationType =
+  (typeof EventNotificationTypes)[keyof typeof EventNotificationTypes];
 
 export type EventPaymentStatusType = {
   page_number: number;
