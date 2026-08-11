@@ -39,13 +39,13 @@ const FilterNotificationsFormActions = ({
   const cancelAction = (
     <MIButton
       data-testid="cancelButton"
+      onClick={cleanFilters}
+      variant="text"
       sx={{
         height: '43px !important',
         padding: '0 16px !important',
         minWidth: '130px !important',
       }}
-      variant="text"
-      onClick={cleanFilters}
     >
       {t('button.annulla filtro')}
     </MIButton>

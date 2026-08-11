@@ -36,7 +36,16 @@ const FilterNotificationsFormActions = ({
 
   const cancelAction = (
     <Grid item lg="auto" xs={12}>
-      <MIButton data-testid="cancelButton" onClick={cleanFilters}>
+      <MIButton
+        data-testid="cancelButton"
+        onClick={cleanFilters}
+        variant="text"
+        sx={{
+          height: '43px !important',
+          padding: '0 16px !important',
+          minWidth: '130px !important',
+        }}
+      >
         {t('button.annulla filtro')}
       </MIButton>
     </Grid>
