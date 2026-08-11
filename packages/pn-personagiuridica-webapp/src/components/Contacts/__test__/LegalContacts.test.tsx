@@ -106,11 +106,11 @@ describe('LegalContacts Component', () => {
     expect(container).toHaveTextContent('status.inactive');
     expect(container).toHaveTextContent('legal-contacts.sercq-send-info-advantages');
 
-    const digitalNotificationsIcon = getByTestId('LaptopChromebookIcon');
+    const digitalNotificationsIcon = getByTestId('IllusMIDesktop');
     expect(digitalNotificationsIcon).toBeInTheDocument();
-    const savingsIcon = getByTestId('SavingsIcon');
+    const savingsIcon = getByTestId('IllusMISavingMoney');
     expect(savingsIcon).toBeInTheDocument();
-    const allInOnePlaceIcon = getByTestId('TouchAppIcon');
+    const allInOnePlaceIcon = getByTestId('IllusMIEmailValidation');
     expect(allInOnePlaceIcon).toBeInTheDocument();
     const startButton = getByRole('button', { name: 'button.start' });
     expect(startButton).toBeInTheDocument();

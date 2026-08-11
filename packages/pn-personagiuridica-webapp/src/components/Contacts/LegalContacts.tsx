@@ -3,13 +3,17 @@ import { Trans, useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
 import ConstructionIcon from '@mui/icons-material/Construction';
-import LaptopChromebookIcon from '@mui/icons-material/LaptopChromebook';
 import PowerSettingsNewIcon from '@mui/icons-material/PowerSettingsNew';
-import SavingsIcon from '@mui/icons-material/Savings';
-import TouchAppIcon from '@mui/icons-material/TouchApp';
 import { Box, Stack, Typography } from '@mui/material';
 import { PnInfoCard, appStateActions, appStorage, useIsMobile } from '@pagopa-pn/pn-commons';
-import { MIAlert, MIButton, MIChip } from '@pagopa/mui-italia';
+import {
+  IllusMIDesktop,
+  IllusMIEmailValidation,
+  IllusMISavingMoney,
+  MIAlert,
+  MIButton,
+  MIChip,
+} from '@pagopa/mui-italia';
 
 import { PGEventsType } from '../../models/PGEventsType';
 import { AddressType, ChannelType } from '../../models/contacts';
@@ -30,7 +34,7 @@ const EmptyLegalContacts = () => {
   const navigate = useNavigate();
   const isMobile = useIsMobile();
 
-  const infoIcons = [LaptopChromebookIcon, SavingsIcon, TouchAppIcon];
+  const infoIcons = [IllusMIDesktop, IllusMISavingMoney, IllusMIEmailValidation];
   const sercqSendInfoList: Array<{ title: string; description: string }> = t(
     'legal-contacts.sercq-send-info-list',
     {
@@ -51,12 +55,19 @@ const EmptyLegalContacts = () => {
         justifyContent="space-between"
         sx={{ mb: 3 }}
       >
-        {infoIcons.map((Icon, index) => {
+        {infoIcons.map((IllustrationSvg, index) => {
           const title = sercqSendInfoList[index]?.title;
           const description = sercqSendInfoList[index]?.description;
           return (
-            <Stack key={title} direction={{ xs: 'row', lg: 'column' }} spacing={2}>
-              <Icon sx={{ height: '24px', width: '24px', color: '#35C1EC' }} />
+            <Stack
+              key={title}
+              direction={{ xs: 'row', lg: 'column' }}
+              spacing={2}
+              alignItems={{ xs: 'center', lg: 'flex-start' }}
+              flex={{ lg: 1 }}
+              flexBasis={{ lg: 0 }}
+            >
+              <IllustrationSvg size={40} />
               <Box>
                 <Typography variant="body2" fontWeight={600} mb={1}>
                   {title}
