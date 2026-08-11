@@ -229,6 +229,7 @@ describe('NotificationDetail.page - Mixpanel events', () => {
 
     expect(triggerEventSpy).toHaveBeenCalledWith(PFEventsType.SEND_START_PAYMENT, {
       psp: 'pagopa',
+      notification_type: 'notifica',
     });
 
     vi.useRealTimers();
