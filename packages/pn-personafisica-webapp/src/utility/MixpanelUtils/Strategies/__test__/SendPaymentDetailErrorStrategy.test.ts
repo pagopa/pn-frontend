@@ -16,6 +16,7 @@ describe('Mixpanel - Payment Detail Error Strategy', () => {
         event_category: EventCategory.KO,
         detail: PaymentInfoDetail.PAYMENT_EXPIRED,
         errorCode: '500',
+        notification_type: 'notifica',
       },
     });
   });
