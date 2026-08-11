@@ -34,26 +34,13 @@ const Contacts = () => {
     void dispatch(getDigitalAddresses());
   }, []);
 
-  const handleRedirectToProfilePage = () => {
-    if (profileUrl) {
-      window.open(profileUrl);
-    }
-  };
-
   const subtitle = (
     <Trans
       i18nKey="subtitle"
       ns="recapiti"
       values={{ recipient: organization.name }}
       components={[
-        <Link
-          key="profilePageLink"
-          color="primary"
-          fontWeight="bold"
-          onClick={handleRedirectToProfilePage}
-          sx={{ verticalAlign: 'inherit' }}
-          component="button"
-        />,
+        <Link key="profilePageLink" href={profileUrl} target="_blank" rel="noopener noreferrer" />,
       ]}
     ></Trans>
   );

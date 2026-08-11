@@ -327,6 +327,7 @@ const DigitalContact = forwardRef<{ toggleEdit: () => void }, Props>(
             >
               <EditButton
                 key="editButton"
+                variant="text"
                 onClick={toggleEdit}
                 startIcon={<CreateIcon />}
                 sx={{ justifyContent: 'left' }}
