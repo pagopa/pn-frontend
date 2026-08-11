@@ -15,6 +15,7 @@ describe('Mixpanel - UX PSP Action Strategy', () => {
         event_category: EventCategory.UX,
         event_type: EventAction.ACTION,
         psp: 'pagopa',
+        notification_type: 'notifica',
       },
     });
   });
