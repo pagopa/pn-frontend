@@ -1,7 +1,16 @@
 import React, { useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 
-import { Box, Divider, List, ListItem, ListItemText, Stack, Typography } from '@mui/material';
+import {
+  Box,
+  Divider,
+  List,
+  ListItem,
+  ListItemText,
+  Stack,
+  Typography,
+  useTheme,
+} from '@mui/material';
 import { MIAlert, MIButton } from '@pagopa/mui-italia';
 
 import { PGEventsType } from '../../models/PGEventsType';
@@ -22,6 +31,7 @@ type Props = {
 
 const HowItWorksContactWizard: React.FC<Props> = ({ goToNextStep, setShowPecWizard }) => {
   const { t } = useTranslation(['recapiti', 'common']);
+  const theme = useTheme();
 
   const [modalOpen, setModalOpen] = useState<ModalType | null>(null);
   const { defaultPECAddress } = useAppSelector(contactsSelectors.selectAddresses);
@@ -43,25 +53,25 @@ const HowItWorksContactWizard: React.FC<Props> = ({ goToNextStep, setShowPecWiza
 
       {IS_DOD_ENABLED && (
         <>
-          <List dense sx={{ p: 0 }} data-testid="sercq-send-info-list">
+          <List sx={{ p: 0, mb: 2 }} data-testid="sercq-send-info-list">
             {sercqSendInfoList.map((item, index) => (
-              <Stack key={index} spacing={2} direction="row" alignItems="flex-start">
-                <Box
-                  sx={{
-                    width: '24px',
-                    height: '24px',
-                    borderRadius: '50%',
-                    backgroundColor: '#35C1EC',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                  }}
-                >
-                  <Typography variant="caption" fontSize="14px" fontWeight={400} color="white">
-                    {index + 1}
-                  </Typography>
-                </Box>
-                <ListItem key={index} sx={{ px: 0, pt: 0, pb: 3 }}>
+              <ListItem key={index} sx={{ px: 0, pt: 0, mb: 2 }}>
+                <Stack spacing={2} direction="row" alignItems="center">
+                  <Stack
+                    alignItems={'center'}
+                    sx={{
+                      width: '24px',
+                      height: '24px',
+                    }}
+                  >
+                    <Typography
+                      fontWeight={600}
+                      fontSize="18px"
+                      color={theme.colors.neutral.grey[300]}
+                    >
+                      {index + 1}.
+                    </Typography>
+                  </Stack>
                   <ListItemText disableTypography>
                     <Typography fontSize="16px" fontWeight={600} mb={1}>
                       {item.title}
@@ -91,8 +101,8 @@ const HowItWorksContactWizard: React.FC<Props> = ({ goToNextStep, setShowPecWiza
                       />
                     </Typography>
                   </ListItemText>
-                </ListItem>
-              </Stack>
+                </Stack>
+              </ListItem>
             ))}
           </List>
 

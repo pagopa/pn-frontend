@@ -77,7 +77,6 @@ const PnInfoCardActions: React.FC<Pick<Props, 'actions'>> = ({ actions }) => {
     <Box data-testid="contextMenu">
       <IconButton
         onClick={handleClick}
-        size="small"
         data-testid="contextMenuButton"
         aria-label="Context menu"
         aria-controls={open ? menuId : undefined}

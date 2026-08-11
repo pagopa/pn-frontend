@@ -56,7 +56,6 @@ const ApiKeyContextMenu = ({
       <Box>
         <IconButton
           onClick={handleClick}
-          size="small"
           data-testid="contextMenuButton"
           aria-label={t('context-menu.title')}
           aria-controls={open ? 'context-menu' : undefined}

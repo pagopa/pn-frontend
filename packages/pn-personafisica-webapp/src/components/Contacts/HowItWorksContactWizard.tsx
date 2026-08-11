@@ -32,12 +32,12 @@ type Props = {
 
 const HowItWorksContactWizard: React.FC<Props> = ({ goToNextStep, setShowPecWizard }) => {
   const { t } = useTranslation(['recapiti', 'common']);
+  const theme = useTheme();
 
   const [modalOpen, setModalOpen] = useState<ModalType | null>(null);
   const { defaultPECAddress, addresses } = useAppSelector(contactsSelectors.selectAddresses);
   const { IS_DOD_ENABLED } = getConfiguration();
 
-  const theme = useTheme();
   const sercqSendInfoList: Array<{ title: string; description: string }> = t(
     'legal-contacts.sercq-send-wizard.step_1.info-list',
     {
@@ -94,8 +94,8 @@ const HowItWorksContactWizard: React.FC<Props> = ({ goToNextStep, setShowPecWiza
                     }}
                   >
                     <Typography
-                      fontWeight={500}
-                      fontSize="16px"
+                      fontWeight={600}
+                      fontSize="18px"
                       color={theme.colors.neutral.grey[300]}
                     >
                       {index + 1}.
