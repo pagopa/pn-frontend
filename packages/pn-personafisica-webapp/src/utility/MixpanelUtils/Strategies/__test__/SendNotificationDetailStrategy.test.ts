@@ -71,6 +71,7 @@ describe('Mixpanel - Notification detail Strategy', () => {
       ],
       flow: 'digital' as EventDeliveryFlowType,
       delivery_mode: 'async' as EventDeliveryModeType,
+      notification_type: 'notifica' as const,
     };
 
     let typeDowntime: EventDowntimeType;
@@ -113,6 +114,7 @@ describe('Mixpanel - Notification detail Strategy', () => {
         elapsed_time: elapsed_time,
         flow: 'digital' as EventDeliveryFlowType,
         delivery_mode: 'async' as EventDeliveryModeType,
+        notification_type: 'notifica',
       },
     });
   });
