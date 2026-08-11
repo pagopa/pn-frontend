@@ -71,9 +71,9 @@ const ConfirmCancellationDialog: React.FC<Props> = ({ showModal, onClose, onConf
         </MIButton>
         <Button
           onClick={onConfirm}
+          disabled={payment ? !checked : false}
           variant="contained"
           data-testid="modalCloseAndProceedBtnId"
-          disabled={payment ? !checked : false}
         >
           {t('detail.cancel-notification')}
         </Button>

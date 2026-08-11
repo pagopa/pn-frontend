@@ -52,10 +52,10 @@ const NewNotificationCard = ({
       >
         <Button
           id="step-subt"
-          disabled={isContinueDisabled}
           variant="contained"
-          data-testid="step-submit"
           type="submit"
+          disabled={isContinueDisabled}
+          data-testid="step-submit"
           fullWidth={isMobile}
         >
           {submitLabel || t('button.continue')}
