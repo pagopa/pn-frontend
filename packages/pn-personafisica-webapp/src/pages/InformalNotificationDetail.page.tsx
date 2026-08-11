@@ -327,6 +327,7 @@ const InformalNotificationDetail: React.FC = () => {
                     onPayClick={onPayClick}
                     handleFetchPaymentsInfo={reloadPaymentsInfo}
                     getPaymentAttachmentAction={getPaymentAttachmentAction}
+                    notificationType={EventNotificationTypes.INFORMAL}
                   />
                 </MIPaper>
               )}

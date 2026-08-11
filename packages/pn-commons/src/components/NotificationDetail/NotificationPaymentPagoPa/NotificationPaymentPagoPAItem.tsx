@@ -55,7 +55,7 @@ const NotificationPaymentPagoPAItem: React.FC<Props> = ({
       handleTrackEventDetailPaymentError(EventPaymentRecipientType.SEND_PAYMENT_DETAIL_ERROR, {
         detail: pagoPAItem.detail,
         errorCode: pagoPAItem.errorCode,
-        notification_type: notificationType, // TODO va aggiornato quando lo uso in bonarie
+        notification_type: notificationType,
       });
     }
 
