@@ -1,4 +1,5 @@
 export { Configuration } from '../services/configuration.service';
+export { getAccessibleIun } from './accessibility.utility';
 export { default as AppError } from './AppError/AppError';
 export { default as AppErrorFactory } from './AppError/AppErrorFactory';
 export { default as errorFactoryManager } from './AppError/ErrorFactoryManager';

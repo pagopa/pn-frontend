@@ -153,8 +153,9 @@ const Statistics = () => {
                   severity="warning"
                   title={t('maintenance_alert.title')}
                   sx={{ mt: 4 }}
-                  description={t('maintenance_alert.description')}
-                />
+                >
+                  {t('maintenance_alert.description')}
+                </MIAlert>
               )}
             <Box ref={exportJpgNode}>
               <Typography variant="h6" component="h5" mt={7}>

@@ -4,7 +4,7 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 
 import { getLangCode, sanitizeString } from '@pagopa-pn/pn-commons';
 
-import { ROUTE_ONE_IDENTITY_LOGIN_ERROR } from '../../navigation/routes.const';
+import { ROUTE_LOGIN_ERROR } from '../../navigation/routes.const';
 import { getConfiguration } from '../../services/configuration.service';
 
 const OneIdentityCallback: React.FC = () => {
@@ -31,10 +31,7 @@ const OneIdentityCallback: React.FC = () => {
     if (errorDescription) {
       params.set('error_description', errorDescription);
     }
-    navigate(
-      { pathname: ROUTE_ONE_IDENTITY_LOGIN_ERROR, search: params.toString() },
-      { replace: true }
-    );
+    navigate({ pathname: ROUTE_LOGIN_ERROR, search: params.toString() }, { replace: true });
   };
 
   const handleOidcCallback = () => {

@@ -9,7 +9,7 @@ export interface Sort<T> {
   order: Order;
 }
 
-type CustomTableCellProps = Pick<TableCellProps, 'width' | 'align'>;
+type CustomTableCellProps = Pick<TableCellProps, 'width' | 'align' | 'sx'>;
 
 export type { CustomTableCellProps as TableCellProps };
 

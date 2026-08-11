@@ -11,6 +11,7 @@ import { closeDomicileBanner } from '../reducers';
 const initialState = {
   pendingDelegators: 0,
   domicileBannerOpened: true,
+  hasNewNotifications: false,
 };
 
 describe('Sidemenu redux state tests', () => {

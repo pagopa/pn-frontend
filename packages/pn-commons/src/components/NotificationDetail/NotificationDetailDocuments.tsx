@@ -1,7 +1,18 @@
-import AttachFileIcon from '@mui/icons-material/AttachFile';
-import { Box, Grid, Stack, Typography, TypographyProps } from '@mui/material';
-// import DownloadIcon from '@mui/icons-material/Download';
-import { ButtonNaked } from '@pagopa/mui-italia';
+import React, { ReactElement } from 'react';
+import { Trans } from 'react-i18next';
+
+import DoNotDisturbIcon from '@mui/icons-material/DoNotDisturb';
+import OpenInBrowserIcon from '@mui/icons-material/OpenInBrowser';
+import { Box, Stack, Typography, TypographyProps, useTheme } from '@mui/material';
+import {
+  IllusMISingleFile,
+  MIAlert,
+  MIBoxedModule,
+  MIBoxedModuleTitle,
+  MIButton,
+  MIPaper,
+  Tag,
+} from '@pagopa/mui-italia';
 
 import {
   NotificationDetailDocument,
@@ -11,16 +22,134 @@ import {
 import { getLocalizedOrDefaultLabel } from '../../utility/localization.utility';
 import { isNotificationDetailOtherDocument } from '../../utility/notification.utility';
 
-type Props = {
-  title: string;
-  documents: Array<NotificationDetailDocument> | undefined;
+export type DocumentsDownloadFilesMessage = {
+  key: string;
+  ns: string;
+  components?: Array<ReactElement>;
+};
+
+type DocumentsProps = {
+  documents?: Array<NotificationDetailDocument>;
   recipients?: Array<NotificationDetailRecipient>;
   clickHandler: (document: string | NotificationDetailOtherDocument | undefined) => void;
-  documentsAvailable?: boolean;
-  downloadFilesMessage?: string;
-  downloadFilesLink?: string;
   disableDownloads?: boolean;
+  downloadFilesMessage?: DocumentsDownloadFilesMessage;
+};
+
+interface Props extends DocumentsProps {
+  title: string;
+  documentsAvailable?: boolean;
+  downloadFilesLink?: string;
   titleVariant?: TypographyProps['variant'];
+  inlineDownloadFilesMessage?: boolean;
+}
+
+type DocumentButtonContentProps = {
+  documentName: string;
+  downloadFilesMessage?: DocumentsDownloadFilesMessage;
+};
+
+const DocumentButtonContent: React.FC<DocumentButtonContentProps> = ({
+  documentName,
+  downloadFilesMessage,
+}) => {
+  if (!downloadFilesMessage) {
+    return <>{documentName}</>;
+  }
+
+  return (
+    <Box sx={{ textAlign: 'left', overflowWrap: 'anywhere' }}>
+      <Typography variant="caption-semibold" fontSize={16} color="primary" component="span">
+        {documentName}
+      </Typography>
+      <Typography variant="caption" color="text.secondary" component="div" sx={{ mt: 0.5 }}>
+        <Trans
+          i18nKey={downloadFilesMessage.key}
+          ns={downloadFilesMessage.ns}
+          {...(downloadFilesMessage.components
+            ? { components: downloadFilesMessage.components }
+            : {})}
+        />
+      </Typography>
+    </Box>
+  );
+};
+
+const Documents: React.FC<DocumentsProps> = ({
+  documents,
+  recipients = [],
+  disableDownloads,
+  downloadFilesMessage,
+  clickHandler,
+}) => {
+  const theme = useTheme();
+
+  return documents?.map((d) => {
+    const isOtherDocument = isNotificationDetailOtherDocument(d);
+    const recipient =
+      recipients.filter((recipient) => recipient.taxId).length > 1 && isOtherDocument
+        ? ` - ${d.recipient?.denomination} (${d.recipient?.taxId})`
+        : '';
+    const docName = isOtherDocument
+      ? `${getLocalizedOrDefaultLabel('notifications', 'detail.aar-acts')}${recipient}`
+      : d.title || d.ref.key;
+
+    const document = {
+      key: d.ref.key || d.documentId,
+      name: docName,
+      downloadHandler: d.documentId
+        ? {
+            documentId: d.documentId,
+            documentType: d.documentType,
+            digests: d.digests,
+            contentType: d.contentType,
+            ref: d.ref,
+          }
+        : d.docIdx,
+    };
+
+    return (
+      <MIBoxedModule key={document.key} data-testid="notificationDetailDocuments">
+        {!disableDownloads && (
+          <Box
+            component={MIButton}
+            variant="text"
+            endIcon={<OpenInBrowserIcon />}
+            onClick={() => clickHandler(document.downloadHandler)}
+            data-testid="documentButton"
+            size="medium"
+            fullWidth
+            justifyContent="space-between"
+            textAlign="left"
+            sx={{
+              overflowWrap: 'anywhere',
+              '& .MuiButton-endIcon svg': {
+                fontSize: '24px',
+              },
+            }}
+          >
+            <DocumentButtonContent
+              documentName={document.name}
+              downloadFilesMessage={downloadFilesMessage}
+            />
+          </Box>
+        )}
+        {disableDownloads && (
+          <>
+            <Box mb={1}>
+              <MIBoxedModuleTitle>{document.name}</MIBoxedModuleTitle>
+            </Box>
+            <Tag
+              icon={DoNotDisturbIcon}
+              variant="default"
+              value={getLocalizedOrDefaultLabel('common', 'not-available')}
+              slotProps={{ icon: { color: theme.palette.grey[300] } }}
+            />
+          </>
+        )}
+      </MIBoxedModule>
+    );
+  });
 };
 
 /**
@@ -45,123 +174,59 @@ const NotificationDetailDocuments: React.FC<Props> = (
     downloadFilesMessage,
     disableDownloads = false,
     titleVariant = 'overline',
+    inlineDownloadFilesMessage = false,
   } // TODO: remove comment when link ready downloadFilesLink
-) => {
-  const mapOtherDocuments = (
-    documents: Array<NotificationDetailDocument | NotificationDetailOtherDocument>
-  ) =>
-    documents.map((d) => {
-      const isOtherDocument = isNotificationDetailOtherDocument(d);
-      const recipient =
-        recipients.filter((recipient) => recipient.taxId).length > 1 && isOtherDocument
-          ? ` - ${d.recipient?.denomination} (${d.recipient?.taxId})`
-          : '';
-      const docName = isOtherDocument
-        ? `${getLocalizedOrDefaultLabel('notifications', 'detail.aar-acts')}${recipient}`
-        : d.title || d.ref.key;
+) => (
+  <Stack spacing={3}>
+    <Typography
+      id="notification-detail-document-attached"
+      color="text.primary"
+      variant={titleVariant}
+      component="h2"
+    >
+      {title}
+    </Typography>
 
-      const document = {
-        key: d.ref.key || d.documentId,
-        name: docName,
-        downloadHandler: d.documentId
-          ? {
-              documentId: d.documentId,
-              documentType: d.documentType,
-              digests: d.digests,
-              contentType: d.contentType,
-              ref: d.ref,
-            }
-          : d.docIdx,
-      };
+    {/* Notification sent after expiration date (120 legal and 180 combo) */}
+    {!disableDownloads && !documentsAvailable && downloadFilesMessage && (
+      <MIAlert severity="warning" data-testid="documentsDisabled">
+        <Trans i18nKey={downloadFilesMessage?.key} ns={downloadFilesMessage?.ns} />
+      </MIAlert>
+    )}
 
-      return (
-        <Box key={document.key} data-testid="notificationDetailDocuments">
-          {!documentsAvailable ? (
-            <Typography
-              sx={{ display: 'flex', alignItems: 'center' }}
-              variant="button"
-              color="text.disabled"
-              fontSize={14}
-            >
-              <AttachFileIcon sx={{ mr: 1 }} fontSize="inherit" color="inherit" />
-              {document.name}
-            </Typography>
-          ) : (
-            <ButtonNaked
-              id="document-button"
-              data-testid="documentButton"
-              color={'primary'}
-              startIcon={<AttachFileIcon />}
-              onClick={() => clickHandler(document.downloadHandler)}
-              disabled={disableDownloads}
-            >
-              <Box
-                sx={{
-                  textOverflow: 'ellipsis',
-                  maxWidth: {
-                    xs: '15rem',
-                    sm: '20rem',
-                    md: '30rem',
-                    lg: '24rem',
-                    xl: '34rem',
-                  },
-                  overflow: 'hidden',
-                  whiteSpace: 'nowrap',
-                }}
-              >
-                {document.name}
-              </Box>
-              <Typography sx={{ fontWeight: 600, ml: 1 }}>
-                {''} {/* TODO: integrate specific dimension of file */}
-              </Typography>
-            </ButtonNaked>
-          )}
-        </Box>
-      );
-    });
-
-  return (
-    <>
-      <Grid
-        key="files-section"
-        container
-        direction="row"
-        justifyContent="space-between"
-        alignItems="center"
+    {/* Notification sent before expiration date (120 legal and 180 combo) */}
+    {documentsAvailable && downloadFilesMessage && !inlineDownloadFilesMessage && (
+      <MIPaper
+        data-testid="documentsMessage"
+        key="detail-documents-message"
+        sx={{ backgroundColor: (theme) => theme.palette.grey[50] }}
+        variant="outlined"
+        padding={16}
       >
-        <Grid key="detail-documents-title" item sx={{ mb: 3 }}>
-          <Typography
-            id="notification-detail-document-attached"
-            color="text.primary"
-            variant={titleVariant}
-          >
-            {title}
+        <Stack direction="row" spacing={1}>
+          <IllusMISingleFile size={40} />
+          <Typography>
+            <Trans
+              i18nKey={downloadFilesMessage?.key}
+              ns={downloadFilesMessage?.ns}
+              components={[<strong key="0" />]}
+            />
           </Typography>
-        </Grid>
-        {/* TODO: ripristinare quando sarà completata la issue pn-720 */}
-        {/* !documentsAvailable &&
-        <Grid item>
-          <Button startIcon={<DownloadIcon />}>Scarica tutti i Documenti</Button>
-        </Grid>
-      */}
-      </Grid>
-      <Grid key="detail-documents-message" item data-testid="documentsMessage">
-        <Stack direction="row">
-          {downloadFilesMessage && (
-            <Typography variant="body2" sx={{ mb: 3 }}>
-              {downloadFilesMessage}
-            </Typography>
-          )}
-          {/* TODO: remove comment when link ready downloadFilesLink &&
-          <Typography onClick={() => console.log('link')}>{downloadFilesLink}</Typography>
-        */}
         </Stack>
-      </Grid>
-      <Grid key="download-files-section" item>
-        {documents && mapOtherDocuments(documents)}
-      </Grid>
-    </>
-  );
-};
+      </MIPaper>
+    )}
+
+    {/* Documents must be shown if the are documents and document is available or is not available but is cancelled */}
+    {documents && (documentsAvailable || (!documentsAvailable && disableDownloads)) && (
+      <Documents
+        documents={documents}
+        recipients={recipients}
+        disableDownloads={disableDownloads}
+        downloadFilesMessage={inlineDownloadFilesMessage ? downloadFilesMessage : undefined}
+        clickHandler={clickHandler}
+      />
+    )}
+  </Stack>
+);
 
 export default NotificationDetailDocuments;

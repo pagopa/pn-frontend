@@ -1,8 +1,7 @@
 {
-  "title": "Notifications of {{recipient}}",
-  "title-delegated-notifications": "Notifications delegated to {{recipient}}",
-  "subtitle": "Read notifications of {{recipient}}. You can filter them by IUN Code and send date.",
-  "subtitle-delegated-notifications": "Read the notifications delegated to {{recipient}}. You can filter them by IUN Code and send date.",
+  "title": "Inbox for {{organization}}",
+  "go-to-detail": "Go to details",
+  "title-delegated-notifications": "Incoming from delegations",
   "table": {
     "data": "Date",
     "gruppo": "Groups",
@@ -11,12 +10,18 @@
     "oggetto": "Subject",
     "iun": "IUN code",
     "status": "Status",
-    "show-detail": "See details",
+    "open": "Open",
     "group-selector-title": "Group selection menu",
-    "aria-action-table": "View notification details with IUN: {{iun}}"
+    "aria-action-table": "Open notification details with IUN: {{iun}}",
+    "legal-value": "Notification with legal value"
   },
   "filters": {
-    "iun": "Search by IUN Code",
+    "communication-type": "Type",
+    "communication-type-options": {
+      "legal": "Legally-binding notifications",
+      "informal": "Communications"
+    },
+    "iun": "IUN code",
     "data_da": "From",
     "data_da-input-aria-label": "Enter the search start date",
     "data_a": "To",
@@ -37,16 +42,35 @@
     "options": "Sort options"
   },
   "empty-state": {
-    "filtered": "We couldn't find any results: try different filters. <0>Remove filters</0>",
-    "no-notifications": "There are no notifications for {{name}}.",
-    "delegate": "There are no notifications delegated to {{name}} to read.",
-    "aria-label-remove-filters": "Reset filters"
+    "filtered": "No notifications or communications for the selected filters",
+    "filtered-description": "Remove them or try another combination.",
+    "clean-filters-cta": "Remove filters",
+    "delegate": "Here you will see the legally binding notifications that have been delegated to your company.",
+    "title": "Here you will see legally-binding notifications and other communications",
+    "description": "Update your digital contact details now to immediately know when your business receives one.",
+    "go-to-contacts-cta": "Go to contact details",
+    "aria-label-remove-filters": "Remove filters"
   },
   "from-qrcode": {
     "not-found": "Notification link not found",
     "not-found-subtitle": "It can only be read by users registered by the recipient company or by its delegate."
   },
   "detail": {
+    "legal-date": "Notification deposited on",
+    "informal-date": "Communication deposited on",
+    "legal-disclaimer": "Notification sent via SEND, the platform governed by Art. 26 of Law Decree 76/2020",
+    "legal-value": "Notification with legal value",
+    "notification-timeline-section": {
+      "title": "Notification status",
+      "aria-label": "Go to notification timeline"
+    },
+    "notification-detail-section": {
+      "title": "Notification details",
+      "recipient": "Recipient",
+      "aar": "Notification of receipt",
+      "aria-label": "Go to notification of receipt",
+      "availability": "Available online for 10 years from the date on which the notification becomes legally binding."
+    },
     "document-not-available": "The document will be available for download in a few minutes. You can try again by reloading the page or clicking on the link of the requested document",
     "table-aria-label": "Notification details",
     "payment-table-aria-label": "Payment details",
@@ -59,8 +83,6 @@
     "groups": "Groups",
     "notice-code": "Notice Code",
     "creditor-tax-id": "Company Fiscal Code",
-    "breadcrumb-root": "Notifications",
-    "breadcrumb-leaf": "Notification details",
     "acts": "Attachments",
     "aar-acts": "Acknowledgement of receipt",
     "timeline-title": "Notification status",
@@ -72,14 +94,14 @@
     "disclaimer-link": "Learn more",
     "pec-unreachable": "Keep your certified email (PEC) mailbox free and active to receive everything digitally!",
     "cancelled": {
-      "message": "This notification has been cancelled by the issuing institution.",
+      "message": "This notification was cancelled by the sending authority, so the documents are no longer available.",
       "cta": "What should I do?"
     },
     "payment": {
-      "title": "Payment",
+      "title": "Payments",
       "f24Models": "F24 forms",
       "pagoPANotices": "pagoPA notices",
-      "download-pagoPA-notice": "Download pagoPA notice",
+      "download-pagoPA-notice": "Download the pagoPA notice",
       "notice-code": "Notice code",
       "due": "Expires on",
       "included-costs": "Notification costs included",
@@ -101,6 +123,7 @@
       "error-payment-failed-single": "There was a problem with a Payment Notice. Press Reload to try again. If the error persists, contact the support team.",
       "error-payment-failed-multiple": "There was a problem with multiple Payment Notices. Press Reload to try again. If the error persists, contact the support team.",
       "status": {
+        "title": "Status",
         "succeded": "Paid",
         "succeded-tooltip": "Your payment has been sent successfully.",
         "failed": "Expired",
@@ -117,14 +140,26 @@
         "duplicated": "This notice has already been paid for. The status will be updated shortly."
       }
     },
+    "contact_sender": {
+      "title": "Contact the issuing institution",
+      "phone": "Institution's phone number",
+      "email": "Institution's email address",
+      "website": "Institution's website",
+      "copy_phone": "Phone number copied"
+    },
+    "informal_notification_markdown": {
+      "greeting": "All'attenzione di {{recipientDenomination}}",
+      "attachments_info": "Per avere maggiori informazioni <0>è consigliato prendere visione degli allegati</0>, che possono fornire dettagli importanti.",
+      "payment_instructions": "È possibile completare il pagamento premendo <0>Paga</0>. In alternativa, si può utilizzare l'<1>avviso allegato</1> per saldare l'importo tramite tutti i canali abilitati a pagoPA.",
+      "assistance": "In ogni caso, qualora si avesse bisogno di assistenza, è possibile <0>contattare {{senderDenomination}} attraverso i suoi canali ufficiali.</0>"
+    },
     "acts_files": {
       "downloadable_acts": "Documents are available online for 120 days from the completion of the notification.",
-      "not_downloadable_acts": "120 days have passed since the completion date. If you want to obtain the documents, please contact the sender.",
-      "downloadable_aar": "The acknowledgement of receipt is available online for 10 years from completion of the notification.",
-      "not_downloadable_aar": "As 10 years have passed since the completion date, the acknowledgement of receipt is no longer available.",
-      "notification_cancelled_aar": "As this notification has been cancelled, the download of the Acknowledgement of Receipt has been disabled.",
-      "notification_cancelled_acts": "Since this notification has been cancelled, the document download has been disabled.",
-      "effected_faq": "When do I complete a notification?"
+      "not_downloadable_acts": "The documents are no longer available online. To request them, contact the institution that sent them to you.",
+      "downloadable_aar": "<0>Available online for 10 years</0> from the date the SEND notification became legally binding.",
+      "not_downloadable_aar": "The notification of receipt is no longer available. To request it, contact the institution that sent it to you.",
+      "effected_faq": "When do I complete a notification?",
+      "informal_downloadable_acts": "Save the attachments to your device: they will be available online for up to <0>180 days from the filing date</0> shown at the top!"
     },
     "timeline": {
       "schedule-digital-workflow": "Send again digitally",
@@ -348,16 +383,16 @@
       },
       "radd": {
         "title": "The documents have been collected",
-        "description": "The recipient or their delegate has collected the notified documents from an operator authorized to deliver them."
+        "description": "The recipient, or their delegate, collected the notified documents from an operator authorized to deliver them."
       },
       "tpp-type": "a third-party digital channel"
     },
     "downtimes": {
-      "title": "DISRUPTIONS",
+      "title": "Disruptions",
       "textWithEndDate": "Disruption started {{startDate}} and ended {{endDate}} on the following functionalities:",
       "textWithoutEndDate": "Disruption started {{startDate}} and not yet ended on the following functionalities:",
       "datePrefix": "the ",
-      "legalFactDownload": "Attestation of malfunction",
+      "legalFactDownload": "Open the malfunction certificate",
       "apiErrorMessage": "We were unable to load any disruptions that affected this notification."
     },
     "help": {
@@ -379,7 +414,7 @@
       }
     },
     "bilingual": {
-      "title": "SUPPORT FACSIMILE TEMPLATES in English",
+      "title": "Support facsimile templates in English",
       "description": "The language of the attached documents may differ from the one you are using to browse the portal. To understand the content of these documents, you can use the facsimile templates found here.",
       "action": "Consult the templates"
     }

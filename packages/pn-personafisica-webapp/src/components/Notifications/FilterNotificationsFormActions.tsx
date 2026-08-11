@@ -1,5 +1,6 @@
 import { Fragment } from 'react';
 import { useTranslation } from 'react-i18next';
+
 import { Button, Grid } from '@mui/material';
 import { CustomMobileDialogAction } from '@pagopa-pn/pn-commons';
 
@@ -34,12 +35,7 @@ const FilterNotificationsFormActions = ({
 
   const cancelAction = (
     <Grid item lg="auto" xs={12}>
-      <Button
-        data-testid="cancelButton"
-        size="small"
-        onClick={cleanFilters}
-        disabled={!filtersApplied}
-      >
+      <Button data-testid="cancelButton" size="small" onClick={cleanFilters}>
         {t('button.annulla filtro')}
       </Button>
     </Grid>
@@ -52,11 +48,12 @@ const FilterNotificationsFormActions = ({
       ) : (
         confirmAction
       )}
-      {isInDialog ? (
-        <CustomMobileDialogAction closeOnClick>{cancelAction}</CustomMobileDialogAction>
-      ) : (
-        cancelAction
-      )}
+      {filtersApplied &&
+        (isInDialog ? (
+          <CustomMobileDialogAction closeOnClick>{cancelAction}</CustomMobileDialogAction>
+        ) : (
+          cancelAction
+        ))}
     </Fragment>
   );
 };

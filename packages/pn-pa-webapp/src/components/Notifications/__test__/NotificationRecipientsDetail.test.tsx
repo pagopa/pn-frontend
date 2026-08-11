@@ -4,7 +4,7 @@ import {
   notificationDTOMultiRecipient,
   recipients,
 } from '../../../__mocks__/NotificationDetail.mock';
-import { fireEvent, render, waitFor, within } from '../../../__test__/test-utils';
+import { render } from '../../../__test__/test-utils';
 import NotificationRecipientsDetail from '../NotificationRecipientsDetail';
 
 describe('NotificationRecipientsDetail Component', () => {
@@ -29,10 +29,7 @@ describe('NotificationRecipientsDetail Component', () => {
 
   it('renders component - no remaining items', () => {
     const { queryAllByTestId, queryByTestId } = render(
-      <NotificationRecipientsDetail
-        recipients={notificationDTOMultiRecipient.recipients}
-        iun={notificationDTOMultiRecipient.iun}
-      />
+      <NotificationRecipientsDetail recipients={notificationDTOMultiRecipient.recipients} />
     );
     const recipientsElem = queryAllByTestId('recipients');
     expect(recipientsElem).toHaveLength(recipients.length);
@@ -55,10 +52,7 @@ describe('NotificationRecipientsDetail Component', () => {
       })),
     ];
     const { queryAllByTestId, queryByTestId } = render(
-      <NotificationRecipientsDetail
-        recipients={recipients}
-        iun={notificationDTOMultiRecipient.iun}
-      />
+      <NotificationRecipientsDetail recipients={recipients} />
     );
     const recipientsElem = queryAllByTestId('recipients');
     expect(recipientsElem).toHaveLength(3);
@@ -72,33 +66,33 @@ describe('NotificationRecipientsDetail Component', () => {
     });
     const remainingRecipients = queryByTestId('remaining-recipients');
     expect(remainingRecipients).toBeInTheDocument();
-    expect(remainingRecipients).toHaveTextContent('+ 1 detail.recipients detail.show-all');
-    // check modal with all recipients
-    const showAllButton = queryByTestId('show-all-recipients');
-    fireEvent.click(showAllButton!);
-    const dialog = await waitFor(() => queryByTestId('dialog'));
-    expect(dialog).toBeInTheDocument();
-    const dialogAllRecipients = queryAllByTestId('dialog-all-recipients');
-    expect(dialogAllRecipients).toHaveLength(recipients.length);
-    dialogAllRecipients.forEach((dialogRecipient, index) => {
-      expect(dialogRecipient).toHaveTextContent(
+    expect(remainingRecipients).toHaveTextContent('+1 detail.recipient');
+    expect(queryByTestId('show-all-recipients')).not.toBeInTheDocument();
+  });
+
+  it('renders component - show all recipients', () => {
+    const recipients = [
+      ...notificationDTOMultiRecipient.recipients,
+      ...notificationDTOMultiRecipient.recipients.map((recipient) => ({
+        ...recipient,
+        taxId: recipient.taxId.split('').reverse().join(''),
+        denomination: recipient.denomination.split('').reverse().join(''),
+      })),
+    ];
+
+    const { queryAllByTestId, queryByTestId } = render(
+      <NotificationRecipientsDetail recipients={recipients} showAll />
+    );
+
+    const recipientsElem = queryAllByTestId('recipients');
+    expect(recipientsElem).toHaveLength(recipients.length);
+
+    recipientsElem.forEach((recipientElem, index) => {
+      expect(recipientElem).toHaveTextContent(
         recipients[index].denomination + ' - ' + recipients[index].taxId
       );
     });
-    // simulate copy to clipboard
-    const copyToClipboardBtn = within(dialogAllRecipients[0]).queryByRole('button');
-    fireEvent.click(copyToClipboardBtn!);
-    await waitFor(() => {
-      expect(writeTextFn).toHaveBeenCalledTimes(1);
-      expect(writeTextFn).toHaveBeenCalledWith(
-        recipients[0].denomination + ' - ' + recipients[0].taxId
-      );
-    });
-    // close dialog
-    const closeDialogBtn = within(dialog!).queryByTestId('close-dialog');
-    fireEvent.click(closeDialogBtn!);
-    await waitFor(() => {
-      expect(dialog).not.toBeInTheDocument();
-    });
+
+    expect(queryByTestId('remaining-recipients')).not.toBeInTheDocument();
   });
 });

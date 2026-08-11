@@ -1,4 +1,6 @@
 {
+  "iun": "Koda IUN",
+  "logo": "Logotip",
   "button": {
     "filtra": "Filtriraj",
     "annulla filtro": "Odstrani filtre",
@@ -28,9 +30,9 @@
     "understand": "V redu, razumem"
   },
   "menu": {
-    "notifiche": "Obvestila",
-    "notifiche-impresa": "Obvestila podjetja",
-    "notifiche-delegato": "Delegirana obvestila",
+    "notifiche": "Prejeto",
+    "notifiche-impresa": "Prejeto za {{organization}}",
+    "notifiche-delegato": "Prejeto iz pooblastil",
     "deleghe": "Prenosi pooblastil",
     "profilo": "Vaši podatki",
     "contacts": "Kontaktni podatki",
@@ -249,6 +251,11 @@
       "zadnja številka"
     ]
   },
+  "user-validation-failed": {
+    "title": "Vneseni podatki niso veljavni",
+    "description": "Eden ali več podatkov, povezanih z vašim uporabniškim računom, ni veljavnih. Za rešitev težave se obrnite na podporo.",
+    "cta": "Stopite v stik s podporo"
+  },
   "autocomplete": {
     "clear": "Odstrani izbrane možnosti",
     "toggle-open": "Odpri meni z možnostmi",
@@ -256,5 +263,6 @@
     "selection-box": "Izbrane možnosti",
     "selection-done": "%s izbranih",
     "delete-selection": "Odstrani %s"
-  }
+  },
+  "not-available": "Ni na voljo"
 }

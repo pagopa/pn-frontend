@@ -1,4 +1,6 @@
 {
+  "iun": "Code IUN",
+  "logo": "Logo de",
   "button": {
     "filtra": "Filtrer",
     "annulla filtro": "Supprimer les filtres",
@@ -28,7 +30,9 @@
     "understand": "OK, j'ai compris"
   },
   "menu": {
-    "notifiche": "Notifications",
+    "notifiche": "Boîte de réception",
+    "notifiche-utente": "Votre boîte de réception",
+    "notifiche-delegato": "Boîte de réception pour {{delegator}}",
     "deleghe": "Délégations",
     "profilo": "Tes données",
     "contacts": "Tes coordonnées",
@@ -74,7 +78,19 @@
   },
   "date-time": {
     "today-uppercase-initial": "Aujourd'hui",
-    "hour-of-day": "heures"
+    "hour-of-day": "heures",
+    "january": "janvier",
+    "february": "février",
+    "march": "mars",
+    "april": "avril",
+    "may": "mai",
+    "june": "juin",
+    "july": "juillet",
+    "august": "août",
+    "september": "septembre",
+    "october": "octobre",
+    "november": "novembre",
+    "december": "décembre"
   },
   "error-boundary": {
     "title": "Quelque chose n'a pas fonctionné",
@@ -141,7 +157,8 @@
     "resources": "Ressources",
     "follow": "Suis-nous sur",
     "legal-part-1": "société anonyme avec associé unique - capital social de 1 000 000 euros entièrement versé - siège social à Rome, Piazza Colonna 370",
-    "legal-part-2": "CAP 00187 - n. d'inscription au Registre des Entreprises de Rome, CF et TVA 15376371009"
+    "legal-part-2": "CAP 00187 - n. d'inscription au Registre des Entreprises de Rome, CF et TVA 15376371009",
+    "products-title": "Produits et services"
   },
   "required-fields": "*Champs obligatoires",
   "required-field": "Champ obligatoire",
@@ -256,5 +273,6 @@
     "selection-box": "Options sélectionnées",
     "selection-done": "%s sélectionnés",
     "delete-selection": "Supprime %s"
-  }
+  },
+  "not-available": "Non disponible"
 }

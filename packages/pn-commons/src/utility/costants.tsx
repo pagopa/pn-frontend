@@ -117,7 +117,7 @@ export const preLoginLinks = ({
         },
         {
           ...getFooterLinkLabels('security'),
-          href: 'https://www.pagopa.it/it/politiche-per-la-sicurezza-delle-informazioni/',
+          href: 'https://www.pagopa.it/it/politiche-sulla-sicurezza-delle-informazioni-e-sulla-qualita/',
           linkType: 'internal',
         },
         {

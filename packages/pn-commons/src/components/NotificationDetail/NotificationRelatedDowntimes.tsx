@@ -1,8 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 
-import AttachFileIcon from '@mui/icons-material/AttachFile';
-import { Box, Grid, Paper, Stack, Typography, useTheme } from '@mui/material';
-import { ButtonNaked } from '@pagopa/mui-italia';
+import { Box, List, ListItem, Typography, useTheme } from '@mui/material';
+import { MIButton, MIPaper, Tag } from '@pagopa/mui-italia';
 
 import { Downtime } from '../../models/AppStatus';
 import { NotificationStatusHistory } from '../../models/NotificationDetail';
@@ -73,7 +72,7 @@ const NotificationRelatedDowntimes: React.FC<Props> = ({
 }) => {
   const theme = useTheme();
 
-  const title = getLocalizedOrDefaultLabel('notifications', 'detail.downtimes.title', 'DISSERVIZI');
+  const title = getLocalizedOrDefaultLabel('notifications', 'detail.downtimes.title');
   const unknownFunctinalityLabel = (event: Downtime) =>
     getLocalizedOrDefaultLabel('appStatus', `legends.unknownFunctionality`, undefined, {
       functionality: event.functionality,
@@ -147,6 +146,7 @@ const NotificationRelatedDowntimes: React.FC<Props> = ({
 
   useEffect(() => doFetchEvents(), [doFetchEvents]);
 
+  const isItalianLanguage = getSessionLanguage() === 'it';
   return (
     <ApiErrorWrapper
       apiId={apiId}
@@ -158,101 +158,85 @@ const NotificationRelatedDowntimes: React.FC<Props> = ({
       )}
     >
       {shouldFetchEvents && downtimeEvents.length > 0 ? (
-        <Paper sx={{ p: 3, mb: 3 }} elevation={0} data-testid="downtimesBox">
-          <Grid
-            key={'downtimes-section'}
-            container
-            direction="row"
-            justifyContent="space-between"
-            alignItems="center"
-            data-testid="notification-related-downtimes-main"
-          >
-            <Grid key={'downtimes-section-title'} item sx={{ mb: 1 }}>
-              <Typography
-                color="text.primary"
-                variant="overline"
-                fontWeight={700}
-                textTransform="uppercase"
-                fontSize={14}
-              >
-                {title}
-              </Typography>
-            </Grid>
-          </Grid>
-
-          {getSessionLanguage() !== 'it' && (
+        <MIPaper padding={24} data-testid="downtimesBox">
+          <Typography component="h2" variant="h6">
+            {title}
+          </Typography>
+          {!isItalianLanguage && (
             <DowntimeLanguageBanner downtimeExampleLink={downtimeExampleLink} />
           )}
+          <List
+            data-testid="notification-related-downtimes-main"
+            sx={{ ...(!isItalianLanguage && { marginTop: 2 }) }}
+          >
+            {/* Render each downtime event */}
+            {downtimeEvents.map((event, ix) => (
+              <ListItem
+                data-testid="notification-related-downtime-detail"
+                disableGutters
+                key={ix}
+                sx={{
+                  flexDirection: 'column',
+                  alignItems: 'flex-start',
+                  borderBottom: '1px solid',
+                  borderColor: theme.palette.divider,
+                  pb: 2,
+                  pt: ix === 0 ? 0 : 2,
+                  '&:last-child': {
+                    borderBottom: 'none',
+                    pb: 0,
+                  },
+                }}
+              >
+                {/* Description including time range */}
+                <Typography variant="body1">{mainTextForDowntime(event)}</Typography>
 
-          <Grid key={'detail-documents-message'} item>
-            <Stack direction="column">
-              {/* Render each downtime event */}
-              {downtimeEvents.map((event, ix) => (
-                <Stack
-                  key={ix}
-                  direction="column"
-                  alignItems="flex-start"
-                  data-testid="notification-related-downtime-detail"
-                  sx={{
-                    mt: 3,
-                    borderBottomColor: 'divider',
-                    borderBottomStyle: 'solid',
-                    borderBottomWidth: '3px',
-                  }}
-                >
-                  {/* Description including time range */}
-                  <Typography variant="body2">{mainTextForDowntime(event)}</Typography>
+                {/* Target functionalities */}
+                <ul style={{ paddingTop: 16, paddingBottom: 16, listStyleType: 'disc' }}>
+                  <li>
+                    <Typography variant="sidenav">
+                      {getLocalizedOrDefaultLabel(
+                        'appStatus',
+                        `legends.knownFunctionality.${event.functionality}`,
+                        unknownFunctinalityLabel(event)
+                      )}
+                    </Typography>
+                  </li>
+                </ul>
 
-                  {/* Target functionalities */}
-                  <ul>
-                    <li style={{ marginTop: '-12px' }}>
-                      <Typography variant="body2">
-                        {getLocalizedOrDefaultLabel(
-                          'appStatus',
-                          `legends.knownFunctionality.${event.functionality}`,
-                          unknownFunctinalityLabel(event)
-                        )}
-                      </Typography>
-                    </li>
-                  </ul>
-
-                  {/* Link to download related file, or message about non-availability of such file */}
-                  {/* beware! - tests rely on the default texts */}
-                  <Box sx={{ mb: 3, ml: 2 }}>
-                    {event.fileAvailable ? (
-                      <ButtonNaked
-                        sx={{ px: 0 }}
-                        color="primary"
-                        startIcon={<AttachFileIcon />}
-                        onClick={() => {
-                          void fetchDowntimeLegalFactDocumentDetails(event.legalFactId as string);
-                        }}
-                        disabled={disableDownloads}
-                      >
-                        {getLocalizedOrDefaultLabel(
-                          'notifications',
-                          'detail.downtimes.legalFactDownload',
-                          'Scaricare'
-                        )}
-                      </ButtonNaked>
-                    ) : (
-                      <Typography
-                        variant="body2"
-                        sx={{ color: theme.palette.text.secondary, fontSize: '0.875rem' }}
-                      >
-                        {getLocalizedOrDefaultLabel(
-                          'appStatus',
-                          `legends.noFileAvailableByStatus.${event.status}`,
-                          'File non disponibile'
-                        )}
-                      </Typography>
-                    )}
-                  </Box>
-                </Stack>
-              ))}
-            </Stack>
-          </Grid>
-        </Paper>
+                {/* Link to download related file, or message about non-availability of such file */}
+                {/* beware! - tests rely on the default texts */}
+                <Box>
+                  {event.fileAvailable && !disableDownloads ? (
+                    <MIButton
+                      variant="text"
+                      color="primary"
+                      onClick={() => {
+                        void fetchDowntimeLegalFactDocumentDetails(event.legalFactId as string);
+                      }}
+                    >
+                      {getLocalizedOrDefaultLabel(
+                        'notifications',
+                        'detail.downtimes.legalFactDownload'
+                      )}
+                    </MIButton>
+                  ) : (
+                    <Typography variant="body1">
+                      {getLocalizedOrDefaultLabel(
+                        'appStatus',
+                        `legends.noFileAvailableByStatus.${event.status}`,
+                        'File non disponibile'
+                      )}
+                    </Typography>
+                  )}
+                  {disableDownloads && (
+                    <Tag value={getLocalizedOrDefaultLabel('common', 'not-available')} />
+                  )}
+                </Box>
+              </ListItem>
+            ))}
+          </List>
+        </MIPaper>
       ) : (
         <></>
       )}

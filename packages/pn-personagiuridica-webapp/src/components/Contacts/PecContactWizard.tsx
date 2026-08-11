@@ -169,12 +169,9 @@ const PecContactWizard: React.FC<Props> = ({
           </Typography>
 
           {defaultSERCQ_SENDAddress && (
-            <MIAlert
-              severity="info"
-              sx={{ mb: 3 }}
-              data-testid="sercq-info-alert"
-              description={t('legal-contacts.pec-contact-wizard.sercq-info-alert')}
-            />
+            <MIAlert severity="info" sx={{ mb: 3 }} data-testid="sercq-info-alert">
+              {t('legal-contacts.pec-contact-wizard.sercq-info-alert')}
+            </MIAlert>
           )}
 
           <Typography

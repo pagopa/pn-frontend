@@ -9,6 +9,7 @@ import Dashboard from '../pages/Dashboard.page';
 import NewApiKey from '../pages/NewApiKey.page';
 import NewNotification from '../pages/NewNotification.page';
 import NotificationDetail from '../pages/NotificationDetail.page';
+import NotificationTimeline from '../pages/NotificationTimeline.page';
 import PrivacyPolicyPage from '../pages/PrivacyPolicy.page';
 import Statistics from '../pages/Statistics.page';
 import TermsOfServicePage from '../pages/TermsOfService.page';
@@ -34,6 +35,8 @@ const Router: React.FC = () => {
             <Route path={routes.DASHBOARD} element={<Dashboard />} />
             {IS_STATISTICS_ENABLED && <Route path={routes.STATISTICHE} element={<Statistics />} />}
             <Route path={routes.DETTAGLIO_NOTIFICA} element={<NotificationDetail />} />
+            <Route path={routes.DETTAGLIO_NOTIFICA_TIMELINE} element={<NotificationTimeline />} />
+            {/*  <Route path={routes.DETTAGLIO_COMBO} element={<InformalNotificationDetail />} /> */}
             <Route path={routes.APP_STATUS} element={<AppStatus />} />
             <Route path="/" element={<Navigate to={routes.DASHBOARD} />} />
 

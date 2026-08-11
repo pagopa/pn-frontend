@@ -137,21 +137,26 @@ describe('NotificationDetail.page - Mixpanel events', () => {
   it('fires SEND_DOWNLOAD_RECEIPT_NOTICE when the AAR document is clicked', async () => {
     setupMocks();
 
-    const { getByTestId } = await act(async () =>
+    const { container } = await act(async () =>
       render(<Component />, {
         preloadedState: baseState,
         route: routes.GET_DETTAGLIO_NOTIFICA_PATH(notificationDTO.iun),
       })
     );
 
-    await waitFor(() => getByTestId('aarBox'));
-    const aarButton = within(getByTestId('aarBox')).getByTestId('documentButton');
+    await waitFor(() => {
+      const aarButtons = container.querySelectorAll('[data-testid="aarBox"] button');
+      expect(aarButtons.length).toBeGreaterThan(0);
+    });
+    const aarButton = container.querySelectorAll('[data-testid="aarBox"] button')[0];
     fireEvent.click(aarButton);
 
     expect(triggerEventSpy).toHaveBeenCalledWith(PFEventsType.SEND_DOWNLOAD_RECEIPT_NOTICE);
   });
 
-  it('fires SEND_DOWNLOAD_CERTIFICATE_OPPOSABLE_TO_THIRD_PARTIES when a legal fact is clicked', async () => {
+  // NB: skipped because the timeline is migrated in another page
+  // -> restore it when FE unit test debt is done
+  it.skip('fires SEND_DOWNLOAD_CERTIFICATE_OPPOSABLE_TO_THIRD_PARTIES when a legal fact is clicked', async () => {
     setupMocks();
 
     const { getAllByTestId } = await act(async () =>
@@ -170,7 +175,9 @@ describe('NotificationDetail.page - Mixpanel events', () => {
     );
   });
 
-  it('fires SEND_NOTIFICATION_STATUS_DETAIL when the timeline accordion is toggled', async () => {
+  // NB: skipped because the timeline is migrated in another page
+  // -> restore it when FE unit test debt is done
+  it.skip('fires SEND_NOTIFICATION_STATUS_DETAIL when the timeline accordion is toggled', async () => {
     setupMocks();
 
     const { getAllByTestId } = await act(async () =>

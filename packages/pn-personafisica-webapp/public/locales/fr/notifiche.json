@@ -1,16 +1,23 @@
 {
   "title": "Vos notifications",
+  "go-to-detail": "Voir le détail",
   "table": {
     "data": "Date",
     "mittente": "Expéditeur",
     "oggetto": "Objet",
     "iun": "Code IUN",
     "status": "État",
-    "show-detail": "Voir le détail",
-    "aria-action-table": "Voir les détails de la notification avec IUN : {{iun}}"
+    "aria-action-table": "Voir les détails de la notification avec IUN : {{iun}}",
+    "open": "Ouvrir",
+    "legal-value": "Notification à valeur juridique"
   },
   "filters": {
-    "iun": "Recherche par code IUN",
+    "communication-type": "Type",
+    "communication-type-options": {
+      "legal": "Notifications à valeur juridique",
+      "informal": "Communications"
+    },
+    "iun": "Code IUN",
     "data_da": "Du",
     "data_da-input-aria-label": "Entrez la date de début de la recherche",
     "data_a": "Au",
@@ -21,7 +28,9 @@
       "date-range": "Saisissez une date comprise entre {{fromDate}} et {{toDate}}",
       "date-start": "La date de début doit être antérieure à la date de fin",
       "date-end": "La date de fin doit être postérieure à la date de début"
-    }
+    },
+    "loading_completed_with_results": "Chargement terminé. La recherche a donné des résultats",
+    "loading_completed_no_results": "Chargement terminé. Aucune notification trouvée"
   },
   "sort": {
     "title": "Trier",
@@ -31,9 +40,11 @@
     "options": "Options de tri"
   },
   "empty-state": {
-    "filtered": "Nous n’avons pas trouvé de résultats : essayez avec des filtres différents. <0>Supprimer filtres</0>.",
-    "delegate": "{{name}} n’a reçu aucune notification.",
-    "title": "Ici, vous trouverez vos notifications SEND",
+    "filtered": "Aucune notification ou communication pour les filtres sélectionnés",
+    "filtered-description": "Supprime-les ou essaie une autre combinaison.",
+    "clean-filters-cta": "Supprimer les filtres",
+    "delegate": "Ici, tu verras les notifications à valeur juridique de {{name}}",
+    "title": "Ici, tu verras tes notifications à valeur juridique et les autres communications",
     "description-onboarding": "Saviez-vous que vous pouvez économiser en choisissant de recevoir les communications à valeur juridique uniquement au format numérique ?",
     "description": "Mettez à jour vos coordonnées dès maintenant et vous saurez immédiatement quand vous en recevrez une.",
     "go-to-onboarding-cta": "Configurer SEND",
@@ -50,6 +61,21 @@
     "not-found-subtitle": "Seul le destinataire peut lire cette notification."
   },
   "detail": {
+    "legal-value": "Notification à valeur juridique",
+    "legal-date": "Notification déposée le",
+    "informal-date": "Communication déposée le",
+    "legal-disclaimer": "Notification envoyée via SEND, la plateforme régie par l'art. 26 du D.L. 76/2020",
+    "notification-timeline-section": {
+      "title": "Statut de la notification",
+      "aria-label": "Accède à la timeline de la notification"
+    },
+    "notification-detail-section": {
+      "title": "Détail de la notification",
+      "recipient": "Destinataire",
+      "aar": "Avis de réception",
+      "aria-label": "Accède à l'avis de réception",
+      "availability": "Disponible en ligne pendant 10 ans à compter de la date à laquelle la notification prend valeur de loi."
+    },
     "document-not-available": "Le document sera téléchargeable dans quelques minutes. Vous pouvez réessayer en rechargeant la page ou en cliquant sur le lien du document requis",
     "table-aria-label": "Détail de la notification",
     "payment-table-aria-label": "Détail des paiements",
@@ -62,8 +88,6 @@
     "groups": "Groupes",
     "notice-code": "Code avis",
     "creditor-tax-id": "Code fiscal de l’organisme",
-    "breadcrumb-root": "Notifications",
-    "breadcrumb-leaf": "Détail de la notification",
     "acts": "Pièces jointes",
     "aar-acts": "Accusé de réception",
     "timeline-title": "État de la notification",
@@ -75,11 +99,11 @@
     "disclaimer-link": "En savoir plus",
     "pec-unreachable": "Maintenez votre adresse PEC libre et active pour tout recevoir au format numérique !",
     "cancelled": {
-      "message": "Cette notification a été annulée par l'organisme émetteur.",
+      "message": "Cette notification a été annulée par l'organisme expéditeur, les documents ne sont donc plus disponibles.",
       "cta": "Que dois-je faire ?"
     },
     "payment": {
-      "title": "Paiement",
+      "title": "Paiements",
       "f24Models": "Formulaires F24",
       "pagoPANotices": "Alertes pagoPA",
       "download-pagoPA-notice": "Télécharger l’alerte pagoPA",
@@ -104,6 +128,7 @@
       "cancelled-message": "Pour toute information concernant un éventuel remboursement, contacte l'organisme émetteur.",
       "f24-download-error": "Le téléchargement a échoué. Réessayer.",
       "status": {
+        "title": "Statut",
         "succeded": "Payé",
         "succeded-tooltip": "Le paiement a bien été envoyé.",
         "failed": "Expiré",
@@ -125,14 +150,26 @@
       "tpp-expired-error-title": "La connexion avec la banque a expiré.",
       "tpp-expired-error-description": "Pour la rétablir, accédez de nouveau à cette notification via le message que vous avez reçu sur l'application de votre banque."
     },
+    "contact_sender": {
+      "title": "Contactez l'organisme émetteur",
+      "phone": "Numéro de téléphone de l'organisme",
+      "email": "E-mail de l'organisme",
+      "website": "Site web de l'organisme",
+      "copy_phone": "Numéro de téléphone copié"
+    },
+    "informal_notification_markdown": {
+      "greeting": "Ciao {{recipientDenomination}},",
+      "attachments_info": "Per avere maggiori informazioni <0>prendi visione degli allegati,</0> che possono fornirti dettagli importanti.",
+      "payment_instructions": "Puoi effettuare il pagamento direttamente premendo <0>Paga</0>. In alternativa, puoi utilizzare l'<0>avviso allegato</0> per saldare l'importo tramite tutti i canali abilitati a pagoPA.",
+      "assistance": "In ogni caso, qualora avessi bisogno di assistenza, <0>contatta {{senderDenomination}} attraverso i suoi canali ufficiali.</0>"
+    },
     "acts_files": {
-      "downloadable_acts": "Les documents sont disponibles en ligne pendant 120 jours à compter de la finalisation de la notification.",
-      "not_downloadable_acts": "Étant donné que 120 jours se sont écoulés depuis la date de finalisation, si vous souhaitez obtenir les actes, vous devez vous adresser à l’expéditeur.",
-      "downloadable_aar": "L’avis de réception est disponible en ligne pendant 10 ans à compter de la finalisation de la notification.",
-      "not_downloadable_aar": "Comme 10 ans se sont écoulés depuis la date de finalisation, l’accusé de réception n’est plus disponible.",
-      "notification_cancelled_aar": "Cette notification ayant été annulée, le téléchargement de l’accusé de réception a été désactivé.",
-      "notification_cancelled_acts": "Cette notification ayant été annulée, le téléchargement des documents a été désactivé.",
-      "effected_faq": "Quand une notification est-elle finalisée ?"
+      "downloadable_acts": "<0>Les documents seront disponibles en ligne jusqu'à 120 jours</0> à compter de la date à laquelle la notification SEND a pris valeur de loi. Enregistrez-les sur votre appareil !",
+      "not_downloadable_acts": "Les documents ne sont plus disponibles en ligne. Pour les demander, veuillez vous adresser à l'organisme qui vous les a envoyés.",
+      "not_downloadable_aar": "L'avis de réception n'est plus disponible. Pour le demander, veuillez vous adresser à l'organisme qui vous l'a envoyé.",
+      "downloadable_aar": "<0>Disponible en ligne pendant 10 ans</0> à compter de la date à laquelle la notification SEND a pris valeur juridique.",
+      "effected_faq": "Quand une notification est-elle finalisée ?",
+      "informal_downloadable_acts": "Conserve les pièces jointes sur ton appareil : elles seront disponibles en ligne jusqu'à <0>180 jours à compter de la date de dépôt</0> indiquée en haut !"
     },
     "timeline": {
       "schedule-digital-workflow": "Envoi ultérieur par voie numérique",
@@ -357,16 +394,16 @@
       },
       "radd": {
         "title": "pour détérioration de l’enveloppe",
-        "description": "Le destinataire ou son délégué a retiré les documents notifiés auprès d’un opérateur autorisé à les délivrer."
+        "description": "Le destinataire, ou la personne déléguée, a retiré les documents notifiés auprès d'un opérateur habilité à leur remise."
       },
       "tpp-type": "un canal numérique tiers"
     },
     "downtimes": {
-      "title": "DYSFONCTIONNEMENTS",
+      "title": "Dysfonctionnements",
       "textWithEndDate": "Dysfonctionnement commencé {{startDate}} et terminé {{endDate}} sur les fonctionnalités suivantes :",
       "textWithoutEndDate": "Dysfonctionnement commencé {{startDate}} et pas encore terminé sur les fonctionnalités suivantes :",
       "datePrefix": "le ",
-      "legalFactDownload": "Attestation de dysfonctionnement",
+      "legalFactDownload": "Ouvrir l'attestation de dysfonctionnement",
       "apiErrorMessage": "Nous n’avons pas pu charger les éventuels dysfonctionnements qui ont affecté cette notification."
     },
     "help": {
@@ -388,12 +425,12 @@
       }
     },
     "bilingual": {
-      "title": "modèles de FAC-SIMILÉ DE SUPPORT en français",
+      "title": "Modèles de Fac-similé de support en français",
       "description": "La langue des actes joints peut différer de celle avec laquelle tu navigues sur le portail. Pour comprendre le contenu de ces documents, tu peux utiliser les modèles de fac-similé que tu trouves ici.",
       "action": "Consulte les modèles"
     }
   },
-  "delegatorTitle": "Les notifications de {{name}}",
+  "delegatorTitle": "Boîte de réception pour {{name}}",
   "status": {
     "recipient": "destinataire",
     "delegate": "délégué {{name}}",

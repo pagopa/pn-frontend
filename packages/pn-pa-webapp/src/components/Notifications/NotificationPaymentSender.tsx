@@ -1,7 +1,7 @@
 import { ChangeEvent, useState } from 'react';
 import { TFunction, useTranslation } from 'react-i18next';
 
-import { Box, Divider, MenuItem, Paper, TextField, Typography } from '@mui/material';
+import { Box, Divider, MenuItem, Stack, SxProps, TextField, Typography } from '@mui/material';
 import {
   CustomPagination,
   F24PaymentDetails,
@@ -15,6 +15,7 @@ import {
   getPagoPaF24Payments,
   populatePaymentsPagoPaF24,
 } from '@pagopa-pn/pn-commons';
+import { MIPaper } from '@pagopa/mui-italia';
 
 import NotificationPaymentF24 from './NotificationPaymentF24';
 import NotificationPaymentPagoPa from './NotificationPaymentPagoPa';
@@ -23,6 +24,7 @@ type Props = {
   iun: string;
   recipients: Array<NotificationDetailRecipient>;
   timeline: Array<INotificationDetailTimeline>;
+  sx?: SxProps;
 };
 
 const renderRecipientMenuItem = (
@@ -55,7 +57,7 @@ const renderSelectValue = (
   return recipient ? `${recipient.denomination} - ${recipient.taxId}` : '';
 };
 
-const NotificationPaymentSender: React.FC<Props> = ({ iun, recipients, timeline }) => {
+const NotificationPaymentSender: React.FC<Props> = ({ iun, recipients, timeline, sx }) => {
   const { t } = useTranslation(['notifiche']);
   const [recipientSelected, setRecipientSelected] = useState<string>('');
   const [paymentDetails, setPaymentDetails] = useState<Array<PaymentDetails>>(
@@ -116,8 +118,10 @@ const NotificationPaymentSender: React.FC<Props> = ({ iun, recipients, timeline 
     );
 
   return (
-    <Paper sx={{ p: 3, mb: 3 }} elevation={0} data-testid="paymentInfoBox">
-      <Typography variant="h6">{t('payment.title', { ns: 'notifiche' })}</Typography>
+    <MIPaper padding={24} data-testid="paymentInfoBox" sx={sx}>
+      <Typography variant="h5" component="h2" mb={2}>
+        {t('payment.title', { ns: 'notifiche' })}
+      </Typography>
       {recipients.length === 1 && (
         <Typography variant="body2" my={2}>
           {f24PaymentDetails.length > 0 && pagoPAPaymentFullDetails.length === 0
@@ -142,7 +146,7 @@ const NotificationPaymentSender: React.FC<Props> = ({ iun, recipients, timeline 
           size="small"
           fullWidth
           onChange={recipientSelectionHandler}
-          label={t('detail.recipient')}
+          label={t('payment.recipient')}
           required
           sx={{ mb: 1 }}
           select
@@ -155,10 +159,13 @@ const NotificationPaymentSender: React.FC<Props> = ({ iun, recipients, timeline 
           {recipients.map((recipient, index) => renderRecipientMenuItem(index, recipient, t))}
         </TextField>
       )}
-      {pagoPAPaymentFullDetails.length > 0 &&
-        pagoPAPaymentFullDetails.map((payment) => (
-          <NotificationPaymentPagoPa iun={iun} payment={payment} key={payment.noticeCode} />
-        ))}
+      {pagoPAPaymentFullDetails.length > 0 && (
+        <Stack gap={2}>
+          {pagoPAPaymentFullDetails.map((payment) => (
+            <NotificationPaymentPagoPa iun={iun} payment={payment} key={payment.noticeCode} />
+          ))}
+        </Stack>
+      )}
       {paginationData.totalElements > paginationData.size && (
         <Box width="full" display="flex" justifyContent="right" mt={1} data-testid="pagination-box">
           <CustomPagination
@@ -174,7 +181,7 @@ const NotificationPaymentSender: React.FC<Props> = ({ iun, recipients, timeline 
       {f24PaymentDetails.length > 0 && (
         <NotificationPaymentF24 iun={iun} payments={f24PaymentDetails} />
       )}
-    </Paper>
+    </MIPaper>
   );
 };
 

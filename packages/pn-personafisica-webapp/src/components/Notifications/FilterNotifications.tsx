@@ -46,13 +46,19 @@ function validateDate(startDate: Date | undefined, endDate: Date | undefined) {
   return isBefore(startDate, endDate) || isEqualDate(startDate, endDate);
 }
 
-const initialEmptyValues = { startDate: undefined, endDate: undefined, iunMatch: '' };
+const initialEmptyValues = {
+  startDate: undefined,
+  endDate: undefined,
+  communicationType: '',
+  iunMatch: '',
+};
 
 const initialValues = (
   filters: GetNotificationsParams,
   emptyValues: {
     startDate: Date | undefined;
     endDate: Date | undefined;
+    communicationType: string;
     iunMatch: string;
     mandateId: string | undefined;
   }
@@ -63,6 +69,7 @@ const initialValues = (
   return {
     startDate: filters.startDate ? new Date(filters.startDate) : undefined,
     endDate: filters.endDate ? new Date(filters.endDate) : undefined,
+    communicationType: getValidValue(filters.communicationType),
     iunMatch: getValidValue(filters.iunMatch),
   };
 };
@@ -77,6 +84,7 @@ const FilterNotifications = forwardRef(({ showFilters, currentDelegator }: Props
   const emptyValues = {
     startDate: undefined,
     endDate: undefined,
+    communicationType: '' as const,
     iunMatch: '',
     mandateId: currentDelegator?.mandateId,
   };
@@ -144,6 +152,7 @@ const FilterNotifications = forwardRef(({ showFilters, currentDelegator }: Props
       const currentFilters = {
         startDate: values.startDate,
         endDate: values.endDate,
+        communicationType: values.communicationType,
         iunMatch: values.iunMatch,
         mandateId: currentDelegator?.mandateId,
       };
@@ -182,6 +191,7 @@ const FilterNotifications = forwardRef(({ showFilters, currentDelegator }: Props
     return <></>;
   }
   const isInitialSearch = isEqual(formik.values, initialEmptyValues);
+  const showRemoveFilters = isFilterApplied(filtersCount);
   return isMobile ? (
     <CustomMobileDialog>
       <CustomMobileDialogToggle
@@ -200,12 +210,15 @@ const FilterNotifications = forwardRef(({ showFilters, currentDelegator }: Props
       <CustomMobileDialogContent title={t('button.filtra')} ref={dialogRef}>
         <form onSubmit={formik.handleSubmit} data-testid="filter-form">
           <DialogContent>
-            <FilterNotificationsFormBody formikInstance={formik} />
+            <FilterNotificationsFormBody
+              formikInstance={formik}
+              showCommunicationType={!currentDelegator}
+            />
           </DialogContent>
           <DialogActions>
             <FilterNotificationsFormActions
               cleanFilters={cleanFilters}
-              filtersApplied={isFilterApplied(filtersCount)}
+              filtersApplied={showRemoveFilters}
               isInitialSearch={isInitialSearch}
               isInDialog
             />
@@ -224,10 +237,13 @@ const FilterNotifications = forwardRef(({ showFilters, currentDelegator }: Props
             alignItems: 'flex',
           }}
         >
-          <FilterNotificationsFormBody formikInstance={formik} />
+          <FilterNotificationsFormBody
+            formikInstance={formik}
+            showCommunicationType={!currentDelegator}
+          />
           <FilterNotificationsFormActions
             cleanFilters={cleanFilters}
-            filtersApplied={isFilterApplied(filtersCount)}
+            filtersApplied={showRemoveFilters}
             isInitialSearch={isInitialSearch}
           />
         </Grid>

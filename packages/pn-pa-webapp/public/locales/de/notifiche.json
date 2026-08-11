@@ -1,6 +1,7 @@
 {
   "title": "Zustellungen",
   "subtitle": "Hier findest du alle von der Körperschaft gesendeten Zustellungen. Du kannst sie nach Steuernummer, IUN-Code, Sendedatum und Status filtern.",
+  "go-to-detail": "Details anzeigen",
   "new-notification-button": "Eine Zustellung senden",
   "manual-send-disabled-message": "Derzeit können keine neuen Zustellungen gesendet werden.",
   "manual-send-disabled-action": "Plattformstatus prüfen",
@@ -29,8 +30,12 @@
     "subtitle-single-f24": "Hier kannst du die dem Bescheid angehängten F24-Vordrucke anzeigen.",
     "subtitle-multiple": "Zur Anzeige des Zahlungsstatus der an die Bescheid angehängten pagoPA-Benachrichtigungen, Empfänger auswählen.",
     "subtitle-multiple-f24": "Zur Anzeige der dem Bescheid beigefügten angehängten Vordrucke F24 Empfänger auswählen.",
+    "recipient": "Empfänger",
     "pagopa-notice": "Bescheid pagoPA",
-    "paid": "Bezahlt",
+    "status": {
+      "to-pay": "Zu zahlen",
+      "succeeded": "Bezahlt"
+    },
     "f24-attached": "Angehängte Vordrucke F24",
     "attachments": "Anhänge",
     "f24-dialog-title": "Anhänge der Vordrucke F24 zur Zustellung {{iun}}"
@@ -38,13 +43,14 @@
   "table": {
     "title": "Tabelle der Zustellungen",
     "date": "Datum",
-    "recipient": "Empfänger",
+    "recipient": "Steuernummer",
     "subject": "Betreff",
     "iun": "IUN-Code",
     "groups": "Gruppen",
     "status": "Status",
     "show-detail": "Siehe Detail",
-    "aria-action-table": "Benachrichtigungsdetails mit IUN anzeigen: {{iun}}"
+    "aria-action-table": "Zustellung mit IUN öffnen: {{iun}}",
+    "open": "Öffnen"
   },
   "sort": {
     "title": "Sortieren",
@@ -54,20 +60,35 @@
     "options": "Optionen Sortieren"
   },
   "empty-state": {
-    "filtered": "Wir haben keine Ergebnisse gefunden: Versuche es mit anderen Filtern. <0>Filter entfernen</0>.",
-    "no-notifications": "Die Körperschaft hat noch keine Zustellung gesendet. Verwende die <0>API-Schlüssel</0> oder sende sie <1>manuell</1>.",
+    "filtered": "Keine Zustellungen für die ausgewählten Filter",
+    "filtered-description": "Entferne sie oder versuche es mit einer anderen Kombination.",
+    "clean-filters-cta": "Filter entfernen",
+    "no-notifications": "Die Entität hat noch keine Zustellungen gesendet. Verwende die <0>API-Schlüssel</0> oder führe einen <1>manuellen Versand</1> durch.",
     "timeout": "Keine Ergebnisse gefunden; versuchen Sie es mit anderen Filtern",
-    "aria-label-remove-filters": "Filter entfernen",
-    "aria-label-api-keys": "API-Schlüssel",
-    "aria-label-create-notification": "Manuelle Sendung"
+    "generic-error": "Die Zustellungen konnten nicht abgerufen werden.",
+    "generic-error-cta": "Versuche es erneut"
   },
   "detail": {
+    "protocol-number": "Protokollnummer",
+    "subject": "Betreff der Zustellung",
+    "notification-details-aria-label": "Zu den Details der Zustellung gehen",
+    "legal-value": "Rechtsgültige Zustellung",
+    "notification-timeline-section": {
+      "title": "Status der Zustellung",
+      "aria-label": "Zur Chronik der Zustellung gehen"
+    },
+    "notification-detail-section": {
+      "title": "Details der Zustellung",
+      "aar": "Empfangsbestätigung",
+      "aria-label": "Zur Empfangsbestätigung gehen"
+    },
     "document-not-available": "Das Dokument kann in wenigen Minuten heruntergeladen werden. Du kannst es erneut versuchen, indem du die Seite neu lädst oder auf den Link des angeforderten Dokuments klickst",
     "table-aria-label": "Einzelheiten zur Zustellung",
     "payment-table-aria-label": "Einzelheiten zu Zahlungen",
     "sender": "Absender",
     "recipient": "Empfänger",
     "recipients": "Empfänger",
+    "notification-text": "Text der Zustellung",
     "tax-id-citizen-recipient": "Steuernummer des Empfängers",
     "tax-id-organization-recipient": "Steuernummer des Empfängers",
     "date": "Sendedatum",
@@ -112,12 +133,11 @@
       }
     },
     "acts": "Beigefügte Anlagen",
-    "download-message-available": "Die Dokumente sind 120 Tage nach Vervollständigung der Zustellung online verfügbar.",
-    "download-message-expired": "Da seit dem Abschlussdatum 120 Tage verstrichen sind, sind die Dokumente nicht mehr verfügbar.",
-    "download-aar-available": "Die Empfangsbestätigung ist 10 Jahre ab Vervollständigung der Zustellung online verfügbar.",
-    "download-aar-expired": "Da seit der Vervollständigung 10 Jahre vergangen sind, steht die Empfangsbestätigung nicht mehr zur Verfügung.",
+    "download-message-available": "<0>Bis zu 120 Tage online verfügbar</0> ab dem Datum, an dem die SEND Zustellung rechtsgültig wurde.",
+    "download-message-expired": "Die Dokumente sind nicht mehr online verfügbar.",
+    "download-aar-available": "<0>10 Jahre lang online verfügbar</0> ab dem Datum, an dem die SEND-Zustellung Rechtskraft erlangt hat.",
+    "download-aar-expired": "Die Empfangsbestätigung ist nicht mehr online verfügbar.",
     "download-files-link": "Wann ist die Bearbeitung einer Zustellung vervollständigt?",
-    "aar-acts": "Empfangsbestätigung",
     "timeline-title": "Status der Zustellung",
     "legalfact": "Bescheinigung kann von Dritten angefochten werden",
     "receipt": "Quittung",
@@ -347,13 +367,13 @@
       },
       "radd": {
         "title": "Die Dokumente wurden abgeholt",
-        "description-mono-recipient": "Der Empfänger oder sein Bevollmächtigter hat die zugestellten Dokumente bei einer zur Zustellung berechtigten Person abgeholt.",
-        "description-multi-recipients": "Einer der Empfänger oder sein Bevollmächtigter hat die zugestellten Dokumente bei einer zur Zustellung berechtigten Person abgeholt."
+        "description-mono-recipient": "Der Empfänger oder die bevollmächtigte Person hat die zugestellten Dokumente bei einem zur Aushändigung befugten Betreiber abgeholt.",
+        "description-multi-recipients": "Einer der Empfänger oder eine bevollmächtigte Person hat die zugestellten Dokumente bei einem für die Übergabe befugten Betreiber abgeholt."
       },
       "tpp-type": "ein digitaler Kanal von Drittanbietern"
     },
     "downtimes": {
-      "title": "FEHLFUNKTIONEN",
+      "title": "Fehlfunktionen",
       "textWithEndDate": "Fehlfunktion begonnen {{startDate}} und behoben {{endDate}} an folgenden Funktionen:",
       "textWithoutEndDate": "Beginn der Fehlfunktion {{startDate}} und noch nicht vollständig behoben an folgenden Funktionen:",
       "datePrefix": "am ",

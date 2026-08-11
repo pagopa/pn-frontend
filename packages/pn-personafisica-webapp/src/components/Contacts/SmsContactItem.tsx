@@ -3,15 +3,7 @@ import { Trans, useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router-dom';
 
 import PowerSettingsNewIcon from '@mui/icons-material/PowerSettingsNew';
-import {
-  Box,
-  Button,
-  ButtonProps,
-  Chip,
-  TextFieldProps,
-  Typography,
-  TypographyProps,
-} from '@mui/material';
+import { Box, ButtonProps, Chip, TextFieldProps, Typography, TypographyProps } from '@mui/material';
 import { EventAction, PnInfoCard, appStateActions } from '@pagopa-pn/pn-commons';
 import { ButtonNaked } from '@pagopa/mui-italia';
 
@@ -407,17 +399,14 @@ const SmsContactItem: React.FC<SmsItemProps> = ({
   const getActions = () =>
     isActive
       ? [
-          <Button
-            data-testid="disable-sms"
-            key="disable"
-            variant="naked"
-            color="error"
-            startIcon={<PowerSettingsNewIcon />}
-            onClick={handleDisableSms}
-            sx={{ p: '10px 16px' }}
-          >
-            {t('button.disable')}
-          </Button>,
+          {
+            key: 'disable',
+            label: t('button.disable'),
+            icon: <PowerSettingsNewIcon />,
+            destructive: true,
+            testId: 'disable-sms',
+            onClick: handleDisableSms,
+          },
         ]
       : undefined;
 
@@ -426,6 +415,8 @@ const SmsContactItem: React.FC<SmsItemProps> = ({
       <PnInfoCard
         title={
           <Typography
+            component="span"
+            display="block"
             variant="h6"
             fontWeight={700}
             fontSize={{ xs: '22px', lg: '24px' }}
@@ -437,6 +428,7 @@ const SmsContactItem: React.FC<SmsItemProps> = ({
         }
         subtitle={
           <Chip
+            component="span"
             label={t(`status.${isActive ? 'active' : 'inactive'}`, { ns: 'recapiti' })}
             color={getChipColor()}
             size="small"
@@ -444,7 +436,6 @@ const SmsContactItem: React.FC<SmsItemProps> = ({
           />
         }
         actions={getActions()}
-        expanded={isActive}
         data-testid="smsContact"
       >
         <SmsContactElem slotsProps={slotsProps} />

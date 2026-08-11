@@ -25,6 +25,7 @@ import PFEventStrategyFactory from '../../utility/MixpanelUtils/PFEventStrategyF
 
 type Props = {
   source: ContactSource;
+  my?: number;
 };
 
 type DomicileBannerData = {
@@ -109,7 +110,7 @@ const resolveCta = (
   };
 };
 
-const DomicileBanner: React.FC<Props> = ({ source }) => {
+const DomicileBanner: React.FC<Props> = ({ source, my = 4 }) => {
   const { t } = useTranslation(['recapiti', 'common']);
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
@@ -162,7 +163,7 @@ const DomicileBanner: React.FC<Props> = ({ source }) => {
   };
 
   return open && domicileBannerData ? (
-    <Box my={4}>
+    <Box my={my}>
       <Banner
         variant="tertiary"
         color="info"

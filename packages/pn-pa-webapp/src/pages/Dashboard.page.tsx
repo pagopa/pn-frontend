@@ -2,7 +2,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
-import { Box, Button, Typography } from '@mui/material';
+import { Box, Button } from '@mui/material';
 import {
   A11yMessage,
   ApiErrorWrapper,
@@ -21,6 +21,7 @@ import DesktopNotifications from '../components/Notifications/DesktopNotificatio
 import FilterNotifications from '../components/Notifications/FilterNotifications';
 import MobileNotifications from '../components/Notifications/MobileNotifications';
 import NotificationSettingsDrawer from '../components/Notifications/NotificationSettingsDrawer';
+import { NotificationsGenericErrorState } from '../components/Notifications/NotificationsEmptyState';
 import { PAEventsType } from '../models/PAEventsType';
 import * as routes from '../navigation/routes.const';
 import { authSelectors } from '../redux/auth/reducers';
@@ -42,6 +43,7 @@ const Dashboard = () => {
   const isSupportUser = useAppSelector(authSelectors.selectIsSupportUser);
   const navigate = useNavigate();
   const isMobile = useIsMobile();
+  const isSmallScreen = useIsMobile('sm');
   const { t } = useTranslation(['notifiche']);
   const { publishEvent } = useEventEmitter<A11yMessage>('a11y-message');
 
@@ -90,7 +92,15 @@ const Dashboard = () => {
     }
 
     return IS_MANUAL_SEND_ENABLED ? (
-      <Box display="flex" gap={5}>
+      <Box
+        display="flex"
+        sx={{
+          flexDirection: { xs: 'column-reverse', sm: 'row' },
+          gap: { xs: 2, sm: 5 },
+          width: { xs: '100%', sm: 'auto' },
+          mt: { xs: 3 },
+        }}
+      >
         <NotificationSettingsDrawer />
         <Button
           id="new-notification-btn"
@@ -104,12 +114,13 @@ const Dashboard = () => {
     ) : (
       <MIAlert
         severity="warning"
-        description={t('manual-send-disabled-message')}
         action={{
           label: t('manual-send-disabled-action'),
           onClick: () => navigate(routes.APP_STATUS),
         }}
-      />
+      >
+        {t('manual-send-disabled-message')}
+      </MIAlert>
     );
   };
 
@@ -121,11 +132,11 @@ const Dashboard = () => {
         pagination.page === 0 ? undefined : pagination.nextPagesKey[pagination.page - 1],
     };
 
-    setHasTimeoutError(false);
-
     dispatch(getSentNotifications(params))
       .unwrap()
       .then((data) => {
+        setHasTimeoutError(false);
+
         PAEventStrategyFactory.triggerEvent(PAEventsType.SEND_PA_HAS_NOTIFICATIONS, {
           value: data.resultsPage.length > 0,
         });
@@ -186,7 +197,8 @@ const Dashboard = () => {
       <TitleBox
         title={t('title')}
         variantTitle="h4"
-        mbTitle={3}
+        variantSubTitle="body2"
+        mbTitle={1}
         propsTitle={{
           display: 'flex',
           justifyContent: 'space-between',
@@ -194,19 +206,11 @@ const Dashboard = () => {
           flexWrap: 'wrap',
           gap: 3,
         }}
-        titleButton={getTitleButtonContent()}
-        subTitle={
-          <Box
-            display={isMobile ? 'block' : 'flex'}
-            justifyContent="space-between"
-            alignItems="center"
-          >
-            <Typography variant="body1" sx={{ marginBottom: isMobile ? 3 : undefined }}>
-              {t('subtitle')}
-            </Typography>
-          </Box>
-        }
+        titleButton={!isSmallScreen ? getTitleButtonContent() : undefined}
+        subTitle={t('subtitle')}
       />
+
+      {isSmallScreen && getTitleButtonContent()}
 
       <Box sx={{ mb: { xs: 0, lg: 3 } }}>
         <FilterNotifications ref={filterNotificationsRef} showFilters />
@@ -214,8 +218,9 @@ const Dashboard = () => {
 
       <ApiErrorWrapper
         apiId={DASHBOARD_ACTIONS.GET_SENT_NOTIFICATIONS}
-        reloadAction={() => fetchNotifications()}
+        reloadAction={fetchNotifications}
         mt={3}
+        customErrorComponent={<NotificationsGenericErrorState onRetry={fetchNotifications} />}
       >
         {isMobile ? (
           <MobileNotifications
@@ -226,6 +231,8 @@ const Dashboard = () => {
             filtersApplied={filterNotificationsRef.current.filtersApplied}
             onCleanFilters={filterNotificationsRef.current.cleanFilters}
             hasTimeoutError={hasTimeoutError}
+            loading={loading}
+            onRetry={fetchNotifications}
           />
         ) : (
           <DesktopNotifications
@@ -236,9 +243,11 @@ const Dashboard = () => {
             filtersApplied={filterNotificationsRef.current.filtersApplied}
             onCleanFilters={filterNotificationsRef.current.cleanFilters}
             hasTimeoutError={hasTimeoutError}
+            loading={loading}
+            onRetry={fetchNotifications}
           />
         )}
-        {notifications.length > 0 && (
+        {notifications.length > 0 && !hasTimeoutError && (
           <CustomPagination
             paginationData={{
               size: pagination.size,

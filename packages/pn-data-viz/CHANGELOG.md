@@ -3,6 +3,32 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.25.0](https://github.com/pagopa/pn-frontend/compare/v2.24.2...v2.25.0) (2026-08-06)
+
+
+
+# [2.25.0-RC.0](https://github.com/pagopa/pn-frontend/compare/v2.24.1...v2.25.0-RC.0) (2026-07-24)
+
+
+### Bug Fixes
+
+* **PN-20130:** use children instead of description on MIAlert  ([#1934](https://github.com/pagopa/pn-frontend/issues/1934)) ([2350d4f](https://github.com/pagopa/pn-frontend/commit/2350d4f16c3f1d615af5074e034783d1aeebb37d))
+
+
+
+
+
+# [2.25.0](https://github.com/pagopa/pn-frontend/compare/v2.24.1...v2.25.0) (2026-07-24)
+
+
+### Bug Fixes
+
+* **PN-20130:** use children instead of description on MIAlert  ([#1934](https://github.com/pagopa/pn-frontend/issues/1934)) ([2350d4f](https://github.com/pagopa/pn-frontend/commit/2350d4f16c3f1d615af5074e034783d1aeebb37d))
+
+
+
+
+
 ## [2.24.2](https://github.com/pagopa/pn-frontend/compare/v2.24.2-RC.0...v2.24.2) (2026-08-06)
 
 **Note:** Version bump only for package @pagopa-pn/pn-data-viz

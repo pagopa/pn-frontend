@@ -11,7 +11,6 @@ import * as yup from 'yup';
 import AccountBalanceIcon from '@mui/icons-material/AccountBalance';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import {
-  Alert,
   Box,
   Checkbox,
   DialogContentText,
@@ -35,7 +34,7 @@ import {
   TosPrivacyConsent,
   searchStringLimitReachedText,
 } from '@pagopa-pn/pn-commons';
-import { Autocomplete, theme } from '@pagopa/mui-italia';
+import { Autocomplete, MIAlert, theme } from '@pagopa/mui-italia';
 
 import { PFEventsType } from '../../models/PFEventsType';
 import {
@@ -94,7 +93,12 @@ const ErrorBanner: React.FC<{ type: ErrorBannerType | undefined; contactValue?: 
 }) => {
   if (type === ErrorBannerType.ALREADY_EXISTS) {
     return (
-      <Alert severity="warning" sx={{ mt: 2 }} data-testid="alreadyExistsAlert" aria-live="polite">
+      <MIAlert
+        severity="warning"
+        data-testid="alreadyExistsAlert"
+        aria-live="polite"
+        sx={{ mt: 2 }}
+      >
         <Trans
           ns="recapiti"
           i18nKey="special-contacts.contact-already-exists"
@@ -106,15 +110,15 @@ const ErrorBanner: React.FC<{ type: ErrorBannerType | undefined; contactValue?: 
             contactValue,
           }}
         />
-      </Alert>
+      </MIAlert>
     );
   } else if (type === ErrorBannerType.VALIDATING_PEC) {
     return (
-      <Alert
+      <MIAlert
         severity="warning"
-        sx={{ mt: 2 }}
         data-testid="validatingPecForSenderAlert"
         aria-live="assertive"
+        sx={{ mt: 2 }}
       >
         <Trans
           ns="recapiti"
@@ -124,7 +128,7 @@ const ErrorBanner: React.FC<{ type: ErrorBannerType | undefined; contactValue?: 
             <Typography key="paragraph_2" variant="body2" />,
           ]}
         />
-      </Alert>
+      </MIAlert>
     );
   }
   return null;

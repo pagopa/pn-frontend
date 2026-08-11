@@ -245,6 +245,26 @@ export function clampMax(date: Date, max: Date): Date {
   return date.getTime() > max.getTime() ? max : date;
 }
 
+export function getDateInfo(date: string): { day: string; month: string; year: string } {
+  const [day, month, year] = formatDate(date).split('/');
+  const months = [
+    'january',
+    'february',
+    'march',
+    'april',
+    'may',
+    'june',
+    'july',
+    'august',
+    'september',
+    'october',
+    'november',
+    'december',
+  ];
+
+  return { day, month: months[parseInt(month, 10) - 1], year };
+}
+
 /**
  * Checks if the date is within a date range
  *

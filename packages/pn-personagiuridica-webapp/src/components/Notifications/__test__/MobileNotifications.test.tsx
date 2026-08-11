@@ -39,7 +39,8 @@ describe('MobileNotifications Component', () => {
     expect(filters).not.toBeInTheDocument();
     const norificationCards = result!.queryAllByTestId('mobileNotificationsCards');
     expect(norificationCards).toHaveLength(0);
-    expect(result!.container).toHaveTextContent(/empty-state.no-notifications/i);
+    expect(result.container).toHaveTextContent(/empty-state.title/i);
+    expect(result.container).toHaveTextContent(/empty-state.description/i);
   });
 
   it('renders component - no notification - delegate access', async () => {

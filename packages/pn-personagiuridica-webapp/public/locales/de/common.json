@@ -1,4 +1,6 @@
 {
+  "iun": "IUN-Code",
+  "logo": "Logo von",
   "button": {
     "filtra": "Filtern",
     "annulla filtro": "Filter entfernen",
@@ -28,9 +30,9 @@
     "understand": "OK, verstanden"
   },
   "menu": {
-    "notifiche": "Bescheide",
-    "notifiche-impresa": "Bescheide des Unternehmens",
-    "notifiche-delegato": "Bescheide mit Vollmacht",
+    "notifiche": "Posteingang",
+    "notifiche-impresa": "Posteingang für {{organization}}",
+    "notifiche-delegato": "Posteingang aus Vollmachten",
     "deleghe": "Vollmachten",
     "profilo": "Deine Daten",
     "contacts": "Anschriften",
@@ -243,6 +245,11 @@
   "code-modal": {
     "digits": ["Erste Ziffer", "Zweite Ziffer", "Dritte Ziffer", "Vierte Ziffer", "Letzte Ziffer"]
   },
+  "user-validation-failed": {
+    "title": "Die eingegebenen Daten sind ungültig",
+    "description": "Ein oder mehrere mit deinem Benutzerkonto verknüpfte Daten sind ungültig. Bitte kontaktiere den Support, um das Problem zu beheben.",
+    "cta": "Support kontaktieren"
+  },
   "autocomplete": {
     "clear": "Ausgewählte Optionen entfernen",
     "toggle-open": "Öffne das Auswahlmenü",
@@ -250,5 +257,6 @@
     "selection-box": "Ausgewählte Optionen",
     "selection-done": "%s ausgewählt",
     "delete-selection": "Entferne %s"
-  }
+  },
+  "not-available": "Nicht verfügbar"
 }

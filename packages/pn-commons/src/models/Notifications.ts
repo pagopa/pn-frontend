@@ -1,4 +1,6 @@
-import { NotificationStatus } from './NotificationStatus';
+import { NotificationStatus, UnifiedNotificationStatus } from './NotificationStatus';
+
+export type NotificationCommunicationType = 'LEGAL' | 'INFORMAL';
 
 export interface Notification {
   iun: string;
@@ -12,8 +14,16 @@ export interface Notification {
   mandateId?: string;
 }
 
-export interface GetNotificationsResponse {
-  resultsPage: Array<Notification>;
+export interface RecipientNotification extends Omit<Notification, 'notificationStatus'> {
+  notificationStatus: UnifiedNotificationStatus;
+  communicationType: NotificationCommunicationType;
+  isNewNotification: boolean;
+}
+
+export interface GetNotificationsResponse<
+  T extends Notification | RecipientNotification = Notification
+> {
+  resultsPage: Array<T>;
   moreResult: boolean;
   nextPagesKey: Array<string>;
 }
@@ -24,11 +34,15 @@ export interface GetNotificationsParams {
   mandateId?: string;
   recipientId?: string;
   status?: string;
-  subjectRegExp?: string;
   size?: number;
   nextPagesKey?: string;
   iunMatch?: string;
   group?: string;
+  communicationType?: NotificationCommunicationType | '';
 }
 
-export type NotificationColumnData = Notification & { badge?: string; action: string };
+export type NotificationColumnData<T extends Notification | RecipientNotification = Notification> =
+  T & {
+    badge?: string;
+    action: string;
+  };

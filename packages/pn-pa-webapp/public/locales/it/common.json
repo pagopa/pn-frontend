@@ -14,6 +14,7 @@
     "delete": "Elimina"
   },
   "menu": {
+    "notifications-send": "Notifica con SEND",
     "notifications": "Notifiche",
     "users": "Utenti",
     "groups": "Gruppi",
@@ -216,5 +217,6 @@
     "selection-box": "Opzioni selezionate",
     "selection-done": "%s selezionati",
     "delete-selection": "Elimina %s"
-  }
+  },
+  "not-available": "Non disponibile"
 }

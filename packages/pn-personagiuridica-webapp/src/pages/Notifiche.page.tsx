@@ -8,6 +8,7 @@ import {
   CustomPagination,
   NotificationColumnData,
   PaginationData,
+  RecipientNotification,
   Sort,
   TitleBox,
   calculatePages,
@@ -28,8 +29,10 @@ import { contactsSelectors } from '../redux/contact/reducers';
 import { DASHBOARD_ACTIONS, getReceivedNotifications } from '../redux/dashboard/actions';
 import { setNotificationFilters, setPagination, setSorting } from '../redux/dashboard/reducers';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
+import { setHasNewNotifications } from '../redux/sidemenu/reducers';
 import { RootState } from '../redux/store';
 import PGEventStrategyFactory from '../utility/MixpanelUtils/PGEventStrategyFactory';
+import { hasActiveFilters } from '../utility/notification.utility';
 
 type Props = {
   isDelegatedPage?: boolean;
@@ -63,12 +66,11 @@ const Notifiche = ({ isDelegatedPage = false }: Props) => {
 
   const isMobile = useIsMobile();
   const pageTitle = !isDelegatedPage
-    ? t('title', { recipient: organization.name })
-    : t('title-delegated-notifications', { recipient: organization.name });
+    ? t('title', { organization: organization.name })
+    : t('title-delegated-notifications');
 
-  const pageSubTitle = !isDelegatedPage
-    ? t('subtitle', { recipient: organization.name })
-    : t('subtitle-delegated-notifications', { recipient: organization.name });
+  const hasGroupSelector =
+    isDelegatedPage && organization.groups && organization.groups?.length > 0;
 
   // back end return at most the next three pages
   // we have flag moreResult to check if there are more pages
@@ -140,6 +142,14 @@ const Notifiche = ({ isDelegatedPage = false }: Props) => {
       .then((data) => {
         setPageReady(true);
 
+        if (pagination.page === 0 && !isDelegatedPage && !hasActiveFilters(filters)) {
+          dispatch(
+            setHasNewNotifications(
+              data.resultsPage.some((notifications) => notifications.isNewNotification)
+            )
+          );
+        }
+
         if (!isDelegatedPage) {
           registerNotificationSectionSuperProperties(data.resultsPage.length);
           PGEventStrategyFactory.triggerEvent(PGEventsType.SEND_PG_YOUR_NOTIFICATION, {
@@ -172,7 +182,7 @@ const Notifiche = ({ isDelegatedPage = false }: Props) => {
   };
 
   // Sort handlers
-  const handleChangeSorting = (s: Sort<NotificationColumnData>) => {
+  const handleChangeSorting = (s: Sort<NotificationColumnData<RecipientNotification>>) => {
     dispatch(setSorting(s));
   };
 
@@ -186,8 +196,13 @@ const Notifiche = ({ isDelegatedPage = false }: Props) => {
   }, []);
 
   useEffect(() => {
+    if (isDelegatedPage && filters.communicationType) {
+      dispatch(setNotificationFilters({ ...filters, communicationType: '' }));
+      return;
+    }
+
     fetchNotifications();
-  }, [fetchNotifications]);
+  }, [fetchNotifications, isDelegatedPage, filters, dispatch]);
 
   // Announce every time loading goes from true -> false
   useEffect(() => {
@@ -212,26 +227,31 @@ const Notifiche = ({ isDelegatedPage = false }: Props) => {
   return (
     <LoadingPageWrapper isInitialized={pageReady}>
       <Box p={3}>
-        {userHasAdminPermissions && !organizationGroup && !isDelegatedPage && (
-          <DomicileBanner
-            source={ContactSource.HOME_NOTIFICHE}
-            onBannerResolved={handleDomicileBannerResolved}
-          />
-        )}
         <TitleBox
           variantTitle="h4"
           title={pageTitle}
-          subTitle={pageSubTitle}
-          variantSubTitle={'body1'}
-          mbTitle={isMobile ? 3 : undefined}
+          mbTitle={isMobile ? 3 : 0}
+          propsTitle={
+            hasGroupSelector
+              ? {
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                }
+              : undefined
+          }
           titleButton={
-            isDelegatedPage &&
-            organization.groups &&
-            organization.groups?.length > 0 && (
+            hasGroupSelector && (
               <GroupSelector currentGroup={group ?? ''} onGroupSelection={handleGroupSelction} />
             )
           }
         />
+        {userHasAdminPermissions && !organizationGroup && !isDelegatedPage && (
+          <DomicileBanner
+            source={ContactSource.HOME_NOTIFICHE}
+            onBannerResolved={handleDomicileBannerResolved}
+            my={3}
+          />
+        )}
         <ApiErrorWrapper
           apiId={DASHBOARD_ACTIONS.GET_RECEIVED_NOTIFICATIONS}
           reloadAction={fetchNotifications}
