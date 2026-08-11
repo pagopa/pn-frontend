@@ -1,6 +1,7 @@
 {
   "title": "Notifiche",
   "subtitle": "Qui trovi tutte le notifiche inviate dall'ente. Puoi filtrarle per Codice Fiscale, Codice IUN, data di invio e stato.",
+  "go-to-detail": "Vai al dettaglio",
   "new-notification-button": "Invia una notifica",
   "manual-send-disabled-message": "In questo momento, non è possibile inviare nuove notifiche.",
   "manual-send-disabled-action": "Controlla lo stato della piattaforma",
@@ -29,8 +30,12 @@
     "subtitle-single-f24": "Qui puoi vedere i modelli F24 allegati alla notifica.",
     "subtitle-multiple": "Per vedere lo stato di pagamento degli avvisi pagoPA allegati alla notifica, seleziona un destinatario.",
     "subtitle-multiple-f24": "Per vedere i modelli F24 allegati alla notifica, seleziona un destinatario.",
+    "recipient": "Destinatario",
     "pagopa-notice": "Avviso pagoPA",
-    "paid": "Pagato",
+    "status": {
+      "to-pay": "Da pagare",
+      "succeeded": "Pagato"
+    },
     "f24-attached": "Modelli F24 allegati",
     "attachments": "allegati",
     "f24-dialog-title": "Modelli F24 allegati alla notifica {{iun}}"
@@ -38,7 +43,7 @@
   "table": {
     "title": "Tabella delle notifiche",
     "date": "Data",
-    "recipient": "Destinatario",
+    "recipient": "Codice fiscale",
     "subject": "Oggetto",
     "iun": "Codice IUN",
     "groups": "Gruppi",
@@ -63,12 +68,26 @@
     "generic-error-cta": "Prova di nuovo"
   },
   "detail": {
+    "protocol-number": "Numero protocollo",
+    "subject": "Oggetto della notifica",
+    "notification-details-aria-label": "Vai alle informazioni di dettaglio della notifica",
+    "legal-value": "Notifica a valore legale",
+    "notification-timeline-section": {
+      "title": "Stato della notifica",
+      "aria-label": "Vai alla timeline della notifica"
+    },
+    "notification-detail-section": {
+      "title": "Dettaglio della notifica",
+      "aar": "Avviso di avvenuta ricezione",
+      "aria-label": "Vai all'avviso di avvenuta ricezione"
+    },
     "document-not-available": "Al momento non è possibile scaricare il documento, riprova più tardi. Per riprovare, ricarica la pagina o premi sul link del documento.",
     "table-aria-label": "Dettaglio notifica",
     "payment-table-aria-label": "Dettaglio pagamenti",
     "sender": "Mittente",
-    "recipient": "Destinatario",
-    "recipients": "Destinatari",
+    "recipient": "Persona destinataria",
+    "recipients": "Persone destinatarie",
+    "notification-text": "Testo della notifica",
     "tax-id-citizen-recipient": "Codice Fiscale destinatario",
     "tax-id-organization-recipient": "Codice Fiscale destinatario",
     "date": "Data di invio",
@@ -113,12 +132,11 @@
       }
     },
     "acts": "Documenti allegati",
-    "download-message-available": "I documenti sono disponibili online per 120 giorni dal perfezionamento della notifica.",
-    "download-message-expired": "Poiché sono trascorsi 120 giorni dalla data di perfezionamento, i documenti non sono più disponibili.",
-    "download-aar-available": "L’avviso di avvenuta ricezione è disponibile online per 10 anni dal perfezionamento della notifica.",
-    "download-aar-expired": "Poiché sono trascorsi 10 anni dalla data di perfezionamento, l’avviso di avvenuta ricezione non è più disponibile.",
+    "download-message-available": "<0>Disponibile online fino a 120 giorni</0> dalla data in cui la notifica SEND ha assunto valore di legge.",
+    "download-message-expired": "I documenti non sono più disponibili online.",
+    "download-aar-available": "<0>Disponibile online per 10 anni</0> dalla data in cui la notifica SEND ha assunto valore di legge.",
+    "download-aar-expired": "L’avviso di avvenuta ricezione non è più disponibile online.",
     "download-files-link": "Quando si perfeziona una notifica?",
-    "aar-acts": "Avviso di avvenuta ricezione",
     "timeline-title": "Stato della notifica",
     "legalfact": "Attestazione opponibile a terzi",
     "receipt": "Ricevuta",

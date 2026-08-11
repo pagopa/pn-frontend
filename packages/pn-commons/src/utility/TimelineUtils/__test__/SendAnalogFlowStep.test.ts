@@ -114,6 +114,47 @@ describe('SendAnalogFlowStep', () => {
     });
   });
 
+  it('getTimelineStepInfo SEND_ANALOG_PROGRESS - "new attachment" code without attachments falls back to generic description', () => {
+    const sendAnalogFlowStep = new SendAnalogFlowStep();
+    // RECRN001B is a "new attachment" code, but the step carries no attachment
+    timelineElem = getTimelineElem(TimelineCategory.SEND_ANALOG_PROGRESS, {
+      deliveryDetailCode: 'RECRN001B',
+      sendRequestId: 'SEND_ANALOG_DOMICILE_0',
+      attachments: [],
+    });
+    payload.step = timelineElem;
+    payload.allStepsForThisStatus = [];
+    payload.isMultiRecipient = false;
+    expect(sendAnalogFlowStep.getTimelineStepInfo(payload)).toStrictEqual({
+      description: `notifiche - detail.timeline.send-analog-flow-description`,
+      label: sendAnalogFlowStep.getTimelineStepLabel(payload),
+    });
+  });
+
+  it('getTimelineStepInfo SEND_ANALOG_PROGRESS - "new attachment" code with attachments keeps its description', () => {
+    const sendAnalogFlowStep = new SendAnalogFlowStep();
+    // RECRN001B is a "new attachment" code and the step carries an attachment
+    timelineElem = getTimelineElem(TimelineCategory.SEND_ANALOG_PROGRESS, {
+      deliveryDetailCode: 'RECRN001B',
+      sendRequestId: 'SEND_ANALOG_DOMICILE_0',
+      attachments: [{ id: 'doc-1', documentType: 'AR', url: 'https://example.com/doc-1' }],
+    });
+    payload.step = timelineElem;
+    payload.allStepsForThisStatus = [];
+    payload.isMultiRecipient = false;
+    expect(sendAnalogFlowStep.getTimelineStepInfo(payload)).toStrictEqual({
+      description: `notifiche - detail.timeline.send-analog-flow-RECRN001B-description - ${JSON.stringify(
+        {
+          ...sendAnalogFlowStep.nameAndTaxId(payload),
+          registeredLetterKind: '',
+          deliveryFailureCause: '',
+          registeredLetterNumber: '',
+        }
+      )}`,
+      label: sendAnalogFlowStep.getTimelineStepLabel(payload),
+    });
+  });
+
   it('getTimelineStepInfo SEND_ANALOG_PROGRESS - with extra data', () => {
     const sendAnalogFlowStep = new SendAnalogFlowStep();
     const sendAnalogDomicileElem = getTimelineElem(TimelineCategory.SEND_ANALOG_DOMICILE, {

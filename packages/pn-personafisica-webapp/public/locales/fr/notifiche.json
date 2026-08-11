@@ -40,11 +40,11 @@
     "options": "Options de tri"
   },
   "empty-state": {
-    "filtered": "No notifications or communications for the selected filters",
-    "filtered-description": "Remove them or try another combination.",
-    "clean-filters-cta": "Remove filters",
-    "delegate": "Here you will see the legally binding communications of {{name}}",
-    "title": "Here you will see your legally binding notifications and other communications",
+    "filtered": "Aucune notification ou communication pour les filtres sélectionnés",
+    "filtered-description": "Supprime-les ou essaie une autre combinaison.",
+    "clean-filters-cta": "Supprimer les filtres",
+    "delegate": "Ici, tu verras les notifications à valeur juridique de {{name}}",
+    "title": "Ici, tu verras tes notifications à valeur juridique et les autres communications",
     "description-onboarding": "Saviez-vous que vous pouvez économiser en choisissant de recevoir les communications à valeur juridique uniquement au format numérique ?",
     "description": "Mettez à jour vos coordonnées dès maintenant et vous saurez immédiatement quand vous en recevrez une.",
     "go-to-onboarding-cta": "Configurer SEND",
@@ -99,7 +99,7 @@
     "disclaimer-link": "En savoir plus",
     "pec-unreachable": "Maintenez votre adresse PEC libre et active pour tout recevoir au format numérique !",
     "cancelled": {
-      "message": "Cette notification a été annulée par l'organisme émetteur.",
+      "message": "Cette notification a été annulée par l'organisme expéditeur, les documents ne sont donc plus disponibles.",
       "cta": "Que dois-je faire ?"
     },
     "payment": {
@@ -154,7 +154,14 @@
       "title": "Contactez l'organisme émetteur",
       "phone": "Numéro de téléphone de l'organisme",
       "email": "E-mail de l'organisme",
-      "website": "Site web de l'organisme"
+      "website": "Site web de l'organisme",
+      "copy_phone": "Numéro de téléphone copié"
+    },
+    "informal_notification_markdown": {
+      "greeting": "Ciao {{recipientDenomination}},",
+      "attachments_info": "Per avere maggiori informazioni <0>prendi visione degli allegati,</0> che possono fornirti dettagli importanti.",
+      "payment_instructions": "Puoi effettuare il pagamento direttamente premendo <0>Paga</0>. In alternativa, puoi utilizzare l'<0>avviso allegato</0> per saldare l'importo tramite tutti i canali abilitati a pagoPA.",
+      "assistance": "In ogni caso, qualora avessi bisogno di assistenza, <0>contatta {{senderDenomination}} attraverso i suoi canali ufficiali.</0>"
     },
     "acts_files": {
       "downloadable_acts": "<0>Les documents seront disponibles en ligne jusqu'à 120 jours</0> à compter de la date à laquelle la notification SEND a pris valeur de loi. Enregistrez-les sur votre appareil !",
@@ -162,7 +169,7 @@
       "not_downloadable_aar": "L'avis de réception n'est plus disponible. Pour le demander, veuillez vous adresser à l'organisme qui vous l'a envoyé.",
       "downloadable_aar": "<0>Disponible en ligne pendant 10 ans</0> à compter de la date à laquelle la notification SEND a pris valeur juridique.",
       "effected_faq": "Quand une notification est-elle finalisée ?",
-      "informal_downloadable_acts": "Conserve les pièces jointes sur ton appareil : elles seront disponibles en ligne <0>jusqu'à 180 jours à compter de la date de dépôt</0> indiquée en haut !"
+      "informal_downloadable_acts": "Conserve les pièces jointes sur ton appareil : elles seront disponibles en ligne jusqu'à <0>180 jours à compter de la date de dépôt</0> indiquée en haut !"
     },
     "timeline": {
       "schedule-digital-workflow": "Envoi ultérieur par voie numérique",

@@ -43,7 +43,7 @@
     "filtered": "Keine Benachrichtigungen oder Mitteilungen für die ausgewählten Filter",
     "filtered-description": "Entferne sie oder versuche es mit einer anderen Kombination.",
     "clean-filters-cta": "Filter entfernen",
-    "delegate": "Hier siehst du die rechtlichen Mitteilungen von {{name}}",
+    "delegate": "Hier siehst du die rechtsgültigen Zustellungen von {{name}}",
     "title": "Hier siehst du deine rechtlichen Benachrichtigungen und andere Mitteilungen",
     "description-onboarding": "Wusstest du, dass du Geld sparen kannst, wenn du dich dafür entscheidest, rechtliche Mitteilungen nur digital zu erhalten?",
     "description": "Aktualisiere jetzt deine Kontaktdaten, damit du sofort erfährst, wenn du eine erhältst.",
@@ -99,7 +99,7 @@
     "disclaimer-link": "Mehr hierzu",
     "pec-unreachable": "Halten Sie Ihr zertifiziertes E-Mail-Postfach (PEC) frei und aktiv, um alles digital zu erhalten!",
     "cancelled": {
-      "message": "Diese Zustellung wurde von der sendenden Körperschaft storniert.",
+      "message": "Diese Zustellung wurde von der Absenderbehörde annulliert, daher sind die Dokumente nicht mehr verfügbar.",
       "cta": "Was muss ich tun?"
     },
     "payment": {
@@ -154,7 +154,14 @@
       "title": "Kontaktiere die sendende Körperschaft",
       "phone": "Telefonnummer der Körperschaft",
       "email": "E-Mail der Körperschaft",
-      "website": "Website der Körperschaft"
+      "website": "Website der Körperschaft",
+      "copy_phone": "Telefonnummer kopiert"
+    },
+    "informal_notification_markdown": {
+      "greeting": "Ciao {{recipientDenomination}},",
+      "attachments_info": "Per avere maggiori informazioni <0>prendi visione degli allegati,</0> che possono fornirti dettagli importanti.",
+      "payment_instructions": "Puoi effettuare il pagamento direttamente premendo <0>Paga</0>. In alternativa, puoi utilizzare l'<0>avviso allegato</0> per saldare l'importo tramite tutti i canali abilitati a pagoPA.",
+      "assistance": "In ogni caso, qualora avessi bisogno di assistenza, <0>contatta {{senderDenomination}} attraverso i suoi canali ufficiali.</0>"
     },
     "acts_files": {
       "downloadable_acts": "<0>Die Dokumente sind bis zu 120 Tage lang online verfügbar</0> ab dem Datum, an dem die SEND-Benachrichtigung rechtlich wirksam wurde. Speichern Sie sie auf Ihrem Gerät!",
@@ -162,7 +169,7 @@
       "not_downloadable_aar": "Der Zustellungsnachweis ist nicht mehr verfügbar. Um ihn anzufordern, wenden Sie sich bitte an die Behörde, die ihn Ihnen zugesendet hat.",
       "downloadable_aar": "<0>10 Jahre lang online verfügbar</0> ab dem Datum, an dem die SEND-Zustellung Rechtskraft erlangt hat.",
       "effected_faq": "Wann ist die Bearbeitung einer Zustellung vervollständigt?",
-      "informal_downloadable_acts": "Speichere die Anhänge auf deinem Gerät: Sie sind online <0>bis zu 180 Tage ab dem Hinterlegungsdatum</0> verfügbar, das du oben findest!"
+      "informal_downloadable_acts": "Speichere die Anhänge auf deinem Gerät: Sie sind online bis zu <0>180 Tage ab dem Hinterlegungsdatum</0> verfügbar, das du oben findest!"
     },
     "timeline": {
       "schedule-digital-workflow": "Weiterer digitaler Versand",

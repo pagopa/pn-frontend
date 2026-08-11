@@ -1,6 +1,7 @@
 {
   "title": "Obvestila",
   "subtitle": "Tukaj boste našli vsa obvestila, ki jih je poslala organizacija. Filtrirate jih lahko po davčni številki, kodi IUN, datumu pošiljanja in stanju.",
+  "go-to-detail": "Pojdi na podrobnosti",
   "new-notification-button": "Pošlji obvestilo",
   "manual-send-disabled-message": "Trenutno ni mogoče pošiljati novih obvestil.",
   "manual-send-disabled-action": "Preverite stanje platforme",
@@ -29,8 +30,12 @@
     "subtitle-single-f24": "Tukaj si lahko ogledate obrazce F24, ki so priloženi obvestilu.",
     "subtitle-multiple": "Če si želite ogledati stanje plačila opozoril pagoPA, priloženih obvestilu, izberite prejemnika.",
     "subtitle-multiple-f24": "Če si želite ogledati obrazce F24, priložene obvestilu, izberite prejemnika.",
+    "recipient": "Prejemnik",
     "pagopa-notice": "Opozorilo pagoPA",
-    "paid": "Plačano",
+    "status": {
+      "to-pay": "Za plačilo",
+      "succeeded": "Plačano"
+    },
     "f24-attached": "Priloženi obrazci F24",
     "attachments": "priloge",
     "f24-dialog-title": "Obrazci F24, priloženi obvestilu {{iun}}"
@@ -38,7 +43,7 @@
   "table": {
     "title": "Tabela obvestil",
     "date": "Datum",
-    "recipient": "Prejemnik",
+    "recipient": "Davčna številka",
     "subject": "Zadeva",
     "iun": "Koda IUN",
     "groups": "Skupine",
@@ -64,12 +69,26 @@
     "generic-error-cta": "Poskusite znova"
   },
   "detail": {
+    "protocol-number": "Številka protokola",
+    "subject": "Zadeva obvestila",
+    "notification-details-aria-label": "Pojdi na podrobnosti obvestila",
+    "legal-value": "Pravno veljavno obvestilo",
+    "notification-timeline-section": {
+      "title": "Stanje obvestila",
+      "aria-label": "Pojdi na časovnico obvestila"
+    },
+    "notification-detail-section": {
+      "title": "Podrobnosti obvestila",
+      "aar": "Potrdilo o prejemu",
+      "aria-label": "Pojdi na potrdilo o prejemu"
+    },
     "document-not-available": "Dokument bo mogoče prenesti v nekaj minutah. Poskusite lahko znova tako, da ponovno naložite stran ali kliknete povezavo zahtevanega dokumenta",
     "table-aria-label": "Podrobnosti o obvestilu",
     "payment-table-aria-label": "Podrobnosti o plačilih",
     "sender": "Pošiljatelj",
     "recipient": "Prejemnik",
     "recipients": "Prejemniki",
+    "notification-text": "Besedilo obvestila",
     "tax-id-citizen-recipient": "Davčna številka prejemnika",
     "tax-id-organization-recipient": "Davčna številka prejemnika",
     "date": "Datum pošiljanja",
@@ -114,12 +133,11 @@
       }
     },
     "acts": "Priloženi dokumenti",
-    "download-message-available": "Dokumenti so na voljo na spletu 120 dni od zaključka obvestila.",
-    "download-message-expired": "Ker je od datuma zaključka minilo 120 dni, dokumenti niso več na voljo.",
-    "download-aar-available": "Obvestilo o prejemu je na voljo na spletu 10 let od zaključka obvestila.",
-    "download-aar-expired": "Ker je od datuma zaključka minilo 10 let, obvestilo o prejemu ni več na voljo.",
+    "download-message-available": "<0>Na spletu na voljo do 120 dni</0> od datuma, ko je obvestilo SEND začelo pravno veljati.",
+    "download-message-expired": "Dokumenti niso več na voljo na spletu.",
+    "download-aar-available": "<0>Na voljo na spletu 10 let</0> od datuma, ko je vročitev SEND postala pravno veljavna.",
+    "download-aar-expired": "Potrdilo o prejemu ni več na voljo na spletu.",
     "download-files-link": "Kdaj se obvestilo zaključi?",
-    "aar-acts": "Potrdilo o prejemu",
     "timeline-title": "Stanje obvestila",
     "legalfact": "Potrdilo, izvršljivo proti tretjim osebam",
     "receipt": "Potrdilo o prejemu",

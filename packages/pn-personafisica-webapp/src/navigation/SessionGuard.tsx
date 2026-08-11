@@ -17,8 +17,17 @@ import {
 
 import { useRapidAccessParam } from '../hooks/useRapidAccessParam';
 import { PFEventsType } from '../models/PFEventsType';
-import { FimsTokenExchangeRequest, OneIdentityExchangeCodeBody, TokenExchangeRequest } from '../models/User';
-import { apiLogout, exchangeFimsToken, exchangeOneIdentityCode, exchangeToken } from '../redux/auth/actions';
+import {
+  FimsTokenExchangeRequest,
+  OneIdentityExchangeCodeBody,
+  TokenExchangeRequest,
+} from '../models/User';
+import {
+  apiLogout,
+  exchangeFimsToken,
+  exchangeOneIdentityCode,
+  exchangeToken,
+} from '../redux/auth/actions';
 import { resetState as resetUserState, setIsFreshLogin } from '../redux/auth/reducers';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { resetState as resetGeneralState } from '../redux/sidemenu/reducers';
@@ -33,7 +42,7 @@ const SessionGuard = () => {
   const location = useLocation();
   const dispatch = useAppDispatch();
   const rapidAccess = useRapidAccessParam();
-  const { loading, loginProvider } = useAppSelector((state: RootState) => state.userState);
+  const { loading } = useAppSelector((state: RootState) => state.userState);
   const { sessionToken, exp } = useAppSelector((state: RootState) => state.userState.user);
   const navigate = useNavigate();
   const { WORK_IN_PROGRESS, INACTIVITY_HANDLER_MINUTES } = getConfiguration();
@@ -114,6 +123,7 @@ const SessionGuard = () => {
     AppResponsePublisher.error.subscribe('exchangeTokenOneIdentity', manageUnforbiddenError);
     try {
       const response = await dispatch(exchangeOneIdentityCode(exchangeCodeParams)).unwrap();
+      dispatch(setIsFreshLogin(true));
       sessionCheck(response.exp);
 
       PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_LOGIN_METHOD, {
@@ -155,7 +165,7 @@ const SessionGuard = () => {
 
     dispatch(resetUserState());
     dispatch(resetGeneralState());
-    goToLoginPortal({ loginProvider, search: location.search });
+    goToLoginPortal({ search: location.search });
   };
 
   useEffect(() => {
@@ -176,7 +186,6 @@ const SessionGuard = () => {
     } else {
       goToLoginPortal({
         rapidAccess,
-        loginProvider,
         search: aarSearchWithUtm ?? location.search,
       });
     }

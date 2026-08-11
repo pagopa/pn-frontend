@@ -43,7 +43,7 @@
     "filtered": "No notifications or communications for the selected filters",
     "filtered-description": "Remove them or try another combination.",
     "clean-filters-cta": "Remove filters",
-    "delegate": "Here you will see the legally binding communications of {{name}}",
+    "delegate": "Here you will see the legally binding notifications of {{name}}",
     "title": "Here you will see your legally binding notifications and other communications",
     "description-onboarding": "Did you know you can save money by choosing to receive legally binding communications only digitally?",
     "description": "Update your contact details now and you will immediately know when you receive one.",
@@ -99,7 +99,7 @@
     "disclaimer-link": "Discover more",
     "pec-unreachable": "Keep your certified email (PEC) mailbox free and active to receive everything digitally!",
     "cancelled": {
-      "message": "This notification has been cancelled by the issuing institution.",
+      "message": "This notification was cancelled by the sending authority, so the documents are no longer available.",
       "cta": "What should I do?"
     },
     "payment": {
@@ -154,7 +154,14 @@
       "title": "Contact the issuing institution",
       "phone": "Institution's phone number",
       "email": "Institution's email address",
-      "website": "Institution's website"
+      "website": "Institution's website",
+      "copy_phone": "Phone number copied"
+    },
+    "informal_notification_markdown": {
+      "greeting": "Ciao {{recipientDenomination}},",
+      "attachments_info": "Per avere maggiori informazioni <0>prendi visione degli allegati,</0> che possono fornirti dettagli importanti.",
+      "payment_instructions": "Puoi effettuare il pagamento direttamente premendo <0>Paga</0>. In alternativa, puoi utilizzare l'<0>avviso allegato</0> per saldare l'importo tramite tutti i canali abilitati a pagoPA.",
+      "assistance": "In ogni caso, qualora avessi bisogno di assistenza, <0>contatta {{senderDenomination}} attraverso i suoi canali ufficiali.</0>"
     },
     "acts_files": {
       "downloadable_acts": "<0>Documents will be available online for up to 120 days</0> from the date the SEND notification became legally effective. Save them to your device!",
@@ -162,7 +169,7 @@
       "not_downloadable_aar": "The acknowledgment of receipt is no longer available. To request it, please contact the institution that sent it to you.",
       "downloadable_aar": "<0>Available online for 10 years</0> from the date the SEND notification became legally binding.",
       "effected_faq": "When is a notification finalized?",
-      "informal_downloadable_acts": "Save the attachments to your device: they will be available online <0>for up to 180 days from the filing date</0> shown at the top!"
+      "informal_downloadable_acts": "Save the attachments to your device: they will be available online for up to <0>180 days from the filing date</0> shown at the top!"
     },
     "timeline": {
       "schedule-digital-workflow": "Further sending digitally",

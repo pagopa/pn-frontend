@@ -14,30 +14,29 @@ import {
   ROUTE_LOGIN_ERROR,
   ROUTE_LOGOUT,
   ROUTE_ONE_IDENTITY_CALLBACK,
-  ROUTE_ONE_IDENTITY_LOGIN,
-  ROUTE_ONE_IDENTITY_LOGIN_ERROR,
-  ROUTE_ONE_IDENTITY_LOGOUT,
   ROUTE_SUCCESS,
 } from './routes.const';
-
-const onLoginRequest = () => <Login />;
 
 const Router: React.FC = () => {
   const { ONE_IDENTITY_LOGIN_ENABLED } = getConfiguration();
 
   return (
     <Routes>
-      <Route path={ROUTE_LOGIN} element={onLoginRequest()} />
-      <Route path={ROUTE_LOGIN_ERROR} element={<LoginError />} />
-      <Route path={ROUTE_LOGOUT} element={<Logout />} />
+      <Route
+        path={ROUTE_LOGIN}
+        element={ONE_IDENTITY_LOGIN_ENABLED ? <OneIdentityLogin /> : <Login />}
+      />
+      <Route
+        path={ROUTE_LOGIN_ERROR}
+        element={ONE_IDENTITY_LOGIN_ENABLED ? <OneIdentityLoginError /> : <LoginError />}
+      />
+      <Route
+        path={ROUTE_LOGOUT}
+        element={ONE_IDENTITY_LOGIN_ENABLED ? <OneIdentityLogout /> : <Logout />}
+      />
       <Route path={ROUTE_SUCCESS} element={<SuccessPage />} />
       {ONE_IDENTITY_LOGIN_ENABLED && (
-        <>
-          <Route path={ROUTE_ONE_IDENTITY_LOGIN} element={<OneIdentityLogin />} />
-          <Route path={ROUTE_ONE_IDENTITY_CALLBACK} element={<OneIdentityCallback />} />
-          <Route path={ROUTE_ONE_IDENTITY_LOGIN_ERROR} element={<OneIdentityLoginError />} />
-          <Route path={ROUTE_ONE_IDENTITY_LOGOUT} element={<OneIdentityLogout />} />
-        </>
+        <Route path={ROUTE_ONE_IDENTITY_CALLBACK} element={<OneIdentityCallback />} />
       )}
       <Route path="*" element={<Navigate to={ROUTE_LOGIN} replace />} />
     </Routes>

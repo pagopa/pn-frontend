@@ -139,7 +139,7 @@ const NotificationTimeline: React.FC = () => {
 
     return (
       <PnBreadcrumb
-        linkRoute={backRoute}
+        linkRoute={mandateId ? routes.NOTIFICHE_DELEGATO : routes.NOTIFICHE}
         linkLabel={t('menu.notifiche')}
         currentLocationLabel={notification.subject ?? ''}
         goBackAction={() => navigate(backRoute)}
