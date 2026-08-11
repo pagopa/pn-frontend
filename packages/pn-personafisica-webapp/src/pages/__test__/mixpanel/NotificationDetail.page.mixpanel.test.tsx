@@ -131,7 +131,9 @@ describe('NotificationDetail.page - Mixpanel events', () => {
     await waitFor(() => getAllByTestId('documentButton'));
     fireEvent.click(getAllByTestId('documentButton')[0]);
 
-    expect(triggerEventSpy).toHaveBeenCalledWith(PFEventsType.SEND_DOWNLOAD_ATTACHMENT);
+    expect(triggerEventSpy).toHaveBeenCalledWith(PFEventsType.SEND_DOWNLOAD_ATTACHMENT, {
+      notification_type: 'notifica',
+    });
   });
 
   it('fires SEND_DOWNLOAD_RECEIPT_NOTICE when the AAR document is clicked', async () => {
