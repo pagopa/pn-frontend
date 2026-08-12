@@ -15,8 +15,8 @@ type Props = {
 const FilterNotificationsFormActions = ({
   filtersApplied,
   cleanFilters,
-  isInitialSearch,
   isInDialog = false,
+  isInitialSearch,
 }: Props) => {
   const { t } = useTranslation(['common']);
 

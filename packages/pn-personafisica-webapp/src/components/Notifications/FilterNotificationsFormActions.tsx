@@ -7,9 +7,9 @@ import { MIButton } from '@pagopa/mui-italia';
 
 type Props = {
   filtersApplied: boolean;
-  isInitialSearch: boolean;
   cleanFilters: () => void;
   isInDialog?: boolean;
+  isInitialSearch: boolean;
 };
 
 const FilterNotificationsFormActions = ({
@@ -23,9 +23,9 @@ const FilterNotificationsFormActions = ({
   const confirmAction = (
     <Grid item lg="auto" xs={12}>
       <Button
-        type="submit"
         id="filter-notifications-button"
         variant="outlined"
+        type="submit"
         size="small"
         disabled={isInitialSearch && !filtersApplied}
       >
