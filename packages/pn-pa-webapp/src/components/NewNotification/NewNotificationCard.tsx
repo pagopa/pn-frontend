@@ -51,7 +51,7 @@ const NewNotificationCard = ({
         sx={{ marginTop: '40px', marginBottom: '20px' }}
       >
         <Button
-          id="step-subt"
+          id="step-submit"
           variant="contained"
           type="submit"
           disabled={isContinueDisabled}
