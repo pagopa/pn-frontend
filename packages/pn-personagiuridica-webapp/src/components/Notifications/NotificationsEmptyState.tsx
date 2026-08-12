@@ -27,7 +27,7 @@ const FilteredEmptyStateContent: React.FC<{ cleanFilters: () => void }> = ({ cle
 
   return (
     <>
-      <Typography variant="subtitle2" fontSize="16px" sx={{ color: 'text.secondary', mb: 1 }}>
+      <Typography variant="subtitle2" fontSize="16px" sx={{ color: 'text.secondary' }}>
         {t('empty-state.filtered')}
       </Typography>
       <Typography variant="body2" fontSize="14px" color="text.secondary" sx={{ mb: 2 }}>
@@ -56,7 +56,7 @@ const DefaultEmptyStateContent: React.FC = () => {
 
   return (
     <>
-      <Typography variant="subtitle2" fontSize="16px" sx={{ color: 'text.secondary', mb: 1 }}>
+      <Typography variant="subtitle2" fontSize="16px" sx={{ color: 'text.secondary' }}>
         {t('empty-state.title')}
       </Typography>
       <Typography variant="body2" fontSize="14px" color="text.secondary" sx={{ mb: 2 }}>

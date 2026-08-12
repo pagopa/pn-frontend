@@ -7,16 +7,16 @@ import { MIButton } from '@pagopa/mui-italia';
 
 type Props = {
   filtersApplied: boolean;
+  isInitialSearch: boolean;
   cleanFilters: () => void;
   isInDialog?: boolean;
-  isInitialSearch: boolean;
 };
 
 const FilterNotificationsFormActions = ({
   filtersApplied,
-  isInitialSearch,
   cleanFilters,
   isInDialog = false,
+  isInitialSearch,
 }: Props) => {
   const { t } = useTranslation(['common']);
 

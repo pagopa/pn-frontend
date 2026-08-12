@@ -40,7 +40,7 @@ const DigitalDomicileOption: React.FC<DigitalDomicileOption> = ({ title, content
     <Typography flexGrow={1} variant="body1" fontSize="14px" mt={1} mb={3}>
       {content}
     </Typography>
-    <MIButton variant="text" endIcon={<ArrowForwardIcon />} onClick={action.callback}>
+    <MIButton endIcon={<ArrowForwardIcon />} variant="text" onClick={action.callback}>
       {action.text}
     </MIButton>
   </Stack>
