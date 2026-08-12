@@ -52,7 +52,7 @@ const SyncFeedbackApiKey = ({ newApiKey = '' }) => {
               maxWidth: '450px',
               input: {
                 textAlign: 'center',
-                color: '#0073E6',
+                color: 'primary.main',
               },
             }}
             InputProps={{

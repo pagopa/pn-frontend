@@ -36,7 +36,7 @@ const FilteredEmptyStateContent: React.FC<{ cleanFilters: () => void }> = ({ cle
 
   return (
     <>
-      <Typography variant="subtitle2" fontSize="16px" sx={{ color: '#636B82' }}>
+      <Typography variant="subtitle2" fontSize="16px" sx={{ color: 'text.secondary' }}>
         {t('empty-state.filtered')}
       </Typography>
       <Typography variant="body2" fontSize="14px" color="text.secondary" sx={{ mb: 2 }}>
@@ -58,7 +58,7 @@ const FilteredEmptyStateContent: React.FC<{ cleanFilters: () => void }> = ({ cle
 const DelegatorEmptyStateContent: React.FC<{ currentDelegator: Delegator }> = ({
   currentDelegator,
 }) => (
-  <Typography variant="subtitle2" fontSize="16px" sx={{ color: '#636B82' }}>
+  <Typography variant="subtitle2" fontSize="16px" sx={{ color: 'text.secondary' }}>
     <Trans
       values={{ name: currentDelegator.delegator?.displayName }}
       ns="notifiche"
@@ -74,7 +74,7 @@ const DefaultEmptyStateContent: React.FC<{ showOnboardingContent: boolean }> = (
 
   return (
     <>
-      <Typography variant="subtitle2" fontSize="16px" sx={{ color: '#636B82' }}>
+      <Typography variant="subtitle2" fontSize="16px" sx={{ color: 'text.secondary' }}>
         {t('empty-state.title')}
       </Typography>
       <Typography variant="body2" fontSize="14px" color="text.secondary" sx={{ mb: 2 }}>

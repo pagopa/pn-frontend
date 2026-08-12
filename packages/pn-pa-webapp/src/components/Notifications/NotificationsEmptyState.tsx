@@ -62,7 +62,7 @@ const NotificationsEmptyStateView: React.FC<NotificationsEmptyStateViewProps> = 
       variant="subtitle2"
       fontSize="16px"
       sx={{
-        color: '#636B82',
+        color: 'text.secondary',
         mb: description ? 1 : action ? 2 : 0,
       }}
     >

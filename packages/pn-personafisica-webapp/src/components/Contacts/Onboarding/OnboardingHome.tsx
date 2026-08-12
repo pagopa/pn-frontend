@@ -77,7 +77,7 @@ const PaperContent = ({ items }: { items: Array<Item> }) => (
           sx={{
             minWidth: 0,
             mt: 0.25,
-            color: '#BBC2D6',
+            color: (theme) => theme.palette.grey[300],
           }}
         >
           {item.icon}
@@ -85,7 +85,13 @@ const PaperContent = ({ items }: { items: Array<Item> }) => (
         <ListItemText
           primary={item.text}
           disableTypography
-          sx={{ m: 0, ml: 1, fontWeight: 400, fontSize: '0.875rem', color: '#555C70' }}
+          sx={{
+            m: 0,
+            ml: 1,
+            fontWeight: 400,
+            fontSize: '0.875rem',
+            color: 'text.secondary',
+          }}
         />{' '}
       </ListItem>
     ))}

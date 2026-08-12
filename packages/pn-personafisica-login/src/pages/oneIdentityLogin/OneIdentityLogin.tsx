@@ -178,11 +178,15 @@ const OneIdentityLogin: React.FC = () => {
                 fontWeight={700}
                 fontSize={{ xs: '28px', lg: '36px' }}
                 lineHeight={{ xs: '40px', lg: '50px' }}
-                sx={{ color: '#0E0F13' }}
+                sx={{ color: 'text.primary' }}
               >
                 {t('loginPage.title')}
               </Typography>
-              <Typography component="h2" textAlign="center" sx={{ mb: 5, mt: 1, color: '#555C70' }}>
+              <Typography
+                component="h2"
+                textAlign="center"
+                sx={{ mb: 5, mt: 1, color: 'text.secondary' }}
+              >
                 {t('loginPage.description')}
               </Typography>
             </Grid>

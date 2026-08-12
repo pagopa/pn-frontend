@@ -306,13 +306,14 @@ const FileUpload = ({
               display="inline"
               variant="body2"
               textAlign="center"
-              color={fileData.error ? 'error' : ''}
+              color={fileData.error ? 'error.dark' : 'text.primary'}
             >
               {uploadText}&nbsp;{getLocalizedOrDefaultLabel('common', 'upload-file.or')}
               &nbsp;
             </Typography>
             <MIButton
               variant="contained"
+              color={fileData.error ? 'error' : 'primary'}
               onClick={chooseFileHandler}
               data-testid="loadFromPc"
               sx={{ margin: isMobile ? '10px 0' : '0 10px' }}

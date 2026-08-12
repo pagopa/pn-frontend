@@ -7,13 +7,12 @@ import { Avatar, Stack, Typography } from '@mui/material';
 import {
   EventAction,
   IllusAppIO,
-  IllusAppIoLogo,
   IllusSendLogo,
   PnInfoCard,
   appStateActions,
   useIsMobile,
 } from '@pagopa-pn/pn-commons';
-import { MIButton, MIChip } from '@pagopa/mui-italia';
+import { LogoIOApp, MIButton, MIChip } from '@pagopa/mui-italia';
 
 import { PFEventsType } from '../../models/PFEventsType';
 import { AddressType, IOAllowedValues, IOContactStatus } from '../../models/contacts';
@@ -242,11 +241,11 @@ const IOContact: React.FC = () => {
       slotProps={{ Card: { id: 'ioContactSection' } }}
     >
       <Stack direction="row" alignItems="center" data-testid="ioContact">
-        <Avatar variant="rounded" sx={{ bgcolor: '#0B3EE3', width: '36px', height: '36px' }}>
-          <IllusAppIoLogo />
+        <Avatar variant="rounded" sx={{ bgcolor: 'primary.main', width: '36px', height: '36px' }}>
+          <LogoIOApp title="AppIoLogo" color="light" size={24} />
         </Avatar>
         <CompareArrowsIcon sx={{ width: '24px', height: '24px', mx: 1, color: 'text.secondary' }} />
-        <Avatar variant="rounded" sx={{ bgcolor: '#0B3EE3', width: '36px', height: '36px' }}>
+        <Avatar variant="rounded" sx={{ bgcolor: 'primary.main', width: '36px', height: '36px' }}>
           <IllusSendLogo />
         </Avatar>
       </Stack>

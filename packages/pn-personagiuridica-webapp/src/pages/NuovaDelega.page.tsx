@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import * as yup from 'yup';
 
-import AccountBalanceIcon from '@mui/icons-material/AccountBalance';
+import AccountBalanceRoundedIcon from '@mui/icons-material/AccountBalance';
 import PeopleIcon from '@mui/icons-material/People';
 import {
   Box,
@@ -176,7 +176,7 @@ const NuovaDelega = () => {
 
   const renderOption = (option: Party) => (
     <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-      <AccountBalanceIcon fontSize="small" sx={{ color: theme.colors.neutral.grey[300] }} />
+      <AccountBalanceRoundedIcon fontSize="small" sx={{ color: theme.colors.neutral.grey[300] }} />
       {option.name}
     </Box>
   );

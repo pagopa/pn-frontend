@@ -2,8 +2,9 @@ import React, { JSXElementConstructor, ReactElement, ReactNode } from 'react';
 
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { Box, Paper, PaperProps, Stack, StackProps, Typography } from '@mui/material';
-import { IllusCompleted, IllustrationProps, MIButton, MIButtonProps } from '@pagopa/mui-italia';
+import { IllusMICompleted, IllustrationProps, MIButton, MIButtonProps } from '@pagopa/mui-italia';
 
+import { useIsMobile } from '../../hooks';
 import { checkChildren } from '../../utility/children.utility';
 import { getLocalizedOrDefaultLabel } from '../../utility/localization.utility';
 import PnWizardStep, { PnWizardStepProps } from './PnWizardStep';
@@ -56,8 +57,8 @@ const PnWizard: React.FC<Props> = ({
   const PrevButton = slots?.prevButton || MIButton;
   const NextButton = slots?.nextButton || MIButton;
   const ExitButton = slots?.exitButton || MIButton;
-  const FeedbackIcon = slots?.feedbackIcon || IllusCompleted;
-
+  const FeedbackIcon = slots?.feedbackIcon || IllusMICompleted;
+  const isMobile = useIsMobile();
   const childrens = React.Children.toArray(children);
   const steps = childrens
     .filter(
@@ -163,9 +164,11 @@ const PnWizard: React.FC<Props> = ({
         <Stack
           direction={{ xs: 'column-reverse', md: 'row' }}
           justifyContent="space-between"
+          spacing={isMobile ? 2 : 0}
           {...slotsProps?.actions}
         >
           <PrevButton
+            variant="text"
             data-testid="prev-button"
             sx={{ mt: { xs: 2, md: 0 } }}
             {...(slotsProps?.prevButton as MIButtonProps)}

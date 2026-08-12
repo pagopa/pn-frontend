@@ -8,7 +8,7 @@ import { ChangeEvent, forwardRef, useEffect, useImperativeHandle, useRef, useSta
 import { Trans, useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 
-import AccountBalanceIcon from '@mui/icons-material/AccountBalance';
+import AccountBalanceRoundedIcon from '@mui/icons-material/AccountBalance';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import {
   Box,
@@ -195,7 +195,10 @@ const AddSpecialContact = forwardRef<AddSpecialContactRef, Props>(
 
     const renderOption = (option: Party) => (
       <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-        <AccountBalanceIcon fontSize="small" sx={{ color: theme.colors.neutral.grey[300] }} />
+        <AccountBalanceRoundedIcon
+          fontSize="small"
+          sx={{ color: theme.colors.neutral.grey[300] }}
+        />
         {option.name}
       </Box>
     );
