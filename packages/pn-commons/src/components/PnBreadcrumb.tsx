@@ -61,7 +61,8 @@ const PnBreadcrumb = ({
         </BreadcrumbLink>
         <MuiLink
           id="title-of-page"
-          sx={{ display: 'flex', alignItems: 'center', color: 'text.primary' }}
+          color="text.primary"
+          sx={{ display: 'flex', alignItems: 'center' }}
           aria-current="page"
           underline="none"
         >
