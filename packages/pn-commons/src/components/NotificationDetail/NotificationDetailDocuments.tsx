@@ -2,7 +2,7 @@ import React, { ReactElement } from 'react';
 import { Trans } from 'react-i18next';
 
 import DoNotDisturbIcon from '@mui/icons-material/DoNotDisturb';
-import OpenInBrowserIcon from '@mui/icons-material/OpenInBrowser';
+import OpenInBrowserRoundedIcon from '@mui/icons-material/OpenInBrowserRounded';
 import { Box, Stack, Typography, TypographyProps, useTheme } from '@mui/material';
 import {
   IllusMISingleFile,
@@ -114,7 +114,7 @@ const Documents: React.FC<DocumentsProps> = ({
           <Box
             component={MIButton}
             variant="text"
-            endIcon={<OpenInBrowserIcon />}
+            endIcon={<OpenInBrowserRoundedIcon />}
             onClick={() => clickHandler(document.downloadHandler)}
             data-testid="documentButton"
             size="medium"

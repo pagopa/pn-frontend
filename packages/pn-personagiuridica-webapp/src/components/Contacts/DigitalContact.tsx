@@ -13,7 +13,7 @@ import * as yup from 'yup';
 import CheckIcon from '@mui/icons-material/Check';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import CloseIcon from '@mui/icons-material/Close';
-import CreateIcon from '@mui/icons-material/Create';
+import CreateRoundedIcon from '@mui/icons-material/CreateRounded';
 import DeleteIcon from '@mui/icons-material/Delete';
 import {
   InputAdornment,
@@ -329,7 +329,7 @@ const DigitalContact = forwardRef<{ toggleEdit: () => void }, Props>(
                 key="editButton"
                 variant="text"
                 onClick={toggleEdit}
-                startIcon={<CreateIcon />}
+                startIcon={<CreateRoundedIcon />}
                 sx={{ justifyContent: 'left' }}
                 id={`modifyContact-${senderId}_${contactType}`}
               >

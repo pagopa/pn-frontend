@@ -1,6 +1,6 @@
 import React, { JSXElementConstructor, ReactElement, ReactNode } from 'react';
 
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import ArrowBackRoundedIcon from '@mui/icons-material/ArrowBackRounded';
 import { Box, Paper, PaperProps, Stack, StackProps, Typography } from '@mui/material';
 import { IllusMICompleted, IllustrationProps, MIButton, MIButtonProps } from '@pagopa/mui-italia';
 
@@ -137,7 +137,7 @@ const PnWizard: React.FC<Props> = ({
       <Box p={3}>
         <ExitButton
           data-testid="exit-button"
-          startIcon={<ArrowBackIcon />}
+          startIcon={<ArrowBackRoundedIcon />}
           {...({ type: 'button' } as any)}
           {...slotsProps?.exitButton}
           variant="text"

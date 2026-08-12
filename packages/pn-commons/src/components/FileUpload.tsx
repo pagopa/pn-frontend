@@ -1,6 +1,6 @@
 import { ChangeEvent, DragEvent, ReactNode, useEffect, useMemo, useReducer, useRef } from 'react';
 
-import AttachFileIcon from '@mui/icons-material/AttachFile';
+import AttachFileRoundedIcon from '@mui/icons-material/AttachFileRounded';
 import CloseIcon from '@mui/icons-material/Close';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import {
@@ -367,7 +367,7 @@ const FileUpload = ({
                 justifyContent="start"
                 sx={{ minWidth: 0, flex: 1, mb: { xs: 1, lg: 0 } }}
               >
-                <AttachFileIcon color="primary" sx={{ flexShrink: 0, mr: 1 }} />
+                <AttachFileRoundedIcon color="primary" sx={{ flexShrink: 0, mr: 1 }} />
                 <FilenameBox filename={fileData.file.name} />
               </Box>
               <Typography fontWeight={600} sx={{ marginLeft: { lg: '30px' }, flexShrink: 0 }}>

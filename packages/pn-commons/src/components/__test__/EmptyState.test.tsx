@@ -21,7 +21,7 @@ describe('EmptyState component', () => {
     );
     expect(container).toHaveTextContent('empty-state-message empty-state-button');
     const button = getByTestId('emptyStateButton');
-    const sadIcon = getByTestId('SentimentDissatisfiedIcon');
+    const sadIcon = getByTestId('SentimentDissatisfiedRoundedIcon');
     expect(sadIcon).toBeInTheDocument();
     fireEvent.click(button);
     expect(mockAction).toBeCalledTimes(1);
@@ -35,7 +35,7 @@ describe('EmptyState component', () => {
 
   it('renders with custom icon', () => {
     const { getByTestId, queryByTestId } = render(<EmptyState sentimentIcon={<BalconyIcon />} />);
-    const sadIcon = queryByTestId('SentimentDissatisfiedIcon');
+    const sadIcon = queryByTestId('SentimentDissatisfiedRoundedIcon');
     const happyIcon = queryByTestId('InsertEmoticonIcon');
     const customIcon = getByTestId('BalconyIcon');
     expect(sadIcon).not.toBeInTheDocument();

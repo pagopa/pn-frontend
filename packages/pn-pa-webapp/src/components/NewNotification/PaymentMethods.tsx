@@ -2,7 +2,7 @@ import { useFormik } from 'formik';
 import { Fragment } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import AddIcon from '@mui/icons-material/Add';
+import AddRoundedIcon from '@mui/icons-material/AddRounded';
 import { Box, Divider, Paper, Stack, Typography } from '@mui/material';
 import { MIButton } from '@pagopa/mui-italia';
 
@@ -172,7 +172,7 @@ const PaymentMethods: React.FC<Props> = ({ notification, formik, hasFieldError }
 
                   <MIButton
                     variant="text"
-                    startIcon={<AddIcon />}
+                    startIcon={<AddRoundedIcon />}
                     onClick={() => handleAddNewPagoPa(recipientKey)}
                     sx={{ justifyContent: 'start' }}
                     data-testid="add-new-pagopa"
@@ -216,7 +216,7 @@ const PaymentMethods: React.FC<Props> = ({ notification, formik, hasFieldError }
 
                   <MIButton
                     variant="text"
-                    startIcon={<AddIcon />}
+                    startIcon={<AddRoundedIcon />}
                     onClick={() => handleAddNewF24(recipientKey)}
                     sx={{ justifyContent: 'start' }}
                     data-testid="add-new-f24"

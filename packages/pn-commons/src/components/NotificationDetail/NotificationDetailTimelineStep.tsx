@@ -1,8 +1,8 @@
 import { Fragment, ReactNode, useState } from 'react';
 
-import AttachFileIcon from '@mui/icons-material/AttachFile';
-import UnfoldLessIcon from '@mui/icons-material/UnfoldLess';
-import UnfoldMoreIcon from '@mui/icons-material/UnfoldMore';
+import AttachFileRoundedIcon from '@mui/icons-material/AttachFileRounded';
+import UnfoldLessRoundedIcon from '@mui/icons-material/UnfoldLessRounded';
+import UnfoldMoreRoundedIcon from '@mui/icons-material/UnfoldMoreRounded';
 import { TimelineConnector } from '@mui/lab';
 import { Box, Typography } from '@mui/material';
 import {
@@ -206,7 +206,7 @@ const NotificationDetailTimelineStep = ({
               legalFactsIds.map((lf) => (
                 <ButtonNaked
                   key={lf.file.key}
-                  startIcon={<AttachFileIcon />}
+                  startIcon={<AttachFileRoundedIcon />}
                   onClick={() => clickHandler(lf.file)}
                   size="small"
                   color="primary"
@@ -240,7 +240,7 @@ const NotificationDetailTimelineStep = ({
             variant="text"
             id="more-less-timeline-step"
             data-testid="more-less-timeline-step"
-            startIcon={collapsed ? <UnfoldMoreIcon /> : <UnfoldLessIcon />}
+            startIcon={collapsed ? <UnfoldMoreRoundedIcon /> : <UnfoldLessRoundedIcon />}
             onClick={handleShowMoreClick}
           >
             {collapsed ? showMoreButtonLabel : showLessButtonLabel}

@@ -1,7 +1,7 @@
 import { useRef, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 
-import PowerSettingsNewIcon from '@mui/icons-material/PowerSettingsNew';
+import PowerSettingsNewRoundedIcon from '@mui/icons-material/PowerSettingsNewRounded';
 import { Divider, Typography } from '@mui/material';
 import { EventAction, PnInfoCard, appStateActions } from '@pagopa-pn/pn-commons';
 import { MIChip } from '@pagopa/mui-italia';
@@ -302,7 +302,7 @@ const EmailContactItem: React.FC = () => {
           {
             key: 'disable',
             label: t('button.disable'),
-            icon: <PowerSettingsNewIcon />,
+            icon: <PowerSettingsNewRoundedIcon />,
             destructive: true,
             testId: 'disable-email',
             onClick: () => {

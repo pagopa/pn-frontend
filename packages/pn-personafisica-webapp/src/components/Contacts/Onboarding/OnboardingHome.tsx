@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 
 import ArrowForwardRoundedIcon from '@mui/icons-material/ArrowForwardRounded';
 import CheckRoundedIcon from '@mui/icons-material/CheckRounded';
-import ErrorOutlineOutlinedIcon from '@mui/icons-material/ErrorOutlineOutlined';
+import ErrorOutlineRoundedIcon from '@mui/icons-material/ErrorOutlineRounded';
 import {
   Box,
   List,
@@ -126,7 +126,7 @@ const OnboardingHome: React.FC = () => {
         text: t('onboarding.cards.contacts.item_1'),
       },
       {
-        icon: <ErrorOutlineOutlinedIcon />,
+        icon: <ErrorOutlineRoundedIcon />,
         text: t('onboarding.cards.contacts.item_2'),
       },
     ],
@@ -136,7 +136,7 @@ const OnboardingHome: React.FC = () => {
         text: t('onboarding.cards.io.item_1'),
       },
       {
-        icon: <ErrorOutlineOutlinedIcon />,
+        icon: <ErrorOutlineRoundedIcon />,
         text: t('onboarding.cards.io.item_2'),
       },
     ],

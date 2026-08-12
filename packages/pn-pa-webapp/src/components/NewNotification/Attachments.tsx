@@ -3,7 +3,7 @@ import { ChangeEvent, ForwardedRef, forwardRef, useImperativeHandle, useMemo } f
 import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 
-import AddIcon from '@mui/icons-material/Add';
+import AddRoundedIcon from '@mui/icons-material/AddRounded';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { Box, FormControl, SxProps, TextField, Typography, useFormControl } from '@mui/material';
 import { FileUpload, useIsMobile } from '@pagopa-pn/pn-commons';
@@ -383,7 +383,7 @@ const Attachments: React.FC<Props> = ({
             <MIButton
               variant="text"
               onClick={addDocumentHandler}
-              startIcon={<AddIcon />}
+              startIcon={<AddRoundedIcon />}
               sx={{ mt: 4 }}
               data-testid="add-doc"
             >

@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 
-import CompareArrowsIcon from '@mui/icons-material/CompareArrows';
-import PowerSettingsNewIcon from '@mui/icons-material/PowerSettingsNew';
+import CompareArrowsRoundedIcon from '@mui/icons-material/CompareArrowsRounded';
+import PowerSettingsNewRoundedIcon from '@mui/icons-material/PowerSettingsNewRounded';
 import { Avatar, Stack, Typography } from '@mui/material';
 import {
   EventAction,
@@ -230,7 +230,7 @@ const IOContact: React.FC = () => {
               {
                 key: 'disable',
                 label: t('button.disable'),
-                icon: <PowerSettingsNewIcon />,
+                icon: <PowerSettingsNewRoundedIcon />,
                 destructive: true,
                 onClick: handleOpenDeleteModal,
               },
@@ -244,7 +244,9 @@ const IOContact: React.FC = () => {
         <Avatar variant="rounded" sx={{ bgcolor: 'primary.main', width: '36px', height: '36px' }}>
           <LogoIOApp title="AppIoLogo" color="light" size={24} />
         </Avatar>
-        <CompareArrowsIcon sx={{ width: '24px', height: '24px', mx: 1, color: 'text.secondary' }} />
+        <CompareArrowsRoundedIcon
+          sx={{ width: '24px', height: '24px', mx: 1, color: 'text.secondary' }}
+        />
         <Avatar variant="rounded" sx={{ bgcolor: 'primary.main', width: '36px', height: '36px' }}>
           <IllusSendLogo />
         </Avatar>

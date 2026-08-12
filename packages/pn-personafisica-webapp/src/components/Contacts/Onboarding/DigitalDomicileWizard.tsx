@@ -2,7 +2,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import ArrowBackRoundedIcon from '@mui/icons-material/ArrowBackRounded';
 import { Typography } from '@mui/material';
 import {
   ConsentActionType,
@@ -396,7 +396,7 @@ const DigitalDomicileWizard: React.FC = () => {
         variant="text"
         onClick={handlePrevious}
         data-testid="prev-button"
-        startIcon={<ArrowBackIcon />}
+        startIcon={<ArrowBackRoundedIcon />}
         sx={{ mt: { xs: 2, md: 0 } }}
       >
         {t('button.indietro', { ns: 'common' })}

@@ -9,7 +9,7 @@ import HelpIcon from '@mui/icons-material/Help';
 import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded';
 import MailOutlineIcon from '@mui/icons-material/MailOutline';
 import MarkunreadMailboxIcon from '@mui/icons-material/MarkunreadMailbox';
-import SettingsIcon from '@mui/icons-material/Settings';
+import SettingsRoundedIcon from '@mui/icons-material/SettingsRounded';
 import { Box, DialogTitle } from '@mui/material';
 import {
   A11yMessageAnnouncer,
@@ -123,7 +123,7 @@ const App = () => {
         });
         navigate(routes.PROFILO);
       },
-      icon: <SettingsIcon fontSize="small" color="inherit" />,
+      icon: <SettingsRoundedIcon fontSize="small" color="inherit" />,
     };
     const logoutAction = {
       id: 'logout',

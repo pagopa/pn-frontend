@@ -2,7 +2,7 @@ import { JSXElementConstructor, useRef, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router-dom';
 
-import PowerSettingsNewIcon from '@mui/icons-material/PowerSettingsNew';
+import PowerSettingsNewRoundedIcon from '@mui/icons-material/PowerSettingsNewRounded';
 import { Box, TextFieldProps, Typography, TypographyProps } from '@mui/material';
 import { EventAction, PnInfoCard, appStateActions } from '@pagopa-pn/pn-commons';
 import { MIButton, MIButtonProps, MIChip } from '@pagopa/mui-italia';
@@ -402,7 +402,7 @@ const SmsContactItem: React.FC<SmsItemProps> = ({
           {
             key: 'disable',
             label: t('button.disable'),
-            icon: <PowerSettingsNewIcon />,
+            icon: <PowerSettingsNewRoundedIcon />,
             destructive: true,
             testId: 'disable-sms',
             onClick: handleDisableSms,

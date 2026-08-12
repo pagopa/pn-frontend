@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 
-import CompareArrowsIcon from '@mui/icons-material/CompareArrows';
+import CompareArrowsRoundedIcon from '@mui/icons-material/CompareArrowsRounded';
 import { Avatar, List, ListItem, ListItemText, Stack, Typography } from '@mui/material';
 import {
   ConfirmationModal,
@@ -141,7 +141,7 @@ const IOContactWizard: React.FC<Props> = ({ goToNextStep }) => {
           <Avatar variant="rounded" sx={{ bgcolor: 'primary.main', width: '36px', height: '36px' }}>
             <LogoIOApp title="AppIoLogo" color="light" size={24} />
           </Avatar>
-          <CompareArrowsIcon
+          <CompareArrowsRoundedIcon
             sx={{ width: '24px', height: '24px', mx: 1, color: 'text.secondary' }}
           />
           <Avatar variant="rounded" sx={{ bgcolor: 'primary.main', width: '36px', height: '36px' }}>

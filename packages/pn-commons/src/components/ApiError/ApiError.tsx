@@ -1,4 +1,4 @@
-import ReportGmailerrorredIcon from '@mui/icons-material/ReportGmailerrorred';
+import ReportGmailerrorredRoundedIcon from '@mui/icons-material/ReportGmailerrorredRounded';
 import { Link, Stack, Typography, useTheme } from '@mui/material';
 
 import { getLocalizedOrDefaultLabel } from '../../utility/localization.utility';
@@ -52,7 +52,7 @@ const ApiError: React.FC<ApiErrorProps> = ({
       alignItems={'center'}
       data-testid={dataTestId}
     >
-      <ReportGmailerrorredIcon
+      <ReportGmailerrorredRoundedIcon
         fontSize={'small'}
         sx={{ verticalAlign: 'middle', margin: '0 20px' }}
       />

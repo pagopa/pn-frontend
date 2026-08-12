@@ -58,6 +58,7 @@ const DigitalContactManagement: React.FC = () => {
       </MIButton>
     ) : (
       <MIButton
+        variant="text"
         onClick={() => navigate(-1)}
         sx={{ fontSize: '16px', width: { xs: 'unset', md: 'auto' }, mx: 'auto' }}
       >

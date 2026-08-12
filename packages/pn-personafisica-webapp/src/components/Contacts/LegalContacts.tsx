@@ -2,8 +2,8 @@ import { useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
-import ConstructionIcon from '@mui/icons-material/Construction';
-import PowerSettingsNewIcon from '@mui/icons-material/PowerSettingsNew';
+import ConstructionRoundedIcon from '@mui/icons-material/ConstructionRounded';
+import PowerSettingsNewRoundedIcon from '@mui/icons-material/PowerSettingsNewRounded';
 import { Box, Stack, Typography } from '@mui/material';
 import {
   EventAction,
@@ -236,13 +236,13 @@ const LegalContacts = () => {
           {
             key: 'manage',
             label: t('button.manage'),
-            icon: <ConstructionIcon />,
+            icon: <ConstructionRoundedIcon />,
             onClick: handleStartManagement,
           },
           {
             key: 'disable',
             label: t('button.disable'),
-            icon: <PowerSettingsNewIcon />,
+            icon: <PowerSettingsNewRoundedIcon />,
             destructive: true,
             onClick: () => {
               const event = hasSercqSendActive

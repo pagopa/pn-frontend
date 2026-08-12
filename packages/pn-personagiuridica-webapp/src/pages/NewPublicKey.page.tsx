@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
 
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import ArrowBackRoundedIcon from '@mui/icons-material/ArrowBackRounded';
 import { Box, Stack, Step, StepLabel, Stepper } from '@mui/material';
 import { AppResponsePublisher, Prompt, TitleBox, appStateActions } from '@pagopa-pn/pn-commons';
 import { MIButton } from '@pagopa/mui-italia';
@@ -47,7 +47,7 @@ const StepperContainer: React.FC<{ children: React.ReactNode; activeStep: number
       <Box p={3} sx={{ maxWidth: { xs: '100%', lg: '90%' } }}>
         <MIButton
           variant="text"
-          startIcon={<ArrowBackIcon />}
+          startIcon={<ArrowBackRoundedIcon />}
           onClick={() => navigate(routes.INTEGRAZIONE_API)}
           data-testid="exitBtn"
         >

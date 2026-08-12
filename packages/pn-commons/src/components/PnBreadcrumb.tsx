@@ -1,7 +1,7 @@
 import { ReactNode, RefAttributes } from 'react';
 import { Link, LinkProps, useNavigate } from 'react-router-dom';
 
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import ArrowBackRoundedIcon from '@mui/icons-material/ArrowBackRounded';
 import { Breadcrumbs, Link as MuiLink, Stack, styled } from '@mui/material';
 import { MIButton } from '@pagopa/mui-italia';
 
@@ -49,7 +49,7 @@ const PnBreadcrumb = ({
           variant="text"
           id="breadcrumb-indietro-button"
           data-testid="breadcrumb-indietro-button"
-          startIcon={<ArrowBackIcon />}
+          startIcon={<ArrowBackRoundedIcon />}
           onClick={goBackAction ?? (() => navigate(-1))}
         >
           {finalBackLabel}
