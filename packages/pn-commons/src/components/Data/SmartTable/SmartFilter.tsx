@@ -64,16 +64,16 @@ const SmartFilter = <FormValues extends object>({
       id="confirm-button"
       data-testid="confirmButton"
       variant="outlined"
-      disabled={!formIsValid || isPreviousSearch}
       type="submit"
       size="small"
+      disabled={!formIsValid || isPreviousSearch}
     >
       {filterLabel}
     </Button>
   );
 
   const cancelAction = (
-    <Button size="small" data-testid="cancelButton" onClick={clearHandler} disabled={!filtersCount}>
+    <Button data-testid="cancelButton" size="small" onClick={clearHandler} disabled={!filtersCount}>
       {cancelLabel}
     </Button>
   );
