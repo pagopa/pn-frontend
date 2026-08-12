@@ -56,8 +56,9 @@ const CostRow = ({
   hint?: HintMessage;
   isTotal?: boolean;
 }) => {
+  const theme = useTheme();
   const isHighlight = hint?.variant === 'highlight';
-  const hintColor = isHighlight ? '#5517E3' : 'text.secondary';
+  const hintColor = isHighlight ? theme.colors.purple[500] : 'text.secondary';
 
   return (
     <ListItem

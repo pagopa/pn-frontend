@@ -1,23 +1,23 @@
 import { NotificationStatus } from '@pagopa-pn/pn-commons';
 
 export enum GraphColors {
-  navy = '#0073E6',
-  greyBlue = '#5C6F82',
-  lightBlue2 = 'rgba(196, 220, 245, 0.61)', // '#C4DCF5',
-  blue = '#0055AA',
-  gold = '#FFCB46',
-  lightGrey = '#E0E0E0',
-  lightBlue = '#6BCFFB',
-  lightGreen = '#6CC66A',
-  darkGreen = '#5CA85A',
-  lightRed = '#FE6666',
-  turquoise = '#21CDD1',
-  azure = '#00C5CA',
-  pink = '#FB9EAC',
-  darkRed = '#761F1F',
-  lightYellow = '#FFE5A3',
-  goldenYellow = '#D9AD3C',
-  oliveBrown = '#614C15',
+  navy = '#0066CC', // blueItalia[500]
+  greyBlue = '#555C70', // grey[700]
+  lightBlue2 = '#C4DCF5', // blueItalia[100]
+  blue = '#0B3EE3', // blue[500]
+  gold = '#FFC824', // warning[500]
+  lightGrey = '#E8EBF1', // grey[100]
+  lightBlue = '#6BCFFB', // info[500]
+  lightGreen = '#6CC66A', // success[500]
+  darkGreen = '#427940', // success[700]
+  lightRed = '#FF6666', // error[400]
+  turquoise = '#61DCDF', // turquoise[300]
+  azure = '#00C5CA', // turquoise[500]
+  pink = '#FFD9D9', // error[100]
+  darkRed = '#A82929', // error[700]
+  lightYellow = '#FFF5DA', // warning[100]
+  goldenYellow = '#FFD56B', // warning[400]
+  oliveBrown = '#614C15', // warning[850]
 }
 
 export enum CxType {
