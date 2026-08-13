@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import * as yup from 'yup';
 
 import AccountBalanceRoundedIcon from '@mui/icons-material/AccountBalance';
-import PeopleIcon from '@mui/icons-material/People';
+import PeopleRoundedIcon from '@mui/icons-material/PeopleRounded';
 import {
   Box,
   Divider,
@@ -234,7 +234,7 @@ const NuovaDelega = () => {
         linkRoute={routes.DELEGHE}
         linkLabel={
           <Fragment>
-            <PeopleIcon sx={{ mr: 0.5 }} />
+            <PeopleRoundedIcon sx={{ mr: 0.5 }} />
             {t('nuovaDelega.title')}
           </Fragment>
         }

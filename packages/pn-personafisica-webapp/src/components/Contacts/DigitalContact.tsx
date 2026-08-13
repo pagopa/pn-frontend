@@ -223,11 +223,11 @@ const DigitalContact = forwardRef<{ toggleEdit: () => void }, Props>(
               {...semanticTextFieldProps}
             />
             <MIButton
+              {...slotsProps?.button}
               id={`${senderId}_${contactType}-button`}
               variant="contained"
               fullWidth={isMobile}
               data-testid={`${senderId}_${contactType}-button`}
-              {...slotsProps?.button}
               sx={{
                 height: '43px',
               }}
@@ -236,12 +236,7 @@ const DigitalContact = forwardRef<{ toggleEdit: () => void }, Props>(
               {insertButtonLabel}
             </MIButton>
             {onCancelInsert && (
-              <MIButton
-                variant="text"
-                color="error"
-                onClick={onCancelInsert}
-                sx={{ color: 'error.dark' }}
-              >
+              <MIButton variant="text" color="error" onClick={onCancelInsert}>
                 {t('button.annulla')}
               </MIButton>
             )}
@@ -311,7 +306,6 @@ const DigitalContact = forwardRef<{ toggleEdit: () => void }, Props>(
                 color="error"
                 onClick={onCancelEdit}
                 sx={{
-                  color: 'error.dark',
                   justifyContent: 'left',
                 }}
                 variant="text"
@@ -388,7 +382,7 @@ const DigitalContact = forwardRef<{ toggleEdit: () => void }, Props>(
                   color="error"
                   onClick={onDelete}
                   startIcon={<DeleteIcon />}
-                  sx={{ justifyContent: 'left', color: 'error.dark' }}
+                  sx={{ justifyContent: 'left' }}
                 >
                   {t('button.elimina')}
                 </MIButton>

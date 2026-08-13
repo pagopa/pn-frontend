@@ -90,7 +90,6 @@ const SpecialContactItem: React.FC<Props> = ({
                 startIcon={<DeleteIcon />}
                 disabled={hasPecInValidationForEntity(senderId)}
                 sx={{
-                  color: 'error.dark',
                   justifyContent: 'left',
                   pl: { xs: 0, lg: 3 },
                 }}

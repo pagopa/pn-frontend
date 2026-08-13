@@ -586,7 +586,7 @@ const AddSpecialContact = forwardRef<AddSpecialContactRef, Props>(
                       sx={{
                         color:
                           formik.touched.s_disclaimer && Boolean(formik.errors.s_disclaimer)
-                            ? theme.palette.error.dark
+                            ? theme.palette.error.main
                             : theme.palette.text.secondary,
                       }}
                     />

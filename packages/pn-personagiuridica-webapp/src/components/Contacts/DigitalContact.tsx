@@ -203,13 +203,7 @@ const DigitalContact = forwardRef<{ toggleEdit: () => void }, Props>(
               {insertButtonLabel}
             </MIButton>
             {onCancelInsert && (
-              <MIButton
-                variant="text"
-                color="error"
-                onClick={onCancelInsert}
-                sx={{ color: 'error.dark' }}
-                size="medium"
-              >
+              <MIButton variant="text" color="error" onClick={onCancelInsert} size="medium">
                 {t('button.annulla')}
               </MIButton>
             )}
@@ -280,7 +274,7 @@ const DigitalContact = forwardRef<{ toggleEdit: () => void }, Props>(
                 color="error"
                 onClick={onCancelEdit}
                 sx={{
-                  color: 'error.dark',
+                  color: 'error',
                   justifyContent: 'left',
                 }}
                 size="medium"
@@ -342,7 +336,7 @@ const DigitalContact = forwardRef<{ toggleEdit: () => void }, Props>(
                   color="error"
                   onClick={onDelete}
                   startIcon={<DeleteIcon />}
-                  sx={{ justifyContent: 'left', color: 'error.dark' }}
+                  sx={{ justifyContent: 'left' }}
                   size="medium"
                 >
                   {t('button.elimina')}

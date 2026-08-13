@@ -90,7 +90,6 @@ const SpecialContactItem: React.FC<Props> = ({
                 onClick={handleDelete}
                 startIcon={<DeleteIcon />}
                 sx={{
-                  color: 'error.dark',
                   fontWeight: 700,
                   justifyContent: 'left',
                   pl: { xs: 0, lg: 3 },
