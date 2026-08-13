@@ -1,7 +1,5 @@
 import { vi } from 'vitest';
 
-import { ThemeProvider, useTheme } from '@mui/material';
-
 import { NotificationStatus } from '../../../models/NotificationStatus';
 import { RecipientNotification } from '../../../models/Notifications';
 import { Row } from '../../../models/PnTable';
@@ -27,7 +25,6 @@ const data: Row<RecipientNotification> = {
 describe('NotificationsRecipientDataSwitch Component', () => {
   const originalWatchMedia = window.matchMedia;
   const originalResizeObserver = globalThis.ResizeObserver;
-  const theme = useTheme();
 
   beforeAll(() => {
     globalThis.ResizeObserver = vi.fn().mockImplementation(() => ({
@@ -101,11 +98,7 @@ describe('NotificationsRecipientDataSwitch Component', () => {
   });
 
   it('renders component - subject - legal communication', () => {
-    const { container } = render(
-      <ThemeProvider theme={theme}>
-        <NotificationsRecipientDataSwitch data={data} type="subject" />
-      </ThemeProvider>
-    );
+    const { container } = render(<NotificationsRecipientDataSwitch data={data} type="subject" />);
     expect(container).toHaveTextContent(data.subject);
     const legalLabel = getLocalizedOrDefaultLabel('notifications', 'table.legal-value');
     expect(container).toHaveTextContent(legalLabel);
@@ -113,12 +106,10 @@ describe('NotificationsRecipientDataSwitch Component', () => {
 
   it('renders component - subject - informal communication (no legal tag)', () => {
     const { container } = render(
-      <ThemeProvider theme={theme}>
-        <NotificationsRecipientDataSwitch
-          data={{ ...data, communicationType: 'INFORMAL' }}
-          type="subject"
-        />
-      </ThemeProvider>
+      <NotificationsRecipientDataSwitch
+        data={{ ...data, communicationType: 'INFORMAL' }}
+        type="subject"
+      />
     );
     expect(container).toHaveTextContent(data.subject);
     const legalLabel = getLocalizedOrDefaultLabel('notifications', 'table.legal-value');

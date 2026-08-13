@@ -28,7 +28,7 @@ describe('CopyToClipboard component', () => {
     );
     const copy_button = getByRole('button', { name: /text-to-be-displayed/ });
     expect(copy_button).toBeInTheDocument();
-    let copy_icon = getByTestId('ContentCopyRoundedRoundedIcon');
+    let copy_icon = getByTestId('ContentCopyRoundedIcon');
     expect(copy_icon).toBeInTheDocument();
     const text_displayed = getByText(/text-to-be-displayed/);
     expect(text_displayed).toBeInTheDocument();

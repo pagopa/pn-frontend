@@ -298,7 +298,7 @@ const NotificationDetailTimelineStep = ({
                 s.legalFactsIds.map((lf) => (
                   <ButtonNaked
                     fontSize={14}
-                    variant="text"
+                    color="primary"
                     onClick={() => clickHandler(lf)}
                     disabled={disableDownloads}
                     key={lf.key}

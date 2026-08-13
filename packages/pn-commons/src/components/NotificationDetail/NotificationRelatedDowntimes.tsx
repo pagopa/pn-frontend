@@ -220,7 +220,7 @@ const NotificationRelatedDowntimes: React.FC<Props> = ({
                       )}
                     </MIButton>
                   ) : (
-                    <Typography variant="body1">
+                    <Typography variant="body1" color="text.secondary">
                       {getLocalizedOrDefaultLabel(
                         'appStatus',
                         `legends.noFileAvailableByStatus.${event.status}`,
