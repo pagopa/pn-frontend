@@ -1,7 +1,7 @@
 import { FC, Fragment, ReactNode, forwardRef } from 'react';
 
 import { SxProps, TooltipProps } from '@mui/material';
-import { MIChip } from '@pagopa/mui-italia';
+import { MIChip, MIChipProps } from '@pagopa/mui-italia';
 
 import { useIsMobile } from '../../hooks/useIsMobile';
 import CustomTooltip from '../CustomTooltip';
@@ -9,7 +9,7 @@ import CustomTooltip from '../CustomTooltip';
 type Props = {
   tooltip: string | ReactNode;
   label: string;
-  color: 'default' | 'info' | 'warning' | 'error' | 'success' | 'highlight' | 'neutral' | undefined;
+  color: MIChipProps['color'];
   tooltipProps?: Partial<TooltipProps>;
   chipProps?: SxProps;
   ariaLabel?: string;

@@ -19,6 +19,7 @@ import {
   MIAlert,
   MIButton,
   MIChip,
+  MIChipProps,
 } from '@pagopa/mui-italia';
 
 import { PFEventsType } from '../../models/PFEventsType';
@@ -129,7 +130,7 @@ const LegalContacts = () => {
 
   type SubtitleParams = {
     label: string;
-    color: 'default' | 'warning' | 'success' | 'info' | 'error' | 'highlight' | 'neutral';
+    color: MIChipProps['color'];
   };
 
   const getSubtitle = () => {

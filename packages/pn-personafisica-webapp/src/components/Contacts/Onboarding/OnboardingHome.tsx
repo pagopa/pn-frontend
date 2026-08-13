@@ -23,6 +23,7 @@ import {
   IllusMISmartphoneValidation,
   MIButton,
   MIChip,
+  MIChipProps,
 } from '@pagopa/mui-italia';
 
 import { OnboardingAvailableFlows } from '../../../models/Onboarding';
@@ -63,7 +64,7 @@ type CardConfig = Array<{
   path: string;
   chip?: {
     label: string;
-    color: 'default' | 'warning' | 'success' | 'info' | 'error' | 'highlight' | 'neutral';
+    color: MIChipProps['color'];
   };
   hide?: boolean;
   mixpanelFlowId: OnboardingAvailableFlows;

@@ -2,6 +2,7 @@ import { ReactNode } from 'react';
 
 import { Box } from '@mui/material';
 import { formatDate, isToday } from '@pagopa-pn/pn-commons';
+import { MIChipProps } from '@pagopa/mui-italia';
 
 import { ApiKeyStatus, ApiKeyStatusHistory } from '../models/ApiKeys';
 
@@ -68,7 +69,7 @@ export function getApiKeyStatusInfos(
   status: ApiKeyStatus,
   statusHistoryLines: Array<string>
 ): {
-  color: 'default' | 'info' | 'warning' | 'error' | 'success' | 'highlight' | 'neutral' | undefined;
+  color: MIChipProps['color'];
   label: string;
   tooltip: ReactNode;
   description: string;

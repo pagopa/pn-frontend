@@ -5,6 +5,8 @@
 /* eslint-disable functional/immutable-data */
 import { isNil, omit } from 'lodash-es';
 
+import { MIChipProps } from '@pagopa/mui-italia';
+
 import {
   AnalogWorkflowDetails,
   ExtRegistriesPaymentDetails,
@@ -184,7 +186,7 @@ export function getNotificationStatusInfos(
     isParty?: boolean;
   }
 ): {
-  color: 'default' | 'warning' | 'success' | 'info' | 'error' | 'highlight' | 'neutral' | undefined;
+  color: MIChipProps['color'];
   label: string;
   tooltip: string;
   description: string;

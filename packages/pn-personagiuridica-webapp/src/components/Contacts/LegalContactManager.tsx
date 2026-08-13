@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import { Paper, Stack, Typography } from '@mui/material';
-import { MIButton, MIChip } from '@pagopa/mui-italia';
+import { MIButton, MIChip, MIChipProps } from '@pagopa/mui-italia';
 
 import { ChannelType } from '../../models/contacts';
 import { contactsSelectors } from '../../redux/contact/reducers';
@@ -56,7 +56,7 @@ const LegalContactManager: React.FC<Props> = ({ setAction }) => {
 
   const getConfig = (): {
     label: string;
-    color: 'default' | 'warning' | 'success' | 'info' | 'error' | 'highlight' | 'neutral';
+    color: MIChipProps['color'];
     value: string;
   } => {
     if (isValidatingPec) {

@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 
 import { Box } from '@mui/material';
 import { formatDate, isToday } from '@pagopa-pn/pn-commons';
+import { MIChipProps } from '@pagopa/mui-italia';
 
 import { PublicKeyStatus, PublicKeyStatusHistory } from '../generated-client/pg-apikeys';
 import { ExtendedVirtualKeyStatus } from '../models/ApiKeys';
@@ -50,7 +51,7 @@ export function getApiKeyStatusInfos(
   status: PublicKeyStatus | ExtendedVirtualKeyStatus,
   statusHistory?: Array<PublicKeyStatusHistory>
 ): {
-  color: 'default' | 'warning' | 'success' | 'info' | 'error' | 'highlight' | 'neutral';
+  color: MIChipProps['color'];
   label: string;
   tooltip?: ReactNode;
 } {
