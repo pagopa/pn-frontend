@@ -1,7 +1,7 @@
 import { MouseEvent, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { MoreVert } from '@mui/icons-material';
+import { MoreVertRounded } from '@mui/icons-material';
 import { Box, IconButton, Menu, MenuItem, Stack, Typography } from '@mui/material';
 import {
   CustomTagGroup,
@@ -62,7 +62,7 @@ const ApiKeyContextMenu = ({
           aria-haspopup="true"
           aria-expanded={open ? 'true' : undefined}
         >
-          <MoreVert />
+          <MoreVertRounded />
         </IconButton>
       </Box>
       <Menu

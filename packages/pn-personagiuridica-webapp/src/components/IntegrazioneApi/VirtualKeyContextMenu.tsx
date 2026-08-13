@@ -1,7 +1,13 @@
 import { MouseEvent, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { Block, Delete, MoreVert, RemoveRedEye, Sync } from '@mui/icons-material';
+import {
+  BlockRounded,
+  DeleteRounded,
+  MoreVertRounded,
+  RemoveRedEyeRounded,
+  SyncRounded,
+} from '@mui/icons-material';
 import { Box, IconButton, Menu, MenuItem } from '@mui/material';
 import { Row, useHasPermissions } from '@pagopa-pn/pn-commons';
 
@@ -91,7 +97,7 @@ const VirtualKeyContextMenu: React.FC<Props> = ({
         aria-haspopup="true"
         aria-expanded={open ? 'true' : undefined}
       >
-        <MoreVert />
+        <MoreVertRounded />
       </IconButton>
 
       <Menu
@@ -119,7 +125,7 @@ const VirtualKeyContextMenu: React.FC<Props> = ({
             data-testid="buttonRotate"
             onClick={() => handleModalClick(ModalApiKeyView.ROTATE, apiKeyId)}
           >
-            <Sync sx={{ mr: 1 }} />
+            <SyncRounded sx={{ mr: 1 }} />
             {t('context-menu.rotate')}
           </MenuItem>
         )}
@@ -129,7 +135,7 @@ const VirtualKeyContextMenu: React.FC<Props> = ({
             data-testid="buttonBlock"
             onClick={() => handleModalClick(ModalApiKeyView.BLOCK, apiKeyId)}
           >
-            <Block sx={{ mr: 1 }} />
+            <BlockRounded sx={{ mr: 1 }} />
             {t('context-menu.block')}
           </MenuItem>
         )}
@@ -139,7 +145,7 @@ const VirtualKeyContextMenu: React.FC<Props> = ({
             data-testid="buttonView"
             onClick={() => handleModalClick(ModalApiKeyView.VIEW, apiKeyId)}
           >
-            <RemoveRedEye sx={{ mr: 1 }} />
+            <RemoveRedEyeRounded sx={{ mr: 1 }} />
             {t('context-menu.view')}
           </MenuItem>
         )}
@@ -150,7 +156,7 @@ const VirtualKeyContextMenu: React.FC<Props> = ({
             onClick={() => handleModalClick(ModalApiKeyView.DELETE, apiKeyId)}
             sx={{ color: 'error.dark' }}
           >
-            <Delete sx={{ mr: 1 }} />
+            <DeleteRounded sx={{ mr: 1 }} />
             {t('button.elimina', { ns: 'common' })}
           </MenuItem>
         )}

@@ -2,7 +2,7 @@ import { ChangeEvent, useState } from 'react';
 
 import ArrowDropDownRoundedIcon from '@mui/icons-material/ArrowDropDownRounded';
 import { Grid, Menu, MenuItem, Pagination, PaginationItem, SxProps } from '@mui/material';
-import { MIButton } from '@pagopa/mui-italia';
+import { ButtonNaked } from '@pagopa/mui-italia';
 
 import { A11yPaginationLabelsTypes, PaginationData } from '../../models/Pagination';
 import { getLocalizedOrDefaultLabel } from '../../utility/localization.utility';
@@ -113,8 +113,7 @@ const CustomPagination: React.FC<Props> = ({
           data-testid="itemsPerPageSelector"
           className="items-per-page-selector"
         >
-          <MIButton
-            variant="text"
+          <ButtonNaked
             sx={{ fontWeight: 400 }}
             aria-controls={open ? 'basic-menu' : undefined}
             aria-haspopup="true"
@@ -125,7 +124,7 @@ const CustomPagination: React.FC<Props> = ({
             id="rows-per-page"
           >
             {size}
-          </MIButton>
+          </ButtonNaked>
           <Menu
             id="basic-menu"
             anchorEl={anchorEl}
