@@ -29,6 +29,7 @@ import { SendLanguageStrategy } from './Strategies/SendLanguageStrategy';
 import { SendNotificationCountStrategy } from './Strategies/SendNotificationCount';
 import { SendNotificationDetailStrategy } from './Strategies/SendNotificationDetailStrategy';
 import { SendNotificationExpensesDetailStrategy } from './Strategies/SendNotificationExpensesDetailStrategy';
+import { SendNotificationStatusDetailStrategy } from './Strategies/SendNotificationStatusDetail';
 import { SendOnboardingEmailActivationStrategy } from './Strategies/SendOnboardingEmailActivationStrategy';
 import { SendOnboardingFlowStrategy } from './Strategies/SendOnboardingFlowStrategy';
 import { SendOnboardingScreenActionStrategy } from './Strategies/SendOnboardingScreenActionStrategy';
@@ -402,6 +403,7 @@ const eventStrategy: Record<
     new SendDownloadCertificateOpposable(),
   [PFEventsType.SEND_YOUR_NOTIFICATIONS]: new SendYourNotificationsStrategy(),
   [PFEventsType.SEND_NOTIFICATION_DELEGATED]: new SendYourNotificationsStrategy(),
+  [PFEventsType.SEND_NOTIFICATION_STATUS_DETAIL]: new SendNotificationStatusDetailStrategy(),
   [PFEventsType.SEND_YOUR_MANDATES]: new SendYourMandatesStrategy(),
   [PFEventsType.SEND_ADD_MANDATE_UX_CONVERSION]: new SendAddMandateUXConversionStrategy(),
   [PFEventsType.SEND_ADD_MANDATE_UX_SUCCESS]: new SendAddMandateUXSuccessStrategy(),

@@ -8,22 +8,19 @@ describe('NotificationDetailTimeline', () => {
   // Define mock data for props
   const recipients = notificationDTO.recipients;
   const statusHistory = notificationDTO.notificationStatusHistory;
-  const showMoreButtonLabel = 'Show More';
-  const showLessButtonLabel = 'Show Less';
 
   it('renders component', () => {
     const { queryByTestId } = render(
       <NotificationDetailTimeline
         recipients={recipients}
         statusHistory={statusHistory}
-        showMoreButtonLabel={showMoreButtonLabel}
-        showLessButtonLabel={showLessButtonLabel}
         clickHandler={function (): void {
           throw new Error('Function not implemented.');
         }}
       />
     );
     expect(queryByTestId('NotificationDetailTimeline')).toBeInTheDocument();
+    expect(queryByTestId('more-less-timeline-step')).not.toBeInTheDocument();
   });
 
   it('renders macro step with tag reworked', () => {
@@ -50,8 +47,6 @@ describe('NotificationDetailTimeline', () => {
             reworkedStatus: ReworkedStatus.NOT_VALID,
           },
         ]}
-        showMoreButtonLabel={''}
-        showLessButtonLabel={''}
         clickHandler={function (): void {
           throw new Error('Function not implemented.');
         }}

@@ -24,6 +24,7 @@ import { SendHasMandateLoginStrategy } from '../Strategies/SendHasMandateLoginSt
 import { SendHasMandateStrategy } from '../Strategies/SendHasMandateStrategy';
 import { SendNotificationCountStrategy } from '../Strategies/SendNotificationCount';
 import { SendNotificationExpensesDetailStrategy } from '../Strategies/SendNotificationExpensesDetailStrategy';
+import { SendNotificationStatusDetailStrategy } from '../Strategies/SendNotificationStatusDetail';
 import { SendPaymentDetailErrorStrategy } from '../Strategies/SendPaymentDetailErrorStrategy';
 import { SendPaymentOutcomeStrategy } from '../Strategies/SendPaymentOutcomeStrategy';
 import { SendPaymentStatusStrategy } from '../Strategies/SendPaymentStatusStrategy';
@@ -89,6 +90,12 @@ describe('Event Strategy Factory', () => {
     eventTypes.forEach((eventType) => {
       expect(factory.getStrategy(eventType)).toBeInstanceOf(SendYourNotificationsStrategy);
     });
+  });
+
+  it('should return SendNotificationStatusDetailStrategy for SEND_NOTIFICATION_STATUS_DETAIL event', () => {
+    expect(factory.getStrategy(PFEventsType.SEND_NOTIFICATION_STATUS_DETAIL)).toBeInstanceOf(
+      SendNotificationStatusDetailStrategy
+    );
   });
 
   it('should return SendYourMandatesStrategy for SEND_YOUR_MANDATES event', () => {

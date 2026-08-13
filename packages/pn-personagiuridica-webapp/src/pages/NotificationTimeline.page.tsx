@@ -73,6 +73,12 @@ const NotificationTimeline: React.FC = () => {
     }
   };
 
+  const trackTimelineShowMore = (collapsed: boolean) => {
+    if (!collapsed) {
+      PGEventStrategyFactory.triggerEvent(PGEventsType.SEND_PG_TIMELINE_SHOW_MORE);
+    }
+  };
+
   const legalFactDownloadHandler = (legalFact: LegalFactId) => {
     if (legalFact.category !== LegalFactType.NOTIFICATION_CANCELLED && isCancelledOrCancelling) {
       return;
@@ -191,6 +197,9 @@ const NotificationTimeline: React.FC = () => {
                 recipients={notification.recipients}
                 statusHistory={notification.notificationStatusHistory}
                 clickHandler={legalFactDownloadHandler}
+                handleTrackShowMoreLess={trackTimelineShowMore}
+                showMoreButtonLabel={t('detail.show-more', { ns: 'notifiche' })}
+                showLessButtonLabel={t('detail.show-less', { ns: 'notifiche' })}
                 disableDownloads={isCancelled.cancellationInTimeline}
                 isParty={false}
               />

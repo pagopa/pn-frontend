@@ -58,6 +58,17 @@ describe('notificationTrackingConfigs', () => {
     });
   });
 
+  it('should build SEND_PA_TIMELINE_SHOW_MORE event', () => {
+    const result = notificationTrackingConfigs[PAEventsType.SEND_PA_TIMELINE_SHOW_MORE](undefined);
+
+    expect(result).toStrictEqual({
+      [EventPropertyType.TRACK]: {
+        event_category: EventCategory.UX,
+        event_type: EventAction.ACTION,
+      },
+    });
+  });
+
   it('should build SEND_PA_TIMELINE_DOWNLOAD event', () => {
     const result = notificationTrackingConfigs[PAEventsType.SEND_PA_TIMELINE_DOWNLOAD]({
       legalFact: {

@@ -1,202 +1,264 @@
-import { beforeEach, vi } from 'vitest';
-
-import { MITimeline, MITimelineItem } from '@pagopa/mui-italia';
+import { vi } from 'vitest';
 
 import { notificationDTO } from '../../../__mocks__/NotificationDetail.mock';
-import { INotificationDetailTimeline, ReworkedStatus } from '../../../models/NotificationDetail';
+import { INotificationDetailTimeline, LegalFactId } from '../../../models/NotificationDetail';
 import { NotificationStatus } from '../../../models/NotificationStatus';
 import { fireEvent, render } from '../../../test-utils';
+import { formatDay, formatMonthString, formatTime } from '../../../utility/date.utility';
 import {
   getLegalFactLabel,
   getNotificationStatusInfos,
-  getNotificationTimelineStatusInfos,
 } from '../../../utility/notification.utility';
-import getNotificationDetailTimelineItems, {
-  NotificationDetailTimelineItem,
-} from '../NotificationDetailTimelineStep';
+import NotificationDetailTimelineStep from '../NotificationDetailTimelineStep';
 
+// Define mock data for testing
 const mockTimelineStep = notificationDTO.notificationStatusHistory.find(
   (item) => item.status === NotificationStatus.DELIVERING
-)!;
+);
 const mockRecipients = notificationDTO.recipients;
+// Mock the clickHandler function
 const mockClickHandler = vi.fn();
 
-type BuilderOverrides = Partial<Parameters<typeof getNotificationDetailTimelineItems>[0]>;
+const getLegalFacts = (collapsed: boolean = true) =>
+  mockTimelineStep!.steps!.reduce((arr, s) => {
+    if (s.legalFactsIds && (collapsed || (!collapsed && s.hidden))) {
+      return arr.concat(s.legalFactsIds.map((lf) => ({ file: lf, step: s })));
+    }
+    return arr;
+  }, [] as Array<{ file: LegalFactId; step: INotificationDetailTimeline }>);
 
-const buildItems = (overrides: BuilderOverrides = {}) =>
-  getNotificationDetailTimelineItems({
-    timelineStep: mockTimelineStep,
-    statusHistory: [],
-    recipients: mockRecipients,
-    clickHandler: mockClickHandler,
-    ...overrides,
-  });
-
-const renderItems = (items: Array<NotificationDetailTimelineItem>) =>
-  render(
-    <MITimeline>
-      {items.map(({ key, content, ...itemProps }) => (
-        <MITimelineItem key={key} {...itemProps}>
-          {content}
-        </MITimelineItem>
-      ))}
-    </MITimeline>
-  );
-
-const visibleSteps = (steps: Array<INotificationDetailTimeline> = []) =>
-  steps.filter(
-    (step) => !step.hidden && getNotificationTimelineStatusInfos(step, mockRecipients, steps)
-  );
-
-const renderedMicroSteps = (steps: Array<INotificationDetailTimeline> = []) =>
-  steps.filter((step) =>
-    step.hidden
-      ? Boolean(step.legalFactsIds?.length)
-      : Boolean(getNotificationTimelineStatusInfos(step, mockRecipients, steps))
-  );
+const checkDateItem = (index: number, dateItem: HTMLElement, date: string) => {
+  if (index === 0) {
+    expect(dateItem).toHaveTextContent(formatMonthString(date));
+  }
+  if (index === 1) {
+    expect(dateItem).toHaveTextContent(formatDay(date));
+  }
+  if (index === 2) {
+    expect(dateItem).toHaveTextContent(formatTime(date));
+  }
+};
 
 describe('NotificationDetailTimelineStep', () => {
-  beforeEach(() => {
-    mockClickHandler.mockClear();
-  });
-
-  describe('Basic functionality', () => {
-    it('renders the macro step correctly', () => {
-      const { container } = renderItems(buildItems());
-      const notificationStatusInfos = getNotificationStatusInfos(mockTimelineStep, {
-        recipients: mockRecipients,
-      });
-
-      expect(container).toHaveTextContent(notificationStatusInfos.label);
-    });
-
-    it('calls the clickHandler function when a download button is clicked', () => {
-      const expectedLegalFacts = renderedMicroSteps(mockTimelineStep.steps).flatMap(
-        (step) => step.legalFactsIds ?? []
-      );
-      const { queryAllByTestId } = renderItems(buildItems());
-
-      queryAllByTestId('download-legalfact-micro').forEach((button) => fireEvent.click(button));
-
-      expect(mockClickHandler).toHaveBeenCalledTimes(expectedLegalFacts.length);
-      expectedLegalFacts.forEach((legalFact, index) => {
-        expect(mockClickHandler).toHaveBeenNthCalledWith(index + 1, legalFact);
-      });
-    });
-
-    it('renders component with disabled downloads', () => {
-      const { queryAllByTestId } = renderItems(buildItems({ disableDownloads: true }));
-
-      queryAllByTestId('download-legalfact-micro').forEach((button) => {
-        expect(button).toBeDisabled();
-      });
-    });
-
-    it('builds only the macro item when the status has no steps', () => {
-      const items = buildItems({ timelineStep: { ...mockTimelineStep, steps: [] } });
-      const { getByText, queryByTestId } = renderItems(items);
-      const notificationStatusInfos = getNotificationStatusInfos(mockTimelineStep, {
-        recipients: mockRecipients,
-      });
-
-      expect(items).toHaveLength(1);
-      expect(getByText(notificationStatusInfos.label)).toBeInTheDocument();
-      expect(queryByTestId('download-legalfact-micro')).not.toBeInTheDocument();
-    });
-  });
-
-  describe('MITimeline behavior', () => {
-    it('builds the macro step and all renderable micro-steps in order', () => {
-      const items = buildItems({ isFirst: true });
-      const expectedMicroSteps = renderedMicroSteps(mockTimelineStep.steps);
-      const excludedHiddenSteps = mockTimelineStep.steps!.filter(
-        (step) => step.hidden && !step.legalFactsIds?.length
-      );
-
-      expect(items).toHaveLength(1 + expectedMicroSteps.length);
-      expect(items[0].variant).toBe('normal');
-      expect(items.slice(1).every((item) => item.variant === 'normal')).toBe(true);
-      expect(items.slice(1).map((item) => item.key)).toEqual(
-        expectedMicroSteps.map((step) => step.elementId)
-      );
-      excludedHiddenSteps.forEach((step) => {
-        expect(items.some((item) => item.key === step.elementId)).toBe(false);
-      });
-    });
-
-    it.each([
-      [NotificationStatus.UNREACHABLE, 'error'],
-      [NotificationStatus.EFFECTIVE_DATE, 'info'],
-      [NotificationStatus.PAID, 'success'],
-      [NotificationStatus.CANCELLED, 'warning'],
-      [NotificationStatus.DELIVERING, 'normal'],
-    ] as const)(
-      'maps the first macro-step color for status %s to variant %s',
-      (status, variant) => {
-        const items = buildItems({
-          isFirst: true,
-          timelineStep: { ...mockTimelineStep, status },
-        });
-
-        expect(items[0].variant).toBe(variant);
-      }
+  it('renders the macro step correctly', () => {
+    const { getAllByTestId, getByTestId } = render(
+      <NotificationDetailTimelineStep
+        timelineStep={mockTimelineStep!}
+        statusHistory={[]}
+        recipients={mockRecipients}
+        clickHandler={mockClickHandler}
+      />
     );
-
-    it('uses the normal variant for a non-current standard macro-step', () => {
-      expect(buildItems({ isFirst: false })[0].variant).toBe('normal');
+    // if it's a macrosteps it has:
+    // - 3 dateItem elements, corresponding to day, month and date when the timeline event is occuring
+    // - one itemStaus, corresponding to status chip
+    const dateItems = getAllByTestId('dateItem');
+    expect(dateItems).toHaveLength(3);
+    dateItems.forEach((dateItem, index) => {
+      checkDateItem(index, dateItem, mockTimelineStep!.activeFrom);
     });
-
-    it('keeps the warning variant for a non-current reworked macro-step', () => {
-      const items = buildItems({
-        isFirst: false,
-        timelineStep: {
-          ...mockTimelineStep,
-          status: NotificationStatus.NOTIFICATION_TIMELINE_REWORKED,
-        },
-      });
-
-      expect(items[0].variant).toBe('warning');
+    const notificationStatusInfos = getNotificationStatusInfos(mockTimelineStep!, {
+      recipients: mockRecipients,
     });
-
-    it('renders the reworked tag from the corresponding micro-step in its title', () => {
-      const reworkedStep = visibleSteps(mockTimelineStep.steps)[0];
-      const timelineStep = {
-        ...mockTimelineStep,
-        steps: mockTimelineStep.steps!.map((step) =>
-          step.elementId === reworkedStep.elementId
-            ? { ...step, reworkedStatus: ReworkedStatus.VALID }
-            : step
-        ),
-      };
-      const { getByText } = renderItems(buildItems({ timelineStep }));
-
-      expect(getByText('status.reworked-status-valid')).toBeInTheDocument();
+    const status = getByTestId('itemStatus');
+    expect(status).toHaveTextContent(notificationStatusInfos.label);
+    const mockLegalFacts = getLegalFacts();
+    const legalFacts = getAllByTestId('download-legalfact');
+    expect(legalFacts).toHaveLength(mockLegalFacts.length);
+    legalFacts.forEach((el, index) => {
+      expect(el).toHaveTextContent(
+        getLegalFactLabel(
+          mockLegalFacts[index].step,
+          mockLegalFacts[index].file.category,
+          mockLegalFacts[index].file.key || ''
+        )
+      );
+      expect(el).toBeEnabled();
     });
   });
 
-  describe('Hidden steps with legal facts', () => {
-    it('renders a hidden step as a title-only micro-step containing its download links', () => {
-      const stepWithLegalFacts = mockTimelineStep.steps!.find(
-        (step) => step.legalFactsIds?.length
-      )!;
-      const hiddenStep = { ...stepWithLegalFacts, hidden: true };
-      const items = buildItems({
-        timelineStep: { ...mockTimelineStep, steps: [hiddenStep] },
-      });
-      const { getAllByTestId } = renderItems(items);
-
-      expect(items).toHaveLength(2);
-      expect(items[1].key).toBe(hiddenStep.elementId);
-      expect(items[1].content).toBeUndefined();
-
-      const downloadButtons = getAllByTestId('download-legalfact-micro');
-      expect(downloadButtons).toHaveLength(hiddenStep.legalFactsIds!.length);
-      downloadButtons.forEach((button, index) => {
-        const legalFact = hiddenStep.legalFactsIds![index];
-        expect(button).toHaveTextContent(
-          getLegalFactLabel(hiddenStep, legalFact.category, legalFact.key || '')
-        );
-      });
+  it('expands and collapses additional steps when "Show More" and "Show Less" buttons are clicked', () => {
+    const eventTrackingCallbackShowMore = vi.fn();
+    const { getByTestId, getAllByTestId, queryAllByTestId } = render(
+      <NotificationDetailTimelineStep
+        timelineStep={mockTimelineStep!}
+        statusHistory={[]}
+        recipients={mockRecipients}
+        clickHandler={mockClickHandler}
+        showMoreButtonLabel="Show More"
+        showLessButtonLabel="Show Less"
+        handleTrackShowMoreLess={eventTrackingCallbackShowMore}
+      />
+    );
+    // Initially, only macro step should be visible
+    const dateItems = getAllByTestId('dateItem');
+    expect(dateItems).toHaveLength(3);
+    const status = getByTestId('itemStatus');
+    expect(status).toBeInTheDocument();
+    let dateItemsMicro = queryAllByTestId('dateItemMicro');
+    expect(dateItemsMicro).toHaveLength(0);
+    // there is at least one legalfact
+    let mockLegalFacts = getLegalFacts();
+    let legalFacts = getAllByTestId('download-legalfact');
+    expect(legalFacts).toHaveLength(mockLegalFacts.length);
+    // Click "Show More" button to expand
+    let moreLessButton = getByTestId('more-less-timeline-step');
+    expect(moreLessButton).toHaveTextContent('Show More');
+    fireEvent.click(moreLessButton);
+    expect(eventTrackingCallbackShowMore).toHaveBeenCalledTimes(1);
+    // After clicking "Show More", additional steps should be visible
+    // some legal facts of the macro step can be hidden
+    mockLegalFacts = getLegalFacts(false);
+    legalFacts = queryAllByTestId('download-legalfact');
+    expect(legalFacts).toHaveLength(mockLegalFacts.length);
+    // check the appereance of the micro steps
+    const notHiddenSteps = mockTimelineStep!.steps!.filter((s) => !s.hidden);
+    dateItemsMicro = getAllByTestId('dateItemMicro');
+    expect(dateItemsMicro).toHaveLength(3 * notHiddenSteps.length);
+    const microLegalFacts = getAllByTestId('download-legalfact-micro');
+    expect(microLegalFacts).toHaveLength(
+      notHiddenSteps.reduce((count, item) => count + (item.legalFactsIds?.length || 0), 0)
+    );
+    let counter = 0;
+    notHiddenSteps.forEach((step, index) => {
+      checkDateItem(0, dateItemsMicro[3 * index], step.timestamp);
+      checkDateItem(1, dateItemsMicro[3 * index + 1], step.timestamp);
+      checkDateItem(2, dateItemsMicro[3 * index + 2], step.timestamp);
+      if (step.legalFactsIds && step.legalFactsIds.length > 0) {
+        for (const lf of step.legalFactsIds) {
+          expect(microLegalFacts[counter]).toHaveTextContent(
+            getLegalFactLabel(step, lf.category, lf.key || '')
+          );
+        }
+        expect(microLegalFacts[counter]).toBeEnabled();
+        counter++;
+      }
     });
+    // Click "Show Less" button to collapse
+    moreLessButton = getByTestId('more-less-timeline-step');
+    expect(moreLessButton).toHaveTextContent('Show Less');
+    fireEvent.click(moreLessButton);
+    expect(eventTrackingCallbackShowMore).toHaveBeenCalledTimes(2);
+    // After clicking "Show Less", additional steps should be hidden
+    dateItemsMicro = queryAllByTestId('dateItemMicro');
+    expect(dateItemsMicro).toHaveLength(0);
+    mockLegalFacts = getLegalFacts();
+    legalFacts = getAllByTestId('download-legalfact');
+    expect(legalFacts).toHaveLength(mockLegalFacts.length);
+  });
+
+  it('calls the clickHandler function when a download button is clicked', () => {
+    const { getAllByTestId, getByTestId } = render(
+      <NotificationDetailTimelineStep
+        timelineStep={mockTimelineStep!}
+        statusHistory={[]}
+        recipients={mockRecipients}
+        clickHandler={mockClickHandler}
+      />
+    );
+    // Assuming there is at least one download button
+    const legalFacts = getLegalFacts();
+    const downloadButtons = getAllByTestId('download-legalfact');
+    // Simulate a click on the download button
+    downloadButtons.forEach((btn, index) => {
+      fireEvent.click(btn);
+      // Verify that the clickHandler function is called with the expected arguments
+      expect(mockClickHandler).toHaveBeenCalledTimes(index + 1);
+      expect(mockClickHandler).toHaveBeenCalledWith(legalFacts[index].file);
+    });
+    // expand step
+    const moreLessButton = getByTestId('more-less-timeline-step');
+    fireEvent.click(moreLessButton);
+    const notHiddenSteps = mockTimelineStep!.steps!.filter((s) => !s.hidden);
+    const microLegalFacts = getAllByTestId('download-legalfact-micro');
+    let counter = 0;
+    notHiddenSteps.forEach((step) => {
+      if (step.legalFactsIds && step.legalFactsIds.length > 0) {
+        for (const lf of step.legalFactsIds) {
+          fireEvent.click(microLegalFacts[counter]);
+          // Verify that the clickHandler function is called with the expected arguments
+          expect(mockClickHandler).toHaveBeenCalledTimes(legalFacts.length + counter + 1);
+          expect(mockClickHandler).toHaveBeenCalledWith(lf);
+        }
+        counter++;
+      }
+    });
+  });
+
+  it('renders component with disabled downloads', () => {
+    const { getAllByTestId, getByTestId } = render(
+      <NotificationDetailTimelineStep
+        timelineStep={mockTimelineStep!}
+        statusHistory={[]}
+        recipients={mockRecipients}
+        clickHandler={mockClickHandler}
+        disableDownloads
+      />
+    );
+    const downloadButtons = getAllByTestId('download-legalfact');
+    downloadButtons.forEach((btn) => {
+      expect(btn).toBeDisabled();
+    });
+    // expand step
+    const moreLessButton = getByTestId('more-less-timeline-step');
+    fireEvent.click(moreLessButton);
+    const microLegalFacts = getAllByTestId('download-legalfact-micro');
+    microLegalFacts.forEach((btn) => {
+      expect(btn).toBeDisabled();
+    });
+  });
+
+  it('renders component when notification is CANCELLATION_IN_PROGRESS', () => {
+    const { rerender, getByTestId } = render(
+      <NotificationDetailTimelineStep
+        timelineStep={{
+          ...mockTimelineStep!,
+          steps: [],
+          status: NotificationStatus.CANCELLATION_IN_PROGRESS,
+        }}
+        statusHistory={[]}
+        recipients={mockRecipients}
+        clickHandler={mockClickHandler}
+        isParty
+      />
+    );
+    let status = getByTestId('itemStatus');
+    expect(status).toHaveStyle({
+      opacity: '0.5',
+    });
+    // rerender component simulating no party user
+    rerender(
+      <NotificationDetailTimelineStep
+        timelineStep={{
+          ...mockTimelineStep!,
+          steps: [],
+          status: NotificationStatus.CANCELLATION_IN_PROGRESS,
+        }}
+        statusHistory={[]}
+        recipients={mockRecipients}
+        clickHandler={mockClickHandler}
+        isParty={false}
+      />
+    );
+    status = getByTestId('itemStatus');
+    expect(status).toHaveStyle({
+      opacity: '1',
+    });
+  });
+
+  it('doesnt render any step if there are no status history', () => {
+    const { getAllByTestId, queryByTestId, getByTestId } = render(
+      <NotificationDetailTimelineStep
+        timelineStep={{ ...mockTimelineStep!, steps: [] }}
+        statusHistory={[]}
+        recipients={mockRecipients}
+        clickHandler={mockClickHandler}
+      />
+    );
+    const dateItems = getAllByTestId('dateItem');
+    expect(dateItems).toHaveLength(3);
+    const status = getByTestId('itemStatus');
+    expect(status).toBeInTheDocument();
+    expect(queryByTestId('moreLessButton')).not.toBeInTheDocument();
   });
 });

@@ -4,21 +4,6 @@
 
 /* eslint-disable functional/immutable-data */
 import { isNil, omit } from 'lodash-es';
-import { ComponentType } from 'react';
-
-import {
-  Check,
-  Drafts,
-  Euro,
-  Gavel,
-  Info,
-  Mail,
-  MarkEmailRead,
-  NoAccounts,
-  PersonOff,
-  Warning,
-} from '@mui/icons-material';
-import { SvgIconProps } from '@mui/material';
 
 import {
   AnalogWorkflowDetails,
@@ -187,8 +172,7 @@ function getNotificationDeliveredInfosForPA(
 }
 
 /**
- * Returns the mapping between current notification status and
- * its color, label, descriptive message and timeline configurations.
+ * Returns the mapping between current notification status and its color, label and descriptive message.
  * @param  {NotificationStatus} status
  * @returns object
  */
@@ -204,10 +188,6 @@ export function getNotificationStatusInfos(
   label: string;
   tooltip: string;
   description: string;
-  timeline: {
-    icon: ComponentType<SvgIconProps>;
-    variant: 'warning' | 'error' | 'success' | 'info' | 'normal';
-  };
 } {
   const statusComesAsAnObject = !!(status as NotificationStatusHistory).status;
   const statusObject: NotificationStatusHistory | undefined = statusComesAsAnObject
@@ -258,59 +238,32 @@ export function getNotificationStatusInfos(
         getNotificationDeliveredInfosForPA(statusInfos, statusObject, options.statusHistory || []);
       }
       // set the color at the end to avoid a type error since the color is defined as an union among some well-known strings
-      return {
-        color: 'default',
-        ...statusInfos,
-        timeline: {
-          variant: 'normal',
-          icon: MarkEmailRead,
-        },
-      };
+      return { color: 'default', ...statusInfos };
     }
     case NotificationStatus.DELIVERING:
       return {
         color: 'default',
         ...localizeStatus('delivering'),
-        timeline: {
-          variant: 'normal',
-          icon: Mail, // Questa icona è errata ma quella del figma non viene esportata da mui-icons
-        },
       };
     case NotificationStatus.UNREACHABLE:
       return {
         color: 'error',
         ...localizeStatus('unreachable', { isMultiRecipient }),
-        timeline: {
-          variant: 'error',
-          icon: PersonOff, // Sul figma non c'è questo stato, quindi l'icona potrebbe cambiare
-        },
       };
     case NotificationStatus.PAID:
       return {
         color: 'success',
         ...localizeStatus('paid'),
-        timeline: {
-          variant: 'success',
-          icon: Euro,
-        },
       };
     case NotificationStatus.ACCEPTED:
       return {
         color: 'default',
         ...localizeStatus('accepted'),
-        timeline: {
-          variant: 'normal',
-          icon: Check, // Da rivedere
-        },
       };
     case NotificationStatus.EFFECTIVE_DATE:
       return {
         color: 'info',
         ...localizeStatus('effective-date', { isMultiRecipient }),
-        timeline: {
-          variant: 'info',
-          icon: Gavel,
-        },
       };
     case NotificationStatus.VIEWED:
       if (statusObject?.recipient) {
@@ -324,46 +277,26 @@ export function getNotificationStatusInfos(
       return {
         color: 'success',
         ...localizeStatus('viewed', { subject, isMultiRecipient }),
-        timeline: {
-          variant: 'success',
-          icon: Drafts,
-        },
       };
     case NotificationStatus.CANCELLED:
       return {
         color: 'warning',
         ...localizeStatus('canceled'),
-        timeline: {
-          variant: 'warning',
-          icon: Warning,
-        },
       };
     case NotificationStatus.CANCELLATION_IN_PROGRESS:
       return {
         color: 'warning',
         ...localizeStatus('cancellation-in-progress'),
-        timeline: {
-          variant: 'warning',
-          icon: Warning,
-        },
       };
     case NotificationStatus.RETURNED_TO_SENDER:
       return {
         color: 'warning',
         ...localizeStatus('returned-to-sender', { isMultiRecipient }),
-        timeline: {
-          variant: 'normal',
-          icon: NoAccounts,
-        },
       };
     case NotificationStatus.NOTIFICATION_TIMELINE_REWORKED:
       return {
         color: 'warning',
         ...localizeStatus('notification-timeline-reworked'),
-        timeline: {
-          variant: 'warning',
-          icon: Warning,
-        },
       };
     default:
       return {
@@ -371,10 +304,6 @@ export function getNotificationStatusInfos(
         label: 'Non definito',
         tooltip: 'Stato sconosciuto',
         description: 'Stato sconosciuto',
-        timeline: {
-          variant: 'normal',
-          icon: Info,
-        },
       };
   }
 }

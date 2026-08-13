@@ -241,6 +241,7 @@ export type PGEventPayloads = {
   [PGEventsType.SEND_PG_NOTIFICATION_DOWNLOAD_ATTACHMENT]: PGNotificationAttachmentEventData;
   [PGEventsType.SEND_PG_START_PAYMENT]: undefined;
   [PGEventsType.SEND_PG_TIMELINE_DOWNLOAD]: PGTimelineLegalFactEventData;
+  [PGEventsType.SEND_PG_TIMELINE_SHOW_MORE]: undefined;
   [PGEventsType.SEND_PG_YOUR_NOTIFICATION]: PGNotificationsListEventData;
 
   /* SERVICE STATUS */
