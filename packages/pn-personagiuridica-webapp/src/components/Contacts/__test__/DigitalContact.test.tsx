@@ -1,7 +1,6 @@
 import { useRef } from 'react';
 import { vi } from 'vitest';
 
-import { Button } from '@mui/material';
 import { getById, queryById } from '@pagopa-pn/pn-commons/src/test-utils';
 import { MIButton } from '@pagopa/mui-italia';
 
