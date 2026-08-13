@@ -9,6 +9,7 @@ import {
   ButtonNaked,
   MIButton,
   MIChip,
+  MIChipProps,
   TimelineNotificationContent,
   TimelineNotificationDot,
   TimelineNotificationItem,
@@ -117,10 +118,10 @@ const NotificationDetailTimelineStep = ({
   showMoreButtonLabel,
   showLessButtonLabel,
   handleTrackShowMoreLess,
+  disableDownloads,
   isParty = true,
   language = 'it',
   reworkedStatus,
-  disableDownloads,
 }: Props) => {
   const [collapsed, setCollapsed] = useState(true);
   /* eslint-disable functional/no-let */
@@ -153,7 +154,7 @@ const NotificationDetailTimelineStep = ({
   const getChipColor = (
     position: string,
     status: NotificationStatus,
-    color?: 'default' | 'warning' | 'success' | 'info' | 'error' | 'highlight' | 'neutral'
+    color?: MIChipProps['color']
   ) => {
     if (position === 'first') {
       return color;

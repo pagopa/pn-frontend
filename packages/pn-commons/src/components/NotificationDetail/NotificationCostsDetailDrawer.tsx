@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-import CloseIcon from '@mui/icons-material/Close';
+import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
 import { Drawer, IconButton, Link, Stack, Typography, useTheme } from '@mui/material';
 import { MIAlert } from '@pagopa/mui-italia';
 
@@ -115,7 +115,7 @@ const NotificationCostsDetailDrawer: React.FC<Props> = ({
               onClick={handleCloseDrawer}
               data-testid="cost-details-drawer-close"
             >
-              <CloseIcon sx={{ color: 'action.active', fontSize: '24px' }} />
+              <CloseRoundedIcon sx={{ color: 'action.active', fontSize: '24px' }} />
             </IconButton>
           </Stack>
 

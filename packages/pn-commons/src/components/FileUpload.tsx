@@ -1,7 +1,7 @@
 import { ChangeEvent, DragEvent, ReactNode, useEffect, useMemo, useReducer, useRef } from 'react';
 
 import AttachFileRoundedIcon from '@mui/icons-material/AttachFileRounded';
-import CloseIcon from '@mui/icons-material/Close';
+import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import {
   Box,
@@ -385,7 +385,7 @@ const FileUpload = ({
               )}
               sx={{ flexShrink: 0, ml: 2 }}
             >
-              <CloseIcon />
+              <CloseRoundedIcon />
             </MIButton>
           </Box>
         )}

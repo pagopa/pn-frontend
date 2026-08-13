@@ -1,7 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import CloseIcon from '@mui/icons-material/Close';
+import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
 import { Stack } from '@mui/material';
 import { MIButton } from '@pagopa/mui-italia';
 
@@ -30,7 +30,7 @@ const PecValidationItem: React.FC<Props> = ({ senderId, onCancelValidation }) =>
         data-testid="cancelValidation"
         size="medium"
         sx={{ color: 'error.dark' }}
-        startIcon={<CloseIcon sx={{ width: '18px', height: '18px' }} />}
+        startIcon={<CloseRoundedIcon sx={{ width: '18px', height: '18px' }} />}
       >
         {t('legal-contacts.cancel-pec-validation', { ns: 'recapiti' })}
       </MIButton>

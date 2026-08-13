@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 
-import CloseIcon from '@mui/icons-material/Close';
+import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
 import { Alert, AlertTitle, Box, IconButton, Snackbar, Typography } from '@mui/material';
 import { ButtonNaked } from '@pagopa/mui-italia';
 
@@ -78,7 +78,7 @@ const SnackBar: React.FC<Props> = ({
         color: 'text.primary',
       }}
     >
-      <CloseIcon fontSize="small" />
+      <CloseRoundedIcon fontSize="small" />
     </IconButton>
   );
 

@@ -3,7 +3,7 @@ import { ChangeEvent, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 
-import CloseIcon from '@mui/icons-material/Close';
+import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
 import {
   Box,
   Drawer,
@@ -103,7 +103,7 @@ const NotificationSettingsDrawer = () => {
       >
         <Box display="flex" justifyContent="flex-end" padding={2}>
           <IconButton aria-label="close" onClick={onCloseDrawer}>
-            <CloseIcon fontSize="medium" sx={{ color: 'action.active' }} />
+            <CloseRoundedIcon fontSize="medium" sx={{ color: 'action.active' }} />
           </IconButton>
         </Box>
         <form onSubmit={formik.handleSubmit}>

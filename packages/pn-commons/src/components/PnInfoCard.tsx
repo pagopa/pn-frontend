@@ -1,6 +1,6 @@
 import { MouseEvent, ReactNode, useId, useState } from 'react';
 
-import KeyboardArrowDownOutlinedIcon from '@mui/icons-material/KeyboardArrowDownOutlined';
+import KeyboardArrowDownRoundedIcon from '@mui/icons-material/KeyboardArrowDownRounded';
 import MoreVert from '@mui/icons-material/MoreVert';
 import {
   Box,
@@ -195,7 +195,7 @@ const PnInfoCardAccordion: React.FC<PnInfoCardContentProps> = ({ title, subtitle
             {subtitle}
           </Box>
 
-          <KeyboardArrowDownOutlinedIcon
+          <KeyboardArrowDownRoundedIcon
             color="primary"
             sx={(theme) => ({
               transform: expanded ? 'rotate(180deg)' : 'rotate(0deg)',

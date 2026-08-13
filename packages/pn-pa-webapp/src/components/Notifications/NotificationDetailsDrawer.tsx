@@ -1,7 +1,7 @@
 import { ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import CloseIcon from '@mui/icons-material/Close';
+import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
 import { Box, Divider, Drawer, IconButton, Stack, Typography } from '@mui/material';
 
 export type NotificationDetailsDrawerItem = {
@@ -42,7 +42,7 @@ const NotificationDetailsDrawer: React.FC<Props> = ({ open, title, details, onCl
             onClick={onClose}
             data-testid="notificationDetailsDrawerClose"
           >
-            <CloseIcon sx={{ color: 'action.active', fontSize: 24 }} />
+            <CloseRoundedIcon sx={{ color: 'action.active', fontSize: 24 }} />
           </IconButton>
         </Stack>
 

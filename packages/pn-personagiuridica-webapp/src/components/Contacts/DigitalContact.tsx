@@ -12,7 +12,7 @@ import * as yup from 'yup';
 
 import CheckIcon from '@mui/icons-material/Check';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
-import CloseIcon from '@mui/icons-material/Close';
+import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
 import CreateRoundedIcon from '@mui/icons-material/CreateRounded';
 import DeleteIcon from '@mui/icons-material/Delete';
 import {
@@ -284,7 +284,7 @@ const DigitalContact = forwardRef<{ toggleEdit: () => void }, Props>(
                   justifyContent: 'left',
                 }}
                 size="medium"
-                startIcon={<CloseIcon />}
+                startIcon={<CloseRoundedIcon />}
               >
                 {t('button.annulla')}
               </MIButton>
