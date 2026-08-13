@@ -1,4 +1,4 @@
-import { ArrowForward } from '@mui/icons-material';
+import { ArrowForwardRounded } from '@mui/icons-material';
 import { Stack, Typography } from '@mui/material';
 import { MIButton } from '@pagopa/mui-italia';
 
@@ -49,7 +49,7 @@ export const NotificationActionButton: React.FC<{
     variant="text"
     data-testid="goToNotificationDetail"
     onClick={onClick}
-    endIcon={<ArrowForward />}
+    endIcon={<ArrowForwardRounded />}
     aria-label={getLocalizedOrDefaultLabel('notifications', 'table.aria-action-table', undefined, {
       iun,
     })}

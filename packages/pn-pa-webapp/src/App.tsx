@@ -2,11 +2,11 @@ import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router-dom';
 
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
-import Email from '@mui/icons-material/Email';
-import ErrorIcon from '@mui/icons-material/Error';
-import HelpIcon from '@mui/icons-material/Help';
-import VpnKey from '@mui/icons-material/VpnKey';
+import CheckCircleRoundedIcon from '@mui/icons-material/CheckCircleRounded';
+import EmailRounded from '@mui/icons-material/EmailRounded';
+import ErrorRoundedIcon from '@mui/icons-material/ErrorRounded';
+import HelpRoundedIcon from '@mui/icons-material/HelpRounded';
+import VpnKeyRoundedIcon from '@mui/icons-material/VpnKeyRounded';
 import { Box, DialogTitle } from '@mui/material';
 import {
   A11yMessageAnnouncer,
@@ -181,7 +181,7 @@ const ActualApp = () => {
     const basicMenuItems: Array<SideMenuItem> = [
       {
         label: t('menu.notifications-send'),
-        icon: Email,
+        icon: EmailRounded,
         route: routes.DASHBOARD,
         children: notificationMenuItems,
         notSelectable: notificationMenuItems.length > 0,
@@ -194,19 +194,19 @@ const ActualApp = () => {
        * - "<Route path={routes.API_KEYS}.../>" in packages/pn-pa-webapp/src/navigation/routes.tsx
        * - BasicMenuItems in packages/pn-pa-webapp/src/utility/__TEST__/role.utilitytest.ts
        */
-      { label: t('menu.api-key'), icon: VpnKey, route: routes.API_KEYS },
+      { label: t('menu.api-key'), icon: VpnKeyRoundedIcon, route: routes.API_KEYS },
       {
         label: t('menu.app-status'),
         // ATTENTION - a similar logic to choose the icon and its color is implemented in AppStatusBar (in pn-commons)
         icon: () =>
           currentStatus ? (
             currentStatus.appIsFullyOperative ? (
-              <CheckCircleIcon sx={{ color: 'success.main' }} />
+              <CheckCircleRoundedIcon sx={{ color: 'success.main' }} />
             ) : (
-              <ErrorIcon sx={{ color: 'error.main' }} />
+              <ErrorRoundedIcon sx={{ color: 'error.main' }} />
             )
           ) : (
-            <HelpIcon />
+            <HelpRoundedIcon />
           ),
         route: routes.APP_STATUS,
       },

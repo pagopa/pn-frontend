@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import MoreVertIcon from '@mui/icons-material/MoreVert';
+import MoreVertRounded from '@mui/icons-material/MoreVertRounded';
 import { Box, IconButton, Menu as MUIMenu, MenuItem, Typography } from '@mui/material';
 import { Variant } from '@mui/material/styles/createTypography';
 import { CustomTagGroup } from '@pagopa-pn/pn-commons';
@@ -78,7 +78,7 @@ export const Menu = (props: any) => {
         data-testid="delegationMenuIcon"
         aria-label={t('deleghe.table.menu-aria-label')}
       >
-        <MoreVertIcon fontSize={'small'} />
+        <MoreVertRounded fontSize={'small'} />
       </IconButton>
       <MUIMenu
         id={`delegation-menu-${props.id}`}

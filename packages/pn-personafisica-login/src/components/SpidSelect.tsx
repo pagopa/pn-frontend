@@ -1,6 +1,6 @@
 import { Trans, useTranslation } from 'react-i18next';
 
-import ClearOutlinedIcon from '@mui/icons-material/ClearOutlined';
+import ClearRoundedIcon from '@mui/icons-material/ClearRounded';
 import { Dialog, DialogContent, Grid, Icon, IconButton, Link, Typography } from '@mui/material';
 import { AppRouteParams } from '@pagopa-pn/pn-commons';
 import { MIButton } from '@pagopa/mui-italia';
@@ -73,7 +73,7 @@ const SpidSelect = ({ show, onClose, rapidAccess }: Props) => {
                 id="backIcon"
                 aria-label={t('button.close', { ns: 'common' })}
               >
-                <ClearOutlinedIcon />
+                <ClearRoundedIcon />
               </IconButton>
             </Grid>
           </Grid>

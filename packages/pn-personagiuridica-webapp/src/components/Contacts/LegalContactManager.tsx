@@ -1,7 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+import ArrowForwardRoundedIcon from '@mui/icons-material/ArrowForwardRounded';
 import { Paper, Stack, Typography } from '@mui/material';
 import { MIButton, MIChip, MIChipProps } from '@pagopa/mui-italia';
 
@@ -37,7 +37,7 @@ const DigitalDomicileOption: React.FC<DigitalDomicileOption> = ({ title, content
     <Typography flexGrow={1} variant="body1" fontSize="14px" mt={1} mb={3}>
       {content}
     </Typography>
-    <MIButton variant="text" endIcon={<ArrowForwardIcon />} onClick={action.callback}>
+    <MIButton variant="text" endIcon={<ArrowForwardRoundedIcon />} onClick={action.callback}>
       {action.text}
     </MIButton>
   </Stack>

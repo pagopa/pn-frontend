@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 
 import AddRoundedIcon from '@mui/icons-material/AddRounded';
-import DeleteIcon from '@mui/icons-material/Delete';
+import DeleteRoundedIcon from '@mui/icons-material/DeleteRounded';
 import { Box, FormControl, SxProps, TextField, Typography, useFormControl } from '@mui/material';
 import { FileUpload, useIsMobile } from '@pagopa-pn/pn-commons';
 import { MIAlert, MIButton } from '@pagopa/mui-italia';
@@ -86,7 +86,7 @@ const AttachmentBox: React.FC<AttachmentBoxProps> = ({
             aria-label={t('new-notification.steps.attachments.remove-document')}
             sx={{ ml: 2 }}
           >
-            <DeleteIcon color="error" />
+            <DeleteRoundedIcon color="error" />
           </MIButton>
         )}
       </Box>

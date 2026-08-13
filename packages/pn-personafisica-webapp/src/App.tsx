@@ -2,13 +2,13 @@ import { ErrorInfo, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLocation, useNavigate } from 'react-router-dom';
 
-import AltRouteIcon from '@mui/icons-material/AltRoute';
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
-import ErrorIcon from '@mui/icons-material/Error';
-import HelpIcon from '@mui/icons-material/Help';
+import AltRouteRoundedIcon from '@mui/icons-material/AltRouteRounded';
+import CheckCircleRoundedIcon from '@mui/icons-material/CheckCircleRounded';
+import ErrorRoundedIcon from '@mui/icons-material/ErrorRounded';
+import HelpRoundedIcon from '@mui/icons-material/HelpRounded';
 import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded';
-import MailOutlineIcon from '@mui/icons-material/MailOutline';
-import MarkunreadMailboxIcon from '@mui/icons-material/MarkunreadMailbox';
+import MailOutlineRoundedIcon from '@mui/icons-material/MailOutlineRounded';
+import MarkunreadMailboxRoundedIcon from '@mui/icons-material/MarkunreadMailboxRounded';
 import SettingsRoundedIcon from '@mui/icons-material/SettingsRounded';
 import { Box, DialogTitle } from '@mui/material';
 import {
@@ -181,16 +181,16 @@ const App = () => {
   const menuItems: Array<SideMenuItem> = [
     {
       label: t('menu.notifiche'),
-      icon: MailOutlineIcon,
+      icon: MailOutlineRoundedIcon,
       route: routes.NOTIFICHE,
       children: sideMenuDelegators,
       notSelectable: sideMenuDelegators && sideMenuDelegators.length > 0,
       dotNotification: hasNewNotifications,
     },
-    { label: t('menu.contacts'), icon: MarkunreadMailboxIcon, route: routes.RECAPITI },
+    { label: t('menu.contacts'), icon: MarkunreadMailboxRoundedIcon, route: routes.RECAPITI },
     {
       label: t('menu.deleghe'),
-      icon: AltRouteIcon,
+      icon: AltRouteRoundedIcon,
       route: routes.DELEGHE,
       rightBadgeNotification: pendingDelegators ? pendingDelegators : undefined,
     },
@@ -200,12 +200,12 @@ const App = () => {
       icon: () =>
         currentStatus ? (
           currentStatus.appIsFullyOperative ? (
-            <CheckCircleIcon sx={{ color: 'success.main' }} />
+            <CheckCircleRoundedIcon sx={{ color: 'success.main' }} />
           ) : (
-            <ErrorIcon sx={{ color: 'error.main' }} />
+            <ErrorRoundedIcon sx={{ color: 'error.main' }} />
           )
         ) : (
-          <HelpIcon />
+          <HelpRoundedIcon />
         ),
       route: routes.APP_STATUS,
     },

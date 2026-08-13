@@ -1,6 +1,6 @@
 import { vi } from 'vitest';
 
-import BalconyIcon from '@mui/icons-material/Balcony';
+import BalconyRoundedIcon from '@mui/icons-material/BalconyRounded';
 import { MIButton } from '@pagopa/mui-italia';
 
 import { KnownSentiment } from '../../models/EmptyState';
@@ -34,10 +34,12 @@ describe('EmptyState component', () => {
   });
 
   it('renders with custom icon', () => {
-    const { getByTestId, queryByTestId } = render(<EmptyState sentimentIcon={<BalconyIcon />} />);
+    const { getByTestId, queryByTestId } = render(
+      <EmptyState sentimentIcon={<BalconyRoundedIcon />} />
+    );
     const sadIcon = queryByTestId('SentimentDissatisfiedRoundedIcon');
     const happyIcon = queryByTestId('InsertEmoticonIcon');
-    const customIcon = getByTestId('BalconyIcon');
+    const customIcon = getByTestId('BalconyRoundedIcon');
     expect(sadIcon).not.toBeInTheDocument();
     expect(happyIcon).not.toBeInTheDocument();
     expect(customIcon).toBeInTheDocument();

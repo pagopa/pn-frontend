@@ -129,7 +129,7 @@ describe('LegalContacts Component', () => {
     // check contacts
     const pecValidationItem = getByTestId('default_pecContact');
     expect(pecValidationItem).toBeInTheDocument();
-    const closeIcon = getByTestId('CloseIcon');
+    const closeIcon = getByTestId('CloseRoundedIcon');
     expect(closeIcon).toBeInTheDocument();
     const cancelValidationButton = getByText('legal-contacts.cancel-pec-validation');
     expect(cancelValidationButton).toBeInTheDocument();
@@ -147,7 +147,7 @@ describe('LegalContacts Component', () => {
     // check contacts
     const pecValidationItem = getByTestId('default_pecContact');
     expect(pecValidationItem).toBeInTheDocument();
-    const closeIcon = getByTestId('CloseIcon');
+    const closeIcon = getByTestId('CloseRoundedIcon');
     expect(closeIcon).toBeInTheDocument();
     const cancelValidationButton = getByText('legal-contacts.cancel-pec-validation');
     expect(cancelValidationButton).toBeInTheDocument();

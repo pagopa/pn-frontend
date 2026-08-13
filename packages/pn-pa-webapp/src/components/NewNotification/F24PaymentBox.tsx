@@ -1,7 +1,7 @@
 import { FieldMetaProps } from 'formik';
 import { useTranslation } from 'react-i18next';
 
-import DeleteIcon from '@mui/icons-material/Delete';
+import DeleteRoundedIcon from '@mui/icons-material/DeleteRounded';
 import { Box, FormControlLabel, FormHelperText, Stack, Switch, TextField } from '@mui/material';
 import { FileUpload, useIsMobile } from '@pagopa-pn/pn-commons';
 import { MIAlert, MIButton } from '@pagopa/mui-italia';
@@ -121,7 +121,7 @@ const F24PaymentBox: React.FC<PaymentBoxProps> = ({
           {showDeleteButton && (
             <MIButton
               variant="text"
-              startIcon={<DeleteIcon />}
+              startIcon={<DeleteRoundedIcon />}
               onClick={onDeletePayment}
               sx={{
                 justifyContent: { xs: 'flex-start', md: 'flex-end' },

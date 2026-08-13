@@ -1,6 +1,6 @@
 import { FocusEventHandler, ReactNode } from 'react';
 
-import CheckIcon from '@mui/icons-material/Check';
+import CheckRoundedIcon from '@mui/icons-material/CheckRounded';
 import { Box, InputAdornment, Stack, TextField, Typography } from '@mui/material';
 import { SxProps, Theme } from '@mui/material/styles';
 import { useIsMobile } from '@pagopa-pn/pn-commons';
@@ -155,7 +155,7 @@ const ViewMode: React.FC<Omit<ViewModeProps, 'mode'>> = ({
     )}
 
     <Stack direction="row" spacing={1.5} alignItems="center">
-      {icon ?? <CheckIcon color="disabled" fontSize="small" aria-hidden="true" />}
+      {icon ?? <CheckRoundedIcon color="disabled" fontSize="small" aria-hidden="true" />}
       <Box>
         {label && (
           <Typography variant="body2" fontSize="14px" color="text.secondary">

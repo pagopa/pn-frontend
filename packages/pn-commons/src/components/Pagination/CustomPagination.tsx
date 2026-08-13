@@ -1,6 +1,6 @@
 import { ChangeEvent, useState } from 'react';
 
-import ArrowDropDown from '@mui/icons-material/ArrowDropDown';
+import ArrowDropDownRoundedIcon from '@mui/icons-material/ArrowDropDownRounded';
 import { Grid, Menu, MenuItem, Pagination, PaginationItem, SxProps } from '@mui/material';
 import { MIButton } from '@pagopa/mui-italia';
 
@@ -120,7 +120,7 @@ const CustomPagination: React.FC<Props> = ({
             aria-haspopup="true"
             aria-expanded={open ? 'true' : undefined}
             onClick={handleClick}
-            endIcon={<ArrowDropDown />}
+            endIcon={<ArrowDropDownRoundedIcon />}
             aria-label={getLocalizedOrDefaultLabel('common', 'paginator.rows-per-page')}
             id="rows-per-page"
           >

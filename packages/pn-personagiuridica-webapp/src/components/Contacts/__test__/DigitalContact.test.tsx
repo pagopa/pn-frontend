@@ -235,7 +235,7 @@ describe('DigitalContact Component', () => {
       />
     );
 
-    const verifiedIcon = result.getByTestId('CheckCircleIcon');
+    const verifiedIcon = result.getByTestId('CheckCircleRoundedIcon');
     expect(verifiedIcon).toBeInTheDocument();
   });
 

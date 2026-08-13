@@ -1,8 +1,8 @@
 import React, { useMemo, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
-import ErrorIcon from '@mui/icons-material/Error';
+import CheckCircleRoundedIcon from '@mui/icons-material/CheckCircleRounded';
+import ErrorRoundedIcon from '@mui/icons-material/ErrorRounded';
 import { Box, Divider, Link, List, ListItem, ListItemText, Stack, Typography } from '@mui/material';
 import {
   ConsentActionType,
@@ -184,9 +184,9 @@ const SercqSendContactWizard: React.FC<Props> = ({ goToStep }) => {
                   )}
                 </ListItemText>
                 {item.value ? (
-                  <CheckCircleIcon fontSize="small" color="success" aria-hidden="true" />
+                  <CheckCircleRoundedIcon fontSize="small" color="success" aria-hidden="true" />
                 ) : (
-                  <ErrorIcon fontSize="small" color="warning" aria-hidden="true" />
+                  <ErrorRoundedIcon fontSize="small" color="warning" aria-hidden="true" />
                 )}
               </Box>
             </Stack>

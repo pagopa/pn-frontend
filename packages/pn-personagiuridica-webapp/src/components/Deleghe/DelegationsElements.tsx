@@ -1,7 +1,7 @@
 import React, { Dispatch, useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import MoreVertIcon from '@mui/icons-material/MoreVert';
+import MoreVertRounded from '@mui/icons-material/MoreVertRounded';
 import {
   Box,
   DialogContentText,
@@ -302,7 +302,7 @@ export const Menu: React.FC<Props> = ({ menuType, id, userLogged, row, onAction 
         data-testid="delegationMenuIcon"
         aria-label={t('deleghe.table.menu-aria-label')}
       >
-        <MoreVertIcon fontSize={'small'} />
+        <MoreVertRounded fontSize={'small'} />
       </IconButton>
       <MUIMenu
         id={`delegation-menu-${id}`}

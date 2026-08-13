@@ -1,7 +1,7 @@
 import { RefObject } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import DeleteIcon from '@mui/icons-material/Delete';
+import DeleteRoundedIcon from '@mui/icons-material/DeleteRounded';
 import { Box, Button, Stack, Typography } from '@mui/material';
 import { MIChip } from '@pagopa/mui-italia';
 
@@ -87,7 +87,7 @@ const SpecialContactItem: React.FC<Props> = ({
                 data-testid={`cancelContact-special_${channelType}`}
                 color="error"
                 onClick={handleDelete}
-                startIcon={<DeleteIcon />}
+                startIcon={<DeleteRoundedIcon />}
                 disabled={hasPecInValidationForEntity(senderId)}
                 sx={{
                   justifyContent: 'left',

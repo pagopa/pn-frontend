@@ -1,7 +1,7 @@
 import { RefObject } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import MailOutlineIcon from '@mui/icons-material/MailOutline';
+import MailOutlineRoundedIcon from '@mui/icons-material/MailOutlineRounded';
 import { Stack, Typography } from '@mui/material';
 import { MIButton } from '@pagopa/mui-italia';
 
@@ -83,7 +83,7 @@ const EmailSection: React.FC<Props> = ({
           label: t('onboarding.digital-domicile.pec.cancel-email-cta'),
           onClick: onCollapse,
         }}
-        prefix={<MailOutlineIcon fontSize="small" color="disabled" />}
+        prefix={<MailOutlineRoundedIcon fontSize="small" color="disabled" />}
       />
     );
   }
@@ -94,7 +94,7 @@ const EmailSection: React.FC<Props> = ({
         mode="view"
         description={t('onboarding.digital-domicile.pec.email-present-description')}
         value={email.value}
-        icon={<MailOutlineIcon color="disabled" fontSize="small" aria-hidden="true" />}
+        icon={<MailOutlineRoundedIcon color="disabled" fontSize="small" aria-hidden="true" />}
       />
     );
   }
@@ -119,7 +119,7 @@ const EmailSection: React.FC<Props> = ({
           showLabelOnEdit={false}
           slots={{
             label: () => <></>,
-            leadingEditIcon: MailOutlineIcon,
+            leadingEditIcon: MailOutlineRoundedIcon,
           }}
           slotsProps={{
             textField: {

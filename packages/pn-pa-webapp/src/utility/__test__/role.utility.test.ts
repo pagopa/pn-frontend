@@ -1,4 +1,4 @@
-import { Email, VpnKey } from '@mui/icons-material';
+import { EmailRounded, VpnKeyRounded } from '@mui/icons-material';
 import { SideMenuItem } from '@pagopa-pn/pn-commons';
 
 import { PNRole } from '../../models/user';
@@ -15,8 +15,8 @@ const mockedLanguage = 'it';
 // Carlos Lombardi, 2022.11.08
 // -------------------------------
 const basicMenuItems: Array<SideMenuItem> = [
-  { label: 'menu.notifications', icon: Email, route: routes.DASHBOARD },
-  { label: 'menu.api-key', icon: VpnKey, route: routes.API_KEYS },
+  { label: 'menu.notifications', icon: EmailRounded, route: routes.DASHBOARD },
+  { label: 'menu.api-key', icon: VpnKeyRounded, route: routes.API_KEYS },
 ];
 
 describe('Test role utility', () => {

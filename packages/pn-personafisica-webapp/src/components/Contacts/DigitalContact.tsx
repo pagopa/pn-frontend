@@ -10,11 +10,11 @@ import {
 import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 
-import CheckIcon from '@mui/icons-material/Check';
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import CheckCircleRoundedIcon from '@mui/icons-material/CheckCircleRounded';
+import CheckRoundedIcon from '@mui/icons-material/CheckRounded';
 import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
 import CreateRoundedIcon from '@mui/icons-material/CreateRounded';
-import DeleteIcon from '@mui/icons-material/Delete';
+import DeleteRoundedIcon from '@mui/icons-material/DeleteRounded';
 import {
   InputAdornment,
   Stack,
@@ -298,7 +298,7 @@ const DigitalContact = forwardRef<{ toggleEdit: () => void }, Props>(
                 {...({ type: 'submit' } as any)}
                 sx={{ justifyContent: 'left' }}
                 id={`saveContact-${senderId}_${contactType}`}
-                startIcon={<CheckIcon />}
+                startIcon={<CheckRoundedIcon />}
               >
                 {t('button.conferma')}
               </MIButton>
@@ -350,7 +350,7 @@ const DigitalContact = forwardRef<{ toggleEdit: () => void }, Props>(
                 {value}
               </Typography>
               {showVerifiedIcon && (
-                <CheckCircleIcon sx={{ ml: 1 }} fontSize="small" color="success" />
+                <CheckCircleRoundedIcon sx={{ ml: 1 }} fontSize="small" color="success" />
               )}
             </Stack>
             <Stack
@@ -381,7 +381,7 @@ const DigitalContact = forwardRef<{ toggleEdit: () => void }, Props>(
                   id={`cancelContact-${senderId}_${contactType}`}
                   color="error"
                   onClick={onDelete}
-                  startIcon={<DeleteIcon />}
+                  startIcon={<DeleteRoundedIcon />}
                   sx={{ justifyContent: 'left' }}
                 >
                   {t('button.elimina')}

@@ -1,4 +1,4 @@
-import FileDownloadOutlinedIcon from '@mui/icons-material/FileDownloadOutlined';
+import FileDownloadRoundedIcon from '@mui/icons-material/FileDownloadRounded';
 import { Typography } from '@mui/material';
 import { Stack } from '@mui/system';
 import { MIButton, MIChip } from '@pagopa/mui-italia';
@@ -68,7 +68,7 @@ const DowntimeLogDataSwitch: React.FC<{
       <MIButton
         sx={{ px: 0 }}
         variant="text"
-        startIcon={<FileDownloadOutlinedIcon />}
+        startIcon={<FileDownloadRoundedIcon />}
         data-testid="download-legal-fact"
         onClick={() => {
           if (handleTrackDownloadCertificateOpposable3dparties) {

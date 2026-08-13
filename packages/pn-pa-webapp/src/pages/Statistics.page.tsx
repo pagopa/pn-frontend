@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import FileDownloadOutlinedIcon from '@mui/icons-material/FileDownloadOutlined';
+import FileDownloadRoundedIcon from '@mui/icons-material/FileDownloadRounded';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import { Box, Grid, IconButton, Paper, Stack, Typography } from '@mui/material';
 import {
@@ -95,7 +95,7 @@ const Statistics = () => {
       <MIButton
         onClick={() => handleDownloadJpeg(exportJpgNode.current)}
         variant="outlined"
-        endIcon={<FileDownloadOutlinedIcon />}
+        endIcon={<FileDownloadRoundedIcon />}
         sx={{ whiteSpace: 'nowrap' }}
         data-testid="exportJpgButton"
       >

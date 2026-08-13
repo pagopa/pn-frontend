@@ -3,7 +3,7 @@ import { useCallback, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 
-import MailOutlineIcon from '@mui/icons-material/MailOutline';
+import MailOutlineRoundedIcon from '@mui/icons-material/MailOutlineRounded';
 import { Stack, Typography } from '@mui/material';
 import { EventAction, appStateActions } from '@pagopa-pn/pn-commons';
 
@@ -218,7 +218,7 @@ const EmailStep: React.FC<Props> = ({ value, alreadySet, onChange, onVerified })
           showLabelOnEdit
           slots={{
             label: () => <></>,
-            leadingEditIcon: MailOutlineIcon,
+            leadingEditIcon: MailOutlineRoundedIcon,
           }}
           slotsProps={{
             textField: {
@@ -254,7 +254,7 @@ const EmailStep: React.FC<Props> = ({ value, alreadySet, onChange, onVerified })
           onChange={handleEmailFieldChange}
           onBlur={formik.handleBlur}
           onSubmit={handleVerifyEmail}
-          prefix={<MailOutlineIcon fontSize="small" color="disabled" />}
+          prefix={<MailOutlineRoundedIcon fontSize="small" color="disabled" />}
         />
       );
     }
@@ -265,7 +265,7 @@ const EmailStep: React.FC<Props> = ({ value, alreadySet, onChange, onVerified })
           mode="view"
           label={t('onboarding.digital-domicile.email.label')}
           value={value ?? currentValueRef.current}
-          icon={<MailOutlineIcon color="disabled" fontSize="small" aria-hidden="true" />}
+          icon={<MailOutlineRoundedIcon color="disabled" fontSize="small" aria-hidden="true" />}
         />
       );
     }

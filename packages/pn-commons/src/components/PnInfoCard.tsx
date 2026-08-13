@@ -1,7 +1,7 @@
 import { MouseEvent, ReactNode, useId, useState } from 'react';
 
 import KeyboardArrowDownRoundedIcon from '@mui/icons-material/KeyboardArrowDownRounded';
-import MoreVert from '@mui/icons-material/MoreVert';
+import MoreVertRounded from '@mui/icons-material/MoreVertRounded';
 import {
   Box,
   ButtonBase,
@@ -83,7 +83,7 @@ const PnInfoCardActions: React.FC<Pick<Props, 'actions'>> = ({ actions }) => {
         aria-haspopup="menu"
         aria-expanded={open ? 'true' : undefined}
       >
-        <MoreVert />
+        <MoreVertRounded />
       </IconButton>
       <Menu
         id={menuId}

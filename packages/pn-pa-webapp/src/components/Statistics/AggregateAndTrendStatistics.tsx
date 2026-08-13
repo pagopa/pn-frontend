@@ -1,8 +1,8 @@
 import React, { ChangeEvent, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import PieIcon from '@mui/icons-material/PieChart';
-import StackedIcon from '@mui/icons-material/StackedLineChart';
+import PieChartRoundedIcon from '@mui/icons-material/PieChartRounded';
+import StackedLineChartRoundedIcon from '@mui/icons-material/StackedLineChartRounded';
 import { Box, Chip, InputAdornment, ListItemText, MenuItem, Stack, TextField } from '@mui/material';
 import { useIsMobile } from '@pagopa-pn/pn-commons';
 import { PnEChartsProps } from '@pagopa-pn/pn-data-viz';
@@ -74,7 +74,11 @@ const AggregateAndTrendStatistics: React.FC<Props> = ({ startDate, endDate, data
           InputProps={{
             startAdornment: (
               <InputAdornment position="start">
-                {graphType === 'aggregate_graph' ? <PieIcon /> : <StackedIcon />}
+                {graphType === 'aggregate_graph' ? (
+                  <PieChartRoundedIcon />
+                ) : (
+                  <StackedLineChartRoundedIcon />
+                )}
               </InputAdornment>
             ),
           }}

@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import FileDownloadOutlinedIcon from '@mui/icons-material/FileDownloadOutlined';
+import FileDownloadRoundedIcon from '@mui/icons-material/FileDownloadRounded';
 import { Box, Stack, Typography } from '@mui/material';
 import { EventAction, appStateActions, useIsMobile } from '@pagopa-pn/pn-commons';
 import { MIButton } from '@pagopa/mui-italia';
@@ -175,7 +175,7 @@ const IoStep: React.FC<Props> = ({ value, selectedOnboardingFlow, onChange, onCo
               onClick={handlePrimaryAction}
               data-testid="io-primary-button"
               startIcon={
-                status === IOContactStatus.UNAVAILABLE ? <FileDownloadOutlinedIcon /> : undefined
+                status === IOContactStatus.UNAVAILABLE ? <FileDownloadRoundedIcon /> : undefined
               }
             >
               {t(`${labelPrefixByStatus}.primary-cta`)}

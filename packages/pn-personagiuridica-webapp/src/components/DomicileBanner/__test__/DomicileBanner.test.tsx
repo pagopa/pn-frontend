@@ -33,7 +33,7 @@ describe('DomicileBanner component', () => {
 
     expect(container).toHaveTextContent('domicile-banner.no-sercq-send-title');
     expect(container).toHaveTextContent('domicile-banner.no-sercq-send-description');
-    const closeButton = getByTestId('CloseIcon');
+    const closeButton = getByTestId('CloseRoundedIcon');
     expect(closeButton).toBeInTheDocument();
     const button = getByText('domicile-banner.no-sercq-cta');
     fireEvent.click(button);
@@ -56,7 +56,7 @@ describe('DomicileBanner component', () => {
 
     expect(container).toHaveTextContent('domicile-banner.no-courtesy-no-sercq-send-title');
     expect(container).toHaveTextContent('domicile-banner.no-courtesy-no-sercq-send-description');
-    const closeButton = queryByTestId('CloseIcon');
+    const closeButton = queryByTestId('CloseRoundedIcon');
     expect(closeButton).not.toBeInTheDocument();
     const button = getByText('domicile-banner.no-courtesy-no-sercq-send-cta');
     fireEvent.click(button);
@@ -84,7 +84,7 @@ describe('DomicileBanner component', () => {
 
     expect(container).toHaveTextContent('domicile-banner.no-courtesy-title');
     expect(container).toHaveTextContent('domicile-banner.no-courtesy-description');
-    const closeButton = queryByTestId('CloseIcon');
+    const closeButton = queryByTestId('CloseRoundedIcon');
     expect(closeButton).not.toBeInTheDocument();
     const button = getByText('domicile-banner.complete-addresses');
     fireEvent.click(button);
@@ -110,7 +110,7 @@ describe('DomicileBanner component', () => {
     expect(dialog).toBeInTheDocument();
     expect(container).toHaveTextContent('domicile-banner.no-courtesy-title');
     expect(container).toHaveTextContent('domicile-banner.no-courtesy-description');
-    const closeButton = queryByTestId('CloseIcon');
+    const closeButton = queryByTestId('CloseRoundedIcon');
     expect(closeButton).not.toBeInTheDocument();
     const button = queryByText('domicile-banner.complete-addresses');
     expect(button).not.toBeInTheDocument();
@@ -138,7 +138,7 @@ describe('DomicileBanner component', () => {
 
     expect(onBannerResolved).toHaveBeenCalledWith(ChannelType.SERCQ_SEND);
 
-    const closeButton = getByTestId('CloseIcon');
+    const closeButton = getByTestId('CloseRoundedIcon');
     fireEvent.click(closeButton);
     const dialog = queryByTestId('addDomicileBanner');
     expect(dialog).toBeNull();

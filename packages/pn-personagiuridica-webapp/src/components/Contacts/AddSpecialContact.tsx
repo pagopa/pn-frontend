@@ -9,7 +9,7 @@ import { Trans, useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 
 import AccountBalanceRoundedIcon from '@mui/icons-material/AccountBalance';
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import CheckCircleRoundedIcon from '@mui/icons-material/CheckCircleRounded';
 import {
   Box,
   Checkbox,
@@ -618,7 +618,7 @@ const AddSpecialContact = forwardRef<AddSpecialContactRef, Props>(
                 >
                   {defaultEMAILAddress?.value}
                 </Typography>
-                <CheckCircleIcon sx={{ color: 'success.main' }} />
+                <CheckCircleRoundedIcon sx={{ color: 'success.main' }} />
               </Stack>
             </Stack>
           )}
