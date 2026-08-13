@@ -4,7 +4,7 @@ import StatusTooltip from '../StatusTooltip';
 const tooltip = 'mocked tooltip test';
 const label = 'mocked label';
 const classRoot = 'MuiChip-color';
-const colors = ['warning', 'error', 'success', 'info', 'default', 'primary', 'secondary'] as const;
+const colors = ['default', 'error', 'warning', 'info', 'success', 'highlight', 'neutral'] as const;
 
 describe('Status Tooltip Component', () => {
   it.each(colors)('renders status tooltip (%s)', async (color) => {
