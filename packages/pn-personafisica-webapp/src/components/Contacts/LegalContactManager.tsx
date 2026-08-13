@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import { Paper, Stack, Typography } from '@mui/material';
 import { EventAction } from '@pagopa-pn/pn-commons';
-import { MIButton, MIChip } from '@pagopa/mui-italia';
+import { MIButton, MIChip, MIChipProps } from '@pagopa/mui-italia';
 
 import { PFEventsType } from '../../models/PFEventsType';
 import { ChannelType } from '../../models/contacts';
@@ -59,15 +59,7 @@ const LegalContactManager: React.FC<Props> = ({ setAction }) => {
 
   const getConfig = (): {
     label: string;
-    color:
-      | 'default'
-      | 'warning'
-      | 'success'
-      | 'info'
-      | 'error'
-      | 'highlight'
-      | 'neutral'
-      | undefined;
+    color: MIChipProps['color'];
     value: string;
   } => {
     if (isValidatingPec) {
