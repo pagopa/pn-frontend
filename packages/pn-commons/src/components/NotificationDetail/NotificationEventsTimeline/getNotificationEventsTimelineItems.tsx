@@ -11,15 +11,19 @@ import {
   NotificationStatusHistory,
   ReworkedStatus,
   TimelineCategory,
-} from '../../models/NotificationDetail';
-import { NotificationStatus } from '../../models/NotificationStatus';
-import { formatDay, formatMonthString, formatTime } from '../../utility/date.utility';
+} from '../../../models/NotificationDetail';
+import { NotificationStatus } from '../../../models/NotificationStatus';
+import { formatDay, formatMonthString, formatTime } from '../../../utility/date.utility';
 import {
   getLegalFactLabel,
   getNotificationStatusInfos,
   getNotificationTimelineStatusInfos,
-} from '../../utility/notification.utility';
-import ReworkedStatusTag from './ReworkedStatusTag';
+} from '../../../utility/notification.utility';
+import ReworkedStatusTag from '../ReworkedStatusTag';
+import {
+  TimelineStatusPresentation,
+  getTimelineStatusPresentation,
+} from './notificationTimelineStatus.config';
 
 type Props = {
   timelineStep: NotificationStatusHistory;
@@ -32,7 +36,7 @@ type Props = {
   language?: string;
 };
 
-export type NotificationDetailTimelineItem = Pick<
+export type NotificationEventsTimelineItem = Pick<
   MITimelineItemProps,
   'icon' | 'title' | 'variant'
 > & {
@@ -76,24 +80,16 @@ const TimelineItemDate = ({
   </Box>
 );
 
+/**
+ * Only the current macro-step (and the reworked one, wherever it sits) is colored:
+ * every other step falls back to the neutral variant.
+ */
 const getTimelineVariant = (
   status: NotificationStatus,
   isFirst: boolean,
-  color: 'warning' | 'error' | 'success' | 'info' | 'normal'
-): MITimelineItemProps['variant'] => {
-  const previousChipColor =
-    isFirst || status === NotificationStatus.NOTIFICATION_TIMELINE_REWORKED ? color : 'default';
-
-  switch (previousChipColor) {
-    case 'error':
-    case 'info':
-    case 'success':
-    case 'warning':
-      return previousChipColor;
-    default:
-      return 'normal';
-  }
-};
+  variant: TimelineStatusPresentation['variant']
+): MITimelineItemProps['variant'] =>
+  isFirst || status === NotificationStatus.NOTIFICATION_TIMELINE_REWORKED ? variant : 'normal';
 
 const formatTimelineDate = (date: string, language: string): string =>
   `${formatDay(date)} ${formatMonthString(date, language)}, ${formatTime(date)}`;
@@ -102,7 +98,7 @@ const formatTimelineDate = (date: string, language: string): string =>
  * Builds the flat list of items rendered directly by MITimeline.
  * Hidden micro-steps are rendered only when they contain legal facts.
  */
-const getNotificationDetailTimelineItems = ({
+const getNotificationEventsTimelineItems = ({
   timelineStep,
   statusHistory,
   recipients,
@@ -111,16 +107,17 @@ const getNotificationDetailTimelineItems = ({
   isFirst = false,
   isParty = true,
   language = 'it',
-}: Props): Array<NotificationDetailTimelineItem> => {
+}: Props): Array<NotificationEventsTimelineItem> => {
   const notificationStatusInfos = getNotificationStatusInfos(timelineStep, {
     statusHistory,
     recipients,
     isParty,
   });
+  const statusPresentation = getTimelineStatusPresentation(timelineStep.status);
 
   const steps = timelineStep.steps ?? [];
 
-  const macroStep: NotificationDetailTimelineItem = {
+  const macroStep: NotificationEventsTimelineItem = {
     key: `timeline_step_${timelineStep.status}_${timelineStep.activeFrom}`,
     title: (
       <TimelineItemTitle
@@ -128,12 +125,8 @@ const getNotificationDetailTimelineItems = ({
         reworkedStatus={timelineStep.reworkedStatus}
       />
     ),
-    icon: notificationStatusInfos.timeline.icon,
-    variant: getTimelineVariant(
-      timelineStep.status,
-      isFirst,
-      notificationStatusInfos.timeline.variant
-    ),
+    icon: statusPresentation.icon,
+    variant: getTimelineVariant(timelineStep.status, isFirst, statusPresentation.variant),
     content: (
       <Box style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
         <Typography color="text.primary" variant="caption">
@@ -144,7 +137,7 @@ const getNotificationDetailTimelineItems = ({
     ),
   };
 
-  const microSteps = steps.reduce<Array<NotificationDetailTimelineItem>>((items, step) => {
+  const microSteps = steps.reduce<Array<NotificationEventsTimelineItem>>((items, step) => {
     if (step.hidden) {
       if (!step.legalFactsIds?.length) {
         return items;
@@ -218,4 +211,4 @@ const getNotificationDetailTimelineItems = ({
   return [macroStep, ...microSteps];
 };
 
-export default getNotificationDetailTimelineItems;
+export default getNotificationEventsTimelineItems;

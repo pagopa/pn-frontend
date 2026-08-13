@@ -1,17 +1,17 @@
-import { notificationDTO } from '../../../__mocks__/NotificationDetail.mock';
-import { NotificationStatus } from '../../../models';
-import { ReworkedStatus } from '../../../models/NotificationDetail';
-import { createMatchMedia, render } from '../../../test-utils';
-import NotificationDetailTimeline from '../NotificationDetailTimeline';
+import { notificationDTO } from '../../../../__mocks__/NotificationDetail.mock';
+import { NotificationStatus } from '../../../../models';
+import { ReworkedStatus } from '../../../../models/NotificationDetail';
+import { createMatchMedia, render } from '../../../../test-utils';
+import NotificationEventsTimeline from '../NotificationEventsTimeline';
 
-describe('NotificationDetailTimeline', () => {
+describe('NotificationEventsTimeline', () => {
   // Define mock data for props
   const recipients = notificationDTO.recipients;
   const statusHistory = notificationDTO.notificationStatusHistory;
 
   it('renders component', () => {
     const { queryByTestId } = render(
-      <NotificationDetailTimeline
+      <NotificationEventsTimeline
         recipients={recipients}
         statusHistory={statusHistory}
         clickHandler={function (): void {
@@ -19,14 +19,14 @@ describe('NotificationDetailTimeline', () => {
         }}
       />
     );
-    expect(queryByTestId('NotificationDetailTimeline')).toBeInTheDocument();
+    expect(queryByTestId('NotificationEventsTimeline')).toBeInTheDocument();
     expect(queryByTestId('more-less-timeline-step')).not.toBeInTheDocument();
   });
 
   it('renders macro step with tag reworked', () => {
     window.matchMedia = createMatchMedia(1920);
     const { container } = render(
-      <NotificationDetailTimeline
+      <NotificationEventsTimeline
         recipients={[]}
         statusHistory={[
           {

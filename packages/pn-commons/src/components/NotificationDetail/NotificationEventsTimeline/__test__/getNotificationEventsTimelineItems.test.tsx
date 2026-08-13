@@ -2,18 +2,18 @@ import { beforeEach, vi } from 'vitest';
 
 import { MITimeline, MITimelineItem } from '@pagopa/mui-italia';
 
-import { notificationDTO } from '../../../__mocks__/NotificationDetail.mock';
-import { INotificationDetailTimeline, ReworkedStatus } from '../../../models/NotificationDetail';
-import { NotificationStatus } from '../../../models/NotificationStatus';
-import { fireEvent, render } from '../../../test-utils';
+import { notificationDTO } from '../../../../__mocks__/NotificationDetail.mock';
+import { INotificationDetailTimeline, ReworkedStatus } from '../../../../models/NotificationDetail';
+import { NotificationStatus } from '../../../../models/NotificationStatus';
+import { fireEvent, render } from '../../../../test-utils';
 import {
   getLegalFactLabel,
   getNotificationStatusInfos,
   getNotificationTimelineStatusInfos,
-} from '../../../utility/notification.utility';
-import getNotificationDetailTimelineItems, {
-  NotificationDetailTimelineItem,
-} from '../NotificationDetailTimelineStep';
+} from '../../../../utility/notification.utility';
+import getNotificationEventsTimelineItems, {
+  NotificationEventsTimelineItem,
+} from '../getNotificationEventsTimelineItems';
 
 const mockTimelineStep = notificationDTO.notificationStatusHistory.find(
   (item) => item.status === NotificationStatus.DELIVERING
@@ -21,10 +21,10 @@ const mockTimelineStep = notificationDTO.notificationStatusHistory.find(
 const mockRecipients = notificationDTO.recipients;
 const mockClickHandler = vi.fn();
 
-type BuilderOverrides = Partial<Parameters<typeof getNotificationDetailTimelineItems>[0]>;
+type BuilderOverrides = Partial<Parameters<typeof getNotificationEventsTimelineItems>[0]>;
 
 const buildItems = (overrides: BuilderOverrides = {}) =>
-  getNotificationDetailTimelineItems({
+  getNotificationEventsTimelineItems({
     timelineStep: mockTimelineStep,
     statusHistory: [],
     recipients: mockRecipients,
@@ -32,7 +32,7 @@ const buildItems = (overrides: BuilderOverrides = {}) =>
     ...overrides,
   });
 
-const renderItems = (items: Array<NotificationDetailTimelineItem>) =>
+const renderItems = (items: Array<NotificationEventsTimelineItem>) =>
   render(
     <MITimeline>
       {items.map(({ key, content, ...itemProps }) => (
@@ -55,7 +55,7 @@ const renderedMicroSteps = (steps: Array<INotificationDetailTimeline> = []) =>
       : Boolean(getNotificationTimelineStatusInfos(step, mockRecipients, steps))
   );
 
-describe('NotificationDetailTimelineStep', () => {
+describe('getNotificationEventsTimelineItems', () => {
   beforeEach(() => {
     mockClickHandler.mockClear();
   });

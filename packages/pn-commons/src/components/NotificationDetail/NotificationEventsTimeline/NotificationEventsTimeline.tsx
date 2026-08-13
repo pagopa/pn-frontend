@@ -7,8 +7,8 @@ import {
   LegalFactId,
   NotificationDetailRecipient,
   NotificationStatusHistory,
-} from '../../models/NotificationDetail';
-import getNotificationDetailTimelineItems from './NotificationDetailTimelineStep';
+} from '../../../models/NotificationDetail';
+import getNotificationEventsTimelineItems from './getNotificationEventsTimelineItems';
 
 type Props = {
   recipients: Array<NotificationDetailRecipient>;
@@ -31,7 +31,7 @@ type Props = {
  * @param isParty for specific render of notification
  * @param language used to translate months in timeline
  */
-const NotificationDetailTimeline = ({
+const NotificationEventsTimeline = ({
   recipients,
   statusHistory,
   clickHandler,
@@ -40,7 +40,7 @@ const NotificationDetailTimeline = ({
   language = 'it',
 }: Props) => {
   const timelineItems = statusHistory.flatMap((timelineStep, index) =>
-    getNotificationDetailTimelineItems({
+    getNotificationEventsTimelineItems({
       timelineStep,
       statusHistory,
       recipients,
@@ -59,7 +59,7 @@ const NotificationDetailTimeline = ({
         direction="row"
         justifyContent="space-between"
         alignItems="center"
-        data-testid="NotificationDetailTimeline"
+        data-testid="NotificationEventsTimeline"
       ></Grid>
       <MITimeline>
         {timelineItems.map(({ key, content, ...itemProps }) => (
@@ -72,4 +72,4 @@ const NotificationDetailTimeline = ({
   );
 };
 
-export default NotificationDetailTimeline;
+export default NotificationEventsTimeline;
