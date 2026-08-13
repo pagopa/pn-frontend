@@ -297,6 +297,7 @@ const NotificationDetailTimelineStep = ({
                 s.legalFactsIds.length > 0 &&
                 s.legalFactsIds.map((lf) => (
                   <ButtonNaked
+                    fontSize={14}
                     variant="text"
                     onClick={() => clickHandler(lf)}
                     disabled={disableDownloads}
@@ -305,7 +306,6 @@ const NotificationDetailTimelineStep = ({
                     sx={{
                       justifyContent: 'flex-start',
                       textAlign: 'left',
-                      fontSize: '14px',
                     }}
                   >
                     {getLegalFactLabel(s, lf.category, lf.key || '')}
