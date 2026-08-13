@@ -22,6 +22,7 @@ import {
   Stack,
   TextField,
   Typography,
+  useTheme,
 } from '@mui/material';
 import {
   ApiErrorWrapper,
@@ -34,7 +35,7 @@ import {
   TosPrivacyConsent,
   searchStringLimitReachedText,
 } from '@pagopa-pn/pn-commons';
-import { Autocomplete, MIAlert, theme } from '@pagopa/mui-italia';
+import { Autocomplete, MIAlert } from '@pagopa/mui-italia';
 
 import { PFEventsType } from '../../models/PFEventsType';
 import {
@@ -145,6 +146,7 @@ const AddSpecialContact = forwardRef<AddSpecialContactRef, Props>(
   // eslint-disable-next-line sonarjs/cognitive-complexity
   ({ handleContactAdded }: Props, ref) => {
     const { t } = useTranslation(['common', 'recapiti']);
+    const theme = useTheme();
     const dispatch = useAppDispatch();
     const getOptionLabel = (option: Party) => option.name || '';
     const [errorBanner, setErrorBanner] = useState<ErrorBannerType | undefined>();
