@@ -1,6 +1,5 @@
 import { vi } from 'vitest';
 
-import { Button } from '@mui/material';
 import { MIButton } from '@pagopa/mui-italia';
 
 import { fireEvent, render } from '../../test-utils';
