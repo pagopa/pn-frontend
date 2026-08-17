@@ -2,7 +2,7 @@ import { RefObject } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import DeleteRoundedIcon from '@mui/icons-material/DeleteRounded';
-import { Box, Button, Stack, Typography } from '@mui/material';
+import { Box, Stack, Typography } from '@mui/material';
 import { ButtonNaked, MIChip } from '@pagopa/mui-italia';
 
 import { AddressType, ChannelType, DigitalAddress, Sender } from '../../models/contacts';
