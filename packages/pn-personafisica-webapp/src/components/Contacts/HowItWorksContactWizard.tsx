@@ -1,16 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 
-import {
-  Box,
-  Divider,
-  List,
-  ListItem,
-  ListItemText,
-  Stack,
-  Typography,
-  useTheme,
-} from '@mui/material';
+import { Box, Divider, List, ListItem, ListItemText, Stack, Typography } from '@mui/material';
 import { EventAction } from '@pagopa-pn/pn-commons';
 import { MIAlert, MIButton } from '@pagopa/mui-italia';
 
@@ -32,7 +23,6 @@ type Props = {
 
 const HowItWorksContactWizard: React.FC<Props> = ({ goToNextStep, setShowPecWizard }) => {
   const { t } = useTranslation(['recapiti', 'common']);
-  const theme = useTheme();
 
   const [modalOpen, setModalOpen] = useState<ModalType | null>(null);
   const { defaultPECAddress, addresses } = useAppSelector(contactsSelectors.selectAddresses);
@@ -96,7 +86,7 @@ const HowItWorksContactWizard: React.FC<Props> = ({ goToNextStep, setShowPecWiza
                     <Typography
                       fontWeight={600}
                       fontSize="18px"
-                      color={theme.colors.neutral.grey[300]}
+                      color={(theme) => theme.colors.neutral.grey[300]}
                     >
                       {index + 1}.
                     </Typography>

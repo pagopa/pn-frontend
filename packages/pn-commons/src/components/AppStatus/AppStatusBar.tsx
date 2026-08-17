@@ -32,7 +32,7 @@ export const AppStatusBar = ({ status }: { status: AppCurrentStatus }) => {
       direction={isMobile ? 'column' : 'row'}
       justifyContent="center"
       alignItems="center"
-      sx={(theme) => ({
+      sx={{
         mt: isMobile ? '23px' : '42px',
         py: '21px',
         px: '35px',
@@ -42,7 +42,7 @@ export const AppStatusBar = ({ status }: { status: AppCurrentStatus }) => {
         borderWidth: '1px',
         borderStyle: 'solid',
         borderRadius: '10px',
-      })}
+      }}
     >
       <IconComponent
         sx={{

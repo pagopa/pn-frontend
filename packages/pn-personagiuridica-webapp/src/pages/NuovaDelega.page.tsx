@@ -18,7 +18,6 @@ import {
   Stack,
   TextField,
   Typography,
-  useTheme,
 } from '@mui/material';
 import {
   CourtesyPage,
@@ -62,7 +61,6 @@ const NuovaDelega = () => {
   const { t, i18n } = useTranslation(['deleghe', 'common']);
   const navigate = useNavigate();
   const isMobile = useIsMobile();
-  const theme = useTheme();
   const dispatch = useAppDispatch();
   const { entities, created } = useAppSelector((state: RootState) => state.newDelegationState);
   const handleSearchStringChangeInput = useSearchStringChangeInput();
@@ -176,7 +174,10 @@ const NuovaDelega = () => {
 
   const renderOption = (option: Party) => (
     <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-      <AccountBalanceRoundedIcon fontSize="small" sx={{ color: theme.colors.neutral.grey[300] }} />
+      <AccountBalanceRoundedIcon
+        fontSize="small"
+        sx={(theme) => ({ color: theme.colors.neutral.grey[300] })}
+      />
       {option.name}
     </Box>
   );

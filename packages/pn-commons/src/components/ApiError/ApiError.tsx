@@ -1,5 +1,5 @@
 import ReportGmailerrorredRoundedIcon from '@mui/icons-material/ReportGmailerrorredRounded';
-import { Link, Stack, Typography, useTheme } from '@mui/material';
+import { Link, Stack, Typography } from '@mui/material';
 
 import { getLocalizedOrDefaultLabel } from '../../utility/localization.utility';
 
@@ -19,8 +19,6 @@ const ApiError: React.FC<ApiErrorProps> = ({
   apiId,
   customErrorComponent,
 }) => {
-  const theme = useTheme();
-
   if (customErrorComponent) {
     return <>{customErrorComponent}</>;
   }
@@ -40,13 +38,13 @@ const ApiError: React.FC<ApiErrorProps> = ({
 
   return (
     <Stack
-      sx={{
+      sx={(theme) => ({
         fontSize: '16px',
         mt,
         borderRadius: '4px',
         backgroundColor: theme.palette.background.paper,
         p: 2,
-      }}
+      })}
       direction={'row'}
       justifyContent={'center'}
       alignItems={'center'}

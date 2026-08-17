@@ -22,7 +22,6 @@ import {
   Stack,
   TextField,
   Typography,
-  useTheme,
 } from '@mui/material';
 import {
   ApiErrorWrapper,
@@ -146,7 +145,6 @@ const AddSpecialContact = forwardRef<AddSpecialContactRef, Props>(
   // eslint-disable-next-line sonarjs/cognitive-complexity
   ({ handleContactAdded }: Props, ref) => {
     const { t } = useTranslation(['common', 'recapiti']);
-    const theme = useTheme();
     const dispatch = useAppDispatch();
     const getOptionLabel = (option: Party) => option.name || '';
     const [errorBanner, setErrorBanner] = useState<ErrorBannerType | undefined>();
@@ -709,12 +707,12 @@ const AddSpecialContact = forwardRef<AddSpecialContactRef, Props>(
                         'aria-invalid':
                           formik.touched.s_disclaimer && Boolean(formik.errors.s_disclaimer),
                       }}
-                      sx={{
+                      sx={(theme) => ({
                         color:
                           formik.touched.s_disclaimer && Boolean(formik.errors.s_disclaimer)
                             ? theme.palette.error.main
                             : theme.palette.text.secondary,
-                      }}
+                      })}
                     />
                   }
                   label={<Trans ns="recapiti" i18nKey="special-contacts.pec-disclaimer" />}
