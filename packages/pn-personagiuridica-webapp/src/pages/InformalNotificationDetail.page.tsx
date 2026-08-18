@@ -23,7 +23,7 @@ import {
 import { MIPaper } from '@pagopa/mui-italia';
 
 import LoadingPageWrapper from '../components/LoadingPageWrapper/LoadingPageWrapper';
-import { BffFullInformalNotificationV1 } from '../generated-client/informal-notifications';
+import type { BffFullInformalNotificationV1 } from '../generated-client/informal-notifications';
 import { PGEventsType } from '../models/PGEventsType';
 import * as routes from '../navigation/routes.const';
 import { useAppDispatch } from '../redux/hooks';
@@ -258,12 +258,14 @@ const InformalNotificationDetail: React.FC = () => {
       notificationType: 'INFORMAL',
       notificationStatus: informalNotification.notificationStatus as InformalNotificationStatus,
       paymentCount,
+      timeline: informalNotification.timeline,
     });
   }, [
     pageReady,
     hasInformalReceivedApiError,
     informalNotification?.iun,
     informalNotification?.notificationStatus,
+    informalNotification?.timeline,
     paymentCount,
   ]);
 

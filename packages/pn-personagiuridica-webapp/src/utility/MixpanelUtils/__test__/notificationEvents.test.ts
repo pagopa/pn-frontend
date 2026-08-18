@@ -15,9 +15,10 @@ import {
   statusHistory,
 } from '../../../__mocks__/NotificationDetail.mock';
 import { notificationsDTO } from '../../../__mocks__/Notifications.mock';
-import { EventDefaultValue, MIXPANEL_NOTIFICATION_TYPE_MAP } from '../../../models/PGEventPayloads';
+import { MIXPANEL_NOTIFICATION_TYPE_MAP } from '../../../models/PGEventPayloads';
 import { PGEventsType } from '../../../models/PGEventsType';
 import { ChannelType } from '../../../models/contacts';
+import { mapNotificationDetailToEventPayload } from '../mappers/notificationPayloadMappers';
 import { notificationTrackingConfigs } from '../notificationEvents';
 
 const notificationListEventData = {
@@ -82,25 +83,18 @@ describe('notificationTrackingConfigs', () => {
   });
 
   it('should build SEND_PG_NOTIFICATION_DETAIL event - informal notification', () => {
-    const result = notificationTrackingConfigs[PGEventsType.SEND_PG_NOTIFICATION_DETAIL]({
-      notificationType: 'INFORMAL',
+    const eventData = {
+      notificationType: 'INFORMAL' as const,
       notificationStatus: InformalNotificationStatus.ACCEPTED,
       paymentCount: 1,
-    });
+      timeline: [],
+    };
+
+    const result = notificationTrackingConfigs[PGEventsType.SEND_PG_NOTIFICATION_DETAIL](eventData);
 
     expect(result).toStrictEqual({
       [EventPropertyType.TRACK]: {
-        notification_type: MIXPANEL_NOTIFICATION_TYPE_MAP.INFORMAL,
-        notification_owner: true,
-        notification_status: InformalNotificationStatus.ACCEPTED,
-        contains_payment: true,
-        disservice_status: EventDefaultValue.NOT_SET,
-        contains_multipayment: 'no',
-        count_payment: 1,
-        contains_f24: 'no',
-        source: 'LISTA_NOTIFICHE',
-        flow: EventDefaultValue.NOT_SET,
-        delivery_mode: EventDefaultValue.NOT_SET,
+        ...mapNotificationDetailToEventPayload(eventData),
         event_category: EventCategory.UX,
         event_type: EventAction.SCREEN_VIEW,
       },

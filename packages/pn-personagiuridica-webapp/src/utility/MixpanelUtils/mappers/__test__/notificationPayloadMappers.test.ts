@@ -1,3 +1,5 @@
+import { vi } from 'vitest';
+
 import type { LegalFactId } from '@pagopa-pn/pn-commons';
 import {
   EventDowntimeType,
@@ -13,6 +15,7 @@ import {
   statusHistory,
 } from '../../../../__mocks__/NotificationDetail.mock';
 import { notificationsDTO } from '../../../../__mocks__/Notifications.mock';
+import { InformalTimelineElementCategoryV1 } from '../../../../generated-client/informal-notifications';
 import {
   EventDefaultValue,
   MIXPANEL_NOTIFICATION_TYPE_MAP,
@@ -26,6 +29,13 @@ import {
 } from '../notificationPayloadMappers';
 
 describe('notificationPayloadMappers', () => {
+  const deliveredAt = '2026-08-17T09:29:40Z';
+  const firstOpeningAt = '2026-08-18T12:44:54Z';
+
+  afterEach(() => {
+    vi.useRealTimers();
+  });
+
   it('should map notification list data to event payload', () => {
     const payload = mapNotificationListToEventPayload({
       notifications: notificationsDTO.resultsPage,
@@ -140,11 +150,20 @@ describe('notificationPayloadMappers', () => {
     });
   });
 
-  it('should map informal notification detail data to event payload', () => {
+  it('should map informal notification detail data on first opening', () => {
+    vi.useFakeTimers();
+    vi.setSystemTime(new Date(firstOpeningAt));
+
     const payload = mapNotificationDetailToEventPayload({
       notificationType: 'INFORMAL',
       notificationStatus: InformalNotificationStatus.ACCEPTED,
       paymentCount: 1,
+      timeline: [
+        {
+          category: InformalTimelineElementCategoryV1.Delivered,
+          eventTimestamp: deliveredAt,
+        },
+      ],
     });
 
     expect(payload).toStrictEqual({
@@ -156,7 +175,43 @@ describe('notificationPayloadMappers', () => {
       contains_multipayment: 'no',
       count_payment: 1,
       contains_f24: 'no',
+      first_time_opening: true,
       source: 'LISTA_NOTIFICHE',
+      elapsed_time: 1,
+      flow: EventDefaultValue.NOT_SET,
+      delivery_mode: EventDefaultValue.NOT_SET,
+    });
+  });
+
+  it('should map informal notification detail data after first opening', () => {
+    const payload = mapNotificationDetailToEventPayload({
+      notificationType: 'INFORMAL',
+      notificationStatus: InformalNotificationStatus.ACCEPTED,
+      paymentCount: 1,
+      timeline: [
+        {
+          category: InformalTimelineElementCategoryV1.Delivered,
+          eventTimestamp: deliveredAt,
+        },
+        {
+          category: InformalTimelineElementCategoryV1.InformalNotificationViewed,
+          eventTimestamp: firstOpeningAt,
+        },
+      ],
+    });
+
+    expect(payload).toStrictEqual({
+      notification_type: MIXPANEL_NOTIFICATION_TYPE_MAP.INFORMAL,
+      notification_owner: true,
+      notification_status: InformalNotificationStatus.ACCEPTED,
+      contains_payment: true,
+      disservice_status: EventDefaultValue.NOT_SET,
+      contains_multipayment: 'no',
+      count_payment: 1,
+      contains_f24: 'no',
+      first_time_opening: false,
+      source: 'LISTA_NOTIFICHE',
+      elapsed_time: 1,
       flow: EventDefaultValue.NOT_SET,
       delivery_mode: EventDefaultValue.NOT_SET,
     });

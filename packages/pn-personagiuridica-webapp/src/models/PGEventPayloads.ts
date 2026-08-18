@@ -21,6 +21,7 @@ import {
   NotificationStatus,
 } from '@pagopa-pn/pn-commons';
 
+import type { BffFullInformalNotificationV1 } from '../generated-client/informal-notifications';
 import { PGEventsType } from './PGEventsType';
 import type { ChannelType, DigitalAddress } from './contacts';
 
@@ -81,6 +82,7 @@ export type PGNotificationDetailEventData =
       notificationType: 'INFORMAL';
       notificationStatus: InformalNotificationStatus;
       paymentCount: number;
+      timeline: BffFullInformalNotificationV1['timeline'];
     };
 
 type PGInformalNotificationAttachmentType =
@@ -197,11 +199,9 @@ export type PGNotificationDetailPayload = {
   contains_multipayment: YesNo;
   count_payment: number;
   contains_f24: YesNo;
-  // TODO: make mandatory after updating the generated BFF client with the informal timeline.
-  first_time_opening?: boolean;
+  first_time_opening: boolean;
   source: EventNotificationSource;
-  // TODO: make mandatory after updating the generated BFF client with the informal timeline.
-  elapsed_time?: number;
+  elapsed_time: number;
   flow: EventDeliveryFlowType | EventDefaultValue.NOT_SET;
   delivery_mode: EventDeliveryModeType;
 };

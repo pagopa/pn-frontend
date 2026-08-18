@@ -6,6 +6,7 @@ import {
   getElapsedTime,
 } from '@pagopa-pn/pn-commons';
 
+import { InformalTimelineElementCategoryV1 } from '../../../generated-client/informal-notifications';
 import {
   EventDefaultValue,
   MIXPANEL_NOTIFICATION_TYPE_MAP,
@@ -35,6 +36,14 @@ export const mapNotificationDetailToEventPayload = (
   data: PGNotificationDetailEventData
 ): PGNotificationDetailPayload => {
   if (data.notificationType === 'INFORMAL') {
+    const viewedEvent = data.timeline?.find(
+      (item) => item.category === InformalTimelineElementCategoryV1.InformalNotificationViewed
+    );
+
+    const deliveredEvent = data.timeline?.find(
+      (item) => item.category === InformalTimelineElementCategoryV1.Delivered
+    );
+
     return {
       notification_type: MIXPANEL_NOTIFICATION_TYPE_MAP[data.notificationType],
       notification_owner: true,
@@ -44,7 +53,9 @@ export const mapNotificationDetailToEventPayload = (
       contains_multipayment: data.paymentCount > 1 ? 'yes' : 'no',
       count_payment: data.paymentCount,
       contains_f24: 'no',
+      first_time_opening: !viewedEvent,
       source: 'LISTA_NOTIFICHE',
+      elapsed_time: getElapsedTime(deliveredEvent?.eventTimestamp, viewedEvent?.eventTimestamp),
       flow: EventDefaultValue.NOT_SET,
       delivery_mode: EventDefaultValue.NOT_SET,
     };
