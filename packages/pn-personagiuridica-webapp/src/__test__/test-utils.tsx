@@ -97,5 +97,5 @@ const createTestStore = (preloadedState = {}) =>
   });
 
 export * from '@testing-library/react';
-export { customRender as render, createTestStore };
+export { customRender as render, createTestStore, themeNext as theme };
 export type { CustomRenderResult as RenderResult };

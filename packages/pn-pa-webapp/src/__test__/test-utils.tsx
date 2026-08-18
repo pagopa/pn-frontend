@@ -111,7 +111,7 @@ function randomString(length: number) {
 }
 
 export * from '@testing-library/react';
-export { customRender as render, createMockedStore };
+export { customRender as render, createMockedStore, themeNext as theme };
 export type { CustomRenderResult as RenderResult };
 // utility functions
 export { randomString };

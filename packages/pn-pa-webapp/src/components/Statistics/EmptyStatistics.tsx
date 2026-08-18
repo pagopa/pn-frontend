@@ -1,7 +1,8 @@
 import React from 'react';
 import { Trans, useTranslation } from 'react-i18next';
+import { Link } from 'react-router-dom';
 
-import { Box, Link, Stack, SxProps, Theme, Typography } from '@mui/material';
+import { Box, Stack, SxProps, Theme, Typography } from '@mui/material';
 import { IllusStatistics } from '@pagopa-pn/pn-commons';
 
 import * as routes from '../../navigation/routes.const';
@@ -16,7 +17,7 @@ type LinkDashboardProps = {
 };
 
 const LinkDashboard: React.FC<LinkDashboardProps> = ({ children }) => (
-  <Link href={routes.DASHBOARD} data-testid="link-to-dashboard">
+  <Link to={routes.DASHBOARD} data-testid="link-to-dashboard">
     {children}
   </Link>
 );
