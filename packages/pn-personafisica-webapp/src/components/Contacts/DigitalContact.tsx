@@ -233,7 +233,7 @@ const DigitalContact = forwardRef<{ toggleEdit: () => void }, Props>(
                 height: '43px',
               }}
             >
-              {insertButtonLabel}ffffff
+              {insertButtonLabel}
             </MIButton>
             {onCancelInsert && (
               <MIButton variant="text" color="error" onClick={onCancelInsert}>

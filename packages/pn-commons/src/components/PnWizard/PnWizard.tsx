@@ -136,9 +136,9 @@ const PnWizard: React.FC<Props> = ({
     <Stack display="flex" alignItems="center" justifyContent="center" {...slotsProps?.container}>
       <Box p={3}>
         <ExitButton
+          {...slotsProps?.exitButton}
           data-testid="exit-button"
           startIcon={<ArrowBackRoundedIcon />}
-          {...slotsProps?.exitButton}
           variant="text"
           sx={{ p: 0 }}
         >
