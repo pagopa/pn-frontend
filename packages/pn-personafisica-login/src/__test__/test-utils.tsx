@@ -3,7 +3,8 @@ import { ReactElement, ReactNode, createContext, useContext } from 'react';
 import { RouterProvider, createMemoryRouter } from 'react-router-dom';
 import { MockInstance } from 'vitest';
 
-import { ThemeProvider, useTheme } from '@mui/material';
+import { ThemeProvider } from '@mui/material';
+import { themeNext } from '@pagopa/mui-italia';
 import { RenderOptions, RenderResult, render } from '@testing-library/react';
 
 import { PFLoginEventsType } from '../models/PFLoginEventsType';
@@ -54,16 +55,14 @@ const customRender = (
   );
 
   // test view
-  const Wrapper = ({ children }: { children: ReactNode }) => {
-    const theme = useTheme();
-    return (
-      <ThemeProvider theme={theme}>
-        <UiContext.Provider value={children as ReactElement}>
-          <RouterProvider router={router} />
-        </UiContext.Provider>
-      </ThemeProvider>
-    );
-  };
+  const Wrapper = ({ children }: { children: ReactNode }) => (
+    <ThemeProvider theme={themeNext}>
+      <UiContext.Provider value={children as ReactElement}>
+        <RouterProvider router={router} />
+      </UiContext.Provider>
+    </ThemeProvider>
+  );
+
   const view = render(ui, {
     wrapper: Wrapper,
     ...renderOptions,

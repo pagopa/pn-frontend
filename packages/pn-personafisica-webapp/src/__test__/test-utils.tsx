@@ -4,7 +4,8 @@ import { Provider } from 'react-redux';
 import { RouterProvider, createMemoryRouter } from 'react-router-dom';
 import { MockInstance } from 'vitest';
 
-import { ThemeProvider, useTheme } from '@mui/material';
+import { ThemeProvider } from '@mui/material';
+import { themeNext } from '@pagopa/mui-italia';
 import { EnhancedStore, configureStore } from '@reduxjs/toolkit';
 import { InitialEntry } from '@remix-run/router';
 import { RenderOptions, RenderResult, render } from '@testing-library/react';
@@ -76,10 +77,9 @@ const customRender = (
 
   // test view
   const Wrapper = ({ children }: { children: ReactNode }) => {
-    const theme = useTheme();
     return (
       <Provider store={testStore}>
-        <ThemeProvider theme={theme}>
+        <ThemeProvider theme={themeNext}>
           <UiContext.Provider value={children as ReactElement}>
             <RouterProvider router={router} />
           </UiContext.Provider>
