@@ -195,15 +195,15 @@ const DigitalContact = forwardRef<{ toggleEdit: () => void }, Props>(
               id={`${senderId}_${contactType}-button`}
               variant="contained"
               fullWidth={isMobile}
+              type="submit"
               data-testid={`${senderId}_${contactType}-button`}
               sx={{ height: '43px', flexBasis: { xs: 'unset', lg: '16.67%' } }}
-              type="submit"
               {...slotsProps?.button}
             >
               {insertButtonLabel}
             </MIButton>
             {onCancelInsert && (
-              <MIButton variant="text" color="error" onClick={onCancelInsert} size="medium">
+              <MIButton color="error" onClick={onCancelInsert} variant="text">
                 {t('button.annulla')}
               </MIButton>
             )}
@@ -260,25 +260,23 @@ const DigitalContact = forwardRef<{ toggleEdit: () => void }, Props>(
             />
             <Stack direction={{ xs: 'column', lg: 'row' }} spacing={2}>
               <MIButton
-                variant="text"
                 key="saveButton"
+                type="submit"
                 sx={{ justifyContent: 'left' }}
                 id={`saveContact-${senderId}_${contactType}`}
                 startIcon={<CheckRoundedIcon />}
-                type="submit"
+                variant="text"
               >
                 {t('button.conferma')}
               </MIButton>
               <MIButton
-                variant="text"
                 color="error"
                 onClick={onCancelEdit}
                 sx={{
-                  color: 'error',
                   justifyContent: 'left',
                 }}
-                size="medium"
                 startIcon={<CloseRoundedIcon />}
+                variant="text"
               >
                 {t('button.annulla')}
               </MIButton>
@@ -321,23 +319,22 @@ const DigitalContact = forwardRef<{ toggleEdit: () => void }, Props>(
             >
               <EditButton
                 key="editButton"
-                variant="text"
                 onClick={toggleEdit}
                 startIcon={<CreateRoundedIcon />}
                 sx={{ justifyContent: 'left' }}
                 id={`modifyContact-${senderId}_${contactType}`}
+                variant="text"
               >
                 {t('button.modifica')}
               </EditButton>
               {onDelete && (
                 <MIButton
-                  variant="text"
                   id={`cancelContact-${senderId}_${contactType}`}
                   color="error"
                   onClick={onDelete}
                   startIcon={<DeleteRoundedIcon />}
                   sx={{ justifyContent: 'left' }}
-                  size="medium"
+                  variant="text"
                 >
                   {t('button.elimina')}
                 </MIButton>
