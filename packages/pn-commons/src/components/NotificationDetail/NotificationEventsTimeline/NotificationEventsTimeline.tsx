@@ -1,36 +1,31 @@
-import { Fragment } from 'react';
+import { Fragment, useMemo } from 'react';
 
-import { Grid } from '@mui/material';
+import { Box, Divider, Stack, Typography } from '@mui/material';
 import { MITimeline, MITimelineItem } from '@pagopa/mui-italia';
 
+import { LegalFactId, NotificationDetailRecipient } from '../../../models/NotificationDetail';
+import { NotificationTimelineStatusHistory } from '../../../models/NotificationTimeline';
+import { getNotificationStatusInfos } from '../../../utility/notification.utility';
 import {
-  LegalFactId,
-  NotificationDetailRecipient,
-  NotificationStatusHistory,
-} from '../../../models/NotificationDetail';
-import getNotificationEventsTimelineItems from './getNotificationEventsTimelineItems';
+  flattenTimelineSteps,
+  isTimelineGroupStep,
+  toLegacyStatusHistory,
+} from '../../../utility/notificationTimeline.utility';
+import ReworkedStatusTag from '../ReworkedStatusTag';
+import NotificationTimelineEventDate from './NotificationTimelineEventDate';
+import NotificationTimelineEventItem from './NotificationTimelineEventItem';
+import NotificationTimelineGroupItem from './NotificationTimelineGroupItem';
+import { getTimelineItemPresentation } from './notificationTimelineStatus.config';
 
 type Props = {
   recipients: Array<NotificationDetailRecipient>;
-  statusHistory: Array<NotificationStatusHistory>;
+  statusHistory: Array<NotificationTimelineStatusHistory>;
   clickHandler: (legalFactId: LegalFactId) => void;
   disableDownloads?: boolean;
   isParty?: boolean;
   language?: string;
 };
 
-/**
- * This component is responsible for rendering a timeline of notification details.
- * The component's render function returns a JSX structure that includes:
- * A grid container.
- * A timeline of notification details based on the statusHistory prop.
- * @param recipients list of recipients
- * @param statusHistory notification macro-status history
- * @param clickHandler function called when user clicks on the download button
- * @param disableDownloads for disable downloads
- * @param isParty for specific render of notification
- * @param language used to translate months in timeline
- */
 const NotificationEventsTimeline = ({
   recipients,
   statusHistory,
@@ -39,36 +34,88 @@ const NotificationEventsTimeline = ({
   isParty = true,
   language = 'it',
 }: Props) => {
-  const timelineItems = statusHistory.flatMap((timelineStep, index) =>
-    getNotificationEventsTimelineItems({
-      timelineStep,
-      statusHistory,
-      recipients,
-      clickHandler,
-      disableDownloads,
-      isParty,
-      isFirst: index === 0,
-      language,
-    })
-  );
+  const legacyStatusHistory = useMemo(() => toLegacyStatusHistory(statusHistory), [statusHistory]);
 
   return (
-    <Fragment>
-      <Grid
-        container
-        direction="row"
-        justifyContent="space-between"
-        alignItems="center"
-        data-testid="NotificationEventsTimeline"
-      ></Grid>
+    <Box data-testid="NotificationEventsTimeline">
       <MITimeline>
-        {timelineItems.map(({ key, content, ...itemProps }) => (
-          <MITimelineItem key={key} {...itemProps}>
-            {content}
-          </MITimelineItem>
-        ))}
+        {statusHistory.map((status, index) => {
+          const { label, description } = getNotificationStatusInfos(legacyStatusHistory[index], {
+            statusHistory: legacyStatusHistory,
+            recipients,
+            isParty,
+          });
+          const { icon, variant } = getTimelineItemPresentation(status.status, index === 0);
+          const allEvents = flattenTimelineSteps(status.steps);
+
+          const hasGroupedEvents = status.steps.some(isTimelineGroupStep);
+
+          return (
+            <MITimelineItem
+              key={`timeline_step_${status.status}_${status.activeFrom}`}
+              icon={icon}
+              variant={variant}
+              title={
+                <Stack
+                  component="span"
+                  direction="row"
+                  fontWeight={600}
+                  alignItems="center"
+                  fontSize="16px"
+                  gap={1}
+                >
+                  {label}
+                  <ReworkedStatusTag reworkedStatus={status.reworkedStatus} />
+                </Stack>
+              }
+            >
+              <Stack gap={1} alignItems="flex-start">
+                {!hasGroupedEvents && (
+                  <Typography fontSize="14px" fontWeight={400}>
+                    {description}{' '}
+                    <NotificationTimelineEventDate date={status.activeFrom} language={language} />
+                  </Typography>
+                )}
+
+                {status.steps.map((step, stepIndex) => {
+                  if (!isTimelineGroupStep(step)) {
+                    return (
+                      <NotificationTimelineEventItem
+                        event={step.event}
+                        key={step.event.elementId}
+                        allEvents={allEvents}
+                        recipients={recipients}
+                        clickHandler={clickHandler}
+                        disableDownloads={disableDownloads}
+                        language={language}
+                      />
+                    );
+                  }
+
+                  const previousStep = status.steps[stepIndex - 1];
+
+                  return (
+                    <Fragment key={step.group.groupId}>
+                      {previousStep && isTimelineGroupStep(previousStep) && (
+                        <Divider flexItem data-testid="timeline-group-divider" />
+                      )}
+                      <NotificationTimelineGroupItem
+                        group={step.group}
+                        allEvents={allEvents}
+                        recipients={recipients}
+                        clickHandler={clickHandler}
+                        disableDownloads={disableDownloads}
+                        language={language}
+                      />
+                    </Fragment>
+                  );
+                })}
+              </Stack>
+            </MITimelineItem>
+          );
+        })}
       </MITimeline>
-    </Fragment>
+    </Box>
   );
 };
 

@@ -100,3 +100,9 @@ export {
   basicUserDataMatcherContents,
   removeNullProperties,
 } from './user.utility';
+export {
+  flattenTimelineSteps,
+  isTimelineGroupStep,
+  toLegacyStatusHistory,
+  formatTimelineDate,
+} from './notificationTimeline.utility';

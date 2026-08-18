@@ -16,7 +16,7 @@ import { SvgIconProps } from '@mui/material';
 
 import { NotificationStatus } from '../../../models/NotificationStatus';
 
-export type TimelineStatusPresentation = {
+type TimelineStatusPresentation = {
   icon: ComponentType<SvgIconProps>;
   variant: 'warning' | 'error' | 'success' | 'info' | 'normal';
 };
@@ -49,12 +49,21 @@ const TIMELINE_STATUS_PRESENTATION: Partial<
  * IN_VALIDATION e REFUSED non hanno una presentazione dedicata e cadono qui,
  * come già facevano nel ramo default di getNotificationStatusInfos.
  */
-export const DEFAULT_TIMELINE_STATUS_PRESENTATION: TimelineStatusPresentation = {
+const DEFAULT_TIMELINE_STATUS_PRESENTATION: TimelineStatusPresentation = {
   variant: 'normal',
   icon: Info,
 };
 
-export const getTimelineStatusPresentation = (
-  status: NotificationStatus
-): TimelineStatusPresentation =>
-  TIMELINE_STATUS_PRESENTATION[status] ?? DEFAULT_TIMELINE_STATUS_PRESENTATION;
+export const getTimelineItemPresentation = (
+  status: NotificationStatus,
+  isFirst: boolean
+): TimelineStatusPresentation => {
+  const { icon, variant } =
+    TIMELINE_STATUS_PRESENTATION[status] ?? DEFAULT_TIMELINE_STATUS_PRESENTATION;
+
+  return {
+    icon,
+    variant:
+      isFirst || status === NotificationStatus.NOTIFICATION_TIMELINE_REWORKED ? variant : 'normal',
+  };
+};

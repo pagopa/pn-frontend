@@ -10,6 +10,7 @@ import {
   NotificationDetailTimeline,
   NotificationDocumentResponse,
   NotificationDocumentType,
+  NotificationEventsTimeline,
   PnBreadcrumb,
   appStateActions,
   downloadDocument,
@@ -24,9 +25,11 @@ import {
   NOTIFICATION_ACTIONS,
   getSentNotification,
   getSentNotificationDocument,
+  getSentNotificationTimeline,
 } from '../redux/notification/actions';
 import { resetState } from '../redux/notification/reducers';
 import { RootState } from '../redux/store';
+import { getConfiguration } from '../services/configuration.service';
 import PAEventStrategyFactory from '../utility/MixpanelUtils/PAEventStrategyFactory';
 
 const NotificationTimeline: React.FC = () => {
@@ -37,20 +40,31 @@ const NotificationTimeline: React.FC = () => {
   const { hasApiErrors } = useErrors();
   const { t, i18n } = useTranslation(['common', 'notifiche', 'appStatus']);
   const notification = useAppSelector((state: RootState) => state.notificationState.notification);
-
-  const hasNotificationSentApiError = hasApiErrors(NOTIFICATION_ACTIONS.GET_SENT_NOTIFICATION);
+  const notificationTimeline = useAppSelector(
+    (state: RootState) => state.notificationState.notificationTimeline
+  );
+  const { IS_NEW_TIMELINE_ENABLED } = getConfiguration();
   const [pageReady, setPageReady] = useState(false);
 
-  const fetchSentNotification = useCallback(() => {
-    if (id) {
-      setPageReady(false);
+  const timelineApiId = IS_NEW_TIMELINE_ENABLED
+    ? NOTIFICATION_ACTIONS.GET_SENT_NOTIFICATION_TIMELINE
+    : NOTIFICATION_ACTIONS.GET_SENT_NOTIFICATION;
+  const hasNotificationSentApiError = hasApiErrors(timelineApiId);
 
-      void dispatch(getSentNotification(id))
-        .unwrap()
-        .catch(() => {})
-        .finally(() => setPageReady(true));
+  const fetchSentNotification = useCallback(() => {
+    if (!id) {
+      return;
     }
-  }, [id]);
+    setPageReady(false);
+    const request = IS_NEW_TIMELINE_ENABLED
+      ? dispatch(getSentNotificationTimeline(id))
+      : dispatch(getSentNotification(id));
+
+    void request
+      .unwrap()
+      .catch(() => {})
+      .finally(() => setPageReady(true));
+  }, [id, IS_NEW_TIMELINE_ENABLED]);
 
   useEffect(() => {
     fetchSentNotification();
@@ -115,7 +129,7 @@ const NotificationTimeline: React.FC = () => {
       <PnBreadcrumb
         linkRoute={routes.DASHBOARD}
         linkLabel={t('detail.breadcrumb-root', { ns: 'notifiche' })}
-        currentLocationLabel={notification.iun}
+        currentLocationLabel={notificationTimeline.iun}
         goBackAction={() =>
           location.state?.fromNotificationDetail
             ? navigate(-1)
@@ -124,7 +138,7 @@ const NotificationTimeline: React.FC = () => {
         goBackLabel={t('button.indietro', { ns: 'common' })}
       />
     );
-  }, [id, i18n.language, location.state, notification.iun]);
+  }, [id, i18n.language, location.state, notificationTimeline.iun]);
 
   const breadcrumb = <Fragment>{properBreadcrumb}</Fragment>;
 
@@ -133,11 +147,7 @@ const NotificationTimeline: React.FC = () => {
       {hasNotificationSentApiError && (
         <Box sx={{ p: 3 }}>
           {properBreadcrumb}
-          <ApiError
-            onClick={fetchSentNotification}
-            mt={3}
-            apiId={NOTIFICATION_ACTIONS.GET_SENT_NOTIFICATION}
-          />
+          <ApiError onClick={fetchSentNotification} mt={3} apiId={timelineApiId} />
         </Box>
       )}
 
@@ -158,15 +168,24 @@ const NotificationTimeline: React.FC = () => {
               {t('detail.notification-timeline-section.title', { ns: 'notifiche' })}
             </Typography>
             <MIPaper>
-              <NotificationDetailTimeline
-                language={i18n.language}
-                recipients={notification.recipients}
-                statusHistory={notification.notificationStatusHistory}
-                clickHandler={legalFactDownloadHandler}
-                showMoreButtonLabel={t('detail.show-more', { ns: 'notifiche' })}
-                showLessButtonLabel={t('detail.show-less', { ns: 'notifiche' })}
-                handleTrackShowMoreLess={trackTimelineShowMore}
-              />
+              {IS_NEW_TIMELINE_ENABLED ? (
+                <NotificationEventsTimeline
+                  language={i18n.language}
+                  recipients={notificationTimeline.recipients}
+                  statusHistory={notificationTimeline.notificationStatusHistory}
+                  clickHandler={legalFactDownloadHandler}
+                />
+              ) : (
+                <NotificationDetailTimeline
+                  language={i18n.language}
+                  recipients={notification.recipients}
+                  statusHistory={notification.notificationStatusHistory}
+                  clickHandler={legalFactDownloadHandler}
+                  showMoreButtonLabel={t('detail.show-more', { ns: 'notifiche' })}
+                  showLessButtonLabel={t('detail.show-less', { ns: 'notifiche' })}
+                  handleTrackShowMoreLess={trackTimelineShowMore}
+                />
+              )}
             </MIPaper>
           </Stack>
         </Box>
