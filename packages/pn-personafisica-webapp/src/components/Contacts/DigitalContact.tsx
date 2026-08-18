@@ -47,7 +47,7 @@ type Props = {
   slotsProps?: {
     container?: CSSProperties;
     textField?: Partial<TextFieldProps>;
-    button?: Partial<MIButtonProps>;
+    button?: Partial<Omit<MIButtonProps, 'href'>>;
     leadingEditIcon?: Partial<SvgIconProps>;
   };
   showLabelOnEdit?: boolean;
@@ -224,6 +224,7 @@ const DigitalContact = forwardRef<{ toggleEdit: () => void }, Props>(
             />
             <MIButton
               {...slotsProps?.button}
+              type="submit"
               id={`${senderId}_${contactType}-button`}
               variant="contained"
               fullWidth={isMobile}
@@ -231,9 +232,8 @@ const DigitalContact = forwardRef<{ toggleEdit: () => void }, Props>(
               sx={{
                 height: '43px',
               }}
-              {...({ type: 'submit' } as any)}
             >
-              {insertButtonLabel}
+              {insertButtonLabel}ffffff
             </MIButton>
             {onCancelInsert && (
               <MIButton variant="text" color="error" onClick={onCancelInsert}>
@@ -295,7 +295,7 @@ const DigitalContact = forwardRef<{ toggleEdit: () => void }, Props>(
               <MIButton
                 variant="text"
                 key="saveButton"
-                {...({ type: 'submit' } as any)}
+                type="submit"
                 sx={{ justifyContent: 'left' }}
                 id={`saveContact-${senderId}_${contactType}`}
                 startIcon={<CheckRoundedIcon />}

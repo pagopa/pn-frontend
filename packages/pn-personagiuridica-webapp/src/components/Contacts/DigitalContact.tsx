@@ -45,7 +45,7 @@ type Props = {
   slotsProps?: {
     container?: CSSProperties;
     textField?: Partial<TextFieldProps>;
-    button?: Partial<MIButtonProps>;
+    button?: Partial<Omit<MIButtonProps, 'href'>>;
   };
   showLabelOnEdit?: boolean;
   senderId?: string;
@@ -197,7 +197,7 @@ const DigitalContact = forwardRef<{ toggleEdit: () => void }, Props>(
               fullWidth={isMobile}
               data-testid={`${senderId}_${contactType}-button`}
               sx={{ height: '43px', flexBasis: { xs: 'unset', lg: '16.67%' } }}
-              {...({ type: 'submit' } as any)}
+              type="submit"
               {...slotsProps?.button}
             >
               {insertButtonLabel}
@@ -265,7 +265,7 @@ const DigitalContact = forwardRef<{ toggleEdit: () => void }, Props>(
                 sx={{ justifyContent: 'left' }}
                 id={`saveContact-${senderId}_${contactType}`}
                 startIcon={<CheckRoundedIcon />}
-                {...({ type: 'submit' } as any)}
+                type="submit"
               >
                 {t('button.conferma')}
               </MIButton>

@@ -15,7 +15,6 @@ import {
   today,
   useIsMobile,
 } from '@pagopa-pn/pn-commons';
-import { MIButton } from '@pagopa/mui-italia';
 
 import {
   GraphColors,
@@ -184,11 +183,10 @@ const FilterStatistics: React.FC<Props> = ({ filter, lastDate, className, sx }) 
           minDate={formik.values.startDate ?? tenYearsAgo}
           maxDate={maxEndDate}
         />
-        <MIButton
+        <Button
           id="filter-button"
           data-testid="filterButton"
           variant="outlined"
-          {...({ type: 'button' } as any)}
           onClick={applyCustomFilter}
           sx={{
             height: '43px !important',
@@ -197,7 +195,7 @@ const FilterStatistics: React.FC<Props> = ({ filter, lastDate, className, sx }) 
           disabled={isInitialSearch || !formik.dirty || !formik.isValid}
         >
           {t('filter.buttons.filter')}
-        </MIButton>
+        </Button>
         <Button
           data-testid="cancelButton"
           sx={{

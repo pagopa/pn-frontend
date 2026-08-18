@@ -138,7 +138,6 @@ const PnWizard: React.FC<Props> = ({
         <ExitButton
           data-testid="exit-button"
           startIcon={<ArrowBackRoundedIcon />}
-          {...({ type: 'button' } as any)}
           {...slotsProps?.exitButton}
           variant="text"
           sx={{ p: 0 }}

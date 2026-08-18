@@ -88,11 +88,11 @@ const SpecialContactItem: React.FC<Props> = ({
                 color="error"
                 onClick={handleDelete}
                 startIcon={<DeleteRoundedIcon />}
-                disabled={hasPecInValidationForEntity(senderId)}
                 sx={{
                   justifyContent: 'left',
                   pl: { xs: 0, lg: 3 },
                 }}
+                disabled={hasPecInValidationForEntity(senderId)}
               >
                 {t('button.disable', { ns: 'common' })}
               </ButtonNaked>

@@ -133,7 +133,7 @@ const SpidSelect = ({ show, onClose, rapidAccess }: Props) => {
               </Trans>
             </Typography>
             <MIButton
-              {...({ type: 'submit' } as any)}
+              type="submit"
               variant="outlined"
               id="backButton"
               sx={{

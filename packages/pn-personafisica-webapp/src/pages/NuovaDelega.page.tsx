@@ -568,7 +568,7 @@ const NuovaDelega = () => {
                         <Stack>
                           <MIButton
                             id="create-button"
-                            {...({ type: 'submit' } as any)}
+                            type="submit"
                             sx={{ marginTop: '1rem', margin: 'auto' }}
                             variant="contained"
                             data-testid="createButton"

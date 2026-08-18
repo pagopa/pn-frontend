@@ -64,7 +64,6 @@ const NewNotificationCard = ({
           <MIButton
             id="previous-step"
             variant="outlined"
-            {...({ type: 'button' } as any)}
             onClick={previousStepOnClick}
             data-testid="previous-step"
             fullWidth={isMobile}
