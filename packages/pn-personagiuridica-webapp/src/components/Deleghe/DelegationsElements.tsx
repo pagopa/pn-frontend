@@ -302,7 +302,7 @@ export const Menu: React.FC<Props> = ({ menuType, id, userLogged, row, onAction 
         data-testid="delegationMenuIcon"
         aria-label={t('deleghe.table.menu-aria-label')}
       >
-        <MoreVertRounded fontSize={'small'} />
+        <MoreVertRounded fontSize="small" />
       </IconButton>
       <MUIMenu
         id={`delegation-menu-${id}`}
@@ -415,7 +415,7 @@ export const AcceptButton: React.FC<AcceptButtonProps> = ({ id, name, onAccept }
       <MIButton
         id="accept-button"
         onClick={handleAcceptClick}
-        variant={'contained'}
+        variant="contained"
         data-testid="acceptButton"
       >
         {t('deleghe.accept')}

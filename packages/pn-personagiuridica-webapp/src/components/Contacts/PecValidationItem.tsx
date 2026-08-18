@@ -16,12 +16,11 @@ const PecValidationItem: React.FC<Props> = ({ senderId, onCancelValidation }) =>
   return (
     <Stack direction="row" spacing={1} alignItems="center" data-testid={`${senderId}_pecContact`}>
       <MIButton
-        variant="text"
         color="error"
         onClick={() => onCancelValidation(senderId)}
         data-testid="cancelValidation"
-        size="medium"
         startIcon={<CloseRoundedIcon sx={{ width: '18px', height: '18px' }} />}
+        variant="text"
       >
         {t('legal-contacts.cancel-pec-validation', { ns: 'recapiti' })}
       </MIButton>
