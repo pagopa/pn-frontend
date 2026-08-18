@@ -51,6 +51,8 @@ const NotificationTimeline: React.FC = () => {
     : NOTIFICATION_ACTIONS.GET_SENT_NOTIFICATION;
   const hasNotificationSentApiError = hasApiErrors(timelineApiId);
 
+  const notificationIUN = IS_NEW_TIMELINE_ENABLED ? notificationTimeline.iun : notification.iun;
+
   const fetchSentNotification = useCallback(() => {
     if (!id) {
       return;
@@ -90,7 +92,7 @@ const NotificationTimeline: React.FC = () => {
     if (legalFact.category !== NotificationDocumentType.AAR) {
       dispatch(
         getSentNotificationDocument({
-          iun: notification.iun,
+          iun: notificationIUN,
           documentType: NotificationDocumentType.LEGAL_FACT,
           documentId: legalFact.key.substring(legalFact.key.lastIndexOf('/') + 1),
         })
@@ -101,7 +103,7 @@ const NotificationTimeline: React.FC = () => {
     } else {
       dispatch(
         getSentNotificationDocument({
-          iun: notification.iun,
+          iun: notificationIUN,
           documentType: NotificationDocumentType.AAR,
           documentId: legalFact.key,
         })
@@ -129,7 +131,7 @@ const NotificationTimeline: React.FC = () => {
       <PnBreadcrumb
         linkRoute={routes.DASHBOARD}
         linkLabel={t('detail.breadcrumb-root', { ns: 'notifiche' })}
-        currentLocationLabel={notificationTimeline.iun}
+        currentLocationLabel={notificationIUN}
         goBackAction={() =>
           location.state?.fromNotificationDetail
             ? navigate(-1)
@@ -138,7 +140,7 @@ const NotificationTimeline: React.FC = () => {
         goBackLabel={t('button.indietro', { ns: 'common' })}
       />
     );
-  }, [id, i18n.language, location.state, notificationTimeline.iun]);
+  }, [id, i18n.language, location.state, notificationIUN]);
 
   const breadcrumb = <Fragment>{properBreadcrumb}</Fragment>;
 

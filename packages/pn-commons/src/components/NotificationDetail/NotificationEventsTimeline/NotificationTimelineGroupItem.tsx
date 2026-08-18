@@ -24,6 +24,7 @@ type Props = {
   clickHandler: (legalFactId: LegalFactId) => void;
   disableDownloads: boolean;
   language: string;
+  hasMultipleAttempts?: boolean;
 };
 
 const NotificationTimelineGroupItem = ({
@@ -33,13 +34,14 @@ const NotificationTimelineGroupItem = ({
   clickHandler,
   disableDownloads,
   language,
+  hasMultipleAttempts = false,
 }: Props) => {
   const generatedId = useId();
   const [expanded, setExpanded] = useState(false);
 
   const headerId = `timeline-group-header-${generatedId}`;
   const panelId = `timeline-group-panel-${generatedId}`;
-  const { channel, detail } = getTimelineGroupHeader(group);
+  const { channel, icon: ChannelIcon, detail } = getTimelineGroupHeader(group, hasMultipleAttempts);
   const headerLabel = detail ? `${channel} · ${detail}` : channel;
 
   const hasReworkedItems = group.events.some(
@@ -65,6 +67,11 @@ const NotificationTimelineGroupItem = ({
         }}
       >
         <Stack component="span" direction="row" spacing={1} alignItems="center">
+          <ChannelIcon
+            fontSize="small"
+            sx={{ fontSize: '24px' }}
+            data-testid="timeline-group-icon"
+          />
           <Typography component="span" variant="body2" fontWeight={600}>
             {headerLabel}
           </Typography>

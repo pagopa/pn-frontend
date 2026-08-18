@@ -16,6 +16,7 @@ import NotificationTimelineEventDate from './NotificationTimelineEventDate';
 import NotificationTimelineEventItem from './NotificationTimelineEventItem';
 import NotificationTimelineGroupItem from './NotificationTimelineGroupItem';
 import { getTimelineItemPresentation } from './notificationTimelineStatus.config';
+import { getMultiAttemptGroupIds } from './timelineGroupHeader.config';
 
 type Props = {
   recipients: Array<NotificationDetailRecipient>;
@@ -35,6 +36,10 @@ const NotificationEventsTimeline = ({
   language = 'it',
 }: Props) => {
   const legacyStatusHistory = useMemo(() => toLegacyStatusHistory(statusHistory), [statusHistory]);
+  const multiAttemptGroupIds = useMemo(
+    () => getMultiAttemptGroupIds(statusHistory),
+    [statusHistory]
+  );
 
   return (
     <Box data-testid="NotificationEventsTimeline">
@@ -63,6 +68,7 @@ const NotificationEventsTimeline = ({
                   alignItems="center"
                   fontSize="16px"
                   gap={1}
+                  mb={hasGroupedEvents ? 1 : 0}
                 >
                   {label}
                   <ReworkedStatusTag reworkedStatus={status.reworkedStatus} />
@@ -106,6 +112,7 @@ const NotificationEventsTimeline = ({
                         clickHandler={clickHandler}
                         disableDownloads={disableDownloads}
                         language={language}
+                        hasMultipleAttempts={multiAttemptGroupIds.has(step.group.groupId)}
                       />
                     </Fragment>
                   );
