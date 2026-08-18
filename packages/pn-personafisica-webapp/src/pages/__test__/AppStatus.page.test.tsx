@@ -1,23 +1,21 @@
 import MockAdapter from 'axios-mock-adapter';
 import { vi } from 'vitest';
 
-import { ThemeProvider, useTheme } from '@mui/material';
 import { AppResponseMessage, ResponseEventDispatcher, formatDate } from '@pagopa-pn/pn-commons';
 
 import { currentStatusDTO, downtimesDTO } from '../../__mocks__/AppStatus.mock';
 import { errorMock } from '../../__mocks__/Errors.mock';
-import { act, fireEvent, render, screen, waitFor, within } from '../../__test__/test-utils';
+import { act, fireEvent, render, screen, theme, waitFor, within } from '../../__test__/test-utils';
 import { apiClient } from '../../api/apiClients';
 import { APP_STATUS_ACTIONS } from '../../redux/appStatus/actions';
 import AppStatus from '../AppStatus.page';
 
-const theme = useTheme();
 const AppStatusWithErrorHandling = () => (
-  <ThemeProvider theme={theme}>
+  <>
     <ResponseEventDispatcher />
     <AppResponseMessage />
     <AppStatus />
-  </ThemeProvider>
+  </>
 );
 
 describe('AppStatus page', () => {

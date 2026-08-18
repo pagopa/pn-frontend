@@ -11,6 +11,6 @@ export const fillCodeDialog = async (result: RenderResult, code: string = '01234
   await userEvent.keyboard(code);
   // confirm the addition
   const dialogButtons = dialog.querySelectorAll('button');
-  await userEvent.click(dialogButtons[1]);
+  await userEvent.click(dialogButtons[2]);
   return dialog;
 };

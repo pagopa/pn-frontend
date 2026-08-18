@@ -322,7 +322,7 @@ async function testCalendar(
   const selectedMonth = dateSelected.getMonth() + 1;
   // select the new date
   if (selectedYear !== year) {
-    const yearIcon = within(dialog).getByTestId('ArrowDropDownRoundedIcon');
+    const yearIcon = within(dialog).getByTestId('ArrowDropDownIcon');
     expect(yearIcon).toBeInTheDocument();
     fireEvent.click(yearIcon);
     const yearButton = document
