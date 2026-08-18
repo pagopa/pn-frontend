@@ -10,26 +10,32 @@ import { getLocalizedOrDefaultLabel } from '../../utility/localization.utility';
 import PnWizardStep, { PnWizardStepProps } from './PnWizardStep';
 import PnWizardStepper from './PnWizardStepper';
 
+type NextButtonProps = Omit<MIButtonProps, 'onClick' | 'href'> & {
+  onClick?: (next: () => void, step: number) => void;
+  label?: string;
+  herf?: never;
+};
+
+type PrevButtonProps = Omit<MIButtonProps, 'onClick' | 'href'> & {
+  onClick?: (previous: () => void, step: number) => void;
+  herf?: never;
+};
+
 type Props = {
   activeStep: number;
   setActiveStep: (step: number) => void;
   title: ReactNode;
   children: ReactNode;
   slots?: {
-    nextButton?: JSXElementConstructor<MIButtonProps>;
-    prevButton?: JSXElementConstructor<MIButtonProps>;
+    nextButton?: JSXElementConstructor<NextButtonProps>;
+    prevButton?: JSXElementConstructor<PrevButtonProps>;
     exitButton?: JSXElementConstructor<MIButtonProps>;
     feedbackIcon?: JSXElementConstructor<IllustrationProps>;
   };
   slotsProps?: {
     stepContainer?: Partial<PaperProps>;
-    nextButton?: Omit<MIButtonProps, 'onClick'> & {
-      onClick?: (next: () => void, step: number) => void;
-      label?: string;
-    };
-    prevButton?: Omit<MIButtonProps, 'onClick'> & {
-      onClick?: (previous: () => void, step: number) => void;
-    };
+    nextButton?: NextButtonProps;
+    prevButton?: PrevButtonProps;
     exitButton?: MIButtonProps;
     actions?: StackProps;
     container?: Omit<StackProps, 'children'> & { 'data-testid'?: string };
@@ -167,20 +173,20 @@ const PnWizard: React.FC<Props> = ({
           {...slotsProps?.actions}
         >
           <PrevButton
+            {...slotsProps?.prevButton}
             variant="text"
             data-testid="prev-button"
             sx={{ mt: { xs: 2, md: 0 } }}
-            {...(slotsProps?.prevButton as MIButtonProps)}
             onClick={handlePrevStep}
           >
             {getLocalizedOrDefaultLabel('common', 'button.indietro', 'Indietro')}
           </PrevButton>
 
           <NextButton
+            {...slotsProps?.nextButton}
             data-testid="next-button"
             variant="contained"
             sx={{ ml: { md: 'auto' } }}
-            {...(slotsProps?.nextButton as MIButtonProps)}
             onClick={handleNextStep}
           >
             {slotsProps?.nextButton?.label ||
