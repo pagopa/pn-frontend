@@ -2,9 +2,64 @@ import { vi } from 'vitest';
 
 import { notificationTimelineDTO } from '../../../../__mocks__/NotificationTimeline.mock';
 import { NotificationStatus } from '../../../../models';
-import { ReworkedStatus } from '../../../../models/NotificationDetail';
+import {
+  NotificationDetailRecipient,
+  RecipientType,
+  ReworkedStatus,
+} from '../../../../models/NotificationDetail';
+import {
+  NotificationTimelineGroup,
+  NotificationTimelineStatusHistory,
+} from '../../../../models/NotificationTimeline';
 import { createMatchMedia, fireEvent, render, within } from '../../../../test-utils';
 import NotificationEventsTimeline from '../NotificationEventsTimeline';
+
+const multiRecipients: Array<NotificationDetailRecipient> = [
+  {
+    recipientType: RecipientType.PF,
+    taxId: 'TSTUTN00A07A001G',
+    denomination: 'Utente Test Uno',
+    payments: [],
+  },
+  {
+    recipientType: RecipientType.PF,
+    taxId: 'TSTUTN00A07A002H',
+    denomination: 'Utente Test Due',
+    payments: [],
+  },
+];
+
+const groupOfRecipient = (
+  groupId: string,
+  recipient: NotificationDetailRecipient,
+  recIndex: number
+): NotificationTimelineGroup => ({
+  groupId,
+  denomination: recipient.denomination,
+  taxId: recipient.taxId,
+  recIndex,
+  category: 'ANALOG',
+  channel: 'AR_REGISTERED_LETTER',
+  attempt: 1,
+  hasReworkedEvents: false,
+  events: [],
+});
+
+/**
+ * Due gruppi del primo destinatario, uno del secondo: l'intestazione col destinatario
+ * deve comparire solo quando cambia.
+ */
+const multiRecipientStatusHistory: Array<NotificationTimelineStatusHistory> = [
+  {
+    status: NotificationStatus.DELIVERING,
+    activeFrom: '2026-08-06T09:14:58.508308Z',
+    steps: [
+      { stepType: 'GROUP', group: groupOfRecipient('first-recipient-pec', multiRecipients[0], 0) },
+      { stepType: 'GROUP', group: groupOfRecipient('first-recipient-890', multiRecipients[0], 0) },
+      { stepType: 'GROUP', group: groupOfRecipient('second-recipient-890', multiRecipients[1], 1) },
+    ],
+  },
+];
 
 describe('NotificationEventsTimeline', () => {
   // Define mock data for props
@@ -89,6 +144,33 @@ describe('NotificationEventsTimeline', () => {
     const groupBody = within(firstGroup).getByTestId('timeline-group-body');
     // the first group of the mock has two visible events
     expect(within(groupBody).getAllByTestId('timeline-event')).toHaveLength(2);
+  });
+
+  it('shows the recipient before the groups only when it changes, on multi-recipient notifications', () => {
+    const { getAllByTestId } = render(
+      <NotificationEventsTimeline
+        recipients={multiRecipients}
+        statusHistory={multiRecipientStatusHistory}
+        clickHandler={clickHandler}
+      />
+    );
+
+    const recipientLabels = getAllByTestId('timeline-group-recipient');
+    expect(recipientLabels).toHaveLength(2);
+    expect(recipientLabels[0]).toHaveTextContent('Utente Test Uno - TSTUTN00A07A001G');
+    expect(recipientLabels[1]).toHaveTextContent('Utente Test Due - TSTUTN00A07A002H');
+  });
+
+  it('does not show the recipient on single recipient notifications', () => {
+    const { queryAllByTestId } = render(
+      <NotificationEventsTimeline
+        recipients={recipients}
+        statusHistory={statusHistory}
+        clickHandler={clickHandler}
+      />
+    );
+
+    expect(queryAllByTestId('timeline-group-recipient')).toHaveLength(0);
   });
 
   it('downloads the legal fact of a hidden event', () => {

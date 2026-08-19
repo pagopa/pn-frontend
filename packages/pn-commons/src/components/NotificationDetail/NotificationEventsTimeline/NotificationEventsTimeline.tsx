@@ -40,6 +40,7 @@ const NotificationEventsTimeline = ({
     () => getMultiAttemptGroupIds(statusHistory),
     [statusHistory]
   );
+  const isMultiRecipient = recipients.length > 1;
 
   return (
     <Box data-testid="NotificationEventsTimeline">
@@ -68,14 +69,13 @@ const NotificationEventsTimeline = ({
                   alignItems="center"
                   fontSize="16px"
                   gap={1}
-                  mb={hasGroupedEvents ? 1 : 0}
                 >
                   {label}
                   <ReworkedStatusTag reworkedStatus={status.reworkedStatus} />
                 </Stack>
               }
             >
-              <Stack gap={1} alignItems="flex-start">
+              <Stack gap={1.5} alignItems="flex-start" mt={hasGroupedEvents ? 1.5 : 0}>
                 {!hasGroupedEvents && (
                   <Typography fontSize="14px" fontWeight={400}>
                     {description}{' '}
@@ -99,11 +99,24 @@ const NotificationEventsTimeline = ({
                   }
 
                   const previousStep = status.steps[stepIndex - 1];
+                  const previousGroup =
+                    previousStep && isTimelineGroupStep(previousStep)
+                      ? previousStep.group
+                      : undefined;
 
                   return (
                     <Fragment key={step.group.groupId}>
-                      {previousStep && isTimelineGroupStep(previousStep) && (
-                        <Divider flexItem data-testid="timeline-group-divider" />
+                      {previousGroup && <Divider flexItem data-testid="timeline-group-divider" />}
+                      {isMultiRecipient && previousGroup?.taxId !== step.group.taxId && (
+                        <Typography
+                          variant="body2"
+                          fontWeight={600}
+                          data-testid="timeline-group-recipient"
+                          mt={3}
+                          sx={{ color: '#555C70' }}
+                        >
+                          {`${step.group.denomination} - ${step.group.taxId}`}
+                        </Typography>
                       )}
                       <NotificationTimelineGroupItem
                         group={step.group}

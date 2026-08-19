@@ -36,7 +36,7 @@ const CHANNEL_PRESENTATION: Record<string, ChannelPresentation> = {
     labelKey: 'detail.timeline.send-digital-domicile-PEC-group-label',
     icon: MailOutlined,
   },
-  SERCQ_SEND: {
+  SERCQ: {
     labelKey: 'detail.timeline.send-digital-domicile-SERCQ-SEND-group-label',
     icon: SendIcon,
   },
