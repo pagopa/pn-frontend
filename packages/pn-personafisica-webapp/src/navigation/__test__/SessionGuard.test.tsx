@@ -112,7 +112,7 @@ describe('SessionGuard Component', () => {
   it('token-exchange user validation failed', async () => {
     const invalidUserResponse = {
       ...userResponse,
-      fiscal_number: '@RSSGPP80B02G273H',
+      fiscal_number: '@TSTUTN00A11A001P',
     };
 
     mock.onPost(AUTH_TOKEN_EXCHANGE()).reply(200, invalidUserResponse);
@@ -351,7 +351,7 @@ describe('SessionGuard Component', () => {
   it('One Identity Exchange Token - user validation failed', async () => {
     const invalidUserResponse = {
       ...userResponse,
-      fiscal_number: '@RSSGPP80B02G273H',
+      fiscal_number: '@TSTUTN00A11A001P',
     };
 
     mock.onPost(ONE_IDENTITY_TOKEN_EXCHANGE()).reply(200, invalidUserResponse);

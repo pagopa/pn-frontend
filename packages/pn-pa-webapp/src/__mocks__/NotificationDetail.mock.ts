@@ -78,7 +78,7 @@ const timeline: Array<INotificationDetailTimeline> = [
       recIndex: 0,
       digitalAddress: {
         type: DigitalDomicileType.SMS,
-        address: '+393889533897',
+        address: '+390000000000',
       },
     },
     legalFactsIds: [],
@@ -138,7 +138,7 @@ const timeline: Array<INotificationDetailTimeline> = [
       recIndex: 0,
       digitalAddress: {
         type: DigitalDomicileType.PEC,
-        address: 'notifichedigitali-uat@pec.pagopa.it',
+        address: 'mittente-test@pec.mock.it',
       },
     },
     index: 8,
@@ -153,7 +153,7 @@ const timeline: Array<INotificationDetailTimeline> = [
       recIndex: 1,
       digitalAddress: {
         type: DigitalDomicileType.PEC,
-        address: 'testpagopa3@pec.pagopa.it',
+        address: 'destinatario-test@pec.mock.it',
       },
     },
     index: 9,
@@ -174,7 +174,7 @@ const timeline: Array<INotificationDetailTimeline> = [
       recIndex: 0,
       digitalAddress: {
         type: DigitalDomicileType.PEC,
-        address: 'notifichedigitali-uat@pec.pagopa.it',
+        address: 'mittente-test@pec.mock.it',
       },
       deliveryDetailCode: 'C001',
     },
@@ -196,7 +196,7 @@ const timeline: Array<INotificationDetailTimeline> = [
       recIndex: 1,
       digitalAddress: {
         type: DigitalDomicileType.PEC,
-        address: 'testpagopa3@pec.pagopa.it',
+        address: 'destinatario-test@pec.mock.it',
       },
       deliveryDetailCode: 'C001',
     },
@@ -218,7 +218,7 @@ const timeline: Array<INotificationDetailTimeline> = [
       recIndex: 0,
       digitalAddress: {
         type: DigitalDomicileType.PEC,
-        address: 'notifichedigitali-uat@pec.pagopa.it',
+        address: 'mittente-test@pec.mock.it',
       },
       responseStatus: ResponseStatus.OK,
       deliveryDetailCode: 'C003',
@@ -251,7 +251,7 @@ const timeline: Array<INotificationDetailTimeline> = [
       recIndex: 1,
       digitalAddress: {
         type: DigitalDomicileType.PEC,
-        address: 'testpagopa3@pec.pagopa.it',
+        address: 'destinatario-test@pec.mock.it',
       },
       responseStatus: ResponseStatus.OK,
       deliveryDetailCode: 'C003',
@@ -283,7 +283,7 @@ const timeline: Array<INotificationDetailTimeline> = [
       recIndex: 0,
       digitalAddress: {
         type: DigitalDomicileType.PEC,
-        address: 'notifichedigitali-uat@pec.pagopa.it',
+        address: 'mittente-test@pec.mock.it',
       },
     },
     index: 16,
@@ -303,7 +303,7 @@ const timeline: Array<INotificationDetailTimeline> = [
       recIndex: 1,
       digitalAddress: {
         type: DigitalDomicileType.PEC,
-        address: 'testpagopa3@pec.pagopa.it',
+        address: 'destinatario-test@pec.mock.it',
       },
     },
     index: 17,
@@ -452,7 +452,7 @@ const notificationStatusHistory: Array<NotificationStatusHistory> = [
           recIndex: 1,
           digitalAddress: {
             type: DigitalDomicileType.PEC,
-            address: 'testpagopa3@pec.pagopa.it',
+            address: 'destinatario-test@pec.mock.it',
           },
         },
         index: 17,
@@ -472,7 +472,7 @@ const notificationStatusHistory: Array<NotificationStatusHistory> = [
           recIndex: 0,
           digitalAddress: {
             type: DigitalDomicileType.PEC,
-            address: 'notifichedigitali-uat@pec.pagopa.it',
+            address: 'mittente-test@pec.mock.it',
           },
         },
         index: 16,
@@ -520,7 +520,7 @@ const notificationStatusHistory: Array<NotificationStatusHistory> = [
           recIndex: 1,
           digitalAddress: {
             type: DigitalDomicileType.PEC,
-            address: 'testpagopa3@pec.pagopa.it',
+            address: 'destinatario-test@pec.mock.it',
           },
           responseStatus: ResponseStatus.OK,
           deliveryDetailCode: 'C003',
@@ -553,7 +553,7 @@ const notificationStatusHistory: Array<NotificationStatusHistory> = [
           recIndex: 0,
           digitalAddress: {
             type: DigitalDomicileType.PEC,
-            address: 'notifichedigitali-uat@pec.pagopa.it',
+            address: 'mittente-test@pec.mock.it',
           },
           responseStatus: ResponseStatus.OK,
           deliveryDetailCode: 'C003',
@@ -576,7 +576,7 @@ const notificationStatusHistory: Array<NotificationStatusHistory> = [
           recIndex: 1,
           digitalAddress: {
             type: DigitalDomicileType.PEC,
-            address: 'testpagopa3@pec.pagopa.it',
+            address: 'destinatario-test@pec.mock.it',
           },
           deliveryDetailCode: 'C001',
         },
@@ -598,7 +598,7 @@ const notificationStatusHistory: Array<NotificationStatusHistory> = [
           recIndex: 0,
           digitalAddress: {
             type: DigitalDomicileType.PEC,
-            address: 'notifichedigitali-uat@pec.pagopa.it',
+            address: 'mittente-test@pec.mock.it',
           },
           deliveryDetailCode: 'C001',
         },
@@ -614,7 +614,7 @@ const notificationStatusHistory: Array<NotificationStatusHistory> = [
           recIndex: 1,
           digitalAddress: {
             type: DigitalDomicileType.PEC,
-            address: 'testpagopa3@pec.pagopa.it',
+            address: 'destinatario-test@pec.mock.it',
           },
         },
         index: 9,
@@ -629,7 +629,7 @@ const notificationStatusHistory: Array<NotificationStatusHistory> = [
           recIndex: 0,
           digitalAddress: {
             type: DigitalDomicileType.PEC,
-            address: 'notifichedigitali-uat@pec.pagopa.it',
+            address: 'mittente-test@pec.mock.it',
           },
         },
         index: 8,
@@ -688,7 +688,7 @@ const notificationStatusHistory: Array<NotificationStatusHistory> = [
           recIndex: 0,
           digitalAddress: {
             type: DigitalDomicileType.SMS,
-            address: '+393889533897',
+            address: '+390000000000',
           },
         },
         legalFactsIds: [],
@@ -798,7 +798,7 @@ const notificationStatusHistory: Array<NotificationStatusHistory> = [
           recIndex: 0,
           digitalAddress: {
             type: DigitalDomicileType.SMS,
-            address: '+393889533897',
+            address: '+390000000000',
           },
         },
         legalFactsIds: [],
@@ -1021,11 +1021,11 @@ const paymentsPagoPaF24: Array<NotificationDetailPayment> = [
 export const recipients: Array<NotificationDetailRecipient> = [
   {
     recipientType: RecipientType.PF,
-    taxId: 'LVLDAA85T50G702B',
+    taxId: 'TSTUTN00A07A001G',
     denomination: 'Mario Cucumber',
     digitalDomicile: {
       type: DigitalDomicileType.PEC,
-      address: 'notifichedigitali-uat@pec.pagopa.it',
+      address: 'mittente-test@pec.mock.it',
     },
     physicalAddress: {
       address: 'VIA SENZA NOME',
@@ -1044,7 +1044,7 @@ export const recipients: Array<NotificationDetailRecipient> = [
     denomination: 'Mario Gherkin',
     digitalDomicile: {
       type: DigitalDomicileType.PEC,
-      address: 'testpagopa3@pec.pagopa.it',
+      address: 'destinatario-test@pec.mock.it',
     },
     physicalAddress: {
       address: 'VIA SENZA NOME',
@@ -1078,7 +1078,7 @@ export const notificationDTOMultiRecipient: NotificationDetail = {
       docIdx: '0',
     },
   ],
-  senderDenomination: 'Comune di palermo',
+  senderDenomination: 'Comune di Test 1',
   group: '000',
   iun: 'RTRD-UDGU-QTQY-202308-P-1',
   sentAt: '2023-08-25T09:33:58.709695008Z',
@@ -1105,7 +1105,7 @@ export const notificationDTOMultiRecipient: NotificationDetail = {
       recIndex: 0,
       documentId: 'PN_AAR-6dc9aa2aceec4a18b4b073df09a1ed12.pdf',
       documentType: 'AAR',
-      title: 'Avviso di avvenuta ricezione - Mario Cucumber (LVLDAA85T50G702B)',
+      title: 'Avviso di avvenuta ricezione - Mario Cucumber (TSTUTN00A07A001G)',
       digests: {
         sha256: '',
       },

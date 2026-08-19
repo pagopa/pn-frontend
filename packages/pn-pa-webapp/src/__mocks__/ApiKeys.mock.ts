@@ -32,17 +32,17 @@ export const mockApiKeysDTO: ApiKeys = {
         {
           status: ApiKeyStatus.CREATED,
           date: '13/09/2022',
-          changedByDenomination: 'Maria Rossi',
+          changedByDenomination: 'Utente Test Due',
         },
         {
           status: ApiKeyStatus.BLOCKED,
           date: '13/09/2022',
-          changedByDenomination: 'Maria Rossi',
+          changedByDenomination: 'Utente Test Due',
         },
         {
           status: ApiKeyStatus.ENABLED,
           date: '13/09/2022',
-          changedByDenomination: 'Maria Rossi',
+          changedByDenomination: 'Utente Test Due',
         },
       ],
     },
@@ -57,17 +57,17 @@ export const mockApiKeysDTO: ApiKeys = {
         {
           status: ApiKeyStatus.CREATED,
           date: '13/09/2022',
-          changedByDenomination: 'Maria Rossi',
+          changedByDenomination: 'Utente Test Due',
         },
         {
           status: ApiKeyStatus.BLOCKED,
           date: '13/09/2022',
-          changedByDenomination: 'Maria Rossi',
+          changedByDenomination: 'Utente Test Due',
         },
         {
           status: ApiKeyStatus.ENABLED,
           date: '13/09/2022',
-          changedByDenomination: 'Maria Rossi',
+          changedByDenomination: 'Utente Test Due',
         },
       ],
     },
@@ -82,17 +82,17 @@ export const mockApiKeysDTO: ApiKeys = {
         {
           status: ApiKeyStatus.CREATED,
           date: '13/09/2022',
-          changedByDenomination: 'Maria Rossi',
+          changedByDenomination: 'Utente Test Due',
         },
         {
           status: ApiKeyStatus.BLOCKED,
           date: '13/09/2022',
-          changedByDenomination: 'Maria Rossi',
+          changedByDenomination: 'Utente Test Due',
         },
         {
           status: ApiKeyStatus.ENABLED,
           date: '13/09/2022',
-          changedByDenomination: 'Maria Rossi',
+          changedByDenomination: 'Utente Test Due',
         },
       ],
     },
