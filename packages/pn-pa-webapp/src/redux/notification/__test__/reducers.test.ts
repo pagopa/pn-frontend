@@ -9,6 +9,7 @@ import {
 import { downtimesDTO } from '../../../__mocks__/AppStatus.mock';
 import { mockAuthentication } from '../../../__mocks__/Auth.mock';
 import { notificationDTOMultiRecipient } from '../../../__mocks__/NotificationDetail.mock';
+import { NotificationTimelineResponse } from '../../../__mocks__/NotificationTimeline.mock';
 import { apiClient } from '../../../api/apiClients';
 import { getDowntimeLegalFact } from '../../appStatus/actions';
 import { store } from '../../store';
@@ -18,6 +19,7 @@ import {
   getSentNotification,
   getSentNotificationDocument,
   getSentNotificationPayment,
+  getSentNotificationTimeline,
 } from '../actions';
 import { resetState } from '../reducers';
 
@@ -33,6 +35,12 @@ const initialState = {
     notificationStatus: '',
     notificationStatusHistory: [],
     timeline: [],
+  },
+  notificationTimeline: {
+    iun: '',
+    subject: '',
+    recipients: [],
+    notificationStatusHistory: [],
   },
   downtimeEvents: [],
 };
@@ -69,6 +77,21 @@ describe('Notification detail redux state tests', () => {
     expect(payload).toEqual(notificationDTOMultiRecipient);
     expect(store.getState().notificationState.notification).toStrictEqual(
       notificationDTOMultiRecipient
+    );
+  });
+
+  it('Should be able to fetch the notification timeline', async () => {
+    mock
+      .onGet(`/bff/v1/notifications/sent/${notificationDTOMultiRecipient.iun}/timeline`)
+      .reply(200, NotificationTimelineResponse);
+    const action = await store.dispatch(
+      getSentNotificationTimeline(notificationDTOMultiRecipient.iun)
+    );
+    const payload = action.payload as NotificationDetail;
+    expect(action.type).toBe('getSentNotificationTimeline/fulfilled');
+    expect(payload).toEqual(NotificationTimelineResponse);
+    expect(store.getState().notificationState.notificationTimeline).toStrictEqual(
+      NotificationTimelineResponse
     );
   });
 

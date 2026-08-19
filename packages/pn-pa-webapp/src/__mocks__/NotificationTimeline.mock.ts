@@ -1,4 +1,4 @@
-export const TIMELINE = {
+export const NotificationTimelineResponse = {
   iun: 'NMDX-NVHP-UEZE-202606-Y-1',
   subject: 'invio notifica test EC',
   recipients: [
