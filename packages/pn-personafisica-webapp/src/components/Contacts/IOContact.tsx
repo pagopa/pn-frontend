@@ -255,7 +255,6 @@ const IOContact: React.FC = () => {
         mt={2}
         variant="body1"
         fontSize={{ xs: '14px', lg: '16px' }}
-        color="text.secondary"
         data-testid="ioContactDescription"
       >
         {isAppIOEnabled

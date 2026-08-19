@@ -440,8 +440,7 @@ const SmsContactItem: React.FC<SmsItemProps> = ({
         <Typography
           mt={2}
           variant="body1"
-          fontSize={{ xs: '14px', lg: '18px' }}
-          color="text.secondary"
+          fontSize={{ xs: '14px', lg: '16px' }}
           data-testid="smsContactDescription"
         >
           {t('courtesy-contacts.sms-description', { ns: 'recapiti' })}
