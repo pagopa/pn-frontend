@@ -155,7 +155,8 @@
       "phone": "Telefonska številka organa",
       "email": "E-pošta organa",
       "website": "Spletno mesto organa",
-      "copy_phone": "Telefonska številka je kopirana"
+      "copy_phone": "Kopiraj telefonsko številko",
+      "copied_phone": "Telefonska številka je kopirana"
     },
     "informal_notification_markdown": {
       "greeting": "Ciao {{recipientDenomination}},",
