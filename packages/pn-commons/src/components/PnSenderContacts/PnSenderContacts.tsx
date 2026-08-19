@@ -78,7 +78,10 @@ const PnSenderContacts = ({ phone, site }: SenderContactsProps) => {
                       <CopyToClipboard
                         getValue={() => phone}
                         tooltipMode
-                        tooltip={t('detail.contact_sender.copy_phone', {
+                        tooltip={t('detail.contact_sender.copied_phone', {
+                          ns: 'notifiche',
+                        })}
+                        tooltipBefore={t('detail.contact_sender.copy_phone', {
                           ns: 'notifiche',
                         })}
                       />
