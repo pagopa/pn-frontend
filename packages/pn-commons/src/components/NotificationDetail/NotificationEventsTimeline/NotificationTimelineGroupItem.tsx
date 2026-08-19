@@ -5,15 +5,12 @@ import KeyboardArrowUpOutlinedIcon from '@mui/icons-material/KeyboardArrowUpOutl
 import { Box, ButtonBase, Collapse, Stack, Typography } from '@mui/material';
 import { Tag } from '@pagopa/mui-italia';
 
-import {
-  LegalFactId,
-  NotificationDetailRecipient,
-  ReworkedStatus,
-} from '../../../models/NotificationDetail';
+import { LegalFactId, NotificationDetailRecipient } from '../../../models/NotificationDetail';
 import {
   NotificationTimelineEvent,
   NotificationTimelineGroup,
 } from '../../../models/NotificationTimeline';
+import { getLocalizedOrDefaultLabel } from '../../../utility/localization.utility';
 import NotificationTimelineEventItem from './NotificationTimelineEventItem';
 import { getTimelineGroupHeader } from './timelineGroupHeader.config';
 
@@ -44,10 +41,6 @@ const NotificationTimelineGroupItem = ({
   const { channel, icon: ChannelIcon, detail } = getTimelineGroupHeader(group, hasMultipleAttempts);
   const headerLabel = detail ? `${channel} · ${detail}` : channel;
 
-  const hasReworkedItems = group.events.some(
-    (event) => event.reworkedStatus === ReworkedStatus.VALID
-  );
-
   return (
     <Box width="100%" data-testid="timeline-group">
       <ButtonBase
@@ -75,7 +68,12 @@ const NotificationTimelineGroupItem = ({
           <Typography component="span" variant="body2" fontWeight={600}>
             {headerLabel}
           </Typography>
-          {!!hasReworkedItems && <Tag variant="warning" value="Uno o piu eventi rettificati" />}
+          {group.hasReworkedEvents && (
+            <Tag
+              variant="warning"
+              value={getLocalizedOrDefaultLabel('notifications', 'status.reworked-status-group')}
+            />
+          )}
         </Stack>
         {expanded ? (
           <KeyboardArrowUpOutlinedIcon color="primary" />

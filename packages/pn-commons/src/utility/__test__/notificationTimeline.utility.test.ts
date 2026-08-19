@@ -1,7 +1,9 @@
 import { notificationTimelineDTO } from '../../__mocks__/NotificationTimeline.mock';
 import { NotificationTimelineStep } from '../../models/NotificationTimeline';
+import { formatDay, formatMonthString } from '../date.utility';
 import {
   flattenTimelineSteps,
+  formatTimelineDate,
   isTimelineGroupStep,
   toLegacyStatusHistory,
 } from '../notificationTimeline.utility';
@@ -45,5 +47,17 @@ describe('notificationTimeline utility', () => {
       recipient: undefined,
       steps: flattenTimelineSteps(deliveringStatus.steps),
     });
+  });
+
+  it('formatTimelineDate - composes day, month and time of the event', () => {
+    const eventDate = deliveringStatus.activeFrom;
+    const localDate = new Date(eventDate);
+
+    expect(formatTimelineDate(eventDate, 'it')).toBe(
+      `${formatDay(eventDate)} ${formatMonthString(
+        eventDate,
+        'it'
+      )}, ${localDate.getHours()}:${localDate.getMinutes()}`
+    );
   });
 });
