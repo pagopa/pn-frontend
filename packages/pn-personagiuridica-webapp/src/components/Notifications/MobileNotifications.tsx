@@ -74,10 +74,6 @@ const MobileNotifications = ({
       id: 'subject',
       label: t('table.oggetto'),
     },
-    {
-      id: 'iun',
-      label: t('table.iun'),
-    },
   ];
 
   if (isDelegatedPage) {

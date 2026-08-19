@@ -68,10 +68,6 @@ const MobileNotifications = ({ notifications, sort, onChangeSorting, currentDele
       id: 'subject',
       label: t('table.oggetto'),
     },
-    {
-      id: 'iun',
-      label: t('table.iun'),
-    },
   ];
 
   const cardData: Array<Row<RecipientNotification>> = notifications.map((n) => ({
