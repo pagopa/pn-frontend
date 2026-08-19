@@ -183,6 +183,7 @@ const App = () => {
       label: t('menu.notifiche'),
       icon: MailOutlineIcon,
       route: routes.NOTIFICHE,
+      additionalRoutes: [routes.COMUNICAZIONE],
       children: sideMenuDelegators,
       notSelectable: sideMenuDelegators && sideMenuDelegators.length > 0,
       dotNotification: hasNewNotifications,
