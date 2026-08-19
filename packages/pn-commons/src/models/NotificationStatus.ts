@@ -16,10 +16,13 @@ export enum NotificationStatus {
 }
 
 export enum InformalNotificationStatus {
-  READY_TO_SEND = 'READY_TO_SEND',
+  IN_VALIDATION = 'IN_VALIDATION',
   PROCESSING = 'PROCESSING',
-  SUCCESSFUL_SENDING = 'SUCCESSFUL_SENDING',
-  UNSUCCESSFUL_SENDING = 'UNSUCCESSFUL_SENDING',
+  COMPLETED_REACHED = 'COMPLETED_REACHED',
+  COMPLETED_UNREACHED = 'COMPLETED_UNREACHED',
+  UNDELIVERABLE = 'UNDELIVERABLE',
+  REFUSED = 'REFUSED',
+  ACCEPTED = 'ACCEPTED',
 }
 
 export type UnifiedNotificationStatus = NotificationStatus | InformalNotificationStatus;
