@@ -52,12 +52,11 @@ describe('notificationTimeline utility', () => {
   it('formatTimelineDate - composes day, month and time of the event', () => {
     const eventDate = deliveringStatus.activeFrom;
     const localDate = new Date(eventDate);
+    const hours = localDate.getHours().toString().padStart(2, '0');
+    const minutes = localDate.getMinutes().toString().padStart(2, '0');
 
     expect(formatTimelineDate(eventDate, 'it')).toBe(
-      `${formatDay(eventDate)} ${formatMonthString(
-        eventDate,
-        'it'
-      )}, ${localDate.getHours()}:${localDate.getMinutes()}`
+      `${formatDay(eventDate)} ${formatMonthString(eventDate, 'it')}, ${hours}:${minutes}`
     );
   });
 });
