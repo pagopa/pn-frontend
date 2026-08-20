@@ -1,7 +1,7 @@
 import { ComponentPropsWithoutRef, useEffect, useState } from 'react';
 
 import CheckIcon from '@mui/icons-material/Check';
-import ContentCopyIcon from '@mui/icons-material/ContentCopy';
+import ContentCopyRoundedIcon from '@mui/icons-material/ContentCopyRounded';
 import { Button, SxProps, Theme, Tooltip } from '@mui/material';
 import { ButtonNaked } from '@pagopa/mui-italia';
 
@@ -80,7 +80,7 @@ const CopyToClipboard: React.FC<Props> = ({
           <CheckIcon fontSize="small" sx={{ m: '5px' }} />
         </Tooltip>
       )}
-      {!copied && <ContentCopyIcon fontSize="small" sx={{ m: '5px' }} />}
+      {!copied && <ContentCopyRoundedIcon fontSize="small" sx={{ m: '5px' }} />}
       {textPosition === 'end' && text}
     </SlotComponent>
   );

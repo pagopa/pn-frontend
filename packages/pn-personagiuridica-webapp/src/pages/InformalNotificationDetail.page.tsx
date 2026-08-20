@@ -6,9 +6,11 @@ import { Box, Stack } from '@mui/material';
 import {
   AbstractPaper,
   ApiError,
+  InformalNotificationStatus,
   NotificationDetailDocuments,
   NotificationDetailOtherDocument,
   NotificationDetailPayment,
+  NotificationDocumentType,
   NotificationPaymentRecipient,
   PaymentAttachmentSName,
   PaymentsData,
@@ -21,7 +23,8 @@ import {
 import { MIPaper } from '@pagopa/mui-italia';
 
 import LoadingPageWrapper from '../components/LoadingPageWrapper/LoadingPageWrapper';
-import { BffFullInformalNotificationV1 } from '../generated-client/informal-notifications';
+import type { BffFullInformalNotificationV1 } from '../generated-client/informal-notifications';
+import { PGEventsType } from '../models/PGEventsType';
 import * as routes from '../navigation/routes.const';
 import { useAppDispatch } from '../redux/hooks';
 import { getReceivedNotificationPaymentUrl } from '../redux/notification/actions';
@@ -33,6 +36,7 @@ import {
   getReceivedInformalNotificationPaymentInfo,
 } from '../redux/notification/informalActions';
 import { getConfiguration } from '../services/configuration.service';
+import PGEventStrategyFactory from '../utility/MixpanelUtils/PGEventStrategyFactory';
 
 const InformalNotificationDetail: React.FC = () => {
   const { id } = useParams();
@@ -77,7 +81,8 @@ const InformalNotificationDetail: React.FC = () => {
 
   const currentRecipient = informalNotification?.recipients?.[0];
 
-  const hasPayments = (currentRecipient?.payments?.length ?? 0) > 0;
+  const paymentCount = currentRecipient?.payments?.length ?? 0;
+  const hasPayments = paymentCount > 0;
 
   const hasInformalReceivedApiError = hasApiErrors(
     INFORMAL_NOTIFICATION_ACTIONS.GET_RECEIVED_INFORMAL_NOTIFICATION
@@ -163,6 +168,11 @@ const InformalNotificationDetail: React.FC = () => {
 
   const onPayClick = (noticeCode?: string, creditorTaxId?: string, amount?: number) => {
     if (noticeCode && creditorTaxId && amount && informalNotification?.senderDenomination) {
+      PGEventStrategyFactory.triggerEvent(
+        PGEventsType.SEND_PG_START_PAYMENT,
+        { notificationType: 'INFORMAL' },
+        { sendImmediately: true }
+      );
       dispatch(
         getReceivedNotificationPaymentUrl({
           paymentNotice: {
@@ -183,14 +193,21 @@ const InformalNotificationDetail: React.FC = () => {
     }
   };
 
-  const getPaymentAttachmentAction = (name: PaymentAttachmentSName, attachmentIdx?: number) =>
-    dispatch(
+  const getPaymentAttachmentAction = (name: PaymentAttachmentSName, attachmentIdx?: number) => {
+    PGEventStrategyFactory.triggerEvent(
+      PGEventsType.SEND_PG_NOTIFICATION_DOWNLOAD_ATTACHMENT,
+      { notificationType: 'INFORMAL', documentType: name },
+      { sendImmediately: true }
+    );
+
+    return dispatch(
       getReceivedInformalNotificationPayment({
         iun: informalNotification?.iun ?? '',
         attachmentName: name,
         attachmentIdx,
       })
     );
+  };
 
   const showInfoMessageIfRetryAfterOrDownload = (response: {
     url: string;
@@ -215,6 +232,12 @@ const InformalNotificationDetail: React.FC = () => {
       return;
     }
 
+    PGEventStrategyFactory.triggerEvent(
+      PGEventsType.SEND_PG_NOTIFICATION_DOWNLOAD_ATTACHMENT,
+      { notificationType: 'INFORMAL', documentType: NotificationDocumentType.ATTACHMENT },
+      { sendImmediately: true }
+    );
+
     dispatch(
       getReceivedInformalNotificationDocument({
         iun: informalNotification.iun,
@@ -225,6 +248,26 @@ const InformalNotificationDetail: React.FC = () => {
       .then(showInfoMessageIfRetryAfterOrDownload)
       .catch(() => {});
   };
+
+  useEffect(() => {
+    if (!pageReady || hasInformalReceivedApiError || !informalNotification) {
+      return;
+    }
+
+    PGEventStrategyFactory.triggerEvent(PGEventsType.SEND_PG_NOTIFICATION_DETAIL, {
+      notificationType: 'INFORMAL',
+      notificationStatus: informalNotification.notificationStatus as InformalNotificationStatus,
+      paymentCount,
+      timeline: informalNotification.timeline,
+    });
+  }, [
+    pageReady,
+    hasInformalReceivedApiError,
+    informalNotification?.iun,
+    informalNotification?.notificationStatus,
+    informalNotification?.timeline,
+    paymentCount,
+  ]);
 
   return (
     <LoadingPageWrapper isInitialized={pageReady}>
