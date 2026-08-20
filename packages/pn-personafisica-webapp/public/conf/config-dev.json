@@ -31,5 +31,6 @@
   "FACSIMILE_FR": "https://notifichedigitali.it/assets/Fac_Simile_Document_FR_c33efc5894.pdf",
   "FACSIMILE_DE": "https://notifichedigitali.it/assets/Fac_Simile_Document_DE_735c331586.pdf",
   "FACSIMILE_SL": "https://notifichedigitali.it/assets/Fac_Simile_Document_SL_3b2209e279.pdf",
-  "SELFCARE_CDN_URL": "https://selcucheckoutsa.z6.web.core.windows.net"
+  "SELFCARE_CDN_URL": "https://selcucheckoutsa.z6.web.core.windows.net",
+  "IS_NEW_TIMELINE_ENABLED": true
 }

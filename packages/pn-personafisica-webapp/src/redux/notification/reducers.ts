@@ -6,6 +6,7 @@ import {
   NotificationDetailRecipient,
   NotificationStatus,
   NotificationStatusHistory,
+  NotificationTimelineResponse,
   PaidDetails,
   PaymentDetails,
   PaymentInfoDetail,
@@ -25,6 +26,7 @@ import {
   getReceivedNotification,
   getReceivedNotificationPaymentInfo,
   getReceivedNotificationPaymentUrl,
+  getReceivedNotificationTimeline,
 } from './actions';
 
 const initialState = {
@@ -53,6 +55,12 @@ const initialState = {
     },
     currentRecipientIndex: 0,
   } as NotificationDetailForRecipient,
+  notificationTimeline: {
+    iun: '',
+    subject: '',
+    recipients: [],
+    notificationStatusHistory: [],
+  } as NotificationTimelineResponse,
   paymentsData: {
     pagoPaF24: [] as Array<PaymentDetails>,
     f24Only: [] as Array<F24PaymentDetails>,
@@ -117,6 +125,9 @@ const notificationSlice = createSlice({
         }
       }
       state.notification = action.payload;
+    });
+    builder.addCase(getReceivedNotificationTimeline.fulfilled, (state, action) => {
+      state.notificationTimeline = action.payload;
     });
     builder.addCase(getReceivedNotificationPaymentInfo.fulfilled, (state, action) => {
       if (action.payload) {

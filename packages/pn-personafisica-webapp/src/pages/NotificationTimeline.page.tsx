@@ -15,6 +15,7 @@ import {
   LegalFactType,
   NotificationDetailTimeline,
   NotificationDocumentType,
+  NotificationEventsTimeline,
   PnBreadcrumb,
   appStateActions,
   downloadDocument,
@@ -33,6 +34,7 @@ import {
   NOTIFICATION_ACTIONS,
   getReceivedNotification,
   getReceivedNotificationDocument,
+  getReceivedNotificationTimeline,
 } from '../redux/notification/actions';
 import { resetState } from '../redux/notification/reducers';
 import { RootState } from '../redux/store';
@@ -51,7 +53,7 @@ const NotificationTimeline: React.FC = () => {
    * Carlos Lombardi, 2023.02.03
    */
   const { t, i18n } = useTranslation(['common', 'notifiche', 'appStatus']);
-  const { NOTIFICATION_CANCELLED_HELP_LINK } = getConfiguration();
+  const { NOTIFICATION_CANCELLED_HELP_LINK, IS_NEW_TIMELINE_ENABLED } = getConfiguration();
   const { hasApiErrors } = useErrors();
   const [pageReady, setPageReady] = useState(false);
   const [isUserForbidden, setIsUserForbidden] = useState(false);
@@ -61,11 +63,23 @@ const NotificationTimeline: React.FC = () => {
   const delegatorsFromStore = useAppSelector(
     (state: RootState) => state.generalInfoState.delegators
   );
-
   const notification = useAppSelector((state: RootState) => state.notificationState.notification);
+  const notificationTimeline = useAppSelector(
+    (state: RootState) => state.notificationState.notificationTimeline
+  );
 
   const isCancelled = useIsCancelled({ notification });
   const isCancelledOrCancelling = isCancelled.cancelled || isCancelled.cancellationInProgress;
+
+  const timelineApiId = IS_NEW_TIMELINE_ENABLED
+    ? NOTIFICATION_ACTIONS.GET_RECEIVED_NOTIFICATION_TIMELINE
+    : NOTIFICATION_ACTIONS.GET_RECEIVED_NOTIFICATION;
+  const hasNotificationTimelineApiError = hasApiErrors(timelineApiId);
+
+  const notificationIUN = IS_NEW_TIMELINE_ENABLED ? notificationTimeline.iun : notification.iun;
+  const notificationSubject = IS_NEW_TIMELINE_ENABLED
+    ? notificationTimeline.subject
+    : notification.subject;
 
   const showInfoMessageIfRetryAfterOrDownload = (response: {
     url: string;
@@ -93,7 +107,7 @@ const NotificationTimeline: React.FC = () => {
       // Legal fact case
       dispatch(
         getReceivedNotificationDocument({
-          iun: notification.iun,
+          iun: notificationIUN,
           documentType: NotificationDocumentType.LEGAL_FACT,
           documentId: legalFact.key.substring(legalFact.key.lastIndexOf('/') + 1),
           mandateId,
@@ -112,7 +126,7 @@ const NotificationTimeline: React.FC = () => {
       // AAR in timeline case
       dispatch(
         getReceivedNotificationDocument({
-          iun: notification.iun,
+          iun: notificationIUN,
           documentType: NotificationDocumentType.AAR,
           documentId: legalFact.key,
           mandateId,
@@ -124,32 +138,34 @@ const NotificationTimeline: React.FC = () => {
     }
   };
 
-  const hasNotificationReceivedApiError = hasApiErrors(
-    NOTIFICATION_ACTIONS.GET_RECEIVED_NOTIFICATION
-  );
-
   const fetchReceivedNotification = useCallback(() => {
-    if (id) {
-      dispatch(
-        getReceivedNotification({
-          iun: id,
-          currentUserTaxId: currentUser.fiscal_number,
-          delegatorsFromStore,
-          mandateId,
-        })
-      )
-        .unwrap()
-        .catch((error) => {
-          if (
-            error?.response?.data?.errors?.[0]?.code ===
-            ServerResponseErrorCode.PN_DELIVERY_USER_ID_NOT_RECIPIENT_OR_DELEGATOR
-          ) {
-            setIsUserForbidden(true);
-          }
-        })
-        .finally(() => setPageReady(true));
+    if (!id) {
+      return;
     }
-  }, []);
+
+    const request = IS_NEW_TIMELINE_ENABLED
+      ? dispatch(getReceivedNotificationTimeline({ iun: id, mandateId }))
+      : dispatch(
+          getReceivedNotification({
+            iun: id,
+            currentUserTaxId: currentUser.fiscal_number,
+            delegatorsFromStore,
+            mandateId,
+          })
+        );
+
+    void request
+      .unwrap()
+      .catch((error) => {
+        if (
+          error?.response?.data?.errors?.[0]?.code ===
+          ServerResponseErrorCode.PN_DELIVERY_USER_ID_NOT_RECIPIENT_OR_DELEGATOR
+        ) {
+          setIsUserForbidden(true);
+        }
+      })
+      .finally(() => setPageReady(true));
+  }, [id, IS_NEW_TIMELINE_ENABLED]);
 
   const handleUserInvalidError = useCallback((e: AppResponse) => {
     const error = e.errors?.[0];
@@ -181,11 +197,11 @@ const NotificationTimeline: React.FC = () => {
       <PnBreadcrumb
         linkRoute={mandateId ? routes.GET_NOTIFICHE_DELEGATO_PATH(mandateId) : routes.NOTIFICHE}
         linkLabel={t('menu.notifiche')}
-        currentLocationLabel={notification.subject ?? ''}
+        currentLocationLabel={notificationSubject ?? ''}
         goBackAction={() => navigate(backRoute)}
       />
     );
-  }, [i18n.language, notification.subject]);
+  }, [i18n.language, notificationSubject]);
 
   const breadcrumb = <Fragment>{properBreadcrumb}</Fragment>;
 
@@ -228,22 +244,18 @@ const NotificationTimeline: React.FC = () => {
 
   return (
     <NotificationDetailOnboardingPrompt
-      iun={notification.iun}
+      iun={notificationIUN}
       mandateId={mandateId}
       route={routes.NOTIFICHE}
     >
       <LoadingPageWrapper isInitialized={pageReady}>
-        {hasNotificationReceivedApiError && (
+        {hasNotificationTimelineApiError && (
           <Box sx={{ p: 3 }}>
             {properBreadcrumb}
-            <ApiError
-              onClick={fetchReceivedNotification}
-              mt={3}
-              apiId={NOTIFICATION_ACTIONS.GET_RECEIVED_NOTIFICATION}
-            />
+            <ApiError onClick={fetchReceivedNotification} mt={3} apiId={timelineApiId} />
           </Box>
         )}
-        {!hasNotificationReceivedApiError && (
+        {!hasNotificationTimelineApiError && (
           <Box sx={{ p: 3, display: 'flex', flexDirection: 'column' }} gap={3}>
             {breadcrumb}
             <Stack gap={3}>
@@ -252,17 +264,27 @@ const NotificationTimeline: React.FC = () => {
               </Typography>
               {isCancelledOrCancelling && cancelledAlert}
               <MIPaper>
-                <NotificationDetailTimeline
-                  language={i18n.language}
-                  recipients={notification.recipients}
-                  statusHistory={notification.notificationStatusHistory}
-                  clickHandler={legalFactDownloadHandler}
-                  handleTrackShowMoreLess={trackShowMoreLess}
-                  showMoreButtonLabel={t('detail.show-more', { ns: 'notifiche' })}
-                  showLessButtonLabel={t('detail.show-less', { ns: 'notifiche' })}
-                  disableDownloads={isCancelled.cancellationInTimeline}
-                  isParty={false}
-                />
+                {IS_NEW_TIMELINE_ENABLED ? (
+                  <NotificationEventsTimeline
+                    language={i18n.language}
+                    recipients={notificationTimeline.recipients}
+                    statusHistory={notificationTimeline.notificationStatusHistory}
+                    clickHandler={legalFactDownloadHandler}
+                    isParty={false}
+                  />
+                ) : (
+                  <NotificationDetailTimeline
+                    language={i18n.language}
+                    recipients={notification.recipients}
+                    statusHistory={notification.notificationStatusHistory}
+                    clickHandler={legalFactDownloadHandler}
+                    handleTrackShowMoreLess={trackShowMoreLess}
+                    showMoreButtonLabel={t('detail.show-more', { ns: 'notifiche' })}
+                    showLessButtonLabel={t('detail.show-less', { ns: 'notifiche' })}
+                    disableDownloads={isCancelled.cancellationInTimeline}
+                    isParty={false}
+                  />
+                )}
               </MIPaper>
             </Stack>
           </Box>
