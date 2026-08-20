@@ -38,3 +38,6 @@ export const toLegacyStatusHistory = (
 
 export const formatTimelineDate = (date: string, language: string): string =>
   `${formatDay(date)} ${formatMonthString(date, language)}, ${formatTime(date)}`;
+
+export const getStepRecIndex = (step: NotificationTimelineStep): number | undefined =>
+  isTimelineGroupStep(step) ? step.group.recIndex : step.event.details.recIndex;

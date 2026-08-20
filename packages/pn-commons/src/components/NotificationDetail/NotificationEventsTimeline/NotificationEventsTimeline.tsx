@@ -8,6 +8,7 @@ import { NotificationTimelineStatusHistory } from '../../../models/NotificationT
 import { getNotificationStatusInfos } from '../../../utility/notification.utility';
 import {
   flattenTimelineSteps,
+  getStepRecIndex,
   isTimelineGroupStep,
   toLegacyStatusHistory,
 } from '../../../utility/notificationTimeline.utility';
@@ -99,15 +100,15 @@ const NotificationEventsTimeline = ({
                   }
 
                   const previousStep = status.steps[stepIndex - 1];
-                  const previousGroup =
-                    previousStep && isTimelineGroupStep(previousStep)
-                      ? previousStep.group
-                      : undefined;
+                  const hasPreviousGroup = !!previousStep && isTimelineGroupStep(previousStep);
+                  const previousRecIndex = previousStep ? getStepRecIndex(previousStep) : undefined;
 
                   return (
                     <Fragment key={step.group.groupId}>
-                      {previousGroup && <Divider flexItem data-testid="timeline-group-divider" />}
-                      {isMultiRecipient && previousGroup?.taxId !== step.group.taxId && (
+                      {hasPreviousGroup && (
+                        <Divider flexItem data-testid="timeline-group-divider" />
+                      )}
+                      {isMultiRecipient && previousRecIndex !== step.group.recIndex && (
                         <Typography
                           variant="body2"
                           fontWeight={600}

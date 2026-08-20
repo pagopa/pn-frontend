@@ -3,13 +3,16 @@ import { vi } from 'vitest';
 import { notificationTimelineDTO } from '../../../../__mocks__/NotificationTimeline.mock';
 import { NotificationStatus } from '../../../../models';
 import {
+  LegalFactType,
   NotificationDetailRecipient,
   RecipientType,
   ReworkedStatus,
+  TimelineCategory,
 } from '../../../../models/NotificationDetail';
 import {
   NotificationTimelineGroup,
   NotificationTimelineStatusHistory,
+  NotificationTimelineStep,
 } from '../../../../models/NotificationTimeline';
 import { createMatchMedia, fireEvent, render, within } from '../../../../test-utils';
 import NotificationEventsTimeline from '../NotificationEventsTimeline';
@@ -43,6 +46,20 @@ const groupOfRecipient = (
   attempt: 1,
   hasReworkedEvents: false,
   events: [],
+});
+
+const hiddenEventStepOfRecipient = (recIndex: number): NotificationTimelineStep => ({
+  stepType: 'EVENT',
+  event: {
+    elementId: `DIGITAL_SUCCESS_WORKFLOW.RECINDEX_${recIndex}`,
+    timestamp: '2026-08-06T09:14:58.508308Z',
+    category: TimelineCategory.DIGITAL_SUCCESS_WORKFLOW,
+    details: { recIndex },
+    legalFactsIds: [
+      { key: 'safestorage://legal-fact.pdf', category: LegalFactType.DIGITAL_DELIVERY },
+    ],
+    isHidden: true,
+  },
 });
 
 /**
@@ -159,6 +176,25 @@ describe('NotificationEventsTimeline', () => {
     expect(recipientLabels).toHaveLength(2);
     expect(recipientLabels[0]).toHaveTextContent('Utente Test Uno - TSTUTN00A07A001G');
     expect(recipientLabels[1]).toHaveTextContent('Utente Test Due - TSTUTN00A07A002H');
+  });
+
+  it('does not show the recipient of a group already introduced by an event of the same recipient', () => {
+    const { getAllByTestId } = render(
+      <NotificationEventsTimeline
+        recipients={multiRecipients}
+        statusHistory={[
+          {
+            ...multiRecipientStatusHistory[0],
+            steps: [hiddenEventStepOfRecipient(0), ...multiRecipientStatusHistory[0].steps],
+          },
+        ]}
+        clickHandler={clickHandler}
+      />
+    );
+
+    const recipientLabels = getAllByTestId('timeline-group-recipient');
+    expect(recipientLabels).toHaveLength(1);
+    expect(recipientLabels[0]).toHaveTextContent('Utente Test Due - TSTUTN00A07A002H');
   });
 
   it('does not show the recipient on single recipient notifications', () => {
