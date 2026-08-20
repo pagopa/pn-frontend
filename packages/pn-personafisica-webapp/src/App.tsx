@@ -157,6 +157,7 @@ const App = () => {
       const myNotifications = {
         label: t('menu.notifiche-utente'),
         route: routes.NOTIFICHE,
+        additionalRoutes: [routes.COMUNICAZIONE],
         dotNotification: hasNewNotifications,
       };
       const mappedDelegators = delegators.map((delegator) => ({
