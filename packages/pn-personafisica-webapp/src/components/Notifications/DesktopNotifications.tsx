@@ -43,32 +43,43 @@ const DesktopNotifications = ({
   const { t } = useTranslation('notifiche');
   const filterNotificationsRef = useRef({ filtersApplied: false, cleanFilters: () => void 0 });
 
+  // 10 + 8 + x + y + z = 100
+  // x + y = 56
+  // x = sender e y = iun e z = subject
+  // xs -> iun = 17 e sender = 25 e subject = 40
+  // xl -> iun = 20 e sender = 25 e subject = 36
+
   const columns: Array<Column<NotificationColumnData>> = [
     {
       id: 'sentAt',
       label: t('table.data'),
-      cellProps: { width: '10%' },
+      cellProps: { sx: { width: { xs: '10%', md: '13%', xl: '13%' } } },
     },
     {
       id: 'sender',
       label: t('table.mittente'),
       mode: 'truncate',
-      cellProps: { width: '12%' },
+      cellProps: { sx: { width: { xs: '25%', md: '23%', xl: '25%' } } },
     },
     {
       id: 'subject',
       label: t('table.oggetto'),
-      cellProps: { width: '26%' },
+      cellProps: { sx: { width: { xs: '40%', md: '24%', xl: '28%' } } },
     },
     {
       id: 'iun',
       label: t('table.iun'),
-      cellProps: { width: '22%', sx: { display: { xs: 'none', xl: 'table-cell' } } },
+      cellProps: {
+        sx: {
+          display: { xs: 'none', xl: 'table-cell' },
+          width: { xs: '17%', md: '32%', xl: '26%' },
+        },
+      },
     },
     {
       id: 'action',
       label: '',
-      cellProps: { width: '13%', align: 'right' },
+      cellProps: { width: '8%', align: 'right' },
     },
   ];
 
