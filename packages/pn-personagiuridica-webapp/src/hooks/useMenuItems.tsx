@@ -42,7 +42,6 @@ export const useMenuItems = (userHasAdminPermissions: boolean) => {
         {
           label: t('menu.notifiche-delegato'),
           route: routes.NOTIFICHE_DELEGATO,
-          additionalRoutes: [routes.COMUNICAZIONE],
         },
       ]
     : undefined;
