@@ -56,7 +56,7 @@ const PnSenderContacts = ({ phone, site }: SenderContactsProps) => {
                     minWidth: 0,
                   }}
                 >
-                  <Typography variant="body2">
+                  <Typography variant="body2" color="text.secondary">
                     {t('detail.contact_sender.phone', { ns: 'notifiche' })}
                   </Typography>
 
@@ -71,14 +71,17 @@ const PnSenderContacts = ({ phone, site }: SenderContactsProps) => {
                       justifyContent="space-between"
                       sx={{ width: '100%' }}
                     >
-                      <Typography variant="body2" color="text.primary">
+                      <Typography variant="body2" color="text.primary" fontWeight={500}>
                         {phone}
                       </Typography>
 
                       <CopyToClipboard
                         getValue={() => phone}
                         tooltipMode
-                        tooltip={t('detail.contact_sender.copy_phone', {
+                        tooltip={t('detail.contact_sender.copied_phone', {
+                          ns: 'notifiche',
+                        })}
+                        tooltipBefore={t('detail.contact_sender.copy_phone', {
                           ns: 'notifiche',
                         })}
                       />
@@ -100,7 +103,7 @@ const PnSenderContacts = ({ phone, site }: SenderContactsProps) => {
               </ListItemAvatar>
 
               <ListItemText sx={{ p: 0 }}>
-                <Typography variant="body2">
+                <Typography variant="body2" color="text.secondary">
                   {t('detail.contact_sender.website', { ns: 'notifiche' })}
                 </Typography>
 

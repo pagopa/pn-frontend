@@ -154,7 +154,8 @@
       "phone": "Numero di telefono dell'ente",
       "email": "Email dell'ente",
       "website": "Sito web dell'ente",
-      "copy_phone": "Numero di telefono copiato"
+      "copy_phone": "Copia numero di telefono",
+      "copied_phone": "Numero di telefono copiato"
     },
     "informal_notification_markdown": {
       "greeting": "Ciao {{recipientDenomination}},",
