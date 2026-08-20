@@ -155,7 +155,8 @@
       "phone": "Institution's phone number",
       "email": "Institution's email address",
       "website": "Institution's website",
-      "copy_phone": "Phone number copied"
+      "copy_phone": "Copy phone number",
+      "copied_phone": "Phone number copied"
     },
     "informal_notification_markdown": {
       "greeting": "Ciao {{recipientDenomination}},",
