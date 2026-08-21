@@ -2,12 +2,14 @@ import MockAdapter from 'axios-mock-adapter';
 
 import {
   NotificationDocumentType,
+  NotificationTimelineResponse,
   PAYMENT_CACHE_KEY,
   PaidDetails,
   PaymentAttachmentSName,
   PaymentStatus,
   RecipientType,
   TimelineCategory,
+  notificationTimelineDTO,
   populatePaymentsPagoPaF24,
 } from '@pagopa-pn/pn-commons';
 
@@ -34,6 +36,7 @@ import {
   getReceivedNotificationPayment,
   getReceivedNotificationPaymentInfo,
   getReceivedNotificationPaymentUrl,
+  getReceivedNotificationTimeline,
 } from '../actions';
 import { resetState } from '../reducers';
 
@@ -58,6 +61,12 @@ const initialState = {
       denomination: '',
     },
     currentRecipientIndex: 0,
+  },
+  notificationTimeline: {
+    iun: '',
+    subject: '',
+    recipients: [],
+    notificationStatusHistory: [],
   },
   paymentsData: {
     pagoPaF24: [],
@@ -117,6 +126,23 @@ describe('Notification detail redux state tests', () => {
       expect(payment.pagoPa?.attachmentIdx).toBe(attachmentIdx);
       expect(payment.pagoPa?.recIndex).toBe(recipientIdx);
     });
+  });
+
+  it('Should be able to fetch the notification timeline', async () => {
+    mock
+      .onGet(`/bff/v1/notifications/received/${notificationDTO.iun}/timeline`)
+      .reply(200, notificationTimelineDTO);
+    const action = await store.dispatch(
+      getReceivedNotificationTimeline({
+        iun: notificationDTO.iun,
+      })
+    );
+    const payload = action.payload as NotificationTimelineResponse;
+    expect(action.type).toBe('getReceivedNotificationTimeline/fulfilled');
+    expect(payload).toEqual(notificationTimelineDTO);
+    expect(store.getState().notificationState.notificationTimeline).toStrictEqual(
+      notificationTimelineDTO
+    );
   });
 
   it('Should be able to fetch the notification document', async () => {

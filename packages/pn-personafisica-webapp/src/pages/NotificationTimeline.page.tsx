@@ -270,7 +270,6 @@ const NotificationTimeline: React.FC = () => {
                     recipients={notificationTimeline.recipients}
                     statusHistory={notificationTimeline.notificationStatusHistory}
                     clickHandler={legalFactDownloadHandler}
-                    isParty={false}
                   />
                 ) : (
                   <NotificationDetailTimeline
