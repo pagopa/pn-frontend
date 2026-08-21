@@ -8,7 +8,7 @@ import { NotificationTimelineStatusHistory } from '../../../models/NotificationT
 import { getNotificationStatusInfos } from '../../../utility/notification.utility';
 import {
   flattenTimelineSteps,
-  getStepRecIndex,
+  getRecipientPerStep,
   isTimelineGroupStep,
   toLegacyStatusHistory,
 } from '../../../utility/notificationTimeline.utility';
@@ -24,7 +24,7 @@ type Props = {
   statusHistory: Array<NotificationTimelineStatusHistory>;
   clickHandler: (legalFactId: LegalFactId) => void;
   disableDownloads?: boolean;
-  isParty?: boolean;
+  isSenderTimeline?: boolean;
   language?: string;
 };
 
@@ -33,7 +33,7 @@ const NotificationEventsTimeline = ({
   statusHistory,
   clickHandler,
   disableDownloads = false,
-  isParty = true,
+  isSenderTimeline,
   language = 'it',
 }: Props) => {
   const legacyStatusHistory = useMemo(() => toLegacyStatusHistory(statusHistory), [statusHistory]);
@@ -50,12 +50,17 @@ const NotificationEventsTimeline = ({
           const { label, description } = getNotificationStatusInfos(legacyStatusHistory[index], {
             statusHistory: legacyStatusHistory,
             recipients,
-            isParty,
+            isParty: isSenderTimeline,
           });
           const { icon, variant } = getTimelineItemPresentation(status.status, index === 0);
           const allEvents = flattenTimelineSteps(status.steps);
 
           const hasGroupedEvents = status.steps.some(isTimelineGroupStep);
+
+          const recipientPerStep =
+            isMultiRecipient && isSenderTimeline
+              ? getRecipientPerStep(status.steps, recipients)
+              : [];
 
           return (
             <MITimelineItem
@@ -85,40 +90,46 @@ const NotificationEventsTimeline = ({
                 )}
 
                 {status.steps.map((step, stepIndex) => {
+                  const recipient = recipientPerStep[stepIndex];
+                  const recipientHeader = recipient && (
+                    <Typography
+                      variant="body2"
+                      fontWeight={600}
+                      data-testid="timeline-group-recipient"
+                      mt={3}
+                      sx={{ color: '#555C70' }}
+                    >
+                      {`${recipient.denomination} - ${recipient.taxId}`}
+                    </Typography>
+                  );
+
                   if (!isTimelineGroupStep(step)) {
                     return (
-                      <NotificationTimelineEventItem
-                        event={step.event}
-                        key={step.event.elementId}
-                        allEvents={allEvents}
-                        recipients={recipients}
-                        clickHandler={clickHandler}
-                        disableDownloads={disableDownloads}
-                        language={language}
-                      />
+                      <Fragment key={step.event.elementId}>
+                        {recipientHeader}
+                        <NotificationTimelineEventItem
+                          event={step.event}
+                          allEvents={allEvents}
+                          recipients={recipients}
+                          clickHandler={clickHandler}
+                          disableDownloads={disableDownloads}
+                          language={language}
+                        />
+                      </Fragment>
                     );
                   }
 
                   const previousStep = status.steps[stepIndex - 1];
                   const hasPreviousGroup = !!previousStep && isTimelineGroupStep(previousStep);
-                  const previousRecIndex = previousStep ? getStepRecIndex(previousStep) : undefined;
 
                   return (
                     <Fragment key={step.group.groupId}>
                       {hasPreviousGroup && (
                         <Divider flexItem data-testid="timeline-group-divider" />
                       )}
-                      {isMultiRecipient && previousRecIndex !== step.group.recIndex && (
-                        <Typography
-                          variant="body2"
-                          fontWeight={600}
-                          data-testid="timeline-group-recipient"
-                          mt={3}
-                          sx={{ color: '#555C70' }}
-                        >
-                          {`${step.group.denomination} - ${step.group.taxId}`}
-                        </Typography>
-                      )}
+
+                      {recipientHeader}
+
                       <NotificationTimelineGroupItem
                         group={step.group}
                         allEvents={allEvents}

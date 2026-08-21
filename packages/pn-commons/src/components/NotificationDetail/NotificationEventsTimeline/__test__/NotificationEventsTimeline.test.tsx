@@ -62,10 +62,6 @@ const hiddenEventStepOfRecipient = (recIndex: number): NotificationTimelineStep 
   },
 });
 
-/**
- * Due gruppi del primo destinatario, uno del secondo: l'intestazione col destinatario
- * deve comparire solo quando cambia.
- */
 const multiRecipientStatusHistory: Array<NotificationTimelineStatusHistory> = [
   {
     status: NotificationStatus.DELIVERING,
@@ -78,8 +74,12 @@ const multiRecipientStatusHistory: Array<NotificationTimelineStatusHistory> = [
   },
 ];
 
+const orderedTestIds = (container: HTMLElement, testIds: Array<string>) =>
+  Array.from(
+    container.querySelectorAll(testIds.map((testId) => `[data-testid="${testId}"]`).join(', '))
+  ).map((el) => el.getAttribute('data-testid'));
+
 describe('NotificationEventsTimeline', () => {
-  // Define mock data for props
   const recipients = notificationTimelineDTO.recipients;
   const statusHistory = notificationTimelineDTO.notificationStatusHistory;
   const clickHandler = vi.fn();
@@ -140,7 +140,7 @@ describe('NotificationEventsTimeline', () => {
         clickHandler={clickHandler}
       />
     );
-    // the mock has two groups, both belonging to the DELIVERING status
+
     expect(getAllByTestId('timeline-group')).toHaveLength(2);
     expect(getAllByTestId('timeline-group-divider')).toHaveLength(1);
   });
@@ -159,7 +159,7 @@ describe('NotificationEventsTimeline', () => {
     fireEvent.click(within(firstGroup).getByTestId('timeline-group-header'));
 
     const groupBody = within(firstGroup).getByTestId('timeline-group-body');
-    // the first group of the mock has two visible events
+
     expect(within(groupBody).getAllByTestId('timeline-event')).toHaveLength(2);
   });
 
@@ -169,6 +169,7 @@ describe('NotificationEventsTimeline', () => {
         recipients={multiRecipients}
         statusHistory={multiRecipientStatusHistory}
         clickHandler={clickHandler}
+        isSenderTimeline
       />
     );
 
@@ -178,8 +179,49 @@ describe('NotificationEventsTimeline', () => {
     expect(recipientLabels[1]).toHaveTextContent('Utente Test Due - TSTUTN00A07A002H');
   });
 
-  it('does not show the recipient of a group already introduced by an event of the same recipient', () => {
-    const { getAllByTestId } = render(
+  it('attaches the header to the event that first introduces a new recipient, so it renders under the correct section', () => {
+    const { container, getAllByTestId } = render(
+      <NotificationEventsTimeline
+        recipients={multiRecipients}
+        statusHistory={[
+          {
+            ...multiRecipientStatusHistory[0],
+            steps: [
+              multiRecipientStatusHistory[0].steps[0],
+              multiRecipientStatusHistory[0].steps[1],
+              hiddenEventStepOfRecipient(1),
+              multiRecipientStatusHistory[0].steps[2],
+            ],
+          },
+        ]}
+        clickHandler={clickHandler}
+        isSenderTimeline
+      />
+    );
+
+    const recipientLabels = getAllByTestId('timeline-group-recipient');
+    expect(recipientLabels).toHaveLength(2);
+    expect(recipientLabels[0]).toHaveTextContent('Utente Test Uno - TSTUTN00A07A001G');
+    expect(recipientLabels[1]).toHaveTextContent('Utente Test Due - TSTUTN00A07A002H');
+
+    expect(
+      orderedTestIds(container, [
+        'timeline-group-recipient',
+        'timeline-group',
+        'download-legalfact',
+      ])
+    ).toStrictEqual([
+      'timeline-group-recipient',
+      'timeline-group',
+      'timeline-group',
+      'timeline-group-recipient',
+      'download-legalfact',
+      'timeline-group',
+    ]);
+  });
+
+  it('attaches the header to a leading event when it is the first occurrence of a recipient, not to the group after it', () => {
+    const { container, getAllByTestId } = render(
       <NotificationEventsTimeline
         recipients={multiRecipients}
         statusHistory={[
@@ -189,12 +231,48 @@ describe('NotificationEventsTimeline', () => {
           },
         ]}
         clickHandler={clickHandler}
+        isSenderTimeline
       />
     );
 
     const recipientLabels = getAllByTestId('timeline-group-recipient');
-    expect(recipientLabels).toHaveLength(1);
-    expect(recipientLabels[0]).toHaveTextContent('Utente Test Due - TSTUTN00A07A002H');
+    expect(recipientLabels).toHaveLength(2);
+    expect(recipientLabels[0]).toHaveTextContent('Utente Test Uno - TSTUTN00A07A001G');
+    expect(recipientLabels[1]).toHaveTextContent('Utente Test Due - TSTUTN00A07A002H');
+
+    expect(
+      orderedTestIds(container, [
+        'timeline-group-recipient',
+        'timeline-group',
+        'download-legalfact',
+      ])
+    ).toStrictEqual([
+      'timeline-group-recipient',
+      'download-legalfact',
+      'timeline-group',
+      'timeline-group',
+      'timeline-group-recipient',
+      'timeline-group',
+    ]);
+  });
+
+  it('does not show the recipient at all when a status only has a single, standalone event step', () => {
+    const { queryAllByTestId } = render(
+      <NotificationEventsTimeline
+        recipients={multiRecipients}
+        statusHistory={[
+          {
+            status: NotificationStatus.VIEWED,
+            activeFrom: '2026-08-06T09:14:58.508308Z',
+            steps: [hiddenEventStepOfRecipient(1)],
+          },
+        ]}
+        clickHandler={clickHandler}
+        isSenderTimeline
+      />
+    );
+
+    expect(queryAllByTestId('timeline-group-recipient')).toHaveLength(0);
   });
 
   it('does not show the recipient on single recipient notifications', () => {
@@ -202,6 +280,19 @@ describe('NotificationEventsTimeline', () => {
       <NotificationEventsTimeline
         recipients={recipients}
         statusHistory={statusHistory}
+        clickHandler={clickHandler}
+        isSenderTimeline
+      />
+    );
+
+    expect(queryAllByTestId('timeline-group-recipient')).toHaveLength(0);
+  });
+
+  it('does not show the recipient on the recipient-facing timeline, even with multiple recipients', () => {
+    const { queryAllByTestId } = render(
+      <NotificationEventsTimeline
+        recipients={multiRecipients}
+        statusHistory={multiRecipientStatusHistory}
         clickHandler={clickHandler}
       />
     );
@@ -217,7 +308,7 @@ describe('NotificationEventsTimeline', () => {
         clickHandler={clickHandler}
       />
     );
-    // the mock has two hidden events, both carrying one legal fact
+
     const legalFactButtons = getAllByTestId('download-legalfact');
     expect(legalFactButtons).toHaveLength(2);
 

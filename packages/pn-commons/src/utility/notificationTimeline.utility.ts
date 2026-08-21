@@ -1,4 +1,5 @@
 import { NotificationStatusHistory } from '../models';
+import { NotificationDetailRecipient } from '../models/NotificationDetail';
 import {
   NotificationTimelineEvent,
   NotificationTimelineGroupStep,
@@ -18,10 +19,10 @@ export const flattenTimelineSteps = (
   steps.flatMap((step) => (isTimelineGroupStep(step) ? step.group.events : [step.event]));
 
 /**
- * Adatta il formato a gruppi al modello legacy che getNotificationStatusInfos pretende.
- * - steps appiattiti: per DELIVERED lato PA, getNotificationDeliveredInfosForPA cerca i
- *   deliveryDetailCode di giacenza scorrendo statusObject.steps e deliveringStatus.steps
- *   come liste piatte;
+ * Adapts the group-based format to the legacy model expected by getNotificationStatusInfos.
+ * - flattened steps: for DELIVERED on the PA side, getNotificationDeliveredInfosForPA looks for
+ *   the holding-period deliveryDetailCode by scanning statusObject.steps and
+ *   deliveringStatus.steps as flat lists;
  */
 export const toLegacyStatusHistory = (
   statusHistory: Array<NotificationTimelineStatusHistory>
@@ -39,5 +40,43 @@ export const toLegacyStatusHistory = (
 export const formatTimelineDate = (date: string, language: string): string =>
   `${formatDay(date)} ${formatMonthString(date, language)}, ${formatTime(date)}`;
 
-export const getStepRecIndex = (step: NotificationTimelineStep): number | undefined =>
+const getStepRecIndex = (step: NotificationTimelineStep): number | undefined =>
   isTimelineGroupStep(step) ? step.group.recIndex : step.event.details.recIndex;
+
+/**
+ * For each step, the recipient to display as a header above it, or undefined if none should be
+ * shown there. Returns all undefined when the steps involve a single recipient; otherwise flags
+ * a recipient the first time it's met and every time it changes, on event steps and group steps
+ * alike.
+ */
+export const getRecipientPerStep = (
+  steps: Array<NotificationTimelineStep>,
+  recipients: Array<NotificationDetailRecipient>
+): Array<NotificationDetailRecipient | undefined> => {
+  const distinctRecIndexes = new Set(
+    steps.map(getStepRecIndex).filter((recIndex): recIndex is number => recIndex !== undefined)
+  );
+
+  // If there is only one recipient involved in the steps, we don't need to show any recipient headers.
+  if (distinctRecIndexes.size < 2) {
+    return steps.map(() => undefined);
+  }
+
+  return steps.reduce<{
+    lastRecIndex: number | undefined;
+    recipientPerStep: Array<NotificationDetailRecipient | undefined>;
+  }>(
+    (acc, step) => {
+      const recIndex = getStepRecIndex(step);
+      const isRecipientChanged = recIndex !== undefined && recIndex !== acc.lastRecIndex;
+      return {
+        lastRecIndex: recIndex ?? acc.lastRecIndex,
+        recipientPerStep: [
+          ...acc.recipientPerStep,
+          isRecipientChanged ? recipients[recIndex as number] : undefined,
+        ],
+      };
+    },
+    { lastRecIndex: undefined, recipientPerStep: [] }
+  ).recipientPerStep;
+};
