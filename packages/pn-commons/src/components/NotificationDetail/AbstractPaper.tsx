@@ -156,25 +156,24 @@ const AbstractPaper = ({
             <PNMarkdown content={abstract} />
           </Box>
 
-          {hasAttachments && (
-            <Typography variant="body1" color="text.primary" mt={4}>
+          <Typography variant="body1" color="text.primary" mt={4}>
+            {hasAttachments && (
               <Trans
                 i18nKey={attachmentsInfoMessage.key}
                 ns={attachmentsInfoMessage.ns}
                 components={[<strong key="0" />]}
               />
-            </Typography>
-          )}
-
-          {hasPayment && (
-            <Typography variant="body1" color="text.primary" mt={hasAttachments ? 2 : 4}>
+            )}
+            {hasAttachments && hasPayment && '\u00A0'}
+            {hasPayment && (
               <Trans
                 i18nKey={paymentInstructionsMessage.key}
                 ns={paymentInstructionsMessage.ns}
-                components={[<strong key="0" />]}
+                components={[<strong key="0" />, <strong key="1" />]}
               />
-            </Typography>
-          )}
+            )}
+          </Typography>
+
           <Typography
             variant="body1"
             color="text.primary"
