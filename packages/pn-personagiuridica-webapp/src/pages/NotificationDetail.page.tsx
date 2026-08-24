@@ -117,6 +117,7 @@ const NotificationDetail = () => {
   const isCancelledOrCancelling = isCancelled.cancelled || isCancelled.cancellationInProgress;
 
   const userPayments = useAppSelector((state: RootState) => state.notificationState.paymentsData);
+  const organization = currentUser.organization;
 
   const checkIfUserHasPayments: boolean =
     !!currentRecipient.payments && currentRecipient.payments.length > 0;
@@ -432,16 +433,21 @@ const NotificationDetail = () => {
 
   const properBreadcrumb = useMemo(() => {
     const backRoute = mandateId ? routes.NOTIFICHE_DELEGATO : routes.NOTIFICHE;
+
+    const breadcrumbLabel = mandateId
+      ? t('menu.notifiche-delegato')
+      : t('menu.notifiche-impresa', { organization: organization?.name });
+
     return (
       <PnBreadcrumb
         showBackAction={!fromQrCode}
         linkRoute={backRoute}
-        linkLabel={t('menu.notifiche')}
+        linkLabel={breadcrumbLabel}
         currentLocationLabel={notification.subject ?? ''}
         goBackAction={() => navigate(backRoute)}
       />
     );
-  }, [fromQrCode, i18n.language, notification.subject]);
+  }, [fromQrCode, i18n.language, notification.subject, mandateId, organization?.name]);
 
   const cancelledAlert = isCancelledOrCancelling && (
     <MIAlert
