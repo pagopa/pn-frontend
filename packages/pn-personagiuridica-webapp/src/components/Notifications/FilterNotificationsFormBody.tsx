@@ -115,7 +115,7 @@ const FilterNotificationsFormBody = ({ formikInstance, showCommunicationType }: 
       ? () => (
           <IconButton
             size="small"
-            aria-label={t('button.clean-field', { ns: 'common' })}
+            aria-label={t('button.clear-field', { ns: 'common' })}
             onClick={(e) => {
               e.stopPropagation();
               void formikInstance.setFieldValue('communicationType', '', false);
