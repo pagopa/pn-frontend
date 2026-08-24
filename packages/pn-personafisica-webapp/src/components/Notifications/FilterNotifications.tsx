@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import * as yup from 'yup';
 
+import FilterIcon from '@mui/icons-material/FilterAltOutlined';
 import { Box, DialogActions, DialogContent, Grid } from '@mui/material';
 import {
   CustomMobileDialog,
@@ -204,6 +205,7 @@ const FilterNotifications = forwardRef(({ showFilters, currentDelegator }: Props
         }}
         hasCounterBadge
         bagdeCount={filtersCount}
+        startIcon={<FilterIcon fontSize="small" />}
       >
         {t('button.filtra')}
       </CustomMobileDialogToggle>

@@ -22,6 +22,7 @@
     "disable": "Deactivate",
     "start": "Start",
     "continue": "Continue",
+    "clear-field": "Clear field",
     "go-to-home": "Go to home page",
     "go-to-login": "Login",
     "not-now": "Not now",
@@ -243,7 +244,13 @@
     "action": "Keep access"
   },
   "code-modal": {
-    "digits": ["First digit", "Second digit", "Third digit", "Fourth digit", "Last digit"]
+    "digits": [
+      "First digit",
+      "Second digit",
+      "Third digit",
+      "Fourth digit",
+      "Last digit"
+    ]
   },
   "user-validation-failed": {
     "title": "The data entered is invalid",

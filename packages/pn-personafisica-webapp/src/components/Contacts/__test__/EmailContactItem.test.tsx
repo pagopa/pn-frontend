@@ -355,7 +355,7 @@ describe('testing EmailContactItem', () => {
   });
 
   it('delete email - SERCQ enabled as special contact', async () => {
-    mock.onDelete('/bff/v1/addresses/LEGAL/tribunale-milano/SERCQ_SEND').reply(204);
+    mock.onDelete('/bff/v1/addresses/LEGAL/tribunale-test/SERCQ_SEND').reply(204);
     mock.onDelete('/bff/v1/addresses/COURTESY/default/EMAIL').reply(204);
 
     const sercqEnabledNoSpecialEmails = digitalAddressesSercq.filter(
@@ -371,8 +371,8 @@ describe('testing EmailContactItem', () => {
       addr.channelType === ChannelType.SERCQ_SEND
         ? {
             ...addr,
-            senderId: 'tribunale-milano',
-            senderName: 'Tribunale di Milano',
+            senderId: 'tribunale-test',
+            senderName: 'Tribunale di Test',
           }
         : addr
     );
@@ -431,10 +431,10 @@ describe('testing EmailContactItem', () => {
       expect(mock.history.delete).toHaveLength(2);
     });
     const urls = mock.history.delete.map((r) => r.url);
-    expect(urls).toContain('/bff/v1/addresses/LEGAL/tribunale-milano/SERCQ_SEND');
+    expect(urls).toContain('/bff/v1/addresses/LEGAL/tribunale-test/SERCQ_SEND');
     expect(urls).toContain('/bff/v1/addresses/COURTESY/default/EMAIL');
     expect(urls.indexOf('/bff/v1/addresses/COURTESY/default/EMAIL')).toBeGreaterThan(
-      urls.indexOf('/bff/v1/addresses/LEGAL/tribunale-milano/SERCQ_SEND')
+      urls.indexOf('/bff/v1/addresses/LEGAL/tribunale-test/SERCQ_SEND')
     );
   });
 

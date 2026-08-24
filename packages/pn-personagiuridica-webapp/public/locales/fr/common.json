@@ -22,6 +22,7 @@
     "disable": "Désactiver",
     "start": "Démarrer",
     "continue": "Continuer",
+    "clear-field": "Vider le champ",
     "go-to-home": "Aller à la page d’accueil",
     "go-to-login": "Se connecter",
     "not-now": "Pas maintenant",

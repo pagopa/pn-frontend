@@ -52,7 +52,12 @@ const NotificationDetailsDrawer: React.FC<Props> = ({ open, title, details, onCl
               <Typography variant="body2" color="text.secondary">
                 {detail.label}
               </Typography>
-              <Typography component="div" variant="body2" color="text" fontWeight={600}>
+              <Typography
+                variant="body2"
+                color="text"
+                fontWeight={600}
+                sx={{ wordBreak: 'break-word' }}
+              >
                 {detail.value}
               </Typography>
             </Box>

@@ -26,8 +26,8 @@ const virtualKeys = {
   items: virtualKeysOfUser.items.map((key) => ({
     ...key,
     user: {
-      denomination: 'Mario Rossi',
-      fiscalCode: 'RSSMRA93E04H502V',
+      denomination: 'Utente Test Uno',
+      fiscalCode: 'TSTUTN00A03A001C',
     },
   })),
 };
@@ -45,7 +45,7 @@ const testData = [
     case: 'admin user',
     user: {
       organization: { roles: [{ role: PNRole.ADMIN }] },
-      fiscal_number: 'RSSMRA93E04H502V',
+      fiscal_number: 'TSTUTN00A03A001C',
     },
     keys: virtualKeys,
     enabledKey: virtualKeys.items.find((key) => key.status === VirtualKeyStatus.Enabled),

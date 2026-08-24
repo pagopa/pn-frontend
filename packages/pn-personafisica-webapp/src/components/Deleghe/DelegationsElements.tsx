@@ -99,10 +99,15 @@ export const OrganizationsList = (props: {
   visibleItems?: number;
 }) => {
   const { t } = useTranslation(['deleghe']);
+  const isMobile = useIsMobile();
+
   return (
     <>
       {props.organizations.length === 0 ? (
-        <Typography variant={props.textVariant || 'inherit'}>
+        <Typography
+          variant={props.textVariant || 'inherit'}
+          fontWeight={isMobile ? 600 : undefined}
+        >
           {t('deleghe.table.allNotifications')}
         </Typography>
       ) : (

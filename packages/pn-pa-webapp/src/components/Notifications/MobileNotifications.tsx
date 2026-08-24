@@ -63,6 +63,7 @@ const MobileNotifications = ({
     {
       id: 'sentAt',
       label: t('table.date'),
+      wrapValueInTypography: false,
     },
     {
       id: 'recipients',
@@ -73,6 +74,7 @@ const MobileNotifications = ({
       id: 'subject',
       mode: 'truncate',
       label: t('table.subject'),
+      wrapValueInTypography: false,
     },
     {
       id: 'iun',
