@@ -31,10 +31,22 @@ const DelegationDataSwitch: React.FC<{
     );
   }
   if (type === 'startDate') {
-    return <>{data.startDate}</>;
+    return isMobile ? (
+      <Typography variant="body2" fontWeight={600}>
+        {data.startDate}
+      </Typography>
+    ) : (
+      <>{data.startDate}</>
+    );
   }
   if (type === 'endDate') {
-    return <>{data.endDate}</>;
+    return isMobile ? (
+      <Typography variant="body2" fontWeight={600}>
+        {data.endDate}
+      </Typography>
+    ) : (
+      <>{data.endDate}</>
+    );
   }
   if (type === 'visibilityIds') {
     return (

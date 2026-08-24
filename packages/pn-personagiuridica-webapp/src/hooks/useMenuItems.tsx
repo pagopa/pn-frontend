@@ -36,6 +36,7 @@ export const useMenuItems = (userHasAdminPermissions: boolean) => {
         {
           label: t('menu.notifiche-impresa', { organization: organization?.name }),
           route: routes.NOTIFICHE,
+          additionalRoutes: [routes.COMUNICAZIONE],
           dotNotification: hasNewNotifications,
         },
         {
@@ -50,6 +51,7 @@ export const useMenuItems = (userHasAdminPermissions: boolean) => {
       label: !loggedUser.hasGroup ? t('menu.notifiche') : t('menu.notifiche-delegato'),
       icon: MailOutlineIcon,
       route: !loggedUser.hasGroup ? routes.NOTIFICHE : routes.NOTIFICHE_DELEGATO,
+      additionalRoutes: [routes.COMUNICAZIONE],
       children: notificationMenuItems,
       notSelectable: notificationMenuItems && notificationMenuItems.length > 0,
     },
