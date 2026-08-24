@@ -69,14 +69,11 @@ const MobileNotifications = ({
       id: 'sender',
       label: t('table.mittente'),
       mode: 'truncate',
+      wrapValueInTypography: false,
     },
     {
       id: 'subject',
       label: t('table.oggetto'),
-    },
-    {
-      id: 'iun',
-      label: t('table.iun'),
     },
   ];
 
