@@ -1,0 +1,93 @@
+name: Pull locales from Lokalise
+
+on:
+  workflow_dispatch:
+    inputs:
+      app:
+        description: 'App da sincronizzare (all = tutte e quattro)'
+        type: choice
+        required: true
+        default: all
+        options:
+          - all
+          - PFL
+          - PF
+          - PA
+          - PG
+
+concurrency:
+  group: lokalise-pull-${{ github.ref }}
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+  pull-requests: write
+  # Le label sulla PR passano dall'API issues, non da quella pull-requests.
+  issues: write
+
+jobs:
+  pull-locale:
+    runs-on: ubuntu-latest
+    # TODO: RIPRISTINARE PRIMA DEL MERGE - usa i secret di repository durante il test.
+    #       Riallineare a io-app con "environment: lokalise" quando l'environment sara' disponibile.
+    # environment: lokalise
+    strategy:
+      fail-fast: false
+      # Il context 'inputs' e' leggibile in 'strategy' (a differenza di 'env'),
+      # quindi la matrix si costruisce qui senza un job di preparazione.
+      matrix:
+        app: ${{ fromJson(inputs.app == 'all' && '["PFL","PF","PA","PG"]' || format('["{0}"]', inputs.app)) }}
+    env:
+      # I codici app sono anche il suffisso dei secret LOKALISE_PROJECT_ID_<CODICE>.
+      PACKAGES: >-
+        {
+          "PFL": "pn-personafisica-login",
+          "PF": "pn-personafisica-webapp",
+          "PA": "pn-pa-webapp",
+          "PG": "pn-personagiuridica-webapp"
+        }
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          # L'action deve poter risolvere il branch base e riusare il branch di lavoro
+          # se esiste gia' sul remoto: serve la storia completa, non lo shallow clone.
+          fetch-depth: 0
+      - name: Pull ${{ matrix.app }} locales from Lokalise
+        uses: lokalise/lokalise-pull-action@95afae3fac9dd28db1ff4887a63b1f76cbee714d # v5.3.0
+        with:
+          api_token: ${{ secrets.LOKALISE_API_TOKEN }}
+          project_id: ${{ secrets[format('LOKALISE_PROJECT_ID_{0}', matrix.app)] }}
+          base_lang: it
+          translations_path: packages/${{ fromJson(env.PACKAGES)[matrix.app] }}/public/locales
+          file_format: json
+          # L'italiano lo scriviamo noi nel repo, ma i traduttori possono correggerlo
+          # su Lokalise: senza questo flag quelle correzioni non tornerebbero mai indietro.
+          always_pull_base: true
+          # Branch stabile per app: ogni run aggiorna la stessa PR invece di aprirne una
+          # nuova. Richiede che il branch venga cancellato al merge, altrimenti il run
+          # successivo ripartirebbe da un punto ormai vecchio.
+          override_branch_name: lokalise/translations-${{ matrix.app }}
+          git_user_name: 'github-actions[bot]'
+          git_user_email: 'github-actions[bot]@users.noreply.github.com'
+          git_commit_message: 'chore(lokalise): update ${{ matrix.app }} translations'
+          pr_title: 'chore(lokalise): update ${{ matrix.app }} translations'
+          pr_body: |
+            Aggiornamento automatico delle traduzioni di `${{ fromJson(env.PACKAGES)[matrix.app] }}` da Lokalise.
+
+            Generata da [Pull locales from Lokalise](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}).
+          pr_labels: lokalise
+          # Nota: l'action filtra il download con include_tags = nome del branch, e la
+          # push-action tagga le chiavi caricate con lo stesso nome. Push e pull vanno
+          # quindi lanciate dallo stesso branch, altrimenti qui non scende nulla.
+          additional_params: |
+            indentation: 2sp
+            placeholder_format: i18n
+            filter_langs:
+              - it
+              - en
+              - fr
+              - de
+              - sl
+            replace_breaks: false
+            add_newline_eof: true
