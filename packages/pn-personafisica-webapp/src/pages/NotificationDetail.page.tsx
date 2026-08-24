@@ -438,7 +438,7 @@ const NotificationDetail: React.FC = () => {
         goBackAction={() => navigate(backRoute)}
       />
     );
-  }, [rapidAccessSource, i18n.language, notification.subject]);
+  }, [rapidAccessSource, i18n.language, notification.subject, delegatorsFromStore, mandateId]);
 
   const cancelledAlert = isCancelledOrCancelling && (
     <MIAlert

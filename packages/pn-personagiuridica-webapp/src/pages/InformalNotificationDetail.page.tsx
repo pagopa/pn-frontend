@@ -50,8 +50,8 @@ const InformalNotificationDetail: React.FC = () => {
 
   const [informalNotification, setInformalNotification] =
     React.useState<BffFullInformalNotificationV1>();
-  const currentUser = useAppSelector((state: RootState) => state.userState.user).organization.name;
-  console.log(currentUser);
+  const currentOrganizationName = useAppSelector((state: RootState) => state.userState.user)
+    .organization.name;
 
   const [paymentsData, setPaymentsData] = React.useState<PaymentsData>({
     pagoPaF24: [],
@@ -163,7 +163,7 @@ const InformalNotificationDetail: React.FC = () => {
         linkLabel={
           currentRecipient?.denomination
             ? t('menu.notifiche-impresa', {
-                organization: currentUser ?? '',
+                organization: currentOrganizationName ?? '',
               })
             : t('menu.notifiche')
         }
@@ -171,7 +171,12 @@ const InformalNotificationDetail: React.FC = () => {
         goBackAction={() => navigate(routes.NOTIFICHE)}
       />
     ),
-    [i18n.language, primaryMessage?.subject]
+    [
+      i18n.language,
+      primaryMessage?.subject,
+      currentRecipient?.denomination,
+      currentOrganizationName,
+    ]
   );
 
   const onPayClick = (noticeCode?: string, creditorTaxId?: string, amount?: number) => {

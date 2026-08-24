@@ -165,7 +165,7 @@ const InformalNotificationDetail: React.FC = () => {
         goBackAction={() => navigate(routes.NOTIFICHE)}
       />
     ),
-    [i18n.language, primaryMessage?.subject]
+    [i18n.language, primaryMessage?.subject, delegatorsFromStore]
   );
 
   const onPayClick = (noticeCode?: string, creditorTaxId?: string, amount?: number) => {

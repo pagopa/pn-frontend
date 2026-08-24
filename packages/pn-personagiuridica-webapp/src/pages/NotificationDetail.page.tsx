@@ -447,7 +447,7 @@ const NotificationDetail = () => {
         goBackAction={() => navigate(backRoute)}
       />
     );
-  }, [fromQrCode, i18n.language, notification.subject]);
+  }, [fromQrCode, i18n.language, notification.subject, mandateId, organization?.name]);
 
   const cancelledAlert = isCancelledOrCancelling && (
     <MIAlert
