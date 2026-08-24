@@ -69,6 +69,7 @@ const MobileNotifications = ({
       id: 'sender',
       label: t('table.mittente'),
       mode: 'truncate',
+      wrapValueInTypography: false,
     },
     {
       id: 'subject',
