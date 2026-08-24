@@ -89,6 +89,9 @@ const DelegatesByCompany = () => {
       tableConfiguration: {
         cellProps: { width: '11%' },
       },
+      cardConfiguration: {
+        wrapValueInTypography: false,
+      },
     },
     {
       id: 'endDate',
@@ -96,6 +99,9 @@ const DelegatesByCompany = () => {
       tableConfiguration: {
         cellProps: { width: '11%' },
         sortable: true,
+      },
+      cardConfiguration: {
+        wrapValueInTypography: false,
       },
     },
     {

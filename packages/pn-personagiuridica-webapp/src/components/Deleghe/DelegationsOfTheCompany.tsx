@@ -123,12 +123,18 @@ const DelegationsOfTheCompany = () => {
       tableConfiguration: {
         cellProps: { width: '13%' },
       },
+      cardConfiguration: {
+        wrapValueInTypography: false,
+      },
     },
     {
       id: 'endDate',
       label: t('deleghe.table.delegationEnd'),
       tableConfiguration: {
         cellProps: { width: '13%' },
+      },
+      cardConfiguration: {
+        wrapValueInTypography: false,
       },
     },
     {

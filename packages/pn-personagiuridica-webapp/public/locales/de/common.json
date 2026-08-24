@@ -24,6 +24,7 @@
     "manage": "Verwalten",
     "start": "Starten",
     "continue": "Weiter",
+    "clear-field": "Feld leeren",
     "not-now": "Nicht jetzt",
     "do-later": "Später erledigen",
     "add": "Hinzufügen",
@@ -243,7 +244,13 @@
     "action": "Angemeldet bleiben"
   },
   "code-modal": {
-    "digits": ["Erste Ziffer", "Zweite Ziffer", "Dritte Ziffer", "Vierte Ziffer", "Letzte Ziffer"]
+    "digits": [
+      "Erste Ziffer",
+      "Zweite Ziffer",
+      "Dritte Ziffer",
+      "Vierte Ziffer",
+      "Letzte Ziffer"
+    ]
   },
   "user-validation-failed": {
     "title": "Die eingegebenen Daten sind ungültig",
