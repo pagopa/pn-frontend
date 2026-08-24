@@ -43,28 +43,22 @@ const DesktopNotifications = ({
   const { t } = useTranslation('notifiche');
   const filterNotificationsRef = useRef({ filtersApplied: false, cleanFilters: () => void 0 });
 
-  // 10 + 8 + x + y + z = 100
-  // x + y = 56
-  // x = sender e y = iun e z = subject
-  // xs -> iun = 17 e sender = 25 e subject = 40
-  // xl -> iun = 20 e sender = 25 e subject = 36
-
   const columns: Array<Column<NotificationColumnData>> = [
     {
       id: 'sentAt',
       label: t('table.data'),
-      cellProps: { sx: { width: { xs: '10%', md: '13%', xl: '13%' } } },
+      cellProps: { sx: { width: { xs: '10%', md: '13%', xl: '13%', xxl: '13%' } } },
     },
     {
       id: 'sender',
       label: t('table.mittente'),
       mode: 'truncate',
-      cellProps: { sx: { width: { xs: '25%', md: '23%', xl: '25%' } } },
+      cellProps: { sx: { width: { xs: '25%', md: '23%', xl: '25%', xxl: '24%' } } },
     },
     {
       id: 'subject',
       label: t('table.oggetto'),
-      cellProps: { sx: { width: { xs: '40%', md: '24%', xl: '28%' } } },
+      cellProps: { sx: { width: { xs: '40%', md: '24%', xl: '28%', xxl: '35%' } } },
     },
     {
       id: 'iun',
@@ -72,7 +66,7 @@ const DesktopNotifications = ({
       cellProps: {
         sx: {
           display: { xs: 'none', xl: 'table-cell' },
-          width: { xs: '17%', md: '32%', xl: '26%' },
+          width: { xs: '17%', md: '32%', xl: '26%', xxl: '20%' },
         },
       },
     },

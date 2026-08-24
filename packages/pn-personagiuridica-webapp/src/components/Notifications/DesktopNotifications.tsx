@@ -46,25 +46,25 @@ const DesktopNotifications = ({
     {
       id: 'sentAt',
       label: t('table.data'),
-      cellProps: { sx: { width: { xs: '10%', md: '13%', xl: '13%' } } },
+      cellProps: { sx: { width: { xs: '10%', md: '13%', xl: '13%', xxl: '13%' } } },
     },
     {
       id: 'sender',
       label: t('table.mittente'),
       mode: 'truncate',
-      cellProps: { sx: { width: { xs: '25%', md: '23%', xl: '25%' } } },
+      cellProps: { sx: { width: { xs: '25%', md: '23%', xl: '25%', xxl: '24%' } } },
     },
     {
       id: 'subject',
       label: t('table.oggetto'),
-      cellProps: { sx: { width: { xs: '40%', md: '24%', xl: '28%' } } },
+      cellProps: { sx: { width: { xs: '40%', md: '24%', xl: '28%', xxl: '35%' } } },
     },
     {
       id: 'iun',
       label: t('table.iun'),
       cellProps: {
         sx: {
-          width: { xs: '17%', md: '32%', xl: '26%' },
+          width: { xs: '17%', md: '32%', xl: '26%', xxl: '20%' },
           display: { xs: 'none', xl: 'table-cell' },
         },
       },
