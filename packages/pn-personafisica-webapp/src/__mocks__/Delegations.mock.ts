@@ -2,16 +2,16 @@ import { Delegate, Delegator, NewMandateRequest } from '../redux/delegation/type
 
 export const mockCreateDelegation: NewMandateRequest = {
   delegate: {
-    firstName: 'Davide',
-    lastName: 'Legato',
-    displayName: 'Davide Legato',
+    firstName: 'Utente',
+    lastName: 'Test Quattro',
+    displayName: 'Utente Test Quattro',
     companyName: 'eni',
-    fiscalCode: 'DVDLGT83C12H501C',
+    fiscalCode: 'TSTUTN00A06A001F',
     person: true,
   },
   visibilityIds: [
     {
-      name: 'Agenzia Entrate',
+      name: 'Agenzia Test',
       uniqueIdentifier: '123456789',
     },
   ],
@@ -23,17 +23,17 @@ export const mandatesByDelegator: Array<Delegate> = [
   {
     mandateId: '1',
     delegate: {
-      displayName: 'Marco Verdi',
-      firstName: 'Marco',
-      lastName: 'Verdi',
+      displayName: 'Utente Test Tre',
+      firstName: 'Utente',
+      lastName: 'Test Tre',
       companyName: 'eni',
-      fiscalCode: 'MRCVRD83C12H501C',
+      fiscalCode: 'TSTUTN00A05A001E',
       person: true,
     },
     status: 'pending',
     visibilityIds: [
       {
-        name: 'Agenzia Entrate',
+        name: 'Agenzia Test',
         uniqueIdentifier: '123456789',
       },
     ],
@@ -44,17 +44,17 @@ export const mandatesByDelegator: Array<Delegate> = [
   {
     mandateId: '2',
     delegate: {
-      displayName: 'Davide Legato',
-      firstName: 'Davide',
-      lastName: 'Legato',
+      displayName: 'Utente Test Quattro',
+      firstName: 'Utente',
+      lastName: 'Test Quattro',
       companyName: 'eni',
-      fiscalCode: 'DVDLGT83C12H501C',
+      fiscalCode: 'TSTUTN00A06A001F',
       person: true,
     },
     status: 'active',
     visibilityIds: [
       {
-        name: 'Agenzia Entrate',
+        name: 'Agenzia Test',
         uniqueIdentifier: '123456789',
       },
     ],
@@ -68,17 +68,17 @@ export const mandatesByDelegate: Array<Delegator> = [
   {
     mandateId: '3',
     delegator: {
-      displayName: 'Marco Verdi',
-      firstName: 'Marco',
-      lastName: 'Verdi',
+      displayName: 'Utente Test Tre',
+      firstName: 'Utente',
+      lastName: 'Test Tre',
       companyName: 'eni',
-      fiscalCode: 'MRCVRD83C12H501C',
+      fiscalCode: 'TSTUTN00A05A001E',
       person: true,
     },
     status: 'pending',
     visibilityIds: [
       {
-        name: 'Agenzia Entrate',
+        name: 'Agenzia Test',
         uniqueIdentifier: '123456789',
       },
     ],
@@ -89,17 +89,17 @@ export const mandatesByDelegate: Array<Delegator> = [
   {
     mandateId: '4',
     delegator: {
-      displayName: 'Davide Legato',
-      firstName: 'Davide',
-      lastName: 'Legato',
+      displayName: 'Utente Test Quattro',
+      firstName: 'Utente',
+      lastName: 'Test Quattro',
       companyName: 'eni',
-      fiscalCode: 'DVDLGT83C12H501C',
+      fiscalCode: 'TSTUTN00A06A001F',
       person: true,
     },
     status: 'active',
     visibilityIds: [
       {
-        name: 'Agenzia Entrate',
+        name: 'Agenzia Test',
         uniqueIdentifier: '123456789',
       },
     ],
@@ -110,17 +110,17 @@ export const mandatesByDelegate: Array<Delegator> = [
   {
     mandateId: '5',
     delegator: {
-      displayName: 'Ada Lovelace',
-      firstName: 'Ada',
-      lastName: 'Lovelace',
+      displayName: 'Utente Test Otto',
+      firstName: 'Utente',
+      lastName: 'Test Otto',
       companyName: 'eni',
-      fiscalCode: 'LVLDAA85T50G702B',
+      fiscalCode: 'TSTUTN00A07A001G',
       person: true,
     },
     status: 'active',
     visibilityIds: [
       {
-        name: 'Comune di Salerno',
+        name: 'Comune di Test 3',
         uniqueIdentifier: '123456789',
       },
     ],

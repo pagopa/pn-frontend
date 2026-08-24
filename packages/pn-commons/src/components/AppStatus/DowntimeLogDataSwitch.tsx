@@ -2,6 +2,7 @@ import DownloadIcon from '@mui/icons-material/Download';
 import { Button, Chip, Typography } from '@mui/material';
 import { Stack } from '@mui/system';
 
+import { useIsMobile } from '../../hooks';
 import { Downtime, DowntimeStatus } from '../../models/AppStatus';
 import { Row } from '../../models/PnTable';
 import { formatDate, formatDateTime, formatTimeWithLegend } from '../../utility/date.utility';
@@ -11,14 +12,22 @@ const FormattedDateAndTime: React.FC<{ date: string; inTwoLines?: boolean }> = (
   date,
   inTwoLines,
 }) => {
+  const isMobile = useIsMobile();
+  const isBold = isMobile ? 600 : undefined;
   if (date) {
     return inTwoLines ? (
       <Stack direction="column">
-        <Typography variant="body2">{formatDate(date)},</Typography>
-        <Typography variant="body2">{formatTimeWithLegend(date)}</Typography>
+        <Typography variant="body2" fontWeight={isBold}>
+          {formatDate(date)},
+        </Typography>
+        <Typography variant="body2" fontWeight={isBold}>
+          {formatTimeWithLegend(date)}
+        </Typography>
       </Stack>
     ) : (
-      <Typography variant="body2">{formatDateTime(date)}</Typography>
+      <Typography variant="body2" fontWeight={isBold}>
+        {formatDateTime(date)}
+      </Typography>
     );
   }
   return (

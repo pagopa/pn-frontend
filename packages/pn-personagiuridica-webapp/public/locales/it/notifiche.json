@@ -58,7 +58,7 @@
   "detail": {
     "legal-date": "Notifica depositata il giorno",
     "informal-date": "Comunicazione depositata il giorno",
-    "legal-disclaimer": "Notifica inviata tramite SEND, la piattaforma disciplinata dall’art. 26 del D.L 76/2020",
+    "legal-disclaimer": "Notifica inviata tramite SEND, la piattaforma disciplinata dall’art. 26 del D.L. 76/2020",
     "legal-value": "Notifica a valore legale",
     "notification-timeline-section": {
       "title": "Stato della notifica",
@@ -145,7 +145,8 @@
       "phone": "Numero di telefono dell'ente",
       "email": "Email dell'ente",
       "website": "Sito web dell'ente",
-      "copy_phone": "Numero di telefono copiato"
+      "copy_phone": "Copia numero di telefono",
+      "copied_phone": "Numero di telefono copiato"
     },
     "informal_notification_markdown": {
       "greeting": "All'attenzione di {{recipientDenomination}}",

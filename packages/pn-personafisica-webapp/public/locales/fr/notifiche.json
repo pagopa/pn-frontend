@@ -155,7 +155,8 @@
       "phone": "Numéro de téléphone de l'organisme",
       "email": "E-mail de l'organisme",
       "website": "Site web de l'organisme",
-      "copy_phone": "Numéro de téléphone copié"
+      "copy_phone": "Copier le numéro de téléphone",
+      "copied_phone": "Numéro de téléphone copié"
     },
     "informal_notification_markdown": {
       "greeting": "Ciao {{recipientDenomination}},",
