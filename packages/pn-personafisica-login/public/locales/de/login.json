@@ -1,54 +1,54 @@
 {
-  "loginPage": {
-    "title": "Zugriff auf SEND für Ihre rechtsverbindlichen Mitteilungen",
-    "description": "Wählen Sie die gewünschte Zugriffsmethode. ",
-    "missing-spid-cie": "Hast du kein SPID oder CIE? <0>Mehr erfahren</0>",
-    "loginBox": {
-      "title": "Anmelden",
-      "spidLogin": "Mit SPID anmelden",
-      "cieLogin": "Mit CIE anmelden"
-    }
+  "disambiguationPage": {
+    "button": "Anmelden",
+    "pf": "Privatperson",
+    "pg": "Juristische Person",
+    "subTitle": "Wir leiten dich nach deiner Wahl weiter.",
+    "title": "Mit welchem Profil möchtest du dich anmelden?"
   },
-  "spidSelect": {
-    "title": "Wähle deinen SPID-Anbieter",
-    "hintText": "Keine SPID-Identität?<0> Mehr hierzu</0>",
-    "cancelButton": "Abbrechen",
-    "emptyState": "Kein IDP gefunden"
+  "ioSmartAppBanner": {
+    "cta": "ÖFFNEN",
+    "subtitle": "In der IO-App öffnen",
+    "title": "IO - Die App für öffentliche Dienste"
   },
   "loginError": {
-    "title": "Aufgrund eines Systemfehlers kann der Vorgang nicht abgeschlossen werden.",
-    "message": "Aufgrund eines Systemfehlers kann der Vorgang nicht abgeschlossen werden. Bitte versuche es später noch einmal.",
     "code": {
+      "error_1001": "Zugriff verweigert: Du hast nicht das erforderliche Mindestalter für die Nutzung der Plattform.",
       "error_19": "Du hast zu oft einen falschen Benutzernamen oder ein falsches Passwort eingegeben: Bitte versuche es in einigen Minuten erneut oder wende dich an deinen SPID-Identitätsanbieter, um deine Anmeldeinformationen zu ändern.",
       "error_20": "Aus Sicherheitsgründen ist ein Login mit einem zweiten Authentifizierungsfaktor erforderlich: Wende dich an deinen SPID-Identitätsanbieter, um zu erfahren, wie dieser verwendet wird.",
       "error_21": "Seit deinem Anmeldeversuch ist zu viel Zeit vergangen: Beginne von vorne.",
       "error_22": "Um die Plattform nutzen zu können, ist es notwendig, der Übermittlung einiger Daten zuzustimmen. Melde dich erneut an und erteile deine Einwilligung.",
       "error_23": "Deine SPID-Identität ist gesperrt oder widerrufen. Um deinen Account zu reaktivieren, wende dich bitte an deinen SPID-Identitätsanbieter.",
       "error_25": "Du hast den Login-Vorgang abgebrochen: Du kannst diesen jederzeit erneut durchführen.",
-      "error_30": "Die von dir verwendete SPID-Identität unterscheidet sich von der vom Dienstanbieter geforderten Art. Melde dich erneut mit der richtigen an.",
-      "error_1001": "Zugriff verweigert: Du hast nicht das erforderliche Mindestalter für die Nutzung der Plattform."
-    }
+      "error_30": "Die von dir verwendete SPID-Identität unterscheidet sich von der vom Dienstanbieter geforderten Art. Melde dich erneut mit der richtigen an."
+    },
+    "message": "Aufgrund eines Systemfehlers kann der Vorgang nicht abgeschlossen werden. Bitte versuche es später noch einmal.",
+    "title": "Aufgrund eines Systemfehlers kann der Vorgang nicht abgeschlossen werden."
   },
-  "disambiguationPage": {
-    "title": "Mit welchem Profil möchtest du dich anmelden?",
-    "subTitle": "Wir leiten dich nach deiner Wahl weiter.",
-    "pf": "Privatperson",
-    "pg": "Juristische Person",
-    "button": "Anmelden"
-  },
-  "ioSmartAppBanner": {
-    "title": "IO - Die App für öffentliche Dienste",
-    "subtitle": "In der IO-App öffnen",
-    "cta": "ÖFFNEN"
+  "loginPage": {
+    "description": "Wählen Sie die gewünschte Zugriffsmethode. ",
+    "loginBox": {
+      "cieLogin": "Mit CIE anmelden",
+      "spidLogin": "Mit SPID anmelden",
+      "title": "Anmelden"
+    },
+    "missing-spid-cie": "Hast du kein SPID oder CIE? <0>Mehr erfahren<\/0>",
+    "title": "Zugriff auf SEND für Ihre rechtsverbindlichen Mitteilungen"
   },
   "one-identity-spid-select": {
-    "title": "Login mit SPID",
     "close-button-aria-label": "Schließen",
-    "unavailable-idp-warning": "Der Zugriff über %s ist derzeit nicht verfügbar. Bitte versuche es später noch einmal oder melde dich mit einem anderen Identitätsanbieter an",
     "error": {
-      "title": "Wir können die Liste nicht laden",
+      "close-button": "Schließen",
       "description": "Bitte versuche es später noch einmal.",
-      "close-button": "Schließen"
-    }
+      "title": "Wir können die Liste nicht laden"
+    },
+    "title": "Login mit SPID",
+    "unavailable-idp-warning": "Der Zugriff über %s ist derzeit nicht verfügbar. Bitte versuche es später noch einmal oder melde dich mit einem anderen Identitätsanbieter an"
+  },
+  "spidSelect": {
+    "cancelButton": "Abbrechen",
+    "emptyState": "Kein IDP gefunden",
+    "hintText": "Keine SPID-Identität?<0> Mehr hierzu<\/0>",
+    "title": "Wähle deinen SPID-Anbieter"
   }
 }

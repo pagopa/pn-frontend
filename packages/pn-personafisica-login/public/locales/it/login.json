@@ -1,54 +1,54 @@
 {
-  "loginPage": {
-    "title": "Accedi a SEND per le tue comunicazioni a valore legale",
-    "description": "Scegli la modalità che preferisci.",
-    "missing-spid-cie": "Non hai SPID o CIE? <0>Scopri di più</0>",
-    "loginBox": {
-      "title": "Accedi",
-      "spidLogin": "Entra con SPID",
-      "cieLogin": "Entra con CIE"
-    }
+  "disambiguationPage": {
+    "button": "Accedi",
+    "pf": "Privato cittadino",
+    "pg": "Persona giuridica",
+    "subTitle": "Ti reindirizzeremo in base alla tua scelta.",
+    "title": "Con che profilo vuoi accedere?"
   },
-  "spidSelect": {
-    "title": "Scegli il tuo SPID",
-    "hintText": "Non hai SPID?<0> Scopri di più</0>",
-    "cancelButton": "Annulla",
-    "emptyState": "Nessun IDP trovato"
+  "ioSmartAppBanner": {
+    "cta": "APRI",
+    "subtitle": "Apri nell'app IO",
+    "title": "IO - L'app dei servizi pubblici"
   },
   "loginError": {
-    "title": "A causa di un errore del sistema non è possibile completare la procedura.",
-    "message": "A causa di un errore del sistema non è possibile completare la procedura. Ti chiediamo di riprovare più tardi.",
     "code": {
+      "error_1001": "Accesso negato: non hai l’età minima richiesta per usare la piattaforma.",
       "error_19": "Hai inserito troppe volte un nome utente o una password non corretti: riprova fra qualche minuto o contatta il tuo fornitore di identità SPID per cambiare le tue credenziali.",
       "error_20": "Per motivi di sicurezza, è richiesto un login con un secondo fattore di autenticazione: contatta il tuo fornitore di identità SPID per capire come si usa.",
       "error_21": "È passato troppo tempo da quando hai iniziato l’accesso: riparti dall’inizio.",
       "error_22": "Per usare la piattaforma, devi acconsentire all’invio di alcuni dati. Entra di nuovo e dai il tuo consenso.",
       "error_23": "La tua identità SPID risulta sospesa o revocata. Per riattivare il tuo account, contatta il tuo fornitore di identità SPID.",
       "error_25": "Hai annullato l’operazione di login: puoi riprovare quando vuoi.",
-      "error_30": "La tipologia di identità SPID che hai usato è diversa da quella richiesta dal Service Provider. Entra di nuovo usando quella corretta.",
-      "error_1001": "Accesso negato: non hai l’età minima richiesta per usare la piattaforma."
-    }
+      "error_30": "La tipologia di identità SPID che hai usato è diversa da quella richiesta dal Service Provider. Entra di nuovo usando quella corretta."
+    },
+    "message": "A causa di un errore del sistema non è possibile completare la procedura. Ti chiediamo di riprovare più tardi.",
+    "title": "A causa di un errore del sistema non è possibile completare la procedura."
   },
-  "disambiguationPage": {
-    "title": "Con che profilo vuoi accedere?",
-    "subTitle": "Ti reindirizzeremo in base alla tua scelta.",
-    "pf": "Privato cittadino",
-    "pg": "Persona giuridica",
-    "button": "Accedi"
-  },
-  "ioSmartAppBanner": {
-    "title": "IO - L'app dei servizi pubblici",
-    "subtitle": "Apri nell'app IO",
-    "cta": "APRI"
+  "loginPage": {
+    "description": "Scegli la modalità che preferisci.",
+    "loginBox": {
+      "cieLogin": "Entra con CIE",
+      "spidLogin": "Entra con SPID",
+      "title": "Accedi"
+    },
+    "missing-spid-cie": "Non hai SPID o CIE? <0>Scopri di più<\/0>",
+    "title": "Accedi a SEND per le tue comunicazioni a valore legale"
   },
   "one-identity-spid-select": {
-    "title": "Accedi con SPID",
     "close-button-aria-label": "Chiudi",
-    "unavailable-idp-warning": "L'accesso tramite %s non è al momento disponibile, riprova più tardi o entra con un altro Identity Provider",
     "error": {
-      "title": "Non riusciamo a caricare la lista",
+      "close-button": "Chiudi",
       "description": "Ti chiediamo di riprovare più tardi.",
-      "close-button": "Chiudi"
-    }
+      "title": "Non riusciamo a caricare la lista"
+    },
+    "title": "Accedi con SPID",
+    "unavailable-idp-warning": "L'accesso tramite {{0}} non è al momento disponibile, riprova più tardi o entra con un altro Identity Provider"
+  },
+  "spidSelect": {
+    "cancelButton": "Annulla",
+    "emptyState": "Nessun IDP trovato",
+    "hintText": "Non hai SPID?<0> Scopri di più<\/0>",
+    "title": "Scegli il tuo SPID"
   }
 }

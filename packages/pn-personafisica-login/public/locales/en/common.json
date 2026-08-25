@@ -1,34 +1,35 @@
 {
+  "button": {
+    "close": "Close",
+    "go-to-login": "Login"
+  },
+  "footer": {
+    "321-model": "Model 231",
+    "accessibility": "Accessibility",
+    "certifications": "Certifications",
+    "company": "Transparent company",
+    "cookie": "Cookie preferences",
+    "disclosure": "Responsible Disclosure Policy",
+    "follow": "Follow us on",
+    "go-to": "Go to link",
+    "go-to-pagopa": "Go to the website of PagoPA S.p.A.",
+    "legal-part-1": "joint stock company with sole shareholder – share capital of € 1,000,000 fully paid up – registered office in Rome, Piazza Colonna 370",
+    "legal-part-2": "ZIP CODE 00187 – Reg. no. in the Rome Business Register, Fiscal code and VAT number 15376371009",
+    "personal-data": "Right to the protection of personal data",
+    "privacy-info": "Privacy Policy",
+    "products-title": "Products and services",
+    "resources": "Resources",
+    "security": "Information security",
+    "sercq-service-statement": "Service practice statement - SERCQ",
+    "social": "Go to the {{social}} website of PagoPA S.p.A.",
+    "terms-conditions": "Terms and Conditions",
+    "who": "About us",
+    "work": "Work with us"
+  },
   "header": {
     "assistance": "Support",
     "logout": "Exit",
     "pago-pa-link": "PagoPA S.p.A. website"
   },
-  "footer": {
-    "go-to-pagopa": "Go to the website of PagoPA S.p.A.",
-    "go-to": "Go to link",
-    "privacy-info": "Privacy Policy",
-    "who": "About us",
-    "work": "Work with us",
-    "certifications": "Certifications",
-    "security": "Information security",
-    "personal-data": "Right to the protection of personal data",
-    "cookie": "Cookie preferences",
-    "terms-conditions": "Terms and Conditions",
-    "company": "Transparent company",
-    "disclosure": "Responsible Disclosure Policy",
-    "321-model": "Model 231",
-    "sercq-service-statement": "Service practice statement - SERCQ",
-    "accessibility": "Accessibility",
-    "social": "Go to the {{social}} website of PagoPA S.p.A.",
-    "resources": "Resources",
-    "follow": "Follow us on",
-    "legal-part-1": "joint stock company with sole shareholder – share capital of € 1,000,000 fully paid up – registered office in Rome, Piazza Colonna 370",
-    "legal-part-2": "ZIP CODE 00187 – Reg. no. in the Rome Business Register, Fiscal code and VAT number 15376371009",
-    "products-title": "Products and services"
-  },
-  "button": {
-    "close": "Close",
-    "go-to-login": "Login"
-  }
+  "test_key_trigger": ""
 }
