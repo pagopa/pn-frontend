@@ -91,6 +91,8 @@ jobs:
 
             Generata da [Pull locales from Lokalise](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}).
           pr_labels: lokalise
+          # Draft: le traduzioni vanno riviste prima di essere considerate mergiabili.
+          pr_draft: true
           # Nota: l'action filtra il download con include_tags = nome del branch, e la
           # push-action tagga le chiavi caricate con lo stesso nome. Push e pull vanno
           # quindi lanciate dallo stesso branch, altrimenti qui non scende nulla.
