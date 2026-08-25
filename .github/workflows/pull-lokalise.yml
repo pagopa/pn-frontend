@@ -1,4 +1,4 @@
-name: Pull locales from Lokalise.
+name: Pull locales from Lokalise
 
 on:
   workflow_dispatch:
