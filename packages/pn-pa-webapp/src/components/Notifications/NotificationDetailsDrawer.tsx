@@ -2,7 +2,8 @@ import { ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
-import { Box, Divider, Drawer, IconButton, Stack, Typography } from '@mui/material';
+import { Box, Divider, Drawer, Stack, Typography } from '@mui/material';
+import { MIIconButton } from '@pagopa/mui-italia';
 
 export type NotificationDetailsDrawerItem = {
   label: ReactNode;
@@ -37,13 +38,13 @@ const NotificationDetailsDrawer: React.FC<Props> = ({ open, title, details, onCl
           <Typography component="h2" variant="h5">
             {title}
           </Typography>
-          <IconButton
+          <MIIconButton
             aria-label={t('button.close', { ns: 'common' })}
             onClick={onClose}
             data-testid="notificationDetailsDrawerClose"
           >
             <CloseRoundedIcon sx={{ color: 'action.active', fontSize: 24 }} />
-          </IconButton>
+          </MIIconButton>
         </Stack>
 
         <Stack spacing={2} divider={<Divider aria-hidden />}>

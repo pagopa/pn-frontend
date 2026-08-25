@@ -2,14 +2,7 @@ import React, { Dispatch, useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import MoreVertRounded from '@mui/icons-material/MoreVertRounded';
-import {
-  Box,
-  DialogContentText,
-  IconButton,
-  Menu as MUIMenu,
-  MenuItem,
-  Typography,
-} from '@mui/material';
+import { Box, DialogContentText, Menu as MUIMenu, MenuItem, Typography } from '@mui/material';
 import { Variant } from '@mui/material/styles/createTypography';
 import {
   AppResponse,
@@ -20,7 +13,7 @@ import {
   Row,
   appStateActions,
 } from '@pagopa-pn/pn-commons';
-import { MIButton, Tag } from '@pagopa/mui-italia';
+import { MIButton, MIIconButton, Tag } from '@pagopa/mui-italia';
 import { AnyAction } from '@reduxjs/toolkit';
 
 import { DelegationColumnData, DelegationStatus } from '../../models/Deleghe';
@@ -296,14 +289,13 @@ export const Menu: React.FC<Props> = ({ menuType, id, userLogged, row, onAction 
         />
       )}
 
-      <IconButton
-        id={`delegation-menu-icon-${id}`}
+      <MIIconButton
         onClick={handleClick}
         data-testid="delegationMenuIcon"
         aria-label={t('deleghe.table.menu-aria-label')}
       >
         <MoreVertRounded fontSize="small" />
-      </IconButton>
+      </MIIconButton>
       <MUIMenu
         id={`delegation-menu-${id}`}
         anchorEl={anchorEl}

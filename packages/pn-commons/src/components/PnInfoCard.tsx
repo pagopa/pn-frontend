@@ -10,7 +10,6 @@ import {
   CardHeader,
   CardProps,
   Collapse,
-  IconButton,
   Menu,
   MenuItem,
   Stack,
@@ -18,7 +17,7 @@ import {
   TypographyProps,
 } from '@mui/material';
 import { useIsMobile } from '@pagopa-pn/pn-commons';
-import { MIButton } from '@pagopa/mui-italia';
+import { MIButton, MIIconButton } from '@pagopa/mui-italia';
 
 type PnInfoCardAction = {
   key: string;
@@ -75,7 +74,7 @@ const PnInfoCardActions: React.FC<Pick<Props, 'actions'>> = ({ actions }) => {
 
   return isMobile ? (
     <Box data-testid="contextMenu">
-      <IconButton
+      <MIIconButton
         onClick={handleClick}
         data-testid="contextMenuButton"
         aria-label="Context menu"
@@ -84,7 +83,7 @@ const PnInfoCardActions: React.FC<Pick<Props, 'actions'>> = ({ actions }) => {
         aria-expanded={open ? 'true' : undefined}
       >
         <MoreVertRounded />
-      </IconButton>
+      </MIIconButton>
       <Menu
         id={menuId}
         data-testid="menuContext"

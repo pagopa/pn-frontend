@@ -131,7 +131,7 @@ const CustomPagination: React.FC<Props> = ({
             open={open}
             onClose={handleClose}
             MenuListProps={{
-              'aria-labelledby': getLocalizedOrDefaultLabel('common', 'paginator.rows-per-page'),
+              'aria-labelledby': 'rows-per-page',
             }}
           >
             {elementsPerPage.map((ep) => (

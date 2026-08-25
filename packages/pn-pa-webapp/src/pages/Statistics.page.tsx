@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 
 import FileDownloadRoundedIcon from '@mui/icons-material/FileDownloadRounded';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
-import { Box, Grid, IconButton, Paper, Stack, Typography } from '@mui/material';
+import { Box, Grid, Paper, Stack, Typography } from '@mui/material';
 import {
   ApiErrorWrapper,
   CustomTooltip,
@@ -16,7 +16,7 @@ import {
   screenshot,
   today,
 } from '@pagopa-pn/pn-commons';
-import { MIAlert, MIButton } from '@pagopa/mui-italia';
+import { MIAlert, MIButton, MIIconButton } from '@pagopa/mui-italia';
 
 import DeliveryModeStatistics from '../components/Statistics/DeliveryModeStatistics';
 import DigitalErrorsDetailStatistics from '../components/Statistics/DigitalErrorsDetailStatistics';
@@ -173,9 +173,9 @@ const Statistics = () => {
                     sx: { marginLeft: 0.5 },
                   }}
                 >
-                  <IconButton aria-describedby="tooltip-section-1">
+                  <MIIconButton aria-describedby="tooltip-section-1">
                     <InfoOutlinedIcon color="action" fontSize="small" />
-                  </IconButton>
+                  </MIIconButton>
                 </CustomTooltip>
               </Box>
 

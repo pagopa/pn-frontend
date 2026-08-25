@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 
 import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
-import { Drawer, IconButton, Link, Stack, Typography, useTheme } from '@mui/material';
-import { MIAlert } from '@pagopa/mui-italia';
+import { Drawer, Link, Stack, Typography, useTheme } from '@mui/material';
+import { MIAlert, MIIconButton } from '@pagopa/mui-italia';
 
 import { useIsMobile } from '../../hooks';
 import { EventAction, EventPaymentRecipientType } from '../../models';
@@ -110,13 +110,13 @@ const NotificationCostsDetailDrawer: React.FC<Props> = ({
             <Typography fontSize="18px" fontWeight="bold" data-testid="cost-details-drawer-title">
               {getLocalizedOrDefaultLabel('notifications', 'notification-alert.details.title')}
             </Typography>
-            <IconButton
+            <MIIconButton
               aria-label="close"
               onClick={handleCloseDrawer}
               data-testid="cost-details-drawer-close"
             >
               <CloseRoundedIcon sx={{ color: 'action.active', fontSize: '24px' }} />
-            </IconButton>
+            </MIIconButton>
           </Stack>
 
           <Stack spacing={3}>

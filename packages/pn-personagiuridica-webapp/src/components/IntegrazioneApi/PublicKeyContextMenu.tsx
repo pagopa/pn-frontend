@@ -8,8 +8,9 @@ import {
   RemoveRedEyeRounded,
   SyncRounded,
 } from '@mui/icons-material';
-import { Box, IconButton, Menu, MenuItem } from '@mui/material';
+import { Box, Menu, MenuItem } from '@mui/material';
 import { Row } from '@pagopa-pn/pn-commons';
+import { MIIconButton } from '@pagopa/mui-italia';
 
 import { BffPublicKeysResponse, PublicKeyStatus } from '../../generated-client/pg-apikeys';
 import { ApiKeyColumnData, ModalApiKeyView } from '../../models/ApiKeys';
@@ -38,7 +39,7 @@ const PublicKeyContextMenu: React.FC<Props> = ({ data, keys, handleModalClick })
 
   return (
     <Box data-testid="contextMenu">
-      <IconButton
+      <MIIconButton
         onClick={handleClick}
         data-testid="contextMenuButton"
         aria-label={t('context-menu.title')}
@@ -47,7 +48,7 @@ const PublicKeyContextMenu: React.FC<Props> = ({ data, keys, handleModalClick })
         aria-expanded={open ? 'true' : undefined}
       >
         <MoreVertRounded />
-      </IconButton>
+      </MIIconButton>
 
       <Menu
         data-testid="menuContext"

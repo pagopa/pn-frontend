@@ -1,9 +1,9 @@
 import { Trans, useTranslation } from 'react-i18next';
 
 import ClearRoundedIcon from '@mui/icons-material/ClearRounded';
-import { Dialog, DialogContent, Grid, Icon, IconButton, Link, Typography } from '@mui/material';
+import { Dialog, DialogContent, Grid, Icon, Link, Typography } from '@mui/material';
 import { AppRouteParams } from '@pagopa-pn/pn-commons';
-import { MIButton } from '@pagopa/mui-italia';
+import { MIButton, MIIconButton } from '@pagopa/mui-italia';
 
 import SpidBig from '../assets/spid_big.svg';
 import { PFLoginEventsType } from '../models/PFLoginEventsType';
@@ -67,14 +67,9 @@ const SpidSelect = ({ show, onClose, rapidAccess }: Props) => {
               <img src={SpidBig} aria-hidden />
             </Grid>
             <Grid item xs={1} sx={{ textAlign: 'right' }}>
-              <IconButton
-                color="primary"
-                onClick={onClose}
-                id="backIcon"
-                aria-label={t('button.close', { ns: 'common' })}
-              >
+              <MIIconButton onClick={onClose} aria-label={t('button.close', { ns: 'common' })}>
                 <ClearRoundedIcon />
-              </IconButton>
+              </MIIconButton>
             </Grid>
           </Grid>
           <Grid item>

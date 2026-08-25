@@ -10,7 +10,6 @@ describe('Status Tooltip Component', () => {
     const { getByTestId } = render(<StatusTooltip tooltip={tooltip} label={label} color={color} />);
     const button = getByTestId(`statusChip-${label}`);
     expect(button).toHaveTextContent(/mocked label/i);
-    // MIChip espone id e data-testid stabili, indipendenti dal color
     expect(button).toHaveAttribute('id', `status-chip-${label}`);
     fireEvent.mouseOver(button);
     const ttip = await waitFor(() => screen.getByRole('tooltip'));

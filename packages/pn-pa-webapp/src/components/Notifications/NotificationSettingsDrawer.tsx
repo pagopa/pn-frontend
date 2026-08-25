@@ -9,14 +9,13 @@ import {
   Drawer,
   FormControl,
   FormControlLabel,
-  IconButton,
   MenuItem,
   Radio,
   RadioGroup,
   Typography,
 } from '@mui/material';
 import { CustomDropdown, LANGUAGES, useIsMobile } from '@pagopa-pn/pn-commons';
-import { LangCode, LangLabels, MIButton } from '@pagopa/mui-italia';
+import { LangCode, LangLabels, MIButton, MIIconButton } from '@pagopa/mui-italia';
 
 import { BILINGUALISM_LANGUAGES, NewNotificationLangOther } from '../../models/NewNotification';
 import { setAdditionalLanguages } from '../../redux/auth/actions';
@@ -102,9 +101,9 @@ const NotificationSettingsDrawer = () => {
         data-testid="settingsLangDrawer"
       >
         <Box display="flex" justifyContent="flex-end" padding={2}>
-          <IconButton aria-label="close" onClick={onCloseDrawer}>
+          <MIIconButton aria-label="close" onClick={onCloseDrawer}>
             <CloseRoundedIcon fontSize="medium" sx={{ color: 'action.active' }} />
-          </IconButton>
+          </MIIconButton>
         </Box>
         <form onSubmit={formik.handleSubmit}>
           <Box paddingX={4}>

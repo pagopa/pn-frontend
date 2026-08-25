@@ -12,7 +12,7 @@ const NotificationBadge: React.FC<Props> = ({ numberOfNotification }) => {
         width: '23px',
         height: '18px',
         borderRadius: '56px',
-        padding: '3px, 8px, 3px, 8px',
+        padding: '3px 8px',
         backgroundColor: theme.palette.primary.main,
         display: 'flex',
         justifyContent: 'center',

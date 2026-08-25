@@ -2,7 +2,7 @@ import { MouseEvent, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { MoreVertRounded } from '@mui/icons-material';
-import { Box, IconButton, Menu, MenuItem, Stack, Typography } from '@mui/material';
+import { Box, Menu, MenuItem, Stack, Typography } from '@mui/material';
 import {
   CustomTagGroup,
   CustomTooltip,
@@ -11,7 +11,7 @@ import {
   StatusTooltip,
   formatDate,
 } from '@pagopa-pn/pn-commons';
-import { CopyToClipboardButton, Tag } from '@pagopa/mui-italia';
+import { CopyToClipboardButton, MIIconButton, Tag } from '@pagopa/mui-italia';
 
 import { ApiKey, ApiKeyStatus, ModalApiKeyView } from '../../models/ApiKeys';
 import { getApiKeyStatusHistoryLines, getApiKeyStatusInfos } from '../../utility/apikeys.utility';
@@ -54,7 +54,7 @@ const ApiKeyContextMenu = ({
   return (
     <Box data-testid="contextMenu">
       <Box>
-        <IconButton
+        <MIIconButton
           onClick={handleClick}
           data-testid="contextMenuButton"
           aria-label={t('context-menu.title')}
@@ -63,7 +63,7 @@ const ApiKeyContextMenu = ({
           aria-expanded={open ? 'true' : undefined}
         >
           <MoreVertRounded />
-        </IconButton>
+        </MIIconButton>
       </Box>
       <Menu
         data-testid="menuContext"

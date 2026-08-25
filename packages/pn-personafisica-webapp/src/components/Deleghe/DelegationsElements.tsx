@@ -2,10 +2,10 @@ import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import MoreVertRounded from '@mui/icons-material/MoreVertRounded';
-import { Box, IconButton, Menu as MUIMenu, MenuItem, Typography } from '@mui/material';
+import { Box, Menu as MUIMenu, MenuItem, Typography } from '@mui/material';
 import { Variant } from '@mui/material/styles/createTypography';
-import { CustomTagGroup } from '@pagopa-pn/pn-commons';
-import { MIButton, Tag } from '@pagopa/mui-italia';
+import { CustomTagGroup, useIsMobile } from '@pagopa-pn/pn-commons';
+import { MIButton, MIIconButton, Tag } from '@pagopa/mui-italia';
 
 import { PFEventsType } from '../../models/PFEventsType';
 import { openAcceptModal, openRevocationModal } from '../../redux/delegation/reducers';
@@ -72,14 +72,13 @@ export const Menu = (props: any) => {
 
   return (
     <>
-      <IconButton
-        id={`delegation-menu-icon-${props.id}`}
+      <MIIconButton
         onClick={handleClick}
         data-testid="delegationMenuIcon"
         aria-label={t('deleghe.table.menu-aria-label')}
       >
         <MoreVertRounded fontSize={'small'} />
-      </IconButton>
+      </MIIconButton>
       <MUIMenu
         id={`delegation-menu-${props.id}`}
         anchorEl={anchorEl}
