@@ -417,16 +417,27 @@ const NotificationDetail: React.FC = () => {
 
   const properBreadcrumb = useMemo(() => {
     const backRoute = mandateId ? routes.GET_NOTIFICHE_DELEGATO_PATH(mandateId) : routes.NOTIFICHE;
+
+    const delegatorName = delegatorsFromStore.find(
+      (delegation) => delegation.mandateId === mandateId
+    )?.delegator?.displayName;
+
+    const breadcrumbLabel = delegatorName
+      ? t('menu.notifiche-delegato', { delegator: delegatorName })
+      : t('menu.notifiche-utente', { ns: 'common' });
+
     return (
       <PnBreadcrumb
         showBackAction={!rapidAccessSource}
         linkRoute={backRoute}
-        linkLabel={t('menu.notifiche')}
+        linkLabel={
+          mandateId || delegatorsFromStore.length > 0 ? breadcrumbLabel : t('menu.notifiche')
+        }
         currentLocationLabel={notification.subject ?? ''}
         goBackAction={() => navigate(backRoute)}
       />
     );
-  }, [rapidAccessSource, i18n.language, notification.subject]);
+  }, [rapidAccessSource, i18n.language, notification.subject, delegatorsFromStore, mandateId]);
 
   const cancelledAlert = isCancelledOrCancelling && (
     <MIAlert

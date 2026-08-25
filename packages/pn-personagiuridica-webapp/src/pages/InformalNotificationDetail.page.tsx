@@ -26,7 +26,7 @@ import LoadingPageWrapper from '../components/LoadingPageWrapper/LoadingPageWrap
 import type { BffFullInformalNotificationV1 } from '../generated-client/informal-notifications';
 import { PGEventsType } from '../models/PGEventsType';
 import * as routes from '../navigation/routes.const';
-import { useAppDispatch } from '../redux/hooks';
+import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { getReceivedNotificationPaymentUrl } from '../redux/notification/actions';
 import {
   INFORMAL_NOTIFICATION_ACTIONS,
@@ -35,6 +35,7 @@ import {
   getReceivedInformalNotificationPayment,
   getReceivedInformalNotificationPaymentInfo,
 } from '../redux/notification/informalActions';
+import { RootState } from '../redux/store';
 import { getConfiguration } from '../services/configuration.service';
 import PGEventStrategyFactory from '../utility/MixpanelUtils/PGEventStrategyFactory';
 
@@ -49,6 +50,8 @@ const InformalNotificationDetail: React.FC = () => {
 
   const [informalNotification, setInformalNotification] =
     React.useState<BffFullInformalNotificationV1>();
+  const currentOrganizationName = useAppSelector((state: RootState) => state.userState.user)
+    .organization.name;
 
   const [paymentsData, setPaymentsData] = React.useState<PaymentsData>({
     pagoPaF24: [],
@@ -152,19 +155,29 @@ const InformalNotificationDetail: React.FC = () => {
     ? (currentRecipient as any).message?.primaryMessage
     : undefined;
 
-  const properBreadcrumb = useMemo(() => {
-    const backRoute = routes.NOTIFICHE;
-
-    return (
+  const properBreadcrumb = useMemo(
+    () => (
       <PnBreadcrumb
         showBackAction
-        linkRoute={backRoute}
-        linkLabel={t('menu.notifiche')}
+        linkRoute={routes.NOTIFICHE}
+        linkLabel={
+          currentRecipient?.denomination
+            ? t('menu.notifiche-impresa', {
+                organization: currentOrganizationName ?? '',
+              })
+            : t('menu.notifiche')
+        }
         currentLocationLabel={primaryMessage?.subject ?? ''}
-        goBackAction={() => navigate(backRoute)}
+        goBackAction={() => navigate(routes.NOTIFICHE)}
       />
-    );
-  }, [i18n.language, primaryMessage?.subject]);
+    ),
+    [
+      i18n.language,
+      primaryMessage?.subject,
+      currentRecipient?.denomination,
+      currentOrganizationName,
+    ]
+  );
 
   const onPayClick = (noticeCode?: string, creditorTaxId?: string, amount?: number) => {
     if (noticeCode && creditorTaxId && amount && informalNotification?.senderDenomination) {

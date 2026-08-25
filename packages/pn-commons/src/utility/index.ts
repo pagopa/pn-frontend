@@ -43,6 +43,7 @@ export {
   today,
   twelveMonthsAgo,
 } from './date.utility';
+export { isMobileDevice } from './device.utility';
 export { waitForElement } from './dom.utility';
 export { APP_VERSION, IS_DEVELOP } from './environment.utility';
 export { calcUnit8Array } from './file.utility';
