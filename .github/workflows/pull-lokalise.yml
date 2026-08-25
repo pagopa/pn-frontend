@@ -14,6 +14,16 @@ on:
           - PF
           - PA
           - PG
+  # TODO: RIMUOVERE PRIMA DEL MERGE IN develop - serve solo per testare sul branch di
+  #       feature. 'workflow_dispatch' e' indirizzabile solo dalla copia del workflow
+  #       presente sul branch di default (develop), quindi da qui non e' lanciabile.
+  #       Il filtro su 'paths' fa scattare il run solo quando si tocca questo file,
+  #       non a ogni commit del branch.
+  push:
+    branches:
+      - feature/PN-19913
+    paths:
+      - '.github/workflows/pull-lokalise.yml'
 
 concurrency:
   group: lokalise-pull-${{ github.ref }}
@@ -35,8 +45,12 @@ jobs:
       fail-fast: false
       # Il context 'inputs' e' leggibile in 'strategy' (a differenza di 'env'),
       # quindi la matrix si costruisce qui senza un job di preparazione.
+      # TODO: RIPRISTINARE PRIMA DEL MERGE la forma senza fallback:
+      #       ${{ fromJson(inputs.app == 'all' && '["PFL","PF","PA","PG"]' || format('["{0}"]', inputs.app)) }}
+      #       Sul trigger 'push' il context 'inputs' e' vuoto, e senza fallback la matrix
+      #       diventerebbe [""]. PFL e' l'unica app con il secret del project id.
       matrix:
-        app: ${{ fromJson(inputs.app == 'all' && '["PFL","PF","PA","PG"]' || format('["{0}"]', inputs.app)) }}
+        app: ${{ fromJson((inputs.app || 'PFL') == 'all' && '["PFL","PF","PA","PG"]' || format('["{0}"]', inputs.app || 'PFL')) }}
     env:
       # I codici app sono anche il suffisso dei secret LOKALISE_PROJECT_ID_<CODICE>.
       PACKAGES: >-
