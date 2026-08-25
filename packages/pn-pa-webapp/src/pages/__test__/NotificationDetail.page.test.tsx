@@ -8,8 +8,6 @@ import {
   NotificationDetailOtherDocument,
   NotificationStatus,
   ResponseEventDispatcher,
-  formatToTimezoneString,
-  today,
 } from '@pagopa-pn/pn-commons';
 
 import { downtimesDTO } from '../../__mocks__/AppStatus.mock';
@@ -109,9 +107,8 @@ describe('NotificationDetail Page', () => {
     const groupDetail = within(notificationDetailsDrawer).getByText('detail.groups').parentElement;
     expect(groupDetail).toHaveTextContent(notificationDTO.group!);
 
-    const drawerRecipientDetail = within(notificationDetailsDrawer).getByText(
-      'detail.recipient'
-    ).parentElement;
+    const drawerRecipientDetail =
+      within(notificationDetailsDrawer).getByText('detail.recipient').parentElement;
 
     expect(drawerRecipientDetail).not.toBeNull();
     expect(drawerRecipientDetail).toHaveTextContent(
@@ -173,18 +170,18 @@ describe('NotificationDetail Page', () => {
     expect(result.queryByTestId('notificationDetailDocuments')).not.toBeInTheDocument();
   });
 
-  it('checks not immediately available aar (otherDocuments) - mono recipient', async () => {
-    const notificationAfter150Days = {
+  it('checks temporarily unavailable aar (otherDocuments) - mono recipient', async () => {
+    const notificationWithAvailableAar = {
       ...notificationDTO,
-      sentAt: formatToTimezoneString(new Date(today.getTime() - 12960000000)) /* 150 days ago*/,
+      aarDocumentAvailable: true,
     };
     mock
-      .onGet(`/bff/v1/notifications/sent/${notificationAfter150Days.iun}`)
-      .reply(200, notificationAfter150Days);
+      .onGet(`/bff/v1/notifications/sent/${notificationWithAvailableAar.iun}`)
+      .reply(200, notificationWithAvailableAar);
 
     const otherDocument: NotificationDetailOtherDocument = {
-      documentId: notificationAfter150Days.otherDocuments?.[0].documentId ?? '',
-      documentType: notificationAfter150Days.otherDocuments?.[0].documentType ?? '',
+      documentId: notificationWithAvailableAar.otherDocuments?.[0].documentId ?? '',
+      documentType: notificationWithAvailableAar.otherDocuments?.[0].documentType ?? '',
       digests: { sha256: '' },
       contentType: '',
       ref: {
@@ -195,7 +192,7 @@ describe('NotificationDetail Page', () => {
 
     mock
       .onGet(
-        `/bff/v1/notifications/sent/${notificationAfter150Days.iun}/documents/AAR?documentId=${otherDocument.documentId}`
+        `/bff/v1/notifications/sent/${notificationWithAvailableAar.iun}/documents/AAR?documentId=${otherDocument.documentId}`
       )
       .reply(200, {
         retryAfter: 1,
@@ -207,7 +204,7 @@ describe('NotificationDetail Page', () => {
           <NotificationDetail />
         </>,
         {
-          route: `/${notificationAfter150Days.iun}`,
+          route: `/${notificationWithAvailableAar.iun}`,
           path: '/:id',
         }
       );
@@ -226,7 +223,7 @@ describe('NotificationDetail Page', () => {
     // simulate that aar is now available
     mock
       .onGet(
-        `/bff/v1/notifications/sent/${notificationAfter150Days.iun}/documents/AAR?documentId=${otherDocument.documentId}`
+        `/bff/v1/notifications/sent/${notificationWithAvailableAar.iun}/documents/AAR?documentId=${otherDocument.documentId}`
       )
       .reply(200, {
         filename: 'mocked-filename',
@@ -238,7 +235,7 @@ describe('NotificationDetail Page', () => {
     await waitFor(() => {
       expect(mock.history.get).toHaveLength(4);
       expect(mock.history.get[3].url).toContain(
-        `/bff/v1/notifications/sent/${notificationAfter150Days.iun}/documents/AAR?documentId=${otherDocument.documentId}`
+        `/bff/v1/notifications/sent/${notificationWithAvailableAar.iun}/documents/AAR?documentId=${otherDocument.documentId}`
       );
     });
     await waitFor(() => {
@@ -246,14 +243,14 @@ describe('NotificationDetail Page', () => {
     });
   });
 
-  it('checks expired aar (otherDocuments) - mono recipient', async () => {
-    const notificationAfter10Years = {
+  it('checks unavailable aar (otherDocuments) - mono recipient', async () => {
+    const notificationWithUnavailableAar = {
       ...notificationDTO,
-      sentAt: formatToTimezoneString(new Date(today.getTime() - 31536000000100)) /* 10 years ago*/,
+      aarDocumentAvailable: false,
     };
     mock
       .onGet(`/bff/v1/notifications/sent/${notificationDTO.iun}`)
-      .reply(200, notificationAfter10Years);
+      .reply(200, notificationWithUnavailableAar);
 
     await act(async () => {
       result = render(<NotificationDetail />, {
@@ -503,7 +500,9 @@ describe('NotificationDetail Page', () => {
     expect(recipientItems).toHaveLength(notificationDTOMultiRecipient.recipients.length);
 
     notificationDTOMultiRecipient.recipients.forEach((recipient, index) => {
-      expect(recipientItems[index]).toHaveTextContent(`${recipient.denomination} - ${recipient.taxId}`);
+      expect(recipientItems[index]).toHaveTextContent(
+        `${recipient.denomination} - ${recipient.taxId}`
+      );
     });
     // check payment history box
     const paymentsTable = result.getByTestId('paymentInfoBox');

@@ -1147,6 +1147,7 @@ export const notificationDTOMultiRecipient: NotificationDetail = {
   iun: 'RTRD-UDGU-QTQY-202308-P-1',
   sentAt: '2023-08-25T09:33:58.709695008Z',
   documentsAvailable: true,
+  aarDocumentAvailable: true,
   notificationStatus: NotificationStatus.EFFECTIVE_DATE,
   notificationStatusHistory,
   timeline,

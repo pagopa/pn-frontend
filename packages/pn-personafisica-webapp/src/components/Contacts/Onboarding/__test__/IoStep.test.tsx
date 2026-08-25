@@ -55,11 +55,7 @@ describe('IoStep', () => {
   it('opens the App IO download page when the primary CTA is clicked in unavailable state', async () => {
     const props = createProps();
 
-    const {
-      APP_IO_SITE: appIoSite,
-      APP_IO_ANDROID: appIoAndroid,
-      APP_IO_IOS: appIoIos,
-    } = getConfiguration();
+    const { APP_IO_SITE: appIoSite, APP_IO_DOWNLOAD: appIoDownload } = getConfiguration();
 
     const { getByRole } = render(<IoStep {...props} />);
 
@@ -70,8 +66,7 @@ describe('IoStep', () => {
     expect(openAppIoDownloadPage).toHaveBeenCalledTimes(1);
     expect(openAppIoDownloadPage).toHaveBeenCalledWith({
       appIoSite,
-      appIoAndroid,
-      appIoIos,
+      appIoDownload,
     });
     expect(props.onChange).not.toHaveBeenCalled();
     expect(props.onContinue).not.toHaveBeenCalled();

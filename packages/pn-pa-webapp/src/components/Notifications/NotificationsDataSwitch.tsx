@@ -43,7 +43,7 @@ const NotificationsDataSwitch: React.FC<{
     return (
       <>
         {data.recipients.map((recipient) => (
-          <Typography key={recipient} variant="body2" fontWeight={600}>
+          <Typography key={recipient} variant="body2" fontWeight={isMobile ? 600 : 400}>
             {recipient}
           </Typography>
         ))}

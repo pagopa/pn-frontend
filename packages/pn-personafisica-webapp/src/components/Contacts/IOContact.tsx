@@ -42,7 +42,7 @@ const IOContact: React.FC = () => {
     addresses,
     legalAddresses,
   } = useAppSelector(contactsSelectors.selectAddresses);
-  const { APP_IO_SITE, APP_IO_ANDROID, APP_IO_IOS } = getConfiguration();
+  const { APP_IO_SITE, APP_IO_DOWNLOAD } = getConfiguration();
 
   const hasCourtesyAddresses =
     addresses.filter(
@@ -141,8 +141,7 @@ const IOContact: React.FC = () => {
   const handleDownload = () => {
     openAppIoDownloadPage({
       appIoSite: APP_IO_SITE,
-      appIoAndroid: APP_IO_ANDROID,
-      appIoIos: APP_IO_IOS,
+      appIoDownload: APP_IO_DOWNLOAD,
     });
   };
 

@@ -29,7 +29,6 @@ import {
   PnBreadcrumb,
   StatusHistoryParser,
   appStateActions,
-  dateIsLessThan10Years,
   downloadDocument,
   getPaymentCache,
   useErrors,
@@ -309,13 +308,13 @@ const NotificationDetail = () => {
         };
       }
       return {
-        key: dateIsLessThan10Years(notification.sentAt)
+        key: notification.aarDocumentAvailable
           ? 'detail.acts_files.downloadable_aar'
           : 'detail.acts_files.not_downloadable_aar',
         ns: 'notifiche',
       };
     },
-    [isCancelledOrCancelling, notification.documentsAvailable, notification.sentAt]
+    [isCancelledOrCancelling, notification.documentsAvailable, notification.aarDocumentAvailable]
   );
 
   const fetchReceivedNotification = useCallback(() => {
@@ -625,7 +624,7 @@ const NotificationDetail = () => {
                 documents={notification.otherDocuments ?? []}
                 clickHandler={documentDowloadHandler}
                 isCancelled={isCancelled.cancellationInTimeline}
-                isLessThan10Years={dateIsLessThan10Years(notification.sentAt)}
+                aarDocumentAvailable={notification.aarDocumentAvailable}
                 downloadFilesMessage={getDownloadFilesMessage('aar')}
               />
               <NotificationRelatedDowntimes
