@@ -1,7 +1,8 @@
 import MockAdapter from 'axios-mock-adapter';
 import { vi } from 'vitest';
 
-import { ThemeProvider, useTheme } from '@mui/material';
+import { ThemeProvider } from '@mui/material';
+import { themeNext } from '@pagopa/mui-italia';
 
 import App from '../App';
 import { currentStatusDTO } from '../__mocks__/AppStatus.mock';
@@ -20,9 +21,8 @@ vi.mock('../pages/Notifiche.page', () => ({ default: () => <div>Generic Page</di
 const unmockedFetch = global.fetch;
 
 const Component = () => {
-  const theme = useTheme();
   return (
-    <ThemeProvider theme={theme}>
+    <ThemeProvider theme={themeNext}>
       <App />
     </ThemeProvider>
   );
