@@ -263,7 +263,7 @@ const AbstractPaper = ({
                 selfcareCdnUrl={selfcareCdnUrl}
               />
               <Box>
-                <Typography variant="sidenav" color="text">
+                <Typography variant="sidenav" color="text" sx={{ wordBreak: 'break-word' }}>
                   {senderDenomination}
                 </Typography>
                 <Typography variant="body2" color="text.secondary">

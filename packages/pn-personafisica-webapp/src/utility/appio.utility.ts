@@ -1,17 +1,10 @@
-export const openAppIoDownloadPage = (params: {
-  appIoSite?: string;
-  appIoAndroid?: string;
-  appIoIos?: string;
-}) => {
-  const { appIoSite, appIoAndroid, appIoIos } = params;
+import { isMobileDevice } from '@pagopa-pn/pn-commons';
 
-  const androidPhone = /Android/i.test(navigator.userAgent);
-  const iosPhone = /iPhone|iPad|iPod/i.test(navigator.userAgent);
+export const openAppIoDownloadPage = (params: { appIoSite?: string; appIoDownload?: string }) => {
+  const { appIoSite, appIoDownload } = params;
 
-  if (androidPhone && appIoAndroid) {
-    window.location.assign(appIoAndroid);
-  } else if (iosPhone && appIoIos) {
-    window.location.assign(appIoIos);
+  if (isMobileDevice() && appIoDownload) {
+    window.location.assign(appIoDownload);
   } else if (appIoSite) {
     window.location.assign(appIoSite);
   }
