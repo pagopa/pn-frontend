@@ -33,7 +33,7 @@ export const MobileSentAtCell: React.FC<{
     <DataValue
       mode="truncate"
       slots={{ root: Typography }}
-      slotProps={{ root: { variant: 'body2' } }}
+      slotProps={{ root: { variant: 'body2', fontWeight: 600 } }}
     >
       {formatDate(date)}
     </DataValue>

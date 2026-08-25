@@ -157,6 +157,7 @@ const App = () => {
       const myNotifications = {
         label: t('menu.notifiche-utente'),
         route: routes.NOTIFICHE,
+        additionalRoutes: [routes.COMUNICAZIONE],
         dotNotification: hasNewNotifications,
       };
       const mappedDelegators = delegators.map((delegator) => ({
@@ -183,6 +184,7 @@ const App = () => {
       label: t('menu.notifiche'),
       icon: MailOutlineIcon,
       route: routes.NOTIFICHE,
+      additionalRoutes: [routes.COMUNICAZIONE],
       children: sideMenuDelegators,
       notSelectable: sideMenuDelegators && sideMenuDelegators.length > 0,
       dotNotification: hasNewNotifications,
