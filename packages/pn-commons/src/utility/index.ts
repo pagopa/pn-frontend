@@ -17,7 +17,6 @@ export {
   convertHoursToDays,
   DATE_FORMAT,
   dateIsDefined,
-  dateIsLessThan10Years,
   formatDate,
   formatDateTime,
   formatDay,

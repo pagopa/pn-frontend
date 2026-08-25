@@ -21,7 +21,6 @@ import {
   NotificationTimelineBox,
   PnBreadcrumb,
   appStateActions,
-  dateIsLessThan10Years,
   downloadDocument,
   useErrors,
   useIsCancelled,
@@ -203,14 +202,14 @@ const NotificationDetail: React.FC = () => {
         };
       } else {
         return {
-          key: dateIsLessThan10Years(notification.sentAt) // 10 years
+          key: notification.aarDocumentAvailable
             ? 'detail.download-aar-available'
             : 'detail.download-aar-expired',
           ns: 'notifiche',
         };
       }
     },
-    [notification.documentsAvailable]
+    [notification.documentsAvailable, notification.aarDocumentAvailable]
   );
 
   const fetchSentNotification = useCallback(() => {
@@ -480,7 +479,7 @@ const NotificationDetail: React.FC = () => {
                 documents={notification.otherDocuments ?? []}
                 clickHandler={documentDownloadHandler}
                 isCancelled={false}
-                isLessThan10Years={dateIsLessThan10Years(notification.sentAt)}
+                aarDocumentAvailable={notification.aarDocumentAvailable}
                 downloadFilesMessage={getDownloadFilesMessage('aar')}
               />
 

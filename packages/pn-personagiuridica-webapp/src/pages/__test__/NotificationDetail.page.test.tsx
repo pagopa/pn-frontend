@@ -575,7 +575,7 @@ describe('NotificationDetail Page', () => {
     mock.onGet(`/bff/v1/notifications/received/${notificationDTO.iun}`).reply(200, {
       ...notificationDTO,
       documentsAvailable: false,
-      sentAt: '2012-01-01T00:00:00Z',
+      aarDocumentAvailable: false,
     });
     mock.onPost(`/bff/v1/payments/info`, paymentInfoRequest).reply(200, paymentInfo);
     // we use regexp to not set the query parameters
