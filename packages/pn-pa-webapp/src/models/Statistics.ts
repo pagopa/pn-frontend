@@ -1,24 +1,27 @@
 import { NotificationStatus } from '@pagopa-pn/pn-commons';
+import { themeNext as theme } from '@pagopa/mui-italia';
 
-export enum GraphColors {
-  navy = '#0066CC', // blueItalia[500]
-  greyBlue = '#555C70', // grey[700]
-  lightBlue2 = '#C4DCF5', // blueItalia[100]
-  blue = '#0B3EE3', // blue[500]
-  gold = '#FFC824', // warning[500]
-  lightGrey = '#E8EBF1', // grey[100]
-  lightBlue = '#6BCFFB', // info[500]
-  lightGreen = '#6CC66A', // success[500]
-  darkGreen = '#427940', // success[700]
-  lightRed = '#FF6666', // error[400]
-  turquoise = '#61DCDF', // turquoise[300]
-  azure = '#00C5CA', // turquoise[500]
-  pink = '#FFD9D9', // error[100]
-  darkRed = '#A82929', // error[700]
-  lightYellow = '#FFF5DA', // warning[100]
-  goldenYellow = '#FFD56B', // warning[400]
-  oliveBrown = '#614C15', // warning[850]
-}
+export const GraphColors = {
+  navy: theme.colors.blueitalia[500],
+  greyBlue: theme.colors.neutral.grey[700],
+  lightBlue2: theme.colors.blueitalia[100],
+  blue: theme.colors.blue[500],
+  gold: theme.colors.warning[500],
+  lightGrey: theme.colors.neutral.grey[100],
+  lightBlue: theme.colors.info[500],
+  lightGreen: theme.colors.success[500],
+  darkGreen: theme.colors.success[700],
+  lightRed: theme.colors.error[400],
+  turquoise: theme.colors.turquoise[300],
+  azure: theme.colors.turquoise[500],
+  pink: theme.colors.error[100],
+  darkRed: theme.colors.error[700],
+  lightYellow: theme.colors.warning[100],
+  goldenYellow: theme.colors.warning[400],
+  oliveBrown: theme.colors.warning[850],
+} as const;
+
+export type GraphColors = (typeof GraphColors)[keyof typeof GraphColors];
 
 export enum CxType {
   PA = 'PA',
