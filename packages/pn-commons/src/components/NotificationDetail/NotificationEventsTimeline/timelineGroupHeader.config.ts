@@ -1,6 +1,6 @@
 import { ComponentType } from 'react';
 
-import { InfoOutlined, MailOutlined } from '@mui/icons-material';
+import { InfoOutlined, MailOutlineRounded } from '@mui/icons-material';
 import { SvgIconProps } from '@mui/material';
 
 import {
@@ -9,9 +9,9 @@ import {
 } from '../../../models/NotificationTimeline';
 import { getLocalizedOrDefaultLabel } from '../../../utility/localization.utility';
 import { isTimelineGroupStep } from '../../../utility/notificationTimeline.utility';
-import FirstLetterOutlined from '../../Icons/FirstLetterOutlined';
-import MobileOutlined from '../../Icons/MobileOutlined';
-import SecondLetterOutlined from '../../Icons/SecondLetterOutlined';
+import FirstLetterRounded from '../../Icons/FirstLetterRounded';
+import MobileRounded from '../../Icons/MobileRounded';
+import SecondLetterRounded from '../../Icons/SecondLetterRounded';
 import SendIcon from '../../Icons/SendIcon';
 
 type ChannelPresentation = {
@@ -22,19 +22,19 @@ type ChannelPresentation = {
 const CHANNEL_PRESENTATION: Record<string, ChannelPresentation> = {
   AR_REGISTERED_LETTER: {
     labelKey: 'detail.timeline.send-analog-domicile-ar-group-label',
-    icon: MailOutlined,
+    icon: MailOutlineRounded,
   },
   REGISTERED_LETTER_890: {
     labelKey: 'detail.timeline.send-analog-domicile-890-group-label',
-    icon: MailOutlined,
+    icon: MailOutlineRounded,
   },
   SIMPLE_REGISTERED_LETTER: {
     labelKey: 'detail.timeline.send-simple-registered-letter',
-    icon: MailOutlined,
+    icon: MailOutlineRounded,
   },
   PEC: {
     labelKey: 'detail.timeline.send-digital-domicile-PEC-group-label',
-    icon: MailOutlined,
+    icon: MailOutlineRounded,
   },
   SERCQ: {
     labelKey: 'detail.timeline.send-digital-domicile-SERCQ-SEND-group-label',
@@ -42,7 +42,7 @@ const CHANNEL_PRESENTATION: Record<string, ChannelPresentation> = {
   },
   COURTESY: {
     labelKey: 'detail.timeline.courtesy-group-label',
-    icon: MobileOutlined,
+    icon: MobileRounded,
   },
 };
 
@@ -50,21 +50,21 @@ const CHANNEL_ATTEMPT_PRESENTATION: Record<string, Record<number, ChannelPresent
   AR_REGISTERED_LETTER: {
     1: {
       labelKey: 'detail.timeline.send-analog-domicile-ar-first-attempt-group-label',
-      icon: FirstLetterOutlined,
+      icon: FirstLetterRounded,
     },
     2: {
       labelKey: 'detail.timeline.send-analog-domicile-ar-second-attempt-group-label',
-      icon: SecondLetterOutlined,
+      icon: SecondLetterRounded,
     },
   },
   REGISTERED_LETTER_890: {
     1: {
       labelKey: 'detail.timeline.send-analog-domicile-890-first-attempt-group-label',
-      icon: FirstLetterOutlined,
+      icon: FirstLetterRounded,
     },
     2: {
       labelKey: 'detail.timeline.send-analog-domicile-890-second-attempt-group-label',
-      icon: SecondLetterOutlined,
+      icon: SecondLetterRounded,
     },
   },
 };
