@@ -192,13 +192,13 @@ const DigitalContact = forwardRef<{ toggleEdit: () => void }, Props>(
               {...semanticTextFieldProps}
             />
             <MIButton
+              {...slotsProps?.button}
               id={`${senderId}_${contactType}-button`}
               variant="contained"
               fullWidth={isMobile}
               type="submit"
               data-testid={`${senderId}_${contactType}-button`}
               sx={{ height: '43px', flexBasis: { xs: 'unset', lg: '16.67%' } }}
-              {...slotsProps?.button}
             >
               {insertButtonLabel}
             </MIButton>
