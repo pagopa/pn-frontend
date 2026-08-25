@@ -44,7 +44,7 @@ const IoStep: React.FC<Props> = ({ value, selectedOnboardingFlow, onChange, onCo
   const { t } = useTranslation(['recapiti', 'common']);
   const isMobile = useIsMobile();
   const dispatch = useAppDispatch();
-  const { APP_IO_SITE, APP_IO_ANDROID, APP_IO_IOS } = getConfiguration();
+  const { APP_IO_SITE, APP_IO_DOWNLOAD } = getConfiguration();
 
   const getStatus = (): IOContactStatus => {
     if (value === IOAllowedValues.ENABLED) {
@@ -134,8 +134,7 @@ const IoStep: React.FC<Props> = ({ value, selectedOnboardingFlow, onChange, onCo
         });
         openAppIoDownloadPage({
           appIoSite: APP_IO_SITE,
-          appIoAndroid: APP_IO_ANDROID,
-          appIoIos: APP_IO_IOS,
+          appIoDownload: APP_IO_DOWNLOAD,
         });
         break;
     }
