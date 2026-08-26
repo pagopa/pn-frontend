@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 
 import FileDownloadRoundedIcon from '@mui/icons-material/FileDownloadRounded';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
-import { Box, Grid, Paper, Stack, Typography } from '@mui/material';
+import { Box, Grid, Paper, Stack, Typography, useTheme } from '@mui/material';
 import {
   ApiErrorWrapper,
   CustomTooltip,
@@ -27,7 +27,7 @@ import FiledNotificationsStatistics from '../components/Statistics/FiledNotifica
 import FilterStatistics from '../components/Statistics/FilterStatistics';
 import LastStateStatistics from '../components/Statistics/LastStateStatistics';
 import { PAEventsType } from '../models/PAEventsType';
-import { CxType, GraphColors, StatisticsDataTypes } from '../models/Statistics';
+import { CxType, StatisticsDataTypes, getGraphColors } from '../models/Statistics';
 import { authSelectors } from '../redux/auth/reducers';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { STATISTICS_ACTIONS, getStatistics } from '../redux/statistics/actions';
@@ -41,14 +41,14 @@ const filter = (node: HTMLElement) => {
   return !exclusionClasses.some((classname) => node.classList?.contains(classname));
 };
 
-const handleDownloadJpeg = (elem: HTMLDivElement | null) => {
+const handleDownloadJpeg = (elem: HTMLDivElement | null, backgroundColor: string) => {
   if (!elem) {
     return;
   }
   screenshot
     .toJpeg(elem, {
       quality: 0.95,
-      backgroundColor: GraphColors.lightGrey,
+      backgroundColor,
       filter,
     })
     .then((dataUrl) => {
@@ -64,6 +64,8 @@ const handleDownloadJpeg = (elem: HTMLDivElement | null) => {
 
 const Statistics = () => {
   const exportJpgNode = useRef<HTMLDivElement>(null);
+  const theme = useTheme();
+  const graphColors = getGraphColors(theme);
   const dispatch = useAppDispatch();
   const { t } = useTranslation(['statistics']);
   const statisticsData = useAppSelector((state: RootState) => state.statisticsState.statistics);
@@ -93,7 +95,7 @@ const Statistics = () => {
     <Stack direction={'row'} display="flex" justifyContent="space-between" alignItems="center">
       <Typography>{t('subtitle', { organization: loggedUserOrganizationParty?.name })}</Typography>
       <MIButton
-        onClick={() => handleDownloadJpeg(exportJpgNode.current)}
+        onClick={() => handleDownloadJpeg(exportJpgNode.current, graphColors.lightGrey)}
         variant="outlined"
         endIcon={<FileDownloadRoundedIcon />}
         sx={{ whiteSpace: 'nowrap' }}
@@ -139,7 +141,7 @@ const Statistics = () => {
               subTitle={Subtitle}
               variantSubTitle="subtitle1"
             />
-            <Typography variant="caption" sx={{ color: GraphColors.greyBlue }}>
+            <Typography variant="caption" sx={{ color: graphColors.greyBlue }}>
               {getLastUpdateText()}
             </Typography>
             {statisticsMaintenanceDates &&
