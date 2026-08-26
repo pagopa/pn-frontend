@@ -329,7 +329,7 @@ describe('NotificationDetail Page', () => {
     });
   });
 
-  it('clicks on the back button - mono recipient', async () => {
+  it('clicks on the root button - mono recipient', async () => {
     // Seed history to verify that the back action uses the previous location.
     mock.onGet(`/bff/v1/notifications/sent/${notificationDTO.iun}`).reply(200, notificationDTO);
     mock.onGet(/\/bff\/v1\/downtime\/history.*/).reply(200, downtimesDTO);
@@ -346,20 +346,14 @@ describe('NotificationDetail Page', () => {
       );
     });
 
-    // before pressing "back" button - mocked page not present
+    // before pressing "root" button - mocked page not present
     const mockedPageBefore = result.queryByTestId('mocked-page');
     expect(mockedPageBefore).not.toBeInTheDocument();
 
-    // simulate press of "back" button
-    const backButton = result.getByRole('button', { name: /indietro/i });
+    // simulate press of "root" button
+    const backButton = result.getByRole('link', { name: /detail.breadcrumb-root/i });
     expect(backButton).toBeInTheDocument();
-    fireEvent.click(backButton);
-
-    // after pressing "back" button - mocked page present
-    await waitFor(() => {
-      const mockedPageAfter = result.queryByTestId('mocked-page');
-      expect(mockedPageAfter).toBeInTheDocument();
-    });
+    expect(backButton).toHaveAttribute('href', '/dashboard');
   });
 
   it('errors on api call - mono recipient', async () => {
