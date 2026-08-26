@@ -168,4 +168,55 @@ describe('Mixpanel - Notification detail Strategy', () => {
       notification_type: EventNotificationTypes.INFORMAL,
     });
   });
+
+  it('should return informal notification payment properties', () => {
+    const strategy = new SendNotificationDetailStrategy();
+
+    const notificationData = {
+      downtimeEvents: [],
+      mandateId: undefined,
+      notificationStatus: NotificationStatus.VIEWED,
+      checkIfUserHasPayments: false,
+      paymentCount: 2,
+      source: undefined,
+      timeline: [],
+      flow: 'digital' as EventDeliveryFlowType,
+      delivery_mode: 'async' as EventDeliveryModeType,
+      notification_type: EventNotificationTypes.INFORMAL,
+    };
+
+    const notificationDetailEvent = strategy.performComputations(notificationData);
+
+    expect(notificationDetailEvent[EventPropertyType.TRACK]).toMatchObject({
+      contains_payment: true,
+      contains_multipayment: 'yes',
+      count_payment: 2,
+      contains_f24: 'no',
+    });
+  });
+  it('should return no payment properties for informal notification without payments', () => {
+    const strategy = new SendNotificationDetailStrategy();
+
+    const notificationData = {
+      downtimeEvents: [],
+      mandateId: undefined,
+      notificationStatus: NotificationStatus.VIEWED,
+      checkIfUserHasPayments: true,
+      paymentCount: 0,
+      source: undefined,
+      timeline: [],
+      flow: 'digital' as EventDeliveryFlowType,
+      delivery_mode: 'async' as EventDeliveryModeType,
+      notification_type: EventNotificationTypes.INFORMAL,
+    };
+
+    const notificationDetailEvent = strategy.performComputations(notificationData);
+
+    expect(notificationDetailEvent[EventPropertyType.TRACK]).toMatchObject({
+      contains_payment: false,
+      contains_multipayment: 'no',
+      count_payment: 0,
+      contains_f24: 'no',
+    });
+  });
 });

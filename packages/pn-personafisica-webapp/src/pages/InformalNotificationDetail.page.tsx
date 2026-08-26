@@ -85,7 +85,8 @@ const InformalNotificationDetail: React.FC = () => {
   const delegatorsFromStore = useAppSelector(
     (state: RootState) => state.generalInfoState.delegators
   );
-  const hasPayments = (currentRecipient?.payments?.length ?? 0) > 0;
+  const paymentCount = currentRecipient?.payments?.length ?? 0;
+  const hasPayments = paymentCount > 0;
 
   const hasInformalReceivedApiError = hasApiErrors(
     INFORMAL_NOTIFICATION_ACTIONS.GET_RECEIVED_INFORMAL_NOTIFICATION
@@ -164,20 +165,28 @@ const InformalNotificationDetail: React.FC = () => {
 
   // TODO in legali ci sono le proprietà downtimesReady isUserForbidden vanno messe anche per le bonarie??
   useEffect(() => {
-    if (pageReady) {
-      PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_NOTIFICATION_DETAIL, {
-        downtimeEvents: [], // TODO al momento non abbiamo i downtime,
-        notificationStatus: informalNotification?.notificationStatus,
-        checkIfUserHasPayments: hasPayments,
-        userPayments: currentRecipient?.payments,
-        source: 'LISTA_NOTIFICHE',
-        timeline: informalNotification?.timeline,
-        flow: 'not_set',
-        delivery_mode: 'not_set',
-        notification_type: EventNotificationTypes.INFORMAL,
-      });
+    if (!pageReady || hasInformalReceivedApiError || !informalNotification) {
+      return;
     }
-  }, [pageReady]);
+    PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_NOTIFICATION_DETAIL, {
+      downtimeEvents: [], // TODO al momento non abbiamo i downtime,
+      notificationStatus: informalNotification?.notificationStatus,
+      checkIfUserHasPayments: hasPayments,
+      paymentCount,
+      source: 'LISTA_NOTIFICHE',
+      timeline: informalNotification?.timeline,
+      flow: 'not_set',
+      delivery_mode: 'not_set',
+      notification_type: EventNotificationTypes.INFORMAL,
+    });
+  }, [
+    pageReady,
+    hasInformalReceivedApiError,
+    informalNotification?.iun,
+    informalNotification?.notificationStatus,
+    informalNotification?.timeline,
+    paymentCount,
+  ]);
 
   const primaryMessage = currentRecipient
     ? (currentRecipient as any).message?.primaryMessage

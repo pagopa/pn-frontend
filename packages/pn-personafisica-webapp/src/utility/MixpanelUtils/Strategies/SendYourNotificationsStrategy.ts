@@ -3,6 +3,7 @@ import {
   EventCategory,
   EventPropertyType,
   EventStrategy,
+  InformalNotificationStatus,
   NotificationStatus,
   RecipientNotification,
   TrackedEvent,
@@ -99,13 +100,15 @@ export class SendYourNotificationsStrategy implements EventStrategy {
         ).length,
         total_combo_count: comboNotifications.length,
         delivered_combo_count: comboNotifications.filter(
-          (notification) => notification.notificationStatus === NotificationStatus.DELIVERED
+          (notification) => notification.communicationOutcomes?.delivered
         ).length,
         opened_combo_count: comboNotifications.filter(
-          (notification) => notification.notificationStatus === NotificationStatus.VIEWED
+          (notification) => notification.communicationOutcomes?.viewed
         ).length,
+
         not_found_combo_count: comboNotifications.filter(
-          (notification) => notification.notificationStatus === NotificationStatus.UNREACHABLE
+          (notification) =>
+            notification.notificationStatus === InformalNotificationStatus.COMPLETED_UNREACHED
         ).length,
         ...getOnboardingNotificationsPayload(),
       },
