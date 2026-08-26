@@ -49,6 +49,17 @@ function validateDate(startDate: Date | undefined, endDate: Date | undefined) {
   return isBefore(startDate, endDate) || isEqualDate(startDate, endDate);
 }
 
+// TODO: confirm Mixpanel filter taxonomy and separator with CX.
+// The tracking value must contain only active filter types, never user-entered values.
+const getTrackingFilter = (values: FormikValues): string =>
+  [
+    values.communicationType ? 'communicationType' : undefined,
+    values.iunMatch ? 'iun' : undefined,
+    values.startDate || values.endDate ? 'date' : undefined,
+  ]
+    .filter(Boolean)
+    .join('-');
+
 const initialEmptyValues = {
   startDate: undefined,
   endDate: undefined,
@@ -152,11 +163,6 @@ const FilterNotifications = forwardRef(({ showFilters, currentDelegator }: Props
     validationSchema,
     /** onSubmit populates filters */
     onSubmit: (values) => {
-      PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_NOTIFICATION_SEARCH, {
-        filter: filters,
-        delegate: currentDelegator != null,
-      });
-
       const currentFilters = {
         startDate: values.startDate,
         endDate: values.endDate,
@@ -164,6 +170,12 @@ const FilterNotifications = forwardRef(({ showFilters, currentDelegator }: Props
         iunMatch: values.iunMatch,
         mandateId: currentDelegator?.mandateId,
       };
+
+      PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_NOTIFICATION_SEARCH, {
+        filter: getTrackingFilter(values),
+        delegate: currentDelegator != null,
+      });
+
       if (isEqual(prevFilters, currentFilters)) {
         return;
       }

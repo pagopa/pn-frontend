@@ -168,8 +168,8 @@ const InformalNotificationDetail: React.FC = () => {
       PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_NOTIFICATION_DETAIL, {
         downtimeEvents: [], // TODO al momento non abbiamo i downtime,
         notificationStatus: informalNotification?.notificationStatus,
-        hasUserPayments: hasPayments,
-        userPayments: paymentsData,
+        checkIfUserHasPayments: hasPayments,
+        userPayments: currentRecipient?.payments,
         source: 'LISTA_NOTIFICHE',
         timeline: informalNotification?.timeline,
         flow: 'not_set',
@@ -278,6 +278,10 @@ const InformalNotificationDetail: React.FC = () => {
     });
   };
 
+  const trackEventPaymentRecipient = (event: EventPaymentRecipientType, param?: object) => {
+    PFEventStrategyFactory.triggerEvent(PFEventsType[event], param);
+  };
+
   return (
     <LoadingPageWrapper isInitialized={pageReady}>
       {hasInformalReceivedApiError && (
@@ -334,6 +338,7 @@ const InformalNotificationDetail: React.FC = () => {
                     handleFetchPaymentsInfo={reloadPaymentsInfo}
                     getPaymentAttachmentAction={getPaymentAttachmentAction}
                     notificationType={EventNotificationTypes.INFORMAL}
+                    handleTrackEvent={trackEventPaymentRecipient}
                   />
                 </MIPaper>
               )}

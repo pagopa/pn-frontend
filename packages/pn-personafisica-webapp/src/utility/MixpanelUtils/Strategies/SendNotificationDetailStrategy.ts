@@ -33,10 +33,20 @@ type NotificationData = {
   userPayments: { pagoPaF24: Array<PaymentDetails>; f24Only: Array<F24PaymentDetails> };
   source: AppRouteParams | undefined;
   timeline: Array<INotificationDetailTimeline>;
-  notificationStatusHistory: Array<NotificationStatusHistory>;
+  notificationStatusHistory?: Array<NotificationStatusHistory>;
   flow: EventDeliveryFlowType;
   delivery_mode: EventDeliveryModeType;
   notification_type: EventNotificationType;
+};
+
+const getInformalElapsedTime = (timeline: Array<INotificationDetailTimeline>): number => {
+  const deliveredEvent = timeline.find((event) => event.category === TimelineCategory.DELIVERED);
+
+  const viewedEvent = timeline.find(
+    (event) => event.category === TimelineCategory.INFORMAL_NOTIFICATION_VIEWED
+  );
+
+  return getElapsedTime(deliveredEvent?.eventTimestamp, viewedEvent?.eventTimestamp);
 };
 
 export class SendNotificationDetailStrategy implements EventStrategy {
@@ -69,18 +79,19 @@ export class SendNotificationDetailStrategy implements EventStrategy {
       userPayments.f24Only.length > 0 ||
       userPayments.pagoPaF24.filter((payment) => payment.f24).length > 0;
 
-    const viewedEvent = notificationStatusHistory.find(
+    const viewedEvent = notificationStatusHistory?.find(
       (el) => el.status === NotificationStatus.VIEWED
     );
 
-    const deliveredEvent = notificationStatusHistory.find(
+    const deliveredEvent = notificationStatusHistory?.find(
       (el) => el.status === NotificationStatus.DELIVERED
     );
 
-    const viewedTimelineCategory =
-      notification_type === EventNotificationTypes.INFORMAL
-        ? TimelineCategory.INFORMAL_NOTIFICATION_VIEWED
-        : TimelineCategory.NOTIFICATION_VIEWED;
+    const isInformalNotification = notification_type === EventNotificationTypes.INFORMAL;
+
+    const viewedTimelineCategory = isInformalNotification
+      ? TimelineCategory.INFORMAL_NOTIFICATION_VIEWED
+      : TimelineCategory.NOTIFICATION_VIEWED;
 
     return {
       [EventPropertyType.TRACK]: {
@@ -97,7 +108,9 @@ export class SendNotificationDetailStrategy implements EventStrategy {
         first_time_opening:
           timeline.findIndex((el) => el.category === viewedTimelineCategory) === -1,
         source: appRouteParamToEventSource(source) || 'LISTA_NOTIFICHE',
-        elapsed_time: getElapsedTime(deliveredEvent?.activeFrom, viewedEvent?.activeFrom),
+        elapsed_time: isInformalNotification
+          ? getInformalElapsedTime(timeline)
+          : getElapsedTime(deliveredEvent?.activeFrom, viewedEvent?.activeFrom),
         flow,
         delivery_mode,
         notification_type,

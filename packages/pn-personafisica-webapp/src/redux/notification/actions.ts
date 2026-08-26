@@ -1,5 +1,6 @@
 import {
   DowntimeLogHistory,
+  EventNotificationType,
   EventNotificationTypes,
   ExtRegistriesPaymentDetails,
   GetDowntimeHistoryParams,
@@ -153,7 +154,7 @@ export const getReceivedNotificationPaymentInfo = createAsyncThunk<
     params: {
       taxId: string;
       paymentInfoRequest: Array<{ noticeCode: string; creditorTaxId: string }>;
-      notification_type?: string;
+      notification_type?: EventNotificationType;
     },
     { rejectWithValue, getState, signal }
   ) => {
