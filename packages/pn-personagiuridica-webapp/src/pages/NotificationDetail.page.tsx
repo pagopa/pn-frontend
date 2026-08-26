@@ -26,7 +26,6 @@ import {
   PagoPaIntegrationMode,
   PaymentAttachmentSName,
   PaymentDetails,
-  PnBreadcrumb,
   StatusHistoryParser,
   appStateActions,
   downloadDocument,
@@ -35,7 +34,7 @@ import {
   useHasPermissions,
   useIsCancelled,
 } from '@pagopa-pn/pn-commons';
-import { MIAlert, MIPaper } from '@pagopa/mui-italia';
+import { MIAlert, MIBreadcrumbItem, MIBreadcrumbs, MIPaper } from '@pagopa/mui-italia';
 
 import DomicileBanner from '../components/DomicileBanner/DomicileBanner';
 import LoadingPageWrapper from '../components/LoadingPageWrapper/LoadingPageWrapper';
@@ -438,13 +437,13 @@ const NotificationDetail = () => {
       : t('menu.notifiche-impresa', { organization: organization?.name });
 
     return (
-      <PnBreadcrumb
-        showBackAction={!fromQrCode}
-        linkRoute={backRoute}
-        linkLabel={breadcrumbLabel}
-        currentLocationLabel={notification.subject ?? ''}
-        goBackAction={() => navigate(backRoute)}
-      />
+      <MIBreadcrumbs>
+        <MIBreadcrumbItem label={breadcrumbLabel} href={backRoute} />
+        <MIBreadcrumbItem
+          label={notification.subject ?? t('menu.fallback-communication', { ns: 'notifiche' })}
+          current
+        />
+      </MIBreadcrumbs>
     );
   }, [fromQrCode, i18n.language, notification.subject, mandateId, organization?.name]);
 

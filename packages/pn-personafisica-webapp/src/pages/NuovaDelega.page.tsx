@@ -5,7 +5,6 @@ import { useNavigate } from 'react-router-dom';
 import * as yup from 'yup';
 
 import AccountBalanceIcon from '@mui/icons-material/AccountBalance';
-import PeopleIcon from '@mui/icons-material/People';
 import {
   Box,
   Button,
@@ -26,7 +25,6 @@ import {
   DATE_FORMAT,
   DatePickerTypes,
   EventCreatedDelegationType,
-  PnBreadcrumb,
   RecipientType,
   TitleBox,
   dataRegex,
@@ -35,7 +33,7 @@ import {
   useIsMobile,
   useSearchStringChangeInput,
 } from '@pagopa-pn/pn-commons';
-import { Autocomplete, IllusCompleted } from '@pagopa/mui-italia';
+import { Autocomplete, IllusCompleted, MIBreadcrumbItem, MIBreadcrumbs } from '@pagopa/mui-italia';
 
 import VerificationCodeComponent from '../components/Deleghe/VerificationCodeComponent';
 import LoadingPageWrapper from '../components/LoadingPageWrapper/LoadingPageWrapper';
@@ -220,24 +218,12 @@ const NuovaDelega = () => {
 
   const getOptionLabel = (option: Party) => option.name || '';
 
-  const handleGoBackAction = () => {
-    PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ADD_MANDATE_BACK);
-    navigate(routes.DELEGHE);
-  };
-
   const breadcrumbs = (
     <Fragment>
-      <PnBreadcrumb
-        goBackAction={handleGoBackAction}
-        linkRoute={routes.DELEGHE}
-        linkLabel={
-          <Fragment>
-            <PeopleIcon sx={{ mr: 0.5 }} />
-            {t('nuovaDelega.title')}
-          </Fragment>
-        }
-        currentLocationLabel={t('nuovaDelega.breadcrumb')}
-      />
+      <MIBreadcrumbs>
+        <MIBreadcrumbItem label={t('nuovaDelega.title')} href={routes.DELEGHE} />
+        <MIBreadcrumbItem label={t('nuovaDelega.breadcrumb')} current />
+      </MIBreadcrumbs>
       <TitleBox
         title={t('nuovaDelega.title')}
         subTitle={t('nuovaDelega.subtitle')}

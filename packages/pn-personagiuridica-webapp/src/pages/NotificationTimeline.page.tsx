@@ -3,7 +3,7 @@
 /* eslint-disable complexity */
 import { Fragment, useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 
 import { Box, Stack, Typography } from '@mui/material';
 import {
@@ -12,13 +12,12 @@ import {
   LegalFactType,
   NotificationDetailTimeline,
   NotificationDocumentType,
-  PnBreadcrumb,
   appStateActions,
   downloadDocument,
   useErrors,
   useIsCancelled,
 } from '@pagopa-pn/pn-commons';
-import { MIAlert, MIPaper } from '@pagopa/mui-italia';
+import { MIAlert, MIBreadcrumbItem, MIBreadcrumbs, MIPaper } from '@pagopa/mui-italia';
 
 import LoadingPageWrapper from '../components/LoadingPageWrapper/LoadingPageWrapper';
 import { PGEventsType } from '../models/PGEventsType';
@@ -48,7 +47,6 @@ const NotificationTimeline: React.FC = () => {
   const { NOTIFICATION_CANCELLED_HELP_LINK } = getConfiguration();
   const { hasApiErrors } = useErrors();
   const [pageReady, setPageReady] = useState(false);
-  const navigate = useNavigate();
 
   const notification = useAppSelector((state: RootState) => state.notificationState.notification);
 
@@ -139,17 +137,18 @@ const NotificationTimeline: React.FC = () => {
     if (!id) {
       return null;
     }
-    const backRoute = mandateId
-      ? routes.GET_DETTAGLIO_NOTIFICA_DELEGATO_PATH(id, mandateId)
-      : routes.GET_DETTAGLIO_NOTIFICA_PATH(id);
 
     return (
-      <PnBreadcrumb
-        linkRoute={mandateId ? routes.NOTIFICHE_DELEGATO : routes.NOTIFICHE}
-        linkLabel={t('menu.notifiche')}
-        currentLocationLabel={notification.subject ?? ''}
-        goBackAction={() => navigate(backRoute)}
-      />
+      <MIBreadcrumbs>
+        <MIBreadcrumbItem
+          label={t('menu.notifiche', { ns: 'notifiche' })}
+          href={mandateId ? routes.NOTIFICHE_DELEGATO : routes.NOTIFICHE}
+        />
+        <MIBreadcrumbItem
+          label={notification.subject ?? t('menu.fallback-communication', { ns: 'notifiche' })}
+          current
+        />
+      </MIBreadcrumbs>
     );
   }, [i18n.language, notification.subject]);
 

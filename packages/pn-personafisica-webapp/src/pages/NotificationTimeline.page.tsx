@@ -15,14 +15,13 @@ import {
   LegalFactType,
   NotificationDetailTimeline,
   NotificationDocumentType,
-  PnBreadcrumb,
   appStateActions,
   downloadDocument,
   useErrors,
   useIsCancelled,
 } from '@pagopa-pn/pn-commons';
 import { useDismissToastOnError } from '@pagopa-pn/pn-commons/src/hooks/useDismissToastOnError';
-import { MIAlert, MIPaper } from '@pagopa/mui-italia';
+import { MIAlert, MIBreadcrumbItem, MIBreadcrumbs, MIPaper } from '@pagopa/mui-italia';
 
 import NotificationDetailOnboardingPrompt from '../components/Contacts/Onboarding/NotificationDetailOnboardingPrompt';
 import LoadingPageWrapper from '../components/LoadingPageWrapper/LoadingPageWrapper';
@@ -173,17 +172,18 @@ const NotificationTimeline: React.FC = () => {
     if (!id) {
       return null;
     }
-    const backRoute = mandateId
-      ? routes.GET_DETTAGLIO_NOTIFICA_DELEGATO_PATH(id, mandateId)
-      : routes.GET_DETTAGLIO_NOTIFICA_PATH(id);
 
     return (
-      <PnBreadcrumb
-        linkRoute={mandateId ? routes.GET_NOTIFICHE_DELEGATO_PATH(mandateId) : routes.NOTIFICHE}
-        linkLabel={t('menu.notifiche')}
-        currentLocationLabel={notification.subject ?? ''}
-        goBackAction={() => navigate(backRoute)}
-      />
+      <MIBreadcrumbs>
+        <MIBreadcrumbItem
+          label={t('menu.notifiche')}
+          href={mandateId ? routes.GET_NOTIFICHE_DELEGATO_PATH(mandateId) : routes.NOTIFICHE}
+        />
+        <MIBreadcrumbItem
+          label={notification.subject ?? t('menu.fallback-notification', { ns: 'notifiche' })}
+          current
+        />
+      </MIBreadcrumbs>
     );
   }, [i18n.language, notification.subject]);
 

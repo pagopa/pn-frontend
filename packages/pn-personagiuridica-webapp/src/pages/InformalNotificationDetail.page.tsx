@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 
 import { Box, Stack } from '@mui/material';
 import {
@@ -14,13 +14,12 @@ import {
   NotificationPaymentRecipient,
   PaymentAttachmentSName,
   PaymentsData,
-  PnBreadcrumb,
   PnSenderContacts,
   appStateActions,
   downloadDocument,
   useErrors,
 } from '@pagopa-pn/pn-commons';
-import { MIPaper } from '@pagopa/mui-italia';
+import { MIBreadcrumbItem, MIBreadcrumbs, MIPaper } from '@pagopa/mui-italia';
 
 import LoadingPageWrapper from '../components/LoadingPageWrapper/LoadingPageWrapper';
 import type { BffFullInformalNotificationV1 } from '../generated-client/informal-notifications';
@@ -45,7 +44,6 @@ const InformalNotificationDetail: React.FC = () => {
   const dispatch = useAppDispatch();
   const [pageReady, setPageReady] = useState(false);
   const { hasApiErrors } = useErrors();
-  const navigate = useNavigate();
   const { SELFCARE_CDN_URL } = getConfiguration();
 
   const [informalNotification, setInformalNotification] =
@@ -157,19 +155,22 @@ const InformalNotificationDetail: React.FC = () => {
 
   const properBreadcrumb = useMemo(
     () => (
-      <PnBreadcrumb
-        showBackAction
-        linkRoute={routes.NOTIFICHE}
-        linkLabel={
-          currentRecipient?.denomination
-            ? t('menu.notifiche-impresa', {
-                organization: currentOrganizationName ?? '',
-              })
-            : t('menu.notifiche')
-        }
-        currentLocationLabel={primaryMessage?.subject ?? ''}
-        goBackAction={() => navigate(routes.NOTIFICHE)}
-      />
+      <MIBreadcrumbs>
+        <MIBreadcrumbItem
+          label={
+            currentRecipient?.denomination
+              ? t('menu.notifiche-impresa', {
+                  organization: currentOrganizationName ?? '',
+                })
+              : t('menu.notifiche')
+          }
+          href={routes.NOTIFICHE}
+        />
+        <MIBreadcrumbItem
+          label={primaryMessage?.subject ?? t('menu.fallback-communication', { ns: 'notifiche' })}
+          current
+        />
+      </MIBreadcrumbs>
     ),
     [
       i18n.language,

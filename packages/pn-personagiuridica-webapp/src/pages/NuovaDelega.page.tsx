@@ -5,7 +5,6 @@ import { useNavigate } from 'react-router-dom';
 import * as yup from 'yup';
 
 import AccountBalanceIcon from '@mui/icons-material/AccountBalance';
-import PeopleIcon from '@mui/icons-material/People';
 import {
   Box,
   Button,
@@ -25,7 +24,6 @@ import {
   CustomDatePicker,
   DATE_FORMAT,
   DatePickerTypes,
-  PnBreadcrumb,
   RecipientType,
   TitleBox,
   dataRegex,
@@ -34,7 +32,7 @@ import {
   useIsMobile,
   useSearchStringChangeInput,
 } from '@pagopa-pn/pn-commons';
-import { Autocomplete, IllusCompleted } from '@pagopa/mui-italia';
+import { Autocomplete, IllusCompleted, MIBreadcrumbItem, MIBreadcrumbs } from '@pagopa/mui-italia';
 
 import VerificationCodeComponent from '../components/Deleghe/VerificationCodeComponent';
 import LoadingPageWrapper from '../components/LoadingPageWrapper/LoadingPageWrapper';
@@ -210,16 +208,10 @@ const NuovaDelega = () => {
 
   const breadcrumbs = (
     <>
-      <PnBreadcrumb
-        linkRoute={routes.DELEGATI}
-        linkLabel={
-          <>
-            <PeopleIcon sx={{ mr: 0.5 }} />
-            {t('deleghe.title')}
-          </>
-        }
-        currentLocationLabel={t('nuovaDelega.breadcrumb')}
-      />
+      <MIBreadcrumbs>
+        <MIBreadcrumbItem label={t('deleghe.title')} href={routes.DELEGATI} />
+        <MIBreadcrumbItem label={t('nuovaDelega.breadcrumb')} current />
+      </MIBreadcrumbs>
       <TitleBox
         title={t('nuovaDelega.title')}
         subTitle={t('nuovaDelega.subtitle')}
