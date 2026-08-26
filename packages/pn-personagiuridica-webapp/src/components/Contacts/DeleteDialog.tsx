@@ -13,8 +13,8 @@ type Props = {
   confirmHandler: () => void;
   blockDelete?: boolean;
   slotsProps?: {
-    primaryButton?: MIButtonProps & { label?: string };
-    secondaryButton?: MIButtonProps & { label?: string };
+    primaryButton?: Omit<MIButtonProps, 'href'> & { label?: string };
+    secondaryButton?: Omit<MIButtonProps, 'href'> & { label?: string };
   };
 };
 
@@ -36,20 +36,20 @@ const DeleteDialog: React.FC<Props> = ({
   ) : (
     [
       <MIButton
+        {...slotsProps?.secondaryButton}
         key="cancel"
         onClick={handleModalClose}
         variant="outlined"
         id="buttonAnnulla"
-        {...slotsProps?.secondaryButton}
       >
         {slotsProps?.secondaryButton?.label ?? t('button.annulla')}
       </MIButton>,
       <MIButton
+        {...slotsProps?.primaryButton}
         id="buttonConferma"
         key="confirm"
         onClick={confirmHandler}
         variant="contained"
-        {...slotsProps?.primaryButton}
       >
         {slotsProps?.primaryButton?.label ?? t('button.conferma')}
       </MIButton>,
