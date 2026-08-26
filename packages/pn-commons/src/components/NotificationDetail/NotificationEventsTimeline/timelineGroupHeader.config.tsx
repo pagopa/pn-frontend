@@ -9,9 +9,8 @@ import {
 } from '../../../models/NotificationTimeline';
 import { getLocalizedOrDefaultLabel } from '../../../utility/localization.utility';
 import { isTimelineGroupStep } from '../../../utility/notificationTimeline.utility';
-import FirstLetterRounded from '../../Icons/FirstLetterRounded';
+import LetterIcon from '../../Icons/LetterIcon';
 import MobileRounded from '../../Icons/MobileRounded';
-import SecondLetterRounded from '../../Icons/SecondLetterRounded';
 import SendIcon from '../../Icons/SendIcon';
 
 type ChannelPresentation = {
@@ -50,21 +49,21 @@ const CHANNEL_ATTEMPT_PRESENTATION: Record<string, Record<number, ChannelPresent
   AR_REGISTERED_LETTER: {
     1: {
       labelKey: 'detail.timeline.send-analog-domicile-ar-first-attempt-group-label',
-      icon: FirstLetterRounded,
+      icon: () => <LetterIcon number={1} />,
     },
     2: {
       labelKey: 'detail.timeline.send-analog-domicile-ar-second-attempt-group-label',
-      icon: SecondLetterRounded,
+      icon: () => <LetterIcon number={2} />,
     },
   },
   REGISTERED_LETTER_890: {
     1: {
       labelKey: 'detail.timeline.send-analog-domicile-890-first-attempt-group-label',
-      icon: FirstLetterRounded,
+      icon: () => <LetterIcon number={1} />,
     },
     2: {
       labelKey: 'detail.timeline.send-analog-domicile-890-second-attempt-group-label',
-      icon: SecondLetterRounded,
+      icon: () => <LetterIcon number={2} />,
     },
   },
 };
