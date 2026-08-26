@@ -2,7 +2,7 @@ import MockAdapter from 'axios-mock-adapter';
 import { Suspense } from 'react';
 import { vi } from 'vitest';
 
-import { ThemeProvider, useTheme } from '@mui/material';
+import { ThemeProvider } from '@mui/material';
 import { themeNext } from '@pagopa/mui-italia';
 
 import App from '../App';
