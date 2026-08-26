@@ -1,4 +1,8 @@
-import { EventNotificationTypes, EventPaymentRecipientType } from '../../../models/MixpanelEvents';
+import {
+  EventNotificationType,
+  EventNotificationTypes,
+  EventPaymentRecipientType,
+} from '../../../models/MixpanelEvents';
 import {
   PagoPAPaymentFullDetails,
   PaymentInfoDetail,
@@ -18,7 +22,7 @@ type Props = {
   isSinglePayment?: boolean;
   isCancelled: boolean;
   handleTrackEventDetailPaymentError?: (event: EventPaymentRecipientType, param?: object) => void;
-  notificationType?: string;
+  notificationType?: EventNotificationType;
 };
 
 const NotificationPaymentPagoPAItem: React.FC<Props> = ({

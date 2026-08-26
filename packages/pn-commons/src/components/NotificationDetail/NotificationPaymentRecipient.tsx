@@ -8,7 +8,11 @@ import { useDismissToastOnError } from '../../hooks';
 import { downloadDocument } from '../../hooks/useDownloadDocument';
 import { AppResponse } from '../../models';
 import { ServerResponseErrorCode } from '../../models/AppResponse';
-import { EventNotificationTypes, EventPaymentRecipientType } from '../../models/MixpanelEvents';
+import {
+  EventNotificationType,
+  EventNotificationTypes,
+  EventPaymentRecipientType,
+} from '../../models/MixpanelEvents';
 import {
   NotificationCostDetails,
   NotificationDetailPayment,
@@ -54,7 +58,7 @@ type Props = {
   ) => void;
   handleTrackEvent?: (event: EventPaymentRecipientType, param?: object) => void;
   handleFetchPaymentsInfo: (payment: Array<PaymentDetails | NotificationDetailPayment>) => void;
-  notificationType?: string;
+  notificationType?: EventNotificationType;
 };
 
 type PaymentError = {

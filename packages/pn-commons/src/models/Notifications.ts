@@ -1,15 +1,12 @@
 import { NotificationStatus, UnifiedNotificationStatus } from './NotificationStatus';
 
 export type NotificationCommunicationType = 'LEGAL' | 'INFORMAL';
-<<<<<<< HEAD
-=======
 
 export type NotificationCommunicationOutcomes = {
   viewed: boolean;
   delivered: boolean;
 };
 
->>>>>>> develop
 export interface Notification {
   iun: string;
   paProtocolNumber: string;

@@ -28,11 +28,7 @@ export type {
   EventPaymentStatusType,
   EventsType,
   TrackedEvent,
-<<<<<<< HEAD
-  EventNotificationSource,
   EventNotificationType,
-=======
->>>>>>> develop
 } from './MixpanelEvents';
 export type {
   GetNotificationsParams,

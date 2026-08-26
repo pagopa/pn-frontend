@@ -22,7 +22,7 @@ import { EventNotificationTypes, EventPaymentRecipientType } from '../../models'
 type SenderContactsProps = {
   phone?: string;
   site?: string;
-  handleTrackEventFn: (event: EventPaymentRecipientType, param?: object) => void;
+  handleTrackEventFn?: (event: EventPaymentRecipientType, param?: object) => void;
 };
 
 const PnSenderContacts = ({ phone, site, handleTrackEventFn }: SenderContactsProps) => {
@@ -36,13 +36,13 @@ const PnSenderContacts = ({ phone, site, handleTrackEventFn }: SenderContactsPro
   const websiteUrl = site && /^https?:\/\//i.test(site) ? site : `https://${site}`;
 
   const trackWebsiteClick = () => {
-    handleTrackEventFn(EventPaymentRecipientType.SEND_TAP_EXTERNAL_LINK, {
+    handleTrackEventFn?.(EventPaymentRecipientType.SEND_TAP_EXTERNAL_LINK, {
       link: websiteUrl,
       notification_type: EventNotificationTypes.INFORMAL,
     });
   };
   const trackPhoneClick = () => {
-    handleTrackEventFn(EventPaymentRecipientType.SEND_TAP_EXTERNAL_LINK, {
+    handleTrackEventFn?.(EventPaymentRecipientType.SEND_TAP_EXTERNAL_LINK, {
       link: `tel:${phone}`,
       notification_type: EventNotificationTypes.INFORMAL,
     });
