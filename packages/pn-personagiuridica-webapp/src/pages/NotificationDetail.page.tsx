@@ -29,7 +29,6 @@ import {
   PnBreadcrumb,
   StatusHistoryParser,
   appStateActions,
-  dateIsLessThan10Years,
   downloadDocument,
   getPaymentCache,
   useErrors,
@@ -117,6 +116,7 @@ const NotificationDetail = () => {
   const isCancelledOrCancelling = isCancelled.cancelled || isCancelled.cancellationInProgress;
 
   const userPayments = useAppSelector((state: RootState) => state.notificationState.paymentsData);
+  const organization = currentUser.organization;
 
   const checkIfUserHasPayments: boolean =
     !!currentRecipient.payments && currentRecipient.payments.length > 0;
@@ -308,13 +308,13 @@ const NotificationDetail = () => {
         };
       }
       return {
-        key: dateIsLessThan10Years(notification.sentAt)
+        key: notification.aarDocumentAvailable
           ? 'detail.acts_files.downloadable_aar'
           : 'detail.acts_files.not_downloadable_aar',
         ns: 'notifiche',
       };
     },
-    [isCancelledOrCancelling, notification.documentsAvailable, notification.sentAt]
+    [isCancelledOrCancelling, notification.documentsAvailable, notification.aarDocumentAvailable]
   );
 
   const fetchReceivedNotification = useCallback(() => {
@@ -432,16 +432,21 @@ const NotificationDetail = () => {
 
   const properBreadcrumb = useMemo(() => {
     const backRoute = mandateId ? routes.NOTIFICHE_DELEGATO : routes.NOTIFICHE;
+
+    const breadcrumbLabel = mandateId
+      ? t('menu.notifiche-delegato')
+      : t('menu.notifiche-impresa', { organization: organization?.name });
+
     return (
       <PnBreadcrumb
         showBackAction={!fromQrCode}
         linkRoute={backRoute}
-        linkLabel={t('menu.notifiche')}
+        linkLabel={breadcrumbLabel}
         currentLocationLabel={notification.subject ?? ''}
         goBackAction={() => navigate(backRoute)}
       />
     );
-  }, [fromQrCode, i18n.language, notification.subject]);
+  }, [fromQrCode, i18n.language, notification.subject, mandateId, organization?.name]);
 
   const cancelledAlert = isCancelledOrCancelling && (
     <MIAlert
@@ -619,7 +624,7 @@ const NotificationDetail = () => {
                 documents={notification.otherDocuments ?? []}
                 clickHandler={documentDowloadHandler}
                 isCancelled={isCancelled.cancellationInTimeline}
-                isLessThan10Years={dateIsLessThan10Years(notification.sentAt)}
+                aarDocumentAvailable={notification.aarDocumentAvailable}
                 downloadFilesMessage={getDownloadFilesMessage('aar')}
               />
               <NotificationRelatedDowntimes

@@ -18,7 +18,7 @@ interface Props {
   documents: Array<NotificationDetailOtherDocument> | undefined;
   isCancelled: boolean;
   isDelegate: boolean;
-  isLessThan10Years: boolean;
+  aarDocumentAvailable: boolean;
   downloadFilesMessage: { key: string; ns: string };
 }
 
@@ -28,7 +28,7 @@ const NotificationDetailSection = ({
   documents,
   isCancelled,
   isDelegate,
-  isLessThan10Years,
+  aarDocumentAvailable,
   downloadFilesMessage,
 }: Props) => {
   const theme = useTheme();
@@ -49,7 +49,7 @@ const NotificationDetailSection = ({
   };
 
   const getAARElement = () => {
-    if (!isCancelled && isLessThan10Years) {
+    if (!isCancelled && aarDocumentAvailable) {
       return (
         <Typography variant="caption" color="text.secondary">
           <Trans
@@ -99,13 +99,13 @@ const NotificationDetailSection = ({
           </Box>
         )}
 
-        {!isLessThan10Years && (
+        {!aarDocumentAvailable && (
           <MIAlert severity="warning" data-testid="aarDisabled">
             <Trans i18nKey={downloadFilesMessage.key} ns={downloadFilesMessage.ns} />
           </MIAlert>
         )}
 
-        {isLessThan10Years &&
+        {aarDocumentAvailable &&
           aarDocuments.map((document) => {
             const documentTitle = getAARTitle(document);
 
