@@ -12,7 +12,7 @@ const mockedLanguage = 'it';
 // As the actual responsibility of getMenuItems is to decide whether to include the selfCareItems
 // or not, any list of basicMenuItems is fit to the test.
 // -------------------------------
-// Carlos Lombardi, 2022.11.08
+// clombardi, 2022.11.08
 // -------------------------------
 const basicMenuItems: Array<SideMenuItem> = [
   { label: 'menu.notifications', icon: EmailRounded, route: routes.DASHBOARD },
