@@ -62,21 +62,17 @@ export const getRecipientPerStep = (
     return steps.map(() => undefined);
   }
 
-  return steps.reduce<{
-    lastRecIndex: number | undefined;
-    recipientPerStep: Array<NotificationDetailRecipient | undefined>;
-  }>(
-    (acc, step) => {
-      const recIndex = getStepRecIndex(step);
-      const isRecipientChanged = recIndex !== undefined && recIndex !== acc.lastRecIndex;
-      return {
-        lastRecIndex: recIndex ?? acc.lastRecIndex,
-        recipientPerStep: [
-          ...acc.recipientPerStep,
-          isRecipientChanged ? recipients[recIndex as number] : undefined,
-        ],
-      };
-    },
-    { lastRecIndex: undefined, recipientPerStep: [] }
-  ).recipientPerStep;
+  // eslint-disable-next-line functional/no-let
+  let lastRecIndex: number | undefined;
+
+  return steps.map((step) => {
+    const recIndex = getStepRecIndex(step);
+    if (recIndex === undefined) {
+      return undefined;
+    }
+
+    const isRecipientChanged = recIndex !== lastRecIndex;
+    lastRecIndex = recIndex;
+    return isRecipientChanged ? recipients[recIndex] : undefined;
+  });
 };

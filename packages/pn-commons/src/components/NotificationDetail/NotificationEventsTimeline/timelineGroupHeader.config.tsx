@@ -108,7 +108,8 @@ const getGroupChannelKey = (group: NotificationTimelineGroup): string =>
   `${group.recIndex}_${group.channel}`;
 
 /**
- * Id dei gruppi che appartengono a un canale con più di un tentativo di invio
+ * Ids of the groups belonging to a channel with more than one delivery attempt, so that
+ * callers can show the attempt-specific label/icon (see CHANNEL_ATTEMPT_PRESENTATION) only for those.
  */
 export const getMultiAttemptGroupIds = (
   statusHistory: Array<NotificationTimelineStatusHistory>
@@ -118,14 +119,15 @@ export const getMultiAttemptGroupIds = (
     .filter(isTimelineGroupStep)
     .map((step) => step.group);
 
-  const maxAttemptByChannel = groups.reduce<Record<string, number>>((acc, group) => {
+  const maxAttemptByChannel = groups.reduce((acc, group) => {
     const key = getGroupChannelKey(group);
-    return { ...acc, [key]: Math.max(acc[key] ?? 0, group.attempt ?? 1) };
-  }, {});
+    acc.set(key, Math.max(acc.get(key) ?? 0, group.attempt ?? 1));
+    return acc;
+  }, new Map<string, number>());
 
   return new Set(
     groups
-      .filter((group) => maxAttemptByChannel[getGroupChannelKey(group)] > 1)
+      .filter((group) => (maxAttemptByChannel.get(getGroupChannelKey(group)) ?? 0) > 1)
       .map((group) => group.groupId)
   );
 };
