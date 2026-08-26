@@ -98,6 +98,17 @@ describe('NotificationTimelineEventItem', () => {
     expect(within(bulletContainer).getAllByTestId('download-legalfact-micro')).toHaveLength(1);
   });
 
+  it('wraps a hidden event in a <li> when rendered inside a bullet list', () => {
+    const { container } = renderEvent(hiddenEvent, { asBullet: true });
+
+    const legalFactButton = within(container).getByTestId('download-legalfact-micro');
+    expect(legalFactButton.closest('li')).not.toBeNull();
+
+    const { container: noListContainer } = renderEvent(hiddenEvent);
+    const legalFactButtonNoList = within(noListContainer).getByTestId('download-legalfact');
+    expect(legalFactButtonNoList.closest('li')).toBeNull();
+  });
+
   it('disables the download when disableDownloads is set, except for the cancelled notification', () => {
     const { container } = renderEvent(eventWithLegalFacts, { disableDownloads: true });
     expect(within(container).getByTestId('download-legalfact-micro')).toBeDisabled();
