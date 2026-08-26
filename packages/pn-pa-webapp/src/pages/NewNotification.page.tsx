@@ -3,8 +3,8 @@ import { useTranslation } from 'react-i18next';
 
 import { Box, Grid, Link, Step, StepLabel, Stepper } from '@mui/material';
 import { visuallyHidden } from '@mui/utils';
-import { PnBreadcrumb, Prompt, TitleBox, useIsMobile } from '@pagopa-pn/pn-commons';
-import { MIAlert } from '@pagopa/mui-italia';
+import { Prompt, TitleBox, useIsMobile } from '@pagopa-pn/pn-commons';
+import { MIAlert, MIBreadcrumbItem, MIBreadcrumbs } from '@pagopa/mui-italia';
 
 import Attachments from '../components/NewNotification/Attachments';
 import DebtPosition from '../components/NewNotification/DebtPosition';
@@ -171,12 +171,16 @@ const NewNotification = () => {
       <Box p={3}>
         <Grid container sx={{ padding: isMobile ? '0 20px' : 0 }}>
           <Grid item xs={12} lg={8}>
-            <PnBreadcrumb
-              linkRoute={routes.DASHBOARD}
-              linkLabel={t('new-notification.breadcrumb-root', { ns: 'notifiche' })}
-              currentLocationLabel={t('new-notification.breadcrumb-leaf', { ns: 'notifiche' })}
-              goBackLabel={t('button.indietro', { ns: 'common' })}
-            />
+            <MIBreadcrumbs>
+              <MIBreadcrumbItem
+                label={t('new-notification.breadcrumb-root', { ns: 'notifiche' })}
+                href={routes.DASHBOARD}
+              />
+              <MIBreadcrumbItem
+                label={t('new-notification.breadcrumb-leaf', { ns: 'notifiche' })}
+                current
+              />
+            </MIBreadcrumbs>
             <TitleBox
               variantTitle="h4"
               title={t('new-notification.title', { ns: 'notifiche' })}

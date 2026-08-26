@@ -19,14 +19,13 @@ import {
   NotificationDocumentType,
   NotificationRelatedDowntimes,
   NotificationTimelineBox,
-  PnBreadcrumb,
   appStateActions,
   downloadDocument,
   useErrors,
   useIsCancelled,
 } from '@pagopa-pn/pn-commons';
 import type { DocumentsDownloadFilesMessage } from '@pagopa-pn/pn-commons/src/components/NotificationDetail/NotificationDetailDocuments';
-import { MIAlert, MIPaper, Tag } from '@pagopa/mui-italia';
+import { MIAlert, MIBreadcrumbItem, MIBreadcrumbs, MIPaper, Tag } from '@pagopa/mui-italia';
 
 import NotificationCancellationAction from '../components/Notifications/NotificationCancellationAction';
 import NotificationDetailsDrawer, {
@@ -258,12 +257,13 @@ const NotificationDetail: React.FC = () => {
   }, []);
 
   const properBreadcrumb = (
-    <PnBreadcrumb
-      linkRoute={routes.DASHBOARD}
-      linkLabel={t('detail.breadcrumb-root', { ns: 'notifiche' })}
-      currentLocationLabel={notification.iun}
-      goBackLabel={t('button.indietro', { ns: 'common' })}
-    />
+    <MIBreadcrumbs>
+      <MIBreadcrumbItem
+        label={t('detail.breadcrumb-root', { ns: 'notifiche' })}
+        href={routes.DASHBOARD}
+      />
+      <MIBreadcrumbItem label={notification.iun} current />
+    </MIBreadcrumbs>
   );
 
   const handleGoToTimeline = () => {

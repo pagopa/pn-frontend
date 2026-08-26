@@ -1,6 +1,6 @@
 import { Fragment, useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import { useLocation, useParams } from 'react-router-dom';
 
 import { Box, Stack, Typography } from '@mui/material';
 import {
@@ -10,12 +10,11 @@ import {
   NotificationDetailTimeline,
   NotificationDocumentResponse,
   NotificationDocumentType,
-  PnBreadcrumb,
   appStateActions,
   downloadDocument,
   useErrors,
 } from '@pagopa-pn/pn-commons';
-import { MIPaper } from '@pagopa/mui-italia';
+import { MIBreadcrumbItem, MIBreadcrumbs, MIPaper } from '@pagopa/mui-italia';
 
 import { PAEventsType } from '../models/PAEventsType';
 import * as routes from '../navigation/routes.const';
@@ -32,7 +31,6 @@ import PAEventStrategyFactory from '../utility/MixpanelUtils/PAEventStrategyFact
 const NotificationTimeline: React.FC = () => {
   const { id } = useParams();
   const dispatch = useAppDispatch();
-  const navigate = useNavigate();
   const location = useLocation();
   const { hasApiErrors } = useErrors();
   const { t, i18n } = useTranslation(['common', 'notifiche', 'appStatus']);
@@ -109,20 +107,14 @@ const NotificationTimeline: React.FC = () => {
       return null;
     }
 
-    const backRoute = routes.GET_DETTAGLIO_NOTIFICA_PATH(id);
-
     return (
-      <PnBreadcrumb
-        linkRoute={routes.DASHBOARD}
-        linkLabel={t('detail.breadcrumb-root', { ns: 'notifiche' })}
-        currentLocationLabel={notification.iun}
-        goBackAction={() =>
-          location.state?.fromNotificationDetail
-            ? navigate(-1)
-            : navigate(backRoute, { replace: true })
-        }
-        goBackLabel={t('button.indietro', { ns: 'common' })}
-      />
+      <MIBreadcrumbs>
+        <MIBreadcrumbItem
+          label={t('detail.breadcrumb-root', { ns: 'notifiche' })}
+          href={routes.DASHBOARD}
+        />
+        <MIBreadcrumbItem label={notification.iun} current />
+      </MIBreadcrumbs>
     );
   }, [id, i18n.language, location.state, notification.iun]);
 

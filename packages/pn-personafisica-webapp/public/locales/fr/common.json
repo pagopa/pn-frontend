@@ -37,7 +37,9 @@
     "deleghe": "Délégations",
     "profilo": "Tes données",
     "contacts": "Tes coordonnées",
-    "app-status": "Statut de la plateforme"
+    "app-status": "Statut de la plateforme",
+    "fallback-notification": "Détail de la notification",
+    "fallback-communication": "Détail de la communication"
   },
   "header": {
     "assistance": "Assistance",

@@ -31,7 +31,6 @@ import {
   PagoPaIntegrationMode,
   PaymentAttachmentSName,
   PaymentDetails,
-  PnBreadcrumb,
   StatusHistoryParser,
   appStateActions,
   downloadDocument,
@@ -44,7 +43,7 @@ import {
   EventDeliveryFlowType,
   EventDeliveryModeType,
 } from '@pagopa-pn/pn-commons/src/models/MixpanelEvents';
-import { MIAlert, MIPaper } from '@pagopa/mui-italia';
+import { MIAlert, MIBreadcrumbItem, MIBreadcrumbs, MIPaper } from '@pagopa/mui-italia';
 
 import NotificationDetailOnboardingPrompt from '../components/Contacts/Onboarding/NotificationDetailOnboardingPrompt';
 import DomicileBanner from '../components/DomicileBanner/DomicileBanner';
@@ -427,15 +426,15 @@ const NotificationDetail: React.FC = () => {
       : t('menu.notifiche-utente', { ns: 'common' });
 
     return (
-      <PnBreadcrumb
-        showBackAction={!rapidAccessSource}
-        linkRoute={backRoute}
-        linkLabel={
-          mandateId || delegatorsFromStore.length > 0 ? breadcrumbLabel : t('menu.notifiche')
-        }
-        currentLocationLabel={notification.subject ?? ''}
-        goBackAction={() => navigate(backRoute)}
-      />
+      <MIBreadcrumbs>
+        <MIBreadcrumbItem
+          label={
+            mandateId || delegatorsFromStore.length > 0 ? breadcrumbLabel : t('menu.notifiche')
+          }
+          href={backRoute}
+        />
+        <MIBreadcrumbItem label={notification.subject ?? 'Dettaglio notifica'} current />
+      </MIBreadcrumbs>
     );
   }, [rapidAccessSource, i18n.language, notification.subject, delegatorsFromStore, mandateId]);
 

@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 
 import { Box, Stack } from '@mui/material';
 import {
@@ -12,13 +12,12 @@ import {
   NotificationPaymentRecipient,
   PaymentAttachmentSName,
   PaymentsData,
-  PnBreadcrumb,
   PnSenderContacts,
   appStateActions,
   downloadDocument,
   useErrors,
 } from '@pagopa-pn/pn-commons';
-import { MIPaper } from '@pagopa/mui-italia';
+import { MIBreadcrumbItem, MIBreadcrumbs, MIPaper } from '@pagopa/mui-italia';
 
 import LoadingPageWrapper from '../components/LoadingPageWrapper/LoadingPageWrapper';
 import { BffFullInformalNotificationV1 } from '../generated-client/informal-notifications';
@@ -43,7 +42,6 @@ const InformalNotificationDetail: React.FC = () => {
   const dispatch = useAppDispatch();
   const [pageReady, setPageReady] = useState(false);
   const { hasApiErrors } = useErrors();
-  const navigate = useNavigate();
 
   const [informalNotification, setInformalNotification] =
     React.useState<BffFullInformalNotificationV1>();
@@ -153,17 +151,20 @@ const InformalNotificationDetail: React.FC = () => {
 
   const properBreadcrumb = useMemo(
     () => (
-      <PnBreadcrumb
-        showBackAction
-        linkRoute={routes.NOTIFICHE}
-        linkLabel={
-          delegatorsFromStore.length > 0
-            ? t('menu.notifiche-utente', { ns: 'common' })
-            : t('menu.notifiche')
-        }
-        currentLocationLabel={primaryMessage?.subject ?? ''}
-        goBackAction={() => navigate(routes.NOTIFICHE)}
-      />
+      <MIBreadcrumbs>
+        <MIBreadcrumbItem
+          href={routes.NOTIFICHE}
+          label={
+            delegatorsFromStore.length > 0
+              ? t('menu.notifiche-utente', { ns: 'common' })
+              : t('menu.notifiche')
+          }
+        />
+        <MIBreadcrumbItem
+          label={primaryMessage?.subject ?? 'Dettaglio della comunicazione'}
+          current
+        />
+      </MIBreadcrumbs>
     ),
     [i18n.language, primaryMessage?.subject, delegatorsFromStore]
   );

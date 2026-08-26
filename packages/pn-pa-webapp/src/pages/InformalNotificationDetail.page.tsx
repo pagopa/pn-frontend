@@ -2,7 +2,8 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { Box, Typography } from '@mui/material';
-import { PnBreadcrumb, TitleBox } from '@pagopa-pn/pn-commons';
+import { TitleBox } from '@pagopa-pn/pn-commons';
+import { MIBreadcrumbItem, MIBreadcrumbs } from '@pagopa/mui-italia';
 
 import * as routes from '../navigation/routes.const';
 
@@ -11,12 +12,13 @@ const InformalNotificationDetail: React.FC = () => {
 
   return (
     <Box sx={{ p: { xs: 3, lg: 0 } }}>
-      <PnBreadcrumb
-        linkRoute={routes.DASHBOARD}
-        linkLabel={t('detail.breadcrumb-root', { ns: 'notifiche' })}
-        currentLocationLabel="Dettaglio comunicazione bonaria"
-        goBackLabel={t('button.indietro', { ns: 'common' })}
-      />
+      <MIBreadcrumbs>
+        <MIBreadcrumbItem
+          label={t('detail.breadcrumb-root', { ns: 'notifiche' })}
+          href={routes.DASHBOARD}
+        />
+        <MIBreadcrumbItem label="Dettaglio comunicazione bonaria" current />
+      </MIBreadcrumbs>
 
       <TitleBox
         variantTitle="h4"
