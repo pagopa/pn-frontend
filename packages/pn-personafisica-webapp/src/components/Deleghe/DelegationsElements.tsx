@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { Box, Button, IconButton, Menu as MUIMenu, MenuItem, Typography } from '@mui/material';
 import { Variant } from '@mui/material/styles/createTypography';
-import { CustomTagGroup } from '@pagopa-pn/pn-commons';
+import { CustomTagGroup, useIsMobile } from '@pagopa-pn/pn-commons';
 import { Tag } from '@pagopa/mui-italia';
 
 import { PFEventsType } from '../../models/PFEventsType';
@@ -99,10 +99,15 @@ export const OrganizationsList = (props: {
   visibleItems?: number;
 }) => {
   const { t } = useTranslation(['deleghe']);
+  const isMobile = useIsMobile();
+
   return (
     <>
       {props.organizations.length === 0 ? (
-        <Typography variant={props.textVariant || 'inherit'}>
+        <Typography
+          variant={props.textVariant || 'inherit'}
+          fontWeight={isMobile ? 600 : undefined}
+        >
           {t('deleghe.table.allNotifications')}
         </Typography>
       ) : (

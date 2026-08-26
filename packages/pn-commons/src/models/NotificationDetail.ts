@@ -34,8 +34,9 @@ export interface NotificationDetail {
   additionalLanguages?: Array<string>;
   iun: string;
   sentAt: string;
-  filedAt: string;
   documentsAvailable?: boolean;
+  aarDocumentAvailable: boolean;
+  filedAt: string;
   notificationStatus: NotificationStatus;
   notificationStatusHistory: Array<NotificationStatusHistory>;
   timeline: Array<INotificationDetailTimeline>;

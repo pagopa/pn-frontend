@@ -155,7 +155,8 @@
       "phone": "Telefonnummer der Körperschaft",
       "email": "E-Mail der Körperschaft",
       "website": "Website der Körperschaft",
-      "copy_phone": "Telefonnummer kopiert"
+      "copy_phone": "Telefonnummer kopieren",
+      "copied_phone": "Telefonnummer kopiert"
     },
     "informal_notification_markdown": {
       "greeting": "Ciao {{recipientDenomination}},",

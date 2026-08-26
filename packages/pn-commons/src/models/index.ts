@@ -20,13 +20,19 @@ export type { Institution, PartyEntityWithUrl } from './Institutions';
 export type {
   ActionMeta,
   EventCreatedDelegationType,
+  EventDeliveryFlowType,
+  EventDeliveryModeType,
   EventMandateNotificationsListType,
   EventNotificationDetailType,
+  EventNotificationSource,
   EventPaymentStatusType,
   EventsType,
   TrackedEvent,
+<<<<<<< HEAD
   EventNotificationSource,
   EventNotificationType,
+=======
+>>>>>>> develop
 } from './MixpanelEvents';
 export type {
   GetNotificationsParams,

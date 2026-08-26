@@ -158,7 +158,7 @@ describe('Filter Notifications Table Component', () => {
       tenYearsAgoDate,
       oneYearAgo,
       localizedNotificationStatus[2].value,
-      'RSSMRA80A01H501U',
+      'TSTUTN00A01A001A',
       'ABCD-EFGH-ILMN-123456-A-1'
     );
     const submitButton = form.querySelector(`button[type="submit"]`);
@@ -169,7 +169,7 @@ describe('Filter Notifications Table Component', () => {
       expect(result.testStore.getState().dashboardState.filters).toStrictEqual({
         startDate: tenYearsAgoDate,
         endDate: oneYearAgo,
-        recipientId: 'RSSMRA80A01H501U',
+        recipientId: 'TSTUTN00A01A001A',
         status: localizedNotificationStatus[2].value,
         iunMatch: 'ABCD-EFGH-ILMN-123456-A-1',
       });
@@ -256,7 +256,7 @@ describe('Filter Notifications Table Component', () => {
       oneYearAgo,
       nineYearsAgo,
       localizedNotificationStatus[2].value,
-      'RSSMRA80A01H501U',
+      'TSTUTN00A01A001A',
       ''
     );
     const submitButton = form.querySelector(`button[type="submit"]`);
@@ -282,7 +282,7 @@ describe('Filter Notifications Table Component', () => {
       todayM,
       oneMonthAhead,
       localizedNotificationStatus[2].value,
-      'RSSMRA80A01H501U',
+      'TSTUTN00A01A001A',
       ''
     );
     const submitButton = form.querySelector(`button[type="submit"]`);
@@ -324,7 +324,7 @@ describe('Filter Notifications Table Component', () => {
       nineYearsAgo,
       oneYearAgo,
       localizedNotificationStatus[2].value,
-      'RSSMRA80A01H501U',
+      'TSTUTN00A01A001A',
       'ABCD-EFGH-ILMN-123456-A-1',
       true
     );
@@ -335,7 +335,7 @@ describe('Filter Notifications Table Component', () => {
       expect(result.testStore.getState().dashboardState.filters).toStrictEqual({
         startDate: nineYearsAgo,
         endDate: oneYearAgo,
-        recipientId: 'RSSMRA80A01H501U',
+        recipientId: 'TSTUTN00A01A001A',
         status: localizedNotificationStatus[2].value,
         iunMatch: 'ABCD-EFGH-ILMN-123456-A-1',
       });
