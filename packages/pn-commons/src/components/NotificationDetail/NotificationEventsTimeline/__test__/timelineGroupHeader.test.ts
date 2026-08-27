@@ -2,20 +2,21 @@ import { NotificationStatus } from '../../../../models';
 import {
   NotificationTimelineGroup,
   NotificationTimelineStatusHistory,
+  TimelineEventsChannel,
 } from '../../../../models/NotificationTimeline';
 import { getMultiAttemptGroupIds, getTimelineGroupHeader } from '../timelineGroupHeader.config';
 
 const analogGroup = (
   groupId: string,
   attempt: number,
-  channel = 'AR_REGISTERED_LETTER'
+  channel: TimelineEventsChannel = TimelineEventsChannel.AR_REGISTERED_LETTER
 ): NotificationTimelineGroup => ({
   groupId,
   denomination: 'Utente Test Uno',
   taxId: 'TSTUTN00A07A001G',
   recIndex: 0,
   category: 'ANALOG',
-  channel,
+  channel: channel,
   attempt,
   hasReworkedEvents: false,
   events: [],
@@ -42,7 +43,7 @@ describe('timelineGroupHeader config', () => {
     const statusHistory = statusHistoryWithGroups([
       analogGroup('second-attempt', 2),
       analogGroup('first-attempt', 1),
-      analogGroup('single-890-attempt', 1, 'REGISTERED_LETTER_890'),
+      analogGroup('single-890-attempt', 1, TimelineEventsChannel.REGISTERED_LETTER_890),
     ]);
 
     expect(getMultiAttemptGroupIds(statusHistory)).toStrictEqual(
@@ -55,7 +56,9 @@ describe('timelineGroupHeader config', () => {
       'detail.timeline.send-analog-domicile-ar-group-label'
     );
     expect(
-      getTimelineGroupHeader(analogGroup('single-attempt', 1, 'REGISTERED_LETTER_890')).channel
+      getTimelineGroupHeader(
+        analogGroup('single-attempt', 1, TimelineEventsChannel.REGISTERED_LETTER_890)
+      ).channel
     ).toBe('detail.timeline.send-analog-domicile-890-group-label');
   });
 
@@ -67,14 +70,16 @@ describe('timelineGroupHeader config', () => {
       'detail.timeline.send-analog-domicile-ar-second-attempt-group-label'
     );
     expect(
-      getTimelineGroupHeader(analogGroup('second-890-attempt', 2, 'REGISTERED_LETTER_890'), true)
-        .channel
+      getTimelineGroupHeader(
+        analogGroup('second-890-attempt', 2, TimelineEventsChannel.REGISTERED_LETTER_890),
+        true
+      ).channel
     ).toBe('detail.timeline.send-analog-domicile-890-second-attempt-group-label');
   });
 
   it('getTimelineGroupHeader - digital channels ignore the attempt, analog ones expose the registered letter code', () => {
     const pecGroup: NotificationTimelineGroup = {
-      ...analogGroup('pec-group', 2, 'PEC'),
+      ...analogGroup('pec-group', 2, TimelineEventsChannel.PEC),
       category: 'DIGITAL',
     };
 
@@ -88,21 +93,14 @@ describe('timelineGroupHeader config', () => {
     ).toBe('abc123');
   });
 
-  it('getTimelineGroupHeader - falls back to the raw channel when it is unknown', () => {
-    expect(getTimelineGroupHeader(analogGroup('unknown-group', 1, 'UNKNOWN_CHANNEL')).channel).toBe(
-      'UNKNOWN_CHANNEL'
-    );
-  });
-
   it('getTimelineGroupHeader - returns an icon for every channel, mapped or not', () => {
     const channels = [
-      'AR_REGISTERED_LETTER',
-      'REGISTERED_LETTER_890',
-      'SIMPLE_REGISTERED_LETTER',
-      'PEC',
-      'SERCQ_SEND',
-      'COURTESY',
-      'UNKNOWN_CHANNEL',
+      TimelineEventsChannel.AR_REGISTERED_LETTER,
+      TimelineEventsChannel.REGISTERED_LETTER_890,
+      TimelineEventsChannel.SIMPLE_REGISTERED_LETTER,
+      TimelineEventsChannel.PEC,
+      TimelineEventsChannel.SERCQ,
+      TimelineEventsChannel.COURTESY,
     ];
 
     channels.forEach((channel) => {

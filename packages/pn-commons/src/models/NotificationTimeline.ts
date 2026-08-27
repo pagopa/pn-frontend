@@ -7,6 +7,18 @@ import {
 } from './NotificationDetail';
 import { NotificationStatus } from './NotificationStatus';
 
+export const TimelineEventsChannel = {
+  AR_REGISTERED_LETTER: 'AR_REGISTERED_LETTER',
+  REGISTERED_LETTER_890: 'REGISTERED_LETTER_890',
+  SIMPLE_REGISTERED_LETTER: 'SIMPLE_REGISTERED_LETTER',
+  PEC: 'PEC',
+  SERCQ: 'SERCQ',
+  COURTESY: 'COURTESY',
+} as const;
+
+export type TimelineEventsChannel =
+  (typeof TimelineEventsChannel)[keyof typeof TimelineEventsChannel];
+
 export interface NotificationTimelineResponse {
   iun: string;
   subject: string;
@@ -47,7 +59,7 @@ export interface NotificationTimelineGroup {
   taxId: string;
   recIndex: number;
   category: NotificationTimelineGroupCategory;
-  channel: string;
+  channel: TimelineEventsChannel;
   attempt?: number;
   registeredLetterCode?: string;
   hasReworkedEvents: boolean;

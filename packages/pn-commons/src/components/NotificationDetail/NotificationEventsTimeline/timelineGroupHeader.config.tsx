@@ -1,14 +1,19 @@
 import { ComponentType } from 'react';
 
-import { InfoOutlined, MailOutlineRounded } from '@mui/icons-material';
+import { MailOutlineRounded } from '@mui/icons-material';
 import { SvgIconProps } from '@mui/material';
 
+import { PhysicalCommunicationType } from '../../../models';
 import {
   NotificationTimelineGroup,
   NotificationTimelineStatusHistory,
+  TimelineEventsChannel,
 } from '../../../models/NotificationTimeline';
 import { getLocalizedOrDefaultLabel } from '../../../utility/localization.utility';
-import { isTimelineGroupStep } from '../../../utility/notificationTimeline.utility';
+import {
+  isPhysicalCommunicationType,
+  isTimelineGroupStep,
+} from '../../../utility/notificationTimeline.utility';
 import LetterIcon from '../../Icons/LetterIcon';
 import MobileRounded from '../../Icons/MobileRounded';
 import SendIcon from '../../Icons/SendIcon';
@@ -18,7 +23,7 @@ type ChannelPresentation = {
   icon: ComponentType<SvgIconProps>;
 };
 
-const CHANNEL_PRESENTATION: Record<string, ChannelPresentation> = {
+const CHANNEL_PRESENTATION: Record<TimelineEventsChannel, ChannelPresentation> = {
   AR_REGISTERED_LETTER: {
     labelKey: 'detail.timeline.send-analog-domicile-ar-group-label',
     icon: MailOutlineRounded,
@@ -45,7 +50,10 @@ const CHANNEL_PRESENTATION: Record<string, ChannelPresentation> = {
   },
 };
 
-const CHANNEL_ATTEMPT_PRESENTATION: Record<string, Record<number, ChannelPresentation>> = {
+const CHANNEL_ATTEMPT_PRESENTATION: Record<
+  PhysicalCommunicationType,
+  Record<number, ChannelPresentation>
+> = {
   AR_REGISTERED_LETTER: {
     1: {
       labelKey: 'detail.timeline.send-analog-domicile-ar-first-attempt-group-label',
@@ -68,8 +76,6 @@ const CHANNEL_ATTEMPT_PRESENTATION: Record<string, Record<number, ChannelPresent
   },
 };
 
-const DEFAULT_CHANNEL_ICON: ComponentType<SvgIconProps> = InfoOutlined;
-
 export type TimelineGroupHeader = {
   channel: string;
   icon: ComponentType<SvgIconProps>;
@@ -79,9 +85,11 @@ export type TimelineGroupHeader = {
 const getChannelPresentation = (
   { channel, attempt }: NotificationTimelineGroup,
   hasMultipleAttempts: boolean
-): ChannelPresentation | undefined => {
+): ChannelPresentation => {
   const attemptPresentation =
-    hasMultipleAttempts && attempt ? CHANNEL_ATTEMPT_PRESENTATION[channel]?.[attempt] : undefined;
+    hasMultipleAttempts && attempt && isPhysicalCommunicationType(channel)
+      ? CHANNEL_ATTEMPT_PRESENTATION[channel]?.[attempt]
+      : undefined;
 
   return attemptPresentation ?? CHANNEL_PRESENTATION[channel];
 };
@@ -93,10 +101,8 @@ export const getTimelineGroupHeader = (
   const presentation = getChannelPresentation(group, hasMultipleAttempts);
 
   return {
-    channel: presentation
-      ? getLocalizedOrDefaultLabel('notifications', presentation.labelKey)
-      : group.channel,
-    icon: presentation?.icon ?? DEFAULT_CHANNEL_ICON,
+    channel: getLocalizedOrDefaultLabel('notifications', presentation.labelKey),
+    icon: presentation.icon,
     detail:
       group.category === 'ANALOG' && group.registeredLetterCode
         ? group.registeredLetterCode
