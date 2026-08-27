@@ -73,19 +73,19 @@ describe('DigitalMeanTimeStatistics component tests', () => {
         value: convertHoursToDays(
           digitalMeanTimeDataMock.data.delivered.time / digitalMeanTimeDataMock.data.delivered.count
         ),
-        itemStyle: { color: graphColors.lightBlue },
+        itemStyle: { color: graphColors.navy },
       },
       {
         value: convertHoursToDays(
           digitalMeanTimeDataMock.data.viewed.time / digitalMeanTimeDataMock.data.viewed.count
         ),
-        itemStyle: { color: graphColors.lightGreen },
+        itemStyle: { color: graphColors.blue },
       },
       {
         value: convertHoursToDays(
           digitalMeanTimeDataMock.data.refined.time / digitalMeanTimeDataMock.data.refined.count
         ),
-        itemStyle: { color: graphColors.darkGreen },
+        itemStyle: { color: graphColors.lightGreen },
       },
     ]);
   });
