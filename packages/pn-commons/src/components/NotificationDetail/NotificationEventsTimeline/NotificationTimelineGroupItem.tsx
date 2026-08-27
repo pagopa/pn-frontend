@@ -59,13 +59,18 @@ const NotificationTimelineGroupItem = ({
           borderRadius: 1,
         }}
       >
-        <Stack component="span" direction="row" spacing={1} alignItems="center">
+        <Stack component="span" direction="row" spacing={1} alignItems="center" minWidth={0}>
           <ChannelIcon
             fontSize="small"
-            sx={{ fontSize: '24px' }}
+            sx={{ fontSize: '24px', flexShrink: 0 }}
             data-testid="timeline-group-icon"
           />
-          <Typography component="span" variant="body2" fontWeight={600}>
+          <Typography
+            component="span"
+            variant="body2"
+            fontWeight={600}
+            sx={{ overflowWrap: 'anywhere' }}
+          >
             {headerLabel}
           </Typography>
           {group.hasReworkedEvents && (
@@ -76,9 +81,9 @@ const NotificationTimelineGroupItem = ({
           )}
         </Stack>
         {expanded ? (
-          <KeyboardArrowUpOutlinedIcon color="primary" />
+          <KeyboardArrowUpOutlinedIcon color="primary" sx={{ flexShrink: 0 }} />
         ) : (
-          <KeyboardArrowDownOutlinedIcon color="primary" />
+          <KeyboardArrowDownOutlinedIcon color="primary" sx={{ flexShrink: 0 }} />
         )}
       </ButtonBase>
 
@@ -89,7 +94,13 @@ const NotificationTimelineGroupItem = ({
           aria-labelledby={headerId}
           component="ul"
           data-testid="timeline-group-body"
-          sx={{ listStyleType: 'disc', pl: 10, my: 1, display: 'grid', rowGap: 1 }}
+          sx={{
+            listStyleType: 'disc',
+            pl: { xs: 3, sm: 10 },
+            my: 1,
+            display: 'grid',
+            rowGap: 1,
+          }}
         >
           {group.events.map((event) => (
             <NotificationTimelineEventItem
