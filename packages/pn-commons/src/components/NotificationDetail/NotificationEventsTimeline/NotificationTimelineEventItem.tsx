@@ -27,7 +27,11 @@ const NotificationTimelineEventItem = ({
   asBullet = false,
 }: Props) => {
   if (event.isHidden) {
-    return event.legalFactsIds?.length ? (
+    if (!event.legalFactsIds?.length) {
+      return null;
+    }
+
+    const legalFacts = (
       <TimelineLegalFacts
         event={event}
         clickHandler={clickHandler}
@@ -35,7 +39,15 @@ const NotificationTimelineEventItem = ({
         withIcon
         testId={asBullet ? 'download-legalfact-micro' : 'download-legalfact'}
       />
-    ) : null;
+    );
+
+    return asBullet ? (
+      <Stack component="li" sx={{ display: 'list-item' }}>
+        {legalFacts}
+      </Stack>
+    ) : (
+      legalFacts
+    );
   }
 
   const statusInfo = getNotificationTimelineStatusInfos(event, recipients, allEvents);

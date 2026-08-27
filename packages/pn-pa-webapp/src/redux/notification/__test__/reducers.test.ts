@@ -87,7 +87,7 @@ describe('Notification detail redux state tests', () => {
     const action = await store.dispatch(
       getSentNotificationTimeline(notificationDTOMultiRecipient.iun)
     );
-    const payload = action.payload as NotificationDetail;
+    const payload = action.payload;
     expect(action.type).toBe('getSentNotificationTimeline/fulfilled');
     expect(payload).toEqual(NotificationTimelineResponse);
     expect(store.getState().notificationState.notificationTimeline).toStrictEqual(

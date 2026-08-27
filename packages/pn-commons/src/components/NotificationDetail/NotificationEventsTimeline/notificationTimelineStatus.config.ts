@@ -1,19 +1,19 @@
 import { ComponentType } from 'react';
 
 import {
-  EuroOutlined,
-  GavelOutlined,
+  EuroRounded,
+  GavelRounded,
   InfoOutlined,
   MarkEmailReadOutlined,
   NoAccountsOutlined,
-  TroubleshootOutlined,
-  WarningOutlined,
+  TaskAltRounded,
+  TroubleshootRounded,
+  WarningRounded,
 } from '@mui/icons-material';
 import { SvgIconProps } from '@mui/material';
 
 import { NotificationStatus } from '../../../models/NotificationStatus';
-import OutgoingEmailOutlined from '../../Icons/OutgoingEmailOutlined';
-import SearchCheckOutlined from '../../Icons/SearchCheckOutlined';
+import OutgoingEmailRounded from '../../Icons/OutgoingEmailRounded';
 
 type TimelineStatusPresentation = {
   icon: ComponentType<SvgIconProps>;
@@ -23,20 +23,20 @@ type TimelineStatusPresentation = {
 const TIMELINE_STATUS_PRESENTATION: Partial<
   Record<NotificationStatus, TimelineStatusPresentation>
 > = {
-  [NotificationStatus.PAID]: { variant: 'success', icon: EuroOutlined },
+  [NotificationStatus.PAID]: { variant: 'success', icon: EuroRounded },
   [NotificationStatus.UNREACHABLE]: { variant: 'error', icon: NoAccountsOutlined },
-  [NotificationStatus.CANCELLED]: { variant: 'warning', icon: WarningOutlined },
-  [NotificationStatus.CANCELLATION_IN_PROGRESS]: { variant: 'warning', icon: WarningOutlined },
+  [NotificationStatus.CANCELLED]: { variant: 'warning', icon: WarningRounded },
+  [NotificationStatus.CANCELLATION_IN_PROGRESS]: { variant: 'warning', icon: WarningRounded },
   [NotificationStatus.NOTIFICATION_TIMELINE_REWORKED]: {
     variant: 'warning',
-    icon: WarningOutlined,
+    icon: WarningRounded,
   },
-  [NotificationStatus.EFFECTIVE_DATE]: { variant: 'info', icon: GavelOutlined },
-  [NotificationStatus.VIEWED]: { variant: 'info', icon: GavelOutlined },
+  [NotificationStatus.EFFECTIVE_DATE]: { variant: 'info', icon: GavelRounded },
+  [NotificationStatus.VIEWED]: { variant: 'info', icon: GavelRounded },
   [NotificationStatus.DELIVERED]: { variant: 'normal', icon: MarkEmailReadOutlined },
-  [NotificationStatus.DELIVERING]: { variant: 'normal', icon: OutgoingEmailOutlined },
-  [NotificationStatus.ACCEPTED]: { variant: 'normal', icon: SearchCheckOutlined },
-  [NotificationStatus.IN_VALIDATION]: { variant: 'normal', icon: TroubleshootOutlined },
+  [NotificationStatus.DELIVERING]: { variant: 'normal', icon: OutgoingEmailRounded },
+  [NotificationStatus.ACCEPTED]: { variant: 'normal', icon: TaskAltRounded },
+  [NotificationStatus.IN_VALIDATION]: { variant: 'normal', icon: TroubleshootRounded },
   [NotificationStatus.RETURNED_TO_SENDER]: { variant: 'normal', icon: NoAccountsOutlined }, // <- Manca sul figma, icona da rivedere
 };
 

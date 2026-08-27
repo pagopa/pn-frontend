@@ -1,17 +1,27 @@
-import { NotificationStatusHistory } from '../models';
-import { NotificationDetailRecipient } from '../models/NotificationDetail';
+import {
+  NotificationDetailRecipient,
+  PhysicalCommunicationType,
+} from '../models/NotificationDetail';
 import {
   NotificationTimelineEvent,
   NotificationTimelineGroupStep,
+  NotificationTimelineLegacyStatusHistory,
   NotificationTimelineStatusHistory,
   NotificationTimelineStep,
   NotificationTimelineStepType,
+  TimelineEventsChannel,
 } from '../models/NotificationTimeline';
 import { formatDay, formatMonthString, formatTime } from './date.utility';
 
 export const isTimelineGroupStep = (
   step: NotificationTimelineStep
 ): step is NotificationTimelineGroupStep => step.stepType === NotificationTimelineStepType.GROUP;
+
+const PHYSICAL_COMMUNICATION_TYPES = new Set<string>(Object.values(PhysicalCommunicationType));
+
+export const isPhysicalCommunicationType = (
+  channel: TimelineEventsChannel
+): channel is PhysicalCommunicationType => PHYSICAL_COMMUNICATION_TYPES.has(channel);
 
 export const flattenTimelineSteps = (
   steps: Array<NotificationTimelineStep>
@@ -26,7 +36,7 @@ export const flattenTimelineSteps = (
  */
 export const toLegacyStatusHistory = (
   statusHistory: Array<NotificationTimelineStatusHistory>
-): Array<NotificationStatusHistory> =>
+): Array<NotificationTimelineLegacyStatusHistory> =>
   statusHistory.map((status) => ({
     status: status.status,
     activeFrom: status.activeFrom,
@@ -62,21 +72,17 @@ export const getRecipientPerStep = (
     return steps.map(() => undefined);
   }
 
-  return steps.reduce<{
-    lastRecIndex: number | undefined;
-    recipientPerStep: Array<NotificationDetailRecipient | undefined>;
-  }>(
-    (acc, step) => {
-      const recIndex = getStepRecIndex(step);
-      const isRecipientChanged = recIndex !== undefined && recIndex !== acc.lastRecIndex;
-      return {
-        lastRecIndex: recIndex ?? acc.lastRecIndex,
-        recipientPerStep: [
-          ...acc.recipientPerStep,
-          isRecipientChanged ? recipients[recIndex as number] : undefined,
-        ],
-      };
-    },
-    { lastRecIndex: undefined, recipientPerStep: [] }
-  ).recipientPerStep;
+  // eslint-disable-next-line functional/no-let
+  let lastRecIndex: number | undefined;
+
+  return steps.map((step) => {
+    const recIndex = getStepRecIndex(step);
+    if (recIndex === undefined) {
+      return undefined;
+    }
+
+    const isRecipientChanged = recIndex !== lastRecIndex;
+    lastRecIndex = recIndex;
+    return isRecipientChanged ? recipients[recIndex] : undefined;
+  });
 };

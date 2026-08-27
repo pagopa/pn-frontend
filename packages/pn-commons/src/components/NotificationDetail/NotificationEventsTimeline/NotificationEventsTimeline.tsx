@@ -5,10 +5,7 @@ import { MITimeline, MITimelineItem } from '@pagopa/mui-italia';
 
 import { LegalFactId, NotificationDetailRecipient } from '../../../models/NotificationDetail';
 import { NotificationTimelineStatusHistory } from '../../../models/NotificationTimeline';
-import { getNotificationStatusInfos } from '../../../utility/notification.utility';
 import {
-  flattenTimelineSteps,
-  getRecipientPerStep,
   isTimelineGroupStep,
   toLegacyStatusHistory,
 } from '../../../utility/notificationTimeline.utility';
@@ -16,8 +13,8 @@ import ReworkedStatusTag from '../ReworkedStatusTag';
 import NotificationTimelineEventDate from './NotificationTimelineEventDate';
 import NotificationTimelineEventItem from './NotificationTimelineEventItem';
 import NotificationTimelineGroupItem from './NotificationTimelineGroupItem';
-import { getTimelineItemPresentation } from './notificationTimelineStatus.config';
 import { getMultiAttemptGroupIds } from './timelineGroupHeader.config';
+import { getTimelineItems } from './timelineItem.config';
 
 type Props = {
   recipients: Array<NotificationDetailRecipient>;
@@ -41,28 +38,25 @@ const NotificationEventsTimeline = ({
     () => getMultiAttemptGroupIds(statusHistory),
     [statusHistory]
   );
-  const isMultiRecipient = recipients.length > 1;
+  const timelineItems = useMemo(
+    () => getTimelineItems(statusHistory, legacyStatusHistory, recipients, isSenderTimeline),
+    [statusHistory, legacyStatusHistory, recipients, isSenderTimeline, language]
+  );
 
   return (
     <Box data-testid="NotificationEventsTimeline">
       <MITimeline>
-        {statusHistory.map((status, index) => {
-          const { label, description } = getNotificationStatusInfos(legacyStatusHistory[index], {
-            statusHistory: legacyStatusHistory,
-            recipients,
-            isParty: isSenderTimeline,
-          });
-          const { icon, variant } = getTimelineItemPresentation(status.status, index === 0);
-          const allEvents = flattenTimelineSteps(status.steps);
-
-          const hasGroupedEvents = status.steps.some(isTimelineGroupStep);
-
-          const recipientPerStep =
-            isMultiRecipient && isSenderTimeline
-              ? getRecipientPerStep(status.steps, recipients)
-              : [];
-
-          return (
+        {timelineItems.map(
+          ({
+            status,
+            label,
+            description,
+            icon,
+            variant,
+            allEvents,
+            hasGroupedEvents,
+            recipientPerStep,
+          }) => (
             <MITimelineItem
               key={`timeline_step_${status.status}_${status.activeFrom}`}
               icon={icon}
@@ -144,8 +138,8 @@ const NotificationEventsTimeline = ({
                 })}
               </Stack>
             </MITimelineItem>
-          );
-        })}
+          )
+        )}
       </MITimeline>
     </Box>
   );

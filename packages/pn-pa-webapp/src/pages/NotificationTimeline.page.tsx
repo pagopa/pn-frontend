@@ -1,4 +1,4 @@
-import { Fragment, useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 
@@ -89,29 +89,16 @@ const NotificationTimeline: React.FC = () => {
   const legalFactDownloadHandler = (legalFact: LegalFactId) => {
     PAEventStrategyFactory.triggerEvent(PAEventsType.SEND_PA_TIMELINE_DOWNLOAD, { legalFact });
 
-    if (legalFact.category !== NotificationDocumentType.AAR) {
-      dispatch(
-        getSentNotificationDocument({
-          iun: notificationIUN,
-          documentType: NotificationDocumentType.LEGAL_FACT,
-          documentId: legalFact.key.substring(legalFact.key.lastIndexOf('/') + 1),
-        })
-      )
-        .unwrap()
-        .then(showInfoMessageIfRetryAfterOrDownload)
-        .catch(() => {});
-    } else {
-      dispatch(
-        getSentNotificationDocument({
-          iun: notificationIUN,
-          documentType: NotificationDocumentType.AAR,
-          documentId: legalFact.key,
-        })
-      )
-        .unwrap()
-        .then(showInfoMessageIfRetryAfterOrDownload)
-        .catch(() => {});
-    }
+    const isAAR = legalFact.category === NotificationDocumentType.AAR;
+    const documentType = isAAR ? NotificationDocumentType.AAR : NotificationDocumentType.LEGAL_FACT;
+    const documentId = isAAR
+      ? legalFact.key
+      : legalFact.key.substring(legalFact.key.lastIndexOf('/') + 1);
+
+    dispatch(getSentNotificationDocument({ iun: notificationIUN, documentType, documentId }))
+      .unwrap()
+      .then(showInfoMessageIfRetryAfterOrDownload)
+      .catch(() => {});
   };
 
   const trackTimelineShowMore = (collapsed: boolean) => {
@@ -142,8 +129,6 @@ const NotificationTimeline: React.FC = () => {
     );
   }, [id, i18n.language, location.state, notificationIUN]);
 
-  const breadcrumb = <Fragment>{properBreadcrumb}</Fragment>;
-
   return (
     <>
       {hasNotificationSentApiError && (
@@ -164,7 +149,7 @@ const NotificationTimeline: React.FC = () => {
 
       {!hasNotificationSentApiError && pageReady && (
         <Box sx={{ p: 3, display: 'flex', flexDirection: 'column' }} gap={3}>
-          {breadcrumb}
+          {properBreadcrumb}
           <Stack gap={3}>
             <Typography variant="h4" component="h1">
               {t('detail.notification-timeline-section.title', { ns: 'notifiche' })}

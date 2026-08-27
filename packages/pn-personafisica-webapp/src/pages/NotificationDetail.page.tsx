@@ -34,7 +34,6 @@ import {
   PnBreadcrumb,
   StatusHistoryParser,
   appStateActions,
-  dateIsLessThan10Years,
   downloadDocument,
   getPaymentCache,
   useErrors,
@@ -293,13 +292,13 @@ const NotificationDetail: React.FC = () => {
         };
       }
       return {
-        key: dateIsLessThan10Years(notification.sentAt)
+        key: notification.aarDocumentAvailable
           ? 'detail.acts_files.downloadable_aar'
           : 'detail.acts_files.not_downloadable_aar',
         ns: 'notifiche',
       };
     },
-    [isCancelledOrCancelling, notification.documentsAvailable, notification.sentAt]
+    [isCancelledOrCancelling, notification.documentsAvailable, notification.aarDocumentAvailable]
   );
 
   const fetchReceivedNotification = useCallback(() => {
@@ -418,16 +417,27 @@ const NotificationDetail: React.FC = () => {
 
   const properBreadcrumb = useMemo(() => {
     const backRoute = mandateId ? routes.GET_NOTIFICHE_DELEGATO_PATH(mandateId) : routes.NOTIFICHE;
+
+    const delegatorName = delegatorsFromStore.find(
+      (delegation) => delegation.mandateId === mandateId
+    )?.delegator?.displayName;
+
+    const breadcrumbLabel = delegatorName
+      ? t('menu.notifiche-delegato', { delegator: delegatorName })
+      : t('menu.notifiche-utente', { ns: 'common' });
+
     return (
       <PnBreadcrumb
         showBackAction={!rapidAccessSource}
         linkRoute={backRoute}
-        linkLabel={t('menu.notifiche')}
+        linkLabel={
+          mandateId || delegatorsFromStore.length > 0 ? breadcrumbLabel : t('menu.notifiche')
+        }
         currentLocationLabel={notification.subject ?? ''}
         goBackAction={() => navigate(backRoute)}
       />
     );
-  }, [rapidAccessSource, i18n.language, notification.subject]);
+  }, [rapidAccessSource, i18n.language, notification.subject, delegatorsFromStore, mandateId]);
 
   const cancelledAlert = isCancelledOrCancelling && (
     <MIAlert
@@ -690,7 +700,7 @@ const NotificationDetail: React.FC = () => {
                   documents={notification.otherDocuments ?? []}
                   clickHandler={documentDowloadHandler}
                   isCancelled={isCancelled.cancellationInTimeline}
-                  isLessThan10Years={dateIsLessThan10Years(notification.sentAt)}
+                  aarDocumentAvailable={notification.aarDocumentAvailable}
                   downloadFilesMessage={getDownloadFilesMessage('aar')}
                 />
                 <NotificationRelatedDowntimes

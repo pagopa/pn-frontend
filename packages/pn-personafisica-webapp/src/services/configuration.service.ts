@@ -21,8 +21,7 @@ export interface PfConfiguration {
   F24_DOWNLOAD_WAIT_TIME: number;
   PAGOPA_HELP_PP: string;
   APP_IO_SITE: string;
-  APP_IO_ANDROID: string;
-  APP_IO_IOS: string;
+  APP_IO_DOWNLOAD: string;
   IS_DOD_ENABLED: boolean;
   DOWNTIME_EXAMPLE_LINK: string;
   ACCESSIBILITY_LINK: string;
@@ -66,8 +65,7 @@ class PfConfigurationValidator extends Validator<PfConfiguration> {
     this.ruleFor('F24_DOWNLOAD_WAIT_TIME').isNumber().isRequired();
     this.ruleFor('PAGOPA_HELP_PP').isString().isRequired().matches(dataRegex.htmlPageUrl);
     this.ruleFor('APP_IO_SITE').isString().isRequired().matches(dataRegex.htmlPageUrl);
-    this.ruleFor('APP_IO_ANDROID').isString().isRequired().matches(dataRegex.htmlPageUrl);
-    this.ruleFor('APP_IO_IOS').isString().isRequired().matches(dataRegex.htmlPageUrl);
+    this.ruleFor('APP_IO_DOWNLOAD').isString().isRequired().matches(dataRegex.htmlPageUrl);
     this.ruleFor('IS_DOD_ENABLED').isBoolean();
     this.ruleFor('DOWNTIME_EXAMPLE_LINK').isString().isRequired().matches(dataRegex.htmlPageUrl);
     this.ruleFor('ACCESSIBILITY_LINK').isString().isRequired();

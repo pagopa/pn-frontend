@@ -12,8 +12,7 @@ export interface LoginConfiguration {
   SPID_CIE_ENTITY_ID: string;
   URL_API_LOGIN: string;
   APP_IO_SITE: string;
-  APP_IO_ANDROID: string;
-  APP_IO_IOS: string;
+  APP_IO_DOWNLOAD: string;
   IS_SMART_APP_BANNER_ENABLED?: boolean;
   ACCESSIBILITY_LINK: string;
   ONE_IDENTITY_LOGIN_ENABLED: boolean;
@@ -43,8 +42,7 @@ class LoginConfigurationValidator extends Validator<LoginConfiguration> {
     this.ruleFor('OT_SETTINGS_TOKEN').isString().isRequired().matches(dataRegex.token);
     this.ruleFor('PF_URL').isString().isRequired().matches(dataRegex.htmlPageUrl);
     this.ruleFor('APP_IO_SITE').isString().isRequired().matches(dataRegex.htmlPageUrl);
-    this.ruleFor('APP_IO_ANDROID').isString().isRequired().matches(dataRegex.htmlPageUrl);
-    this.ruleFor('APP_IO_IOS').isString().isRequired().matches(dataRegex.htmlPageUrl);
+    this.ruleFor('APP_IO_DOWNLOAD').isString().isRequired().matches(dataRegex.htmlPageUrl);
     this.ruleFor('IS_SMART_APP_BANNER_ENABLED').isBoolean();
     this.ruleFor('ACCESSIBILITY_LINK').isString().isRequired();
     this.ruleFor('ONE_IDENTITY_LOGIN_ENABLED').isBoolean();

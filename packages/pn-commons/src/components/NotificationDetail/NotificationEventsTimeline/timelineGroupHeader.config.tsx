@@ -1,17 +1,21 @@
 import { ComponentType } from 'react';
 
-import { InfoOutlined, MailOutlined } from '@mui/icons-material';
+import { MailOutlineRounded } from '@mui/icons-material';
 import { SvgIconProps } from '@mui/material';
 
+import { PhysicalCommunicationType } from '../../../models';
 import {
   NotificationTimelineGroup,
   NotificationTimelineStatusHistory,
+  TimelineEventsChannel,
 } from '../../../models/NotificationTimeline';
 import { getLocalizedOrDefaultLabel } from '../../../utility/localization.utility';
-import { isTimelineGroupStep } from '../../../utility/notificationTimeline.utility';
-import FirstLetterOutlined from '../../Icons/FirstLetterOutlined';
-import MobileOutlined from '../../Icons/MobileOutlined';
-import SecondLetterOutlined from '../../Icons/SecondLetterOutlined';
+import {
+  isPhysicalCommunicationType,
+  isTimelineGroupStep,
+} from '../../../utility/notificationTimeline.utility';
+import LetterIcon from '../../Icons/LetterIcon';
+import MobileRounded from '../../Icons/MobileRounded';
 import SendIcon from '../../Icons/SendIcon';
 
 type ChannelPresentation = {
@@ -19,22 +23,22 @@ type ChannelPresentation = {
   icon: ComponentType<SvgIconProps>;
 };
 
-const CHANNEL_PRESENTATION: Record<string, ChannelPresentation> = {
+const CHANNEL_PRESENTATION: Record<TimelineEventsChannel, ChannelPresentation> = {
   AR_REGISTERED_LETTER: {
     labelKey: 'detail.timeline.send-analog-domicile-ar-group-label',
-    icon: MailOutlined,
+    icon: MailOutlineRounded,
   },
   REGISTERED_LETTER_890: {
     labelKey: 'detail.timeline.send-analog-domicile-890-group-label',
-    icon: MailOutlined,
+    icon: MailOutlineRounded,
   },
   SIMPLE_REGISTERED_LETTER: {
     labelKey: 'detail.timeline.send-simple-registered-letter',
-    icon: MailOutlined,
+    icon: MailOutlineRounded,
   },
   PEC: {
     labelKey: 'detail.timeline.send-digital-domicile-PEC-group-label',
-    icon: MailOutlined,
+    icon: MailOutlineRounded,
   },
   SERCQ: {
     labelKey: 'detail.timeline.send-digital-domicile-SERCQ-SEND-group-label',
@@ -42,34 +46,35 @@ const CHANNEL_PRESENTATION: Record<string, ChannelPresentation> = {
   },
   COURTESY: {
     labelKey: 'detail.timeline.courtesy-group-label',
-    icon: MobileOutlined,
+    icon: MobileRounded,
   },
 };
 
-const CHANNEL_ATTEMPT_PRESENTATION: Record<string, Record<number, ChannelPresentation>> = {
+const CHANNEL_ATTEMPT_PRESENTATION: Record<
+  PhysicalCommunicationType,
+  Record<number, ChannelPresentation>
+> = {
   AR_REGISTERED_LETTER: {
     1: {
       labelKey: 'detail.timeline.send-analog-domicile-ar-first-attempt-group-label',
-      icon: FirstLetterOutlined,
+      icon: () => <LetterIcon number={1} />,
     },
     2: {
       labelKey: 'detail.timeline.send-analog-domicile-ar-second-attempt-group-label',
-      icon: SecondLetterOutlined,
+      icon: () => <LetterIcon number={2} />,
     },
   },
   REGISTERED_LETTER_890: {
     1: {
       labelKey: 'detail.timeline.send-analog-domicile-890-first-attempt-group-label',
-      icon: FirstLetterOutlined,
+      icon: () => <LetterIcon number={1} />,
     },
     2: {
       labelKey: 'detail.timeline.send-analog-domicile-890-second-attempt-group-label',
-      icon: SecondLetterOutlined,
+      icon: () => <LetterIcon number={2} />,
     },
   },
 };
-
-const DEFAULT_CHANNEL_ICON: ComponentType<SvgIconProps> = InfoOutlined;
 
 export type TimelineGroupHeader = {
   channel: string;
@@ -80,9 +85,11 @@ export type TimelineGroupHeader = {
 const getChannelPresentation = (
   { channel, attempt }: NotificationTimelineGroup,
   hasMultipleAttempts: boolean
-): ChannelPresentation | undefined => {
+): ChannelPresentation => {
   const attemptPresentation =
-    hasMultipleAttempts && attempt ? CHANNEL_ATTEMPT_PRESENTATION[channel]?.[attempt] : undefined;
+    hasMultipleAttempts && attempt && isPhysicalCommunicationType(channel)
+      ? CHANNEL_ATTEMPT_PRESENTATION[channel]?.[attempt]
+      : undefined;
 
   return attemptPresentation ?? CHANNEL_PRESENTATION[channel];
 };
@@ -94,10 +101,8 @@ export const getTimelineGroupHeader = (
   const presentation = getChannelPresentation(group, hasMultipleAttempts);
 
   return {
-    channel: presentation
-      ? getLocalizedOrDefaultLabel('notifications', presentation.labelKey)
-      : group.channel,
-    icon: presentation?.icon ?? DEFAULT_CHANNEL_ICON,
+    channel: getLocalizedOrDefaultLabel('notifications', presentation.labelKey),
+    icon: presentation.icon,
     detail:
       group.category === 'ANALOG' && group.registeredLetterCode
         ? group.registeredLetterCode
@@ -109,7 +114,8 @@ const getGroupChannelKey = (group: NotificationTimelineGroup): string =>
   `${group.recIndex}_${group.channel}`;
 
 /**
- * Id dei gruppi che appartengono a un canale con più di un tentativo di invio
+ * Ids of the groups belonging to a channel with more than one delivery attempt, so that
+ * callers can show the attempt-specific label/icon (see CHANNEL_ATTEMPT_PRESENTATION) only for those.
  */
 export const getMultiAttemptGroupIds = (
   statusHistory: Array<NotificationTimelineStatusHistory>
@@ -119,14 +125,15 @@ export const getMultiAttemptGroupIds = (
     .filter(isTimelineGroupStep)
     .map((step) => step.group);
 
-  const maxAttemptByChannel = groups.reduce<Record<string, number>>((acc, group) => {
+  const maxAttemptByChannel = groups.reduce((acc, group) => {
     const key = getGroupChannelKey(group);
-    return { ...acc, [key]: Math.max(acc[key] ?? 0, group.attempt ?? 1) };
-  }, {});
+    acc.set(key, Math.max(acc.get(key) ?? 0, group.attempt ?? 1));
+    return acc;
+  }, new Map<string, number>());
 
   return new Set(
     groups
-      .filter((group) => maxAttemptByChannel[getGroupChannelKey(group)] > 1)
+      .filter((group) => (maxAttemptByChannel.get(getGroupChannelKey(group)) ?? 0) > 1)
       .map((group) => group.groupId)
   );
 };

@@ -2,9 +2,22 @@ import {
   INotificationDetailTimeline,
   NotificationDeliveryMode,
   NotificationDetailRecipient,
+  NotificationStatusHistory,
   ReworkedStatus,
 } from './NotificationDetail';
 import { NotificationStatus } from './NotificationStatus';
+
+export const TimelineEventsChannel = {
+  AR_REGISTERED_LETTER: 'AR_REGISTERED_LETTER',
+  REGISTERED_LETTER_890: 'REGISTERED_LETTER_890',
+  SIMPLE_REGISTERED_LETTER: 'SIMPLE_REGISTERED_LETTER',
+  PEC: 'PEC',
+  SERCQ: 'SERCQ',
+  COURTESY: 'COURTESY',
+} as const;
+
+export type TimelineEventsChannel =
+  (typeof TimelineEventsChannel)[keyof typeof TimelineEventsChannel];
 
 export interface NotificationTimelineResponse {
   iun: string;
@@ -46,7 +59,7 @@ export interface NotificationTimelineGroup {
   taxId: string;
   recIndex: number;
   category: NotificationTimelineGroupCategory;
-  channel: string;
+  channel: TimelineEventsChannel;
   attempt?: number;
   registeredLetterCode?: string;
   hasReworkedEvents: boolean;
@@ -57,6 +70,10 @@ export interface NotificationTimelineEvent
   extends Omit<INotificationDetailTimeline, 'hidden' | 'index'> {
   isHidden: boolean;
 }
+
+export type NotificationTimelineLegacyStatusHistory = Omit<NotificationStatusHistory, 'steps'> & {
+  steps: Array<NotificationTimelineEvent>;
+};
 
 export const NotificationTimelineStepType = { EVENT: 'EVENT', GROUP: 'GROUP' } as const;
 
