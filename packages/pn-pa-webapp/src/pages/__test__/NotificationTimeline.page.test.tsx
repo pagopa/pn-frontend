@@ -40,11 +40,35 @@ vi.mock('../../services/configuration.service', async () => {
 describe('NotificationTimeline Page - IS_NEW_TIMELINE_ENABLED enabled', () => {
   const timelineIun = NotificationTimelineResponse.iun;
 
+  const timelineResponseWithHiddenLegalFact = (legalFactKey: string, category: string) => ({
+    ...NotificationTimelineResponse,
+    notificationStatusHistory: [
+      {
+        status: 'ACCEPTED',
+        activeFrom: '2026-06-05T13:12:50.043521089Z',
+        steps: [
+          {
+            stepType: 'EVENT',
+            event: {
+              elementId: 'REQUEST_ACCEPTED.IUN_TEST',
+              timestamp: '2026-06-05T13:12:50.043521089Z',
+              details: {},
+              legalFactsIds: [{ key: legalFactKey, category }],
+              category: 'REQUEST_ACCEPTED',
+              isHidden: true,
+            },
+          },
+        ],
+      },
+    ],
+  });
+
   let result: RenderResult;
   let mock: MockAdapter;
 
   beforeAll(() => {
     mock = new MockAdapter(apiClient);
+    vi.stubGlobal('location', { href: '', assign: vi.fn() });
   });
 
   beforeEach(() => {
@@ -58,6 +82,7 @@ describe('NotificationTimeline Page - IS_NEW_TIMELINE_ENABLED enabled', () => {
 
   afterAll(() => {
     mock.restore();
+    vi.unstubAllGlobals();
   });
 
   it('fetch the timeline api and renders the new timeline', async () => {
@@ -99,6 +124,99 @@ describe('NotificationTimeline Page - IS_NEW_TIMELINE_ENABLED enabled', () => {
 
     expect(result.getByTestId('api-error-getSentNotificationTimeline')).toBeInTheDocument();
     expect(result.queryByTestId('NotificationEventsTimeline')).not.toBeInTheDocument();
+  });
+
+  it('executes the legal fact download handler', async () => {
+    // il prefisso "safestorage://" va estratto dalla chiave prima di essere usato come documentId
+    const legalFactKey = 'safestorage://PN_LEGAL_FACTS-non-aar-test.pdf';
+    const documentId = 'PN_LEGAL_FACTS-non-aar-test.pdf';
+    const documentUrl = `/bff/v1/notifications/sent/${timelineIun}/documents/LEGAL_FACT?documentId=${documentId}`;
+
+    mock
+      .onGet(`/bff/v1/notifications/sent/${timelineIun}/timeline`)
+      .reply(200, timelineResponseWithHiddenLegalFact(legalFactKey, 'SENDER_ACK'));
+    mock.onGet(documentUrl).reply(200, { retryAfter: 1 });
+
+    await act(async () => {
+      result = render(
+        <>
+          <AppMessage />
+          <NotificationTimeline />
+        </>,
+        {
+          route: `/${timelineIun}/dettaglio/timeline`,
+          path: '/:id/dettaglio/timeline',
+        }
+      );
+    });
+
+    expect(mock.history.get).toHaveLength(1);
+    expect(mock.history.get[0].url).toBe(`/bff/v1/notifications/sent/${timelineIun}/timeline`);
+
+    const legalFactButton = result.getByTestId('download-legalfact');
+    fireEvent.click(legalFactButton);
+
+    await waitFor(() => {
+      expect(mock.history.get).toHaveLength(2);
+      expect(mock.history.get[1].url).toContain(documentUrl);
+    });
+
+    const docNotAvailableAlert = await waitFor(() => result.getByTestId('snackBarContainer'));
+    expect(docNotAvailableAlert).toBeInTheDocument();
+
+    mock.onGet(documentUrl).reply(200, {
+      filename: 'mocked-filename',
+      contentLength: 1000,
+      retryAfter: null,
+      url: 'https://mocked-url-com',
+    });
+
+    fireEvent.click(legalFactButton);
+
+    await waitFor(() => {
+      expect(mock.history.get).toHaveLength(3);
+      expect(mock.history.get[2].url).toContain(documentUrl);
+    });
+
+    await waitFor(() => {
+      expect(globalThis.location.href).toBe('https://mocked-url-com');
+    });
+  });
+
+  it('executes the legal fact download handler - AAR branch', async () => {
+    // per l'AAR la chiave va usata per intero come documentId, senza estrarre alcun prefisso
+    const legalFactKey = 'safestorage://PN_AAR-test.pdf';
+    const documentUrl = `/bff/v1/notifications/sent/${timelineIun}/documents/AAR?documentId=${encodeURIComponent(
+      legalFactKey
+    )}`;
+
+    mock
+      .onGet(`/bff/v1/notifications/sent/${timelineIun}/timeline`)
+      .reply(200, timelineResponseWithHiddenLegalFact(legalFactKey, 'AAR'));
+    mock.onGet(documentUrl).reply(200, {
+      filename: 'mocked-filename',
+      contentLength: 1000,
+      retryAfter: null,
+      url: 'https://mocked-aar-url.com',
+    });
+
+    await act(async () => {
+      result = render(<NotificationTimeline />, {
+        route: `/${timelineIun}/dettaglio/timeline`,
+        path: '/:id/dettaglio/timeline',
+      });
+    });
+
+    fireEvent.click(result.getByTestId('download-legalfact'));
+
+    await waitFor(() => {
+      expect(mock.history.get).toHaveLength(2);
+      expect(mock.history.get[1].url).toBe(documentUrl);
+    });
+
+    await waitFor(() => {
+      expect(globalThis.location.href).toBe('https://mocked-aar-url.com');
+    });
   });
 });
 

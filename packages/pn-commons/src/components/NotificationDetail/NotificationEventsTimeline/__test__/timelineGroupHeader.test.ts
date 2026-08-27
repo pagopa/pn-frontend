@@ -1,9 +1,13 @@
+import { MailOutlineRounded } from '@mui/icons-material';
+
 import { NotificationStatus } from '../../../../models';
 import {
   NotificationTimelineGroup,
   NotificationTimelineStatusHistory,
   TimelineEventsChannel,
 } from '../../../../models/NotificationTimeline';
+import MobileRounded from '../../../Icons/MobileRounded';
+import SendIcon from '../../../Icons/SendIcon';
 import { getMultiAttemptGroupIds, getTimelineGroupHeader } from '../timelineGroupHeader.config';
 
 const analogGroup = (
@@ -51,17 +55,6 @@ describe('timelineGroupHeader config', () => {
     );
   });
 
-  it('getTimelineGroupHeader - shows the generic label when the channel has a single attempt', () => {
-    expect(getTimelineGroupHeader(analogGroup('single-attempt', 1)).channel).toBe(
-      'detail.timeline.send-analog-domicile-ar-group-label'
-    );
-    expect(
-      getTimelineGroupHeader(
-        analogGroup('single-attempt', 1, TimelineEventsChannel.REGISTERED_LETTER_890)
-      ).channel
-    ).toBe('detail.timeline.send-analog-domicile-890-group-label');
-  });
-
   it('getTimelineGroupHeader - shows the attempt label when the channel has multiple attempts', () => {
     expect(getTimelineGroupHeader(analogGroup('first-attempt', 1), true).channel).toBe(
       'detail.timeline.send-analog-domicile-ar-first-attempt-group-label'
@@ -93,21 +86,45 @@ describe('timelineGroupHeader config', () => {
     ).toBe('abc123');
   });
 
-  it('getTimelineGroupHeader - returns an icon for every channel, mapped or not', () => {
-    const channels = [
-      TimelineEventsChannel.AR_REGISTERED_LETTER,
-      TimelineEventsChannel.REGISTERED_LETTER_890,
-      TimelineEventsChannel.SIMPLE_REGISTERED_LETTER,
-      TimelineEventsChannel.PEC,
-      TimelineEventsChannel.SERCQ,
-      TimelineEventsChannel.COURTESY,
-    ];
-
-    channels.forEach((channel) => {
-      expect(
-        getTimelineGroupHeader(analogGroup(`${channel}-group`, 1, channel)).icon
-      ).toBeDefined();
-    });
+  it.each([
+    {
+      channel: TimelineEventsChannel.AR_REGISTERED_LETTER,
+      labelKey: 'detail.timeline.send-analog-domicile-ar-group-label',
+      icon: MailOutlineRounded,
+    },
+    {
+      channel: TimelineEventsChannel.REGISTERED_LETTER_890,
+      labelKey: 'detail.timeline.send-analog-domicile-890-group-label',
+      icon: MailOutlineRounded,
+    },
+    {
+      channel: TimelineEventsChannel.SIMPLE_REGISTERED_LETTER,
+      labelKey: 'detail.timeline.send-simple-registered-letter',
+      icon: MailOutlineRounded,
+    },
+    {
+      channel: TimelineEventsChannel.PEC,
+      labelKey: 'detail.timeline.send-digital-domicile-PEC-group-label',
+      icon: MailOutlineRounded,
+    },
+    {
+      channel: TimelineEventsChannel.SERCQ,
+      labelKey: 'detail.timeline.send-digital-domicile-SERCQ-SEND-group-label',
+      icon: SendIcon,
+    },
+    {
+      channel: TimelineEventsChannel.COURTESY,
+      labelKey: 'detail.timeline.courtesy-group-label',
+      icon: MobileRounded,
+    },
+  ])('getTimelineGroupHeader - maps $channel to its own label and icon', ({
+    channel,
+    labelKey,
+    icon,
+  }) => {
+    const header = getTimelineGroupHeader(analogGroup(`${channel}-group`, 1, channel));
+    expect(header.channel).toBe(labelKey);
+    expect(header.icon).toBe(icon);
   });
 
   it('getTimelineGroupHeader - changes the icon with the attempt, as the label does', () => {
