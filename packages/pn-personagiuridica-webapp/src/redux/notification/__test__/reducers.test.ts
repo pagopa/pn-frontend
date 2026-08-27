@@ -2,14 +2,12 @@ import MockAdapter from 'axios-mock-adapter';
 
 import {
   NotificationDocumentType,
-  NotificationTimelineResponse,
   PAYMENT_CACHE_KEY,
   PaidDetails,
   PaymentAttachmentSName,
   PaymentStatus,
   RecipientType,
   TimelineCategory,
-  notificationTimelineDTO,
   populatePaymentsPagoPaF24,
 } from '@pagopa-pn/pn-commons';
 
@@ -25,6 +23,7 @@ import {
   paymentsData,
   recipients,
 } from '../../../__mocks__/NotificationDetail.mock';
+import { NotificationTimelineResponse } from '../../../__mocks__/NotificationTimeline.mock';
 import { createTestStore } from '../../../__test__/test-utils';
 import { apiClient } from '../../../api/apiClients';
 import { getDowntimeLegalFact } from '../../appStatus/actions';
@@ -131,17 +130,17 @@ describe('Notification detail redux state tests', () => {
   it('Should be able to fetch the notification timeline', async () => {
     mock
       .onGet(`/bff/v1/notifications/received/${notificationDTO.iun}/timeline`)
-      .reply(200, notificationTimelineDTO);
+      .reply(200, NotificationTimelineResponse);
     const action = await store.dispatch(
       getReceivedNotificationTimeline({
         iun: notificationDTO.iun,
       })
     );
-    const payload = action.payload as NotificationTimelineResponse;
+    const payload = action.payload;
     expect(action.type).toBe('getReceivedNotificationTimeline/fulfilled');
-    expect(payload).toEqual(notificationTimelineDTO);
+    expect(payload).toEqual(NotificationTimelineResponse);
     expect(store.getState().notificationState.notificationTimeline).toStrictEqual(
-      notificationTimelineDTO
+      NotificationTimelineResponse
     );
   });
 

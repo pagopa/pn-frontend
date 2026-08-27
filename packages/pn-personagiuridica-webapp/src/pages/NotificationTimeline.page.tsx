@@ -1,7 +1,7 @@
 /* eslint-disable sonarjs/cognitive-complexity */
 
 /* eslint-disable complexity */
-import { Fragment, useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
 
@@ -101,33 +101,18 @@ const NotificationTimeline: React.FC = () => {
 
     PGEventStrategyFactory.triggerEvent(PGEventsType.SEND_PG_TIMELINE_DOWNLOAD, { legalFact });
 
-    if (legalFact.category !== 'AAR') {
-      // Legal fact case
-      dispatch(
-        getReceivedNotificationDocument({
-          iun: notificationIUN,
-          documentType: NotificationDocumentType.LEGAL_FACT,
-          documentId: legalFact.key.substring(legalFact.key.lastIndexOf('/') + 1),
-          mandateId,
-        })
-      )
-        .unwrap()
-        .then(showInfoMessageIfRetryAfterOrDownload)
-        .catch(() => {});
-    } else {
-      // AAR in timeline case
-      dispatch(
-        getReceivedNotificationDocument({
-          iun: notificationIUN,
-          documentType: NotificationDocumentType.AAR,
-          documentId: legalFact.key,
-          mandateId,
-        })
-      )
-        .unwrap()
-        .then(showInfoMessageIfRetryAfterOrDownload)
-        .catch(() => {});
-    }
+    const isAAR = legalFact.category === NotificationDocumentType.AAR;
+    const documentType = isAAR ? NotificationDocumentType.AAR : NotificationDocumentType.LEGAL_FACT;
+    const documentId = isAAR
+      ? legalFact.key
+      : legalFact.key.substring(legalFact.key.lastIndexOf('/') + 1);
+
+    dispatch(
+      getReceivedNotificationDocument({ iun: notificationIUN, documentType, documentId, mandateId })
+    )
+      .unwrap()
+      .then(showInfoMessageIfRetryAfterOrDownload)
+      .catch(() => {});
   };
 
   const fetchReceivedNotification = useCallback(() => {
@@ -143,7 +128,7 @@ const NotificationTimeline: React.FC = () => {
       .unwrap()
       .catch(() => {})
       .finally(() => setPageReady(true));
-  }, [id, IS_NEW_TIMELINE_ENABLED]);
+  }, [id, IS_NEW_TIMELINE_ENABLED, mandateId]);
 
   useEffect(() => {
     fetchReceivedNotification();
@@ -166,9 +151,7 @@ const NotificationTimeline: React.FC = () => {
         goBackAction={() => navigate(backRoute)}
       />
     );
-  }, [i18n.language, notificationSubject]);
-
-  const breadcrumb = <Fragment>{properBreadcrumb}</Fragment>;
+  }, [id, i18n.language, notificationSubject, mandateId]);
 
   const cancelledAlert = isCancelledOrCancelling && (
     <MIAlert
@@ -196,7 +179,7 @@ const NotificationTimeline: React.FC = () => {
       )}
       {!hasNotificationTimelineApiError && (
         <Box sx={{ p: 3, display: 'flex', flexDirection: 'column' }} gap={3}>
-          {breadcrumb}
+          {properBreadcrumb}
           <Stack gap={3}>
             <Typography variant="h4" component="h1">
               {t('detail.notification-timeline-section.title', { ns: 'notifiche' })}
