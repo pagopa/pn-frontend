@@ -40,7 +40,7 @@ const NotificationEventsTimeline = ({
   );
   const timelineItems = useMemo(
     () => getTimelineItems(statusHistory, legacyStatusHistory, recipients, isSenderTimeline),
-    [statusHistory, legacyStatusHistory, recipients, isSenderTimeline]
+    [statusHistory, legacyStatusHistory, recipients, isSenderTimeline, language]
   );
 
   return (
