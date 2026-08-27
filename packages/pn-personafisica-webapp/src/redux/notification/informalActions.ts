@@ -1,8 +1,10 @@
 import {
+  EventNotificationTypes,
   ExtRegistriesPaymentDetails,
   NotificationDocumentResponse,
   PaymentAttachment,
   PaymentAttachmentSName,
+  getPaymentCache,
   parseError,
 } from '@pagopa-pn/pn-commons';
 import { createAsyncThunk } from '@reduxjs/toolkit';
@@ -13,6 +15,9 @@ import {
   RecipientInformalNotificationsApiFactory,
 } from '../../generated-client/informal-notifications';
 import { PaymentsApiFactory } from '../../generated-client/payments';
+import { PFEventsType } from '../../models/PFEventsType';
+import PFEventStrategyFactory from '../../utility/MixpanelUtils/PFEventStrategyFactory';
+import { RootState } from '../store';
 
 export enum INFORMAL_NOTIFICATION_ACTIONS {
   GET_RECEIVED_INFORMAL_NOTIFICATION = 'getReceivedInformalNotification',
@@ -111,12 +116,31 @@ export const getReceivedInformalNotificationPayment = createAsyncThunk<
 
 export const getReceivedInformalNotificationPaymentInfo = createAsyncThunk<
   Array<ExtRegistriesPaymentDetails>,
-  { paymentInfoRequest: Array<{ noticeCode: string; creditorTaxId: string }> }
+  { paymentInfoRequest: Array<{ noticeCode: string; creditorTaxId: string }> },
+  { state: RootState }
 >(
   INFORMAL_NOTIFICATION_ACTIONS.GET_RECEIVED_INFORMAL_NOTIFICATION_PAYMENT_INFO,
-  async ({ paymentInfoRequest }, { rejectWithValue, signal }) => {
+  async ({ paymentInfoRequest }, { rejectWithValue, getState, signal }) => {
     try {
+      const { notificationState } = getState();
+      const iun = notificationState.notification.iun;
+      const paymentCache = getPaymentCache(iun);
       const paymentsApiFactory = PaymentsApiFactory(undefined, undefined, apiClient);
+      if (paymentCache?.currentPayment) {
+        const updatedPaymentResponse = await paymentsApiFactory.getPaymentsInfoV1(
+          [paymentCache.currentPayment],
+          { signal }
+        );
+
+        const updatedPayment = updatedPaymentResponse.data as Array<ExtRegistriesPaymentDetails>;
+
+        PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_PAYMENT_OUTCOME, {
+          outcome: updatedPayment[0].status,
+          notification_type: EventNotificationTypes.INFORMAL,
+        });
+
+        return updatedPayment;
+      }
 
       const response = await paymentsApiFactory.getPaymentsInfoV1(paymentInfoRequest, { signal });
 
