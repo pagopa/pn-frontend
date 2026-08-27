@@ -123,6 +123,7 @@ const Layout: React.FC<Props> = ({
             isLogged={isLogged}
             enableAssistanceButton={enableAssistanceButton}
             chipLabel={chipLabel}
+            currentLanguage={currentLanguage}
           />
         )}
         <Stack
