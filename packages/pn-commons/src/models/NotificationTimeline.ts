@@ -2,6 +2,7 @@ import {
   INotificationDetailTimeline,
   NotificationDeliveryMode,
   NotificationDetailRecipient,
+  NotificationStatusHistory,
   ReworkedStatus,
 } from './NotificationDetail';
 import { NotificationStatus } from './NotificationStatus';
@@ -57,6 +58,10 @@ export interface NotificationTimelineEvent
   extends Omit<INotificationDetailTimeline, 'hidden' | 'index'> {
   isHidden: boolean;
 }
+
+export type NotificationTimelineLegacyStatusHistory = Omit<NotificationStatusHistory, 'steps'> & {
+  steps: Array<NotificationTimelineEvent>;
+};
 
 export const NotificationTimelineStepType = { EVENT: 'EVENT', GROUP: 'GROUP' } as const;
 

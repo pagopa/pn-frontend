@@ -1,8 +1,8 @@
-import { NotificationStatusHistory } from '../models';
 import { NotificationDetailRecipient } from '../models/NotificationDetail';
 import {
   NotificationTimelineEvent,
   NotificationTimelineGroupStep,
+  NotificationTimelineLegacyStatusHistory,
   NotificationTimelineStatusHistory,
   NotificationTimelineStep,
   NotificationTimelineStepType,
@@ -26,7 +26,7 @@ export const flattenTimelineSteps = (
  */
 export const toLegacyStatusHistory = (
   statusHistory: Array<NotificationTimelineStatusHistory>
-): Array<NotificationStatusHistory> =>
+): Array<NotificationTimelineLegacyStatusHistory> =>
   statusHistory.map((status) => ({
     status: status.status,
     activeFrom: status.activeFrom,

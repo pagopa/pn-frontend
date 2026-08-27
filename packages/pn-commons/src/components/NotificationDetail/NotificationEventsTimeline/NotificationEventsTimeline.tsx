@@ -7,7 +7,6 @@ import { LegalFactId, NotificationDetailRecipient } from '../../../models/Notifi
 import { NotificationTimelineStatusHistory } from '../../../models/NotificationTimeline';
 import { getNotificationStatusInfos } from '../../../utility/notification.utility';
 import {
-  flattenTimelineSteps,
   getRecipientPerStep,
   isTimelineGroupStep,
   toLegacyStatusHistory,
@@ -47,13 +46,14 @@ const NotificationEventsTimeline = ({
     <Box data-testid="NotificationEventsTimeline">
       <MITimeline>
         {statusHistory.map((status, index) => {
-          const { label, description } = getNotificationStatusInfos(legacyStatusHistory[index], {
+          const legacyStatus = legacyStatusHistory[index];
+          const { label, description } = getNotificationStatusInfos(legacyStatus, {
             statusHistory: legacyStatusHistory,
             recipients,
             isParty: isSenderTimeline,
           });
           const { icon, variant } = getTimelineItemPresentation(status.status, index === 0);
-          const allEvents = flattenTimelineSteps(status.steps);
+          const allEvents = legacyStatus.steps;
 
           const hasGroupedEvents = status.steps.some(isTimelineGroupStep);
 
