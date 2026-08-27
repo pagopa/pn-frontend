@@ -10,11 +10,11 @@ export const NotificationTimelineResponse = {
         at: 'Presso',
         address: 'A@FAIL-DISCOVERY_AR_IRR_D',
         addressDetails: 'SCALA B',
-        zip: '00118',
-        municipality: 'ROMA',
-        municipalityDetails: 'CENTRO',
-        province: 'RM',
-        foreignState: 'ITALIA',
+        zip: '00000',
+        municipality: 'FAKE_CITY',
+        municipalityDetails: 'FAKE_DISTRICT',
+        province: 'FC',
+        foreignState: 'FAKE_COUNTRY',
       },
       payments: [
         {
