@@ -146,18 +146,15 @@ export const getReceivedNotificationPayment = createAsyncThunk<
 
 export const getReceivedNotificationPaymentInfo = createAsyncThunk<
   Array<PaymentDetails>,
-  { taxId: string; paymentInfoRequest: Array<{ noticeCode: string; creditorTaxId: string }> },
+  {
+    taxId: string;
+    paymentInfoRequest: Array<{ noticeCode: string; creditorTaxId: string }>;
+    notification_type?: EventNotificationType;
+  },
   { state: RootState }
 >(
   NOTIFICATION_ACTIONS.GET_RECEIVED_NOTIFICATION_PAYMENT_INFO,
-  async (
-    params: {
-      taxId: string;
-      paymentInfoRequest: Array<{ noticeCode: string; creditorTaxId: string }>;
-      notification_type?: EventNotificationType;
-    },
-    { rejectWithValue, getState, signal }
-  ) => {
+  async (params, { rejectWithValue, getState, signal }) => {
     try {
       const { notificationState } = getState();
       const iun = notificationState.notification.iun;
