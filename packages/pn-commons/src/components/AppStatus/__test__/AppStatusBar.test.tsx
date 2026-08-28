@@ -63,8 +63,8 @@ describe('AppStatusBar component', () => {
       'flex-direction': 'row',
       'border-color': fakePalette.success.main,
     });
-    // check icon: must be CheckCircleIcon
-    const iconElement = result?.getByTestId('CheckCircleIcon');
+    // check icon: must be CheckCircleRoundedIcon
+    const iconElement = result?.getByTestId('CheckCircleRoundedIcon');
     expect(iconElement).toBeInTheDocument();
   });
 
@@ -86,8 +86,8 @@ describe('AppStatusBar component', () => {
       'flex-direction': 'row',
       'border-color': fakePalette.error.main,
     });
-    // check icon: must be ErrorIcon
-    const iconElement = result?.getByTestId('ErrorIcon');
+    // check icon: must be ErrorRoundedIcon
+    const iconElement = result?.getByTestId('ErrorRoundedIcon');
     expect(iconElement).toBeInTheDocument();
   });
 
@@ -110,8 +110,8 @@ describe('AppStatusBar component', () => {
       'flex-direction': 'column',
       'border-color': fakePalette.success.main,
     });
-    // check icon: must be CheckCircleIcon
-    const iconElement = result?.getByTestId('CheckCircleIcon');
+    // check icon: must be CheckCircleRoundedIcon
+    const iconElement = result?.getByTestId('CheckCircleRoundedIcon');
     expect(iconElement).toBeInTheDocument();
   });
 });

@@ -1,10 +1,10 @@
 import { FieldMetaProps } from 'formik';
 import { useTranslation } from 'react-i18next';
 
-import DeleteIcon from '@mui/icons-material/Delete';
+import DeleteRoundedIcon from '@mui/icons-material/DeleteRounded';
 import { Box, FormControlLabel, FormHelperText, Stack, Switch, TextField } from '@mui/material';
 import { FileUpload, useIsMobile } from '@pagopa-pn/pn-commons';
-import { ButtonNaked, MIAlert } from '@pagopa/mui-italia';
+import { MIAlert, MIButton } from '@pagopa/mui-italia';
 
 import { NewNotificationPagoPaPayment, NotificationFeePolicy } from '../../models/NewNotification';
 
@@ -137,9 +137,9 @@ const PagoPaPaymentBox: React.FC<PaymentBoxProps> = ({
           )}
 
           {showDeleteButton && (
-            <ButtonNaked
-              color="primary"
-              startIcon={<DeleteIcon />}
+            <MIButton
+              variant="text"
+              startIcon={<DeleteRoundedIcon />}
               onClick={onDeletePayment}
               sx={{
                 justifyContent: { xs: 'flex-start', md: 'flex-end' },
@@ -148,7 +148,7 @@ const PagoPaPaymentBox: React.FC<PaymentBoxProps> = ({
               data-testid="pagopa-delete-button"
             >
               {t('button.delete', { ns: 'common' })}
-            </ButtonNaked>
+            </MIButton>
           )}
         </Stack>
       )}

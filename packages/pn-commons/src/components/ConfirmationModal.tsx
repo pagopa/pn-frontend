@@ -1,7 +1,8 @@
 import React, { JSXElementConstructor, ReactNode } from 'react';
 
-import { Box, Button, ButtonProps, DialogActionsProps, DialogTitle } from '@mui/material';
+import { Box, DialogActionsProps, DialogTitle } from '@mui/material';
 import { PnDialog, PnDialogActions, PnDialogContent } from '@pagopa-pn/pn-commons';
+import { MIButton, MIButtonProps } from '@pagopa/mui-italia';
 
 import PnDialogIllustration from './PnDialog/PnDialogIllustration';
 
@@ -11,12 +12,12 @@ type Props = {
   contentAlign?: 'left' | 'center';
   slots?: {
     illustration?: ReactNode;
-    confirmButton?: JSXElementConstructor<ButtonProps>;
-    closeButton?: JSXElementConstructor<ButtonProps>;
+    confirmButton?: JSXElementConstructor<MIButtonProps>;
+    closeButton?: JSXElementConstructor<MIButtonProps>;
   };
   slotsProps?: {
-    confirmButton?: ButtonProps;
-    closeButton?: ButtonProps;
+    confirmButton?: MIButtonProps;
+    closeButton?: MIButtonProps;
     actions?: DialogActionsProps;
   };
   children?: React.ReactNode;
@@ -31,7 +32,7 @@ const ConfirmationModal: React.FC<Props> = ({
   children,
 }: Props) => {
   const illustration = slots?.illustration;
-  const ConfirmButton = slots?.confirmButton || Button;
+  const ConfirmButton = slots?.confirmButton || MIButton;
   const CloseButton = slots?.closeButton;
 
   const actionsProps: DialogActionsProps = {
@@ -73,7 +74,6 @@ const ConfirmationModal: React.FC<Props> = ({
         {CloseButton && (
           <CloseButton
             id="dialog-close-button"
-            color="primary"
             variant="outlined"
             data-testid="closeButton"
             {...slotsProps?.closeButton}
@@ -81,7 +81,6 @@ const ConfirmationModal: React.FC<Props> = ({
         )}
         <ConfirmButton
           id="dialog-confirm-button"
-          color="primary"
           variant="contained"
           data-testid="confirmButton"
           {...slotsProps?.confirmButton}

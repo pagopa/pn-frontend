@@ -13,18 +13,6 @@ type NotificationTimelineBoxProps = {
   onTimelineClick?: () => void;
 };
 
-type MIChipColors = 'default' | 'info' | 'warning' | 'error' | 'success' | 'highlight' | 'neutral';
-
-const statusColorMap: Record<string, MIChipColors> = {
-  primary: 'info',
-  secondary: 'neutral',
-  info: 'info',
-  warning: 'warning',
-  error: 'error',
-  success: 'success',
-  default: 'default',
-};
-
 const NotificationTimelineBox = ({
   statusHistory,
   recipients,
@@ -41,8 +29,6 @@ const NotificationTimelineBox = ({
     isParty,
   });
 
-  const chipColor = statusColorMap[notificationStatusInfos.color || 'default'] || 'default';
-
   return (
     <MIPaper padding={24} data-testid="NotificationDetailTimeline">
       <Stack spacing={1} alignItems="flex-start">
@@ -53,7 +39,7 @@ const NotificationTimelineBox = ({
           )}
         </Typography>
         <MIChip
-          color={chipColor}
+          color={notificationStatusInfos.color}
           variant="filled"
           label={notificationStatusInfos.label}
           sx={{ my: 1, width: 'fit-content' }}

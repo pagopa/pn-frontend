@@ -3,7 +3,7 @@ import { Provider } from 'react-redux';
 import { RouterProvider, createMemoryRouter } from 'react-router-dom';
 
 import { ThemeProvider } from '@mui/material';
-import { theme } from '@pagopa/mui-italia';
+import { themeNext } from '@pagopa/mui-italia';
 import { EnhancedStore, configureStore } from '@reduxjs/toolkit';
 import { RenderOptions, RenderResult, render } from '@testing-library/react';
 
@@ -67,15 +67,17 @@ const customRender = (
   );
 
   // test view
-  const Wrapper = ({ children }: { children: ReactNode }) => (
-    <Provider store={testStore}>
-      <ThemeProvider theme={theme}>
-        <UiContext.Provider value={children as ReactElement}>
-          <RouterProvider router={router} />
-        </UiContext.Provider>
-      </ThemeProvider>
-    </Provider>
-  );
+  const Wrapper = ({ children }: { children: ReactNode }) => {
+    return (
+      <Provider store={testStore}>
+        <ThemeProvider theme={themeNext}>
+          <UiContext.Provider value={children as ReactElement}>
+            <RouterProvider router={router} />
+          </UiContext.Provider>
+        </ThemeProvider>
+      </Provider>
+    );
+  };
   const view = render(ui, {
     wrapper: Wrapper,
     ...renderOptions,
@@ -109,7 +111,7 @@ function randomString(length: number) {
 }
 
 export * from '@testing-library/react';
-export { customRender as render, createMockedStore };
+export { customRender as render, createMockedStore, themeNext as theme };
 export type { CustomRenderResult as RenderResult };
 // utility functions
 export { randomString };

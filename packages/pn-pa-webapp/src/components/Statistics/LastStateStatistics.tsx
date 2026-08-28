@@ -3,11 +3,11 @@ import { isArray } from 'lodash-es';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { Paper, SxProps, Typography } from '@mui/material';
+import { Paper, SxProps, Typography, useTheme } from '@mui/material';
 import { NotificationStatus } from '@pagopa-pn/pn-commons';
 import { PnECharts, PnEChartsProps } from '@pagopa-pn/pn-data-viz';
 
-import { GraphColors, ILastStateStatistics } from '../../models/Statistics';
+import { ILastStateStatistics, getGraphColors } from '../../models/Statistics';
 import EmptyStatistics from './EmptyStatistics';
 
 type Props = {
@@ -17,35 +17,37 @@ type Props = {
 
 const LastStateStatistics: React.FC<Props> = (props) => {
   const { t } = useTranslation(['statistics']);
+  const theme = useTheme();
+  const graphColors = getGraphColors(theme);
 
   const statuses = [
     {
       value: props.data[NotificationStatus.DELIVERING],
-      color: GraphColors.lightGrey,
+      color: graphColors.lightGrey,
     },
     {
       value: props.data[NotificationStatus.DELIVERED],
-      color: GraphColors.lightBlue,
+      color: graphColors.lightBlue,
     },
     {
       value: props.data[NotificationStatus.VIEWED],
-      color: GraphColors.lightGreen,
+      color: graphColors.lightGreen,
     },
     {
       value: props.data[NotificationStatus.EFFECTIVE_DATE],
-      color: GraphColors.darkGreen,
+      color: graphColors.darkGreen,
     },
     {
       value: props.data[NotificationStatus.CANCELLED],
-      color: GraphColors.gold,
+      color: graphColors.gold,
     },
     {
       value: props.data[NotificationStatus.UNREACHABLE],
-      color: GraphColors.lightRed,
+      color: graphColors.lightRed,
     },
     {
       value: props.data[NotificationStatus.RETURNED_TO_SENDER],
-      color: GraphColors.pink,
+      color: graphColors.pink,
     },
   ];
 

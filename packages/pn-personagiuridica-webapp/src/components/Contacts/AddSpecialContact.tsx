@@ -8,8 +8,8 @@ import { ChangeEvent, forwardRef, useEffect, useImperativeHandle, useRef, useSta
 import { Trans, useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 
-import AccountBalanceIcon from '@mui/icons-material/AccountBalance';
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import AccountBalanceRoundedIcon from '@mui/icons-material/AccountBalance';
+import CheckCircleRoundedIcon from '@mui/icons-material/CheckCircleRounded';
 import {
   Box,
   Checkbox,
@@ -33,7 +33,7 @@ import {
   TosPrivacyConsent,
   searchStringLimitReachedText,
 } from '@pagopa-pn/pn-commons';
-import { Autocomplete, MIAlert, theme } from '@pagopa/mui-italia';
+import { Autocomplete, MIAlert } from '@pagopa/mui-italia';
 
 import { AddressType, ChannelType, SaveDigitalAddressParams, Sender } from '../../models/contacts';
 import { Party } from '../../models/party';
@@ -193,7 +193,10 @@ const AddSpecialContact = forwardRef<AddSpecialContactRef, Props>(
 
     const renderOption = (option: Party) => (
       <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-        <AccountBalanceIcon fontSize="small" sx={{ color: '#BBC2D6' }} />
+        <AccountBalanceRoundedIcon
+          fontSize="small"
+          sx={(theme) => ({ color: theme.colors.neutral.grey[300] })}
+        />
         {option.name}
       </Box>
     );
@@ -578,12 +581,12 @@ const AddSpecialContact = forwardRef<AddSpecialContactRef, Props>(
                         'aria-invalid':
                           formik.touched.s_disclaimer && Boolean(formik.errors.s_disclaimer),
                       }}
-                      sx={{
+                      sx={(theme) => ({
                         color:
                           formik.touched.s_disclaimer && Boolean(formik.errors.s_disclaimer)
-                            ? theme.palette.error.dark
+                            ? theme.palette.error.main
                             : theme.palette.text.secondary,
-                      }}
+                      })}
                     />
                   }
                   label={<Trans ns="recapiti" i18nKey="special-contacts.pec-disclaimer" />}
@@ -613,7 +616,7 @@ const AddSpecialContact = forwardRef<AddSpecialContactRef, Props>(
                 >
                   {defaultEMAILAddress?.value}
                 </Typography>
-                <CheckCircleIcon sx={{ color: 'success.main' }} />
+                <CheckCircleRoundedIcon sx={{ color: 'success.main' }} />
               </Stack>
             </Stack>
           )}

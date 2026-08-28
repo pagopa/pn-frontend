@@ -2,7 +2,7 @@ import { Fragment, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
-import ArrowForward from '@mui/icons-material/ArrowForward';
+import ArrowForwardRoundedIcon from '@mui/icons-material/ArrowForwardRounded';
 import { Grid } from '@mui/material';
 import {
   CardElement,
@@ -181,9 +181,8 @@ const MobileNotifications = ({
               <PnCardActions>
                 <MIButton
                   variant="text"
-                  color="primary"
                   onClick={() => handleRowClick(data)}
-                  endIcon={<ArrowForward />}
+                  endIcon={<ArrowForwardRoundedIcon />}
                   data-testid="go-to-detail"
                 >
                   {t('table.open')}
