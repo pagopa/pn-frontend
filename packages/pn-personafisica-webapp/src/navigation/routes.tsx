@@ -50,6 +50,7 @@ const Router: React.FC = () => {
     <Suspense fallback={<LoadingPage />}>
       <Routes>
         <Route element={<SessionGuard />}>
+          <Route path={routes.SUPPORT} element={<SupportPage />} />
           <Route element={<ToSGuard />}>
             <Route element={<RapidAccessGuard />}>
               <Route element={<OnboardingGuard />}>
@@ -72,7 +73,6 @@ const Router: React.FC = () => {
                 <Route path={routes.RECAPITI} element={<Contacts />} />
                 <Route path={routes.PROFILO} element={<Profile />} />
                 <Route path={routes.APP_STATUS} element={<AppStatus />} />
-                <Route path={routes.SUPPORT} element={<SupportPage />} />
                 {IS_ONBOARDING_ENABLED && (
                   <Route path={routes.ONBOARDING} element={<Onboarding />}>
                     <Route index element={<OnboardingHome />} />
