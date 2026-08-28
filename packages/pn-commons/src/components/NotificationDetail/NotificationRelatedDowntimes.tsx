@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 
-import { Box, List, ListItem, Typography, useTheme } from '@mui/material';
+import { Box, List, ListItem, Typography } from '@mui/material';
 import { MIButton, MIPaper, Tag } from '@pagopa/mui-italia';
 
 import { Downtime } from '../../models/AppStatus';
@@ -70,8 +70,6 @@ const NotificationRelatedDowntimes: React.FC<Props> = ({
   disableDownloads,
   downtimeExampleLink,
 }) => {
-  const theme = useTheme();
-
   const title = getLocalizedOrDefaultLabel('notifications', 'detail.downtimes.title');
   const unknownFunctinalityLabel = (event: Downtime) =>
     getLocalizedOrDefaultLabel('appStatus', `legends.unknownFunctionality`, undefined, {
@@ -175,7 +173,7 @@ const NotificationRelatedDowntimes: React.FC<Props> = ({
                 data-testid="notification-related-downtime-detail"
                 disableGutters
                 key={ix}
-                sx={{
+                sx={(theme) => ({
                   flexDirection: 'column',
                   alignItems: 'flex-start',
                   borderBottom: '1px solid',
@@ -186,7 +184,7 @@ const NotificationRelatedDowntimes: React.FC<Props> = ({
                     borderBottom: 'none',
                     pb: 0,
                   },
-                }}
+                })}
               >
                 {/* Description including time range */}
                 <Typography variant="body1">{mainTextForDowntime(event)}</Typography>
@@ -210,7 +208,6 @@ const NotificationRelatedDowntimes: React.FC<Props> = ({
                   {event.fileAvailable && !disableDownloads ? (
                     <MIButton
                       variant="text"
-                      color="primary"
                       onClick={() => {
                         void fetchDowntimeLegalFactDocumentDetails(event.legalFactId as string);
                       }}
@@ -221,7 +218,7 @@ const NotificationRelatedDowntimes: React.FC<Props> = ({
                       )}
                     </MIButton>
                   ) : (
-                    <Typography variant="body1">
+                    <Typography variant="body1" color="text.secondary">
                       {getLocalizedOrDefaultLabel(
                         'appStatus',
                         `legends.noFileAvailableByStatus.${event.status}`,

@@ -1,9 +1,10 @@
 import { useRef, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 
-import PowerSettingsNewIcon from '@mui/icons-material/PowerSettingsNew';
-import { Chip, Divider, Typography } from '@mui/material';
+import PowerSettingsNewRoundedIcon from '@mui/icons-material/PowerSettingsNewRounded';
+import { Divider, Typography } from '@mui/material';
 import { EventAction, PnInfoCard, appStateActions } from '@pagopa-pn/pn-commons';
+import { MIChip } from '@pagopa/mui-italia';
 
 import { PFEventsType } from '../../models/PFEventsType';
 import {
@@ -220,7 +221,7 @@ const EmailContactItem: React.FC = () => {
     if (defaultSERCQ_SENDAddress && !hasCourtesyAddresses) {
       return 'warning';
     }
-    return 'default';
+    return 'neutral';
   };
 
   const getRemoveModalTitle = () => {
@@ -301,7 +302,7 @@ const EmailContactItem: React.FC = () => {
           {
             key: 'disable',
             label: t('button.disable'),
-            icon: <PowerSettingsNewIcon />,
+            icon: <PowerSettingsNewRoundedIcon />,
             destructive: true,
             testId: 'disable-email',
             onClick: () => {
@@ -384,11 +385,10 @@ const EmailContactItem: React.FC = () => {
         </Typography>
       }
       subtitle={
-        <Chip
+        <MIChip
           component="span"
           label={t(`status.${isEmailActive ? 'active' : 'inactive'}`, { ns: 'recapiti' })}
           color={getChipColor()}
-          size="small"
           sx={{ mb: 2 }}
         />
       }

@@ -1,7 +1,8 @@
 /* eslint-disable functional/immutable-data */
 import { useCallback, useEffect, useRef, useState } from 'react';
 
-import { Button, DialogContentText, DialogTitle } from '@mui/material';
+import { DialogContentText, DialogTitle } from '@mui/material';
+import { MIButton } from '@pagopa/mui-italia';
 
 import { getLocalizedOrDefaultLabel } from '../utility/localization.utility';
 import PnDialog from './PnDialog/PnDialog';
@@ -81,15 +82,14 @@ const InactivityHandler: React.FC<Props> = ({ inactivityTimer, onTimerExpired, c
             </DialogContentText>
           </PnDialogContent>
           <PnDialogActions>
-            <Button
+            <MIButton
               fullWidth
-              color="primary"
               variant="outlined"
               data-testid="inactivity-button"
               onClick={confirmModal}
             >
               {getLocalizedOrDefaultLabel('common', 'inactivity.action')}
-            </Button>
+            </MIButton>
           </PnDialogActions>
         </PnDialog>
       )}

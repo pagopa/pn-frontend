@@ -47,7 +47,6 @@ export { default as Footer } from './Footer/Footer';
 export { default as Header } from './Header/Header';
 export { IllusAppIO } from './Illustrations/IllusAppIO';
 export { IllusAppIODialog } from './Illustrations/IllusAppIODialog';
-export { IllusAppIoLogo } from './Illustrations/IllusAppIOLogo';
 export { IllusHourglass } from './Illustrations/IllusHourglass';
 export { IllusQuestion } from './Illustrations/IllusQuestion';
 export { IllusSendLogo } from './Illustrations/IllusSendLogo';

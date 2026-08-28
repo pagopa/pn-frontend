@@ -4,10 +4,9 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import * as yup from 'yup';
 
-import AccountBalanceIcon from '@mui/icons-material/AccountBalance';
+import AccountBalanceRoundedIcon from '@mui/icons-material/AccountBalance';
 import {
   Box,
-  Button,
   Divider,
   FormControl,
   FormControlLabel,
@@ -32,7 +31,13 @@ import {
   useIsMobile,
   useSearchStringChangeInput,
 } from '@pagopa-pn/pn-commons';
-import { Autocomplete, IllusCompleted, MIBreadcrumbItem, MIBreadcrumbs } from '@pagopa/mui-italia';
+import {
+  Autocomplete,
+  IllusMICompleted,
+  MIBreadcrumbItem,
+  MIBreadcrumbs,
+  MIButton,
+} from '@pagopa/mui-italia';
 
 import VerificationCodeComponent from '../components/Deleghe/VerificationCodeComponent';
 import LoadingPageWrapper from '../components/LoadingPageWrapper/LoadingPageWrapper';
@@ -173,7 +178,10 @@ const NuovaDelega = () => {
 
   const renderOption = (option: Party) => (
     <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-      <AccountBalanceIcon fontSize="small" sx={{ color: '#BBC2D6' }} />
+      <AccountBalanceRoundedIcon
+        fontSize="small"
+        sx={(theme) => ({ color: theme.colors.neutral.grey[300] })}
+      />
       {option.name}
     </Box>
   );
@@ -532,15 +540,15 @@ const NuovaDelega = () => {
                       <Divider sx={{ my: 3 }} />
                       <Stack alignItems="flex-start" justifyContent={'flex-start'}>
                         <Stack>
-                          <Button
+                          <MIButton
                             id="create-button"
                             sx={{ marginTop: '1rem', margin: 'auto' }}
-                            type={'submit'}
+                            type="submit"
                             variant={'contained'}
                             data-testid="createButton"
                           >
                             {t('nuovaDelega.form.submit')}
-                          </Button>
+                          </MIButton>
                         </Stack>
                       </Stack>
                     </Form>
@@ -553,7 +561,7 @@ const NuovaDelega = () => {
       )}
       {created && (
         <CourtesyPage
-          icon={<IllusCompleted />}
+          icon={<IllusMICompleted />}
           title={t('nuovaDelega.createdTitle')}
           subtitle={t('nuovaDelega.createdDescription')}
           onClick={handleDelegationsClick}
