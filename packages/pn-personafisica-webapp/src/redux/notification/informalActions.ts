@@ -4,8 +4,10 @@ import {
   NotificationDocumentResponse,
   PaymentAttachment,
   PaymentAttachmentSName,
+  PaymentDetails,
   getPaymentCache,
   parseError,
+  setPaymentsInCache,
 } from '@pagopa-pn/pn-commons';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
@@ -123,7 +125,7 @@ export const getReceivedInformalNotificationPaymentInfo = createAsyncThunk<
   async ({ paymentInfoRequest }, { rejectWithValue, getState, signal }) => {
     try {
       const { notificationState } = getState();
-      const iun = notificationState.notification.iun;
+      const iun = notificationState.informalNotification?.iun ?? '';
       const paymentCache = getPaymentCache(iun);
       const paymentsApiFactory = PaymentsApiFactory(undefined, undefined, apiClient);
       if (paymentCache?.currentPayment) {
@@ -144,7 +146,18 @@ export const getReceivedInformalNotificationPaymentInfo = createAsyncThunk<
 
       const response = await paymentsApiFactory.getPaymentsInfoV1(paymentInfoRequest, { signal });
 
-      return response.data as Array<ExtRegistriesPaymentDetails>;
+      const paymentInfo = response.data as Array<ExtRegistriesPaymentDetails>;
+
+      const payments: Array<PaymentDetails> = paymentInfo.map((info) => ({
+        pagoPa: {
+          ...info,
+          applyCost: false,
+        },
+      }));
+
+      setPaymentsInCache(payments, iun);
+
+      return paymentInfo;
     } catch (e) {
       return rejectWithValue(parseError(e));
     }

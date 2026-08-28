@@ -223,14 +223,14 @@ export const getReceivedNotificationPaymentInfo = createAsyncThunk<
 
 export const getReceivedNotificationPaymentUrl = createAsyncThunk<
   { checkoutUrl: string },
-  { paymentNotice: PaymentNotice; returnUrl: string },
+  { paymentNotice: PaymentNotice; returnUrl: string; iun?: string },
   { state: RootState }
 >(
   NOTIFICATION_ACTIONS.GET_RECEIVED_NOTIFICATION_PAYMENT_URL,
-  async (params: { paymentNotice: PaymentNotice; returnUrl: string }, { rejectWithValue }) => {
+  async ({ iun, ...params }, { rejectWithValue, getState }) => {
     try {
       const paymentsApiFactory = PaymentsApiFactory(undefined, undefined, apiClient);
-      const iun = store.getState().notificationState.notification.iun;
+      const notificationIun = iun ?? getState().notificationState.notification.iun;
       setPaymentCache(
         {
           currentPayment: {
@@ -238,7 +238,7 @@ export const getReceivedNotificationPaymentUrl = createAsyncThunk<
             creditorTaxId: params.paymentNotice.fiscalCode,
           },
         },
-        iun
+        notificationIun
       );
       const response = await paymentsApiFactory.paymentsCartV1(params);
       return response.data;

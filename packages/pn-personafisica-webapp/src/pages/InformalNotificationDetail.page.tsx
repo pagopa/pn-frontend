@@ -23,7 +23,6 @@ import {
 import { MIPaper } from '@pagopa/mui-italia';
 
 import LoadingPageWrapper from '../components/LoadingPageWrapper/LoadingPageWrapper';
-import { BffFullInformalNotificationV1 } from '../generated-client/informal-notifications';
 import { PFEventsType } from '../models/PFEventsType';
 import * as routes from '../navigation/routes.const';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
@@ -49,8 +48,9 @@ const InformalNotificationDetail: React.FC = () => {
   const { hasApiErrors } = useErrors();
   const navigate = useNavigate();
 
-  const [informalNotification, setInformalNotification] =
-    React.useState<BffFullInformalNotificationV1>();
+  const informalNotification = useAppSelector(
+    (state: RootState) => state.notificationState.informalNotification
+  );
 
   const [paymentsData, setPaymentsData] = React.useState<PaymentsData>({
     pagoPaF24: [],
@@ -72,7 +72,6 @@ const InformalNotificationDetail: React.FC = () => {
     }
     void dispatch(getReceivedInformalNotification(id))
       .unwrap()
-      .then(setInformalNotification)
       .catch(() => {})
       .finally(() => setPageReady(true));
   }, [id, dispatch]);
@@ -225,6 +224,7 @@ const InformalNotificationDetail: React.FC = () => {
             description: informalNotification.subject,
           },
           returnUrl: window.location.href,
+          iun: informalNotification.iun,
         })
       )
         .unwrap()
