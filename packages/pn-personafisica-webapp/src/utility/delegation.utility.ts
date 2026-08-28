@@ -39,8 +39,7 @@ export function sortDelegations<T extends Delegate | Delegator>(
   if (sortAttr === '') {
     return values;
   }
-  /* eslint-disable-next-line functional/immutable-data */
-  return values.sort((a: T, b: T) => {
+  return [...values].sort((a: T, b: T) => {
     const orderDirection = order === 'desc' ? 1 : -1;
     if (sortAttr === 'endDate') {
       const dateA = new Date(a.dateto).getTime();
