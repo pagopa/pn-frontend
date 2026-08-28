@@ -36,19 +36,19 @@ const DeleteDialog: React.FC<Props> = ({
   ) : (
     [
       <MIButton
+        onClick={handleModalClose}
         {...slotsProps?.secondaryButton}
         key="cancel"
-        onClick={handleModalClose}
         variant="outlined"
         id="buttonAnnulla"
       >
         {slotsProps?.secondaryButton?.label ?? t('button.annulla')}
       </MIButton>,
       <MIButton
+        onClick={confirmHandler}
         {...slotsProps?.primaryButton}
         id="buttonConferma"
         key="confirm"
-        onClick={confirmHandler}
         variant="contained"
       >
         {slotsProps?.primaryButton?.label ?? t('button.conferma')}
