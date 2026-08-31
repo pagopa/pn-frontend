@@ -19,6 +19,7 @@ import {
 } from '@pagopa-pn/pn-commons';
 import { createSlice } from '@reduxjs/toolkit';
 
+import { BffFullInformalNotificationV1 } from '../../generated-client/informal-notifications';
 import { NotificationDetailForRecipient } from '../../models/NotificationDetail';
 import {
   getDowntimeHistory,
@@ -26,9 +27,11 @@ import {
   getReceivedNotificationPaymentInfo,
   getReceivedNotificationPaymentUrl,
 } from './actions';
+import { getReceivedInformalNotification } from './informalActions';
 
 const initialState = {
   loading: false,
+  informalNotification: undefined as BffFullInformalNotificationV1 | undefined,
   notification: {
     subject: '',
     recipients: [] as Array<NotificationDetailRecipient>,
@@ -68,6 +71,9 @@ const notificationSlice = createSlice({
     resetState: () => initialState,
   },
   extraReducers: (builder) => {
+    builder.addCase(getReceivedInformalNotification.fulfilled, (state, action) => {
+      state.informalNotification = action.payload;
+    });
     builder.addCase(getReceivedNotification.fulfilled, (state, action) => {
       const recipientIdx = action.payload.recipients.findIndex(
         (recipient) => recipient.taxId === action.payload.currentRecipient.taxId
