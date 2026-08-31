@@ -63,7 +63,7 @@ const InstitutionLogo = ({ id, name, selfcareCdnUrl }: InstitutionLogoProps) => 
         width: { xs: 64 },
         height: { xs: 64 },
         backgroundColor: logoSrc ? undefined : theme.palette.grey[50],
-        border: logoSrc ? `1px solid ${theme.palette.grey[300]}` : undefined,
+        border: logoSrc ? `1px solid ${theme.palette.grey[200]}` : undefined,
         borderRadius: 2,
         padding: logoSrc ? 1 : 0,
       }}

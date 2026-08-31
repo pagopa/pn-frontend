@@ -1,17 +1,15 @@
 import { MouseEvent, ReactNode, useId, useState } from 'react';
 
-import KeyboardArrowDownOutlinedIcon from '@mui/icons-material/KeyboardArrowDownOutlined';
-import MoreVert from '@mui/icons-material/MoreVert';
+import KeyboardArrowDownRoundedIcon from '@mui/icons-material/KeyboardArrowDownRounded';
+import MoreVertRounded from '@mui/icons-material/MoreVertRounded';
 import {
   Box,
-  Button,
   ButtonBase,
   Card,
   CardContent,
   CardHeader,
   CardProps,
   Collapse,
-  IconButton,
   Menu,
   MenuItem,
   Stack,
@@ -19,6 +17,7 @@ import {
   TypographyProps,
 } from '@mui/material';
 import { useIsMobile } from '@pagopa-pn/pn-commons';
+import { MIButton, MIIconButton } from '@pagopa/mui-italia';
 
 type PnInfoCardAction = {
   key: string;
@@ -75,18 +74,16 @@ const PnInfoCardActions: React.FC<Pick<Props, 'actions'>> = ({ actions }) => {
 
   return isMobile ? (
     <Box data-testid="contextMenu">
-      <IconButton
+      <MIIconButton
         onClick={handleClick}
-        size="small"
-        color="primary"
         data-testid="contextMenuButton"
         aria-label="Context menu"
         aria-controls={open ? menuId : undefined}
         aria-haspopup="menu"
         aria-expanded={open ? 'true' : undefined}
       >
-        <MoreVert />
-      </IconButton>
+        <MoreVertRounded />
+      </MIIconButton>
       <Menu
         id={menuId}
         data-testid="menuContext"
@@ -131,17 +128,17 @@ const PnInfoCardActions: React.FC<Pick<Props, 'actions'>> = ({ actions }) => {
   ) : (
     <Stack direction="row" alignItems="end" spacing={3}>
       {actions?.map((action) => (
-        <Button
+        <MIButton
+          variant="text"
           key={action.key}
           data-testid={action.testId}
-          variant="naked"
           color={action.destructive ? 'error' : 'primary'}
           startIcon={action.icon}
           onClick={action.onClick}
           sx={{ p: '10px 16px' }}
         >
           {action.label}
-        </Button>
+        </MIButton>
       ))}
     </Stack>
   );
@@ -197,7 +194,7 @@ const PnInfoCardAccordion: React.FC<PnInfoCardContentProps> = ({ title, subtitle
             {subtitle}
           </Box>
 
-          <KeyboardArrowDownOutlinedIcon
+          <KeyboardArrowDownRoundedIcon
             color="primary"
             sx={(theme) => ({
               transform: expanded ? 'rotate(180deg)' : 'rotate(0deg)',

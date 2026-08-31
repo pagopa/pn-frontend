@@ -4,11 +4,10 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import * as yup from 'yup';
 
-import AccountBalanceIcon from '@mui/icons-material/AccountBalance';
-import PeopleIcon from '@mui/icons-material/People';
+import AccountBalanceRoundedIcon from '@mui/icons-material/AccountBalance';
+import PeopleRoundedIcon from '@mui/icons-material/PeopleRounded';
 import {
   Box,
-  Button,
   Divider,
   FormControl,
   FormControlLabel,
@@ -35,7 +34,7 @@ import {
   useIsMobile,
   useSearchStringChangeInput,
 } from '@pagopa-pn/pn-commons';
-import { Autocomplete, IllusCompleted } from '@pagopa/mui-italia';
+import { Autocomplete, IllusMICompleted, MIButton } from '@pagopa/mui-italia';
 
 import VerificationCodeComponent from '../components/Deleghe/VerificationCodeComponent';
 import LoadingPageWrapper from '../components/LoadingPageWrapper/LoadingPageWrapper';
@@ -207,7 +206,10 @@ const NuovaDelega = () => {
 
   const renderOption = (option: Party) => (
     <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-      <AccountBalanceIcon fontSize="small" sx={{ color: '#BBC2D6' }} />
+      <AccountBalanceRoundedIcon
+        fontSize="small"
+        sx={{ color: (theme) => theme.palette.grey[300] }}
+      />
       {option.name}
     </Box>
   );
@@ -232,7 +234,7 @@ const NuovaDelega = () => {
         linkRoute={routes.DELEGHE}
         linkLabel={
           <Fragment>
-            <PeopleIcon sx={{ mr: 0.5 }} />
+            <PeopleRoundedIcon sx={{ mr: 0.5 }} />
             {t('nuovaDelega.title')}
           </Fragment>
         }
@@ -564,15 +566,15 @@ const NuovaDelega = () => {
                         justifyContent={'flex-start'}
                       >
                         <Stack>
-                          <Button
+                          <MIButton
                             id="create-button"
+                            type="submit"
                             sx={{ marginTop: '1rem', margin: 'auto' }}
-                            type={'submit'}
-                            variant={'contained'}
+                            variant="contained"
                             data-testid="createButton"
                           >
                             {t('nuovaDelega.form.submit')}
-                          </Button>
+                          </MIButton>
                         </Stack>
                       </Stack>
                     </Form>
@@ -585,7 +587,7 @@ const NuovaDelega = () => {
       )}
       {created && (
         <CourtesyPage
-          icon={<IllusCompleted />}
+          icon={<IllusMICompleted />}
           title={t('nuovaDelega.createdTitle')}
           subtitle={t('nuovaDelega.createdDescription')}
           onClick={handleDelegationsClick}

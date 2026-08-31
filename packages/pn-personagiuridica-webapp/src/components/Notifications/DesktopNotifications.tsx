@@ -121,7 +121,7 @@ const DesktopNotifications = ({
       {rows.length ? (
         <PnTable
           testId="notificationsTable"
-          slotProps={{ table: { sx: { tableLayout: 'fixed' } } }}
+          slotProps={{ table: { sx: { tableLayout: 'fixed', mt: 3 } } }}
         >
           <PnTableHeader>
             {columns.map((column) => (

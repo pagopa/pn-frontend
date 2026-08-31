@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 
-import CallOutlinedIcon from '@mui/icons-material/CallOutlined';
+import CallRoundedIcon from '@mui/icons-material/CallRounded';
 import LanguageRoundedIcon from '@mui/icons-material/LanguageRounded';
 import {
   Divider,
@@ -61,7 +61,7 @@ const PnSenderContacts = ({ phone, site, handleTrackEventFn }: SenderContactsPro
               <ListItem disableGutters>
                 <ListItemAvatar>
                   <ListItemIcon sx={{ minWidth: 40 }}>
-                    <CallOutlinedIcon sx={{ color: theme.palette.grey[400] }} />
+                    <CallRoundedIcon sx={{ color: theme.palette.grey[400] }} />
                   </ListItemIcon>
                 </ListItemAvatar>
 

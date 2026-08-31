@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 
 import { Box, Button, Paper, Stack, Typography } from '@mui/material';
 import { useIsMobile } from '@pagopa-pn/pn-commons';
+import { MIButton } from '@pagopa/mui-italia';
 
 type Props = {
   children: ReactNode;
@@ -54,17 +55,16 @@ const NewPublicKeyCard: React.FC<Props> = ({
           {submitLabel ?? t('button.end')}
         </Button>
         {previousStepLabel && (
-          <Button
+          <MIButton
             id="previous-step"
             variant="outlined"
-            type="button"
             onClick={onBackClick}
             data-testid="previous-step"
             fullWidth={isMobile}
             sx={{ mt: { xs: 2, lg: 0 } }}
           >
             {previousStepLabel}
-          </Button>
+          </MIButton>
         )}
       </Stack>
     </>

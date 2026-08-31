@@ -20,7 +20,7 @@ const PnWizardStepper: React.FC<Props> = ({ steps, activeStep }) => {
           variant="determinate"
           value={100}
           size={48}
-          sx={{ color: '#D9D9D9' }}
+          sx={{ color: (theme) => theme.palette.grey[300] }}
           thickness={3}
         />
         <CircularProgress

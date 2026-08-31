@@ -1,10 +1,10 @@
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import FileDownloadOutlinedIcon from '@mui/icons-material/FileDownloadOutlined';
-import { Box, Button, Stack, Typography } from '@mui/material';
+import FileDownloadRoundedIcon from '@mui/icons-material/FileDownloadRounded';
+import { Box, Stack, Typography } from '@mui/material';
 import { EventAction, appStateActions, useIsMobile } from '@pagopa-pn/pn-commons';
-import { ButtonNaked } from '@pagopa/mui-italia';
+import { MIButton } from '@pagopa/mui-italia';
 
 import { OnboardingAvailableFlows } from '../../../models/Onboarding';
 import { PFEventsType } from '../../../models/PFEventsType';
@@ -168,31 +168,29 @@ const IoStep: React.FC<Props> = ({ value, selectedOnboardingFlow, onChange, onCo
             spacing={2}
             justifyContent={isMobile ? undefined : 'space-between'}
           >
-            <Button
+            <MIButton
               fullWidth={isMobile}
               variant="contained"
               onClick={handlePrimaryAction}
               data-testid="io-primary-button"
               startIcon={
-                status === IOContactStatus.UNAVAILABLE ? <FileDownloadOutlinedIcon /> : undefined
+                status === IOContactStatus.UNAVAILABLE ? <FileDownloadRoundedIcon /> : undefined
               }
             >
               {t(`${labelPrefixByStatus}.primary-cta`)}
-            </Button>
+            </MIButton>
 
             {status === IOContactStatus.UNAVAILABLE && (
-              <ButtonNaked
-                color="primary"
-                size="medium"
+              <MIButton
+                variant="text"
                 onClick={() => void handleRefreshState()}
                 data-testid="io-refresh-link"
                 sx={{
-                  fontWeight: 700,
                   alignSelf: isMobile ? 'flex-start' : undefined,
                 }}
               >
                 {t(`${labelPrefixByStatus}.refresh-cta`)}
-              </ButtonNaked>
+              </MIButton>
             )}
           </Stack>
         )}

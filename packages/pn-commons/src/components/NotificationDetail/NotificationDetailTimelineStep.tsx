@@ -1,12 +1,15 @@
 import { Fragment, ReactNode, useState } from 'react';
 
-import AttachFileIcon from '@mui/icons-material/AttachFile';
-import UnfoldLessIcon from '@mui/icons-material/UnfoldLess';
-import UnfoldMoreIcon from '@mui/icons-material/UnfoldMore';
+import AttachFileRoundedIcon from '@mui/icons-material/AttachFileRounded';
+import UnfoldLessRoundedIcon from '@mui/icons-material/UnfoldLessRounded';
+import UnfoldMoreRoundedIcon from '@mui/icons-material/UnfoldMoreRounded';
 import { TimelineConnector } from '@mui/lab';
-import { Box, Button, Chip, Typography } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import {
   ButtonNaked,
+  MIButton,
+  MIChip,
+  MIChipProps,
   TimelineNotificationContent,
   TimelineNotificationDot,
   TimelineNotificationItem,
@@ -40,9 +43,6 @@ type Props = {
   position?: 'first' | 'last' | 'middle';
   showMoreButtonLabel?: string;
   showLessButtonLabel?: string;
-  showHistoryButton?: boolean;
-  historyButtonLabel?: string;
-  historyButtonClickHandler?: () => void;
   handleTrackShowMoreLess?: (collapsed: boolean) => void;
   disableDownloads?: boolean;
   isParty?: boolean;
@@ -100,9 +100,6 @@ const TimelineStepCmp: React.FC<StepProps> = ({
  * @param recipients list of recipients
  * @param clickHandler function called when user clicks on the download button
  * @param position step position
- * @param showHistoryButton show history button
- * @param historyButtonLabel label for history button
- * @param historyButtonClickHandler function called when user clicks on the history button
  * @param showMoreButtonLabel label of show more button
  * @param showLessButtonLabel label of show less button
  * @param completeStatusHistory the whole history, sometimes some information from a different status must be retrieved
@@ -120,9 +117,6 @@ const NotificationDetailTimelineStep = ({
   position = 'middle',
   showMoreButtonLabel,
   showLessButtonLabel,
-  showHistoryButton = false,
-  historyButtonLabel,
-  historyButtonClickHandler,
   handleTrackShowMoreLess,
   disableDownloads,
   isParty = true,
@@ -160,7 +154,7 @@ const NotificationDetailTimelineStep = ({
   const getChipColor = (
     position: string,
     status: NotificationStatus,
-    color?: 'warning' | 'error' | 'success' | 'info' | 'default' | 'primary' | 'secondary'
+    color?: MIChipProps['color']
   ) => {
     if (position === 'first') {
       return color;
@@ -169,7 +163,7 @@ const NotificationDetailTimelineStep = ({
       return 'warning';
     }
 
-    return 'default';
+    return 'neutral';
   };
 
   const macroStep = (
@@ -191,12 +185,11 @@ const NotificationDetailTimelineStep = ({
             {formatTime(timelineStep.activeFrom)}
           </Typography>
           <ReworkedStatusTag reworkedStatus={reworkedStatus} />
-          <Chip
+          <MIChip
             id={`${notificationStatusInfos.label}-status`}
             data-testid="itemStatus"
             label={notificationStatusInfos.label}
             color={getChipColor(position, timelineStep.status, notificationStatusInfos.color)}
-            size={position === 'first' ? 'medium' : 'small'}
             sx={{
               opacity:
                 timelineStep.status === NotificationStatus.CANCELLATION_IN_PROGRESS && isParty
@@ -204,40 +197,30 @@ const NotificationDetailTimelineStep = ({
                   : '1',
             }}
           />
-          {showHistoryButton && historyButtonLabel ? (
-            <Button
-              data-testid="historyButton"
-              sx={{ paddingLeft: 0, paddingRight: 0, marginTop: '5px' }}
-              startIcon={<UnfoldMoreIcon />}
-              onClick={historyButtonClickHandler}
-            >
-              {historyButtonLabel}
-            </Button>
-          ) : (
-            <Box style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
-              <Typography color="text.primary" variant="caption">
-                {notificationStatusInfos.description}
-              </Typography>
-              {legalFactsIds &&
-                legalFactsIds.length > 0 &&
-                legalFactsIds.map((lf) => (
-                  <ButtonNaked
-                    key={lf.file.key}
-                    startIcon={<AttachFileIcon />}
-                    onClick={() => clickHandler(lf.file)}
-                    color="primary"
-                    sx={{ marginTop: '10px', textAlign: 'left' }}
-                    data-testid="download-legalfact"
-                    disabled={
-                      lf.step.category !== TimelineCategory.NOTIFICATION_CANCELLED &&
-                      disableDownloads
-                    }
-                  >
-                    {getLegalFactLabel(lf.step, lf.file.category, lf.file.key || '')}
-                  </ButtonNaked>
-                ))}
-            </Box>
-          )}
+
+          <Box style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
+            <Typography color="text.primary" variant="caption">
+              {notificationStatusInfos.description}
+            </Typography>
+            {legalFactsIds &&
+              legalFactsIds.length > 0 &&
+              legalFactsIds.map((lf) => (
+                <ButtonNaked
+                  key={lf.file.key}
+                  startIcon={<AttachFileRoundedIcon />}
+                  onClick={() => clickHandler(lf.file)}
+                  size="small"
+                  color="primary"
+                  sx={{ textAlign: 'left', paddingLeft: 0 }}
+                  data-testid="download-legalfact"
+                  disabled={
+                    lf.step.category !== TimelineCategory.NOTIFICATION_CANCELLED && disableDownloads
+                  }
+                >
+                  {getLegalFactLabel(lf.step, lf.file.category, lf.file.key || '')}
+                </ButtonNaked>
+              ))}
+          </Box>
         </Fragment>
       }
       stepPosition={position}
@@ -254,14 +237,15 @@ const NotificationDetailTimelineStep = ({
     <TimelineStepCmp
       content={
         <Box data-testid="moreLessButton">
-          <ButtonNaked
+          <MIButton
+            variant="text"
             id="more-less-timeline-step"
             data-testid="more-less-timeline-step"
-            startIcon={collapsed ? <UnfoldMoreIcon /> : <UnfoldLessIcon />}
+            startIcon={collapsed ? <UnfoldMoreRoundedIcon /> : <UnfoldLessRoundedIcon />}
             onClick={handleShowMoreClick}
           >
             {collapsed ? showMoreButtonLabel : showLessButtonLabel}
-          </ButtonNaked>
+          </MIButton>
         </Box>
       }
       stepPosition="middle"
@@ -339,7 +323,7 @@ const NotificationDetailTimelineStep = ({
   return (
     <Fragment>
       {macroStep}
-      {!showHistoryButton && visibleSteps.length > 0 && moreLessButton}
+      {visibleSteps.length > 0 && moreLessButton}
       {!collapsed && visibleSteps.map((s) => microStep(s))}
     </Fragment>
   );
