@@ -1,54 +1,54 @@
 {
-  "loginPage": {
-    "title": "Access SEND for your legally binding communications",
-    "description": "Select your preferred log in method.",
-    "missing-spid-cie": "Don't have SPID or CIE? <0>Find out more</0>",
-    "loginBox": {
-      "title": "Login",
-      "spidLogin": "Log in with SPID",
-      "cieLogin": "Log in with CIE"
-    }
+  "disambiguationPage": {
+    "button": "Login",
+    "pf": "Private citizen",
+    "pg": "Legal person",
+    "subTitle": "We will redirect you based on your selection.",
+    "title": "Which profile do you want to log in with?"
   },
-  "spidSelect": {
-    "title": "Select your SPID",
-    "hintText": "Do you not have a SPID?<0> Discover more</0>",
-    "cancelButton": "Cancel",
-    "emptyState": "No IDP found"
+  "ioSmartAppBanner": {
+    "cta": "OPEN",
+    "subtitle": "Open in the IO app",
+    "title": "IO - The public services app"
   },
   "loginError": {
-    "title": "Due to a system error, the procedure cannot be completed.",
-    "message": "Due to a system error, the procedure cannot be completed. Please try again later.",
     "code": {
+      "error_1001": "Access denied: You are not of the minimum age required to use the platform.",
       "error_19": "You have entered an incorrect username or password too many times; try again in a few minutes or contact your SPID identity provider to change your credentials.",
       "error_20": "For security reasons, a login with a second authentication factor is required: contact your SPID identity provider to find out how to use it.",
       "error_21": "It's been too long since you started the process of logging in: start from the beginning.",
       "error_22": "To use the platform, you must consent to the transmission of certain data. Renter the data and give your consent.",
       "error_23": "Your SPID identity has been suspended or revoked. To reactivate your account, contact your SPID identity provider.",
       "error_25": "You have canceled the login operation: you can try again whenever you want.",
-      "error_30": "The type of SPID identity you used is different from the one requested by the Service Provider. Re-enter the information using the correct identity.",
-      "error_1001": "Access denied: You are not of the minimum age required to use the platform."
-    }
+      "error_30": "The type of SPID identity you used is different from the one requested by the Service Provider. Re-enter the information using the correct identity."
+    },
+    "message": "Due to a system error, the procedure cannot be completed. Please try again later.",
+    "title": "Due to a system error, the procedure cannot be completed."
   },
-  "disambiguationPage": {
-    "title": "Which profile do you want to log in with?",
-    "subTitle": "We will redirect you based on your selection.",
-    "pf": "Private citizen",
-    "pg": "Legal person",
-    "button": "Login"
-  },
-  "ioSmartAppBanner": {
-    "title": "IO - The public services app",
-    "subtitle": "Open in the IO app",
-    "cta": "OPEN"
+  "loginPage": {
+    "description": "Select your preferred log in method.",
+    "loginBox": {
+      "cieLogin": "Log in with CIE",
+      "spidLogin": "Log in with SPID",
+      "title": "Login"
+    },
+    "missing-spid-cie": "Don't have SPID or CIE? <0>Find out more<\/0>",
+    "title": "Access SEND for your legally binding communications"
   },
   "one-identity-spid-select": {
-    "title": "Login with SPID",
     "close-button-aria-label": "Close",
-    "unavailable-idp-warning": "Access via %s is currently unavailable, please try again later or log in with another Identity Provider",
     "error": {
-      "title": "We cannot load the list",
+      "close-button": "Close",
       "description": "Please try again later.",
-      "close-button": "Close"
-    }
+      "title": "We cannot load the list"
+    },
+    "title": "Login with SPID",
+    "unavailable-idp-warning": "Access via %s is currently unavailable, please try again later or log in with another Identity Provider"
+  },
+  "spidSelect": {
+    "cancelButton": "Cancel",
+    "emptyState": "No IDP found",
+    "hintText": "Do you not have a SPID?<0> Discover more<\/0>",
+    "title": "Select your SPID"
   }
 }
