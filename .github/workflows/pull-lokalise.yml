@@ -2,18 +2,6 @@ name: Pull locales from Lokalise
 
 on:
   workflow_dispatch:
-    inputs:
-      app:
-        description: 'App da sincronizzare (all = tutte e quattro)'
-        type: choice
-        required: true
-        default: all
-        options:
-          - all
-          - PFL
-          - PF
-          - PA
-          - PG
   # TODO: RIMUOVERE PRIMA DEL MERGE IN develop - serve solo per testare sul branch di
   #       feature. 'workflow_dispatch' e' indirizzabile solo dalla copia del workflow
   #       presente sul branch di default (develop), quindi da qui non e' lanciabile.
@@ -43,14 +31,11 @@ jobs:
     # environment: lokalise
     strategy:
       fail-fast: false
-      # Il context 'inputs' e' leggibile in 'strategy' (a differenza di 'env'),
-      # quindi la matrix si costruisce qui senza un job di preparazione.
-      # TODO: RIPRISTINARE PRIMA DEL MERGE la forma senza fallback:
-      #       ${{ fromJson(inputs.app == 'all' && '["PFL","PF","PA","PG"]' || format('["{0}"]', inputs.app)) }}
-      #       Sul trigger 'push' il context 'inputs' e' vuoto, e senza fallback la matrix
-      #       diventerebbe [""]. PFL e' l'unica app con il secret del project id.
+      # I quattro job committano sullo stesso branch: in parallelo i push si
+      # sovrascriverebbero a vicenda, quindi vanno eseguiti in sequenza.
+      max-parallel: 1
       matrix:
-        app: ${{ fromJson((inputs.app || 'PFL') == 'all' && '["PFL","PF","PA","PG"]' || format('["{0}"]', inputs.app || 'PFL')) }}
+        app: [PFL, PF, PA, PG]
     env:
       # I codici app sono anche il suffisso dei secret LOKALISE_PROJECT_ID_<CODICE>.
       PACKAGES: >-
@@ -78,16 +63,19 @@ jobs:
           # L'italiano lo scriviamo noi nel repo, ma i traduttori possono correggerlo
           # su Lokalise: senza questo flag quelle correzioni non tornerebbero mai indietro.
           always_pull_base: true
-          # Branch stabile per app: ogni run aggiorna la stessa PR invece di aprirne una
-          # nuova. Richiede che il branch venga cancellato al merge, altrimenti il run
+          # Branch unico e stabile per tutte le app: i quattro job ci committano sopra
+          # uno dopo l'altro, cosi' il run produce una sola PR che le contiene tutte.
+          # L'action, se il branch remoto esiste, committa e aggiorna la PR esistente.
+          # Richiede che il branch venga cancellato al merge, altrimenti il run
           # successivo ripartirebbe da un punto ormai vecchio.
-          override_branch_name: lokalise/translations-${{ matrix.app }}
+          # NB: non attivare 'force_push', sovrascriverebbe il commit del job precedente.
+          override_branch_name: lokalise/translations
           git_user_name: 'github-actions[bot]'
           git_user_email: 'github-actions[bot]@users.noreply.github.com'
           git_commit_message: 'chore(lokalise): update ${{ matrix.app }} translations'
-          pr_title: 'chore(lokalise): update ${{ matrix.app }} translations'
+          pr_title: 'chore(lokalise): update translations'
           pr_body: |
-            Aggiornamento automatico delle traduzioni di `${{ fromJson(env.PACKAGES)[matrix.app] }}` da Lokalise.
+            Aggiornamento automatico delle traduzioni delle quattro app da Lokalise.
 
             Generata da [Pull locales from Lokalise](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}).
           pr_labels: lokalise
