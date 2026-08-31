@@ -1,19 +1,16 @@
 import { ComponentType } from 'react';
 
-import { MailOutlineRounded } from '@mui/icons-material';
+import { InfoOutlined, MailOutlineRounded } from '@mui/icons-material';
 import { SvgIconProps } from '@mui/material';
 
-import { PhysicalCommunicationType } from '../../../models';
 import {
   NotificationTimelineGroup,
+  NotificationTimelineGroupCategory,
   NotificationTimelineStatusHistory,
   TimelineEventsChannel,
 } from '../../../models/NotificationTimeline';
 import { getLocalizedOrDefaultLabel } from '../../../utility/localization.utility';
-import {
-  isPhysicalCommunicationType,
-  isTimelineGroupStep,
-} from '../../../utility/notificationTimeline.utility';
+import { isTimelineGroupStep } from '../../../utility/notificationTimeline.utility';
 import LetterIcon from '../../Icons/LetterIcon';
 import MobileRounded from '../../Icons/MobileRounded';
 import SendIcon from '../../Icons/SendIcon';
@@ -50,9 +47,8 @@ const CHANNEL_PRESENTATION: Record<TimelineEventsChannel, ChannelPresentation> =
   },
 };
 
-const CHANNEL_ATTEMPT_PRESENTATION: Record<
-  PhysicalCommunicationType,
-  Record<number, ChannelPresentation>
+const CHANNEL_ATTEMPT_PRESENTATION: Partial<
+  Record<TimelineEventsChannel, Record<number, ChannelPresentation>>
 > = {
   AR_REGISTERED_LETTER: {
     1: {
@@ -74,22 +70,52 @@ const CHANNEL_ATTEMPT_PRESENTATION: Record<
       icon: () => <LetterIcon number={2} />,
     },
   },
+  PEC: {
+    1: {
+      labelKey: 'detail.timeline.send-digital-domicile-PEC-group-label',
+      icon: () => <LetterIcon number={1} />,
+    },
+    2: {
+      labelKey: 'detail.timeline.send-digital-domicile-PEC-group-label',
+      icon: () => <LetterIcon number={2} />,
+    },
+  },
+};
+
+const CATEGORY_FALLBACK_PRESENTATION: Partial<
+  Record<NotificationTimelineGroupCategory, ChannelPresentation>
+> = {
+  ANALOG_FAILURE: {
+    labelKey: 'detail.timeline.registered-letter',
+    icon: MailOutlineRounded,
+  },
+  DIGITAL: {
+    labelKey: 'detail.timeline.digital-send-fallback',
+    icon: MailOutlineRounded,
+  },
+};
+
+const DEFAULT_PRESENTATION: ChannelPresentation = {
+  labelKey: 'detail.timeline.unknown-status',
+  icon: InfoOutlined,
 };
 
 export type TimelineGroupHeader = {
-  channel: string;
+  channel?: string;
   icon: ComponentType<SvgIconProps>;
   detail?: string;
 };
 
 const getChannelPresentation = (
-  { channel, attempt }: NotificationTimelineGroup,
+  { channel, category, attempt }: NotificationTimelineGroup,
   hasMultipleAttempts: boolean
 ): ChannelPresentation => {
+  if (!channel) {
+    return CATEGORY_FALLBACK_PRESENTATION[category] ?? DEFAULT_PRESENTATION;
+  }
+
   const attemptPresentation =
-    hasMultipleAttempts && attempt && isPhysicalCommunicationType(channel)
-      ? CHANNEL_ATTEMPT_PRESENTATION[channel]?.[attempt]
-      : undefined;
+    hasMultipleAttempts && attempt ? CHANNEL_ATTEMPT_PRESENTATION[channel]?.[attempt] : undefined;
 
   return attemptPresentation ?? CHANNEL_PRESENTATION[channel];
 };
@@ -104,7 +130,7 @@ export const getTimelineGroupHeader = (
     channel: getLocalizedOrDefaultLabel('notifications', presentation.labelKey),
     icon: presentation.icon,
     detail:
-      group.category === 'ANALOG' && group.registeredLetterCode
+      group.category === NotificationTimelineGroupCategory.ANALOG && group.registeredLetterCode
         ? group.registeredLetterCode
         : undefined,
   };

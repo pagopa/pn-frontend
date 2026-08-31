@@ -1,7 +1,4 @@
-import {
-  NotificationDetailRecipient,
-  PhysicalCommunicationType,
-} from '../models/NotificationDetail';
+import { NotificationDetailRecipient } from '../models/NotificationDetail';
 import {
   NotificationTimelineEvent,
   NotificationTimelineGroupStep,
@@ -9,19 +6,12 @@ import {
   NotificationTimelineStatusHistory,
   NotificationTimelineStep,
   NotificationTimelineStepType,
-  TimelineEventsChannel,
 } from '../models/NotificationTimeline';
 import { formatDay, formatMonthString, formatTime } from './date.utility';
 
 export const isTimelineGroupStep = (
   step: NotificationTimelineStep
 ): step is NotificationTimelineGroupStep => step.stepType === NotificationTimelineStepType.GROUP;
-
-const PHYSICAL_COMMUNICATION_TYPES = new Set<string>(Object.values(PhysicalCommunicationType));
-
-export const isPhysicalCommunicationType = (
-  channel: TimelineEventsChannel
-): channel is PhysicalCommunicationType => PHYSICAL_COMMUNICATION_TYPES.has(channel);
 
 export const flattenTimelineSteps = (
   steps: Array<NotificationTimelineStep>

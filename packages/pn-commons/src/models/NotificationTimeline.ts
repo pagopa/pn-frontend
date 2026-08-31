@@ -59,7 +59,7 @@ export interface NotificationTimelineGroup {
   taxId: string;
   recIndex: number;
   category: NotificationTimelineGroupCategory;
-  channel: TimelineEventsChannel;
+  channel?: TimelineEventsChannel;
   attempt?: number;
   registeredLetterCode?: string;
   hasReworkedEvents: boolean;
@@ -84,6 +84,7 @@ export const NotificationTimelineGroupCategory = {
   COURTESY: 'COURTESY',
   DIGITAL: 'DIGITAL',
   ANALOG: 'ANALOG',
+  ANALOG_FAILURE: 'ANALOG_FAILURE',
 } as const;
 
 export type NotificationTimelineGroupCategory =

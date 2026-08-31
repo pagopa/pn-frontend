@@ -163,6 +163,9 @@
       "informal_downloadable_acts": "Conserve les pièces jointes sur ton appareil : elles seront disponibles en ligne jusqu'à <0>180 jours à compter de la date de dépôt</0> indiquée en haut !"
     },
     "timeline": {
+      "registered-letter": "Lettre recommandée",
+      "digital-send-fallback": "Envoi numérique",
+      "unknown-status": "Statut inconnu",
       "schedule-digital-workflow": "Envoi ultérieur par voie numérique",
       "schedule-digital-workflow-description": "Une nouvelle tentative d’envoi de la notification par voie numérique a commencé.",
       "schedule-digital-workflow-description-multirecipient": "Une nouvelle tentative d’envoi de la notification à {{name}} {{taxId}} par voie numérique a commencé.",

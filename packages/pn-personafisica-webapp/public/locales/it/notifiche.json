@@ -172,6 +172,9 @@
       "informal_downloadable_acts": "Conserva gli allegati sul tuo dispositivo: saranno disponibili online fino a <0>180 giorni dalla data di deposito</0> che trovi in alto!"
     },
     "timeline": {
+      "registered-letter": "Raccomandata",
+      "digital-send-fallback": "Invio digitale",
+      "unknown-status": "Stato sconosciuto",
       "schedule-digital-workflow": "Ulteriore invio per via digitale",
       "schedule-digital-workflow-description": "È iniziato un ulteriore tentativo di invio della notifica per via digitale.",
       "schedule-digital-workflow-description-multirecipient": "È iniziato un ulteriore tentativo di invio della notifica a {{name}} {{taxId}} per via digitale.",

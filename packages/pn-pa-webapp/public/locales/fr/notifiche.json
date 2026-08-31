@@ -147,6 +147,9 @@
     "show-all": "Tout voir",
     "timeline": {
       "courtesy-group-label": "Messages de courtoisie",
+      "registered-letter": "Lettre recommandée",
+      "digital-send-fallback": "Envoi numérique",
+      "unknown-status": "Statut inconnu",
       "schedule-digital-workflow": "Envoi ultérieur par voie numérique",
       "schedule-digital-workflow-description": "Une nouvelle tentative d’envoi de la notification par voie numérique a commencé.",
       "schedule-digital-workflow-description-multirecipient": "Une nouvelle tentative d’envoi de la notification a commencé {{name}} {{taxId}} par voie numérique.",
