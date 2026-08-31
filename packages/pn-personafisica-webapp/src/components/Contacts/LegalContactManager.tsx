@@ -1,10 +1,10 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
-import { Chip, ChipProps, Paper, Stack, Typography } from '@mui/material';
+import ArrowForwardRoundedIcon from '@mui/icons-material/ArrowForwardRounded';
+import { Paper, Stack, Typography } from '@mui/material';
 import { EventAction } from '@pagopa-pn/pn-commons';
-import { ButtonNaked } from '@pagopa/mui-italia';
+import { MIButton, MIChip, MIChipProps } from '@pagopa/mui-italia';
 
 import { PFEventsType } from '../../models/PFEventsType';
 import { ChannelType } from '../../models/contacts';
@@ -40,15 +40,9 @@ const DigitalDomicileOption: React.FC<DigitalDomicileOption> = ({ title, content
     <Typography flexGrow={1} variant="body1" fontSize="14px" mt={1} mb={3}>
       {content}
     </Typography>
-    <ButtonNaked
-      endIcon={<ArrowForwardIcon />}
-      color="primary"
-      size="small"
-      sx={{ fontWeight: 700 }}
-      onClick={action.callback}
-    >
+    <MIButton endIcon={<ArrowForwardRoundedIcon />} variant="text" onClick={action.callback}>
       {action.text}
-    </ButtonNaked>
+    </MIButton>
   </Stack>
 );
 
@@ -65,7 +59,7 @@ const LegalContactManager: React.FC<Props> = ({ setAction }) => {
 
   const getConfig = (): {
     label: string;
-    color: ChipProps['color'];
+    color: MIChipProps['color'];
     value: string;
   } => {
     if (isValidatingPec) {
@@ -87,7 +81,7 @@ const LegalContactManager: React.FC<Props> = ({ setAction }) => {
     }
     return {
       label: t('status.inactive', { ns: 'recapiti' }),
-      color: 'default',
+      color: 'neutral',
       value: '',
     };
   };
@@ -105,7 +99,7 @@ const LegalContactManager: React.FC<Props> = ({ setAction }) => {
   return (
     <Stack data-testid="legalContactManager" spacing={2}>
       <Paper sx={{ p: { xs: 2, lg: 3 } }}>
-        <Chip label={config.label} color={config.color} />
+        <MIChip label={config.label} color={config.color} />
         <Typography variant="body1" fontSize="18px" fontWeight={600} mt={2}>
           {config.value}
         </Typography>

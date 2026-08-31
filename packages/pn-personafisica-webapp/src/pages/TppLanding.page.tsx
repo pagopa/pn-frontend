@@ -7,13 +7,13 @@ import {
   Accordion,
   AccordionDetails,
   AccordionSummary,
-  Button,
   Container,
   Paper,
   Stack,
   Typography,
 } from '@mui/material';
 import { AppRouteParams, IllusLandingTpp } from '@pagopa-pn/pn-commons';
+import { MIButton } from '@pagopa/mui-italia';
 
 import { useRapidAccessParam } from '../hooks/useRapidAccessParam';
 import { PFEventsType } from '../models/PFEventsType';
@@ -100,14 +100,14 @@ const TppLanding: React.FC = () => {
                 <Trans t={t} i18nKey="description" />
               </Typography>
 
-              <Button
+              <MIButton
                 variant="contained"
                 onClick={handleClickAccessButton}
                 sx={{ maxWidth: { md: '300px' } }}
                 data-testid="accessButton"
               >
                 {t('access-button')}
-              </Button>
+              </MIButton>
             </Stack>
           </Stack>
         </Paper>

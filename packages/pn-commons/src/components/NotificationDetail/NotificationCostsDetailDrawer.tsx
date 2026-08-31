@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 
-import CloseIcon from '@mui/icons-material/Close';
-import { Drawer, IconButton, Link, Stack, Typography } from '@mui/material';
-import { MIAlert } from '@pagopa/mui-italia';
+import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
+import { Drawer, Link, Stack, Typography, useTheme } from '@mui/material';
+import { MIAlert, MIIconButton } from '@pagopa/mui-italia';
 
 import { useIsMobile } from '../../hooks';
 import { EventAction, EventPaymentRecipientType } from '../../models';
@@ -51,6 +51,8 @@ const NotificationCostsDetailDrawer: React.FC<Props> = ({
   const [openDrawer, setOpenDrawer] = useState(false);
 
   const isMobile = useIsMobile();
+
+  const theme = useTheme();
 
   const handleCloseDrawer = () => {
     setOpenDrawer(false);
@@ -108,17 +110,17 @@ const NotificationCostsDetailDrawer: React.FC<Props> = ({
             <Typography fontSize="18px" fontWeight="bold" data-testid="cost-details-drawer-title">
               {getLocalizedOrDefaultLabel('notifications', 'notification-alert.details.title')}
             </Typography>
-            <IconButton
+            <MIIconButton
               aria-label="close"
               onClick={handleCloseDrawer}
               data-testid="cost-details-drawer-close"
             >
-              <CloseIcon sx={{ color: 'action.active', fontSize: '24px' }} />
-            </IconButton>
+              <CloseRoundedIcon sx={{ color: 'action.active', fontSize: '24px' }} />
+            </MIIconButton>
           </Stack>
 
           <Stack spacing={3}>
-            <Typography variant="body1" color="#555C70" fontSize="16px">
+            <Typography variant="body1" color={theme.palette.text.secondary} fontSize="16px">
               {getLocalizedOrDefaultLabel(
                 'notifications',
                 'notification-alert.details.description'

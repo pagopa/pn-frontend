@@ -5,7 +5,6 @@ import { useNavigate } from 'react-router-dom';
 import * as yup from 'yup';
 
 import {
-  Button,
   Checkbox,
   FormControl,
   FormControlLabel,
@@ -14,7 +13,7 @@ import {
   Typography,
 } from '@mui/material';
 import { EventAction, IllusHourglass, PnWizard, PnWizardStep } from '@pagopa-pn/pn-commons';
-import { ButtonNaked, MIAlert } from '@pagopa/mui-italia';
+import { MIAlert, MIButton } from '@pagopa/mui-italia';
 
 import { PFEventsType } from '../../models/PFEventsType';
 import { AddressType, ChannelType, SaveDigitalAddressParams } from '../../models/contacts';
@@ -186,15 +185,14 @@ const PecContactWizard: React.FC<Props> = ({
           exitButton: () => <></>,
           nextButton: () => <></>,
           prevButton: () => (
-            <ButtonNaked
+            <MIButton
+              variant="text"
               onClick={handlePreviousBtnClick}
-              color="primary"
-              size="medium"
               data-testid="prev-button"
               sx={{ mt: { xs: 2, lg: 0 } }}
             >
               {t('button.indietro', { ns: 'common' })}
-            </ButtonNaked>
+            </MIButton>
           ),
           feedbackIcon: IllusHourglass,
         }}
@@ -267,7 +265,7 @@ const PecContactWizard: React.FC<Props> = ({
                 <Checkbox
                   sx={
                     formik.touched.disclaimer && formik.errors.disclaimer
-                      ? { color: 'error.dark' }
+                      ? { color: 'error.main' }
                       : { color: 'text.secondary' }
                   }
                   name="disclaimer"
@@ -290,16 +288,15 @@ const PecContactWizard: React.FC<Props> = ({
               </FormHelperText>
             )}
           </FormControl>
-          <Button
+          <MIButton
             fullWidth
             variant="contained"
-            color="primary"
             onClick={handleSubmitForm}
             sx={{ mt: 3 }}
             data-testid="next-button"
           >
             {t(buttonTextLabel, { ns: 'recapiti' })}
-          </Button>
+          </MIButton>
         </PnWizardStep>
       </PnWizard>
 

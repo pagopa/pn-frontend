@@ -2,7 +2,7 @@ import React, { useCallback, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { Block, Delete, Sync } from '@mui/icons-material';
-import { Button, Stack, Typography } from '@mui/material';
+import { Stack, Typography } from '@mui/material';
 import {
   EmptyState,
   KnownSentiment,
@@ -10,6 +10,7 @@ import {
   today,
   useHasPermissions,
 } from '@pagopa-pn/pn-commons';
+import { MIButton } from '@pagopa/mui-italia';
 
 import {
   BffVirtualKeyStatusRequestStatusEnum,
@@ -149,7 +150,7 @@ const VirtualKeys: React.FC = () => {
           {t('virtualKeys.title')}
         </Typography>
         {isCreationEnabled && (
-          <Button
+          <MIButton
             id="generate-virtual-key"
             data-testid="generateVirtualKey"
             variant="contained"
@@ -157,7 +158,7 @@ const VirtualKeys: React.FC = () => {
             onClick={handleGenerateVirtualKey}
           >
             {t('virtualKeys.new-key-button')}
-          </Button>
+          </MIButton>
         )}
       </Stack>
 

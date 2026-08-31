@@ -1,9 +1,9 @@
 import { ReactNode, RefAttributes } from 'react';
 import { Link, LinkProps, useNavigate } from 'react-router-dom';
 
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import ArrowBackRoundedIcon from '@mui/icons-material/ArrowBackRounded';
 import { Breadcrumbs, Link as MuiLink, Stack, styled } from '@mui/material';
-import { ButtonNaked } from '@pagopa/mui-italia';
+import { MIButton } from '@pagopa/mui-italia';
 
 import { getLocalizedOrDefaultLabel } from '../utility/localization.utility';
 
@@ -45,15 +45,15 @@ const PnBreadcrumb = ({
   return (
     <Stack direction="row" alignItems="center" justifyContent="start" spacing={3}>
       {showBackAction && (
-        <ButtonNaked
+        <MIButton
+          variant="text"
           id="breadcrumb-indietro-button"
-          color="primary"
           data-testid="breadcrumb-indietro-button"
-          startIcon={<ArrowBackIcon />}
+          startIcon={<ArrowBackRoundedIcon />}
           onClick={goBackAction ?? (() => navigate(-1))}
         >
           {finalBackLabel}
-        </ButtonNaked>
+        </MIButton>
       )}
       <Breadcrumbs>
         <BreadcrumbLink to={linkRoute} data-testid="breadcrumb-link" {...linkProps}>
@@ -62,7 +62,7 @@ const PnBreadcrumb = ({
         <MuiLink
           id="title-of-page"
           color="text.primary"
-          sx={{ display: 'flex', alignItems: 'center', fontWeight: 600 }}
+          sx={{ display: 'flex', alignItems: 'center' }}
           aria-current="page"
           underline="none"
         >
