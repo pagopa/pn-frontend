@@ -147,6 +147,9 @@
     "show-all": "Alle ansehen",
     "timeline": {
       "courtesy-group-label": "Höflichkeitsmitteilungen",
+      "registered-letter": "Einschreiben",
+      "digital-send-fallback": "Digitaler Versand",
+      "unknown-status": "Unbekannter Status",
       "schedule-digital-workflow": "Weiterer digitaler Versand",
       "schedule-digital-workflow-description": "Es wurde ein weiterer Versuch gestartet, die Zustellung digital zu versenden.",
       "schedule-digital-workflow-description-multirecipient": "Es wurde ein weiterer Versuch gestartet, die Zustellung digital an {{name}} {{taxId}} zu versenden.",

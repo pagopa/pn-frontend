@@ -164,6 +164,9 @@
     },
     "timeline": {
       "courtesy-group-label": "Courtesy messages",
+      "registered-letter": "Registered post",
+      "digital-send-fallback": "Digital delivery",
+      "unknown-status": "Unknown status",
       "schedule-digital-workflow": "Send again digitally",
       "schedule-digital-workflow-description": "A further attempt to send the notification digitally has begun.",
       "schedule-digital-workflow-description-multirecipient": "A further attempt to send the notification to {{name}} {{taxId}} digitally has begun.",

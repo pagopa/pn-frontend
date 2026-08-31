@@ -164,6 +164,9 @@
     },
     "timeline": {
       "courtesy-group-label": "Messaggi di cortesia",
+      "registered-letter": "Raccomandata",
+      "digital-send-fallback": "Invio digitale",
+      "unknown-status": "Stato sconosciuto",
       "schedule-digital-workflow": "Ulteriore invio per via digitale",
       "schedule-digital-workflow-description": "È iniziato un ulteriore tentativo di invio della notifica per via digitale.",
       "schedule-digital-workflow-description-multirecipient": "È iniziato un ulteriore tentativo di invio della notifica a {{name}} {{taxId}} per via digitale.",

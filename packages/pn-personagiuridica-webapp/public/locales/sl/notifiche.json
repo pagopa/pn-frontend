@@ -164,6 +164,9 @@
     },
     "timeline": {
       "courtesy-group-label": "Vljudnostna sporočila",
+      "registered-letter": "Priporočeno pismo",
+      "digital-send-fallback": "Digitalno pošiljanje",
+      "unknown-status": "Neznano stanje",
       "schedule-digital-workflow": "Nadaljnje pošiljanje z digitalnimi sredstvi",
       "schedule-digital-workflow-description": "Začel se je nadaljnji poskus digitalnega pošiljanja obvestila.",
       "schedule-digital-workflow-description-multirecipient": "Začel se je nadaljnji poskus pošiljanja obvestila za {{name}} {{taxId}} po digitalni poti.",
