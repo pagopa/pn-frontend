@@ -15,6 +15,7 @@ import {
   AppResponse,
   AppRouteParams,
   DeliveryOutcomeType,
+  EventNotificationTypes,
   EventPaymentRecipientType,
   GetDowntimeHistoryParams,
   IllusQuestion,
@@ -212,7 +213,9 @@ const NotificationDetail: React.FC = () => {
         .unwrap()
         .then(showInfoMessageIfRetryAfterOrDownload)
         .catch(() => {});
-      PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_DOWNLOAD_ATTACHMENT);
+      PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_DOWNLOAD_ATTACHMENT, {
+        notification_type: EventNotificationTypes.NOTIFICATION,
+      });
     }
   };
 
@@ -228,7 +231,10 @@ const NotificationDetail: React.FC = () => {
 
   const onPayClick = (noticeCode?: string, creditorTaxId?: string, amount?: number) => {
     if (noticeCode && creditorTaxId && amount && notification.senderDenomination) {
-      PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_START_PAYMENT, { psp: 'pagopa' });
+      PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_START_PAYMENT, {
+        psp: 'pagopa',
+        notification_type: EventNotificationTypes.NOTIFICATION,
+      });
       dispatch(
         getReceivedNotificationPaymentUrl({
           paymentNotice: {
@@ -257,7 +263,10 @@ const NotificationDetail: React.FC = () => {
     amount?: number
   ) => {
     if (noticeCode && creditorTaxId && retrievalId) {
-      PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_START_PAYMENT, { psp: tppName });
+      PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_START_PAYMENT, {
+        psp: tppName,
+        notification_type: EventNotificationTypes.NOTIFICATION,
+      });
       dispatch(
         getReceivedNotificationPaymentTppUrl({
           noticeCode,
@@ -509,6 +518,7 @@ const NotificationDetail: React.FC = () => {
         notificationStatusHistory: notification.notificationStatusHistory,
         flow: getFlowType(),
         delivery_mode: getDeliveryMode(),
+        notification_type: EventNotificationTypes.NOTIFICATION,
       });
 
       PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_NOTIFICATIONS_COUNT, {

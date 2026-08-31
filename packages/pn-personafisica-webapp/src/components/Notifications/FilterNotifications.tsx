@@ -23,10 +23,12 @@ import {
   useIsMobile,
 } from '@pagopa-pn/pn-commons';
 
+import { PFEventsType } from '../../models/PFEventsType';
 import { setNotificationFilters } from '../../redux/dashboard/reducers';
 import { Delegator } from '../../redux/delegation/types';
 import { useAppSelector } from '../../redux/hooks';
 import { RootState } from '../../redux/store';
+import PFEventStrategyFactory from '../../utility/MixpanelUtils/PFEventStrategyFactory';
 import FilterNotificationsFormActions from './FilterNotificationsFormActions';
 import FilterNotificationsFormBody from './FilterNotificationsFormBody';
 
@@ -46,6 +48,17 @@ function validateDate(startDate: Date | undefined, endDate: Date | undefined) {
   }
   return isBefore(startDate, endDate) || isEqualDate(startDate, endDate);
 }
+
+// TODO: confirm Mixpanel filter taxonomy and separator with CX.
+// The tracking value must contain only active filter types, never user-entered values.
+const getTrackingFilter = (values: FormikValues): string =>
+  [
+    values.communicationType ? 'communicationType' : undefined,
+    values.iunMatch ? 'iun' : undefined,
+    values.startDate || values.endDate ? 'date' : undefined,
+  ]
+    .filter(Boolean)
+    .join('-');
 
 const initialEmptyValues = {
   startDate: undefined,
@@ -157,6 +170,12 @@ const FilterNotifications = forwardRef(({ showFilters, currentDelegator }: Props
         iunMatch: values.iunMatch,
         mandateId: currentDelegator?.mandateId,
       };
+
+      PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_NOTIFICATION_SEARCH, {
+        filter: getTrackingFilter(values),
+        delegate: currentDelegator != null,
+      });
+
       if (isEqual(prevFilters, currentFilters)) {
         return;
       }
