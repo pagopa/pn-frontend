@@ -98,6 +98,7 @@ export interface INotificationDetailTimeline {
   hidden?: boolean;
   index?: number;
   reworkedStatus?: ReworkedStatus;
+  eventTimestamp?: string;
 }
 
 export enum ResponseStatus {
@@ -298,6 +299,10 @@ export enum TimelineCategory {
   NOTIFICATION_RADD_RETRIEVED = 'NOTIFICATION_RADD_RETRIEVED',
   // PN-16970
   NOTIFICATION_TIMELINE_REWORKED = 'NOTIFICATION_TIMELINE_REWORKED',
+  // Informal notification viewed
+  INFORMAL_NOTIFICATION_VIEWED = 'INFORMAL_NOTIFICATION_VIEWED',
+  // Informal notification delivered
+  DELIVERED = 'DELIVERED',
 }
 
 interface DigitalAddress {
