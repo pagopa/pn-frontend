@@ -23,6 +23,7 @@ export interface NotificationTimelineResponse {
   iun: string;
   subject: string;
   recipients: Array<NotificationDetailRecipient>;
+  isCancelled: boolean;
   notificationStatusHistory: Array<NotificationTimelineStatusHistory>;
 }
 

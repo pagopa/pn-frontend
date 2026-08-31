@@ -57,7 +57,9 @@ const NotificationTimeline: React.FC = () => {
     (state: RootState) => state.notificationState.notificationTimeline
   );
 
-  const isCancelled = useIsCancelled({ notification });
+  const isCancelled = useIsCancelled({
+    notification: IS_NEW_TIMELINE_ENABLED ? notificationTimeline : notification,
+  });
   const isCancelledOrCancelling = isCancelled.cancelled || isCancelled.cancellationInProgress;
 
   const timelineApiId = IS_NEW_TIMELINE_ENABLED
@@ -192,6 +194,7 @@ const NotificationTimeline: React.FC = () => {
                   recipients={notificationTimeline.recipients}
                   statusHistory={notificationTimeline.notificationStatusHistory}
                   clickHandler={legalFactDownloadHandler}
+                  disableDownloads={isCancelled.cancellationInTimeline}
                 />
               ) : (
                 <NotificationDetailTimeline
