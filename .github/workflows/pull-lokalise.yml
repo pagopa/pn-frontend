@@ -26,7 +26,7 @@ permissions:
 jobs:
   pull-locale:
     runs-on: ubuntu-latest
-    # TODO: RIPRISTINARE PRIMA DEL MERGE - usa i secret di repository durante il test.
+    # TODO: RIPRISTINARE PRIMA DEL MERGE - usa secret e variabili di repository durante il test.
     #       Riallineare a io-app con "environment: lokalise" quando l'environment sara' disponibile.
     # environment: lokalise
     strategy:
@@ -37,7 +37,7 @@ jobs:
       matrix:
         app: [PFL, PF, PA, PG]
     env:
-      # I codici app sono anche il suffisso dei secret LOKALISE_PROJECT_ID_<CODICE>.
+      # I codici app sono anche il suffisso delle variabili LOKALISE_PROJECT_ID_<CODICE>.
       PACKAGES: >-
         {
           "PFL": "pn-personafisica-login",
@@ -56,7 +56,7 @@ jobs:
         uses: lokalise/lokalise-pull-action@95afae3fac9dd28db1ff4887a63b1f76cbee714d # v5.3.0
         with:
           api_token: ${{ secrets.LOKALISE_API_TOKEN }}
-          project_id: ${{ secrets[format('LOKALISE_PROJECT_ID_{0}', matrix.app)] }}
+          project_id: ${{ vars[format('LOKALISE_PROJECT_ID_{0}', matrix.app)] }}
           base_lang: it
           translations_path: packages/${{ fromJson(env.PACKAGES)[matrix.app] }}/public/locales
           file_format: json
