@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 
 import { EmailOutlined, PhoneOutlined } from '@mui/icons-material';
 import { Stack, Typography } from '@mui/material';
-import { ButtonNaked } from '@pagopa/mui-italia';
+import { MIButton } from '@pagopa/mui-italia';
 
 import { ContactState, OnboardingAvailableFlows } from '../../../../models/Onboarding';
 import { PFEventsType } from '../../../../models/PFEventsType';
@@ -112,14 +112,9 @@ const CourtesyContactHandler: React.FC<Props> = ({
           {labels.collapsed.label}
         </Typography>
 
-        <ButtonNaked
-          color="primary"
-          size="medium"
-          onClick={onExpand}
-          sx={{ alignSelf: 'flex-start', fontWeight: 700 }}
-        >
+        <MIButton variant="text" onClick={onExpand} sx={{ alignSelf: 'flex-start' }}>
           {labels.collapsed.buttonLabel}
-        </ButtonNaked>
+        </MIButton>
       </Stack>
     );
   }
@@ -196,7 +191,6 @@ const CourtesyContactHandler: React.FC<Props> = ({
               variant: 'outlined',
               sx: {
                 height: '43px',
-                fontWeight: 700,
                 flexBasis: { xs: 'unset', lg: '25%' },
               },
             },

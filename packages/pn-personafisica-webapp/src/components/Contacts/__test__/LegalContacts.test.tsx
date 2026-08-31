@@ -101,7 +101,7 @@ describe('LegalContacts Component', () => {
   });
 
   it('renders component - no contacts', async () => {
-    const { container, getByRole, getByTestId } = render(<LegalContacts />, {
+    const { container, getByRole, getByTitle } = render(<LegalContacts />, {
       preloadedState: { contactsState: { digitalAddresses: [] } },
     });
 
@@ -109,11 +109,11 @@ describe('LegalContacts Component', () => {
     expect(container).toHaveTextContent('status.inactive');
     expect(container).toHaveTextContent('legal-contacts.sercq-send-info-advantages');
 
-    const digitalNotificationsIcon = getByTestId('LaptopChromebookIcon');
+    const digitalNotificationsIcon = getByTitle('MIDesktop');
     expect(digitalNotificationsIcon).toBeInTheDocument();
-    const savingsIcon = getByTestId('SavingsIcon');
+    const savingsIcon = getByTitle('MISavingMoney');
     expect(savingsIcon).toBeInTheDocument();
-    const allInOnePlaceIcon = getByTestId('TouchAppIcon');
+    const allInOnePlaceIcon = getByTitle('MIEmailValidation');
     expect(allInOnePlaceIcon).toBeInTheDocument();
     const startButton = getByRole('button', { name: 'button.start' });
     expect(startButton).toBeInTheDocument();
@@ -129,7 +129,7 @@ describe('LegalContacts Component', () => {
     // check contacts
     const pecValidationItem = getByTestId('default_pecContact');
     expect(pecValidationItem).toBeInTheDocument();
-    const closeIcon = getByTestId('CloseIcon');
+    const closeIcon = getByTestId('CloseRoundedIcon');
     expect(closeIcon).toBeInTheDocument();
     const cancelValidationButton = getByText('legal-contacts.cancel-pec-validation');
     expect(cancelValidationButton).toBeInTheDocument();
@@ -147,7 +147,7 @@ describe('LegalContacts Component', () => {
     // check contacts
     const pecValidationItem = getByTestId('default_pecContact');
     expect(pecValidationItem).toBeInTheDocument();
-    const closeIcon = getByTestId('CloseIcon');
+    const closeIcon = getByTestId('CloseRoundedIcon');
     expect(closeIcon).toBeInTheDocument();
     const cancelValidationButton = getByText('legal-contacts.cancel-pec-validation');
     expect(cancelValidationButton).toBeInTheDocument();

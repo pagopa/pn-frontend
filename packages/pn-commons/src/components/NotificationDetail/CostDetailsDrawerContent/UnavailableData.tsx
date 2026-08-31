@@ -1,14 +1,17 @@
 import React from 'react';
 
-import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
+import HelpOutlineRoundedIcon from '@mui/icons-material/HelpOutlineRounded';
 import { Stack, Typography } from '@mui/material';
 
 import { getLocalizedOrDefaultLabel } from '../../../utility/localization.utility';
 
 const UnavailableDataDrawerContent: React.FC = () => (
   <Stack direction="row" alignItems="center" spacing={2}>
-    <HelpOutlineIcon fontSize="small" sx={{ flexShrink: 0, color: '#BBC2D6' }} />
-    <Typography variant="body2" fontSize="14px" color="#555C70">
+    <HelpOutlineRoundedIcon
+      fontSize="small"
+      sx={(theme) => ({ flexShrink: 0, color: theme.colors.neutral.grey[300] })}
+    />
+    <Typography variant="body2" fontSize="14px" color={(theme) => theme.palette.text.secondary}>
       {getLocalizedOrDefaultLabel('notifications', 'notification-alert.details.more-info')}
     </Typography>
   </Stack>

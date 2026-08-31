@@ -1,8 +1,8 @@
 import React from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 
-import { Button } from '@mui/material';
 import { ConfirmationModal } from '@pagopa-pn/pn-commons';
+import { MIButton } from '@pagopa/mui-italia';
 
 type Props = {
   open: boolean;
@@ -28,8 +28,8 @@ const ExistingContactDialog: React.FC<Props> = ({
         ns: 'recapiti',
       })}
       slots={{
-        confirmButton: isDefault ? () => <></> : Button,
-        closeButton: Button,
+        confirmButton: isDefault ? () => <></> : MIButton,
+        closeButton: MIButton,
       }}
       slotsProps={{
         closeButton: {

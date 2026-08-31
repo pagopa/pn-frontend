@@ -7,8 +7,8 @@ vi.mock('@pagopa/mui-italia', async (importOriginal) => {
   const actual = await importOriginal<any>();
   return {
     ...actual,
-    IllusCompleted: () => <div data-testid="success-illustration" />,
-    IllusError: () => <div data-testid="error-illustration" />,
+    IllusMICompleted: () => <div data-testid="success-illustration" />,
+    IllusMIError: () => <div data-testid="error-illustration" />,
   };
 });
 

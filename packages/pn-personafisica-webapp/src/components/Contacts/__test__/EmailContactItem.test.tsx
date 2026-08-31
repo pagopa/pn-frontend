@@ -95,6 +95,7 @@ describe('testing EmailContactItem', () => {
     const errorMessage = form?.querySelector('#default_email-helper-text');
     expect(errorMessage).not.toBeInTheDocument();
     const button = result.getByTestId('default_email-button');
+    expect(button).toHaveAttribute('type', 'submit');
     expect(button).toBeEnabled();
     fireEvent.click(button);
     await waitFor(() => {
