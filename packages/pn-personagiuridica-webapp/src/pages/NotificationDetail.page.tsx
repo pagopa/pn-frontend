@@ -440,7 +440,7 @@ const NotificationDetail = () => {
       <MIBreadcrumbs>
         <MIBreadcrumbItem label={breadcrumbLabel} href={backRoute} />
         <MIBreadcrumbItem
-          label={notification.subject ?? t('menu.fallback-communication', { ns: 'notifiche' })}
+          label={notification.subject ?? t('menu.fallback-notification', { ns: 'notifiche' })}
           current
         />
       </MIBreadcrumbs>

@@ -797,7 +797,7 @@ describe('NotificationDetail Page', () => {
         route: routes.GET_DETTAGLIO_NOTIFICA_PATH(notificationDTO.iun),
       });
     });
-    const backButton = result?.getByTestId('breadcrumb-indietro-button');
+    const backButton = result?.getByTestId('breadcrumb-root-button');
     expect(backButton).toBeInTheDocument();
     fireEvent.click(backButton);
     expect(result.router.state.location.pathname).toBe(routes.NOTIFICHE);
@@ -823,7 +823,7 @@ describe('NotificationDetail Page', () => {
         ],
       });
     });
-    const backButton = result?.queryByTestId('breadcrumb-indietro-button');
+    const backButton = result?.queryByTestId('breadcrumb-root-button');
     expect(backButton).not.toBeInTheDocument();
   });
 
@@ -930,7 +930,7 @@ describe('NotificationDetail Page', () => {
         ),
       });
     });
-    const backButton = result?.getByTestId('breadcrumb-indietro-button');
+    const backButton = result?.getByTestId('breadcrumb-root-button');
     expect(backButton).toBeInTheDocument();
     fireEvent.click(backButton);
     expect(result.router.state.location.pathname).toBe(routes.NOTIFICHE_DELEGATO);

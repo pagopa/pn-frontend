@@ -449,7 +449,7 @@ const NotificationDetail: React.FC = () => {
           data-testId="breadcrumb-root-button"
         />
         <MIBreadcrumbItem
-          label={notification.subject ?? t('menu.fallback-communication', { ns: 'notifiche' })}
+          label={notification.subject ?? t('menu.fallback-notification', { ns: 'notifiche' })}
           current
         />
       </MIBreadcrumbs>

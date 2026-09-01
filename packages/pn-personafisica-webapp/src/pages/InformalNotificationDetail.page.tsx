@@ -206,7 +206,7 @@ const InformalNotificationDetail: React.FC = () => {
           data-testId="breadcrumb-root-button"
         />
         <MIBreadcrumbItem
-          label={primaryMessage?.subject ?? 'Dettaglio della comunicazione'}
+          label={primaryMessage?.subject ?? t('menu.fallback-communication', { ns: 'notifiche' })}
           current
         />
       </MIBreadcrumbs>

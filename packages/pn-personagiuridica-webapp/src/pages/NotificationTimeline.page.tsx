@@ -147,7 +147,7 @@ const NotificationTimeline: React.FC = () => {
           href={mandateId ? routes.NOTIFICHE_DELEGATO : routes.NOTIFICHE}
         />
         <MIBreadcrumbItem
-          label={notification.subject ?? t('menu.fallback-communication', { ns: 'notifiche' })}
+          label={notification.subject ?? t('menu.fallback-notification', { ns: 'notifiche' })}
           current
         />
       </MIBreadcrumbs>
