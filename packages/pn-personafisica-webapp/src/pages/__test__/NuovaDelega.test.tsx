@@ -113,7 +113,7 @@ describe('NuovaDelega page', () => {
     expect(mockedPageBefore).not.toBeInTheDocument();
 
     // simulate press of "back" button
-    const backButton = result?.getByTestId('breadcrumb-indietro-button');
+    const backButton = result?.getByTestId('breadcrumb-root-button');
     fireEvent.click(backButton!);
 
     // after pressing "back" button - mocked page present

@@ -435,14 +435,23 @@ const NotificationDetail: React.FC = () => {
       : t('menu.notifiche-utente', { ns: 'common' });
 
     return (
-      <MIBreadcrumbs>
+      <MIBreadcrumbs
+        backButtonLabel={
+          rapidAccessSource ? t('menu.notifiche') : t('button.indietro', { ns: 'common' })
+        }
+        backButtonAction={() => navigate(routes.NOTIFICHE)}
+      >
         <MIBreadcrumbItem
           label={
             mandateId || delegatorsFromStore.length > 0 ? breadcrumbLabel : t('menu.notifiche')
           }
           onClick={() => navigate(backRoute)}
+          data-testId="breadcrumb-root-button"
         />
-        <MIBreadcrumbItem label={notification.subject ?? 'Dettaglio notifica'} current />
+        <MIBreadcrumbItem
+          label={notification.subject ?? t('menu.fallback-communication', { ns: 'notifiche' })}
+          current
+        />
       </MIBreadcrumbs>
     );
   }, [rapidAccessSource, i18n.language, notification.subject, delegatorsFromStore, mandateId]);

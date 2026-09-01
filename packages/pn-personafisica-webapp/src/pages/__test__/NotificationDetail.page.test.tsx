@@ -144,7 +144,7 @@ describe('NotificationDetail Page', () => {
     expect(mock.history.get[0].url).toContain('/bff/v1/notifications/received');
     expect(mock.history.post[0].url).toBe(`/bff/v1/payments/info`);
     expect(mock.history.get[1].url).toContain('/bff/v1/downtime/history');
-    expect(result.getByRole('link', { name: /menu.notifiche/i })).toBeInTheDocument();
+    expect(result.getByTestId('breadcrumb-root-button')).toHaveTextContent(/menu.notifiche/i);
     expect(result.container).toHaveTextContent(notificationToFe.abstract!);
 
     // SKIPPED because it's not a table anymore, update unit test with new implementation
@@ -821,24 +821,21 @@ describe('NotificationDetail Page', () => {
       });
     });
 
-    // simulate press of "root" button
-    const rootButton = result.getByRole('link', { name: /menu.notifiche/i });
+    const rootButton = result.getByTestId('breadcrumb-root-button');
     expect(rootButton).toBeInTheDocument();
-    expect(rootButton).toHaveAttribute('href', '/notifiche');
 
-    // TODO: Uncomment when breadcrumbs accept onClick handler to open confirmation dialog instead of navigating directly
-    // await userEvent.click(rootButton);
+    await userEvent.click(rootButton);
 
-    // expect(await screen.findByTestId('confirmationDialog')).toBeInTheDocument();
-    // expect(result.router.state.location.pathname).toBe(
-    //   routes.GET_DETTAGLIO_NOTIFICA_PATH(notificationDTO.iun)
-    // );
+    expect(await screen.findByTestId('confirmationDialog')).toBeInTheDocument();
+    expect(result.router.state.location.pathname).toBe(
+      routes.GET_DETTAGLIO_NOTIFICA_PATH(notificationDTO.iun)
+    );
 
-    // await userEvent.click(screen.getByTestId('closeButton'));
+    await userEvent.click(screen.getByTestId('closeButton'));
 
-    // await waitFor(() => {
-    //   expect(result.router.state.location.pathname).toBe(routes.NOTIFICHE);
-    // });
+    await waitFor(() => {
+      expect(result.router.state.location.pathname).toBe(routes.NOTIFICHE);
+    });
   });
 
   it('normal navigation - clicking back opens onboarding exit reminder and configure navigates to onboarding', async () => {
@@ -862,23 +859,18 @@ describe('NotificationDetail Page', () => {
       );
     });
 
-    const rootButton = result.getByRole('link', { name: /menu.notifiche/i });
-    expect(rootButton).toBeInTheDocument();
-    expect(rootButton).toHaveAttribute('href', '/notifiche');
+    const rootButton = result.getByTestId('breadcrumb-root-button');
+    await userEvent.click(rootButton);
 
-    // TODO: Uncomment when breadcrumbs accept onClick handler to open confirmation dialog instead of navigating directly
+    expect(await screen.findByTestId('confirmationDialog')).toBeInTheDocument();
 
-    // await userEvent.click(rootButton);
+    await userEvent.click(screen.getByTestId('confirmButton'));
 
-    // expect(await screen.findByTestId('confirmationDialog')).toBeInTheDocument();
+    await waitFor(() => {
+      expect(result.router.state.location.pathname).toBe(routes.ONBOARDING);
+    });
 
-    // await userEvent.click(screen.getByTestId('confirmButton'));
-
-    // await waitFor(() => {
-    //   expect(result.router.state.location.pathname).toBe(routes.ONBOARDING);
-    // });
-
-    // expect(screen.getByText('Onboarding page')).toBeInTheDocument();
+    expect(screen.getByText('Onboarding page')).toBeInTheDocument();
   });
 
   it('should open onboarding exit reminder when returning from payment and stay on detail after skip', async () => {
@@ -937,13 +929,12 @@ describe('NotificationDetail Page', () => {
         ],
       });
     });
-
-    const rootButton = result.getByRole('link', { name: /menu.notifiche/i });
+    const rootButton = result.queryByTestId('breadcrumb-root-button');
     expect(rootButton).toBeInTheDocument();
-    expect(rootButton).toHaveAttribute('href', '/notifiche');
+    expect(rootButton).toHaveTextContent(/menu.notifiche/i);
   });
 
-  it('navigation from Retrieval ID - does not include back button', async () => {
+  it('navigation from Retrieval ID - include root button', async () => {
     mock.onGet(`/bff/v1/notifications/received/${notificationDTO.iun}`).reply(200, notificationDTO);
     mock.onPost(`/bff/v1/payments/info`, paymentInfoRequest).reply(200, paymentInfo);
     // we use regexp to not set the query parameters
@@ -961,9 +952,9 @@ describe('NotificationDetail Page', () => {
         ],
       });
     });
-    const rootButton = result.getByRole('link', { name: /menu.notifiche/i });
+    const rootButton = result.queryByTestId('breadcrumb-root-button');
     expect(rootButton).toBeInTheDocument();
-    expect(rootButton).toHaveAttribute('href', '/notifiche');
+    expect(rootButton).toHaveTextContent(/menu.notifiche/i);
   });
 
   it('API error', async () => {
@@ -1021,7 +1012,7 @@ describe('NotificationDetail Page', () => {
     expect(mock.history.get[0].url).toContain('/bff/v1/notifications/received');
     expect(mock.history.post[0].url).toBe(`/bff/v1/payments/info`);
     expect(mock.history.get[1].url).toContain('/bff/v1/downtime/history');
-    expect(result.getByRole('link', { name: /menu.notifiche/i })).toBeInTheDocument();
+    expect(result.getByTestId('breadcrumb-root-button')).toHaveTextContent(/menu.notifiche/i);
     expect(result.container).toHaveTextContent(notificationToFe.abstract!);
 
     // SKIPPED because it's not a table anymore, update unit test with new implementation
@@ -1060,7 +1051,7 @@ describe('NotificationDetail Page', () => {
     expect(result.queryByTestId('notificationCostBanner')).not.toBeInTheDocument();
   });
 
-  it('normal navigation when delegator is logged - includes root button', async () => {
+  it('normal navigation when delegator is logged - includes back button', async () => {
     mock
       .onGet(
         `/bff/v1/notifications/received/${notificationDTO.iun}?mandateId=${delegator?.mandateId}`
@@ -1084,9 +1075,12 @@ describe('NotificationDetail Page', () => {
         ],
       });
     });
-    const rootButton = result.getByRole('link', { name: /menu.notifiche/i });
+    const rootButton = result.getByTestId('breadcrumb-root-button');
     expect(rootButton).toBeInTheDocument();
-    expect(rootButton).toHaveAttribute('href', '/notifiche/5');
+    fireEvent.click(rootButton);
+    expect(result.router.state.location.pathname).toBe(
+      routes.GET_NOTIFICHE_DELEGATO_PATH(delegator?.mandateId!)
+    );
   });
 
   it('should dispatch getReceivedNotificationPaymentUrl on pay button click', async () => {

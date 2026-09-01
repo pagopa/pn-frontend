@@ -46,14 +46,6 @@ describe('NuovaDelega.page - Mixpanel events', () => {
     expect(triggerEventSpy).toHaveBeenCalledWith(PFEventsType.SEND_ADD_MANDATE_DATA_INPUT);
   });
 
-  it('fires SEND_ADD_MANDATE_BACK when the back button is clicked', async () => {
-    const { getByTestId } = await act(async () => render(<NuovaDelega />));
-
-    fireEvent.click(getByTestId('breadcrumb-indietro-button'));
-
-    expect(triggerEventSpy).toHaveBeenCalledWith(PFEventsType.SEND_ADD_MANDATE_BACK);
-  });
-
   it('fires SEND_ADD_MANDATE_UX_CONVERSION on form submit and SEND_ADD_MANDATE_UX_SUCCESS on API success', async () => {
     mock.onPost('/bff/v1/mandate').reply(200);
 

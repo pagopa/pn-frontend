@@ -182,10 +182,18 @@ const NotificationTimeline: React.FC = () => {
     }
 
     return (
-      <MIBreadcrumbs>
+      <MIBreadcrumbs
+        backButtonLabel={t('button.indietro', { ns: 'common' })}
+        backButtonAction={() =>
+          navigate(mandateId ? routes.GET_NOTIFICHE_DELEGATO_PATH(mandateId) : routes.NOTIFICHE)
+        }
+      >
         <MIBreadcrumbItem
           label={t('menu.notifiche')}
-          href={mandateId ? routes.GET_NOTIFICHE_DELEGATO_PATH(mandateId) : routes.NOTIFICHE}
+          onClick={() =>
+            navigate(mandateId ? routes.GET_NOTIFICHE_DELEGATO_PATH(mandateId) : routes.NOTIFICHE)
+          }
+          data-testId="breadcrumb-root-button"
         />
         <MIBreadcrumbItem
           label={notification.subject ?? t('menu.fallback-notification', { ns: 'notifiche' })}

@@ -192,7 +192,10 @@ const InformalNotificationDetail: React.FC = () => {
 
   const properBreadcrumb = useMemo(
     () => (
-      <MIBreadcrumbs>
+      <MIBreadcrumbs
+        backButtonLabel={t('button.indietro', { ns: 'common' })}
+        backButtonAction={() => navigate(routes.NOTIFICHE)}
+      >
         <MIBreadcrumbItem
           onClick={() => navigate(routes.NOTIFICHE)}
           label={
@@ -200,6 +203,7 @@ const InformalNotificationDetail: React.FC = () => {
               ? t('menu.notifiche-utente', { ns: 'common' })
               : t('menu.notifiche')
           }
+          data-testId="breadcrumb-root-button"
         />
         <MIBreadcrumbItem
           label={primaryMessage?.subject ?? 'Dettaglio della comunicazione'}
