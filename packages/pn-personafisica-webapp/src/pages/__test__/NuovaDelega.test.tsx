@@ -108,15 +108,15 @@ describe('NuovaDelega page', () => {
       );
     });
 
-    // before pressing "back" button - mocked page not present
+    // before pressing root button - mocked page not present
     const mockedPageBefore = result?.queryByTestId('mocked-page');
     expect(mockedPageBefore).not.toBeInTheDocument();
 
-    // simulate press of "back" button
-    const backButton = result?.getByTestId('breadcrumb-root-button');
-    fireEvent.click(backButton!);
+    // simulate press of root button
+    const rootButton = result?.getByTestId('breadcrumb-root-button');
+    fireEvent.click(rootButton!);
 
-    // after pressing "back" button - mocked page present
+    // after pressing root button - mocked page present
     await waitFor(() => {
       const mockedPageAfter = result?.queryByTestId('mocked-page');
       expect(mockedPageAfter).toBeInTheDocument();

@@ -100,22 +100,22 @@ describe('NuovaDelega page', () => {
     await act(async () => {
       result = render(
         <Routes>
-          <Route path={routes.NOTIFICHE} element={<div data-testid="mocked-page">hello</div>} />
+          <Route path={routes.DELEGATI} element={<div data-testid="mocked-page">hello</div>} />
           <Route path={routes.NUOVA_DELEGA} element={<NuovaDelega />} />
         </Routes>,
-        { route: [routes.NOTIFICHE, routes.NUOVA_DELEGA] }
+        { route: [routes.DELEGATI, routes.NUOVA_DELEGA] }
       );
     });
 
-    // before clicking "back" button - mocked page not present
+    // before clicking root button - mocked page not present
     const mockedPageBefore = result.queryByTestId('mocked-page');
     expect(mockedPageBefore).not.toBeInTheDocument();
 
-    // simulate click of "back" button
-    const backButton = result.getByTestId('breadcrumb-root-button');
-    fireEvent.click(backButton);
+    // simulate click of root button
+    const rootButton = result.getByTestId('breadcrumb-root-button');
+    fireEvent.click(rootButton);
 
-    // after clicking "back" button - mocked page present
+    // after clicking root button - mocked page present
     await waitFor(() => {
       const mockedPageAfter = result.queryByTestId('mocked-page');
       expect(mockedPageAfter).toBeInTheDocument();

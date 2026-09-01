@@ -437,8 +437,15 @@ const NotificationDetail = () => {
       : t('menu.notifiche-impresa', { organization: organization?.name });
 
     return (
-      <MIBreadcrumbs>
-        <MIBreadcrumbItem label={breadcrumbLabel} href={backRoute} />
+      <MIBreadcrumbs
+        backButtonLabel={t('button.indietro', { ns: 'common' })}
+        backButtonAction={() => navigate(routes.DELEGATI)}
+      >
+        <MIBreadcrumbItem
+          label={breadcrumbLabel}
+          onClick={() => navigate(backRoute)}
+          data-testid="breadcrumb-root-button"
+        />
         <MIBreadcrumbItem
           label={notification.subject ?? t('menu.fallback-notification', { ns: 'notifiche' })}
           current

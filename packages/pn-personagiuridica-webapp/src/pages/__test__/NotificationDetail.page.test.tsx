@@ -114,7 +114,7 @@ describe('NotificationDetail Page', () => {
     expect(mock.history.get[0].url).toContain('/bff/v1/notifications/received');
     expect(mock.history.get[1].url).toContain('/bff/v1/downtime/history');
     expect(mock.history.post[0].url).toBe(`/bff/v1/payments/info`);
-    expect(result?.getByTestId('breadcrumb-link')).toHaveTextContent(/menu.notifiche/i);
+    expect(result?.getByTestId('breadcrumb-root-button')).toHaveTextContent(/menu.notifiche/i);
     expect(result?.container).toHaveTextContent(notificationToFe.abstract!);
 
     // check documents box
@@ -797,9 +797,9 @@ describe('NotificationDetail Page', () => {
         route: routes.GET_DETTAGLIO_NOTIFICA_PATH(notificationDTO.iun),
       });
     });
-    const backButton = result?.getByTestId('breadcrumb-root-button');
-    expect(backButton).toBeInTheDocument();
-    fireEvent.click(backButton);
+    const rootButton = result?.getByTestId('breadcrumb-root-button');
+    expect(rootButton).toBeInTheDocument();
+    fireEvent.click(rootButton);
     expect(result.router.state.location.pathname).toBe(routes.NOTIFICHE);
   });
 
@@ -823,8 +823,9 @@ describe('NotificationDetail Page', () => {
         ],
       });
     });
-    const backButton = result?.queryByTestId('breadcrumb-root-button');
-    expect(backButton).not.toBeInTheDocument();
+    const rootButton = result?.queryByTestId('breadcrumb-root-button');
+    expect(rootButton).toBeInTheDocument();
+    expect(rootButton).toHaveTextContent(/menu.notifiche/i);
   });
 
   it('API error', async () => {
@@ -880,7 +881,7 @@ describe('NotificationDetail Page', () => {
     expect(mock.history.get).toHaveLength(2);
     expect(mock.history.get[0].url).toContain('/bff/v1/notifications/received');
     expect(mock.history.get[1].url).toContain('/bff/v1/downtime/history');
-    expect(result?.getByTestId('breadcrumb-link')).toHaveTextContent(/menu.notifiche/i);
+    expect(result?.getByTestId('breadcrumb-root-button')).toHaveTextContent(/menu.notifiche/i);
     expect(result?.container).toHaveTextContent(notificationToFe.abstract!);
 
     // check documents box
@@ -930,9 +931,9 @@ describe('NotificationDetail Page', () => {
         ),
       });
     });
-    const backButton = result?.getByTestId('breadcrumb-root-button');
-    expect(backButton).toBeInTheDocument();
-    fireEvent.click(backButton);
+    const rootButton = result?.getByTestId('breadcrumb-root-button');
+    expect(rootButton).toBeInTheDocument();
+    fireEvent.click(rootButton);
     expect(result.router.state.location.pathname).toBe(routes.NOTIFICHE_DELEGATO);
   });
 
@@ -955,7 +956,7 @@ describe('NotificationDetail Page', () => {
     expect(mock.history.get[0].url).toContain('/bff/v1/notifications/received');
     expect(mock.history.get[1].url).toContain('/bff/v1/downtime/history');
     expect(mock.history.post[0].url).toBe(`/bff/v1/payments/info`);
-    expect(result?.getByTestId('breadcrumb-link')).toHaveTextContent(/menu.notifiche/i);
+    expect(result?.getByTestId('breadcrumb-root-button')).toHaveTextContent(/menu.notifiche/i);
     expect(result?.container).toHaveTextContent(notificationToFe.abstract!);
     // check documents box
     const notificationDetailDocuments = result?.getAllByTestId('notificationDetailDocuments');

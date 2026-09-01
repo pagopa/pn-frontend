@@ -216,8 +216,15 @@ const NuovaDelega = () => {
 
   const breadcrumbs = (
     <>
-      <MIBreadcrumbs>
-        <MIBreadcrumbItem label={t('deleghe.title')} href={routes.DELEGATI} />
+      <MIBreadcrumbs
+        backButtonLabel={t('button.indietro', { ns: 'common' })}
+        backButtonAction={() => navigate(routes.DELEGATI)}
+      >
+        <MIBreadcrumbItem
+          label={t('deleghe.title')}
+          onClick={() => navigate(routes.DELEGATI)}
+          data-testid="breadcrumb-root-button"
+        />
         <MIBreadcrumbItem label={t('nuovaDelega.breadcrumb')} current />
       </MIBreadcrumbs>
       <TitleBox
