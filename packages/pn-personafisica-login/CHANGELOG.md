@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.26.0-RC.0](https://github.com/pagopa/pn-frontend/compare/v2.25.0...v2.26.0-RC.0) (2026-09-01)
+
+### Features
+
+* **PN-20865:** dismiss io.italia.it CDN for App IO download links ([43e2e17](https://github.com/pagopa/pn-frontend/commit/43e2e177b25a120673b36372e5980221b32a868a))
+
+
 # [2.25.0](https://github.com/pagopa/pn-frontend/compare/v2.24.2...v2.25.0) (2026-08-06)
 
 

@@ -3,6 +3,34 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.26.0-RC.0](https://github.com/pagopa/pn-frontend/compare/v2.25.0...v2.26.0-RC.0) (2026-09-01)
+
+### Bug Fixes
+
+* **PN-20351:** timeline mobile layout ([#2026](https://github.com/pagopa/pn-frontend/issues/2026)) ([a85ce95](https://github.com/pagopa/pn-frontend/commit/a85ce952834509b73bbe518e2c9c9fd295ec04a2))
+* **PN-20767:** apply wrap to all status chips ([73df114](https://github.com/pagopa/pn-frontend/commit/73df114aa7e821379a695368326a8bdbaefa3ff8))
+* **PN-20767:** status chp wrap value instead of truncate ([1772339](https://github.com/pagopa/pn-frontend/commit/1772339c0fbfdc88c6a4074f80e4c377e8797d20))
+* **PN-20885, PN-20959:** mobile layout and menu drawer ([#2002](https://github.com/pagopa/pn-frontend/issues/2002)) ([0c3b95f](https://github.com/pagopa/pn-frontend/commit/0c3b95f3189a49a7425602ac9ddee8137187d2e6))
+* **PN-20885:** fix boldness in desktop dashboard page ([#2013](https://github.com/pagopa/pn-frontend/issues/2013)) ([e2df404](https://github.com/pagopa/pn-frontend/commit/e2df40497462ffd0b1c365fc4642d46d91f422c7))
+* **PN-20948:** update weight and color in SenderContact ([464b62d](https://github.com/pagopa/pn-frontend/commit/464b62d5710fc3933ca755daf7e797f973139618))
+* **PN-20958:** add break word to sender denomination in abstract paper ([#2011](https://github.com/pagopa/pn-frontend/issues/2011)) ([9f5e601](https://github.com/pagopa/pn-frontend/commit/9f5e601650bc30b739257763548e44f2943bf7ea))
+* **PN-20958:** fix long names in drawer ([#2010](https://github.com/pagopa/pn-frontend/issues/2010)) ([2b8c126](https://github.com/pagopa/pn-frontend/commit/2b8c126056e17e2341705aa8eb8aba269f9d8ff6))
+* **PN-20960:** fix back label from detail ([#2006](https://github.com/pagopa/pn-frontend/issues/2006)) ([cc8e49a](https://github.com/pagopa/pn-frontend/commit/cc8e49a13960adfa8db68cdcd732e861e23bc97b))
+* **PN-20966:** resize column in desktop notifications table ([#2003](https://github.com/pagopa/pn-frontend/issues/2003)) ([7e7cd32](https://github.com/pagopa/pn-frontend/commit/7e7cd3210d2aaf1008d38fad7e501cc67ed520c5))
+* **PN-20974:** update format in static section ([#2009](https://github.com/pagopa/pn-frontend/issues/2009)) ([01bc734](https://github.com/pagopa/pn-frontend/commit/01bc734da05f0c7e5a9897c2c1560031d0cdfc47))
+* **PN-21142:** add dot to DL ([41c0717](https://github.com/pagopa/pn-frontend/commit/41c0717015bbcfd299b5573ac59de551064547b5))
+* **PN-21196:** add clear icon in communication type field ([#2007](https://github.com/pagopa/pn-frontend/issues/2007)) ([548f816](https://github.com/pagopa/pn-frontend/commit/548f81643a3b6b37bb039fb9e3e2df47beabf169))
+
+### Features
+
+* **PN-20350:** PA - Rework timeline layout ([#1963](https://github.com/pagopa/pn-frontend/issues/1963)) ([f5a61ac](https://github.com/pagopa/pn-frontend/commit/f5a61acd07898191beef208320216f0cb8f86c05))
+* **PN-20351:** PF/PG - Rework timeline layout ([#2004](https://github.com/pagopa/pn-frontend/issues/2004)) ([a71c245](https://github.com/pagopa/pn-frontend/commit/a71c2453b8829753273fc044ef90261e0f4c7e14))
+* **PN-20356:** Implementation mix panel event for PF ([#1987](https://github.com/pagopa/pn-frontend/issues/1987)) ([15c0c5f](https://github.com/pagopa/pn-frontend/commit/15c0c5f769b0a187f215d5d004d4ab0f09a912ee))
+* **PN-20357:** PG - Add Mixpanel tracking for ComBo notifications ([#1995](https://github.com/pagopa/pn-frontend/issues/1995)) ([eb07fb8](https://github.com/pagopa/pn-frontend/commit/eb07fb8d57cecb05b50117b5a25bd67d7828fe22))
+* **PN-20778:** use aarDocumentAvailable for AAR download availability ([#2008](https://github.com/pagopa/pn-frontend/issues/2008)) ([7650e43](https://github.com/pagopa/pn-frontend/commit/7650e437463e7ca292d7fedbb6c29d2f703b795a))
+* **PN-20865:** dismiss io.italia.it CDN for App IO download links ([43e2e17](https://github.com/pagopa/pn-frontend/commit/43e2e177b25a120673b36372e5980221b32a868a))
+
+
 # [2.25.0](https://github.com/pagopa/pn-frontend/compare/v2.24.2...v2.25.0) (2026-08-06)
 
 
