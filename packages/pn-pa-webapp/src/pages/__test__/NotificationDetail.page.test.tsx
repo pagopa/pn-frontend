@@ -21,6 +21,7 @@ import {
 } from '../../__mocks__/NotificationDetail.mock';
 import { RenderResult, act, fireEvent, render, waitFor, within } from '../../__test__/test-utils';
 import { apiClient } from '../../api/apiClients';
+import * as routes from '../../navigation/routes.const';
 import { NOTIFICATION_ACTIONS } from '../../redux/notification/actions';
 import NotificationDetail from '../NotificationDetail.page';
 
@@ -60,7 +61,7 @@ describe('NotificationDetail Page', () => {
     expect(mock.history.get[1].url).toContain('/bff/v1/downtime/history');
 
     expect(
-      result.getByRole('link', {
+      result.getByRole('button', {
         name: /detail.breadcrumb-root/i,
       })
     ).toBeInTheDocument();
@@ -336,24 +337,30 @@ describe('NotificationDetail Page', () => {
     await act(async () => {
       result = render(
         <Routes>
-          <Route path={'/mock-path'} element={<div data-testid="mocked-page">hello</div>} />
+          <Route path={routes.DASHBOARD} element={<div data-testid="mocked-page">hello</div>} />
           <Route path={'/:id'} element={<NotificationDetail />} />
         </Routes>,
         {
           path: '*',
-          route: ['/mock-path', `/${notificationDTO.iun}`],
+          route: [routes.DASHBOARD, `/${notificationDTO.iun}`],
         }
       );
     });
 
-    // before pressing "root" button - mocked page not present
+    // before pressing "back" button - mocked page not present
     const mockedPageBefore = result.queryByTestId('mocked-page');
     expect(mockedPageBefore).not.toBeInTheDocument();
 
-    // simulate press of "root" button
-    const backButton = result.getByRole('link', { name: /detail.breadcrumb-root/i });
+    // simulate press of "back" button
+    const backButton = result.getByRole('button', { name: /detail.breadcrumb-root/i });
     expect(backButton).toBeInTheDocument();
-    expect(backButton).toHaveAttribute('href', '/dashboard');
+    fireEvent.click(backButton);
+
+    // after pressing "back" button - mocked page present
+    await waitFor(() => {
+      const mockedPageAfter = result.queryByTestId('mocked-page');
+      expect(mockedPageAfter).toBeInTheDocument();
+    });
   });
 
   it('errors on api call - mono recipient', async () => {

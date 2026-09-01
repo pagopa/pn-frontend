@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 
 import { Box, Grid, Link, Step, StepLabel, Stepper } from '@mui/material';
 import { visuallyHidden } from '@mui/utils';
@@ -64,7 +65,7 @@ const NewNotification = () => {
   const { IS_PAYMENT_ENABLED } = useMemo(() => getConfiguration(), []);
   const dispatch = useAppDispatch();
   const { t } = useTranslation(['common', 'notifiche']);
-
+  const navigate = useNavigate();
   const steps = useMemo(() => {
     const baseSteps = [
       t('new-notification.steps.preliminary-informations.title', { ns: 'notifiche' }),
@@ -171,10 +172,14 @@ const NewNotification = () => {
       <Box p={3}>
         <Grid container sx={{ padding: isMobile ? '0 20px' : 0 }}>
           <Grid item xs={12} lg={8}>
-            <MIBreadcrumbs>
+            <MIBreadcrumbs
+              backButtonLabel={t('button.indietro', { ns: 'common' })}
+              backButtonAction={() => navigate(routes.DASHBOARD)}
+            >
               <MIBreadcrumbItem
                 label={t('new-notification.breadcrumb-root', { ns: 'notifiche' })}
-                href={routes.DASHBOARD}
+                onClick={() => navigate(routes.DASHBOARD)}
+                data-testid="breadcrumb-root-button"
               />
               <MIBreadcrumbItem
                 label={t('new-notification.breadcrumb-leaf', { ns: 'notifiche' })}

@@ -257,10 +257,14 @@ const NotificationDetail: React.FC = () => {
   }, []);
 
   const properBreadcrumb = (
-    <MIBreadcrumbs>
+    <MIBreadcrumbs
+      backButtonLabel={t('button.indietro', { ns: 'common' })}
+      backButtonAction={() => navigate(routes.DASHBOARD)}
+    >
       <MIBreadcrumbItem
         label={t('detail.breadcrumb-root', { ns: 'notifiche' })}
-        href={routes.DASHBOARD}
+        onClick={() => navigate(routes.DASHBOARD)}
+        data-testid="breadcrumb-root-button"
       />
       <MIBreadcrumbItem label={notification.iun} current />
     </MIBreadcrumbs>

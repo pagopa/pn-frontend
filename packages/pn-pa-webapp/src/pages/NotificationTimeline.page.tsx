@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useLocation, useParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 
 import { Box, Stack, Typography } from '@mui/material';
 import {
@@ -43,6 +43,7 @@ const NotificationTimeline: React.FC = () => {
   );
   const { IS_NEW_TIMELINE_ENABLED } = getConfiguration();
   const [pageReady, setPageReady] = useState(false);
+  const navigate = useNavigate();
 
   const timelineApiId = IS_NEW_TIMELINE_ENABLED
     ? NOTIFICATION_ACTIONS.GET_SENT_NOTIFICATION_TIMELINE
@@ -111,10 +112,14 @@ const NotificationTimeline: React.FC = () => {
     }
 
     return (
-      <MIBreadcrumbs>
+      <MIBreadcrumbs
+        backButtonLabel={t('button.indietro', { ns: 'common' })}
+        backButtonAction={() => navigate(routes.DASHBOARD)}
+      >
         <MIBreadcrumbItem
           label={t('detail.breadcrumb-root', { ns: 'notifiche' })}
-          href={routes.DASHBOARD}
+          onClick={() => navigate(routes.DASHBOARD)}
+          data-testid="breadcrumb-root-button"
         />
         <MIBreadcrumbItem label={notification.iun} current />
       </MIBreadcrumbs>

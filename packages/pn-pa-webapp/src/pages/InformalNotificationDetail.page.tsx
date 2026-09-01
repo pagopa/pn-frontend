@@ -1,5 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 
 import { Box, Typography } from '@mui/material';
 import { TitleBox } from '@pagopa-pn/pn-commons';
@@ -9,13 +10,18 @@ import * as routes from '../navigation/routes.const';
 
 const InformalNotificationDetail: React.FC = () => {
   const { t } = useTranslation(['common', 'notifiche']);
+  const navigate = useNavigate();
 
   return (
     <Box sx={{ p: { xs: 3, lg: 0 } }}>
-      <MIBreadcrumbs>
+      <MIBreadcrumbs
+        backButtonLabel={t('button.indietro', { ns: 'common' })}
+        backButtonAction={() => navigate(routes.DASHBOARD)}
+      >
         <MIBreadcrumbItem
           label={t('detail.breadcrumb-root', { ns: 'notifiche' })}
-          href={routes.DASHBOARD}
+          onClick={() => navigate(routes.DASHBOARD)}
+          data-testid="breadcrumb-root-button"
         />
         <MIBreadcrumbItem label="Dettaglio comunicazione bonaria" current />
       </MIBreadcrumbs>
