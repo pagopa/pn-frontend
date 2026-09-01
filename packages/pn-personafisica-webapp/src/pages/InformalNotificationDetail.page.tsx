@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 import { Box, Stack } from '@mui/material';
 import {
@@ -45,6 +45,7 @@ const InformalNotificationDetail: React.FC = () => {
   const dispatch = useAppDispatch();
   const [pageReady, setPageReady] = useState(false);
   const { hasApiErrors } = useErrors();
+  const navigate = useNavigate();
 
   const informalNotification = useAppSelector(
     (state: RootState) => state.notificationState.informalNotification
@@ -193,7 +194,7 @@ const InformalNotificationDetail: React.FC = () => {
     () => (
       <MIBreadcrumbs>
         <MIBreadcrumbItem
-          href={routes.NOTIFICHE}
+          onClick={() => navigate(routes.NOTIFICHE)}
           label={
             delegatorsFromStore.length > 0
               ? t('menu.notifiche-utente', { ns: 'common' })

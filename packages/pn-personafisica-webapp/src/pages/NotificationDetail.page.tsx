@@ -440,7 +440,7 @@ const NotificationDetail: React.FC = () => {
           label={
             mandateId || delegatorsFromStore.length > 0 ? breadcrumbLabel : t('menu.notifiche')
           }
-          href={backRoute}
+          onClick={() => navigate(backRoute)}
         />
         <MIBreadcrumbItem label={notification.subject ?? 'Dettaglio notifica'} current />
       </MIBreadcrumbs>
