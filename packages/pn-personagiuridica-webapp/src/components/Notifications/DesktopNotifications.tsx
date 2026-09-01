@@ -1,4 +1,3 @@
-import { useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
@@ -19,7 +18,6 @@ import {
 } from '@pagopa-pn/pn-commons';
 
 import * as routes from '../../navigation/routes.const';
-import FilterNotifications from './FilterNotifications';
 import NotificationsEmptyState from './NotificationsEmptyState';
 
 type Props = {
@@ -30,6 +28,10 @@ type Props = {
   onChangeSorting?: (s: Sort<NotificationColumnData<RecipientNotification>>) => void;
   /** Defines if the component is in delegated page */
   isDelegatedPage?: boolean;
+  /** True when at least one filter is active */
+  filtersApplied: boolean;
+  /** The function to be invoked if the user clicks on clean filters button */
+  onCleanFilters: () => void;
 };
 
 const DesktopNotifications = ({
@@ -37,10 +39,11 @@ const DesktopNotifications = ({
   sort,
   onChangeSorting,
   isDelegatedPage = false,
+  filtersApplied,
+  onCleanFilters,
 }: Props) => {
   const navigate = useNavigate();
   const { t } = useTranslation(['notifiche', 'common']);
-  const filterNotificationsRef = useRef({ filtersApplied: false, cleanFilters: () => void 0 });
 
   const columns: Array<Column<NotificationColumnData<RecipientNotification>>> = [
     {
@@ -92,10 +95,6 @@ const DesktopNotifications = ({
     id: n.iun,
   }));
 
-  const filtersApplied: boolean = filterNotificationsRef.current.filtersApplied;
-
-  const showFilters = notifications?.length > 0 || filtersApplied;
-
   const handleRowClick = (
     iun: string,
     communicationType: NotificationCommunicationType,
@@ -113,11 +112,6 @@ const DesktopNotifications = ({
 
   return (
     <>
-      <FilterNotifications
-        ref={filterNotificationsRef}
-        showFilters={showFilters}
-        isDelegatedPage={isDelegatedPage}
-      />
       {rows.length ? (
         <PnTable
           testId="notificationsTable"
@@ -172,7 +166,7 @@ const DesktopNotifications = ({
       ) : (
         <NotificationsEmptyState
           filtersApplied={filtersApplied}
-          filterNotificationsRef={filterNotificationsRef}
+          onCleanFilters={onCleanFilters}
           isDelegatedPage={isDelegatedPage}
         />
       )}
