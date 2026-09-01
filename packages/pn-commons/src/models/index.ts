@@ -28,6 +28,7 @@ export type {
   EventPaymentStatusType,
   EventsType,
   TrackedEvent,
+  EventNotificationType,
 } from './MixpanelEvents';
 export type {
   GetNotificationsParams,
@@ -90,6 +91,7 @@ export {
   EventDowntimeType,
   EventPageType,
   EventPaymentRecipientType,
+  EventNotificationTypes,
   EventPropertyType,
 } from './MixpanelEvents';
 export {

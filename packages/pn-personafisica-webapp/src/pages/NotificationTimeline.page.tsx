@@ -72,7 +72,6 @@ const NotificationTimeline: React.FC = () => {
     notification: IS_NEW_TIMELINE_ENABLED ? notificationTimeline : notification,
   });
 
-  console.log({ isCancelled });
   const isCancelledOrCancelling = isCancelled.cancelled || isCancelled.cancellationInProgress;
 
   const timelineApiId = IS_NEW_TIMELINE_ENABLED
