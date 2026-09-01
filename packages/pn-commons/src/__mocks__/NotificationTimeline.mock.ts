@@ -33,6 +33,7 @@ export const notificationTimelineDTO: NotificationTimelineResponse = {
   iun: 'EPXW-VTMZ-DUJH-202608-U-1',
   subject: 'Test notifica 20260806111108',
   recipients: timelineRecipients,
+  isCancelled: false,
   notificationStatusHistory: [
     {
       status: NotificationStatus.VIEWED,

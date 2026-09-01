@@ -40,6 +40,7 @@ const initialState = {
     iun: '',
     subject: '',
     recipients: [],
+    isCancelled: false,
     notificationStatusHistory: [],
   },
   downtimeEvents: [],
