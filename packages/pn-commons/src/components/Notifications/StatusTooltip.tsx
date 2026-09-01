@@ -13,27 +13,11 @@ type Props = {
   tooltipProps?: Partial<TooltipProps>;
   chipProps?: SxProps;
   ariaLabel?: string;
-  useNewChip?: boolean;
 };
 
 const StatusTooltipChip = forwardRef<never, Omit<Props, 'tooltip'>>(
-  ({ useNewChip, label, ariaLabel, color, chipProps, ...rest }, ref) => {
+  ({ label, ariaLabel, color, chipProps, ...rest }, ref) => {
     const isMobile = useIsMobile();
-
-    if (useNewChip) {
-      return (
-        <MIChip
-          {...rest}
-          id={`status-chip-${label}`}
-          data-testid={`statusChip-${label}`}
-          aria-label={ariaLabel}
-          label={isMobile ? <span aria-hidden="true">{label}</span> : label}
-          color={color ?? 'default'}
-          sx={chipProps}
-          ref={ref}
-        />
-      );
-    }
 
     return (
       <MIChip
@@ -43,10 +27,7 @@ const StatusTooltipChip = forwardRef<never, Omit<Props, 'tooltip'>>(
         aria-label={ariaLabel}
         label={isMobile ? <span aria-hidden="true">{label}</span> : label}
         color={color ?? 'default'}
-        sx={{
-          ...chipProps,
-          cursor: 'default',
-        }}
+        sx={chipProps}
         ref={ref}
       />
     );
@@ -60,7 +41,6 @@ const StatusTooltip: FC<Props> = ({
   tooltipProps,
   chipProps,
   ariaLabel,
-  useNewChip,
 }) => {
   const tooltipContent = <Fragment>{tooltip}</Fragment>;
 
@@ -72,7 +52,6 @@ const StatusTooltip: FC<Props> = ({
         label={label}
         aria-label={ariaLabel ?? computedAriaLabel}
         color={color}
-        useNewChip={useNewChip}
         chipProps={chipProps}
       />
     </CustomTooltip>

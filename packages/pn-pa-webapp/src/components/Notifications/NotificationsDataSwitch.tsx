@@ -16,7 +16,17 @@ const NotificationStatusChip: React.FC<{ data: Row<Notification> }> = ({ data })
   const { label, tooltip, color } = getNotificationStatusInfos(data.notificationStatus, {
     recipients: data.recipients,
   });
-  return <StatusTooltip label={label} tooltip={tooltip} color={color}></StatusTooltip>;
+  return (
+    <StatusTooltip
+      label={label}
+      tooltip={tooltip}
+      color={color}
+      chipProps={{
+        textAlign: 'center',
+        '& .MuiChip-label': { whiteSpace: 'normal', wordWrap: 'break-word' },
+      }}
+    />
+  );
 };
 
 const NotificationsDataSwitch: React.FC<{
