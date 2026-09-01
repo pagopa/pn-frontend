@@ -5,7 +5,7 @@ import { Drawer, Link, Stack, Typography, useTheme } from '@mui/material';
 import { MIAlert, MIIconButton } from '@pagopa/mui-italia';
 
 import { useIsMobile } from '../../hooks';
-import { EventAction, EventPaymentRecipientType } from '../../models';
+import { EventAction, EventNotificationTypes, EventPaymentRecipientType } from '../../models';
 import {
   NotificationCostDetails,
   NotificationCostDetailsStatus,
@@ -74,6 +74,7 @@ const NotificationCostsDetailDrawer: React.FC<Props> = ({
   const trackExternalLinkClickEvent = () => {
     handleTrackEventFn(EventPaymentRecipientType.SEND_TAP_EXTERNAL_LINK, {
       link: costDetailsAssistanceLink,
+      notification_type: EventNotificationTypes.NOTIFICATION,
     });
   };
 

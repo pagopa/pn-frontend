@@ -28,6 +28,7 @@ export type {
   EventPaymentStatusType,
   EventsType,
   TrackedEvent,
+  EventNotificationType,
 } from './MixpanelEvents';
 export type {
   GetNotificationsParams,
@@ -90,6 +91,7 @@ export {
   EventDowntimeType,
   EventPageType,
   EventPaymentRecipientType,
+  EventNotificationTypes,
   EventPropertyType,
 } from './MixpanelEvents';
 export {
@@ -112,3 +114,7 @@ export {
 export { NotificationStatus, InformalNotificationStatus } from './NotificationStatus';
 export type { UnifiedNotificationStatus } from './NotificationStatus';
 export { basicNoLoggedUserData } from './User';
+export type {
+  NotificationTimelineResponse,
+  NotificationTimelineStatusHistory,
+} from './NotificationTimeline';

@@ -5,6 +5,7 @@ import {
   NotificationDetail,
   NotificationDocumentRequest,
   NotificationDocumentResponse,
+  NotificationTimelineResponse,
   PaymentAttachment,
   PaymentAttachmentSName,
   PaymentDetails,
@@ -33,6 +34,7 @@ import { RootState, store } from '../store';
 
 export enum NOTIFICATION_ACTIONS {
   GET_RECEIVED_NOTIFICATION = 'getReceivedNotification',
+  GET_RECEIVED_NOTIFICATION_TIMELINE = 'getReceivedNotificationTimeline',
   GET_RECEIVED_NOTIFICATION_DOCUMENT = 'getReceivedNotificationDocument',
   GET_RECEIVED_NOTIFICATION_PAYMENT = 'getReceivedNotificationPayment',
   GET_RECEIVED_NOTIFICATION_PAYMENT_INFO = 'getReceivedNotificationPaymentInfo',
@@ -58,6 +60,31 @@ export const getReceivedNotification = createAsyncThunk<
         params.mandateId
       );
       return parseNotificationDetailForRecipient(response.data as NotificationDetail);
+    } catch (e: any) {
+      return rejectWithValue(parseError(e));
+    }
+  }
+);
+
+export const getReceivedNotificationTimeline = createAsyncThunk<
+  NotificationTimelineResponse,
+  { iun: string; mandateId?: string }
+>(
+  NOTIFICATION_ACTIONS.GET_RECEIVED_NOTIFICATION_TIMELINE,
+  async (params: { iun: string; mandateId?: string }, { rejectWithValue }) => {
+    try {
+      const notificationReceivedApiFactory = NotificationReceivedApiFactory(
+        undefined,
+        undefined,
+        apiClient
+      );
+
+      const response = await notificationReceivedApiFactory.getReceivedNotificationTimelineV1(
+        params.iun,
+        params.mandateId
+      );
+
+      return response.data as NotificationTimelineResponse;
     } catch (e: any) {
       return rejectWithValue(parseError(e));
     }

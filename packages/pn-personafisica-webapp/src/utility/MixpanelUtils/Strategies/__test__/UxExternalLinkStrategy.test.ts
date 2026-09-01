@@ -10,6 +10,7 @@ describe('Mixpanel - UX External Link Strategy', () => {
 
     const uxExternalLinkEvent = strategy.performComputations({
       link,
+      notification_type: 'notifica',
     });
 
     expect(uxExternalLinkEvent).toEqual({
@@ -17,6 +18,7 @@ describe('Mixpanel - UX External Link Strategy', () => {
         event_category: EventCategory.UX,
         event_type: EventAction.EXIT,
         link,
+        notification_type: 'notifica',
       },
     });
   });
