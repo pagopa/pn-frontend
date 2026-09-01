@@ -30,6 +30,7 @@ const initialState = {
     iun: '',
     subject: '',
     recipients: [],
+    isCancelled: false,
     notificationStatusHistory: [],
   } as NotificationTimelineResponse,
   downtimeEvents: [] as Array<Downtime>,

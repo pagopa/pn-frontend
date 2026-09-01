@@ -54,6 +54,7 @@ const initialState = {
     iun: '',
     subject: '',
     recipients: [],
+    isCancelled: false,
     notificationStatusHistory: [],
   } as NotificationTimelineResponse,
   paymentsData: {
