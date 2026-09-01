@@ -1,6 +1,6 @@
 import { FC, Fragment, ReactNode, forwardRef } from 'react';
 
-import { SxProps, TooltipProps } from '@mui/material';
+import { ChipProps, TooltipProps } from '@mui/material';
 import { MIChip, MIChipProps } from '@pagopa/mui-italia';
 
 import { useIsMobile } from '../../hooks/useIsMobile';
@@ -11,7 +11,7 @@ type Props = {
   label: string;
   color: MIChipProps['color'];
   tooltipProps?: Partial<TooltipProps>;
-  chipProps?: SxProps;
+  chipProps?: ChipProps['sx'];
   ariaLabel?: string;
 };
 
@@ -27,7 +27,11 @@ const StatusTooltipChip = forwardRef<never, Omit<Props, 'tooltip'>>(
         aria-label={ariaLabel}
         label={isMobile ? <span aria-hidden="true">{label}</span> : label}
         color={color ?? 'default'}
-        sx={chipProps}
+        sx={{
+          ...chipProps,
+          textAlign: 'center',
+          '& .MuiChip-label': { whiteSpace: 'normal', wordWrap: 'break-word' },
+        }}
         ref={ref}
       />
     );
