@@ -454,9 +454,18 @@ describe('NotificationDetail Page', () => {
   });
 
   it('check alert on screen with change status', async () => {
-    mock
-      .onGet(`/bff/v1/notifications/sent/${notificationDTO.iun}`)
-      .reply(200, { ...notificationDTO, notificationStatus: NotificationStatus.CANCELLED });
+    mock.onGet(`/bff/v1/notifications/sent/${notificationDTO.iun}`).reply(200, {
+      ...notificationDTO,
+      notificationStatus: NotificationStatus.CANCELLED,
+      notificationStatusHistory: [
+        {
+          status: NotificationStatus.CANCELLED,
+          activeFrom: '2033-08-14T13:42:54.17675939Z',
+          relatedTimelineElements: [],
+        },
+        ...notificationDTO.notificationStatusHistory,
+      ],
+    });
     // we use regexp to not set the query parameters
     mock.onGet(/\/bff\/v1\/downtime\/history.*/).reply(200, downtimesDTO);
     await act(async () => {
