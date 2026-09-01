@@ -7,10 +7,11 @@ import {
   NotificationDetailRecipient,
   NotificationStatus,
   NotificationStatusHistory,
+  NotificationTimelineResponse,
 } from '@pagopa-pn/pn-commons';
 import { createSlice } from '@reduxjs/toolkit';
 
-import { getDowntimeHistory, getSentNotification } from './actions';
+import { getDowntimeHistory, getSentNotification, getSentNotificationTimeline } from './actions';
 
 const initialState = {
   loading: false,
@@ -25,6 +26,13 @@ const initialState = {
     notificationStatusHistory: [] as Array<NotificationStatusHistory>,
     timeline: [] as Array<INotificationDetailTimeline>,
   } as NotificationDetail,
+  notificationTimeline: {
+    iun: '',
+    subject: '',
+    recipients: [],
+    isCancelled: false,
+    notificationStatusHistory: [],
+  } as NotificationTimelineResponse,
   downtimeEvents: [] as Array<Downtime>,
 };
 
@@ -38,6 +46,9 @@ const notificationSlice = createSlice({
   extraReducers: (builder) => {
     builder.addCase(getSentNotification.fulfilled, (state, action) => {
       state.notification = action.payload;
+    });
+    builder.addCase(getSentNotificationTimeline.fulfilled, (state, action) => {
+      state.notificationTimeline = action.payload;
     });
     builder.addCase(getDowntimeHistory.fulfilled, (state, action) => {
       state.downtimeEvents = action.payload.result;

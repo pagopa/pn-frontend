@@ -242,6 +242,14 @@ describe('NotificationDetail.page - Mixpanel events', () => {
     mock.onGet(`/bff/v1/notifications/received/${notificationDTO.iun}`).reply(200, {
       ...notificationDTO,
       notificationStatus: NotificationStatus.CANCELLED,
+      notificationStatusHistory: [
+        ...notificationDTO.notificationStatusHistory,
+        {
+          status: NotificationStatus.CANCELLED,
+          activeFrom: '2033-08-14T13:42:54.17675939Z',
+          relatedTimelineElements: [],
+        },
+      ],
       timeline: [
         ...notificationDTO.timeline,
         {

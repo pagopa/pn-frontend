@@ -7,6 +7,7 @@ import {
   NotificationDetail,
   NotificationDocumentRequest,
   NotificationDocumentResponse,
+  NotificationTimelineResponse,
   PaymentAttachment,
   PaymentAttachmentSName,
   PaymentDetails,
@@ -35,10 +36,11 @@ import { PFEventsType } from '../../models/PFEventsType';
 import PFEventStrategyFactory from '../../utility/MixpanelUtils/PFEventStrategyFactory';
 import { parseNotificationDetailForRecipient } from '../../utility/notification.utility';
 import { RootState, store } from '../store';
-import { GetReceivedNotificationParams } from './types';
+import { GetReceivedNotificationParams, GetReceivedNotificationTimelineParams } from './types';
 
 export enum NOTIFICATION_ACTIONS {
   GET_RECEIVED_NOTIFICATION = 'getReceivedNotification',
+  GET_RECEIVED_NOTIFICATION_TIMELINE = 'getReceivedNotificationTimeline',
   GET_RECEIVED_NOTIFICATION_DOCUMENT = 'getReceivedNotificationDocument',
   GET_RECEIVED_NOTIFICATION_PAYMENT = 'getReceivedNotificationPayment',
   GET_RECEIVED_NOTIFICATION_PAYMENT_INFO = 'getReceivedNotificationPaymentInfo',
@@ -71,6 +73,31 @@ export const getReceivedNotification = createAsyncThunk<
         params.delegatorsFromStore,
         params.mandateId
       );
+    } catch (e: any) {
+      return rejectWithValue(parseError(e));
+    }
+  }
+);
+
+export const getReceivedNotificationTimeline = createAsyncThunk<
+  NotificationTimelineResponse,
+  GetReceivedNotificationTimelineParams
+>(
+  NOTIFICATION_ACTIONS.GET_RECEIVED_NOTIFICATION_TIMELINE,
+  async (params: GetReceivedNotificationTimelineParams, { rejectWithValue }) => {
+    try {
+      const notificationReceivedApiFactory = NotificationReceivedApiFactory(
+        undefined,
+        undefined,
+        apiClient
+      );
+
+      const response = await notificationReceivedApiFactory.getReceivedNotificationTimelineV1(
+        params.iun,
+        params.mandateId
+      );
+
+      return response.data as NotificationTimelineResponse;
     } catch (e: any) {
       return rejectWithValue(parseError(e));
     }

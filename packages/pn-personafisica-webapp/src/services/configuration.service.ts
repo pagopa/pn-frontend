@@ -35,6 +35,7 @@ export interface PfConfiguration {
   FACSIMILE_DE: string;
   FACSIMILE_SL: string;
   SELFCARE_CDN_URL: string;
+  IS_NEW_TIMELINE_ENABLED: boolean;
 }
 
 class PfConfigurationValidator extends Validator<PfConfiguration> {
@@ -81,6 +82,7 @@ class PfConfigurationValidator extends Validator<PfConfiguration> {
     this.ruleFor('FACSIMILE_DE').isString().isRequired().matches(dataRegex.htmlPageUrl);
     this.ruleFor('FACSIMILE_SL').isString().isRequired().matches(dataRegex.htmlPageUrl);
     this.ruleFor('SELFCARE_CDN_URL').isString().isRequired().matches(dataRegex.htmlPageUrl);
+    this.ruleFor('IS_NEW_TIMELINE_ENABLED').isBoolean();
   }
 }
 

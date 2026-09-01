@@ -59,7 +59,9 @@ export { LoadingOverlay } from './Loading/LoadingOverlay';
 export { default as LoadingPage } from './LoadingPage';
 export { default as NotificationDetailDocuments } from './NotificationDetail/NotificationDetailDocuments';
 export { default as NotificationDetailBilingualFacsimileDocuments } from './NotificationDetail/NotificationDetailBilingualFacsimileDocuments';
+// TODO: rimuovere quando IS_NEW_TIMELINE_ENABLED sarà a rollout completato e resterà solo NotificationEventsTimeline
 export { default as NotificationDetailTimeline } from './NotificationDetail/NotificationDetailTimeline';
+export { default as NotificationEventsTimeline } from './NotificationDetail/NotificationEventsTimeline/NotificationEventsTimeline';
 export { default as NotificationPaymentRecipient } from './NotificationDetail/NotificationPaymentRecipient';
 export { default as NotificationRelatedDowntimes } from './NotificationDetail/NotificationRelatedDowntimes';
 export { default as MobileNotificationsSort } from './Notifications/MobileNotificationsSort';
