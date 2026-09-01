@@ -15,7 +15,7 @@ import { notificationsDTO, notificationsToFe } from '../../../__mocks__/Notifica
 import { apiClient } from '../../../api/apiClients';
 import { store } from '../../store';
 import { getReceivedNotifications } from '../actions';
-import { setNotificationFilters, setPagination, setSorting } from '../reducers';
+import { setIsDelegatedPage, setNotificationFilters, setPagination, setSorting } from '../reducers';
 
 describe('Dashbaord redux state tests', () => {
   let mock: MockAdapter;
@@ -26,6 +26,15 @@ describe('Dashbaord redux state tests', () => {
 
   afterEach(() => {
     mock.reset();
+
+    store.dispatch(setIsDelegatedPage(false));
+
+    store.dispatch(
+      setPagination({
+        page: 0,
+        size: 10,
+      })
+    );
   });
 
   afterAll(() => {
@@ -45,6 +54,7 @@ describe('Dashbaord redux state tests', () => {
         communicationType: '',
         iunMatch: '',
       },
+      isDelegatedPage: false,
       pagination: {
         nextPagesKey: [],
         size: 10,
@@ -137,6 +147,54 @@ describe('Dashbaord redux state tests', () => {
       page: 2,
       size: 50,
     });
+  });
+
+  it('Should reset pagination when switching to delegated page', async () => {
+    const paginatedNotificationsDTO = {
+      ...notificationsDTO,
+      moreResult: true,
+    };
+
+    mock
+      .onGet(
+        `/bff/v1/notifications/received?startDate=${encodeURIComponent(
+          formatToTimezoneString(tenYearsAgo)
+        )}&endDate=${encodeURIComponent(
+          formatToTimezoneString(today)
+        )}&size=10&communicationType=ALL`
+      )
+      .reply(200, paginatedNotificationsDTO);
+
+    await store.dispatch(
+      getReceivedNotifications({
+        startDate: tenYearsAgo,
+        endDate: today,
+        isDelegatedPage: false,
+        size: 10,
+      })
+    );
+
+    store.dispatch(
+      setPagination({
+        page: 1,
+        size: 10,
+      })
+    );
+
+    const stateBeforeReset = store.getState().dashboardState;
+
+    expect(stateBeforeReset.pagination.page).toBe(1);
+    expect(stateBeforeReset.pagination.nextPagesKey).toHaveLength(1);
+    expect(stateBeforeReset.pagination.moreResult).toBe(true);
+
+    store.dispatch(setIsDelegatedPage(true));
+
+    const stateAfterReset = store.getState().dashboardState;
+
+    expect(stateAfterReset.isDelegatedPage).toBe(true);
+    expect(stateAfterReset.pagination.page).toBe(0);
+    expect(stateAfterReset.pagination.nextPagesKey).toEqual([]);
+    expect(stateAfterReset.pagination.moreResult).toBe(false);
   });
 
   it('Should be able to change sort', () => {
