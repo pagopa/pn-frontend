@@ -59,7 +59,13 @@ const NotificationTimelineGroupItem = ({
           borderRadius: 1,
         }}
       >
-        <Stack component="span" direction="row" spacing={1} alignItems="center" minWidth={0}>
+        <Stack
+          component="span"
+          direction={{ xs: 'column', sm: 'row' }}
+          spacing={1}
+          alignItems={{ xs: 'flex-start', sm: 'center' }}
+          minWidth={0}
+        >
           <ChannelIcon
             fontSize="small"
             sx={{ fontSize: '24px', flexShrink: 0 }}
