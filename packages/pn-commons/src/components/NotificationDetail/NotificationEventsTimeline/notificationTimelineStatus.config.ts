@@ -24,7 +24,7 @@ const TIMELINE_STATUS_PRESENTATION: Partial<
   Record<NotificationStatus, TimelineStatusPresentation>
 > = {
   [NotificationStatus.PAID]: { variant: 'success', icon: EuroRounded },
-  [NotificationStatus.UNREACHABLE]: { variant: 'error', icon: NoAccountsOutlined },
+  [NotificationStatus.RETURNED_TO_SENDER]: { variant: 'warning', icon: NoAccountsOutlined },
   [NotificationStatus.CANCELLED]: { variant: 'warning', icon: WarningRounded },
   [NotificationStatus.CANCELLATION_IN_PROGRESS]: { variant: 'warning', icon: WarningRounded },
   [NotificationStatus.NOTIFICATION_TIMELINE_REWORKED]: {
@@ -37,7 +37,7 @@ const TIMELINE_STATUS_PRESENTATION: Partial<
   [NotificationStatus.DELIVERING]: { variant: 'normal', icon: OutgoingEmailRounded },
   [NotificationStatus.ACCEPTED]: { variant: 'normal', icon: TaskAltRounded },
   [NotificationStatus.IN_VALIDATION]: { variant: 'normal', icon: TroubleshootRounded },
-  [NotificationStatus.RETURNED_TO_SENDER]: { variant: 'normal', icon: NoAccountsOutlined }, // <- Manca sul figma, icona da rivedere
+  [NotificationStatus.UNREACHABLE]: { variant: 'normal', icon: NoAccountsOutlined },
 };
 
 const DEFAULT_TIMELINE_STATUS_PRESENTATION: TimelineStatusPresentation = {

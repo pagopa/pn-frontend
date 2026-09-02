@@ -64,11 +64,11 @@ const NotificationEventsTimeline = ({
               title={
                 <Stack
                   component="span"
-                  direction="row"
+                  direction={{ xs: 'column-reverse', sm: 'row' }}
                   fontWeight={600}
-                  alignItems="center"
+                  alignItems={{ xs: 'flex-start', sm: 'center' }}
                   fontSize="16px"
-                  gap={1}
+                  gap={{ xs: 0.5, sm: 1 }}
                 >
                   {label}
                   <ReworkedStatusTag reworkedStatus={status.reworkedStatus} />
