@@ -30,6 +30,5 @@
   "button": {
     "close": "Chiudi",
     "go-to-login": "Accedi"
-  },
-  "test_key_trigger_3": "Premi il tasto '3' per aprire il menu di test"
+  }
 }
