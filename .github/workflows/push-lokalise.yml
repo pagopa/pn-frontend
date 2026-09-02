@@ -36,6 +36,10 @@ jobs:
         if: github.event_name != 'workflow_dispatch'
         uses: dorny/paths-filter@7b450fff21473bca461d4b92ce414b9d0420d706 # v4.0.2
         with:
+          # Senza 'base' l'action confronta col branch di default del repo (develop),
+          # cioe' l'intero branch invece del singolo push. Puntandolo al branch appena
+          # pushato, il confronto avviene contro il commit precedente al push.
+          base: ${{ github.ref_name }}
           filters: |
             PFL: ['packages/pn-personafisica-login/public/locales/it/**']
             PF: ['packages/pn-personafisica-webapp/public/locales/it/**']
