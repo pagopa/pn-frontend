@@ -201,6 +201,7 @@ const NotificationTimeline: React.FC = () => {
         <MIBreadcrumbItem
           label={notificationSubject || t('menu.fallback-notification')}
           onClick={() => navigate(notificationDetailRoute)}
+          data-testid="breadcrumb-subject-button"
         />
         <MIBreadcrumbItem
           label={t('detail.notification-timeline-section.title', { ns: 'notifiche' })}

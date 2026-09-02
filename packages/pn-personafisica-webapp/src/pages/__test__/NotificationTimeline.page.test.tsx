@@ -37,8 +37,15 @@ vi.mock('../../services/configuration.service', async () => {
   };
 });
 
+const mockNavigateFn = vi.fn();
+vi.mock('react-router-dom', async () => ({
+  ...(await vi.importActual<any>('react-router-dom')),
+  useNavigate: () => mockNavigateFn,
+}));
+
 describe('NotificationTimeline Page - IS_NEW_TIMELINE_ENABLED enabled', () => {
   const timelineIun = NotificationTimelineResponse.iun;
+  const timelineSubject = NotificationTimelineResponse.subject;
 
   const timelineResponseWithHiddenLegalFact = (legalFactKey: string, category: string) => ({
     ...NotificationTimelineResponse,
@@ -218,6 +225,68 @@ describe('NotificationTimeline Page - IS_NEW_TIMELINE_ENABLED enabled', () => {
       expect(globalThis.location.href).toBe('https://mocked-aar-url.com');
     });
   });
+
+  it('check the breadcrumb items', async () => {
+    mock
+      .onGet(`/bff/v1/notifications/received/${timelineIun}/timeline`)
+      .reply(200, NotificationTimelineResponse);
+
+    await act(async () => {
+      result = render(<NotificationTimeline />, {
+        route: routes.GET_DETTAGLIO_NOTIFICA_TIMELINE_PATH(timelineIun),
+        path: routes.DETTAGLIO_NOTIFICA_TIMELINE,
+      });
+    });
+
+    // root breadcrumb item is rendered
+    const rootButton = result.getByTestId('breadcrumb-root-button');
+    expect(rootButton).toBeInTheDocument();
+
+    // subject breadcrumb item is rendered and shows the notification IUN
+    const subjectButton = result.getByTestId('breadcrumb-subject-button');
+    expect(subjectButton).toBeInTheDocument();
+    expect(subjectButton).toHaveTextContent(timelineSubject);
+  });
+
+  it('navigates to the notification detail when clicking the subject breadcrumb', async () => {
+    mock
+      .onGet(`/bff/v1/notifications/received/${timelineIun}/timeline`)
+      .reply(200, NotificationTimelineResponse);
+
+    await act(async () => {
+      result = render(<NotificationTimeline />, {
+        route: routes.GET_DETTAGLIO_NOTIFICA_TIMELINE_PATH(timelineIun),
+        path: routes.DETTAGLIO_NOTIFICA_TIMELINE,
+      });
+    });
+
+    const subjectButton = result.getByTestId('breadcrumb-subject-button');
+    fireEvent.click(subjectButton);
+
+    await waitFor(() => {
+      expect(mockNavigateFn).toHaveBeenCalledWith(routes.GET_DETTAGLIO_NOTIFICA_PATH(timelineIun));
+    });
+  });
+
+  it('navigates back when clicking the root breadcrumb', async () => {
+    mock
+      .onGet(`/bff/v1/notifications/received/${timelineIun}/timeline`)
+      .reply(200, NotificationTimelineResponse);
+
+    await act(async () => {
+      result = render(<NotificationTimeline />, {
+        route: routes.GET_DETTAGLIO_NOTIFICA_TIMELINE_PATH(timelineIun),
+        path: routes.DETTAGLIO_NOTIFICA_TIMELINE,
+      });
+    });
+
+    const rootButton = result.getByTestId('breadcrumb-root-button');
+    fireEvent.click(rootButton);
+
+    await waitFor(() => {
+      expect(mockNavigateFn).toHaveBeenCalled();
+    });
+  });
 });
 
 describe('NotificationTimeline Page - new timeline disabled', () => {
@@ -328,6 +397,63 @@ describe('NotificationTimeline Page - new timeline disabled', () => {
 
     await waitFor(() => {
       expect(globalThis.location.href).toBe('https://mocked-url-com');
+    });
+  });
+
+  it('check the breadcrumb items', async () => {
+    mock.onGet(`/bff/v1/notifications/received/${notificationDTO.iun}`).reply(200, notificationDTO);
+
+    await act(async () => {
+      result = render(<NotificationTimeline />, {
+        route: routes.GET_DETTAGLIO_NOTIFICA_TIMELINE_PATH(notificationDTO.iun),
+        path: routes.DETTAGLIO_NOTIFICA_TIMELINE,
+      });
+    });
+
+    // root breadcrumb item is rendered
+    const rootButton = result.getByTestId('breadcrumb-root-button');
+    expect(rootButton).toBeInTheDocument();
+
+    // subject breadcrumb item is rendered and shows the notification IUN
+    const subjectButton = result.getByTestId('breadcrumb-subject-button');
+    expect(subjectButton).toBeInTheDocument();
+    expect(subjectButton).toHaveTextContent(notificationDTO.subject);
+  });
+
+  it('navigates to the notification detail when clicking the subject breadcrumb', async () => {
+    mock.onGet(`/bff/v1/notifications/received/${notificationDTO.iun}`).reply(200, notificationDTO);
+    await act(async () => {
+      result = render(<NotificationTimeline />, {
+        route: routes.GET_DETTAGLIO_NOTIFICA_TIMELINE_PATH(notificationDTO.iun),
+        path: routes.DETTAGLIO_NOTIFICA_TIMELINE,
+      });
+    });
+
+    const subjectButton = result.getByTestId('breadcrumb-subject-button');
+    fireEvent.click(subjectButton);
+
+    await waitFor(() => {
+      expect(mockNavigateFn).toHaveBeenCalledWith(
+        routes.GET_DETTAGLIO_NOTIFICA_PATH(notificationDTO.iun)
+      );
+    });
+  });
+
+  it('navigates back when clicking the root breadcrumb', async () => {
+    mock.onGet(`/bff/v1/notifications/received/${notificationDTO.iun}`).reply(200, notificationDTO);
+
+    await act(async () => {
+      result = render(<NotificationTimeline />, {
+        route: routes.GET_DETTAGLIO_NOTIFICA_TIMELINE_PATH(notificationDTO.iun),
+        path: routes.DETTAGLIO_NOTIFICA_TIMELINE,
+      });
+    });
+
+    const rootButton = result.getByTestId('breadcrumb-root-button');
+    fireEvent.click(rootButton);
+
+    await waitFor(() => {
+      expect(mockNavigateFn).toHaveBeenCalled();
     });
   });
 });
