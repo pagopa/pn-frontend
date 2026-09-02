@@ -3,7 +3,7 @@
 /* eslint-disable complexity */
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 import { Box, Stack, Typography } from '@mui/material';
 import {
@@ -49,6 +49,7 @@ const NotificationTimeline: React.FC = () => {
   const { NOTIFICATION_CANCELLED_HELP_LINK, IS_NEW_TIMELINE_ENABLED } = getConfiguration();
   const { hasApiErrors } = useErrors();
   const [pageReady, setPageReady] = useState(false);
+  const navigate = useNavigate();
 
   const notification = useAppSelector((state: RootState) => state.notificationState.notification);
   const notificationTimeline = useAppSelector(
@@ -140,11 +141,21 @@ const NotificationTimeline: React.FC = () => {
       return null;
     }
 
+    const backRoute = mandateId
+      ? routes.GET_DETTAGLIO_NOTIFICA_DELEGATO_PATH(id, mandateId)
+      : routes.GET_DETTAGLIO_NOTIFICA_PATH(id);
+
     return (
-      <MIBreadcrumbs>
+      <MIBreadcrumbs
+        backButtonLabel={t('button.indietro', { ns: 'common' })}
+        backButtonAction={() => navigate(backRoute)}
+      >
         <MIBreadcrumbItem
           label={t('menu.notifiche')}
-          href={mandateId ? routes.NOTIFICHE_DELEGATO : routes.NOTIFICHE}
+          onClick={() => {
+            navigate(mandateId ? routes.NOTIFICHE_DELEGATO : routes.NOTIFICHE);
+          }}
+          data-testid="breadcrumb-root-button"
         />
         <MIBreadcrumbItem label={notificationSubject || t('menu.fallback-notification')} current />
       </MIBreadcrumbs>

@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 import { Box, Stack } from '@mui/material';
 import {
@@ -44,6 +44,8 @@ const InformalNotificationDetail: React.FC = () => {
   const dispatch = useAppDispatch();
   const [pageReady, setPageReady] = useState(false);
   const { hasApiErrors } = useErrors();
+  const navigate = useNavigate();
+
   const { SELFCARE_CDN_URL } = getConfiguration();
 
   const [informalNotification, setInformalNotification] =
@@ -155,7 +157,10 @@ const InformalNotificationDetail: React.FC = () => {
 
   const properBreadcrumb = useMemo(
     () => (
-      <MIBreadcrumbs>
+      <MIBreadcrumbs
+        backButtonLabel={t('button.indietro', { ns: 'common' })}
+        backButtonAction={() => navigate(routes.NOTIFICHE)}
+      >
         <MIBreadcrumbItem
           label={
             currentRecipient?.denomination
@@ -164,7 +169,10 @@ const InformalNotificationDetail: React.FC = () => {
                 })
               : t('menu.notifiche')
           }
-          href={routes.NOTIFICHE}
+          onClick={() => {
+            navigate(routes.NOTIFICHE);
+          }}
+          data-testid="breadcrumb-root-button"
         />
         <MIBreadcrumbItem
           label={primaryMessage?.subject ?? t('menu.fallback-communication')}
