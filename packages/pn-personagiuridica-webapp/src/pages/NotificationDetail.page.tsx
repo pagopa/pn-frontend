@@ -439,7 +439,7 @@ const NotificationDetail = () => {
     return (
       <MIBreadcrumbs
         backButtonLabel={t('button.indietro', { ns: 'common' })}
-        backButtonAction={() => navigate(routes.DELEGATI)}
+        backButtonAction={() => navigate(backRoute)}
       >
         <MIBreadcrumbItem
           label={breadcrumbLabel}
@@ -447,7 +447,7 @@ const NotificationDetail = () => {
           data-testid="breadcrumb-root-button"
         />
         <MIBreadcrumbItem
-          label={notification.subject ?? t('menu.fallback-notification', { ns: 'notifiche' })}
+          label={notification.subject || t('menu.fallback-notification', { ns: 'common' })}
           current
         />
       </MIBreadcrumbs>

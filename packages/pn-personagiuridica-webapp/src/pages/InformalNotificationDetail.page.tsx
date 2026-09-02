@@ -167,7 +167,7 @@ const InformalNotificationDetail: React.FC = () => {
           href={routes.NOTIFICHE}
         />
         <MIBreadcrumbItem
-          label={primaryMessage?.subject ?? t('menu.fallback-communication', { ns: 'notifiche' })}
+          label={primaryMessage?.subject ?? t('menu.fallback-communication')}
           current
         />
       </MIBreadcrumbs>

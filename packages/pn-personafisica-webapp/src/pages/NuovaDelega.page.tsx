@@ -235,7 +235,7 @@ const NuovaDelega = () => {
         <MIBreadcrumbItem
           label={t('nuovaDelega.title')}
           onClick={() => navigate(routes.DELEGHE)}
-          data-testId="breadcrumb-root-button"
+          data-testid="breadcrumb-root-button"
         />
         <MIBreadcrumbItem label={t('nuovaDelega.breadcrumb')} current />
       </MIBreadcrumbs>

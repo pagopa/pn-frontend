@@ -90,7 +90,7 @@ const NewApiKey = () => {
               <Grid item xs={12} lg={8}>
                 <MIBreadcrumbs
                   backButtonLabel={t('button.indietro', { ns: 'common' })}
-                  backButtonAction={() => navigate(routes.DASHBOARD)}
+                  backButtonAction={() => navigate(routes.API_KEYS)}
                 >
                   <MIBreadcrumbItem
                     label={t('title')}

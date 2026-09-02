@@ -114,14 +114,18 @@ const NotificationTimeline: React.FC = () => {
     return (
       <MIBreadcrumbs
         backButtonLabel={t('button.indietro', { ns: 'common' })}
-        backButtonAction={() => navigate(routes.DASHBOARD)}
+        backButtonAction={() =>
+          location.state?.fromNotificationDetail
+            ? navigate(-1)
+            : navigate(routes.GET_DETTAGLIO_NOTIFICA_PATH(id), { replace: true })
+        }
       >
         <MIBreadcrumbItem
           label={t('detail.breadcrumb-root', { ns: 'notifiche' })}
           onClick={() => navigate(routes.DASHBOARD)}
           data-testid="breadcrumb-root-button"
         />
-        <MIBreadcrumbItem label={notification.iun} current />
+        <MIBreadcrumbItem label={notificationIUN} current />
       </MIBreadcrumbs>
     );
   }, [id, i18n.language, location.state, notificationIUN]);

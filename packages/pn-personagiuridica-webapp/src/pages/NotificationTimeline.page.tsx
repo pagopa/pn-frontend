@@ -143,13 +143,10 @@ const NotificationTimeline: React.FC = () => {
     return (
       <MIBreadcrumbs>
         <MIBreadcrumbItem
-          label={t('menu.notifiche', { ns: 'notifiche' })}
+          label={t('menu.notifiche')}
           href={mandateId ? routes.NOTIFICHE_DELEGATO : routes.NOTIFICHE}
         />
-        <MIBreadcrumbItem
-          label={notification.subject ?? t('menu.fallback-notification', { ns: 'notifiche' })}
-          current
-        />
+        <MIBreadcrumbItem label={notificationSubject || t('menu.fallback-notification')} current />
       </MIBreadcrumbs>
     );
   }, [id, i18n.language, notificationSubject, mandateId]);

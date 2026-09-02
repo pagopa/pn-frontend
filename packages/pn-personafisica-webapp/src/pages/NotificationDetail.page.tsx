@@ -439,17 +439,17 @@ const NotificationDetail: React.FC = () => {
         backButtonLabel={
           rapidAccessSource ? t('menu.notifiche') : t('button.indietro', { ns: 'common' })
         }
-        backButtonAction={() => navigate(routes.NOTIFICHE)}
+        backButtonAction={() => navigate(backRoute)}
       >
         <MIBreadcrumbItem
           label={
             mandateId || delegatorsFromStore.length > 0 ? breadcrumbLabel : t('menu.notifiche')
           }
           onClick={() => navigate(backRoute)}
-          data-testId="breadcrumb-root-button"
+          data-testid="breadcrumb-root-button"
         />
         <MIBreadcrumbItem
-          label={notification.subject ?? t('menu.fallback-notification', { ns: 'notifiche' })}
+          label={notification.subject || t('menu.fallback-notification', { ns: 'common' })}
           current
         />
       </MIBreadcrumbs>
