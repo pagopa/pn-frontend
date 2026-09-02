@@ -164,7 +164,7 @@ const NotificationTimeline: React.FC = () => {
           data-testid="breadcrumb-root-button"
         />
         <MIBreadcrumbItem
-          label={notification.subject || t('menu.fallback-notification')}
+          label={notificationSubject || t('menu.fallback-notification')}
           onClick={() => navigate(notificationDetailRoute)}
         />
         <MIBreadcrumbItem
@@ -173,7 +173,7 @@ const NotificationTimeline: React.FC = () => {
         />
       </MIBreadcrumbs>
     );
-  }, [id, i18n.language, notificationSubject, mandateId]);
+  }, [id, i18n.language, notificationSubject, mandateId, organization?.name]);
 
   const cancelledAlert = isCancelledOrCancelling && (
     <MIAlert

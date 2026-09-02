@@ -180,6 +180,10 @@ const NotificationTimeline: React.FC = () => {
     if (!id) {
       return null;
     }
+    const notificationListRoute = mandateId
+      ? routes.GET_NOTIFICHE_DELEGATO_PATH(mandateId)
+      : routes.NOTIFICHE;
+
     const notificationDetailRoute = mandateId
       ? routes.GET_DETTAGLIO_NOTIFICA_DELEGATO_PATH(id, mandateId)
       : routes.GET_DETTAGLIO_NOTIFICA_PATH(id);
@@ -191,7 +195,7 @@ const NotificationTimeline: React.FC = () => {
       >
         <MIBreadcrumbItem
           label={t('menu.notifiche')}
-          onClick={() => navigate(routes.NOTIFICHE)}
+          onClick={() => navigate(notificationListRoute)}
           data-testid="breadcrumb-root-button"
         />
         <MIBreadcrumbItem
