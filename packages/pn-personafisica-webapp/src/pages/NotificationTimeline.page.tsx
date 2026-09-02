@@ -188,13 +188,23 @@ const NotificationTimeline: React.FC = () => {
       ? routes.GET_DETTAGLIO_NOTIFICA_DELEGATO_PATH(id, mandateId)
       : routes.GET_DETTAGLIO_NOTIFICA_PATH(id);
 
+    const delegatorName = delegatorsFromStore.find(
+      (delegation) => delegation.mandateId === mandateId
+    )?.delegator?.displayName;
+
+    const breadcrumbLabel = delegatorName
+      ? t('menu.notifiche-delegato', { delegator: delegatorName })
+      : t('menu.notifiche-utente', { ns: 'common' });
+
     return (
       <MIBreadcrumbs
         backButtonLabel={t('button.indietro', { ns: 'common' })}
         backButtonAction={() => navigate(notificationDetailRoute)}
       >
         <MIBreadcrumbItem
-          label={t('menu.notifiche')}
+          label={
+            mandateId || delegatorsFromStore.length > 0 ? breadcrumbLabel : t('menu.notifiche')
+          }
           onClick={() => navigate(notificationListRoute)}
           data-testid="breadcrumb-root-button"
         />
