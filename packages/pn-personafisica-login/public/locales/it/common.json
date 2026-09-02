@@ -30,6 +30,5 @@
   "button": {
     "close": "Chiudi",
     "go-to-login": "Accedi"
-  },
-  "test_key_trigger": "test_key_trigger_2"
+  }
 }
