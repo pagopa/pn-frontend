@@ -180,26 +180,28 @@ const NotificationTimeline: React.FC = () => {
     if (!id) {
       return null;
     }
+    const notificationDetailRoute = mandateId
+      ? routes.GET_DETTAGLIO_NOTIFICA_DELEGATO_PATH(id, mandateId)
+      : routes.GET_DETTAGLIO_NOTIFICA_PATH(id);
 
     return (
       <MIBreadcrumbs
         backButtonLabel={t('button.indietro', { ns: 'common' })}
-        backButtonAction={() =>
-          navigate(
-            mandateId
-              ? routes.GET_DETTAGLIO_NOTIFICA_DELEGATO_PATH(id, mandateId)
-              : routes.GET_DETTAGLIO_NOTIFICA_PATH(id)
-          )
-        }
+        backButtonAction={() => navigate(notificationDetailRoute)}
       >
         <MIBreadcrumbItem
           label={t('menu.notifiche')}
-          onClick={() =>
-            navigate(mandateId ? routes.GET_NOTIFICHE_DELEGATO_PATH(mandateId) : routes.NOTIFICHE)
-          }
+          onClick={() => navigate(routes.NOTIFICHE)}
           data-testid="breadcrumb-root-button"
         />
-        <MIBreadcrumbItem label={notificationSubject || t('menu.fallback-notification')} current />
+        <MIBreadcrumbItem
+          label={notificationSubject || t('menu.fallback-notification')}
+          onClick={() => navigate(notificationDetailRoute)}
+        />
+        <MIBreadcrumbItem
+          label={t('detail.notification-timeline-section.title', { ns: 'notifiche' })}
+          current
+        />
       </MIBreadcrumbs>
     );
   }, [id, i18n.language, notificationSubject, mandateId]);

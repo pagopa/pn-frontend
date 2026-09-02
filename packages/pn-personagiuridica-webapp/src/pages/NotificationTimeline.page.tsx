@@ -55,6 +55,8 @@ const NotificationTimeline: React.FC = () => {
   const notificationTimeline = useAppSelector(
     (state: RootState) => state.notificationState.notificationTimeline
   );
+  const currentUser = useAppSelector((state: RootState) => state.userState.user);
+  const organization = currentUser.organization;
 
   const isCancelled = useIsCancelled({
     notification: IS_NEW_TIMELINE_ENABLED ? notificationTimeline : notification,
@@ -141,23 +143,34 @@ const NotificationTimeline: React.FC = () => {
       return null;
     }
 
-    const backRoute = mandateId
+    const notificationDetailRoute = mandateId
       ? routes.GET_DETTAGLIO_NOTIFICA_DELEGATO_PATH(id, mandateId)
       : routes.GET_DETTAGLIO_NOTIFICA_PATH(id);
+
+    const breadcrumbLabel = mandateId
+      ? t('menu.notifiche-delegato')
+      : t('menu.notifiche-impresa', { organization: organization?.name });
 
     return (
       <MIBreadcrumbs
         backButtonLabel={t('button.indietro', { ns: 'common' })}
-        backButtonAction={() => navigate(backRoute)}
+        backButtonAction={() => navigate(notificationDetailRoute)}
       >
         <MIBreadcrumbItem
-          label={t('menu.notifiche')}
+          label={breadcrumbLabel}
           onClick={() => {
             navigate(mandateId ? routes.NOTIFICHE_DELEGATO : routes.NOTIFICHE);
           }}
           data-testid="breadcrumb-root-button"
         />
-        <MIBreadcrumbItem label={notificationSubject || t('menu.fallback-notification')} current />
+        <MIBreadcrumbItem
+          label={notification.subject || t('menu.fallback-notification')}
+          onClick={() => navigate(notificationDetailRoute)}
+        />
+        <MIBreadcrumbItem
+          label={t('detail.notification-timeline-section.title', { ns: 'notifiche' })}
+          current
+        />
       </MIBreadcrumbs>
     );
   }, [id, i18n.language, notificationSubject, mandateId]);

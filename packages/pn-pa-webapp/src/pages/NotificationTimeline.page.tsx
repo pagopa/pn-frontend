@@ -125,7 +125,14 @@ const NotificationTimeline: React.FC = () => {
           onClick={() => navigate(routes.DASHBOARD)}
           data-testid="breadcrumb-root-button"
         />
-        <MIBreadcrumbItem label={notificationIUN} current />
+        <MIBreadcrumbItem
+          label={notificationIUN}
+          onClick={() => navigate(routes.GET_DETTAGLIO_NOTIFICA_PATH(id))}
+        />
+        <MIBreadcrumbItem
+          label={t('detail.notification-timeline-section.title', { ns: 'notifiche' })}
+          current
+        />
       </MIBreadcrumbs>
     );
   }, [id, i18n.language, location.state, notificationIUN]);
