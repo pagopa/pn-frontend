@@ -233,7 +233,7 @@ const NuovaDelega = () => {
         backButtonAction={() => navigate(routes.DELEGHE)}
       >
         <MIBreadcrumbItem
-          label={t('nuovaDelega.title')}
+          label={t('deleghe.title')}
           onClick={() => navigate(routes.DELEGHE)}
           data-testid="breadcrumb-root-button"
         />
