@@ -274,5 +274,6 @@
     "selection-done": "%s selezionati",
     "delete-selection": "Elimina %s"
   },
-  "not-available": "Non disponibile"
+  "not-available": "Non disponibile",
+  "trigger_key": "Chiave per trigger action"
 }
