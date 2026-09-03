@@ -15,6 +15,7 @@ import { notificationDTO } from '../../__mocks__/NotificationDetail.mock';
 import { NotificationTimelineResponse } from '../../__mocks__/NotificationTimeline.mock';
 import { RenderResult, act, fireEvent, render, waitFor } from '../../__test__/test-utils';
 import { apiClient } from '../../api/apiClients';
+import * as routes from '../../navigation/routes.const';
 import { PaConfiguration } from '../../services/configuration.service';
 import NotificationTimeline from '../NotificationTimeline.page';
 
@@ -255,8 +256,8 @@ describe('NotificationTimeline Page - IS_NEW_TIMELINE_ENABLED enabled', () => {
 
     await act(async () => {
       result = render(<NotificationTimeline />, {
-        route: `/${timelineIun}/dettaglio/timeline`,
-        path: '/:id/dettaglio/timeline',
+        route: routes.GET_DETTAGLIO_NOTIFICA_PATH(timelineIun),
+        path: routes.DETTAGLIO_NOTIFICA,
       });
     });
 
@@ -264,7 +265,7 @@ describe('NotificationTimeline Page - IS_NEW_TIMELINE_ENABLED enabled', () => {
     fireEvent.click(subjectButton);
 
     await waitFor(() => {
-      expect(mockNavigateFn).toHaveBeenCalledWith(`/dashboard/${timelineIun}/dettaglio`);
+      expect(mockNavigateFn).toHaveBeenCalledWith(routes.GET_DETTAGLIO_NOTIFICA_PATH(timelineIun));
     });
   });
 });
@@ -299,8 +300,8 @@ describe('NotificationTimeline Page - new timeline disabled', () => {
 
     await act(async () => {
       result = render(<NotificationTimeline />, {
-        route: `/${notificationDTO.iun}/dettaglio/timeline`,
-        path: '/:id/dettaglio/timeline',
+        route: routes.GET_DETTAGLIO_NOTIFICA_PATH(notificationDTO.iun),
+        path: routes.DETTAGLIO_NOTIFICA,
       });
     });
 
@@ -327,8 +328,8 @@ describe('NotificationTimeline Page - new timeline disabled', () => {
           <NotificationTimeline />
         </>,
         {
-          route: `/${notificationDTO.iun}/dettaglio/timeline`,
-          path: '/:id/dettaglio/timeline',
+          route: routes.GET_DETTAGLIO_NOTIFICA_PATH(notificationDTO.iun),
+          path: routes.DETTAGLIO_NOTIFICA,
         }
       );
     });
@@ -379,8 +380,8 @@ describe('NotificationTimeline Page - new timeline disabled', () => {
 
     await act(async () => {
       result = render(<NotificationTimeline />, {
-        route: `/${notificationDTO.iun}/dettaglio/timeline`,
-        path: '/:id/dettaglio/timeline',
+        route: routes.GET_DETTAGLIO_NOTIFICA_PATH(notificationDTO.iun),
+        path: routes.DETTAGLIO_NOTIFICA,
       });
     });
 
@@ -417,8 +418,8 @@ describe('NotificationTimeline Page - new timeline disabled', () => {
 
     await act(async () => {
       result = render(<NotificationTimeline />, {
-        route: `/${notificationDTO.iun}/dettaglio/timeline`,
-        path: '/:id/dettaglio/timeline',
+        route: routes.GET_DETTAGLIO_NOTIFICA_PATH(notificationDTO.iun),
+        path: routes.DETTAGLIO_NOTIFICA,
       });
     });
 
@@ -426,7 +427,7 @@ describe('NotificationTimeline Page - new timeline disabled', () => {
     fireEvent.click(rootButton);
 
     await waitFor(() => {
-      expect(mockNavigateFn).toHaveBeenCalledWith(`/dashboard`);
+      expect(mockNavigateFn).toHaveBeenCalledWith(routes.DASHBOARD);
     });
   });
 });
