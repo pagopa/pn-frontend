@@ -297,7 +297,10 @@ describe('NotificationTimeline Page - IS_NEW_TIMELINE_ENABLED enabled', () => {
 
     await act(async () => {
       result = render(<NotificationTimeline />, {
-        route: routes.GET_DETTAGLIO_NOTIFICA_DELEGATO_TIMELINE_PATH(notificationDTO.iun, mandateId),
+        route: routes.GET_DETTAGLIO_NOTIFICA_DELEGATO_TIMELINE_PATH(
+          notificationDTO.iun,
+          mandateId
+        ),
         path: routes.DETTAGLIO_NOTIFICA_DELEGATO_TIMELINE,
       });
     });
@@ -502,8 +505,11 @@ describe('NotificationTimeline Page - new timeline disabled', () => {
 
     await act(async () => {
       result = render(<NotificationTimeline />, {
-        route: routes.GET_DETTAGLIO_NOTIFICA_DELEGATO_PATH(notificationDTO.iun, mandateId),
-        path: routes.DETTAGLIO_NOTIFICA_DELEGATO,
+        route: routes.GET_DETTAGLIO_NOTIFICA_DELEGATO_TIMELINE_PATH(
+          notificationDTO.iun,
+          mandateId
+        ),
+        path: routes.DETTAGLIO_NOTIFICA_DELEGATO_TIMELINE,
       });
     });
 
@@ -511,9 +517,7 @@ describe('NotificationTimeline Page - new timeline disabled', () => {
     fireEvent.click(rootButton);
 
     await waitFor(() => {
-      expect(result.router.state.location.pathname).toBe(
-        routes.GET_DETTAGLIO_NOTIFICA_DELEGATO_PATH(notificationDTO.iun, mandateId)
-      );
+      expect(result.router.state.location.pathname).toBe(routes.NOTIFICHE_DELEGATO);
     });
   });
 
