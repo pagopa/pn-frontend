@@ -37,12 +37,6 @@ vi.mock('../../services/configuration.service', async () => {
   };
 });
 
-const mockNavigateFn = vi.fn();
-vi.mock('react-router-dom', async () => ({
-  ...(await vi.importActual<any>('react-router-dom')),
-  useNavigate: () => mockNavigateFn,
-}));
-
 describe('NotificationTimeline Page - IS_NEW_TIMELINE_ENABLED enabled', () => {
   const timelineIun = NotificationTimelineResponse.iun;
   const timelineSubject = NotificationTimelineResponse.subject;
@@ -265,7 +259,9 @@ describe('NotificationTimeline Page - IS_NEW_TIMELINE_ENABLED enabled', () => {
     fireEvent.click(subjectButton);
 
     await waitFor(() => {
-      expect(mockNavigateFn).toHaveBeenCalledWith(routes.GET_DETTAGLIO_NOTIFICA_PATH(timelineIun));
+      expect(result.router.state.location.pathname).toBe(
+        routes.GET_DETTAGLIO_NOTIFICA_PATH(timelineIun)
+      );
     });
   });
 
@@ -276,8 +272,8 @@ describe('NotificationTimeline Page - IS_NEW_TIMELINE_ENABLED enabled', () => {
 
     await act(async () => {
       result = render(<NotificationTimeline />, {
-        route: routes.GET_DETTAGLIO_NOTIFICA_TIMELINE_PATH(timelineIun),
-        path: routes.DETTAGLIO_NOTIFICA_TIMELINE,
+        route: routes.GET_DETTAGLIO_NOTIFICA_PATH(timelineIun),
+        path: routes.DETTAGLIO_NOTIFICA,
       });
     });
 
@@ -285,18 +281,20 @@ describe('NotificationTimeline Page - IS_NEW_TIMELINE_ENABLED enabled', () => {
     fireEvent.click(rootButton);
 
     await waitFor(() => {
-      expect(mockNavigateFn).toHaveBeenCalledWith(routes.NOTIFICHE);
+      expect(result.router.state.location.pathname).toBe(
+        routes.GET_DETTAGLIO_NOTIFICA_PATH(timelineIun)
+      );
     });
   });
 
   it('navigates to the delegate notifications list when clicking the root breadcrumb', async () => {
     mock
-      .onGet(`/bff/v1/notifications/received/${notificationDTO.iun}?mandateId=${mandateId}`)
+      .onGet(`/bff/v1/notifications/received/${timelineIun}?mandateId=${mandateId}`)
       .reply(200, notificationDTO);
 
     await act(async () => {
       result = render(<NotificationTimeline />, {
-        route: routes.GET_DETTAGLIO_NOTIFICA_DELEGATO_TIMELINE_PATH(notificationDTO.iun, mandateId),
+        route: routes.GET_DETTAGLIO_NOTIFICA_DELEGATO_TIMELINE_PATH(timelineIun, mandateId),
         path: routes.DETTAGLIO_NOTIFICA_DELEGATO_TIMELINE,
       });
     });
@@ -305,18 +303,20 @@ describe('NotificationTimeline Page - IS_NEW_TIMELINE_ENABLED enabled', () => {
     fireEvent.click(rootButton);
 
     await waitFor(() => {
-      expect(mockNavigateFn).toHaveBeenCalledWith(routes.GET_NOTIFICHE_DELEGATO_PATH(mandateId));
+      expect(result.router.state.location.pathname).toBe(
+        routes.GET_NOTIFICHE_DELEGATO_PATH(mandateId)
+      );
     });
   });
 
   it('navigates to the delegate notification detail when clicking the subject breadcrumb', async () => {
     mock
-      .onGet(`/bff/v1/notifications/received/${notificationDTO.iun}?mandateId=${mandateId}`)
+      .onGet(`/bff/v1/notifications/received/${timelineIun}?mandateId=${mandateId}`)
       .reply(200, notificationDTO);
 
     await act(async () => {
       result = render(<NotificationTimeline />, {
-        route: routes.GET_DETTAGLIO_NOTIFICA_DELEGATO_TIMELINE_PATH(notificationDTO.iun, mandateId),
+        route: routes.GET_DETTAGLIO_NOTIFICA_DELEGATO_TIMELINE_PATH(timelineIun, mandateId),
         path: routes.DETTAGLIO_NOTIFICA_DELEGATO_TIMELINE,
       });
     });
@@ -325,8 +325,8 @@ describe('NotificationTimeline Page - IS_NEW_TIMELINE_ENABLED enabled', () => {
     fireEvent.click(subjectButton);
 
     await waitFor(() => {
-      expect(mockNavigateFn).toHaveBeenCalledWith(
-        routes.GET_DETTAGLIO_NOTIFICA_DELEGATO_PATH(notificationDTO.iun, mandateId)
+      expect(result.router.state.location.pathname).toBe(
+        routes.GET_DETTAGLIO_NOTIFICA_DELEGATO_PATH(timelineIun, mandateId)
       );
     });
   });
@@ -477,7 +477,7 @@ describe('NotificationTimeline Page - new timeline disabled', () => {
     fireEvent.click(subjectButton);
 
     await waitFor(() => {
-      expect(mockNavigateFn).toHaveBeenCalledWith(
+      expect(result.router.state.location.pathname).toBe(
         routes.GET_DETTAGLIO_NOTIFICA_PATH(notificationDTO.iun)
       );
     });
@@ -488,8 +488,8 @@ describe('NotificationTimeline Page - new timeline disabled', () => {
 
     await act(async () => {
       result = render(<NotificationTimeline />, {
-        route: routes.GET_DETTAGLIO_NOTIFICA_TIMELINE_PATH(notificationDTO.iun),
-        path: routes.DETTAGLIO_NOTIFICA_TIMELINE,
+        route: routes.GET_DETTAGLIO_NOTIFICA_PATH(notificationDTO.iun),
+        path: routes.DETTAGLIO_NOTIFICA,
       });
     });
 
@@ -497,7 +497,9 @@ describe('NotificationTimeline Page - new timeline disabled', () => {
     fireEvent.click(rootButton);
 
     await waitFor(() => {
-      expect(mockNavigateFn).toHaveBeenCalledWith(routes.NOTIFICHE);
+      expect(result.router.state.location.pathname).toBe(
+        routes.GET_DETTAGLIO_NOTIFICA_PATH(notificationDTO.iun)
+      );
     });
   });
 
@@ -517,7 +519,9 @@ describe('NotificationTimeline Page - new timeline disabled', () => {
     fireEvent.click(rootButton);
 
     await waitFor(() => {
-      expect(mockNavigateFn).toHaveBeenCalledWith(routes.GET_NOTIFICHE_DELEGATO_PATH(mandateId));
+      expect(result.router.state.location.pathname).toBe(
+        routes.GET_NOTIFICHE_DELEGATO_PATH(mandateId)
+      );
     });
   });
 
@@ -537,7 +541,7 @@ describe('NotificationTimeline Page - new timeline disabled', () => {
     fireEvent.click(subjectButton);
 
     await waitFor(() => {
-      expect(mockNavigateFn).toHaveBeenCalledWith(
+      expect(result.router.state.location.pathname).toBe(
         routes.GET_DETTAGLIO_NOTIFICA_DELEGATO_PATH(notificationDTO.iun, mandateId)
       );
     });

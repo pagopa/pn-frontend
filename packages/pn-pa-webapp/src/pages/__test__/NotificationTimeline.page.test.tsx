@@ -38,12 +38,6 @@ vi.mock('../../services/configuration.service', async () => {
   };
 });
 
-const mockNavigateFn = vi.fn();
-vi.mock('react-router-dom', async () => ({
-  ...(await vi.importActual<any>('react-router-dom')),
-  useNavigate: () => mockNavigateFn,
-}));
-
 describe('NotificationTimeline Page - IS_NEW_TIMELINE_ENABLED enabled', () => {
   const timelineIun = NotificationTimelineResponse.iun;
 
@@ -250,8 +244,7 @@ describe('NotificationTimeline Page - IS_NEW_TIMELINE_ENABLED enabled', () => {
   });
 
   it('navigates to the notification detail when clicking the subject breadcrumb', async () => {
-    mock
-      .onGet(`/bff/v1/notifications/sent/${timelineIun}/timeline`)
+    mock.onGet(`/bff/v1/notifications/sent/${timelineIun}/timeline`)
       .reply(200, NotificationTimelineResponse);
 
     await act(async () => {
@@ -265,7 +258,9 @@ describe('NotificationTimeline Page - IS_NEW_TIMELINE_ENABLED enabled', () => {
     fireEvent.click(subjectButton);
 
     await waitFor(() => {
-      expect(mockNavigateFn).toHaveBeenCalledWith(routes.GET_DETTAGLIO_NOTIFICA_PATH(timelineIun));
+      expect(result.router.state.location.pathname).toBe(
+        routes.GET_DETTAGLIO_NOTIFICA_PATH(timelineIun)
+      );
     });
   });
 });
@@ -400,8 +395,8 @@ describe('NotificationTimeline Page - new timeline disabled', () => {
 
     await act(async () => {
       result = render(<NotificationTimeline />, {
-        route: `/${notificationDTO.iun}/dettaglio/timeline`,
-        path: '/:id/dettaglio/timeline',
+        route: routes.GET_DETTAGLIO_NOTIFICA_TIMELINE_PATH(notificationDTO.iun),
+        path: routes.DETTAGLIO_NOTIFICA_TIMELINE,
       });
     });
 
@@ -409,7 +404,9 @@ describe('NotificationTimeline Page - new timeline disabled', () => {
     fireEvent.click(subjectButton);
 
     await waitFor(() => {
-      expect(mockNavigateFn).toHaveBeenCalledWith(`/dashboard/${notificationDTO.iun}/dettaglio`);
+      expect(result.router.state.location.pathname).toBe(
+        routes.GET_DETTAGLIO_NOTIFICA_PATH(notificationDTO.iun)
+      );
     });
   });
 
@@ -427,7 +424,7 @@ describe('NotificationTimeline Page - new timeline disabled', () => {
     fireEvent.click(rootButton);
 
     await waitFor(() => {
-      expect(mockNavigateFn).toHaveBeenCalledWith(routes.DASHBOARD);
+      expect(result.router.state.location.pathname).toBe(routes.DASHBOARD);
     });
   });
 });
