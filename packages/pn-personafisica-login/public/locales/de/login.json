@@ -26,7 +26,7 @@
     "title": "Aufgrund eines Systemfehlers kann der Vorgang nicht abgeschlossen werden."
   },
   "loginPage": {
-    "description": "Wählen Sie die gewünschte Zugriffsmethode. ",
+    "description": "Wählen Sie die gewünschte Zugriffsmethode.",
     "loginBox": {
       "cieLogin": "Mit CIE anmelden",
       "spidLogin": "Mit SPID anmelden",
