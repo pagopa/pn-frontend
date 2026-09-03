@@ -1265,4 +1265,25 @@ describe('NotificationDetail Page', () => {
     expect(alertRadd).toBeInTheDocument();
     expect(alertRadd).toHaveTextContent('detail.timeline.radd.title');
   });
+
+  it('navigates to the delegate notifications list when clicking the root breadcrumb', async () => {
+    mock
+      .onGet(`/bff/v1/notifications/received/${raddNotificationDTO.iun}`)
+      .reply(200, raddNotificationDTO);
+    await act(async () => {
+      result = render(<Component />, {
+        preloadedState: {
+          userState: { user: adminUser },
+        },
+        route: routes.GET_DETTAGLIO_NOTIFICA_PATH(raddNotificationDTO.iun),
+      });
+    });
+
+    const rootButton = result.getByTestId('breadcrumb-root-button');
+    fireEvent.click(rootButton);
+
+    await waitFor(() => {
+      expect(result.router.state.location.pathname).toBe(routes.NOTIFICHE);
+    });
+  });
 });

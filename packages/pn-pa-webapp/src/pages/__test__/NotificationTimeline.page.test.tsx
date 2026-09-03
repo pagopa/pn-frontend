@@ -426,7 +426,7 @@ describe('NotificationTimeline Page - new timeline disabled', () => {
     fireEvent.click(rootButton);
 
     await waitFor(() => {
-      expect(mockNavigateFn).toHaveBeenCalled();
+      expect(mockNavigateFn).toHaveBeenCalledWith(`/dashboard`);
     });
   });
 });

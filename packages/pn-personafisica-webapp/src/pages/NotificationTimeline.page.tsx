@@ -219,7 +219,7 @@ const NotificationTimeline: React.FC = () => {
         />
       </MIBreadcrumbs>
     );
-  }, [id, i18n.language, notificationSubject, mandateId]);
+  }, [id, i18n.language, notificationSubject, mandateId, delegatorsFromStore]);
 
   const cancelledAlert = isCancelledOrCancelling && (
     <MIAlert

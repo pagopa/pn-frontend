@@ -51,6 +51,7 @@ vi.mock('react-router-dom', async () => ({
 describe('NotificationTimeline Page - IS_NEW_TIMELINE_ENABLED enabled', () => {
   const timelineIun = NotificationTimelineResponse.iun;
   const timelineSubject = NotificationTimelineResponse.subject;
+  const mandateId = 'mocked-mandate-id';
 
   const timelineResponseWithHiddenLegalFact = (legalFactKey: string, category: string) => ({
     ...NotificationTimelineResponse,
@@ -289,14 +290,56 @@ describe('NotificationTimeline Page - IS_NEW_TIMELINE_ENABLED enabled', () => {
     fireEvent.click(rootButton);
 
     await waitFor(() => {
-      expect(mockNavigateFn).toHaveBeenCalled();
+      expect(mockNavigateFn).toHaveBeenCalledWith(routes.NOTIFICHE);
+    });
+  });
+
+  it('navigates to the delegate notifications list when clicking the root breadcrumb', async () => {
+    mock
+      .onGet(`/bff/v1/notifications/received/${notificationDTO.iun}?mandateId=${mandateId}`)
+      .reply(200, notificationDTO);
+
+    await act(async () => {
+      result = render(<NotificationTimeline />, {
+        route: routes.GET_DETTAGLIO_NOTIFICA_DELEGATO_TIMELINE_PATH(notificationDTO.iun, mandateId),
+        path: routes.DETTAGLIO_NOTIFICA_DELEGATO_TIMELINE,
+      });
+    });
+
+    const rootButton = result.getByTestId('breadcrumb-root-button');
+    fireEvent.click(rootButton);
+
+    await waitFor(() => {
+      expect(mockNavigateFn).toHaveBeenCalledWith(routes.NOTIFICHE_DELEGATO);
+    });
+  });
+
+  it('navigates to the delegate notification detail when clicking the subject breadcrumb', async () => {
+    mock
+      .onGet(`/bff/v1/notifications/received/${notificationDTO.iun}?mandateId=${mandateId}`)
+      .reply(200, notificationDTO);
+
+    await act(async () => {
+      result = render(<NotificationTimeline />, {
+        route: routes.GET_DETTAGLIO_NOTIFICA_DELEGATO_TIMELINE_PATH(notificationDTO.iun, mandateId),
+        path: routes.DETTAGLIO_NOTIFICA_DELEGATO_TIMELINE,
+      });
+    });
+
+    const subjectButton = result.getByTestId('breadcrumb-subject-button');
+    fireEvent.click(subjectButton);
+
+    await waitFor(() => {
+      expect(mockNavigateFn).toHaveBeenCalledWith(
+        routes.GET_DETTAGLIO_NOTIFICA_DELEGATO_PATH(notificationDTO.iun, mandateId)
+      );
     });
   });
 });
 
 describe('NotificationTimeline Page - new timeline disabled', () => {
   const mockLegalIds = getLegalFactIds(notificationDTO, 1);
-
+  const mandateId = 'mocked-mandate-id';
   let result: RenderResult;
   let mock: MockAdapter;
 
@@ -452,7 +495,49 @@ describe('NotificationTimeline Page - new timeline disabled', () => {
     fireEvent.click(rootButton);
 
     await waitFor(() => {
-      expect(mockNavigateFn).toHaveBeenCalled();
+      expect(mockNavigateFn).toHaveBeenCalledWith(routes.NOTIFICHE);
+    });
+  });
+
+  it('navigates to the delegate notifications list when clicking the root breadcrumb', async () => {
+    mock
+      .onGet(`/bff/v1/notifications/received/${notificationDTO.iun}?mandateId=${mandateId}`)
+      .reply(200, notificationDTO);
+
+    await act(async () => {
+      result = render(<NotificationTimeline />, {
+        route: routes.GET_DETTAGLIO_NOTIFICA_DELEGATO_TIMELINE_PATH(notificationDTO.iun, mandateId),
+        path: routes.DETTAGLIO_NOTIFICA_DELEGATO_TIMELINE,
+      });
+    });
+
+    const rootButton = result.getByTestId('breadcrumb-root-button');
+    fireEvent.click(rootButton);
+
+    await waitFor(() => {
+      expect(mockNavigateFn).toHaveBeenCalledWith(routes.NOTIFICHE_DELEGATO);
+    });
+  });
+
+  it('navigates to the delegate notification detail when clicking the subject breadcrumb', async () => {
+    mock
+      .onGet(`/bff/v1/notifications/received/${notificationDTO.iun}?mandateId=${mandateId}`)
+      .reply(200, notificationDTO);
+
+    await act(async () => {
+      result = render(<NotificationTimeline />, {
+        route: routes.GET_DETTAGLIO_NOTIFICA_DELEGATO_TIMELINE_PATH(notificationDTO.iun, mandateId),
+        path: routes.DETTAGLIO_NOTIFICA_DELEGATO_TIMELINE,
+      });
+    });
+
+    const subjectButton = result.getByTestId('breadcrumb-subject-button');
+    fireEvent.click(subjectButton);
+
+    await waitFor(() => {
+      expect(mockNavigateFn).toHaveBeenCalledWith(
+        routes.GET_DETTAGLIO_NOTIFICA_DELEGATO_PATH(notificationDTO.iun, mandateId)
+      );
     });
   });
 });

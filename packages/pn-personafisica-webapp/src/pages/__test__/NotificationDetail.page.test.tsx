@@ -1562,4 +1562,78 @@ describe('NotificationDetail Page', () => {
     expect(result.router.state.location.pathname).toBe(routes.NOTIFICHE);
     expect(result.router.state.historyAction).toBe('REPLACE');
   });
+
+  it('navigates to the notifications list when clicking the root breadcrumb', async () => {
+    mock
+      .onGet(`/bff/v1/notifications/received/${raddNotificationDTO.iun}`)
+      .reply(200, raddNotificationDTO);
+
+    await act(async () => {
+      result = render(<Component />, {
+        preloadedState: {
+          userState: { user: { fiscal_number: raddNotificationDTO.recipients[2].taxId } },
+        },
+        route: routes.GET_DETTAGLIO_NOTIFICA_PATH(raddNotificationDTO.iun),
+      });
+    });
+
+    const rootButton = result.getByTestId('breadcrumb-root-button');
+    expect(rootButton).toBeInTheDocument();
+
+    // clicking back is what triggers the onboarding exit reminder
+    await userEvent.click(rootButton);
+
+    const skipButton = await screen.findByText('onboarding.notification-exit-dialog.buttons.skip');
+    expect(result.router.state.location.pathname).toBe(
+      routes.GET_DETTAGLIO_NOTIFICA_PATH(raddNotificationDTO.iun)
+    );
+
+    await userEvent.click(skipButton);
+
+    await waitFor(() => {
+      expect(result.router.state.location.pathname).toBe(routes.NOTIFICHE);
+    });
+  });
+
+  it('navigates to the delegate notifications list when clicking the root breadcrumb', async () => {
+    mock
+      .onGet(
+        `/bff/v1/notifications/received/${notificationDTO.iun}?mandateId=${delegator?.mandateId}`
+      )
+      .reply(200, notificationDTO);
+    mock.onPost(`/bff/v1/payments/info`, paymentInfoRequest).reply(200, paymentInfo);
+    mock.onGet(/\/bff\/v1\/downtime\/history.*/).reply(200, downtimesDTO);
+
+    await act(async () => {
+      result = render(<Component />, {
+        preloadedState: {
+          userState: { user: { fiscal_number: 'CGNNMO80A03H501U' } },
+          generalInfoState: {
+            delegators: mandatesByDelegate,
+            onboardingData: defaultOnboardingData,
+          },
+        },
+        route: routes.GET_DETTAGLIO_NOTIFICA_DELEGATO_PATH(
+          notificationDTO.iun,
+          delegator!.mandateId
+        ),
+      });
+    });
+
+    const rootButton = result.getByTestId('breadcrumb-root-button');
+    expect(rootButton).toBeInTheDocument();
+
+    // for a delegate the onboarding exit reminder is not shown, so navigation is direct
+    await userEvent.click(rootButton);
+
+    expect(
+      screen.queryByText('onboarding.notification-exit-dialog.buttons.skip')
+    ).not.toBeInTheDocument();
+
+    await waitFor(() => {
+      expect(result.router.state.location.pathname).toBe(
+        routes.GET_NOTIFICHE_DELEGATO_PATH(delegator!.mandateId)
+      );
+    });
+  });
 });
