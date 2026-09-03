@@ -50,9 +50,7 @@ jobs:
     needs: detect-changes
     if: needs.detect-changes.outputs.apps != '' && needs.detect-changes.outputs.apps != '[]'
     runs-on: ubuntu-latest
-    # TODO: RIPRISTINARE PRIMA DEL MERGE - usa secret e variabili di repository durante il test.
-    #       Riallineare a io-app con "environment: lokalise" quando l'environment sara' disponibile.
-    # environment: lokalise
+    environment: lokalise
     strategy:
       fail-fast: false
       matrix:
