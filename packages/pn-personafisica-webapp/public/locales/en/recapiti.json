@@ -1,442 +1,446 @@
 {
-  "title": "Addresses",
-  "subtitle": "Manage the digital addresses on which to receive SEND's legally-binding communications and/or the related courtesy messages.",
+  "common": {
+    "duplicate-contact-descr": "The contact {{value}} is already present, do you still want to proceed?",
+    "duplicate-contact-title": "Address already present",
+    "duplicate-default-contact-descr": "The address {{value}} is already used as the main digital domicile on SEND.<br \/>To personalize the digital domicile per sending institution, choose a different address.",
+    "duplicate-default-contact-title": "This address is already used as a digital domicile",
+    "enti-not-found": "No institution found",
+    "too-long-field-error": "Enter a maximum of {{maxLength}} characters"
+  },
+  "courtesy-contacts": {
+    "block-remove-email-message": "To proceed, you must first remove the personalized emails per institution.",
+    "block-remove-email-sercq-default-pec-special-message": "To proceed, you must first deactivate the digital domicile and the personalized addresses.",
+    "block-remove-email-title": "It is not possible to deactivate the email",
+    "block-remove-sms-message": "To proceed, you must first eliminate the personalized mobile numbers per institution.",
+    "block-remove-sms-title": "It is not possible to deactivate the mobile number",
+    "confirmation-modal-disable-io-content": "If you disconnect SEND from IO <strong>you will not receive an in-app message<\/strong> when you receive a legally-binding communication on SEND.",
+    "confirmation-modal-email-content": "To activate the SEND digital domicile we need your email address, so we can <strong>notify you when there is a legally-binding communication for you.<\/strong>",
+    "confirmation-modal-io-accept": "Connect SEND to IO",
+    "confirmation-modal-io-content": "If you do not connect SEND to IO <strong>you will not receive an in-app message<\/strong> when you receive a legally-binding communication on SEND.",
+    "confirmation-modal-io-title": "Adding your contact details is important!",
+    "confirmation-modal-title": "Add an email address for alerts!",
+    "email-add": "Add email",
+    "email-added-successfully": "Email address added successfully",
+    "email-and-sercq-removed-successfully": "Email and SEND digital domicile deactivated",
+    "email-empty-description": "Add an email address where we can notify you when there is a notification to read on SEND.",
+    "email-filled-description": "When there is a notification for you, we will inform you with an email to the address you selected.",
+    "email-new-code": "Did you not receive it? Check if you entered the correct email or <0>generate a new code<\/0>.",
+    "email-removed-successfully": "Email address removed successfully",
+    "email-sms-add": "Add mobile number",
+    "email-sms-updates": "Do you want to receive alerts via SMS too?",
+    "email-title": "Your email address",
+    "email-to-add": "Email address",
+    "email-verify": "Verify email {{value}}",
+    "email-verify-descr": "We have sent a code to the indicated email address. The code is <strong>valid for 15 minutes<\/strong>.",
+    "io-added-successfully": "You have activated the SEND - Digital Notifications service on IO.",
+    "io-removed-successfully": "You have deactivated the SEND - Digital Notifications service on IO.",
+    "link-email-placeholder": "Email address",
+    "link-sms-placeholder": "Your mobile phone number",
+    "remove-email": "Deactivate email",
+    "remove-email-and-sercq": "Deactivate email and domicile",
+    "remove-email-and-sercq-message": "<0>If you choose to deactivate your SEND digital domicile you might receive communications via registered mail and <strong>pay the relative costs.<\/strong><\/0>",
+    "remove-email-and-sercq-title": "The SEND digital domicile is also deactivated with the email",
+    "remove-email-no-domicile-message": "If you confirm, you will no longer receive the email on {{value}} when there is a SEND notification to read.",
+    "remove-email-no-domicile-title": "Deactivate email",
+    "remove-email-pec-enabled-message": "<0>If you deactivate the email address <strong>we cannot notify you when there is a legally-binding communication for you<\/strong>.<\/0><1>Remember that if you do not read a SEND notification in time, you might not be aware of any deadlines and incur penalties.<\/1>",
+    "remove-email-pec-enabled-title": "Do you want to deactivate email alerts?",
+    "remove-email-preconfirm-message": "<0>If you deactivate the email address we cannot <strong>notify you when there is a legally-binding communication for you.<\/strong><\/0>",
+    "remove-email-preconfirm-title": "Do you want to deactivate email alerts?",
+    "remove-sms": "Deactivate mobile phone",
+    "remove-sms-message": "If you confirm, you will no longer receive the SMS on {{value}} when there is a SEND notification to read.",
+    "remove-sms-message-dod-enabled": "<0>If you deactivate your phone number <strong>you will not receive SMS alerts when there is a legally-binding communication for you on SEND.<\/strong><\/0><1>Remember that if you do not read a SEND notification in time, you might not be aware of any deadlines and incur penalties.<\/1>",
+    "remove-sms-title-dod-enabled": "Do you want to deactivate SMS alerts?",
+    "sms-add": "Add number",
+    "sms-added-successfully": "Mobile number added successfully",
+    "sms-description": "When there is a notification for you, we will inform you with an SMS.",
+    "sms-new-code": "Did you not receive it? Check if you entered the correct mobile number or <0>generate a new code<\/0>.",
+    "sms-removed-successfully": "Mobile number removed successfully",
+    "sms-title": "Your mobile phone",
+    "sms-to-add": "Mobile number",
+    "sms-verify": "Verify mobile number {{value}}",
+    "sms-verify-descr": "We have sent a code to the indicated mobile number. The code is <strong>valid for 15 minutes<\/strong>.",
+    "valid-email": "Invalid email address",
+    "valid-sms": "Invalid mobile number"
+  },
+  "domicile-banner": {
+    "add-io": "Activate SEND on the IO app",
+    "complete-addresses": "Enter an email",
+    "complete-configuration": "Complete the configuration",
+    "no-courtesy-description": "Without a courtesy address, we cannot inform you when there is a legal communication to read on SEND.",
+    "no-courtesy-no-sercq-send-cta": "Confirm your email",
+    "no-courtesy-no-sercq-send-description": "Add an email address to receive a notification when you have a new notification on SEND.",
+    "no-courtesy-no-sercq-send-title": "Do not miss important communications ",
+    "no-courtesy-sercq-send-description": "Activate SEND as the Digital Domicile and stop worrying about registered mail.",
+    "no-courtesy-sercq-send-title": "Do you want to receive the next notifications only digitally?",
+    "no-courtesy-title": "Do not miss important communications",
+    "no-io-description": "When there is a notification for you, you can receive it on the IO app, read it and pay any expenses directly in app!",
+    "no-io-title": "Your notifications directly in app",
+    "no-sercq-cta": "Activate digital address",
+    "no-sercq-send-description": "Activate a digital address to receive future notifications digitally only and save on costs.",
+    "no-sercq-send-title": "No more paper documents"
+  },
+  "errors": {
+    "expired_verification_code": {
+      "message": "Generate a new one and enter it.",
+      "title": "This code has expired"
+    },
+    "invalid_verification_code": {
+      "message": "Check and re-enter it, or generate another one.",
+      "title": "Wrong code"
+    },
+    "retry_limit_code": {
+      "message": "You have entered the wrong code too many times. To try again, press \"Cancel\", make sure the contact is correct and enter the new code.",
+      "title": "You have made too many attempts"
+    }
+  },
   "insert-code": "Enter code",
-  "status": {
-    "active": "Active",
-    "inactive": "To activate",
-    "pec-validation": "PEC validation in progress"
+  "io-contact": {
+    "description": "Connecting SEND to IO is the most convenient way to receive and manage legally-binding communications: when there is a notification for you, you receive it in app and you can pay any expenses.",
+    "description-enabled": "When there is a notification for you, you receive it directly in app and you can pay any expenses.",
+    "disable-modal": {
+      "confirm-dod-enabled": "Deactivate SEND on IO",
+      "content": "If you confirm, you will no longer receive SEND notifications in the app.",
+      "content-dod-enabled": "<0>If you deactivate SEND on IO, <strong>you will no longer receive SEND notifications in the app.<\/strong><\/0><1>Remember that if you do not read a SEND notification in time, you might not be aware of any deadlines and incur penalties.<\/1>",
+      "title": "Deactivate SEND on the IO app"
+    },
+    "download": "Download the IO app",
+    "enable": "Activate SEND on IO",
+    "info-modal": {
+      "content": "If you do not have an active digital domicile and do not open the message within 5 days of sending, you will receive the documents in paper format at home.",
+      "subtitle": "For every new SEND notification, you receive a message on the IO app from which you can easily open the attached documents and make any planned payments.",
+      "title": "SEND on IO: how it works"
+    },
+    "title": "SEND on the IO app"
   },
   "legal-contacts": {
-    "title": "Legal address",
-    "pec-validation-banner": {
-      "title": "PEC validation in progress",
-      "dod-enabled-message": "Until the process is complete, the SEND Platform remains active as a digital domicile.",
-      "dod-disabled-message": "Until the process is complete, it will not be possible to modify legally-binding addresses.",
-      "parties-list": "The SEND platform will remain your digital domicile for {{list}} until the validation is complete."
+    "block-remove-digital-domicile-message": "To proceed, you must first deactivate the personalized digital domiciles per institution.",
+    "block-remove-digital-domicile-title": "It is not possible to deactivate the Digital Domicile",
+    "cancel-pec-validation": "Cancel validation",
+    "digital-domicile-management": {
+      "choose-action": "Choose an option",
+      "sercq_send-active": "The SEND platform is your digital domicile",
+      "special_contacts": {
+        "action": "Personalize per institution",
+        "content": "Choose where to receive the notifications sent to you by a specific institution.",
+        "title": "Personalize your digital domicile per sending institution"
+      },
+      "title": "Manage your digital domicile",
+      "transfer": {
+        "action-pec": "Transfer to SEND",
+        "action-sercq_send": "Transfer to a PEC",
+        "content-pec": "The SEND platform guarantees secure and legally-binding deliveries. The service is free and does not require additional tools.",
+        "content-sercq_send": "If you have a PEC, you can use it as a digital domicile for SEND notifications.",
+        "title-pec": "Transfer the digital domicile to the SEND platform",
+        "title-sercq_send": "Transfer the digital domicile to a PEC"
+      }
     },
-    "pec-disclaimer": "This is the main address that will be used to send you digital notifications. By entering it, you will no longer receive paper registered mail.",
-    "pec-description": "When an institution sends a communication for you on SEND, you will receive the official notification at the PEC you selected.",
     "link-pec-placeholder": "Your PEC",
-    "valid-pec": "Invalid PEC address",
-    "pec-verify": "Verify PEC {{value}}",
-    "pec-verify-descr": "We have sent a code to the indicated PEC address. The code is <strong>valid for 15 minutes</strong>.",
-    "pec-new-code": "Did you not receive it? Check if you entered the correct PEC or <0>generate a new code</0>.",
     "pec-added-successfully": "PEC address correctly linked",
+    "pec-contact-wizard": {
+      "content-description": "When an institution sends you a SEND notification, you will receive the legally-binding communication at the PEC you selected.",
+      "content-title": "Enter your PEC",
+      "disclaimer": "I accept that this address is used by SEND in priority over any PEC registered with a sending institution or present in public registries.",
+      "input-label": "PEC address",
+      "sercq-info-alert": "The PEC will replace the SEND platform as your digital domicile.",
+      "title": "Use a PEC as digital domicile",
+      "title-transfer": "Transfer the digital domicile to a PEC"
+    },
+    "pec-description": "When an institution sends a communication for you on SEND, you will receive the official notification at the PEC you selected.",
+    "pec-disclaimer": "This is the main address that will be used to send you digital notifications. By entering it, you will no longer receive paper registered mail.",
+    "pec-new-code": "Did you not receive it? Check if you entered the correct PEC or <0>generate a new code<\/0>.",
     "pec-removed-successfully": "PEC removed correctly",
     "pec-to-add": "PEC address",
     "pec-validating": "PEC address validation in progress",
-    "cancel-pec-validation": "Cancel validation",
-    "remove-pec-title": "Do you confirm to want to deactivate the PEC?",
-    "remove-pec-message": "<0>You will no longer have a legal digital address for the communications of the Public Administration and you might receive them on paper, with eventual costs charged to you.</0><1>You will however continue to receive alerts on the channels you have activated.</1>",
+    "pec-validation-banner": {
+      "dod-disabled-message": "Until the process is complete, it will not be possible to modify legally-binding addresses.",
+      "dod-enabled-message": "Until the process is complete, the SEND Platform remains active as a digital domicile.",
+      "parties-list": "The SEND platform will remain your digital domicile for {{list}} until the validation is complete.",
+      "title": "PEC validation in progress"
+    },
+    "pec-verify": "Verify PEC {{value}}",
+    "pec-verify-descr": "We have sent a code to the indicated PEC address. The code is <strong>valid for 15 minutes<\/strong>.",
     "remove-pec-confirm": "Deactivate PEC",
-    "validation-cancel-title": "Cancel PEC validation",
-    "validation-cancel-content": "If you confirm, you cancel the activation of the PEC as digital domicile on SEND.",
-    "validation-progress-title": "Thank you!",
-    "validation-progress-content": "We are verifying that the PEC address is valid. You will receive an email with the result within 24 hours.",
-    "sercq_send-title": "SEND Platform",
-    "sercq_send-description": "When an institution sends you a SEND notification, it is delivered securely and with legal value through the platform itself.",
-    "sercq-send-description-pec-enabled": "Use SEND as your digital domicile to manage your SEND notifications in one place, without worrying about paper registered mail and associated costs.",
+    "remove-pec-message": "<0>You will no longer have a legal digital address for the communications of the Public Administration and you might receive them on paper, with eventual costs charged to you.<\/0><1>You will however continue to receive alerts on the channels you have activated.<\/1>",
+    "remove-pec-title": "Do you confirm to want to deactivate the PEC?",
+    "remove-sercq_send-confirm": "Deactivate Digital Domicile",
+    "remove-sercq_send-message": "<0>If you choose to deactivate your SEND digital domicile you might receive communications via registered mail and <strong>pay the relative costs.<\/strong><\/0><1>You will continue to receive alerts via email, you can deactivate them in the Addresses section.<\/1>",
+    "remove-sercq_send-title": "Do you confirm to want to deactivate the Digital Domicile on SEND?",
     "sercq-send-active": "Active",
     "sercq-send-active-pec-enabled": "Activate Digital Domicile",
-    "sercq-send-info-title": "Activate SEND as your Digital Domicile",
-    "sercq-send-info-description": "If you activate the Digital Domicile, SEND will become <strong>your legal address</strong> for PA communications.",
+    "sercq-send-description-pec-enabled": "Use SEND as your digital domicile to manage your SEND notifications in one place, without worrying about paper registered mail and associated costs.",
     "sercq-send-info-advantages": "Why is it useful?",
+    "sercq-send-info-description": "If you activate the Digital Domicile, SEND will become <strong>your legal address<\/strong> for PA communications.",
     "sercq-send-info-list": [
       {
-        "title": "100% digital notifications",
-        "description": "You will no longer receive paper notifications."
+        "description": "You will no longer receive paper notifications.",
+        "title": "100% digital notifications"
       },
       {
-        "title": "Savings on postage costs",
-        "description": "You no longer have to worry about collecting paper documents and paying the relative costs."
+        "description": "You no longer have to worry about collecting paper documents and paying the relative costs.",
+        "title": "Savings on postage costs"
       },
       {
-        "title": "Everything in one place",
-        "description": "SEND notifications will be delivered to you securely and will all be available in your SEND reserved area."
+        "description": "SEND notifications will be delivered to you securely and will all be available in your SEND reserved area.",
+        "title": "Everything in one place"
       }
     ],
-    "sercq_send-added-successfully": "Digital Domicile activated correctly",
-    "remove-sercq_send-title": "Do you confirm to want to deactivate the Digital Domicile on SEND?",
-    "remove-sercq_send-message": "<0>If you choose to deactivate your SEND digital domicile you might receive communications via registered mail and <strong>pay the relative costs.</strong></0><1>You will continue to receive alerts via email, you can deactivate them in the Addresses section.</1>",
-    "remove-sercq_send-confirm": "Deactivate Digital Domicile",
-    "block-remove-digital-domicile-title": "It is not possible to deactivate the Digital Domicile",
-    "block-remove-digital-domicile-message": "To proceed, you must first deactivate the personalized digital domiciles per institution.",
-    "sercq_send-removed-successfully": "Digital Domicile deactivated correctly",
-    "sercq-send-io-title": "Activate SEND on IO",
-    "sercq-send-io-description": "Activate SEND - Notifiche Digitali on IO to receive the communications sent to your SEND digital domicile <strong>directly in app</strong>.",
+    "sercq-send-info-title": "Activate SEND as your Digital Domicile",
     "sercq-send-io-advantages": "On IO",
+    "sercq-send-io-description": "Activate SEND - Notifiche Digitali on IO to receive the communications sent to your SEND digital domicile <strong>directly in app<\/strong>.",
+    "sercq-send-io-title": "Activate SEND on IO",
     "sercq-send-wizard": {
-      "title": "Activate digital domicile on SEND",
-      "title-transfer": "Transfer the digital domicile to the SEND platform",
-      "button-transfer": "Transfer digital domicile",
       "button-activation": "Activate digital domicile",
+      "button-transfer": "Transfer digital domicile",
+      "feedback": {
+        "content-pec": "The PEC you entered is being validated. Once confirmed, the digital domicile will be activated and you will receive all legally-binding communications at the address you selected.",
+        "content-pec-transfer": "The PEC is being validated. Once confirmed, your digital domicile will be transferred to the address you selected. Until then, the SEND digital domicile will remain active.",
+        "content-sercq_send": "You will receive your legally-binding communications at your digital domicile on SEND and a message at the addresses you selected.",
+        "go-to-contacts": "Go back to your contact details",
+        "title-pec-activation": "Digital domicile activation in progress",
+        "title-pec-transfer": "Digital domicile transfer in progress",
+        "title-sercq_send-activation": "You have activated your digital domicile on SEND",
+        "title-sercq_send-transfer": "You have transferred your digital domicile to SEND",
+        "title-transfer": "You have updated your digital domicile"
+      },
       "step_1": {
-        "title": "How it works",
-        "info-list": [
-          {
-            "title": "An institution sends you a notification on SEND",
-            "description": "The notification is <0>delivered</0> to you securely and with legal value through the platform",
-            "aria-description": "Activate to read the explanation of the term"
-          },
-          {
-            "title": "You receive a message",
-            "description": "When a notification arrives on SEND, we will notify you via email and on the channels you prefer"
-          },
-          {
-            "title": "Access the notification",
-            "description": "Open the details of the digital notification on the SEND platform or, if you have activated the service, directly from the IO app"
-          }
-        ],
-        "info-tos": "By pressing “Activate” you declare to have read and accepted the <0>Terms of service</0>.",
+        "delivered-dialog-description": "If you choose SEND as your digital domicile, <strong>7 days after delivery<\/strong> the notification will be considered legally delivered, even if you have not viewed it.",
+        "delivered-dialog-title": "Legal value of the notification on the SEND digital domicile",
         "have-pec": "Do you have a PEC?",
         "have-pec-description": "Alternatively, you can use a PEC as your digital domicile for SEND notifications.",
+        "info-list": [
+          {
+            "aria-description": "Activate to read the explanation of the term",
+            "description": "The notification is <0>delivered<\/0> to you securely and with legal value through the platform",
+            "title": "An institution sends you a notification on SEND"
+          },
+          {
+            "description": "When a notification arrives on SEND, we will notify you via email and on the channels you prefer",
+            "title": "You receive a message"
+          },
+          {
+            "description": "Open the details of the digital notification on the SEND platform or, if you have activated the service, directly from the IO app",
+            "title": "Access the notification"
+          }
+        ],
+        "info-tos": "By pressing “Activate” you declare to have read and accepted the <0>Terms of service<\/0>.",
         "insert-pec": "Enter PEC",
-        "delivered-dialog-title": "Legal value of the notification on the SEND digital domicile",
-        "delivered-dialog-description": "If you choose SEND as your digital domicile, <strong>7 days after delivery</strong> the notification will be considered legally delivered, even if you have not viewed it.",
-        "pec-info-alert": "The SEND platform will replace the PEC as your digital domicile."
+        "pec-info-alert": "The SEND platform will replace the PEC as your digital domicile.",
+        "title": "How it works"
       },
       "step_2": {
-        "title": "Connect SEND to the IO app",
+        "confirm": "Connect SEND to IO",
         "content": "Connecting SEND to IO is the most convenient way to receive and manage legally-binding communications.",
+        "disable": "Disconnect SEND from IO",
         "io-list": [
           "Receive notifications in real-time, as soon as the institution uploads them to SEND",
           "You can open and read the documents attached to the notification",
           "You can pay any amounts due if the notification involves a payment"
         ],
-        "confirm": "Connect SEND to IO",
-        "disable": "Disconnect SEND from IO",
-        "skip-io": "Continue without connecting IO"
+        "skip-io": "Continue without connecting IO",
+        "title": "Connect SEND to the IO app"
       },
       "step_3": {
-        "title": "Your email to receive alerts on SEND notifications",
-        "step-title": "Enter your email",
         "content": "The email where we will notify you when you receive a legally-binding communication for you on SEND.",
-        "sms-disclaimer": "If you press <strong>Add number</strong> you save this address to receive alerts on your SEND notifications. You can manage it in the <strong>Addresses.</strong> section"
+        "sms-disclaimer": "If you press <strong>Add number<\/strong> you save this address to receive alerts on your SEND notifications. You can manage it in the <strong>Addresses.<\/strong> section",
+        "step-title": "Enter your email",
+        "title": "Your email to receive alerts on SEND notifications"
       },
       "step_4": {
-        "title": "Your summary",
-        "step-title": "Summary",
-        "content": "Your legally-binding communications will only be delivered to:",
-        "digital-domicile": "Digital Domicile",
-        "send": "SEND",
-        "courtesy-content": "You will receive a notice via:",
         "contacts-list": {
           "email": {
-            "title": "Email",
-            "textDisabled": "Add email"
+            "textDisabled": "Add email",
+            "title": "Email"
           },
           "io": {
-            "title-app-io": "IO, the public services app",
             "textDisabled": "Connect SEND to IO",
-            "textEnabled": "SEND service activated"
+            "textEnabled": "SEND service activated",
+            "title": "IO, the public services app"
           },
           "sms": {
-            "title": "Mobile number",
-            "textDisabled": "Add mobile number"
+            "textDisabled": "Add mobile number",
+            "title": "Mobile number"
           }
         },
-        "disclaimer-enable": "By pressing <strong>“Activate digital domicile”</strong> you declare that you have read the <0>Privacy Policy</0>, accept the <1>Terms of Service</1>, and that you understand that SEND notifications will not be forwarded to other digital domiciles.",
-        "disclaimer-transfer": "By pressing <strong>“Confirm”</strong> you declare that you have read the <0>Privacy Policy</0>, accept the <1>Terms of Service</1>, and that you understand that SEND notifications will not be forwarded to other digital domiciles.",
+        "content": "Your legally-binding communications will only be delivered to:",
+        "courtesy-content": "You will receive a notice via:",
+        "digital-domicile": "Digital Domicile",
+        "disclaimer-enable": "By pressing <strong>“Activate digital domicile”<\/strong> you declare that you have read the <0>Privacy Policy<\/0>, accept the <1>Terms of Service<\/1>, and that you understand that SEND notifications will not be forwarded to other digital domiciles.",
+        "disclaimer-transfer": "By pressing <strong>“Confirm”<\/strong> you declare that you have read the <0>Privacy Policy<\/0>, accept the <1>Terms of Service<\/1>, and that you understand that SEND notifications will not be forwarded to other digital domiciles.",
+        "enable": "Activate digital domicile",
+        "send": "SEND",
         "sercq-send-contacts-alert": "Monitor the contact details you have chosen: a SEND digital notification begins to produce legal effects even if you have not viewed it.",
-        "enable": "Activate digital domicile"
+        "step-title": "Summary",
+        "title": "Your summary"
       },
-      "feedback": {
-        "title-transfer": "You have updated your digital domicile",
-        "title-pec-activation": "Digital domicile activation in progress",
-        "title-pec-transfer": "Digital domicile transfer in progress",
-        "title-sercq_send-activation": "You have activated your digital domicile on SEND",
-        "title-sercq_send-transfer": "You have transferred your digital domicile to SEND",
-        "content-pec": "The PEC you entered is being validated. Once confirmed, the digital domicile will be activated and you will receive all legally-binding communications at the address you selected.",
-        "content-pec-transfer": "The PEC is being validated. Once confirmed, your digital domicile will be transferred to the address you selected. Until then, the SEND digital domicile will remain active.",
-        "content-sercq_send": "You will receive your legally-binding communications at your digital domicile on SEND and a message at the addresses you selected.",
-        "go-to-contacts": "Go back to your contact details"
-      }
+      "title": "Activate digital domicile on SEND",
+      "title-transfer": "Transfer the digital domicile to the SEND platform"
     },
-    "pec-contact-wizard": {
-      "title": "Use a PEC as digital domicile",
-      "title-transfer": "Transfer the digital domicile to a PEC",
-      "content-title": "Enter your PEC",
-      "content-description": "When an institution sends you a SEND notification, you will receive the legally-binding communication at the PEC you selected.",
-      "input-label": "PEC address",
-      "sercq-info-alert": "The PEC will replace the SEND platform as your digital domicile.",
-      "disclaimer": "I accept that this address is used by SEND in priority over any PEC registered with a sending institution or present in public registries."
-    },
-    "digital-domicile-management": {
-      "title": "Manage your digital domicile",
-      "sercq_send-active": "The SEND platform is your digital domicile",
-      "choose-action": "Choose an option",
-      "transfer": {
-        "title-pec": "Transfer the digital domicile to the SEND platform",
-        "content-pec": "The SEND platform guarantees secure and legally-binding deliveries. The service is free and does not require additional tools.",
-        "action-pec": "Transfer to SEND",
-        "title-sercq_send": "Transfer the digital domicile to a PEC",
-        "content-sercq_send": "If you have a PEC, you can use it as a digital domicile for SEND notifications.",
-        "action-sercq_send": "Transfer to a PEC"
-      },
-      "special_contacts": {
-        "title": "Personalize your digital domicile per sending institution",
-        "content": "Choose where to receive the notifications sent to you by a specific institution.",
-        "action": "Personalize per institution"
-      }
-    }
-  },
-  "io-contact": {
-    "title": "SEND on the IO app",
-    "description": "Connecting SEND to IO is the most convenient way to receive and manage legally-binding communications: when there is a notification for you, you receive it in app and you can pay any expenses.",
-    "description-enabled": "When there is a notification for you, you receive it directly in app and you can pay any expenses.",
-    "enable": "Activate SEND on IO",
-    "download": "Download the IO app",
-    "disable-modal": {
-      "title": "Deactivate SEND on the IO app",
-      "content": "If you confirm, you will no longer receive SEND notifications in the app.",
-      "content-dod-enabled": "<0>If you deactivate SEND on IO, <strong>you will no longer receive SEND notifications in the app.</strong></0><1>Remember that if you do not read a SEND notification in time, you might not be aware of any deadlines and incur penalties.</1>",
-      "confirm-dod-enabled": "Deactivate SEND on IO"
-    },
-    "info-modal": {
-      "title": "SEND on IO: how it works",
-      "subtitle": "For every new SEND notification, you receive a message on the IO app from which you can easily open the attached documents and make any planned payments.",
-      "content": "If you do not have an active digital domicile and do not open the message within 5 days of sending, you will receive the documents in paper format at home."
-    }
-  },
-  "courtesy-contacts": {
-    "email-title": "Your email address",
-    "email-empty-description": "Add an email address where we can notify you when there is a notification to read on SEND.",
-    "email-filled-description": "When there is a notification for you, we will inform you with an email to the address you selected.",
-    "email-sms-updates": "Do you want to receive alerts via SMS too?",
-    "email-sms-add": "Add mobile number",
-    "sms-title": "Your mobile phone",
-    "sms-description": "When there is a notification for you, we will inform you with an SMS.",
-    "link-sms-placeholder": "Your mobile phone number",
-    "link-email-placeholder": "Email address",
-    "sms-add": "Add number",
-    "email-add": "Add email",
-    "email-verify": "Verify email {{value}}",
-    "email-verify-descr": "We have sent a code to the indicated email address. The code is <strong>valid for 15 minutes</strong>.",
-    "sms-verify": "Verify mobile number {{value}}",
-    "sms-verify-descr": "We have sent a code to the indicated mobile number. The code is <strong>valid for 15 minutes</strong>.",
-    "email-new-code": "Did you not receive it? Check if you entered the correct email or <0>generate a new code</0>.",
-    "sms-new-code": "Did you not receive it? Check if you entered the correct mobile number or <0>generate a new code</0>.",
-    "email-to-add": "Email address",
-    "sms-to-add": "Mobile number",
-    "valid-email": "Invalid email address",
-    "valid-sms": "Invalid mobile number",
-    "email-added-successfully": "Email address added successfully",
-    "sms-added-successfully": "Mobile number added successfully",
-    "email-removed-successfully": "Email address removed successfully",
-    "email-and-sercq-removed-successfully": "Email and SEND digital domicile deactivated",
-    "sms-removed-successfully": "Mobile number removed successfully",
-    "io-added-successfully": "You have activated the SEND - Digital Notifications service on IO.",
-    "io-removed-successfully": "You have deactivated the SEND - Digital Notifications service on IO.",
-    "remove-email": "Deactivate email",
-    "remove-email-pec-enabled-title": "Do you want to deactivate email alerts?",
-    "remove-email-pec-enabled-message": "<0>If you deactivate the email address <strong>we cannot notify you when there is a legally-binding communication for you</strong>.</0><1>Remember that if you do not read a SEND notification in time, you might not be aware of any deadlines and incur penalties.</1>",
-    "remove-email-no-domicile-title": "Deactivate email",
-    "remove-email-no-domicile-message": "If you confirm, you will no longer receive the email on {{value}} when there is a SEND notification to read.",
-    "remove-email-preconfirm-title": "Do you want to deactivate email alerts?",
-    "remove-email-preconfirm-message": "<0>If you deactivate the email address we cannot <strong>notify you when there is a legally-binding communication for you.</strong></0>",
-    "remove-email-and-sercq": "Deactivate email and domicile",
-    "remove-email-and-sercq-title": "The SEND digital domicile is also deactivated with the email",
-    "remove-email-and-sercq-message": "<0>If you choose to deactivate your SEND digital domicile you might receive communications via registered mail and <strong>pay the relative costs.</strong></0>",
-    "remove-sms": "Deactivate mobile phone",
-    "remove-sms-title-dod-enabled": "Do you want to deactivate SMS alerts?",
-    "remove-sms-message-dod-enabled": "<0>If you deactivate your phone number <strong>you will not receive SMS alerts when there is a legally-binding communication for you on SEND.</strong></0><1>Remember that if you do not read a SEND notification in time, you might not be aware of any deadlines and incur penalties.</1>",
-    "remove-sms-message": "If you confirm, you will no longer receive the SMS on {{value}} when there is a SEND notification to read.",
-    "confirmation-modal-title": "Add an email address for alerts!",
-    "confirmation-modal-io-title": "Adding your contact details is important!",
-    "confirmation-modal-io-content": "If you do not connect SEND to IO <strong>you will not receive an in-app message</strong> when you receive a legally-binding communication on SEND.",
-    "confirmation-modal-disable-io-content": "If you disconnect SEND from IO <strong>you will not receive an in-app message</strong> when you receive a legally-binding communication on SEND.",
-    "confirmation-modal-io-accept": "Connect SEND to IO",
-    "confirmation-modal-email-content": "To activate the SEND digital domicile we need your email address, so we can <strong>notify you when there is a legally-binding communication for you.</strong>",
-    "block-remove-email-title": "It is not possible to deactivate the email",
-    "block-remove-email-message": "To proceed, you must first remove the personalized emails per institution.",
-    "block-remove-email-sercq-default-pec-special-message": "To proceed, you must first deactivate the digital domicile and the personalized addresses.",
-    "block-remove-sms-title": "It is not possible to deactivate the mobile number",
-    "block-remove-sms-message": "To proceed, you must first eliminate the personalized mobile numbers per institution."
-  },
-  "special-contacts": {
-    "select-address": "Type",
-    "add-sender": "Sending institution",
-    "pec": "PEC address",
-    "sercq_send": "SEND digital domicile",
-    "link-pec-label": "PEC address",
-    "link-sercq-label": "Your SEND Digital Domicile",
-    "contact-to-add-description": "The personalized digital domicile where you will receive the SEND notifications sent to you by a specific institution",
-    "contact-already-exists": "<0>This institution is already associated with the address {{contactValue}}.</0><1>If you press <strong>Confirm</strong>, you will replace it with the one just entered.</1>",
-    "validating-pec-banner-content": "<0>You have already entered a PEC for this institution which is in the validation phase.</0><1>Once confirmed, you can modify it.</1>",
-    "validating-pec-error-message": "You have already entered a PEC for this institution that is currently in validation",
-    "fetch-party-error": "We were unable to retrieve the data needed to create a new address.",
-    "add-title": "Enter the institution and the address to associate",
-    "card-title": "CUSTOMIZED PER INSTITUTION",
-    "remove-special-title": "Do you want to delete {{contactValue}}?",
-    "remove-special-description": "The alerts related to the notifications of the associated institutions will no longer be sent to this address, but to the main one.",
-    "pec-disclaimer": "I accept that this address is used by SEND in priority over any PEC registered with a sending institution or present in public registries.",
-    "courtesy-banner": {
-      "title": "Feature dismissed",
-      "description": "You can no longer enter personalized courtesy addresses per institution or modify existing addresses. If you delete a personalized address, you will not be able to recover it or re-enter it."
-    },
-    "email-description": "The email where we will notify you when you receive a legally-binding communication on SEND.",
-    "sercq-disclaimer": "By pressing <strong>“Confirm”</strong> you declare that you have read the <0>Privacy Policy</0>, accept the <1>Terms of Service</1>, and that you understand that the institution's SEND notifications will not be forwarded to other digital domiciles."
-  },
-  "common": {
-    "duplicate-contact-title": "Address already present",
-    "duplicate-contact-descr": "The contact {{value}} is already present, do you still want to proceed?",
-    "duplicate-default-contact-title": "This address is already used as a digital domicile",
-    "duplicate-default-contact-descr": "The address {{value}} is already used as the main digital domicile on SEND.<br />To personalize the digital domicile per sending institution, choose a different address.",
-    "enti-not-found": "No institution found",
-    "too-long-field-error": "Enter a maximum of {{maxLength}} characters"
-  },
-  "errors": {
-    "invalid_verification_code": {
-      "title": "Wrong code",
-      "message": "Check and re-enter it, or generate another one."
-    },
-    "retry_limit_code": {
-      "title": "You have made too many attempts",
-      "message": "You have entered the wrong code too many times. To try again, press \"Cancel\", make sure the contact is correct and enter the new code."
-    },
-    "expired_verification_code": {
-      "title": "This code has expired",
-      "message": "Generate a new one and enter it."
-    }
-  },
-  "domicile-banner": {
-    "no-sercq-send-title": "No more paper documents",
-    "no-sercq-send-description": "Activate a digital address to receive future notifications digitally only and save on costs.",
-    "no-sercq-cta": "Activate digital address",
-    "no-courtesy-title": "Do not miss important communications",
-    "no-courtesy-description": "Without a courtesy address, we cannot inform you when there is a legal communication to read on SEND.",
-    "complete-addresses": "Enter an email",
-    "no-io-title": "Your notifications directly in app",
-    "no-io-description": "When there is a notification for you, you can receive it on the IO app, read it and pay any expenses directly in app!",
-    "add-io": "Activate SEND on the IO app",
-    "no-courtesy-sercq-send-title": "Do you want to receive the next notifications only digitally?",
-    "no-courtesy-sercq-send-description": "Activate SEND as the Digital Domicile and stop worrying about registered mail.",
-    "complete-configuration": "Complete the configuration",
-    "no-courtesy-no-sercq-send-title": "Do not miss important communications ",
-    "no-courtesy-no-sercq-send-description": "Add an email address to receive a notification when you have a new notification on SEND.",
-    "no-courtesy-no-sercq-send-cta": "Confirm your email"
+    "sercq_send-added-successfully": "Digital Domicile activated correctly",
+    "sercq_send-description": "When an institution sends you a SEND notification, it is delivered securely and with legal value through the platform itself.",
+    "sercq_send-removed-successfully": "Digital Domicile deactivated correctly",
+    "sercq_send-title": "SEND Platform",
+    "title": "Legal address",
+    "valid-pec": "Invalid PEC address",
+    "validation-cancel-content": "If you confirm, you cancel the activation of the PEC as digital domicile on SEND.",
+    "validation-cancel-title": "Cancel PEC validation",
+    "validation-progress-content": "We are verifying that the PEC address is valid. You will receive an email with the result within 24 hours.",
+    "validation-progress-title": "Thank you!"
   },
   "onboarding": {
-    "title": "Configure SEND",
-    "description": "Get the most and save!",
     "cards": {
-      "send": {
-        "title": "I choose the best of SEND",
-        "cta": "Activate the best of SEND",
-        "label": "Recommended",
-        "item_1": "Activate your digital address and save on delivery times and costs associated with registered mail.",
-        "item_2": "We will notify you upon receipt of a SEND notification via email and on IO."
-      },
       "contacts": {
-        "title": "I only want notifications",
         "cta": "Activate only notifications",
         "item_1": "Receive notifications via email, SMS, and on the IO app, so you have a better chance of reading the communication in time and avoiding delivery costs associated with registered mail.",
-        "item_2": "If you do not open the SEND notification within 5 days of receipt, you will still receive a registered mail with the relative additional costs."
+        "item_2": "If you do not open the SEND notification within 5 days of receipt, you will still receive a registered mail with the relative additional costs.",
+        "title": "I only want notifications"
       },
       "io": {
-        "title": "I prefer to activate only SEND on the IO app",
         "cta": "Activate SEND on IO",
-        "label": "Recommended",
         "item_1": "Receive courtesy notifications and access legally binding communications directly through IO.",
-        "item_2": "If you do not open the SEND notification within 5 days of receipt, you will still receive a registered mail with the relative additional costs."
+        "item_2": "If you do not open the SEND notification within 5 days of receipt, you will still receive a registered mail with the relative additional costs.",
+        "label": "Recommended",
+        "title": "I prefer to activate only SEND on the IO app"
+      },
+      "send": {
+        "cta": "Activate the best of SEND",
+        "item_1": "Activate your digital address and save on delivery times and costs associated with registered mail.",
+        "item_2": "We will notify you upon receipt of a SEND notification via email and on IO.",
+        "label": "Recommended",
+        "title": "I choose the best of SEND"
       }
     },
-    "exit-flow": "Skip and go to your notifications",
-    "exit-flow-dialog": {
-      "title": "Do you really want to skip the SEND configuration?",
-      "description": "You risk not reading SEND notifications in time and having to pay the mailing costs for the registered mail.",
-      "cancel": "Back to configuration"
+    "courtesy": {
+      "banner-description": "The more notices are active, the more chances you have to read the digital notification in time and avoid the registered post!",
+      "email": {
+        "collapsed": {
+          "button-label": "Activate email notices",
+          "label": "Do you also want to receive an email upon receipt of a SEND notification?"
+        },
+        "edit": {
+          "description": "You will receive a notice at the address:",
+          "input-label": "Email address",
+          "title": "Email notices active"
+        },
+        "insert": {
+          "button-label": "Verify email",
+          "collapse-label": "Cancel email activation",
+          "description": "Choose an email address:",
+          "input-label": "Email address",
+          "title": "Activate email notices"
+        },
+        "readonly": {
+          "description": "You will receive a notice at the address:",
+          "title": "Activate email notices"
+        },
+        "verify-before-continue-content": "Before proceeding, select <strong>Verify email<\/strong> and follow the instructions.",
+        "verify-before-continue-title": "Verify your email"
+      },
+      "proceed-without-io": "Continue without the IO app",
+      "sms": {
+        "collapsed": {
+          "button-label": "Activate SMS notices",
+          "label": "Do you also want to receive a notice on your smartphone?"
+        },
+        "edit": {
+          "description": "You will receive a notice at the number:",
+          "input-label": "Mobile number",
+          "title": "SMS notices active"
+        },
+        "insert": {
+          "button-label": "Verify number",
+          "collapse-label": "Cancel SMS activation",
+          "description": "Choose a mobile number:",
+          "input-label": "Mobile number",
+          "title": "Activate SMS notices"
+        },
+        "readonly": {
+          "description": "You will receive a notice at the number:",
+          "title": "Activate SMS notices"
+        },
+        "verify-before-continue-content": "Before proceeding, select <strong>Verify number<\/strong> and follow the instructions.",
+        "verify-before-continue-title": "Verify your number"
+      },
+      "step-1-label": "Activate notices on IO",
+      "step-2-label": "Email and SMS",
+      "success-description": "You will receive a notice on the channels you have chosen when you receive a SEND notification.",
+      "success-title": "You have activated the notices",
+      "title": "Notice activation"
     },
+    "description": "Get the most and save!",
     "digital-domicile": {
-      "title": "The best of SEND",
+      "buttons": {
+        "continue-without-io": "Continue without the IO app"
+      },
       "choice": {
-        "title": "Activate your digital domicile on SEND",
-        "description": "You will receive legally-binding communications on SEND, digitally only, and you will avoid being sent a registered post with the relative additional costs.",
         "cta": "Activate on SEND",
-        "pec": {
-          "description": "Alternatively, you can choose to receive SEND notifications at your PEC address. This way you could avoid being sent a registered post with the relative additional costs.",
-          "cta": "Activate on a PEC"
-        },
+        "description": "You will receive legally-binding communications on SEND, digitally only, and you will avoid being sent a registered post with the relative additional costs.",
         "pec-activating": {
-          "title": "Activation of the digital domicile via PEC is in progress",
-          "description": "After activation, you will receive SEND notifications at your PEC address. This way you could avoid being sent a registered post with the relative additional costs.",
           "badge": "Activation in progress",
-          "img-alt-text": ""
+          "description": "After activation, you will receive SEND notifications at your PEC address. This way you could avoid being sent a registered post with the relative additional costs.",
+          "title": "Activation of the digital domicile via PEC is in progress"
         },
-        "img-alt-text": ""
+        "pec": {
+          "cta": "Activate on a PEC",
+          "description": "Alternatively, you can choose to receive SEND notifications at your PEC address. This way you could avoid being sent a registered post with the relative additional costs."
+        },
+        "title": "Activate your digital domicile on SEND"
       },
       "email": {
+        "confirm-cta": "Confirm email",
+        "description": "You will receive an email upon receipt of each SEND notification.",
+        "input-label": "Email address",
+        "label": "Email:",
         "title": "Associate an email address with your digital domicile",
         "title-existing": "You have already associated an email address with your digital domicile",
-        "description": "You will receive an email upon receipt of each SEND notification.",
-        "label": "Email:",
-        "input-label": "Email address",
-        "verify-cta": "Verify email",
-        "confirm-cta": "Confirm email"
+        "verify-cta": "Verify email"
+      },
+      "feedback": {
+        "pec": {
+          "content": "The PEC you entered is being validated. Once confirmed, you will receive all SEND notifications at the address you have chosen. Notices, however, are already active.",
+          "title": "Digital domicile activation is in progress"
+        },
+        "send": {
+          "content": "You will receive SEND notifications and relative notices on the channels you have chosen.",
+          "title": "You have activated your digital domicile and notices"
+        }
       },
       "io": {
-        "title": "Activate SEND on the IO app",
         "description": "Is there a SEND notification for you? You will receive a notice on IO and you can consult it directly in the app!",
-        "not-installed": {
-          "primary-cta": "Download the IO app",
-          "refresh-cta": "I have already downloaded and installed the app"
-        },
         "disabled": {
           "primary-cta": "Activate notices on IO"
         },
         "enabled": {
-          "title": "You have already activated SEND on the IO app",
-          "primary-cta": "Continue"
+          "primary-cta": "Continue",
+          "title": "You have already activated SEND on the IO app"
         },
-        "img-alt-text": ""
-      },
-      "summary": {
-        "title": "Your summary",
-        "legal-title-sercq": "Legally binding communications will only be delivered to:",
-        "legal-title-pec": "Legally binding communications will be delivered to:",
-        "courtesy-title": "You will receive a notice via:",
-        "info-box": "Monitor the contact details you have chosen: a SEND digital notification starts to produce legal effects even if you have not consulted it.",
-        "disclaimer": "By pressing <strong>\"Confirm\"</strong> you declare that you have read the <0>Privacy Policy</0>, accept the <1>Terms of Service</1>, and that you understand that SEND notifications will not be forwarded to other digital domiciles.",
-        "ddom-label": "Digital domicile",
-        "io-label": "IO, the public services app",
-        "io-value": "SEND service on IO active",
-        "email-label": "Email",
-        "send-badge": "SEND",
-        "pec-badge": "PEC"
+        "not-installed": {
+          "primary-cta": "Download the IO app",
+          "refresh-cta": "I have already downloaded and installed the app"
+        },
+        "title": "Activate SEND on the IO app"
       },
       "pec": {
-        "title": "Your PEC as a SEND digital domicile",
+        "cancel-email-cta": "Cancel email activation",
         "description": "You will receive legally-binding communications on your PEC, digitally only, and you can avoid being sent a registered post with the relative additional costs.",
+        "disclaimer": "I accept that the indicated PEC address be used with priority over any PECs registered with an issuing institution or present in public registers.",
+        "edit-email-cta": "Edit address",
+        "email-cta": "Activate email notices",
+        "email-present-description": "Upon receipt of a SEND notification, you will also receive a notice at the address:",
+        "input-label": "PEC address",
         "label-choose-address": "Choose a PEC address:",
         "label-summary": "PEC address",
-        "input-label": "PEC address",
-        "verify-cta": "Verify PEC",
-        "disclaimer": "I accept that the indicated PEC address be used with priority over any PECs registered with an issuing institution or present in public registers.",
-        "email-cta": "Activate email notices",
         "optional-email-description": "Do you also want to receive an email upon receipt of a SEND notification?",
-        "optional-email-title": "Activate email notices",
         "optional-email-label": "Choose an email address:",
-        "cancel-email-cta": "Cancel email activation",
-        "email-present-description": "Upon receipt of a SEND notification, you will also receive a notice at the address:",
-        "edit-email-cta": "Edit address",
-        "verify-before-continue-title": "Verify your PEC",
-        "verify-before-continue-content": "Before proceeding, select <strong>Verify PEC</strong> and follow the instructions.",
+        "optional-email-title": "Activate email notices",
         "pending": {
-          "title": "The entered PEC address is being validated",
+          "badge": "Activation in progress",
           "description": "You will receive legally binding communications at the chosen PEC, digitally only, and you will be able to avoid the delivery of registered mail with the relative additional costs. After validation, you can modify it in the \"Your contact details\" section.",
-          "badge": "Activation in progress"
-        }
-      },
-      "feedback": {
-        "send": {
-          "title": "You have activated your digital domicile and notices",
-          "content": "You will receive SEND notifications and relative notices on the channels you have chosen."
+          "title": "The entered PEC address is being validated"
         },
-        "pec": {
-          "title": "Digital domicile activation is in progress",
-          "content": "The PEC you entered is being validated. Once confirmed, you will receive all SEND notifications at the address you have chosen. Notices, however, are already active."
-        }
+        "title": "Your PEC as a SEND digital domicile",
+        "verify-before-continue-content": "Before proceeding, select <strong>Verify PEC<\/strong> and follow the instructions.",
+        "verify-before-continue-title": "Verify your PEC",
+        "verify-cta": "Verify PEC"
       },
       "steps": {
         "choice": "Choose a digital domicile",
@@ -444,81 +448,74 @@
         "io": "Activate notices on IO",
         "summary": "Check the chosen options"
       },
-      "buttons": {
-        "continue-without-io": "Continue without the IO app"
-      }
+      "summary": {
+        "courtesy-title": "You will receive a notice via:",
+        "ddom-label": "Digital domicile",
+        "disclaimer": "By pressing <strong>\"Confirm\"<\/strong> you declare that you have read the <0>Privacy Policy<\/0>, accept the <1>Terms of Service<\/1>, and that you understand that SEND notifications will not be forwarded to other digital domiciles.",
+        "email-label": "Email",
+        "info-box": "Monitor the contact details you have chosen: a SEND digital notification starts to produce legal effects even if you have not consulted it.",
+        "io-label": "IO, the public services app",
+        "io-value": "SEND service on IO active",
+        "legal-title-pec": "Legally binding communications will be delivered to:",
+        "legal-title-sercq": "Legally binding communications will only be delivered to:",
+        "pec-badge": "PEC",
+        "send-badge": "SEND",
+        "title": "Your summary"
+      },
+      "title": "The best of SEND"
+    },
+    "exit-flow": "Skip and go to your notifications",
+    "exit-flow-dialog": {
+      "cancel": "Back to configuration",
+      "description": "You risk not reading SEND notifications in time and having to pay the mailing costs for the registered mail.",
+      "title": "Do you really want to skip the SEND configuration?"
     },
     "io-activation": {
-      "title": "Everything on the IO app",
       "feedback": {
-        "title": "You have activated the notices",
-        "content": "You will receive a notice on the IO app when you receive a SEND notification."
-      }
-    },
-    "courtesy": {
-      "title": "Notice activation",
-      "step-1-label": "Activate notices on IO",
-      "step-2-label": "Email and SMS",
-      "proceed-without-io": "Continue without the IO app",
-      "banner-description": "The more notices are active, the more chances you have to read the digital notification in time and avoid the registered post!",
-      "success-title": "You have activated the notices",
-      "success-description": "You will receive a notice on the channels you have chosen when you receive a SEND notification.",
-      "email": {
-        "readonly": {
-          "title": "Activate email notices",
-          "description": "You will receive a notice at the address:"
-        },
-        "insert": {
-          "title": "Activate email notices",
-          "description": "Choose an email address:",
-          "input-label": "Email address",
-          "button-label": "Verify email",
-          "collapse-label": "Cancel email activation"
-        },
-        "collapsed": {
-          "label": "Do you also want to receive an email upon receipt of a SEND notification?",
-          "button-label": "Activate email notices"
-        },
-        "edit": {
-          "input-label": "Email address",
-          "title": "Email notices active",
-          "description": "You will receive a notice at the address:"
-        },
-        "verify-before-continue-title": "Verify your email",
-        "verify-before-continue-content": "Before proceeding, select <strong>Verify email</strong> and follow the instructions."
+        "content": "You will receive a notice on the IO app when you receive a SEND notification.",
+        "title": "You have activated the notices"
       },
-      "sms": {
-        "readonly": {
-          "title": "Activate SMS notices",
-          "description": "You will receive a notice at the number:"
-        },
-        "insert": {
-          "title": "Activate SMS notices",
-          "description": "Choose a mobile number:",
-          "input-label": "Mobile number",
-          "button-label": "Verify number",
-          "collapse-label": "Cancel SMS activation"
-        },
-        "collapsed": {
-          "label": "Do you also want to receive a notice on your smartphone?",
-          "button-label": "Activate SMS notices"
-        },
-        "edit": {
-          "input-label": "Mobile number",
-          "title": "SMS notices active",
-          "description": "You will receive a notice at the number:"
-        },
-        "verify-before-continue-title": "Verify your number",
-        "verify-before-continue-content": "Before proceeding, select <strong>Verify number</strong> and follow the instructions."
-      }
+      "title": "Everything on the IO app"
     },
     "notification-exit-dialog": {
-      "title": "How do you want to receive legally binding communications?",
-      "description": "Set up SEND in the best way and save money!",
       "buttons": {
         "configure": "Set up SEND",
         "skip": "Skip setup"
-      }
-    }
-  }
+      },
+      "description": "Set up SEND in the best way and save money!",
+      "title": "How do you want to receive legally binding communications?"
+    },
+    "title": "Configure SEND"
+  },
+  "special-contacts": {
+    "add-sender": "Sending institution",
+    "add-title": "Enter the institution and the address to associate",
+    "card-title": "CUSTOMIZED PER INSTITUTION",
+    "contact-already-exists": "<0>This institution is already associated with the address {{contactValue}}.<\/0><1>If you press <strong>Confirm<\/strong>, you will replace it with the one just entered.<\/1>",
+    "contact-to-add-description": "The personalized digital domicile where you will receive the SEND notifications sent to you by a specific institution",
+    "courtesy-banner": {
+      "description": "You can no longer enter personalized courtesy addresses per institution or modify existing addresses. If you delete a personalized address, you will not be able to recover it or re-enter it.",
+      "title": "Feature dismissed"
+    },
+    "email-description": "The email where we will notify you when you receive a legally-binding communication on SEND.",
+    "fetch-party-error": "We were unable to retrieve the data needed to create a new address.",
+    "link-pec-label": "PEC address",
+    "link-sercq-label": "Your SEND Digital Domicile",
+    "pec": "PEC address",
+    "pec-disclaimer": "I accept that this address is used by SEND in priority over any PEC registered with a sending institution or present in public registries.",
+    "remove-special-description": "The alerts related to the notifications of the associated institutions will no longer be sent to this address, but to the main one.",
+    "remove-special-title": "Do you want to delete {{contactValue}}?",
+    "select-address": "Type",
+    "sercq-disclaimer": "By pressing <strong>“Confirm”<\/strong> you declare that you have read the <0>Privacy Policy<\/0>, accept the <1>Terms of Service<\/1>, and that you understand that the institution's SEND notifications will not be forwarded to other digital domiciles.",
+    "sercq_send": "SEND digital domicile",
+    "validating-pec-banner-content": "<0>You have already entered a PEC for this institution which is in the validation phase.<\/0><1>Once confirmed, you can modify it.<\/1>",
+    "validating-pec-error-message": "You have already entered a PEC for this institution that is currently in validation"
+  },
+  "status": {
+    "active": "Active",
+    "inactive": "To activate",
+    "pec-validation": "PEC validation in progress"
+  },
+  "subtitle": "Manage the digital addresses on which to receive SEND's legally-binding communications and\/or the related courtesy messages.",
+  "title": "Addresses"
 }

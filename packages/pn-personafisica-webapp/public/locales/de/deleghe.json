@@ -1,92 +1,110 @@
 {
   "deleghe": {
-    "title": "Vollmachten",
-    "close": "Schließen",
-    "description": "Hier können die Bevollmächtigten des Unternehmens und deren Vollmachten verwaltet werden. Die ersten sind die natürlichen oder juristischen Personen, denen du die Vollmacht erteilt hast, deine Bescheide zu lesen und zu verwalten, die zweiten sind diejenigen, die dich bevollmächtigt haben.",
-    "delegatesTitle": "Deine Bevollmächtigten",
-    "delegatorsTitle": "Deine Vollmachten",
-    "delegatorsApiErrorMessage": "Wir konnten die Daten zu den von dir erteilten Vollmachten nicht wiederherstellen.",
-    "delegationStart": "Beginn Vollmacht",
-    "delegationEnd": "Ende Vollmacht",
-    "empty_state": "Du hast niemanden zur Anzeige deiner Zustellungen bevollmächtigt.",
-    "accept_title": "Bestätigungscode eingeben",
-    "accept_description": "Um die Vollmacht zu akzeptieren, gib den Code ein, den {{name}} mit dir geteilt hat.",
-    "add": "Eine Vollmacht hinzufügen",
-    "revoke": "Widerrufen",
-    "reject": "Ablehnen",
     "accept": "Zustimmen",
-    "show": "Code anzeigen",
-    "revocation_question": "Möchtest du die Vollmacht wirklich widerrufen?",
-    "rejection_question": "Möchtest du die Vollmacht wirklich ablehnen?",
-    "confirm_revocation": "Vollmacht widerrufen",
-    "confirm_rejection": "Vollmacht ablehnen",
-    "error_title": "Leider ist etwas schiefgelaufen",
-    "error_subtitle": "Die Seite konnte nicht geladen werden. Seite neu laden oder später erneut versuchen.",
-    "error_button": "Seite neu laden",
-    "no_delegates": "Du hast niemanden zur Anzeige deiner Zustellungen bevollmächtigt. <0>Eine Vollmacht hinzufügen</0>",
-    "no_delegators": "Du hast keine Vollmachten.",
-    "show_code_title": "Bestätigungscode für die Vollmacht an {{name}}",
-    "show_code_subtitle": "Teile diesen Code mit der bevollmächtigten Person: Sie muss ihn bei Annahme der Vollmacht eingeben. Der Code ist 7 Tage lang nach der Erstellung der Vollmachtsanfrage gültig.",
-    "verification_code": "Bestätigungscode",
+    "accept_description": "Um die Vollmacht zu akzeptieren, gib den Code ein, den {{name}} mit dir geteilt hat.",
+    "accept_title": "Bestätigungscode eingeben",
+    "add": "Eine Vollmacht hinzufügen",
+    "close": "Schließen",
     "code_copied": "Code kopiert",
-    "table": {
-      "name": "Name",
-      "delegationStart": "Beginn Vollmacht",
-      "delegationEnd": "Ende Vollmacht",
-      "permissions": "Genehmigungen",
-      "status": "Status",
-      "showCode": "Code anzeigen",
-      "revoke": "Widerrufen",
-      "reject": "Ablehnen",
-      "accept": "Zustimmen",
-      "notificationsFrom": "Zustellungen von:",
-      "allNotifications": "Alle Zustellungen",
-      "active": "Aktivieren",
-      "pending": "Wartet auf Bestätigung",
-      "menu-aria-label": "Aktionsmenü"
-    },
+    "confirm_rejection": "Vollmacht ablehnen",
+    "confirm_revocation": "Vollmacht widerrufen",
+    "delegatesTitle": "Deine Bevollmächtigten",
+    "delegationEnd": "Ende Vollmacht",
+    "delegationStart": "Beginn Vollmacht",
+    "delegatorsApiErrorMessage": "Wir konnten die Daten zu den von dir erteilten Vollmachten nicht wiederherstellen.",
+    "delegatorsTitle": "Deine Vollmachten",
+    "description": "Hier können die Bevollmächtigten des Unternehmens und deren Vollmachten verwaltet werden. Die ersten sind die natürlichen oder juristischen Personen, denen du die Vollmacht erteilt hast, deine Bescheide zu lesen und zu verwalten, die zweiten sind diejenigen, die dich bevollmächtigt haben.",
+    "empty_state": "Du hast niemanden zur Anzeige deiner Zustellungen bevollmächtigt.",
+    "error_button": "Seite neu laden",
+    "error_subtitle": "Die Seite konnte nicht geladen werden. Seite neu laden oder später erneut versuchen.",
+    "error_title": "Leider ist etwas schiefgelaufen",
+    "no_delegates": "Du hast niemanden zur Anzeige deiner Zustellungen bevollmächtigt. <0>Eine Vollmacht hinzufügen<\/0>",
+    "no_delegators": "Du hast keine Vollmachten.",
+    "reject": "Ablehnen",
+    "reject-successfully": "Vollmacht wurde abgelehnt.",
+    "rejection_question": "Möchtest du die Vollmacht wirklich ablehnen?",
+    "revocation_question": "Möchtest du die Vollmacht wirklich widerrufen?",
+    "revoke": "Widerrufen",
     "revoke-successfully": "Vollmacht wurde widerrufen.",
-    "reject-successfully": "Vollmacht wurde abgelehnt."
+    "show": "Code anzeigen",
+    "show_code_subtitle": "Teile diesen Code mit der bevollmächtigten Person: Sie muss ihn bei Annahme der Vollmacht eingeben. Der Code ist 7 Tage lang nach der Erstellung der Vollmachtsanfrage gültig.",
+    "show_code_title": "Bestätigungscode für die Vollmacht an {{name}}",
+    "table": {
+      "accept": "Zustimmen",
+      "active": "Aktivieren",
+      "allNotifications": "Alle Zustellungen",
+      "delegationEnd": "Ende Vollmacht",
+      "delegationStart": "Beginn Vollmacht",
+      "menu-aria-label": "Aktionsmenü",
+      "name": "Name",
+      "notificationsFrom": "Zustellungen von:",
+      "pending": "Wartet auf Bestätigung",
+      "permissions": "Genehmigungen",
+      "reject": "Ablehnen",
+      "revoke": "Widerrufen",
+      "showCode": "Code anzeigen",
+      "status": "Status"
+    },
+    "title": "Vollmachten",
+    "verification_code": "Bestätigungscode"
+  },
+  "errors": {
+    "already_exists": {
+      "message": "Die angegebene Person hat bereits eine Vollmacht. Lösche sie und erstelle eine neue.",
+      "title": "Vollmacht bereits vorhanden"
+    },
+    "delegate_himself": {
+      "message": "Du kannst dich nicht selbst bevollmächtigen",
+      "title": "Fehler bei der Eingabe der Vollmacht"
+    },
+    "fiscal_code": {
+      "message": "Die eingegebene Steuernummer ist ungültig",
+      "title": "Steuernummer ungültig"
+    },
+    "invalid_verification_code": {
+      "message": "Überprüfe ihn und gib ihn erneut ein",
+      "title": "Der Code ist falsch"
+    },
+    "not_acceptable": {
+      "message": "Die eingegebene Vollmacht ist ungültig",
+      "title": "Vollmacht ungültig"
+    },
+    "not_found": {
+      "message": "Vollmacht nicht gefunden",
+      "title": "Fehler"
+    }
   },
   "nuovaDelega": {
-    "breadcrumb": "Neue Vollmacht",
     "backToDelegations": "Zurück zu den Vollmachten",
-    "createdTitle": "Vollmachtsanfrage erstellt",
+    "breadcrumb": "Neue Vollmacht",
     "createdDescription": "Teile den Bestätigungscode mit der bevollmächtigten Person: Sie muss ihn beim ersten Zugriff auf SEND eingeben und deine Anfrage akzeptieren.",
-    "title": "Eine Vollmacht hinzufügen",
-    "subtitle": "Gib die Daten der natürlichen oder juristischen Person ein, der du eine Vollmacht zum Lesen deiner Zustellungen erteilen möchtest.",
+    "createdTitle": "Vollmachtsanfrage erstellt",
     "form": {
-      "personType": "Rechtssubjekt:",
-      "naturalPerson": "Natürliche Person",
-      "legalPerson": "Juristische Person",
-      "firstName": "Name",
-      "lastName": "Nachname",
-      "fiscalCode": "Steuernummer",
-      "businessName": "Firmenbezeichnung",
-      "viewFrom": "Kann Zustellungen von anzeigen:",
       "allEntities": "Alle Körperschaften",
-      "onlySelected": "Nur ausgewählte Körperschaften",
-      "selectEntities": "Körperschaft wählen",
+      "businessName": "Firmenbezeichnung",
       "date-duration": "Gültigkeitsdauer der Vollmacht",
       "endDate": "Ende der Vollmacht",
       "endDate-input-aria-label": "Enddatum der Vollmacht eingeben",
+      "firstName": "Name",
+      "fiscalCode": "Steuernummer",
+      "lastName": "Nachname",
+      "legalPerson": "Juristische Person",
+      "mandatoryField": "Pflichtfelder*",
+      "naturalPerson": "Natürliche Person",
+      "onlySelected": "Nur ausgewählte Körperschaften",
+      "party-not-found": "Keine Körperschaft gefunden",
+      "personType": "Rechtssubjekt:",
+      "personType-content-subtitle": "Wähle die Art des Rechtssubjekts",
+      "selectEntities": "Körperschaft wählen",
+      "submit": "Anfrage senden",
       "verificationCode": "Bestätigungscode",
       "verificationCodeDescr": "Teile diesen Code mit der bevollmächtigten Person: Sie muss ihn bei Annahme der Vollmacht eingeben. Der Code ist 7 Tage lang nach der Erstellung der Vollmachtsanfrage gültig.",
-      "submit": "Anfrage senden",
-      "mandatoryField": "Pflichtfelder*",
-      "party-not-found": "Keine Körperschaft gefunden"
+      "viewFrom": "Kann Zustellungen von anzeigen:",
+      "viewFrom-content-subtitle": "Wähle eine Option"
     },
+    "subtitle": "Gib die Daten der natürlichen oder juristischen Person ein, der du eine Vollmacht zum Lesen deiner Zustellungen erteilen möchtest.",
+    "title": "Eine Vollmacht hinzufügen",
     "validation": {
-      "fiscalCode": {
-        "required": "Die Steuernummer ist erforderlich",
-        "wrong": "Die eingegebene Steuernummer ist falsch"
-      },
-      "name": {
-        "required": "Der Name ist erforderlich"
-      },
-      "surname": {
-        "required": "Der Nachname ist erforderlich"
-      },
       "businessName": {
         "required": "Die Firmenbezeichnung ist erforderlich"
       },
@@ -96,41 +114,18 @@
       "expirationDate": {
         "required": "Das Ablaufdatum der Vollmacht ist erforderlich",
         "wrong": "Falsches Datum"
+      },
+      "fiscalCode": {
+        "required": "Die Steuernummer ist erforderlich",
+        "wrong": "Die eingegebene Steuernummer ist falsch",
+        "wrong-pg": "Gib nur Zahlen ein. Wenn die Steuernummer der Person, die du bevollmächtigen möchtest, auch aus Buchstaben besteht, wähle „Natürliche Person“."
+      },
+      "name": {
+        "required": "Der Name ist erforderlich"
+      },
+      "surname": {
+        "required": "Der Nachname ist erforderlich"
       }
-    }
-  },
-  "errors": {
-    "not_found": {
-      "title": "Fehler",
-      "message": "Vollmacht nicht gefunden"
-    },
-    "delivery_mandate_not_found": {
-      "title": "Fehler",
-      "message": "Diese Vollmacht ist nicht mehr aktiv."
-    },
-    "already_exists": {
-      "title": "Vollmacht bereits vorhanden",
-      "message": "Die angegebene Person hat bereits eine Vollmacht. Lösche sie und erstelle eine neue."
-    },
-    "not_acceptable": {
-      "title": "Vollmacht ungültig",
-      "message": "Die eingegebene Vollmacht ist ungültig"
-    },
-    "delegate_himself": {
-      "title": "Fehler bei der Eingabe der Vollmacht",
-      "message": "Du kannst dich nicht selbst bevollmächtigen"
-    },
-    "invalid_verification_code": {
-      "title": "Der Code ist falsch",
-      "message": "Überprüfe ihn und gib ihn erneut ein"
-    },
-    "fiscal_code": {
-      "title": "Steuernummer ungültig",
-      "message": "Die eingegebene Steuernummer ist ungültig"
-    },
-    "invalid_parameter": {
-      "title": "Daten ungültig",
-      "message": "Eine oder mehrere der eingegebenen Daten sind ungültig"
     }
   }
 }

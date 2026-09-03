@@ -1,23 +1,25 @@
 {
   "appStatus": {
-    "title": "Plattformstatus",
-    "subtitle": "Überprüft die Funktionsweise von SEND, zeigt den Verlauf der Fehlfunktionen an und lädt die entsprechenden Bescheinigungen herunter, die gegenüber Dritten angefochten werden können. Jeder Beleg bescheinigt eine Fehlfunktion: Von Nutzen, wenn er eine an dich gerichtete Zustellung betrifft.",
+    "aria-missed-endDate": "Fehlendes Enddatum, Dienstunterbrechung in Bearbeitung",
+    "lastCheckLegend": "Letzte Aktualisierung - {{ lastCheckTimestamp }}",
+    "missed-endDate": "In Bearbeitung",
     "statusDescription": {
-      "ok": "Alle SEND-Dienste sind betriebsbereit.",
-      "not-ok": "Es ist eine Störung aufgetreten. Weitere Details in der Tabelle unten."
+      "not-ok": "Es ist eine Störung aufgetreten. Weitere Details in der Tabelle unten.",
+      "ok": "Alle SEND-Dienste sind betriebsbereit."
     },
-    "lastCheckLegend": "Letzte Aktualisierung - {{ lastCheckTimestamp }}"
+    "subtitle": "Überprüft die Funktionsweise von SEND, zeigt den Verlauf der Fehlfunktionen an und lädt die entsprechenden Bescheinigungen herunter, die gegenüber Dritten angefochten werden können. Jeder Beleg bescheinigt eine Fehlfunktion: Von Nutzen, wenn er eine an dich gerichtete Zustellung betrifft.",
+    "title": "Plattformstatus"
   },
   "downtimeList": {
-    "title": "Verlauf der Fehlfunktionen",
     "columnHeader": {
-      "startDate": "Datum Beginn",
       "endDate": "Datum Ende",
       "functionality": "Betroffener Dienst",
       "legalFactId": "Bescheinigungen können von Dritten beanstandet werden",
+      "startDate": "Datum Beginn",
       "status": "Status"
     },
-    "emptyMessage": "Es wurden keine Fehlfunktionen aufgezeichnet"
+    "emptyMessage": "Es wurden keine Fehlfunktionen aufgezeichnet",
+    "title": "Verlauf der Fehlfunktionen"
   },
   "legends": {
     "knownFunctionality": {
@@ -25,15 +27,15 @@
       "NOTIFICATION_VISUALIZATION": "Anzeige von Zustellungen und Herunterladen von Anhängen",
       "NOTIFICATION_WORKFLOW": "Änderung des Zustellungsstatus"
     },
-    "unknownFunctionality": "Unbekannter Dienst ({{functionality}})",
-    "status": {
-      "OK": "Behoben",
-      "KO": "Laufend"
-    },
+    "legalFactDownload": "Bescheinigung herunterladen",
     "noFileAvailableByStatus": {
-      "OK": "Bescheinigung in Kürze verfügbar",
-      "KO": "Die Bescheinigung wird nach Behebung der Störung zur Verfügung stehen"
+      "KO": "Die Bescheinigung wird nach Behebung der Störung zur Verfügung stehen",
+      "OK": "Bescheinigung in Kürze verfügbar"
     },
-    "legalFactDownload": "Bescheinigung herunterladen"
+    "status": {
+      "KO": "Laufend",
+      "OK": "Behoben"
+    },
+    "unknownFunctionality": "Unbekannter Dienst ({{functionality}})"
   }
 }

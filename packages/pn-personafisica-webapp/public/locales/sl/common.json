@@ -1,256 +1,43 @@
 {
-  "iun": "Koda IUN",
-  "logo": "Logotip",
-  "button": {
-    "filtra": "Filtriraj",
-    "annulla filtro": "Odstrani filtre",
-    "indietro": "Nazaj",
-    "associa": "Poveži",
-    "capito": "Razumem",
-    "conferma": "Potrdi",
-    "attiva": "Aktiviraj",
-    "annulla": "Prekliči",
-    "modifica": "Uredi",
-    "salva": "Shrani",
-    "elimina": "Izbriši",
-    "enter": "Vstopi",
-    "exit": "Izhod",
-    "close": "Zapri",
-    "enable": "Omogoči",
-    "manage": "Upravljaj",
-    "disable": "Onemogoči",
-    "start": "Začni",
-    "continue": "Nadaljuj",
-    "go-on": "Naprej",
-    "go-to-home": "Pojdi na domačo stran",
-    "go-to-login": "Prijava",
-    "not-now": "Ne zdaj",
-    "do-later": "Naredil bom pozneje",
-    "add": "Dodaj",
-    "understand": "V redu, razumem"
-  },
-  "menu": {
-    "notifiche": "Prejeto",
-    "notifiche-utente": "Prejeto za vas",
-    "notifiche-delegato": "Prejeto za {{delegator}}",
-    "deleghe": "Pooblastila",
-    "profilo": "Tvoji podatki",
-    "contacts": "Tvoji kontaktni podatki",
-    "app-status": "Status platforme"
-  },
-  "header": {
-    "assistance": "Pomoč",
-    "login": "Prijava",
-    "logout": "Odjava",
-    "pago-pa-link": "Spletna stran PagoPA S.p.A.",
-    "logout-message": "Ali želiš potrditi izhod iz SEND?"
-  },
-  "tos": {
-    "title": "SEND - Servizio Notifiche Digitali",
-    "body": "Za prijavo sprejmi Splošne pogoje uporabe storitve in preberi Izjavo o zasebnosti.",
-    "redo-body": "Splošni pogoji uporabe storitve in Izjava o zasebnosti so se spremenili. Za prijavo sprejmi in potrdi, da si prebral nove različice.",
-    "switch-label": "Sprejmem <1>Splošne pogoje uporabe</1> in potrjujem, da sem prebral <0>Izjavo o zasebnosti</0>",
-    "button": "Prijava"
-  },
-  "table": {
-    "aria-label": "Tabela predmetov"
-  },
-  "paginator": {
-    "aria-label": "Meni za oštevilčenje strani",
-    "first": "prvi element",
-    "last": "zadnji element",
-    "page": "stran",
-    "next": "Pojdi na naslednjo stran",
-    "previous": "Pojdi na prejšnjo stran",
-    "selected": "izbran element",
-    "rows-per-page": "Vrstice na stran"
-  },
-  "toast": {
-    "aria-label": "Ikona za zapiranje obvestila"
-  },
-  "date-picker": {
-    "left-arrow": "Pojdi na prejšnji mesec",
-    "right-arrow": "Pojdi na naslednji mesec",
-    "switch-to-year": "aktiven način koledarja, preklopi na način izbire leta",
-    "switch-to-calendar": "aktiven način izbire leta, preklopi na način koledarja",
-    "select-date": "Izberi datum",
-    "date-selected": "Izberi datum, izbran datum je {{date}}"
-  },
-  "date-time": {
-    "today-uppercase-initial": "Danes",
-    "hour-of-day": "ure",
-    "january": "januar",
-    "february": "februar",
-    "march": "marec",
-    "april": "april",
-    "may": "maj",
-    "june": "junij",
-    "july": "julij",
-    "august": "avgust",
-    "september": "september",
-    "october": "oktober",
-    "november": "november",
-    "december": "december"
-  },
-  "error-boundary": {
-    "title": "Nekaj je šlo narobe",
-    "description": "Strani nismo mogli naložiti. Ponovno jo naloži ali poskusi pozneje.",
-    "action": "Ponovno naloži stran"
-  },
-  "not-accessible": {
-    "title": "Dostop do platforme ni možen",
-    "description": "SEND je trenutno v fazi preizkušanja in še ni na voljo. Za več informacij o pobudi,",
-    "action": "obišči namensko spletno stran"
-  },
   "access-denied": "Nimaš potrebnih pooblastil za dostop do te strani",
-  "not-logged": "Prijavi se v SEND",
-  "not-logged-subtitle": "Za ogled in upravljanje svojih obvestil se prijavi s SPID ali CIE.",
-  "not-found": {
-    "title": "To, kar si iskal, ni tukaj.",
-    "description": "Stran, do katere si želel dostopati, ne obstaja ali ni več na voljo.",
-    "back-to-home": "Nazaj na domačo stran"
-  },
-  "leaving-app": {
-    "title": "Zapuščaš SEND",
-    "message": "Preusmerjen boš"
-  },
-  "error-when-fetching-tos-status": {
-    "title": "Težave pri dostopu do SEND",
-    "message": "Poskusi pozneje"
-  },
-  "messages": {
-    "404-title": "Vir ni najden",
-    "404-message": "Prišlo je do napake. Prosimo, poskusi pozneje",
-    "403-title": "Seja je potekla",
-    "403-message": "Vstopi in se prijavi s SPID ali CIE.",
-    "401-title": "Nepooblaščen uporabnik",
-    "401-message": "Trenutni uporabnik nima pooblastil",
-    "451-title": "Platforma ni dostopna",
-    "451-message": "Dostop do platforme ni možen",
-    "500-title": "Storitev ni na voljo",
-    "500-message": "Zaradi začasne težave s storitvijo tvoja zahteva ni bila poslana. Prosimo, poskusi pozneje.",
-    "lacking-grants-for-app-title": "Nisi pooblaščen za dostop",
-    "invalid-token-title": "Zaradi tehnične težave se ne moreš prijaviti - neveljaven žeton",
-    "generic-token-exchange-problem": "Prijave ni bilo mogoče dokončati",
-    "generic-title": "Splošna napaka",
-    "generic-message": "Prišlo je do napake. Prosimo, poskusi pozneje",
-    "generic-api-error-main-text": "Teh podatkov nismo mogli pridobiti.",
-    "generic-api-error-action-text": "Ponovno naloži"
-  },
-  "footer": {
-    "go-to-pagopa": "Povezava: pojdi na spletno stran PagoPA S.p.A.",
-    "go-to": "Pojdi na povezavo",
-    "privacy-info": "Izjava o zasebnosti",
-    "who": "Kdo smo",
-    "work": "Delo pri nas",
-    "certifications": "Certifikati",
-    "security": "Varnost informacij",
-    "personal-data": "Pravica do varstva osebnih podatkov",
-    "cookie": "Nastavitve piškotkov",
-    "terms-conditions": "Splošni pogoji",
-    "company": "Transparentno podjetje",
-    "disclosure": "Politika odgovornega razkrivanja (Responsible Disclosure Policy)",
-    "321-model": "Model 231",
-    "sercq-service-statement": "Service practice statement - SERCQ",
-    "accessibility": "Dostopnost",
-    "social": "Povezava: pojdi na spletno stran {{social}} PagoPA S.p.A.",
-    "resources": "Viri",
-    "follow": "Spremljaj nas na",
-    "legal-part-1": "delniška družba z edinim družbenikom - osnovni kapital 1.000.000 evrov v celoti vplačan - sedež v Rimu, Piazza Colonna 370",
-    "legal-part-2": "CAP 00187 - št. vpisa v Register podjetij v Rimu, davčna in ID številka 15376371009",
-    "products-title": "Izdelki in storitve"
-  },
-  "required-fields": "*Obvezna polja",
-  "required-field": "Obvezno polje",
-  "too-long-field-error": "Vnesi največ {{maxLength}} znakov",
-  "loading": "Nalaganje poteka",
-  "validation": {
-    "search-pattern-length-limit": "največ {{maxLength}} znakov za iskanje",
-    "invalid-characters-not-inserted": "Neveljavni znaki niso bili vneseni."
-  },
-  "errors": {
-    "delivery_mandate_not_found": {
-      "title": "Napaka",
-      "message": "To pooblastilo ni več aktivno."
-    },
-    "technical-error": {
-      "title": "Informacije o napaki",
-      "copy-to-clipboard": "Kopiraj informacije o napaki"
-    },
-    "bad_request": {
-      "title": "Napaka pri pošiljanju podatkov",
-      "message": "Oblika zahteve ni veljavna."
-    },
-    "unauthorized": {
-      "title": "Nepooblaščen uporabnik",
-      "message": "Trenutni uporabnik nima pooblastil."
-    },
-    "unavailable_legal_reasons": {
-      "title": "Platforma ni dostopna",
-      "message": "Dostop do platforme ni možen"
-    },
-    "forbidden": {
-      "title": "Seja je potekla",
-      "message": "Vstopi in se prijavi s SPID ali CIE."
-    },
-    "not_found": {
-      "title": "Vir ni najden",
-      "message": "Prišlo je do napake. Prosimo, poskusi pozneje."
-    },
-    "internal_server": {
-      "title": "Prišlo je do napake",
-      "message": "Storitev ni na voljo zaradi tehnične težave. Prosimo, poskusi pozneje. Če se napaka ponovi, se obrni na pomoč in sporoči informacije o napaki."
-    },
-    "unhandled": {
-      "title": "Prišlo je do napake",
-      "message": "Storitev ni na voljo. Prosimo, poskusi pozneje. Če se napaka ponovi, se obrni na pomoč in sporoči informacije o napaki."
-    },
-    "unknown": {
-      "title": "Prišlo je do napake",
-      "message": "Storitev ni na voljo. Prosimo, poskusi pozneje. Če se napaka ponovi, se obrni na pomoč in sporoči informacije o napaki."
-    },
-    "invalid_type_code": {
-      "title": "To polje sprejema samo številčne vrednosti",
-      "message": "Preveri kodo za preverjanje in jo ponovno vnesi"
-    },
-    "empty_code": {
-      "title": "Manjkajoča ali nepopolna koda",
-      "message": "Koda, ki si jo vnesel, je nepopolna, vnesi 5-mestno kodo."
-    },
-    "invalid_body": {
-      "title": "Podatki niso veljavni",
-      "message": "Prišlo je do napake med pošiljanjem podatkov. Preveri, ali so pravilni, brez presledkov ali posebnih znakov, in poskusi znova. Če se napaka ponovi, se obrni na pomoč in sporoči informacije o napaki."
-    },
-    "invalid_parameter": {
-      "title": "Neveljavni podatki",
-      "message": "Eden ali več vnesenih podatkov ni veljaven"
-    }
+  "autocomplete": {
+    "clear": "Odstrani izbrane možnosti",
+    "delete-selection": "Odstrani {{0}}",
+    "selection-box": "Izbrane možnosti",
+    "selection-done": "{{0}} izbranih",
+    "toggle-close": "Zapri meni z možnostmi",
+    "toggle-open": "Odpri meni z možnostmi"
   },
   "badges": {
     "news": "Novost"
   },
-  "conjunctions": {
-    "or": "ali"
-  },
-  "downtime_language_banner": {
-    "message": "Izvirno besedilo teh dokumentov je v italijanščini. V primeru nasprotja med italijansko različico in prevodi v druge jezike prevladajo pomen in pogoji v italijanskem jeziku.",
-    "link": "Oglej si prevode"
-  },
-  "feedback_banner": {
-    "title": "Pomagajte nam izboljšati SEND",
-    "content": "Vaše povratne informacije nam omogočajo, da vse postane bolj jasno in preprosto. Traja le nekaj minut, da nam sporočite svoje mnenje."
-  },
-  "no-spaces-at-edges": "Odstrani presledke na začetku ali na koncu",
-  "wizard": {
-    "stepper": {
-      "of": "{{currentStep}} od {{totalSteps}}",
-      "activeStep": "Korak {{currentStep}}"
-    }
-  },
-  "inactivity": {
-    "title": "Ali se res želiš odjaviti iz SEND?",
-    "body": "Prekinitev povezave je v teku. Če si si premislil, pritisni »Ohrani dostop« v nekaj sekundah.",
-    "action": "Ohrani dostop"
+  "button": {
+    "add": "Dodaj",
+    "annulla": "Prekliči",
+    "annulla filtro": "Odstrani filtre",
+    "associa": "Poveži",
+    "attiva": "Aktiviraj",
+    "capito": "Razumem",
+    "close": "Zapri",
+    "conferma": "Potrdi",
+    "continue": "Nadaljuj",
+    "disable": "Onemogoči",
+    "do-later": "Naredil bom pozneje",
+    "elimina": "Izbriši",
+    "enable": "Omogoči",
+    "enter": "Vstopi",
+    "exit": "Izhod",
+    "filtra": "Filtriraj",
+    "go-on": "Naprej",
+    "go-to-home": "Pojdi na domačo stran",
+    "go-to-login": "Prijava",
+    "indietro": "Nazaj",
+    "manage": "Upravljaj",
+    "modifica": "Uredi",
+    "not-now": "Ne zdaj",
+    "salva": "Shrani",
+    "start": "Začni",
+    "understand": "V redu, razumem"
   },
   "code-modal": {
     "digits": [
@@ -261,18 +48,231 @@
       "zadnja števka"
     ]
   },
+  "conjunctions": {
+    "or": "ali"
+  },
+  "date-picker": {
+    "date-selected": "Izberi datum, izbran datum je {{date}}",
+    "left-arrow": "Pojdi na prejšnji mesec",
+    "right-arrow": "Pojdi na naslednji mesec",
+    "select-date": "Izberi datum",
+    "switch-to-calendar": "aktiven način izbire leta, preklopi na način koledarja",
+    "switch-to-year": "aktiven način koledarja, preklopi na način izbire leta"
+  },
+  "date-time": {
+    "april": "april",
+    "august": "avgust",
+    "december": "december",
+    "february": "februar",
+    "hour-of-day": "ure",
+    "january": "januar",
+    "july": "julij",
+    "june": "junij",
+    "march": "marec",
+    "may": "maj",
+    "november": "november",
+    "october": "oktober",
+    "september": "september",
+    "today-uppercase-initial": "Danes"
+  },
+  "downtime_language_banner": {
+    "link": "Oglej si prevode",
+    "message": "Izvirno besedilo teh dokumentov je v italijanščini. V primeru nasprotja med italijansko različico in prevodi v druge jezike prevladajo pomen in pogoji v italijanskem jeziku."
+  },
+  "error-boundary": {
+    "action": "Ponovno naloži stran",
+    "description": "Strani nismo mogli naložiti. Ponovno jo naloži ali poskusi pozneje.",
+    "title": "Nekaj je šlo narobe"
+  },
+  "error-when-fetching-tos-status": {
+    "message": "Poskusi pozneje",
+    "title": "Težave pri dostopu do SEND"
+  },
+  "errors": {
+    "bad_request": {
+      "message": "Oblika zahteve ni veljavna.",
+      "title": "Napaka pri pošiljanju podatkov"
+    },
+    "delivery_mandate_not_found": {
+      "message": "To pooblastilo ni več aktivno.",
+      "title": "Napaka"
+    },
+    "empty_code": {
+      "message": "Koda, ki si jo vnesel, je nepopolna, vnesi 5-mestno kodo.",
+      "title": "Manjkajoča ali nepopolna koda"
+    },
+    "forbidden": {
+      "message": "Vstopi in se prijavi s SPID ali CIE.",
+      "title": "Seja je potekla"
+    },
+    "internal_server": {
+      "message": "Storitev ni na voljo zaradi tehnične težave. Prosimo, poskusi pozneje. Če se napaka ponovi, se obrni na pomoč in sporoči informacije o napaki.",
+      "title": "Prišlo je do napake"
+    },
+    "invalid_body": {
+      "message": "Prišlo je do napake med pošiljanjem podatkov. Preveri, ali so pravilni, brez presledkov ali posebnih znakov, in poskusi znova. Če se napaka ponovi, se obrni na pomoč in sporoči informacije o napaki.",
+      "title": "Podatki niso veljavni"
+    },
+    "invalid_parameter": {
+      "message": "Eden ali več vnesenih podatkov ni veljaven",
+      "title": "Neveljavni podatki"
+    },
+    "invalid_type_code": {
+      "message": "Preveri kodo za preverjanje in jo ponovno vnesi",
+      "title": "To polje sprejema samo številčne vrednosti"
+    },
+    "not_found": {
+      "message": "Prišlo je do napake. Prosimo, poskusi pozneje.",
+      "title": "Vir ni najden"
+    },
+    "technical-error": {
+      "copy-to-clipboard": "Kopiraj informacije o napaki",
+      "title": "Informacije o napaki"
+    },
+    "unauthorized": {
+      "message": "Trenutni uporabnik nima pooblastil.",
+      "title": "Nepooblaščen uporabnik"
+    },
+    "unavailable_legal_reasons": {
+      "message": "Dostop do platforme ni možen",
+      "title": "Platforma ni dostopna"
+    },
+    "unhandled": {
+      "message": "Storitev ni na voljo. Prosimo, poskusi pozneje. Če se napaka ponovi, se obrni na pomoč in sporoči informacije o napaki.",
+      "title": "Prišlo je do napake"
+    },
+    "unknown": {
+      "message": "Storitev ni na voljo. Prosimo, poskusi pozneje. Če se napaka ponovi, se obrni na pomoč in sporoči informacije o napaki.",
+      "title": "Prišlo je do napake"
+    }
+  },
+  "feedback_banner": {
+    "content": "Vaše povratne informacije nam omogočajo, da vse postane bolj jasno in preprosto. Traja le nekaj minut, da nam sporočite svoje mnenje.",
+    "title": "Pomagajte nam izboljšati SEND"
+  },
+  "footer": {
+    "321-model": "Model 231",
+    "accessibility": "Dostopnost",
+    "certifications": "Certifikati",
+    "company": "Transparentno podjetje",
+    "cookie": "Nastavitve piškotkov",
+    "disclosure": "Politika odgovornega razkrivanja (Responsible Disclosure Policy)",
+    "follow": "Spremljaj nas na",
+    "go-to": "Pojdi na povezavo",
+    "go-to-pagopa": "Povezava: pojdi na spletno stran PagoPA S.p.A.",
+    "legal-part-1": "delniška družba z edinim družbenikom - osnovni kapital 1.000.000 evrov v celoti vplačan - sedež v Rimu, Piazza Colonna 370",
+    "legal-part-2": "CAP 00187 - št. vpisa v Register podjetij v Rimu, davčna in ID številka 15376371009",
+    "personal-data": "Pravica do varstva osebnih podatkov",
+    "privacy-info": "Izjava o zasebnosti",
+    "products-title": "Izdelki in storitve",
+    "resources": "Viri",
+    "security": "Varnost informacij",
+    "sercq-service-statement": "Service practice statement - SERCQ",
+    "social": "Povezava: pojdi na spletno stran {{social}} PagoPA S.p.A.",
+    "terms-conditions": "Splošni pogoji",
+    "who": "Kdo smo",
+    "work": "Delo pri nas"
+  },
+  "header": {
+    "assistance": "Pomoč",
+    "login": "Prijava",
+    "logout": "Odjava",
+    "logout-message": "Ali želiš potrditi izhod iz SEND?",
+    "pago-pa-link": "Spletna stran PagoPA S.p.A."
+  },
+  "inactivity": {
+    "action": "Ohrani dostop",
+    "body": "Prekinitev povezave je v teku. Če si si premislil, pritisni »Ohrani dostop« v nekaj sekundah.",
+    "title": "Ali se res želiš odjaviti iz SEND?"
+  },
+  "iun": "Koda IUN",
+  "leaving-app": {
+    "message": "Preusmerjen boš",
+    "title": "Zapuščaš SEND"
+  },
+  "loading": "Nalaganje poteka",
+  "logo": "Logotip",
+  "menu": {
+    "app-status": "Status platforme",
+    "contacts": "Tvoji kontaktni podatki",
+    "deleghe": "Pooblastila",
+    "notifiche": "Prejeto",
+    "notifiche-delegato": "Prejeto za {{delegator}}",
+    "notifiche-utente": "Prejeto za vas",
+    "profilo": "Tvoji podatki"
+  },
+  "messages": {
+    "401-message": "Trenutni uporabnik nima pooblastil",
+    "401-title": "Nepooblaščen uporabnik",
+    "403-message": "Vstopi in se prijavi s SPID ali CIE.",
+    "403-title": "Seja je potekla",
+    "404-message": "Prišlo je do napake. Prosimo, poskusi pozneje",
+    "404-title": "Vir ni najden",
+    "451-message": "Dostop do platforme ni možen",
+    "451-title": "Platforma ni dostopna",
+    "500-message": "Zaradi začasne težave s storitvijo tvoja zahteva ni bila poslana. Prosimo, poskusi pozneje.",
+    "500-title": "Storitev ni na voljo",
+    "generic-api-error-action-text": "Ponovno naloži",
+    "generic-api-error-main-text": "Teh podatkov nismo mogli pridobiti.",
+    "generic-message": "Prišlo je do napake. Prosimo, poskusi pozneje",
+    "generic-title": "Splošna napaka",
+    "generic-token-exchange-problem": "Prijave ni bilo mogoče dokončati",
+    "invalid-token-title": "Zaradi tehnične težave se ne moreš prijaviti - neveljaven žeton",
+    "lacking-grants-for-app-title": "Nisi pooblaščen za dostop"
+  },
+  "no-spaces-at-edges": "Odstrani presledke na začetku ali na koncu",
+  "not-accessible": {
+    "action": "obišči namensko spletno stran",
+    "description": "SEND je trenutno v fazi preizkušanja in še ni na voljo. Za več informacij o pobudi,",
+    "title": "Dostop do platforme ni možen"
+  },
+  "not-available": "Ni na voljo",
+  "not-found": {
+    "back-to-home": "Nazaj na domačo stran",
+    "description": "Stran, do katere si želel dostopati, ne obstaja ali ni več na voljo.",
+    "title": "To, kar si iskal, ni tukaj."
+  },
+  "not-logged": "Prijavi se v SEND",
+  "not-logged-subtitle": "Za ogled in upravljanje svojih obvestil se prijavi s SPID ali CIE.",
+  "paginator": {
+    "aria-label": "Meni za oštevilčenje strani",
+    "first": "prvi element",
+    "last": "zadnji element",
+    "next": "Pojdi na naslednjo stran",
+    "page": "stran",
+    "previous": "Pojdi na prejšnjo stran",
+    "rows-per-page": "Vrstice na stran",
+    "selected": "izbran element"
+  },
+  "required-field": "Obvezno polje",
+  "required-fields": "*Obvezna polja",
+  "table": {
+    "aria-label": "Tabela predmetov"
+  },
+  "toast": {
+    "aria-label": "Ikona za zapiranje obvestila"
+  },
+  "too-long-field-error": "Vnesi največ {{maxLength}} znakov",
+  "tos": {
+    "body": "Za prijavo sprejmi Splošne pogoje uporabe storitve in preberi Izjavo o zasebnosti.",
+    "button": "Prijava",
+    "redo-body": "Splošni pogoji uporabe storitve in Izjava o zasebnosti so se spremenili. Za prijavo sprejmi in potrdi, da si prebral nove različice.",
+    "switch-label": "Sprejmem <1>Splošne pogoje uporabe<\/1> in potrjujem, da sem prebral <0>Izjavo o zasebnosti<\/0>",
+    "title": "SEND - Servizio Notifiche Digitali"
+  },
   "user-validation-failed": {
-    "title": "Vneseni podatki niso veljavni",
+    "cta": "Stopite v stik s podporo",
     "description": "Eden ali več podatkov, povezanih z vašim uporabniškim računom, ni veljavnih; za rešitev težave stopite v stik s podporo.",
-    "cta": "Stopite v stik s podporo"
+    "title": "Vneseni podatki niso veljavni"
   },
-  "autocomplete": {
-    "clear": "Odstrani izbrane možnosti",
-    "toggle-open": "Odpri meni z možnostmi",
-    "toggle-close": "Zapri meni z možnostmi",
-    "selection-box": "Izbrane možnosti",
-    "selection-done": "%s izbranih",
-    "delete-selection": "Odstrani %s"
+  "validation": {
+    "invalid-characters-not-inserted": "Neveljavni znaki niso bili vneseni.",
+    "search-pattern-length-limit": "največ {{maxLength}} znakov za iskanje"
   },
-  "not-available": "Ni na voljo"
+  "wizard": {
+    "stepper": {
+      "activeStep": "Korak {{currentStep}}",
+      "of": "{{currentStep}} od {{totalSteps}}"
+    }
+  }
 }
