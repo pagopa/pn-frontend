@@ -104,10 +104,6 @@
       "title": "Error",
       "message": "Delegation not found"
     },
-    "delivery_mandate_not_found": {
-      "title": "Error",
-      "message": "This delegation is no longer active."
-    },
     "already_exists": {
       "title": "Delegation already present",
       "message": "The person you indicated already has a delegation. Delete it and create a new one."
@@ -127,10 +123,6 @@
     "fiscal_code": {
       "title": "Invalid tax code",
       "message": "The entered tax code is not valid"
-    },
-    "invalid_parameter": {
-      "title": "Invalid data",
-      "message": "One or more of the data items entered is invalid"
     }
   }
 }

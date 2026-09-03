@@ -1,5 +1,4 @@
 {
-  "title": "Vaša obvestila",
   "go-to-detail": "Pojdi na podrobnosti",
   "table": {
     "data": "Datum",
@@ -129,8 +128,8 @@
       "f24-download-error": "Prenos ni uspel. Poskusite znova.",
       "status": {
         "title": "Stanje",
-        "succeded": "Plačano",
-        "succeded-tooltip": "Plačilo je bilo uspešno poslano.",
+        "succeeded": "Plačano",
+        "succeeded-tooltip": "Plačilo je bilo uspešno poslano.",
         "failed": "Zapadlo",
         "failed-tooltip": "Obvestilo je poteklo in ga ni več mogoče plačati. Za več informacij se obrnite na organizacijo pošiljateljico.",
         "inprogress": "V pripravi",
@@ -430,7 +429,6 @@
       "action": "Preglej vzorce"
     }
   },
-  "delegatorTitle": "Prejeto za {{name}}",
   "status": {
     "recipient": "prejemnik",
     "delegate": "pooblaščenec {{name}}",

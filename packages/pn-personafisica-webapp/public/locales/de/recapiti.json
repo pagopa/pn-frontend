@@ -127,7 +127,7 @@
             "textDisabled": "E-Mail-Adresse hinzufügen"
           },
           "io": {
-            "title-app-io": "IO, die App der öffentlichen Dienste",
+            "title": "IO, die App der öffentlichen Dienste",
             "textDisabled": "SEND mit IO verbinden",
             "textEnabled": "SEND-Dienst aktiviert"
           },

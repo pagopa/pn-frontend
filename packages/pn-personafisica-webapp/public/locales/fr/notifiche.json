@@ -1,5 +1,4 @@
 {
-  "title": "Vos notifications",
   "go-to-detail": "Voir le détail",
   "table": {
     "data": "Date",
@@ -129,8 +128,8 @@
       "f24-download-error": "Le téléchargement a échoué. Réessayer.",
       "status": {
         "title": "Statut",
-        "succeded": "Payé",
-        "succeded-tooltip": "Le paiement a bien été envoyé.",
+        "succeeded": "Payé",
+        "succeeded-tooltip": "Le paiement a bien été envoyé.",
         "failed": "Expiré",
         "failed-tooltip": "L’alerte a expiré et il n’est plus possible de la payer. Pour plus d’informations, contactez l’organisme expéditeur.",
         "inprogress": "En cours de traitement",
@@ -430,7 +429,6 @@
       "action": "Consulte les modèles"
     }
   },
-  "delegatorTitle": "Boîte de réception pour {{name}}",
   "status": {
     "recipient": "destinataire",
     "delegate": "délégué {{name}}",

@@ -127,7 +127,7 @@
             "textDisabled": "Dodaj e-pošto"
           },
           "io": {
-            "title-app-io": "IO, aplikacija za javne storitve",
+            "title": "IO, aplikacija za javne storitve",
             "textDisabled": "Poveži SEND z IO",
             "textEnabled": "Storitev SEND aktivirana"
           },

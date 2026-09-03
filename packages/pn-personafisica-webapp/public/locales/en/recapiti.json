@@ -127,7 +127,7 @@
             "textDisabled": "Add email"
           },
           "io": {
-            "title-app-io": "IO, the public services app",
+            "title": "IO, the public services app",
             "textDisabled": "Connect SEND to IO",
             "textEnabled": "SEND service activated"
           },

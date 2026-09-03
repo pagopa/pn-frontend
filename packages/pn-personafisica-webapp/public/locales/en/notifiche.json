@@ -1,5 +1,4 @@
 {
-  "title": "Your notifications",
   "go-to-detail": "Go to details",
   "table": {
     "data": "Date",
@@ -129,8 +128,8 @@
       "f24-download-error": "The download was not successful. Try again.",
       "status": {
         "title": "Status",
-        "succeded": "Paid",
-        "succeded-tooltip": "The payment has been sent successfully.",
+        "succeeded": "Paid",
+        "succeeded-tooltip": "The payment has been sent successfully.",
         "failed": "Expired",
         "failed-tooltip": "The notification has expired and it can no longer be paid. For more information, contact the sender.",
         "inprogress": "Processing",
@@ -430,7 +429,6 @@
       "action": "Consult the templates"
     }
   },
-  "delegatorTitle": "Inbox for {{name}}",
   "status": {
     "recipient": "recipient",
     "delegate": "delegate {{name}}",

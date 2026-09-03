@@ -127,7 +127,7 @@
             "textDisabled": "Ajouter un e-mail"
           },
           "io": {
-            "title-app-io": "IO, l'application des services publics",
+            "title": "IO, l'application des services publics",
             "textDisabled": "Connecter SEND à IO",
             "textEnabled": "Service SEND activé"
           },
