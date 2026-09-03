@@ -48,7 +48,6 @@
     "iun": "IUN code",
     "groups": "Groups",
     "status": "Status",
-    "show-detail": "See details",
     "aria-action-table": "Open notification with IUN: {{iun}}",
     "open": "Open"
   },

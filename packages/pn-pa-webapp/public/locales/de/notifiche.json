@@ -48,7 +48,6 @@
     "iun": "IUN-Code",
     "groups": "Gruppen",
     "status": "Status",
-    "show-detail": "Siehe Detail",
     "aria-action-table": "Zustellung mit IUN öffnen: {{iun}}",
     "open": "Öffnen"
   },

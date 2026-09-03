@@ -48,7 +48,6 @@
     "iun": "Koda IUN",
     "groups": "Skupine",
     "status": "Država",
-    "show-detail": "Ogled podrobnosti",
     "aria-action-table": "Odpri obvestilo z IUN: {{iun}}",
     "open": "Odpri"
   },

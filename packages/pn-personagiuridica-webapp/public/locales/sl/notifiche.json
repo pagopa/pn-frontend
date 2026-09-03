@@ -124,8 +124,8 @@
       "error-payment-failed-multiple": "Prišlo je do težave z več obvestili o plačilu. Pritisnite Ponovno naloži za nov poskus. Če se napaka ponovi, se obrnite na podporo.",
       "status": {
         "title": "Stanje",
-        "succeded": "Plačano",
-        "succeded-tooltip": "Vaše plačilo je bilo uspešno poslano.",
+        "succeeded": "Plačano",
+        "succeeded-tooltip": "Vaše plačilo je bilo uspešno poslano.",
         "failed": "Zapadlo",
         "failed-tooltip": "Opozorilo je poteklo in ga ni več mogoče plačati. Za več informacij se obrnite na ustanovo pošiljateljico.",
         "inprogress": "V pripravi",
