@@ -1,262 +1,268 @@
 {
-  "iun": "IUN-Code",
-  "logo": "Logo von",
-  "button": {
-    "filtra": "Filtern",
-    "annulla filtro": "Filter entfernen",
-    "indietro": "Zurück",
-    "associa": "Zuordnen",
-    "capito": "Verstanden",
-    "conferma": "Bestätigen",
-    "attiva": "Aktivieren",
-    "annulla": "Abbrechen",
-    "modifica": "Bearbeiten",
-    "salva": "Speichern",
-    "elimina": "Löschen",
-    "enter": "Zugreifen",
-    "exit": "Abmelden",
-    "close": "Schließen",
-    "end": "Ende",
-    "enable": "Aktivieren",
-    "disable": "Deaktivieren",
-    "go-to-home": "Zur Startseite",
-    "go-to-login": "Anmelden",
-    "manage": "Verwalten",
-    "start": "Starten",
-    "continue": "Weiter",
-    "not-now": "Nicht jetzt",
-    "do-later": "Später erledigen",
-    "add": "Hinzufügen",
-    "understand": "OK, verstanden"
-  },
-  "menu": {
-    "notifiche": "Posteingang",
-    "notifiche-impresa": "Posteingang für {{organization}}",
-    "notifiche-delegato": "Posteingang aus Vollmachten",
-    "deleghe": "Vollmachten",
-    "profilo": "Deine Daten",
-    "contacts": "Anschriften",
-    "integrazione-api": "API-Integration",
-    "app-status": "Plattformstatus",
-    "users": "Benutzer",
-    "groups": "Gruppen"
-  },
-  "header": {
-    "assistance": "Hilfe",
-    "login": "Anmelden",
-    "product": {
-      "organization-dashboard": "Dein Unternehmen",
-      "notification-platform": "SEND - Servizio Notifiche Digitali"
-    },
-    "logout-message": "Bestätigen Sie, dass Sie sich von SEND abmelden möchten?",
-    "logout": "Abmelden",
-    "pago-pa-link": "Website von PagoPA S.p.A."
-  },
-  "tos": {
-    "title": "SEND - Servizio Notifiche Digitali",
-    "body": "Um darauf zuzugreifen, lese und akzeptiere die Nutzungsbedingungen und die Datenschutzerklärung.",
-    "redo-body": "Die Nutzungsbedingungen für den Dienst und die Datenschutzerklärung haben sich geändert. Um zuzugreifen, akzeptiere und bestätige, dass du die neuen Versionen gelesen hast.",
-    "switch-label": "Ich akzeptiere die <1>Nutzungsbedingungen</1> und bestätige, dass ich die<0>Datenschutzerklärung</0> gelesen habe",
-    "button": "Anmelden"
-  },
-  "table": {
-    "aria-label": "Item-Tabelle"
-  },
-  "paginator": {
-    "aria-label": "Menü Seite",
-    "first": "Erstes Element",
-    "last": "Letztes Element",
-    "page": "Seite ",
-    "next": "Zur nächsten Seite",
-    "previous": "Zur vorherigen Seite",
-    "selected": "ausgewähltes Element",
-    "rows-per-page": "Zeilen pro Seite"
-  },
-  "toast": {
-    "aria-label": "Symbol zum Schließen von Toast"
-  },
-  "date-picker": {
-    "left-arrow": "Zum Vormonat",
-    "right-arrow": "Zum nächsten Monat",
-    "switch-to-year": "Kalendermodus aktiv, wechselt in den Jahreswahlmodus",
-    "switch-to-calendar": "Jahreswahlmodus aktiv, wechselt in den Kalendermodus",
-    "select-date": "Datum wählen",
-    "date-selected": "Datum wählen, das gewählte Datum ist {{date}} "
-  },
-  "date-time": {
-    "today-uppercase-initial": "Heute",
-    "hour-of-day": "Stunden"
-  },
-  "error-boundary": {
-    "title": "Etwas ist schief gelaufen",
-    "description": "Die Seite konnte nicht geladen werden. Seite neu laden oder später nochmal versuchen.",
-    "action": "Seite neu laden"
-  },
-  "not-accessible": {
-    "title": "Zugriff auf die Plattform nicht möglich",
-    "description": "SEND befindet sich derzeit in der Testphase und ist noch nicht verfügbar. Weitere Informationen dazu ",
-    "action": "auf der entsprechenden Website"
-  },
   "access-denied": "Du bist für den Zugriff auf diese Seite nicht berechtigt",
-  "not-logged": "Auf SEND zugreifen",
-  "not-logged-subtitle": "Melde dich mit SPID oder CIE an, um Bescheide anzuzeigen oder zu verwalten.",
-  "loading": "Wird geladen",
-  "not-found": {
-    "title": "Was Sie gesucht haben, ist nicht hier.",
-    "description": "Die Seite, die Sie aufzurufen versucht haben, existiert nicht oder ist nicht mehr verfügbar.",
-    "back-to-home": "Zur Startseite"
+  "autocomplete": {
+    "clear": "Ausgewählte Optionen entfernen",
+    "delete-selection": "Entferne %s",
+    "selection-box": "Ausgewählte Optionen",
+    "selection-done": "%s ausgewählt",
+    "toggle-close": "Schließe das Auswahlmenü",
+    "toggle-open": "Öffne das Auswahlmenü"
   },
-  "leaving-app": {
-    "title": "Du verlässt SEND",
-    "message": "Du wirst weitergeleitet"
-  },
-  "error-when-fetching-tos-status": {
-    "title": "Probleme beim Zugriff auf SEND",
-    "message": "Bitte später erneut versuchen"
-  },
-  "messages": {
-    "404-title": "Quelle nicht gefunden",
-    "404-message": "Es ist ein Fehler aufgetreten. Bitte versuche es später erneut",
-    "403-title": "Sitzung abgelaufen",
-    "403-message": "Melde dich mit SPID oder CIE an.",
-    "401-title": "Unberechtigter Benutzer",
-    "401-message": "Der aktuelle Benutzer hat keine Berechtigungen",
-    "451-title": "Plattform nicht zugänglich",
-    "451-message": "Zugriff auf die Plattform nicht möglich",
-    "500-title": "Dienst nicht erreichbar",
-    "500-message": "Aufgrund eines vorübergehenden Problems wurde deine Anfrage nicht gesendet. Versuche es später noch einmal.",
-    "lacking-grants-for-app-title": "Du bist nicht zur Anmeldung berechtigt",
-    "invalid-token-title": "Anmeldung wegen technischem Problem nicht möglich - Token ungültig",
-    "generic-token-exchange-problem": "Die Anmeldung konnte nicht abgeschlossen werden",
-    "generic-title": "Allgemeiner Fehler",
-    "generic-message": "Es ist ein Fehler aufgetreten. Bitte versuche es später erneut",
-    "generic-api-error-main-text": "Wir konnten diese Daten nicht wiederherstellen.",
-    "generic-api-error-action-text": "Erneut laden"
-  },
-  "footer": {
-    "go-to-pagopa": "Gehe auf die Website von PagoPA S.p.A.",
-    "go-to": "Zum Link",
-    "privacy-info": "Datenschutzerklärung",
-    "who": "Über uns",
-    "work": "Karriere",
-    "certifications": "Zertifizierungen",
-    "security": "Informationssicherheit",
-    "personal-data": "Recht auf Schutz personenbezogener Daten",
-    "cookie": "Cookie-Einstellungen",
-    "terms-conditions": "Allgemeine Geschäftsbedingungen",
-    "company": "Transparente Gesellschaft",
-    "disclosure": "Responsible Disclosure Policy",
-    "321-model": "Vordruck 231",
-    "sercq-service-statement": "Service practice statement - SERCQ",
-    "accessibility": "Zugänglichkeit",
-    "social": "Gehe auf die Website {{social}} von PagoPA S.p.A.",
-    "resources": "Quellen",
-    "follow": "Folge uns auf",
-    "legal-part-1": "Aktiengesellschaft mit einem einzigen Gesellschafter - voll eingezahltes Grundkapital von 1.000.000 Euro - eingetragener Sitz in Rom, Piazza Colonna 370",
-    "legal-part-2": "PLZ 00187 – Eintrag im Handelsregister von Rom Nr., Steuernummer und USt-IdNr. 15376371009"
-  },
-  "required-fields": "*Pflichtfelder",
-  "too-long-field-error": "Maximal {{maxLength}} Zeichen",
-  "validation": {
-    "search-pattern-length-limit": "Suche max. {{maxLength}} Zeichen",
-    "invalid-characters-not-inserted": "Ungültige Zeichen wurden nicht eingegeben."
-  },
-  "errors": {
-    "technical-error": {
-      "title": "Fehlerinformationen",
-      "copy-to-clipboard": "Fehlerinformationen kopieren"
-    },
-    "bad_request": {
-      "title": "Fehler beim Senden der Daten",
-      "message": "Format der Anfrage ungültig."
-    },
-    "unauthorized": {
-      "title": "Unberechtigter Benutzer",
-      "message": "Der aktuelle Benutzer hat keine Berechtigungen."
-    },
-    "unavailable_legal_reasons": {
-      "title": "Plattform nicht zugänglich",
-      "message": "Zugriff auf die Plattform nicht möglich"
-    },
-    "forbidden": {
-      "title": "Sitzung abgelaufen",
-      "message": "Melde dich mit SPID oder CIE an."
-    },
-    "not_found": {
-      "title": "Quelle nicht gefunden",
-      "message": "Es ist ein Fehler aufgetreten. Bitte später erneut versuchen."
-    },
-    "internal_server": {
-      "title": "Dienst nicht erreichbar",
-      "message": "Aufgrund eines vorübergehenden Problems wurde deine Anfrage nicht gesendet. Versuche es später noch einmal."
-    },
-    "unhandled": {
-      "title": "Allgemeiner Fehler",
-      "message": "Es ist ein Fehler aufgetreten. Bitte später erneut versuchen."
-    },
-    "unknown": {
-      "title": "Fehler",
-      "message": "Unerwarteter Fehler"
-    },
-    "invalid_type_code": {
-      "title": "Dieses Feld akzeptiert nur numerische Werte",
-      "message": "Überprüfen Sie den Verifizierungscode und geben Sie ihn erneut ein"
-    },
-    "empty_code": {
-      "title": "Code fehlt oder ist unvollständig",
-      "message": "Der eingegebene Code ist unvollständig. Geben Sie einen 5-stelligen Code ein."
-    },
-    "invalid_body": {
-      "title": "Die Daten sind ungültig",
-      "message": "Beim Senden Ihrer Daten ist ein Fehler aufgetreten. Überprüfen Sie, ob sie korrekt sind, keine Leerzeichen oder Sonderzeichen enthalten, und versuchen Sie es erneut. Wenn der Fehler weiterhin auftritt, wenden Sie sich an den Support und teilen Sie die Fehlerinformationen mit."
-    },
-    "invalid_parameter": {
-      "title": "Ungültige Daten",
-      "message": "Eines oder mehrere der eingegebenen Daten sind ungültig"
-    }
-  },
-  "roles": {
-    "pg-operator": "Sachbearbeiter",
-    "pg-admin": "Administrator"
-  },
-  "required-field": "Pflichtfeld",
   "badges": {
     "news": "Neuigkeiten"
+  },
+  "button": {
+    "add": "Hinzufügen",
+    "annulla": "Abbrechen",
+    "annulla filtro": "Filter entfernen",
+    "associa": "Zuordnen",
+    "attiva": "Aktivieren",
+    "capito": "Verstanden",
+    "close": "Schließen",
+    "conferma": "Bestätigen",
+    "continue": "Weiter",
+    "disable": "Deaktivieren",
+    "do-later": "Später erledigen",
+    "elimina": "Löschen",
+    "enable": "Aktivieren",
+    "end": "Ende",
+    "enter": "Zugreifen",
+    "exit": "Abmelden",
+    "filtra": "Filtern",
+    "go-to-home": "Zur Startseite",
+    "go-to-login": "Anmelden",
+    "indietro": "Zurück",
+    "manage": "Verwalten",
+    "modifica": "Bearbeiten",
+    "not-now": "Nicht jetzt",
+    "salva": "Speichern",
+    "start": "Starten",
+    "understand": "OK, verstanden"
+  },
+  "code-modal": {
+    "digits": [
+      "Erste Ziffer",
+      "Zweite Ziffer",
+      "Dritte Ziffer",
+      "Vierte Ziffer",
+      "Letzte Ziffer"
+    ]
   },
   "conjunctions": {
     "or": "oder"
   },
-  "downtime_language_banner": {
-    "message": "Der Originaltext dieser Dokumente ist auf Italienisch. Bei Abweichungen zwischen der italienischen Fassung und den Übersetzungen in andere Sprachen sind die Bedeutung und die Bestimmungen der italienischen Sprache maßgebend.",
-    "link": "Übersetzungen konsultieren"
+  "date-picker": {
+    "date-selected": "Datum wählen, das gewählte Datum ist {{date}} ",
+    "left-arrow": "Zum Vormonat",
+    "right-arrow": "Zum nächsten Monat",
+    "select-date": "Datum wählen",
+    "switch-to-calendar": "Jahreswahlmodus aktiv, wechselt in den Kalendermodus",
+    "switch-to-year": "Kalendermodus aktiv, wechselt in den Jahreswahlmodus"
   },
-  "no-spaces-at-edges": "Lösche die Leerzeichen am Anfang oder Ende",
-  "wizard": {
-    "stepper": {
-      "of": "{{currentStep}} von {{totalSteps}}",
-      "activeStep": "Schritt {{currentStep}}"
+  "date-time": {
+    "hour-of-day": "Stunden",
+    "today-uppercase-initial": "Heute"
+  },
+  "downtime_language_banner": {
+    "link": "Übersetzungen konsultieren",
+    "message": "Der Originaltext dieser Dokumente ist auf Italienisch. Bei Abweichungen zwischen der italienischen Fassung und den Übersetzungen in andere Sprachen sind die Bedeutung und die Bestimmungen der italienischen Sprache maßgebend."
+  },
+  "error-boundary": {
+    "action": "Seite neu laden",
+    "description": "Die Seite konnte nicht geladen werden. Seite neu laden oder später nochmal versuchen.",
+    "title": "Etwas ist schief gelaufen"
+  },
+  "error-when-fetching-tos-status": {
+    "message": "Bitte später erneut versuchen",
+    "title": "Probleme beim Zugriff auf SEND"
+  },
+  "errors": {
+    "bad_request": {
+      "message": "Format der Anfrage ungültig.",
+      "title": "Fehler beim Senden der Daten"
+    },
+    "empty_code": {
+      "message": "Der eingegebene Code ist unvollständig. Geben Sie einen 5-stelligen Code ein.",
+      "title": "Code fehlt oder ist unvollständig"
+    },
+    "forbidden": {
+      "message": "Melde dich mit SPID oder CIE an.",
+      "title": "Sitzung abgelaufen"
+    },
+    "internal_server": {
+      "message": "Aufgrund eines vorübergehenden Problems wurde deine Anfrage nicht gesendet. Versuche es später noch einmal.",
+      "title": "Dienst nicht erreichbar"
+    },
+    "invalid_body": {
+      "message": "Beim Senden Ihrer Daten ist ein Fehler aufgetreten. Überprüfen Sie, ob sie korrekt sind, keine Leerzeichen oder Sonderzeichen enthalten, und versuchen Sie es erneut. Wenn der Fehler weiterhin auftritt, wenden Sie sich an den Support und teilen Sie die Fehlerinformationen mit.",
+      "title": "Die Daten sind ungültig"
+    },
+    "invalid_parameter": {
+      "message": "Eines oder mehrere der eingegebenen Daten sind ungültig",
+      "title": "Ungültige Daten"
+    },
+    "invalid_type_code": {
+      "message": "Überprüfen Sie den Verifizierungscode und geben Sie ihn erneut ein",
+      "title": "Dieses Feld akzeptiert nur numerische Werte"
+    },
+    "not_found": {
+      "message": "Es ist ein Fehler aufgetreten. Bitte später erneut versuchen.",
+      "title": "Quelle nicht gefunden"
+    },
+    "technical-error": {
+      "copy-to-clipboard": "Fehlerinformationen kopieren",
+      "title": "Fehlerinformationen"
+    },
+    "unauthorized": {
+      "message": "Der aktuelle Benutzer hat keine Berechtigungen.",
+      "title": "Unberechtigter Benutzer"
+    },
+    "unavailable_legal_reasons": {
+      "message": "Zugriff auf die Plattform nicht möglich",
+      "title": "Plattform nicht zugänglich"
+    },
+    "unhandled": {
+      "message": "Es ist ein Fehler aufgetreten. Bitte später erneut versuchen.",
+      "title": "Allgemeiner Fehler"
+    },
+    "unknown": {
+      "message": "Unerwarteter Fehler",
+      "title": "Fehler"
+    }
+  },
+  "footer": {
+    "321-model": "Vordruck 231",
+    "accessibility": "Zugänglichkeit",
+    "certifications": "Zertifizierungen",
+    "company": "Transparente Gesellschaft",
+    "cookie": "Cookie-Einstellungen",
+    "disclosure": "Responsible Disclosure Policy",
+    "follow": "Folge uns auf",
+    "go-to": "Zum Link",
+    "go-to-pagopa": "Gehe auf die Website von PagoPA S.p.A.",
+    "legal-part-1": "Aktiengesellschaft mit einem einzigen Gesellschafter - voll eingezahltes Grundkapital von 1.000.000 Euro - eingetragener Sitz in Rom, Piazza Colonna 370",
+    "legal-part-2": "PLZ 00187 – Eintrag im Handelsregister von Rom Nr., Steuernummer und USt-IdNr. 15376371009",
+    "personal-data": "Recht auf Schutz personenbezogener Daten",
+    "privacy-info": "Datenschutzerklärung",
+    "resources": "Quellen",
+    "security": "Informationssicherheit",
+    "sercq-service-statement": "Service practice statement - SERCQ",
+    "social": "Gehe auf die Website {{social}} von PagoPA S.p.A.",
+    "terms-conditions": "Allgemeine Geschäftsbedingungen",
+    "who": "Über uns",
+    "work": "Karriere"
+  },
+  "header": {
+    "assistance": "Hilfe",
+    "login": "Anmelden",
+    "logout": "Abmelden",
+    "logout-message": "Bestätigen Sie, dass Sie sich von SEND abmelden möchten?",
+    "pago-pa-link": "Website von PagoPA S.p.A.",
+    "product": {
+      "notification-platform": "SEND - Servizio Notifiche Digitali",
+      "organization-dashboard": "Dein Unternehmen"
     }
   },
   "inactivity": {
-    "title": "Möchten Sie sich wirklich von SEND abmelden?",
+    "action": "Angemeldet bleiben",
     "body": "Die Abmeldung läuft. Wenn Sie es sich anders überlegt haben, drücken Sie innerhalb weniger Sekunden „Angemeldet bleiben“.",
-    "action": "Angemeldet bleiben"
+    "title": "Möchten Sie sich wirklich von SEND abmelden?"
   },
-  "code-modal": {
-    "digits": ["Erste Ziffer", "Zweite Ziffer", "Dritte Ziffer", "Vierte Ziffer", "Letzte Ziffer"]
+  "iun": "IUN-Code",
+  "leaving-app": {
+    "message": "Du wirst weitergeleitet",
+    "title": "Du verlässt SEND"
+  },
+  "loading": "Wird geladen",
+  "logo": "Logo von",
+  "menu": {
+    "app-status": "Plattformstatus",
+    "contacts": "Anschriften",
+    "deleghe": "Vollmachten",
+    "groups": "Gruppen",
+    "integrazione-api": "API-Integration",
+    "notifiche": "Posteingang",
+    "notifiche-delegato": "Posteingang aus Vollmachten",
+    "notifiche-impresa": "Posteingang für {{organization}}",
+    "profilo": "Deine Daten",
+    "users": "Benutzer"
+  },
+  "messages": {
+    "401-message": "Der aktuelle Benutzer hat keine Berechtigungen",
+    "401-title": "Unberechtigter Benutzer",
+    "403-message": "Melde dich mit SPID oder CIE an.",
+    "403-title": "Sitzung abgelaufen",
+    "404-message": "Es ist ein Fehler aufgetreten. Bitte versuche es später erneut",
+    "404-title": "Quelle nicht gefunden",
+    "451-message": "Zugriff auf die Plattform nicht möglich",
+    "451-title": "Plattform nicht zugänglich",
+    "500-message": "Aufgrund eines vorübergehenden Problems wurde deine Anfrage nicht gesendet. Versuche es später noch einmal.",
+    "500-title": "Dienst nicht erreichbar",
+    "generic-api-error-action-text": "Erneut laden",
+    "generic-api-error-main-text": "Wir konnten diese Daten nicht wiederherstellen.",
+    "generic-message": "Es ist ein Fehler aufgetreten. Bitte versuche es später erneut",
+    "generic-title": "Allgemeiner Fehler",
+    "generic-token-exchange-problem": "Die Anmeldung konnte nicht abgeschlossen werden",
+    "invalid-token-title": "Anmeldung wegen technischem Problem nicht möglich - Token ungültig",
+    "lacking-grants-for-app-title": "Du bist nicht zur Anmeldung berechtigt"
+  },
+  "no-spaces-at-edges": "Lösche die Leerzeichen am Anfang oder Ende",
+  "not-accessible": {
+    "action": "auf der entsprechenden Website",
+    "description": "SEND befindet sich derzeit in der Testphase und ist noch nicht verfügbar. Weitere Informationen dazu ",
+    "title": "Zugriff auf die Plattform nicht möglich"
+  },
+  "not-available": "Nicht verfügbar",
+  "not-found": {
+    "back-to-home": "Zur Startseite",
+    "description": "Die Seite, die Sie aufzurufen versucht haben, existiert nicht oder ist nicht mehr verfügbar.",
+    "title": "Was Sie gesucht haben, ist nicht hier."
+  },
+  "not-logged": "Auf SEND zugreifen",
+  "not-logged-subtitle": "Melde dich mit SPID oder CIE an, um Bescheide anzuzeigen oder zu verwalten.",
+  "paginator": {
+    "aria-label": "Menü Seite",
+    "first": "Erstes Element",
+    "last": "Letztes Element",
+    "next": "Zur nächsten Seite",
+    "page": "Seite ",
+    "previous": "Zur vorherigen Seite",
+    "rows-per-page": "Zeilen pro Seite",
+    "selected": "ausgewähltes Element"
+  },
+  "required-field": "Pflichtfeld",
+  "required-fields": "*Pflichtfelder",
+  "roles": {
+    "pg-admin": "Administrator",
+    "pg-operator": "Sachbearbeiter"
+  },
+  "table": {
+    "aria-label": "Item-Tabelle"
+  },
+  "toast": {
+    "aria-label": "Symbol zum Schließen von Toast"
+  },
+  "too-long-field-error": "Maximal {{maxLength}} Zeichen",
+  "tos": {
+    "body": "Um darauf zuzugreifen, lese und akzeptiere die Nutzungsbedingungen und die Datenschutzerklärung.",
+    "button": "Anmelden",
+    "redo-body": "Die Nutzungsbedingungen für den Dienst und die Datenschutzerklärung haben sich geändert. Um zuzugreifen, akzeptiere und bestätige, dass du die neuen Versionen gelesen hast.",
+    "switch-label": "Ich akzeptiere die <1>Nutzungsbedingungen<\/1> und bestätige, dass ich die<0>Datenschutzerklärung<\/0> gelesen habe",
+    "title": "SEND - Servizio Notifiche Digitali"
   },
   "user-validation-failed": {
-    "title": "Die eingegebenen Daten sind ungültig",
+    "cta": "Support kontaktieren",
     "description": "Ein oder mehrere mit deinem Benutzerkonto verknüpfte Daten sind ungültig. Bitte kontaktiere den Support, um das Problem zu beheben.",
-    "cta": "Support kontaktieren"
+    "title": "Die eingegebenen Daten sind ungültig"
   },
-  "autocomplete": {
-    "clear": "Ausgewählte Optionen entfernen",
-    "toggle-open": "Öffne das Auswahlmenü",
-    "toggle-close": "Schließe das Auswahlmenü",
-    "selection-box": "Ausgewählte Optionen",
-    "selection-done": "%s ausgewählt",
-    "delete-selection": "Entferne %s"
+  "validation": {
+    "invalid-characters-not-inserted": "Ungültige Zeichen wurden nicht eingegeben.",
+    "search-pattern-length-limit": "Suche max. {{maxLength}} Zeichen"
   },
-  "not-available": "Nicht verfügbar"
+  "wizard": {
+    "stepper": {
+      "activeStep": "Schritt {{currentStep}}",
+      "of": "{{currentStep}} von {{totalSteps}}"
+    }
+  }
 }
