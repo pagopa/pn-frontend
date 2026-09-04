@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router-dom';
 
-import { Box, DialogTitle, useTheme } from '@mui/material';
+import { Box, DialogTitle } from '@mui/material';
 import {
   A11yMessageAnnouncer,
   APP_VERSION,
@@ -107,7 +107,6 @@ const ActualApp = () => {
     (state: RootState) => state.userState
   );
   const { pathname } = useLocation();
-  const theme = useTheme();
 
   const sessionToken = loggedUser.sessionToken;
   const jwtUser = useMemo(
@@ -286,7 +285,6 @@ const ActualApp = () => {
         hasTermsOfService={true}
         accessibilityLink={ACCESSIBILITY_LINK}
         sercqServiceStatementLink={SERCQ_SERVICE_STATEMENT_LINK}
-        theme={theme}
       >
         <PnDialog open={openModal}>
           <DialogTitle sx={{ mb: 2 }}>{t('header.logout-message')}</DialogTitle>
