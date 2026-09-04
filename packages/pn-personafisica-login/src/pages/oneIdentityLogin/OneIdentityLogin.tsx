@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
-import { Box, Divider, Grid, Link, Typography } from '@mui/material';
+import { Box, Divider, Grid, Link, Typography, useTheme } from '@mui/material';
 import {
   AppRouteParams,
   Layout,
@@ -31,6 +31,8 @@ const OneIdentityLogin: React.FC = () => {
   const { t, i18n } = useTranslation(['login']);
   const isMobile = useIsMobile();
   const navigate = useNavigate();
+  const theme = useTheme();
+
   const rapidAccess = useRapidAccessParam();
   const {
     PAGOPA_HELP_EMAIL,
@@ -146,6 +148,7 @@ const OneIdentityLogin: React.FC = () => {
               : undefined,
           },
         }}
+        theme={theme}
       >
         <Box sx={{ position: { xs: 'sticky', lg: 'static' }, top: 0, bgcolor: 'white', zIndex: 1 }}>
           <Box px={3} py={2}>

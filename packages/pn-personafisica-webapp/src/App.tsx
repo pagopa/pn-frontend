@@ -10,7 +10,7 @@ import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded';
 import MailOutlineRoundedIcon from '@mui/icons-material/MailOutlineRounded';
 import MarkunreadMailboxRoundedIcon from '@mui/icons-material/MarkunreadMailboxRounded';
 import SettingsRoundedIcon from '@mui/icons-material/SettingsRounded';
-import { Box, DialogTitle } from '@mui/material';
+import { Box, DialogTitle, useTheme } from '@mui/material';
 import {
   A11yMessageAnnouncer,
   APP_VERSION,
@@ -88,6 +88,7 @@ const App = () => {
   const currentStatus = useAppSelector((state: RootState) => state.appStatus.currentStatus);
   const navigate = useNavigate();
   const { pathname } = useLocation();
+  const theme = useTheme();
   const { MIXPANEL_TOKEN, PAGOPA_HELP_EMAIL, ACCESSIBILITY_LINK, SERCQ_SERVICE_STATEMENT_LINK } =
     getConfiguration();
 
@@ -330,6 +331,7 @@ const App = () => {
         enableAssistanceButton={showAssistanceButton}
         accessibilityLink={ACCESSIBILITY_LINK}
         sercqServiceStatementLink={SERCQ_SERVICE_STATEMENT_LINK}
+        theme={theme}
       >
         <PnDialog open={openModal}>
           <DialogTitle sx={{ mb: 2 }}>{t('header.logout-message')}</DialogTitle>

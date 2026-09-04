@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { Box, Button, Grid, Typography } from '@mui/material';
+import { useTheme } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import {
   Layout,
@@ -32,6 +33,7 @@ const Login = () => {
   const [showIDPS, setShowIDPS] = useState(false);
   const { t, i18n } = useTranslation(['login']);
   const isMobile = useIsMobile('md');
+  const theme = useTheme();
   const rapidAccess = useRapidAccessParam();
   const {
     URL_API_LOGIN,
@@ -113,6 +115,7 @@ const Login = () => {
               }
             : undefined
         }
+        theme={theme}
       >
         <Grid
           container
@@ -164,7 +167,7 @@ const Login = () => {
           >
             <Box
               sx={{
-                boxShadow: (theme) => theme.shadows[8],
+                boxShadow: theme.shadows[8],
                 borderRadius: '16px',
                 px: 1,
                 py: 3,

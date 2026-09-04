@@ -7,7 +7,7 @@ import EmailRounded from '@mui/icons-material/EmailRounded';
 import ErrorRoundedIcon from '@mui/icons-material/ErrorRounded';
 import HelpRoundedIcon from '@mui/icons-material/HelpRounded';
 import VpnKeyRoundedIcon from '@mui/icons-material/VpnKeyRounded';
-import { Box, DialogTitle } from '@mui/material';
+import { Box, DialogTitle, useTheme } from '@mui/material';
 import {
   A11yMessageAnnouncer,
   APP_VERSION,
@@ -124,7 +124,7 @@ const ActualApp = () => {
   const isSupportUser = useAppSelector(authSelectors.selectIsSupportUser);
   const dispatch = useAppDispatch();
   const { t, i18n } = useTranslation(['common', 'notifiche']);
-
+  const theme = useTheme();
   const reservedArea: ProductEntity = {
     id: 'selfcare',
     title: t('header.reserved-area'),
@@ -342,6 +342,7 @@ const ActualApp = () => {
         accessibilityLink={ACCESSIBILITY_LINK}
         chipLabel={isSupportUser ? t('header.support') : undefined}
         sercqServiceStatementLink={SERCQ_SERVICE_STATEMENT_LINK}
+        theme={theme}
       >
         <PnDialog open={openModal}>
           <DialogTitle sx={{ mb: 2 }}>{t('header.logout-message')}</DialogTitle>

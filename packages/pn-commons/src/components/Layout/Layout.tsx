@@ -65,6 +65,7 @@ type Props = {
     content?: Partial<StackProps>;
     main?: Partial<BoxOwnProps>;
   };
+  theme: Theme;
 };
 
 const Layout: React.FC<Props> = ({
@@ -96,6 +97,7 @@ const Layout: React.FC<Props> = ({
   enableAssistanceButton = true,
   chipLabel,
   slotsProps,
+  theme,
 }) => (
   <ErrorBoundary
     sx={{ height: 'calc(100vh - 5px)' }}
@@ -107,7 +109,7 @@ const Layout: React.FC<Props> = ({
       direction="column"
       sx={{
         minHeight: 'calc(100vh - 5px)',
-        background: (theme) => theme.palette.grey[100],
+        background: theme.palette.background.main,
       }} // 100vh per sticky footer
     >
       <>
