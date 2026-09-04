@@ -1,72 +1,45 @@
 {
+  "access-denied": "Non hai le autorizzazioni necessarie per accedere a questa pagina",
+  "attachments": {
+    "remove-attachment": "Elimina allegato"
+  },
+  "autocomplete": {
+    "clear": "Rimuovi opzioni selezionate",
+    "delete-selection": "Elimina %s",
+    "selection-box": "Opzioni selezionate",
+    "selection-done": "%s selezionati",
+    "toggle-close": "Chiudi menu selezione opzioni",
+    "toggle-open": "Apri menu selezione opzioni"
+  },
   "button": {
-    "filtra": "Filtra",
-    "annulla filtro": "Rimuovi filtri",
-    "indietro": "Indietro",
     "annulla": "Annulla",
+    "annulla filtro": "Rimuovi filtri",
+    "close": "Chiudi",
+    "continue": "Continua",
+    "delete": "Elimina",
     "enter": "Entra",
     "exit": "Esci",
-    "continue": "Continua",
-    "send": "Invia",
+    "filtra": "Filtra",
     "go-to-home": "Torna alla home page",
     "go-to-login": "Accedi",
-    "close": "Chiudi",
-    "delete": "Elimina"
-  },
-  "menu": {
-    "notifications-send": "Notifica con SEND",
-    "notifications": "Notifiche",
-    "users": "Utenti",
-    "groups": "Gruppi",
-    "api-key": "API Key",
-    "statistics": "Statistiche",
-    "app-status": "Stato della piattaforma"
-  },
-  "header": {
-    "assistance": "Assistenza",
-    "login": "Accedi",
-    "logout": "Esci",
-    "pago-pa-link": "Sito di PagoPA S.p.A.",
-    "reserved-area": "Area Riservata",
-    "notification-platform": "SEND - Servizio Notifiche Digitali",
-    "logout-message": "Confermi di voler uscire da Area Riservata?",
-    "support": "Supporto"
-  },
-  "tos": {
-    "title": "SEND - Servizio Notifiche Digitali",
-    "switch-label": "Accedendo, accetti i <0>Termini e condizioni d’uso</0> del servizio e confermi di aver letto l’<1>Informativa Privacy</1>.",
-    "button": "Accedi"
-  },
-  "table": {
-    "aria-label": "Tabella di item"
-  },
-  "paginator": {
-    "aria-label": "Menu Paginazione",
-    "first": "primo elemento",
-    "last": "ultimo elemento",
-    "page": "pagina",
-    "next": "Vai alla pagina successiva",
-    "previous": "Vai alla pagina precedente",
-    "selected": "elemento selezionato",
-    "rows-per-page": "Righe per pagina"
-  },
-  "toast": {
-    "aria-label": "Icona di chisura toast"
+    "indietro": "Indietro",
+    "send": "Invia"
   },
   "date-picker": {
+    "date-selected": "Scegli data, la data selezionata è {{date}}",
     "left-arrow": "Vai al mese precedente",
     "right-arrow": "Vai al mese successivo",
-    "switch-to-year": "modalità calendario attiva, passa alla modalità di scelta dell'anno",
-    "switch-to-calendar": "modalità di scelta dell'anno attiva, passa alla modalità calendario",
     "select-date": "Scegli data",
-    "date-selected": "Scegli data, la data selezionata è {{date}}"
+    "switch-to-calendar": "modalità di scelta dell'anno attiva, passa alla modalità calendario",
+    "switch-to-year": "modalità calendario attiva, passa alla modalità di scelta dell'anno"
   },
   "date-time": {
-    "today-uppercase-initial": "Oggi",
     "hour-of-day": "ore",
     "s-month": {
       "0": "gen",
       "1": "feb",
+      "10": "nov",
+      "11": "dic",
       "2": "mar",
       "3": "apr",
       "4": "mag",
@@ -74,149 +47,176 @@
       "6": "lug",
       "7": "ago",
       "8": "set",
-      "9": "ott",
-      "10": "nov",
-      "11": "dic"
-    }
-  },
-  "error-boundary": {
-    "title": "Qualcosa è andato storto",
-    "description": "Non siamo riusciti a caricare la pagina. Ricaricala, oppure prova più tardi.",
-    "action": "Ricarica la pagina"
-  },
-  "not-accessible": {
-    "title": "Non è possibile accedere alla piattaforma",
-    "description": "In questo momento SEND è in fase di collaudo e non è ancora disponibile. Se sei un Ente e hai completato l'adesione, riceverai aggiornamenti in merito alla data di attivazione della piattaforma. Per maggiori informazioni sull'iniziativa,",
-    "action": "visita il sito dedicato"
-  },
-  "access-denied": "Non hai le autorizzazioni necessarie per accedere a questa pagina",
-  "not-logged": "Accedi all'Area Riservata",
-  "not-logged-subtitle": "Per usare SEND, accedi all'Area Riservata con SPID o CIE. Poi, premi \"Gestisci\" nella card corrispondente.",
-  "not-found": {
-    "title": "Quello che cercavi non è qui.",
-    "description": "La pagina che hai tentato di raggiungere non esiste o non è più disponibile.",
-    "back-to-home": "Torna alla home"
-  },
-  "leaving-app": {
-    "title": "Stai uscendo da SEND",
-    "message": "Verrai reindirizzato"
-  },
-  "error-when-fetching-tos-status": {
-    "title": "Problemi nell'accesso in SEND",
-    "message": "Riprova più tardi"
-  },
-  "messages": {
-    "404-title": "Risorsa non trovata",
-    "404-message": "Si è verificato un errore. Si prega di riprovare più tardi",
-    "403-title": "La sessione è scaduta",
-    "403-message": "Entra e accedi con SPID o CIE.",
-    "401-title": "Utente non autorizzato",
-    "401-message": "L'utente corrente non ha le autorizzazioni",
-    "451-title": "Piattaforma non accessibile",
-    "451-message": "Non è possibile accedere alla piattaforma",
-    "500-title": "Il servizio non è disponibile",
-    "500-message": "Per un problema temporaneo del servizio, la tua richiesta non è stata inviata. Riprova più tardi.",
-    "lacking-grants-for-app-title": "Non sei autorizzato ad accedere",
-    "generic-token-exchange-problem": "Non è stato possibile completare l'accesso",
-    "error-in-initial-info-loading": "Non siamo riusciti a recuperare dati necessari per l'avvio dell'applicazione",
-    "invalid-token-title": "Non puoi accedere per un problema tecnico - token non valido",
-    "generic-title": "Errore generico",
-    "generic-message": "Si è verificato un errore. Si prega di riprovare più tardi",
-    "generic-api-error-main-text": "Non siamo riusciti a recuperare questi dati.",
-    "generic-api-error-action-text": "Ricarica"
-  },
-  "footer": {
-    "go-to-pagopa": "Vai al sito di PagoPA S.p.A.",
-    "go-to": "Vai al link",
-    "who": "Chi siamo",
-    "work": "Lavora con noi",
-    "certifications": "Certificazioni",
-    "security": "Sicurezza delle informazioni",
-    "privacy-info": "Informativa Privacy",
-    "personal-data": "Diritto alla protezione dei dati personali",
-    "cookie": "Preferenze Cookie",
-    "terms-conditions": "Termini e Condizioni",
-    "company": "Società trasparente",
-    "disclosure": "Responsible Disclosure Policy",
-    "321-model": "Modello 231",
-    "sercq-service-statement": "Service practice statement - SERCQ",
-    "accessibility": "Accessibilità",
-    "social": "Vai al sito {{social}} di PagoPA S.p.A.",
-    "resources": "Risorse",
-    "follow": "Seguici su",
-    "legal-part-1": "società per azioni con socio unico - capitale sociale di euro 1,000,000 interamente versato - sede legale in Roma, Piazza Colonna 370",
-    "legal-part-2": "CAP 00187 - n. di iscrizione a Registro Imprese di Roma, CF e P.IVA 15376371009"
-  },
-  "required-fields": "*Campi obbligatori",
-  "required-field": "Campo obbligatorio",
-  "required": "obbligatorio",
-  "too-long-field-error": "Scrivi massimo {{maxLength}} caratteri",
-  "too-short-field-error": "Scrivi minimo {{minLength}} caratteri",
-  "no-spaces-at-edges": "Elimina gli spazi all'inizio o alla fine",
-  "invalid": "non valido",
-  "loading": "Caricamento in corso",
-  "upload-file": {
-    "or": "oppure",
-    "select-file": "carica il file",
-    "loading": "Caricamento in corso...",
-    "sending": "Invio in corso...",
-    "hash-code": "Codice hash",
-    "hash-code-descr": "Il codice hash è un codice alfanumerico univoco utilizzato per identificare un determinato file",
-    "ext-not-supported": "Estensione file non supportata. Riprovare con un altro file.",
-    "file-size-exceeded": "Il file selezionato supera la dimensione massima di {{limit}}.",
-    "loading-error": "Si è verificato un errore durante il caricamento del file. Si prega di riprovare."
-  },
-  "roles": {
-    "operator": "Referente operativo",
-    "admin": "Amministratore",
-    "support": "Supporto"
-  },
-  "attachments": {
-    "remove-attachment": "Elimina allegato"
+      "9": "ott"
+    },
+    "today-uppercase-initial": "Oggi"
   },
   "downtime_language_banner": {
-    "message": "Il testo originario di questi documenti è in lingua italiana. In caso di contrasto tra la versione italiana e le traduzioni in altre lingue, prevarranno il significato e le condizioni della lingua italiana.",
-    "link": "Consulta le traduzioni"
+    "link": "Consulta le traduzioni",
+    "message": "Il testo originario di questi documenti è in lingua italiana. In caso di contrasto tra la versione italiana e le traduzioni in altre lingue, prevarranno il significato e le condizioni della lingua italiana."
   },
-  "inactivity": {
-    "title": "Vuoi davvero uscire da SEND?",
-    "body": "La disconnessione è in corso. Se hai cambiato idea premi “Mantieni l’accesso” entro pochi secondi.",
-    "action": "Mantieni l’accesso"
+  "error-boundary": {
+    "action": "Ricarica la pagina",
+    "description": "Non siamo riusciti a caricare la pagina. Ricaricala, oppure prova più tardi.",
+    "title": "Qualcosa è andato storto"
+  },
+  "error-when-fetching-tos-status": {
+    "message": "Riprova più tardi",
+    "title": "Problemi nell'accesso in SEND"
   },
   "errors": {
-    "technical-error": {
-      "title": "Informazioni errore",
-      "copy-to-clipboard": "Copia informazioni errore"
+    "internal_server": {
+      "message": "Il servizio non è disponibile a causa di un problema tecnico. Riprova più tardi. Se l’errore si ripete, contatta l’assistenza e comunica le informazioni errore.",
+      "title": "Si è verificato un errore"
     },
     "invalid_body": {
-      "title": "I dati non sono validi",
-      "message": "Si è verificato un errore durante l’invio dei dati. Controlla che siano corretti, senza spazi o caratteri speciali, e riprova. Se l’errore si ripete, contatta l’assistenza e comunica le informazioni errore."
+      "message": "Si è verificato un errore durante l’invio dei dati. Controlla che siano corretti, senza spazi o caratteri speciali, e riprova. Se l’errore si ripete, contatta l’assistenza e comunica le informazioni errore.",
+      "title": "I dati non sono validi"
     },
-    "internal_server": {
-      "title": "Si è verificato un errore",
-      "message": "Il servizio non è disponibile a causa di un problema tecnico. Riprova più tardi. Se l’errore si ripete, contatta l’assistenza e comunica le informazioni errore."
+    "technical-error": {
+      "copy-to-clipboard": "Copia informazioni errore",
+      "title": "Informazioni errore"
     },
     "unhandled": {
-      "title": "Si è verificato un errore",
-      "message": "Il servizio non è disponibile. Riprova più tardi. Se l’errore si ripete, contatta l’assistenza e comunica le informazioni errore."
+      "message": "Il servizio non è disponibile. Riprova più tardi. Se l’errore si ripete, contatta l’assistenza e comunica le informazioni errore.",
+      "title": "Si è verificato un errore"
     },
     "unknown": {
-      "title": "Si è verificato un errore",
-      "message": "Il servizio non è disponibile. Riprova più tardi. Se l’errore si ripete, contatta l’assistenza e comunica le informazioni errore."
+      "message": "Il servizio non è disponibile. Riprova più tardi. Se l’errore si ripete, contatta l’assistenza e comunica le informazioni errore.",
+      "title": "Si è verificato un errore"
     }
   },
+  "footer": {
+    "321-model": "Modello 231",
+    "accessibility": "Accessibilità",
+    "certifications": "Certificazioni",
+    "company": "Società trasparente",
+    "cookie": "Preferenze Cookie",
+    "disclosure": "Responsible Disclosure Policy",
+    "follow": "Seguici su",
+    "go-to": "Vai al link",
+    "go-to-pagopa": "Vai al sito di PagoPA S.p.A.",
+    "legal-part-1": "società per azioni con socio unico - capitale sociale di euro 1,000,000 interamente versato - sede legale in Roma, Piazza Colonna 370",
+    "legal-part-2": "CAP 00187 - n. di iscrizione a Registro Imprese di Roma, CF e P.IVA 15376371009",
+    "personal-data": "Diritto alla protezione dei dati personali",
+    "privacy-info": "Informativa Privacy",
+    "resources": "Risorse",
+    "security": "Sicurezza delle informazioni",
+    "sercq-service-statement": "Service practice statement - SERCQ",
+    "social": "Vai al sito {{social}} di PagoPA S.p.A.",
+    "terms-conditions": "Termini e Condizioni",
+    "who": "Chi siamo",
+    "work": "Lavora con noi"
+  },
+  "header": {
+    "assistance": "Assistenza",
+    "login": "Accedi",
+    "logout": "Esci",
+    "logout-message": "Confermi di voler uscire da Area Riservata?",
+    "notification-platform": "SEND - Servizio Notifiche Digitali",
+    "pago-pa-link": "Sito di PagoPA S.p.A.",
+    "reserved-area": "Area Riservata",
+    "support": "Supporto"
+  },
+  "inactivity": {
+    "action": "Mantieni l’accesso",
+    "body": "La disconnessione è in corso. Se hai cambiato idea premi “Mantieni l’accesso” entro pochi secondi.",
+    "title": "Vuoi davvero uscire da SEND?"
+  },
+  "invalid": "non valido",
+  "leaving-app": {
+    "message": "Verrai reindirizzato",
+    "title": "Stai uscendo da SEND"
+  },
+  "loading": "Caricamento in corso",
+  "menu": {
+    "api-key": "API Key",
+    "app-status": "Stato della piattaforma",
+    "groups": "Gruppi",
+    "notifications": "Notifiche",
+    "notifications-send": "Notifica con SEND",
+    "statistics": "Statistiche",
+    "users": "Utenti"
+  },
+  "messages": {
+    "401-message": "L'utente corrente non ha le autorizzazioni",
+    "401-title": "Utente non autorizzato",
+    "403-message": "Entra e accedi con SPID o CIE.",
+    "403-title": "La sessione è scaduta",
+    "404-message": "Si è verificato un errore. Si prega di riprovare più tardi",
+    "404-title": "Risorsa non trovata",
+    "451-message": "Non è possibile accedere alla piattaforma",
+    "451-title": "Piattaforma non accessibile",
+    "500-message": "Per un problema temporaneo del servizio, la tua richiesta non è stata inviata. Riprova più tardi.",
+    "500-title": "Il servizio non è disponibile",
+    "error-in-initial-info-loading": "Non siamo riusciti a recuperare dati necessari per l'avvio dell'applicazione",
+    "generic-api-error-action-text": "Ricarica",
+    "generic-api-error-main-text": "Non siamo riusciti a recuperare questi dati.",
+    "generic-message": "Si è verificato un errore. Si prega di riprovare più tardi",
+    "generic-title": "Errore generico",
+    "generic-token-exchange-problem": "Non è stato possibile completare l'accesso",
+    "invalid-token-title": "Non puoi accedere per un problema tecnico - token non valido",
+    "lacking-grants-for-app-title": "Non sei autorizzato ad accedere"
+  },
+  "no-spaces-at-edges": "Elimina gli spazi all'inizio o alla fine",
+  "not-accessible": {
+    "action": "visita il sito dedicato",
+    "description": "In questo momento SEND è in fase di collaudo e non è ancora disponibile. Se sei un Ente e hai completato l'adesione, riceverai aggiornamenti in merito alla data di attivazione della piattaforma. Per maggiori informazioni sull'iniziativa,",
+    "title": "Non è possibile accedere alla piattaforma"
+  },
+  "not-available": "Non disponibile",
+  "not-found": {
+    "back-to-home": "Torna alla home",
+    "description": "La pagina che hai tentato di raggiungere non esiste o non è più disponibile.",
+    "title": "Quello che cercavi non è qui."
+  },
+  "not-logged": "Accedi all'Area Riservata",
+  "not-logged-subtitle": "Per usare SEND, accedi all'Area Riservata con SPID o CIE. Poi, premi \"Gestisci\" nella card corrispondente.",
+  "paginator": {
+    "aria-label": "Menu Paginazione",
+    "first": "primo elemento",
+    "last": "ultimo elemento",
+    "next": "Vai alla pagina successiva",
+    "page": "pagina",
+    "previous": "Vai alla pagina precedente",
+    "rows-per-page": "Righe per pagina",
+    "selected": "elemento selezionato"
+  },
+  "required": "obbligatorio",
+  "required-field": "Campo obbligatorio",
+  "required-fields": "*Campi obbligatori",
+  "roles": {
+    "admin": "Amministratore",
+    "operator": "Referente operativo",
+    "support": "Supporto"
+  },
+  "table": {
+    "aria-label": "Tabella di item"
+  },
+  "toast": {
+    "aria-label": "Icona di chisura toast"
+  },
+  "too-long-field-error": "Scrivi massimo {{maxLength}} caratteri",
+  "too-short-field-error": "Scrivi minimo {{minLength}} caratteri",
+  "tos": {
+    "button": "Accedi",
+    "switch-label": "Accedendo, accetti i <0>Termini e condizioni d’uso<\/0> del servizio e confermi di aver letto l’<1>Informativa Privacy<\/1>.",
+    "title": "SEND - Servizio Notifiche Digitali"
+  },
+  "upload-file": {
+    "ext-not-supported": "Estensione file non supportata. Riprovare con un altro file.",
+    "file-size-exceeded": "Il file selezionato supera la dimensione massima di {{limit}}.",
+    "hash-code": "Codice hash",
+    "hash-code-descr": "Il codice hash è un codice alfanumerico univoco utilizzato per identificare un determinato file",
+    "loading": "Caricamento in corso...",
+    "loading-error": "Si è verificato un errore durante il caricamento del file. Si prega di riprovare.",
+    "or": "oppure",
+    "select-file": "carica il file",
+    "sending": "Invio in corso..."
+  },
   "user-validation-failed": {
-    "title": "I dati inseriti non sono validi",
+    "cta": "Contatta l’assistenza",
     "description": "Uno o più dati associati alla tua utenza non risultano validi, contatta l’assistenza per risolvere il problema.",
-    "cta": "Contatta l’assistenza"
-  },
-  "autocomplete": {
-    "clear": "Rimuovi opzioni selezionate",
-    "toggle-open": "Apri menu selezione opzioni",
-    "toggle-close": "Chiudi menu selezione opzioni",
-    "selection-box": "Opzioni selezionate",
-    "selection-done": "%s selezionati",
-    "delete-selection": "Elimina %s"
-  },
-  "not-available": "Non disponibile"
+    "title": "I dati inseriti non sono validi"
+  }
 }
