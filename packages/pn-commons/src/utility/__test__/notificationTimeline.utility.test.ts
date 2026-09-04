@@ -139,7 +139,7 @@ describe('notificationTimeline utility', () => {
       ]);
     });
 
-    it('shows nothing at all when only a single recipient is involved, even mixing events and groups', () => {
+    it('still flags the first occurrence even when only a single recipient is involved, mixing events and groups', () => {
       const steps = [
         eventStepOfRecIndex(0),
         groupStepOfRecIndex(0, 'group0'),
@@ -147,13 +147,13 @@ describe('notificationTimeline utility', () => {
       ];
 
       expect(getRecipientPerStep(steps, recipients)).toStrictEqual([
-        undefined,
+        recipients[0],
         undefined,
         undefined,
       ]);
     });
 
-    it('ignores steps with no recIndex, both for the "more than one recipient" check and the tracked recIndex', () => {
+    it('ignores steps with no recIndex and does not alter the tracked recIndex', () => {
       const steps = [
         groupStepOfRecIndex(0, 'group0'),
         eventStepOfRecIndex(undefined),

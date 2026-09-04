@@ -159,20 +159,20 @@ const NotificationTimeline: React.FC = () => {
       {!hasNotificationSentApiError && pageReady && (
         <Box sx={{ p: 3, display: 'flex', flexDirection: 'column' }} gap={3}>
           {properBreadcrumb}
-          <Stack gap={3}>
+          <Stack>
             <Typography variant="h4" component="h1">
               {t('detail.notification-timeline-section.title', { ns: 'notifiche' })}
             </Typography>
-            <MIPaper>
-              {IS_NEW_TIMELINE_ENABLED ? (
-                <NotificationEventsTimeline
-                  language={i18n.language}
-                  recipients={notificationTimeline.recipients}
-                  statusHistory={notificationTimeline.notificationStatusHistory}
-                  clickHandler={legalFactDownloadHandler}
-                  isSenderTimeline
-                />
-              ) : (
+            {IS_NEW_TIMELINE_ENABLED ? (
+              <NotificationEventsTimeline
+                language={i18n.language}
+                recipients={notificationTimeline.recipients}
+                statusHistory={notificationTimeline.notificationStatusHistory}
+                clickHandler={legalFactDownloadHandler}
+                isSenderTimeline
+              />
+            ) : (
+              <MIPaper sx={{ mt: 3 }}>
                 <NotificationDetailTimeline
                   language={i18n.language}
                   recipients={notification.recipients}
@@ -182,8 +182,8 @@ const NotificationTimeline: React.FC = () => {
                   showLessButtonLabel={t('detail.show-less', { ns: 'notifiche' })}
                   handleTrackShowMoreLess={trackTimelineShowMore}
                 />
-              )}
-            </MIPaper>
+              </MIPaper>
+            )}
           </Stack>
         </Box>
       )}
