@@ -1,6 +1,6 @@
 import { vi } from 'vitest';
 
-import { Chip } from '@mui/material';
+import { MIChip } from '@pagopa/mui-italia';
 
 import { fireEvent, render } from '../../../../__test__/test-utils';
 import OnboardingContactItem from '../OnboardingContactItem';
@@ -87,7 +87,7 @@ describe('OnboardingContactItem', () => {
           introText="mock-intro"
           label="mock-label"
           value={mockEmail}
-          secondaryContent={<Chip label="SEND" size="small" />}
+          secondaryContent={<MIChip label="SEND" />}
         />
       );
 
@@ -102,7 +102,7 @@ describe('OnboardingContactItem', () => {
         <OnboardingContactItem
           mode="view"
           label="mock-label"
-          secondaryContent={<Chip label="SEND" size="small" />}
+          secondaryContent={<MIChip label="SEND" />}
         />
       );
 

@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import MoreVertIcon from '@mui/icons-material/MoreVert';
-import { Box, Button, IconButton, Menu as MUIMenu, MenuItem, Typography } from '@mui/material';
+import MoreVertRounded from '@mui/icons-material/MoreVertRounded';
+import { Box, Menu as MUIMenu, MenuItem, Typography } from '@mui/material';
 import { Variant } from '@mui/material/styles/createTypography';
-import { CustomTagGroup } from '@pagopa-pn/pn-commons';
-import { Tag } from '@pagopa/mui-italia';
+import { CustomTagGroup, useIsMobile } from '@pagopa-pn/pn-commons';
+import { MIButton, MIIconButton, Tag } from '@pagopa/mui-italia';
 
 import { PFEventsType } from '../../models/PFEventsType';
 import { openAcceptModal, openRevocationModal } from '../../redux/delegation/reducers';
@@ -72,14 +72,13 @@ export const Menu = (props: any) => {
 
   return (
     <>
-      <IconButton
-        id={`delegation-menu-icon-${props.id}`}
+      <MIIconButton
         onClick={handleClick}
         data-testid="delegationMenuIcon"
         aria-label={t('deleghe.table.menu-aria-label')}
       >
-        <MoreVertIcon fontSize={'small'} />
-      </IconButton>
+        <MoreVertRounded fontSize={'small'} />
+      </MIIconButton>
       <MUIMenu
         id={`delegation-menu-${props.id}`}
         anchorEl={anchorEl}
@@ -99,10 +98,15 @@ export const OrganizationsList = (props: {
   visibleItems?: number;
 }) => {
   const { t } = useTranslation(['deleghe']);
+  const isMobile = useIsMobile();
+
   return (
     <>
       {props.organizations.length === 0 ? (
-        <Typography variant={props.textVariant || 'inherit'}>
+        <Typography
+          variant={props.textVariant || 'inherit'}
+          fontWeight={isMobile ? 600 : undefined}
+        >
           {t('deleghe.table.allNotifications')}
         </Typography>
       ) : (
@@ -138,7 +142,7 @@ export const AcceptButton = ({ id, name }: { id: string; name: string }) => {
   };
 
   return (
-    <Button
+    <MIButton
       id="accept-button"
       onClick={handleAcceptClick}
       variant={'contained'}
@@ -146,6 +150,6 @@ export const AcceptButton = ({ id, name }: { id: string; name: string }) => {
       data-testid="acceptButton"
     >
       {t('deleghe.accept')}
-    </Button>
+    </MIButton>
   );
 };

@@ -7,7 +7,6 @@ import * as yup from 'yup';
 import {
   Box,
   Checkbox,
-  Chip,
   Grid,
   Link,
   ListItemText,
@@ -32,7 +31,7 @@ import {
   dataRegex,
   useIsMobile,
 } from '@pagopa-pn/pn-commons';
-import { Autocomplete } from '@pagopa/mui-italia';
+import { Autocomplete, MIChip } from '@pagopa/mui-italia';
 
 import {
   DelegationColumnData,
@@ -123,12 +122,18 @@ const DelegationsOfTheCompany = () => {
       tableConfiguration: {
         cellProps: { width: '13%' },
       },
+      cardConfiguration: {
+        wrapValueInTypography: false,
+      },
     },
     {
       id: 'endDate',
       label: t('deleghe.table.delegationEnd'),
       tableConfiguration: {
         cellProps: { width: '13%' },
+      },
+      cardConfiguration: {
+        wrapValueInTypography: false,
       },
     },
     {
@@ -414,7 +419,7 @@ const DelegationsOfTheCompany = () => {
                       <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
                         {selected.map((value: any) => {
                           const label = statuses.find((s) => s.id === value)?.label;
-                          return <Chip key={value} label={label} />;
+                          return <MIChip key={value} label={label} />;
                         })}
                       </Box>
                     ),

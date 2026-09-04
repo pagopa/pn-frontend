@@ -1,8 +1,9 @@
 import { ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import CloseIcon from '@mui/icons-material/Close';
-import { Box, Divider, Drawer, IconButton, Stack, Typography } from '@mui/material';
+import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
+import { Box, Divider, Drawer, Stack, Typography } from '@mui/material';
+import { MIIconButton } from '@pagopa/mui-italia';
 
 export type NotificationDetailsDrawerItem = {
   label: ReactNode;
@@ -37,13 +38,13 @@ const NotificationDetailsDrawer: React.FC<Props> = ({ open, title, details, onCl
           <Typography component="h2" variant="h5">
             {title}
           </Typography>
-          <IconButton
+          <MIIconButton
             aria-label={t('button.close', { ns: 'common' })}
             onClick={onClose}
             data-testid="notificationDetailsDrawerClose"
           >
-            <CloseIcon sx={{ color: 'action.active', fontSize: 24 }} />
-          </IconButton>
+            <CloseRoundedIcon sx={{ color: 'action.active', fontSize: 24 }} />
+          </MIIconButton>
         </Stack>
 
         <Stack spacing={2} divider={<Divider aria-hidden />}>
@@ -52,7 +53,12 @@ const NotificationDetailsDrawer: React.FC<Props> = ({ open, title, details, onCl
               <Typography variant="body2" color="text.secondary">
                 {detail.label}
               </Typography>
-              <Typography component="div" variant="body2" color="text" fontWeight={600}>
+              <Typography
+                variant="body2"
+                color="text"
+                fontWeight={600}
+                sx={{ wordBreak: 'break-word' }}
+              >
                 {detail.value}
               </Typography>
             </Box>

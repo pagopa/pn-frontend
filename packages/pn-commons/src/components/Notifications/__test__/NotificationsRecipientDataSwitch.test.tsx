@@ -1,8 +1,5 @@
 import { vi } from 'vitest';
 
-import { ThemeProvider } from '@mui/material';
-import { theme } from '@pagopa/mui-italia';
-
 import { NotificationStatus } from '../../../models/NotificationStatus';
 import { RecipientNotification } from '../../../models/Notifications';
 import { Row } from '../../../models/PnTable';
@@ -15,11 +12,11 @@ const data: Row<RecipientNotification> = {
   id: '0',
   iun: 'DAPQ-LWQV-DKQH-202308-A-1',
   paProtocolNumber: 'TA-FFSMRC-20230823-2',
-  sender: 'Comune di Palermo',
+  sender: 'Comune di Test 1',
   sentAt: '2023-08-23T07:38:49.601270863Z',
   subject: 'Pagamento rata IMU',
   notificationStatus: NotificationStatus.ACCEPTED,
-  recipients: ['CLMCST42R12D969Z', 'DRCGNN12A46A326K', 'LVLDAA85T50G702B'],
+  recipients: ['CLMCST42R12D969Z', 'DRCGNN12A46A326K', 'TSTUTN00A07A001G'],
   group: '6467344676f10c7617353c90',
   communicationType: 'LEGAL',
   isNewNotification: true,
@@ -101,11 +98,7 @@ describe('NotificationsRecipientDataSwitch Component', () => {
   });
 
   it('renders component - subject - legal communication', () => {
-    const { container } = render(
-      <ThemeProvider theme={theme}>
-        <NotificationsRecipientDataSwitch data={data} type="subject" />
-      </ThemeProvider>
-    );
+    const { container } = render(<NotificationsRecipientDataSwitch data={data} type="subject" />);
     expect(container).toHaveTextContent(data.subject);
     const legalLabel = getLocalizedOrDefaultLabel('notifications', 'table.legal-value');
     expect(container).toHaveTextContent(legalLabel);
@@ -113,12 +106,10 @@ describe('NotificationsRecipientDataSwitch Component', () => {
 
   it('renders component - subject - informal communication (no legal tag)', () => {
     const { container } = render(
-      <ThemeProvider theme={theme}>
-        <NotificationsRecipientDataSwitch
-          data={{ ...data, communicationType: 'INFORMAL' }}
-          type="subject"
-        />
-      </ThemeProvider>
+      <NotificationsRecipientDataSwitch
+        data={{ ...data, communicationType: 'INFORMAL' }}
+        type="subject"
+      />
     );
     expect(container).toHaveTextContent(data.subject);
     const legalLabel = getLocalizedOrDefaultLabel('notifications', 'table.legal-value');

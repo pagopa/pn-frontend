@@ -1,30 +1,21 @@
 import { useTranslation } from 'react-i18next';
 
 import { Avatar, Link, Stack, StackProps, Typography } from '@mui/material';
-import { IllusAppIoLogo, useMobileOS } from '@pagopa-pn/pn-commons';
+import { isMobileDevice } from '@pagopa-pn/pn-commons';
+import { LogoIOApp } from '@pagopa/mui-italia';
 
 import { getConfiguration } from '../services/configuration.service';
 
 const IOSmartAppBanner: React.FC<StackProps> = (props) => {
-  const { APP_IO_ANDROID, APP_IO_IOS, APP_IO_SITE } = getConfiguration();
-  const os = useMobileOS();
+  const { APP_IO_DOWNLOAD, APP_IO_SITE } = getConfiguration();
   const { t } = useTranslation(['login']);
 
-  const getActionUrl = () => {
-    switch (os) {
-      case 'iOS':
-        return APP_IO_IOS;
-      case 'Android':
-        return APP_IO_ANDROID;
-      default:
-        return APP_IO_SITE;
-    }
-  };
+  const actionUrl = isMobileDevice() ? APP_IO_DOWNLOAD : APP_IO_SITE;
 
   return (
     <Stack id="ioSmartAppBanner" direction="row" alignItems="center" p={2} {...props}>
-      <Avatar variant="rounded" sx={{ bgcolor: '#0B3EE3', width: '30px', height: '30px' }}>
-        <IllusAppIoLogo />
+      <Avatar variant="rounded" sx={{ bgcolor: 'primary.main', width: '30px', height: '30px' }}>
+        <LogoIOApp title="AppIoLogo" color="light" />
       </Avatar>
       <Stack direction="column" mx={1}>
         <Typography variant="body1" fontSize="14px" fontWeight="600" lineHeight="1em">
@@ -36,7 +27,7 @@ const IOSmartAppBanner: React.FC<StackProps> = (props) => {
       </Stack>
       <Link
         ml="auto"
-        href={getActionUrl()}
+        href={actionUrl}
         fontWeight={600}
         fontSize="16px"
         px={4}

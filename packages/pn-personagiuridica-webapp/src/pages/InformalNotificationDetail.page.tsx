@@ -6,24 +6,26 @@ import { Box, Stack } from '@mui/material';
 import {
   AbstractPaper,
   ApiError,
+  InformalNotificationStatus,
   NotificationDetailDocuments,
   NotificationDetailOtherDocument,
   NotificationDetailPayment,
+  NotificationDocumentType,
   NotificationPaymentRecipient,
   PaymentAttachmentSName,
   PaymentsData,
-  PnBreadcrumb,
   PnSenderContacts,
   appStateActions,
   downloadDocument,
   useErrors,
 } from '@pagopa-pn/pn-commons';
-import { MIPaper } from '@pagopa/mui-italia';
+import { MIBreadcrumbItem, MIBreadcrumbs, MIPaper } from '@pagopa/mui-italia';
 
 import LoadingPageWrapper from '../components/LoadingPageWrapper/LoadingPageWrapper';
-import { BffFullInformalNotificationV1 } from '../generated-client/informal-notifications';
+import type { BffFullInformalNotificationV1 } from '../generated-client/informal-notifications';
+import { PGEventsType } from '../models/PGEventsType';
 import * as routes from '../navigation/routes.const';
-import { useAppDispatch } from '../redux/hooks';
+import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { getReceivedNotificationPaymentUrl } from '../redux/notification/actions';
 import {
   INFORMAL_NOTIFICATION_ACTIONS,
@@ -32,7 +34,9 @@ import {
   getReceivedInformalNotificationPayment,
   getReceivedInformalNotificationPaymentInfo,
 } from '../redux/notification/informalActions';
+import { RootState } from '../redux/store';
 import { getConfiguration } from '../services/configuration.service';
+import PGEventStrategyFactory from '../utility/MixpanelUtils/PGEventStrategyFactory';
 
 const InformalNotificationDetail: React.FC = () => {
   const { id } = useParams();
@@ -41,10 +45,13 @@ const InformalNotificationDetail: React.FC = () => {
   const [pageReady, setPageReady] = useState(false);
   const { hasApiErrors } = useErrors();
   const navigate = useNavigate();
+
   const { SELFCARE_CDN_URL } = getConfiguration();
 
   const [informalNotification, setInformalNotification] =
     React.useState<BffFullInformalNotificationV1>();
+  const currentOrganizationName = useAppSelector((state: RootState) => state.userState.user)
+    .organization.name;
 
   const [paymentsData, setPaymentsData] = React.useState<PaymentsData>({
     pagoPaF24: [],
@@ -77,7 +84,8 @@ const InformalNotificationDetail: React.FC = () => {
 
   const currentRecipient = informalNotification?.recipients?.[0];
 
-  const hasPayments = (currentRecipient?.payments?.length ?? 0) > 0;
+  const paymentCount = currentRecipient?.payments?.length ?? 0;
+  const hasPayments = paymentCount > 0;
 
   const hasInformalReceivedApiError = hasApiErrors(
     INFORMAL_NOTIFICATION_ACTIONS.GET_RECEIVED_INFORMAL_NOTIFICATION
@@ -147,22 +155,46 @@ const InformalNotificationDetail: React.FC = () => {
     ? (currentRecipient as any).message?.primaryMessage
     : undefined;
 
-  const properBreadcrumb = useMemo(() => {
-    const backRoute = routes.NOTIFICHE;
-
-    return (
-      <PnBreadcrumb
-        showBackAction
-        linkRoute={backRoute}
-        linkLabel={t('menu.notifiche')}
-        currentLocationLabel={primaryMessage?.subject ?? ''}
-        goBackAction={() => navigate(backRoute)}
-      />
-    );
-  }, [i18n.language, primaryMessage?.subject]);
+  const properBreadcrumb = useMemo(
+    () => (
+      <MIBreadcrumbs
+        backButtonLabel={t('button.indietro', { ns: 'common' })}
+        backButtonAction={() => navigate(routes.NOTIFICHE)}
+      >
+        <MIBreadcrumbItem
+          label={
+            currentRecipient?.denomination
+              ? t('menu.notifiche-impresa', {
+                  organization: currentOrganizationName ?? '',
+                })
+              : t('menu.notifiche')
+          }
+          onClick={() => {
+            navigate(routes.NOTIFICHE);
+          }}
+          data-testid="breadcrumb-root-button"
+        />
+        <MIBreadcrumbItem
+          label={primaryMessage?.subject ?? t('menu.fallback-communication')}
+          current
+        />
+      </MIBreadcrumbs>
+    ),
+    [
+      i18n.language,
+      primaryMessage?.subject,
+      currentRecipient?.denomination,
+      currentOrganizationName,
+    ]
+  );
 
   const onPayClick = (noticeCode?: string, creditorTaxId?: string, amount?: number) => {
     if (noticeCode && creditorTaxId && amount && informalNotification?.senderDenomination) {
+      PGEventStrategyFactory.triggerEvent(
+        PGEventsType.SEND_PG_START_PAYMENT,
+        { notificationType: 'INFORMAL' },
+        { sendImmediately: true }
+      );
       dispatch(
         getReceivedNotificationPaymentUrl({
           paymentNotice: {
@@ -183,14 +215,21 @@ const InformalNotificationDetail: React.FC = () => {
     }
   };
 
-  const getPaymentAttachmentAction = (name: PaymentAttachmentSName, attachmentIdx?: number) =>
-    dispatch(
+  const getPaymentAttachmentAction = (name: PaymentAttachmentSName, attachmentIdx?: number) => {
+    PGEventStrategyFactory.triggerEvent(
+      PGEventsType.SEND_PG_NOTIFICATION_DOWNLOAD_ATTACHMENT,
+      { notificationType: 'INFORMAL', documentType: name },
+      { sendImmediately: true }
+    );
+
+    return dispatch(
       getReceivedInformalNotificationPayment({
         iun: informalNotification?.iun ?? '',
         attachmentName: name,
         attachmentIdx,
       })
     );
+  };
 
   const showInfoMessageIfRetryAfterOrDownload = (response: {
     url: string;
@@ -215,6 +254,12 @@ const InformalNotificationDetail: React.FC = () => {
       return;
     }
 
+    PGEventStrategyFactory.triggerEvent(
+      PGEventsType.SEND_PG_NOTIFICATION_DOWNLOAD_ATTACHMENT,
+      { notificationType: 'INFORMAL', documentType: NotificationDocumentType.ATTACHMENT },
+      { sendImmediately: true }
+    );
+
     dispatch(
       getReceivedInformalNotificationDocument({
         iun: informalNotification.iun,
@@ -225,6 +270,26 @@ const InformalNotificationDetail: React.FC = () => {
       .then(showInfoMessageIfRetryAfterOrDownload)
       .catch(() => {});
   };
+
+  useEffect(() => {
+    if (!pageReady || hasInformalReceivedApiError || !informalNotification) {
+      return;
+    }
+
+    PGEventStrategyFactory.triggerEvent(PGEventsType.SEND_PG_NOTIFICATION_DETAIL, {
+      notificationType: 'INFORMAL',
+      notificationStatus: informalNotification.notificationStatus as InformalNotificationStatus,
+      paymentCount,
+      timeline: informalNotification.timeline,
+    });
+  }, [
+    pageReady,
+    hasInformalReceivedApiError,
+    informalNotification?.iun,
+    informalNotification?.notificationStatus,
+    informalNotification?.timeline,
+    paymentCount,
+  ]);
 
   return (
     <LoadingPageWrapper isInitialized={pageReady}>

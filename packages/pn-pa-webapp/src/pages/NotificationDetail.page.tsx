@@ -19,15 +19,13 @@ import {
   NotificationDocumentType,
   NotificationRelatedDowntimes,
   NotificationTimelineBox,
-  PnBreadcrumb,
   appStateActions,
-  dateIsLessThan10Years,
   downloadDocument,
   useErrors,
   useIsCancelled,
 } from '@pagopa-pn/pn-commons';
 import type { DocumentsDownloadFilesMessage } from '@pagopa-pn/pn-commons/src/components/NotificationDetail/NotificationDetailDocuments';
-import { MIAlert, MIPaper, Tag } from '@pagopa/mui-italia';
+import { MIAlert, MIBreadcrumbItem, MIBreadcrumbs, MIPaper, Tag } from '@pagopa/mui-italia';
 
 import NotificationCancellationAction from '../components/Notifications/NotificationCancellationAction';
 import NotificationDetailsDrawer, {
@@ -203,14 +201,14 @@ const NotificationDetail: React.FC = () => {
         };
       } else {
         return {
-          key: dateIsLessThan10Years(notification.sentAt) // 10 years
+          key: notification.aarDocumentAvailable
             ? 'detail.download-aar-available'
             : 'detail.download-aar-expired',
           ns: 'notifiche',
         };
       }
     },
-    [notification.documentsAvailable]
+    [notification.documentsAvailable, notification.aarDocumentAvailable]
   );
 
   const fetchSentNotification = useCallback(() => {
@@ -259,12 +257,17 @@ const NotificationDetail: React.FC = () => {
   }, []);
 
   const properBreadcrumb = (
-    <PnBreadcrumb
-      linkRoute={routes.DASHBOARD}
-      linkLabel={t('detail.breadcrumb-root', { ns: 'notifiche' })}
-      currentLocationLabel={notification.iun}
-      goBackLabel={t('button.indietro', { ns: 'common' })}
-    />
+    <MIBreadcrumbs
+      backButtonLabel={t('button.indietro', { ns: 'common' })}
+      backButtonAction={() => navigate(routes.DASHBOARD)}
+    >
+      <MIBreadcrumbItem
+        label={t('detail.breadcrumb-root', { ns: 'notifiche' })}
+        onClick={() => navigate(routes.DASHBOARD)}
+        data-testid="breadcrumb-root-button"
+      />
+      <MIBreadcrumbItem label={notification.iun} current />
+    </MIBreadcrumbs>
   );
 
   const handleGoToTimeline = () => {
@@ -480,7 +483,7 @@ const NotificationDetail: React.FC = () => {
                 documents={notification.otherDocuments ?? []}
                 clickHandler={documentDownloadHandler}
                 isCancelled={false}
-                isLessThan10Years={dateIsLessThan10Years(notification.sentAt)}
+                aarDocumentAvailable={notification.aarDocumentAvailable}
                 downloadFilesMessage={getDownloadFilesMessage('aar')}
               />
 

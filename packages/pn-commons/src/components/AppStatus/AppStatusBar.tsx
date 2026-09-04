@@ -1,5 +1,5 @@
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
-import ErrorIcon from '@mui/icons-material/Error';
+import CheckCircleRoundedIcon from '@mui/icons-material/CheckCircleRounded';
+import ErrorRoundedIcon from '@mui/icons-material/ErrorRounded';
 import { Stack, Typography, useTheme } from '@mui/material';
 import { alpha } from '@mui/material/styles';
 
@@ -22,7 +22,7 @@ export const AppStatusBar = ({ status }: { status: AppCurrentStatus }) => {
   const mainColor = status.appIsFullyOperative
     ? theme.palette.success.main
     : theme.palette.error.main;
-  const IconComponent = status.appIsFullyOperative ? CheckCircleIcon : ErrorIcon;
+  const IconComponent = status.appIsFullyOperative ? CheckCircleRoundedIcon : ErrorRoundedIcon;
 
   return (
     <Stack
@@ -32,7 +32,7 @@ export const AppStatusBar = ({ status }: { status: AppCurrentStatus }) => {
       direction={isMobile ? 'column' : 'row'}
       justifyContent="center"
       alignItems="center"
-      sx={(theme) => ({
+      sx={{
         mt: isMobile ? '23px' : '42px',
         py: '21px',
         px: '35px',
@@ -42,7 +42,7 @@ export const AppStatusBar = ({ status }: { status: AppCurrentStatus }) => {
         borderWidth: '1px',
         borderStyle: 'solid',
         borderRadius: '10px',
-      })}
+      }}
     >
       <IconComponent
         sx={{

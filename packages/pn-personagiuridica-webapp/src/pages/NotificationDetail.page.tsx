@@ -9,6 +9,9 @@ import {
   ApiError,
   ApiErrorWrapper,
   DeliveryOutcomeType,
+  EventDeliveryFlowType,
+  EventDeliveryModeType,
+  EventNotificationSource,
   GetDowntimeHistoryParams,
   NotificationDetailBilingualFacsimileDocuments,
   NotificationDetailDocuments,
@@ -23,22 +26,15 @@ import {
   PagoPaIntegrationMode,
   PaymentAttachmentSName,
   PaymentDetails,
-  PnBreadcrumb,
   StatusHistoryParser,
   appStateActions,
-  dateIsLessThan10Years,
   downloadDocument,
   getPaymentCache,
   useErrors,
   useHasPermissions,
   useIsCancelled,
 } from '@pagopa-pn/pn-commons';
-import {
-  EventDeliveryFlowType,
-  EventDeliveryModeType,
-  EventNotificationSource,
-} from '@pagopa-pn/pn-commons/src/models/MixpanelEvents';
-import { MIAlert, MIPaper } from '@pagopa/mui-italia';
+import { MIAlert, MIBreadcrumbItem, MIBreadcrumbs, MIPaper } from '@pagopa/mui-italia';
 
 import DomicileBanner from '../components/DomicileBanner/DomicileBanner';
 import LoadingPageWrapper from '../components/LoadingPageWrapper/LoadingPageWrapper';
@@ -119,6 +115,7 @@ const NotificationDetail = () => {
   const isCancelledOrCancelling = isCancelled.cancelled || isCancelled.cancellationInProgress;
 
   const userPayments = useAppSelector((state: RootState) => state.notificationState.paymentsData);
+  const organization = currentUser.organization;
 
   const checkIfUserHasPayments: boolean =
     !!currentRecipient.payments && currentRecipient.payments.length > 0;
@@ -210,9 +207,16 @@ const NotificationDetail = () => {
       return;
     }
 
-    PGEventStrategyFactory.triggerEvent(PGEventsType.SEND_PG_NOTIFICATION_DOWNLOAD_ATTACHMENT, {
-      document,
-    });
+    PGEventStrategyFactory.triggerEvent(
+      PGEventsType.SEND_PG_NOTIFICATION_DOWNLOAD_ATTACHMENT,
+      {
+        notificationType: 'LEGAL',
+        documentType: isObject(document)
+          ? NotificationDocumentType.AAR
+          : NotificationDocumentType.ATTACHMENT,
+      },
+      { sendImmediately: true }
+    );
 
     if (isObject(document)) {
       // AAR case
@@ -243,8 +247,14 @@ const NotificationDetail = () => {
     }
   };
 
-  const getPaymentAttachmentAction = (name: PaymentAttachmentSName, attachmentIdx?: number) =>
-    dispatch(
+  const getPaymentAttachmentAction = (name: PaymentAttachmentSName, attachmentIdx?: number) => {
+    PGEventStrategyFactory.triggerEvent(
+      PGEventsType.SEND_PG_NOTIFICATION_DOWNLOAD_ATTACHMENT,
+      { notificationType: 'LEGAL', documentType: name },
+      { sendImmediately: true }
+    );
+
+    return dispatch(
       getReceivedNotificationPayment({
         iun: notification.iun,
         attachmentName: name,
@@ -252,10 +262,15 @@ const NotificationDetail = () => {
         attachmentIdx,
       })
     );
+  };
 
   const onPayClick = (noticeCode?: string, creditorTaxId?: string, amount?: number) => {
     if (noticeCode && creditorTaxId && amount && notification.senderDenomination) {
-      PGEventStrategyFactory.triggerEvent(PGEventsType.SEND_PG_START_PAYMENT);
+      PGEventStrategyFactory.triggerEvent(
+        PGEventsType.SEND_PG_START_PAYMENT,
+        { notificationType: 'LEGAL' },
+        { sendImmediately: true }
+      );
 
       dispatch(
         getReceivedNotificationPaymentUrl({
@@ -292,13 +307,13 @@ const NotificationDetail = () => {
         };
       }
       return {
-        key: dateIsLessThan10Years(notification.sentAt)
+        key: notification.aarDocumentAvailable
           ? 'detail.acts_files.downloadable_aar'
           : 'detail.acts_files.not_downloadable_aar',
         ns: 'notifiche',
       };
     },
-    [isCancelledOrCancelling, notification.documentsAvailable, notification.sentAt]
+    [isCancelledOrCancelling, notification.documentsAvailable, notification.aarDocumentAvailable]
   );
 
   const fetchReceivedNotification = useCallback(() => {
@@ -370,9 +385,17 @@ const NotificationDetail = () => {
     [location]
   );
 
+  /**
+   * Wait for payment info loading to complete before tracking the detail event
+   * so it is emitted once with stable payment data
+   */
+  const paymentsReady =
+    !checkIfUserHasPayments || userPayments.pagoPaF24.every((payment) => !payment.isLoading);
+
   useEffect(() => {
-    if (downtimesReady && pageReady && !hasNotificationReceivedApiError) {
+    if (downtimesReady && pageReady && !hasNotificationReceivedApiError && paymentsReady) {
       PGEventStrategyFactory.triggerEvent(PGEventsType.SEND_PG_NOTIFICATION_DETAIL, {
+        notificationType: 'LEGAL',
         downtimeEvents,
         mandateId,
         notificationStatus: notification.notificationStatus,
@@ -408,16 +431,28 @@ const NotificationDetail = () => {
 
   const properBreadcrumb = useMemo(() => {
     const backRoute = mandateId ? routes.NOTIFICHE_DELEGATO : routes.NOTIFICHE;
+
+    const breadcrumbLabel = mandateId
+      ? t('menu.notifiche-delegato')
+      : t('menu.notifiche-impresa', { organization: organization?.name });
+
     return (
-      <PnBreadcrumb
-        showBackAction={!fromQrCode}
-        linkRoute={backRoute}
-        linkLabel={t('menu.notifiche')}
-        currentLocationLabel={notification.subject ?? ''}
-        goBackAction={() => navigate(backRoute)}
-      />
+      <MIBreadcrumbs
+        backButtonLabel={t('button.indietro', { ns: 'common' })}
+        backButtonAction={() => navigate(backRoute)}
+      >
+        <MIBreadcrumbItem
+          label={breadcrumbLabel}
+          onClick={() => navigate(backRoute)}
+          data-testid="breadcrumb-root-button"
+        />
+        <MIBreadcrumbItem
+          label={notification.subject || t('menu.fallback-notification', { ns: 'common' })}
+          current
+        />
+      </MIBreadcrumbs>
     );
-  }, [fromQrCode, i18n.language, notification.subject]);
+  }, [fromQrCode, i18n.language, notification.subject, mandateId, organization?.name]);
 
   const cancelledAlert = isCancelledOrCancelling && (
     <MIAlert
@@ -595,7 +630,7 @@ const NotificationDetail = () => {
                 documents={notification.otherDocuments ?? []}
                 clickHandler={documentDowloadHandler}
                 isCancelled={isCancelled.cancellationInTimeline}
-                isLessThan10Years={dateIsLessThan10Years(notification.sentAt)}
+                aarDocumentAvailable={notification.aarDocumentAvailable}
                 downloadFilesMessage={getDownloadFilesMessage('aar')}
               />
               <NotificationRelatedDowntimes

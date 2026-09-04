@@ -3,20 +3,19 @@ import { ChangeEvent, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 
-import CloseIcon from '@mui/icons-material/Close';
+import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
 import {
   Box,
   Drawer,
   FormControl,
   FormControlLabel,
-  IconButton,
   MenuItem,
   Radio,
   RadioGroup,
   Typography,
 } from '@mui/material';
 import { CustomDropdown, LANGUAGES, useIsMobile } from '@pagopa-pn/pn-commons';
-import { ButtonNaked, LangCode, LangLabels } from '@pagopa/mui-italia';
+import { LangCode, LangLabels, MIButton, MIIconButton } from '@pagopa/mui-italia';
 
 import { BILINGUALISM_LANGUAGES, NewNotificationLangOther } from '../../models/NewNotification';
 import { setAdditionalLanguages } from '../../redux/auth/actions';
@@ -87,14 +86,14 @@ const NotificationSettingsDrawer = () => {
 
   return (
     <>
-      <ButtonNaked
-        color="primary"
-        sx={{ fontSize: '16px', fontWeight: 700 }}
+      <MIButton
+        variant="text"
+        sx={{ fontSize: '16px' }}
         onClick={toggleDrawer}
         data-testid="settingsLangBtn"
       >
         {t('settings.language-settings-title')}
-      </ButtonNaked>
+      </MIButton>
       <Drawer
         anchor="right"
         open={openDrawer}
@@ -102,9 +101,9 @@ const NotificationSettingsDrawer = () => {
         data-testid="settingsLangDrawer"
       >
         <Box display="flex" justifyContent="flex-end" padding={2}>
-          <IconButton aria-label="close" onClick={onCloseDrawer}>
-            <CloseIcon fontSize="medium" sx={{ color: 'action.active' }} />
-          </IconButton>
+          <MIIconButton aria-label="close" onClick={onCloseDrawer}>
+            <CloseRoundedIcon fontSize="medium" sx={{ color: 'action.active' }} />
+          </MIIconButton>
         </Box>
         <form onSubmit={formik.handleSubmit}>
           <Box paddingX={4}>

@@ -1,7 +1,7 @@
 /* eslint-disable sonarjs/cognitive-complexity */
 
 /* eslint-disable complexity */
-import { Fragment, useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
 
@@ -10,19 +10,24 @@ import {
   AccessDenied,
   ApiError,
   AppResponse,
-  IllusQuestion,
   LegalFactId,
   LegalFactType,
   NotificationDetailTimeline,
   NotificationDocumentType,
-  PnBreadcrumb,
+  NotificationEventsTimeline,
   appStateActions,
   downloadDocument,
   useErrors,
   useIsCancelled,
 } from '@pagopa-pn/pn-commons';
 import { useDismissToastOnError } from '@pagopa-pn/pn-commons/src/hooks/useDismissToastOnError';
-import { MIAlert, MIPaper } from '@pagopa/mui-italia';
+import {
+  IllusMIQuestion,
+  MIAlert,
+  MIBreadcrumbItem,
+  MIBreadcrumbs,
+  MIPaper,
+} from '@pagopa/mui-italia';
 
 import NotificationDetailOnboardingPrompt from '../components/Contacts/Onboarding/NotificationDetailOnboardingPrompt';
 import LoadingPageWrapper from '../components/LoadingPageWrapper/LoadingPageWrapper';
@@ -33,6 +38,7 @@ import {
   NOTIFICATION_ACTIONS,
   getReceivedNotification,
   getReceivedNotificationDocument,
+  getReceivedNotificationTimeline,
 } from '../redux/notification/actions';
 import { resetState } from '../redux/notification/reducers';
 import { RootState } from '../redux/store';
@@ -51,7 +57,7 @@ const NotificationTimeline: React.FC = () => {
    * Carlos Lombardi, 2023.02.03
    */
   const { t, i18n } = useTranslation(['common', 'notifiche', 'appStatus']);
-  const { NOTIFICATION_CANCELLED_HELP_LINK } = getConfiguration();
+  const { NOTIFICATION_CANCELLED_HELP_LINK, IS_NEW_TIMELINE_ENABLED } = getConfiguration();
   const { hasApiErrors } = useErrors();
   const [pageReady, setPageReady] = useState(false);
   const [isUserForbidden, setIsUserForbidden] = useState(false);
@@ -61,11 +67,26 @@ const NotificationTimeline: React.FC = () => {
   const delegatorsFromStore = useAppSelector(
     (state: RootState) => state.generalInfoState.delegators
   );
-
   const notification = useAppSelector((state: RootState) => state.notificationState.notification);
+  const notificationTimeline = useAppSelector(
+    (state: RootState) => state.notificationState.notificationTimeline
+  );
 
-  const isCancelled = useIsCancelled({ notification });
+  const isCancelled = useIsCancelled({
+    notification: IS_NEW_TIMELINE_ENABLED ? notificationTimeline : notification,
+  });
+
   const isCancelledOrCancelling = isCancelled.cancelled || isCancelled.cancellationInProgress;
+
+  const timelineApiId = IS_NEW_TIMELINE_ENABLED
+    ? NOTIFICATION_ACTIONS.GET_RECEIVED_NOTIFICATION_TIMELINE
+    : NOTIFICATION_ACTIONS.GET_RECEIVED_NOTIFICATION;
+  const hasNotificationTimelineApiError = hasApiErrors(timelineApiId);
+
+  const notificationIUN = IS_NEW_TIMELINE_ENABLED ? notificationTimeline.iun : notification.iun;
+  const notificationSubject = IS_NEW_TIMELINE_ENABLED
+    ? notificationTimeline.subject
+    : notification.subject;
 
   const showInfoMessageIfRetryAfterOrDownload = (response: {
     url: string;
@@ -89,67 +110,58 @@ const NotificationTimeline: React.FC = () => {
     if (legalFact.category !== LegalFactType.NOTIFICATION_CANCELLED && isCancelledOrCancelling) {
       return;
     }
-    if (legalFact.category !== 'AAR') {
-      // Legal fact case
-      dispatch(
-        getReceivedNotificationDocument({
-          iun: notification.iun,
-          documentType: NotificationDocumentType.LEGAL_FACT,
-          documentId: legalFact.key.substring(legalFact.key.lastIndexOf('/') + 1),
-          mandateId,
-        })
-      )
-        .unwrap()
-        .then(showInfoMessageIfRetryAfterOrDownload)
-        .catch(() => {});
+
+    const isAAR = legalFact.category === NotificationDocumentType.AAR;
+    const documentType = isAAR ? NotificationDocumentType.AAR : NotificationDocumentType.LEGAL_FACT;
+    const documentId = isAAR
+      ? legalFact.key
+      : legalFact.key.substring(legalFact.key.lastIndexOf('/') + 1);
+
+    dispatch(
+      getReceivedNotificationDocument({ iun: notificationIUN, documentType, documentId, mandateId })
+    )
+      .unwrap()
+      .then(showInfoMessageIfRetryAfterOrDownload)
+      .catch(() => {});
+
+    if (!isAAR) {
       PFEventStrategyFactory.triggerEvent(
         PFEventsType.SEND_DOWNLOAD_CERTIFICATE_OPPOSABLE_TO_THIRD_PARTIES,
         {
           source: 'dettaglio_notifica',
         }
       );
-    } else {
-      // AAR in timeline case
-      dispatch(
-        getReceivedNotificationDocument({
-          iun: notification.iun,
-          documentType: NotificationDocumentType.AAR,
-          documentId: legalFact.key,
-          mandateId,
-        })
-      )
-        .unwrap()
-        .then(showInfoMessageIfRetryAfterOrDownload)
-        .catch(() => {});
     }
   };
 
-  const hasNotificationReceivedApiError = hasApiErrors(
-    NOTIFICATION_ACTIONS.GET_RECEIVED_NOTIFICATION
-  );
-
   const fetchReceivedNotification = useCallback(() => {
-    if (id) {
-      dispatch(
-        getReceivedNotification({
-          iun: id,
-          currentUserTaxId: currentUser.fiscal_number,
-          delegatorsFromStore,
-          mandateId,
-        })
-      )
-        .unwrap()
-        .catch((error) => {
-          if (
-            error?.response?.data?.errors?.[0]?.code ===
-            ServerResponseErrorCode.PN_DELIVERY_USER_ID_NOT_RECIPIENT_OR_DELEGATOR
-          ) {
-            setIsUserForbidden(true);
-          }
-        })
-        .finally(() => setPageReady(true));
+    if (!id) {
+      return;
     }
-  }, []);
+
+    const request = IS_NEW_TIMELINE_ENABLED
+      ? dispatch(getReceivedNotificationTimeline({ iun: id, mandateId }))
+      : dispatch(
+          getReceivedNotification({
+            iun: id,
+            currentUserTaxId: currentUser.fiscal_number,
+            delegatorsFromStore,
+            mandateId,
+          })
+        );
+
+    void request
+      .unwrap()
+      .catch((error) => {
+        if (
+          error?.response?.data?.errors?.[0]?.code ===
+          ServerResponseErrorCode.PN_DELIVERY_USER_ID_NOT_RECIPIENT_OR_DELEGATOR
+        ) {
+          setIsUserForbidden(true);
+        }
+      })
+      .finally(() => setPageReady(true));
+  }, [id, IS_NEW_TIMELINE_ENABLED, mandateId, currentUser.fiscal_number, delegatorsFromStore]);
 
   const handleUserInvalidError = useCallback((e: AppResponse) => {
     const error = e.errors?.[0];
@@ -173,27 +185,52 @@ const NotificationTimeline: React.FC = () => {
     if (!id) {
       return null;
     }
-    const backRoute = mandateId
+    const notificationListRoute = mandateId
+      ? routes.GET_NOTIFICHE_DELEGATO_PATH(mandateId)
+      : routes.NOTIFICHE;
+
+    const notificationDetailRoute = mandateId
       ? routes.GET_DETTAGLIO_NOTIFICA_DELEGATO_PATH(id, mandateId)
       : routes.GET_DETTAGLIO_NOTIFICA_PATH(id);
 
-    return (
-      <PnBreadcrumb
-        linkRoute={mandateId ? routes.GET_NOTIFICHE_DELEGATO_PATH(mandateId) : routes.NOTIFICHE}
-        linkLabel={t('menu.notifiche')}
-        currentLocationLabel={notification.subject ?? ''}
-        goBackAction={() => navigate(backRoute)}
-      />
-    );
-  }, [i18n.language, notification.subject]);
+    const delegatorName = delegatorsFromStore.find(
+      (delegation) => delegation.mandateId === mandateId
+    )?.delegator?.displayName;
 
-  const breadcrumb = <Fragment>{properBreadcrumb}</Fragment>;
+    const breadcrumbLabel = delegatorName
+      ? t('menu.notifiche-delegato', { delegator: delegatorName })
+      : t('menu.notifiche-utente', { ns: 'common' });
+
+    return (
+      <MIBreadcrumbs
+        backButtonLabel={t('button.indietro', { ns: 'common' })}
+        backButtonAction={() => navigate(notificationDetailRoute)}
+      >
+        <MIBreadcrumbItem
+          label={
+            mandateId || delegatorsFromStore.length > 0 ? breadcrumbLabel : t('menu.notifiche')
+          }
+          onClick={() => navigate(notificationListRoute)}
+          data-testid="breadcrumb-root-button"
+        />
+        <MIBreadcrumbItem
+          label={notificationSubject || t('menu.fallback-notification')}
+          onClick={() => navigate(notificationDetailRoute)}
+          data-testid="breadcrumb-subject-button"
+        />
+        <MIBreadcrumbItem
+          label={t('detail.notification-timeline-section.title', { ns: 'notifiche' })}
+          current
+        />
+      </MIBreadcrumbs>
+    );
+  }, [id, i18n.language, notificationSubject, mandateId, delegatorsFromStore]);
 
   const cancelledAlert = isCancelledOrCancelling && (
     <MIAlert
       data-testid="cancelledAlertText"
       severity="warning"
-      sx={{ mb: { xs: 2, lg: 0 } }}
+      sx={{ mt: 3, mb: { xs: 2, lg: 0 } }}
       action={{
         label: t('detail.cancelled.cta', { ns: 'notifiche' }),
         onClick: () => {
@@ -216,7 +253,7 @@ const NotificationTimeline: React.FC = () => {
     const i18nKey = currentUser.source?.retrievalId ? 'from-tpp' : 'from-qrcode';
     return (
       <AccessDenied
-        icon={<IllusQuestion />}
+        icon={<IllusMIQuestion />}
         message={t(`${i18nKey}.not-found`, { ns: 'notifiche' })}
         subtitle={t(`${i18nKey}.not-found-subtitle`, { ns: 'notifiche' })}
         isLogged={true}
@@ -228,42 +265,48 @@ const NotificationTimeline: React.FC = () => {
 
   return (
     <NotificationDetailOnboardingPrompt
-      iun={notification.iun}
+      iun={notificationIUN}
       mandateId={mandateId}
       route={routes.NOTIFICHE}
     >
       <LoadingPageWrapper isInitialized={pageReady}>
-        {hasNotificationReceivedApiError && (
+        {hasNotificationTimelineApiError && (
           <Box sx={{ p: 3 }}>
             {properBreadcrumb}
-            <ApiError
-              onClick={fetchReceivedNotification}
-              mt={3}
-              apiId={NOTIFICATION_ACTIONS.GET_RECEIVED_NOTIFICATION}
-            />
+            <ApiError onClick={fetchReceivedNotification} mt={3} apiId={timelineApiId} />
           </Box>
         )}
-        {!hasNotificationReceivedApiError && (
+        {!hasNotificationTimelineApiError && (
           <Box sx={{ p: 3, display: 'flex', flexDirection: 'column' }} gap={3}>
-            {breadcrumb}
-            <Stack gap={3}>
+            {properBreadcrumb}
+            <Stack>
               <Typography variant="h4" component="h1">
                 {t('detail.notification-timeline-section.title', { ns: 'notifiche' })}
               </Typography>
-              {isCancelledOrCancelling && cancelledAlert}
-              <MIPaper>
-                <NotificationDetailTimeline
+              {cancelledAlert}
+              {IS_NEW_TIMELINE_ENABLED ? (
+                <NotificationEventsTimeline
                   language={i18n.language}
-                  recipients={notification.recipients}
-                  statusHistory={notification.notificationStatusHistory}
+                  recipients={notificationTimeline.recipients}
+                  statusHistory={notificationTimeline.notificationStatusHistory}
                   clickHandler={legalFactDownloadHandler}
-                  handleTrackShowMoreLess={trackShowMoreLess}
-                  showMoreButtonLabel={t('detail.show-more', { ns: 'notifiche' })}
-                  showLessButtonLabel={t('detail.show-less', { ns: 'notifiche' })}
                   disableDownloads={isCancelled.cancellationInTimeline}
-                  isParty={false}
                 />
-              </MIPaper>
+              ) : (
+                <MIPaper sx={{ mt: 3 }}>
+                  <NotificationDetailTimeline
+                    language={i18n.language}
+                    recipients={notification.recipients}
+                    statusHistory={notification.notificationStatusHistory}
+                    clickHandler={legalFactDownloadHandler}
+                    handleTrackShowMoreLess={trackShowMoreLess}
+                    showMoreButtonLabel={t('detail.show-more', { ns: 'notifiche' })}
+                    showLessButtonLabel={t('detail.show-less', { ns: 'notifiche' })}
+                    disableDownloads={isCancelled.cancellationInTimeline}
+                    isParty={false}
+                  />
+                </MIPaper>
+              )}
             </Stack>
           </Box>
         )}

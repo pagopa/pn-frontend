@@ -5,7 +5,7 @@ import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 
 import { CssBaseline, ThemeProvider } from '@mui/material';
 import { LoadingPage } from '@pagopa-pn/pn-commons';
-import { theme } from '@pagopa/mui-italia';
+import { themeNext } from '@pagopa/mui-italia';
 
 import App from './App';
 import { initAxiosClients } from './api/apiClients';
@@ -44,7 +44,7 @@ async function doTheRender() {
     root.render(
       <Provider store={store}>
         {/* <React.StrictMode> */}
-        <ThemeProvider theme={theme}>
+        <ThemeProvider theme={themeNext}>
           <CssBaseline />
           <Suspense fallback={<LoadingPage renderType="whole" />}>
             <RouterProvider router={router} />

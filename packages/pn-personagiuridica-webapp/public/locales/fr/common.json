@@ -22,6 +22,7 @@
     "disable": "Désactiver",
     "start": "Démarrer",
     "continue": "Continuer",
+    "clear-field": "Vider le champ",
     "go-to-home": "Aller à la page d’accueil",
     "go-to-login": "Se connecter",
     "not-now": "Pas maintenant",
@@ -39,7 +40,9 @@
     "integrazione-api": "Intégration API",
     "app-status": "État de la plateforme",
     "users": "Utilisateurs",
-    "groups": "Groupes"
+    "groups": "Groupes",
+    "fallback-notification": "Détail de la notification",
+    "fallback-communication": "Détail de la communication"
   },
   "header": {
     "assistance": "Assistance",

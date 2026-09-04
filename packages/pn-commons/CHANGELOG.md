@@ -3,6 +3,40 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.26.0-RC.1](https://github.com/pagopa/pn-frontend/compare/v2.26.0-RC.0...v2.26.0-RC.1) (2026-09-04)
+
+### Bug Fixes
+
+* **PN-21374, PN-21339:** show recipient label on multi recipient notifications and fix background color of timeline page ([#2030](https://github.com/pagopa/pn-frontend/issues/2030)) ([cf2fdbc](https://github.com/pagopa/pn-frontend/commit/cf2fdbca3593bba169de9a9950e854c76d1b4842))
+
+### Features
+
+* **PN-20767:** add new illustrations ([#2029](https://github.com/pagopa/pn-frontend/issues/2029)) ([41cda9c](https://github.com/pagopa/pn-frontend/commit/41cda9cb7eb01142445da6103e1d4a0caf242c05))
+* **PN-21141:** add MIBreadcrumbs on portals ([#2015](https://github.com/pagopa/pn-frontend/issues/2015)) ([0dc70c7](https://github.com/pagopa/pn-frontend/commit/0dc70c7297e063cdf302ff970d5314b060dc9918))
+
+
+# [2.26.0-RC.0](https://github.com/pagopa/pn-frontend/compare/v2.25.0...v2.26.0-RC.0) (2026-09-01)
+
+### Bug Fixes
+
+* **PN-20351:** timeline mobile layout ([#2026](https://github.com/pagopa/pn-frontend/issues/2026)) ([a85ce95](https://github.com/pagopa/pn-frontend/commit/a85ce952834509b73bbe518e2c9c9fd295ec04a2))
+* **PN-20767:** apply wrap to all status chips ([73df114](https://github.com/pagopa/pn-frontend/commit/73df114aa7e821379a695368326a8bdbaefa3ff8))
+* **PN-20767:** status chp wrap value instead of truncate ([1772339](https://github.com/pagopa/pn-frontend/commit/1772339c0fbfdc88c6a4074f80e4c377e8797d20))
+* **PN-20885, PN-20959:** mobile layout and menu drawer ([#2002](https://github.com/pagopa/pn-frontend/issues/2002)) ([0c3b95f](https://github.com/pagopa/pn-frontend/commit/0c3b95f3189a49a7425602ac9ddee8137187d2e6))
+* **PN-20948:** update weight and color in SenderContact ([464b62d](https://github.com/pagopa/pn-frontend/commit/464b62d5710fc3933ca755daf7e797f973139618))
+* **PN-20958:** add break word to sender denomination in abstract paper ([#2011](https://github.com/pagopa/pn-frontend/issues/2011)) ([9f5e601](https://github.com/pagopa/pn-frontend/commit/9f5e601650bc30b739257763548e44f2943bf7ea))
+* **PN-20974:** update format in static section ([#2009](https://github.com/pagopa/pn-frontend/issues/2009)) ([01bc734](https://github.com/pagopa/pn-frontend/commit/01bc734da05f0c7e5a9897c2c1560031d0cdfc47))
+
+### Features
+
+* **PN-20350:** PA - Rework timeline layout ([#1963](https://github.com/pagopa/pn-frontend/issues/1963)) ([f5a61ac](https://github.com/pagopa/pn-frontend/commit/f5a61acd07898191beef208320216f0cb8f86c05))
+* **PN-20351:** PF/PG - Rework timeline layout ([#2004](https://github.com/pagopa/pn-frontend/issues/2004)) ([a71c245](https://github.com/pagopa/pn-frontend/commit/a71c2453b8829753273fc044ef90261e0f4c7e14))
+* **PN-20356:** Implementation mix panel event for PF ([#1987](https://github.com/pagopa/pn-frontend/issues/1987)) ([15c0c5f](https://github.com/pagopa/pn-frontend/commit/15c0c5f769b0a187f215d5d004d4ab0f09a912ee))
+* **PN-20357:** PG - Add Mixpanel tracking for ComBo notifications ([#1995](https://github.com/pagopa/pn-frontend/issues/1995)) ([eb07fb8](https://github.com/pagopa/pn-frontend/commit/eb07fb8d57cecb05b50117b5a25bd67d7828fe22))
+* **PN-20778:** use aarDocumentAvailable for AAR download availability ([#2008](https://github.com/pagopa/pn-frontend/issues/2008)) ([7650e43](https://github.com/pagopa/pn-frontend/commit/7650e437463e7ca292d7fedbb6c29d2f703b795a))
+* **PN-20865:** dismiss io.italia.it CDN for App IO download links ([43e2e17](https://github.com/pagopa/pn-frontend/commit/43e2e177b25a120673b36372e5980221b32a868a))
+
+
 # [2.25.0](https://github.com/pagopa/pn-frontend/compare/v2.24.2...v2.25.0) (2026-08-06)
 
 

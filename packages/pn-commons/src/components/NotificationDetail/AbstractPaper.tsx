@@ -38,6 +38,7 @@ interface AbstractPaperProps {
   recipientDenomination?: string;
   hasAttachments?: boolean;
   hasPayment?: boolean;
+  onExternalLinkClick?: (href: string) => void;
 }
 
 interface InstitutionLogoProps {
@@ -62,7 +63,7 @@ const InstitutionLogo = ({ id, name, selfcareCdnUrl }: InstitutionLogoProps) => 
         width: { xs: 64 },
         height: { xs: 64 },
         backgroundColor: logoSrc ? undefined : theme.palette.grey[50],
-        border: logoSrc ? `1px solid ${theme.palette.grey[300]}` : undefined,
+        border: logoSrc ? `1px solid ${theme.palette.grey[200]}` : undefined,
         borderRadius: 2,
         padding: logoSrc ? 1 : 0,
       }}
@@ -87,6 +88,7 @@ const AbstractPaper = ({
   recipientDenomination,
   hasAttachments = false,
   hasPayment = false,
+  onExternalLinkClick,
 }: AbstractPaperProps) => {
   const isMobile = useIsMobile();
 
@@ -153,28 +155,29 @@ const AbstractPaper = ({
               },
             }}
           >
-            <PNMarkdown content={abstract} />
+            <PNMarkdown content={abstract} onExternalLinkClick={onExternalLinkClick} />
           </Box>
 
-          {hasAttachments && (
+          {(hasAttachments || hasPayment) && (
             <Typography variant="body1" color="text.primary" mt={4}>
-              <Trans
-                i18nKey={attachmentsInfoMessage.key}
-                ns={attachmentsInfoMessage.ns}
-                components={[<strong key="0" />]}
-              />
+              {hasAttachments && (
+                <Trans
+                  i18nKey={attachmentsInfoMessage.key}
+                  ns={attachmentsInfoMessage.ns}
+                  components={[<strong key="0" />]}
+                />
+              )}
+              {hasAttachments && hasPayment && '\u00A0'}
+              {hasPayment && (
+                <Trans
+                  i18nKey={paymentInstructionsMessage.key}
+                  ns={paymentInstructionsMessage.ns}
+                  components={[<strong key="0" />, <strong key="1" />]}
+                />
+              )}
             </Typography>
           )}
 
-          {hasPayment && (
-            <Typography variant="body1" color="text.primary" mt={hasAttachments ? 2 : 4}>
-              <Trans
-                i18nKey={paymentInstructionsMessage.key}
-                ns={paymentInstructionsMessage.ns}
-                components={[<strong key="0" />]}
-              />
-            </Typography>
-          )}
           <Typography
             variant="body1"
             color="text.primary"
@@ -262,7 +265,7 @@ const AbstractPaper = ({
                 selfcareCdnUrl={selfcareCdnUrl}
               />
               <Box>
-                <Typography variant="sidenav" color="text">
+                <Typography variant="sidenav" color="text" sx={{ wordBreak: 'break-word' }}>
                   {senderDenomination}
                 </Typography>
                 <Typography variant="body2" color="text.secondary">

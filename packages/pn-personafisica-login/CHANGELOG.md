@@ -3,6 +3,21 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.26.0-RC.1](https://github.com/pagopa/pn-frontend/compare/v2.26.0-RC.0...v2.26.0-RC.1) (2026-09-04)
+
+### Features
+
+* **PN-20767:** add new illustrations ([#2029](https://github.com/pagopa/pn-frontend/issues/2029)) ([41cda9c](https://github.com/pagopa/pn-frontend/commit/41cda9cb7eb01142445da6103e1d4a0caf242c05))
+* **PN-21141:** add MIBreadcrumbs on portals ([#2015](https://github.com/pagopa/pn-frontend/issues/2015)) ([0dc70c7](https://github.com/pagopa/pn-frontend/commit/0dc70c7297e063cdf302ff970d5314b060dc9918))
+
+
+# [2.26.0-RC.0](https://github.com/pagopa/pn-frontend/compare/v2.25.0...v2.26.0-RC.0) (2026-09-01)
+
+### Features
+
+* **PN-20865:** dismiss io.italia.it CDN for App IO download links ([43e2e17](https://github.com/pagopa/pn-frontend/commit/43e2e177b25a120673b36372e5980221b32a868a))
+
+
 # [2.25.0](https://github.com/pagopa/pn-frontend/compare/v2.24.2...v2.25.0) (2026-08-06)
 
 
