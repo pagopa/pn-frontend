@@ -225,7 +225,7 @@ const NotificationTimeline: React.FC = () => {
     <MIAlert
       data-testid="cancelledAlertText"
       severity="warning"
-      sx={{ mb: { xs: 2, lg: 0 } }}
+      sx={{ mt: 3, mb: { xs: 2, lg: 0 } }}
       action={{
         label: t('detail.cancelled.cta', { ns: 'notifiche' }),
         onClick: () => {
@@ -274,21 +274,21 @@ const NotificationTimeline: React.FC = () => {
         {!hasNotificationTimelineApiError && (
           <Box sx={{ p: 3, display: 'flex', flexDirection: 'column' }} gap={3}>
             {properBreadcrumb}
-            <Stack gap={3}>
+            <Stack>
               <Typography variant="h4" component="h1">
                 {t('detail.notification-timeline-section.title', { ns: 'notifiche' })}
               </Typography>
-              {isCancelledOrCancelling && cancelledAlert}
-              <MIPaper>
-                {IS_NEW_TIMELINE_ENABLED ? (
-                  <NotificationEventsTimeline
-                    language={i18n.language}
-                    recipients={notificationTimeline.recipients}
-                    statusHistory={notificationTimeline.notificationStatusHistory}
-                    clickHandler={legalFactDownloadHandler}
-                    disableDownloads={isCancelled.cancellationInTimeline}
-                  />
-                ) : (
+              {cancelledAlert}
+              {IS_NEW_TIMELINE_ENABLED ? (
+                <NotificationEventsTimeline
+                  language={i18n.language}
+                  recipients={notificationTimeline.recipients}
+                  statusHistory={notificationTimeline.notificationStatusHistory}
+                  clickHandler={legalFactDownloadHandler}
+                  disableDownloads={isCancelled.cancellationInTimeline}
+                />
+              ) : (
+                <MIPaper sx={{ mt: 3 }}>
                   <NotificationDetailTimeline
                     language={i18n.language}
                     recipients={notification.recipients}
@@ -300,8 +300,8 @@ const NotificationTimeline: React.FC = () => {
                     disableDownloads={isCancelled.cancellationInTimeline}
                     isParty={false}
                   />
-                )}
-              </MIPaper>
+                </MIPaper>
+              )}
             </Stack>
           </Box>
         )}
