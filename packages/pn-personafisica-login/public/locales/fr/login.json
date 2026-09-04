@@ -1,54 +1,54 @@
 {
-  "loginPage": {
-    "title": "Connectez-vous à SEND pour vos communications juridiquement contraignantes",
-    "description": "Sélectionnez le mode d’accès souhaité.",
-    "missing-spid-cie": "Vous n'avez pas le SPID ou la CIE ? <0>En savoir plus</0>",
-    "loginBox": {
-      "title": "Se connecter",
-      "spidLogin": "Se connecter avec SPID",
-      "cieLogin": "Se connecter avec CIE"
-    }
+  "disambiguationPage": {
+    "button": "Se connecter",
+    "pf": "Citoyen privé",
+    "pg": "Personnalité juridique",
+    "subTitle": "Nous vous redirigerons en fonction de votre choix.",
+    "title": "Avec quel profil souhaitez-vous accéder ?"
   },
-  "spidSelect": {
-    "title": "Choisissez votre SPID",
-    "hintText": "Pas de SPID ?<0> En savoir plus</0>",
-    "cancelButton": "Annuler",
-    "emptyState": "Aucun IDP trouvé"
+  "ioSmartAppBanner": {
+    "cta": "OUVRIR",
+    "subtitle": "Ouvrir dans l'app IO",
+    "title": "IO - L'app des services publics"
   },
   "loginError": {
-    "title": "En raison d’une erreur du système, il n’est pas possible de terminer la procédure.",
-    "message": "En raison d’une erreur du système, il n’est pas possible de terminer la procédure. Veuillez réessayer plus tard.",
     "code": {
+      "error_1001": "Accès refusé : vous n’avez pas l’âge minimum requis pour utiliser la plateforme.",
       "error_19": "Vous avez saisi trop souvent un nom d’utilisateur ou un mot de passe incorrect : réessayez dans quelques minutes ou contactez votre fournisseur d’identité SPID pour modifier vos informations d’identification.",
       "error_20": "Pour des raisons de sécurité, une connexion avec un deuxième facteur d’authentification est requise : contactez votre fournisseur d’identité SPID pour comprendre comment il est utilisé.",
       "error_21": "Trop de temps s’est écoulé depuis que vous avez commencé la procédure de connexion : recommencez depuis le début.",
       "error_22": "Pour utiliser la plateforme, vous devez consentir à l’envoi de certaines données. Entrez à nouveau et donnez votre consentement.",
       "error_23": "Votre identité SPID est suspendue ou révoquée. Pour réactiver votre compte, contactez votre fournisseur d’identité SPID.",
       "error_25": "Vous avez annulé l’opération de connexion : vous pouvez réessayer quand vous le souhaitez.",
-      "error_30": "Le type d’identité SPID que vous avez utilisé est différent de celui requis par le fournisseur de services. Entrez à nouveau en utilisant le bon type.",
-      "error_1001": "Accès refusé : vous n’avez pas l’âge minimum requis pour utiliser la plateforme."
-    }
+      "error_30": "Le type d’identité SPID que vous avez utilisé est différent de celui requis par le fournisseur de services. Entrez à nouveau en utilisant le bon type."
+    },
+    "message": "En raison d’une erreur du système, il n’est pas possible de terminer la procédure. Veuillez réessayer plus tard.",
+    "title": "En raison d’une erreur du système, il n’est pas possible de terminer la procédure."
   },
-  "disambiguationPage": {
-    "title": "Avec quel profil souhaitez-vous accéder ?",
-    "subTitle": "Nous vous redirigerons en fonction de votre choix.",
-    "pf": "Citoyen privé",
-    "pg": "Personnalité juridique",
-    "button": "Se connecter"
-  },
-  "ioSmartAppBanner": {
-    "title": "IO - L'app des services publics",
-    "subtitle": "Ouvrir dans l'app IO",
-    "cta": "OUVRIR"
+  "loginPage": {
+    "description": "Sélectionnez le mode d’accès souhaité.",
+    "loginBox": {
+      "cieLogin": "Se connecter avec CIE",
+      "spidLogin": "Se connecter avec SPID",
+      "title": "Se connecter"
+    },
+    "missing-spid-cie": "Vous n'avez pas le SPID ou la CIE ? <0>En savoir plus<\/0>",
+    "title": "Connectez-vous à SEND pour vos communications juridiquement contraignantes"
   },
   "one-identity-spid-select": {
-    "title": "Se connecter avec SPID",
     "close-button-aria-label": "Fermer",
-    "unavailable-idp-warning": "L'accès via %s n'est pas disponible pour le moment, veuillez réessayer plus tard ou vous connecter avec un autre fournisseur d'identité",
     "error": {
-      "title": "Nous ne parvenons pas à charger la liste",
+      "close-button": "Fermer",
       "description": "Veuillez réessayer plus tard.",
-      "close-button": "Fermer"
-    }
+      "title": "Nous ne parvenons pas à charger la liste"
+    },
+    "title": "Se connecter avec SPID",
+    "unavailable-idp-warning": "L'accès via %s n'est pas disponible pour le moment, veuillez réessayer plus tard ou vous connecter avec un autre fournisseur d'identité"
+  },
+  "spidSelect": {
+    "cancelButton": "Annuler",
+    "emptyState": "Aucun IDP trouvé",
+    "hintText": "Pas de SPID ?<0> En savoir plus<\/0>",
+    "title": "Choisissez votre SPID"
   }
 }
