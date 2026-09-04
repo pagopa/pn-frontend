@@ -18,7 +18,6 @@ import {
   EventNotificationTypes,
   EventPaymentRecipientType,
   GetDowntimeHistoryParams,
-  IllusQuestion,
   NotificationDetailBilingualFacsimileDocuments,
   NotificationDetailDocuments,
   NotificationDetailOtherDocument,
@@ -32,7 +31,6 @@ import {
   PagoPaIntegrationMode,
   PaymentAttachmentSName,
   PaymentDetails,
-  PnBreadcrumb,
   StatusHistoryParser,
   appStateActions,
   downloadDocument,
@@ -45,7 +43,13 @@ import {
   EventDeliveryFlowType,
   EventDeliveryModeType,
 } from '@pagopa-pn/pn-commons/src/models/MixpanelEvents';
-import { MIAlert, MIPaper } from '@pagopa/mui-italia';
+import {
+  IllusMIQuestion,
+  MIAlert,
+  MIBreadcrumbItem,
+  MIBreadcrumbs,
+  MIPaper,
+} from '@pagopa/mui-italia';
 
 import NotificationDetailOnboardingPrompt from '../components/Contacts/Onboarding/NotificationDetailOnboardingPrompt';
 import DomicileBanner from '../components/DomicileBanner/DomicileBanner';
@@ -436,15 +440,24 @@ const NotificationDetail: React.FC = () => {
       : t('menu.notifiche-utente', { ns: 'common' });
 
     return (
-      <PnBreadcrumb
-        showBackAction={!rapidAccessSource}
-        linkRoute={backRoute}
-        linkLabel={
-          mandateId || delegatorsFromStore.length > 0 ? breadcrumbLabel : t('menu.notifiche')
+      <MIBreadcrumbs
+        backButtonLabel={
+          rapidAccessSource ? t('menu.notifiche') : t('button.indietro', { ns: 'common' })
         }
-        currentLocationLabel={notification.subject ?? ''}
-        goBackAction={() => navigate(backRoute)}
-      />
+        backButtonAction={() => navigate(backRoute)}
+      >
+        <MIBreadcrumbItem
+          label={
+            mandateId || delegatorsFromStore.length > 0 ? breadcrumbLabel : t('menu.notifiche')
+          }
+          onClick={() => navigate(backRoute)}
+          data-testid="breadcrumb-root-button"
+        />
+        <MIBreadcrumbItem
+          label={notification.subject || t('menu.fallback-notification', { ns: 'common' })}
+          current
+        />
+      </MIBreadcrumbs>
     );
   }, [rapidAccessSource, i18n.language, notification.subject, delegatorsFromStore, mandateId]);
 
@@ -536,7 +549,7 @@ const NotificationDetail: React.FC = () => {
     const i18nKey = currentUser.source?.retrievalId ? 'from-tpp' : 'from-qrcode';
     return (
       <AccessDenied
-        icon={<IllusQuestion />}
+        icon={<IllusMIQuestion />}
         message={t(`${i18nKey}.not-found`, { ns: 'notifiche' })}
         subtitle={t(`${i18nKey}.not-found-subtitle`, { ns: 'notifiche' })}
         isLogged={true}

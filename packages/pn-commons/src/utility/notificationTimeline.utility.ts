@@ -45,23 +45,14 @@ const getStepRecIndex = (step: NotificationTimelineStep): number | undefined =>
 
 /**
  * For each step, the recipient to display as a header above it, or undefined if none should be
- * shown there. Returns all undefined when the steps involve a single recipient; otherwise flags
- * a recipient the first time it's met and every time it changes, on event steps and group steps
- * alike.
+ * shown there. Flags a recipient the first time it's met and every time it changes, on event
+ * steps and group steps alike. Callers are expected to only use this for multi-recipient
+ * notifications, since every recipient encountered ends up flagged at least once.
  */
 export const getRecipientPerStep = (
   steps: Array<NotificationTimelineStep>,
   recipients: Array<NotificationDetailRecipient>
 ): Array<NotificationDetailRecipient | undefined> => {
-  const distinctRecIndexes = new Set(
-    steps.map(getStepRecIndex).filter((recIndex): recIndex is number => recIndex !== undefined)
-  );
-
-  // If there is only one recipient involved in the steps, we don't need to show any recipient headers.
-  if (distinctRecIndexes.size < 2) {
-    return steps.map(() => undefined);
-  }
-
   // eslint-disable-next-line functional/no-let
   let lastRecIndex: number | undefined;
 

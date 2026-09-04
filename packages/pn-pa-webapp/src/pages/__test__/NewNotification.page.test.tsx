@@ -103,11 +103,9 @@ describe('NewNotification Page without payment enabled in configuration', () => 
     const mockedPageBefore = result.queryByTestId('mocked-dashboard');
     expect(mockedPageBefore).not.toBeInTheDocument();
 
-    // simulate clicking the link
-    const links = result.getAllByRole('link');
-    expect(links[0]).toHaveTextContent(/new-notification.breadcrumb-root/i);
-    expect(links[0]).toHaveAttribute('href', routes.DASHBOARD);
-    fireEvent.click(links[0]);
+    // simulate clicking the button
+    const breadcrumbRootButton = result.getByTestId('breadcrumb-root-button');
+    fireEvent.click(breadcrumbRootButton);
 
     // prompt must be shown
     const promptDialog = await waitFor(() => result.getByTestId('promptDialog'));

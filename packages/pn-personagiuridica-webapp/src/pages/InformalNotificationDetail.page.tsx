@@ -14,13 +14,12 @@ import {
   NotificationPaymentRecipient,
   PaymentAttachmentSName,
   PaymentsData,
-  PnBreadcrumb,
   PnSenderContacts,
   appStateActions,
   downloadDocument,
   useErrors,
 } from '@pagopa-pn/pn-commons';
-import { MIPaper } from '@pagopa/mui-italia';
+import { MIBreadcrumbItem, MIBreadcrumbs, MIPaper } from '@pagopa/mui-italia';
 
 import LoadingPageWrapper from '../components/LoadingPageWrapper/LoadingPageWrapper';
 import type { BffFullInformalNotificationV1 } from '../generated-client/informal-notifications';
@@ -46,6 +45,7 @@ const InformalNotificationDetail: React.FC = () => {
   const [pageReady, setPageReady] = useState(false);
   const { hasApiErrors } = useErrors();
   const navigate = useNavigate();
+
   const { SELFCARE_CDN_URL } = getConfiguration();
 
   const [informalNotification, setInformalNotification] =
@@ -157,19 +157,28 @@ const InformalNotificationDetail: React.FC = () => {
 
   const properBreadcrumb = useMemo(
     () => (
-      <PnBreadcrumb
-        showBackAction
-        linkRoute={routes.NOTIFICHE}
-        linkLabel={
-          currentRecipient?.denomination
-            ? t('menu.notifiche-impresa', {
-                organization: currentOrganizationName ?? '',
-              })
-            : t('menu.notifiche')
-        }
-        currentLocationLabel={primaryMessage?.subject ?? ''}
-        goBackAction={() => navigate(routes.NOTIFICHE)}
-      />
+      <MIBreadcrumbs
+        backButtonLabel={t('button.indietro', { ns: 'common' })}
+        backButtonAction={() => navigate(routes.NOTIFICHE)}
+      >
+        <MIBreadcrumbItem
+          label={
+            currentRecipient?.denomination
+              ? t('menu.notifiche-impresa', {
+                  organization: currentOrganizationName ?? '',
+                })
+              : t('menu.notifiche')
+          }
+          onClick={() => {
+            navigate(routes.NOTIFICHE);
+          }}
+          data-testid="breadcrumb-root-button"
+        />
+        <MIBreadcrumbItem
+          label={primaryMessage?.subject ?? t('menu.fallback-communication')}
+          current
+        />
+      </MIBreadcrumbs>
     ),
     [
       i18n.language,

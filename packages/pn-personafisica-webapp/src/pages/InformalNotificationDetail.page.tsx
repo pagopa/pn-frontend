@@ -14,13 +14,12 @@ import {
   NotificationPaymentRecipient,
   PaymentAttachmentSName,
   PaymentsData,
-  PnBreadcrumb,
   PnSenderContacts,
   appStateActions,
   downloadDocument,
   useErrors,
 } from '@pagopa-pn/pn-commons';
-import { MIPaper } from '@pagopa/mui-italia';
+import { MIBreadcrumbItem, MIBreadcrumbs, MIPaper } from '@pagopa/mui-italia';
 
 import LoadingPageWrapper from '../components/LoadingPageWrapper/LoadingPageWrapper';
 import { PFEventsType } from '../models/PFEventsType';
@@ -193,17 +192,24 @@ const InformalNotificationDetail: React.FC = () => {
 
   const properBreadcrumb = useMemo(
     () => (
-      <PnBreadcrumb
-        showBackAction
-        linkRoute={routes.NOTIFICHE}
-        linkLabel={
-          delegatorsFromStore.length > 0
-            ? t('menu.notifiche-utente', { ns: 'common' })
-            : t('menu.notifiche')
-        }
-        currentLocationLabel={primaryMessage?.subject ?? ''}
-        goBackAction={() => navigate(routes.NOTIFICHE)}
-      />
+      <MIBreadcrumbs
+        backButtonLabel={t('button.indietro', { ns: 'common' })}
+        backButtonAction={() => navigate(routes.NOTIFICHE)}
+      >
+        <MIBreadcrumbItem
+          onClick={() => navigate(routes.NOTIFICHE)}
+          label={
+            delegatorsFromStore.length > 0
+              ? t('menu.notifiche-utente', { ns: 'common' })
+              : t('menu.notifiche')
+          }
+          data-testid="breadcrumb-root-button"
+        />
+        <MIBreadcrumbItem
+          label={primaryMessage?.subject ?? t('menu.fallback-communication')}
+          current
+        />
+      </MIBreadcrumbs>
     ),
     [i18n.language, primaryMessage?.subject, delegatorsFromStore]
   );

@@ -13,13 +13,12 @@ import {
   NotificationDetailTimeline,
   NotificationDocumentType,
   NotificationEventsTimeline,
-  PnBreadcrumb,
   appStateActions,
   downloadDocument,
   useErrors,
   useIsCancelled,
 } from '@pagopa-pn/pn-commons';
-import { MIAlert, MIPaper } from '@pagopa/mui-italia';
+import { MIAlert, MIBreadcrumbItem, MIBreadcrumbs, MIPaper } from '@pagopa/mui-italia';
 
 import LoadingPageWrapper from '../components/LoadingPageWrapper/LoadingPageWrapper';
 import { PGEventsType } from '../models/PGEventsType';
@@ -56,6 +55,8 @@ const NotificationTimeline: React.FC = () => {
   const notificationTimeline = useAppSelector(
     (state: RootState) => state.notificationState.notificationTimeline
   );
+  const currentUser = useAppSelector((state: RootState) => state.userState.user);
+  const organization = currentUser.organization;
 
   const isCancelled = useIsCancelled({
     notification: IS_NEW_TIMELINE_ENABLED ? notificationTimeline : notification,
@@ -141,25 +142,45 @@ const NotificationTimeline: React.FC = () => {
     if (!id) {
       return null;
     }
-    const backRoute = mandateId
+
+    const notificationDetailRoute = mandateId
       ? routes.GET_DETTAGLIO_NOTIFICA_DELEGATO_PATH(id, mandateId)
       : routes.GET_DETTAGLIO_NOTIFICA_PATH(id);
 
+    const breadcrumbLabel = mandateId
+      ? t('menu.notifiche-delegato')
+      : t('menu.notifiche-impresa', { organization: organization?.name });
+
     return (
-      <PnBreadcrumb
-        linkRoute={mandateId ? routes.NOTIFICHE_DELEGATO : routes.NOTIFICHE}
-        linkLabel={t('menu.notifiche')}
-        currentLocationLabel={notificationSubject ?? ''}
-        goBackAction={() => navigate(backRoute)}
-      />
+      <MIBreadcrumbs
+        backButtonLabel={t('button.indietro', { ns: 'common' })}
+        backButtonAction={() => navigate(notificationDetailRoute)}
+      >
+        <MIBreadcrumbItem
+          label={breadcrumbLabel}
+          onClick={() => {
+            navigate(mandateId ? routes.NOTIFICHE_DELEGATO : routes.NOTIFICHE);
+          }}
+          data-testid="breadcrumb-root-button"
+        />
+        <MIBreadcrumbItem
+          label={notificationSubject || t('menu.fallback-notification')}
+          onClick={() => navigate(notificationDetailRoute)}
+          data-testid="breadcrumb-subject-button"
+        />
+        <MIBreadcrumbItem
+          label={t('detail.notification-timeline-section.title', { ns: 'notifiche' })}
+          current
+        />
+      </MIBreadcrumbs>
     );
-  }, [id, i18n.language, notificationSubject, mandateId]);
+  }, [id, i18n.language, notificationSubject, mandateId, organization?.name]);
 
   const cancelledAlert = isCancelledOrCancelling && (
     <MIAlert
       data-testid="cancelledAlertText"
       severity="warning"
-      sx={{ mb: { xs: 2, lg: 0 } }}
+      sx={{ mt: 3, mb: { xs: 2, lg: 0 } }}
       action={{
         label: t('detail.cancelled.cta', { ns: 'notifiche' }),
         href: NOTIFICATION_CANCELLED_HELP_LINK,
@@ -182,21 +203,21 @@ const NotificationTimeline: React.FC = () => {
       {!hasNotificationTimelineApiError && (
         <Box sx={{ p: 3, display: 'flex', flexDirection: 'column' }} gap={3}>
           {properBreadcrumb}
-          <Stack gap={3}>
+          <Stack>
             <Typography variant="h4" component="h1">
               {t('detail.notification-timeline-section.title', { ns: 'notifiche' })}
             </Typography>
-            {isCancelledOrCancelling && cancelledAlert}
-            <MIPaper>
-              {IS_NEW_TIMELINE_ENABLED ? (
-                <NotificationEventsTimeline
-                  language={i18n.language}
-                  recipients={notificationTimeline.recipients}
-                  statusHistory={notificationTimeline.notificationStatusHistory}
-                  clickHandler={legalFactDownloadHandler}
-                  disableDownloads={isCancelled.cancellationInTimeline}
-                />
-              ) : (
+            {cancelledAlert}
+            {IS_NEW_TIMELINE_ENABLED ? (
+              <NotificationEventsTimeline
+                language={i18n.language}
+                recipients={notificationTimeline.recipients}
+                statusHistory={notificationTimeline.notificationStatusHistory}
+                clickHandler={legalFactDownloadHandler}
+                disableDownloads={isCancelled.cancellationInTimeline}
+              />
+            ) : (
+              <MIPaper sx={{ mt: 3 }}>
                 <NotificationDetailTimeline
                   language={i18n.language}
                   recipients={notification.recipients}
@@ -208,8 +229,8 @@ const NotificationTimeline: React.FC = () => {
                   disableDownloads={isCancelled.cancellationInTimeline}
                   isParty={false}
                 />
-              )}
-            </MIPaper>
+              </MIPaper>
+            )}
           </Stack>
         </Box>
       )}

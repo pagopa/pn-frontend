@@ -11,12 +11,11 @@ import {
   NotificationDocumentResponse,
   NotificationDocumentType,
   NotificationEventsTimeline,
-  PnBreadcrumb,
   appStateActions,
   downloadDocument,
   useErrors,
 } from '@pagopa-pn/pn-commons';
-import { MIPaper } from '@pagopa/mui-italia';
+import { MIBreadcrumbItem, MIBreadcrumbs, MIPaper } from '@pagopa/mui-italia';
 
 import { PAEventsType } from '../models/PAEventsType';
 import * as routes from '../navigation/routes.const';
@@ -35,7 +34,6 @@ import PAEventStrategyFactory from '../utility/MixpanelUtils/PAEventStrategyFact
 const NotificationTimeline: React.FC = () => {
   const { id } = useParams();
   const dispatch = useAppDispatch();
-  const navigate = useNavigate();
   const location = useLocation();
   const { hasApiErrors } = useErrors();
   const { t, i18n } = useTranslation(['common', 'notifiche', 'appStatus']);
@@ -45,6 +43,7 @@ const NotificationTimeline: React.FC = () => {
   );
   const { IS_NEW_TIMELINE_ENABLED } = getConfiguration();
   const [pageReady, setPageReady] = useState(false);
+  const navigate = useNavigate();
 
   const timelineApiId = IS_NEW_TIMELINE_ENABLED
     ? NOTIFICATION_ACTIONS.GET_SENT_NOTIFICATION_TIMELINE
@@ -112,20 +111,30 @@ const NotificationTimeline: React.FC = () => {
       return null;
     }
 
-    const backRoute = routes.GET_DETTAGLIO_NOTIFICA_PATH(id);
-
     return (
-      <PnBreadcrumb
-        linkRoute={routes.DASHBOARD}
-        linkLabel={t('detail.breadcrumb-root', { ns: 'notifiche' })}
-        currentLocationLabel={notificationIUN}
-        goBackAction={() =>
+      <MIBreadcrumbs
+        backButtonLabel={t('button.indietro', { ns: 'common' })}
+        backButtonAction={() =>
           location.state?.fromNotificationDetail
             ? navigate(-1)
-            : navigate(backRoute, { replace: true })
+            : navigate(routes.GET_DETTAGLIO_NOTIFICA_PATH(id), { replace: true })
         }
-        goBackLabel={t('button.indietro', { ns: 'common' })}
-      />
+      >
+        <MIBreadcrumbItem
+          label={t('detail.breadcrumb-root', { ns: 'notifiche' })}
+          onClick={() => navigate(routes.DASHBOARD)}
+          data-testid="breadcrumb-root-button"
+        />
+        <MIBreadcrumbItem
+          label={notificationIUN}
+          onClick={() => navigate(routes.GET_DETTAGLIO_NOTIFICA_PATH(id))}
+          data-testid="breadcrumb-iun-button"
+        />
+        <MIBreadcrumbItem
+          label={t('detail.notification-timeline-section.title', { ns: 'notifiche' })}
+          current
+        />
+      </MIBreadcrumbs>
     );
   }, [id, i18n.language, location.state, notificationIUN]);
 
@@ -150,20 +159,20 @@ const NotificationTimeline: React.FC = () => {
       {!hasNotificationSentApiError && pageReady && (
         <Box sx={{ p: 3, display: 'flex', flexDirection: 'column' }} gap={3}>
           {properBreadcrumb}
-          <Stack gap={3}>
+          <Stack>
             <Typography variant="h4" component="h1">
               {t('detail.notification-timeline-section.title', { ns: 'notifiche' })}
             </Typography>
-            <MIPaper>
-              {IS_NEW_TIMELINE_ENABLED ? (
-                <NotificationEventsTimeline
-                  language={i18n.language}
-                  recipients={notificationTimeline.recipients}
-                  statusHistory={notificationTimeline.notificationStatusHistory}
-                  clickHandler={legalFactDownloadHandler}
-                  isSenderTimeline
-                />
-              ) : (
+            {IS_NEW_TIMELINE_ENABLED ? (
+              <NotificationEventsTimeline
+                language={i18n.language}
+                recipients={notificationTimeline.recipients}
+                statusHistory={notificationTimeline.notificationStatusHistory}
+                clickHandler={legalFactDownloadHandler}
+                isSenderTimeline
+              />
+            ) : (
+              <MIPaper sx={{ mt: 3 }}>
                 <NotificationDetailTimeline
                   language={i18n.language}
                   recipients={notification.recipients}
@@ -173,8 +182,8 @@ const NotificationTimeline: React.FC = () => {
                   showLessButtonLabel={t('detail.show-less', { ns: 'notifiche' })}
                   handleTrackShowMoreLess={trackTimelineShowMore}
                 />
-              )}
-            </MIPaper>
+              </MIPaper>
+            )}
           </Stack>
         </Box>
       )}

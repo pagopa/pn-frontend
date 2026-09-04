@@ -37,7 +37,9 @@
     "deleghe": "Vollmachten",
     "profilo": "Deine Daten",
     "contacts": "Deine Kontaktdaten",
-    "app-status": "Status der Plattform"
+    "app-status": "Status der Plattform",
+    "fallback-notification": "Zustellungsdetails",
+    "fallback-communication": "Mitteilungsdetails"
   },
   "header": {
     "assistance": "Support",
