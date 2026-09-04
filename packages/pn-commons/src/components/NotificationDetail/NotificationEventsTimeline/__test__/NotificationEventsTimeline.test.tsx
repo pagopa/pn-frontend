@@ -256,7 +256,7 @@ describe('NotificationEventsTimeline', () => {
     ]);
   });
 
-  it('does not show the recipient at all when a status only has a single, standalone event step', () => {
+  it('still shows the recipient on a status made of a single, standalone event step, since it is its first occurrence', () => {
     const { queryAllByTestId } = render(
       <NotificationEventsTimeline
         recipients={multiRecipients}
@@ -272,7 +272,9 @@ describe('NotificationEventsTimeline', () => {
       />
     );
 
-    expect(queryAllByTestId('timeline-group-recipient')).toHaveLength(0);
+    const recipientLabels = queryAllByTestId('timeline-group-recipient');
+    expect(recipientLabels).toHaveLength(1);
+    expect(recipientLabels[0]).toHaveTextContent('Utente Test Due - TSTUTN00A07A002H');
   });
 
   it('does not show the recipient on single recipient notifications', () => {
