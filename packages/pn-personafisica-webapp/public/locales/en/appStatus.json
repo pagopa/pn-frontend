@@ -1,23 +1,25 @@
 {
   "appStatus": {
-    "title": "Platform status",
-    "subtitle": "Check the operation of SEND, view the history of disruptions and download the related certificates enforceable against third parties. Each certification certifies a disruption: it may be useful if this has involved a notification intended for you.",
+    "aria-missed-endDate": "Missing end date, service disruption in progress",
+    "lastCheckLegend": "Last update - {{ lastCheckTimestamp }}",
+    "missed-endDate": "In progress",
     "statusDescription": {
-      "ok": "All SEND services are operational.",
-      "not-ok": "There is a current disruption. For more details, see the table below."
+      "not-ok": "There is a current disruption. For more details, see the table below.",
+      "ok": "All SEND services are operational."
     },
-    "lastCheckLegend": "Last update - {{ lastCheckTimestamp }}"
+    "subtitle": "Check the operation of SEND, view the history of disruptions and download the related certificates enforceable against third parties. Each certification certifies a disruption: it may be useful if this has involved a notification intended for you.",
+    "title": "Platform status"
   },
   "downtimeList": {
-    "title": "Disruption history",
     "columnHeader": {
-      "startDate": "Start date",
       "endDate": "End date",
       "functionality": "Service involved",
       "legalFactId": "Certificates enforceable against third parties",
+      "startDate": "Start date",
       "status": "Status"
     },
-    "emptyMessage": "No disruptions have been recorded"
+    "emptyMessage": "No disruptions have been recorded",
+    "title": "Disruption history"
   },
   "legends": {
     "knownFunctionality": {
@@ -25,15 +27,15 @@
       "NOTIFICATION_VISUALIZATION": "View notifications and download attachments",
       "NOTIFICATION_WORKFLOW": "Notification status change"
     },
-    "unknownFunctionality": "Unknown service ({{functionality}})",
-    "status": {
-      "OK": "Resolved",
-      "KO": "In progress"
-    },
+    "legalFactDownload": "Download the certificate",
     "noFileAvailableByStatus": {
-      "OK": "The certificate will be available shortly",
-      "KO": "The certificate will be available at the end of the disruption"
+      "KO": "The certificate will be available at the end of the disruption",
+      "OK": "The certificate will be available shortly"
     },
-    "legalFactDownload": "Download the certificate"
+    "status": {
+      "KO": "In progress",
+      "OK": "Resolved"
+    },
+    "unknownFunctionality": "Unknown service ({{functionality}})"
   }
 }
