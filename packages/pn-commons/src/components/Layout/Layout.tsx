@@ -107,7 +107,7 @@ const Layout: React.FC<Props> = ({
       direction="column"
       sx={{
         minHeight: 'calc(100vh - 5px)',
-        background: (theme) => theme.palette.grey[100],
+        backgroundColor: 'background.main',
       }} // 100vh per sticky footer
     >
       <>

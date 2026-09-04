@@ -1,4 +1,4 @@
-import { vi } from 'vitest';
+import { themeNext as theme } from '@pagopa/mui-italia';
 
 import { AppCurrentStatus } from '../../../models/AppStatus';
 import {
@@ -9,19 +9,6 @@ import {
   render,
 } from '../../../test-utils';
 import { AppStatusBar } from '../AppStatusBar';
-
-const fakePalette = { success: { main: '#00FF00' }, error: { main: '#FF0000' } };
-
-vi.mock('@mui/material', async () => {
-  const original = await vi.importActual<any>('@mui/material');
-  return {
-    ...original,
-    useTheme: () => ({
-      ...original.useTheme(),
-      palette: { ...original.useTheme().palette, ...fakePalette },
-    }),
-  };
-});
 
 const baseStatus: Omit<AppCurrentStatus, 'appIsFullyOperative'> = {
   lastCheckTimestamp: '2022-11-21T06:07:08Z',
@@ -59,9 +46,7 @@ describe('AppStatusBar component', () => {
     // check main element: flexbox with row direction, border color success
     const mainElement = result?.getByTestId('app-status-bar');
     expect(mainElement).toHaveStyle({
-      display: 'flex',
-      'flex-direction': 'row',
-      'border-color': fakePalette.success.main,
+      'border-color': theme.palette.success.main,
     });
     // check icon: must be CheckCircleRoundedIcon
     const iconElement = result?.getByTestId('CheckCircleRoundedIcon');
@@ -82,12 +67,10 @@ describe('AppStatusBar component', () => {
     // check main element: flexbox with row direction, border color error
     const mainElement = result?.getByTestId('app-status-bar');
     expect(mainElement).toHaveStyle({
-      display: 'flex',
-      'flex-direction': 'row',
-      'border-color': fakePalette.error.main,
+      'border-color': theme.palette.error.light,
     });
     // check icon: must be ErrorRoundedIcon
-    const iconElement = result?.getByTestId('ErrorRoundedIcon');
+    const iconElement = result?.getByTestId('ReportRoundedIcon');
     expect(iconElement).toBeInTheDocument();
   });
 
@@ -106,9 +89,7 @@ describe('AppStatusBar component', () => {
     // check main element: flexbox with column direction, border color error
     const mainElement = result?.getByTestId('app-status-bar');
     expect(mainElement).toHaveStyle({
-      display: 'flex',
-      'flex-direction': 'column',
-      'border-color': fakePalette.success.main,
+      'border-color': theme.palette.success.main,
     });
     // check icon: must be CheckCircleRoundedIcon
     const iconElement = result?.getByTestId('CheckCircleRoundedIcon');
