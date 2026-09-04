@@ -1,20 +1,20 @@
 {
-  "title": "Come possiamo aiutarti?",
-  "sub-title": "Indica l’indirizzo email in cui desideri ricevere le risposte dell’assistenza.",
+  "disclaimer": "Proseguendo dichiari di aver letto la <0>Privacy Policy Assistenza<\/0>",
+  "exit-message": "Se esci, la richiesta di assistenza andrà persa.",
+  "exit-title": "Vuoi davvero uscire?",
   "form": {
-    "email": "Inserisci l'indirizzo email",
     "confirm-email": "Conferma l'indirizzo email",
+    "email": "Inserisci l'indirizzo email",
     "errors": {
+      "not-the-same": "L'indirizzo email di conferma non è uguale all'indirizzo email inserito",
       "not-valid": "L'indirizzo email non è valido",
-      "required": "Campo obbligatorio",
-      "not-the-same": "L'indirizzo email di conferma non è uguale all'indirizzo email inserito"
+      "required": "Campo obbligatorio"
     }
   },
-  "disclaimer": "Proseguendo dichiari di aver letto la <0>Privacy Policy Assistenza</0>",
-  "exit-title": "Vuoi davvero uscire?",
-  "exit-message": "Se esci, la richiesta di assistenza andrà persa.",
   "messages": {
-    "generic-title": "Si è verificato un errore inatteso",
-    "generic-message": "Ti suggeriamo di riprovare più tardi"
-  }
+    "generic-message": "Ti suggeriamo di riprovare più tardi",
+    "generic-title": "Si è verificato un errore inatteso"
+  },
+  "sub-title": "Indica l’indirizzo email in cui desideri ricevere le risposte dell’assistenza.",
+  "title": "Come possiamo aiutarti?"
 }

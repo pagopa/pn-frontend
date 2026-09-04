@@ -1,439 +1,446 @@
 {
-  "title": "Adressen",
-  "subtitle": "Hier kannst du die Adressen verwalten, an die du die Zustellungen der SEND beigetretenen Körperschaften erhalten möchtest.",
+  "common": {
+    "duplicate-contact-descr": "Der Kontakt {{value}} ist bereits vorhanden, dennoch fortfahren?",
+    "duplicate-contact-title": "Adresse bereits vorhanden",
+    "duplicate-default-contact-descr": "Die Adresse {{value}} wird bereits als primäres digitales Domizil auf SEND verwendet.<br \/>Um das digitale Domizil pro sendender Körperschaft zu personalisieren, wähle eine andere Adresse.",
+    "duplicate-default-contact-title": "Diese Adresse wird bereits als digitales Domizil verwendet",
+    "enti-not-found": "Keine Körperschaft gefunden",
+    "too-long-field-error": "Höchstens {{maxLength}} Zeichen schreiben"
+  },
+  "courtesy-contacts": {
+    "block-remove-email-message": "Um fortzufahren, musst du zuerst die personalisierten E-Mail-Adressen für jede Körperschaft entfernen.",
+    "block-remove-email-sercq-default-pec-special-message": "Um fortzufahren, musst du zuerst das digitale Domizil und die personalisierten Adressen deaktivieren.",
+    "block-remove-email-title": "E-Mail-Adresse kann nicht deaktiviert werden",
+    "block-remove-sms-message": "Um fortzufahren, musst du zuerst die personalisierten Handynummern für jede Körperschaft löschen.",
+    "block-remove-sms-title": "Handynummer kann nicht deaktiviert werden",
+    "confirmation-modal-disable-io-content": "Wenn du SEND von IO trennst, <strong>erhältst du keine Nachricht in der App<\/strong>, wenn du eine rechtsgültige Mitteilung auf SEND erhältst.",
+    "confirmation-modal-email-content": "Um das digitale Domizil SEND zu aktivieren, benötigen wir deine E-Mail-Adresse, damit wir dich <strong>benachrichtigen können, wenn eine rechtsgültige Mitteilung für dich vorliegt.<\/strong>",
+    "confirmation-modal-io-accept": "SEND mit IO verbinden",
+    "confirmation-modal-io-content": "Wenn du SEND nicht mit IO verbindest, <strong>erhältst du keine Nachricht in der App<\/strong>, wenn du eine rechtsgültige Mitteilung auf SEND erhältst.",
+    "confirmation-modal-io-title": "Das Hinzufügen Ihrer Kontaktdaten ist wichtig!",
+    "confirmation-modal-title": "Füge eine E-Mail-Adresse für die Benachrichtigungen hinzu!",
+    "email-add": "E-Mail-Adresse hinzufügen",
+    "email-added-successfully": "E-Mail-Adresse erfolgreich hinzugefügt",
+    "email-and-sercq-removed-successfully": "E-Mail und digitales Domizil SEND deaktiviert",
+    "email-empty-description": "Füge eine E-Mail-Adresse hinzu, über die wir dich benachrichtigen können, wenn eine Mitteilung auf SEND zu lesen ist.",
+    "email-filled-description": "Wenn eine Zustellung für dich vorliegt, benachrichtigen wir dich mit einer E-Mail an die gewählte Adresse.",
+    "email-new-code": "Du hast ihn nicht erhalten? Überprüfe, ob die richtige E-Mail-Adresse eingegeben wurde oder <0>generiere einen neuen Code<\/0>.",
+    "email-removed-successfully": "E-Mail-Adresse erfolgreich entfernt",
+    "email-sms-add": "Handynummer hinzufügen",
+    "email-sms-updates": "Möchtest du die Benachrichtigungen auch per SMS erhalten?",
+    "email-title": "Deine E-Mail-Adresse",
+    "email-to-add": "E-Mail-Adresse",
+    "email-verify": "Verifizierung der E-Mail {{value}}",
+    "email-verify-descr": "Wir haben einen Code an die angegebene E-Mail-Adresse gesendet. Der Code ist <strong>15 Minuten<\/strong> lang gültig.",
+    "io-added-successfully": "Du hast den Dienst SEND - Notifiche Digitali auf IO aktiviert.",
+    "io-removed-successfully": "Du hast den Dienst SEND - Notifiche Digitali auf IO deaktiviert.",
+    "link-email-placeholder": "Deine E-Mail-Adresse",
+    "link-sms-placeholder": "Deine Handynummer",
+    "remove-email": "E-Mail-Adresse deaktivieren",
+    "remove-email-and-sercq": "E-Mail und Domizil deaktivieren",
+    "remove-email-and-sercq-message": "<0>Wenn du dich entscheidest, dein digitales Domizil SEND zu deaktivieren, könntest du die Mitteilungen per Einschreiben erhalten und <strong>die entsprechenden Kosten bezahlen.<\/strong><\/0>",
+    "remove-email-and-sercq-title": "Mit der E-Mail wird auch das digitale Domizil SEND deaktiviert",
+    "remove-email-no-domicile-message": "Wenn du dies bestätigst, erhältst du keine E-Mail mehr auf {{value}}, wenn eine SEND-Mitteilung zu lesen ist.",
+    "remove-email-no-domicile-title": "E-Mail-Adresse deaktivieren",
+    "remove-email-pec-enabled-message": "<0>Wenn du die E-Mail-Adresse deaktivierst, <strong>können wir dich nicht benachrichtigen, wenn eine rechtsgültige Mitteilung für dich vorliegt<\/strong>.<\/0><1>Denke daran, dass du, wenn du eine SEND-Mitteilung nicht rechtzeitig liest, möglicherweise Fristen versäumst und Strafen riskierst.<\/1>",
+    "remove-email-pec-enabled-title": "Möchtest du die E-Mail-Benachrichtigungen deaktivieren?",
+    "remove-email-preconfirm-message": "<0>Wenn du die E-Mail-Adresse deaktivierst, können wir dich nicht <strong>benachrichtigen, wenn eine rechtsgültige Mitteilung für dich vorliegt.<\/strong><\/0>",
+    "remove-email-preconfirm-title": "Möchtest du die E-Mail-Benachrichtigungen deaktivieren?",
+    "remove-sms": "Handynummer entfernen",
+    "remove-sms-message": "Wenn du dies bestätigst, erhältst du keine SMS mehr auf {{value}}, wenn eine SEND-Mitteilung zu lesen ist.",
+    "remove-sms-message-dod-enabled": "<0>Wenn du deine Handynummer deaktivierst, <strong>erhältst du keine SMS-Benachrichtigungen mehr, wenn eine rechtsgültige Mitteilung für dich auf SEND vorliegt.<\/strong><\/0><1>Denke daran, dass du, wenn du eine SEND-Mitteilung nicht rechtzeitig liest, möglicherweise Fristen versäumst und Strafen riskierst.<\/1>",
+    "remove-sms-title-dod-enabled": "Möchtest du die SMS-Benachrichtigungen deaktivieren?",
+    "sms-add": "Nummer hinzufügen",
+    "sms-added-successfully": "Handynummer erfolgreich hinzugefügt",
+    "sms-description": "Wenn eine Zustellung für dich vorliegt, benachrichtigen wir dich mit einer SMS an die gewählte Nummer.",
+    "sms-new-code": "Du hast ihn nicht erhalten? Überprüfe, ob die richtige Handynummer eingegeben wurde oder <0>generiere einen neuen Code<\/0>.",
+    "sms-removed-successfully": "Handynummer erfolgreich entfernt",
+    "sms-title": "Dein Handy",
+    "sms-to-add": "Handynummer",
+    "sms-verify": "Verifizierung der Handynummer {{value}}",
+    "sms-verify-descr": "Wir haben einen Code an die angegebene Handynummer gesendet. Der Code ist <strong>15 Minuten<\/strong> lang gültig.",
+    "valid-email": "E-Mail-Adresse ungültig",
+    "valid-sms": "Handynummer ungültig"
+  },
+  "domicile-banner": {
+    "add-io": "Aktiviere SEND auf der IO-App",
+    "complete-addresses": "Eine E-Mail-Adresse eingeben",
+    "complete-configuration": "Konfiguration fertigstellen",
+    "no-courtesy-description": "Ohne informelle Adresse können wir dich nicht benachrichtigen, wenn es eine rechtsgültige Mitteilung auf SEND zu lesen gibt.",
+    "no-courtesy-no-sercq-send-cta": "Deine E-Mail-Adresse bestätigen",
+    "no-courtesy-no-sercq-send-description": "Füge eine E-Mail-Adresse hinzu, um eine Benachrichtigung zum Vorliegen einer neuen Zustellung auf SEND zu erhalten.",
+    "no-courtesy-no-sercq-send-title": "Versäume keine wichtigen Mitteilungen ",
+    "no-courtesy-sercq-send-description": "Aktiviere SEND als digitales Domizil und mach dir nie wieder Sorgen um Einschreiben in Papierform.",
+    "no-courtesy-sercq-send-title": "Möchtest du die nächsten Zustellungen ausschließlich digital empfangen?",
+    "no-courtesy-title": "Versäume keine wichtigen Mitteilungen",
+    "no-io-description": "Wenn eine Zustellung für dich vorliegt, so kannst du sie in der IO-App empfangen, lesen und etwaige Gebühren direkt in der App bezahlen!",
+    "no-io-title": "Deine Zustellungen per App",
+    "no-sercq-cta": "Digitale Adresse aktivieren",
+    "no-sercq-send-description": "Aktiviere eine digitale Adresse, um die nächsten Zustellungen nur noch digital zu erhalten und Kosten zu sparen.",
+    "no-sercq-send-title": "Keine Papierdokumente mehr"
+  },
+  "errors": {
+    "expired_verification_code": {
+      "message": "Einen neuen erstellen und eingeben.",
+      "title": "Code abgelaufen"
+    },
+    "invalid_verification_code": {
+      "message": "Überprüfe ihn und gib ihn erneut ein, oder erstelle einen neuen.",
+      "title": "Der Code ist falsch"
+    },
+    "retry_limit_code": {
+      "message": "Code zu oft falsch eingegeben. Um es erneut zu versuchen, auf „Abbrechen“ klicken, sicherstellen, dass der Kontakt korrekt ist und neuen Code eingeben.",
+      "title": "Zu viele Versuche"
+    }
+  },
   "insert-code": "Code eingeben",
-  "status": {
-    "active": "Aktiv",
-    "inactive": "Zu aktivieren",
-    "pec-validation": "Validierung der PEC läuft"
+  "io-contact": {
+    "description": "SEND mit IO zu verbinden ist der praktischste Weg, um rechtsgültige Mitteilungen zu erhalten und zu verwalten: Wenn eine Zustellung für dich vorliegt, erhältst du sie in der App und kannst etwaige Gebühren bezahlen.",
+    "description-enabled": "Wenn eine Zustellung für dich vorliegt, erhältst du sie direkt in der App und kannst etwaige Gebühren bezahlen.",
+    "disable-modal": {
+      "confirm-dod-enabled": "SEND auf IO deaktivieren",
+      "content": "Wenn du dies bestätigst, erhältst du die SEND-Mitteilungen nicht mehr in der App.",
+      "content-dod-enabled": "<0>Wenn du SEND auf IO deaktivierst, <strong>erhältst du die SEND-Mitteilungen nicht mehr in der App.<\/strong><\/0><1>Denke daran, dass du, wenn du eine SEND-Mitteilung nicht rechtzeitig liest, möglicherweise Fristen versäumst und Strafen riskierst.<\/1>",
+      "title": "Deaktiviere SEND auf der IO-App"
+    },
+    "download": "IO-App herunterladen",
+    "enable": "Aktiviere SEND auf IO",
+    "info-modal": {
+      "content": "Wenn Sie keinen aktiven digitalen Wohnsitz haben und die Nachricht nicht innerhalb von 5 Tagen nach dem Versand öffnen, erhalten Sie die Dokumente in Papierform zu Hause",
+      "subtitle": "Für jede neue SEND-Mitteilung erhalten Sie eine Nachricht in der IO App, von der aus Sie bequem die beigefügten Dokumente öffnen und die vorgesehenen Zahlungen tätigen können.",
+      "title": "SEND in IO: Wie es funktioniert"
+    },
+    "title": "SEND auf der IO-App"
   },
   "legal-contacts": {
-    "title": "Rechtsgültige Adresse",
-    "pec-validation-banner": {
-      "title": "Die PEC wird validiert",
-      "dod-enabled-message": "Bis zum Abschluss des Vorgangs bleibt die SEND-Plattform als digitales Domizil aktiv.",
-      "dod-disabled-message": "Bis zum Abschluss des Vorgangs ist es nicht möglich, die rechtsgültigen Adressen zu ändern.",
-      "parties-list": "Die SEND-Plattform bleibt dein digitales Domizil für {{list}} bis zum Abschluss der Validierung."
+    "block-remove-digital-domicile-message": "Um fortzufahren, musst du zuerst die personalisierten digitalen Domizile für jede Körperschaft deaktivieren.",
+    "block-remove-digital-domicile-title": "Das digitale Domizil kann nicht deaktiviert werden",
+    "cancel-pec-validation": "Validierung abbrechen",
+    "digital-domicile-management": {
+      "choose-action": "Eine Option wählen",
+      "sercq_send-active": "Die SEND-Plattform ist dein digitales Domizil",
+      "special_contacts": {
+        "action": "Pro Körperschaft personalisieren",
+        "content": "Wähle, wo du die Mitteilungen einer bestimmten Körperschaft erhalten möchtest.",
+        "title": "Dein digitales Domizil pro sendender Körperschaft personalisieren"
+      },
+      "title": "Dein digitales Domizil verwalten",
+      "transfer": {
+        "action-pec": "Auf SEND übertragen",
+        "action-sercq_send": "Auf eine PEC übertragen",
+        "content-pec": "Die SEND-Plattform garantiert dir sichere und rechtsgültige Zustellungen. Der Dienst ist kostenlos und erfordert keine zusätzlichen Tools.",
+        "content-sercq_send": "Wenn du eine PEC hast, kannst du sie als digitales Domizil für SEND-Mitteilungen verwenden.",
+        "title-pec": "Digitales Domizil auf die SEND-Plattform übertragen",
+        "title-sercq_send": "Digitales Domizil auf eine PEC übertragen"
+      }
     },
-    "pec-disclaimer": "Dies ist die Hauptadresse, die für die digitale Zustellung der Benachrichtigungen verwendet wird. Wenn du sie eingibst, erhältst du keine Papierdokumente mehr.",
-    "pec-description": "Wenn eine Körperschaft eine Mitteilung für dich über SEND sendet, erhältst du die offizielle Mitteilung in dem von dir gewählten PEC-Postfach.",
     "link-pec-placeholder": "Deine PEC",
-    "valid-pec": "Ungültige PEC-Adresse",
-    "pec-verify": "Überprüfung der PEC {{value}}",
-    "pec-verify-descr": "Wir haben einen Code an die angegebene PEC-Adresse gesendet. Der Code ist <strong>15 Minuten</strong> lang gültig.",
-    "pec-new-code": "Du hast ihn nicht erhalten? Überprüfe, ob die richtige PEC eingegeben wurde oder <0>generiere einen neuen Code</0>.",
     "pec-added-successfully": "PEC erfolgreich zugeordnet",
+    "pec-contact-wizard": {
+      "content-description": "Wenn eine Körperschaft eine Mitteilung für dich über SEND sendet, erhältst du die offizielle Mitteilung in dem von dir gewählten PEC-Postfach.",
+      "content-title": "Deine PEC eingeben",
+      "disclaimer": "Ich akzeptiere, dass diese Adresse von SEND vorrangig gegenüber eventuellen bei einer sendenden Körperschaft registrierten oder in öffentlichen Registern vorhandenen PEC verwendet wird.",
+      "input-label": "PEC-Adresse",
+      "sercq-info-alert": "Die PEC wird die SEND-Plattform als dein digitales Domizil ersetzen.",
+      "title": "Eine PEC als digitales Domizil verwenden",
+      "title-transfer": "Digitales Domizil auf eine PEC übertragen"
+    },
+    "pec-description": "Wenn eine Körperschaft eine Mitteilung für dich über SEND sendet, erhältst du die offizielle Mitteilung in dem von dir gewählten PEC-Postfach.",
+    "pec-disclaimer": "Dies ist die Hauptadresse, die für die digitale Zustellung der Benachrichtigungen verwendet wird. Wenn du sie eingibst, erhältst du keine Papierdokumente mehr.",
+    "pec-new-code": "Du hast ihn nicht erhalten? Überprüfe, ob die richtige PEC eingegeben wurde oder <0>generiere einen neuen Code<\/0>.",
     "pec-removed-successfully": "PEC erfolgreich entfernt",
     "pec-to-add": "PEC-Adresse",
     "pec-validating": "Validierung der PEC läuft",
-    "cancel-pec-validation": "Validierung abbrechen",
-    "remove-pec-title": "Möchtest du die PEC wirklich deaktivieren?",
-    "remove-pec-message": "<0>Du hast keine rechtsgültige digitale Adresse mehr für die Mitteilungen der öffentlichen Verwaltung und kannst wieder Zustellungen in Papierform erhalten, wobei Kosten anfallen können.</0><1>Du erhältst jedoch weiterhin Benachrichtigungen über die von dir aktivierten Kanäle.</1>",
+    "pec-validation-banner": {
+      "dod-disabled-message": "Bis zum Abschluss des Vorgangs ist es nicht möglich, die rechtsgültigen Adressen zu ändern.",
+      "dod-enabled-message": "Bis zum Abschluss des Vorgangs bleibt die SEND-Plattform als digitales Domizil aktiv.",
+      "parties-list": "Die SEND-Plattform bleibt dein digitales Domizil für {{list}} bis zum Abschluss der Validierung.",
+      "title": "Die PEC wird validiert"
+    },
+    "pec-verify": "Überprüfung der PEC {{value}}",
+    "pec-verify-descr": "Wir haben einen Code an die angegebene PEC-Adresse gesendet. Der Code ist <strong>15 Minuten<\/strong> lang gültig.",
     "remove-pec-confirm": "PEC deaktivieren",
-    "validation-cancel-title": "Überprüfung der PEC abbrechen",
-    "validation-cancel-content": "Wenn du dies bestätigst, brichst du die Aktivierung der PEC als digitales Domizil auf SEND ab.",
-    "validation-progress-title": "Danke!",
-    "validation-progress-content": "Wir prüfen, ob die PEC-Adresse gültig ist. Du erhältst innerhalb von 24 Stunden eine E-Mail mit dem Ergebnis.",
-    "sercq_send-title": "SEND-Plattform",
-    "sercq_send-description": "Wenn eine Körperschaft eine Mitteilung für dich über SEND sendet, wird sie sicher und mit Rechtswert über die Plattform selbst zugestellt.",
-    "sercq-send-description-pec-enabled": "Nutze SEND als digitales Domizil, um deine SEND-Mitteilungen an einem einzigen Ort zu verwalten, ohne dir mehr Sorgen um Einschreiben in Papierform und die damit verbundenen Kosten machen zu müssen.",
+    "remove-pec-message": "<0>Du hast keine rechtsgültige digitale Adresse mehr für die Mitteilungen der öffentlichen Verwaltung und kannst wieder Zustellungen in Papierform erhalten, wobei Kosten anfallen können.<\/0><1>Du erhältst jedoch weiterhin Benachrichtigungen über die von dir aktivierten Kanäle.<\/1>",
+    "remove-pec-title": "Möchtest du die PEC wirklich deaktivieren?",
+    "remove-sercq_send-confirm": "Digitales Domizil deaktivieren",
+    "remove-sercq_send-message": "<0>Wenn du dein digitales Domizil auf SEND deaktivierst, könntest du die Mitteilungen wieder per Einschreiben erhalten und <strong>die entsprechenden Kosten bezahlen.<\/strong><\/0><1>Du erhältst weiterhin Benachrichtigungen per E-Mail, du kannst sie im Bereich „Deine Adressen“ deaktivieren.<\/1>",
+    "remove-sercq_send-title": "Möchtest du das digitale Domizil auf SEND wirklich deaktivieren?",
     "sercq-send-active": "Aktivieren",
     "sercq-send-active-pec-enabled": "Digitales Domizil aktivieren",
-    "sercq-send-info-title": "Aktiviere SEND als dein digitales Domizil",
-    "sercq-send-info-description": "Wenn du das digitale Domizil aktivierst, wird SEND deine <strong>rechtsgültige Adresse</strong> für die Mitteilungen der ÖV.",
+    "sercq-send-description-pec-enabled": "Nutze SEND als digitales Domizil, um deine SEND-Mitteilungen an einem einzigen Ort zu verwalten, ohne dir mehr Sorgen um Einschreiben in Papierform und die damit verbundenen Kosten machen zu müssen.",
     "sercq-send-info-advantages": "Warum ist das nützlich?",
+    "sercq-send-info-description": "Wenn du das digitale Domizil aktivierst, wird SEND deine <strong>rechtsgültige Adresse<\/strong> für die Mitteilungen der ÖV.",
     "sercq-send-info-list": [
       {
-        "title": "100% digitale Zustellungen",
-        "description": "Du wirst keine Zustellungen mehr in Papierform erhalten."
+        "description": "Du wirst keine Zustellungen mehr in Papierform erhalten.",
+        "title": "100% digitale Zustellungen"
       },
       {
-        "title": "Keine Zustellungsgebühren",
-        "description": "Du musst dich nicht um das Abholen der Papierdokumente und die damit verbundenen Kosten kümmern."
+        "description": "Du musst dich nicht um das Abholen der Papierdokumente und die damit verbundenen Kosten kümmern.",
+        "title": "Keine Zustellungsgebühren"
       },
       {
-        "title": "Alles an einem Ort",
-        "description": "Die Zustellungen, die dir die Körperschaften über SEND senden, werden immer sicher zugestellt und sind in deinem reservierten Bereich verfügbar."
+        "description": "Die Zustellungen, die dir die Körperschaften über SEND senden, werden immer sicher zugestellt und sind in deinem reservierten Bereich verfügbar.",
+        "title": "Alles an einem Ort"
       }
     ],
-    "sercq_send-added-successfully": "Digitales Domizil erfolgreich aktiviert",
-    "remove-sercq_send-title": "Möchtest du das digitale Domizil auf SEND wirklich deaktivieren?",
-    "remove-sercq_send-message": "<0>Wenn du dein digitales Domizil auf SEND deaktivierst, könntest du die Mitteilungen wieder per Einschreiben erhalten und <strong>die entsprechenden Kosten bezahlen.</strong></0><1>Du erhältst weiterhin Benachrichtigungen per E-Mail, du kannst sie im Bereich „Deine Adressen“ deaktivieren.</1>",
-    "remove-sercq_send-confirm": "Digitales Domizil deaktivieren",
-    "block-remove-digital-domicile-title": "Das digitale Domizil kann nicht deaktiviert werden",
-    "sercq_send-removed-successfully": "Digitales Domizil erfolgreich deaktiviert",
-    "block-remove-digital-domicile-message": "Um fortzufahren, musst du zuerst die personalisierten digitalen Domizile für jede Körperschaft deaktivieren.",
-    "sercq-send-io-title": "Aktiviere SEND auf IO",
-    "sercq-send-io-description": "Aktiviere SEND - Notifiche Digitali auf IO, um<strong> direkt in der App</strong> die an dein digitales Domizil SEND gesendeten Zustellungen zu erhalten.",
+    "sercq-send-info-title": "Aktiviere SEND als dein digitales Domizil",
     "sercq-send-io-advantages": "Auf IO",
+    "sercq-send-io-description": "Aktiviere SEND - Notifiche Digitali auf IO, um<strong> direkt in der App<\/strong> die an dein digitales Domizil SEND gesendeten Zustellungen zu erhalten.",
+    "sercq-send-io-title": "Aktiviere SEND auf IO",
     "sercq-send-wizard": {
-      "title": "Digitales Domizil auf SEND aktivieren",
-      "title-transfer": "Digitales Domizil auf die SEND-Plattform übertragen",
-      "button-transfer": "Digitalen Wohnsitz übertragen",
       "button-activation": "Digitalen Wohnsitz aktivieren",
+      "button-transfer": "Digitalen Wohnsitz übertragen",
+      "feedback": {
+        "content-pec": "Die von dir eingegebene PEC wird validiert. Sobald sie bestätigt ist, wird das digitale Domizil aktiviert und du erhältst alle rechtsgültigen Mitteilungen an die von dir gewählte Adresse.",
+        "content-pec-transfer": "Die PEC wird validiert. Sobald sie bestätigt ist, wird dein digitales Domizil an die von dir gewählte Adresse übertragen. Bis dahin bleibt das digitale Domizil SEND aktiv.",
+        "content-sercq_send": "Du erhältst deine rechtsgültigen Mitteilungen an dein digitales Domizil auf SEND und eine Nachricht an die von dir gewählten Kontakte.",
+        "go-to-contacts": "Zurück zu Ihren Kontaktdaten",
+        "title-pec-activation": "Aktivierung des digitalen Domizils läuft",
+        "title-pec-transfer": "Übertragung des digitalen Domizils läuft",
+        "title-sercq_send-activation": "Du hast dein digitales Domizil auf SEND aktiviert",
+        "title-sercq_send-transfer": "Du hast dein digitales Domizil auf SEND übertragen",
+        "title-transfer": "Du hast dein digitales Domizil aktualisiert"
+      },
       "step_1": {
-        "title": "Funktionsweise",
-        "info-list": [
-          {
-            "title": "Eine Körperschaft sendet dir eine Mitteilung auf SEND",
-            "description": "Die Zustellung wird dir sicher und mit Rechtswert über die Plattform <0>zugestellt</0>",
-            "aria-description": "Aktivieren, um die Erklärung des Begriffs zu lesen"
-          },
-          {
-            "title": "Du erhältst eine Nachricht",
-            "description": "Wenn du eine Mitteilung auf SEND erhältst, benachrichtigen wir dich per E-Mail und über die von dir bevorzugten Kanäle"
-          },
-          {
-            "title": "Auf die Mitteilung zugreifen",
-            "description": "Öffne die Details der digitalen Mitteilung auf der SEND-Plattform oder, falls du den Dienst aktiviert hast, direkt über die IO-App"
-          }
-        ],
-        "info-tos": "Durch Klicken auf „Aktivieren“ erklärst du, die <0>Nutzungsbedingungen des Dienstes</0> gelesen zu haben und diese zu akzeptieren.",
+        "delivered-dialog-description": "Wenn du SEND als digitales Domizil wählst, gilt die Mitteilung <strong>nach 7 Tagen ab Zustellung<\/strong> als rechtlich zugestellt, auch wenn du sie nicht konsultiert hast.",
+        "delivered-dialog-title": "Rechtswert der Zustellung im digitalen Domizil SEND",
         "have-pec": "Hast du eine PEC?",
         "have-pec-description": "Alternativ kannst du eine PEC als digitales Domizil für SEND-Mitteilungen verwenden.",
+        "info-list": [
+          {
+            "aria-description": "Aktivieren, um die Erklärung des Begriffs zu lesen",
+            "description": "Die Zustellung wird dir sicher und mit Rechtswert über die Plattform <0>zugestellt<\/0>",
+            "title": "Eine Körperschaft sendet dir eine Mitteilung auf SEND"
+          },
+          {
+            "description": "Wenn du eine Mitteilung auf SEND erhältst, benachrichtigen wir dich per E-Mail und über die von dir bevorzugten Kanäle",
+            "title": "Du erhältst eine Nachricht"
+          },
+          {
+            "description": "Öffne die Details der digitalen Mitteilung auf der SEND-Plattform oder, falls du den Dienst aktiviert hast, direkt über die IO-App",
+            "title": "Auf die Mitteilung zugreifen"
+          }
+        ],
+        "info-tos": "Durch Klicken auf „Aktivieren“ erklärst du, die <0>Nutzungsbedingungen des Dienstes<\/0> gelesen zu haben und diese zu akzeptieren.",
         "insert-pec": "PEC eingeben",
-        "delivered-dialog-title": "Rechtswert der Zustellung im digitalen Domizil SEND",
-        "delivered-dialog-description": "Wenn du SEND als digitales Domizil wählst, gilt die Mitteilung <strong>nach 7 Tagen ab Zustellung</strong> als rechtlich zugestellt, auch wenn du sie nicht konsultiert hast.",
-        "pec-info-alert": "Die SEND-Plattform wird die PEC als dein digitales Domizil ersetzen."
+        "pec-info-alert": "Die SEND-Plattform wird die PEC als dein digitales Domizil ersetzen.",
+        "title": "Funktionsweise"
       },
       "step_2": {
-        "title": "SEND mit der IO-App verbinden",
+        "confirm": "SEND mit IO verbinden",
         "content": "SEND mit IO zu verbinden ist der praktischste Weg, um rechtsgültige Mitteilungen zu erhalten und zu verwalten.",
+        "disable": "SEND von IO trennen",
         "io-list": [
           "Erhalte Mitteilungen in Echtzeit, sobald die Körperschaft sie auf SEND hochlädt",
           "Du kannst die der Mitteilung beigefügten Dokumente öffnen und lesen",
           "Du kannst fällige Beträge bezahlen, wenn die Mitteilung eine Zahlung vorsieht"
         ],
-        "confirm": "SEND mit IO verbinden",
-        "disable": "SEND von IO trennen",
-        "skip-io": "Ohne Verbindung zu IO fortfahren"
+        "skip-io": "Ohne Verbindung zu IO fortfahren",
+        "title": "SEND mit der IO-App verbinden"
       },
       "step_3": {
-        "title": "Deine E-Mail-Adresse für Benachrichtigungen über SEND-Mitteilungen",
-        "step-title": "Deine E-Mail-Adresse eingeben",
         "content": "Die E-Mail-Adresse, an die wir dich benachrichtigen, wenn du eine rechtsgültige Mitteilung auf SEND erhältst.",
-        "sms-disclaimer": "Wenn du <strong>Nummer hinzufügen</strong> klickst, speicherst du diesen Kontakt, um Benachrichtigungen über deine SEND-Mitteilungen zu erhalten. Du kannst ihn im Bereich <strong>Adressen</strong> verwalten."
+        "sms-disclaimer": "Wenn du <strong>Nummer hinzufügen<\/strong> klickst, speicherst du diesen Kontakt, um Benachrichtigungen über deine SEND-Mitteilungen zu erhalten. Du kannst ihn im Bereich <strong>Adressen<\/strong> verwalten.",
+        "step-title": "Deine E-Mail-Adresse eingeben",
+        "title": "Deine E-Mail-Adresse für Benachrichtigungen über SEND-Mitteilungen"
       },
       "step_4": {
-        "title": "Deine Zusammenfassung",
-        "step-title": "Zusammenfassung",
-        "content": "Deine rechtsgültigen Mitteilungen werden nur zugestellt an:",
-        "digital-domicile": "Digitales Domizil",
-        "send": "SEND",
-        "courtesy-content": "Du erhältst eine Mitteilung über:",
         "contacts-list": {
           "email": {
-            "title": "E-Mail",
-            "textDisabled": "E-Mail-Adresse hinzufügen"
+            "textDisabled": "E-Mail-Adresse hinzufügen",
+            "title": "E-Mail"
           },
           "io": {
-            "title": "IO, die App der öffentlichen Dienste",
             "textDisabled": "SEND mit IO verbinden",
-            "textEnabled": "SEND-Dienst aktiviert"
+            "textEnabled": "SEND-Dienst aktiviert",
+            "title": "IO, die App der öffentlichen Dienste"
           },
           "sms": {
-            "title": "Handynummer",
-            "textDisabled": "Handynummer hinzufügen"
+            "textDisabled": "Handynummer hinzufügen",
+            "title": "Handynummer"
           }
         },
-        "disclaimer-enable": "Durch Klicken auf <strong>„Digitalen Wohnsitz aktivieren“</strong> erklärst du, dass du die <0>Datenschutzerklärung</0> gelesen hast, die <1>Nutzungsbedingungen</1> akzeptierst, und dass du verstanden hast, dass SEND Benachrichtigungen nicht an andere digitale Domizile weitergeleitet werden.",
-        "disclaimer-transfer": "Durch Klicken auf <strong>„Bestätigen“</strong> erklärst du, dass du die <0>Datenschutzerklärung</0> gelesen hast, die <1>Nutzungsbedingungen</1> akzeptierst, und dass du verstanden hast, dass SEND Benachrichtigungen nicht an andere digitale Domizile weitergeleitet werden.",
+        "content": "Deine rechtsgültigen Mitteilungen werden nur zugestellt an:",
+        "courtesy-content": "Du erhältst eine Mitteilung über:",
+        "digital-domicile": "Digitales Domizil",
+        "disclaimer-enable": "Durch Klicken auf <strong>„Digitalen Wohnsitz aktivieren“<\/strong> erklärst du, dass du die <0>Datenschutzerklärung<\/0> gelesen hast, die <1>Nutzungsbedingungen<\/1> akzeptierst, und dass du verstanden hast, dass SEND Benachrichtigungen nicht an andere digitale Domizile weitergeleitet werden.",
+        "disclaimer-transfer": "Durch Klicken auf <strong>„Bestätigen“<\/strong> erklärst du, dass du die <0>Datenschutzerklärung<\/0> gelesen hast, die <1>Nutzungsbedingungen<\/1> akzeptierst, und dass du verstanden hast, dass SEND Benachrichtigungen nicht an andere digitale Domizile weitergeleitet werden.",
+        "enable": "Digitalen Wohnsitz aktivieren",
+        "send": "SEND",
         "sercq-send-contacts-alert": "Überwache die von dir gewählten Kontaktdaten: Eine digitale SEND Benachrichtigung entfaltet ihre Rechtswirkungen, auch wenn du sie nicht abgerufen hast.",
-        "enable": "Digitalen Wohnsitz aktivieren"
+        "step-title": "Zusammenfassung",
+        "title": "Deine Zusammenfassung"
       },
-      "feedback": {
-        "title-transfer": "Du hast dein digitales Domizil aktualisiert",
-        "title-pec-activation": "Aktivierung des digitalen Domizils läuft",
-        "title-pec-transfer": "Übertragung des digitalen Domizils läuft",
-        "title-sercq_send-activation": "Du hast dein digitales Domizil auf SEND aktiviert",
-        "title-sercq_send-transfer": "Du hast dein digitales Domizil auf SEND übertragen",
-        "content-pec": "Die von dir eingegebene PEC wird validiert. Sobald sie bestätigt ist, wird das digitale Domizil aktiviert und du erhältst alle rechtsgültigen Mitteilungen an die von dir gewählte Adresse.",
-        "content-pec-transfer": "Die PEC wird validiert. Sobald sie bestätigt ist, wird dein digitales Domizil an die von dir gewählte Adresse übertragen. Bis dahin bleibt das digitale Domizil SEND aktiv.",
-        "content-sercq_send": "Du erhältst deine rechtsgültigen Mitteilungen an dein digitales Domizil auf SEND und eine Nachricht an die von dir gewählten Kontakte.",
-        "go-to-contacts": "Zurück zu Ihren Kontaktdaten"
-      }
+      "title": "Digitales Domizil auf SEND aktivieren",
+      "title-transfer": "Digitales Domizil auf die SEND-Plattform übertragen"
     },
-    "pec-contact-wizard": {
-      "title": "Eine PEC als digitales Domizil verwenden",
-      "title-transfer": "Digitales Domizil auf eine PEC übertragen",
-      "content-title": "Deine PEC eingeben",
-      "content-description": "Wenn eine Körperschaft eine Mitteilung für dich über SEND sendet, erhältst du die offizielle Mitteilung in dem von dir gewählten PEC-Postfach.",
-      "input-label": "PEC-Adresse",
-      "sercq-info-alert": "Die PEC wird die SEND-Plattform als dein digitales Domizil ersetzen.",
-      "disclaimer": "Ich akzeptiere, dass diese Adresse von SEND vorrangig gegenüber eventuellen bei einer sendenden Körperschaft registrierten oder in öffentlichen Registern vorhandenen PEC verwendet wird."
-    },
-    "digital-domicile-management": {
-      "title": "Dein digitales Domizil verwalten",
-      "sercq_send-active": "Die SEND-Plattform ist dein digitales Domizil",
-      "choose-action": "Eine Option wählen",
-      "transfer": {
-        "title-pec": "Digitales Domizil auf die SEND-Plattform übertragen",
-        "content-pec": "Die SEND-Plattform garantiert dir sichere und rechtsgültige Zustellungen. Der Dienst ist kostenlos und erfordert keine zusätzlichen Tools.",
-        "action-pec": "Auf SEND übertragen",
-        "title-sercq_send": "Digitales Domizil auf eine PEC übertragen",
-        "content-sercq_send": "Wenn du eine PEC hast, kannst du sie als digitales Domizil für SEND-Mitteilungen verwenden.",
-        "action-sercq_send": "Auf eine PEC übertragen"
-      },
-      "special_contacts": {
-        "title": "Dein digitales Domizil pro sendender Körperschaft personalisieren",
-        "content": "Wähle, wo du die Mitteilungen einer bestimmten Körperschaft erhalten möchtest.",
-        "action": "Pro Körperschaft personalisieren"
-      }
-    }
-  },
-  "io-contact": {
-    "title": "SEND auf der IO-App",
-    "description": "SEND mit IO zu verbinden ist der praktischste Weg, um rechtsgültige Mitteilungen zu erhalten und zu verwalten: Wenn eine Zustellung für dich vorliegt, erhältst du sie in der App und kannst etwaige Gebühren bezahlen.",
-    "description-enabled": "Wenn eine Zustellung für dich vorliegt, erhältst du sie direkt in der App und kannst etwaige Gebühren bezahlen.",
-    "enable": "Aktiviere SEND auf IO",
-    "download": "IO-App herunterladen",
-    "disable-modal": {
-      "title": "Deaktiviere SEND auf der IO-App",
-      "content": "Wenn du dies bestätigst, erhältst du die SEND-Mitteilungen nicht mehr in der App.",
-      "content-dod-enabled": "<0>Wenn du SEND auf IO deaktivierst, <strong>erhältst du die SEND-Mitteilungen nicht mehr in der App.</strong></0><1>Denke daran, dass du, wenn du eine SEND-Mitteilung nicht rechtzeitig liest, möglicherweise Fristen versäumst und Strafen riskierst.</1>",
-      "confirm-dod-enabled": "SEND auf IO deaktivieren"
-    },
-    "info-modal": {
-      "title": "SEND in IO: Wie es funktioniert",
-      "subtitle": "Für jede neue SEND-Mitteilung erhalten Sie eine Nachricht in der IO App, von der aus Sie bequem die beigefügten Dokumente öffnen und die vorgesehenen Zahlungen tätigen können.",
-      "content": "Wenn Sie keinen aktiven digitalen Wohnsitz haben und die Nachricht nicht innerhalb von 5 Tagen nach dem Versand öffnen, erhalten Sie die Dokumente in Papierform zu Hause"
-    }
-  },
-  "courtesy-contacts": {
-    "email-title": "Deine E-Mail-Adresse",
-    "email-empty-description": "Füge eine E-Mail-Adresse hinzu, über die wir dich benachrichtigen können, wenn eine Mitteilung auf SEND zu lesen ist.",
-    "email-filled-description": "Wenn eine Zustellung für dich vorliegt, benachrichtigen wir dich mit einer E-Mail an die gewählte Adresse.",
-    "email-sms-updates": "Möchtest du die Benachrichtigungen auch per SMS erhalten?",
-    "email-sms-add": "Handynummer hinzufügen",
-    "sms-title": "Dein Handy",
-    "sms-description": "Wenn eine Zustellung für dich vorliegt, benachrichtigen wir dich mit einer SMS an die gewählte Nummer.",
-    "link-sms-placeholder": "Deine Handynummer",
-    "link-email-placeholder": "Deine E-Mail-Adresse",
-    "sms-add": "Nummer hinzufügen",
-    "email-add": "E-Mail-Adresse hinzufügen",
-    "email-verify": "Verifizierung der E-Mail {{value}}",
-    "email-verify-descr": "Wir haben einen Code an die angegebene E-Mail-Adresse gesendet. Der Code ist <strong>15 Minuten</strong> lang gültig.",
-    "sms-verify": "Verifizierung der Handynummer {{value}}",
-    "sms-verify-descr": "Wir haben einen Code an die angegebene Handynummer gesendet. Der Code ist <strong>15 Minuten</strong> lang gültig.",
-    "email-new-code": "Du hast ihn nicht erhalten? Überprüfe, ob die richtige E-Mail-Adresse eingegeben wurde oder <0>generiere einen neuen Code</0>.",
-    "sms-new-code": "Du hast ihn nicht erhalten? Überprüfe, ob die richtige Handynummer eingegeben wurde oder <0>generiere einen neuen Code</0>.",
-    "email-to-add": "E-Mail-Adresse",
-    "sms-to-add": "Handynummer",
-    "valid-email": "E-Mail-Adresse ungültig",
-    "valid-sms": "Handynummer ungültig",
-    "email-added-successfully": "E-Mail-Adresse erfolgreich hinzugefügt",
-    "sms-added-successfully": "Handynummer erfolgreich hinzugefügt",
-    "email-removed-successfully": "E-Mail-Adresse erfolgreich entfernt",
-    "email-and-sercq-removed-successfully": "E-Mail und digitales Domizil SEND deaktiviert",
-    "sms-removed-successfully": "Handynummer erfolgreich entfernt",
-    "io-added-successfully": "Du hast den Dienst SEND - Notifiche Digitali auf IO aktiviert.",
-    "io-removed-successfully": "Du hast den Dienst SEND - Notifiche Digitali auf IO deaktiviert.",
-    "remove-email": "E-Mail-Adresse deaktivieren",
-    "remove-email-pec-enabled-title": "Möchtest du die E-Mail-Benachrichtigungen deaktivieren?",
-    "remove-email-pec-enabled-message": "<0>Wenn du die E-Mail-Adresse deaktivierst, <strong>können wir dich nicht benachrichtigen, wenn eine rechtsgültige Mitteilung für dich vorliegt</strong>.</0><1>Denke daran, dass du, wenn du eine SEND-Mitteilung nicht rechtzeitig liest, möglicherweise Fristen versäumst und Strafen riskierst.</1>",
-    "remove-email-no-domicile-title": "E-Mail-Adresse deaktivieren",
-    "remove-email-no-domicile-message": "Wenn du dies bestätigst, erhältst du keine E-Mail mehr auf {{value}}, wenn eine SEND-Mitteilung zu lesen ist.",
-    "remove-email-preconfirm-title": "Möchtest du die E-Mail-Benachrichtigungen deaktivieren?",
-    "remove-email-preconfirm-message": "<0>Wenn du die E-Mail-Adresse deaktivierst, können wir dich nicht <strong>benachrichtigen, wenn eine rechtsgültige Mitteilung für dich vorliegt.</strong></0>",
-    "remove-email-and-sercq": "E-Mail und Domizil deaktivieren",
-    "remove-email-and-sercq-title": "Mit der E-Mail wird auch das digitale Domizil SEND deaktiviert",
-    "remove-email-and-sercq-message": "<0>Wenn du dich entscheidest, dein digitales Domizil SEND zu deaktivieren, könntest du die Mitteilungen per Einschreiben erhalten und <strong>die entsprechenden Kosten bezahlen.</strong></0>",
-    "remove-sms": "Handynummer entfernen",
-    "remove-sms-title-dod-enabled": "Möchtest du die SMS-Benachrichtigungen deaktivieren?",
-    "remove-sms-message-dod-enabled": "<0>Wenn du deine Handynummer deaktivierst, <strong>erhältst du keine SMS-Benachrichtigungen mehr, wenn eine rechtsgültige Mitteilung für dich auf SEND vorliegt.</strong></0><1>Denke daran, dass du, wenn du eine SEND-Mitteilung nicht rechtzeitig liest, möglicherweise Fristen versäumst und Strafen riskierst.</1>",
-    "remove-sms-message": "Wenn du dies bestätigst, erhältst du keine SMS mehr auf {{value}}, wenn eine SEND-Mitteilung zu lesen ist.",
-    "confirmation-modal-title": "Füge eine E-Mail-Adresse für die Benachrichtigungen hinzu!",
-    "confirmation-modal-io-title": "Das Hinzufügen Ihrer Kontaktdaten ist wichtig!",
-    "confirmation-modal-io-content": "Wenn du SEND nicht mit IO verbindest, <strong>erhältst du keine Nachricht in der App</strong>, wenn du eine rechtsgültige Mitteilung auf SEND erhältst.",
-    "confirmation-modal-disable-io-content": "Wenn du SEND von IO trennst, <strong>erhältst du keine Nachricht in der App</strong>, wenn du eine rechtsgültige Mitteilung auf SEND erhältst.",
-    "confirmation-modal-io-accept": "SEND mit IO verbinden",
-    "confirmation-modal-email-content": "Um das digitale Domizil SEND zu aktivieren, benötigen wir deine E-Mail-Adresse, damit wir dich <strong>benachrichtigen können, wenn eine rechtsgültige Mitteilung für dich vorliegt.</strong>",
-    "block-remove-email-title": "E-Mail-Adresse kann nicht deaktiviert werden",
-    "block-remove-email-message": "Um fortzufahren, musst du zuerst die personalisierten E-Mail-Adressen für jede Körperschaft entfernen.",
-    "block-remove-email-sercq-default-pec-special-message": "Um fortzufahren, musst du zuerst das digitale Domizil und die personalisierten Adressen deaktivieren.",
-    "block-remove-sms-title": "Handynummer kann nicht deaktiviert werden",
-    "block-remove-sms-message": "Um fortzufahren, musst du zuerst die personalisierten Handynummern für jede Körperschaft löschen."
-  },
-  "special-contacts": {
-    "select-address": "Typologie",
-    "add-sender": "Sendende Körperschaft",
-    "pec": "PEC-Adresse",
-    "sercq_send": "Digitales Domizil SEND",
-    "link-pec-label": "PEC-Adresse",
-    "link-sercq-label": "Dein digitales Domizil SEND",
-    "contact-to-add-description": "Das personalisierte digitale Domizil, an das du die SEND-Mitteilungen erhältst, die dir eine bestimmte Körperschaft sendet",
-    "contact-already-exists": "<0>Diese Körperschaft ist bereits mit der Adresse {{contactValue}} verknüpft.</0><1>Wenn du <strong>Bestätigen</strong> klickst, wird sie durch die gerade eingegebene ersetzt.</1>",
-    "validating-pec-banner-content": "<0>Du hast bereits eine PEC für diese Körperschaft eingegeben, die validiert wird.</0><1>Sobald sie bestätigt ist, kannst du sie ändern.</1>",
-    "validating-pec-error-message": "Du hast bereits eine PEC für diese Körperschaft eingegeben, die derzeit validiert wird",
-    "fetch-party-error": "Wir konnten die Daten, die benötigt werden, um eine neue Adresse zu erstellen, nicht wiederherstellen.",
-    "add-title": "Gib die Körperschaft und die zu verknüpfende Adresse ein",
-    "card-title": "PERSONALISIERT PRO KÖRPERSCHAFT",
-    "remove-special-title": "Möchtest du {{contactValue}} entfernen?",
-    "remove-special-description": "Die Benachrichtigungen der Zustellungen der verknüpften Körperschaften werden nicht mehr an diese Adresse geschickt, sondern an die Hauptadresse.",
-    "pec-disclaimer": "Ich akzeptiere, dass diese Adresse von SEND vorrangig gegenüber eventuellen bei einer sendenden Körperschaft registrierten oder in öffentlichen Registern vorhandenen PEC verwendet wird.",
-    "courtesy-banner": {
-      "title": "Funktion eingestellt",
-      "description": "Du kannst keine personalisierten Benachrichtigungsadressen mehr für Körperschaften eingeben oder bestehende ändern. Wenn du eine personalisierte Adresse löschst, kannst du sie nicht wiederherstellen oder erneut eingeben."
-    },
-    "email-description": "Die E-Mail-Adresse, über die wir dich benachrichtigen, wenn du eine rechtsgültige Mitteilung über SEND erhältst.",
-    "sercq-disclaimer": "Durch Klicken auf <strong>„Bestätigen“</strong> erklärst du, dass du die <0>Datenschutzerklärung</0> gelesen hast, die <1>Nutzungsbedingungen</1> akzeptierst, und dass du verstanden hast, dass SEND Benachrichtigungen der Entität nicht an andere digitale Domizile weitergeleitet werden."
-  },
-  "common": {
-    "duplicate-contact-title": "Adresse bereits vorhanden",
-    "duplicate-contact-descr": "Der Kontakt {{value}} ist bereits vorhanden, dennoch fortfahren?",
-    "duplicate-default-contact-title": "Diese Adresse wird bereits als digitales Domizil verwendet",
-    "duplicate-default-contact-descr": "Die Adresse {{value}} wird bereits als primäres digitales Domizil auf SEND verwendet.<br />Um das digitale Domizil pro sendender Körperschaft zu personalisieren, wähle eine andere Adresse.",
-    "enti-not-found": "Keine Körperschaft gefunden",
-    "too-long-field-error": "Höchstens {{maxLength}} Zeichen schreiben"
-  },
-  "errors": {
-    "invalid_verification_code": {
-      "title": "Der Code ist falsch",
-      "message": "Überprüfe ihn und gib ihn erneut ein, oder erstelle einen neuen."
-    },
-    "retry_limit_code": {
-      "title": "Zu viele Versuche",
-      "message": "Code zu oft falsch eingegeben. Um es erneut zu versuchen, auf „Abbrechen“ klicken, sicherstellen, dass der Kontakt korrekt ist und neuen Code eingeben."
-    },
-    "expired_verification_code": {
-      "title": "Code abgelaufen",
-      "message": "Einen neuen erstellen und eingeben."
-    }
-  },
-  "domicile-banner": {
-    "no-sercq-send-title": "Keine Papierdokumente mehr",
-    "no-sercq-send-description": "Aktiviere eine digitale Adresse, um die nächsten Zustellungen nur noch digital zu erhalten und Kosten zu sparen.",
-    "no-sercq-cta": "Digitale Adresse aktivieren",
-    "no-courtesy-title": "Versäume keine wichtigen Mitteilungen",
-    "no-courtesy-description": "Ohne informelle Adresse können wir dich nicht benachrichtigen, wenn es eine rechtsgültige Mitteilung auf SEND zu lesen gibt.",
-    "complete-addresses": "Eine E-Mail-Adresse eingeben",
-    "no-io-title": "Deine Zustellungen per App",
-    "no-io-description": "Wenn eine Zustellung für dich vorliegt, so kannst du sie in der IO-App empfangen, lesen und etwaige Gebühren direkt in der App bezahlen!",
-    "add-io": "Aktiviere SEND auf der IO-App",
-    "no-courtesy-sercq-send-title": "Möchtest du die nächsten Zustellungen ausschließlich digital empfangen?",
-    "no-courtesy-sercq-send-description": "Aktiviere SEND als digitales Domizil und mach dir nie wieder Sorgen um Einschreiben in Papierform.",
-    "complete-configuration": "Konfiguration fertigstellen",
-    "no-courtesy-no-sercq-send-title": "Versäume keine wichtigen Mitteilungen ",
-    "no-courtesy-no-sercq-send-description": "Füge eine E-Mail-Adresse hinzu, um eine Benachrichtigung zum Vorliegen einer neuen Zustellung auf SEND zu erhalten.",
-    "no-courtesy-no-sercq-send-cta": "Deine E-Mail-Adresse bestätigen"
+    "sercq_send-added-successfully": "Digitales Domizil erfolgreich aktiviert",
+    "sercq_send-description": "Wenn eine Körperschaft eine Mitteilung für dich über SEND sendet, wird sie sicher und mit Rechtswert über die Plattform selbst zugestellt.",
+    "sercq_send-removed-successfully": "Digitales Domizil erfolgreich deaktiviert",
+    "sercq_send-title": "SEND-Plattform",
+    "title": "Rechtsgültige Adresse",
+    "valid-pec": "Ungültige PEC-Adresse",
+    "validation-cancel-content": "Wenn du dies bestätigst, brichst du die Aktivierung der PEC als digitales Domizil auf SEND ab.",
+    "validation-cancel-title": "Überprüfung der PEC abbrechen",
+    "validation-progress-content": "Wir prüfen, ob die PEC-Adresse gültig ist. Du erhältst innerhalb von 24 Stunden eine E-Mail mit dem Ergebnis.",
+    "validation-progress-title": "Danke!"
   },
   "onboarding": {
-    "title": "SEND konfigurieren",
-    "description": "Holen Sie das Beste heraus und sparen Sie!",
     "cards": {
-      "send": {
-        "title": "Ich wähle das Beste von SEND",
-        "cta": "Das Beste von SEND aktivieren",
-        "label": "Empfohlen",
-        "item_1": "Aktivieren Sie Ihre digitalen Kontaktdaten und sparen Sie die Versandkosten für das Papier-Einschreiben.",
-        "item_2": "Wir benachrichtigen Sie beim Empfang einer SEND-Benachrichtigung per E-Mail und auf IO."
-      },
       "contacts": {
-        "title": "Ich möchte nur die Mitteilungen",
         "cta": "Nur Mitteilungen aktivieren",
         "item_1": "Erhalten Sie Mitteilungen per E-Mail, SMS und über die IO-App, damit Sie die Mitteilung rechtzeitig lesen und die Versandkosten für das Papier-Einschreiben vermeiden können.",
-        "item_2": "Wenn Sie die SEND-Benachrichtigung nicht innerhalb von 5 Tagen nach Erhalt öffnen, erhalten Sie dennoch ein Einschreiben mit den entsprechenden Zusatzkosten."
+        "item_2": "Wenn Sie die SEND-Benachrichtigung nicht innerhalb von 5 Tagen nach Erhalt öffnen, erhalten Sie dennoch ein Einschreiben mit den entsprechenden Zusatzkosten.",
+        "title": "Ich möchte nur die Mitteilungen"
       },
       "io": {
-        "title": "Ich möchte lieber nur SEND in der IO-App aktivieren",
         "cta": "SEND auf IO aktivieren",
-        "label": "Empfohlen",
         "item_1": "Erhalten Sie Höflichkeitsmitteilungen und Zugriff auf rechtliche Mitteilungen direkt über IO.",
-        "item_2": "Wenn Sie die SEND-Benachrichtigung nicht innerhalb von 5 Tagen nach Erhalt öffnen, erhalten Sie dennoch ein Einschreiben mit den entsprechenden Zusatzkosten."
+        "item_2": "Wenn Sie die SEND-Benachrichtigung nicht innerhalb von 5 Tagen nach Erhalt öffnen, erhalten Sie dennoch ein Einschreiben mit den entsprechenden Zusatzkosten.",
+        "label": "Empfohlen",
+        "title": "Ich möchte lieber nur SEND in der IO-App aktivieren"
+      },
+      "send": {
+        "cta": "Das Beste von SEND aktivieren",
+        "item_1": "Aktivieren Sie Ihre digitalen Kontaktdaten und sparen Sie die Versandkosten für das Papier-Einschreiben.",
+        "item_2": "Wir benachrichtigen Sie beim Empfang einer SEND-Benachrichtigung per E-Mail und auf IO.",
+        "label": "Empfohlen",
+        "title": "Ich wähle das Beste von SEND"
       }
     },
-    "exit-flow": "Überspringen und zu deinen Zustellungen gehen",
-    "exit-flow-dialog": {
-      "title": "Möchtest du die Konfiguration von SEND wirklich überspringen?",
-      "description": "Du riskierst, die SEND-Zustellungen nicht rechtzeitig zu lesen und die Kosten für den Versand des Einschreibens tragen zu müssen.",
-      "cancel": "Zurück zur Konfiguration"
-    },
-    "digital-domicile": {
-      "title": "Das Beste von SEND",
-      "choice": {
-        "title": "Aktiviere dein digitales Domizil auf SEND",
-        "description": "Du erhältst rechtliche Mitteilungen auf SEND, ausschließlich digital, und vermeidest so den Versand eines Einschreibens mit den entsprechenden Zusatzkosten.",
-        "cta": "Auf SEND aktivieren",
-        "pec": {
-          "description": "Alternativ kannst du dich dafür entscheiden, SEND-Zustellungen an deine PEC-Adresse zu erhalten. So könntest du den Versand eines Einschreibens mit den entsprechenden Zusatzkosten vermeiden.",
-          "cta": "Auf einer PEC aktivieren"
+    "courtesy": {
+      "banner-description": "Je mehr Benachrichtigungen aktiv sind, desto größer ist die Chance, die digitale Zustellung rechtzeitig zu lesen und das Einschreiben zu vermeiden!",
+      "email": {
+        "collapsed": {
+          "button-label": "E-Mail-Benachrichtigungen aktivieren",
+          "label": "Möchtest du auch eine E-Mail erhalten, wenn eine SEND-Zustellung eingeht?"
         },
+        "edit": {
+          "description": "Du erhältst eine Mitteilung an die Adresse:",
+          "input-label": "E-Mail-Adresse",
+          "title": "E-Mail-Benachrichtigungen aktiv"
+        },
+        "insert": {
+          "button-label": "E-Mail überprüfen",
+          "collapse-label": "E-Mail-Aktivierung abbrechen",
+          "description": "Wähle eine E-Mail-Adresse:",
+          "input-label": "E-Mail-Adresse",
+          "title": "E-Mail-Benachrichtigungen aktivieren"
+        },
+        "readonly": {
+          "description": "Du erhältst eine Mitteilung an die Adresse:",
+          "title": "E-Mail-Benachrichtigungen aktivieren"
+        },
+        "verify-before-continue-content": "Bevor du fortfährst, wähle <strong>E-Mail überprüfen<\/strong> und folge den Anweisungen.",
+        "verify-before-continue-title": "Überprüfe deine E-Mail"
+      },
+      "proceed-without-io": "Ohne IO-App fortfahren",
+      "sms": {
+        "collapsed": {
+          "button-label": "SMS-Benachrichtigungen aktivieren",
+          "label": "Möchtest du auch eine Benachrichtigung auf deinem Smartphone erhalten?"
+        },
+        "edit": {
+          "description": "Du erhältst eine Mitteilung an die Nummer:",
+          "input-label": "Mobilfunknummer",
+          "title": "SMS-Benachrichtigungen aktiv"
+        },
+        "insert": {
+          "button-label": "Nummer überprüfen",
+          "collapse-label": "SMS-Aktivierung abbrechen",
+          "description": "Wähle eine Mobilfunknummer:",
+          "input-label": "Mobilfunknummer",
+          "title": "SMS-Benachrichtigungen aktivieren"
+        },
+        "readonly": {
+          "description": "Du erhältst eine Mitteilung an die Nummer:",
+          "title": "SMS-Benachrichtigungen aktivieren"
+        },
+        "verify-before-continue-content": "Bevor du fortfährst, wähle <strong>Nummer überprüfen<\/strong> und folge den Anweisungen.",
+        "verify-before-continue-title": "Überprüfe deine Nummer"
+      },
+      "step-1-label": "Aktiviere Benachrichtigungen auf IO",
+      "step-2-label": "E-Mail und SMS",
+      "success-description": "Du erhältst eine Mitteilung auf den von dir gewählten Kanälen, wenn du eine SEND-Zustellung erhältst.",
+      "success-title": "Du hast die Benachrichtigungen aktiviert",
+      "title": "Aktivierung der Benachrichtigungen"
+    },
+    "description": "Holen Sie das Beste heraus und sparen Sie!",
+    "digital-domicile": {
+      "buttons": {
+        "continue-without-io": "Ohne IO-App fortfahren"
+      },
+      "choice": {
+        "cta": "Auf SEND aktivieren",
+        "description": "Du erhältst rechtliche Mitteilungen auf SEND, ausschließlich digital, und vermeidest so den Versand eines Einschreibens mit den entsprechenden Zusatzkosten.",
         "pec-activating": {
-          "title": "Die Aktivierung deines digitalen Domizils über PEC ist in Bearbeitung",
+          "badge": "Aktivierung läuft",
           "description": "Nach der Aktivierung erhältst du SEND-Zustellungen an deine PEC-Adresse. So könntest du den Versand eines Einschreibens mit den entsprechenden Zusatzkosten vermeiden.",
-          "badge": "Aktivierung läuft"
-        }
+          "title": "Die Aktivierung deines digitalen Domizils über PEC ist in Bearbeitung"
+        },
+        "pec": {
+          "cta": "Auf einer PEC aktivieren",
+          "description": "Alternativ kannst du dich dafür entscheiden, SEND-Zustellungen an deine PEC-Adresse zu erhalten. So könntest du den Versand eines Einschreibens mit den entsprechenden Zusatzkosten vermeiden."
+        },
+        "title": "Aktiviere dein digitales Domizil auf SEND"
       },
       "email": {
+        "confirm-cta": "E-Mail bestätigen",
+        "description": "Du erhältst bei jedem Eingang einer SEND-Zustellung eine E-Mail.",
+        "input-label": "E-Mail-Adresse",
+        "label": "E-Mail:",
         "title": "Verknüpfe eine E-Mail-Adresse mit dem digitalen Domizil",
         "title-existing": "Du hast bereits eine E-Mail-Adresse mit dem digitalen Domizil verknüpft",
-        "description": "Du erhältst bei jedem Eingang einer SEND-Zustellung eine E-Mail.",
-        "label": "E-Mail:",
-        "input-label": "E-Mail-Adresse",
-        "verify-cta": "E-Mail überprüfen",
-        "confirm-cta": "E-Mail bestätigen"
+        "verify-cta": "E-Mail überprüfen"
+      },
+      "feedback": {
+        "pec": {
+          "content": "Die von dir eingegebene PEC befindet sich in der Validierungsphase. Sobald sie bestätigt ist, erhältst du alle SEND-Zustellungen an die von dir gewählte Adresse. Die Benachrichtigungen sind hingegen bereits aktiv.",
+          "title": "Die Aktivierung des digitalen Domizils läuft"
+        },
+        "send": {
+          "content": "Du erhältst SEND-Zustellungen und die entsprechenden Mitteilungen auf den von dir gewählten Kanälen.",
+          "title": "Du hast das digitale Domizil und die Benachrichtigungen aktiviert"
+        }
       },
       "io": {
-        "title": "Aktiviere SEND in der IO-App",
         "description": "Gibt es eine SEND-Zustellung für dich? Du erhältst eine Mitteilung auf IO und kannst sie direkt in der App einsehen!",
-        "not-installed": {
-          "primary-cta": "Lade die IO-App herunter",
-          "refresh-cta": "Ich habe die App bereits heruntergeladen und installiert"
-        },
         "disabled": {
           "primary-cta": "Mitteilungen auf IO aktivieren"
         },
         "enabled": {
-          "title": "Du hast SEND bereits in der IO-App aktiviert",
-          "primary-cta": "Weiter"
-        }
-      },
-      "summary": {
-        "title": "Deine Zusammenfassung",
-        "legal-title-sercq": "Rechtliche Mitteilungen werden nur zugestellt an:",
-        "legal-title-pec": "Rechtliche Mitteilungen werden zugestellt an:",
-        "courtesy-title": "Du erhältst eine Mitteilung über:",
-        "info-box": "Überwache die von dir gewählten Kontaktdaten: Eine digitale SEND-Zustellung entfaltet ihre Rechtswirkungen auch dann, wenn du sie nicht eingesehen hast.",
-        "disclaimer": "Durch Klicken auf <strong>\"Bestätigen\"</strong> erklärst du, dass du die <0>Datenschutzerklärung</0> gelesen hast, die <1>Nutzungsbedingungen</1> akzeptierst, und dass du verstanden hast, dass SEND Benachrichtigungen nicht an andere digitale Domizile weitergeleitet werden.",
-        "ddom-label": "Digitales Domizil",
-        "io-label": "IO, die App für öffentliche Dienste",
-        "io-value": "SEND-Dienst auf IO aktiv",
-        "email-label": "E-Mail",
-        "send-badge": "SEND",
-        "pec-badge": "PEC"
+          "primary-cta": "Weiter",
+          "title": "Du hast SEND bereits in der IO-App aktiviert"
+        },
+        "not-installed": {
+          "primary-cta": "Lade die IO-App herunter",
+          "refresh-cta": "Ich habe die App bereits heruntergeladen und installiert"
+        },
+        "title": "Aktiviere SEND in der IO-App"
       },
       "pec": {
-        "title": "Deine PEC als digitales SEND-Domizil",
+        "cancel-email-cta": "E-Mail-Aktivierung abbrechen",
         "description": "Du erhältst rechtliche Mitteilungen auf deiner PEC, ausschließlich digital, und kannst so den Versand eines Einschreibens mit den entsprechenden Zusatzkosten vermeiden.",
+        "disclaimer": "Ich akzeptiere, dass die angegebene PEC-Adresse vorrangig gegenüber etwaigen bei einer sendenden Einrichtung registrierten oder in öffentlichen Registern vorhandenen PEC-Adressen verwendet wird.",
+        "edit-email-cta": "Adresse ändern",
+        "email-cta": "E-Mail-Benachrichtigungen aktivieren",
+        "email-present-description": "Beim Eingang einer SEND-Zustellung erhältst du auch eine Mitteilung an die Adresse:",
+        "input-label": "PEC-Adresse",
         "label-choose-address": "Wähle eine PEC-Adresse:",
         "label-summary": "PEC-Adresse",
-        "input-label": "PEC-Adresse",
-        "verify-cta": "PEC überprüfen",
-        "disclaimer": "Ich akzeptiere, dass die angegebene PEC-Adresse vorrangig gegenüber etwaigen bei einer sendenden Einrichtung registrierten oder in öffentlichen Registern vorhandenen PEC-Adressen verwendet wird.",
-        "email-cta": "E-Mail-Benachrichtigungen aktivieren",
         "optional-email-description": "Möchtest du auch eine E-Mail erhalten, wenn eine SEND-Zustellung eingeht?",
-        "optional-email-title": "E-Mail-Benachrichtigungen aktivieren",
         "optional-email-label": "Wähle eine E-Mail-Adresse:",
-        "cancel-email-cta": "E-Mail-Aktivierung abbrechen",
-        "email-present-description": "Beim Eingang einer SEND-Zustellung erhältst du auch eine Mitteilung an die Adresse:",
-        "edit-email-cta": "Adresse ändern",
-        "verify-before-continue-title": "Überprüfe deine PEC",
-        "verify-before-continue-content": "Bevor du fortfährst, wähle <strong>PEC überprüfen</strong> und folge den Anweisungen.",
+        "optional-email-title": "E-Mail-Benachrichtigungen aktivieren",
         "pending": {
-          "title": "Die eingegebene PEC-Adresse wird validiert",
+          "badge": "Aktivierung läuft",
           "description": "Sie erhalten rechtliche Mitteilungen über die gewählte PEC, ausschließlich auf digitalem Weg, und können so den Versand eines Einschreibens mit den entsprechenden Zusatzkosten vermeiden. Nach der Validierung können Sie diese im Bereich „Ihre Kontaktdaten\" ändern.",
-          "badge": "Aktivierung läuft"
-        }
-      },
-      "feedback": {
-        "send": {
-          "title": "Du hast das digitale Domizil und die Benachrichtigungen aktiviert",
-          "content": "Du erhältst SEND-Zustellungen und die entsprechenden Mitteilungen auf den von dir gewählten Kanälen."
+          "title": "Die eingegebene PEC-Adresse wird validiert"
         },
-        "pec": {
-          "title": "Die Aktivierung des digitalen Domizils läuft",
-          "content": "Die von dir eingegebene PEC befindet sich in der Validierungsphase. Sobald sie bestätigt ist, erhältst du alle SEND-Zustellungen an die von dir gewählte Adresse. Die Benachrichtigungen sind hingegen bereits aktiv."
-        }
+        "title": "Deine PEC als digitales SEND-Domizil",
+        "verify-before-continue-content": "Bevor du fortfährst, wähle <strong>PEC überprüfen<\/strong> und folge den Anweisungen.",
+        "verify-before-continue-title": "Überprüfe deine PEC",
+        "verify-cta": "PEC überprüfen"
       },
       "steps": {
         "choice": "Wähle ein digitales Domizil",
@@ -441,81 +448,74 @@
         "io": "Aktiviere Benachrichtigungen auf IO",
         "summary": "Überprüfe die gewählten Optionen"
       },
-      "buttons": {
-        "continue-without-io": "Ohne IO-App fortfahren"
-      }
+      "summary": {
+        "courtesy-title": "Du erhältst eine Mitteilung über:",
+        "ddom-label": "Digitales Domizil",
+        "disclaimer": "Durch Klicken auf <strong>\"Bestätigen\"<\/strong> erklärst du, dass du die <0>Datenschutzerklärung<\/0> gelesen hast, die <1>Nutzungsbedingungen<\/1> akzeptierst, und dass du verstanden hast, dass SEND Benachrichtigungen nicht an andere digitale Domizile weitergeleitet werden.",
+        "email-label": "E-Mail",
+        "info-box": "Überwache die von dir gewählten Kontaktdaten: Eine digitale SEND-Zustellung entfaltet ihre Rechtswirkungen auch dann, wenn du sie nicht eingesehen hast.",
+        "io-label": "IO, die App für öffentliche Dienste",
+        "io-value": "SEND-Dienst auf IO aktiv",
+        "legal-title-pec": "Rechtliche Mitteilungen werden zugestellt an:",
+        "legal-title-sercq": "Rechtliche Mitteilungen werden nur zugestellt an:",
+        "pec-badge": "PEC",
+        "send-badge": "SEND",
+        "title": "Deine Zusammenfassung"
+      },
+      "title": "Das Beste von SEND"
+    },
+    "exit-flow": "Überspringen und zu deinen Zustellungen gehen",
+    "exit-flow-dialog": {
+      "cancel": "Zurück zur Konfiguration",
+      "description": "Du riskierst, die SEND-Zustellungen nicht rechtzeitig zu lesen und die Kosten für den Versand des Einschreibens tragen zu müssen.",
+      "title": "Möchtest du die Konfiguration von SEND wirklich überspringen?"
     },
     "io-activation": {
-      "title": "Alles in der IO-App",
       "feedback": {
-        "title": "Du hast die Benachrichtigungen aktiviert",
-        "content": "Du erhältst eine Mitteilung in der IO-App, wenn du eine SEND-Zustellung erhältst."
-      }
-    },
-    "courtesy": {
-      "title": "Aktivierung der Benachrichtigungen",
-      "step-1-label": "Aktiviere Benachrichtigungen auf IO",
-      "step-2-label": "E-Mail und SMS",
-      "proceed-without-io": "Ohne IO-App fortfahren",
-      "banner-description": "Je mehr Benachrichtigungen aktiv sind, desto größer ist die Chance, die digitale Zustellung rechtzeitig zu lesen und das Einschreiben zu vermeiden!",
-      "success-title": "Du hast die Benachrichtigungen aktiviert",
-      "success-description": "Du erhältst eine Mitteilung auf den von dir gewählten Kanälen, wenn du eine SEND-Zustellung erhältst.",
-      "email": {
-        "readonly": {
-          "title": "E-Mail-Benachrichtigungen aktivieren",
-          "description": "Du erhältst eine Mitteilung an die Adresse:"
-        },
-        "insert": {
-          "title": "E-Mail-Benachrichtigungen aktivieren",
-          "description": "Wähle eine E-Mail-Adresse:",
-          "input-label": "E-Mail-Adresse",
-          "button-label": "E-Mail überprüfen",
-          "collapse-label": "E-Mail-Aktivierung abbrechen"
-        },
-        "collapsed": {
-          "label": "Möchtest du auch eine E-Mail erhalten, wenn eine SEND-Zustellung eingeht?",
-          "button-label": "E-Mail-Benachrichtigungen aktivieren"
-        },
-        "edit": {
-          "input-label": "E-Mail-Adresse",
-          "title": "E-Mail-Benachrichtigungen aktiv",
-          "description": "Du erhältst eine Mitteilung an die Adresse:"
-        },
-        "verify-before-continue-title": "Überprüfe deine E-Mail",
-        "verify-before-continue-content": "Bevor du fortfährst, wähle <strong>E-Mail überprüfen</strong> und folge den Anweisungen."
+        "content": "Du erhältst eine Mitteilung in der IO-App, wenn du eine SEND-Zustellung erhältst.",
+        "title": "Du hast die Benachrichtigungen aktiviert"
       },
-      "sms": {
-        "readonly": {
-          "title": "SMS-Benachrichtigungen aktivieren",
-          "description": "Du erhältst eine Mitteilung an die Nummer:"
-        },
-        "insert": {
-          "title": "SMS-Benachrichtigungen aktivieren",
-          "description": "Wähle eine Mobilfunknummer:",
-          "input-label": "Mobilfunknummer",
-          "button-label": "Nummer überprüfen",
-          "collapse-label": "SMS-Aktivierung abbrechen"
-        },
-        "collapsed": {
-          "label": "Möchtest du auch eine Benachrichtigung auf deinem Smartphone erhalten?",
-          "button-label": "SMS-Benachrichtigungen aktivieren"
-        },
-        "edit": {
-          "input-label": "Mobilfunknummer",
-          "title": "SMS-Benachrichtigungen aktiv",
-          "description": "Du erhältst eine Mitteilung an die Nummer:"
-        },
-        "verify-before-continue-title": "Überprüfe deine Nummer",
-        "verify-before-continue-content": "Bevor du fortfährst, wähle <strong>Nummer überprüfen</strong> und folge den Anweisungen."
-      }
+      "title": "Alles in der IO-App"
     },
     "notification-exit-dialog": {
-      "title": "Wie möchtest du rechtliche Mitteilungen erhalten?",
-      "description": "Richte SEND optimal ein und spare Geld!",
       "buttons": {
         "configure": "SEND konfigurieren",
         "skip": "Konfiguration überspringen"
-      }
-    }
-  }
+      },
+      "description": "Richte SEND optimal ein und spare Geld!",
+      "title": "Wie möchtest du rechtliche Mitteilungen erhalten?"
+    },
+    "title": "SEND konfigurieren"
+  },
+  "special-contacts": {
+    "add-sender": "Sendende Körperschaft",
+    "add-title": "Gib die Körperschaft und die zu verknüpfende Adresse ein",
+    "card-title": "PERSONALISIERT PRO KÖRPERSCHAFT",
+    "contact-already-exists": "<0>Diese Körperschaft ist bereits mit der Adresse {{contactValue}} verknüpft.<\/0><1>Wenn du <strong>Bestätigen<\/strong> klickst, wird sie durch die gerade eingegebene ersetzt.<\/1>",
+    "contact-to-add-description": "Das personalisierte digitale Domizil, an das du die SEND-Mitteilungen erhältst, die dir eine bestimmte Körperschaft sendet",
+    "courtesy-banner": {
+      "description": "Du kannst keine personalisierten Benachrichtigungsadressen mehr für Körperschaften eingeben oder bestehende ändern. Wenn du eine personalisierte Adresse löschst, kannst du sie nicht wiederherstellen oder erneut eingeben.",
+      "title": "Funktion eingestellt"
+    },
+    "email-description": "Die E-Mail-Adresse, über die wir dich benachrichtigen, wenn du eine rechtsgültige Mitteilung über SEND erhältst.",
+    "fetch-party-error": "Wir konnten die Daten, die benötigt werden, um eine neue Adresse zu erstellen, nicht wiederherstellen.",
+    "link-pec-label": "PEC-Adresse",
+    "link-sercq-label": "Dein digitales Domizil SEND",
+    "pec": "PEC-Adresse",
+    "pec-disclaimer": "Ich akzeptiere, dass diese Adresse von SEND vorrangig gegenüber eventuellen bei einer sendenden Körperschaft registrierten oder in öffentlichen Registern vorhandenen PEC verwendet wird.",
+    "remove-special-description": "Die Benachrichtigungen der Zustellungen der verknüpften Körperschaften werden nicht mehr an diese Adresse geschickt, sondern an die Hauptadresse.",
+    "remove-special-title": "Möchtest du {{contactValue}} entfernen?",
+    "select-address": "Typologie",
+    "sercq-disclaimer": "Durch Klicken auf <strong>„Bestätigen“<\/strong> erklärst du, dass du die <0>Datenschutzerklärung<\/0> gelesen hast, die <1>Nutzungsbedingungen<\/1> akzeptierst, und dass du verstanden hast, dass SEND Benachrichtigungen der Entität nicht an andere digitale Domizile weitergeleitet werden.",
+    "sercq_send": "Digitales Domizil SEND",
+    "validating-pec-banner-content": "<0>Du hast bereits eine PEC für diese Körperschaft eingegeben, die validiert wird.<\/0><1>Sobald sie bestätigt ist, kannst du sie ändern.<\/1>",
+    "validating-pec-error-message": "Du hast bereits eine PEC für diese Körperschaft eingegeben, die derzeit validiert wird"
+  },
+  "status": {
+    "active": "Aktiv",
+    "inactive": "Zu aktivieren",
+    "pec-validation": "Validierung der PEC läuft"
+  },
+  "subtitle": "Hier kannst du die Adressen verwalten, an die du die Zustellungen der SEND beigetretenen Körperschaften erhalten möchtest.",
+  "title": "Adressen"
 }

@@ -1,34 +1,34 @@
 {
+  "button": {
+    "close": "Chiudi",
+    "go-to-login": "Accedi"
+  },
+  "footer": {
+    "321-model": "Modello 231",
+    "accessibility": "Accessibilità",
+    "certifications": "Certificazioni",
+    "company": "Società trasparente",
+    "cookie": "Preferenze Cookie",
+    "disclosure": "Responsible Disclosure Policy",
+    "follow": "Seguici su",
+    "go-to": "Vai al link",
+    "go-to-pagopa": "Vai al sito di PagoPA S.p.A.",
+    "legal-part-1": "società per azioni con socio unico - capitale sociale di euro 1,000,000 interamente versato - sede legale in Roma, Piazza Colonna 370",
+    "legal-part-2": "CAP 00187 - n. di iscrizione a Registro Imprese di Roma, CF e P.IVA 15376371009",
+    "personal-data": "Diritto alla protezione dei dati personali",
+    "privacy-info": "Informativa Privacy",
+    "products-title": "Prodotti e servizi",
+    "resources": "Risorse",
+    "security": "Sicurezza delle informazioni",
+    "sercq-service-statement": "Service practice statement - SERCQ",
+    "social": "Vai al sito {{social}} di PagoPA S.p.A.",
+    "terms-conditions": "Termini e Condizioni",
+    "who": "Chi siamo",
+    "work": "Lavora con noi"
+  },
   "header": {
     "assistance": "Assistenza",
     "logout": "Esci",
     "pago-pa-link": "Sito di PagoPA S.p.A."
-  },
-  "footer": {
-    "go-to-pagopa": "Vai al sito di PagoPA S.p.A.",
-    "go-to": "Vai al link",
-    "privacy-info": "Informativa Privacy",
-    "who": "Chi siamo",
-    "work": "Lavora con noi",
-    "certifications": "Certificazioni",
-    "security": "Sicurezza delle informazioni",
-    "personal-data": "Diritto alla protezione dei dati personali",
-    "cookie": "Preferenze Cookie",
-    "terms-conditions": "Termini e Condizioni",
-    "company": "Società trasparente",
-    "disclosure": "Responsible Disclosure Policy",
-    "321-model": "Modello 231",
-    "sercq-service-statement": "Service practice statement - SERCQ",
-    "accessibility": "Accessibilità",
-    "social": "Vai al sito {{social}} di PagoPA S.p.A.",
-    "resources": "Risorse",
-    "follow": "Seguici su",
-    "legal-part-1": "società per azioni con socio unico - capitale sociale di euro 1,000,000 interamente versato - sede legale in Roma, Piazza Colonna 370",
-    "legal-part-2": "CAP 00187 - n. di iscrizione a Registro Imprese di Roma, CF e P.IVA 15376371009",
-    "products-title": "Prodotti e servizi"
-  },
-  "button": {
-    "close": "Chiudi",
-    "go-to-login": "Accedi"
   }
 }

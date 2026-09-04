@@ -1,262 +1,268 @@
 {
-  "iun": "IUN Code",
-  "logo": "Logo of",
-  "button": {
-    "filtra": "Filter",
-    "annulla filtro": "Reset filters",
-    "indietro": "Back",
-    "associa": "Link",
-    "capito": "OK, I understand",
-    "conferma": "Confirm",
-    "attiva": "Activate",
-    "annulla": "Cancel",
-    "modifica": "Edit",
-    "salva": "Save",
-    "elimina": "Delete",
-    "enter": "Enter",
-    "exit": "Exit",
-    "close": "Close",
-    "end": "End",
-    "enable": "Activate",
-    "manage": "Manage",
-    "disable": "Deactivate",
-    "start": "Start",
-    "continue": "Continue",
-    "go-to-home": "Go to home page",
-    "go-to-login": "Login",
-    "not-now": "Not now",
-    "do-later": "I'll do it later",
-    "add": "Add",
-    "understand": "Ok, I understand"
-  },
-  "menu": {
-    "notifiche": "Inbox",
-    "notifiche-impresa": "Inbox for {{organization}}",
-    "notifiche-delegato": "Incoming from delegations",
-    "deleghe": "Delegations of authority",
-    "profilo": "Your details",
-    "contacts": "Contact details",
-    "integrazione-api": "API Integration",
-    "app-status": "Platform status",
-    "users": "Users",
-    "groups": "Groups"
-  },
-  "header": {
-    "assistance": "Assistance",
-    "login": "Login",
-    "product": {
-      "organization-dashboard": "Your company",
-      "notification-platform": "SEND - Servizio Notifiche Digitali"
-    },
-    "logout-message": "Do you confirm you want to log out of SEND?",
-    "logout": "Exit",
-    "pago-pa-link": "PagoPA S.p.A. website"
-  },
-  "tos": {
-    "title": "SEND - Servizio Notifiche Digitali",
-    "body": "To log in, accept the Terms and Conditions of Service and read the Privacy Policy.",
-    "redo-body": "The Terms and Conditions of Service and Privacy Policy have changed. To log in, you must agree and confirm that you have read the new versions.",
-    "switch-label": "I accept the <1>Terms and Conditions of Use</1> and confirm that I have read the <0>Privacy Policy</0>",
-    "button": "Login"
-  },
-  "table": {
-    "aria-label": "Item table"
-  },
-  "paginator": {
-    "aria-label": "Pagination Menu",
-    "first": "first element",
-    "last": "last element",
-    "page": "page",
-    "next": "Go to next page",
-    "previous": "Go to previous page",
-    "selected": "Selected item",
-    "rows-per-page": "Lines per page"
-  },
-  "toast": {
-    "aria-label": "Toast close icon"
-  },
-  "date-picker": {
-    "left-arrow": "Go to previous month",
-    "right-arrow": "Go to next month",
-    "switch-to-year": "calendar mode active, switch to year selection mode",
-    "switch-to-calendar": "year selection mode active, switch to calendar mode",
-    "select-date": "Choose date",
-    "date-selected": "Choose date, the selected date is {{date}} "
-  },
-  "date-time": {
-    "today-uppercase-initial": "Today",
-    "hour-of-day": "time"
-  },
-  "error-boundary": {
-    "title": "Something went wrong",
-    "description": "We were unable to load the page. Please reload it, or try again later.",
-    "action": "Reload page"
-  },
-  "not-accessible": {
-    "title": "Cannot access the platform",
-    "description": "SEND is currently being tested and is not yet available. For more information about SEND,",
-    "action": "visit the website"
-  },
   "access-denied": "You do not have the necessary permissions to access this page",
-  "not-logged": "Log in to SEND",
-  "not-logged-subtitle": "To view and manage your notifications, log in with SPID or CIE.",
-  "loading": "Loading",
-  "not-found": {
-    "title": "What you were looking for is not here.",
-    "description": "The page you were looking for does not exist or is no longer available.",
-    "back-to-home": "Back to home"
+  "autocomplete": {
+    "clear": "Remove selected options",
+    "delete-selection": "Remove %s",
+    "selection-box": "Selected options",
+    "selection-done": "%s selected",
+    "toggle-close": "Close option selection menu",
+    "toggle-open": "Open option selection menu"
   },
-  "leaving-app": {
-    "title": "You are exiting SEND",
-    "message": "You will be redirected"
-  },
-  "error-when-fetching-tos-status": {
-    "title": "Problems with logging into SEND",
-    "message": "Please try again later"
-  },
-  "messages": {
-    "404-title": "Resource not found",
-    "404-message": "An error has occurred. Please try again later",
-    "403-title": "Your session has timed out",
-    "403-message": "Enter and log in with SPID or CIE.",
-    "401-title": "Unauthorised user",
-    "401-message": "Current user does not have permissions",
-    "451-title": "Platform not accessible",
-    "451-message": "Cannot access the platform",
-    "500-title": "Service not available",
-    "500-message": "Due to a temporary service issue, your request has not been sent. Please come back later.",
-    "lacking-grants-for-app-title": "You are not authorised to log in",
-    "invalid-token-title": "You cannot log in due to a technical issue - invalid token",
-    "generic-token-exchange-problem": "Login could not be completed",
-    "generic-title": "Generic error",
-    "generic-message": "An error has occurred. Please try again later",
-    "generic-api-error-main-text": "We were unable to retrieve this data.",
-    "generic-api-error-action-text": "Reload"
-  },
-  "footer": {
-    "go-to-pagopa": "Go to the website of PagoPA S.p.A.",
-    "go-to": "Go to link",
-    "privacy-info": "Privacy Policy",
-    "who": "About",
-    "work": "Jobs",
-    "certifications": "Certifications",
-    "security": "Information security",
-    "personal-data": "Right to protection of personal data",
-    "cookie": "Cookie Preferences",
-    "terms-conditions": "Terms and Conditions",
-    "company": "Transparent company",
-    "disclosure": "Responsible Disclosure Policy",
-    "321-model": "Form 231",
-    "sercq-service-statement": "Service practice statement - SERCQ",
-    "accessibility": "Accessibility",
-    "social": "Go to the website {{social}} of PagoPA S.p.A.",
-    "resources": "Resources",
-    "follow": "Follow us on",
-    "legal-part-1": "joint stock company with sole shareholder - share capital of 1,000,000 euros fully paid up - registered office in Rome, Piazza Colonna 370",
-    "legal-part-2": "CAP 00187 - Reg. no. in the Rome Business Register, Fiscal code and VAT number 15376371009"
-  },
-  "required-fields": "*Required fields",
-  "too-long-field-error": "Write maximum {{maxLength}} characters",
-  "validation": {
-    "search-pattern-length-limit": "Search max {{maxLength}} characters",
-    "invalid-characters-not-inserted": "Invalid characters have not been entered."
-  },
-  "errors": {
-    "technical-error": {
-      "title": "Error Information",
-      "copy-to-clipboard": "Copy error information"
-    },
-    "bad_request": {
-      "title": "Error sending data",
-      "message": "The request format is invalid."
-    },
-    "unauthorized": {
-      "title": "Unauthorised user",
-      "message": "The current user does not have permissions."
-    },
-    "unavailable_legal_reasons": {
-      "title": "Platform not accessible",
-      "message": "Cannot access the platform"
-    },
-    "forbidden": {
-      "title": "Your session has timed out",
-      "message": "Enter and log in with SPID or CIE."
-    },
-    "not_found": {
-      "title": "Resource not found",
-      "message": "An error has occurred. Please try again later."
-    },
-    "internal_server": {
-      "title": "Service not available",
-      "message": "Due to a temporary service issue, your request has not been sent. Please come back later."
-    },
-    "unhandled": {
-      "title": "Generic error",
-      "message": "An error has occurred. Please try again later."
-    },
-    "unknown": {
-      "title": "Error",
-      "message": "Unexpected error"
-    },
-    "invalid_type_code": {
-      "title": "This field only accepts numeric values",
-      "message": "Check the verification code and enter it again"
-    },
-    "empty_code": {
-      "title": "Missing or incomplete code",
-      "message": "The code you entered is incomplete; please enter a 5-digit code."
-    },
-    "invalid_body": {
-      "title": "Data is invalid",
-      "message": "An error occurred while submitting your data. Please check that it is correct, without spaces or special characters, and try again. If the error persists, contact support and provide the error information."
-    },
-    "invalid_parameter": {
-      "title": "Invalid data",
-      "message": "One or more of the entered data is invalid"
-    }
-  },
-  "roles": {
-    "pg-operator": "Operational contact person",
-    "pg-admin": "Administrator"
-  },
-  "required-field": "Required field",
   "badges": {
     "news": "News"
+  },
+  "button": {
+    "add": "Add",
+    "annulla": "Cancel",
+    "annulla filtro": "Reset filters",
+    "associa": "Link",
+    "attiva": "Activate",
+    "capito": "OK, I understand",
+    "close": "Close",
+    "conferma": "Confirm",
+    "continue": "Continue",
+    "disable": "Deactivate",
+    "do-later": "I'll do it later",
+    "elimina": "Delete",
+    "enable": "Activate",
+    "end": "End",
+    "enter": "Enter",
+    "exit": "Exit",
+    "filtra": "Filter",
+    "go-to-home": "Go to home page",
+    "go-to-login": "Login",
+    "indietro": "Back",
+    "manage": "Manage",
+    "modifica": "Edit",
+    "not-now": "Not now",
+    "salva": "Save",
+    "start": "Start",
+    "understand": "Ok, I understand"
+  },
+  "code-modal": {
+    "digits": [
+      "First digit",
+      "Second digit",
+      "Third digit",
+      "Fourth digit",
+      "Last digit"
+    ]
   },
   "conjunctions": {
     "or": "or"
   },
-  "downtime_language_banner": {
-    "message": "The original text of these documents is in Italian. In case of conflict between the Italian version and the translations into other languages, the meaning and conditions of the Italian language shall prevail.",
-    "link": "Consult the translations"
+  "date-picker": {
+    "date-selected": "Choose date, the selected date is {{date}} ",
+    "left-arrow": "Go to previous month",
+    "right-arrow": "Go to next month",
+    "select-date": "Choose date",
+    "switch-to-calendar": "year selection mode active, switch to calendar mode",
+    "switch-to-year": "calendar mode active, switch to year selection mode"
   },
-  "no-spaces-at-edges": "Delete spaces at the beginning or end",
-  "wizard": {
-    "stepper": {
-      "of": "{{currentStep}} of {{totalSteps}}",
-      "activeStep": "Step {{currentStep}}"
+  "date-time": {
+    "hour-of-day": "time",
+    "today-uppercase-initial": "Today"
+  },
+  "downtime_language_banner": {
+    "link": "Consult the translations",
+    "message": "The original text of these documents is in Italian. In case of conflict between the Italian version and the translations into other languages, the meaning and conditions of the Italian language shall prevail."
+  },
+  "error-boundary": {
+    "action": "Reload page",
+    "description": "We were unable to load the page. Please reload it, or try again later.",
+    "title": "Something went wrong"
+  },
+  "error-when-fetching-tos-status": {
+    "message": "Please try again later",
+    "title": "Problems with logging into SEND"
+  },
+  "errors": {
+    "bad_request": {
+      "message": "The request format is invalid.",
+      "title": "Error sending data"
+    },
+    "empty_code": {
+      "message": "The code you entered is incomplete; please enter a 5-digit code.",
+      "title": "Missing or incomplete code"
+    },
+    "forbidden": {
+      "message": "Enter and log in with SPID or CIE.",
+      "title": "Your session has timed out"
+    },
+    "internal_server": {
+      "message": "Due to a temporary service issue, your request has not been sent. Please come back later.",
+      "title": "Service not available"
+    },
+    "invalid_body": {
+      "message": "An error occurred while submitting your data. Please check that it is correct, without spaces or special characters, and try again. If the error persists, contact support and provide the error information.",
+      "title": "Data is invalid"
+    },
+    "invalid_parameter": {
+      "message": "One or more of the entered data is invalid",
+      "title": "Invalid data"
+    },
+    "invalid_type_code": {
+      "message": "Check the verification code and enter it again",
+      "title": "This field only accepts numeric values"
+    },
+    "not_found": {
+      "message": "An error has occurred. Please try again later.",
+      "title": "Resource not found"
+    },
+    "technical-error": {
+      "copy-to-clipboard": "Copy error information",
+      "title": "Error Information"
+    },
+    "unauthorized": {
+      "message": "The current user does not have permissions.",
+      "title": "Unauthorised user"
+    },
+    "unavailable_legal_reasons": {
+      "message": "Cannot access the platform",
+      "title": "Platform not accessible"
+    },
+    "unhandled": {
+      "message": "An error has occurred. Please try again later.",
+      "title": "Generic error"
+    },
+    "unknown": {
+      "message": "Unexpected error",
+      "title": "Error"
+    }
+  },
+  "footer": {
+    "321-model": "Form 231",
+    "accessibility": "Accessibility",
+    "certifications": "Certifications",
+    "company": "Transparent company",
+    "cookie": "Cookie Preferences",
+    "disclosure": "Responsible Disclosure Policy",
+    "follow": "Follow us on",
+    "go-to": "Go to link",
+    "go-to-pagopa": "Go to the website of PagoPA S.p.A.",
+    "legal-part-1": "joint stock company with sole shareholder - share capital of 1,000,000 euros fully paid up - registered office in Rome, Piazza Colonna 370",
+    "legal-part-2": "CAP 00187 - Reg. no. in the Rome Business Register, Fiscal code and VAT number 15376371009",
+    "personal-data": "Right to protection of personal data",
+    "privacy-info": "Privacy Policy",
+    "resources": "Resources",
+    "security": "Information security",
+    "sercq-service-statement": "Service practice statement - SERCQ",
+    "social": "Go to the website {{social}} of PagoPA S.p.A.",
+    "terms-conditions": "Terms and Conditions",
+    "who": "About",
+    "work": "Jobs"
+  },
+  "header": {
+    "assistance": "Assistance",
+    "login": "Login",
+    "logout": "Exit",
+    "logout-message": "Do you confirm you want to log out of SEND?",
+    "pago-pa-link": "PagoPA S.p.A. website",
+    "product": {
+      "notification-platform": "SEND - Servizio Notifiche Digitali",
+      "organization-dashboard": "Your company"
     }
   },
   "inactivity": {
-    "title": "Do you really want to log out of SEND?",
+    "action": "Keep access",
     "body": "The disconnection is in progress. If you have changed your mind, press “Keep access” within a few seconds.",
-    "action": "Keep access"
+    "title": "Do you really want to log out of SEND?"
   },
-  "code-modal": {
-    "digits": ["First digit", "Second digit", "Third digit", "Fourth digit", "Last digit"]
+  "iun": "IUN Code",
+  "leaving-app": {
+    "message": "You will be redirected",
+    "title": "You are exiting SEND"
+  },
+  "loading": "Loading",
+  "logo": "Logo of",
+  "menu": {
+    "app-status": "Platform status",
+    "contacts": "Contact details",
+    "deleghe": "Delegations of authority",
+    "groups": "Groups",
+    "integrazione-api": "API Integration",
+    "notifiche": "Inbox",
+    "notifiche-delegato": "Incoming from delegations",
+    "notifiche-impresa": "Inbox for {{organization}}",
+    "profilo": "Your details",
+    "users": "Users"
+  },
+  "messages": {
+    "401-message": "Current user does not have permissions",
+    "401-title": "Unauthorised user",
+    "403-message": "Enter and log in with SPID or CIE.",
+    "403-title": "Your session has timed out",
+    "404-message": "An error has occurred. Please try again later",
+    "404-title": "Resource not found",
+    "451-message": "Cannot access the platform",
+    "451-title": "Platform not accessible",
+    "500-message": "Due to a temporary service issue, your request has not been sent. Please come back later.",
+    "500-title": "Service not available",
+    "generic-api-error-action-text": "Reload",
+    "generic-api-error-main-text": "We were unable to retrieve this data.",
+    "generic-message": "An error has occurred. Please try again later",
+    "generic-title": "Generic error",
+    "generic-token-exchange-problem": "Login could not be completed",
+    "invalid-token-title": "You cannot log in due to a technical issue - invalid token",
+    "lacking-grants-for-app-title": "You are not authorised to log in"
+  },
+  "no-spaces-at-edges": "Delete spaces at the beginning or end",
+  "not-accessible": {
+    "action": "visit the website",
+    "description": "SEND is currently being tested and is not yet available. For more information about SEND,",
+    "title": "Cannot access the platform"
+  },
+  "not-available": "Not available",
+  "not-found": {
+    "back-to-home": "Back to home",
+    "description": "The page you were looking for does not exist or is no longer available.",
+    "title": "What you were looking for is not here."
+  },
+  "not-logged": "Log in to SEND",
+  "not-logged-subtitle": "To view and manage your notifications, log in with SPID or CIE.",
+  "paginator": {
+    "aria-label": "Pagination Menu",
+    "first": "first element",
+    "last": "last element",
+    "next": "Go to next page",
+    "page": "page",
+    "previous": "Go to previous page",
+    "rows-per-page": "Lines per page",
+    "selected": "Selected item"
+  },
+  "required-field": "Required field",
+  "required-fields": "*Required fields",
+  "roles": {
+    "pg-admin": "Administrator",
+    "pg-operator": "Operational contact person"
+  },
+  "table": {
+    "aria-label": "Item table"
+  },
+  "toast": {
+    "aria-label": "Toast close icon"
+  },
+  "too-long-field-error": "Write maximum {{maxLength}} characters",
+  "tos": {
+    "body": "To log in, accept the Terms and Conditions of Service and read the Privacy Policy.",
+    "button": "Login",
+    "redo-body": "The Terms and Conditions of Service and Privacy Policy have changed. To log in, you must agree and confirm that you have read the new versions.",
+    "switch-label": "I accept the <1>Terms and Conditions of Use<\/1> and confirm that I have read the <0>Privacy Policy<\/0>",
+    "title": "SEND - Servizio Notifiche Digitali"
   },
   "user-validation-failed": {
-    "title": "The data entered is invalid",
+    "cta": "Contact support",
     "description": "One or more details associated with your account are invalid. Contact support to resolve the issue.",
-    "cta": "Contact support"
+    "title": "The data entered is invalid"
   },
-  "autocomplete": {
-    "clear": "Remove selected options",
-    "toggle-open": "Open option selection menu",
-    "toggle-close": "Close option selection menu",
-    "selection-box": "Selected options",
-    "selection-done": "%s selected",
-    "delete-selection": "Remove %s"
+  "validation": {
+    "invalid-characters-not-inserted": "Invalid characters have not been entered.",
+    "search-pattern-length-limit": "Search max {{maxLength}} characters"
   },
-  "not-available": "Not available"
+  "wizard": {
+    "stepper": {
+      "activeStep": "Step {{currentStep}}",
+      "of": "{{currentStep}} of {{totalSteps}}"
+    }
+  }
 }

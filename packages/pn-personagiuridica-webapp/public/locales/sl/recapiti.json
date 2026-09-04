@@ -1,275 +1,275 @@
 {
-  "title": "Naslovi",
-  "subtitle": "Upravljajte digitalne naslove, na katere lahko prejemate pravno veljavne komunikacije SEND in/ali ustrezna vljudnostna sporočila za <0>vaše podjetje</0>.",
+  "common": {
+    "duplicate-contact-descr": "Naslov {{value}} že obstaja, ali želite vseeno nadaljevati?",
+    "duplicate-contact-title": "Naslov že obstaja",
+    "duplicate-default-contact-descr": "Naslov {{value}} se že uporablja kot glavni digitalni naslov na SEND.<br \/>Za personalizacijo digitalnega naslova za posameznega pošiljatelja izberite drug naslov.",
+    "duplicate-default-contact-title": "Ta naslov se že uporablja kot digitalni naslov",
+    "enti-not-found": "Noben organ ni najden",
+    "too-long-field-error": "Napišite največ {{maxLength}} znakov"
+  },
+  "courtesy-contacts": {
+    "block-remove-email-message": "Za nadaljevanje morate najprej odstraniti personalizirane e-pošte za posameznega pošiljatelja.",
+    "block-remove-email-sercq-default-pec-special-message": "Za nadaljevanje morate najprej deaktivirati digitalni naslov in personalizirane naslove.",
+    "block-remove-email-title": "E-pošte ni mogoče deaktivirati",
+    "block-remove-sms-message": "Za nadaljevanje morate najprej izbrisati personalizirane mobilne številke za posameznega pošiljatelja.",
+    "block-remove-sms-title": "Mobilne številke ni mogoče deaktivirati",
+    "confirmation-modal-email-content": "<0>Za aktivacijo digitalnega naslova SEND potrebujemo poslovni e-poštni naslov, da lahko <strong>pošljemo opozorilo, ko je na voljo pravno veljavna komunikacija za vaše podjetje.<\/strong><\/0>",
+    "confirmation-modal-title": "Dodajte poslovni e-poštni naslov za opozorila!",
+    "email-add": "Dodaj e-pošto",
+    "email-added-successfully": "E-poštni naslov uspešno dodan",
+    "email-and-sercq-removed-successfully": "E-pošta in digitalni naslov SEND deaktivirana",
+    "email-empty-description": "Dodajte poslovni e-poštni naslov, na katerega vas lahko opozorimo, ko je na voljo obvestilo SEND za vaše podjetje.",
+    "email-filled-description": "Ko je na voljo obvestilo za vaše podjetje, vas obvestimo po e-pošti na naslov, ki ste ga izbrali.",
+    "email-new-code": "Niste prejeli? Preverite, ali ste vnesli pravilen e-poštni naslov, ali <0>generirajte novo kodo<\/0>.",
+    "email-removed-successfully": "E-poštni naslov uspešno odstranjen",
+    "email-sms-add": "Dodaj mobilno številko",
+    "email-sms-updates": "Ali želite prejemati opozorila tudi prek SMS-a?",
+    "email-title": "Poslovni e-poštni naslov",
+    "email-to-add": "E-poštni naslov",
+    "email-verify": "Potrdi e-pošto {{value}}",
+    "email-verify-descr": "Na navedeni e-poštni naslov smo poslali kodo. Koda velja <strong>15 minut<\/strong>.",
+    "link-email-placeholder": "Poslovni e-poštni naslov",
+    "link-sms-placeholder": "Poslovna mobilna številka",
+    "remove-email": "Deaktiviraj e-pošto",
+    "remove-email-and-sercq": "Deaktiviraj e-pošto in naslov",
+    "remove-email-and-sercq-message": "<0>Če se odločite za deaktivacijo digitalnega naslova SEND, lahko vaše podjetje prejema komunikacije prek priporočene pošiljke in <strong>plača povezane stroške.<\/strong><\/0>",
+    "remove-email-and-sercq-title": "Skupaj z e-pošto se deaktivira tudi digitalni naslov SEND",
+    "remove-email-button-dod-enabled": "Deaktiviraj poslovno e-pošto",
+    "remove-email-no-domicile-message": "Če potrdite, ne boste več prejemali e-pošte na {{value}}, ko bo na voljo obvestilo SEND za branje.",
+    "remove-email-no-domicile-title": "Deaktiviraj e-pošto",
+    "remove-email-pec-enabled-message": "<0>Če deaktivirate poslovni e-poštni naslov, <strong>vas ne moremo opozoriti, ko je na voljo pravno veljavna komunikacija za vaše podjetje<\/strong>.<\/0><1>Ne pozabite, da podjetje, če obvestilo ni prebrano pravočasno, morda ne bo seznanjeno z morebitnimi roki in lahko nastanejo kazni.<\/1>",
+    "remove-email-pec-enabled-title": "Ali želite deaktivirati vašo poslovno e-pošto?",
+    "remove-email-preconfirm-message": "<0>Če deaktivirate e-poštni naslov, vas ne moremo <strong>opozoriti, ko je na voljo pravno veljavna komunikacija za vaše podjetje.<\/strong><\/0>",
+    "remove-email-preconfirm-title": "Ali želite deaktivirati e-poštna opozorila?",
+    "remove-sms": "Deaktiviraj mobilno številko",
+    "remove-sms-button-dod-enabled": "Deaktiviraj SMS",
+    "remove-sms-message": "Če potrdite, ne boste več prejemali SMS-a na {{value}}, ko bo na voljo obvestilo SEND za branje.",
+    "remove-sms-message-dod-enabled": "<0>Če deaktivirate poslovno telefonsko številko, <strong>ne boste prejemali SMS opozoril, ko je na voljo pravno veljavna komunikacija za vaše podjetje na SEND.<\/strong><\/0><1>Ne pozabite, da podjetje, če obvestilo SEND ni prebrano pravočasno, morda ne bo seznanjeno z morebitnimi roki in lahko nastanejo kazni.<\/1>",
+    "remove-sms-title-dod-enabled": "Ali želite deaktivirati SMS opozorila?",
+    "sms-add": "Dodaj številko",
+    "sms-added-successfully": "Mobilna številka uspešno dodana",
+    "sms-description": "Ko je na voljo obvestilo za vaše podjetje, vas opozorimo z SMS-om.",
+    "sms-new-code": "Niste prejeli? Preverite, ali ste vnesli pravilno mobilno številko, ali <0>generirajte novo kodo<\/0>.",
+    "sms-removed-successfully": "Mobilna številka uspešno odstranjena",
+    "sms-title": "Poslovna mobilna številka",
+    "sms-to-add": "Mobilna številka",
+    "sms-verify": "Potrdi številko {{value}}",
+    "sms-verify-descr": "Na navedeno mobilno številko smo poslali kodo. Koda velja <strong>15 minut<\/strong>.",
+    "valid-email": "Neveljaven e-poštni naslov",
+    "valid-sms": "Neveljavna mobilna številka"
+  },
+  "domicile-banner": {
+    "complete-addresses": "Vnesite e-pošto",
+    "complete-configuration": "Zaključi konfiguracijo",
+    "no-courtesy-description": "Brez vljudnostnega naslova vas ne moremo opozoriti, ko je na voljo pravno veljavna komunikacija za branje na SEND.",
+    "no-courtesy-no-sercq-send-cta": "Potrdi vašo e-pošto",
+    "no-courtesy-no-sercq-send-description": "Dodajte e-poštni naslov, da prejmete opozorilo, ko imate novo obvestilo na SEND.",
+    "no-courtesy-no-sercq-send-title": "Ne spreglejte pomembnih komunikacij",
+    "no-courtesy-sercq-send-description": "Aktivirajte SEND kot digitalni naslov in se ne boste več obremenjevali s papirnatimi priporočenimi pošiljkami.",
+    "no-courtesy-sercq-send-title": "Ali želite prejemati naslednja obvestila samo digitalno?",
+    "no-courtesy-title": "Ne spreglejte pomembnih komunikacij",
+    "no-sercq-cta": "Aktiviraj digitalni naslov",
+    "no-sercq-send-description": "Aktivirajte digitalni naslov, da boste prihodnja obvestila prejemali le v digitalni obliki in prihranili.",
+    "no-sercq-send-title": "Nič več papirnatih dokumentov"
+  },
+  "errors": {
+    "expired_verification_code": {
+      "message": "Generirajte novo in jo vnesite.",
+      "title": "Koda je potekla"
+    },
+    "invalid_verification_code": {
+      "message": "Preverite jo in jo ponovno vnesite ali generirajte novo.",
+      "title": "Koda je napačna"
+    },
+    "retry_limit_code": {
+      "message": "Prevečkrat ste vnesli napačno kodo. Za ponovni poskus pritisnite »Prekliči«, preverite, ali je naslov pravilen, in vnesite novo kodo.",
+      "title": "Naredili ste preveč poskusov"
+    }
+  },
   "insert-code": "Vnesite kodo",
+  "legal-contacts": {
+    "block-remove-digital-domicile-message": "Za nadaljevanje morate najprej deaktivirati personalizirane digitalne naslove za posameznega pošiljatelja.",
+    "block-remove-digital-domicile-title": "Digitalnega naslova ni mogoče deaktivirati",
+    "cancel-pec-validation": "Prekliči potrjevanje",
+    "digital-domicile-management": {
+      "choose-action": "Izberite možnost",
+      "sercq_send-active": "Platforma SEND je digitalni naslov vašega podjetja",
+      "special_contacts": {
+        "action": "Personaliziraj za pošiljatelja",
+        "content": "Izberite, kam boste prejemali obvestila, ki jih vašemu podjetju pošlje določen organ.",
+        "title": "Personaliziraj digitalni naslov za posameznega pošiljatelja"
+      },
+      "title": "Upravljanje digitalnega naslova",
+      "transfer": {
+        "action-pec": "Prenesi na SEND",
+        "action-sercq_send": "Prenesi na PEC",
+        "content-pec": "Platforma SEND zagotavlja varne dostave s pravno veljavnostjo. Storitev je brezplačna in ne zahteva dodatnih orodij.",
+        "content-sercq_send": "Če imate PEC, ga lahko uporabite kot digitalni naslov za obvestila SEND.",
+        "title-pec": "Prenesi digitalni naslov na platformo SEND",
+        "title-sercq_send": "Prenesi digitalni naslov na poslovni PEC"
+      }
+    },
+    "link-pec-placeholder": "Naslov PEC",
+    "pec-added-successfully": "PEC uspešno dodeljen",
+    "pec-contact-wizard": {
+      "content-description": "Ko organ pošlje obvestilo SEND vašemu podjetju, prejmete pravno veljavno komunikacijo na PEC, ki ste jo izbrali.",
+      "content-title": "Vnesite PEC vašega podjetja",
+      "disclaimer": "Strinjam se, da SEND uporablja ta naslov prednostno pred morebitnimi PEC, registriranimi pri pošiljajočem organu ali prisotnimi v javnih registrih.",
+      "input-label": "Naslov PEC",
+      "sercq-info-alert": "Poslovni PEC bo nadomestil platformo SEND kot digitalni naslov podjetja.",
+      "title": "Uporabi PEC kot digitalni naslov",
+      "title-transfer": "Prenesi digitalni naslov na poslovni PEC"
+    },
+    "pec-description": "Ko organ pošlje obvestilo SEND vašemu podjetju, je to varno in s pravno veljavnostjo dostavljeno na PEC, ki ste jo izbrali.",
+    "pec-disclaimer": "To je glavni naslov, ki se bo uporabljal za pošiljanje digitalnih obvestil podjetju. Z vnosom podjetje ne bo več prejemalo papirnatih priporočenih pošiljk.",
+    "pec-new-code": "Niste prejeli? Preverite, ali ste vnesli pravilen PEC, ali <0>generirajte novo kodo<\/0>.",
+    "pec-removed-successfully": "PEC uspešno odstranjen",
+    "pec-to-add": "Naslov PEC",
+    "pec-validating": "Potrjevanje PEC v teku",
+    "pec-validation-banner": {
+      "dod-disabled-message": "Do zaključka postopka ne bo mogoče spreminjati pravno veljavnih naslovov.",
+      "dod-enabled-message": "Do zaključka postopka ostaja platforma SEND aktivna kot digitalni naslov.",
+      "parties-list": "Platforma SEND bo ostala vaš digitalni naslov za {{list}} do zaključka potrjevanja.",
+      "title": "PEC se potrjuje"
+    },
+    "pec-verify": "Potrdi PEC {{value}}",
+    "pec-verify-descr": "Na navedeni naslov PEC smo poslali kodo. Koda velja <strong>15 minut<\/strong>.",
+    "remove-pec-confirm": "Deaktiviraj PEC",
+    "remove-pec-message": "<0>Vaše podjetje ne bo več imelo digitalnega naslova s pravno veljavnostjo za sporočila javne uprave in bi jih lahko prejemalo v papirni obliki, z morebitnimi stroški, ki jih krije.<\/0> <1>Podjetje bo še naprej prejemalo obvestila prek kanalov, ki jih je aktiviralo.<\/1>",
+    "remove-pec-title": "Ali potrjujete, da želite deaktivirati PEC?",
+    "remove-sercq_send-confirm": "Deaktiviraj digitalni naslov",
+    "remove-sercq_send-message": "<0>Če se odločite za deaktivacijo digitalnega naslova SEND, lahko vaše podjetje prejema komunikacije prek priporočene pošiljke in <strong>plača povezane stroške.<\/strong><\/0><1>Podjetje bo še naprej prejemalo opozorila po e-pošti, ki jih lahko deaktivirate v razdelku Vaši naslovi.<\/1>",
+    "remove-sercq_send-title": "Ali potrjujete, da želite deaktivirati digitalni naslov na SEND?",
+    "sercq-send-active": "Aktiviraj",
+    "sercq-send-active-pec-enabled": "Aktiviraj digitalni naslov",
+    "sercq-send-active-pec-transfer": "Prenesi digitalni naslov",
+    "sercq-send-description-pec-enabled": "Uporabite SEND kot digitalni naslov za upravljanje vaših obvestil SEND na enem mestu, ne da bi vas skrbele papirnate priporočene pošiljke in povezani stroški.",
+    "sercq-send-info-advantages": "Zakaj je to koristno?",
+    "sercq-send-info-description": "Z aktiviranjem digitalnega naslova postane SEND <strong>pravno veljaven naslov vašega podjetja<\/strong> za komunikacije javne uprave.",
+    "sercq-send-info-list": [
+      {
+        "description": "Obvestil SEND ne boste več prejemali v papirni obliki.",
+        "title": "100 % digitalna obvestila"
+      },
+      {
+        "description": "Ne bo vam treba skrbeti za prevzem papirnatih dokumentov in plačilo povezanih stroškov.",
+        "title": "Prihranek pri stroških pošiljanja"
+      },
+      {
+        "description": "Obvestila SEND bodo varno dostavljena in vsa na voljo v rezerviranem območju SEND vašega podjetja.",
+        "title": "Vse na enem mestu"
+      }
+    ],
+    "sercq-send-info-title": "Aktiviraj SEND kot digitalni naslov",
+    "sercq-send-info-tos": "Z izbiro »Aktiviraj« izjavljate, da ste prebrali in se strinjate z <0>Pogoji storitve<\/0>.",
+    "sercq-send-wizard": {
+      "feedback": {
+        "content-pec": "PEC, ki ste jo vnesli, se potrjuje. Po potrditvi bo digitalni naslov aktiviran in podjetje bo prejemalo vse pravno veljavne komunikacije na naslov, ki ste ga izbrali.",
+        "content-pec-transfer": "PEC se potrjuje. Po potrditvi bo digitalni naslov podjetja prenesen na naslov, ki ste ga izbrali. Do takrat ostaja aktiven digitalni naslov SEND.",
+        "content-sercq_send": "Podjetje bo prejelo pravno veljavne komunikacije na digitalni naslov na SEND in sporočilo na naslove, ki ste jih izbrali.",
+        "go-to-contacts": "Nazaj na naslove",
+        "title-pec-activation": "Aktivacija digitalnega naslova v teku",
+        "title-pec-transfer": "Prenos digitalnega naslova v teku",
+        "title-sercq_send-activation": "Aktivirali ste digitalni naslov na SEND",
+        "title-sercq_send-transfer": "Prenesli ste digitalni naslov vašega podjetja na SEND",
+        "title-transfer": "Posodobili ste digitalni naslov vašega podjetja"
+      },
+      "step_1": {
+        "delivered-dialog-description": "Če izberete SEND kot digitalni naslov, se bo obvestilo <strong>7 dni po dostavi<\/strong> štelo za pravno dostavljeno, tudi če ga niste prebrali.",
+        "delivered-dialog-title": "Pravna veljavnost obvestila na digitalnem naslovu SEND",
+        "have-pec": "Ali raje uporabljate poslovni PEC?",
+        "have-pec-description": "Druga možnost je, da uporabite PEC kot digitalni naslov za obvestila SEND.",
+        "info-list": [
+          {
+            "aria-description": "Aktivirajte za branje razlage izraza",
+            "description": "Obvestilo je <0>dostavljeno<\/0> varno in s pravno veljavnostjo prek platforme",
+            "title": "Organ pošlje obvestilo SEND za podjetje"
+          },
+          {
+            "description": "Ko na SEND prispe obvestilo za vaše podjetje, vas obvestimo po e-pošti in, če želite, tudi prek SMS-a",
+            "title": "Prejmete sporočilo"
+          },
+          {
+            "description": "Odprite podrobnosti digitalnega obvestila na platformi SEND",
+            "title": "Dostop do obvestila"
+          }
+        ],
+        "info-tos": "S pritiskom na »Aktiviraj« izjavljate, da ste prebrali in se strinjate z <0>Pogoji storitve<\/0>.",
+        "insert-pec": "Vnesi PEC",
+        "pec-info-alert": "Platforma SEND bo nadomestila poslovni PEC kot digitalni naslov vašega podjetja. ",
+        "title": "Kako deluje"
+      },
+      "step_2": {
+        "content": "Poslovna e-pošta, na katero bomo podjetje obvestili, ko bo na SEND prispela nova pravno veljavna komunikacija.",
+        "sms-disclaimer": "Če pritisnete <strong>Dodaj številko<\/strong>, shranite ta naslov za prejemanje opozoril o obvestilih SEND za podjetje. Upravljate ga lahko v razdelku <strong>Naslovi.<\/strong>",
+        "step-title": "Vnesite poslovno e-pošto",
+        "title": "E-pošta za prejemanje opozoril o obvestilih SEND"
+      },
+      "step_3": {
+        "contacts-list": {
+          "email": {
+            "textDisabled": "Dodaj e-pošto",
+            "title": "Poslovna e-pošta"
+          },
+          "sms": {
+            "textDisabled": "Dodaj mobilno številko",
+            "title": "Mobilna številka"
+          }
+        },
+        "content": "Uradna sporočila za podjetje bodo dostavljena samo na:",
+        "courtesy-content": "Obvestilo boste prejeli prek:",
+        "digital-domicile": "Digitalni naslov",
+        "disclaimer-enable": "S klikom na <strong>»Aktiviraj digitalni naslov«<\/strong> izjavljate, da ste prebrali <0>Politiko zasebnosti<\/0>, sprejemate <1>Pogoje storitve<\/1>, ter da razumete, da obvestila SEND ne bodo posredovana na druge digitalne domicile.",
+        "disclaimer-transfer": "S klikom na <strong>»Potrdi«<\/strong> izjavljate, da ste prebrali <0>Politiko zasebnosti<\/0>, sprejemate <1>Pogoje storitve<\/1>, ter da razumete, da obvestila SEND ne bodo posredovana na druge digitalne domicile.",
+        "enable": "Aktiviraj digitalni naslov",
+        "send": "SEND",
+        "sercq-send-contacts-alert": "Spremljajte izbrane kontaktne podatke: digitalno obvestilo SEND začne ustvarjati pravne učinke, tudi če ga niste prebrali.",
+        "step-title": "Povzetek",
+        "title": "Vaš povzetek"
+      },
+      "title": "Aktiviraj digitalni naslov na SEND",
+      "title-transfer": "Prenesi digitalni naslov na platformo SEND"
+    },
+    "sercq_send-added-successfully": "Digitalni naslov uspešno aktiviran",
+    "sercq_send-description": "Ko organ pošlje obvestilo SEND vašemu podjetju, je to varno in s pravno veljavnostjo dostavljeno prek same platforme.",
+    "sercq_send-removed-successfully": "Digitalni naslov uspešno deaktiviran",
+    "sercq_send-title": "Platforma SEND",
+    "title": "Digitalni naslov vašega podjetja",
+    "valid-pec": "Neveljaven naslov PEC",
+    "validation-cancel-content": "Če potrdite, prekličete aktivacijo PEC kot digitalnega naslova na SEND.",
+    "validation-cancel-title": "Prekliči potrjevanje PEC",
+    "validation-progress-content": "Preverjamo veljavnost naslova PEC. V 24 urah boste prejeli e-pošto z rezultatom.",
+    "validation-progress-title": "Hvala!"
+  },
+  "special-contacts": {
+    "add-sender": "Pošiljajoči organ",
+    "add-title": "Vnesite organ in naslov za dodelitev",
+    "card-title": "PERSONALIZIRANO ZA POŠILJATELJA",
+    "contact-already-exists": "<0>Ta organ je že dodeljen naslovu {{contactValue}}.<\/0><1>Če pritisnete <strong>Potrdi<\/strong>, ga boste zamenjali s tistim, ki ste ga pravkar vnesli.<\/1>",
+    "contact-to-add-description": "Personalizirani digitalni naslov, na katerega bo vaše podjetje prejelo obvestila SEND, ki jih pošlje določen organ.",
+    "courtesy-banner": {
+      "description": "Ne morete več vnašati personaliziranih vljudnostnih naslovov za posameznega pošiljatelja ali spreminjati obstoječih naslovov. Če izbrišete personaliziran naslov, ga ne boste mogli obnoviti ali ponovno vnesti.",
+      "title": "Funkcionalnost opuščena"
+    },
+    "email-description": "E-pošta, na katero bomo vaše podjetje obvestili, ko prejme pravno veljavno komunikacijo na SEND.",
+    "fetch-party-error": "Nismo uspeli pridobiti podatkov, potrebnih za ustvarjanje novega naslova.",
+    "link-pec-label": "Naslov PEC",
+    "link-sercq-label": "Vaš digitalni naslov SEND",
+    "pec": "Naslov PEC",
+    "pec-disclaimer": "Z izpolnitvijo polja in pritiskom na <strong>Potrdi<\/strong> se strinjate, da SEND uporablja izbrani naslov PEC za pošiljanje obvestil tega določenega pošiljajočega organa, prednostno pred digitalnim naslovom platforme, morebitnim digitalnim naslovom, izbranim pri istem pošiljajočem organu, ali tistim, ki je prisoten v javnih registrih.",
+    "remove-special-description": "Opozorila v zvezi z obvestili dodeljenih organov ne bodo več poslana na ta naslov, ampak na glavni naslov.",
+    "remove-special-title": "Ali želite izbrisati {{contactValue}}?",
+    "select-address": "Tip",
+    "sercq-disclaimer": "S klikom na <strong>»Potrdi«<\/strong> izjavljate, da ste prebrali <0>Politiko zasebnosti<\/0>, sprejemate <1>Pogoje storitve<\/1>, ter da razumete, da obvestila SEND organa ne bodo posredovana na druge digitalne domicile.",
+    "sercq_send": "Digitalni naslov SEND",
+    "validating-pec-banner-content": "<0>Za ta organ ste že vnesli PEC, ki se trenutno potrjuje.<\/0><1>Ko bo potrjen, ga boste lahko spremenili.<\/1>",
+    "validating-pec-error-message": "Za ta organ ste že vnesli PEC, ki je trenutno v potrjevanju"
+  },
   "status": {
     "active": "Aktivno",
     "inactive": "Za aktiviranje",
     "pec-validation": "Potrjevanje PEC v teku"
   },
-  "legal-contacts": {
-    "title": "Digitalni naslov vašega podjetja",
-    "pec-validation-banner": {
-      "title": "PEC se potrjuje",
-      "dod-enabled-message": "Do zaključka postopka ostaja platforma SEND aktivna kot digitalni naslov.",
-      "dod-disabled-message": "Do zaključka postopka ne bo mogoče spreminjati pravno veljavnih naslovov.",
-      "parties-list": "Platforma SEND bo ostala vaš digitalni naslov za {{list}} do zaključka potrjevanja."
-    },
-    "pec-disclaimer": "To je glavni naslov, ki se bo uporabljal za pošiljanje digitalnih obvestil podjetju. Z vnosom podjetje ne bo več prejemalo papirnatih priporočenih pošiljk.",
-    "pec-description": "Ko organ pošlje obvestilo SEND vašemu podjetju, je to varno in s pravno veljavnostjo dostavljeno na PEC, ki ste jo izbrali.",
-    "link-pec-placeholder": "Naslov PEC",
-    "valid-pec": "Neveljaven naslov PEC",
-    "pec-verify": "Potrdi PEC {{value}}",
-    "pec-verify-descr": "Na navedeni naslov PEC smo poslali kodo. Koda velja <strong>15 minut</strong>.",
-    "pec-new-code": "Niste prejeli? Preverite, ali ste vnesli pravilen PEC, ali <0>generirajte novo kodo</0>.",
-    "pec-added-successfully": "PEC uspešno dodeljen",
-    "pec-removed-successfully": "PEC uspešno odstranjen",
-    "pec-to-add": "Naslov PEC",
-    "pec-validating": "Potrjevanje PEC v teku",
-    "cancel-pec-validation": "Prekliči potrjevanje",
-    "remove-pec-title": "Ali potrjujete, da želite deaktivirati PEC?",
-    "remove-pec-message": "<0>Vaše podjetje ne bo več imelo digitalnega naslova s pravno veljavnostjo za sporočila javne uprave in bi jih lahko prejemalo v papirni obliki, z morebitnimi stroški, ki jih krije.</0> <1>Podjetje bo še naprej prejemalo obvestila prek kanalov, ki jih je aktiviralo.</1>",
-    "remove-pec-confirm": "Deaktiviraj PEC",
-    "validation-cancel-title": "Prekliči potrjevanje PEC",
-    "validation-cancel-content": "Če potrdite, prekličete aktivacijo PEC kot digitalnega naslova na SEND.",
-    "validation-progress-title": "Hvala!",
-    "validation-progress-content": "Preverjamo veljavnost naslova PEC. V 24 urah boste prejeli e-pošto z rezultatom.",
-    "sercq_send-title": "Platforma SEND",
-    "sercq_send-description": "Ko organ pošlje obvestilo SEND vašemu podjetju, je to varno in s pravno veljavnostjo dostavljeno prek same platforme.",
-    "sercq-send-description-pec-enabled": "Uporabite SEND kot digitalni naslov za upravljanje vaših obvestil SEND na enem mestu, ne da bi vas skrbele papirnate priporočene pošiljke in povezani stroški.",
-    "sercq-send-active": "Aktiviraj",
-    "sercq-send-active-pec-enabled": "Aktiviraj digitalni naslov",
-    "sercq-send-active-pec-transfer": "Prenesi digitalni naslov",
-    "sercq-send-info-title": "Aktiviraj SEND kot digitalni naslov",
-    "sercq-send-info-description": "Z aktiviranjem digitalnega naslova postane SEND <strong>pravno veljaven naslov vašega podjetja</strong> za komunikacije javne uprave.",
-    "sercq-send-info-advantages": "Zakaj je to koristno?",
-    "sercq-send-info-list": [
-      {
-        "title": "100 % digitalna obvestila",
-        "description": "Obvestil SEND ne boste več prejemali v papirni obliki."
-      },
-      {
-        "title": "Prihranek pri stroških pošiljanja",
-        "description": "Ne bo vam treba skrbeti za prevzem papirnatih dokumentov in plačilo povezanih stroškov."
-      },
-      {
-        "title": "Vse na enem mestu",
-        "description": "Obvestila SEND bodo varno dostavljena in vsa na voljo v rezerviranem območju SEND vašega podjetja."
-      }
-    ],
-    "sercq-send-info-tos": "Z izbiro »Aktiviraj« izjavljate, da ste prebrali in se strinjate z <0>Pogoji storitve</0>.",
-    "sercq_send-added-successfully": "Digitalni naslov uspešno aktiviran",
-    "remove-sercq_send-title": "Ali potrjujete, da želite deaktivirati digitalni naslov na SEND?",
-    "remove-sercq_send-message": "<0>Če se odločite za deaktivacijo digitalnega naslova SEND, lahko vaše podjetje prejema komunikacije prek priporočene pošiljke in <strong>plača povezane stroške.</strong></0><1>Podjetje bo še naprej prejemalo opozorila po e-pošti, ki jih lahko deaktivirate v razdelku Vaši naslovi.</1>",
-    "remove-sercq_send-confirm": "Deaktiviraj digitalni naslov",
-    "block-remove-digital-domicile-title": "Digitalnega naslova ni mogoče deaktivirati",
-    "block-remove-digital-domicile-message": "Za nadaljevanje morate najprej deaktivirati personalizirane digitalne naslove za posameznega pošiljatelja.",
-    "sercq_send-removed-successfully": "Digitalni naslov uspešno deaktiviran",
-    "sercq-send-wizard": {
-      "title": "Aktiviraj digitalni naslov na SEND",
-      "title-transfer": "Prenesi digitalni naslov na platformo SEND",
-      "step_1": {
-        "title": "Kako deluje",
-        "info-list": [
-          {
-            "title": "Organ pošlje obvestilo SEND za podjetje",
-            "description": "Obvestilo je <0>dostavljeno</0> varno in s pravno veljavnostjo prek platforme",
-            "aria-description": "Aktivirajte za branje razlage izraza"
-          },
-          {
-            "title": "Prejmete sporočilo",
-            "description": "Ko na SEND prispe obvestilo za vaše podjetje, vas obvestimo po e-pošti in, če želite, tudi prek SMS-a"
-          },
-          {
-            "title": "Dostop do obvestila",
-            "description": "Odprite podrobnosti digitalnega obvestila na platformi SEND"
-          }
-        ],
-        "info-tos": "S pritiskom na »Aktiviraj« izjavljate, da ste prebrali in se strinjate z <0>Pogoji storitve</0>.",
-        "have-pec": "Ali raje uporabljate poslovni PEC?",
-        "have-pec-description": "Druga možnost je, da uporabite PEC kot digitalni naslov za obvestila SEND.",
-        "insert-pec": "Vnesi PEC",
-        "delivered-dialog-title": "Pravna veljavnost obvestila na digitalnem naslovu SEND",
-        "delivered-dialog-description": "Če izberete SEND kot digitalni naslov, se bo obvestilo <strong>7 dni po dostavi</strong> štelo za pravno dostavljeno, tudi če ga niste prebrali.",
-        "pec-info-alert": "Platforma SEND bo nadomestila poslovni PEC kot digitalni naslov vašega podjetja. "
-      },
-      "step_2": {
-        "title": "E-pošta za prejemanje opozoril o obvestilih SEND",
-        "step-title": "Vnesite poslovno e-pošto",
-        "content": "Poslovna e-pošta, na katero bomo podjetje obvestili, ko bo na SEND prispela nova pravno veljavna komunikacija.",
-        "sms-disclaimer": "Če pritisnete <strong>Dodaj številko</strong>, shranite ta naslov za prejemanje opozoril o obvestilih SEND za podjetje. Upravljate ga lahko v razdelku <strong>Naslovi.</strong>"
-      },
-      "step_3": {
-        "title": "Vaš povzetek",
-        "step-title": "Povzetek",
-        "content": "Uradna sporočila za podjetje bodo dostavljena samo na:",
-        "digital-domicile": "Digitalni naslov",
-        "send": "SEND",
-        "courtesy-content": "Obvestilo boste prejeli prek:",
-        "contacts-list": {
-          "email": {
-            "title": "Poslovna e-pošta",
-            "textDisabled": "Dodaj e-pošto"
-          },
-          "sms": {
-            "title": "Mobilna številka",
-            "textDisabled": "Dodaj mobilno številko"
-          }
-        },
-        "disclaimer-enable": "S klikom na <strong>»Aktiviraj digitalni naslov«</strong> izjavljate, da ste prebrali <0>Politiko zasebnosti</0>, sprejemate <1>Pogoje storitve</1>, ter da razumete, da obvestila SEND ne bodo posredovana na druge digitalne domicile.",
-        "disclaimer-transfer": "S klikom na <strong>»Potrdi«</strong> izjavljate, da ste prebrali <0>Politiko zasebnosti</0>, sprejemate <1>Pogoje storitve</1>, ter da razumete, da obvestila SEND ne bodo posredovana na druge digitalne domicile.",
-        "sercq-send-contacts-alert": "Spremljajte izbrane kontaktne podatke: digitalno obvestilo SEND začne ustvarjati pravne učinke, tudi če ga niste prebrali.",
-        "enable": "Aktiviraj digitalni naslov"
-      },
-      "feedback": {
-        "title-transfer": "Posodobili ste digitalni naslov vašega podjetja",
-        "title-pec-activation": "Aktivacija digitalnega naslova v teku",
-        "title-pec-transfer": "Prenos digitalnega naslova v teku",
-        "title-sercq_send-activation": "Aktivirali ste digitalni naslov na SEND",
-        "title-sercq_send-transfer": "Prenesli ste digitalni naslov vašega podjetja na SEND",
-        "content-pec": "PEC, ki ste jo vnesli, se potrjuje. Po potrditvi bo digitalni naslov aktiviran in podjetje bo prejemalo vse pravno veljavne komunikacije na naslov, ki ste ga izbrali.",
-        "content-pec-transfer": "PEC se potrjuje. Po potrditvi bo digitalni naslov podjetja prenesen na naslov, ki ste ga izbrali. Do takrat ostaja aktiven digitalni naslov SEND.",
-        "content-sercq_send": "Podjetje bo prejelo pravno veljavne komunikacije na digitalni naslov na SEND in sporočilo na naslove, ki ste jih izbrali.",
-        "go-to-contacts": "Nazaj na naslove"
-      }
-    },
-    "pec-contact-wizard": {
-      "title": "Uporabi PEC kot digitalni naslov",
-      "title-transfer": "Prenesi digitalni naslov na poslovni PEC",
-      "content-title": "Vnesite PEC vašega podjetja",
-      "content-description": "Ko organ pošlje obvestilo SEND vašemu podjetju, prejmete pravno veljavno komunikacijo na PEC, ki ste jo izbrali.",
-      "input-label": "Naslov PEC",
-      "sercq-info-alert": "Poslovni PEC bo nadomestil platformo SEND kot digitalni naslov podjetja.",
-      "disclaimer": "Strinjam se, da SEND uporablja ta naslov prednostno pred morebitnimi PEC, registriranimi pri pošiljajočem organu ali prisotnimi v javnih registrih."
-    },
-    "digital-domicile-management": {
-      "title": "Upravljanje digitalnega naslova",
-      "sercq_send-active": "Platforma SEND je digitalni naslov vašega podjetja",
-      "choose-action": "Izberite možnost",
-      "transfer": {
-        "title-pec": "Prenesi digitalni naslov na platformo SEND",
-        "content-pec": "Platforma SEND zagotavlja varne dostave s pravno veljavnostjo. Storitev je brezplačna in ne zahteva dodatnih orodij.",
-        "action-pec": "Prenesi na SEND",
-        "title-sercq_send": "Prenesi digitalni naslov na poslovni PEC",
-        "content-sercq_send": "Če imate PEC, ga lahko uporabite kot digitalni naslov za obvestila SEND.",
-        "action-sercq_send": "Prenesi na PEC"
-      },
-      "special_contacts": {
-        "title": "Personaliziraj digitalni naslov za posameznega pošiljatelja",
-        "content": "Izberite, kam boste prejemali obvestila, ki jih vašemu podjetju pošlje določen organ.",
-        "action": "Personaliziraj za pošiljatelja"
-      }
-    }
-  },
-  "courtesy-contacts": {
-    "email-title": "Poslovni e-poštni naslov",
-    "email-empty-description": "Dodajte poslovni e-poštni naslov, na katerega vas lahko opozorimo, ko je na voljo obvestilo SEND za vaše podjetje.",
-    "email-filled-description": "Ko je na voljo obvestilo za vaše podjetje, vas obvestimo po e-pošti na naslov, ki ste ga izbrali.",
-    "email-sms-updates": "Ali želite prejemati opozorila tudi prek SMS-a?",
-    "email-sms-add": "Dodaj mobilno številko",
-    "sms-title": "Poslovna mobilna številka",
-    "sms-description": "Ko je na voljo obvestilo za vaše podjetje, vas opozorimo z SMS-om.",
-    "link-sms-placeholder": "Poslovna mobilna številka",
-    "link-email-placeholder": "Poslovni e-poštni naslov",
-    "sms-add": "Dodaj številko",
-    "email-add": "Dodaj e-pošto",
-    "email-verify": "Potrdi e-pošto {{value}}",
-    "email-verify-descr": "Na navedeni e-poštni naslov smo poslali kodo. Koda velja <strong>15 minut</strong>.",
-    "sms-verify": "Potrdi številko {{value}}",
-    "sms-verify-descr": "Na navedeno mobilno številko smo poslali kodo. Koda velja <strong>15 minut</strong>.",
-    "email-new-code": "Niste prejeli? Preverite, ali ste vnesli pravilen e-poštni naslov, ali <0>generirajte novo kodo</0>.",
-    "sms-new-code": "Niste prejeli? Preverite, ali ste vnesli pravilno mobilno številko, ali <0>generirajte novo kodo</0>.",
-    "email-to-add": "E-poštni naslov",
-    "sms-to-add": "Mobilna številka",
-    "valid-email": "Neveljaven e-poštni naslov",
-    "valid-sms": "Neveljavna mobilna številka",
-    "email-added-successfully": "E-poštni naslov uspešno dodan",
-    "sms-added-successfully": "Mobilna številka uspešno dodana",
-    "email-removed-successfully": "E-poštni naslov uspešno odstranjen",
-    "email-and-sercq-removed-successfully": "E-pošta in digitalni naslov SEND deaktivirana",
-    "sms-removed-successfully": "Mobilna številka uspešno odstranjena",
-    "remove-email": "Deaktiviraj e-pošto",
-    "remove-email-pec-enabled-title": "Ali želite deaktivirati vašo poslovno e-pošto?",
-    "remove-email-pec-enabled-message": "<0>Če deaktivirate poslovni e-poštni naslov, <strong>vas ne moremo opozoriti, ko je na voljo pravno veljavna komunikacija za vaše podjetje</strong>.</0><1>Ne pozabite, da podjetje, če obvestilo ni prebrano pravočasno, morda ne bo seznanjeno z morebitnimi roki in lahko nastanejo kazni.</1>",
-    "remove-email-no-domicile-title": "Deaktiviraj e-pošto",
-    "remove-email-no-domicile-message": "Če potrdite, ne boste več prejemali e-pošte na {{value}}, ko bo na voljo obvestilo SEND za branje.",
-    "remove-email-preconfirm-title": "Ali želite deaktivirati e-poštna opozorila?",
-    "remove-email-preconfirm-message": "<0>Če deaktivirate e-poštni naslov, vas ne moremo <strong>opozoriti, ko je na voljo pravno veljavna komunikacija za vaše podjetje.</strong></0>",
-    "remove-email-and-sercq": "Deaktiviraj e-pošto in naslov",
-    "remove-email-and-sercq-title": "Skupaj z e-pošto se deaktivira tudi digitalni naslov SEND",
-    "remove-email-and-sercq-message": "<0>Če se odločite za deaktivacijo digitalnega naslova SEND, lahko vaše podjetje prejema komunikacije prek priporočene pošiljke in <strong>plača povezane stroške.</strong></0>",
-    "remove-sms": "Deaktiviraj mobilno številko",
-    "remove-sms-title-dod-enabled": "Ali želite deaktivirati SMS opozorila?",
-    "remove-email-button-dod-enabled": "Deaktiviraj poslovno e-pošto",
-    "remove-sms-button-dod-enabled": "Deaktiviraj SMS",
-    "remove-sms-message-dod-enabled": "<0>Če deaktivirate poslovno telefonsko številko, <strong>ne boste prejemali SMS opozoril, ko je na voljo pravno veljavna komunikacija za vaše podjetje na SEND.</strong></0><1>Ne pozabite, da podjetje, če obvestilo SEND ni prebrano pravočasno, morda ne bo seznanjeno z morebitnimi roki in lahko nastanejo kazni.</1>",
-    "remove-sms-message": "Če potrdite, ne boste več prejemali SMS-a na {{value}}, ko bo na voljo obvestilo SEND za branje.",
-    "confirmation-modal-title": "Dodajte poslovni e-poštni naslov za opozorila!",
-    "confirmation-modal-email-content": "<0>Za aktivacijo digitalnega naslova SEND potrebujemo poslovni e-poštni naslov, da lahko <strong>pošljemo opozorilo, ko je na voljo pravno veljavna komunikacija za vaše podjetje.</strong></0>",
-    "block-remove-email-title": "E-pošte ni mogoče deaktivirati",
-    "block-remove-email-message": "Za nadaljevanje morate najprej odstraniti personalizirane e-pošte za posameznega pošiljatelja.",
-    "block-remove-email-sercq-default-pec-special-message": "Za nadaljevanje morate najprej deaktivirati digitalni naslov in personalizirane naslove.",
-    "block-remove-sms-title": "Mobilne številke ni mogoče deaktivirati",
-    "block-remove-sms-message": "Za nadaljevanje morate najprej izbrisati personalizirane mobilne številke za posameznega pošiljatelja."
-  },
-  "special-contacts": {
-    "select-address": "Tip",
-    "add-sender": "Pošiljajoči organ",
-    "pec": "Naslov PEC",
-    "sercq_send": "Digitalni naslov SEND",
-    "link-pec-label": "Naslov PEC",
-    "link-sercq-label": "Vaš digitalni naslov SEND",
-    "contact-to-add-description": "Personalizirani digitalni naslov, na katerega bo vaše podjetje prejelo obvestila SEND, ki jih pošlje določen organ.",
-    "contact-already-exists": "<0>Ta organ je že dodeljen naslovu {{contactValue}}.</0><1>Če pritisnete <strong>Potrdi</strong>, ga boste zamenjali s tistim, ki ste ga pravkar vnesli.</1>",
-    "validating-pec-banner-content": "<0>Za ta organ ste že vnesli PEC, ki se trenutno potrjuje.</0><1>Ko bo potrjen, ga boste lahko spremenili.</1>",
-    "validating-pec-error-message": "Za ta organ ste že vnesli PEC, ki je trenutno v potrjevanju",
-    "fetch-party-error": "Nismo uspeli pridobiti podatkov, potrebnih za ustvarjanje novega naslova.",
-    "add-title": "Vnesite organ in naslov za dodelitev",
-    "card-title": "PERSONALIZIRANO ZA POŠILJATELJA",
-    "remove-special-title": "Ali želite izbrisati {{contactValue}}?",
-    "remove-special-description": "Opozorila v zvezi z obvestili dodeljenih organov ne bodo več poslana na ta naslov, ampak na glavni naslov.",
-    "pec-disclaimer": "Z izpolnitvijo polja in pritiskom na <strong>Potrdi</strong> se strinjate, da SEND uporablja izbrani naslov PEC za pošiljanje obvestil tega določenega pošiljajočega organa, prednostno pred digitalnim naslovom platforme, morebitnim digitalnim naslovom, izbranim pri istem pošiljajočem organu, ali tistim, ki je prisoten v javnih registrih.",
-    "courtesy-banner": {
-      "title": "Funkcionalnost opuščena",
-      "description": "Ne morete več vnašati personaliziranih vljudnostnih naslovov za posameznega pošiljatelja ali spreminjati obstoječih naslovov. Če izbrišete personaliziran naslov, ga ne boste mogli obnoviti ali ponovno vnesti."
-    },
-    "email-description": "E-pošta, na katero bomo vaše podjetje obvestili, ko prejme pravno veljavno komunikacijo na SEND.",
-    "sercq-disclaimer": "S klikom na <strong>»Potrdi«</strong> izjavljate, da ste prebrali <0>Politiko zasebnosti</0>, sprejemate <1>Pogoje storitve</1>, ter da razumete, da obvestila SEND organa ne bodo posredovana na druge digitalne domicile."
-  },
-  "common": {
-    "duplicate-contact-title": "Naslov že obstaja",
-    "duplicate-contact-descr": "Naslov {{value}} že obstaja, ali želite vseeno nadaljevati?",
-    "duplicate-default-contact-title": "Ta naslov se že uporablja kot digitalni naslov",
-    "duplicate-default-contact-descr": "Naslov {{value}} se že uporablja kot glavni digitalni naslov na SEND.<br />Za personalizacijo digitalnega naslova za posameznega pošiljatelja izberite drug naslov.",
-    "enti-not-found": "Noben organ ni najden",
-    "too-long-field-error": "Napišite največ {{maxLength}} znakov"
-  },
-  "errors": {
-    "invalid_verification_code": {
-      "title": "Koda je napačna",
-      "message": "Preverite jo in jo ponovno vnesite ali generirajte novo."
-    },
-    "retry_limit_code": {
-      "title": "Naredili ste preveč poskusov",
-      "message": "Prevečkrat ste vnesli napačno kodo. Za ponovni poskus pritisnite »Prekliči«, preverite, ali je naslov pravilen, in vnesite novo kodo."
-    },
-    "expired_verification_code": {
-      "title": "Koda je potekla",
-      "message": "Generirajte novo in jo vnesite."
-    }
-  },
-  "domicile-banner": {
-    "no-sercq-send-title": "Nič več papirnatih dokumentov",
-    "no-sercq-send-description": "Aktivirajte digitalni naslov, da boste prihodnja obvestila prejemali le v digitalni obliki in prihranili.",
-    "no-sercq-cta": "Aktiviraj digitalni naslov",
-    "no-courtesy-title": "Ne spreglejte pomembnih komunikacij",
-    "no-courtesy-description": "Brez vljudnostnega naslova vas ne moremo opozoriti, ko je na voljo pravno veljavna komunikacija za branje na SEND.",
-    "complete-addresses": "Vnesite e-pošto",
-    "no-courtesy-sercq-send-title": "Ali želite prejemati naslednja obvestila samo digitalno?",
-    "no-courtesy-sercq-send-description": "Aktivirajte SEND kot digitalni naslov in se ne boste več obremenjevali s papirnatimi priporočenimi pošiljkami.",
-    "complete-configuration": "Zaključi konfiguracijo",
-    "no-courtesy-no-sercq-send-title": "Ne spreglejte pomembnih komunikacij",
-    "no-courtesy-no-sercq-send-description": "Dodajte e-poštni naslov, da prejmete opozorilo, ko imate novo obvestilo na SEND.",
-    "no-courtesy-no-sercq-send-cta": "Potrdi vašo e-pošto"
-  }
+  "subtitle": "Upravljajte digitalne naslove, na katere lahko prejemate pravno veljavne komunikacije SEND in\/ali ustrezna vljudnostna sporočila za <0>vaše podjetje<\/0>.",
+  "title": "Naslovi"
 }

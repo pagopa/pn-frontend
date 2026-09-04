@@ -1,110 +1,142 @@
 {
   "deleghe": {
-    "title": "Delegations of authority",
-    "close": "Close",
-    "description": "Here you can manage the company's authorised representatives and authoritys of authority. \"Authorised representatives\" are the people appointed by the company to read the notifications. \"Delegations of authority\" or \"authorities\" are the forms indicating the authorities held by the company.",
-    "delegatesTitle": "Authorised representatives of the company",
-    "delegatorsTitle": "Authorities held by the company",
-    "delegatorsApiErrorMessage": "We were unable to retrieve the data regarding your company's authorities.",
-    "delegationStart": "Start of authority",
-    "delegationEnd": "End of authority",
-    "accept_title": "Please enter the verification code",
-    "accept_description": "To accept the authority, enter the code that {{name}} shared with you.",
-    "add": "Add an authority",
-    "revoke": "Revoke an authority",
-    "reject": "Decline",
     "accept": "Accept",
-    "update": "Edit",
-    "show": "Show code",
-    "revocation_question": "Do you want to revoke the authority to {{delegate}}? ",
-    "rejection_question": "Do you want to decline the authority from {{delegator}}?",
-    "confirm_revocation": "Revoke authority",
+    "accept-delegation": "Accept authority",
+    "accept_description": "To accept the authority, enter the code that {{name}} shared with you.",
+    "accept_title": "Please enter the verification code",
+    "accepted-error": "Due to an error, the authority was not accepted. Press Cancel and try again.",
+    "accepted-successfully": "The authority has been accepted",
+    "add": "Add an authority",
+    "associate-group": "Assign to a group",
+    "associate-groups-subtitle": "The group administrator will be able to manage the authority. Users in the group will only be able to read the notifications related to that authority.",
+    "associate-groups-title": "Do you want to assign the authority to a group?",
+    "close": "Close",
+    "code_copied": "Code copied",
     "confirm_rejection": "Decline authority",
+    "confirm_revocation": "Revoke authority",
+    "delegatesTitle": "Authorised representatives of the company",
+    "delegationEnd": "End of authority",
+    "delegationStart": "Start of authority",
+    "delegatorsApiErrorMessage": "We were unable to retrieve the data regarding your company's authorities.",
+    "delegatorsTitle": "Authorities held by the company",
+    "description": "Here you can manage the company's authorised representatives and authoritys of authority. \"Authorised representatives\" are the people appointed by the company to read the notifications. \"Delegations of authority\" or \"authorities\" are the forms indicating the authorities held by the company.",
+    "edit-groups-title": "Edit the group assigned to this authority",
+    "error_button": "Reload page",
+    "error_subtitle": "We were unable to load the page. Please reload it, or try again later.",
+    "error_title": "Sorry, something went wrong",
+    "no-group": "Don't assign to a group",
+    "no_delegates": "{{organizationName}} has not authorised anyone to read the notifications. <0>Add an authority<\/0>.",
+    "no_delegators": "There is no authority for {{organizationName}}.",
+    "no_delegators_after_filters": "No results from these filters. <0>Remove filters<\/0>.",
+    "reject": "Decline",
+    "reject-error": "An error occurred and the authority was not declined. Please try again.",
+    "reject-successfully": "The authority has been declined.",
+    "rejection_question": "Do you want to decline the authority from {{delegator}}?",
+    "revocation_question": "Do you want to revoke the authority to {{delegate}}? ",
+    "revoke": "Revoke an authority",
+    "revoke-error": "An error occurred and the authority was not revoked. Please try again.",
+    "revoke-successfully": "The authority has been revoked.",
+    "select-group": "Select a group*",
+    "show": "Show code",
+    "show_code_subtitle": "Share this code with the authorised representative: they will have to enter it when accepting the authority.",
+    "show_code_title": "Verification code for the authority to {{name}} ",
     "subtitle_rejection": "If you decline, you won't be able to read notifications from {{delegator}}.",
     "subtitle_revocation": "You will no longer be able to read notifications from {{recipient}}.",
-    "error_title": "Sorry, something went wrong",
-    "error_subtitle": "We were unable to load the page. Please reload it, or try again later.",
-    "error_button": "Reload page",
-    "no_delegates": "{{organizationName}} has not authorised anyone to read the notifications. <0>Add an authority</0>.",
-    "no_delegators": "There is no authority for {{organizationName}}.",
-    "no_delegators_after_filters": "No results from these filters. <0>Remove filters</0>.",
-    "show_code_title": "Verification code for the authority to {{name}} ",
-    "show_code_subtitle": "Share this code with the authorised representative: they will have to enter it when accepting the authority.",
-    "verification_code": "Verification code",
-    "code_copied": "Code copied",
     "tab_aria_label": "Authorities tab",
     "tab_delegati": "Authorised representatives of the company",
     "tab_deleghe": "Authorities held by the company",
     "table": {
-      "name": "Name",
-      "delegationStart": "Start of authority",
-      "delegationEnd": "End of authority",
-      "permissions": "Permissions",
-      "status": "Status",
-      "showCode": "Show code",
-      "revoke": "Revoke an authority",
-      "reject": "Decline",
       "accept": "Accept",
-      "notificationsFrom": "Notifications from:",
-      "allNotifications": "All notifications",
       "active": "Active",
-      "pending": "Pending",
-      "rejected": "Declined",
-      "groups": "Groups",
+      "allNotifications": "All notifications",
+      "delegationEnd": "End of authority",
+      "delegationStart": "Start of authority",
       "group": "Group",
-      "no-group-found": "No groups found",
+      "groups": "Groups",
       "menu-aria-label": "Actions menu",
+      "name": "Name",
+      "no-group-found": "No groups found",
+      "notificationsFrom": "Notifications from:",
+      "pending": "Pending",
+      "permissions": "Permissions",
+      "reject": "Decline",
+      "rejected": "Declined",
+      "revoke": "Revoke an authority",
+      "showCode": "Show code",
+      "status": "Status",
       "tax-id": "Fiscal code"
     },
-    "accept-delegation": "Accept authority",
-    "associate-groups-title": "Do you want to assign the authority to a group?",
-    "edit-groups-title": "Edit the group assigned to this authority",
-    "associate-groups-subtitle": "The group administrator will be able to manage the authority. Users in the group will only be able to read the notifications related to that authority.",
-    "no-group": "Don't assign to a group",
-    "associate-group": "Assign to a group",
-    "select-group": "Select a group*",
-    "accepted-successfully": "The authority has been accepted",
-    "accepted-error": "Due to an error, the authority was not accepted. Press Cancel and try again.",
-    "updated-successfully": "Group edited",
+    "title": "Delegations of authority",
+    "update": "Edit",
     "updated-error": "An error occurred and the group was not edited. Please try again.",
-    "revoke-successfully": "The authority has been revoked.",
-    "reject-successfully": "The authority has been declined.",
-    "revoke-error": "An error occurred and the authority was not revoked. Please try again.",
-    "reject-error": "An error occurred and the authority was not declined. Please try again.",
+    "updated-successfully": "Group edited",
     "validation": {
       "pIvaAndFiscalCode": {
         "wrong": "The fiscal code entered is incorrect"
       }
+    },
+    "verification_code": "Verification code"
+  },
+  "errors": {
+    "already_exists": {
+      "message": "The person you indicated already has an authority. Delete it and create a new one.",
+      "title": "Authority already present"
+    },
+    "delegate_himself": {
+      "message": "You cannot authorise yourself",
+      "title": "Data entry error"
+    },
+    "invalid_verification_code": {
+      "message": "Please check and re-enter",
+      "title": "Wrong code"
+    },
+    "not_acceptable": {
+      "message": "Invalid authority entered",
+      "title": "Invalid authority"
+    },
+    "not_found": {
+      "message": "Authority not found",
+      "title": "Error"
     }
   },
   "nuovaDelega": {
-    "breadcrumb": "New authority",
     "backToDelegations": "Back to authorities",
-    "createdTitle": "Authority request created",
+    "breadcrumb": "New authority",
     "createdDescription": "Share the verification code with the authorised representative: they will have to enter it when first logging in to SEND, and accept the request.",
-    "title": "Add an authority",
-    "subtitle": "Enter the details of the person or entity you wish to authorise to read your notifications.",
+    "createdTitle": "Authority request created",
     "form": {
-      "personType": "Legal entity:",
-      "naturalPerson": "Natural person",
-      "legalPerson": "Legal person",
-      "firstName": "First name",
-      "lastName": "Surname",
-      "fiscalCode": "Fiscal code",
-      "businessName": "Company name",
-      "viewFrom": "The person will be able to view notifications from:",
       "allEntities": "All organisations",
-      "onlySelected": "Selected organisations only",
-      "selectEntities": "Select organisations",
+      "businessName": "Company name",
       "date-duration": "Period of validity of the authority",
       "endDate": "End of authority",
+      "firstName": "First name",
+      "fiscalCode": "Fiscal code",
+      "lastName": "Surname",
+      "legalPerson": "Legal person",
+      "mandatoryField": "Required fields*",
+      "naturalPerson": "Natural person",
+      "onlySelected": "Selected organisations only",
+      "party-not-found": "No organisations found",
+      "personType": "Legal entity:",
+      "selectEntities": "Select organisations",
+      "submit": "Send request",
       "verificationCode": "Verification code",
       "verificationCodeDescr": "Share this code with the authorised representative: they will have to enter it when accepting the authority.",
-      "submit": "Send request",
-      "mandatoryField": "Required fields*",
-      "party-not-found": "No organisations found"
+      "viewFrom": "The person will be able to view notifications from:"
     },
+    "subtitle": "Enter the details of the person or entity you wish to authorise to read your notifications.",
+    "title": "Add an authority",
     "validation": {
+      "businessName": {
+        "required": "Company name is required"
+      },
+      "entiSelected": {
+        "required": "Please select at least one organisation"
+      },
+      "expirationDate": {
+        "required": "Authority end date is required",
+        "wrong": "Incorrect date"
+      },
       "fiscalCode": {
         "required": "The fiscal code is required",
         "wrong": "The fiscal code entered is incorrect"
@@ -112,42 +144,12 @@
       "name": {
         "required": "First name is required"
       },
-      "surname": {
-        "required": "Surname is required"
-      },
-      "businessName": {
-        "required": "Company name is required"
-      },
-      "entiSelected": { "required": "Please select at least one organisation" },
-      "expirationDate": {
-        "required": "Authority end date is required",
-        "wrong": "Incorrect date"
-      },
       "pIvaAndFiscalCode": {
         "wrong": "The fiscal code entered is incorrect"
+      },
+      "surname": {
+        "required": "Surname is required"
       }
-    }
-  },
-  "errors": {
-    "not_found": {
-      "title": "Error",
-      "message": "Authority not found"
-    },
-    "already_exists": {
-      "title": "Authority already present",
-      "message": "The person you indicated already has an authority. Delete it and create a new one."
-    },
-    "not_acceptable": {
-      "title": "Invalid authority",
-      "message": "Invalid authority entered"
-    },
-    "delegate_himself": {
-      "title": "Data entry error",
-      "message": "You cannot authorise yourself"
-    },
-    "invalid_verification_code": {
-      "title": "Wrong code",
-      "message": "Please check and re-enter"
     }
   }
 }

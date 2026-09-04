@@ -1,94 +1,94 @@
 {
-  "title": "Statistični podatki",
-  "subtitle": "Raziščite statistiko v zvezi z obvestili vaše organizacije na SEND - Servizio Notifiche Digitali",
-  "section_1": "Pregled obvestil",
-  "subtitle_section_1": "Izberite interval spremljanja",
-  "tooltip_section_1": "Najnovejši dan opazovanja ustreza datumu zadnje posodobitve podatkov",
-  "section_2": "Podrobnosti o digitalno poslanih obvestilih",
+  "aggregate_graph": "Združeno",
+  "delivery_mode": {
+    "analog": "Analogno pošiljanje",
+    "description": "Število dostavljenih obvestil glede na način pošiljanja (digitalni ali analogni)",
+    "digital": "Digitalno pošiljanje",
+    "title": "Obvestila, dostavljena po načinu pošiljanja"
+  },
+  "digital_errors_detail": {
+    "delivery_description": "Obvestilo ni bilo dostavljeno zaradi tehničnih težav pri sprejemu",
+    "delivery_title": "Napaka pri dostavi",
+    "description": "Delež tehničnih napak glede na vrsto napake od vseh tehničnih napak v fazi pošiljanja",
+    "pec_description": "Obvestilo ni bilo dostavljeno zaradi neveljavne domene PEC",
+    "pec_title": "Napaka domene PEC",
+    "rejected_description": "Obvestilo ni bilo sprejeto zaradi tehničnih težav pri pošiljanju",
+    "rejected_title": "Napaka pri pošiljanju",
+    "title": "Tehnične napake glede na vrsto"
+  },
+  "digital_mean_time": {
+    "delivered": "Dostavljeno",
+    "delivered_description": "Dnevi za dostavo",
+    "description": "Povprečni čas (v dnevih) dostave, dostopa in dokončanja obvestil, poslanih digitalno",
+    "refined": "Zaključeno\ndatum začetka veljavnosti",
+    "refined_description": "Dnevi za dokončanje zaradi poteka roka",
+    "title": "Povprečni čas pošiljanja digitalnih sporočil",
+    "viewed": "Prišlo je do dostopa",
+    "viewed_description": "Dnevi za dostop"
+  },
+  "digital_state": {
+    "description": "Število obvestil, poslanih digitalno, na rezultat",
+    "ko": "Dostavljeno prek\npriporočenega pisma\nnavadno",
+    "ko_description": "Obvestila, dostavljena z navadnim priporočenim pismom, ker jih je prejemnikov PEC zavrnil",
+    "ko_title": "Dostavljeno z navadnim priporočenim pismom",
+    "ok": "Dostavljeno prek\ndigitalnih kanalov",
+    "ok_description": "Obvestila dostavljena prek PEC ali dokončana na SEND",
+    "ok_title": "Dostavljeno po digitalnih kanalih",
+    "progress": "pošiljanje v teku",
+    "progress_description": "Obvestila, katerih pošiljanje je še v teku",
+    "progress_title": "Pošiljanje v teku",
+    "title": "Digitalno pošiljanje glede na rezultat"
+  },
+  "empty": {
+    "no_data_found": "Za izbrano časovno obdobje ni podatkov",
+    "not_enough_data": "Število obvestil, ki jih je organizacija naložila na SEND, trenutno ne zadostuje za obdelavo in prikaz statistike pošiljanja. Raziščite <0>razdelek Obvestil<\/0> in si oglejte do zdaj naložena obvestila.",
+    "notification_section_aria_label": "Razdelek obvestil"
+  },
   "error-fetch": "Trenutno je prišlo do tehnične težave pri nalaganju podatkov. Poskusite znova pozneje",
   "export_all": "Izvozi JPEG",
-  "last_update": "Zadnja posodobitev {{dateTime}}",
-  "aggregate_graph": "Združeno",
-  "trend_graph": "Potek",
+  "filed": {
+    "accepted": "Sprejeta",
+    "description": "Število obvestil, ki jih je sprejela platforma SEND, od skupnega števila obvestil, ki jih je naložila organizacija",
+    "description2": " vseh obvestil, naloženih v SEND",
+    "refused": "Zavržena",
+    "title": "Obvestila organizacije na SEND"
+  },
+  "filter": {
+    "buttons": {
+      "clear_filter": "Počisti filtre",
+      "filter": "Filtriraj"
+    },
+    "from_date": "Od",
+    "from_date-input-aria-label": "Vnesite začetni datum iskanja",
+    "last12Months": "Zadnjih 12 mesecev",
+    "last3Months": "Zadnje 3 mesece",
+    "last6Months": "Zadnjih 6 mesecev",
+    "lastMonth": "Zadnjih 30 dni",
+    "to_date": "Ob",
+    "to_date-input-aria-label": "Vnesite končni datum iskanja"
+  },
   "graph_type_label": "Grafični",
+  "last_state": {
+    "canceled": "Preklicano",
+    "delivered": "Dostavljeno",
+    "delivering": "Pošiljanje v teku",
+    "description": "Število sprejetih obvestil, zadnje stanje, doseženo med postopkom pošiljanja prek SEND",
+    "effective_date": "Zaključeno\ndatum začetka veljavnosti",
+    "title": "Obvestila, ki jih pošilja država",
+    "unreachable": "Prejemnik\nneizsledljivo",
+    "viewed": "Prišlo je do dostopa"
+  },
+  "last_update": "Zadnja posodobitev {{dateTime}}",
   "save_as_image": "Shrani kot sliko",
+  "section_1": "Pregled obvestil",
+  "section_2": "Podrobnosti o digitalno poslanih obvestilih",
+  "subtitle": "Raziščite statistiko v zvezi z obvestili vaše organizacije na SEND - Servizio Notifiche Digitali",
+  "subtitle_section_1": "Izberite interval spremljanja",
+  "title": "Statistični podatki",
+  "tooltip_section_1": "Najnovejši dan opazovanja ustreza datumu zadnje posodobitve podatkov",
   "trend": {
     "days": "Dni",
     "weeks": "Tednov"
   },
-  "filter": {
-    "from_date": "Od",
-    "from_date-input-aria-label": "Vnesite začetni datum iskanja",
-    "to_date": "Ob",
-    "to_date-input-aria-label": "Vnesite končni datum iskanja",
-    "lastMonth": "Zadnjih 30 dni",
-    "last3Months": "Zadnje 3 mesece",
-    "last6Months": "Zadnjih 6 mesecev",
-    "last12Months": "Zadnjih 12 mesecev",
-    "buttons": {
-      "filter": "Filtriraj",
-      "clear_filter": "Počisti filtre"
-    }
-  },
-  "filed": {
-    "title": "Obvestila organizacije na SEND",
-    "description": "Število obvestil, ki jih je sprejela platforma SEND, od skupnega števila obvestil, ki jih je naložila organizacija",
-    "description2": " vseh obvestil, naloženih v SEND",
-    "accepted": "Sprejeta",
-    "refused": "Zavržena"
-  },
-  "last_state": {
-    "title": "Obvestila, ki jih pošilja država",
-    "description": "Število sprejetih obvestil, zadnje stanje, doseženo med postopkom pošiljanja prek SEND",
-    "delivering": "Pošiljanje v teku",
-    "delivered": "Dostavljeno",
-    "viewed": "Prišlo je do dostopa",
-    "effective_date": "Zaključeno\ndatum začetka veljavnosti",
-    "canceled": "Preklicano",
-    "unreachable": "Prejemnik\nneizsledljivo"
-  },
-  "delivery_mode": {
-    "title": "Obvestila, dostavljena po načinu pošiljanja",
-    "description": "Število dostavljenih obvestil glede na način pošiljanja (digitalni ali analogni)",
-    "digital": "Digitalno pošiljanje",
-    "analog": "Analogno pošiljanje"
-  },
-  "digital_state": {
-    "title": "Digitalno pošiljanje glede na rezultat",
-    "description": "Število obvestil, poslanih digitalno, na rezultat",
-    "ok": "Dostavljeno prek\ndigitalnih kanalov",
-    "ko": "Dostavljeno prek\npriporočenega pisma\nnavadno",
-    "progress": "pošiljanje v teku",
-    "ok_title": "Dostavljeno po digitalnih kanalih",
-    "ok_description": "Obvestila dostavljena prek PEC ali dokončana na SEND",
-    "ko_title": "Dostavljeno z navadnim priporočenim pismom",
-    "ko_description": "Obvestila, dostavljena z navadnim priporočenim pismom, ker jih je prejemnikov PEC zavrnil",
-    "progress_title": "Pošiljanje v teku",
-    "progress_description": "Obvestila, katerih pošiljanje je še v teku"
-  },
-  "digital_mean_time": {
-    "title": "Povprečni čas pošiljanja digitalnih sporočil",
-    "description": "Povprečni čas (v dnevih) dostave, dostopa in dokončanja obvestil, poslanih digitalno",
-    "delivered": "Dostavljeno",
-    "viewed": "Prišlo je do dostopa",
-    "refined": "Zaključeno\ndatum začetka veljavnosti",
-    "delivered_description": "Dnevi za dostavo",
-    "viewed_description": "Dnevi za dostop",
-    "refined_description": "Dnevi za dokončanje zaradi poteka roka"
-  },
-  "digital_errors_detail": {
-    "title": "Tehnične napake glede na vrsto",
-    "description": "Delež tehničnih napak glede na vrsto napake od vseh tehničnih napak v fazi pošiljanja",
-    "delivery_title": "Napaka pri dostavi",
-    "delivery_description": "Obvestilo ni bilo dostavljeno zaradi tehničnih težav pri sprejemu",
-    "pec_title": "Napaka domene PEC",
-    "pec_description": "Obvestilo ni bilo dostavljeno zaradi neveljavne domene PEC",
-    "rejected_title": "Napaka pri pošiljanju",
-    "rejected_description": "Obvestilo ni bilo sprejeto zaradi tehničnih težav pri pošiljanju"
-  },
-  "empty": {
-    "no_data_found": "Za izbrano časovno obdobje ni podatkov",
-    "not_enough_data": "Število obvestil, ki jih je organizacija naložila na SEND, trenutno ne zadostuje za obdelavo in prikaz statistike pošiljanja. Raziščite <0>razdelek Obvestil</0> in si oglejte do zdaj naložena obvestila.",
-    "notification_section_aria_label": "Razdelek obvestil"
-  }
+  "trend_graph": "Potek"
 }

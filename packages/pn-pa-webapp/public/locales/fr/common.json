@@ -1,70 +1,44 @@
 {
+  "access-denied": "Vous n’avez pas les autorisations nécessaires pour accéder à cette page",
+  "attachments": {
+    "remove-attachment": "Supprimer la pièce jointe"
+  },
+  "autocomplete": {
+    "clear": "Supprimer les options sélectionnées",
+    "delete-selection": "Supprime %s",
+    "selection-box": "Options sélectionnées",
+    "selection-done": "%s sélectionnés",
+    "toggle-close": "Ferme le menu de sélection",
+    "toggle-open": "Ouvre le menu de sélection"
+  },
   "button": {
-    "filtra": "Filtrer",
-    "annulla filtro": "Supprimer les filtres",
-    "indietro": "Retour",
     "annulla": "Annuler",
+    "annulla filtro": "Supprimer les filtres",
+    "close": "Fermer",
+    "continue": "Continuer",
     "enter": "Entrer",
     "exit": "Sortir",
-    "continue": "Continuer",
-    "send": "Envoyer",
+    "filtra": "Filtrer",
     "go-to-home": "Retour à l’accueil",
     "go-to-login": "Se connecter",
-    "close": "Fermer"
-  },
-  "menu": {
-    "notifications-send": "Notification avec SEND",
-    "notifications": "Notifications",
-    "users": "Utilisateurs",
-    "groups": "Groupes",
-    "api-key": "API Key",
-    "statistics": "Statistiques",
-    "app-status": "État de la plateforme"
-  },
-  "header": {
-    "assistance": "Assistance",
-    "login": "Se connecter",
-    "logout": "Sortir",
-    "pago-pa-link": "Site de PagoPA S.p.A.",
-    "reserved-area": "Espace réservé",
-    "notification-platform": "SEND - Servizio Notifiche Digitali",
-    "support": "Assistance"
-  },
-  "tos": {
-    "title": "SEND - Servizio Notifiche Digitali",
-    "switch-label": "En continuant, vous acceptez les <0>Conditions générales d’utilisation</0> du service et vous confirmez que vous avez lu la <1>Charte de confidentialité</1>.",
-    "button": "Se connecter"
-  },
-  "table": {
-    "aria-label": "Tableau des éléments"
-  },
-  "paginator": {
-    "aria-label": "Menu pagination",
-    "first": "premier élément",
-    "last": "dernier élément",
-    "page": "page",
-    "next": "Passer à la page suivante",
-    "previous": "Aller à la page précédente",
-    "selected": "élément sélectionné",
-    "rows-per-page": "Lignes par page"
-  },
-  "toast": {
-    "aria-label": "Icône de fermeture de toast"
+    "indietro": "Retour",
+    "send": "Envoyer"
   },
   "date-picker": {
+    "date-selected": "Choisir la date, la date sélectionnée est {{date}}",
     "left-arrow": "Aller au mois précédent",
     "right-arrow": "Aller au mois suivant",
-    "switch-to-year": "mode calendrier actif, passez au mode de choix de l’année",
-    "switch-to-calendar": "mode de choix de l’année active, passez en mode calendrier",
     "select-date": "Choisir la date",
-    "date-selected": "Choisir la date, la date sélectionnée est {{date}}"
+    "switch-to-calendar": "mode de choix de l’année active, passez en mode calendrier",
+    "switch-to-year": "mode calendrier actif, passez au mode de choix de l’année"
   },
   "date-time": {
-    "today-uppercase-initial": "Aujourd’hui",
     "hour-of-day": "heures",
     "s-month": {
       "0": "jan",
       "1": "fév",
+      "10": "nov",
+      "11": "déc",
       "2": "mar",
       "3": "avr",
       "4": "mai",
@@ -72,111 +46,137 @@
       "6": "jui",
       "7": "août",
       "8": "sept",
-      "9": "oct",
-      "10": "nov",
-      "11": "déc"
-    }
+      "9": "oct"
+    },
+    "today-uppercase-initial": "Aujourd’hui"
   },
   "error-boundary": {
-    "title": "Une erreur s’est produite",
+    "action": "Recharger la page",
     "description": "Nous n’avons pas pu charger la page. Rechargez-la, ou essayez plus tard.",
-    "action": "Recharger la page"
-  },
-  "not-accessible": {
-    "title": "Impossible d’accéder à la plateforme",
-    "description": "SEND est actuellement en phase de test et n’est pas encore disponible. Si vous êtes un Organisme et que vous avez complété l’adhésion, vous recevrez des mises à jour concernant la date d’activation de la plateforme. Pour plus d’informations sur l’initiative,",
-    "action": "visitez le site dédié"
-  },
-  "access-denied": "Vous n’avez pas les autorisations nécessaires pour accéder à cette page",
-  "not-logged": "Accéder à l’espace privé",
-  "not-logged-subtitle": "Pour utiliser SEND, connectez-vous à l’Espace Réservé avec SPID ou CIE. Ensuite, appuyez sur « Gérer » dans la carte correspondante.",
-  "not-found": {
-    "title": "404 : la page que vous cherchez n’existe pas",
-    "description": "Vous êtes ici par erreur, essayez d’utiliser la navigation."
-  },
-  "leaving-app": {
-    "title": "Vous quittez SEND",
-    "message": "Vous serez redirigé(e)"
+    "title": "Une erreur s’est produite"
   },
   "error-when-fetching-tos-status": {
-    "title": "Problèmes d’accès dans SEND",
-    "message": "Réessayer plus tard"
-  },
-  "messages": {
-    "404-title": "Ressource introuvable",
-    "404-message": "Une erreur s’est produite. Veuillez réessayer ultérieurement.",
-    "403-title": "La session a expiré",
-    "403-message": "Entrez et connectez-vous avec SPID ou CIE.",
-    "401-title": "Utilisateur non autorisé",
-    "401-message": "L’utilisateur actuel ne dispose pas des autorisations nécessaires",
-    "451-title": "Plateforme inaccessible",
-    "451-message": "Impossible d’accéder à la plateforme",
-    "500-title": "Le service n’est pas disponible",
-    "500-message": "En raison d’un problème temporaire du service, votre demande n’a pas été envoyée. Veuillez réessayer plus tard.",
-    "lacking-grants-for-app-title": "Vous n’êtes pas autorisé à accéder",
-    "generic-token-exchange-problem": "Impossible de finaliser la procédure de connexion",
-    "error-in-initial-info-loading": "Nous n’avons pas pu récupérer les données nécessaires au démarrage de l’application",
-    "invalid-token-title": "Vous ne pouvez pas vous connecter en raison d’un problème technique - jeton non valide",
-    "generic-title": "Erreur générique",
-    "generic-message": "Une erreur s’est produite. Veuillez réessayer ultérieurement.",
-    "generic-api-error-main-text": "Nous n’avons pas pu récupérer ces données.",
-    "generic-api-error-action-text": "Recharger"
+    "message": "Réessayer plus tard",
+    "title": "Problèmes d’accès dans SEND"
   },
   "footer": {
-    "go-to-pagopa": "Lien : aller sur le site de PagoPA S.p.A.",
-    "go-to": "Cliquer sur le lien",
-    "who": "Qui sommes-nous ?",
-    "work": "Carrière",
-    "certifications": "Certifications",
-    "security": "Sécurité des informations",
-    "privacy-info": "Charte de confidentialité",
-    "personal-data": "Droit à la protection des données personnelles",
-    "cookie": "Préférences en matière de cookies",
-    "terms-conditions": "Conditions générales",
-    "company": "Société transparente",
-    "disclosure": "Politique de divulgation responsable",
     "321-model": "Formulaire 231",
-    "sercq-service-statement": "Service practice statement - SERCQ",
     "accessibility": "Accessibilité",
-    "social": "Lien : aller sur le site {{social}} de PagoPA S.p.A.",
-    "resources": "Ressources",
+    "certifications": "Certifications",
+    "company": "Société transparente",
+    "cookie": "Préférences en matière de cookies",
+    "disclosure": "Politique de divulgation responsable",
     "follow": "Suis-nous sur",
+    "go-to": "Cliquer sur le lien",
+    "go-to-pagopa": "Lien : aller sur le site de PagoPA S.p.A.",
     "legal-part-1": "société anonyme à associé unique – capital social de 1 000 000 d’euros entièrement libéré – siège social à Rome, Piazza Colonna 370",
-    "legal-part-2": "Code postal 00187 – N° d’inscription au Registre du Commerce de Rome, code fiscal et n° de TVA 15376371009"
+    "legal-part-2": "Code postal 00187 – N° d’inscription au Registre du Commerce de Rome, code fiscal et n° de TVA 15376371009",
+    "personal-data": "Droit à la protection des données personnelles",
+    "privacy-info": "Charte de confidentialité",
+    "resources": "Ressources",
+    "security": "Sécurité des informations",
+    "sercq-service-statement": "Service practice statement - SERCQ",
+    "social": "Lien : aller sur le site {{social}} de PagoPA S.p.A.",
+    "terms-conditions": "Conditions générales",
+    "who": "Qui sommes-nous ?",
+    "work": "Carrière"
   },
-  "required-fields": "*Champs obligatoires",
-  "required-field": "Champ obligatoire",
-  "required": "obligatoire",
-  "too-long-field-error": "Écrire un maximum de {{maxLength}} caractères",
-  "too-short-field-error": "Écrire un minimum de {{minLength}} caractères",
-  "no-spaces-at-edges": "Supprimer les espaces au début ou à la fin",
-  "invalid": "Non valide",
-  "upload-file": {
-    "or": "ou",
-    "select-file": "Charger un document",
-    "loading": "Chargement en cours...",
-    "sending": "Envoi en cours...",
-    "hash-code": "Code de hachage",
-    "hash-code-descr": "Le code de hachage est un code alphanumérique unique utilisé pour identifier un fichier donné",
-    "ext-not-supported": "Extension de fichier non prise en charge. Réessayer avec un autre fichier.",
-    "file-size-exceeded": "Le fichier sélectionné dépasse la taille maximale de {{limit}}.",
-    "loading-error": "Une erreur s’est produite lors du chargement du fichier. Veuillez réessayer."
-  },
-  "roles": {
-    "operator": "Personne de contact opérationnel",
-    "admin": "Administrateur",
+  "header": {
+    "assistance": "Assistance",
+    "login": "Se connecter",
+    "logout": "Sortir",
+    "notification-platform": "SEND - Servizio Notifiche Digitali",
+    "pago-pa-link": "Site de PagoPA S.p.A.",
+    "reserved-area": "Espace réservé",
     "support": "Assistance"
   },
-  "attachments": {
-    "remove-attachment": "Supprimer la pièce jointe"
+  "invalid": "Non valide",
+  "leaving-app": {
+    "message": "Vous serez redirigé(e)",
+    "title": "Vous quittez SEND"
   },
-  "autocomplete": {
-    "clear": "Supprimer les options sélectionnées",
-    "toggle-open": "Ouvre le menu de sélection",
-    "toggle-close": "Ferme le menu de sélection",
-    "selection-box": "Options sélectionnées",
-    "selection-done": "%s sélectionnés",
-    "delete-selection": "Supprime %s"
+  "menu": {
+    "api-key": "API Key",
+    "app-status": "État de la plateforme",
+    "groups": "Groupes",
+    "notifications": "Notifications",
+    "notifications-send": "Notification avec SEND",
+    "statistics": "Statistiques",
+    "users": "Utilisateurs"
   },
-  "not-available": "Non disponible"
+  "messages": {
+    "401-message": "L’utilisateur actuel ne dispose pas des autorisations nécessaires",
+    "401-title": "Utilisateur non autorisé",
+    "403-message": "Entrez et connectez-vous avec SPID ou CIE.",
+    "403-title": "La session a expiré",
+    "404-message": "Une erreur s’est produite. Veuillez réessayer ultérieurement.",
+    "404-title": "Ressource introuvable",
+    "451-message": "Impossible d’accéder à la plateforme",
+    "451-title": "Plateforme inaccessible",
+    "500-message": "En raison d’un problème temporaire du service, votre demande n’a pas été envoyée. Veuillez réessayer plus tard.",
+    "500-title": "Le service n’est pas disponible",
+    "error-in-initial-info-loading": "Nous n’avons pas pu récupérer les données nécessaires au démarrage de l’application",
+    "generic-api-error-action-text": "Recharger",
+    "generic-api-error-main-text": "Nous n’avons pas pu récupérer ces données.",
+    "generic-message": "Une erreur s’est produite. Veuillez réessayer ultérieurement.",
+    "generic-title": "Erreur générique",
+    "generic-token-exchange-problem": "Impossible de finaliser la procédure de connexion",
+    "invalid-token-title": "Vous ne pouvez pas vous connecter en raison d’un problème technique - jeton non valide",
+    "lacking-grants-for-app-title": "Vous n’êtes pas autorisé à accéder"
+  },
+  "no-spaces-at-edges": "Supprimer les espaces au début ou à la fin",
+  "not-accessible": {
+    "action": "visitez le site dédié",
+    "description": "SEND est actuellement en phase de test et n’est pas encore disponible. Si vous êtes un Organisme et que vous avez complété l’adhésion, vous recevrez des mises à jour concernant la date d’activation de la plateforme. Pour plus d’informations sur l’initiative,",
+    "title": "Impossible d’accéder à la plateforme"
+  },
+  "not-available": "Non disponible",
+  "not-found": {
+    "description": "Vous êtes ici par erreur, essayez d’utiliser la navigation.",
+    "title": "404 : la page que vous cherchez n’existe pas"
+  },
+  "not-logged": "Accéder à l’espace privé",
+  "not-logged-subtitle": "Pour utiliser SEND, connectez-vous à l’Espace Réservé avec SPID ou CIE. Ensuite, appuyez sur « Gérer » dans la carte correspondante.",
+  "paginator": {
+    "aria-label": "Menu pagination",
+    "first": "premier élément",
+    "last": "dernier élément",
+    "next": "Passer à la page suivante",
+    "page": "page",
+    "previous": "Aller à la page précédente",
+    "rows-per-page": "Lignes par page",
+    "selected": "élément sélectionné"
+  },
+  "required": "obligatoire",
+  "required-field": "Champ obligatoire",
+  "required-fields": "*Champs obligatoires",
+  "roles": {
+    "admin": "Administrateur",
+    "operator": "Personne de contact opérationnel",
+    "support": "Assistance"
+  },
+  "table": {
+    "aria-label": "Tableau des éléments"
+  },
+  "toast": {
+    "aria-label": "Icône de fermeture de toast"
+  },
+  "too-long-field-error": "Écrire un maximum de {{maxLength}} caractères",
+  "too-short-field-error": "Écrire un minimum de {{minLength}} caractères",
+  "tos": {
+    "button": "Se connecter",
+    "switch-label": "En continuant, vous acceptez les <0>Conditions générales d’utilisation<\/0> du service et vous confirmez que vous avez lu la <1>Charte de confidentialité<\/1>.",
+    "title": "SEND - Servizio Notifiche Digitali"
+  },
+  "upload-file": {
+    "ext-not-supported": "Extension de fichier non prise en charge. Réessayer avec un autre fichier.",
+    "file-size-exceeded": "Le fichier sélectionné dépasse la taille maximale de {{limit}}.",
+    "hash-code": "Code de hachage",
+    "hash-code-descr": "Le code de hachage est un code alphanumérique unique utilisé pour identifier un fichier donné",
+    "loading": "Chargement en cours...",
+    "loading-error": "Une erreur s’est produite lors du chargement du fichier. Veuillez réessayer.",
+    "or": "ou",
+    "select-file": "Charger un document",
+    "sending": "Envoi en cours..."
+  }
 }

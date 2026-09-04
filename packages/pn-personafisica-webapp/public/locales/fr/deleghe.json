@@ -1,92 +1,110 @@
 {
   "deleghe": {
-    "title": "Procurations",
-    "close": "Fermer",
-    "description": "Ici, vous pouvez gérer vos mandataires et les procuration à votre charge. Les premiers sont les personnes physiques ou morales que vous avez autorisées à visualiser et à gérer vos notifications, les seconds sont celles qui vous ont autorisées.",
-    "delegatesTitle": "Vos mandataires",
-    "delegatorsTitle": "Procurations à votre charge",
-    "delegatorsApiErrorMessage": "Nous n’avons pas pu récupérer les données concernant les procurations à votre charge.",
-    "delegationStart": "Début procuration",
-    "delegationEnd": "Fin procuration",
-    "empty_state": "Vous n’avez mandaté personne pour visualiser vos notifications.",
-    "accept_title": "Saisir le code de vérification",
-    "accept_description": "Pour accepter la procuration, saisissez le code que {{name}} a partagé avec vous.",
-    "add": "Ajouter une procuration",
-    "revoke": "Supprimer",
-    "reject": "Refuser",
     "accept": "Accepter",
-    "show": "Afficher le code",
-    "revocation_question": "Voulez-vous vraiment révoquer la procuration ?",
-    "rejection_question": "Voulez-vous vraiment refuser la procuration ?",
-    "confirm_revocation": "Révoquer la procuration",
+    "accept_description": "Pour accepter la procuration, saisissez le code que {{name}} a partagé avec vous.",
+    "accept_title": "Saisir le code de vérification",
+    "add": "Ajouter une procuration",
+    "close": "Fermer",
+    "code_copied": "Code copié",
     "confirm_rejection": "Refuser la procuration",
-    "error_title": "Désolé, quelque chose s’est mal passé",
-    "error_subtitle": "Nous n’avons pas pu charger la page. Rechargez-la, ou essayez plus tard.",
+    "confirm_revocation": "Révoquer la procuration",
+    "delegatesTitle": "Vos mandataires",
+    "delegationEnd": "Fin procuration",
+    "delegationStart": "Début procuration",
+    "delegatorsApiErrorMessage": "Nous n’avons pas pu récupérer les données concernant les procurations à votre charge.",
+    "delegatorsTitle": "Procurations à votre charge",
+    "description": "Ici, vous pouvez gérer vos mandataires et les procuration à votre charge. Les premiers sont les personnes physiques ou morales que vous avez autorisées à visualiser et à gérer vos notifications, les seconds sont celles qui vous ont autorisées.",
+    "empty_state": "Vous n’avez mandaté personne pour visualiser vos notifications.",
     "error_button": "Recharger la page",
+    "error_subtitle": "Nous n’avons pas pu charger la page. Rechargez-la, ou essayez plus tard.",
+    "error_title": "Désolé, quelque chose s’est mal passé",
     "no_delegates": "Vous n’avez délégué personne pour visualiser vos notifications. <0>Ajouter une procuration<0>",
     "no_delegators": "Vous n’avez pas de procuration à votre charge.",
-    "show_code_title": "Code de vérification pour la procuration à {{name}}",
-    "show_code_subtitle": "Partagez ce code avec la personne mandatée : elle devra le saisir lors de l’acceptation de la procuration. Le code est valable 7 jours à compter de la création de la demande de procuration.",
-    "verification_code": "Code de vérification",
-    "code_copied": "Code copié",
-    "table": {
-      "name": "Prénom",
-      "delegationStart": "Début procuration",
-      "delegationEnd": "Fin procuration",
-      "permissions": "Autorisations",
-      "status": "État",
-      "showCode": "Afficher le code",
-      "revoke": "Supprimer",
-      "reject": "Refuser",
-      "accept": "Accepter",
-      "notificationsFrom": "Notifications de :",
-      "allNotifications": "Toutes les notifications",
-      "active": "Activer",
-      "pending": "En attente de confirmation",
-      "menu-aria-label": "Menu actions"
-    },
+    "reject": "Refuser",
+    "reject-successfully": "La procuration a été refusée.",
+    "rejection_question": "Voulez-vous vraiment refuser la procuration ?",
+    "revocation_question": "Voulez-vous vraiment révoquer la procuration ?",
+    "revoke": "Supprimer",
     "revoke-successfully": "La procuration a été révoquée.",
-    "reject-successfully": "La procuration a été refusée."
+    "show": "Afficher le code",
+    "show_code_subtitle": "Partagez ce code avec la personne mandatée : elle devra le saisir lors de l’acceptation de la procuration. Le code est valable 7 jours à compter de la création de la demande de procuration.",
+    "show_code_title": "Code de vérification pour la procuration à {{name}}",
+    "table": {
+      "accept": "Accepter",
+      "active": "Activer",
+      "allNotifications": "Toutes les notifications",
+      "delegationEnd": "Fin procuration",
+      "delegationStart": "Début procuration",
+      "menu-aria-label": "Menu actions",
+      "name": "Prénom",
+      "notificationsFrom": "Notifications de :",
+      "pending": "En attente de confirmation",
+      "permissions": "Autorisations",
+      "reject": "Refuser",
+      "revoke": "Supprimer",
+      "showCode": "Afficher le code",
+      "status": "État"
+    },
+    "title": "Procurations",
+    "verification_code": "Code de vérification"
+  },
+  "errors": {
+    "already_exists": {
+      "message": "La personne que vous avez indiquée a déjà une procuration. Supprimez-la et créez-en une nouvelle.",
+      "title": "Procuration déjà présente"
+    },
+    "delegate_himself": {
+      "message": "Vous ne pouvez pas vous mandater vous-même",
+      "title": "Erreur saisie procuration"
+    },
+    "fiscal_code": {
+      "message": "Le code fiscal saisi est incorrect",
+      "title": "Code fiscal non valide"
+    },
+    "invalid_verification_code": {
+      "message": "Vérifiez-le et saisissez-le à nouveau",
+      "title": "Le code est incorrect"
+    },
+    "not_acceptable": {
+      "message": "La procuration saisie n’est pas valide",
+      "title": "Procuration non valide"
+    },
+    "not_found": {
+      "message": "Procuration non trouvée",
+      "title": "Erreur"
+    }
   },
   "nuovaDelega": {
-    "breadcrumb": "Nouvelle procuration",
     "backToDelegations": "Retour aux procurations",
-    "createdTitle": "Demande de procuration créée",
+    "breadcrumb": "Nouvelle procuration",
     "createdDescription": "Partagez le code de vérification avec la personne mandatée : elle devra le saisir lors de la première connexion à SEND et accepter votre demande.",
-    "title": "Ajouter une procuration",
-    "subtitle": "Saisissez les données de la personne physique ou morale à qui vous souhaitez mandater la lecture de vos notifications.",
+    "createdTitle": "Demande de procuration créée",
     "form": {
-      "personType": "Entité juridique :",
-      "naturalPerson": "Personne physique",
-      "legalPerson": "Personnalité juridique",
-      "firstName": "Prénom",
-      "lastName": "Nom de famille",
-      "fiscalCode": "Code fiscal",
-      "businessName": "Raison sociale",
-      "viewFrom": "Vous pourrez visualiser les notifications de :",
       "allEntities": "Tous les organismes",
-      "onlySelected": "Uniquement les organismes sélectionnés",
-      "selectEntities": "Sélectionner entités",
+      "businessName": "Raison sociale",
       "date-duration": "Sélectionner organismes",
       "endDate": "Terminer la procuration",
       "endDate-input-aria-label": "Terminer la procuration",
+      "firstName": "Prénom",
+      "fiscalCode": "Code fiscal",
+      "lastName": "Nom de famille",
+      "legalPerson": "Personnalité juridique",
+      "mandatoryField": "Champs obligatoires*",
+      "naturalPerson": "Personne physique",
+      "onlySelected": "Uniquement les organismes sélectionnés",
+      "party-not-found": "Aucun organisme trouvé",
+      "personType": "Entité juridique :",
+      "personType-content-subtitle": "Sélectionne le type de sujet de droit",
+      "selectEntities": "Sélectionner entités",
+      "submit": "Envoyez votre demande",
       "verificationCode": "Code de vérification",
       "verificationCodeDescr": "Partagez ce code avec la personne mandatée : elle devra le saisir lors de l’acceptation de la procuration. Le code est valable 7 jours à compter de la création de la demande de procuration.",
-      "submit": "Envoyez votre demande",
-      "mandatoryField": "Champs obligatoires*",
-      "party-not-found": "Aucun organisme trouvé"
+      "viewFrom": "Vous pourrez visualiser les notifications de :",
+      "viewFrom-content-subtitle": "Sélectionne une option"
     },
+    "subtitle": "Saisissez les données de la personne physique ou morale à qui vous souhaitez mandater la lecture de vos notifications.",
+    "title": "Ajouter une procuration",
     "validation": {
-      "fiscalCode": {
-        "required": "Le code fiscal est obligatoire",
-        "wrong": "Le code fiscal saisi est incorrect."
-      },
-      "name": {
-        "required": "Le prénom est obligatoire"
-      },
-      "surname": {
-        "required": "Le nom de famille est obligatoire"
-      },
       "businessName": {
         "required": "La raison sociale est obligatoire"
       },
@@ -96,33 +114,18 @@
       "expirationDate": {
         "required": "La date de fin de procuration est obligatoire",
         "wrong": "Date erronée"
+      },
+      "fiscalCode": {
+        "required": "Le code fiscal est obligatoire",
+        "wrong": "Le code fiscal saisi est incorrect.",
+        "wrong-pg": "Saisis uniquement des chiffres. Si le code fiscal de la personne que tu veux déléguer contient également des lettres, sélectionne « Personne physique »."
+      },
+      "name": {
+        "required": "Le prénom est obligatoire"
+      },
+      "surname": {
+        "required": "Le nom de famille est obligatoire"
       }
-    }
-  },
-  "errors": {
-    "not_found": {
-      "title": "Erreur",
-      "message": "Procuration non trouvée"
-    },
-    "already_exists": {
-      "title": "Procuration déjà présente",
-      "message": "La personne que vous avez indiquée a déjà une procuration. Supprimez-la et créez-en une nouvelle."
-    },
-    "not_acceptable": {
-      "title": "Procuration non valide",
-      "message": "La procuration saisie n’est pas valide"
-    },
-    "delegate_himself": {
-      "title": "Erreur saisie procuration",
-      "message": "Vous ne pouvez pas vous mandater vous-même"
-    },
-    "invalid_verification_code": {
-      "title": "Le code est incorrect",
-      "message": "Vérifiez-le et saisissez-le à nouveau"
-    },
-    "fiscal_code": {
-      "title": "Code fiscal non valide",
-      "message": "Le code fiscal saisi est incorrect"
     }
   }
 }

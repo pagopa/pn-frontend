@@ -1,70 +1,44 @@
 {
+  "access-denied": "Du bist für den Zugriff auf diese Seite nicht berechtigt",
+  "attachments": {
+    "remove-attachment": "Anhang entfernen"
+  },
+  "autocomplete": {
+    "clear": "Ausgewählte Optionen entfernen",
+    "delete-selection": "Entferne %s",
+    "selection-box": "Ausgewählte Optionen",
+    "selection-done": "%s ausgewählt",
+    "toggle-close": "Schließe das Auswahlmenü",
+    "toggle-open": "Öffne das Auswahlmenü"
+  },
   "button": {
-    "filtra": "Filtern",
-    "annulla filtro": "Filter entfernen",
-    "indietro": "Zurück",
     "annulla": "Abbrechen",
+    "annulla filtro": "Filter entfernen",
+    "close": "Schließen",
+    "continue": "Weiter",
     "enter": "Einwählen",
     "exit": "Beenden",
-    "continue": "Weiter",
-    "send": "Senden",
+    "filtra": "Filtern",
     "go-to-home": "Zurück zur Startseite",
     "go-to-login": "Anmelden",
-    "close": "Schließen"
-  },
-  "menu": {
-    "notifications-send": "Benachrichtigung mit SEND",
-    "notifications": "Zustellungen",
-    "users": "Benutzer",
-    "groups": "Gruppen",
-    "api-key": "API-Schlüssel",
-    "statistics": "Statistiken",
-    "app-status": "Plattformstatus"
-  },
-  "header": {
-    "assistance": "Hilfe",
-    "login": "Anmelden",
-    "logout": "Beenden",
-    "pago-pa-link": "Website von PagoPA S.p.A.",
-    "reserved-area": "Reservierten Bereich",
-    "notification-platform": "SEND - Servizio Notifiche Digitali",
-    "support": "Support"
-  },
-  "tos": {
-    "title": "SEND - Servizio Notifiche Digitali",
-    "switch-label": "Durch Anmelden am Dienst erklärst du dich mit dessen <0>Nutzungsbedingungen</0> einverstanden und bestätigst, die <1>Datenschutzerklärung gelesen zu haben</1>.",
-    "button": "Anmelden"
-  },
-  "table": {
-    "aria-label": "Item-Tabelle"
-  },
-  "paginator": {
-    "aria-label": "Menü Seite",
-    "first": "Erstes Element",
-    "last": "Letztes Element",
-    "page": "Seite",
-    "next": "Zur nächsten Seite",
-    "previous": "Zur vorherigen Seite",
-    "selected": "ausgewähltes Element",
-    "rows-per-page": "Zeilen pro Seite"
-  },
-  "toast": {
-    "aria-label": "Symbol zum Schließen von Toast"
+    "indietro": "Zurück",
+    "send": "Senden"
   },
   "date-picker": {
+    "date-selected": "Datum wählen, das gewählte Datum ist {{date}}",
     "left-arrow": "Zum Vormonat",
     "right-arrow": "Zum nächsten Monat",
-    "switch-to-year": "Kalendermodus aktiv, wechsele in den Jahreswahlmodus",
-    "switch-to-calendar": "Jahreswahlmodus aktiv, wechsele in den Kalendermodus",
     "select-date": "Datum wählen",
-    "date-selected": "Datum wählen, das gewählte Datum ist {{date}}"
+    "switch-to-calendar": "Jahreswahlmodus aktiv, wechsele in den Kalendermodus",
+    "switch-to-year": "Kalendermodus aktiv, wechsele in den Jahreswahlmodus"
   },
   "date-time": {
-    "today-uppercase-initial": "Heute",
     "hour-of-day": "Stunden",
     "s-month": {
       "0": "Jan",
       "1": "Feb",
+      "10": "Nov",
+      "11": "Dez",
       "2": "März",
       "3": "April",
       "4": "Mai",
@@ -72,111 +46,137 @@
       "6": "Juli",
       "7": "Aug",
       "8": "Sept",
-      "9": "Okt",
-      "10": "Nov",
-      "11": "Dez"
-    }
+      "9": "Okt"
+    },
+    "today-uppercase-initial": "Heute"
   },
   "error-boundary": {
-    "title": "Etwas ist schiefgelaufen",
+    "action": "Seite neu laden",
     "description": "Die Seite konnte nicht geladen werden. Seite neu laden oder später erneut versuchen.",
-    "action": "Seite neu laden"
-  },
-  "not-accessible": {
-    "title": "Zugriff auf die Plattform nicht möglich",
-    "description": "SEND befindet sich derzeit in der Testphase und ist noch nicht verfügbar. Wenn du eine Körperschaft bist und dich angemeldet hast, wirst du über das Aktivierungsdatum der Plattform informiert. Weitere Informationen dazu",
-    "action": "auf der entsprechenden Website"
-  },
-  "access-denied": "Du bist für den Zugriff auf diese Seite nicht berechtigt",
-  "not-logged": "Zugang zur Area Riservata",
-  "not-logged-subtitle": "Um SEND zu verwenden, logge dich mit SPID oder CIE in der Area Riservata ein. Danach „Verwalten“ in der entsprechenden Karte wählen.",
-  "not-found": {
-    "title": "404: Die gesuchte Seite existiert nicht",
-    "description": "Du bist versehentlich hier gelandet, benutze die Navigation."
-  },
-  "leaving-app": {
-    "title": "Du verlässt SEND",
-    "message": "Du wirst weitergeleitet"
+    "title": "Etwas ist schiefgelaufen"
   },
   "error-when-fetching-tos-status": {
-    "title": "Probleme beim Login auf SEND",
-    "message": "Bitte später erneut versuchen"
-  },
-  "messages": {
-    "404-title": "Quelle nicht gefunden",
-    "404-message": "Es ist ein Fehler aufgetreten. Bitte versuche es später erneut",
-    "403-title": "Die Sitzung ist abgelaufen",
-    "403-message": "Melde dich mit SPID oder CIE an.",
-    "401-title": "Unberechtigter Benutzer",
-    "401-message": "Der aktuelle Benutzer hat keine Berechtigungen",
-    "451-title": "Plattform nicht zugänglich",
-    "451-message": "Zugriff auf die Plattform nicht möglich",
-    "500-title": "Dienst nicht erreichbar",
-    "500-message": "Aufgrund eines vorübergehenden Problems wurde deine Anfrage nicht gesendet. Bitte später erneut versuchen.",
-    "lacking-grants-for-app-title": "Du bist nicht zur Anmeldung berechtigt",
-    "generic-token-exchange-problem": "Die Anmeldung konnte nicht abgeschlossen werden",
-    "error-in-initial-info-loading": "Wir konnten keine Daten wiederherstellen, die für den Start der Anwendung erforderlich sind",
-    "invalid-token-title": "Anmeldung wegen technischem Problem nicht möglich - Token ungültig",
-    "generic-title": "Allgemeiner Fehler",
-    "generic-message": "Es ist ein Fehler aufgetreten. Bitte versuche es später erneut",
-    "generic-api-error-main-text": "Wir konnten diese Daten nicht wiederherstellen.",
-    "generic-api-error-action-text": "Erneut laden"
+    "message": "Bitte später erneut versuchen",
+    "title": "Probleme beim Login auf SEND"
   },
   "footer": {
-    "go-to-pagopa": "Gehe auf die Website von PagoPA S.p.A.",
-    "go-to": "Zum Link",
-    "who": "Über uns",
-    "work": "Karriere",
-    "certifications": "Zertifizierungen",
-    "security": "Informationssicherheit",
-    "privacy-info": "Datenschutzerklärung",
-    "personal-data": "Recht auf Schutz personenbezogener Daten",
-    "cookie": "Cookie-Präferenzen",
-    "terms-conditions": "Allgemeine Geschäftsbedingungen",
-    "company": "Transparente Gesellschaft",
-    "disclosure": "Responsible Disclosure Policy",
     "321-model": "Vordruck 231",
-    "sercq-service-statement": "Service practice statement - SERCQ",
     "accessibility": "Barrierefreiheit",
-    "social": "Gehe auf die Website {{social}} von PagoPA S.p.A.",
-    "resources": "Ressourcen",
+    "certifications": "Zertifizierungen",
+    "company": "Transparente Gesellschaft",
+    "cookie": "Cookie-Präferenzen",
+    "disclosure": "Responsible Disclosure Policy",
     "follow": "Folgen Sie uns auf",
+    "go-to": "Zum Link",
+    "go-to-pagopa": "Gehe auf die Website von PagoPA S.p.A.",
     "legal-part-1": "Aktiengesellschaft mit einem einzigen Gesellschafter - voll eingezahltes Grundkapital von 1.000.000 Euro - eingetragener Sitz in Rom, Piazza Colonna 370",
-    "legal-part-2": "PLZ 00187 – Eintragungsnummer im Handelsregister von Rom, Steuernummer und USt-IdNr. 15376371009"
+    "legal-part-2": "PLZ 00187 – Eintragungsnummer im Handelsregister von Rom, Steuernummer und USt-IdNr. 15376371009",
+    "personal-data": "Recht auf Schutz personenbezogener Daten",
+    "privacy-info": "Datenschutzerklärung",
+    "resources": "Ressourcen",
+    "security": "Informationssicherheit",
+    "sercq-service-statement": "Service practice statement - SERCQ",
+    "social": "Gehe auf die Website {{social}} von PagoPA S.p.A.",
+    "terms-conditions": "Allgemeine Geschäftsbedingungen",
+    "who": "Über uns",
+    "work": "Karriere"
   },
-  "required-fields": "*Pflichtfelder",
-  "required-field": "Pflichtfeld",
-  "required": "obligatorisch",
-  "too-long-field-error": "Höchstens {{maxLength}} Zeichen schreiben",
-  "too-short-field-error": "Mindestens {{minLength}} Zeichen schreiben",
-  "no-spaces-at-edges": "Lösche die Leerzeichen am Anfang oder Ende",
-  "invalid": "Ungültig",
-  "upload-file": {
-    "or": "oder",
-    "select-file": "lade die Datei",
-    "loading": "Ladevorgang läuft...",
-    "sending": "Sendevorgang läuft...",
-    "hash-code": "Hash-Code",
-    "hash-code-descr": "Der Hash-Code ist ein eindeutiger alphanumerischer Code, der zur Identifizierung einer bestimmten Datei verwendet wird",
-    "ext-not-supported": "Dateiformat wird nicht unterstützt. Bitte versuche es mit einer anderen Datei.",
-    "file-size-exceeded": "Die ausgewählte Datei überschreitet die maximale Größe von {{limit}}.",
-    "loading-error": "Beim Hochladen der Datei ist ein Fehler aufgetreten. Bitte erneut versuchen."
-  },
-  "roles": {
-    "operator": "Sachbearbeiter",
-    "admin": "Administrator",
+  "header": {
+    "assistance": "Hilfe",
+    "login": "Anmelden",
+    "logout": "Beenden",
+    "notification-platform": "SEND - Servizio Notifiche Digitali",
+    "pago-pa-link": "Website von PagoPA S.p.A.",
+    "reserved-area": "Reservierten Bereich",
     "support": "Support"
   },
-  "attachments": {
-    "remove-attachment": "Anhang entfernen"
+  "invalid": "Ungültig",
+  "leaving-app": {
+    "message": "Du wirst weitergeleitet",
+    "title": "Du verlässt SEND"
   },
-  "autocomplete": {
-    "clear": "Ausgewählte Optionen entfernen",
-    "toggle-open": "Öffne das Auswahlmenü",
-    "toggle-close": "Schließe das Auswahlmenü",
-    "selection-box": "Ausgewählte Optionen",
-    "selection-done": "%s ausgewählt",
-    "delete-selection": "Entferne %s"
+  "menu": {
+    "api-key": "API-Schlüssel",
+    "app-status": "Plattformstatus",
+    "groups": "Gruppen",
+    "notifications": "Zustellungen",
+    "notifications-send": "Benachrichtigung mit SEND",
+    "statistics": "Statistiken",
+    "users": "Benutzer"
   },
-  "not-available": "Nicht verfügbar"
+  "messages": {
+    "401-message": "Der aktuelle Benutzer hat keine Berechtigungen",
+    "401-title": "Unberechtigter Benutzer",
+    "403-message": "Melde dich mit SPID oder CIE an.",
+    "403-title": "Die Sitzung ist abgelaufen",
+    "404-message": "Es ist ein Fehler aufgetreten. Bitte versuche es später erneut",
+    "404-title": "Quelle nicht gefunden",
+    "451-message": "Zugriff auf die Plattform nicht möglich",
+    "451-title": "Plattform nicht zugänglich",
+    "500-message": "Aufgrund eines vorübergehenden Problems wurde deine Anfrage nicht gesendet. Bitte später erneut versuchen.",
+    "500-title": "Dienst nicht erreichbar",
+    "error-in-initial-info-loading": "Wir konnten keine Daten wiederherstellen, die für den Start der Anwendung erforderlich sind",
+    "generic-api-error-action-text": "Erneut laden",
+    "generic-api-error-main-text": "Wir konnten diese Daten nicht wiederherstellen.",
+    "generic-message": "Es ist ein Fehler aufgetreten. Bitte versuche es später erneut",
+    "generic-title": "Allgemeiner Fehler",
+    "generic-token-exchange-problem": "Die Anmeldung konnte nicht abgeschlossen werden",
+    "invalid-token-title": "Anmeldung wegen technischem Problem nicht möglich - Token ungültig",
+    "lacking-grants-for-app-title": "Du bist nicht zur Anmeldung berechtigt"
+  },
+  "no-spaces-at-edges": "Lösche die Leerzeichen am Anfang oder Ende",
+  "not-accessible": {
+    "action": "auf der entsprechenden Website",
+    "description": "SEND befindet sich derzeit in der Testphase und ist noch nicht verfügbar. Wenn du eine Körperschaft bist und dich angemeldet hast, wirst du über das Aktivierungsdatum der Plattform informiert. Weitere Informationen dazu",
+    "title": "Zugriff auf die Plattform nicht möglich"
+  },
+  "not-available": "Nicht verfügbar",
+  "not-found": {
+    "description": "Du bist versehentlich hier gelandet, benutze die Navigation.",
+    "title": "404: Die gesuchte Seite existiert nicht"
+  },
+  "not-logged": "Zugang zur Area Riservata",
+  "not-logged-subtitle": "Um SEND zu verwenden, logge dich mit SPID oder CIE in der Area Riservata ein. Danach „Verwalten“ in der entsprechenden Karte wählen.",
+  "paginator": {
+    "aria-label": "Menü Seite",
+    "first": "Erstes Element",
+    "last": "Letztes Element",
+    "next": "Zur nächsten Seite",
+    "page": "Seite",
+    "previous": "Zur vorherigen Seite",
+    "rows-per-page": "Zeilen pro Seite",
+    "selected": "ausgewähltes Element"
+  },
+  "required": "obligatorisch",
+  "required-field": "Pflichtfeld",
+  "required-fields": "*Pflichtfelder",
+  "roles": {
+    "admin": "Administrator",
+    "operator": "Sachbearbeiter",
+    "support": "Support"
+  },
+  "table": {
+    "aria-label": "Item-Tabelle"
+  },
+  "toast": {
+    "aria-label": "Symbol zum Schließen von Toast"
+  },
+  "too-long-field-error": "Höchstens {{maxLength}} Zeichen schreiben",
+  "too-short-field-error": "Mindestens {{minLength}} Zeichen schreiben",
+  "tos": {
+    "button": "Anmelden",
+    "switch-label": "Durch Anmelden am Dienst erklärst du dich mit dessen <0>Nutzungsbedingungen<\/0> einverstanden und bestätigst, die <1>Datenschutzerklärung gelesen zu haben<\/1>.",
+    "title": "SEND - Servizio Notifiche Digitali"
+  },
+  "upload-file": {
+    "ext-not-supported": "Dateiformat wird nicht unterstützt. Bitte versuche es mit einer anderen Datei.",
+    "file-size-exceeded": "Die ausgewählte Datei überschreitet die maximale Größe von {{limit}}.",
+    "hash-code": "Hash-Code",
+    "hash-code-descr": "Der Hash-Code ist ein eindeutiger alphanumerischer Code, der zur Identifizierung einer bestimmten Datei verwendet wird",
+    "loading": "Ladevorgang läuft...",
+    "loading-error": "Beim Hochladen der Datei ist ein Fehler aufgetreten. Bitte erneut versuchen.",
+    "or": "oder",
+    "select-file": "lade die Datei",
+    "sending": "Sendevorgang läuft..."
+  }
 }
