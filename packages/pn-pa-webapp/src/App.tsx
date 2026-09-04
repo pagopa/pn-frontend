@@ -124,6 +124,7 @@ const ActualApp = () => {
   const isSupportUser = useAppSelector(authSelectors.selectIsSupportUser);
   const dispatch = useAppDispatch();
   const { t, i18n } = useTranslation(['common', 'notifiche']);
+
   const reservedArea: ProductEntity = {
     id: 'selfcare',
     title: t('header.reserved-area'),

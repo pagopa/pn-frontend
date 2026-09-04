@@ -115,7 +115,6 @@ const Login = () => {
               }
             : undefined
         }
-        theme={theme}
       >
         <Grid
           container
