@@ -1,6 +1,6 @@
 import { ErrorInfo, ReactNode } from 'react';
 
-import { Stack, useTheme } from '@mui/material';
+import { Stack } from '@mui/material';
 import { Box, BoxOwnProps, StackProps } from '@mui/system';
 import { JwtUser, PartyEntity, ProductEntity, UserAction } from '@pagopa/mui-italia';
 
@@ -96,80 +96,77 @@ const Layout: React.FC<Props> = ({
   enableAssistanceButton = true,
   chipLabel,
   slotsProps,
-}) => {
-  const theme = useTheme();
-  return (
-    <ErrorBoundary
-      sx={{ height: 'calc(100vh - 5px)' }}
-      eventTrackingCallback={eventTrackingCallbackAppCrash}
-      eventTrackingCallbackRefreshPage={eventTrackingCallbackRefreshPage}
+}) => (
+  <ErrorBoundary
+    sx={{ height: 'calc(100vh - 5px)' }}
+    eventTrackingCallback={eventTrackingCallbackAppCrash}
+    eventTrackingCallbackRefreshPage={eventTrackingCallbackRefreshPage}
+  >
+    {/* calc fixes the layout discrepancy given by the version box */}
+    <Stack
+      direction="column"
+      sx={{
+        minHeight: 'calc(100vh - 5px)',
+        backgroundColor: 'background.main',
+      }} // 100vh per sticky footer
     >
-      {/* calc fixes the layout discrepancy given by the version box */}
-      <Stack
-        direction="column"
-        sx={{
-          minHeight: 'calc(100vh - 5px)',
-          background: theme.palette.background.main,
-        }} // 100vh per sticky footer
-      >
-        <>
-          {showHeader && (
-            <Header
-              onExitAction={onExitAction}
-              productsList={productsList}
-              showHeaderProduct={showHeaderProduct}
-              productId={productId}
-              partyId={partyId}
-              partyList={partyList}
-              loggedUser={loggedUser}
-              enableDropdown={enableUserDropdown}
-              userActions={userActions}
-              onAssistanceClick={onAssistanceClick}
-              isLogged={isLogged}
-              enableAssistanceButton={enableAssistanceButton}
-              chipLabel={chipLabel}
-            />
-          )}
-          <Stack
-            direction={{ xs: 'column', lg: 'row' }}
-            sx={{ flexGrow: 1 }}
-            {...slotsProps?.content}
-          >
-            {showSideMenu && (
-              <Box
-                sx={{ width: { lg: 300 }, flexShrink: '0' }}
-                component="nav"
-                data-testid="side-menu"
-              >
-                {sideMenu}
-              </Box>
-            )}
+      <>
+        {showHeader && (
+          <Header
+            onExitAction={onExitAction}
+            productsList={productsList}
+            showHeaderProduct={showHeaderProduct}
+            productId={productId}
+            partyId={partyId}
+            partyList={partyList}
+            loggedUser={loggedUser}
+            enableDropdown={enableUserDropdown}
+            userActions={userActions}
+            onAssistanceClick={onAssistanceClick}
+            isLogged={isLogged}
+            enableAssistanceButton={enableAssistanceButton}
+            chipLabel={chipLabel}
+          />
+        )}
+        <Stack
+          direction={{ xs: 'column', lg: 'row' }}
+          sx={{ flexGrow: 1 }}
+          {...slotsProps?.content}
+        >
+          {showSideMenu && (
             <Box
-              sx={{ flexGrow: 1, flexBasis: { xs: 1, lg: 'auto' }, position: 'relative' }}
-              component="main"
-              {...slotsProps?.main}
+              sx={{ width: { lg: 300 }, flexShrink: '0' }}
+              component="nav"
+              data-testid="side-menu"
             >
-              <ErrorBoundary eventTrackingCallback={eventTrackingCallbackAppCrash}>
-                {children}
-              </ErrorBoundary>
+              {sideMenu}
             </Box>
-          </Stack>
-          {showFooter && (
-            <Footer
-              currentLanguage={currentLanguage}
-              onLanguageChanged={onLanguageChanged}
-              loggedUser={loggedUser.id !== ''}
-              hasTermsOfService={hasTermsOfService}
-              privacyPolicyHref={privacyPolicyHref}
-              termsOfServiceHref={termsOfServiceHref}
-              accessibilityLink={accessibilityLink}
-              sercqServiceStatementLink={sercqServiceStatementLink}
-            />
           )}
-        </>
-      </Stack>
-    </ErrorBoundary>
-  );
-};
+          <Box
+            sx={{ flexGrow: 1, flexBasis: { xs: 1, lg: 'auto' }, position: 'relative' }}
+            component="main"
+            {...slotsProps?.main}
+          >
+            <ErrorBoundary eventTrackingCallback={eventTrackingCallbackAppCrash}>
+              {children}
+            </ErrorBoundary>
+          </Box>
+        </Stack>
+        {showFooter && (
+          <Footer
+            currentLanguage={currentLanguage}
+            onLanguageChanged={onLanguageChanged}
+            loggedUser={loggedUser.id !== ''}
+            hasTermsOfService={hasTermsOfService}
+            privacyPolicyHref={privacyPolicyHref}
+            termsOfServiceHref={termsOfServiceHref}
+            accessibilityLink={accessibilityLink}
+            sercqServiceStatementLink={sercqServiceStatementLink}
+          />
+        )}
+      </>
+    </Stack>
+  </ErrorBoundary>
+);
 
 export default Layout;
