@@ -26,9 +26,7 @@ permissions:
 jobs:
   pull-locale:
     runs-on: ubuntu-latest
-    # TODO: RIPRISTINARE PRIMA DEL MERGE - usa secret e variabili di repository durante il test.
-    #       Riallineare a io-app con "environment: lokalise" quando l'environment sara' disponibile.
-    # environment: lokalise
+    environment: lokalise
     strategy:
       fail-fast: false
       # I quattro job committano sullo stesso branch: in parallelo i push si
@@ -87,10 +85,11 @@ jobs:
           additional_params: |
             indentation: 2sp
             placeholder_format: i18n
-            # Le chiavi non ancora tradotte vengono omesse dal file invece di scendere
-            # come stringa vuota: "" e' un valore legittimo e sarebbe indistinguibile
-            # da una traduzione mancante. A runtime i18next risolve la chiave assente
-            # con fallbackLng: 'it' (vedi packages/*/src/i18n.ts).
+            # Le chiavi non tradotte vengono omesse invece di scendere come "":
+            # a runtime i18next le risolve con fallbackLng: 'it', e un file senza
+            # nessuna traduzione non viene emesso affatto, cosi' i namespace
+            # solo-italiano (integrazioneApi.json di PG) restano tali.
+            # Nota: una chiave vuota anche in it sparisce da tutti i file.
             export_empty_as: skip
             filter_langs:
               - it
