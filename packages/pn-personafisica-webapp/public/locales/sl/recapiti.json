@@ -361,10 +361,8 @@
         "pec-activating": {
           "title": "Aktivacija digitalnega domicila prek PEC je v teku",
           "description": "Po aktivaciji boš prejemal uradna obvestila SEND na tvoj naslov PEC. Tako bi se lahko izognil pošiljanju priporočene pošte s pripadajočimi dodatnimi stroški.",
-          "badge": "Aktivacija v teku",
-          "img-alt-text": ""
-        },
-        "img-alt-text": ""
+          "badge": "Aktivacija v teku"
+        }
       },
       "email": {
         "title": "Poveži e-poštni naslov z digitalnim naslovom",
@@ -388,8 +386,7 @@
         "enabled": {
           "title": "SEND si že aktiviral v aplikaciji IO",
           "primary-cta": "Nadaljuj"
-        },
-        "img-alt-text": ""
+        }
       },
       "summary": {
         "title": "Tvoj povzetek",

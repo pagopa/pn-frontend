@@ -361,10 +361,8 @@
         "pec-activating": {
           "title": "Die Aktivierung deines digitalen Domizils über PEC ist in Bearbeitung",
           "description": "Nach der Aktivierung erhältst du SEND-Zustellungen an deine PEC-Adresse. So könntest du den Versand eines Einschreibens mit den entsprechenden Zusatzkosten vermeiden.",
-          "badge": "Aktivierung läuft",
-          "img-alt-text": ""
-        },
-        "img-alt-text": ""
+          "badge": "Aktivierung läuft"
+        }
       },
       "email": {
         "title": "Verknüpfe eine E-Mail-Adresse mit dem digitalen Domizil",
@@ -388,8 +386,7 @@
         "enabled": {
           "title": "Du hast SEND bereits in der IO-App aktiviert",
           "primary-cta": "Weiter"
-        },
-        "img-alt-text": ""
+        }
       },
       "summary": {
         "title": "Deine Zusammenfassung",

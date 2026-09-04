@@ -361,10 +361,8 @@
         "pec-activating": {
           "title": "L'activation du domicile numérique via PEC est en cours",
           "description": "Après l’activation, tu recevras les notifications SEND à ton adresse PEC. Tu pourrais ainsi éviter l’envoi d’une lettre recommandée avec les frais supplémentaires correspondants.",
-          "badge": "Activation en cours",
-          "img-alt-text": ""
-        },
-        "img-alt-text": ""
+          "badge": "Activation en cours"
+        }
       },
       "email": {
         "title": "Associe une adresse e-mail au domicile numérique",
@@ -388,8 +386,7 @@
         "enabled": {
           "title": "Tu as déjà activé SEND sur l’app IO",
           "primary-cta": "Continuer"
-        },
-        "img-alt-text": ""
+        }
       },
       "summary": {
         "title": "Ton récapitulatif",

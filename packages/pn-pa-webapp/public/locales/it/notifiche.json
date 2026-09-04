@@ -111,7 +111,6 @@
     },
     "errors": {
       "generic_error": {
-        "title": "",
         "message": "Si è verificato un errore durante l’annullamento. Riprova."
       },
       "delivery_file_info_not_found": {

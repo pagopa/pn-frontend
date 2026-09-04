@@ -111,7 +111,6 @@
     },
     "errors": {
       "generic_error": {
-        "title": "",
         "message": "An error occurred while canceling. Try again."
       },
       "delivery_file_info_not_found": {
