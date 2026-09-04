@@ -18,7 +18,6 @@ import {
   EventNotificationTypes,
   EventPaymentRecipientType,
   GetDowntimeHistoryParams,
-  IllusQuestion,
   NotificationDetailBilingualFacsimileDocuments,
   NotificationDetailDocuments,
   NotificationDetailOtherDocument,
@@ -44,7 +43,13 @@ import {
   EventDeliveryFlowType,
   EventDeliveryModeType,
 } from '@pagopa-pn/pn-commons/src/models/MixpanelEvents';
-import { MIAlert, MIBreadcrumbItem, MIBreadcrumbs, MIPaper } from '@pagopa/mui-italia';
+import {
+  IllusMIQuestion,
+  MIAlert,
+  MIBreadcrumbItem,
+  MIBreadcrumbs,
+  MIPaper,
+} from '@pagopa/mui-italia';
 
 import NotificationDetailOnboardingPrompt from '../components/Contacts/Onboarding/NotificationDetailOnboardingPrompt';
 import DomicileBanner from '../components/DomicileBanner/DomicileBanner';
@@ -544,7 +549,7 @@ const NotificationDetail: React.FC = () => {
     const i18nKey = currentUser.source?.retrievalId ? 'from-tpp' : 'from-qrcode';
     return (
       <AccessDenied
-        icon={<IllusQuestion />}
+        icon={<IllusMIQuestion />}
         message={t(`${i18nKey}.not-found`, { ns: 'notifiche' })}
         subtitle={t(`${i18nKey}.not-found-subtitle`, { ns: 'notifiche' })}
         isLogged={true}

@@ -10,7 +10,6 @@ import {
   AccessDenied,
   ApiError,
   AppResponse,
-  IllusQuestion,
   LegalFactId,
   LegalFactType,
   NotificationDetailTimeline,
@@ -22,7 +21,13 @@ import {
   useIsCancelled,
 } from '@pagopa-pn/pn-commons';
 import { useDismissToastOnError } from '@pagopa-pn/pn-commons/src/hooks/useDismissToastOnError';
-import { MIAlert, MIBreadcrumbItem, MIBreadcrumbs, MIPaper } from '@pagopa/mui-italia';
+import {
+  IllusMIQuestion,
+  MIAlert,
+  MIBreadcrumbItem,
+  MIBreadcrumbs,
+  MIPaper,
+} from '@pagopa/mui-italia';
 
 import NotificationDetailOnboardingPrompt from '../components/Contacts/Onboarding/NotificationDetailOnboardingPrompt';
 import LoadingPageWrapper from '../components/LoadingPageWrapper/LoadingPageWrapper';
@@ -248,7 +253,7 @@ const NotificationTimeline: React.FC = () => {
     const i18nKey = currentUser.source?.retrievalId ? 'from-tpp' : 'from-qrcode';
     return (
       <AccessDenied
-        icon={<IllusQuestion />}
+        icon={<IllusMIQuestion />}
         message={t(`${i18nKey}.not-found`, { ns: 'notifiche' })}
         subtitle={t(`${i18nKey}.not-found-subtitle`, { ns: 'notifiche' })}
         isLogged={true}
