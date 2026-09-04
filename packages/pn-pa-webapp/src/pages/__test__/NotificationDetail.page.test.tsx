@@ -21,6 +21,7 @@ import {
 } from '../../__mocks__/NotificationDetail.mock';
 import { RenderResult, act, fireEvent, render, waitFor, within } from '../../__test__/test-utils';
 import { apiClient } from '../../api/apiClients';
+import * as routes from '../../navigation/routes.const';
 import { NOTIFICATION_ACTIONS } from '../../redux/notification/actions';
 import NotificationDetail from '../NotificationDetail.page';
 
@@ -60,7 +61,7 @@ describe('NotificationDetail Page', () => {
     expect(mock.history.get[1].url).toContain('/bff/v1/downtime/history');
 
     expect(
-      result.getByRole('link', {
+      result.getByRole('button', {
         name: /detail.breadcrumb-root/i,
       })
     ).toBeInTheDocument();
@@ -329,19 +330,19 @@ describe('NotificationDetail Page', () => {
     });
   });
 
-  it('clicks on the back button - mono recipient', async () => {
+  it('clicks on the root button - mono recipient', async () => {
     // Seed history to verify that the back action uses the previous location.
     mock.onGet(`/bff/v1/notifications/sent/${notificationDTO.iun}`).reply(200, notificationDTO);
     mock.onGet(/\/bff\/v1\/downtime\/history.*/).reply(200, downtimesDTO);
     await act(async () => {
       result = render(
         <Routes>
-          <Route path={'/mock-path'} element={<div data-testid="mocked-page">hello</div>} />
+          <Route path={routes.DASHBOARD} element={<div data-testid="mocked-page">hello</div>} />
           <Route path={'/:id'} element={<NotificationDetail />} />
         </Routes>,
         {
           path: '*',
-          route: ['/mock-path', `/${notificationDTO.iun}`],
+          route: [routes.DASHBOARD, `/${notificationDTO.iun}`],
         }
       );
     });
@@ -351,7 +352,7 @@ describe('NotificationDetail Page', () => {
     expect(mockedPageBefore).not.toBeInTheDocument();
 
     // simulate press of "back" button
-    const backButton = result.getByRole('button', { name: /indietro/i });
+    const backButton = result.getByRole('button', { name: /detail.breadcrumb-root/i });
     expect(backButton).toBeInTheDocument();
     fireEvent.click(backButton);
 

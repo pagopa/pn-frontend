@@ -69,7 +69,6 @@ export { default as NotificationsRecipientDataSwitch } from './Notifications/Not
 export { NotificationActionButton } from './Notifications/NotificationsDataSwitchCells';
 export { default as StatusTooltip } from './Notifications/StatusTooltip';
 export { default as CustomPagination } from './Pagination/CustomPagination';
-export { default as PnBreadcrumb } from './PnBreadcrumb';
 export { default as PnDialog } from './PnDialog/PnDialog';
 export { default as PnDialogActions } from './PnDialog/PnDialogActions';
 export { default as PnDialogContent } from './PnDialog/PnDialogContent';

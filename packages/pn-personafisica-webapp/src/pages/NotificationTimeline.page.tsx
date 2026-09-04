@@ -16,14 +16,13 @@ import {
   NotificationDetailTimeline,
   NotificationDocumentType,
   NotificationEventsTimeline,
-  PnBreadcrumb,
   appStateActions,
   downloadDocument,
   useErrors,
   useIsCancelled,
 } from '@pagopa-pn/pn-commons';
 import { useDismissToastOnError } from '@pagopa-pn/pn-commons/src/hooks/useDismissToastOnError';
-import { MIAlert, MIPaper } from '@pagopa/mui-italia';
+import { MIAlert, MIBreadcrumbItem, MIBreadcrumbs, MIPaper } from '@pagopa/mui-italia';
 
 import NotificationDetailOnboardingPrompt from '../components/Contacts/Onboarding/NotificationDetailOnboardingPrompt';
 import LoadingPageWrapper from '../components/LoadingPageWrapper/LoadingPageWrapper';
@@ -181,19 +180,46 @@ const NotificationTimeline: React.FC = () => {
     if (!id) {
       return null;
     }
-    const backRoute = mandateId
+    const notificationListRoute = mandateId
+      ? routes.GET_NOTIFICHE_DELEGATO_PATH(mandateId)
+      : routes.NOTIFICHE;
+
+    const notificationDetailRoute = mandateId
       ? routes.GET_DETTAGLIO_NOTIFICA_DELEGATO_PATH(id, mandateId)
       : routes.GET_DETTAGLIO_NOTIFICA_PATH(id);
 
+    const delegatorName = delegatorsFromStore.find(
+      (delegation) => delegation.mandateId === mandateId
+    )?.delegator?.displayName;
+
+    const breadcrumbLabel = delegatorName
+      ? t('menu.notifiche-delegato', { delegator: delegatorName })
+      : t('menu.notifiche-utente', { ns: 'common' });
+
     return (
-      <PnBreadcrumb
-        linkRoute={mandateId ? routes.GET_NOTIFICHE_DELEGATO_PATH(mandateId) : routes.NOTIFICHE}
-        linkLabel={t('menu.notifiche')}
-        currentLocationLabel={notificationSubject ?? ''}
-        goBackAction={() => navigate(backRoute)}
-      />
+      <MIBreadcrumbs
+        backButtonLabel={t('button.indietro', { ns: 'common' })}
+        backButtonAction={() => navigate(notificationDetailRoute)}
+      >
+        <MIBreadcrumbItem
+          label={
+            mandateId || delegatorsFromStore.length > 0 ? breadcrumbLabel : t('menu.notifiche')
+          }
+          onClick={() => navigate(notificationListRoute)}
+          data-testid="breadcrumb-root-button"
+        />
+        <MIBreadcrumbItem
+          label={notificationSubject || t('menu.fallback-notification')}
+          onClick={() => navigate(notificationDetailRoute)}
+          data-testid="breadcrumb-subject-button"
+        />
+        <MIBreadcrumbItem
+          label={t('detail.notification-timeline-section.title', { ns: 'notifiche' })}
+          current
+        />
+      </MIBreadcrumbs>
     );
-  }, [id, i18n.language, notificationSubject, mandateId]);
+  }, [id, i18n.language, notificationSubject, mandateId, delegatorsFromStore]);
 
   const cancelledAlert = isCancelledOrCancelling && (
     <MIAlert

@@ -40,7 +40,9 @@
     "integrazione-api": "Integracija API",
     "app-status": "Stanje platforme",
     "users": "Uporabniki",
-    "groups": "Skupine"
+    "groups": "Skupine",
+    "fallback-notification": "Podrobnosti obvestila",
+    "fallback-communication": "Podrobnosti sporočila"
   },
   "header": {
     "assistance": "Pomoč",
