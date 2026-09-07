@@ -30,7 +30,7 @@ type DigitalDomicileOption = {
 };
 
 const DigitalDomicileOption: React.FC<DigitalDomicileOption> = ({ title, content, action }) => (
-  <Stack flexBasis="100%" p={2} bgcolor="#FAFAFA" alignItems="start">
+  <Stack flexBasis="100%" p={2} bgcolor={(theme) => theme.palette.grey[50]} alignItems="start">
     <Typography variant="body1" fontSize="18px" fontWeight={600}>
       {title}
     </Typography>
