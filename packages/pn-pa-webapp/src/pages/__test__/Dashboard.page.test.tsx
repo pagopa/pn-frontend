@@ -250,9 +250,8 @@ describe('Dashboard Page', () => {
 
     expect(screen.getByTestId('link-retry')).toBeInTheDocument();
 
-    // filters should be visible on desktop
-    const filterForm = screen.getByTestId('filter-form');
-    expect(filterForm).toBeInTheDocument();
+    // filters should be hidden when there are no notifications
+    expect(screen.queryByTestId('filter-form')).not.toBeInTheDocument();
   });
 
   it('shows timeout empty state when getSentNotifications times out', async () => {
@@ -298,7 +297,7 @@ describe('Dashboard Page', () => {
     expect(pageSelector).toBeInTheDocument();
   });
 
-  it('errors on api - mobile keeps filter toggle visible', async () => {
+  it('errors on api - mobile hides filter toggle', async () => {
     globalThis.matchMedia = createMatchMedia(800);
     mock.onGet(notificationsPath).reply(errorMock.status, errorMock.data);
 
@@ -321,9 +320,8 @@ describe('Dashboard Page', () => {
 
     expect(screen.getByTestId('link-retry')).toBeInTheDocument();
 
-    // On mobile we expect the toggle for filters to be visible
-    const toggle = screen.getByTestId('dialogToggle');
-    expect(toggle).toBeInTheDocument();
+    // On mobile filters are hidden when there are no notifications
+    expect(screen.queryByTestId('dialogToggle')).not.toBeInTheDocument();
   });
 
   it('mobile: opens filters drawer and applies recipientId filter', async () => {
