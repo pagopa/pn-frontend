@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.26.0-RC.3](https://github.com/pagopa/pn-frontend/compare/v2.26.0-RC.2...v2.26.0-RC.3) (2026-09-09)
+
+### Bug Fixes
+
+* **PN-21381:** update content in reworked label ([#2039](https://github.com/pagopa/pn-frontend/issues/2039)) ([6ef37ad](https://github.com/pagopa/pn-frontend/commit/6ef37adb252fa73e21bc9099fb9702dcbb6c0af0))
+
+### Features
+
+* **PN-20767:** fix colors and add alerts ([#2032](https://github.com/pagopa/pn-frontend/issues/2032)) ([1d7f570](https://github.com/pagopa/pn-frontend/commit/1d7f570438ddcae07272a56a88dfc0f86a55e3ad))
+
+
 # [2.26.0-RC.1](https://github.com/pagopa/pn-frontend/compare/v2.26.0-RC.0...v2.26.0-RC.1) (2026-09-04)
 
 ### Bug Fixes

@@ -3,6 +3,19 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.26.0-RC.3](https://github.com/pagopa/pn-frontend/compare/v2.26.0-RC.2...v2.26.0-RC.3) (2026-09-09)
+
+### Bug Fixes
+
+* **PN-20948:** fix boldness in sender contacts ([#2035](https://github.com/pagopa/pn-frontend/issues/2035)) ([cc90bba](https://github.com/pagopa/pn-frontend/commit/cc90bba547167237c3dae7d5757665c8e256902c))
+* **PN-21381:** update content in reworked label ([#2039](https://github.com/pagopa/pn-frontend/issues/2039)) ([6ef37ad](https://github.com/pagopa/pn-frontend/commit/6ef37adb252fa73e21bc9099fb9702dcbb6c0af0))
+* **PN-21428:** fix padding in app io smart app banner ([#2036](https://github.com/pagopa/pn-frontend/issues/2036)) ([1425056](https://github.com/pagopa/pn-frontend/commit/1425056dfa1719eba787f0943a8a0c21d392430a))
+
+### Features
+
+* **PN-20767:** fix colors and add alerts ([#2032](https://github.com/pagopa/pn-frontend/issues/2032)) ([1d7f570](https://github.com/pagopa/pn-frontend/commit/1d7f570438ddcae07272a56a88dfc0f86a55e3ad))
+
+
 # [2.26.0-RC.1](https://github.com/pagopa/pn-frontend/compare/v2.26.0-RC.0...v2.26.0-RC.1) (2026-09-04)
 
 ### Bug Fixes
