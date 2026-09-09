@@ -119,12 +119,12 @@ const CustomPagination: React.FC<Props> = ({
           xs={4}
           display="flex"
           justifyContent="start"
-          alignItems="baseline"
+          alignItems="center"
           data-testid="itemsPerPageSelector"
           className="items-per-page-selector"
         >
           {!isMobile && (
-            <Typography sx={{ mr: 1.5 }}>
+            <Typography sx={{ mr: 1.5 }} aria-hidden="true" variant="caption">
               {getLocalizedOrDefaultLabel('common', 'paginator.rows-per-page')}
             </Typography>
           )}
