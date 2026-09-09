@@ -70,17 +70,6 @@ const EntryMode: React.FC<Omit<EntryModeProps, 'mode'>> = ({
 }) => {
   const isMobile = useIsMobile();
 
-  const submitButton = (
-    <MIButton
-      fullWidth={isMobile}
-      sx={isMobile ? { mt: 2 } : { height: '43px', flexShrink: 0 }}
-      variant={buttonVariant}
-      onClick={() => void onSubmit()}
-    >
-      {buttonLabel}
-    </MIButton>
-  );
-
   return (
     <Stack sx={slotProps?.container?.sx}>
       {title && (
@@ -111,12 +100,18 @@ const EntryMode: React.FC<Omit<EntryModeProps, 'mode'>> = ({
           error={touched && Boolean(error)}
           helperText={touched && error}
         />
-        {!isMobile && submitButton}
       </Stack>
 
       {footer ?? null}
 
-      {isMobile && submitButton}
+      <MIButton
+        fullWidth={isMobile}
+        sx={{ mt: 2 }}
+        variant={buttonVariant}
+        onClick={() => void onSubmit()}
+      >
+        {buttonLabel}
+      </MIButton>
 
       {collapse && (
         <MIButton
