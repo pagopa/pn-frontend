@@ -46,7 +46,7 @@
     "next": "Go to next page",
     "previous": "Go to previous page",
     "selected": "selected item",
-    "rows-per-page": "Lines per page"
+    "rows-per-page": "Items per page"
   },
   "toast": {
     "aria-label": "Toast close icon"

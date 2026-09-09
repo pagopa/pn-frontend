@@ -1,7 +1,15 @@
 import { ChangeEvent, useState } from 'react';
 
 import ArrowDropDownRoundedIcon from '@mui/icons-material/ArrowDropDownRounded';
-import { Grid, Menu, MenuItem, Pagination, PaginationItem, SxProps } from '@mui/material';
+import {
+  Grid,
+  Menu,
+  MenuItem,
+  Pagination,
+  PaginationItem,
+  SxProps,
+  Typography,
+} from '@mui/material';
 import { ButtonNaked } from '@pagopa/mui-italia';
 
 import { A11yPaginationLabelsTypes, PaginationData } from '../../models/Pagination';
@@ -109,10 +117,13 @@ const CustomPagination: React.FC<Props> = ({
           xs={4}
           display="flex"
           justifyContent="start"
-          alignItems={'center'}
+          alignItems="baseline"
           data-testid="itemsPerPageSelector"
           className="items-per-page-selector"
         >
+          <Typography sx={{ mr: 1.5 }}>
+            {getLocalizedOrDefaultLabel('common', 'paginator.rows-per-page')}
+          </Typography>
           <ButtonNaked
             sx={{ fontWeight: 400 }}
             aria-controls={open ? 'basic-menu' : undefined}

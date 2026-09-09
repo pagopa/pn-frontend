@@ -48,7 +48,7 @@
     "next": "Vai alla pagina successiva",
     "previous": "Vai alla pagina precedente",
     "selected": "elemento selezionato",
-    "rows-per-page": "Righe per pagina"
+    "rows-per-page": "Elementi per pagina"
   },
   "toast": {
     "aria-label": "Icona di chisura toast"

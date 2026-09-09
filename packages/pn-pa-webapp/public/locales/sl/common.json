@@ -46,7 +46,7 @@
     "next": "Pojdi na naslednjo stran",
     "previous": "Pojdi na prejšnjo stran",
     "selected": "izbrani element",
-    "rows-per-page": "Vrstice na stran"
+    "rows-per-page": "Elementi na stran"
   },
   "toast": {
     "aria-label": "Ikona za toast zapiranje"
