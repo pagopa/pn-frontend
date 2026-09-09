@@ -1,14 +1,21 @@
 import i18next from 'i18next';
 import LanguageDetector, { CustomDetector } from 'i18next-browser-languagedetector';
-import HttpApi from 'i18next-http-backend';
 import { initReactI18next } from 'react-i18next';
 
 import {
+  OverlaidNamespaces,
+  TranslationOverlayBackend,
   getLangCode,
   hashDetectorLookup,
   sanitizeString,
   setSessionLanguage,
 } from '@pagopa-pn/pn-commons';
+
+import type { PgConfiguration } from './services/configuration.service';
+
+const overlaidNamespaces: OverlaidNamespaces<PgConfiguration> = {
+  notifiche: 'IS_NEW_TIMELINE_COPY_ENABLED',
+};
 
 const languageDetector = new LanguageDetector();
 
@@ -22,8 +29,9 @@ languageDetector.addDetector(customHashDetector);
 void i18next
   .use(languageDetector)
   .use(initReactI18next)
-  .use(HttpApi)
+  .use(TranslationOverlayBackend)
   .init({
+    backend: { overlaidNamespaces },
     fallbackLng: 'it',
     debug: process.env.NODE_ENV === 'development',
     ns: ['common'],

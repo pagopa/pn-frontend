@@ -30,6 +30,7 @@ export interface PaConfiguration {
   SERCQ_SERVICE_STATEMENT_LINK: string;
   STATISTICS_MAINTENANCE_DATES?: string;
   IS_NEW_TIMELINE_ENABLED: boolean;
+  IS_NEW_TIMELINE_COPY_ENABLED: boolean;
 }
 
 function statisticsMaintenanceDatesValidator(value: string): ValidationResult<string> {
@@ -93,6 +94,7 @@ class PaConfigurationValidator extends Validator<PaConfiguration> {
       .isString()
       .customValidator(statisticsMaintenanceDatesValidator);
     this.ruleFor('IS_NEW_TIMELINE_ENABLED').isBoolean();
+    this.ruleFor('IS_NEW_TIMELINE_COPY_ENABLED').isBoolean();
   }
 }
 

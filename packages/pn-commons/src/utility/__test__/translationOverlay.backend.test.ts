@@ -1,21 +1,24 @@
 import type { Services } from 'i18next';
 import { Mock, vi } from 'vitest';
 
-import TranslationOverlayBackend, { mergeTranslations } from '../translationOverlay.backend';
+import { Configuration } from '../../services/configuration.service';
+import TranslationOverlayBackend, {
+  OverlaidNamespaces,
+  mergeTranslations,
+} from '../translationOverlay.backend';
 
 type FakeBackend = {
   loadPath: string;
   read: Mock;
 };
 
-const { instances, mockGetConfiguration } = vi.hoisted(() => ({
+const { instances } = vi.hoisted(() => ({
   instances: [] as Array<FakeBackend>,
-  mockGetConfiguration: vi.fn(),
 }));
 
 vi.mock('i18next-http-backend', () => {
   class FakeHttpBackend {
-    // il costruttore vero applica già i default, fra cui questo loadPath
+    // the real constructor already applies the defaults, this loadPath among them
     loadPath = '/locales/{{lng}}/{{ns}}.json';
     read = vi.fn();
 
@@ -30,52 +33,63 @@ vi.mock('i18next-http-backend', () => {
   return { default: FakeHttpBackend };
 });
 
-vi.mock('../../services/configuration.service', async (importOriginal) => ({
-  ...(await importOriginal<typeof import('../../services/configuration.service')>()),
-  getConfiguration: mockGetConfiguration,
-}));
-
 const BASE_LOAD_PATH = '/locales/{{lng}}/{{ns}}.json';
 const OVERLAY_LOAD_PATH = '/locales/{{lng}}/{{ns}}-v2.json';
+
+type TestConfiguration = {
+  API_BASE_URL: string;
+  IS_NEW_TIMELINE_COPY_ENABLED: boolean;
+};
+
+const overlaidNamespaces: OverlaidNamespaces<TestConfiguration> = {
+  notifiche: 'IS_NEW_TIMELINE_COPY_ENABLED',
+};
 
 const baseTranslations = {
   detail: {
     timeline: {
-      'schedule-digital-workflow': 'testo corrente',
+      'schedule-digital-workflow': 'current text',
       legalfact: {
-        'sender-ack': 'presa in carico corrente',
-        'recipient-access': 'accesso corrente',
+        'sender-ack': 'current sender ack',
+        'recipient-access': 'current recipient access',
       },
     },
   },
 };
 
-const createBackend = () => {
+const setFlag = (value: boolean) =>
+  Configuration.setForTest<TestConfiguration>({
+    API_BASE_URL: 'https://fake.api',
+    IS_NEW_TIMELINE_COPY_ENABLED: value,
+  });
+
+const createBackend = (options = { overlaidNamespaces }) => {
   const backend = new TranslationOverlayBackend();
-  backend.init({} as Services);
+  backend.init({} as Services, options);
   return { backend, base: instances[0], overlay: instances[1] };
 };
 
 describe('TranslationOverlayBackend', () => {
   beforeEach(() => {
     instances.length = 0;
-    mockGetConfiguration.mockReset();
+    Configuration.clear();
   });
 
   afterEach(() => {
     vi.restoreAllMocks();
+    Configuration.clear();
   });
 
-  // il base deve restare sul default di i18next-http-backend: a flag spento nulla cambia
-  it('inizializza i due backend sui percorsi attesi', () => {
+  // the base one must stay on the i18next-http-backend default: with the flag off nothing changes
+  it('initializes the two inner backends on the expected paths', () => {
     const { base, overlay } = createBackend();
 
     expect(base.loadPath).toBe(BASE_LOAD_PATH);
     expect(overlay.loadPath).toBe(OVERLAY_LOAD_PATH);
   });
 
-  it('a feature flag spento fa una sola richiesta e restituisce le traduzioni correnti', () => {
-    mockGetConfiguration.mockReturnValue({ IS_NEW_TIMELINE_COPY_ENABLED: false });
+  it('makes a single request and returns the current translations when the flag is off', () => {
+    setFlag(false);
     const { backend, base, overlay } = createBackend();
     base.read.mockImplementation((_lng, _ns, cb) => cb(null, baseTranslations));
     const callback = vi.fn();
@@ -86,28 +100,34 @@ describe('TranslationOverlayBackend', () => {
     expect(callback).toHaveBeenCalledWith(null, baseTranslations);
   });
 
-  // all'avvio i18next carica `common` mentre loadPfConfiguration non è ancora arrivata in fondo:
-  // il namespace va scartato prima di toccare la configurazione, altrimenti il boot si rompe
-  it('non interroga la configurazione per i namespace fuori overlay', () => {
-    mockGetConfiguration.mockImplementation(() => {
-      throw new Error('loadConfiguration must be called before any call to getConfiguration');
-    });
+  // on startup i18next loads `common` while loadConfiguration has not finished yet: the namespace
+  // must be discarded before touching the configuration, or the boot breaks
+  it('does not read the configuration for namespaces outside the map', () => {
+    // no setForTest on purpose: reading the configuration here would throw
     const { backend, base, overlay } = createBackend();
     base.read.mockImplementation((_lng, _ns, cb) => cb(null, { button: { exit: 'Esci' } }));
     const callback = vi.fn();
 
-    backend.read('it', 'common', callback);
+    expect(() => backend.read('it', 'common', callback)).not.toThrow();
 
-    expect(mockGetConfiguration).not.toHaveBeenCalled();
     expect(overlay.read).not.toHaveBeenCalled();
     expect(callback).toHaveBeenCalledWith(null, { button: { exit: 'Esci' } });
   });
 
-  it('degrada alle traduzioni correnti se la configurazione non è ancora disponibile', () => {
+  it('treats missing options as no overlaid namespace at all', () => {
+    setFlag(true);
+    const { backend, base, overlay } = createBackend({} as { overlaidNamespaces: never });
+    base.read.mockImplementation((_lng, _ns, cb) => cb(null, baseTranslations));
+    const callback = vi.fn();
+
+    expect(() => backend.read('it', 'notifiche', callback)).not.toThrow();
+
+    expect(overlay.read).not.toHaveBeenCalled();
+    expect(callback).toHaveBeenCalledWith(null, baseTranslations);
+  });
+
+  it('falls back to the current translations when the configuration is not available yet', () => {
     const consoleWarn = vi.spyOn(console, 'warn').mockImplementation(() => {});
-    mockGetConfiguration.mockImplementation(() => {
-      throw new Error('loadConfiguration must be called before any call to getConfiguration');
-    });
     const { backend, base, overlay } = createBackend();
     base.read.mockImplementation((_lng, _ns, cb) => cb(null, baseTranslations));
     const callback = vi.fn();
@@ -119,18 +139,18 @@ describe('TranslationOverlayBackend', () => {
     expect(consoleWarn).toHaveBeenCalled();
   });
 
-  it('a feature flag acceso lancia le due richieste insieme e fonde l’overlay sulle traduzioni correnti', async () => {
-    mockGetConfiguration.mockReturnValue({ IS_NEW_TIMELINE_COPY_ENABLED: true });
+  it('fires both requests together and merges the overlay onto the current translations', async () => {
+    setFlag(true);
     const { backend, base, overlay } = createBackend();
     base.read.mockImplementation((_lng, _ns, cb) => cb(null, baseTranslations));
     overlay.read.mockImplementation((_lng, _ns, cb) =>
-      cb(null, { detail: { timeline: { legalfact: { 'sender-ack': 'presa in carico rivista' } } } })
+      cb(null, { detail: { timeline: { legalfact: { 'sender-ack': 'revised sender ack' } } } })
     );
     const callback = vi.fn();
 
     backend.read('it', 'notifiche', callback);
 
-    // entrambe le richieste partono prima che arrivi una risposta
+    // both requests start before any answer comes back
     expect(base.read).toHaveBeenCalledTimes(1);
     expect(overlay.read).toHaveBeenCalledTimes(1);
 
@@ -138,18 +158,18 @@ describe('TranslationOverlayBackend', () => {
     expect(callback).toHaveBeenCalledWith(null, {
       detail: {
         timeline: {
-          'schedule-digital-workflow': 'testo corrente',
+          'schedule-digital-workflow': 'current text',
           legalfact: {
-            'sender-ack': 'presa in carico rivista',
-            'recipient-access': 'accesso corrente',
+            'sender-ack': 'revised sender ack',
+            'recipient-access': 'current recipient access',
           },
         },
       },
     });
   });
 
-  it('usa le traduzioni correnti se l’overlay non esiste o non è leggibile', async () => {
-    mockGetConfiguration.mockReturnValue({ IS_NEW_TIMELINE_COPY_ENABLED: true });
+  it('uses the current translations when the overlay is missing or unreadable', async () => {
+    setFlag(true);
     const { backend, base, overlay } = createBackend();
     base.read.mockImplementation((_lng, _ns, cb) => cb(null, baseTranslations));
     overlay.read.mockImplementation((_lng, _ns, cb) => cb(new Error('404'), false));
@@ -161,8 +181,8 @@ describe('TranslationOverlayBackend', () => {
     expect(callback).toHaveBeenCalledWith(null, baseTranslations);
   });
 
-  it('propaga l’errore del backend base', async () => {
-    mockGetConfiguration.mockReturnValue({ IS_NEW_TIMELINE_COPY_ENABLED: true });
+  it('propagates the error of the base backend', async () => {
+    setFlag(true);
     const { backend, base, overlay } = createBackend();
     const baseError = new Error('500');
     base.read.mockImplementation((_lng, _ns, cb) => cb(baseError, false));
@@ -177,38 +197,35 @@ describe('TranslationOverlayBackend', () => {
 });
 
 describe('mergeTranslations', () => {
-  it('sovrascrive solo le foglie dichiarate dall’overlay, a qualsiasi profondità', () => {
+  it('overrides only the leaves declared by the overlay, at any depth', () => {
     const result = mergeTranslations(
-      { a: { b: { c: 'vecchio c', d: 'vecchio d' }, e: 'vecchio e' } },
-      { a: { b: { c: 'nuovo c' } } }
+      { a: { b: { c: 'old c', d: 'old d' }, e: 'old e' } },
+      { a: { b: { c: 'new c' } } }
     );
 
-    expect(result).toStrictEqual({ a: { b: { c: 'nuovo c', d: 'vecchio d' }, e: 'vecchio e' } });
+    expect(result).toStrictEqual({ a: { b: { c: 'new c', d: 'old d' }, e: 'old e' } });
   });
 
-  it('aggiunge le chiavi presenti solo nell’overlay', () => {
-    const result = mergeTranslations({ a: 'vecchio a' }, { b: 'nuovo b' });
+  it('adds the keys that only the overlay declares', () => {
+    const result = mergeTranslations({ a: 'old a' }, { b: 'new b' });
 
-    expect(result).toStrictEqual({ a: 'vecchio a', b: 'nuovo b' });
+    expect(result).toStrictEqual({ a: 'old a', b: 'new b' });
   });
 
-  // il default di lodash fonderebbe per indice, lasciando in coda le voci della lista vecchia
-  it('sostituisce le liste per intero invece di fonderle per indice', () => {
-    const result = mergeTranslations(
-      { list: ['vecchio 1', 'vecchio 2', 'vecchio 3'] },
-      { list: ['nuovo 1'] }
-    );
+  // lodash' default would merge by index, leaving the trailing entries of the old list behind
+  it('replaces lists as a whole instead of merging them by index', () => {
+    const result = mergeTranslations({ list: ['old 1', 'old 2', 'old 3'] }, { list: ['new 1'] });
 
-    expect(result).toStrictEqual({ list: ['nuovo 1'] });
+    expect(result).toStrictEqual({ list: ['new 1'] });
   });
 
-  it('non modifica gli oggetti ricevuti', () => {
-    const base = { a: { b: 'vecchio b' } };
-    const overlay = { a: { b: 'nuovo b' } };
+  it('does not mutate the objects it receives', () => {
+    const base = { a: { b: 'old b' } };
+    const overlay = { a: { b: 'new b' } };
 
     mergeTranslations(base, overlay);
 
-    expect(base).toStrictEqual({ a: { b: 'vecchio b' } });
-    expect(overlay).toStrictEqual({ a: { b: 'nuovo b' } });
+    expect(base).toStrictEqual({ a: { b: 'old b' } });
+    expect(overlay).toStrictEqual({ a: { b: 'new b' } });
   });
 });

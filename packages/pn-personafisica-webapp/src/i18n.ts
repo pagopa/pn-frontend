@@ -3,13 +3,19 @@ import LanguageDetector, { CustomDetector } from 'i18next-browser-languagedetect
 import { initReactI18next } from 'react-i18next';
 
 import {
+  OverlaidNamespaces,
+  TranslationOverlayBackend,
   getLangCode,
   hashDetectorLookup,
   sanitizeString,
   setSessionLanguage,
 } from '@pagopa-pn/pn-commons';
 
-import TranslationOverlayBackend from './utility/translationOverlay.backend';
+import type { PfConfiguration } from './services/configuration.service';
+
+const overlaidNamespaces: OverlaidNamespaces<PfConfiguration> = {
+  notifiche: 'IS_NEW_TIMELINE_COPY_ENABLED',
+};
 
 const languageDetector = new LanguageDetector();
 
@@ -25,6 +31,7 @@ void i18next
   .use(initReactI18next)
   .use(TranslationOverlayBackend)
   .init({
+    backend: { overlaidNamespaces },
     fallbackLng: 'it',
     debug: process.env.NODE_ENV === 'development',
     ns: ['common'],
