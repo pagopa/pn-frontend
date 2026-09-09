@@ -63,6 +63,7 @@ beforeAll(() => {
     FACSIMILE_SL: 'https://fake.facsimile-sl.pagopa.it',
     SELFCARE_CDN_URL: 'https://fake.sender-logo.pagopa.it',
     IS_NEW_TIMELINE_ENABLED: true,
+    IS_NEW_TIMELINE_COPY_ENABLED: false,
   });
   initStore(false);
   initAxiosClients();

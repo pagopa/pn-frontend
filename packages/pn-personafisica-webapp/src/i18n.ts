@@ -1,6 +1,5 @@
 import i18next from 'i18next';
 import LanguageDetector, { CustomDetector } from 'i18next-browser-languagedetector';
-import HttpApi from 'i18next-http-backend';
 import { initReactI18next } from 'react-i18next';
 
 import {
@@ -9,6 +8,8 @@ import {
   sanitizeString,
   setSessionLanguage,
 } from '@pagopa-pn/pn-commons';
+
+import TranslationOverlayBackend from './utility/translationOverlay.backend';
 
 const languageDetector = new LanguageDetector();
 
@@ -22,7 +23,7 @@ languageDetector.addDetector(customHashDetector);
 void i18next
   .use(languageDetector)
   .use(initReactI18next)
-  .use(HttpApi)
+  .use(TranslationOverlayBackend)
   .init({
     fallbackLng: 'it',
     debug: process.env.NODE_ENV === 'development',
