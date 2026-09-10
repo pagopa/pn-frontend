@@ -46,7 +46,7 @@
     "next": "Passer à la page suivante",
     "previous": "Aller à la page précédente",
     "selected": "élément sélectionné",
-    "rows-per-page": "Lignes par page"
+    "rows-per-page": "Éléments par page"
   },
   "toast": {
     "aria-label": "Icône de fermeture de toast"

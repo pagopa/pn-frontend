@@ -12,6 +12,13 @@ let paginationData: PaginationData = {
 
 const handlePageChange = vi.fn();
 
+const useIsMobileMock = vi.fn().mockReturnValue(false);
+
+vi.mock('../../../hooks', async () => ({
+  ...(await vi.importActual<any>('../../../hooks')),
+  useIsMobile: () => useIsMobileMock(),
+}));
+
 describe('CustomPagination Component', () => {
   afterEach(() => {
     handlePageChange.mockClear();
@@ -20,15 +27,33 @@ describe('CustomPagination Component', () => {
       size: 50,
       totalElements: 500,
     };
+    useIsMobileMock.mockReturnValue(false);
   });
 
-  it('renders custom pagination', () => {
+  it('renders custom pagination - desktop', () => {
     // render component
     const { getByTestId } = render(
       <CustomPagination paginationData={paginationData} onPageRequest={handlePageChange} />
     );
     const itemsPerPageSelector = getByTestId('itemsPerPageSelector');
     expect(itemsPerPageSelector).toBeInTheDocument();
+    expect(itemsPerPageSelector).toHaveTextContent(/rows-per-page/i);
+    const pageSelector = getByTestId('pageSelector');
+    expect(pageSelector).toBeInTheDocument();
+  });
+
+  it('renders custom pagination - mobile', () => {
+    useIsMobileMock.mockReturnValue(true);
+    // render component
+    const { getByTestId, container } = render(
+      <CustomPagination paginationData={paginationData} onPageRequest={handlePageChange} />
+    );
+    const itemsPerPageSelector = getByTestId('itemsPerPageSelector');
+    expect(itemsPerPageSelector).toBeInTheDocument();
+    // in mobile the label is rendered only as aria-label, the button shows the size value
+    const button = getById(container, 'rows-per-page');
+    expect(button).toHaveAttribute('aria-label', 'paginator.rows-per-page');
+    expect(button).toHaveTextContent('50');
     const pageSelector = getByTestId('pageSelector');
     expect(pageSelector).toBeInTheDocument();
   });

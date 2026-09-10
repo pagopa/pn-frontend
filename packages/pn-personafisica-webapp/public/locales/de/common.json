@@ -66,7 +66,7 @@
     "next": "Zur nächsten Seite",
     "previous": "Zur vorherigen Seite",
     "selected": "ausgewähltes Element",
-    "rows-per-page": "Zeilen pro Seite"
+    "rows-per-page": "Elemente pro Seite"
   },
   "toast": {
     "aria-label": "Toast-Schließen-Symbol"

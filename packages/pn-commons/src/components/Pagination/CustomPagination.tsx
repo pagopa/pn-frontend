@@ -1,9 +1,18 @@
 import { ChangeEvent, useState } from 'react';
 
 import ArrowDropDownRoundedIcon from '@mui/icons-material/ArrowDropDownRounded';
-import { Grid, Menu, MenuItem, Pagination, PaginationItem, SxProps } from '@mui/material';
+import {
+  Grid,
+  Menu,
+  MenuItem,
+  Pagination,
+  PaginationItem,
+  SxProps,
+  Typography,
+} from '@mui/material';
 import { ButtonNaked } from '@pagopa/mui-italia';
 
+import { useIsMobile } from '../../hooks';
 import { A11yPaginationLabelsTypes, PaginationData } from '../../models/Pagination';
 import { getLocalizedOrDefaultLabel } from '../../utility/localization.utility';
 
@@ -81,6 +90,7 @@ const CustomPagination: React.FC<Props> = ({
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
 
+  const isMobile = useIsMobile();
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
   };
@@ -109,10 +119,15 @@ const CustomPagination: React.FC<Props> = ({
           xs={4}
           display="flex"
           justifyContent="start"
-          alignItems={'center'}
+          alignItems="center"
           data-testid="itemsPerPageSelector"
           className="items-per-page-selector"
         >
+          {!isMobile && (
+            <Typography sx={{ mr: 1.5 }} aria-hidden="true" variant="caption">
+              {getLocalizedOrDefaultLabel('common', 'paginator.rows-per-page')}
+            </Typography>
+          )}
           <ButtonNaked
             sx={{ fontWeight: 400 }}
             aria-controls={open ? 'basic-menu' : undefined}
