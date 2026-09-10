@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.26.0-RC.4](https://github.com/pagopa/pn-frontend/compare/v2.26.0-RC.3...v2.26.0-RC.4) (2026-09-10)
+
+### Bug Fixes
+
+* **PN-21465:** show event description when timeline status differs from DELIVERING ([#2045](https://github.com/pagopa/pn-frontend/issues/2045)) ([d6af887](https://github.com/pagopa/pn-frontend/commit/d6af887b186aab3b8a6f174eb48e6b240d3815e8))
+
+
 # [2.26.0-RC.3](https://github.com/pagopa/pn-frontend/compare/v2.26.0-RC.2...v2.26.0-RC.3) (2026-09-09)
 
 ### Bug Fixes
