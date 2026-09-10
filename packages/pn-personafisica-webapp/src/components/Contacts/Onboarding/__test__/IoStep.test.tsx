@@ -13,6 +13,16 @@ vi.mock('../../../../utility/appio.utility', () => ({
   openAppIoDownloadPage: vi.fn(),
 }));
 
+const mockIsMobile = vi.fn(() => false);
+
+vi.mock('@pagopa-pn/pn-commons', async () => {
+  const original = await vi.importActual<any>('@pagopa-pn/pn-commons');
+  return {
+    ...original,
+    useIsMobile: () => mockIsMobile(),
+  };
+});
+
 describe('IoStep', () => {
   const labelPrefix = 'onboarding.digital-domicile.io';
   let mock: MockAdapter;
@@ -24,6 +34,7 @@ describe('IoStep', () => {
   beforeEach(() => {
     mock.reset();
     vi.clearAllMocks();
+    mockIsMobile.mockReturnValue(false);
   });
 
   afterAll(() => {
@@ -53,6 +64,7 @@ describe('IoStep', () => {
   });
 
   it('opens the App IO download page when the primary CTA is clicked in unavailable state', async () => {
+    mockIsMobile.mockReturnValue(true);
     const props = createProps();
 
     const { APP_IO_SITE: appIoSite, APP_IO_DOWNLOAD: appIoDownload } = getConfiguration();
@@ -146,5 +158,77 @@ describe('IoStep', () => {
     expect(
       queryByRole('button', { name: `${labelPrefix}.enabled.primary-cta` })
     ).not.toBeInTheDocument();
+  });
+
+  it('opens the App IO download page when the primary CTA is clicked on mobile', async () => {
+    mockIsMobile.mockReturnValue(true);
+    const props = createProps();
+
+    const { APP_IO_SITE: appIoSite, APP_IO_DOWNLOAD: appIoDownload } = getConfiguration();
+
+    const { getByRole, queryByRole } = render(<IoStep {...props} />);
+
+    await act(async () => {
+      fireEvent.click(getByRole('button', { name: `${labelPrefix}.not-installed.primary-cta` }));
+    });
+
+    expect(openAppIoDownloadPage).toHaveBeenCalledTimes(1);
+    expect(openAppIoDownloadPage).toHaveBeenCalledWith({
+      appIoSite,
+      appIoDownload,
+    });
+    expect(queryByRole('dialog')).not.toBeInTheDocument();
+    expect(props.onChange).not.toHaveBeenCalled();
+    expect(props.onContinue).not.toHaveBeenCalled();
+  });
+
+  it('opens the App IO download modal when the primary CTA is clicked on desktop', async () => {
+    const props = createProps();
+    const { getByRole, getByTestId } = render(<IoStep {...props} />);
+
+    await act(async () => {
+      fireEvent.click(getByRole('button', { name: `${labelPrefix}.not-installed.primary-cta` }));
+    });
+
+    const dialog = getByTestId('downloadIODialog');
+    expect(dialog).toBeInTheDocument();
+    expect(getByRole('dialog')).toBeInTheDocument();
+    expect(openAppIoDownloadPage).not.toHaveBeenCalled();
+  });
+
+  it('closes the download modal when the confirm button is clicked', async () => {
+    const props = createProps();
+    const { getByRole, getByTestId, queryByRole } = render(<IoStep {...props} />);
+
+    await act(async () => {
+      fireEvent.click(getByRole('button', { name: `${labelPrefix}.not-installed.primary-cta` }));
+    });
+    expect(getByRole('dialog')).toBeInTheDocument();
+
+    await act(async () => {
+      fireEvent.click(getByTestId('confirmButton'));
+    });
+
+    await waitFor(() => {
+      expect(queryByRole('dialog')).not.toBeInTheDocument();
+    });
+  });
+
+  it('does not call onChange when the refresh call fails', async () => {
+    const props = createProps();
+
+    mock.onGet('/bff/v1/addresses').reply(500);
+
+    const { getByRole } = render(<IoStep {...props} />);
+
+    await act(async () => {
+      fireEvent.click(getByRole('button', { name: `${labelPrefix}.not-installed.refresh-cta` }));
+    });
+
+    await waitFor(() => {
+      expect(mock.history.get).toHaveLength(1);
+    });
+    expect(props.onChange).not.toHaveBeenCalled();
+    expect(props.onContinue).not.toHaveBeenCalled();
   });
 });
