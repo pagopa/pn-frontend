@@ -79,7 +79,9 @@ const Delegators = () => {
   return (
     <Box mb={8} data-testid="delegators-wrapper">
       <Stack mb={2} direction={'row'} justifyContent={'space-between'} alignItems={'center'}>
-        <Typography variant="h5">{t('deleghe.delegatorsTitle')}</Typography>
+        <Typography component="h2" variant="h5">
+          {t('deleghe.delegatorsTitle')}
+        </Typography>
       </Stack>
       <ApiErrorWrapper
         apiId={DELEGATION_ACTIONS.GET_MANDATES_BY_DELEGATE}
