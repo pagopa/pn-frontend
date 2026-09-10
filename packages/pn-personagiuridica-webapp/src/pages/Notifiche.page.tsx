@@ -27,7 +27,12 @@ import { PNRole } from '../models/User';
 import { ContactSource } from '../models/contacts';
 import { contactsSelectors } from '../redux/contact/reducers';
 import { DASHBOARD_ACTIONS, getReceivedNotifications } from '../redux/dashboard/actions';
-import { setNotificationFilters, setPagination, setSorting } from '../redux/dashboard/reducers';
+import {
+  setIsDelegatedPage,
+  setNotificationFilters,
+  setPagination,
+  setSorting,
+} from '../redux/dashboard/reducers';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { setHasNewNotifications } from '../redux/sidemenu/reducers';
 import { RootState } from '../redux/store';
@@ -44,9 +49,13 @@ const Notifiche = ({ isDelegatedPage = false }: Props) => {
   const [pageReady, setPageReady] = useState(false);
   const domicileBannerTypeRef = useRef('');
 
-  const { notifications, filters, sort, pagination } = useAppSelector(
-    (state: RootState) => state.dashboardState
-  );
+  const {
+    notifications,
+    filters,
+    sort,
+    pagination,
+    isDelegatedPage: storedIsDelegatedPage,
+  } = useAppSelector((state: RootState) => state.dashboardState);
   const { defaultEMAILAddress, defaultSMSAddress, addresses } = useAppSelector(
     contactsSelectors.selectAddresses
   );
@@ -196,13 +205,17 @@ const Notifiche = ({ isDelegatedPage = false }: Props) => {
   }, []);
 
   useEffect(() => {
+    if (storedIsDelegatedPage !== isDelegatedPage) {
+      dispatch(setIsDelegatedPage(isDelegatedPage));
+      return;
+    }
     if (isDelegatedPage && filters.communicationType) {
       dispatch(setNotificationFilters({ ...filters, communicationType: '' }));
       return;
     }
 
     fetchNotifications();
-  }, [fetchNotifications, isDelegatedPage, filters, dispatch]);
+  }, [fetchNotifications, isDelegatedPage, filters, dispatch, storedIsDelegatedPage]);
 
   // Announce every time loading goes from true -> false
   useEffect(() => {
