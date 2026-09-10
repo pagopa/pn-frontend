@@ -160,6 +160,10 @@ const NewNotification = () => {
     }
   }, [activeStep]);
 
+  useEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
+  }, [activeStep]);
+
   if (activeStep === steps.length) {
     return <SyncFeedback />;
   }
