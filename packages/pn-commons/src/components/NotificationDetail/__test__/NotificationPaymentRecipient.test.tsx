@@ -20,6 +20,14 @@ import {
 import { setPaymentCache } from '../../../utility/paymentCaching.utility';
 import NotificationPaymentRecipient from '../NotificationPaymentRecipient';
 
+vi.mock('react-i18next', async (importOriginal) => {
+  const original = await importOriginal<typeof import('react-i18next')>();
+  const TransComponent = ({ i18nKey }: { i18nKey?: string }) => (
+    <span data-testid="trans-component">{i18nKey}</span>
+  );
+  return { ...original, Trans: TransComponent };
+});
+
 describe('NotificationPaymentRecipient Component', () => {
   const paymentsData: PaymentsData = {
     pagoPaF24: populatePaymentsPagoPaF24(
@@ -533,8 +541,9 @@ describe('NotificationPaymentRecipient Component', () => {
     fireEvent.click(payButton);
 
     const errorMessage = getByTestId('payment-error');
-    expect(errorMessage).toBeInTheDocument();
-    expect(errorMessage).toHaveTextContent('detail.payment.error-payment-failed-single');
+    expect(within(errorMessage).getByTestId('trans-component')).toHaveTextContent(
+      'detail.payment.error-payment-failed-single'
+    );
   });
 
   it('should show multiple payments failure error when all payments fail', () => {
@@ -566,9 +575,9 @@ describe('NotificationPaymentRecipient Component', () => {
     const payButton = getByTestId('pay-button');
     fireEvent.click(payButton);
 
-    const errorMessage = getByTestId('payment-error');
-    expect(errorMessage).toBeInTheDocument();
-    expect(errorMessage).toHaveTextContent('detail.payment.error-payment-failed-multiple');
+    expect(within(getByTestId('payment-error')).getByTestId('trans-component')).toHaveTextContent(
+      'detail.payment.error-payment-failed-single'
+    );
   });
 
   it('should show default error when no payment is selected but payments are valid', () => {

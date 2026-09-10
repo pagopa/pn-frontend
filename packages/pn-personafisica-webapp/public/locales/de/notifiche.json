@@ -145,8 +145,8 @@
         "duplicated": "Diese Benachrichtigung wurde bereits bezahlt. Der Status wird in Kürze aktualisiert."
       },
       "error-payment": "Wählen Sie eine Zahlungsaufforderung aus",
-      "error-payment-failed-single": "Es ist ein Problem mit einer Zahlungsaufforderung aufgetreten. Drücken Sie auf Neu laden, um es erneut zu versuchen. Wenn der Fehler weiterhin besteht, kontaktieren Sie den Support.",
-      "error-payment-failed-multiple": "Es ist ein Problem mit mehreren Zahlungsaufforderungen aufgetreten. Drücken Sie auf Neu laden, um es erneut zu versuchen. Wenn der Fehler weiterhin besteht, kontaktieren Sie den Support.",
+      "error-payment-failed-single": "Bei einer Zahlungsaufforderung ist ein Problem aufgetreten. Drücke auf <0>Neu laden</0>, um es erneut zu versuchen. Wenn der Fehler weiterhin besteht, kontaktiere den Support.",
+      "error-payment-failed-multiple": "Bei mehreren Zahlungsaufforderungen ist ein Problem aufgetreten. Drücke auf <0>Neu laden</0>, um es erneut zu versuchen. Wenn der Fehler weiterhin besteht, kontaktiere den Support.",
       "tpp-expired-error-title": "Die Verbindung zur Bank ist abgelaufen.",
       "tpp-expired-error-description": "Um sie wiederherzustellen, greife über die Nachricht, die du in deiner Bank-App erhalten hast, erneut auf diese Benachrichtigung zu."
     },
