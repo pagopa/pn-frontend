@@ -1,4 +1,3 @@
-import { useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
@@ -20,7 +19,6 @@ import {
 
 import * as routes from '../../navigation/routes.const';
 import { Delegator } from '../../redux/delegation/types';
-import FilterNotifications from './FilterNotifications';
 import NotificationsEmptyState from './NotificationsEmptyState';
 
 type Props = {
@@ -31,6 +29,10 @@ type Props = {
   onChangeSorting?: (s: Sort<NotificationColumnData<RecipientNotification>>) => void;
   /** Delegator */
   currentDelegator?: Delegator;
+  /** True when at least one filter is active */
+  filtersApplied: boolean;
+  /** The function to be invoked if the user clicks on clean filters button */
+  onCleanFilters: () => void;
 };
 
 const DesktopNotifications = ({
@@ -38,10 +40,11 @@ const DesktopNotifications = ({
   sort,
   onChangeSorting,
   currentDelegator,
+  filtersApplied,
+  onCleanFilters,
 }: Props) => {
   const navigate = useNavigate();
   const { t } = useTranslation('notifiche');
-  const filterNotificationsRef = useRef({ filtersApplied: false, cleanFilters: () => void 0 });
 
   const columns: Array<Column<NotificationColumnData>> = [
     {
@@ -82,10 +85,6 @@ const DesktopNotifications = ({
     id: n.iun,
   }));
 
-  const filtersApplied: boolean = filterNotificationsRef.current?.filtersApplied ?? false;
-
-  const showFilters = notifications?.length > 0 || filtersApplied;
-
   const handleRowClick = (iun: string, communicationType: NotificationCommunicationType) => {
     if (currentDelegator) {
       return navigate(routes.GET_DETTAGLIO_NOTIFICA_DELEGATO_PATH(iun, currentDelegator.mandateId));
@@ -98,11 +97,6 @@ const DesktopNotifications = ({
 
   return (
     <>
-      <FilterNotifications
-        ref={filterNotificationsRef}
-        showFilters={showFilters}
-        currentDelegator={currentDelegator}
-      />
       {rows.length ? (
         <PnTable
           testId="notificationsTable"
@@ -157,7 +151,7 @@ const DesktopNotifications = ({
       ) : (
         <NotificationsEmptyState
           filtersApplied={filtersApplied}
-          filterNotificationsRef={filterNotificationsRef}
+          onCleanFilters={onCleanFilters}
           currentDelegator={currentDelegator}
         />
       )}

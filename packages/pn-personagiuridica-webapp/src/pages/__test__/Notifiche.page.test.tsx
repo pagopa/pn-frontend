@@ -84,6 +84,18 @@ describe('Notifiche Page ', () => {
     expect(groupSelector).not.toBeInTheDocument();
   });
 
+  it('does not render filters on desktop when there are no notifications and no filters applied', async () => {
+    mock.onGet(notificationsPath).reply(200, emptyNotificationsFromBe);
+
+    await act(async () => {
+      result = render(<Notifiche />);
+    });
+
+    expect(mock.history.get).toHaveLength(1);
+    expect(result.queryByTestId('filter-form')).not.toBeInTheDocument();
+    expect(result.queryByTestId('notificationsTable')).not.toBeInTheDocument();
+  });
+
   it('render page without notifications after filtering and remove filters', async () => {
     mock.onGet(notificationsPath).reply(200, notificationsDTO);
     mock
@@ -112,12 +124,13 @@ describe('Notifiche Page ', () => {
       expect(mock.history.get[1].url).toContain('/bff/v1/notifications/received');
     });
     expect(result.container).toHaveTextContent(/empty-state.filtered/);
+    expect(result.getByTestId('filter-form')).toBeInTheDocument();
     // remove filters
     const routeContactsBtn = result.getByTestId('link-remove-filters');
     fireEvent.click(routeContactsBtn);
     await waitFor(() => {
       expect(mock.history.get).toHaveLength(3);
-      expect(mock.history.get[1].url).toContain('/bff/v1/notifications/received');
+      expect(mock.history.get[2].url).toContain('/bff/v1/notifications/received');
     });
     expect(result.container).not.toHaveTextContent(/empty-state.filtered/);
   });
@@ -350,6 +363,42 @@ describe('Notifiche Page ', () => {
     expect(itemsPerPageSelector).toBeInTheDocument();
     const pageSelector = result.queryByTestId('pageSelector');
     expect(pageSelector).toBeInTheDocument();
+  });
+
+  it('does not render filters on mobile when there are no notifications and no filters applied', async () => {
+    globalThis.matchMedia = createMatchMedia(800);
+    mock.onGet(notificationsPath).reply(200, emptyNotificationsFromBe);
+
+    await act(async () => {
+      result = render(<Notifiche />);
+    });
+
+    expect(mock.history.get).toHaveLength(1);
+    expect(result.queryByTestId('dialogToggle')).not.toBeInTheDocument();
+    expect(result.queryAllByTestId('mobileNotificationsCards')).toHaveLength(0);
+  });
+
+  it('keeps draft filters when switching between desktop and mobile', async () => {
+    mock.onGet(notificationsPath).reply(200, notificationsDTO);
+
+    await act(async () => {
+      result = render(<Notifiche />);
+    });
+
+    const desktopForm = result.getByTestId('filter-form');
+    await testInput(desktopForm, 'iunMatch', 'ABCD-EFGH-ILMN-123456-A-1');
+
+    globalThis.matchMedia = createMatchMedia(800);
+
+    result.rerender(<Notifiche />);
+
+    const toggleButton = result.getByTestId('dialogToggleButton');
+    fireEvent.click(toggleButton);
+
+    const mobileForm = await screen.findByTestId<HTMLFormElement>('filter-form');
+    expect(mobileForm.querySelector('input[name="iunMatch"]')).toHaveValue(
+      'ABCD-EFGH-ILMN-123456-A-1'
+    );
   });
 
   describe('new notifications dot', () => {
