@@ -81,7 +81,7 @@ const NotificationTimelineGroupItem = ({
           >
             {headerLabel}
           </Typography>
-          {!group.hasReworkedEvents && (
+          {group.hasReworkedEvents && (
             <Tag
               variant="warning"
               value={getLocalizedOrDefaultLabel('notifications', 'status.reworked-status-group')}
