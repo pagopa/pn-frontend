@@ -101,7 +101,7 @@ describe('PnInfoCard Component', () => {
       </PnInfoCard>
     );
 
-    const heading = getByRole('heading', { level: 5 });
+    const heading = getByRole('heading', { level: 2 });
     const accordionButton = within(heading).getByRole('button', {
       name: new RegExp(title, 'i'),
     });
