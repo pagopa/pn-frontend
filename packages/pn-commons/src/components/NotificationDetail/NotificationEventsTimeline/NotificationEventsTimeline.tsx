@@ -3,6 +3,7 @@ import { Fragment, useMemo } from 'react';
 import { Box, Divider, Stack, Typography } from '@mui/material';
 import { MITimeline, MITimelineItem } from '@pagopa/mui-italia';
 
+import { NotificationStatus } from '../../../models';
 import { LegalFactId, NotificationDetailRecipient } from '../../../models/NotificationDetail';
 import { NotificationTimelineStatusHistory } from '../../../models/NotificationTimeline';
 import {
@@ -47,16 +48,7 @@ const NotificationEventsTimeline = ({
     <Box data-testid="NotificationEventsTimeline">
       <MITimeline>
         {timelineItems.map(
-          ({
-            status,
-            label,
-            description,
-            icon,
-            variant,
-            allEvents,
-            hasGroupedEvents,
-            recipientPerStep,
-          }) => (
+          ({ status, label, description, icon, variant, allEvents, recipientPerStep }) => (
             <MITimelineItem
               key={`timeline_step_${status.status}_${status.activeFrom}`}
               icon={icon}
@@ -75,8 +67,8 @@ const NotificationEventsTimeline = ({
                 </Stack>
               }
             >
-              <Stack gap={1.5} alignItems="flex-start" mt={hasGroupedEvents ? 1.5 : 0}>
-                {!hasGroupedEvents && (
+              <Stack gap={1.5} alignItems="flex-start">
+                {status.status !== NotificationStatus.DELIVERING && (
                   <Typography fontSize="14px" fontWeight={400}>
                     {description}{' '}
                     <NotificationTimelineEventDate date={status.activeFrom} language={language} />
@@ -90,7 +82,7 @@ const NotificationEventsTimeline = ({
                       variant="body2"
                       fontWeight={600}
                       data-testid="timeline-group-recipient"
-                      mt={3}
+                      mt={2}
                       sx={{ color: '#555C70' }}
                     >
                       {`${recipient.denomination} - ${recipient.taxId}`}
