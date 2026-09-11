@@ -22,7 +22,7 @@ const validatingDefaultPecNoSercq = digitalAddresses.map((addr) =>
 const validatingDefaultPecSercq = [...validatingDefaultPecNoSercq, sercqAddr];
 
 const validatingPartyPecNoSercq = digitalAddresses.map((addr) =>
-  addr.senderId === 'comune-milano' ? { ...addr, pecValid: false } : addr
+  addr.senderId === 'comune-test-2' ? { ...addr, pecValid: false } : addr
 );
 
 const validatingPartyPecSercq = [...validatingPartyPecNoSercq, sercqAddr];

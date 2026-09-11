@@ -193,7 +193,7 @@ describe('Header Component', () => {
     );
     const headers = container.querySelectorAll('.MuiContainer-root');
     const buttons = headers[0].querySelectorAll('button');
-    expect(buttons[2]).toHaveTextContent(/Mario Rossi/i);
+    expect(buttons[2]).toHaveTextContent(/Utente Test Uno/i);
     fireEvent.click(buttons[2]);
     const userDropdown = await waitFor(() => screen.queryByRole('presentation'));
     expect(userDropdown).toBeInTheDocument();

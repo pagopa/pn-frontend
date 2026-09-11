@@ -1,4 +1,4 @@
-import { Button } from '@mui/material';
+import { MIButton } from '@pagopa/mui-italia';
 
 import { createMatchMedia, render } from '../../../test-utils';
 import PnDialogActions from '../PnDialogActions';
@@ -8,8 +8,8 @@ describe('PnDialogActions Component', () => {
     window.matchMedia = createMatchMedia(2000);
     const { queryByTestId, queryAllByTestId } = render(
       <PnDialogActions>
-        <Button data-testid="button">Test confirm button</Button>
-        <Button data-testid="button">Test cancel button</Button>
+        <MIButton data-testid="button">Test confirm button</MIButton>
+        <MIButton data-testid="button">Test cancel button</MIButton>
       </PnDialogActions>
     );
 
@@ -29,8 +29,8 @@ describe('PnDialogActions Component', () => {
     window.matchMedia = createMatchMedia(500);
     const { queryByTestId, queryAllByTestId } = render(
       <PnDialogActions>
-        <Button data-testid="button">Test confirm button</Button>
-        <Button data-testid="button">Test cancel button</Button>
+        <MIButton data-testid="button">Test confirm button</MIButton>
+        <MIButton data-testid="button">Test cancel button</MIButton>
       </PnDialogActions>
     );
 

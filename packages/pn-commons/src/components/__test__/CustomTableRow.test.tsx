@@ -22,7 +22,7 @@ describe('CustomTableRow Component', () => {
     const { getByTestId } = render(
       <table>
         <tbody>
-          <CustomTableRow label="Name" value="Mario" />
+          <CustomTableRow label="Name" value="Utente" />
         </tbody>
       </table>
     );
@@ -31,6 +31,6 @@ describe('CustomTableRow Component', () => {
     expect(label).toBeInTheDocument();
     expect(label).toHaveTextContent('Name');
     expect(value).toBeInTheDocument();
-    expect(value).toHaveTextContent('Mario');
+    expect(value).toHaveTextContent('Utente');
   });
 });

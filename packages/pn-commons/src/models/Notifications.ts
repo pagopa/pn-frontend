@@ -2,6 +2,11 @@ import { NotificationStatus, UnifiedNotificationStatus } from './NotificationSta
 
 export type NotificationCommunicationType = 'LEGAL' | 'INFORMAL';
 
+export type NotificationCommunicationOutcomes = {
+  viewed: boolean;
+  delivered: boolean;
+};
+
 export interface Notification {
   iun: string;
   paProtocolNumber: string;
@@ -17,6 +22,7 @@ export interface Notification {
 export interface RecipientNotification extends Omit<Notification, 'notificationStatus'> {
   notificationStatus: UnifiedNotificationStatus;
   communicationType: NotificationCommunicationType;
+  communicationOutcomes?: NotificationCommunicationOutcomes;
   isNewNotification: boolean;
 }
 

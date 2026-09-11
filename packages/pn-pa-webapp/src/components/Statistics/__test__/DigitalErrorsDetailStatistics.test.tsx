@@ -4,8 +4,8 @@ import {
   digitalErrorsDataMock,
   digitalErrorsEmptyDataMock,
 } from '../../../__mocks__/Statistics.mock';
-import { render } from '../../../__test__/test-utils';
-import { DigitaErrorTypes, GraphColors } from '../../../models/Statistics';
+import { render, theme } from '../../../__test__/test-utils';
+import { DigitaErrorTypes, getGraphColors } from '../../../models/Statistics';
 import DigitalErrorsDetailStatistics from '../DigitalErrorsDetailStatistics';
 
 const mockInput = vi.fn();
@@ -56,6 +56,7 @@ describe('DeliveryModeStatistics component tests', () => {
   });
 
   it('renders the component when data is available', () => {
+    const graphColors = getGraphColors(theme);
     const { container, getByTestId } = render(
       <DigitalErrorsDetailStatistics {...digitalErrorsDataMock} />
     );
@@ -75,16 +76,16 @@ describe('DeliveryModeStatistics component tests', () => {
           title: 'digital_errors_detail.delivery_title',
           description: 'digital_errors_detail.delivery_description',
           value: digitalErrorsDataMock.data[DigitaErrorTypes.DELIVERY_ERROR].count,
-          color: GraphColors.lightRed,
+          color: graphColors.lightRed,
         },
         {
           title: 'digital_errors_detail.pec_title',
           description: 'digital_errors_detail.pec_description',
           value: digitalErrorsDataMock.data[DigitaErrorTypes.INVALID_PEC].count,
-          color: GraphColors.darkRed,
+          color: graphColors.darkRed,
         },
       ],
-      options: { color: [GraphColors.lightRed, GraphColors.darkRed] },
+      options: { color: [graphColors.lightRed, graphColors.darkRed] },
       startAngle: 180,
       endAngle: -180,
       radius: ['30%', '90%'],

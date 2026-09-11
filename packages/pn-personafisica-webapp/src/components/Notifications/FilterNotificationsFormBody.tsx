@@ -2,8 +2,17 @@ import { FormikErrors, FormikTouched, FormikValues } from 'formik';
 import { ChangeEvent, Fragment } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import ClearRoundedIcon from '@mui/icons-material/ClearRounded';
 import VerifiedRounded from '@mui/icons-material/VerifiedRounded';
-import { Box, Grid, ListItemIcon, ListItemText, MenuItem, TextField } from '@mui/material';
+import {
+  Box,
+  Grid,
+  IconButton,
+  ListItemIcon,
+  ListItemText,
+  MenuItem,
+  TextField,
+} from '@mui/material';
 import {
   CustomDatePicker,
   DATE_FORMAT,
@@ -30,6 +39,7 @@ type Props = {
   showCommunicationType: boolean;
 };
 
+// eslint-disable-next-line sonarjs/cognitive-complexity
 const FilterNotificationsFormBody = ({ formikInstance, showCommunicationType }: Props) => {
   const { t, i18n } = useTranslation(['notifiche']);
   const isMobile = useIsMobile();
@@ -73,6 +83,27 @@ const FilterNotificationsFormBody = ({ formikInstance, showCommunicationType }: 
     }
   };
 
+  const communicationTypeIcon = () =>
+    formikInstance.values.communicationType
+      ? () => (
+          <IconButton
+            size="small"
+            aria-label={t('button.clear-field', { ns: 'common' })}
+            onClick={(e) => {
+              e.stopPropagation();
+              void formikInstance.setFieldValue('communicationType', '', false);
+            }}
+            sx={{
+              pointerEvents: 'auto',
+              position: 'absolute',
+              right: 8,
+            }}
+          >
+            <ClearRoundedIcon fontSize="small" />
+          </IconButton>
+        )
+      : undefined;
+
   return (
     <Fragment>
       {showCommunicationType && (
@@ -97,6 +128,7 @@ const FilterNotificationsFormBody = ({ formikInstance, showCommunicationType }: 
                 ) : (
                   communicationTypeLabels[value as keyof typeof communicationTypeLabels] || ''
                 ),
+              IconComponent: communicationTypeIcon(),
             }}
             fullWidth
             sx={{ marginBottom: isMobile ? '20px' : '0' }}

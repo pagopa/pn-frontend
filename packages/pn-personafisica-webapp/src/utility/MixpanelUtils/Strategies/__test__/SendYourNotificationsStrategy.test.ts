@@ -2,6 +2,7 @@ import {
   EventAction,
   EventCategory,
   EventPropertyType,
+  InformalNotificationStatus,
   NotificationStatus,
 } from '@pagopa-pn/pn-commons';
 
@@ -25,6 +26,14 @@ describe('Mixpanel - Send Your Notification Strategy', () => {
       domicileBannerType: 'EMAIL',
     };
 
+    const legalNotifications = yourNotification.notifications.filter(
+      (notification) => notification.communicationType === 'LEGAL'
+    );
+
+    const comboNotifications = yourNotification.notifications.filter(
+      (notification) => notification.communicationType === 'INFORMAL'
+    );
+
     const yourNotificationEvent = strategy.performComputations(yourNotification);
     expect(yourNotificationEvent).toEqual({
       [EventPropertyType.TRACK]: {
@@ -33,28 +42,86 @@ describe('Mixpanel - Send Your Notification Strategy', () => {
         ...(yourNotification.domicileBannerType && { banner: yourNotification.domicileBannerType }),
         delegate: yourNotification.delegators.length > 0,
         page_number: yourNotification.pagination.page,
-        total_count: yourNotification.notifications.length,
-        unread_count: yourNotification.notifications.filter((n) => n.isNewNotification).length,
-        delivered_count: yourNotification.notifications.filter(
+        total_count: legalNotifications.length,
+        unread_count: legalNotifications.filter((n) => n.isNewNotification).length,
+        delivered_count: legalNotifications.filter(
           (n) => n.notificationStatus === NotificationStatus.DELIVERED
         ).length,
-        opened_count: yourNotification.notifications.filter(
+        opened_count: legalNotifications.filter(
           (n) => n.notificationStatus === NotificationStatus.VIEWED
         ).length,
-        expired_count: yourNotification.notifications.filter(
+        expired_count: legalNotifications.filter(
           (n) => n.notificationStatus === NotificationStatus.EFFECTIVE_DATE
         ).length,
-        not_found_count: yourNotification.notifications.filter(
+        not_found_count: legalNotifications.filter(
           (n) => n.notificationStatus === NotificationStatus.UNREACHABLE
         ).length,
-        cancelled_count: yourNotification.notifications.filter(
+        cancelled_count: legalNotifications.filter(
           (n) => n.notificationStatus === NotificationStatus.CANCELLED
         ).length,
-        effective_date_count: yourNotification.notifications.filter(
+        effective_date_count: legalNotifications.filter(
           (n) => n.notificationStatus === NotificationStatus.EFFECTIVE_DATE
+        ).length,
+        unread_combo_count: comboNotifications.filter((n) => n.isNewNotification).length,
+
+        total_combo_count: comboNotifications.length,
+
+        delivered_combo_count: comboNotifications.filter((n) => n.communicationOutcomes?.delivered)
+          .length,
+
+        opened_combo_count: comboNotifications.filter((n) => n.communicationOutcomes?.viewed)
+          .length,
+
+        not_found_combo_count: comboNotifications.filter(
+          (n) => n.notificationStatus === InformalNotificationStatus.COMPLETED_UNREACHED
         ).length,
         onboarding: 'not_viewed',
       },
+    });
+  });
+
+  it('should calculate combo counters from communication outcomes', () => {
+    const strategy = new SendYourNotificationsStrategy();
+
+    const comboNotifications = [
+      {
+        ...notificationsDTO.resultsPage[0],
+        communicationType: 'INFORMAL' as const,
+        communicationOutcomes: {
+          delivered: true,
+          viewed: true,
+        },
+        notificationStatus: InformalNotificationStatus.COMPLETED_REACHED,
+      },
+      {
+        ...notificationsDTO.resultsPage[0],
+        communicationType: 'INFORMAL' as const,
+        communicationOutcomes: {
+          delivered: false,
+          viewed: true,
+        },
+        notificationStatus: InformalNotificationStatus.COMPLETED_UNREACHED,
+      },
+    ];
+
+    const yourNotification = {
+      notifications: comboNotifications,
+      delegators: [],
+      pagination: {
+        nextPagesKey: [],
+        size: 2,
+        page: 1,
+        moreResult: false,
+      },
+      domicileBannerType: '',
+    };
+    const yourNotificationEvent = strategy.performComputations(yourNotification);
+
+    expect(yourNotificationEvent[EventPropertyType.TRACK]).toMatchObject({
+      total_combo_count: 2,
+      delivered_combo_count: 1,
+      opened_combo_count: 2,
+      not_found_combo_count: 1,
     });
   });
 });

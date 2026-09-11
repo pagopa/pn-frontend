@@ -6,6 +6,7 @@ import {
   EventAction,
   EventCategory,
   EventDowntimeType,
+  EventNotificationTypes,
   EventPropertyType,
   KnownFunctionality,
   NotificationStatus,
@@ -71,6 +72,7 @@ describe('Mixpanel - Notification detail Strategy', () => {
       ],
       flow: 'digital' as EventDeliveryFlowType,
       delivery_mode: 'async' as EventDeliveryModeType,
+      notification_type: 'notifica' as const,
     };
 
     let typeDowntime: EventDowntimeType;
@@ -113,7 +115,108 @@ describe('Mixpanel - Notification detail Strategy', () => {
         elapsed_time: elapsed_time,
         flow: 'digital' as EventDeliveryFlowType,
         delivery_mode: 'async' as EventDeliveryModeType,
+        notification_type: 'notifica',
       },
+    });
+  });
+
+  it('should return informal notification detail event', () => {
+    const strategy = new SendNotificationDetailStrategy();
+    const deliveredDay = '2026-02-01T15:05:00.000Z';
+    const informalViewedDay = '2026-02-06T15:05:00.000Z';
+    const diffInMs = new Date(informalViewedDay).getTime() - new Date(deliveredDay).getTime();
+
+    const elapsed_time = Math.floor(diffInMs / (1000 * 60 * 60 * 24));
+
+    const informalTimeline = [
+      {
+        elementId: 'DELIVERED',
+        timestamp: deliveredDay,
+        eventTimestamp: deliveredDay,
+        category: TimelineCategory.DELIVERED,
+        details: {},
+      },
+      {
+        elementId: 'INFORMAL_NOTIFICATION_VIEWED',
+        timestamp: informalViewedDay,
+        eventTimestamp: informalViewedDay,
+        category: TimelineCategory.INFORMAL_NOTIFICATION_VIEWED,
+        details: {},
+      },
+    ];
+
+    const notificationData = {
+      downtimeEvents: [],
+      mandateId: undefined,
+      notificationStatus: NotificationStatus.VIEWED,
+      checkIfUserHasPayments: true,
+      userPayments: {
+        pagoPaF24: paymentsData.pagoPaF24,
+        f24Only: paymentsData.f24Only,
+      },
+      source: undefined,
+      timeline: informalTimeline,
+      flow: 'digital' as EventDeliveryFlowType,
+      delivery_mode: 'async' as EventDeliveryModeType,
+      notification_type: EventNotificationTypes.INFORMAL,
+    };
+    const notificationDetailEvent = strategy.performComputations(notificationData);
+
+    expect(notificationDetailEvent[EventPropertyType.TRACK]).toMatchObject({
+      first_time_opening: false,
+      elapsed_time,
+      notification_type: EventNotificationTypes.INFORMAL,
+    });
+  });
+
+  it('should return informal notification payment properties', () => {
+    const strategy = new SendNotificationDetailStrategy();
+
+    const notificationData = {
+      downtimeEvents: [],
+      mandateId: undefined,
+      notificationStatus: NotificationStatus.VIEWED,
+      checkIfUserHasPayments: false,
+      paymentCount: 2,
+      source: undefined,
+      timeline: [],
+      flow: 'digital' as EventDeliveryFlowType,
+      delivery_mode: 'async' as EventDeliveryModeType,
+      notification_type: EventNotificationTypes.INFORMAL,
+    };
+
+    const notificationDetailEvent = strategy.performComputations(notificationData);
+
+    expect(notificationDetailEvent[EventPropertyType.TRACK]).toMatchObject({
+      contains_payment: true,
+      contains_multipayment: 'yes',
+      count_payment: 2,
+      contains_f24: 'no',
+    });
+  });
+  it('should return no payment properties for informal notification without payments', () => {
+    const strategy = new SendNotificationDetailStrategy();
+
+    const notificationData = {
+      downtimeEvents: [],
+      mandateId: undefined,
+      notificationStatus: NotificationStatus.VIEWED,
+      checkIfUserHasPayments: true,
+      paymentCount: 0,
+      source: undefined,
+      timeline: [],
+      flow: 'digital' as EventDeliveryFlowType,
+      delivery_mode: 'async' as EventDeliveryModeType,
+      notification_type: EventNotificationTypes.INFORMAL,
+    };
+
+    const notificationDetailEvent = strategy.performComputations(notificationData);
+
+    expect(notificationDetailEvent[EventPropertyType.TRACK]).toMatchObject({
+      contains_payment: false,
+      contains_multipayment: 'no',
+      count_payment: 0,
+      contains_f24: 'no',
     });
   });
 });

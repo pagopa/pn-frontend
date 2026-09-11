@@ -19,7 +19,7 @@ describe('AcceptDelegationModal', () => {
       <AcceptDelegationModal
         isEditMode={false}
         open
-        name="Mario Rossi"
+        name="Utente Test Uno"
         handleCloseAcceptModal={cancelCbk}
         handleConfirm={confirmCbk}
       />
@@ -33,7 +33,7 @@ describe('AcceptDelegationModal', () => {
       <AcceptDelegationModal
         isEditMode={false}
         open
-        name="Mario Rossi"
+        name="Utente Test Uno"
         handleCloseAcceptModal={cancelCbk}
         handleConfirm={confirmCbk}
       />
@@ -51,7 +51,7 @@ describe('AcceptDelegationModal', () => {
       <AcceptDelegationModal
         isEditMode
         open
-        name="Mario Rossi"
+        name="Utente Test Uno"
         handleCloseAcceptModal={cancelCbk}
         handleConfirm={confirmCbk}
       />
@@ -71,7 +71,7 @@ describe('AcceptDelegationModal', () => {
       <AcceptDelegationModal
         isEditMode
         open
-        name="Mario Rossi"
+        name="Utente Test Uno"
         handleCloseAcceptModal={cancelCbk}
         handleConfirm={confirmCbk}
         currentGroups={[groups[1]]}
@@ -97,7 +97,7 @@ describe('AcceptDelegationModal', () => {
       <AcceptDelegationModal
         isEditMode
         open
-        name="Mario Rossi"
+        name="Utente Test Uno"
         handleCloseAcceptModal={cancelCbk}
         handleConfirm={confirmCbk}
       />
@@ -120,7 +120,7 @@ describe('AcceptDelegationModal', () => {
       <AcceptDelegationModal
         isEditMode
         open
-        name="Mario Rossi"
+        name="Utente Test Uno"
         handleCloseAcceptModal={cancelCbk}
         handleConfirm={confirmCbk}
       />,
@@ -152,7 +152,7 @@ describe('AcceptDelegationModal', () => {
       <AcceptDelegationModal
         isEditMode={false}
         open
-        name="Mario Rossi"
+        name="Utente Test Uno"
         handleCloseAcceptModal={cancelCbk}
         handleConfirm={confirmCbk}
       />,
@@ -198,7 +198,7 @@ describe('AcceptDelegationModal', () => {
       <AcceptDelegationModal
         isEditMode={false}
         open
-        name="Mario Rossi"
+        name="Utente Test Uno"
         handleCloseAcceptModal={cancelCbk}
         handleConfirm={confirmCbk}
       />
@@ -228,7 +228,7 @@ describe('AcceptDelegationModal', () => {
       <AcceptDelegationModal
         isEditMode={false}
         open
-        name="Mario Rossi"
+        name="Utente Test Uno"
         handleCloseAcceptModal={cancelCbk}
         handleConfirm={confirmCbk}
       />,

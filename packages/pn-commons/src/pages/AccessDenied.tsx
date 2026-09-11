@@ -1,4 +1,5 @@
-import { Box, Button, Stack, Typography } from '@mui/material';
+import { Box, Stack, Typography } from '@mui/material';
+import { MIButton } from '@pagopa/mui-italia';
 
 import { getLocalizedOrDefaultLabel } from '../utility/localization.utility';
 
@@ -55,7 +56,7 @@ const AccessDenied: React.FC<Props> = ({
         {finalSubTitle}
       </Typography>
 
-      <Button
+      <MIButton
         id="login-button"
         variant="contained"
         onClick={isLogged ? goToHomePage : goToLogin}
@@ -64,7 +65,7 @@ const AccessDenied: React.FC<Props> = ({
         {isLogged
           ? getLocalizedOrDefaultLabel('common', 'button.go-to-home', 'Vai alla homepage')
           : getLocalizedOrDefaultLabel('common', 'button.go-to-login', 'Accedi')}
-      </Button>
+      </MIButton>
     </Stack>
   );
 };

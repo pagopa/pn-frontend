@@ -1,10 +1,10 @@
 import { JSXElementConstructor, useRef, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 
-import PowerSettingsNewIcon from '@mui/icons-material/PowerSettingsNew';
-import { Box, ButtonProps, Chip, TextFieldProps, Typography, TypographyProps } from '@mui/material';
+import PowerSettingsNewRoundedIcon from '@mui/icons-material/PowerSettingsNewRounded';
+import { Box, TextFieldProps, Typography, TypographyProps } from '@mui/material';
 import { PnInfoCard, appStateActions } from '@pagopa-pn/pn-commons';
-import { ButtonNaked } from '@pagopa/mui-italia';
+import { MIButton, MIButtonProps, MIChip } from '@pagopa/mui-italia';
 
 import { PGEventsType } from '../../models/PGEventsType';
 import { AddressType, ChannelType, SaveDigitalAddressParams } from '../../models/contacts';
@@ -33,7 +33,7 @@ type SmsElemProps = {
   };
   slotsProps?: {
     textField?: Partial<TextFieldProps>;
-    button?: Partial<ButtonProps>;
+    button?: Partial<MIButtonProps>;
   };
 };
 
@@ -43,7 +43,7 @@ type SmsItemProps = {
   };
   slotsProps?: {
     textField?: Partial<TextFieldProps>;
-    button?: Partial<ButtonProps>;
+    button?: Partial<MIButtonProps>;
   };
 };
 
@@ -227,7 +227,7 @@ const SmsContactItem: React.FC<SmsItemProps> = ({ slotsProps, slots }) => {
     if (defaultSERCQ_SENDAddress && !hasCourtesyAddresses) {
       return 'warning';
     }
-    return 'default';
+    return 'neutral';
   };
 
   const getRemoveModalTitle = () => {
@@ -270,7 +270,7 @@ const SmsContactItem: React.FC<SmsItemProps> = ({ slotsProps, slots }) => {
           {
             key: 'disable',
             label: t('button.disable'),
-            icon: <PowerSettingsNewIcon />,
+            icon: <PowerSettingsNewRoundedIcon />,
             destructive: true,
             testId: 'disable-sms',
             onClick: () => {
@@ -298,11 +298,9 @@ const SmsContactItem: React.FC<SmsItemProps> = ({ slotsProps, slots }) => {
           </Typography>
         }
         subtitle={
-          <Chip
-            component="span"
+          <MIChip
             label={t(`status.${isActive ? 'active' : 'inactive'}`, { ns: 'recapiti' })}
             color={getChipColor()}
-            size="small"
             sx={{ mb: 2 }}
           />
         }
@@ -359,8 +357,8 @@ const SmsContactItem: React.FC<SmsItemProps> = ({ slotsProps, slots }) => {
           <Typography variant="body1" fontWeight={600} fontSize="16px" mb={1}>
             {t('courtesy-contacts.email-sms-updates', { ns: 'recapiti' })}
           </Typography>
-          <ButtonNaked
-            color="primary"
+          <MIButton
+            variant="text"
             sx={{ fontSize: '16px' }}
             onClick={() => {
               PGEventStrategyFactory.triggerEvent(PGEventsType.SEND_PG_ADD_SMS_START);
@@ -368,7 +366,7 @@ const SmsContactItem: React.FC<SmsItemProps> = ({ slotsProps, slots }) => {
             }}
           >
             {t('courtesy-contacts.email-sms-add', { ns: 'recapiti' })}
-          </ButtonNaked>
+          </MIButton>
         </>
       )}
     </Box>

@@ -21,6 +21,7 @@
     "disable": "Disable",
     "start": "Start",
     "continue": "Continue",
+    "clear-field": "Clear field",
     "go-on": "Next",
     "go-to-home": "Go to homepage",
     "go-to-login": "Login",
@@ -36,7 +37,9 @@
     "deleghe": "Delegations",
     "profilo": "Your data",
     "contacts": "Your contact details",
-    "app-status": "Platform status"
+    "app-status": "Platform status",
+    "fallback-notification": "Notification details",
+    "fallback-communication": "Communication details"
   },
   "header": {
     "assistance": "Support",

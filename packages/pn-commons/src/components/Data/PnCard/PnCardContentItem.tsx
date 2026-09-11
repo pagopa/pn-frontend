@@ -26,11 +26,7 @@ const PnCardContentItem: React.FC<Props> = ({
   );
   return (
     <>
-      <Typography
-        sx={{ fontWeight: 'bold' }}
-        variant="caption"
-        data-testid={testId ? `${testId}Label` : null}
-      >
+      <Typography variant="caption" data-testid={testId ? `${testId}Label` : null}>
         {label}
       </Typography>
       {hasDataValue && children}

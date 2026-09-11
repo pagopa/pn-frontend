@@ -1,5 +1,5 @@
 import { SavingsOutlined } from '@mui/icons-material';
-import { Box, Divider, List, ListItem, ListItemText, Typography } from '@mui/material';
+import { Box, Divider, List, ListItem, ListItemText, Typography, useTheme } from '@mui/material';
 
 import {
   NotificationCostDetails,
@@ -56,8 +56,9 @@ const CostRow = ({
   hint?: HintMessage;
   isTotal?: boolean;
 }) => {
+  const theme = useTheme();
   const isHighlight = hint?.variant === 'highlight';
-  const hintColor = isHighlight ? '#5517E3' : 'text.secondary';
+  const hintColor = isHighlight ? theme.colors.purple[500] : 'text.secondary';
 
   return (
     <ListItem
@@ -113,6 +114,7 @@ const HintLabel = ({
 
 const CostsBreakdown: React.FC<Props> = ({ costDetails }) => {
   const { status, baseCost, analogCost = 0, totalCost } = costDetails;
+  const theme = useTheme();
 
   if (
     status !== NotificationCostDetailsStatus.OK &&
@@ -142,7 +144,7 @@ const CostsBreakdown: React.FC<Props> = ({ costDetails }) => {
         hint={buildHintMessage(costDetails)}
       />
 
-      <Divider sx={{ color: '#E8EBF1' }} />
+      <Divider sx={{ color: theme.palette.divider }} />
 
       {totalCost && (
         <CostRow

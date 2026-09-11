@@ -73,7 +73,7 @@ describe('test useSafeDispatch hook', () => {
 
     act(() => {
       // Pass the already invoked thunk (classic RTK usage)
-      promise = result.current(mockFetchUsers('mario'));
+      promise = result.current(mockFetchUsers('utente'));
     });
 
     await act(async () => {
@@ -129,7 +129,7 @@ describe('test useSafeDispatch hook', () => {
     let postsPromise: AbortablePromise<unknown> | undefined;
 
     act(() => {
-      usersPromise = result.current(mockFetchUsers, 'mario');
+      usersPromise = result.current(mockFetchUsers, 'utente');
       postsPromise = result.current(mockFetchPosts, 1);
     });
 
@@ -152,7 +152,7 @@ describe('test useSafeDispatch hook', () => {
     let promise: AbortablePromise<unknown> | undefined;
 
     act(() => {
-      promise = result.current(mockFetchUsers, 'mario');
+      promise = result.current(mockFetchUsers, 'utente');
     });
 
     act(() => {

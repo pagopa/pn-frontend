@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 
 import { Box, Typography } from '@mui/material';
 import { EmptyState } from '@pagopa-pn/pn-commons';
-import { ButtonNaked, IllusMIInbox, IllusMIMessage } from '@pagopa/mui-italia';
+import { IllusMIInbox, IllusMIMessage, MIButton } from '@pagopa/mui-italia';
 
 import * as routes from '../../navigation/routes.const';
 
@@ -27,22 +27,21 @@ const FilteredEmptyStateContent: React.FC<{ cleanFilters: () => void }> = ({ cle
 
   return (
     <>
-      <Typography variant="subtitle2" fontSize="16px" sx={{ color: '#636B82' }}>
+      <Typography variant="subtitle2" fontSize="16px" sx={{ color: 'text.secondary' }}>
         {t('empty-state.filtered')}
       </Typography>
       <Typography variant="body2" fontSize="14px" color="text.secondary" sx={{ mb: 2 }}>
         {t('empty-state.filtered-description')}
       </Typography>
 
-      <ButtonNaked
-        size="medium"
-        color="primary"
+      <MIButton
+        variant="text"
         id="call-to-action-first"
         data-testid="link-remove-filters"
         onClick={cleanFilters}
       >
         {t('empty-state.clean-filters-cta')}
-      </ButtonNaked>
+      </MIButton>
     </>
   );
 };
@@ -57,22 +56,21 @@ const DefaultEmptyStateContent: React.FC = () => {
 
   return (
     <>
-      <Typography variant="subtitle2" fontSize="16px" sx={{ color: '#636B82' }}>
+      <Typography variant="subtitle2" fontSize="16px" sx={{ color: 'text.secondary' }}>
         {t('empty-state.title')}
       </Typography>
       <Typography variant="body2" fontSize="14px" color="text.secondary" sx={{ mb: 2 }}>
         {t('empty-state.description')}
       </Typography>
 
-      <ButtonNaked
-        size="medium"
-        color="primary"
+      <MIButton
+        variant="text"
         id="call-to-action-first"
         data-testid="link-route-contacts"
         onClick={goToContactsPage}
       >
         {t('empty-state.go-to-contacts-cta')}
-      </ButtonNaked>
+      </MIButton>
     </>
   );
 };

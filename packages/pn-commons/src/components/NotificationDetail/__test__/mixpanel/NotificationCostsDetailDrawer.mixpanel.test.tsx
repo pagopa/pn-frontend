@@ -69,7 +69,7 @@ describe('NotificationCostsDetailDrawer - Mixpanel events', () => {
     fireEvent.click(getByTestId('cost-details-drawer-assistance-link'));
     expect(handleTrackEventFn).toHaveBeenCalledWith(
       EventPaymentRecipientType.SEND_TAP_EXTERNAL_LINK,
-      { link: costDetailsAssistanceLink }
+      { link: costDetailsAssistanceLink, notification_type: 'notifica' }
     );
   });
 });

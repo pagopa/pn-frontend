@@ -3,7 +3,6 @@ export { useErrors } from './useErrors';
 export { useHasPermissions } from './useHasPermissions';
 export { useIsCancelled } from './useIsCancelled';
 export { useIsMobile } from './useIsMobile';
-export { useMobileOS } from './useMobileOS';
 export { useMultiEvent } from './useMultiEvent';
 export { useProcess } from './useProcess';
 export { isJwtExpired, useSessionCheck } from './useSessionCheck';

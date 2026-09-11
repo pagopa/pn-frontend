@@ -2,9 +2,9 @@ import { useFormik } from 'formik';
 import { Fragment } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import AddIcon from '@mui/icons-material/Add';
+import AddRoundedIcon from '@mui/icons-material/AddRounded';
 import { Box, Divider, Paper, Stack, Typography } from '@mui/material';
-import { ButtonNaked } from '@pagopa/mui-italia';
+import { MIButton } from '@pagopa/mui-italia';
 
 import {
   NewNotification,
@@ -170,15 +170,15 @@ const PaymentMethods: React.FC<Props> = ({ notification, formik, hasFieldError }
                     />
                   ))}
 
-                  <ButtonNaked
-                    color="primary"
-                    startIcon={<AddIcon />}
+                  <MIButton
+                    variant="text"
+                    startIcon={<AddRoundedIcon />}
                     onClick={() => handleAddNewPagoPa(recipientKey)}
                     sx={{ justifyContent: 'start' }}
                     data-testid="add-new-pagopa"
                   >
                     {t('pagopa.add-new-pagopa-notice')}
-                  </ButtonNaked>
+                  </MIButton>
                 </Stack>
               </Box>
             )}
@@ -214,15 +214,15 @@ const PaymentMethods: React.FC<Props> = ({ notification, formik, hasFieldError }
                     />
                   ))}
 
-                  <ButtonNaked
-                    color="primary"
-                    startIcon={<AddIcon />}
+                  <MIButton
+                    variant="text"
+                    startIcon={<AddRoundedIcon />}
                     onClick={() => handleAddNewF24(recipientKey)}
                     sx={{ justifyContent: 'start' }}
                     data-testid="add-new-f24"
                   >
                     {t('f24.add-new-f24')}
-                  </ButtonNaked>
+                  </MIButton>
                 </Stack>
               </Box>
             )}

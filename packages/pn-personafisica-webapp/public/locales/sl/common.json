@@ -21,6 +21,7 @@
     "disable": "Onemogoči",
     "start": "Začni",
     "continue": "Nadaljuj",
+    "clear-field": "Počisti polje",
     "go-on": "Naprej",
     "go-to-home": "Pojdi na domačo stran",
     "go-to-login": "Prijava",
@@ -36,7 +37,9 @@
     "deleghe": "Pooblastila",
     "profilo": "Tvoji podatki",
     "contacts": "Tvoji kontaktni podatki",
-    "app-status": "Status platforme"
+    "app-status": "Status platforme",
+    "fallback-notification": "Podrobnosti obvestila",
+    "fallback-communication": "Podrobnosti sporočila"
   },
   "header": {
     "assistance": "Pomoč",

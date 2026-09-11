@@ -21,10 +21,6 @@ export const twelveMonthsAgo = add(today, { months: -12, days: 1 });
 
 export const oneYearAgo = dateFns.startOfDay(new Date(new Date().setMonth(today.getMonth() - 12)));
 
-export function dateIsLessThan10Years(sentAt: string): boolean {
-  return Date.parse(formatToTimezoneString(today)) - Date.parse(sentAt) < 315569520000;
-}
-
 export function dateIsDefined(date: Date | null | undefined): date is Date {
   return !!date && !Number.isNaN(date.getTime());
 }

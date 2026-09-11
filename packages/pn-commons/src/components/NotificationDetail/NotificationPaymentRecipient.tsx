@@ -8,7 +8,11 @@ import { useDismissToastOnError } from '../../hooks';
 import { downloadDocument } from '../../hooks/useDownloadDocument';
 import { AppResponse } from '../../models';
 import { ServerResponseErrorCode } from '../../models/AppResponse';
-import { EventPaymentRecipientType } from '../../models/MixpanelEvents';
+import {
+  EventNotificationType,
+  EventNotificationTypes,
+  EventPaymentRecipientType,
+} from '../../models/MixpanelEvents';
 import {
   NotificationCostDetails,
   NotificationDetailPayment,
@@ -54,6 +58,7 @@ type Props = {
   ) => void;
   handleTrackEvent?: (event: EventPaymentRecipientType, param?: object) => void;
   handleFetchPaymentsInfo: (payment: Array<PaymentDetails | NotificationDetailPayment>) => void;
+  notificationType?: EventNotificationType;
 };
 
 type PaymentError = {
@@ -76,6 +81,7 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
   onPayTppClick,
   handleTrackEvent,
   handleFetchPaymentsInfo,
+  notificationType = EventNotificationTypes.NOTIFICATION,
 }) => {
   const { pagoPaF24, f24Only } = payments;
   const pageFromCache = getPaymentCache(iun)?.currentPaymentPage;
@@ -273,6 +279,7 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
                     isSinglePayment={isSinglePayment}
                     isCancelled={isCancelled}
                     handleTrackEventDetailPaymentError={handleTrackEventFn}
+                    notificationType={notificationType}
                   />
                 ) : null
               )}

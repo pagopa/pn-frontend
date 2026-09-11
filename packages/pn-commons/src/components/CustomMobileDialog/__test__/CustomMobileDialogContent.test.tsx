@@ -35,7 +35,7 @@ describe('CustomMobileDialogContent Component', () => {
     const button = container.querySelector('button');
     fireEvent.click(button!);
     const dialog = await waitFor(() => screen.getByTestId('mobileDialog'));
-    const closeIcon = within(dialog!).queryByTestId('CloseIcon');
+    const closeIcon = within(dialog!).queryByTestId('CloseRoundedIcon');
     fireEvent.click(closeIcon!);
     await waitFor(() => {
       expect(dialog).not.toBeInTheDocument();

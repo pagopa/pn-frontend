@@ -2,9 +2,10 @@ import React, { useCallback, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
-import { Block, Delete, Sync } from '@mui/icons-material';
-import { Button, Stack, Typography } from '@mui/material';
+import { BlockRounded, DeleteRounded, SyncRounded } from '@mui/icons-material';
+import { Stack, Typography } from '@mui/material';
 import { ApiErrorWrapper, appStateActions } from '@pagopa-pn/pn-commons';
+import { MIButton } from '@pagopa/mui-italia';
 
 import {
   ChangeStatusPublicKeyV1StatusEnum,
@@ -121,7 +122,7 @@ const PublicKeys: React.FC = () => {
           {t('publicKeys.title')}
         </Typography>
         {!hasOneActiveKey && (
-          <Button
+          <MIButton
             id="generate-public-key"
             data-testid="generatePublicKey"
             variant="contained"
@@ -129,7 +130,7 @@ const PublicKeys: React.FC = () => {
             onClick={() => handleGeneratePublicKey()}
           >
             {t('publicKeys.new-key-button')}
-          </Button>
+          </MIButton>
         )}
       </Stack>
       <ApiErrorWrapper
@@ -175,7 +176,7 @@ const PublicKeys: React.FC = () => {
             closeButtonLabel={t('button.annulla', { ns: 'common' })}
             closeModalHandler={handleCloseModal}
             actionButtonLabel={t('block-button')}
-            buttonIcon={<Block fontSize="small" sx={{ mr: 1 }} />}
+            buttonIcon={<BlockRounded fontSize="small" sx={{ mr: 1 }} />}
             actionHandler={() => blockPublicKey(modal.publicKey?.kid)}
           />
         )}
@@ -187,7 +188,7 @@ const PublicKeys: React.FC = () => {
             closeButtonLabel={t('button.annulla', { ns: 'common' })}
             closeModalHandler={handleCloseModal}
             actionButtonLabel={t('rotate-public-key-button')}
-            buttonIcon={<Sync fontSize="small" sx={{ mr: 1 }} />}
+            buttonIcon={<SyncRounded fontSize="small" sx={{ mr: 1 }} />}
             actionHandler={() => handleGeneratePublicKey(modal.publicKey?.kid)}
           />
         )}
@@ -198,7 +199,7 @@ const PublicKeys: React.FC = () => {
             closeButtonLabel={t('button.annulla', { ns: 'common' })}
             closeModalHandler={handleCloseModal}
             actionButtonLabel={t('button.elimina', { ns: 'common' })}
-            buttonIcon={<Delete fontSize="small" sx={{ mr: 1 }} />}
+            buttonIcon={<DeleteRounded fontSize="small" sx={{ mr: 1 }} />}
             actionHandler={() => deleteApiKey(modal.publicKey?.kid)}
             hasDeleteButton
           />

@@ -3,7 +3,7 @@ import { vi } from 'vitest';
 import { AppRouteParams } from '@pagopa-pn/pn-commons';
 import { getById } from '@pagopa-pn/pn-commons/src/test-utils';
 
-import { fireEvent, render } from '../../__test__/test-utils';
+import { fireEvent, render, screen } from '../../__test__/test-utils';
 import { getConfiguration } from '../../services/configuration.service';
 import { getIDPS } from '../../utility/IDPS';
 import { storageRapidAccessOps } from '../../utility/storage';
@@ -32,8 +32,8 @@ describe('test spid select page', () => {
     render(<SpidSelect onClose={backHandler} show={true} />);
     const container = document.body;
     expect(container).toHaveTextContent('spidSelect.title');
-    const backIcon = getById(container, 'backIcon');
-    expect(backIcon).toBeInTheDocument();
+    const closeButton = screen.getByRole('button', { name: 'button.close' });
+    expect(closeButton).toBeInTheDocument();
     idps.identityProviders.forEach((element, index) => {
       const spidButton = getById(container, `spid-select-${element.entityId}`);
       fireEvent.click(spidButton);
@@ -51,8 +51,8 @@ describe('test spid select page', () => {
   it('clicks on back buttons', () => {
     render(<SpidSelect onClose={backHandler} show={true} />);
     const container = document.body;
-    const backIcon = getById(document.body, 'backIcon');
-    fireEvent.click(backIcon);
+    const closeButton = screen.getByRole('button', { name: 'button.close' });
+    fireEvent.click(closeButton);
     expect(backHandler).toHaveBeenCalledTimes(1);
     const backButton = getById(container, 'backButton');
     fireEvent.click(backButton);

@@ -1,18 +1,18 @@
 import { useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 
-import CompareArrowsIcon from '@mui/icons-material/CompareArrows';
-import PowerSettingsNewIcon from '@mui/icons-material/PowerSettingsNew';
-import { Avatar, Button, Chip, Stack, Typography } from '@mui/material';
+import CompareArrowsRoundedIcon from '@mui/icons-material/CompareArrowsRounded';
+import PowerSettingsNewRoundedIcon from '@mui/icons-material/PowerSettingsNewRounded';
+import { Avatar, Stack, Typography } from '@mui/material';
 import {
   EventAction,
   IllusAppIO,
-  IllusAppIoLogo,
   IllusSendLogo,
   PnInfoCard,
   appStateActions,
   useIsMobile,
 } from '@pagopa-pn/pn-commons';
+import { LogoIOApp, MIButton, MIChip } from '@pagopa/mui-italia';
 
 import { PFEventsType } from '../../models/PFEventsType';
 import { AddressType, IOAllowedValues, IOContactStatus } from '../../models/contacts';
@@ -42,7 +42,7 @@ const IOContact: React.FC = () => {
     addresses,
     legalAddresses,
   } = useAppSelector(contactsSelectors.selectAddresses);
-  const { APP_IO_SITE, APP_IO_ANDROID, APP_IO_IOS } = getConfiguration();
+  const { APP_IO_SITE, APP_IO_DOWNLOAD } = getConfiguration();
 
   const hasCourtesyAddresses =
     addresses.filter(
@@ -141,8 +141,7 @@ const IOContact: React.FC = () => {
   const handleDownload = () => {
     openAppIoDownloadPage({
       appIoSite: APP_IO_SITE,
-      appIoAndroid: APP_IO_ANDROID,
-      appIoIos: APP_IO_IOS,
+      appIoDownload: APP_IO_DOWNLOAD,
     });
   };
 
@@ -154,29 +153,22 @@ const IOContact: React.FC = () => {
   const getButton = () => {
     if (status === IOContactStatus.UNAVAILABLE) {
       return (
-        <Button
-          variant="contained"
-          onClick={handleDownload}
-          color="primary"
-          fullWidth={isMobile}
-          sx={{ mt: 3 }}
-        >
+        <MIButton variant="contained" onClick={handleDownload} fullWidth={isMobile} sx={{ mt: 3 }}>
           {t('io-contact.download', { ns: 'recapiti' })}
-        </Button>
+        </MIButton>
       );
     }
     if (status === IOContactStatus.DISABLED) {
       return (
-        <Button
+        <MIButton
           variant="contained"
           onClick={handleOpenInfoModal}
-          color="primary"
           fullWidth={isMobile}
           sx={{ mt: 3 }}
           id="ioContactButton"
         >
           {t('io-contact.enable', { ns: 'recapiti' })}
-        </Button>
+        </MIButton>
       );
     }
     return null;
@@ -189,7 +181,7 @@ const IOContact: React.FC = () => {
     if (defaultSERCQ_SENDAddress && !hasCourtesyAddresses) {
       return 'warning';
     }
-    return 'default';
+    return 'neutral';
   };
 
   const getRemoveModalMessage = () => {
@@ -224,11 +216,10 @@ const IOContact: React.FC = () => {
         </Typography>
       }
       subtitle={
-        <Chip
+        <MIChip
           component="span"
           label={t(`status.${isAppIOEnabled ? 'active' : 'inactive'}`, { ns: 'recapiti' })}
           color={getChipColor()}
-          size="small"
           sx={{ mb: 2 }}
         />
       }
@@ -238,7 +229,7 @@ const IOContact: React.FC = () => {
               {
                 key: 'disable',
                 label: t('button.disable'),
-                icon: <PowerSettingsNewIcon />,
+                icon: <PowerSettingsNewRoundedIcon />,
                 destructive: true,
                 onClick: handleOpenDeleteModal,
               },
@@ -249,11 +240,13 @@ const IOContact: React.FC = () => {
       slotProps={{ Card: { id: 'ioContactSection' } }}
     >
       <Stack direction="row" alignItems="center" data-testid="ioContact">
-        <Avatar variant="rounded" sx={{ bgcolor: '#0B3EE3', width: '36px', height: '36px' }}>
-          <IllusAppIoLogo />
+        <Avatar variant="rounded" sx={{ bgcolor: 'primary.main', width: '36px', height: '36px' }}>
+          <LogoIOApp title="AppIoLogo" color="light" size={24} />
         </Avatar>
-        <CompareArrowsIcon sx={{ width: '24px', height: '24px', mx: 1, color: 'text.secondary' }} />
-        <Avatar variant="rounded" sx={{ bgcolor: '#0B3EE3', width: '36px', height: '36px' }}>
+        <CompareArrowsRoundedIcon
+          sx={{ width: '24px', height: '24px', mx: 1, color: 'text.secondary' }}
+        />
+        <Avatar variant="rounded" sx={{ bgcolor: 'primary.main', width: '36px', height: '36px' }}>
           <IllusSendLogo />
         </Avatar>
       </Stack>
@@ -261,7 +254,6 @@ const IOContact: React.FC = () => {
         mt={2}
         variant="body1"
         fontSize={{ xs: '14px', lg: '16px' }}
-        color="text.secondary"
         data-testid="ioContactDescription"
       >
         {isAppIOEnabled

@@ -3,8 +3,8 @@ import { vi } from 'vitest';
 import { NotificationStatus } from '@pagopa-pn/pn-commons';
 
 import { filedNotificationsDataMock } from '../../../__mocks__/Statistics.mock';
-import { render } from '../../../__test__/test-utils';
-import { GraphColors } from '../../../models/Statistics';
+import { render, theme } from '../../../__test__/test-utils';
+import { getGraphColors } from '../../../models/Statistics';
 import FiledNotificationsStatistics from '../FiledNotificationsStatistics';
 
 const mockInput = vi.fn();
@@ -55,6 +55,7 @@ describe('FiledNotificationsStatistics component tests', () => {
   });
 
   it('renders the component', () => {
+    const graphColors = getGraphColors(theme);
     const { container, getByTestId } = render(
       <FiledNotificationsStatistics {...filedNotificationsDataMock} />
     );
@@ -79,7 +80,7 @@ describe('FiledNotificationsStatistics component tests', () => {
           details: filedNotificationsDataMock.data[NotificationStatus.REFUSED].details,
         },
       ],
-      options: { color: [GraphColors.blue, GraphColors.gold] },
+      options: { color: [graphColors.blue, graphColors.gold] },
     });
   });
 });

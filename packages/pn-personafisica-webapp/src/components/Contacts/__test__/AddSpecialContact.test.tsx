@@ -29,7 +29,7 @@ import { fillCodeDialog } from './test-utils';
 const specialAddresses = digitalLegalAddresses.filter((addr) => addr.senderId !== 'default');
 
 const digitalAddressesWithInvalidPec = digitalAddresses.map((addr) =>
-  addr.senderName === 'Comune di Milano' && addr.channelType === ChannelType.PEC
+  addr.senderName === 'Comune di Test 2' && addr.channelType === ChannelType.PEC
     ? { ...addr, pecValid: false }
     : addr
 );
@@ -366,7 +366,7 @@ describe('test AddSpecialContact', () => {
 
     expect(mock.history.get).toHaveLength(2);
     expect(mock.history.get[0].url).toBe('/bff/v1/pa-list');
-    expect(mock.history.get[1].url).toBe('/bff/v1/pa-list?paNameFilter=Comune+di+Milano');
+    expect(mock.history.get[1].url).toBe('/bff/v1/pa-list?paNameFilter=Comune+di+Test+2');
 
     // no api call to override validating PEC
     await waitFor(() => {

@@ -4,8 +4,8 @@ import {
   digitalStateDataMock,
   digitalStateEmptyDataMock,
 } from '../../../__mocks__/Statistics.mock';
-import { render } from '../../../__test__/test-utils';
-import { GraphColors, StatisticsResponseStatus } from '../../../models/Statistics';
+import { render, theme } from '../../../__test__/test-utils';
+import { StatisticsResponseStatus, getGraphColors } from '../../../models/Statistics';
 import DigitalStateStatistics from '../DigitalStateStatistics';
 
 const mockInput = vi.fn();
@@ -56,6 +56,8 @@ describe('DigitaStateStatistics component tests', () => {
   });
 
   it('renders the component when data is available', () => {
+    const graphColors = getGraphColors(theme);
+
     const { container, getByTestId } = render(<DigitalStateStatistics {...digitalStateDataMock} />);
     expect(container).toHaveTextContent('digital_state.title');
     expect(container).toHaveTextContent('digital_state.description');
@@ -66,15 +68,15 @@ describe('DigitaStateStatistics component tests', () => {
     expect(mockInput).toHaveBeenCalledWith([
       {
         value: digitalStateDataMock.data[StatisticsResponseStatus.OK],
-        itemStyle: { color: GraphColors.blue },
+        itemStyle: { color: graphColors.blue },
       },
       {
         value: digitalStateDataMock.data[StatisticsResponseStatus.KO],
-        itemStyle: { color: GraphColors.azure },
+        itemStyle: { color: graphColors.azure },
       },
       {
         value: digitalStateDataMock.data[StatisticsResponseStatus.PROGRESS],
-        itemStyle: { color: GraphColors.lightGrey },
+        itemStyle: { color: graphColors.lightGrey },
       },
     ]);
   });

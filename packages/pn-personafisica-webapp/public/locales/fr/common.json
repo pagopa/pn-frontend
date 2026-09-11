@@ -21,6 +21,7 @@
     "disable": "Désactiver",
     "start": "Commencer",
     "continue": "Continuer",
+    "clear-field": "Vider le champ",
     "go-on": "Suivant",
     "go-to-home": "Aller à la page d'accueil",
     "go-to-login": "Se connecter",
@@ -36,7 +37,9 @@
     "deleghe": "Délégations",
     "profilo": "Tes données",
     "contacts": "Tes coordonnées",
-    "app-status": "Statut de la plateforme"
+    "app-status": "Statut de la plateforme",
+    "fallback-notification": "Détail de la notification",
+    "fallback-communication": "Détail de la communication"
   },
   "header": {
     "assistance": "Assistance",

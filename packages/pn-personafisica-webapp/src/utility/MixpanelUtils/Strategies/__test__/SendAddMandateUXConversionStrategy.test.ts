@@ -27,7 +27,7 @@ describe('Mixpanel - Add mandate UX conversion Strategy', () => {
 
     const selectedPartyEvent = strategy.performComputations({
       selectPersonaFisicaOrPersonaGiuridica: recipientType,
-      selectTuttiEntiOrSelezionati: 'comune di milano',
+      selectTuttiEntiOrSelezionati: 'comune di test 2',
     });
     expect(selectedPartyEvent).toEqual({
       [EventPropertyType.TRACK]: {

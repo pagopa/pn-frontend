@@ -145,10 +145,11 @@
       "phone": "Telefonska številka organa",
       "email": "E-pošta organa",
       "website": "Spletno mesto organa",
-      "copy_phone": "Telefonska številka je kopirana"
+      "copy_phone": "Kopiraj telefonsko številko",
+      "copied_phone": "Telefonska številka je kopirana"
     },
     "informal_notification_markdown": {
-      "greeting": "All'attenzione di {{recipientDenomination}}",
+      "greeting": "All'attenzione di {{recipientDenomination}},",
       "attachments_info": "Per avere maggiori informazioni <0>è consigliato prendere visione degli allegati</0>, che possono fornire dettagli importanti.",
       "payment_instructions": "È possibile completare il pagamento premendo <0>Paga</0>. In alternativa, si può utilizzare l'<1>avviso allegato</1> per saldare l'importo tramite tutti i canali abilitati a pagoPA.",
       "assistance": "In ogni caso, qualora si avesse bisogno di assistenza, è possibile <0>contattare {{senderDenomination}} attraverso i suoi canali ufficiali.</0>"
@@ -162,6 +163,10 @@
       "informal_downloadable_acts": "Shranite priloge v svojo napravo: na spletu bodo na voljo do <0>180 dni od datuma vložitve</0>, ki ga najdete zgoraj!"
     },
     "timeline": {
+      "courtesy-group-label": "Vljudnostna sporočila",
+      "registered-letter": "Priporočeno pismo",
+      "digital-send-fallback": "Digitalno pošiljanje",
+      "unknown-status": "Neznano stanje",
       "schedule-digital-workflow": "Nadaljnje pošiljanje z digitalnimi sredstvi",
       "schedule-digital-workflow-description": "Začel se je nadaljnji poskus digitalnega pošiljanja obvestila.",
       "schedule-digital-workflow-description-multirecipient": "Začel se je nadaljnji poskus pošiljanja obvestila za {{name}} {{taxId}} po digitalni poti.",
@@ -172,9 +177,11 @@
       "send-courtesy-message-description": "Vljudnostno sporočilo se pošilja prek {{type}}.",
       "send-courtesy-message-description-multirecipient": "Vljudnostno sporočilo se pošilja za {{name}} {{taxId}} prek {{type}}.",
       "send-digital-domicile-PEC": "Pošiljanje prek PEC",
+      "send-digital-domicile-PEC-group-label": "PEC",
       "send-digital-domicile-PEC-description": "Obvestilo se pošlje na PEC {{address}}.",
       "send-digital-domicile-PEC-description-multirecipient": "Obvestilo se pošlje za {{name}} {{taxId}} na PEC {{address}}.",
       "send-digital-domicile-SERCQ-SEND": "Pošiljanje prek digitalnega naslova SEND",
+      "send-digital-domicile-SERCQ-SEND-group-label": "Digitalni domicil SEND",
       "send-digital-domicile-SERCQ-SEND-description": "Pošiljanje obvestila na digitalni naslov SEND je v teku.",
       "send-digital-domicile-SERCQ-SEND-description-multirecipient": "Pošiljanje obvestila osebi {{name}} {{taxId}} na digitalni naslov SEND je v teku",
       "send-digital-error": "Pošiljanje prek PEC ni uspelo",
@@ -190,9 +197,15 @@
       "send-simple-registered-letter-description": "Obvestilo se pošlje na naslov {{address}} z navadnim priporočenim pismom.",
       "send-simple-registered-letter-description-multirecipient": "Obvestilo se pošlje za {{name}} {{taxId}} na naslov {{address}} z navadnim priporočenim pismom.",
       "send-analog-domicile-890": "Pošiljanje po priporočeni pošti 890",
+      "send-analog-domicile-890-group-label": "Priporočeno pismo 890",
+      "send-analog-domicile-890-first-attempt-group-label": "Prvo priporočeno pismo 890",
+      "send-analog-domicile-890-second-attempt-group-label": "Drugo priporočeno pismo 890",
       "send-analog-domicile-890-description": "Začelo se je pošiljanje obvestila na naslov {{address}} s priporočenim pismom 890.",
       "send-analog-domicile-890-description-multirecipient": "Začelo se je pošiljanje obvestila za {{name}} {{taxId}} na naslov {{address}} s priporočenim pismom 890.",
       "send-analog-domicile-ar": "Pošiljanje s priporočenim pismom s povratnico",
+      "send-analog-domicile-ar-group-label": "Priporočeno pismo s povratnico",
+      "send-analog-domicile-ar-first-attempt-group-label": "Prvo priporočeno pismo s povratnico",
+      "send-analog-domicile-ar-second-attempt-group-label": "Drugo priporočeno pismo s povratnico",
       "send-analog-domicile-ar-description": "Začelo se je pošiljanje obvestila na naslov {{address}} s priporočenim pismom s povratnico.",
       "send-analog-domicile-ar-description-multirecipient": "Začelo se je pošiljanje obvestila za {{name}} {{taxId}} na naslov {{address}} s priporočenim pismom s povratnico.",
       "send-digital-progress-error": "Pošiljanje prek PEC ni prevzeto",
@@ -476,6 +489,7 @@
     "notification-timeline-reworked-description": "Dogodki, označeni kot popravljeni, nadomeščajo prejšnje dogodke, navedene kot neveljavne.",
     "reworked-status-valid": "Popravljen dogodek",
     "reworked-status-not-valid": "Neveljaven dogodek",
+    "reworked-status-group": "En ali več popravljenih dogodkov",
     "cancellation-in-progress": "Preklicano",
     "cancellation-in-progress-tooltip": "Preklic poteka. Stanje bo kmalu posodobljeno.",
     "cancellation-in-progress-description": "Preklic poteka. Stanje bo kmalu posodobljeno."

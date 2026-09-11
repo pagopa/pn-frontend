@@ -2,8 +2,8 @@ import { useEffect, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
-import AddIcon from '@mui/icons-material/Add';
-import { Box, Button, Link, Stack, Typography } from '@mui/material';
+import AddRoundedIcon from '@mui/icons-material/AddRounded';
+import { Box, Link, Stack, Typography } from '@mui/material';
 import {
   ApiErrorWrapper,
   EmptyState,
@@ -19,6 +19,7 @@ import {
   sortArray,
   useIsMobile,
 } from '@pagopa-pn/pn-commons';
+import { MIButton } from '@pagopa/mui-italia';
 
 import { DelegationColumnData } from '../../models/Deleghe';
 import { PGEventsType } from '../../models/PGEventsType';
@@ -89,6 +90,9 @@ const DelegatesByCompany = () => {
       tableConfiguration: {
         cellProps: { width: '11%' },
       },
+      cardConfiguration: {
+        wrapValueInTypography: false,
+      },
     },
     {
       id: 'endDate',
@@ -96,6 +100,9 @@ const DelegatesByCompany = () => {
       tableConfiguration: {
         cellProps: { width: '11%' },
         sortable: true,
+      },
+      cardConfiguration: {
+        wrapValueInTypography: false,
       },
     },
     {
@@ -158,15 +165,15 @@ const DelegatesByCompany = () => {
         <Typography variant="h6" mb={3}>
           {t('deleghe.delegatesTitle')}
         </Typography>
-        <Button
+        <MIButton
           id="add-deleghe"
           variant="outlined"
           onClick={handleAddDelegationClick}
           data-testid="addDeleghe"
         >
-          <AddIcon fontSize={'small'} sx={{ marginRight: 1 }} />
+          <AddRoundedIcon fontSize={'small'} sx={{ marginRight: 1 }} />
           {t('deleghe.add')}
-        </Button>
+        </MIButton>
       </Stack>
       <ApiErrorWrapper
         apiId={DELEGATION_ACTIONS.GET_MANDATES_BY_DELEGATOR}

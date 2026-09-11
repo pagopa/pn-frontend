@@ -23,11 +23,7 @@ export const ShowCodesInput: React.FC<Props> = ({ name, value, label }) => {
         sx: { p: 0 },
         endAdornment: (
           <InputAdornment position="end">
-            <CopyToClipboardButton
-              value={() => value}
-              tooltipTitle={t('api-key-copied')}
-              color="primary"
-            />
+            <CopyToClipboardButton value={() => value} tooltipTitle={t('api-key-copied')} />
           </InputAdornment>
         ),
       }}

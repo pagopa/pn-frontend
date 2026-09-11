@@ -46,8 +46,14 @@ const NotificationsRecipientDataSwitch: React.FC<{
 
   const isNewNotification = data.isNewNotification;
 
-  if (type === 'sentAt' && !isMobile) {
-    return (
+  if (type === 'sentAt') {
+    return isMobile ? (
+      <MobileSentAtCell
+        date={data.sentAt}
+        isNew={isNewNotification}
+        badge={<NewNotificationBadge isNew={isNewNotification} />}
+      />
+    ) : (
       <Stack direction="row" alignItems="center">
         <NewNotificationBadge isNew={isNewNotification} />
         <DataValue
@@ -60,25 +66,26 @@ const NotificationsRecipientDataSwitch: React.FC<{
       </Stack>
     );
   }
-  if (type === 'sentAt' && isMobile) {
-    return (
-      <MobileSentAtCell
-        date={data.sentAt}
-        isNew={isNewNotification}
-        badge={<NewNotificationBadge isNew={isNewNotification} />}
-      />
+
+  if (type === 'sender') {
+    return isMobile ? (
+      <Typography variant="body2" fontWeight={600}>
+        {data.sender}
+      </Typography>
+    ) : (
+      data.sender
     );
   }
-  if (type === 'sender') {
-    return data.sender;
-  }
+
   if (type === 'subject') {
     return (
       <>
         <DataValue
           mode={isMobile ? 'wrap' : 'truncate'}
           slots={{ root: Typography }}
-          slotProps={{ root: { variant: 'body2', mb: 0.5 } }}
+          slotProps={{
+            root: { variant: 'body2', mb: 0.5, fontWeight: isMobile ? 600 : undefined },
+          }}
         >
           {data.subject}
         </DataValue>
@@ -92,12 +99,15 @@ const NotificationsRecipientDataSwitch: React.FC<{
       </>
     );
   }
+
   if (type === 'iun') {
     return data.iun;
   }
+
   if (type === 'recipients') {
     return <RecipientsCell recipients={data.recipients} />;
   }
+
   if (type === 'action') {
     return (
       <NotificationActionButton

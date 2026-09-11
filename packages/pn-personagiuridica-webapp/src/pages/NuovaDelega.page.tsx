@@ -4,11 +4,9 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import * as yup from 'yup';
 
-import AccountBalanceIcon from '@mui/icons-material/AccountBalance';
-import PeopleIcon from '@mui/icons-material/People';
+import AccountBalanceRoundedIcon from '@mui/icons-material/AccountBalance';
 import {
   Box,
-  Button,
   Divider,
   FormControl,
   FormControlLabel,
@@ -25,7 +23,6 @@ import {
   CustomDatePicker,
   DATE_FORMAT,
   DatePickerTypes,
-  PnBreadcrumb,
   RecipientType,
   TitleBox,
   dataRegex,
@@ -34,7 +31,13 @@ import {
   useIsMobile,
   useSearchStringChangeInput,
 } from '@pagopa-pn/pn-commons';
-import { Autocomplete, IllusCompleted } from '@pagopa/mui-italia';
+import {
+  Autocomplete,
+  IllusMICompleted,
+  MIBreadcrumbItem,
+  MIBreadcrumbs,
+  MIButton,
+} from '@pagopa/mui-italia';
 
 import VerificationCodeComponent from '../components/Deleghe/VerificationCodeComponent';
 import LoadingPageWrapper from '../components/LoadingPageWrapper/LoadingPageWrapper';
@@ -175,7 +178,10 @@ const NuovaDelega = () => {
 
   const renderOption = (option: Party) => (
     <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-      <AccountBalanceIcon fontSize="small" sx={{ color: '#BBC2D6' }} />
+      <AccountBalanceRoundedIcon
+        fontSize="small"
+        sx={(theme) => ({ color: theme.colors.neutral.grey[300] })}
+      />
       {option.name}
     </Box>
   );
@@ -210,16 +216,17 @@ const NuovaDelega = () => {
 
   const breadcrumbs = (
     <>
-      <PnBreadcrumb
-        linkRoute={routes.DELEGATI}
-        linkLabel={
-          <>
-            <PeopleIcon sx={{ mr: 0.5 }} />
-            {t('deleghe.title')}
-          </>
-        }
-        currentLocationLabel={t('nuovaDelega.breadcrumb')}
-      />
+      <MIBreadcrumbs
+        backButtonLabel={t('button.indietro', { ns: 'common' })}
+        backButtonAction={() => navigate(routes.DELEGATI)}
+      >
+        <MIBreadcrumbItem
+          label={t('deleghe.title')}
+          onClick={() => navigate(routes.DELEGATI)}
+          data-testid="breadcrumb-root-button"
+        />
+        <MIBreadcrumbItem label={t('nuovaDelega.breadcrumb')} current />
+      </MIBreadcrumbs>
       <TitleBox
         title={t('nuovaDelega.title')}
         subTitle={t('nuovaDelega.subtitle')}
@@ -540,15 +547,15 @@ const NuovaDelega = () => {
                       <Divider sx={{ my: 3 }} />
                       <Stack alignItems="flex-start" justifyContent={'flex-start'}>
                         <Stack>
-                          <Button
+                          <MIButton
                             id="create-button"
                             sx={{ marginTop: '1rem', margin: 'auto' }}
-                            type={'submit'}
+                            type="submit"
                             variant={'contained'}
                             data-testid="createButton"
                           >
                             {t('nuovaDelega.form.submit')}
-                          </Button>
+                          </MIButton>
                         </Stack>
                       </Stack>
                     </Form>
@@ -561,7 +568,7 @@ const NuovaDelega = () => {
       )}
       {created && (
         <CourtesyPage
-          icon={<IllusCompleted />}
+          icon={<IllusMICompleted />}
           title={t('nuovaDelega.createdTitle')}
           subtitle={t('nuovaDelega.createdDescription')}
           onClick={handleDelegationsClick}

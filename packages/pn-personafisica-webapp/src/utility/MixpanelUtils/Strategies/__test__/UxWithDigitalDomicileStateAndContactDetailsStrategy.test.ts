@@ -215,7 +215,7 @@ describe('Mixpanel - UX Action with DigitalDomicileState and ContactDetails Stra
         addressType: AddressType.COURTESY,
         senderId: 'comune-di-milano',
         channelType: ChannelType.EMAIL,
-        value: 'milano@mail.it',
+        value: 'ente-test@mail.it',
       },
     ];
 

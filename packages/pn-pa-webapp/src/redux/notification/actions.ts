@@ -4,6 +4,7 @@ import {
   NotificationDetail,
   NotificationDocumentRequest,
   NotificationDocumentResponse,
+  NotificationTimelineResponse,
   PaymentAttachment,
   PaymentAttachmentSName,
   parseError,
@@ -17,6 +18,7 @@ import { NotificationSentApiFactory } from '../../generated-client/notifications
 
 export enum NOTIFICATION_ACTIONS {
   GET_SENT_NOTIFICATION = 'getSentNotification',
+  GET_SENT_NOTIFICATION_TIMELINE = 'getSentNotificationTimeline',
   GET_SENT_NOTIFICATION_DOCUMENT = 'getSentNotificationDocument',
   GET_SENT_NOTIFICATION_PAYMENT = 'getSentNotificationPayment',
   GET_DOWNTIME_HISTORY = 'getNotificationDowntimeHistory',
@@ -34,6 +36,23 @@ export const getSentNotification = createAsyncThunk<NotificationDetail, string>(
       );
       const response = await notificationSentApiFactory.getSentNotificationV1(params);
       return response.data as NotificationDetail;
+    } catch (e: any) {
+      return rejectWithValue(parseError(e));
+    }
+  }
+);
+
+export const getSentNotificationTimeline = createAsyncThunk<NotificationTimelineResponse, string>(
+  NOTIFICATION_ACTIONS.GET_SENT_NOTIFICATION_TIMELINE,
+  async (params: string, { rejectWithValue }) => {
+    try {
+      const notificationSentApiFactory = NotificationSentApiFactory(
+        undefined,
+        undefined,
+        apiClient
+      );
+      const response = await notificationSentApiFactory.getSentNotificationTimelineV1(params);
+      return response.data as NotificationTimelineResponse;
     } catch (e: any) {
       return rejectWithValue(parseError(e));
     }

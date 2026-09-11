@@ -1,9 +1,9 @@
 import { RefObject } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import MailOutlineIcon from '@mui/icons-material/MailOutline';
+import MailOutlineRoundedIcon from '@mui/icons-material/MailOutlineRounded';
 import { Stack, Typography } from '@mui/material';
-import { ButtonNaked } from '@pagopa/mui-italia';
+import { MIButton } from '@pagopa/mui-italia';
 
 import { EmailContactState } from '../../../models/Onboarding';
 import { ChannelType } from '../../../models/contacts';
@@ -57,14 +57,9 @@ const EmailSection: React.FC<Props> = ({
           {t('onboarding.digital-domicile.pec.optional-email-description')}
         </Typography>
 
-        <ButtonNaked
-          color="primary"
-          size="medium"
-          onClick={onExpand}
-          sx={{ alignSelf: 'flex-start', fontWeight: 700 }}
-        >
+        <MIButton variant="text" onClick={onExpand} sx={{ alignSelf: 'flex-start' }}>
           {t('onboarding.digital-domicile.pec.email-cta')}
-        </ButtonNaked>
+        </MIButton>
       </Stack>
     );
   }
@@ -88,7 +83,7 @@ const EmailSection: React.FC<Props> = ({
           label: t('onboarding.digital-domicile.pec.cancel-email-cta'),
           onClick: onCollapse,
         }}
-        prefix={<MailOutlineIcon fontSize="small" color="disabled" />}
+        prefix={<MailOutlineRoundedIcon fontSize="small" color="disabled" />}
       />
     );
   }
@@ -99,7 +94,7 @@ const EmailSection: React.FC<Props> = ({
         mode="view"
         description={t('onboarding.digital-domicile.pec.email-present-description')}
         value={email.value}
-        icon={<MailOutlineIcon color="disabled" fontSize="small" aria-hidden="true" />}
+        icon={<MailOutlineRoundedIcon color="disabled" fontSize="small" aria-hidden="true" />}
       />
     );
   }
@@ -124,7 +119,7 @@ const EmailSection: React.FC<Props> = ({
           showLabelOnEdit={false}
           slots={{
             label: () => <></>,
-            leadingEditIcon: MailOutlineIcon,
+            leadingEditIcon: MailOutlineRoundedIcon,
           }}
           slotsProps={{
             textField: {
@@ -134,7 +129,6 @@ const EmailSection: React.FC<Props> = ({
               variant: 'outlined',
               sx: {
                 height: '43px',
-                fontWeight: 700,
                 flexBasis: { xs: 'unset', lg: '25%' },
               },
             },

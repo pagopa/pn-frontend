@@ -2,12 +2,9 @@ import { useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
-import ConstructionIcon from '@mui/icons-material/Construction';
-import LaptopChromebookIcon from '@mui/icons-material/LaptopChromebook';
-import PowerSettingsNewIcon from '@mui/icons-material/PowerSettingsNew';
-import SavingsIcon from '@mui/icons-material/Savings';
-import TouchAppIcon from '@mui/icons-material/TouchApp';
-import { Box, Button, Chip, ChipOwnProps, Stack, Typography } from '@mui/material';
+import ConstructionRoundedIcon from '@mui/icons-material/ConstructionRounded';
+import PowerSettingsNewRoundedIcon from '@mui/icons-material/PowerSettingsNewRounded';
+import { Box, Stack, Typography } from '@mui/material';
 import {
   EventAction,
   PnInfoCard,
@@ -15,7 +12,15 @@ import {
   appStorage,
   useIsMobile,
 } from '@pagopa-pn/pn-commons';
-import { MIAlert } from '@pagopa/mui-italia';
+import {
+  IllusMIDesktop,
+  IllusMIEmailValidation,
+  IllusMISavingMoney,
+  MIAlert,
+  MIButton,
+  MIChip,
+  MIChipProps,
+} from '@pagopa/mui-italia';
 
 import { PFEventsType } from '../../models/PFEventsType';
 import { AddressType, ChannelType, ContactSource } from '../../models/contacts';
@@ -38,7 +43,7 @@ const EmptyLegalContacts = () => {
   const navigate = useNavigate();
   const isMobile = useIsMobile();
 
-  const infoIcons = [LaptopChromebookIcon, SavingsIcon, TouchAppIcon];
+  const infoIcons = [IllusMIDesktop, IllusMISavingMoney, IllusMIEmailValidation];
   const sercqSendInfoList: Array<{ title: string; description: string }> = t(
     'legal-contacts.sercq-send-info-list',
     {
@@ -68,12 +73,19 @@ const EmptyLegalContacts = () => {
         justifyContent="space-between"
         sx={{ mb: 3 }}
       >
-        {infoIcons.map((Icon, index) => {
+        {infoIcons.map((IllustrationSvg, index) => {
           const title = sercqSendInfoList[index]?.title;
           const description = sercqSendInfoList[index]?.description;
           return (
-            <Stack key={title} direction={{ xs: 'row', lg: 'column' }} spacing={2}>
-              <Icon sx={{ height: '24px', width: '24px', color: '#35C1EC' }} />
+            <Stack
+              key={title}
+              direction={{ xs: 'row', lg: 'column' }}
+              spacing={2}
+              alignItems={{ xs: 'center', lg: 'flex-start' }}
+              flex={{ lg: 1 }}
+              flexBasis={{ lg: 0 }}
+            >
+              <IllustrationSvg size={40} />
               <Box>
                 <Typography variant="body2" fontWeight={600} mb={1}>
                   {title}
@@ -84,9 +96,9 @@ const EmptyLegalContacts = () => {
           );
         })}
       </Stack>
-      <Button variant="contained" fullWidth={isMobile} onClick={handleStartActivation}>
+      <MIButton variant="contained" fullWidth={isMobile} onClick={handleStartActivation}>
         {t('button.start')}
-      </Button>
+      </MIButton>
     </>
   );
 };
@@ -118,7 +130,7 @@ const LegalContacts = () => {
 
   type SubtitleParams = {
     label: string;
-    color: ChipOwnProps['color'];
+    color: MIChipProps['color'];
   };
 
   const getSubtitle = () => {
@@ -132,7 +144,7 @@ const LegalContacts = () => {
     } else if (hasNoDefaultLegalAddress) {
       params = {
         label: t('status.inactive', { ns: 'recapiti' }),
-        color: 'default',
+        color: 'neutral',
       };
     } else {
       params = {
@@ -140,7 +152,7 @@ const LegalContacts = () => {
         color: 'success',
       };
     }
-    return <Chip component="span" {...params} sx={{ mb: 2 }} />;
+    return <MIChip {...params} sx={{ mb: 2 }} />;
   };
 
   const deleteAbortHandler = () => {
@@ -225,13 +237,13 @@ const LegalContacts = () => {
           {
             key: 'manage',
             label: t('button.manage'),
-            icon: <ConstructionIcon />,
+            icon: <ConstructionRoundedIcon />,
             onClick: handleStartManagement,
           },
           {
             key: 'disable',
             label: t('button.disable'),
-            icon: <PowerSettingsNewIcon />,
+            icon: <PowerSettingsNewRoundedIcon />,
             destructive: true,
             onClick: () => {
               const event = hasSercqSendActive

@@ -47,9 +47,6 @@ export { default as Footer } from './Footer/Footer';
 export { default as Header } from './Header/Header';
 export { IllusAppIO } from './Illustrations/IllusAppIO';
 export { IllusAppIODialog } from './Illustrations/IllusAppIODialog';
-export { IllusAppIoLogo } from './Illustrations/IllusAppIOLogo';
-export { IllusHourglass } from './Illustrations/IllusHourglass';
-export { IllusQuestion } from './Illustrations/IllusQuestion';
 export { IllusSendLogo } from './Illustrations/IllusSendLogo';
 export { IllusStatistics } from './Illustrations/IllusStatistics';
 export { IllusLandingTpp } from './Illustrations/IllusLandingTpp';
@@ -60,7 +57,9 @@ export { LoadingOverlay } from './Loading/LoadingOverlay';
 export { default as LoadingPage } from './LoadingPage';
 export { default as NotificationDetailDocuments } from './NotificationDetail/NotificationDetailDocuments';
 export { default as NotificationDetailBilingualFacsimileDocuments } from './NotificationDetail/NotificationDetailBilingualFacsimileDocuments';
+// TODO: rimuovere quando IS_NEW_TIMELINE_ENABLED sarà a rollout completato e resterà solo NotificationEventsTimeline
 export { default as NotificationDetailTimeline } from './NotificationDetail/NotificationDetailTimeline';
+export { default as NotificationEventsTimeline } from './NotificationDetail/NotificationEventsTimeline/NotificationEventsTimeline';
 export { default as NotificationPaymentRecipient } from './NotificationDetail/NotificationPaymentRecipient';
 export { default as NotificationRelatedDowntimes } from './NotificationDetail/NotificationRelatedDowntimes';
 export { default as MobileNotificationsSort } from './Notifications/MobileNotificationsSort';
@@ -68,7 +67,6 @@ export { default as NotificationsRecipientDataSwitch } from './Notifications/Not
 export { NotificationActionButton } from './Notifications/NotificationsDataSwitchCells';
 export { default as StatusTooltip } from './Notifications/StatusTooltip';
 export { default as CustomPagination } from './Pagination/CustomPagination';
-export { default as PnBreadcrumb } from './PnBreadcrumb';
 export { default as PnDialog } from './PnDialog/PnDialog';
 export { default as PnDialogActions } from './PnDialog/PnDialogActions';
 export { default as PnDialogContent } from './PnDialog/PnDialogContent';

@@ -1,4 +1,4 @@
-import ReportGmailerrorredIcon from '@mui/icons-material/ReportGmailerrorred';
+import ReportGmailerrorredRoundedIcon from '@mui/icons-material/ReportGmailerrorredRounded';
 import { Link, Stack, Typography } from '@mui/material';
 
 import { getLocalizedOrDefaultLabel } from '../../utility/localization.utility';
@@ -38,13 +38,19 @@ const ApiError: React.FC<ApiErrorProps> = ({
 
   return (
     <Stack
-      sx={{ fontSize: '16px', mt, borderRadius: '4px', backgroundColor: '#ffffff', p: 2 }}
+      sx={(theme) => ({
+        fontSize: '16px',
+        mt,
+        borderRadius: '4px',
+        backgroundColor: theme.palette.background.paper,
+        p: 2,
+      })}
       direction={'row'}
       justifyContent={'center'}
       alignItems={'center'}
       data-testid={dataTestId}
     >
-      <ReportGmailerrorredIcon
+      <ReportGmailerrorredRoundedIcon
         fontSize={'small'}
         sx={{ verticalAlign: 'middle', margin: '0 20px' }}
       />

@@ -1,6 +1,7 @@
 import { useTranslation } from 'react-i18next';
 
-import { Button, DialogContentText, DialogTitle } from '@mui/material';
+import { DialogContentText, DialogTitle } from '@mui/material';
+import { MIButton } from '@pagopa/mui-italia';
 
 import { usePrompt } from '../hooks/usePrompt';
 import PnDialog from './PnDialog/PnDialog';
@@ -26,10 +27,10 @@ const Prompt: React.FC<Props> = ({ disabled = false, title, message, children })
           <DialogContentText>{message}</DialogContentText>
         </PnDialogContent>
         <PnDialogActions>
-          <Button variant="outlined" onClick={cancelNavigation}>
+          <MIButton variant="outlined" onClick={cancelNavigation}>
             {t('button.annulla')}
-          </Button>
-          <Button
+          </MIButton>
+          <MIButton
             id="button-exit"
             variant="contained"
             onClick={confirmNavigation}
@@ -37,7 +38,7 @@ const Prompt: React.FC<Props> = ({ disabled = false, title, message, children })
             data-testid="confirmExitBtn"
           >
             {t('button.exit')}
-          </Button>
+          </MIButton>
         </PnDialogActions>
       </PnDialog>
       {children}

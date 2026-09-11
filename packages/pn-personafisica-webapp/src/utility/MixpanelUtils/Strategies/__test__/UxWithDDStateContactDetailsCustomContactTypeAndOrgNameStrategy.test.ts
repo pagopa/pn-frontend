@@ -51,7 +51,7 @@ describe('Mixpanel - UX Action with Digital Domicil State, ContactDetails, Custo
       event_type: EventAction.ACTION,
       addresses: digitalAddressesSercq,
       customized_contact_type: ChannelType.PEC,
-      organization_name: 'Agenzia delle Entrate',
+      organization_name: 'Agenzia Test',
     });
 
     expect(result).toEqual({
@@ -61,7 +61,7 @@ describe('Mixpanel - UX Action with Digital Domicil State, ContactDetails, Custo
         digital_domicile_state: 'send',
         contact_details: 'email_sms',
         customized_contact_type: 'pec',
-        organization_name: 'Agenzia delle Entrate',
+        organization_name: 'Agenzia Test',
       },
     });
   });

@@ -20,12 +20,15 @@ export type { Institution, PartyEntityWithUrl } from './Institutions';
 export type {
   ActionMeta,
   EventCreatedDelegationType,
+  EventDeliveryFlowType,
+  EventDeliveryModeType,
   EventMandateNotificationsListType,
   EventNotificationDetailType,
+  EventNotificationSource,
   EventPaymentStatusType,
   EventsType,
   TrackedEvent,
-  EventNotificationSource,
+  EventNotificationType,
 } from './MixpanelEvents';
 export type {
   GetNotificationsParams,
@@ -88,6 +91,7 @@ export {
   EventDowntimeType,
   EventPageType,
   EventPaymentRecipientType,
+  EventNotificationTypes,
   EventPropertyType,
 } from './MixpanelEvents';
 export {
@@ -110,3 +114,7 @@ export {
 export { NotificationStatus, InformalNotificationStatus } from './NotificationStatus';
 export type { UnifiedNotificationStatus } from './NotificationStatus';
 export { basicNoLoggedUserData } from './User';
+export type {
+  NotificationTimelineResponse,
+  NotificationTimelineStatusHistory,
+} from './NotificationTimeline';

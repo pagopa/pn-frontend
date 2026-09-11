@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 
 import { Button, Grid } from '@mui/material';
 import { CustomMobileDialogAction } from '@pagopa-pn/pn-commons';
+import { MIButton } from '@pagopa/mui-italia';
 
 type Props = {
   filtersApplied: boolean;
@@ -35,9 +36,18 @@ const FilterNotificationsFormActions = ({
 
   const cancelAction = (
     <Grid item lg="auto" xs={12}>
-      <Button data-testid="cancelButton" size="small" onClick={cleanFilters}>
+      <MIButton
+        data-testid="cancelButton"
+        onClick={cleanFilters}
+        variant="text"
+        sx={{
+          height: '43px !important',
+          padding: '0 16px !important',
+          minWidth: '130px !important',
+        }}
+      >
         {t('button.annulla filtro')}
-      </Button>
+      </MIButton>
     </Grid>
   );
 

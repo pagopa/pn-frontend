@@ -3,7 +3,7 @@ import { Trans, useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
 import { Add } from '@mui/icons-material';
-import { Box, Button, InputAdornment, Link, TextField, Typography } from '@mui/material';
+import { Box, InputAdornment, Link, TextField, Typography } from '@mui/material';
 import {
   ApiErrorWrapper,
   CustomPagination,
@@ -13,7 +13,7 @@ import {
   calculatePages,
   useIsMobile,
 } from '@pagopa-pn/pn-commons';
-import { CopyToClipboardButton } from '@pagopa/mui-italia';
+import { CopyToClipboardButton, MIButton } from '@pagopa/mui-italia';
 
 import ApiKeyModal from '../components/ApiKeys/ApiKeyModal';
 import DesktopApiKeys from '../components/ApiKeys/DesktopApiKeys';
@@ -257,7 +257,7 @@ const ApiKeys = () => {
         <Typography variant="h5" sx={{ marginBottom: isMobile ? 3 : undefined }}>
           {t('generated-api-keys')}
         </Typography>
-        <Button
+        <MIButton
           id="generate-api-key"
           data-testid="generateApiKey"
           variant="outlined"
@@ -266,7 +266,7 @@ const ApiKeys = () => {
         >
           <Add />
           {t('new-api-key-button')}
-        </Button>
+        </MIButton>
       </Box>
       <ApiErrorWrapper
         apiId={API_KEYS_ACTIONS.GET_API_KEYS}

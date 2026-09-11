@@ -1,11 +1,10 @@
 import { ChangeEvent, DragEvent, ReactNode, useEffect, useMemo, useReducer, useRef } from 'react';
 
-import AttachFileIcon from '@mui/icons-material/AttachFile';
-import CloseIcon from '@mui/icons-material/Close';
+import AttachFileRoundedIcon from '@mui/icons-material/AttachFileRounded';
+import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import {
   Box,
-  Button,
   FormHelperText,
   Input,
   LinearProgress,
@@ -13,8 +12,9 @@ import {
   SxProps,
   TextField,
   Typography,
+  useTheme,
 } from '@mui/material';
-import { ButtonNaked, CopyToClipboardButton } from '@pagopa/mui-italia';
+import { CopyToClipboardButton, MIButton } from '@pagopa/mui-italia';
 
 import { useIsMobile } from '../hooks/useIsMobile';
 import { calcSha256String, parseFileSize } from '../utility/file.utility';
@@ -145,7 +145,7 @@ const FilenameBox = ({ filename }: { filename: string }) => {
 };
 
 /**
- * This component allows file upload
+ *  This component allows file upload
  * @param uploadText text to display
  * @param vertical text orientation
  * @param accept file types accepted
@@ -185,6 +185,7 @@ const FileUpload = ({
   const attachmentExists = fileUploaded?.file?.data;
 
   const isMobile = useIsMobile();
+  const theme = useTheme();
 
   const containerStyle = useMemo(() => {
     if (fileData.status === UploadStatus.IN_PROGRESS || fileData.status === UploadStatus.SENDING) {
@@ -204,7 +205,7 @@ const FileUpload = ({
     return {
       border: '1px dashed',
       borderColor: fileData.error ? 'error.main' : 'primary.main',
-      backgroundColor: fileData.error ? '#fe66661a' : 'primaryAction.selected',
+      backgroundColor: fileData.error ? theme.colors.error[100] : 'primaryAction.selected',
     };
   }, [fileData.status, fileData.error]);
 
@@ -305,19 +306,20 @@ const FileUpload = ({
               display="inline"
               variant="body2"
               textAlign="center"
-              color={fileData.error ? 'error' : ''}
+              color={fileData.error ? 'error.dark' : 'text.primary'}
             >
               {uploadText}&nbsp;{getLocalizedOrDefaultLabel('common', 'upload-file.or')}
               &nbsp;
             </Typography>
-            <Button
+            <MIButton
               variant="contained"
+              color={fileData.error ? 'error' : 'primary'}
               onClick={chooseFileHandler}
               data-testid="loadFromPc"
               sx={{ margin: isMobile ? '10px 0' : '0 10px' }}
             >
               {getLocalizedOrDefaultLabel('common', 'upload-file.select-file')}
-            </Button>
+            </MIButton>
             <Input
               id="file-input"
               type="file"
@@ -365,14 +367,15 @@ const FileUpload = ({
                 justifyContent="start"
                 sx={{ minWidth: 0, flex: 1, mb: { xs: 1, lg: 0 } }}
               >
-                <AttachFileIcon color="primary" sx={{ flexShrink: 0, mr: 1 }} />
+                <AttachFileRoundedIcon color="primary" sx={{ flexShrink: 0, mr: 1 }} />
                 <FilenameBox filename={fileData.file.name} />
               </Box>
               <Typography fontWeight={600} sx={{ marginLeft: { lg: '30px' }, flexShrink: 0 }}>
                 {parseFileSize(fileData.file.size)}
               </Typography>
             </Box>
-            <ButtonNaked
+            <MIButton
+              variant="text"
               data-testid="removeDocument"
               onClick={removeFileHandler}
               aria-label={getLocalizedOrDefaultLabel(
@@ -382,8 +385,8 @@ const FileUpload = ({
               )}
               sx={{ flexShrink: 0, ml: 2 }}
             >
-              <CloseIcon />
-            </ButtonNaked>
+              <CloseRoundedIcon />
+            </MIButton>
           </Box>
         )}
       </Box>

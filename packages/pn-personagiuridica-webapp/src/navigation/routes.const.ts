@@ -15,7 +15,7 @@ export const INTEGRAZIONE_API = '/integrazione-api';
 export const REGISTRA_CHIAVE_PUBBLICA = `${INTEGRAZIONE_API}/registra-chiave-pubblica`;
 
 const DETTAGLIO = '/dettaglio';
-const COMUNICAZIONE = '/comunicazione';
+export const COMUNICAZIONE = '/comunicazione';
 export const DETTAGLIO_NOTIFICA = `${NOTIFICHE}/:id${DETTAGLIO}`;
 export const DETTAGLIO_NOTIFICA_TIMELINE = `${NOTIFICHE}/:id${DETTAGLIO}/timeline`;
 export const DETTAGLIO_COMBO = `${COMUNICAZIONE}/:id${DETTAGLIO}`;

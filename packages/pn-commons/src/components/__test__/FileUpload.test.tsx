@@ -182,7 +182,7 @@ describe('FileUpload Component', () => {
       />
     );
     await testFileUploading(result);
-    const removeIcon = result.queryByTestId('CloseIcon');
+    const removeIcon = result.queryByTestId('CloseRoundedIcon');
     expect(removeIcon).toBeInTheDocument();
     fireEvent.click(removeIcon!);
     await waitFor(() => {

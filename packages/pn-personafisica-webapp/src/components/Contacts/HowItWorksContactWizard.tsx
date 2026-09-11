@@ -1,18 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 
-import {
-  Box,
-  Button,
-  Divider,
-  List,
-  ListItem,
-  ListItemText,
-  Stack,
-  Typography,
-} from '@mui/material';
+import { Box, Divider, List, ListItem, ListItemText, Stack, Typography } from '@mui/material';
 import { EventAction } from '@pagopa-pn/pn-commons';
-import { ButtonNaked, MIAlert } from '@pagopa/mui-italia';
+import { MIAlert, MIButton } from '@pagopa/mui-italia';
 
 import { PFEventsType } from '../../models/PFEventsType';
 import { contactsSelectors } from '../../redux/contact/reducers';
@@ -81,25 +72,25 @@ const HowItWorksContactWizard: React.FC<Props> = ({ goToNextStep, setShowPecWiza
 
       {IS_DOD_ENABLED && (
         <>
-          <List dense sx={{ p: 0 }} data-testid="sercq-send-info-list">
+          <List sx={{ p: 0, mb: 2 }} data-testid="sercq-send-info-list">
             {sercqSendInfoList.map((item, index) => (
-              <Stack key={index} spacing={2} direction="row" alignItems="flex-start">
-                <Box
-                  sx={{
-                    width: '24px',
-                    height: '24px',
-                    borderRadius: '50%',
-                    backgroundColor: '#35C1EC',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                  }}
-                >
-                  <Typography variant="caption" fontSize="14px" fontWeight={400} color="white">
-                    {index + 1}
-                  </Typography>
-                </Box>
-                <ListItem key={index} sx={{ px: 0, pt: 0, pb: 3 }}>
+              <ListItem key={index} sx={{ px: 0, pt: 0, mb: 2 }}>
+                <Stack direction="row" spacing={2} alignItems="center">
+                  <Stack
+                    alignItems={'center'}
+                    sx={{
+                      width: '24px',
+                      height: '24px',
+                    }}
+                  >
+                    <Typography
+                      fontWeight={600}
+                      fontSize="18px"
+                      color={(theme) => theme.colors.neutral.grey[300]}
+                    >
+                      {index + 1}.
+                    </Typography>
+                  </Stack>
                   <ListItemText disableTypography>
                     <Typography fontSize="16px" fontWeight={600} mb={1}>
                       {item.title}
@@ -110,12 +101,11 @@ const HowItWorksContactWizard: React.FC<Props> = ({ goToNextStep, setShowPecWiza
                         ns="recapiti"
                         t={(s: string) => s}
                         components={[
-                          <ButtonNaked
+                          <MIButton
+                            variant="text"
                             key="delivered"
                             data-testid="deliveredLink"
-                            size="medium"
                             onClick={handleShowDeliveredDialog}
-                            color="primary"
                             aria-description={t(
                               'legal-contacts.sercq-send-wizard.step_1.info-list.0.aria-description'
                             )}
@@ -130,8 +120,8 @@ const HowItWorksContactWizard: React.FC<Props> = ({ goToNextStep, setShowPecWiza
                       />
                     </Typography>
                   </ListItemText>
-                </ListItem>
-              </Stack>
+                </Stack>
+              </ListItem>
             ))}
           </List>
 
@@ -141,16 +131,15 @@ const HowItWorksContactWizard: React.FC<Props> = ({ goToNextStep, setShowPecWiza
             </MIAlert>
           )}
 
-          <Button
+          <MIButton
             fullWidth
             variant="contained"
-            color="primary"
             onClick={handleNextStep}
             sx={{ textTransform: 'none', mb: !defaultPECAddress ? 3 : 0 }}
             data-testid="continueButton"
           >
             {t('button.continue', { ns: 'common' })}
-          </Button>
+          </MIButton>
 
           {!defaultPECAddress && (
             <Divider
@@ -170,9 +159,9 @@ const HowItWorksContactWizard: React.FC<Props> = ({ goToNextStep, setShowPecWiza
           <Typography variant="body2" mb={1}>
             {t('legal-contacts.sercq-send-wizard.step_1.have-pec-description')}
           </Typography>
-          <ButtonNaked color="primary" size="medium" onClick={handleShowPecWizard}>
+          <MIButton variant="text" onClick={handleShowPecWizard}>
             {t('legal-contacts.sercq-send-wizard.step_1.insert-pec')}
-          </ButtonNaked>
+          </MIButton>
         </Box>
       )}
 

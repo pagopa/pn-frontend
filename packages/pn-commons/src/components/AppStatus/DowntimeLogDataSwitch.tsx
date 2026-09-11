@@ -1,7 +1,9 @@
-import DownloadIcon from '@mui/icons-material/Download';
-import { Button, Chip, Typography } from '@mui/material';
+import FileDownloadRoundedIcon from '@mui/icons-material/FileDownloadRounded';
+import { Typography } from '@mui/material';
 import { Stack } from '@mui/system';
+import { MIButton, MIChip } from '@pagopa/mui-italia';
 
+import { useIsMobile } from '../../hooks';
 import { Downtime, DowntimeStatus } from '../../models/AppStatus';
 import { Row } from '../../models/PnTable';
 import { formatDate, formatDateTime, formatTimeWithLegend } from '../../utility/date.utility';
@@ -11,14 +13,22 @@ const FormattedDateAndTime: React.FC<{ date: string; inTwoLines?: boolean }> = (
   date,
   inTwoLines,
 }) => {
+  const isMobile = useIsMobile();
+  const isBold = isMobile ? 600 : undefined;
   if (date) {
     return inTwoLines ? (
       <Stack direction="column">
-        <Typography variant="body2">{formatDate(date)},</Typography>
-        <Typography variant="body2">{formatTimeWithLegend(date)}</Typography>
+        <Typography variant="body2" fontWeight={isBold}>
+          {formatDate(date)},
+        </Typography>
+        <Typography variant="body2" fontWeight={isBold}>
+          {formatTimeWithLegend(date)}
+        </Typography>
       </Stack>
     ) : (
-      <Typography variant="body2">{formatDateTime(date)}</Typography>
+      <Typography variant="body2" fontWeight={isBold}>
+        {formatDateTime(date)}
+      </Typography>
     );
   }
   return (
@@ -64,9 +74,10 @@ const DowntimeLogDataSwitch: React.FC<{
   }
   if (type === 'legalFactId') {
     return data.fileAvailable ? (
-      <Button
+      <MIButton
         sx={{ px: 0 }}
-        startIcon={<DownloadIcon />}
+        variant="text"
+        startIcon={<FileDownloadRoundedIcon />}
         data-testid="download-legal-fact"
         onClick={() => {
           if (handleTrackDownloadCertificateOpposable3dparties) {
@@ -76,7 +87,7 @@ const DowntimeLogDataSwitch: React.FC<{
         }}
       >
         {getLocalizedOrDefaultLabel('appStatus', 'legends.legalFactDownload')}
-      </Button>
+      </MIButton>
     ) : (
       <Typography variant="body2" sx={{ color: 'text.secondary' }}>
         {getLocalizedOrDefaultLabel('appStatus', `legends.noFileAvailableByStatus.${data.status}`)}
@@ -85,7 +96,7 @@ const DowntimeLogDataSwitch: React.FC<{
   }
   if (type === 'status') {
     return (
-      <Chip
+      <MIChip
         data-testid="downtime-status"
         label={getLocalizedOrDefaultLabel('appStatus', `legends.status.${data.status}`)}
         color={data.status === DowntimeStatus.OK ? 'success' : 'error'}

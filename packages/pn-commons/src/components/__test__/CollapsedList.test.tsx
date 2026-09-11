@@ -2,10 +2,10 @@ import { render } from '../../test-utils';
 import CollapsedList from '../CollapsedList';
 
 const people = [
-  { id: 'mario', label: 'Mario Rossi' },
-  { id: 'sara', label: 'Sara Giallo' },
-  { id: 'maria', label: 'Maria Verde' },
-  { id: 'luca', label: 'Luca Bianchi' },
+  { id: 'utente-uno', label: 'Utente Test Uno' },
+  { id: 'utente-nove', label: 'Utente Test Nove' },
+  { id: 'utente-dieci', label: 'Utente Test Dieci' },
+  { id: 'utente-cinque', label: 'Utente Test Cinque' },
 ];
 
 describe('CollapsedList Component', () => {

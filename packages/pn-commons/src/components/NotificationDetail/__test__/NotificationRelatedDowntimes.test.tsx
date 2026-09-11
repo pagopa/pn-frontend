@@ -13,9 +13,9 @@ import { LANGUAGE_SESSION_KEY } from '../../../utility/multilanguage.utility';
 import NotificationRelatedDowntimes from '../NotificationRelatedDowntimes';
 
 const fakePalette = {
-  success: { main: '#00FF00' },
-  error: { main: '#FF0000' },
-  text: { primary: '#AAAAAA', secondary: '#17324D' },
+  success: { main: '#6CC66A' },
+  error: { main: '#D13333' },
+  text: { primary: '#0E0F13', secondary: '#555C70' },
 };
 
 vi.mock('@mui/material', async () => {

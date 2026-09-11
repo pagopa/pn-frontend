@@ -5,7 +5,7 @@ import { RouterProvider, createMemoryRouter } from 'react-router-dom';
 import { vi } from 'vitest';
 
 import { ThemeProvider } from '@mui/material';
-import { theme } from '@pagopa/mui-italia';
+import { themeNext } from '@pagopa/mui-italia';
 import { EnhancedStore, configureStore } from '@reduxjs/toolkit';
 import {
   Matcher,
@@ -85,7 +85,7 @@ const customRender = (
   // test view
   const Wrapper = ({ children }: { children: ReactNode }) => (
     <Provider store={testStore}>
-      <ThemeProvider theme={theme}>
+      <ThemeProvider theme={themeNext}>
         <UiContext.Provider value={children as ReactElement}>
           <RouterProvider router={router} />
         </UiContext.Provider>

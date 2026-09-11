@@ -1,64 +1,36 @@
 import { FC, Fragment, ReactNode, forwardRef } from 'react';
 
-import { SxProps, TooltipProps } from '@mui/material';
-import Chip from '@mui/material/Chip';
-import { MIChip } from '@pagopa/mui-italia';
+import { ChipProps, TooltipProps } from '@mui/material';
+import { MIChip, MIChipProps } from '@pagopa/mui-italia';
 
 import { useIsMobile } from '../../hooks/useIsMobile';
 import CustomTooltip from '../CustomTooltip';
 
-type MIChipColors = 'default' | 'info' | 'warning' | 'error' | 'success' | 'highlight' | 'neutral';
-
-const statusColorMap: Record<string, MIChipColors> = {
-  primary: 'info',
-  secondary: 'neutral',
-  info: 'info',
-  warning: 'warning',
-  error: 'error',
-  success: 'success',
-  default: 'default',
-};
-
 type Props = {
   tooltip: string | ReactNode;
   label: string;
-  color: 'warning' | 'error' | 'success' | 'info' | 'default' | 'primary' | 'secondary' | undefined;
+  color: MIChipProps['color'];
   tooltipProps?: Partial<TooltipProps>;
-  chipProps?: SxProps;
+  chipProps?: ChipProps['sx'];
   ariaLabel?: string;
-  useNewChip?: boolean;
 };
 
 const StatusTooltipChip = forwardRef<never, Omit<Props, 'tooltip'>>(
-  ({ useNewChip, label, ariaLabel, color, chipProps, ...rest }, ref) => {
+  ({ label, ariaLabel, color, chipProps, ...rest }, ref) => {
     const isMobile = useIsMobile();
 
-    if (useNewChip) {
-      return (
-        <MIChip
-          {...rest}
-          id={`status-chip-${label}`}
-          data-testid={`statusChip-${label}`}
-          aria-label={ariaLabel}
-          label={isMobile ? <span aria-hidden="true">{label}</span> : label}
-          color={color ? statusColorMap[color] : 'default'}
-          sx={chipProps}
-          ref={ref}
-        />
-      );
-    }
-
     return (
-      <Chip
+      <MIChip
         {...rest}
         id={`status-chip-${label}`}
         data-testid={`statusChip-${label}`}
         aria-label={ariaLabel}
         label={isMobile ? <span aria-hidden="true">{label}</span> : label}
-        color={color}
+        color={color ?? 'default'}
         sx={{
           ...chipProps,
-          cursor: 'default',
+          textAlign: 'center',
+          '& .MuiChip-label': { whiteSpace: 'normal', wordWrap: 'break-word' },
         }}
         ref={ref}
       />
@@ -73,7 +45,6 @@ const StatusTooltip: FC<Props> = ({
   tooltipProps,
   chipProps,
   ariaLabel,
-  useNewChip,
 }) => {
   const tooltipContent = <Fragment>{tooltip}</Fragment>;
 
@@ -85,7 +56,6 @@ const StatusTooltip: FC<Props> = ({
         label={label}
         aria-label={ariaLabel ?? computedAriaLabel}
         color={color}
-        useNewChip={useNewChip}
         chipProps={chipProps}
       />
     </CustomTooltip>

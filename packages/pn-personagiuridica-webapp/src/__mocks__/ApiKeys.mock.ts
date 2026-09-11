@@ -86,8 +86,8 @@ export const virtualKeys: BffVirtualKeysResponse = {
       value: 'string',
       lastUpdate: '2024-09-30T13:10:03.178Z',
       user: {
-        denomination: 'Luca Bianchi',
-        fiscalCode: 'BNCLCU89E08H501A',
+        denomination: 'Utente Test Cinque',
+        fiscalCode: 'TSTUTN00A08A001H',
       },
       status: VirtualKeyStatus.Rotated,
     },
@@ -97,16 +97,16 @@ export const virtualKeys: BffVirtualKeysResponse = {
       value: 'string',
       lastUpdate: '2024-09-30T17:10:03.178Z',
       user: {
-        denomination: 'Sara Verdi',
-        fiscalCode: 'VRDSRA05S47H505C',
+        denomination: 'Utente Test Sei',
+        fiscalCode: 'TSTUTN00A10A001M',
       },
       status: VirtualKeyStatus.Blocked,
     },
     ...virtualKeysOfUser.items.map((key) => ({
       ...key,
       user: {
-        denomination: 'Mario Rossi',
-        fiscalCode: 'RSSMRA93E04H502V',
+        denomination: 'Utente Test Uno',
+        fiscalCode: 'TSTUTN00A03A001C',
       },
     })),
   ],
