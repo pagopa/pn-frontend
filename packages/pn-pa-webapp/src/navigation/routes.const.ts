@@ -8,6 +8,8 @@ export {
 export const DASHBOARD = '/dashboard';
 const NOTIFICA = '/dettaglio';
 const COMUNICATION = '/comunication';
+const CAMPAGNA = '/campagna';
+
 export const DETTAGLIO_NOTIFICA = `${DASHBOARD}/:id${NOTIFICA}`;
 export const DETTAGLIO_NOTIFICA_TIMELINE = `${DASHBOARD}/:id${NOTIFICA}/timeline`;
 export const NUOVA_NOTIFICA = `${DASHBOARD}/nuova-notifica`;
@@ -15,6 +17,7 @@ export const API_KEYS = '/api-keys';
 export const NUOVA_API_KEY = `${API_KEYS}/nuova-api-key`;
 export const STATISTICHE = '/statistiche';
 export const DETTAGLIO_COMBO = `${DASHBOARD}/:id${COMUNICATION}`;
+export const DETTAGLIO_CAMPAGNA = `${DASHBOARD}/:id${CAMPAGNA}`;
 
 export const USERS_SEGMENT = '/users';
 export const GROUPS_SEGMENT = '/groups';
@@ -40,6 +43,7 @@ export const GET_DETTAGLIO_NOTIFICA_PATH = (id: string) => `${DASHBOARD}/${id}${
 export const GET_DETTAGLIO_NOTIFICA_TIMELINE_PATH = (id: string) =>
   `${DASHBOARD}/${id}${NOTIFICA}/timeline`;
 export const GET_DETTAGLIO_COMUNICATION_PATH = (id: string) => `${DASHBOARD}/${id}${COMUNICATION}`;
+export const GET_DETTAGLIO_CAMPAGNA_PATH = (id: string) => `${DASHBOARD}/${id}${CAMPAGNA}`;
 export const NOT_ACCESSIBLE = '/non-accessibile';
 
 export const SELFCARE_LOGIN_PATH = '/auth/login';

@@ -5,6 +5,7 @@ import { NotFound } from '@pagopa-pn/pn-commons';
 import { PNRole } from '../models/user';
 import ApiKeys from '../pages/ApiKeys.page';
 import AppStatus from '../pages/AppStatus.page';
+import CampaignDetail from '../pages/CampaignDetail.page';
 import Dashboard from '../pages/Dashboard.page';
 import NewApiKey from '../pages/NewApiKey.page';
 import NewNotification from '../pages/NewNotification.page';
@@ -36,6 +37,7 @@ const Router: React.FC = () => {
             {IS_STATISTICS_ENABLED && <Route path={routes.STATISTICHE} element={<Statistics />} />}
             <Route path={routes.DETTAGLIO_NOTIFICA} element={<NotificationDetail />} />
             <Route path={routes.DETTAGLIO_NOTIFICA_TIMELINE} element={<NotificationTimeline />} />
+            <Route path={routes.DETTAGLIO_CAMPAGNA} element={<CampaignDetail />} />
             {/*  <Route path={routes.DETTAGLIO_COMBO} element={<InformalNotificationDetail />} /> */}
             <Route path={routes.APP_STATUS} element={<AppStatus />} />
             <Route path="/" element={<Navigate to={routes.DASHBOARD} />} />
