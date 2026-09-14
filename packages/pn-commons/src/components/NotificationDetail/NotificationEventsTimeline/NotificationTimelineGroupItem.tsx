@@ -61,10 +61,12 @@ const NotificationTimelineGroupItem = ({
       >
         <Stack
           component="span"
-          direction={{ xs: 'column', sm: 'row' }}
+          direction="row"
           spacing={1}
           alignItems={{ xs: 'flex-start', sm: 'center' }}
           minWidth={0}
+          useFlexGap
+          sx={{ flexWrap: 'wrap' }}
         >
           <ChannelIcon
             fontSize="small"
@@ -102,7 +104,7 @@ const NotificationTimelineGroupItem = ({
           data-testid="timeline-group-body"
           sx={{
             listStyleType: 'disc',
-            pl: { xs: 3, sm: 10 },
+            pl: { xs: 3, sm: 3.5 },
             my: 1,
             display: 'grid',
             rowGap: 1,
