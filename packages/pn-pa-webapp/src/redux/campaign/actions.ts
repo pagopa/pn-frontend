@@ -6,7 +6,7 @@ import {
   BffCampaignDetailResponseV1,
   BffCampaignSearchResponseV1,
   SenderInformalNotificationsApiFactory,
-} from '../../generated-client/sender-informal-notifications';
+} from '../../generated-client/informal-notifications';
 
 export enum CAMPAIGN_ACTIONS {
   GET_CAMPAIGNS = 'getCampaigns',

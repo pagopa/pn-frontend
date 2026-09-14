@@ -3,7 +3,7 @@ import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 import {
   BffCampaignDetailResponseV1,
   CampaignSummary,
-} from '../../generated-client/sender-informal-notifications';
+} from '../../generated-client/informal-notifications';
 import { getCampaignDetail, getCampaigns } from './actions';
 
 const initialState = {

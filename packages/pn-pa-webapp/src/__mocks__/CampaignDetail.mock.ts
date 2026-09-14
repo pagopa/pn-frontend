@@ -2,7 +2,7 @@ import {
   BffCampaignDetailResponseV1,
   CampaignStatus,
   ChannelType,
-} from '../generated-client/sender-informal-notifications/api';
+} from '../generated-client/informal-notifications/api';
 
 export const campaignDetailMock: BffCampaignDetailResponseV1 = {
   campaignId: 'FattOrd',

@@ -7,7 +7,7 @@ import {
   BffCampaignSearchResponseV1,
   CampaignStatus,
   ChannelType,
-} from '../../../generated-client/sender-informal-notifications';
+} from '../../../generated-client/informal-notifications';
 import { store } from '../../store';
 import { getCampaignDetail, getCampaigns } from '../actions';
 import campaignSlice, { resetCampaignDetail, setPagination } from '../reducers';
