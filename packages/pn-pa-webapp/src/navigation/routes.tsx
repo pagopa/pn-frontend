@@ -40,7 +40,7 @@ const Router: React.FC = () => {
             <Route path={routes.DETTAGLIO_NOTIFICA} element={<NotificationDetail />} />
             <Route path={routes.DETTAGLIO_NOTIFICA_TIMELINE} element={<NotificationTimeline />} />
             <Route path={routes.CAMPAIGNS} element={<Campaigns />} />
-            <Route path={routes.DETTAGLIO_CAMPAGNA} element={<CampaignDetail />} />
+            <Route path={routes.CAMPAIGN_DETAIL} element={<CampaignDetail />} />
             {/*  <Route path={routes.DETTAGLIO_COMBO} element={<InformalNotificationDetail />} /> */}
             <Route path={routes.APP_STATUS} element={<AppStatus />} />
             <Route path="/" element={<Navigate to={routes.DASHBOARD} />} />
