@@ -21,6 +21,7 @@ describe('Mixpanel - Has Addresses Strategy', () => {
         SEND_HAS_PEC: 'yes',
         SEND_HAS_SMS: 'yes',
         SEND_HAS_SERCQ_SEND: 'no',
+        contact_details: 'email_sms',
       },
       [EventPropertyType.SUPER_PROPERTY]: {
         SEND_APPIO_STATUS: 'deactivated',
@@ -28,6 +29,7 @@ describe('Mixpanel - Has Addresses Strategy', () => {
         SEND_HAS_PEC: 'yes',
         SEND_HAS_SMS: 'yes',
         SEND_HAS_SERCQ_SEND: 'no',
+        contact_details: 'email_sms',
       },
     });
   });
@@ -48,6 +50,7 @@ describe('Mixpanel - Has Addresses Strategy', () => {
         SEND_HAS_PEC: 'no',
         SEND_HAS_SMS: 'yes',
         SEND_HAS_SERCQ_SEND: 'no',
+        contact_details: 'email_sms',
       },
       [EventPropertyType.SUPER_PROPERTY]: {
         SEND_APPIO_STATUS: 'deactivated',
@@ -55,6 +58,7 @@ describe('Mixpanel - Has Addresses Strategy', () => {
         SEND_HAS_PEC: 'no',
         SEND_HAS_SMS: 'yes',
         SEND_HAS_SERCQ_SEND: 'no',
+        contact_details: 'email_sms',
       },
     });
   });
@@ -77,6 +81,7 @@ describe('Mixpanel - Has Addresses Strategy', () => {
         SEND_HAS_PEC: 'yes',
         SEND_HAS_SMS: 'yes',
         SEND_HAS_SERCQ_SEND: 'no',
+        contact_details: 'sms',
       },
       [EventPropertyType.SUPER_PROPERTY]: {
         SEND_APPIO_STATUS: 'deactivated',
@@ -84,6 +89,7 @@ describe('Mixpanel - Has Addresses Strategy', () => {
         SEND_HAS_PEC: 'yes',
         SEND_HAS_SMS: 'yes',
         SEND_HAS_SERCQ_SEND: 'no',
+        contact_details: 'sms',
       },
     });
   });
@@ -106,6 +112,7 @@ describe('Mixpanel - Has Addresses Strategy', () => {
         SEND_HAS_PEC: 'yes',
         SEND_HAS_SMS: 'no',
         SEND_HAS_SERCQ_SEND: 'no',
+        contact_details: 'email',
       },
       [EventPropertyType.SUPER_PROPERTY]: {
         SEND_APPIO_STATUS: 'deactivated',
@@ -113,6 +120,7 @@ describe('Mixpanel - Has Addresses Strategy', () => {
         SEND_HAS_PEC: 'yes',
         SEND_HAS_SMS: 'no',
         SEND_HAS_SERCQ_SEND: 'no',
+        contact_details: 'email',
       },
     });
   });
@@ -135,6 +143,7 @@ describe('Mixpanel - Has Addresses Strategy', () => {
         SEND_HAS_PEC: 'yes',
         SEND_HAS_SMS: 'yes',
         SEND_HAS_SERCQ_SEND: 'no',
+        contact_details: 'email_sms',
       },
       [EventPropertyType.SUPER_PROPERTY]: {
         SEND_APPIO_STATUS: 'nd',
@@ -142,6 +151,7 @@ describe('Mixpanel - Has Addresses Strategy', () => {
         SEND_HAS_PEC: 'yes',
         SEND_HAS_SMS: 'yes',
         SEND_HAS_SERCQ_SEND: 'no',
+        contact_details: 'email_sms',
       },
     });
   });
@@ -170,6 +180,7 @@ describe('Mixpanel - Has Addresses Strategy', () => {
         SEND_HAS_PEC: 'yes',
         SEND_HAS_SMS: 'yes',
         SEND_HAS_SERCQ_SEND: 'no',
+        contact_details: 'app_io_email_sms',
       },
       [EventPropertyType.SUPER_PROPERTY]: {
         SEND_APPIO_STATUS: 'activated',
@@ -177,6 +188,7 @@ describe('Mixpanel - Has Addresses Strategy', () => {
         SEND_HAS_PEC: 'yes',
         SEND_HAS_SMS: 'yes',
         SEND_HAS_SERCQ_SEND: 'no',
+        contact_details: 'app_io_email_sms',
       },
     });
   });
@@ -195,6 +207,7 @@ describe('Mixpanel - Has Addresses Strategy', () => {
         SEND_HAS_PEC: 'no',
         SEND_HAS_SMS: 'yes',
         SEND_HAS_SERCQ_SEND: 'yes',
+        contact_details: 'email_sms',
       },
       [EventPropertyType.SUPER_PROPERTY]: {
         SEND_APPIO_STATUS: 'deactivated',
@@ -202,6 +215,7 @@ describe('Mixpanel - Has Addresses Strategy', () => {
         SEND_HAS_PEC: 'no',
         SEND_HAS_SMS: 'yes',
         SEND_HAS_SERCQ_SEND: 'yes',
+        contact_details: 'email_sms',
       },
     });
   });
@@ -227,6 +241,7 @@ describe('Mixpanel - Has Addresses Strategy', () => {
         SEND_HAS_PEC: 'yes',
         SEND_HAS_SMS: 'yes',
         SEND_HAS_SERCQ_SEND: 'no',
+        contact_details: 'email_sms',
       },
       [EventPropertyType.SUPER_PROPERTY]: {
         SEND_APPIO_STATUS: 'deactivated',
@@ -234,6 +249,7 @@ describe('Mixpanel - Has Addresses Strategy', () => {
         SEND_HAS_PEC: 'yes',
         SEND_HAS_SMS: 'yes',
         SEND_HAS_SERCQ_SEND: 'no',
+        contact_details: 'email_sms',
       },
     });
   });
