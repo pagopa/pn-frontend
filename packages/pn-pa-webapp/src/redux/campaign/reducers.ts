@@ -1,11 +1,7 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { createSlice } from '@reduxjs/toolkit';
 
 import { BffCampaignDetailResponseV1 } from '../../generated-client/sender-informal-notifications';
-
-const getCampaignDetail = createAsyncThunk(
-  'campaign/getCampaignDetail',
-  async (): Promise<BffCampaignDetailResponseV1> => ({} as BffCampaignDetailResponseV1)
-);
+import { getCampaignDetail } from './actions';
 
 const initialState = {
   campaignDetail: {} as BffCampaignDetailResponseV1,

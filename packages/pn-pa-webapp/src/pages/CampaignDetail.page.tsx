@@ -25,7 +25,12 @@ const CampaignDetail = () => {
 
   return (
     <Box
-      sx={{ p: 3, display: 'flex', flexDirection: 'column', backgroundColor: 'grey.100' }}
+      sx={{
+        p: 3,
+        display: 'flex',
+        flexDirection: 'column',
+        backgroundColor: 'grey.100',
+      }}
       gap={3}
     >
       {breadcrumb}
@@ -38,23 +43,11 @@ const CampaignDetail = () => {
       />
 
       <PnCampaignDetailCard
-        creationDate="10/07/2026"
+        creationDate={campaign.startDate}
         campaignId={campaign.campaignId}
         serviceName={campaign.serviceName}
         channels={campaign.channels.join(' · ')}
       />
-
-      {/*       <DesktopNotifications
-        notifications={notifications}
-        // onChangeSorting={handleChangeSorting} // Riabilitare con la issue PN-1124
-        onManualSend={handleRouteManualSend}
-        onApiKeys={handleRouteApiKeys}
-        filtersApplied={filterNotificationsRef.current.filtersApplied}
-        onCleanFilters={filterNotificationsRef.current.cleanFilters}
-        hasTimeoutError={hasTimeoutError}
-        loading={loading}
-        onRetry={fetchNotifications}
-      /> */}
     </Box>
   );
 };
