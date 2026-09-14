@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.26.0-RC.6](https://github.com/pagopa/pn-frontend/compare/v2.26.0-RC.5...v2.26.0-RC.6) (2026-09-14)
+
+### Bug Fixes
+
+* **PN-21493:** adjusted timeline layout ([#2048](https://github.com/pagopa/pn-frontend/issues/2048)) ([c1aa0cf](https://github.com/pagopa/pn-frontend/commit/c1aa0cf60ccf91a360b815abfb4d439a80c20df9))
+
+
 # [2.26.0-RC.3](https://github.com/pagopa/pn-frontend/compare/v2.26.0-RC.2...v2.26.0-RC.3) (2026-09-09)
 
 ### Bug Fixes
