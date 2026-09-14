@@ -3,9 +3,10 @@ import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router-dom';
 
 import CheckCircleRoundedIcon from '@mui/icons-material/CheckCircleRounded';
-import EmailRounded from '@mui/icons-material/EmailRounded';
 import ErrorRoundedIcon from '@mui/icons-material/ErrorRounded';
 import HelpRoundedIcon from '@mui/icons-material/HelpRounded';
+import MailIcon from '@mui/icons-material/Mail';
+import MailReadIcon from '@mui/icons-material/MarkEmailRead';
 import VpnKeyRoundedIcon from '@mui/icons-material/VpnKeyRounded';
 import { Box, DialogTitle } from '@mui/material';
 import {
@@ -171,6 +172,13 @@ const ActualApp = () => {
       },
     ];
 
+    const communicationMenuItems: Array<SideMenuItem> = [
+      {
+        label: t('menu.campaigns'),
+        route: routes.CAMPAIGNS,
+      },
+    ];
+
     if (IS_STATISTICS_ENABLED) {
       // eslint-disable-next-line functional/immutable-data
       notificationMenuItems.push({
@@ -181,10 +189,17 @@ const ActualApp = () => {
     const basicMenuItems: Array<SideMenuItem> = [
       {
         label: t('menu.notifications-send'),
-        icon: EmailRounded,
+        icon: MailReadIcon,
         route: routes.DASHBOARD,
         children: notificationMenuItems,
         notSelectable: notificationMenuItems.length > 0,
+      },
+      {
+        label: t('menu.communications'),
+        icon: MailIcon,
+        route: routes.CAMPAIGNS,
+        children: communicationMenuItems,
+        notSelectable: communicationMenuItems.length > 0,
       },
       /**
        * Refers to PN-1741

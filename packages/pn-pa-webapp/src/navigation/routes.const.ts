@@ -16,6 +16,8 @@ export const NUOVA_NOTIFICA = `${DASHBOARD}/nuova-notifica`;
 export const API_KEYS = '/api-keys';
 export const NUOVA_API_KEY = `${API_KEYS}/nuova-api-key`;
 export const STATISTICHE = '/statistiche';
+export const CAMPAIGNS = '/campaigns';
+export const CAMPAIGN_DETAIL = `${CAMPAIGNS}/:id`;
 export const DETTAGLIO_COMBO = `${DASHBOARD}/:id${COMUNICATION}`;
 export const DETTAGLIO_CAMPAGNA = `${DASHBOARD}/:id${CAMPAGNA}`;
 
@@ -43,7 +45,7 @@ export const GET_DETTAGLIO_NOTIFICA_PATH = (id: string) => `${DASHBOARD}/${id}${
 export const GET_DETTAGLIO_NOTIFICA_TIMELINE_PATH = (id: string) =>
   `${DASHBOARD}/${id}${NOTIFICA}/timeline`;
 export const GET_DETTAGLIO_COMUNICATION_PATH = (id: string) => `${DASHBOARD}/${id}${COMUNICATION}`;
-export const GET_DETTAGLIO_CAMPAGNA_PATH = (id: string) => `${DASHBOARD}/${id}${CAMPAGNA}`;
+export const GET_CAMPAIGN_DETAIL_PATH = (id: string) => `${CAMPAIGNS}/${id}`;
 export const NOT_ACCESSIBLE = '/non-accessibile';
 
 export const SELFCARE_LOGIN_PATH = '/auth/login';
