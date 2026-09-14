@@ -274,6 +274,29 @@ describe('Header Component', () => {
     expect(headers[1]).toHaveTextContent(partyWithParent?.parentName as string);
   });
 
+  it('updates the party role on PartySwitch when language changes', () => {
+    const props = {
+      productsList,
+      loggedUser,
+      partyId: partyList[1].id,
+      partyList,
+      productId: productsList[0].id,
+    };
+    const { container, rerender } = render(<Header {...props} currentLanguage="it" />);
+
+    let headers = container.querySelectorAll('.MuiContainer-root');
+    expect(headers[1]).toHaveTextContent(partyList[1].productRole);
+
+    const translatedPartyList = partyList.map((party) => ({
+      ...party,
+      productRole: `${party.productRole} - translated`,
+    }));
+    rerender(<Header {...props} partyList={translatedPartyList} currentLanguage="en" />);
+
+    headers = container.querySelectorAll('.MuiContainer-root');
+    expect(headers[1]).toHaveTextContent(translatedPartyList[1].productRole);
+  });
+
   it('clicks on assistanceEmail when value is passed', async () => {
     // render component
     const { getByText } = render(
