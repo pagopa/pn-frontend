@@ -69,6 +69,17 @@
           "modelPackage": "models",
           "cleanupOutput": true
         }
+      },
+      "bff-informal-notifications": {
+        "generatorName": "typescript-axios",
+        "inputSpec": "https://raw.githubusercontent.com/pagopa/pn-bff/eba79c285a9cb4a637277a6fc5eef9b639b02661/docs/openapi/api-external-pn-bff-sender-informal-notifications.yaml",
+        "output": "./src/generated-client/informal-notifications",
+        "additionalProperties": {
+          "supportsES6": true,
+          "apiPackage": "apis",
+          "modelPackage": "models",
+          "cleanupOutput": true
+        }
       }
     }
   }

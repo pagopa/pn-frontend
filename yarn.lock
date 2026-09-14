@@ -975,12 +975,12 @@
 
 "@fontsource/dm-mono@^4.5.10":
   version "4.5.10"
-  resolved "https://registry.yarnpkg.com/@fontsource/dm-mono/-/dm-mono-4.5.10.tgz#2d033549b4fe75ab8e26c5e74081f1ba5aa65519"
+  resolved "http://localhost:4873/@fontsource/dm-mono/-/dm-mono-4.5.10.tgz#2d033549b4fe75ab8e26c5e74081f1ba5aa65519"
   integrity sha512-cVd0L+tz1PrrNyClnpeJvRtVdvtB69L9PJ4sBm3t2ZCcbzKCa3MmW9duljKeRxTfQh3YTZpevnD14uWumRJYzA==
 
 "@fontsource/titillium-web@^4.5.9":
   version "4.5.9"
-  resolved "https://registry.yarnpkg.com/@fontsource/titillium-web/-/titillium-web-4.5.9.tgz#9de41e7b27fd6913055c2e9f616e5a2c5180f121"
+  resolved "http://localhost:4873/@fontsource/titillium-web/-/titillium-web-4.5.9.tgz#9de41e7b27fd6913055c2e9f616e5a2c5180f121"
   integrity sha512-C9bkYCeelkLcom4dHcT3/sM6CmlPwisyRbHUNGAt5LtF3XBdxqOW/R3cB6IaHWjqQvLYb93bTQpJu8X+KfggGA==
 
 "@gar/promise-retry@^1.0.0":
@@ -2015,10 +2015,10 @@
     rxjs "7.8.2"
     tslib "2.8.1"
 
-"@pagopa/mui-italia@2.7.0-RC.2":
-  version "2.7.0-RC.2"
-  resolved "https://registry.yarnpkg.com/@pagopa/mui-italia/-/mui-italia-2.7.0-RC.2.tgz#92801c9045f02ce30c26164e1868d51858c78acc"
-  integrity sha512-dHA+zWche32/PqAehaMPi7T6f7PmXmdNH0WaWQ3mi/e4yi9d2Es0kVd5zPVNmGFvZl+abnPhqeGYKb48p17Z9g==
+"@pagopa/mui-italia@^2.6.1-beta.1":
+  version "2.6.1-beta.1"
+  resolved "http://localhost:4873/@pagopa/mui-italia/-/mui-italia-2.6.1-beta.1.tgz#5fa5288402d7010519dfd3e1db4e2bfc972c8339"
+  integrity sha512-JHnLirWsjDWvc/WmDCRUQFK5tsUgCLmocRTd0au0ZZA7BGgydDFGwkVq/PUB2FYf7OEPaldCPrgKs3eMkcwC0w==
   dependencies:
     "@fontsource/dm-mono" "^4.5.10"
     "@fontsource/titillium-web" "^4.5.9"
@@ -2432,6 +2432,11 @@
   version "7.0.9"
   resolved "https://registry.npmjs.org/@types/json-schema/-/json-schema-7.0.9.tgz"
   integrity sha512-qcUXuemtEu+E5wZSJHNxUXeCZhAfXKQ41D+duX+VYPde7xyEVZci+/oXKJL13tnRs9lR2pr4fod59GT6/X1/yQ==
+
+"@types/json5@^0.0.29":
+  version "0.0.29"
+  resolved "http://localhost:4873/@types/json5/-/json5-0.0.29.tgz#ee28707ae94e11d2b827bcbe5270bcea7f3e71ee"
+  integrity sha512-dRLjCWHYg4oaA77cxO64oO+7JwCwnIzkZPdrrC71jQmQtlhM556pwKo5bUzqvZndkVbeFLIIi+9TC40JNF5hNQ==
 
 "@types/lodash-es@^4.17.12":
   version "4.17.12"
@@ -3468,7 +3473,7 @@ clone@1.0.4, clone@^1.0.2:
 
 clsx@^1.2.1:
   version "1.2.1"
-  resolved "https://registry.yarnpkg.com/clsx/-/clsx-1.2.1.tgz#0ddc4a20a549b59c93a4116bb26f5294ca17dc12"
+  resolved "http://localhost:4873/clsx/-/clsx-1.2.1.tgz#0ddc4a20a549b59c93a4116bb26f5294ca17dc12"
   integrity sha512-EcR6r5a8bj6pu3ycsa/E/cKVGuTgZJZdsyUYHOksG/UHIiKfjxzRxYJpyVBwYaQeOvghal9fcc4PidlgzugAQg==
 
 clsx@^2.0.0:
@@ -4693,7 +4698,7 @@ formik@^2.4.6:
 
 fp-ts@^2.12.3:
   version "2.16.11"
-  resolved "https://registry.yarnpkg.com/fp-ts/-/fp-ts-2.16.11.tgz#831a10514bf4e22adf12065732fc5a20c85d9623"
+  resolved "http://localhost:4873/fp-ts/-/fp-ts-2.16.11.tgz#831a10514bf4e22adf12065732fc5a20c85d9623"
   integrity sha512-LaI+KaX2NFkfn1ZGHoKCmcfv7yrZsC3b8NtWsTVQeHkq4F27vI5igUuO53sxqDEa2gNQMHFPmpojDw/1zmUK7w==
 
 fs-constants@1.0.0, fs-constants@^1.0.0:
@@ -5323,7 +5328,7 @@ internal-slot@^1.0.3:
 
 io-ts@^2.2.18:
   version "2.2.22"
-  resolved "https://registry.yarnpkg.com/io-ts/-/io-ts-2.2.22.tgz#5ab0d3636fe8494a275f0266461ab019da4b8d0b"
+  resolved "http://localhost:4873/io-ts/-/io-ts-2.2.22.tgz#5ab0d3636fe8494a275f0266461ab019da4b8d0b"
   integrity sha512-FHCCztTkHoV9mdBsHpocLpdTAfh956ZQcIkWQxxS0U5HT53vtrcuYdQneEJKH6xILaLNzXVl2Cvwtoy8XNN0AA==
 
 ip-address@^10.0.1:
@@ -5769,6 +5774,13 @@ json5@2.2.3, json5@^2.2.2, json5@^2.2.3:
   version "2.2.3"
   resolved "https://registry.yarnpkg.com/json5/-/json5-2.2.3.tgz#78cd6f1a19bdc12b73db5ad0c61efd66c1e29283"
   integrity sha512-XmOWe7eyHYH14cLdVPoyg+GOH3rYX++KpzrylJwSW98t3Nk+U8XOl8FWKOgwtzdb8lXGf6zYwDUzeHMWfxasyg==
+
+json5@^1.0.2:
+  version "1.0.2"
+  resolved "http://localhost:4873/json5/-/json5-1.0.2.tgz#63d98d60f21b313b77c4d6da18bfa69d80e1d593"
+  integrity sha512-g1MWMLBiz8FKi1e4w0UyVL3w+iJceWAFBAaBnnGKOpNa5f8TLktkbre1+s6oICydWAm+HRUGTmI+//xv2hvXYA==
+  dependencies:
+    minimist "^1.2.0"
 
 jsonc-parser@3.3.1:
   version "3.3.1"
@@ -6491,7 +6503,7 @@ minimatch@^9.0.5:
   dependencies:
     brace-expansion "^2.0.1"
 
-minimist@1.2.8:
+minimist@1.2.8, minimist@^1.2.0:
   version "1.2.8"
   resolved "https://registry.yarnpkg.com/minimist/-/minimist-1.2.8.tgz#c1a464e7693302e082a075cee0c057741ac4772c"
   integrity sha512-2yyAR8qBkN3YuheJanUpWC5U3bb5osDywNB8RzDVlDwDHbocAJveqqj1u8+SVD7jkWT4yvsHCpWqqWqAxb0zCA==
@@ -8685,12 +8697,22 @@ ts-api-utils@^1.0.1:
   resolved "https://registry.yarnpkg.com/ts-api-utils/-/ts-api-utils-1.0.3.tgz#f12c1c781d04427313dbac808f453f050e54a331"
   integrity sha512-wNMeqtMz5NtwpT/UZGY5alT+VoKdSsOOP/kqHFcUW1P/VRhH2wJ48+DN2WwUliNbQ976ETwDL0Ifd2VVvgonvg==
 
-tsconfig-paths@4.2.0, tsconfig-paths@^3.12.0, tsconfig-paths@^4.1.2:
+tsconfig-paths@4.2.0:
   version "4.2.0"
   resolved "https://registry.yarnpkg.com/tsconfig-paths/-/tsconfig-paths-4.2.0.tgz#ef78e19039133446d244beac0fd6a1632e2d107c"
   integrity sha512-NoZ4roiN7LnbKn9QqE1amc9DJfzvZXxF4xDavcOWt1BPkdx+m+0gJuPM+S0vCe7zTJMYUP0R8pO2XMr+Y8oLIg==
   dependencies:
     json5 "^2.2.2"
+    minimist "^1.2.6"
+    strip-bom "^3.0.0"
+
+tsconfig-paths@^3.12.0:
+  version "3.15.0"
+  resolved "http://localhost:4873/tsconfig-paths/-/tsconfig-paths-3.15.0.tgz#5299ec605e55b1abb23ec939ef15edaf483070d4"
+  integrity sha512-2Ac2RgzDe/cn48GvOe3M+o82pEFewD3UPbyoUHHdKasHwJKjds4fLXWf/Ux5kATBKN20oaFGu+jbElp1pos0mg==
+  dependencies:
+    "@types/json5" "^0.0.29"
+    json5 "^1.0.2"
     minimist "^1.2.6"
     strip-bom "^3.0.0"
 

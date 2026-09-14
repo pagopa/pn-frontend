@@ -1,0 +1,7 @@
+{
+  "list": {
+    "title": "Campagne",
+    "id": "Codice ID",
+    "open-aria-label": "Apri campagna \"{{name}}\""
+  }
+}
