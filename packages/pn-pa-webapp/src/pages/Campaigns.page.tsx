@@ -1,7 +1,7 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
 
+/* import { useNavigate } from 'react-router-dom'; */
 import { Box } from '@mui/material';
 import {
   ApiErrorWrapper,
@@ -9,11 +9,12 @@ import {
   PaginationData,
   TitleBox,
   calculatePages,
-  formatDate,
 } from '@pagopa-pn/pn-commons';
-import { MITableList, MITableListItem, MITableListItemField } from '@pagopa/mui-italia';
 
-import { GET_CAMPAIGN_DETAIL_PATH } from '../navigation/routes.const';
+/* temporary comment */
+
+/* import { MITableList, MITableListItem, MITableListItemField } from '@pagopa/mui-italia';
+import { GET_CAMPAIGN_DETAIL_PATH } from '../navigation/routes.const'; */
 import { CAMPAIGN_ACTIONS, getCampaigns } from '../redux/campaign/actions';
 import { setPagination } from '../redux/campaign/reducers';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
@@ -21,9 +22,9 @@ import { RootState } from '../redux/store';
 
 const Campaigns = () => {
   const dispatch = useAppDispatch();
-  const navigate = useNavigate();
-  const [loading, setLoading] = useState(false);
-  const campaigns = useAppSelector((state: RootState) => state.campaignState.campaigns);
+  /*   const navigate = useNavigate(); */
+  /*   const [loading, setLoading] = useState(false);
+  const campaigns = useAppSelector((state: RootState) => state.campaignState.campaigns); */
   const pagination = useAppSelector((state: RootState) => state.campaignState.pagination);
   const { t } = useTranslation(['campaigns', 'common']);
 
@@ -44,12 +45,12 @@ const Campaigns = () => {
     dispatch(setPagination({ size: paginationData.size, page: paginationData.page }));
   };
 
-  const handleOpenCampaign = (id: string) => {
+  /*   const handleOpenCampaign = (id: string) => {
     navigate(GET_CAMPAIGN_DETAIL_PATH(id));
-  };
+  }; */
 
   const fetchCampaigns = useCallback(() => {
-    setLoading(true);
+    /*  setLoading(true); */
 
     dispatch(
       getCampaigns({
@@ -61,7 +62,7 @@ const Campaigns = () => {
       .unwrap()
       .catch(() => {})
       .finally(() => {
-        setLoading(false);
+        /*     setLoading(false); */
       });
   }, [dispatch, pagination.size, pagination.page]);
 
@@ -76,7 +77,7 @@ const Campaigns = () => {
       <ApiErrorWrapper apiId={CAMPAIGN_ACTIONS.GET_CAMPAIGNS} reloadAction={fetchCampaigns} mt={3}>
         {/* TODO: Temporary fallback until MITableList provides native empty and error state support. */}
 
-        <MITableList
+        {/*         <MITableList
           loading={loading}
           slotProps={{ skeleton: { action: true, rows: 10 } }}
           columns={[2, 1]}
@@ -99,7 +100,7 @@ const Campaigns = () => {
               </MITableListItemField>
             </MITableListItem>
           ))}
-        </MITableList>
+        </MITableList> */}
 
         {/* TODO: Temporary fallback until MITableList provides native pagination support. */}
         <CustomPagination
