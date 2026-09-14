@@ -1,5 +1,6 @@
 import MockAdapter from 'axios-mock-adapter';
 
+import { campaignsDTO } from '../../../__mocks__/Campaigns.mock';
 import { apiClient } from '../../../api/apiClients';
 import {
   BffCampaignDetailResponseV1,
@@ -20,12 +21,6 @@ const campaign: BffCampaignDetailResponseV1 = {
   serviceName: 'Servizi idrici',
   channels: [ChannelType.Io, ChannelType.Email, ChannelType.Pec],
 };
-
-const campaignsDTO = {
-  resultsPage: [],
-  moreResult: true,
-  nextPagesKey: ['page-key-1'],
-} as BffCampaignSearchResponseV1;
 
 describe('Campaign redux state tests', () => {
   let mock: MockAdapter;
