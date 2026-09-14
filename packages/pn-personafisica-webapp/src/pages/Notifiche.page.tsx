@@ -20,6 +20,7 @@ import {
 import DomicileBanner from '../components/DomicileBanner/DomicileBanner';
 import LoadingPageWrapper from '../components/LoadingPageWrapper/LoadingPageWrapper';
 import DesktopNotifications from '../components/Notifications/DesktopNotifications';
+import FilterNotifications from '../components/Notifications/FilterNotifications';
 import MobileNotifications from '../components/Notifications/MobileNotifications';
 import { PFEventsType } from '../models/PFEventsType';
 import { ContactSource } from '../models/contacts';
@@ -37,12 +38,22 @@ import { RootState } from '../redux/store';
 import PFEventStrategyFactory from '../utility/MixpanelUtils/PFEventStrategyFactory';
 import { hasActiveFilters } from '../utility/notification.utility';
 
+const shouldShowFilters = (notificationsLength: number, filtersApplied: boolean) =>
+  notificationsLength > 0 || filtersApplied;
+
 const Notifiche = () => {
   const dispatch = useAppDispatch();
   const { t } = useTranslation(['notifiche', 'common']);
   const { mandateId } = useParams();
   const [pageReady, setPageReady] = useState(false);
   const domicileBannerTypeRef = useRef('');
+  const filterNotificationsRef = useRef<{
+    filtersApplied: boolean;
+    cleanFilters: () => void;
+  }>({
+    filtersApplied: false,
+    cleanFilters: () => void 0,
+  });
   const { notifications, filters, sort, pagination, isFirstSearch } = useAppSelector(
     (state: RootState) => state.dashboardState
   );
@@ -55,6 +66,9 @@ const Notifiche = () => {
   );
 
   const isMobile = useIsMobile();
+
+  const filtersApplied = filterNotificationsRef.current.filtersApplied;
+  const showFilters = shouldShowFilters(notifications.length, filtersApplied);
 
   const getPageTitle = () => {
     if (currentDelegator) {
@@ -176,6 +190,11 @@ const Notifiche = () => {
       <Box p={3}>
         <TitleBox variantTitle="h4" title={getPageTitle()} mbTitle={isMobile ? 3 : 0} />
         {!mandateId && <DomicileBanner source={ContactSource.HOME_NOTIFICHE} my={3} />}
+        <FilterNotifications
+          ref={filterNotificationsRef}
+          showFilters={showFilters}
+          currentDelegator={currentDelegator}
+        />
         <ApiErrorWrapper
           apiId={DASHBOARD_ACTIONS.GET_RECEIVED_NOTIFICATIONS}
           reloadAction={fetchNotifications}
@@ -186,6 +205,8 @@ const Notifiche = () => {
               sort={sort}
               onChangeSorting={handleChangeSorting}
               currentDelegator={currentDelegator}
+              filtersApplied={filtersApplied}
+              onCleanFilters={filterNotificationsRef.current.cleanFilters}
             />
           ) : (
             <DesktopNotifications
@@ -193,6 +214,8 @@ const Notifiche = () => {
               sort={sort}
               onChangeSorting={handleChangeSorting}
               currentDelegator={currentDelegator}
+              filtersApplied={filtersApplied}
+              onCleanFilters={filterNotificationsRef.current.cleanFilters}
             />
           )}
           {notifications.length > 0 && (
