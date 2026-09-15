@@ -4,9 +4,7 @@ on:
   workflow_dispatch:
   push:
     branches:
-      # - develop
-      # TODO: RIMUOVERE PRIMA DEL MERGE IN develop - serve solo per testare sul branch di feature
-      - feature/PN-19913
+      - develop
     paths:
       - 'packages/*/public/locales/it/**'
 
