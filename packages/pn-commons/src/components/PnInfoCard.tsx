@@ -159,7 +159,7 @@ const PnInfoCardAccordion: React.FC<PnInfoCardContentProps> = ({ title, subtitle
 
   return (
     <>
-      <Box component="h5" data-testid="PnInfoCardHeader" sx={{ m: 0 }}>
+      <Box component="h2" data-testid="PnInfoCardHeader" sx={{ m: 0 }}>
         <ButtonBase
           id={headerId}
           type="button"
@@ -237,7 +237,7 @@ const PnInfoCardStaticContent: React.FC<PnInfoCardStaticContentProps> = ({
       disableTypography
       sx={{ p: 0, '.MuiCardHeader-action': { m: 0 } }}
       title={
-        <Box component="h5" sx={{ m: 0 }}>
+        <Box component="h2" sx={{ m: 0 }}>
           {title}
         </Box>
       }
