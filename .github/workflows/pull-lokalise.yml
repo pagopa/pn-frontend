@@ -1,0 +1,100 @@
+name: Pull locales from Lokalise
+
+on:
+  workflow_dispatch:
+
+concurrency:
+  group: lokalise-pull
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+  pull-requests: write
+  # Le label sulla PR passano dall'API issues, non da quella pull-requests.
+  issues: write
+
+jobs:
+  check-branch:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Fail if not launched from develop
+        if: github.ref_name != 'develop'
+        run: |
+          echo "::error::Questo workflow va lanciato solo da develop, non da '${{ github.ref_name }}'."
+          exit 1
+
+  pull-locale:
+    needs: check-branch
+    runs-on: ubuntu-latest
+    environment: lokalise
+    strategy:
+      fail-fast: false
+      # I quattro job committano sullo stesso branch: in parallelo i push si
+      # sovrascriverebbero a vicenda, quindi vanno eseguiti in sequenza.
+      max-parallel: 1
+      matrix:
+        app: [PFL, PF, PA, PG]
+    env:
+      # I codici app sono anche il suffisso delle variabili LOKALISE_PROJECT_ID_<CODICE>.
+      PACKAGES: >-
+        {
+          "PFL": "pn-personafisica-login",
+          "PF": "pn-personafisica-webapp",
+          "PA": "pn-pa-webapp",
+          "PG": "pn-personagiuridica-webapp"
+        }
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          # L'action deve poter risolvere il branch base e riusare il branch di lavoro
+          # se esiste gia' sul remoto: serve la storia completa, non lo shallow clone.
+          fetch-depth: 0
+      - name: Pull ${{ matrix.app }} locales from Lokalise
+        uses: lokalise/lokalise-pull-action@95afae3fac9dd28db1ff4887a63b1f76cbee714d # v5.3.0
+        with:
+          api_token: ${{ secrets.LOKALISE_API_TOKEN }}
+          project_id: ${{ vars[format('LOKALISE_PROJECT_ID_{0}', matrix.app)] }}
+          base_lang: it
+          translations_path: packages/${{ fromJson(env.PACKAGES)[matrix.app] }}/public/locales
+          file_format: json
+          skip_include_tags: true
+          # L'italiano lo scriviamo noi nel repo, ma i traduttori possono correggerlo
+          # su Lokalise: senza questo flag quelle correzioni non tornerebbero mai indietro.
+          always_pull_base: true
+          # Branch unico e stabile per tutte le app: i quattro job ci committano sopra
+          # uno dopo l'altro, cosi' il run produce una sola PR che le contiene tutte.
+          # L'action, se il branch remoto esiste, committa e aggiorna la PR esistente.
+          # Richiede che il branch venga cancellato al merge, altrimenti il run
+          # successivo ripartirebbe da un punto ormai vecchio.
+          # NB: non attivare 'force_push', sovrascriverebbe il commit del job precedente.
+          override_branch_name: lokalise/translations
+          override_base_branch: develop
+          git_user_name: 'github-actions[bot]'
+          git_user_email: 'github-actions[bot]@users.noreply.github.com'
+          git_commit_message: 'chore(lokalise): update ${{ matrix.app }} translations'
+          pr_title: 'chore(lokalise): update translations'
+          pr_body: |
+            Aggiornamento automatico delle traduzioni delle quattro app da Lokalise.
+
+            Generata da [Pull locales from Lokalise](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}).
+          pr_labels: lokalise
+          # Draft: le traduzioni vanno riviste prima di essere considerate mergiabili.
+          pr_draft: true
+          additional_params: |
+            indentation: 2sp
+            placeholder_format: i18n
+            # Le chiavi non tradotte vengono omesse invece di scendere come "":
+            # a runtime i18next le risolve con fallbackLng: 'it', e un file senza
+            # nessuna traduzione non viene emesso affatto, cosi' i namespace
+            # solo-italiano (integrazioneApi.json di PG) restano tali.
+            # Nota: una chiave vuota anche in it sparisce da tutti i file.
+            export_empty_as: skip
+            filter_langs:
+              - it
+              - en
+              - fr
+              - de
+              - sl
+            replace_breaks: false
+            add_newline_eof: true

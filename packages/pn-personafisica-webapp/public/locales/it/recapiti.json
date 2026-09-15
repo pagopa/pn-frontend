@@ -361,10 +361,8 @@
         "pec-activating": {
           "title": "L’attivazione del domicilio digitale su PEC è in corso",
           "description": "Dopo l’attivazione, riceverai le notifiche SEND al tuo indirizzo PEC. Potresti evitare così l’invio di una raccomandata con i relativi costi aggiuntivi.",
-          "badge": "Attivazione in corso",
-          "img-alt-text": ""
-        },
-        "img-alt-text": ""
+          "badge": "Attivazione in corso"
+        }
       },
       "email": {
         "title": "Associa un indirizzo email al domicilio digitale",
@@ -388,8 +386,7 @@
         "enabled": {
           "title": "Hai già attivato SEND sull’app IO",
           "primary-cta": "Continua"
-        },
-        "img-alt-text": ""
+        }
       },
       "summary": {
         "title": "Il tuo riepilogo",
