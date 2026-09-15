@@ -3,5 +3,13 @@
     "title": "Campagne",
     "id": "Codice ID",
     "open-aria-label": "Apri campagna \"{{name}}\""
+  },
+
+  "detail": {
+    "title": "Dettaglio campagna",
+    "creation-date": "Data di creazione",
+    "service-name": "Nome servizio",
+    "communications": "Comunicazioni",
+    "channels": "Canali"
   }
 }

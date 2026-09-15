@@ -1,3 +1,5 @@
+import { useTranslation } from 'react-i18next';
+
 import { Divider, Grid, Stack, Typography } from '@mui/material';
 import { MIPaper } from '@pagopa/mui-italia';
 
@@ -15,63 +17,67 @@ const PnCampaignDetailCard = ({
   serviceName,
   communications,
   channels,
-}: CampaignDetailCardProps) => (
-  <MIPaper padding={24}>
-    <Grid container columnSpacing={3}>
-      <Grid item xs={12} md={4}>
-        <Stack>
-          <Typography variant="body2" color="text.secondary">
-            Data di creazione
-          </Typography>
-          <Typography variant="body1" fontWeight={600}>
-            {creationDate}
-          </Typography>
+}: CampaignDetailCardProps) => {
+  const { t } = useTranslation('campaigns');
 
-          <Divider sx={{ my: 2 }} />
+  return (
+    <MIPaper padding={24}>
+      <Grid container columnSpacing={3}>
+        <Grid item xs={12} md={4}>
+          <Stack>
+            <Typography variant="body2" color="text.secondary">
+              {t('detail.creation-date')}
+            </Typography>
+            <Typography variant="body1" fontWeight={600}>
+              {creationDate}
+            </Typography>
 
-          <Typography variant="body2" color="text.secondary">
-            Comunicazioni
-          </Typography>
-          <Typography variant="body1" fontWeight={600}>
-            {communications}
-          </Typography>
-        </Stack>
+            <Divider sx={{ my: 2 }} />
+
+            <Typography variant="body2" color="text.secondary">
+              {t('detail.communications')}
+            </Typography>
+            <Typography variant="body1" fontWeight={600}>
+              {communications}
+            </Typography>
+          </Stack>
+        </Grid>
+
+        <Grid item xs={12} md={4}>
+          <Stack>
+            <Typography variant="body2" color="text.secondary">
+              {t('list.id')}
+            </Typography>
+            <Typography variant="body1" fontWeight={600}>
+              {campaignId}
+            </Typography>
+
+            <Divider sx={{ my: 2 }} />
+
+            <Typography variant="body2" color="text.secondary">
+              {t('detail.channels')}
+            </Typography>
+            <Typography variant="body1" fontWeight={600}>
+              {channels}
+            </Typography>
+          </Stack>
+        </Grid>
+
+        <Grid item xs={12} md={4}>
+          <Stack>
+            <Typography variant="body2" color="text.secondary">
+              {t('detail.service-name')}
+            </Typography>
+            <Typography variant="body1" fontWeight={600}>
+              {serviceName}
+            </Typography>
+
+            <Divider sx={{ my: 2 }} />
+          </Stack>
+        </Grid>
       </Grid>
-
-      <Grid item xs={12} md={4}>
-        <Stack>
-          <Typography variant="body2" color="text.secondary">
-            Codice ID
-          </Typography>
-          <Typography variant="body1" fontWeight={600}>
-            {campaignId}
-          </Typography>
-
-          <Divider sx={{ my: 2 }} />
-
-          <Typography variant="body2" color="text.secondary">
-            Canali selezionati
-          </Typography>
-          <Typography variant="body1" fontWeight={600}>
-            {channels}
-          </Typography>
-        </Stack>
-      </Grid>
-
-      <Grid item xs={12} md={4}>
-        <Stack>
-          <Typography variant="body2" color="text.secondary">
-            Servizio
-          </Typography>
-          <Typography variant="body1" fontWeight={600}>
-            {serviceName}
-          </Typography>
-
-          <Divider sx={{ my: 2 }} />
-        </Stack>
-      </Grid>
-    </Grid>
-  </MIPaper>
-);
+    </MIPaper>
+  );
+};
 
 export default PnCampaignDetailCard;
