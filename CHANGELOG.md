@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.25.1-RC.0](https://fbianchicodermine-GitHub/pagopa/pn-frontend/compare/v2.25.0...v2.25.1-RC.0) (2026-09-15)
+
+### Bug Fixes
+
+* **PN-21519:** pass error code in SEND_LOGIN_FAILURE if access_denied ([#2052](https://fbianchicodermine-GitHub/pagopa/pn-frontend/issues/2052)) ([819b077](https://fbianchicodermine-GitHub/pagopa/pn-frontend/commits/819b07746b8435da74fea7ea900c45c5d6f2d424))
+
+
 # [2.25.0](https://github.com/pagopa/pn-frontend/compare/v2.24.2...v2.25.0) (2026-08-06)
 
 
