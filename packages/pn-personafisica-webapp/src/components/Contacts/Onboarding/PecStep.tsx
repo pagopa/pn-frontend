@@ -401,6 +401,10 @@ const PecStep: React.FC<Props> = ({
                 alignSelf: 'flex-start',
                 p: 0,
                 mr: 1,
+                color:
+                  formik.touched.pecDisclaimer && formik.errors.pecDisclaimer
+                    ? 'error.main'
+                    : 'text.secondary',
               }}
             />
           }
