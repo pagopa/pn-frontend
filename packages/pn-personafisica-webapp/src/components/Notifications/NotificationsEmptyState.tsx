@@ -17,10 +17,7 @@ import { hasRequiredContacts } from '../../utility/contacts.utility';
 
 type Props = {
   filtersApplied: boolean;
-  filterNotificationsRef: React.MutableRefObject<{
-    filtersApplied: boolean;
-    cleanFilters: () => void;
-  }>;
+  onCleanFilters: () => void;
   currentDelegator?: Delegator;
 };
 
@@ -129,7 +126,7 @@ const EmptyStateCTA: React.FC<{ showOnboardingContent: boolean }> = ({ showOnboa
 
 const NotificationsEmptyState: React.FC<Props> = ({
   filtersApplied,
-  filterNotificationsRef,
+  onCleanFilters,
   currentDelegator,
 }) => {
   const addresses = useAppSelector(contactsSelectors.selectAddresses);
@@ -145,7 +142,7 @@ const NotificationsEmptyState: React.FC<Props> = ({
         slotProps={{ contentContainer: CONTENT_CONTAINER_PROPS }}
         sentimentIcon={<IllusMIInbox size={56} />}
       >
-        <FilteredEmptyStateContent cleanFilters={filterNotificationsRef.current.cleanFilters} />
+        <FilteredEmptyStateContent cleanFilters={onCleanFilters} />
       </EmptyState>
     );
   }
