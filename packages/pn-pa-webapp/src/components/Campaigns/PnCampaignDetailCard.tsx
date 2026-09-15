@@ -1,6 +1,7 @@
 import { useTranslation } from 'react-i18next';
 
 import { Divider, Grid, Stack, Typography } from '@mui/material';
+import { formatDate } from '@pagopa-pn/pn-commons';
 import { MIPaper } from '@pagopa/mui-italia';
 
 type CampaignDetailCardProps = {
@@ -29,7 +30,7 @@ const PnCampaignDetailCard = ({
               {t('detail.creation-date')}
             </Typography>
             <Typography variant="body1" fontWeight={600}>
-              {creationDate}
+              {formatDate(creationDate, false)}
             </Typography>
 
             <Divider sx={{ my: 2 }} />
