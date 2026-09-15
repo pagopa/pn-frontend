@@ -1,17 +1,17 @@
 import { useCallback, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 
-/* import { useNavigate } from 'react-router-dom'; */
+import { ArrowForward } from '@mui/icons-material';
 import { Box } from '@mui/material';
 import {
   ApiErrorWrapper,
   CustomPagination,
+  EmptyErrorState,
   PaginationData,
   TitleBox,
   calculatePages,
 } from '@pagopa-pn/pn-commons';
-
-/* temporary comment */
+import { MIButton, MITableList, MITableListItem, MITableListItemField } from '@pagopa/mui-italia';
 
 /* import { MITableList, MITableListItem, MITableListItemField } from '@pagopa/mui-italia';
 import { GET_CAMPAIGN_DETAIL_PATH } from '../navigation/routes.const'; */
@@ -74,44 +74,67 @@ const Campaigns = () => {
     <Box p={3}>
       <TitleBox title={t('list.title')} variantTitle="h4" />
 
-      <ApiErrorWrapper apiId={CAMPAIGN_ACTIONS.GET_CAMPAIGNS} reloadAction={fetchCampaigns} mt={3}>
+      <ApiErrorWrapper
+        apiId={CAMPAIGN_ACTIONS.GET_CAMPAIGNS}
+        reloadAction={fetchCampaigns}
+        customErrorComponent={
+          <EmptyErrorState
+            variant="error"
+            title={t('list.empty-state.generic-error')}
+            action={{ label: t('list.empty-state.generic-error-cta'), onClick: fetchCampaigns }}
+          />
+        }
+        mt={3}
+      >
         {/* TODO: Temporary fallback until MITableList provides native empty and error state support. */}
-
-        {/*         <MITableList
-          loading={loading}
-          slotProps={{ skeleton: { action: true, rows: 10 } }}
-          columns={[2, 1]}
-        >
-          {campaigns.map((campaign) => (
-            <MITableListItem
-              key={campaign.campaignId}
-              action={{
-                content: t('button.open', { ns: 'common' }),
-                onClick: () => handleOpenCampaign(campaign.campaignId),
-                ariaLabel: t('list.open-aria-label', { name: campaign.title }),
-              }}
+        {!loading && campaigns.length === 0 ? (
+          <EmptyErrorState title={t('list.empty-state.no-campaigns')} />
+        ) : (
+          <>
+            <MITableList
+              loading={loading}
+              slotProps={{ skeleton: { action: true, rows: 10 } }}
+              columns={[2, 1]}
             >
-              <MITableListItemField label={formatDate(campaign.startDate)}>
-                {campaign.title}
-              </MITableListItemField>
+              {campaigns.map((campaign) => (
+                <MITableListItem
+                  key={campaign.campaignId}
+                  action={
+                    <MIButton
+                      variant="text"
+                      endIcon={<ArrowForward />}
+                      onClick={() => handleOpenCampaign(campaign.campaignId)}
+                      aria-label={t('list.open-aria-label', { name: campaign.title })}
+                    >
+                      {t('button.open', { ns: 'common' })}
+                    </MIButton>
+                  }
+                >
+                  <MITableListItemField label={formatDate(campaign.startDate)}>
+                    {campaign.title}
+                  </MITableListItemField>
 
-              <MITableListItemField label={t('list.id')}>
-                {campaign.campaignId}
-              </MITableListItemField>
-            </MITableListItem>
-          ))}
-        </MITableList> */}
+                  <MITableListItemField label={t('list.id')}>
+                    {campaign.campaignId}
+                  </MITableListItemField>
+                </MITableListItem>
+              ))}
+            </MITableList>
 
-        {/* TODO: Temporary fallback until MITableList provides native pagination support. */}
-        <CustomPagination
-          paginationData={{
-            size: pagination.size,
-            page: pagination.page,
-            totalElements,
-          }}
-          onPageRequest={handleChangePage}
-          pagesToShow={pagesToShow}
-        />
+            {/* TODO: Temporary fallback until MITableList provides native pagination support. */}
+            {!loading && campaigns.length > 0 && (
+              <CustomPagination
+                paginationData={{
+                  size: pagination.size,
+                  page: pagination.page,
+                  totalElements,
+                }}
+                onPageRequest={handleChangePage}
+                pagesToShow={pagesToShow}
+              />
+            )}
+          </>
+        )}
       </ApiErrorWrapper>
     </Box>
   );

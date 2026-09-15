@@ -1,6 +1,5 @@
 import { vi } from 'vitest';
 
-import { formatToTimezoneString, tenYearsAgo, today } from '@pagopa-pn/pn-commons';
 import { createMatchMedia } from '@pagopa-pn/pn-commons/src/test-utils';
 
 import { digitalAddressesSercq } from '../../../__mocks__/Contacts.mock';
@@ -11,6 +10,7 @@ import MobileNotifications from '../MobileNotifications';
 
 describe('MobileNotifications Component', () => {
   let result: RenderResult;
+  const onCleanFilters = vi.fn();
   const originalMatchMedia = globalThis.matchMedia;
   const originalResizeObserver = globalThis.ResizeObserver;
 
@@ -35,18 +35,23 @@ describe('MobileNotifications Component', () => {
   it('renders MobileNotifications - no notifications - no contacts', async () => {
     // render component
     await act(async () => {
-      result = render(<MobileNotifications notifications={[]} />, {
-        preloadedState: {
-          contactsState: {
-            digitalAddresses: [],
+      result = render(
+        <MobileNotifications
+          notifications={[]}
+          filtersApplied={false}
+          onCleanFilters={onCleanFilters}
+        />,
+        {
+          preloadedState: {
+            contactsState: {
+              digitalAddresses: [],
+            },
           },
-        },
-      });
+        }
+      );
     });
-    const filters = result!.queryByTestId('dialogToggle');
-    expect(filters).not.toBeInTheDocument();
-    const norificationCards = result!.queryAllByTestId('mobileNotificationsCards');
-    expect(norificationCards).toHaveLength(0);
+    const notificationCards = result!.queryAllByTestId('mobileNotificationsCards');
+    expect(notificationCards).toHaveLength(0);
     expect(result!.container).toHaveTextContent(/empty-state.title/i);
     expect(result!.container).toHaveTextContent(/empty-state.description-onboarding/i);
     // clicks on empty state action
@@ -58,18 +63,23 @@ describe('MobileNotifications Component', () => {
   it('renders MobileNotifications - no notifications - with contacts', async () => {
     // render component
     await act(async () => {
-      result = render(<MobileNotifications notifications={[]} />, {
-        preloadedState: {
-          contactsState: {
-            digitalAddresses: digitalAddressesSercq,
+      result = render(
+        <MobileNotifications
+          notifications={[]}
+          filtersApplied={false}
+          onCleanFilters={onCleanFilters}
+        />,
+        {
+          preloadedState: {
+            contactsState: {
+              digitalAddresses: digitalAddressesSercq,
+            },
           },
-        },
-      });
+        }
+      );
     });
-    const filters = result!.queryByTestId('dialogToggle');
-    expect(filters).not.toBeInTheDocument();
-    const norificationCards = result!.queryAllByTestId('mobileNotificationsCards');
-    expect(norificationCards).toHaveLength(0);
+    const notificationCards = result!.queryAllByTestId('mobileNotificationsCards');
+    expect(notificationCards).toHaveLength(0);
     expect(result!.container).toHaveTextContent(/empty-state.title/i);
     expect(result!.container).toHaveTextContent(/empty-state.description/i);
     // clicks on empty state action
@@ -81,43 +91,49 @@ describe('MobileNotifications Component', () => {
   it('renders MobileNotifications - notifications', async () => {
     // render component
     await act(async () => {
-      result = render(<MobileNotifications notifications={notificationsToFe.resultsPage} />);
+      result = render(
+        <MobileNotifications
+          notifications={notificationsToFe.resultsPage}
+          filtersApplied={false}
+          onCleanFilters={onCleanFilters}
+        />
+      );
     });
-    const filters = result!.queryByTestId('dialogToggle');
-    expect(filters).toBeInTheDocument();
-    const norificationCards = result!.queryAllByTestId('mobileNotificationsCards');
-    expect(norificationCards).toHaveLength(notificationsToFe.resultsPage.length);
+    const notificationCards = result!.queryAllByTestId('mobileNotificationsCards');
+    expect(notificationCards).toHaveLength(notificationsToFe.resultsPage.length);
   });
 
   it('renders component - no notification after filter', async () => {
     // render component
     await act(async () => {
-      result = render(<MobileNotifications notifications={[]} />, {
-        preloadedState: {
-          dashboardState: {
-            filters: {
-              startDate: formatToTimezoneString(tenYearsAgo),
-              endDate: formatToTimezoneString(today),
-              iunMatch: 'ABCD-EFGH-ILMN-123456-A-1',
-            },
-          },
-        },
-      });
+      result = render(
+        <MobileNotifications notifications={[]} filtersApplied onCleanFilters={onCleanFilters} />
+      );
     });
-    // the rerendering must be done to take the useRef updates
-    result!.rerender(<MobileNotifications notifications={[]} />);
-    const filters = await waitFor(() => result!.queryByTestId('dialogToggle'));
-    expect(filters).toBeInTheDocument();
-    expect(result!.container).toHaveTextContent(/empty-state.filtered/i);
+
+    const notificationCards = result.queryAllByTestId('mobileNotificationsCards');
+    expect(notificationCards).toHaveLength(0);
+    expect(result.container).toHaveTextContent(/empty-state.filtered/i);
+
+    const button = result.getByTestId('link-remove-filters');
+    fireEvent.click(button);
+
+    expect(onCleanFilters).toHaveBeenCalledTimes(1);
   });
 
   it('clicks on go to detail action', async () => {
     // render component
     await act(async () => {
-      result = render(<MobileNotifications notifications={notificationsToFe.resultsPage} />);
+      result = render(
+        <MobileNotifications
+          notifications={notificationsToFe.resultsPage}
+          filtersApplied={false}
+          onCleanFilters={onCleanFilters}
+        />
+      );
     });
-    const norificationCards = result!.getAllByTestId('mobileNotificationsCards');
-    const notificationsCardButton = norificationCards[0].querySelector('button');
+    const notificationCards = result!.getAllByTestId('mobileNotificationsCards');
+    const notificationsCardButton = notificationCards[0].querySelector('button');
     fireEvent.click(notificationsCardButton!);
     await waitFor(() => {
       expect(result.router.state.location.pathname).toBe(
