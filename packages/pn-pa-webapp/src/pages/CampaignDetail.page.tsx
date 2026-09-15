@@ -65,6 +65,7 @@ const CampaignDetail: React.FC = () => {
           /* TODO fare component per errore */
           customErrorComponent={
             <Stack
+              data-testid={`api-error-${CAMPAIGN_ACTIONS.GET_CAMPAIGN_DETAIL}`}
               sx={{
                 p: 3,
                 borderRadius: 1,
