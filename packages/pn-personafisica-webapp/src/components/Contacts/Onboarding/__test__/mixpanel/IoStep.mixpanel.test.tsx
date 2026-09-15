@@ -22,6 +22,16 @@ vi.mock('../../../../../utility/appio.utility', () => ({
   openAppIoDownloadPage: vi.fn(),
 }));
 
+const mockIsMobile = vi.fn(() => false);
+
+vi.mock('@pagopa-pn/pn-commons', async () => {
+  const original = await vi.importActual<any>('@pagopa-pn/pn-commons');
+  return {
+    ...original,
+    useIsMobile: () => mockIsMobile(),
+  };
+});
+
 describe('IoStep - Mixpanel events', () => {
   let triggerEventSpy: PFTriggerEventSpy;
   let mock: MockAdapter;
@@ -32,6 +42,7 @@ describe('IoStep - Mixpanel events', () => {
 
   beforeEach(() => {
     triggerEventSpy = vi.spyOn(PFEventStrategyFactory, 'triggerEvent');
+    mockIsMobile.mockReturnValue(false);
   });
 
   afterEach(() => {
@@ -85,6 +96,8 @@ describe('IoStep - Mixpanel events', () => {
   });
 
   it('fires SEND_ONBOARDING_IO_DOWNLOAD_SELECTED when the download CTA is clicked', async () => {
+    mockIsMobile.mockReturnValue(true);
+
     const props = createProps(undefined);
     const { getByTestId } = render(<IoStep {...props} />);
 

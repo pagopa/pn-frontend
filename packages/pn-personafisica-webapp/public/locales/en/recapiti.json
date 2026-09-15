@@ -187,6 +187,13 @@
     "description-enabled": "When there is a notification for you, you receive it directly in app and you can pay any expenses.",
     "enable": "Activate SEND on IO",
     "download": "Download the IO app",
+    "download-modal": {
+      "title": "To proceed, you need to download and register on the IO app",
+      "subtitle": "Scan the QR code with your device to download the app, or search for it in your app store.",
+      "qr-code-alt": "QR code to download the IO app",
+      "instructions": "Open it, log in with SPID or CIE and complete the registration.",
+      "cta": "Done!"
+    },
     "disable-modal": {
       "title": "Deactivate SEND on the IO app",
       "content": "If you confirm, you will no longer receive SEND notifications in the app.",
