@@ -192,7 +192,7 @@ export const preLoginLinks = ({
         {
           icon: 'youtube',
           title: 'Youtube',
-          href: 'https://www.youtube.com/channel/@pagopaspa',
+          href: 'https://www.youtube.com/@pagopaspa',
           ariaLabel: getLocalizedOrDefaultLabel(
             'common',
             'footer.social',
