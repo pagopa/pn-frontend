@@ -3,12 +3,14 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 
 import { apiClient } from '../../api/apiClients';
 import {
+  BffCampaignDetailResponseV1,
   BffCampaignSearchResponseV1,
   SenderInformalNotificationsApiFactory,
 } from '../../generated-client/informal-notifications';
 
 export enum CAMPAIGN_ACTIONS {
   GET_CAMPAIGNS = 'getCampaigns',
+  GET_CAMPAIGN_DETAIL = 'getCampaignDetail',
 }
 
 interface GetCampaignsParams {
@@ -42,5 +44,24 @@ export const getCampaigns = createAsyncThunk(
   },
   {
     getPendingMeta: ({ arg }) => ({ blockLoading: !arg.allowGlobalLoading }),
+  }
+);
+
+export const getCampaignDetail = createAsyncThunk<BffCampaignDetailResponseV1, string>(
+  CAMPAIGN_ACTIONS.GET_CAMPAIGN_DETAIL,
+  async (campaignId: string, { rejectWithValue }) => {
+    try {
+      const senderInformalNotificationsApiFactory = SenderInformalNotificationsApiFactory(
+        undefined,
+        undefined,
+        apiClient
+      );
+
+      const response = await senderInformalNotificationsApiFactory.getCampaignDetailV1(campaignId);
+
+      return response.data as BffCampaignDetailResponseV1;
+    } catch (e: any) {
+      return rejectWithValue(parseError(e));
+    }
   }
 );

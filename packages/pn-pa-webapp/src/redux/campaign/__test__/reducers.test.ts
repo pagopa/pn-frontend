@@ -2,10 +2,25 @@ import MockAdapter from 'axios-mock-adapter';
 
 import { campaignsDTO } from '../../../__mocks__/Campaigns.mock';
 import { apiClient } from '../../../api/apiClients';
-import { BffCampaignSearchResponseV1 } from '../../../generated-client/informal-notifications';
+import {
+  BffCampaignDetailResponseV1,
+  BffCampaignSearchResponseV1,
+  CampaignStatus,
+  ChannelType,
+} from '../../../generated-client/informal-notifications';
 import { store } from '../../store';
-import { getCampaigns } from '../actions';
-import { setPagination } from '../reducers';
+import { getCampaignDetail, getCampaigns } from '../actions';
+import campaignSlice, { resetCampaignDetail, setPagination } from '../reducers';
+
+const campaign: BffCampaignDetailResponseV1 = {
+  campaignId: 'FattOrd',
+  title: 'Fatturazione Ordinaria',
+  description: 'Test campaign',
+  startDate: '2026-07-10T10:00:00Z',
+  campaignStatus: CampaignStatus.InProgress,
+  serviceName: 'Servizi idrici',
+  channels: [ChannelType.Io, ChannelType.Email, ChannelType.Pec],
+};
 
 describe('Campaign redux state tests', () => {
   let mock: MockAdapter;
@@ -24,11 +39,12 @@ describe('Campaign redux state tests', () => {
     mock.restore();
   });
 
-  it('Initial state', () => {
-    const state = store.getState().campaignState;
+  it('Should return initial state', () => {
+    const state = campaignSlice.reducer(undefined, { type: '' });
 
     expect(state).toEqual({
       campaigns: [],
+      campaignDetail: {},
       pagination: {
         nextPagesKey: [],
         size: 10,
@@ -51,8 +67,11 @@ describe('Campaign redux state tests', () => {
 
     expect(action.type).toBe('getCampaigns/fulfilled');
     expect(payload).toEqual(campaignsDTO);
+
     expect(store.getState().campaignState.campaigns).toStrictEqual(campaignsDTO.resultsPage);
+
     expect(store.getState().campaignState.pagination.moreResult).toBe(true);
+
     expect(store.getState().campaignState.pagination.nextPagesKey).toEqual(['page-key-1']);
   });
 
@@ -73,9 +92,13 @@ describe('Campaign redux state tests', () => {
       })
     );
 
-    const payload = action.payload as { page: number; size: number };
+    const payload = action.payload as {
+      page: number;
+      size: number;
+    };
 
     expect(action.type).toBe('campaignSlice/setPagination');
+
     expect(payload).toEqual({
       page: 1,
       size: 10,
@@ -95,6 +118,53 @@ describe('Campaign redux state tests', () => {
       size: 20,
       page: 0,
       moreResult: false,
+    });
+  });
+
+  it('Should set campaign detail when getCampaignDetail is fulfilled', () => {
+    const action = getCampaignDetail.fulfilled(campaign, '', campaign.campaignId);
+
+    const state = campaignSlice.reducer(undefined, action);
+
+    expect(state.campaignDetail).toEqual(campaign);
+  });
+
+  it('Should be able to fetch campaign detail', async () => {
+    mock
+      .onGet(`/bff/v1/notifications/informal/campaigns/${campaign.campaignId}`)
+      .reply(200, campaign);
+
+    const action = await store.dispatch(getCampaignDetail(campaign.campaignId));
+
+    expect(action.type).toBe('getCampaignDetail/fulfilled');
+    expect(action.payload).toEqual(campaign);
+
+    expect(store.getState().campaignState.campaignDetail).toStrictEqual(campaign);
+  });
+
+  it('Should reset campaign detail', () => {
+    const stateWithCampaign = {
+      campaigns: [],
+      campaignDetail: campaign,
+      pagination: {
+        nextPagesKey: [] as Array<string>,
+        size: 10,
+        page: 0,
+        moreResult: false,
+      },
+    };
+
+    const state = campaignSlice.reducer(stateWithCampaign, resetCampaignDetail());
+
+    expect(state).toEqual({
+      campaigns: [],
+      campaignDetail: {},
+      pagination: {
+        nextPagesKey: [],
+        size: 10,
+        page: 0,
+        moreResult: false,
+      },
     });
   });
 });
