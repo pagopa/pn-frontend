@@ -5,7 +5,6 @@ import { AppResponseMessage, ResponseEventDispatcher } from '@pagopa-pn/pn-commo
 import { campaignDetailMock } from '../../__mocks__/CampaignDetail.mock';
 import { RenderResult, act, fireEvent, render, waitFor } from '../../__test__/test-utils';
 import { apiClient } from '../../api/apiClients';
-import { CAMPAIGN_ACTIONS } from '../../redux/campaign/actions';
 import CampaignDetail from '../CampaignDetail.page';
 
 describe('CampaignDetail Page', () => {
@@ -97,16 +96,14 @@ describe('CampaignDetail Page', () => {
     });
 
     await waitFor(() => {
-      expect(
-        result.getByTestId(`api-error-${CAMPAIGN_ACTIONS.GET_CAMPAIGN_DETAIL}`)
-      ).toBeInTheDocument();
+      expect(result.getByTestId('emptyState')).toBeInTheDocument();
     });
 
     expect(
-      result.getByText('Non è stato possibile recuperare i dati della campagna.')
+      result.getByRole('button', {
+        name: 'detail.empty-state.generic-error-cta',
+      })
     ).toBeInTheDocument();
-
-    expect(result.getByRole('button', { name: 'Prova di nuovo' })).toBeInTheDocument();
   });
 
   it('retries campaign detail request', async () => {
@@ -134,7 +131,7 @@ describe('CampaignDetail Page', () => {
 
     fireEvent.click(
       result.getByRole('button', {
-        name: 'Prova di nuovo',
+        name: 'detail.empty-state.generic-error-cta',
       })
     );
 

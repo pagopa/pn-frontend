@@ -15,6 +15,10 @@
     "creation-date": "Data di creazione",
     "service-name": "Nome servizio",
     "communications": "Comunicazioni",
-    "channels": "Canali"
+    "channels": "Canali",
+    "empty-state": {
+      "generic-error": "Non è stato possibile recuperare i dettagli della campagna.",
+      "generic-error-cta": "Prova di nuovo"
+    }
   }
 }

@@ -1,9 +1,9 @@
 import { useCallback, useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
 
-import ReportGmailerrorredRoundedIcon from '@mui/icons-material/ReportGmailerrorredRounded';
-import { Box, Link, Stack, Typography } from '@mui/material';
-import { ApiError, LoadingPage, TitleBox, useErrors } from '@pagopa-pn/pn-commons';
+import { Box } from '@mui/material';
+import { ApiError, EmptyErrorState, LoadingPage, TitleBox, useErrors } from '@pagopa-pn/pn-commons';
 import { MIBreadcrumbItem, MIBreadcrumbs } from '@pagopa/mui-italia';
 
 import PnCampaignDetailCard from '../components/Campaigns/PnCampaignDetailCard';
@@ -19,6 +19,7 @@ const CampaignDetail: React.FC = () => {
   const campaign = useAppSelector((state: RootState) => state.campaignState.campaignDetail);
   const { hasApiErrors } = useErrors();
   const [pageReady, setPageReady] = useState(false);
+  const { t } = useTranslation(['campaigns', 'common']);
   const hasCampaignDetailApiError = hasApiErrors(CAMPAIGN_ACTIONS.GET_CAMPAIGN_DETAIL);
   const isCampaignDetailEmpty = pageReady && !hasCampaignDetailApiError && !campaign.campaignId;
 
@@ -62,26 +63,15 @@ const CampaignDetail: React.FC = () => {
       {hasCampaignDetailApiError && (
         <ApiError
           apiId={CAMPAIGN_ACTIONS.GET_CAMPAIGN_DETAIL}
-          /* TODO fare component per errore */
           customErrorComponent={
-            <Stack
-              data-testid={`api-error-${CAMPAIGN_ACTIONS.GET_CAMPAIGN_DETAIL}`}
-              sx={{
-                p: 3,
-                borderRadius: 1,
-                backgroundColor: 'background.paper',
+            <EmptyErrorState
+              variant="error"
+              title={t('detail.empty-state.generic-error')}
+              action={{
+                label: t('detail.empty-state.generic-error-cta'),
+                onClick: fetchCampaignDetail,
               }}
-              alignItems="center"
-              gap={1}
-            >
-              <ReportGmailerrorredRoundedIcon />
-
-              <Typography>Non è stato possibile recuperare i dati della campagna.</Typography>
-
-              <Link component="button" fontWeight="bold" onClick={fetchCampaignDetail}>
-                Prova di nuovo
-              </Link>
-            </Stack>
+            />
           }
         />
       )}
