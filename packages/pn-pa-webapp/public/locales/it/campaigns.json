@@ -2,6 +2,11 @@
   "list": {
     "title": "Campagne",
     "id": "Codice ID",
-    "open-aria-label": "Apri campagna \"{{name}}\""
+    "open-aria-label": "Apri campagna \"{{name}}\"",
+    "empty-state": {
+      "no-campaigns": "Qui vedrai le campagne inviate dall'ente",
+      "generic-error": "Non è stato possibile recuperare le campagne.",
+      "generic-error-cta": "Prova di nuovo"
+    }
   }
 }
