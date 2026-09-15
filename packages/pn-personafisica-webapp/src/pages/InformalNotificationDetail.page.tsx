@@ -6,24 +6,25 @@ import { Box, Stack } from '@mui/material';
 import {
   AbstractPaper,
   ApiError,
+  EventNotificationTypes,
+  EventPaymentRecipientType,
   NotificationDetailDocuments,
   NotificationDetailOtherDocument,
   NotificationDetailPayment,
   NotificationPaymentRecipient,
   PaymentAttachmentSName,
   PaymentsData,
-  PnBreadcrumb,
   PnSenderContacts,
   appStateActions,
   downloadDocument,
   useErrors,
 } from '@pagopa-pn/pn-commons';
-import { MIPaper } from '@pagopa/mui-italia';
+import { MIBreadcrumbItem, MIBreadcrumbs, MIPaper } from '@pagopa/mui-italia';
 
 import LoadingPageWrapper from '../components/LoadingPageWrapper/LoadingPageWrapper';
-import { BffFullInformalNotificationV1 } from '../generated-client/informal-notifications';
+import { PFEventsType } from '../models/PFEventsType';
 import * as routes from '../navigation/routes.const';
-import { useAppDispatch } from '../redux/hooks';
+import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { getReceivedNotificationPaymentUrl } from '../redux/notification/actions';
 import {
   INFORMAL_NOTIFICATION_ACTIONS,
@@ -32,7 +33,9 @@ import {
   getReceivedInformalNotificationPayment,
   getReceivedInformalNotificationPaymentInfo,
 } from '../redux/notification/informalActions';
+import { RootState } from '../redux/store';
 import { getConfiguration } from '../services/configuration.service';
+import PFEventStrategyFactory from '../utility/MixpanelUtils/PFEventStrategyFactory';
 
 const { SELFCARE_CDN_URL } = getConfiguration();
 
@@ -44,8 +47,9 @@ const InformalNotificationDetail: React.FC = () => {
   const { hasApiErrors } = useErrors();
   const navigate = useNavigate();
 
-  const [informalNotification, setInformalNotification] =
-    React.useState<BffFullInformalNotificationV1>();
+  const informalNotification = useAppSelector(
+    (state: RootState) => state.notificationState.informalNotification
+  );
 
   const [paymentsData, setPaymentsData] = React.useState<PaymentsData>({
     pagoPaF24: [],
@@ -67,7 +71,6 @@ const InformalNotificationDetail: React.FC = () => {
     }
     void dispatch(getReceivedInformalNotification(id))
       .unwrap()
-      .then(setInformalNotification)
       .catch(() => {})
       .finally(() => setPageReady(true));
   }, [id, dispatch]);
@@ -77,12 +80,26 @@ const InformalNotificationDetail: React.FC = () => {
   }, []);
 
   const currentRecipient = informalNotification?.recipients?.[0];
-
-  const hasPayments = (currentRecipient?.payments?.length ?? 0) > 0;
+  const delegatorsFromStore = useAppSelector(
+    (state: RootState) => state.generalInfoState.delegators
+  );
+  const paymentCount = currentRecipient?.payments?.length ?? 0;
+  const hasPayments = paymentCount > 0;
 
   const hasInformalReceivedApiError = hasApiErrors(
     INFORMAL_NOTIFICATION_ACTIONS.GET_RECEIVED_INFORMAL_NOTIFICATION
   );
+
+  const handleExternalLinkEvent = (event: EventPaymentRecipientType, param?: object) => {
+    PFEventStrategyFactory.triggerEvent(PFEventsType[event], param);
+  };
+
+  const handleExternalLinkClick = (href: string) => {
+    PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_TAP_EXTERNAL_LINK, {
+      link: href,
+      notification_type: EventNotificationTypes.INFORMAL,
+    });
+  };
 
   const phone = informalNotification?.senderContacts?.phone;
   const site = informalNotification?.senderContacts?.site;
@@ -144,26 +161,65 @@ const InformalNotificationDetail: React.FC = () => {
     fetchPaymentsInfo(payments as Array<NotificationDetailPayment>);
   }, [currentRecipient?.payments]);
 
+  // TODO in legali ci sono le proprietà downtimesReady isUserForbidden vanno messe anche per le bonarie??
+  useEffect(() => {
+    if (!pageReady || hasInformalReceivedApiError || !informalNotification) {
+      return;
+    }
+    PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_NOTIFICATION_DETAIL, {
+      downtimeEvents: [], // TODO al momento non abbiamo i downtime,
+      notificationStatus: informalNotification?.notificationStatus,
+      checkIfUserHasPayments: hasPayments,
+      paymentCount,
+      source: 'LISTA_NOTIFICHE',
+      timeline: informalNotification?.timeline,
+      flow: 'not_set',
+      delivery_mode: 'not_set',
+      notification_type: EventNotificationTypes.INFORMAL,
+    });
+  }, [
+    pageReady,
+    hasInformalReceivedApiError,
+    informalNotification?.iun,
+    informalNotification?.notificationStatus,
+    informalNotification?.timeline,
+    paymentCount,
+  ]);
+
   const primaryMessage = currentRecipient
     ? (currentRecipient as any).message?.primaryMessage
     : undefined;
 
-  const properBreadcrumb = useMemo(() => {
-    const backRoute = routes.NOTIFICHE;
-
-    return (
-      <PnBreadcrumb
-        showBackAction
-        linkRoute={backRoute}
-        linkLabel={t('menu.notifiche')}
-        currentLocationLabel={primaryMessage?.subject ?? ''}
-        goBackAction={() => navigate(backRoute)}
-      />
-    );
-  }, [i18n.language, primaryMessage?.subject]);
+  const properBreadcrumb = useMemo(
+    () => (
+      <MIBreadcrumbs
+        backButtonLabel={t('button.indietro', { ns: 'common' })}
+        backButtonAction={() => navigate(routes.NOTIFICHE)}
+      >
+        <MIBreadcrumbItem
+          onClick={() => navigate(routes.NOTIFICHE)}
+          label={
+            delegatorsFromStore.length > 0
+              ? t('menu.notifiche-utente', { ns: 'common' })
+              : t('menu.notifiche')
+          }
+          data-testid="breadcrumb-root-button"
+        />
+        <MIBreadcrumbItem
+          label={primaryMessage?.subject ?? t('menu.fallback-communication')}
+          current
+        />
+      </MIBreadcrumbs>
+    ),
+    [i18n.language, primaryMessage?.subject, delegatorsFromStore]
+  );
 
   const onPayClick = (noticeCode?: string, creditorTaxId?: string, amount?: number) => {
     if (noticeCode && creditorTaxId && amount && informalNotification?.senderDenomination) {
+      PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_START_PAYMENT, {
+        psp: 'pagopa',
+        notification_type: EventNotificationTypes.INFORMAL,
+      });
       dispatch(
         getReceivedNotificationPaymentUrl({
           paymentNotice: {
@@ -174,6 +230,7 @@ const InformalNotificationDetail: React.FC = () => {
             description: informalNotification.subject,
           },
           returnUrl: window.location.href,
+          iun: informalNotification.iun,
         })
       )
         .unwrap()
@@ -184,14 +241,19 @@ const InformalNotificationDetail: React.FC = () => {
     }
   };
 
-  const getPaymentAttachmentAction = (name: PaymentAttachmentSName, attachmentIdx?: number) =>
-    dispatch(
+  const getPaymentAttachmentAction = (name: PaymentAttachmentSName, attachmentIdx?: number) => {
+    PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_DOWNLOAD_PAYMENT_NOTICE, {
+      notification_type: EventNotificationTypes.INFORMAL,
+    });
+
+    return dispatch(
       getReceivedInformalNotificationPayment({
         iun: informalNotification?.iun ?? '',
         attachmentName: name,
         attachmentIdx,
       })
     );
+  };
 
   const showInfoMessageIfRetryAfterOrDownload = (response: {
     url: string;
@@ -225,6 +287,14 @@ const InformalNotificationDetail: React.FC = () => {
       .unwrap()
       .then(showInfoMessageIfRetryAfterOrDownload)
       .catch(() => {});
+
+    PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_DOWNLOAD_ATTACHMENT, {
+      notification_type: EventNotificationTypes.INFORMAL,
+    });
+  };
+
+  const trackEventPaymentRecipient = (event: EventPaymentRecipientType, param?: object) => {
+    PFEventStrategyFactory.triggerEvent(PFEventsType[event], param);
   };
 
   return (
@@ -256,6 +326,7 @@ const InformalNotificationDetail: React.FC = () => {
             hasAttachments={documentsAvailable}
             hasPayment={hasPayments}
             selfcareCdnUrl={SELFCARE_CDN_URL}
+            onExternalLinkClick={handleExternalLinkClick}
           />
 
           <Stack direction={{ xs: 'column', md: 'row' }} spacing={2} alignItems="flex-start">
@@ -281,12 +352,18 @@ const InformalNotificationDetail: React.FC = () => {
                     onPayClick={onPayClick}
                     handleFetchPaymentsInfo={reloadPaymentsInfo}
                     getPaymentAttachmentAction={getPaymentAttachmentAction}
+                    notificationType={EventNotificationTypes.INFORMAL}
+                    handleTrackEvent={trackEventPaymentRecipient}
                   />
                 </MIPaper>
               )}
             </Stack>
 
-            <PnSenderContacts phone={phone} site={site} />
+            <PnSenderContacts
+              phone={phone}
+              site={site}
+              handleTrackEventFn={handleExternalLinkEvent}
+            />
           </Stack>
         </Box>
       )}

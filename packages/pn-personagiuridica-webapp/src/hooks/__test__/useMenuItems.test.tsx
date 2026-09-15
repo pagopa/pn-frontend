@@ -54,11 +54,17 @@ describe('useMenuItems', () => {
     expect(result.current.menuItems).toEqual([
       {
         children: [
-          { label: 'menu.notifiche-impresa', route: routes.NOTIFICHE, dotNotification: false },
+          {
+            label: 'menu.notifiche-impresa',
+            route: routes.NOTIFICHE,
+            additionalRoutes: [routes.COMUNICAZIONE],
+            dotNotification: false,
+          },
           { label: 'menu.notifiche-delegato', route: routes.NOTIFICHE_DELEGATO },
         ],
         icon: expect.anything(),
         route: routes.NOTIFICHE,
+        additionalRoutes: [routes.COMUNICAZIONE],
         label: 'menu.notifiche',
         notSelectable: true,
       },
@@ -92,11 +98,17 @@ describe('useMenuItems', () => {
     expect(result.current.menuItems).toEqual([
       {
         children: [
-          { label: 'menu.notifiche-impresa', route: routes.NOTIFICHE, dotNotification: false },
+          {
+            label: 'menu.notifiche-impresa',
+            route: routes.NOTIFICHE,
+            additionalRoutes: [routes.COMUNICAZIONE],
+            dotNotification: false,
+          },
           { label: 'menu.notifiche-delegato', route: routes.NOTIFICHE_DELEGATO },
         ],
         icon: expect.anything(),
         route: routes.NOTIFICHE,
+        additionalRoutes: [routes.COMUNICAZIONE],
         label: 'menu.notifiche',
         notSelectable: true,
       },

@@ -8,7 +8,7 @@ export const NOTIFICHE_DELEGATO = `${NOTIFICHE}/:mandateId`;
 export const DELEGHE = '/deleghe';
 export const PROFILO = '/profilo';
 const DETTAGLIO = '/dettaglio';
-const COMUNICAZIONE = '/comunicazione';
+export const COMUNICAZIONE = '/comunicazione';
 export const DETTAGLIO_NOTIFICA = `${NOTIFICHE}/:id${DETTAGLIO}`;
 export const DETTAGLIO_NOTIFICA_TIMELINE = `${NOTIFICHE}/:id${DETTAGLIO}/timeline`;
 

@@ -29,6 +29,7 @@ export interface PaConfiguration {
   ACCESSIBILITY_LINK: string;
   SERCQ_SERVICE_STATEMENT_LINK: string;
   STATISTICS_MAINTENANCE_DATES?: string;
+  IS_NEW_TIMELINE_ENABLED: boolean;
 }
 
 function statisticsMaintenanceDatesValidator(value: string): ValidationResult<string> {
@@ -91,6 +92,7 @@ class PaConfigurationValidator extends Validator<PaConfiguration> {
     this.ruleFor('STATISTICS_MAINTENANCE_DATES')
       .isString()
       .customValidator(statisticsMaintenanceDatesValidator);
+    this.ruleFor('IS_NEW_TIMELINE_ENABLED').isBoolean();
   }
 }
 

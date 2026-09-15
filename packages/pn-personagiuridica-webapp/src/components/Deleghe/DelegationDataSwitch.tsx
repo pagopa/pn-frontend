@@ -1,8 +1,8 @@
 import { useTranslation } from 'react-i18next';
 
-import { Box, Chip, Typography } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import { CustomTagGroup, Row } from '@pagopa-pn/pn-commons';
-import { Tag } from '@pagopa/mui-italia';
+import { MIChip, Tag } from '@pagopa/mui-italia';
 
 import { DelegationColumnData, DelegationStatus } from '../../models/Deleghe';
 import { useAppSelector } from '../../redux/hooks';
@@ -57,7 +57,7 @@ const DelegationDataSwitch: React.FC<Props> = ({
   if (type === 'status') {
     const { color, key } = getDelegationStatusKeyAndColor(data.status);
     if (data.status === DelegationStatus.ACTIVE || menuType === 'delegates') {
-      return <Chip id={`chip-status-${color}`} label={t(key)} color={color} />;
+      return <MIChip id={`chip-status-${color}`} label={t(key)} color={color} />;
     }
     return <AcceptButton id={data.id} name={data.name} onAccept={onAccept} />;
   }

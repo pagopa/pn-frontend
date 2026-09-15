@@ -3,7 +3,7 @@ import { Suspense } from 'react';
 import { vi } from 'vitest';
 
 import { ThemeProvider } from '@mui/material';
-import { theme } from '@pagopa/mui-italia';
+import { themeNext } from '@pagopa/mui-italia';
 
 import App from '../../App';
 import { currentStatusDTO } from '../../__mocks__/AppStatus.mock';
@@ -18,13 +18,15 @@ import { PFTriggerEventSpy, act, fireEvent, render, screen, waitFor, within } fr
 vi.mock('../../pages/Notifiche.page', () => ({ default: () => <div>Generic Page</div> }));
 vi.mock('../../pages/Profile.page', () => ({ default: () => <div>Profile Page</div> }));
 
-const Component = () => (
-  <ThemeProvider theme={theme}>
-    <Suspense fallback="loading...">
-      <App />
-    </Suspense>
-  </ThemeProvider>
-);
+const Component = () => {
+  return (
+    <ThemeProvider theme={themeNext}>
+      <Suspense fallback="loading...">
+        <App />
+      </Suspense>
+    </ThemeProvider>
+  );
+};
 
 const reduxInitialState = {
   userState: {

@@ -1,13 +1,7 @@
 import { useRef, useState } from 'react';
 
-import {
-  Button,
-  DialogActions,
-  DialogContent,
-  FormControlLabel,
-  Radio,
-  RadioGroup,
-} from '@mui/material';
+import { DialogActions, DialogContent, FormControlLabel, Radio, RadioGroup } from '@mui/material';
+import { MIButton } from '@pagopa/mui-italia';
 
 import { CardSort } from '../../models/PnCard';
 import { Sort } from '../../models/PnTable';
@@ -87,12 +81,12 @@ const MobileNotificationsSort = <T,>({
         </DialogContent>
         <DialogActions>
           <CustomMobileDialogAction closeOnClick>
-            <Button variant="outlined" onClick={handleConfirmSort}>
+            <MIButton variant="outlined" onClick={handleConfirmSort}>
               {title}
-            </Button>
+            </MIButton>
           </CustomMobileDialogAction>
           <CustomMobileDialogAction closeOnClick>
-            <Button onClick={handleCancelSort}>{cancelLabel}</Button>
+            <MIButton onClick={handleCancelSort}>{cancelLabel}</MIButton>
           </CustomMobileDialogAction>
         </DialogActions>
       </CustomMobileDialogContent>

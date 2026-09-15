@@ -1,8 +1,8 @@
 import { useTranslation } from 'react-i18next';
 
-import { Chip, Stack, Typography } from '@mui/material';
+import { Stack, Typography } from '@mui/material';
 import { Row, StatusTooltip } from '@pagopa-pn/pn-commons';
-import { CopyToClipboardButton } from '@pagopa/mui-italia';
+import { CopyToClipboardButton, MIChip } from '@pagopa/mui-italia';
 
 import {
   BffPublicKeysResponse,
@@ -89,7 +89,7 @@ const ApiKeysDataSwitch: React.FC<Props> = ({
       return tooltip ? (
         <StatusTooltip label={t(label)} tooltip={tooltip} color={color} />
       ) : (
-        <Chip
+        <MIChip
           id={`status-chip-${t(label)}`}
           label={t(label)}
           color={color}

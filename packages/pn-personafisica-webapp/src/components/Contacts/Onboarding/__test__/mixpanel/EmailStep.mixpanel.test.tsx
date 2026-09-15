@@ -162,8 +162,8 @@ describe('EmailStep - Mixpanel events', () => {
 
     mock.onPost('/bff/v1/addresses/COURTESY/default/EMAIL').reply(200, { result: 'OK' });
 
-    const dialogButtons = dialog.querySelectorAll('button');
-    await userEvent.click(dialogButtons[1]);
+    const confirmButton = within(dialog).getByTestId('codeConfirmButton');
+    await userEvent.click(confirmButton);
 
     expect(triggerEventSpy).toHaveBeenCalledWith(
       PFEventsType.SEND_ONBOARDING_EMAIL_OTP_VERIFICATION,

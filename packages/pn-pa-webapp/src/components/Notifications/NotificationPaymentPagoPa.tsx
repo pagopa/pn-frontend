@@ -1,7 +1,7 @@
 import { isNil } from 'lodash-es';
 import { useTranslation } from 'react-i18next';
 
-import OpenInBrowserIcon from '@mui/icons-material/OpenInBrowser';
+import OpenInBrowserRoundedIcon from '@mui/icons-material/OpenInBrowserRounded';
 import { Box, Grid, Typography } from '@mui/material';
 import {
   PagoPAPaymentFullDetails,
@@ -68,7 +68,7 @@ const NotificationPaymentPagoPa: React.FC<Props> = ({ iun, payment }) => {
         <Box
           component={MIButton}
           variant="text"
-          endIcon={<OpenInBrowserIcon />}
+          endIcon={<OpenInBrowserRoundedIcon />}
           onClick={downloadHandler}
           size="medium"
           fullWidth

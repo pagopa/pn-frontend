@@ -1,9 +1,9 @@
 import { ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { Chip, Stack, Typography } from '@mui/material';
+import { Stack, Typography } from '@mui/material';
 import { useIsMobile } from '@pagopa-pn/pn-commons';
-import { MIAlert } from '@pagopa/mui-italia';
+import { MIAlert, MIChip } from '@pagopa/mui-italia';
 
 import { WizardMode } from '../../../models/Onboarding';
 import { IOAllowedValues } from '../../../models/contacts';
@@ -37,18 +37,14 @@ const SummaryStep: React.FC<Props> = ({ mode, email, pec, io }) => {
         id: 'sercqSend',
         label: t('onboarding.digital-domicile.summary.ddom-label'),
         secondaryContent: (
-          <Chip
-            label={sendLabel}
-            size="small"
-            sx={{ mt: 0.75, '& .MuiChip-label': { fontSize: '12px' } }}
-          />
+          <MIChip label={sendLabel} sx={{ mt: 0.75, '& .MuiChip-label': { fontSize: '12px' } }} />
         ),
       }
     : {
         id: 'pec',
         label: t('onboarding.digital-domicile.summary.ddom-label'),
         value: pec,
-        secondaryContent: <Chip label={pecLabel} size="small" sx={{ mt: 0.75 }} />,
+        secondaryContent: <MIChip label={pecLabel} sx={{ mt: 0.75 }} />,
       };
 
   const courtesyRows: Array<SummaryRow> = [

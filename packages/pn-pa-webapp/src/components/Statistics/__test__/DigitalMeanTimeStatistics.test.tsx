@@ -6,8 +6,8 @@ import {
   digitalMeanTimeDataMock,
   digitalMeanTimeEmptyDataMock,
 } from '../../../__mocks__/Statistics.mock';
-import { render } from '../../../__test__/test-utils';
-import { GraphColors } from '../../../models/Statistics';
+import { render, theme } from '../../../__test__/test-utils';
+import { getGraphColors } from '../../../models/Statistics';
 import DigitalMeanTimeStatistics from '../DigitalMeanTimeStatistics';
 
 const mockInput = vi.fn();
@@ -58,6 +58,7 @@ describe('DigitalMeanTimeStatistics component tests', () => {
   });
 
   it('renders the component when data is available', () => {
+    const graphColors = getGraphColors(theme);
     const { container, getByTestId } = render(
       <DigitalMeanTimeStatistics {...digitalMeanTimeDataMock} />
     );
@@ -72,19 +73,19 @@ describe('DigitalMeanTimeStatistics component tests', () => {
         value: convertHoursToDays(
           digitalMeanTimeDataMock.data.delivered.time / digitalMeanTimeDataMock.data.delivered.count
         ),
-        itemStyle: { color: GraphColors.lightBlue },
+        itemStyle: { color: graphColors.navy },
       },
       {
         value: convertHoursToDays(
           digitalMeanTimeDataMock.data.viewed.time / digitalMeanTimeDataMock.data.viewed.count
         ),
-        itemStyle: { color: GraphColors.lightGreen },
+        itemStyle: { color: graphColors.blue },
       },
       {
         value: convertHoursToDays(
           digitalMeanTimeDataMock.data.refined.time / digitalMeanTimeDataMock.data.refined.count
         ),
-        itemStyle: { color: GraphColors.darkGreen },
+        itemStyle: { color: graphColors.lightGreen },
       },
     ]);
   });

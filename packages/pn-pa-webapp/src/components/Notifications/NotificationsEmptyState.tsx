@@ -3,7 +3,7 @@ import { Trans, useTranslation } from 'react-i18next';
 
 import { Box, Link, Typography } from '@mui/material';
 import { EmptyState } from '@pagopa-pn/pn-commons';
-import { ButtonNaked, IllusMIError, IllusMIMessage } from '@pagopa/mui-italia';
+import { IllusMIError, IllusMIMessage, MIButton } from '@pagopa/mui-italia';
 
 type Props = {
   filtersApplied: boolean;
@@ -62,7 +62,7 @@ const NotificationsEmptyStateView: React.FC<NotificationsEmptyStateViewProps> = 
       variant="subtitle2"
       fontSize="16px"
       sx={{
-        color: '#636B82',
+        color: 'text.secondary',
         mb: description ? 1 : action ? 2 : 0,
       }}
     >
@@ -120,15 +120,14 @@ export const NotificationsGenericErrorState: React.FC<NotificationsGenericErrorS
     <NotificationsEmptyStateView
       title={t('empty-state.generic-error')}
       action={
-        <ButtonNaked
-          size="medium"
-          color="primary"
+        <MIButton
+          variant="text"
           id="call-to-action-first"
           data-testid="link-retry"
           onClick={onRetry}
         >
           {t('empty-state.generic-error-cta')}
-        </ButtonNaked>
+        </MIButton>
       }
     />
   );
@@ -148,15 +147,14 @@ const NotificationsEmptyState: React.FC<Props> = ({
       <NotificationsEmptyStateView
         title={t('notifiche:empty-state.timeout')}
         action={
-          <ButtonNaked
-            size="medium"
-            color="primary"
+          <MIButton
+            variant="text"
             id="call-to-action-first"
             data-testid="link-retry"
             onClick={onRetry}
           >
             {t('common:messages.generic-api-error-action-text')}
-          </ButtonNaked>
+          </MIButton>
         }
       />
     );
@@ -168,15 +166,14 @@ const NotificationsEmptyState: React.FC<Props> = ({
         title={t('notifiche:empty-state.filtered')}
         description={t('notifiche:empty-state.filtered-description')}
         action={
-          <ButtonNaked
-            size="medium"
-            color="primary"
+          <MIButton
+            variant="text"
             id="call-to-action-first"
             data-testid="link-remove-filters"
             onClick={onCleanFilters}
           >
             {t('notifiche:empty-state.clean-filters-cta')}
-          </ButtonNaked>
+          </MIButton>
         }
       />
     );

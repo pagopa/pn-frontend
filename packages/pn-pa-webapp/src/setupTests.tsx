@@ -50,6 +50,7 @@ beforeAll(() => {
     ACCESSIBILITY_LINK: 'https://accessibility-link.it',
     SERCQ_SERVICE_STATEMENT_LINK: 'https://fake.sercq-service-statement.pagopa.it',
     STATISTICS_MAINTENANCE_DATES: '2025-08-14_2025-08-25',
+    IS_NEW_TIMELINE_ENABLED: true,
   });
   initStore(false);
   initAxiosClients();

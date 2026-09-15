@@ -1,8 +1,8 @@
 import { vi } from 'vitest';
 
 import { deliveryModeDataMock } from '../../../__mocks__/Statistics.mock';
-import { render } from '../../../__test__/test-utils';
-import { GraphColors, StatisticsDeliveryMode } from '../../../models/Statistics';
+import { render, theme } from '../../../__test__/test-utils';
+import { StatisticsDeliveryMode, getGraphColors } from '../../../models/Statistics';
 import DeliveryModeStatistics from '../DeliveryModeStatistics';
 
 const mockInput = vi.fn();
@@ -53,6 +53,8 @@ describe('DeliveryModeStatistics component tests', () => {
   });
 
   it('renders the component', () => {
+    const graphColors = getGraphColors(theme);
+
     const { container, getByTestId } = render(<DeliveryModeStatistics {...deliveryModeDataMock} />);
     expect(container).toHaveTextContent('delivery_mode.title');
     expect(container).toHaveTextContent('delivery_mode.description');
@@ -74,7 +76,7 @@ describe('DeliveryModeStatistics component tests', () => {
           details: deliveryModeDataMock.data[StatisticsDeliveryMode.ANALOG].details,
         },
       ],
-      options: { color: [GraphColors.blue, GraphColors.turquoise] },
+      options: { color: [graphColors.blue, graphColors.turquoise] },
     });
   });
 });

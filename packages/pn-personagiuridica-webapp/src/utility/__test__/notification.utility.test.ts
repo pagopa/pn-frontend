@@ -18,8 +18,8 @@ describe('Tests notification utility', () => {
     const clonedNotification = cloneDeep(notificationDTO);
     for (const recipient of clonedNotification.recipients) {
       if (!recipient.taxId) {
-        recipient.taxId = 'BNCSRA34H41G645K';
-        recipient.denomination = 'Sara Bianchi';
+        recipient.taxId = 'TSTUTN00A09A001L';
+        recipient.denomination = 'Utente Test Sette';
       }
     }
     const notification = parseNotificationDetailForRecipient(clonedNotification);

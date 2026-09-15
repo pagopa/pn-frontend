@@ -2,10 +2,10 @@ import { PNRole, PartyRole, User } from '../models/User';
 
 export const adminUser: User = {
   sessionToken: 'mocked-session-token',
-  name: 'Mario',
-  family_name: 'Rossi',
-  fiscal_number: 'RSSMRA80A01H501U',
-  email: 'info@agid.gov.it',
+  name: 'Utente',
+  family_name: 'Test Uno',
+  fiscal_number: 'TSTUTN00A01A001A',
+  email: 'info@ente-test.it',
   from_aa: false,
   uid: 'a6c1350d-1d69-4209-8bf8-31de58c79d6f',
   aud: 'portale-pg.dev.pn.pagopa.it',

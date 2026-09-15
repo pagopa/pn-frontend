@@ -57,6 +57,14 @@ export enum EventPropertyType {
   SUPER_PROPERTY = 'superProperty',
 }
 
+export const EventNotificationTypes = {
+  NOTIFICATION: 'notifica',
+  INFORMAL: 'comunicazione bonaria',
+} as const;
+
+export type EventNotificationType =
+  (typeof EventNotificationTypes)[keyof typeof EventNotificationTypes];
+
 export type EventPaymentStatusType = {
   page_number: number;
   count_payment: number;
@@ -84,6 +92,7 @@ export type EventNotificationDetailType = {
   elapsed_time: number;
   flow: EventDeliveryFlowType;
   delivery_mode: EventDeliveryModeType;
+  notification_type: EventNotificationType;
 };
 
 export type EventMandateNotificationsListType = {

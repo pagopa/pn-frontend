@@ -3,8 +3,8 @@ import { vi } from 'vitest';
 import { NotificationStatus } from '@pagopa-pn/pn-commons';
 
 import { lastStateDataMock, lastStateEmptyDataMock } from '../../../__mocks__/Statistics.mock';
-import { render } from '../../../__test__/test-utils';
-import { GraphColors } from '../../../models/Statistics';
+import { render, theme } from '../../../__test__/test-utils';
+import { getGraphColors } from '../../../models/Statistics';
 import LastStateStatistics from '../LastStateStatistics';
 
 const mockInput = vi.fn();
@@ -55,6 +55,8 @@ describe('DigitalMeanTimeStatistics component tests', () => {
   });
 
   it('renders the component when data is available', () => {
+    const graphColors = getGraphColors(theme);
+
     const { container, getByTestId } = render(<LastStateStatistics data={lastStateDataMock} />);
     expect(container).toHaveTextContent('last_state.title');
     expect(container).toHaveTextContent('last_state.description');
@@ -65,31 +67,31 @@ describe('DigitalMeanTimeStatistics component tests', () => {
     expect(mockInput).toHaveBeenCalledWith([
       {
         value: lastStateDataMock[NotificationStatus.DELIVERING],
-        itemStyle: { color: GraphColors.lightGrey },
+        itemStyle: { color: graphColors.lightGrey },
       },
       {
         value: lastStateDataMock[NotificationStatus.DELIVERED],
-        itemStyle: { color: GraphColors.lightBlue },
+        itemStyle: { color: graphColors.lightBlue },
       },
       {
         value: lastStateDataMock[NotificationStatus.VIEWED],
-        itemStyle: { color: GraphColors.lightGreen },
+        itemStyle: { color: graphColors.lightGreen },
       },
       {
         value: lastStateDataMock[NotificationStatus.EFFECTIVE_DATE],
-        itemStyle: { color: GraphColors.darkGreen },
+        itemStyle: { color: graphColors.darkGreen },
       },
       {
         value: lastStateDataMock[NotificationStatus.CANCELLED],
-        itemStyle: { color: GraphColors.gold },
+        itemStyle: { color: graphColors.gold },
       },
       {
         value: lastStateDataMock[NotificationStatus.UNREACHABLE],
-        itemStyle: { color: GraphColors.lightRed },
+        itemStyle: { color: graphColors.lightRed },
       },
       {
         value: lastStateDataMock[NotificationStatus.RETURNED_TO_SENDER],
-        itemStyle: { color: GraphColors.pink },
+        itemStyle: { color: graphColors.pink },
       },
     ]);
   });

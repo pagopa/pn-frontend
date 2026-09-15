@@ -1,24 +1,29 @@
+import { Theme } from '@mui/material';
 import { NotificationStatus } from '@pagopa-pn/pn-commons';
 
-export enum GraphColors {
-  navy = '#0073E6',
-  greyBlue = '#5C6F82',
-  lightBlue2 = 'rgba(196, 220, 245, 0.61)', // '#C4DCF5',
-  blue = '#0055AA',
-  gold = '#FFCB46',
-  lightGrey = '#E0E0E0',
-  lightBlue = '#6BCFFB',
-  lightGreen = '#6CC66A',
-  darkGreen = '#5CA85A',
-  lightRed = '#FE6666',
-  turquoise = '#21CDD1',
-  azure = '#00C5CA',
-  pink = '#FB9EAC',
-  darkRed = '#761F1F',
-  lightYellow = '#FFE5A3',
-  goldenYellow = '#D9AD3C',
-  oliveBrown = '#614C15',
-}
+export const getGraphColors = (theme: Theme) =>
+  ({
+    navy: theme.colors.blueitalia[500],
+    greyBlue: theme.colors.neutral.grey[700],
+    lightBlue2: theme.colors.blueitalia[100],
+    blue: theme.colors.blue[500],
+    gold: theme.colors.warning[500],
+    lightGrey: theme.colors.neutral.grey[100],
+    lightBlue: theme.colors.info[500],
+    lightGreen: theme.colors.success[500],
+    darkGreen: theme.colors.success[700],
+    lightRed: theme.colors.error[400],
+    turquoise: theme.colors.turquoise[300],
+    azure: theme.colors.turquoise[500],
+    pink: theme.colors.error[100],
+    darkRed: theme.colors.error[700],
+    lightYellow: theme.colors.warning[100],
+    goldenYellow: theme.colors.warning[400],
+    oliveBrown: theme.colors.warning[850],
+  } as const);
+
+export type GraphColors = ReturnType<typeof getGraphColors>;
+export type GraphColor = GraphColors[keyof GraphColors];
 
 export enum CxType {
   PA = 'PA',

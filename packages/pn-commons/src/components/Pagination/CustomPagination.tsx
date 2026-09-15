@@ -1,7 +1,8 @@
 import { ChangeEvent, useState } from 'react';
 
-import ArrowDropDown from '@mui/icons-material/ArrowDropDown';
-import { Button, Grid, Menu, MenuItem, Pagination, PaginationItem, SxProps } from '@mui/material';
+import ArrowDropDownRoundedIcon from '@mui/icons-material/ArrowDropDownRounded';
+import { Grid, Menu, MenuItem, Pagination, PaginationItem, SxProps } from '@mui/material';
+import { ButtonNaked } from '@pagopa/mui-italia';
 
 import { A11yPaginationLabelsTypes, PaginationData } from '../../models/Pagination';
 import { getLocalizedOrDefaultLabel } from '../../utility/localization.utility';
@@ -112,35 +113,26 @@ const CustomPagination: React.FC<Props> = ({
           data-testid="itemsPerPageSelector"
           className="items-per-page-selector"
         >
-          <Button
-            sx={{ color: 'text.primary', fontWeight: 400 }}
+          <ButtonNaked
+            sx={{ fontWeight: 400 }}
             aria-controls={open ? 'basic-menu' : undefined}
             aria-haspopup="true"
             aria-expanded={open ? 'true' : undefined}
             onClick={handleClick}
-            endIcon={<ArrowDropDown />}
-            aria-label={getLocalizedOrDefaultLabel(
-              'common',
-              'paginator.rows-per-page',
-              'Righe per pagina'
-            )}
+            endIcon={<ArrowDropDownRoundedIcon />}
+            aria-label={getLocalizedOrDefaultLabel('common', 'paginator.rows-per-page')}
             id="rows-per-page"
           >
             {size}
-          </Button>
+          </ButtonNaked>
           <Menu
             id="basic-menu"
             anchorEl={anchorEl}
             open={open}
             onClose={handleClose}
             MenuListProps={{
-              'aria-labelledby': getLocalizedOrDefaultLabel(
-                'common',
-                'paginator.rows-per-page',
-                'Righe per pagina'
-              ),
+              'aria-labelledby': 'rows-per-page',
             }}
-            data-testid=""
           >
             {elementsPerPage.map((ep) => (
               <MenuItem

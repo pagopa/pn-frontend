@@ -45,8 +45,7 @@ beforeAll(() => {
     LANDING_SITE_URL: 'https://www.notifichedigitali.it',
     PAGOPA_HELP_PP: 'https://www.fake-page.it',
     APP_IO_SITE: 'https://www.fake.appio.it',
-    APP_IO_ANDROID: 'https://www.fake.android-appio.it',
-    APP_IO_IOS: 'https://www.fake.ios-appio.it',
+    APP_IO_DOWNLOAD: 'https://www.fake.download-appio.it',
     IS_DOD_ENABLED: true,
     WORK_IN_PROGRESS: false,
     F24_DOWNLOAD_WAIT_TIME: 0,
@@ -63,6 +62,7 @@ beforeAll(() => {
     FACSIMILE_DE: 'https://fake.facsimile-de.pagopa.it',
     FACSIMILE_SL: 'https://fake.facsimile-sl.pagopa.it',
     SELFCARE_CDN_URL: 'https://fake.sender-logo.pagopa.it',
+    IS_NEW_TIMELINE_ENABLED: true,
   });
   initStore(false);
   initAxiosClients();

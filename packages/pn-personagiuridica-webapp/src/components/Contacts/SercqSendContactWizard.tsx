@@ -1,19 +1,9 @@
 import React, { useMemo, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
-import ErrorIcon from '@mui/icons-material/Error';
-import {
-  Box,
-  Button,
-  Divider,
-  Link,
-  List,
-  ListItem,
-  ListItemText,
-  Stack,
-  Typography,
-} from '@mui/material';
+import CheckCircleRoundedIcon from '@mui/icons-material/CheckCircleRounded';
+import ErrorRoundedIcon from '@mui/icons-material/ErrorRounded';
+import { Box, Divider, Link, List, ListItem, ListItemText, Stack, Typography } from '@mui/material';
 import {
   ConsentActionType,
   ConsentType,
@@ -21,7 +11,7 @@ import {
   TosPrivacyConsent,
   appStorage,
 } from '@pagopa-pn/pn-commons';
-import { MIAlert } from '@pagopa/mui-italia';
+import { MIAlert, MIButton } from '@pagopa/mui-italia';
 
 import { PGEventsType } from '../../models/PGEventsType';
 import { AddressType, ChannelType, SaveDigitalAddressParams } from '../../models/contacts';
@@ -194,9 +184,9 @@ const SercqSendContactWizard: React.FC<Props> = ({ goToStep }) => {
                   )}
                 </ListItemText>
                 {item.value ? (
-                  <CheckCircleIcon fontSize="small" color="success" aria-hidden="true" />
+                  <CheckCircleRoundedIcon fontSize="small" color="success" aria-hidden="true" />
                 ) : (
-                  <ErrorIcon fontSize="small" color="warning" aria-hidden="true" />
+                  <ErrorRoundedIcon fontSize="small" color="warning" aria-hidden="true" />
                 )}
               </Box>
             </Stack>
@@ -216,17 +206,16 @@ const SercqSendContactWizard: React.FC<Props> = ({ goToStep }) => {
         }`}
       />
 
-      <Button
+      <MIButton
         fullWidth
         variant="contained"
-        color="primary"
         onClick={handleActivation}
         data-testid="activateButton"
       >
         {isDodEnabled
           ? t('button.conferma', { ns: 'common' })
           : t('legal-contacts.sercq-send-wizard.step_3.enable', { ns: 'recapiti' })}
-      </Button>
+      </MIButton>
     </Box>
   );
 };

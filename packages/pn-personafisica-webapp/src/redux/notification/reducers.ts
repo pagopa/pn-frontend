@@ -6,6 +6,7 @@ import {
   NotificationDetailRecipient,
   NotificationStatus,
   NotificationStatusHistory,
+  NotificationTimelineResponse,
   PaidDetails,
   PaymentDetails,
   PaymentInfoDetail,
@@ -19,16 +20,20 @@ import {
 } from '@pagopa-pn/pn-commons';
 import { createSlice } from '@reduxjs/toolkit';
 
+import { BffFullInformalNotificationV1 } from '../../generated-client/informal-notifications';
 import { NotificationDetailForRecipient } from '../../models/NotificationDetail';
 import {
   getDowntimeHistory,
   getReceivedNotification,
   getReceivedNotificationPaymentInfo,
   getReceivedNotificationPaymentUrl,
+  getReceivedNotificationTimeline,
 } from './actions';
+import { getReceivedInformalNotification } from './informalActions';
 
 const initialState = {
   loading: false,
+  informalNotification: undefined as BffFullInformalNotificationV1 | undefined,
   notification: {
     subject: '',
     recipients: [] as Array<NotificationDetailRecipient>,
@@ -53,6 +58,13 @@ const initialState = {
     },
     currentRecipientIndex: 0,
   } as NotificationDetailForRecipient,
+  notificationTimeline: {
+    iun: '',
+    subject: '',
+    recipients: [],
+    isCancelled: false,
+    notificationStatusHistory: [],
+  } as NotificationTimelineResponse,
   paymentsData: {
     pagoPaF24: [] as Array<PaymentDetails>,
     f24Only: [] as Array<F24PaymentDetails>,
@@ -68,6 +80,9 @@ const notificationSlice = createSlice({
     resetState: () => initialState,
   },
   extraReducers: (builder) => {
+    builder.addCase(getReceivedInformalNotification.fulfilled, (state, action) => {
+      state.informalNotification = action.payload;
+    });
     builder.addCase(getReceivedNotification.fulfilled, (state, action) => {
       const recipientIdx = action.payload.recipients.findIndex(
         (recipient) => recipient.taxId === action.payload.currentRecipient.taxId
@@ -117,6 +132,9 @@ const notificationSlice = createSlice({
         }
       }
       state.notification = action.payload;
+    });
+    builder.addCase(getReceivedNotificationTimeline.fulfilled, (state, action) => {
+      state.notificationTimeline = action.payload;
     });
     builder.addCase(getReceivedNotificationPaymentInfo.fulfilled, (state, action) => {
       if (action.payload) {

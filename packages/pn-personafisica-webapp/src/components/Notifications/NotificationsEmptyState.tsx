@@ -1,9 +1,9 @@
 import { Trans, useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
-import { Box, Button, Typography } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import { EmptyState } from '@pagopa-pn/pn-commons';
-import { ButtonNaked, IllusMIInbox, IllusMIMessage } from '@pagopa/mui-italia';
+import { IllusMIInbox, IllusMIMessage, MIButton } from '@pagopa/mui-italia';
 
 import { PFEventsType } from '../../models/PFEventsType';
 import { ContactSource } from '../../models/contacts';
@@ -36,22 +36,21 @@ const FilteredEmptyStateContent: React.FC<{ cleanFilters: () => void }> = ({ cle
 
   return (
     <>
-      <Typography variant="subtitle2" fontSize="16px" sx={{ color: '#636B82' }}>
+      <Typography variant="subtitle2" fontSize="16px" sx={{ color: 'text.secondary' }}>
         {t('empty-state.filtered')}
       </Typography>
       <Typography variant="body2" fontSize="14px" color="text.secondary" sx={{ mb: 2 }}>
         {t('empty-state.filtered-description')}
       </Typography>
 
-      <ButtonNaked
-        size="medium"
-        color="primary"
+      <MIButton
+        variant="text"
         id="call-to-action-first"
         data-testid="link-remove-filters"
         onClick={cleanFilters}
       >
         {t('empty-state.clean-filters-cta')}
-      </ButtonNaked>
+      </MIButton>
     </>
   );
 };
@@ -59,7 +58,7 @@ const FilteredEmptyStateContent: React.FC<{ cleanFilters: () => void }> = ({ cle
 const DelegatorEmptyStateContent: React.FC<{ currentDelegator: Delegator }> = ({
   currentDelegator,
 }) => (
-  <Typography variant="subtitle2" fontSize="16px" sx={{ color: '#636B82' }}>
+  <Typography variant="subtitle2" fontSize="16px" sx={{ color: 'text.secondary' }}>
     <Trans
       values={{ name: currentDelegator.delegator?.displayName }}
       ns="notifiche"
@@ -75,7 +74,7 @@ const DefaultEmptyStateContent: React.FC<{ showOnboardingContent: boolean }> = (
 
   return (
     <>
-      <Typography variant="subtitle2" fontSize="16px" sx={{ color: '#636B82' }}>
+      <Typography variant="subtitle2" fontSize="16px" sx={{ color: 'text.secondary' }}>
         {t('empty-state.title')}
       </Typography>
       <Typography variant="body2" fontSize="14px" color="text.secondary" sx={{ mb: 2 }}>
@@ -104,7 +103,7 @@ const EmptyStateCTA: React.FC<{ showOnboardingContent: boolean }> = ({ showOnboa
 
   if (showOnboardingContent) {
     return (
-      <Button
+      <MIButton
         variant="contained"
         key="route-onboarding"
         data-testid="button-route-onboarding"
@@ -112,20 +111,19 @@ const EmptyStateCTA: React.FC<{ showOnboardingContent: boolean }> = ({ showOnboa
         fullWidth={false}
       >
         {t('empty-state.go-to-onboarding-cta')}
-      </Button>
+      </MIButton>
     );
   }
 
   return (
-    <ButtonNaked
-      size="medium"
-      color="primary"
+    <MIButton
+      variant="text"
       id="call-to-action-first"
       data-testid="link-route-contacts"
       onClick={goToContactsPage}
     >
       {t('empty-state.go-to-contacts-cta')}
-    </ButtonNaked>
+    </MIButton>
   );
 };
 

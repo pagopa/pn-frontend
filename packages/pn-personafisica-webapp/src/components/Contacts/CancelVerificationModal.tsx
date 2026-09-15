@@ -1,8 +1,9 @@
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { Button, DialogContentText, DialogTitle } from '@mui/material';
+import { DialogContentText, DialogTitle } from '@mui/material';
 import { PnDialog, PnDialogActions, PnDialogContent } from '@pagopa-pn/pn-commons';
+import { MIButton } from '@pagopa/mui-italia';
 
 import { PFEventsType } from '../../models/PFEventsType';
 import { resetPecValidation } from '../../redux/contact/reducers';
@@ -49,12 +50,12 @@ const CancelVerificationModal: React.FC<Props> = ({ open, senderId = 'default', 
         </DialogContentText>
       </PnDialogContent>
       <PnDialogActions>
-        <Button onClick={handleCancel} variant="outlined">
+        <MIButton onClick={handleCancel} variant="outlined">
           {t('button.annulla')}
-        </Button>
-        <Button onClick={handleConfirm} variant="contained">
+        </MIButton>
+        <MIButton onClick={handleConfirm} variant="contained">
           {t('button.conferma')}
-        </Button>
+        </MIButton>
       </PnDialogActions>
     </PnDialog>
   );

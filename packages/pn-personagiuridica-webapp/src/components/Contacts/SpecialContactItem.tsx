@@ -1,9 +1,9 @@
 import { RefObject } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import DeleteIcon from '@mui/icons-material/Delete';
-import { Box, Chip, Stack, Typography } from '@mui/material';
-import { ButtonNaked } from '@pagopa/mui-italia';
+import DeleteRoundedIcon from '@mui/icons-material/DeleteRounded';
+import { Box, Stack, Typography } from '@mui/material';
+import { ButtonNaked, MIChip } from '@pagopa/mui-italia';
 
 import { AddressType, ChannelType, DigitalAddress, Sender } from '../../models/contacts';
 import DigitalContact from './DigitalContact';
@@ -58,12 +58,7 @@ const SpecialContactItem: React.FC<Props> = ({
       )}
       {isVerifyingPec && (
         <Box key={`${address.senderId}-${address.value}`}>
-          <Chip
-            label={t('legal-contacts.pec-validating')}
-            color="warning"
-            size="small"
-            sx={{ mb: 2 }}
-          />
+          <MIChip label={t('legal-contacts.pec-validating')} color="warning" sx={{ mb: 2 }} />
           <PecValidationItem senderId={senderId} onCancelValidation={onCancelValidation} />
         </Box>
       )}
@@ -92,14 +87,12 @@ const SpecialContactItem: React.FC<Props> = ({
                 data-testid={`cancelContact-special_${channelType}`}
                 color="error"
                 onClick={handleDelete}
-                startIcon={<DeleteIcon />}
+                startIcon={<DeleteRoundedIcon />}
                 sx={{
-                  color: 'error.dark',
                   fontWeight: 700,
                   justifyContent: 'left',
                   pl: { xs: 0, lg: 3 },
                 }}
-                size="medium"
                 disabled={hasPecInValidationForEntity(senderId)}
               >
                 {t('button.disable', { ns: 'common' })}

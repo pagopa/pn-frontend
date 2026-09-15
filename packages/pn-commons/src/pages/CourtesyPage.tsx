@@ -1,6 +1,7 @@
 import React from 'react';
 
-import { Box, Button, Typography } from '@mui/material';
+import { Box, Typography } from '@mui/material';
+import { MIButton } from '@pagopa/mui-italia';
 
 type Props = {
   icon?: React.ReactNode;
@@ -34,14 +35,14 @@ const CourtesyPage: React.FC<Props> = ({ icon, title, subtitle, onClick, onClick
       </Typography>
     )}
     {onClick && (
-      <Button
+      <MIButton
         id="courtesy-page-button"
         sx={{ marginTop: '24px' }}
         variant="contained"
         onClick={onClick}
       >
         {onClickLabel}
-      </Button>
+      </MIButton>
     )}
   </Box>
 );
