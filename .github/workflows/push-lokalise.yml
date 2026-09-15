@@ -9,7 +9,7 @@ on:
       - 'packages/*/public/locales/it/**'
 
 concurrency:
-  group: lokalise-push-${{ github.head_ref || github.run_id }}
+  group: lokalise-push
   cancel-in-progress: false
 
 permissions:
@@ -18,41 +18,13 @@ permissions:
   contents: write
 
 jobs:
-  # Ogni app ha il suo progetto Lokalise, quindi qui rileviamo quali app hanno
-  # traduzioni italiane modificate. L'output 'changes' di paths-filter e' gia' un
-  # array JSON con i nomi dei filtri che hanno fatto match: lo passiamo tale e quale
-  # come matrix del job successivo, cosi' le app non toccate non generano un job.
-  detect-changes:
-    runs-on: ubuntu-latest
-    outputs:
-      apps: ${{ github.event_name == 'workflow_dispatch' && '["PFL","PF","PA","PG"]' || steps.filter.outputs.changes }}
-    steps:
-      - name: Checkout Repo
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
-      - name: Detect apps with changed locales
-        id: filter
-        if: github.event_name != 'workflow_dispatch'
-        uses: dorny/paths-filter@7b450fff21473bca461d4b92ce414b9d0420d706 # v4.0.2
-        with:
-          # Senza 'base' l'action confronta col branch di default del repo (develop),
-          # cioe' l'intero branch invece del singolo push. Puntandolo al branch appena
-          # pushato, il confronto avviene contro il commit precedente al push.
-          base: ${{ github.ref_name }}
-          filters: |
-            PFL: ['packages/pn-personafisica-login/public/locales/it/**']
-            PF: ['packages/pn-personafisica-webapp/public/locales/it/**']
-            PA: ['packages/pn-pa-webapp/public/locales/it/**']
-            PG: ['packages/pn-personagiuridica-webapp/public/locales/it/**']
-
   push-locale:
-    needs: detect-changes
-    if: needs.detect-changes.outputs.apps != '' && needs.detect-changes.outputs.apps != '[]'
     runs-on: ubuntu-latest
     environment: lokalise
     strategy:
       fail-fast: false
       matrix:
-        app: ${{ fromJson(needs.detect-changes.outputs.apps) }}
+        app: [PFL, PF, PA, PG]
     env:
       # I codici app sono anche il suffisso delle variabili LOKALISE_PROJECT_ID_<CODICE>.
       PACKAGES: >-
