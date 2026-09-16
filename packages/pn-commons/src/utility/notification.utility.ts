@@ -268,7 +268,6 @@ export function getNotificationStatusInfos(
         ...localizeStatus('effective-date', { isMultiRecipient }),
       };
     case NotificationStatus.VIEWED:
-      console.log(statusObject);
       if (statusObject?.recipient) {
         subject = getLocalizedOrDefaultLabel(
           'notifications',
@@ -277,6 +276,10 @@ export function getNotificationStatusInfos(
           { name: statusObject.recipient }
         );
       }
+      const viewedEvent = statusObject?.steps?.find(
+        (s) => s.category === TimelineCategory.NOTIFICATION_VIEWED
+      );
+      console.log(viewedEvent);
       return {
         color: 'success',
         ...localizeStatus('viewed', { subject, isMultiRecipient }),

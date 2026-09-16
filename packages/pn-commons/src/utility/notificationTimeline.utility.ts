@@ -78,7 +78,7 @@ export const getStatusLegalFacts = (events: Array<NotificationTimelineEvent>) =>
     return arr;
   }, [] as Array<LegalFactId>);
 
-  return legalFactsIds.length === events.length ? legalFactsIds : [];
+  return statusHasStepsToShow(events) ? [] : legalFactsIds;
 };
 
 // if a status has all steps hidden, we hide the steps

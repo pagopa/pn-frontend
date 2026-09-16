@@ -1,22 +1,46 @@
 import { notificationTimelineDTO } from '../../__mocks__/NotificationTimeline.mock';
 import {
+  LegalFactType,
   NotificationDetailRecipient,
   RecipientType,
   TimelineCategory,
 } from '../../models/NotificationDetail';
-import { NotificationTimelineStep } from '../../models/NotificationTimeline';
+import {
+  NotificationTimelineEvent,
+  NotificationTimelineStep,
+} from '../../models/NotificationTimeline';
 import { formatDay, formatMonthString } from '../date.utility';
 import {
   flattenTimelineSteps,
   formatTimelineDate,
   getRecipientPerStep,
+  getStatusLegalFacts,
   isTimelineGroupStep,
+  statusHasStepsToShow,
   toLegacyStatusHistory,
 } from '../notificationTimeline.utility';
 
 const [viewedStatus, deliveringStatus] = notificationTimelineDTO.notificationStatusHistory;
 
 describe('notificationTimeline utility', () => {
+  const legalFact = {
+    key: 'safestorage://legal-fact.pdf',
+    category: LegalFactType.DIGITAL_DELIVERY,
+  };
+
+  const createEvent = (
+    elementId: string,
+    overrides: Partial<NotificationTimelineEvent> = {}
+  ): NotificationTimelineEvent => ({
+    elementId,
+    timestamp: '2026-01-01T00:00:00Z',
+    category: TimelineCategory.DIGITAL_SUCCESS_WORKFLOW,
+    details: {},
+    legalFactsIds: [],
+    isHidden: false,
+    ...overrides,
+  });
+
   it('isTimelineGroupStep - discriminates the steps by stepType', () => {
     const eventStep: NotificationTimelineStep = viewedStatus.steps[0];
     const groupStep: NotificationTimelineStep = deliveringStatus.steps[0];
@@ -167,6 +191,91 @@ describe('notificationTimeline utility', () => {
         undefined,
         recipients[1],
       ]);
+    });
+  });
+
+  describe('getStatusLegalFacts', () => {
+    it('returns the legal facts when every status event is hidden and has a legal fact', () => {
+      const firstLegalFact = {
+        ...legalFact,
+        key: 'safestorage://first-legal-fact.pdf',
+      };
+      const secondLegalFact = {
+        ...legalFact,
+        key: 'safestorage://second-legal-fact.pdf',
+      };
+
+      const events = [
+        createEvent('FIRST_EVENT', {
+          isHidden: true,
+          legalFactsIds: [firstLegalFact],
+        }),
+        createEvent('SECOND_EVENT', {
+          isHidden: true,
+          legalFactsIds: [secondLegalFact],
+        }),
+      ];
+
+      expect(getStatusLegalFacts(events)).toStrictEqual([firstLegalFact, secondLegalFact]);
+    });
+
+    it('returns an empty array when at least one event is visible', () => {
+      const events = [
+        createEvent('HIDDEN_EVENT', {
+          isHidden: true,
+          legalFactsIds: [legalFact],
+        }),
+        createEvent('VISIBLE_EVENT', {
+          isHidden: false,
+          legalFactsIds: [legalFact],
+        }),
+      ];
+
+      expect(getStatusLegalFacts(events)).toStrictEqual([]);
+    });
+
+    it('returns every legal fact when a hidden event contains more than one', () => {
+      const secondLegalFact = {
+        ...legalFact,
+        key: 'safestorage://second-legal-fact.pdf',
+      };
+
+      const events = [
+        createEvent('EVENT_WITH_MULTIPLE_LEGAL_FACTS', {
+          isHidden: true,
+          legalFactsIds: [legalFact, secondLegalFact],
+        }),
+      ];
+
+      expect(getStatusLegalFacts(events)).toStrictEqual([legalFact, secondLegalFact]);
+    });
+
+    it('returns an empty array for an empty status', () => {
+      expect(getStatusLegalFacts([])).toStrictEqual([]);
+    });
+  });
+
+  describe('statusHasStepsToShow', () => {
+    it('returns true when at least one event is visible', () => {
+      const events = [
+        createEvent('HIDDEN_EVENT', { isHidden: true }),
+        createEvent('VISIBLE_EVENT', { isHidden: false }),
+      ];
+
+      expect(statusHasStepsToShow(events)).toBe(true);
+    });
+
+    it('returns false when every event is hidden', () => {
+      const events = [
+        createEvent('FIRST_HIDDEN_EVENT', { isHidden: true }),
+        createEvent('SECOND_HIDDEN_EVENT', { isHidden: true }),
+      ];
+
+      expect(statusHasStepsToShow(events)).toBe(false);
+    });
+
+    it('returns false for an empty event list', () => {
+      expect(statusHasStepsToShow([])).toBe(false);
     });
   });
 });

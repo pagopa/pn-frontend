@@ -322,4 +322,46 @@ describe('NotificationEventsTimeline', () => {
         : undefined
     );
   });
+
+  it('keeps rendering hidden legal facts separately when the new copy is disabled', () => {
+    const { getAllByTestId } = render(
+      <NotificationEventsTimeline
+        recipients={recipients}
+        statusHistory={statusHistory}
+        clickHandler={clickHandler}
+        isNewTimelineCopyEnabled={false}
+      />
+    );
+
+    expect(getAllByTestId('download-legalfact')).toHaveLength(2);
+  });
+
+  it('does not render hidden events separately when the new copy is enabled', () => {
+    const { queryAllByTestId } = render(
+      <NotificationEventsTimeline
+        recipients={recipients}
+        statusHistory={statusHistory}
+        clickHandler={clickHandler}
+        isNewTimelineCopyEnabled
+      />
+    );
+
+    expect(queryAllByTestId('download-legalfact')).toHaveLength(0);
+  });
+
+  it('propagates the new-copy flag to events inside an expanded group', () => {
+    const { getAllByTestId } = render(
+      <NotificationEventsTimeline
+        recipients={recipients}
+        statusHistory={statusHistory}
+        clickHandler={clickHandler}
+        isNewTimelineCopyEnabled
+      />
+    );
+
+    const firstGroup = getAllByTestId('timeline-group')[0];
+    fireEvent.click(within(firstGroup).getByTestId('timeline-group-header'));
+
+    expect(within(firstGroup).queryAllByTestId('download-legalfact-micro')).toHaveLength(0);
+  });
 });
