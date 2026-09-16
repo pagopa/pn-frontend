@@ -1,0 +1,12 @@
+{
+  "list": {
+    "title": "Campagnes",
+    "id": "Code ID",
+    "open-aria-label": "Ouvrir la campagne \"{{name}}\"",
+    "empty-state": {
+      "no-campaigns": "Ici, vous verrez les campagnes envoyées par l'organisme",
+      "generic-error": "Impossible de récupérer les campagnes.",
+      "generic-error-cta": "Réessayer"
+    }
+  }
+}

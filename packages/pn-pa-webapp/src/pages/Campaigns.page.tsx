@@ -17,7 +17,6 @@ import { MIButton, MITableList, MITableListItem, MITableListItemField } from '@p
 
 import { GET_CAMPAIGN_DETAIL_PATH } from '../navigation/routes.const';
 import { CAMPAIGN_ACTIONS, getCampaigns } from '../redux/campaign/actions';
-import { setPagination } from '../redux/campaign/reducers';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { RootState } from '../redux/store';
 
@@ -42,34 +41,52 @@ const Campaigns = () => {
     pagination.page + 1
   );
 
+  const fetchCampaigns = useCallback(
+    (page: number, size: number, nextPagesKey?: string) => {
+      setLoading(true);
+
+      dispatch(
+        getCampaigns({
+          page,
+          size,
+          nextPagesKey,
+        })
+      )
+        .unwrap()
+        .catch(() => {})
+        .finally(() => {
+          setLoading(false);
+        });
+    },
+    [dispatch]
+  );
+
   const handleChangePage = (paginationData: PaginationData) => {
-    dispatch(setPagination({ size: paginationData.size, page: paginationData.page }));
+    const hasSizeChanged = paginationData.size !== pagination.size;
+    const page = hasSizeChanged ? 0 : paginationData.page;
+
+    fetchCampaigns(
+      page,
+      paginationData.size,
+      page === 0 ? undefined : pagination.nextPagesKey[page - 1]
+    );
   };
 
   const handleOpenCampaign = (id: string) => {
     navigate(GET_CAMPAIGN_DETAIL_PATH(id));
   };
 
-  const fetchCampaigns = useCallback(() => {
-    setLoading(true);
-
-    dispatch(
-      getCampaigns({
-        size: pagination.size,
-        nextPagesKey:
-          pagination.page === 0 ? undefined : pagination.nextPagesKey[pagination.page - 1],
-      })
-    )
-      .unwrap()
-      .catch(() => {})
-      .finally(() => {
-        setLoading(false);
-      });
-  }, [dispatch, pagination.size, pagination.page]);
+  const reloadCampaigns = useCallback(() => {
+    fetchCampaigns(
+      pagination.page,
+      pagination.size,
+      pagination.page === 0 ? undefined : pagination.nextPagesKey[pagination.page - 1]
+    );
+  }, [fetchCampaigns, pagination.page, pagination.size, pagination.nextPagesKey]);
 
   useEffect(() => {
-    fetchCampaigns();
-  }, [fetchCampaigns]);
+    fetchCampaigns(0, pagination.size);
+  }, []);
 
   return (
     <Box p={3}>
@@ -77,12 +94,12 @@ const Campaigns = () => {
 
       <ApiErrorWrapper
         apiId={CAMPAIGN_ACTIONS.GET_CAMPAIGNS}
-        reloadAction={fetchCampaigns}
+        reloadAction={reloadCampaigns}
         customErrorComponent={
           <EmptyErrorState
             variant="error"
             title={t('list.empty-state.generic-error')}
-            action={{ label: t('list.empty-state.generic-error-cta'), onClick: fetchCampaigns }}
+            action={{ label: t('list.empty-state.generic-error-cta'), onClick: reloadCampaigns }}
           />
         }
         mt={3}

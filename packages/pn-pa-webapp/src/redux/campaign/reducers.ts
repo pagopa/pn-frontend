@@ -1,4 +1,4 @@
-import { PayloadAction, createSlice } from '@reduxjs/toolkit';
+import { createSlice } from '@reduxjs/toolkit';
 
 import { CampaignSummary } from '../../generated-client/informal-notifications';
 import { getCampaigns } from './actions';
@@ -15,21 +15,20 @@ const campaignSlice = createSlice({
       moreResult: false,
     },
   },
-  reducers: {
-    setPagination: (state, action: PayloadAction<{ page: number; size: number }>) => {
-      if (state.pagination.size !== action.payload.size) {
-        // reset pagination
-        state.pagination.nextPagesKey = [];
-        state.pagination.moreResult = false;
-      }
-      state.pagination.size = action.payload.size;
-      state.pagination.page = action.payload.page;
-    },
-  },
+  reducers: {},
   extraReducers: (builder) => {
     builder.addCase(getCampaigns.fulfilled, (state, action) => {
+      const { page, size } = action.meta.arg;
+      const hasSizeChanged = state.pagination.size !== size;
+
       state.campaigns = action.payload.resultsPage;
+      state.pagination.page = page;
+      state.pagination.size = size;
       state.pagination.moreResult = action.payload.moreResult;
+
+      if (hasSizeChanged) {
+        state.pagination.nextPagesKey = [];
+      }
 
       if (action.payload.nextPagesKey) {
         for (const pageKey of action.payload.nextPagesKey) {
@@ -41,7 +40,5 @@ const campaignSlice = createSlice({
     });
   },
 });
-
-export const { setPagination } = campaignSlice.actions;
 
 export default campaignSlice;

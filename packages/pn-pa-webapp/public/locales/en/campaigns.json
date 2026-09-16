@@ -1,0 +1,12 @@
+{
+  "list": {
+    "title": "Campaigns",
+    "id": "ID code",
+    "open-aria-label": "Open campaign \"{{name}}\"",
+    "empty-state": {
+      "no-campaigns": "Here you will see the campaigns sent by the institution",
+      "generic-error": "The campaigns could not be retrieved.",
+      "generic-error-cta": "Try again"
+    }
+  }
+}
