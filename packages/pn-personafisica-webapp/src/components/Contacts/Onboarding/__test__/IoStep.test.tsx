@@ -1,6 +1,8 @@
 import MockAdapter from 'axios-mock-adapter';
 import { vi } from 'vitest';
 
+import { createMatchMedia } from '@pagopa-pn/pn-commons/src/test-utils';
+
 import { act, fireEvent, render, waitFor } from '../../../../__test__/test-utils';
 import { apiClient } from '../../../../api/apiClients';
 import { OnboardingAvailableFlows } from '../../../../models/Onboarding';
@@ -13,16 +15,6 @@ vi.mock('../../../../utility/appio.utility', () => ({
   openAppIoDownloadPage: vi.fn(),
 }));
 
-const mockIsMobile = vi.fn(() => false);
-
-vi.mock('@pagopa-pn/pn-commons', async () => {
-  const original = await vi.importActual<any>('@pagopa-pn/pn-commons');
-  return {
-    ...original,
-    useIsMobile: () => mockIsMobile(),
-  };
-});
-
 describe('IoStep', () => {
   const labelPrefix = 'onboarding.digital-domicile.io';
   let mock: MockAdapter;
@@ -34,7 +26,7 @@ describe('IoStep', () => {
   beforeEach(() => {
     mock.reset();
     vi.clearAllMocks();
-    mockIsMobile.mockReturnValue(false);
+    window.matchMedia = createMatchMedia(2000);
   });
 
   afterAll(() => {
@@ -64,7 +56,7 @@ describe('IoStep', () => {
   });
 
   it('opens the App IO download page when the primary CTA is clicked in unavailable state', async () => {
-    mockIsMobile.mockReturnValue(true);
+    window.matchMedia = createMatchMedia(400);
     const props = createProps();
 
     const { APP_IO_SITE: appIoSite, APP_IO_DOWNLOAD: appIoDownload } = getConfiguration();
@@ -161,7 +153,8 @@ describe('IoStep', () => {
   });
 
   it('opens the App IO download page when the primary CTA is clicked on mobile', async () => {
-    mockIsMobile.mockReturnValue(true);
+    window.matchMedia = createMatchMedia(400);
+
     const props = createProps();
 
     const { APP_IO_SITE: appIoSite, APP_IO_DOWNLOAD: appIoDownload } = getConfiguration();
