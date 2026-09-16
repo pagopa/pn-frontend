@@ -54,7 +54,7 @@
     "createdTitle": "Vollmachtsanfrage erstellt",
     "createdDescription": "Teile den Bestätigungscode mit der bevollmächtigten Person: Sie muss ihn beim ersten Zugriff auf SEND eingeben und deine Anfrage akzeptieren.",
     "title": "Eine Vollmacht hinzufügen",
-    "subtitle": "Gib die Daten der natürlichen oder juristischen Person ein, der du eine Vollmacht zum Lesen deiner Zustellungen erteilen möchtest.",
+    "subtitle": "Gib die Daten der natürlichen oder juristischen Person ein, der du das Lesen deiner Zustellungen übertragen möchtest.",
     "form": {
       "personType": "Rechtssubjekt:",
       "naturalPerson": "Natürliche Person",
