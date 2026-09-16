@@ -31,6 +31,24 @@ describe('One Identity Login Error page - Mixpanel events', () => {
     });
   });
 
+  it('fires SEND_LOGIN_FAILURE with the error description as reason when error is access_denied', async () => {
+    await act(async () =>
+      render(<OneIdentityLoginError />, {
+        route: '/?error=access_denied&error_description=21',
+      })
+    );
+    expect(triggerEventSpy).toHaveBeenCalledWith(PFLoginEventsType.SEND_LOGIN_FAILURE, {
+      reason: '21',
+    });
+  });
+
+  it('fires SEND_LOGIN_FAILURE with the error code as reason when access_denied has no description', async () => {
+    await act(async () => render(<OneIdentityLoginError />, { route: '/?error=access_denied' }));
+    expect(triggerEventSpy).toHaveBeenCalledWith(PFLoginEventsType.SEND_LOGIN_FAILURE, {
+      reason: 'access_denied',
+    });
+  });
+
   it('fires SEND_LOGIN_FAILURE on mount when error param is missing', async () => {
     await act(async () => render(<OneIdentityLoginError />));
     expect(triggerEventSpy).toHaveBeenCalledWith(PFLoginEventsType.SEND_LOGIN_FAILURE, {
