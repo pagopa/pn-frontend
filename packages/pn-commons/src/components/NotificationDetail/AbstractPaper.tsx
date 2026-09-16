@@ -118,9 +118,6 @@ const AbstractPaper = ({
               {abstract}
             </Typography>
           )}
-          <Typography variant="body2" color="text.secondary" sx={{ mt: abstract ? 2 : 0 }}>
-            {getLocalizedOrDefaultLabel('notifications', 'detail.legal-disclaimer')}
-          </Typography>
         </>
       );
     }
@@ -298,6 +295,12 @@ const AbstractPaper = ({
           {renderAbstractSection()}
         </>
       )}
+      <Typography variant="body2" color="text.secondary" sx={{ mt: abstract ? 2 : 0 }}>
+        {getLocalizedOrDefaultLabel(
+          'notifications',
+          `detail.${!isLegal ? 'informal' : 'legal'}-disclaimer`
+        )}
+      </Typography>
     </MIPaper>
   );
 };

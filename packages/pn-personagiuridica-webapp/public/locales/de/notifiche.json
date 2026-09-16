@@ -60,6 +60,7 @@
     "legal-date": "Zustellung hinterlegt am",
     "informal-date": "Mitteilung hinterlegt am",
     "legal-disclaimer": "Zustellung über SEND gesendet, die durch Art. 26 des Gesetzesdekrets 76/2020 geregelte Plattform",
+    "informal-disclaimer": "Diese Mitteilung könnte Rechtswirkungen entfalten. Prüfe die Anlagen, falls vorhanden, um mehr zu erfahren.",
     "notification-timeline-section": {
       "title": "Status der Benachrichtigung",
       "aria-label": "Zur Chronik der Benachrichtigung"

@@ -65,6 +65,7 @@
     "legal-date": "Vročitev odložena dne",
     "informal-date": "Sporočilo odloženo dne",
     "legal-disclaimer": "Vročitev poslana preko SEND, platforme, ki jo ureja 26. člen Zakonske uredbe 76/2020",
+    "informal-disclaimer": "To sporočilo bi lahko imelo pravne učinke. Oglej si priloge, če so priložene, da izveš več.",
     "notification-timeline-section": {
       "title": "Stanje obvestila",
       "aria-label": "Pojdi na časovnico obvestila"

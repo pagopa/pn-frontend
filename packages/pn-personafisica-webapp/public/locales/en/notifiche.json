@@ -65,6 +65,7 @@
     "legal-date": "Notification deposited on",
     "informal-date": "Communication deposited on",
     "legal-disclaimer": "Notification sent via SEND, the platform governed by Art. 26 of Law Decree 76/2020",
+    "informal-disclaimer": "This communication may produce legal effects. Check the attachments, if present, to learn more.",
     "notification-timeline-section": {
       "title": "Notification status",
       "aria-label": "Go to the notification timeline"

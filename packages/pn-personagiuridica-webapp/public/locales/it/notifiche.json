@@ -59,6 +59,7 @@
     "legal-date": "Notifica depositata il giorno",
     "informal-date": "Comunicazione depositata il giorno",
     "legal-disclaimer": "Notifica inviata tramite SEND, la piattaforma disciplinata dall’art. 26 del D.L. 76/2020",
+    "informal-disclaimer": "Questa comunicazione potrebbe produrre effetti giuridici. Consulta gli allegati, se presenti, per saperne di più.",
     "legal-value": "Notifica a valore legale",
     "notification-timeline-section": {
       "title": "Stato della notifica",
