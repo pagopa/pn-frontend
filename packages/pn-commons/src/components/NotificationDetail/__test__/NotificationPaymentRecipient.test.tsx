@@ -20,14 +20,6 @@ import {
 import { setPaymentCache } from '../../../utility/paymentCaching.utility';
 import NotificationPaymentRecipient from '../NotificationPaymentRecipient';
 
-vi.mock('react-i18next', async (importOriginal) => {
-  const original = await importOriginal<typeof import('react-i18next')>();
-  const TransComponent = ({ i18nKey }: { i18nKey?: string }) => (
-    <span data-testid="trans-component">{i18nKey}</span>
-  );
-  return { ...original, Trans: TransComponent };
-});
-
 describe('NotificationPaymentRecipient Component', () => {
   const paymentsData: PaymentsData = {
     pagoPaF24: populatePaymentsPagoPaF24(
@@ -576,7 +568,7 @@ describe('NotificationPaymentRecipient Component', () => {
     fireEvent.click(payButton);
 
     expect(within(getByTestId('payment-error')).getByTestId('trans-component')).toHaveTextContent(
-      'detail.payment.error-payment-failed-single'
+      'detail.payment.error-payment-failed-multiple'
     );
   });
 
