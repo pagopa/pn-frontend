@@ -53,29 +53,6 @@ describe('CampaignDetail Page', () => {
     );
   });
 
-  it('renders empty state when campaign detail is empty', async () => {
-    mock.onGet('/bff/v1/notifications/informal/campaigns/empty-campaign').reply(200, {});
-
-    await act(async () => {
-      result = render(<CampaignDetail />, {
-        route: '/campaigns/empty-campaign',
-        path: '/campaigns/:id',
-      });
-    });
-
-    await waitFor(() => {
-      expect(result.getByText('[Titolo campagna]')).toBeInTheDocument();
-    });
-
-    expect(
-      result.getByText('[Descrizione della campagna compilata in fase di inserimento]')
-    ).toBeInTheDocument();
-
-    expect(result.getByText('00/00/0000')).toBeInTheDocument();
-    expect(result.getByText('000')).toBeInTheDocument();
-    expect(result.getByText('[nome servizio]')).toBeInTheDocument();
-  });
-
   it('renders api error when campaign detail request fails', async () => {
     mock
       .onGet(`/bff/v1/notifications/informal/campaigns/${campaignDetailMock.campaignId}`)

@@ -18,7 +18,12 @@
     "channels": "Canali",
     "empty-state": {
       "generic-error": "Non è stato possibile recuperare i dettagli della campagna.",
-      "generic-error-cta": "Prova di nuovo"
+      "generic-error-cta": "Prova di nuovo",
+      "campaign-title-placeholder": "[Titolo campagna]"
+    },
+    "breadcrumb": {
+      "back": "Indietro",
+      "campaigns": "Campagne"
     }
   }
 }

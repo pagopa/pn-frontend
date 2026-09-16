@@ -21,7 +21,6 @@ const CampaignDetail: React.FC = () => {
   const [pageReady, setPageReady] = useState(false);
   const { t } = useTranslation(['campaigns', 'common']);
   const hasCampaignDetailApiError = hasApiErrors(CAMPAIGN_ACTIONS.GET_CAMPAIGN_DETAIL);
-  const isCampaignDetailEmpty = pageReady && !hasCampaignDetailApiError && !campaign.campaignId;
 
   const fetchCampaignDetail = useCallback(() => {
     if (id) {
@@ -39,13 +38,19 @@ const CampaignDetail: React.FC = () => {
   }, [fetchCampaignDetail]);
 
   const breadcrumb = (
-    <MIBreadcrumbs backButtonLabel="Indietro" backButtonAction={() => navigate(routes.DASHBOARD)}>
+    <MIBreadcrumbs
+      backButtonLabel={t('detail.breadcrumb.back')}
+      backButtonAction={() => navigate(routes.DASHBOARD)}
+    >
       <MIBreadcrumbItem
-        label="Campagne"
+        label={t('detail.breadcrumb.campaigns')}
         onClick={() => navigate(routes.CAMPAIGNS)}
         data-testid="breadcrumb-root-button"
       />
-      <MIBreadcrumbItem label={campaign.title} current />
+      <MIBreadcrumbItem
+        label={campaign.title || t('detail.empty-state.campaign-title-placeholder')}
+        current
+      />
     </MIBreadcrumbs>
   );
 
@@ -83,26 +88,8 @@ const CampaignDetail: React.FC = () => {
           }}
         />
       )}
-      {isCampaignDetailEmpty && (
-        <>
-          <TitleBox
-            title="[Titolo campagna]"
-            subTitle="[Descrizione della campagna compilata in fase di inserimento]"
-            mbTitle={1}
-            variantSubTitle="body1"
-          />
 
-          <PnCampaignDetailCard
-            creationDate="00/00/0000"
-            campaignId="000"
-            serviceName="[nome servizio]"
-            communications={0}
-            channels="-"
-          />
-        </>
-      )}
-
-      {!hasCampaignDetailApiError && pageReady && !isCampaignDetailEmpty && (
+      {!hasCampaignDetailApiError && pageReady && (
         <>
           <TitleBox
             title={campaign.title}
