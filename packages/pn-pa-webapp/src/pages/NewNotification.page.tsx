@@ -92,9 +92,15 @@ const NewNotification = () => {
     );
 
   const childRef = useRef<{ confirm: () => void }>();
+  const stepperRef = useRef<HTMLDivElement>(null);
+
+  const scrollToStepper = () => {
+    stepperRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  };
 
   const goToNextStep = () => {
     setActiveStep((previousStep) => previousStep + 1);
+    scrollToStepper();
   };
 
   const goToPreviousStep = (selectedStep?: number) => {
@@ -107,6 +113,7 @@ const NewNotification = () => {
     } else {
       setActiveStep(activeStep - 1);
     }
+    scrollToStepper();
   };
 
   const createNotification = () => {
@@ -160,10 +167,6 @@ const NewNotification = () => {
     }
   }, [activeStep]);
 
-  useEffect(() => {
-    window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
-  }, [activeStep]);
-
   if (activeStep === steps.length) {
     return <SyncFeedback />;
   }
@@ -210,6 +213,7 @@ const NewNotification = () => {
               sx={{ marginTop: '60px' }}
               data-testid="stepper"
               role="list"
+              ref={stepperRef}
             >
               {steps.map((label, index) => {
                 const isStepCompleted = index < activeStep;
