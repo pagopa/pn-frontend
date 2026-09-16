@@ -57,7 +57,6 @@ const CampaignDetail: React.FC = () => {
         flexDirection: 'column',
         backgroundColor: 'grey.100',
       }}
-      gap={3}
     >
       {breadcrumb}
       {hasCampaignDetailApiError && (
