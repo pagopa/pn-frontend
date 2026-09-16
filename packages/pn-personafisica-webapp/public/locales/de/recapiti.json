@@ -187,6 +187,13 @@
     "description-enabled": "Wenn eine Zustellung für dich vorliegt, erhältst du sie direkt in der App und kannst etwaige Gebühren bezahlen.",
     "enable": "Aktiviere SEND auf IO",
     "download": "IO-App herunterladen",
+    "download-modal": {
+      "title": "Um fortzufahren, musst du die App IO herunterladen und dich registrieren",
+      "subtitle": "Scanne den QR-Code mit deinem Gerät, um die App herunterzuladen, oder suche sie in deinem App-Store.",
+      "qr-code-alt": "QR-Code zum Herunterladen der App IO",
+      "instructions": "Öffne sie, melde dich mit SPID oder CIE an und schließe die Registrierung ab.",
+      "cta": "Erledigt!"
+    },
     "disable-modal": {
       "title": "Deaktiviere SEND auf der IO-App",
       "content": "Wenn du dies bestätigst, erhältst du die SEND-Mitteilungen nicht mehr in der App.",
