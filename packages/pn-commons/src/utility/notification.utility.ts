@@ -32,6 +32,7 @@ import { NotificationStatus } from '../models/NotificationStatus';
 import { getLocalizedOrDefaultLabel } from '../utility/localization.utility';
 import { TimelineStepInfo } from './TimelineUtils/TimelineStep';
 import { TimelineStepFactory } from './TimelineUtils/TimelineStepFactory';
+import { formatDate } from './date.utility';
 
 type StatusInfo = {
   label: string;
@@ -267,7 +268,7 @@ export function getNotificationStatusInfos(
         color: 'info',
         ...localizeStatus('effective-date', { isMultiRecipient }),
       };
-    case NotificationStatus.VIEWED:
+    case NotificationStatus.VIEWED: {
       if (statusObject?.recipient) {
         subject = getLocalizedOrDefaultLabel(
           'notifications',
@@ -279,11 +280,15 @@ export function getNotificationStatusInfos(
       const viewedEvent = statusObject?.steps?.find(
         (s) => s.category === TimelineCategory.NOTIFICATION_VIEWED
       );
-      console.log(viewedEvent);
       return {
         color: 'success',
-        ...localizeStatus('viewed', { subject, isMultiRecipient }),
+        ...localizeStatus('viewed', {
+          subject,
+          isMultiRecipient,
+          viewedAt: formatDate(viewedEvent?.timestamp ?? ''),
+        }),
       };
+    }
     case NotificationStatus.CANCELLED:
       return {
         color: 'warning',
