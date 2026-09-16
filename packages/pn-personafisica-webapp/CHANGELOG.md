@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.25.1](https://fbianchicodermine-GitHub/pagopa/pn-frontend/compare/v2.25.1-RC.0...v2.25.1) (2026-09-16)
+
+**Note:** Version bump only for package @pagopa-pn/pn-personafisica-webapp
+
+
+
+
+
+## [2.25.1-RC.0](https://fbianchicodermine-GitHub/pagopa/pn-frontend/compare/v2.25.0...v2.25.1-RC.0) (2026-09-15)
+
+**Note:** Version bump only for package @pagopa-pn/pn-personafisica-webapp
+
+
+
+
+
 # [2.26.0-RC.6](https://github.com/pagopa/pn-frontend/compare/v2.26.0-RC.5...v2.26.0-RC.6) (2026-09-14)
 
 ### Bug Fixes
