@@ -102,7 +102,6 @@ const CampaignDetail: React.FC = () => {
             creationDate={campaign.startDate}
             campaignId={campaign.campaignId}
             serviceName={campaign.serviceName}
-            communications={0}
             channels={campaign.channels.join(' · ')}
           />
         </>

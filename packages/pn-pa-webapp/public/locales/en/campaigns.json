@@ -1,0 +1,28 @@
+{
+  "list": {
+    "title": "Campaigns",
+    "id": "ID Code",
+    "open-aria-label": "Open campaign \"{{name}}\"",
+    "empty-state": {
+      "no-campaigns": "Here you will see the campaigns sent by the institution",
+      "generic-error": "Unable to retrieve campaigns.",
+      "generic-error-cta": "Try again"
+    }
+  },
+
+  "detail": {
+    "title": "Campaign details",
+    "creation-date": "Creation date",
+    "service-name": "Service name",
+    "channels": "Channels",
+    "empty-state": {
+      "generic-error": "Unable to retrieve campaign details.",
+      "generic-error-cta": "Try again",
+      "campaign-title-placeholder": "[Campaign title]"
+    },
+    "breadcrumb": {
+      "back": "Back",
+      "campaigns": "Campaigns"
+    }
+  }
+}

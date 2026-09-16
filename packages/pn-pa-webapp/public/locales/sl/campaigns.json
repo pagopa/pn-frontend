@@ -1,0 +1,28 @@
+{
+  "list": {
+    "title": "Kampanje",
+    "id": "Koda ID",
+    "open-aria-label": "Odpri kampanjo \"{{name}}\"",
+    "empty-state": {
+      "no-campaigns": "Tukaj boste videli kampanje, ki jih je poslal organ",
+      "generic-error": "Kampanj ni bilo mogoče pridobiti.",
+      "generic-error-cta": "Poskusite znova"
+    }
+  },
+
+  "detail": {
+    "title": "Podrobnosti kampanje",
+    "creation-date": "Datum ustvarjanja",
+    "service-name": "Ime storitve",
+    "channels": "Kanali",
+    "empty-state": {
+      "generic-error": "Podrobnosti kampanje ni bilo mogoče pridobiti.",
+      "generic-error-cta": "Poskusite znova",
+      "campaign-title-placeholder": "[Naslov kampanje]"
+    },
+    "breadcrumb": {
+      "back": "Nazaj",
+      "campaigns": "Kampanje"
+    }
+  }
+}

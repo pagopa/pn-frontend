@@ -8,7 +8,6 @@ type CampaignDetailCardProps = {
   creationDate: string;
   campaignId: string;
   serviceName: string;
-  communications: number;
   channels: string;
 };
 
@@ -16,7 +15,6 @@ const PnCampaignDetailCard = ({
   creationDate,
   campaignId,
   serviceName,
-  communications,
   channels,
 }: CampaignDetailCardProps) => {
   const { t } = useTranslation('campaigns');
@@ -36,10 +34,10 @@ const PnCampaignDetailCard = ({
             <Divider sx={{ my: 2 }} />
 
             <Typography variant="body2" color="text.secondary">
-              {t('detail.communications')}
+              {t('detail.service-name')}
             </Typography>
             <Typography variant="body1" fontWeight={600}>
-              {communications}
+              {serviceName}
             </Typography>
           </Stack>
         </Grid>
@@ -61,19 +59,6 @@ const PnCampaignDetailCard = ({
             <Typography variant="body1" fontWeight={600}>
               {channels}
             </Typography>
-          </Stack>
-        </Grid>
-
-        <Grid item xs={12} md={4}>
-          <Stack>
-            <Typography variant="body2" color="text.secondary">
-              {t('detail.service-name')}
-            </Typography>
-            <Typography variant="body1" fontWeight={600}>
-              {serviceName}
-            </Typography>
-
-            <Divider sx={{ my: 2 }} />
           </Stack>
         </Grid>
       </Grid>

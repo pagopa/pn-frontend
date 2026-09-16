@@ -1,0 +1,28 @@
+{
+  "list": {
+    "title": "Kampagnen",
+    "id": "ID-Code",
+    "open-aria-label": "Kampagne \"{{name}}\" öffnen",
+    "empty-state": {
+      "no-campaigns": "Hier siehst du die von der Körperschaft gesendeten Kampagnen",
+      "generic-error": "Die Kampagnen konnten nicht abgerufen werden.",
+      "generic-error-cta": "Versuche es erneut"
+    }
+  },
+
+  "detail": {
+    "title": "Kampagnendetails",
+    "creation-date": "Erstellungsdatum",
+    "service-name": "Dienstname",
+    "channels": "Kanäle",
+    "empty-state": {
+      "generic-error": "Die Kampagnendetails konnten nicht abgerufen werden.",
+      "generic-error-cta": "Versuche es erneut",
+      "campaign-title-placeholder": "[Kampagnentitel]"
+    },
+    "breadcrumb": {
+      "back": "Zurück",
+      "campaigns": "Kampagnen"
+    }
+  }
+}

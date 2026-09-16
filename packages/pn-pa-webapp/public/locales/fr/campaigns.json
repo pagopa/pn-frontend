@@ -1,0 +1,28 @@
+{
+  "list": {
+    "title": "Campagnes",
+    "id": "Code ID",
+    "open-aria-label": "Ouvrir la campagne \"{{name}}\"",
+    "empty-state": {
+      "no-campaigns": "Ici, vous verrez les campagnes envoyées par l'organisme",
+      "generic-error": "Impossible de récupérer les campagnes.",
+      "generic-error-cta": "Réessayer"
+    }
+  },
+
+  "detail": {
+    "title": "Détail de la campagne",
+    "creation-date": "Date de création",
+    "service-name": "Nom du service",
+    "channels": "Canaux",
+    "empty-state": {
+      "generic-error": "Impossible de récupérer les détails de la campagne.",
+      "generic-error-cta": "Réessayer",
+      "campaign-title-placeholder": "[Titre de la campagne]"
+    },
+    "breadcrumb": {
+      "back": "Retour",
+      "campaigns": "Campagnes"
+    }
+  }
+}

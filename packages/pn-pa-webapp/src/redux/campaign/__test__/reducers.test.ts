@@ -39,8 +39,8 @@ describe('Campaign redux state tests', () => {
     mock.restore();
   });
 
-  it('Should return initial state', () => {
-    const state = campaignSlice.reducer(undefined, { type: '' });
+  it('Initial state', () => {
+    const state = store.getState().campaignState;
 
     expect(state).toEqual({
       campaigns: [],
