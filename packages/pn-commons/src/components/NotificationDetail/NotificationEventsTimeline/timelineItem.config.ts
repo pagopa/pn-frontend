@@ -5,10 +5,7 @@ import {
   NotificationTimelineStatusHistory,
 } from '../../../models/NotificationTimeline';
 import { getNotificationStatusInfos } from '../../../utility/notification.utility';
-import {
-  getRecipientPerStep,
-  isTimelineGroupStep,
-} from '../../../utility/notificationTimeline.utility';
+import { getRecipientPerStep } from '../../../utility/notificationTimeline.utility';
 import { getTimelineItemPresentation } from './notificationTimelineStatus.config';
 
 export type TimelineItem = {
@@ -16,7 +13,6 @@ export type TimelineItem = {
   label: string;
   description: string;
   allEvents: Array<NotificationTimelineEvent>;
-  hasGroupedEvents: boolean;
   recipientPerStep: Array<NotificationDetailRecipient | undefined>;
 } & ReturnType<typeof getTimelineItemPresentation>;
 
@@ -44,7 +40,6 @@ export const getTimelineItems = (
       label,
       description,
       allEvents: legacyStatus.steps,
-      hasGroupedEvents: status.steps.some(isTimelineGroupStep),
       recipientPerStep:
         isMultiRecipient && isSenderTimeline ? getRecipientPerStep(status.steps, recipients) : [],
       ...getTimelineItemPresentation(status.status, index === 0),

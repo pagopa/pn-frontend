@@ -195,13 +195,13 @@ const NotificationTimeline: React.FC = () => {
   return (
     <LoadingPageWrapper isInitialized={pageReady}>
       {hasNotificationTimelineApiError && (
-        <Box sx={{ p: 3 }}>
+        <Box sx={{ py: 3, px: { xs: 2, sm: 3 } }}>
           {properBreadcrumb}
           <ApiError onClick={fetchReceivedNotification} mt={3} apiId={timelineApiId} />
         </Box>
       )}
       {!hasNotificationTimelineApiError && (
-        <Box sx={{ p: 3, display: 'flex', flexDirection: 'column' }} gap={3}>
+        <Box sx={{ py: 3, px: { xs: 2, sm: 3 }, display: 'flex', flexDirection: 'column' }} gap={3}>
           {properBreadcrumb}
           <Stack>
             <Typography variant="h4" component="h1">
