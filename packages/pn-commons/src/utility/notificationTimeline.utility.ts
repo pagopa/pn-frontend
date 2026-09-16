@@ -1,4 +1,4 @@
-import { NotificationDetailRecipient } from '../models/NotificationDetail';
+import { LegalFactId, NotificationDetailRecipient } from '../models/NotificationDetail';
 import {
   NotificationTimelineEvent,
   NotificationTimelineGroupStep,
@@ -67,3 +67,20 @@ export const getRecipientPerStep = (
     return isRecipientChanged ? recipients[recIndex] : undefined;
   });
 };
+
+// when statutes have all steps hidden, they have leagl facts under description
+// when statuses have even just on step not hidden, the legal fact is shown as bullet point inside the status
+export const getStatusLegalFacts = (events: Array<NotificationTimelineEvent>) => {
+  const legalFactsIds = events.reduce((arr, s) => {
+    if (s.legalFactsIds && s.isHidden) {
+      return arr.concat(s.legalFactsIds);
+    }
+    return arr;
+  }, [] as Array<LegalFactId>);
+
+  return legalFactsIds.length === events.length ? legalFactsIds : [];
+};
+
+// if a status has all steps hidden, we hide the steps
+export const statusHasStepsToShow = (events: Array<NotificationTimelineEvent>) =>
+  events.some((s) => !s.isHidden);

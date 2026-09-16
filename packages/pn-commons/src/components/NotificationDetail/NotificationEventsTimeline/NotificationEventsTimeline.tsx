@@ -1,12 +1,14 @@
 import { Fragment, useMemo } from 'react';
+import { Trans } from 'react-i18next';
 
 import { Box, Divider, Stack, Typography } from '@mui/material';
-import { MITimeline, MITimelineItem } from '@pagopa/mui-italia';
+import { MIButton, MITimeline, MITimelineItem } from '@pagopa/mui-italia';
 
 import { NotificationStatus } from '../../../models';
 import { LegalFactId, NotificationDetailRecipient } from '../../../models/NotificationDetail';
 import { NotificationTimelineStatusHistory } from '../../../models/NotificationTimeline';
 import {
+  getStatusLegalFacts,
   isTimelineGroupStep,
   toLegacyStatusHistory,
 } from '../../../utility/notificationTimeline.utility';
@@ -24,6 +26,7 @@ type Props = {
   disableDownloads?: boolean;
   isSenderTimeline?: boolean;
   language?: string;
+  isNewTimelineCopyEnabled?: boolean;
 };
 
 const NotificationEventsTimeline = ({
@@ -33,6 +36,7 @@ const NotificationEventsTimeline = ({
   disableDownloads = false,
   isSenderTimeline,
   language = 'it',
+  isNewTimelineCopyEnabled = false,
 }: Props) => {
   const legacyStatusHistory = useMemo(() => toLegacyStatusHistory(statusHistory), [statusHistory]);
   const multiAttemptGroupIds = useMemo(
@@ -48,89 +52,115 @@ const NotificationEventsTimeline = ({
     <Box data-testid="NotificationEventsTimeline">
       <MITimeline>
         {timelineItems.map(
-          ({ status, label, description, icon, variant, allEvents, recipientPerStep }) => (
-            <MITimelineItem
-              key={`timeline_step_${status.status}_${status.activeFrom}`}
-              icon={icon}
-              variant={variant}
-              title={
-                <Stack
-                  component="span"
-                  direction={{ xs: 'column-reverse', sm: 'row' }}
-                  fontWeight={600}
-                  alignItems={{ xs: 'flex-start', sm: 'center' }}
-                  fontSize="16px"
-                  gap={{ xs: 0.5, sm: 1 }}
-                >
-                  {label}
-                  <ReworkedStatusTag reworkedStatus={status.reworkedStatus} />
-                </Stack>
-              }
-            >
-              <Stack gap={1.5} alignItems="flex-start">
-                {status.status !== NotificationStatus.DELIVERING && (
-                  <Typography fontSize="14px" fontWeight={400}>
-                    {description}{' '}
-                    <NotificationTimelineEventDate date={status.activeFrom} language={language} />
-                  </Typography>
-                )}
-
-                {status.steps.map((step, stepIndex) => {
-                  const recipient = recipientPerStep[stepIndex];
-                  const recipientHeader = recipient && (
-                    <Typography
-                      variant="body2"
-                      fontWeight={600}
-                      data-testid="timeline-group-recipient"
-                      mt={2}
-                      sx={{ color: '#555C70' }}
-                    >
-                      {`${recipient.denomination} - ${recipient.taxId}`}
+          ({ status, label, description, icon, variant, allEvents, recipientPerStep }) => {
+            const legalFactsIds = getStatusLegalFacts(allEvents);
+            return (
+              <MITimelineItem
+                key={`timeline_step_${status.status}_${status.activeFrom}`}
+                icon={icon}
+                variant={variant}
+                title={
+                  <Stack
+                    component="span"
+                    direction={{ xs: 'column-reverse', sm: 'row' }}
+                    fontWeight={600}
+                    alignItems={{ xs: 'flex-start', sm: 'center' }}
+                    fontSize="16px"
+                    gap={{ xs: 0.5, sm: 1 }}
+                  >
+                    {label}
+                    <ReworkedStatusTag reworkedStatus={status.reworkedStatus} />
+                  </Stack>
+                }
+              >
+                <Stack gap={1.5} alignItems="flex-start">
+                  {status.status !== NotificationStatus.DELIVERING && (
+                    <Typography fontSize="14px" fontWeight={400}>
+                      <Trans
+                        i18nKey="description" // this is fake and is needed to run trans functionality
+                        t={() => description}
+                        components={
+                          legalFactsIds.length > 0
+                            ? [
+                                <MIButton
+                                  key="legalFact"
+                                  variant="text"
+                                  onClick={() => clickHandler(legalFactsIds![0])}
+                                  sx={{
+                                    textDecoration: 'underline',
+                                    display: 'inline',
+                                    fontWeight: 400,
+                                    fontSize: '14px',
+                                    verticalAlign: 'baseline',
+                                  }}
+                                />,
+                              ]
+                            : []
+                        }
+                      />{' '}
+                      <NotificationTimelineEventDate date={status.activeFrom} language={language} />
                     </Typography>
-                  );
+                  )}
 
-                  if (!isTimelineGroupStep(step)) {
+                  {status.steps.map((step, stepIndex) => {
+                    const recipient = recipientPerStep[stepIndex];
+                    const recipientHeader = recipient && (
+                      <Typography
+                        variant="body2"
+                        fontWeight={600}
+                        data-testid="timeline-group-recipient"
+                        mt={2}
+                        sx={{ color: '#555C70' }}
+                      >
+                        {`${recipient.denomination} - ${recipient.taxId}`}
+                      </Typography>
+                    );
+
+                    if (!isTimelineGroupStep(step)) {
+                      return (
+                        <Fragment key={step.event.elementId}>
+                          {recipientHeader}
+                          <NotificationTimelineEventItem
+                            event={step.event}
+                            allEvents={allEvents}
+                            recipients={recipients}
+                            clickHandler={clickHandler}
+                            disableDownloads={disableDownloads}
+                            language={language}
+                            isNewTimelineCopyEnabled={isNewTimelineCopyEnabled}
+                          />
+                        </Fragment>
+                      );
+                    }
+
+                    const previousStep = status.steps[stepIndex - 1];
+                    const hasPreviousGroup = !!previousStep && isTimelineGroupStep(previousStep);
+
                     return (
-                      <Fragment key={step.event.elementId}>
+                      <Fragment key={step.group.groupId}>
+                        {hasPreviousGroup && (
+                          <Divider flexItem data-testid="timeline-group-divider" />
+                        )}
+
                         {recipientHeader}
-                        <NotificationTimelineEventItem
-                          event={step.event}
+
+                        <NotificationTimelineGroupItem
+                          group={step.group}
                           allEvents={allEvents}
                           recipients={recipients}
                           clickHandler={clickHandler}
                           disableDownloads={disableDownloads}
                           language={language}
+                          hasMultipleAttempts={multiAttemptGroupIds.has(step.group.groupId)}
+                          isNewTimelineCopyEnabled={isNewTimelineCopyEnabled}
                         />
                       </Fragment>
                     );
-                  }
-
-                  const previousStep = status.steps[stepIndex - 1];
-                  const hasPreviousGroup = !!previousStep && isTimelineGroupStep(previousStep);
-
-                  return (
-                    <Fragment key={step.group.groupId}>
-                      {hasPreviousGroup && (
-                        <Divider flexItem data-testid="timeline-group-divider" />
-                      )}
-
-                      {recipientHeader}
-
-                      <NotificationTimelineGroupItem
-                        group={step.group}
-                        allEvents={allEvents}
-                        recipients={recipients}
-                        clickHandler={clickHandler}
-                        disableDownloads={disableDownloads}
-                        language={language}
-                        hasMultipleAttempts={multiAttemptGroupIds.has(step.group.groupId)}
-                      />
-                    </Fragment>
-                  );
-                })}
-              </Stack>
-            </MITimelineItem>
-          )
+                  })}
+                </Stack>
+              </MITimelineItem>
+            );
+          }
         )}
       </MITimeline>
     </Box>

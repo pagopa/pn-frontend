@@ -268,6 +268,7 @@ export function getNotificationStatusInfos(
         ...localizeStatus('effective-date', { isMultiRecipient }),
       };
     case NotificationStatus.VIEWED:
+      console.log(statusObject);
       if (statusObject?.recipient) {
         subject = getLocalizedOrDefaultLabel(
           'notifications',
