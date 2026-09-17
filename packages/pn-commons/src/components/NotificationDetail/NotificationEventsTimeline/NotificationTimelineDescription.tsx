@@ -25,6 +25,7 @@ type BaseProps = {
   date?: string;
   language?: string;
   clickHandler: (legalFactId: LegalFactId) => void;
+  disableDownloads?: boolean;
   slotProps?: {
     typography?: TypographyProps;
     button?: MIButtonProps;
@@ -53,21 +54,24 @@ type LegacyStatusProps = BaseProps & {
 type Props = EventProps | StatusProps | LegacyStatusProps;
 
 const NotificationTimelineEventLegalFact: React.FC<
-  Pick<BaseProps, 'slotProps' | 'clickHandler'> & {
+  Pick<BaseProps, 'slotProps' | 'clickHandler' | 'disableDownloads'> & {
     legalFact: LegalFactId;
     children?: React.ReactNode;
+    dataTestId?: string;
   }
-> = ({ slotProps, legalFact, clickHandler, children }) => (
+> = ({ slotProps, legalFact, clickHandler, children, disableDownloads, dataTestId }) => (
   <MIButton
     {...slotProps?.button}
     variant="text"
     onClick={() => clickHandler(legalFact)}
+    disabled={disableDownloads}
     sx={{
       textDecoration: 'underline',
       verticalAlign: 'baseline',
       ...slotProps?.button?.sx,
       fontWeight: 400,
     }}
+    data-testid={dataTestId}
   >
     {children}
   </MIButton>
@@ -79,6 +83,7 @@ const NotificationTimelineDescription: React.FC<Props> = ({
   date,
   language,
   clickHandler,
+  disableDownloads = false,
   slotProps,
   isNewTimelineCopyEnabled = false,
   ...rest
@@ -119,6 +124,10 @@ const NotificationTimelineDescription: React.FC<Props> = ({
                 legalFact={legalFact.lf}
                 clickHandler={clickHandler}
                 slotProps={slotProps}
+                disableDownloads={disableDownloads}
+                dataTestId={
+                  status || legacyStatus ? 'download-legalfact' : 'download-legalfact-micro'
+                }
               />
             ))}
           />
@@ -144,6 +153,8 @@ const NotificationTimelineDescription: React.FC<Props> = ({
             legalFact={legalFact.lf}
             clickHandler={clickHandler}
             slotProps={{ ...slotProps, button: { sx: { display: 'block' } } }}
+            disableDownloads={disableDownloads}
+            dataTestId={status || legacyStatus ? 'download-legalfact' : 'download-legalfact-micro'}
           >
             {getLegalFactLabel(legalFact.event, legalFact.lf.category, legalFact.lf.key || '')}
           </NotificationTimelineEventLegalFact>

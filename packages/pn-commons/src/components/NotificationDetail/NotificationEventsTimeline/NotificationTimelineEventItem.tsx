@@ -98,6 +98,7 @@ const NotificationTimelineEventItem: React.FC<Props> = ({
         clickHandler={clickHandler}
         slotProps={{ typography: { variant: 'body2', sx: { fontWeight: 400 } } }}
         isNewTimelineCopyEnabled={isNewTimelineCopyEnabled}
+        disableDownloads={disableDownloads}
       />
 
       {/* !isNewTimelineCopyEnabled && (

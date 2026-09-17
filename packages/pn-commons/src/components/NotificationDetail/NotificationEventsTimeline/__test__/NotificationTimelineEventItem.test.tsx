@@ -4,10 +4,7 @@ import { notificationTimelineDTO } from '../../../../__mocks__/NotificationTimel
 import { TimelineCategory } from '../../../../models/NotificationDetail';
 import { NotificationTimelineEvent } from '../../../../models/NotificationTimeline';
 import { fireEvent, render, within } from '../../../../test-utils';
-import {
-  getLegalFactLabel,
-  getNotificationTimelineStatusInfos,
-} from '../../../../utility/notification.utility';
+import { getNotificationTimelineStatusInfos } from '../../../../utility/notification.utility';
 import {
   flattenTimelineSteps,
   formatTimelineDate,
@@ -62,21 +59,6 @@ describe('NotificationTimelineEventItem', () => {
     expect(item).toHaveTextContent('status.reworked-status-not-valid');
   });
 
-  it('downloads the legal facts of a visible event', () => {
-    const { getAllByTestId } = renderEvent(eventWithLegalFacts);
-
-    const legalFact = eventWithLegalFacts.legalFactsIds![0];
-    const legalFactButtons = getAllByTestId('download-legalfact-micro');
-    expect(legalFactButtons).toHaveLength(1);
-    expect(legalFactButtons[0]).toHaveTextContent(
-      getLegalFactLabel(eventWithLegalFacts, legalFact.category, legalFact.key)
-    );
-
-    fireEvent.click(legalFactButtons[0]);
-    expect(clickHandler).toHaveBeenCalledTimes(1);
-    expect(clickHandler).toHaveBeenCalledWith(legalFact);
-  });
-
   it('renders the legal fact inline and downloads it when the new copy is enabled', () => {
     const legalFact = eventWithLegalFacts.legalFactsIds![0];
     const statusInfo = getNotificationTimelineStatusInfos(
@@ -103,42 +85,6 @@ describe('NotificationTimelineEventItem', () => {
 
     expect(clickHandler).toHaveBeenCalledTimes(1);
     expect(clickHandler).toHaveBeenCalledWith(legalFact);
-  });
-
-  it('uses the first legal fact for the inline download', () => {
-    const secondLegalFact = {
-      ...eventWithLegalFacts.legalFactsIds![0],
-      key: 'safestorage://second-legal-fact.pdf',
-    };
-    const eventWithMultipleLegalFacts = {
-      ...eventWithLegalFacts,
-      legalFactsIds: [eventWithLegalFacts.legalFactsIds![0], secondLegalFact],
-    };
-
-    const { getByRole } = renderEvent(eventWithMultipleLegalFacts, {
-      isNewTimelineCopyEnabled: true,
-    });
-
-    fireEvent.click(getByRole('button'));
-
-    expect(clickHandler).toHaveBeenCalledWith(eventWithMultipleLegalFacts.legalFactsIds[0]);
-  });
-
-  it('does not render the legacy legal-fact list when the new copy is enabled', () => {
-    const { queryByTestId } = renderEvent(eventWithLegalFacts, {
-      isNewTimelineCopyEnabled: true,
-    });
-
-    expect(queryByTestId('download-legalfact-micro')).not.toBeInTheDocument();
-    expect(queryByTestId('download-legalfact')).not.toBeInTheDocument();
-  });
-
-  it('preserves the legacy legal-fact rendering when the new copy is disabled', () => {
-    const { getByTestId } = renderEvent(eventWithLegalFacts, {
-      isNewTimelineCopyEnabled: false,
-    });
-
-    expect(getByTestId('download-legalfact-micro')).toBeInTheDocument();
   });
 
   it('does not render an event when all status events are hidden and the new copy is enabled', () => {
@@ -212,5 +158,89 @@ describe('NotificationTimelineEventItem', () => {
       disableDownloads: true,
     });
     expect(within(cancelledContainer).getByTestId('download-legalfact-micro')).toBeEnabled();
+  });
+
+  it('renders a single legal fact inline when the new copy is enabled', () => {
+    const legalFact = eventWithLegalFacts.legalFactsIds![0];
+    const event = {
+      ...eventWithLegalFacts,
+      category: TimelineCategory.DIGITAL_SUCCESS_WORKFLOW,
+    };
+
+    const { getByRole } = renderEvent(event, {
+      isNewTimelineCopyEnabled: true,
+    });
+
+    fireEvent.click(getByRole('button'));
+
+    expect(clickHandler).toHaveBeenCalledTimes(1);
+    expect(clickHandler).toHaveBeenCalledWith(legalFact);
+  });
+
+  it('renders a visible event legal fact below the description when the new copy is disabled', () => {
+    const legalFact = eventWithLegalFacts.legalFactsIds![0];
+
+    const { getByRole } = renderEvent(eventWithLegalFacts, {
+      isNewTimelineCopyEnabled: false,
+    });
+
+    const legalFactButton = getByRole('button');
+
+    fireEvent.click(legalFactButton);
+
+    expect(clickHandler).toHaveBeenCalledTimes(1);
+    expect(clickHandler).toHaveBeenCalledWith(legalFact);
+  });
+
+  it('renders every legal fact below the description when an event has multiple legal facts', () => {
+    const secondLegalFact = {
+      ...eventWithLegalFacts.legalFactsIds![0],
+      key: 'safestorage://second-legal-fact.pdf',
+    };
+    const event = {
+      ...eventWithLegalFacts,
+      legalFactsIds: [eventWithLegalFacts.legalFactsIds![0], secondLegalFact],
+    };
+
+    const { getAllByRole } = renderEvent(event, {
+      isNewTimelineCopyEnabled: true,
+    });
+
+    const buttons = getAllByRole('button');
+
+    expect(buttons).toHaveLength(2);
+
+    fireEvent.click(buttons[0]);
+    fireEvent.click(buttons[1]);
+
+    expect(clickHandler).toHaveBeenNthCalledWith(1, event.legalFactsIds[0]);
+    expect(clickHandler).toHaveBeenNthCalledWith(2, secondLegalFact);
+  });
+
+  it('does not render status steps when every event is hidden and the new copy is enabled', () => {
+    const firstHiddenEvent = {
+      ...hiddenEvent,
+      elementId: 'FIRST_HIDDEN_EVENT',
+    };
+    const secondHiddenEvent = {
+      ...hiddenEvent,
+      elementId: 'SECOND_HIDDEN_EVENT',
+    };
+
+    const { container } = renderEvent(firstHiddenEvent, {
+      allEvents: [firstHiddenEvent, secondHiddenEvent],
+      isNewTimelineCopyEnabled: true,
+    });
+
+    expect(container).toBeEmptyDOMElement();
+  });
+
+  it('renders the event when at least one status event is visible', () => {
+    const { getByTestId } = renderEvent(visibleEvent, {
+      allEvents: [hiddenEvent, visibleEvent],
+      isNewTimelineCopyEnabled: true,
+    });
+
+    expect(getByTestId('timeline-event')).toBeInTheDocument();
   });
 });
