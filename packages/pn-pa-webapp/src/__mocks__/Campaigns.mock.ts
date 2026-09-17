@@ -163,6 +163,12 @@ export const campaignsPage2DTO: BffCampaignSearchResponseV1 = {
   nextPagesKey: [],
 };
 
+export const campaignsSize20DTO: BffCampaignSearchResponseV1 = {
+  resultsPage: campaignsPage1,
+  moreResult: true,
+  nextPagesKey: ['page-key-size20-1'],
+};
+
 export const emptyCampaignsDTO: BffCampaignSearchResponseV1 = {
   resultsPage: [],
   moreResult: false,

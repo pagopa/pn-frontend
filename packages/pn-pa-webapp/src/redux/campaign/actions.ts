@@ -14,6 +14,7 @@ export enum CAMPAIGN_ACTIONS {
 }
 
 interface GetCampaignsParams {
+  page: number;
   size: number;
   nextPagesKey?: string;
   allowGlobalLoading?: boolean;

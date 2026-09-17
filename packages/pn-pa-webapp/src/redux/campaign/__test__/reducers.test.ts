@@ -1,6 +1,6 @@
 import MockAdapter from 'axios-mock-adapter';
 
-import { campaignsDTO } from '../../../__mocks__/Campaigns.mock';
+import { campaignsDTO, campaignsPage2DTO } from '../../../__mocks__/Campaigns.mock';
 import { apiClient } from '../../../api/apiClients';
 import {
   BffCampaignDetailResponseV1,
@@ -25,7 +25,8 @@ const campaign: BffCampaignDetailResponseV1 = {
 describe('Campaign redux state tests', () => {
   let mock: MockAdapter;
 
-  const campaignsPath = '/bff/v1/notifications/informal/campaigns?size=10';
+  const campaignsPath = (size?: number) =>
+    `/bff/v1/notifications/informal/campaigns?size=${size ?? 10}`;
 
   beforeAll(() => {
     mock = new MockAdapter(apiClient);
@@ -55,13 +56,9 @@ describe('Campaign redux state tests', () => {
   });
 
   it('Should be able to fetch the campaigns list', async () => {
-    mock.onGet(campaignsPath).reply(200, campaignsDTO);
+    mock.onGet(campaignsPath()).reply(200, campaignsDTO);
 
-    const action = await store.dispatch(
-      getCampaigns({
-        size: 10,
-      })
-    );
+    const action = await store.dispatch(getCampaigns({ page: 0, size: 10 }));
 
     const payload = action.payload as BffCampaignSearchResponseV1;
 
@@ -76,42 +73,36 @@ describe('Campaign redux state tests', () => {
   });
 
   it('Should not duplicate nextPagesKey', async () => {
-    mock.onGet(campaignsPath).reply(200, campaignsDTO);
+    mock.onGet(campaignsPath()).reply(200, campaignsDTO);
 
-    await store.dispatch(getCampaigns({ size: 10 }));
-    await store.dispatch(getCampaigns({ size: 10 }));
+    await store.dispatch(getCampaigns({ page: 0, size: 10 }));
+    await store.dispatch(getCampaigns({ page: 0, size: 10 }));
 
     expect(store.getState().campaignState.pagination.nextPagesKey).toEqual(['page-key-1']);
   });
 
-  it('Should be able to change pagination', () => {
-    const action = store.dispatch(
-      setPagination({
-        page: 1,
-        size: 10,
-      })
-    );
+  it('Should update pagination when campaigns are retrieved', async () => {
+    mock.onGet(campaignsPath()).reply(200, campaignsDTO);
 
-    const payload = action.payload as {
-      page: number;
-      size: number;
-    };
+    await store.dispatch(getCampaigns({ page: 1, size: 10 }));
 
-    expect(action.type).toBe('campaignSlice/setPagination');
-
-    expect(payload).toEqual({
+    expect(store.getState().campaignState.pagination).toEqual({
       page: 1,
       size: 10,
+      moreResult: true,
+      nextPagesKey: ['page-key-1'],
     });
   });
 
-  it('Should reset pagination when page size changes', () => {
-    store.dispatch(
-      setPagination({
-        page: 0,
-        size: 20,
-      })
-    );
+  it('Should reset pagination when page size changes', async () => {
+    mock.onGet(campaignsPath()).replyOnce(200, campaignsDTO);
+    mock.onGet(campaignsPath(20)).replyOnce(200, campaignsPage2DTO);
+
+    await store.dispatch(getCampaigns({ page: 0, size: 10 }));
+
+    expect(store.getState().campaignState.pagination.nextPagesKey).toEqual(['page-key-1']);
+
+    await store.dispatch(getCampaigns({ page: 0, size: 20 }));
 
     expect(store.getState().campaignState.pagination).toEqual({
       nextPagesKey: [],

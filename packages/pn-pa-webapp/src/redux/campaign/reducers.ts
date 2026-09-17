@@ -1,4 +1,4 @@
-import { PayloadAction, createSlice } from '@reduxjs/toolkit';
+import { createSlice } from '@reduxjs/toolkit';
 
 import {
   BffCampaignDetailResponseV1,
@@ -40,8 +40,17 @@ const campaignSlice = createSlice({
 
   extraReducers: (builder) => {
     builder.addCase(getCampaigns.fulfilled, (state, action) => {
+      const { page, size } = action.meta.arg;
+      const hasSizeChanged = state.pagination.size !== size;
+
       state.campaigns = action.payload.resultsPage;
+      state.pagination.page = page;
+      state.pagination.size = size;
       state.pagination.moreResult = action.payload.moreResult;
+
+      if (hasSizeChanged) {
+        state.pagination.nextPagesKey = [];
+      }
 
       if (action.payload.nextPagesKey) {
         for (const pageKey of action.payload.nextPagesKey) {
