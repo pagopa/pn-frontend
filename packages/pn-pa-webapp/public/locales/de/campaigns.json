@@ -4,7 +4,7 @@
     "id": "ID-Code",
     "open-aria-label": "Kampagne \"{{name}}\" öffnen",
     "empty-state": {
-      "no-campaigns": "Hier siehst du die von der Körperschaft gesendeten Kampagnen",
+      "no-campaigns": "Hier siehst du die von der Entität gesendeten Kampagnen",
       "generic-error": "Die Kampagnen konnten nicht abgerufen werden.",
       "generic-error-cta": "Versuche es erneut"
     }
