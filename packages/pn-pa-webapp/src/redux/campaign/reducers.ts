@@ -37,7 +37,6 @@ const campaignSlice = createSlice({
       state.campaignDetail = {} as BffCampaignDetailResponseV1;
     },
   },
-
   extraReducers: (builder) => {
     builder.addCase(getCampaigns.fulfilled, (state, action) => {
       const { page, size } = action.meta.arg;

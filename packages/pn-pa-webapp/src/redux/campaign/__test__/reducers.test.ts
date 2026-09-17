@@ -4,10 +4,10 @@ import { campaignsDTO, campaignsPage2DTO } from '../../../__mocks__/Campaigns.mo
 import { apiClient } from '../../../api/apiClients';
 import {
   BffCampaignDetailResponseV1,
-  BffCampaignSearchResponseV1,
   CampaignStatus,
   ChannelType,
 } from '../../../generated-client/informal-notifications';
+import { BffCampaignSearchResponseV1 } from '../../../generated-client/informal-notifications';
 import { store } from '../../store';
 import { getCampaignDetail, getCampaigns } from '../actions';
 import campaignSlice, { resetCampaignDetail } from '../reducers';
@@ -69,6 +69,8 @@ describe('Campaign redux state tests', () => {
 
     expect(store.getState().campaignState.pagination.moreResult).toBe(true);
 
+    expect(store.getState().campaignState.campaigns).toStrictEqual(campaignsDTO.resultsPage);
+    expect(store.getState().campaignState.pagination.moreResult).toBe(true);
     expect(store.getState().campaignState.pagination.nextPagesKey).toEqual(['page-key-1']);
   });
 

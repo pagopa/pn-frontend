@@ -37,6 +37,7 @@ const Router: React.FC = () => {
             <Route path={routes.DASHBOARD} element={<Dashboard />} />
             {IS_STATISTICS_ENABLED && <Route path={routes.STATISTICHE} element={<Statistics />} />}
 
+            <Route path={routes.CAMPAIGNS} element={<Campaigns />} />
             <Route path={routes.DETTAGLIO_NOTIFICA} element={<NotificationDetail />} />
             <Route path={routes.DETTAGLIO_NOTIFICA_TIMELINE} element={<NotificationTimeline />} />
             <Route path={routes.CAMPAIGNS} element={<Campaigns />} />
