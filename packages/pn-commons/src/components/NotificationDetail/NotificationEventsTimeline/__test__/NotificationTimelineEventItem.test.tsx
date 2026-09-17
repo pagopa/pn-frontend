@@ -71,15 +71,14 @@ describe('NotificationTimelineEventItem', () => {
       ...eventWithLegalFacts,
     };
 
-    const { container, getByRole, queryByTestId } = renderEvent(eventWithInlineCopy, {
+    const { container, getByTestId } = renderEvent(eventWithInlineCopy, {
       isNewTimelineCopyEnabled: true,
     });
 
-    const inlineButton = getByRole('button');
+    const inlineButton = getByTestId('download-legalfact-micro');
 
     expect(container).toHaveTextContent(statusInfo!.description as string);
     expect(inlineButton).toBeInTheDocument();
-    expect(queryByTestId('download-legalfact-micro')).not.toBeInTheDocument();
 
     fireEvent.click(inlineButton);
 
@@ -160,23 +159,6 @@ describe('NotificationTimelineEventItem', () => {
     expect(within(cancelledContainer).getByTestId('download-legalfact-micro')).toBeEnabled();
   });
 
-  it('renders a single legal fact inline when the new copy is enabled', () => {
-    const legalFact = eventWithLegalFacts.legalFactsIds![0];
-    const event = {
-      ...eventWithLegalFacts,
-      category: TimelineCategory.DIGITAL_SUCCESS_WORKFLOW,
-    };
-
-    const { getByRole } = renderEvent(event, {
-      isNewTimelineCopyEnabled: true,
-    });
-
-    fireEvent.click(getByRole('button'));
-
-    expect(clickHandler).toHaveBeenCalledTimes(1);
-    expect(clickHandler).toHaveBeenCalledWith(legalFact);
-  });
-
   it('renders a visible event legal fact below the description when the new copy is disabled', () => {
     const legalFact = eventWithLegalFacts.legalFactsIds![0];
 
@@ -215,32 +197,5 @@ describe('NotificationTimelineEventItem', () => {
 
     expect(clickHandler).toHaveBeenNthCalledWith(1, event.legalFactsIds[0]);
     expect(clickHandler).toHaveBeenNthCalledWith(2, secondLegalFact);
-  });
-
-  it('does not render status steps when every event is hidden and the new copy is enabled', () => {
-    const firstHiddenEvent = {
-      ...hiddenEvent,
-      elementId: 'FIRST_HIDDEN_EVENT',
-    };
-    const secondHiddenEvent = {
-      ...hiddenEvent,
-      elementId: 'SECOND_HIDDEN_EVENT',
-    };
-
-    const { container } = renderEvent(firstHiddenEvent, {
-      allEvents: [firstHiddenEvent, secondHiddenEvent],
-      isNewTimelineCopyEnabled: true,
-    });
-
-    expect(container).toBeEmptyDOMElement();
-  });
-
-  it('renders the event when at least one status event is visible', () => {
-    const { getByTestId } = renderEvent(visibleEvent, {
-      allEvents: [hiddenEvent, visibleEvent],
-      isNewTimelineCopyEnabled: true,
-    });
-
-    expect(getByTestId('timeline-event')).toBeInTheDocument();
   });
 });

@@ -7,6 +7,7 @@ import {
   INotificationDetailTimeline,
   LegalFactId,
   NotificationStatusHistory,
+  TimelineCategory,
 } from '../../../models';
 import {
   NotificationTimelineEvent,
@@ -124,7 +125,10 @@ const NotificationTimelineDescription: React.FC<Props> = ({
                 legalFact={legalFact.lf}
                 clickHandler={clickHandler}
                 slotProps={slotProps}
-                disableDownloads={disableDownloads}
+                disableDownloads={
+                  disableDownloads &&
+                  legalFact.event.category !== TimelineCategory.NOTIFICATION_CANCELLED
+                }
                 dataTestId={
                   status || legacyStatus ? 'download-legalfact' : 'download-legalfact-micro'
                 }
@@ -153,7 +157,10 @@ const NotificationTimelineDescription: React.FC<Props> = ({
             legalFact={legalFact.lf}
             clickHandler={clickHandler}
             slotProps={{ ...slotProps, button: { sx: { display: 'block' } } }}
-            disableDownloads={disableDownloads}
+            disableDownloads={
+              disableDownloads &&
+              legalFact.event.category !== TimelineCategory.NOTIFICATION_CANCELLED
+            }
             dataTestId={status || legacyStatus ? 'download-legalfact' : 'download-legalfact-micro'}
           >
             {getLegalFactLabel(legalFact.event, legalFact.lf.category, legalFact.lf.key || '')}

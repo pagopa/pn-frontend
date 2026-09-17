@@ -331,6 +331,26 @@ describe('NotificationEventsTimeline', () => {
     expect(clickHandler).toHaveBeenCalledWith(legalFact);
   });
 
+  it('disables a status legal fact when downloads are disabled', () => {
+    const statusWithHiddenEvent: NotificationTimelineStatusHistory = {
+      status: NotificationStatus.VIEWED,
+      activeFrom: '2026-08-06T09:14:58.508308Z',
+      steps: [hiddenEventStepOfRecipient(0)],
+    };
+
+    const { getByTestId } = render(
+      <NotificationEventsTimeline
+        recipients={recipients}
+        statusHistory={[statusWithHiddenEvent]}
+        clickHandler={clickHandler}
+        isNewTimelineCopyEnabled
+        disableDownloads
+      />
+    );
+
+    expect(getByTestId('download-legalfact')).toBeDisabled();
+  });
+
   it('renders a status legal fact below the description when the new copy is disabled', () => {
     const statusWithHiddenEvent: NotificationTimelineStatusHistory = {
       status: NotificationStatus.VIEWED,

@@ -12,7 +12,7 @@ import {
   NotificationTimelineEvent,
   NotificationTimelineLegacyStatusHistory,
 } from '../../../../models/NotificationTimeline';
-import { fireEvent, render } from '../../../../test-utils';
+import { fireEvent, initLocalizationForTest, render } from '../../../../test-utils';
 import { formatTimelineDate } from '../../../../utility/notificationTimeline.utility';
 import NotificationTimelineDescription from '../NotificationTimelineDescription';
 
@@ -70,6 +70,10 @@ const createLegacyStatus = (
 
 describe('NotificationTimelineDescription', () => {
   const clickHandler = vi.fn();
+
+  beforeAll(() => {
+    initLocalizationForTest();
+  });
 
   afterEach(() => {
     vi.clearAllMocks();
@@ -129,7 +133,7 @@ describe('NotificationTimelineDescription', () => {
 
     expect(container).toHaveTextContent('Descrizione legacy.');
     expect(button).toHaveTextContent(
-      'detail.legalfact: detail.timeline.legalfact.digital-delivery-success'
+      'notifiche - detail.legalfact: notifiche - detail.timeline.legalfact.digital-delivery-success'
     );
 
     fireEvent.click(button);
