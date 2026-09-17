@@ -10,7 +10,7 @@ import {
 } from '../../../generated-client/informal-notifications';
 import { store } from '../../store';
 import { getCampaignDetail, getCampaigns } from '../actions';
-import campaignSlice, { resetCampaignDetail, setPagination } from '../reducers';
+import campaignSlice, { resetCampaignDetail } from '../reducers';
 
 const campaign: BffCampaignDetailResponseV1 = {
   campaignId: 'FattOrd',
