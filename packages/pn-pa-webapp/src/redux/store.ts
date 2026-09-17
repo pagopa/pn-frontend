@@ -22,7 +22,6 @@ export const appReducers = {
   apiKeysState: apiKeysSlice.reducer,
   campaignState: campaignSlice.reducer,
   statisticsState: statisticsSlice.reducer,
-  campaignState: campaignSlice.reducer,
 };
 
 const createStore = (logReduxActions?: boolean) => {
