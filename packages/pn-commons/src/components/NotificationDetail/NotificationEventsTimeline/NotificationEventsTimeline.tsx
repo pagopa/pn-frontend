@@ -7,13 +7,12 @@ import { NotificationStatus } from '../../../models';
 import { LegalFactId, NotificationDetailRecipient } from '../../../models/NotificationDetail';
 import { NotificationTimelineStatusHistory } from '../../../models/NotificationTimeline';
 import {
-  getStatusLegalFacts,
   isTimelineGroupStep,
+  statusHasStepsToShow,
   toLegacyStatusHistory,
 } from '../../../utility/notificationTimeline.utility';
 import ReworkedStatusTag from '../ReworkedStatusTag';
-import NotificationTimelineEventDate from './NotificationTimelineEventDate';
-import NotificationTimelineEventDescription from './NotificationTimelineEventDescription';
+import NotificationTimelineDescription from './NotificationTimelineDescription';
 import NotificationTimelineEventItem from './NotificationTimelineEventItem';
 import NotificationTimelineGroupItem from './NotificationTimelineGroupItem';
 import { getMultiAttemptGroupIds } from './timelineGroupHeader.config';
@@ -52,41 +51,42 @@ const NotificationEventsTimeline = ({
     <Box data-testid="NotificationEventsTimeline">
       <MITimeline>
         {timelineItems.map(
-          ({ status, label, description, icon, variant, allEvents, recipientPerStep }) => {
-            const legalFactsIds = getStatusLegalFacts(allEvents);
-            return (
-              <MITimelineItem
-                key={`timeline_step_${status.status}_${status.activeFrom}`}
-                icon={icon}
-                variant={variant}
-                title={
-                  <Stack
-                    component="span"
-                    direction={{ xs: 'column-reverse', sm: 'row' }}
-                    fontWeight={600}
-                    alignItems={{ xs: 'flex-start', sm: 'center' }}
-                    fontSize="16px"
-                    gap={{ xs: 0.5, sm: 1 }}
-                  >
-                    {label}
-                    <ReworkedStatusTag reworkedStatus={status.reworkedStatus} />
-                  </Stack>
-                }
-              >
-                <Stack gap={1.5} alignItems="flex-start">
-                  {status.status !== NotificationStatus.DELIVERING && (
-                    <Typography fontSize="14px" fontWeight={400}>
-                      <NotificationTimelineEventDescription
-                        description={description}
-                        legalFactsIds={legalFactsIds}
-                        clickHandler={clickHandler}
-                        slotProps={{ button: { sx: { fontSize: '14px' } } }}
-                      />{' '}
-                      <NotificationTimelineEventDate date={status.activeFrom} language={language} />
-                    </Typography>
-                  )}
+          ({ status, label, description, icon, variant, legacyStatus, recipientPerStep }) => (
+            <MITimelineItem
+              key={`timeline_step_${status.status}_${status.activeFrom}`}
+              icon={icon}
+              variant={variant}
+              title={
+                <Stack
+                  component="span"
+                  direction={{ xs: 'column-reverse', sm: 'row' }}
+                  fontWeight={600}
+                  alignItems={{ xs: 'flex-start', sm: 'center' }}
+                  fontSize="16px"
+                  gap={{ xs: 0.5, sm: 1 }}
+                >
+                  {label}
+                  <ReworkedStatusTag reworkedStatus={status.reworkedStatus} />
+                </Stack>
+              }
+            >
+              <Stack gap={1.5} alignItems="flex-start">
+                {status.status !== NotificationStatus.DELIVERING && (
+                  <NotificationTimelineDescription
+                    description={description}
+                    date={status.activeFrom}
+                    language={language}
+                    status={legacyStatus}
+                    clickHandler={clickHandler}
+                    slotProps={{
+                      typography: { sx: { fontSize: '14px', fontWeight: 400 } },
+                      button: { sx: { fontSize: '14px' } },
+                    }}
+                  />
+                )}
 
-                  {status.steps.map((step, stepIndex) => {
+                {statusHasStepsToShow(legacyStatus.steps) &&
+                  status.steps.map((step, stepIndex) => {
                     const recipient = recipientPerStep[stepIndex];
                     const recipientHeader = recipient && (
                       <Typography
@@ -106,7 +106,7 @@ const NotificationEventsTimeline = ({
                           {recipientHeader}
                           <NotificationTimelineEventItem
                             event={step.event}
-                            allEvents={allEvents}
+                            allEvents={legacyStatus.steps}
                             recipients={recipients}
                             clickHandler={clickHandler}
                             disableDownloads={disableDownloads}
@@ -130,7 +130,7 @@ const NotificationEventsTimeline = ({
 
                         <NotificationTimelineGroupItem
                           group={step.group}
-                          allEvents={allEvents}
+                          allEvents={legacyStatus.steps}
                           recipients={recipients}
                           clickHandler={clickHandler}
                           disableDownloads={disableDownloads}
@@ -141,10 +141,9 @@ const NotificationEventsTimeline = ({
                       </Fragment>
                     );
                   })}
-                </Stack>
-              </MITimelineItem>
-            );
-          }
+              </Stack>
+            </MITimelineItem>
+          )
         )}
       </MITimeline>
     </Box>

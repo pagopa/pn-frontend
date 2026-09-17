@@ -1,12 +1,11 @@
-import { Stack, Typography } from '@mui/material';
+import { Stack } from '@mui/material';
 
 import { LegalFactId, NotificationDetailRecipient } from '../../../models/NotificationDetail';
 import { NotificationTimelineEvent } from '../../../models/NotificationTimeline';
 import { getNotificationTimelineStatusInfos } from '../../../utility/notification.utility';
 import { statusHasStepsToShow } from '../../../utility/notificationTimeline.utility';
 import ReworkedStatusTag from '../ReworkedStatusTag';
-import NotificationTimelineEventDate from './NotificationTimelineEventDate';
-import NotificationTimelineEventDescription from './NotificationTimelineEventDescription';
+import NotificationTimelineDescription from './NotificationTimelineDescription';
 import TimelineLegalFacts from './TimelineLegalFacts';
 
 type Props = {
@@ -90,30 +89,24 @@ const NotificationTimelineEventItem: React.FC<Props> = ({
         <ReworkedStatusTag reworkedStatus={event.reworkedStatus} />
       </Stack>
 
-      <Typography variant="body2" fontWeight={400}>
-        {asBullet && (
-          <>
-            <Typography component="span" variant="body2" fontWeight={600}>
-              {statusInfo.label}
-            </Typography>
-            {' - '}
-          </>
-        )}
-        <NotificationTimelineEventDescription
-          description={statusInfo.description}
-          legalFactsIds={event.legalFactsIds ?? []}
-          clickHandler={clickHandler}
-        />
-        <NotificationTimelineEventDate date={event.timestamp} language={language} />
-      </Typography>
+      <NotificationTimelineDescription
+        title={asBullet ? statusInfo.label : undefined}
+        description={statusInfo.description}
+        date={event.timestamp}
+        language={language}
+        event={event}
+        clickHandler={clickHandler}
+        slotProps={{ typography: { variant: 'body2', sx: { fontWeight: 400 } } }}
+        isNewTimelineCopyEnabled={isNewTimelineCopyEnabled}
+      />
 
-      {!isNewTimelineCopyEnabled && (
+      {/* !isNewTimelineCopyEnabled && (
         <TimelineLegalFacts
           event={event}
           clickHandler={clickHandler}
           disableDownloads={disableDownloads}
         />
-      )}
+      ) */}
     </Stack>
   );
 };
