@@ -94,6 +94,8 @@ export * from './StatusHistory';
 export { storageOpsBuilder } from './storage.utility';
 export { dataRegex, formatFiscalCode, fromStringToBase64, sanitizeString } from './string.utility';
 export { extractRootTraceId } from './support.utility';
+export { default as TranslationOverlayBackend } from './translationOverlay.backend';
+export type { OverlaidNamespaces } from './translationOverlay.backend';
 export {
   adaptedTokenExchangeError,
   basicInitialUserData,
