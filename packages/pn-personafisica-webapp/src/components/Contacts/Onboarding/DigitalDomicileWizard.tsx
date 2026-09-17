@@ -2,8 +2,8 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import { Button, Typography } from '@mui/material';
+import ArrowBackRoundedIcon from '@mui/icons-material/ArrowBackRounded';
+import { Typography } from '@mui/material';
 import {
   ConsentActionType,
   ConsentType,
@@ -12,7 +12,7 @@ import {
   PnWizardStep,
   SERCQ_SEND_VALUE,
 } from '@pagopa-pn/pn-commons';
-import { ButtonNaked, IllusMICompleted, IllusMIQuick } from '@pagopa/mui-italia';
+import { IllusMICompleted, IllusMIQuick, MIButton } from '@pagopa/mui-italia';
 
 import {
   ContactState,
@@ -392,16 +392,15 @@ const DigitalDomicileWizard: React.FC = () => {
     }
 
     return (
-      <ButtonNaked
+      <MIButton
+        variant="text"
         onClick={handlePrevious}
-        color="primary"
-        size="medium"
         data-testid="prev-button"
-        startIcon={<ArrowBackIcon />}
+        startIcon={<ArrowBackRoundedIcon />}
         sx={{ mt: { xs: 2, md: 0 } }}
       >
         {t('button.indietro', { ns: 'common' })}
-      </ButtonNaked>
+      </MIButton>
     );
   };
 
@@ -411,16 +410,14 @@ const DigitalDomicileWizard: React.FC = () => {
     }
 
     return (
-      <Button
+      <MIButton
         variant={isIoStep && !isIoEnabled ? 'outlined' : 'contained'}
         onClick={() => void handleNext()}
-        color="primary"
-        size="medium"
         sx={{ width: { xs: '100%', md: 'auto' }, ml: { md: 'auto' } }}
         data-testid="next-button"
       >
         {getNextButtonLabel()}
-      </Button>
+      </MIButton>
     );
   };
 
@@ -555,9 +552,9 @@ const DigitalDomicileWizard: React.FC = () => {
         exitButton: {
           onClick: exit,
           sx: {
-            color: '#0E0F13',
+            color: 'text.primary',
             '&:hover': {
-              color: '#0E0F13',
+              color: 'text.primary',
             },
           },
         },

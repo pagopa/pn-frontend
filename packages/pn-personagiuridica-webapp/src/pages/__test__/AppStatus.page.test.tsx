@@ -1,23 +1,21 @@
 import MockAdapter from 'axios-mock-adapter';
 import { vi } from 'vitest';
 
-import { ThemeProvider } from '@mui/material';
 import { AppResponseMessage, ResponseEventDispatcher, formatDate } from '@pagopa-pn/pn-commons';
-import { theme } from '@pagopa/mui-italia';
 
 import { currentStatusDTO, downtimesDTO } from '../../__mocks__/AppStatus.mock';
 import { errorMock } from '../../__mocks__/Errors.mock';
-import { act, fireEvent, render, screen, waitFor, within } from '../../__test__/test-utils';
+import { act, fireEvent, render, screen, theme, waitFor, within } from '../../__test__/test-utils';
 import { apiClient } from '../../api/apiClients';
 import { APP_STATUS_ACTIONS } from '../../redux/appStatus/actions';
 import AppStatus from '../AppStatus.page';
 
 const AppStatusWithErrorHandling = () => (
-  <ThemeProvider theme={theme}>
+  <>
     <ResponseEventDispatcher />
     <AppResponseMessage />
     <AppStatus />
-  </ThemeProvider>
+  </>
 );
 
 describe('AppStatus page', () => {
@@ -74,7 +72,7 @@ describe('AppStatus page', () => {
     expect(mock.history.get).toHaveLength(2);
     const appStatusBarComponent = screen.queryByTestId('app-status-bar');
     expect(appStatusBarComponent).toBeInTheDocument();
-    expect(appStatusBarComponent).toHaveStyle({ 'border-color': theme.palette.error.main });
+    expect(appStatusBarComponent).toHaveStyle({ 'border-color': theme.palette.error.light });
     const downtimeLogTable = screen.queryByTestId('tableDowntimeLog');
     expect(downtimeLogTable).toBeInTheDocument();
     const downtimeLogTableRows = screen.queryAllByTestId('tableDowntimeLog.row');

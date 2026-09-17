@@ -128,22 +128,13 @@ describe('IOContact component', () => {
     expect(assignFn).toHaveBeenCalledWith(getConfiguration().APP_IO_SITE);
   });
 
-  it('Click on download AppIO button - IOS', () => {
-    vi.stubGlobal('navigator', { userAgent: 'iPhone' });
+  it.each(['iPhone', 'Android'])('Click on download AppIO button - %s', (userAgent) => {
+    vi.stubGlobal('navigator', { userAgent });
     const { getByRole } = render(<IOContact />);
     const button = getByRole('button', { name: 'io-contact.download' });
     fireEvent.click(button);
     expect(assignFn).toHaveBeenCalledTimes(1);
-    expect(assignFn).toHaveBeenCalledWith(getConfiguration().APP_IO_IOS);
-  });
-
-  it('Click on download AppIO button - Android', () => {
-    vi.stubGlobal('navigator', { userAgent: 'Android' });
-    const { getByRole } = render(<IOContact />);
-    const button = getByRole('button', { name: 'io-contact.download' });
-    fireEvent.click(button);
-    expect(assignFn).toHaveBeenCalledTimes(1);
-    expect(assignFn).toHaveBeenCalledWith(getConfiguration().APP_IO_ANDROID);
+    expect(assignFn).toHaveBeenCalledWith(getConfiguration().APP_IO_DOWNLOAD);
   });
 
   it('disables IO - Digital Domicile enabled', async () => {

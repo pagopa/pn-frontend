@@ -7,9 +7,9 @@ import {
 import { Party } from '../models/party';
 
 export const parties: Array<Party> = [
-  { name: 'Comune di Milano', id: 'comune-milano' },
-  { name: 'Tribunale di Milano', id: 'tribunale-milano' },
-  { name: 'Comune di Palermo', id: 'comune-palermo' },
+  { name: 'Comune di Test 2', id: 'comune-test-2' },
+  { name: 'Tribunale di Test', id: 'tribunale-test' },
+  { name: 'Comune di Test 1', id: 'comune-test-1' },
 ];
 
 export const paymentInfo: Array<ExtRegistriesPaymentDetails> = [

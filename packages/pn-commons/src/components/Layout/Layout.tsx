@@ -105,7 +105,10 @@ const Layout: React.FC<Props> = ({
     {/* calc fixes the layout discrepancy given by the version box */}
     <Stack
       direction="column"
-      sx={{ minHeight: 'calc(100vh - 5px)' }} // 100vh per sticky footer
+      sx={{
+        minHeight: 'calc(100vh - 5px)',
+        backgroundColor: 'background.main',
+      }} // 100vh per sticky footer
     >
       <>
         {showHeader && (

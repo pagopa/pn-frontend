@@ -9,13 +9,14 @@ import {
   StatusTooltip,
   formatDate,
   getNotificationStatusInfos,
+  useIsMobile,
 } from '@pagopa-pn/pn-commons';
 
 const NotificationStatusChip: React.FC<{ data: Row<Notification> }> = ({ data }) => {
   const { label, tooltip, color } = getNotificationStatusInfos(data.notificationStatus, {
     recipients: data.recipients,
   });
-  return <StatusTooltip label={label} tooltip={tooltip} color={color}></StatusTooltip>;
+  return <StatusTooltip label={label} tooltip={tooltip} color={color} />;
 };
 
 const NotificationsDataSwitch: React.FC<{
@@ -24,9 +25,16 @@ const NotificationsDataSwitch: React.FC<{
   handleRowClick?: (iun: string) => void;
 }> = ({ data, type, handleRowClick }) => {
   const { t } = useTranslation(['notifiche']);
+  const isMobile = useIsMobile();
 
   if (type === 'sentAt') {
-    return formatDate(data.sentAt);
+    return isMobile ? (
+      <Typography variant="body2" fontWeight={600}>
+        {formatDate(data.sentAt)}
+      </Typography>
+    ) : (
+      formatDate(data.sentAt)
+    );
   }
   if (type === 'notificationStatus') {
     return <NotificationStatusChip data={data} />;
@@ -35,7 +43,7 @@ const NotificationsDataSwitch: React.FC<{
     return (
       <>
         {data.recipients.map((recipient) => (
-          <Typography key={recipient} variant="body2">
+          <Typography key={recipient} variant="body2" fontWeight={isMobile ? 600 : 400}>
             {recipient}
           </Typography>
         ))}
@@ -43,10 +51,22 @@ const NotificationsDataSwitch: React.FC<{
     );
   }
   if (type === 'subject') {
-    return data.subject;
+    return isMobile ? (
+      <Typography variant="body2" fontWeight={600}>
+        {data.subject}
+      </Typography>
+    ) : (
+      data.subject
+    );
   }
   if (type === 'iun') {
-    return data.iun;
+    return isMobile ? (
+      <Typography variant="body2" fontWeight={600}>
+        {data.iun}
+      </Typography>
+    ) : (
+      data.iun
+    );
   }
   if (type === 'action') {
     return (

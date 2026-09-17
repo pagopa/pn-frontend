@@ -2,11 +2,11 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { Grid, Paper, Typography } from '@mui/material';
+import { Grid, Paper, Typography, useTheme } from '@mui/material';
 import { NotificationStatus, useIsMobile } from '@pagopa-pn/pn-commons';
 import { PnEChartsProps } from '@pagopa-pn/pn-data-viz';
 
-import { GraphColors, IFiledStatistics } from '../../models/Statistics';
+import { IFiledStatistics, getGraphColors } from '../../models/Statistics';
 import AggregateAndTrendStatistics, { AggregateAndTrendData } from './AggregateAndTrendStatistics';
 
 type Props = {
@@ -21,6 +21,8 @@ const FiledNotificationsStatistics: React.FC<Props> = ({
   data: statisticsData,
 }) => {
   const { t } = useTranslation(['statistics']);
+  const theme = useTheme();
+  const graphColors = getGraphColors(theme);
 
   const accepted = statisticsData[NotificationStatus.ACCEPTED];
   const refused = statisticsData[NotificationStatus.REFUSED];
@@ -54,7 +56,7 @@ const FiledNotificationsStatistics: React.FC<Props> = ({
   const spacing = isMobile ? 3 : 0;
 
   const options: PnEChartsProps['option'] = {
-    color: [GraphColors.blue, GraphColors.gold],
+    color: [graphColors.blue, graphColors.gold],
   };
 
   return (
@@ -67,10 +69,10 @@ const FiledNotificationsStatistics: React.FC<Props> = ({
           <Typography sx={{ my: 3 }} variant="body1" color="text.primary">
             {t('filed.description')}
           </Typography>
-          <Typography sx={{ fontSize: 50, fontWeight: 'bold' }} color={GraphColors.blue}>
+          <Typography sx={{ fontSize: 50, fontWeight: 'bold' }} color={graphColors.blue}>
             {notificationsAmount.toLocaleString()}
           </Typography>
-          <Typography color={GraphColors.blue}>
+          <Typography color={graphColors.blue}>
             <b>{notificationsPercent.toLocaleString()}%</b> {t('filed.description2')}
           </Typography>
         </Grid>

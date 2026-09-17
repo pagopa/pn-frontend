@@ -3,7 +3,7 @@ import { isEqual } from 'lodash-es';
 import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 
-import { Button, Chip, SxProps } from '@mui/material';
+import { Button, Chip, SxProps, useTheme } from '@mui/material';
 import { Box, Stack } from '@mui/system';
 import {
   CustomDatePicker,
@@ -17,10 +17,10 @@ import {
 } from '@pagopa-pn/pn-commons';
 
 import {
-  GraphColors,
   SelectedStatisticsFilter,
   SelectedStatisticsFilterKeys,
   StatisticsFilter,
+  getGraphColors,
 } from '../../models/Statistics';
 import { useAppDispatch } from '../../redux/hooks';
 import { setStatisticsFilter } from '../../redux/statistics/reducers';
@@ -39,6 +39,8 @@ const FilterStatistics: React.FC<Props> = ({ filter, lastDate, className, sx }) 
   const { t, i18n } = useTranslation(['statistics']);
   const isMobile = useIsMobile();
   const dispatch = useAppDispatch();
+  const theme = useTheme();
+  const graphColors = getGraphColors(theme);
 
   const maxEndDate = getEndOfDay(lastDate ?? today);
 
@@ -104,7 +106,7 @@ const FilterStatistics: React.FC<Props> = ({ filter, lastDate, className, sx }) 
         sx={{
           mr: 1,
           my: { xl: 0, xs: 1 },
-          background: elem === formik.values.selected ? GraphColors.lightBlue2 : 'none',
+          background: elem === formik.values.selected ? graphColors.lightBlue2 : 'none',
           color: 'primary',
           opacity: `${elem === formik.values.selected ? 0.5 : 1} !important`,
         }}
@@ -187,9 +189,7 @@ const FilterStatistics: React.FC<Props> = ({ filter, lastDate, className, sx }) 
           id="filter-button"
           data-testid="filterButton"
           variant="outlined"
-          type="button"
           onClick={applyCustomFilter}
-          size="small"
           sx={{
             height: '43px !important',
             mr: 1,

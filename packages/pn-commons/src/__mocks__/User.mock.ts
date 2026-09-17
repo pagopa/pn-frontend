@@ -11,10 +11,10 @@ export const noUserLoggedData = {
 
 export const userLoggedData = {
   sessionToken: 'mocked-token',
-  name: 'Mario',
-  family_name: 'Rossi',
-  fiscal_number: 'RSSGPP80B02G273H',
-  email: 'mario.rossi@mail.it',
+  name: 'Utente',
+  family_name: 'Test Uno',
+  fiscal_number: 'TSTUTN00A11A001P',
+  email: 'utente.uno@mail.it',
   uid: '00000000-0000-0000-0000-000000000000',
 };
 
@@ -58,6 +58,6 @@ export const partyList = [
 
 export const loggedUser = {
   id: 'mocked-id',
-  name: 'Mario',
-  surname: 'Rossi',
+  name: 'Utente',
+  surname: 'Test Uno',
 };

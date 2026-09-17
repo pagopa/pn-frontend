@@ -1,10 +1,13 @@
 import {
   DowntimeLogHistory,
+  EventNotificationType,
+  EventNotificationTypes,
   ExtRegistriesPaymentDetails,
   GetDowntimeHistoryParams,
   NotificationDetail,
   NotificationDocumentRequest,
   NotificationDocumentResponse,
+  NotificationTimelineResponse,
   PaymentAttachment,
   PaymentAttachmentSName,
   PaymentDetails,
@@ -33,10 +36,11 @@ import { PFEventsType } from '../../models/PFEventsType';
 import PFEventStrategyFactory from '../../utility/MixpanelUtils/PFEventStrategyFactory';
 import { parseNotificationDetailForRecipient } from '../../utility/notification.utility';
 import { RootState, store } from '../store';
-import { GetReceivedNotificationParams } from './types';
+import { GetReceivedNotificationParams, GetReceivedNotificationTimelineParams } from './types';
 
 export enum NOTIFICATION_ACTIONS {
   GET_RECEIVED_NOTIFICATION = 'getReceivedNotification',
+  GET_RECEIVED_NOTIFICATION_TIMELINE = 'getReceivedNotificationTimeline',
   GET_RECEIVED_NOTIFICATION_DOCUMENT = 'getReceivedNotificationDocument',
   GET_RECEIVED_NOTIFICATION_PAYMENT = 'getReceivedNotificationPayment',
   GET_RECEIVED_NOTIFICATION_PAYMENT_INFO = 'getReceivedNotificationPaymentInfo',
@@ -69,6 +73,31 @@ export const getReceivedNotification = createAsyncThunk<
         params.delegatorsFromStore,
         params.mandateId
       );
+    } catch (e: any) {
+      return rejectWithValue(parseError(e));
+    }
+  }
+);
+
+export const getReceivedNotificationTimeline = createAsyncThunk<
+  NotificationTimelineResponse,
+  GetReceivedNotificationTimelineParams
+>(
+  NOTIFICATION_ACTIONS.GET_RECEIVED_NOTIFICATION_TIMELINE,
+  async (params: GetReceivedNotificationTimelineParams, { rejectWithValue }) => {
+    try {
+      const notificationReceivedApiFactory = NotificationReceivedApiFactory(
+        undefined,
+        undefined,
+        apiClient
+      );
+
+      const response = await notificationReceivedApiFactory.getReceivedNotificationTimelineV1(
+        params.iun,
+        params.mandateId
+      );
+
+      return response.data as NotificationTimelineResponse;
     } catch (e: any) {
       return rejectWithValue(parseError(e));
     }
@@ -144,17 +173,15 @@ export const getReceivedNotificationPayment = createAsyncThunk<
 
 export const getReceivedNotificationPaymentInfo = createAsyncThunk<
   Array<PaymentDetails>,
-  { taxId: string; paymentInfoRequest: Array<{ noticeCode: string; creditorTaxId: string }> },
+  {
+    taxId: string;
+    paymentInfoRequest: Array<{ noticeCode: string; creditorTaxId: string }>;
+    notification_type?: EventNotificationType;
+  },
   { state: RootState }
 >(
   NOTIFICATION_ACTIONS.GET_RECEIVED_NOTIFICATION_PAYMENT_INFO,
-  async (
-    params: {
-      taxId: string;
-      paymentInfoRequest: Array<{ noticeCode: string; creditorTaxId: string }>;
-    },
-    { rejectWithValue, getState, signal }
-  ) => {
+  async (params, { rejectWithValue, getState, signal }) => {
     try {
       const { notificationState } = getState();
       const iun = notificationState.notification.iun;
@@ -173,6 +200,7 @@ export const getReceivedNotificationPaymentInfo = createAsyncThunk<
 
           PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_PAYMENT_OUTCOME, {
             outcome: updatedPayment[0].status,
+            notification_type: params.notification_type ?? EventNotificationTypes.NOTIFICATION,
           });
 
           if (updatedPayment[0].status === PaymentStatus.SUCCEEDED) {
@@ -222,14 +250,14 @@ export const getReceivedNotificationPaymentInfo = createAsyncThunk<
 
 export const getReceivedNotificationPaymentUrl = createAsyncThunk<
   { checkoutUrl: string },
-  { paymentNotice: PaymentNotice; returnUrl: string },
+  { paymentNotice: PaymentNotice; returnUrl: string; iun?: string },
   { state: RootState }
 >(
   NOTIFICATION_ACTIONS.GET_RECEIVED_NOTIFICATION_PAYMENT_URL,
-  async (params: { paymentNotice: PaymentNotice; returnUrl: string }, { rejectWithValue }) => {
+  async ({ iun, ...params }, { rejectWithValue, getState }) => {
     try {
       const paymentsApiFactory = PaymentsApiFactory(undefined, undefined, apiClient);
-      const iun = store.getState().notificationState.notification.iun;
+      const notificationIun = iun ?? getState().notificationState.notification.iun;
       setPaymentCache(
         {
           currentPayment: {
@@ -237,7 +265,7 @@ export const getReceivedNotificationPaymentUrl = createAsyncThunk<
             creditorTaxId: params.paymentNotice.fiscalCode,
           },
         },
-        iun
+        notificationIun
       );
       const response = await paymentsApiFactory.paymentsCartV1(params);
       return response.data;

@@ -8,8 +8,8 @@ import {
   useState,
 } from 'react';
 
-import { Box, Button, DialogContentText, DialogTitle, Divider } from '@mui/material';
-import { CodeInput, CopyToClipboardButton, MIAlert } from '@pagopa/mui-italia';
+import { Box, DialogContentText, DialogTitle, Divider } from '@mui/material';
+import { CodeInput, CopyToClipboardButton, MIAlert, MIButton } from '@pagopa/mui-italia';
 
 import { ErrorMessage } from '../../models/AppResponse';
 import { getLocalizedOrDefaultLabel } from '../../utility/localization.utility';
@@ -213,16 +213,16 @@ const CodeModal = forwardRef<ModalHandle, Props>(
           )}
         </PnDialogContent>
         <PnDialogActions>
-          <Button
+          <MIButton
             id="code-cancel-button"
             variant="outlined"
             onClick={cancelCallback}
             data-testid="codeCancelButton"
           >
             {cancelLabel}
-          </Button>
+          </MIButton>
           {confirmLabel && confirmCallback && (
-            <Button
+            <MIButton
               id="code-confirm-button"
               variant={internalHasError ? 'outlined' : 'contained'}
               color={internalHasError ? 'error' : 'primary'}
@@ -230,7 +230,7 @@ const CodeModal = forwardRef<ModalHandle, Props>(
               onClick={confirmHandler}
             >
               {confirmLabel}
-            </Button>
+            </MIButton>
           )}
         </PnDialogActions>
       </PnDialog>

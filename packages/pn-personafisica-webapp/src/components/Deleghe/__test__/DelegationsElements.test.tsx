@@ -80,30 +80,30 @@ describe('DelegationElements', () => {
 
   it('renders the OrganizationList with multiple organization', () => {
     const { container } = render(
-      <OrganizationsList organizations={['Bollate', 'Comune di Milano', 'Comune di Palermo']} />
+      <OrganizationsList organizations={['Ente Test', 'Comune di Test 2', 'Comune di Test 1']} />
     );
     expect(container).toHaveTextContent(/deleghe.table.notificationsFrom/i);
-    expect(container).toHaveTextContent(/Bollate/i);
-    expect(container).toHaveTextContent(/Comune di Milano/i);
-    expect(container).toHaveTextContent(/Comune di Palermo/i);
+    expect(container).toHaveTextContent(/Ente Test/i);
+    expect(container).toHaveTextContent(/Comune di Test 2/i);
+    expect(container).toHaveTextContent(/Comune di Test 1/i);
   });
 
   it('renders the OrganizationList with multiple organizations and visibleItems set to 3', async () => {
     const { container, getByTestId } = render(
       <OrganizationsList
-        organizations={['Bollate', 'Milano', 'Abbiategrasso', 'Malpensa']}
+        organizations={['Ente Test Alfa', 'Ente Test Beta', 'Ente Test Gamma', 'Ente Test Delta']}
         visibleItems={3}
       />
     );
     const organizationsList = getByTestId('custom-tooltip-indicator');
     expect(container).toHaveTextContent(/deleghe.table.notificationsFrom/i);
-    expect(container).toHaveTextContent(/Bollate/i);
-    expect(container).toHaveTextContent(/Milano/i);
-    expect(container).toHaveTextContent(/Abbiategrasso/i);
+    expect(container).toHaveTextContent(/Ente Test/i);
+    expect(container).toHaveTextContent(/Ente Test Beta/i);
+    expect(container).toHaveTextContent(/Ente Test Gamma/i);
     expect(container).toHaveTextContent(/\+1/i);
-    expect(container).not.toHaveTextContent(/Malpesa/i);
+    expect(container).not.toHaveTextContent(/Ente Test Delta/i);
     fireEvent.mouseOver(organizationsList);
-    await waitFor(() => expect(screen.getByText(/Malpensa/i)).toBeInTheDocument());
+    await waitFor(() => expect(screen.getByText(/Ente Test Delta/i)).toBeInTheDocument());
   });
 
   it('renders the AcceptButton and clicks on button', async () => {

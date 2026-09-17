@@ -1,8 +1,9 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { Button, DialogContentText, DialogTitle } from '@mui/material';
+import { DialogContentText, DialogTitle } from '@mui/material';
 import { PnDialog, PnDialogActions, PnDialogContent } from '@pagopa-pn/pn-commons';
+import { MIButton } from '@pagopa/mui-italia';
 
 type Props = {
   open: boolean;
@@ -27,9 +28,9 @@ const PecVerificationDialog: React.FC<Props> = ({ open = false, handleConfirm })
         </DialogContentText>
       </PnDialogContent>
       <PnDialogActions>
-        <Button id="confirmDialog" onClick={handleConfirm} variant="contained">
+        <MIButton id="confirmDialog" onClick={handleConfirm} variant="contained">
           {t('button.conferma')}
-        </Button>
+        </MIButton>
       </PnDialogActions>
     </PnDialog>
   );

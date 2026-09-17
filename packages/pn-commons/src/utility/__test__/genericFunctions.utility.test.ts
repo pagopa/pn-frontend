@@ -41,8 +41,8 @@ describe('filtersApplied function', () => {
         email: '',
       },
       {
-        username: 'mariorossi',
-        email: 'mario.rossi@mail.it',
+        username: 'utenteuno',
+        email: 'utente.uno@mail.it',
       }
     );
     expect(count).toEqual(2);
@@ -59,11 +59,11 @@ describe('sortArray function', () => {
   });
 
   it('sorts array - string', () => {
-    const arrayToSort = [{ name: 'Andrea' }, { name: 'Mario' }, { name: 'Sara' }];
+    const arrayToSort = [{ name: 'Alfa' }, { name: 'Beta' }, { name: 'Gamma' }];
     let sortedArray = sortArray('asc', 'name', arrayToSort);
     expect(sortedArray).toStrictEqual(arrayToSort);
     sortedArray = sortArray('desc', 'name', arrayToSort);
-    expect(sortedArray).toStrictEqual([{ name: 'Sara' }, { name: 'Mario' }, { name: 'Andrea' }]);
+    expect(sortedArray).toStrictEqual([{ name: 'Gamma' }, { name: 'Beta' }, { name: 'Alfa' }]);
   });
 
   it('sorts array - date', () => {
@@ -79,7 +79,7 @@ describe('sortArray function', () => {
   });
 
   it('sorts array - empty sort field', () => {
-    const arrayToSort = [{ name: 'Andrea' }, { name: 'Mario' }, { name: 'Sara' }];
+    const arrayToSort = [{ name: 'Alfa' }, { name: 'Beta' }, { name: 'Gamma' }];
     let sortedArray = sortArray('asc', '', arrayToSort);
     expect(sortedArray).toStrictEqual(arrayToSort);
     sortedArray = sortArray('desc', '', arrayToSort);

@@ -1,7 +1,7 @@
 import { vi } from 'vitest';
 
-import BalconyIcon from '@mui/icons-material/Balcony';
-import { Button } from '@mui/material';
+import BalconyRoundedIcon from '@mui/icons-material/BalconyRounded';
+import { MIButton } from '@pagopa/mui-italia';
 
 import { KnownSentiment } from '../../models/EmptyState';
 import { fireEvent, render } from '../../test-utils';
@@ -14,14 +14,14 @@ describe('EmptyState component', () => {
     const { container, getByTestId } = render(
       <EmptyState>
         empty-state-message{' '}
-        <Button data-testid="emptyStateButton" onClick={mockAction}>
+        <MIButton data-testid="emptyStateButton" onClick={mockAction}>
           empty-state-button
-        </Button>
+        </MIButton>
       </EmptyState>
     );
     expect(container).toHaveTextContent('empty-state-message empty-state-button');
     const button = getByTestId('emptyStateButton');
-    const sadIcon = getByTestId('SentimentDissatisfiedIcon');
+    const sadIcon = getByTestId('SentimentDissatisfiedRoundedIcon');
     expect(sadIcon).toBeInTheDocument();
     fireEvent.click(button);
     expect(mockAction).toBeCalledTimes(1);
@@ -34,10 +34,12 @@ describe('EmptyState component', () => {
   });
 
   it('renders with custom icon', () => {
-    const { getByTestId, queryByTestId } = render(<EmptyState sentimentIcon={<BalconyIcon />} />);
-    const sadIcon = queryByTestId('SentimentDissatisfiedIcon');
+    const { getByTestId, queryByTestId } = render(
+      <EmptyState sentimentIcon={<BalconyRoundedIcon />} />
+    );
+    const sadIcon = queryByTestId('SentimentDissatisfiedRoundedIcon');
     const happyIcon = queryByTestId('InsertEmoticonIcon');
-    const customIcon = getByTestId('BalconyIcon');
+    const customIcon = getByTestId('BalconyRoundedIcon');
     expect(sadIcon).not.toBeInTheDocument();
     expect(happyIcon).not.toBeInTheDocument();
     expect(customIcon).toBeInTheDocument();

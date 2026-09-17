@@ -49,14 +49,14 @@ function calcExpirationDate() {
 // Andrea Cimini, 2023.02.17
 export const userResponse: User = {
   sessionToken: 'mocked-session-token',
-  name: 'giuseppe',
-  family_name: 'rossini',
-  fiscal_number: 'RSSGPP80B02G273H',
-  email: 'giuseppe.rossini@gmail.com',
+  name: 'Utente',
+  family_name: 'Test Undici',
+  fiscal_number: 'TSTUTN00A11A001P',
+  email: 'utente.undici@mock.it',
   uid: '00000000-0000-0000-0000-000000000000',
   organization: {
     id: '5b994d4a-0fa8-47ac-9c7b-354f1d44a1ce',
-    name: 'Comune di Palermo',
+    name: 'Comune di Test 1',
     roles: [
       {
         partyRole: PartyRole.MANAGER,
@@ -71,11 +71,11 @@ export const userResponse: User = {
 
 export const supportUserResponse: User = {
   sessionToken: 'mocked-session-token',
-  email: 'support.user@gmail.com',
+  email: 'utente.supporto@mock.it',
   uid: '72af51b4-fe24-41bd-ad41-335026c2e9df',
   organization: {
     id: '5b994d4a-0fa8-47ac-9c7b-354f1d44a1ce',
-    name: 'Comune di Palermo',
+    name: 'Comune di Test 1',
     roles: [
       {
         partyRole: PartyRole.SUPPORT,

@@ -3,11 +3,11 @@ import { isArray } from 'lodash-es';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { Paper, SxProps, Typography } from '@mui/material';
+import { Paper, SxProps, Typography, useTheme } from '@mui/material';
 import { convertHoursToDays } from '@pagopa-pn/pn-commons';
 import { PnECharts, PnEChartsProps } from '@pagopa-pn/pn-data-viz';
 
-import { GraphColors, IDigitalMeanTimeStatistics } from '../../models/Statistics';
+import { IDigitalMeanTimeStatistics, getGraphColors } from '../../models/Statistics';
 import EmptyStatistics from './EmptyStatistics';
 
 type Props = {
@@ -17,6 +17,8 @@ type Props = {
 
 const DigitalMeanTimeStatistics: React.FC<Props> = (props) => {
   const { t } = useTranslation(['statistics']);
+  const theme = useTheme();
+  const graphColors = getGraphColors(theme);
 
   const labels = [
     {
@@ -34,17 +36,17 @@ const DigitalMeanTimeStatistics: React.FC<Props> = (props) => {
     {
       time: props.data.delivered.time,
       count: props.data.delivered.count,
-      color: GraphColors.lightBlue,
+      color: graphColors.navy,
     },
     {
       time: props.data.viewed.time,
       count: props.data.viewed.count,
-      color: GraphColors.lightGreen,
+      color: graphColors.blue,
     },
     {
       time: props.data.refined.time,
       count: props.data.refined.count,
-      color: GraphColors.darkGreen,
+      color: graphColors.lightGreen,
     },
   ];
 

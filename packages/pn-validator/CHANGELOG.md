@@ -19,6 +19,14 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 
 
+# [2.26.0-RC.0](https://github.com/pagopa/pn-frontend/compare/v2.25.0...v2.26.0-RC.0) (2026-09-01)
+
+**Note:** Version bump only for package @pagopa-pn/pn-validator
+
+
+
+
+
 # [2.25.0](https://github.com/pagopa/pn-frontend/compare/v2.24.2...v2.25.0) (2026-08-06)
 
 

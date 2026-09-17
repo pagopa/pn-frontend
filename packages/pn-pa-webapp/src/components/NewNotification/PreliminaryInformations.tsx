@@ -233,16 +233,7 @@ const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
               <Trans
                 t={t}
                 i18nKey={'taxonomy-id-subtitle'}
-                components={[
-                  <Link
-                    key={'taxonomy'}
-                    href={TAXONOMY_SEND_URL}
-                    target="_blank"
-                    color={'primary'}
-                    fontWeight={600}
-                    sx={{ textDecoration: 'none' }}
-                  />,
-                ]}
+                components={[<Link key={'taxonomy'} href={TAXONOMY_SEND_URL} target="_blank" />]}
               />
             </Typography>
             <TextField
