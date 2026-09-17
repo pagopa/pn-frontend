@@ -24,6 +24,9 @@ console.warn = (...args) => {
 };
 
 beforeAll(() => {
+  // jsdom does not implement scrollIntoView, so we mock it to avoid unhandled errors in tests
+  // eslint-disable-next-line functional/immutable-data
+  Element.prototype.scrollIntoView = vi.fn();
   Configuration.setForTest<PaConfiguration>({
     API_BASE_URL: 'https://mock-api-base-url',
     INACTIVITY_HANDLER_MINUTES: 0,
