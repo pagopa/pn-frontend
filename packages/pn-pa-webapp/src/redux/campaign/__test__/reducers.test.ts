@@ -64,11 +64,6 @@ describe('Campaign redux state tests', () => {
 
     expect(action.type).toBe('getCampaigns/fulfilled');
     expect(payload).toEqual(campaignsDTO);
-
-    expect(store.getState().campaignState.campaigns).toStrictEqual(campaignsDTO.resultsPage);
-
-    expect(store.getState().campaignState.pagination.moreResult).toBe(true);
-
     expect(store.getState().campaignState.campaigns).toStrictEqual(campaignsDTO.resultsPage);
     expect(store.getState().campaignState.pagination.moreResult).toBe(true);
     expect(store.getState().campaignState.pagination.nextPagesKey).toEqual(['page-key-1']);
