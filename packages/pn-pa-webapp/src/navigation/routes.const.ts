@@ -8,7 +8,6 @@ export {
 export const DASHBOARD = '/dashboard';
 const NOTIFICA = '/dettaglio';
 const COMUNICATION = '/comunication';
-
 export const DETTAGLIO_NOTIFICA = `${DASHBOARD}/:id${NOTIFICA}`;
 export const DETTAGLIO_NOTIFICA_TIMELINE = `${DASHBOARD}/:id${NOTIFICA}/timeline`;
 export const NUOVA_NOTIFICA = `${DASHBOARD}/nuova-notifica`;
