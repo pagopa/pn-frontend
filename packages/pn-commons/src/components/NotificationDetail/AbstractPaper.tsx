@@ -109,19 +109,6 @@ const AbstractPaper = ({
   );
 
   const renderAbstractSection = () => {
-    if (isLegal) {
-      return (
-        <>
-          <Divider aria-hidden sx={{ my: 2 }} />
-          {abstract && (
-            <Typography variant="body1" sx={{ overflowWrap: 'anywhere' }}>
-              {abstract}
-            </Typography>
-          )}
-        </>
-      );
-    }
-
     if (!abstract) {
       return null;
     }
@@ -129,67 +116,69 @@ const AbstractPaper = ({
     return (
       <>
         <Divider aria-hidden sx={{ my: 2 }} />
-        <Stack>
-          {recipientDenomination && (
-            <Typography variant="body1" color="text.primary">
-              {getLocalizedOrDefaultLabel(
-                'notifications',
-                'detail.informal_notification_markdown.greeting',
-                undefined,
-                { recipientDenomination }
-              )}
-            </Typography>
-          )}
-
-          <Box
-            sx={{
-              overflowWrap: 'anywhere',
-              '& p': {
-                m: 0,
-                typography: 'body1',
-                color: 'text.primary',
-                mt: 4,
-              },
-            }}
-          >
-            <PNMarkdown content={abstract} onExternalLinkClick={onExternalLinkClick} />
-          </Box>
-
-          {(hasAttachments || hasPayment) && (
-            <Typography variant="body1" color="text.primary" mt={4}>
-              {hasAttachments && (
-                <Trans
-                  i18nKey={attachmentsInfoMessage.key}
-                  ns={attachmentsInfoMessage.ns}
-                  components={[<strong key="0" />]}
-                />
-              )}
-              {hasAttachments && hasPayment && '\u00A0'}
-              {hasPayment && (
-                <Trans
-                  i18nKey={paymentInstructionsMessage.key}
-                  ns={paymentInstructionsMessage.ns}
-                  components={[<strong key="0" />, <strong key="1" />]}
-                />
-              )}
-            </Typography>
-          )}
-
-          <Typography
-            variant="body1"
-            color="text.primary"
-            mt={hasAttachments || hasPayment ? 2 : 4}
-          >
-            <Trans
-              i18nKey={assistanceMessage.key}
-              ns={assistanceMessage.ns}
-              values={{
-                senderDenomination,
-              }}
-              components={[<strong key="0" />]}
-            />
+        {isLegal && abstract ? (
+          <Typography variant="body1" sx={{ overflowWrap: 'anywhere' }}>
+            {abstract}
           </Typography>
-        </Stack>
+        ) : (
+          <Stack>
+            {recipientDenomination && (
+              <Typography variant="body1" color="text.primary">
+                {getLocalizedOrDefaultLabel(
+                  'notifications',
+                  'detail.informal_notification_markdown.greeting',
+                  undefined,
+                  { recipientDenomination }
+                )}
+              </Typography>
+            )}
+
+            <Box
+              sx={{
+                overflowWrap: 'anywhere',
+                '& p': {
+                  m: 0,
+                  typography: 'body1',
+                  color: 'text.primary',
+                  mt: 1.5,
+                },
+              }}
+            >
+              <PNMarkdown content={abstract} onExternalLinkClick={onExternalLinkClick} />
+            </Box>
+
+            {(hasAttachments || hasPayment) && (
+              <Typography variant="body1" color="text.primary" mt={1.5}>
+                {hasAttachments && (
+                  <Trans
+                    i18nKey={attachmentsInfoMessage.key}
+                    ns={attachmentsInfoMessage.ns}
+                    components={[<strong key="0" />]}
+                  />
+                )}
+                {hasAttachments && hasPayment && '\u00A0'}
+                {hasPayment && (
+                  <Trans
+                    i18nKey={paymentInstructionsMessage.key}
+                    ns={paymentInstructionsMessage.ns}
+                    components={[<strong key="0" />, <strong key="1" />]}
+                  />
+                )}
+              </Typography>
+            )}
+
+            <Typography variant="body1" color="text.primary" mt={1.5}>
+              <Trans
+                i18nKey={assistanceMessage.key}
+                ns={assistanceMessage.ns}
+                values={{
+                  senderDenomination,
+                }}
+                components={[<strong key="0" />]}
+              />
+            </Typography>
+          </Stack>
+        )}
       </>
     );
   };
@@ -295,7 +284,7 @@ const AbstractPaper = ({
           {renderAbstractSection()}
         </>
       )}
-      <Typography variant="body2" color="text.secondary" sx={{ mt: abstract ? 2 : 0 }}>
+      <Typography variant="body2" color="text.secondary" sx={{ mt: 2 }}>
         {getLocalizedOrDefaultLabel(
           'notifications',
           `detail.${!isLegal ? 'informal' : 'legal'}-disclaimer`
