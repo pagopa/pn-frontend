@@ -475,6 +475,7 @@ const NotificationDetail: React.FC = () => {
                   recipients={notification.recipients}
                   isParty={true}
                   onTimelineClick={handleGoToTimeline}
+                  clickHandler={() => {}}
                 />
               )}
               <NotificationDetailSection

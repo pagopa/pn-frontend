@@ -622,6 +622,7 @@ const NotificationDetail = () => {
                   recipients={notification.recipients}
                   isParty={false}
                   onTimelineClick={handleGoToTimeline}
+                  clickHandler={() => {}}
                 />
               )}
               <NotificationDetailSection

@@ -1,7 +1,4 @@
-import { Trans } from 'react-i18next';
-
 import { Stack, Typography } from '@mui/material';
-import { MIButton } from '@pagopa/mui-italia';
 
 import { LegalFactId, NotificationDetailRecipient } from '../../../models/NotificationDetail';
 import { NotificationTimelineEvent } from '../../../models/NotificationTimeline';
@@ -9,6 +6,7 @@ import { getNotificationTimelineStatusInfos } from '../../../utility/notificatio
 import { statusHasStepsToShow } from '../../../utility/notificationTimeline.utility';
 import ReworkedStatusTag from '../ReworkedStatusTag';
 import NotificationTimelineEventDate from './NotificationTimelineEventDate';
+import NotificationTimelineEventDescription from './NotificationTimelineEventDescription';
 import TimelineLegalFacts from './TimelineLegalFacts';
 
 type Props = {
@@ -75,7 +73,6 @@ const NotificationTimelineEventItem: React.FC<Props> = ({
   }
 
   const statusInfo = getNotificationTimelineStatusInfos(event, recipients, allEvents);
-  const hasLegalFact = !!event.legalFactsIds && event.legalFactsIds.length > 0;
 
   if (!statusInfo) {
     return null;
@@ -102,26 +99,10 @@ const NotificationTimelineEventItem: React.FC<Props> = ({
             {' - '}
           </>
         )}
-        <Trans
-          i18nKey="description" // this is fake and is needed to run trans functionality
-          t={() => statusInfo.description}
-          components={
-            hasLegalFact
-              ? [
-                  <MIButton
-                    key="legalFact"
-                    variant="text"
-                    onClick={() => clickHandler(event.legalFactsIds![0])}
-                    sx={{
-                      textDecoration: 'underline',
-                      display: 'inline',
-                      fontWeight: 400,
-                      verticalAlign: 'baseline',
-                    }}
-                  />,
-                ]
-              : []
-          }
+        <NotificationTimelineEventDescription
+          description={statusInfo.description}
+          legalFactsIds={event.legalFactsIds ?? []}
+          clickHandler={clickHandler}
         />
         <NotificationTimelineEventDate date={event.timestamp} language={language} />
       </Typography>

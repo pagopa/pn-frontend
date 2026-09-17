@@ -2,15 +2,39 @@ import KeyboardArrowRightRoundedIcon from '@mui/icons-material/KeyboardArrowRigh
 import { Stack, Typography } from '@mui/material';
 import { MIButton, MIChip, MIPaper } from '@pagopa/mui-italia';
 
-import { NotificationDetailRecipient, NotificationStatusHistory } from '../../models';
+import {
+  INotificationDetailTimeline,
+  LegalFactId,
+  NotificationDetailRecipient,
+  NotificationStatusHistory,
+} from '../../models';
 import { getNotificationStatusInfos } from '../../utility';
 import { getLocalizedOrDefaultLabel } from '../../utility/localization.utility';
+import NotificationTimelineEventDescription from './NotificationEventsTimeline/NotificationTimelineEventDescription';
 
 type NotificationTimelineBoxProps = {
   statusHistory: Array<NotificationStatusHistory>;
   recipients: Array<NotificationDetailRecipient>;
   isParty: boolean;
   onTimelineClick?: () => void;
+  clickHandler: (legalFactId: LegalFactId) => void;
+};
+
+const legacyStatusHasStepsToShow = (events: Array<INotificationDetailTimeline>) =>
+  events.some((s) => !s.hidden);
+
+const getLegacyStatusLegalFacts = (events?: Array<INotificationDetailTimeline>) => {
+  if (!events) {
+    return [];
+  }
+  const legalFactsIds = events.reduce((arr, s) => {
+    if (s.legalFactsIds && s.hidden) {
+      return arr.concat(s.legalFactsIds);
+    }
+    return arr;
+  }, [] as Array<LegalFactId>);
+
+  return legacyStatusHasStepsToShow(events) ? [] : legalFactsIds;
 };
 
 const NotificationTimelineBox = ({
@@ -18,6 +42,7 @@ const NotificationTimelineBox = ({
   recipients,
   isParty,
   onTimelineClick,
+  clickHandler,
 }: NotificationTimelineBoxProps) => {
   if (statusHistory.length === 0) {
     return null;
@@ -28,6 +53,8 @@ const NotificationTimelineBox = ({
     recipients,
     isParty,
   });
+
+  const legalFactsIds = getLegacyStatusLegalFacts(statusHistory[0].steps);
 
   return (
     <MIPaper padding={24} data-testid="NotificationDetailTimeline">
@@ -44,7 +71,13 @@ const NotificationTimelineBox = ({
           label={notificationStatusInfos.label}
           sx={{ my: 1, width: 'fit-content' }}
         />
-        <Typography variant="body2">{notificationStatusInfos.description}</Typography>
+        <Typography variant="body2">
+          <NotificationTimelineEventDescription
+            legalFactsIds={legalFactsIds}
+            description={notificationStatusInfos.description}
+            clickHandler={clickHandler}
+          />
+        </Typography>
         <MIButton
           aria-label={getLocalizedOrDefaultLabel(
             'notifications',

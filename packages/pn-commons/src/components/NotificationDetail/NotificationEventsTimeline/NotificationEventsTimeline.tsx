@@ -1,8 +1,7 @@
 import { Fragment, useMemo } from 'react';
-import { Trans } from 'react-i18next';
 
 import { Box, Divider, Stack, Typography } from '@mui/material';
-import { MIButton, MITimeline, MITimelineItem } from '@pagopa/mui-italia';
+import { MITimeline, MITimelineItem } from '@pagopa/mui-italia';
 
 import { NotificationStatus } from '../../../models';
 import { LegalFactId, NotificationDetailRecipient } from '../../../models/NotificationDetail';
@@ -14,6 +13,7 @@ import {
 } from '../../../utility/notificationTimeline.utility';
 import ReworkedStatusTag from '../ReworkedStatusTag';
 import NotificationTimelineEventDate from './NotificationTimelineEventDate';
+import NotificationTimelineEventDescription from './NotificationTimelineEventDescription';
 import NotificationTimelineEventItem from './NotificationTimelineEventItem';
 import NotificationTimelineGroupItem from './NotificationTimelineGroupItem';
 import { getMultiAttemptGroupIds } from './timelineGroupHeader.config';
@@ -76,27 +76,11 @@ const NotificationEventsTimeline = ({
                 <Stack gap={1.5} alignItems="flex-start">
                   {status.status !== NotificationStatus.DELIVERING && (
                     <Typography fontSize="14px" fontWeight={400}>
-                      <Trans
-                        i18nKey="description" // this is fake and is needed to run trans functionality
-                        t={() => description}
-                        components={
-                          legalFactsIds.length > 0
-                            ? [
-                                <MIButton
-                                  key="legalFact"
-                                  variant="text"
-                                  onClick={() => clickHandler(legalFactsIds![0])}
-                                  sx={{
-                                    textDecoration: 'underline',
-                                    display: 'inline',
-                                    fontWeight: 400,
-                                    fontSize: '14px',
-                                    verticalAlign: 'baseline',
-                                  }}
-                                />,
-                              ]
-                            : []
-                        }
+                      <NotificationTimelineEventDescription
+                        description={description}
+                        legalFactsIds={legalFactsIds}
+                        clickHandler={clickHandler}
+                        slotProps={{ button: { sx: { fontSize: '14px' } } }}
                       />{' '}
                       <NotificationTimelineEventDate date={status.activeFrom} language={language} />
                     </Typography>
