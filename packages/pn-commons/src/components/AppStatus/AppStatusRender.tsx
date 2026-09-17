@@ -146,7 +146,7 @@ export const AppStatusRender: React.FC<Props> = ({
               data-testid="appStatus-lastCheck"
               id="appStatusLastCheck"
             >
-              <Typography variant="caption" sx={{ mt: 2, color: 'text.secondary' }}>
+              <Typography component="h2" variant="caption" sx={{ mt: 2, color: 'text.secondary' }}>
                 {lastCheckLegend}
               </Typography>
             </Stack>
@@ -154,7 +154,7 @@ export const AppStatusRender: React.FC<Props> = ({
         </ApiErrorWrapper>
 
         {/* Titolo elenco di downtime */}
-        <Typography variant="h6" sx={{ mt: '36px', mb: 2 }}>
+        <Typography component="h2" variant="h6" sx={{ mt: '36px', mb: 2 }}>
           {downtimeListTitle}
         </Typography>
 

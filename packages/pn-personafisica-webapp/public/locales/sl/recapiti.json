@@ -187,6 +187,13 @@
     "description-enabled": "Ko je obvestilo za vas, ga prejmete neposredno v aplikaciji in lahko plačate morebitne stroške.",
     "enable": "Aktivirajte SEND na IO",
     "download": "Prenesite aplikacijo IO",
+    "download-modal": {
+      "title": "Za nadaljevanje moraš prenesti aplikacijo IO in se registrirati",
+      "subtitle": "Skeniraj QR-kodo z napravo, da preneseš aplikacijo, ali pa jo poišči v svoji trgovini z aplikacijami.",
+      "qr-code-alt": "QR-koda za prenos aplikacije IO",
+      "instructions": "Odpri jo, prijavi se s SPID ali CIE in dokončaj registracijo.",
+      "cta": "Opravljeno!"
+    },
     "disable-modal": {
       "title": "Deaktivirajte SEND na aplikaciji IO",
       "content": "Če potrdite, ne boste več prejemali obvestil SEND v aplikaciji.",

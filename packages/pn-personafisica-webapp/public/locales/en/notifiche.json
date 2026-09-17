@@ -145,8 +145,8 @@
         "duplicated": "This notification has already been paid. The status will be updated shortly."
       },
       "error-payment": "Select a Payment Notice",
-      "error-payment-failed-single": "There was a problem with a Payment Notice. Press Reload to try again. If the error persists, contact the support team.",
-      "error-payment-failed-multiple": "There was a problem with multiple Payment Notices. Press Reload to try again. If the error persists, contact the support team.",
+      "error-payment-failed-single": "There was a problem with a payment notice. Press <0>Reload</0> to try again; if the error persists, contact support.",
+      "error-payment-failed-multiple": "There was a problem with multiple payment notices. Press <0>Reload</0> to try again; if the error persists, contact support.",
       "tpp-expired-error-title": "The connection with the bank has expired.",
       "tpp-expired-error-description": "To restore it, access this notification again using the message you received on your bank's app."
     },
