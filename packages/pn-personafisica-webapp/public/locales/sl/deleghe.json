@@ -54,7 +54,7 @@
     "createdTitle": "Zahteva za prenos pooblastila je bila ustvarjena",
     "createdDescription": "Delite potrditveno kodo s pooblaščencem: moral jo bo vnesti, ko se bo prvič prijavil v SEND in sprejeti svojo zahtevo.",
     "title": "Dodajte prenos pooblastila",
-    "subtitle": "Vnesi podatke fizične ali pravne osebe, ki jo želiš pooblastiti za branje svojih obvestil.",
+    "subtitle": "Vnesi podatke fizične ali pravne osebe, ki jo želiš pooblastiti za branje obvestil {{organizationName}}.",
     "form": {
       "personType": "Pravni subjekt:",
       "naturalPerson": "Fizična oseba",
