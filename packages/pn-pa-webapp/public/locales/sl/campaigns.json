@@ -1,0 +1,12 @@
+{
+  "list": {
+    "title": "Kampanje",
+    "id": "Koda ID",
+    "open-aria-label": "Odpri kampanjo \"{{name}}\"",
+    "empty-state": {
+      "no-campaigns": "Tukaj boste videli kampanje, ki jih je poslal organ",
+      "generic-error": "Kampanj ni bilo mogoče pridobiti.",
+      "generic-error-cta": "Poskusite znova"
+    }
+  }
+}
