@@ -104,10 +104,6 @@
       "title": "Fehler",
       "message": "Vollmacht nicht gefunden"
     },
-    "delivery_mandate_not_found": {
-      "title": "Fehler",
-      "message": "Diese Vollmacht ist nicht mehr aktiv."
-    },
     "already_exists": {
       "title": "Vollmacht bereits vorhanden",
       "message": "Die angegebene Person hat bereits eine Vollmacht. Lösche sie und erstelle eine neue."
@@ -127,10 +123,6 @@
     "fiscal_code": {
       "title": "Steuernummer ungültig",
       "message": "Die eingegebene Steuernummer ist ungültig"
-    },
-    "invalid_parameter": {
-      "title": "Daten ungültig",
-      "message": "Eine oder mehrere der eingegebenen Daten sind ungültig"
     }
   }
 }

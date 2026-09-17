@@ -124,8 +124,8 @@
       "error-payment-failed-multiple": "Un problème est survenu avec plusieurs avis de paiement. Appuyez sur Recharger pour réessayer. Si l’erreur persiste, contactez l’assistance.",
       "status": {
         "title": "Statut",
-        "succeded": "Payé",
-        "succeded-tooltip": "Le paiement a bien été envoyé.",
+        "succeeded": "Payé",
+        "succeeded-tooltip": "Le paiement a bien été envoyé.",
         "failed": "Expiré",
         "failed-tooltip": "L’alerte a expiré et il n’est plus possible de la payer. Pour plus d’informations, contactez l’organisme expéditeur.",
         "inprogress": "En cours de traitement",

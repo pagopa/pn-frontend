@@ -124,8 +124,8 @@
       "error-payment-failed-multiple": "There was a problem with multiple Payment Notices. Press Reload to try again. If the error persists, contact the support team.",
       "status": {
         "title": "Status",
-        "succeded": "Paid",
-        "succeded-tooltip": "Your payment has been sent successfully.",
+        "succeeded": "Paid",
+        "succeeded-tooltip": "Your payment has been sent successfully.",
         "failed": "Expired",
         "failed-tooltip": "The notice has expired and can no longer be paid. For more information, please contact the sender.",
         "inprogress": "Processing",
