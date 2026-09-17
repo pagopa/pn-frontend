@@ -13,15 +13,17 @@ type NotificationTimelineBoxProps = {
   isParty: boolean;
   onTimelineClick?: () => void;
   clickHandler: (legalFactId: LegalFactId) => void;
+  isNewTimelineCopyEnabled?: boolean;
 };
 
-const NotificationTimelineBox = ({
+const NotificationTimelineBox: React.FC<NotificationTimelineBoxProps> = ({
   statusHistory,
   recipients,
   isParty,
   onTimelineClick,
   clickHandler,
-}: NotificationTimelineBoxProps) => {
+  isNewTimelineCopyEnabled = false,
+}) => {
   if (statusHistory.length === 0) {
     return null;
   }
@@ -52,6 +54,7 @@ const NotificationTimelineBox = ({
           description={notificationStatusInfos.description}
           clickHandler={clickHandler}
           slotProps={{ typography: { variant: 'body2' } }}
+          isNewTimelineCopyEnabled={isNewTimelineCopyEnabled}
         />
         <MIButton
           aria-label={getLocalizedOrDefaultLabel(

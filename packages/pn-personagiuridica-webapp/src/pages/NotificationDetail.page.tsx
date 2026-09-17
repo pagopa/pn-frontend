@@ -93,6 +93,7 @@ const NotificationDetail = () => {
     FACSIMILE_DE,
     FACSIMILE_SL,
     SELFCARE_CDN_URL,
+    IS_NEW_TIMELINE_COPY_ENABLED,
   } = getConfiguration();
   const navigate = useNavigate();
 
@@ -623,6 +624,7 @@ const NotificationDetail = () => {
                   isParty={false}
                   onTimelineClick={handleGoToTimeline}
                   clickHandler={() => {}}
+                  isNewTimelineCopyEnabled={IS_NEW_TIMELINE_COPY_ENABLED}
                 />
               )}
               <NotificationDetailSection
