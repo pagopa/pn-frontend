@@ -83,7 +83,7 @@
     "createdTitle": "Authority request created",
     "createdDescription": "Share the verification code with the authorised representative: they will have to enter it when first logging in to SEND, and accept the request.",
     "title": "Add an authority",
-    "subtitle": "Enter the details of the person or entity you wish to authorise to read your notifications.",
+    "subtitle": "Enter the details of the natural or legal person you want to delegate to read the notifications of {{organizationName}}.",
     "form": {
       "personType": "Legal entity:",
       "naturalPerson": "Natural person",
@@ -118,7 +118,9 @@
       "businessName": {
         "required": "Company name is required"
       },
-      "entiSelected": { "required": "Please select at least one organisation" },
+      "entiSelected": {
+        "required": "Please select at least one organisation"
+      },
       "expirationDate": {
         "required": "Authority end date is required",
         "wrong": "Incorrect date"
