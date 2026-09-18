@@ -82,8 +82,10 @@ const NotificationEventsTimeline = ({
                       typography: { sx: { fontSize: '14px', fontWeight: 400 } },
                       button: { sx: { fontSize: '14px' } },
                     }}
-                    isNewTimelineCopyEnabled={isNewTimelineCopyEnabled}
                     disableDownloads={disableDownloads}
+                    recipients={recipients}
+                    isSenderTimeline={isSenderTimeline}
+                    isNewTimelineCopyEnabled={isNewTimelineCopyEnabled}
                   />
                 )}
 

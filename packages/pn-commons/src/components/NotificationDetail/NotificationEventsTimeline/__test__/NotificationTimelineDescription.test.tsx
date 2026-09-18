@@ -4,8 +4,10 @@ import {
   INotificationDetailTimeline,
   LegalFactId,
   LegalFactType,
+  NotificationDetailRecipient,
   NotificationStatus,
   NotificationStatusHistory,
+  RecipientType,
   TimelineCategory,
 } from '../../../../models';
 import {
@@ -163,6 +165,81 @@ describe('NotificationTimelineDescription', () => {
 
     expect(clickHandler).toHaveBeenNthCalledWith(1, firstLegalFact);
     expect(clickHandler).toHaveBeenNthCalledWith(2, secondLegalFact);
+  });
+
+  it('shows the recipient next to status legal facts for a multi-recipient sender timeline', () => {
+    const recipients: Array<NotificationDetailRecipient> = [
+      {
+        recipientType: RecipientType.PF,
+        denomination: 'Destinatario Test Uno',
+        taxId: 'TSTTNO00A00A000A',
+      },
+      {
+        recipientType: RecipientType.PF,
+        denomination: 'Destinatario Test Due',
+        taxId: 'TSTTDU00A00A000B',
+      },
+    ];
+    const firstEvent = createEvent({
+      elementId: 'FIRST_HIDDEN_EVENT',
+      details: { recIndex: 0 },
+      isHidden: true,
+      legalFactsIds: [firstLegalFact],
+    });
+    const secondEvent = createEvent({
+      elementId: 'SECOND_HIDDEN_EVENT',
+      details: { recIndex: 1 },
+      isHidden: true,
+      legalFactsIds: [secondLegalFact],
+    });
+
+    const { getAllByTestId } = render(
+      <NotificationTimelineDescription
+        description="Descrizione con attestazioni."
+        status={createStatus([firstEvent, secondEvent])}
+        recipients={recipients}
+        isSenderTimeline
+        clickHandler={clickHandler}
+        isNewTimelineCopyEnabled
+      />
+    );
+
+    const recipientLabels = getAllByTestId('legal-fact-recipient');
+    expect(recipientLabels).toHaveLength(2);
+    expect(recipientLabels[0]).toHaveTextContent('Destinatario Test Uno - TSTTNO00A00A000A');
+    expect(recipientLabels[1]).toHaveTextContent('Destinatario Test Due - TSTTDU00A00A000B');
+  });
+
+  it('does not show the recipient next to legal facts outside the sender timeline', () => {
+    const recipients: Array<NotificationDetailRecipient> = [
+      {
+        recipientType: RecipientType.PF,
+        denomination: 'Destinatario Test Uno',
+        taxId: 'TSTTNO00A00A000A',
+      },
+      {
+        recipientType: RecipientType.PF,
+        denomination: 'Destinatario Test Due',
+        taxId: 'TSTTDU00A00A000B',
+      },
+    ];
+    const event = createEvent({
+      details: { recIndex: 0 },
+      isHidden: true,
+      legalFactsIds: [firstLegalFact, secondLegalFact],
+    });
+
+    const { queryByTestId } = render(
+      <NotificationTimelineDescription
+        description="Descrizione con attestazioni."
+        status={createStatus([event])}
+        recipients={recipients}
+        clickHandler={clickHandler}
+        isNewTimelineCopyEnabled
+      />
+    );
+
+    expect(queryByTestId('legal-fact-recipient')).not.toBeInTheDocument();
   });
 
   it('extracts legal facts from a status only when all its events are hidden', () => {

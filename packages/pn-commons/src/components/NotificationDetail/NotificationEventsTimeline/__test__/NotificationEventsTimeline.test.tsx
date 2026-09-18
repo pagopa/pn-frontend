@@ -379,7 +379,7 @@ describe('NotificationEventsTimeline', () => {
     expect(clickHandler).toHaveBeenCalledWith(legalFact);
   });
 
-  it('renders status steps when at least one flattened event is visible', () => {
+  it('renders both hidden and visible status events when at least one event is visible and the new copy is enabled', () => {
     const hiddenStep = hiddenEventStepOfRecipient(0);
     const visibleStep: NotificationTimelineStep = {
       stepType: 'EVENT',
@@ -393,7 +393,7 @@ describe('NotificationEventsTimeline', () => {
       },
     };
 
-    const { getByTestId } = render(
+    const { getAllByTestId } = render(
       <NotificationEventsTimeline
         recipients={recipients}
         statusHistory={[
@@ -408,6 +408,7 @@ describe('NotificationEventsTimeline', () => {
       />
     );
 
-    expect(getByTestId('timeline-event')).toBeInTheDocument();
+    const timelineEvents = getAllByTestId('timeline-event');
+    expect(timelineEvents).toHaveLength(2);
   });
 });
