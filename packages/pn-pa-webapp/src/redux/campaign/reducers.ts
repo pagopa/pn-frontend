@@ -2,13 +2,15 @@ import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 
 import {
   BffCampaignDetailResponseV1,
+  BffInformalSenderNotificationSearchResponse,
   CampaignSummary,
 } from '../../generated-client/informal-notifications';
-import { getCampaignDetail, getCampaigns } from './actions';
+import { getCampaignCommunications, getCampaignDetail, getCampaigns } from './actions';
 
 const initialState = {
   campaigns: [] as Array<CampaignSummary>,
   campaignDetail: {} as BffCampaignDetailResponseV1,
+  campaignCommunications: {} as BffInformalSenderNotificationSearchResponse,
   pagination: {
     nextPagesKey: [] as Array<string>,
     size: 10,
@@ -62,6 +64,10 @@ const campaignSlice = createSlice({
 
     builder.addCase(getCampaignDetail.fulfilled, (state, action) => {
       state.campaignDetail = action.payload;
+    });
+
+    builder.addCase(getCampaignCommunications.fulfilled, (state, action) => {
+      state.campaignCommunications = action.payload;
     });
   },
 });

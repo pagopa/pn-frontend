@@ -4,12 +4,13 @@ import { campaignsDTO, campaignsPage2DTO } from '../../../__mocks__/Campaigns.mo
 import { apiClient } from '../../../api/apiClients';
 import {
   BffCampaignDetailResponseV1,
+  BffCampaignSearchResponseV1,
+  BffInformalSenderNotificationSearchResponse,
   CampaignStatus,
   ChannelType,
 } from '../../../generated-client/informal-notifications';
-import { BffCampaignSearchResponseV1 } from '../../../generated-client/informal-notifications';
 import { store } from '../../store';
-import { getCampaignDetail, getCampaigns } from '../actions';
+import { getCampaignCommunications, getCampaignDetail, getCampaigns } from '../actions';
 import campaignSlice, { resetCampaignDetail } from '../reducers';
 
 const campaign: BffCampaignDetailResponseV1 = {
@@ -20,6 +21,12 @@ const campaign: BffCampaignDetailResponseV1 = {
   campaignStatus: CampaignStatus.InProgress,
   serviceName: 'Servizi idrici',
   channels: [ChannelType.Io, ChannelType.Email, ChannelType.Pec],
+};
+
+const campaignCommunications: BffInformalSenderNotificationSearchResponse = {
+  resultsPage: [],
+  moreResult: false,
+  nextPagesKey: [],
 };
 
 describe('Campaign redux state tests', () => {
@@ -46,6 +53,7 @@ describe('Campaign redux state tests', () => {
     expect(state).toEqual({
       campaigns: [],
       campaignDetail: {},
+      campaignCommunications: {},
       pagination: {
         nextPagesKey: [],
         size: 10,
@@ -134,6 +142,7 @@ describe('Campaign redux state tests', () => {
     const stateWithCampaign = {
       campaigns: [],
       campaignDetail: campaign,
+      campaignCommunications: {},
       pagination: {
         nextPagesKey: [] as Array<string>,
         size: 10,
@@ -147,6 +156,7 @@ describe('Campaign redux state tests', () => {
     expect(state).toEqual({
       campaigns: [],
       campaignDetail: {},
+      campaignCommunications: {},
       pagination: {
         nextPagesKey: [],
         size: 10,
@@ -154,5 +164,15 @@ describe('Campaign redux state tests', () => {
         moreResult: false,
       },
     });
+  });
+
+  it('Should set campaign communications when getCampaignCommunications is fulfilled', () => {
+    const action = getCampaignCommunications.fulfilled(campaignCommunications, '', {
+      campaignId: campaign.campaignId,
+    });
+
+    const state = campaignSlice.reducer(undefined, action);
+
+    expect(state.campaignCommunications).toEqual(campaignCommunications);
   });
 });
