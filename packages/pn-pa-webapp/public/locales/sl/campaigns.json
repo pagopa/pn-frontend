@@ -14,7 +14,7 @@
     "title": "Podrobnosti kampanje",
     "creation-date": "Datum ustvarjanja",
     "service-name": "Ime storitve",
-    "channels": "Kanali",
+    "channels-label": "Kanali",
     "empty-state": {
       "generic-error": "Podrobnosti kampanje ni bilo mogoče pridobiti.",
       "generic-error-cta": "Poskusite znova",
@@ -23,6 +23,13 @@
     "breadcrumb": {
       "back": "Nazaj",
       "campaigns": "Kampanje"
+    },
+    "channels": {
+      "IO": "IO",
+      "SMS": "SMS",
+      "EMAIL": "E-pošta",
+      "ANALOG": "Poštna storitev",
+      "PEC": "PEC"
     }
   }
 }

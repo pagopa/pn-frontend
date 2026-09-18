@@ -14,7 +14,7 @@
     "title": "Dettaglio campagna",
     "creation-date": "Data di creazione",
     "service-name": "Nome servizio",
-    "channels": "Canali",
+    "channels-label": "Canali",
     "empty-state": {
       "generic-error": "Non è stato possibile recuperare i dettagli della campagna.",
       "generic-error-cta": "Prova di nuovo",
@@ -23,6 +23,13 @@
     "breadcrumb": {
       "back": "Indietro",
       "campaigns": "Campagne"
+    },
+    "channels": {
+      "IO": "IO",
+      "SMS": "SMS",
+      "EMAIL": "Email",
+      "ANALOG": "Servizio postale",
+      "PEC": "PEC"
     }
   }
 }
