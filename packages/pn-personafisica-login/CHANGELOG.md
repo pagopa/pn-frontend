@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.26.1-RC.0](https://github.com/pagopa/pn-frontend/compare/v2.26.0...v2.26.1-RC.0) (2026-09-18)
+
+### Bug Fixes
+
+* **PN-21556:** removed blue background from spid selection buttons ([#2060](https://github.com/pagopa/pn-frontend/issues/2060)) ([8b0ccd6](https://github.com/pagopa/pn-frontend/commit/8b0ccd6f70e1fbf0c086f8a5a285b5a50f26c658))
+
+
 ## [2.25.1](https://fbianchicodermine-GitHub/pagopa/pn-frontend/compare/v2.25.1-RC.0...v2.25.1) (2026-09-16)
 
 **Note:** Version bump only for package @pagopa-pn/pn-personafisica-login
