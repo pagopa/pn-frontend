@@ -204,23 +204,18 @@ describe('NotificationTimelineDescription', () => {
       />
     );
 
-    const recipientLabels = getAllByTestId('legal-fact-recipient');
-    expect(recipientLabels).toHaveLength(2);
-    expect(recipientLabels[0]).toHaveTextContent('Destinatario Test Uno - TSTTNO00A00A000A');
-    expect(recipientLabels[1]).toHaveTextContent('Destinatario Test Due - TSTTDU00A00A000B');
+    const legalFactsLabel = getAllByTestId('download-legalfact');
+    expect(legalFactsLabel).toHaveLength(2);
+    expect(legalFactsLabel[0]).toHaveTextContent('Destinatario Test Uno (TSTTNO00A00A000A)');
+    expect(legalFactsLabel[1]).toHaveTextContent('Destinatario Test Due (TSTTDU00A00A000B)');
   });
 
-  it('does not show the recipient next to legal facts outside the sender timeline', () => {
+  it('does not show the recipient next to legal facts outside the sender timeline and with only one recipient', () => {
     const recipients: Array<NotificationDetailRecipient> = [
       {
         recipientType: RecipientType.PF,
         denomination: 'Destinatario Test Uno',
         taxId: 'TSTTNO00A00A000A',
-      },
-      {
-        recipientType: RecipientType.PF,
-        denomination: 'Destinatario Test Due',
-        taxId: 'TSTTDU00A00A000B',
       },
     ];
     const event = createEvent({
@@ -229,7 +224,7 @@ describe('NotificationTimelineDescription', () => {
       legalFactsIds: [firstLegalFact, secondLegalFact],
     });
 
-    const { queryByTestId } = render(
+    const { getAllByTestId } = render(
       <NotificationTimelineDescription
         description="Descrizione con attestazioni."
         status={createStatus([event])}
@@ -239,7 +234,10 @@ describe('NotificationTimelineDescription', () => {
       />
     );
 
-    expect(queryByTestId('legal-fact-recipient')).not.toBeInTheDocument();
+    const legalFactsLabel = getAllByTestId('download-legalfact');
+    expect(legalFactsLabel).toHaveLength(2);
+    expect(legalFactsLabel[0]).not.toHaveTextContent('Destinatario Test Uno (TSTTNO00A00A000A)');
+    expect(legalFactsLabel[1]).not.toHaveTextContent('Destinatario Test Uno (TSTTNO00A00A000A)');
   });
 
   it('extracts legal facts from a status only when all its events are hidden', () => {

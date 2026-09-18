@@ -83,7 +83,6 @@ const NotificationTimelineEventItem: React.FC<Props> = ({
       spacing={0.5}
       sx={{ overflowWrap: 'anywhere', display: asBullet ? 'list-item' : 'flex', py: 1 }}
       data-testid="timeline-event"
-      id={event.elementId}
     >
       <Stack component="span" direction="row" alignItems="center" gap={1}>
         {!asBullet && statusInfo.label}

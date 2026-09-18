@@ -45,7 +45,16 @@ const groupOfRecipient = (
   channel: 'AR_REGISTERED_LETTER',
   attempt: 1,
   hasReworkedEvents: false,
-  events: [],
+  events: [
+    {
+      elementId: `${groupId}.VISIBLE_EVENT`,
+      timestamp: '2026-08-06T09:14:58.508308Z',
+      category: TimelineCategory.REQUEST_ACCEPTED,
+      details: { recIndex },
+      legalFactsIds: [],
+      isHidden: false,
+    },
+  ],
 });
 
 const hiddenEventStepOfRecipient = (recIndex: number): NotificationTimelineStep => ({
@@ -256,8 +265,8 @@ describe('NotificationEventsTimeline', () => {
     ]);
   });
 
-  it('still shows the recipient on a status made of a single, standalone event step, since it is its first occurrence', () => {
-    const { queryAllByTestId } = render(
+  it('shows the recipient in the legal fact label when all status events are hidden', () => {
+    const { getByTestId, queryByTestId } = render(
       <NotificationEventsTimeline
         recipients={multiRecipients}
         statusHistory={[
@@ -272,9 +281,10 @@ describe('NotificationEventsTimeline', () => {
       />
     );
 
-    const recipientLabels = queryAllByTestId('timeline-group-recipient');
-    expect(recipientLabels).toHaveLength(1);
-    expect(recipientLabels[0]).toHaveTextContent('Utente Test Due - TSTUTN00A07A002H');
+    expect(queryByTestId('timeline-group-recipient')).not.toBeInTheDocument();
+    expect(getByTestId('download-legalfact')).toHaveTextContent(
+      'Utente Test Due (TSTUTN00A07A002H)'
+    );
   });
 
   it('does not show the recipient on single recipient notifications', () => {

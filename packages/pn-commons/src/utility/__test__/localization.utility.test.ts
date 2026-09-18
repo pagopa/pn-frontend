@@ -6,10 +6,6 @@ import {
 } from '../localization.utility';
 
 describe('localization service', () => {
-  afterEach(() => {
-    initLocalizationExists();
-  });
-
   it('localize label (default label)', () => {
     const label = getLocalizedOrDefaultLabel('', 'mocked.path', 'default label');
     expect(label).toBe('default label');
@@ -45,7 +41,15 @@ describe('localization service', () => {
   });
 
   it('returns true when the localization key exists', () => {
+    initLocalization((namespace, path) => namespace + ' ' + path, {
+      common: 'common',
+      notifications: 'notifiche',
+      appStatus: 'appStatus',
+      delegations: 'deleghe',
+      recapiti: 'recapiti',
+    });
     initLocalizationExists((namespace, path) => {
+      console.log('----------------------- ao', namespace, path);
       return namespace === 'notifiche' && path === 'mocked.path';
     });
 
