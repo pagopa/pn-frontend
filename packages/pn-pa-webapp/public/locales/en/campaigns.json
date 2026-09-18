@@ -8,5 +8,28 @@
       "generic-error": "The campaigns could not be retrieved.",
       "generic-error-cta": "Try again"
     }
+  },
+
+  "detail": {
+    "title": "Campaign details",
+    "creation-date": "Creation date",
+    "service-name": "Service name",
+    "channels-label": "Channels",
+    "empty-state": {
+      "generic-error": "Unable to retrieve campaign details.",
+      "generic-error-cta": "Try again",
+      "campaign-title-placeholder": "[Campaign title]"
+    },
+    "breadcrumb": {
+      "back": "Back",
+      "campaigns": "Campaigns"
+    },
+    "channels": {
+      "IO": "IO",
+      "SMS": "SMS",
+      "EMAIL": "Email",
+      "ANALOG": "Postal service",
+      "PEC": "PEC"
+    }
   }
 }

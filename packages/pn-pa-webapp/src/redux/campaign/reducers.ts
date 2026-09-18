@@ -1,21 +1,42 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 
-import { CampaignSummary } from '../../generated-client/informal-notifications';
-import { getCampaigns } from './actions';
+import {
+  BffCampaignDetailResponseV1,
+  CampaignSummary,
+} from '../../generated-client/informal-notifications';
+import { getCampaignDetail, getCampaigns } from './actions';
+
+const initialState = {
+  campaigns: [] as Array<CampaignSummary>,
+  campaignDetail: {} as BffCampaignDetailResponseV1,
+  pagination: {
+    nextPagesKey: [] as Array<string>,
+    size: 10,
+    page: 0,
+    moreResult: false,
+  },
+};
 
 /* eslint-disable functional/immutable-data */
 const campaignSlice = createSlice({
   name: 'campaignSlice',
-  initialState: {
-    campaigns: [] as Array<CampaignSummary>,
-    pagination: {
-      nextPagesKey: [] as Array<string>,
-      size: 10,
-      page: 0,
-      moreResult: false,
+  initialState,
+  reducers: {
+    setPagination: (state, action: PayloadAction<{ page: number; size: number }>) => {
+      if (state.pagination.size !== action.payload.size) {
+        // reset pagination
+        state.pagination.nextPagesKey = [];
+        state.pagination.moreResult = false;
+      }
+
+      state.pagination.size = action.payload.size;
+      state.pagination.page = action.payload.page;
+    },
+
+    resetCampaignDetail: (state) => {
+      state.campaignDetail = {} as BffCampaignDetailResponseV1;
     },
   },
-  reducers: {},
   extraReducers: (builder) => {
     builder.addCase(getCampaigns.fulfilled, (state, action) => {
       const { page, size } = action.meta.arg;
@@ -38,7 +59,13 @@ const campaignSlice = createSlice({
         }
       }
     });
+
+    builder.addCase(getCampaignDetail.fulfilled, (state, action) => {
+      state.campaignDetail = action.payload;
+    });
   },
 });
+
+export const { setPagination, resetCampaignDetail } = campaignSlice.actions;
 
 export default campaignSlice;

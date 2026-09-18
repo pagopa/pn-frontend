@@ -8,5 +8,28 @@
       "generic-error": "Non è stato possibile recuperare le campagne.",
       "generic-error-cta": "Prova di nuovo"
     }
+  },
+
+  "detail": {
+    "title": "Dettaglio campagna",
+    "creation-date": "Data di creazione",
+    "service-name": "Nome servizio",
+    "channels-label": "Canali",
+    "empty-state": {
+      "generic-error": "Non è stato possibile recuperare i dettagli della campagna.",
+      "generic-error-cta": "Prova di nuovo",
+      "campaign-title-placeholder": "[Titolo campagna]"
+    },
+    "breadcrumb": {
+      "back": "Indietro",
+      "campaigns": "Campagne"
+    },
+    "channels": {
+      "IO": "IO",
+      "SMS": "SMS",
+      "EMAIL": "Email",
+      "ANALOG": "Servizio postale",
+      "PEC": "PEC"
+    }
   }
 }
