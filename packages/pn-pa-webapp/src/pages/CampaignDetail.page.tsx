@@ -3,10 +3,11 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
 
 import { Box } from '@mui/material';
-import { ApiError, EmptyErrorState, LoadingPage, TitleBox, useErrors } from '@pagopa-pn/pn-commons';
+import { ApiError, EmptyErrorState, TitleBox, useErrors } from '@pagopa-pn/pn-commons';
 import { MIBreadcrumbItem, MIBreadcrumbs } from '@pagopa/mui-italia';
 
 import PnCampaignDetailCard from '../components/Campaigns/PnCampaignDetailCard';
+import PnCampaignDetailLoading from '../components/Campaigns/PnCampaignDetailLoading';
 import * as routes from '../navigation/routes.const';
 import { CAMPAIGN_ACTIONS, getCampaignDetail } from '../redux/campaign/actions';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
@@ -60,7 +61,7 @@ const CampaignDetail: React.FC = () => {
         p: 3,
         display: 'flex',
         flexDirection: 'column',
-        backgroundColor: 'grey.100',
+        backgroundColor: 'grey.50',
       }}
     >
       {breadcrumb}
@@ -80,14 +81,7 @@ const CampaignDetail: React.FC = () => {
         />
       )}
 
-      {!hasCampaignDetailApiError && !pageReady && (
-        <LoadingPage
-          sx={{
-            backgroundColor: 'background.paper',
-            minHeight: '60vh',
-          }}
-        />
-      )}
+      {!hasCampaignDetailApiError && !pageReady && <PnCampaignDetailLoading />}
 
       {!hasCampaignDetailApiError && pageReady && (
         <>
@@ -95,6 +89,7 @@ const CampaignDetail: React.FC = () => {
             title={campaign.title}
             subTitle={campaign.description}
             mbTitle={1}
+            mbSubTitle={2}
             variantSubTitle="body1"
           />
 
