@@ -77,7 +77,7 @@ const NotificationDetail: React.FC = () => {
   const dispatch = useAppDispatch();
   const { hasApiErrors } = useErrors();
   const notification = useAppSelector((state: RootState) => state.notificationState.notification);
-  const { DOWNTIME_EXAMPLE_LINK } = getConfiguration();
+  const { DOWNTIME_EXAMPLE_LINK, IS_NEW_TIMELINE_COPY_ENABLED } = getConfiguration();
 
   const downtimeEvents = useAppSelector(
     (state: RootState) => state.notificationState.downtimeEvents
@@ -475,6 +475,8 @@ const NotificationDetail: React.FC = () => {
                   recipients={notification.recipients}
                   isParty={true}
                   onTimelineClick={handleGoToTimeline}
+                  clickHandler={() => {}}
+                  isNewTimelineCopyEnabled={IS_NEW_TIMELINE_COPY_ENABLED}
                 />
               )}
               <NotificationDetailSection

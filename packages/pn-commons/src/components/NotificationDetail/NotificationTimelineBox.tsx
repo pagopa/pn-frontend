@@ -2,23 +2,28 @@ import KeyboardArrowRightRoundedIcon from '@mui/icons-material/KeyboardArrowRigh
 import { Stack, Typography } from '@mui/material';
 import { MIButton, MIChip, MIPaper } from '@pagopa/mui-italia';
 
-import { NotificationDetailRecipient, NotificationStatusHistory } from '../../models';
+import { LegalFactId, NotificationDetailRecipient, NotificationStatusHistory } from '../../models';
 import { getNotificationStatusInfos } from '../../utility';
 import { getLocalizedOrDefaultLabel } from '../../utility/localization.utility';
+import NotificationTimelineDescription from './NotificationEventsTimeline/NotificationTimelineDescription';
 
 type NotificationTimelineBoxProps = {
   statusHistory: Array<NotificationStatusHistory>;
   recipients: Array<NotificationDetailRecipient>;
   isParty: boolean;
   onTimelineClick?: () => void;
+  clickHandler: (legalFactId: LegalFactId) => void;
+  isNewTimelineCopyEnabled?: boolean;
 };
 
-const NotificationTimelineBox = ({
+const NotificationTimelineBox: React.FC<NotificationTimelineBoxProps> = ({
   statusHistory,
   recipients,
   isParty,
   onTimelineClick,
-}: NotificationTimelineBoxProps) => {
+  clickHandler,
+  isNewTimelineCopyEnabled = false,
+}) => {
   if (statusHistory.length === 0) {
     return null;
   }
@@ -44,7 +49,15 @@ const NotificationTimelineBox = ({
           label={notificationStatusInfos.label}
           sx={{ my: 1, width: 'fit-content' }}
         />
-        <Typography variant="body2">{notificationStatusInfos.description}</Typography>
+        <NotificationTimelineDescription
+          legacyStatus={statusHistory[0]}
+          description={notificationStatusInfos.description}
+          clickHandler={clickHandler}
+          slotProps={{ typography: { variant: 'body2' } }}
+          recipients={recipients}
+          isSenderTimeline={isParty}
+          isNewTimelineCopyEnabled={isNewTimelineCopyEnabled}
+        />
         <MIButton
           aria-label={getLocalizedOrDefaultLabel(
             'notifications',

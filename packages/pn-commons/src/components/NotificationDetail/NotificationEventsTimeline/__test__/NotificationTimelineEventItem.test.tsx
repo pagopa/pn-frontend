@@ -4,10 +4,7 @@ import { notificationTimelineDTO } from '../../../../__mocks__/NotificationTimel
 import { TimelineCategory } from '../../../../models/NotificationDetail';
 import { NotificationTimelineEvent } from '../../../../models/NotificationTimeline';
 import { fireEvent, render, within } from '../../../../test-utils';
-import {
-  getLegalFactLabel,
-  getNotificationTimelineStatusInfos,
-} from '../../../../utility/notification.utility';
+import { getNotificationTimelineStatusInfos } from '../../../../utility/notification.utility';
 import {
   flattenTimelineSteps,
   formatTimelineDate,
@@ -62,19 +59,58 @@ describe('NotificationTimelineEventItem', () => {
     expect(item).toHaveTextContent('status.reworked-status-not-valid');
   });
 
-  it('downloads the legal facts of a visible event', () => {
-    const { getAllByTestId } = renderEvent(eventWithLegalFacts);
-
+  it('renders the legal fact inline and downloads it when the new copy is enabled', () => {
     const legalFact = eventWithLegalFacts.legalFactsIds![0];
-    const legalFactButtons = getAllByTestId('download-legalfact-micro');
-    expect(legalFactButtons).toHaveLength(1);
-    expect(legalFactButtons[0]).toHaveTextContent(
-      getLegalFactLabel(eventWithLegalFacts, legalFact.category, legalFact.key)
+    const statusInfo = getNotificationTimelineStatusInfos(
+      eventWithLegalFacts,
+      recipients,
+      allEvents
     );
 
-    fireEvent.click(legalFactButtons[0]);
+    const eventWithInlineCopy: NotificationTimelineEvent = {
+      ...eventWithLegalFacts,
+    };
+
+    const { container, getByTestId } = renderEvent(eventWithInlineCopy, {
+      isNewTimelineCopyEnabled: true,
+    });
+
+    const inlineButton = getByTestId('download-legalfact-micro');
+
+    expect(container).toHaveTextContent(statusInfo!.description as string);
+    expect(inlineButton).toBeInTheDocument();
+
+    fireEvent.click(inlineButton);
+
     expect(clickHandler).toHaveBeenCalledTimes(1);
     expect(clickHandler).toHaveBeenCalledWith(legalFact);
+  });
+
+  it('does not render an event when all status events are hidden and the new copy is enabled', () => {
+    const firstHiddenEvent = {
+      ...hiddenEvent,
+      elementId: 'FIRST_HIDDEN_EVENT',
+    };
+    const secondHiddenEvent = {
+      ...hiddenEvent,
+      elementId: 'SECOND_HIDDEN_EVENT',
+    };
+
+    const { container } = renderEvent(firstHiddenEvent, {
+      allEvents: [firstHiddenEvent, secondHiddenEvent],
+      isNewTimelineCopyEnabled: true,
+    });
+
+    expect(container).toBeEmptyDOMElement();
+  });
+
+  it('still renders status events when at least one event is visible and the new copy is enabled', () => {
+    const { getByTestId } = renderEvent(visibleEvent, {
+      allEvents: [hiddenEvent, visibleEvent],
+      isNewTimelineCopyEnabled: true,
+    });
+
+    expect(getByTestId('timeline-event')).toBeInTheDocument();
   });
 
   it('renders only the legal facts of a hidden event, nothing if it has none', () => {
@@ -121,5 +157,45 @@ describe('NotificationTimelineEventItem', () => {
       disableDownloads: true,
     });
     expect(within(cancelledContainer).getByTestId('download-legalfact-micro')).toBeEnabled();
+  });
+
+  it('renders a visible event legal fact below the description when the new copy is disabled', () => {
+    const legalFact = eventWithLegalFacts.legalFactsIds![0];
+
+    const { getByRole } = renderEvent(eventWithLegalFacts, {
+      isNewTimelineCopyEnabled: false,
+    });
+
+    const legalFactButton = getByRole('button');
+
+    fireEvent.click(legalFactButton);
+
+    expect(clickHandler).toHaveBeenCalledTimes(1);
+    expect(clickHandler).toHaveBeenCalledWith(legalFact);
+  });
+
+  it('renders every legal fact below the description when an event has multiple legal facts', () => {
+    const secondLegalFact = {
+      ...eventWithLegalFacts.legalFactsIds![0],
+      key: 'safestorage://second-legal-fact.pdf',
+    };
+    const event = {
+      ...eventWithLegalFacts,
+      legalFactsIds: [eventWithLegalFacts.legalFactsIds![0], secondLegalFact],
+    };
+
+    const { getAllByRole } = renderEvent(event, {
+      isNewTimelineCopyEnabled: true,
+    });
+
+    const buttons = getAllByRole('button');
+
+    expect(buttons).toHaveLength(2);
+
+    fireEvent.click(buttons[0]);
+    fireEvent.click(buttons[1]);
+
+    expect(clickHandler).toHaveBeenNthCalledWith(1, event.legalFactsIds[0]);
+    expect(clickHandler).toHaveBeenNthCalledWith(2, secondLegalFact);
   });
 });
