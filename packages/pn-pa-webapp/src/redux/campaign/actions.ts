@@ -20,8 +20,8 @@ import {
 
 export enum CAMPAIGN_ACTIONS {
   GET_CAMPAIGNS = 'getCampaigns',
-  GET_CAMPAIGN_DETAIL = 'getCampaignDetail',
   GET_CAMPAIGN_COMMUNICATIONS = 'getCampaignCommunications',
+  GET_CAMPAIGN_DETAIL = 'getCampaignDetail',
 }
 
 interface GetCampaignsParams {
