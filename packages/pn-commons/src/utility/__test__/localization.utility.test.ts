@@ -49,7 +49,6 @@ describe('localization service', () => {
       recapiti: 'recapiti',
     });
     initLocalizationExists((namespace, path) => {
-      console.log('----------------------- ao', namespace, path);
       return namespace === 'notifiche' && path === 'mocked.path';
     });
 
