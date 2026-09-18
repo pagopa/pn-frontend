@@ -133,9 +133,9 @@
       }
     },
     "acts": "Priloženi dokumenti",
-    "download-message-available": "<0>Na spletu na voljo do 120 dni</0> od datuma, ko je obvestilo SEND začelo pravno veljati.",
+    "download-message-available": "<0>Na voljo na spletu do 120 dni</0> od datuma, ko je obvestilo SEND začelo pravno veljati za naslovnika.",
     "download-message-expired": "Dokumenti niso več na voljo na spletu.",
-    "download-aar-available": "<0>Na voljo na spletu 10 let</0> od datuma, ko je vročitev SEND postala pravno veljavna.",
+    "download-aar-available": "<0>Na voljo na spletu 10 let</0> od datuma, ko je obvestilo SEND začelo pravno veljati za naslovnika.",
     "download-aar-expired": "Potrdilo o prejemu ni več na voljo na spletu.",
     "download-files-link": "Kdaj se obvestilo zaključi?",
     "timeline-title": "Stanje obvestila",
