@@ -141,7 +141,7 @@ const NotificationTimeline: React.FC = () => {
   return (
     <>
       {hasNotificationSentApiError && (
-        <Box sx={{ p: 3 }}>
+        <Box sx={{ py: 3, px: { xs: 2, sm: 3 } }}>
           {properBreadcrumb}
           <ApiError onClick={fetchSentNotification} mt={3} apiId={timelineApiId} />
         </Box>
@@ -157,7 +157,7 @@ const NotificationTimeline: React.FC = () => {
       )}
 
       {!hasNotificationSentApiError && pageReady && (
-        <Box sx={{ p: 3, display: 'flex', flexDirection: 'column' }} gap={3}>
+        <Box sx={{ py: 3, px: { xs: 2, sm: 3 }, display: 'flex', flexDirection: 'column' }} gap={3}>
           {properBreadcrumb}
           <Stack>
             <Typography variant="h4" component="h1">

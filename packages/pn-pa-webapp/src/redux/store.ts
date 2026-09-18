@@ -6,6 +6,7 @@ import { Middleware, MiddlewareArray, configureStore } from '@reduxjs/toolkit';
 import apiKeysSlice from './apiKeys/reducers';
 import appStatusSlice from './appStatus/reducers';
 import userSlice from './auth/reducers';
+import campaignSlice from './campaign/reducers';
 import dashboardSlice from './dashboard/reducers';
 import newNotificationSlice from './newNotification/reducers';
 import notificationSlice from './notification/reducers';
@@ -20,6 +21,7 @@ export const appReducers = {
   newNotificationState: newNotificationSlice.reducer,
   apiKeysState: apiKeysSlice.reducer,
   statisticsState: statisticsSlice.reducer,
+  campaignState: campaignSlice.reducer,
 };
 
 const createStore = (logReduxActions?: boolean) => {

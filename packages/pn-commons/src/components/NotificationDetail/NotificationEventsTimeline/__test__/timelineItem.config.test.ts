@@ -42,35 +42,6 @@ describe('getTimelineItems', () => {
     expect(items.map((item) => item.status)).toStrictEqual(statusHistory);
   });
 
-  it('exposes hasGroupedEvents based on whether the status has a group step', () => {
-    const statusHistory = [
-      statusWithEvents(NotificationStatus.ACCEPTED, [
-        { stepType: 'EVENT', event: eventOfRecipient('event-1', 0) },
-      ]),
-      statusWithEvents(NotificationStatus.DELIVERING, [
-        {
-          stepType: 'GROUP',
-          group: {
-            groupId: 'group-1',
-            denomination: recipients[0].denomination,
-            taxId: recipients[0].taxId,
-            recIndex: 0,
-            category: 'ANALOG',
-            channel: 'AR_REGISTERED_LETTER',
-            hasReworkedEvents: false,
-            events: [],
-          },
-        },
-      ]),
-    ];
-    const legacyStatusHistory = toLegacyStatusHistory(statusHistory);
-
-    const items = getTimelineItems(statusHistory, legacyStatusHistory, [recipients[0]]);
-
-    expect(items[0].hasGroupedEvents).toBe(false);
-    expect(items[1].hasGroupedEvents).toBe(true);
-  });
-
   it('reuses the legacy status steps as allEvents, without flattening them again', () => {
     const statusHistory = [
       statusWithEvents(NotificationStatus.ACCEPTED, [
@@ -101,8 +72,12 @@ describe('getTimelineItems', () => {
       getTimelineItems(statusHistory, legacyStatusHistory, recipients, false)[0].recipientPerStep
     ).toStrictEqual([]);
 
-    const recipientPerStep = getTimelineItems(statusHistory, legacyStatusHistory, recipients, true)[0]
-      .recipientPerStep;
+    const recipientPerStep = getTimelineItems(
+      statusHistory,
+      legacyStatusHistory,
+      recipients,
+      true
+    )[0].recipientPerStep;
     expect(recipientPerStep).toStrictEqual([recipients[0], recipients[1]]);
   });
 

@@ -70,6 +70,9 @@ const Dashboard = () => {
     cleanFilters: () => void 0,
   });
 
+  const filtersApplied = filterNotificationsRef.current.filtersApplied;
+  const showFilters = (notifications.length > 0 || filtersApplied) && !hasTimeoutError;
+
   // Pagination handlers
   const handleChangePage = (paginationData: PaginationData) => {
     dispatch(setPagination({ size: paginationData.size, page: paginationData.page }));
@@ -212,9 +215,11 @@ const Dashboard = () => {
 
       {isSmallScreen && getTitleButtonContent()}
 
-      <Box sx={{ mb: { xs: 0, lg: 3 } }}>
-        <FilterNotifications ref={filterNotificationsRef} showFilters />
-      </Box>
+      {showFilters && (
+        <Box sx={{ mb: { xs: 0, lg: 3 } }}>
+          <FilterNotifications ref={filterNotificationsRef} showFilters />
+        </Box>
+      )}
 
       <ApiErrorWrapper
         apiId={DASHBOARD_ACTIONS.GET_SENT_NOTIFICATIONS}

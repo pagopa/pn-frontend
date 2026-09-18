@@ -144,8 +144,8 @@
         "duplicated": "Questo avviso è già stato pagato. Lo stato verrà aggiornato a breve."
       },
       "error-payment": "Seleziona un avviso di pagamento",
-      "error-payment-failed-single": "Si è verificato un problema con un avviso di pagamento. Premi Ricarica per riprovare, se l’errore persiste contatta l’assistenza.",
-      "error-payment-failed-multiple": "Si è verificato un problema con più avvisi di pagamento. Premi Ricarica per riprovare, se l’errore persiste contatta l’assistenza.",
+      "error-payment-failed-single": "Si è verificato un problema con un avviso di pagamento. Premi <0>Ricarica</0> per riprovare, se l’errore persiste contatta l’assistenza.",
+      "error-payment-failed-multiple": "Si è verificato un problema con più avvisi di pagamento. Premi <0>Ricarica</0> per riprovare, se l’errore persiste contatta l’assistenza.",
       "tpp-expired-error-title": "La connesione con la banca è scaduta.",
       "tpp-expired-error-description": "Per ripristinarla, accedi di nuovo a questa notifica tramite il messaggio che hai ricevuto sull'app della banca."
     },
@@ -498,7 +498,7 @@
     "notification-timeline-reworked-description": "Gli eventi contrassegnati come rettificati sostituiscono gli eventi precedenti indicati come non validi.",
     "reworked-status-valid": "Evento rettificato",
     "reworked-status-not-valid": "Evento non valido",
-    "reworked-status-group": "Uno o più eventi rettificati",
+    "reworked-status-group": "Uno o più eventi aggiornati",
     "cancellation-in-progress": "Annullata",
     "cancellation-in-progress-tooltip": "Annullamento in corso. Lo stato sarà aggiornato a breve.",
     "cancellation-in-progress-description": "Annullamento in corso. Lo stato sarà aggiornato a breve."
