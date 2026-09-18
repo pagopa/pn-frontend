@@ -83,7 +83,7 @@
     "createdTitle": "Vollmachtsanfrage erstellt",
     "createdDescription": "Teile den Bestätigungscode mit der bevollmächtigten Person: Sie muss ihn beim ersten Zugriff auf SEND eingeben und die Anfrage akzeptieren.",
     "title": "Vollmacht hinzufügen",
-    "subtitle": "Gib die Daten der natürlichen oder juristischen Person ein, der du eine Vollmacht zum Lesen deiner Bescheide erteilen möchtest.",
+    "subtitle": "Gib die Daten der natürlichen oder juristischen Person ein, die du zum Lesen der Zustellungen von {{organizationName}} bevollmächtigen möchtest.",
     "form": {
       "personType": "Rechtssubjekt:",
       "naturalPerson": "Natürliche Person",
@@ -118,7 +118,9 @@
       "businessName": {
         "required": "Der Firmenname ist erforderlich"
       },
-      "entiSelected": { "required": "Wähle mindestens eine Körperschaft aus" },
+      "entiSelected": {
+        "required": "Wähle mindestens eine Körperschaft aus"
+      },
       "expirationDate": {
         "required": "Das Ablaufdatum der Vollmacht ist erforderlich",
         "wrong": "Falsches Datum"

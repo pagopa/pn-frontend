@@ -54,7 +54,7 @@
     "createdTitle": "Delegate request created",
     "createdDescription": "Share the verification code with the delegate: they will have to enter it upon first logging in to SEND and accept your request.",
     "title": "Add a delegate",
-    "subtitle": "Enter the details of the natural or legal person you want to delegate to read the notifications of {{organizationName}}.",
+    "subtitle": "Enter the data of the natural or legal person to whom you want to delegate the reading of your notifications.",
     "form": {
       "personType": "Legal entity:",
       "naturalPerson": "Physical person",

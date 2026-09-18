@@ -54,7 +54,7 @@
     "createdTitle": "Demande de procuration créée",
     "createdDescription": "Partagez le code de vérification avec la personne mandatée : elle devra le saisir lors de la première connexion à SEND et accepter votre demande.",
     "title": "Ajouter une procuration",
-    "subtitle": "Saisis les données de la personne physique ou morale à qui tu veux déléguer la lecture des notifications de {{organizationName}}.",
+    "subtitle": "Saisissez les données de la personne physique ou morale à qui vous souhaitez mandater la lecture de vos notifications.",
     "form": {
       "personType": "Entité juridique :",
       "naturalPerson": "Personne physique",
