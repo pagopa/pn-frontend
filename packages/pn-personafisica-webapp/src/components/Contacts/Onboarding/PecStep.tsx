@@ -450,6 +450,7 @@ const PecStep: React.FC<Props> = ({
         value={formik.values.pec}
         buttonLabel={t('onboarding.digital-domicile.pec.verify-cta')}
         buttonVariant="outlined"
+        buttonPlacement="below"
         error={formik.errors.pec}
         touched={formik.touched.pec}
         onChange={(value) => void handleFieldChange('pec', value)}
