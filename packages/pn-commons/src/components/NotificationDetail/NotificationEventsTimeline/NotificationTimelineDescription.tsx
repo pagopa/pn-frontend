@@ -1,5 +1,6 @@
 import { Trans } from 'react-i18next';
 
+import AttachFileIcon from '@mui/icons-material/AttachFile';
 import { Box, Typography, TypographyProps } from '@mui/material';
 import { MIButton, MIButtonProps } from '@pagopa/mui-italia';
 
@@ -55,28 +56,52 @@ type LegacyStatusProps = BaseProps & {
 type Props = EventProps | StatusProps | LegacyStatusProps;
 
 const NotificationTimelineEventLegalFact: React.FC<
-  Pick<BaseProps, 'slotProps' | 'clickHandler' | 'disableDownloads'> & {
+  Pick<
+    BaseProps,
+    'slotProps' | 'clickHandler' | 'disableDownloads' | 'isNewTimelineCopyEnabled'
+  > & {
     legalFact: LegalFactId;
     children?: React.ReactNode;
     dataTestId?: string;
+    underAStatus?: boolean;
   }
-> = ({ slotProps, legalFact, clickHandler, children, disableDownloads, dataTestId }) => (
-  <MIButton
-    {...slotProps?.button}
-    variant="text"
-    onClick={() => clickHandler(legalFact)}
-    disabled={disableDownloads}
-    sx={{
-      textDecoration: 'underline',
-      verticalAlign: 'baseline',
-      ...slotProps?.button?.sx,
-      fontWeight: 400,
-    }}
-    data-testid={dataTestId}
-  >
-    {children}
-  </MIButton>
-);
+> = ({
+  slotProps,
+  legalFact,
+  clickHandler,
+  children,
+  disableDownloads,
+  dataTestId,
+  isNewTimelineCopyEnabled,
+  underAStatus = false,
+}) => {
+  const buttonLayout = !isNewTimelineCopyEnabled
+    ? {
+        fontSize: '14px',
+        justifyContent: 'flex-start',
+        textAlign: 'left',
+      }
+    : {
+        textDecoration: 'underline',
+        verticalAlign: 'baseline',
+        ...slotProps?.button?.sx,
+        fontWeight: 400,
+      };
+
+  return (
+    <MIButton
+      {...slotProps?.button}
+      variant="text"
+      onClick={() => clickHandler(legalFact)}
+      disabled={disableDownloads}
+      sx={buttonLayout}
+      startIcon={underAStatus && !isNewTimelineCopyEnabled ? <AttachFileIcon /> : undefined}
+      data-testid={dataTestId}
+    >
+      {children}
+    </MIButton>
+  );
+};
 
 const NotificationTimelineDescription: React.FC<Props> = ({
   title,
@@ -132,6 +157,7 @@ const NotificationTimelineDescription: React.FC<Props> = ({
                 dataTestId={
                   status || legacyStatus ? 'download-legalfact' : 'download-legalfact-micro'
                 }
+                isNewTimelineCopyEnabled={isNewTimelineCopyEnabled}
               />
             ))}
           />
@@ -162,6 +188,8 @@ const NotificationTimelineDescription: React.FC<Props> = ({
               legalFact.event.category !== TimelineCategory.NOTIFICATION_CANCELLED
             }
             dataTestId={status || legacyStatus ? 'download-legalfact' : 'download-legalfact-micro'}
+            underAStatus={!!status}
+            isNewTimelineCopyEnabled={isNewTimelineCopyEnabled}
           >
             {getLegalFactLabel(legalFact.event, legalFact.lf.category, legalFact.lf.key || '')}
           </NotificationTimelineEventLegalFact>

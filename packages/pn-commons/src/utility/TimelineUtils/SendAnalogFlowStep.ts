@@ -1,5 +1,5 @@
 import { SendPaperDetails, TimelineCategory } from '../../models/NotificationDetail';
-import { getLocalizedOrDefaultLabel } from '../../utility/localization.utility';
+import { getLocalizedOrDefaultLabel, hasLocalizedLabel } from '../../utility/localization.utility';
 import { TimelineStep, TimelineStepInfo, TimelineStepPayload } from './TimelineStep';
 
 const SEND_ANALOG_FEEDBACK_OK_DETAIL_CODES = [
@@ -79,11 +79,22 @@ export class SendAnalogFlowStep extends TimelineStep {
         ? `Aggiornamento dell'invio via raccomandata semplice`
         : 'Invio cartaceo completato';
 
-    return getLocalizedOrDefaultLabel(
+    const defaultLocalized = getLocalizedOrDefaultLabel(
       'notifications',
       `detail.timeline.${labelEntry}`,
       defaultLabel
     );
+
+    const deliveryDetailCode = (payload.step.details as SendPaperDetails).deliveryDetailCode;
+
+    if (hasLocalizedLabel('notifications', `detail.timeline.${labelEntry}-${deliveryDetailCode}`)) {
+      return getLocalizedOrDefaultLabel(
+        'notifications',
+        `detail.timeline.${labelEntry}-${deliveryDetailCode}`
+      );
+    }
+
+    return defaultLocalized;
   }
 
   getTimelineStepInfo(payload: TimelineStepPayload): TimelineStepInfo | null {

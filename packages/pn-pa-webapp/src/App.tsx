@@ -27,6 +27,7 @@ import {
   appStateActions,
   errorFactoryManager,
   initLocalization,
+  initLocalizationExists,
   useMultiEvent,
   useTracking,
 } from '@pagopa-pn/pn-commons';
@@ -58,7 +59,7 @@ import { getMenuItems } from './utility/role.utility';
 // Cfr. comment in packages/pn-personafisica-webapp/src/App.tsx
 // --------------------
 const App = () => {
-  const { t } = useTranslation(['common', 'notifiche']);
+  const { t, i18n } = useTranslation(['common', 'notifiche']);
   const [isInitialized, setIsInitialized] = useState(false);
 
   useEffect(() => {
@@ -66,6 +67,7 @@ const App = () => {
       setIsInitialized(true);
       // init localization
       initLocalization((namespace, path, data) => t(path, { ns: namespace, ...data }));
+      initLocalizationExists((namespace, path) => i18n.exists(path, { ns: namespace }));
       // eslint-disable-next-line functional/immutable-data
       errorFactoryManager.factory = new PAAppErrorFactory((path, ns, params) =>
         t(path, { ns, ...params })

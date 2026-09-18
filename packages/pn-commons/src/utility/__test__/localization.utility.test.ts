@@ -1,6 +1,15 @@
-import { getLocalizedOrDefaultLabel, initLocalization } from '../localization.utility';
+import {
+  getLocalizedOrDefaultLabel,
+  hasLocalizedLabel,
+  initLocalization,
+  initLocalizationExists,
+} from '../localization.utility';
 
 describe('localization service', () => {
+  afterEach(() => {
+    initLocalizationExists();
+  });
+
   it('localize label (default label)', () => {
     const label = getLocalizedOrDefaultLabel('', 'mocked.path', 'default label');
     expect(label).toBe('default label');
@@ -33,5 +42,41 @@ describe('localization service', () => {
   it('localize label when no deafult is specified (path)', () => {
     const label = getLocalizedOrDefaultLabel('', 'mocked.path');
     expect(label).toBe('mocked.path');
+  });
+
+  it('returns true when the localization key exists', () => {
+    initLocalizationExists((namespace, path) => {
+      return namespace === 'notifiche' && path === 'mocked.path';
+    });
+
+    expect(hasLocalizedLabel('notifications', 'mocked.path')).toBe(true);
+  });
+
+  it('returns false when the localization key does not exist', () => {
+    initLocalizationExists(() => false);
+
+    expect(hasLocalizedLabel('notifications', 'missing.path')).toBe(false);
+  });
+
+  it('maps custom namespaces before checking the key', () => {
+    initLocalization((namespace, path) => `${namespace} ${path}`, {
+      common: 'common',
+      notifications: 'custom-notifications',
+      appStatus: 'appStatus',
+      delegations: 'deleghe',
+      recapiti: 'recapiti',
+    });
+
+    initLocalizationExists(
+      (namespace, path) => namespace === 'custom-notifications' && path === 'mocked.path'
+    );
+
+    expect(hasLocalizedLabel('notifications', 'mocked.path')).toBe(true);
+  });
+
+  it('returns false when the existence function is not initialized', () => {
+    initLocalizationExists();
+
+    expect(hasLocalizedLabel('notifications', 'mocked.path')).toBe(false);
   });
 });
