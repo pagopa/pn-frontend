@@ -83,7 +83,7 @@
     "createdTitle": "Zahteva za prenos pooblastila je bila ustvarjena",
     "createdDescription": "Delite potrditveno kodo s pooblaščencem: moral jo bo vnesti, ko se bo prvič prijavil v SEND in sprejeti zahtevo.",
     "title": "Dodajte prenos pooblastila",
-    "subtitle": "Vnesite podatke fizične ali pravne osebe, na katero želite prenesti pooblastilo za branje vaših obvestil.",
+    "subtitle": "Vnesi podatke fizične ali pravne osebe, ki jo želiš pooblastiti za branje obvestil {{organizationName}}.",
     "form": {
       "personType": "Pravni subjekt:",
       "naturalPerson": "Fizična oseba",
@@ -118,7 +118,9 @@
       "businessName": {
         "required": "Ime podjetja je obvezno"
       },
-      "entiSelected": { "required": "Izberite vsaj eno organizacijo" },
+      "entiSelected": {
+        "required": "Izberite vsaj eno organizacijo"
+      },
       "expirationDate": {
         "required": "Datum zaključka prenosa pooblastila je obvezen",
         "wrong": "Napačen datum"
