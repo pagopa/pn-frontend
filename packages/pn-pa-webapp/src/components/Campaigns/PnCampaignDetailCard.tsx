@@ -22,7 +22,7 @@ const PnCampaignDetailCard = ({
   return (
     <MIPaper padding={24}>
       <Grid container columnSpacing={3}>
-        <Grid item xs={12} md={4}>
+        <Grid item xs={12} md={6}>
           <Stack>
             <Typography variant="body2" color="text.secondary">
               {t('detail.creation-date')}
@@ -42,7 +42,7 @@ const PnCampaignDetailCard = ({
           </Stack>
         </Grid>
 
-        <Grid item xs={12} md={4}>
+        <Grid item xs={12} md={6}>
           <Stack>
             <Typography variant="body2" color="text.secondary">
               {t('list.id')}
@@ -54,7 +54,7 @@ const PnCampaignDetailCard = ({
             <Divider sx={{ my: 2 }} />
 
             <Typography variant="body2" color="text.secondary">
-              {t('detail.channels')}
+              {t('detail.channels-label')}
             </Typography>
             <Typography variant="body1" fontWeight={600}>
               {channels}

@@ -20,7 +20,7 @@ const PnCampaignDetailLoading = () => (
     </Stack>
     <MIPaper padding={24}>
       <Grid container columnSpacing={3}>
-        <Grid item xs={12} md={4}>
+        <Grid item xs={12} md={6}>
           <Stack spacing={1}>
             <Skeleton
               variant="rounded"
@@ -66,7 +66,7 @@ const PnCampaignDetailLoading = () => (
           </Stack>
         </Grid>
 
-        <Grid item xs={12} md={4}>
+        <Grid item xs={12} md={6}>
           <Stack spacing={1}>
             <Skeleton
               variant="rounded"

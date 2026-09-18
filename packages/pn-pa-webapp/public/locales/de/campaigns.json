@@ -14,7 +14,7 @@
     "title": "Kampagnendetails",
     "creation-date": "Erstellungsdatum",
     "service-name": "Dienstname",
-    "channels": "Kanäle",
+    "channels-label": "Kanäle",
     "empty-state": {
       "generic-error": "Die Kampagnendetails konnten nicht abgerufen werden.",
       "generic-error-cta": "Versuche es erneut",
@@ -23,6 +23,13 @@
     "breadcrumb": {
       "back": "Zurück",
       "campaigns": "Kampagnen"
+    },
+    "channels": {
+      "IO": "IO",
+      "SMS": "SMS",
+      "EMAIL": "E-Mail",
+      "ANALOG": "Postdienst",
+      "PEC": "PEC"
     }
   }
 }
