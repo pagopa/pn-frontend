@@ -321,7 +321,13 @@ export function getNotificationStatusInfos(
     case NotificationStatus.EFFECTIVE_DATE:
       return {
         color: 'info',
-        ...localizeStatus('effective-date', { isMultiRecipient }),
+        // the status became active at the very moment the notification perfected, so `activeFrom` is
+        // the date the revised copy asks for. The wording in the base catalog has no `{{date}}`, so
+        // passing it is a no-op with the overlay off.
+        ...localizeStatus('effective-date', {
+          isMultiRecipient,
+          ...(statusObject ? { date: formatDate(statusObject.activeFrom, false) } : {}),
+        }),
       };
     case NotificationStatus.VIEWED: {
       if (statusObject?.recipient) {
