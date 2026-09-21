@@ -68,9 +68,16 @@ function i18nLabelEntry(category: TimelineCategory, deliveryDetailCode: string |
 export class SendAnalogFlowStep extends TimelineStep {
   getTimelineStepLabel(payload: TimelineStepPayload): string {
     const typedDetails = payload.step.details as SendPaperDetails;
+    const deliveryDetailCode = typedDetails.deliveryDetailCode;
+
+    // when a title specific to the status code is available, it wins over the category one
+    const codeLabelPath = `detail.timeline.send-analog-flow-${deliveryDetailCode}-title`;
+    if (deliveryDetailCode && hasLocalizedLabel('notifications', codeLabelPath)) {
+      return getLocalizedOrDefaultLabel('notifications', codeLabelPath);
+    }
 
     // to avoid cognitive complexity warning
-    const labelEntry = i18nLabelEntry(payload.step.category, typedDetails.deliveryDetailCode);
+    const labelEntry = i18nLabelEntry(payload.step.category, deliveryDetailCode);
 
     const defaultLabel =
       payload.step.category === TimelineCategory.SEND_ANALOG_PROGRESS
@@ -79,22 +86,11 @@ export class SendAnalogFlowStep extends TimelineStep {
         ? `Aggiornamento dell'invio via raccomandata semplice`
         : 'Invio cartaceo completato';
 
-    const defaultLocalized = getLocalizedOrDefaultLabel(
+    return getLocalizedOrDefaultLabel(
       'notifications',
       `detail.timeline.${labelEntry}`,
       defaultLabel
     );
-
-    const deliveryDetailCode = (payload.step.details as SendPaperDetails).deliveryDetailCode;
-
-    if (hasLocalizedLabel('notifications', `detail.timeline.${labelEntry}-${deliveryDetailCode}`)) {
-      return getLocalizedOrDefaultLabel(
-        'notifications',
-        `detail.timeline.${labelEntry}-${deliveryDetailCode}`
-      );
-    }
-
-    return defaultLocalized;
   }
 
   getTimelineStepInfo(payload: TimelineStepPayload): TimelineStepInfo | null {
