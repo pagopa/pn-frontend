@@ -285,7 +285,7 @@ export function getNotificationStatusInfos(
         ...localizeStatus('viewed', {
           subject,
           isMultiRecipient,
-          viewedAt: viewedEvent?.timestamp ? formatDate(viewedEvent.timestamp) : undefined,
+          viewedAt: viewedEvent?.timestamp ? formatDate(viewedEvent.timestamp, false) : undefined,
         }),
       };
     }
