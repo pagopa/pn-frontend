@@ -24,6 +24,7 @@
   "detail": {
     "timeline": {
       "schedule-digital-workflow": "Nuovo tentativo di invio PEC",
+      "schedule-digital-workflow-description": "Verrà effettuato il secondo tentativo di invio della notifica SEND all’indirizzo PEC {{address}}.",
       "analog-failure-workflow": "Impossibile recapitare la notifica",
       "send-courtesy-message": "Invio dei messaggi di avviso in corso",
       "send-courtesy-message-description": "Ti è stato inviato un messaggio di avviso via {{type}} perché hai ricevuto una nuova notifica SEND.",
