@@ -6,8 +6,8 @@ export class CompletelyUnreachableStep extends TimelineStep {
       ...this.localizeTimelineStatus(
         'completely-unreachable',
         payload.isMultiRecipient,
-        'Deposito di avvenuta ricezione',
-        '',
+        undefined,
+        undefined,
         this.nameAndTaxId(payload)
       ),
     };

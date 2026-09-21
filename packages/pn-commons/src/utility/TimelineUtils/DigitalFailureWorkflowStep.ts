@@ -6,8 +6,8 @@ export class DigitalFailureWorkflowStep extends TimelineStep {
       ...this.localizeTimelineStatus(
         'digital-failure-workflow',
         payload.isMultiRecipient,
-        'Attestazione opponibile a terzi: mancato recapito digitale',
-        '',
+        undefined,
+        undefined,
         this.nameAndTaxId(payload)
       ),
     };
