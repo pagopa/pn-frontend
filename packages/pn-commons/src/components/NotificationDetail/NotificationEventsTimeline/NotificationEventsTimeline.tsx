@@ -26,6 +26,7 @@ type Props = {
   isSenderTimeline?: boolean;
   language?: string;
   isNewTimelineCopyEnabled?: boolean;
+  perfectionLink?: string;
 };
 
 const NotificationEventsTimeline = ({
@@ -36,6 +37,7 @@ const NotificationEventsTimeline = ({
   isSenderTimeline,
   language = 'it',
   isNewTimelineCopyEnabled = false,
+  perfectionLink,
 }: Props) => {
   const legacyStatusHistory = useMemo(() => toLegacyStatusHistory(statusHistory), [statusHistory]);
   const multiAttemptGroupIds = useMemo(
@@ -86,6 +88,7 @@ const NotificationEventsTimeline = ({
                     recipients={recipients}
                     isSenderTimeline={isSenderTimeline}
                     isNewTimelineCopyEnabled={isNewTimelineCopyEnabled}
+                    perfectionLink={perfectionLink}
                   />
                 )}
 
@@ -116,6 +119,7 @@ const NotificationEventsTimeline = ({
                             disableDownloads={disableDownloads}
                             language={language}
                             isNewTimelineCopyEnabled={isNewTimelineCopyEnabled}
+                            perfectionLink={perfectionLink}
                           />
                         </Fragment>
                       );
@@ -141,6 +145,7 @@ const NotificationEventsTimeline = ({
                           language={language}
                           hasMultipleAttempts={multiAttemptGroupIds.has(step.group.groupId)}
                           isNewTimelineCopyEnabled={isNewTimelineCopyEnabled}
+                          perfectionLink={perfectionLink}
                         />
                       </Fragment>
                     );

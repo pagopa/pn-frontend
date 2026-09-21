@@ -319,4 +319,62 @@ describe('NotificationTimelineDescription', () => {
     expect(container).toHaveTextContent('Evento digitale - Descrizione evento.');
     expect(getByTestId('dateItem')).toHaveTextContent(formatTimelineDate(event.timestamp, 'it'));
   });
+
+  it('appends the perfection link after the legal facts, so the slots keep their order', () => {
+    const event = createEvent({
+      legalFactsIds: [firstLegalFact],
+    });
+
+    const { getByTestId } = render(
+      <NotificationTimelineDescription
+        description="Scarica l'<0>avviso</0>. Consulta le <1>modalità di perfezionamento</1>."
+        event={event}
+        clickHandler={clickHandler}
+        isNewTimelineCopyEnabled
+        perfectionLink="https://fake.perfezionamento.it"
+      />
+    );
+
+    const legalFact = getByTestId('download-legalfact-micro');
+    const link = getByTestId('perfection-link');
+
+    expect(legalFact.compareDocumentPosition(link)).toBe(Node.DOCUMENT_POSITION_FOLLOWING);
+    expect(link).toHaveAttribute('href', 'https://fake.perfezionamento.it');
+    expect(link).toHaveAttribute('target', '_blank');
+  });
+
+  it('renders the perfection link even when the event carries no legal fact', () => {
+    const event = createEvent();
+
+    const { getByTestId, queryByTestId } = render(
+      <NotificationTimelineDescription
+        description="Consulta le <0>modalità di perfezionamento</0>."
+        event={event}
+        clickHandler={clickHandler}
+        isNewTimelineCopyEnabled
+        perfectionLink="https://fake.perfezionamento.it"
+      />
+    );
+
+    expect(queryByTestId('download-legalfact-micro')).not.toBeInTheDocument();
+    expect(getByTestId('perfection-link')).toHaveAttribute(
+      'href',
+      'https://fake.perfezionamento.it'
+    );
+  });
+
+  it('renders no perfection link when the prop is not given', () => {
+    const event = createEvent();
+
+    const { queryByTestId } = render(
+      <NotificationTimelineDescription
+        description="Consulta le <0>modalità di perfezionamento</0>."
+        event={event}
+        clickHandler={clickHandler}
+        isNewTimelineCopyEnabled
+      />
+    );
+
+    expect(queryByTestId('perfection-link')).not.toBeInTheDocument();
+  });
 });

@@ -28,6 +28,7 @@ export interface PfConfiguration {
   FEEDBACK_SURVEY_URL: string;
   NOTIFICATION_CANCELLED_HELP_LINK: string;
   NOTIFICATION_COST_DETAILS_ASSISTANCE_LINK: string;
+  NOTIFICATION_PERFECTION_LINK: string;
   SERCQ_SERVICE_STATEMENT_LINK: string;
   IS_ONBOARDING_ENABLED: boolean;
   FACSIMILE_EN: string;
@@ -73,6 +74,10 @@ class PfConfigurationValidator extends Validator<PfConfiguration> {
     this.ruleFor('FEEDBACK_SURVEY_URL').isString().isRequired();
     this.ruleFor('NOTIFICATION_CANCELLED_HELP_LINK').isString().isRequired();
     this.ruleFor('NOTIFICATION_COST_DETAILS_ASSISTANCE_LINK')
+      .isString()
+      .isRequired()
+      .matches(dataRegex.htmlPageUrl);
+    this.ruleFor('NOTIFICATION_PERFECTION_LINK')
       .isString()
       .isRequired()
       .matches(dataRegex.htmlPageUrl);

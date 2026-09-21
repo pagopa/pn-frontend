@@ -1,7 +1,7 @@
 import { Trans } from 'react-i18next';
 
 import AttachFileIcon from '@mui/icons-material/AttachFile';
-import { Box, Typography, TypographyProps } from '@mui/material';
+import { Box, Link, Typography, TypographyProps } from '@mui/material';
 import { MIButton, MIButtonProps } from '@pagopa/mui-italia';
 
 import {
@@ -31,6 +31,7 @@ type BaseProps = {
   disableDownloads?: boolean;
   recipients?: Array<NotificationDetailRecipient>;
   isSenderTimeline?: boolean;
+  perfectionLink?: string;
   slotProps?: {
     typography?: TypographyProps;
     button?: MIButtonProps;
@@ -148,6 +149,7 @@ const NotificationTimelineDescription: React.FC<Props> = ({
   isNewTimelineCopyEnabled = false,
   recipients,
   isSenderTimeline = false,
+  perfectionLink,
   ...rest
 }) => {
   const { legacyStatus, status, event } = rest;
@@ -169,22 +171,36 @@ const NotificationTimelineDescription: React.FC<Props> = ({
           <Trans
             i18nKey="description" // this is fake and is needed to run trans functionality
             t={() => description}
-            components={legalFactsIds.map((legalFact) => (
-              <NotificationTimelineEventLegalFact
-                key={legalFact.lf.key}
-                legalFact={legalFact.lf}
-                clickHandler={clickHandler}
-                slotProps={slotProps}
-                disableDownloads={
-                  disableDownloads &&
-                  legalFact.event.category !== TimelineCategory.NOTIFICATION_CANCELLED
-                }
-                dataTestId={
-                  status || legacyStatus ? 'download-legalfact' : 'download-legalfact-micro'
-                }
-                isNewTimelineCopyEnabled={isNewTimelineCopyEnabled}
-              />
-            ))}
+            components={[
+              ...legalFactsIds.map((legalFact) => (
+                <NotificationTimelineEventLegalFact
+                  key={legalFact.lf.key}
+                  legalFact={legalFact.lf}
+                  clickHandler={clickHandler}
+                  slotProps={slotProps}
+                  disableDownloads={
+                    disableDownloads &&
+                    legalFact.event.category !== TimelineCategory.NOTIFICATION_CANCELLED
+                  }
+                  dataTestId={
+                    status || legacyStatus ? 'download-legalfact' : 'download-legalfact-micro'
+                  }
+                  isNewTimelineCopyEnabled={isNewTimelineCopyEnabled}
+                />
+              )),
+              ...(perfectionLink
+                ? [
+                    <Link
+                      key="perfection-link"
+                      href={perfectionLink}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      sx={{ ...slotProps?.button?.sx, fontWeight: 400 }}
+                      data-testid="perfection-link"
+                    />,
+                  ]
+                : []),
+            ]}
           />
         )}
         {(!isNewTimelineCopyEnabled || legalFactsIds.length > 1) && (
