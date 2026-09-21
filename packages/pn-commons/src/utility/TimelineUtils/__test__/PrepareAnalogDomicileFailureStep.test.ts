@@ -1,7 +1,7 @@
 import { getTimelineElem, notificationDTO } from '../../../__mocks__/NotificationDetail.mock';
 import { TimelineCategory } from '../../../models/NotificationDetail';
 import { PrepareAnalogDomicileFailureDetails } from '../../../models/NotificationDetail';
-import { initLocalization } from '../../../utility/localization.utility';
+import { initLocalization, initLocalizationExists } from '../../../utility/localization.utility';
 import { PrepareAnalogDomicileFailureStep } from '../PrepareAnalogDomicileFailureStep';
 
 const physicalAddress = {
@@ -139,5 +139,28 @@ describe('PrepareAnalogDomicileFailureStep', () => {
         }
       )}`,
     });
+  });
+
+  it('getTimelineStepLabel prefers the failure cause title, falling back to the XXX one', () => {
+    const prepareAnalogDomicileFailureStep = new PrepareAnalogDomicileFailureStep();
+    const withTitles = ['D02', 'XXX'].map(
+      (cause) => `detail.timeline.prepare-analog-domicile-failure-${cause}-title`
+    );
+    initLocalizationExists((_namespace, path) => withTitles.includes(path));
+
+    // a cause with a title of its own
+    expect(prepareAnalogDomicileFailureStep.getTimelineStepLabel('D02')).toBe(
+      'notifiche - detail.timeline.prepare-analog-domicile-failure-D02-title'
+    );
+    // a cause without one falls back to XXX, as the description does
+    expect(prepareAnalogDomicileFailureStep.getTimelineStepLabel('D08')).toBe(
+      'notifiche - detail.timeline.prepare-analog-domicile-failure-XXX-title'
+    );
+
+    // with no title at all (i.e. the flag off) the category label is kept
+    initLocalizationExists(() => false);
+    expect(prepareAnalogDomicileFailureStep.getTimelineStepLabel('D02')).toBe(
+      'notifiche - detail.timeline.prepare-analog-domicile-failure'
+    );
   });
 });

@@ -1,6 +1,7 @@
 import { getTimelineElem, notificationDTO } from '../../../__mocks__/NotificationDetail.mock';
 import { TimelineCategory } from '../../../models/NotificationDetail';
 import { initLocalizationForTest } from '../../../test-utils';
+import { initLocalizationExists } from '../../localization.utility';
 import { SendAnalogFlowStep } from '../SendAnalogFlowStep';
 import { TimelineStepPayload } from '../TimelineStep';
 
@@ -78,6 +79,32 @@ describe('SendAnalogFlowStep', () => {
     expect(sendAnalogFlowStep.getTimelineStepLabel(payload)).toStrictEqual(
       'notifiche - detail.timeline.send-analog-outcome-unknown'
     );
+  });
+
+  it('getTimelineStepLabel prefers the status code title, whatever the category', () => {
+    const sendAnalogFlowStep = new SendAnalogFlowStep();
+    initLocalizationExists(
+      (_namespace, path) => path === 'detail.timeline.send-analog-flow-CON080-title'
+    );
+
+    timelineElem = getTimelineElem(TimelineCategory.SEND_ANALOG_PROGRESS, {
+      deliveryDetailCode: 'CON080',
+    });
+    payload.step = timelineElem;
+    expect(sendAnalogFlowStep.getTimelineStepLabel(payload)).toStrictEqual(
+      'notifiche - detail.timeline.send-analog-flow-CON080-title'
+    );
+
+    // a code without its own title keeps the category label
+    timelineElem = getTimelineElem(TimelineCategory.SEND_ANALOG_PROGRESS, {
+      deliveryDetailCode: 'CON020',
+    });
+    payload.step = timelineElem;
+    expect(sendAnalogFlowStep.getTimelineStepLabel(payload)).toStrictEqual(
+      'notifiche - detail.timeline.send-analog-progress'
+    );
+
+    initLocalizationForTest();
   });
 
   it('getTimelineStepInfo SEND_ANALOG_PROGRESS - no extra data', () => {
