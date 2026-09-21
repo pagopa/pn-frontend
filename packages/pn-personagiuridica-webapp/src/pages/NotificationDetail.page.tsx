@@ -13,6 +13,8 @@ import {
   EventDeliveryModeType,
   EventNotificationSource,
   GetDowntimeHistoryParams,
+  LegalFactId,
+  LegalFactType,
   NotificationDetailBilingualFacsimileDocuments,
   NotificationDetailDocuments,
   NotificationDetailOtherDocument,
@@ -502,6 +504,32 @@ const NotificationDetail = () => {
       : navigate(routes.GET_DETTAGLIO_NOTIFICA_TIMELINE_PATH(id));
   };
 
+  const legalFactDownloadHandler = (legalFact: LegalFactId) => {
+    if (legalFact.category !== LegalFactType.NOTIFICATION_CANCELLED && isCancelledOrCancelling) {
+      return;
+    }
+
+    PGEventStrategyFactory.triggerEvent(PGEventsType.SEND_PG_TIMELINE_DOWNLOAD, { legalFact });
+
+    const isAAR = legalFact.category === NotificationDocumentType.AAR;
+    const documentType = isAAR ? NotificationDocumentType.AAR : NotificationDocumentType.LEGAL_FACT;
+    const documentId = isAAR
+      ? legalFact.key
+      : legalFact.key.substring(legalFact.key.lastIndexOf('/') + 1);
+
+    dispatch(
+      getReceivedNotificationDocument({
+        iun: notification.iun,
+        documentType,
+        documentId,
+        mandateId,
+      })
+    )
+      .unwrap()
+      .then(showInfoMessageIfRetryAfterOrDownload)
+      .catch(() => {});
+  };
+
   return (
     <LoadingPageWrapper isInitialized={pageReady}>
       {hasNotificationReceivedApiError && (
@@ -623,7 +651,7 @@ const NotificationDetail = () => {
                   recipients={notification.recipients}
                   isParty={false}
                   onTimelineClick={handleGoToTimeline}
-                  clickHandler={() => {}}
+                  clickHandler={legalFactDownloadHandler}
                   isNewTimelineCopyEnabled={IS_NEW_TIMELINE_COPY_ENABLED}
                 />
               )}
