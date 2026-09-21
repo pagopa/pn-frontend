@@ -29,7 +29,7 @@ import {
   TimelineCategory,
 } from '../models/NotificationDetail';
 import { NotificationStatus } from '../models/NotificationStatus';
-import { getLocalizedOrDefaultLabel } from '../utility/localization.utility';
+import { getLocalizedOrDefaultLabel, hasLocalizedLabel } from '../utility/localization.utility';
 import { TimelineStepInfo } from './TimelineUtils/TimelineStep';
 import { TimelineStepFactory } from './TimelineUtils/TimelineStepFactory';
 import { formatDate } from './date.utility';
@@ -39,6 +39,61 @@ type StatusInfo = {
   tooltip: string;
   description: string;
 };
+
+/**
+ * The VIEWED status has three readings, and only the first one is expressed by `status.viewed*`:
+ * the recipient opened the notification and that is what made it legally effective, a delegate
+ * opened it on their behalf, or the access came when the notification had already perfected by
+ * deadline - in which case it is no longer the access that gives it legal value.
+ *
+ * The two variants only exist in the revised copy, so each one is taken only when its key is there:
+ * with the overlay off nothing is found and the standard VIEWED wording is kept.
+ */
+function viewedStatusVariant(
+  statusInfos: StatusInfo,
+  statusObject?: NotificationStatusHistory,
+  statusHistory?: Array<NotificationStatusHistory>,
+  viewedAt?: string
+): StatusInfo {
+  const effectiveDateFrom = statusHistory?.find(
+    (s) => s.status === NotificationStatus.EFFECTIVE_DATE
+  )?.activeFrom;
+  const viewedAfterEffectiveDate =
+    !!effectiveDateFrom &&
+    !!statusObject &&
+    new Date(effectiveDateFrom).getTime() < new Date(statusObject.activeFrom).getTime();
+
+  if (
+    viewedAfterEffectiveDate &&
+    hasLocalizedLabel('notifications', `status.viewed-after-effective-date`)
+  ) {
+    return {
+      ...statusInfos,
+      label: getLocalizedOrDefaultLabel('notifications', `status.viewed-after-effective-date`),
+      description: getLocalizedOrDefaultLabel(
+        'notifications',
+        `status.viewed-after-effective-date-description`
+      ),
+    };
+  }
+
+  if (
+    statusObject?.recipient &&
+    hasLocalizedLabel('notifications', `status.viewed-by-delegate-description`)
+  ) {
+    return {
+      ...statusInfos,
+      description: getLocalizedOrDefaultLabel(
+        'notifications',
+        `status.viewed-by-delegate-description`,
+        undefined,
+        { name: statusObject.recipient, viewedAt }
+      ),
+    };
+  }
+
+  return statusInfos;
+}
 
 const AnalogDeliveryCodeStock = new Set(['RECRN003C', 'RECRN011', 'RECAG011A']);
 const AnalogDeliveryCodeWithdrawnStock = new Set(['RECAG005C', 'RECAG006C']);
@@ -280,13 +335,17 @@ export function getNotificationStatusInfos(
       const viewedEvent = statusObject?.steps?.find(
         (s) => s.category === TimelineCategory.NOTIFICATION_VIEWED
       );
+      const viewedAt = viewedEvent?.timestamp
+        ? formatDate(viewedEvent.timestamp, false)
+        : undefined;
       return {
         color: 'success',
-        ...localizeStatus('viewed', {
-          subject,
-          isMultiRecipient,
-          viewedAt: viewedEvent?.timestamp ? formatDate(viewedEvent.timestamp, false) : undefined,
-        }),
+        ...viewedStatusVariant(
+          localizeStatus('viewed', { subject, isMultiRecipient, viewedAt }),
+          statusObject,
+          options?.statusHistory,
+          viewedAt
+        ),
       };
     }
     case NotificationStatus.CANCELLED:
