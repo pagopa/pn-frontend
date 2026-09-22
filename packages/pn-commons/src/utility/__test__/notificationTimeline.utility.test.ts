@@ -1,6 +1,6 @@
 import { notificationTimelineDTO } from '../../__mocks__/NotificationTimeline.mock';
+import { NotificationStatus } from '../../models';
 import {
-  INotificationDetailTimeline,
   LegalFactType,
   NotificationDetailRecipient,
   RecipientType,
@@ -18,7 +18,6 @@ import {
   getRecipientPerStep,
   getStatusLegalFacts,
   isTimelineGroupStep,
-  statusHasStepsToShow,
   toLegacyStatusHistory,
 } from '../notificationTimeline.utility';
 
@@ -197,163 +196,120 @@ describe('notificationTimeline utility', () => {
   });
 
   describe('getStatusLegalFacts', () => {
-    it('returns event/legal-fact pairs when every event is hidden', () => {
-      const firstEvent = createEvent('FIRST_EVENT', {
+    it('returns the single hidden legal fact matching the status category', () => {
+      const event = createEvent('VIEWED_LEGAL_FACT', {
+        category: TimelineCategory.NOTIFICATION_VIEWED,
         isHidden: true,
         legalFactsIds: [legalFact],
       });
-      const secondLegalFact = {
-        ...legalFact,
-        key: 'safestorage://second-legal-fact.pdf',
+
+      const status = {
+        status: NotificationStatus.VIEWED,
+        activeFrom: '2026-01-01T00:00:00Z',
+        relatedTimelineElements: [],
+        steps: [event],
       };
-      const secondEvent = createEvent('SECOND_EVENT', {
-        isHidden: true,
-        legalFactsIds: [secondLegalFact],
-      });
 
-      expect(getStatusLegalFacts([firstEvent, secondEvent])).toStrictEqual([
-        {
-          event: firstEvent,
-          lf: legalFact,
-        },
-        {
-          event: secondEvent,
-          lf: secondLegalFact,
-        },
-      ]);
+      expect(getStatusLegalFacts(status)).toStrictEqual([{ event, lf: legalFact }]);
     });
 
-    it('returns an empty array when at least one event is visible', () => {
-      const hiddenEvent = createEvent('HIDDEN_EVENT', {
+    it('ignores legal facts whose event category does not belong to the status', () => {
+      const event = createEvent('UNRELATED_LEGAL_FACT', {
+        category: TimelineCategory.DIGITAL_SUCCESS_WORKFLOW,
         isHidden: true,
         legalFactsIds: [legalFact],
       });
-      const visibleEvent = createEvent('VISIBLE_EVENT', {
-        isHidden: false,
-      });
 
-      expect(getStatusLegalFacts([hiddenEvent, visibleEvent])).toStrictEqual([]);
-    });
-
-    it('returns every legal fact of the same hidden event', () => {
-      const secondLegalFact = {
-        ...legalFact,
-        key: 'safestorage://second-legal-fact.pdf',
+      const status = {
+        status: NotificationStatus.VIEWED,
+        activeFrom: '2026-01-01T00:00:00Z',
+        relatedTimelineElements: [],
+        steps: [event],
       };
-      const event = createEvent('EVENT_WITH_MULTIPLE_LEGAL_FACTS', {
+
+      expect(getStatusLegalFacts(status)).toStrictEqual([]);
+    });
+
+    it('does not embed multiple legal facts in the status description', () => {
+      const event = createEvent('MULTIPLE_VIEWED_LEGAL_FACTS', {
+        category: TimelineCategory.NOTIFICATION_VIEWED,
         isHidden: true,
-        legalFactsIds: [legalFact, secondLegalFact],
+        legalFactsIds: [
+          legalFact,
+          {
+            ...legalFact,
+            key: 'safestorage://fictional-second-legal-fact.pdf',
+          },
+        ],
       });
 
-      expect(getStatusLegalFacts([event])).toStrictEqual([
-        { event, lf: legalFact },
-        { event, lf: secondLegalFact },
-      ]);
-    });
+      const status = {
+        status: NotificationStatus.VIEWED,
+        activeFrom: '2026-01-01T00:00:00Z',
+        relatedTimelineElements: [],
+        steps: [event],
+      };
 
-    it('ignores hidden events without legal facts', () => {
-      const eventWithoutLegalFacts = createEvent('WITHOUT_LEGAL_FACTS', {
-        isHidden: true,
-        legalFactsIds: [],
-      });
-      const eventWithLegalFact = createEvent('WITH_LEGAL_FACT', {
-        isHidden: true,
-        legalFactsIds: [legalFact],
-      });
-
-      expect(getStatusLegalFacts([eventWithoutLegalFacts, eventWithLegalFact])).toStrictEqual([
-        {
-          event: eventWithLegalFact,
-          lf: legalFact,
-        },
-      ]);
-    });
-
-    it('returns an empty array for an empty status', () => {
-      expect(getStatusLegalFacts([])).toStrictEqual([]);
-    });
-  });
-
-  describe('statusHasStepsToShow', () => {
-    it('returns true when at least one event is visible', () => {
-      const events = [
-        createEvent('HIDDEN_EVENT', { isHidden: true }),
-        createEvent('VISIBLE_EVENT', { isHidden: false }),
-      ];
-
-      expect(statusHasStepsToShow(events)).toBe(true);
-    });
-
-    it('returns false when every event is hidden', () => {
-      const events = [
-        createEvent('FIRST_HIDDEN_EVENT', { isHidden: true }),
-        createEvent('SECOND_HIDDEN_EVENT', { isHidden: true }),
-      ];
-
-      expect(statusHasStepsToShow(events)).toBe(false);
-    });
-
-    it('returns false for an empty event list', () => {
-      expect(statusHasStepsToShow([])).toBe(false);
+      expect(getStatusLegalFacts(status)).toStrictEqual([]);
     });
   });
 
   describe('getLegacyStatusLegalFacts', () => {
-    const createLegacyEvent = (
-      elementId: string,
-      overrides: Partial<INotificationDetailTimeline> = {}
-    ): INotificationDetailTimeline => ({
-      elementId,
-      timestamp: '2026-01-01T00:00:00Z',
-      category: TimelineCategory.NOTIFICATION_VIEWED,
-      details: {},
-      legalFactsIds: [],
-      hidden: true,
-      ...overrides,
-    });
-
-    it('returns event/legal-fact pairs when every legacy event is hidden', () => {
-      const event = createLegacyEvent('HIDDEN_EVENT', {
+    it('returns the single hidden legal fact matching the status category', () => {
+      const event = createEvent('VIEWED_LEGAL_FACT', {
+        category: TimelineCategory.NOTIFICATION_VIEWED,
+        isHidden: true,
         legalFactsIds: [legalFact],
       });
 
-      expect(getLegacyStatusLegalFacts([event])).toStrictEqual([
-        {
-          event,
-          lf: legalFact,
-        },
-      ]);
-    });
-
-    it('returns an empty array when a legacy event is visible', () => {
-      const hiddenEvent = createLegacyEvent('HIDDEN_EVENT', {
-        hidden: true,
-        legalFactsIds: [legalFact],
-      });
-      const visibleEvent = createLegacyEvent('VISIBLE_EVENT', {
-        hidden: false,
-      });
-
-      expect(getLegacyStatusLegalFacts([hiddenEvent, visibleEvent])).toStrictEqual([]);
-    });
-
-    it('returns an empty array when steps are undefined', () => {
-      expect(getLegacyStatusLegalFacts(undefined)).toStrictEqual([]);
-    });
-
-    it('returns all legal facts from a hidden legacy event', () => {
-      const secondLegalFact = {
-        ...legalFact,
-        key: 'safestorage://second-legal-fact.pdf',
+      const status = {
+        status: NotificationStatus.VIEWED,
+        activeFrom: '2026-01-01T00:00:00Z',
+        relatedTimelineElements: [],
+        steps: [event],
       };
-      const event = createLegacyEvent('HIDDEN_EVENT', {
-        legalFactsIds: [legalFact, secondLegalFact],
+
+      expect(getLegacyStatusLegalFacts(status)).toStrictEqual([{ event, lf: legalFact }]);
+    });
+
+    it('ignores legal facts whose event category does not belong to the status', () => {
+      const event = createEvent('UNRELATED_LEGAL_FACT', {
+        category: TimelineCategory.DIGITAL_SUCCESS_WORKFLOW,
+        isHidden: true,
+        legalFactsIds: [legalFact],
       });
 
-      expect(getLegacyStatusLegalFacts([event])).toStrictEqual([
-        { event, lf: legalFact },
-        { event, lf: secondLegalFact },
-      ]);
+      const status = {
+        status: NotificationStatus.VIEWED,
+        activeFrom: '2026-01-01T00:00:00Z',
+        relatedTimelineElements: [],
+        steps: [event],
+      };
+
+      expect(getLegacyStatusLegalFacts(status)).toStrictEqual([]);
+    });
+
+    it('does not embed multiple legal facts in the status description', () => {
+      const event = createEvent('MULTIPLE_VIEWED_LEGAL_FACTS', {
+        category: TimelineCategory.NOTIFICATION_VIEWED,
+        isHidden: true,
+        legalFactsIds: [
+          legalFact,
+          {
+            ...legalFact,
+            key: 'safestorage://fictional-second-legal-fact.pdf',
+          },
+        ],
+      });
+
+      const status = {
+        status: NotificationStatus.VIEWED,
+        activeFrom: '2026-01-01T00:00:00Z',
+        relatedTimelineElements: [],
+        steps: [event],
+      };
+
+      expect(getLegacyStatusLegalFacts(status)).toStrictEqual([]);
     });
   });
 });

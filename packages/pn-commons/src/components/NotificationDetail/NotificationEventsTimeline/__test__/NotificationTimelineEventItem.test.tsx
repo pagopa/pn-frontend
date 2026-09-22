@@ -36,6 +36,7 @@ const renderEvent = (event: NotificationTimelineEvent, props?: Record<string, un
       clickHandler={clickHandler}
       disableDownloads={false}
       language="it"
+      status={deliveringStatus}
       {...props}
     />
   );
@@ -120,6 +121,39 @@ describe('NotificationTimelineEventItem', () => {
 
     const { container: emptyContainer } = renderEvent({ ...hiddenEvent, legalFactsIds: [] });
     expect(emptyContainer).toBeEmptyDOMElement();
+  });
+
+  it('renders multiple event legal facts as an ordered list below the description', () => {
+    const firstLegalFact = eventWithLegalFacts.legalFactsIds![0];
+    const secondLegalFact = {
+      ...firstLegalFact,
+      key: 'safestorage://fictional-second-legal-fact.pdf',
+    };
+
+    const event = {
+      ...eventWithLegalFacts,
+      legalFactsIds: [firstLegalFact, secondLegalFact],
+    };
+
+    const statusInfo = getNotificationTimelineStatusInfos(event, recipients, allEvents);
+
+    const { getByTestId, getAllByTestId } = renderEvent(event, {
+      isNewTimelineCopyEnabled: true,
+    });
+
+    const timelineEvent = getByTestId('timeline-event');
+    const buttons = getAllByTestId('download-legalfact-micro');
+
+    expect(timelineEvent).toHaveTextContent(statusInfo!.description as string);
+    expect(buttons).toHaveLength(2);
+    expect(buttons[0]).toHaveTextContent('detail.timeline.legalfact');
+    expect(buttons[1]).toHaveTextContent('detail.timeline.legalfact');
+
+    fireEvent.click(buttons[0]);
+    fireEvent.click(buttons[1]);
+
+    expect(clickHandler).toHaveBeenNthCalledWith(1, firstLegalFact);
+    expect(clickHandler).toHaveBeenNthCalledWith(2, secondLegalFact);
   });
 
   it('renders as a list item when asBullet is set', () => {

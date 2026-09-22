@@ -8,10 +8,7 @@ import {
   NotificationStatusHistory,
   TimelineCategory,
 } from '../../../../models';
-import {
-  NotificationTimelineEvent,
-  NotificationTimelineLegacyStatusHistory,
-} from '../../../../models/NotificationTimeline';
+import { NotificationTimelineEvent } from '../../../../models/NotificationTimeline';
 import { fireEvent, initLocalizationForTest, render } from '../../../../test-utils';
 import { formatTimelineDate } from '../../../../utility/notificationTimeline.utility';
 import NotificationTimelineDescription from '../NotificationTimelineDescription';
@@ -38,7 +35,7 @@ const createEvent = (
   ...overrides,
 });
 
-const createStatus = (
+/*const createStatus = (
   steps: Array<NotificationTimelineEvent>
 ): NotificationTimelineLegacyStatusHistory => ({
   status: NotificationStatus.VIEWED,
@@ -46,6 +43,7 @@ const createStatus = (
   relatedTimelineElements: [],
   steps,
 });
+*/
 
 const createLegacyEvent = (
   overrides: Partial<INotificationDetailTimeline> = {}
@@ -163,100 +161,6 @@ describe('NotificationTimelineDescription', () => {
 
     expect(clickHandler).toHaveBeenNthCalledWith(1, firstLegalFact);
     expect(clickHandler).toHaveBeenNthCalledWith(2, secondLegalFact);
-  });
-
-  it('shows the recipient next to status legal facts for a multi-recipient sender timeline', () => {
-    const firstEvent = createEvent({
-      elementId: 'FIRST_HIDDEN_EVENT',
-      details: { recIndex: 0 },
-      isHidden: true,
-      legalFactsIds: [firstLegalFact],
-    });
-    const secondEvent = createEvent({
-      elementId: 'SECOND_HIDDEN_EVENT',
-      details: { recIndex: 1 },
-      isHidden: true,
-      legalFactsIds: [secondLegalFact],
-    });
-
-    const { getAllByTestId } = render(
-      <NotificationTimelineDescription
-        description="Descrizione con attestazioni."
-        status={createStatus([firstEvent, secondEvent])}
-        clickHandler={clickHandler}
-        isNewTimelineCopyEnabled
-      />
-    );
-
-    const legalFactsLabel = getAllByTestId('download-legalfact');
-    expect(legalFactsLabel).toHaveLength(2);
-    expect(legalFactsLabel[0]).toHaveTextContent('Destinatario Test Uno (TSTTNO00A00A000A)');
-    expect(legalFactsLabel[1]).toHaveTextContent('Destinatario Test Due (TSTTDU00A00A000B)');
-  });
-
-  it('does not show the recipient next to legal facts outside the sender timeline and with only one recipient', () => {
-    const event = createEvent({
-      details: { recIndex: 0 },
-      isHidden: true,
-      legalFactsIds: [firstLegalFact, secondLegalFact],
-    });
-
-    const { getAllByTestId } = render(
-      <NotificationTimelineDescription
-        description="Descrizione con attestazioni."
-        status={createStatus([event])}
-        clickHandler={clickHandler}
-        isNewTimelineCopyEnabled
-      />
-    );
-
-    const legalFactsLabel = getAllByTestId('download-legalfact');
-    expect(legalFactsLabel).toHaveLength(2);
-    expect(legalFactsLabel[0]).not.toHaveTextContent('Destinatario Test Uno (TSTTNO00A00A000A)');
-    expect(legalFactsLabel[1]).not.toHaveTextContent('Destinatario Test Uno (TSTTNO00A00A000A)');
-  });
-
-  it('extracts legal facts from a status only when all its events are hidden', () => {
-    const hiddenEvent = createEvent({
-      isHidden: true,
-      legalFactsIds: [firstLegalFact],
-    });
-
-    const { getByRole } = render(
-      <NotificationTimelineDescription
-        description="Scarica l'<0>attestazione</0>."
-        status={createStatus([hiddenEvent])}
-        clickHandler={clickHandler}
-        isNewTimelineCopyEnabled
-      />
-    );
-
-    fireEvent.click(getByRole('button'));
-
-    expect(clickHandler).toHaveBeenCalledWith(firstLegalFact);
-  });
-
-  it('does not extract status legal facts when at least one event is visible', () => {
-    const hiddenEvent = createEvent({
-      elementId: 'HIDDEN_EVENT',
-      isHidden: true,
-      legalFactsIds: [firstLegalFact],
-    });
-    const visibleEvent = createEvent({
-      elementId: 'VISIBLE_EVENT',
-      isHidden: false,
-    });
-
-    const { queryByRole } = render(
-      <NotificationTimelineDescription
-        description="Descrizione senza link inline."
-        status={createStatus([hiddenEvent, visibleEvent])}
-        clickHandler={clickHandler}
-        isNewTimelineCopyEnabled
-      />
-    );
-
-    expect(queryByRole('button')).not.toBeInTheDocument();
   });
 
   it('supports legacy statuses', () => {

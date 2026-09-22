@@ -27,6 +27,7 @@ const renderGroup = (group: NotificationTimelineGroup, hasMultipleAttempts = fal
       disableDownloads={false}
       language="it"
       hasMultipleAttempts={hasMultipleAttempts}
+      status={deliveringStatus}
     />
   );
 

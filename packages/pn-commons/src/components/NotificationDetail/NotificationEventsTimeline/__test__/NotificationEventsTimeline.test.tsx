@@ -389,6 +389,118 @@ describe('NotificationEventsTimeline', () => {
     expect(clickHandler).toHaveBeenCalledWith(legalFact);
   });
 
+  it('renders multiple status legal facts under their recipients', () => {
+    const firstLegalFact = {
+      key: 'safestorage://fictional-first-attestation.pdf',
+      category: LegalFactType.DIGITAL_DELIVERY,
+    };
+    const secondLegalFact = {
+      key: 'safestorage://fictional-second-attestation.pdf',
+      category: LegalFactType.DIGITAL_DELIVERY,
+    };
+
+    const status: NotificationTimelineStatusHistory = {
+      status: NotificationStatus.VIEWED,
+      activeFrom: '2026-08-06T09:14:58.508308Z',
+      steps: [
+        {
+          stepType: 'EVENT',
+          event: {
+            elementId: 'FICTIONAL_VIEWED_EVENT_0',
+            timestamp: '2026-08-06T09:14:58.508308Z',
+            category: TimelineCategory.NOTIFICATION_VIEWED,
+            details: { recIndex: 0 },
+            legalFactsIds: [firstLegalFact],
+            isHidden: true,
+          },
+        },
+        {
+          stepType: 'EVENT',
+          event: {
+            elementId: 'FICTIONAL_VIEWED_EVENT_1',
+            timestamp: '2026-08-06T09:15:58.508308Z',
+            category: TimelineCategory.NOTIFICATION_VIEWED,
+            details: { recIndex: 1 },
+            legalFactsIds: [secondLegalFact],
+            isHidden: true,
+          },
+        },
+      ],
+    };
+
+    const { container, getAllByTestId, queryAllByTestId } = render(
+      <NotificationEventsTimeline
+        recipients={multiRecipients}
+        statusHistory={[status]}
+        clickHandler={clickHandler}
+        isSenderTimeline
+        isNewTimelineCopyEnabled
+      />
+    );
+
+    const recipients = getAllByTestId('timeline-group-recipient');
+    expect(recipients).toHaveLength(2);
+    expect(recipients[0]).toHaveTextContent('Utente Test Uno - TSTUTN00A07A001G');
+    expect(recipients[1]).toHaveTextContent('Utente Test Due - TSTUTN00A07A002H');
+
+    const legalFacts = getAllByTestId('download-legalfact');
+    expect(legalFacts).toHaveLength(2);
+
+    // Gli eventi tecnici non devono apparire con descrizione e data.
+    expect(queryAllByTestId('timeline-event')).toHaveLength(0);
+
+    expect(
+      orderedTestIds(container, ['timeline-group-recipient', 'download-legalfact'])
+    ).toStrictEqual([
+      'timeline-group-recipient',
+      'download-legalfact',
+      'timeline-group-recipient',
+      'download-legalfact',
+    ]);
+
+    fireEvent.click(legalFacts[0]);
+    fireEvent.click(legalFacts[1]);
+
+    expect(clickHandler).toHaveBeenNthCalledWith(1, firstLegalFact);
+    expect(clickHandler).toHaveBeenNthCalledWith(2, secondLegalFact);
+  });
+
+  it('embeds a single status legal fact in the status description without duplicating its event', () => {
+    const statusWithEmbeddedLegalFact: NotificationTimelineStatusHistory = {
+      status: NotificationStatus.VIEWED,
+      activeFrom: '2026-08-06T09:14:58.508308Z',
+      steps: [hiddenEventStepOfRecipient(0)],
+    };
+
+    const legalFact =
+      statusWithEmbeddedLegalFact.steps[0].stepType === 'EVENT'
+        ? statusWithEmbeddedLegalFact.steps[0].event.legalFactsIds![0]
+        : undefined;
+
+    const { getAllByRole, queryByTestId } = render(
+      <NotificationEventsTimeline
+        recipients={multiRecipients}
+        statusHistory={[statusWithEmbeddedLegalFact]}
+        clickHandler={clickHandler}
+        isSenderTimeline
+        isNewTimelineCopyEnabled
+      />
+    );
+
+    const buttons = getAllByRole('button');
+
+    // Una sola occorrenza: quella incorporata nella descrizione.
+    expect(buttons).toHaveLength(1);
+    expect(queryByTestId('timeline-event')).not.toBeInTheDocument();
+
+    // Nessuna intestazione destinatario orfana per l'evento nascosto.
+    expect(queryByTestId('timeline-group-recipient')).not.toBeInTheDocument();
+
+    fireEvent.click(buttons[0]);
+    expect(clickHandler).toHaveBeenCalledTimes(1);
+    expect(clickHandler).toHaveBeenCalledWith(legalFact);
+  });
+
   it('renders both hidden and visible status events when at least one event is visible and the new copy is enabled', () => {
     const hiddenStep = hiddenEventStepOfRecipient(0);
     const visibleStep: NotificationTimelineStep = {

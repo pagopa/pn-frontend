@@ -132,10 +132,6 @@ const NotificationTimelineDescription: React.FC<Props> = ({
 
   const legalFactsIds = getLegalFacts(event, status, legacyStatus);
 
-  if (legacyStatus) {
-    console.log(legacyStatus);
-  }
-
   return (
     <Box>
       <Typography {...slotProps?.typography}>
