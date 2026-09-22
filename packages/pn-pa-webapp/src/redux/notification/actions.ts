@@ -14,6 +14,11 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 
 import { apiClient } from '../../api/apiClients';
 import { DowntimeApiFactory } from '../../generated-client/downtime-logs';
+import {
+  BffDocumentDownloadMetadataResponse,
+  BffFullSentInformalNotificationV1,
+  SenderInformalNotificationsApiFactory,
+} from '../../generated-client/informal-notifications';
 import { NotificationSentApiFactory } from '../../generated-client/notifications';
 
 export enum NOTIFICATION_ACTIONS {
@@ -23,6 +28,10 @@ export enum NOTIFICATION_ACTIONS {
   GET_SENT_NOTIFICATION_PAYMENT = 'getSentNotificationPayment',
   GET_DOWNTIME_HISTORY = 'getNotificationDowntimeHistory',
   CANCEL_NOTIFICATION = 'cancelNotification',
+
+  GET_SENT_INFORMAL_NOTIFICATION = 'getSentInformalNotification',
+  GET_SENT_INFORMAL_NOTIFICATION_DOCUMENT = 'getSentInformalNotificationDocument',
+  GET_SENT_INFORMAL_NOTIFICATION_PAYMENT = 'getSentInformalNotificationPayment',
 }
 
 export const getSentNotification = createAsyncThunk<NotificationDetail, string>(
@@ -156,6 +165,86 @@ export const getSentNotificationPayment = createAsyncThunk<
       );
       return response.data as PaymentAttachment;
     } catch (e: any) {
+      return rejectWithValue(parseError(e));
+    }
+  }
+);
+
+/* INFORMAL */
+
+export const getSentInformalNotification = createAsyncThunk<
+  BffFullSentInformalNotificationV1,
+  string
+>(NOTIFICATION_ACTIONS.GET_SENT_INFORMAL_NOTIFICATION, async (iun: string, { rejectWithValue }) => {
+  try {
+    const informalNotificationsApiFactory = SenderInformalNotificationsApiFactory(
+      undefined,
+      undefined,
+      apiClient
+    );
+
+    const response = await informalNotificationsApiFactory.getSentInformalNotificationV1(iun);
+
+    return response.data;
+  } catch (e: any) {
+    return rejectWithValue(parseError(e));
+  }
+});
+
+export const getSentInformalNotificationDocument = createAsyncThunk<
+  BffDocumentDownloadMetadataResponse,
+  { iun: string; docIdx: number }
+>(
+  NOTIFICATION_ACTIONS.GET_SENT_INFORMAL_NOTIFICATION_DOCUMENT,
+  async (params, { rejectWithValue }) => {
+    try {
+      const senderInformalNotificationsApiFactory = SenderInformalNotificationsApiFactory(
+        undefined,
+        undefined,
+        apiClient
+      );
+
+      const response =
+        await senderInformalNotificationsApiFactory.getSentInformalNotificationDocumentV1(
+          params.iun,
+          params.docIdx
+        );
+
+      return response.data;
+    } catch (e) {
+      return rejectWithValue(parseError(e));
+    }
+  }
+);
+
+export const getSentInformalNotificationPayment = createAsyncThunk<
+  BffDocumentDownloadMetadataResponse,
+  {
+    iun: string;
+    recipientIdx: number;
+    attachmentName: PaymentAttachmentSName;
+    attachmentIdx?: number;
+  }
+>(
+  NOTIFICATION_ACTIONS.GET_SENT_INFORMAL_NOTIFICATION_PAYMENT,
+  async ({ iun, recipientIdx, attachmentName, attachmentIdx }, { rejectWithValue }) => {
+    try {
+      const informalNotificationsApiFactory = SenderInformalNotificationsApiFactory(
+        undefined,
+        undefined,
+        apiClient
+      );
+
+      const response =
+        await informalNotificationsApiFactory.getSentInformalNotificationAttachmentV1(
+          iun,
+          recipientIdx,
+          attachmentName,
+          attachmentIdx
+        );
+
+      return response.data;
+    } catch (e) {
       return rejectWithValue(parseError(e));
     }
   }

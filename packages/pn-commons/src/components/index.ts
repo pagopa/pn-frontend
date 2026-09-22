@@ -83,6 +83,7 @@ export { default as SnackBar } from './SnackBar/SnackBar';
 export { default as TabPanel } from './TabPanel';
 export { default as TitleBox } from './TitleBox';
 export { default as AbstractPaper } from './NotificationDetail/AbstractPaper';
+export { default as NotificationStatusBox } from './NotificationDetail/NotificationStatusBox';
 export { default as NotificationTimelineBox } from './NotificationDetail/NotificationTimelineBox';
 export { default as NotificationDetailSection } from './NotificationDetail/NotificationDetailSection';
 

@@ -36,6 +36,13 @@ const initialState = {
     notificationStatusHistory: [],
     timeline: [],
   },
+  informalNotification: {
+    iun: '',
+    senderDenomination: '',
+    recipients: [],
+    subject: '',
+    notificationStatus: '',
+  },
   notificationTimeline: {
     iun: '',
     subject: '',

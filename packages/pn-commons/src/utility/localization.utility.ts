@@ -3,7 +3,8 @@ type LocalizationNamespacesNames =
   | 'notifications'
   | 'appStatus'
   | 'delegations'
-  | 'recapiti';
+  | 'recapiti'
+  | 'campaigns';
 
 type LocalizationNamespaces = {
   [key in LocalizationNamespacesNames]: string;
@@ -24,6 +25,7 @@ let localizationNamespaces: LocalizationNamespaces = {
   appStatus: 'appStatus',
   delegations: 'deleghe',
   recapiti: 'recapiti',
+  campaigns: 'campaigns',
 };
 
 /* eslint-disable-next-line functional/no-let */
