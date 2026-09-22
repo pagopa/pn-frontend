@@ -15,10 +15,11 @@ beforeAll(() => {
         ns?: string;
         i18nKey: string;
         t?: () => string;
-        components?: Array<ReactNode>;
+        components?: Array<ReactNode> | Record<string, ReactNode>;
       }) => (
         <>
-          {props.ns} {props.t ? '' : props.i18nKey} {props.t?.()} {props.components?.map((c) => c)}
+          {props.ns} {props.t ? '' : props.i18nKey} {props.t?.()}{' '}
+          {Object.values(props.components ?? {}).map((c) => c)}
         </>
       ),
     };

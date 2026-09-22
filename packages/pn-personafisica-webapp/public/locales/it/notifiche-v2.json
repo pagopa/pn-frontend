@@ -25,7 +25,7 @@
     "timeline": {
       "schedule-digital-workflow": "Nuovo tentativo di invio PEC",
       "analog-failure-workflow": "Impossibile recapitare la notifica",
-      "analog-failure-workflow-description": "Risulti irreperibile in quanto all’indirizzo disponibile non c’erano tuoi riferimenti; oppure l’indirizzo fornito è stato dichiarato inesistente, insufficiente o inesatto. Per questo mettiamo a disposizione qui <0>l’avviso di avvenuta ricezione</0>. Consulta le <1>modalità di perfezionamento</1> per sapere quando la notifica SEND assumerà comunque valore di legge.",
+      "analog-failure-workflow-description": "Risulti irreperibile in quanto all’indirizzo disponibile non c’erano tuoi riferimenti; oppure l’indirizzo fornito è stato dichiarato inesistente, insufficiente o inesatto. Per questo mettiamo a disposizione qui <0>l’avviso di avvenuta ricezione</0>. Consulta le <PerfectionLink>modalità di perfezionamento</PerfectionLink> per sapere quando la notifica SEND assumerà comunque valore di legge.",
       "send-courtesy-message": "Invio dei messaggi di avviso in corso",
       "send-courtesy-message-description": "Ti è stato inviato un messaggio di avviso via {{type}} perché hai ricevuto una nuova notifica SEND.",
       "send-digital-domicile-PEC": "Processo di invio PEC iniziato",

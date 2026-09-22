@@ -156,6 +156,20 @@ const NotificationTimelineDescription: React.FC<Props> = ({
 
   const legalFactsIds = getLegalFacts(event, status, legacyStatus);
 
+  const perfectionLinkComponent: Record<string, React.ReactElement> = perfectionLink
+    ? {
+        PerfectionLink: (
+          <Link
+            href={perfectionLink}
+            target="_blank"
+            rel="noopener noreferrer"
+            sx={{ ...slotProps?.button?.sx, fontWeight: 400 }}
+            data-testid="perfection-link"
+          />
+        ),
+      }
+    : {};
+
   return (
     <Box>
       <Typography {...slotProps?.typography}>
@@ -171,7 +185,7 @@ const NotificationTimelineDescription: React.FC<Props> = ({
           <Trans
             i18nKey="description" // this is fake and is needed to run trans functionality
             t={() => description}
-            components={[
+            components={{
               ...legalFactsIds.map((legalFact) => (
                 <NotificationTimelineEventLegalFact
                   key={legalFact.lf.key}
@@ -188,26 +202,15 @@ const NotificationTimelineDescription: React.FC<Props> = ({
                   isNewTimelineCopyEnabled={isNewTimelineCopyEnabled}
                 />
               )),
-              ...(perfectionLink
-                ? [
-                    <Link
-                      key="perfection-link"
-                      href={perfectionLink}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      sx={{ ...slotProps?.button?.sx, fontWeight: 400 }}
-                      data-testid="perfection-link"
-                    />,
-                  ]
-                : []),
-            ]}
+              ...perfectionLinkComponent,
+            }}
           />
         )}
         {(!isNewTimelineCopyEnabled || legalFactsIds.length > 1) && (
           <Trans
             i18nKey="description" // this is fake and is needed to run trans functionality
             t={() => description}
-            components={[]}
+            components={perfectionLinkComponent}
           />
         )}
         {date && language && (
