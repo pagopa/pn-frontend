@@ -70,8 +70,9 @@ const Dashboard = () => {
     cleanFilters: () => void 0,
   });
 
-  const filtersApplied = filterNotificationsRef.current.filtersApplied;
-  const showFilters = (notifications.length > 0 || filtersApplied) && !hasTimeoutError;
+  const filtersApplied = filterNotificationsRef.current?.filtersApplied;
+  const cleanFilters = filterNotificationsRef.current?.cleanFilters;
+  const showFilters = notifications.length > 0 || filtersApplied;
 
   // Pagination handlers
   const handleChangePage = (paginationData: PaginationData) => {
@@ -233,8 +234,8 @@ const Dashboard = () => {
             // onChangeSorting={handleChangeSorting} // Riabilitare con la issue PN-1124
             onManualSend={handleRouteManualSend}
             onApiKeys={handleRouteApiKeys}
-            filtersApplied={filterNotificationsRef.current.filtersApplied}
-            onCleanFilters={filterNotificationsRef.current.cleanFilters}
+            filtersApplied={filtersApplied}
+            onCleanFilters={cleanFilters}
             hasTimeoutError={hasTimeoutError}
             loading={loading}
             onRetry={fetchNotifications}
@@ -245,8 +246,8 @@ const Dashboard = () => {
             // onChangeSorting={handleChangeSorting} // Riabilitare con la issue PN-1124
             onManualSend={handleRouteManualSend}
             onApiKeys={handleRouteApiKeys}
-            filtersApplied={filterNotificationsRef.current.filtersApplied}
-            onCleanFilters={filterNotificationsRef.current.cleanFilters}
+            filtersApplied={filtersApplied}
+            onCleanFilters={cleanFilters}
             hasTimeoutError={hasTimeoutError}
             loading={loading}
             onRetry={fetchNotifications}
