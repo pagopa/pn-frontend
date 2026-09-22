@@ -417,6 +417,7 @@ const NotificationDetail: React.FC = () => {
                   detailsAriaLabel={t('detail.notification-details-aria-label', {
                     ns: 'notifiche',
                   })}
+                  isSender
                 />
               </Stack>
               {/* end ELEMENT 1: intro and alert */}
