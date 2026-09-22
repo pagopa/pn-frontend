@@ -1,7 +1,9 @@
 import { getTimelineElem } from '../../../__mocks__/NotificationDetail.mock';
 import { TimelineCategory } from '../../../models/NotificationDetail';
 import { AnalogFailureWorkflowStep } from '../AnalogFailureWorkflowStep';
+import { CompletelyUnreachableStep } from '../CompletelyUnreachableStep';
 import { DefaultStep } from '../DefaultStep';
+import { DigitalFailureWorkflowStep } from '../DigitalFailureWorkflowStep';
 import { DigitalSuccessWorkflowStep } from '../DigitalSuccessWorkflowStep';
 import { NotHandledStep } from '../NotHandledStep';
 import { ScheduleDigitalWorkflowStep } from '../ScheduleDigitalWorkflowStep';
@@ -30,6 +32,8 @@ describe('TimelineStepFactory', () => {
     { category: TimelineCategory.SEND_ANALOG_FEEDBACK, class: SendAnalogFlowStep },
     { category: TimelineCategory.SEND_ANALOG_PROGRESS, class: SendAnalogFlowStep },
     { category: TimelineCategory.DIGITAL_SUCCESS_WORKFLOW, class: DigitalSuccessWorkflowStep },
+    { category: TimelineCategory.DIGITAL_FAILURE_WORKFLOW, class: DigitalFailureWorkflowStep },
+    { category: TimelineCategory.COMPLETELY_UNREACHABLE, class: CompletelyUnreachableStep },
     {
       category: TimelineCategory.SEND_SIMPLE_REGISTERED_LETTER_PROGRESS,
       class: SendAnalogFlowStep,

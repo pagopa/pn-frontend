@@ -65,6 +65,7 @@
     "legal-date": "Notification déposée le",
     "informal-date": "Communication déposée le",
     "legal-disclaimer": "Notification envoyée via SEND, la plateforme régie par l'art. 26 du D.L. 76/2020",
+    "informal-disclaimer": "Cette communication pourrait produire des effets juridiques. Consulte les pièces jointes, si présentes, pour en savoir plus.",
     "notification-timeline-section": {
       "title": "Statut de la notification",
       "aria-label": "Accède à la timeline de la notification"
@@ -162,7 +163,7 @@
       "greeting": "Ciao {{recipientDenomination}},",
       "attachments_info": "Per avere maggiori informazioni <0>prendi visione degli allegati,</0> che possono fornirti dettagli importanti.",
       "payment_instructions": "Puoi effettuare il pagamento direttamente premendo <0>Paga</0>. In alternativa, puoi utilizzare l'<0>avviso allegato</0> per saldare l'importo tramite tutti i canali abilitati a pagoPA.",
-      "assistance": "In ogni caso, qualora avessi bisogno di assistenza, <0>contatta {{senderDenomination}} attraverso i suoi canali ufficiali.</0>"
+      "assistance": "In ogni caso, qualora avessi bisogno di assistenza, <0>contatta {{senderDenomination}}</0> attraverso i suoi canali ufficiali."
     },
     "acts_files": {
       "downloadable_acts": "<0>Les documents seront disponibles en ligne jusqu'à 120 jours</0> à compter de la date à laquelle la notification SEND a pris valeur de loi. Enregistrez-les sur votre appareil !",
