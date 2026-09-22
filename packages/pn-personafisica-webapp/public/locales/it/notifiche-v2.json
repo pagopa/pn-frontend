@@ -81,6 +81,7 @@
       "send-analog-flow-RECRN003C-title": "Raccomandata ritirata",
       "send-analog-flow-RECRN003C-description": "La raccomandata A/R numero {{registeredLetterNumber}} è stata consegnata alla persona destinataria o a una persona abilitata presso il punto di ritiro.",
       "send-analog-flow-RECRN004C-title": "Raccomandata rifiutata",
+      "send-analog-flow-RECRN004C-description": "Hai rifiutato il ritiro della raccomandata numero {{registeredLetterNumber}}, che continua a essere quindi in giacenza presso il punto di ritiro.",
       "send-analog-flow-RECRN005C-title": "Termini di ritiro scaduti",
       "send-analog-flow-RECRN005C-description": "Sono trascorsi 30 giorni di giacenza e non è più possibile ritirare la raccomandata A/R numero {{registeredLetterNumber}}.",
       "send-analog-flow-RECAG004-title": "Raccomandata non consegnata",
@@ -165,6 +166,10 @@
       "send-analog-flow-RECAG012-description": "La raccomandata 890 numero {{registeredLetterNumber}} è stata ritirata o è in giacenza da almeno 10 giorni presso il punto di ritiro.",
       "analog-workflow-failure-cause": {
         "M04": "perché il destinatario si è trasferito",
+        "F01": "furto della busta",
+        "F02": "smarrimento della busta",
+        "F03": "deterioramento della busta",
+        "F04": "rapina",
         "C01": "a causa di un incendio",
         "C02": "a causa di una strada chiusa per lavori in corso o frana",
         "C03": "a causa di una strada chiusa dalle autorità per eventi eccezionali",
