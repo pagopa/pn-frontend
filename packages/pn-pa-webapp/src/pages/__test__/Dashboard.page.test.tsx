@@ -306,6 +306,47 @@ describe('Dashboard Page', () => {
     });
   });
 
+  it('does not crash when an active filter request times out', async () => {
+    mock.onGet(notificationsPath).reply(200, notificationsDTO);
+
+    const filteredRecipient = notificationsDTO.resultsPage[0].recipients[0];
+    const notificationsPathFiltered = `/bff/v1/notifications/sent?startDate=${startParam}&endDate=${endParam}&recipientId=${filteredRecipient}&size=10`;
+
+    mock.onGet(notificationsPathFiltered).reply(timeoutErrorMock.status, timeoutErrorMock.data);
+
+    await act(async () => {
+      result = render(
+        <>
+          <ResponseEventDispatcher />
+          <AppResponseMessage />
+          <Dashboard />
+        </>
+      );
+    });
+
+    // Dashboard initially renders notifications and filters
+    expect(result.getByTestId('filter-form')).toBeInTheDocument();
+
+    // Apply filter
+    const form = result.getByTestId('filter-form') as HTMLFormElement;
+    await testInput(form, 'recipientId', filteredRecipient);
+
+    const submitButton = form.querySelector('button[type="submit"]');
+    expect(submitButton).toBeEnabled();
+    fireEvent.click(submitButton!);
+
+    // Filtered request is performed
+    await waitFor(() => {
+      expect(mock.history.get).toHaveLength(2);
+      expect(mock.history.get[1].url).toContain(`recipientId=${filteredRecipient}`);
+    });
+
+    // Timeout state is rendered without crashing the Dashboard
+    await waitFor(() => {
+      expect(screen.getByText(/empty-state\.timeout/i)).toBeInTheDocument();
+    });
+  });
+
   it('renders page - mobile', async () => {
     globalThis.matchMedia = createMatchMedia(800);
     mock.onGet(notificationsPath).reply(200, notificationsDTO);
