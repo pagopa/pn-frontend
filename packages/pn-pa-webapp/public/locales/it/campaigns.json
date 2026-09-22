@@ -11,6 +11,7 @@
   },
 
   "detail": {
+    "breadcrumb-root": "Campagne",
     "title": "Dettaglio campagna",
     "creation-date": "Data di creazione",
     "service-name": "Nome servizio",

@@ -212,6 +212,7 @@ const InformalNotificationDetail: React.FC = () => {
           <Stack direction={{ xs: 'column', md: 'row' }} spacing={2} alignItems="flex-start">
             <Stack sx={{ width: { xs: '100%', md: 'calc(58% - 8px)' } }} gap={2}>
               <AbstractPaper
+                isSender
                 isLegal={false}
                 title={informalNotification.iun}
                 senderDenomination={informalNotification.senderDenomination}
