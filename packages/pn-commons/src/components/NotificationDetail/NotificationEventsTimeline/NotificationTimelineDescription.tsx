@@ -113,7 +113,7 @@ function getLegalFacts(
   } else if (status) {
     return getStatusLegalFacts(status);
   } else {
-    return getLegacyStatusLegalFacts(legacyStatus?.steps);
+    return getLegacyStatusLegalFacts(legacyStatus);
   }
 }
 
@@ -131,6 +131,10 @@ const NotificationTimelineDescription: React.FC<Props> = ({
   const { legacyStatus, status, event } = rest;
 
   const legalFactsIds = getLegalFacts(event, status, legacyStatus);
+
+  if (legacyStatus) {
+    console.log(legacyStatus);
+  }
 
   return (
     <Box>
