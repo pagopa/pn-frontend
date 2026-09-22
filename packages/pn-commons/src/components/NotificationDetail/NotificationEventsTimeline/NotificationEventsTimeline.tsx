@@ -105,6 +105,7 @@ const NotificationEventsTimeline = ({
                       <Fragment key={step.event.elementId}>
                         {recipientHeader}
                         <NotificationTimelineEventItem
+                          status={status}
                           event={step.event}
                           allEvents={legacyStatus.steps}
                           recipients={recipients}
@@ -129,6 +130,7 @@ const NotificationEventsTimeline = ({
                       {recipientHeader}
 
                       <NotificationTimelineGroupItem
+                        status={status}
                         group={step.group}
                         allEvents={legacyStatus.steps}
                         recipients={recipients}

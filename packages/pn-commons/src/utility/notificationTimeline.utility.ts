@@ -1,7 +1,9 @@
+import { NotificationStatus } from '../models';
 import {
   INotificationDetailTimeline,
   LegalFactId,
   NotificationDetailRecipient,
+  TimelineCategory,
 } from '../models/NotificationDetail';
 import {
   NotificationTimelineEvent,
@@ -12,6 +14,11 @@ import {
   NotificationTimelineStepType,
 } from '../models/NotificationTimeline';
 import { formatDay, formatMonthString, formatTime } from './date.utility';
+
+const legalFactStatusMap = new Map<NotificationStatus, TimelineCategory>([
+  [NotificationStatus.ACCEPTED, TimelineCategory.REQUEST_ACCEPTED],
+  [NotificationStatus.VIEWED, TimelineCategory.NOTIFICATION_VIEWED],
+]);
 
 export const isTimelineGroupStep = (
   step: NotificationTimelineStep
@@ -72,22 +79,30 @@ export const getRecipientPerStep = (
   });
 };
 
-// when statutes have all steps hidden, they have leagl facts under description
-// when statuses have even just on step not hidden, the legal fact is shown as bullet point inside the status
-export const getStatusLegalFacts = (events: Array<NotificationTimelineEvent>) => {
-  const legalFactsIds = events.reduce((arr, s) => {
-    if (s.legalFactsIds && s.isHidden) {
-      return arr.concat(s.legalFactsIds.map((lf) => ({ event: s, lf })));
-    }
-    return arr;
-  }, [] as Array<{ event: NotificationTimelineEvent; lf: LegalFactId }>);
+export const getStatusLegalFacts = (status: NotificationTimelineLegacyStatusHistory) => {
+  const eventCategory = legalFactStatusMap.get(status.status);
+  if (eventCategory) {
+    const legalFactsIds = status.steps
+      .filter((s) => s.category === eventCategory)
+      .reduce((arr, s) => {
+        if (s.legalFactsIds && s.isHidden) {
+          return arr.concat(s.legalFactsIds.map((lf) => ({ event: s, lf })));
+        }
+        return arr;
+      }, [] as Array<{ event: NotificationTimelineEvent; lf: LegalFactId }>);
 
-  return statusHasStepsToShow(events) ? [] : legalFactsIds;
+    return legalFactsIds.length === 1 ? legalFactsIds : [];
+  }
+  return [];
 };
 
-// if a status has all steps hidden, we hide the steps
-export const statusHasStepsToShow = (events: Array<NotificationTimelineEvent>) =>
-  events.some((s) => !s.isHidden);
+export const eventMustBeShown = (
+  status: NotificationTimelineStatusHistory,
+  event: NotificationTimelineEvent
+) => {
+  const eventCategory = legalFactStatusMap.get(status.status);
+  return event.category !== eventCategory;
+};
 
 // if a status has all steps hidden, we hide the steps
 const legacyStatusHasStepsToShow = (events: Array<INotificationDetailTimeline>) =>

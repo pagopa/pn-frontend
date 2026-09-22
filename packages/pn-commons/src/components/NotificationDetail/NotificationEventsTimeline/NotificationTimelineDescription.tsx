@@ -111,7 +111,7 @@ function getLegalFacts(
   if (event) {
     return event.legalFactsIds?.map((lf) => ({ event, lf })) ?? [];
   } else if (status) {
-    return getStatusLegalFacts(status.steps);
+    return getStatusLegalFacts(status);
   } else {
     return getLegacyStatusLegalFacts(legacyStatus?.steps);
   }

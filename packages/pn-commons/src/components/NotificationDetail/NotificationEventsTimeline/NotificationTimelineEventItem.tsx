@@ -1,14 +1,18 @@
 import { Stack } from '@mui/material';
 
 import { LegalFactId, NotificationDetailRecipient } from '../../../models/NotificationDetail';
-import { NotificationTimelineEvent } from '../../../models/NotificationTimeline';
+import {
+  NotificationTimelineEvent,
+  NotificationTimelineStatusHistory,
+} from '../../../models/NotificationTimeline';
 import { getNotificationTimelineStatusInfos } from '../../../utility/notification.utility';
-import { statusHasStepsToShow } from '../../../utility/notificationTimeline.utility';
+import { eventMustBeShown } from '../../../utility/notificationTimeline.utility';
 import ReworkedStatusTag from '../ReworkedStatusTag';
 import NotificationTimelineDescription from './NotificationTimelineDescription';
 import TimelineLegalFacts from './TimelineLegalFacts';
 
 type Props = {
+  status: NotificationTimelineStatusHistory;
   event: NotificationTimelineEvent;
   allEvents: Array<NotificationTimelineEvent>;
   recipients: Array<NotificationDetailRecipient>;
@@ -48,6 +52,7 @@ const NotificationTimelineEventItemLegalFacts: React.FC<
 };
 
 const NotificationTimelineEventItem: React.FC<Props> = ({
+  status,
   event,
   allEvents,
   recipients,
@@ -57,7 +62,8 @@ const NotificationTimelineEventItem: React.FC<Props> = ({
   asBullet = false,
   isNewTimelineCopyEnabled = false,
 }) => {
-  if (!statusHasStepsToShow(allEvents) && isNewTimelineCopyEnabled) {
+  if (!eventMustBeShown(status, event) && isNewTimelineCopyEnabled) {
+    console.log(status, event);
     return null;
   }
   if (event.isHidden && !isNewTimelineCopyEnabled) {
