@@ -195,6 +195,7 @@
       "send-digital-success-SERCQ-SEND-description": "The notification was successfully sent to the SEND Digital Domicile.",
       "send-digital-success-SERCQ-SEND-description-multirecipient": "The notification to {{name}} {{taxId}} was successfully sent to the SEND Digital Domicile.",
       "send-simple-registered-letter": "Sending by ordinary registered post",
+      "send-simple-registered-letter-group-label": "Sending by ordinary registered post",
       "send-simple-registered-letter-description": "The notification is being sent to the address {{address}} by simple registered letter.",
       "send-simple-registered-letter-description-multirecipient": "The notification is being sent to {{name}} {{taxId}} at the address {{address}} by simple registered letter.",
       "send-analog-domicile-890": "Sending by 890 registered post",

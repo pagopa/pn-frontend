@@ -177,6 +177,7 @@
       "send-digital-success-SERCQ-SEND-description": "Der Versand der Zustellung an das digitale Domizil SEND war erfolgreich.",
       "send-digital-success-SERCQ-SEND-description-multirecipient": "Der Versand der Zustellung an {{name}} {{taxId}} an das digitale Domizil SEND war erfolgreich.",
       "send-simple-registered-letter": "Einfacher Versand per Einschreiben",
+      "send-simple-registered-letter-group-label": "Einfacher Versand per Einschreiben",
       "send-simple-registered-letter-description": "Die Zustellung an die Anschrift {{address}} per einfachem Einschreiben wird gesendet.",
       "send-simple-registered-letter-description-multirecipient": "Die Zustellung an die Anschrift {{address}} von {{name}} {{taxId}} per einfachem Einschreiben wird gesendet.",
       "send-analog-domicile-890": "Versand per Einschreiben 890",

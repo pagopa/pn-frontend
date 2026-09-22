@@ -205,6 +205,7 @@
       "send-digital-success-SERCQ-SEND-description": "Pošiljanje obvestila na digitalno prebivališče SEND je bilo uspešno.",
       "send-digital-success-SERCQ-SEND-description-multirecipient": "Pošiljanje obvestila {{name}} {{taxId}} na digitalno prebivališče SEND je bilo uspešno.",
       "send-simple-registered-letter": "Pošiljanje z navadno priporočeno pošto",
+      "send-simple-registered-letter-group-label": "Pošiljanje z navadno priporočeno pošto",
       "send-simple-registered-letter-description": "Obvestilo se pošlje na naslov {{address}} z navadno priporočeno pošto.",
       "send-simple-registered-letter-description-multirecipient": "Obvestilo se pošlje {{name}} {{taxId}} na naslov {{address}} z navadno priporočeno pošto.",
       "simple-registered-letter-progess": "Posodobitev pošiljanja po priporočeni pošti",
