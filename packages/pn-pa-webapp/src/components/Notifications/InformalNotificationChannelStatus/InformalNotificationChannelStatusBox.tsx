@@ -6,8 +6,6 @@ import SmsChannelIcon from '@mui/icons-material/ChatOutlined';
 import ViewedIcon from '@mui/icons-material/DraftsOutlined';
 import EmailChannelIcon from '@mui/icons-material/MailOutline';
 import DeliveredIcon from '@mui/icons-material/MarkEmailReadOutlined';
-import PecChannelIcon from '@mui/icons-material/MarkEmailUnreadOutlined';
-import AnalogChannelIcon from '@mui/icons-material/MarkunreadMailboxOutlined';
 import WaitingIcon from '@mui/icons-material/Schedule';
 import SentIcon from '@mui/icons-material/Send';
 import NotDeliveredIcon from '@mui/icons-material/Unsubscribe';
@@ -15,6 +13,8 @@ import { Box, SvgIconProps, Typography } from '@mui/material';
 import SendIcon from '@pagopa-pn/pn-commons/src/components/Icons/SendIcon';
 import { LogoIOApp, MIPaper, themeNext } from '@pagopa/mui-italia';
 
+import AnalogChannelIcon from '../../../assets/local_post_office.svg';
+import PecChannelIcon from '../../../assets/mail_shield.svg';
 import {
   BffChannelDeliveryStatusV1,
   BffChannelStatusV1,
@@ -52,8 +52,8 @@ const CHANNEL_ICONS_MAP: Record<BffNotificationChannelType, ReactNode> = {
   IO: <LogoIOApp title="AppIoLogo" color="blue500" size={24} />,
   SMS: <SmsChannelIcon />,
   EMAIL: <EmailChannelIcon />,
-  ANALOG: <AnalogChannelIcon />,
-  PEC: <PecChannelIcon />,
+  ANALOG: <img src={AnalogChannelIcon} alt="" width={24} height={24} />,
+  PEC: <img src={PecChannelIcon} alt="" width={24} height={24} />,
 };
 
 const getStatusIconColor = (status: BffChannelStatusV1): string => {

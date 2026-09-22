@@ -48,6 +48,7 @@ describe('localization service', () => {
       appStatus: 'appStatus',
       delegations: 'deleghe',
       recapiti: 'recapiti',
+      campaigns: 'campaigns',
     });
     initLocalizationExists((namespace, path) => {
       return namespace === 'notifiche' && path === 'mocked.path';
@@ -69,6 +70,7 @@ describe('localization service', () => {
       appStatus: 'appStatus',
       delegations: 'deleghe',
       recapiti: 'recapiti',
+      campaigns: 'campaigns',
     });
 
     initLocalizationExists(
