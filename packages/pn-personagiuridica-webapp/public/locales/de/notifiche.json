@@ -195,6 +195,7 @@
       "send-digital-success-SERCQ-SEND-description": "Der Versand der Benachrichtigung an das digitale SEND-Domizil war erfolgreich.",
       "send-digital-success-SERCQ-SEND-description-multirecipient": "Der Versand der Benachrichtigung an {{name}} {{taxId}} an das digitale SEND-Domizil war erfolgreich.",
       "send-simple-registered-letter": "Einfacher Versand per Einschreiben",
+      "send-simple-registered-letter-group-label": "Einfacher Versand per Einschreiben",
       "send-simple-registered-letter-description": "Der Bescheid an die Anschrift {{address}} per einfachem Einschreiben wird gesendet.",
       "send-simple-registered-letter-description-multirecipient": "Der Bescheid an {{name}} {{taxId}} an die Adresse {{address}} per einfachem Einschreiben wird gesendet.",
       "send-analog-domicile-890": "Versand per Einschreiben 890",
