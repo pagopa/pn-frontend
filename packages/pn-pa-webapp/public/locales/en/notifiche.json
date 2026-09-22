@@ -133,9 +133,9 @@
       }
     },
     "acts": "Attached documents",
-    "download-message-available": "<0>Available online for up to 120 days</0> from the date the SEND notification became legally binding.",
+    "download-message-available": "<0>Available online for up to 120 days</0> from the date on which the SEND notification took legal effect for the recipient.",
     "download-message-expired": "The documents are no longer available online.",
-    "download-aar-available": "<0>Available online for 10 years</0> from the date the SEND notification became legally binding.",
+    "download-aar-available": "<0>Available online for 10 years</0> from the date on which the SEND notification took legal effect for the recipient.",
     "download-aar-expired": "The notice of receipt is no longer available online.",
     "download-files-link": "When is a notification finalized?",
     "timeline-title": "Notification status",

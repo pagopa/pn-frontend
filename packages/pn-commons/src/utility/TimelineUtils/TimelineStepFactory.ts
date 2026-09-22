@@ -1,6 +1,7 @@
 import { INotificationDetailTimeline, TimelineCategory } from '../../models/NotificationDetail';
 import { AnalogFailureWorkflowStep } from './AnalogFailureWorkflowStep';
 import { DefaultStep } from './DefaultStep';
+import { DigitalSuccessWorkflowStep } from './DigitalSuccessWorkflowStep';
 import { NotHandledStep } from './NotHandledStep';
 import { PrepareAnalogDomicileFailureStep } from './PrepareAnalogDomicileFailureStep';
 import { ScheduleDigitalWorkflowStep } from './ScheduleDigitalWorkflowStep';
@@ -28,6 +29,8 @@ export class TimelineStepFactory {
         return new SendDigitalFeedbackStep();
       case TimelineCategory.SEND_DIGITAL_PROGRESS:
         return new SendDigitalProgressStep();
+      case TimelineCategory.DIGITAL_SUCCESS_WORKFLOW:
+        return new DigitalSuccessWorkflowStep();
       case TimelineCategory.SEND_SIMPLE_REGISTERED_LETTER:
         return new SendSimpleRegisteredLetterStep();
       case TimelineCategory.SEND_ANALOG_DOMICILE:

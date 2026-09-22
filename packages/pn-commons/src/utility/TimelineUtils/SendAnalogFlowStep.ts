@@ -1,5 +1,5 @@
 import { SendPaperDetails, TimelineCategory } from '../../models/NotificationDetail';
-import { getLocalizedOrDefaultLabel } from '../../utility/localization.utility';
+import { getLocalizedOrDefaultLabel, hasLocalizedLabel } from '../../utility/localization.utility';
 import { TimelineStep, TimelineStepInfo, TimelineStepPayload } from './TimelineStep';
 
 const SEND_ANALOG_FEEDBACK_OK_DETAIL_CODES = [
@@ -25,7 +25,7 @@ const SEND_ANALOG_FEEDBACK_KO_DETAIL_CODES = [
   'RECRI004C',
 ];
 
-// CODES (PF,PG,PA) with description: "C'è un nuovo documento allegato." 
+// CODES (PF,PG,PA) with description: "C'è un nuovo documento allegato."
 const SEND_ANALOG_FLOW_NEW_ATTACHMENT_DETAIL_CODES = [
   'RECRN001B',
   'RECRN002B',
@@ -68,9 +68,16 @@ function i18nLabelEntry(category: TimelineCategory, deliveryDetailCode: string |
 export class SendAnalogFlowStep extends TimelineStep {
   getTimelineStepLabel(payload: TimelineStepPayload): string {
     const typedDetails = payload.step.details as SendPaperDetails;
+    const deliveryDetailCode = typedDetails.deliveryDetailCode;
+
+    // when a title specific to the status code is available, it wins over the category one
+    const codeLabelPath = `detail.timeline.send-analog-flow-${deliveryDetailCode}-title`;
+    if (deliveryDetailCode && hasLocalizedLabel('notifications', codeLabelPath)) {
+      return getLocalizedOrDefaultLabel('notifications', codeLabelPath);
+    }
 
     // to avoid cognitive complexity warning
-    const labelEntry = i18nLabelEntry(payload.step.category, typedDetails.deliveryDetailCode);
+    const labelEntry = i18nLabelEntry(payload.step.category, deliveryDetailCode);
 
     const defaultLabel =
       payload.step.category === TimelineCategory.SEND_ANALOG_PROGRESS

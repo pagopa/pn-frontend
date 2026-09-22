@@ -18,6 +18,8 @@ import {
   EventNotificationTypes,
   EventPaymentRecipientType,
   GetDowntimeHistoryParams,
+  LegalFactId,
+  LegalFactType,
   NotificationDetailBilingualFacsimileDocuments,
   NotificationDetailDocuments,
   NotificationDetailOtherDocument,
@@ -105,6 +107,7 @@ const NotificationDetail: React.FC = () => {
     FACSIMILE_DE,
     FACSIMILE_SL,
     SELFCARE_CDN_URL,
+    IS_NEW_TIMELINE_COPY_ENABLED,
   } = getConfiguration();
   const navigate = useNavigate();
 
@@ -583,6 +586,39 @@ const NotificationDetail: React.FC = () => {
       : navigate(routes.GET_DETTAGLIO_NOTIFICA_TIMELINE_PATH(id));
   };
 
+  const legalFactDownloadHandler = (legalFact: LegalFactId) => {
+    if (legalFact.category !== LegalFactType.NOTIFICATION_CANCELLED && isCancelledOrCancelling) {
+      return;
+    }
+
+    const isAAR = legalFact.category === NotificationDocumentType.AAR;
+    const documentType = isAAR ? NotificationDocumentType.AAR : NotificationDocumentType.LEGAL_FACT;
+    const documentId = isAAR
+      ? legalFact.key
+      : legalFact.key.substring(legalFact.key.lastIndexOf('/') + 1);
+
+    dispatch(
+      getReceivedNotificationDocument({
+        iun: notification.iun,
+        documentType,
+        documentId,
+        mandateId,
+      })
+    )
+      .unwrap()
+      .then(showInfoMessageIfRetryAfterOrDownload)
+      .catch(() => {});
+
+    if (!isAAR) {
+      PFEventStrategyFactory.triggerEvent(
+        PFEventsType.SEND_DOWNLOAD_CERTIFICATE_OPPOSABLE_TO_THIRD_PARTIES,
+        {
+          source: 'dettaglio_notifica',
+        }
+      );
+    }
+  };
+
   return (
     <NotificationDetailOnboardingPrompt
       iun={notification.iun}
@@ -715,6 +751,8 @@ const NotificationDetail: React.FC = () => {
                     recipients={notification.recipients}
                     isParty={false}
                     onTimelineClick={handleGoToTimeline}
+                    clickHandler={legalFactDownloadHandler}
+                    isNewTimelineCopyEnabled={IS_NEW_TIMELINE_COPY_ENABLED}
                   />
                 )}
                 <NotificationDetailSection

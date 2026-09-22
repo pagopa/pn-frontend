@@ -133,9 +133,9 @@
       }
     },
     "acts": "Beigefügte Anlagen",
-    "download-message-available": "<0>Bis zu 120 Tage online verfügbar</0> ab dem Datum, an dem die SEND Zustellung rechtsgültig wurde.",
+    "download-message-available": "<0>Online verfügbar bis zu 120 Tage</0> ab dem Datum, an dem die SEND-Zustellung für den Empfänger rechtsgültig geworden ist.",
     "download-message-expired": "Die Dokumente sind nicht mehr online verfügbar.",
-    "download-aar-available": "<0>10 Jahre lang online verfügbar</0> ab dem Datum, an dem die SEND-Zustellung Rechtskraft erlangt hat.",
+    "download-aar-available": "<0>Online verfügbar für 10 Jahre</0> ab dem Datum, an dem die SEND-Zustellung für den Empfänger rechtsgültig geworden ist.",
     "download-aar-expired": "Die Empfangsbestätigung ist nicht mehr online verfügbar.",
     "download-files-link": "Wann ist die Bearbeitung einer Zustellung vervollständigt?",
     "timeline-title": "Status der Zustellung",

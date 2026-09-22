@@ -22,6 +22,7 @@ type Props = {
   disableDownloads: boolean;
   language: string;
   hasMultipleAttempts?: boolean;
+  isNewTimelineCopyEnabled?: boolean;
 };
 
 const NotificationTimelineGroupItem = ({
@@ -32,6 +33,7 @@ const NotificationTimelineGroupItem = ({
   disableDownloads,
   language,
   hasMultipleAttempts = false,
+  isNewTimelineCopyEnabled = false,
 }: Props) => {
   const generatedId = useId();
   const [expanded, setExpanded] = useState(false);
@@ -120,6 +122,7 @@ const NotificationTimelineGroupItem = ({
               disableDownloads={disableDownloads}
               language={language}
               asBullet
+              isNewTimelineCopyEnabled={isNewTimelineCopyEnabled}
             />
           ))}
         </Box>
