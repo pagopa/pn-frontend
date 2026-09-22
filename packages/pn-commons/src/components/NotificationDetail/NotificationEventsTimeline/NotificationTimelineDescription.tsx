@@ -156,19 +156,38 @@ const NotificationTimelineDescription: React.FC<Props> = ({
 
   const legalFactsIds = getLegalFacts(event, status, legacyStatus);
 
-  const perfectionLinkComponent: Record<string, React.ReactElement> = perfectionLink
-    ? {
-        PerfectionLink: (
-          <Link
-            href={perfectionLink}
-            target="_blank"
-            rel="noopener noreferrer"
-            sx={{ ...slotProps?.button?.sx, fontWeight: 400 }}
-            data-testid="perfection-link"
-          />
-        ),
+  const showsLegalFactInline = isNewTimelineCopyEnabled && legalFactsIds.length <= 1;
+  const inlineLegalFact = showsLegalFactInline ? legalFactsIds[0] : undefined;
+
+  const emptySlot = <span />;
+
+  const legalFactSlot = inlineLegalFact ? (
+    <NotificationTimelineEventLegalFact
+      legalFact={inlineLegalFact.lf}
+      clickHandler={clickHandler}
+      slotProps={slotProps}
+      disableDownloads={
+        disableDownloads &&
+        inlineLegalFact.event.category !== TimelineCategory.NOTIFICATION_CANCELLED
       }
-    : {};
+      dataTestId={status || legacyStatus ? 'download-legalfact' : 'download-legalfact-micro'}
+      isNewTimelineCopyEnabled={isNewTimelineCopyEnabled}
+    />
+  ) : (
+    emptySlot
+  );
+
+  const perfectionLinkSlot = perfectionLink ? (
+    <Link
+      href={perfectionLink}
+      target="_blank"
+      rel="noopener noreferrer"
+      sx={{ ...slotProps?.button?.sx, fontWeight: 400 }}
+      data-testid="perfection-link"
+    />
+  ) : (
+    emptySlot
+  );
 
   return (
     <Box>
@@ -181,38 +200,11 @@ const NotificationTimelineDescription: React.FC<Props> = ({
             {' - '}
           </>
         )}
-        {isNewTimelineCopyEnabled && legalFactsIds.length <= 1 && (
-          <Trans
-            i18nKey="description" // this is fake and is needed to run trans functionality
-            t={() => description}
-            components={{
-              ...legalFactsIds.map((legalFact) => (
-                <NotificationTimelineEventLegalFact
-                  key={legalFact.lf.key}
-                  legalFact={legalFact.lf}
-                  clickHandler={clickHandler}
-                  slotProps={slotProps}
-                  disableDownloads={
-                    disableDownloads &&
-                    legalFact.event.category !== TimelineCategory.NOTIFICATION_CANCELLED
-                  }
-                  dataTestId={
-                    status || legacyStatus ? 'download-legalfact' : 'download-legalfact-micro'
-                  }
-                  isNewTimelineCopyEnabled={isNewTimelineCopyEnabled}
-                />
-              )),
-              ...perfectionLinkComponent,
-            }}
-          />
-        )}
-        {(!isNewTimelineCopyEnabled || legalFactsIds.length > 1) && (
-          <Trans
-            i18nKey="description" // this is fake and is needed to run trans functionality
-            t={() => description}
-            components={perfectionLinkComponent}
-          />
-        )}
+        <Trans
+          i18nKey="description" // this is fake and is needed to run trans functionality
+          t={() => description}
+          components={[legalFactSlot, perfectionLinkSlot]}
+        />
         {date && language && (
           <>
             &nbsp;
@@ -220,7 +212,7 @@ const NotificationTimelineDescription: React.FC<Props> = ({
           </>
         )}
       </Typography>
-      {(!isNewTimelineCopyEnabled || legalFactsIds.length > 1) &&
+      {!showsLegalFactInline &&
         legalFactsIds.map((legalFact) => {
           const recipient = getLegalFactRecipient(legalFact.event, isSenderTimeline, recipients);
           const recipientLabel =

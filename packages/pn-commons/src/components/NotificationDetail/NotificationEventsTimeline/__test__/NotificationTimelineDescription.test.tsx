@@ -327,7 +327,7 @@ describe('NotificationTimelineDescription', () => {
 
     const { getByTestId } = render(
       <NotificationTimelineDescription
-        description="Scarica l'<0>avviso</0>. Consulta le <PerfectionLink>modalità di perfezionamento</PerfectionLink>."
+        description="Scarica l'<0>avviso</0>. Consulta le <1>modalità di perfezionamento</1>."
         event={event}
         clickHandler={clickHandler}
         isNewTimelineCopyEnabled
@@ -347,7 +347,7 @@ describe('NotificationTimelineDescription', () => {
 
     const { getByTestId, queryByTestId } = render(
       <NotificationTimelineDescription
-        description="Consulta le <PerfectionLink>modalità di perfezionamento</PerfectionLink>."
+        description="Consulta le <1>modalità di perfezionamento</1>."
         event={event}
         clickHandler={clickHandler}
         isNewTimelineCopyEnabled
@@ -369,7 +369,7 @@ describe('NotificationTimelineDescription', () => {
 
     const { getByTestId } = render(
       <NotificationTimelineDescription
-        description="Consulta le <PerfectionLink>modalità di perfezionamento</PerfectionLink>."
+        description="Consulta le <1>modalità di perfezionamento</1>."
         event={event}
         clickHandler={clickHandler}
         isNewTimelineCopyEnabled
@@ -388,7 +388,7 @@ describe('NotificationTimelineDescription', () => {
 
     const { queryByTestId } = render(
       <NotificationTimelineDescription
-        description="Consulta le <PerfectionLink>modalità di perfezionamento</PerfectionLink>."
+        description="Consulta le <1>modalità di perfezionamento</1>."
         event={event}
         clickHandler={clickHandler}
         isNewTimelineCopyEnabled
