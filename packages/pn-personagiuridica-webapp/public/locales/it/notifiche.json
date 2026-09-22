@@ -195,6 +195,7 @@
       "send-digital-success-SERCQ-SEND-description": "L'invio della notifica al Domicilio Digitale SEND è riuscito.",
       "send-digital-success-SERCQ-SEND-description-multirecipient": "L'invio della notifica a {{name}} {{taxId}} al Domicilio Digitale SEND è riuscito.",
       "send-simple-registered-letter": "Invio via raccomandata semplice",
+      "send-simple-registered-letter-group-label": "Invio via raccomandata semplice",
       "send-simple-registered-letter-description": "È in corso l'invio della notifica all'indirizzo {{address}} tramite raccomandata semplice.",
       "send-simple-registered-letter-description-multirecipient": "È in corso l'invio della notifica a {{name}} {{taxId}} all'indirizzo {{address}} tramite raccomandata semplice.",
       "send-analog-domicile-890": "Invio via raccomandata 890",
