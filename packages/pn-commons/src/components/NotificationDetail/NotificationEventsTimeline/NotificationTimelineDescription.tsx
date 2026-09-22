@@ -1,13 +1,11 @@
 import { Trans } from 'react-i18next';
 
-import AttachFileIcon from '@mui/icons-material/AttachFile';
 import { Box, Typography, TypographyProps } from '@mui/material';
 import { MIButton, MIButtonProps } from '@pagopa/mui-italia';
 
 import {
   INotificationDetailTimeline,
   LegalFactId,
-  NotificationDetailRecipient,
   NotificationStatusHistory,
   TimelineCategory,
 } from '../../../models';
@@ -29,8 +27,6 @@ type BaseProps = {
   language?: string;
   clickHandler: (legalFactId: LegalFactId) => void;
   disableDownloads?: boolean;
-  recipients?: Array<NotificationDetailRecipient>;
-  isSenderTimeline?: boolean;
   slotProps?: {
     typography?: TypographyProps;
     button?: MIButtonProps;
@@ -66,7 +62,6 @@ const NotificationTimelineEventLegalFact: React.FC<
     legalFact: LegalFactId;
     children?: React.ReactNode;
     dataTestId?: string;
-    underAStatus?: boolean;
   }
 > = ({
   slotProps,
@@ -76,7 +71,6 @@ const NotificationTimelineEventLegalFact: React.FC<
   disableDownloads,
   dataTestId,
   isNewTimelineCopyEnabled,
-  underAStatus = false,
 }) => {
   const buttonLayout = !isNewTimelineCopyEnabled
     ? {
@@ -99,7 +93,6 @@ const NotificationTimelineEventLegalFact: React.FC<
       onClick={() => clickHandler(legalFact)}
       disabled={disableDownloads}
       sx={buttonLayout}
-      startIcon={underAStatus && !isNewTimelineCopyEnabled ? <AttachFileIcon /> : undefined}
       data-testid={dataTestId}
     >
       {children}
@@ -124,19 +117,6 @@ function getLegalFacts(
   }
 }
 
-function getLegalFactRecipient(
-  legalFactEvent: NotificationTimelineEvent | INotificationDetailTimeline,
-  isSenderTimeline: boolean,
-  recipients?: Array<NotificationDetailRecipient>
-) {
-  if (!isSenderTimeline || !recipients || recipients.length <= 1) {
-    return undefined;
-  }
-
-  const recIndex = legalFactEvent.details.recIndex;
-  return recIndex !== undefined ? recipients[recIndex] : undefined;
-}
-
 const NotificationTimelineDescription: React.FC<Props> = ({
   title,
   description,
@@ -146,8 +126,6 @@ const NotificationTimelineDescription: React.FC<Props> = ({
   disableDownloads = false,
   slotProps,
   isNewTimelineCopyEnabled = false,
-  recipients,
-  isSenderTimeline = false,
   ...rest
 }) => {
   const { legacyStatus, status, event } = rest;
@@ -201,38 +179,24 @@ const NotificationTimelineDescription: React.FC<Props> = ({
           </>
         )}
       </Typography>
-      {(!isNewTimelineCopyEnabled || legalFactsIds.length > 1) &&
-        legalFactsIds.map((legalFact) => {
-          const recipient = getLegalFactRecipient(legalFact.event, isSenderTimeline, recipients);
-          const recipientLabel =
-            !!(status ?? legacyStatus) && recipient
-              ? ` - ${recipient.denomination} (${recipient.taxId})`
-              : '';
-
-          return (
-            <NotificationTimelineEventLegalFact
-              key={legalFact.lf.key}
-              legalFact={legalFact.lf}
-              clickHandler={clickHandler}
-              slotProps={{ ...slotProps, button: { sx: { display: 'block' } } }}
-              disableDownloads={
-                disableDownloads &&
-                legalFact.event.category !== TimelineCategory.NOTIFICATION_CANCELLED
-              }
-              dataTestId={
-                status || legacyStatus ? 'download-legalfact' : 'download-legalfact-micro'
-              }
-              underAStatus={!!(status ?? legacyStatus)}
-              isNewTimelineCopyEnabled={isNewTimelineCopyEnabled}
-            >
-              {`${getLegalFactLabel(
-                legalFact.event,
-                legalFact.lf.category,
-                legalFact.lf.key || ''
-              )}${recipientLabel}`}
-            </NotificationTimelineEventLegalFact>
-          );
-        })}
+      {event &&
+        (!isNewTimelineCopyEnabled || legalFactsIds.length > 1) &&
+        legalFactsIds.map((legalFact) => (
+          <NotificationTimelineEventLegalFact
+            key={legalFact.lf.key}
+            legalFact={legalFact.lf}
+            clickHandler={clickHandler}
+            slotProps={{ ...slotProps, button: { sx: { display: 'block' } } }}
+            disableDownloads={
+              disableDownloads &&
+              legalFact.event.category !== TimelineCategory.NOTIFICATION_CANCELLED
+            }
+            dataTestId={status || legacyStatus ? 'download-legalfact' : 'download-legalfact-micro'}
+            isNewTimelineCopyEnabled={isNewTimelineCopyEnabled}
+          >
+            {getLegalFactLabel(legalFact.event, legalFact.lf.category, legalFact.lf.key || '')}
+          </NotificationTimelineEventLegalFact>
+        ))}
     </Box>
   );
 };

@@ -4,10 +4,8 @@ import {
   INotificationDetailTimeline,
   LegalFactId,
   LegalFactType,
-  NotificationDetailRecipient,
   NotificationStatus,
   NotificationStatusHistory,
-  RecipientType,
   TimelineCategory,
 } from '../../../../models';
 import {
@@ -168,18 +166,6 @@ describe('NotificationTimelineDescription', () => {
   });
 
   it('shows the recipient next to status legal facts for a multi-recipient sender timeline', () => {
-    const recipients: Array<NotificationDetailRecipient> = [
-      {
-        recipientType: RecipientType.PF,
-        denomination: 'Destinatario Test Uno',
-        taxId: 'TSTTNO00A00A000A',
-      },
-      {
-        recipientType: RecipientType.PF,
-        denomination: 'Destinatario Test Due',
-        taxId: 'TSTTDU00A00A000B',
-      },
-    ];
     const firstEvent = createEvent({
       elementId: 'FIRST_HIDDEN_EVENT',
       details: { recIndex: 0 },
@@ -197,8 +183,6 @@ describe('NotificationTimelineDescription', () => {
       <NotificationTimelineDescription
         description="Descrizione con attestazioni."
         status={createStatus([firstEvent, secondEvent])}
-        recipients={recipients}
-        isSenderTimeline
         clickHandler={clickHandler}
         isNewTimelineCopyEnabled
       />
@@ -211,13 +195,6 @@ describe('NotificationTimelineDescription', () => {
   });
 
   it('does not show the recipient next to legal facts outside the sender timeline and with only one recipient', () => {
-    const recipients: Array<NotificationDetailRecipient> = [
-      {
-        recipientType: RecipientType.PF,
-        denomination: 'Destinatario Test Uno',
-        taxId: 'TSTTNO00A00A000A',
-      },
-    ];
     const event = createEvent({
       details: { recIndex: 0 },
       isHidden: true,
@@ -228,7 +205,6 @@ describe('NotificationTimelineDescription', () => {
       <NotificationTimelineDescription
         description="Descrizione con attestazioni."
         status={createStatus([event])}
-        recipients={recipients}
         clickHandler={clickHandler}
         isNewTimelineCopyEnabled
       />

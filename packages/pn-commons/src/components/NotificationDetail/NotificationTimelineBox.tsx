@@ -54,8 +54,6 @@ const NotificationTimelineBox: React.FC<NotificationTimelineBoxProps> = ({
           description={notificationStatusInfos.description}
           clickHandler={clickHandler}
           slotProps={{ typography: { variant: 'body2' } }}
-          recipients={recipients}
-          isSenderTimeline={isParty}
           isNewTimelineCopyEnabled={isNewTimelineCopyEnabled}
         />
         <MIButton
