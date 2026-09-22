@@ -70,8 +70,8 @@ const Dashboard = () => {
     cleanFilters: () => void 0,
   });
 
-  const filtersApplied = filterNotificationsRef.current?.filtersApplied ?? false;
-  const cleanFilters = filterNotificationsRef.current?.cleanFilters ?? (() => void 0);
+  const filtersApplied = filterNotificationsRef.current?.filtersApplied;
+  const cleanFilters = filterNotificationsRef.current?.cleanFilters;
   const showFilters = notifications.length > 0 || filtersApplied;
 
   // Pagination handlers
