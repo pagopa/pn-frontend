@@ -2,9 +2,18 @@ import KeyboardArrowRightRoundedIcon from '@mui/icons-material/KeyboardArrowRigh
 import { Stack, Typography } from '@mui/material';
 import { MIButton, MIChip, MIPaper } from '@pagopa/mui-italia';
 
-import { LegalFactId, NotificationDetailRecipient, NotificationStatusHistory } from '../../models';
+import {
+  INotificationDetailTimeline,
+  LegalFactId,
+  NotificationDetailRecipient,
+  NotificationStatusHistory,
+} from '../../models';
 import { getNotificationStatusInfos } from '../../utility';
 import { getLocalizedOrDefaultLabel } from '../../utility/localization.utility';
+import {
+  emptyLegalFactPlan,
+  getStatusLegalFactPlan,
+} from '../../utility/notificationTimeline.utility';
 import NotificationTimelineDescription from './NotificationEventsTimeline/NotificationTimelineDescription';
 
 type NotificationTimelineBoxProps = {
@@ -34,6 +43,10 @@ const NotificationTimelineBox: React.FC<NotificationTimelineBoxProps> = ({
     isParty,
   });
 
+  const plan = isNewTimelineCopyEnabled
+    ? getStatusLegalFactPlan(statusHistory[0], (event) => event.hidden)
+    : emptyLegalFactPlan<INotificationDetailTimeline>();
+
   return (
     <MIPaper padding={24} data-testid="NotificationDetailTimeline">
       <Stack spacing={1} alignItems="flex-start">
@@ -50,7 +63,7 @@ const NotificationTimelineBox: React.FC<NotificationTimelineBoxProps> = ({
           sx={{ my: 1, width: 'fit-content' }}
         />
         <NotificationTimelineDescription
-          legacyStatus={statusHistory[0]}
+          inlineLegalFact={plan.inlineLegalFact}
           description={notificationStatusInfos.description}
           clickHandler={clickHandler}
           slotProps={{ typography: { variant: 'body2' } }}

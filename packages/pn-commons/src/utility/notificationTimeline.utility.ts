@@ -1,9 +1,7 @@
 import { NotificationStatus } from '../models';
 import {
-  INotificationDetailTimeline,
   LegalFactId,
   NotificationDetailRecipient,
-  NotificationStatusHistory,
   TimelineCategory,
 } from '../models/NotificationDetail';
 import {
@@ -15,6 +13,31 @@ import {
   NotificationTimelineStepType,
 } from '../models/NotificationTimeline';
 import { formatDay, formatMonthString, formatTime } from './date.utility';
+
+/**
+ * Minimal shape a timeline event must have to take part in the legal fact plan.
+ * Both NotificationTimelineEvent and INotificationDetailTimeline satisfy it; they only
+ * differ in the name of the hidden flag, which is supplied by the caller.
+ */
+type LegalFactCarrier = {
+  elementId: string;
+  category: TimelineCategory;
+  legalFactsIds?: Array<LegalFactId>;
+};
+
+export type StatusLegalFact<T extends LegalFactCarrier> = { event: T; lf: LegalFactId };
+
+export type StatusLegalFactPlan<T extends LegalFactCarrier> = {
+  /** Legal fact to be rendered inline within the status description text, if any. */
+  inlineLegalFact?: StatusLegalFact<T>;
+  /** elementIds of the events that must not be rendered, as they are absorbed into the description. */
+  hiddenEventIds: Set<string>;
+};
+
+const EMPTY_PLAN: StatusLegalFactPlan<never> = { hiddenEventIds: new Set<string>() };
+
+export const emptyLegalFactPlan = <T extends LegalFactCarrier>(): StatusLegalFactPlan<T> =>
+  EMPTY_PLAN as StatusLegalFactPlan<T>;
 
 const legalFactStatusMap = new Map<NotificationStatus, TimelineCategory>([
   [NotificationStatus.ACCEPTED, TimelineCategory.REQUEST_ACCEPTED],
@@ -80,6 +103,42 @@ export const getRecipientPerStep = (
   });
 };
 
+/**
+ * Single source of truth for how the legal facts of a status must be displayed.
+ *
+ * - Zero or several candidates: nothing is inlined, each legal fact keeps being rendered
+ *   in its own context (recipient group for statuses, list for events).
+ * - Exactly one candidate: it is rendered inside the status description and its event is
+ *   hidden, so that the same legal fact is not shown twice.
+ *
+ * `isHidden` tells how to read the hidden flag, which is `isHidden` on the new timeline
+ * and `hidden` on the legacy one.
+ */
+export const getStatusLegalFactPlan = <T extends LegalFactCarrier>(
+  status: { status: NotificationStatus; steps?: Array<T> } | undefined,
+  isHidden: (event: T) => boolean | undefined
+): StatusLegalFactPlan<T> => {
+  const eventCategory = status && legalFactStatusMap.get(status.status);
+  if (!status?.steps || !eventCategory) {
+    return emptyLegalFactPlan<T>();
+  }
+
+  // All (event, legalFact) pairs of this status that are candidates for inlining.
+  const candidates = status.steps
+    .filter((event) => event.category === eventCategory && isHidden(event))
+    .flatMap((event) => (event.legalFactsIds ?? []).map((lf) => ({ event, lf })));
+
+  if (candidates.length !== 1) {
+    return emptyLegalFactPlan<T>();
+  }
+
+  return {
+    inlineLegalFact: candidates[0],
+    hiddenEventIds: new Set([candidates[0].event.elementId]),
+  };
+};
+
+/*
 export const getStatusLegalFacts = (status: NotificationTimelineLegacyStatusHistory) => {
   const eventCategory = legalFactStatusMap.get(status.status);
   if (eventCategory) {
@@ -135,3 +194,4 @@ export const getLegacyStatusLegalFacts = (status?: NotificationStatusHistory) =>
   }
   return [];
 };
+*/

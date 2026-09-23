@@ -9,14 +9,12 @@ import { LegalFactId, NotificationDetailRecipient } from '../../../models/Notifi
 import {
   NotificationTimelineEvent,
   NotificationTimelineGroup,
-  NotificationTimelineStatusHistory,
 } from '../../../models/NotificationTimeline';
 import { getLocalizedOrDefaultLabel } from '../../../utility/localization.utility';
 import NotificationTimelineEventItem from './NotificationTimelineEventItem';
 import { getTimelineGroupHeader } from './timelineGroupHeader.config';
 
 type Props = {
-  status: NotificationTimelineStatusHistory;
   group: NotificationTimelineGroup;
   allEvents: Array<NotificationTimelineEvent>;
   recipients: Array<NotificationDetailRecipient>;
@@ -28,7 +26,6 @@ type Props = {
 };
 
 const NotificationTimelineGroupItem = ({
-  status,
   group,
   allEvents,
   recipients,
@@ -117,7 +114,6 @@ const NotificationTimelineGroupItem = ({
         >
           {group.events.map((event) => (
             <NotificationTimelineEventItem
-              status={status}
               key={event.elementId}
               event={event}
               allEvents={allEvents}
@@ -125,7 +121,7 @@ const NotificationTimelineGroupItem = ({
               clickHandler={clickHandler}
               disableDownloads={disableDownloads}
               language={language}
-              asBullet
+              insideAGroup
               isNewTimelineCopyEnabled={isNewTimelineCopyEnabled}
             />
           ))}

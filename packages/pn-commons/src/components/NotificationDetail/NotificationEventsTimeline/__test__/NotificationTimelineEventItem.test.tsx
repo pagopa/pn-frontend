@@ -142,20 +142,20 @@ describe('NotificationTimelineEventItem', () => {
     expect(clickHandler).toHaveBeenNthCalledWith(2, secondLegalFact);
   });
 
-  it('renders as a list item when asBullet is set', () => {
-    const { container } = renderEvent(visibleEvent, { asBullet: true });
+  it('renders as a list item when insideAGroup is set', () => {
+    const { container } = renderEvent(visibleEvent, { insideAGroup: true });
 
     const item = within(container).getByTestId('timeline-event');
     expect(item.tagName).toBe('LI');
     const statusInfo = getNotificationTimelineStatusInfos(visibleEvent, recipients, allEvents);
     expect(item).toHaveTextContent(`${statusInfo!.label} - ${statusInfo!.description}`);
 
-    const { container: bulletContainer } = renderEvent(hiddenEvent, { asBullet: true });
+    const { container: bulletContainer } = renderEvent(hiddenEvent, { insideAGroup: true });
     expect(within(bulletContainer).getAllByTestId('download-legalfact-micro')).toHaveLength(1);
   });
 
   it('wraps a hidden event in a <li> when rendered inside a bullet list', () => {
-    const { container } = renderEvent(hiddenEvent, { asBullet: true });
+    const { container } = renderEvent(hiddenEvent, { insideAGroup: true });
 
     const legalFactButton = within(container).getByTestId('download-legalfact-micro');
     expect(legalFactButton.closest('li')).not.toBeNull();
