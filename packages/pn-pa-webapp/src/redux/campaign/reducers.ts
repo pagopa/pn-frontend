@@ -11,6 +11,12 @@ const initialState = {
   campaigns: [] as Array<CampaignSummary>,
   campaignDetail: {} as BffCampaignDetailResponseV1,
   campaignCommunications: {} as BffInformalSenderNotificationSearchResponse,
+  communicationFilters: {
+    recipientId: '',
+    iunMatch: '',
+    status: '',
+    outcome: '',
+  },
   pagination: {
     nextPagesKey: [] as Array<string>,
     size: 10,
@@ -33,6 +39,18 @@ const campaignSlice = createSlice({
 
       state.pagination.size = action.payload.size;
       state.pagination.page = action.payload.page;
+    },
+
+    setCommunicationFilters: (
+      state,
+      action: PayloadAction<{
+        recipientId: string;
+        iunMatch: string;
+        status: string;
+        outcome: string;
+      }>
+    ) => {
+      state.communicationFilters = action.payload;
     },
 
     resetCampaignDetail: (state) => {
@@ -72,6 +90,7 @@ const campaignSlice = createSlice({
   },
 });
 
-export const { setPagination, resetCampaignDetail } = campaignSlice.actions;
+export const { setPagination, resetCampaignDetail, setCommunicationFilters } =
+  campaignSlice.actions;
 
 export default campaignSlice;

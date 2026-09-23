@@ -30,6 +30,30 @@
       "EMAIL": "E-Mail",
       "ANALOG": "Postdienst",
       "PEC": "PEC"
+    },
+    "communications": {
+      "title": "Mitteilungsliste",
+      "tax-id": "Steuernummer",
+      "iun": "IUN-Code",
+      "status": "Status",
+      "outcome": "Ergebnis",
+      "empty-title": "Keine Mitteilungen für die ausgewählten Filter vorhanden.",
+      "empty-description": "Entferne sie oder versuche es mit einer anderen Kombination.",
+      "remove-filters": "Filter entfernen",
+      "statuses": {
+        "ready": "Bereit zum Versand",
+        "processing": "Versand läuft",
+        "success": "Erfolgreich versendet",
+        "failed": "Versand fehlgeschlagen",
+        "refused": "Abgelehnt"
+      },
+      "outcomes": {
+        "all": "Alle",
+        "viewed": "Gelesen",
+        "delivered": "Zugestellt"
+      },
+      "no-communications-title": "Keine Mitteilungen verfügbar",
+      "no-communications-description": "Es gibt keine Mitteilungen, die den ausgewählten Filtern entsprechen."
     }
   }
 }

@@ -30,6 +30,30 @@
       "EMAIL": "E-mail",
       "ANALOG": "Service postal",
       "PEC": "PEC"
+    },
+    "communications": {
+      "title": "Liste des communications",
+      "tax-id": "Code fiscal",
+      "iun": "Code IUN",
+      "status": "Statut",
+      "outcome": "Résultat",
+      "empty-title": "Aucune communication pour les filtres sélectionnés.",
+      "empty-description": "Supprimez-les ou essayez une autre combinaison.",
+      "remove-filters": "Supprimer les filtres",
+      "statuses": {
+        "ready": "Prête pour l'envoi",
+        "processing": "Envoi en cours",
+        "success": "Envoi réussi",
+        "failed": "Envoi échoué",
+        "refused": "Refusée"
+      },
+      "outcomes": {
+        "all": "Tous",
+        "viewed": "Lue",
+        "delivered": "Livrée"
+      },
+      "no-communications-title": "Aucune communication disponible",
+      "no-communications-description": "Il n'y a pas de communications correspondant aux filtres sélectionnés."
     }
   }
 }
