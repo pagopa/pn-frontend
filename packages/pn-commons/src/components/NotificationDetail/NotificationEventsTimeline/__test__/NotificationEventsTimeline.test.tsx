@@ -45,7 +45,16 @@ const groupOfRecipient = (
   channel: 'AR_REGISTERED_LETTER',
   attempt: 1,
   hasReworkedEvents: false,
-  events: [],
+  events: [
+    {
+      elementId: `${groupId}.VISIBLE_EVENT`,
+      timestamp: '2026-08-06T09:14:58.508308Z',
+      category: TimelineCategory.REQUEST_ACCEPTED,
+      details: { recIndex },
+      legalFactsIds: [],
+      isHidden: false,
+    },
+  ],
 });
 
 const hiddenEventStepOfRecipient = (recIndex: number): NotificationTimelineStep => ({
@@ -256,8 +265,8 @@ describe('NotificationEventsTimeline', () => {
     ]);
   });
 
-  it('still shows the recipient on a status made of a single, standalone event step, since it is its first occurrence', () => {
-    const { queryAllByTestId } = render(
+  it('shows the recipient in the legal fact label when all status events are hidden', () => {
+    const { getByTestId, queryByTestId } = render(
       <NotificationEventsTimeline
         recipients={multiRecipients}
         statusHistory={[
@@ -272,9 +281,10 @@ describe('NotificationEventsTimeline', () => {
       />
     );
 
-    const recipientLabels = queryAllByTestId('timeline-group-recipient');
-    expect(recipientLabels).toHaveLength(1);
-    expect(recipientLabels[0]).toHaveTextContent('Utente Test Due - TSTUTN00A07A002H');
+    expect(queryByTestId('timeline-group-recipient')).not.toBeInTheDocument();
+    expect(getByTestId('download-legalfact')).toHaveTextContent(
+      'Utente Test Due (TSTUTN00A07A002H)'
+    );
   });
 
   it('does not show the recipient on single recipient notifications', () => {
@@ -302,24 +312,113 @@ describe('NotificationEventsTimeline', () => {
     expect(queryAllByTestId('timeline-group-recipient')).toHaveLength(0);
   });
 
-  it('downloads the legal fact of a hidden event', () => {
-    const { getAllByTestId } = render(
+  it('renders a status legal fact inline when all its events are hidden and the new copy is enabled', () => {
+    const statusWithHiddenEvent: NotificationTimelineStatusHistory = {
+      status: NotificationStatus.VIEWED,
+      activeFrom: '2026-08-06T09:14:58.508308Z',
+      steps: [hiddenEventStepOfRecipient(0)],
+    };
+
+    const legalFact =
+      statusWithHiddenEvent.steps[0].stepType === 'EVENT'
+        ? statusWithHiddenEvent.steps[0].event.legalFactsIds![0]
+        : undefined;
+
+    const { getByRole, queryByTestId } = render(
       <NotificationEventsTimeline
         recipients={recipients}
-        statusHistory={statusHistory}
+        statusHistory={[statusWithHiddenEvent]}
         clickHandler={clickHandler}
+        isNewTimelineCopyEnabled
       />
     );
 
-    const legalFactButtons = getAllByTestId('download-legalfact');
-    expect(legalFactButtons).toHaveLength(2);
+    expect(queryByTestId('timeline-event')).not.toBeInTheDocument();
 
-    fireEvent.click(legalFactButtons[0]);
+    fireEvent.click(getByRole('button'));
+
     expect(clickHandler).toHaveBeenCalledTimes(1);
-    expect(clickHandler).toHaveBeenCalledWith(
-      notificationTimelineDTO.notificationStatusHistory[0].steps[0].stepType === 'EVENT'
-        ? notificationTimelineDTO.notificationStatusHistory[0].steps[0].event.legalFactsIds?.[0]
-        : undefined
+    expect(clickHandler).toHaveBeenCalledWith(legalFact);
+  });
+
+  it('disables a status legal fact when downloads are disabled', () => {
+    const statusWithHiddenEvent: NotificationTimelineStatusHistory = {
+      status: NotificationStatus.VIEWED,
+      activeFrom: '2026-08-06T09:14:58.508308Z',
+      steps: [hiddenEventStepOfRecipient(0)],
+    };
+
+    const { getByTestId } = render(
+      <NotificationEventsTimeline
+        recipients={recipients}
+        statusHistory={[statusWithHiddenEvent]}
+        clickHandler={clickHandler}
+        isNewTimelineCopyEnabled
+        disableDownloads
+      />
     );
+
+    expect(getByTestId('download-legalfact')).toBeDisabled();
+  });
+
+  it('renders a status legal fact below the description when the new copy is disabled', () => {
+    const statusWithHiddenEvent: NotificationTimelineStatusHistory = {
+      status: NotificationStatus.VIEWED,
+      activeFrom: '2026-08-06T09:14:58.508308Z',
+      steps: [hiddenEventStepOfRecipient(0)],
+    };
+
+    const legalFact =
+      statusWithHiddenEvent.steps[0].stepType === 'EVENT'
+        ? statusWithHiddenEvent.steps[0].event.legalFactsIds![0]
+        : undefined;
+
+    const { getByRole, queryByTestId } = render(
+      <NotificationEventsTimeline
+        recipients={recipients}
+        statusHistory={[statusWithHiddenEvent]}
+        clickHandler={clickHandler}
+        isNewTimelineCopyEnabled={false}
+      />
+    );
+
+    expect(queryByTestId('timeline-event')).not.toBeInTheDocument();
+
+    fireEvent.click(getByRole('button'));
+
+    expect(clickHandler).toHaveBeenCalledWith(legalFact);
+  });
+
+  it('renders both hidden and visible status events when at least one event is visible and the new copy is enabled', () => {
+    const hiddenStep = hiddenEventStepOfRecipient(0);
+    const visibleStep: NotificationTimelineStep = {
+      stepType: 'EVENT',
+      event: {
+        elementId: 'VISIBLE_EVENT',
+        timestamp: '2026-08-06T09:14:58.508308Z',
+        category: TimelineCategory.REQUEST_ACCEPTED,
+        details: { recIndex: 0 },
+        legalFactsIds: [],
+        isHidden: false,
+      },
+    };
+
+    const { getAllByTestId } = render(
+      <NotificationEventsTimeline
+        recipients={recipients}
+        statusHistory={[
+          {
+            status: NotificationStatus.VIEWED,
+            activeFrom: '2026-08-06T09:14:58.508308Z',
+            steps: [hiddenStep, visibleStep],
+          },
+        ]}
+        clickHandler={clickHandler}
+        isNewTimelineCopyEnabled
+      />
+    );
+
+    const timelineEvents = getAllByTestId('timeline-event');
+    expect(timelineEvents).toHaveLength(2);
   });
 });

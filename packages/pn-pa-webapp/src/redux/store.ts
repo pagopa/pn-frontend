@@ -20,8 +20,8 @@ export const appReducers = {
   notificationState: notificationSlice.reducer,
   newNotificationState: newNotificationSlice.reducer,
   apiKeysState: apiKeysSlice.reducer,
-  statisticsState: statisticsSlice.reducer,
   campaignState: campaignSlice.reducer,
+  statisticsState: statisticsSlice.reducer,
 };
 
 const createStore = (logReduxActions?: boolean) => {

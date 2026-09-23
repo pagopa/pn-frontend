@@ -1,4 +1,8 @@
-import { NotificationDetailRecipient } from '../models/NotificationDetail';
+import {
+  INotificationDetailTimeline,
+  LegalFactId,
+  NotificationDetailRecipient,
+} from '../models/NotificationDetail';
 import {
   NotificationTimelineEvent,
   NotificationTimelineGroupStep,
@@ -66,4 +70,41 @@ export const getRecipientPerStep = (
     lastRecIndex = recIndex;
     return isRecipientChanged ? recipients[recIndex] : undefined;
   });
+};
+
+// when statutes have all steps hidden, they have leagl facts under description
+// when statuses have even just on step not hidden, the legal fact is shown as bullet point inside the status
+export const getStatusLegalFacts = (events: Array<NotificationTimelineEvent>) => {
+  const legalFactsIds = events.reduce((arr, s) => {
+    if (s.legalFactsIds && s.isHidden) {
+      return arr.concat(s.legalFactsIds.map((lf) => ({ event: s, lf })));
+    }
+    return arr;
+  }, [] as Array<{ event: NotificationTimelineEvent; lf: LegalFactId }>);
+
+  return statusHasStepsToShow(events) ? [] : legalFactsIds;
+};
+
+// if a status has all steps hidden, we hide the steps
+export const statusHasStepsToShow = (events: Array<NotificationTimelineEvent>) =>
+  events.some((s) => !s.isHidden);
+
+// if a status has all steps hidden, we hide the steps
+const legacyStatusHasStepsToShow = (events: Array<INotificationDetailTimeline>) =>
+  events.some((s) => !s.hidden);
+
+// when statutes have all steps hidden, they have leagl facts under description
+// when statuses have even just on step not hidden, the legal fact is shown as bullet point inside the status
+export const getLegacyStatusLegalFacts = (events?: Array<INotificationDetailTimeline>) => {
+  if (!events) {
+    return [];
+  }
+  const legalFactsIds = events.reduce((arr, s) => {
+    if (s.legalFactsIds && s.hidden) {
+      return arr.concat(s.legalFactsIds.map((lf) => ({ event: s, lf })));
+    }
+    return arr;
+  }, [] as Array<{ event: INotificationDetailTimeline; lf: LegalFactId }>);
+
+  return legacyStatusHasStepsToShow(events) ? [] : legalFactsIds;
 };

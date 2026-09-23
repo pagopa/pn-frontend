@@ -23,6 +23,7 @@ import {
 import { NotificationStatus } from '../../models/NotificationStatus';
 import { initLocalizationForTest } from '../../test-utils';
 import { TimelineStepFactory } from '../TimelineUtils/TimelineStepFactory';
+import { initLocalizationExists } from '../localization.utility';
 import {
   getF24Payments,
   getLegalFactLabel,
@@ -446,6 +447,119 @@ describe('notification status texts', () => {
       },
       { recipients: notificationDTO.recipients }
     );
+  });
+
+  it('return notification status infos - EFFECTIVE_DATE - passes the perfection date', () => {
+    const activeFrom = '2023-01-26T13:57:16.42843144Z';
+    testNotificationStatusInfos(
+      'info',
+      `notifiche - status.effective-date`,
+      `notifiche - status.effective-date-tooltip - ${JSON.stringify({
+        date: '26/01/2023',
+      })}`,
+      `notifiche - status.effective-date-description - ${JSON.stringify({
+        date: '26/01/2023',
+      })}`,
+      {
+        status: NotificationStatus.EFFECTIVE_DATE,
+        activeFrom,
+        relatedTimelineElements: [],
+      },
+      { recipients: notificationDTO.recipients }
+    );
+  });
+
+  it('return notification status infos - VIEWED - access after the effective date', () => {
+    initLocalizationExists((_ns, path) => path === 'status.viewed-after-effective-date');
+    testNotificationStatusInfos(
+      'success',
+      `notifiche - status.viewed-after-effective-date`,
+      // tooltip and color stay those of the standard VIEWED
+      `notifiche - status.viewed-tooltip - ${JSON.stringify({
+        subject: `notifiche - status.recipient`,
+      })}`,
+      `notifiche - status.viewed-after-effective-date-description`,
+      {
+        status: NotificationStatus.VIEWED,
+        activeFrom: '2023-01-27T13:57:16.42843144Z',
+        relatedTimelineElements: [],
+      },
+      {
+        recipients: notificationDTO.recipients,
+        statusHistory: [
+          {
+            status: NotificationStatus.VIEWED,
+            activeFrom: '2023-01-27T13:57:16.42843144Z',
+            relatedTimelineElements: [],
+          },
+          {
+            status: NotificationStatus.EFFECTIVE_DATE,
+            activeFrom: '2023-01-26T13:57:16.42843144Z',
+            relatedTimelineElements: [],
+          },
+        ],
+      }
+    );
+    initLocalizationForTest();
+  });
+
+  it('return notification status infos - VIEWED - access before the effective date keeps the standard copy', () => {
+    initLocalizationExists((_ns, path) => path === 'status.viewed-after-effective-date');
+    testNotificationStatusInfos(
+      'success',
+      `notifiche - status.viewed`,
+      `notifiche - status.viewed-tooltip - ${JSON.stringify({
+        subject: `notifiche - status.recipient`,
+      })}`,
+      `notifiche - status.viewed-description - ${JSON.stringify({
+        subject: `notifiche - status.recipient`,
+      })}`,
+      {
+        status: NotificationStatus.VIEWED,
+        activeFrom: '2023-01-26T13:57:16.42843144Z',
+        relatedTimelineElements: [],
+      },
+      {
+        recipients: notificationDTO.recipients,
+        statusHistory: [
+          {
+            status: NotificationStatus.VIEWED,
+            activeFrom: '2023-01-26T13:57:16.42843144Z',
+            relatedTimelineElements: [],
+          },
+          {
+            status: NotificationStatus.EFFECTIVE_DATE,
+            activeFrom: '2023-01-27T13:57:16.42843144Z',
+            relatedTimelineElements: [],
+          },
+        ],
+      }
+    );
+    initLocalizationForTest();
+  });
+
+  it('return notification status infos - VIEWED - by delegate, with the revised copy', () => {
+    initLocalizationExists((_ns, path) => path === 'status.viewed-by-delegate-description');
+    testNotificationStatusInfos(
+      'success',
+      `notifiche - status.viewed`,
+      `notifiche - status.viewed-tooltip - ${JSON.stringify({
+        subject: `notifiche - status.delegate - ${JSON.stringify({
+          name: notificationDTO.recipients[0].denomination,
+        })}`,
+      })}`,
+      `notifiche - status.viewed-by-delegate-description - ${JSON.stringify({
+        name: notificationDTO.recipients[0].denomination,
+      })}`,
+      {
+        status: NotificationStatus.VIEWED,
+        activeFrom: '2023-01-26T13:57:16.42843144Z',
+        relatedTimelineElements: [],
+        recipient: notificationDTO.recipients[0].denomination,
+      },
+      { recipients: notificationDTO.recipients }
+    );
+    initLocalizationForTest();
   });
 
   it('return notification status infos - VIEWED - multi recipient - no delegate', () => {

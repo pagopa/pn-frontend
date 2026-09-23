@@ -533,9 +533,8 @@ describe('NotificationPaymentRecipient Component', () => {
     fireEvent.click(payButton);
 
     const errorMessage = getByTestId('payment-error');
-    expect(within(errorMessage).getByTestId('trans-component')).toHaveTextContent(
-      'detail.payment.error-payment-failed-single'
-    );
+    expect(errorMessage).toBeInTheDocument();
+    expect(errorMessage).toHaveTextContent('detail.payment.error-payment-failed-single');
   });
 
   it('should show multiple payments failure error when all payments fail', () => {
@@ -567,7 +566,7 @@ describe('NotificationPaymentRecipient Component', () => {
     const payButton = getByTestId('pay-button');
     fireEvent.click(payButton);
 
-    expect(within(getByTestId('payment-error')).getByTestId('trans-component')).toHaveTextContent(
+    expect(getByTestId('payment-error')).toHaveTextContent(
       'detail.payment.error-payment-failed-multiple'
     );
   });

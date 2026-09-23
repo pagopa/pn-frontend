@@ -14,13 +14,13 @@ type Props = {
   testId?: 'download-legalfact' | 'download-legalfact-micro';
 };
 
-const TimelineLegalFacts = ({
+const TimelineLegalFacts: React.FC<Props> = ({
   event,
   clickHandler,
   disableDownloads,
   withIcon = false,
   testId = 'download-legalfact-micro',
-}: Props) => {
+}) => {
   if (!event.legalFactsIds?.length) {
     return null;
   }

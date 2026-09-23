@@ -144,7 +144,7 @@ describe('timelineGroupHeader config', () => {
     },
     {
       channel: TimelineEventsChannel.SIMPLE_REGISTERED_LETTER,
-      labelKey: 'detail.timeline.send-simple-registered-letter',
+      labelKey: 'detail.timeline.send-simple-registered-letter-group-label',
       icon: MailOutlineRounded,
     },
     {
