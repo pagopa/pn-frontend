@@ -137,6 +137,6 @@ export const getStatusLegalFactPlan = <T extends LegalFactCarrier>(
 
   return {
     legalFacts,
-    hiddenEventIds: new Set([legalFacts[0].event.elementId]),
+    hiddenEventIds: legalFacts.length === 1 ? new Set([legalFacts[0].event.elementId]) : new Set(),
   };
 };

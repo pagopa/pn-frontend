@@ -66,9 +66,12 @@ const NotificationEventsTimeline = ({
             // Absorbed events are dropped before rendering, so that no recipient header is
             // emitted for an event that will not be displayed. The original index is kept to
             // stay aligned with recipientPerStep.
-            const visibleSteps = status.steps.filter(
-              (step) => isTimelineGroupStep(step) || !plan.hiddenEventIds.has(step.event.elementId)
-            );
+            const visibleSteps = status.steps
+              .map((step, stepIndex) => ({ step, stepIndex }))
+              .filter(
+                ({ step }) =>
+                  isTimelineGroupStep(step) || !plan.hiddenEventIds.has(step.event.elementId)
+              );
 
             return (
               <MITimelineItem
@@ -106,7 +109,7 @@ const NotificationEventsTimeline = ({
                     />
                   )}
 
-                  {visibleSteps.map((step, stepIndex) => {
+                  {visibleSteps.map(({ step, stepIndex }) => {
                     const recipient = recipientPerStep[stepIndex];
                     const recipientHeader = recipient && (
                       <Typography

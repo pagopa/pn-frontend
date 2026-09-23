@@ -48,6 +48,7 @@ describe('NotificationTimelineDescription', () => {
         event={event}
         clickHandler={clickHandler}
         isNewTimelineCopyEnabled
+        legalFacts={[]}
       />
     );
 
@@ -66,6 +67,7 @@ describe('NotificationTimelineDescription', () => {
         event={event}
         clickHandler={clickHandler}
         isNewTimelineCopyEnabled
+        legalFacts={(event.legalFactsIds ?? []).map((lf) => ({ event, lf }))}
       />
     );
 
@@ -86,6 +88,7 @@ describe('NotificationTimelineDescription', () => {
         description="Descrizione legacy."
         event={event}
         clickHandler={clickHandler}
+        legalFacts={(event.legalFactsIds ?? []).map((lf) => ({ event, lf }))}
       />
     );
 
@@ -111,6 +114,7 @@ describe('NotificationTimelineDescription', () => {
         event={event}
         clickHandler={clickHandler}
         isNewTimelineCopyEnabled
+        legalFacts={(event.legalFactsIds ?? []).map((lf) => ({ event, lf }))}
       />
     );
 
@@ -134,9 +138,9 @@ describe('NotificationTimelineDescription', () => {
       <NotificationTimelineDescription
         description="Puoi scaricare l'<0>attestazione</0>."
         event={event}
-        inlineLegalFact={{ event, lf: firstLegalFact }}
         clickHandler={clickHandler}
         isNewTimelineCopyEnabled
+        legalFacts={(event.legalFactsIds ?? []).map((lf) => ({ event, lf }))}
       />
     );
 
@@ -153,6 +157,7 @@ describe('NotificationTimelineDescription', () => {
         language="it"
         event={event}
         clickHandler={clickHandler}
+        legalFacts={(event.legalFactsIds ?? []).map((lf) => ({ event, lf }))}
       />
     );
 

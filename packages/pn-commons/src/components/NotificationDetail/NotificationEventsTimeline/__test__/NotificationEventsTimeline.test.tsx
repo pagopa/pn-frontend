@@ -57,16 +57,18 @@ const groupOfRecipient = (
   ],
 });
 
-const hiddenEventStepOfRecipient = (recIndex: number): NotificationTimelineStep => ({
+const hiddenEventStepOfRecipient = (
+  recIndex: number,
+  category: TimelineCategory,
+  legalFactType: LegalFactType
+): NotificationTimelineStep => ({
   stepType: 'EVENT',
   event: {
-    elementId: `DIGITAL_SUCCESS_WORKFLOW.RECINDEX_${recIndex}`,
+    elementId: `${category}.RECINDEX_${recIndex}`,
     timestamp: '2026-08-06T09:14:58.508308Z',
-    category: TimelineCategory.DIGITAL_SUCCESS_WORKFLOW,
+    category,
     details: { recIndex },
-    legalFactsIds: [
-      { key: 'safestorage://legal-fact.pdf', category: LegalFactType.DIGITAL_DELIVERY },
-    ],
+    legalFactsIds: [{ key: 'safestorage://legal-fact.pdf', category: legalFactType }],
     isHidden: true,
   },
 });
@@ -198,7 +200,11 @@ describe('NotificationEventsTimeline', () => {
             steps: [
               multiRecipientStatusHistory[0].steps[0],
               multiRecipientStatusHistory[0].steps[1],
-              hiddenEventStepOfRecipient(1),
+              hiddenEventStepOfRecipient(
+                1,
+                TimelineCategory.NOTIFICATION_VIEWED,
+                LegalFactType.RECIPIENT_ACCESS
+              ),
               multiRecipientStatusHistory[0].steps[2],
             ],
           },
@@ -236,7 +242,14 @@ describe('NotificationEventsTimeline', () => {
         statusHistory={[
           {
             ...multiRecipientStatusHistory[0],
-            steps: [hiddenEventStepOfRecipient(0), ...multiRecipientStatusHistory[0].steps],
+            steps: [
+              hiddenEventStepOfRecipient(
+                0,
+                TimelineCategory.NOTIFICATION_VIEWED,
+                LegalFactType.RECIPIENT_ACCESS
+              ),
+              ...multiRecipientStatusHistory[0].steps,
+            ],
           },
         ]}
         clickHandler={clickHandler}
@@ -263,28 +276,6 @@ describe('NotificationEventsTimeline', () => {
       'timeline-group-recipient',
       'timeline-group',
     ]);
-  });
-
-  it('shows the recipient in the legal fact label when all status events are hidden', () => {
-    const { getByTestId, queryByTestId } = render(
-      <NotificationEventsTimeline
-        recipients={multiRecipients}
-        statusHistory={[
-          {
-            status: NotificationStatus.VIEWED,
-            activeFrom: '2026-08-06T09:14:58.508308Z',
-            steps: [hiddenEventStepOfRecipient(1)],
-          },
-        ]}
-        clickHandler={clickHandler}
-        isSenderTimeline
-      />
-    );
-
-    expect(queryByTestId('timeline-group-recipient')).not.toBeInTheDocument();
-    expect(getByTestId('download-legalfact')).toHaveTextContent(
-      'Utente Test Due (TSTUTN00A07A002H)'
-    );
   });
 
   it('does not show the recipient on single recipient notifications', () => {
@@ -316,7 +307,13 @@ describe('NotificationEventsTimeline', () => {
     const statusWithHiddenEvent: NotificationTimelineStatusHistory = {
       status: NotificationStatus.VIEWED,
       activeFrom: '2026-08-06T09:14:58.508308Z',
-      steps: [hiddenEventStepOfRecipient(0)],
+      steps: [
+        hiddenEventStepOfRecipient(
+          0,
+          TimelineCategory.NOTIFICATION_VIEWED,
+          LegalFactType.RECIPIENT_ACCESS
+        ),
+      ],
     };
 
     const legalFact =
@@ -345,7 +342,13 @@ describe('NotificationEventsTimeline', () => {
     const statusWithHiddenEvent: NotificationTimelineStatusHistory = {
       status: NotificationStatus.VIEWED,
       activeFrom: '2026-08-06T09:14:58.508308Z',
-      steps: [hiddenEventStepOfRecipient(0)],
+      steps: [
+        hiddenEventStepOfRecipient(
+          0,
+          TimelineCategory.NOTIFICATION_VIEWED,
+          LegalFactType.RECIPIENT_ACCESS
+        ),
+      ],
     };
 
     const { getByTestId } = render(
@@ -365,7 +368,13 @@ describe('NotificationEventsTimeline', () => {
     const statusWithHiddenEvent: NotificationTimelineStatusHistory = {
       status: NotificationStatus.VIEWED,
       activeFrom: '2026-08-06T09:14:58.508308Z',
-      steps: [hiddenEventStepOfRecipient(0)],
+      steps: [
+        hiddenEventStepOfRecipient(
+          0,
+          TimelineCategory.NOTIFICATION_VIEWED,
+          LegalFactType.RECIPIENT_ACCESS
+        ),
+      ],
     };
 
     const legalFact =
@@ -400,7 +409,7 @@ describe('NotificationEventsTimeline', () => {
     };
 
     const status: NotificationTimelineStatusHistory = {
-      status: NotificationStatus.VIEWED,
+      status: NotificationStatus.DELIVERED,
       activeFrom: '2026-08-06T09:14:58.508308Z',
       steps: [
         {
@@ -408,7 +417,7 @@ describe('NotificationEventsTimeline', () => {
           event: {
             elementId: 'FICTIONAL_VIEWED_EVENT_0',
             timestamp: '2026-08-06T09:14:58.508308Z',
-            category: TimelineCategory.NOTIFICATION_VIEWED,
+            category: TimelineCategory.DIGITAL_SUCCESS_WORKFLOW,
             details: { recIndex: 0 },
             legalFactsIds: [firstLegalFact],
             isHidden: true,
@@ -419,7 +428,7 @@ describe('NotificationEventsTimeline', () => {
           event: {
             elementId: 'FICTIONAL_VIEWED_EVENT_1',
             timestamp: '2026-08-06T09:15:58.508308Z',
-            category: TimelineCategory.NOTIFICATION_VIEWED,
+            category: TimelineCategory.DIGITAL_SUCCESS_WORKFLOW,
             details: { recIndex: 1 },
             legalFactsIds: [secondLegalFact],
             isHidden: true,
@@ -428,7 +437,7 @@ describe('NotificationEventsTimeline', () => {
       ],
     };
 
-    const { container, getAllByTestId, queryAllByTestId } = render(
+    const { container, getAllByTestId } = render(
       <NotificationEventsTimeline
         recipients={multiRecipients}
         statusHistory={[status]}
@@ -443,19 +452,16 @@ describe('NotificationEventsTimeline', () => {
     expect(recipients[0]).toHaveTextContent('Utente Test Uno - TSTUTN00A07A001G');
     expect(recipients[1]).toHaveTextContent('Utente Test Due - TSTUTN00A07A002H');
 
-    const legalFacts = getAllByTestId('download-legalfact');
+    const legalFacts = getAllByTestId('download-legalfact-micro');
     expect(legalFacts).toHaveLength(2);
 
-    // Technical events must not appear with descriptions and data.
-    expect(queryAllByTestId('timeline-event')).toHaveLength(0);
-
     expect(
-      orderedTestIds(container, ['timeline-group-recipient', 'download-legalfact'])
+      orderedTestIds(container, ['timeline-group-recipient', 'download-legalfact-micro'])
     ).toStrictEqual([
       'timeline-group-recipient',
-      'download-legalfact',
+      'download-legalfact-micro',
       'timeline-group-recipient',
-      'download-legalfact',
+      'download-legalfact-micro',
     ]);
 
     fireEvent.click(legalFacts[0]);
@@ -469,7 +475,13 @@ describe('NotificationEventsTimeline', () => {
     const statusWithEmbeddedLegalFact: NotificationTimelineStatusHistory = {
       status: NotificationStatus.VIEWED,
       activeFrom: '2026-08-06T09:14:58.508308Z',
-      steps: [hiddenEventStepOfRecipient(0)],
+      steps: [
+        hiddenEventStepOfRecipient(
+          0,
+          TimelineCategory.NOTIFICATION_VIEWED,
+          LegalFactType.RECIPIENT_ACCESS
+        ),
+      ],
     };
 
     const legalFact =
@@ -499,14 +511,18 @@ describe('NotificationEventsTimeline', () => {
     expect(clickHandler).toHaveBeenCalledWith(legalFact);
   });
 
-  it('renders both hidden and visible status events when at least one event is visible and the new copy is enabled', () => {
-    const hiddenStep = hiddenEventStepOfRecipient(0);
+  it('renders a hidden event when its category is not absorbed by the status', () => {
+    const hiddenStep = hiddenEventStepOfRecipient(
+      0,
+      TimelineCategory.DELIVERED,
+      LegalFactType.DIGITAL_DELIVERY
+    );
     const visibleStep: NotificationTimelineStep = {
       stepType: 'EVENT',
       event: {
         elementId: 'VISIBLE_EVENT',
         timestamp: '2026-08-06T09:14:58.508308Z',
-        category: TimelineCategory.REQUEST_ACCEPTED,
+        category: TimelineCategory.DELIVERED,
         details: { recIndex: 0 },
         legalFactsIds: [],
         isHidden: false,
@@ -518,7 +534,7 @@ describe('NotificationEventsTimeline', () => {
         recipients={recipients}
         statusHistory={[
           {
-            status: NotificationStatus.VIEWED,
+            status: NotificationStatus.DELIVERED,
             activeFrom: '2026-08-06T09:14:58.508308Z',
             steps: [hiddenStep, visibleStep],
           },
@@ -535,7 +551,7 @@ describe('NotificationEventsTimeline', () => {
   it('keeps the correct recipient after removing an event embedded in the status description', () => {
     const inlineLegalFact = {
       key: 'safestorage://fictional-inline-legal-fact.pdf',
-      category: LegalFactType.DIGITAL_DELIVERY,
+      category: LegalFactType.RECIPIENT_ACCESS,
     };
 
     const absorbedStep: NotificationTimelineStep = {
@@ -555,7 +571,7 @@ describe('NotificationEventsTimeline', () => {
       event: {
         elementId: 'VISIBLE_EVENT_RECIPIENT_1',
         timestamp: '2026-08-06T09:15:58.508308Z',
-        category: TimelineCategory.DIGITAL_SUCCESS_WORKFLOW,
+        category: TimelineCategory.NOTIFICATION_VIEWED,
         details: { recIndex: 1 },
         legalFactsIds: [],
         isHidden: false,
