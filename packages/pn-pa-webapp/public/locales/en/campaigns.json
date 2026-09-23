@@ -11,6 +11,7 @@
   },
 
   "detail": {
+    "breadcrumb-root": "Campaigns",
     "title": "Campaign details",
     "creation-date": "Creation date",
     "service-name": "Service name",
@@ -30,6 +31,98 @@
       "EMAIL": "Email",
       "ANALOG": "Postal service",
       "PEC": "PEC"
+    }
+  },
+  "informal": {
+    "detail": {
+      "iun": "IUN code",
+      "sender": "Sender",
+      "recipient": "Recipient",
+      "recipients": "Recipients",
+      "subject": "Communication subject",
+      "text": "Communication text",
+      "title": "Communication details",
+      "aria-label": "Go to communication details",
+      "status": {
+        "title": "Communication status",
+        "aria-label": "Go to the communication status details",
+        "go-to-detail": "Go to details"
+      },
+      "documents": {
+        "title": "Attached documents",
+        "download-message-available": "<0>Available online for up to 180 days</0> from the communication acceptance date.",
+        "download-message-expired": "The documents are no longer available online.",
+        "document-not-available": "The document is not yet available. Try again later."
+      },
+      "payments": {
+        "title": "Payments",
+        "notice-code": "Notice code"
+      },
+      "send-by-channel": {
+        "title": "Sending details by channel",
+        "channel": {
+          "send": "SEND",
+          "io": "IO",
+          "sms": "SMS",
+          "email": "Email",
+          "analog": "Postal service",
+          "pec": "PEC"
+        },
+        "status": {
+          "ready_to_send": "WAITING",
+          "waiting_to_send": "WAITING",
+          "sent": "SENT",
+          "filed": "FILED",
+          "delivered": "DELIVERED",
+          "viewed": "READ",
+          "unavailable": "UNAVAILABLE",
+          "not_delivered": "NOT DELIVERED",
+          "workflow_ended": "WORKFLOW ENDED"
+        },
+        "description": {
+          "ready_to_send": "Sending expected after communication validation.",
+          "waiting_to_send": "Waiting for the completion of sending on the previous channel.",
+          "workflow_ended": {
+            "sms": "It will not be used, because the communication has already achieved the requested outcome.",
+            "email": "It will not be used, because the communication has already achieved the requested outcome.",
+            "analog": "It will not be used, because the communication has already achieved the requested outcome.",
+            "pec": "It will not be used, because the communication has already achieved the requested outcome."
+          },
+          "unavailable": {
+            "io": "Cannot trace the recipient's account.",
+            "sms": "Cannot trace the recipient's phone number.",
+            "email": "Cannot trace the recipient's email address.",
+            "pec": "Cannot trace the recipient's PEC address."
+          }
+        }
+      }
+    },
+    "status": {
+      "accepted": {
+        "label": "Ready to send",
+        "tooltip": "Ready to send",
+        "description": "The communication has passed the compliance checks. The sending process will begin shortly."
+      },
+      "processing": {
+        "label": "Sending in progress",
+        "tooltip": "Sending in progress",
+        "description": "The communication will try to reach the recipient on the chosen channels."
+      },
+      "completed": {
+        "label": "Sending successful",
+        "tooltip": "Sending successful",
+        "description": "The communication has been sent to the chosen channels."
+      },
+      "undeliverable": {
+        "label": "Sending failed",
+        "tooltip": "Sending failed",
+        "description": "The communication could not be sent to the chosen channels."
+      },
+      "unknown": {
+        "label": "Undefined",
+        "tooltip": "Undefined",
+        "description": "Unknown status"
+      }
     }
   }
 }

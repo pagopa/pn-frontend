@@ -11,6 +11,7 @@
   },
 
   "detail": {
+    "breadcrumb-root": "Kampanje",
     "title": "Podrobnosti kampanje",
     "creation-date": "Datum ustvarjanja",
     "service-name": "Ime storitve",
@@ -30,6 +31,98 @@
       "EMAIL": "E-pošta",
       "ANALOG": "Poštna storitev",
       "PEC": "PEC"
+    }
+  },
+  "informal": {
+    "detail": {
+      "iun": "Koda IUN",
+      "sender": "Pošiljatelj",
+      "recipient": "Prejemnik",
+      "recipients": "Prejemniki",
+      "subject": "Zadeva sporočila",
+      "text": "Besedilo sporočila",
+      "title": "Podrobnosti sporočila",
+      "aria-label": "Pojdite na podrobnosti sporočila",
+      "status": {
+        "title": "Stanje sporočila",
+        "aria-label": "Pojdite na podrobnosti stanja sporočila",
+        "go-to-detail": "Pojdite na podrobnosti"
+      },
+      "documents": {
+        "title": "Priloženi dokumenti",
+        "download-message-available": "<0>Na spletu na voljo do 180 dni</0> od datuma sprejetja sporočila.",
+        "download-message-expired": "Dokumenti niso več na voljo na spletu.",
+        "document-not-available": "Dokument še ni na voljo. Poskusite znova pozneje."
+      },
+      "payments": {
+        "title": "Plačila",
+        "notice-code": "Koda obvestila"
+      },
+      "send-by-channel": {
+        "title": "Podrobnosti pošiljanja po kanalu",
+        "channel": {
+          "send": "SEND",
+          "io": "IO",
+          "sms": "SMS",
+          "email": "E-pošta",
+          "analog": "Poštna storitev",
+          "pec": "PEC"
+        },
+        "status": {
+          "ready_to_send": "V ČAKANJU",
+          "waiting_to_send": "V ČAKANJU",
+          "sent": "POSLANO",
+          "filed": "VLOŽENO",
+          "delivered": "DOSTAVLJENO",
+          "viewed": "PREBRANO",
+          "unavailable": "NI NA VOLJO",
+          "not_delivered": "NI DOSTAVLJENO",
+          "workflow_ended": "WORKFLOW ZAKLJUČEN"
+        },
+        "description": {
+          "ready_to_send": "Predvideno pošiljanje po potrditvi sporočila.",
+          "waiting_to_send": "Čakanje na zaključek pošiljanja na prejšnjem kanalu.",
+          "workflow_ended": {
+            "sms": "Ta kanal ne bo uporabljen, ker je sporočilo že doseglo zahtevani rezultat.",
+            "email": "Ta kanal ne bo uporabljen, ker je sporočilo že doseglo zahtevani rezultat.",
+            "analog": "Ta kanal ne bo uporabljen, ker je sporočilo že doseglo zahtevani rezultat.",
+            "pec": "Ta kanal ne bo uporabljen, ker je sporočilo že doseglo zahtevani rezultat."
+          },
+          "unavailable": {
+            "io": "Računa prejemnika ni mogoče izslediti.",
+            "sms": "Telefonske številke prejemnika ni mogoče izslediti.",
+            "email": "E-poštnega naslova prejemnika ni mogoče izslediti.",
+            "pec": "Naslova PEC prejemnika ni mogoče izslediti."
+          }
+        }
+      }
+    },
+    "status": {
+      "accepted": {
+        "label": "Pripravljeno na pošiljanje",
+        "tooltip": "Pripravljeno na pošiljanje",
+        "description": "Sporočilo je opravilo preverjanja skladnosti. Postopek pošiljanja se bo kmalu začel."
+      },
+      "processing": {
+        "label": "Pošiljanje v teku",
+        "tooltip": "Pošiljanje v teku",
+        "description": "Sporočilo bo poskušalo doseči prejemnika na izbranih kanalih."
+      },
+      "completed": {
+        "label": "Uspešno poslano",
+        "tooltip": "Uspešno poslano",
+        "description": "Sporočilo je bilo poslano na izbrane kanale."
+      },
+      "undeliverable": {
+        "label": "Pošiljanje ni uspelo",
+        "tooltip": "Pošiljanje ni uspelo",
+        "description": "Sporočila ni bilo mogoče poslati na izbrane kanale."
+      },
+      "unknown": {
+        "label": "Nedoločeno",
+        "tooltip": "Nedoločeno",
+        "description": "Neznano stanje"
+      }
     }
   }
 }

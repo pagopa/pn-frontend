@@ -11,6 +11,7 @@
   },
 
   "detail": {
+    "breadcrumb-root": "Campagnes",
     "title": "Détail de la campagne",
     "creation-date": "Date de création",
     "service-name": "Nom du service",
@@ -30,6 +31,98 @@
       "EMAIL": "E-mail",
       "ANALOG": "Service postal",
       "PEC": "PEC"
+    }
+  },
+  "informal": {
+    "detail": {
+      "iun": "Code IUN",
+      "sender": "Expéditeur",
+      "recipient": "Destinataire",
+      "recipients": "Destinataires",
+      "subject": "Objet de la communication",
+      "text": "Texte de la communication",
+      "title": "Détails de la communication",
+      "aria-label": "Aller aux détails de la communication",
+      "status": {
+        "title": "Statut de la communication",
+        "aria-label": "Aller aux détails du statut de la communication",
+        "go-to-detail": "Aller aux détails"
+      },
+      "documents": {
+        "title": "Documents joints",
+        "download-message-available": "<0>Disponible en ligne jusqu'à 180 jours</0> à compter de la date d'acceptation de la communication.",
+        "download-message-expired": "Les documents ne sont plus disponibles en ligne.",
+        "document-not-available": "Le document n'est pas encore disponible. Réessayez plus tard."
+      },
+      "payments": {
+        "title": "Paiements",
+        "notice-code": "Code d'avis"
+      },
+      "send-by-channel": {
+        "title": "Détails d'envoi par canal",
+        "channel": {
+          "send": "SEND",
+          "io": "IO",
+          "sms": "SMS",
+          "email": "Email",
+          "analog": "Service postal",
+          "pec": "PEC"
+        },
+        "status": {
+          "ready_to_send": "EN ATTENTE",
+          "waiting_to_send": "EN ATTENTE",
+          "sent": "ENVOYÉE",
+          "filed": "DÉPOSÉE",
+          "delivered": "LIVRÉE",
+          "viewed": "LUE",
+          "unavailable": "INDISPONIBLE",
+          "not_delivered": "NON LIVRÉE",
+          "workflow_ended": "WORKFLOW TERMINÉ"
+        },
+        "description": {
+          "ready_to_send": "Envoi prévu après la validation de la communication.",
+          "waiting_to_send": "En attente de l'achèvement de l'envoi sur le canal précédent.",
+          "workflow_ended": {
+            "sms": "Ce canal ne sera pas utilisé, car la communication a déjà atteint le résultat demandé.",
+            "email": "Ce canal ne sera pas utilisé, car la communication a déjà atteint le résultat demandé.",
+            "analog": "Ce canal ne sera pas utilisé, car la communication a déjà atteint le résultat demandé.",
+            "pec": "Ce canal ne sera pas utilisé, car la communication a déjà atteint le résultat demandé."
+          },
+          "unavailable": {
+            "io": "Impossible de retrouver le compte du destinataire.",
+            "sms": "Impossible de retrouver le numéro de téléphone du destinataire.",
+            "email": "Impossible de retrouver l'adresse e-mail du destinataire.",
+            "pec": "Impossible de retrouver l'adresse PEC du destinataire."
+          }
+        }
+      }
+    },
+    "status": {
+      "accepted": {
+        "label": "Prêt pour l'envoi",
+        "tooltip": "Prêt pour l'envoi",
+        "description": "La communication a passé les contrôles de conformité. Le processus d'envoi commencera sous peu."
+      },
+      "processing": {
+        "label": "Envoi en cours",
+        "tooltip": "Envoi en cours",
+        "description": "La communication tentera de joindre le destinataire sur les canaux choisis."
+      },
+      "completed": {
+        "label": "Envoi réussi",
+        "tooltip": "Envoi réussi",
+        "description": "La communication a été envoyée sur les canaux choisis."
+      },
+      "undeliverable": {
+        "label": "Échec de l'envoi",
+        "tooltip": "Échec de l'envoi",
+        "description": "La communication n'a pas pu être envoyée sur les canaux choisis."
+      },
+      "unknown": {
+        "label": "Non défini",
+        "tooltip": "Non défini",
+        "description": "Statut inconnu"
+      }
     }
   }
 }
