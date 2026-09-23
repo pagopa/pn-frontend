@@ -29,6 +29,18 @@ import { RootState } from '../../redux/store';
 const PnCampaignCommunications = () => {
   const { t } = useTranslation('campaigns');
 
+  const initialEmptyValues: {
+    recipientId: string;
+    iunMatch: string;
+    status: string;
+    outcome: string;
+  } = {
+    recipientId: '',
+    iunMatch: '',
+    status: '',
+    outcome: '',
+  };
+
   const statusOptions = [
     {
       id: InformalNotificationStatus.ACCEPTED,
@@ -71,6 +83,26 @@ const PnCampaignCommunications = () => {
     iunMatch: yup.string().matches(IUN_regex, t('filters.errors.iun', { ns: 'notifiche' })),
   });
 
+  const handleClearFilters = () => {
+    formik.resetForm({
+      values: {
+        recipientId: '',
+        iunMatch: '',
+        status: '',
+        outcome: '',
+      },
+    });
+
+    dispatch(
+      setCommunicationFilters({
+        recipientId: '',
+        iunMatch: '',
+        status: '',
+        outcome: '',
+      })
+    );
+  };
+
   const handlePaste = async (e: React.ClipboardEvent) => {
     e.preventDefault();
     const trimmedValue = e.clipboardData.getData('text').trim();
@@ -80,13 +112,6 @@ const PnCampaignCommunications = () => {
   };
 
   const handleChangeTouched = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (formik.errors) {
-      formik.setErrors({
-        ...formik.errors,
-        [e.target.id]: undefined,
-      });
-    }
-
     if (e.target.id === 'iunMatch') {
       const originalEvent = e.target;
       const cursorPosition = originalEvent.selectionStart || 0;
@@ -99,11 +124,13 @@ const PnCampaignCommunications = () => {
           ? 1
           : 0);
 
-      await formik.setFieldValue('iunMatch', newInput, false);
+      await formik.setFieldValue('iunMatch', newInput);
+      await formik.setFieldTouched('iunMatch', true, false);
 
       originalEvent.setSelectionRange(newCursorPosition, newCursorPosition);
     } else {
-      await formik.setFieldValue(e.target.id, e.target.value, false);
+      formik.handleChange(e);
+      await formik.setFieldTouched(e.target.id, true, false);
     }
   };
 
@@ -186,6 +213,12 @@ const PnCampaignCommunications = () => {
     id: communication.iun ?? '',
   }));
 
+  console.log('FILTER DEBUG TANO:', {
+    values: formik.values,
+    errors: formik.errors,
+    isValid: formik.isValid,
+  });
+
   return (
     <Box sx={{ mt: 3 }}>
       <Typography component="h2" variant="h6">
@@ -209,15 +242,10 @@ const PnCampaignCommunications = () => {
           filterLabel={t('button.filtra', { ns: 'common' })}
           cancelLabel={t('button.annulla filtro', { ns: 'common' })}
           onSubmit={formik.handleSubmit}
-          onClear={() => {}}
+          onClear={handleClearFilters}
           formIsValid={formik.isValid}
           formValues={formik.values}
-          initialValues={{
-            recipientId: '',
-            iunMatch: '',
-            status: '',
-            outcome: '',
-          }}
+          initialValues={initialEmptyValues}
         >
           <Grid item xs={12} lg>
             <TextField
