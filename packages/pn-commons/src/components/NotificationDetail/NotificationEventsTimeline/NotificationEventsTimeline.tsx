@@ -8,6 +8,7 @@ import { LegalFactId, NotificationDetailRecipient } from '../../../models/Notifi
 import { NotificationTimelineStatusHistory } from '../../../models/NotificationTimeline';
 import {
   isTimelineGroupStep,
+  stepsMustBeShown,
   toLegacyStatusHistory,
 } from '../../../utility/notificationTimeline.utility';
 import ReworkedStatusTag from '../ReworkedStatusTag';
@@ -86,63 +87,65 @@ const NotificationEventsTimeline = ({
                   />
                 )}
 
-                {status.steps.map((step, stepIndex) => {
-                  const recipient = recipientPerStep[stepIndex];
-                  const recipientHeader = recipient && (
-                    <Typography
-                      variant="body2"
-                      fontWeight={600}
-                      data-testid="timeline-group-recipient"
-                      mt={2}
-                      sx={{ color: '#555C70' }}
-                    >
-                      {`${recipient.denomination} - ${recipient.taxId}`}
-                    </Typography>
-                  );
+                {isNewTimelineCopyEnabled &&
+                  stepsMustBeShown(status, legacyStatus.steps) &&
+                  status.steps.map((step, stepIndex) => {
+                    const recipient = recipientPerStep[stepIndex];
+                    const recipientHeader = recipient && (
+                      <Typography
+                        variant="body2"
+                        fontWeight={600}
+                        data-testid="timeline-group-recipient"
+                        mt={2}
+                        sx={{ color: '#555C70' }}
+                      >
+                        {`${recipient.denomination} - ${recipient.taxId}`}
+                      </Typography>
+                    );
 
-                  if (!isTimelineGroupStep(step)) {
+                    if (!isTimelineGroupStep(step)) {
+                      return (
+                        <Fragment key={step.event.elementId}>
+                          {recipientHeader}
+                          <NotificationTimelineEventItem
+                            status={status}
+                            event={step.event}
+                            allEvents={legacyStatus.steps}
+                            recipients={recipients}
+                            clickHandler={clickHandler}
+                            disableDownloads={disableDownloads}
+                            language={language}
+                            isNewTimelineCopyEnabled={isNewTimelineCopyEnabled}
+                          />
+                        </Fragment>
+                      );
+                    }
+
+                    const previousStep = status.steps[stepIndex - 1];
+                    const hasPreviousGroup = !!previousStep && isTimelineGroupStep(previousStep);
+
                     return (
-                      <Fragment key={step.event.elementId}>
+                      <Fragment key={step.group.groupId}>
+                        {hasPreviousGroup && (
+                          <Divider flexItem data-testid="timeline-group-divider" />
+                        )}
+
                         {recipientHeader}
-                        <NotificationTimelineEventItem
+
+                        <NotificationTimelineGroupItem
                           status={status}
-                          event={step.event}
+                          group={step.group}
                           allEvents={legacyStatus.steps}
                           recipients={recipients}
                           clickHandler={clickHandler}
                           disableDownloads={disableDownloads}
                           language={language}
+                          hasMultipleAttempts={multiAttemptGroupIds.has(step.group.groupId)}
                           isNewTimelineCopyEnabled={isNewTimelineCopyEnabled}
                         />
                       </Fragment>
                     );
-                  }
-
-                  const previousStep = status.steps[stepIndex - 1];
-                  const hasPreviousGroup = !!previousStep && isTimelineGroupStep(previousStep);
-
-                  return (
-                    <Fragment key={step.group.groupId}>
-                      {hasPreviousGroup && (
-                        <Divider flexItem data-testid="timeline-group-divider" />
-                      )}
-
-                      {recipientHeader}
-
-                      <NotificationTimelineGroupItem
-                        status={status}
-                        group={step.group}
-                        allEvents={legacyStatus.steps}
-                        recipients={recipients}
-                        clickHandler={clickHandler}
-                        disableDownloads={disableDownloads}
-                        language={language}
-                        hasMultipleAttempts={multiAttemptGroupIds.has(step.group.groupId)}
-                        isNewTimelineCopyEnabled={isNewTimelineCopyEnabled}
-                      />
-                    </Fragment>
-                  );
-                })}
+                  })}
               </Stack>
             </MITimelineItem>
           )

@@ -446,7 +446,7 @@ describe('NotificationEventsTimeline', () => {
     const legalFacts = getAllByTestId('download-legalfact');
     expect(legalFacts).toHaveLength(2);
 
-    // Gli eventi tecnici non devono apparire con descrizione e data.
+    // Technical events must not appear with descriptions and data.
     expect(queryAllByTestId('timeline-event')).toHaveLength(0);
 
     expect(
@@ -489,11 +489,9 @@ describe('NotificationEventsTimeline', () => {
 
     const buttons = getAllByRole('button');
 
-    // Una sola occorrenza: quella incorporata nella descrizione.
     expect(buttons).toHaveLength(1);
     expect(queryByTestId('timeline-event')).not.toBeInTheDocument();
 
-    // Nessuna intestazione destinatario orfana per l'evento nascosto.
     expect(queryByTestId('timeline-group-recipient')).not.toBeInTheDocument();
 
     fireEvent.click(buttons[0]);

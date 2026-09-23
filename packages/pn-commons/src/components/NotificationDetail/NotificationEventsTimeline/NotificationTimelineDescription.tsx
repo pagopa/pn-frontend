@@ -191,7 +191,7 @@ const NotificationTimelineDescription: React.FC<Props> = ({
               disableDownloads &&
               legalFact.event.category !== TimelineCategory.NOTIFICATION_CANCELLED
             }
-            dataTestId={status || legacyStatus ? 'download-legalfact' : 'download-legalfact-micro'}
+            dataTestId="download-legalfact-micro"
             isNewTimelineCopyEnabled={isNewTimelineCopyEnabled}
           >
             {getLegalFactLabel(legalFact.event, legalFact.lf.category, legalFact.lf.key || '')}

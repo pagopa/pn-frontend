@@ -1,6 +1,7 @@
 import { notificationTimelineDTO } from '../../__mocks__/NotificationTimeline.mock';
 import { NotificationStatus } from '../../models';
 import {
+  INotificationDetailTimeline,
   LegalFactType,
   NotificationDetailRecipient,
   RecipientType,
@@ -39,6 +40,19 @@ describe('notificationTimeline utility', () => {
     details: {},
     legalFactsIds: [],
     isHidden: false,
+    ...overrides,
+  });
+
+  const createLegacyEvent = (
+    elementId: string,
+    overrides: Partial<INotificationDetailTimeline> = {}
+  ): INotificationDetailTimeline => ({
+    elementId,
+    timestamp: '2026-01-01T00:00:00Z',
+    category: TimelineCategory.DIGITAL_SUCCESS_WORKFLOW,
+    details: {},
+    legalFactsIds: [],
+    hidden: false,
     ...overrides,
   });
 
@@ -256,9 +270,9 @@ describe('notificationTimeline utility', () => {
 
   describe('getLegacyStatusLegalFacts', () => {
     it('returns the single hidden legal fact matching the status category', () => {
-      const event = createEvent('VIEWED_LEGAL_FACT', {
+      const event = createLegacyEvent('VIEWED_LEGAL_FACT', {
         category: TimelineCategory.NOTIFICATION_VIEWED,
-        isHidden: true,
+        hidden: true,
         legalFactsIds: [legalFact],
       });
 
@@ -273,9 +287,9 @@ describe('notificationTimeline utility', () => {
     });
 
     it('ignores legal facts whose event category does not belong to the status', () => {
-      const event = createEvent('UNRELATED_LEGAL_FACT', {
+      const event = createLegacyEvent('UNRELATED_LEGAL_FACT', {
         category: TimelineCategory.DIGITAL_SUCCESS_WORKFLOW,
-        isHidden: true,
+        hidden: true,
         legalFactsIds: [legalFact],
       });
 
@@ -290,9 +304,9 @@ describe('notificationTimeline utility', () => {
     });
 
     it('does not embed multiple legal facts in the status description', () => {
-      const event = createEvent('MULTIPLE_VIEWED_LEGAL_FACTS', {
+      const event = createLegacyEvent('MULTIPLE_VIEWED_LEGAL_FACTS', {
         category: TimelineCategory.NOTIFICATION_VIEWED,
-        isHidden: true,
+        hidden: true,
         legalFactsIds: [
           legalFact,
           {

@@ -35,16 +35,6 @@ const createEvent = (
   ...overrides,
 });
 
-/*const createStatus = (
-  steps: Array<NotificationTimelineEvent>
-): NotificationTimelineLegacyStatusHistory => ({
-  status: NotificationStatus.VIEWED,
-  activeFrom: '2026-09-17T10:30:00Z',
-  relatedTimelineElements: [],
-  steps,
-});
-*/
-
 const createLegacyEvent = (
   overrides: Partial<INotificationDetailTimeline> = {}
 ): INotificationDetailTimeline => ({

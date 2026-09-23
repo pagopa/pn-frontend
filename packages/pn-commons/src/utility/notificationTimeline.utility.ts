@@ -97,12 +97,23 @@ export const getStatusLegalFacts = (status: NotificationTimelineLegacyStatusHist
   return [];
 };
 
+export const stepsMustBeShown = (
+  status: NotificationTimelineStatusHistory,
+  allEvents: Array<NotificationTimelineEvent>
+) => {
+  const eventCategory = legalFactStatusMap.get(status.status);
+  const eventsFilteredByCategory = allEvents.filter((evt) => evt.category === eventCategory);
+  return eventsFilteredByCategory.length > 1;
+};
+
 export const eventMustBeShown = (
   status: NotificationTimelineStatusHistory,
+  allEvents: Array<NotificationTimelineEvent>,
   event: NotificationTimelineEvent
 ) => {
   const eventCategory = legalFactStatusMap.get(status.status);
-  return event.category !== eventCategory;
+  const eventsFilteredByCategory = allEvents.filter((evt) => evt.category === eventCategory);
+  return eventsFilteredByCategory.length > 1 || event.category !== eventCategory;
 };
 
 export const getLegacyStatusLegalFacts = (status?: NotificationStatusHistory) => {

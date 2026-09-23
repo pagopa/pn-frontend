@@ -62,7 +62,7 @@ const NotificationTimelineEventItem: React.FC<Props> = ({
   asBullet = false,
   isNewTimelineCopyEnabled = false,
 }) => {
-  if (!eventMustBeShown(status, event) && isNewTimelineCopyEnabled) {
+  if (!eventMustBeShown(status, allEvents, event) && isNewTimelineCopyEnabled) {
     return null;
   }
   if (event.isHidden && !isNewTimelineCopyEnabled) {

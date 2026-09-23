@@ -3,7 +3,7 @@ import { vi } from 'vitest';
 import { notificationTimelineDTO } from '../../../../__mocks__/NotificationTimeline.mock';
 import { TimelineCategory } from '../../../../models/NotificationDetail';
 import { NotificationTimelineEvent } from '../../../../models/NotificationTimeline';
-import { fireEvent, render, within } from '../../../../test-utils';
+import { fireEvent, initLocalizationForTest, render, within } from '../../../../test-utils';
 import { getNotificationTimelineStatusInfos } from '../../../../utility/notification.utility';
 import {
   flattenTimelineSteps,
@@ -42,6 +42,10 @@ const renderEvent = (event: NotificationTimelineEvent, props?: Record<string, un
   );
 
 describe('NotificationTimelineEventItem', () => {
+  beforeAll(() => {
+    initLocalizationForTest();
+  });
+
   afterEach(() => {
     vi.clearAllMocks();
   });
@@ -85,24 +89,6 @@ describe('NotificationTimelineEventItem', () => {
 
     expect(clickHandler).toHaveBeenCalledTimes(1);
     expect(clickHandler).toHaveBeenCalledWith(legalFact);
-  });
-
-  it('does not render an event when all status events are hidden and the new copy is enabled', () => {
-    const firstHiddenEvent = {
-      ...hiddenEvent,
-      elementId: 'FIRST_HIDDEN_EVENT',
-    };
-    const secondHiddenEvent = {
-      ...hiddenEvent,
-      elementId: 'SECOND_HIDDEN_EVENT',
-    };
-
-    const { container } = renderEvent(firstHiddenEvent, {
-      allEvents: [firstHiddenEvent, secondHiddenEvent],
-      isNewTimelineCopyEnabled: true,
-    });
-
-    expect(container).toBeEmptyDOMElement();
   });
 
   it('still renders status events when at least one event is visible and the new copy is enabled', () => {
