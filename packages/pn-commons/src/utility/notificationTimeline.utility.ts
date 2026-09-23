@@ -29,12 +29,15 @@ export type StatusLegalFact<T extends LegalFactCarrier> = { event: T; lf: LegalF
 
 export type StatusLegalFactPlan<T extends LegalFactCarrier> = {
   /** Legal fact to be rendered inline within the status description text, if any. */
-  inlineLegalFact?: StatusLegalFact<T>;
+  legalFacts: Array<StatusLegalFact<T>>;
   /** elementIds of the events that must not be rendered, as they are absorbed into the description. */
   hiddenEventIds: Set<string>;
 };
 
-const EMPTY_PLAN: StatusLegalFactPlan<never> = { hiddenEventIds: new Set<string>() };
+const EMPTY_PLAN: StatusLegalFactPlan<never> = {
+  legalFacts: [],
+  hiddenEventIds: new Set<string>(),
+};
 
 export const emptyLegalFactPlan = <T extends LegalFactCarrier>(): StatusLegalFactPlan<T> =>
   EMPTY_PLAN as StatusLegalFactPlan<T>;
@@ -124,74 +127,16 @@ export const getStatusLegalFactPlan = <T extends LegalFactCarrier>(
   }
 
   // All (event, legalFact) pairs of this status that are candidates for inlining.
-  const candidates = status.steps
+  const legalFacts = status.steps
     .filter((event) => event.category === eventCategory && isHidden(event))
     .flatMap((event) => (event.legalFactsIds ?? []).map((lf) => ({ event, lf })));
 
-  if (candidates.length !== 1) {
+  if (legalFacts.length === 0) {
     return emptyLegalFactPlan<T>();
   }
 
   return {
-    inlineLegalFact: candidates[0],
-    hiddenEventIds: new Set([candidates[0].event.elementId]),
+    legalFacts,
+    hiddenEventIds: new Set([legalFacts[0].event.elementId]),
   };
 };
-
-/*
-export const getStatusLegalFacts = (status: NotificationTimelineLegacyStatusHistory) => {
-  const eventCategory = legalFactStatusMap.get(status.status);
-  if (eventCategory) {
-    const legalFactsIds = status.steps
-      .filter((s) => s.category === eventCategory)
-      .reduce((arr, s) => {
-        if (s.legalFactsIds && s.isHidden) {
-          return arr.concat(s.legalFactsIds.map((lf) => ({ event: s, lf })));
-        }
-        return arr;
-      }, [] as Array<{ event: NotificationTimelineEvent; lf: LegalFactId }>);
-
-    return legalFactsIds.length === 1 ? legalFactsIds : [];
-  }
-  return [];
-};
-
-export const stepsMustBeShown = (
-  status: NotificationTimelineStatusHistory,
-  allEvents: Array<NotificationTimelineEvent>
-) => {
-  const eventCategory = legalFactStatusMap.get(status.status);
-  const eventsFilteredByCategory = allEvents.filter((evt) => evt.category === eventCategory);
-  return eventsFilteredByCategory.length > 1;
-};
-
-export const eventMustBeShown = (
-  status: NotificationTimelineStatusHistory,
-  allEvents: Array<NotificationTimelineEvent>,
-  event: NotificationTimelineEvent
-) => {
-  const eventCategory = legalFactStatusMap.get(status.status);
-  const eventsFilteredByCategory = allEvents.filter((evt) => evt.category === eventCategory);
-  return eventsFilteredByCategory.length > 1 || event.category !== eventCategory;
-};
-
-export const getLegacyStatusLegalFacts = (status?: NotificationStatusHistory) => {
-  if (!status) {
-    return [];
-  }
-  const eventCategory = legalFactStatusMap.get(status.status);
-  if (eventCategory && status.steps) {
-    const legalFactsIds = status.steps
-      .filter((s) => s.category === eventCategory)
-      .reduce((arr, s) => {
-        if (s.legalFactsIds && s.hidden) {
-          return arr.concat(s.legalFactsIds.map((lf) => ({ event: s, lf })));
-        }
-        return arr;
-      }, [] as Array<{ event: INotificationDetailTimeline; lf: LegalFactId }>);
-
-    return legalFactsIds.length === 1 ? legalFactsIds : [];
-  }
-  return [];
-};
-*/

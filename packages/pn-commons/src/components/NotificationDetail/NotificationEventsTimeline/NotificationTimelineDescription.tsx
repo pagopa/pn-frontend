@@ -22,7 +22,7 @@ type Props = {
   };
   isNewTimelineCopyEnabled?: boolean;
   event?: NotificationTimelineEvent;
-  inlineLegalFact?: StatusLegalFact<NotificationTimelineEvent | INotificationDetailTimeline>;
+  legalFacts: Array<StatusLegalFact<NotificationTimelineEvent | INotificationDetailTimeline>>;
 };
 
 const NotificationTimelineEventLegalFact: React.FC<
@@ -77,12 +77,14 @@ const NotificationTimelineDescription: React.FC<Props> = ({
   disableDownloads = false,
   slotProps,
   isNewTimelineCopyEnabled = false,
-  inlineLegalFact,
+  legalFacts,
   event,
 }) => {
-  // Event legal facts are always listed below the text, unless one of them was inlined.
-  const legalFactsToList =
-    event && !inlineLegalFact ? (event.legalFactsIds ?? []).map((lf) => ({ event, lf })) : [];
+  // inline only makes sense with the new copy, where the description text contains the placeholder
+  const inlineLegalFact =
+    isNewTimelineCopyEnabled && legalFacts.length === 1 ? legalFacts[0] : undefined;
+
+  const legalFactsToList = inlineLegalFact ? [] : legalFacts;
 
   const downloadIsDisabled = (category: TimelineCategory) =>
     disableDownloads && category !== TimelineCategory.NOTIFICATION_CANCELLED;

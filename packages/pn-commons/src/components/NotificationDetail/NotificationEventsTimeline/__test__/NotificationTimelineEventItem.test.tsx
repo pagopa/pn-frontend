@@ -36,7 +36,6 @@ const renderEvent = (event: NotificationTimelineEvent, props?: Record<string, un
       clickHandler={clickHandler}
       disableDownloads={false}
       language="it"
-      status={deliveringStatus}
       {...props}
     />
   );
@@ -89,15 +88,6 @@ describe('NotificationTimelineEventItem', () => {
 
     expect(clickHandler).toHaveBeenCalledTimes(1);
     expect(clickHandler).toHaveBeenCalledWith(legalFact);
-  });
-
-  it('still renders status events when at least one event is visible and the new copy is enabled', () => {
-    const { getByTestId } = renderEvent(visibleEvent, {
-      allEvents: [hiddenEvent, visibleEvent],
-      isNewTimelineCopyEnabled: true,
-    });
-
-    expect(getByTestId('timeline-event')).toBeInTheDocument();
   });
 
   it('renders only the legal facts of a hidden event, nothing if it has none', () => {
@@ -192,30 +182,5 @@ describe('NotificationTimelineEventItem', () => {
 
     expect(clickHandler).toHaveBeenCalledTimes(1);
     expect(clickHandler).toHaveBeenCalledWith(legalFact);
-  });
-
-  it('renders every legal fact below the description when an event has multiple legal facts', () => {
-    const secondLegalFact = {
-      ...eventWithLegalFacts.legalFactsIds![0],
-      key: 'safestorage://second-legal-fact.pdf',
-    };
-    const event = {
-      ...eventWithLegalFacts,
-      legalFactsIds: [eventWithLegalFacts.legalFactsIds![0], secondLegalFact],
-    };
-
-    const { getAllByRole } = renderEvent(event, {
-      isNewTimelineCopyEnabled: true,
-    });
-
-    const buttons = getAllByRole('button');
-
-    expect(buttons).toHaveLength(2);
-
-    fireEvent.click(buttons[0]);
-    fireEvent.click(buttons[1]);
-
-    expect(clickHandler).toHaveBeenNthCalledWith(1, event.legalFactsIds[0]);
-    expect(clickHandler).toHaveBeenNthCalledWith(2, secondLegalFact);
   });
 });

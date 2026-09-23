@@ -63,7 +63,7 @@ const NotificationTimelineBox: React.FC<NotificationTimelineBoxProps> = ({
           sx={{ my: 1, width: 'fit-content' }}
         />
         <NotificationTimelineDescription
-          inlineLegalFact={plan.inlineLegalFact}
+          legalFacts={plan.legalFacts}
           description={notificationStatusInfos.description}
           clickHandler={clickHandler}
           slotProps={{ typography: { variant: 'body2' } }}

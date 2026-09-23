@@ -1,13 +1,6 @@
 import { vi } from 'vitest';
 
-import {
-  INotificationDetailTimeline,
-  LegalFactId,
-  LegalFactType,
-  NotificationStatus,
-  NotificationStatusHistory,
-  TimelineCategory,
-} from '../../../../models';
+import { LegalFactId, LegalFactType, TimelineCategory } from '../../../../models';
 import { NotificationTimelineEvent } from '../../../../models/NotificationTimeline';
 import { fireEvent, initLocalizationForTest, render } from '../../../../test-utils';
 import { formatTimelineDate } from '../../../../utility/notificationTimeline.utility';
@@ -33,27 +26,6 @@ const createEvent = (
   legalFactsIds: [],
   isHidden: false,
   ...overrides,
-});
-
-const createLegacyEvent = (
-  overrides: Partial<INotificationDetailTimeline> = {}
-): INotificationDetailTimeline => ({
-  elementId: 'NOTIFICATION_VIEWED',
-  timestamp: '2026-09-17T10:30:00Z',
-  category: TimelineCategory.NOTIFICATION_VIEWED,
-  details: {},
-  legalFactsIds: [],
-  hidden: true,
-  ...overrides,
-});
-
-const createLegacyStatus = (
-  steps: Array<INotificationDetailTimeline>
-): NotificationStatusHistory => ({
-  status: NotificationStatus.VIEWED,
-  activeFrom: '2026-09-17T10:30:00Z',
-  relatedTimelineElements: [],
-  steps,
 });
 
 describe('NotificationTimelineDescription', () => {
@@ -83,7 +55,7 @@ describe('NotificationTimelineDescription', () => {
     expect(queryByRole('button')).not.toBeInTheDocument();
   });
 
-  it('renders the event legal fact inline when the new copy is enabled', () => {
+  it('renders the supplied legal fact inline', () => {
     const event = createEvent({
       legalFactsIds: [firstLegalFact],
     });
@@ -153,24 +125,22 @@ describe('NotificationTimelineDescription', () => {
     expect(clickHandler).toHaveBeenNthCalledWith(2, secondLegalFact);
   });
 
-  it('supports legacy statuses', () => {
-    const event = createLegacyEvent({
-      hidden: true,
+  it('does not list an inline legal fact a second time below the description', () => {
+    const event = createEvent({
       legalFactsIds: [firstLegalFact],
     });
 
-    const { getByRole } = render(
+    const { getAllByRole } = render(
       <NotificationTimelineDescription
-        description="Scarica l'<0>attestazione</0>."
-        legacyStatus={createLegacyStatus([event])}
+        description="Puoi scaricare l'<0>attestazione</0>."
+        event={event}
+        inlineLegalFact={{ event, lf: firstLegalFact }}
         clickHandler={clickHandler}
         isNewTimelineCopyEnabled
       />
     );
 
-    fireEvent.click(getByRole('button'));
-
-    expect(clickHandler).toHaveBeenCalledWith(firstLegalFact);
+    expect(getAllByRole('button')).toHaveLength(1);
   });
 
   it('renders title, description and date', () => {

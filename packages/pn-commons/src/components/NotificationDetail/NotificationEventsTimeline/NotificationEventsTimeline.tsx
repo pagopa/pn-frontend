@@ -102,7 +102,7 @@ const NotificationEventsTimeline = ({
                       }}
                       disableDownloads={disableDownloads}
                       isNewTimelineCopyEnabled={isNewTimelineCopyEnabled}
-                      inlineLegalFact={plan.inlineLegalFact}
+                      legalFacts={plan.legalFacts.length === 1 ? plan.legalFacts : []}
                     />
                   )}
 

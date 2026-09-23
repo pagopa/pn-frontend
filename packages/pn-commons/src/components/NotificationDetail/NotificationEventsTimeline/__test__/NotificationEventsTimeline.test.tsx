@@ -531,4 +531,59 @@ describe('NotificationEventsTimeline', () => {
     const timelineEvents = getAllByTestId('timeline-event');
     expect(timelineEvents).toHaveLength(2);
   });
+
+  it('keeps the correct recipient after removing an event embedded in the status description', () => {
+    const inlineLegalFact = {
+      key: 'safestorage://fictional-inline-legal-fact.pdf',
+      category: LegalFactType.DIGITAL_DELIVERY,
+    };
+
+    const absorbedStep: NotificationTimelineStep = {
+      stepType: 'EVENT',
+      event: {
+        elementId: 'VIEWED_RECIPIENT_0',
+        timestamp: '2026-08-06T09:14:58.508308Z',
+        category: TimelineCategory.NOTIFICATION_VIEWED,
+        details: { recIndex: 0 },
+        legalFactsIds: [inlineLegalFact],
+        isHidden: true,
+      },
+    };
+
+    const visibleStep: NotificationTimelineStep = {
+      stepType: 'EVENT',
+      event: {
+        elementId: 'VISIBLE_EVENT_RECIPIENT_1',
+        timestamp: '2026-08-06T09:15:58.508308Z',
+        category: TimelineCategory.DIGITAL_SUCCESS_WORKFLOW,
+        details: { recIndex: 1 },
+        legalFactsIds: [],
+        isHidden: false,
+      },
+    };
+
+    const { getByTestId, getAllByRole } = render(
+      <NotificationEventsTimeline
+        recipients={multiRecipients}
+        statusHistory={[
+          {
+            status: NotificationStatus.VIEWED,
+            activeFrom: '2026-08-06T09:14:58.508308Z',
+            steps: [absorbedStep, visibleStep],
+          },
+        ]}
+        clickHandler={clickHandler}
+        isSenderTimeline
+        isNewTimelineCopyEnabled
+      />
+    );
+
+    expect(getByTestId('timeline-group-recipient')).toHaveTextContent(
+      'Utente Test Due - TSTUTN00A07A002H'
+    );
+    expect(getByTestId('timeline-event')).toBeInTheDocument();
+
+    fireEvent.click(getAllByRole('button')[0]);
+    expect(clickHandler).toHaveBeenCalledWith(inlineLegalFact);
+  });
 });

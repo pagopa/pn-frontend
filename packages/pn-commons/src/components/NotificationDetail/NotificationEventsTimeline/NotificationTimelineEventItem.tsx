@@ -76,10 +76,8 @@ const NotificationTimelineEventItem: React.FC<Props> = ({
   }
 
   // Event level mirrors the status rule: a single legal fact is inlined in the description
-  // text, several ones are listed below it. No context is needed to decide it.
+  // text, several ones are listed below it. Inlining only happens with the new copy.
   const eventLegalFacts = (event.legalFactsIds ?? []).map((lf) => ({ event, lf }));
-  const inlineLegalFact =
-    isNewTimelineCopyEnabled && eventLegalFacts.length === 1 ? eventLegalFacts[0] : undefined;
 
   return (
     <Stack
@@ -98,20 +96,12 @@ const NotificationTimelineEventItem: React.FC<Props> = ({
         date={event.timestamp}
         language={language}
         event={event}
-        inlineLegalFact={inlineLegalFact}
+        legalFacts={eventLegalFacts}
         clickHandler={clickHandler}
         slotProps={{ typography: { variant: 'body2', sx: { fontWeight: 400 } } }}
         isNewTimelineCopyEnabled={isNewTimelineCopyEnabled}
         disableDownloads={disableDownloads}
       />
-
-      {/* !isNewTimelineCopyEnabled && (
-        <TimelineLegalFacts
-          event={event}
-          clickHandler={clickHandler}
-          disableDownloads={disableDownloads}
-        />
-      ) */}
     </Stack>
   );
 };
