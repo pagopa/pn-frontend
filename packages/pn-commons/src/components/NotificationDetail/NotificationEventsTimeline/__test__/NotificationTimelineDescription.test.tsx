@@ -1,19 +1,7 @@
 import { vi } from 'vitest';
 
-import {
-  INotificationDetailTimeline,
-  LegalFactId,
-  LegalFactType,
-  NotificationDetailRecipient,
-  NotificationStatus,
-  NotificationStatusHistory,
-  RecipientType,
-  TimelineCategory,
-} from '../../../../models';
-import {
-  NotificationTimelineEvent,
-  NotificationTimelineLegacyStatusHistory,
-} from '../../../../models/NotificationTimeline';
+import { LegalFactId, LegalFactType, TimelineCategory } from '../../../../models';
+import { NotificationTimelineEvent } from '../../../../models/NotificationTimeline';
 import { fireEvent, initLocalizationForTest, render } from '../../../../test-utils';
 import { formatTimelineDate } from '../../../../utility/notificationTimeline.utility';
 import NotificationTimelineDescription from '../NotificationTimelineDescription';
@@ -40,36 +28,6 @@ const createEvent = (
   ...overrides,
 });
 
-const createStatus = (
-  steps: Array<NotificationTimelineEvent>
-): NotificationTimelineLegacyStatusHistory => ({
-  status: NotificationStatus.VIEWED,
-  activeFrom: '2026-09-17T10:30:00Z',
-  relatedTimelineElements: [],
-  steps,
-});
-
-const createLegacyEvent = (
-  overrides: Partial<INotificationDetailTimeline> = {}
-): INotificationDetailTimeline => ({
-  elementId: 'NOTIFICATION_VIEWED',
-  timestamp: '2026-09-17T10:30:00Z',
-  category: TimelineCategory.NOTIFICATION_VIEWED,
-  details: {},
-  legalFactsIds: [],
-  hidden: true,
-  ...overrides,
-});
-
-const createLegacyStatus = (
-  steps: Array<INotificationDetailTimeline>
-): NotificationStatusHistory => ({
-  status: NotificationStatus.VIEWED,
-  activeFrom: '2026-09-17T10:30:00Z',
-  relatedTimelineElements: [],
-  steps,
-});
-
 describe('NotificationTimelineDescription', () => {
   const clickHandler = vi.fn();
 
@@ -90,6 +48,7 @@ describe('NotificationTimelineDescription', () => {
         event={event}
         clickHandler={clickHandler}
         isNewTimelineCopyEnabled
+        legalFacts={[]}
       />
     );
 
@@ -97,7 +56,7 @@ describe('NotificationTimelineDescription', () => {
     expect(queryByRole('button')).not.toBeInTheDocument();
   });
 
-  it('renders the event legal fact inline when the new copy is enabled', () => {
+  it('renders the supplied legal fact inline', () => {
     const event = createEvent({
       legalFactsIds: [firstLegalFact],
     });
@@ -108,6 +67,7 @@ describe('NotificationTimelineDescription', () => {
         event={event}
         clickHandler={clickHandler}
         isNewTimelineCopyEnabled
+        legalFacts={(event.legalFactsIds ?? []).map((lf) => ({ event, lf }))}
       />
     );
 
@@ -128,6 +88,7 @@ describe('NotificationTimelineDescription', () => {
         description="Descrizione legacy."
         event={event}
         clickHandler={clickHandler}
+        legalFacts={(event.legalFactsIds ?? []).map((lf) => ({ event, lf }))}
       />
     );
 
@@ -153,6 +114,7 @@ describe('NotificationTimelineDescription', () => {
         event={event}
         clickHandler={clickHandler}
         isNewTimelineCopyEnabled
+        legalFacts={(event.legalFactsIds ?? []).map((lf) => ({ event, lf }))}
       />
     );
 
@@ -167,140 +129,22 @@ describe('NotificationTimelineDescription', () => {
     expect(clickHandler).toHaveBeenNthCalledWith(2, secondLegalFact);
   });
 
-  it('shows the recipient next to status legal facts for a multi-recipient sender timeline', () => {
-    const recipients: Array<NotificationDetailRecipient> = [
-      {
-        recipientType: RecipientType.PF,
-        denomination: 'Destinatario Test Uno',
-        taxId: 'TSTTNO00A00A000A',
-      },
-      {
-        recipientType: RecipientType.PF,
-        denomination: 'Destinatario Test Due',
-        taxId: 'TSTTDU00A00A000B',
-      },
-    ];
-    const firstEvent = createEvent({
-      elementId: 'FIRST_HIDDEN_EVENT',
-      details: { recIndex: 0 },
-      isHidden: true,
-      legalFactsIds: [firstLegalFact],
-    });
-    const secondEvent = createEvent({
-      elementId: 'SECOND_HIDDEN_EVENT',
-      details: { recIndex: 1 },
-      isHidden: true,
-      legalFactsIds: [secondLegalFact],
-    });
-
-    const { getAllByTestId } = render(
-      <NotificationTimelineDescription
-        description="Descrizione con attestazioni."
-        status={createStatus([firstEvent, secondEvent])}
-        recipients={recipients}
-        isSenderTimeline
-        clickHandler={clickHandler}
-        isNewTimelineCopyEnabled
-      />
-    );
-
-    const legalFactsLabel = getAllByTestId('download-legalfact');
-    expect(legalFactsLabel).toHaveLength(2);
-    expect(legalFactsLabel[0]).toHaveTextContent('Destinatario Test Uno (TSTTNO00A00A000A)');
-    expect(legalFactsLabel[1]).toHaveTextContent('Destinatario Test Due (TSTTDU00A00A000B)');
-  });
-
-  it('does not show the recipient next to legal facts outside the sender timeline and with only one recipient', () => {
-    const recipients: Array<NotificationDetailRecipient> = [
-      {
-        recipientType: RecipientType.PF,
-        denomination: 'Destinatario Test Uno',
-        taxId: 'TSTTNO00A00A000A',
-      },
-    ];
+  it('does not list an inline legal fact a second time below the description', () => {
     const event = createEvent({
-      details: { recIndex: 0 },
-      isHidden: true,
-      legalFactsIds: [firstLegalFact, secondLegalFact],
-    });
-
-    const { getAllByTestId } = render(
-      <NotificationTimelineDescription
-        description="Descrizione con attestazioni."
-        status={createStatus([event])}
-        recipients={recipients}
-        clickHandler={clickHandler}
-        isNewTimelineCopyEnabled
-      />
-    );
-
-    const legalFactsLabel = getAllByTestId('download-legalfact');
-    expect(legalFactsLabel).toHaveLength(2);
-    expect(legalFactsLabel[0]).not.toHaveTextContent('Destinatario Test Uno (TSTTNO00A00A000A)');
-    expect(legalFactsLabel[1]).not.toHaveTextContent('Destinatario Test Uno (TSTTNO00A00A000A)');
-  });
-
-  it('extracts legal facts from a status only when all its events are hidden', () => {
-    const hiddenEvent = createEvent({
-      isHidden: true,
       legalFactsIds: [firstLegalFact],
     });
 
-    const { getByRole } = render(
+    const { getAllByRole } = render(
       <NotificationTimelineDescription
-        description="Scarica l'<0>attestazione</0>."
-        status={createStatus([hiddenEvent])}
+        description="Puoi scaricare l'<0>attestazione</0>."
+        event={event}
         clickHandler={clickHandler}
         isNewTimelineCopyEnabled
+        legalFacts={(event.legalFactsIds ?? []).map((lf) => ({ event, lf }))}
       />
     );
 
-    fireEvent.click(getByRole('button'));
-
-    expect(clickHandler).toHaveBeenCalledWith(firstLegalFact);
-  });
-
-  it('does not extract status legal facts when at least one event is visible', () => {
-    const hiddenEvent = createEvent({
-      elementId: 'HIDDEN_EVENT',
-      isHidden: true,
-      legalFactsIds: [firstLegalFact],
-    });
-    const visibleEvent = createEvent({
-      elementId: 'VISIBLE_EVENT',
-      isHidden: false,
-    });
-
-    const { queryByRole } = render(
-      <NotificationTimelineDescription
-        description="Descrizione senza link inline."
-        status={createStatus([hiddenEvent, visibleEvent])}
-        clickHandler={clickHandler}
-        isNewTimelineCopyEnabled
-      />
-    );
-
-    expect(queryByRole('button')).not.toBeInTheDocument();
-  });
-
-  it('supports legacy statuses', () => {
-    const event = createLegacyEvent({
-      hidden: true,
-      legalFactsIds: [firstLegalFact],
-    });
-
-    const { getByRole } = render(
-      <NotificationTimelineDescription
-        description="Scarica l'<0>attestazione</0>."
-        legacyStatus={createLegacyStatus([event])}
-        clickHandler={clickHandler}
-        isNewTimelineCopyEnabled
-      />
-    );
-
-    fireEvent.click(getByRole('button'));
-
-    expect(clickHandler).toHaveBeenCalledWith(firstLegalFact);
+    expect(getAllByRole('button')).toHaveLength(1);
   });
 
   it('renders title, description and date', () => {
@@ -313,6 +157,7 @@ describe('NotificationTimelineDescription', () => {
         language="it"
         event={event}
         clickHandler={clickHandler}
+        legalFacts={(event.legalFactsIds ?? []).map((lf) => ({ event, lf }))}
       />
     );
 
