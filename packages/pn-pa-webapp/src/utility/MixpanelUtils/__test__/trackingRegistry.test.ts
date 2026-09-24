@@ -1,4 +1,5 @@
 import { apiKeyTrackingConfigs } from '../apiKeyEvents';
+import { campaignTrackingConfigs } from '../campaignEvents';
 import { errorTrackingConfigs } from '../errorEvents';
 import { newNotificationTrackingConfigs } from '../newNotificationEvents';
 import { notificationTrackingConfigs } from '../notificationEvents';
@@ -11,6 +12,7 @@ describe('trackingRegistry', () => {
   it('should compose PA tracking configs from domain configs', () => {
     expect(paTrackingConfigs).toStrictEqual({
       ...apiKeyTrackingConfigs,
+      ...campaignTrackingConfigs,
       ...errorTrackingConfigs,
       ...newNotificationTrackingConfigs,
       ...notificationTrackingConfigs,

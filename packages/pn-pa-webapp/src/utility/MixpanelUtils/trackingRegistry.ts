@@ -3,6 +3,7 @@ import type { TrackedEvent } from '@pagopa-pn/pn-commons';
 import type { PAEventPayloads } from '../../models/PAEventPayloads';
 import { PAEventsType } from '../../models/PAEventsType';
 import { apiKeyTrackingConfigs } from './apiKeyEvents';
+import { campaignTrackingConfigs } from './campaignEvents';
 import { errorTrackingConfigs } from './errorEvents';
 import { newNotificationTrackingConfigs } from './newNotificationEvents';
 import { notificationTrackingConfigs } from './notificationEvents';
@@ -15,6 +16,7 @@ type PATrackingConfigs = TrackingConfigs<PAEventsType>;
 
 export const paTrackingConfigs: PATrackingConfigs = {
   ...apiKeyTrackingConfigs,
+  ...campaignTrackingConfigs,
   ...errorTrackingConfigs,
   ...newNotificationTrackingConfigs,
   ...notificationTrackingConfigs,

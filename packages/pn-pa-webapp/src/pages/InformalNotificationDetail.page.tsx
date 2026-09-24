@@ -24,6 +24,7 @@ import NotificationDetailsDrawer, {
 } from '../components/Notifications/NotificationDetailsDrawer';
 import NotificationRecipientsDetail from '../components/Notifications/NotificationRecipientsDetail';
 import { BffDocumentDownloadMetadataResponse } from '../generated-client/informal-notifications';
+import { PAEventsType } from '../models/PAEventsType';
 import * as routes from '../navigation/routes.const';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import {
@@ -32,6 +33,7 @@ import {
   getSentInformalNotificationDocument,
 } from '../redux/notification/actions';
 import { RootState } from '../redux/store';
+import PAEventStrategyFactory from '../utility/MixpanelUtils/PAEventStrategyFactory';
 
 const InformalNotificationDetail: React.FC = () => {
   const { campaignId, id } = useParams();
@@ -59,6 +61,9 @@ const InformalNotificationDetail: React.FC = () => {
 
     void dispatch(getSentInformalNotification(id))
       .unwrap()
+      .then(() => {
+        PAEventStrategyFactory.triggerEvent(PAEventsType.SEND_PA_COMBO_DETAIL);
+      })
       .catch(() => {})
       .finally(() => setPageReady(true));
   }, [dispatch, id]);
