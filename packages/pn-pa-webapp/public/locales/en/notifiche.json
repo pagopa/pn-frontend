@@ -373,6 +373,7 @@
         "M07": "because the address does not exist",
         "M08": "because the address is insufficient",
         "M09": "for other reasons",
+        "M10": "because the address is not legible",
         "F01": "the envelope was stolen",
         "F02": "the envelope was lost",
         "F03": "the envelope was ruined",
