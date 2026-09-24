@@ -391,6 +391,7 @@
         "M07": "parce que l’adresse n’existe pas",
         "M08": "parce que l’adresse est incomplète",
         "M09": "pour d’autres raisons",
+        "M10": "parce que l'adresse n'est pas lisible",
         "F01": "pour vol de l’enveloppe",
         "F02": "pour perte de l’enveloppe",
         "F03": "pour détérioration de l’enveloppe",

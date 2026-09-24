@@ -402,6 +402,7 @@
         "M07": "weil die Adresse nicht existiert",
         "M08": "weil die Adresse unvollständig ist",
         "M09": "aus anderen Gründen",
+        "M10": "weil die Adresse nicht lesbar ist",
         "F01": "wegen Diebstahls des Umschlags",
         "F02": "wegen Verlust des Umschlags",
         "F03": "wegen Beschädigung des Umschlags",
