@@ -375,7 +375,6 @@ const ActualApp = () => {
             </MIButton>
           </PnDialogActions>
         </PnDialog>
-
         <A11yMessageAnnouncer />
         <AppMessage />
         <AppResponseMessage
