@@ -23,6 +23,7 @@ type NotificationTimelineBoxProps = {
   onTimelineClick?: () => void;
   clickHandler: (legalFactId: LegalFactId) => void;
   isNewTimelineCopyEnabled?: boolean;
+  perfectionLink?: string;
 };
 
 const NotificationTimelineBox: React.FC<NotificationTimelineBoxProps> = ({
@@ -32,6 +33,7 @@ const NotificationTimelineBox: React.FC<NotificationTimelineBoxProps> = ({
   onTimelineClick,
   clickHandler,
   isNewTimelineCopyEnabled = false,
+  perfectionLink,
 }) => {
   if (statusHistory.length === 0) {
     return null;
@@ -68,6 +70,7 @@ const NotificationTimelineBox: React.FC<NotificationTimelineBoxProps> = ({
           clickHandler={clickHandler}
           slotProps={{ typography: { variant: 'body2' } }}
           isNewTimelineCopyEnabled={isNewTimelineCopyEnabled}
+          perfectionLink={perfectionLink}
         />
         <MIButton
           aria-label={getLocalizedOrDefaultLabel(

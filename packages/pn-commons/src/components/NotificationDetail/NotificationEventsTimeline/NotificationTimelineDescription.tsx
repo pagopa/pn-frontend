@@ -1,6 +1,6 @@
 import { Trans } from 'react-i18next';
 
-import { Box, Typography, TypographyProps } from '@mui/material';
+import { Box, Link, Typography, TypographyProps } from '@mui/material';
 import { MIButton, MIButtonProps } from '@pagopa/mui-italia';
 
 import { INotificationDetailTimeline, LegalFactId, TimelineCategory } from '../../../models';
@@ -16,6 +16,7 @@ type Props = {
   language?: string;
   clickHandler: (legalFactId: LegalFactId) => void;
   disableDownloads?: boolean;
+  perfectionLink?: string;
   slotProps?: {
     typography?: TypographyProps;
     button?: MIButtonProps;
@@ -79,6 +80,7 @@ const NotificationTimelineDescription: React.FC<Props> = ({
   isNewTimelineCopyEnabled = false,
   legalFacts,
   event,
+  perfectionLink,
 }) => {
   // inline only makes sense with the new copy, where the description text contains the placeholder
   const inlineLegalFact =
@@ -88,6 +90,31 @@ const NotificationTimelineDescription: React.FC<Props> = ({
 
   const downloadIsDisabled = (category: TimelineCategory) =>
     disableDownloads && category !== TimelineCategory.NOTIFICATION_CANCELLED;
+
+  const legalFactSlot = inlineLegalFact ? (
+    <NotificationTimelineEventLegalFact
+      legalFact={inlineLegalFact.lf}
+      clickHandler={clickHandler}
+      slotProps={slotProps}
+      disableDownloads={downloadIsDisabled(inlineLegalFact.event.category)}
+      dataTestId={event ? 'download-legalfact-micro' : 'download-legalfact'}
+      isNewTimelineCopyEnabled={isNewTimelineCopyEnabled}
+    />
+  ) : (
+    <></>
+  );
+
+  const perfectionLinkSlot = perfectionLink ? (
+    <Link
+      href={perfectionLink}
+      target="_blank"
+      rel="noopener noreferrer"
+      sx={{ ...slotProps?.button?.sx, fontWeight: 400 }}
+      data-testid="perfection-link"
+    />
+  ) : (
+    <></>
+  );
 
   return (
     <Box>
@@ -100,30 +127,11 @@ const NotificationTimelineDescription: React.FC<Props> = ({
             {' - '}
           </>
         )}
-        {inlineLegalFact && (
-          <Trans
-            i18nKey="description" // this is fake and is needed to run trans functionality
-            t={() => description}
-            components={[
-              <NotificationTimelineEventLegalFact
-                key={inlineLegalFact.lf.key}
-                legalFact={inlineLegalFact.lf}
-                clickHandler={clickHandler}
-                slotProps={slotProps}
-                disableDownloads={downloadIsDisabled(inlineLegalFact.event.category)}
-                dataTestId={event ? 'download-legalfact-micro' : 'download-legalfact'}
-                isNewTimelineCopyEnabled={isNewTimelineCopyEnabled}
-              />,
-            ]}
-          />
-        )}
-        {!inlineLegalFact && (
-          <Trans
-            i18nKey="description" // this is fake and is needed to run trans functionality
-            t={() => description}
-            components={[]}
-          />
-        )}
+        <Trans
+          i18nKey="description" // this is fake and is needed to run trans functionality
+          t={() => description}
+          components={[legalFactSlot, perfectionLinkSlot]}
+        />
         {date && language && (
           <>
             &nbsp;
