@@ -60,6 +60,7 @@
     "legal-date": "Vročitev odložena dne",
     "informal-date": "Sporočilo odloženo dne",
     "legal-disclaimer": "Vročitev poslana preko SEND, platforme, ki jo ureja 26. člen Zakonske uredbe 76/2020",
+    "informal-disclaimer": "To sporočilo bi lahko imelo pravne učinke. Oglej si priloge, če so priložene, da izveš več.",
     "notification-timeline-section": {
       "title": "Stanje obvestila",
       "aria-label": "Prikaži časovnico obvestila"
@@ -150,9 +151,9 @@
     },
     "informal_notification_markdown": {
       "greeting": "All'attenzione di {{recipientDenomination}},",
-      "attachments_info": "Per avere maggiori informazioni <0>è consigliato prendere visione degli allegati</0>, che possono fornire dettagli importanti.",
+      "attachments_info": "Per avere maggiori informazioni <0>è necessario prendere visione degli allegati</0>, che possono fornire dettagli importanti.",
       "payment_instructions": "È possibile completare il pagamento premendo <0>Paga</0>. In alternativa, si può utilizzare l'<1>avviso allegato</1> per saldare l'importo tramite tutti i canali abilitati a pagoPA.",
-      "assistance": "In ogni caso, qualora si avesse bisogno di assistenza, è possibile <0>contattare {{senderDenomination}} attraverso i suoi canali ufficiali.</0>"
+      "assistance": "In ogni caso, qualora si avesse bisogno di assistenza, è possibile <0>contattare {{senderDenomination}}</0> attraverso i suoi canali ufficiali."
     },
     "acts_files": {
       "downloadable_acts": "Dokumenti so na voljo na spletu 120 dni od zaključka obvestila.",
@@ -194,6 +195,7 @@
       "send-digital-success-SERCQ-SEND-description": "Pošiljanje obvestila na digitalni naslov SEND je uspelo.",
       "send-digital-success-SERCQ-SEND-description-multirecipient": "Pošiljanje obvestila osebi {{name}} {{taxId}} na digitalni naslov SEND je uspelo.",
       "send-simple-registered-letter": "Pošiljanje z navadnim priporočenim pismom",
+      "send-simple-registered-letter-group-label": "Pošiljanje z navadnim priporočenim pismom",
       "send-simple-registered-letter-description": "Obvestilo se pošlje na naslov {{address}} z navadnim priporočenim pismom.",
       "send-simple-registered-letter-description-multirecipient": "Obvestilo se pošlje za {{name}} {{taxId}} na naslov {{address}} z navadnim priporočenim pismom.",
       "send-analog-domicile-890": "Pošiljanje po priporočeni pošti 890",

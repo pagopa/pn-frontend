@@ -449,6 +449,26 @@ describe('notification status texts', () => {
     );
   });
 
+  it('return notification status infos - EFFECTIVE_DATE - passes the perfection date', () => {
+    const activeFrom = '2023-01-26T13:57:16.42843144Z';
+    testNotificationStatusInfos(
+      'info',
+      `notifiche - status.effective-date`,
+      `notifiche - status.effective-date-tooltip - ${JSON.stringify({
+        date: '26/01/2023',
+      })}`,
+      `notifiche - status.effective-date-description - ${JSON.stringify({
+        date: '26/01/2023',
+      })}`,
+      {
+        status: NotificationStatus.EFFECTIVE_DATE,
+        activeFrom,
+        relatedTimelineElements: [],
+      },
+      { recipients: notificationDTO.recipients }
+    );
+  });
+
   it('return notification status infos - VIEWED - access after the effective date', () => {
     initLocalizationExists((_ns, path) => path === 'status.viewed-after-effective-date');
     testNotificationStatusInfos(

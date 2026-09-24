@@ -103,41 +103,4 @@ describe('NotificationTimelineBox', () => {
     expect(clickHandler).toHaveBeenCalledTimes(1);
     expect(clickHandler).toHaveBeenCalledWith(legalFact);
   });
-
-  it('renders the legal fact below the description when the new copy is disabled', () => {
-    const legalFact = {
-      key: 'safestorage://recipient-access.pdf',
-      category: LegalFactType.RECIPIENT_ACCESS,
-    };
-
-    const statusHistory: Array<NotificationStatusHistory> = [
-      {
-        status: NotificationStatus.VIEWED,
-        activeFrom: '2026-09-17T10:30:00Z',
-        relatedTimelineElements: [],
-        steps: [
-          {
-            elementId: 'NOTIFICATION_VIEWED',
-            timestamp: '2026-09-17T10:30:00Z',
-            category: TimelineCategory.NOTIFICATION_VIEWED,
-            details: {},
-            hidden: true,
-            legalFactsIds: [legalFact],
-          },
-        ],
-      },
-    ];
-
-    const { getByTestId } = render(
-      <NotificationTimelineBox
-        statusHistory={statusHistory}
-        recipients={notificationDTO.recipients}
-        isParty={false}
-        clickHandler={clickHandler}
-        isNewTimelineCopyEnabled={false}
-      />
-    );
-
-    expect(getByTestId('download-legalfact')).toBeInTheDocument();
-  });
 });

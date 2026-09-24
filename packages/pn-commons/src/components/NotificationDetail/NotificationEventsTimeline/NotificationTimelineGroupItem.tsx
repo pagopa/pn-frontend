@@ -123,7 +123,7 @@ const NotificationTimelineGroupItem = ({
               clickHandler={clickHandler}
               disableDownloads={disableDownloads}
               language={language}
-              asBullet
+              insideAGroup
               isNewTimelineCopyEnabled={isNewTimelineCopyEnabled}
               perfectionLink={perfectionLink}
             />
