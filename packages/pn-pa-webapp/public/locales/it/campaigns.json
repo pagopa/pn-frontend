@@ -11,6 +11,7 @@
   },
 
   "detail": {
+    "breadcrumb-root": "Campagne",
     "title": "Dettaglio campagna",
     "creation-date": "Data di creazione",
     "service-name": "Nome servizio",
@@ -30,6 +31,98 @@
       "EMAIL": "Email",
       "ANALOG": "Servizio postale",
       "PEC": "PEC"
+    }
+  },
+  "informal": {
+    "detail": {
+      "iun": "Codice IUN",
+      "sender": "Mittente",
+      "recipient": "Persona destinataria",
+      "recipients": "Persone destinatarie",
+      "subject": "Oggetto della comunicazione",
+      "text": "Testo della comunicazione",
+      "title": "Dettaglio comunicazione",
+      "aria-label": "Vai al dettaglio della comunicazione",
+      "status": {
+        "title": "Stato della comunicazione",
+        "aria-label": "Vai al dettaglio dello stato della comunicazione",
+        "go-to-detail": "Vai al dettaglio"
+      },
+      "documents": {
+        "title": "Documenti allegati",
+        "download-message-available": "<0>Disponibile online fino a 180 giorni</0> dalla data di accettazione della comunicazione.",
+        "download-message-expired": "I documenti non sono più disponibili online.",
+        "document-not-available": "Il documento non è ancora disponibile. Riprova più tardi."
+      },
+      "payments": {
+        "title": "Pagamenti",
+        "notice-code": "Codice avviso"
+      },
+      "send-by-channel": {
+        "title": "Dettaglio invio per canale",
+        "channel": {
+          "send": "SEND",
+          "io": "IO",
+          "sms": "SMS",
+          "email": "Email",
+          "analog": "Servizio postale",
+          "pec": "PEC"
+        },
+        "status": {
+          "ready_to_send": "IN ATTESA",
+          "waiting_to_send": "IN ATTESA",
+          "sent": "INVIATA",
+          "filed": "DEPOSITATA",
+          "delivered": "CONSEGNATA",
+          "viewed": "LETTA",
+          "unavailable": "NON DISPONIBILE",
+          "not_delivered": "NON CONSEGNATA",
+          "workflow_ended": "WORKFLOW TERMINATO"
+        },
+        "description": {
+          "ready_to_send": "Invio previsto dopo la validazione della comunicazione.",
+          "waiting_to_send": "In attesa del completamento dell'invio sul canale precedente.",
+          "workflow_ended": {
+            "sms": "Non sarà utilizzato, perché la comunicazione ha già raggiunto l'esito richiesto.",
+            "email": "Non sarà utilizzata, perché la comunicazione ha già raggiunto l'esito richiesto.",
+            "analog": "Non sarà utilizzato, perché la comunicazione ha già raggiunto l'esito richiesto.",
+            "pec": "Non sarà utilizzata, perché la comunicazione ha già raggiunto l'esito richiesto."
+          },
+          "unavailable": {
+            "io": "Impossibile risalire all'account della persona destinataria.",
+            "sms": "Impossibile risalire al numero di telefono della persona destinataria.",
+            "email": "Impossibile risalire all'indirizzo email della persona destinataria.",
+            "pec": "Impossibile risalire all'indirizzo PEC della persona destinataria."
+          }
+        }
+      }
+    },
+    "status": {
+      "accepted": {
+        "label": "Pronta per l'invio",
+        "tooltip": "Pronta per l'invio",
+        "description": "La comunicazione ha superato le verifiche di conformità. Inizierà a breve il processo d’invio."
+      },
+      "processing": {
+        "label": "Invio in corso",
+        "tooltip": "Invio in corso",
+        "description": "La comunicazione proverà a raggiungere la persona destinataria sui canali scelti."
+      },
+      "completed": {
+        "label": "Invio riuscito",
+        "tooltip": "Invio riuscito",
+        "description": "La comunicazione è stata inviata sui canali scelti."
+      },
+      "undeliverable": {
+        "label": "Invio fallito",
+        "tooltip": "Invio fallito",
+        "description": "Non è stato possibile inviare la comunicazione sui canali scelti."
+      },
+      "unknown": {
+        "label": "Non definito",
+        "tooltip": "Non definito",
+        "description": "Stato sconosciuto"
+      }
     }
   }
 }

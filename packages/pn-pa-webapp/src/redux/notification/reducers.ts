@@ -11,7 +11,16 @@ import {
 } from '@pagopa-pn/pn-commons';
 import { createSlice } from '@reduxjs/toolkit';
 
-import { getDowntimeHistory, getSentNotification, getSentNotificationTimeline } from './actions';
+import {
+  BffFullSentInformalNotificationV1,
+  InformalNotificationStatusV1,
+} from '../../generated-client/informal-notifications';
+import {
+  getDowntimeHistory,
+  getSentInformalNotification,
+  getSentNotification,
+  getSentNotificationTimeline,
+} from './actions';
 
 const initialState = {
   loading: false,
@@ -26,6 +35,13 @@ const initialState = {
     notificationStatusHistory: [] as Array<NotificationStatusHistory>,
     timeline: [] as Array<INotificationDetailTimeline>,
   } as NotificationDetail,
+  informalNotification: {
+    iun: '',
+    senderDenomination: '',
+    recipients: [],
+    subject: '',
+    notificationStatus: '' as InformalNotificationStatusV1,
+  } as BffFullSentInformalNotificationV1,
   notificationTimeline: {
     iun: '',
     subject: '',
@@ -52,6 +68,9 @@ const notificationSlice = createSlice({
     });
     builder.addCase(getDowntimeHistory.fulfilled, (state, action) => {
       state.downtimeEvents = action.payload.result;
+    });
+    builder.addCase(getSentInformalNotification.fulfilled, (state, action) => {
+      state.informalNotification = action.payload;
     });
   },
 });

@@ -28,7 +28,7 @@ import {
   SendPaperDetails,
   TimelineCategory,
 } from '../models/NotificationDetail';
-import { NotificationStatus } from '../models/NotificationStatus';
+import { InformalNotificationStatus, NotificationStatus } from '../models/NotificationStatus';
 import { getLocalizedOrDefaultLabel, hasLocalizedLabel } from '../utility/localization.utility';
 import { TimelineStepInfo } from './TimelineUtils/TimelineStep';
 import { TimelineStepFactory } from './TimelineUtils/TimelineStepFactory';
@@ -94,6 +94,10 @@ function viewedStatusVariant(
 
   return statusInfos;
 }
+
+type StatusInfoWithColor = StatusInfo & {
+  color: MIChipProps['color'];
+};
 
 const AnalogDeliveryCodeStock = new Set(['RECRN003C', 'RECRN011', 'RECAG011A']);
 const AnalogDeliveryCodeWithdrawnStock = new Set(['RECAG005C', 'RECAG006C']);
@@ -241,12 +245,7 @@ export function getNotificationStatusInfos(
     recipients: Array<NotificationDetailRecipient | string>;
     isParty?: boolean;
   }
-): {
-  color: MIChipProps['color'];
-  label: string;
-  tooltip: string;
-  description: string;
-} {
+): StatusInfoWithColor {
   const statusComesAsAnObject = !!(status as NotificationStatusHistory).status;
   const statusObject: NotificationStatusHistory | undefined = statusComesAsAnObject
     ? (status as NotificationStatusHistory)
@@ -383,6 +382,45 @@ export function getNotificationStatusInfos(
       };
   }
 }
+
+const localizeInformalStatus = (status: string): StatusInfo => ({
+  label: getLocalizedOrDefaultLabel('campaigns', `informal.status.${status}.label`),
+  tooltip: getLocalizedOrDefaultLabel('campaigns', `informal.status.${status}.tooltip`),
+  description: getLocalizedOrDefaultLabel('campaigns', `informal.status.${status}.description`),
+});
+
+export const getInformalNotificationStatusInfos = (
+  status: InformalNotificationStatus
+): StatusInfoWithColor => {
+  switch (status) {
+    case InformalNotificationStatus.ACCEPTED:
+      return {
+        color: 'default',
+        ...localizeInformalStatus('accepted'),
+      };
+    case InformalNotificationStatus.PROCESSING:
+      return {
+        color: 'info',
+        ...localizeInformalStatus('processing'),
+      };
+    case InformalNotificationStatus.COMPLETED_REACHED:
+    case InformalNotificationStatus.COMPLETED_UNREACHED:
+      return {
+        color: 'success',
+        ...localizeInformalStatus('completed'),
+      };
+    case InformalNotificationStatus.UNDELIVERABLE:
+      return {
+        color: 'error',
+        ...localizeInformalStatus('undeliverable'),
+      };
+    default:
+      return {
+        color: 'default',
+        ...localizeInformalStatus('unknown'),
+      };
+  }
+};
 
 export const getNotificationAllowedStatus = () => [
   {

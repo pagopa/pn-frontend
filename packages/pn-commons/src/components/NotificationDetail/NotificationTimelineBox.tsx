@@ -1,11 +1,8 @@
-import KeyboardArrowRightRoundedIcon from '@mui/icons-material/KeyboardArrowRightRounded';
-import { Stack, Typography } from '@mui/material';
-import { MIButton, MIChip, MIPaper } from '@pagopa/mui-italia';
-
 import { LegalFactId, NotificationDetailRecipient, NotificationStatusHistory } from '../../models';
 import { getNotificationStatusInfos } from '../../utility';
 import { getLocalizedOrDefaultLabel } from '../../utility/localization.utility';
 import NotificationTimelineDescription from './NotificationEventsTimeline/NotificationTimelineDescription';
+import NotificationStatusBox from './NotificationStatusBox';
 
 type NotificationTimelineBoxProps = {
   statusHistory: Array<NotificationStatusHistory>;
@@ -35,20 +32,13 @@ const NotificationTimelineBox: React.FC<NotificationTimelineBoxProps> = ({
   });
 
   return (
-    <MIPaper padding={24} data-testid="NotificationDetailTimeline">
-      <Stack spacing={1} alignItems="flex-start">
-        <Typography component="h2" variant="h6" sx={{ mb: 1 }}>
-          {getLocalizedOrDefaultLabel(
-            'notifications',
-            'detail.notification-timeline-section.title'
-          )}
-        </Typography>
-        <MIChip
-          color={notificationStatusInfos.color}
-          variant="filled"
-          label={notificationStatusInfos.label}
-          sx={{ my: 1, width: 'fit-content' }}
-        />
+    <NotificationStatusBox
+      ariaLabel={getLocalizedOrDefaultLabel(
+        'notifications',
+        'detail.notification-timeline-section.aria-label'
+      )}
+      color={notificationStatusInfos.color}
+      description={
         <NotificationTimelineDescription
           legacyStatus={statusHistory[0]}
           description={notificationStatusInfos.description}
@@ -58,19 +48,15 @@ const NotificationTimelineBox: React.FC<NotificationTimelineBoxProps> = ({
           isSenderTimeline={isParty}
           isNewTimelineCopyEnabled={isNewTimelineCopyEnabled}
         />
-        <MIButton
-          aria-label={getLocalizedOrDefaultLabel(
-            'notifications',
-            'detail.notification-timeline-section.aria-label'
-          )}
-          onClick={onTimelineClick}
-          variant="text"
-        >
-          {getLocalizedOrDefaultLabel('notifications', 'go-to-detail')}{' '}
-          <KeyboardArrowRightRoundedIcon />
-        </MIButton>
-      </Stack>
-    </MIPaper>
+      }
+      label={notificationStatusInfos.label}
+      detailsLabel={getLocalizedOrDefaultLabel('notifications', 'go-to-detail')}
+      onDetailsClick={onTimelineClick}
+      title={getLocalizedOrDefaultLabel(
+        'notifications',
+        'detail.notification-timeline-section.title'
+      )}
+    />
   );
 };
 

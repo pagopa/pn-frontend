@@ -11,6 +11,7 @@
   },
 
   "detail": {
+    "breadcrumb-root": "Kampagnen",
     "title": "Kampagnendetails",
     "creation-date": "Erstellungsdatum",
     "service-name": "Dienstname",
@@ -30,6 +31,98 @@
       "EMAIL": "E-Mail",
       "ANALOG": "Postdienst",
       "PEC": "PEC"
+    }
+  },
+  "informal": {
+    "detail": {
+      "iun": "IUN-Code",
+      "sender": "Absender",
+      "recipient": "Empfänger",
+      "recipients": "Empfänger",
+      "subject": "Betreff der Mitteilung",
+      "text": "Text der Mitteilung",
+      "title": "Details der Mitteilung",
+      "aria-label": "Zu den Details der Mitteilung",
+      "status": {
+        "title": "Status der Mitteilung",
+        "aria-label": "Zu den Details des Mitteilungsstatus",
+        "go-to-detail": "Zu den Details"
+      },
+      "documents": {
+        "title": "Angehängte Dokumente",
+        "download-message-available": "<0>Bis zu 180 Tage online verfügbar</0> ab dem Datum der Annahme der Mitteilung.",
+        "download-message-expired": "Die Dokumente sind nicht mehr online verfügbar.",
+        "document-not-available": "Das Dokument ist noch nicht verfügbar. Versuche es später noch einmal."
+      },
+      "payments": {
+        "title": "Zahlungen",
+        "notice-code": "Mitteilungscode"
+      },
+      "send-by-channel": {
+        "title": "Versanddetails nach Kanal",
+        "channel": {
+          "send": "SEND",
+          "io": "IO",
+          "sms": "SMS",
+          "email": "E-Mail",
+          "analog": "Postdienst",
+          "pec": "PEC"
+        },
+        "status": {
+          "ready_to_send": "WARTEND",
+          "waiting_to_send": "WARTEND",
+          "sent": "GESENDET",
+          "filed": "HINTERLEGT",
+          "delivered": "ZUGESTELLT",
+          "viewed": "GELESEN",
+          "unavailable": "NICHT VERFÜGBAR",
+          "not_delivered": "NICHT ZUGESTELLT",
+          "workflow_ended": "WORKFLOW BEENDET"
+        },
+        "description": {
+          "ready_to_send": "Voraussichtlicher Versand nach Validierung der Mitteilung.",
+          "waiting_to_send": "Warten auf den Abschluss des Versands auf dem vorherigen Kanal.",
+          "workflow_ended": {
+            "sms": "Wird nicht verwendet, da die Mitteilung bereits das gewünschte Ergebnis erzielt hat.",
+            "email": "Wird nicht verwendet, da die Mitteilung bereits das gewünschte Ergebnis erzielt hat.",
+            "analog": "Wird nicht verwendet, da die Mitteilung bereits das gewünschte Ergebnis erzielt hat.",
+            "pec": "Wird nicht verwendet, da die Mitteilung bereits das gewünschte Ergebnis erzielt hat."
+          },
+          "unavailable": {
+            "io": "Das Konto des Empfängers kann nicht ermittelt werden.",
+            "sms": "Die Telefonnummer des Empfängers kann nicht ermittelt werden.",
+            "email": "Die E-Mail-Adresse des Empfängers kann nicht ermittelt werden.",
+            "pec": "Die PEC-Adresse des Empfängers kann nicht ermittelt werden."
+          }
+        }
+      }
+    },
+    "status": {
+      "accepted": {
+        "label": "Bereit zum Versand",
+        "tooltip": "Bereit zum Versand",
+        "description": "Die Mitteilung hat die Konformitätsprüfungen bestanden. Der Versandprozess beginnt in Kürze."
+      },
+      "processing": {
+        "label": "Versand im Gange",
+        "tooltip": "Versand im Gange",
+        "description": "Die Mitteilung wird versuchen, den Empfänger über die gewählten Kanäle zu erreichen."
+      },
+      "completed": {
+        "label": "Versand erfolgreich",
+        "tooltip": "Versand erfolgreich",
+        "description": "Die Mitteilung wurde über die gewählten Kanäle versendet."
+      },
+      "undeliverable": {
+        "label": "Versand fehlgeschlagen",
+        "tooltip": "Versand fehlgeschlagen",
+        "description": "Die Mitteilung konnte nicht über die gewählten Kanäle versendet werden."
+      },
+      "unknown": {
+        "label": "Nicht definiert",
+        "tooltip": "Nicht definiert",
+        "description": "Unbekannter Status"
+      }
     }
   }
 }
