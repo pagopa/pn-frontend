@@ -1,7 +1,8 @@
+import { NotificationStatus } from '../models';
 import {
-  INotificationDetailTimeline,
   LegalFactId,
   NotificationDetailRecipient,
+  TimelineCategory,
 } from '../models/NotificationDetail';
 import {
   NotificationTimelineEvent,
@@ -12,6 +13,39 @@ import {
   NotificationTimelineStepType,
 } from '../models/NotificationTimeline';
 import { formatDay, formatMonthString, formatTime } from './date.utility';
+
+/**
+ * Minimal shape a timeline event must have to take part in the legal fact plan.
+ * Both NotificationTimelineEvent and INotificationDetailTimeline satisfy it; they only
+ * differ in the name of the hidden flag, which is supplied by the caller.
+ */
+type LegalFactCarrier = {
+  elementId: string;
+  category: TimelineCategory;
+  legalFactsIds?: Array<LegalFactId>;
+};
+
+export type StatusLegalFact<T extends LegalFactCarrier> = { event: T; lf: LegalFactId };
+
+export type StatusLegalFactPlan<T extends LegalFactCarrier> = {
+  /** Legal fact to be rendered inline within the status description text, if any. */
+  legalFacts: Array<StatusLegalFact<T>>;
+  /** elementIds of the events that must not be rendered, as they are absorbed into the description. */
+  hiddenEventIds: Set<string>;
+};
+
+const EMPTY_PLAN: StatusLegalFactPlan<never> = {
+  legalFacts: [],
+  hiddenEventIds: new Set<string>(),
+};
+
+export const emptyLegalFactPlan = <T extends LegalFactCarrier>(): StatusLegalFactPlan<T> =>
+  EMPTY_PLAN as StatusLegalFactPlan<T>;
+
+const legalFactStatusMap = new Map<NotificationStatus, TimelineCategory>([
+  [NotificationStatus.ACCEPTED, TimelineCategory.REQUEST_ACCEPTED],
+  [NotificationStatus.VIEWED, TimelineCategory.NOTIFICATION_VIEWED],
+]);
 
 export const isTimelineGroupStep = (
   step: NotificationTimelineStep
@@ -72,39 +106,37 @@ export const getRecipientPerStep = (
   });
 };
 
-// when statutes have all steps hidden, they have leagl facts under description
-// when statuses have even just on step not hidden, the legal fact is shown as bullet point inside the status
-export const getStatusLegalFacts = (events: Array<NotificationTimelineEvent>) => {
-  const legalFactsIds = events.reduce((arr, s) => {
-    if (s.legalFactsIds && s.isHidden) {
-      return arr.concat(s.legalFactsIds.map((lf) => ({ event: s, lf })));
-    }
-    return arr;
-  }, [] as Array<{ event: NotificationTimelineEvent; lf: LegalFactId }>);
-
-  return statusHasStepsToShow(events) ? [] : legalFactsIds;
-};
-
-// if a status has all steps hidden, we hide the steps
-export const statusHasStepsToShow = (events: Array<NotificationTimelineEvent>) =>
-  events.some((s) => !s.isHidden);
-
-// if a status has all steps hidden, we hide the steps
-const legacyStatusHasStepsToShow = (events: Array<INotificationDetailTimeline>) =>
-  events.some((s) => !s.hidden);
-
-// when statutes have all steps hidden, they have leagl facts under description
-// when statuses have even just on step not hidden, the legal fact is shown as bullet point inside the status
-export const getLegacyStatusLegalFacts = (events?: Array<INotificationDetailTimeline>) => {
-  if (!events) {
-    return [];
+/**
+ * Single source of truth for how the legal facts of a status must be displayed.
+ *
+ * - Zero or several candidates: nothing is inlined, each legal fact keeps being rendered
+ *   in its own context (recipient group for statuses, list for events).
+ * - Exactly one candidate: it is rendered inside the status description and its event is
+ *   hidden, so that the same legal fact is not shown twice.
+ *
+ * `isHidden` tells how to read the hidden flag, which is `isHidden` on the new timeline
+ * and `hidden` on the legacy one.
+ */
+export const getStatusLegalFactPlan = <T extends LegalFactCarrier>(
+  status: { status: NotificationStatus; steps?: Array<T> } | undefined,
+  isHidden: (event: T) => boolean | undefined
+): StatusLegalFactPlan<T> => {
+  const eventCategory = status && legalFactStatusMap.get(status.status);
+  if (!status?.steps || !eventCategory) {
+    return emptyLegalFactPlan<T>();
   }
-  const legalFactsIds = events.reduce((arr, s) => {
-    if (s.legalFactsIds && s.hidden) {
-      return arr.concat(s.legalFactsIds.map((lf) => ({ event: s, lf })));
-    }
-    return arr;
-  }, [] as Array<{ event: INotificationDetailTimeline; lf: LegalFactId }>);
 
-  return legacyStatusHasStepsToShow(events) ? [] : legalFactsIds;
+  // All (event, legalFact) pairs of this status that are candidates for inlining.
+  const legalFacts = status.steps
+    .filter((event) => event.category === eventCategory && isHidden(event))
+    .flatMap((event) => (event.legalFactsIds ?? []).map((lf) => ({ event, lf })));
+
+  if (legalFacts.length === 0) {
+    return emptyLegalFactPlan<T>();
+  }
+
+  return {
+    legalFacts,
+    hiddenEventIds: legalFacts.length === 1 ? new Set([legalFacts[0].event.elementId]) : new Set(),
+  };
 };

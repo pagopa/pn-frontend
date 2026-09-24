@@ -391,6 +391,7 @@
         "M07": "because the address is non-existent",
         "M08": "because the address was incomplete",
         "M09": "due to other reasons",
+        "M10": "because the address is not legible",
         "F01": "envelope was stolen",
         "F02": "envelope was lost",
         "F03": "envelope was damaged",
