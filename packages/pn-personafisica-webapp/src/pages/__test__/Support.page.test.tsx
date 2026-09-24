@@ -41,6 +41,9 @@ describe('Support page', () => {
     expect(container).toHaveTextContent(/sub-title/);
     const form = getByTestId('supportForm');
     expect(form).toBeInTheDocument();
+    const disclaimer = getByTestId('pecDisclaimer');
+    expect(disclaimer).toBeInTheDocument();
+    expect(disclaimer).toHaveTextContent('pec-disclaimer');
     const email = getById(form, 'mail');
     expect(email).toBeInTheDocument();
     expect(email).toHaveValue('');
