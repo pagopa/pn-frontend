@@ -50,7 +50,8 @@
       "outcomes": {
         "all": "Alle",
         "viewed": "Gelesen",
-        "delivered": "Zugestellt"
+        "delivered": "Zugestellt",
+        "not-available": "Ergebnis nicht verfügbar"
       },
       "no-communications-title": "Keine Mitteilungen verfügbar",
       "no-communications-description": "Es gibt keine Mitteilungen, die den ausgewählten Filtern entsprechen."

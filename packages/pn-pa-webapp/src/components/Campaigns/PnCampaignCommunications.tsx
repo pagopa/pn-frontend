@@ -2,6 +2,7 @@ import { useFormik } from 'formik';
 import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 
+import { ArrowForward } from '@mui/icons-material';
 import { Box, Grid, ListItemText, MenuItem, TextField, Typography } from '@mui/material';
 import {
   EmptyErrorState,
@@ -16,15 +17,21 @@ import {
   SmartHeaderCell,
   SmartTable,
   SmartTableData,
+  StatusTooltip,
   dataRegex,
   formatIun,
 } from '@pagopa-pn/pn-commons';
-import { Autocomplete } from '@pagopa/mui-italia';
+import { Autocomplete, MIButton } from '@pagopa/mui-italia';
 
 import { BffInformalSenderNotificationSearchRow } from '../../generated-client/informal-notifications';
 import { setCommunicationFilters } from '../../redux/campaign/reducers';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { RootState } from '../../redux/store';
+import PnCommunicationOutcomeTag from './PnCommunicationOutcomeTag';
+
+type CampaignCommunicationRow = BffInformalSenderNotificationSearchRow & {
+  action?: string;
+};
 
 const PnCampaignCommunications = () => {
   const { t } = useTranslation('campaigns');
@@ -51,6 +58,10 @@ const PnCampaignCommunications = () => {
       label: t('detail.communications.statuses.processing'),
     },
     {
+      id: InformalNotificationStatus.COMPLETED_REACHED,
+      label: t('detail.communications.statuses.success'),
+    },
+    {
       id: InformalNotificationStatus.UNDELIVERABLE,
       label: t('detail.communications.statuses.failed'),
     },
@@ -73,6 +84,46 @@ const PnCampaignCommunications = () => {
       label: t('detail.communications.outcomes.delivered'),
     },
   ];
+
+  const getCommunicationStatusInfo = (status?: InformalNotificationStatus) => {
+    switch (status) {
+      case InformalNotificationStatus.ACCEPTED:
+        return {
+          label: t('detail.communications.statuses.ready'),
+          color: 'default' as const,
+        };
+
+      case InformalNotificationStatus.PROCESSING:
+        return {
+          label: t('detail.communications.statuses.processing'),
+          color: 'info' as const,
+        };
+
+      case InformalNotificationStatus.COMPLETED_REACHED:
+        return {
+          label: t('detail.communications.statuses.success'),
+          color: 'success' as const,
+        };
+
+      case InformalNotificationStatus.UNDELIVERABLE:
+        return {
+          label: t('detail.communications.statuses.failed'),
+          color: 'error' as const,
+        };
+
+      case InformalNotificationStatus.REFUSED:
+        return {
+          label: t('detail.communications.statuses.refused'),
+          color: 'error' as const,
+        };
+
+      default:
+        return {
+          label: '-',
+          color: 'default' as const,
+        };
+    }
+  };
 
   const dispatch = useAppDispatch();
 
@@ -134,6 +185,33 @@ const PnCampaignCommunications = () => {
     }
   };
 
+  const renderCellContent = (
+    row: Row<CampaignCommunicationRow>,
+    columnId: keyof CampaignCommunicationRow
+  ) => {
+    if (columnId === 'notificationStatus') {
+      const { label, color } = getCommunicationStatusInfo(
+        row.notificationStatus as InformalNotificationStatus
+      );
+
+      return <StatusTooltip label={label} tooltip="" color={color} />;
+    }
+
+    if (columnId === 'communicationOutcomes') {
+      return <PnCommunicationOutcomeTag outcomes={row.communicationOutcomes} />;
+    }
+
+    if (columnId === 'action') {
+      return (
+        <MIButton variant="text" endIcon={<ArrowForward />}>
+          {t('button.open', { ns: 'common' })}
+        </MIButton>
+      );
+    }
+
+    return String(row[columnId] ?? '');
+  };
+
   const campaignCommunications = useAppSelector(
     (state: RootState) => state.campaignState.campaignCommunications
   );
@@ -163,7 +241,7 @@ const PnCampaignCommunications = () => {
     },
   });
 
-  const communicationsColumns: Array<SmartTableData<BffInformalSenderNotificationSearchRow>> = [
+  const communicationsColumns: Array<SmartTableData<CampaignCommunicationRow>> = [
     {
       id: 'recipients',
       label: t('detail.communications.tax-id'),
@@ -204,20 +282,24 @@ const PnCampaignCommunications = () => {
         wrapValueInTypography: false,
       },
     },
+    {
+      id: 'action',
+      label: '',
+      tableConfiguration: {
+        cellProps: { width: '10%' },
+      },
+      cardConfiguration: {
+        wrapValueInTypography: false,
+      },
+    },
   ];
 
-  const data: Array<Row<BffInformalSenderNotificationSearchRow>> = (
-    campaignCommunications.resultsPage ?? []
-  ).map((communication) => ({
-    ...communication,
-    id: communication.iun ?? '',
-  }));
-
-  console.log('FILTER DEBUG TANO:', {
-    values: formik.values,
-    errors: formik.errors,
-    isValid: formik.isValid,
-  });
+  const data: Array<Row<CampaignCommunicationRow>> = (campaignCommunications.resultsPage ?? []).map(
+    (communication) => ({
+      ...communication,
+      id: communication.iun ?? '',
+    })
+  );
 
   return (
     <Box sx={{ mt: 3 }}>
@@ -335,7 +417,7 @@ const PnCampaignCommunications = () => {
                   cardProps={column.cardConfiguration}
                   isCardHeader={column.cardConfiguration?.isCardHeader}
                 >
-                  {String(row[column.id] ?? '')}
+                  {renderCellContent(row, column.id)}
                 </SmartBodyCell>
               ))}
             </SmartBodyRow>

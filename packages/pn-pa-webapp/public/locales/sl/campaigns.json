@@ -50,7 +50,8 @@
       "outcomes": {
         "all": "Vsi",
         "viewed": "Prebrano",
-        "delivered": "Vročeno"
+        "delivered": "Vročeno",
+        "not-available": "Izid ni na voljo"
       },
       "no-communications-title": "Na voljo ni nobenega sporočila",
       "no-communications-description": "Ni sporočil, ki bi ustrezala izbranim filtrom."

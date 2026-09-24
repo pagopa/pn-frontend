@@ -50,7 +50,8 @@
       "outcomes": {
         "all": "Tous",
         "viewed": "Lue",
-        "delivered": "Livrée"
+        "delivered": "Livrée",
+        "not-available": "Résultat non disponible"
       },
       "no-communications-title": "Aucune communication disponible",
       "no-communications-description": "Il n'y a pas de communications correspondant aux filtres sélectionnés."
