@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 
 import { ArrowForward } from '@mui/icons-material';
-import { Box, Grid, ListItemText, MenuItem, TextField, Typography } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import {
   EmptyErrorState,
   IUN_regex,
@@ -17,17 +17,18 @@ import {
   SmartHeaderCell,
   SmartTable,
   SmartTableData,
-  StatusTooltip,
   dataRegex,
   formatIun,
 } from '@pagopa-pn/pn-commons';
-import { Autocomplete, MIButton } from '@pagopa/mui-italia';
+import { MIButton } from '@pagopa/mui-italia';
 
 import { BffInformalSenderNotificationSearchRow } from '../../generated-client/informal-notifications';
 import { setCommunicationFilters } from '../../redux/campaign/reducers';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { RootState } from '../../redux/store';
+import PnCampaignCommunicationsFilters from './PnCampaignCommunicationsFilters';
 import PnCommunicationOutcomeTag from './PnCommunicationOutcomeTag';
+import PnCommunicationStatusTooltip from './PnCommunicationStatusTooltip';
 
 type CampaignCommunicationRow = BffInformalSenderNotificationSearchRow & {
   action?: string;
@@ -35,95 +36,6 @@ type CampaignCommunicationRow = BffInformalSenderNotificationSearchRow & {
 
 const PnCampaignCommunications = () => {
   const { t } = useTranslation('campaigns');
-
-  const initialEmptyValues: {
-    recipientId: string;
-    iunMatch: string;
-    status: string;
-    outcome: string;
-  } = {
-    recipientId: '',
-    iunMatch: '',
-    status: '',
-    outcome: '',
-  };
-
-  const statusOptions = [
-    {
-      id: InformalNotificationStatus.ACCEPTED,
-      label: t('detail.communications.statuses.ready'),
-    },
-    {
-      id: InformalNotificationStatus.PROCESSING,
-      label: t('detail.communications.statuses.processing'),
-    },
-    {
-      id: InformalNotificationStatus.COMPLETED_REACHED,
-      label: t('detail.communications.statuses.success'),
-    },
-    {
-      id: InformalNotificationStatus.UNDELIVERABLE,
-      label: t('detail.communications.statuses.failed'),
-    },
-    {
-      id: InformalNotificationStatus.REFUSED,
-      label: t('detail.communications.statuses.refused'),
-    },
-  ];
-  const outcomeOptions = [
-    {
-      id: '',
-      label: t('detail.communications.outcomes.all'),
-    },
-    {
-      id: 'viewed',
-      label: t('detail.communications.outcomes.viewed'),
-    },
-    {
-      id: 'delivered',
-      label: t('detail.communications.outcomes.delivered'),
-    },
-  ];
-
-  const getCommunicationStatusInfo = (status?: InformalNotificationStatus) => {
-    switch (status) {
-      case InformalNotificationStatus.ACCEPTED:
-        return {
-          label: t('detail.communications.statuses.ready'),
-          color: 'default' as const,
-        };
-
-      case InformalNotificationStatus.PROCESSING:
-        return {
-          label: t('detail.communications.statuses.processing'),
-          color: 'info' as const,
-        };
-
-      case InformalNotificationStatus.COMPLETED_REACHED:
-        return {
-          label: t('detail.communications.statuses.success'),
-          color: 'success' as const,
-        };
-
-      case InformalNotificationStatus.UNDELIVERABLE:
-        return {
-          label: t('detail.communications.statuses.failed'),
-          color: 'error' as const,
-        };
-
-      case InformalNotificationStatus.REFUSED:
-        return {
-          label: t('detail.communications.statuses.refused'),
-          color: 'error' as const,
-        };
-
-      default:
-        return {
-          label: '-',
-          color: 'default' as const,
-        };
-    }
-  };
 
   const dispatch = useAppDispatch();
 
@@ -190,11 +102,11 @@ const PnCampaignCommunications = () => {
     columnId: keyof CampaignCommunicationRow
   ) => {
     if (columnId === 'notificationStatus') {
-      const { label, color } = getCommunicationStatusInfo(
-        row.notificationStatus as InformalNotificationStatus
+      return (
+        <PnCommunicationStatusTooltip
+          status={row.notificationStatus as InformalNotificationStatus}
+        />
       );
-
-      return <StatusTooltip label={label} tooltip="" color={color} />;
     }
 
     if (columnId === 'communicationOutcomes') {
@@ -327,70 +239,18 @@ const PnCampaignCommunications = () => {
           onClear={handleClearFilters}
           formIsValid={formik.isValid}
           formValues={formik.values}
-          initialValues={initialEmptyValues}
+          initialValues={{
+            recipientId: '',
+            iunMatch: '',
+            status: '',
+            outcome: '',
+          }}
         >
-          <Grid item xs={12} lg>
-            <TextField
-              id="recipientId"
-              name="recipientId"
-              value={formik.values.recipientId}
-              onChange={handleChangeTouched}
-              onPaste={handlePaste}
-              label={t('detail.communications.tax-id')}
-              error={formik.touched.recipientId && Boolean(formik.errors.recipientId)}
-              helperText={formik.touched.recipientId && formik.errors.recipientId}
-              size="small"
-              fullWidth
-            />
-          </Grid>
-          <Grid item xs={12} lg>
-            <TextField
-              id="iunMatch"
-              name="iunMatch"
-              value={formik.values.iunMatch}
-              onChange={handleChangeTouched}
-              onPaste={handlePaste}
-              label={t('detail.communications.iun')}
-              error={formik.touched.iunMatch && Boolean(formik.errors.iunMatch)}
-              helperText={formik.touched.iunMatch && formik.errors.iunMatch}
-              size="small"
-              fullWidth
-              inputProps={{ maxLength: 25 }}
-            />
-          </Grid>
-          <Grid item xs={12} lg>
-            <Autocomplete
-              id="status"
-              options={statusOptions}
-              getOptionLabel={(option) => option.label}
-              isOptionEqualToValue={(option, value) => option.id === value.id}
-              label={t('detail.communications.status')}
-              placeholder={t('detail.communications.status')}
-              value={statusOptions.find((option) => option.id === formik.values.status)}
-              onChange={(newValue) => {
-                void formik.setFieldValue('status', newValue?.id ?? '');
-              }}
-            />
-          </Grid>
-          <Grid item xs={12} lg>
-            <TextField
-              id="outcome"
-              data-testid="communicationOutcome"
-              name="outcome"
-              label={t('detail.communications.outcome')}
-              select
-              onChange={handleChangeTouched}
-              value={formik.values.outcome}
-              fullWidth
-              size="small"
-            >
-              {outcomeOptions.map(({ id, label }) => (
-                <MenuItem key={id} value={id}>
-                  <ListItemText>{label}</ListItemText>
-                </MenuItem>
-              ))}
-            </TextField>
-          </Grid>
+          <PnCampaignCommunicationsFilters
+            formik={formik}
+            handleChangeTouched={handleChangeTouched}
+            handlePaste={handlePaste}
+          />
         </SmartFilter>
         <SmartHeader>
           {communicationsColumns.map((column) => (
