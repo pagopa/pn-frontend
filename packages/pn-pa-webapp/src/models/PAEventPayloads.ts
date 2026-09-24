@@ -7,6 +7,7 @@ import type {
   NotificationDetailOtherDocument,
 } from '@pagopa-pn/pn-commons';
 
+import { CampaignSummary } from '../generated-client/informal-notifications';
 import { PAEventsType } from './PAEventsType';
 
 export type YesNo = 'yes' | 'no';
@@ -22,6 +23,11 @@ export type BooleanSuperPropertyEventData = {
 
 export type PANotificationAttachmentEventData = {
   document: string | NotificationDetailOtherDocument | undefined;
+};
+
+export type PACampaignsListEventData = {
+  campaigns: Array<CampaignSummary>;
+  pageNumber: number;
 };
 
 export type PANotificationsListEventData = {
@@ -43,6 +49,15 @@ export type ToastErrorEventData = {
  * Mixpanel payloads produced by mappers and then enriched by tracking helpers with
  * event_category/event_type
  */
+export type PACampaignsListPayload = {
+  page_number: number;
+  total_count: number;
+  draft_count: number;
+  in_progress_count: number;
+  concluded_count: number;
+  canceled_count: number;
+};
+
 export type PANotificationsListPayload = {
   page_number: number;
   total_count: number;
@@ -69,7 +84,9 @@ export type PAToastErrorPayload = {
   message?: string;
 };
 
-export type PAHasProperty = PAEventsType.SEND_PA_HAS_NOTIFICATIONS;
+export type PAHasProperty =
+  | PAEventsType.SEND_PA_HAS_NOTIFICATIONS
+  | PAEventsType.SEND_PA_HAS_CAMPAIGNS;
 
 export type PAHasPayload<K extends PAHasProperty> = {
   [P in K]: YesNo;
@@ -80,6 +97,11 @@ export type PAEventPayloads = {
   [PAEventsType.SEND_PA_ADD_API_START]: undefined;
   [PAEventsType.SEND_PA_ADD_API_UX_SUCCESS]: undefined;
   [PAEventsType.SEND_PA_API_INTEGRATIONS]: undefined;
+
+  [PAEventsType.SEND_PA_CAMPAIGNS]: PACampaignsListEventData;
+  [PAEventsType.SEND_PA_CAMPAIGN_DETAIL]: undefined;
+  [PAEventsType.SEND_PA_COMBO_DETAIL]: undefined;
+  [PAEventsType.SEND_PA_COMBO_STATUS_DETAIL]: undefined;
 
   /* ERROR */
   [PAEventsType.SEND_PA_TOAST_ERROR]: ToastErrorEventData;
@@ -109,5 +131,6 @@ export type PAEventPayloads = {
   [PAEventsType.SEND_PA_STATISTICS]: undefined;
 
   /* SUPER PROPERTIES */
+  [PAEventsType.SEND_PA_HAS_CAMPAIGNS]: BooleanSuperPropertyEventData;
   [PAEventsType.SEND_PA_HAS_NOTIFICATIONS]: BooleanSuperPropertyEventData;
 };
