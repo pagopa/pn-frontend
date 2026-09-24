@@ -514,7 +514,7 @@ describe('NotificationEventsTimeline', () => {
   it('renders a hidden event when its category is not absorbed by the status', () => {
     const hiddenStep = hiddenEventStepOfRecipient(
       0,
-      TimelineCategory.DELIVERED,
+      TimelineCategory.DIGITAL_SUCCESS_WORKFLOW,
       LegalFactType.DIGITAL_DELIVERY
     );
     const visibleStep: NotificationTimelineStep = {
@@ -522,7 +522,7 @@ describe('NotificationEventsTimeline', () => {
       event: {
         elementId: 'VISIBLE_EVENT',
         timestamp: '2026-08-06T09:14:58.508308Z',
-        category: TimelineCategory.DELIVERED,
+        category: TimelineCategory.DIGITAL_SUCCESS_WORKFLOW,
         details: { recIndex: 0 },
         legalFactsIds: [],
         isHidden: false,

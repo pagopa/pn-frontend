@@ -14,16 +14,11 @@ import NotificationTimelineEventItem from '../NotificationTimelineEventItem';
 const [viewedStatus, deliveringStatus] = notificationTimelineDTO.notificationStatusHistory;
 
 const recipients = notificationTimelineDTO.recipients;
-const allEvents = flattenTimelineSteps(deliveringStatus.steps);
+const deliveringAllEvents = flattenTimelineSteps(deliveringStatus.steps);
 
-const visibleEvent = allEvents[allEvents.length - 1];
+const visibleEvent = deliveringAllEvents[2];
 
 const hiddenEvent = flattenTimelineSteps(viewedStatus.steps)[0];
-
-const eventWithLegalFacts: NotificationTimelineEvent = {
-  ...visibleEvent,
-  legalFactsIds: hiddenEvent.legalFactsIds,
-};
 
 const clickHandler = vi.fn();
 
@@ -31,7 +26,7 @@ const renderEvent = (event: NotificationTimelineEvent, props?: Record<string, un
   render(
     <NotificationTimelineEventItem
       event={event}
-      allEvents={allEvents}
+      allEvents={deliveringAllEvents}
       recipients={recipients}
       clickHandler={clickHandler}
       disableDownloads={false}
@@ -52,7 +47,11 @@ describe('NotificationTimelineEventItem', () => {
   it('renders label, description, date and reworked tag of a visible event', () => {
     const { getByTestId } = renderEvent(visibleEvent);
 
-    const statusInfo = getNotificationTimelineStatusInfos(visibleEvent, recipients, allEvents);
+    const statusInfo = getNotificationTimelineStatusInfos(
+      visibleEvent,
+      recipients,
+      deliveringAllEvents
+    );
     const item = getByTestId('timeline-event');
     expect(item).toHaveTextContent(statusInfo!.label);
     expect(item).toHaveTextContent(statusInfo!.description as string);
@@ -64,15 +63,15 @@ describe('NotificationTimelineEventItem', () => {
   });
 
   it('renders the legal fact inline and downloads it when the new copy is enabled', () => {
-    const legalFact = eventWithLegalFacts.legalFactsIds![0];
+    const legalFact = visibleEvent.legalFactsIds![0];
     const statusInfo = getNotificationTimelineStatusInfos(
-      eventWithLegalFacts,
+      visibleEvent,
       recipients,
-      allEvents
+      deliveringAllEvents
     );
 
     const eventWithInlineCopy: NotificationTimelineEvent = {
-      ...eventWithLegalFacts,
+      ...visibleEvent,
     };
 
     const { container, getByTestId } = renderEvent(eventWithInlineCopy, {
@@ -100,18 +99,18 @@ describe('NotificationTimelineEventItem', () => {
   });
 
   it('renders multiple event legal facts as an ordered list below the description', () => {
-    const firstLegalFact = eventWithLegalFacts.legalFactsIds![0];
+    const firstLegalFact = visibleEvent.legalFactsIds![0];
     const secondLegalFact = {
       ...firstLegalFact,
       key: 'safestorage://fictional-second-legal-fact.pdf',
     };
 
     const event = {
-      ...eventWithLegalFacts,
+      ...visibleEvent,
       legalFactsIds: [firstLegalFact, secondLegalFact],
     };
 
-    const statusInfo = getNotificationTimelineStatusInfos(event, recipients, allEvents);
+    const statusInfo = getNotificationTimelineStatusInfos(event, recipients, deliveringAllEvents);
 
     const { getByTestId, getAllByTestId } = renderEvent(event, {
       isNewTimelineCopyEnabled: true,
@@ -137,7 +136,11 @@ describe('NotificationTimelineEventItem', () => {
 
     const item = within(container).getByTestId('timeline-event');
     expect(item.tagName).toBe('LI');
-    const statusInfo = getNotificationTimelineStatusInfos(visibleEvent, recipients, allEvents);
+    const statusInfo = getNotificationTimelineStatusInfos(
+      visibleEvent,
+      recipients,
+      deliveringAllEvents
+    );
     expect(item).toHaveTextContent(`${statusInfo!.label} - ${statusInfo!.description}`);
 
     const { container: bulletContainer } = renderEvent(hiddenEvent, { insideAGroup: true });
@@ -156,11 +159,11 @@ describe('NotificationTimelineEventItem', () => {
   });
 
   it('disables the download when disableDownloads is set, except for the cancelled notification', () => {
-    const { container } = renderEvent(eventWithLegalFacts, { disableDownloads: true });
+    const { container } = renderEvent(visibleEvent, { disableDownloads: true });
     expect(within(container).getByTestId('download-legalfact-micro')).toBeDisabled();
 
     const cancelledEvent: NotificationTimelineEvent = {
-      ...eventWithLegalFacts,
+      ...visibleEvent,
       category: TimelineCategory.NOTIFICATION_CANCELLED,
     };
     const { container: cancelledContainer } = renderEvent(cancelledEvent, {
@@ -170,9 +173,9 @@ describe('NotificationTimelineEventItem', () => {
   });
 
   it('renders a visible event legal fact below the description when the new copy is disabled', () => {
-    const legalFact = eventWithLegalFacts.legalFactsIds![0];
+    const legalFact = visibleEvent.legalFactsIds![0];
 
-    const { getByRole } = renderEvent(eventWithLegalFacts, {
+    const { getByRole } = renderEvent(visibleEvent, {
       isNewTimelineCopyEnabled: false,
     });
 
