@@ -91,8 +91,6 @@ const NotificationTimelineDescription: React.FC<Props> = ({
   const downloadIsDisabled = (category: TimelineCategory) =>
     disableDownloads && category !== TimelineCategory.NOTIFICATION_CANCELLED;
 
-  const emptySlot = <span />;
-
   const legalFactSlot = inlineLegalFact ? (
     <NotificationTimelineEventLegalFact
       legalFact={inlineLegalFact.lf}
@@ -103,7 +101,7 @@ const NotificationTimelineDescription: React.FC<Props> = ({
       isNewTimelineCopyEnabled={isNewTimelineCopyEnabled}
     />
   ) : (
-    emptySlot
+    <></>
   );
 
   const perfectionLinkSlot = perfectionLink ? (
@@ -115,7 +113,7 @@ const NotificationTimelineDescription: React.FC<Props> = ({
       data-testid="perfection-link"
     />
   ) : (
-    emptySlot
+    <></>
   );
 
   return (
