@@ -48,7 +48,6 @@
     "iun": "IUN-Code",
     "groups": "Gruppen",
     "status": "Status",
-    "show-detail": "Siehe Detail",
     "aria-action-table": "Zustellung mit IUN öffnen: {{iun}}",
     "open": "Öffnen"
   },
@@ -112,7 +111,6 @@
     },
     "errors": {
       "generic_error": {
-        "title": "",
         "message": "Beim Stornieren ist ein Fehler aufgetreten. Erneut versuchen."
       },
       "delivery_file_info_not_found": {

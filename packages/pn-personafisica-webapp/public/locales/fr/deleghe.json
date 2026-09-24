@@ -104,10 +104,6 @@
       "title": "Erreur",
       "message": "Procuration non trouvée"
     },
-    "delivery_mandate_not_found": {
-      "title": "Erreur",
-      "message": "Cette procuration n’est plus active."
-    },
     "already_exists": {
       "title": "Procuration déjà présente",
       "message": "La personne que vous avez indiquée a déjà une procuration. Supprimez-la et créez-en une nouvelle."
@@ -127,10 +123,6 @@
     "fiscal_code": {
       "title": "Code fiscal non valide",
       "message": "Le code fiscal saisi est incorrect"
-    },
-    "invalid_parameter": {
-      "title": "Données non valides",
-      "message": "Une ou plusieurs des données saisies ne sont pas valides"
     }
   }
 }

@@ -104,10 +104,6 @@
       "title": "Napaka",
       "message": "Prenosa pooblastila ni mogoče najti"
     },
-    "delivery_mandate_not_found": {
-      "title": "Napaka",
-      "message": "Ta prenos pooblastila ni več aktiven."
-    },
     "already_exists": {
       "title": "Prenos pooblastila je že prisoten",
       "message": "Oseba, ki ste jo navedli, že ima pooblastilo. Izbrišite jo in ustvarite novo."
@@ -127,10 +123,6 @@
     "fiscal_code": {
       "title": "Neveljavna davčna številka",
       "message": "Vnesena davčna številka ni veljavna"
-    },
-    "invalid_parameter": {
-      "title": "Neveljavni podatki",
-      "message": "Eden ali več vnesenih podatkov ni veljavnih"
     }
   }
 }
