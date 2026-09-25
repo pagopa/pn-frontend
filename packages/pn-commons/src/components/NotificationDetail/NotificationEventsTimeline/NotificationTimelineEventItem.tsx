@@ -16,6 +16,7 @@ type Props = {
   language: string;
   insideAGroup?: boolean;
   isNewTimelineCopyEnabled?: boolean;
+  perfectionLink?: string;
 };
 
 const NotificationTimelineEventItemLegalFacts: React.FC<
@@ -55,6 +56,7 @@ const NotificationTimelineEventItem: React.FC<Props> = ({
   language,
   insideAGroup = false,
   isNewTimelineCopyEnabled = false,
+  perfectionLink,
 }) => {
   // Events absorbed into a status description are filtered out by the caller, so reaching
   // this component means the event has to be rendered.
@@ -101,6 +103,7 @@ const NotificationTimelineEventItem: React.FC<Props> = ({
         slotProps={{ typography: { variant: 'body2', sx: { fontWeight: 400 } } }}
         isNewTimelineCopyEnabled={isNewTimelineCopyEnabled}
         disableDownloads={disableDownloads}
+        perfectionLink={perfectionLink}
       />
     </Stack>
   );

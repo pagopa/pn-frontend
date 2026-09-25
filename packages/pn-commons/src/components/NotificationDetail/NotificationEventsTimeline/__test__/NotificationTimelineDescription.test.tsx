@@ -164,4 +164,86 @@ describe('NotificationTimelineDescription', () => {
     expect(container).toHaveTextContent('Evento digitale - Descrizione evento.');
     expect(getByTestId('dateItem')).toHaveTextContent(formatTimelineDate(event.timestamp, 'it'));
   });
+
+  it('renders the perfection link next to a legal fact, addressed by name', () => {
+    const event = createEvent({
+      legalFactsIds: [firstLegalFact],
+    });
+
+    const { getByTestId } = render(
+      <NotificationTimelineDescription
+        description="Scarica l'<0>avviso</0>. Consulta le <1>modalità di perfezionamento</1>."
+        event={event}
+        clickHandler={clickHandler}
+        isNewTimelineCopyEnabled
+        legalFacts={(event.legalFactsIds ?? []).map((lf) => ({ event, lf }))}
+        perfectionLink="https://fake.perfezionamento.it"
+      />
+    );
+
+    expect(getByTestId('download-legalfact-micro')).toBeInTheDocument();
+
+    const link = getByTestId('perfection-link');
+    expect(link).toHaveAttribute('href', 'https://fake.perfezionamento.it');
+    expect(link).toHaveAttribute('target', '_blank');
+  });
+
+  it('renders the perfection link when the event carries no legal fact', () => {
+    const event = createEvent();
+
+    const { getByTestId, queryByTestId } = render(
+      <NotificationTimelineDescription
+        description="Consulta le <1>modalità di perfezionamento</1>."
+        event={event}
+        clickHandler={clickHandler}
+        isNewTimelineCopyEnabled
+        legalFacts={(event.legalFactsIds ?? []).map((lf) => ({ event, lf }))}
+        perfectionLink="https://fake.perfezionamento.it"
+      />
+    );
+
+    expect(queryByTestId('download-legalfact-micro')).not.toBeInTheDocument();
+    expect(getByTestId('perfection-link')).toHaveAttribute(
+      'href',
+      'https://fake.perfezionamento.it'
+    );
+  });
+
+  it('renders the perfection link also when several legal facts push the description to the other branch', () => {
+    const event = createEvent({
+      legalFactsIds: [firstLegalFact, secondLegalFact],
+    });
+
+    const { getByTestId } = render(
+      <NotificationTimelineDescription
+        description="Consulta le <1>modalità di perfezionamento</1>."
+        event={event}
+        clickHandler={clickHandler}
+        isNewTimelineCopyEnabled
+        legalFacts={(event.legalFactsIds ?? []).map((lf) => ({ event, lf }))}
+        perfectionLink="https://fake.perfezionamento.it"
+      />
+    );
+
+    expect(getByTestId('perfection-link')).toHaveAttribute(
+      'href',
+      'https://fake.perfezionamento.it'
+    );
+  });
+
+  it('renders no perfection link when the prop is not given', () => {
+    const event = createEvent();
+
+    const { queryByTestId } = render(
+      <NotificationTimelineDescription
+        description="Consulta le <1>modalità di perfezionamento</1>."
+        event={event}
+        clickHandler={clickHandler}
+        isNewTimelineCopyEnabled
+        legalFacts={(event.legalFactsIds ?? []).map((lf) => ({ event, lf }))}
+      />
+    );
+
+    expect(queryByTestId('perfection-link')).not.toBeInTheDocument();
+  });
 });
