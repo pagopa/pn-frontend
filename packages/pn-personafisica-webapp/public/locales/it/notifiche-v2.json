@@ -24,6 +24,7 @@
     "returned-to-sender-description-multirecipient": "La persona destinataria di questa notifica SEND è stata dichiarata deceduta."
   },
   "detail": {
+    "document-unavailable": "Il documento non è più disponibile. Contatta l’ente per maggiori informazioni.",
     "timeline": {
       "schedule-digital-workflow": "Nuovo tentativo di invio PEC",
       "schedule-digital-workflow-description": "Verrà effettuato il secondo tentativo di invio della notifica SEND all’indirizzo PEC {{address}}.",
