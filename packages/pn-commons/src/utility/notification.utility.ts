@@ -190,6 +190,18 @@ function getNotificationDeliveredInfosForPA(
   return statusInfos;
 }
 
+/**
+ * Returns the localized information for the DELIVERED status.
+ *
+ * Uses the delivery-mode-specific description when the corresponding localization
+ * exists, including the multi-recipient variant. Otherwise, it preserves the legacy
+ * behavior for multi-recipient notifications, PA-specific statuses and delivery mode.
+ *
+ * @param isMultiRecipient Whether the notification has multiple recipients.
+ * @param statusObject Status history entry containing delivery information.
+ * @param options Status history, recipients and party context.
+ * @returns The localized label, tooltip and description for the DELIVERED status.
+ */
 function deliveredStatusVariant(
   isMultiRecipient?: boolean,
   statusObject?: NotificationStatusHistory,

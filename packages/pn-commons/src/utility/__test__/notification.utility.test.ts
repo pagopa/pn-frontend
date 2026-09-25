@@ -317,6 +317,73 @@ describe('notification status texts', () => {
     );
   });
 
+  it.each([
+    {
+      deliveryMode: NotificationDeliveryMode.DIGITAL,
+      recipients: notificationDTO.recipients,
+      suffix: '',
+    },
+    {
+      deliveryMode: NotificationDeliveryMode.ANALOG,
+      recipients: notificationDTO.recipients,
+      suffix: '',
+    },
+    {
+      deliveryMode: NotificationDeliveryMode.DIGITAL,
+      recipients: notificationDTOMultiRecipient.recipients,
+      suffix: '-multirecipient',
+    },
+    {
+      deliveryMode: NotificationDeliveryMode.ANALOG,
+      recipients: notificationDTOMultiRecipient.recipients,
+      suffix: '-multirecipient',
+    },
+  ])(
+    'uses the new DELIVERED description for $deliveryMode$suffix',
+    ({ deliveryMode, recipients, suffix }) => {
+      const localizationKey = `status.delivered-description-${deliveryMode}${suffix}`;
+      initLocalizationExists((_namespace, path) => path === localizationKey);
+
+      testNotificationStatusInfos(
+        'default',
+        `notifiche - status.delivered${suffix ? '-multirecipient' : ''}`,
+        `notifiche - status.delivered-tooltip${suffix}`,
+        `notifiche - ${localizationKey}`,
+        {
+          status: NotificationStatus.DELIVERED,
+          activeFrom: '2023-01-26T13:57:16.42843144Z',
+          relatedTimelineElements: [],
+          deliveryMode,
+        },
+        { recipients }
+      );
+
+      initLocalizationForTest();
+    }
+  );
+
+  it('keeps the legacy DELIVERED description when the new content is unavailable', () => {
+    initLocalizationExists(() => false);
+
+    testNotificationStatusInfos(
+      'default',
+      'notifiche - status.delivered',
+      'notifiche - status.delivered-tooltip',
+      `notifiche - status.delivered-description-with-delivery-mode - ${JSON.stringify({
+        deliveryMode: `notifiche - status.deliveryMode.${NotificationDeliveryMode.DIGITAL}`,
+      })}`,
+      {
+        status: NotificationStatus.DELIVERED,
+        activeFrom: '2023-01-26T13:57:16.42843144Z',
+        relatedTimelineElements: [],
+        deliveryMode: NotificationDeliveryMode.DIGITAL,
+      },
+      { recipients: notificationDTO.recipients }
+    );
+
+    initLocalizationForTest();
+  });
+
   it('return notification status infos - DELIVERING', () => {
     testNotificationStatusInfos(
       'default',
