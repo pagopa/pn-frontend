@@ -1,8 +1,9 @@
 import { useTranslation } from 'react-i18next';
 
 import { Grid, ListItemText, MenuItem, TextField } from '@mui/material';
-import { InformalNotificationStatus } from '@pagopa-pn/pn-commons';
 import { Autocomplete } from '@pagopa/mui-italia';
+
+import { communicationOutcomeOptions, communicationStatusOptions } from '../../models/Campaign';
 
 type Props = {
   formik: any;
@@ -13,61 +14,7 @@ type Props = {
 const PnCampaignCommunicationsFilters = ({ formik, handleChangeTouched, handlePaste }: Props) => {
   const { t } = useTranslation('campaigns');
 
-  const CampaignCommunicationStatusFilter = {
-    READY: 'READY',
-    PROCESSING: 'PROCESSING',
-    SUCCESS: 'SUCCESS',
-    FAILED: 'FAILED',
-    REFUSED: 'REFUSED',
-  };
-
-  const statusOptions = [
-    {
-      id: CampaignCommunicationStatusFilter.READY,
-      label: t('detail.communications.statuses.ready'),
-      value: [InformalNotificationStatus.ACCEPTED],
-    },
-    {
-      id: CampaignCommunicationStatusFilter.PROCESSING,
-      label: t('detail.communications.statuses.processing'),
-      value: [InformalNotificationStatus.PROCESSING],
-    },
-    {
-      id: CampaignCommunicationStatusFilter.SUCCESS,
-      label: t('detail.communications.statuses.success'),
-      value: [
-        InformalNotificationStatus.COMPLETED_REACHED,
-        InformalNotificationStatus.COMPLETED_UNREACHED,
-      ],
-    },
-    {
-      id: CampaignCommunicationStatusFilter.FAILED,
-      label: t('detail.communications.statuses.failed'),
-      value: [InformalNotificationStatus.UNDELIVERABLE],
-    },
-    {
-      id: CampaignCommunicationStatusFilter.REFUSED,
-      label: t('detail.communications.statuses.refused'),
-      value: [InformalNotificationStatus.REFUSED],
-    },
-  ];
-
-  const outcomeOptions = [
-    {
-      id: '',
-      label: t('detail.communications.outcomes.all'),
-    },
-    {
-      id: 'viewed',
-      label: t('detail.communications.outcomes.viewed'),
-    },
-    {
-      id: 'delivered',
-      label: t('detail.communications.outcomes.delivered'),
-    },
-  ];
-
-  const selectedStatusOption = statusOptions.find(
+  const selectedStatusOption = communicationStatusOptions.find(
     (option) =>
       option.value.length === formik.values.status.length &&
       option.value.every((status) => formik.values.status.includes(status))
@@ -107,13 +54,13 @@ const PnCampaignCommunicationsFilters = ({ formik, handleChangeTouched, handlePa
       <Grid item xs={12} lg>
         <Autocomplete
           id="status"
-          options={statusOptions}
-          getOptionLabel={(option) => option.label}
+          options={communicationStatusOptions}
+          getOptionLabel={(option) => t(option.label)}
           isOptionEqualToValue={(option, value) => option.value === value.value}
           label={t('detail.communications.status')}
           placeholder={t('detail.communications.status')}
           value={selectedStatusOption}
-          inputValue={selectedStatusOption?.label ?? ''}
+          inputValue={t(selectedStatusOption?.label ?? '')}
           onChange={(newValue) => {
             void formik.setFieldValue('status', newValue?.value ?? []);
           }}
@@ -131,9 +78,9 @@ const PnCampaignCommunicationsFilters = ({ formik, handleChangeTouched, handlePa
           fullWidth
           size="small"
         >
-          {outcomeOptions.map(({ id, label }) => (
+          {communicationOutcomeOptions.map(({ id, label }) => (
             <MenuItem key={id} value={id}>
-              <ListItemText>{label}</ListItemText>
+              <ListItemText>{t(label)}</ListItemText>
             </MenuItem>
           ))}
         </TextField>

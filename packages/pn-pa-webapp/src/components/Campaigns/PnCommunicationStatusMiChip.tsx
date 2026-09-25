@@ -3,6 +3,8 @@ import { useTranslation } from 'react-i18next';
 import { InformalNotificationStatus } from '@pagopa-pn/pn-commons';
 import { MIChip } from '@pagopa/mui-italia';
 
+import { communicationStatusOptions } from '../../models/Campaign';
+
 type Props = {
   status?: InformalNotificationStatus;
 };
@@ -10,49 +12,15 @@ type Props = {
 const PnCommunicationStatusMIChip = ({ status }: Props) => {
   const { t } = useTranslation('campaigns');
 
-  const getStatusInfo = () => {
-    switch (status) {
-      case InformalNotificationStatus.ACCEPTED:
-        return {
-          label: t('detail.communications.statuses.ready'),
-          color: 'default' as const,
-        };
+  const statusInfo = communicationStatusOptions.find(({ value }) =>
+    status ? value.includes(status) : false
+  );
 
-      case InformalNotificationStatus.PROCESSING:
-        return {
-          label: t('detail.communications.statuses.processing'),
-          color: 'info' as const,
-        };
+  if (!statusInfo) {
+    return <MIChip label="-" color="default" />;
+  }
 
-      case InformalNotificationStatus.COMPLETED_REACHED:
-      case InformalNotificationStatus.COMPLETED_UNREACHED:
-        return {
-          label: t('detail.communications.statuses.success'),
-          color: 'success' as const,
-        };
-      case InformalNotificationStatus.UNDELIVERABLE:
-        return {
-          label: t('detail.communications.statuses.failed'),
-          color: 'error' as const,
-        };
-
-      case InformalNotificationStatus.REFUSED:
-        return {
-          label: t('detail.communications.statuses.refused'),
-          color: 'error' as const,
-        };
-
-      default:
-        return {
-          label: '-',
-          color: 'default' as const,
-        };
-    }
-  };
-
-  const { label, color } = getStatusInfo();
-
-  return <MIChip label={label} color={color} />;
+  return <MIChip label={t(statusInfo.label)} color={statusInfo.color} />;
 };
 
 export default PnCommunicationStatusMIChip;
