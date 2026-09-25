@@ -2,7 +2,7 @@
   "title": "How can we help you?",
   "sub-title": "Enter the email address where you want to receive the support answers.",
   "form": {
-    "email": "Enter your email address",
+    "email": "Enter the email address (no PEC)",
     "confirm-email": "Confirm your email address",
     "errors": {
       "not-valid": "The email address is not valid",
@@ -10,6 +10,7 @@
       "not-the-same": "The confirmation email address is not the same as the email address that was entered"
     }
   },
+  "pec-disclaimer": "Enter a standard email address: requests sent from a PEC address cannot be handled by support.",
   "disclaimer": "By continuing, you declare to have read the <0>Support Privacy Policy</0>",
   "exit-title": "Do you really want to exit?",
   "exit-message": "If you exit, your request for support will be lost.",
