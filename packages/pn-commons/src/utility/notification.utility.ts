@@ -201,16 +201,16 @@ function deliveredStatusVariant(
 ): StatusInfo {
   const statusInfos = localizeStatus('delivered', { isMultiRecipient });
   const deliveryMode = statusObject?.deliveryMode;
+  const deliveryModeDescriptionKey = `status.delivered-description-${deliveryMode}${
+    isMultiRecipient ? '-multirecipient' : ''
+  }`;
 
   // if the deliveryMode is defined, then change the description for a more specific one ...
   // ... if we have status description label with delivery mode
-  if (
-    deliveryMode &&
-    hasLocalizedLabel('notifications', `status.delivered-description-${deliveryMode}`)
-  ) {
+  if (deliveryMode && hasLocalizedLabel('notifications', deliveryModeDescriptionKey)) {
     statusInfos.description = getLocalizedOrDefaultLabel(
       'notifications',
-      `status.delivered-description-${deliveryMode}${isMultiRecipient ? '-multirecipient' : ''}`
+      deliveryModeDescriptionKey
     );
 
     return statusInfos;
