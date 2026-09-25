@@ -512,6 +512,65 @@ describe('notification status texts', () => {
     );
   });
 
+  it('return notification status infos - VIEWED - multi recipient - without legal fact, with the revised copy', () => {
+    initLocalizationExists(
+      (_ns, path) => path === 'status.viewed-without-legal-fact-description-multirecipient'
+    );
+    testNotificationStatusInfos(
+      'success',
+      `notifiche - status.viewed-multirecipient`,
+      `notifiche - status.viewed-tooltip-multirecipient - ${JSON.stringify({
+        subject: `notifiche - status.recipient`,
+      })}`,
+      `notifiche - status.viewed-without-legal-fact-description-multirecipient`,
+      {
+        status: NotificationStatus.VIEWED,
+        activeFrom: '2023-01-26T13:57:16.42843144Z',
+        relatedTimelineElements: [],
+        steps: [],
+      },
+      { recipients: notificationDTOMultiRecipient.recipients }
+    );
+    initLocalizationForTest();
+  });
+
+  it('return notification status infos - VIEWED - multi recipient - with legal fact, with the revised copy', () => {
+    initLocalizationExists(
+      (_ns, path) => path === 'status.viewed-without-legal-fact-description-multirecipient'
+    );
+    testNotificationStatusInfos(
+      'success',
+      `notifiche - status.viewed-multirecipient`,
+      `notifiche - status.viewed-tooltip-multirecipient - ${JSON.stringify({
+        subject: `notifiche - status.recipient`,
+      })}`,
+      `notifiche - status.viewed-description-multirecipient - ${JSON.stringify({
+        subject: `notifiche - status.recipient`,
+      })}`,
+      {
+        status: NotificationStatus.VIEWED,
+        activeFrom: '2023-01-26T13:57:16.42843144Z',
+        relatedTimelineElements: [],
+        steps: [
+          {
+            elementId: 'NOTIFICATION_VIEWED.IUN_DAPQ-LWQV-DKQH-202308-A-1.RECINDEX_1',
+            timestamp: '2023-01-26T13:57:16.42843144Z',
+            category: TimelineCategory.NOTIFICATION_VIEWED,
+            legalFactsIds: [
+              {
+                key: 'safestorage://PN_LEGAL_FACTS-viewed.pdf',
+                category: LegalFactType.RECIPIENT_ACCESS,
+              },
+            ],
+            details: { recIndex: 1 },
+          },
+        ],
+      },
+      { recipients: notificationDTOMultiRecipient.recipients }
+    );
+    initLocalizationForTest();
+  });
+
   it('return notification status infos - CANCELLED - passing status only', () => {
     testNotificationStatusInfos(
       'warning',

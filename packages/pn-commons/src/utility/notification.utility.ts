@@ -42,7 +42,8 @@ type StatusInfo = {
 
 function viewedStatusVariant(
   statusInfos: StatusInfo,
-  statusObject?: NotificationStatusHistory
+  statusObject?: NotificationStatusHistory,
+  isMultiRecipient?: boolean
 ): StatusInfo {
   if (
     statusObject?.recipient &&
@@ -55,6 +56,26 @@ function viewedStatusVariant(
         `status.viewed-by-delegate-description`,
         undefined,
         { name: statusObject.recipient }
+      ),
+    };
+  }
+
+  const hasViewedLegalFact = !!statusObject?.steps?.some(
+    (step) => step.category === TimelineCategory.NOTIFICATION_VIEWED && step.legalFactsIds?.length
+  );
+  if (
+    isMultiRecipient &&
+    !hasViewedLegalFact &&
+    hasLocalizedLabel(
+      'notifications',
+      `status.viewed-without-legal-fact-description-multirecipient`
+    )
+  ) {
+    return {
+      ...statusInfos,
+      description: getLocalizedOrDefaultLabel(
+        'notifications',
+        `status.viewed-without-legal-fact-description-multirecipient`
       ),
     };
   }
@@ -309,7 +330,8 @@ export function getNotificationStatusInfos(
         color: 'success',
         ...viewedStatusVariant(
           localizeStatus('viewed', { subject, isMultiRecipient }),
-          statusObject
+          statusObject,
+          isMultiRecipient
         ),
       };
     }

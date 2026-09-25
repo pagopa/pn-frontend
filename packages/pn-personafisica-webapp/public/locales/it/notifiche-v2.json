@@ -13,6 +13,7 @@
     "viewed-multirecipient": "Notifica letta",
     "viewed-description": "Hai effettuato un accesso a questa notifica a valore legale su SEND. Puoi effettuare il download dell’<0>attestazione di avvenuto accesso</0>.",
     "viewed-description-multirecipient": "Questa notifica SEND è stata inviata a più destinatari, e almeno una persona tra questi ha effettuato un accesso alla notifica. Puoi effettuare il download dell’<0>attestazione di avvenuto accesso</0>.",
+    "viewed-without-legal-fact-description-multirecipient": "Questa notifica SEND è stata inviata a più destinatari, e almeno una persona tra questi ha effettuato un accesso alla notifica.",
     "viewed-by-delegate-description": "In qualità di delegato, {{name}} ha effettuato un accesso a questa notifica a valore legale su SEND. Puoi effettuare il download dell’<0>attestazione di avvenuto accesso</0>.",
     "canceled": "Notifica annullata",
     "canceled-description": "L'ente ha annullato l'invio della notifica SEND, che dall'annullamento in poi non produrrà più effetti giuridici.",
