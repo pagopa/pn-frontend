@@ -67,6 +67,12 @@ const PnCampaignCommunicationsFilters = ({ formik, handleChangeTouched, handlePa
     },
   ];
 
+  const selectedStatusOption = statusOptions.find(
+    (option) =>
+      option.value.length === formik.values.status.length &&
+      option.value.every((status) => formik.values.status.includes(status))
+  );
+
   return (
     <>
       <Grid item xs={12} lg>
@@ -106,9 +112,10 @@ const PnCampaignCommunicationsFilters = ({ formik, handleChangeTouched, handlePa
           isOptionEqualToValue={(option, value) => option.value === value.value}
           label={t('detail.communications.status')}
           placeholder={t('detail.communications.status')}
-          value={statusOptions.find((option) => option.value === formik.values.status)}
+          value={selectedStatusOption}
+          inputValue={selectedStatusOption?.label ?? ''}
           onChange={(newValue) => {
-            void formik.setFieldValue('status', [newValue?.value ?? '']);
+            void formik.setFieldValue('status', newValue?.value ?? []);
           }}
         />
       </Grid>
