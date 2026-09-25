@@ -51,7 +51,20 @@ const PnCampaignCommunicationsFilters = ({ formik, handleChangeTouched, handlePa
           inputProps={{ maxLength: 25 }}
         />
       </Grid>
-      <Grid item xs={12} lg>
+      <Grid
+        item
+        xs={12}
+        lg
+        sx={{
+          '& .MuiOutlinedInput-root': {
+            height: '43px',
+            minHeight: '43px',
+          },
+          '& input#status': {
+            position: 'relative',
+          },
+        }}
+      >
         <Autocomplete
           id="status"
           options={communicationStatusOptions}

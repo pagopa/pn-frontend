@@ -1,5 +1,7 @@
 import { InformalNotificationStatus } from '@pagopa-pn/pn-commons';
 
+import { InformalNotificationStatusV1 } from '../generated-client/informal-notifications';
+
 export enum CommunicationStatusFilter {
   READY = 'READY',
   PROCESSING = 'PROCESSING',
@@ -7,6 +9,13 @@ export enum CommunicationStatusFilter {
   FAILED = 'FAILED',
   REFUSED = 'REFUSED',
 }
+
+export type CommunicationFilters = {
+  recipientId: string;
+  iunMatch: string;
+  status: Array<InformalNotificationStatusV1>;
+  outcome: string;
+};
 
 type CommunicationStatusOption = {
   id: CommunicationStatusFilter;

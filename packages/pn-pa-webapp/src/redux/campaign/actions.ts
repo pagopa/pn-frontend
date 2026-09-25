@@ -38,7 +38,8 @@ interface GetCampaignCommunicationsParams {
   status?: Array<InformalNotificationStatusV1>;
   viewed?: boolean;
   delivered?: boolean;
-  size?: number;
+  page: number;
+  size: number;
   nextPagesKey?: string;
 }
 

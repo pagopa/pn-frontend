@@ -9,6 +9,7 @@ import { MIBreadcrumbItem, MIBreadcrumbs } from '@pagopa/mui-italia';
 import PnCampaignCommunications from '../components/Campaigns/PnCampaignCommunications';
 import PnCampaignDetailCard from '../components/Campaigns/PnCampaignDetailCard';
 import PnCampaignDetailLoading from '../components/Campaigns/PnCampaignDetailLoading';
+import { CommunicationFilters } from '../models/Campaign';
 import * as routes from '../navigation/routes.const';
 import {
   CAMPAIGN_ACTIONS,
@@ -48,48 +49,43 @@ const CampaignDetail: React.FC = () => {
     }
   }, [dispatch, id]);
 
-  const fetchCampaignCommunications = useCallback(() => {
-    if (id) {
-      setCommunicationsReady(false);
-      void dispatch(
-        getCampaignCommunications({
-          campaignId: id,
-          recipientId: communicationFilters.recipientId || undefined,
-          iunMatch: communicationFilters.iunMatch || undefined,
-          status: communicationFilters.status.length > 0 ? communicationFilters.status : undefined,
-          viewed: communicationFilters.outcome === 'viewed' ? true : undefined,
-          delivered: communicationFilters.outcome === 'delivered' ? true : undefined,
-          size: communicationsPagination.size,
-          nextPagesKey:
-            communicationsPagination.page === 0
-              ? undefined
-              : communicationsPagination.nextPagesKey[communicationsPagination.page - 1],
-        })
-      )
-        .unwrap()
-        .then((response) => {
-          setHasInitialCommunications(
-            (currentValue) => currentValue ?? (response.resultsPage?.length ?? 0) > 0
-          );
-        })
-        .catch(() => {})
-        .finally(() => setCommunicationsReady(true));
-    }
-  }, [
-    dispatch,
-    id,
-    communicationFilters,
-    communicationsPagination.size,
-    communicationsPagination.page,
-  ]);
+  const fetchCampaignCommunications = useCallback(
+    (page: number, size: number, filters: CommunicationFilters, nextPagesKey?: string) => {
+      if (id) {
+        setCommunicationsReady(false);
+        void dispatch(
+          getCampaignCommunications({
+            campaignId: id,
+            recipientId: filters.recipientId || undefined,
+            iunMatch: filters.iunMatch || undefined,
+            status: filters.status.length > 0 ? filters.status : undefined,
+            viewed: filters.outcome === 'viewed' ? true : undefined,
+            delivered: filters.outcome === 'delivered' ? true : undefined,
+            page,
+            size,
+            nextPagesKey,
+          })
+        )
+          .unwrap()
+          .then((response) => {
+            setHasInitialCommunications(
+              (currentValue) => currentValue ?? (response.resultsPage?.length ?? 0) > 0
+            );
+          })
+          .catch(() => {})
+          .finally(() => setCommunicationsReady(true));
+      }
+    },
+    [dispatch, id]
+  );
 
   useEffect(() => {
     fetchCampaignDetail();
   }, [fetchCampaignDetail]);
 
   useEffect(() => {
-    fetchCampaignCommunications();
-  }, [fetchCampaignCommunications]);
+    fetchCampaignCommunications(0, communicationsPagination.size, communicationFilters);
+  }, []);
 
   const breadcrumb = (
     <MIBreadcrumbs
@@ -154,7 +150,7 @@ const CampaignDetail: React.FC = () => {
               .join(' · ')}
           />
           {hasInitialCommunications ? (
-            <PnCampaignCommunications />
+            <PnCampaignCommunications fetchCampaignCommunications={fetchCampaignCommunications} />
           ) : (
             <Box sx={{ mt: 3 }}>
               <Typography component="h2" variant="h6">

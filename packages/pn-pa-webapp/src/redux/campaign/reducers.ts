@@ -47,16 +47,6 @@ const campaignSlice = createSlice({
       state.pagination.size = action.payload.size;
       state.pagination.page = action.payload.page;
     },
-    setCommunicationsPagination: (state, action: PayloadAction<{ page: number; size: number }>) => {
-      if (state.communicationsPagination.size !== action.payload.size) {
-        // reset pagination
-        state.communicationsPagination.nextPagesKey = [];
-        state.communicationsPagination.moreResult = false;
-      }
-
-      state.communicationsPagination.size = action.payload.size;
-      state.communicationsPagination.page = action.payload.page;
-    },
 
     resetCommunicationsPagination: (state) => {
       state.communicationsPagination.nextPagesKey = [];
@@ -100,8 +90,16 @@ const campaignSlice = createSlice({
     });
 
     builder.addCase(getCampaignCommunications.fulfilled, (state, action) => {
+      const { page, size } = action.meta.arg;
+      const hasSizeChanged = state.communicationsPagination.size !== size;
       state.campaignCommunications = action.payload;
+      state.communicationsPagination.page = page;
+      state.communicationsPagination.size = size;
       state.communicationsPagination.moreResult = action.payload.moreResult ?? false;
+
+      if (hasSizeChanged) {
+        state.communicationsPagination.nextPagesKey = [];
+      }
 
       if (action.payload.nextPagesKey) {
         for (const pageKey of action.payload.nextPagesKey) {
@@ -118,7 +116,6 @@ export const {
   setPagination,
   resetCampaignDetail,
   setCommunicationFilters,
-  setCommunicationsPagination,
   resetCommunicationsPagination,
 } = campaignSlice.actions;
 

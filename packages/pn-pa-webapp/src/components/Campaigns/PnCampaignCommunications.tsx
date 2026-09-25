@@ -26,10 +26,10 @@ import {
 import { MIButton } from '@pagopa/mui-italia';
 
 import { BffInformalSenderNotificationSearchRow } from '../../generated-client/informal-notifications';
+import { CommunicationFilters } from '../../models/Campaign';
 import {
   resetCommunicationsPagination,
   setCommunicationFilters,
-  setCommunicationsPagination,
 } from '../../redux/campaign/reducers';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { RootState } from '../../redux/store';
@@ -41,7 +41,16 @@ type CampaignCommunicationRow = BffInformalSenderNotificationSearchRow & {
   action?: string;
 };
 
-const PnCampaignCommunications = () => {
+interface Props {
+  fetchCampaignCommunications: (
+    page: number,
+    size: number,
+    filters: CommunicationFilters,
+    nextPagesKey?: string
+  ) => void;
+}
+
+const PnCampaignCommunications = ({ fetchCampaignCommunications }: Props) => {
   const { t } = useTranslation('campaigns');
 
   const communicationsPagination = useAppSelector(
@@ -71,34 +80,33 @@ const PnCampaignCommunications = () => {
 
   // Pagination handlers
   const handleChangePage = (paginationData: PaginationData) => {
-    dispatch(
-      setCommunicationsPagination({
-        size: paginationData.size,
-        page: paginationData.page,
-      })
+    const hasSizeChanged = paginationData.size !== communicationsPagination.size;
+    const page = hasSizeChanged ? 0 : paginationData.page;
+
+    fetchCampaignCommunications(
+      page,
+      paginationData.size,
+      communicationFilters,
+      page === 0 ? undefined : communicationsPagination.nextPagesKey[page - 1]
     );
   };
 
   const handleClearFilters = () => {
+    const emptyFilters: CommunicationFilters = {
+      recipientId: '',
+      iunMatch: '',
+      status: [],
+      outcome: '',
+    };
+
     formik.resetForm({
-      values: {
-        recipientId: '',
-        iunMatch: '',
-        status: [],
-        outcome: '',
-      },
+      values: emptyFilters,
     });
 
     dispatch(resetCommunicationsPagination());
+    dispatch(setCommunicationFilters(emptyFilters));
 
-    dispatch(
-      setCommunicationFilters({
-        recipientId: '',
-        iunMatch: '',
-        status: [],
-        outcome: '',
-      })
-    );
+    fetchCampaignCommunications(0, communicationsPagination.size, emptyFilters);
   };
 
   const handlePaste = async (e: React.ClipboardEvent) => {
@@ -186,6 +194,7 @@ const PnCampaignCommunications = () => {
           outcome: formik.values.outcome,
         })
       );
+      fetchCampaignCommunications(0, communicationsPagination.size, formik.values);
     },
   });
 
