@@ -27,6 +27,9 @@ const CampaignDetail: React.FC = () => {
   const communicationFilters = useAppSelector(
     (state: RootState) => state.campaignState.communicationFilters
   );
+  const communicationsPagination = useAppSelector(
+    (state: RootState) => state.campaignState.communicationsPagination
+  );
   const { hasApiErrors } = useErrors();
   const [pageReady, setPageReady] = useState(false);
   const [communicationsReady, setCommunicationsReady] = useState(false);
@@ -59,6 +62,11 @@ const CampaignDetail: React.FC = () => {
             : undefined,
           viewed: communicationFilters.outcome === 'viewed' ? true : undefined,
           delivered: communicationFilters.outcome === 'delivered' ? true : undefined,
+          size: communicationsPagination.size,
+          nextPagesKey:
+            communicationsPagination.page === 0
+              ? undefined
+              : communicationsPagination.nextPagesKey[communicationsPagination.page - 1],
         })
       )
         .unwrap()
@@ -70,12 +78,21 @@ const CampaignDetail: React.FC = () => {
         .catch(() => {})
         .finally(() => setCommunicationsReady(true));
     }
-  }, [dispatch, id, communicationFilters]);
+  }, [
+    dispatch,
+    id,
+    communicationFilters,
+    communicationsPagination.size,
+    communicationsPagination.page,
+  ]);
 
   useEffect(() => {
     fetchCampaignDetail();
+  }, [fetchCampaignDetail]);
+
+  useEffect(() => {
     fetchCampaignCommunications();
-  }, [fetchCampaignDetail, fetchCampaignCommunications]);
+  }, [fetchCampaignCommunications]);
 
   const breadcrumb = (
     <MIBreadcrumbs

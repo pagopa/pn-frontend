@@ -23,6 +23,12 @@ const initialState = {
     page: 0,
     moreResult: false,
   },
+  communicationsPagination: {
+    nextPagesKey: [] as Array<string>,
+    size: 10,
+    page: 0,
+    moreResult: false,
+  },
 };
 
 /* eslint-disable functional/immutable-data */
@@ -39,6 +45,22 @@ const campaignSlice = createSlice({
 
       state.pagination.size = action.payload.size;
       state.pagination.page = action.payload.page;
+    },
+    setCommunicationsPagination: (state, action: PayloadAction<{ page: number; size: number }>) => {
+      if (state.communicationsPagination.size !== action.payload.size) {
+        // reset pagination
+        state.communicationsPagination.nextPagesKey = [];
+        state.communicationsPagination.moreResult = false;
+      }
+
+      state.communicationsPagination.size = action.payload.size;
+      state.communicationsPagination.page = action.payload.page;
+    },
+
+    resetCommunicationsPagination: (state) => {
+      state.communicationsPagination.nextPagesKey = [];
+      state.communicationsPagination.page = 0;
+      state.communicationsPagination.moreResult = false;
     },
 
     setCommunicationFilters: (
@@ -86,11 +108,25 @@ const campaignSlice = createSlice({
 
     builder.addCase(getCampaignCommunications.fulfilled, (state, action) => {
       state.campaignCommunications = action.payload;
+      state.communicationsPagination.moreResult = action.payload.moreResult ?? false;
+
+      if (action.payload.nextPagesKey) {
+        for (const pageKey of action.payload.nextPagesKey) {
+          if (!state.communicationsPagination.nextPagesKey.includes(pageKey)) {
+            state.communicationsPagination.nextPagesKey.push(pageKey);
+          }
+        }
+      }
     });
   },
 });
 
-export const { setPagination, resetCampaignDetail, setCommunicationFilters } =
-  campaignSlice.actions;
+export const {
+  setPagination,
+  resetCampaignDetail,
+  setCommunicationFilters,
+  setCommunicationsPagination,
+  resetCommunicationsPagination,
+} = campaignSlice.actions;
 
 export default campaignSlice;

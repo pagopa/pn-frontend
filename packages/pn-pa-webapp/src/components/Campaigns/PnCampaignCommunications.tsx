@@ -5,9 +5,11 @@ import * as yup from 'yup';
 import { ArrowForward } from '@mui/icons-material';
 import { Box, Typography } from '@mui/material';
 import {
+  CustomPagination,
   EmptyErrorState,
   IUN_regex,
   InformalNotificationStatus,
+  PaginationData,
   Row,
   SmartBody,
   SmartBodyCell,
@@ -17,13 +19,18 @@ import {
   SmartHeaderCell,
   SmartTable,
   SmartTableData,
+  calculatePages,
   dataRegex,
   formatIun,
 } from '@pagopa-pn/pn-commons';
 import { MIButton } from '@pagopa/mui-italia';
 
 import { BffInformalSenderNotificationSearchRow } from '../../generated-client/informal-notifications';
-import { setCommunicationFilters } from '../../redux/campaign/reducers';
+import {
+  resetCommunicationsPagination,
+  setCommunicationFilters,
+  setCommunicationsPagination,
+} from '../../redux/campaign/reducers';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { RootState } from '../../redux/store';
 import PnCampaignCommunicationsFilters from './PnCampaignCommunicationsFilters';
@@ -37,6 +44,22 @@ type CampaignCommunicationRow = BffInformalSenderNotificationSearchRow & {
 const PnCampaignCommunications = () => {
   const { t } = useTranslation('campaigns');
 
+  const communicationsPagination = useAppSelector(
+    (state: RootState) => state.campaignState.communicationsPagination
+  );
+
+  const totalElements =
+    communicationsPagination.size *
+    (communicationsPagination.moreResult
+      ? communicationsPagination.nextPagesKey.length + 5
+      : communicationsPagination.nextPagesKey.length + 1);
+  const pagesToShow: Array<number> = calculatePages(
+    communicationsPagination.size,
+    totalElements,
+    Math.min(communicationsPagination.nextPagesKey.length + 1, 3),
+    communicationsPagination.page + 1
+  );
+
   const dispatch = useAppDispatch();
 
   const validationSchema = yup.object({
@@ -45,6 +68,16 @@ const PnCampaignCommunications = () => {
       .matches(dataRegex.pIvaAndFiscalCode, t('filters.errors.fiscal-code', { ns: 'notifiche' })),
     iunMatch: yup.string().matches(IUN_regex, t('filters.errors.iun', { ns: 'notifiche' })),
   });
+
+  // Pagination handlers
+  const handleChangePage = (paginationData: PaginationData) => {
+    dispatch(
+      setCommunicationsPagination({
+        size: paginationData.size,
+        page: paginationData.page,
+      })
+    );
+  };
 
   const handleClearFilters = () => {
     formik.resetForm({
@@ -55,6 +88,8 @@ const PnCampaignCommunications = () => {
         outcome: '',
       },
     });
+
+    dispatch(resetCommunicationsPagination());
 
     dispatch(
       setCommunicationFilters({
@@ -141,6 +176,7 @@ const PnCampaignCommunications = () => {
     },
     validationSchema,
     onSubmit: () => {
+      dispatch(resetCommunicationsPagination());
       dispatch(
         setCommunicationFilters({
           ...communicationFilters,
@@ -284,6 +320,17 @@ const PnCampaignCommunications = () => {
           ))}
         </SmartBody>
       </SmartTable>
+      {data.length > 0 && (
+        <CustomPagination
+          paginationData={{
+            size: communicationsPagination.size,
+            page: communicationsPagination.page,
+            totalElements,
+          }}
+          onPageRequest={handleChangePage}
+          pagesToShow={pagesToShow}
+        />
+      )}
     </Box>
   );
 };

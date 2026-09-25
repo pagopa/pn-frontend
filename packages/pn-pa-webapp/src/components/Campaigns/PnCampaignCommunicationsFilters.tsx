@@ -22,6 +22,7 @@ const PnCampaignCommunicationsFilters = ({ formik, handleChangeTouched, handlePa
       id: InformalNotificationStatus.PROCESSING,
       label: t('detail.communications.statuses.processing'),
     },
+    // TODO manca InformalNotificationStatus.COMPLETED_UNREACHED
     {
       id: InformalNotificationStatus.COMPLETED_REACHED,
       label: t('detail.communications.statuses.success'),
