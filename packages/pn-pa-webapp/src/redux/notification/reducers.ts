@@ -12,12 +12,14 @@ import {
 import { createSlice } from '@reduxjs/toolkit';
 
 import {
+  BffFullSentInformalNotificationTimelineV1,
   BffFullSentInformalNotificationV1,
   InformalNotificationStatusV1,
 } from '../../generated-client/informal-notifications';
 import {
   getDowntimeHistory,
   getSentInformalNotification,
+  getSentInformalNotificationTimeline,
   getSentNotification,
   getSentNotificationTimeline,
 } from './actions';
@@ -49,6 +51,15 @@ const initialState = {
     isCancelled: false,
     notificationStatusHistory: [],
   } as NotificationTimelineResponse,
+  informalNotificationTimeline: {
+    iun: '',
+    recipients: [],
+    notificationStatusHistory: [],
+    communicationOutcomes: {
+      delivered: undefined,
+      viewed: undefined,
+    },
+  } as BffFullSentInformalNotificationTimelineV1,
   downtimeEvents: [] as Array<Downtime>,
 };
 
@@ -71,6 +82,9 @@ const notificationSlice = createSlice({
     });
     builder.addCase(getSentInformalNotification.fulfilled, (state, action) => {
       state.informalNotification = action.payload;
+    });
+    builder.addCase(getSentInformalNotificationTimeline.fulfilled, (state, action) => {
+      state.informalNotificationTimeline = action.payload;
     });
   },
 });

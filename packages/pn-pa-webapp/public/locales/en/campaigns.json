@@ -66,7 +66,8 @@
           "sms": "SMS",
           "email": "Email",
           "analog": "Postal service",
-          "pec": "PEC"
+          "pec": "PEC",
+          "unknown": "Unknown channel"
         },
         "status": {
           "ready_to_send": "WAITING",
@@ -122,6 +123,66 @@
         "label": "Undefined",
         "tooltip": "Undefined",
         "description": "Unknown status"
+      }
+    },
+    "timeline": {
+      "title": "Communication status",
+      "outcome": {
+        "viewed": {
+          "title": "Read",
+          "description": "The recipient has read the communication."
+        },
+        "delivered": {
+          "title": "Delivered",
+          "description": "The recipient has received the communication."
+        }
+      },
+      "event": {
+        "send_digital_message_feedback": {
+          "ok": {
+            "io": "Sending to IO successful.",
+            "email": "Sending via email successful.",
+            "sms": "Sending via SMS successful.",
+            "pec": "Sending via PEC successful."
+          },
+          "ko": {
+            "io": "Cannot send to IO.",
+            "email": "Cannot send via email.",
+            "sms": "Cannot send via SMS.",
+            "pec": "Cannot send via PEC."
+          }
+        },
+        "send_analog_message_feedback": {
+          "ok": {
+            "analog_registered": "Sending via registered post no. {{code}} successful.",
+            "analog_ordinary": "Sending via ordinary post successful."
+          },
+          "ko": {
+            "analog_registered": "Cannot send via registered post.",
+            "analog_ordinary": "Cannot send via ordinary post."
+          }
+        },
+        "delivered": {
+          "io": "Delivery to IO successful.",
+          "email": "Delivery via email successful.",
+          "sms": "Delivery via SMS successful.",
+          "pec": "Delivery via PEC successful.",
+          "analog_registered": "Delivery via registered post no. {{code}} successful.",
+          "analog_ordinary": "Delivery via ordinary post successful."
+        },
+        "send_digital_message_skip": {
+          "io": "Cannot trace the recipient's account.",
+          "email": "Cannot trace the recipient's email address.",
+          "sms": "Cannot trace the recipient's phone number.",
+          "pec": "Cannot trace the recipient's PEC address."
+        },
+        "filed": {
+          "send": "Filed on the SEND platform."
+        },
+        "informal_notification_viewed": {
+          "io": "The recipient has read the communication on IO.",
+          "send": "The recipient has read the communication on the SEND platform."
+        }
       }
     }
   }

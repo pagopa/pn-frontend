@@ -86,6 +86,13 @@ export { default as AbstractPaper } from './NotificationDetail/AbstractPaper';
 export { default as NotificationStatusBox } from './NotificationDetail/NotificationStatusBox';
 export { default as NotificationTimelineBox } from './NotificationDetail/NotificationTimelineBox';
 export { default as NotificationDetailSection } from './NotificationDetail/NotificationDetailSection';
+export { default as NotificationTimelineEventDate } from './NotificationDetail/NotificationEventsTimeline/NotificationTimelineEventDate';
+export { default as MailOffRounded } from './Icons/MailOffRounded';
+export { default as OutgoingEmailRounded } from './Icons/OutgoingEmailRounded';
+export { default as SearchCheckRounded } from './Icons/SearchCheckRounded';
+export { default as IOIcon } from './Icons/IOIcon';
+export { default as SendIcon } from './Icons/SendIcon';
+export { default as MailShieldRounded } from './Icons/MailShieldRounded';
 
 export { default as A11yMessageAnnouncer } from './A11yMessageAnnouncer';
 export type { AppNotAccessibleReason } from './AppNotAccessible';

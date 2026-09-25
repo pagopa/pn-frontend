@@ -8,6 +8,7 @@ import {
 
 import { downtimesDTO } from '../../../__mocks__/AppStatus.mock';
 import { mockAuthentication } from '../../../__mocks__/Auth.mock';
+import { INFORMAL_NOTIFICATION_TIMELINE_MOCK } from '../../../__mocks__/InformalNotificationTimeline.mock';
 import { notificationDTOMultiRecipient } from '../../../__mocks__/NotificationDetail.mock';
 import { NotificationTimelineResponse } from '../../../__mocks__/NotificationTimeline.mock';
 import { apiClient } from '../../../api/apiClients';
@@ -16,6 +17,7 @@ import { store } from '../../store';
 import {
   cancelNotification,
   getDowntimeHistory,
+  getSentInformalNotificationTimeline,
   getSentNotification,
   getSentNotificationDocument,
   getSentNotificationPayment,
@@ -49,6 +51,15 @@ const initialState = {
     recipients: [],
     isCancelled: false,
     notificationStatusHistory: [],
+  },
+  informalNotificationTimeline: {
+    iun: '',
+    recipients: [],
+    notificationStatusHistory: [],
+    communicationOutcomes: {
+      delivered: undefined,
+      viewed: undefined,
+    },
   },
   downtimeEvents: [],
 };
@@ -100,6 +111,19 @@ describe('Notification detail redux state tests', () => {
     expect(payload).toEqual(NotificationTimelineResponse);
     expect(store.getState().notificationState.notificationTimeline).toStrictEqual(
       NotificationTimelineResponse
+    );
+  });
+
+  it('Should be able to fetch the informal notification timeline', async () => {
+    const { iun } = INFORMAL_NOTIFICATION_TIMELINE_MOCK;
+    mock
+      .onGet(`/bff/v1/notifications/informal/sent/${iun}/timeline`)
+      .reply(200, INFORMAL_NOTIFICATION_TIMELINE_MOCK);
+    const action = await store.dispatch(getSentInformalNotificationTimeline(iun));
+    expect(action.type).toBe('getSentInformalNotificationTimeline/fulfilled');
+    expect(action.payload).toEqual(INFORMAL_NOTIFICATION_TIMELINE_MOCK);
+    expect(store.getState().notificationState.informalNotificationTimeline).toStrictEqual(
+      INFORMAL_NOTIFICATION_TIMELINE_MOCK
     );
   });
 

@@ -66,7 +66,8 @@
           "sms": "SMS",
           "email": "Email",
           "analog": "Servizio postale",
-          "pec": "PEC"
+          "pec": "PEC",
+          "unknown": "Canale sconosciuto"
         },
         "status": {
           "ready_to_send": "IN ATTESA",
@@ -122,6 +123,64 @@
         "label": "Non definito",
         "tooltip": "Non definito",
         "description": "Stato sconosciuto"
+      }
+    },
+    "timeline": {
+      "title": "Stato della comunicazione",
+      "outcome": {
+        "viewed": {
+          "title": "Letta",
+          "description": "La persona destinataria ha letto la comunicazione."
+        },
+        "delivered": {
+          "title": "Consegnata",
+          "description": "La persona destinataria ha ricevuto la comunicazione."
+        }
+      },
+      "event": {
+        "send_digital_message_feedback": {
+          "ok": {
+            "io": "Invio su IO riuscito.",
+            "email": "Invio via email riuscito.",
+            "sms": "Invio via SMS riuscito.",
+            "pec": "Invio via PEC riuscito."
+          },
+          "ko": {
+            "io": "Impossibile effettuare l'invio su IO.",
+            "email": "Impossibile effettuare l'invio via email.",
+            "sms": "Impossibile effettuare l'invio via SMS.",
+            "pec": "Impossibile effettuare l'invio via PEC."
+          }
+        },
+        "send_analog_message_feedback": {
+          "ok": {
+            "analog_registered": "Invio via raccomandata semplice n. {{code}} riuscito.",
+            "analog_ordinary": "Invio via posta ordinaria riuscito."
+          },
+          "ko": {
+            "analog_registered": "Impossibile effettuare l'invio via raccomandata semplice.",
+            "analog_ordinary": "Impossibile effettuare l'invio via posta ordinaria."
+          }
+        },
+        "delivered": {
+          "io": "Consegna su IO riuscita.",
+          "email": "Consegna via email riuscita.",
+          "sms": "Consegna via SMS riuscita.",
+          "pec": "Consegna via PEC riuscita.",
+          "analog_registered": "Consegna via raccomandata semplice n. {{code}} riuscita.",
+          "analog_ordinary": "Consegna via posta ordinaria riuscita."
+        },
+        "send_digital_message_skip": {
+          "io": "Impossibile risalire all'account della persona destinataria.",
+          "email": "Impossibile risalire all'indirizzo email della persona destinataria.",
+          "sms": "Impossibile risalire al numero di telefono della persona destinataria.",
+          "pec": "Impossibile risalire all'indirizzo PEC della persona destinataria."
+        },
+        "filed": { "send": "Depositata sulla piattaforma SEND." },
+        "informal_notification_viewed": {
+          "io": "La persona destinataria ha letto la comunicazione su IO.",
+          "send": "La persona destinataria ha letto la comunicazione sulla piattaforma SEND."
+        }
       }
     }
   }

@@ -66,7 +66,8 @@
           "sms": "SMS",
           "email": "E-Mail",
           "analog": "Postdienst",
-          "pec": "PEC"
+          "pec": "PEC",
+          "unknown": "Unbekannter Kanal"
         },
         "status": {
           "ready_to_send": "WARTEND",
@@ -122,6 +123,66 @@
         "label": "Nicht definiert",
         "tooltip": "Nicht definiert",
         "description": "Unbekannter Status"
+      }
+    },
+    "timeline": {
+      "title": "Status der Mitteilung",
+      "outcome": {
+        "viewed": {
+          "title": "Gelesen",
+          "description": "Der Empfänger hat die Mitteilung gelesen."
+        },
+        "delivered": {
+          "title": "Zugestellt",
+          "description": "Der Empfänger hat die Mitteilung erhalten."
+        }
+      },
+      "event": {
+        "send_digital_message_feedback": {
+          "ok": {
+            "io": "Versand über IO erfolgreich.",
+            "email": "Versand per E-Mail erfolgreich.",
+            "sms": "Versand per SMS erfolgreich.",
+            "pec": "Versand per PEC erfolgreich."
+          },
+          "ko": {
+            "io": "Versand über IO nicht möglich.",
+            "email": "Versand per E-Mail nicht möglich.",
+            "sms": "Versand per SMS nicht möglich.",
+            "pec": "Versand per PEC nicht möglich."
+          }
+        },
+        "send_analog_message_feedback": {
+          "ok": {
+            "analog_registered": "Versand per Einschreiben Nr. {{code}} erfolgreich.",
+            "analog_ordinary": "Versand per normaler Post erfolgreich."
+          },
+          "ko": {
+            "analog_registered": "Versand per Einschreiben nicht möglich.",
+            "analog_ordinary": "Versand per normaler Post nicht möglich."
+          }
+        },
+        "delivered": {
+          "io": "Zustellung über IO erfolgreich.",
+          "email": "Zustellung per E-Mail erfolgreich.",
+          "sms": "Zustellung per SMS erfolgreich.",
+          "pec": "Zustellung per PEC erfolgreich.",
+          "analog_registered": "Zustellung per Einschreiben Nr. {{code}} erfolgreich.",
+          "analog_ordinary": "Zustellung per normaler Post erfolgreich."
+        },
+        "send_digital_message_skip": {
+          "io": "Das Konto des Empfängers kann nicht ermittelt werden.",
+          "email": "Die E-Mail-Adresse des Empfängers kann nicht ermittelt werden.",
+          "sms": "Die Telefonnummer des Empfängers kann nicht ermittelt werden.",
+          "pec": "Die PEC-Adresse des Empfängers kann nicht ermittelt werden."
+        },
+        "filed": {
+          "send": "Auf der SEND Plattform hinterlegt."
+        },
+        "informal_notification_viewed": {
+          "io": "Der Empfänger hat die Mitteilung auf IO gelesen.",
+          "send": "Der Empfänger hat die Mitteilung auf der SEND Plattform gelesen."
+        }
       }
     }
   }

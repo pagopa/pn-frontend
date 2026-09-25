@@ -9,6 +9,7 @@ import CampaignDetail from '../pages/CampaignDetail.page';
 import Campaigns from '../pages/Campaigns.page';
 import Dashboard from '../pages/Dashboard.page';
 import InformalNotificationDetail from '../pages/InformalNotificationDetail.page';
+import InformalNotificationTimeline from '../pages/InformalNotificationTimeline.page';
 import NewApiKey from '../pages/NewApiKey.page';
 import NewNotification from '../pages/NewNotification.page';
 import NotificationDetail from '../pages/NotificationDetail.page';
@@ -43,6 +44,10 @@ const Router: React.FC = () => {
             <Route path={routes.CAMPAIGNS} element={<Campaigns />} />
             <Route path={routes.CAMPAIGN_DETAIL} element={<CampaignDetail />} />
             <Route path={routes.DETTAGLIO_COMBO} element={<InformalNotificationDetail />} />
+            <Route
+              path={routes.DETTAGLIO_COMBO_TIMELINE}
+              element={<InformalNotificationTimeline />}
+            />
             <Route path={routes.APP_STATUS} element={<AppStatus />} />
             <Route path="/" element={<Navigate to={routes.DASHBOARD} />} />
 
