@@ -536,75 +536,6 @@ describe('notification status texts', () => {
     );
   });
 
-  it('return notification status infos - VIEWED - access after the effective date', () => {
-    initLocalizationExists((_ns, path) => path === 'status.viewed-after-effective-date');
-    testNotificationStatusInfos(
-      'success',
-      `notifiche - status.viewed-after-effective-date`,
-      // tooltip and color stay those of the standard VIEWED
-      `notifiche - status.viewed-tooltip - ${JSON.stringify({
-        subject: `notifiche - status.recipient`,
-      })}`,
-      `notifiche - status.viewed-after-effective-date-description`,
-      {
-        status: NotificationStatus.VIEWED,
-        activeFrom: '2023-01-27T13:57:16.42843144Z',
-        relatedTimelineElements: [],
-      },
-      {
-        recipients: notificationDTO.recipients,
-        statusHistory: [
-          {
-            status: NotificationStatus.VIEWED,
-            activeFrom: '2023-01-27T13:57:16.42843144Z',
-            relatedTimelineElements: [],
-          },
-          {
-            status: NotificationStatus.EFFECTIVE_DATE,
-            activeFrom: '2023-01-26T13:57:16.42843144Z',
-            relatedTimelineElements: [],
-          },
-        ],
-      }
-    );
-    initLocalizationForTest();
-  });
-
-  it('return notification status infos - VIEWED - access before the effective date keeps the standard copy', () => {
-    initLocalizationExists((_ns, path) => path === 'status.viewed-after-effective-date');
-    testNotificationStatusInfos(
-      'success',
-      `notifiche - status.viewed`,
-      `notifiche - status.viewed-tooltip - ${JSON.stringify({
-        subject: `notifiche - status.recipient`,
-      })}`,
-      `notifiche - status.viewed-description - ${JSON.stringify({
-        subject: `notifiche - status.recipient`,
-      })}`,
-      {
-        status: NotificationStatus.VIEWED,
-        activeFrom: '2023-01-26T13:57:16.42843144Z',
-        relatedTimelineElements: [],
-      },
-      {
-        recipients: notificationDTO.recipients,
-        statusHistory: [
-          {
-            status: NotificationStatus.VIEWED,
-            activeFrom: '2023-01-26T13:57:16.42843144Z',
-            relatedTimelineElements: [],
-          },
-          {
-            status: NotificationStatus.EFFECTIVE_DATE,
-            activeFrom: '2023-01-27T13:57:16.42843144Z',
-            relatedTimelineElements: [],
-          },
-        ],
-      }
-    );
-    initLocalizationForTest();
-  });
-
   it('return notification status infos - VIEWED - by delegate, with the revised copy', () => {
     initLocalizationExists((_ns, path) => path === 'status.viewed-by-delegate-description');
     testNotificationStatusInfos(
@@ -646,6 +577,65 @@ describe('notification status texts', () => {
       },
       { recipients: notificationDTOMultiRecipient.recipients }
     );
+  });
+
+  it('return notification status infos - VIEWED - multi recipient - without legal fact, with the revised copy', () => {
+    initLocalizationExists(
+      (_ns, path) => path === 'status.viewed-without-legal-fact-description-multirecipient'
+    );
+    testNotificationStatusInfos(
+      'success',
+      `notifiche - status.viewed-multirecipient`,
+      `notifiche - status.viewed-tooltip-multirecipient - ${JSON.stringify({
+        subject: `notifiche - status.recipient`,
+      })}`,
+      `notifiche - status.viewed-without-legal-fact-description-multirecipient`,
+      {
+        status: NotificationStatus.VIEWED,
+        activeFrom: '2023-01-26T13:57:16.42843144Z',
+        relatedTimelineElements: [],
+        steps: [],
+      },
+      { recipients: notificationDTOMultiRecipient.recipients }
+    );
+    initLocalizationForTest();
+  });
+
+  it('return notification status infos - VIEWED - multi recipient - with legal fact, with the revised copy', () => {
+    initLocalizationExists(
+      (_ns, path) => path === 'status.viewed-without-legal-fact-description-multirecipient'
+    );
+    testNotificationStatusInfos(
+      'success',
+      `notifiche - status.viewed-multirecipient`,
+      `notifiche - status.viewed-tooltip-multirecipient - ${JSON.stringify({
+        subject: `notifiche - status.recipient`,
+      })}`,
+      `notifiche - status.viewed-description-multirecipient - ${JSON.stringify({
+        subject: `notifiche - status.recipient`,
+      })}`,
+      {
+        status: NotificationStatus.VIEWED,
+        activeFrom: '2023-01-26T13:57:16.42843144Z',
+        relatedTimelineElements: [],
+        steps: [
+          {
+            elementId: 'NOTIFICATION_VIEWED.IUN_DAPQ-LWQV-DKQH-202308-A-1.RECINDEX_1',
+            timestamp: '2023-01-26T13:57:16.42843144Z',
+            category: TimelineCategory.NOTIFICATION_VIEWED,
+            legalFactsIds: [
+              {
+                key: 'safestorage://PN_LEGAL_FACTS-viewed.pdf',
+                category: LegalFactType.RECIPIENT_ACCESS,
+              },
+            ],
+            details: { recIndex: 1 },
+          },
+        ],
+      },
+      { recipients: notificationDTOMultiRecipient.recipients }
+    );
+    initLocalizationForTest();
   });
 
   it('return notification status infos - CANCELLED - passing status only', () => {

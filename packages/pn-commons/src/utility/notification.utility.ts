@@ -40,43 +40,11 @@ type StatusInfo = {
   description: string;
 };
 
-/**
- * The VIEWED status has three readings, and only the first one is expressed by `status.viewed*`:
- * the recipient opened the notification and that is what made it legally effective, a delegate
- * opened it on their behalf, or the access came when the notification had already perfected by
- * deadline - in which case it is no longer the access that gives it legal value.
- *
- * The two variants only exist in the revised copy, so each one is taken only when its key is there:
- * with the overlay off nothing is found and the standard VIEWED wording is kept.
- */
 function viewedStatusVariant(
   statusInfos: StatusInfo,
   statusObject?: NotificationStatusHistory,
-  statusHistory?: Array<NotificationStatusHistory>,
-  viewedAt?: string
+  isMultiRecipient?: boolean
 ): StatusInfo {
-  const effectiveDateFrom = statusHistory?.find(
-    (s) => s.status === NotificationStatus.EFFECTIVE_DATE
-  )?.activeFrom;
-  const viewedAfterEffectiveDate =
-    !!effectiveDateFrom &&
-    !!statusObject &&
-    new Date(effectiveDateFrom).getTime() < new Date(statusObject.activeFrom).getTime();
-
-  if (
-    viewedAfterEffectiveDate &&
-    hasLocalizedLabel('notifications', `status.viewed-after-effective-date`)
-  ) {
-    return {
-      ...statusInfos,
-      label: getLocalizedOrDefaultLabel('notifications', `status.viewed-after-effective-date`),
-      description: getLocalizedOrDefaultLabel(
-        'notifications',
-        `status.viewed-after-effective-date-description`
-      ),
-    };
-  }
-
   if (
     statusObject?.recipient &&
     hasLocalizedLabel('notifications', `status.viewed-by-delegate-description`)
@@ -87,7 +55,27 @@ function viewedStatusVariant(
         'notifications',
         `status.viewed-by-delegate-description`,
         undefined,
-        { name: statusObject.recipient, viewedAt }
+        { name: statusObject.recipient }
+      ),
+    };
+  }
+
+  const hasViewedLegalFact = !!statusObject?.steps?.some(
+    (step) => step.category === TimelineCategory.NOTIFICATION_VIEWED && step.legalFactsIds?.length
+  );
+  if (
+    isMultiRecipient &&
+    !hasViewedLegalFact &&
+    hasLocalizedLabel(
+      'notifications',
+      `status.viewed-without-legal-fact-description-multirecipient`
+    )
+  ) {
+    return {
+      ...statusInfos,
+      description: getLocalizedOrDefaultLabel(
+        'notifications',
+        `status.viewed-without-legal-fact-description-multirecipient`
       ),
     };
   }
@@ -387,19 +375,12 @@ export function getNotificationStatusInfos(
           { name: statusObject.recipient }
         );
       }
-      const viewedEvent = statusObject?.steps?.find(
-        (s) => s.category === TimelineCategory.NOTIFICATION_VIEWED
-      );
-      const viewedAt = viewedEvent?.timestamp
-        ? formatDate(viewedEvent.timestamp, false)
-        : undefined;
       return {
         color: 'success',
         ...viewedStatusVariant(
-          localizeStatus('viewed', { subject, isMultiRecipient, viewedAt }),
+          localizeStatus('viewed', { subject, isMultiRecipient }),
           statusObject,
-          options?.statusHistory,
-          viewedAt
+          isMultiRecipient
         ),
       };
     }
