@@ -30,6 +30,31 @@
       "EMAIL": "Email",
       "ANALOG": "Postal service",
       "PEC": "PEC"
+    },
+    "communications": {
+      "title": "Communications list",
+      "tax-id": "Tax code",
+      "iun": "IUN code",
+      "status": "Status",
+      "outcome": "Outcome",
+      "empty-title": "No communications found for the selected filters.",
+      "empty-description": "Remove them or try another combination.",
+      "remove-filters": "Remove filters",
+      "statuses": {
+        "ready": "Ready for sending",
+        "processing": "Sending in progress",
+        "success": "Sent successfully",
+        "failed": "Sending failed",
+        "refused": "Refused"
+      },
+      "outcomes": {
+        "all": "All",
+        "viewed": "Read",
+        "delivered": "Delivered",
+        "not-available": "Outcome not available"
+      },
+      "no-communications-title": "No communications available",
+      "no-communications-description": "There are no communications matching the selected filters."
     }
   }
 }

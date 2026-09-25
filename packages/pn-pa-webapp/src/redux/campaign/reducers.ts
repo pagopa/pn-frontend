@@ -2,14 +2,29 @@ import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 
 import {
   BffCampaignDetailResponseV1,
+  BffInformalSenderNotificationSearchResponse,
   CampaignSummary,
+  InformalNotificationStatusV1,
 } from '../../generated-client/informal-notifications';
-import { getCampaignDetail, getCampaigns } from './actions';
+import { getCampaignCommunications, getCampaignDetail, getCampaigns } from './actions';
 
 const initialState = {
   campaigns: [] as Array<CampaignSummary>,
   campaignDetail: {} as BffCampaignDetailResponseV1,
+  campaignCommunications: {} as BffInformalSenderNotificationSearchResponse,
+  communicationFilters: {
+    recipientId: '',
+    iunMatch: '',
+    status: [] as Array<InformalNotificationStatusV1>,
+    outcome: '',
+  },
   pagination: {
+    nextPagesKey: [] as Array<string>,
+    size: 10,
+    page: 0,
+    moreResult: false,
+  },
+  communicationsPagination: {
     nextPagesKey: [] as Array<string>,
     size: 10,
     page: 0,
@@ -33,6 +48,16 @@ const campaignSlice = createSlice({
       state.pagination.page = action.payload.page;
     },
 
+    resetCommunicationsPagination: (state) => {
+      state.communicationsPagination.nextPagesKey = [];
+      state.communicationsPagination.page = 0;
+      state.communicationsPagination.moreResult = false;
+    },
+
+    setCommunicationFilters: (state, action) => {
+      state.communicationFilters = action.payload;
+    },
+
     resetCampaignDetail: (state) => {
       state.campaignDetail = {} as BffCampaignDetailResponseV1;
     },
@@ -53,7 +78,7 @@ const campaignSlice = createSlice({
 
       if (action.payload.nextPagesKey) {
         for (const pageKey of action.payload.nextPagesKey) {
-          if (state.pagination.nextPagesKey.indexOf(pageKey) === -1) {
+          if (!state.pagination.nextPagesKey.includes(pageKey)) {
             state.pagination.nextPagesKey.push(pageKey);
           }
         }
@@ -63,9 +88,35 @@ const campaignSlice = createSlice({
     builder.addCase(getCampaignDetail.fulfilled, (state, action) => {
       state.campaignDetail = action.payload;
     });
+
+    builder.addCase(getCampaignCommunications.fulfilled, (state, action) => {
+      const { page, size } = action.meta.arg;
+      const hasSizeChanged = state.communicationsPagination.size !== size;
+      state.campaignCommunications = action.payload;
+      state.communicationsPagination.page = page;
+      state.communicationsPagination.size = size;
+      state.communicationsPagination.moreResult = action.payload.moreResult ?? false;
+
+      if (hasSizeChanged) {
+        state.communicationsPagination.nextPagesKey = [];
+      }
+
+      if (action.payload.nextPagesKey) {
+        for (const pageKey of action.payload.nextPagesKey) {
+          if (!state.communicationsPagination.nextPagesKey.includes(pageKey)) {
+            state.communicationsPagination.nextPagesKey.push(pageKey);
+          }
+        }
+      }
+    });
   },
 });
 
-export const { setPagination, resetCampaignDetail } = campaignSlice.actions;
+export const {
+  setPagination,
+  resetCampaignDetail,
+  setCommunicationFilters,
+  resetCommunicationsPagination,
+} = campaignSlice.actions;
 
 export default campaignSlice;

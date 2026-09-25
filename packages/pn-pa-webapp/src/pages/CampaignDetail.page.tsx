@@ -2,14 +2,20 @@ import { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
 
-import { Box } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import { ApiError, EmptyErrorState, TitleBox, useErrors } from '@pagopa-pn/pn-commons';
 import { MIBreadcrumbItem, MIBreadcrumbs } from '@pagopa/mui-italia';
 
+import PnCampaignCommunications from '../components/Campaigns/PnCampaignCommunications';
 import PnCampaignDetailCard from '../components/Campaigns/PnCampaignDetailCard';
 import PnCampaignDetailLoading from '../components/Campaigns/PnCampaignDetailLoading';
+import { CommunicationFilters } from '../models/Campaign';
 import * as routes from '../navigation/routes.const';
-import { CAMPAIGN_ACTIONS, getCampaignDetail } from '../redux/campaign/actions';
+import {
+  CAMPAIGN_ACTIONS,
+  getCampaignCommunications,
+  getCampaignDetail,
+} from '../redux/campaign/actions';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { RootState } from '../redux/store';
 
@@ -18,8 +24,17 @@ const CampaignDetail: React.FC = () => {
   const { id } = useParams();
   const dispatch = useAppDispatch();
   const campaign = useAppSelector((state: RootState) => state.campaignState.campaignDetail);
+  const communicationFilters = useAppSelector(
+    (state: RootState) => state.campaignState.communicationFilters
+  );
+  const communicationsPagination = useAppSelector(
+    (state: RootState) => state.campaignState.communicationsPagination
+  );
   const { hasApiErrors } = useErrors();
   const [pageReady, setPageReady] = useState(false);
+  const [communicationsReady, setCommunicationsReady] = useState(false);
+  const [hasInitialCommunications, setHasInitialCommunications] = useState<boolean | null>(null);
+  const isPageReady = pageReady && communicationsReady;
   const { t } = useTranslation(['campaigns', 'common']);
   const hasCampaignDetailApiError = hasApiErrors(CAMPAIGN_ACTIONS.GET_CAMPAIGN_DETAIL);
 
@@ -34,9 +49,43 @@ const CampaignDetail: React.FC = () => {
     }
   }, [dispatch, id]);
 
+  const fetchCampaignCommunications = useCallback(
+    (page: number, size: number, filters: CommunicationFilters, nextPagesKey?: string) => {
+      if (id) {
+        setCommunicationsReady(false);
+        void dispatch(
+          getCampaignCommunications({
+            campaignId: id,
+            recipientId: filters.recipientId || undefined,
+            iunMatch: filters.iunMatch || undefined,
+            status: filters.status.length > 0 ? filters.status : undefined,
+            viewed: filters.outcome === 'viewed' ? true : undefined,
+            delivered: filters.outcome === 'delivered' ? true : undefined,
+            page,
+            size,
+            nextPagesKey,
+          })
+        )
+          .unwrap()
+          .then((response) => {
+            setHasInitialCommunications(
+              (currentValue) => currentValue ?? (response.resultsPage?.length ?? 0) > 0
+            );
+          })
+          .catch(() => {})
+          .finally(() => setCommunicationsReady(true));
+      }
+    },
+    [dispatch, id]
+  );
+
   useEffect(() => {
     fetchCampaignDetail();
   }, [fetchCampaignDetail]);
+
+  useEffect(() => {
+    fetchCampaignCommunications(0, communicationsPagination.size, communicationFilters);
+  }, []);
 
   const breadcrumb = (
     <MIBreadcrumbs
@@ -81,9 +130,9 @@ const CampaignDetail: React.FC = () => {
         />
       )}
 
-      {!hasCampaignDetailApiError && !pageReady && <PnCampaignDetailLoading />}
+      {!hasCampaignDetailApiError && !isPageReady && <PnCampaignDetailLoading />}
 
-      {!hasCampaignDetailApiError && pageReady && (
+      {!hasCampaignDetailApiError && isPageReady && (
         <>
           <TitleBox
             title={campaign.title}
@@ -92,7 +141,6 @@ const CampaignDetail: React.FC = () => {
             mbSubTitle={2}
             variantSubTitle="body1"
           />
-
           <PnCampaignDetailCard
             creationDate={campaign.startDate}
             campaignId={campaign.campaignId}
@@ -101,6 +149,20 @@ const CampaignDetail: React.FC = () => {
               .map((channel) => t(`detail.channels.${channel}`))
               .join(' · ')}
           />
+          {hasInitialCommunications ? (
+            <PnCampaignCommunications fetchCampaignCommunications={fetchCampaignCommunications} />
+          ) : (
+            <Box sx={{ mt: 3 }}>
+              <Typography component="h2" variant="h6">
+                {t('detail.communications.title')}
+              </Typography>
+              <EmptyErrorState
+                variant="empty"
+                title={t('detail.communications.no-communications-title')}
+                description={t('detail.communications.no-communications-description')}
+              />
+            </Box>
+          )}
         </>
       )}
     </Box>

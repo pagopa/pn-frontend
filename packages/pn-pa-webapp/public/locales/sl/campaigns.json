@@ -30,6 +30,31 @@
       "EMAIL": "E-pošta",
       "ANALOG": "Poštna storitev",
       "PEC": "PEC"
+    },
+    "communications": {
+      "title": "Seznam sporočil",
+      "tax-id": "Davčna številka",
+      "iun": "Koda IUN",
+      "status": "Stanje",
+      "outcome": "Izid",
+      "empty-title": "Za izbrane filtre ni sporočil.",
+      "empty-description": "Odstranite jih ali poskusite z drugo kombinacijo.",
+      "remove-filters": "Odstrani filtre",
+      "statuses": {
+        "ready": "Pripravljeno za pošiljanje",
+        "processing": "Pošiljanje poteka",
+        "success": "Pošiljanje uspešno",
+        "failed": "Pošiljanje neuspešno",
+        "refused": "Zavrnjeno"
+      },
+      "outcomes": {
+        "all": "Vsi",
+        "viewed": "Prebrano",
+        "delivered": "Vročeno",
+        "not-available": "Izid ni na voljo"
+      },
+      "no-communications-title": "Na voljo ni nobenega sporočila",
+      "no-communications-description": "Ni sporočil, ki bi ustrezala izbranim filtrom."
     }
   }
 }
