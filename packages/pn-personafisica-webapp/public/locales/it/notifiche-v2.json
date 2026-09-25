@@ -2,6 +2,10 @@
   "status": {
     "delivered": "Nuova notifica ricevuta",
     "delivered-multirecipient": "Nuova notifica ricevuta",
+    "delivered-description-digital": "Ti abbiamo inviato questa notifica a valore legale. Consulta le <1>modalità di perfezionamento</1> per sapere quando assumerà valore di legge.",
+    "delivered-description-digital-multirecipient": "Ti abbiamo inviato questa notifica a valore legale. Consulta le <1>modalità di perfezionamento</1> per sapere quando assumerà valore di legge.",
+    "delivered-description-analog": "Ti abbiamo inviato l’avviso di ricezione per questa notifica a valore legale via raccomandata. Consulta le <1>modalità di perfezionamento</1> per sapere quando la notifica SEND assumerà valore di legge.",
+    "delivered-description-analog-multirecipient": "Ti abbiamo inviato l’avviso di ricezione per questa notifica a valore legale via raccomandata. Consulta le <1>modalità di perfezionamento</1> per sapere quando la notifica SEND assumerà valore di legge.",
     "delivering": "Invio della notifica in corso",
     "accepted": "Notifica pronta per l’invio",
     "accepted-description": "La notifica digitale ha superato le verifiche di conformità. Puoi effettuare il download dell’<0>attestazione</0>.",

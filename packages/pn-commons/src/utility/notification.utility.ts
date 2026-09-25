@@ -95,45 +95,6 @@ function viewedStatusVariant(
   return statusInfos;
 }
 
-const AnalogDeliveryCodeStock = new Set(['RECRN003C', 'RECRN011', 'RECAG011A']);
-const AnalogDeliveryCodeWithdrawnStock = new Set(['RECAG005C', 'RECAG006C']);
-const AnalogDeliveryCodeExpiredStock = new Set(['RECAG008C', 'RECRN005C', 'PNAG012', 'PNRN012']);
-
-/*
- * Besides the values used in the generation of the final messages,
- * data can include an isMultiRecipient attribute, which refers to the notification.
- * If set to true, the "-tooltip-multirecipient" and "-description-multirecipient"
- * (instead of just "-tooltip" and "-description")
- * entries will be looked for in the i18n catalog.
- */
-function localizeStatus(status: string, data?: { [key: string]: any }): StatusInfo {
-  const isMultiRecipient = data?.isMultiRecipient;
-  // eslint-disable-next-line functional/no-let
-  let filteredData: any = omit(data, ['isMultiRecipient']);
-  if (Object.keys(filteredData).length === 0) {
-    filteredData = undefined;
-  }
-
-  return {
-    label: getLocalizedOrDefaultLabel(
-      'notifications',
-      `status.${status}${isMultiRecipient ? '-multirecipient' : ''}`
-    ),
-    tooltip: getLocalizedOrDefaultLabel(
-      'notifications',
-      `status.${status}-tooltip${isMultiRecipient ? '-multirecipient' : ''}`,
-      undefined,
-      filteredData
-    ),
-    description: getLocalizedOrDefaultLabel(
-      'notifications',
-      `status.${status}-description${isMultiRecipient ? '-multirecipient' : ''}`,
-      undefined,
-      filteredData
-    ),
-  };
-}
-
 /*
  * Returns the mapping between current notification delivered status, label and descriptive message for PA
  * @param  {NotificationStatus} status
@@ -171,13 +132,13 @@ function getNotificationDeliveredInfosForPA(
       : new Date(step.timestamp) <= activeFrom
   );
   const stepsToCheck = [...(statusObject.steps || []), ...(deliveringStepsBeforeDelivered ?? [])];
-  const isStock = stepsToCheck.find(
+  const isStock = stepsToCheck.some(
     (step) =>
       (step.category === TimelineCategory.SEND_ANALOG_PROGRESS ||
         step.category === TimelineCategory.SEND_ANALOG_FEEDBACK) &&
       AnalogDeliveryCodeStock.has((step.details as SendPaperDetails).deliveryDetailCode ?? '')
   );
-  const isWithdrawnStock = stepsToCheck.find(
+  const isWithdrawnStock = stepsToCheck.some(
     (step) =>
       (step.category === TimelineCategory.SEND_ANALOG_PROGRESS ||
         step.category === TimelineCategory.SEND_ANALOG_FEEDBACK) &&
@@ -185,7 +146,7 @@ function getNotificationDeliveredInfosForPA(
         (step.details as SendPaperDetails).deliveryDetailCode ?? ''
       )
   );
-  const isExpiredStock = stepsToCheck.find(
+  const isExpiredStock = stepsToCheck.some(
     (step) =>
       (step.category === TimelineCategory.SEND_ANALOG_PROGRESS ||
         step.category === TimelineCategory.SEND_ANALOG_FEEDBACK) &&
@@ -227,6 +188,88 @@ function getNotificationDeliveredInfosForPA(
     );
   }
   return statusInfos;
+}
+
+function deliveredStatusVariant(
+  isMultiRecipient?: boolean,
+  statusObject?: NotificationStatusHistory,
+  options?: {
+    statusHistory?: Array<NotificationStatusHistory>;
+    recipients: Array<NotificationDetailRecipient | string>;
+    isParty?: boolean;
+  }
+): StatusInfo {
+  const statusInfos = localizeStatus('delivered', { isMultiRecipient });
+
+  if (isMultiRecipient) {
+    return statusInfos;
+  }
+
+  // if it is a PA, change the title and the description
+  // ... only for single-recipient notifications!
+  if (options?.isParty) {
+    getNotificationDeliveredInfosForPA(statusInfos, statusObject, options.statusHistory || []);
+    return statusInfos;
+  }
+
+  // if the deliveryMode is defined, then change the description for a more specific one ...
+  const deliveryMode = statusObject?.deliveryMode;
+  // ... only for single-recipient notifications!
+  if (deliveryMode) {
+    const deliveryModeDescription = getLocalizedOrDefaultLabel(
+      'notifications',
+      `status.deliveryMode.${deliveryMode}`
+    );
+    statusInfos.description = getLocalizedOrDefaultLabel(
+      'notifications',
+      'status.delivered-description-with-delivery-mode',
+      undefined,
+      { deliveryMode: deliveryModeDescription }
+    );
+
+    return statusInfos;
+  }
+
+  return statusInfos;
+}
+
+const AnalogDeliveryCodeStock = new Set(['RECRN003C', 'RECRN011', 'RECAG011A']);
+const AnalogDeliveryCodeWithdrawnStock = new Set(['RECAG005C', 'RECAG006C']);
+const AnalogDeliveryCodeExpiredStock = new Set(['RECAG008C', 'RECRN005C', 'PNAG012', 'PNRN012']);
+
+/*
+ * Besides the values used in the generation of the final messages,
+ * data can include an isMultiRecipient attribute, which refers to the notification.
+ * If set to true, the "-tooltip-multirecipient" and "-description-multirecipient"
+ * (instead of just "-tooltip" and "-description")
+ * entries will be looked for in the i18n catalog.
+ */
+function localizeStatus(status: string, data?: { [key: string]: any }): StatusInfo {
+  const isMultiRecipient = data?.isMultiRecipient;
+  // eslint-disable-next-line functional/no-let
+  let filteredData: any = omit(data, ['isMultiRecipient']);
+  if (Object.keys(filteredData).length === 0) {
+    filteredData = undefined;
+  }
+
+  return {
+    label: getLocalizedOrDefaultLabel(
+      'notifications',
+      `status.${status}${isMultiRecipient ? '-multirecipient' : ''}`
+    ),
+    tooltip: getLocalizedOrDefaultLabel(
+      'notifications',
+      `status.${status}-tooltip${isMultiRecipient ? '-multirecipient' : ''}`,
+      undefined,
+      filteredData
+    ),
+    description: getLocalizedOrDefaultLabel(
+      'notifications',
+      `status.${status}-description${isMultiRecipient ? '-multirecipient' : ''}`,
+      undefined,
+      filteredData
+    ),
+  };
 }
 
 /**
@@ -274,27 +317,7 @@ export function getNotificationStatusInfos(
 
   switch (actualStatus) {
     case NotificationStatus.DELIVERED: {
-      const statusInfos = localizeStatus('delivered', { isMultiRecipient });
-      // if the deliveryMode is defined, then change the description for a more specific one ...
-      const deliveryMode = statusObject?.deliveryMode;
-      // ... only for single-recipient notifications!
-      if (deliveryMode && !isMultiRecipient && !options?.isParty) {
-        const deliveryModeDescription = getLocalizedOrDefaultLabel(
-          'notifications',
-          `status.deliveryMode.${deliveryMode}`
-        );
-        statusInfos.description = getLocalizedOrDefaultLabel(
-          'notifications',
-          'status.delivered-description-with-delivery-mode',
-          undefined,
-          { deliveryMode: deliveryModeDescription }
-        );
-      }
-      // if it is a PA, change the title and the description
-      // ... only for single-recipient notifications!
-      if (options?.isParty && !isMultiRecipient) {
-        getNotificationDeliveredInfosForPA(statusInfos, statusObject, options.statusHistory || []);
-      }
+      const statusInfos = deliveredStatusVariant(isMultiRecipient, statusObject, options);
       // set the color at the end to avoid a type error since the color is defined as an union among some well-known strings
       return { color: 'default', ...statusInfos };
     }
