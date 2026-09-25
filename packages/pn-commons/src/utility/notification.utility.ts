@@ -210,7 +210,7 @@ function deliveredStatusVariant(
   ) {
     statusInfos.description = getLocalizedOrDefaultLabel(
       'notifications',
-      `status.delivered-description-${deliveryMode}`
+      `status.delivered-description-${deliveryMode}${isMultiRecipient ? '-multirecipient' : ''}`
     );
 
     return statusInfos;
