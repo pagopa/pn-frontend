@@ -66,7 +66,8 @@
           "sms": "SMS",
           "email": "E-pošta",
           "analog": "Poštna storitev",
-          "pec": "PEC"
+          "pec": "PEC",
+          "unknown": "Neznan kanal"
         },
         "status": {
           "ready_to_send": "V ČAKANJU",
@@ -122,6 +123,66 @@
         "label": "Nedoločeno",
         "tooltip": "Nedoločeno",
         "description": "Neznano stanje"
+      }
+    },
+    "timeline": {
+      "title": "Stanje sporočila",
+      "outcome": {
+        "viewed": {
+          "title": "Prebrano",
+          "description": "Prejemnik je prebral sporočilo."
+        },
+        "delivered": {
+          "title": "Dostavljeno",
+          "description": "Prejemnik je prejel sporočilo."
+        }
+      },
+      "event": {
+        "send_digital_message_feedback": {
+          "ok": {
+            "io": "Pošiljanje v IO je uspelo.",
+            "email": "Pošiljanje po e-pošti je uspelo.",
+            "sms": "Pošiljanje prek SMS je uspelo.",
+            "pec": "Pošiljanje prek PEC je uspelo."
+          },
+          "ko": {
+            "io": "Pošiljanje v IO ni mogoče.",
+            "email": "Pošiljanje po e-pošti ni mogoče.",
+            "sms": "Pošiljanje prek SMS ni mogoče.",
+            "pec": "Pošiljanje prek PEC ni mogoče."
+          }
+        },
+        "send_analog_message_feedback": {
+          "ok": {
+            "analog_registered": "Pošiljanje priporočenega pisma št. {{code}} uspešno.",
+            "analog_ordinary": "Pošiljanje z navadno pošto uspešno."
+          },
+          "ko": {
+            "analog_registered": "Pošiljanje priporočenega pisma ni mogoče.",
+            "analog_ordinary": "Pošiljanje z navadno pošto ni mogoče."
+          }
+        },
+        "delivered": {
+          "io": "Dostava v IO je uspela.",
+          "email": "Dostava po e-pošti je uspela.",
+          "sms": "Dostava prek SMS je uspela.",
+          "pec": "Dostava prek PEC je uspela.",
+          "analog_registered": "Dostava priporočenega pisma št. {{code}} uspešna.",
+          "analog_ordinary": "Dostava z navadno pošto uspešna."
+        },
+        "send_digital_message_skip": {
+          "io": "Računa prejemnika ni mogoče izslediti.",
+          "email": "E-poštnega naslova prejemnika ni mogoče izslediti.",
+          "sms": "Telefonske številke prejemnika ni mogoče izslediti.",
+          "pec": "Naslova PEC prejemnika ni mogoče izslediti."
+        },
+        "filed": {
+          "send": "Vloženo na platformi SEND."
+        },
+        "informal_notification_viewed": {
+          "io": "Prejemnik je prebral sporočilo v IO.",
+          "send": "Prejemnik je prebral sporočilo na platformi SEND."
+        }
       }
     }
   }

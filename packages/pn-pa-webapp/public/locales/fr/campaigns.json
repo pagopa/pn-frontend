@@ -66,7 +66,8 @@
           "sms": "SMS",
           "email": "Email",
           "analog": "Service postal",
-          "pec": "PEC"
+          "pec": "PEC",
+          "unknown": "Canal inconnu"
         },
         "status": {
           "ready_to_send": "EN ATTENTE",
@@ -122,6 +123,66 @@
         "label": "Non défini",
         "tooltip": "Non défini",
         "description": "Statut inconnu"
+      }
+    },
+    "timeline": {
+      "title": "Statut de la communication",
+      "outcome": {
+        "viewed": {
+          "title": "Lue",
+          "description": "Le destinataire a lu la communication."
+        },
+        "delivered": {
+          "title": "Livrée",
+          "description": "Le destinataire a reçu la communication."
+        }
+      },
+      "event": {
+        "send_digital_message_feedback": {
+          "ok": {
+            "io": "Envoi sur IO réussi.",
+            "email": "Envoi par e-mail réussi.",
+            "sms": "Envoi par SMS réussi.",
+            "pec": "Envoi par PEC réussi."
+          },
+          "ko": {
+            "io": "Impossible d'effectuer l'envoi sur IO.",
+            "email": "Impossible d'effectuer l'envoi par e-mail.",
+            "sms": "Impossible d'effectuer l'envoi par SMS.",
+            "pec": "Impossible d'effectuer l'envoi par PEC."
+          }
+        },
+        "send_analog_message_feedback": {
+          "ok": {
+            "analog_registered": "Envoi par lettre recommandée n° {{code}} réussi.",
+            "analog_ordinary": "Envoi par courrier ordinaire réussi."
+          },
+          "ko": {
+            "analog_registered": "Impossible d'effectuer l'envoi par lettre recommandée.",
+            "analog_ordinary": "Impossible d'effectuer l'envoi par courrier ordinaire."
+          }
+        },
+        "delivered": {
+          "io": "Livraison sur IO réussie.",
+          "email": "Livraison par e-mail réussie.",
+          "sms": "Livraison par SMS réussie.",
+          "pec": "Livraison par PEC réussie.",
+          "analog_registered": "Livraison par lettre recommandée n° {{code}} réussie.",
+          "analog_ordinary": "Livraison par courrier ordinaire réussie."
+        },
+        "send_digital_message_skip": {
+          "io": "Impossible de retrouver le compte du destinataire.",
+          "email": "Impossible de retrouver l'adresse e-mail du destinataire.",
+          "sms": "Impossible de retrouver le numéro de téléphone du destinataire.",
+          "pec": "Impossible de retrouver l'adresse PEC du destinataire."
+        },
+        "filed": {
+          "send": "Déposée sur la plateforme SEND."
+        },
+        "informal_notification_viewed": {
+          "io": "Le destinataire a lu la communication sur IO.",
+          "send": "Le destinataire a lu la communication sur la plateforme SEND."
+        }
       }
     }
   }
