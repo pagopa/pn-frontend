@@ -17,7 +17,7 @@
     "viewed-after-effective-date": "Notifica letta",
     "viewed-after-effective-date-description": "Hai effettuato un accesso alla notifica a valore legale su SEND dopo che questa ha assunto valore di legge.",
     "canceled": "Notifica annullata",
-    "canceled-description": "L'ente ha annullato l'invio della notifica SEND, che dall'annullamento in poi non produrrà più effetti giuridici.",
+    "canceled-description": "L'ente ha annullato l'invio della notifica SEND, che dall'annullamento in poi non produrrà più effetti giuridici. È possibile effettuare il <0>download della dichiarazione di annullamento</0>.",
     "returned-to-sender": "Notifica restituita all'ente mittente",
     "returned-to-sender-multirecipient": "Notifica restituita all'ente mittente",
     "returned-to-sender-description": "La persona destinataria di questa notifica SEND è stata dichiarata deceduta.",
