@@ -9,7 +9,7 @@ import DeliveredIcon from '@mui/icons-material/MarkEmailReadOutlined';
 import WaitingIcon from '@mui/icons-material/Schedule';
 import SentIcon from '@mui/icons-material/Send';
 import NotDeliveredIcon from '@mui/icons-material/Unsubscribe';
-import { Box, SvgIconProps, Typography } from '@mui/material';
+import { SvgIconProps, Typography } from '@mui/material';
 import SendIcon from '@pagopa-pn/pn-commons/src/components/Icons/SendIcon';
 import { LogoIOApp, MIPaper, themeNext } from '@pagopa/mui-italia';
 
@@ -144,13 +144,12 @@ const InformalNotificationChannelStatusBox = ({ channelsStatus }: Props) => {
 
       <InformalNotificationChannelStatusList>
         {channelsStatus.map(({ channel, status }) => (
-          <Box component="li" key={channel}>
-            <InformalNotificationChannelStatus
-              channel={getChannelPresentation(channel)}
-              status={getStatusPresentation(status)}
-              description={getDescription(channel, status)}
-            />
-          </Box>
+          <InformalNotificationChannelStatus
+            key={channel}
+            channel={getChannelPresentation(channel)}
+            status={getStatusPresentation(status)}
+            description={getDescription(channel, status)}
+          />
         ))}
       </InformalNotificationChannelStatusList>
     </MIPaper>

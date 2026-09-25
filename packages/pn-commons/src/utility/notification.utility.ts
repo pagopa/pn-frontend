@@ -15,9 +15,9 @@ import {
   LegalFactType,
   NotificationDetailDocument,
   NotificationDetailOtherDocument,
-  NotificationDetailPayment,
   NotificationDetailRecipient,
   NotificationDetailTimelineDetails,
+  NotificationPayment,
   NotificationStatusHistory,
   PagoPAPaymentFullDetails,
   PaidDetails,
@@ -698,7 +698,7 @@ export function getNotificationTimelineStatusInfos(
 }
 
 export const getF24Payments = (
-  payments: Array<NotificationDetailPayment>,
+  payments: Array<NotificationPayment>,
   recIndex: number,
   onlyF24: boolean = true
 ): Array<F24PaymentDetails> =>
@@ -715,7 +715,7 @@ export const getF24Payments = (
   }, [] as Array<F24PaymentDetails>);
 
 export const getPagoPaF24Payments = (
-  payments: Array<NotificationDetailPayment>,
+  payments: Array<NotificationPayment>,
   recIndex: number,
   withLoading: boolean = false
 ): Array<PaymentDetails> =>
@@ -744,7 +744,7 @@ export const getPagoPaF24Payments = (
  */
 export const populatePaymentsPagoPaF24 = (
   timeline: Array<INotificationDetailTimeline>,
-  pagoPaF24Payments: Array<PaymentDetails> | Array<NotificationDetailPayment>,
+  pagoPaF24Payments: Array<PaymentDetails> | Array<NotificationPayment>,
   checkoutPayments: Array<ExtRegistriesPaymentDetails>
 ): Array<PaymentDetails> => {
   const paymentDetails: Array<PaymentDetails> = [];

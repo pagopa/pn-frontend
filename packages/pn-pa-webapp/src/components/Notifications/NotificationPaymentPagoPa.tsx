@@ -17,6 +17,7 @@ import { getSentNotificationPayment } from '../../redux/notification/actions';
 type Props = {
   iun: string;
   payment: PagoPAPaymentFullDetails;
+  onDownload?: (payment: PagoPAPaymentFullDetails) => void;
 };
 
 type StatusVisualInfo = {
@@ -25,24 +26,30 @@ type StatusVisualInfo = {
   testId: string;
 };
 
-const getStatusVisualInfo = (status?: PaymentStatus): StatusVisualInfo => {
+const getStatusVisualInfo = (status?: PaymentStatus): StatusVisualInfo | undefined => {
   switch (status) {
     case PaymentStatus.SUCCEEDED:
       return { color: 'success', key: 'succeeded', testId: 'payment-succeeded' };
 
     case PaymentStatus.REQUIRED:
-    default:
       return { color: 'default', key: 'to-pay', testId: 'payment-required' };
+    default:
+      return undefined;
   }
 };
 
-const NotificationPaymentPagoPa: React.FC<Props> = ({ iun, payment }) => {
+const NotificationPaymentPagoPa: React.FC<Props> = ({ iun, payment, onDownload }) => {
   const { t } = useTranslation(['notifiche']);
   const dispatch = useAppDispatch();
 
   const statusVisualInfo = getStatusVisualInfo(payment.status);
 
   const downloadHandler = () => {
+    if (onDownload) {
+      onDownload(payment);
+      return;
+    }
+
     if (!isNil(payment.recIndex) && payment.attachment) {
       dispatch(
         getSentNotificationPayment({
@@ -92,13 +99,15 @@ const NotificationPaymentPagoPa: React.FC<Props> = ({ iun, payment }) => {
                 {payment.noticeCode}
               </Typography>
             </Grid>
-            <Grid item>
-              <MIChip
-                data-testid={statusVisualInfo.testId}
-                label={t(`payment.status.${statusVisualInfo.key}`)}
-                color={statusVisualInfo.color}
-              />
-            </Grid>
+            {statusVisualInfo && (
+              <Grid item>
+                <MIChip
+                  data-testid={statusVisualInfo.testId}
+                  label={t(`payment.status.${statusVisualInfo.key}`)}
+                  color={statusVisualInfo.color}
+                />
+              </Grid>
+            )}
           </Grid>
         </Box>
       ) : (
@@ -112,13 +121,15 @@ const NotificationPaymentPagoPa: React.FC<Props> = ({ iun, payment }) => {
               {payment.noticeCode}
             </Typography>
           </Grid>
-          <Grid item>
-            <MIChip
-              data-testid={statusVisualInfo.testId}
-              label={t(`payment.status.${statusVisualInfo.key}`)}
-              color={statusVisualInfo.color}
-            />
-          </Grid>
+          {statusVisualInfo && (
+            <Grid item>
+              <MIChip
+                data-testid={statusVisualInfo.testId}
+                label={t(`payment.status.${statusVisualInfo.key}`)}
+                color={statusVisualInfo.color}
+              />
+            </Grid>
+          )}
         </Grid>
       )}
     </MIBoxedModule>

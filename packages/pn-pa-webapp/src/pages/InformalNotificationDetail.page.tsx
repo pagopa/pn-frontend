@@ -10,6 +10,8 @@ import {
   LoadingPage,
   NotificationDetailDocuments,
   NotificationStatusBox,
+  PagoPAPaymentFullDetails,
+  PaymentAttachmentSName,
   appStateActions,
   downloadDocument,
   useErrors,
@@ -18,10 +20,10 @@ import { getInformalNotificationStatusInfos } from '@pagopa-pn/pn-commons/src/ut
 import { MIBreadcrumbItem, MIBreadcrumbs, MIPaper } from '@pagopa/mui-italia';
 
 import InformalNotificationChannelStatusBox from '../components/Notifications/InformalNotificationChannelStatus/InformalNotificationChannelStatusBox';
-import InformalNotificationPaymentSender from '../components/Notifications/InformalNotificationPaymentSender';
 import NotificationDetailsDrawer, {
   NotificationDetailsDrawerItem,
 } from '../components/Notifications/NotificationDetailsDrawer';
+import NotificationPaymentSender from '../components/Notifications/NotificationPaymentSender';
 import NotificationRecipientsDetail from '../components/Notifications/NotificationRecipientsDetail';
 import { BffDocumentDownloadMetadataResponse } from '../generated-client/informal-notifications';
 import * as routes from '../navigation/routes.const';
@@ -30,6 +32,7 @@ import {
   NOTIFICATION_ACTIONS,
   getSentInformalNotification,
   getSentInformalNotificationDocument,
+  getSentInformalNotificationPayment,
 } from '../redux/notification/actions';
 import { RootState } from '../redux/store';
 
@@ -130,6 +133,24 @@ const InformalNotificationDetail: React.FC = () => {
       getSentInformalNotificationDocument({
         iun: informalNotification.iun,
         docIdx: Number(document),
+      })
+    )
+      .unwrap()
+      .then(showInfoMessageIfRetryAfterOrDownload)
+      .catch(() => {});
+  };
+
+  const paymentDownloadHandler = (payment: PagoPAPaymentFullDetails) => {
+    if (payment.recIndex === undefined || !payment.attachment) {
+      return;
+    }
+
+    void dispatch(
+      getSentInformalNotificationPayment({
+        iun: informalNotification.iun,
+        recipientIdx: payment.recIndex,
+        attachmentName: PaymentAttachmentSName.PAGOPA,
+        attachmentIdx: payment.attachmentIdx,
       })
     )
       .unwrap()
@@ -241,11 +262,11 @@ const InformalNotificationDetail: React.FC = () => {
                 </MIPaper>
               )}
 
-              {recipients[0]?.payments?.[0] && (
-                <InformalNotificationPaymentSender
+              {recipients.some((recipient) => recipient.payments?.length) && (
+                <NotificationPaymentSender
                   iun={informalNotification.iun}
-                  payment={recipients[0].payments[0]}
-                  recipientIdx={0}
+                  recipients={recipients}
+                  onPagoPaDownload={paymentDownloadHandler}
                 />
               )}
             </Stack>

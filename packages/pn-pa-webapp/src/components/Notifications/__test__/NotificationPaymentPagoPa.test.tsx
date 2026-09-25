@@ -52,9 +52,9 @@ describe('NotificationPaymentPagoPa Component', () => {
     );
     expect(container).toHaveTextContent('detail.notice-code');
     expect(container).toHaveTextContent(paymentHistory[0].pagoPa?.noticeCode!);
-    expect(container).toHaveTextContent('payment.status.to-pay');
-    // payment without status defaults to required
-    expect(queryByTestId('payment-required')).toBeInTheDocument();
+    expect(container).not.toHaveTextContent('payment.status.to-pay');
+    // payment without status doesn't show a status
+    expect(queryByTestId('payment-required')).not.toBeInTheDocument();
     // payment with status succeeded
     paymentHistory[0].pagoPa!.status = PaymentStatus.SUCCEEDED;
     rerender(
@@ -130,7 +130,7 @@ describe('NotificationPaymentPagoPa Component', () => {
         payment={paymentHistory[indexItem].pagoPa!}
       />
     );
-    expect(container).toHaveTextContent('payment.status.to-pay');
+    expect(container).not.toHaveTextContent('payment.status.to-pay');
     expect(container).not.toHaveTextContent('payment.pagopa-notice');
   });
 });

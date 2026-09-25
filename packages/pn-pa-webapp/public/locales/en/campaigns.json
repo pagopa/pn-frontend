@@ -54,10 +54,6 @@
         "download-message-expired": "The documents are no longer available online.",
         "document-not-available": "The document is not yet available. Try again later."
       },
-      "payments": {
-        "title": "Payments",
-        "notice-code": "Notice code"
-      },
       "send-by-channel": {
         "title": "Sending details by channel",
         "channel": {

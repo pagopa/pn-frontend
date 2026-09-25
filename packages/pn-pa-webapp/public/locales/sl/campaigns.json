@@ -54,10 +54,6 @@
         "download-message-expired": "Dokumenti niso več na voljo na spletu.",
         "document-not-available": "Dokument še ni na voljo. Poskusite znova pozneje."
       },
-      "payments": {
-        "title": "Plačila",
-        "notice-code": "Koda obvestila"
-      },
       "send-by-channel": {
         "title": "Podrobnosti pošiljanja po kanalu",
         "channel": {

@@ -229,6 +229,15 @@ export interface NotificationDetailPayment {
   f24?: F24PaymentDetails;
 }
 
+export type NotificationPayment = {
+  pagoPa?: {
+    creditorTaxId: string;
+    noticeCode: string;
+    attachment?: Attachment;
+  };
+  f24?: F24PaymentDetails;
+};
+
 export interface PaymentNotice {
   noticeNumber: string;
   fiscalCode: string;

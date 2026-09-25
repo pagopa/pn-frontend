@@ -54,10 +54,6 @@
         "download-message-expired": "Die Dokumente sind nicht mehr online verfügbar.",
         "document-not-available": "Das Dokument ist noch nicht verfügbar. Versuche es später noch einmal."
       },
-      "payments": {
-        "title": "Zahlungen",
-        "notice-code": "Mitteilungscode"
-      },
       "send-by-channel": {
         "title": "Versanddetails nach Kanal",
         "channel": {
