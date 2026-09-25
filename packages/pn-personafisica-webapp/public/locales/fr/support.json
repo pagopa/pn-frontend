@@ -2,7 +2,7 @@
   "title": "Comment pouvons-nous vous aider ?",
   "sub-title": "Veuillez indiquer l’adresse mail à laquelle vous souhaitez recevoir les réponses de l’assistance.",
   "form": {
-    "email": "Saisissez l’adresse mail",
+    "email": "Saisissez l'adresse e-mail (non PEC)",
     "confirm-email": "Confirmez l’adresse mail",
     "errors": {
       "not-valid": "L’adresse mail est invalide",
@@ -10,6 +10,7 @@
       "not-the-same": "L’adresse mail de confirmation n’est pas la même que l’adresse mail saisie"
     }
   },
+  "pec-disclaimer": "Saisissez une adresse e-mail standard : les demandes envoyées depuis une adresse PEC ne peuvent pas être traitées par l'assistance.",
   "disclaimer": "En poursuivant, vous déclarez avoir lu la <0>Politique de Confidentialité Assistance</0>",
   "exit-title": "Voulez-vous vraiment sortir ?",
   "exit-message": "Si vous sortez, votre demande d’assistance sera perdue.",
