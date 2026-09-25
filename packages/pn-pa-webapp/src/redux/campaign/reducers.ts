@@ -4,6 +4,7 @@ import {
   BffCampaignDetailResponseV1,
   BffInformalSenderNotificationSearchResponse,
   CampaignSummary,
+  InformalNotificationStatusV1,
 } from '../../generated-client/informal-notifications';
 import { getCampaignCommunications, getCampaignDetail, getCampaigns } from './actions';
 
@@ -14,7 +15,7 @@ const initialState = {
   communicationFilters: {
     recipientId: '',
     iunMatch: '',
-    status: '',
+    status: [] as Array<InformalNotificationStatusV1>,
     outcome: '',
   },
   pagination: {
@@ -63,15 +64,7 @@ const campaignSlice = createSlice({
       state.communicationsPagination.moreResult = false;
     },
 
-    setCommunicationFilters: (
-      state,
-      action: PayloadAction<{
-        recipientId: string;
-        iunMatch: string;
-        status: string;
-        outcome: string;
-      }>
-    ) => {
+    setCommunicationFilters: (state, action) => {
       state.communicationFilters = action.payload;
     },
 
@@ -95,7 +88,7 @@ const campaignSlice = createSlice({
 
       if (action.payload.nextPagesKey) {
         for (const pageKey of action.payload.nextPagesKey) {
-          if (state.pagination.nextPagesKey.indexOf(pageKey) === -1) {
+          if (!state.pagination.nextPagesKey.includes(pageKey)) {
             state.pagination.nextPagesKey.push(pageKey);
           }
         }

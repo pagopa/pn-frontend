@@ -35,7 +35,7 @@ import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { RootState } from '../../redux/store';
 import PnCampaignCommunicationsFilters from './PnCampaignCommunicationsFilters';
 import PnCommunicationOutcomeTag from './PnCommunicationOutcomeTag';
-import PnCommunicationStatusTooltip from './PnCommunicationStatusTooltip';
+import PnCommunicationStatusMIChip from './PnCommunicationStatusMiChip';
 
 type CampaignCommunicationRow = BffInformalSenderNotificationSearchRow & {
   action?: string;
@@ -84,7 +84,7 @@ const PnCampaignCommunications = () => {
       values: {
         recipientId: '',
         iunMatch: '',
-        status: '',
+        status: [],
         outcome: '',
       },
     });
@@ -95,7 +95,7 @@ const PnCampaignCommunications = () => {
       setCommunicationFilters({
         recipientId: '',
         iunMatch: '',
-        status: '',
+        status: [],
         outcome: '',
       })
     );
@@ -138,7 +138,7 @@ const PnCampaignCommunications = () => {
   ) => {
     if (columnId === 'notificationStatus') {
       return (
-        <PnCommunicationStatusTooltip
+        <PnCommunicationStatusMIChip
           status={row.notificationStatus as InformalNotificationStatus}
         />
       );
@@ -278,7 +278,7 @@ const PnCampaignCommunications = () => {
           initialValues={{
             recipientId: '',
             iunMatch: '',
-            status: '',
+            status: [],
             outcome: '',
           }}
         >

@@ -13,27 +13,42 @@ type Props = {
 const PnCampaignCommunicationsFilters = ({ formik, handleChangeTouched, handlePaste }: Props) => {
   const { t } = useTranslation('campaigns');
 
+  const CampaignCommunicationStatusFilter = {
+    READY: 'READY',
+    PROCESSING: 'PROCESSING',
+    SUCCESS: 'SUCCESS',
+    FAILED: 'FAILED',
+    REFUSED: 'REFUSED',
+  };
+
   const statusOptions = [
     {
-      id: InformalNotificationStatus.ACCEPTED,
+      id: CampaignCommunicationStatusFilter.READY,
       label: t('detail.communications.statuses.ready'),
+      value: [InformalNotificationStatus.ACCEPTED],
     },
     {
-      id: InformalNotificationStatus.PROCESSING,
+      id: CampaignCommunicationStatusFilter.PROCESSING,
       label: t('detail.communications.statuses.processing'),
+      value: [InformalNotificationStatus.PROCESSING],
     },
-    // TODO manca InformalNotificationStatus.COMPLETED_UNREACHED
     {
-      id: InformalNotificationStatus.COMPLETED_REACHED,
+      id: CampaignCommunicationStatusFilter.SUCCESS,
       label: t('detail.communications.statuses.success'),
+      value: [
+        InformalNotificationStatus.COMPLETED_REACHED,
+        InformalNotificationStatus.COMPLETED_UNREACHED,
+      ],
     },
     {
-      id: InformalNotificationStatus.UNDELIVERABLE,
+      id: CampaignCommunicationStatusFilter.FAILED,
       label: t('detail.communications.statuses.failed'),
+      value: [InformalNotificationStatus.UNDELIVERABLE],
     },
     {
-      id: InformalNotificationStatus.REFUSED,
+      id: CampaignCommunicationStatusFilter.REFUSED,
       label: t('detail.communications.statuses.refused'),
+      value: [InformalNotificationStatus.REFUSED],
     },
   ];
 
@@ -88,12 +103,12 @@ const PnCampaignCommunicationsFilters = ({ formik, handleChangeTouched, handlePa
           id="status"
           options={statusOptions}
           getOptionLabel={(option) => option.label}
-          isOptionEqualToValue={(option, value) => option.id === value.id}
+          isOptionEqualToValue={(option, value) => option.value === value.value}
           label={t('detail.communications.status')}
           placeholder={t('detail.communications.status')}
-          value={statusOptions.find((option) => option.id === formik.values.status)}
+          value={statusOptions.find((option) => option.value === formik.values.status)}
           onChange={(newValue) => {
-            void formik.setFieldValue('status', newValue?.id ?? '');
+            void formik.setFieldValue('status', [newValue?.value ?? '']);
           }}
         />
       </Grid>

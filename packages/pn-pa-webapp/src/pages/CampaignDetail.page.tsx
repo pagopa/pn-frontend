@@ -9,7 +9,6 @@ import { MIBreadcrumbItem, MIBreadcrumbs } from '@pagopa/mui-italia';
 import PnCampaignCommunications from '../components/Campaigns/PnCampaignCommunications';
 import PnCampaignDetailCard from '../components/Campaigns/PnCampaignDetailCard';
 import PnCampaignDetailLoading from '../components/Campaigns/PnCampaignDetailLoading';
-import { InformalNotificationStatusV1 } from '../generated-client/informal-notifications';
 import * as routes from '../navigation/routes.const';
 import {
   CAMPAIGN_ACTIONS,
@@ -57,9 +56,7 @@ const CampaignDetail: React.FC = () => {
           campaignId: id,
           recipientId: communicationFilters.recipientId || undefined,
           iunMatch: communicationFilters.iunMatch || undefined,
-          status: communicationFilters.status
-            ? (communicationFilters.status as InformalNotificationStatusV1)
-            : undefined,
+          status: communicationFilters.status.length > 0 ? communicationFilters.status : undefined,
           viewed: communicationFilters.outcome === 'viewed' ? true : undefined,
           delivered: communicationFilters.outcome === 'delivered' ? true : undefined,
           size: communicationsPagination.size,

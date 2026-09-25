@@ -1,12 +1,13 @@
 import { useTranslation } from 'react-i18next';
 
-import { InformalNotificationStatus, StatusTooltip } from '@pagopa-pn/pn-commons';
+import { InformalNotificationStatus } from '@pagopa-pn/pn-commons';
+import { MIChip } from '@pagopa/mui-italia';
 
 type Props = {
   status?: InformalNotificationStatus;
 };
 
-const PnCommunicationStatusTooltip = ({ status }: Props) => {
+const PnCommunicationStatusMIChip = ({ status }: Props) => {
   const { t } = useTranslation('campaigns');
 
   const getStatusInfo = () => {
@@ -24,11 +25,11 @@ const PnCommunicationStatusTooltip = ({ status }: Props) => {
         };
 
       case InformalNotificationStatus.COMPLETED_REACHED:
+      case InformalNotificationStatus.COMPLETED_UNREACHED:
         return {
           label: t('detail.communications.statuses.success'),
           color: 'success' as const,
         };
-
       case InformalNotificationStatus.UNDELIVERABLE:
         return {
           label: t('detail.communications.statuses.failed'),
@@ -51,7 +52,7 @@ const PnCommunicationStatusTooltip = ({ status }: Props) => {
 
   const { label, color } = getStatusInfo();
 
-  return <StatusTooltip label={label} tooltip="" color={color} />;
+  return <MIChip label={label} color={color} />;
 };
 
-export default PnCommunicationStatusTooltip;
+export default PnCommunicationStatusMIChip;

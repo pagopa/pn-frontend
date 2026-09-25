@@ -35,7 +35,7 @@ interface GetCampaignCommunicationsParams {
   campaignId: string;
   recipientId?: string;
   iunMatch?: string;
-  status?: InformalNotificationStatusV1;
+  status?: Array<InformalNotificationStatusV1>;
   viewed?: boolean;
   delivered?: boolean;
   size?: number;
