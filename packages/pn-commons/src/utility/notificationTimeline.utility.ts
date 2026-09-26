@@ -45,6 +45,7 @@ export const emptyLegalFactPlan = <T extends LegalFactCarrier>(): StatusLegalFac
 const legalFactStatusMap = new Map<NotificationStatus, TimelineCategory>([
   [NotificationStatus.ACCEPTED, TimelineCategory.REQUEST_ACCEPTED],
   [NotificationStatus.VIEWED, TimelineCategory.NOTIFICATION_VIEWED],
+  [NotificationStatus.CANCELLED, TimelineCategory.NOTIFICATION_CANCELLED],
 ]);
 
 export const isTimelineGroupStep = (

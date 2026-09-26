@@ -16,6 +16,7 @@ const AppMessage = () => {
   const errors = useSelector(appStateSelectors.selectErrors);
   const success = useSelector(appStateSelectors.selectSuccess);
   const info = useSelector(appStateSelectors.selectInfo);
+  const warning = useSelector(appStateSelectors.selectWarning);
   const [currentMessage, setCurrentMessage] = useState<EnqueuedMessage | null>(null);
   const [queue, setQueue] = useState<Array<EnqueuedMessage>>([]);
 
@@ -32,6 +33,8 @@ const AppMessage = () => {
       dispatch(appStateActions.setErrorAsAlreadyShown(message.message.id));
     } else if (message.type === AppResponseOutcome.SUCCESS) {
       dispatch(appStateActions.removeSuccess(message.message.id));
+    } else if (message.type === AppResponseOutcome.WARNING) {
+      dispatch(appStateActions.removeWarning(message.message.id));
     } else {
       dispatch(appStateActions.removeInfo(message.message.id));
     }
@@ -79,6 +82,10 @@ const AppMessage = () => {
   useEffect(() => {
     enqueueMessages(info, AppResponseOutcome.INFO);
   }, [info]);
+
+  useEffect(() => {
+    enqueueMessages(warning, AppResponseOutcome.WARNING);
+  }, [warning]);
 
   return (
     <>

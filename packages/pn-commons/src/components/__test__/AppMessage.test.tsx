@@ -56,6 +56,7 @@ describe('AppMessage Component', () => {
             errors: [baseMessage],
             success: [],
             info: [],
+            warning: [],
           },
         },
       },
@@ -80,6 +81,7 @@ describe('AppMessage Component', () => {
             errors: [techMessage],
             success: [],
             info: [],
+            warning: [],
           },
         },
       },
@@ -104,6 +106,7 @@ describe('AppMessage Component', () => {
             errors: [shownMessage],
             success: [],
             info: [],
+            warning: [],
           },
         },
       },
@@ -120,6 +123,7 @@ describe('AppMessage Component', () => {
             errors: [],
             success,
             info: [],
+            warning: [],
           },
         },
       },
@@ -143,6 +147,7 @@ describe('AppMessage Component', () => {
             errors: [],
             success: [],
             info,
+            warning: [],
           },
         },
       },
@@ -156,5 +161,29 @@ describe('AppMessage Component', () => {
     });
 
     expect(testStore.getState().appState.messages.info).toStrictEqual([]);
+  });
+
+  it('renders toast and dispatches event on close - warning', async () => {
+    const { testStore, getByTestId } = render(<AppMessage />, {
+      preloadedState: {
+        appState: {
+          messages: {
+            errors: [],
+            success: [],
+            info: [],
+            warning: [baseMessage],
+          },
+        },
+      },
+    });
+
+    const snackBarContainer = getByTestId('snackBarContainer');
+    expect(snackBarContainer).toBeInTheDocument();
+
+    await act(async () => {
+      vi.advanceTimersByTime(5000);
+    });
+
+    expect(testStore.getState().appState.messages.warning).toStrictEqual([]);
   });
 });

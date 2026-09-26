@@ -113,6 +113,14 @@ const NotificationTimeline: React.FC = () => {
 
   const legalFactDownloadHandler = (legalFact: LegalFactId) => {
     if (legalFact.category !== LegalFactType.NOTIFICATION_CANCELLED && isCancelledOrCancelling) {
+      if (IS_NEW_TIMELINE_COPY_ENABLED) {
+        dispatch(
+          appStateActions.addWarning({
+            title: '',
+            message: t('detail.document-unavailable', { ns: 'notifiche' }),
+          })
+        );
+      }
       return;
     }
 
@@ -298,7 +306,9 @@ const NotificationTimeline: React.FC = () => {
                   recipients={notificationTimeline.recipients}
                   statusHistory={notificationTimeline.notificationStatusHistory}
                   clickHandler={legalFactDownloadHandler}
-                  disableDownloads={isCancelled.cancellationInTimeline}
+                  disableDownloads={
+                    !IS_NEW_TIMELINE_COPY_ENABLED && isCancelled.cancellationInTimeline
+                  }
                   isNewTimelineCopyEnabled={IS_NEW_TIMELINE_COPY_ENABLED}
                   perfectionLink={NOTIFICATION_PERFECTION_LINK}
                 />
