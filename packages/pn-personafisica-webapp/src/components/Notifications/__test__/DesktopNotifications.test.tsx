@@ -1,7 +1,5 @@
 import { vi } from 'vitest';
 
-import { formatToTimezoneString, tenYearsAgo, today } from '@pagopa-pn/pn-commons';
-
 import { digitalAddressesSercq } from '../../../__mocks__/Contacts.mock';
 import { mandatesByDelegate } from '../../../__mocks__/Delegations.mock';
 import { notificationsToFe } from '../../../__mocks__/Notifications.mock';
@@ -19,6 +17,7 @@ import DesktopNotifications from '../DesktopNotifications';
 
 describe('DesktopNotifications Component', () => {
   let result: RenderResult;
+  const onCleanFilters = vi.fn();
 
   const original = globalThis.ResizeObserver;
 
@@ -30,6 +29,10 @@ describe('DesktopNotifications Component', () => {
     }));
   });
 
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
   afterAll(() => {
     globalThis.ResizeObserver = original;
   });
@@ -37,18 +40,24 @@ describe('DesktopNotifications Component', () => {
   it('renders component - no notification - no contacts', async () => {
     // render component
     await act(async () => {
-      result = render(<DesktopNotifications notifications={[]} />, {
-        preloadedState: {
-          contactsState: {
-            digitalAddresses: [],
+      result = render(
+        <DesktopNotifications
+          notifications={[]}
+          filtersApplied={false}
+          onCleanFilters={onCleanFilters}
+        />,
+        {
+          preloadedState: {
+            contactsState: {
+              digitalAddresses: [],
+            },
           },
-        },
-      });
+        }
+      );
     });
-    const filters = result.queryByTestId('filter-form');
-    expect(filters).not.toBeInTheDocument();
-    const norificationTable = result.queryByTestId('notificationsTable');
-    expect(norificationTable).not.toBeInTheDocument();
+
+    const notificationTable = result.queryByTestId('notificationsTable');
+    expect(notificationTable).not.toBeInTheDocument();
     expect(result.container).toHaveTextContent(/empty-state.title/i);
     expect(result.container).toHaveTextContent(/empty-state.description-onboarding/i);
     // clicks on empty state action
@@ -60,18 +69,23 @@ describe('DesktopNotifications Component', () => {
   it('renders component - no notification - with contacts', async () => {
     // render component
     await act(async () => {
-      result = render(<DesktopNotifications notifications={[]} />, {
-        preloadedState: {
-          contactsState: {
-            digitalAddresses: digitalAddressesSercq,
+      result = render(
+        <DesktopNotifications
+          notifications={[]}
+          filtersApplied={false}
+          onCleanFilters={onCleanFilters}
+        />,
+        {
+          preloadedState: {
+            contactsState: {
+              digitalAddresses: digitalAddressesSercq,
+            },
           },
-        },
-      });
+        }
+      );
     });
-    const filters = result.queryByTestId('filter-form');
-    expect(filters).not.toBeInTheDocument();
-    const norificationTable = result.queryByTestId('notificationsTable');
-    expect(norificationTable).not.toBeInTheDocument();
+    const notificationTable = result.queryByTestId('notificationsTable');
+    expect(notificationTable).not.toBeInTheDocument();
     expect(result.container).toHaveTextContent(/empty-state.title/i);
     expect(result.container).toHaveTextContent(/empty-state.description/i);
     // clicks on empty state action
@@ -84,53 +98,61 @@ describe('DesktopNotifications Component', () => {
     // render component
     await act(async () => {
       result = render(
-        <DesktopNotifications notifications={[]} currentDelegator={mandatesByDelegate[0]} />
+        <DesktopNotifications
+          notifications={[]}
+          filtersApplied={false}
+          onCleanFilters={onCleanFilters}
+          currentDelegator={mandatesByDelegate[0]}
+        />
       );
     });
-    const filters = result.queryByTestId('filter-form');
-    expect(filters).not.toBeInTheDocument();
-    const norificationTable = result.queryByTestId('notificationsTable');
-    expect(norificationTable).not.toBeInTheDocument();
+    const notificationTable = result.queryByTestId('notificationsTable');
+    expect(notificationTable).not.toBeInTheDocument();
     expect(result.container).toHaveTextContent(/empty-state.delegate/i);
   });
 
   it('renders component - notification', async () => {
     // render component
     await act(async () => {
-      result = render(<DesktopNotifications notifications={notificationsToFe.resultsPage} />);
+      result = render(
+        <DesktopNotifications
+          notifications={notificationsToFe.resultsPage}
+          filtersApplied={false}
+          onCleanFilters={onCleanFilters}
+        />
+      );
     });
-    const filters = result.getByTestId('filter-form');
-    expect(filters).toBeInTheDocument();
-    const norificationTableRows = result.getAllByTestId('notificationsTable.body.row');
-    expect(norificationTableRows).toHaveLength(notificationsToFe.resultsPage.length);
+    const notificationTableRows = result.getAllByTestId('notificationsTable.body.row');
+    expect(notificationTableRows).toHaveLength(notificationsToFe.resultsPage.length);
   });
 
   it('renders component - no notification after filter', async () => {
     // render component
     await act(async () => {
-      result = render(<DesktopNotifications notifications={[]} />, {
-        preloadedState: {
-          dashboardState: {
-            filters: {
-              startDate: formatToTimezoneString(tenYearsAgo),
-              endDate: formatToTimezoneString(today),
-              iunMatch: 'ABCD-EFGH-ILMN-123456-A-1',
-              mandateId: undefined,
-            },
-          },
-        },
-      });
+      result = render(
+        <DesktopNotifications notifications={[]} filtersApplied onCleanFilters={onCleanFilters} />
+      );
     });
-    // the rerendering must be done to take the useRef updates
-    result.rerender(<DesktopNotifications notifications={[]} />);
-    const filters = await waitFor(() => result.queryByTestId('filter-form'));
-    expect(filters).toBeInTheDocument();
+
+    const notificationTable = result.queryByTestId('notificationsTable');
+    expect(notificationTable).not.toBeInTheDocument();
     expect(result.container).toHaveTextContent(/empty-state.filtered/i);
+
+    const button = result.getByTestId('link-remove-filters');
+    fireEvent.click(button);
+
+    expect(onCleanFilters).toHaveBeenCalledTimes(1);
   });
 
   it('go to notification detail', async () => {
     await act(async () => {
-      result = render(<DesktopNotifications notifications={notificationsToFe.resultsPage} />);
+      result = render(
+        <DesktopNotifications
+          notifications={notificationsToFe.resultsPage}
+          filtersApplied={false}
+          onCleanFilters={onCleanFilters}
+        />
+      );
     });
     const rows = result.getAllByTestId('notificationsTable.body.row');
     const notificationsTableCellArrow = within(rows[0]).getByTestId('goToNotificationDetail');

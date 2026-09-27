@@ -125,11 +125,9 @@ describe('NewApiKey component', () => {
     const mockApiKeysPageBefore = result.queryByTestId('mock-api-keys-page');
     expect(mockApiKeysPageBefore).not.toBeInTheDocument();
 
-    // simulate click on the breadcrumb link ...
-    const links = result.getAllByRole('link');
-    expect(links[0]).toHaveTextContent(/title/i);
-    expect(links[0]).toHaveAttribute('href', routes.API_KEYS);
-    fireEvent.click(links[0]);
+    // simulate clicking the button ...
+    const breadcrumbRootButton = result.getByTestId('breadcrumb-root-button');
+    fireEvent.click(breadcrumbRootButton);
 
     // ... hence prompt must be shown
     const promptDialog = await waitFor(() => result.getByTestId('promptDialog'));

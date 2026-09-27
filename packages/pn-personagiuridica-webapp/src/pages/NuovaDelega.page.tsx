@@ -5,7 +5,6 @@ import { useNavigate } from 'react-router-dom';
 import * as yup from 'yup';
 
 import AccountBalanceRoundedIcon from '@mui/icons-material/AccountBalance';
-import PeopleRoundedIcon from '@mui/icons-material/PeopleRounded';
 import {
   Box,
   Divider,
@@ -24,7 +23,6 @@ import {
   CustomDatePicker,
   DATE_FORMAT,
   DatePickerTypes,
-  PnBreadcrumb,
   RecipientType,
   TitleBox,
   dataRegex,
@@ -33,7 +31,13 @@ import {
   useIsMobile,
   useSearchStringChangeInput,
 } from '@pagopa-pn/pn-commons';
-import { Autocomplete, IllusMICompleted, MIButton } from '@pagopa/mui-italia';
+import {
+  Autocomplete,
+  IllusMICompleted,
+  MIBreadcrumbItem,
+  MIBreadcrumbs,
+  MIButton,
+} from '@pagopa/mui-italia';
 
 import VerificationCodeComponent from '../components/Deleghe/VerificationCodeComponent';
 import LoadingPageWrapper from '../components/LoadingPageWrapper/LoadingPageWrapper';
@@ -63,6 +67,9 @@ const NuovaDelega = () => {
   const isMobile = useIsMobile();
   const dispatch = useAppDispatch();
   const { entities, created } = useAppSelector((state: RootState) => state.newDelegationState);
+  const organizationName = useAppSelector(
+    (state: RootState) => state.userState.user?.organization?.name
+  );
   const handleSearchStringChangeInput = useSearchStringChangeInput();
   const [senderInputValue, setSenderInputValue] = useState('');
   const { DELEGATIONS_TO_PG_ENABLED } = getConfiguration();
@@ -212,19 +219,20 @@ const NuovaDelega = () => {
 
   const breadcrumbs = (
     <>
-      <PnBreadcrumb
-        linkRoute={routes.DELEGATI}
-        linkLabel={
-          <>
-            <PeopleRoundedIcon sx={{ mr: 0.5 }} />
-            {t('deleghe.title')}
-          </>
-        }
-        currentLocationLabel={t('nuovaDelega.breadcrumb')}
-      />
+      <MIBreadcrumbs
+        backButtonLabel={t('button.indietro', { ns: 'common' })}
+        backButtonAction={() => navigate(routes.DELEGATI)}
+      >
+        <MIBreadcrumbItem
+          label={t('deleghe.title')}
+          onClick={() => navigate(routes.DELEGATI)}
+          data-testid="breadcrumb-root-button"
+        />
+        <MIBreadcrumbItem label={t('nuovaDelega.breadcrumb')} current />
+      </MIBreadcrumbs>
       <TitleBox
         title={t('nuovaDelega.title')}
-        subTitle={t('nuovaDelega.subtitle')}
+        subTitle={t('nuovaDelega.subtitle', { organizationName })}
         variantTitle="h3"
         variantSubTitle="body1"
         sx={{ pt: '20px' }}

@@ -5,6 +5,7 @@
     "indietro": "Nazaj",
     "annulla": "Prekliči",
     "enter": "Vstopi",
+    "open": "Odpri",
     "exit": "Izhod",
     "continue": "Nadaljuj",
     "send": "Pošlji",
@@ -15,6 +16,8 @@
   "menu": {
     "notifications-send": "Obvestilo s SEND",
     "notifications": "Obvestila",
+    "communications": "Komunicirajte s SEND",
+    "campaigns": "Kampanje",
     "users": "Uporabniki",
     "groups": "Skupine",
     "api-key": "Ključ API",

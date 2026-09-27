@@ -18,7 +18,8 @@ import {
   EventNotificationTypes,
   EventPaymentRecipientType,
   GetDowntimeHistoryParams,
-  IllusQuestion,
+  LegalFactId,
+  LegalFactType,
   NotificationDetailBilingualFacsimileDocuments,
   NotificationDetailDocuments,
   NotificationDetailOtherDocument,
@@ -32,7 +33,6 @@ import {
   PagoPaIntegrationMode,
   PaymentAttachmentSName,
   PaymentDetails,
-  PnBreadcrumb,
   StatusHistoryParser,
   appStateActions,
   downloadDocument,
@@ -45,7 +45,13 @@ import {
   EventDeliveryFlowType,
   EventDeliveryModeType,
 } from '@pagopa-pn/pn-commons/src/models/MixpanelEvents';
-import { MIAlert, MIPaper } from '@pagopa/mui-italia';
+import {
+  IllusMIQuestion,
+  MIAlert,
+  MIBreadcrumbItem,
+  MIBreadcrumbs,
+  MIPaper,
+} from '@pagopa/mui-italia';
 
 import NotificationDetailOnboardingPrompt from '../components/Contacts/Onboarding/NotificationDetailOnboardingPrompt';
 import DomicileBanner from '../components/DomicileBanner/DomicileBanner';
@@ -96,11 +102,13 @@ const NotificationDetail: React.FC = () => {
     DOWNTIME_EXAMPLE_LINK,
     NOTIFICATION_COST_DETAILS_ASSISTANCE_LINK,
     NOTIFICATION_CANCELLED_HELP_LINK,
+    NOTIFICATION_PERFECTION_LINK,
     FACSIMILE_EN,
     FACSIMILE_FR,
     FACSIMILE_DE,
     FACSIMILE_SL,
     SELFCARE_CDN_URL,
+    IS_NEW_TIMELINE_COPY_ENABLED,
   } = getConfiguration();
   const navigate = useNavigate();
 
@@ -436,15 +444,24 @@ const NotificationDetail: React.FC = () => {
       : t('menu.notifiche-utente', { ns: 'common' });
 
     return (
-      <PnBreadcrumb
-        showBackAction={!rapidAccessSource}
-        linkRoute={backRoute}
-        linkLabel={
-          mandateId || delegatorsFromStore.length > 0 ? breadcrumbLabel : t('menu.notifiche')
+      <MIBreadcrumbs
+        backButtonLabel={
+          rapidAccessSource ? t('menu.notifiche') : t('button.indietro', { ns: 'common' })
         }
-        currentLocationLabel={notification.subject ?? ''}
-        goBackAction={() => navigate(backRoute)}
-      />
+        backButtonAction={() => navigate(backRoute)}
+      >
+        <MIBreadcrumbItem
+          label={
+            mandateId || delegatorsFromStore.length > 0 ? breadcrumbLabel : t('menu.notifiche')
+          }
+          onClick={() => navigate(backRoute)}
+          data-testid="breadcrumb-root-button"
+        />
+        <MIBreadcrumbItem
+          label={notification.subject || t('menu.fallback-notification', { ns: 'common' })}
+          current
+        />
+      </MIBreadcrumbs>
     );
   }, [rapidAccessSource, i18n.language, notification.subject, delegatorsFromStore, mandateId]);
 
@@ -536,7 +553,7 @@ const NotificationDetail: React.FC = () => {
     const i18nKey = currentUser.source?.retrievalId ? 'from-tpp' : 'from-qrcode';
     return (
       <AccessDenied
-        icon={<IllusQuestion />}
+        icon={<IllusMIQuestion />}
         message={t(`${i18nKey}.not-found`, { ns: 'notifiche' })}
         subtitle={t(`${i18nKey}.not-found-subtitle`, { ns: 'notifiche' })}
         isLogged={true}
@@ -568,6 +585,39 @@ const NotificationDetail: React.FC = () => {
     return mandateId
       ? navigate(routes.GET_DETTAGLIO_NOTIFICA_DELEGATO_TIMELINE_PATH(id, mandateId))
       : navigate(routes.GET_DETTAGLIO_NOTIFICA_TIMELINE_PATH(id));
+  };
+
+  const legalFactDownloadHandler = (legalFact: LegalFactId) => {
+    if (legalFact.category !== LegalFactType.NOTIFICATION_CANCELLED && isCancelledOrCancelling) {
+      return;
+    }
+
+    const isAAR = legalFact.category === NotificationDocumentType.AAR;
+    const documentType = isAAR ? NotificationDocumentType.AAR : NotificationDocumentType.LEGAL_FACT;
+    const documentId = isAAR
+      ? legalFact.key
+      : legalFact.key.substring(legalFact.key.lastIndexOf('/') + 1);
+
+    dispatch(
+      getReceivedNotificationDocument({
+        iun: notification.iun,
+        documentType,
+        documentId,
+        mandateId,
+      })
+    )
+      .unwrap()
+      .then(showInfoMessageIfRetryAfterOrDownload)
+      .catch(() => {});
+
+    if (!isAAR) {
+      PFEventStrategyFactory.triggerEvent(
+        PFEventsType.SEND_DOWNLOAD_CERTIFICATE_OPPOSABLE_TO_THIRD_PARTIES,
+        {
+          source: 'dettaglio_notifica',
+        }
+      );
+    }
   };
 
   return (
@@ -702,6 +752,9 @@ const NotificationDetail: React.FC = () => {
                     recipients={notification.recipients}
                     isParty={false}
                     onTimelineClick={handleGoToTimeline}
+                    clickHandler={legalFactDownloadHandler}
+                    isNewTimelineCopyEnabled={IS_NEW_TIMELINE_COPY_ENABLED}
+                    perfectionLink={NOTIFICATION_PERFECTION_LINK}
                   />
                 )}
                 <NotificationDetailSection

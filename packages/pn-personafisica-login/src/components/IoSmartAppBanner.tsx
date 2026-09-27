@@ -14,7 +14,10 @@ const IOSmartAppBanner: React.FC<StackProps> = (props) => {
 
   return (
     <Stack id="ioSmartAppBanner" direction="row" alignItems="center" p={2} {...props}>
-      <Avatar variant="rounded" sx={{ bgcolor: 'primary.main', width: '30px', height: '30px' }}>
+      <Avatar
+        variant="rounded"
+        sx={{ bgcolor: 'primary.main', width: '30px', height: '30px', padding: '5px' }}
+      >
         <LogoIOApp title="AppIoLogo" color="light" />
       </Avatar>
       <Stack direction="column" mx={1}>

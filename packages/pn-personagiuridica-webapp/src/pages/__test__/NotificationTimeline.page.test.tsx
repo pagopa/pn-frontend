@@ -44,6 +44,8 @@ vi.mock('../../services/configuration.service', async () => {
 
 describe('NotificationTimeline Page - IS_NEW_TIMELINE_ENABLED enabled', () => {
   const timelineIun = NotificationTimelineResponse.iun;
+  const timelineSubject = NotificationTimelineResponse.subject;
+  const mandateId = 'mocked-mandate-id';
 
   const timelineResponseWithHiddenLegalFact = (legalFactKey: string, category: string) => ({
     ...NotificationTimelineResponse,
@@ -223,11 +225,120 @@ describe('NotificationTimeline Page - IS_NEW_TIMELINE_ENABLED enabled', () => {
       expect(globalThis.location.href).toBe('https://mocked-aar-url.com');
     });
   });
+
+  it('check the breadcrumb items', async () => {
+    mock
+      .onGet(`/bff/v1/notifications/received/${timelineIun}/timeline`)
+      .reply(200, NotificationTimelineResponse);
+
+    await act(async () => {
+      result = render(<NotificationTimeline />, {
+        route: routes.GET_DETTAGLIO_NOTIFICA_TIMELINE_PATH(timelineIun),
+        path: routes.DETTAGLIO_NOTIFICA_TIMELINE,
+      });
+    });
+
+    // root breadcrumb item is rendered
+    const rootButton = result.getByTestId('breadcrumb-root-button');
+    expect(rootButton).toBeInTheDocument();
+
+    // subject breadcrumb item is rendered and shows the notification IUN
+    const subjectButton = result.getByTestId('breadcrumb-subject-button');
+    expect(subjectButton).toBeInTheDocument();
+    expect(subjectButton).toHaveTextContent(timelineSubject);
+  });
+
+  it('navigates to the notification detail when clicking the subject breadcrumb', async () => {
+    mock
+      .onGet(`/bff/v1/notifications/received/${timelineIun}/timeline`)
+      .reply(200, NotificationTimelineResponse);
+
+    await act(async () => {
+      result = render(<NotificationTimeline />, {
+        route: routes.GET_DETTAGLIO_NOTIFICA_TIMELINE_PATH(timelineIun),
+        path: routes.DETTAGLIO_NOTIFICA_TIMELINE,
+      });
+    });
+
+    const subjectButton = result.getByTestId('breadcrumb-subject-button');
+    fireEvent.click(subjectButton);
+
+    await waitFor(() => {
+      expect(result.router.state.location.pathname).toBe(
+        routes.GET_DETTAGLIO_NOTIFICA_PATH(timelineIun)
+      );
+    });
+  });
+
+  it('navigates back when clicking the root breadcrumb', async () => {
+    mock
+      .onGet(`/bff/v1/notifications/received/${timelineIun}/timeline`)
+      .reply(200, NotificationTimelineResponse);
+
+    await act(async () => {
+      result = render(<NotificationTimeline />, {
+        route: routes.GET_DETTAGLIO_NOTIFICA_TIMELINE_PATH(timelineIun),
+        path: routes.DETTAGLIO_NOTIFICA_TIMELINE,
+      });
+    });
+
+    const rootButton = result.getByTestId('breadcrumb-root-button');
+    fireEvent.click(rootButton);
+
+    await waitFor(() => {
+      expect(result.router.state.location.pathname).toBe(routes.NOTIFICHE);
+    });
+  });
+
+  it('navigates to the delegate notifications list when clicking the root breadcrumb', async () => {
+    mock
+      .onGet(`/bff/v1/notifications/received/${notificationDTO.iun}?mandateId=${mandateId}`)
+      .reply(200, notificationDTO);
+
+    await act(async () => {
+      result = render(<NotificationTimeline />, {
+        route: routes.GET_DETTAGLIO_NOTIFICA_DELEGATO_TIMELINE_PATH(
+          notificationDTO.iun,
+          mandateId
+        ),
+        path: routes.DETTAGLIO_NOTIFICA_DELEGATO_TIMELINE,
+      });
+    });
+
+    const rootButton = result.getByTestId('breadcrumb-root-button');
+    fireEvent.click(rootButton);
+
+    await waitFor(() => {
+      expect(result.router.state.location.pathname).toBe(routes.NOTIFICHE_DELEGATO);
+    });
+  });
+
+  it('navigates to the delegate notification detail when clicking the subject breadcrumb', async () => {
+    mock
+      .onGet(`/bff/v1/notifications/received/${notificationDTO.iun}?mandateId=${mandateId}`)
+      .reply(200, notificationDTO);
+
+    await act(async () => {
+      result = render(<NotificationTimeline />, {
+        route: routes.GET_DETTAGLIO_NOTIFICA_DELEGATO_PATH(notificationDTO.iun, mandateId),
+        path: routes.DETTAGLIO_NOTIFICA_DELEGATO,
+      });
+    });
+
+    const subjectButton = result.getByTestId('breadcrumb-subject-button');
+    fireEvent.click(subjectButton);
+
+    await waitFor(() => {
+      expect(result.router.state.location.pathname).toBe(
+        routes.GET_DETTAGLIO_NOTIFICA_DELEGATO_PATH(notificationDTO.iun, mandateId)
+      );
+    });
+  });
 });
 
 describe('NotificationTimeline Page - new timeline disabled', () => {
   const mockLegalIds = getLegalFactIds(notificationDTO, 1);
-
+  const mandateId = 'mocked-mandate-id';
   let result: RenderResult;
   let mock: MockAdapter;
 
@@ -327,6 +438,108 @@ describe('NotificationTimeline Page - new timeline disabled', () => {
 
     await waitFor(() => {
       expect(globalThis.location.href).toBe('https://mocked-url-com');
+    });
+  });
+
+  it('check the breadcrumb items', async () => {
+    mock.onGet(`/bff/v1/notifications/received/${notificationDTO.iun}`).reply(200, notificationDTO);
+
+    await act(async () => {
+      result = render(<NotificationTimeline />, {
+        route: routes.GET_DETTAGLIO_NOTIFICA_TIMELINE_PATH(notificationDTO.iun),
+        path: routes.DETTAGLIO_NOTIFICA_TIMELINE,
+      });
+    });
+
+    // root breadcrumb item is rendered
+    const rootButton = result.getByTestId('breadcrumb-root-button');
+    expect(rootButton).toBeInTheDocument();
+
+    // subject breadcrumb item is rendered and shows the notification IUN
+    const subjectButton = result.getByTestId('breadcrumb-subject-button');
+    expect(subjectButton).toBeInTheDocument();
+    expect(subjectButton).toHaveTextContent(notificationDTO.subject);
+  });
+
+  it('navigates to the notification detail when clicking the subject breadcrumb', async () => {
+    mock.onGet(`/bff/v1/notifications/received/${notificationDTO.iun}`).reply(200, notificationDTO);
+    await act(async () => {
+      result = render(<NotificationTimeline />, {
+        route: routes.GET_DETTAGLIO_NOTIFICA_TIMELINE_PATH(notificationDTO.iun),
+        path: routes.DETTAGLIO_NOTIFICA_TIMELINE,
+      });
+    });
+
+    const subjectButton = result.getByTestId('breadcrumb-subject-button');
+    fireEvent.click(subjectButton);
+
+    await waitFor(() => {
+      expect(result.router.state.location.pathname).toBe(
+        routes.GET_DETTAGLIO_NOTIFICA_PATH(notificationDTO.iun)
+      );
+    });
+  });
+
+  it('navigates back when clicking the root breadcrumb', async () => {
+    mock.onGet(`/bff/v1/notifications/received/${notificationDTO.iun}`).reply(200, notificationDTO);
+
+    await act(async () => {
+      result = render(<NotificationTimeline />, {
+        route: routes.GET_DETTAGLIO_NOTIFICA_TIMELINE_PATH(notificationDTO.iun),
+        path: routes.DETTAGLIO_NOTIFICA_TIMELINE,
+      });
+    });
+
+    const rootButton = result.getByTestId('breadcrumb-root-button');
+    fireEvent.click(rootButton);
+
+    await waitFor(() => {
+      expect(result.router.state.location.pathname).toBe(routes.NOTIFICHE);
+    });
+  });
+
+  it('navigates to the delegate notifications list when clicking the root breadcrumb', async () => {
+    mock
+      .onGet(`/bff/v1/notifications/received/${notificationDTO.iun}?mandateId=${mandateId}`)
+      .reply(200, notificationDTO);
+
+    await act(async () => {
+      result = render(<NotificationTimeline />, {
+        route: routes.GET_DETTAGLIO_NOTIFICA_DELEGATO_TIMELINE_PATH(
+          notificationDTO.iun,
+          mandateId
+        ),
+        path: routes.DETTAGLIO_NOTIFICA_DELEGATO_TIMELINE,
+      });
+    });
+
+    const rootButton = result.getByTestId('breadcrumb-root-button');
+    fireEvent.click(rootButton);
+
+    await waitFor(() => {
+      expect(result.router.state.location.pathname).toBe(routes.NOTIFICHE_DELEGATO);
+    });
+  });
+
+  it('navigates to the delegate notification detail when clicking the subject breadcrumb', async () => {
+    mock
+      .onGet(`/bff/v1/notifications/received/${notificationDTO.iun}?mandateId=${mandateId}`)
+      .reply(200, notificationDTO);
+
+    await act(async () => {
+      result = render(<NotificationTimeline />, {
+        route: routes.GET_DETTAGLIO_NOTIFICA_DELEGATO_PATH(notificationDTO.iun, mandateId),
+        path: routes.DETTAGLIO_NOTIFICA_DELEGATO,
+      });
+    });
+
+    const subjectButton = result.getByTestId('breadcrumb-subject-button');
+    fireEvent.click(subjectButton);
+
+    await waitFor(() => {
+      expect(result.router.state.location.pathname).toBe(
+        routes.GET_DETTAGLIO_NOTIFICA_DELEGATO_PATH(notificationDTO.iun, mandateId)
+      );
     });
   });
 });

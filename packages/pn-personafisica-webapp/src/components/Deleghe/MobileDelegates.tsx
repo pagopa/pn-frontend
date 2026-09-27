@@ -103,7 +103,7 @@ const MobileDelegates = () => {
         isReadOnly
       />
       <Box data-testid="mobile-delegates-wrapper">
-        <Typography variant="h4" mb={3}>
+        <Typography component="h2" variant="h4" mb={3}>
           {t('deleghe.delegatesTitle')}
         </Typography>
         <Box mb={2}>

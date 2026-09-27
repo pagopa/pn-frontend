@@ -92,7 +92,7 @@ const PnSenderContacts = ({ phone, site, handleTrackEventFn }: SenderContactsPro
                       justifyContent="space-between"
                       sx={{ width: '100%' }}
                     >
-                      <Typography variant="body2" color="text.primary" fontWeight={500}>
+                      <Typography variant="body2" color="text.primary" fontWeight={600}>
                         {phone}
                       </Typography>
 

@@ -65,6 +65,7 @@
     "legal-date": "Zustellung hinterlegt am",
     "informal-date": "Mitteilung hinterlegt am",
     "legal-disclaimer": "Zustellung über SEND gesendet, die durch Art. 26 des Gesetzesdekrets 76/2020 geregelte Plattform",
+    "informal-disclaimer": "Diese Mitteilung könnte Rechtswirkungen entfalten. Prüfe die Anlagen, falls vorhanden, um mehr zu erfahren.",
     "notification-timeline-section": {
       "title": "Status der Zustellung",
       "aria-label": "Gehe zur Timeline der Zustellung"
@@ -145,8 +146,8 @@
         "duplicated": "Diese Benachrichtigung wurde bereits bezahlt. Der Status wird in Kürze aktualisiert."
       },
       "error-payment": "Wählen Sie eine Zahlungsaufforderung aus",
-      "error-payment-failed-single": "Es ist ein Problem mit einer Zahlungsaufforderung aufgetreten. Drücken Sie auf Neu laden, um es erneut zu versuchen. Wenn der Fehler weiterhin besteht, kontaktieren Sie den Support.",
-      "error-payment-failed-multiple": "Es ist ein Problem mit mehreren Zahlungsaufforderungen aufgetreten. Drücken Sie auf Neu laden, um es erneut zu versuchen. Wenn der Fehler weiterhin besteht, kontaktieren Sie den Support.",
+      "error-payment-failed-single": "Bei einer Zahlungsaufforderung ist ein Problem aufgetreten. Drücke auf <0>Neu laden</0>, um es erneut zu versuchen. Wenn der Fehler weiterhin besteht, kontaktiere den Support.",
+      "error-payment-failed-multiple": "Bei mehreren Zahlungsaufforderungen ist ein Problem aufgetreten. Drücke auf <0>Neu laden</0>, um es erneut zu versuchen. Wenn der Fehler weiterhin besteht, kontaktiere den Support.",
       "tpp-expired-error-title": "Die Verbindung zur Bank ist abgelaufen.",
       "tpp-expired-error-description": "Um sie wiederherzustellen, greife über die Nachricht, die du in deiner Bank-App erhalten hast, erneut auf diese Benachrichtigung zu."
     },
@@ -162,7 +163,7 @@
       "greeting": "Ciao {{recipientDenomination}},",
       "attachments_info": "Per avere maggiori informazioni <0>prendi visione degli allegati,</0> che possono fornirti dettagli importanti.",
       "payment_instructions": "Puoi effettuare il pagamento direttamente premendo <0>Paga</0>. In alternativa, puoi utilizzare l'<0>avviso allegato</0> per saldare l'importo tramite tutti i canali abilitati a pagoPA.",
-      "assistance": "In ogni caso, qualora avessi bisogno di assistenza, <0>contatta {{senderDenomination}} attraverso i suoi canali ufficiali.</0>"
+      "assistance": "In ogni caso, qualora avessi bisogno di assistenza, <0>contatta {{senderDenomination}}</0> attraverso i suoi canali ufficiali."
     },
     "acts_files": {
       "downloadable_acts": "<0>Die Dokumente sind bis zu 120 Tage lang online verfügbar</0> ab dem Datum, an dem die SEND-Benachrichtigung rechtlich wirksam wurde. Speichern Sie sie auf Ihrem Gerät!",
@@ -204,6 +205,7 @@
       "send-digital-success-SERCQ-SEND-description": "Der Versand der Zustellung an das digitale Domizil SEND war erfolgreich.",
       "send-digital-success-SERCQ-SEND-description-multirecipient": "Der Versand der Zustellung an {{name}} {{taxId}} an das digitale Domizil SEND war erfolgreich.",
       "send-simple-registered-letter": "Einfacher Versand per Einschreiben",
+      "send-simple-registered-letter-group-label": "Einfacher Versand per Einschreiben",
       "send-simple-registered-letter-description": "Die Zustellung an die Anschrift {{address}} per einfachem Einschreiben wird gesendet.",
       "send-simple-registered-letter-description-multirecipient": "Die Zustellung an die Anschrift {{address}} von {{name}} {{taxId}} per einfachem Einschreiben wird gesendet.",
       "simple-registered-letter-progess": "Aktualisierung des Versands per Einschreiben",
@@ -400,6 +402,7 @@
         "M07": "weil die Adresse nicht existiert",
         "M08": "weil die Adresse unvollständig ist",
         "M09": "aus anderen Gründen",
+        "M10": "weil die Adresse nicht lesbar ist",
         "F01": "wegen Diebstahls des Umschlags",
         "F02": "wegen Verlust des Umschlags",
         "F03": "wegen Beschädigung des Umschlags",

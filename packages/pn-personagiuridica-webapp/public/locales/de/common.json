@@ -40,7 +40,9 @@
     "integrazione-api": "API-Integration",
     "app-status": "Plattformstatus",
     "users": "Benutzer",
-    "groups": "Gruppen"
+    "groups": "Gruppen",
+    "fallback-notification": "Zustellungsdetails",
+    "fallback-communication": "Mitteilungsdetails"
   },
   "header": {
     "assistance": "Hilfe",

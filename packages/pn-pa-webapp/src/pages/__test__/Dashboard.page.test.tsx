@@ -228,6 +228,35 @@ describe('Dashboard Page', () => {
     expect(rows[0]).toHaveTextContent(notificationsDTO.resultsPage[1].iun);
   });
 
+  it('keeps filters visible when active filter returns no notifications', async () => {
+    mock.onGet(notificationsPath).reply(200, notificationsDTO);
+
+    const filteredRecipient = notificationsDTO.resultsPage[0].recipients[0];
+    const notificationsPathFiltered = `/bff/v1/notifications/sent?startDate=${startParam}&endDate=${endParam}&recipientId=${filteredRecipient}&size=10`;
+
+    mock.onGet(notificationsPathFiltered).reply(200, emptyNotificationsFromBe);
+
+    await act(async () => {
+      result = render(<Dashboard />);
+    });
+
+    // apply filter
+    const form = result.getByTestId('filter-form') as HTMLFormElement;
+    await testInput(form, 'recipientId', filteredRecipient);
+
+    const submitButton = form.querySelector('button[type="submit"]');
+    expect(submitButton).toBeEnabled();
+    fireEvent.click(submitButton!);
+
+    await waitFor(() => {
+      expect(mock.history.get).toHaveLength(2);
+      expect(mock.history.get[1].url).toContain(`recipientId=${filteredRecipient}`);
+    });
+
+    // no notifications returned, but filters must remain visible
+    expect(result.queryByTestId('filter-form')).toBeInTheDocument();
+  });
+
   it('errors on api', async () => {
     mock.onGet(notificationsPath).reply(errorMock.status, errorMock.data);
 
@@ -250,9 +279,8 @@ describe('Dashboard Page', () => {
 
     expect(screen.getByTestId('link-retry')).toBeInTheDocument();
 
-    // filters should be visible on desktop
-    const filterForm = screen.getByTestId('filter-form');
-    expect(filterForm).toBeInTheDocument();
+    // filters should be hidden when there are no notifications
+    expect(screen.queryByTestId('filter-form')).not.toBeInTheDocument();
   });
 
   it('shows timeout empty state when getSentNotifications times out', async () => {
@@ -278,6 +306,47 @@ describe('Dashboard Page', () => {
     });
   });
 
+  it('does not crash when an active filter request times out', async () => {
+    mock.onGet(notificationsPath).reply(200, notificationsDTO);
+
+    const filteredRecipient = notificationsDTO.resultsPage[0].recipients[0];
+    const notificationsPathFiltered = `/bff/v1/notifications/sent?startDate=${startParam}&endDate=${endParam}&recipientId=${filteredRecipient}&size=10`;
+
+    mock.onGet(notificationsPathFiltered).reply(timeoutErrorMock.status, timeoutErrorMock.data);
+
+    await act(async () => {
+      result = render(
+        <>
+          <ResponseEventDispatcher />
+          <AppResponseMessage />
+          <Dashboard />
+        </>
+      );
+    });
+
+    // Dashboard initially renders notifications and filters
+    expect(result.getByTestId('filter-form')).toBeInTheDocument();
+
+    // Apply filter
+    const form = result.getByTestId('filter-form') as HTMLFormElement;
+    await testInput(form, 'recipientId', filteredRecipient);
+
+    const submitButton = form.querySelector('button[type="submit"]');
+    expect(submitButton).toBeEnabled();
+    fireEvent.click(submitButton!);
+
+    // Filtered request is performed
+    await waitFor(() => {
+      expect(mock.history.get).toHaveLength(2);
+      expect(mock.history.get[1].url).toContain(`recipientId=${filteredRecipient}`);
+    });
+
+    // Timeout state is rendered without crashing the Dashboard
+    await waitFor(() => {
+      expect(screen.getByText(/empty-state\.timeout/i)).toBeInTheDocument();
+    });
+  });
+
   it('renders page - mobile', async () => {
     globalThis.matchMedia = createMatchMedia(800);
     mock.onGet(notificationsPath).reply(200, notificationsDTO);
@@ -298,7 +367,7 @@ describe('Dashboard Page', () => {
     expect(pageSelector).toBeInTheDocument();
   });
 
-  it('errors on api - mobile keeps filter toggle visible', async () => {
+  it('errors on api - mobile hides filter toggle', async () => {
     globalThis.matchMedia = createMatchMedia(800);
     mock.onGet(notificationsPath).reply(errorMock.status, errorMock.data);
 
@@ -321,9 +390,8 @@ describe('Dashboard Page', () => {
 
     expect(screen.getByTestId('link-retry')).toBeInTheDocument();
 
-    // On mobile we expect the toggle for filters to be visible
-    const toggle = screen.getByTestId('dialogToggle');
-    expect(toggle).toBeInTheDocument();
+    // On mobile filters are hidden when there are no notifications
+    expect(screen.queryByTestId('dialogToggle')).not.toBeInTheDocument();
   });
 
   it('mobile: opens filters drawer and applies recipientId filter', async () => {

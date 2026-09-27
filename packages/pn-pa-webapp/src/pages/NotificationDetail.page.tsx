@@ -10,6 +10,7 @@ import {
   AppResponse,
   AppResponsePublisher,
   GetDowntimeHistoryParams,
+  LegalFactId,
   LoadingPage,
   NotificationDetailDocuments,
   NotificationDetailOtherDocument,
@@ -19,14 +20,13 @@ import {
   NotificationDocumentType,
   NotificationRelatedDowntimes,
   NotificationTimelineBox,
-  PnBreadcrumb,
   appStateActions,
   downloadDocument,
   useErrors,
   useIsCancelled,
 } from '@pagopa-pn/pn-commons';
 import type { DocumentsDownloadFilesMessage } from '@pagopa-pn/pn-commons/src/components/NotificationDetail/NotificationDetailDocuments';
-import { MIAlert, MIPaper, Tag } from '@pagopa/mui-italia';
+import { MIAlert, MIBreadcrumbItem, MIBreadcrumbs, MIPaper, Tag } from '@pagopa/mui-italia';
 
 import NotificationCancellationAction from '../components/Notifications/NotificationCancellationAction';
 import NotificationDetailsDrawer, {
@@ -78,7 +78,7 @@ const NotificationDetail: React.FC = () => {
   const dispatch = useAppDispatch();
   const { hasApiErrors } = useErrors();
   const notification = useAppSelector((state: RootState) => state.notificationState.notification);
-  const { DOWNTIME_EXAMPLE_LINK } = getConfiguration();
+  const { DOWNTIME_EXAMPLE_LINK, IS_NEW_TIMELINE_COPY_ENABLED } = getConfiguration();
 
   const downtimeEvents = useAppSelector(
     (state: RootState) => state.notificationState.downtimeEvents
@@ -258,12 +258,17 @@ const NotificationDetail: React.FC = () => {
   }, []);
 
   const properBreadcrumb = (
-    <PnBreadcrumb
-      linkRoute={routes.DASHBOARD}
-      linkLabel={t('detail.breadcrumb-root', { ns: 'notifiche' })}
-      currentLocationLabel={notification.iun}
-      goBackLabel={t('button.indietro', { ns: 'common' })}
-    />
+    <MIBreadcrumbs
+      backButtonLabel={t('button.indietro', { ns: 'common' })}
+      backButtonAction={() => navigate(routes.DASHBOARD)}
+    >
+      <MIBreadcrumbItem
+        label={t('detail.breadcrumb-root', { ns: 'notifiche' })}
+        onClick={() => navigate(routes.DASHBOARD)}
+        data-testid="breadcrumb-root-button"
+      />
+      <MIBreadcrumbItem label={notification.iun} current />
+    </MIBreadcrumbs>
   );
 
   const handleGoToTimeline = () => {
@@ -343,6 +348,21 @@ const NotificationDetail: React.FC = () => {
     },
   ].filter((detail) => detail.value);
 
+  const legalFactDownloadHandler = (legalFact: LegalFactId) => {
+    PAEventStrategyFactory.triggerEvent(PAEventsType.SEND_PA_TIMELINE_DOWNLOAD, { legalFact });
+
+    const isAAR = legalFact.category === NotificationDocumentType.AAR;
+    const documentType = isAAR ? NotificationDocumentType.AAR : NotificationDocumentType.LEGAL_FACT;
+    const documentId = isAAR
+      ? legalFact.key
+      : legalFact.key.substring(legalFact.key.lastIndexOf('/') + 1);
+
+    dispatch(getSentNotificationDocument({ iun: notification.iun, documentType, documentId }))
+      .unwrap()
+      .then(showInfoMessageIfRetryAfterOrDownload)
+      .catch(() => {});
+  };
+
   return (
     <>
       {hasNotificationSentApiError && (
@@ -397,6 +417,7 @@ const NotificationDetail: React.FC = () => {
                   detailsAriaLabel={t('detail.notification-details-aria-label', {
                     ns: 'notifiche',
                   })}
+                  isSender
                 />
               </Stack>
               {/* end ELEMENT 1: intro and alert */}
@@ -471,6 +492,8 @@ const NotificationDetail: React.FC = () => {
                   recipients={notification.recipients}
                   isParty={true}
                   onTimelineClick={handleGoToTimeline}
+                  clickHandler={legalFactDownloadHandler}
+                  isNewTimelineCopyEnabled={IS_NEW_TIMELINE_COPY_ENABLED}
                 />
               )}
               <NotificationDetailSection

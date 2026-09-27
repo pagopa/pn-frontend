@@ -3,11 +3,8 @@ import { vi } from 'vitest';
 import { notificationTimelineDTO } from '../../../../__mocks__/NotificationTimeline.mock';
 import { TimelineCategory } from '../../../../models/NotificationDetail';
 import { NotificationTimelineEvent } from '../../../../models/NotificationTimeline';
-import { fireEvent, render, within } from '../../../../test-utils';
-import {
-  getLegalFactLabel,
-  getNotificationTimelineStatusInfos,
-} from '../../../../utility/notification.utility';
+import { fireEvent, initLocalizationForTest, render, within } from '../../../../test-utils';
+import { getNotificationTimelineStatusInfos } from '../../../../utility/notification.utility';
 import {
   flattenTimelineSteps,
   formatTimelineDate,
@@ -17,16 +14,11 @@ import NotificationTimelineEventItem from '../NotificationTimelineEventItem';
 const [viewedStatus, deliveringStatus] = notificationTimelineDTO.notificationStatusHistory;
 
 const recipients = notificationTimelineDTO.recipients;
-const allEvents = flattenTimelineSteps(deliveringStatus.steps);
+const deliveringAllEvents = flattenTimelineSteps(deliveringStatus.steps);
 
-const visibleEvent = allEvents[allEvents.length - 1];
+const visibleEvent = deliveringAllEvents[2];
 
 const hiddenEvent = flattenTimelineSteps(viewedStatus.steps)[0];
-
-const eventWithLegalFacts: NotificationTimelineEvent = {
-  ...visibleEvent,
-  legalFactsIds: hiddenEvent.legalFactsIds,
-};
 
 const clickHandler = vi.fn();
 
@@ -34,7 +26,7 @@ const renderEvent = (event: NotificationTimelineEvent, props?: Record<string, un
   render(
     <NotificationTimelineEventItem
       event={event}
-      allEvents={allEvents}
+      allEvents={deliveringAllEvents}
       recipients={recipients}
       clickHandler={clickHandler}
       disableDownloads={false}
@@ -44,6 +36,10 @@ const renderEvent = (event: NotificationTimelineEvent, props?: Record<string, un
   );
 
 describe('NotificationTimelineEventItem', () => {
+  beforeAll(() => {
+    initLocalizationForTest();
+  });
+
   afterEach(() => {
     vi.clearAllMocks();
   });
@@ -51,7 +47,11 @@ describe('NotificationTimelineEventItem', () => {
   it('renders label, description, date and reworked tag of a visible event', () => {
     const { getByTestId } = renderEvent(visibleEvent);
 
-    const statusInfo = getNotificationTimelineStatusInfos(visibleEvent, recipients, allEvents);
+    const statusInfo = getNotificationTimelineStatusInfos(
+      visibleEvent,
+      recipients,
+      deliveringAllEvents
+    );
     const item = getByTestId('timeline-event');
     expect(item).toHaveTextContent(statusInfo!.label);
     expect(item).toHaveTextContent(statusInfo!.description as string);
@@ -62,17 +62,29 @@ describe('NotificationTimelineEventItem', () => {
     expect(item).toHaveTextContent('status.reworked-status-not-valid');
   });
 
-  it('downloads the legal facts of a visible event', () => {
-    const { getAllByTestId } = renderEvent(eventWithLegalFacts);
-
-    const legalFact = eventWithLegalFacts.legalFactsIds![0];
-    const legalFactButtons = getAllByTestId('download-legalfact-micro');
-    expect(legalFactButtons).toHaveLength(1);
-    expect(legalFactButtons[0]).toHaveTextContent(
-      getLegalFactLabel(eventWithLegalFacts, legalFact.category, legalFact.key)
+  it('renders the legal fact inline and downloads it when the new copy is enabled', () => {
+    const legalFact = visibleEvent.legalFactsIds![0];
+    const statusInfo = getNotificationTimelineStatusInfos(
+      visibleEvent,
+      recipients,
+      deliveringAllEvents
     );
 
-    fireEvent.click(legalFactButtons[0]);
+    const eventWithInlineCopy: NotificationTimelineEvent = {
+      ...visibleEvent,
+    };
+
+    const { container, getByTestId } = renderEvent(eventWithInlineCopy, {
+      isNewTimelineCopyEnabled: true,
+    });
+
+    const inlineButton = getByTestId('download-legalfact-micro');
+
+    expect(container).toHaveTextContent(statusInfo!.description as string);
+    expect(inlineButton).toBeInTheDocument();
+
+    fireEvent.click(inlineButton);
+
     expect(clickHandler).toHaveBeenCalledTimes(1);
     expect(clickHandler).toHaveBeenCalledWith(legalFact);
   });
@@ -86,20 +98,57 @@ describe('NotificationTimelineEventItem', () => {
     expect(emptyContainer).toBeEmptyDOMElement();
   });
 
-  it('renders as a list item when asBullet is set', () => {
-    const { container } = renderEvent(visibleEvent, { asBullet: true });
+  it('renders multiple event legal facts as an ordered list below the description', () => {
+    const firstLegalFact = visibleEvent.legalFactsIds![0];
+    const secondLegalFact = {
+      ...firstLegalFact,
+      key: 'safestorage://fictional-second-legal-fact.pdf',
+    };
+
+    const event = {
+      ...visibleEvent,
+      legalFactsIds: [firstLegalFact, secondLegalFact],
+    };
+
+    const statusInfo = getNotificationTimelineStatusInfos(event, recipients, deliveringAllEvents);
+
+    const { getByTestId, getAllByTestId } = renderEvent(event, {
+      isNewTimelineCopyEnabled: true,
+    });
+
+    const timelineEvent = getByTestId('timeline-event');
+    const buttons = getAllByTestId('download-legalfact-micro');
+
+    expect(timelineEvent).toHaveTextContent(statusInfo!.description as string);
+    expect(buttons).toHaveLength(2);
+    expect(buttons[0]).toHaveTextContent('detail.timeline.legalfact');
+    expect(buttons[1]).toHaveTextContent('detail.timeline.legalfact');
+
+    fireEvent.click(buttons[0]);
+    fireEvent.click(buttons[1]);
+
+    expect(clickHandler).toHaveBeenNthCalledWith(1, firstLegalFact);
+    expect(clickHandler).toHaveBeenNthCalledWith(2, secondLegalFact);
+  });
+
+  it('renders as a list item when insideAGroup is set', () => {
+    const { container } = renderEvent(visibleEvent, { insideAGroup: true });
 
     const item = within(container).getByTestId('timeline-event');
     expect(item.tagName).toBe('LI');
-    const statusInfo = getNotificationTimelineStatusInfos(visibleEvent, recipients, allEvents);
+    const statusInfo = getNotificationTimelineStatusInfos(
+      visibleEvent,
+      recipients,
+      deliveringAllEvents
+    );
     expect(item).toHaveTextContent(`${statusInfo!.label} - ${statusInfo!.description}`);
 
-    const { container: bulletContainer } = renderEvent(hiddenEvent, { asBullet: true });
+    const { container: bulletContainer } = renderEvent(hiddenEvent, { insideAGroup: true });
     expect(within(bulletContainer).getAllByTestId('download-legalfact-micro')).toHaveLength(1);
   });
 
   it('wraps a hidden event in a <li> when rendered inside a bullet list', () => {
-    const { container } = renderEvent(hiddenEvent, { asBullet: true });
+    const { container } = renderEvent(hiddenEvent, { insideAGroup: true });
 
     const legalFactButton = within(container).getByTestId('download-legalfact-micro');
     expect(legalFactButton.closest('li')).not.toBeNull();
@@ -110,16 +159,31 @@ describe('NotificationTimelineEventItem', () => {
   });
 
   it('disables the download when disableDownloads is set, except for the cancelled notification', () => {
-    const { container } = renderEvent(eventWithLegalFacts, { disableDownloads: true });
+    const { container } = renderEvent(visibleEvent, { disableDownloads: true });
     expect(within(container).getByTestId('download-legalfact-micro')).toBeDisabled();
 
     const cancelledEvent: NotificationTimelineEvent = {
-      ...eventWithLegalFacts,
+      ...visibleEvent,
       category: TimelineCategory.NOTIFICATION_CANCELLED,
     };
     const { container: cancelledContainer } = renderEvent(cancelledEvent, {
       disableDownloads: true,
     });
     expect(within(cancelledContainer).getByTestId('download-legalfact-micro')).toBeEnabled();
+  });
+
+  it('renders a visible event legal fact below the description when the new copy is disabled', () => {
+    const legalFact = visibleEvent.legalFactsIds![0];
+
+    const { getByRole } = renderEvent(visibleEvent, {
+      isNewTimelineCopyEnabled: false,
+    });
+
+    const legalFactButton = getByRole('button');
+
+    fireEvent.click(legalFactButton);
+
+    expect(clickHandler).toHaveBeenCalledTimes(1);
+    expect(clickHandler).toHaveBeenCalledWith(legalFact);
   });
 });

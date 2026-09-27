@@ -2,23 +2,39 @@ import KeyboardArrowRightRoundedIcon from '@mui/icons-material/KeyboardArrowRigh
 import { Stack, Typography } from '@mui/material';
 import { MIButton, MIChip, MIPaper } from '@pagopa/mui-italia';
 
-import { NotificationDetailRecipient, NotificationStatusHistory } from '../../models';
+import {
+  INotificationDetailTimeline,
+  LegalFactId,
+  NotificationDetailRecipient,
+  NotificationStatusHistory,
+} from '../../models';
 import { getNotificationStatusInfos } from '../../utility';
 import { getLocalizedOrDefaultLabel } from '../../utility/localization.utility';
+import {
+  emptyLegalFactPlan,
+  getStatusLegalFactPlan,
+} from '../../utility/notificationTimeline.utility';
+import NotificationTimelineDescription from './NotificationEventsTimeline/NotificationTimelineDescription';
 
 type NotificationTimelineBoxProps = {
   statusHistory: Array<NotificationStatusHistory>;
   recipients: Array<NotificationDetailRecipient>;
   isParty: boolean;
   onTimelineClick?: () => void;
+  clickHandler: (legalFactId: LegalFactId) => void;
+  isNewTimelineCopyEnabled?: boolean;
+  perfectionLink?: string;
 };
 
-const NotificationTimelineBox = ({
+const NotificationTimelineBox: React.FC<NotificationTimelineBoxProps> = ({
   statusHistory,
   recipients,
   isParty,
   onTimelineClick,
-}: NotificationTimelineBoxProps) => {
+  clickHandler,
+  isNewTimelineCopyEnabled = false,
+  perfectionLink,
+}) => {
   if (statusHistory.length === 0) {
     return null;
   }
@@ -28,6 +44,10 @@ const NotificationTimelineBox = ({
     recipients,
     isParty,
   });
+
+  const plan = isNewTimelineCopyEnabled
+    ? getStatusLegalFactPlan(statusHistory[0], (event) => event.hidden)
+    : emptyLegalFactPlan<INotificationDetailTimeline>();
 
   return (
     <MIPaper padding={24} data-testid="NotificationDetailTimeline">
@@ -44,7 +64,14 @@ const NotificationTimelineBox = ({
           label={notificationStatusInfos.label}
           sx={{ my: 1, width: 'fit-content' }}
         />
-        <Typography variant="body2">{notificationStatusInfos.description}</Typography>
+        <NotificationTimelineDescription
+          legalFacts={plan.legalFacts}
+          description={notificationStatusInfos.description}
+          clickHandler={clickHandler}
+          slotProps={{ typography: { variant: 'body2' } }}
+          isNewTimelineCopyEnabled={isNewTimelineCopyEnabled}
+          perfectionLink={perfectionLink}
+        />
         <MIButton
           aria-label={getLocalizedOrDefaultLabel(
             'notifications',

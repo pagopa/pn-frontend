@@ -1,15 +1,22 @@
 import { notificationTimelineDTO } from '../../__mocks__/NotificationTimeline.mock';
+import { NotificationStatus } from '../../models';
 import {
+  INotificationDetailTimeline,
+  LegalFactType,
   NotificationDetailRecipient,
   RecipientType,
   TimelineCategory,
 } from '../../models/NotificationDetail';
-import { NotificationTimelineStep } from '../../models/NotificationTimeline';
+import {
+  NotificationTimelineEvent,
+  NotificationTimelineStep,
+} from '../../models/NotificationTimeline';
 import { formatDay, formatMonthString } from '../date.utility';
 import {
   flattenTimelineSteps,
   formatTimelineDate,
   getRecipientPerStep,
+  getStatusLegalFactPlan,
   isTimelineGroupStep,
   toLegacyStatusHistory,
 } from '../notificationTimeline.utility';
@@ -17,6 +24,37 @@ import {
 const [viewedStatus, deliveringStatus] = notificationTimelineDTO.notificationStatusHistory;
 
 describe('notificationTimeline utility', () => {
+  const legalFact = (legalFactType: LegalFactType) => ({
+    key: 'safestorage://legal-fact.pdf',
+    category: legalFactType,
+  });
+
+  const createEvent = (
+    elementId: string,
+    overrides: Partial<NotificationTimelineEvent> = {}
+  ): NotificationTimelineEvent => ({
+    elementId,
+    timestamp: '2026-01-01T00:00:00Z',
+    category: TimelineCategory.DIGITAL_SUCCESS_WORKFLOW,
+    details: {},
+    legalFactsIds: [],
+    isHidden: false,
+    ...overrides,
+  });
+
+  const createLegacyEvent = (
+    elementId: string,
+    overrides: Partial<INotificationDetailTimeline> = {}
+  ): INotificationDetailTimeline => ({
+    elementId,
+    timestamp: '2026-01-01T00:00:00Z',
+    category: TimelineCategory.DIGITAL_SUCCESS_WORKFLOW,
+    details: {},
+    legalFactsIds: [],
+    hidden: false,
+    ...overrides,
+  });
+
   it('isTimelineGroupStep - discriminates the steps by stepType', () => {
     const eventStep: NotificationTimelineStep = viewedStatus.steps[0];
     const groupStep: NotificationTimelineStep = deliveringStatus.steps[0];
@@ -139,7 +177,7 @@ describe('notificationTimeline utility', () => {
       ]);
     });
 
-    it('shows nothing at all when only a single recipient is involved, even mixing events and groups', () => {
+    it('still flags the first occurrence even when only a single recipient is involved, mixing events and groups', () => {
       const steps = [
         eventStepOfRecIndex(0),
         groupStepOfRecIndex(0, 'group0'),
@@ -147,13 +185,13 @@ describe('notificationTimeline utility', () => {
       ];
 
       expect(getRecipientPerStep(steps, recipients)).toStrictEqual([
-        undefined,
+        recipients[0],
         undefined,
         undefined,
       ]);
     });
 
-    it('ignores steps with no recIndex, both for the "more than one recipient" check and the tracked recIndex', () => {
+    it('ignores steps with no recIndex and does not alter the tracked recIndex', () => {
       const steps = [
         groupStepOfRecIndex(0, 'group0'),
         eventStepOfRecIndex(undefined),
@@ -167,6 +205,123 @@ describe('notificationTimeline utility', () => {
         undefined,
         recipients[1],
       ]);
+    });
+  });
+
+  describe('getStatusLegalFactPlan', () => {
+    it.each([
+      [
+        NotificationStatus.VIEWED,
+        TimelineCategory.NOTIFICATION_VIEWED,
+        LegalFactType.RECIPIENT_ACCESS,
+      ],
+      [NotificationStatus.ACCEPTED, TimelineCategory.REQUEST_ACCEPTED, LegalFactType.SENDER_ACK],
+    ])(
+      'inlines the single hidden legal fact associated with status %s',
+      (statusValue, category, legalFactType) => {
+        const event = createEvent('MATCHING_LEGAL_FACT', {
+          category,
+          isHidden: true,
+          legalFactsIds: [legalFact(legalFactType)],
+        });
+
+        const plan = getStatusLegalFactPlan(
+          {
+            status: statusValue,
+            steps: [event],
+          },
+          (timelineEvent) => timelineEvent.isHidden
+        );
+
+        expect(plan.legalFacts).toStrictEqual(
+          (event.legalFactsIds ?? []).map((legalFact) => ({ event, lf: legalFact }))
+        );
+        expect(plan.hiddenEventIds).toStrictEqual(new Set([event.elementId]));
+      }
+    );
+
+    it('does not inline a legal fact belonging to an unrelated event category', () => {
+      const event = createEvent('UNRELATED_LEGAL_FACT', {
+        category: TimelineCategory.DIGITAL_SUCCESS_WORKFLOW,
+        isHidden: true,
+        legalFactsIds: [legalFact(LegalFactType.DIGITAL_DELIVERY)],
+      });
+
+      const plan = getStatusLegalFactPlan(
+        {
+          status: NotificationStatus.VIEWED,
+          steps: [event],
+        },
+        (timelineEvent) => timelineEvent.isHidden
+      );
+
+      expect(plan.legalFacts).toStrictEqual([]);
+      expect(plan.hiddenEventIds).toStrictEqual(new Set());
+    });
+
+    it('does not inline legal facts from a visible event', () => {
+      const event = createEvent('VISIBLE_LEGAL_FACT', {
+        category: TimelineCategory.NOTIFICATION_VIEWED,
+        isHidden: false,
+        legalFactsIds: [legalFact(LegalFactType.RECIPIENT_ACCESS)],
+      });
+
+      const plan = getStatusLegalFactPlan(
+        {
+          status: NotificationStatus.VIEWED,
+          steps: [event],
+        },
+        (timelineEvent) => timelineEvent.isHidden
+      );
+
+      expect(plan.legalFacts).toStrictEqual([]);
+      expect(plan.hiddenEventIds).toStrictEqual(new Set());
+    });
+
+    it('returns multiple matching legal facts without absorbing their event', () => {
+      const secondLegalFact = {
+        ...legalFact(LegalFactType.RECIPIENT_ACCESS),
+        key: 'safestorage://fictional-second-legal-fact.pdf',
+      };
+      const event = createEvent('MULTIPLE_LEGAL_FACTS', {
+        category: TimelineCategory.NOTIFICATION_VIEWED,
+        isHidden: true,
+        legalFactsIds: [legalFact(LegalFactType.RECIPIENT_ACCESS), secondLegalFact],
+      });
+
+      const plan = getStatusLegalFactPlan(
+        {
+          status: NotificationStatus.VIEWED,
+          steps: [event],
+        },
+        (timelineEvent) => timelineEvent.isHidden
+      );
+
+      expect(plan.legalFacts).toStrictEqual(
+        (event.legalFactsIds ?? []).map((legalFact) => ({ event, lf: legalFact }))
+      );
+      expect(plan.hiddenEventIds).toStrictEqual(new Set());
+    });
+
+    it('supports the legacy hidden property', () => {
+      const event = createLegacyEvent('LEGACY_VIEWED_LEGAL_FACT', {
+        category: TimelineCategory.NOTIFICATION_VIEWED,
+        hidden: true,
+        legalFactsIds: [legalFact(LegalFactType.RECIPIENT_ACCESS)],
+      });
+
+      const plan = getStatusLegalFactPlan(
+        {
+          status: NotificationStatus.VIEWED,
+          steps: [event],
+        },
+        (timelineEvent) => timelineEvent.hidden
+      );
+
+      expect(plan.legalFacts).toStrictEqual([
+        { event, lf: legalFact(LegalFactType.RECIPIENT_ACCESS) },
+      ]);
+      expect(plan.hiddenEventIds).toStrictEqual(new Set([event.elementId]));
     });
   });
 });

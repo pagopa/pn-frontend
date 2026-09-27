@@ -23,6 +23,7 @@ import {
 import { NotificationStatus } from '../../models/NotificationStatus';
 import { initLocalizationForTest } from '../../test-utils';
 import { TimelineStepFactory } from '../TimelineUtils/TimelineStepFactory';
+import { initLocalizationExists } from '../localization.utility';
 import {
   getF24Payments,
   getLegalFactLabel,
@@ -316,6 +317,73 @@ describe('notification status texts', () => {
     );
   });
 
+  it.each([
+    {
+      deliveryMode: NotificationDeliveryMode.DIGITAL,
+      recipients: notificationDTO.recipients,
+      suffix: '',
+    },
+    {
+      deliveryMode: NotificationDeliveryMode.ANALOG,
+      recipients: notificationDTO.recipients,
+      suffix: '',
+    },
+    {
+      deliveryMode: NotificationDeliveryMode.DIGITAL,
+      recipients: notificationDTOMultiRecipient.recipients,
+      suffix: '-multirecipient',
+    },
+    {
+      deliveryMode: NotificationDeliveryMode.ANALOG,
+      recipients: notificationDTOMultiRecipient.recipients,
+      suffix: '-multirecipient',
+    },
+  ])(
+    'uses the new DELIVERED description for $deliveryMode$suffix',
+    ({ deliveryMode, recipients, suffix }) => {
+      const localizationKey = `status.delivered-description-${deliveryMode}${suffix}`;
+      initLocalizationExists((_namespace, path) => path === localizationKey);
+
+      testNotificationStatusInfos(
+        'default',
+        `notifiche - status.delivered${suffix ? '-multirecipient' : ''}`,
+        `notifiche - status.delivered-tooltip${suffix}`,
+        `notifiche - ${localizationKey}`,
+        {
+          status: NotificationStatus.DELIVERED,
+          activeFrom: '2023-01-26T13:57:16.42843144Z',
+          relatedTimelineElements: [],
+          deliveryMode,
+        },
+        { recipients }
+      );
+
+      initLocalizationForTest();
+    }
+  );
+
+  it('keeps the legacy DELIVERED description when the new content is unavailable', () => {
+    initLocalizationExists(() => false);
+
+    testNotificationStatusInfos(
+      'default',
+      'notifiche - status.delivered',
+      'notifiche - status.delivered-tooltip',
+      `notifiche - status.delivered-description-with-delivery-mode - ${JSON.stringify({
+        deliveryMode: `notifiche - status.deliveryMode.${NotificationDeliveryMode.DIGITAL}`,
+      })}`,
+      {
+        status: NotificationStatus.DELIVERED,
+        activeFrom: '2023-01-26T13:57:16.42843144Z',
+        relatedTimelineElements: [],
+        deliveryMode: NotificationDeliveryMode.DIGITAL,
+      },
+      { recipients: notificationDTO.recipients }
+    );
+
+    initLocalizationForTest();
+  });
+
   it('return notification status infos - DELIVERING', () => {
     testNotificationStatusInfos(
       'default',
@@ -448,6 +516,50 @@ describe('notification status texts', () => {
     );
   });
 
+  it('return notification status infos - EFFECTIVE_DATE - passes the perfection date', () => {
+    const activeFrom = '2023-01-26T13:57:16.42843144Z';
+    testNotificationStatusInfos(
+      'info',
+      `notifiche - status.effective-date`,
+      `notifiche - status.effective-date-tooltip - ${JSON.stringify({
+        date: '26/01/2023',
+      })}`,
+      `notifiche - status.effective-date-description - ${JSON.stringify({
+        date: '26/01/2023',
+      })}`,
+      {
+        status: NotificationStatus.EFFECTIVE_DATE,
+        activeFrom,
+        relatedTimelineElements: [],
+      },
+      { recipients: notificationDTO.recipients }
+    );
+  });
+
+  it('return notification status infos - VIEWED - by delegate, with the revised copy', () => {
+    initLocalizationExists((_ns, path) => path === 'status.viewed-by-delegate-description');
+    testNotificationStatusInfos(
+      'success',
+      `notifiche - status.viewed`,
+      `notifiche - status.viewed-tooltip - ${JSON.stringify({
+        subject: `notifiche - status.delegate - ${JSON.stringify({
+          name: notificationDTO.recipients[0].denomination,
+        })}`,
+      })}`,
+      `notifiche - status.viewed-by-delegate-description - ${JSON.stringify({
+        name: notificationDTO.recipients[0].denomination,
+      })}`,
+      {
+        status: NotificationStatus.VIEWED,
+        activeFrom: '2023-01-26T13:57:16.42843144Z',
+        relatedTimelineElements: [],
+        recipient: notificationDTO.recipients[0].denomination,
+      },
+      { recipients: notificationDTO.recipients }
+    );
+    initLocalizationForTest();
+  });
+
   it('return notification status infos - VIEWED - multi recipient - no delegate', () => {
     testNotificationStatusInfos(
       'success',
@@ -465,6 +577,65 @@ describe('notification status texts', () => {
       },
       { recipients: notificationDTOMultiRecipient.recipients }
     );
+  });
+
+  it('return notification status infos - VIEWED - multi recipient - without legal fact, with the revised copy', () => {
+    initLocalizationExists(
+      (_ns, path) => path === 'status.viewed-without-legal-fact-description-multirecipient'
+    );
+    testNotificationStatusInfos(
+      'success',
+      `notifiche - status.viewed-multirecipient`,
+      `notifiche - status.viewed-tooltip-multirecipient - ${JSON.stringify({
+        subject: `notifiche - status.recipient`,
+      })}`,
+      `notifiche - status.viewed-without-legal-fact-description-multirecipient`,
+      {
+        status: NotificationStatus.VIEWED,
+        activeFrom: '2023-01-26T13:57:16.42843144Z',
+        relatedTimelineElements: [],
+        steps: [],
+      },
+      { recipients: notificationDTOMultiRecipient.recipients }
+    );
+    initLocalizationForTest();
+  });
+
+  it('return notification status infos - VIEWED - multi recipient - with legal fact, with the revised copy', () => {
+    initLocalizationExists(
+      (_ns, path) => path === 'status.viewed-without-legal-fact-description-multirecipient'
+    );
+    testNotificationStatusInfos(
+      'success',
+      `notifiche - status.viewed-multirecipient`,
+      `notifiche - status.viewed-tooltip-multirecipient - ${JSON.stringify({
+        subject: `notifiche - status.recipient`,
+      })}`,
+      `notifiche - status.viewed-description-multirecipient - ${JSON.stringify({
+        subject: `notifiche - status.recipient`,
+      })}`,
+      {
+        status: NotificationStatus.VIEWED,
+        activeFrom: '2023-01-26T13:57:16.42843144Z',
+        relatedTimelineElements: [],
+        steps: [
+          {
+            elementId: 'NOTIFICATION_VIEWED.IUN_DAPQ-LWQV-DKQH-202308-A-1.RECINDEX_1',
+            timestamp: '2023-01-26T13:57:16.42843144Z',
+            category: TimelineCategory.NOTIFICATION_VIEWED,
+            legalFactsIds: [
+              {
+                key: 'safestorage://PN_LEGAL_FACTS-viewed.pdf',
+                category: LegalFactType.RECIPIENT_ACCESS,
+              },
+            ],
+            details: { recIndex: 1 },
+          },
+        ],
+      },
+      { recipients: notificationDTOMultiRecipient.recipients }
+    );
+    initLocalizationForTest();
   });
 
   it('return notification status infos - CANCELLED - passing status only', () => {

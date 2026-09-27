@@ -96,7 +96,6 @@ describe('App', () => {
     expect(mockOpenFn).toHaveBeenCalledWith(url, '_self');
   });
 
-  // this test fails because SideMenu is defined inside pn-commons and test
   it('render component - user logged in', async () => {
     mock.onGet(/\/bff\/v2\/tos-privacy.*/).reply(200, tosPrivacyConsentMock(true, true));
     mock.onGet('/bff/v1/institutions').reply(200, institutionsDTO);
@@ -112,6 +111,11 @@ describe('App', () => {
     expect(footer).toBeInTheDocument();
     const sideMenu = result.queryByTestId('side-menu');
     expect(sideMenu).toBeInTheDocument();
+
+    expect(result.getByText('menu.communications')).toBeInTheDocument();
+    fireEvent.click(result.getByText('menu.communications'));
+    expect(result.getByText('menu.campaigns')).toBeInTheDocument();
+
     expect(result.container).toHaveTextContent('Generic Page');
     expect(mock.history.get).toHaveLength(5);
   });

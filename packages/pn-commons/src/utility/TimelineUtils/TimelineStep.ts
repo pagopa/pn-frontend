@@ -16,7 +16,6 @@ export interface TimelineStepPayload {
 export interface TimelineStepInfo {
   label: string;
   description: string;
-  linkText?: string;
 }
 
 export abstract class TimelineStep {

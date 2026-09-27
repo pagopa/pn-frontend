@@ -5,8 +5,6 @@ import { configDefaults, defineConfig as defineVitestConfig } from 'vitest/confi
 import basicSsl from '@vitejs/plugin-basic-ssl';
 import react from '@vitejs/plugin-react';
 
-import type { IncomingMessage, ServerResponse } from 'node:http';
-
 const vitestConfig = defineVitestConfig({
   test: {
     globals: true,
@@ -45,7 +43,7 @@ export default defineConfig(({ mode }) => {
           target: 'https://pnpg.uat.selfcare.pagopa.it',
           changeOrigin: true,
         },
-       '/mock-mixpanel': {
+        '/mock-mixpanel': {
           target: env.HOST, // Fake target
           bypass: (_: IncomingMessage, res: ServerResponse) => {
             res.statusCode = 200;

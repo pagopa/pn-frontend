@@ -5,6 +5,7 @@
     "indietro": "Retour",
     "annulla": "Annuler",
     "enter": "Entrer",
+    "open": "Ouvrir",
     "exit": "Sortir",
     "continue": "Continuer",
     "send": "Envoyer",
@@ -15,6 +16,8 @@
   "menu": {
     "notifications-send": "Notification avec SEND",
     "notifications": "Notifications",
+    "communications": "Communiquer avec SEND",
+    "campaigns": "Campagnes",
     "users": "Utilisateurs",
     "groups": "Groupes",
     "api-key": "API Key",

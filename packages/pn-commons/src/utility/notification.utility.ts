@@ -29,9 +29,10 @@ import {
   TimelineCategory,
 } from '../models/NotificationDetail';
 import { NotificationStatus } from '../models/NotificationStatus';
-import { getLocalizedOrDefaultLabel } from '../utility/localization.utility';
+import { getLocalizedOrDefaultLabel, hasLocalizedLabel } from '../utility/localization.utility';
 import { TimelineStepInfo } from './TimelineUtils/TimelineStep';
 import { TimelineStepFactory } from './TimelineUtils/TimelineStepFactory';
+import { formatDate } from './date.utility';
 
 type StatusInfo = {
   label: string;
@@ -39,43 +40,47 @@ type StatusInfo = {
   description: string;
 };
 
-const AnalogDeliveryCodeStock = new Set(['RECRN003C', 'RECRN011', 'RECAG011A']);
-const AnalogDeliveryCodeWithdrawnStock = new Set(['RECAG005C', 'RECAG006C']);
-const AnalogDeliveryCodeExpiredStock = new Set(['RECAG008C', 'RECRN005C', 'PNAG012', 'PNRN012']);
-
-/*
- * Besides the values used in the generation of the final messages,
- * data can include an isMultiRecipient attribute, which refers to the notification.
- * If set to true, the "-tooltip-multirecipient" and "-description-multirecipient"
- * (instead of just "-tooltip" and "-description")
- * entries will be looked for in the i18n catalog.
- */
-function localizeStatus(status: string, data?: { [key: string]: any }): StatusInfo {
-  const isMultiRecipient = data?.isMultiRecipient;
-  // eslint-disable-next-line functional/no-let
-  let filteredData: any = omit(data, ['isMultiRecipient']);
-  if (Object.keys(filteredData).length === 0) {
-    filteredData = undefined;
+function viewedStatusVariant(
+  statusInfos: StatusInfo,
+  statusObject?: NotificationStatusHistory,
+  isMultiRecipient?: boolean
+): StatusInfo {
+  if (
+    statusObject?.recipient &&
+    hasLocalizedLabel('notifications', `status.viewed-by-delegate-description`)
+  ) {
+    return {
+      ...statusInfos,
+      description: getLocalizedOrDefaultLabel(
+        'notifications',
+        `status.viewed-by-delegate-description`,
+        undefined,
+        { name: statusObject.recipient }
+      ),
+    };
   }
 
-  return {
-    label: getLocalizedOrDefaultLabel(
+  const hasViewedLegalFact = !!statusObject?.steps?.some(
+    (step) => step.category === TimelineCategory.NOTIFICATION_VIEWED && step.legalFactsIds?.length
+  );
+  if (
+    isMultiRecipient &&
+    !hasViewedLegalFact &&
+    hasLocalizedLabel(
       'notifications',
-      `status.${status}${isMultiRecipient ? '-multirecipient' : ''}`
-    ),
-    tooltip: getLocalizedOrDefaultLabel(
-      'notifications',
-      `status.${status}-tooltip${isMultiRecipient ? '-multirecipient' : ''}`,
-      undefined,
-      filteredData
-    ),
-    description: getLocalizedOrDefaultLabel(
-      'notifications',
-      `status.${status}-description${isMultiRecipient ? '-multirecipient' : ''}`,
-      undefined,
-      filteredData
-    ),
-  };
+      `status.viewed-without-legal-fact-description-multirecipient`
+    )
+  ) {
+    return {
+      ...statusInfos,
+      description: getLocalizedOrDefaultLabel(
+        'notifications',
+        `status.viewed-without-legal-fact-description-multirecipient`
+      ),
+    };
+  }
+
+  return statusInfos;
 }
 
 /*
@@ -115,13 +120,13 @@ function getNotificationDeliveredInfosForPA(
       : new Date(step.timestamp) <= activeFrom
   );
   const stepsToCheck = [...(statusObject.steps || []), ...(deliveringStepsBeforeDelivered ?? [])];
-  const isStock = stepsToCheck.find(
+  const isStock = stepsToCheck.some(
     (step) =>
       (step.category === TimelineCategory.SEND_ANALOG_PROGRESS ||
         step.category === TimelineCategory.SEND_ANALOG_FEEDBACK) &&
       AnalogDeliveryCodeStock.has((step.details as SendPaperDetails).deliveryDetailCode ?? '')
   );
-  const isWithdrawnStock = stepsToCheck.find(
+  const isWithdrawnStock = stepsToCheck.some(
     (step) =>
       (step.category === TimelineCategory.SEND_ANALOG_PROGRESS ||
         step.category === TimelineCategory.SEND_ANALOG_FEEDBACK) &&
@@ -129,7 +134,7 @@ function getNotificationDeliveredInfosForPA(
         (step.details as SendPaperDetails).deliveryDetailCode ?? ''
       )
   );
-  const isExpiredStock = stepsToCheck.find(
+  const isExpiredStock = stepsToCheck.some(
     (step) =>
       (step.category === TimelineCategory.SEND_ANALOG_PROGRESS ||
         step.category === TimelineCategory.SEND_ANALOG_FEEDBACK) &&
@@ -171,6 +176,114 @@ function getNotificationDeliveredInfosForPA(
     );
   }
   return statusInfos;
+}
+
+/**
+ * Returns the localized information for the DELIVERED status.
+ *
+ * Uses the delivery-mode-specific description when the corresponding localization
+ * exists, including the multi-recipient variant. Otherwise, it preserves the legacy
+ * behavior for multi-recipient notifications, PA-specific statuses and delivery mode.
+ *
+ * @param isMultiRecipient Whether the notification has multiple recipients.
+ * @param statusObject Status history entry containing delivery information.
+ * @param options Status history, recipients and party context.
+ * @returns The localized label, tooltip and description for the DELIVERED status.
+ */
+function deliveredStatusVariant(
+  isMultiRecipient?: boolean,
+  statusObject?: NotificationStatusHistory,
+  options?: {
+    statusHistory?: Array<NotificationStatusHistory>;
+    recipients: Array<NotificationDetailRecipient | string>;
+    isParty?: boolean;
+  }
+): StatusInfo {
+  const statusInfos = localizeStatus('delivered', { isMultiRecipient });
+  const deliveryMode = statusObject?.deliveryMode;
+  const deliveryModeDescriptionKey = `status.delivered-description-${deliveryMode}${
+    isMultiRecipient ? '-multirecipient' : ''
+  }`;
+
+  // if the deliveryMode is defined, then change the description for a more specific one ...
+  // ... if we have status description label with delivery mode
+  if (deliveryMode && hasLocalizedLabel('notifications', deliveryModeDescriptionKey)) {
+    statusInfos.description = getLocalizedOrDefaultLabel(
+      'notifications',
+      deliveryModeDescriptionKey
+    );
+
+    return statusInfos;
+  }
+
+  if (isMultiRecipient) {
+    return statusInfos;
+  }
+
+  // if it is a PA, change the title and the description
+  // ... only for single-recipient notifications!
+  if (options?.isParty) {
+    getNotificationDeliveredInfosForPA(statusInfos, statusObject, options.statusHistory || []);
+    return statusInfos;
+  }
+
+  // if the deliveryMode is defined, then change the description for a more specific one ...
+  // ... only for single-recipient notifications!
+  if (deliveryMode) {
+    const deliveryModeDescription = getLocalizedOrDefaultLabel(
+      'notifications',
+      `status.deliveryMode.${deliveryMode}`
+    );
+    statusInfos.description = getLocalizedOrDefaultLabel(
+      'notifications',
+      'status.delivered-description-with-delivery-mode',
+      undefined,
+      { deliveryMode: deliveryModeDescription }
+    );
+
+    return statusInfos;
+  }
+
+  return statusInfos;
+}
+
+const AnalogDeliveryCodeStock = new Set(['RECRN003C', 'RECRN011', 'RECAG011A']);
+const AnalogDeliveryCodeWithdrawnStock = new Set(['RECAG005C', 'RECAG006C']);
+const AnalogDeliveryCodeExpiredStock = new Set(['RECAG008C', 'RECRN005C', 'PNAG012', 'PNRN012']);
+
+/*
+ * Besides the values used in the generation of the final messages,
+ * data can include an isMultiRecipient attribute, which refers to the notification.
+ * If set to true, the "-tooltip-multirecipient" and "-description-multirecipient"
+ * (instead of just "-tooltip" and "-description")
+ * entries will be looked for in the i18n catalog.
+ */
+function localizeStatus(status: string, data?: { [key: string]: any }): StatusInfo {
+  const isMultiRecipient = data?.isMultiRecipient;
+  // eslint-disable-next-line functional/no-let
+  let filteredData: any = omit(data, ['isMultiRecipient']);
+  if (Object.keys(filteredData).length === 0) {
+    filteredData = undefined;
+  }
+
+  return {
+    label: getLocalizedOrDefaultLabel(
+      'notifications',
+      `status.${status}${isMultiRecipient ? '-multirecipient' : ''}`
+    ),
+    tooltip: getLocalizedOrDefaultLabel(
+      'notifications',
+      `status.${status}-tooltip${isMultiRecipient ? '-multirecipient' : ''}`,
+      undefined,
+      filteredData
+    ),
+    description: getLocalizedOrDefaultLabel(
+      'notifications',
+      `status.${status}-description${isMultiRecipient ? '-multirecipient' : ''}`,
+      undefined,
+      filteredData
+    ),
+  };
 }
 
 /**
@@ -218,27 +331,7 @@ export function getNotificationStatusInfos(
 
   switch (actualStatus) {
     case NotificationStatus.DELIVERED: {
-      const statusInfos = localizeStatus('delivered', { isMultiRecipient });
-      // if the deliveryMode is defined, then change the description for a more specific one ...
-      const deliveryMode = statusObject?.deliveryMode;
-      // ... only for single-recipient notifications!
-      if (deliveryMode && !isMultiRecipient && !options?.isParty) {
-        const deliveryModeDescription = getLocalizedOrDefaultLabel(
-          'notifications',
-          `status.deliveryMode.${deliveryMode}`
-        );
-        statusInfos.description = getLocalizedOrDefaultLabel(
-          'notifications',
-          'status.delivered-description-with-delivery-mode',
-          undefined,
-          { deliveryMode: deliveryModeDescription }
-        );
-      }
-      // if it is a PA, change the title and the description
-      // ... only for single-recipient notifications!
-      if (options?.isParty && !isMultiRecipient) {
-        getNotificationDeliveredInfosForPA(statusInfos, statusObject, options.statusHistory || []);
-      }
+      const statusInfos = deliveredStatusVariant(isMultiRecipient, statusObject, options);
       // set the color at the end to avoid a type error since the color is defined as an union among some well-known strings
       return { color: 'default', ...statusInfos };
     }
@@ -265,9 +358,15 @@ export function getNotificationStatusInfos(
     case NotificationStatus.EFFECTIVE_DATE:
       return {
         color: 'info',
-        ...localizeStatus('effective-date', { isMultiRecipient }),
+        // the status became active at the very moment the notification perfected, so `activeFrom` is
+        // the date the revised copy asks for. The wording in the base catalog has no `{{date}}`, so
+        // passing it is a no-op with the overlay off.
+        ...localizeStatus('effective-date', {
+          isMultiRecipient,
+          ...(statusObject ? { date: formatDate(statusObject.activeFrom, false) } : {}),
+        }),
       };
-    case NotificationStatus.VIEWED:
+    case NotificationStatus.VIEWED: {
       if (statusObject?.recipient) {
         subject = getLocalizedOrDefaultLabel(
           'notifications',
@@ -278,8 +377,13 @@ export function getNotificationStatusInfos(
       }
       return {
         color: 'success',
-        ...localizeStatus('viewed', { subject, isMultiRecipient }),
+        ...viewedStatusVariant(
+          localizeStatus('viewed', { subject, isMultiRecipient }),
+          statusObject,
+          isMultiRecipient
+        ),
       };
+    }
     case NotificationStatus.CANCELLED:
       return {
         color: 'warning',

@@ -37,7 +37,9 @@
     "deleghe": "Pooblastila",
     "profilo": "Tvoji podatki",
     "contacts": "Tvoji kontaktni podatki",
-    "app-status": "Status platforme"
+    "app-status": "Status platforme",
+    "fallback-notification": "Podrobnosti obvestila",
+    "fallback-communication": "Podrobnosti sporočila"
   },
   "header": {
     "assistance": "Pomoč",

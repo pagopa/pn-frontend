@@ -20,6 +20,7 @@ import {
 import DomicileBanner from '../components/DomicileBanner/DomicileBanner';
 import LoadingPageWrapper from '../components/LoadingPageWrapper/LoadingPageWrapper';
 import DesktopNotifications from '../components/Notifications/DesktopNotifications';
+import FilterNotifications from '../components/Notifications/FilterNotifications';
 import GroupSelector from '../components/Notifications/GroupSelector';
 import MobileNotifications from '../components/Notifications/MobileNotifications';
 import { PGEventsType } from '../models/PGEventsType';
@@ -43,11 +44,21 @@ type Props = {
   isDelegatedPage?: boolean;
 };
 
+const shouldShowFilters = (notificationsLength: number, filtersApplied: boolean) =>
+  notificationsLength > 0 || filtersApplied;
+
 const Notifiche = ({ isDelegatedPage = false }: Props) => {
   const dispatch = useAppDispatch();
   const { t } = useTranslation(['notifiche']);
   const [pageReady, setPageReady] = useState(false);
   const domicileBannerTypeRef = useRef('');
+  const filterNotificationsRef = useRef<{
+    filtersApplied: boolean;
+    cleanFilters: () => void;
+  }>({
+    filtersApplied: false,
+    cleanFilters: () => void 0,
+  });
 
   const {
     notifications,
@@ -74,6 +85,10 @@ const Notifiche = ({ isDelegatedPage = false }: Props) => {
   const group = isDelegatedPage ? delegationGroup : undefined;
 
   const isMobile = useIsMobile();
+
+  const filtersApplied = filterNotificationsRef.current.filtersApplied;
+  const showFilters = shouldShowFilters(notifications.length, filtersApplied);
+
   const pageTitle = !isDelegatedPage
     ? t('title', { organization: organization.name })
     : t('title-delegated-notifications');
@@ -265,6 +280,11 @@ const Notifiche = ({ isDelegatedPage = false }: Props) => {
             my={3}
           />
         )}
+        <FilterNotifications
+          ref={filterNotificationsRef}
+          showFilters={showFilters}
+          isDelegatedPage={isDelegatedPage}
+        />
         <ApiErrorWrapper
           apiId={DASHBOARD_ACTIONS.GET_RECEIVED_NOTIFICATIONS}
           reloadAction={fetchNotifications}
@@ -275,6 +295,8 @@ const Notifiche = ({ isDelegatedPage = false }: Props) => {
               sort={sort}
               onChangeSorting={handleChangeSorting}
               isDelegatedPage={isDelegatedPage}
+              filtersApplied={filtersApplied}
+              onCleanFilters={filterNotificationsRef.current.cleanFilters}
             />
           ) : (
             <DesktopNotifications
@@ -282,6 +304,8 @@ const Notifiche = ({ isDelegatedPage = false }: Props) => {
               sort={sort}
               onChangeSorting={handleChangeSorting}
               isDelegatedPage={isDelegatedPage}
+              filtersApplied={filtersApplied}
+              onCleanFilters={filterNotificationsRef.current.cleanFilters}
             />
           )}
           {notifications.length > 0 && (

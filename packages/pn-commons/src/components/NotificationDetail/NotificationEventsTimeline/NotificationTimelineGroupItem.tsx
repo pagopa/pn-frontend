@@ -22,6 +22,8 @@ type Props = {
   disableDownloads: boolean;
   language: string;
   hasMultipleAttempts?: boolean;
+  isNewTimelineCopyEnabled?: boolean;
+  perfectionLink?: string;
 };
 
 const NotificationTimelineGroupItem = ({
@@ -32,6 +34,8 @@ const NotificationTimelineGroupItem = ({
   disableDownloads,
   language,
   hasMultipleAttempts = false,
+  isNewTimelineCopyEnabled = false,
+  perfectionLink,
 }: Props) => {
   const generatedId = useId();
   const [expanded, setExpanded] = useState(false);
@@ -59,7 +63,15 @@ const NotificationTimelineGroupItem = ({
           borderRadius: 1,
         }}
       >
-        <Stack component="span" direction="row" spacing={1} alignItems="center" minWidth={0}>
+        <Stack
+          component="span"
+          direction="row"
+          spacing={1}
+          alignItems={{ xs: 'flex-start', sm: 'center' }}
+          minWidth={0}
+          useFlexGap
+          sx={{ flexWrap: 'wrap' }}
+        >
           <ChannelIcon
             fontSize="small"
             sx={{ fontSize: '24px', flexShrink: 0 }}
@@ -96,7 +108,7 @@ const NotificationTimelineGroupItem = ({
           data-testid="timeline-group-body"
           sx={{
             listStyleType: 'disc',
-            pl: { xs: 3, sm: 10 },
+            pl: { xs: 3, sm: 3.5 },
             my: 1,
             display: 'grid',
             rowGap: 1,
@@ -111,7 +123,9 @@ const NotificationTimelineGroupItem = ({
               clickHandler={clickHandler}
               disableDownloads={disableDownloads}
               language={language}
-              asBullet
+              insideAGroup
+              isNewTimelineCopyEnabled={isNewTimelineCopyEnabled}
+              perfectionLink={perfectionLink}
             />
           ))}
         </Box>

@@ -100,6 +100,7 @@ const SpidSelect = ({ show, onClose, rapidAccess }: Props) => {
                     onClick={() => getSPID(IDP)}
                     sx={{ width: '100px', padding: '0' }}
                     aria-label={IDP.name}
+                    variant="text"
                   >
                     <Icon sx={{ width: '100px', height: '48px' }}>
                       <img width="100px" src={IDP.imageUrl} alt={IDP.name} />

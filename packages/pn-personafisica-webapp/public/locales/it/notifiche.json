@@ -64,6 +64,7 @@
     "legal-date": "Notifica depositata il giorno",
     "informal-date": "Comunicazione depositata il giorno",
     "legal-disclaimer": "Notifica inviata tramite SEND, la piattaforma disciplinata dall’art. 26 del D.L. 76/2020",
+    "informal-disclaimer": "Questa comunicazione potrebbe produrre effetti giuridici. Consulta gli allegati, se presenti, per saperne di più.",
     "notification-timeline-section": {
       "title": "Stato della notifica",
       "aria-label": "Vai alla timeline della notifica"
@@ -144,8 +145,8 @@
         "duplicated": "Questo avviso è già stato pagato. Lo stato verrà aggiornato a breve."
       },
       "error-payment": "Seleziona un avviso di pagamento",
-      "error-payment-failed-single": "Si è verificato un problema con un avviso di pagamento. Premi Ricarica per riprovare, se l’errore persiste contatta l’assistenza.",
-      "error-payment-failed-multiple": "Si è verificato un problema con più avvisi di pagamento. Premi Ricarica per riprovare, se l’errore persiste contatta l’assistenza.",
+      "error-payment-failed-single": "Si è verificato un problema con un avviso di pagamento. Premi <0>Ricarica</0> per riprovare, se l’errore persiste contatta l’assistenza.",
+      "error-payment-failed-multiple": "Si è verificato un problema con più avvisi di pagamento. Premi <0>Ricarica</0> per riprovare, se l’errore persiste contatta l’assistenza.",
       "tpp-expired-error-title": "La connesione con la banca è scaduta.",
       "tpp-expired-error-description": "Per ripristinarla, accedi di nuovo a questa notifica tramite il messaggio che hai ricevuto sull'app della banca."
     },
@@ -161,7 +162,7 @@
       "greeting": "Ciao {{recipientDenomination}},",
       "attachments_info": "Per avere maggiori informazioni <0>prendi visione degli allegati,</0> che possono fornirti dettagli importanti.",
       "payment_instructions": "Puoi effettuare il pagamento direttamente premendo <0>Paga</0>. In alternativa, puoi utilizzare l'<0>avviso allegato</0> per saldare l'importo tramite tutti i canali abilitati a pagoPA.",
-      "assistance": "In ogni caso, qualora avessi bisogno di assistenza, <0>contatta {{senderDenomination}} attraverso i suoi canali ufficiali.</0>"
+      "assistance": "In ogni caso, qualora avessi bisogno di assistenza, <0>contatta {{senderDenomination}}</0> attraverso i suoi canali ufficiali."
     },
     "acts_files": {
       "downloadable_acts": "<0>I documenti saranno disponibili online fino a 120 giorni</0> dalla data in cui la notifica SEND ha assunto valore di legge. Salvali sul tuo dispositivo!",
@@ -203,6 +204,7 @@
       "send-digital-success-SERCQ-SEND-description": "L'invio della notifica al Domicilio Digitale SEND è riuscito.",
       "send-digital-success-SERCQ-SEND-description-multirecipient": "L'invio della notifica a {{name}} {{taxId}} al Domicilio Digitale SEND è riuscito.",
       "send-simple-registered-letter": "Invio via raccomandata semplice",
+      "send-simple-registered-letter-group-label": "Invio via raccomandata semplice",
       "send-simple-registered-letter-description": "È in corso l'invio della notifica all'indirizzo {{address}} tramite raccomandata semplice.",
       "send-simple-registered-letter-description-multirecipient": "È in corso l'invio della notifica a {{name}} {{taxId}} all'indirizzo {{address}} tramite raccomandata semplice.",
       "simple-registered-letter-progess": "Aggiornamento dell'invio via raccomandata",
@@ -399,6 +401,7 @@
         "M07": "perché l'indirizzo è inesistente",
         "M08": "perché l'indirizzo è insufficiente",
         "M09": "per altre motivazioni",
+        "M10": "perché l'indirizzo non è leggibile",
         "F01": "per furto della busta",
         "F02": "per smarrimento della busta",
         "F03": "per deterioramento della busta",
@@ -498,7 +501,7 @@
     "notification-timeline-reworked-description": "Gli eventi contrassegnati come rettificati sostituiscono gli eventi precedenti indicati come non validi.",
     "reworked-status-valid": "Evento rettificato",
     "reworked-status-not-valid": "Evento non valido",
-    "reworked-status-group": "Uno o più eventi rettificati",
+    "reworked-status-group": "Uno o più eventi aggiornati",
     "cancellation-in-progress": "Annullata",
     "cancellation-in-progress-tooltip": "Annullamento in corso. Lo stato sarà aggiornato a breve.",
     "cancellation-in-progress-description": "Annullamento in corso. Lo stato sarà aggiornato a breve."

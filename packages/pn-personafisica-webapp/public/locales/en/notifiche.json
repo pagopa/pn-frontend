@@ -65,6 +65,7 @@
     "legal-date": "Notification deposited on",
     "informal-date": "Communication deposited on",
     "legal-disclaimer": "Notification sent via SEND, the platform governed by Art. 26 of Law Decree 76/2020",
+    "informal-disclaimer": "This communication may produce legal effects. Check the attachments, if present, to learn more.",
     "notification-timeline-section": {
       "title": "Notification status",
       "aria-label": "Go to the notification timeline"
@@ -145,8 +146,8 @@
         "duplicated": "This notification has already been paid. The status will be updated shortly."
       },
       "error-payment": "Select a Payment Notice",
-      "error-payment-failed-single": "There was a problem with a Payment Notice. Press Reload to try again. If the error persists, contact the support team.",
-      "error-payment-failed-multiple": "There was a problem with multiple Payment Notices. Press Reload to try again. If the error persists, contact the support team.",
+      "error-payment-failed-single": "There was a problem with a payment notice. Press <0>Reload</0> to try again; if the error persists, contact support.",
+      "error-payment-failed-multiple": "There was a problem with multiple payment notices. Press <0>Reload</0> to try again; if the error persists, contact support.",
       "tpp-expired-error-title": "The connection with the bank has expired.",
       "tpp-expired-error-description": "To restore it, access this notification again using the message you received on your bank's app."
     },
@@ -162,7 +163,7 @@
       "greeting": "Ciao {{recipientDenomination}},",
       "attachments_info": "Per avere maggiori informazioni <0>prendi visione degli allegati,</0> che possono fornirti dettagli importanti.",
       "payment_instructions": "Puoi effettuare il pagamento direttamente premendo <0>Paga</0>. In alternativa, puoi utilizzare l'<0>avviso allegato</0> per saldare l'importo tramite tutti i canali abilitati a pagoPA.",
-      "assistance": "In ogni caso, qualora avessi bisogno di assistenza, <0>contatta {{senderDenomination}} attraverso i suoi canali ufficiali.</0>"
+      "assistance": "In ogni caso, qualora avessi bisogno di assistenza, <0>contatta {{senderDenomination}}</0> attraverso i suoi canali ufficiali."
     },
     "acts_files": {
       "downloadable_acts": "<0>Documents will be available online for up to 120 days</0> from the date the SEND notification became legally effective. Save them to your device!",
@@ -204,6 +205,7 @@
       "send-digital-success-SERCQ-SEND-description": "The sending of the notification to the SEND digital domicile was successful.",
       "send-digital-success-SERCQ-SEND-description-multirecipient": "The sending of the notification to {{name}} {{taxId}} at the SEND digital domicile was successful.",
       "send-simple-registered-letter": "Sending by ordinary registered letter",
+      "send-simple-registered-letter-group-label": "Sending by ordinary registered letter",
       "send-simple-registered-letter-description": "The notification is being sent to the address {{address}} by ordinary registered letter.",
       "send-simple-registered-letter-description-multirecipient": "The notification is being sent to {{name}} {{taxId}} at the address {{address}} via ordinary registered letter.",
       "simple-registered-letter-progess": "Update of sending by registered mail",
@@ -400,6 +402,7 @@
         "M07": "because the address does not exist",
         "M08": "because the address is insufficient",
         "M09": "for other reasons",
+        "M10": "because the address is not legible",
         "F01": "the envelope was stolen",
         "F02": "the envelope was lost",
         "F03": "the envelope was ruined",

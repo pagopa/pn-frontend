@@ -72,7 +72,7 @@ describe('AppStatus page', () => {
     expect(mock.history.get).toHaveLength(2);
     const appStatusBarComponent = screen.queryByTestId('app-status-bar');
     expect(appStatusBarComponent).toBeInTheDocument();
-    expect(appStatusBarComponent).toHaveStyle({ 'border-color': theme.palette.error.main });
+    expect(appStatusBarComponent).toHaveStyle({ 'border-color': theme.palette.error.light });
     const downtimeLogTable = screen.queryByTestId('tableDowntimeLog');
     expect(downtimeLogTable).toBeInTheDocument();
     const downtimeLogTableRows = screen.queryAllByTestId('tableDowntimeLog.row');

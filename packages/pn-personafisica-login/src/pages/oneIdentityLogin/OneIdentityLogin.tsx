@@ -31,6 +31,7 @@ const OneIdentityLogin: React.FC = () => {
   const { t, i18n } = useTranslation(['login']);
   const isMobile = useIsMobile();
   const navigate = useNavigate();
+
   const rapidAccess = useRapidAccessParam();
   const {
     PAGOPA_HELP_EMAIL,

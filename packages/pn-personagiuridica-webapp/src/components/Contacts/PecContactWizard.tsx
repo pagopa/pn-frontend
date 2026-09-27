@@ -12,8 +12,8 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
-import { IllusHourglass, PnWizard, PnWizardStep } from '@pagopa-pn/pn-commons';
-import { MIAlert, MIButton } from '@pagopa/mui-italia';
+import { PnWizard, PnWizardStep } from '@pagopa-pn/pn-commons';
+import { IllusMIHourglass, MIAlert, MIButton } from '@pagopa/mui-italia';
 
 import { PGEventsType } from '../../models/PGEventsType';
 import { AddressType, ChannelType, SaveDigitalAddressParams } from '../../models/contacts';
@@ -142,7 +142,7 @@ const PecContactWizard: React.FC<Props> = ({
               {t('button.indietro', { ns: 'common' })}
             </MIButton>
           ),
-          feedbackIcon: IllusHourglass,
+          feedbackIcon: IllusMIHourglass,
         }}
         slotsProps={{
           container: {
