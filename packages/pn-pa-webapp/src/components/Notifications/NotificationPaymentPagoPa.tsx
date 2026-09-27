@@ -26,15 +26,14 @@ type StatusVisualInfo = {
   testId: string;
 };
 
-const getStatusVisualInfo = (status?: PaymentStatus): StatusVisualInfo | undefined => {
+const getStatusVisualInfo = (status?: PaymentStatus): StatusVisualInfo => {
   switch (status) {
     case PaymentStatus.SUCCEEDED:
       return { color: 'success', key: 'succeeded', testId: 'payment-succeeded' };
 
     case PaymentStatus.REQUIRED:
-      return { color: 'default', key: 'to-pay', testId: 'payment-required' };
     default:
-      return undefined;
+      return { color: 'default', key: 'to-pay', testId: 'payment-required' };
   }
 };
 
@@ -99,15 +98,13 @@ const NotificationPaymentPagoPa: React.FC<Props> = ({ iun, payment, onDownload }
                 {payment.noticeCode}
               </Typography>
             </Grid>
-            {statusVisualInfo && (
-              <Grid item>
-                <MIChip
-                  data-testid={statusVisualInfo.testId}
-                  label={t(`payment.status.${statusVisualInfo.key}`)}
-                  color={statusVisualInfo.color}
-                />
-              </Grid>
-            )}
+            <Grid item>
+              <MIChip
+                data-testid={statusVisualInfo.testId}
+                label={t(`payment.status.${statusVisualInfo.key}`)}
+                color={statusVisualInfo.color}
+              />
+            </Grid>
           </Grid>
         </Box>
       ) : (
@@ -121,15 +118,13 @@ const NotificationPaymentPagoPa: React.FC<Props> = ({ iun, payment, onDownload }
               {payment.noticeCode}
             </Typography>
           </Grid>
-          {statusVisualInfo && (
-            <Grid item>
-              <MIChip
-                data-testid={statusVisualInfo.testId}
-                label={t(`payment.status.${statusVisualInfo.key}`)}
-                color={statusVisualInfo.color}
-              />
-            </Grid>
-          )}
+          <Grid item>
+            <MIChip
+              data-testid={statusVisualInfo.testId}
+              label={t(`payment.status.${statusVisualInfo.key}`)}
+              color={statusVisualInfo.color}
+            />
+          </Grid>
         </Grid>
       )}
     </MIBoxedModule>

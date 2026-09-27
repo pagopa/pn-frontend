@@ -10,7 +10,6 @@ import {
   PaginationData,
   PagoPAPaymentFullDetails,
   PaymentDetails,
-  PaymentStatus,
   RecipientType,
   getF24Payments,
   getPagoPaF24Payments,
@@ -31,7 +30,7 @@ type NotificationPaymentRecipient = {
 type Props = {
   iun: string;
   recipients: Array<NotificationPaymentRecipient>;
-  timeline?: Array<INotificationDetailTimeline>;
+  timeline: Array<INotificationDetailTimeline>;
   sx?: SxProps;
   onPagoPaDownload?: (payment: PagoPAPaymentFullDetails) => void;
 };
@@ -66,28 +65,6 @@ const renderSelectValue = (
   return recipient ? `${recipient.denomination} - ${recipient.taxId}` : '';
 };
 
-const getPaymentDetails = (
-  payments: NotificationPaymentRecipient['payments'],
-  recipientIndex: number,
-  timeline?: Array<INotificationDetailTimeline>
-): Array<PaymentDetails> => {
-  const paymentDetails = getPagoPaF24Payments(payments ?? [], recipientIndex, false);
-
-  if (!timeline) {
-    return paymentDetails;
-  }
-
-  return populatePaymentsPagoPaF24(timeline, paymentDetails, []).map((payment) => ({
-    ...payment,
-    pagoPa: payment.pagoPa
-      ? {
-          ...payment.pagoPa,
-          status: payment.pagoPa.status ?? PaymentStatus.REQUIRED,
-        }
-      : undefined,
-  }));
-};
-
 const NotificationPaymentSender: React.FC<Props> = ({
   iun,
   recipients,
@@ -99,7 +76,13 @@ const NotificationPaymentSender: React.FC<Props> = ({
   const [recipientSelected, setRecipientSelected] = useState<string>('');
 
   const [paymentDetails, setPaymentDetails] = useState<Array<PaymentDetails>>(
-    recipients.length === 1 ? getPaymentDetails(recipients[0].payments, 0, timeline) : []
+    recipients.length === 1
+      ? populatePaymentsPagoPaF24(
+          timeline,
+          getPagoPaF24Payments(recipients[0].payments ?? [], 0, false),
+          []
+        )
+      : []
   );
 
   const [f24PaymentDetails, setF24PaymentDetails] = useState<Array<F24PaymentDetails>>(
@@ -121,7 +104,12 @@ const NotificationPaymentSender: React.FC<Props> = ({
     }
 
     setPaymentDetails(
-      getPaymentDetails(recipients[recipientIndex].payments, recipientIndex, timeline)
+      populatePaymentsPagoPaF24(
+        timeline,
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        getPagoPaF24Payments(recipients[recipientIndex].payments!, recipientIndex, false),
+        []
+      )
     );
 
     setF24PaymentDetails(

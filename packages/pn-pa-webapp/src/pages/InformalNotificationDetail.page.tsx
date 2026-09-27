@@ -6,6 +6,7 @@ import { Box, Stack } from '@mui/material';
 import {
   AbstractPaper,
   ApiError,
+  INotificationDetailTimeline,
   InformalNotificationStatus,
   LoadingPage,
   NotificationDetailDocuments,
@@ -205,6 +206,15 @@ const InformalNotificationDetail: React.FC = () => {
     },
   ].filter((detail) => detail.value);
 
+  // TODO: remove this cast once the BFF exposes the informal notification timeline
+  // and the generated BFF client is updated.
+  const timeline =
+    (
+      informalNotification as typeof informalNotification & {
+        timeline?: Array<INotificationDetailTimeline>;
+      }
+    ).timeline ?? [];
+
   return (
     <>
       {hasNotificationSentApiError && (
@@ -267,6 +277,14 @@ const InformalNotificationDetail: React.FC = () => {
                   iun={informalNotification.iun}
                   recipients={recipients}
                   onPagoPaDownload={paymentDownloadHandler}
+                  /**
+                   * TODO: when the BFF informal notification timeline is exposed and the OpenAPI client updated
+                   * change the following line to:
+                   * timeline={informalNotification.timeline}
+                   * if BFF declares it as optional use:
+                   * timeline={informalNotification.timeline ?? []}
+                   * */
+                  timeline={timeline}
                 />
               )}
             </Stack>
