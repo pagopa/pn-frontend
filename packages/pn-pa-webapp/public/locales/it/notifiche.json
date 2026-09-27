@@ -372,6 +372,7 @@
         "M07": "perché l'indirizzo è inesistente",
         "M08": "perché l'indirizzo è insufficiente",
         "M09": "per altre motivazioni",
+        "M10": "perché l'indirizzo non è leggibile",
         "F01": "per furto della busta",
         "F02": "per smarrimento della busta",
         "F03": "per deterioramento della busta",
