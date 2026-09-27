@@ -149,7 +149,7 @@ describe('Dashbaord redux state tests', () => {
     });
   });
 
-  it('Should reset pagination when switching to delegated page', async () => {
+  it('Should reset pagination and filters when switching to delegated page', async () => {
     const paginatedNotificationsDTO = {
       ...notificationsDTO,
       moreResult: true,
@@ -165,6 +165,17 @@ describe('Dashbaord redux state tests', () => {
       )
       .reply(200, paginatedNotificationsDTO);
 
+    // set non default filters
+    store.dispatch(
+      setNotificationFilters({
+        startDate: tenYearsAgo,
+        endDate: today,
+        communicationType: 'LEGAL',
+        iunMatch: 'QVNA-WYDP-KAHE-202504-X-1',
+      })
+    );
+
+    // load notifications
     await store.dispatch(
       getReceivedNotifications({
         startDate: tenYearsAgo,
@@ -195,6 +206,13 @@ describe('Dashbaord redux state tests', () => {
     expect(stateAfterReset.pagination.page).toBe(0);
     expect(stateAfterReset.pagination.nextPagesKey).toEqual([]);
     expect(stateAfterReset.pagination.moreResult).toBe(false);
+    expect(stateAfterReset.filters).toEqual({
+      startDate: undefined,
+      endDate: undefined,
+      communicationType: '',
+      iunMatch: '',
+    });
+    expect(stateAfterReset.notifications).toEqual([]);
   });
 
   it('Should be able to change sort', () => {

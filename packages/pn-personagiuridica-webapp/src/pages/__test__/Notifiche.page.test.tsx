@@ -346,7 +346,7 @@ describe('Notifiche Page ', () => {
     expect(notificationsTableRows).toHaveLength(notificationGroup3.length);
   });
 
-  it('resets pagination when switching to delegated notifications', async () => {
+  it('resets pagination and filters when switching to delegated notifications', async () => {
     const delegatedNotificationsDTO = {
       ...notificationsDTO,
       nextPagesKey: [],
@@ -361,7 +361,13 @@ describe('Notifiche Page ', () => {
           userState: {
             user: userResponse,
           },
-          dashboardState: dashboardPaginatedState,
+          dashboardState: {
+            ...dashboardPaginatedState,
+            filters: {
+              ...dashboardPaginatedState.filters,
+              iunMatch: 'QVNA-WYDP-KAHE-202504-X-1',
+            },
+          },
         },
       });
     });
@@ -378,6 +384,12 @@ describe('Notifiche Page ', () => {
     expect(dashboardState.pagination.page).toBe(0);
     expect(dashboardState.pagination.nextPagesKey).toEqual([]);
     expect(dashboardState.pagination.moreResult).toBe(false);
+    expect(dashboardState.filters).toEqual({
+      startDate: undefined,
+      endDate: undefined,
+      communicationType: '',
+      iunMatch: '',
+    });
   });
 
   it('renders page - mobile', async () => {

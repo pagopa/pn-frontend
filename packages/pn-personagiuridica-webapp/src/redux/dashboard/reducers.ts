@@ -55,6 +55,13 @@ const dashboardSlice = createSlice({
     setIsDelegatedPage: (state, action: PayloadAction<boolean>) => {
       if (state.isDelegatedPage !== action.payload) {
         state.isDelegatedPage = action.payload;
+        state.notifications = [];
+        state.filters = {
+          startDate: undefined,
+          endDate: undefined,
+          communicationType: '',
+          iunMatch: '',
+        };
         resetPaginationState(state);
       }
     },
