@@ -5,7 +5,6 @@ import { Box, Divider, MenuItem, Stack, SxProps, TextField, Typography } from '@
 import {
   CustomPagination,
   F24PaymentDetails,
-  INotificationDetailTimeline,
   NotificationCommunicationType,
   NotificationPayment,
   PaginationData,
@@ -16,6 +15,7 @@ import {
   getPagoPaF24Payments,
   populatePaymentsPagoPaF24,
 } from '@pagopa-pn/pn-commons';
+import { NotificationPaymentTimelineElement } from '@pagopa-pn/pn-commons/src/models/NotificationTimeline';
 import { MIPaper } from '@pagopa/mui-italia';
 
 import NotificationPaymentF24 from './NotificationPaymentF24';
@@ -31,7 +31,7 @@ type NotificationPaymentRecipient = {
 type Props = {
   iun: string;
   recipients: Array<NotificationPaymentRecipient>;
-  timeline: Array<INotificationDetailTimeline>;
+  timeline: Array<NotificationPaymentTimelineElement>;
   communicationType?: NotificationCommunicationType;
   sx?: SxProps;
 };

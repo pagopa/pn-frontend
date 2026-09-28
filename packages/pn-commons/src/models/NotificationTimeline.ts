@@ -90,3 +90,8 @@ export const NotificationTimelineGroupCategory = {
 
 export type NotificationTimelineGroupCategory =
   (typeof NotificationTimelineGroupCategory)[keyof typeof NotificationTimelineGroupCategory];
+
+export type NotificationPaymentTimelineElement = {
+  category?: string;
+  details?: unknown;
+};

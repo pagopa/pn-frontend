@@ -29,6 +29,7 @@ import {
   TimelineCategory,
 } from '../models/NotificationDetail';
 import { InformalNotificationStatus, NotificationStatus } from '../models/NotificationStatus';
+import { NotificationPaymentTimelineElement } from '../models/NotificationTimeline';
 import { getLocalizedOrDefaultLabel, hasLocalizedLabel } from '../utility/localization.utility';
 import { TimelineStepInfo } from './TimelineUtils/TimelineStep';
 import { TimelineStepFactory } from './TimelineUtils/TimelineStepFactory';
@@ -773,7 +774,7 @@ export const getPagoPaF24Payments = (
  * @returns Array<PaymentDetails>
  */
 export const populatePaymentsPagoPaF24 = (
-  timeline: Array<INotificationDetailTimeline>,
+  timeline: Array<NotificationPaymentTimelineElement>,
   pagoPaF24Payments: Array<PaymentDetails> | Array<NotificationPayment>,
   checkoutPayments: Array<ExtRegistriesPaymentDetails>
 ): Array<PaymentDetails> => {
@@ -817,7 +818,7 @@ export const populatePaymentsPagoPaF24 = (
         paymentDetails.creditorTaxId === userPayment?.pagoPa?.creditorTaxId &&
         paymentDetails.noticeCode === userPayment?.pagoPa?.noticeCode
       );
-    })?.details;
+    })?.details as PaidDetails | undefined;
 
     if (timelineEvent) {
       (Object.keys(timelineEvent) as Array<keyof NotificationDetailTimelineDetails>).forEach(
