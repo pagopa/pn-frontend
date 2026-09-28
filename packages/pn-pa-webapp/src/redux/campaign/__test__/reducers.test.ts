@@ -61,17 +61,17 @@ describe('Campaign redux state tests', () => {
         page: 0,
         moreResult: false,
       },
-      communicationFilters: {
-        recipientId: '',
-        iunMatch: '',
-        status: [],
-        outcome: '',
-      },
       communicationsPagination: {
         nextPagesKey: [],
         size: 10,
         page: 0,
         moreResult: false,
+      },
+      communicationFilters: {
+        recipientId: '',
+        iunMatch: '',
+        status: [],
+        outcome: '',
       },
     });
   });
@@ -169,7 +169,7 @@ describe('Campaign redux state tests', () => {
         moreResult: false,
       },
       communicationsPagination: {
-        nextPagesKey: [] as Array<string>,
+        nextPagesKey: [],
         size: 10,
         page: 0,
         moreResult: false,
