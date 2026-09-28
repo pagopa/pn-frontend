@@ -16,7 +16,6 @@ import {
   downloadDocument,
   useErrors,
 } from '@pagopa-pn/pn-commons';
-import { getInformalNotificationStatusInfos } from '@pagopa-pn/pn-commons/src/utility/notification.utility';
 import { MIBreadcrumbItem, MIBreadcrumbs, MIPaper } from '@pagopa/mui-italia';
 
 import InformalNotificationChannelStatusBox from '../components/Notifications/InformalNotificationChannelStatus/InformalNotificationChannelStatusBox';
@@ -26,6 +25,7 @@ import NotificationDetailsDrawer, {
 import NotificationPaymentSender from '../components/Notifications/NotificationPaymentSender';
 import NotificationRecipientsDetail from '../components/Notifications/NotificationRecipientsDetail';
 import { BffDocumentDownloadMetadataResponse } from '../generated-client/informal-notifications';
+import { communicationStatusOptions } from '../models/Campaign';
 import * as routes from '../navigation/routes.const';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import {
@@ -106,9 +106,17 @@ const InformalNotificationDetail: React.FC = () => {
 
   const recipients = informalNotification.recipients;
 
-  const notificationStatusInfos = getInformalNotificationStatusInfos(
+  const notificationStatusInfos = communicationStatusOptions.find((st) =>
+    st.value.includes(informalNotification.notificationStatus as InformalNotificationStatus)
+  ) ?? {
+    color: 'default',
+    label: `informal.status.unknown.label`,
+    description: `informal.status.unknown.description`,
+  };
+
+  /* getInformalNotificationStatusInfos(
     informalNotification.notificationStatus as InformalNotificationStatus
-  );
+  ); */
 
   const showInfoMessageIfRetryAfterOrDownload = (response: BffDocumentDownloadMetadataResponse) => {
     if (response.retryAfter) {
@@ -275,7 +283,7 @@ const InformalNotificationDetail: React.FC = () => {
                 color={notificationStatusInfos.color}
                 description={notificationStatusInfos.description}
                 detailsLabel={t('informal.detail.status.go-to-detail')}
-                label={notificationStatusInfos.label}
+                label={t(notificationStatusInfos.label)}
                 title={t('informal.detail.status.title')}
                 onDetailsClick={goToCommunicationTimeline}
               />

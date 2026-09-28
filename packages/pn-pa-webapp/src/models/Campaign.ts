@@ -19,6 +19,7 @@ export type CommunicationFilters = {
 
 type CommunicationStatusOption = {
   id: CommunicationStatusFilter;
+  description: string;
   label: string;
   value: Array<InformalNotificationStatus>;
   color: 'default' | 'info' | 'error' | 'highlight';
@@ -28,18 +29,21 @@ export const communicationStatusOptions: Array<CommunicationStatusOption> = [
   {
     id: CommunicationStatusFilter.READY,
     label: 'detail.communications.statuses.ready',
+    description: '',
     value: [InformalNotificationStatus.ACCEPTED],
     color: 'default',
   },
   {
     id: CommunicationStatusFilter.PROCESSING,
     label: 'detail.communications.statuses.processing',
+    description: '',
     value: [InformalNotificationStatus.PROCESSING],
     color: 'info',
   },
   {
     id: CommunicationStatusFilter.SUCCESS,
     label: 'detail.communications.statuses.success',
+    description: '',
     value: [
       InformalNotificationStatus.COMPLETED_REACHED,
       InformalNotificationStatus.COMPLETED_UNREACHED,
@@ -49,12 +53,14 @@ export const communicationStatusOptions: Array<CommunicationStatusOption> = [
   {
     id: CommunicationStatusFilter.FAILED,
     label: 'detail.communications.statuses.failed',
+    description: '',
     value: [InformalNotificationStatus.UNDELIVERABLE],
     color: 'error',
   },
   {
     id: CommunicationStatusFilter.REFUSED,
     label: 'detail.communications.statuses.refused',
+    description: '',
     value: [InformalNotificationStatus.REFUSED],
     color: 'error',
   },
