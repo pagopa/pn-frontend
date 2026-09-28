@@ -76,6 +76,51 @@ describe('OnboardingContactItem', () => {
 
       expect(getAllByRole('button')).toHaveLength(1);
     });
+
+    it('renders the submit button inline (next to the input) by default', () => {
+      const { getByRole, getByLabelText } = render(
+        <OnboardingContactItem
+          mode="entry"
+          inputLabel="mock-input-label"
+          value=""
+          buttonLabel="mock-submit"
+          footer="mock-footer"
+          onChange={vi.fn()}
+          onSubmit={vi.fn()}
+        />
+      );
+
+      const submitButton = getByRole('button', { name: 'mock-submit' });
+      const inputRow = getByLabelText('mock-input-label').closest('.MuiStack-root');
+
+      // in inline mode the button lives in the same row as the input
+      expect(inputRow?.contains(submitButton)).toBe(true);
+    });
+
+    it('renders the submit button below the input when buttonPlacement is "below"', () => {
+      const { getByRole, getByLabelText, getByText } = render(
+        <OnboardingContactItem
+          mode="entry"
+          inputLabel="mock-input-label"
+          value=""
+          buttonLabel="mock-submit"
+          buttonPlacement="below"
+          footer="mock-footer"
+          onChange={vi.fn()}
+          onSubmit={vi.fn()}
+        />
+      );
+
+      const submitButton = getByRole('button', { name: 'mock-submit' });
+      const inputRow = getByLabelText('mock-input-label').closest('.MuiStack-root');
+
+      expect(inputRow?.contains(submitButton)).toBe(false);
+
+      const footer = getByText('mock-footer');
+      expect(
+        footer.compareDocumentPosition(submitButton) & Node.DOCUMENT_POSITION_FOLLOWING
+      ).toBeTruthy();
+    });
   });
 
   describe('view mode', () => {

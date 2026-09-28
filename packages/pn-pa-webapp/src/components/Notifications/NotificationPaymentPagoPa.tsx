@@ -17,6 +17,7 @@ import { getSentNotificationPayment } from '../../redux/notification/actions';
 type Props = {
   iun: string;
   payment: PagoPAPaymentFullDetails;
+  onDownload?: (payment: PagoPAPaymentFullDetails) => void;
 };
 
 type StatusVisualInfo = {
@@ -36,13 +37,18 @@ const getStatusVisualInfo = (status?: PaymentStatus): StatusVisualInfo => {
   }
 };
 
-const NotificationPaymentPagoPa: React.FC<Props> = ({ iun, payment }) => {
+const NotificationPaymentPagoPa: React.FC<Props> = ({ iun, payment, onDownload }) => {
   const { t } = useTranslation(['notifiche']);
   const dispatch = useAppDispatch();
 
   const statusVisualInfo = getStatusVisualInfo(payment.status);
 
   const downloadHandler = () => {
+    if (onDownload) {
+      onDownload(payment);
+      return;
+    }
+
     if (!isNil(payment.recIndex) && payment.attachment) {
       dispatch(
         getSentNotificationPayment({

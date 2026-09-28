@@ -402,6 +402,7 @@
         "M07": "parce que l’adresse est incorrecte",
         "M08": "parce que l’adresse n’existe pas",
         "M09": "pour d’autres raisons",
+        "M10": "parce que l'adresse n'est pas lisible",
         "F01": "pour vol du pli",
         "F02": "pour d’autres raisons",
         "F03": "pour vol de l’enveloppe",

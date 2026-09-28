@@ -102,6 +102,7 @@ const NotificationDetail: React.FC = () => {
     DOWNTIME_EXAMPLE_LINK,
     NOTIFICATION_COST_DETAILS_ASSISTANCE_LINK,
     NOTIFICATION_CANCELLED_HELP_LINK,
+    NOTIFICATION_PERFECTION_LINK,
     FACSIMILE_EN,
     FACSIMILE_FR,
     FACSIMILE_DE,
@@ -753,6 +754,7 @@ const NotificationDetail: React.FC = () => {
                     onTimelineClick={handleGoToTimeline}
                     clickHandler={legalFactDownloadHandler}
                     isNewTimelineCopyEnabled={IS_NEW_TIMELINE_COPY_ENABLED}
+                    perfectionLink={NOTIFICATION_PERFECTION_LINK}
                   />
                 )}
                 <NotificationDetailSection
