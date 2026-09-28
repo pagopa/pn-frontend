@@ -9,10 +9,9 @@ import {
   INotificationDetailTimeline,
   InformalNotificationStatus,
   LoadingPage,
+  NotificationCommunicationType,
   NotificationDetailDocuments,
   NotificationStatusBox,
-  PagoPAPaymentFullDetails,
-  PaymentAttachmentSName,
   appStateActions,
   downloadDocument,
   useErrors,
@@ -33,7 +32,6 @@ import {
   NOTIFICATION_ACTIONS,
   getSentInformalNotification,
   getSentInformalNotificationDocument,
-  getSentInformalNotificationPayment,
 } from '../redux/notification/actions';
 import { RootState } from '../redux/store';
 
@@ -134,24 +132,6 @@ const InformalNotificationDetail: React.FC = () => {
       getSentInformalNotificationDocument({
         iun: informalNotification.iun,
         docIdx: Number(document),
-      })
-    )
-      .unwrap()
-      .then(showInfoMessageIfRetryAfterOrDownload)
-      .catch(() => {});
-  };
-
-  const paymentDownloadHandler = (payment: PagoPAPaymentFullDetails) => {
-    if (payment.recIndex === undefined || !payment.attachment) {
-      return;
-    }
-
-    void dispatch(
-      getSentInformalNotificationPayment({
-        iun: informalNotification.iun,
-        recipientIdx: payment.recIndex,
-        attachmentName: PaymentAttachmentSName.PAGOPA,
-        attachmentIdx: payment.attachmentIdx,
       })
     )
       .unwrap()
@@ -276,7 +256,7 @@ const InformalNotificationDetail: React.FC = () => {
                 <NotificationPaymentSender
                   iun={informalNotification.iun}
                   recipients={recipients}
-                  onPagoPaDownload={paymentDownloadHandler}
+                  communicationType={NotificationCommunicationType.INFORMAL}
                   /**
                    * TODO: when the BFF informal notification timeline is exposed and the OpenAPI client updated
                    * change the following line to:
