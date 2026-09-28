@@ -1,9 +1,8 @@
 import MockAdapter from 'axios-mock-adapter';
 
-import { AppResponseMessage, ResponseEventDispatcher } from '@pagopa-pn/pn-commons';
-
+// import { AppResponseMessage, ResponseEventDispatcher } from '@pagopa-pn/pn-commons';
 import { campaignDetailMock } from '../../__mocks__/CampaignDetail.mock';
-import { RenderResult, act, fireEvent, render, waitFor } from '../../__test__/test-utils';
+import { RenderResult, act, render, waitFor } from '../../__test__/test-utils';
 import { apiClient } from '../../api/apiClients';
 import CampaignDetail from '../CampaignDetail.page';
 
