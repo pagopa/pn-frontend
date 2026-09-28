@@ -34,9 +34,12 @@ const CampaignDetail: React.FC = () => {
   const [pageReady, setPageReady] = useState(false);
   const [communicationsReady, setCommunicationsReady] = useState(false);
   const [hasInitialCommunications, setHasInitialCommunications] = useState<boolean | null>(null);
-  const isPageReady = pageReady && communicationsReady && !!campaign.campaignId;
+  const isPageReady = pageReady && communicationsReady;
   const { t } = useTranslation(['campaigns', 'common']);
   const hasCampaignDetailApiError = hasApiErrors(CAMPAIGN_ACTIONS.GET_CAMPAIGN_DETAIL);
+  const hasCampaignCommunicationsApiError = hasApiErrors(
+    CAMPAIGN_ACTIONS.GET_CAMPAIGN_COMMUNICATIONS
+  );
 
   const fetchCampaignDetail = useCallback(() => {
     if (id) {
@@ -114,7 +117,8 @@ const CampaignDetail: React.FC = () => {
       }}
     >
       {breadcrumb}
-      {hasCampaignDetailApiError && (
+      {!isPageReady && <PnCampaignDetailLoading />}
+      {isPageReady && hasCampaignDetailApiError && (
         <ApiError
           apiId={CAMPAIGN_ACTIONS.GET_CAMPAIGN_DETAIL}
           customErrorComponent={
@@ -130,9 +134,7 @@ const CampaignDetail: React.FC = () => {
         />
       )}
 
-      {!hasCampaignDetailApiError && !isPageReady && <PnCampaignDetailLoading />}
-
-      {!hasCampaignDetailApiError && isPageReady && (
+      {isPageReady && !hasCampaignDetailApiError && (
         <>
           <TitleBox
             title={campaign.title}
@@ -149,6 +151,31 @@ const CampaignDetail: React.FC = () => {
               .map((channel) => t(`detail.channels.${channel}`))
               .join(' · ')}
           />
+        </>
+      )}
+
+      {isPageReady && hasCampaignCommunicationsApiError && (
+        <ApiError
+          apiId={CAMPAIGN_ACTIONS.GET_CAMPAIGN_COMMUNICATIONS}
+          customErrorComponent={
+            <EmptyErrorState
+              variant="error"
+              title={t('detail.empty-state.generic-error')}
+              action={{
+                label: t('detail.empty-state.generic-error-cta'),
+                onClick: () =>
+                  fetchCampaignCommunications(
+                    0,
+                    communicationsPagination.size,
+                    communicationFilters
+                  ),
+              }}
+            />
+          }
+        />
+      )}
+      {isPageReady && !hasCampaignCommunicationsApiError && (
+        <>
           {hasInitialCommunications ? (
             <PnCampaignCommunications fetchCampaignCommunications={fetchCampaignCommunications} />
           ) : (
