@@ -3,10 +3,11 @@ import { Trans, useTranslation } from 'react-i18next';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import * as yup from 'yup';
 
+import ArrowBackRoundedIcon from '@mui/icons-material/ArrowBackRounded';
 import { Box, Button, Link, Paper, Stack, TextField, Typography } from '@mui/material';
 import { Prompt, TitleBox } from '@pagopa-pn/pn-commons';
 import { ValidationError } from '@pagopa-pn/pn-validator';
-import { MIButton } from '@pagopa/mui-italia';
+import { MIAlert, MIButton } from '@pagopa/mui-italia';
 
 import ZendeskForm from '../components/Support/ZendeskForm';
 import { SupportForm, ZendeskAuthorizationDTO } from '../models/Support';
@@ -143,7 +144,10 @@ const SupportPage: React.FC = () => {
             subTitle={t('sub-title')}
             variantSubTitle="body1"
           />
-          <Paper sx={{ p: 3, mt: 4 }}>
+          <MIAlert severity="info" data-testid="pecDisclaimer" sx={{ my: 3 }}>
+            {t('pec-disclaimer')}
+          </MIAlert>
+          <Paper sx={{ p: 2 }}>
             <form data-testid="supportForm">
               <TextField
                 id="mail"
@@ -168,7 +172,7 @@ const SupportPage: React.FC = () => {
                 size="small"
                 type="mail"
                 fullWidth
-                sx={{ mt: 4 }}
+                sx={{ mt: 3 }}
                 onChange={(e) => handleChange('UPDATE_CONFIRM_EMAIL', e)}
                 value={formData.confirmEmail.value}
                 error={formData.confirmEmail.touched && !!formData.errors?.confirmEmail}
@@ -180,7 +184,7 @@ const SupportPage: React.FC = () => {
               />
             </form>
           </Paper>
-          <Typography variant="body2" sx={{ mt: 2, color: 'text.secondary' }}>
+          <Typography variant="body2" sx={{ mt: 2, color: 'text.secondary', fontSize: '14px' }}>
             <Trans
               ns={'support'}
               i18nKey={'disclaimer'}
@@ -198,7 +202,6 @@ const SupportPage: React.FC = () => {
             <Button
               disabled={!!formData.errors}
               variant="contained"
-              size="small"
               sx={{ width: { xs: 1, sm: 'auto' } }}
               onClick={handleConfirm}
               data-testid="continueButton"
@@ -207,10 +210,10 @@ const SupportPage: React.FC = () => {
             </Button>
             <MIButton
               variant="outlined"
-              size="small"
               sx={{ mt: { xs: 2, sm: 0 }, width: { xs: 1, sm: 'auto' } }}
               onClick={handleCancel}
               data-testid="backButton"
+              startIcon={<ArrowBackRoundedIcon />}
             >
               {t('button.indietro', { ns: 'common' })}
             </MIButton>
