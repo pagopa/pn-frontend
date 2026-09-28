@@ -40,43 +40,11 @@ type StatusInfo = {
   description: string;
 };
 
-/**
- * The VIEWED status has three readings, and only the first one is expressed by `status.viewed*`:
- * the recipient opened the notification and that is what made it legally effective, a delegate
- * opened it on their behalf, or the access came when the notification had already perfected by
- * deadline - in which case it is no longer the access that gives it legal value.
- *
- * The two variants only exist in the revised copy, so each one is taken only when its key is there:
- * with the overlay off nothing is found and the standard VIEWED wording is kept.
- */
 function viewedStatusVariant(
   statusInfos: StatusInfo,
   statusObject?: NotificationStatusHistory,
-  statusHistory?: Array<NotificationStatusHistory>,
-  viewedAt?: string
+  isMultiRecipient?: boolean
 ): StatusInfo {
-  const effectiveDateFrom = statusHistory?.find(
-    (s) => s.status === NotificationStatus.EFFECTIVE_DATE
-  )?.activeFrom;
-  const viewedAfterEffectiveDate =
-    !!effectiveDateFrom &&
-    !!statusObject &&
-    new Date(effectiveDateFrom).getTime() < new Date(statusObject.activeFrom).getTime();
-
-  if (
-    viewedAfterEffectiveDate &&
-    hasLocalizedLabel('notifications', `status.viewed-after-effective-date`)
-  ) {
-    return {
-      ...statusInfos,
-      label: getLocalizedOrDefaultLabel('notifications', `status.viewed-after-effective-date`),
-      description: getLocalizedOrDefaultLabel(
-        'notifications',
-        `status.viewed-after-effective-date-description`
-      ),
-    };
-  }
-
   if (
     statusObject?.recipient &&
     hasLocalizedLabel('notifications', `status.viewed-by-delegate-description`)
@@ -87,9 +55,193 @@ function viewedStatusVariant(
         'notifications',
         `status.viewed-by-delegate-description`,
         undefined,
-        { name: statusObject.recipient, viewedAt }
+        { name: statusObject.recipient }
       ),
     };
+  }
+
+  const hasViewedLegalFact = !!statusObject?.steps?.some(
+    (step) => step.category === TimelineCategory.NOTIFICATION_VIEWED && step.legalFactsIds?.length
+  );
+  if (
+    isMultiRecipient &&
+    !hasViewedLegalFact &&
+    hasLocalizedLabel(
+      'notifications',
+      `status.viewed-without-legal-fact-description-multirecipient`
+    )
+  ) {
+    return {
+      ...statusInfos,
+      description: getLocalizedOrDefaultLabel(
+        'notifications',
+        `status.viewed-without-legal-fact-description-multirecipient`
+      ),
+    };
+  }
+
+  return statusInfos;
+}
+
+/*
+ * Returns the mapping between current notification delivered status, label and descriptive message for PA
+ * @param  {NotificationStatus} status
+ * @returns object
+ */
+function getNotificationDeliveredInfosForPA(
+  statusInfos: StatusInfo,
+  statusObject: NotificationStatusHistory | undefined,
+  statusHistory: Array<NotificationStatusHistory>
+): StatusInfo {
+  if (!statusObject) {
+    return statusInfos;
+  }
+  // the timeline event that tells us if there is a stock and its status can be in the DELIVERED status and also in the DELIVERING one.
+  // we have to get the DELIVERING STATUS and get only those events that are cronologically before the DELIVERED status
+  // for each status we have the activeFrom property that is the date from witch the status starts to take effect
+  const activeFrom = new Date(statusObject.activeFrom);
+  // the timeline can be corrected and so we can have multiple DELIVERED statuses
+  // in this case we have to get only those DELIVERING events that are releated to the current DELIVERED status
+  // to do this, we have to check if there is a DELIVERED status next to the current (beacuse the events are ordered from most recent to the oldest)
+  const nextDeliveredStatus = statusHistory.find(
+    (status) =>
+      status.status === NotificationStatus.DELIVERED && new Date(status.activeFrom) < activeFrom
+  );
+  // calc when the next status starts to take effect
+  const activeTo = nextDeliveredStatus ? new Date(nextDeliveredStatus.activeFrom) : null;
+  // get delivering status and filter out those events that are from the date of delivered status activation
+  // and the date of the next status activation (i.e. the date from witch the delivered status ends to take effect)
+  const deliveringStatus = statusHistory.find(
+    (history) => history.status === NotificationStatus.DELIVERING
+  );
+  const deliveringStepsBeforeDelivered = deliveringStatus?.steps?.filter((step) =>
+    activeTo
+      ? new Date(step.timestamp) <= activeFrom && new Date(step.timestamp) > activeTo
+      : new Date(step.timestamp) <= activeFrom
+  );
+  const stepsToCheck = [...(statusObject.steps || []), ...(deliveringStepsBeforeDelivered ?? [])];
+  const isStock = stepsToCheck.some(
+    (step) =>
+      (step.category === TimelineCategory.SEND_ANALOG_PROGRESS ||
+        step.category === TimelineCategory.SEND_ANALOG_FEEDBACK) &&
+      AnalogDeliveryCodeStock.has((step.details as SendPaperDetails).deliveryDetailCode ?? '')
+  );
+  const isWithdrawnStock = stepsToCheck.some(
+    (step) =>
+      (step.category === TimelineCategory.SEND_ANALOG_PROGRESS ||
+        step.category === TimelineCategory.SEND_ANALOG_FEEDBACK) &&
+      AnalogDeliveryCodeWithdrawnStock.has(
+        (step.details as SendPaperDetails).deliveryDetailCode ?? ''
+      )
+  );
+  const isExpiredStock = stepsToCheck.some(
+    (step) =>
+      (step.category === TimelineCategory.SEND_ANALOG_PROGRESS ||
+        step.category === TimelineCategory.SEND_ANALOG_FEEDBACK) &&
+      AnalogDeliveryCodeExpiredStock.has(
+        (step.details as SendPaperDetails).deliveryDetailCode ?? ''
+      )
+  );
+  // case giacenza
+  if (isExpiredStock) {
+    // case expired stock
+    statusInfos.label = getLocalizedOrDefaultLabel(
+      'notifications',
+      'status.delivered-expired-stock'
+    );
+    statusInfos.description = getLocalizedOrDefaultLabel(
+      'notifications',
+      'status.delivered-expired-stock-description'
+    );
+  } else if (isWithdrawnStock) {
+    // case withdraw stock
+    statusInfos.label = getLocalizedOrDefaultLabel(
+      'notifications',
+      'status.delivered-withdrawn-stock'
+    );
+    statusInfos.description = getLocalizedOrDefaultLabel(
+      'notifications',
+      'status.delivered-withdrawn-stock-description'
+    );
+  } else if (isStock) {
+    statusInfos.label = getLocalizedOrDefaultLabel('notifications', 'status.delivered-stock');
+    statusInfos.description = getLocalizedOrDefaultLabel(
+      'notifications',
+      'status.delivered-stock-description'
+    );
+  } else {
+    statusInfos.label = getLocalizedOrDefaultLabel(
+      'notifications',
+      'status.delivered-monorecipient'
+    );
+  }
+  return statusInfos;
+}
+
+/**
+ * Returns the localized information for the DELIVERED status.
+ *
+ * Uses the delivery-mode-specific description when the corresponding localization
+ * exists, including the multi-recipient variant. Otherwise, it preserves the legacy
+ * behavior for multi-recipient notifications, PA-specific statuses and delivery mode.
+ *
+ * @param isMultiRecipient Whether the notification has multiple recipients.
+ * @param statusObject Status history entry containing delivery information.
+ * @param options Status history, recipients and party context.
+ * @returns The localized label, tooltip and description for the DELIVERED status.
+ */
+function deliveredStatusVariant(
+  isMultiRecipient?: boolean,
+  statusObject?: NotificationStatusHistory,
+  options?: {
+    statusHistory?: Array<NotificationStatusHistory>;
+    recipients: Array<NotificationDetailRecipient | string>;
+    isParty?: boolean;
+  }
+): StatusInfo {
+  const statusInfos = localizeStatus('delivered', { isMultiRecipient });
+  const deliveryMode = statusObject?.deliveryMode;
+  const deliveryModeDescriptionKey = `status.delivered-description-${deliveryMode}${
+    isMultiRecipient ? '-multirecipient' : ''
+  }`;
+
+  // if the deliveryMode is defined, then change the description for a more specific one ...
+  // ... if we have status description label with delivery mode
+  if (deliveryMode && hasLocalizedLabel('notifications', deliveryModeDescriptionKey)) {
+    statusInfos.description = getLocalizedOrDefaultLabel(
+      'notifications',
+      deliveryModeDescriptionKey
+    );
+
+    return statusInfos;
+  }
+
+  if (isMultiRecipient) {
+    return statusInfos;
+  }
+
+  // if it is a PA, change the title and the description
+  // ... only for single-recipient notifications!
+  if (options?.isParty) {
+    getNotificationDeliveredInfosForPA(statusInfos, statusObject, options.statusHistory || []);
+    return statusInfos;
+  }
+
+  // if the deliveryMode is defined, then change the description for a more specific one ...
+  // ... only for single-recipient notifications!
+  if (deliveryMode) {
+    const deliveryModeDescription = getLocalizedOrDefaultLabel(
+      'notifications',
+      `status.deliveryMode.${deliveryMode}`
+    );
+    statusInfos.description = getLocalizedOrDefaultLabel(
+      'notifications',
+      'status.delivered-description-with-delivery-mode',
+      undefined,
+      { deliveryMode: deliveryModeDescription }
+    );
+
+    return statusInfos;
   }
 
   return statusInfos;
@@ -132,101 +284,6 @@ function localizeStatus(status: string, data?: { [key: string]: any }): StatusIn
       filteredData
     ),
   };
-}
-
-/*
- * Returns the mapping between current notification delivered status, label and descriptive message for PA
- * @param  {NotificationStatus} status
- * @returns object
- */
-function getNotificationDeliveredInfosForPA(
-  statusInfos: StatusInfo,
-  statusObject: NotificationStatusHistory | undefined,
-  statusHistory: Array<NotificationStatusHistory>
-): StatusInfo {
-  if (!statusObject) {
-    return statusInfos;
-  }
-  // the timeline event that tells us if there is a stock and its status can be in the DELIVERED status and also in the DELIVERING one.
-  // we have to get the DELIVERING STATUS and get only those events that are cronologically before the DELIVERED status
-  // for each status we have the activeFrom property that is the date from witch the status starts to take effect
-  const activeFrom = new Date(statusObject.activeFrom);
-  // the timeline can be corrected and so we can have multiple DELIVERED statuses
-  // in this case we have to get only those DELIVERING events that are releated to the current DELIVERED status
-  // to do this, we have to check if there is a DELIVERED status next to the current (beacuse the events are ordered from most recent to the oldest)
-  const nextDeliveredStatus = statusHistory.find(
-    (status) =>
-      status.status === NotificationStatus.DELIVERED && new Date(status.activeFrom) < activeFrom
-  );
-  // calc when the next status starts to take effect
-  const activeTo = nextDeliveredStatus ? new Date(nextDeliveredStatus.activeFrom) : null;
-  // get delivering status and filter out those events that are from the date of delivered status activation
-  // and the date of the next status activation (i.e. the date from witch the delivered status ends to take effect)
-  const deliveringStatus = statusHistory.find(
-    (history) => history.status === NotificationStatus.DELIVERING
-  );
-  const deliveringStepsBeforeDelivered = deliveringStatus?.steps?.filter((step) =>
-    activeTo
-      ? new Date(step.timestamp) <= activeFrom && new Date(step.timestamp) > activeTo
-      : new Date(step.timestamp) <= activeFrom
-  );
-  const stepsToCheck = [...(statusObject.steps || []), ...(deliveringStepsBeforeDelivered ?? [])];
-  const isStock = stepsToCheck.find(
-    (step) =>
-      (step.category === TimelineCategory.SEND_ANALOG_PROGRESS ||
-        step.category === TimelineCategory.SEND_ANALOG_FEEDBACK) &&
-      AnalogDeliveryCodeStock.has((step.details as SendPaperDetails).deliveryDetailCode ?? '')
-  );
-  const isWithdrawnStock = stepsToCheck.find(
-    (step) =>
-      (step.category === TimelineCategory.SEND_ANALOG_PROGRESS ||
-        step.category === TimelineCategory.SEND_ANALOG_FEEDBACK) &&
-      AnalogDeliveryCodeWithdrawnStock.has(
-        (step.details as SendPaperDetails).deliveryDetailCode ?? ''
-      )
-  );
-  const isExpiredStock = stepsToCheck.find(
-    (step) =>
-      (step.category === TimelineCategory.SEND_ANALOG_PROGRESS ||
-        step.category === TimelineCategory.SEND_ANALOG_FEEDBACK) &&
-      AnalogDeliveryCodeExpiredStock.has(
-        (step.details as SendPaperDetails).deliveryDetailCode ?? ''
-      )
-  );
-  // case giacenza
-  if (isExpiredStock) {
-    // case expired stock
-    statusInfos.label = getLocalizedOrDefaultLabel(
-      'notifications',
-      'status.delivered-expired-stock'
-    );
-    statusInfos.description = getLocalizedOrDefaultLabel(
-      'notifications',
-      'status.delivered-expired-stock-description'
-    );
-  } else if (isWithdrawnStock) {
-    // case withdraw stock
-    statusInfos.label = getLocalizedOrDefaultLabel(
-      'notifications',
-      'status.delivered-withdrawn-stock'
-    );
-    statusInfos.description = getLocalizedOrDefaultLabel(
-      'notifications',
-      'status.delivered-withdrawn-stock-description'
-    );
-  } else if (isStock) {
-    statusInfos.label = getLocalizedOrDefaultLabel('notifications', 'status.delivered-stock');
-    statusInfos.description = getLocalizedOrDefaultLabel(
-      'notifications',
-      'status.delivered-stock-description'
-    );
-  } else {
-    statusInfos.label = getLocalizedOrDefaultLabel(
-      'notifications',
-      'status.delivered-monorecipient'
-    );
-  }
-  return statusInfos;
 }
 
 /**
@@ -274,27 +331,7 @@ export function getNotificationStatusInfos(
 
   switch (actualStatus) {
     case NotificationStatus.DELIVERED: {
-      const statusInfos = localizeStatus('delivered', { isMultiRecipient });
-      // if the deliveryMode is defined, then change the description for a more specific one ...
-      const deliveryMode = statusObject?.deliveryMode;
-      // ... only for single-recipient notifications!
-      if (deliveryMode && !isMultiRecipient && !options?.isParty) {
-        const deliveryModeDescription = getLocalizedOrDefaultLabel(
-          'notifications',
-          `status.deliveryMode.${deliveryMode}`
-        );
-        statusInfos.description = getLocalizedOrDefaultLabel(
-          'notifications',
-          'status.delivered-description-with-delivery-mode',
-          undefined,
-          { deliveryMode: deliveryModeDescription }
-        );
-      }
-      // if it is a PA, change the title and the description
-      // ... only for single-recipient notifications!
-      if (options?.isParty && !isMultiRecipient) {
-        getNotificationDeliveredInfosForPA(statusInfos, statusObject, options.statusHistory || []);
-      }
+      const statusInfos = deliveredStatusVariant(isMultiRecipient, statusObject, options);
       // set the color at the end to avoid a type error since the color is defined as an union among some well-known strings
       return { color: 'default', ...statusInfos };
     }
@@ -338,19 +375,12 @@ export function getNotificationStatusInfos(
           { name: statusObject.recipient }
         );
       }
-      const viewedEvent = statusObject?.steps?.find(
-        (s) => s.category === TimelineCategory.NOTIFICATION_VIEWED
-      );
-      const viewedAt = viewedEvent?.timestamp
-        ? formatDate(viewedEvent.timestamp, false)
-        : undefined;
       return {
         color: 'success',
         ...viewedStatusVariant(
-          localizeStatus('viewed', { subject, isMultiRecipient, viewedAt }),
+          localizeStatus('viewed', { subject, isMultiRecipient }),
           statusObject,
-          options?.statusHistory,
-          viewedAt
+          isMultiRecipient
         ),
       };
     }
