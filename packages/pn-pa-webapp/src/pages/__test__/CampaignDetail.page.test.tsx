@@ -1,8 +1,9 @@
 import MockAdapter from 'axios-mock-adapter';
 
-// import { AppResponseMessage, ResponseEventDispatcher } from '@pagopa-pn/pn-commons';
+import { AppResponseMessage, ResponseEventDispatcher } from '@pagopa-pn/pn-commons';
+
 import { campaignDetailMock } from '../../__mocks__/CampaignDetail.mock';
-import { RenderResult, act, render, waitFor } from '../../__test__/test-utils';
+import { RenderResult, act, fireEvent, render, waitFor } from '../../__test__/test-utils';
 import { apiClient } from '../../api/apiClients';
 import CampaignDetail from '../CampaignDetail.page';
 
@@ -52,43 +53,22 @@ describe('CampaignDetail Page', () => {
     );
   });
 
-  /*   it('renders api error when campaign detail request fails', async () => {
+  it('renders api error when campaign detail request fails', async () => {
     mock
       .onGet(`/bff/v1/notifications/informal/campaigns/${campaignDetailMock.campaignId}`)
       .reply(500);
 
-    await act(async () => {
-      result = result = render(
-        <>
-          <ResponseEventDispatcher />
-          <AppResponseMessage />
-          <CampaignDetail />
-        </>,
-        {
-          route: `/campaigns/${campaignDetailMock.campaignId}`,
-          path: '/campaigns/:id',
-        }
-      );
-    });
-
-    await waitFor(() => {
-      expect(result.getByTestId('emptyState')).toBeInTheDocument();
-    });
-
-    expect(
-      result.getByRole('button', {
-        name: 'detail.empty-state.generic-error-cta',
-      })
-    ).toBeInTheDocument();
-  });
-
-  it('retries campaign detail request', async () => {
     mock
-      .onGet(`/bff/v1/notifications/informal/campaigns/${campaignDetailMock.campaignId}`)
-      .reply(500);
+      .onGet(
+        new RegExp(`/bff/v1/informal/campaigns/${campaignDetailMock.campaignId}/notifications/sent`)
+      )
+      .reply(200, {
+        resultsPage: [],
+        moreResult: false,
+      });
 
     await act(async () => {
-      result = result = render(
+      result = render(
         <>
           <ResponseEventDispatcher />
           <AppResponseMessage />
@@ -103,6 +83,51 @@ describe('CampaignDetail Page', () => {
 
     await waitFor(() => {
       expect(mock.history.get).toHaveLength(2);
+    });
+
+    await waitFor(() => {
+      expect(
+        result.getByRole('button', {
+          name: 'detail.empty-state.generic-error-cta',
+        })
+      ).toBeInTheDocument();
+    });
+  });
+
+  it('retries campaign detail request', async () => {
+    const campaignDetailUrl = `/bff/v1/notifications/informal/campaigns/${campaignDetailMock.campaignId}`;
+
+    mock.onGet(campaignDetailUrl).reply(500);
+
+    mock
+      .onGet(
+        new RegExp(`/bff/v1/informal/campaigns/${campaignDetailMock.campaignId}/notifications/sent`)
+      )
+      .reply(200, {
+        resultsPage: [],
+        moreResult: false,
+      });
+
+    await act(async () => {
+      result = render(
+        <>
+          <ResponseEventDispatcher />
+          <AppResponseMessage />
+          <CampaignDetail />
+        </>,
+        {
+          route: `/campaigns/${campaignDetailMock.campaignId}`,
+          path: '/campaigns/:id',
+        }
+      );
+    });
+
+    await waitFor(() => {
+      const campaignDetailRequests = mock.history.get.filter(
+        ({ url }) => url === campaignDetailUrl
+      );
+
+      expect(campaignDetailRequests).toHaveLength(1);
     });
 
     fireEvent.click(
@@ -112,7 +137,11 @@ describe('CampaignDetail Page', () => {
     );
 
     await waitFor(() => {
-      expect(mock.history.get).toHaveLength(2);
+      const campaignDetailRequests = mock.history.get.filter(
+        ({ url }) => url === campaignDetailUrl
+      );
+
+      expect(campaignDetailRequests).toHaveLength(2);
     });
-  }); */
+  });
 });

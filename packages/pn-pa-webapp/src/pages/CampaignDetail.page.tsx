@@ -34,7 +34,7 @@ const CampaignDetail: React.FC = () => {
   const [pageReady, setPageReady] = useState(false);
   const [communicationsReady, setCommunicationsReady] = useState(false);
   const [hasInitialCommunications, setHasInitialCommunications] = useState<boolean | null>(null);
-  const isPageReady = pageReady && communicationsReady;
+  const isPageReady = pageReady && communicationsReady && !!campaign.campaignId;
   const { t } = useTranslation(['campaigns', 'common']);
   const hasCampaignDetailApiError = hasApiErrors(CAMPAIGN_ACTIONS.GET_CAMPAIGN_DETAIL);
 
