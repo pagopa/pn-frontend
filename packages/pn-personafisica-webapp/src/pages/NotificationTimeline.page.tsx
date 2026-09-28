@@ -59,6 +59,7 @@ const NotificationTimeline: React.FC = () => {
   const { t, i18n } = useTranslation(['common', 'notifiche', 'appStatus']);
   const {
     NOTIFICATION_CANCELLED_HELP_LINK,
+    NOTIFICATION_PERFECTION_LINK,
     IS_NEW_TIMELINE_ENABLED,
     IS_NEW_TIMELINE_COPY_ENABLED,
   } = getConfiguration();
@@ -299,6 +300,7 @@ const NotificationTimeline: React.FC = () => {
                   clickHandler={legalFactDownloadHandler}
                   disableDownloads={isCancelled.cancellationInTimeline}
                   isNewTimelineCopyEnabled={IS_NEW_TIMELINE_COPY_ENABLED}
+                  perfectionLink={NOTIFICATION_PERFECTION_LINK}
                 />
               ) : (
                 <MIPaper sx={{ mt: 3 }}>

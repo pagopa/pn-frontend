@@ -64,6 +64,7 @@ export type {
   NotificationDetailTimelineDetails,
   NotificationDocumentRequest,
   NotificationDocumentResponse,
+  NotificationPayment,
   NotificationStatusHistory,
   PagoPAPaymentFullDetails,
   PaidDetails,

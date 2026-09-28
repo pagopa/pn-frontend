@@ -6,10 +6,13 @@ import { Box, Stack } from '@mui/material';
 import {
   AbstractPaper,
   ApiError,
+  INotificationDetailTimeline,
   InformalNotificationStatus,
   LoadingPage,
   NotificationDetailDocuments,
   NotificationStatusBox,
+  PagoPAPaymentFullDetails,
+  PaymentAttachmentSName,
   appStateActions,
   downloadDocument,
   useErrors,
@@ -18,10 +21,10 @@ import { getInformalNotificationStatusInfos } from '@pagopa-pn/pn-commons/src/ut
 import { MIBreadcrumbItem, MIBreadcrumbs, MIPaper } from '@pagopa/mui-italia';
 
 import InformalNotificationChannelStatusBox from '../components/Notifications/InformalNotificationChannelStatus/InformalNotificationChannelStatusBox';
-import InformalNotificationPaymentSender from '../components/Notifications/InformalNotificationPaymentSender';
 import NotificationDetailsDrawer, {
   NotificationDetailsDrawerItem,
 } from '../components/Notifications/NotificationDetailsDrawer';
+import NotificationPaymentSender from '../components/Notifications/NotificationPaymentSender';
 import NotificationRecipientsDetail from '../components/Notifications/NotificationRecipientsDetail';
 import { BffDocumentDownloadMetadataResponse } from '../generated-client/informal-notifications';
 import * as routes from '../navigation/routes.const';
@@ -30,6 +33,7 @@ import {
   NOTIFICATION_ACTIONS,
   getSentInformalNotification,
   getSentInformalNotificationDocument,
+  getSentInformalNotificationPayment,
 } from '../redux/notification/actions';
 import { RootState } from '../redux/store';
 
@@ -137,6 +141,24 @@ const InformalNotificationDetail: React.FC = () => {
       .catch(() => {});
   };
 
+  const paymentDownloadHandler = (payment: PagoPAPaymentFullDetails) => {
+    if (payment.recIndex === undefined || !payment.attachment) {
+      return;
+    }
+
+    void dispatch(
+      getSentInformalNotificationPayment({
+        iun: informalNotification.iun,
+        recipientIdx: payment.recIndex,
+        attachmentName: PaymentAttachmentSName.PAGOPA,
+        attachmentIdx: payment.attachmentIdx,
+      })
+    )
+      .unwrap()
+      .then(showInfoMessageIfRetryAfterOrDownload)
+      .catch(() => {});
+  };
+
   const documentsDownloadFilesMessage = {
     key: informalNotification.documentsAvailable
       ? 'informal.detail.documents.download-message-available'
@@ -183,6 +205,15 @@ const InformalNotificationDetail: React.FC = () => {
       value: recipients[0]?.message.primaryMessage.longBody,
     },
   ].filter((detail) => detail.value);
+
+  // TODO: remove this cast once the BFF exposes the informal notification timeline
+  // and the generated BFF client is updated.
+  const timeline =
+    (
+      informalNotification as typeof informalNotification & {
+        timeline?: Array<INotificationDetailTimeline>;
+      }
+    ).timeline ?? [];
 
   return (
     <>
@@ -241,11 +272,19 @@ const InformalNotificationDetail: React.FC = () => {
                 </MIPaper>
               )}
 
-              {recipients[0]?.payments?.[0] && (
-                <InformalNotificationPaymentSender
+              {recipients.some((recipient) => recipient.payments?.length) && (
+                <NotificationPaymentSender
                   iun={informalNotification.iun}
-                  payment={recipients[0].payments[0]}
-                  recipientIdx={0}
+                  recipients={recipients}
+                  onPagoPaDownload={paymentDownloadHandler}
+                  /**
+                   * TODO: when the BFF informal notification timeline is exposed and the OpenAPI client updated
+                   * change the following line to:
+                   * timeline={informalNotification.timeline}
+                   * if BFF declares it as optional use:
+                   * timeline={informalNotification.timeline ?? []}
+                   * */
+                  timeline={timeline}
                 />
               )}
             </Stack>
