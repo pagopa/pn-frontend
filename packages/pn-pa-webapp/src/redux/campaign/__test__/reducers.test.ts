@@ -5,11 +5,13 @@ import { apiClient } from '../../../api/apiClients';
 import {
   BffCampaignDetailResponseV1,
   BffCampaignSearchResponseV1,
+  BffInformalSenderNotificationSearchResponse,
   CampaignStatus,
   ChannelType,
+  InformalNotificationStatusV1,
 } from '../../../generated-client/informal-notifications';
 import { store } from '../../store';
-import { getCampaignDetail, getCampaigns } from '../actions';
+import { getCampaignCommunications, getCampaignDetail, getCampaigns } from '../actions';
 import campaignSlice, { resetCampaignDetail } from '../reducers';
 
 const campaign: BffCampaignDetailResponseV1 = {
@@ -20,6 +22,12 @@ const campaign: BffCampaignDetailResponseV1 = {
   campaignStatus: CampaignStatus.InProgress,
   serviceName: 'Servizi idrici',
   channels: [ChannelType.Io, ChannelType.Email, ChannelType.Pec],
+};
+
+const campaignCommunications: BffInformalSenderNotificationSearchResponse = {
+  resultsPage: [],
+  moreResult: false,
+  nextPagesKey: [],
 };
 
 describe('Campaign redux state tests', () => {
@@ -46,11 +54,24 @@ describe('Campaign redux state tests', () => {
     expect(state).toEqual({
       campaigns: [],
       campaignDetail: {},
+      campaignCommunications: {},
       pagination: {
         nextPagesKey: [],
         size: 10,
         page: 0,
         moreResult: false,
+      },
+      communicationsPagination: {
+        nextPagesKey: [],
+        size: 10,
+        page: 0,
+        moreResult: false,
+      },
+      communicationFilters: {
+        recipientId: '',
+        iunMatch: '',
+        status: [],
+        outcome: '',
       },
     });
   });
@@ -134,8 +155,21 @@ describe('Campaign redux state tests', () => {
     const stateWithCampaign = {
       campaigns: [],
       campaignDetail: campaign,
+      campaignCommunications: {},
+      communicationFilters: {
+        recipientId: '',
+        iunMatch: '',
+        status: [] as Array<InformalNotificationStatusV1>,
+        outcome: '',
+      },
       pagination: {
         nextPagesKey: [] as Array<string>,
+        size: 10,
+        page: 0,
+        moreResult: false,
+      },
+      communicationsPagination: {
+        nextPagesKey: [],
         size: 10,
         page: 0,
         moreResult: false,
@@ -147,12 +181,37 @@ describe('Campaign redux state tests', () => {
     expect(state).toEqual({
       campaigns: [],
       campaignDetail: {},
+      campaignCommunications: {},
+      communicationFilters: {
+        recipientId: '',
+        iunMatch: '',
+        status: [],
+        outcome: '',
+      },
       pagination: {
         nextPagesKey: [],
         size: 10,
         page: 0,
         moreResult: false,
       },
+      communicationsPagination: {
+        nextPagesKey: [],
+        size: 10,
+        page: 0,
+        moreResult: false,
+      },
     });
+  });
+
+  it('Should set campaign communications when getCampaignCommunications is fulfilled', () => {
+    const action = getCampaignCommunications.fulfilled(campaignCommunications, '', {
+      campaignId: campaign.campaignId,
+      page: 0,
+      size: 10,
+    });
+
+    const state = campaignSlice.reducer(undefined, action);
+
+    expect(state.campaignCommunications).toEqual(campaignCommunications);
   });
 });

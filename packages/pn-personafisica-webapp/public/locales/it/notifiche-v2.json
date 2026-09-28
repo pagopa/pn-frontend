@@ -20,13 +20,14 @@
     "viewed-without-legal-fact-description-multirecipient": "Questa notifica SEND è stata inviata a più destinatari, e almeno una persona tra questi ha effettuato un accesso alla notifica.",
     "viewed-by-delegate-description": "In qualità di delegato, {{name}} ha effettuato un accesso a questa notifica a valore legale su SEND. Puoi effettuare il download dell’<0>attestazione di avvenuto accesso</0>.",
     "canceled": "Notifica annullata",
-    "canceled-description": "L'ente ha annullato l'invio della notifica SEND, che dall'annullamento in poi non produrrà più effetti giuridici.",
+    "canceled-description": "L'ente ha annullato l'invio della notifica SEND, che dall'annullamento in poi non produrrà più effetti giuridici. È possibile effettuare il <0>download della dichiarazione di annullamento</0>.",
     "returned-to-sender": "Notifica restituita all'ente mittente",
     "returned-to-sender-multirecipient": "Notifica restituita all'ente mittente",
     "returned-to-sender-description": "La persona destinataria di questa notifica SEND è stata dichiarata deceduta.",
     "returned-to-sender-description-multirecipient": "La persona destinataria di questa notifica SEND è stata dichiarata deceduta."
   },
   "detail": {
+    "document-unavailable": "Il documento non è più disponibile. Contatta l’ente per maggiori informazioni.",
     "timeline": {
       "schedule-digital-workflow": "Nuovo tentativo di invio PEC",
       "schedule-digital-workflow-description": "Verrà effettuato il secondo tentativo di invio della notifica SEND all’indirizzo PEC {{address}}.",
