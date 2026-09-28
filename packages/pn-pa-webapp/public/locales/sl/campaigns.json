@@ -43,7 +43,7 @@
       "statuses": {
         "ready": "Pripravljeno za pošiljanje",
         "processing": "Pošiljanje poteka",
-        "success": "Pošiljanje uspešno",
+        "success": "Pošiljanje končano",
         "failed": "Pošiljanje neuspešno",
         "refused": "Zavrnjeno"
       },

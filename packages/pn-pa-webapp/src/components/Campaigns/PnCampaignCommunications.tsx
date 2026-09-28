@@ -27,11 +27,7 @@ import { MIButton } from '@pagopa/mui-italia';
 
 import { BffInformalSenderNotificationSearchRow } from '../../generated-client/informal-notifications';
 import { CommunicationFilters } from '../../models/Campaign';
-import {
-  resetCommunicationsPagination,
-  setCommunicationFilters,
-} from '../../redux/campaign/reducers';
-import { useAppDispatch, useAppSelector } from '../../redux/hooks';
+import { useAppSelector } from '../../redux/hooks';
 import { RootState } from '../../redux/store';
 import PnCampaignCommunicationsFilters from './PnCampaignCommunicationsFilters';
 import PnCommunicationOutcomeTag from './PnCommunicationOutcomeTag';
@@ -69,8 +65,6 @@ const PnCampaignCommunications = ({ fetchCampaignCommunications }: Props) => {
     communicationsPagination.page + 1
   );
 
-  const dispatch = useAppDispatch();
-
   const validationSchema = yup.object({
     recipientId: yup
       .string()
@@ -102,9 +96,6 @@ const PnCampaignCommunications = ({ fetchCampaignCommunications }: Props) => {
     formik.resetForm({
       values: emptyFilters,
     });
-
-    dispatch(resetCommunicationsPagination());
-    dispatch(setCommunicationFilters(emptyFilters));
 
     fetchCampaignCommunications(0, communicationsPagination.size, emptyFilters);
   };
@@ -184,16 +175,6 @@ const PnCampaignCommunications = ({ fetchCampaignCommunications }: Props) => {
     },
     validationSchema,
     onSubmit: () => {
-      dispatch(resetCommunicationsPagination());
-      dispatch(
-        setCommunicationFilters({
-          ...communicationFilters,
-          recipientId: formik.values.recipientId,
-          iunMatch: formik.values.iunMatch,
-          status: formik.values.status,
-          outcome: formik.values.outcome,
-        })
-      );
       fetchCampaignCommunications(0, communicationsPagination.size, formik.values);
     },
   });

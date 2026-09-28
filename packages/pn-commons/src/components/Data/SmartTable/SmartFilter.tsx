@@ -110,7 +110,7 @@ const SmartFilter = <FormValues extends object>({
   return (
     <form onSubmit={submitHandler}>
       <Box sx={{ flexGrow: 1, mt: 3 }}>
-        <Grid container spacing={1} sx={{ alignItems: 'flex' }} alignItems="center">
+        <Grid container spacing={1} sx={{ alignItems: 'center' }}>
           {children}
           <Grid item lg="auto" xs={12}>
             {confirmAction}

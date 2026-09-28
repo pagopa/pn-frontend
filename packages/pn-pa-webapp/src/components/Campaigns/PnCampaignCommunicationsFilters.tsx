@@ -11,6 +11,15 @@ type Props = {
   handlePaste: (e: React.ClipboardEvent) => Promise<void>;
 };
 
+const inputStyle = {
+  '& .MuiInputBase-root': {
+    height: '48px',
+  },
+  '& .MuiInputLabel-root:not(.MuiInputLabel-shrink)': {
+    transform: 'translate(14px, 12px) scale(1)',
+  },
+};
+
 const PnCampaignCommunicationsFilters = ({ formik, handleChangeTouched, handlePaste }: Props) => {
   const { t } = useTranslation('campaigns');
 
@@ -22,7 +31,7 @@ const PnCampaignCommunicationsFilters = ({ formik, handleChangeTouched, handlePa
 
   return (
     <>
-      <Grid item xs={12} lg>
+      <Grid item xs={12} lg sx={{ mb: { md: 2.5, lg: 0 } }}>
         <TextField
           id="recipientId"
           name="recipientId"
@@ -32,11 +41,11 @@ const PnCampaignCommunicationsFilters = ({ formik, handleChangeTouched, handlePa
           label={t('detail.communications.tax-id')}
           error={formik.touched.recipientId && Boolean(formik.errors.recipientId)}
           helperText={formik.touched.recipientId && formik.errors.recipientId}
-          size="small"
           fullWidth
+          sx={inputStyle}
         />
       </Grid>
-      <Grid item xs={12} lg>
+      <Grid item xs={12} lg sx={{ mb: { md: 2.5, lg: 0 } }}>
         <TextField
           id="iunMatch"
           name="iunMatch"
@@ -46,25 +55,12 @@ const PnCampaignCommunicationsFilters = ({ formik, handleChangeTouched, handlePa
           label={t('detail.communications.iun')}
           error={formik.touched.iunMatch && Boolean(formik.errors.iunMatch)}
           helperText={formik.touched.iunMatch && formik.errors.iunMatch}
-          size="small"
           fullWidth
           inputProps={{ maxLength: 25 }}
+          sx={inputStyle}
         />
       </Grid>
-      <Grid
-        item
-        xs={12}
-        lg
-        sx={{
-          '& .MuiOutlinedInput-root': {
-            height: '43px',
-            minHeight: '43px',
-          },
-          '& input#status': {
-            position: 'relative',
-          },
-        }}
-      >
+      <Grid item xs={12} lg sx={{ mb: { md: 2.5, lg: 0 } }}>
         <Autocomplete
           id="status"
           options={communicationStatusOptions}
@@ -76,6 +72,25 @@ const PnCampaignCommunicationsFilters = ({ formik, handleChangeTouched, handlePa
           inputValue={t(selectedStatusOption?.label ?? '')}
           onChange={(newValue) => {
             void formik.setFieldValue('status', newValue?.value ?? []);
+          }}
+          slotProps={{
+            textField: { name: 'status' },
+            clearButton: {
+              'aria-label': t('autocomplete.clear', { ns: 'common' }),
+            },
+            toggleButton: {
+              'close-aria-label': t('autocomplete.toggle-close', { ns: 'common' }),
+              'open-aria-label': t('autocomplete.toggle-open', { ns: 'common' }),
+            },
+            selectionBox: {
+              'aria-label': t('autocomplete.selection-box', { ns: 'common' }),
+            },
+            selectionChip: {
+              'aria-label': t('autocomplete.delete-selection', { ns: 'common' }),
+            },
+            announcementBox: {
+              selectionText: t('autocomplete.selection-done', { ns: 'common' }),
+            },
           }}
         />
       </Grid>
@@ -89,7 +104,7 @@ const PnCampaignCommunicationsFilters = ({ formik, handleChangeTouched, handlePa
           onChange={handleChangeTouched}
           value={formik.values.outcome}
           fullWidth
-          size="small"
+          sx={inputStyle}
         >
           {communicationOutcomeOptions.map(({ id, label }) => (
             <MenuItem key={id} value={id}>

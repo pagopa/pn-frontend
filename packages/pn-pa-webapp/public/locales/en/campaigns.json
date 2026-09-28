@@ -43,7 +43,7 @@
       "statuses": {
         "ready": "Ready for sending",
         "processing": "Sending in progress",
-        "success": "Sent successfully",
+        "success": "Sending completed",
         "failed": "Sending failed",
         "refused": "Refused"
       },

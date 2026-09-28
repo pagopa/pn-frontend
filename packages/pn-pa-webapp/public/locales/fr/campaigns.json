@@ -43,7 +43,7 @@
       "statuses": {
         "ready": "Prête pour l'envoi",
         "processing": "Envoi en cours",
-        "success": "Envoi réussi",
+        "success": "Envoi terminé",
         "failed": "Envoi échoué",
         "refused": "Refusée"
       },

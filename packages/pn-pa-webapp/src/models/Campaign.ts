@@ -21,7 +21,7 @@ type CommunicationStatusOption = {
   id: CommunicationStatusFilter;
   label: string;
   value: Array<InformalNotificationStatus>;
-  color: 'default' | 'info' | 'success' | 'error';
+  color: 'default' | 'info' | 'error' | 'highlight';
 };
 
 export const communicationStatusOptions: Array<CommunicationStatusOption> = [
@@ -44,7 +44,7 @@ export const communicationStatusOptions: Array<CommunicationStatusOption> = [
       InformalNotificationStatus.COMPLETED_REACHED,
       InformalNotificationStatus.COMPLETED_UNREACHED,
     ],
-    color: 'success',
+    color: 'highlight',
   },
   {
     id: CommunicationStatusFilter.FAILED,

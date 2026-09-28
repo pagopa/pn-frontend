@@ -43,7 +43,7 @@
       "statuses": {
         "ready": "Bereit zum Versand",
         "processing": "Versand läuft",
-        "success": "Erfolgreich versendet",
+        "success": "Versand abgeschlossen",
         "failed": "Versand fehlgeschlagen",
         "refused": "Abgelehnt"
       },

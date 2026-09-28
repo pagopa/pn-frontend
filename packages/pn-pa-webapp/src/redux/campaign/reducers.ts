@@ -1,4 +1,4 @@
-import { PayloadAction, createSlice } from '@reduxjs/toolkit';
+import { createSlice } from '@reduxjs/toolkit';
 
 import {
   BffCampaignDetailResponseV1,
@@ -37,27 +37,6 @@ const campaignSlice = createSlice({
   name: 'campaignSlice',
   initialState,
   reducers: {
-    setPagination: (state, action: PayloadAction<{ page: number; size: number }>) => {
-      if (state.pagination.size !== action.payload.size) {
-        // reset pagination
-        state.pagination.nextPagesKey = [];
-        state.pagination.moreResult = false;
-      }
-
-      state.pagination.size = action.payload.size;
-      state.pagination.page = action.payload.page;
-    },
-
-    resetCommunicationsPagination: (state) => {
-      state.communicationsPagination.nextPagesKey = [];
-      state.communicationsPagination.page = 0;
-      state.communicationsPagination.moreResult = false;
-    },
-
-    setCommunicationFilters: (state, action) => {
-      state.communicationFilters = action.payload;
-    },
-
     resetCampaignDetail: (state) => {
       state.campaignDetail = {} as BffCampaignDetailResponseV1;
     },
@@ -90,9 +69,10 @@ const campaignSlice = createSlice({
     });
 
     builder.addCase(getCampaignCommunications.fulfilled, (state, action) => {
-      const { page, size } = action.meta.arg;
+      const { page, size, iunMatch, recipientId, status, viewed, delivered } = action.meta.arg;
       const hasSizeChanged = state.communicationsPagination.size !== size;
       state.campaignCommunications = action.payload;
+      // set pagination
       state.communicationsPagination.page = page;
       state.communicationsPagination.size = size;
       state.communicationsPagination.moreResult = action.payload.moreResult ?? false;
@@ -108,15 +88,21 @@ const campaignSlice = createSlice({
           }
         }
       }
+      // set filters
+      state.communicationFilters.iunMatch = iunMatch ?? '';
+      state.communicationFilters.recipientId = recipientId ?? '';
+      state.communicationFilters.status = status ?? [];
+      if (viewed) {
+        state.communicationFilters.outcome = 'viewed';
+      } else if (delivered) {
+        state.communicationFilters.outcome = 'delivered';
+      } else {
+        state.communicationFilters.outcome = '';
+      }
     });
   },
 });
 
-export const {
-  setPagination,
-  resetCampaignDetail,
-  setCommunicationFilters,
-  resetCommunicationsPagination,
-} = campaignSlice.actions;
+export const { resetCampaignDetail } = campaignSlice.actions;
 
 export default campaignSlice;
