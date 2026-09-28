@@ -20,13 +20,14 @@
     "viewed-without-legal-fact-description-multirecipient": "Questa notifica SEND è stata inviata a più destinatari, e almeno una persona tra questi ha effettuato un accesso alla notifica.",
     "viewed-by-delegate-description": "In qualità di delegato, {{name}} ha effettuato un accesso a questa notifica a valore legale su SEND. Puoi effettuare il download dell’<0>attestazione di avvenuto accesso</0>.",
     "canceled": "Notifica annullata",
-    "canceled-description": "L'ente ha annullato l'invio della notifica SEND, che dall'annullamento in poi non produrrà più effetti giuridici.",
+    "canceled-description": "L'ente ha annullato l'invio della notifica SEND, che dall'annullamento in poi non produrrà più effetti giuridici. È possibile effettuare il <0>download della dichiarazione di annullamento</0>.",
     "returned-to-sender": "Notifica restituita all'ente mittente",
     "returned-to-sender-multirecipient": "Notifica restituita all'ente mittente",
     "returned-to-sender-description": "La persona destinataria di questa notifica SEND è stata dichiarata deceduta.",
     "returned-to-sender-description-multirecipient": "La persona destinataria di questa notifica SEND è stata dichiarata deceduta."
   },
   "detail": {
+    "document-unavailable": "Il documento non è più disponibile. Contatta l’ente per maggiori informazioni.",
     "timeline": {
       "schedule-digital-workflow": "Nuovo tentativo di invio PEC",
       "schedule-digital-workflow-description": "Verrà effettuato il secondo tentativo di invio della notifica SEND all’indirizzo PEC {{address}}.",
@@ -67,9 +68,9 @@
       "prepare-analog-domicile-failure-ZZZ-title": "Impossibile trovare un indirizzo valido",
       "prepare-analog-domicile-failure-ZZZ-description": "Non sarà possibile provare a inviarti nuovamente la notifica SEND. Il motivo non è stato specificato.",
       "send-analog-flow-CON020-title": "Avviso di ricezione (AAR) disponibile",
-      "send-analog-flow-CON020-description": "È disponibile l'Avviso di Avvenuta Ricezione, firmato digitalmente da PagoPA.",
+      "send-analog-flow-CON020-description": "È disponibile l'<0>Avviso di Avvenuta Ricezione</0>, firmato digitalmente da PagoPA.",
       "send-analog-flow-CON080-title": "Raccomandata pronta",
-      "send-analog-flow-CON080-description": "La raccomandata{{registeredLetterKind}} numero {{registeredLetterNumber}} è stata stampata e imbustata e verrà spedita.",
+      "send-analog-flow-CON080-description": "La raccomandata {{registeredLetterKind}} numero {{registeredLetterNumber}} è stata stampata e imbustata e verrà spedita.",
       "send-analog-flow-PNAG012-title": "Raccomandata in giacenza da 10 giorni",
       "send-analog-flow-PNAG012-description": "La raccomandata 890 numero {{registeredLetterNumber}} si trova da 10 giorni presso il punto di giacenza.",
       "send-analog-flow-RECAG002C-title": "Raccomandata consegnata",

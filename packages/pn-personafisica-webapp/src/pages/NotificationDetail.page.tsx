@@ -589,6 +589,14 @@ const NotificationDetail: React.FC = () => {
 
   const legalFactDownloadHandler = (legalFact: LegalFactId) => {
     if (legalFact.category !== LegalFactType.NOTIFICATION_CANCELLED && isCancelledOrCancelling) {
+      if (IS_NEW_TIMELINE_COPY_ENABLED) {
+        dispatch(
+          appStateActions.addWarning({
+            title: '',
+            message: t('detail.document-unavailable', { ns: 'notifiche' }),
+          })
+        );
+      }
       return;
     }
 

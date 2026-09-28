@@ -6,6 +6,7 @@ import {
   AppMessage,
   AppResponseMessage,
   AppRouteParams,
+  Configuration,
   DeliveryOutcomeType,
   NotificationDetail as NotificationDetailModel,
   NotificationDetailOtherDocument,
@@ -50,7 +51,7 @@ import { apiClient } from '../../api/apiClients';
 import { BffCheckTPPResponse } from '../../generated-client/notifications';
 import * as routes from '../../navigation/routes.const';
 import { NOTIFICATION_ACTIONS } from '../../redux/notification/actions';
-import { getConfiguration } from '../../services/configuration.service';
+import { PfConfiguration, getConfiguration } from '../../services/configuration.service';
 import { mockLanguageConfig } from '../../setupTests';
 import { ServerResponseErrorCode } from '../../utility/AppError/types';
 import NotificationDetail from '../NotificationDetail.page';
@@ -546,6 +547,53 @@ describe('NotificationDetail Page', () => {
       '_blank',
       'noopener noreferrer'
     );
+  });
+
+  it('cancelled notification with new copy - timeline box legal fact shows a warning', async () => {
+    const originalConfiguration = getConfiguration();
+    Configuration.setForTest<PfConfiguration>({
+      ...originalConfiguration,
+      IS_NEW_TIMELINE_COPY_ENABLED: true,
+    });
+
+    mock.onGet(`/bff/v1/notifications/received/${notificationDTO.iun}`).reply(200, {
+      ...notificationDTO,
+      notificationStatus: NotificationStatus.CANCELLED,
+      notificationStatusHistory: [
+        ...notificationDTO.notificationStatusHistory,
+        {
+          status: NotificationStatus.CANCELLED,
+          activeFrom: '2033-08-14T13:42:54.17675939Z',
+          relatedTimelineElements: [],
+        },
+      ],
+    });
+    mock.onGet(/\/bff\/v1\/downtime\/history.*/).reply(200, downtimesDTO);
+
+    await act(async () => {
+      result = render(
+        <>
+          <AppMessage />
+          <Component />
+        </>,
+        {
+          preloadedState: {
+            userState: { user: { fiscal_number: notificationDTO.recipients[2].taxId } },
+          },
+          route: routes.GET_DETTAGLIO_NOTIFICA_PATH(notificationDTO.iun),
+        }
+      );
+    });
+
+    const requestsBeforeClick = mock.history.get.length;
+    const timelineBox = result.getByTestId('NotificationDetailTimeline');
+    fireEvent.click(within(timelineBox).getByTestId('download-legalfact'));
+
+    const warning = await waitFor(() => result.getByTestId('snackBarContainer'));
+    expect(warning).toHaveTextContent('detail.document-unavailable');
+    expect(mock.history.get).toHaveLength(requestsBeforeClick);
+
+    Configuration.setForTest<PfConfiguration>(originalConfiguration);
   });
 
   it('checks not available documents', async () => {

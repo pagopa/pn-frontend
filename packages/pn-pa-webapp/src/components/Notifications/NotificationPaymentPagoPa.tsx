@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import OpenInBrowserRoundedIcon from '@mui/icons-material/OpenInBrowserRounded';
 import { Box, Grid, Typography } from '@mui/material';
 import {
+  NotificationCommunicationType,
   PagoPAPaymentFullDetails,
   PaymentAttachmentSName,
   PaymentStatus,
@@ -12,12 +13,15 @@ import {
 import { MIBoxedModule, MIButton, MIChip } from '@pagopa/mui-italia';
 
 import { useAppDispatch } from '../../redux/hooks';
-import { getSentNotificationPayment } from '../../redux/notification/actions';
+import {
+  getSentInformalNotificationPayment,
+  getSentNotificationPayment,
+} from '../../redux/notification/actions';
 
 type Props = {
   iun: string;
   payment: PagoPAPaymentFullDetails;
-  onDownload?: (payment: PagoPAPaymentFullDetails) => void;
+  communicationType?: NotificationCommunicationType;
 };
 
 type StatusVisualInfo = {
@@ -37,27 +41,38 @@ const getStatusVisualInfo = (status?: PaymentStatus): StatusVisualInfo => {
   }
 };
 
-const NotificationPaymentPagoPa: React.FC<Props> = ({ iun, payment, onDownload }) => {
+const NotificationPaymentPagoPa: React.FC<Props> = ({
+  iun,
+  payment,
+  communicationType = NotificationCommunicationType.LEGAL,
+}) => {
   const { t } = useTranslation(['notifiche']);
   const dispatch = useAppDispatch();
 
   const statusVisualInfo = getStatusVisualInfo(payment.status);
 
   const downloadHandler = () => {
-    if (onDownload) {
-      onDownload(payment);
-      return;
-    }
-
     if (!isNil(payment.recIndex) && payment.attachment) {
-      dispatch(
-        getSentNotificationPayment({
-          iun,
-          attachmentName: PaymentAttachmentSName.PAGOPA,
-          recIndex: payment.recIndex,
-          attachmentIdx: payment.attachmentIdx,
-        })
-      )
+      const getPayment =
+        communicationType === NotificationCommunicationType.LEGAL
+          ? dispatch(
+              getSentNotificationPayment({
+                iun,
+                attachmentName: PaymentAttachmentSName.PAGOPA,
+                recIndex: payment.recIndex,
+                attachmentIdx: payment.attachmentIdx,
+              })
+            )
+          : dispatch(
+              getSentInformalNotificationPayment({
+                iun,
+                recipientIdx: payment.recIndex,
+                attachmentName: PaymentAttachmentSName.PAGOPA,
+                attachmentIdx: payment.attachmentIdx,
+              })
+            );
+
+      getPayment
         .unwrap()
         .then((res) => {
           if (res.url) {

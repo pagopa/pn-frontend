@@ -6,6 +6,7 @@ import {
   CustomPagination,
   F24PaymentDetails,
   INotificationDetailTimeline,
+  NotificationCommunicationType,
   NotificationPayment,
   PaginationData,
   PagoPAPaymentFullDetails,
@@ -31,6 +32,7 @@ type Props = {
   iun: string;
   recipients: Array<NotificationPaymentRecipient>;
   timeline: Array<INotificationDetailTimeline>;
+  communicationType?: NotificationCommunicationType;
   sx?: SxProps;
   onPagoPaDownload?: (payment: PagoPAPaymentFullDetails) => void;
 };
@@ -70,7 +72,7 @@ const NotificationPaymentSender: React.FC<Props> = ({
   recipients,
   timeline,
   sx,
-  onPagoPaDownload,
+  communicationType = NotificationCommunicationType.LEGAL,
 }) => {
   const { t } = useTranslation(['notifiche']);
   const [recipientSelected, setRecipientSelected] = useState<string>('');
@@ -184,7 +186,7 @@ const NotificationPaymentSender: React.FC<Props> = ({
               iun={iun}
               payment={payment}
               key={payment.noticeCode}
-              onDownload={onPagoPaDownload}
+              communicationType={communicationType}
             />
           ))}
         </Stack>
