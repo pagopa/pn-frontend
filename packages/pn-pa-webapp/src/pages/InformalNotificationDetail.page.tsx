@@ -114,10 +114,6 @@ const InformalNotificationDetail: React.FC = () => {
     description: `informal.status.unknown.description`,
   };
 
-  /* getInformalNotificationStatusInfos(
-    informalNotification.notificationStatus as InformalNotificationStatus
-  ); */
-
   const showInfoMessageIfRetryAfterOrDownload = (response: BffDocumentDownloadMetadataResponse) => {
     if (response.retryAfter) {
       dispatch(
@@ -190,7 +186,7 @@ const InformalNotificationDetail: React.FC = () => {
     },
     {
       label: t('informal.detail.text'),
-      value: recipients[0]?.message.primaryMessage.longBody,
+      value: recipients[0]?.message?.primaryMessage.longBody,
     },
   ].filter((detail) => detail.value);
 
@@ -281,7 +277,7 @@ const InformalNotificationDetail: React.FC = () => {
               <NotificationStatusBox
                 ariaLabel={t('informal.detail.status.aria-label')}
                 color={notificationStatusInfos.color}
-                description={notificationStatusInfos.description}
+                description={t(notificationStatusInfos.description)}
                 detailsLabel={t('informal.detail.status.go-to-detail')}
                 label={t(notificationStatusInfos.label)}
                 title={t('informal.detail.status.title')}

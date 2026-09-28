@@ -29,21 +29,21 @@ export const communicationStatusOptions: Array<CommunicationStatusOption> = [
   {
     id: CommunicationStatusFilter.READY,
     label: 'detail.communications.statuses.ready',
-    description: '',
+    description: 'informal.status.accepted.description',
     value: [InformalNotificationStatus.ACCEPTED],
     color: 'default',
   },
   {
     id: CommunicationStatusFilter.PROCESSING,
     label: 'detail.communications.statuses.processing',
-    description: '',
+    description: 'informal.status.processing.description',
     value: [InformalNotificationStatus.PROCESSING],
     color: 'info',
   },
   {
     id: CommunicationStatusFilter.SUCCESS,
     label: 'detail.communications.statuses.success',
-    description: '',
+    description: 'informal.status.completed.description',
     value: [
       InformalNotificationStatus.COMPLETED_REACHED,
       InformalNotificationStatus.COMPLETED_UNREACHED,
@@ -53,14 +53,14 @@ export const communicationStatusOptions: Array<CommunicationStatusOption> = [
   {
     id: CommunicationStatusFilter.FAILED,
     label: 'detail.communications.statuses.failed',
-    description: '',
+    description: 'informal.status.undeliverable.description',
     value: [InformalNotificationStatus.UNDELIVERABLE],
     color: 'error',
   },
   {
     id: CommunicationStatusFilter.REFUSED,
     label: 'detail.communications.statuses.refused',
-    description: '',
+    description: 'informal.status.refused.description',
     value: [InformalNotificationStatus.REFUSED],
     color: 'error',
   },
