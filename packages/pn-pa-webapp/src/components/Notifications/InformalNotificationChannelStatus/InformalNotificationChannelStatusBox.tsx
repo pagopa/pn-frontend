@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import UnavailableIcon from '@mui/icons-material/Block';
 import SmsChannelIcon from '@mui/icons-material/ChatOutlined';
 import ViewedIcon from '@mui/icons-material/DraftsOutlined';
+import InfoOutlined from '@mui/icons-material/InfoOutlined';
 import EmailChannelIcon from '@mui/icons-material/MailOutline';
 import DeliveredIcon from '@mui/icons-material/MarkEmailReadOutlined';
 import WaitingIcon from '@mui/icons-material/Schedule';
@@ -54,6 +55,7 @@ const CHANNEL_ICONS_MAP: Record<BffNotificationChannelType, ReactNode> = {
   EMAIL: <EmailChannelIcon />,
   ANALOG: <img src={AnalogChannelIcon} alt="" width={24} height={24} />,
   PEC: <img src={PecChannelIcon} alt="" width={24} height={24} />,
+  UNKNOWN: <InfoOutlined />,
 };
 
 const getStatusIconColor = (status: BffChannelStatusV1): string => {

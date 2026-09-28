@@ -31,6 +31,31 @@
       "EMAIL": "E-mail",
       "ANALOG": "Service postal",
       "PEC": "PEC"
+    },
+    "communications": {
+      "title": "Liste des communications",
+      "tax-id": "Code fiscal",
+      "iun": "Code IUN",
+      "status": "Statut",
+      "outcome": "Résultat",
+      "empty-title": "Aucune communication pour les filtres sélectionnés.",
+      "empty-description": "Supprimez-les ou essayez une autre combinaison.",
+      "remove-filters": "Supprimer les filtres",
+      "statuses": {
+        "ready": "Prête pour l'envoi",
+        "processing": "Envoi en cours",
+        "success": "Envoi terminé",
+        "failed": "Envoi échoué",
+        "refused": "Refusée"
+      },
+      "outcomes": {
+        "all": "Tous",
+        "viewed": "Lue",
+        "delivered": "Livrée",
+        "not-available": "Résultat non disponible"
+      },
+      "no-communications-title": "Aucune communication disponible",
+      "no-communications-description": "Il n'y a pas de communications correspondant aux filtres sélectionnés."
     }
   },
   "informal": {
@@ -96,27 +121,26 @@
     "status": {
       "accepted": {
         "label": "Prêt pour l'envoi",
-        "tooltip": "Prêt pour l'envoi",
         "description": "La communication a passé les contrôles de conformité. Le processus d'envoi commencera sous peu."
       },
       "processing": {
         "label": "Envoi en cours",
-        "tooltip": "Envoi en cours",
         "description": "La communication tentera de joindre le destinataire sur les canaux choisis."
       },
       "completed": {
         "label": "Envoi réussi",
-        "tooltip": "Envoi réussi",
         "description": "La communication a été envoyée sur les canaux choisis."
       },
       "undeliverable": {
         "label": "Échec de l'envoi",
-        "tooltip": "Échec de l'envoi",
         "description": "La communication n'a pas pu être envoyée sur les canaux choisis."
+      },
+      "refused": {
+        "label": "Refusée",
+        "description": "La communication n'a pas passé les contrôles de conformité."
       },
       "unknown": {
         "label": "Non défini",
-        "tooltip": "Non défini",
         "description": "Statut inconnu"
       }
     }

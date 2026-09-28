@@ -31,6 +31,31 @@
       "EMAIL": "E-pošta",
       "ANALOG": "Poštna storitev",
       "PEC": "PEC"
+    },
+    "communications": {
+      "title": "Seznam sporočil",
+      "tax-id": "Davčna številka",
+      "iun": "Koda IUN",
+      "status": "Stanje",
+      "outcome": "Izid",
+      "empty-title": "Za izbrane filtre ni sporočil.",
+      "empty-description": "Odstranite jih ali poskusite z drugo kombinacijo.",
+      "remove-filters": "Odstrani filtre",
+      "statuses": {
+        "ready": "Pripravljeno za pošiljanje",
+        "processing": "Pošiljanje poteka",
+        "success": "Pošiljanje končano",
+        "failed": "Pošiljanje neuspešno",
+        "refused": "Zavrnjeno"
+      },
+      "outcomes": {
+        "all": "Vsi",
+        "viewed": "Prebrano",
+        "delivered": "Vročeno",
+        "not-available": "Izid ni na voljo"
+      },
+      "no-communications-title": "Na voljo ni nobenega sporočila",
+      "no-communications-description": "Ni sporočil, ki bi ustrezala izbranim filtrom."
     }
   },
   "informal": {
@@ -96,27 +121,26 @@
     "status": {
       "accepted": {
         "label": "Pripravljeno na pošiljanje",
-        "tooltip": "Pripravljeno na pošiljanje",
         "description": "Sporočilo je opravilo preverjanja skladnosti. Postopek pošiljanja se bo kmalu začel."
       },
       "processing": {
         "label": "Pošiljanje v teku",
-        "tooltip": "Pošiljanje v teku",
         "description": "Sporočilo bo poskušalo doseči prejemnika na izbranih kanalih."
       },
       "completed": {
         "label": "Uspešno poslano",
-        "tooltip": "Uspešno poslano",
         "description": "Sporočilo je bilo poslano na izbrane kanale."
       },
       "undeliverable": {
         "label": "Pošiljanje ni uspelo",
-        "tooltip": "Pošiljanje ni uspelo",
         "description": "Sporočila ni bilo mogoče poslati na izbrane kanale."
+      },
+      "refused": {
+        "label": "Zavrnjeno",
+        "description": "Sporočilo ni opravilo preverjanja skladnosti."
       },
       "unknown": {
         "label": "Nedoločeno",
-        "tooltip": "Nedoločeno",
         "description": "Neznano stanje"
       }
     }

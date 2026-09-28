@@ -31,6 +31,31 @@
       "EMAIL": "Email",
       "ANALOG": "Postal service",
       "PEC": "PEC"
+    },
+    "communications": {
+      "title": "Communications list",
+      "tax-id": "Tax code",
+      "iun": "IUN code",
+      "status": "Status",
+      "outcome": "Outcome",
+      "empty-title": "No communications found for the selected filters.",
+      "empty-description": "Remove them or try another combination.",
+      "remove-filters": "Remove filters",
+      "statuses": {
+        "ready": "Ready for sending",
+        "processing": "Sending in progress",
+        "success": "Sending completed",
+        "failed": "Sending failed",
+        "refused": "Refused"
+      },
+      "outcomes": {
+        "all": "All",
+        "viewed": "Read",
+        "delivered": "Delivered",
+        "not-available": "Outcome not available"
+      },
+      "no-communications-title": "No communications available",
+      "no-communications-description": "There are no communications matching the selected filters."
     }
   },
   "informal": {
@@ -96,27 +121,26 @@
     "status": {
       "accepted": {
         "label": "Ready to send",
-        "tooltip": "Ready to send",
         "description": "The communication has passed the compliance checks. The sending process will begin shortly."
       },
       "processing": {
         "label": "Sending in progress",
-        "tooltip": "Sending in progress",
         "description": "The communication will try to reach the recipient on the chosen channels."
       },
       "completed": {
         "label": "Sending successful",
-        "tooltip": "Sending successful",
         "description": "The communication has been sent to the chosen channels."
       },
       "undeliverable": {
         "label": "Sending failed",
-        "tooltip": "Sending failed",
         "description": "The communication could not be sent to the chosen channels."
+      },
+      "refused": {
+        "label": "Refused",
+        "description": "The communication has not passed the compliance checks."
       },
       "unknown": {
         "label": "Undefined",
-        "tooltip": "Undefined",
         "description": "Unknown status"
       }
     }

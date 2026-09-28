@@ -216,6 +216,11 @@ describe('notificationTimeline utility', () => {
         LegalFactType.RECIPIENT_ACCESS,
       ],
       [NotificationStatus.ACCEPTED, TimelineCategory.REQUEST_ACCEPTED, LegalFactType.SENDER_ACK],
+      [
+        NotificationStatus.CANCELLED,
+        TimelineCategory.NOTIFICATION_CANCELLED,
+        LegalFactType.NOTIFICATION_CANCELLED,
+      ],
     ])(
       'inlines the single hidden legal fact associated with status %s',
       (statusValue, category, legalFactType) => {

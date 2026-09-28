@@ -31,6 +31,31 @@
       "EMAIL": "E-Mail",
       "ANALOG": "Postdienst",
       "PEC": "PEC"
+    },
+    "communications": {
+      "title": "Mitteilungsliste",
+      "tax-id": "Steuernummer",
+      "iun": "IUN-Code",
+      "status": "Status",
+      "outcome": "Ergebnis",
+      "empty-title": "Keine Mitteilungen für die ausgewählten Filter vorhanden.",
+      "empty-description": "Entferne sie oder versuche es mit einer anderen Kombination.",
+      "remove-filters": "Filter entfernen",
+      "statuses": {
+        "ready": "Bereit zum Versand",
+        "processing": "Versand läuft",
+        "success": "Versand abgeschlossen",
+        "failed": "Versand fehlgeschlagen",
+        "refused": "Abgelehnt"
+      },
+      "outcomes": {
+        "all": "Alle",
+        "viewed": "Gelesen",
+        "delivered": "Zugestellt",
+        "not-available": "Ergebnis nicht verfügbar"
+      },
+      "no-communications-title": "Keine Mitteilungen verfügbar",
+      "no-communications-description": "Es gibt keine Mitteilungen, die den ausgewählten Filtern entsprechen."
     }
   },
   "informal": {
@@ -96,27 +121,26 @@
     "status": {
       "accepted": {
         "label": "Bereit zum Versand",
-        "tooltip": "Bereit zum Versand",
         "description": "Die Mitteilung hat die Konformitätsprüfungen bestanden. Der Versandprozess beginnt in Kürze."
       },
       "processing": {
         "label": "Versand im Gange",
-        "tooltip": "Versand im Gange",
         "description": "Die Mitteilung wird versuchen, den Empfänger über die gewählten Kanäle zu erreichen."
       },
       "completed": {
         "label": "Versand erfolgreich",
-        "tooltip": "Versand erfolgreich",
         "description": "Die Mitteilung wurde über die gewählten Kanäle versendet."
       },
       "undeliverable": {
         "label": "Versand fehlgeschlagen",
-        "tooltip": "Versand fehlgeschlagen",
         "description": "Die Mitteilung konnte nicht über die gewählten Kanäle versendet werden."
+      },
+      "refused": {
+        "label": "Abgelehnt",
+        "description": "Die Mitteilung hat die Konformitätsprüfungen nicht bestanden."
       },
       "unknown": {
         "label": "Nicht definiert",
-        "tooltip": "Nicht definiert",
         "description": "Unbekannter Status"
       }
     }

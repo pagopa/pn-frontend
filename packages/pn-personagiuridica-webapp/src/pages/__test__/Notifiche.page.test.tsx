@@ -13,6 +13,7 @@ import {
 import { createMatchMedia, testInput } from '@pagopa-pn/pn-commons/src/test-utils';
 
 import { userResponse } from '../../__mocks__/Auth.mock';
+import { dashboardPaginatedState } from '../../__mocks__/Dashboard.mock';
 import { errorMock } from '../../__mocks__/Errors.mock';
 import { emptyNotificationsFromBe, notificationsDTO } from '../../__mocks__/Notifications.mock';
 import {
@@ -343,6 +344,52 @@ describe('Notifiche Page ', () => {
     });
     notificationsTableRows = result.getAllByTestId('notificationsTable.body.row');
     expect(notificationsTableRows).toHaveLength(notificationGroup3.length);
+  });
+
+  it('resets pagination and filters when switching to delegated notifications', async () => {
+    const delegatedNotificationsDTO = {
+      ...notificationsDTO,
+      nextPagesKey: [],
+      moreResult: false,
+    };
+
+    mock.onGet(notificationsDelegatedPath).reply(200, delegatedNotificationsDTO);
+
+    await act(async () => {
+      result = render(<Notifiche isDelegatedPage />, {
+        preloadedState: {
+          userState: {
+            user: userResponse,
+          },
+          dashboardState: {
+            ...dashboardPaginatedState,
+            filters: {
+              ...dashboardPaginatedState.filters,
+              iunMatch: 'QVNA-WYDP-KAHE-202504-X-1',
+            },
+          },
+        },
+      });
+    });
+
+    await waitFor(() => {
+      expect(mock.history.get).toHaveLength(1);
+    });
+
+    expect(mock.history.get[0].url).toBe(notificationsDelegatedPath);
+
+    const dashboardState = result.testStore.getState().dashboardState;
+
+    expect(dashboardState.isDelegatedPage).toBe(true);
+    expect(dashboardState.pagination.page).toBe(0);
+    expect(dashboardState.pagination.nextPagesKey).toEqual([]);
+    expect(dashboardState.pagination.moreResult).toBe(false);
+    expect(dashboardState.filters).toEqual({
+      startDate: undefined,
+      endDate: undefined,
+      communicationType: '',
+      iunMatch: '',
+    });
   });
 
   it('renders page - mobile', async () => {
