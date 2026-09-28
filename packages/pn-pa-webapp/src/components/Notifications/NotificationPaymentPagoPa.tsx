@@ -41,7 +41,11 @@ const getStatusVisualInfo = (status?: PaymentStatus): StatusVisualInfo => {
   }
 };
 
-const NotificationPaymentPagoPa: React.FC<Props> = ({ iun, payment, communicationType }) => {
+const NotificationPaymentPagoPa: React.FC<Props> = ({
+  iun,
+  payment,
+  communicationType = NotificationCommunicationType.LEGAL,
+}) => {
   const { t } = useTranslation(['notifiche']);
   const dispatch = useAppDispatch();
 
