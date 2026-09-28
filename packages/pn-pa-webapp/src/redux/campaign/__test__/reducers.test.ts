@@ -8,6 +8,7 @@ import {
   BffInformalSenderNotificationSearchResponse,
   CampaignStatus,
   ChannelType,
+  InformalNotificationStatusV1,
 } from '../../../generated-client/informal-notifications';
 import { store } from '../../store';
 import { getCampaignCommunications, getCampaignDetail, getCampaigns } from '../actions';
@@ -55,6 +56,18 @@ describe('Campaign redux state tests', () => {
       campaignDetail: {},
       campaignCommunications: {},
       pagination: {
+        nextPagesKey: [],
+        size: 10,
+        page: 0,
+        moreResult: false,
+      },
+      communicationFilters: {
+        recipientId: '',
+        iunMatch: '',
+        status: [],
+        outcome: '',
+      },
+      communicationsPagination: {
         nextPagesKey: [],
         size: 10,
         page: 0,
@@ -143,7 +156,19 @@ describe('Campaign redux state tests', () => {
       campaigns: [],
       campaignDetail: campaign,
       campaignCommunications: {},
+      communicationFilters: {
+        recipientId: '',
+        iunMatch: '',
+        status: [] as Array<InformalNotificationStatusV1>,
+        outcome: '',
+      },
       pagination: {
+        nextPagesKey: [] as Array<string>,
+        size: 10,
+        page: 0,
+        moreResult: false,
+      },
+      communicationsPagination: {
         nextPagesKey: [] as Array<string>,
         size: 10,
         page: 0,
@@ -157,7 +182,19 @@ describe('Campaign redux state tests', () => {
       campaigns: [],
       campaignDetail: {},
       campaignCommunications: {},
+      communicationFilters: {
+        recipientId: '',
+        iunMatch: '',
+        status: [],
+        outcome: '',
+      },
       pagination: {
+        nextPagesKey: [],
+        size: 10,
+        page: 0,
+        moreResult: false,
+      },
+      communicationsPagination: {
         nextPagesKey: [],
         size: 10,
         page: 0,
@@ -169,6 +206,8 @@ describe('Campaign redux state tests', () => {
   it('Should set campaign communications when getCampaignCommunications is fulfilled', () => {
     const action = getCampaignCommunications.fulfilled(campaignCommunications, '', {
       campaignId: campaign.campaignId,
+      page: 0,
+      size: 10,
     });
 
     const state = campaignSlice.reducer(undefined, action);

@@ -259,7 +259,7 @@ const PnCampaignCommunications = ({ fetchCampaignCommunications }: Props) => {
   );
 
   return (
-    <Box sx={{ mt: 3 }}>
+    <Box sx={{ mt: 3 }} data-testid="campaignsList">
       <Typography component="h2" variant="h6">
         {t('detail.communications.title')}
       </Typography>
