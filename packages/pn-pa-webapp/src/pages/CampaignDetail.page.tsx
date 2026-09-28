@@ -177,7 +177,10 @@ const CampaignDetail: React.FC = () => {
       {isPageReady && !hasCampaignCommunicationsApiError && (
         <>
           {hasInitialCommunications ? (
-            <PnCampaignCommunications fetchCampaignCommunications={fetchCampaignCommunications} />
+            <PnCampaignCommunications
+              campaignId={campaign.campaignId}
+              fetchCampaignCommunications={fetchCampaignCommunications}
+            />
           ) : (
             <Box sx={{ mt: 3 }}>
               <Typography component="h2" variant="h6">

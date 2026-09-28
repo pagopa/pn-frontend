@@ -1,10 +1,15 @@
 import { useTranslation } from 'react-i18next';
 
 import { Box } from '@mui/material';
-import { CollapsedList, NotificationDetailRecipient } from '@pagopa-pn/pn-commons';
+import { CollapsedList } from '@pagopa-pn/pn-commons';
+
+interface NotificationRecipient {
+  denomination: string;
+  taxId: string;
+}
 
 type Props = {
-  recipients: Array<NotificationDetailRecipient>;
+  recipients: Array<NotificationRecipient>;
   showAll?: boolean;
 };
 
@@ -12,7 +17,7 @@ const NotificationRecipientsDetail: React.FC<Props> = ({ recipients, showAll = f
   const { t } = useTranslation(['notifiche', 'common']);
   const MAX_VISIBLE_RECIPIENTS = 3;
 
-  const renderRecipient = (recipient: NotificationDetailRecipient) => (
+  const renderRecipient = (recipient: NotificationRecipient) => (
     <Box component="li" key={recipient.taxId} data-testid="recipients">
       {recipient.denomination} - {recipient.taxId}
     </Box>

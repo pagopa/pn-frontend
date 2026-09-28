@@ -31,7 +31,7 @@ interface AbstractPaperProps {
   iun: string;
   abstract?: string; // todo: to sanitize and format the abstract content before passing it to the component
   isLegal?: boolean;
-  filedAt: string;
+  filedAt?: string;
   selfcareCdnUrl?: string;
   details?: Array<AbstractPaperDetail>;
   onDetailsClick?: () => void;
@@ -276,12 +276,14 @@ const AbstractPaper = ({
                 <Typography variant="sidenav" color="text" sx={{ wordBreak: 'break-word' }}>
                   {senderDenomination}
                 </Typography>
-                <Typography variant="body2" color="text.secondary">
-                  {isLegal
-                    ? getLocalizedOrDefaultLabel('notifications', 'detail.legal-date')
-                    : getLocalizedOrDefaultLabel('notifications', 'detail.informal-date')}{' '}
-                  {formatDate(filedAt, false)}
-                </Typography>
+                {filedAt && (
+                  <Typography variant="body2" color="text.secondary">
+                    {isLegal
+                      ? getLocalizedOrDefaultLabel('notifications', 'detail.legal-date')
+                      : getLocalizedOrDefaultLabel('notifications', 'detail.informal-date')}{' '}
+                    {formatDate(filedAt, false)}
+                  </Typography>
+                )}
               </Box>
             </Grid>
             {isMobile && (

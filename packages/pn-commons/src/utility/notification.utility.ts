@@ -15,9 +15,9 @@ import {
   LegalFactType,
   NotificationDetailDocument,
   NotificationDetailOtherDocument,
-  NotificationDetailPayment,
   NotificationDetailRecipient,
   NotificationDetailTimelineDetails,
+  NotificationPayment,
   NotificationStatusHistory,
   PagoPAPaymentFullDetails,
   PaidDetails,
@@ -28,7 +28,7 @@ import {
   SendPaperDetails,
   TimelineCategory,
 } from '../models/NotificationDetail';
-import { NotificationStatus } from '../models/NotificationStatus';
+import { InformalNotificationStatus, NotificationStatus } from '../models/NotificationStatus';
 import { getLocalizedOrDefaultLabel, hasLocalizedLabel } from '../utility/localization.utility';
 import { TimelineStepInfo } from './TimelineUtils/TimelineStep';
 import { TimelineStepFactory } from './TimelineUtils/TimelineStepFactory';
@@ -247,6 +247,10 @@ function deliveredStatusVariant(
   return statusInfos;
 }
 
+type StatusInfoWithColor = StatusInfo & {
+  color: MIChipProps['color'];
+};
+
 const AnalogDeliveryCodeStock = new Set(['RECRN003C', 'RECRN011', 'RECAG011A']);
 const AnalogDeliveryCodeWithdrawnStock = new Set(['RECAG005C', 'RECAG006C']);
 const AnalogDeliveryCodeExpiredStock = new Set(['RECAG008C', 'RECRN005C', 'PNAG012', 'PNRN012']);
@@ -298,12 +302,7 @@ export function getNotificationStatusInfos(
     recipients: Array<NotificationDetailRecipient | string>;
     isParty?: boolean;
   }
-): {
-  color: MIChipProps['color'];
-  label: string;
-  tooltip: string;
-  description: string;
-} {
+): StatusInfoWithColor {
   const statusComesAsAnObject = !!(status as NotificationStatusHistory).status;
   const statusObject: NotificationStatusHistory | undefined = statusComesAsAnObject
     ? (status as NotificationStatusHistory)
@@ -413,6 +412,45 @@ export function getNotificationStatusInfos(
       };
   }
 }
+
+const localizeInformalStatus = (status: string): StatusInfo => ({
+  label: getLocalizedOrDefaultLabel('campaigns', `informal.status.${status}.label`),
+  tooltip: getLocalizedOrDefaultLabel('campaigns', `informal.status.${status}.tooltip`),
+  description: getLocalizedOrDefaultLabel('campaigns', `informal.status.${status}.description`),
+});
+
+export const getInformalNotificationStatusInfos = (
+  status: InformalNotificationStatus
+): StatusInfoWithColor => {
+  switch (status) {
+    case InformalNotificationStatus.ACCEPTED:
+      return {
+        color: 'default',
+        ...localizeInformalStatus('accepted'),
+      };
+    case InformalNotificationStatus.PROCESSING:
+      return {
+        color: 'info',
+        ...localizeInformalStatus('processing'),
+      };
+    case InformalNotificationStatus.COMPLETED_REACHED:
+    case InformalNotificationStatus.COMPLETED_UNREACHED:
+      return {
+        color: 'success',
+        ...localizeInformalStatus('completed'),
+      };
+    case InformalNotificationStatus.UNDELIVERABLE:
+      return {
+        color: 'error',
+        ...localizeInformalStatus('undeliverable'),
+      };
+    default:
+      return {
+        color: 'default',
+        ...localizeInformalStatus('unknown'),
+      };
+  }
+};
 
 export const getNotificationAllowedStatus = () => [
   {
@@ -690,7 +728,7 @@ export function getNotificationTimelineStatusInfos(
 }
 
 export const getF24Payments = (
-  payments: Array<NotificationDetailPayment>,
+  payments: Array<NotificationPayment>,
   recIndex: number,
   onlyF24: boolean = true
 ): Array<F24PaymentDetails> =>
@@ -707,7 +745,7 @@ export const getF24Payments = (
   }, [] as Array<F24PaymentDetails>);
 
 export const getPagoPaF24Payments = (
-  payments: Array<NotificationDetailPayment>,
+  payments: Array<NotificationPayment>,
   recIndex: number,
   withLoading: boolean = false
 ): Array<PaymentDetails> =>
@@ -736,7 +774,7 @@ export const getPagoPaF24Payments = (
  */
 export const populatePaymentsPagoPaF24 = (
   timeline: Array<INotificationDetailTimeline>,
-  pagoPaF24Payments: Array<PaymentDetails> | Array<NotificationDetailPayment>,
+  pagoPaF24Payments: Array<PaymentDetails> | Array<NotificationPayment>,
   checkoutPayments: Array<ExtRegistriesPaymentDetails>
 ): Array<PaymentDetails> => {
   const paymentDetails: Array<PaymentDetails> = [];

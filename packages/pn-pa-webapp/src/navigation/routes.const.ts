@@ -7,7 +7,7 @@ export {
 
 export const DASHBOARD = '/dashboard';
 const NOTIFICA = '/dettaglio';
-const COMUNICATION = '/comunication';
+const COMMUNICATIONS = '/communications';
 export const DETTAGLIO_NOTIFICA = `${DASHBOARD}/:id${NOTIFICA}`;
 export const DETTAGLIO_NOTIFICA_TIMELINE = `${DASHBOARD}/:id${NOTIFICA}/timeline`;
 export const NUOVA_NOTIFICA = `${DASHBOARD}/nuova-notifica`;
@@ -16,7 +16,8 @@ export const NUOVA_API_KEY = `${API_KEYS}/nuova-api-key`;
 export const STATISTICHE = '/statistiche';
 export const CAMPAIGNS = '/campaigns';
 export const CAMPAIGN_DETAIL = `${CAMPAIGNS}/:id`;
-export const DETTAGLIO_COMBO = `${DASHBOARD}/:id${COMUNICATION}`;
+export const DETTAGLIO_COMBO = `${CAMPAIGNS}/:campaignId${COMMUNICATIONS}/:id`;
+export const DETTAGLIO_COMBO_TIMELINE = `${DETTAGLIO_COMBO}/timeline`;
 
 export const USERS_SEGMENT = '/users';
 export const GROUPS_SEGMENT = '/groups';
@@ -41,7 +42,10 @@ export const GROUPS = (idOrganization: string, lang: string) =>
 export const GET_DETTAGLIO_NOTIFICA_PATH = (id: string) => `${DASHBOARD}/${id}${NOTIFICA}`;
 export const GET_DETTAGLIO_NOTIFICA_TIMELINE_PATH = (id: string) =>
   `${DASHBOARD}/${id}${NOTIFICA}/timeline`;
-export const GET_DETTAGLIO_COMUNICATION_PATH = (id: string) => `${DASHBOARD}/${id}${COMUNICATION}`;
+export const GET_DETTAGLIO_COMBO_PATH = (campaignId: string, id: string) =>
+  `${CAMPAIGNS}/${campaignId}${COMMUNICATIONS}/${id}`;
+export const GET_DETTAGLIO_COMBO_TIMELINE_PATH = (campaignId: string, id: string) =>
+  `${GET_DETTAGLIO_COMBO_PATH(campaignId, id)}/timeline`;
 export const GET_CAMPAIGN_DETAIL_PATH = (id: string) => `${CAMPAIGNS}/${id}`;
 export const NOT_ACCESSIBLE = '/non-accessibile';
 

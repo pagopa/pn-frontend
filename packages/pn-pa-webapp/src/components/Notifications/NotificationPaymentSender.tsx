@@ -6,7 +6,8 @@ import {
   CustomPagination,
   F24PaymentDetails,
   INotificationDetailTimeline,
-  NotificationDetailRecipient,
+  NotificationCommunicationType,
+  NotificationPayment,
   PaginationData,
   PagoPAPaymentFullDetails,
   PaymentDetails,
@@ -20,16 +21,24 @@ import { MIPaper } from '@pagopa/mui-italia';
 import NotificationPaymentF24 from './NotificationPaymentF24';
 import NotificationPaymentPagoPa from './NotificationPaymentPagoPa';
 
+type NotificationPaymentRecipient = {
+  recipientType: `${RecipientType}`;
+  taxId: string;
+  denomination: string;
+  payments?: Array<NotificationPayment>;
+};
+
 type Props = {
   iun: string;
-  recipients: Array<NotificationDetailRecipient>;
+  recipients: Array<NotificationPaymentRecipient>;
   timeline: Array<INotificationDetailTimeline>;
+  communicationType?: NotificationCommunicationType;
   sx?: SxProps;
 };
 
 const renderRecipientMenuItem = (
   index: number,
-  option: NotificationDetailRecipient,
+  option: NotificationPaymentRecipient,
   t: TFunction<Array<string>, undefined>
 ) => (
   <MenuItem
@@ -51,15 +60,22 @@ const renderRecipientMenuItem = (
 
 const renderSelectValue = (
   value: string,
-  recipients: Array<NotificationDetailRecipient>
+  recipients: Array<NotificationPaymentRecipient>
 ): string => {
   const recipient = recipients.find((recipient) => recipient.taxId === value);
   return recipient ? `${recipient.denomination} - ${recipient.taxId}` : '';
 };
 
-const NotificationPaymentSender: React.FC<Props> = ({ iun, recipients, timeline, sx }) => {
+const NotificationPaymentSender: React.FC<Props> = ({
+  iun,
+  recipients,
+  timeline,
+  sx,
+  communicationType = NotificationCommunicationType.LEGAL,
+}) => {
   const { t } = useTranslation(['notifiche']);
   const [recipientSelected, setRecipientSelected] = useState<string>('');
+
   const [paymentDetails, setPaymentDetails] = useState<Array<PaymentDetails>>(
     recipients.length === 1
       ? populatePaymentsPagoPaF24(
@@ -69,6 +85,7 @@ const NotificationPaymentSender: React.FC<Props> = ({ iun, recipients, timeline,
         )
       : []
   );
+
   const [f24PaymentDetails, setF24PaymentDetails] = useState<Array<F24PaymentDetails>>(
     recipients.length === 1 ? getF24Payments(recipients[0].payments ?? [], 0, false) : []
   );
@@ -86,6 +103,7 @@ const NotificationPaymentSender: React.FC<Props> = ({ iun, recipients, timeline,
     if (recipientIndex === -1 || !recipients[recipientIndex].payments) {
       return;
     }
+
     setPaymentDetails(
       populatePaymentsPagoPaF24(
         timeline,
@@ -94,6 +112,7 @@ const NotificationPaymentSender: React.FC<Props> = ({ iun, recipients, timeline,
         []
       )
     );
+
     setF24PaymentDetails(
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       getF24Payments(recipients[recipientIndex].payments!, recipientIndex, false)
@@ -162,7 +181,12 @@ const NotificationPaymentSender: React.FC<Props> = ({ iun, recipients, timeline,
       {pagoPAPaymentFullDetails.length > 0 && (
         <Stack gap={2}>
           {pagoPAPaymentFullDetails.map((payment) => (
-            <NotificationPaymentPagoPa iun={iun} payment={payment} key={payment.noticeCode} />
+            <NotificationPaymentPagoPa
+              iun={iun}
+              payment={payment}
+              key={payment.noticeCode}
+              communicationType={communicationType}
+            />
           ))}
         </Stack>
       )}

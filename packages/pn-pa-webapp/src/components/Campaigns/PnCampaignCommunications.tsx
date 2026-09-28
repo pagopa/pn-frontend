@@ -1,5 +1,6 @@
 import { useFormik } from 'formik';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 import * as yup from 'yup';
 
 import { ArrowForward } from '@mui/icons-material';
@@ -27,6 +28,7 @@ import { MIButton } from '@pagopa/mui-italia';
 
 import { BffInformalSenderNotificationSearchRow } from '../../generated-client/informal-notifications';
 import { CommunicationFilters } from '../../models/Campaign';
+import * as routes from '../../navigation/routes.const';
 import { useAppSelector } from '../../redux/hooks';
 import { RootState } from '../../redux/store';
 import PnCampaignCommunicationsFilters from './PnCampaignCommunicationsFilters';
@@ -38,6 +40,7 @@ type CampaignCommunicationRow = BffInformalSenderNotificationSearchRow & {
 };
 
 interface Props {
+  campaignId: string;
   fetchCampaignCommunications: (
     page: number,
     size: number,
@@ -46,8 +49,9 @@ interface Props {
   ) => void;
 }
 
-const PnCampaignCommunications = ({ fetchCampaignCommunications }: Props) => {
+const PnCampaignCommunications = ({ campaignId, fetchCampaignCommunications }: Props) => {
   const { t } = useTranslation('campaigns');
+  const navigate = useNavigate();
 
   const communicationsPagination = useAppSelector(
     (state: RootState) => state.campaignState.communicationsPagination
@@ -149,7 +153,11 @@ const PnCampaignCommunications = ({ fetchCampaignCommunications }: Props) => {
 
     if (columnId === 'action') {
       return (
-        <MIButton variant="text" endIcon={<ArrowForward />}>
+        <MIButton
+          variant="text"
+          endIcon={<ArrowForward />}
+          onClick={() => navigate(routes.GET_DETTAGLIO_COMBO_PATH(campaignId, row.id))}
+        >
           {t('button.open', { ns: 'common' })}
         </MIButton>
       );
