@@ -7,6 +7,7 @@ import { ApiError, LoadingPage, TitleBox, useErrors } from '@pagopa-pn/pn-common
 import { MIBreadcrumbItem, MIBreadcrumbs } from '@pagopa/mui-italia';
 
 import InformalNotificationSenderTimeline from '../components/Notifications/InformalNotificationSenderTimeline';
+import { PAEventsType } from '../models/PAEventsType';
 import * as routes from '../navigation/routes.const';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import {
@@ -15,6 +16,7 @@ import {
 } from '../redux/notification/actions';
 import { resetState } from '../redux/notification/reducers';
 import { RootState } from '../redux/store';
+import PAEventStrategyFactory from '../utility/MixpanelUtils/PAEventStrategyFactory';
 
 const InformalNotificationTimeline: React.FC = () => {
   const { campaignId, id } = useParams();
@@ -64,6 +66,10 @@ const InformalNotificationTimeline: React.FC = () => {
     fetchInformalNotificationTimeline();
     return () => void dispatch(resetState());
   }, [fetchInformalNotificationTimeline]);
+
+  useEffect(() => {
+    PAEventStrategyFactory.triggerEvent(PAEventsType.SEND_PA_COMBO_STATUS_DETAIL);
+  }, []);
 
   const breadcrumb = (
     <MIBreadcrumbs
