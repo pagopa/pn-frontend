@@ -26,7 +26,7 @@ import {
   SendPaperDetails,
   TimelineCategory,
 } from '../models/NotificationDetail';
-import { InformalNotificationStatus, NotificationStatus } from '../models/NotificationStatus';
+import { NotificationStatus } from '../models/NotificationStatus';
 import {
   NotificationPaymentTimeline,
   NotificationPaymentTimelineElement,
@@ -414,45 +414,6 @@ export function getNotificationStatusInfos(
       };
   }
 }
-
-const localizeInformalStatus = (status: string): StatusInfo => ({
-  label: getLocalizedOrDefaultLabel('campaigns', `informal.status.${status}.label`),
-  tooltip: getLocalizedOrDefaultLabel('campaigns', `informal.status.${status}.tooltip`),
-  description: getLocalizedOrDefaultLabel('campaigns', `informal.status.${status}.description`),
-});
-
-export const getInformalNotificationStatusInfos = (
-  status: InformalNotificationStatus
-): StatusInfoWithColor => {
-  switch (status) {
-    case InformalNotificationStatus.ACCEPTED:
-      return {
-        color: 'default',
-        ...localizeInformalStatus('accepted'),
-      };
-    case InformalNotificationStatus.PROCESSING:
-      return {
-        color: 'info',
-        ...localizeInformalStatus('processing'),
-      };
-    case InformalNotificationStatus.COMPLETED_REACHED:
-    case InformalNotificationStatus.COMPLETED_UNREACHED:
-      return {
-        color: 'success',
-        ...localizeInformalStatus('completed'),
-      };
-    case InformalNotificationStatus.UNDELIVERABLE:
-      return {
-        color: 'error',
-        ...localizeInformalStatus('undeliverable'),
-      };
-    default:
-      return {
-        color: 'default',
-        ...localizeInformalStatus('unknown'),
-      };
-  }
-};
 
 export const getNotificationAllowedStatus = () => [
   {
