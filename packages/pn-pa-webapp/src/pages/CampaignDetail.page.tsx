@@ -17,6 +17,11 @@ import {
   getCampaignCommunications,
   getCampaignDetail,
 } from '../redux/campaign/actions';
+import {
+  initialCommunicationFilters,
+  initialCommunicationsPagination,
+  resetCampaignCommunications,
+} from '../redux/campaign/reducers';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { RootState } from '../redux/store';
 import PAEventStrategyFactory from '../utility/MixpanelUtils/PAEventStrategyFactory';
@@ -31,6 +36,9 @@ const CampaignDetail: React.FC = () => {
   );
   const communicationsPagination = useAppSelector(
     (state: RootState) => state.campaignState.communicationsPagination
+  );
+  const communicationsCampaignId = useAppSelector(
+    (state: RootState) => state.campaignState.communicationsCampaignId
   );
   const { hasApiErrors } = useErrors();
   const [pageReady, setPageReady] = useState(false);
@@ -92,7 +100,27 @@ const CampaignDetail: React.FC = () => {
   }, [fetchCampaignDetail]);
 
   useEffect(() => {
-    fetchCampaignCommunications(0, communicationsPagination.size, communicationFilters);
+    if (!id) {
+      return;
+    }
+
+    if (communicationsCampaignId === id) {
+      const { page, size, nextPagesKey } = communicationsPagination;
+      fetchCampaignCommunications(
+        page,
+        size,
+        communicationFilters,
+        page === 0 ? undefined : nextPagesKey[page - 1]
+      );
+      return;
+    }
+
+    dispatch(resetCampaignCommunications(id));
+    fetchCampaignCommunications(
+      0,
+      initialCommunicationsPagination.size,
+      initialCommunicationFilters
+    );
   }, []);
 
   const breadcrumb = (

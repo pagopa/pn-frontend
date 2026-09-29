@@ -224,4 +224,66 @@ describe('CampaignDetail Page', () => {
       expect(mock.history.get[2].url).toBe(comunicationsListPath);
     });
   });
+
+  const filteredState = (campaignId: string) => ({
+    campaignState: {
+      campaigns: [],
+      campaignDetail: {},
+      communicationsCampaignId: campaignId,
+      campaignCommunications: {},
+      communicationFilters: {
+        recipientId: '',
+        iunMatch: 'ABCD-EFGH-IJKL-123456-M-1',
+        status: [],
+        outcome: '',
+      },
+      pagination: { nextPagesKey: [], size: 10, page: 0, moreResult: false },
+      communicationsPagination: { nextPagesKey: ['key-1'], size: 20, page: 1, moreResult: true },
+    },
+  });
+
+  it('resets communications filters and pagination when opening another campaign', async () => {
+    mock
+      .onGet(`/bff/v1/notifications/informal/campaigns/${campaignDetailMock.campaignId}`)
+      .reply(200, campaignDetailMock);
+    mock.onGet(comunicationsListPath).reply(200, comunicationsList);
+
+    await act(async () => {
+      result = render(<CampaignDetail />, {
+        route: `/campaigns/${campaignDetailMock.campaignId}`,
+        path: '/campaigns/:id',
+        preloadedState: filteredState('another-campaign'),
+      });
+    });
+
+    await waitFor(() => {
+      expect(mock.history.get).toHaveLength(2);
+    });
+    expect(mock.history.get[1].url).toBe(comunicationsListPath);
+    expect(result.testStore.getState().campaignState.communicationsCampaignId).toBe(
+      campaignDetailMock.campaignId
+    );
+  });
+
+  it('keeps communications filters and pagination when coming back to the same campaign', async () => {
+    const filteredComunicationsListPath = `/bff/v1/informal/campaigns/${campaignDetailMock.campaignId}/notifications/sent?startDate=${startParam}&endDate=${endParam}&iunMatch=ABCD-EFGH-IJKL-123456-M-1&size=20&nextPagesKey=key-1`;
+
+    mock
+      .onGet(`/bff/v1/notifications/informal/campaigns/${campaignDetailMock.campaignId}`)
+      .reply(200, campaignDetailMock);
+    mock.onGet(filteredComunicationsListPath).reply(200, comunicationsList);
+
+    await act(async () => {
+      result = render(<CampaignDetail />, {
+        route: `/campaigns/${campaignDetailMock.campaignId}`,
+        path: '/campaigns/:id',
+        preloadedState: filteredState(campaignDetailMock.campaignId),
+      });
+    });
+
+    await waitFor(() => {
+      expect(mock.history.get).toHaveLength(2);
+    });
+    expect(mock.history.get[1].url).toBe(filteredComunicationsListPath);
+  });
 });

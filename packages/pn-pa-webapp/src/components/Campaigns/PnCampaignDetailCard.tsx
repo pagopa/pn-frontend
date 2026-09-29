@@ -39,6 +39,8 @@ const PnCampaignDetailCard = ({
             <Typography variant="body1" fontWeight={600}>
               {serviceName}
             </Typography>
+
+            <Divider sx={{ my: 2, display: { xs: 'block', md: 'none' } }} />
           </Stack>
         </Grid>
 
