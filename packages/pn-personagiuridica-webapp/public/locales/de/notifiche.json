@@ -19,11 +19,10 @@
     "cancelled-iun": "IUN-Code storniert",
     "cancelled": {
       "cta": "Was muss ich tun?",
-      "message": "Diese Zustellung wurde von der Absenderbehörde annulliert, daher sind die Dokumente nicht mehr verfügbar."
+      "message": "Diese Zustellung wurde von der sendenden Körperschaft storniert."
     },
     "contact_sender": {
-      "copied_phone": "Telefonnummer kopiert",
-      "copy_phone": "Telefonnummer kopieren",
+      "copy_phone": "Telefonnummer kopiert",
       "email": "E-Mail der Körperschaft",
       "phone": "Telefonnummer der Körperschaft",
       "title": "Kontaktiere die sendende Körperschaft",
@@ -61,11 +60,10 @@
       "goto": "Besuche die Webseite"
     },
     "informal-date": "Mitteilung hinterlegt am",
-    "informal-disclaimer": "Diese Mitteilung könnte Rechtswirkungen entfalten. Prüfe die Anlagen, falls vorhanden, um mehr zu erfahren.",
     "informal_notification_markdown": {
-      "assistance": "In ogni caso, qualora si avesse bisogno di assistenza, è possibile <0>contattare {{senderDenomination}}</0> attraverso i suoi canali ufficiali.",
-      "attachments_info": "Per avere maggiori informazioni <0>è necessario prendere visione degli allegati</0>, che possono fornire dettagli importanti.",
-      "greeting": "All'attenzione di {{recipientDenomination}},",
+      "assistance": "In ogni caso, qualora si avesse bisogno di assistenza, è possibile <0>contattare {{senderDenomination}} attraverso i suoi canali ufficiali.</0>",
+      "attachments_info": "Per avere maggiori informazioni <0>è consigliato prendere visione degli allegati</0>, che possono fornire dettagli importanti.",
+      "greeting": "All'attenzione di {{recipientDenomination}}",
       "payment_instructions": "È possibile completare il pagamento premendo <0>Paga</0>. In alternativa, si può utilizzare l'<1>avviso allegato</1> per saldare l'importo tramite tutti i canali abilitati a pagoPA."
     },
     "iun": "IUN-Code",
@@ -167,11 +165,8 @@
         "M06": "weil die Adresse falsch ist",
         "M07": "weil die Adresse nicht existiert",
         "M08": "weil die Adresse unvollständig ist",
-        "M09": "aus anderen Gründen",
-        "M10": "weil die Adresse nicht lesbar ist"
+        "M09": "aus anderen Gründen"
       },
-      "courtesy-group-label": "Höflichkeitsmitteilungen",
-      "digital-send-fallback": "Digitaler Versand",
       "legalfact": {
         "analog-failure-delivery": "Hinterlegung der Empfangsbestätigung",
         "digital-delivery-failure": "fehlende digitale Zustellung",
@@ -201,7 +196,6 @@
         "description": "Der Empfänger oder die bevollmächtigte Person hat die zugestellten Dokumente bei einem zur Aushändigung befugten Betreiber abgeholt.",
         "title": "Die Dokumente wurden abgeholt"
       },
-      "registered-letter": "Einschreiben",
       "registered-letter-kind": {
         "890": "890",
         "AR": "Rückschein",
@@ -215,15 +209,9 @@
       "send-analog-domicile-890": "Versand per Einschreiben 890",
       "send-analog-domicile-890-description": "Der Versand des Bescheids an die Adresse {{address}} per Einschreiben 890 hat begonnen.",
       "send-analog-domicile-890-description-multirecipient": "Der Versand des Bescheids an {{name}} {{taxId}} an die Adresse {{address}} per Einschreiben 890 hat begonnen.",
-      "send-analog-domicile-890-first-attempt-group-label": "Erstes Einschreiben 890",
-      "send-analog-domicile-890-group-label": "Einschreiben 890",
-      "send-analog-domicile-890-second-attempt-group-label": "Zweites Einschreiben 890",
       "send-analog-domicile-ar": "Einschreiben mit Rückschein",
       "send-analog-domicile-ar-description": "Der Versand des Bescheids an die Adresse {{address}} per Einschreiben mit Rückschein hat begonnen.",
       "send-analog-domicile-ar-description-multirecipient": "Der Versand des Bescheids an {{name}} {{taxId}} an die Adresse {{address}} per Einschreiben mit Rückschein hat begonnen.",
-      "send-analog-domicile-ar-first-attempt-group-label": "Erstes Einschreiben mit Rückschein",
-      "send-analog-domicile-ar-group-label": "Einschreiben mit Rückschein",
-      "send-analog-domicile-ar-second-attempt-group-label": "Zweites Einschreiben mit Rückschein",
       "send-analog-error": "Der Versand auf dem Postweg hat zu keiner Zustellung geführt",
       "send-analog-flow-CON020-description": "Original der AAR (digital natives Dokument), das vom Konsolidierer zur Verfügung gestellt und von PagoPA digital signiert wurde.",
       "send-analog-flow-CON020-description-multirecipient": "Original der AAR (digital natives Dokument), das vom Konsolidierer zur Verfügung gestellt und von PagoPA digital signiert wurde.",
@@ -352,11 +340,9 @@
       "send-digital-domicile-PEC": "Versand per PEC",
       "send-digital-domicile-PEC-description": "Versand des Bescheids an die PEC-Adresse {{address}} läuft.",
       "send-digital-domicile-PEC-description-multirecipient": "Versand des Bescheids an {{name}} {{taxId}} an die PEC-Adresse {{address}} läuft.",
-      "send-digital-domicile-PEC-group-label": "PEC",
       "send-digital-domicile-SERCQ-SEND": "Versand über das digitale SEND-Domizil",
       "send-digital-domicile-SERCQ-SEND-description": "Der Versand der Benachrichtigung an das digitale SEND-Domizil ist im Gange.",
       "send-digital-domicile-SERCQ-SEND-description-multirecipient": "Der Versand der Benachrichtigung an {{name}} {{taxId}} an das digitale SEND-Domizil ist im Gange",
-      "send-digital-domicile-SERCQ-SEND-group-label": "Digitales Zustelldomizil SEND",
       "send-digital-error": "Versand per PEC-Adresse fehlgeschlagen",
       "send-digital-error-description": "Versand an die PEC-Adresse {{address}} fehlgeschlagen, da das Postfach voll, ungültig oder inaktiv ist.",
       "send-digital-error-description-multirecipient": "Versand an {{name}} {{taxId}} an die PEC-Adresse {{address}} fehlgeschlagen, da das Postfach voll, ungültig oder inaktiv ist.",
@@ -375,9 +361,7 @@
       "send-simple-registered-letter": "Einfacher Versand per Einschreiben",
       "send-simple-registered-letter-description": "Der Bescheid an die Anschrift {{address}} per einfachem Einschreiben wird gesendet.",
       "send-simple-registered-letter-description-multirecipient": "Der Bescheid an {{name}} {{taxId}} an die Adresse {{address}} per einfachem Einschreiben wird gesendet.",
-      "send-simple-registered-letter-group-label": "Einfacher Versand per Einschreiben",
-      "tpp-type": "ein digitaler Drittanbieter-Kanal",
-      "unknown-status": "Unbekannter Status"
+      "tpp-type": "ein digitaler Drittanbieter-Kanal"
     }
   },
   "empty-state": {
@@ -522,7 +506,6 @@
     "returned-to-sender-multirecipient": "Rücksendung an den Absender",
     "returned-to-sender-tooltip": "Der Empfänger ist verstorben",
     "returned-to-sender-tooltip-multirecipient": "Alle Empfänger sind verstorben",
-    "reworked-status-group": "Ein oder mehrere korrigierte Ereignisse",
     "reworked-status-not-valid": "Ungültiges Ereignis",
     "reworked-status-valid": "Berichtigtes Ereignis",
     "unreachable": "Empfänger unauffindbar",

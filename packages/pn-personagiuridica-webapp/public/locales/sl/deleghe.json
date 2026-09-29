@@ -124,7 +124,7 @@
       "verificationCodeDescr": "Delite to kodo s pooblaščencem: moral jo bo vnesti ob sprejetju prenosa pooblastila.",
       "viewFrom": "Ogledali si boste laho obvestila s strani:"
     },
-    "subtitle": "Vnesi podatke fizične ali pravne osebe, ki jo želiš pooblastiti za branje obvestil {{organizationName}}.",
+    "subtitle": "Vnesite podatke fizične ali pravne osebe, na katero želite prenesti pooblastilo za branje vaših obvestil.",
     "title": "Dodajte prenos pooblastila",
     "validation": {
       "businessName": {

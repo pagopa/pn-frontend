@@ -124,7 +124,7 @@
       "verificationCodeDescr": "Partagez ce code avec la personne mandatée : elle devra le saisir lors de l’acceptation de la procuration.",
       "viewFrom": "Vous pourrez visualiser les notifications de :"
     },
-    "subtitle": "Saisis les données de la personne physique ou morale à qui tu veux déléguer la lecture des notifications de {{organizationName}}.",
+    "subtitle": "Saisissez les données de la personne physique ou morale à qui vous souhaitez mandater la lecture de vos notifications.",
     "title": "Ajouter une procuration",
     "validation": {
       "businessName": {

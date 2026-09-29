@@ -19,11 +19,10 @@
     "cancelled-iun": "Koda IUN je preklicana",
     "cancelled": {
       "cta": "Kaj moram storiti?",
-      "message": "To obvestilo je preklical organ pošiljatelj, zato dokumenti niso več na voljo."
+      "message": "To obvestilo je preklical organ pošiljatelj."
     },
     "contact_sender": {
-      "copied_phone": "Telefonska številka je kopirana",
-      "copy_phone": "Kopiraj telefonsko številko",
+      "copy_phone": "Telefonska številka je kopirana",
       "email": "E-pošta organa",
       "phone": "Telefonska številka organa",
       "title": "Stopite in stik z izdajateljem",
@@ -61,11 +60,10 @@
       "goto": "Pojdi na spletno mesto"
     },
     "informal-date": "Sporočilo odloženo dne",
-    "informal-disclaimer": "To sporočilo bi lahko imelo pravne učinke. Oglej si priloge, če so priložene, da izveš več.",
     "informal_notification_markdown": {
-      "assistance": "In ogni caso, qualora si avesse bisogno di assistenza, è possibile <0>contattare {{senderDenomination}}</0> attraverso i suoi canali ufficiali.",
-      "attachments_info": "Per avere maggiori informazioni <0>è necessario prendere visione degli allegati</0>, che possono fornire dettagli importanti.",
-      "greeting": "All'attenzione di {{recipientDenomination}},",
+      "assistance": "In ogni caso, qualora si avesse bisogno di assistenza, è possibile <0>contattare {{senderDenomination}} attraverso i suoi canali ufficiali.</0>",
+      "attachments_info": "Per avere maggiori informazioni <0>è consigliato prendere visione degli allegati</0>, che possono fornire dettagli importanti.",
+      "greeting": "All'attenzione di {{recipientDenomination}}",
       "payment_instructions": "È possibile completare il pagamento premendo <0>Paga</0>. In alternativa, si può utilizzare l'<1>avviso allegato</1> per saldare l'importo tramite tutti i canali abilitati a pagoPA."
     },
     "iun": "Koda IUN",
@@ -167,11 +165,8 @@
         "M06": "ker je naslov napačen",
         "M07": "ker naslov ne obstaja",
         "M08": "ker je naslov nezadosten",
-        "M09": "iz drugih razlogov",
-        "M10": "ker naslov ni čitljiv"
+        "M09": "iz drugih razlogov"
       },
-      "courtesy-group-label": "Vljudnostna sporočila",
-      "digital-send-fallback": "Digitalno pošiljanje",
       "legalfact": {
         "analog-failure-delivery": "Depozit potrdila o prejemu",
         "digital-delivery-failure": "brez digitalnega kontaktnega podatka",
@@ -201,7 +196,6 @@
         "description": "Prejemnik ali pooblaščena oseba je prevzela vročene dokumente pri izvajalcu, pooblaščenem za njihovo dostavo.",
         "title": "Dokumenti so bili prevzeti"
       },
-      "registered-letter": "Priporočeno pismo",
       "registered-letter-kind": {
         "890": "890",
         "AR": "S povratnico",
@@ -215,15 +209,9 @@
       "send-analog-domicile-890": "Pošiljanje po priporočeni pošti 890",
       "send-analog-domicile-890-description": "Začelo se je pošiljanje obvestila na naslov {{address}} s priporočenim pismom 890.",
       "send-analog-domicile-890-description-multirecipient": "Začelo se je pošiljanje obvestila za {{name}} {{taxId}} na naslov {{address}} s priporočenim pismom 890.",
-      "send-analog-domicile-890-first-attempt-group-label": "Prvo priporočeno pismo 890",
-      "send-analog-domicile-890-group-label": "Priporočeno pismo 890",
-      "send-analog-domicile-890-second-attempt-group-label": "Drugo priporočeno pismo 890",
       "send-analog-domicile-ar": "Pošiljanje s priporočenim pismom s povratnico",
       "send-analog-domicile-ar-description": "Začelo se je pošiljanje obvestila na naslov {{address}} s priporočenim pismom s povratnico.",
       "send-analog-domicile-ar-description-multirecipient": "Začelo se je pošiljanje obvestila za {{name}} {{taxId}} na naslov {{address}} s priporočenim pismom s povratnico.",
-      "send-analog-domicile-ar-first-attempt-group-label": "Prvo priporočeno pismo s povratnico",
-      "send-analog-domicile-ar-group-label": "Priporočeno pismo s povratnico",
-      "send-analog-domicile-ar-second-attempt-group-label": "Drugo priporočeno pismo s povratnico",
       "send-analog-error": "Pošiljanje v papirni obliki ni določilo dostave",
       "send-analog-flow-CON020-description": "Izvirnik AAR (izvorno digitalni dokument), ki ga je dal na voljo konsolidator in ga je digitalno podpisal PagoPA.",
       "send-analog-flow-CON020-description-multirecipient": "Izvirnik AAR (izvorno digitalni dokument), ki ga je dal na voljo konsolidator in ga je digitalno podpisal PagoPA.",
@@ -352,11 +340,9 @@
       "send-digital-domicile-PEC": "Pošiljanje prek PEC",
       "send-digital-domicile-PEC-description": "Obvestilo se pošlje na PEC {{address}}.",
       "send-digital-domicile-PEC-description-multirecipient": "Obvestilo se pošlje za {{name}} {{taxId}} na PEC {{address}}.",
-      "send-digital-domicile-PEC-group-label": "PEC",
       "send-digital-domicile-SERCQ-SEND": "Pošiljanje prek digitalnega naslova SEND",
       "send-digital-domicile-SERCQ-SEND-description": "Pošiljanje obvestila na digitalni naslov SEND je v teku.",
       "send-digital-domicile-SERCQ-SEND-description-multirecipient": "Pošiljanje obvestila osebi {{name}} {{taxId}} na digitalni naslov SEND je v teku",
-      "send-digital-domicile-SERCQ-SEND-group-label": "Digitalni domicil SEND",
       "send-digital-error": "Pošiljanje prek PEC ni uspelo",
       "send-digital-error-description": "Pošiljanje obvestila na PEC {{address}} ni uspelo, ker je polje nasičeno, neveljavno ali neaktivno.",
       "send-digital-error-description-multirecipient": "Pošiljanje obvestila za {{name}} {{taxId}} na PEC {{address}} ni uspelo, ker je polje nasičeno, neveljavno ali neaktivno.",
@@ -375,9 +361,7 @@
       "send-simple-registered-letter": "Pošiljanje z navadnim priporočenim pismom",
       "send-simple-registered-letter-description": "Obvestilo se pošlje na naslov {{address}} z navadnim priporočenim pismom.",
       "send-simple-registered-letter-description-multirecipient": "Obvestilo se pošlje za {{name}} {{taxId}} na naslov {{address}} z navadnim priporočenim pismom.",
-      "send-simple-registered-letter-group-label": "Pošiljanje z navadnim priporočenim pismom",
-      "tpp-type": "digitalni kanal tretje osebe",
-      "unknown-status": "Neznano stanje"
+      "tpp-type": "digitalni kanal tretje osebe"
     }
   },
   "empty-state": {
@@ -522,7 +506,6 @@
     "returned-to-sender-multirecipient": "Vrnjeno pošiljatelju",
     "returned-to-sender-tooltip": "Prejemnik je umrl",
     "returned-to-sender-tooltip-multirecipient": "Vsi prejemniki so umrli",
-    "reworked-status-group": "En ali več popravljenih dogodkov",
     "reworked-status-not-valid": "Neveljaven dogodek",
     "reworked-status-valid": "Popravljen dogodek",
     "unreachable": "Prejemnika ni mogoče izslediti",
