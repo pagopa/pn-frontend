@@ -15,10 +15,12 @@ import {
 } from '@pagopa-pn/pn-commons';
 import { MIButton, MITableList, MITableListItem, MITableListItemField } from '@pagopa/mui-italia';
 
+import { PAEventsType } from '../models/PAEventsType';
 import { GET_CAMPAIGN_DETAIL_PATH } from '../navigation/routes.const';
 import { CAMPAIGN_ACTIONS, getCampaigns } from '../redux/campaign/actions';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { RootState } from '../redux/store';
+import PAEventStrategyFactory from '../utility/MixpanelUtils/PAEventStrategyFactory';
 
 const Campaigns = () => {
   const dispatch = useAppDispatch();
@@ -53,6 +55,16 @@ const Campaigns = () => {
         })
       )
         .unwrap()
+        .then((data) => {
+          PAEventStrategyFactory.triggerEvent(PAEventsType.SEND_PA_HAS_CAMPAIGNS, {
+            value: data.resultsPage.length > 0,
+          });
+
+          PAEventStrategyFactory.triggerEvent(PAEventsType.SEND_PA_CAMPAIGNS, {
+            campaigns: data.resultsPage,
+            pageNumber: page,
+          });
+        })
         .catch(() => {})
         .finally(() => {
           setLoading(false);

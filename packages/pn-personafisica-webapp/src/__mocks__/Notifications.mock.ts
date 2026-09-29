@@ -1,5 +1,6 @@
 import {
   GetNotificationsResponse,
+  NotificationCommunicationType,
   NotificationStatus,
   RecipientNotification,
 } from '@pagopa-pn/pn-commons';
@@ -15,7 +16,7 @@ export const notificationsDTO: GetNotificationsResponse<RecipientNotification> =
       notificationStatus: NotificationStatus.VIEWED,
       recipients: ['CLMCST42R12D969Z', 'DRCGNN12A46A326K', 'TSTUTN00A07A001G'],
       group: '6467344676f10c7617353c90',
-      communicationType: 'LEGAL',
+      communicationType: NotificationCommunicationType.LEGAL,
       isNewNotification: false,
     },
     {
@@ -27,7 +28,7 @@ export const notificationsDTO: GetNotificationsResponse<RecipientNotification> =
       notificationStatus: NotificationStatus.EFFECTIVE_DATE,
       recipients: ['TSTUTN00A07A001G'],
       group: '6467344676f10c7617353c90',
-      communicationType: 'INFORMAL',
+      communicationType: NotificationCommunicationType.INFORMAL,
       isNewNotification: false,
     },
     {
@@ -39,7 +40,7 @@ export const notificationsDTO: GetNotificationsResponse<RecipientNotification> =
       notificationStatus: NotificationStatus.VIEWED,
       recipients: ['TSTUTN00A07A001G'],
       group: '6467344676f10c7617353c90',
-      communicationType: 'INFORMAL',
+      communicationType: NotificationCommunicationType.INFORMAL,
       isNewNotification: true,
     },
   ],

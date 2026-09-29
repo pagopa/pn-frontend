@@ -117,5 +117,6 @@ export type { UnifiedNotificationStatus } from './NotificationStatus';
 export type {
   NotificationTimelineResponse,
   NotificationTimelineStatusHistory,
+  NotificationPaymentTimeline,
 } from './NotificationTimeline';
 export { basicNoLoggedUserData } from './User';

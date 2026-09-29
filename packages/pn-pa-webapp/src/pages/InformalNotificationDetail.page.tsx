@@ -6,7 +6,6 @@ import { Box, Stack } from '@mui/material';
 import {
   AbstractPaper,
   ApiError,
-  INotificationDetailTimeline,
   InformalNotificationStatus,
   LoadingPage,
   NotificationCommunicationType,
@@ -26,6 +25,7 @@ import NotificationPaymentSender from '../components/Notifications/NotificationP
 import NotificationRecipientsDetail from '../components/Notifications/NotificationRecipientsDetail';
 import { BffDocumentDownloadMetadataResponse } from '../generated-client/informal-notifications';
 import { communicationStatusOptions } from '../models/Campaign';
+import { PAEventsType } from '../models/PAEventsType';
 import * as routes from '../navigation/routes.const';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import {
@@ -34,6 +34,7 @@ import {
   getSentInformalNotificationDocument,
 } from '../redux/notification/actions';
 import { RootState } from '../redux/store';
+import PAEventStrategyFactory from '../utility/MixpanelUtils/PAEventStrategyFactory';
 
 const InformalNotificationDetail: React.FC = () => {
   const { campaignId, id } = useParams();
@@ -61,6 +62,9 @@ const InformalNotificationDetail: React.FC = () => {
 
     void dispatch(getSentInformalNotification(id))
       .unwrap()
+      .then(() => {
+        PAEventStrategyFactory.triggerEvent(PAEventsType.SEND_PA_COMBO_DETAIL);
+      })
       .catch(() => {})
       .finally(() => setPageReady(true));
   }, [dispatch, id]);
@@ -190,15 +194,6 @@ const InformalNotificationDetail: React.FC = () => {
     },
   ].filter((detail) => detail.value);
 
-  // TODO: remove this cast once the BFF exposes the informal notification timeline
-  // and the generated BFF client is updated.
-  const timeline =
-    (
-      informalNotification as typeof informalNotification & {
-        timeline?: Array<INotificationDetailTimeline>;
-      }
-    ).timeline ?? [];
-
   return (
     <>
       {hasNotificationSentApiError && (
@@ -261,7 +256,7 @@ const InformalNotificationDetail: React.FC = () => {
                   iun={informalNotification.iun}
                   recipients={recipients}
                   communicationType={NotificationCommunicationType.INFORMAL}
-                  timeline={timeline}
+                  timeline={informalNotification.timeline ?? []}
                 />
               )}
             </Stack>

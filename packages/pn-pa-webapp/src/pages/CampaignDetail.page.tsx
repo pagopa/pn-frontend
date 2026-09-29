@@ -10,6 +10,7 @@ import PnCampaignCommunications from '../components/Campaigns/PnCampaignCommunic
 import PnCampaignDetailCard from '../components/Campaigns/PnCampaignDetailCard';
 import PnCampaignDetailLoading from '../components/Campaigns/PnCampaignDetailLoading';
 import { CommunicationFilters } from '../models/Campaign';
+import { PAEventsType } from '../models/PAEventsType';
 import * as routes from '../navigation/routes.const';
 import {
   CAMPAIGN_ACTIONS,
@@ -18,6 +19,7 @@ import {
 } from '../redux/campaign/actions';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { RootState } from '../redux/store';
+import PAEventStrategyFactory from '../utility/MixpanelUtils/PAEventStrategyFactory';
 
 const CampaignDetail: React.FC = () => {
   const navigate = useNavigate();
@@ -47,6 +49,9 @@ const CampaignDetail: React.FC = () => {
 
       void dispatch(getCampaignDetail(id))
         .unwrap()
+        .then(() => {
+          PAEventStrategyFactory.triggerEvent(PAEventsType.SEND_PA_CAMPAIGN_DETAIL);
+        })
         .catch(() => {})
         .finally(() => setPageReady(true));
     }

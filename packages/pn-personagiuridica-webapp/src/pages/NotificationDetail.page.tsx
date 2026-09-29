@@ -15,6 +15,7 @@ import {
   GetDowntimeHistoryParams,
   LegalFactId,
   LegalFactType,
+  NotificationCommunicationType,
   NotificationDetailBilingualFacsimileDocuments,
   NotificationDetailDocuments,
   NotificationDetailOtherDocument,
@@ -271,7 +272,7 @@ const NotificationDetail = () => {
     if (noticeCode && creditorTaxId && amount && notification.senderDenomination) {
       PGEventStrategyFactory.triggerEvent(
         PGEventsType.SEND_PG_START_PAYMENT,
-        { notificationType: 'LEGAL' },
+        { notificationType: NotificationCommunicationType.LEGAL },
         { sendImmediately: true }
       );
 
