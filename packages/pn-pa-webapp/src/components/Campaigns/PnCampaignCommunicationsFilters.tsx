@@ -69,7 +69,6 @@ const PnCampaignCommunicationsFilters = ({ formik, handleChangeTouched, handlePa
           label={t('detail.communications.status')}
           placeholder={t('detail.communications.status')}
           value={selectedStatusOption}
-          inputValue={t(selectedStatusOption?.label ?? '')}
           onChange={(newValue) => {
             void formik.setFieldValue('status', newValue?.value ?? []);
           }}
@@ -101,6 +100,8 @@ const PnCampaignCommunicationsFilters = ({ formik, handleChangeTouched, handlePa
           name="outcome"
           label={t('detail.communications.outcome')}
           select
+          SelectProps={{ displayEmpty: true }}
+          InputLabelProps={{ shrink: true }}
           onChange={handleChangeTouched}
           value={formik.values.outcome}
           fullWidth
