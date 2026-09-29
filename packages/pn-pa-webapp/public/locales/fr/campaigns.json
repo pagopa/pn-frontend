@@ -14,8 +14,8 @@
     "breadcrumb-root": "Campagnes",
     "title": "Détail de la campagne",
     "creation-date": "Date de création",
-    "service-name": "Nom du service",
-    "channels-label": "Canaux",
+    "service-name": "Service",
+    "channels-label": "Canaux sélectionnés",
     "empty-state": {
       "generic-error": "Impossible de récupérer les détails de la campagne.",
       "generic-error-cta": "Réessayer",

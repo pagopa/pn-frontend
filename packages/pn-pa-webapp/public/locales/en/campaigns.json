@@ -14,8 +14,8 @@
     "breadcrumb-root": "Campaigns",
     "title": "Campaign details",
     "creation-date": "Creation date",
-    "service-name": "Service name",
-    "channels-label": "Channels",
+    "service-name": "Service",
+    "channels-label": "Selected channels",
     "empty-state": {
       "generic-error": "Unable to retrieve campaign details.",
       "generic-error-cta": "Try again",
