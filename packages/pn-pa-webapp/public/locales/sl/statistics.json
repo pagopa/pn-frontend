@@ -79,10 +79,6 @@
     "viewed": "Prišlo je do dostopa"
   },
   "last_update": "Zadnja posodobitev {{dateTime}}",
-  "maintenance_alert": {
-    "description": "Poteka načrtovano vzdrževanje, ki lahko povzroči zamude pri razpoložljivosti podatkov na nadzorni plošči. Za preverjanje zadnje razpoložljive posodobitve glejte datum, naveden na tej strani. Posodobitve se bodo normalno nadaljevale po končanem vzdrževanju.",
-    "title": "Vzdrževanje v teku"
-  },
   "save_as_image": "Shrani kot sliko",
   "section_1": "Pregled obvestil",
   "section_2": "Podrobnosti o digitalno poslanih obvestilih",

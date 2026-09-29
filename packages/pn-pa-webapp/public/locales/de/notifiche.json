@@ -17,10 +17,10 @@
     "cancelled-iun": "IUN-Code storniert",
     "date": "Sendedatum",
     "document-not-available": "Das Dokument kann in wenigen Minuten heruntergeladen werden. Du kannst es erneut versuchen, indem du die Seite neu lädst oder auf den Link des angeforderten Dokuments klickst",
-    "download-aar-available": "<0>Online verfügbar für 10 Jahre</0> ab dem Datum, an dem die SEND-Zustellung für den Empfänger rechtsgültig geworden ist.",
+    "download-aar-available": "<0>10 Jahre lang online verfügbar</0> ab dem Datum, an dem die SEND-Zustellung Rechtskraft erlangt hat.",
     "download-aar-expired": "Die Empfangsbestätigung ist nicht mehr online verfügbar.",
     "download-files-link": "Wann ist die Bearbeitung einer Zustellung vervollständigt?",
-    "download-message-available": "<0>Online verfügbar bis zu 120 Tage</0> ab dem Datum, an dem die SEND-Zustellung für den Empfänger rechtsgültig geworden ist.",
+    "download-message-available": "<0>Bis zu 120 Tage online verfügbar</0> ab dem Datum, an dem die SEND Zustellung rechtsgültig wurde.",
     "download-message-expired": "Die Dokumente sind nicht mehr online verfügbar.",
     "downtimes": {
       "apiErrorMessage": "Wir konnten noch keinen Bericht über Fehlfunktionen hochladen, die diese Zustellung betrafen.",
@@ -114,11 +114,8 @@
         "M06": "weil die Adresse falsch ist",
         "M07": "weil die Adresse nicht existiert",
         "M08": "weil die Adresse unvollständig ist",
-        "M09": "aus anderen Gründen",
-        "M10": "weil die Adresse nicht lesbar ist"
+        "M09": "aus anderen Gründen"
       },
-      "courtesy-group-label": "Höflichkeitsmitteilungen",
-      "digital-send-fallback": "Digitaler Versand",
       "legalfact": {
         "analog-failure-delivery": "Hinterlegung der Empfangsbestätigung",
         "digital-delivery-failure": "fehlende digitale Zustellung",
@@ -149,7 +146,6 @@
         "description-multi-recipients": "Einer der Empfänger oder eine bevollmächtigte Person hat die zugestellten Dokumente bei einem für die Übergabe befugten Betreiber abgeholt.",
         "title": "Die Dokumente wurden abgeholt"
       },
-      "registered-letter": "Einschreiben",
       "registered-letter-kind": {
         "890": "890",
         "AR": "Rückschein",
@@ -163,15 +159,9 @@
       "send-analog-domicile-890": "Versand per Einschreiben 890",
       "send-analog-domicile-890-description": "Der Versand der Zustellung an die Anschrift {{address}} per Einschreiben 890 hat begonnen.",
       "send-analog-domicile-890-description-multirecipient": "Der Versand der Zustellung an die Anschrift {{address}} von {{name}} {{taxId}} per Einschreiben 890 hat begonnen.",
-      "send-analog-domicile-890-first-attempt-group-label": "Erstes Einschreiben 890",
-      "send-analog-domicile-890-group-label": "Einschreiben 890",
-      "send-analog-domicile-890-second-attempt-group-label": "Zweites Einschreiben 890",
       "send-analog-domicile-ar": "Einschreiben mit Rückschein",
       "send-analog-domicile-ar-description": "Der Versand der Zustellung an die Anschrift {{address}} per Einschreiben mit Rückschein hat begonnen.",
       "send-analog-domicile-ar-description-multirecipient": "Der Versand der Zustellung an die Anschrift {{address}} von {{name}} {{taxId}} per Einschreiben mit Rückschein hat begonnen.",
-      "send-analog-domicile-ar-first-attempt-group-label": "Erstes Einschreiben mit Rückschein",
-      "send-analog-domicile-ar-group-label": "Einschreiben mit Rückschein",
-      "send-analog-domicile-ar-second-attempt-group-label": "Zweites Einschreiben mit Rückschein",
       "send-analog-error": "Der Versand auf dem Postweg hat zu keiner Zustellung geführt",
       "send-analog-flow-CON020-description": "Original des AAR (digitales natives Dokument), das vom Konsolidierer bereitgestellt und von PagoPA digital signiert wird.",
       "send-analog-flow-CON020-description-multirecipient": "Original des AAR (digitales natives Dokument), das vom Konsolidierer bereitgestellt und von PagoPA digital signiert wird.",
@@ -300,11 +290,9 @@
       "send-digital-domicile-PEC": "Versand per PEC",
       "send-digital-domicile-PEC-description": "Versand der Zustellung an die PEC-Adresse {{address}} läuft.",
       "send-digital-domicile-PEC-description-multirecipient": "Versand der Zustellung an die PEC-Adresse {{address}} von {{name}} {{taxId}} läuft.",
-      "send-digital-domicile-PEC-group-label": "PEC",
       "send-digital-domicile-SERCQ-SEND": "Versand über das digitale Domizil SEND",
       "send-digital-domicile-SERCQ-SEND-description": "Die Zustellung wird an das digitale Domizil SEND gesendet.",
       "send-digital-domicile-SERCQ-SEND-description-multirecipient": "Die Zustellung an {{name}} {{taxId}} wird an das digitale Domizil SEND gesendet",
-      "send-digital-domicile-SERCQ-SEND-group-label": "Digitales Zustelldomizil SEND",
       "send-digital-error": "Versand per PEC-Adresse fehlgeschlagen",
       "send-digital-error-description": "Versand an die PEC-Adresse {{address}} fehlgeschlagen, da das Postfach voll, ungültig oder inaktiv ist.",
       "send-digital-error-description-multirecipient": "Versand an die PEC-Adresse {{address}} von {{name}} {{taxId}} fehlgeschlagen, da das Postfach voll, ungültig oder inaktiv ist.",
@@ -323,9 +311,7 @@
       "send-simple-registered-letter": "Einfacher Versand per Einschreiben",
       "send-simple-registered-letter-description": "Die Zustellung an die Anschrift {{address}} per einfachem Einschreiben wird gesendet.",
       "send-simple-registered-letter-description-multirecipient": "Die Zustellung an die Anschrift {{address}} von {{name}} {{taxId}} per einfachem Einschreiben wird gesendet.",
-      "send-simple-registered-letter-group-label": "Einfacher Versand per Einschreiben",
-      "tpp-type": "ein digitaler Kanal von Drittanbietern",
-      "unknown-status": "Unbekannter Status"
+      "tpp-type": "ein digitaler Kanal von Drittanbietern"
     }
   },
   "empty-state": {
@@ -652,7 +638,6 @@
     "returned-to-sender-multirecipient": "Rücksendung an den Absender",
     "returned-to-sender-tooltip": "Der Empfänger ist verstorben",
     "returned-to-sender-tooltip-multirecipient": "Alle Empfänger sind verstorben",
-    "reworked-status-group": "Ein oder mehrere korrigierte Ereignisse",
     "reworked-status-not-valid": "Ungültiges Ereignis",
     "reworked-status-valid": "Berichtigtes Ereignis",
     "unreachable": "Empfänger unauffindbar",

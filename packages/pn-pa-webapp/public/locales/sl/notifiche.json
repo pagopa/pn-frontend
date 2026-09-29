@@ -17,10 +17,10 @@
     "cancelled-iun": "Koda IUN je preklicana",
     "date": "Datum pošiljanja",
     "document-not-available": "Dokument bo mogoče prenesti v nekaj minutah. Poskusite lahko znova tako, da ponovno naložite stran ali kliknete povezavo zahtevanega dokumenta",
-    "download-aar-available": "<0>Na voljo na spletu 10 let</0> od datuma, ko je obvestilo SEND začelo pravno veljati za naslovnika.",
+    "download-aar-available": "<0>Na voljo na spletu 10 let</0> od datuma, ko je vročitev SEND postala pravno veljavna.",
     "download-aar-expired": "Potrdilo o prejemu ni več na voljo na spletu.",
     "download-files-link": "Kdaj se obvestilo zaključi?",
-    "download-message-available": "<0>Na voljo na spletu do 120 dni</0> od datuma, ko je obvestilo SEND začelo pravno veljati za naslovnika.",
+    "download-message-available": "<0>Na spletu na voljo do 120 dni</0> od datuma, ko je obvestilo SEND začelo pravno veljati.",
     "download-message-expired": "Dokumenti niso več na voljo na spletu.",
     "downtimes": {
       "apiErrorMessage": "Ni bilo mogoče naložiti morebitnih motenj, ki so vplivale na to obvestilo.",
@@ -114,11 +114,8 @@
         "M06": "ker je naslov napačen",
         "M07": "ker naslov ne obstaja",
         "M08": "ker je naslov nezadosten",
-        "M09": "ker naslov ne obstaja",
-        "M10": "ker naslov ni čitljiv"
+        "M09": "ker naslov ne obstaja"
       },
-      "courtesy-group-label": "Vljudnostna sporočila",
-      "digital-send-fallback": "Digitalno pošiljanje",
       "legalfact": {
         "analog-failure-delivery": "Depozit potrdila o prejemu",
         "digital-delivery-failure": "brez digitalnega kontaktnega podatka",
@@ -149,7 +146,6 @@
         "description-multi-recipients": "Eden od prejemnikov ali njegov pooblaščenec je prevzel vročene dokumente pri operaterju, pooblaščenem za njihovo dostavo.",
         "title": "Dokumenti so bili prevzeti"
       },
-      "registered-letter": "Priporočeno pismo",
       "registered-letter-kind": {
         "890": "890",
         "AR": "s povratnico",
@@ -163,15 +159,9 @@
       "send-analog-domicile-890": "Pošiljanje po priporočeni pošti 890",
       "send-analog-domicile-890-description": "Obvestilo se pošlje na naslov {{address}} po priporočeni pošti 890.",
       "send-analog-domicile-890-description-multirecipient": "Obvestilo se pošlje {{name}} {{taxId}} na naslov {{address}} po priporočeni pošti 890.",
-      "send-analog-domicile-890-first-attempt-group-label": "Prvo priporočeno pismo 890",
-      "send-analog-domicile-890-group-label": "Priporočeno pismo 890",
-      "send-analog-domicile-890-second-attempt-group-label": "Drugo priporočeno pismo 890",
       "send-analog-domicile-ar": "Pošiljanje s priporočenim pismom s povratnico",
       "send-analog-domicile-ar-description": "Obvestilo se pošlje na naslov {{address}} s priporočenim pismom s povratnico.",
       "send-analog-domicile-ar-description-multirecipient": "Obvestilo se pošlje {{name}} {{taxId}} na naslov {{address}} s priporočenim pismom s povratnico.",
-      "send-analog-domicile-ar-first-attempt-group-label": "Prvo priporočeno pismo s povratnico",
-      "send-analog-domicile-ar-group-label": "Priporočeno pismo s povratnico",
-      "send-analog-domicile-ar-second-attempt-group-label": "Drugo priporočeno pismo s povratnico",
       "send-analog-error": "Pošiljanje v papirni obliki ni določilo dostave",
       "send-analog-flow-CON020-description": "Izvirnik AAR (domači digitalni dokument), ki ga je dal na voljo združevalec in digitalno podpisal PagoPA.",
       "send-analog-flow-CON020-description-multirecipient": "Izvirnik AAR (domači digitalni dokument), ki ga je dal na voljo združevalec in digitalno podpisal PagoPA.",
@@ -300,11 +290,9 @@
       "send-digital-domicile-PEC": "Pošiljanje prek potrjenega e-poštnega naslova",
       "send-digital-domicile-PEC-description": "Obvestilo se pošlje na potrjeni e-poštni naslov {{address}}.",
       "send-digital-domicile-PEC-description-multirecipient": "Obvestilo se pošlje {{name}} {{taxId}} na potrjeni e-poštni naslov {{address}}.",
-      "send-digital-domicile-PEC-group-label": "PEC",
       "send-digital-domicile-SERCQ-SEND": "Pošiljanje preko digitalnega prebivališča SEND",
       "send-digital-domicile-SERCQ-SEND-description": "Pošiljanje obvestila na digitalno prebivališče SEND je v teku.",
       "send-digital-domicile-SERCQ-SEND-description-multirecipient": "Obvestilo se pošlje {{name}} {{taxId}} na digitalno prebivališče SEND",
-      "send-digital-domicile-SERCQ-SEND-group-label": "Digitalni domicil SEND",
       "send-digital-error": "Pošiljanje prek potrjenega e-poštnega naslova ni uspelo",
       "send-digital-error-description": "Pošiljanje obvestila na potrjeni e-poštni naslov {{address}} ni uspelo, ker je polje nasičeno, neveljavno ali neaktivno.",
       "send-digital-error-description-multirecipient": "Pošiljanje obvestila {{name}} {{taxId}} na potrjeni e-poštni naslov {{address}} ni uspelo, ker je polje nasičeno, neveljavno ali neaktivno.",
@@ -323,9 +311,7 @@
       "send-simple-registered-letter": "Pošiljanje z navadno priporočeno pošto",
       "send-simple-registered-letter-description": "Obvestilo se pošlje na naslov {{address}} z navadno priporočeno pošto.",
       "send-simple-registered-letter-description-multirecipient": "Obvestilo se pošlje {{name}} {{taxId}} na naslov {{address}} z navadno priporočeno pošto.",
-      "send-simple-registered-letter-group-label": "Pošiljanje z navadno priporočeno pošto",
-      "tpp-type": "digitalni kanal tretje osebe",
-      "unknown-status": "Neznano stanje"
+      "tpp-type": "digitalni kanal tretje osebe"
     }
   },
   "empty-state": {
@@ -652,7 +638,6 @@
     "returned-to-sender-multirecipient": "Vrnjeno pošiljatelju",
     "returned-to-sender-tooltip": "Prejemnik je umrl",
     "returned-to-sender-tooltip-multirecipient": "Vsi prejemniki so umrli",
-    "reworked-status-group": "En ali več popravljenih dogodkov",
     "reworked-status-not-valid": "Neveljaven dogodek",
     "reworked-status-valid": "Popravljen dogodek",
     "unreachable": "Prejemnika ni mogoče izslediti",

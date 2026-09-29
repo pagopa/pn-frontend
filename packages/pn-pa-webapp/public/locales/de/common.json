@@ -22,7 +22,6 @@
     "go-to-home": "Zurück zur Startseite",
     "go-to-login": "Anmelden",
     "indietro": "Zurück",
-    "open": "Öffnen",
     "send": "Senden"
   },
   "date-picker": {
@@ -99,8 +98,6 @@
   "menu": {
     "api-key": "API-Schlüssel",
     "app-status": "Plattformstatus",
-    "campaigns": "Kampagnen",
-    "communications": "Kommuniziere mit SEND",
     "groups": "Gruppen",
     "notifications": "Zustellungen",
     "notifications-send": "Benachrichtigung mit SEND",

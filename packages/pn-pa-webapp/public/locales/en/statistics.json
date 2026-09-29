@@ -79,10 +79,6 @@
     "viewed": "Logged in"
   },
   "last_update": "Last update {{dateTime}}",
-  "maintenance_alert": {
-    "description": "Scheduled maintenance is in progress and may delay data updates on the dashboard. Please refer to the date shown on this page to check the latest update. Regular updates will resume once maintenance is complete.",
-    "title": "Maintenance in progress"
-  },
   "save_as_image": "Save as image",
   "section_1": "Overview of the notifications",
   "section_2": "Details of notifications sent digitally",
