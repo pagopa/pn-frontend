@@ -2,6 +2,7 @@ import MockAdapter from 'axios-mock-adapter';
 
 import {
   NotificationColumnData,
+  NotificationCommunicationType,
   NotificationStatus,
   RecipientNotification,
   Sort,
@@ -105,7 +106,7 @@ describe('Dashbaord redux state tests', () => {
       getReceivedNotifications({
         startDate: tenYearsAgo,
         endDate: today,
-        communicationType: 'LEGAL',
+        communicationType: NotificationCommunicationType.LEGAL,
         isDelegatedPage: false,
         size: 10,
       })
@@ -170,7 +171,7 @@ describe('Dashbaord redux state tests', () => {
       setNotificationFilters({
         startDate: tenYearsAgo,
         endDate: today,
-        communicationType: 'LEGAL',
+        communicationType: NotificationCommunicationType.LEGAL,
         iunMatch: 'QVNA-WYDP-KAHE-202504-X-1',
       })
     );

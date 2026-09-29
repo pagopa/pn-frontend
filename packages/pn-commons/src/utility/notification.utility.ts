@@ -16,11 +16,9 @@ import {
   NotificationDetailDocument,
   NotificationDetailOtherDocument,
   NotificationDetailRecipient,
-  NotificationDetailTimelineDetails,
   NotificationPayment,
   NotificationStatusHistory,
   PagoPAPaymentFullDetails,
-  PaidDetails,
   PaymentDetails,
   PaymentStatus,
   ResponseStatus,
@@ -29,6 +27,10 @@ import {
   TimelineCategory,
 } from '../models/NotificationDetail';
 import { InformalNotificationStatus, NotificationStatus } from '../models/NotificationStatus';
+import {
+  NotificationPaymentTimeline,
+  NotificationPaymentTimelineElement,
+} from '../models/NotificationTimeline';
 import { getLocalizedOrDefaultLabel, hasLocalizedLabel } from '../utility/localization.utility';
 import { TimelineStepInfo } from './TimelineUtils/TimelineStep';
 import { TimelineStepFactory } from './TimelineUtils/TimelineStepFactory';
@@ -765,15 +767,20 @@ export const getPagoPaF24Payments = (
     return arr;
   }, [] as Array<PaymentDetails>);
 
+const isPaymentTimelineElement = (
+  element: NotificationPaymentTimelineElement
+): element is Extract<NotificationPaymentTimelineElement, { category: TimelineCategory.PAYMENT }> =>
+  element.category === TimelineCategory.PAYMENT && !!element.details;
+
 /**
  * Populate only pagoPA(with eventual f24 associated) payment history array before send notification to fe.
- * @param  {Array<INotificationDetailTimeline>} timeline
+ * @param  {NotificationPaymentTimeline} timeline
  * @param  {Array<PaymentDetails>} pagoPaF24Payments
  * @param  {Array<ExtRegistriesPaymentDetails>} checkoutPayments
  * @returns Array<PaymentDetails>
  */
 export const populatePaymentsPagoPaF24 = (
-  timeline: Array<INotificationDetailTimeline>,
+  timeline: NotificationPaymentTimeline,
   pagoPaF24Payments: Array<PaymentDetails> | Array<NotificationPayment>,
   checkoutPayments: Array<ExtRegistriesPaymentDetails>
 ): Array<PaymentDetails> => {
@@ -784,7 +791,7 @@ export const populatePaymentsPagoPaF24 = (
   }
 
   // 1. Get all timeline steps that have category payment
-  const paymentTimelineStep = timeline.filter((t) => t.category === TimelineCategory.PAYMENT);
+  const paymentTimelineStep = timeline.filter(isPaymentTimelineElement);
 
   // 2. populate payment history array with the informations from timeline and related recipients
   for (const userPayment of pagoPaF24Payments) {
@@ -810,18 +817,15 @@ export const populatePaymentsPagoPaF24 = (
         p.noticeCode === userPayment?.pagoPa?.noticeCode
     );
 
-    const timelineEvent = paymentTimelineStep.find((item) => {
-      const paymentDetails = item.details as PaidDetails;
-
-      return (
-        paymentDetails.creditorTaxId === userPayment?.pagoPa?.creditorTaxId &&
-        paymentDetails.noticeCode === userPayment?.pagoPa?.noticeCode
-      );
-    })?.details;
+    const timelineEvent = paymentTimelineStep.find(
+      (item) =>
+        item.details.creditorTaxId === userPayment?.pagoPa?.creditorTaxId &&
+        item.details.noticeCode === userPayment?.pagoPa?.noticeCode
+    )?.details;
 
     if (timelineEvent) {
-      (Object.keys(timelineEvent) as Array<keyof NotificationDetailTimelineDetails>).forEach(
-        (key) => (timelineEvent[key] === undefined ? delete timelineEvent[key] : {})
+      (Object.keys(timelineEvent) as Array<keyof typeof timelineEvent>).forEach((key) =>
+        timelineEvent[key] === undefined ? delete timelineEvent[key] : {}
       );
     }
 

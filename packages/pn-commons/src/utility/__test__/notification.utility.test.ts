@@ -1062,6 +1062,39 @@ describe('Populate pagoPA and F24 payments', () => {
     expect(mappedPayments).toStrictEqual(res);
   });
 
+  it('With informal timeline it should use only PAYMENT events to populate payment info', () => {
+    const pagoPaPayment = paymentsData.pagoPaF24.find((payment) => payment.pagoPa)?.pagoPa;
+
+    expect(pagoPaPayment).toBeDefined();
+
+    const timeline = [
+      {
+        category: 'PUBLIC_REGISTRY_VALIDATION_CALL',
+        details: {
+          creditorTaxId: pagoPaPayment?.creditorTaxId,
+          noticeCode: pagoPaPayment?.noticeCode,
+        },
+      },
+      {
+        category: TimelineCategory.PAYMENT,
+        details: {
+          creditorTaxId: pagoPaPayment?.creditorTaxId,
+          noticeCode: pagoPaPayment?.noticeCode,
+        },
+      },
+    ];
+
+    const mappedPayments = populatePaymentsPagoPaF24(timeline, paymentsData.pagoPaF24, []);
+
+    const mappedPayment = mappedPayments.find(
+      (payment) =>
+        payment.pagoPa?.creditorTaxId === pagoPaPayment?.creditorTaxId &&
+        payment.pagoPa?.noticeCode === pagoPaPayment?.noticeCode
+    );
+
+    expect(mappedPayment?.pagoPa?.status).toBe(PaymentStatus.SUCCEEDED);
+  });
+
   it('If timeline has some elements it should return the mapped array with the timeline element over the external registry info', () => {
     const res: Array<PaymentDetails> = paymentsData.pagoPaF24.map((item, index) => {
       const checkoutSucceded =
