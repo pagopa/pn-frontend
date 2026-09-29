@@ -98,3 +98,4 @@ jobs:
               - sl
             replace_breaks: false
             add_newline_eof: true
+            json_unescaped_slashes: true
