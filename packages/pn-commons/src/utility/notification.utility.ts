@@ -770,7 +770,7 @@ export const getPagoPaF24Payments = (
 const isPaymentTimelineElement = (
   element: NotificationPaymentTimelineElement
 ): element is Extract<NotificationPaymentTimelineElement, { category: TimelineCategory.PAYMENT }> =>
-  element.category === TimelineCategory.PAYMENT;
+  element.category === TimelineCategory.PAYMENT && !!element.details;
 
 /**
  * Populate only pagoPA(with eventual f24 associated) payment history array before send notification to fe.
