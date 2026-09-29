@@ -104,13 +104,6 @@
       "title": "Deaktiviere SEND auf der IO-App"
     },
     "download": "IO-App herunterladen",
-    "download-modal": {
-      "cta": "Erledigt!",
-      "instructions": "Öffne sie, melde dich mit SPID oder CIE an und schließe die Registrierung ab.",
-      "qr-code-alt": "QR-Code zum Herunterladen der App IO",
-      "subtitle": "Scanne den QR-Code mit deinem Gerät, um die App herunterzuladen, oder suche sie in deinem App-Store.",
-      "title": "Um fortzufahren, musst du die App IO herunterladen und dich registrieren"
-    },
     "enable": "Aktiviere SEND auf IO",
     "info-modal": {
       "content": "Wenn Sie keinen aktiven digitalen Wohnsitz haben und die Nachricht nicht innerhalb von 5 Tagen nach dem Versand öffnen, erhalten Sie die Dokumente in Papierform zu Hause",

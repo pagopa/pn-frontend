@@ -4,7 +4,7 @@
   "exit-title": "Wirklich beenden?",
   "form": {
     "confirm-email": "Bestätige die E-Mail-Adresse",
-    "email": "Gib die E-Mail-Adresse ein (keine PEC)",
+    "email": "Gib die E-Mail-Adresse ein",
     "errors": {
       "not-the-same": "Die Bestätigungs-E-Mail-Adresse stimmt nicht mit der eingegebenen E-Mail-Adresse überein",
       "not-valid": "Die E-Mail-Adresse ist ungültig",
@@ -15,7 +15,6 @@
     "generic-message": "Bitte versuche es später erneut",
     "generic-title": "Ein unvorhergesehener Fehler ist aufgetreten"
   },
-  "pec-disclaimer": "Gib eine normale E-Mail-Adresse ein: Anfragen, die von einer PEC-Adresse gesendet werden, können vom Support nicht bearbeitet werden.",
   "sub-title": "Bitte gib die E-Mail-Adresse an, an die du Antworten vom Kundendienst erhalten möchtest.",
   "title": "Wie kann ich dir behilflich sein?"
 }

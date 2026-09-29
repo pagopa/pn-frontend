@@ -1,6 +1,8 @@
 {
   "appStatus": {
+    "aria-missed-endDate": "Manjka končni datum, motnje v delovanju v teku",
     "lastCheckLegend": "Zadnja posodobitev – {{ lastCheckTimestamp }}",
+    "missed-endDate": "V teku",
     "statusDescription": {
       "not-ok": "Motnja je v teku. Za več podrobnosti si oglejte spodnjo tabelo.",
       "ok": "Vse storitve SEND delujejo."

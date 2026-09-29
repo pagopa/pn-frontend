@@ -4,7 +4,7 @@
   "exit-title": "Voulez-vous vraiment sortir ?",
   "form": {
     "confirm-email": "Confirmez l’adresse mail",
-    "email": "Saisissez l'adresse e-mail (non PEC)",
+    "email": "Saisissez l’adresse mail",
     "errors": {
       "not-the-same": "L’adresse mail de confirmation n’est pas la même que l’adresse mail saisie",
       "not-valid": "L’adresse mail est invalide",
@@ -15,7 +15,6 @@
     "generic-message": "Veuillez réessayer plus tard",
     "generic-title": "Une erreur inattendue s’est produite"
   },
-  "pec-disclaimer": "Saisissez une adresse e-mail standard : les demandes envoyées depuis une adresse PEC ne peuvent pas être traitées par l'assistance.",
   "sub-title": "Veuillez indiquer l’adresse mail à laquelle vous souhaitez recevoir les réponses de l’assistance.",
   "title": "Comment pouvons-nous vous aider ?"
 }

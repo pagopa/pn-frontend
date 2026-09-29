@@ -104,13 +104,6 @@
       "title": "Deaktivirajte SEND na aplikaciji IO"
     },
     "download": "Prenesite aplikacijo IO",
-    "download-modal": {
-      "cta": "Opravljeno!",
-      "instructions": "Odpri jo, prijavi se s SPID ali CIE in dokončaj registracijo.",
-      "qr-code-alt": "QR-koda za prenos aplikacije IO",
-      "subtitle": "Skeniraj QR-kodo z napravo, da preneseš aplikacijo, ali pa jo poišči v svoji trgovini z aplikacijami.",
-      "title": "Za nadaljevanje moraš prenesti aplikacijo IO in se registrirati"
-    },
     "enable": "Aktivirajte SEND na IO",
     "info-modal": {
       "content": "Če nimate aktivnega digitalnega prebivališča in sporočila ne odprete v 5 dneh od pošiljanja, boste dokumente prejeli v papirnati obliki na dom.",
