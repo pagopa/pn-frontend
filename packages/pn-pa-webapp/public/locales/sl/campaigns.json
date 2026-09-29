@@ -1,200 +1,148 @@
 {
-  "list": {
-    "title": "Kampanje",
-    "id": "Koda ID",
-    "open-aria-label": "Odpri kampanjo \"{{name}}\"",
-    "empty-state": {
-      "no-campaigns": "Tukaj boste videli kampanje, ki jih je poslal organ",
-      "generic-error": "Kampanj ni bilo mogoče pridobiti.",
-      "generic-error-cta": "Poskusite znova"
-    }
-  },
-
   "detail": {
     "breadcrumb-root": "Kampanje",
-    "title": "Podrobnosti kampanje",
-    "creation-date": "Datum ustvarjanja",
-    "service-name": "Storitev",
-    "channels-label": "Izbrani kanali",
-    "empty-state": {
-      "generic-error": "Podrobnosti kampanje ni bilo mogoče pridobiti.",
-      "generic-error-cta": "Poskusite znova",
-      "campaign-title-placeholder": "[Naslov kampanje]"
-    },
     "breadcrumb": {
       "back": "Nazaj",
       "campaigns": "Kampanje"
     },
+    "channels-label": "Izbrani kanali",
     "channels": {
-      "IO": "IO",
-      "SMS": "SMS",
-      "EMAIL": "E-pošta",
       "ANALOG": "Poštna storitev",
-      "PEC": "PEC"
+      "EMAIL": "E-pošta",
+      "IO": "IO",
+      "PEC": "PEC",
+      "SMS": "SMS"
     },
     "communications": {
-      "title": "Seznam sporočil",
-      "tax-id": "Davčna številka",
-      "iun": "Koda IUN",
-      "status": "Stanje",
-      "outcome": "Izid",
-      "empty-title": "Za izbrane filtre ni sporočil.",
       "empty-description": "Odstranite jih ali poskusite z drugo kombinacijo.",
-      "remove-filters": "Odstrani filtre",
-      "statuses": {
-        "ready": "Pripravljeno za pošiljanje",
-        "processing": "Pošiljanje poteka",
-        "success": "Pošiljanje končano",
-        "failed": "Pošiljanje neuspešno",
-        "refused": "Zavrnjeno"
-      },
+      "empty-title": "Za izbrane filtre ni sporočil.",
+      "iun": "Koda IUN",
+      "no-communications-description": "Ni sporočil, ki bi ustrezala izbranim filtrom.",
+      "no-communications-title": "Na voljo ni nobenega sporočila",
+      "outcome": "Izid",
       "outcomes": {
         "all": "Vsi",
-        "viewed": "Prebrano",
         "delivered": "Vročeno",
-        "not-available": "Izid ni na voljo"
+        "not-available": "Izid ni na voljo",
+        "viewed": "Prebrano"
       },
-      "no-communications-title": "Na voljo ni nobenega sporočila",
-      "no-communications-description": "Ni sporočil, ki bi ustrezala izbranim filtrom."
-    }
+      "remove-filters": "Odstrani filtre",
+      "status": "Stanje",
+      "statuses": {
+        "failed": "Pošiljanje neuspešno",
+        "processing": "Pošiljanje poteka",
+        "ready": "Pripravljeno za pošiljanje",
+        "refused": "Zavrnjeno",
+        "success": "Pošiljanje končano"
+      },
+      "tax-id": "Davčna številka",
+      "title": "Seznam sporočil"
+    },
+    "creation-date": "Datum ustvarjanja",
+    "empty-state": {
+      "campaign-title-placeholder": "[Naslov kampanje]",
+      "generic-error": "Podrobnosti kampanje ni bilo mogoče pridobiti.",
+      "generic-error-cta": "Poskusite znova"
+    },
+    "service-name": "Storitev",
+    "title": "Podrobnosti kampanje"
   },
   "informal": {
     "detail": {
-      "iun": "Koda IUN",
-      "sender": "Pošiljatelj",
-      "recipient": "Prejemnik",
-      "recipients": "Prejemniki",
-      "subject": "Zadeva sporočila",
-      "text": "Besedilo sporočila",
-      "title": "Podrobnosti sporočila",
       "aria-label": "Pojdite na podrobnosti sporočila",
-      "status": {
-        "title": "Stanje sporočila",
-        "aria-label": "Pojdite na podrobnosti stanja sporočila",
-        "go-to-detail": "Pojdite na podrobnosti"
-      },
       "documents": {
-        "title": "Priloženi dokumenti",
+        "document-not-available": "Dokument še ni na voljo. Poskusite znova pozneje.",
         "download-message-available": "<0>Na spletu na voljo do 180 dni</0> od datuma sprejetja sporočila.",
         "download-message-expired": "Dokumenti niso več na voljo na spletu.",
-        "document-not-available": "Dokument še ni na voljo. Poskusite znova pozneje."
+        "title": "Priloženi dokumenti"
       },
+      "iun": "Koda IUN",
+      "recipient": "Prejemnik",
+      "recipients": "Prejemniki",
       "send-by-channel": {
-        "title": "Podrobnosti pošiljanja po kanalu",
         "channel": {
-          "send": "SEND",
-          "io": "IO",
-          "sms": "SMS",
-          "email": "E-pošta",
           "analog": "Poštna storitev",
+          "email": "E-pošta",
+          "io": "IO",
           "pec": "PEC",
+          "send": "SEND",
+          "sms": "SMS",
           "unknown": "Neznan kanal"
-        },
-        "status": {
-          "ready_to_send": "V ČAKANJU",
-          "waiting_to_send": "V ČAKANJU",
-          "sent": "POSLANO",
-          "filed": "VLOŽENO",
-          "delivered": "DOSTAVLJENO",
-          "viewed": "PREBRANO",
-          "unavailable": "NI NA VOLJO",
-          "not_delivered": "NI DOSTAVLJENO",
-          "workflow_ended": "WORKFLOW ZAKLJUČEN"
         },
         "description": {
           "ready_to_send": "Predvideno pošiljanje po potrditvi sporočila.",
+          "unavailable": {
+            "email": "E-poštnega naslova prejemnika ni mogoče izslediti.",
+            "io": "Računa prejemnika ni mogoče izslediti.",
+            "pec": "Naslova PEC prejemnika ni mogoče izslediti.",
+            "sms": "Telefonske številke prejemnika ni mogoče izslediti."
+          },
           "waiting_to_send": "Čakanje na zaključek pošiljanja na prejšnjem kanalu.",
           "workflow_ended": {
-            "sms": "Ta kanal ne bo uporabljen, ker je sporočilo že doseglo zahtevani rezultat.",
-            "email": "Ta kanal ne bo uporabljen, ker je sporočilo že doseglo zahtevani rezultat.",
             "analog": "Ta kanal ne bo uporabljen, ker je sporočilo že doseglo zahtevani rezultat.",
-            "pec": "Ta kanal ne bo uporabljen, ker je sporočilo že doseglo zahtevani rezultat."
-          },
-          "unavailable": {
-            "io": "Računa prejemnika ni mogoče izslediti.",
-            "sms": "Telefonske številke prejemnika ni mogoče izslediti.",
-            "email": "E-poštnega naslova prejemnika ni mogoče izslediti.",
-            "pec": "Naslova PEC prejemnika ni mogoče izslediti."
+            "email": "Ta kanal ne bo uporabljen, ker je sporočilo že doseglo zahtevani rezultat.",
+            "pec": "Ta kanal ne bo uporabljen, ker je sporočilo že doseglo zahtevani rezultat.",
+            "sms": "Ta kanal ne bo uporabljen, ker je sporočilo že doseglo zahtevani rezultat."
           }
-        }
-      }
+        },
+        "status": {
+          "delivered": "DOSTAVLJENO",
+          "filed": "VLOŽENO",
+          "not_delivered": "NI DOSTAVLJENO",
+          "ready_to_send": "V ČAKANJU",
+          "sent": "POSLANO",
+          "unavailable": "NI NA VOLJO",
+          "viewed": "PREBRANO",
+          "waiting_to_send": "V ČAKANJU",
+          "workflow_ended": "WORKFLOW ZAKLJUČEN"
+        },
+        "title": "Podrobnosti pošiljanja po kanalu"
+      },
+      "sender": "Pošiljatelj",
+      "status": {
+        "aria-label": "Pojdite na podrobnosti stanja sporočila",
+        "go-to-detail": "Pojdite na podrobnosti",
+        "title": "Stanje sporočila"
+      },
+      "subject": "Zadeva sporočila",
+      "text": "Besedilo sporočila",
+      "title": "Podrobnosti sporočila"
     },
     "status": {
       "accepted": {
-        "label": "Pripravljeno na pošiljanje",
-        "description": "Sporočilo je opravilo preverjanja skladnosti. Postopek pošiljanja se bo kmalu začel."
-      },
-      "processing": {
-        "label": "Pošiljanje v teku",
-        "description": "Sporočilo bo poskušalo doseči prejemnika na izbranih kanalih."
+        "description": "Sporočilo je opravilo preverjanja skladnosti. Postopek pošiljanja se bo kmalu začel.",
+        "label": "Pripravljeno na pošiljanje"
       },
       "completed": {
-        "label": "Uspešno poslano",
-        "description": "Sporočilo je bilo poslano na izbrane kanale."
+        "description": "Sporočilo je bilo poslano na izbrane kanale.",
+        "label": "Uspešno poslano"
       },
-      "undeliverable": {
-        "label": "Pošiljanje ni uspelo",
-        "description": "Sporočila ni bilo mogoče poslati na izbrane kanale."
+      "processing": {
+        "description": "Sporočilo bo poskušalo doseči prejemnika na izbranih kanalih.",
+        "label": "Pošiljanje v teku"
       },
       "refused": {
-        "label": "Zavrnjeno",
-        "description": "Sporočilo ni opravilo preverjanja skladnosti."
+        "description": "Sporočilo ni opravilo preverjanja skladnosti.",
+        "label": "Zavrnjeno"
+      },
+      "undeliverable": {
+        "description": "Sporočila ni bilo mogoče poslati na izbrane kanale.",
+        "label": "Pošiljanje ni uspelo"
       },
       "unknown": {
-        "label": "Nedoločeno",
-        "description": "Neznano stanje"
+        "description": "Neznano stanje",
+        "label": "Nedoločeno"
       }
     },
     "timeline": {
-      "title": "Stanje sporočila",
-      "outcome": {
-        "viewed": {
-          "title": "Prebrano",
-          "description": "Prejemnik je prebral sporočilo."
-        },
-        "delivered": {
-          "title": "Dostavljeno",
-          "description": "Prejemnik je prejel sporočilo."
-        }
-      },
       "event": {
-        "send_digital_message_feedback": {
-          "ok": {
-            "io": "Pošiljanje v IO je uspelo.",
-            "email": "Pošiljanje po e-pošti je uspelo.",
-            "sms": "Pošiljanje prek SMS je uspelo.",
-            "pec": "Pošiljanje prek PEC je uspelo."
-          },
-          "ko": {
-            "io": "Pošiljanje v IO ni mogoče.",
-            "email": "Pošiljanje po e-pošti ni mogoče.",
-            "sms": "Pošiljanje prek SMS ni mogoče.",
-            "pec": "Pošiljanje prek PEC ni mogoče."
-          }
-        },
-        "send_analog_message_feedback": {
-          "ok": {
-            "analog_registered": "Pošiljanje priporočenega pisma št. {{code}} uspešno.",
-            "analog_ordinary": "Pošiljanje z navadno pošto uspešno."
-          },
-          "ko": {
-            "analog_registered": "Pošiljanje priporočenega pisma ni mogoče.",
-            "analog_ordinary": "Pošiljanje z navadno pošto ni mogoče."
-          }
-        },
         "delivered": {
-          "io": "Dostava v IO je uspela.",
-          "email": "Dostava po e-pošti je uspela.",
-          "sms": "Dostava prek SMS je uspela.",
-          "pec": "Dostava prek PEC je uspela.",
+          "analog_ordinary": "Dostava z navadno pošto uspešna.",
           "analog_registered": "Dostava priporočenega pisma št. {{code}} uspešna.",
-          "analog_ordinary": "Dostava z navadno pošto uspešna."
-        },
-        "send_digital_message_skip": {
-          "io": "Računa prejemnika ni mogoče izslediti.",
-          "email": "E-poštnega naslova prejemnika ni mogoče izslediti.",
-          "sms": "Telefonske številke prejemnika ni mogoče izslediti.",
-          "pec": "Naslova PEC prejemnika ni mogoče izslediti."
+          "email": "Dostava po e-pošti je uspela.",
+          "io": "Dostava v IO je uspela.",
+          "pec": "Dostava prek PEC je uspela.",
+          "sms": "Dostava prek SMS je uspela."
         },
         "filed": {
           "send": "Vloženo na platformi SEND."
@@ -202,8 +150,59 @@
         "informal_notification_viewed": {
           "io": "Prejemnik je prebral sporočilo v IO.",
           "send": "Prejemnik je prebral sporočilo na platformi SEND."
+        },
+        "send_analog_message_feedback": {
+          "ko": {
+            "analog_ordinary": "Pošiljanje z navadno pošto ni mogoče.",
+            "analog_registered": "Pošiljanje priporočenega pisma ni mogoče."
+          },
+          "ok": {
+            "analog_ordinary": "Pošiljanje z navadno pošto uspešno.",
+            "analog_registered": "Pošiljanje priporočenega pisma št. {{code}} uspešno."
+          }
+        },
+        "send_digital_message_feedback": {
+          "ko": {
+            "email": "Pošiljanje po e-pošti ni mogoče.",
+            "io": "Pošiljanje v IO ni mogoče.",
+            "pec": "Pošiljanje prek PEC ni mogoče.",
+            "sms": "Pošiljanje prek SMS ni mogoče."
+          },
+          "ok": {
+            "email": "Pošiljanje po e-pošti je uspelo.",
+            "io": "Pošiljanje v IO je uspelo.",
+            "pec": "Pošiljanje prek PEC je uspelo.",
+            "sms": "Pošiljanje prek SMS je uspelo."
+          }
+        },
+        "send_digital_message_skip": {
+          "email": "E-poštnega naslova prejemnika ni mogoče izslediti.",
+          "io": "Računa prejemnika ni mogoče izslediti.",
+          "pec": "Naslova PEC prejemnika ni mogoče izslediti.",
+          "sms": "Telefonske številke prejemnika ni mogoče izslediti."
         }
-      }
+      },
+      "outcome": {
+        "delivered": {
+          "description": "Prejemnik je prejel sporočilo.",
+          "title": "Dostavljeno"
+        },
+        "viewed": {
+          "description": "Prejemnik je prebral sporočilo.",
+          "title": "Prebrano"
+        }
+      },
+      "title": "Stanje sporočila"
     }
+  },
+  "list": {
+    "empty-state": {
+      "generic-error": "Kampanj ni bilo mogoče pridobiti.",
+      "generic-error-cta": "Poskusite znova",
+      "no-campaigns": "Tukaj boste videli kampanje, ki jih je poslal organ"
+    },
+    "id": "Koda ID",
+    "open-aria-label": "Odpri kampanjo \"{{name}}\"",
+    "title": "Kampanje"
   }
 }
