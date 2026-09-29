@@ -1,4 +1,4 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 
 import {
   BffCampaignDetailResponseV1,
@@ -8,14 +8,14 @@ import {
 } from '../../generated-client/informal-notifications';
 import { getCampaignCommunications, getCampaignDetail, getCampaigns } from './actions';
 
-const initialCommunicationFilters = {
+export const initialCommunicationFilters = {
   recipientId: '',
   iunMatch: '',
   status: [] as Array<InformalNotificationStatusV1>,
   outcome: '',
 };
 
-const initialCommunicationsPagination = {
+export const initialCommunicationsPagination = {
   nextPagesKey: [] as Array<string>,
   size: 10,
   page: 0,
@@ -25,6 +25,7 @@ const initialCommunicationsPagination = {
 const initialState = {
   campaigns: [] as Array<CampaignSummary>,
   campaignDetail: {} as BffCampaignDetailResponseV1,
+  communicationsCampaignId: '',
   campaignCommunications: {} as BffInformalSenderNotificationSearchResponse,
   communicationFilters: initialCommunicationFilters,
   pagination: {
@@ -44,7 +45,8 @@ const campaignSlice = createSlice({
     resetCampaignDetail: (state) => {
       state.campaignDetail = {} as BffCampaignDetailResponseV1;
     },
-    resetCampaignCommunications: (state) => {
+    resetCampaignCommunications: (state, action: PayloadAction<string>) => {
+      state.communicationsCampaignId = action.payload;
       state.campaignCommunications = initialState.campaignCommunications;
       state.communicationFilters = initialCommunicationFilters;
       state.communicationsPagination = initialCommunicationsPagination;

@@ -225,7 +225,47 @@ describe('CampaignDetail Page', () => {
     });
   });
 
-  it('resets communications filters and pagination when leaving the page', async () => {
+  const filteredState = (campaignId: string) => ({
+    campaignState: {
+      campaigns: [],
+      campaignDetail: {},
+      communicationsCampaignId: campaignId,
+      campaignCommunications: {},
+      communicationFilters: {
+        recipientId: '',
+        iunMatch: 'ABCD-EFGH-IJKL-123456-M-1',
+        status: [],
+        outcome: '',
+      },
+      pagination: { nextPagesKey: [], size: 10, page: 0, moreResult: false },
+      communicationsPagination: { nextPagesKey: ['key-1'], size: 20, page: 1, moreResult: true },
+    },
+  });
+
+  it('resets communications filters and pagination when opening another campaign', async () => {
+    mock
+      .onGet(`/bff/v1/notifications/informal/campaigns/${campaignDetailMock.campaignId}`)
+      .reply(200, campaignDetailMock);
+    mock.onGet(comunicationsListPath).reply(200, comunicationsList);
+
+    await act(async () => {
+      result = render(<CampaignDetail />, {
+        route: `/campaigns/${campaignDetailMock.campaignId}`,
+        path: '/campaigns/:id',
+        preloadedState: filteredState('another-campaign'),
+      });
+    });
+
+    await waitFor(() => {
+      expect(mock.history.get).toHaveLength(2);
+    });
+    expect(mock.history.get[1].url).toBe(comunicationsListPath);
+    expect(result.testStore.getState().campaignState.communicationsCampaignId).toBe(
+      campaignDetailMock.campaignId
+    );
+  });
+
+  it('keeps communications filters and page size when coming back to the same campaign', async () => {
     const filteredComunicationsListPath = `/bff/v1/informal/campaigns/${campaignDetailMock.campaignId}/notifications/sent?startDate=${startParam}&endDate=${endParam}&iunMatch=ABCD-EFGH-IJKL-123456-M-1&size=20`;
 
     mock
@@ -237,26 +277,7 @@ describe('CampaignDetail Page', () => {
       result = render(<CampaignDetail />, {
         route: `/campaigns/${campaignDetailMock.campaignId}`,
         path: '/campaigns/:id',
-        preloadedState: {
-          campaignState: {
-            campaigns: [],
-            campaignDetail: {},
-            campaignCommunications: {},
-            communicationFilters: {
-              recipientId: '',
-              iunMatch: 'ABCD-EFGH-IJKL-123456-M-1',
-              status: [],
-              outcome: '',
-            },
-            pagination: { nextPagesKey: [], size: 10, page: 0, moreResult: false },
-            communicationsPagination: {
-              nextPagesKey: ['key-1'],
-              size: 20,
-              page: 1,
-              moreResult: true,
-            },
-          },
-        },
+        preloadedState: filteredState(campaignDetailMock.campaignId),
       });
     });
 
@@ -264,23 +285,5 @@ describe('CampaignDetail Page', () => {
       expect(mock.history.get).toHaveLength(2);
     });
     expect(mock.history.get[1].url).toBe(filteredComunicationsListPath);
-
-    result.unmount();
-
-    const { communicationFilters, communicationsPagination, campaignCommunications } =
-      result.testStore.getState().campaignState;
-    expect(campaignCommunications).toEqual({});
-    expect(communicationFilters).toEqual({
-      recipientId: '',
-      iunMatch: '',
-      status: [],
-      outcome: '',
-    });
-    expect(communicationsPagination).toEqual({
-      nextPagesKey: [],
-      size: 10,
-      page: 0,
-      moreResult: false,
-    });
   });
 });

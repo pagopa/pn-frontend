@@ -54,6 +54,7 @@ describe('Campaign redux state tests', () => {
     expect(state).toEqual({
       campaigns: [],
       campaignDetail: {},
+      communicationsCampaignId: '',
       campaignCommunications: {},
       pagination: {
         nextPagesKey: [],
@@ -155,6 +156,7 @@ describe('Campaign redux state tests', () => {
     const stateWithCampaign = {
       campaigns: [],
       campaignDetail: campaign,
+      communicationsCampaignId: '',
       campaignCommunications: {},
       communicationFilters: {
         recipientId: '',
@@ -181,6 +183,7 @@ describe('Campaign redux state tests', () => {
     expect(state).toEqual({
       campaigns: [],
       campaignDetail: {},
+      communicationsCampaignId: '',
       campaignCommunications: {},
       communicationFilters: {
         recipientId: '',
@@ -220,8 +223,12 @@ describe('Campaign redux state tests', () => {
       )
     );
 
-    const state = campaignSlice.reducer(stateWithCommunications, resetCampaignCommunications());
+    const state = campaignSlice.reducer(
+      stateWithCommunications,
+      resetCampaignCommunications('another-campaign')
+    );
 
+    expect(state.communicationsCampaignId).toBe('another-campaign');
     expect(state.campaignCommunications).toEqual({});
     expect(state.communicationFilters).toEqual({
       recipientId: '',
