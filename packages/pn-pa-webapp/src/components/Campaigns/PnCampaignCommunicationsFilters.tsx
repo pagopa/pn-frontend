@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { Grid, ListItemText, MenuItem, TextField } from '@mui/material';
@@ -22,12 +23,17 @@ const inputStyle = {
 
 const PnCampaignCommunicationsFilters = ({ formik, handleChangeTouched, handlePaste }: Props) => {
   const { t } = useTranslation('campaigns');
+  const [inputValue, setInputValue] = useState('');
 
   const selectedStatusOption = communicationStatusOptions.find(
     (option) =>
       option.value.length === formik.values.status.length &&
       option.value.every((status) => formik.values.status.includes(status))
   );
+
+  useEffect(() => {
+    setInputValue(t(selectedStatusOption?.label ?? ''));
+  }, [selectedStatusOption?.label, t]);
 
   return (
     <>
@@ -63,13 +69,14 @@ const PnCampaignCommunicationsFilters = ({ formik, handleChangeTouched, handlePa
       <Grid item xs={12} lg sx={{ mb: { md: 2.5, lg: 0 } }}>
         <Autocomplete
           id="status"
+          inputValue={inputValue}
+          onInputChange={(newInputValue) => setInputValue(newInputValue)}
           options={communicationStatusOptions}
           getOptionLabel={(option) => t(option.label)}
           isOptionEqualToValue={(option, value) => option.value === value.value}
           label={t('detail.communications.status')}
           placeholder={t('detail.communications.status')}
           value={selectedStatusOption}
-          inputValue={t(selectedStatusOption?.label ?? '')}
           onChange={(newValue) => {
             void formik.setFieldValue('status', newValue?.value ?? []);
           }}
@@ -101,6 +108,8 @@ const PnCampaignCommunicationsFilters = ({ formik, handleChangeTouched, handlePa
           name="outcome"
           label={t('detail.communications.outcome')}
           select
+          SelectProps={{ displayEmpty: true }}
+          InputLabelProps={{ shrink: true }}
           onChange={handleChangeTouched}
           value={formik.values.outcome}
           fullWidth

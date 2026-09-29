@@ -136,19 +136,15 @@ const NotificationPaymentSender: React.FC<Props> = ({
       (paginationData.page + 1) * paginationData.size
     );
 
-  return (
-    <MIPaper padding={24} data-testid="paymentInfoBox" sx={sx}>
-      <Typography variant="h5" component="h2" mb={2}>
-        {t('payment.title', { ns: 'notifiche' })}
-      </Typography>
-      {recipients.length === 1 && (
+  const renderSubtitle = () => {
+    if (communicationType === NotificationCommunicationType.LEGAL) {
+      return recipients.length === 1 ? (
         <Typography variant="body2" my={2}>
           {f24PaymentDetails.length > 0 && pagoPAPaymentFullDetails.length === 0
             ? t('payment.subtitle-single-f24', { ns: 'notifiche' })
             : t('payment.subtitle-single', { ns: 'notifiche' })}
         </Typography>
-      )}
-      {recipients.length > 1 && (
+      ) : (
         <Typography variant="body2" my={2}>
           {f24PaymentDetails.length > 0 &&
           pagoPAPaymentFullDetails.length === 0 &&
@@ -156,7 +152,17 @@ const NotificationPaymentSender: React.FC<Props> = ({
             ? t('payment.subtitle-multiple-f24', { ns: 'notifiche' })
             : t('payment.subtitle-multiple', { ns: 'notifiche' })}
         </Typography>
-      )}
+      );
+    }
+    return null;
+  };
+
+  return (
+    <MIPaper padding={24} data-testid="paymentInfoBox" sx={sx}>
+      <Typography variant="h5" component="h2" mb={2}>
+        {t('payment.title', { ns: 'notifiche' })}
+      </Typography>
+      {renderSubtitle()}
       {recipients.length > 1 && (
         <TextField
           id="recipients-select"
