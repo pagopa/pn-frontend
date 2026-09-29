@@ -34,7 +34,6 @@ type Props = {
   timeline: Array<INotificationDetailTimeline>;
   communicationType?: NotificationCommunicationType;
   sx?: SxProps;
-  onPagoPaDownload?: (payment: PagoPAPaymentFullDetails) => void;
 };
 
 const renderRecipientMenuItem = (
