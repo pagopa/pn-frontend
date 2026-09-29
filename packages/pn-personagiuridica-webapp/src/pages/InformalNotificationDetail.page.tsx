@@ -7,6 +7,7 @@ import {
   AbstractPaper,
   ApiError,
   InformalNotificationStatus,
+  NotificationCommunicationType,
   NotificationDetailDocuments,
   NotificationDetailOtherDocument,
   NotificationDetailPayment,
@@ -196,7 +197,7 @@ const InformalNotificationDetail: React.FC = () => {
     if (noticeCode && creditorTaxId && amount && informalNotification?.senderDenomination) {
       PGEventStrategyFactory.triggerEvent(
         PGEventsType.SEND_PG_START_PAYMENT,
-        { notificationType: 'INFORMAL' },
+        { notificationType: NotificationCommunicationType.INFORMAL },
         { sendImmediately: true }
       );
       dispatch(

@@ -5,9 +5,9 @@ import { Box, Divider, MenuItem, Stack, SxProps, TextField, Typography } from '@
 import {
   CustomPagination,
   F24PaymentDetails,
-  INotificationDetailTimeline,
   NotificationCommunicationType,
   NotificationPayment,
+  NotificationPaymentTimeline,
   PaginationData,
   PagoPAPaymentFullDetails,
   PaymentDetails,
@@ -31,7 +31,7 @@ type NotificationPaymentRecipient = {
 type Props = {
   iun: string;
   recipients: Array<NotificationPaymentRecipient>;
-  timeline: Array<INotificationDetailTimeline>;
+  timeline: NotificationPaymentTimeline;
   communicationType?: NotificationCommunicationType;
   sx?: SxProps;
 };

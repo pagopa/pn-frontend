@@ -16,6 +16,7 @@ import { apiClient } from '../../api/apiClients';
 import { DowntimeApiFactory } from '../../generated-client/downtime-logs';
 import {
   BffDocumentDownloadMetadataResponse,
+  BffFullSentInformalNotificationTimelineV1,
   BffFullSentInformalNotificationV1,
   SenderInformalNotificationsApiFactory,
 } from '../../generated-client/informal-notifications';
@@ -32,6 +33,7 @@ export enum NOTIFICATION_ACTIONS {
   GET_SENT_INFORMAL_NOTIFICATION = 'getSentInformalNotification',
   GET_SENT_INFORMAL_NOTIFICATION_DOCUMENT = 'getSentInformalNotificationDocument',
   GET_SENT_INFORMAL_NOTIFICATION_PAYMENT = 'getSentInformalNotificationPayment',
+  GET_SENT_INFORMAL_NOTIFICATION_TIMELINE = 'getSentInformalNotificationTimeline',
 }
 
 export const getSentNotification = createAsyncThunk<NotificationDetail, string>(
@@ -242,6 +244,30 @@ export const getSentInformalNotificationPayment = createAsyncThunk<
           attachmentName,
           attachmentIdx
         );
+
+      return response.data;
+    } catch (e) {
+      return rejectWithValue(parseError(e));
+    }
+  }
+);
+
+export const getSentInformalNotificationTimeline = createAsyncThunk<
+  BffFullSentInformalNotificationTimelineV1,
+  string
+>(
+  NOTIFICATION_ACTIONS.GET_SENT_INFORMAL_NOTIFICATION_TIMELINE,
+  async (iun: string, { rejectWithValue }) => {
+    try {
+      const informalNotificationsApiFactory = SenderInformalNotificationsApiFactory(
+        undefined,
+        undefined,
+        apiClient
+      );
+
+      const response = await informalNotificationsApiFactory.getSentInformalNotificationTimelineV1(
+        iun
+      );
 
       return response.data;
     } catch (e) {
