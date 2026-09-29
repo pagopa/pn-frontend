@@ -59,6 +59,7 @@ jobs:
           translations_path: packages/${{ fromJson(env.PACKAGES)[matrix.app] }}/public/locales
           file_format: json
           skip_include_tags: true
+          async_mode: true
           # L'italiano lo scriviamo noi nel repo, ma i traduttori possono correggerlo
           # su Lokalise: senza questo flag quelle correzioni non tornerebbero mai indietro.
           always_pull_base: true
