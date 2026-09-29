@@ -17,6 +17,7 @@ import {
   getCampaignCommunications,
   getCampaignDetail,
 } from '../redux/campaign/actions';
+import { resetCampaignCommunications } from '../redux/campaign/reducers';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { RootState } from '../redux/store';
 import PAEventStrategyFactory from '../utility/MixpanelUtils/PAEventStrategyFactory';
@@ -93,6 +94,7 @@ const CampaignDetail: React.FC = () => {
 
   useEffect(() => {
     fetchCampaignCommunications(0, communicationsPagination.size, communicationFilters);
+    return () => void dispatch(resetCampaignCommunications());
   }, []);
 
   const breadcrumb = (

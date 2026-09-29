@@ -8,28 +8,32 @@ import {
 } from '../../generated-client/informal-notifications';
 import { getCampaignCommunications, getCampaignDetail, getCampaigns } from './actions';
 
+const initialCommunicationFilters = {
+  recipientId: '',
+  iunMatch: '',
+  status: [] as Array<InformalNotificationStatusV1>,
+  outcome: '',
+};
+
+const initialCommunicationsPagination = {
+  nextPagesKey: [] as Array<string>,
+  size: 10,
+  page: 0,
+  moreResult: false,
+};
+
 const initialState = {
   campaigns: [] as Array<CampaignSummary>,
   campaignDetail: {} as BffCampaignDetailResponseV1,
   campaignCommunications: {} as BffInformalSenderNotificationSearchResponse,
-  communicationFilters: {
-    recipientId: '',
-    iunMatch: '',
-    status: [] as Array<InformalNotificationStatusV1>,
-    outcome: '',
-  },
+  communicationFilters: initialCommunicationFilters,
   pagination: {
     nextPagesKey: [] as Array<string>,
     size: 10,
     page: 0,
     moreResult: false,
   },
-  communicationsPagination: {
-    nextPagesKey: [] as Array<string>,
-    size: 10,
-    page: 0,
-    moreResult: false,
-  },
+  communicationsPagination: initialCommunicationsPagination,
 };
 
 /* eslint-disable functional/immutable-data */
@@ -39,6 +43,11 @@ const campaignSlice = createSlice({
   reducers: {
     resetCampaignDetail: (state) => {
       state.campaignDetail = {} as BffCampaignDetailResponseV1;
+    },
+    resetCampaignCommunications: (state) => {
+      state.campaignCommunications = initialState.campaignCommunications;
+      state.communicationFilters = initialCommunicationFilters;
+      state.communicationsPagination = initialCommunicationsPagination;
     },
   },
   extraReducers: (builder) => {
@@ -103,6 +112,6 @@ const campaignSlice = createSlice({
   },
 });
 
-export const { resetCampaignDetail } = campaignSlice.actions;
+export const { resetCampaignDetail, resetCampaignCommunications } = campaignSlice.actions;
 
 export default campaignSlice;

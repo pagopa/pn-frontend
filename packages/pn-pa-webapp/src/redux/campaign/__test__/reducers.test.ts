@@ -12,7 +12,7 @@ import {
 } from '../../../generated-client/informal-notifications';
 import { store } from '../../store';
 import { getCampaignCommunications, getCampaignDetail, getCampaigns } from '../actions';
-import campaignSlice, { resetCampaignDetail } from '../reducers';
+import campaignSlice, { resetCampaignCommunications, resetCampaignDetail } from '../reducers';
 
 const campaign: BffCampaignDetailResponseV1 = {
   campaignId: 'FattOrd',
@@ -200,6 +200,40 @@ describe('Campaign redux state tests', () => {
         page: 0,
         moreResult: false,
       },
+    });
+  });
+
+  it('Should reset campaign communications, filters and pagination', () => {
+    const stateWithCommunications = campaignSlice.reducer(
+      undefined,
+      getCampaignCommunications.fulfilled(
+        { resultsPage: [], moreResult: true, nextPagesKey: ['key-1'] },
+        '',
+        {
+          campaignId: campaign.campaignId,
+          page: 1,
+          size: 20,
+          iunMatch: 'ABCD-EFGH-IJKL-123456-M-1',
+          status: [InformalNotificationStatusV1.Processing],
+          viewed: true,
+        }
+      )
+    );
+
+    const state = campaignSlice.reducer(stateWithCommunications, resetCampaignCommunications());
+
+    expect(state.campaignCommunications).toEqual({});
+    expect(state.communicationFilters).toEqual({
+      recipientId: '',
+      iunMatch: '',
+      status: [],
+      outcome: '',
+    });
+    expect(state.communicationsPagination).toEqual({
+      nextPagesKey: [],
+      size: 10,
+      page: 0,
+      moreResult: false,
     });
   });
 

@@ -224,4 +224,63 @@ describe('CampaignDetail Page', () => {
       expect(mock.history.get[2].url).toBe(comunicationsListPath);
     });
   });
+
+  it('resets communications filters and pagination when leaving the page', async () => {
+    const filteredComunicationsListPath = `/bff/v1/informal/campaigns/${campaignDetailMock.campaignId}/notifications/sent?startDate=${startParam}&endDate=${endParam}&iunMatch=ABCD-EFGH-IJKL-123456-M-1&size=20`;
+
+    mock
+      .onGet(`/bff/v1/notifications/informal/campaigns/${campaignDetailMock.campaignId}`)
+      .reply(200, campaignDetailMock);
+    mock.onGet(filteredComunicationsListPath).reply(200, comunicationsList);
+
+    await act(async () => {
+      result = render(<CampaignDetail />, {
+        route: `/campaigns/${campaignDetailMock.campaignId}`,
+        path: '/campaigns/:id',
+        preloadedState: {
+          campaignState: {
+            campaigns: [],
+            campaignDetail: {},
+            campaignCommunications: {},
+            communicationFilters: {
+              recipientId: '',
+              iunMatch: 'ABCD-EFGH-IJKL-123456-M-1',
+              status: [],
+              outcome: '',
+            },
+            pagination: { nextPagesKey: [], size: 10, page: 0, moreResult: false },
+            communicationsPagination: {
+              nextPagesKey: ['key-1'],
+              size: 20,
+              page: 1,
+              moreResult: true,
+            },
+          },
+        },
+      });
+    });
+
+    await waitFor(() => {
+      expect(mock.history.get).toHaveLength(2);
+    });
+    expect(mock.history.get[1].url).toBe(filteredComunicationsListPath);
+
+    result.unmount();
+
+    const { communicationFilters, communicationsPagination, campaignCommunications } =
+      result.testStore.getState().campaignState;
+    expect(campaignCommunications).toEqual({});
+    expect(communicationFilters).toEqual({
+      recipientId: '',
+      iunMatch: '',
+      status: [],
+      outcome: '',
+    });
+    expect(communicationsPagination).toEqual({
+      nextPagesKey: [],
+      size: 10,
+      page: 0,
+      moreResult: false,
+    });
+  });
 });
