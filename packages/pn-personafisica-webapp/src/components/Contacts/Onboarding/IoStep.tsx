@@ -1,10 +1,17 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import FileDownloadOutlinedIcon from '@mui/icons-material/FileDownloadOutlined';
-import { Box, Button, Stack, Typography } from '@mui/material';
-import { EventAction, appStateActions, useIsMobile } from '@pagopa-pn/pn-commons';
-import { ButtonNaked } from '@pagopa/mui-italia';
+import FileDownloadRoundedIcon from '@mui/icons-material/FileDownloadRounded';
+import { Box, DialogTitle, Stack, Typography } from '@mui/material';
+import {
+  EventAction,
+  PnDialog,
+  PnDialogActions,
+  PnDialogContent,
+  appStateActions,
+  useIsMobile,
+} from '@pagopa-pn/pn-commons';
+import { MIButton } from '@pagopa/mui-italia';
 
 import { OnboardingAvailableFlows } from '../../../models/Onboarding';
 import { PFEventsType } from '../../../models/PFEventsType';
@@ -44,7 +51,8 @@ const IoStep: React.FC<Props> = ({ value, selectedOnboardingFlow, onChange, onCo
   const { t } = useTranslation(['recapiti', 'common']);
   const isMobile = useIsMobile();
   const dispatch = useAppDispatch();
-  const { APP_IO_SITE, APP_IO_ANDROID, APP_IO_IOS } = getConfiguration();
+  const { APP_IO_SITE, APP_IO_DOWNLOAD } = getConfiguration();
+  const [openDialog, setOpenDialog] = useState(false);
 
   const getStatus = (): IOContactStatus => {
     if (value === IOAllowedValues.ENABLED) {
@@ -132,11 +140,14 @@ const IoStep: React.FC<Props> = ({ value, selectedOnboardingFlow, onChange, onCo
         PFEventStrategyFactory.triggerEvent(PFEventsType.SEND_ONBOARDING_IO_DOWNLOAD_SELECTED, {
           onboarding_selected_flow: selectedOnboardingFlow,
         });
-        openAppIoDownloadPage({
-          appIoSite: APP_IO_SITE,
-          appIoAndroid: APP_IO_ANDROID,
-          appIoIos: APP_IO_IOS,
-        });
+        if (isMobile) {
+          openAppIoDownloadPage({
+            appIoSite: APP_IO_SITE,
+            appIoDownload: APP_IO_DOWNLOAD,
+          });
+        } else {
+          setOpenDialog(true);
+        }
         break;
     }
   };
@@ -154,56 +165,111 @@ const IoStep: React.FC<Props> = ({ value, selectedOnboardingFlow, onChange, onCo
   }, [status]);
 
   return (
-    <Stack data-testid="io-step">
-      <Box sx={{ p: 2, bgcolor: 'background.paper' }}>
-        <Typography fontSize="18px" fontWeight={700} mb={1}>
-          {title}
-        </Typography>
+    <>
+      <Stack data-testid="io-step">
+        <Box sx={{ p: 2, bgcolor: 'background.paper' }}>
+          <Typography fontSize="18px" fontWeight={700} mb={1}>
+            {title}
+          </Typography>
 
-        <Typography variant="body2" color="text.secondary" mb={2}>
-          {t('onboarding.digital-domicile.io.description')}
-        </Typography>
-        {status !== IOContactStatus.ENABLED && (
-          <Stack
-            direction={isMobile ? 'column' : 'row'}
-            spacing={2}
-            justifyContent={isMobile ? undefined : 'space-between'}
-          >
-            <Button
-              fullWidth={isMobile}
-              variant="contained"
-              onClick={handlePrimaryAction}
-              data-testid="io-primary-button"
-              startIcon={
-                status === IOContactStatus.UNAVAILABLE ? <FileDownloadOutlinedIcon /> : undefined
-              }
+          <Typography variant="body2" color="text.secondary" mb={2}>
+            {t('onboarding.digital-domicile.io.description')}
+          </Typography>
+          {status !== IOContactStatus.ENABLED && (
+            <Stack
+              direction={isMobile ? 'column' : 'row'}
+              spacing={2}
+              justifyContent={isMobile ? undefined : 'space-between'}
             >
-              {t(`${labelPrefixByStatus}.primary-cta`)}
-            </Button>
-
-            {status === IOContactStatus.UNAVAILABLE && (
-              <ButtonNaked
-                color="primary"
-                size="medium"
-                onClick={() => void handleRefreshState()}
-                data-testid="io-refresh-link"
-                sx={{
-                  fontWeight: 700,
-                  alignSelf: isMobile ? 'flex-start' : undefined,
-                }}
+              <MIButton
+                fullWidth={isMobile}
+                variant="contained"
+                onClick={handlePrimaryAction}
+                data-testid="io-primary-button"
+                startIcon={
+                  status === IOContactStatus.UNAVAILABLE ? <FileDownloadRoundedIcon /> : undefined
+                }
               >
-                {t(`${labelPrefixByStatus}.refresh-cta`)}
-              </ButtonNaked>
-            )}
+                {t(`${labelPrefixByStatus}.primary-cta`)}
+              </MIButton>
+
+              {status === IOContactStatus.UNAVAILABLE && (
+                <MIButton
+                  variant="text"
+                  onClick={() => void handleRefreshState()}
+                  data-testid="io-refresh-link"
+                  sx={{
+                    alignSelf: isMobile ? 'flex-start' : undefined,
+                  }}
+                >
+                  {t(`${labelPrefixByStatus}.refresh-cta`)}
+                </MIButton>
+              )}
+            </Stack>
+          )}
+        </Box>
+        <OnboardingImage
+          src="/imgs/onboarding-appio.webp"
+          decorative
+          height={isMobile ? '160px' : '276px'}
+        />
+      </Stack>
+      <PnDialog
+        open={openDialog}
+        onClose={() => setOpenDialog(false)}
+        scroll="body"
+        showCloseButton
+        closeButtonLabel={t('button.close', { ns: 'common' })}
+        onCloseButtonClick={() => setOpenDialog(false)}
+        aria-labelledby="downloadIO-dialog-title"
+        aria-describedby="downloadIO-dialog-description"
+        data-testid="downloadIODialog"
+        sx={{
+          '& .MuiDialog-container': {
+            alignItems: 'flex-start',
+          },
+          '& .MuiDialog-paper': {
+            maxHeight: 'none',
+            overflowY: 'visible',
+            my: { xs: 2, sm: 4 },
+          },
+        }}
+      >
+        <DialogTitle id="downloadIO-dialog-title">
+          {t('io-contact.download-modal.title', { ns: 'recapiti' })}
+        </DialogTitle>
+
+        <PnDialogContent
+          id="downloadIO-dialog-description"
+          sx={{ overflowY: 'visible', maxHeight: 'none' }}
+        >
+          <Stack justifyContent={'center'}>
+            <Typography>{t('io-contact.download-modal.subtitle', { ns: 'recapiti' })}</Typography>
+            <Stack justifyContent={'center'} alignItems={'center'}>
+              <OnboardingImage
+                src="/imgs/qrCodeDownloadIo.webp"
+                alt={t('io-contact.download-modal.qr-code-alt', { ns: 'recapiti' })}
+                width={'200px'}
+                sx={{ my: 3, maxWidth: '100%' }}
+              />
+            </Stack>
+            <Typography>
+              {t('io-contact.download-modal.instructions', { ns: 'recapiti' })}
+            </Typography>
           </Stack>
-        )}
-      </Box>
-      <OnboardingImage
-        src="/imgs/onboarding-appio.webp"
-        decorative
-        height={isMobile ? '160px' : '276px'}
-      />
-    </Stack>
+        </PnDialogContent>
+        <PnDialogActions sx={{ justifyContent: 'center' }}>
+          <MIButton
+            id="dialog-confirm-button"
+            variant="contained"
+            data-testid="confirmButton"
+            onClick={() => setOpenDialog(false)}
+          >
+            {t('io-contact.download-modal.cta', { ns: 'recapiti' })}
+          </MIButton>
+        </PnDialogActions>
+      </PnDialog>
+    </>
   );
 };
 

@@ -1,7 +1,8 @@
 import MockAdapter from 'axios-mock-adapter';
 import { vi } from 'vitest';
 
-import { ThemeProvider, createTheme } from '@mui/material';
+import { ThemeProvider } from '@mui/material';
+import { themeNext } from '@pagopa/mui-italia';
 
 import App from '../App';
 import { currentStatusDTO } from '../__mocks__/AppStatus.mock';
@@ -21,9 +22,8 @@ vi.mock('../pages/Dashboard.page', () => ({ default: () => <div>Generic Page</di
 
 const unmockedFetch = globalThis.fetch;
 
-const theme = createTheme({});
 const Component = () => (
-  <ThemeProvider theme={theme}>
+  <ThemeProvider theme={themeNext}>
     <App />
   </ThemeProvider>
 );
@@ -96,7 +96,6 @@ describe('App', () => {
     expect(mockOpenFn).toHaveBeenCalledWith(url, '_self');
   });
 
-  // this test fails because SideMenu is defined inside pn-commons and test
   it('render component - user logged in', async () => {
     mock.onGet(/\/bff\/v2\/tos-privacy.*/).reply(200, tosPrivacyConsentMock(true, true));
     mock.onGet('/bff/v1/institutions').reply(200, institutionsDTO);
@@ -112,6 +111,11 @@ describe('App', () => {
     expect(footer).toBeInTheDocument();
     const sideMenu = result.queryByTestId('side-menu');
     expect(sideMenu).toBeInTheDocument();
+
+    expect(result.getByText('menu.communications')).toBeInTheDocument();
+    fireEvent.click(result.getByText('menu.communications'));
+    expect(result.getByText('menu.campaigns')).toBeInTheDocument();
+
     expect(result.container).toHaveTextContent('Generic Page');
     expect(mock.history.get).toHaveLength(5);
   });

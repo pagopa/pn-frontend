@@ -80,8 +80,8 @@ describe('Smart Filter Component', () => {
     const { getByTestId } = render(<ExampleForm />);
     const username = getByTestId('username');
     const email = getByTestId('email');
-    fireEvent.change(username, { target: { value: 'mariorossi' } });
-    fireEvent.change(email, { target: { value: 'mario.rossi@mail.it' } });
+    fireEvent.change(username, { target: { value: 'utenteuno' } });
+    fireEvent.change(email, { target: { value: 'utente.uno@mail.it' } });
     const confirmButton = await waitFor(() => getByTestId('confirmButton'));
     expect(confirmButton).toBeEnabled();
     fireEvent.click(confirmButton);
@@ -90,7 +90,7 @@ describe('Smart Filter Component', () => {
 
   it('clicks on cancel button (desktop version)', () => {
     const { getByTestId } = render(
-      <ExampleForm inputUsername="mariorossi" inputEmail="mario.rossimail.it" />
+      <ExampleForm inputUsername="utenteuno" inputEmail="utente.unomail.it" />
     );
     const cancelButton = getByTestId('cancelButton');
     expect(cancelButton).toBeEnabled();
@@ -138,7 +138,7 @@ describe('Smart Filter Component', () => {
   it('renders badge count (mobile version)', async () => {
     window.matchMedia = createMatchMedia(800);
     const { getByTestId } = render(
-      <ExampleForm inputUsername="mariorossi" inputEmail="mario.rossimail.it" />
+      <ExampleForm inputUsername="utenteuno" inputEmail="utente.unomail.it" />
     );
     const dialogToggle = await waitFor(() => getByTestId('dialogToggle'));
     expect(dialogToggle).toHaveTextContent('2');

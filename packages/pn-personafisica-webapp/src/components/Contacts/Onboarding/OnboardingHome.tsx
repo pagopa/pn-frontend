@@ -4,11 +4,9 @@ import { useNavigate } from 'react-router-dom';
 
 import ArrowForwardRoundedIcon from '@mui/icons-material/ArrowForwardRounded';
 import CheckRoundedIcon from '@mui/icons-material/CheckRounded';
-import ErrorOutlineOutlinedIcon from '@mui/icons-material/ErrorOutlineOutlined';
+import ErrorOutlineRoundedIcon from '@mui/icons-material/ErrorOutlineRounded';
 import {
   Box,
-  Button,
-  Chip,
   List,
   ListItem,
   ListItemIcon,
@@ -23,6 +21,9 @@ import {
   IllusMIBell,
   IllusMIMessage,
   IllusMISmartphoneValidation,
+  MIButton,
+  MIChip,
+  MIChipProps,
 } from '@pagopa/mui-italia';
 
 import { OnboardingAvailableFlows } from '../../../models/Onboarding';
@@ -61,7 +62,10 @@ type CardConfig = Array<{
   description: React.ReactNode;
   cta: string;
   path: string;
-  chip?: { label: string; color: ChipColors };
+  chip?: {
+    label: string;
+    color: MIChipProps['color'];
+  };
   hide?: boolean;
   mixpanelFlowId: OnboardingAvailableFlows;
 }>;
@@ -74,7 +78,7 @@ const PaperContent = ({ items }: { items: Array<Item> }) => (
           sx={{
             minWidth: 0,
             mt: 0.25,
-            color: '#BBC2D6',
+            color: (theme) => theme.palette.grey[300],
           }}
         >
           {item.icon}
@@ -82,7 +86,13 @@ const PaperContent = ({ items }: { items: Array<Item> }) => (
         <ListItemText
           primary={item.text}
           disableTypography
-          sx={{ m: 0, ml: 1, fontWeight: 400, fontSize: '0.875rem', color: '#555C70' }}
+          sx={{
+            m: 0,
+            ml: 1,
+            fontWeight: 400,
+            fontSize: '0.875rem',
+            color: 'text.secondary',
+          }}
         />{' '}
       </ListItem>
     ))}
@@ -117,7 +127,7 @@ const OnboardingHome: React.FC = () => {
         text: t('onboarding.cards.contacts.item_1'),
       },
       {
-        icon: <ErrorOutlineOutlinedIcon />,
+        icon: <ErrorOutlineRoundedIcon />,
         text: t('onboarding.cards.contacts.item_2'),
       },
     ],
@@ -127,7 +137,7 @@ const OnboardingHome: React.FC = () => {
         text: t('onboarding.cards.io.item_1'),
       },
       {
-        icon: <ErrorOutlineOutlinedIcon />,
+        icon: <ErrorOutlineRoundedIcon />,
         text: t('onboarding.cards.io.item_2'),
       },
     ],
@@ -237,15 +247,13 @@ const OnboardingHome: React.FC = () => {
                         {card.title}
                       </Typography>
 
-                      {card.chip && (
-                        <Chip label={card.chip.label} color={card.chip.color} size="small" />
-                      )}
+                      {card.chip && <MIChip label={card.chip.label} color={card.chip.color} />}
                     </Box>
                   </Stack>
 
                   <Box my={1}>{card.description}</Box>
 
-                  <Button
+                  <MIButton
                     fullWidth
                     onClick={() => handleSelectFlow(card.path, card.mixpanelFlowId)}
                     endIcon={<ArrowForwardRoundedIcon />}
@@ -255,23 +263,23 @@ const OnboardingHome: React.FC = () => {
                     data-testid={`onboarding-card-cta-${card.mixpanelFlowId}`}
                   >
                     {card.cta}
-                  </Button>
+                  </MIButton>
                 </Paper>
               </Box>
             );
           })}
       </Stack>
       <Box display="flex" justifyContent="center" mt={3}>
-        <Button variant="text" onClick={handleExitFlow}>
+        <MIButton variant="text" onClick={handleExitFlow}>
           {t('onboarding.exit-flow')}
-        </Button>
+        </MIButton>
       </Box>
       <ConfirmationModal
         open={openModal}
         contentAlign="center"
         slots={{
           illustration: <IllusMIBell size={48} />,
-          closeButton: Button,
+          closeButton: MIButton,
         }}
         title={t('onboarding.exit-flow-dialog.title')}
         slotsProps={{

@@ -2,7 +2,7 @@ import { TFunction } from 'i18next';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
-import NotificationsActiveOutlinedIcon from '@mui/icons-material/NotificationsActiveOutlined';
+import NotificationsActiveRoundedIcon from '@mui/icons-material/NotificationsActiveRounded';
 import SavingsOutlinedIcon from '@mui/icons-material/SavingsOutlined';
 import { Box } from '@mui/material';
 import { EventAction, appStorage } from '@pagopa-pn/pn-commons';
@@ -91,7 +91,7 @@ const getDomicileData = (
 
 const resolveIcon = (message: string) =>
   message === 'no-io' ? (
-    <NotificationsActiveOutlinedIcon fontSize="small" />
+    <NotificationsActiveRoundedIcon fontSize="small" />
   ) : (
     <SavingsOutlinedIcon fontSize="small" />
   );

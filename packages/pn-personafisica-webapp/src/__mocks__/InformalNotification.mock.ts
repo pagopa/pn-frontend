@@ -57,7 +57,7 @@ export const informalNotificationMock: BffFullInformalNotificationV1 = {
           subject: 'Sollecito di pagamento Tari 2023',
           longBody: `Ciao Gervasia Mentini,
 
-**Sorical S.p.A.** ti informa che è stata emessa una fattura per l'utenza **182140** relativa al periodo **23 dicembre 2025 / 31 marzo 2026**.
+**Ipazia S.p.A.** ti informa che è stata emessa una fattura per l'utenza **182140** relativa al periodo **23 dicembre 2025 / 31 marzo 2026**.
 
 Di seguito trovi le principali informazioni relative al pagamento:
 
@@ -68,9 +68,9 @@ Per maggiori dettagli consulta gli **allegati** disponibili nella sezione dedica
 
 Puoi effettuare il pagamento direttamente tramite **PagoPA**. In alternativa, puoi utilizzare l'**avviso di pagamento** allegato presso tutti i canali abilitati.
 
-Per qualsiasi necessità puoi contattare **Sorical S.p.A.** attraverso i canali ufficiali.
+Per qualsiasi necessità puoi contattare **Ipazia S.p.A.** attraverso i canali ufficiali.
 
-Per ulteriori informazioni visita il sito: [www.sorical.it](https://www.sorical.it)
+Per ulteriori informazioni visita il sito: [www.ipazia.it](https://www.ipazia.it)
 
 Grazie per l'attenzione.`,
           shortBody: 'Sollecito Tari: hai una nuova comunicazione da SEND.',

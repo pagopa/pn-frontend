@@ -2,7 +2,6 @@ import { Trans, useTranslation } from 'react-i18next';
 
 import {
   Box,
-  Button,
   DialogContentText,
   DialogTitle,
   List,
@@ -18,6 +17,7 @@ import {
   PnDialogContent,
   useIsMobile,
 } from '@pagopa-pn/pn-commons';
+import { MIButton } from '@pagopa/mui-italia';
 
 import { PFEventsType } from '../../models/PFEventsType';
 import { enableIOAddress } from '../../redux/contact/actions';
@@ -93,12 +93,12 @@ const SercqSendIODialog: React.FC<Props> = ({ open, onDiscard }) => {
         </Stack>
       </PnDialogContent>
       <PnDialogActions>
-        <Button onClick={onDiscard} variant="naked">
+        <MIButton onClick={onDiscard} variant="text">
           {t('button.not-now')}
-        </Button>
-        <Button onClick={handleConfirm} variant="contained">
+        </MIButton>
+        <MIButton onClick={handleConfirm} variant="contained">
           {t('button.attiva')}
-        </Button>
+        </MIButton>
       </PnDialogActions>
     </PnDialog>
   );

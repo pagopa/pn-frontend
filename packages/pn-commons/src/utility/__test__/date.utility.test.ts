@@ -3,7 +3,6 @@ import {
   clampMax,
   convertHoursToDays,
   dateIsDefined,
-  dateIsLessThan10Years,
   formatDate,
   formatDateTime,
   formatDay,
@@ -18,13 +17,13 @@ import {
   getEndOfDay,
   getStartOfDay,
   getWeeksFromDateRange,
+  isDateInRange,
   isToday,
   minutesBeforeNow,
   subtractMonthsFromDate,
 } from '../date.utility';
 
 const dateString = '2022-02-22T14:20:20.566Z';
-const sentAt = '2012-02-22T14:20:20.566Z';
 const date = new Date(dateString);
 
 describe('Date utility', () => {
@@ -182,11 +181,6 @@ describe('Date utility', () => {
     expect(date).toBeInstanceOf(Date);
   });
 
-  it('return a boolean value if the sentAt is less than 10 years far from today', () => {
-    const isLessThan10Years = dateIsLessThan10Years(sentAt);
-    expect(isLessThan10Years).toBe(false);
-  });
-
   it('return date short string - without year', () => {
     const shortDate = formatShortDate(dateString);
     expect(shortDate).toBe('22 date-time.s-month.1');
@@ -267,5 +261,48 @@ describe('Date utility', () => {
 
     const result = clampMax(dateBefore, max);
     expect(result).toBe(dateBefore);
+  });
+
+  it('isDateInRange - returns true when date is in range', () => {
+    const now = new Date();
+
+    const futureDateDays = new Date(now);
+    futureDateDays.setDate(now.getDate() + 7);
+
+    const pastDateDays = new Date(now);
+    pastDateDays.setDate(now.getDate() - 5);
+
+    const result = isDateInRange(now, pastDateDays.toISOString(), futureDateDays.toISOString());
+    expect(result).toBeTruthy();
+  });
+
+  it('isDateInRange - returns false when date is not in range', () => {
+    const now = new Date();
+
+    const futureDateDays = new Date(now);
+    futureDateDays.setDate(now.getDate() + 7);
+
+    const futureDateMonth = new Date(now);
+    futureDateMonth.setMonth(now.getMonth() + 1);
+
+    const result = isDateInRange(now, futureDateDays.toISOString(), futureDateMonth.toISOString());
+    expect(result).toBeFalsy();
+  });
+
+  it('isDateInRange - returns true when date is not in range (no time specified)', () => {
+    const now = new Date();
+
+    const futureDateDays = new Date(now);
+    futureDateDays.setDate(now.getDate() + 7);
+
+    const futureDateMonth = new Date(now);
+    futureDateMonth.setMonth(now.getMonth() + 1);
+
+    const result = isDateInRange(
+      now,
+      formatToSlicedISOString(futureDateDays),
+      formatToSlicedISOString(futureDateMonth)
+    );
+    expect(result).toBeFalsy();
   });
 });

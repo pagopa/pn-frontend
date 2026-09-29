@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 
 import { Box, Button, Paper, Typography } from '@mui/material';
 import { SectionHeading, useIsMobile } from '@pagopa-pn/pn-commons';
+import { MIButton } from '@pagopa/mui-italia';
 
 type Props = {
   children: ReactNode;
@@ -60,17 +61,16 @@ const NewNotificationCard = ({
           {submitLabel || t('button.continue')}
         </Button>
         {previousStepLabel && (
-          <Button
+          <MIButton
             id="previous-step"
             variant="outlined"
-            type="button"
             onClick={previousStepOnClick}
             data-testid="previous-step"
             fullWidth={isMobile}
             sx={{ marginTop: isMobile ? 2 : 0 }}
           >
             {previousStepLabel}
-          </Button>
+          </MIButton>
         )}
       </Box>
     </Fragment>

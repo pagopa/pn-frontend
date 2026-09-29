@@ -1,6 +1,7 @@
 import { MouseEventHandler, useEffect } from 'react';
 
-import { Button, DialogContentText, DialogTitle } from '@mui/material';
+import { DialogContentText, DialogTitle } from '@mui/material';
+import { MIButton } from '@pagopa/mui-italia';
 
 import PnDialog from './PnDialog/PnDialog';
 import PnDialogActions from './PnDialog/PnDialogActions';
@@ -75,9 +76,14 @@ const SessionModal: React.FC<Props> = ({
       </PnDialogContent>
       {onConfirm && (
         <PnDialogActions>
-          <Button sx={{ width: '100%' }} color="primary" variant="contained" data-testid='buttonOfSessionModal' onClick={onConfirm}>
+          <MIButton
+            sx={{ width: '100%' }}
+            variant="contained"
+            data-testid="buttonOfSessionModal"
+            onClick={onConfirm}
+          >
             {onConfirmLabel}
-          </Button>
+          </MIButton>
         </PnDialogActions>
       )}
     </PnDialog>

@@ -1,6 +1,6 @@
 import { Trans } from 'react-i18next';
 
-import DoNotDisturbIcon from '@mui/icons-material/DoNotDisturb';
+import DoNotDisturbRoundedIcon from '@mui/icons-material/DoNotDisturbRounded';
 import OpenInBrowserRoundedIcon from '@mui/icons-material/OpenInBrowserRounded';
 import { Box, Stack, Typography, useTheme } from '@mui/material';
 import { MIAlert, MIIconButton, MIPaper, Tag } from '@pagopa/mui-italia';
@@ -18,7 +18,7 @@ interface Props {
   documents: Array<NotificationDetailOtherDocument> | undefined;
   isCancelled: boolean;
   isDelegate: boolean;
-  isLessThan10Years: boolean;
+  aarDocumentAvailable: boolean;
   downloadFilesMessage: { key: string; ns: string };
 }
 
@@ -28,7 +28,7 @@ const NotificationDetailSection = ({
   documents,
   isCancelled,
   isDelegate,
-  isLessThan10Years,
+  aarDocumentAvailable,
   downloadFilesMessage,
 }: Props) => {
   const theme = useTheme();
@@ -49,7 +49,7 @@ const NotificationDetailSection = ({
   };
 
   const getAARElement = () => {
-    if (!isCancelled && isLessThan10Years) {
+    if (!isCancelled && aarDocumentAvailable) {
       return (
         <Typography variant="caption" color="text.secondary">
           <Trans
@@ -63,7 +63,7 @@ const NotificationDetailSection = ({
     if (isCancelled) {
       return (
         <Tag
-          icon={DoNotDisturbIcon}
+          icon={DoNotDisturbRoundedIcon}
           variant="default"
           value={getLocalizedOrDefaultLabel('common', 'not-available')}
           slotProps={{ icon: { color: theme.palette.grey[300] } }}
@@ -99,13 +99,13 @@ const NotificationDetailSection = ({
           </Box>
         )}
 
-        {!isLessThan10Years && (
+        {!aarDocumentAvailable && (
           <MIAlert severity="warning" data-testid="aarDisabled">
             <Trans i18nKey={downloadFilesMessage.key} ns={downloadFilesMessage.ns} />
           </MIAlert>
         )}
 
-        {isLessThan10Years &&
+        {aarDocumentAvailable &&
           aarDocuments.map((document) => {
             const documentTitle = getAARTitle(document);
 

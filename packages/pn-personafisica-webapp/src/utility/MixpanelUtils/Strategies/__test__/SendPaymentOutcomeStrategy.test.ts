@@ -10,11 +10,13 @@ describe('Mixpanel - Payment Outcome Strategy', () => {
 
     const paymentOutcomeEvent = strategy.performComputations({
       outcome,
+      notification_type: 'notifica',
     });
     expect(paymentOutcomeEvent).toEqual({
       [EventPropertyType.TRACK]: {
         event_category: EventCategory.TECH,
         outcome,
+        notification_type: 'notifica',
       },
     });
   });

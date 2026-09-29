@@ -41,11 +41,16 @@ describe('Support page', () => {
     expect(container).toHaveTextContent(/sub-title/);
     const form = getByTestId('supportForm');
     expect(form).toBeInTheDocument();
+    const disclaimer = getByTestId('pecDisclaimer');
+    expect(disclaimer).toBeInTheDocument();
+    expect(disclaimer).toHaveTextContent('pec-disclaimer');
     const email = getById(form, 'mail');
     expect(email).toBeInTheDocument();
+    expect(email).toHaveAccessibleName('form.email');
     expect(email).toHaveValue('');
     const confirmEmail = getById(form, 'confirmMail');
     expect(confirmEmail).toBeInTheDocument();
+    expect(confirmEmail).toHaveAccessibleName('form.confirm-email');
     expect(confirmEmail).toHaveValue('');
     const backButton = getByTestId('backButton');
     expect(backButton).toBeInTheDocument();

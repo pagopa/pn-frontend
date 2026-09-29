@@ -1,8 +1,9 @@
 import { ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { Button, ButtonProps, DialogContentText, DialogTitle } from '@mui/material';
+import { DialogContentText, DialogTitle } from '@mui/material';
 import { PnDialog, PnDialogActions, PnDialogContent } from '@pagopa-pn/pn-commons';
+import { MIButton, MIButtonProps } from '@pagopa/mui-italia';
 
 type Props = {
   showModal: boolean;
@@ -12,8 +13,8 @@ type Props = {
   confirmHandler: () => void;
   blockDelete?: boolean;
   slotsProps?: {
-    primaryButton?: ButtonProps & { label?: string };
-    secondaryButton?: ButtonProps & { label?: string };
+    primaryButton?: Omit<MIButtonProps, 'href'> & { label?: string };
+    secondaryButton?: Omit<MIButtonProps, 'href'> & { label?: string };
   };
 };
 
@@ -29,29 +30,29 @@ const DeleteDialog: React.FC<Props> = ({
   const { t } = useTranslation(['common']);
 
   const deleteModalActions = blockDelete ? (
-    <Button id="buttonClose" onClick={handleModalClose} variant="contained">
+    <MIButton id="buttonClose" onClick={handleModalClose} variant="contained">
       {t('button.understand')}
-    </Button>
+    </MIButton>
   ) : (
     [
-      <Button
-        key="cancel"
+      <MIButton
         onClick={handleModalClose}
+        {...slotsProps?.secondaryButton}
+        key="cancel"
         variant="outlined"
         id="buttonAnnulla"
-        {...slotsProps?.secondaryButton}
       >
         {slotsProps?.secondaryButton?.label ?? t('button.annulla')}
-      </Button>,
-      <Button
+      </MIButton>,
+      <MIButton
+        onClick={confirmHandler}
+        {...slotsProps?.primaryButton}
         id="buttonConferma"
         key="confirm"
-        onClick={confirmHandler}
         variant="contained"
-        {...slotsProps?.primaryButton}
       >
         {slotsProps?.primaryButton?.label ?? t('button.conferma')}
-      </Button>,
+      </MIButton>,
     ]
   );
 

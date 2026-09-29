@@ -5,7 +5,7 @@ import { RouterProvider, createMemoryRouter } from 'react-router-dom';
 import { vi } from 'vitest';
 
 import { ThemeProvider } from '@mui/material';
-import { theme } from '@pagopa/mui-italia';
+import { themeNext } from '@pagopa/mui-italia';
 import { EnhancedStore, configureStore } from '@reduxjs/toolkit';
 import {
   Matcher,
@@ -23,7 +23,7 @@ import userEvent from '@testing-library/user-event';
 
 import { AppStateState, appStateSlice } from './redux/slices/appStateSlice';
 import { formatDate } from './utility/date.utility';
-import { initLocalization } from './utility/localization.utility';
+import { initLocalization, initLocalizationExists } from './utility/localization.utility';
 
 interface CustomRenderOptions extends Omit<RenderOptions, 'wrapper'> {
   preloadedState?: any;
@@ -85,7 +85,7 @@ const customRender = (
   // test view
   const Wrapper = ({ children }: { children: ReactNode }) => (
     <Provider store={testStore}>
-      <ThemeProvider theme={theme}>
+      <ThemeProvider theme={themeNext}>
         <UiContext.Provider value={children as ReactElement}>
           <RouterProvider router={router} />
         </UiContext.Provider>
@@ -368,6 +368,7 @@ function initLocalizationForTest() {
     data?: { [key: string]: any }
   ) => (data ? `${namespace} - ${path} - ${JSON.stringify(data)}` : `${namespace} - ${path}`);
   initLocalization(mockedTranslationFn);
+  initLocalizationExists(() => false);
 }
 /**
  * Get element by id
@@ -404,18 +405,18 @@ const getById: (container: HTMLElement, id: Matcher, options?: MatcherOptions) =
 
 export * from '@testing-library/react';
 export {
-  customRender as render,
-  testSelect,
   createMatchMedia,
+  createTestStore,
+  disableConsoleLogging,
+  getById,
+  initLocalizationForTest,
+  queryById,
+  customRender as render,
   testAutocomplete,
+  testCalendar,
   testFormElements,
   testInput,
   testRadio,
-  testCalendar,
-  initLocalizationForTest,
-  getById,
-  queryById,
-  createTestStore,
-  disableConsoleLogging,
+  testSelect,
 };
 export type { CustomRenderResult as RenderResult };

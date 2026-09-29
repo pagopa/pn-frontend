@@ -2,7 +2,7 @@ import MockAdapter from 'axios-mock-adapter';
 import { vi } from 'vitest';
 
 import { ThemeProvider } from '@mui/material';
-import { theme } from '@pagopa/mui-italia';
+import { themeNext } from '@pagopa/mui-italia';
 
 import App from '../App';
 import { currentStatusDTO } from '../__mocks__/AppStatus.mock';
@@ -20,11 +20,13 @@ vi.mock('../pages/Notifiche.page', () => ({ default: () => <div>Generic Page</di
 
 const unmockedFetch = global.fetch;
 
-const Component = () => (
-  <ThemeProvider theme={theme}>
-    <App />
-  </ThemeProvider>
-);
+const Component = () => {
+  return (
+    <ThemeProvider theme={themeNext}>
+      <App />
+    </ThemeProvider>
+  );
+};
 
 const reduxInitialState = {
   userState: {
@@ -62,6 +64,13 @@ describe('App', () => {
       }) as Promise<Response>;
 
     vi.stubGlobal('open', mockOpenFn);
+  });
+
+  beforeEach(() => {
+    mock.onGet(/\/bff\/v1\/notifications\/received(?:\?.*)?$/).reply(200, {
+      resultsPage: [],
+      moreResult: false,
+    });
   });
 
   afterEach(() => {
@@ -110,14 +119,17 @@ describe('App', () => {
     expect(logo).toBeInTheDocument();
     expect(logo).toHaveAttribute(
       'src',
-      `${getConfiguration().SELFCARE_CDN_URL}institutions/${organizationId}/logo.png`
+      `${getConfiguration().SELFCARE_CDN_URL}/institutions/${organizationId}/logo.png`
     );
     const footer = document.querySelector('footer');
     expect(footer).toBeInTheDocument();
     const sideMenu = result!.queryByTestId('side-menu');
     expect(sideMenu).toBeInTheDocument();
     expect(result!.container).toHaveTextContent('Generic Page');
-    expect(mock.history.get).toHaveLength(4);
+    expect(
+      mock.history.get.some((request) => request.url?.startsWith('/bff/v1/notifications/received'))
+    ).toBe(true);
+    expect(mock.history.get).toHaveLength(5);
   });
 
   it('sidemenu not included if error in API call to fetch TOS and privacy', async () => {
@@ -131,7 +143,7 @@ describe('App', () => {
     const sideMenu = result!.queryByTestId('side-menu');
     expect(sideMenu).not.toBeInTheDocument();
     expect(result!.container).not.toHaveTextContent('Generic Page');
-    expect(mock.history.get).toHaveLength(4);
+    expect(mock.history.get).toHaveLength(5);
   });
 
   it('sidemenu not included if user has not accepted the TOS and PRIVACY', async () => {
@@ -147,7 +159,7 @@ describe('App', () => {
     const tosPage = result!.queryByTestId('tos-acceptance-page');
     expect(tosPage).toBeInTheDocument();
     expect(result!.container).not.toHaveTextContent('Generic Page');
-    expect(mock.history.get).toHaveLength(4);
+    expect(mock.history.get).toHaveLength(5);
   });
 
   it('sidemenu items if user is admin', async () => {
@@ -185,7 +197,7 @@ describe('App', () => {
         },
       });
     });
-    expect(mock.history.get).toHaveLength(3);
+    expect(mock.history.get).toHaveLength(4);
     const sideMenu = result!.getByTestId('side-menu');
     const sideMenuItems = sideMenu.querySelectorAll('[data-testid^=sideMenuItem-]');
     // link to delegated notifications + link to app status + link to delegations +
@@ -219,7 +231,7 @@ describe('App', () => {
         },
       });
     });
-    expect(mock.history.get).toHaveLength(2);
+    expect(mock.history.get).toHaveLength(3);
     const sideMenu = result!.getByTestId('side-menu');
     const sideMenuItems = sideMenu.querySelectorAll('[data-testid^=sideMenuItem-]');
     // link to notifications + link to delegated notifications + link to app status +
@@ -254,7 +266,7 @@ describe('App', () => {
         },
       });
     });
-    expect(mock.history.get).toHaveLength(2);
+    expect(mock.history.get).toHaveLength(3);
     const sideMenu = result!.getByTestId('side-menu');
     const sideMenuItems = sideMenu.querySelectorAll('[data-testid^=sideMenuItem-]');
     // link to delegated notifications + link to app status +

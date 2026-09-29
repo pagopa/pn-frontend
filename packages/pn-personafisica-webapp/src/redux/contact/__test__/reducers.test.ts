@@ -68,7 +68,7 @@ describe('Contacts redux state tests', () => {
   });
 
   it('Should be able to update the digital address with legal value (pec to verify)', async () => {
-    const updatedDigitalAddress = { ...digitalLegalAddresses[0], value: 'mario.rossi@mail.it' };
+    const updatedDigitalAddress = { ...digitalLegalAddresses[0], value: 'utente.uno@mail.it' };
     mock
       .onPost(`/bff/v1/addresses/LEGAL/${updatedDigitalAddress.senderId}/PEC`, {
         value: updatedDigitalAddress.value,
@@ -89,7 +89,7 @@ describe('Contacts redux state tests', () => {
   });
 
   it('Should be able to update the digital address with legal value (pec to validate)', async () => {
-    const updatedDigitalAddress = { ...digitalLegalAddresses[0], value: 'mario.rossi@mail.it' };
+    const updatedDigitalAddress = { ...digitalLegalAddresses[0], value: 'utente.uno@mail.it' };
     mock
       .onPost(`/bff/v1/addresses/LEGAL/${updatedDigitalAddress.senderId}/PEC`, {
         value: updatedDigitalAddress.value,
@@ -112,7 +112,7 @@ describe('Contacts redux state tests', () => {
   });
 
   it('Should be able to update the digital address with legal value (pec verified)', async () => {
-    const updatedDigitalAddress = { ...digitalLegalAddresses[0], value: 'mario.rossi@mail.it' };
+    const updatedDigitalAddress = { ...digitalLegalAddresses[0], value: 'utente.uno@mail.it' };
     mock
       .onPost(`/bff/v1/addresses/LEGAL/${updatedDigitalAddress.senderId}/PEC`, {
         value: updatedDigitalAddress.value,
@@ -151,7 +151,7 @@ describe('Contacts redux state tests', () => {
     const emailContact = digitalCourtesyAddresses.find(
       (el) => el.channelType === ChannelType.EMAIL
     );
-    const updatedDigitalAddress = { ...emailContact!, value: 'mario.rossi@mail.it' };
+    const updatedDigitalAddress = { ...emailContact!, value: 'utente.uno@mail.it' };
     mock
       .onPost(`/bff/v1/addresses/COURTESY/${updatedDigitalAddress.senderId}/EMAIL`, {
         value: updatedDigitalAddress.value,
@@ -175,7 +175,7 @@ describe('Contacts redux state tests', () => {
     const emailContact = digitalCourtesyAddresses.find(
       (el) => el.channelType === ChannelType.EMAIL && el.senderId === 'default'
     );
-    const updatedDigitalAddress = { ...emailContact!, value: 'mario.rossi@mail.it' };
+    const updatedDigitalAddress = { ...emailContact!, value: 'utente.uno@mail.it' };
     mock
       .onPost(`/bff/v1/addresses/COURTESY/${updatedDigitalAddress.senderId}/EMAIL`, {
         value: updatedDigitalAddress.value,
@@ -242,7 +242,7 @@ describe('Contacts redux state tests', () => {
   it('Should be able to reset pec validation', async () => {
     const updatedDigitalAddress = {
       ...digitalLegalAddresses[0],
-      value: 'mario.rossi@mail.it',
+      value: 'utente.uno@mail.it',
       senderId: 'default',
     };
     mock
@@ -386,7 +386,7 @@ describe('Contacts redux state tests', () => {
 
   it('should remove special SERCQ, then default SERCQ, then EMAIL (in order)', async () => {
     const sercqDefaultUrl = '/bff/v1/addresses/LEGAL/default/SERCQ_SEND';
-    const sercqTribUrl = '/bff/v1/addresses/LEGAL/tribunale-milano/SERCQ_SEND';
+    const sercqTribUrl = '/bff/v1/addresses/LEGAL/tribunale-test/SERCQ_SEND';
     const emailUrl = '/bff/v1/addresses/COURTESY/default/EMAIL';
 
     mock.onDelete(sercqDefaultUrl).reply(204);
@@ -394,7 +394,7 @@ describe('Contacts redux state tests', () => {
     mock.onDelete(emailUrl).reply(204);
 
     const action = await store.dispatch(
-      removeSercqAndEmail({ senderIds: ['default', 'tribunale-milano'] })
+      removeSercqAndEmail({ senderIds: ['default', 'tribunale-test'] })
     );
 
     expect(action.type).toBe('deleteAddress/removeEmailAndAllSercq/fulfilled');
@@ -418,7 +418,7 @@ describe('Contacts redux state tests', () => {
 
   it('should abort EMAIL deletion if any SERCQ deletion fails', async () => {
     const sercqDefaultUrl = '/bff/v1/addresses/LEGAL/default/SERCQ_SEND';
-    const sercqTribUrl = '/bff/v1/addresses/LEGAL/tribunale-milano/SERCQ_SEND';
+    const sercqTribUrl = '/bff/v1/addresses/LEGAL/tribunale-test/SERCQ_SEND';
     const emailUrl = '/bff/v1/addresses/COURTESY/default/EMAIL';
 
     // One SERCQ fails -> chain must reject and not call EMAIL
@@ -427,7 +427,7 @@ describe('Contacts redux state tests', () => {
     mock.onDelete(emailUrl).reply(204); // should NOT be hit
 
     const action = await store.dispatch(
-      removeSercqAndEmail({ senderIds: ['default', 'tribunale-milano'] })
+      removeSercqAndEmail({ senderIds: ['default', 'tribunale-test'] })
     );
 
     expect(action.type).toBe('deleteAddress/removeEmailAndAllSercq/rejected');

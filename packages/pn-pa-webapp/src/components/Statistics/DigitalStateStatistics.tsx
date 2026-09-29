@@ -3,13 +3,13 @@ import { isArray } from 'lodash-es';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { Paper, SxProps, Typography } from '@mui/material';
+import { Paper, SxProps, Typography, useTheme } from '@mui/material';
 import { PnECharts, PnEChartsProps } from '@pagopa-pn/pn-data-viz';
 
 import {
-  GraphColors,
   IDigitalStateStatistics,
   StatisticsResponseStatus,
+  getGraphColors,
 } from '../../models/Statistics';
 import EmptyStatistics from './EmptyStatistics';
 
@@ -20,6 +20,8 @@ type Props = {
 
 const DigitalStateStatistics: React.FC<Props> = (props) => {
   const { t } = useTranslation(['statistics']);
+  const theme = useTheme();
+  const graphColors = getGraphColors(theme);
 
   const labels = [
     {
@@ -39,15 +41,15 @@ const DigitalStateStatistics: React.FC<Props> = (props) => {
   const statuses = [
     {
       value: props.data[StatisticsResponseStatus.OK],
-      color: GraphColors.blue,
+      color: graphColors.blue,
     },
     {
       value: props.data[StatisticsResponseStatus.KO],
-      color: GraphColors.azure,
+      color: graphColors.azure,
     },
     {
       value: props.data[StatisticsResponseStatus.PROGRESS],
-      color: GraphColors.lightGrey,
+      color: graphColors.lightGrey,
     },
   ];
 

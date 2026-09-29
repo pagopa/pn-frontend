@@ -2,8 +2,8 @@ import React, { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 
-import { Box, Button, Dialog, Typography } from '@mui/material';
-import { IllusError } from '@pagopa/mui-italia';
+import { Box, Dialog, Typography } from '@mui/material';
+import { IllusMIError, MIButton } from '@pagopa/mui-italia';
 
 import { PFLoginEventsType } from '../../models/PFLoginEventsType';
 import { ROUTE_LOGIN } from '../../navigation/routes.const';
@@ -22,12 +22,18 @@ const OneIdentityLoginError: React.FC = () => {
 
   const [searchParams] = useSearchParams();
   const error = searchParams.get('error');
+  const errorDescription = searchParams.get('error_description');
 
   const goToLogin = () => navigate(ROUTE_LOGIN);
 
   useEffect(() => {
+    /**
+     * if error=access_denied, reason is error_description (19,20,21,22,23,25,30) already mapped in Mixpanel
+     * otherwise reason is error (invalid_scope, unsupported_response_type, server_error, invalid_request)
+     */
+    const reason = error === 'access_denied' && errorDescription ? errorDescription : error;
     PFLoginEventStrategyFactory.triggerEvent(PFLoginEventsType.SEND_LOGIN_FAILURE, {
-      reason: error,
+      reason,
     });
     if (!error || !KNOWN_ERROR_CODES.includes(error)) {
       goToLogin();
@@ -37,16 +43,16 @@ const OneIdentityLoginError: React.FC = () => {
   return (
     <Dialog fullScreen={true} open={true} aria-labelledby="dialog-per-messaggi-di-errore">
       <Box m="auto" sx={{ textAlign: 'center', width: '100%' }} id="oneIdentityErrorDialog">
-        <IllusError />
+        <IllusMIError />
         <Typography variant="h5" sx={{ fontSize: '18px', fontWeight: '600' }} mt={5}>
           {t('loginError.title')}
         </Typography>
         <Typography variant="body2" id="message" mb={8}>
           {t('loginError.message')}
         </Typography>
-        <Button id="login-button" variant="contained" onClick={goToLogin}>
+        <MIButton id="login-button" variant="contained" onClick={goToLogin}>
           {t('button.go-to-login', { ns: 'common' })}
-        </Button>
+        </MIButton>
       </Box>
     </Dialog>
   );

@@ -64,6 +64,7 @@
     "legal-date": "Zustellung hinterlegt am",
     "informal-date": "Mitteilung hinterlegt am",
     "legal-disclaimer": "Zustellung über SEND gesendet, die durch Art. 26 des Gesetzesdekrets 76/2020 geregelte Plattform",
+    "informal-disclaimer": "Diese Mitteilung könnte Rechtswirkungen entfalten. Prüfe die Anlagen, falls vorhanden, um mehr zu erfahren.",
     "notification-timeline-section": {
       "title": "Status der Zustellung",
       "aria-label": "Gehe zur Timeline der Zustellung"
@@ -98,7 +99,7 @@
     "disclaimer-link": "Mehr hierzu",
     "pec-unreachable": "Halten Sie Ihr zertifiziertes E-Mail-Postfach (PEC) frei und aktiv, um alles digital zu erhalten!",
     "cancelled": {
-      "message": "Diese Zustellung wurde von der sendenden Körperschaft storniert.",
+      "message": "Diese Zustellung wurde von der Absenderbehörde annulliert, daher sind die Dokumente nicht mehr verfügbar.",
       "cta": "Was muss ich tun?"
     },
     "payment": {
@@ -144,8 +145,8 @@
         "duplicated": "Diese Benachrichtigung wurde bereits bezahlt. Der Status wird in Kürze aktualisiert."
       },
       "error-payment": "Wählen Sie eine Zahlungsaufforderung aus",
-      "error-payment-failed-single": "Es ist ein Problem mit einer Zahlungsaufforderung aufgetreten. Drücken Sie auf Neu laden, um es erneut zu versuchen. Wenn der Fehler weiterhin besteht, kontaktieren Sie den Support.",
-      "error-payment-failed-multiple": "Es ist ein Problem mit mehreren Zahlungsaufforderungen aufgetreten. Drücken Sie auf Neu laden, um es erneut zu versuchen. Wenn der Fehler weiterhin besteht, kontaktieren Sie den Support.",
+      "error-payment-failed-single": "Bei einer Zahlungsaufforderung ist ein Problem aufgetreten. Drücke auf <0>Neu laden</0>, um es erneut zu versuchen. Wenn der Fehler weiterhin besteht, kontaktiere den Support.",
+      "error-payment-failed-multiple": "Bei mehreren Zahlungsaufforderungen ist ein Problem aufgetreten. Drücke auf <0>Neu laden</0>, um es erneut zu versuchen. Wenn der Fehler weiterhin besteht, kontaktiere den Support.",
       "tpp-expired-error-title": "Die Verbindung zur Bank ist abgelaufen.",
       "tpp-expired-error-description": "Um sie wiederherzustellen, greife über die Nachricht, die du in deiner Bank-App erhalten hast, erneut auf diese Benachrichtigung zu."
     },
@@ -154,13 +155,14 @@
       "phone": "Telefonnummer der Körperschaft",
       "email": "E-Mail der Körperschaft",
       "website": "Website der Körperschaft",
-      "copy_phone": "Telefonnummer kopiert"
+      "copy_phone": "Telefonnummer kopieren",
+      "copied_phone": "Telefonnummer kopiert"
     },
     "informal_notification_markdown": {
       "greeting": "Ciao {{recipientDenomination}},",
       "attachments_info": "Per avere maggiori informazioni <0>prendi visione degli allegati,</0> che possono fornirti dettagli importanti.",
       "payment_instructions": "Puoi effettuare il pagamento direttamente premendo <0>Paga</0>. In alternativa, puoi utilizzare l'<0>avviso allegato</0> per saldare l'importo tramite tutti i canali abilitati a pagoPA.",
-      "assistance": "In ogni caso, qualora avessi bisogno di assistenza, <0>contatta {{senderDenomination}} attraverso i suoi canali ufficiali.</0>"
+      "assistance": "In ogni caso, qualora avessi bisogno di assistenza, <0>contatta {{senderDenomination}}</0> attraverso i suoi canali ufficiali."
     },
     "acts_files": {
       "downloadable_acts": "<0>Die Dokumente sind bis zu 120 Tage lang online verfügbar</0> ab dem Datum, an dem die SEND-Benachrichtigung rechtlich wirksam wurde. Speichern Sie sie auf Ihrem Gerät!",
@@ -171,6 +173,10 @@
       "informal_downloadable_acts": "Speichere die Anhänge auf deinem Gerät: Sie sind online bis zu <0>180 Tage ab dem Hinterlegungsdatum</0> verfügbar, das du oben findest!"
     },
     "timeline": {
+      "courtesy-group-label": "Höflichkeitsmitteilungen",
+      "registered-letter": "Einschreiben",
+      "digital-send-fallback": "Digitaler Versand",
+      "unknown-status": "Unbekannter Status",
       "schedule-digital-workflow": "Weiterer digitaler Versand",
       "schedule-digital-workflow-description": "Es wurde ein weiterer Versuch gestartet, die Zustellung digital zu versenden.",
       "schedule-digital-workflow-description-multirecipient": "Es wurde ein weiterer Versuch gestartet, die Zustellung digital an {{name}} {{taxId}} zu versenden.",
@@ -181,9 +187,11 @@
       "send-courtesy-message-description": "Die informelle Benachrichtigung wird per {{type}} gesendet.",
       "send-courtesy-message-description-multirecipient": "Die informelle Benachrichtigung wird per {{type}} an {{name}} {{taxId}} gesendet.",
       "send-digital-domicile-PEC": "Versand per PEC",
+      "send-digital-domicile-PEC-group-label": "PEC",
       "send-digital-domicile-PEC-description": "Versand der Zustellung an die PEC-Adresse {{address}} läuft.",
       "send-digital-domicile-PEC-description-multirecipient": "Versand der Zustellung an die PEC-Adresse {{address}} von {{name}} {{taxId}} läuft.",
       "send-digital-domicile-SERCQ-SEND": "Versand über das digitale Domizil SEND",
+      "send-digital-domicile-SERCQ-SEND-group-label": "Digitales Zustelldomizil SEND",
       "send-digital-domicile-SERCQ-SEND-description": "Die Zustellung wird an das digitale Domizil SEND gesendet.",
       "send-digital-domicile-SERCQ-SEND-description-multirecipient": "Die Zustellung an {{name}} {{taxId}} wird an das digitale Domizil SEND gesendet",
       "send-digital-error": "Versand per PEC-Adresse fehlgeschlagen",
@@ -196,13 +204,20 @@
       "send-digital-success-SERCQ-SEND-description": "Der Versand der Zustellung an das digitale Domizil SEND war erfolgreich.",
       "send-digital-success-SERCQ-SEND-description-multirecipient": "Der Versand der Zustellung an {{name}} {{taxId}} an das digitale Domizil SEND war erfolgreich.",
       "send-simple-registered-letter": "Einfacher Versand per Einschreiben",
+      "send-simple-registered-letter-group-label": "Einfacher Versand per Einschreiben",
       "send-simple-registered-letter-description": "Die Zustellung an die Anschrift {{address}} per einfachem Einschreiben wird gesendet.",
       "send-simple-registered-letter-description-multirecipient": "Die Zustellung an die Anschrift {{address}} von {{name}} {{taxId}} per einfachem Einschreiben wird gesendet.",
       "simple-registered-letter-progess": "Aktualisierung des Versands per Einschreiben",
       "send-analog-domicile-890": "Versand per Einschreiben 890",
+      "send-analog-domicile-890-group-label": "Einschreiben 890",
+      "send-analog-domicile-890-first-attempt-group-label": "Erstes Einschreiben 890",
+      "send-analog-domicile-890-second-attempt-group-label": "Zweites Einschreiben 890",
       "send-analog-domicile-890-description": "Der Versand der Zustellung an die Anschrift {{address}} per Einschreiben 890 hat begonnen.",
       "send-analog-domicile-890-description-multirecipient": "Der Versand der Zustellung an die Anschrift {{address}} von {{name}} {{taxId}} per Einschreiben 890 hat begonnen.",
       "send-analog-domicile-ar": "Einschreiben mit Rückschein",
+      "send-analog-domicile-ar-group-label": "Einschreiben mit Rückschein",
+      "send-analog-domicile-ar-first-attempt-group-label": "Erstes Einschreiben mit Rückschein",
+      "send-analog-domicile-ar-second-attempt-group-label": "Zweites Einschreiben mit Rückschein",
       "send-analog-domicile-ar-description": "Der Versand der Zustellung an die Anschrift {{address}} per Einschreiben mit Rückschein hat begonnen.",
       "send-analog-domicile-ar-description-multirecipient": "Der Versand der Zustellung an die Anschrift {{address}} von {{name}} {{taxId}} per Einschreiben mit Rückschein hat begonnen.",
       "send-digital-progress-error": "Versand per PEC nicht übernommen",
@@ -386,6 +401,7 @@
         "M07": "weil die Adresse nicht existiert",
         "M08": "weil die Adresse unvollständig ist",
         "M09": "aus anderen Gründen",
+        "M10": "weil die Adresse nicht lesbar ist",
         "F01": "wegen Diebstahls des Umschlags",
         "F02": "wegen Verlust des Umschlags",
         "F03": "wegen Beschädigung des Umschlags",
@@ -485,6 +501,7 @@
     "notification-timeline-reworked-description": "Als berichtigt gekennzeichnete Ereignisse ersetzen die vorherigen, als ungültig angegebenen Ereignisse.",
     "reworked-status-valid": "Berichtigtes Ereignis",
     "reworked-status-not-valid": "Ungültiges Ereignis",
+    "reworked-status-group": "Ein oder mehrere korrigierte Ereignisse",
     "cancellation-in-progress": "Annulliert",
     "cancellation-in-progress-tooltip": "Annullierung in Bearbeitung. Der Status wird in Kürze aktualisiert.",
     "cancellation-in-progress-description": "Annullierung in Bearbeitung. Der Status wird in Kürze aktualisiert."

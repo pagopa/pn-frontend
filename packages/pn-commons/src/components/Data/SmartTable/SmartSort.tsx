@@ -8,6 +8,7 @@ import {
   Radio,
   RadioGroup,
 } from '@mui/material';
+import { MIButton } from '@pagopa/mui-italia';
 
 import { CardSort } from '../../../models/PnCard';
 import { Sort } from '../../../models/PnTable';
@@ -124,9 +125,9 @@ const SmartSort = <T,>({
             </Button>
           </CustomMobileDialogAction>
           <CustomMobileDialogAction closeOnClick>
-            <Button onClick={handleCancelSort} data-testid="cancelButton">
+            <MIButton onClick={handleCancelSort} data-testid="cancelButton">
               {cancelLabel}
-            </Button>
+            </MIButton>
           </CustomMobileDialogAction>
         </DialogActions>
       </CustomMobileDialogContent>

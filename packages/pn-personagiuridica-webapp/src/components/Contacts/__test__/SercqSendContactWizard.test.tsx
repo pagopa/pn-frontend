@@ -60,13 +60,13 @@ describe('SercqSendContactWizard', () => {
     expect(getByText(initialAddresses[1].value));
 
     const icons = container.querySelectorAll(
-      'svg[data-testid="CheckCircleIcon"], svg[data-testid="ErrorIcon"]'
+      'svg[data-testid="CheckCircleRoundedIcon"], svg[data-testid="ErrorRoundedIcon"]'
     );
 
     const emailIcon = icons[0];
     const smsIcon = icons[1];
-    expect(emailIcon).toHaveAttribute('data-testid', 'CheckCircleIcon');
-    expect(smsIcon).toHaveAttribute('data-testid', 'CheckCircleIcon');
+    expect(emailIcon).toHaveAttribute('data-testid', 'CheckCircleRoundedIcon');
+    expect(smsIcon).toHaveAttribute('data-testid', 'CheckCircleRoundedIcon');
 
     expect(getByText(`${labelPrefix}.disclaimer-enable`)).toBeInTheDocument();
 
@@ -103,13 +103,13 @@ describe('SercqSendContactWizard', () => {
     expect(getByText(initialAddresses[0].value));
 
     const icons = container.querySelectorAll(
-      'svg[data-testid="CheckCircleIcon"], svg[data-testid="ErrorIcon"]'
+      'svg[data-testid="CheckCircleRoundedIcon"], svg[data-testid="ErrorRoundedIcon"]'
     );
     expect(icons.length).toBe(2);
     const emailIcon = icons[0];
     const smsIcon = icons[1];
-    expect(emailIcon).toHaveAttribute('data-testid', 'ErrorIcon');
-    expect(smsIcon).toHaveAttribute('data-testid', 'CheckCircleIcon');
+    expect(emailIcon).toHaveAttribute('data-testid', 'ErrorRoundedIcon');
+    expect(smsIcon).toHaveAttribute('data-testid', 'CheckCircleRoundedIcon');
 
     fireEvent.click(emailLink);
 
@@ -145,13 +145,13 @@ describe('SercqSendContactWizard', () => {
     });
 
     const icons = container.querySelectorAll(
-      'svg[data-testid="CheckCircleIcon"], svg[data-testid="ErrorIcon"]'
+      'svg[data-testid="CheckCircleRoundedIcon"], svg[data-testid="ErrorRoundedIcon"]'
     );
     expect(icons.length).toBe(2);
     const emailIcon = icons[0];
     const smsIcon = icons[1];
-    expect(emailIcon).toHaveAttribute('data-testid', 'CheckCircleIcon');
-    expect(smsIcon).toHaveAttribute('data-testid', 'ErrorIcon');
+    expect(emailIcon).toHaveAttribute('data-testid', 'CheckCircleRoundedIcon');
+    expect(smsIcon).toHaveAttribute('data-testid', 'ErrorRoundedIcon');
 
     fireEvent.click(smsLink);
 
@@ -187,13 +187,13 @@ describe('SercqSendContactWizard', () => {
     });
 
     const icons = container.querySelectorAll(
-      'svg[data-testid="CheckCircleIcon"], svg[data-testid="ErrorIcon"]'
+      'svg[data-testid="CheckCircleRoundedIcon"], svg[data-testid="ErrorRoundedIcon"]'
     );
     expect(icons.length).toBe(2);
     const emailIcon = icons[0];
     const smsIcon = icons[1];
-    expect(emailIcon).toHaveAttribute('data-testid', 'CheckCircleIcon');
-    expect(smsIcon).toHaveAttribute('data-testid', 'ErrorIcon');
+    expect(emailIcon).toHaveAttribute('data-testid', 'CheckCircleRoundedIcon');
+    expect(smsIcon).toHaveAttribute('data-testid', 'ErrorRoundedIcon');
 
     const activateButton = getByTestId('activateButton');
 

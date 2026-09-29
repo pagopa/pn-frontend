@@ -3,6 +3,176 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.26.1](https://github.com/pagopa/pn-frontend/compare/v2.26.1-RC.0...v2.26.1) (2026-09-21)
+
+**Note:** Version bump only for package @pagopa-pn/pn-personafisica-login
+
+
+
+
+
+## [2.26.1-RC.0](https://github.com/pagopa/pn-frontend/compare/v2.26.0...v2.26.1-RC.0) (2026-09-18)
+
+### Bug Fixes
+
+* **PN-21556:** removed blue background from spid selection buttons ([#2060](https://github.com/pagopa/pn-frontend/issues/2060)) ([8b0ccd6](https://github.com/pagopa/pn-frontend/commit/8b0ccd6f70e1fbf0c086f8a5a285b5a50f26c658))
+
+
+## [2.25.1](https://fbianchicodermine-GitHub/pagopa/pn-frontend/compare/v2.25.1-RC.0...v2.25.1) (2026-09-16)
+
+**Note:** Version bump only for package @pagopa-pn/pn-personafisica-login
+
+
+
+
+
+## [2.25.1-RC.0](https://fbianchicodermine-GitHub/pagopa/pn-frontend/compare/v2.25.0...v2.25.1-RC.0) (2026-09-15)
+
+### Bug Fixes
+
+* **PN-21519:** pass error code in SEND_LOGIN_FAILURE if access_denied ([#2052](https://fbianchicodermine-GitHub/pagopa/pn-frontend/issues/2052)) ([819b077](https://fbianchicodermine-GitHub/pagopa/pn-frontend/commits/819b07746b8435da74fea7ea900c45c5d6f2d424))
+
+
+# [2.26.0-RC.6](https://github.com/pagopa/pn-frontend/compare/v2.26.0-RC.5...v2.26.0-RC.6) (2026-09-14)
+
+### Bug Fixes
+
+* **PN-21493:** adjusted timeline layout ([#2048](https://github.com/pagopa/pn-frontend/issues/2048)) ([c1aa0cf](https://github.com/pagopa/pn-frontend/commit/c1aa0cf60ccf91a360b815abfb4d439a80c20df9))
+
+
+# [2.26.0-RC.5](https://fbianchicodermine-GitHub/pagopa/pn-frontend/compare/v2.26.0-RC.4...v2.26.0-RC.5) (2026-09-11)
+
+**Note:** Version bump only for package @pagopa-pn/pn-personafisica-login
+
+
+
+
+
+# [2.26.0-RC.3](https://github.com/pagopa/pn-frontend/compare/v2.26.0-RC.2...v2.26.0-RC.3) (2026-09-09)
+
+### Bug Fixes
+
+* **PN-21428:** fix padding in app io smart app banner ([#2036](https://github.com/pagopa/pn-frontend/issues/2036)) ([1425056](https://github.com/pagopa/pn-frontend/commit/1425056dfa1719eba787f0943a8a0c21d392430a))
+
+### Features
+
+* **PN-20767:** fix colors and add alerts ([#2032](https://github.com/pagopa/pn-frontend/issues/2032)) ([1d7f570](https://github.com/pagopa/pn-frontend/commit/1d7f570438ddcae07272a56a88dfc0f86a55e3ad))
+
+
+# [2.26.0-RC.1](https://github.com/pagopa/pn-frontend/compare/v2.26.0-RC.0...v2.26.0-RC.1) (2026-09-04)
+
+### Features
+
+* **PN-20767:** add new illustrations ([#2029](https://github.com/pagopa/pn-frontend/issues/2029)) ([41cda9c](https://github.com/pagopa/pn-frontend/commit/41cda9cb7eb01142445da6103e1d4a0caf242c05))
+* **PN-21141:** add MIBreadcrumbs on portals ([#2015](https://github.com/pagopa/pn-frontend/issues/2015)) ([0dc70c7](https://github.com/pagopa/pn-frontend/commit/0dc70c7297e063cdf302ff970d5314b060dc9918))
+
+
+# [2.26.0-RC.0](https://github.com/pagopa/pn-frontend/compare/v2.25.0...v2.26.0-RC.0) (2026-09-01)
+
+### Features
+
+* **PN-20865:** dismiss io.italia.it CDN for App IO download links ([43e2e17](https://github.com/pagopa/pn-frontend/commit/43e2e177b25a120673b36372e5980221b32a868a))
+
+
+# [2.25.0](https://github.com/pagopa/pn-frontend/compare/v2.24.2...v2.25.0) (2026-08-06)
+
+
+
+# [2.25.0-RC.3](https://github.com/pagopa/pn-frontend/compare/v2.25.0-RC.2...v2.25.0-RC.3) (2026-08-04)
+
+
+### Bug Fixes
+
+* **PN-20931:** preserve PG unread notifications indicator after refresh ([#1980](https://github.com/pagopa/pn-frontend/issues/1980)) ([57804fd](https://github.com/pagopa/pn-frontend/commit/57804fddd5bfbd0127b829eeab19a90385b183f1))
+* **PN-20933:** PG - added missed localization for not available tag ([#1978](https://github.com/pagopa/pn-frontend/issues/1978)) ([8884762](https://github.com/pagopa/pn-frontend/commit/88847622dc1984b50379e509e57ed11079a79673))
+
+
+
+# [2.25.0-RC.2](https://github.com/pagopa/pn-frontend/compare/v2.25.0-RC.1...v2.25.0-RC.2) (2026-07-30)
+
+
+### Features
+
+* **PN-20879:** serve the OneIdentity login flow from the institutional /login route ([#1968](https://github.com/pagopa/pn-frontend/issues/1968)) ([f93ab98](https://github.com/pagopa/pn-frontend/commit/f93ab98f5ae247acf8e0cffca908ebb29748d6ae))
+
+
+
+# [2.25.0-RC.0](https://github.com/pagopa/pn-frontend/compare/v2.24.1...v2.25.0-RC.0) (2026-07-24)
+
+
+### Bug Fixes
+
+* **PN-20130:** use children instead of description on MIAlert  ([#1934](https://github.com/pagopa/pn-frontend/issues/1934)) ([2350d4f](https://github.com/pagopa/pn-frontend/commit/2350d4f16c3f1d615af5074e034783d1aeebb37d))
+* **PN-20646:** add missing login assistance translation ([#1950](https://github.com/pagopa/pn-frontend/issues/1950)) ([a1df1b4](https://github.com/pagopa/pn-frontend/commit/a1df1b4fbc8fb2d7cb7414664c6ab92af0d03ac5))
+
+
+### Features
+
+* **PN-20243:** implemented MIBoxedModule ([#1955](https://github.com/pagopa/pn-frontend/issues/1955)) ([e7860c7](https://github.com/pagopa/pn-frontend/commit/e7860c7288fdfff889ed69d99f0335a1580f4ded))
+
+
+
+
+
+# [2.25.0-RC.3](https://github.com/pagopa/pn-frontend/compare/v2.25.0-RC.2...v2.25.0-RC.3) (2026-08-04)
+
+
+### Bug Fixes
+
+* **PN-20931:** preserve PG unread notifications indicator after refresh ([#1980](https://github.com/pagopa/pn-frontend/issues/1980)) ([57804fd](https://github.com/pagopa/pn-frontend/commit/57804fddd5bfbd0127b829eeab19a90385b183f1))
+* **PN-20933:** PG - added missed localization for not available tag ([#1978](https://github.com/pagopa/pn-frontend/issues/1978)) ([8884762](https://github.com/pagopa/pn-frontend/commit/88847622dc1984b50379e509e57ed11079a79673))
+
+
+
+
+
+# [2.25.0-RC.2](https://fbianchicodermine-github/pagopa/pn-frontend/compare/v2.25.0-RC.1...v2.25.0-RC.2) (2026-07-30)
+
+
+### Features
+
+* **PN-20879:** serve the OneIdentity login flow from the institutional /login route ([#1968](https://fbianchicodermine-github/pagopa/pn-frontend/issues/1968)) ([f93ab98](https://fbianchicodermine-github/pagopa/pn-frontend/commit/f93ab98f5ae247acf8e0cffca908ebb29748d6ae))
+
+
+
+
+
+# [2.25.0](https://github.com/pagopa/pn-frontend/compare/v2.24.1...v2.25.0) (2026-07-24)
+
+
+### Bug Fixes
+
+* **PN-20130:** use children instead of description on MIAlert  ([#1934](https://github.com/pagopa/pn-frontend/issues/1934)) ([2350d4f](https://github.com/pagopa/pn-frontend/commit/2350d4f16c3f1d615af5074e034783d1aeebb37d))
+* **PN-20646:** add missing login assistance translation ([#1950](https://github.com/pagopa/pn-frontend/issues/1950)) ([a1df1b4](https://github.com/pagopa/pn-frontend/commit/a1df1b4fbc8fb2d7cb7414664c6ab92af0d03ac5))
+
+
+### Features
+
+* **PN-20243:** implemented MIBoxedModule ([#1955](https://github.com/pagopa/pn-frontend/issues/1955)) ([e7860c7](https://github.com/pagopa/pn-frontend/commit/e7860c7288fdfff889ed69d99f0335a1580f4ded))
+
+
+
+
+
+## [2.24.2](https://github.com/pagopa/pn-frontend/compare/v2.24.2-RC.0...v2.24.2) (2026-08-06)
+
+**Note:** Version bump only for package @pagopa-pn/pn-personafisica-login
+
+
+
+
+
+## [2.24.2-RC.0](https://github.com/pagopa/pn-frontend/compare/v2.24.1...v2.24.2-RC.0) (2026-08-06)
+
+
+### Features
+
+* **PN-20886:** implemented statistics maintenance alert ([#1990](https://github.com/pagopa/pn-frontend/issues/1990)) ([4760e5e](https://github.com/pagopa/pn-frontend/commit/4760e5e72daa91d636e2f9e28b9094df45bb1114))
+
+
+
+
+
 ## [2.24.1](https://fbianchicodermine-github/pagopa/pn-frontend/compare/v2.24.1-RC.0...v2.24.1) (2026-07-08)
 
 **Note:** Version bump only for package @pagopa-pn/pn-personafisica-login

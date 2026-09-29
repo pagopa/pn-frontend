@@ -3,6 +3,336 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.26.1](https://github.com/pagopa/pn-frontend/compare/v2.26.1-RC.0...v2.26.1) (2026-09-21)
+
+**Note:** Version bump only for package pn-frontend
+
+
+
+
+
+## [2.26.1-RC.0](https://github.com/pagopa/pn-frontend/compare/v2.26.0...v2.26.1-RC.0) (2026-09-18)
+
+### Bug Fixes
+
+* **PN-21556:** removed blue background from spid selection buttons ([#2060](https://github.com/pagopa/pn-frontend/issues/2060)) ([8b0ccd6](https://github.com/pagopa/pn-frontend/commit/8b0ccd6f70e1fbf0c086f8a5a285b5a50f26c658))
+
+
+## [2.25.1](https://fbianchicodermine-GitHub/pagopa/pn-frontend/compare/v2.25.1-RC.0...v2.25.1) (2026-09-16)
+
+**Note:** Version bump only for package pn-frontend
+
+
+
+
+
+## [2.25.1-RC.0](https://fbianchicodermine-GitHub/pagopa/pn-frontend/compare/v2.25.0...v2.25.1-RC.0) (2026-09-15)
+
+### Bug Fixes
+
+* **PN-21519:** pass error code in SEND_LOGIN_FAILURE if access_denied ([#2052](https://fbianchicodermine-GitHub/pagopa/pn-frontend/issues/2052)) ([819b077](https://fbianchicodermine-GitHub/pagopa/pn-frontend/commits/819b07746b8435da74fea7ea900c45c5d6f2d424))
+
+
+# [2.26.0-RC.6](https://github.com/pagopa/pn-frontend/compare/v2.26.0-RC.5...v2.26.0-RC.6) (2026-09-14)
+
+### Bug Fixes
+
+* **PN-21493:** adjusted timeline layout ([#2048](https://github.com/pagopa/pn-frontend/issues/2048)) ([c1aa0cf](https://github.com/pagopa/pn-frontend/commit/c1aa0cf60ccf91a360b815abfb4d439a80c20df9))
+
+
+# [2.26.0-RC.5](https://fbianchicodermine-GitHub/pagopa/pn-frontend/compare/v2.26.0-RC.4...v2.26.0-RC.5) (2026-09-11)
+
+**Note:** Version bump only for package pn-frontend
+
+
+
+
+
+# [2.26.0-RC.4](https://github.com/pagopa/pn-frontend/compare/v2.26.0-RC.3...v2.26.0-RC.4) (2026-09-10)
+
+### Bug Fixes
+
+* **PN-21465:** show event description when timeline status differs from DELIVERING ([#2045](https://github.com/pagopa/pn-frontend/issues/2045)) ([d6af887](https://github.com/pagopa/pn-frontend/commit/d6af887b186aab3b8a6f174eb48e6b240d3815e8))
+
+
+# [2.26.0-RC.3](https://github.com/pagopa/pn-frontend/compare/v2.26.0-RC.2...v2.26.0-RC.3) (2026-09-09)
+
+### Bug Fixes
+
+* **PN-20948:** fix boldness in sender contacts ([#2035](https://github.com/pagopa/pn-frontend/issues/2035)) ([cc90bba](https://github.com/pagopa/pn-frontend/commit/cc90bba547167237c3dae7d5757665c8e256902c))
+* **PN-21381:** update content in reworked label ([#2039](https://github.com/pagopa/pn-frontend/issues/2039)) ([6ef37ad](https://github.com/pagopa/pn-frontend/commit/6ef37adb252fa73e21bc9099fb9702dcbb6c0af0))
+* **PN-21428:** fix padding in app io smart app banner ([#2036](https://github.com/pagopa/pn-frontend/issues/2036)) ([1425056](https://github.com/pagopa/pn-frontend/commit/1425056dfa1719eba787f0943a8a0c21d392430a))
+
+### Features
+
+* **PN-20767:** fix colors and add alerts ([#2032](https://github.com/pagopa/pn-frontend/issues/2032)) ([1d7f570](https://github.com/pagopa/pn-frontend/commit/1d7f570438ddcae07272a56a88dfc0f86a55e3ad))
+
+
+# [2.26.0-RC.1](https://github.com/pagopa/pn-frontend/compare/v2.26.0-RC.0...v2.26.0-RC.1) (2026-09-04)
+
+### Bug Fixes
+
+* **PN-21374, PN-21339:** show recipient label on multi recipient notifications and fix background color of timeline page ([#2030](https://github.com/pagopa/pn-frontend/issues/2030)) ([cf2fdbc](https://github.com/pagopa/pn-frontend/commit/cf2fdbca3593bba169de9a9950e854c76d1b4842))
+
+### Features
+
+* **PN-20767:** add new illustrations ([#2029](https://github.com/pagopa/pn-frontend/issues/2029)) ([41cda9c](https://github.com/pagopa/pn-frontend/commit/41cda9cb7eb01142445da6103e1d4a0caf242c05))
+* **PN-21141:** add MIBreadcrumbs on portals ([#2015](https://github.com/pagopa/pn-frontend/issues/2015)) ([0dc70c7](https://github.com/pagopa/pn-frontend/commit/0dc70c7297e063cdf302ff970d5314b060dc9918))
+
+
+# [2.26.0-RC.0](https://github.com/pagopa/pn-frontend/compare/v2.25.0...v2.26.0-RC.0) (2026-09-01)
+
+### Bug Fixes
+
+* **PN-20351:** timeline mobile layout ([#2026](https://github.com/pagopa/pn-frontend/issues/2026)) ([a85ce95](https://github.com/pagopa/pn-frontend/commit/a85ce952834509b73bbe518e2c9c9fd295ec04a2))
+* **PN-20767:** apply wrap to all status chips ([73df114](https://github.com/pagopa/pn-frontend/commit/73df114aa7e821379a695368326a8bdbaefa3ff8))
+* **PN-20767:** status chp wrap value instead of truncate ([1772339](https://github.com/pagopa/pn-frontend/commit/1772339c0fbfdc88c6a4074f80e4c377e8797d20))
+* **PN-20885, PN-20959:** mobile layout and menu drawer ([#2002](https://github.com/pagopa/pn-frontend/issues/2002)) ([0c3b95f](https://github.com/pagopa/pn-frontend/commit/0c3b95f3189a49a7425602ac9ddee8137187d2e6))
+* **PN-20885:** fix boldness in desktop dashboard page ([#2013](https://github.com/pagopa/pn-frontend/issues/2013)) ([e2df404](https://github.com/pagopa/pn-frontend/commit/e2df40497462ffd0b1c365fc4642d46d91f422c7))
+* **PN-20948:** update weight and color in SenderContact ([464b62d](https://github.com/pagopa/pn-frontend/commit/464b62d5710fc3933ca755daf7e797f973139618))
+* **PN-20958:** add break word to sender denomination in abstract paper ([#2011](https://github.com/pagopa/pn-frontend/issues/2011)) ([9f5e601](https://github.com/pagopa/pn-frontend/commit/9f5e601650bc30b739257763548e44f2943bf7ea))
+* **PN-20958:** fix long names in drawer ([#2010](https://github.com/pagopa/pn-frontend/issues/2010)) ([2b8c126](https://github.com/pagopa/pn-frontend/commit/2b8c126056e17e2341705aa8eb8aba269f9d8ff6))
+* **PN-20960:** fix back label from detail ([#2006](https://github.com/pagopa/pn-frontend/issues/2006)) ([cc8e49a](https://github.com/pagopa/pn-frontend/commit/cc8e49a13960adfa8db68cdcd732e861e23bc97b))
+* **PN-20966:** resize column in desktop notifications table ([#2003](https://github.com/pagopa/pn-frontend/issues/2003)) ([7e7cd32](https://github.com/pagopa/pn-frontend/commit/7e7cd3210d2aaf1008d38fad7e501cc67ed520c5))
+* **PN-20974:** update format in static section ([#2009](https://github.com/pagopa/pn-frontend/issues/2009)) ([01bc734](https://github.com/pagopa/pn-frontend/commit/01bc734da05f0c7e5a9897c2c1560031d0cdfc47))
+* **PN-21142:** add dot to DL ([41c0717](https://github.com/pagopa/pn-frontend/commit/41c0717015bbcfd299b5573ac59de551064547b5))
+* **PN-21196:** add clear icon in communication type field ([#2007](https://github.com/pagopa/pn-frontend/issues/2007)) ([548f816](https://github.com/pagopa/pn-frontend/commit/548f81643a3b6b37bb039fb9e3e2df47beabf169))
+
+### Features
+
+* **PN-20350:** PA - Rework timeline layout ([#1963](https://github.com/pagopa/pn-frontend/issues/1963)) ([f5a61ac](https://github.com/pagopa/pn-frontend/commit/f5a61acd07898191beef208320216f0cb8f86c05))
+* **PN-20351:** PF/PG - Rework timeline layout ([#2004](https://github.com/pagopa/pn-frontend/issues/2004)) ([a71c245](https://github.com/pagopa/pn-frontend/commit/a71c2453b8829753273fc044ef90261e0f4c7e14))
+* **PN-20356:** Implementation mix panel event for PF ([#1987](https://github.com/pagopa/pn-frontend/issues/1987)) ([15c0c5f](https://github.com/pagopa/pn-frontend/commit/15c0c5f769b0a187f215d5d004d4ab0f09a912ee))
+* **PN-20357:** PG - Add Mixpanel tracking for ComBo notifications ([#1995](https://github.com/pagopa/pn-frontend/issues/1995)) ([eb07fb8](https://github.com/pagopa/pn-frontend/commit/eb07fb8d57cecb05b50117b5a25bd67d7828fe22))
+* **PN-20778:** use aarDocumentAvailable for AAR download availability ([#2008](https://github.com/pagopa/pn-frontend/issues/2008)) ([7650e43](https://github.com/pagopa/pn-frontend/commit/7650e437463e7ca292d7fedbb6c29d2f703b795a))
+* **PN-20865:** dismiss io.italia.it CDN for App IO download links ([43e2e17](https://github.com/pagopa/pn-frontend/commit/43e2e177b25a120673b36372e5980221b32a868a))
+
+
+# [2.25.0](https://github.com/pagopa/pn-frontend/compare/v2.24.2...v2.25.0) (2026-08-06)
+
+
+
+# [2.25.0-RC.5](https://github.com/pagopa/pn-frontend/compare/v2.25.0-RC.4...v2.25.0-RC.5) (2026-08-05)
+
+
+### Bug Fixes
+
+* **PN-21019:** redirects to the notifications list when clicking the breadcrumb on the timeline page ([#1989](https://github.com/pagopa/pn-frontend/issues/1989)) ([70ee2d3](https://github.com/pagopa/pn-frontend/commit/70ee2d376ddcb6dea275b0e50b6a0896044a9d9a))
+* **PN-21037:** add link to informal notification and update cancelled content ([#1988](https://github.com/pagopa/pn-frontend/issues/1988)) ([b17d12d](https://github.com/pagopa/pn-frontend/commit/b17d12d059a9cb46e6805b8922d7c47f5d9669b7))
+
+
+
+# [2.25.0-RC.4](https://github.com/pagopa/pn-frontend/compare/v2.25.0-RC.3...v2.25.0-RC.4) (2026-08-05)
+
+
+### Bug Fixes
+
+* **PN-21019:** redirects to the notifications list when clicking the breadcrumb on the timeline page ([#1985](https://github.com/pagopa/pn-frontend/issues/1985)) ([6044985](https://github.com/pagopa/pn-frontend/commit/604498571b1db16aa119f77073e18c38821b43cd))
+* **PN-21027:** cancel button full width on mobile devices ([#1984](https://github.com/pagopa/pn-frontend/issues/1984)) ([e547048](https://github.com/pagopa/pn-frontend/commit/e547048929ad99f80f23385828f9ec2a335e2d91))
+
+
+
+# [2.25.0-RC.3](https://github.com/pagopa/pn-frontend/compare/v2.25.0-RC.2...v2.25.0-RC.3) (2026-08-04)
+
+
+### Bug Fixes
+
+* **PN-20849:** resolve PA notification list issues ([#1979](https://github.com/pagopa/pn-frontend/issues/1979)) ([c415550](https://github.com/pagopa/pn-frontend/commit/c415550b422e1678dbfefde7964ae3894fe6661a))
+* **PN-20854:** resolve PA notification detail issues ([#1975](https://github.com/pagopa/pn-frontend/issues/1975)) ([5abb8a8](https://github.com/pagopa/pn-frontend/commit/5abb8a813e34b728da60af9b1dcbcd9140e37167))
+* **PN-20931:** preserve PG unread notifications indicator after refresh ([#1980](https://github.com/pagopa/pn-frontend/issues/1980)) ([57804fd](https://github.com/pagopa/pn-frontend/commit/57804fddd5bfbd0127b829eeab19a90385b183f1))
+* **PN-20933:** PG - added missed localization for not available tag ([#1978](https://github.com/pagopa/pn-frontend/issues/1978)) ([8884762](https://github.com/pagopa/pn-frontend/commit/88847622dc1984b50379e509e57ed11079a79673))
+* **PN-20934:** fix logo link ([#1982](https://github.com/pagopa/pn-frontend/issues/1982)) ([be32592](https://github.com/pagopa/pn-frontend/commit/be325926e35111329be27dbe05fa983089295ba5))
+* **PN-20934:** update logo and spaces in Abstract Paper ([#1983](https://github.com/pagopa/pn-frontend/issues/1983)) ([6d8c50e](https://github.com/pagopa/pn-frontend/commit/6d8c50e4058eb97542b4ff1f7f4ea81245d82618))
+* **PN-20939:** show onboarding when the unread notifications are only those in EFFECTIVE_DATE ([#1977](https://github.com/pagopa/pn-frontend/issues/1977)) ([2341fce](https://github.com/pagopa/pn-frontend/commit/2341fce87f5b06b5d1b969b23c226880f8e341d5))
+* **PN-20950:** show F24 section when there are only payments of this type ([#1976](https://github.com/pagopa/pn-frontend/issues/1976)) ([e015327](https://github.com/pagopa/pn-frontend/commit/e0153276baaecece226b561bf0ad269375f57774))
+
+
+
+# [2.25.0-RC.2](https://github.com/pagopa/pn-frontend/compare/v2.25.0-RC.1...v2.25.0-RC.2) (2026-07-30)
+
+
+### Bug Fixes
+
+* **PN-20748:** update content and tag ([#1970](https://github.com/pagopa/pn-frontend/issues/1970)) ([5447854](https://github.com/pagopa/pn-frontend/commit/54478544a9512e6a19e615e08d5712cf947eb0aa))
+* **PN-20848:** Add missing static sections to PF informal notification details ([#1969](https://github.com/pagopa/pn-frontend/issues/1969)) ([d5debf5](https://github.com/pagopa/pn-frontend/commit/d5debf5f35e5ec0f011e6fe3d17af0c7f6176f51))
+* **PN-20900:** fix notification list loading flow and empty states ([#1973](https://github.com/pagopa/pn-frontend/issues/1973)) ([f16d1bc](https://github.com/pagopa/pn-frontend/commit/f16d1bc65d1e26bd2ede2b08493ef5a052309b87))
+
+
+### Features
+
+* **PN-20879:** serve the OneIdentity login flow from the institutional /login route ([#1968](https://github.com/pagopa/pn-frontend/issues/1968)) ([f93ab98](https://github.com/pagopa/pn-frontend/commit/f93ab98f5ae247acf8e0cffca908ebb29748d6ae))
+
+
+
+# [2.25.0-RC.1](https://github.com/pagopa/pn-frontend/compare/v2.25.0-RC.0...v2.25.0-RC.1) (2026-07-27)
+
+
+### Bug Fixes
+
+* **PN-20240:** fix PA notification detail recipients rendering ([#1966](https://github.com/pagopa/pn-frontend/issues/1966)) ([4a61efd](https://github.com/pagopa/pn-frontend/commit/4a61efdd82ccbccb27e5a77eb8566c1179fc9884))
+* **PN-20781:** hide "new attachment" timeline message when the analog event has no attachments ([#1958](https://github.com/pagopa/pn-frontend/issues/1958)) ([759d10c](https://github.com/pagopa/pn-frontend/commit/759d10cc10b8182fe0b367385c3ca3b65ebfc6d9))
+* **PN-20828:** align PF notifications title with navigation labels ([#1967](https://github.com/pagopa/pn-frontend/issues/1967)) ([7003660](https://github.com/pagopa/pn-frontend/commit/7003660c8777630014fd8f751e04f44108fecf21))
+
+
+
+# [2.25.0-RC.0](https://github.com/pagopa/pn-frontend/compare/v2.24.1...v2.25.0-RC.0) (2026-07-24)
+
+
+### Bug Fixes
+
+* **A2-2339:** improve mobile contact accordion a11y ([#1930](https://github.com/pagopa/pn-frontend/issues/1930)) ([937d4da](https://github.com/pagopa/pn-frontend/commit/937d4da0c0e14b0cba1689e4255869d134aa349f))
+* **PN-20130:** use children instead of description on MIAlert  ([#1934](https://github.com/pagopa/pn-frontend/issues/1934)) ([2350d4f](https://github.com/pagopa/pn-frontend/commit/2350d4f16c3f1d615af5074e034783d1aeebb37d))
+* **PN-20241:** moved domicile banner below title and update pn-bff commitId ([#1959](https://github.com/pagopa/pn-frontend/issues/1959)) ([01d39de](https://github.com/pagopa/pn-frontend/commit/01d39de912e16c0cdec0eea5638bc9f727526890))
+* **PN-20241:** update empty states UI for recipient users ([#1942](https://github.com/pagopa/pn-frontend/issues/1942)) ([7c9011a](https://github.com/pagopa/pn-frontend/commit/7c9011ad5b394d49f7fa14872f39d8c954e6145c))
+* **PN-20242:** adjust AbstractPaper top margin for informal notifications ([#1961](https://github.com/pagopa/pn-frontend/issues/1961)) ([6f12a21](https://github.com/pagopa/pn-frontend/commit/6f12a218e9912d4ebe3e85e58b83424c84003ab7))
+* **PN-20243:** use filedAt instead of sentAt date and resolve some typescript errors ([#1951](https://github.com/pagopa/pn-frontend/issues/1951)) ([851189b](https://github.com/pagopa/pn-frontend/commit/851189bb041acbe3b18e3872e42e383e0112e65d))
+* **PN-20645:** fix link "security" in footer ([#1949](https://github.com/pagopa/pn-frontend/issues/1949)) ([96d9f7c](https://github.com/pagopa/pn-frontend/commit/96d9f7cf59eb019c90ff764e84a9a8a270ebba9a))
+* **PN-20646:** add missing login assistance translation ([#1950](https://github.com/pagopa/pn-frontend/issues/1950)) ([a1df1b4](https://github.com/pagopa/pn-frontend/commit/a1df1b4fbc8fb2d7cb7414664c6ab92af0d03ac5))
+
+
+### Features
+
+* **PN-20239:** Align PA notifications list with new layout ([#1953](https://github.com/pagopa/pn-frontend/issues/1953)) ([910bcf7](https://github.com/pagopa/pn-frontend/commit/910bcf7bf2d4453a9f5f07f7db5528827b1a5c96))
+* **PN-20240:** Update PA notification detail layout for legal communications ([#1962](https://github.com/pagopa/pn-frontend/issues/1962)) ([d156cc3](https://github.com/pagopa/pn-frontend/commit/d156cc39a41aa4be33920e65d77fd6ccc4af888f))
+* **PN-20241:** add new notifications badge on side menu ([#1944](https://github.com/pagopa/pn-frontend/issues/1944)) ([620c3df](https://github.com/pagopa/pn-frontend/commit/620c3df8eac6c2a6df8b9860f7e44f07405b8452))
+* **PN-20241:** implement filter by notification type ([#1956](https://github.com/pagopa/pn-frontend/issues/1956)) ([08818c5](https://github.com/pagopa/pn-frontend/commit/08818c5a13b83ff1bfdb0f894ec8f298b8307b20))
+* **PN-20241:** update notification list for recipient users ([#1936](https://github.com/pagopa/pn-frontend/issues/1936)) ([186b0e0](https://github.com/pagopa/pn-frontend/commit/186b0e05b7842c88acd6f7f23e45ccce234526f4))
+* **PN-20242:** improve sender contacts rendering for PF and PG ([#1960](https://github.com/pagopa/pn-frontend/issues/1960)) ([682dd31](https://github.com/pagopa/pn-frontend/commit/682dd31c594c13dc82a1f60164a2223c5b87f0dc))
+* **PN-20243:** implemented MIBoxedModule ([#1955](https://github.com/pagopa/pn-frontend/issues/1955)) ([e7860c7](https://github.com/pagopa/pn-frontend/commit/e7860c7288fdfff889ed69d99f0335a1580f4ded))
+* **PN-20243:** PF - rework legal notification detail ([#1928](https://github.com/pagopa/pn-frontend/issues/1928)) ([f854760](https://github.com/pagopa/pn-frontend/commit/f854760b6cd6d3c741f79ec57fe8ba58445040bf))
+* **PN-20560:** Add FIMS token exchange flow to PF ([#1945](https://github.com/pagopa/pn-frontend/issues/1945)) ([2038b58](https://github.com/pagopa/pn-frontend/commit/2038b58651de0120640371588a0993d40d940739))
+* **PN-20698:** PG - rework notification detail page ([#1954](https://github.com/pagopa/pn-frontend/issues/1954)) ([46a2697](https://github.com/pagopa/pn-frontend/commit/46a26979d1363883c957fde87c75294e875eee20))
+* **PN-20748:** [legal-PF/PG] update content ([#1957](https://github.com/pagopa/pn-frontend/issues/1957)) ([a883f44](https://github.com/pagopa/pn-frontend/commit/a883f44728071349e355eefff833801e98c15855))
+
+
+
+
+
+# [2.25.0-RC.5](https://github.com/pagopa/pn-frontend/compare/v2.25.0-RC.4...v2.25.0-RC.5) (2026-08-05)
+
+
+### Bug Fixes
+
+* **PN-21019:** redirects to the notifications list when clicking the breadcrumb on the timeline page ([#1989](https://github.com/pagopa/pn-frontend/issues/1989)) ([70ee2d3](https://github.com/pagopa/pn-frontend/commit/70ee2d376ddcb6dea275b0e50b6a0896044a9d9a))
+* **PN-21037:** add link to informal notification and update cancelled content ([#1988](https://github.com/pagopa/pn-frontend/issues/1988)) ([b17d12d](https://github.com/pagopa/pn-frontend/commit/b17d12d059a9cb46e6805b8922d7c47f5d9669b7))
+
+
+
+
+
+# [2.25.0-RC.4](https://github.com/pagopa/pn-frontend/compare/v2.25.0-RC.3...v2.25.0-RC.4) (2026-08-05)
+
+
+### Bug Fixes
+
+* **PN-21019:** redirects to the notifications list when clicking the breadcrumb on the timeline page ([#1985](https://github.com/pagopa/pn-frontend/issues/1985)) ([6044985](https://github.com/pagopa/pn-frontend/commit/604498571b1db16aa119f77073e18c38821b43cd))
+* **PN-21027:** cancel button full width on mobile devices ([#1984](https://github.com/pagopa/pn-frontend/issues/1984)) ([e547048](https://github.com/pagopa/pn-frontend/commit/e547048929ad99f80f23385828f9ec2a335e2d91))
+
+
+
+
+
+# [2.25.0-RC.3](https://github.com/pagopa/pn-frontend/compare/v2.25.0-RC.2...v2.25.0-RC.3) (2026-08-04)
+
+
+### Bug Fixes
+
+* **PN-20849:** resolve PA notification list issues ([#1979](https://github.com/pagopa/pn-frontend/issues/1979)) ([c415550](https://github.com/pagopa/pn-frontend/commit/c415550b422e1678dbfefde7964ae3894fe6661a))
+* **PN-20854:** resolve PA notification detail issues ([#1975](https://github.com/pagopa/pn-frontend/issues/1975)) ([5abb8a8](https://github.com/pagopa/pn-frontend/commit/5abb8a813e34b728da60af9b1dcbcd9140e37167))
+* **PN-20931:** preserve PG unread notifications indicator after refresh ([#1980](https://github.com/pagopa/pn-frontend/issues/1980)) ([57804fd](https://github.com/pagopa/pn-frontend/commit/57804fddd5bfbd0127b829eeab19a90385b183f1))
+* **PN-20933:** PG - added missed localization for not available tag ([#1978](https://github.com/pagopa/pn-frontend/issues/1978)) ([8884762](https://github.com/pagopa/pn-frontend/commit/88847622dc1984b50379e509e57ed11079a79673))
+* **PN-20934:** fix logo link ([#1982](https://github.com/pagopa/pn-frontend/issues/1982)) ([be32592](https://github.com/pagopa/pn-frontend/commit/be325926e35111329be27dbe05fa983089295ba5))
+* **PN-20934:** update logo and spaces in Abstract Paper ([#1983](https://github.com/pagopa/pn-frontend/issues/1983)) ([6d8c50e](https://github.com/pagopa/pn-frontend/commit/6d8c50e4058eb97542b4ff1f7f4ea81245d82618))
+* **PN-20939:** show onboarding when the unread notifications are only those in EFFECTIVE_DATE ([#1977](https://github.com/pagopa/pn-frontend/issues/1977)) ([2341fce](https://github.com/pagopa/pn-frontend/commit/2341fce87f5b06b5d1b969b23c226880f8e341d5))
+* **PN-20950:** show F24 section when there are only payments of this type ([#1976](https://github.com/pagopa/pn-frontend/issues/1976)) ([e015327](https://github.com/pagopa/pn-frontend/commit/e0153276baaecece226b561bf0ad269375f57774))
+
+
+
+
+
+# [2.25.0-RC.2](https://fbianchicodermine-github/pagopa/pn-frontend/compare/v2.25.0-RC.1...v2.25.0-RC.2) (2026-07-30)
+
+
+### Bug Fixes
+
+* **PN-20748:** update content and tag ([#1970](https://fbianchicodermine-github/pagopa/pn-frontend/issues/1970)) ([5447854](https://fbianchicodermine-github/pagopa/pn-frontend/commit/54478544a9512e6a19e615e08d5712cf947eb0aa))
+* **PN-20848:** Add missing static sections to PF informal notification details ([#1969](https://fbianchicodermine-github/pagopa/pn-frontend/issues/1969)) ([d5debf5](https://fbianchicodermine-github/pagopa/pn-frontend/commit/d5debf5f35e5ec0f011e6fe3d17af0c7f6176f51))
+* **PN-20900:** fix notification list loading flow and empty states ([#1973](https://fbianchicodermine-github/pagopa/pn-frontend/issues/1973)) ([f16d1bc](https://fbianchicodermine-github/pagopa/pn-frontend/commit/f16d1bc65d1e26bd2ede2b08493ef5a052309b87))
+
+
+### Features
+
+* **PN-20879:** serve the OneIdentity login flow from the institutional /login route ([#1968](https://fbianchicodermine-github/pagopa/pn-frontend/issues/1968)) ([f93ab98](https://fbianchicodermine-github/pagopa/pn-frontend/commit/f93ab98f5ae247acf8e0cffca908ebb29748d6ae))
+
+
+
+
+
+## [2.25.0-RC.1](https://github.com/pagopa/pn-frontend/compare/v2.25.0-RC.0...v2.25.1-RC.0) (2026-07-27)
+
+
+### Bug Fixes
+
+* **PN-20240:** fix PA notification detail recipients rendering ([#1966](https://github.com/pagopa/pn-frontend/issues/1966)) ([4a61efd](https://github.com/pagopa/pn-frontend/commit/4a61efdd82ccbccb27e5a77eb8566c1179fc9884))
+* **PN-20781:** hide "new attachment" timeline message when the analog event has no attachments ([#1958](https://github.com/pagopa/pn-frontend/issues/1958)) ([759d10c](https://github.com/pagopa/pn-frontend/commit/759d10cc10b8182fe0b367385c3ca3b65ebfc6d9))
+* **PN-20828:** align PF notifications title with navigation labels ([#1967](https://github.com/pagopa/pn-frontend/issues/1967)) ([7003660](https://github.com/pagopa/pn-frontend/commit/7003660c8777630014fd8f751e04f44108fecf21))
+
+
+
+
+
+# [2.25.0-RC.0](https://github.com/pagopa/pn-frontend/compare/v2.24.1...v2.25.0) (2026-07-24)
+
+
+### Bug Fixes
+
+* **A2-2339:** improve mobile contact accordion a11y ([#1930](https://github.com/pagopa/pn-frontend/issues/1930)) ([937d4da](https://github.com/pagopa/pn-frontend/commit/937d4da0c0e14b0cba1689e4255869d134aa349f))
+* **PN-20130:** use children instead of description on MIAlert  ([#1934](https://github.com/pagopa/pn-frontend/issues/1934)) ([2350d4f](https://github.com/pagopa/pn-frontend/commit/2350d4f16c3f1d615af5074e034783d1aeebb37d))
+* **PN-20241:** moved domicile banner below title and update pn-bff commitId ([#1959](https://github.com/pagopa/pn-frontend/issues/1959)) ([01d39de](https://github.com/pagopa/pn-frontend/commit/01d39de912e16c0cdec0eea5638bc9f727526890))
+* **PN-20241:** update empty states UI for recipient users ([#1942](https://github.com/pagopa/pn-frontend/issues/1942)) ([7c9011a](https://github.com/pagopa/pn-frontend/commit/7c9011ad5b394d49f7fa14872f39d8c954e6145c))
+* **PN-20242:** adjust AbstractPaper top margin for informal notifications ([#1961](https://github.com/pagopa/pn-frontend/issues/1961)) ([6f12a21](https://github.com/pagopa/pn-frontend/commit/6f12a218e9912d4ebe3e85e58b83424c84003ab7))
+* **PN-20243:** use filedAt instead of sentAt date and resolve some typescript errors ([#1951](https://github.com/pagopa/pn-frontend/issues/1951)) ([851189b](https://github.com/pagopa/pn-frontend/commit/851189bb041acbe3b18e3872e42e383e0112e65d))
+* **PN-20645:** fix link "security" in footer ([#1949](https://github.com/pagopa/pn-frontend/issues/1949)) ([96d9f7c](https://github.com/pagopa/pn-frontend/commit/96d9f7cf59eb019c90ff764e84a9a8a270ebba9a))
+* **PN-20646:** add missing login assistance translation ([#1950](https://github.com/pagopa/pn-frontend/issues/1950)) ([a1df1b4](https://github.com/pagopa/pn-frontend/commit/a1df1b4fbc8fb2d7cb7414664c6ab92af0d03ac5))
+
+
+### Features
+
+* **PN-20239:** Align PA notifications list with new layout ([#1953](https://github.com/pagopa/pn-frontend/issues/1953)) ([910bcf7](https://github.com/pagopa/pn-frontend/commit/910bcf7bf2d4453a9f5f07f7db5528827b1a5c96))
+* **PN-20240:** Update PA notification detail layout for legal communications ([#1962](https://github.com/pagopa/pn-frontend/issues/1962)) ([d156cc3](https://github.com/pagopa/pn-frontend/commit/d156cc39a41aa4be33920e65d77fd6ccc4af888f))
+* **PN-20241:** add new notifications badge on side menu ([#1944](https://github.com/pagopa/pn-frontend/issues/1944)) ([620c3df](https://github.com/pagopa/pn-frontend/commit/620c3df8eac6c2a6df8b9860f7e44f07405b8452))
+* **PN-20241:** implement filter by notification type ([#1956](https://github.com/pagopa/pn-frontend/issues/1956)) ([08818c5](https://github.com/pagopa/pn-frontend/commit/08818c5a13b83ff1bfdb0f894ec8f298b8307b20))
+* **PN-20241:** update notification list for recipient users ([#1936](https://github.com/pagopa/pn-frontend/issues/1936)) ([186b0e0](https://github.com/pagopa/pn-frontend/commit/186b0e05b7842c88acd6f7f23e45ccce234526f4))
+* **PN-20242:** improve sender contacts rendering for PF and PG ([#1960](https://github.com/pagopa/pn-frontend/issues/1960)) ([682dd31](https://github.com/pagopa/pn-frontend/commit/682dd31c594c13dc82a1f60164a2223c5b87f0dc))
+* **PN-20243:** implemented MIBoxedModule ([#1955](https://github.com/pagopa/pn-frontend/issues/1955)) ([e7860c7](https://github.com/pagopa/pn-frontend/commit/e7860c7288fdfff889ed69d99f0335a1580f4ded))
+* **PN-20243:** PF - rework legal notification detail ([#1928](https://github.com/pagopa/pn-frontend/issues/1928)) ([f854760](https://github.com/pagopa/pn-frontend/commit/f854760b6cd6d3c741f79ec57fe8ba58445040bf))
+* **PN-20560:** Add FIMS token exchange flow to PF ([#1945](https://github.com/pagopa/pn-frontend/issues/1945)) ([2038b58](https://github.com/pagopa/pn-frontend/commit/2038b58651de0120640371588a0993d40d940739))
+* **PN-20698:** PG - rework notification detail page ([#1954](https://github.com/pagopa/pn-frontend/issues/1954)) ([46a2697](https://github.com/pagopa/pn-frontend/commit/46a26979d1363883c957fde87c75294e875eee20))
+* **PN-20748:** [legal-PF/PG] update content ([#1957](https://github.com/pagopa/pn-frontend/issues/1957)) ([a883f44](https://github.com/pagopa/pn-frontend/commit/a883f44728071349e355eefff833801e98c15855))
+
+
+
+
+
+## [2.24.2](https://github.com/pagopa/pn-frontend/compare/v2.24.2-RC.0...v2.24.2) (2026-08-06)
+
+**Note:** Version bump only for package pn-frontend
+
+
+
+
+
+## [2.24.2-RC.0](https://github.com/pagopa/pn-frontend/compare/v2.24.1...v2.24.2-RC.0) (2026-08-06)
+
+
+### Features
+
+* **PN-20886:** implemented statistics maintenance alert ([#1990](https://github.com/pagopa/pn-frontend/issues/1990)) ([4760e5e](https://github.com/pagopa/pn-frontend/commit/4760e5e72daa91d636e2f9e28b9094df45bb1114))
+
+
+
+
+
 ## [2.24.1](https://fbianchicodermine-github/pagopa/pn-frontend/compare/v2.24.1-RC.0...v2.24.1) (2026-07-08)
 
 **Note:** Version bump only for package pn-frontend

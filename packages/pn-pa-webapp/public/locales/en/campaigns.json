@@ -1,0 +1,297 @@
+{
+  "list": {
+    "title": "Campaigns",
+    "id": "ID code",
+    "open-aria-label": "Open campaign \"{{name}}\"",
+    "empty-state": {
+      "no-campaigns": "Here you will see the campaigns sent by the institution",
+      "generic-error": "The campaigns could not be retrieved.",
+      "generic-error-cta": "Try again"
+    }
+  },
+
+  "detail": {
+    "breadcrumb-root": "Campaigns",
+    "title": "Campaign details",
+    "creation-date": "Creation date",
+    "service-name": "Service name",
+    "channels-label": "Channels",
+    "empty-state": {
+      "generic-error": "Unable to retrieve campaign details.",
+      "generic-error-cta": "Try again",
+      "campaign-title-placeholder": "[Campaign title]"
+    },
+    "breadcrumb": {
+      "back": "Back",
+      "campaigns": "Campaigns"
+    },
+    "channels": {
+      "IO": "IO",
+      "SMS": "SMS",
+      "EMAIL": "Email",
+      "ANALOG": "Postal service",
+      "PEC": "PEC"
+    },
+    "communications": {
+      "title": "Communications list",
+      "tax-id": "Tax code",
+      "iun": "IUN code",
+      "status": "Status",
+      "outcome": "Outcome",
+      "empty-title": "No communications found for the selected filters.",
+      "empty-description": "Remove them or try another combination.",
+      "remove-filters": "Remove filters",
+      "statuses": {
+        "ready": "Ready for sending",
+        "processing": "Sending in progress",
+        "success": "Sending completed",
+        "failed": "Sending failed",
+        "refused": "Refused"
+      },
+      "outcomes": {
+        "all": "All",
+        "viewed": "Read",
+        "delivered": "Delivered",
+        "not-available": "Outcome not available"
+      },
+      "no-communications-title": "No communications available",
+      "no-communications-description": "There are no communications matching the selected filters."
+    }
+  },
+  "informal": {
+    "detail": {
+      "iun": "IUN code",
+      "sender": "Sender",
+      "recipient": "Recipient",
+      "recipients": "Recipients",
+      "subject": "Communication subject",
+      "text": "Communication text",
+      "title": "Communication details",
+      "aria-label": "Go to communication details",
+      "status": {
+        "title": "Communication status",
+        "aria-label": "Go to the communication status details",
+        "go-to-detail": "Go to details"
+      },
+      "documents": {
+        "title": "Attached documents",
+        "download-message-available": "<0>Available online for up to 180 days</0> from the communication acceptance date.",
+        "download-message-expired": "The documents are no longer available online.",
+        "document-not-available": "The document is not yet available. Try again later."
+      },
+      "send-by-channel": {
+        "title": "Sending details by channel",
+        "channel": {
+          "send": "SEND",
+          "io": "IO",
+          "sms": "SMS",
+          "email": "Email",
+          "analog": "Postal service",
+          "pec": "PEC"
+        },
+        "status": {
+          "ready_to_send": "WAITING",
+          "waiting_to_send": "WAITING",
+          "sent": "SENT",
+          "filed": "FILED",
+          "delivered": "DELIVERED",
+          "viewed": "READ",
+          "unavailable": "UNAVAILABLE",
+          "not_delivered": "NOT DELIVERED",
+          "workflow_ended": "WORKFLOW ENDED"
+        },
+        "description": {
+          "ready_to_send": "Sending expected after communication validation.",
+          "waiting_to_send": "Waiting for the completion of sending on the previous channel.",
+          "workflow_ended": {
+            "sms": "It will not be used, because the communication has already achieved the requested outcome.",
+            "email": "It will not be used, because the communication has already achieved the requested outcome.",
+            "analog": "It will not be used, because the communication has already achieved the requested outcome.",
+            "pec": "It will not be used, because the communication has already achieved the requested outcome."
+          },
+          "unavailable": {
+            "io": "Cannot trace the recipient's account.",
+            "sms": "Cannot trace the recipient's phone number.",
+            "email": "Cannot trace the recipient's email address.",
+            "pec": "Cannot trace the recipient's PEC address."
+          }
+        }
+      }
+    },
+    "status": {
+      "accepted": {
+        "label": "Ready to send",
+        "description": "The communication has passed the compliance checks. The sending process will begin shortly."
+      },
+      "processing": {
+        "label": "Sending in progress",
+        "description": "The communication will try to reach the recipient on the chosen channels."
+      },
+      "completed": {
+        "label": "Sending successful",
+        "description": "The communication has been sent to the chosen channels."
+      },
+      "undeliverable": {
+        "label": "Sending failed",
+        "description": "The communication could not be sent to the chosen channels."
+      },
+      "refused": {
+        "label": "Refused",
+        "description": "The communication has not passed the compliance checks."
+      },
+      "unknown": {
+        "label": "Undefined",
+        "description": "Unknown status"
+      }
+    }
+  },
+  "informal": {
+    "detail": {
+      "iun": "IUN code",
+      "sender": "Sender",
+      "recipient": "Recipient",
+      "recipients": "Recipients",
+      "subject": "Communication subject",
+      "text": "Communication text",
+      "title": "Communication details",
+      "aria-label": "Go to communication details",
+      "status": {
+        "title": "Communication status",
+        "aria-label": "Go to the communication status details",
+        "go-to-detail": "Go to details"
+      },
+      "documents": {
+        "title": "Attached documents",
+        "download-message-available": "<0>Available online for up to 180 days</0> from the communication acceptance date.",
+        "download-message-expired": "The documents are no longer available online.",
+        "document-not-available": "The document is not yet available. Try again later."
+      },
+      "send-by-channel": {
+        "title": "Sending details by channel",
+        "channel": {
+          "send": "SEND",
+          "io": "IO",
+          "sms": "SMS",
+          "email": "Email",
+          "analog": "Postal service",
+          "pec": "PEC",
+          "unknown": "Unknown channel"
+        },
+        "status": {
+          "ready_to_send": "WAITING",
+          "waiting_to_send": "WAITING",
+          "sent": "SENT",
+          "filed": "FILED",
+          "delivered": "DELIVERED",
+          "viewed": "READ",
+          "unavailable": "UNAVAILABLE",
+          "not_delivered": "NOT DELIVERED",
+          "workflow_ended": "WORKFLOW ENDED"
+        },
+        "description": {
+          "ready_to_send": "Sending expected after communication validation.",
+          "waiting_to_send": "Waiting for the completion of sending on the previous channel.",
+          "workflow_ended": {
+            "sms": "It will not be used, because the communication has already achieved the requested outcome.",
+            "email": "It will not be used, because the communication has already achieved the requested outcome.",
+            "analog": "It will not be used, because the communication has already achieved the requested outcome.",
+            "pec": "It will not be used, because the communication has already achieved the requested outcome."
+          },
+          "unavailable": {
+            "io": "Cannot trace the recipient's account.",
+            "sms": "Cannot trace the recipient's phone number.",
+            "email": "Cannot trace the recipient's email address.",
+            "pec": "Cannot trace the recipient's PEC address."
+          }
+        }
+      }
+    },
+    "status": {
+      "accepted": {
+        "label": "Ready to send",
+        "tooltip": "Ready to send",
+        "description": "The communication has passed the compliance checks. The sending process will begin shortly."
+      },
+      "processing": {
+        "label": "Sending in progress",
+        "tooltip": "Sending in progress",
+        "description": "The communication will try to reach the recipient on the chosen channels."
+      },
+      "completed": {
+        "label": "Sending successful",
+        "tooltip": "Sending successful",
+        "description": "The communication has been sent to the chosen channels."
+      },
+      "undeliverable": {
+        "label": "Sending failed",
+        "tooltip": "Sending failed",
+        "description": "The communication could not be sent to the chosen channels."
+      },
+      "unknown": {
+        "label": "Undefined",
+        "tooltip": "Undefined",
+        "description": "Unknown status"
+      }
+    },
+    "timeline": {
+      "title": "Communication status",
+      "outcome": {
+        "viewed": {
+          "title": "Read",
+          "description": "The recipient has read the communication."
+        },
+        "delivered": {
+          "title": "Delivered",
+          "description": "The recipient has received the communication."
+        }
+      },
+      "event": {
+        "send_digital_message_feedback": {
+          "ok": {
+            "io": "Sending to IO successful.",
+            "email": "Sending via email successful.",
+            "sms": "Sending via SMS successful.",
+            "pec": "Sending via PEC successful."
+          },
+          "ko": {
+            "io": "Cannot send to IO.",
+            "email": "Cannot send via email.",
+            "sms": "Cannot send via SMS.",
+            "pec": "Cannot send via PEC."
+          }
+        },
+        "send_analog_message_feedback": {
+          "ok": {
+            "analog_registered": "Sending via registered post no. {{code}} successful.",
+            "analog_ordinary": "Sending via ordinary post successful."
+          },
+          "ko": {
+            "analog_registered": "Cannot send via registered post.",
+            "analog_ordinary": "Cannot send via ordinary post."
+          }
+        },
+        "delivered": {
+          "io": "Delivery to IO successful.",
+          "email": "Delivery via email successful.",
+          "sms": "Delivery via SMS successful.",
+          "pec": "Delivery via PEC successful.",
+          "analog_registered": "Delivery via registered post no. {{code}} successful.",
+          "analog_ordinary": "Delivery via ordinary post successful."
+        },
+        "send_digital_message_skip": {
+          "io": "Cannot trace the recipient's account.",
+          "email": "Cannot trace the recipient's email address.",
+          "sms": "Cannot trace the recipient's phone number.",
+          "pec": "Cannot trace the recipient's PEC address."
+        },
+        "filed": {
+          "send": "Filed on the SEND platform."
+        },
+        "informal_notification_viewed": {
+          "io": "The recipient has read the communication on IO.",
+          "send": "The recipient has read the communication on the SEND platform."
+        }
+      }
+    }
+  }
+}

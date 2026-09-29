@@ -11,10 +11,6 @@ const sercqSendDefault = digitalAddressesSercq.find(
   (addr) => addr.senderId === 'default' && addr.channelType === ChannelType.SERCQ_SEND
 );
 
-const filterNotificationsRef = {
-  current: { filtersApplied: false, cleanFilters: vi.fn() },
-};
-
 describe('NotificationsEmptyState component - Mixpanel events', () => {
   let triggerEventSpy: PFTriggerEventSpy;
 
@@ -28,10 +24,7 @@ describe('NotificationsEmptyState component - Mixpanel events', () => {
 
   it('fires SEND_VIEW_CONTACT_DETAILS when go-to-contacts link is clicked', () => {
     const { getByTestId } = render(
-      <NotificationsEmptyState
-        filtersApplied={false}
-        filterNotificationsRef={filterNotificationsRef as any}
-      />,
+      <NotificationsEmptyState filtersApplied={false} onCleanFilters={vi.fn()} />,
       { preloadedState: { contactsState: { digitalAddresses: [sercqSendDefault] } } }
     );
     fireEvent.click(getByTestId('link-route-contacts'));

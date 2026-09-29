@@ -53,7 +53,7 @@ beforeAll(async () => {
     WORK_IN_PROGRESS: false,
     F24_DOWNLOAD_WAIT_TIME: 0,
     DOWNTIME_EXAMPLE_LINK: 'https://www.example.com',
-    SELFCARE_CDN_URL: 'https://cdn.selfcare.pagopa.it/',
+    SELFCARE_CDN_URL: 'https://cdn.selfcare.pagopa.it',
     ACCESSIBILITY_LINK: 'https://accessibility-link.it',
     NOTIFICATION_CANCELLED_HELP_LINK: 'https://fake.notification-cancelled-help.pagopa.it',
     NOTIFICATION_COST_DETAILS_ASSISTANCE_LINK:
@@ -63,6 +63,8 @@ beforeAll(async () => {
     FACSIMILE_FR: 'https://fake.facsimile-fr.pagopa.it',
     FACSIMILE_DE: 'https://fake.facsimile-de.pagopa.it',
     FACSIMILE_SL: 'https://fake.facsimile-sl.pagopa.it',
+    IS_NEW_TIMELINE_ENABLED: true,
+    IS_NEW_TIMELINE_COPY_ENABLED: false,
   });
   initStore(false);
   initAxiosClients();

@@ -43,18 +43,18 @@ describe('String utility', () => {
 
 describe('dataRegex.name', () => {
   const valid = [
-    'Mario Rossi',
-    "Giovanni D'Angelo",
+    'Nome Cognome',
+    "Nome D'Apostrofo",
     'Müller',         // tedesco: umlaut
     'François',       // francese: cedilla
-    'Škoda',          // ceco: háček
+    'Šimun',          // ceco: háček
     'Maša',           // rumeno/slavo: Š
     'José',           // spagnolo: accento acuto
     'O\'Brien',       // irlandese: apostrofo
     'Smith-Jones',    // trattino
     'Name123',        // cifre
     'St. John',       // punto
-    'Roberto, Sebastiano', // virgola
+    'Nome, Cognome', // virgola
     'name,cognome',   // virgola senza spazio
     'Łukasz',         // polacco: Ł
     'Ångström',       // svedese: Å
@@ -65,7 +65,7 @@ describe('dataRegex.name', () => {
   ];
 
   const invalid = [
-    'Mario@Rossi',    // @
+    'Nome@Cognome',    // @
     'Name<script>',   // <
     'Test/Name',      // /
     'Hello\\World',   // \
@@ -75,7 +75,7 @@ describe('dataRegex.name', () => {
     'Name#tag',       // #
     'Name$',          // $
     'Name%20',        // %
-    '(Mario)',        // parentesi
+    '(Nome)',        // parentesi
     '[test]',         // parentesi quadre
     '{name}',         // parentesi graffe
     'name_test',      // underscore

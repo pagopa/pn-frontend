@@ -1,11 +1,13 @@
 import { notificationDTO } from '../../__mocks__/NotificationDetail.mock';
+import { notificationTimelineDTO } from '../../__mocks__/NotificationTimeline.mock';
 import { NotificationDetail, TimelineCategory } from '../../models/NotificationDetail';
+import { NotificationTimelineResponse } from '../../models/NotificationTimeline';
 import { NotificationStatus } from '../../models/NotificationStatus';
 import { render } from '../../test-utils';
 import { useIsCancelled } from '../useIsCancelled';
 
 type Props = {
-  notification: NotificationDetail;
+  notification: NotificationDetail | NotificationTimelineResponse;
 };
 
 const Component: React.FC<Props> = ({ notification }) => {
@@ -32,7 +34,18 @@ describe('useIsCancelled test', () => {
   it('notification is cancelled', () => {
     const { getByTestId } = render(
       <Component
-        notification={{ ...notificationDTO, notificationStatus: NotificationStatus.CANCELLED }}
+        notification={{
+          ...notificationDTO,
+          notificationStatus: NotificationStatus.CANCELLED,
+          notificationStatusHistory: [
+            ...notificationDTO.notificationStatusHistory,
+            {
+              status: NotificationStatus.CANCELLED,
+              activeFrom: '2033-08-14T13:42:54.17675939Z',
+              relatedTimelineElements: [],
+            },
+          ],
+        }}
       />
     );
 
@@ -47,6 +60,14 @@ describe('useIsCancelled test', () => {
         notification={{
           ...notificationDTO,
           notificationStatus: NotificationStatus.CANCELLATION_IN_PROGRESS,
+          notificationStatusHistory: [
+            ...notificationDTO.notificationStatusHistory,
+            {
+              status: NotificationStatus.CANCELLATION_IN_PROGRESS,
+              activeFrom: '2033-08-14T13:42:54.17675939Z',
+              relatedTimelineElements: [],
+            },
+          ],
         }}
       />
     );
@@ -73,6 +94,16 @@ describe('useIsCancelled test', () => {
           ],
         }}
       />
+    );
+
+    expect(getByTestId('cancellationInProgress')).toHaveTextContent('false');
+    expect(getByTestId('cancellationInTimeline')).toHaveTextContent('true');
+    expect(getByTestId('cancelled')).toHaveTextContent('false');
+  });
+
+  it('notification is a NotificationTimelineResponse and is cancelled', () => {
+    const { getByTestId } = render(
+      <Component notification={{ ...notificationTimelineDTO, isCancelled: true }} />
     );
 
     expect(getByTestId('cancellationInProgress')).toHaveTextContent('false');

@@ -34,8 +34,9 @@ export interface NotificationDetail {
   additionalLanguages?: Array<string>;
   iun: string;
   sentAt: string;
-  filedAt: string;
   documentsAvailable?: boolean;
+  aarDocumentAvailable: boolean;
+  filedAt: string;
   notificationStatus: NotificationStatus;
   notificationStatusHistory: Array<NotificationStatusHistory>;
   timeline: Array<INotificationDetailTimeline>;
@@ -97,6 +98,7 @@ export interface INotificationDetailTimeline {
   hidden?: boolean;
   index?: number;
   reworkedStatus?: ReworkedStatus;
+  eventTimestamp?: string;
 }
 
 export enum ResponseStatus {
@@ -227,6 +229,15 @@ export interface NotificationDetailPayment {
   f24?: F24PaymentDetails;
 }
 
+export type NotificationPayment = {
+  pagoPa?: {
+    creditorTaxId: string;
+    noticeCode: string;
+    attachment?: Attachment;
+  };
+  f24?: F24PaymentDetails;
+};
+
 export interface PaymentNotice {
   noticeNumber: string;
   fiscalCode: string;
@@ -297,6 +308,10 @@ export enum TimelineCategory {
   NOTIFICATION_RADD_RETRIEVED = 'NOTIFICATION_RADD_RETRIEVED',
   // PN-16970
   NOTIFICATION_TIMELINE_REWORKED = 'NOTIFICATION_TIMELINE_REWORKED',
+  // Informal notification viewed
+  INFORMAL_NOTIFICATION_VIEWED = 'INFORMAL_NOTIFICATION_VIEWED',
+  // Informal notification delivered
+  DELIVERED = 'DELIVERED',
 }
 
 interface DigitalAddress {

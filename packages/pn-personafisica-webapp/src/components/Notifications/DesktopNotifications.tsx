@@ -1,4 +1,3 @@
-import { useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
@@ -20,7 +19,6 @@ import {
 
 import * as routes from '../../navigation/routes.const';
 import { Delegator } from '../../redux/delegation/types';
-import FilterNotifications from './FilterNotifications';
 import NotificationsEmptyState from './NotificationsEmptyState';
 
 type Props = {
@@ -31,6 +29,10 @@ type Props = {
   onChangeSorting?: (s: Sort<NotificationColumnData<RecipientNotification>>) => void;
   /** Delegator */
   currentDelegator?: Delegator;
+  /** True when at least one filter is active */
+  filtersApplied: boolean;
+  /** The function to be invoked if the user clicks on clean filters button */
+  onCleanFilters: () => void;
 };
 
 const DesktopNotifications = ({
@@ -38,37 +40,43 @@ const DesktopNotifications = ({
   sort,
   onChangeSorting,
   currentDelegator,
+  filtersApplied,
+  onCleanFilters,
 }: Props) => {
   const navigate = useNavigate();
   const { t } = useTranslation('notifiche');
-  const filterNotificationsRef = useRef({ filtersApplied: false, cleanFilters: () => void 0 });
 
   const columns: Array<Column<NotificationColumnData>> = [
     {
       id: 'sentAt',
       label: t('table.data'),
-      cellProps: { width: '10%' },
+      cellProps: { sx: { width: { xs: '10%', md: '13%', xl: '13%', xxl: '13%' } } },
     },
     {
       id: 'sender',
       label: t('table.mittente'),
       mode: 'truncate',
-      cellProps: { width: '12%' },
+      cellProps: { sx: { width: { xs: '25%', md: '23%', xl: '25%', xxl: '24%' } } },
     },
     {
       id: 'subject',
       label: t('table.oggetto'),
-      cellProps: { width: '26%' },
+      cellProps: { sx: { width: { xs: '40%', md: '24%', xl: '28%', xxl: '35%' } } },
     },
     {
       id: 'iun',
       label: t('table.iun'),
-      cellProps: { width: '22%', sx: { display: { xs: 'none', xl: 'table-cell' } } },
+      cellProps: {
+        sx: {
+          display: { xs: 'none', xl: 'table-cell' },
+          width: { xs: '17%', md: '32%', xl: '26%', xxl: '20%' },
+        },
+      },
     },
     {
       id: 'action',
       label: '',
-      cellProps: { width: '13%', align: 'right' },
+      cellProps: { width: '8%', align: 'right' },
     },
   ];
 
@@ -76,10 +84,6 @@ const DesktopNotifications = ({
     ...n,
     id: n.iun,
   }));
-
-  const filtersApplied: boolean = filterNotificationsRef.current?.filtersApplied ?? false;
-
-  const showFilters = notifications?.length > 0 || filtersApplied;
 
   const handleRowClick = (iun: string, communicationType: NotificationCommunicationType) => {
     if (currentDelegator) {
@@ -93,11 +97,6 @@ const DesktopNotifications = ({
 
   return (
     <>
-      <FilterNotifications
-        ref={filterNotificationsRef}
-        showFilters={showFilters}
-        currentDelegator={currentDelegator}
-      />
       {rows.length ? (
         <PnTable
           testId="notificationsTable"
@@ -152,7 +151,7 @@ const DesktopNotifications = ({
       ) : (
         <NotificationsEmptyState
           filtersApplied={filtersApplied}
-          filterNotificationsRef={filterNotificationsRef}
+          onCleanFilters={onCleanFilters}
           currentDelegator={currentDelegator}
         />
       )}

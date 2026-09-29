@@ -43,7 +43,7 @@ const TermsOfService = ({ tosConsent, privacyConsent }: TermsOfServiceProps) => 
     <Link
       key="privacy-link"
       data-testid="privacy-link"
-      sx={{ cursor: 'pointer', textDecoration: 'none !important' }}
+      sx={{ cursor: 'pointer' }}
       onClick={redirectPrivacyLink}
     >
       {children}

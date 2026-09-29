@@ -1,4 +1,5 @@
 import React, { memo, useCallback, useEffect, useState } from 'react';
+import { Trans } from 'react-i18next';
 
 import SaveAltRoundedIcon from '@mui/icons-material/SaveAltRounded';
 import { Box, Divider, FormControl, RadioGroup, Stack, Typography } from '@mui/material';
@@ -8,7 +9,11 @@ import { useDismissToastOnError } from '../../hooks';
 import { downloadDocument } from '../../hooks/useDownloadDocument';
 import { AppResponse } from '../../models';
 import { ServerResponseErrorCode } from '../../models/AppResponse';
-import { EventPaymentRecipientType } from '../../models/MixpanelEvents';
+import {
+  EventNotificationType,
+  EventNotificationTypes,
+  EventPaymentRecipientType,
+} from '../../models/MixpanelEvents';
 import {
   NotificationCostDetails,
   NotificationDetailPayment,
@@ -54,11 +59,12 @@ type Props = {
   ) => void;
   handleTrackEvent?: (event: EventPaymentRecipientType, param?: object) => void;
   handleFetchPaymentsInfo: (payment: Array<PaymentDetails | NotificationDetailPayment>) => void;
+  notificationType?: EventNotificationType;
 };
 
 type PaymentError = {
   title?: string;
-  description: string;
+  description: React.ReactNode;
   source?: 'tpp' | 'default';
 } | null;
 
@@ -76,6 +82,7 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
   onPayTppClick,
   handleTrackEvent,
   handleFetchPaymentsInfo,
+  notificationType = EventNotificationTypes.NOTIFICATION,
 }) => {
   const { pagoPaF24, f24Only } = payments;
   const pageFromCache = getPaymentCache(iun)?.currentPaymentPage;
@@ -182,7 +189,7 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
     }
   };
 
-  const getErrorMessage = () => {
+  const getErrorMessage = (): React.ReactNode => {
     const loadedPayments = pagoPaF24.filter((payment) => !payment.isLoading);
 
     const failedPayments = loadedPayments.filter(
@@ -191,12 +198,12 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
 
     // All payments failed
     if (failedPayments.length === loadedPayments.length) {
-      return getLocalizedOrDefaultLabel(
-        'notifications',
+      const i18nKey =
         failedPayments.length === 1
           ? 'detail.payment.error-payment-failed-single'
-          : 'detail.payment.error-payment-failed-multiple'
-      );
+          : 'detail.payment.error-payment-failed-multiple';
+
+      return <Trans ns="notifiche" i18nKey={i18nKey} components={[<strong key="0" />]} />;
     }
 
     return getLocalizedOrDefaultLabel('notifications', 'detail.payment.error-payment');
@@ -273,6 +280,7 @@ const NotificationPaymentRecipient: React.FC<Props> = ({
                     isSinglePayment={isSinglePayment}
                     isCancelled={isCancelled}
                     handleTrackEventDetailPaymentError={handleTrackEventFn}
+                    notificationType={notificationType}
                   />
                 ) : null
               )}

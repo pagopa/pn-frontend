@@ -6,6 +6,7 @@ import {
   AppMessage,
   AppResponseMessage,
   AppRouteParams,
+  Configuration,
   DeliveryOutcomeType,
   NotificationDetail as NotificationDetailModel,
   NotificationDetailOtherDocument,
@@ -50,7 +51,7 @@ import { apiClient } from '../../api/apiClients';
 import { BffCheckTPPResponse } from '../../generated-client/notifications';
 import * as routes from '../../navigation/routes.const';
 import { NOTIFICATION_ACTIONS } from '../../redux/notification/actions';
-import { getConfiguration } from '../../services/configuration.service';
+import { PfConfiguration, getConfiguration } from '../../services/configuration.service';
 import { mockLanguageConfig } from '../../setupTests';
 import { ServerResponseErrorCode } from '../../utility/AppError/types';
 import NotificationDetail from '../NotificationDetail.page';
@@ -144,7 +145,7 @@ describe('NotificationDetail Page', () => {
     expect(mock.history.get[0].url).toContain('/bff/v1/notifications/received');
     expect(mock.history.post[0].url).toBe(`/bff/v1/payments/info`);
     expect(mock.history.get[1].url).toContain('/bff/v1/downtime/history');
-    expect(result.getByTestId('breadcrumb-link')).toHaveTextContent(/menu.notifiche/i);
+    expect(result.getByTestId('breadcrumb-root-button')).toHaveTextContent(/menu.notifiche/i);
     expect(result.container).toHaveTextContent(notificationToFe.abstract!);
 
     // SKIPPED because it's not a table anymore, update unit test with new implementation
@@ -333,6 +334,14 @@ describe('NotificationDetail Page', () => {
       pagoPaIntMode: PagoPaIntegrationMode.Async,
       recipients: [notificationDTO.recipients[2]],
       notificationStatus: NotificationStatus.CANCELLED,
+      notificationStatusHistory: [
+        ...notificationDTO.notificationStatusHistory,
+        {
+          status: NotificationStatus.CANCELLED,
+          activeFrom: '2033-08-14T13:42:54.17675939Z',
+          relatedTimelineElements: [],
+        },
+      ],
       timeline: [
         ...notificationDTO.timeline,
         {
@@ -495,6 +504,14 @@ describe('NotificationDetail Page', () => {
     mock.onGet(`/bff/v1/notifications/received/${notificationDTO.iun}`).reply(200, {
       ...notificationDTO,
       notificationStatus: NotificationStatus.CANCELLED,
+      notificationStatusHistory: [
+        ...notificationDTO.notificationStatusHistory,
+        {
+          status: NotificationStatus.CANCELLED,
+          activeFrom: '2033-08-14T13:42:54.17675939Z',
+          relatedTimelineElements: [],
+        },
+      ],
       timeline: [
         ...notificationDTO.timeline,
         {
@@ -532,11 +549,58 @@ describe('NotificationDetail Page', () => {
     );
   });
 
+  it('cancelled notification with new copy - timeline box legal fact shows a warning', async () => {
+    const originalConfiguration = getConfiguration();
+    Configuration.setForTest<PfConfiguration>({
+      ...originalConfiguration,
+      IS_NEW_TIMELINE_COPY_ENABLED: true,
+    });
+
+    mock.onGet(`/bff/v1/notifications/received/${notificationDTO.iun}`).reply(200, {
+      ...notificationDTO,
+      notificationStatus: NotificationStatus.CANCELLED,
+      notificationStatusHistory: [
+        ...notificationDTO.notificationStatusHistory,
+        {
+          status: NotificationStatus.CANCELLED,
+          activeFrom: '2033-08-14T13:42:54.17675939Z',
+          relatedTimelineElements: [],
+        },
+      ],
+    });
+    mock.onGet(/\/bff\/v1\/downtime\/history.*/).reply(200, downtimesDTO);
+
+    await act(async () => {
+      result = render(
+        <>
+          <AppMessage />
+          <Component />
+        </>,
+        {
+          preloadedState: {
+            userState: { user: { fiscal_number: notificationDTO.recipients[2].taxId } },
+          },
+          route: routes.GET_DETTAGLIO_NOTIFICA_PATH(notificationDTO.iun),
+        }
+      );
+    });
+
+    const requestsBeforeClick = mock.history.get.length;
+    const timelineBox = result.getByTestId('NotificationDetailTimeline');
+    fireEvent.click(within(timelineBox).getByTestId('download-legalfact'));
+
+    const warning = await waitFor(() => result.getByTestId('snackBarContainer'));
+    expect(warning).toHaveTextContent('detail.document-unavailable');
+    expect(mock.history.get).toHaveLength(requestsBeforeClick);
+
+    Configuration.setForTest<PfConfiguration>(originalConfiguration);
+  });
+
   it('checks not available documents', async () => {
     mock.onGet(`/bff/v1/notifications/received/${notificationDTO.iun}`).reply(200, {
       ...notificationDTO,
       documentsAvailable: false,
-      sentAt: '2012-01-01T00:00:00Z',
+      aarDocumentAvailable: false,
     });
     mock.onPost(`/bff/v1/payments/info`, paymentInfoRequest).reply(200, paymentInfo);
     // we use regexp to not set the query parameters
@@ -805,10 +869,10 @@ describe('NotificationDetail Page', () => {
       });
     });
 
-    const backButton = result.getByTestId('breadcrumb-indietro-button');
-    expect(backButton).toBeInTheDocument();
+    const rootButton = result.getByTestId('breadcrumb-root-button');
+    expect(rootButton).toBeInTheDocument();
 
-    await userEvent.click(backButton);
+    await userEvent.click(rootButton);
 
     expect(await screen.findByTestId('confirmationDialog')).toBeInTheDocument();
     expect(result.router.state.location.pathname).toBe(
@@ -843,8 +907,8 @@ describe('NotificationDetail Page', () => {
       );
     });
 
-    const backButton = result.getByTestId('breadcrumb-indietro-button');
-    await userEvent.click(backButton);
+    const rootButton = result.getByTestId('breadcrumb-root-button');
+    await userEvent.click(rootButton);
 
     expect(await screen.findByTestId('confirmationDialog')).toBeInTheDocument();
 
@@ -913,11 +977,12 @@ describe('NotificationDetail Page', () => {
         ],
       });
     });
-    const backButton = result.queryByTestId('breadcrumb-indietro-button');
-    expect(backButton).not.toBeInTheDocument();
+    const rootButton = result.queryByTestId('breadcrumb-root-button');
+    expect(rootButton).toBeInTheDocument();
+    expect(rootButton).toHaveTextContent(/menu.notifiche/i);
   });
 
-  it('navigation from Retrieval ID - does not include back button', async () => {
+  it('navigation from Retrieval ID - include root button', async () => {
     mock.onGet(`/bff/v1/notifications/received/${notificationDTO.iun}`).reply(200, notificationDTO);
     mock.onPost(`/bff/v1/payments/info`, paymentInfoRequest).reply(200, paymentInfo);
     // we use regexp to not set the query parameters
@@ -935,8 +1000,9 @@ describe('NotificationDetail Page', () => {
         ],
       });
     });
-    const backButton = result.queryByTestId('breadcrumb-indietro-button');
-    expect(backButton).not.toBeInTheDocument();
+    const rootButton = result.queryByTestId('breadcrumb-root-button');
+    expect(rootButton).toBeInTheDocument();
+    expect(rootButton).toHaveTextContent(/menu.notifiche/i);
   });
 
   it('API error', async () => {
@@ -994,7 +1060,7 @@ describe('NotificationDetail Page', () => {
     expect(mock.history.get[0].url).toContain('/bff/v1/notifications/received');
     expect(mock.history.post[0].url).toBe(`/bff/v1/payments/info`);
     expect(mock.history.get[1].url).toContain('/bff/v1/downtime/history');
-    expect(result.getByTestId('breadcrumb-link')).toHaveTextContent(/menu.notifiche/i);
+    expect(result.getByTestId('breadcrumb-root-button')).toHaveTextContent(/menu.notifiche/i);
     expect(result.container).toHaveTextContent(notificationToFe.abstract!);
 
     // SKIPPED because it's not a table anymore, update unit test with new implementation
@@ -1057,9 +1123,9 @@ describe('NotificationDetail Page', () => {
         ],
       });
     });
-    const backButton = result.getByTestId('breadcrumb-indietro-button');
-    expect(backButton).toBeInTheDocument();
-    fireEvent.click(backButton);
+    const rootButton = result.getByTestId('breadcrumb-root-button');
+    expect(rootButton).toBeInTheDocument();
+    fireEvent.click(rootButton);
     expect(result.router.state.location.pathname).toBe(
       routes.GET_NOTIFICHE_DELEGATO_PATH(delegator?.mandateId!)
     );
@@ -1543,5 +1609,79 @@ describe('NotificationDetail Page', () => {
 
     expect(result.router.state.location.pathname).toBe(routes.NOTIFICHE);
     expect(result.router.state.historyAction).toBe('REPLACE');
+  });
+
+  it('navigates to the notifications list when clicking the root breadcrumb', async () => {
+    mock
+      .onGet(`/bff/v1/notifications/received/${raddNotificationDTO.iun}`)
+      .reply(200, raddNotificationDTO);
+
+    await act(async () => {
+      result = render(<Component />, {
+        preloadedState: {
+          userState: { user: { fiscal_number: raddNotificationDTO.recipients[2].taxId } },
+        },
+        route: routes.GET_DETTAGLIO_NOTIFICA_PATH(raddNotificationDTO.iun),
+      });
+    });
+
+    const rootButton = result.getByTestId('breadcrumb-root-button');
+    expect(rootButton).toBeInTheDocument();
+
+    // clicking back is what triggers the onboarding exit reminder
+    await userEvent.click(rootButton);
+
+    const skipButton = await screen.findByText('onboarding.notification-exit-dialog.buttons.skip');
+    expect(result.router.state.location.pathname).toBe(
+      routes.GET_DETTAGLIO_NOTIFICA_PATH(raddNotificationDTO.iun)
+    );
+
+    await userEvent.click(skipButton);
+
+    await waitFor(() => {
+      expect(result.router.state.location.pathname).toBe(routes.NOTIFICHE);
+    });
+  });
+
+  it('navigates to the delegate notifications list when clicking the root breadcrumb', async () => {
+    mock
+      .onGet(
+        `/bff/v1/notifications/received/${notificationDTO.iun}?mandateId=${delegator?.mandateId}`
+      )
+      .reply(200, notificationDTO);
+    mock.onPost(`/bff/v1/payments/info`, paymentInfoRequest).reply(200, paymentInfo);
+    mock.onGet(/\/bff\/v1\/downtime\/history.*/).reply(200, downtimesDTO);
+
+    await act(async () => {
+      result = render(<Component />, {
+        preloadedState: {
+          userState: { user: { fiscal_number: 'CGNNMO80A03H501U' } },
+          generalInfoState: {
+            delegators: mandatesByDelegate,
+            onboardingData: defaultOnboardingData,
+          },
+        },
+        route: routes.GET_DETTAGLIO_NOTIFICA_DELEGATO_PATH(
+          notificationDTO.iun,
+          delegator!.mandateId
+        ),
+      });
+    });
+
+    const rootButton = result.getByTestId('breadcrumb-root-button');
+    expect(rootButton).toBeInTheDocument();
+
+    // for a delegate the onboarding exit reminder is not shown, so navigation is direct
+    await userEvent.click(rootButton);
+
+    expect(
+      screen.queryByText('onboarding.notification-exit-dialog.buttons.skip')
+    ).not.toBeInTheDocument();
+
+    await waitFor(() => {
+      expect(result.router.state.location.pathname).toBe(
+        routes.GET_NOTIFICHE_DELEGATO_PATH(delegator!.mandateId)
+      );
+    });
   });
 });

@@ -26,7 +26,7 @@ export function useTracking(mixpanelToken: string, nodeEnv: string) {
         }
       });
     };
-    // // check mixpanel cookie consent in cookie
+    // check mixpanel cookie consent in cookie
     const OTCookieValue: string =
       document.cookie.split('; ').find((row) => row.startsWith('OptanonConsent=')) || '';
     const checkValue = `${targCookiesGroup}%3A1`;

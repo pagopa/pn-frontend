@@ -1,6 +1,14 @@
 import { NotificationStatus, UnifiedNotificationStatus } from './NotificationStatus';
 
-export type NotificationCommunicationType = 'LEGAL' | 'INFORMAL';
+export enum NotificationCommunicationType {
+  LEGAL = 'LEGAL',
+  INFORMAL = 'INFORMAL',
+}
+
+export type NotificationCommunicationOutcomes = {
+  viewed: boolean;
+  delivered: boolean;
+};
 
 export interface Notification {
   iun: string;
@@ -17,6 +25,7 @@ export interface Notification {
 export interface RecipientNotification extends Omit<Notification, 'notificationStatus'> {
   notificationStatus: UnifiedNotificationStatus;
   communicationType: NotificationCommunicationType;
+  communicationOutcomes?: NotificationCommunicationOutcomes;
   isNewNotification: boolean;
 }
 

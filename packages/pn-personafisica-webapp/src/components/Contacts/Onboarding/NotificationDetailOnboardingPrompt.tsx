@@ -2,9 +2,9 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
-import { Button, Typography } from '@mui/material';
+import { Typography } from '@mui/material';
 import { ConfirmationModal, getPaymentCache } from '@pagopa-pn/pn-commons';
-import { IllusMIMessage } from '@pagopa/mui-italia';
+import { IllusMIMessage, MIButton } from '@pagopa/mui-italia';
 
 import { useNotificationExitPrompt } from '../../../hooks/useNotificationExitPrompt';
 import { OnboardingSource } from '../../../models/Onboarding';
@@ -123,7 +123,7 @@ const NotificationDetailOnboardingPrompt: React.FC<Props> = ({
         contentAlign="center"
         slots={{
           illustration: <IllusMIMessage />,
-          closeButton: Button,
+          closeButton: MIButton,
         }}
         slotsProps={{
           actions: {

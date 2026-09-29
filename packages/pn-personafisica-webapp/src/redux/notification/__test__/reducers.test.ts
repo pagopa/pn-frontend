@@ -23,6 +23,7 @@ import {
   paymentsData,
   recipients,
 } from '../../../__mocks__/NotificationDetail.mock';
+import { NotificationTimelineResponse } from '../../../__mocks__/NotificationTimeline.mock';
 import { createMockedStore } from '../../../__test__/test-utils';
 import { apiClient } from '../../../api/apiClients';
 import { getDowntimeLegalFact } from '../../appStatus/actions';
@@ -35,6 +36,7 @@ import {
   getReceivedNotificationPaymentInfo,
   getReceivedNotificationPaymentTppUrl,
   getReceivedNotificationPaymentUrl,
+  getReceivedNotificationTimeline,
 } from '../actions';
 import { resetState } from '../reducers';
 
@@ -63,6 +65,13 @@ const initialState = {
       denomination: '',
     },
     currentRecipientIndex: 0,
+  },
+  notificationTimeline: {
+    iun: '',
+    subject: '',
+    recipients: [],
+    isCancelled: false,
+    notificationStatusHistory: [],
   },
   paymentsData: {
     pagoPaF24: [],
@@ -124,6 +133,23 @@ describe('Notification detail redux state tests', () => {
       expect(payment.pagoPa?.attachmentIdx).toBe(attachmentIdx);
       expect(payment.pagoPa?.recIndex).toBe(recipientIdx);
     });
+  });
+
+  it('Should be able to fetch the notification timeline', async () => {
+    mock
+      .onGet(`/bff/v1/notifications/received/${notificationDTO.iun}/timeline`)
+      .reply(200, NotificationTimelineResponse);
+    const action = await store.dispatch(
+      getReceivedNotificationTimeline({
+        iun: notificationDTO.iun,
+      })
+    );
+    const payload = action.payload;
+    expect(action.type).toBe('getReceivedNotificationTimeline/fulfilled');
+    expect(payload).toEqual(NotificationTimelineResponse);
+    expect(store.getState().notificationState.notificationTimeline).toStrictEqual(
+      NotificationTimelineResponse
+    );
   });
 
   it('Should be able to fetch the notification document', async () => {

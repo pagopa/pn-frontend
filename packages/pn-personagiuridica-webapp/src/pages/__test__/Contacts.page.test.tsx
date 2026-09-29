@@ -128,7 +128,7 @@ describe('Contacts page', () => {
     // check contacts
     const pecValidationItem = within(specialContacts).getByTestId('1234_pecContact');
     expect(pecValidationItem).toBeInTheDocument();
-    const closeIcon = within(specialContacts).getByTestId('CloseIcon');
+    const closeIcon = within(specialContacts).getByTestId('CloseRoundedIcon');
     expect(closeIcon).toBeInTheDocument();
     const cancelValidationButton = within(specialContacts).getByText(
       'legal-contacts.cancel-pec-validation'

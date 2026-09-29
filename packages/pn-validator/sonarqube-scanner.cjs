@@ -22,5 +22,11 @@ scanner(
     token: process.env.SONAR_TOKEN,
     options,
   },
-  () => process.exit()
+  (error) => {
+    if (error) {
+      console.error(error);
+      process.exit(1);
+    }
+    process.exit();
+  }
 );

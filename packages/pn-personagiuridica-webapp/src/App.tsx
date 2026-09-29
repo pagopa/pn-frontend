@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router-dom';
 
-import { Box, Button, DialogTitle } from '@mui/material';
+import { Box, DialogTitle } from '@mui/material';
 import {
   A11yMessageAnnouncer,
   APP_VERSION,
@@ -19,14 +19,14 @@ import {
   appStateActions,
   errorFactoryManager,
   initLocalization,
+  initLocalizationExists,
   useHasPermissions,
   useMultiEvent,
   useTracking,
 } from '@pagopa-pn/pn-commons';
-import { PartyEntity, ProductEntity } from '@pagopa/mui-italia';
+import { MIButton, PartyEntity, ProductEntity } from '@pagopa/mui-italia';
 
 import { useMenuItems } from './hooks/useMenuItems';
-import i18n from './i18n';
 import { PGEventsType } from './models/PGEventsType';
 import { PNRole } from './models/User';
 import { getCurrentEventTypePage, goToLoginPortal } from './navigation/navigation.utility';
@@ -36,8 +36,10 @@ import { getCurrentAppStatus } from './redux/appStatus/actions';
 import { apiLogout } from './redux/auth/actions';
 import { resetState } from './redux/auth/reducers';
 import { getDigitalAddresses } from './redux/contact/actions';
+import { getReceivedNotifications } from './redux/dashboard/actions';
 import { useAppDispatch, useAppSelector } from './redux/hooks';
 import { getSidemenuInformation } from './redux/sidemenu/actions';
+import { setHasNewNotifications } from './redux/sidemenu/reducers';
 import { RootState } from './redux/store';
 import { getConfiguration } from './services/configuration.service';
 import { PGAppErrorFactory } from './utility/AppError/PGAppErrorFactory';
@@ -52,7 +54,7 @@ import './utility/onetrust';
 // Cfr. comment in packages/pn-personafisica-webapp/src/App.tsx
 // --------------------
 const App = () => {
-  const { t } = useTranslation(['common', 'notifiche']);
+  const { t, i18n } = useTranslation(['common', 'notifiche']);
   const [isInitialized, setIsInitialized] = useState(false);
 
   useEffect(() => {
@@ -60,6 +62,7 @@ const App = () => {
       setIsInitialized(true);
       // init localization
       initLocalization((namespace, path, data) => t(path, { ns: namespace, ...data }));
+      initLocalizationExists((namespace, path) => i18n.exists(path, { ns: namespace }));
       // eslint-disable-next-line functional/immutable-data
       errorFactoryManager.factory = new PGAppErrorFactory((path, ns) => t(path, { ns }));
     }
@@ -162,6 +165,27 @@ const ActualApp = () => {
 
   useEffect(() => {
     if (sessionToken !== '') {
+      // this api call it is needed to populate the notification side menu dot
+      // to avoid double api call (one here and another in the notification page) we have to do the call
+      // only if the current page is the delegated page
+      if (pathname !== routes.NOTIFICHE) {
+        dispatch(
+          getReceivedNotifications({
+            size: 10,
+            isDelegatedPage: false,
+          })
+        )
+          .unwrap()
+          .then((data) => {
+            dispatch(
+              setHasNewNotifications(
+                data.resultsPage.some((notification) => notification.isNewNotification)
+              )
+            );
+          })
+          .catch(() => {});
+      }
+
       if (userHasAdminPermissions) {
         void dispatch(getSidemenuInformation());
       }
@@ -180,7 +204,7 @@ const ActualApp = () => {
         name: organization?.name,
         // productRole: role?.role,
         productRole: t(`roles.${role?.role}`),
-        logoUrl: `${SELFCARE_CDN_URL}institutions/${organization?.id}/logo.png`,
+        logoUrl: `${SELFCARE_CDN_URL}/institutions/${organization?.id}/logo.png`,
       },
     ],
     [role, organization, i18n.language]
@@ -266,12 +290,12 @@ const ActualApp = () => {
         <PnDialog open={openModal}>
           <DialogTitle sx={{ mb: 2 }}>{t('header.logout-message')}</DialogTitle>
           <PnDialogActions>
-            <Button id="cancelButton" variant="outlined" onClick={() => setOpenModal(false)}>
+            <MIButton id="cancelButton" variant="outlined" onClick={() => setOpenModal(false)}>
               {t('button.annulla')}
-            </Button>
-            <Button data-testid="confirm-button" variant="contained" onClick={performLogout}>
+            </MIButton>
+            <MIButton data-testid="confirm-button" variant="contained" onClick={performLogout}>
               {t('header.logout')}
-            </Button>
+            </MIButton>
           </PnDialogActions>
         </PnDialog>
         {/* <AppMessage sessionRedirect={async () => await dispatch(logout())} /> */}

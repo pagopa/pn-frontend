@@ -1,6 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { useTheme } from '@mui/material';
 import {
   Avatar,
   Grid,
@@ -15,8 +16,8 @@ import { PnEChartsProps } from '@pagopa-pn/pn-data-viz';
 
 import {
   DigitaErrorTypes,
-  GraphColors,
   IDigitalErrorsDetailStatistics,
+  getGraphColors,
 } from '../../models/Statistics';
 import AggregateStatistics, { AggregateDataItem } from './AggregateStatistics';
 import EmptyStatistics from './EmptyStatistics';
@@ -32,6 +33,8 @@ interface AggregateErrorDetailDataItem extends AggregateDataItem {
 
 const DigitalErrorsDetailStatistics: React.FC<Props> = ({ data: sData }) => {
   const { t } = useTranslation(['statistics']);
+  const theme = useTheme();
+  const graphColors = getGraphColors(theme);
 
   const delivery_errors = sData[DigitaErrorTypes.DELIVERY_ERROR].count;
   const pec_errors = sData[DigitaErrorTypes.INVALID_PEC].count;
@@ -46,43 +49,43 @@ const DigitalErrorsDetailStatistics: React.FC<Props> = ({ data: sData }) => {
       title: t('digital_errors_detail.delivery_title'),
       description: t('digital_errors_detail.delivery_description'),
       value: delivery_errors,
-      color: GraphColors.lightRed,
+      color: graphColors.lightRed,
     },
     {
       title: t('digital_errors_detail.pec_title'),
       description: t('digital_errors_detail.pec_description'),
       value: pec_errors,
-      color: GraphColors.darkRed,
+      color: graphColors.darkRed,
     },
     {
       title: t('digital_errors_detail.rejected_title'),
       description: t('digital_errors_detail.rejected_description'),
       value: rejected_errors,
-      color: GraphColors.pink,
+      color: graphColors.pink,
     },
     {
       title: t('digital_errors_detail.virus_detected_title'),
       description: t('digital_errors_detail.virus_detected_description'),
       value: virus_detected_errors,
-      color: GraphColors.lightYellow,
+      color: graphColors.lightYellow,
     },
     {
       title: t('digital_errors_detail.server_pec_comunication_title'),
       description: t('digital_errors_detail.server_pec_comunication_description'),
       value: server_pec_comunication_errors,
-      color: GraphColors.gold,
+      color: graphColors.gold,
     },
     {
       title: t('digital_errors_detail.sending_pec_title'),
       description: t('digital_errors_detail.sending_pec_description'),
       value: sending_pec_errors,
-      color: GraphColors.goldenYellow,
+      color: graphColors.goldenYellow,
     },
     {
       title: t('digital_errors_detail.malformed_pec_address_title'),
       description: t('digital_errors_detail.malformed_pec_address_description'),
       value: malformed_pec_address_errors,
-      color: GraphColors.oliveBrown,
+      color: graphColors.oliveBrown,
     },
   ];
 

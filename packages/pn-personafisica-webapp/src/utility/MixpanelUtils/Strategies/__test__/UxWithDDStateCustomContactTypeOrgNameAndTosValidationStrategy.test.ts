@@ -11,7 +11,7 @@ describe('Mixpanel - UX Action with Digital Domicil State, customized contact ty
       event_type: EventAction.SCREEN_VIEW,
       addresses: digitalLegalAddresses,
       customized_contact_type: ChannelType.PEC,
-      organization_name: 'Agenzia delle Entrate',
+      organization_name: 'Agenzia Test',
       tos_validation: 'valid',
     });
 
@@ -21,7 +21,7 @@ describe('Mixpanel - UX Action with Digital Domicil State, customized contact ty
         event_type: EventAction.SCREEN_VIEW,
         digital_domicile_state: 'pec',
         customized_contact_type: 'pec',
-        organization_name: 'Agenzia delle Entrate',
+        organization_name: 'Agenzia Test',
         tos_validation: 'valid',
       },
     });
@@ -32,7 +32,7 @@ describe('Mixpanel - UX Action with Digital Domicil State, customized contact ty
       event_type: EventAction.SCREEN_VIEW,
       addresses: digitalLegalAddresses,
       customized_contact_type: ChannelType.SERCQ_SEND,
-      organization_name: 'Agenzia delle Entrate',
+      organization_name: 'Agenzia Test',
       tos_validation: 'missing',
     });
 
@@ -42,7 +42,7 @@ describe('Mixpanel - UX Action with Digital Domicil State, customized contact ty
         event_type: EventAction.SCREEN_VIEW,
         digital_domicile_state: 'pec',
         customized_contact_type: 'send',
-        organization_name: 'Agenzia delle Entrate',
+        organization_name: 'Agenzia Test',
         tos_validation: 'missing',
       },
     });

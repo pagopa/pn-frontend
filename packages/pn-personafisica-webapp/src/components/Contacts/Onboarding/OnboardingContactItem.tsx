@@ -1,18 +1,10 @@
 import { FocusEventHandler, ReactNode } from 'react';
 
-import CheckIcon from '@mui/icons-material/Check';
-import {
-  Box,
-  Button,
-  ButtonProps,
-  InputAdornment,
-  Stack,
-  TextField,
-  Typography,
-} from '@mui/material';
+import CheckRoundedIcon from '@mui/icons-material/CheckRounded';
+import { Box, InputAdornment, Stack, TextField, Typography } from '@mui/material';
 import { SxProps, Theme } from '@mui/material/styles';
 import { useIsMobile } from '@pagopa-pn/pn-commons';
-import { ButtonNaked } from '@pagopa/mui-italia';
+import { MIButton, MIButtonProps } from '@pagopa/mui-italia';
 
 type CommonSlotProps = {
   container?: {
@@ -27,7 +19,8 @@ type EntryModeProps = {
   inputLabel: string;
   value: string;
   buttonLabel: string;
-  buttonVariant?: ButtonProps['variant'];
+  buttonVariant?: MIButtonProps['variant'];
+  buttonPlacement?: 'inline' | 'below';
   error?: string;
   touched?: boolean;
   onChange: (value: string) => void | Promise<void>;
@@ -66,6 +59,7 @@ const EntryMode: React.FC<Omit<EntryModeProps, 'mode'>> = ({
   value,
   buttonLabel,
   buttonVariant = 'contained',
+  buttonPlacement = 'inline',
   error,
   touched,
   onChange,
@@ -78,16 +72,17 @@ const EntryMode: React.FC<Omit<EntryModeProps, 'mode'>> = ({
 }) => {
   const isMobile = useIsMobile();
 
+  const inlineButton = !isMobile && buttonPlacement === 'inline';
+
   const submitButton = (
-    <Button
+    <MIButton
       fullWidth={isMobile}
-      sx={isMobile ? { mt: 2 } : { height: '43px', fontWeight: 700, flexShrink: 0 }}
+      sx={inlineButton ? { height: '43px', flexShrink: 0 } : { mt: 2 }}
       variant={buttonVariant}
-      color="primary"
       onClick={() => void onSubmit()}
     >
       {buttonLabel}
-    </Button>
+    </MIButton>
   );
 
   return (
@@ -120,22 +115,21 @@ const EntryMode: React.FC<Omit<EntryModeProps, 'mode'>> = ({
           error={touched && Boolean(error)}
           helperText={touched && error}
         />
-        {!isMobile && submitButton}
+        {inlineButton && submitButton}
       </Stack>
 
       {footer ?? null}
 
-      {isMobile && submitButton}
+      {!inlineButton && submitButton}
 
       {collapse && (
-        <ButtonNaked
-          color="primary"
-          size="medium"
+        <MIButton
+          variant="text"
           onClick={collapse.onClick}
           sx={{ alignSelf: isMobile ? 'center' : 'flex-start', fontWeight: 700, mt: 2 }}
         >
           {collapse.label}
-        </ButtonNaked>
+        </MIButton>
       )}
     </Stack>
   );
@@ -165,7 +159,7 @@ const ViewMode: React.FC<Omit<ViewModeProps, 'mode'>> = ({
     )}
 
     <Stack direction="row" spacing={1.5} alignItems="center">
-      {icon ?? <CheckIcon color="disabled" fontSize="small" aria-hidden="true" />}
+      {icon ?? <CheckRoundedIcon color="disabled" fontSize="small" aria-hidden="true" />}
       <Box>
         {label && (
           <Typography variant="body2" fontSize="14px" color="text.secondary">
@@ -182,14 +176,13 @@ const ViewMode: React.FC<Omit<ViewModeProps, 'mode'>> = ({
     </Stack>
 
     {action && (
-      <ButtonNaked
-        color="primary"
-        size="medium"
+      <MIButton
+        variant="text"
         onClick={action.onClick}
         sx={{ alignSelf: 'flex-start', fontWeight: 700 }}
       >
         {action.label}
-      </ButtonNaked>
+      </MIButton>
     )}
   </Stack>
 );

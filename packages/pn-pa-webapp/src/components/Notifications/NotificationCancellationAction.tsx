@@ -8,6 +8,7 @@ import {
   TimelineCategory,
   useHasPermissions,
   useIsCancelled,
+  useIsMobile,
 } from '@pagopa-pn/pn-commons';
 import { MIButton } from '@pagopa/mui-italia';
 
@@ -32,6 +33,7 @@ const NotificationCancellationAction: React.FC<Props> = ({
   const { t } = useTranslation(['notifiche']);
   const [showModal, setShowModal] = useState(false);
   const { cancellationInProgress, cancelled } = useIsCancelled({ notification });
+  const isMobile = useIsMobile('md');
 
   const withPayment =
     notification.timeline.findIndex(
@@ -69,6 +71,7 @@ const NotificationCancellationAction: React.FC<Props> = ({
         color="error"
         onClick={openModal}
         data-testid="cancelNotificationBtn"
+        fullWidth={isMobile}
       >
         {t('detail.cancel-notification', { ns: 'notifiche' })}
       </MIButton>

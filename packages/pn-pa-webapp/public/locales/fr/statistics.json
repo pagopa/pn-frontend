@@ -90,5 +90,9 @@
     "no_data_found": "Aucune donnée disponible pour l’intervalle de temps sélectionné",
     "not_enough_data": "Le nombre de notifications téléchargées par l’organisme sur SEND n’est pas encore suffisant pour élaborer et  montrer les statistiques d’envoi. Explorez la <0>section Notifications</0> pour consulter celles téléchargées jusqu’à présent.",
     "notification_section_aria_label": "Section notifications"
+  },
+  "maintenance_alert": {
+    "title": "Maintenance en cours",
+    "description": "Une maintenance programmée est en cours. Elle pourrait entraîner des retards dans la mise à jour des données du tableau de bord. Veuillez vous référer à la date indiquée sur cette page pour vérifier la dernière mise à jour disponible. Les mises à jour reprendront normalement à la fin de l'intervention."
   }
 }

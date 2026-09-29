@@ -142,8 +142,8 @@ describe('Public Keys', () => {
       value: 'string',
       lastUpdate: '2024-09-30T13:10:03.178Z',
       user: {
-        denomination: 'Luca Bianchi',
-        fiscalCode: 'BNCLCU89E08H501A',
+        denomination: 'Utente Test Cinque',
+        fiscalCode: 'TSTUTN00A08A001H',
       },
       status: VirtualKeyStatus.Rotated,
     };

@@ -226,7 +226,7 @@ const EmailSmsContactWizard: React.FC = () => {
             sx: { flexBasis: { xs: 'unset', lg: '50%' } },
           },
           button: {
-            sx: { height: '43px', fontWeight: 700, flexBasis: { xs: 'unset', lg: '25%' } },
+            sx: { height: '43px', flexBasis: { xs: 'unset', lg: '25%' } },
           },
           container: {
             width: '100%',

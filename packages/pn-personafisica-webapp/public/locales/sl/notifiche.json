@@ -64,6 +64,7 @@
     "legal-date": "Vročitev odložena dne",
     "informal-date": "Sporočilo odloženo dne",
     "legal-disclaimer": "Vročitev poslana preko SEND, platforme, ki jo ureja 26. člen Zakonske uredbe 76/2020",
+    "informal-disclaimer": "To sporočilo bi lahko imelo pravne učinke. Oglej si priloge, če so priložene, da izveš več.",
     "notification-timeline-section": {
       "title": "Stanje obvestila",
       "aria-label": "Pojdi na časovnico obvestila"
@@ -98,7 +99,7 @@
     "disclaimer-link": "Izvedite več",
     "pec-unreachable": "Vaš predal PEC naj bo prost in aktiven, da boste vse prejemali v digitalni obliki!",
     "cancelled": {
-      "message": "To obvestilo je preklical organ pošiljatelj.",
+      "message": "To obvestilo je preklical organ pošiljatelj, zato dokumenti niso več na voljo.",
       "cta": "Kaj moram storiti?"
     },
     "payment": {
@@ -144,8 +145,8 @@
         "duplicated": "To opozorilo je bilo že plačano. Stanje bo kmalu posodobljeno."
       },
       "error-payment": "Izberite obvestilo o plačilu",
-      "error-payment-failed-single": "Prišlo je do težave z obvestilom o plačilu. Pritisnite Ponovno naloži za nov poskus. Če se napaka ponovi, se obrnite na podporo.",
-      "error-payment-failed-multiple": "Prišlo je do težave z več obvestili o plačilu. Pritisnite Ponovno naloži za nov poskus. Če se napaka ponovi, se obrnite na podporo.",
+      "error-payment-failed-single": "Prišlo je do težave z obvestilom o plačilu. Pritisni <0>Ponovno naloži</0> za ponovni poskus. Če se napaka nadaljuje, kontaktiraj podporo.",
+      "error-payment-failed-multiple": "Prišlo je do težave z več obvestili o plačilu. Pritisni <0>Ponovno naloži</0> za ponovni poskus. Če se napaka nadaljuje, kontaktiraj podporo.",
       "tpp-expired-error-title": "Povezava z banko je potekla.",
       "tpp-expired-error-description": "Za ponovno vzpostavitev ponovno dostopajte do tega obvestila prek sporočila, ki ste ga prejeli v aplikaciji vaše banke."
     },
@@ -154,13 +155,14 @@
       "phone": "Telefonska številka organa",
       "email": "E-pošta organa",
       "website": "Spletno mesto organa",
-      "copy_phone": "Telefonska številka je kopirana"
+      "copy_phone": "Kopiraj telefonsko številko",
+      "copied_phone": "Telefonska številka je kopirana"
     },
     "informal_notification_markdown": {
       "greeting": "Ciao {{recipientDenomination}},",
       "attachments_info": "Per avere maggiori informazioni <0>prendi visione degli allegati,</0> che possono fornirti dettagli importanti.",
       "payment_instructions": "Puoi effettuare il pagamento direttamente premendo <0>Paga</0>. In alternativa, puoi utilizzare l'<0>avviso allegato</0> per saldare l'importo tramite tutti i canali abilitati a pagoPA.",
-      "assistance": "In ogni caso, qualora avessi bisogno di assistenza, <0>contatta {{senderDenomination}} attraverso i suoi canali ufficiali.</0>"
+      "assistance": "In ogni caso, qualora avessi bisogno di assistenza, <0>contatta {{senderDenomination}}</0> attraverso i suoi canali ufficiali."
     },
     "acts_files": {
       "downloadable_acts": "<0>Dokumenti bodo na voljo na spletu do 120 dni</0> od dneva, ko je uradno obvestilo SEND postalo pravno veljavno. Shranite jih v svojo napravo!",
@@ -171,6 +173,10 @@
       "informal_downloadable_acts": "Shranite priloge v svojo napravo: na spletu bodo na voljo do <0>180 dni od datuma vložitve</0>, ki ga najdete zgoraj!"
     },
     "timeline": {
+      "courtesy-group-label": "Vljudnostna sporočila",
+      "registered-letter": "Priporočeno pismo",
+      "digital-send-fallback": "Digitalno pošiljanje",
+      "unknown-status": "Neznano stanje",
       "schedule-digital-workflow": "Nadaljnje pošiljanje z digitalnimi sredstvi",
       "schedule-digital-workflow-description": "Začel se je nadaljnji poskus digitalnega pošiljanja obvestila.",
       "schedule-digital-workflow-description-multirecipient": "Začel se je nadaljnji poskus digitalnega pošiljanja obvestila za {{name}} {{taxId}}.",
@@ -181,9 +187,11 @@
       "send-courtesy-message-description": "Vljudnostno sporočilo se pošilja prek {{type}}.",
       "send-courtesy-message-description-multirecipient": "Vljudnostno sporočilo za {{name}} {{taxId}} se pošilja prek {{type}}.",
       "send-digital-domicile-PEC": "Pošiljanje prek potrjenega e-poštnega naslova",
+      "send-digital-domicile-PEC-group-label": "PEC",
       "send-digital-domicile-PEC-description": "Obvestilo se pošlje na potrjeni e-poštni naslov {{address}}.",
       "send-digital-domicile-PEC-description-multirecipient": "Obvestilo se pošlje {{name}} {{taxId}} na potrjeni e-poštni naslov {{address}}.",
       "send-digital-domicile-SERCQ-SEND": "Pošiljanje preko digitalnega prebivališča SEND",
+      "send-digital-domicile-SERCQ-SEND-group-label": "Digitalni domicil SEND",
       "send-digital-domicile-SERCQ-SEND-description": "Pošiljanje obvestila na digitalno prebivališče SEND je v teku.",
       "send-digital-domicile-SERCQ-SEND-description-multirecipient": "Obvestilo se pošlje {{name}} {{taxId}} na digitalno prebivališče SEND",
       "send-digital-error": "Pošiljanje prek potrjenega e-poštnega naslova ni uspelo",
@@ -196,13 +204,20 @@
       "send-digital-success-SERCQ-SEND-description": "Pošiljanje obvestila na digitalno prebivališče SEND je bilo uspešno.",
       "send-digital-success-SERCQ-SEND-description-multirecipient": "Pošiljanje obvestila {{name}} {{taxId}} na digitalno prebivališče SEND je bilo uspešno.",
       "send-simple-registered-letter": "Pošiljanje z navadno priporočeno pošto",
+      "send-simple-registered-letter-group-label": "Pošiljanje z navadno priporočeno pošto",
       "send-simple-registered-letter-description": "Obvestilo se pošlje na naslov {{address}} z navadno priporočeno pošto.",
       "send-simple-registered-letter-description-multirecipient": "Obvestilo se pošlje {{name}} {{taxId}} na naslov {{address}} z navadno priporočeno pošto.",
       "simple-registered-letter-progess": "Posodobitev pošiljanja po priporočeni pošti",
       "send-analog-domicile-890": "Pošiljanje po priporočeni pošti 890",
+      "send-analog-domicile-890-group-label": "Priporočeno pismo 890",
+      "send-analog-domicile-890-first-attempt-group-label": "Prvo priporočeno pismo 890",
+      "send-analog-domicile-890-second-attempt-group-label": "Drugo priporočeno pismo 890",
       "send-analog-domicile-890-description": "Obvestilo se pošlje na naslov {{address}} po priporočeni pošti 890.",
       "send-analog-domicile-890-description-multirecipient": "Obvestilo se pošlje {{name}} {{taxId}} na naslov {{address}} po priporočeni pošti 890.",
       "send-analog-domicile-ar": "Pošiljanje s priporočenim pismom s povratnico",
+      "send-analog-domicile-ar-group-label": "Priporočeno pismo s povratnico",
+      "send-analog-domicile-ar-first-attempt-group-label": "Prvo priporočeno pismo s povratnico",
+      "send-analog-domicile-ar-second-attempt-group-label": "Drugo priporočeno pismo s povratnico",
       "send-analog-domicile-ar-description": "Obvestilo se pošlje na naslov {{address}} s priporočenim pismom s povratnico.",
       "send-analog-domicile-ar-description-multirecipient": "Obvestilo se pošlje {{name}} {{taxId}} na naslov {{address}} s priporočenim pismom s povratnico.",
       "send-digital-progress-error": "Pošiljanje prek potrjenega e-poštnega naslova ni prevzeto",
@@ -386,6 +401,7 @@
         "M07": "ker naslov ne obstaja",
         "M08": "ker je naslov nezadosten",
         "M09": "ker naslov ne obstaja",
+        "M10": "ker naslov ni čitljiv",
         "F01": "zaradi kraje kuverte",
         "F02": "zaradi izgube kuverte",
         "F03": "zaradi poškodbe kuverte",
@@ -485,6 +501,7 @@
     "notification-timeline-reworked-description": "Dogodki, označeni kot popravljeni, nadomeščajo prejšnje dogodke, navedene kot neveljavne.",
     "reworked-status-valid": "Popravljen dogodek",
     "reworked-status-not-valid": "Neveljaven dogodek",
+    "reworked-status-group": "En ali več popravljenih dogodkov",
     "cancellation-in-progress": "Preklicano",
     "cancellation-in-progress-tooltip": "Preklic poteka. Stanje bo kmalu posodobljeno.",
     "cancellation-in-progress-description": "Preklic poteka. Stanje bo kmalu posodobljeno."

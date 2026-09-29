@@ -1,7 +1,7 @@
 import { ReactNode, useState } from 'react';
 import { Trans } from 'react-i18next';
 
-import AccountBalanceOutlinedIcon from '@mui/icons-material/AccountBalanceOutlined';
+import AccountBalanceRoundedIcon from '@mui/icons-material/AccountBalanceRounded';
 import KeyboardArrowRightRoundedIcon from '@mui/icons-material/KeyboardArrowRightRounded';
 import VerifiedRoundedIcon from '@mui/icons-material/VerifiedRounded';
 import { Avatar, Box, Divider, Grid, Stack, Typography } from '@mui/material';
@@ -27,29 +27,31 @@ interface AbstractPaperProps {
   title?: string;
   senderPaId?: string;
   senderDenomination?: string;
+  isSender?: boolean;
   iun: string;
   abstract?: string; // todo: to sanitize and format the abstract content before passing it to the component
   isLegal?: boolean;
-  filedAt: string;
-  senderLogoUrl?: string;
+  filedAt?: string;
+  selfcareCdnUrl?: string;
   details?: Array<AbstractPaperDetail>;
   onDetailsClick?: () => void;
   detailsAriaLabel?: string;
   recipientDenomination?: string;
   hasAttachments?: boolean;
   hasPayment?: boolean;
+  onExternalLinkClick?: (href: string) => void;
 }
 
 interface InstitutionLogoProps {
   id?: string;
   name?: string;
-  senderLogoUrl?: string;
+  selfcareCdnUrl?: string;
 }
 
-const InstitutionLogo = ({ id, name, senderLogoUrl }: InstitutionLogoProps) => {
+const InstitutionLogo: React.FC<InstitutionLogoProps> = ({ id, name, selfcareCdnUrl }) => {
   const [hasError, setHasError] = useState(false);
   const logoSrc =
-    id && !hasError && senderLogoUrl ? `${senderLogoUrl}institutions/${id}/logo.png` : undefined;
+    id && !hasError && selfcareCdnUrl ? `${selfcareCdnUrl}/institutions/${id}/logo.png` : undefined;
 
   return (
     <Avatar
@@ -59,36 +61,40 @@ const InstitutionLogo = ({ id, name, senderLogoUrl }: InstitutionLogoProps) => {
         onError: () => setHasError(true),
       }}
       sx={{
-        width: { xs: 40, md: 56 },
-        height: { xs: 40, md: 56 },
-        backgroundColor: theme.palette.grey[50],
+        width: { xs: 64 },
+        height: { xs: 64 },
+        backgroundColor: logoSrc ? undefined : theme.palette.grey[50],
+        border: logoSrc ? `1px solid ${theme.palette.grey[200]}` : undefined,
+        borderRadius: 2,
+        padding: logoSrc ? 1 : 0,
       }}
       variant="rounded"
     >
-      <AccountBalanceOutlinedIcon sx={{ color: theme.palette.grey[300] }} />
+      <AccountBalanceRoundedIcon sx={{ width: 40, height: 40, color: theme.palette.grey[300] }} />
     </Avatar>
   );
 };
-const AbstractPaper = ({
-  title,
-  senderPaId,
-  senderDenomination,
-  iun,
+
+const AbstractSection: React.FC<
+  Pick<
+    AbstractPaperProps,
+    | 'isLegal'
+    | 'abstract'
+    | 'recipientDenomination'
+    | 'onExternalLinkClick'
+    | 'hasAttachments'
+    | 'hasPayment'
+    | 'senderDenomination'
+  >
+> = ({
   abstract,
-  isLegal = true,
-  filedAt,
-  senderLogoUrl,
-  details,
-  onDetailsClick,
-  detailsAriaLabel,
+  isLegal,
   recipientDenomination,
-  hasAttachments = false,
-  hasPayment = false,
-}: AbstractPaperProps) => {
-  const isMobile = useIsMobile();
-
-  const hasDetails = !!details?.length;
-
+  onExternalLinkClick,
+  hasAttachments,
+  hasPayment,
+  senderDenomination,
+}) => {
   const attachmentsInfoMessage = getTranslationMessage(
     'detail.informal_notification_markdown.attachments_info',
     'notifiche'
@@ -103,30 +109,18 @@ const AbstractPaper = ({
     'notifiche'
   );
 
-  const renderAbstractSection = () => {
-    if (isLegal) {
-      return (
-        <>
-          <Divider aria-hidden sx={{ my: 2 }} />
-          {abstract && (
-            <Typography variant="body1" sx={{ overflowWrap: 'anywhere' }}>
-              {abstract}
-            </Typography>
-          )}
-          <Typography variant="body2" color="text.secondary" sx={{ mt: abstract ? 2 : 0 }}>
-            {getLocalizedOrDefaultLabel('notifications', 'detail.legal-disclaimer')}
-          </Typography>
-        </>
-      );
-    }
+  if (!abstract) {
+    return null;
+  }
 
-    if (!abstract) {
-      return null;
-    }
-
-    return (
-      <>
-        <Divider aria-hidden sx={{ my: 2 }} />
+  return (
+    <>
+      <Divider aria-hidden sx={{ my: 2 }} />
+      {isLegal && abstract ? (
+        <Typography variant="body1" sx={{ overflowWrap: 'anywhere' }}>
+          {abstract}
+        </Typography>
+      ) : (
         <Stack>
           {recipientDenomination && (
             <Typography variant="body1" color="text.primary">
@@ -146,37 +140,34 @@ const AbstractPaper = ({
                 m: 0,
                 typography: 'body1',
                 color: 'text.primary',
-                mt: 4,
+                mt: 1.5,
               },
             }}
           >
-            <PNMarkdown content={abstract} />
+            <PNMarkdown content={abstract} onExternalLinkClick={onExternalLinkClick} />
           </Box>
 
-          {hasAttachments && (
-            <Typography variant="body1" color="text.primary" mt={4}>
-              <Trans
-                i18nKey={attachmentsInfoMessage.key}
-                ns={attachmentsInfoMessage.ns}
-                components={[<strong key="0" />]}
-              />
+          {(hasAttachments || hasPayment) && (
+            <Typography variant="body1" color="text.primary" mt={1.5}>
+              {hasAttachments && (
+                <Trans
+                  i18nKey={attachmentsInfoMessage.key}
+                  ns={attachmentsInfoMessage.ns}
+                  components={[<strong key="0" />]}
+                />
+              )}
+              {hasAttachments && hasPayment && '\u00A0'}
+              {hasPayment && (
+                <Trans
+                  i18nKey={paymentInstructionsMessage.key}
+                  ns={paymentInstructionsMessage.ns}
+                  components={[<strong key="0" />, <strong key="1" />]}
+                />
+              )}
             </Typography>
           )}
 
-          {hasPayment && (
-            <Typography variant="body1" color="text.primary" mt={hasAttachments ? 2 : 4}>
-              <Trans
-                i18nKey={paymentInstructionsMessage.key}
-                ns={paymentInstructionsMessage.ns}
-                components={[<strong key="0" />]}
-              />
-            </Typography>
-          )}
-          <Typography
-            variant="body1"
-            color="text.primary"
-            mt={hasAttachments || hasPayment ? 2 : 4}
-          >
+          <Typography variant="body1" color="text.primary" mt={1.5}>
             <Trans
               i18nKey={assistanceMessage.key}
               ns={assistanceMessage.ns}
@@ -187,9 +178,32 @@ const AbstractPaper = ({
             />
           </Typography>
         </Stack>
-      </>
-    );
-  };
+      )}
+    </>
+  );
+};
+
+const AbstractPaper = ({
+  title,
+  senderPaId,
+  senderDenomination,
+  isSender = false,
+  iun,
+  abstract,
+  isLegal = true,
+  filedAt,
+  selfcareCdnUrl,
+  details,
+  onDetailsClick,
+  detailsAriaLabel,
+  recipientDenomination,
+  hasAttachments = false,
+  hasPayment = false,
+  onExternalLinkClick,
+}: AbstractPaperProps) => {
+  const isMobile = useIsMobile();
+
+  const hasDetails = !!details?.length;
 
   return (
     <MIPaper
@@ -251,23 +265,25 @@ const AbstractPaper = ({
         </Stack>
       ) : (
         <>
-          <Grid container spacing={2}>
+          <Grid container spacing={isMobile ? 0 : 2}>
             <Grid item xs={12} md={6} display="flex" alignItems="center" gap={2}>
               <InstitutionLogo
                 id={senderPaId}
                 name={senderDenomination}
-                senderLogoUrl={senderLogoUrl}
+                selfcareCdnUrl={selfcareCdnUrl}
               />
               <Box>
-                <Typography variant="sidenav" color="text">
+                <Typography variant="sidenav" color="text" sx={{ wordBreak: 'break-word' }}>
                   {senderDenomination}
                 </Typography>
-                <Typography variant="body2" color="text.secondary">
-                  {isLegal
-                    ? getLocalizedOrDefaultLabel('notifications', 'detail.legal-date')
-                    : getLocalizedOrDefaultLabel('notifications', 'detail.informal-date')}{' '}
-                  {formatDate(filedAt, false)}
-                </Typography>
+                {filedAt && (
+                  <Typography variant="body2" color="text.secondary">
+                    {isLegal
+                      ? getLocalizedOrDefaultLabel('notifications', 'detail.legal-date')
+                      : getLocalizedOrDefaultLabel('notifications', 'detail.informal-date')}{' '}
+                    {formatDate(filedAt, false)}
+                  </Typography>
+                )}
               </Box>
             </Grid>
             {isMobile && (
@@ -289,8 +305,24 @@ const AbstractPaper = ({
               </Box>
             </Grid>
           </Grid>
-          {renderAbstractSection()}
+          <AbstractSection
+            isLegal={isLegal}
+            abstract={abstract}
+            recipientDenomination={recipientDenomination}
+            onExternalLinkClick={onExternalLinkClick}
+            hasAttachments={hasAttachments}
+            hasPayment={hasPayment}
+            senderDenomination={senderDenomination}
+          />
         </>
+      )}
+      {!isSender && (
+        <Typography variant="body2" color="text.secondary" sx={{ mt: 2 }}>
+          {getLocalizedOrDefaultLabel(
+            'notifications',
+            `detail.${!isLegal ? 'informal' : 'legal'}-disclaimer`
+          )}
+        </Typography>
       )}
     </MIPaper>
   );

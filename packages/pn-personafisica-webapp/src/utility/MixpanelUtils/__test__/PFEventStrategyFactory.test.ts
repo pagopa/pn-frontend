@@ -265,7 +265,6 @@ describe('Event Strategy Factory', () => {
       PFEventsType.SEND_DOWNLOAD_RECEIPT_NOTICE,
       PFEventsType.SEND_PAYMENT_DETAIL_REFRESH,
       PFEventsType.SEND_ADD_MANDATE_START,
-      PFEventsType.SEND_ADD_MANDATE_BACK,
       PFEventsType.SEND_SHOW_MANDATE_CODE,
       PFEventsType.SEND_MANDATE_REVOKED,
       PFEventsType.SEND_MANDATE_REJECTED,

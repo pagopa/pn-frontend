@@ -1,9 +1,9 @@
 import { useCallback, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import DownloadIcon from '@mui/icons-material/Download';
+import FileDownloadRoundedIcon from '@mui/icons-material/FileDownloadRounded';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
-import { Box, Button, Grid, IconButton, Paper, Stack, Typography } from '@mui/material';
+import { Box, Grid, Paper, Stack, Typography, useTheme } from '@mui/material';
 import {
   ApiErrorWrapper,
   CustomTooltip,
@@ -11,10 +11,12 @@ import {
   formatDate,
   formatToSlicedISOString,
   getDateFromString,
+  isDateInRange,
   oneYearAgo,
   screenshot,
   today,
 } from '@pagopa-pn/pn-commons';
+import { MIAlert, MIButton, MIIconButton } from '@pagopa/mui-italia';
 
 import DeliveryModeStatistics from '../components/Statistics/DeliveryModeStatistics';
 import DigitalErrorsDetailStatistics from '../components/Statistics/DigitalErrorsDetailStatistics';
@@ -25,12 +27,13 @@ import FiledNotificationsStatistics from '../components/Statistics/FiledNotifica
 import FilterStatistics from '../components/Statistics/FilterStatistics';
 import LastStateStatistics from '../components/Statistics/LastStateStatistics';
 import { PAEventsType } from '../models/PAEventsType';
-import { CxType, GraphColors, StatisticsDataTypes } from '../models/Statistics';
+import { CxType, StatisticsDataTypes, getGraphColors } from '../models/Statistics';
 import { authSelectors } from '../redux/auth/reducers';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { STATISTICS_ACTIONS, getStatistics } from '../redux/statistics/actions';
 import { hasData } from '../redux/statistics/reducers';
 import { RootState } from '../redux/store';
+import { getConfiguration } from '../services/configuration.service';
 import PAEventStrategyFactory from '../utility/MixpanelUtils/PAEventStrategyFactory';
 
 const filter = (node: HTMLElement) => {
@@ -38,14 +41,14 @@ const filter = (node: HTMLElement) => {
   return !exclusionClasses.some((classname) => node.classList?.contains(classname));
 };
 
-const handleDownloadJpeg = (elem: HTMLDivElement | null) => {
+const handleDownloadJpeg = (elem: HTMLDivElement | null, backgroundColor: string) => {
   if (!elem) {
     return;
   }
   screenshot
     .toJpeg(elem, {
       quality: 0.95,
-      backgroundColor: GraphColors.lightGrey,
+      backgroundColor,
       filter,
     })
     .then((dataUrl) => {
@@ -61,6 +64,8 @@ const handleDownloadJpeg = (elem: HTMLDivElement | null) => {
 
 const Statistics = () => {
   const exportJpgNode = useRef<HTMLDivElement>(null);
+  const theme = useTheme();
+  const graphColors = getGraphColors(theme);
   const dispatch = useAppDispatch();
   const { t } = useTranslation(['statistics']);
   const statisticsData = useAppSelector((state: RootState) => state.statisticsState.statistics);
@@ -70,6 +75,10 @@ const Statistics = () => {
     (state: RootState) => state.userState.user?.organization
   );
   const isSupportUser = useAppSelector(authSelectors.selectIsSupportUser);
+  const statisticsMaintenanceDates = getConfiguration().STATISTICS_MAINTENANCE_DATES;
+  const [statisticsMaintenanceStartDate, statisticsMaintenanceEndDate] = statisticsMaintenanceDates
+    ? statisticsMaintenanceDates.split('_')
+    : [];
 
   const cxId = loggedUserOrganizationParty.id;
   const cxType = isSupportUser ? CxType.BS : CxType.PA;
@@ -85,15 +94,15 @@ const Statistics = () => {
   const Subtitle = (
     <Stack direction={'row'} display="flex" justifyContent="space-between" alignItems="center">
       <Typography>{t('subtitle', { organization: loggedUserOrganizationParty?.name })}</Typography>
-      <Button
-        onClick={() => handleDownloadJpeg(exportJpgNode.current)}
+      <MIButton
+        onClick={() => handleDownloadJpeg(exportJpgNode.current, graphColors.lightGrey)}
         variant="outlined"
-        endIcon={<DownloadIcon />}
+        endIcon={<FileDownloadRoundedIcon />}
         sx={{ whiteSpace: 'nowrap' }}
         data-testid="exportJpgButton"
       >
         {t('export_all')}
-      </Button>
+      </MIButton>
     </Stack>
   );
 
@@ -132,11 +141,26 @@ const Statistics = () => {
               subTitle={Subtitle}
               variantSubTitle="subtitle1"
             />
-            <Typography variant="caption" sx={{ color: GraphColors.greyBlue }}>
+            <Typography variant="caption" sx={{ color: graphColors.greyBlue }}>
               {getLastUpdateText()}
             </Typography>
+            {statisticsMaintenanceDates &&
+              isDateInRange(
+                new Date(),
+                statisticsMaintenanceStartDate,
+                statisticsMaintenanceEndDate
+              ) && (
+                <MIAlert
+                  data-testid="maintenanceAlert"
+                  severity="warning"
+                  title={t('maintenance_alert.title')}
+                  sx={{ mt: 4 }}
+                >
+                  {t('maintenance_alert.description')}
+                </MIAlert>
+              )}
             <Box ref={exportJpgNode}>
-              <Typography variant="h6" component="h5" mt={7}>
+              <Typography variant="h6" component="h2" mt={7}>
                 {t('section_1')}
               </Typography>
 
@@ -151,9 +175,9 @@ const Statistics = () => {
                     sx: { marginLeft: 0.5 },
                   }}
                 >
-                  <IconButton aria-describedby="tooltip-section-1">
+                  <MIIconButton aria-describedby="tooltip-section-1">
                     <InfoOutlinedIcon color="action" fontSize="small" />
-                  </IconButton>
+                  </MIIconButton>
                 </CustomTooltip>
               </Box>
 
@@ -189,7 +213,7 @@ const Statistics = () => {
                       />
                     </Grid>
                   </Grid>
-                  <Typography variant="h6" component="h5" mt={9}>
+                  <Typography variant="h6" component="h2" mt={9}>
                     {t('section_2')}
                   </Typography>
                   <FilterStatistics

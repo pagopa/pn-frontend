@@ -26,7 +26,7 @@ export const notificationTrackingConfigs: TrackingConfigs<NotificationEventType>
     uxScreenView(mapNotificationDetailToEventPayload(data)),
   [PGEventsType.SEND_PG_NOTIFICATION_DOWNLOAD_ATTACHMENT]: (data) =>
     uxAction(mapNotificationAttachmentToDocumentDownloadPayload(data)),
-  [PGEventsType.SEND_PG_START_PAYMENT]: () => uxAction(mapStartPaymentToEventPayload()),
+  [PGEventsType.SEND_PG_START_PAYMENT]: (data) => uxAction(mapStartPaymentToEventPayload(data)),
   [PGEventsType.SEND_PG_TIMELINE_DOWNLOAD]: (data) =>
     uxAction(mapTimelineLegalFactToDocumentDownloadPayload(data)),
   [PGEventsType.SEND_PG_TIMELINE_SHOW_MORE]: () => uxAction(),

@@ -1,5 +1,5 @@
 import { Typography } from '@mui/material';
-import { IllusInProgress } from '@pagopa/mui-italia';
+import { IllusMIMaintenance } from '@pagopa/mui-italia';
 
 import { getLocalizedOrDefaultLabel } from '../utility/localization.utility';
 import FeedbackPage from './FeedbackPage';
@@ -41,7 +41,7 @@ const AppNotAccessible: React.FC<Props> = ({ onAction, reason = 'not-accessible'
     getLocalizedOrDefaultLabel('common', 'user-validation-failed.description')
   );
 
-  const slotProps = isNotAccessible ? { headingIcon: <IllusInProgress /> } : undefined;
+  const slotProps = isNotAccessible ? { headingIcon: <IllusMIMaintenance /> } : undefined;
 
   const action = isNotAccessible
     ? undefined

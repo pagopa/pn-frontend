@@ -64,6 +64,7 @@
     "legal-date": "Notification déposée le",
     "informal-date": "Communication déposée le",
     "legal-disclaimer": "Notification envoyée via SEND, la plateforme régie par l'art. 26 du D.L. 76/2020",
+    "informal-disclaimer": "Cette communication pourrait produire des effets juridiques. Consulte les pièces jointes, si présentes, pour en savoir plus.",
     "notification-timeline-section": {
       "title": "Statut de la notification",
       "aria-label": "Accède à la timeline de la notification"
@@ -98,7 +99,7 @@
     "disclaimer-link": "En savoir plus",
     "pec-unreachable": "Maintenez votre adresse PEC libre et active pour tout recevoir au format numérique !",
     "cancelled": {
-      "message": "Cette notification a été annulée par l'organisme émetteur.",
+      "message": "Cette notification a été annulée par l'organisme expéditeur, les documents ne sont donc plus disponibles.",
       "cta": "Que dois-je faire ?"
     },
     "payment": {
@@ -144,8 +145,8 @@
         "duplicated": "Cette alerte a déjà été payée. L’état sera mis à jour sous peu."
       },
       "error-payment": "Sélectionnez un avis de paiement",
-      "error-payment-failed-single": "Un problème est survenu avec un avis de paiement. Appuyez sur Recharger pour réessayer. Si l’erreur persiste, contactez l’assistance.",
-      "error-payment-failed-multiple": "Un problème est survenu avec plusieurs avis de paiement. Appuyez sur Recharger pour réessayer. Si l’erreur persiste, contactez l’assistance.",
+      "error-payment-failed-single": "Un problème est survenu avec un avis de paiement. Appuie sur <0>Recharger</0> pour réessayer. Si l’erreur persiste, contacte l’assistance.",
+      "error-payment-failed-multiple": "Un problème est survenu avec plusieurs avis de paiement. Appuie sur <0>Recharger</0> pour réessayer. Si l’erreur persiste, contacte l’assistance.",
       "tpp-expired-error-title": "La connexion avec la banque a expiré.",
       "tpp-expired-error-description": "Pour la rétablir, accédez de nouveau à cette notification via le message que vous avez reçu sur l'application de votre banque."
     },
@@ -154,13 +155,14 @@
       "phone": "Numéro de téléphone de l'organisme",
       "email": "E-mail de l'organisme",
       "website": "Site web de l'organisme",
-      "copy_phone": "Numéro de téléphone copié"
+      "copy_phone": "Copier le numéro de téléphone",
+      "copied_phone": "Numéro de téléphone copié"
     },
     "informal_notification_markdown": {
       "greeting": "Ciao {{recipientDenomination}},",
       "attachments_info": "Per avere maggiori informazioni <0>prendi visione degli allegati,</0> che possono fornirti dettagli importanti.",
       "payment_instructions": "Puoi effettuare il pagamento direttamente premendo <0>Paga</0>. In alternativa, puoi utilizzare l'<0>avviso allegato</0> per saldare l'importo tramite tutti i canali abilitati a pagoPA.",
-      "assistance": "In ogni caso, qualora avessi bisogno di assistenza, <0>contatta {{senderDenomination}} attraverso i suoi canali ufficiali.</0>"
+      "assistance": "In ogni caso, qualora avessi bisogno di assistenza, <0>contatta {{senderDenomination}}</0> attraverso i suoi canali ufficiali."
     },
     "acts_files": {
       "downloadable_acts": "<0>Les documents seront disponibles en ligne jusqu'à 120 jours</0> à compter de la date à laquelle la notification SEND a pris valeur de loi. Enregistrez-les sur votre appareil !",
@@ -171,6 +173,10 @@
       "informal_downloadable_acts": "Conserve les pièces jointes sur ton appareil : elles seront disponibles en ligne jusqu'à <0>180 jours à compter de la date de dépôt</0> indiquée en haut !"
     },
     "timeline": {
+      "courtesy-group-label": "Messages de courtoisie",
+      "registered-letter": "Lettre recommandée",
+      "digital-send-fallback": "Envoi numérique",
+      "unknown-status": "Statut inconnu",
       "schedule-digital-workflow": "Envoi ultérieur par voie numérique",
       "schedule-digital-workflow-description": "Une nouvelle tentative d’envoi de la notification par voie numérique a commencé.",
       "schedule-digital-workflow-description-multirecipient": "Une nouvelle tentative d’envoi de la notification a commencé {{name}} {{taxId}} par voie numérique.",
@@ -181,9 +187,11 @@
       "send-courtesy-message-description": "L’envoi du message de courtoisie est en cours via {{type}}.",
       "send-courtesy-message-description-multirecipient": "L’envoi du message de courtoisie est en cours {{name}} {{taxId}} via {{type}}.",
       "send-digital-domicile-PEC": "Envoi via PEC",
+      "send-digital-domicile-PEC-group-label": "PEC",
       "send-digital-domicile-PEC-description": "La notification est en cours d’envoi à l’adresse PEC {{address}}.",
       "send-digital-domicile-PEC-description-multirecipient": "La notification à {{name}} {{taxId}} est en cours d’envoi à l’adresse PEC {{address}}.",
       "send-digital-domicile-SERCQ-SEND": "Envoi via une Adresse Numérique SEND",
+      "send-digital-domicile-SERCQ-SEND-group-label": "Domicile numérique SEND",
       "send-digital-domicile-SERCQ-SEND-description": "L’envoi de la notification à l’Adresse Numérique SEND est en cours.",
       "send-digital-domicile-SERCQ-SEND-description-multirecipient": "L’envoi de la notification à {{name}} {{taxId}} à l’Adresse Numérique SEND est en cours",
       "send-digital-error": "L’envoi via PEC a échoué",
@@ -196,13 +204,20 @@
       "send-digital-success-SERCQ-SEND-description": "L’envoi de la notification à l’Adresse Numérique SEND a réussi.",
       "send-digital-success-SERCQ-SEND-description-multirecipient": "L’envoi de la notification à {{name}} {{taxId}} à l’Adresse Numérique SEND a réussi.",
       "send-simple-registered-letter": "Envoi par courrier recommandé simple",
+      "send-simple-registered-letter-group-label": "Envoi par courrier recommandé simple",
       "send-simple-registered-letter-description": "La notification est en cours d’envoi à l’adresse {{address}} par lettre recommandée simple.",
       "send-simple-registered-letter-description-multirecipient": "La notification est en cours d’envoi à {{name}} {{taxId}} à l’adresse {{address}} par lettre recommandée simple.",
       "simple-registered-letter-progess": "Mise à jour de l’envoi par lettre recommandée",
       "send-analog-domicile-890": "Envoi par recommandé 890",
+      "send-analog-domicile-890-group-label": "Lettre recommandée 890",
+      "send-analog-domicile-890-first-attempt-group-label": "Première lettre recommandée 890",
+      "send-analog-domicile-890-second-attempt-group-label": "Deuxième lettre recommandée 890",
       "send-analog-domicile-890-description": "L’envoi de la notification à l’adresse {{address}} par lettre recommandée 890 a commencé.",
       "send-analog-domicile-890-description-multirecipient": "L’envoi de la notification à {{name}} {{taxId}} à l’adresse {{address}} par lettre recommandée 890 a commencé.",
       "send-analog-domicile-ar": "Envoi par lettre recommandée A/R",
+      "send-analog-domicile-ar-group-label": "Lettre recommandée avec accusé de réception",
+      "send-analog-domicile-ar-first-attempt-group-label": "Première lettre recommandée avec accusé de réception",
+      "send-analog-domicile-ar-second-attempt-group-label": "Deuxième lettre recommandée avec accusé de réception",
       "send-analog-domicile-ar-description": "L’envoi de la notification à l’adresse {{address}}  par lettre recommandée A/R a commencé.",
       "send-analog-domicile-ar-description-multirecipient": "L’envoi de la notification à {{name}} {{taxId}} à l’adresse {{address}} par lettre recommandée A/R a commencé.",
       "send-digital-progress-error": "Envoi via PEC non pris en charge",
@@ -386,6 +401,7 @@
         "M07": "parce que l’adresse est incorrecte",
         "M08": "parce que l’adresse n’existe pas",
         "M09": "pour d’autres raisons",
+        "M10": "parce que l'adresse n'est pas lisible",
         "F01": "pour vol du pli",
         "F02": "pour d’autres raisons",
         "F03": "pour vol de l’enveloppe",
@@ -485,6 +501,7 @@
     "notification-timeline-reworked-description": "Les événements marqués comme rectifiés remplacent les événements précédents indiqués comme non valides.",
     "reworked-status-valid": "Événement rectifié",
     "reworked-status-not-valid": "Événement non valide",
+    "reworked-status-group": "Un ou plusieurs événements rectifiés",
     "cancellation-in-progress": "Annulée",
     "cancellation-in-progress-tooltip": "Annulation en cours. Le statut sera mis à jour sous peu.",
     "cancellation-in-progress-description": "Annulation en cours. Le statut sera mis à jour sous peu."

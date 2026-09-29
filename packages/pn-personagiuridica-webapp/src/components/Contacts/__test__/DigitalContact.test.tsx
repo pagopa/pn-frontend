@@ -1,8 +1,8 @@
 import { useRef } from 'react';
 import { vi } from 'vitest';
 
-import { Button } from '@mui/material';
 import { getById, queryById } from '@pagopa-pn/pn-commons/src/test-utils';
+import { MIButton } from '@pagopa/mui-italia';
 
 import { fireEvent, render, waitFor } from '../../../__test__/test-utils';
 import { ChannelType } from '../../../models/contacts';
@@ -234,7 +234,7 @@ describe('DigitalContact Component', () => {
       />
     );
 
-    const verifiedIcon = result.getByTestId('CheckCircleIcon');
+    const verifiedIcon = result.getByTestId('CheckCircleRoundedIcon');
     expect(verifiedIcon).toBeInTheDocument();
   });
 
@@ -362,7 +362,7 @@ describe('DigitalContact Component', () => {
           label: 'Mocked input label',
         }}
         slots={{
-          editButton: () => <Button>Custom edit button</Button>,
+          editButton: () => <MIButton>Custom edit button</MIButton>,
         }}
         insertButtonLabel="Button"
         onSubmit={mockSubmitCbk}

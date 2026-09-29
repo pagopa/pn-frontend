@@ -32,7 +32,7 @@ describe('test custom validation for recipients', () => {
   });
 
   it('taxIdDependingOnRecipientType (PF no errors)', () => {
-    const result = taxIdDependingOnRecipientType('LVLDAA85T50G702B', RecipientType.PF);
+    const result = taxIdDependingOnRecipientType('TSTUTN00A07A001G', RecipientType.PF);
     expect(result).toBeTruthy();
   });
 
@@ -57,7 +57,7 @@ describe('test custom validation for recipients', () => {
   });
 
   it('taxIdDependingOnRecipientType (PG errors with a taxId physical person formed value)', () => {
-    const result = taxIdDependingOnRecipientType('LVLDAA85T50G702B', RecipientType.PG);
+    const result = taxIdDependingOnRecipientType('TSTUTN00A07A001G', RecipientType.PG);
     expect(result).toBeFalsy();
   });
 

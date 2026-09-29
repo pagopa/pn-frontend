@@ -9,7 +9,7 @@ import { Person } from '../redux/delegation/types';
 export class PersonValidator extends Validator<Person> {
   constructor() {
     super();
-    this.ruleFor('firstName').isString().isEqual('Mario');
+    this.ruleFor('firstName').isString().isEqual('Utente');
     this.ruleFor('lastName').isString().not().isEmpty();
     this.ruleFor('displayName').isString().length(3, 4);
   }

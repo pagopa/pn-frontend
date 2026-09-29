@@ -21,14 +21,14 @@ export interface PfConfiguration {
   F24_DOWNLOAD_WAIT_TIME: number;
   PAGOPA_HELP_PP: string;
   APP_IO_SITE: string;
-  APP_IO_ANDROID: string;
-  APP_IO_IOS: string;
+  APP_IO_DOWNLOAD: string;
   IS_DOD_ENABLED: boolean;
   DOWNTIME_EXAMPLE_LINK: string;
   ACCESSIBILITY_LINK: string;
   FEEDBACK_SURVEY_URL: string;
   NOTIFICATION_CANCELLED_HELP_LINK: string;
   NOTIFICATION_COST_DETAILS_ASSISTANCE_LINK: string;
+  NOTIFICATION_PERFECTION_LINK: string;
   SERCQ_SERVICE_STATEMENT_LINK: string;
   IS_ONBOARDING_ENABLED: boolean;
   FACSIMILE_EN: string;
@@ -36,6 +36,8 @@ export interface PfConfiguration {
   FACSIMILE_DE: string;
   FACSIMILE_SL: string;
   SELFCARE_CDN_URL: string;
+  IS_NEW_TIMELINE_ENABLED: boolean;
+  IS_NEW_TIMELINE_COPY_ENABLED: boolean;
 }
 
 class PfConfigurationValidator extends Validator<PfConfiguration> {
@@ -65,14 +67,17 @@ class PfConfigurationValidator extends Validator<PfConfiguration> {
     this.ruleFor('F24_DOWNLOAD_WAIT_TIME').isNumber().isRequired();
     this.ruleFor('PAGOPA_HELP_PP').isString().isRequired().matches(dataRegex.htmlPageUrl);
     this.ruleFor('APP_IO_SITE').isString().isRequired().matches(dataRegex.htmlPageUrl);
-    this.ruleFor('APP_IO_ANDROID').isString().isRequired().matches(dataRegex.htmlPageUrl);
-    this.ruleFor('APP_IO_IOS').isString().isRequired().matches(dataRegex.htmlPageUrl);
+    this.ruleFor('APP_IO_DOWNLOAD').isString().isRequired().matches(dataRegex.htmlPageUrl);
     this.ruleFor('IS_DOD_ENABLED').isBoolean();
     this.ruleFor('DOWNTIME_EXAMPLE_LINK').isString().isRequired().matches(dataRegex.htmlPageUrl);
     this.ruleFor('ACCESSIBILITY_LINK').isString().isRequired();
     this.ruleFor('FEEDBACK_SURVEY_URL').isString().isRequired();
     this.ruleFor('NOTIFICATION_CANCELLED_HELP_LINK').isString().isRequired();
     this.ruleFor('NOTIFICATION_COST_DETAILS_ASSISTANCE_LINK')
+      .isString()
+      .isRequired()
+      .matches(dataRegex.htmlPageUrl);
+    this.ruleFor('NOTIFICATION_PERFECTION_LINK')
       .isString()
       .isRequired()
       .matches(dataRegex.htmlPageUrl);
@@ -83,6 +88,8 @@ class PfConfigurationValidator extends Validator<PfConfiguration> {
     this.ruleFor('FACSIMILE_DE').isString().isRequired().matches(dataRegex.htmlPageUrl);
     this.ruleFor('FACSIMILE_SL').isString().isRequired().matches(dataRegex.htmlPageUrl);
     this.ruleFor('SELFCARE_CDN_URL').isString().isRequired().matches(dataRegex.htmlPageUrl);
+    this.ruleFor('IS_NEW_TIMELINE_ENABLED').isBoolean();
+    this.ruleFor('IS_NEW_TIMELINE_COPY_ENABLED').isBoolean();
   }
 }
 

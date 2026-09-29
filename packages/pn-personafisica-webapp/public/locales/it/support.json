@@ -2,7 +2,7 @@
   "title": "Come possiamo aiutarti?",
   "sub-title": "Indica l’indirizzo email in cui desideri ricevere le risposte dell’assistenza.",
   "form": {
-    "email": "Inserisci l'indirizzo email",
+    "email": "Inserisci l’indirizzo email (no PEC)",
     "confirm-email": "Conferma l'indirizzo email",
     "errors": {
       "not-valid": "L'indirizzo email non è valido",
@@ -10,6 +10,7 @@
       "not-the-same": "L'indirizzo email di conferma non è uguale all'indirizzo email inserito"
     }
   },
+  "pec-disclaimer": "Inserisci un indirizzo di posta elettronica ordinaria: le richieste inviate da un indirizzo PEC non possono essere gestite dall'assistenza.",
   "disclaimer": "Proseguendo dichiari di aver letto la <0>Privacy Policy Assistenza</0>",
   "exit-title": "Vuoi davvero uscire?",
   "exit-message": "Se esci, la richiesta di assistenza andrà persa.",

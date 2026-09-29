@@ -99,7 +99,7 @@ describe('PreliminaryInformations Component', () => {
             userState: {
               user: {
                 organization: {
-                  name: 'Comune di Palermo',
+                  name: 'Comune di Test 1',
                 },
               },
             },
@@ -133,7 +133,7 @@ describe('PreliminaryInformations Component', () => {
             userState: {
               user: {
                 organization: {
-                  name: 'Comune di Palermo',
+                  name: 'Comune di Test 1',
                   hasGroup: true,
                 },
               },
@@ -158,7 +158,7 @@ describe('PreliminaryInformations Component', () => {
           preloadedState: {
             userState: {
               user: {
-                organization: { name: 'Comune di Palermo', fiscal_code: '00000', hasGroup: true },
+                organization: { name: 'Comune di Test 1', fiscal_code: '00000', hasGroup: true },
               },
             },
           },
@@ -207,7 +207,7 @@ describe('PreliminaryInformations Component', () => {
           preloadedState: {
             userState: {
               user: {
-                organization: { name: 'Comune di Palermo', hasGroup: true },
+                organization: { name: 'Comune di Test 1', hasGroup: true },
               },
             },
           },
@@ -254,7 +254,7 @@ describe('PreliminaryInformations Component', () => {
     await testInput(
       form,
       'senderDenomination',
-      'Comune di Palermo - Commissario Straordinario del Governo ZES Sicilia Occidentale'
+      'Comune di Test 1 - Commissario Straordinario di Test per Denominazione Molto Lunga'
     );
     expect(senderDenominationError).toHaveTextContent('too-long-field-error');
     // check submit button state
@@ -270,7 +270,7 @@ describe('PreliminaryInformations Component', () => {
           notification={{
             ...newNotificationEmpty,
             senderDenomination:
-              'Comune di Palermo - Commissario Straordinario del Governo ZES Sicilia Occidentale',
+              'Comune di Test 1 - Commissario Straordinario di Test per Denominazione Molto Lunga',
           }}
           onConfirm={confirmHandlerMk}
         />,
@@ -279,7 +279,7 @@ describe('PreliminaryInformations Component', () => {
             userState: {
               user: {
                 organization: {
-                  name: 'Comune di Palermo - Commissario Straordinario del Governo ZES Sicilia Occidentale',
+                  name: 'Comune di Test 1 - Commissario Straordinario di Test per Denominazione Molto Lunga',
                 },
               },
             },
@@ -310,7 +310,7 @@ describe('PreliminaryInformations Component', () => {
           preloadedState: {
             userState: {
               user: {
-                organization: { name: 'Comune di Palermo', hasGroup: true },
+                organization: { name: 'Comune di Test 1', hasGroup: true },
               },
             },
           },
@@ -335,7 +335,7 @@ describe('PreliminaryInformations Component', () => {
             userState: {
               additionalLanguages: ['de'],
               user: {
-                organization: { name: 'Comune di Palermo', hasGroup: true },
+                organization: { name: 'Comune di Test 1', hasGroup: true },
               },
             },
           },
@@ -363,7 +363,7 @@ describe('PreliminaryInformations Component', () => {
           preloadedState: {
             userState: {
               user: {
-                organization: { name: 'Comune di Palermo', hasGroup: true },
+                organization: { name: 'Comune di Test 1', hasGroup: true },
               },
             },
           },
@@ -396,7 +396,7 @@ describe('PreliminaryInformations Component', () => {
           preloadedState: {
             userState: {
               user: {
-                organization: { name: 'Comune di Palermo', hasGroup: true },
+                organization: { name: 'Comune di Test 1', hasGroup: true },
               },
             },
           },

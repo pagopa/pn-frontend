@@ -1,8 +1,8 @@
-import { Fragment, useRef } from 'react';
+import { Fragment } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
-import ArrowForward from '@mui/icons-material/ArrowForward';
+import ArrowForwardRoundedIcon from '@mui/icons-material/ArrowForwardRounded';
 import { Grid } from '@mui/material';
 import {
   CardElement,
@@ -22,7 +22,6 @@ import {
 import { MIButton } from '@pagopa/mui-italia';
 
 import * as routes from '../../navigation/routes.const';
-import FilterNotifications from './FilterNotifications';
 import NotificationsEmptyState from './NotificationsEmptyState';
 
 type Props = {
@@ -33,6 +32,10 @@ type Props = {
   onChangeSorting?: (s: Sort<NotificationColumnData<RecipientNotification>>) => void;
   /** Delegator */
   isDelegatedPage?: boolean;
+  /** True when at least one filter is active */
+  filtersApplied: boolean;
+  /** The function to be invoked if the user clicks on clean filters button */
+  onCleanFilters: () => void;
 };
 
 /**
@@ -52,13 +55,11 @@ const MobileNotifications = ({
   sort,
   onChangeSorting,
   isDelegatedPage = false,
+  filtersApplied,
+  onCleanFilters,
 }: Props) => {
   const navigate = useNavigate();
   const { t } = useTranslation('notifiche');
-  const filterNotificationsRef = useRef({
-    filtersApplied: false,
-    cleanFilters: () => void 0,
-  });
 
   const cardBody: Array<CardElement<RecipientNotification>> = [
     {
@@ -69,14 +70,11 @@ const MobileNotifications = ({
       id: 'sender',
       label: t('table.mittente'),
       mode: 'truncate',
+      wrapValueInTypography: false,
     },
     {
       id: 'subject',
       label: t('table.oggetto'),
-    },
-    {
-      id: 'iun',
-      label: t('table.iun'),
     },
   ];
 
@@ -121,8 +119,6 @@ const MobileNotifications = ({
     return arr;
   }, [] as Array<CardSort<RecipientNotification>>);
 
-  const filtersApplied: boolean = filterNotificationsRef.current.filtersApplied;
-
   // Navigation handlers
   const handleRowClick = (row: Row<RecipientNotification>) => {
     const { iun, communicationType, mandateId } = row;
@@ -141,14 +137,7 @@ const MobileNotifications = ({
   return (
     <Fragment>
       <Grid container direction="row" sx={{ marginBottom: '16px' }}>
-        <Grid item xs={6}>
-          <FilterNotifications
-            ref={filterNotificationsRef}
-            showFilters={showFilters}
-            isDelegatedPage={isDelegatedPage}
-          />
-        </Grid>
-        <Grid item xs={6} textAlign="right">
+        <Grid item xs={12} textAlign="right">
           {/**
            * Refers to PN-1741
            * See the comment above, where IS_SORT_ENABLE is declared!
@@ -184,9 +173,8 @@ const MobileNotifications = ({
               <PnCardActions>
                 <MIButton
                   variant="text"
-                  color="primary"
                   onClick={() => handleRowClick(data)}
-                  endIcon={<ArrowForward />}
+                  endIcon={<ArrowForwardRoundedIcon />}
                   data-testid="go-to-detail"
                 >
                   {t('table.open')}
@@ -198,7 +186,7 @@ const MobileNotifications = ({
       ) : (
         <NotificationsEmptyState
           filtersApplied={filtersApplied}
-          filterNotificationsRef={filterNotificationsRef}
+          onCleanFilters={onCleanFilters}
           isDelegatedPage={isDelegatedPage}
         />
       )}

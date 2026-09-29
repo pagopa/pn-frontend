@@ -312,6 +312,23 @@ describe('Statistics Page tests', () => {
     });
   });
 
+  it('show maintenance alert', async () => {
+    vi.setSystemTime(new Date('2025-08-20'));
+    mock.onGet(/\/bff\/v1\/sender-dashboard\/dashboard-data-request*/).reply(200, rawResponseMock);
+
+    const { findByTestId } = render(<Statistics />, {
+      preloadedState: {
+        userState: { user: userResponse },
+      },
+    });
+
+    const maintenanceAlert = await findByTestId('maintenanceAlert');
+    expect(maintenanceAlert).toBeInTheDocument();
+    expect(maintenanceAlert).toHaveTextContent('maintenance_alert.title');
+    expect(maintenanceAlert).toHaveTextContent('maintenance_alert.description');
+    vi.useRealTimers();
+  });
+
   it('api returns error', async () => {
     mock
       .onGet(/\/bff\/v1\/sender-dashboard\/dashboard-data-request*/)
