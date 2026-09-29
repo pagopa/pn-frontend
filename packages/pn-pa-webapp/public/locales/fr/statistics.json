@@ -79,10 +79,6 @@
     "viewed": "Accès réussi"
   },
   "last_update": "Dernière mise à jour {{dateTime}}",
-  "maintenance_alert": {
-    "description": "Une maintenance programmée est en cours. Elle pourrait entraîner des retards dans la mise à jour des données du tableau de bord. Veuillez vous référer à la date indiquée sur cette page pour vérifier la dernière mise à jour disponible. Les mises à jour reprendront normalement à la fin de l'intervention.",
-    "title": "Maintenance en cours"
-  },
   "save_as_image": "Enregistrer sous forme d’image",
   "section_1": "Aperçu des notifications",
   "section_2": "Détail des notifications envoyées par voie  numérique",

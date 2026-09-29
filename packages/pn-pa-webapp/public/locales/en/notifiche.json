@@ -17,10 +17,10 @@
     "cancelled-iun": "IUN code canceled",
     "date": "Date sent",
     "document-not-available": "The document will be available for download in a few minutes. You can try again by reloading the page or clicking on the link of the requested document",
-    "download-aar-available": "<0>Available online for 10 years</0> from the date on which the SEND notification took legal effect for the recipient.",
+    "download-aar-available": "<0>Available online for 10 years</0> from the date the SEND notification became legally binding.",
     "download-aar-expired": "The notice of receipt is no longer available online.",
     "download-files-link": "When is a notification finalized?",
-    "download-message-available": "<0>Available online for up to 120 days</0> from the date on which the SEND notification took legal effect for the recipient.",
+    "download-message-available": "<0>Available online for up to 120 days</0> from the date the SEND notification became legally binding.",
     "download-message-expired": "The documents are no longer available online.",
     "downtimes": {
       "apiErrorMessage": "We were unable to load any disruptions that affected this notification.",
@@ -114,11 +114,8 @@
         "M06": "because the address is incorrect",
         "M07": "because the address does not exist",
         "M08": "because the address is insufficient",
-        "M09": "for other reasons",
-        "M10": "because the address is not legible"
+        "M09": "for other reasons"
       },
-      "courtesy-group-label": "Courtesy messages",
-      "digital-send-fallback": "Digital delivery",
       "legalfact": {
         "analog-failure-delivery": "Deposit of the notification of receipt",
         "digital-delivery-failure": "no digital address",
@@ -149,7 +146,6 @@
         "description-multi-recipients": "One of the recipients, or their delegate, collected the notified documents from an operator authorized to deliver them.",
         "title": "The documents were collected"
       },
-      "registered-letter": "Registered post",
       "registered-letter-kind": {
         "890": "890",
         "AR": "Registered letter with return receipt",
@@ -163,15 +159,9 @@
       "send-analog-domicile-890": "Sending by 890 registered letter",
       "send-analog-domicile-890-description": "The sending of the notification to the address {{address}} by 890 registered letter has started.",
       "send-analog-domicile-890-description-multirecipient": "The sending of the notification to {{name}} {{taxId}} at the address {{address}} via 890 registered letter has started.",
-      "send-analog-domicile-890-first-attempt-group-label": "First registered mail 890",
-      "send-analog-domicile-890-group-label": "Registered mail 890",
-      "send-analog-domicile-890-second-attempt-group-label": "Second registered mail 890",
       "send-analog-domicile-ar": "Sending by registered letter with acknowledgment of receipt",
       "send-analog-domicile-ar-description": "The sending of the notification to the address {{address}} by registered letter with acknowledgment of receipt has started.",
       "send-analog-domicile-ar-description-multirecipient": "The sending of the notification to {{name}} {{taxId}} at the address {{address}} via registered letter with acknowledgment of receipt has started.",
-      "send-analog-domicile-ar-first-attempt-group-label": "First registered mail with advice of receipt",
-      "send-analog-domicile-ar-group-label": "Registered mail with advice of receipt",
-      "send-analog-domicile-ar-second-attempt-group-label": "Second registered mail with advice of receipt",
       "send-analog-error": "Sending by mail did not result in delivery",
       "send-analog-flow-CON020-description": "The original of the AAR (native digital document) made available by the consolidator and signed digitally by PagoPA.",
       "send-analog-flow-CON020-description-multirecipient": "The original of the AAR (native digital document) made available by the consolidator and signed digitally by PagoPA.",
@@ -300,11 +290,9 @@
       "send-digital-domicile-PEC": "Sent via PEC",
       "send-digital-domicile-PEC-description": "The notification is being sent to the PEC address {{address}}.",
       "send-digital-domicile-PEC-description-multirecipient": "The notification is being sent to {{name}} {{taxId}} at the PEC address {{address}}.",
-      "send-digital-domicile-PEC-group-label": "PEC",
       "send-digital-domicile-SERCQ-SEND": "Send via SEND digital domicile",
       "send-digital-domicile-SERCQ-SEND-description": "The sending of the notification to the SEND digital domicile is in progress.",
       "send-digital-domicile-SERCQ-SEND-description-multirecipient": "The sending of the notification to {{name}} {{taxId}} at the SEND digital domicile is in progress",
-      "send-digital-domicile-SERCQ-SEND-group-label": "SEND Digital domicile",
       "send-digital-error": "Sending via PEC failed",
       "send-digital-error-description": "Sending the notification to the PEC address {{address}} failed because the box is full, invalid or inactive.",
       "send-digital-error-description-multirecipient": "Sending the notification to {{name}} {{taxId}} at the PEC address {{address}} failed because the box is full, invalid or inactive.",
@@ -323,9 +311,7 @@
       "send-simple-registered-letter": "Sending by ordinary registered letter",
       "send-simple-registered-letter-description": "The notification is being sent to the address {{address}} by ordinary registered letter.",
       "send-simple-registered-letter-description-multirecipient": "The notification is being sent to {{name}} {{taxId}} at the address {{address}} via ordinary registered letter.",
-      "send-simple-registered-letter-group-label": "Sending by ordinary registered letter",
-      "tpp-type": "a third-party digital channel",
-      "unknown-status": "Unknown status"
+      "tpp-type": "a third-party digital channel"
     }
   },
   "empty-state": {
@@ -652,7 +638,6 @@
     "returned-to-sender-multirecipient": "Returned to sender",
     "returned-to-sender-tooltip": "The recipient is deceased",
     "returned-to-sender-tooltip-multirecipient": "All recipients are deceased",
-    "reworked-status-group": "One or more corrected events",
     "reworked-status-not-valid": "Invalid event",
     "reworked-status-valid": "Rectified event",
     "unreachable": "Recipient untraceable",

@@ -22,7 +22,6 @@
     "go-to-home": "Back to the home page",
     "go-to-login": "Login",
     "indietro": "Go back",
-    "open": "Open",
     "send": "Send"
   },
   "date-picker": {
@@ -99,8 +98,6 @@
   "menu": {
     "api-key": "API Key",
     "app-status": "Platform status",
-    "campaigns": "Campaigns",
-    "communications": "Communicate with SEND",
     "groups": "Groups",
     "notifications": "Notifications",
     "notifications-send": "Notification with SEND",

@@ -79,10 +79,6 @@
     "viewed": "Zugriff erfolgt"
   },
   "last_update": "Letzte Aktualisierung {{dateTime}}",
-  "maintenance_alert": {
-    "description": "Aufgrund einer geplanten Wartung kann es zu Verzögerungen bei der Aktualisierung der Daten im Dashboard kommen. Bitte beachten Sie das auf dieser Seite angegebene Datum für den Stand der letzten Aktualisierung. Nach Abschluss der Wartung werden die Daten wieder regelmäßig aktualisiert.",
-    "title": "Wartungsarbeiten im Gange"
-  },
   "save_as_image": "Als Bild speichern",
   "section_1": "Übersicht der Zustellungen",
   "section_2": "Detail der digital gesendeten Zustellungen",

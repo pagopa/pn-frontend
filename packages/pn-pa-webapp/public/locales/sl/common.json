@@ -22,7 +22,6 @@
     "go-to-home": "Nazaj na domačo stran",
     "go-to-login": "Prijava",
     "indietro": "Nazaj",
-    "open": "Odpri",
     "send": "Pošlji"
   },
   "date-picker": {
@@ -99,8 +98,6 @@
   "menu": {
     "api-key": "Ključ API",
     "app-status": "Stanje platforme",
-    "campaigns": "Kampanje",
-    "communications": "Komunicirajte s SEND",
     "groups": "Skupine",
     "notifications": "Obvestila",
     "notifications-send": "Obvestilo s SEND",
