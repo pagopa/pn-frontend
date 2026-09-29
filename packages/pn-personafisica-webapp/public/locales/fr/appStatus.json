@@ -1,6 +1,8 @@
 {
   "appStatus": {
+    "aria-missed-endDate": "Date de fin manquante, interruption de service en cours",
     "lastCheckLegend": "Dernière mise à jour - {{ lastCheckTimestamp }}",
+    "missed-endDate": "En cours",
     "statusDescription": {
       "not-ok": "Il y a un dysfonctionnement en cours. Pour plus de détails, consultez le tableau ci-dessous.",
       "ok": "Tous les services de SEND sont opérationnels."

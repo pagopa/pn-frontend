@@ -94,11 +94,13 @@
       "onlySelected": "Uniquement les organismes sélectionnés",
       "party-not-found": "Aucun organisme trouvé",
       "personType": "Entité juridique :",
+      "personType-content-subtitle": "Sélectionne le type de sujet de droit",
       "selectEntities": "Sélectionner entités",
       "submit": "Envoyez votre demande",
       "verificationCode": "Code de vérification",
       "verificationCodeDescr": "Partagez ce code avec la personne mandatée : elle devra le saisir lors de l’acceptation de la procuration. Le code est valable 7 jours à compter de la création de la demande de procuration.",
-      "viewFrom": "Vous pourrez visualiser les notifications de :"
+      "viewFrom": "Vous pourrez visualiser les notifications de :",
+      "viewFrom-content-subtitle": "Sélectionne une option"
     },
     "subtitle": "Saisissez les données de la personne physique ou morale à qui vous souhaitez mandater la lecture de vos notifications.",
     "title": "Ajouter une procuration",
@@ -115,7 +117,8 @@
       },
       "fiscalCode": {
         "required": "Le code fiscal est obligatoire",
-        "wrong": "Le code fiscal saisi est incorrect."
+        "wrong": "Le code fiscal saisi est incorrect.",
+        "wrong-pg": "Saisis uniquement des chiffres. Si le code fiscal de la personne que tu veux déléguer contient également des lettres, sélectionne « Personne physique »."
       },
       "name": {
         "required": "Le prénom est obligatoire"

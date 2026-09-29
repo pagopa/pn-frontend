@@ -104,13 +104,6 @@
       "title": "Désactiver SEND sur l’app IO"
     },
     "download": "Téléchargez l’app IO",
-    "download-modal": {
-      "cta": "C'est fait !",
-      "instructions": "Ouvre-la, connecte-toi avec SPID ou CIE et termine l’inscription.",
-      "qr-code-alt": "Code QR pour télécharger l’application IO",
-      "subtitle": "Scanne le code QR avec ton appareil pour télécharger l’application, ou cherche-la dans ton magasin d’applications.",
-      "title": "Pour continuer, tu dois télécharger l’application IO et t’inscrire"
-    },
     "enable": "Activez SEND sur IO",
     "info-modal": {
       "content": "Si vous n'avez pas le Domicile Numérique actif et que vous n'ouvrez pas le message dans les 5 jours suivant l'envoi, vous recevrez les documents au format papier à la maison.",

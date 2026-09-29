@@ -94,11 +94,13 @@
       "onlySelected": "Samo izbranih organizacij",
       "party-not-found": "Najdena ni bila nobena organizacija",
       "personType": "Pravni subjekt:",
+      "personType-content-subtitle": "Izberi vrsto pravnega subjekta",
       "selectEntities": "Izberite organizacije",
       "submit": "Pošlji zahtevo",
       "verificationCode": "Koda za preverjanje",
       "verificationCodeDescr": "Delite to kodo s pooblaščencem: moral jo bo vnesti ob sprejetju prenosa pooblastila. Koda velja 7 dni od generiranja zahtevka za pooblastilo.",
-      "viewFrom": "Ogledali si boste lahko obvestila s strani:"
+      "viewFrom": "Ogledali si boste lahko obvestila s strani:",
+      "viewFrom-content-subtitle": "Izberi možnost"
     },
     "subtitle": "Vnesite podatke fizične ali pravne osebe, na katero želite prenesti pooblastilo za branje vaših obvestil.",
     "title": "Dodajte prenos pooblastila",
@@ -115,7 +117,8 @@
       },
       "fiscalCode": {
         "required": "Davčna številka je obvezna",
-        "wrong": "Vnesena davčna številka ni pravilna"
+        "wrong": "Vnesena davčna številka ni pravilna",
+        "wrong-pg": "Vnesi samo številke. Če davčna številka osebe, ki jo želiš pooblastiti, vsebuje tudi črke, izberi »Fizična oseba«."
       },
       "name": {
         "required": "Ime je obvezno"

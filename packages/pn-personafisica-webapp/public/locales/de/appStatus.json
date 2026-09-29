@@ -1,6 +1,8 @@
 {
   "appStatus": {
+    "aria-missed-endDate": "Fehlendes Enddatum, Dienstunterbrechung in Bearbeitung",
     "lastCheckLegend": "Letzte Aktualisierung - {{ lastCheckTimestamp }}",
+    "missed-endDate": "In Bearbeitung",
     "statusDescription": {
       "not-ok": "Es ist eine Störung aufgetreten. Weitere Details in der Tabelle unten.",
       "ok": "Alle SEND-Dienste sind betriebsbereit."

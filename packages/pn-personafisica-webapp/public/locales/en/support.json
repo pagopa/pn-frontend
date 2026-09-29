@@ -4,7 +4,7 @@
   "exit-title": "Do you really want to exit?",
   "form": {
     "confirm-email": "Confirm your email address",
-    "email": "Enter the email address (no PEC)",
+    "email": "Enter your email address",
     "errors": {
       "not-the-same": "The confirmation email address is not the same as the email address that was entered",
       "not-valid": "The email address is not valid",
@@ -15,7 +15,6 @@
     "generic-message": "We suggest trying again later",
     "generic-title": "An unexpected error occurred"
   },
-  "pec-disclaimer": "Enter a standard email address: requests sent from a PEC address cannot be handled by support.",
   "sub-title": "Enter the email address where you want to receive the support answers.",
   "title": "How can we help you?"
 }

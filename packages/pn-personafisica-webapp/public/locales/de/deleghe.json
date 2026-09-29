@@ -94,11 +94,13 @@
       "onlySelected": "Nur ausgewählte Körperschaften",
       "party-not-found": "Keine Körperschaft gefunden",
       "personType": "Rechtssubjekt:",
+      "personType-content-subtitle": "Wähle die Art des Rechtssubjekts",
       "selectEntities": "Körperschaft wählen",
       "submit": "Anfrage senden",
       "verificationCode": "Bestätigungscode",
       "verificationCodeDescr": "Teile diesen Code mit der bevollmächtigten Person: Sie muss ihn bei Annahme der Vollmacht eingeben. Der Code ist 7 Tage lang nach der Erstellung der Vollmachtsanfrage gültig.",
-      "viewFrom": "Kann Zustellungen von anzeigen:"
+      "viewFrom": "Kann Zustellungen von anzeigen:",
+      "viewFrom-content-subtitle": "Wähle eine Option"
     },
     "subtitle": "Gib die Daten der natürlichen oder juristischen Person ein, der du eine Vollmacht zum Lesen deiner Zustellungen erteilen möchtest.",
     "title": "Eine Vollmacht hinzufügen",
@@ -115,7 +117,8 @@
       },
       "fiscalCode": {
         "required": "Die Steuernummer ist erforderlich",
-        "wrong": "Die eingegebene Steuernummer ist falsch"
+        "wrong": "Die eingegebene Steuernummer ist falsch",
+        "wrong-pg": "Gib nur Zahlen ein. Wenn die Steuernummer der Person, die du bevollmächtigen möchtest, auch aus Buchstaben besteht, wähle „Natürliche Person“."
       },
       "name": {
         "required": "Der Name ist erforderlich"
