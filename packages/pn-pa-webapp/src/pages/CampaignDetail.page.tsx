@@ -105,7 +105,13 @@ const CampaignDetail: React.FC = () => {
     }
 
     if (communicationsCampaignId === id) {
-      fetchCampaignCommunications(0, communicationsPagination.size, communicationFilters);
+      const { page, size, nextPagesKey } = communicationsPagination;
+      fetchCampaignCommunications(
+        page,
+        size,
+        communicationFilters,
+        page === 0 ? undefined : nextPagesKey[page - 1]
+      );
       return;
     }
 
