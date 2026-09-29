@@ -3,6 +3,7 @@ import {
   EventCategory,
   EventPropertyType,
   InformalNotificationStatus,
+  NotificationCommunicationType,
   NotificationStatus,
 } from '@pagopa-pn/pn-commons';
 
@@ -27,11 +28,11 @@ describe('Mixpanel - Send Your Notification Strategy', () => {
     };
 
     const legalNotifications = yourNotification.notifications.filter(
-      (notification) => notification.communicationType === 'LEGAL'
+      (notification) => notification.communicationType === NotificationCommunicationType.LEGAL
     );
 
     const comboNotifications = yourNotification.notifications.filter(
-      (notification) => notification.communicationType === 'INFORMAL'
+      (notification) => notification.communicationType === NotificationCommunicationType.INFORMAL
     );
 
     const yourNotificationEvent = strategy.performComputations(yourNotification);
@@ -86,7 +87,7 @@ describe('Mixpanel - Send Your Notification Strategy', () => {
     const comboNotifications = [
       {
         ...notificationsDTO.resultsPage[0],
-        communicationType: 'INFORMAL' as const,
+        communicationType: NotificationCommunicationType.INFORMAL,
         communicationOutcomes: {
           delivered: true,
           viewed: true,
@@ -95,7 +96,7 @@ describe('Mixpanel - Send Your Notification Strategy', () => {
       },
       {
         ...notificationsDTO.resultsPage[0],
-        communicationType: 'INFORMAL' as const,
+        communicationType: NotificationCommunicationType.INFORMAL,
         communicationOutcomes: {
           delivered: false,
           viewed: true,

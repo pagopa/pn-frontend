@@ -7,6 +7,7 @@ import {
   F24PaymentDetails,
   NotificationCommunicationType,
   NotificationPayment,
+  NotificationPaymentTimeline,
   PaginationData,
   PagoPAPaymentFullDetails,
   PaymentDetails,
@@ -15,7 +16,6 @@ import {
   getPagoPaF24Payments,
   populatePaymentsPagoPaF24,
 } from '@pagopa-pn/pn-commons';
-import { NotificationPaymentTimelineElement } from '@pagopa-pn/pn-commons/src/models/NotificationTimeline';
 import { MIPaper } from '@pagopa/mui-italia';
 
 import NotificationPaymentF24 from './NotificationPaymentF24';
@@ -31,7 +31,7 @@ type NotificationPaymentRecipient = {
 type Props = {
   iun: string;
   recipients: Array<NotificationPaymentRecipient>;
-  timeline: Array<NotificationPaymentTimelineElement>;
+  timeline: NotificationPaymentTimeline;
   communicationType?: NotificationCommunicationType;
   sx?: SxProps;
 };
