@@ -122,32 +122,26 @@
     "status": {
       "accepted": {
         "label": "Pronta per l'invio",
-        "tooltip": "Pronta per l'invio",
         "description": "La comunicazione ha superato le verifiche di conformità. Inizierà a breve il processo d’invio."
       },
       "processing": {
         "label": "Invio in corso",
-        "tooltip": "Invio in corso",
         "description": "La comunicazione proverà a raggiungere la persona destinataria sui canali scelti."
       },
       "completed": {
         "label": "Invio riuscito",
-        "tooltip": "Invio riuscito",
         "description": "La comunicazione è stata inviata sui canali scelti."
       },
       "undeliverable": {
         "label": "Invio fallito",
-        "tooltip": "Invio fallito",
         "description": "Non è stato possibile inviare la comunicazione sui canali scelti."
       },
       "refused": {
         "label": "Rifiutata",
-        "tooltip": "Rifiutata",
         "description": "La comunicazione non ha superato le verifiche di conformità."
       },
       "unknown": {
         "label": "Non definito",
-        "tooltip": "Non definito",
         "description": "Stato sconosciuto"
       }
     },
