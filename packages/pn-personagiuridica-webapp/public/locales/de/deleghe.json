@@ -124,7 +124,7 @@
       "verificationCodeDescr": "Teile diesen Code mit der bevollmächtigten Person: Sie muss ihn bei der Annahme der Vollmacht eingeben.",
       "viewFrom": "Kann Bescheide von anzeigen:"
     },
-    "subtitle": "Gib die Daten der natürlichen oder juristischen Person ein, die du zum Lesen der Zustellungen von {{organizationName}} bevollmächtigen möchtest.",
+    "subtitle": "Gib die Daten der natürlichen oder juristischen Person ein, der du eine Vollmacht zum Lesen deiner Bescheide erteilen möchtest.",
     "title": "Vollmacht hinzufügen",
     "validation": {
       "businessName": {
