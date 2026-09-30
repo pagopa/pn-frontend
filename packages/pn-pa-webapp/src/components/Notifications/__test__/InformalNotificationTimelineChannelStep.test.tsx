@@ -9,8 +9,9 @@ import {
 } from '../../../generated-client/informal-notifications';
 import InformalNotificationTimelineChannelStep from '../InformalNotificationTimelineChannelStep';
 
+const status = InformalNotificationStatusV1.Processing;
 const pecStep = INFORMAL_NOTIFICATION_TIMELINE_MOCK.notificationStatusHistory.find(
-  (item) => item.status === InformalNotificationStatusV1.Processing
+  (item) => item.status === status
 )!.steps[0];
 
 const viewedDetails: InformalNotificationViewedDetails = {
@@ -28,7 +29,7 @@ const viewedEvent: BffInformalNotificationTimelineItem = {
 describe('InformalNotificationTimelineChannelStep Component', () => {
   it('renders the channel header and one row with date for each event', () => {
     const { getByText, getAllByRole, getAllByTestId } = render(
-      <InformalNotificationTimelineChannelStep step={pecStep} />
+      <InformalNotificationTimelineChannelStep step={pecStep} status={status} />
     );
 
     expect(getByText('informal.detail.send-by-channel.channel.pec')).toBeInTheDocument();
@@ -45,6 +46,7 @@ describe('InformalNotificationTimelineChannelStep Component', () => {
   it('shows the viewed and delivered tags only on the IO channel', () => {
     const { getByText, rerender, queryByText } = render(
       <InformalNotificationTimelineChannelStep
+        status={status}
         step={{ channel: BffNotificationChannelType.Io, events: [viewedEvent, ...pecStep.events] }}
       />
     );
@@ -55,7 +57,7 @@ describe('InformalNotificationTimelineChannelStep Component', () => {
     ).toBeInTheDocument();
     expect(getByText('informal.detail.send-by-channel.status.delivered')).toBeInTheDocument();
 
-    rerender(<InformalNotificationTimelineChannelStep step={pecStep} />);
+    rerender(<InformalNotificationTimelineChannelStep step={pecStep} status={status} />);
 
     expect(queryByText('informal.detail.send-by-channel.status.delivered')).not.toBeInTheDocument();
   });
@@ -63,6 +65,7 @@ describe('InformalNotificationTimelineChannelStep Component', () => {
   it('shows the raw category for the UNKNOWN channel', () => {
     const { getByText, queryByText } = render(
       <InformalNotificationTimelineChannelStep
+        status={status}
         step={{ ...pecStep, channel: BffNotificationChannelType.Unknown }}
       />
     );
@@ -75,6 +78,7 @@ describe('InformalNotificationTimelineChannelStep Component', () => {
   it('renders only the header when no event has a copy', () => {
     const { getByText, queryByTestId } = render(
       <InformalNotificationTimelineChannelStep
+        status={status}
         step={{
           ...pecStep,
           events: [

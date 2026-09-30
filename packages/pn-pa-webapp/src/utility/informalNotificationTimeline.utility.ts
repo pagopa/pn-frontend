@@ -18,6 +18,7 @@ import {
   BffInformalNotificationTimelineItem,
   BffNotificationChannelType,
   DeliveredDetails,
+  InformalNotificationStatusV1,
   InformalTimelineElementCategoryV1,
   SendAnalogMessageFeedbackDetails,
   SendDigitalMessageFeedbackDetails,
@@ -65,13 +66,19 @@ export const getChannelLabelKey = (channel: BffNotificationChannelType) =>
   `informal.detail.send-by-channel.channel.${channel.toLowerCase()}`;
 
 /**
- * Check if SEND is already present in the timeline. If not, it creates it.
+ * In the PROCESSING status the SEND group is always shown, since every notification is filed on SEND:
+ * if the backend doesn't return it, it is created.
  * @param steps - Timeline steps
+ * @param status - Status the steps belong to
  */
 export const getInformalTimelineSteps = (
-  steps: Array<BffInformalNotificationTimelineGroup>
+  steps: Array<BffInformalNotificationTimelineGroup>,
+  status: InformalNotificationStatusV1
 ): Array<BffInformalNotificationTimelineGroup> => {
-  if (!steps.some((step) => step.channel === BffNotificationChannelType.Send)) {
+  if (
+    status === InformalNotificationStatusV1.Processing &&
+    !steps.some((step) => step.channel === BffNotificationChannelType.Send)
+  ) {
     return [...steps, { channel: BffNotificationChannelType.Send, events: [] }];
   }
 
@@ -175,13 +182,15 @@ const toEventView = (
 
 /**
  * Maps the events of a channel group to the rows to show, discarding the ones without a copy.
- * The SEND group always starts with the "filed" row, since every notification is filed on SEND.
+ * In the PROCESSING status the SEND group starts with the "filed" row, since every notification is filed on SEND.
  * The UNKNOWN group has no copy to pick, so its events have the raw category as key.
  * @param step - Channel group
+ * @param status - Status the channel group belongs to
  * @param filedDate - Date the notification was filed on SEND
  */
 export const getInformalTimelineEvents = (
   step: BffInformalNotificationTimelineGroup,
+  status: InformalNotificationStatusV1,
   filedDate?: string
 ): Array<InformalTimelineEventView> => {
   const events = step.events.flatMap((event, index) => {
@@ -190,7 +199,10 @@ export const getInformalTimelineEvents = (
     return copy ? [toEventView(copy, getEventId(event, step, index), event.eventTimestamp)] : [];
   });
 
-  if (step.channel !== BffNotificationChannelType.Send) {
+  if (
+    status !== InformalNotificationStatusV1.Processing ||
+    step.channel !== BffNotificationChannelType.Send
+  ) {
     return events;
   }
 
