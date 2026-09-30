@@ -1,6 +1,7 @@
 import { vi } from 'vitest';
 
 import { formatDate, getNotificationStatusInfos } from '@pagopa-pn/pn-commons';
+import { createMatchMedia } from '@pagopa-pn/pn-commons/src/test-utils';
 
 import { notificationsToFe } from '../../../__mocks__/Notifications.mock';
 import { fireEvent, render } from '../../../__test__/test-utils';
@@ -59,7 +60,14 @@ describe('NotificationsDataSwitch Component', () => {
     expect(container).toHaveTextContent(regexp);
   });
 
-  it('renders component - group', () => {
+  it('renders component - group - desktop', () => {
+    const { container } = render(<NotificationsDataSwitch data={data} type="group" />);
+    const regexp = new RegExp(`^${data.group}$`, 'ig');
+    expect(container).toHaveTextContent(regexp);
+  });
+
+  it('renders component - group - mobile', () => {
+    globalThis.matchMedia = createMatchMedia(800);
     const { container } = render(<NotificationsDataSwitch data={data} type="group" />);
     const regexp = new RegExp(`^${data.group}$`, 'ig');
     expect(container).toHaveTextContent(regexp);
