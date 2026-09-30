@@ -51,6 +51,8 @@ function testNotificationStatusInfos(
     recipients: Array<NotificationDetailRecipient | string>;
     statusHistory?: Array<NotificationStatusHistory>;
     isParty?: boolean;
+    mandateId?: string;
+    delegatorName?: string;
   }
 ) {
   const { color, label, tooltip, description } = getNotificationStatusInfos(status, options);
@@ -556,6 +558,208 @@ describe('notification status texts', () => {
         recipient: notificationDTO.recipients[0].denomination,
       },
       { recipients: notificationDTO.recipients }
+    );
+    initLocalizationForTest();
+  });
+
+  it('return notification status infos - VIEWED - by delegate, the viewed event wins over the tax id carried by recipient', () => {
+    initLocalizationExists((_ns, path) => path === 'status.viewed-by-delegate-description');
+    testNotificationStatusInfos(
+      'success',
+      `notifiche - status.viewed`,
+      `notifiche - status.viewed-tooltip - ${JSON.stringify({
+        subject: `notifiche - status.delegate - ${JSON.stringify({
+          name: 'Luigi Zucchini (ZCCLGU80A01H501X)',
+        })}`,
+      })}`,
+      `notifiche - status.viewed-by-delegate-description - ${JSON.stringify({
+        name: 'Luigi Zucchini',
+      })}`,
+      {
+        status: NotificationStatus.VIEWED,
+        activeFrom: '2023-08-25T11:38:05.392Z',
+        relatedTimelineElements: [],
+        recipient: 'Luigi Zucchini (ZCCLGU80A01H501X)',
+        steps: [
+          getTimelineElem(TimelineCategory.NOTIFICATION_VIEWED, {
+            recIndex: 0,
+            delegateInfo: { mandateId: 'mandate-1', denomination: 'Luigi Zucchini' },
+          }),
+        ],
+      },
+      { recipients: notificationDTO.recipients }
+    );
+    initLocalizationForTest();
+  });
+
+  it('return notification status infos - VIEWED - delegate view, access made by the reading delegate', () => {
+    initLocalizationExists((_ns, path) => path === 'status.viewed-as-delegate-description');
+    testNotificationStatusInfos(
+      'success',
+      `notifiche - status.viewed`,
+      `notifiche - status.viewed-tooltip - ${JSON.stringify({
+        subject: `notifiche - status.recipient`,
+      })}`,
+      `notifiche - status.viewed-as-delegate-description - ${JSON.stringify({
+        recipient: 'Mario Cucumber',
+      })}`,
+      {
+        status: NotificationStatus.VIEWED,
+        activeFrom: '2023-08-25T11:38:05.392Z',
+        relatedTimelineElements: [],
+        steps: [
+          getTimelineElem(TimelineCategory.NOTIFICATION_VIEWED, {
+            recIndex: 0,
+            delegateInfo: { mandateId: 'mandate-1', denomination: 'Luigi Zucchini' },
+          }),
+        ],
+      },
+      {
+        recipients: notificationDTO.recipients,
+        mandateId: 'mandate-1',
+        delegatorName: 'Mario Cucumber',
+      }
+    );
+    initLocalizationForTest();
+  });
+
+  it('return notification status infos - VIEWED - delegate view, access made by another delegate', () => {
+    initLocalizationExists((_ns, path) => path === 'status.viewed-by-other-delegate-description');
+    testNotificationStatusInfos(
+      'success',
+      `notifiche - status.viewed`,
+      `notifiche - status.viewed-tooltip - ${JSON.stringify({
+        subject: `notifiche - status.recipient`,
+      })}`,
+      `notifiche - status.viewed-by-other-delegate-description - ${JSON.stringify({
+        name: 'Luigi Zucchini',
+        recipient: 'Mario Cucumber',
+      })}`,
+      {
+        status: NotificationStatus.VIEWED,
+        activeFrom: '2023-08-25T11:38:05.392Z',
+        relatedTimelineElements: [],
+        steps: [
+          getTimelineElem(TimelineCategory.NOTIFICATION_VIEWED, {
+            recIndex: 0,
+            delegateInfo: { mandateId: 'mandate-2', denomination: 'Luigi Zucchini' },
+          }),
+        ],
+      },
+      {
+        recipients: notificationDTO.recipients,
+        mandateId: 'mandate-1',
+        delegatorName: 'Mario Cucumber',
+      }
+    );
+    initLocalizationForTest();
+  });
+
+  it('return notification status infos - VIEWED - delegate view, access made by the recipient', () => {
+    initLocalizationExists((_ns, path) => path === 'status.viewed-by-recipient-description');
+    testNotificationStatusInfos(
+      'success',
+      `notifiche - status.viewed`,
+      `notifiche - status.viewed-tooltip - ${JSON.stringify({
+        subject: `notifiche - status.recipient`,
+      })}`,
+      `notifiche - status.viewed-by-recipient-description - ${JSON.stringify({
+        recipient: 'Mario Cucumber',
+      })}`,
+      {
+        status: NotificationStatus.VIEWED,
+        activeFrom: '2023-08-25T11:38:05.392Z',
+        relatedTimelineElements: [],
+        steps: [getTimelineElem(TimelineCategory.NOTIFICATION_VIEWED, { recIndex: 0 })],
+      },
+      {
+        recipients: notificationDTO.recipients,
+        mandateId: 'mandate-1',
+        delegatorName: 'Mario Cucumber',
+      }
+    );
+    initLocalizationForTest();
+  });
+
+  it('return notification status infos - VIEWED - delegate view, no delegateInfo falls back on the delegate carried by recipient', () => {
+    initLocalizationExists((_ns, path) => path === 'status.viewed-by-other-delegate-description');
+    testNotificationStatusInfos(
+      'success',
+      `notifiche - status.viewed`,
+      `notifiche - status.viewed-tooltip - ${JSON.stringify({
+        subject: `notifiche - status.delegate - ${JSON.stringify({
+          name: 'Luigi Zucchini (ZCCLGU80A01H501X)',
+        })}`,
+      })}`,
+      `notifiche - status.viewed-by-other-delegate-description - ${JSON.stringify({
+        name: 'Luigi Zucchini (ZCCLGU80A01H501X)',
+        recipient: 'Mario Cucumber',
+      })}`,
+      {
+        status: NotificationStatus.VIEWED,
+        activeFrom: '2023-08-25T11:38:05.392Z',
+        relatedTimelineElements: [],
+        recipient: 'Luigi Zucchini (ZCCLGU80A01H501X)',
+        steps: [getTimelineElem(TimelineCategory.NOTIFICATION_VIEWED, { recIndex: 0 })],
+      },
+      {
+        recipients: notificationDTO.recipients,
+        mandateId: 'mandate-1',
+        delegatorName: 'Mario Cucumber',
+      }
+    );
+    initLocalizationForTest();
+  });
+
+  it('return notification status infos - VIEWED - delegate view, multi recipient access without delegate keeps the multi recipient copy', () => {
+    initLocalizationExists((_ns, path) => path === 'status.viewed-by-recipient-description');
+    testNotificationStatusInfos(
+      'success',
+      `notifiche - status.viewed-multirecipient`,
+      `notifiche - status.viewed-tooltip-multirecipient - ${JSON.stringify({
+        subject: `notifiche - status.recipient`,
+      })}`,
+      `notifiche - status.viewed-description-multirecipient - ${JSON.stringify({
+        subject: `notifiche - status.recipient`,
+      })}`,
+      {
+        status: NotificationStatus.VIEWED,
+        activeFrom: '2023-08-25T11:38:05.392Z',
+        relatedTimelineElements: [],
+        steps: [getTimelineElem(TimelineCategory.NOTIFICATION_VIEWED, { recIndex: 1 })],
+      },
+      {
+        recipients: notificationDTOMultiRecipient.recipients,
+        mandateId: 'mandate-1',
+        delegatorName: 'Mario Cucumber',
+      }
+    );
+    initLocalizationForTest();
+  });
+
+  it('return notification status infos - VIEWED - delegate view without the delegator name keeps the standard copy', () => {
+    initLocalizationExists((_ns, path) => path === 'status.viewed-as-delegate-description');
+    testNotificationStatusInfos(
+      'success',
+      `notifiche - status.viewed`,
+      `notifiche - status.viewed-tooltip - ${JSON.stringify({
+        subject: `notifiche - status.recipient`,
+      })}`,
+      `notifiche - status.viewed-description - ${JSON.stringify({
+        subject: `notifiche - status.recipient`,
+      })}`,
+      {
+        status: NotificationStatus.VIEWED,
+        activeFrom: '2023-08-25T11:38:05.392Z',
+        relatedTimelineElements: [],
+        steps: [
+          getTimelineElem(TimelineCategory.NOTIFICATION_VIEWED, {
+            recIndex: 0,
+            delegateInfo: { mandateId: 'mandate-1', denomination: 'Luigi Zucchini' },
+          }),
+        ],
+      },
+      { recipients: notificationDTO.recipients, mandateId: 'mandate-1' }
     );
     initLocalizationForTest();
   });
