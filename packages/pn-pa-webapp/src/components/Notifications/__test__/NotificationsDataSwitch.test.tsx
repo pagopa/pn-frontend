@@ -59,6 +59,12 @@ describe('NotificationsDataSwitch Component', () => {
     expect(container).toHaveTextContent(regexp);
   });
 
+  it('renders component - group', () => {
+    const { container } = render(<NotificationsDataSwitch data={data} type="group" />);
+    const regexp = new RegExp(`^${data.group}$`, 'ig');
+    expect(container).toHaveTextContent(regexp);
+  });
+
   it('renders component - action', () => {
     const clickFn = vi.fn();
     const { getByTestId } = render(

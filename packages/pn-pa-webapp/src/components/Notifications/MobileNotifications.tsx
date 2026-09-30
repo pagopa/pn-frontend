@@ -81,6 +81,11 @@ const MobileNotifications = ({
       label: t('table.iun'),
     },
     {
+      id: 'group',
+      label: t('table.groups'),
+      wrapValueInTypography: false,
+    },
+    {
       id: 'notificationStatus',
       label: t('table.status'),
       wrapValueInTypography: false,

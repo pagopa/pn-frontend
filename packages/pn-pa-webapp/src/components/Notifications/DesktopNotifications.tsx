@@ -89,6 +89,11 @@ const DesktopNotifications = ({
       },
     },
     {
+      id: 'group',
+      label: t('table.groups'),
+      cellProps: { width: '6%' },
+    },
+    {
       id: 'notificationStatus',
       label: t('table.status'),
       cellProps: { width: '16%' },
