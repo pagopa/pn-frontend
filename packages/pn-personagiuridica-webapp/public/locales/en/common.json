@@ -155,7 +155,7 @@
     "social": "Go to the website {{social}} of PagoPA S.p.A.",
     "resources": "Resources",
     "follow": "Follow us on",
-    "legal-part-1": "joint stock company with sole shareholder - share capital of 1,000,000 euros fully paid up - registered office in Rome, Piazza Colonna 370",
+    "legal-part-1": "joint stock company - share capital of 1,000,000 euros fully paid up - registered office in Rome, Piazza Colonna 370",
     "legal-part-2": "CAP 00187 - Reg. no. in the Rome Business Register, Fiscal code and VAT number 15376371009"
   },
   "required-fields": "*Required fields",
@@ -246,13 +246,7 @@
     "action": "Keep access"
   },
   "code-modal": {
-    "digits": [
-      "First digit",
-      "Second digit",
-      "Third digit",
-      "Fourth digit",
-      "Last digit"
-    ]
+    "digits": ["First digit", "Second digit", "Third digit", "Fourth digit", "Last digit"]
   },
   "user-validation-failed": {
     "title": "The data entered is invalid",

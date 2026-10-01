@@ -159,7 +159,7 @@
     "social": "Povezava: pojdi na spletno stran {{social}} PagoPA S.p.A.",
     "resources": "Viri",
     "follow": "Spremljaj nas na",
-    "legal-part-1": "delniška družba z edinim družbenikom - osnovni kapital 1.000.000 evrov v celoti vplačan - sedež v Rimu, Piazza Colonna 370",
+    "legal-part-1": "delniška družba - osnovni kapital 1.000.000 evrov v celoti vplačan - sedež v Rimu, Piazza Colonna 370",
     "legal-part-2": "CAP 00187 - št. vpisa v Register podjetij v Rimu, davčna in ID številka 15376371009",
     "products-title": "Izdelki in storitve"
   },
@@ -256,13 +256,7 @@
     "action": "Ohrani dostop"
   },
   "code-modal": {
-    "digits": [
-      "prva števka",
-      "druga števka",
-      "tretja števka",
-      "četrta števka",
-      "zadnja števka"
-    ]
+    "digits": ["prva števka", "druga števka", "tretja števka", "četrta števka", "zadnja števka"]
   },
   "user-validation-failed": {
     "title": "Vneseni podatki niso veljavni",
