@@ -286,4 +286,30 @@ describe('CampaignDetail Page', () => {
     });
     expect(mock.history.get[1].url).toBe(filteredComunicationsListPath);
   });
+
+  it('shows communications filters when applied filters return no results', async () => {
+    const filteredComunicationsListPath = `/bff/v1/informal/campaigns/${campaignDetailMock.campaignId}/notifications/sent?startDate=${startParam}&endDate=${endParam}&iunMatch=ABCD-EFGH-IJKL-123456-M-1&size=20&nextPagesKey=key-1`;
+
+    mock
+      .onGet(`/bff/v1/notifications/informal/campaigns/${campaignDetailMock.campaignId}`)
+      .reply(200, campaignDetailMock);
+    mock
+      .onGet(filteredComunicationsListPath)
+      .reply(200, { resultsPage: [], moreResult: false, nextPagesKey: [] });
+
+    await act(async () => {
+      result = render(<CampaignDetail />, {
+        route: `/campaigns/${campaignDetailMock.campaignId}`,
+        path: '/campaigns/:id',
+        preloadedState: filteredState(campaignDetailMock.campaignId),
+      });
+    });
+
+    await waitFor(() => {
+      expect(result.getByTestId('campaignsList')).toBeInTheDocument();
+    });
+    expect(
+      result.queryByText('detail.communications.no-communications-title')
+    ).not.toBeInTheDocument();
+  });
 });
