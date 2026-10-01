@@ -23,7 +23,6 @@ import {
 import { MIBreadcrumbItem, MIBreadcrumbs, MIPaper } from '@pagopa/mui-italia';
 
 import LoadingPageWrapper from '../components/LoadingPageWrapper/LoadingPageWrapper';
-import type { BffFullInformalNotificationV1 } from '../generated-client/informal-notifications';
 import { PGEventsType } from '../models/PGEventsType';
 import * as routes from '../navigation/routes.const';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
@@ -35,6 +34,7 @@ import {
   getReceivedInformalNotificationPayment,
   getReceivedInformalNotificationPaymentInfo,
 } from '../redux/notification/informalActions';
+import { resetState } from '../redux/notification/reducers';
 import { RootState } from '../redux/store';
 import { getConfiguration } from '../services/configuration.service';
 import PGEventStrategyFactory from '../utility/MixpanelUtils/PGEventStrategyFactory';
@@ -49,8 +49,10 @@ const InformalNotificationDetail: React.FC = () => {
 
   const { SELFCARE_CDN_URL } = getConfiguration();
 
-  const [informalNotification, setInformalNotification] =
-    React.useState<BffFullInformalNotificationV1>();
+  const informalNotification = useAppSelector(
+    (state: RootState) => state.notificationState.informalNotification
+  );
+
   const currentOrganizationName = useAppSelector((state: RootState) => state.userState.user)
     .organization.name;
 
@@ -78,13 +80,16 @@ const InformalNotificationDetail: React.FC = () => {
     }
     void dispatch(getReceivedInformalNotification(id))
       .unwrap()
-      .then(setInformalNotification)
       .catch(() => {})
       .finally(() => setPageReady(true));
   }, [id, dispatch]);
 
   useEffect(() => {
     fetchReceivedInformalNotification();
+
+    return () => {
+      dispatch(resetState());
+    };
   }, []);
 
   const currentRecipient = informalNotification?.recipients?.[0];
@@ -210,6 +215,7 @@ const InformalNotificationDetail: React.FC = () => {
             description: informalNotification.subject,
           },
           returnUrl: window.location.href,
+          iun: informalNotification.iun,
         })
       )
         .unwrap()
