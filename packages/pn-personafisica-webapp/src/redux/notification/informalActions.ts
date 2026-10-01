@@ -4,10 +4,10 @@ import {
   NotificationDocumentResponse,
   PaymentAttachment,
   PaymentAttachmentSName,
-  PaymentDetails,
+  checkIfPaymentsIsAlreadyInCache,
   getPaymentCache,
   parseError,
-  setPaymentsInCache,
+  setInformalPaymentsInCache,
 } from '@pagopa-pn/pn-commons';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
@@ -125,7 +125,12 @@ export const getReceivedInformalNotificationPaymentInfo = createAsyncThunk<
   async ({ paymentInfoRequest }, { rejectWithValue, getState, signal }) => {
     try {
       const { notificationState } = getState();
-      const iun = notificationState.informalNotification?.iun ?? '';
+      const iun = notificationState.informalNotification?.iun;
+
+      if (!iun) {
+        throw new Error('IUN is not defined');
+      }
+
       const paymentCache = getPaymentCache(iun);
       const paymentsApiFactory = PaymentsApiFactory(undefined, undefined, apiClient);
       if (paymentCache?.currentPayment) {
@@ -141,21 +146,20 @@ export const getReceivedInformalNotificationPaymentInfo = createAsyncThunk<
           notification_type: EventNotificationTypes.INFORMAL,
         });
 
+        setInformalPaymentsInCache(updatedPayment, iun);
+
         return updatedPayment;
+      }
+
+      if (paymentCache?.payments && checkIfPaymentsIsAlreadyInCache(paymentInfoRequest, iun)) {
+        return paymentCache.payments.flatMap((payment) => (payment.pagoPa ? [payment.pagoPa] : []));
       }
 
       const response = await paymentsApiFactory.getPaymentsInfoV1(paymentInfoRequest, { signal });
 
       const paymentInfo = response.data as Array<ExtRegistriesPaymentDetails>;
 
-      const payments: Array<PaymentDetails> = paymentInfo.map((info) => ({
-        pagoPa: {
-          ...info,
-          applyCost: false,
-        },
-      }));
-
-      setPaymentsInCache(payments, iun);
+      setInformalPaymentsInCache(paymentInfo, iun);
 
       return paymentInfo;
     } catch (e) {

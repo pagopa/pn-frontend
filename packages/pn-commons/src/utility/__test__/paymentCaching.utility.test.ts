@@ -4,6 +4,7 @@ import {
   PAYMENT_CACHE_KEY,
   checkIfPaymentsIsAlreadyInCache,
   getPaymentCache,
+  setInformalPaymentsInCache,
   setPaymentCache,
   setPaymentsInCache,
 } from '../paymentCaching.utility';
@@ -90,6 +91,27 @@ describe('Payment caching utility', () => {
     setPaymentsInCache(cachedPayments.payments, iun);
     paymentCache = getPaymentCache(iun);
     expect(paymentCache?.currentPayment).toBeUndefined();
+  });
+
+  it('setInformalPaymentsInCache should map and store informal payments without notification costs', () => {
+    sessionStorage.clear();
+
+    const paymentInfo = cachedPayments.payments
+      .filter((payment) => payment.pagoPa)
+      .map((payment) => payment.pagoPa!);
+
+    setInformalPaymentsInCache(paymentInfo, iun);
+
+    const paymentCache = getPaymentCache(iun);
+
+    expect(paymentCache?.payments).toEqual(
+      paymentInfo.map((payment) => ({
+        pagoPa: {
+          ...payment,
+          applyCost: false,
+        },
+      }))
+    );
   });
 
   it('checkIfPaymentsIsAlreadyInCache should return true if payments is already in cache', () => {
