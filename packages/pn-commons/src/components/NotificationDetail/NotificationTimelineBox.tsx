@@ -2,6 +2,7 @@ import {
   INotificationDetailTimeline,
   LegalFactId,
   NotificationDetailRecipient,
+  NotificationStatus,
   NotificationStatusHistory,
 } from '../../models';
 import { getNotificationStatusInfos } from '../../utility';
@@ -46,6 +47,9 @@ const NotificationTimelineBox: React.FC<NotificationTimelineBoxProps> = ({
     ? getStatusLegalFactPlan(statusHistory[0], (event) => event.hidden)
     : emptyLegalFactPlan<INotificationDetailTimeline>();
 
+  const hideDescription =
+    isNewTimelineCopyEnabled && statusHistory[0].status === NotificationStatus.DELIVERING;
+
   return (
     <NotificationStatusBox
       ariaLabel={getLocalizedOrDefaultLabel(
@@ -54,14 +58,16 @@ const NotificationTimelineBox: React.FC<NotificationTimelineBoxProps> = ({
       )}
       color={notificationStatusInfos.color}
       description={
-        <NotificationTimelineDescription
-          legalFacts={plan.legalFacts}
-          description={notificationStatusInfos.description}
-          clickHandler={clickHandler}
-          slotProps={{ typography: { variant: 'body2' } }}
-          isNewTimelineCopyEnabled={isNewTimelineCopyEnabled}
-          perfectionLink={perfectionLink}
-        />
+        hideDescription ? null : (
+          <NotificationTimelineDescription
+            legalFacts={plan.legalFacts}
+            description={notificationStatusInfos.description}
+            clickHandler={clickHandler}
+            slotProps={{ typography: { variant: 'body2' } }}
+            isNewTimelineCopyEnabled={isNewTimelineCopyEnabled}
+            perfectionLink={perfectionLink}
+          />
+        )
       }
       label={notificationStatusInfos.label}
       detailsLabel={getLocalizedOrDefaultLabel('notifications', 'go-to-detail')}
