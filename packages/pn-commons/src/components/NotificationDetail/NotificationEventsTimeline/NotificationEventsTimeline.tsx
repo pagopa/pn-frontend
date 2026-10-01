@@ -31,6 +31,8 @@ type Props = {
   language?: string;
   isNewTimelineCopyEnabled?: boolean;
   perfectionLink?: string;
+  mandateId?: string;
+  delegatorName?: string;
 };
 
 const NotificationEventsTimeline = ({
@@ -42,6 +44,8 @@ const NotificationEventsTimeline = ({
   language = 'it',
   isNewTimelineCopyEnabled = false,
   perfectionLink,
+  mandateId,
+  delegatorName,
 }: Props) => {
   const legacyStatusHistory = useMemo(() => toLegacyStatusHistory(statusHistory), [statusHistory]);
   const multiAttemptGroupIds = useMemo(
@@ -49,8 +53,20 @@ const NotificationEventsTimeline = ({
     [statusHistory]
   );
   const timelineItems = useMemo(
-    () => getTimelineItems(statusHistory, legacyStatusHistory, recipients, isSenderTimeline),
-    [statusHistory, legacyStatusHistory, recipients, isSenderTimeline, language]
+    () =>
+      getTimelineItems(statusHistory, legacyStatusHistory, recipients, isSenderTimeline, {
+        mandateId,
+        delegatorName,
+      }),
+    [
+      statusHistory,
+      legacyStatusHistory,
+      recipients,
+      isSenderTimeline,
+      language,
+      mandateId,
+      delegatorName,
+    ]
   );
 
   return (
