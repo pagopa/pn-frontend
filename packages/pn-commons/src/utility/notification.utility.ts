@@ -655,7 +655,8 @@ export function getLegalFactLabel(
 export function getNotificationTimelineStatusInfos(
   step: INotificationDetailTimeline,
   recipients: Array<NotificationDetailRecipient>,
-  allStepsForThisStatus?: Array<INotificationDetailTimeline>
+  allStepsForThisStatus?: Array<INotificationDetailTimeline>,
+  isNewTimelineCopyEnabled?: boolean
 ): TimelineStepInfo | null {
   const recipient = isNil(step.details.recIndex)
     ? undefined
@@ -687,6 +688,7 @@ export function getNotificationTimelineStatusInfos(
           recDescription.denomination && recDescription.taxId && recDescription.recipientType
       ).length > 1,
     allStepsForThisStatus,
+    isNewTimelineCopyEnabled,
   });
 }
 

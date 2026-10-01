@@ -11,6 +11,7 @@ export interface TimelineStepPayload {
   recipient?: NotificationDetailRecipient;
   isMultiRecipient: boolean;
   allStepsForThisStatus?: Array<INotificationDetailTimeline>;
+  isNewTimelineCopyEnabled?: boolean;
 }
 
 export interface TimelineStepInfo {
