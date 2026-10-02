@@ -15,6 +15,10 @@
     },
     "communications": {
       "empty-description": "Supprimez-les ou essayez une autre combinaison.",
+      "empty-state": {
+        "description": "Les communications refusées ou encore en cours de validation ne seront pas affichées.",
+        "title": "Ici, vous verrez les communications de la campagne."
+      },
       "empty-title": "Aucune communication pour les filtres sélectionnés.",
       "iun": "Code IUN",
       "no-communications-description": "Il n'y a pas de communications correspondant aux filtres sélectionnés.",

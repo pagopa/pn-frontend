@@ -15,15 +15,15 @@
     },
     "communications": {
       "empty-description": "Rimuovili o prova con un'altra combinazione.",
+      "empty-state": {
+        "description": "Non saranno visualizzate le comunicazioni rifiutate o ancora in validazione.",
+        "title": "Qui vedrai le comunicazioni della campagna."
+      },
       "empty-title": "Nessuna comunicazione per i filtri selezionati.",
       "iun": "Codice IUN",
       "no-communications-description": "Non ci sono comunicazioni corrispondenti ai filtri selezionati.",
       "no-communications-title": "Nessuna comunicazione disponibile",
       "outcome": "Esito",
-      "empty-state": {
-        "title": "Qui vedrai le comunicazioni della campagna.",
-        "description": "Non saranno visualizzate le comunicazioni rifiutate o ancora in validazione."
-      },
       "outcomes": {
         "all": "Tutti",
         "delivered": "Consegnata",

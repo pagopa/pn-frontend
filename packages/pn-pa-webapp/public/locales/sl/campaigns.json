@@ -15,6 +15,10 @@
     },
     "communications": {
       "empty-description": "Odstranite jih ali poskusite z drugo kombinacijo.",
+      "empty-state": {
+        "description": "Zavrnjena sporočila ali sporočila, ki so še v preverjanju, ne bodo prikazana.",
+        "title": "Tukaj boste videli sporočila kampanje."
+      },
       "empty-title": "Za izbrane filtre ni sporočil.",
       "iun": "Koda IUN",
       "no-communications-description": "Ni sporočil, ki bi ustrezala izbranim filtrom.",
