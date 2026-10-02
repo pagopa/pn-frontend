@@ -1,9 +1,9 @@
 {
-  "title": "Deine Daten",
-  "subtitle": "Diese Daten stammen von deinem SPID oder CIE und können nicht geändert werden.",
   "profile": {
-    "name": "Name",
     "family_name": "Nachname",
-    "fiscal_number": "Steuernummer"
-  }
+    "fiscal_number": "Steuernummer",
+    "name": "Name"
+  },
+  "subtitle": "Diese Daten stammen von deinem SPID oder CIE und können nicht geändert werden.",
+  "title": "Deine Daten"
 }

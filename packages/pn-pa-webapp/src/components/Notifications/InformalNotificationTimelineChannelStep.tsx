@@ -4,7 +4,10 @@ import { Box, Stack, Typography } from '@mui/material';
 import { NotificationTimelineEventDate } from '@pagopa-pn/pn-commons';
 import { Tag, themeNext } from '@pagopa/mui-italia';
 
-import { BffInformalNotificationTimelineGroup } from '../../generated-client/informal-notifications';
+import {
+  BffInformalNotificationTimelineGroup,
+  InformalNotificationStatusV1,
+} from '../../generated-client/informal-notifications';
 import {
   INFORMAL_CHANNEL_ICON,
   IO_TAG_ICON,
@@ -15,13 +18,14 @@ import {
 
 type Props = {
   step: BffInformalNotificationTimelineGroup;
+  status: InformalNotificationStatusV1;
   filedDate?: string;
 };
 
-const InformalNotificationTimelineChannelStep: React.FC<Props> = ({ step, filedDate }) => {
+const InformalNotificationTimelineChannelStep: React.FC<Props> = ({ step, status, filedDate }) => {
   const { t, i18n } = useTranslation('campaigns');
 
-  const events = getInformalTimelineEvents(step, filedDate);
+  const events = getInformalTimelineEvents(step, status, filedDate);
 
   const ChannelIcon = INFORMAL_CHANNEL_ICON[step.channel];
 

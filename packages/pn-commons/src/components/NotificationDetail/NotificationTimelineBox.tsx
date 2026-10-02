@@ -21,6 +21,8 @@ type NotificationTimelineBoxProps = {
   clickHandler: (legalFactId: LegalFactId) => void;
   isNewTimelineCopyEnabled?: boolean;
   perfectionLink?: string;
+  mandateId?: string;
+  delegatorName?: string;
 };
 
 const NotificationTimelineBox: React.FC<NotificationTimelineBoxProps> = ({
@@ -31,6 +33,8 @@ const NotificationTimelineBox: React.FC<NotificationTimelineBoxProps> = ({
   clickHandler,
   isNewTimelineCopyEnabled = false,
   perfectionLink,
+  mandateId,
+  delegatorName,
 }) => {
   if (statusHistory.length === 0) {
     return null;
@@ -40,6 +44,8 @@ const NotificationTimelineBox: React.FC<NotificationTimelineBoxProps> = ({
     statusHistory,
     recipients,
     isParty,
+    mandateId,
+    delegatorName,
   });
 
   const plan = isNewTimelineCopyEnabled

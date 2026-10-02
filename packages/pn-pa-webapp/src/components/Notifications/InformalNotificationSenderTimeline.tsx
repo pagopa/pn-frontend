@@ -110,6 +110,7 @@ const InformalNotificationSenderTimeline = ({ statusHistory, communicationOutcom
 
       {statusHistory.map((item) => {
         const presentation = TIMELINE_ITEM_PRESENTATION[item.status];
+        const steps = getInformalTimelineSteps(item.steps, item.status);
 
         return (
           <MITimelineItem
@@ -118,7 +119,7 @@ const InformalNotificationSenderTimeline = ({ statusHistory, communicationOutcom
             icon={presentation?.icon ?? InfoRounded}
             title={presentation && t(`informal.status.${presentation.statusKey}.label`)}
           >
-            {item.status !== InformalNotificationStatusV1.Processing ? (
+            {item.status !== InformalNotificationStatusV1.Processing && (
               <InformalTimelineItemDescription
                 description={
                   presentation && t(`informal.status.${presentation.statusKey}.description`)
@@ -129,12 +130,15 @@ const InformalNotificationSenderTimeline = ({ statusHistory, communicationOutcom
                     : undefined
                 }
               />
-            ) : (
+            )}
+
+            {!!steps.length && (
               <Stack spacing={1.5} divider={<Divider flexItem />} sx={{ mt: 1.5 }}>
-                {getInformalTimelineSteps(item.steps).map((step, stepIndex) => (
+                {steps.map((step, stepIndex) => (
                   <InformalNotificationTimelineChannelStep
                     key={`step-${step.channel}-${stepIndex}`}
                     step={step}
+                    status={item.status}
                     filedDate={filedDate}
                   />
                 ))}

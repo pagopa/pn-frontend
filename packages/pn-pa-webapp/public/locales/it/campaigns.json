@@ -1,207 +1,212 @@
 {
-  "list": {
-    "title": "Campagne",
-    "id": "Codice ID",
-    "open-aria-label": "Apri campagna \"{{name}}\"",
-    "empty-state": {
-      "no-campaigns": "Qui vedrai le campagne inviate dall'ente",
-      "generic-error": "Non è stato possibile recuperare le campagne.",
-      "generic-error-cta": "Prova di nuovo"
-    }
-  },
-
   "detail": {
     "breadcrumb-root": "Campagne",
-    "title": "Dettaglio campagna",
-    "creation-date": "Data di creazione",
-    "service-name": "Servizio",
-    "channels-label": "Canali selezionati",
-    "empty-state": {
-      "generic-error": "Non è stato possibile recuperare i dettagli della campagna.",
-      "generic-error-cta": "Prova di nuovo",
-      "campaign-title-placeholder": "[Titolo campagna]"
-    },
     "breadcrumb": {
       "back": "Indietro",
       "campaigns": "Campagne"
     },
+    "channels-label": "Canali selezionati",
     "channels": {
-      "IO": "IO",
-      "SMS": "SMS",
-      "EMAIL": "Email",
       "ANALOG": "Servizio postale",
-      "PEC": "PEC"
+      "EMAIL": "Email",
+      "IO": "IO",
+      "PEC": "PEC",
+      "SMS": "SMS"
     },
     "communications": {
-      "title": "Elenco delle comunicazioni",
-      "tax-id": "Codice fiscale",
-      "iun": "Codice IUN",
-      "status": "Stato",
-      "outcome": "Esito",
-      "empty-title": "Nessuna comunicazione per i filtri selezionati.",
       "empty-description": "Rimuovili o prova con un'altra combinazione.",
-      "remove-filters": "Rimuovi filtri",
-      "statuses": {
-        "ready": "Pronta per l'invio",
-        "processing": "Invio in corso",
-        "success": "Invio terminato",
-        "failed": "Invio fallito",
-        "refused": "Rifiutata"
+      "empty-state": {
+        "description": "Non saranno visualizzate le comunicazioni rifiutate o ancora in validazione.",
+        "title": "Qui vedrai le comunicazioni della campagna."
       },
+      "empty-title": "Nessuna comunicazione per i filtri selezionati.",
+      "iun": "Codice IUN",
+      "no-communications-description": "Non ci sono comunicazioni corrispondenti ai filtri selezionati.",
+      "no-communications-title": "Nessuna comunicazione disponibile",
+      "outcome": "Esito",
       "outcomes": {
         "all": "Tutti",
-        "viewed": "Letta",
         "delivered": "Consegnata",
-        "not-available": "Esito non disponibile"
+        "not-available": "Esito non disponibile",
+        "viewed": "Letta"
       },
-      "no-communications-title": "Nessuna comunicazione disponibile",
-      "no-communications-description": "Non ci sono comunicazioni corrispondenti ai filtri selezionati."
-    }
+      "remove-filters": "Rimuovi filtri",
+      "status": "Stato",
+      "statuses": {
+        "failed": "Invio fallito",
+        "processing": "Invio in corso",
+        "ready": "Pronta per l'invio",
+        "refused": "Rifiutata",
+        "success": "Invio terminato"
+      },
+      "tax-id": "Codice fiscale",
+      "title": "Elenco delle comunicazioni"
+    },
+    "creation-date": "Data di creazione",
+    "empty-state": {
+      "campaign-title-placeholder": "[Titolo campagna]",
+      "generic-error": "Non è stato possibile recuperare i dettagli della campagna.",
+      "generic-error-cta": "Prova di nuovo"
+    },
+    "service-name": "Servizio",
+    "title": "Dettaglio campagna"
   },
   "informal": {
     "detail": {
-      "iun": "Codice IUN",
-      "sender": "Mittente",
-      "recipient": "Persona destinataria",
-      "recipients": "Persone destinatarie",
-      "subject": "Oggetto della comunicazione",
-      "text": "Testo della comunicazione",
-      "title": "Dettaglio comunicazione",
       "aria-label": "Vai al dettaglio della comunicazione",
-      "status": {
-        "title": "Stato della comunicazione",
-        "aria-label": "Vai al dettaglio dello stato della comunicazione",
-        "go-to-detail": "Vai al dettaglio"
-      },
       "documents": {
-        "title": "Documenti allegati",
+        "document-not-available": "Il documento non è ancora disponibile. Riprova più tardi.",
         "download-message-available": "<0>Disponibile online fino a 180 giorni</0> dalla data di accettazione della comunicazione.",
         "download-message-expired": "I documenti non sono più disponibili online.",
-        "document-not-available": "Il documento non è ancora disponibile. Riprova più tardi."
+        "title": "Documenti allegati"
       },
+      "iun": "Codice IUN",
+      "recipient": "Persona destinataria",
+      "recipients": "Persone destinatarie",
       "send-by-channel": {
-        "title": "Dettaglio invio per canale",
         "channel": {
-          "send": "SEND",
-          "io": "IO",
-          "sms": "SMS",
-          "email": "Email",
           "analog": "Servizio postale",
+          "email": "Email",
+          "io": "IO",
           "pec": "PEC",
+          "send": "SEND",
+          "sms": "SMS",
           "unknown": "Canale sconosciuto"
-        },
-        "status": {
-          "ready_to_send": "IN ATTESA",
-          "waiting_to_send": "IN ATTESA",
-          "sent": "INVIATA",
-          "filed": "DEPOSITATA",
-          "delivered": "CONSEGNATA",
-          "viewed": "LETTA",
-          "unavailable": "NON DISPONIBILE",
-          "not_delivered": "NON CONSEGNATA",
-          "workflow_ended": "WORKFLOW TERMINATO"
         },
         "description": {
           "ready_to_send": "Invio previsto dopo la validazione della comunicazione.",
+          "unavailable": {
+            "email": "Impossibile risalire all'indirizzo email della persona destinataria.",
+            "io": "Impossibile risalire all'account della persona destinataria.",
+            "pec": "Impossibile risalire all'indirizzo PEC della persona destinataria.",
+            "sms": "Impossibile risalire al numero di telefono della persona destinataria."
+          },
           "waiting_to_send": "In attesa del completamento dell'invio sul canale precedente.",
           "workflow_ended": {
-            "sms": "Non sarà utilizzato, perché la comunicazione ha già raggiunto l'esito richiesto.",
-            "email": "Non sarà utilizzata, perché la comunicazione ha già raggiunto l'esito richiesto.",
             "analog": "Non sarà utilizzato, perché la comunicazione ha già raggiunto l'esito richiesto.",
-            "pec": "Non sarà utilizzata, perché la comunicazione ha già raggiunto l'esito richiesto."
-          },
-          "unavailable": {
-            "io": "Impossibile risalire all'account della persona destinataria.",
-            "sms": "Impossibile risalire al numero di telefono della persona destinataria.",
-            "email": "Impossibile risalire all'indirizzo email della persona destinataria.",
-            "pec": "Impossibile risalire all'indirizzo PEC della persona destinataria."
+            "email": "Non sarà utilizzata, perché la comunicazione ha già raggiunto l'esito richiesto.",
+            "pec": "Non sarà utilizzata, perché la comunicazione ha già raggiunto l'esito richiesto.",
+            "sms": "Non sarà utilizzato, perché la comunicazione ha già raggiunto l'esito richiesto."
           }
-        }
-      }
+        },
+        "status": {
+          "delivered": "CONSEGNATA",
+          "filed": "DEPOSITATA",
+          "not_delivered": "NON CONSEGNATA",
+          "ready_to_send": "IN ATTESA",
+          "sent": "INVIATA",
+          "unavailable": "NON DISPONIBILE",
+          "viewed": "LETTA",
+          "waiting_to_send": "IN ATTESA",
+          "workflow_ended": "WORKFLOW TERMINATO"
+        },
+        "title": "Dettaglio invio per canale"
+      },
+      "sender": "Mittente",
+      "status": {
+        "aria-label": "Vai al dettaglio dello stato della comunicazione",
+        "go-to-detail": "Vai al dettaglio",
+        "title": "Stato della comunicazione"
+      },
+      "subject": "Oggetto della comunicazione",
+      "text": "Testo della comunicazione",
+      "title": "Dettaglio comunicazione"
     },
     "status": {
       "accepted": {
-        "label": "Pronta per l'invio",
-        "description": "La comunicazione ha superato le verifiche di conformità. Inizierà a breve il processo d'invio."
-      },
-      "processing": {
-        "label": "Invio in corso",
-        "description": "La comunicazione proverà a raggiungere la persona destinataria sui canali scelti."
+        "description": "La comunicazione ha superato le verifiche di conformità. Inizierà a breve il processo d'invio.",
+        "label": "Pronta per l'invio"
       },
       "completed": {
-        "label": "Invio riuscito",
-        "description": "La comunicazione è stata inviata sui canali scelti."
+        "description": "La comunicazione è stata inviata sui canali scelti.",
+        "label": "Invio riuscito"
       },
-      "undeliverable": {
-        "label": "Invio fallito",
-        "description": "Non è stato possibile inviare la comunicazione sui canali scelti."
+      "processing": {
+        "description": "La comunicazione proverà a raggiungere la persona destinataria sui canali scelti.",
+        "label": "Invio in corso"
       },
       "refused": {
-        "label": "Rifiutata",
-        "description": "La comunicazione non ha superato le verifiche di conformità."
+        "description": "La comunicazione non ha superato le verifiche di conformità.",
+        "label": "Rifiutata"
+      },
+      "undeliverable": {
+        "description": "Non è stato possibile inviare la comunicazione sui canali scelti.",
+        "label": "Invio fallito"
       },
       "unknown": {
-        "label": "Non definito",
-        "description": "Stato sconosciuto"
+        "description": "Stato sconosciuto",
+        "label": "Non definito"
       }
     },
     "timeline": {
-      "title": "Stato della comunicazione",
-      "outcome": {
-        "viewed": {
-          "title": "Letta",
-          "description": "La persona destinataria ha letto la comunicazione."
-        },
-        "delivered": {
-          "title": "Consegnata",
-          "description": "La persona destinataria ha ricevuto la comunicazione."
-        }
-      },
       "event": {
-        "send_digital_message_feedback": {
-          "ok": {
-            "io": "Invio su IO riuscito.",
-            "email": "Invio via email riuscito.",
-            "sms": "Invio via SMS riuscito.",
-            "pec": "Invio via PEC riuscito."
-          },
-          "ko": {
-            "io": "Impossibile effettuare l'invio su IO.",
-            "email": "Impossibile effettuare l'invio via email.",
-            "sms": "Impossibile effettuare l'invio via SMS.",
-            "pec": "Impossibile effettuare l'invio via PEC."
-          }
-        },
-        "send_analog_message_feedback": {
-          "ok": {
-            "analog_registered": "Invio via raccomandata semplice n. {{code}} riuscito.",
-            "analog_ordinary": "Invio via posta ordinaria riuscito."
-          },
-          "ko": {
-            "analog_registered": "Impossibile effettuare l'invio via raccomandata semplice.",
-            "analog_ordinary": "Impossibile effettuare l'invio via posta ordinaria."
-          }
-        },
         "delivered": {
-          "io": "Consegna su IO riuscita.",
-          "email": "Consegna via email riuscita.",
-          "sms": "Consegna via SMS riuscita.",
-          "pec": "Consegna via PEC riuscita.",
+          "analog_ordinary": "Consegna via posta ordinaria riuscita.",
           "analog_registered": "Consegna via raccomandata semplice n. {{code}} riuscita.",
-          "analog_ordinary": "Consegna via posta ordinaria riuscita."
+          "email": "Consegna via email riuscita.",
+          "io": "Consegna su IO riuscita.",
+          "pec": "Consegna via PEC riuscita.",
+          "sms": "Consegna via SMS riuscita."
         },
-        "send_digital_message_skip": {
-          "io": "Impossibile risalire all'account della persona destinataria.",
-          "email": "Impossibile risalire all'indirizzo email della persona destinataria.",
-          "sms": "Impossibile risalire al numero di telefono della persona destinataria.",
-          "pec": "Impossibile risalire all'indirizzo PEC della persona destinataria."
+        "filed": {
+          "send": "Depositata sulla piattaforma SEND."
         },
-        "filed": { "send": "Depositata sulla piattaforma SEND." },
         "informal_notification_viewed": {
           "io": "La persona destinataria ha letto la comunicazione su IO.",
           "send": "La persona destinataria ha letto la comunicazione sulla piattaforma SEND."
+        },
+        "send_analog_message_feedback": {
+          "ko": {
+            "analog_ordinary": "Impossibile effettuare l'invio via posta ordinaria.",
+            "analog_registered": "Impossibile effettuare l'invio via raccomandata semplice."
+          },
+          "ok": {
+            "analog_ordinary": "Invio via posta ordinaria riuscito.",
+            "analog_registered": "Invio via raccomandata semplice n. {{code}} riuscito."
+          }
+        },
+        "send_digital_message_feedback": {
+          "ko": {
+            "email": "Impossibile effettuare l'invio via email.",
+            "io": "Impossibile effettuare l'invio su IO.",
+            "pec": "Impossibile effettuare l'invio via PEC.",
+            "sms": "Impossibile effettuare l'invio via SMS."
+          },
+          "ok": {
+            "email": "Invio via email riuscito.",
+            "io": "Invio su IO riuscito.",
+            "pec": "Invio via PEC riuscito.",
+            "sms": "Invio via SMS riuscito."
+          }
+        },
+        "send_digital_message_skip": {
+          "email": "Impossibile risalire all'indirizzo email della persona destinataria.",
+          "io": "Impossibile risalire all'account della persona destinataria.",
+          "pec": "Impossibile risalire all'indirizzo PEC della persona destinataria.",
+          "sms": "Impossibile risalire al numero di telefono della persona destinataria."
         }
-      }
+      },
+      "outcome": {
+        "delivered": {
+          "description": "La persona destinataria ha ricevuto la comunicazione.",
+          "title": "Consegnata"
+        },
+        "viewed": {
+          "description": "La persona destinataria ha letto la comunicazione.",
+          "title": "Letta"
+        }
+      },
+      "title": "Stato della comunicazione"
     }
+  },
+  "list": {
+    "empty-state": {
+      "generic-error": "Non è stato possibile recuperare le campagne.",
+      "generic-error-cta": "Prova di nuovo",
+      "no-campaigns": "Qui vedrai le campagne inviate dall'ente"
+    },
+    "id": "Codice ID",
+    "open-aria-label": "Apri campagna \"{{name}}\"",
+    "title": "Campagne"
   }
 }

@@ -29,7 +29,8 @@ import { MIButton } from '@pagopa/mui-italia';
 import { BffInformalSenderNotificationSearchRow } from '../../generated-client/informal-notifications';
 import { CommunicationFilters } from '../../models/Campaign';
 import * as routes from '../../navigation/routes.const';
-import { useAppSelector } from '../../redux/hooks';
+import { resetCommunicationsPagination } from '../../redux/campaign/reducers';
+import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { RootState } from '../../redux/store';
 import PnCampaignCommunicationsFilters from './PnCampaignCommunicationsFilters';
 import PnCommunicationOutcomeTag from './PnCommunicationOutcomeTag';
@@ -52,6 +53,7 @@ interface Props {
 const PnCampaignCommunications = ({ campaignId, fetchCampaignCommunications }: Props) => {
   const { t } = useTranslation('campaigns');
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
 
   const communicationsPagination = useAppSelector(
     (state: RootState) => state.campaignState.communicationsPagination
@@ -101,6 +103,7 @@ const PnCampaignCommunications = ({ campaignId, fetchCampaignCommunications }: P
       values: emptyFilters,
     });
 
+    dispatch(resetCommunicationsPagination());
     fetchCampaignCommunications(0, communicationsPagination.size, emptyFilters);
   };
 
@@ -183,6 +186,7 @@ const PnCampaignCommunications = ({ campaignId, fetchCampaignCommunications }: P
     },
     validationSchema,
     onSubmit: () => {
+      dispatch(resetCommunicationsPagination());
       fetchCampaignCommunications(0, communicationsPagination.size, formik.values);
     },
   });

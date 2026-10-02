@@ -43,7 +43,7 @@ const CampaignDetail: React.FC = () => {
   const { hasApiErrors } = useErrors();
   const [pageReady, setPageReady] = useState(false);
   const [communicationsReady, setCommunicationsReady] = useState(false);
-  const [hasInitialCommunications, setHasInitialCommunications] = useState<boolean | null>(null);
+  const [showCommunications, setShowCommunications] = useState<boolean | null>(null);
   const isPageReady = pageReady && communicationsReady;
   const { t } = useTranslation(['campaigns', 'common']);
   const hasCampaignDetailApiError = hasApiErrors(CAMPAIGN_ACTIONS.GET_CAMPAIGN_DETAIL);
@@ -69,14 +69,19 @@ const CampaignDetail: React.FC = () => {
     (page: number, size: number, filters: CommunicationFilters, nextPagesKey?: string) => {
       if (id) {
         setCommunicationsReady(false);
+        const filterParams = {
+          recipientId: filters.recipientId || undefined,
+          iunMatch: filters.iunMatch || undefined,
+          status: filters.status.length > 0 ? filters.status : undefined,
+          viewed: filters.outcome === 'viewed' ? true : undefined,
+          delivered: filters.outcome === 'delivered' ? true : undefined,
+        };
+        const hasFiltersApplied = Object.values(filterParams).some((value) => value !== undefined);
+
         void dispatch(
           getCampaignCommunications({
             campaignId: id,
-            recipientId: filters.recipientId || undefined,
-            iunMatch: filters.iunMatch || undefined,
-            status: filters.status.length > 0 ? filters.status : undefined,
-            viewed: filters.outcome === 'viewed' ? true : undefined,
-            delivered: filters.outcome === 'delivered' ? true : undefined,
+            ...filterParams,
             page,
             size,
             nextPagesKey,
@@ -84,8 +89,9 @@ const CampaignDetail: React.FC = () => {
         )
           .unwrap()
           .then((response) => {
-            setHasInitialCommunications(
-              (currentValue) => currentValue ?? (response.resultsPage?.length ?? 0) > 0
+            setShowCommunications(
+              (currentValue) =>
+                hasFiltersApplied || (currentValue ?? (response.resultsPage?.length ?? 0) > 0)
             );
           })
           .catch(() => {})
@@ -209,7 +215,7 @@ const CampaignDetail: React.FC = () => {
       )}
       {isPageReady && !hasCampaignCommunicationsApiError && (
         <>
-          {hasInitialCommunications ? (
+          {showCommunications ? (
             <PnCampaignCommunications
               campaignId={campaign.campaignId}
               fetchCampaignCommunications={fetchCampaignCommunications}
@@ -221,8 +227,8 @@ const CampaignDetail: React.FC = () => {
               </Typography>
               <EmptyErrorState
                 variant="empty"
-                title={t('detail.communications.no-communications-title')}
-                description={t('detail.communications.no-communications-description')}
+                title={t('detail.communications.empty-state.title')}
+                description={t('detail.communications.empty-state.description')}
               />
             </Box>
           )}

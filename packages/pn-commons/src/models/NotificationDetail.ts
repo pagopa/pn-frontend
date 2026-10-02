@@ -75,6 +75,7 @@ export type NotificationDetailTimelineDetails =
   | SendDigitalDetails
   | SendPaperDetails
   | PaidDetails
+  | NotificationViewedDetails
   // PN-1647
   | NotHandledDetails;
 
@@ -152,6 +153,22 @@ export interface SendDigitalDetails extends BaseDetails {
   digitalAddress?: DigitalAddress;
   responseStatus?: ResponseStatus;
   deliveryDetailCode?: string;
+}
+
+export interface DelegateInfo {
+  internalId?: string;
+  taxId?: string;
+  operatorUuid?: string;
+  mandateId?: string;
+  denomination?: string;
+  delegateType?: RecipientType;
+}
+
+export interface NotificationViewedDetails extends BaseDetails {
+  notificationCost?: number;
+  raddType?: string;
+  raddTransactionId?: string;
+  delegateInfo?: DelegateInfo;
 }
 
 export interface PaidDetails extends BaseDetails {
