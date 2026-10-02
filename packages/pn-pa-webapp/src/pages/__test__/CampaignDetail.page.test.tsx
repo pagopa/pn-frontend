@@ -312,4 +312,79 @@ describe('CampaignDetail Page', () => {
       result.queryByText('detail.communications.no-communications-title')
     ).not.toBeInTheDocument();
   });
+
+  it('resets communications pagination when applying filters', async () => {
+    const paginatedState = {
+      campaignState: {
+        campaigns: [],
+        campaignDetail: {},
+        communicationsCampaignId: campaignDetailMock.campaignId,
+        campaignCommunications: comunicationsList,
+        communicationFilters: {
+          recipientId: '',
+          iunMatch: '',
+          status: [],
+          outcome: '',
+        },
+        pagination: { nextPagesKey: [], size: 10, page: 0, moreResult: false },
+        communicationsPagination: {
+          nextPagesKey: ['key-1'],
+          size: 10,
+          page: 0,
+          moreResult: true,
+        },
+      },
+    };
+
+    const filteredComunicationsListPath = `/bff/v1/informal/campaigns/${campaignDetailMock.campaignId}/notifications/sent?startDate=${startParam}&endDate=${endParam}&iunMatch=ABCD-EFGH-IJKL-123456-M-1&size=10`;
+
+    mock
+      .onGet(`/bff/v1/notifications/informal/campaigns/${campaignDetailMock.campaignId}`)
+      .reply(200, campaignDetailMock);
+
+    mock.onGet(comunicationsListPath).reply(200, comunicationsList);
+
+    mock.onGet(filteredComunicationsListPath).reply(200, {
+      resultsPage: comunicationsList.resultsPage?.slice(0, 2) ?? [],
+      moreResult: false,
+      nextPagesKey: [],
+    });
+
+    await act(async () => {
+      result = render(<CampaignDetail />, {
+        route: `/campaigns/${campaignDetailMock.campaignId}`,
+        path: '/campaigns/:id',
+        preloadedState: paginatedState,
+      });
+    });
+
+    await waitFor(() => {
+      expect(mock.history.get).toHaveLength(2);
+    });
+
+    fireEvent.change(result.getByLabelText('detail.communications.iun'), {
+      target: { value: 'ABCD-EFGH-IJKL-123456-M-1' },
+    });
+
+    fireEvent.click(
+      result.getByRole('button', {
+        name: 'button.filtra',
+      })
+    );
+
+    await waitFor(() => {
+      expect(mock.history.get).toHaveLength(3);
+    });
+
+    expect(mock.history.get[2].url).toBe(filteredComunicationsListPath);
+
+    expect(result.testStore.getState().campaignState.communicationsPagination).toEqual({
+      nextPagesKey: [],
+      size: 10,
+      page: 0,
+      moreResult: false,
+    });
+
+    expect(result.container.querySelector('#page2')).not.toBeInTheDocument();
+  });
 });
