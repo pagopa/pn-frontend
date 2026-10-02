@@ -3,6 +3,16 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.27.0-RC.1](https://github.com/pagopa/pn-frontend/compare/v2.27.0-RC.0...v2.27.0-RC.1) (2026-10-02)
+
+### Bug Fixes
+
+* **PN-21455:** show channel events for every informal timeline status ([#2091](https://github.com/pagopa/pn-frontend/issues/2091)) ([531f4e4](https://github.com/pagopa/pn-frontend/commit/531f4e418b16ffbff1387dc4ef9fb51f65c766a8))
+* **PN-21694:** show campaign communications filters when filters are applied ([#2098](https://github.com/pagopa/pn-frontend/issues/2098)) ([430ebf9](https://github.com/pagopa/pn-frontend/commit/430ebf95ebe82c2e8ecd26b1ebe90109e7447dd5))
+* **PN-21699:** reset ComBo communications pagination when applying filters ([#2100](https://github.com/pagopa/pn-frontend/issues/2100)) ([7e5775e](https://github.com/pagopa/pn-frontend/commit/7e5775e0584448df9780a0a7e05480bc8428cb6d))
+* **PN-21705:** empty state message in detail campaign communications ([#2102](https://github.com/pagopa/pn-frontend/issues/2102)) ([1e8eea8](https://github.com/pagopa/pn-frontend/commit/1e8eea8b3917dc0e229ffee0fb1af129bc9ae73b))
+
+
 # [2.27.0-RC.0](https://github.com/pagopa/pn-frontend/compare/v2.26.1...v2.27.0-RC.0) (2026-09-29)
 
 ### Bug Fixes

@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.27.0-RC.1](https://github.com/pagopa/pn-frontend/compare/v2.27.0-RC.0...v2.27.0-RC.1) (2026-10-02)
+
+### Bug Fixes
+
+* **PN-21705:** empty state message in detail campaign communications ([#2102](https://github.com/pagopa/pn-frontend/issues/2102)) ([1e8eea8](https://github.com/pagopa/pn-frontend/commit/1e8eea8b3917dc0e229ffee0fb1af129bc9ae73b))
+
+### Features
+
+* **PN-20352:** VIEWED copy for the delegate view ([#2093](https://github.com/pagopa/pn-frontend/issues/2093)) ([d46549c](https://github.com/pagopa/pn-frontend/commit/d46549c5da1febf69590b23a4a64e7d17f4c53a1))
+
+
 # [2.27.0-RC.0](https://github.com/pagopa/pn-frontend/compare/v2.26.1...v2.27.0-RC.0) (2026-09-29)
 
 ### Bug Fixes
