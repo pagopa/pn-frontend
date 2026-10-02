@@ -20,6 +20,10 @@
       "no-communications-description": "Non ci sono comunicazioni corrispondenti ai filtri selezionati.",
       "no-communications-title": "Nessuna comunicazione disponibile",
       "outcome": "Esito",
+      "empty-state": {
+        "title": "Qui vedrai le comunicazioni della campagna.",
+        "description": "Non saranno visualizzate le comunicazioni rifiutate o ancora in validazione."
+      },
       "outcomes": {
         "all": "Tutti",
         "delivered": "Consegnata",

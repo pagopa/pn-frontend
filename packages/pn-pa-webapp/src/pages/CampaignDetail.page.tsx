@@ -227,8 +227,8 @@ const CampaignDetail: React.FC = () => {
               </Typography>
               <EmptyErrorState
                 variant="empty"
-                title={t('detail.communications.no-communications-title')}
-                description={t('detail.communications.no-communications-description')}
+                title={t('detail.communications.empty-state.title')}
+                description={t('detail.communications.empty-state.description')}
               />
             </Box>
           )}
