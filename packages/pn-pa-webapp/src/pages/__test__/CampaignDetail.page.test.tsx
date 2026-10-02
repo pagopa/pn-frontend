@@ -69,6 +69,49 @@ describe('CampaignDetail Page', () => {
     expect(mock.history.get[1].url).toBe(comunicationsListPath);
   });
 
+  it('shows campaign detail while communications are still loading, without global loading', async () => {
+    let resolveCommunications: (value: [number, typeof comunicationsList]) => void = () => {};
+
+    mock
+      .onGet(`/bff/v1/notifications/informal/campaigns/${campaignDetailMock.campaignId}`)
+      .reply(200, campaignDetailMock);
+
+    mock.onGet(comunicationsListPath).reply(
+      () =>
+        new Promise((resolve) => {
+          resolveCommunications = resolve;
+        })
+    );
+
+    await act(async () => {
+      result = render(<CampaignDetail />, {
+        route: `/campaigns/${campaignDetailMock.campaignId}`,
+        path: '/campaigns/:id',
+      });
+    });
+
+    await waitFor(() => {
+      expect(
+        result.getByRole('heading', {
+          name: campaignDetailMock.title,
+        })
+      ).toBeInTheDocument();
+    });
+
+    expect(result.getByTestId('campaignCommunicationsLoading')).toBeInTheDocument();
+    expect(result.queryByTestId('campaignsList')).not.toBeInTheDocument();
+    expect(result.testStore.getState().appState.loading.result).toBe(false);
+
+    await act(async () => {
+      resolveCommunications([200, comunicationsList]);
+    });
+
+    await waitFor(() => {
+      expect(result.getByTestId('campaignsList')).toBeInTheDocument();
+    });
+    expect(result.queryByTestId('campaignCommunicationsLoading')).not.toBeInTheDocument();
+  });
+
   it('renders api error when campaign detail request fails', async () => {
     mock
       .onGet(`/bff/v1/notifications/informal/campaigns/${campaignDetailMock.campaignId}`)
