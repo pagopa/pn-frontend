@@ -26,10 +26,6 @@
         "not-available": "Outcome not available",
         "viewed": "Read"
       },
-      "empty-state": {
-        "title": "Here you will see the campaign communications.",
-        "description": "Refused communications or those still under validation will not be displayed."
-      },
       "remove-filters": "Remove filters",
       "status": "Status",
       "statuses": {

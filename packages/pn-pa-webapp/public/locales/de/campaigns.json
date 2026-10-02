@@ -26,10 +26,6 @@
         "not-available": "Ergebnis nicht verfügbar",
         "viewed": "Gelesen"
       },
-      "empty-state": {
-        "title": "Hier siehst du die Mitteilungen der Kampagne.",
-        "description": "Abgelehnte oder noch in der Validierung befindliche Mitteilungen werden nicht angezeigt."
-      },
       "remove-filters": "Filter entfernen",
       "status": "Status",
       "statuses": {

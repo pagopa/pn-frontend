@@ -26,10 +26,6 @@
         "not-available": "Résultat non disponible",
         "viewed": "Lue"
       },
-      "empty-state": {
-        "title": "Ici, vous verrez les communications de la campagne.",
-        "description": "Les communications refusées ou encore en cours de validation ne seront pas affichées."
-      },
       "remove-filters": "Supprimer les filtres",
       "status": "Statut",
       "statuses": {

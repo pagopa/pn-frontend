@@ -26,10 +26,6 @@
         "not-available": "Izid ni na voljo",
         "viewed": "Prebrano"
       },
-      "empty-state": {
-        "title": "Tukaj boste videli sporočila kampanje.",
-        "description": "Zavrnjena sporočila ali sporočila, ki so še v preverjanju, ne bodo prikazana."
-      },
       "remove-filters": "Odstrani filtre",
       "status": "Stanje",
       "statuses": {

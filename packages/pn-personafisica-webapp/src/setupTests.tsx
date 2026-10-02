@@ -30,7 +30,7 @@ export const mockLanguageConfig = {
 beforeAll(() => {
   Configuration.setForTest<PfConfiguration>({
     API_BASE_URL: 'https://webapi.test.notifichedigitali.it/',
-    INACTIVITY_HANDLER_MINUTES: 0,
+    INACTIVITY_HANDLER_MINUTES: 5,
     ONE_TRUST_DRAFT_MODE: false,
     ONE_TRUST_PARTICIPATING_ENTITIES: 'mocked-id',
     ONE_TRUST_PP: 'mocked-id',

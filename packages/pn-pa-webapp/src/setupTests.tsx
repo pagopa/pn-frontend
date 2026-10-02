@@ -29,7 +29,7 @@ beforeAll(() => {
   Element.prototype.scrollIntoView = vi.fn();
   Configuration.setForTest<PaConfiguration>({
     API_BASE_URL: 'https://mock-api-base-url',
-    INACTIVITY_HANDLER_MINUTES: 0,
+    INACTIVITY_HANDLER_MINUTES: 5,
     ONE_TRUST_DRAFT_MODE: true,
     ONE_TRUST_PP: '365c84c5-9329-4ec5-89f5-e53572eda132',
     ONE_TRUST_TOS: 'b0da531e-8370-4373-8bd2-61ddc89e7fa6',
