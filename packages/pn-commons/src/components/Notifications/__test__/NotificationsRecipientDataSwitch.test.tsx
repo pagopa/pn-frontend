@@ -1,7 +1,10 @@
 import { vi } from 'vitest';
 
 import { NotificationStatus } from '../../../models/NotificationStatus';
-import { RecipientNotification } from '../../../models/Notifications';
+import {
+  NotificationCommunicationType,
+  RecipientNotification,
+} from '../../../models/Notifications';
 import { Row } from '../../../models/PnTable';
 import { createMatchMedia, fireEvent, render } from '../../../test-utils';
 import { formatDate } from '../../../utility/date.utility';
@@ -18,7 +21,7 @@ const data: Row<RecipientNotification> = {
   notificationStatus: NotificationStatus.ACCEPTED,
   recipients: ['CLMCST42R12D969Z', 'DRCGNN12A46A326K', 'TSTUTN00A07A001G'],
   group: '6467344676f10c7617353c90',
-  communicationType: 'LEGAL',
+  communicationType: NotificationCommunicationType.LEGAL,
   isNewNotification: true,
 };
 
@@ -107,7 +110,7 @@ describe('NotificationsRecipientDataSwitch Component', () => {
   it('renders component - subject - informal communication (no legal tag)', () => {
     const { container } = render(
       <NotificationsRecipientDataSwitch
-        data={{ ...data, communicationType: 'INFORMAL' }}
+        data={{ ...data, communicationType: NotificationCommunicationType.INFORMAL }}
         type="subject"
       />
     );

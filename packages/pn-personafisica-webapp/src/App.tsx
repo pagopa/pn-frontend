@@ -28,6 +28,7 @@ import {
   appStateActions,
   errorFactoryManager,
   initLocalization,
+  initLocalizationExists,
   useMultiEvent,
   useTracking,
 } from '@pagopa-pn/pn-commons';
@@ -292,6 +293,7 @@ const App = () => {
       setIsInitialized(true);
       // init localization
       initLocalization((namespace, path, data) => t(path, { ns: namespace, ...data }));
+      initLocalizationExists((namespace, path) => i18n.exists(path, { ns: namespace }));
       // eslint-disable-next-line functional/immutable-data
       errorFactoryManager.factory = new PFAppErrorFactory((path, ns) => t(path, { ns }));
     }

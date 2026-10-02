@@ -160,7 +160,7 @@ const Statistics = () => {
                 </MIAlert>
               )}
             <Box ref={exportJpgNode}>
-              <Typography variant="h6" component="h5" mt={7}>
+              <Typography variant="h6" component="h2" mt={7}>
                 {t('section_1')}
               </Typography>
 
@@ -213,7 +213,7 @@ const Statistics = () => {
                       />
                     </Grid>
                   </Grid>
-                  <Typography variant="h6" component="h5" mt={9}>
+                  <Typography variant="h6" component="h2" mt={9}>
                     {t('section_2')}
                   </Typography>
                   <FilterStatistics

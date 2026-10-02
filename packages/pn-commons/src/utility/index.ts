@@ -50,7 +50,7 @@ export { calcUnit8Array } from './file.utility';
 export { filtersApplied, getValidValue, sortArray } from './genericFunctions.utility';
 export { formatIun, IUN_regex } from './iun.utility';
 export { lazyRetry } from './lazyRetry.utility';
-export { initLocalization } from './localization.utility';
+export { initLocalization, initLocalizationExists } from './localization.utility';
 export {
   koError,
   superProperty,
@@ -77,6 +77,12 @@ export {
   getPagoPaF24Payments,
   populatePaymentsPagoPaF24,
 } from './notification.utility';
+export {
+  flattenTimelineSteps,
+  formatTimelineDate,
+  isTimelineGroupStep,
+  toLegacyStatusHistory,
+} from './notificationTimeline.utility';
 export { compileOneTrustPath, rewriteLinks } from './onetrust.utility';
 export { calculatePages } from './pagination.utility';
 export {
@@ -94,15 +100,11 @@ export * from './StatusHistory';
 export { storageOpsBuilder } from './storage.utility';
 export { dataRegex, formatFiscalCode, fromStringToBase64, sanitizeString } from './string.utility';
 export { extractRootTraceId } from './support.utility';
+export { default as TranslationOverlayBackend } from './translationOverlay.backend';
+export type { OverlaidNamespaces } from './translationOverlay.backend';
 export {
   adaptedTokenExchangeError,
   basicInitialUserData,
   basicUserDataMatcherContents,
   removeNullProperties,
 } from './user.utility';
-export {
-  flattenTimelineSteps,
-  isTimelineGroupStep,
-  toLegacyStatusHistory,
-  formatTimelineDate,
-} from './notificationTimeline.utility';

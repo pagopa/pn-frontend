@@ -1,34 +1,34 @@
 {
+  "button": {
+    "close": "Zapri",
+    "go-to-login": "Prijava"
+  },
+  "footer": {
+    "321-model": "Obrazec 231",
+    "accessibility": "Dostopnost",
+    "certifications": "Certifikati",
+    "company": "Pregledna družba",
+    "cookie": "Nastavitve piškotkov",
+    "disclosure": "Politika odgovornega razkritja",
+    "follow": "Spremljajte nas na",
+    "go-to": "Pojdi na povezavo",
+    "go-to-pagopa": "Povezava: pojdi na spletno mesto družbe PagoPA S.p.A.",
+    "legal-part-1": "delniška družba z enim družbenikom – v celoti vplačan osnovni kapital 1.000.000 EUR – sedež v Rimu, Piazza Colonna 370",
+    "legal-part-2": "Poštna številka 00187 – št. vpisa v Poslovni register v Rimu, davčna številka in identifikacijska številka za DDV 15376371009",
+    "personal-data": "Pravica do varstva osebnih podatkov",
+    "privacy-info": "Obvestilo o varovanju zasebnosti",
+    "products-title": "Izdelki in storitve",
+    "resources": "Viri",
+    "security": "Varnost podatkov",
+    "sercq-service-statement": "Service practice statement - SERCQ",
+    "social": "Povezava: pojdi na spletno mesto {{social}} družbe PagoPA S.p.A.",
+    "terms-conditions": "Pogoji in določila",
+    "who": "Kdo smo",
+    "work": "Sodeluj z nami"
+  },
   "header": {
     "assistance": "Pomoč",
     "logout": "Izhod",
     "pago-pa-link": "Spletna stran PagoPA S.p.A."
-  },
-  "footer": {
-    "go-to-pagopa": "Povezava: pojdi na spletno mesto družbe PagoPA S.p.A.",
-    "go-to": "Pojdi na povezavo",
-    "privacy-info": "Obvestilo o varovanju zasebnosti",
-    "who": "Kdo smo",
-    "work": "Sodeluj z nami",
-    "certifications": "Certifikati",
-    "security": "Varnost podatkov",
-    "personal-data": "Pravica do varstva osebnih podatkov",
-    "cookie": "Nastavitve piškotkov",
-    "terms-conditions": "Pogoji in določila",
-    "company": "Pregledna družba",
-    "disclosure": "Politika odgovornega razkritja",
-    "321-model": "Obrazec 231",
-    "sercq-service-statement": "Service practice statement - SERCQ",
-    "accessibility": "Dostopnost",
-    "social": "Povezava: pojdi na spletno mesto {{social}} družbe PagoPA S.p.A.",
-    "resources": "Viri",
-    "follow": "Spremljajte nas na",
-    "legal-part-1": "delniška družba z enim družbenikom – v celoti vplačan osnovni kapital 1.000.000 EUR – sedež v Rimu, Piazza Colonna 370",
-    "legal-part-2": "Poštna številka 00187 – št. vpisa v Poslovni register v Rimu, davčna številka in identifikacijska številka za DDV 15376371009",
-    "products-title": "Izdelki in storitve"
-  },
-  "button": {
-    "close": "Zapri",
-    "go-to-login": "Prijava"
   }
 }

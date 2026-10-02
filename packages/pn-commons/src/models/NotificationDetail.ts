@@ -75,6 +75,7 @@ export type NotificationDetailTimelineDetails =
   | SendDigitalDetails
   | SendPaperDetails
   | PaidDetails
+  | NotificationViewedDetails
   // PN-1647
   | NotHandledDetails;
 
@@ -154,6 +155,22 @@ export interface SendDigitalDetails extends BaseDetails {
   deliveryDetailCode?: string;
 }
 
+export interface DelegateInfo {
+  internalId?: string;
+  taxId?: string;
+  operatorUuid?: string;
+  mandateId?: string;
+  denomination?: string;
+  delegateType?: RecipientType;
+}
+
+export interface NotificationViewedDetails extends BaseDetails {
+  notificationCost?: number;
+  raddType?: string;
+  raddTransactionId?: string;
+  delegateInfo?: DelegateInfo;
+}
+
 export interface PaidDetails extends BaseDetails {
   paymentSourceChannel?: string;
   recipientType?: RecipientType;
@@ -228,6 +245,15 @@ export interface NotificationDetailPayment {
   pagoPa?: PagoPAPaymentDetails;
   f24?: F24PaymentDetails;
 }
+
+export type NotificationPayment = {
+  pagoPa?: {
+    creditorTaxId: string;
+    noticeCode: string;
+    attachment?: Attachment;
+  };
+  f24?: F24PaymentDetails;
+};
 
 export interface PaymentNotice {
   noticeNumber: string;

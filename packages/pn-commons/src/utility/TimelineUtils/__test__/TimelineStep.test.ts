@@ -8,7 +8,6 @@ class MockTimelineStep extends TimelineStep {
     return {
       label: 'mock-label',
       description: 'mock-description',
-      linkText: 'mock-linkText',
     };
   }
 }
@@ -24,7 +23,6 @@ describe('TimelineStep', () => {
     expect(mockTimelineStep.getTimelineStepInfo()).toStrictEqual({
       label: 'mock-label',
       description: `mock-description`,
-      linkText: 'mock-linkText',
     });
   });
 

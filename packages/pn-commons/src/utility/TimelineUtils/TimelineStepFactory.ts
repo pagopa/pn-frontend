@@ -1,6 +1,9 @@
 import { INotificationDetailTimeline, TimelineCategory } from '../../models/NotificationDetail';
 import { AnalogFailureWorkflowStep } from './AnalogFailureWorkflowStep';
+import { CompletelyUnreachableStep } from './CompletelyUnreachableStep';
 import { DefaultStep } from './DefaultStep';
+import { DigitalFailureWorkflowStep } from './DigitalFailureWorkflowStep';
+import { DigitalSuccessWorkflowStep } from './DigitalSuccessWorkflowStep';
 import { NotHandledStep } from './NotHandledStep';
 import { PrepareAnalogDomicileFailureStep } from './PrepareAnalogDomicileFailureStep';
 import { ScheduleDigitalWorkflowStep } from './ScheduleDigitalWorkflowStep';
@@ -28,6 +31,12 @@ export class TimelineStepFactory {
         return new SendDigitalFeedbackStep();
       case TimelineCategory.SEND_DIGITAL_PROGRESS:
         return new SendDigitalProgressStep();
+      case TimelineCategory.DIGITAL_SUCCESS_WORKFLOW:
+        return new DigitalSuccessWorkflowStep();
+      case TimelineCategory.DIGITAL_FAILURE_WORKFLOW:
+        return new DigitalFailureWorkflowStep();
+      case TimelineCategory.COMPLETELY_UNREACHABLE:
+        return new CompletelyUnreachableStep();
       case TimelineCategory.SEND_SIMPLE_REGISTERED_LETTER:
         return new SendSimpleRegisteredLetterStep();
       case TimelineCategory.SEND_ANALOG_DOMICILE:

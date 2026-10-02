@@ -3,7 +3,9 @@ import {
   NotificationDeliveryMode,
   NotificationDetailRecipient,
   NotificationStatusHistory,
+  PaidDetails,
   ReworkedStatus,
+  TimelineCategory,
 } from './NotificationDetail';
 import { NotificationStatus } from './NotificationStatus';
 
@@ -90,3 +92,19 @@ export const NotificationTimelineGroupCategory = {
 
 export type NotificationTimelineGroupCategory =
   (typeof NotificationTimelineGroupCategory)[keyof typeof NotificationTimelineGroupCategory];
+
+export type NotificationPaymentTimelineDetails = Partial<
+  Pick<PaidDetails, 'creditorTaxId' | 'noticeCode'>
+>;
+
+export type NotificationPaymentTimelineElement =
+  | {
+      category: TimelineCategory.PAYMENT;
+      details: NotificationPaymentTimelineDetails;
+    }
+  | {
+      category?: string;
+      details?: unknown;
+    };
+
+export type NotificationPaymentTimeline = Array<NotificationPaymentTimelineElement>;

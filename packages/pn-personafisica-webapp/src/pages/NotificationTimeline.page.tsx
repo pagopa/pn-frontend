@@ -57,7 +57,12 @@ const NotificationTimeline: React.FC = () => {
    * Carlos Lombardi, 2023.02.03
    */
   const { t, i18n } = useTranslation(['common', 'notifiche', 'appStatus']);
-  const { NOTIFICATION_CANCELLED_HELP_LINK, IS_NEW_TIMELINE_ENABLED } = getConfiguration();
+  const {
+    NOTIFICATION_CANCELLED_HELP_LINK,
+    NOTIFICATION_PERFECTION_LINK,
+    IS_NEW_TIMELINE_ENABLED,
+    IS_NEW_TIMELINE_COPY_ENABLED,
+  } = getConfiguration();
   const { hasApiErrors } = useErrors();
   const [pageReady, setPageReady] = useState(false);
   const [isUserForbidden, setIsUserForbidden] = useState(false);
@@ -71,6 +76,8 @@ const NotificationTimeline: React.FC = () => {
   const notificationTimeline = useAppSelector(
     (state: RootState) => state.notificationState.notificationTimeline
   );
+  const delegatorName = delegatorsFromStore.find((delegation) => delegation.mandateId === mandateId)
+    ?.delegator?.displayName;
 
   const isCancelled = useIsCancelled({
     notification: IS_NEW_TIMELINE_ENABLED ? notificationTimeline : notification,
@@ -108,6 +115,14 @@ const NotificationTimeline: React.FC = () => {
 
   const legalFactDownloadHandler = (legalFact: LegalFactId) => {
     if (legalFact.category !== LegalFactType.NOTIFICATION_CANCELLED && isCancelledOrCancelling) {
+      if (IS_NEW_TIMELINE_COPY_ENABLED) {
+        dispatch(
+          appStateActions.addWarning({
+            title: '',
+            message: t('detail.document-unavailable', { ns: 'notifiche' }),
+          })
+        );
+      }
       return;
     }
 
@@ -192,10 +207,6 @@ const NotificationTimeline: React.FC = () => {
     const notificationDetailRoute = mandateId
       ? routes.GET_DETTAGLIO_NOTIFICA_DELEGATO_PATH(id, mandateId)
       : routes.GET_DETTAGLIO_NOTIFICA_PATH(id);
-
-    const delegatorName = delegatorsFromStore.find(
-      (delegation) => delegation.mandateId === mandateId
-    )?.delegator?.displayName;
 
     const breadcrumbLabel = delegatorName
       ? t('menu.notifiche-delegato', { delegator: delegatorName })
@@ -293,7 +304,13 @@ const NotificationTimeline: React.FC = () => {
                   recipients={notificationTimeline.recipients}
                   statusHistory={notificationTimeline.notificationStatusHistory}
                   clickHandler={legalFactDownloadHandler}
-                  disableDownloads={isCancelled.cancellationInTimeline}
+                  disableDownloads={
+                    !IS_NEW_TIMELINE_COPY_ENABLED && isCancelled.cancellationInTimeline
+                  }
+                  isNewTimelineCopyEnabled={IS_NEW_TIMELINE_COPY_ENABLED}
+                  perfectionLink={NOTIFICATION_PERFECTION_LINK}
+                  mandateId={mandateId}
+                  delegatorName={delegatorName}
                 />
               ) : (
                 <MIPaper sx={{ mt: 3 }}>

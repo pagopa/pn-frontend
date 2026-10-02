@@ -1,0 +1,212 @@
+{
+  "detail": {
+    "breadcrumb-root": "Kampagnen",
+    "breadcrumb": {
+      "back": "Zurück",
+      "campaigns": "Kampagnen"
+    },
+    "channels-label": "Ausgewählte Kanäle",
+    "channels": {
+      "ANALOG": "Postdienst",
+      "EMAIL": "E-Mail",
+      "IO": "IO",
+      "PEC": "PEC",
+      "SMS": "SMS"
+    },
+    "communications": {
+      "empty-description": "Entferne sie oder versuche es mit einer anderen Kombination.",
+      "empty-state": {
+        "description": "Abgelehnte oder noch in der Validierung befindliche Mitteilungen werden nicht angezeigt.",
+        "title": "Hier siehst du die Mitteilungen der Kampagne."
+      },
+      "empty-title": "Keine Mitteilungen für die ausgewählten Filter vorhanden.",
+      "iun": "IUN-Code",
+      "no-communications-description": "Es gibt keine Mitteilungen, die den ausgewählten Filtern entsprechen.",
+      "no-communications-title": "Keine Mitteilungen verfügbar",
+      "outcome": "Ergebnis",
+      "outcomes": {
+        "all": "Alle",
+        "delivered": "Zugestellt",
+        "not-available": "Ergebnis nicht verfügbar",
+        "viewed": "Gelesen"
+      },
+      "remove-filters": "Filter entfernen",
+      "status": "Status",
+      "statuses": {
+        "failed": "Versand fehlgeschlagen",
+        "processing": "Versand läuft",
+        "ready": "Bereit zum Versand",
+        "refused": "Abgelehnt",
+        "success": "Versand abgeschlossen"
+      },
+      "tax-id": "Steuernummer",
+      "title": "Mitteilungsliste"
+    },
+    "creation-date": "Erstellungsdatum",
+    "empty-state": {
+      "campaign-title-placeholder": "[Kampagnentitel]",
+      "generic-error": "Die Kampagnendetails konnten nicht abgerufen werden.",
+      "generic-error-cta": "Versuche es erneut"
+    },
+    "service-name": "Dienst",
+    "title": "Kampagnendetails"
+  },
+  "informal": {
+    "detail": {
+      "aria-label": "Zu den Details der Mitteilung",
+      "documents": {
+        "document-not-available": "Das Dokument ist noch nicht verfügbar. Versuche es später noch einmal.",
+        "download-message-available": "<0>Bis zu 180 Tage online verfügbar</0> ab dem Datum der Annahme der Mitteilung.",
+        "download-message-expired": "Die Dokumente sind nicht mehr online verfügbar.",
+        "title": "Angehängte Dokumente"
+      },
+      "iun": "IUN-Code",
+      "recipient": "Empfänger",
+      "recipients": "Empfänger",
+      "send-by-channel": {
+        "channel": {
+          "analog": "Postdienst",
+          "email": "E-Mail",
+          "io": "IO",
+          "pec": "PEC",
+          "send": "SEND",
+          "sms": "SMS",
+          "unknown": "Unbekannter Kanal"
+        },
+        "description": {
+          "ready_to_send": "Voraussichtlicher Versand nach Validierung der Mitteilung.",
+          "unavailable": {
+            "email": "Die E-Mail-Adresse des Empfängers kann nicht ermittelt werden.",
+            "io": "Das Konto des Empfängers kann nicht ermittelt werden.",
+            "pec": "Die PEC-Adresse des Empfängers kann nicht ermittelt werden.",
+            "sms": "Die Telefonnummer des Empfängers kann nicht ermittelt werden."
+          },
+          "waiting_to_send": "Warten auf den Abschluss des Versands auf dem vorherigen Kanal.",
+          "workflow_ended": {
+            "analog": "Wird nicht verwendet, da die Mitteilung bereits das gewünschte Ergebnis erzielt hat.",
+            "email": "Wird nicht verwendet, da die Mitteilung bereits das gewünschte Ergebnis erzielt hat.",
+            "pec": "Wird nicht verwendet, da die Mitteilung bereits das gewünschte Ergebnis erzielt hat.",
+            "sms": "Wird nicht verwendet, da die Mitteilung bereits das gewünschte Ergebnis erzielt hat."
+          }
+        },
+        "status": {
+          "delivered": "ZUGESTELLT",
+          "filed": "HINTERLEGT",
+          "not_delivered": "NICHT ZUGESTELLT",
+          "ready_to_send": "WARTEND",
+          "sent": "GESENDET",
+          "unavailable": "NICHT VERFÜGBAR",
+          "viewed": "GELESEN",
+          "waiting_to_send": "WARTEND",
+          "workflow_ended": "WORKFLOW BEENDET"
+        },
+        "title": "Versanddetails nach Kanal"
+      },
+      "sender": "Absender",
+      "status": {
+        "aria-label": "Zu den Details des Mitteilungsstatus",
+        "go-to-detail": "Zu den Details",
+        "title": "Status der Mitteilung"
+      },
+      "subject": "Betreff der Mitteilung",
+      "text": "Text der Mitteilung",
+      "title": "Details der Mitteilung"
+    },
+    "status": {
+      "accepted": {
+        "description": "Die Mitteilung hat die Konformitätsprüfungen bestanden. Der Versandprozess beginnt in Kürze.",
+        "label": "Bereit zum Versand"
+      },
+      "completed": {
+        "description": "Die Mitteilung wurde über die gewählten Kanäle versendet.",
+        "label": "Versand erfolgreich"
+      },
+      "processing": {
+        "description": "Die Mitteilung wird versuchen, den Empfänger über die gewählten Kanäle zu erreichen.",
+        "label": "Versand im Gange"
+      },
+      "refused": {
+        "description": "Die Mitteilung hat die Konformitätsprüfungen nicht bestanden.",
+        "label": "Abgelehnt"
+      },
+      "undeliverable": {
+        "description": "Die Mitteilung konnte nicht über die gewählten Kanäle versendet werden.",
+        "label": "Versand fehlgeschlagen"
+      },
+      "unknown": {
+        "description": "Unbekannter Status",
+        "label": "Nicht definiert"
+      }
+    },
+    "timeline": {
+      "event": {
+        "delivered": {
+          "analog_ordinary": "Zustellung per normaler Post erfolgreich.",
+          "analog_registered": "Zustellung per Einschreiben Nr. {{code}} erfolgreich.",
+          "email": "Zustellung per E-Mail erfolgreich.",
+          "io": "Zustellung über IO erfolgreich.",
+          "pec": "Zustellung per PEC erfolgreich.",
+          "sms": "Zustellung per SMS erfolgreich."
+        },
+        "filed": {
+          "send": "Auf der SEND Plattform hinterlegt."
+        },
+        "informal_notification_viewed": {
+          "io": "Der Empfänger hat die Mitteilung auf IO gelesen.",
+          "send": "Der Empfänger hat die Mitteilung auf der SEND Plattform gelesen."
+        },
+        "send_analog_message_feedback": {
+          "ko": {
+            "analog_ordinary": "Versand per normaler Post nicht möglich.",
+            "analog_registered": "Versand per Einschreiben nicht möglich."
+          },
+          "ok": {
+            "analog_ordinary": "Versand per normaler Post erfolgreich.",
+            "analog_registered": "Versand per Einschreiben Nr. {{code}} erfolgreich."
+          }
+        },
+        "send_digital_message_feedback": {
+          "ko": {
+            "email": "Versand per E-Mail nicht möglich.",
+            "io": "Versand über IO nicht möglich.",
+            "pec": "Versand per PEC nicht möglich.",
+            "sms": "Versand per SMS nicht möglich."
+          },
+          "ok": {
+            "email": "Versand per E-Mail erfolgreich.",
+            "io": "Versand über IO erfolgreich.",
+            "pec": "Versand per PEC erfolgreich.",
+            "sms": "Versand per SMS erfolgreich."
+          }
+        },
+        "send_digital_message_skip": {
+          "email": "Die E-Mail-Adresse des Empfängers kann nicht ermittelt werden.",
+          "io": "Das Konto des Empfängers kann nicht ermittelt werden.",
+          "pec": "Die PEC-Adresse des Empfängers kann nicht ermittelt werden.",
+          "sms": "Die Telefonnummer des Empfängers kann nicht ermittelt werden."
+        }
+      },
+      "outcome": {
+        "delivered": {
+          "description": "Der Empfänger hat die Mitteilung erhalten.",
+          "title": "Zugestellt"
+        },
+        "viewed": {
+          "description": "Der Empfänger hat die Mitteilung gelesen.",
+          "title": "Gelesen"
+        }
+      },
+      "title": "Status der Mitteilung"
+    }
+  },
+  "list": {
+    "empty-state": {
+      "generic-error": "Die Kampagnen konnten nicht abgerufen werden.",
+      "generic-error-cta": "Versuche es erneut",
+      "no-campaigns": "Hier siehst du die von der Entität gesendeten Kampagnen"
+    },
+    "id": "ID-Code",
+    "open-aria-label": "Kampagne \"{{name}}\" öffnen",
+    "title": "Kampagnen"
+  }
+}

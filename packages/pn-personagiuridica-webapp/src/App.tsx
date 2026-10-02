@@ -19,6 +19,7 @@ import {
   appStateActions,
   errorFactoryManager,
   initLocalization,
+  initLocalizationExists,
   useHasPermissions,
   useMultiEvent,
   useTracking,
@@ -26,7 +27,6 @@ import {
 import { MIButton, PartyEntity, ProductEntity } from '@pagopa/mui-italia';
 
 import { useMenuItems } from './hooks/useMenuItems';
-import i18n from './i18n';
 import { PGEventsType } from './models/PGEventsType';
 import { PNRole } from './models/User';
 import { getCurrentEventTypePage, goToLoginPortal } from './navigation/navigation.utility';
@@ -54,7 +54,7 @@ import './utility/onetrust';
 // Cfr. comment in packages/pn-personafisica-webapp/src/App.tsx
 // --------------------
 const App = () => {
-  const { t } = useTranslation(['common', 'notifiche']);
+  const { t, i18n } = useTranslation(['common', 'notifiche']);
   const [isInitialized, setIsInitialized] = useState(false);
 
   useEffect(() => {
@@ -62,6 +62,7 @@ const App = () => {
       setIsInitialized(true);
       // init localization
       initLocalization((namespace, path, data) => t(path, { ns: namespace, ...data }));
+      initLocalizationExists((namespace, path) => i18n.exists(path, { ns: namespace }));
       // eslint-disable-next-line functional/immutable-data
       errorFactoryManager.factory = new PGAppErrorFactory((path, ns) => t(path, { ns }));
     }
