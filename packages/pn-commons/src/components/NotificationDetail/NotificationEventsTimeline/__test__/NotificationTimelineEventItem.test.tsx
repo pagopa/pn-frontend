@@ -1,7 +1,8 @@
 import { vi } from 'vitest';
 
 import { notificationTimelineDTO } from '../../../../__mocks__/NotificationTimeline.mock';
-import { TimelineCategory } from '../../../../models/NotificationDetail';
+import { SERCQ_SEND_VALUE } from '../../../../models/Contacts';
+import { DigitalDomicileType, TimelineCategory } from '../../../../models/NotificationDetail';
 import { NotificationTimelineEvent } from '../../../../models/NotificationTimeline';
 import { fireEvent, initLocalizationForTest, render, within } from '../../../../test-utils';
 import { getNotificationTimelineStatusInfos } from '../../../../utility/notification.utility';
@@ -186,4 +187,31 @@ describe('NotificationTimelineEventItem', () => {
     expect(clickHandler).toHaveBeenCalledTimes(1);
     expect(clickHandler).toHaveBeenCalledWith(legalFact);
   });
+
+  it.each([true, false])(
+    'renders the description of a SERCQ SEND event only when the new copy is disabled: %s',
+    (isNewTimelineCopyEnabled) => {
+      const sercqEvent: NotificationTimelineEvent = {
+        elementId: 'SEND_DIGITAL_DOMICILE.SERCQ',
+        timestamp: '2026-09-23T10:30:00Z',
+        category: TimelineCategory.SEND_DIGITAL_DOMICILE,
+        details: {
+          recIndex: 0,
+          digitalAddress: { address: SERCQ_SEND_VALUE, type: DigitalDomicileType.SERCQ },
+        },
+        legalFactsIds: [],
+        isHidden: false,
+      };
+
+      const { getByTestId } = renderEvent(sercqEvent, { isNewTimelineCopyEnabled });
+
+      const item = getByTestId('timeline-event');
+      expect(item).toHaveTextContent('detail.timeline.send-digital-domicile-SERCQ-SEND');
+      if (isNewTimelineCopyEnabled) {
+        expect(item).not.toHaveTextContent('send-digital-domicile-SERCQ-SEND-description');
+      } else {
+        expect(item).toHaveTextContent('send-digital-domicile-SERCQ-SEND-description');
+      }
+    }
+  );
 });

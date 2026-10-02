@@ -71,7 +71,12 @@ const NotificationTimelineEventItem: React.FC<Props> = ({
     );
   }
 
-  const statusInfo = getNotificationTimelineStatusInfos(event, recipients, allEvents);
+  const statusInfo = getNotificationTimelineStatusInfos(
+    event,
+    recipients,
+    allEvents,
+    isNewTimelineCopyEnabled
+  );
 
   if (!statusInfo) {
     return null;
