@@ -155,7 +155,7 @@
     "social": "Gehe auf die Website {{social}} von PagoPA S.p.A.",
     "resources": "Quellen",
     "follow": "Folge uns auf",
-    "legal-part-1": "Aktiengesellschaft mit einem einzigen Gesellschafter - voll eingezahltes Grundkapital von 1.000.000 Euro - eingetragener Sitz in Rom, Piazza Colonna 370",
+    "legal-part-1": "Aktiengesellschaft - voll eingezahltes Grundkapital von 1.000.000 Euro - eingetragener Sitz in Rom, Piazza Colonna 370",
     "legal-part-2": "PLZ 00187 – Eintrag im Handelsregister von Rom Nr., Steuernummer und USt-IdNr. 15376371009"
   },
   "required-fields": "*Pflichtfelder",
@@ -246,13 +246,7 @@
     "action": "Angemeldet bleiben"
   },
   "code-modal": {
-    "digits": [
-      "Erste Ziffer",
-      "Zweite Ziffer",
-      "Dritte Ziffer",
-      "Vierte Ziffer",
-      "Letzte Ziffer"
-    ]
+    "digits": ["Erste Ziffer", "Zweite Ziffer", "Dritte Ziffer", "Vierte Ziffer", "Letzte Ziffer"]
   },
   "user-validation-failed": {
     "title": "Die eingegebenen Daten sind ungültig",
