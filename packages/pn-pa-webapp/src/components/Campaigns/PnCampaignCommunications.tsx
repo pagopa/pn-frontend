@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import * as yup from 'yup';
 
 import { ArrowForward } from '@mui/icons-material';
-import { Box, Typography } from '@mui/material';
+import { Box } from '@mui/material';
 import {
   CustomPagination,
   EmptyErrorState,
@@ -252,11 +252,7 @@ const PnCampaignCommunications = ({ campaignId, fetchCampaignCommunications }: P
   );
 
   return (
-    <Box sx={{ mt: 3 }} data-testid="campaignsList">
-      <Typography component="h2" variant="h6">
-        {t('detail.communications.title')}
-      </Typography>
-
+    <Box data-testid="campaignsList">
       <SmartTable
         data={data}
         conf={communicationsColumns}
