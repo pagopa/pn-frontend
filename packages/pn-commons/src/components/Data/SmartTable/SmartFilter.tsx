@@ -1,5 +1,5 @@
 import { isEqual } from 'lodash-es';
-import { FormEvent, PropsWithChildren, useRef } from 'react';
+import { FormEvent, PropsWithChildren, useRef, useState } from 'react';
 
 import { Box, Button, DialogActions, DialogContent, Grid } from '@mui/material';
 
@@ -16,7 +16,9 @@ type Props<FormValues> = {
   /** label to show for the cancel button */
   cancelLabel: string;
   /** function to be called when filters are submitted */
-  onSubmit: (event?: FormEvent<HTMLFormElement> | undefined) => void;
+  onSubmit: (
+    event?: FormEvent<HTMLFormElement> | undefined
+  ) => void | boolean | Promise<void | boolean>;
   /** function to be called when filters are cleaned */
   onClear: () => void;
   /** flag to check if the form is valid */
@@ -26,6 +28,8 @@ type Props<FormValues> = {
   /** initial form values */
   initialValues: FormValues;
 };
+
+const actionBoxStyle = { display: 'flex', alignItems: 'center', minHeight: '48px' };
 
 /**
  * SmartFilter show filter in desktop view and dialog in mobile view.
@@ -41,21 +45,22 @@ const SmartFilter = <FormValues extends object>({
   initialValues,
 }: PropsWithChildren<Props<FormValues>>) => {
   const isMobile = useIsMobile();
-  const currentFilters = useRef<FormValues>(formValues);
-  const isPreviousSearch = isEqual(formValues, currentFilters.current);
-  const filtersCount = filtersApplied(currentFilters.current, initialValues);
+  const [currentFilters, setCurrentFilters] = useState<FormValues>(formValues);
+  const isPreviousSearch = isEqual(formValues, currentFilters);
+  const filtersCount = filtersApplied(currentFilters, initialValues);
   const dialogRef = useRef<{ toggleOpen: () => void }>(null);
 
-  const submitHandler = (e?: FormEvent<HTMLFormElement> | undefined) => {
-    // eslint-disable-next-line functional/immutable-data
-    currentFilters.current = formValues;
+  const submitHandler = async (e?: FormEvent<HTMLFormElement> | undefined) => {
+    const result = await onSubmit(e);
+    if (result === false) {
+      return;
+    }
+    setCurrentFilters(formValues);
     dialogRef.current?.toggleOpen();
-    onSubmit(e);
   };
 
   const clearHandler = () => {
-    // eslint-disable-next-line functional/immutable-data
-    currentFilters.current = initialValues;
+    setCurrentFilters(initialValues);
     onClear();
   };
 
@@ -110,13 +115,13 @@ const SmartFilter = <FormValues extends object>({
   return (
     <form onSubmit={submitHandler}>
       <Box sx={{ flexGrow: 1, mt: 3 }}>
-        <Grid container spacing={1} sx={{ alignItems: 'center' }}>
+        <Grid container spacing={1} sx={{ alignItems: 'flex-start' }}>
           {children}
           <Grid item lg="auto" xs={12}>
-            {confirmAction}
+            <Box sx={actionBoxStyle}>{confirmAction}</Box>
           </Grid>
           <Grid item lg="auto" xs={12}>
-            {cancelAction}
+            <Box sx={actionBoxStyle}>{cancelAction}</Box>
           </Grid>
         </Grid>
       </Box>

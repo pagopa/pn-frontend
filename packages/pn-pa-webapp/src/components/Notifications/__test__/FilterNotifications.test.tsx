@@ -239,6 +239,20 @@ describe('Filter Notifications Table Component', () => {
     expect(form).toHaveTextContent('filters.errors.iun');
   });
 
+  it('test form submission - iunMatch of an informal notification (invalid)', async () => {
+    await act(async () => {
+      result = render(<FilterNotifications showFilters />);
+    });
+    form = result.container.querySelector('form') as HTMLFormElement;
+    await testInput(form, 'iunMatch', 'ABCD-EFGH-ILMN-123456-A-A');
+    const submitButton = form.querySelector(`button[type="submit"]`);
+    fireEvent.click(submitButton!);
+    await waitFor(() => {
+      expect(form).toHaveTextContent('filters.errors.iun');
+    });
+    expect(result.testStore.getState().dashboardState.filters).toStrictEqual(initialState);
+  });
+
   it('test invalid date range - end before start', async () => {
     // render component
     await act(async () => {

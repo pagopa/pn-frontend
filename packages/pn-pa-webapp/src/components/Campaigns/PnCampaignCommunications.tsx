@@ -8,7 +8,7 @@ import { Box } from '@mui/material';
 import {
   CustomPagination,
   EmptyErrorState,
-  IUN_regex,
+  INFORMAL_IUN_regex,
   InformalNotificationStatus,
   PaginationData,
   Row,
@@ -74,8 +74,10 @@ const PnCampaignCommunications = ({ campaignId, fetchCampaignCommunications }: P
   const validationSchema = yup.object({
     recipientId: yup
       .string()
-      .matches(dataRegex.pIvaAndFiscalCode, t('filters.errors.fiscal-code', { ns: 'notifiche' })),
-    iunMatch: yup.string().matches(IUN_regex, t('filters.errors.iun', { ns: 'notifiche' })),
+      .matches(dataRegex.pIvaAndFiscalCode, t('detail.communications.errors.tax-id')),
+    iunMatch: yup
+      .string()
+      .matches(INFORMAL_IUN_regex, t('filters.errors.iun', { ns: 'notifiche' })),
   });
 
   // Pagination handlers
@@ -116,7 +118,9 @@ const PnCampaignCommunications = ({ campaignId, fetchCampaignCommunications }: P
   };
 
   const handleChangeTouched = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.id === 'iunMatch') {
+    formik.setFieldError(e.target.name, undefined);
+
+    if (e.target.name === 'iunMatch') {
       const originalEvent = e.target;
       const cursorPosition = originalEvent.selectionStart || 0;
       const newInput = formatIun(originalEvent.value);
@@ -128,14 +132,23 @@ const PnCampaignCommunications = ({ campaignId, fetchCampaignCommunications }: P
           ? 1
           : 0);
 
-      await formik.setFieldValue('iunMatch', newInput);
-      await formik.setFieldTouched('iunMatch', true, false);
+      await formik.setFieldValue('iunMatch', newInput, false);
 
       originalEvent.setSelectionRange(newCursorPosition, newCursorPosition);
     } else {
-      formik.handleChange(e);
-      await formik.setFieldTouched(e.target.id, true, false);
+      await formik.setFieldValue(e.target.name, e.target.value, false);
     }
+  };
+
+  const handleSubmitFilters = async (e?: React.FormEvent<HTMLFormElement>) => {
+    e?.preventDefault();
+    const errors = await formik.validateForm();
+    if (Object.keys(errors).length > 0) {
+      await formik.setTouched({ recipientId: true, iunMatch: true }, false);
+      return false;
+    }
+    await formik.submitForm();
+    return true;
   };
 
   const renderCellContent = (
@@ -185,6 +198,8 @@ const PnCampaignCommunications = ({ campaignId, fetchCampaignCommunications }: P
       outcome: communicationFilters.outcome,
     },
     validationSchema,
+    validateOnChange: false,
+    validateOnBlur: false,
     onSubmit: () => {
       dispatch(resetCommunicationsPagination());
       fetchCampaignCommunications(0, communicationsPagination.size, formik.values);
@@ -269,9 +284,9 @@ const PnCampaignCommunications = ({ campaignId, fetchCampaignCommunications }: P
         <SmartFilter
           filterLabel={t('button.filtra', { ns: 'common' })}
           cancelLabel={t('button.annulla filtro', { ns: 'common' })}
-          onSubmit={formik.handleSubmit}
+          onSubmit={handleSubmitFilters}
           onClear={handleClearFilters}
-          formIsValid={formik.isValid}
+          formIsValid
           formValues={formik.values}
           initialValues={{
             recipientId: '',

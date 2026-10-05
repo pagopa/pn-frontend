@@ -233,7 +233,7 @@ describe('CampaignDetail Page', () => {
       campaignCommunications: {},
       communicationFilters: {
         recipientId: '',
-        iunMatch: 'ABCD-EFGH-IJKL-123456-M-1',
+        iunMatch: 'ABCD-EFGH-IJKL-123456-M-A',
         status: [],
         outcome: '',
       },
@@ -266,7 +266,7 @@ describe('CampaignDetail Page', () => {
   });
 
   it('keeps communications filters and pagination when coming back to the same campaign', async () => {
-    const filteredComunicationsListPath = `/bff/v1/informal/campaigns/${campaignDetailMock.campaignId}/notifications/sent?startDate=${startParam}&endDate=${endParam}&iunMatch=ABCD-EFGH-IJKL-123456-M-1&size=20&nextPagesKey=key-1`;
+    const filteredComunicationsListPath = `/bff/v1/informal/campaigns/${campaignDetailMock.campaignId}/notifications/sent?startDate=${startParam}&endDate=${endParam}&iunMatch=ABCD-EFGH-IJKL-123456-M-A&size=20&nextPagesKey=key-1`;
 
     mock
       .onGet(`/bff/v1/notifications/informal/campaigns/${campaignDetailMock.campaignId}`)
@@ -288,7 +288,7 @@ describe('CampaignDetail Page', () => {
   });
 
   it('shows communications filters when applied filters return no results', async () => {
-    const filteredComunicationsListPath = `/bff/v1/informal/campaigns/${campaignDetailMock.campaignId}/notifications/sent?startDate=${startParam}&endDate=${endParam}&iunMatch=ABCD-EFGH-IJKL-123456-M-1&size=20&nextPagesKey=key-1`;
+    const filteredComunicationsListPath = `/bff/v1/informal/campaigns/${campaignDetailMock.campaignId}/notifications/sent?startDate=${startParam}&endDate=${endParam}&iunMatch=ABCD-EFGH-IJKL-123456-M-A&size=20&nextPagesKey=key-1`;
 
     mock
       .onGet(`/bff/v1/notifications/informal/campaigns/${campaignDetailMock.campaignId}`)
@@ -336,7 +336,7 @@ describe('CampaignDetail Page', () => {
       },
     };
 
-    const filteredComunicationsListPath = `/bff/v1/informal/campaigns/${campaignDetailMock.campaignId}/notifications/sent?startDate=${startParam}&endDate=${endParam}&iunMatch=ABCD-EFGH-IJKL-123456-M-1&size=10`;
+    const filteredComunicationsListPath = `/bff/v1/informal/campaigns/${campaignDetailMock.campaignId}/notifications/sent?startDate=${startParam}&endDate=${endParam}&iunMatch=ABCD-EFGH-IJKL-123456-M-A&size=10`;
 
     mock
       .onGet(`/bff/v1/notifications/informal/campaigns/${campaignDetailMock.campaignId}`)
@@ -363,7 +363,7 @@ describe('CampaignDetail Page', () => {
     });
 
     fireEvent.change(result.getByLabelText('detail.communications.iun'), {
-      target: { value: 'ABCD-EFGH-IJKL-123456-M-1' },
+      target: { value: 'ABCD-EFGH-IJKL-123456-M-A' },
     });
 
     fireEvent.click(
@@ -386,5 +386,56 @@ describe('CampaignDetail Page', () => {
     });
 
     expect(result.container.querySelector('#page2')).not.toBeInTheDocument();
+  });
+
+  it('shows communications filters errors only after submit and does not apply invalid filters', async () => {
+    mock
+      .onGet(`/bff/v1/notifications/informal/campaigns/${campaignDetailMock.campaignId}`)
+      .reply(200, campaignDetailMock);
+    mock.onGet(comunicationsListPath).reply(200, comunicationsList);
+
+    await act(async () => {
+      result = render(<CampaignDetail />, {
+        route: `/campaigns/${campaignDetailMock.campaignId}`,
+        path: '/campaigns/:id',
+      });
+    });
+
+    await waitFor(() => {
+      expect(mock.history.get).toHaveLength(2);
+    });
+
+    const filterButton = result.getByRole('button', { name: 'button.filtra' });
+    expect(filterButton).toBeDisabled();
+
+    const recipientIdInput = result.getByLabelText('detail.communications.tax-id');
+    const iunInput = result.getByLabelText('detail.communications.iun');
+    fireEvent.change(recipientIdInput, { target: { value: 'A' } });
+    // iun of a legal notification
+    fireEvent.change(iunInput, { target: { value: 'ABCD-EFGH-IJKL-123456-M-1' } });
+
+    // filter button is enabled even if values are not valid and errors are not shown yet
+    await waitFor(() => {
+      expect(filterButton).toBeEnabled();
+    });
+    expect(result.queryByText('detail.communications.errors.tax-id')).not.toBeInTheDocument();
+    expect(result.queryByText('filters.errors.iun')).not.toBeInTheDocument();
+
+    fireEvent.click(filterButton);
+
+    await waitFor(() => {
+      expect(result.getByText('detail.communications.errors.tax-id')).toBeInTheDocument();
+      expect(result.getByText('filters.errors.iun')).toBeInTheDocument();
+    });
+    expect(mock.history.get).toHaveLength(2);
+    expect(filterButton).toBeEnabled();
+    expect(result.getByRole('button', { name: 'button.annulla filtro' })).toBeDisabled();
+
+    // editing a field hides its error
+    fireEvent.change(recipientIdInput, { target: { value: 'AB' } });
+    await waitFor(() => {
+      expect(result.queryByText('detail.communications.errors.tax-id')).not.toBeInTheDocument();
+    });
+    expect(result.getByText('filters.errors.iun')).toBeInTheDocument();
   });
 });
