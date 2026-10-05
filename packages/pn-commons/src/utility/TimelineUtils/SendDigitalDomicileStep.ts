@@ -21,7 +21,8 @@ export class SendDigitalDomicileStep extends TimelineStep {
         {
           ...this.nameAndTaxId(payload),
           address: details.digitalAddress?.address,
-        }
+        },
+        payload.delegatorName
       );
       return payload.isNewTimelineCopyEnabled ? { ...statusInfo, description: '' } : statusInfo;
     }
@@ -34,7 +35,8 @@ export class SendDigitalDomicileStep extends TimelineStep {
         {
           ...this.nameAndTaxId(payload),
           address: details.digitalAddress?.address,
-        }
+        },
+        payload.delegatorName
       ),
     };
   }

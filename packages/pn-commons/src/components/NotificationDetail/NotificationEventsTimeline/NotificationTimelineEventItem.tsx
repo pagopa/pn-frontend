@@ -17,6 +17,7 @@ type Props = {
   insideAGroup?: boolean;
   isNewTimelineCopyEnabled?: boolean;
   perfectionLink?: string;
+  delegatorName?: string;
 };
 
 const NotificationTimelineEventItemLegalFacts: React.FC<
@@ -57,6 +58,7 @@ const NotificationTimelineEventItem: React.FC<Props> = ({
   insideAGroup = false,
   isNewTimelineCopyEnabled = false,
   perfectionLink,
+  delegatorName,
 }) => {
   // Events absorbed into a status description are filtered out by the caller, so reaching
   // this component means the event has to be rendered.
@@ -75,7 +77,8 @@ const NotificationTimelineEventItem: React.FC<Props> = ({
     event,
     recipients,
     allEvents,
-    isNewTimelineCopyEnabled
+    isNewTimelineCopyEnabled,
+    delegatorName
   );
 
   if (!statusInfo) {
