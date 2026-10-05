@@ -7,6 +7,7 @@ import { ApiError, EmptyErrorState, TitleBox, useErrors } from '@pagopa-pn/pn-co
 import { MIBreadcrumbItem, MIBreadcrumbs } from '@pagopa/mui-italia';
 
 import PnCampaignCommunications from '../components/Campaigns/PnCampaignCommunications';
+import PnCampaignCommunicationsLoading from '../components/Campaigns/PnCampaignCommunicationsLoading';
 import PnCampaignDetailCard from '../components/Campaigns/PnCampaignDetailCard';
 import PnCampaignDetailLoading from '../components/Campaigns/PnCampaignDetailLoading';
 import { CommunicationFilters } from '../models/Campaign';
@@ -41,10 +42,9 @@ const CampaignDetail: React.FC = () => {
     (state: RootState) => state.campaignState.communicationsCampaignId
   );
   const { hasApiErrors } = useErrors();
-  const [pageReady, setPageReady] = useState(false);
+  const [detailReady, setDetailReady] = useState(false);
   const [communicationsReady, setCommunicationsReady] = useState(false);
   const [showCommunications, setShowCommunications] = useState<boolean | null>(null);
-  const isPageReady = pageReady && communicationsReady;
   const { t } = useTranslation(['campaigns', 'common']);
   const hasCampaignDetailApiError = hasApiErrors(CAMPAIGN_ACTIONS.GET_CAMPAIGN_DETAIL);
   const hasCampaignCommunicationsApiError = hasApiErrors(
@@ -53,7 +53,7 @@ const CampaignDetail: React.FC = () => {
 
   const fetchCampaignDetail = useCallback(() => {
     if (id) {
-      setPageReady(false);
+      setDetailReady(false);
 
       void dispatch(getCampaignDetail(id))
         .unwrap()
@@ -61,7 +61,7 @@ const CampaignDetail: React.FC = () => {
           PAEventStrategyFactory.triggerEvent(PAEventsType.SEND_PA_CAMPAIGN_DETAIL);
         })
         .catch(() => {})
-        .finally(() => setPageReady(true));
+        .finally(() => setDetailReady(true));
     }
   }, [dispatch, id]);
 
@@ -160,8 +160,8 @@ const CampaignDetail: React.FC = () => {
       }}
     >
       {breadcrumb}
-      {!isPageReady && <PnCampaignDetailLoading />}
-      {isPageReady && hasCampaignDetailApiError && (
+      {!detailReady && <PnCampaignDetailLoading />}
+      {detailReady && hasCampaignDetailApiError && (
         <ApiError
           apiId={CAMPAIGN_ACTIONS.GET_CAMPAIGN_DETAIL}
           customErrorComponent={
@@ -177,7 +177,7 @@ const CampaignDetail: React.FC = () => {
         />
       )}
 
-      {isPageReady && !hasCampaignDetailApiError && (
+      {detailReady && !hasCampaignDetailApiError && (
         <>
           <TitleBox
             title={campaign.title}
@@ -197,13 +197,12 @@ const CampaignDetail: React.FC = () => {
         </>
       )}
 
-      {isPageReady && (
-        <Typography component="h2" variant="h6" sx={{ mt: 3 }}>
-          {t('detail.communications.title')}
-        </Typography>
-      )}
+      <Typography component="h2" variant="h6" sx={{ mt: 3 }}>
+        {t('detail.communications.title')}
+      </Typography>
 
-      {isPageReady && hasCampaignCommunicationsApiError && (
+      {!communicationsReady && <PnCampaignCommunicationsLoading />}
+      {communicationsReady && hasCampaignCommunicationsApiError && (
         <ApiError
           apiId={CAMPAIGN_ACTIONS.GET_CAMPAIGN_COMMUNICATIONS}
           customErrorComponent={
@@ -219,11 +218,11 @@ const CampaignDetail: React.FC = () => {
         />
       )}
 
-      {isPageReady && !hasCampaignCommunicationsApiError && (
+      {communicationsReady && !hasCampaignCommunicationsApiError && (
         <>
           {showCommunications ? (
             <PnCampaignCommunications
-              campaignId={campaign.campaignId}
+              campaignId={id ?? ''}
               fetchCampaignCommunications={fetchCampaignCommunications}
             />
           ) : (
