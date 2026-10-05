@@ -123,7 +123,7 @@ const Campaigns = () => {
           <>
             <MITableList
               loading={loading}
-              slotProps={{ skeleton: { action: true, rows: 10 } }}
+              slotProps={{ skeleton: { action: true, rows: 5 } }}
               columns={[2, 1]}
             >
               {campaigns.map((campaign) => (

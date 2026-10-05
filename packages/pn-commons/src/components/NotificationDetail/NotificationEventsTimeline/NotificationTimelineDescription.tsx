@@ -124,14 +124,16 @@ const NotificationTimelineDescription: React.FC<Props> = ({
             <Typography component="span" variant="body2" fontWeight={600}>
               {title}
             </Typography>
-            {' - '}
+            {description && ' - '}
           </>
         )}
-        <Trans
-          i18nKey="description" // this is fake and is needed to run trans functionality
-          t={() => description}
-          components={[legalFactSlot, perfectionLinkSlot]}
-        />
+        {description && (
+          <Trans
+            i18nKey="description" // this is fake and is needed to run trans functionality
+            t={() => description}
+            components={[legalFactSlot, perfectionLinkSlot]}
+          />
+        )}
         {date && language && (
           <>
             &nbsp;

@@ -119,7 +119,7 @@
       },
       "completed": {
         "description": "The communication has been sent to the chosen channels.",
-        "label": "Sending successful"
+        "label": "Sending completed"
       },
       "processing": {
         "description": "The communication will try to reach the recipient on the chosen channels.",

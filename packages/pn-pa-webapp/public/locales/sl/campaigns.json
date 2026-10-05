@@ -119,7 +119,7 @@
       },
       "completed": {
         "description": "Sporočilo je bilo poslano na izbrane kanale.",
-        "label": "Uspešno poslano"
+        "label": "Pošiljanje končano"
       },
       "processing": {
         "description": "Sporočilo bo poskušalo doseči prejemnika na izbranih kanalih.",

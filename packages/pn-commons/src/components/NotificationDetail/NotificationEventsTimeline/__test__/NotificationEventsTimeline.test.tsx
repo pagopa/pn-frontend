@@ -143,6 +143,34 @@ describe('NotificationEventsTimeline', () => {
     expect(container).toHaveTextContent('status.reworked-status-not-valid');
   });
 
+  it.each([true, false])(
+    'does not render the description of the DELIVERING status with new copy %s',
+    (isNewTimelineCopyEnabled) => {
+      const { container } = render(
+        <NotificationEventsTimeline
+          recipients={[]}
+          statusHistory={[
+            {
+              status: NotificationStatus.DELIVERING,
+              activeFrom: '2023-01-02T00:00:00Z',
+              steps: [],
+            },
+            {
+              status: NotificationStatus.ACCEPTED,
+              activeFrom: '2023-01-01T00:00:00Z',
+              steps: [],
+            },
+          ]}
+          clickHandler={clickHandler}
+          isNewTimelineCopyEnabled={isNewTimelineCopyEnabled}
+        />
+      );
+      expect(container).toHaveTextContent('status.delivering');
+      expect(container).not.toHaveTextContent('status.delivering-description');
+      expect(container).toHaveTextContent('status.accepted-description');
+    }
+  );
+
   it('renders a group for each grouped step, divided one from the other', () => {
     const { getAllByTestId } = render(
       <NotificationEventsTimeline

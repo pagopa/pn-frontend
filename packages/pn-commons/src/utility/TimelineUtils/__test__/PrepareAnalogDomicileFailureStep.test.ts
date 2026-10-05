@@ -163,4 +163,53 @@ describe('PrepareAnalogDomicileFailureStep', () => {
       'notifiche - detail.timeline.prepare-analog-domicile-failure'
     );
   });
+
+  it('test getTimelineStepInfo in the delegate view', () => {
+    const prepareAnalogDomicileFailureStep = new PrepareAnalogDomicileFailureStep();
+    const knownCause = getTimelineElem(TimelineCategory.PREPARE_ANALOG_DOMICILE_FAILURE, {
+      foundAddress: physicalAddress,
+      failureCause: 'D02',
+    } as PrepareAnalogDomicileFailureDetails);
+    const unknownCause = getTimelineElem(TimelineCategory.PREPARE_ANALOG_DOMICILE_FAILURE, {
+      foundAddress: physicalAddress,
+      failureCause: 'D08',
+    } as PrepareAnalogDomicileFailureDetails);
+    const payload = {
+      step: knownCause,
+      recipient: notificationDTO.recipients[0],
+      isMultiRecipient: true,
+      delegatorName: 'Mario Cucumber',
+    };
+    const delegateKeys = ['D02', 'XXX'].map(
+      (cause) => `detail.timeline.prepare-analog-domicile-failure-${cause}-description-delegate`
+    );
+    initLocalizationExists((_namespace, path) => delegateKeys.includes(path));
+
+    expect(prepareAnalogDomicileFailureStep.getTimelineStepInfo(payload)?.description).toBe(
+      `notifiche - detail.timeline.prepare-analog-domicile-failure-D02-description-delegate - ${JSON.stringify(
+        {
+          ...prepareAnalogDomicileFailureStep.nameAndTaxId(payload),
+          ...prepareAnalogDomicileFailureStep.completePhysicalAddressFromAddress(physicalAddress),
+          recipient: 'Mario Cucumber',
+        }
+      )}`
+    );
+    expect(
+      prepareAnalogDomicileFailureStep.getTimelineStepInfo({ ...payload, step: unknownCause })
+        ?.description
+    ).toBe(
+      `notifiche - detail.timeline.prepare-analog-domicile-failure-XXX-description-delegate - ${JSON.stringify(
+        {
+          failureCause: 'D08',
+          ...prepareAnalogDomicileFailureStep.nameAndTaxId(payload),
+          recipient: 'Mario Cucumber',
+        }
+      )}`
+    );
+
+    initLocalizationExists(() => false);
+    expect(prepareAnalogDomicileFailureStep.getTimelineStepInfo(payload)).toStrictEqual(
+      prepareAnalogDomicileFailureStep.getTimelineStepInfo({ ...payload, delegatorName: undefined })
+    );
+  });
 });
