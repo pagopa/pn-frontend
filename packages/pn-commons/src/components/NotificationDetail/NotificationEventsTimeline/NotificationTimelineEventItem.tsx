@@ -77,6 +77,7 @@ const NotificationTimelineEventItem: React.FC<Props> = ({
     event,
     recipients,
     allEvents,
+    isNewTimelineCopyEnabled,
     delegatorName
   );
 

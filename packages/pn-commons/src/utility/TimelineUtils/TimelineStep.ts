@@ -12,6 +12,7 @@ export interface TimelineStepPayload {
   isMultiRecipient: boolean;
   allStepsForThisStatus?: Array<INotificationDetailTimeline>;
   delegatorName?: string;
+  isNewTimelineCopyEnabled?: boolean;
 }
 
 export interface TimelineStepInfo {

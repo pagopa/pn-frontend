@@ -1302,6 +1302,7 @@ describe('timeline event description', () => {
       timelineElem,
       notificationDTO.recipients,
       undefined,
+      undefined,
       'Mario Cucumber'
     );
     expect(result?.description).toBe(

@@ -717,6 +717,7 @@ export function getNotificationTimelineStatusInfos(
   step: INotificationDetailTimeline,
   recipients: Array<NotificationDetailRecipient>,
   allStepsForThisStatus?: Array<INotificationDetailTimeline>,
+  isNewTimelineCopyEnabled?: boolean,
   delegatorName?: string
 ): TimelineStepInfo | null {
   const recipient = isNil(step.details.recIndex)
@@ -750,6 +751,7 @@ export function getNotificationTimelineStatusInfos(
       ).length > 1,
     allStepsForThisStatus,
     delegatorName,
+    isNewTimelineCopyEnabled,
   });
 }
 
