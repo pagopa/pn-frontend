@@ -76,6 +76,7 @@ const PnCampaignCommunicationsFilters = ({ formik, handleChangeTouched, handlePa
           isOptionEqualToValue={(option, value) => option.value === value.value}
           label={t('detail.communications.status')}
           placeholder={t('detail.communications.status')}
+          noResultsText={t('autocomplete.no-results', { ns: 'common' })}
           value={selectedStatusOption}
           onChange={(newValue) => {
             void formik.setFieldValue('status', newValue?.value ?? []);
