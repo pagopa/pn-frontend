@@ -13,18 +13,17 @@ export class SendDigitalDomicileStep extends TimelineStep {
       details.digitalAddress?.type === DigitalDomicileType.SERCQ &&
       details.digitalAddress?.address.startsWith(SERCQ_SEND_VALUE)
     ) {
-      return {
-        ...this.localizeTimelineStatus(
-          'send-digital-domicile-SERCQ-SEND',
-          payload.isMultiRecipient,
-          undefined,
-          undefined,
-          {
-            ...this.nameAndTaxId(payload),
-            address: details.digitalAddress?.address,
-          }
-        ),
-      };
+      const statusInfo = this.localizeTimelineStatus(
+        'send-digital-domicile-SERCQ-SEND',
+        payload.isMultiRecipient,
+        undefined,
+        undefined,
+        {
+          ...this.nameAndTaxId(payload),
+          address: details.digitalAddress?.address,
+        }
+      );
+      return payload.isNewTimelineCopyEnabled ? { ...statusInfo, description: '' } : statusInfo;
     }
     return {
       ...this.localizeTimelineStatus(

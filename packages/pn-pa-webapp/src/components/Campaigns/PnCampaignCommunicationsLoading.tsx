@@ -6,10 +6,7 @@ const PnCampaignCommunicationsLoading = () => {
   const { t } = useTranslation('campaigns');
 
   return (
-    <Box sx={{ mt: 3 }} data-testid="campaignCommunicationsLoading">
-      <Typography component="h2" variant="h6">
-        {t('detail.communications.title')}
-      </Typography>
+    <Box data-testid="campaignCommunicationsLoading">
       <Grid
         container
         sx={{

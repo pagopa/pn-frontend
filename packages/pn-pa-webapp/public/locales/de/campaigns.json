@@ -119,7 +119,7 @@
       },
       "completed": {
         "description": "Die Mitteilung wurde über die gewählten Kanäle versendet.",
-        "label": "Versand erfolgreich"
+        "label": "Versand abgeschlossen"
       },
       "processing": {
         "description": "Die Mitteilung wird versuchen, den Empfänger über die gewählten Kanäle zu erreichen.",

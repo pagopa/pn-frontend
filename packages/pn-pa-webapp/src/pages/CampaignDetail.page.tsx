@@ -101,6 +101,10 @@ const CampaignDetail: React.FC = () => {
     [dispatch, id]
   );
 
+  const retryCampaignCommunications = () => {
+    fetchCampaignCommunications(0, communicationsPagination.size, communicationFilters);
+  };
+
   useEffect(() => {
     fetchCampaignDetail();
   }, [fetchCampaignDetail]);
@@ -193,6 +197,10 @@ const CampaignDetail: React.FC = () => {
         </>
       )}
 
+      <Typography component="h2" variant="h6" sx={{ mt: 3 }}>
+        {t('detail.communications.title')}
+      </Typography>
+
       {!communicationsReady && <PnCampaignCommunicationsLoading />}
       {communicationsReady && hasCampaignCommunicationsApiError && (
         <ApiError
@@ -203,17 +211,13 @@ const CampaignDetail: React.FC = () => {
               title={t('detail.empty-state.generic-error')}
               action={{
                 label: t('detail.empty-state.generic-error-cta'),
-                onClick: () =>
-                  fetchCampaignCommunications(
-                    0,
-                    communicationsPagination.size,
-                    communicationFilters
-                  ),
+                onClick: retryCampaignCommunications,
               }}
             />
           }
         />
       )}
+
       {communicationsReady && !hasCampaignCommunicationsApiError && (
         <>
           {showCommunications ? (
@@ -222,16 +226,11 @@ const CampaignDetail: React.FC = () => {
               fetchCampaignCommunications={fetchCampaignCommunications}
             />
           ) : (
-            <Box sx={{ mt: 3 }}>
-              <Typography component="h2" variant="h6">
-                {t('detail.communications.title')}
-              </Typography>
-              <EmptyErrorState
-                variant="empty"
-                title={t('detail.communications.empty-state.title')}
-                description={t('detail.communications.empty-state.description')}
-              />
-            </Box>
+            <EmptyErrorState
+              variant="empty"
+              title={t('detail.communications.empty-state.title')}
+              description={t('detail.communications.empty-state.description')}
+            />
           )}
         </>
       )}

@@ -119,7 +119,7 @@
       },
       "completed": {
         "description": "La comunicazione è stata inviata sui canali scelti.",
-        "label": "Invio riuscito"
+        "label": "Invio terminato"
       },
       "processing": {
         "description": "La comunicazione proverà a raggiungere la persona destinataria sui canali scelti.",
