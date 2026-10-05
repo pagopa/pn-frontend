@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.27.0-RC.2](https://github.com/pagopa/pn-frontend/compare/v2.27.0-RC.1...v2.27.0-RC.2) (2026-10-05)
+
+### Bug Fixes
+
+* **PN-21692:** hide DELIVERING description in status box with new timeline copy ([#2096](https://github.com/pagopa/pn-frontend/issues/2096)) ([92b4d5e](https://github.com/pagopa/pn-frontend/commit/92b4d5e6827393ce2c1a3553c518dc484cfb3dc2))
+* **PN-21696:** hide SERCQ SEND event descriptions with new timeline copy ([#2097](https://github.com/pagopa/pn-frontend/issues/2097)) ([ef732c5](https://github.com/pagopa/pn-frontend/commit/ef732c50dc6cd4262d54845e60222e7906564043))
+* **PN-21710:** informal timeline title label of COMPLETED_REACHED and COMPLETED_UNREACHED events ([#2105](https://github.com/pagopa/pn-frontend/issues/2105)) ([000ba0d](https://github.com/pagopa/pn-frontend/commit/000ba0db8f8571cfc5b942e7f612392574853006))
+* **PN-21715, PN-21712:** independent loading states in campaign detail ([#2104](https://github.com/pagopa/pn-frontend/issues/2104)) ([dfdd178](https://github.com/pagopa/pn-frontend/commit/dfdd178d4764c03ba2809134d1fb5d555e0722c8))
+* **PN-21723:** communications section title visibility in campaign detail error state ([#2107](https://github.com/pagopa/pn-frontend/issues/2107)) ([52b686d](https://github.com/pagopa/pn-frontend/commit/52b686d5ab871d27c1a5525b0cdc8a39a566eaaa))
+* **PN-21732:** delegate view copy for timeline events and statuses ([#2108](https://github.com/pagopa/pn-frontend/issues/2108)) ([5a28191](https://github.com/pagopa/pn-frontend/commit/5a281917cb808f5c57e635201891bf94f63cd40c))
+
+
 # [2.27.0-RC.1](https://github.com/pagopa/pn-frontend/compare/v2.27.0-RC.0...v2.27.0-RC.1) (2026-10-02)
 
 ### Bug Fixes

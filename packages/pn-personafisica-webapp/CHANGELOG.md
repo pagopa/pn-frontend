@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.27.0-RC.2](https://github.com/pagopa/pn-frontend/compare/v2.27.0-RC.1...v2.27.0-RC.2) (2026-10-05)
+
+### Bug Fixes
+
+* **PN-21732:** delegate view copy for timeline events and statuses ([#2108](https://github.com/pagopa/pn-frontend/issues/2108)) ([5a28191](https://github.com/pagopa/pn-frontend/commit/5a281917cb808f5c57e635201891bf94f63cd40c))
+
+
 # [2.27.0-RC.1](https://github.com/pagopa/pn-frontend/compare/v2.27.0-RC.0...v2.27.0-RC.1) (2026-10-02)
 
 ### Bug Fixes
