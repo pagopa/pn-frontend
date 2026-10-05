@@ -36,7 +36,8 @@ export class SendAnalogDomicileStep extends TimelineStep {
           {
             ...this.nameAndTaxId(payload),
             ...this.completePhysicalAddressFromStep(payload.step),
-          }
+          },
+          payload.delegatorName
         ),
       };
     }
@@ -51,7 +52,8 @@ export class SendAnalogDomicileStep extends TimelineStep {
         {
           ...this.nameAndTaxId(payload),
           ...this.completePhysicalAddressFromStep(payload.step),
-        }
+        },
+        payload.delegatorName
       ),
     };
   }

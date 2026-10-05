@@ -12,7 +12,8 @@ export class ScheduleDigitalWorkflowStep extends TimelineStep {
         {
           ...this.nameAndTaxId(payload),
           address: (payload.step.details as SendDigitalDetails).digitalAddress?.address,
-        }
+        },
+        payload.delegatorName
       ),
     };
   }

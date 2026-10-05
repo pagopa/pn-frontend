@@ -386,6 +386,85 @@ describe('notification status texts', () => {
     initLocalizationForTest();
   });
 
+  it.each([NotificationDeliveryMode.DIGITAL, NotificationDeliveryMode.ANALOG])(
+    'uses the delegate DELIVERED description for %s in the delegate view',
+    (deliveryMode) => {
+      const delegateKey = `status.delivered-description-${deliveryMode}-delegate`;
+      initLocalizationExists((_namespace, path) => path === delegateKey);
+
+      testNotificationStatusInfos(
+        'default',
+        'notifiche - status.delivered',
+        'notifiche - status.delivered-tooltip',
+        `notifiche - ${delegateKey} - ${JSON.stringify({ recipient: 'Mario Cucumber' })}`,
+        {
+          status: NotificationStatus.DELIVERED,
+          activeFrom: '2023-01-26T13:57:16.42843144Z',
+          relatedTimelineElements: [],
+          deliveryMode,
+        },
+        {
+          recipients: notificationDTO.recipients,
+          mandateId: 'mandate-1',
+          delegatorName: 'Mario Cucumber',
+        }
+      );
+
+      initLocalizationForTest();
+    }
+  );
+
+  it('keeps the DELIVERED description of the recipient view when the delegate one is unavailable', () => {
+    const localizationKey = `status.delivered-description-${NotificationDeliveryMode.DIGITAL}`;
+    initLocalizationExists((_namespace, path) => path === localizationKey);
+
+    testNotificationStatusInfos(
+      'default',
+      'notifiche - status.delivered',
+      'notifiche - status.delivered-tooltip',
+      `notifiche - ${localizationKey}`,
+      {
+        status: NotificationStatus.DELIVERED,
+        activeFrom: '2023-01-26T13:57:16.42843144Z',
+        relatedTimelineElements: [],
+        deliveryMode: NotificationDeliveryMode.DIGITAL,
+      },
+      {
+        recipients: notificationDTO.recipients,
+        mandateId: 'mandate-1',
+        delegatorName: 'Mario Cucumber',
+      }
+    );
+
+    initLocalizationForTest();
+  });
+
+  it('keeps the legacy DELIVERED description in the delegate view when the new content is unavailable', () => {
+    initLocalizationExists(() => false);
+
+    testNotificationStatusInfos(
+      'default',
+      'notifiche - status.delivered',
+      'notifiche - status.delivered-tooltip',
+      `notifiche - status.delivered-description-with-delivery-mode - ${JSON.stringify({
+        deliveryMode: `notifiche - status.deliveryMode.${NotificationDeliveryMode.DIGITAL}`,
+      })}`,
+      {
+        status: NotificationStatus.DELIVERED,
+        activeFrom: '2023-01-26T13:57:16.42843144Z',
+        relatedTimelineElements: [],
+        deliveryMode: NotificationDeliveryMode.DIGITAL,
+      },
+      {
+        recipients: notificationDTO.recipients,
+        mandateId: 'mandate-1',
+        delegatorName: 'Mario Cucumber',
+      }
+    );
+
+    initLocalizationForTest();
+  });
+
   it('return notification status infos - DELIVERING', () => {
     testNotificationStatusInfos(
       'default',
@@ -536,6 +615,57 @@ describe('notification status texts', () => {
       },
       { recipients: notificationDTO.recipients }
     );
+  });
+
+  it('return notification status infos - EFFECTIVE_DATE - delegate view, with the revised copy', () => {
+    initLocalizationExists((_ns, path) => path === 'status.effective-date-description-delegate');
+    testNotificationStatusInfos(
+      'info',
+      `notifiche - status.effective-date`,
+      `notifiche - status.effective-date-tooltip - ${JSON.stringify({
+        date: '26/01/2023',
+      })}`,
+      `notifiche - status.effective-date-description-delegate - ${JSON.stringify({
+        date: '26/01/2023',
+        recipient: 'Mario Cucumber',
+      })}`,
+      {
+        status: NotificationStatus.EFFECTIVE_DATE,
+        activeFrom: '2023-01-26T13:57:16.42843144Z',
+        relatedTimelineElements: [],
+      },
+      {
+        recipients: notificationDTO.recipients,
+        mandateId: 'mandate-1',
+        delegatorName: 'Mario Cucumber',
+      }
+    );
+    initLocalizationForTest();
+  });
+
+  it('return notification status infos - EFFECTIVE_DATE - delegate view, without the revised copy', () => {
+    initLocalizationExists(() => false);
+    testNotificationStatusInfos(
+      'info',
+      `notifiche - status.effective-date`,
+      `notifiche - status.effective-date-tooltip - ${JSON.stringify({
+        date: '26/01/2023',
+      })}`,
+      `notifiche - status.effective-date-description - ${JSON.stringify({
+        date: '26/01/2023',
+      })}`,
+      {
+        status: NotificationStatus.EFFECTIVE_DATE,
+        activeFrom: '2023-01-26T13:57:16.42843144Z',
+        relatedTimelineElements: [],
+      },
+      {
+        recipients: notificationDTO.recipients,
+        mandateId: 'mandate-1',
+        delegatorName: 'Mario Cucumber',
+      }
+    );
+    initLocalizationForTest();
   });
 
   it('return notification status infos - VIEWED - by delegate, with the revised copy', () => {
@@ -1161,6 +1291,27 @@ describe('timeline event description', () => {
         isMultiRecipient: true,
       })
     );
+  });
+
+  it('passes the delegator name to the step in the delegate view', () => {
+    initLocalizationExists(
+      (_ns, path) => path === 'detail.timeline.completely-unreachable-description-delegate'
+    );
+    const timelineElem = getTimelineElem(TimelineCategory.COMPLETELY_UNREACHABLE, { recIndex: 0 });
+    const result = getNotificationTimelineStatusInfos(
+      timelineElem,
+      notificationDTO.recipients,
+      undefined,
+      'Mario Cucumber'
+    );
+    expect(result?.description).toBe(
+      `notifiche - detail.timeline.completely-unreachable-description-delegate - ${JSON.stringify({
+        name: notificationDTO.recipients[0].denomination,
+        taxId: `(${notificationDTO.recipients[0].taxId})`,
+        recipient: 'Mario Cucumber',
+      })}`
+    );
+    initLocalizationForTest();
   });
 });
 

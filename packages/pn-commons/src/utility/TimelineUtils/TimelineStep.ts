@@ -4,13 +4,14 @@ import {
   NotificationDetailRecipient,
   PhysicalAddress,
 } from '../../models/NotificationDetail';
-import { getLocalizedOrDefaultLabel } from '../../utility/localization.utility';
+import { getLocalizedOrDefaultLabel, hasLocalizedLabel } from '../../utility/localization.utility';
 
 export interface TimelineStepPayload {
   step: INotificationDetailTimeline;
   recipient?: NotificationDetailRecipient;
   isMultiRecipient: boolean;
   allStepsForThisStatus?: Array<INotificationDetailTimeline>;
+  delegatorName?: string;
 }
 
 export interface TimelineStepInfo {
@@ -24,7 +25,8 @@ export abstract class TimelineStep {
     isMultiRecipient: boolean,
     defaultLabel?: string,
     defaultDescription?: string,
-    data?: { [key: string]: string | undefined }
+    data?: { [key: string]: string | undefined },
+    delegatorName?: string
   ): { label: string; description: string } {
     return {
       label: getLocalizedOrDefaultLabel(
@@ -32,13 +34,37 @@ export abstract class TimelineStep {
         `detail.timeline.${category}`,
         defaultLabel
       ),
-      description: getLocalizedOrDefaultLabel(
-        'notifications',
-        `detail.timeline.${category}-description${isMultiRecipient ? '-multirecipient' : ''}`,
+      description: this.localizeDescription(
+        `detail.timeline.${category}-description`,
+        isMultiRecipient,
         defaultDescription,
-        data
+        data,
+        delegatorName
       ),
     };
+  }
+
+  localizeDescription(
+    path: string,
+    isMultiRecipient: boolean,
+    defaultDescription?: string,
+    data?: { [key: string]: string | undefined },
+    delegatorName?: string
+  ): string {
+    const delegatePath = `${path}-delegate`;
+    if (delegatorName && hasLocalizedLabel('notifications', delegatePath)) {
+      return getLocalizedOrDefaultLabel('notifications', delegatePath, defaultDescription, {
+        ...data,
+        recipient: delegatorName,
+      });
+    }
+
+    return getLocalizedOrDefaultLabel(
+      'notifications',
+      `${path}${isMultiRecipient ? '-multirecipient' : ''}`,
+      defaultDescription,
+      data
+    );
   }
 
   nameAndTaxId(payload: TimelineStepPayload) {
