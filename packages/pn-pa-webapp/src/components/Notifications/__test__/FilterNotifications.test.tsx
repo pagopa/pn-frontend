@@ -17,6 +17,7 @@ import {
   waitFor,
   within,
 } from '../../../__test__/test-utils';
+import { comunicationsList } from '../../../__mocks__/CampaignDetail.mock';
 import FilterNotifications from '../FilterNotifications';
 
 const localizedNotificationStatus = getNotificationAllowedStatus();
@@ -244,7 +245,7 @@ describe('Filter Notifications Table Component', () => {
       result = render(<FilterNotifications showFilters />);
     });
     form = result.container.querySelector('form') as HTMLFormElement;
-    await testInput(form, 'iunMatch', 'ABCD-EFGH-ILMN-123456-A-A');
+    await testInput(form, 'iunMatch', comunicationsList.resultsPage![0].iun!);
     const submitButton = form.querySelector(`button[type="submit"]`);
     fireEvent.click(submitButton!);
     await waitFor(() => {

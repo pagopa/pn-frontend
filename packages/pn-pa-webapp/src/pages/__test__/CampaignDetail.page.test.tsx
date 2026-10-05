@@ -9,6 +9,7 @@ import {
 } from '@pagopa-pn/pn-commons';
 
 import { campaignDetailMock, comunicationsList } from '../../__mocks__/CampaignDetail.mock';
+import { notificationsDTO } from '../../__mocks__/Notifications.mock';
 import { RenderResult, act, fireEvent, render, waitFor, within } from '../../__test__/test-utils';
 import { apiClient } from '../../api/apiClients';
 import CampaignDetail from '../CampaignDetail.page';
@@ -19,6 +20,9 @@ describe('CampaignDetail Page', () => {
 
   const startParam = encodeURIComponent(formatToTimezoneString(tenYearsAgo));
   const endParam = encodeURIComponent(formatToTimezoneString(today));
+
+  const informalIun = comunicationsList.resultsPage![0].iun!;
+  const legalIun = notificationsDTO.resultsPage[0].iun;
 
   const comunicationsListPath = `/bff/v1/informal/campaigns/${campaignDetailMock.campaignId}/notifications/sent?startDate=${startParam}&endDate=${endParam}&size=10`;
 
@@ -233,7 +237,7 @@ describe('CampaignDetail Page', () => {
       campaignCommunications: {},
       communicationFilters: {
         recipientId: '',
-        iunMatch: 'ABCD-EFGH-IJKL-123456-M-A',
+        iunMatch: informalIun,
         status: [],
         outcome: '',
       },
@@ -266,7 +270,7 @@ describe('CampaignDetail Page', () => {
   });
 
   it('keeps communications filters and pagination when coming back to the same campaign', async () => {
-    const filteredComunicationsListPath = `/bff/v1/informal/campaigns/${campaignDetailMock.campaignId}/notifications/sent?startDate=${startParam}&endDate=${endParam}&iunMatch=ABCD-EFGH-IJKL-123456-M-A&size=20&nextPagesKey=key-1`;
+    const filteredComunicationsListPath = `/bff/v1/informal/campaigns/${campaignDetailMock.campaignId}/notifications/sent?startDate=${startParam}&endDate=${endParam}&iunMatch=${informalIun}&size=20&nextPagesKey=key-1`;
 
     mock
       .onGet(`/bff/v1/notifications/informal/campaigns/${campaignDetailMock.campaignId}`)
@@ -288,7 +292,7 @@ describe('CampaignDetail Page', () => {
   });
 
   it('shows communications filters when applied filters return no results', async () => {
-    const filteredComunicationsListPath = `/bff/v1/informal/campaigns/${campaignDetailMock.campaignId}/notifications/sent?startDate=${startParam}&endDate=${endParam}&iunMatch=ABCD-EFGH-IJKL-123456-M-A&size=20&nextPagesKey=key-1`;
+    const filteredComunicationsListPath = `/bff/v1/informal/campaigns/${campaignDetailMock.campaignId}/notifications/sent?startDate=${startParam}&endDate=${endParam}&iunMatch=${informalIun}&size=20&nextPagesKey=key-1`;
 
     mock
       .onGet(`/bff/v1/notifications/informal/campaigns/${campaignDetailMock.campaignId}`)
@@ -336,7 +340,7 @@ describe('CampaignDetail Page', () => {
       },
     };
 
-    const filteredComunicationsListPath = `/bff/v1/informal/campaigns/${campaignDetailMock.campaignId}/notifications/sent?startDate=${startParam}&endDate=${endParam}&iunMatch=ABCD-EFGH-IJKL-123456-M-A&size=10`;
+    const filteredComunicationsListPath = `/bff/v1/informal/campaigns/${campaignDetailMock.campaignId}/notifications/sent?startDate=${startParam}&endDate=${endParam}&iunMatch=${informalIun}&size=10`;
 
     mock
       .onGet(`/bff/v1/notifications/informal/campaigns/${campaignDetailMock.campaignId}`)
@@ -363,7 +367,7 @@ describe('CampaignDetail Page', () => {
     });
 
     fireEvent.change(result.getByLabelText('detail.communications.iun'), {
-      target: { value: 'ABCD-EFGH-IJKL-123456-M-A' },
+      target: { value: informalIun },
     });
 
     fireEvent.click(
@@ -411,8 +415,7 @@ describe('CampaignDetail Page', () => {
     const recipientIdInput = result.getByLabelText('detail.communications.tax-id');
     const iunInput = result.getByLabelText('detail.communications.iun');
     fireEvent.change(recipientIdInput, { target: { value: 'A' } });
-    // iun of a legal notification
-    fireEvent.change(iunInput, { target: { value: 'ABCD-EFGH-IJKL-123456-M-1' } });
+    fireEvent.change(iunInput, { target: { value: legalIun } });
 
     // filter button is enabled even if values are not valid and errors are not shown yet
     await waitFor(() => {
