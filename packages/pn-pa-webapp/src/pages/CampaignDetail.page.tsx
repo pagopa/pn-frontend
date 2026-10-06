@@ -71,7 +71,7 @@ const CampaignDetail: React.FC = () => {
         setCommunicationsReady(false);
         const outcomeFilters =
           {
-            viewed: { viewed: true },
+            viewed: { viewed: true, delivered: false },
             delivered: { viewed: false, delivered: true },
           }[filters.outcome] ?? {};
         const filterParams = {
