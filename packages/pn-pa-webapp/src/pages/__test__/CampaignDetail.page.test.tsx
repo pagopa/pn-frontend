@@ -486,7 +486,7 @@ describe('CampaignDetail Page', () => {
   });
 
   it('removes communications filters from the empty state', async () => {
-    const filteredComunicationsListPath = `/bff/v1/informal/campaigns/${campaignDetailMock.campaignId}/notifications/sent?startDate=${startParam}&endDate=${endParam}&iunMatch=ABCD-EFGH-IJKL-123456-M-1&size=20&nextPagesKey=key-1`;
+    const filteredComunicationsListPath = `/bff/v1/informal/campaigns/${campaignDetailMock.campaignId}/notifications/sent?startDate=${startParam}&endDate=${endParam}&iunMatch=${informalIun}&size=20&nextPagesKey=key-1`;
     const unfilteredComunicationsListPath = `/bff/v1/informal/campaigns/${campaignDetailMock.campaignId}/notifications/sent?startDate=${startParam}&endDate=${endParam}&size=20`;
 
     mock
