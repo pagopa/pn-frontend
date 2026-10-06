@@ -155,6 +155,7 @@ const NotificationEventsTimeline = ({
                             language={language}
                             isNewTimelineCopyEnabled={isNewTimelineCopyEnabled}
                             perfectionLink={perfectionLink}
+                            delegatorName={delegatorName}
                           />
                         </Fragment>
                       );
@@ -181,6 +182,7 @@ const NotificationEventsTimeline = ({
                           hasMultipleAttempts={multiAttemptGroupIds.has(step.group.groupId)}
                           isNewTimelineCopyEnabled={isNewTimelineCopyEnabled}
                           perfectionLink={perfectionLink}
+                          delegatorName={delegatorName}
                         />
                       </Fragment>
                     );

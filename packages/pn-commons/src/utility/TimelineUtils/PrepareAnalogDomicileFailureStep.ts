@@ -35,26 +35,24 @@ export class PrepareAnalogDomicileFailureStep extends TimelineStep {
     );
 
     // eslint-disable-next-line functional/no-let
-    let description = getLocalizedOrDefaultLabel(
-      'notifications',
-      `detail.timeline.prepare-analog-domicile-failure-${failureCause}-description${
-        payload.isMultiRecipient ? '-multirecipient' : ''
-      }`,
+    let description = this.localizeDescription(
+      `detail.timeline.prepare-analog-domicile-failure-${failureCause}-description`,
+      payload.isMultiRecipient,
       '',
       {
         ...this.nameAndTaxId(payload),
         ...addressData,
-      }
+      },
+      payload.delegatorName
     );
 
     if (description.length === 0) {
-      description = getLocalizedOrDefaultLabel(
-        'notifications',
-        `detail.timeline.prepare-analog-domicile-failure-XXX-description${
-          payload.isMultiRecipient ? '-multirecipient' : ''
-        }`,
+      description = this.localizeDescription(
+        `detail.timeline.prepare-analog-domicile-failure-XXX-description`,
+        payload.isMultiRecipient,
         `Non è stato trovato un indirizzo valido per predisporre un altro tentativo di invio - motivo sconosciuto.`,
-        { failureCause, ...this.nameAndTaxId(payload) }
+        { failureCause, ...this.nameAndTaxId(payload) },
+        payload.delegatorName
       );
     }
 

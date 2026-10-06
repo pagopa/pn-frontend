@@ -275,9 +275,13 @@ const PnCampaignCommunications = ({ campaignId, fetchCampaignCommunications }: P
         slotProps={{ table: { sx: { tableLayout: 'fixed' } } }}
         emptyState={
           <EmptyErrorState
-            variant="empty"
+            variant="error"
             title={t('detail.communications.empty-title')}
             description={t('detail.communications.empty-description')}
+            action={{
+              label: t('detail.communications.remove-filters'),
+              onClick: handleClearFilters,
+            }}
           />
         }
       >

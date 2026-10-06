@@ -24,6 +24,7 @@ type Props = {
   hasMultipleAttempts?: boolean;
   isNewTimelineCopyEnabled?: boolean;
   perfectionLink?: string;
+  delegatorName?: string;
 };
 
 const NotificationTimelineGroupItem = ({
@@ -36,6 +37,7 @@ const NotificationTimelineGroupItem = ({
   hasMultipleAttempts = false,
   isNewTimelineCopyEnabled = false,
   perfectionLink,
+  delegatorName,
 }: Props) => {
   const generatedId = useId();
   const [expanded, setExpanded] = useState(false);
@@ -126,6 +128,7 @@ const NotificationTimelineGroupItem = ({
               insideAGroup
               isNewTimelineCopyEnabled={isNewTimelineCopyEnabled}
               perfectionLink={perfectionLink}
+              delegatorName={delegatorName}
             />
           ))}
         </Box>
