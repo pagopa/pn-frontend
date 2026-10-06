@@ -430,4 +430,38 @@ describe('CampaignDetail Page', () => {
 
     expect(result.container.querySelector('#page2')).not.toBeInTheDocument();
   });
+
+  it('removes communications filters from the empty state', async () => {
+    const filteredComunicationsListPath = `/bff/v1/informal/campaigns/${campaignDetailMock.campaignId}/notifications/sent?startDate=${startParam}&endDate=${endParam}&iunMatch=ABCD-EFGH-IJKL-123456-M-1&size=20&nextPagesKey=key-1`;
+    const unfilteredComunicationsListPath = `/bff/v1/informal/campaigns/${campaignDetailMock.campaignId}/notifications/sent?startDate=${startParam}&endDate=${endParam}&size=20`;
+
+    mock
+      .onGet(`/bff/v1/notifications/informal/campaigns/${campaignDetailMock.campaignId}`)
+      .reply(200, campaignDetailMock);
+    mock
+      .onGet(filteredComunicationsListPath)
+      .reply(200, { resultsPage: [], moreResult: false, nextPagesKey: [] });
+    mock.onGet(unfilteredComunicationsListPath).reply(200, comunicationsList);
+
+    await act(async () => {
+      result = render(<CampaignDetail />, {
+        route: `/campaigns/${campaignDetailMock.campaignId}`,
+        path: '/campaigns/:id',
+        preloadedState: filteredState(campaignDetailMock.campaignId),
+      });
+    });
+
+    const removeFiltersButton = await waitFor(() =>
+      result.getByRole('button', { name: 'detail.communications.remove-filters' })
+    );
+
+    fireEvent.click(removeFiltersButton);
+
+    await waitFor(() => {
+      expect(mock.history.get).toHaveLength(3);
+    });
+    expect(mock.history.get[2].url).toBe(unfilteredComunicationsListPath);
+    expect(result.getByLabelText('detail.communications.iun')).toHaveValue('');
+    expect(result.getByTestId('cancelButton')).toBeDisabled();
+  });
 });
