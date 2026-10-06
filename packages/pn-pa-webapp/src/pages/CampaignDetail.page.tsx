@@ -69,12 +69,16 @@ const CampaignDetail: React.FC = () => {
     (page: number, size: number, filters: CommunicationFilters, nextPagesKey?: string) => {
       if (id) {
         setCommunicationsReady(false);
+        const outcomeFilters =
+          {
+            viewed: { viewed: true },
+            delivered: { viewed: false, delivered: true },
+          }[filters.outcome] ?? {};
         const filterParams = {
           recipientId: filters.recipientId || undefined,
           iunMatch: filters.iunMatch || undefined,
           status: filters.status.length > 0 ? filters.status : undefined,
-          viewed: filters.outcome === 'viewed' ? true : undefined,
-          delivered: filters.outcome === 'delivered' ? true : undefined,
+          ...outcomeFilters,
         };
         const hasFiltersApplied = Object.values(filterParams).some((value) => value !== undefined);
 
