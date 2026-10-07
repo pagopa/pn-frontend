@@ -14,7 +14,15 @@ import SmartFilter from '../SmartFilter';
 const submitHandler = vi.fn();
 const cancelHandler = vi.fn();
 
-const ExampleForm = ({ inputUsername = '', inputEmail = '' }) => {
+const ExampleForm = ({
+  inputUsername = '',
+  inputEmail = '',
+  submitResult,
+}: {
+  inputUsername?: string;
+  inputEmail?: string;
+  submitResult?: boolean;
+}) => {
   const [username, setUsername] = useState(inputUsername);
   const [email, setEmail] = useState(inputEmail);
   return (
@@ -26,6 +34,7 @@ const ExampleForm = ({ inputUsername = '', inputEmail = '' }) => {
       onSubmit={(e) => {
         e?.preventDefault();
         submitHandler();
+        return submitResult;
       }}
       formValues={{ username, email }}
       initialValues={{ username: '', email: '' }}
@@ -53,6 +62,10 @@ const ExampleForm = ({ inputUsername = '', inputEmail = '' }) => {
 
 describe('Smart Filter Component', () => {
   const original = window.matchMedia;
+
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
 
   afterAll(() => {
     window.matchMedia = original;
@@ -86,6 +99,23 @@ describe('Smart Filter Component', () => {
     expect(confirmButton).toBeEnabled();
     fireEvent.click(confirmButton);
     expect(submitHandler).toBeCalledTimes(1);
+    await waitFor(() => {
+      expect(confirmButton).toBeDisabled();
+      expect(getByTestId('cancelButton')).toBeEnabled();
+    });
+  });
+
+  it('clicks on confirm button and submit fails (desktop version)', async () => {
+    const { getByTestId } = render(<ExampleForm submitResult={false} />);
+    const username = getByTestId('username');
+    fireEvent.change(username, { target: { value: 'utenteuno' } });
+    const confirmButton = getByTestId('confirmButton');
+    expect(confirmButton).toBeEnabled();
+    fireEvent.click(confirmButton);
+    await waitFor(() => expect(submitHandler).toBeCalledTimes(1));
+    // filters are not applied: confirm button still enabled and cancel button still disabled
+    expect(confirmButton).toBeEnabled();
+    expect(getByTestId('cancelButton')).toBeDisabled();
   });
 
   it('clicks on cancel button (desktop version)', () => {
@@ -142,5 +172,19 @@ describe('Smart Filter Component', () => {
     );
     const dialogToggle = await waitFor(() => getByTestId('dialogToggle'));
     expect(dialogToggle).toHaveTextContent('2');
+  });
+
+  it('clicks on confirm button and submit fails (mobile version)', async () => {
+    window.matchMedia = createMatchMedia(800);
+    const { getByTestId } = render(<ExampleForm submitResult={false} />);
+    fireEvent.click(getByTestId('dialogToggleButton'));
+    const dialog = await waitFor(() => screen.getByTestId('mobileDialog'));
+    fireEvent.change(within(dialog).getByTestId('username'), { target: { value: 'utenteuno' } });
+    const confirmButton = within(dialog).getByTestId('confirmButton');
+    fireEvent.click(confirmButton);
+    await waitFor(() => expect(submitHandler).toBeCalledTimes(1));
+    // dialog stays open and no filter is counted
+    expect(screen.getByTestId('mobileDialog')).toBeInTheDocument();
+    expect(getByTestId('dialogToggle')).not.toHaveTextContent('1');
   });
 });
