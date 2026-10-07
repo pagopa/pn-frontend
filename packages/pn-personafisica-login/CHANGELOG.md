@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.27.0-RC.3](https://github.com/pagopa/pn-frontend/compare/v2.27.0-RC.2...v2.27.0-RC.3) (2026-10-07)
+
+### Bug Fixes
+
+* **PN-21757:** serve IdP logos from local assets instead of IO CDN ([#2112](https://github.com/pagopa/pn-frontend/issues/2112)) ([3e4f6d9](https://github.com/pagopa/pn-frontend/commit/3e4f6d997b80370a8c2c089e579e2a5faeac1d6b))
+
+
 # [2.27.0-RC.1](https://github.com/pagopa/pn-frontend/compare/v2.27.0-RC.0...v2.27.0-RC.1) (2026-10-02)
 
 **Note:** Version bump only for package @pagopa-pn/pn-personafisica-login

@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.27.0-RC.3](https://github.com/pagopa/pn-frontend/compare/v2.27.0-RC.2...v2.27.0-RC.3) (2026-10-07)
+
+### Bug Fixes
+
+* **PN-21725, PN-21733, PN-21735:** align informal notifications filters behaviour with legal notifications ([#2109](https://github.com/pagopa/pn-frontend/issues/2109)) ([214a1cd](https://github.com/pagopa/pn-frontend/commit/214a1cd202e0f2c88d0cdfe14ade9cc9b038859c))
+* **PN-21745:** pick the right subject and enrich message of informal notification detail ([#2115](https://github.com/pagopa/pn-frontend/issues/2115)) ([17e96a3](https://github.com/pagopa/pn-frontend/commit/17e96a34e63e47729739b30d6003f0a05270fdf8))
+
+
 # [2.27.0-RC.2](https://github.com/pagopa/pn-frontend/compare/v2.27.0-RC.1...v2.27.0-RC.2) (2026-10-05)
 
 ### Bug Fixes

@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.27.0-RC.3](https://github.com/pagopa/pn-frontend/compare/v2.27.0-RC.2...v2.27.0-RC.3) (2026-10-07)
+
+### Bug Fixes
+
+* **PN-21725, PN-21733, PN-21735:** align informal notifications filters behaviour with legal notifications ([#2109](https://github.com/pagopa/pn-frontend/issues/2109)) ([214a1cd](https://github.com/pagopa/pn-frontend/commit/214a1cd202e0f2c88d0cdfe14ade9cc9b038859c))
+* **PN-21734:** exclude viewed communications from delivered filter ([#2114](https://github.com/pagopa/pn-frontend/issues/2114)) ([7f81382](https://github.com/pagopa/pn-frontend/commit/7f8138251ff9202c5e21414c14f2b8fc500a127f))
+* **PN-21736:** add clear filter CTA to ComBo empty state ([#2113](https://github.com/pagopa/pn-frontend/issues/2113)) ([920002b](https://github.com/pagopa/pn-frontend/commit/920002bfee459d7bdd8dbf210b95435030094a22))
+* **PN-21745:** pick the right subject and enrich message of informal notification detail ([#2115](https://github.com/pagopa/pn-frontend/issues/2115)) ([17e96a3](https://github.com/pagopa/pn-frontend/commit/17e96a34e63e47729739b30d6003f0a05270fdf8))
+* **PN-21756:** keeps the current page when coming back to the campaign list ([#2116](https://github.com/pagopa/pn-frontend/issues/2116)) ([a39dbc4](https://github.com/pagopa/pn-frontend/commit/a39dbc46a96c80e5c094fb841d33ce9a50989e86))
+* **PN-21757:** serve IdP logos from local assets instead of IO CDN ([#2112](https://github.com/pagopa/pn-frontend/issues/2112)) ([3e4f6d9](https://github.com/pagopa/pn-frontend/commit/3e4f6d997b80370a8c2c089e579e2a5faeac1d6b))
+
+
 # [2.27.0-RC.2](https://github.com/pagopa/pn-frontend/compare/v2.27.0-RC.1...v2.27.0-RC.2) (2026-10-05)
 
 ### Bug Fixes
