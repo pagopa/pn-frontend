@@ -6,6 +6,7 @@
   "autocomplete": {
     "clear": "Rimuovi opzioni selezionate",
     "delete-selection": "Elimina %s",
+    "no-results": "Non ci sono corrispondenze da mostrare",
     "selection-box": "Opzioni selezionate",
     "selection-done": "%s selezionati",
     "toggle-close": "Chiudi menu selezione opzioni",

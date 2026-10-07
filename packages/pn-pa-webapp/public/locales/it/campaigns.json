@@ -20,6 +20,9 @@
         "title": "Qui vedrai le comunicazioni della campagna."
       },
       "empty-title": "Nessuna comunicazione per i filtri selezionati.",
+      "errors": {
+        "tax-id": "Inserisci un codice fiscale valido"
+      },
       "iun": "Codice IUN",
       "no-communications-description": "Non ci sono comunicazioni corrispondenti ai filtri selezionati.",
       "no-communications-title": "Nessuna comunicazione disponibile",

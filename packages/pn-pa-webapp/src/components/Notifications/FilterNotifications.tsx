@@ -12,7 +12,7 @@ import {
   CustomMobileDialogContent,
   CustomMobileDialogToggle,
   GetNotificationsParams,
-  IUN_regex,
+  LEGAL_IUN_regex,
   dataRegex,
   dateIsDefined,
   filtersApplied,
@@ -83,7 +83,7 @@ const FilterNotifications = forwardRef(({ showFilters }: Props, ref) => {
     recipientId: yup
       .string()
       .matches(dataRegex.pIvaAndFiscalCode, t('filters.errors.fiscal-code', { ns: 'notifiche' })),
-    iunMatch: yup.string().matches(IUN_regex, t('filters.errors.iun', { ns: 'notifiche' })),
+    iunMatch: yup.string().matches(LEGAL_IUN_regex, t('filters.errors.iun', { ns: 'notifiche' })),
     // the formik validations for dates (which control the enable status of the "filtra" button)
     // must coincide with the input field validations (which control the color of the frame around each field)
     startDate: yup
