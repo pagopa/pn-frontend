@@ -21,25 +21,25 @@ export const campaignDetailMock: BffCampaignDetailResponseV1 = {
 export const comunicationsList: BffInformalSenderNotificationSearchResponse = {
   resultsPage: [
     {
-      iun: 'XGPG-LXPA-YXRL-202308-M-1',
+      iun: 'XGPG-LXPA-YXRL-202308-M-A',
       notificationStatus: InformalNotificationStatus.UNDELIVERABLE,
       recipients: ['CLMCST42R12D969Z', '20517490320'],
       communicationOutcomes: { viewed: true, delivered: true },
     },
     {
-      iun: 'ZEXV-XVNG-HKNY-202308-D-1',
+      iun: 'ZEXV-XVNG-HKNY-202308-D-A',
       notificationStatus: InformalNotificationStatus.COMPLETED_REACHED,
       recipients: ['CLMCST42R12D969Z', '20517490320'],
       communicationOutcomes: { viewed: true, delivered: true },
     },
     {
-      iun: 'LQJA-EHAM-DGAU-202308-E-1',
+      iun: 'LQJA-EHAM-DGAU-202308-E-A',
       notificationStatus: InformalNotificationStatus.PROCESSING,
       recipients: ['CLMCST42R12D969Z', '20517490320'],
       communicationOutcomes: { viewed: true, delivered: true },
     },
     {
-      iun: 'PYRH-VGJR-GXTW-202308-V-1',
+      iun: 'PYRH-VGJR-GXTW-202308-V-A',
       notificationStatus: InformalNotificationStatus.ACCEPTED,
       recipients: ['CLMCST42R12D969Z', '20517490320'],
       communicationOutcomes: { viewed: true, delivered: true },
