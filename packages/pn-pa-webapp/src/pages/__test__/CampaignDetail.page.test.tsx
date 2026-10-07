@@ -483,6 +483,13 @@ describe('CampaignDetail Page', () => {
       expect(result.queryByText('detail.communications.errors.tax-id')).not.toBeInTheDocument();
     });
     expect(result.getByText('filters.errors.iun')).toBeInTheDocument();
+
+    // pasting a value hides the field error too
+    fireEvent.paste(iunInput, { clipboardData: { getData: () => ` ${informalIun} ` } });
+    await waitFor(() => {
+      expect(result.queryByText('filters.errors.iun')).not.toBeInTheDocument();
+    });
+    expect(iunInput).toHaveValue(informalIun);
   });
 
   it('removes communications filters from the empty state', async () => {

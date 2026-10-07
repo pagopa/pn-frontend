@@ -1,7 +1,7 @@
 import { isEqual } from 'lodash-es';
 import { FormEvent, PropsWithChildren, useRef, useState } from 'react';
 
-import { Box, Button, DialogActions, DialogContent, Grid } from '@mui/material';
+import { Button, DialogActions, DialogContent, Grid, Theme } from '@mui/material';
 
 import { useIsMobile } from '../../../hooks/useIsMobile';
 import { filtersApplied } from '../../../utility/genericFunctions.utility';
@@ -29,7 +29,11 @@ type Props<FormValues> = {
   initialValues: FormValues;
 };
 
-const actionBoxStyle = { display: 'flex', alignItems: 'center', minHeight: '48px' };
+const actionItemStyle = {
+  display: 'flex',
+  alignItems: 'center',
+  minHeight: (theme: Theme) => `calc(48px + ${theme.spacing(1)})`,
+};
 
 /**
  * SmartFilter show filter in desktop view and dialog in mobile view.
@@ -114,17 +118,15 @@ const SmartFilter = <FormValues extends object>({
 
   return (
     <form onSubmit={submitHandler}>
-      <Box sx={{ flexGrow: 1, mt: 3 }}>
-        <Grid container spacing={1} sx={{ alignItems: 'flex-start' }}>
-          {children}
-          <Grid item lg="auto" xs={12}>
-            <Box sx={actionBoxStyle}>{confirmAction}</Box>
-          </Grid>
-          <Grid item lg="auto" xs={12}>
-            <Box sx={actionBoxStyle}>{cancelAction}</Box>
-          </Grid>
+      <Grid container spacing={1} sx={{ alignItems: 'flex-start', mt: 2 }}>
+        {children}
+        <Grid item lg="auto" xs={12} sx={actionItemStyle}>
+          {confirmAction}
         </Grid>
-      </Box>
+        <Grid item lg="auto" xs={12} sx={actionItemStyle}>
+          {cancelAction}
+        </Grid>
+      </Grid>
     </form>
   );
 };

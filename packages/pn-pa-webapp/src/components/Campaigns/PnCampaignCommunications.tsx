@@ -112,9 +112,11 @@ const PnCampaignCommunications = ({ campaignId, fetchCampaignCommunications }: P
   const handlePaste = async (e: React.ClipboardEvent) => {
     e.preventDefault();
     const trimmedValue = e.clipboardData.getData('text').trim();
+    const input = e.target as HTMLInputElement;
+    formik.setFieldError(input.name, undefined);
     // eslint-disable-next-line functional/immutable-data
-    (e.target as HTMLInputElement).value = trimmedValue;
-    await formik.setFieldValue((e.target as HTMLInputElement).id, trimmedValue, false);
+    input.value = trimmedValue;
+    await formik.setFieldValue(input.name, trimmedValue, false);
   };
 
   const handleChangeTouched = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -142,13 +144,8 @@ const PnCampaignCommunications = ({ campaignId, fetchCampaignCommunications }: P
 
   const handleSubmitFilters = async (e?: React.FormEvent<HTMLFormElement>) => {
     e?.preventDefault();
-    const errors = await formik.validateForm();
-    if (Object.keys(errors).length > 0) {
-      await formik.setTouched({ recipientId: true, iunMatch: true }, false);
-      return false;
-    }
-    await formik.submitForm();
-    return true;
+    const submitted = await formik.submitForm();
+    return submitted === true;
   };
 
   const renderCellContent = (
@@ -200,9 +197,10 @@ const PnCampaignCommunications = ({ campaignId, fetchCampaignCommunications }: P
     validationSchema,
     validateOnChange: false,
     validateOnBlur: false,
-    onSubmit: () => {
+    onSubmit: (values) => {
       dispatch(resetCommunicationsPagination());
-      fetchCampaignCommunications(0, communicationsPagination.size, formik.values);
+      fetchCampaignCommunications(0, communicationsPagination.size, values);
+      return Promise.resolve(true);
     },
   });
 
