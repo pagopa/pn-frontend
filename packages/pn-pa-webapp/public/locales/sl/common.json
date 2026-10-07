@@ -6,6 +6,7 @@
   "autocomplete": {
     "clear": "Odstrani izbrane možnosti",
     "delete-selection": "Odstrani %s",
+    "no-results": "Ni ujemanj za prikaz",
     "selection-box": "Izbrane možnosti",
     "selection-done": "%s izbranih",
     "toggle-close": "Zapri meni z možnostmi",

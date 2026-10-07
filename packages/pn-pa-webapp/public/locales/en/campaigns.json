@@ -20,6 +20,9 @@
         "title": "Here you will see the campaign communications."
       },
       "empty-title": "No communications found for the selected filters.",
+      "errors": {
+        "tax-id": "Enter a valid fiscal code"
+      },
       "iun": "IUN code",
       "no-communications-description": "There are no communications matching the selected filters.",
       "no-communications-title": "No communications available",
