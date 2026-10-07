@@ -18,6 +18,7 @@ import {
   NotificationDetailRecipient,
   NotificationPayment,
   NotificationStatusHistory,
+  NotificationViewedDetails,
   PagoPAPaymentFullDetails,
   PaymentDetails,
   PaymentStatus,
@@ -42,22 +43,58 @@ type StatusInfo = {
   description: string;
 };
 
-function viewedStatusVariant(
-  statusInfos: StatusInfo,
-  statusObject?: NotificationStatusHistory,
-  isMultiRecipient?: boolean
-): StatusInfo {
-  if (
-    statusObject?.recipient &&
-    hasLocalizedLabel('notifications', `status.viewed-by-delegate-description`)
-  ) {
+type ViewedVariantOptions = {
+  statusObject?: NotificationStatusHistory;
+  isMultiRecipient?: boolean;
+  mandateId?: string;
+  delegatorName?: string;
+};
+
+function viewedByVariant({
+  statusObject,
+  isMultiRecipient,
+  mandateId,
+  delegatorName,
+}: ViewedVariantOptions): { key: string; data: { [key: string]: string } } | undefined {
+  const viewedEvent = statusObject?.steps?.find(
+    (step) => step.category === TimelineCategory.NOTIFICATION_VIEWED
+  );
+  const delegateInfo = (viewedEvent?.details as NotificationViewedDetails | undefined)
+    ?.delegateInfo;
+  const delegateName = delegateInfo?.denomination ?? statusObject?.recipient;
+
+  if (mandateId && delegatorName) {
+    if (delegateInfo?.mandateId === mandateId) {
+      return { key: 'status.viewed-as-delegate-description', data: { recipient: delegatorName } };
+    }
+    if (delegateName) {
+      return {
+        key: 'status.viewed-by-other-delegate-description',
+        data: { name: delegateName, recipient: delegatorName },
+      };
+    }
+    return isMultiRecipient
+      ? undefined
+      : { key: 'status.viewed-by-recipient-description', data: { recipient: delegatorName } };
+  }
+
+  return delegateName
+    ? { key: 'status.viewed-by-delegate-description', data: { name: delegateName } }
+    : undefined;
+}
+
+function viewedStatusVariant(statusInfos: StatusInfo, options: ViewedVariantOptions): StatusInfo {
+  const { statusObject, isMultiRecipient } = options;
+
+  const variant = viewedByVariant(options);
+  if (variant && hasLocalizedLabel('notifications', variant.key)) {
     return {
       ...statusInfos,
       description: getLocalizedOrDefaultLabel(
         'notifications',
-        `status.viewed-by-delegate-description`,
+        variant.key,
         undefined,
-        { name: statusObject.recipient }
+        variant.data
       ),
     };
   }
@@ -199,10 +236,25 @@ function deliveredStatusVariant(
     statusHistory?: Array<NotificationStatusHistory>;
     recipients: Array<NotificationDetailRecipient | string>;
     isParty?: boolean;
+    delegatorName?: string;
   }
 ): StatusInfo {
   const statusInfos = localizeStatus('delivered', { isMultiRecipient });
   const deliveryMode = statusObject?.deliveryMode;
+  const delegatorName = options?.delegatorName;
+  const delegateDescriptionKey = `status.delivered-description-${deliveryMode}-delegate`;
+
+  if (deliveryMode && delegatorName && hasLocalizedLabel('notifications', delegateDescriptionKey)) {
+    statusInfos.description = getLocalizedOrDefaultLabel(
+      'notifications',
+      delegateDescriptionKey,
+      undefined,
+      { recipient: delegatorName }
+    );
+
+    return statusInfos;
+  }
+
   const deliveryModeDescriptionKey = `status.delivered-description-${deliveryMode}${
     isMultiRecipient ? '-multirecipient' : ''
   }`;
@@ -303,6 +355,8 @@ export function getNotificationStatusInfos(
     statusHistory?: Array<NotificationStatusHistory>;
     recipients: Array<NotificationDetailRecipient | string>;
     isParty?: boolean;
+    mandateId?: string;
+    delegatorName?: string;
   }
 ): StatusInfoWithColor {
   const statusComesAsAnObject = !!(status as NotificationStatusHistory).status;
@@ -356,17 +410,23 @@ export function getNotificationStatusInfos(
         color: 'default',
         ...localizeStatus('accepted'),
       };
-    case NotificationStatus.EFFECTIVE_DATE:
-      return {
-        color: 'info',
-        // the status became active at the very moment the notification perfected, so `activeFrom` is
-        // the date the revised copy asks for. The wording in the base catalog has no `{{date}}`, so
-        // passing it is a no-op with the overlay off.
-        ...localizeStatus('effective-date', {
-          isMultiRecipient,
-          ...(statusObject ? { date: formatDate(statusObject.activeFrom, false) } : {}),
-        }),
-      };
+    case NotificationStatus.EFFECTIVE_DATE: {
+      // the status became active at the very moment the notification perfected, so `activeFrom` is
+      // the date the revised copy asks for. The wording in the base catalog has no `{{date}}`, so
+      // passing it is a no-op with the overlay off.
+      const dateData = statusObject ? { date: formatDate(statusObject.activeFrom, false) } : {};
+      const statusInfos = localizeStatus('effective-date', { isMultiRecipient, ...dateData });
+      const delegateDescriptionKey = 'status.effective-date-description-delegate';
+      if (options?.delegatorName && hasLocalizedLabel('notifications', delegateDescriptionKey)) {
+        statusInfos.description = getLocalizedOrDefaultLabel(
+          'notifications',
+          delegateDescriptionKey,
+          undefined,
+          { ...dateData, recipient: options.delegatorName }
+        );
+      }
+      return { color: 'info', ...statusInfos };
+    }
     case NotificationStatus.VIEWED: {
       if (statusObject?.recipient) {
         subject = getLocalizedOrDefaultLabel(
@@ -378,11 +438,12 @@ export function getNotificationStatusInfos(
       }
       return {
         color: 'success',
-        ...viewedStatusVariant(
-          localizeStatus('viewed', { subject, isMultiRecipient }),
+        ...viewedStatusVariant(localizeStatus('viewed', { subject, isMultiRecipient }), {
           statusObject,
-          isMultiRecipient
-        ),
+          isMultiRecipient,
+          mandateId: options?.mandateId,
+          delegatorName: options?.delegatorName,
+        }),
       };
     }
     case NotificationStatus.CANCELLED:
@@ -655,7 +716,9 @@ export function getLegalFactLabel(
 export function getNotificationTimelineStatusInfos(
   step: INotificationDetailTimeline,
   recipients: Array<NotificationDetailRecipient>,
-  allStepsForThisStatus?: Array<INotificationDetailTimeline>
+  allStepsForThisStatus?: Array<INotificationDetailTimeline>,
+  isNewTimelineCopyEnabled?: boolean,
+  delegatorName?: string
 ): TimelineStepInfo | null {
   const recipient = isNil(step.details.recIndex)
     ? undefined
@@ -687,6 +750,8 @@ export function getNotificationTimelineStatusInfos(
           recDescription.denomination && recDescription.taxId && recDescription.recipientType
       ).length > 1,
     allStepsForThisStatus,
+    delegatorName,
+    isNewTimelineCopyEnabled,
   });
 }
 

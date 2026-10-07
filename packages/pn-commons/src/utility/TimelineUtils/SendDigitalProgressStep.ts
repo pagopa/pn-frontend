@@ -20,7 +20,8 @@ export class SendDigitalProgressStep extends TimelineStep {
           {
             ...this.nameAndTaxId(payload),
             address: (payload.step.details as SendDigitalDetails).digitalAddress?.address,
-          }
+          },
+          payload.delegatorName
         ),
       };
     } else if (deliveryDetailCode === 'C001' || deliveryDetailCode === 'DP00') {
@@ -35,7 +36,8 @@ export class SendDigitalProgressStep extends TimelineStep {
           {
             ...this.nameAndTaxId(payload),
             address: (payload.step.details as SendDigitalDetails).digitalAddress?.address,
-          }
+          },
+          payload.delegatorName
         ),
       };
     }

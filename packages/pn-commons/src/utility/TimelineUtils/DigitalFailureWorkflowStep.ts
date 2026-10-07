@@ -8,7 +8,8 @@ export class DigitalFailureWorkflowStep extends TimelineStep {
         payload.isMultiRecipient,
         undefined,
         undefined,
-        this.nameAndTaxId(payload)
+        this.nameAndTaxId(payload),
+        payload.delegatorName
       ),
     };
   }

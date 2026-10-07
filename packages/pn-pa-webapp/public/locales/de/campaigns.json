@@ -15,6 +15,10 @@
     },
     "communications": {
       "empty-description": "Entferne sie oder versuche es mit einer anderen Kombination.",
+      "empty-state": {
+        "description": "Abgelehnte oder noch in der Validierung befindliche Mitteilungen werden nicht angezeigt.",
+        "title": "Hier siehst du die Mitteilungen der Kampagne."
+      },
       "empty-title": "Keine Mitteilungen für die ausgewählten Filter vorhanden.",
       "iun": "IUN-Code",
       "no-communications-description": "Es gibt keine Mitteilungen, die den ausgewählten Filtern entsprechen.",
@@ -115,7 +119,7 @@
       },
       "completed": {
         "description": "Die Mitteilung wurde über die gewählten Kanäle versendet.",
-        "label": "Versand erfolgreich"
+        "label": "Versand abgeschlossen"
       },
       "processing": {
         "description": "Die Mitteilung wird versuchen, den Empfänger über die gewählten Kanäle zu erreichen.",

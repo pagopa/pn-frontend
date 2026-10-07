@@ -128,6 +128,8 @@ const NotificationDetail: React.FC = () => {
   const isCancelled = useIsCancelled({ notification });
   const isCancelledOrCancelling = isCancelled.cancelled || isCancelled.cancellationInProgress;
   const currentRecipient = notification?.currentRecipient;
+  const delegatorName = delegatorsFromStore.find((delegation) => delegation.mandateId === mandateId)
+    ?.delegator?.displayName;
 
   const userPayments = useAppSelector((state: RootState) => state.notificationState.paymentsData);
   const paymentTpp = useAppSelector((state: RootState) => state.generalInfoState.paymentTpp);
@@ -434,10 +436,6 @@ const NotificationDetail: React.FC = () => {
 
   const properBreadcrumb = useMemo(() => {
     const backRoute = mandateId ? routes.GET_NOTIFICHE_DELEGATO_PATH(mandateId) : routes.NOTIFICHE;
-
-    const delegatorName = delegatorsFromStore.find(
-      (delegation) => delegation.mandateId === mandateId
-    )?.delegator?.displayName;
 
     const breadcrumbLabel = delegatorName
       ? t('menu.notifiche-delegato', { delegator: delegatorName })
@@ -763,6 +761,8 @@ const NotificationDetail: React.FC = () => {
                     clickHandler={legalFactDownloadHandler}
                     isNewTimelineCopyEnabled={IS_NEW_TIMELINE_COPY_ENABLED}
                     perfectionLink={NOTIFICATION_PERFECTION_LINK}
+                    mandateId={mandateId}
+                    delegatorName={delegatorName}
                   />
                 )}
                 <NotificationDetailSection

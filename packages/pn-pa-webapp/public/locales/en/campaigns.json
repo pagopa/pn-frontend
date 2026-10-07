@@ -15,6 +15,10 @@
     },
     "communications": {
       "empty-description": "Remove them or try another combination.",
+      "empty-state": {
+        "description": "Refused communications or those still under validation will not be displayed.",
+        "title": "Here you will see the campaign communications."
+      },
       "empty-title": "No communications found for the selected filters.",
       "iun": "IUN code",
       "no-communications-description": "There are no communications matching the selected filters.",
@@ -115,7 +119,7 @@
       },
       "completed": {
         "description": "The communication has been sent to the chosen channels.",
-        "label": "Sending successful"
+        "label": "Sending completed"
       },
       "processing": {
         "description": "The communication will try to reach the recipient on the chosen channels.",
