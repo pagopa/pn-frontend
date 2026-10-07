@@ -6,6 +6,7 @@
   "autocomplete": {
     "clear": "Remove selected options",
     "delete-selection": "Remove %s",
+    "no-results": "No matches to display",
     "selection-box": "Selected options",
     "selection-done": "%s selected",
     "toggle-close": "Close option selection menu",
