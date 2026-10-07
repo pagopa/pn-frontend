@@ -47,7 +47,7 @@ const Campaigns = () => {
     (page: number, size: number) => {
       setLoading(true);
 
-      dispatch(
+      return dispatch(
         getCampaigns({
           page,
           size,
@@ -56,16 +56,13 @@ const Campaigns = () => {
       )
         .unwrap()
         .then((data) => {
-          PAEventStrategyFactory.triggerEvent(PAEventsType.SEND_PA_HAS_CAMPAIGNS, {
-            value: data.resultsPage.length > 0,
-          });
-
           PAEventStrategyFactory.triggerEvent(PAEventsType.SEND_PA_CAMPAIGNS, {
             campaigns: data.resultsPage,
             pageNumber: page,
           });
+          return data;
         })
-        .catch(() => {})
+        .catch(() => undefined)
         .finally(() => {
           setLoading(false);
         });
@@ -77,19 +74,26 @@ const Campaigns = () => {
     const hasSizeChanged = paginationData.size !== pagination.size;
     const page = hasSizeChanged ? 0 : paginationData.page;
 
-    fetchCampaigns(page, paginationData.size);
+    void fetchCampaigns(page, paginationData.size);
   };
 
   const handleOpenCampaign = (id: string) => {
     navigate(GET_CAMPAIGN_DETAIL_PATH(id));
   };
 
-  const fetchCurrentPage = useCallback(() => {
-    fetchCampaigns(pagination.page, pagination.size);
-  }, [fetchCampaigns, pagination.page, pagination.size]);
+  const fetchCurrentPage = useCallback(
+    () => fetchCampaigns(pagination.page, pagination.size),
+    [fetchCampaigns, pagination.page, pagination.size]
+  );
 
   useEffect(() => {
-    fetchCurrentPage();
+    void fetchCurrentPage().then((data) => {
+      if (data) {
+        PAEventStrategyFactory.triggerEvent(PAEventsType.SEND_PA_HAS_CAMPAIGNS, {
+          value: data.resultsPage.length > 0,
+        });
+      }
+    });
   }, []);
 
   return (
