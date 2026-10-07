@@ -4,7 +4,14 @@ import { Box, Divider, Stack, Typography } from '@mui/material';
 import { MITimeline, MITimelineItem } from '@pagopa/mui-italia';
 
 import { NotificationStatus } from '../../../models';
-import { LegalFactId, NotificationDetailRecipient } from '../../../models/NotificationDetail';
+import {
+  DigitalDomicileType,
+  LegalFactId,
+  NotificationDeliveryMode,
+  NotificationDetailRecipient,
+  SendDigitalDetails,
+  TimelineCategory,
+} from '../../../models/NotificationDetail';
 import {
   NotificationTimelineEvent,
   NotificationTimelineStatusHistory,
@@ -20,7 +27,7 @@ import NotificationTimelineDescription from './NotificationTimelineDescription';
 import NotificationTimelineEventItem from './NotificationTimelineEventItem';
 import NotificationTimelineGroupItem from './NotificationTimelineGroupItem';
 import { getMultiAttemptGroupIds } from './timelineGroupHeader.config';
-import { getTimelineItems } from './timelineItem.config';
+import { PERFECTION_ANCHORS, getTimelineItems } from './timelineItem.config';
 
 type Props = {
   recipients: Array<NotificationDetailRecipient>;
@@ -33,6 +40,41 @@ type Props = {
   perfectionLink?: string;
   mandateId?: string;
   delegatorName?: string;
+};
+
+const getStatusPerfectionLink = (
+  perfectionLink: string | undefined,
+  status: NotificationTimelineStatusHistory
+): string | undefined => {
+  if (!perfectionLink) {
+    return perfectionLink;
+  }
+  if (status.deliveryMode === NotificationDeliveryMode.ANALOG) {
+    return `${perfectionLink}${PERFECTION_ANCHORS.ANALOG}`;
+  }
+  if (status.deliveryMode !== NotificationDeliveryMode.DIGITAL) {
+    return perfectionLink;
+  }
+
+  const digitalSuccessWorkflow = status.steps.find(
+    (step) =>
+      !isTimelineGroupStep(step) &&
+      step.event.category === TimelineCategory.DIGITAL_SUCCESS_WORKFLOW
+  );
+  if (!digitalSuccessWorkflow) {
+    return perfectionLink;
+  }
+
+  const digitalAddress = (digitalSuccessWorkflow.event.details as SendDigitalDetails)
+    .digitalAddress;
+  if (digitalAddress?.type === DigitalDomicileType.PEC) {
+    return `${perfectionLink}${PERFECTION_ANCHORS.PEC}`;
+  }
+  if (digitalAddress?.type === DigitalDomicileType.SERCQ) {
+    return `${perfectionLink}${PERFECTION_ANCHORS.SEND}`;
+  }
+
+  return perfectionLink;
 };
 
 const NotificationEventsTimeline = ({
@@ -91,6 +133,10 @@ const NotificationEventsTimeline = ({
                   isTimelineGroupStep(step) || !plan.hiddenEventIds.has(step.event.elementId)
               );
 
+            const statusPerfectionLink = isNewTimelineCopyEnabled
+              ? getStatusPerfectionLink(perfectionLink, status)
+              : perfectionLink;
+
             return (
               <MITimelineItem
                 key={`timeline_step_${status.status}_${status.activeFrom}`}
@@ -124,7 +170,7 @@ const NotificationEventsTimeline = ({
                       disableDownloads={disableDownloads}
                       isNewTimelineCopyEnabled={isNewTimelineCopyEnabled}
                       legalFacts={plan.legalFacts.length === 1 ? plan.legalFacts : []}
-                      perfectionLink={perfectionLink}
+                      perfectionLink={statusPerfectionLink}
                     />
                   )}
 

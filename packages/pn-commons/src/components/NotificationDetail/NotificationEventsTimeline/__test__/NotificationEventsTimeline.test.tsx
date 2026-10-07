@@ -3,7 +3,9 @@ import { vi } from 'vitest';
 import { notificationTimelineDTO } from '../../../../__mocks__/NotificationTimeline.mock';
 import { NotificationStatus } from '../../../../models';
 import {
+  DigitalDomicileType,
   LegalFactType,
+  NotificationDeliveryMode,
   NotificationDetailRecipient,
   RecipientType,
   ReworkedStatus,
@@ -16,6 +18,7 @@ import {
 } from '../../../../models/NotificationTimeline';
 import { createMatchMedia, fireEvent, render, within } from '../../../../test-utils';
 import NotificationEventsTimeline from '../NotificationEventsTimeline';
+import { PERFECTION_ANCHORS } from '../timelineItem.config';
 
 const multiRecipients: Array<NotificationDetailRecipient> = [
   {
@@ -89,6 +92,39 @@ const orderedTestIds = (container: HTMLElement, testIds: Array<string>) =>
   Array.from(
     container.querySelectorAll(testIds.map((testId) => `[data-testid="${testId}"]`).join(', '))
   ).map((el) => el.getAttribute('data-testid'));
+
+const deliveredStatus = (
+  deliveryMode: NotificationDeliveryMode,
+  digitalDomicileType?: DigitalDomicileType
+): NotificationTimelineStatusHistory => ({
+  status: NotificationStatus.DELIVERED,
+  activeFrom: '2026-09-23T10:30:00Z',
+  deliveryMode,
+  steps:
+    deliveryMode === NotificationDeliveryMode.DIGITAL && digitalDomicileType
+      ? [
+          {
+            stepType: 'EVENT',
+            event: {
+              elementId: 'DIGITAL_SUCCESS_WORKFLOW.RECINDEX_0',
+              timestamp: '2026-09-23T10:30:00Z',
+              category: TimelineCategory.DIGITAL_SUCCESS_WORKFLOW,
+              details: {
+                recIndex: 0,
+                digitalAddress: {
+                  address: 'test-address',
+                  type: digitalDomicileType,
+                },
+              },
+              legalFactsIds: [],
+              isHidden: true,
+            },
+          },
+        ]
+      : [],
+});
+
+const perfectionLink = 'https://fake.perfezionamento.it/perfezionamento';
 
 describe('NotificationEventsTimeline', () => {
   const recipients = notificationTimelineDTO.recipients;
@@ -170,6 +206,46 @@ describe('NotificationEventsTimeline', () => {
       expect(container).toHaveTextContent('status.accepted-description');
     }
   );
+
+  it.each([
+    [DigitalDomicileType.PEC, PERFECTION_ANCHORS.PEC],
+    [DigitalDomicileType.SERCQ, PERFECTION_ANCHORS.SEND],
+  ])(
+    'adds the correct perfection anchor for digital delivery type %s',
+    (digitalDomicileType, anchor) => {
+      const { getAllByTestId } = render(
+        <NotificationEventsTimeline
+          recipients={recipients}
+          statusHistory={[deliveredStatus(NotificationDeliveryMode.DIGITAL, digitalDomicileType)]}
+          clickHandler={clickHandler}
+          isNewTimelineCopyEnabled
+          perfectionLink={perfectionLink}
+        />
+      );
+
+      expect(getAllByTestId('perfection-link')[0]).toHaveAttribute(
+        'href',
+        `${perfectionLink}${anchor}`
+      );
+    }
+  );
+
+  it('adds the registered letter anchor to the perfection link for analog delivery', () => {
+    const { getByTestId } = render(
+      <NotificationEventsTimeline
+        recipients={recipients}
+        statusHistory={[deliveredStatus(NotificationDeliveryMode.ANALOG)]}
+        clickHandler={clickHandler}
+        isNewTimelineCopyEnabled
+        perfectionLink={perfectionLink}
+      />
+    );
+
+    expect(getByTestId('perfection-link')).toHaveAttribute(
+      'href',
+      `${perfectionLink}${PERFECTION_ANCHORS.ANALOG}`
+    );
+  });
 
   it('renders a group for each grouped step, divided one from the other', () => {
     const { getAllByTestId } = render(
