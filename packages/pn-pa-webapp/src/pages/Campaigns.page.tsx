@@ -44,14 +44,14 @@ const Campaigns = () => {
   );
 
   const fetchCampaigns = useCallback(
-    (page: number, size: number, nextPagesKey?: string) => {
+    (page: number, size: number) => {
       setLoading(true);
 
       dispatch(
         getCampaigns({
           page,
           size,
-          nextPagesKey,
+          nextPagesKey: page === 0 ? undefined : pagination.nextPagesKey[page - 1],
         })
       )
         .unwrap()
@@ -70,34 +70,26 @@ const Campaigns = () => {
           setLoading(false);
         });
     },
-    [dispatch]
+    [dispatch, pagination.nextPagesKey]
   );
 
   const handleChangePage = (paginationData: PaginationData) => {
     const hasSizeChanged = paginationData.size !== pagination.size;
     const page = hasSizeChanged ? 0 : paginationData.page;
 
-    fetchCampaigns(
-      page,
-      paginationData.size,
-      page === 0 ? undefined : pagination.nextPagesKey[page - 1]
-    );
+    fetchCampaigns(page, paginationData.size);
   };
 
   const handleOpenCampaign = (id: string) => {
     navigate(GET_CAMPAIGN_DETAIL_PATH(id));
   };
 
-  const reloadCampaigns = useCallback(() => {
-    fetchCampaigns(
-      pagination.page,
-      pagination.size,
-      pagination.page === 0 ? undefined : pagination.nextPagesKey[pagination.page - 1]
-    );
-  }, [fetchCampaigns, pagination.page, pagination.size, pagination.nextPagesKey]);
+  const fetchCurrentPage = useCallback(() => {
+    fetchCampaigns(pagination.page, pagination.size);
+  }, [fetchCampaigns, pagination.page, pagination.size]);
 
   useEffect(() => {
-    fetchCampaigns(0, pagination.size);
+    fetchCurrentPage();
   }, []);
 
   return (
@@ -106,12 +98,12 @@ const Campaigns = () => {
 
       <ApiErrorWrapper
         apiId={CAMPAIGN_ACTIONS.GET_CAMPAIGNS}
-        reloadAction={reloadCampaigns}
+        reloadAction={fetchCurrentPage}
         customErrorComponent={
           <EmptyErrorState
             variant="error"
             title={t('list.empty-state.generic-error')}
-            action={{ label: t('list.empty-state.generic-error-cta'), onClick: reloadCampaigns }}
+            action={{ label: t('list.empty-state.generic-error-cta'), onClick: fetchCurrentPage }}
           />
         }
         mt={3}
