@@ -435,6 +435,61 @@ describe('CampaignDetail Page', () => {
     expect(result.container.querySelector('#page2')).not.toBeInTheDocument();
   });
 
+  it('filters delivered communications excluding viewed ones', async () => {
+    const deliveredCommunicationsListPath =
+      `/bff/v1/informal/campaigns/${campaignDetailMock.campaignId}/notifications/sent` +
+      `?startDate=${startParam}&endDate=${endParam}&viewed=false&delivered=true&size=10`;
+
+    mock
+      .onGet(`/bff/v1/notifications/informal/campaigns/${campaignDetailMock.campaignId}`)
+      .reply(200, campaignDetailMock);
+
+    mock.onGet(comunicationsListPath).reply(200, comunicationsList);
+
+    mock.onGet(deliveredCommunicationsListPath).reply(200, {
+      resultsPage: comunicationsList.resultsPage?.filter(
+        (communication) =>
+          communication.communicationOutcomes?.delivered &&
+          !communication.communicationOutcomes?.viewed
+      ),
+      moreResult: false,
+      nextPagesKey: [],
+    });
+
+    await act(async () => {
+      result = render(<CampaignDetail />, {
+        route: `/campaigns/${campaignDetailMock.campaignId}`,
+        path: '/campaigns/:id',
+      });
+    });
+
+    await waitFor(() => {
+      expect(result.getByTestId('campaignsList')).toBeInTheDocument();
+    });
+
+    fireEvent.mouseDown(
+      result.getByTestId('communicationOutcome').querySelector('[role="combobox"]')!
+    );
+
+    const deliveredOption = await result.findByRole('option', {
+      name: 'detail.communications.outcomes.delivered',
+    });
+
+    fireEvent.click(deliveredOption);
+
+    fireEvent.click(
+      result.getByRole('button', {
+        name: 'button.filtra',
+      })
+    );
+
+    await waitFor(() => {
+      expect(mock.history.get).toHaveLength(3);
+    });
+
+    expect(mock.history.get[2].url).toBe(deliveredCommunicationsListPath);
+  });
+
   it('shows communications filters errors only after submit and does not apply invalid filters', async () => {
     mock
       .onGet(`/bff/v1/notifications/informal/campaigns/${campaignDetailMock.campaignId}`)
