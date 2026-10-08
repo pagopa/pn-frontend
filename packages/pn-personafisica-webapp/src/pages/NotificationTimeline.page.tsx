@@ -113,13 +113,40 @@ const NotificationTimeline: React.FC = () => {
     }
   };
 
+  const handleDocumentDownloadError = useCallback(
+    (response: AppResponse) => {
+      const error = response.errors?.[0];
+
+      if (error?.code === ServerResponseErrorCode.PN_DELIVERYPUSH_FILE_GONE) {
+        dispatch(
+          appStateActions.addWarning({
+            title: '',
+            message: t('detail.timeline.warnings.document-unavailable', { ns: 'notifiche' }),
+          })
+        );
+
+        return false;
+      }
+
+      return true;
+    },
+    [dispatch, t]
+  );
+
+  useDismissToastOnError(
+    IS_NEW_TIMELINE_COPY_ENABLED
+      ? NOTIFICATION_ACTIONS.GET_RECEIVED_NOTIFICATION_DOCUMENT
+      : undefined,
+    handleDocumentDownloadError
+  );
+
   const legalFactDownloadHandler = (legalFact: LegalFactId) => {
     if (legalFact.category !== LegalFactType.NOTIFICATION_CANCELLED && isCancelledOrCancelling) {
       if (IS_NEW_TIMELINE_COPY_ENABLED) {
         dispatch(
           appStateActions.addWarning({
             title: '',
-            message: t('detail.document-unavailable', { ns: 'notifiche' }),
+            message: t('detail.timeline.warnings.document-canceled', { ns: 'notifiche' }),
           })
         );
       }

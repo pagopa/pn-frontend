@@ -589,8 +589,9 @@ describe('NotificationDetail Page', () => {
     const timelineBox = result.getByTestId('NotificationDetailTimeline');
     fireEvent.click(within(timelineBox).getByTestId('download-legalfact'));
 
-    const warning = await waitFor(() => result.getByTestId('snackBarContainer'));
-    expect(warning).toHaveTextContent('detail.document-unavailable');
+    await screen.findByRole('alert', {
+      name: 'detail.document-unavailable',
+    });
     expect(mock.history.get).toHaveLength(requestsBeforeClick);
 
     Configuration.setForTest<PfConfiguration>(originalConfiguration);
