@@ -42,6 +42,7 @@ describe('informalNotificationTimeline utility', () => {
         id: deliveredEvent.elementId,
         date: deliveredEvent.eventTimestamp,
         key: 'delivered.pec',
+        tag: 'DELIVERED',
       },
       {
         id: feedbackEvent.elementId,
@@ -73,7 +74,7 @@ describe('informalNotificationTimeline utility', () => {
     expect(getInformalTimelineEvents(sendStep, completed, '2026-09-21T13:59:18Z')).toEqual([]);
   });
 
-  it('uses the registered letter code for analog events and tags the IO delivery', () => {
+  it('uses the registered letter code for analog events and tags the delivery on every channel', () => {
     const analogFeedbackDetails: SendAnalogMessageFeedbackDetails = {
       recIndex: 0,
       sentAttemptMade: 0,
@@ -92,10 +93,18 @@ describe('informalNotificationTimeline utility', () => {
     };
 
     expect(
-      getInformalTimelineEvents(analogStep, status).map(({ key, values }) => ({ key, values }))
+      getInformalTimelineEvents(analogStep, status).map(({ key, values, tag }) => ({
+        key,
+        values,
+        tag,
+      }))
     ).toEqual([
-      { key: 'delivered.analog_registered', values: { code: 'RR-0123456' } },
-      { key: 'send_analog_message_feedback.ok.analog_registered', values: { code: 'RR-0123456' } },
+      { key: 'delivered.analog_registered', values: { code: 'RR-0123456' }, tag: 'DELIVERED' },
+      {
+        key: 'send_analog_message_feedback.ok.analog_registered',
+        values: { code: 'RR-0123456' },
+        tag: undefined,
+      },
     ]);
 
     const [ioDelivered, ioFeedback] = getInformalTimelineEvents(
@@ -106,7 +115,7 @@ describe('informalNotificationTimeline utility', () => {
     expect(ioFeedback.tag).toBeUndefined();
   });
 
-  it('maps the reading on IO with its tag and the reading from web after the filed row', () => {
+  it('tags the reading on IO and the reading from web after the filed row', () => {
     expect(
       getInformalTimelineEvents(
         { channel: BffNotificationChannelType.Io, events: [viewedEvent] },
@@ -121,7 +130,7 @@ describe('informalNotificationTimeline utility', () => {
       },
     ]);
 
-    // the reading from the web portal is in the SEND group, and has no tag
+    // the reading from the web portal is in the SEND group
     expect(
       getInformalTimelineEvents(
         {
@@ -133,7 +142,7 @@ describe('informalNotificationTimeline utility', () => {
       ).map(({ key, tag }) => ({ key, tag }))
     ).toEqual([
       { key: 'filed.send', tag: undefined },
-      { key: 'informal_notification_viewed.send', tag: undefined },
+      { key: 'informal_notification_viewed.send', tag: 'VIEWED' },
     ]);
   });
 
@@ -156,6 +165,7 @@ describe('informalNotificationTimeline utility', () => {
         id: deliveredEvent.elementId,
         date: deliveredEvent.eventTimestamp,
         key: 'delivered.email',
+        tag: 'DELIVERED',
       },
       {
         id: progressEvent.elementId,

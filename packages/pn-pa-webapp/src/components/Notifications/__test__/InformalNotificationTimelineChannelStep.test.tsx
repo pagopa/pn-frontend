@@ -43,7 +43,7 @@ describe('InformalNotificationTimelineChannelStep Component', () => {
     expect(getAllByTestId('dateItem')).toHaveLength(2);
   });
 
-  it('shows the viewed and delivered tags only on the IO channel', () => {
+  it('shows the viewed and delivered tags on every channel', () => {
     const { getByText, rerender, queryByText } = render(
       <InformalNotificationTimelineChannelStep
         status={status}
@@ -59,7 +59,8 @@ describe('InformalNotificationTimelineChannelStep Component', () => {
 
     rerender(<InformalNotificationTimelineChannelStep step={pecStep} status={status} />);
 
-    expect(queryByText('informal.detail.send-by-channel.status.delivered')).not.toBeInTheDocument();
+    expect(getByText('informal.detail.send-by-channel.status.delivered')).toBeInTheDocument();
+    expect(queryByText('informal.detail.send-by-channel.status.viewed')).not.toBeInTheDocument();
   });
 
   it('shows the raw category for the UNKNOWN channel', () => {

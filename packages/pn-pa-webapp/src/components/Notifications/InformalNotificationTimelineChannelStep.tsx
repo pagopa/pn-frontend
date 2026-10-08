@@ -10,7 +10,7 @@ import {
 } from '../../generated-client/informal-notifications';
 import {
   INFORMAL_CHANNEL_ICON,
-  IO_TAG_ICON,
+  EVENT_TAG_ICON,
   InformalTimelineEventView,
   getChannelLabelKey,
   getInformalTimelineEvents,
@@ -84,7 +84,7 @@ const InformalNotificationTimelineChannelStep: React.FC<Props> = ({ step, status
                 >
                   <Tag
                     variant="default"
-                    icon={IO_TAG_ICON[event.tag]}
+                    icon={EVENT_TAG_ICON[event.tag]}
                     value={t(`informal.detail.send-by-channel.status.${event.tag.toLowerCase()}`)}
                     slotProps={{
                       icon: { color: themeNext.colors.success[700] },
