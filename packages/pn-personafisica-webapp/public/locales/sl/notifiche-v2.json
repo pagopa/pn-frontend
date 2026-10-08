@@ -252,7 +252,7 @@
     "viewed-by-delegate-description": "Kot pooblaščenec je {{name}} dostopal do obvestila SEND. Lahko prenesete <0>potrdilo o uspešnem dostopu</0>.",
     "viewed-by-other-delegate-description": "Kot pooblaščenec je {{name}} dostopal do obvestila SEND osebe {{recipient}}. Lahko prenesete <0>potrdilo o uspešnem dostopu</0>.",
     "viewed-by-recipient-description": "Oseba {{recipient}} je dostopala do obvestila SEND. Lahko prenesete <0>potrdilo o uspešnem dostopu</0>.",
-    "viewed-description": "Dostopali ste do tega uradnega sporočila na platformi SEND. Lahko prenesete <0>potrdilo o uspešnem dostopu</0>.",
+    "viewed-description": "Dostopali ste do tega uradnega sporočila. Lahko prenesete <0>potrdilo o uspešnem dostopu</0>.",
     "viewed-description-multirecipient": "To obvestilo SEND je bilo poslano več prejemnikom, pri čemer je vsaj ena oseba med njimi dostopala do obvestila. Lahko prenesete <0>potrdilo o uspešnem dostopu</0>.",
     "viewed-multirecipient": "Prebrano obvestilo",
     "viewed-without-legal-fact-description-multirecipient": "To obvestilo SEND je bilo poslano več prejemnikom, pri čemer je vsaj ena oseba med njimi dostopala do obvestila."

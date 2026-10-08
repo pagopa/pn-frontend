@@ -252,7 +252,7 @@
     "viewed-by-delegate-description": "Als delegierte Person hat {{name}} auf die SEND Zustellung zugegriffen. Du kannst die <0>Zugriffsbescheinigung</0> herunterladen.",
     "viewed-by-other-delegate-description": "Als delegierte Person hat {{name}} auf die SEND Zustellung von {{recipient}} zugegriffen. Du kannst die <0>Zugriffsbescheinigung</0> herunterladen.",
     "viewed-by-recipient-description": "{{recipient}} hat auf die SEND Zustellung zugegriffen. Du kannst die <0>Zugriffsbescheinigung</0> herunterladen.",
-    "viewed-description": "Du hast auf SEND auf diese rechtsgültige Zustellung zugegriffen. Du kannst die <0>Zugriffsbescheinigung</0> herunterladen.",
+    "viewed-description": "Du hast auf diese rechtsgültige Zustellung zugegriffen. Du kannst die <0>Zugriffsbescheinigung</0> herunterladen.",
     "viewed-description-multirecipient": "Diese SEND Zustellung wurde an mehrere Empfänger gesendet, und mindestens eine Person von ihnen hat auf die Zustellung zugegriffen. Du kannst die <0>Zugriffsbescheinigung</0> herunterladen.",
     "viewed-multirecipient": "Zustellung gelesen",
     "viewed-without-legal-fact-description-multirecipient": "Diese SEND Zustellung wurde an mehrere Empfänger gesendet, und mindestens eine Person von ihnen hat auf die Zustellung zugegriffen."
