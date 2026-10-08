@@ -139,11 +139,11 @@ const CampaignDetail: React.FC = () => {
 
   const breadcrumb = (
     <MIBreadcrumbs
-      backButtonLabel={t('detail.breadcrumb.back')}
+      backButtonLabel={t('detail.breadcrumb-back')}
       backButtonAction={() => navigate(routes.CAMPAIGNS)}
     >
       <MIBreadcrumbItem
-        label={t('detail.breadcrumb.campaigns')}
+        label={t('detail.breadcrumb-root')}
         onClick={() => navigate(routes.CAMPAIGNS)}
         data-testid="breadcrumb-root-button"
       />

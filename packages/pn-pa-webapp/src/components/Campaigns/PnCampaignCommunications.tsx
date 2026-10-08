@@ -4,7 +4,8 @@ import { useNavigate } from 'react-router-dom';
 import * as yup from 'yup';
 
 import { ArrowForward } from '@mui/icons-material';
-import { Box } from '@mui/material';
+import FilterAltOutlinedIcon from '@mui/icons-material/FilterAltOutlined';
+import { Box, Typography } from '@mui/material';
 import {
   CustomPagination,
   EmptyErrorState,
@@ -12,6 +13,7 @@ import {
   InformalNotificationStatus,
   PaginationData,
   Row,
+  SmartActions,
   SmartBody,
   SmartBodyCell,
   SmartBodyRow,
@@ -23,6 +25,7 @@ import {
   calculatePages,
   dataRegex,
   formatIun,
+  useIsMobile,
 } from '@pagopa-pn/pn-commons';
 import { MIButton } from '@pagopa/mui-italia';
 
@@ -54,6 +57,7 @@ const PnCampaignCommunications = ({ campaignId, fetchCampaignCommunications }: P
   const { t } = useTranslation('campaigns');
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
+  const isMobile = useIsMobile();
 
   const communicationsPagination = useAppSelector(
     (state: RootState) => state.campaignState.communicationsPagination
@@ -152,6 +156,13 @@ const PnCampaignCommunications = ({ campaignId, fetchCampaignCommunications }: P
     row: Row<CampaignCommunicationRow>,
     columnId: keyof CampaignCommunicationRow
   ) => {
+    if (columnId === 'iun' && isMobile) {
+      return (
+        <Typography component="span" fontWeight={600}>
+          {row.iun ?? ''}
+        </Typography>
+      );
+    }
     if (columnId === 'notificationStatus') {
       return (
         <PnCommunicationStatusMIChip
@@ -163,21 +174,18 @@ const PnCampaignCommunications = ({ campaignId, fetchCampaignCommunications }: P
     if (columnId === 'communicationOutcomes') {
       return <PnCommunicationOutcomeTag outcomes={row.communicationOutcomes} />;
     }
-
-    if (columnId === 'action') {
-      return (
-        <MIButton
-          variant="text"
-          endIcon={<ArrowForward />}
-          onClick={() => navigate(routes.GET_DETTAGLIO_COMBO_PATH(campaignId, row.id))}
-        >
-          {t('button.open', { ns: 'common' })}
-        </MIButton>
-      );
-    }
-
     return String(row[columnId] ?? '');
   };
+
+  const renderActionButton = (row: Row<CampaignCommunicationRow>) => (
+    <MIButton
+      variant="text"
+      endIcon={<ArrowForward />}
+      onClick={() => navigate(routes.GET_DETTAGLIO_COMBO_PATH(campaignId, row.id))}
+    >
+      {t('button.open', { ns: 'common' })}
+    </MIButton>
+  );
 
   const campaignCommunications = useAppSelector(
     (state: RootState) => state.campaignState.campaignCommunications
@@ -286,6 +294,7 @@ const PnCampaignCommunications = ({ campaignId, fetchCampaignCommunications }: P
         <SmartFilter
           filterLabel={t('button.filtra', { ns: 'common' })}
           cancelLabel={t('button.annulla filtro', { ns: 'common' })}
+          mobileFilterIcon={<FilterAltOutlinedIcon fontSize="small" />}
           onSubmit={handleSubmitFilters}
           onClear={handleClearFilters}
           formIsValid
@@ -317,22 +326,28 @@ const PnCampaignCommunications = ({ campaignId, fetchCampaignCommunications }: P
         </SmartHeader>
 
         <SmartBody>
-          {data.map((row, index) => (
-            <SmartBodyRow key={row.id} index={index} testId="campaignCommunicationsBodyRow">
-              {communicationsColumns.map((column) => (
-                <SmartBodyCell
-                  key={column.id.toString()}
-                  columnId={column.id}
-                  mode={column.mode}
-                  tableProps={column.tableConfiguration}
-                  cardProps={column.cardConfiguration}
-                  isCardHeader={column.cardConfiguration?.isCardHeader}
-                >
-                  {renderCellContent(row, column.id)}
-                </SmartBodyCell>
-              ))}
-            </SmartBodyRow>
-          ))}
+          {data.map((row, index) => {
+            const actionButton = renderActionButton(row);
+
+            return (
+              <SmartBodyRow key={row.id} index={index} testId="campaignCommunicationsBodyRow">
+                {communicationsColumns.map((column) => (
+                  <SmartBodyCell
+                    key={column.id.toString()}
+                    columnId={column.id}
+                    mode={column.mode}
+                    tableProps={column.tableConfiguration}
+                    cardProps={column.cardConfiguration}
+                    isCardHeader={column.cardConfiguration?.isCardHeader}
+                    hideInCard={column.id === 'action'}
+                  >
+                    {column.id === 'action' ? actionButton : renderCellContent(row, column.id)}
+                  </SmartBodyCell>
+                ))}
+                <SmartActions>{actionButton}</SmartActions>
+              </SmartBodyRow>
+            );
+          })}
         </SmartBody>
       </SmartTable>
       {data.length > 0 && (
