@@ -57,7 +57,7 @@ export const INFORMAL_CHANNEL_ICON: Record<
   UNKNOWN: InfoOutlined,
 };
 
-export const IO_TAG_ICON: Record<InformalTimelineEventTag, ComponentType<SvgIconProps>> = {
+export const EVENT_TAG_ICON: Record<InformalTimelineEventTag, ComponentType<SvgIconProps>> = {
   DELIVERED: MarkEmailReadOutlined,
   VIEWED: DraftsOutlined,
 };
@@ -84,17 +84,6 @@ export const getInformalTimelineSteps = (
 
   return steps;
 };
-
-/**
- * On IO the delivery and the reading of the notification are highlighted with a tag.
- * @param step - Channel group
- * @param tag - Tag to show
- */
-const getIOTag = (
-  step: BffInformalNotificationTimelineGroup,
-  tag: InformalTimelineEventTag
-): InformalTimelineEventTag | undefined =>
-  step.channel === BffNotificationChannelType.Io ? tag : undefined;
 
 /**
  * Registered letters has the code, ordinary mail doesn't.
@@ -147,7 +136,7 @@ const getEventCopy = (
 
     case InformalTimelineElementCategoryV1.Delivered: {
       if (step.channel !== BffNotificationChannelType.Analog) {
-        return { key: `delivered.${channel}`, tag: getIOTag(step, BffChannelStatusV1.Delivered) };
+        return { key: `delivered.${channel}`, tag: BffChannelStatusV1.Delivered };
       }
 
       // the delivery code is only on the feedback event the delivery refers to
@@ -157,7 +146,7 @@ const getEventCopy = (
         feedback?.details as SendAnalogMessageFeedbackDetails | undefined
       );
 
-      return { key: `delivered.${variant}`, values };
+      return { key: `delivered.${variant}`, values, tag: BffChannelStatusV1.Delivered };
     }
 
     case InformalTimelineElementCategoryV1.SendDigitalMessageSkip:
@@ -166,7 +155,7 @@ const getEventCopy = (
     case InformalTimelineElementCategoryV1.InformalNotificationViewed:
       return {
         key: `informal_notification_viewed.${channel}`,
-        tag: getIOTag(step, BffChannelStatusV1.Viewed),
+        tag: BffChannelStatusV1.Viewed,
       };
 
     default:
