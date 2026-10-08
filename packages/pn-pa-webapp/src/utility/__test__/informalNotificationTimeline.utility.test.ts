@@ -137,6 +137,34 @@ describe('informalNotificationTimeline utility', () => {
     ]);
   });
 
+  it('maps the progress event to the successful sending only for the email', () => {
+    const progressEvent: BffInformalNotificationTimelineItem = {
+      elementId:
+        'SEND_DIGITAL_MESSAGE_PROGRESS.IUN_YWNY-YHRA-KTYL-202609-P-A.RECINDEX_0.IDX_2.CHANNEL_EMAIL',
+      eventTimestamp: '2026-09-21T14:01:00Z',
+      category: InformalTimelineElementCategoryV1.SendDigitalMessageProgress,
+      details: { recIndex: 0, channel: 'EMAIL' },
+    };
+
+    expect(
+      getInformalTimelineEvents(
+        { channel: BffNotificationChannelType.Email, events: [deliveredEvent, progressEvent] },
+        status
+      )
+    ).toEqual([
+      {
+        id: deliveredEvent.elementId,
+        date: deliveredEvent.eventTimestamp,
+        key: 'delivered.email',
+      },
+      {
+        id: progressEvent.elementId,
+        date: progressEvent.eventTimestamp,
+        key: 'send_digital_message_feedback.ok.email',
+      },
+    ]);
+  });
+
   it('keeps the raw category for the UNKNOWN channel and discards the events without a copy', () => {
     expect(
       getInformalTimelineEvents({ ...pecStep, channel: BffNotificationChannelType.Unknown }, status)

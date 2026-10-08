@@ -7,6 +7,12 @@ import { getNotificationStatusInfos } from '../../../utility/notification.utilit
 import { getRecipientPerStep } from '../../../utility/notificationTimeline.utility';
 import { getTimelineItemPresentation } from './notificationTimelineStatus.config';
 
+export const PERFECTION_ANCHORS = {
+  PEC: '#pec',
+  SEND: '#send',
+  ANALOG: '#raccomandata',
+} as const;
+
 export type TimelineItem = {
   status: NotificationTimelineStatusHistory;
   label: string;

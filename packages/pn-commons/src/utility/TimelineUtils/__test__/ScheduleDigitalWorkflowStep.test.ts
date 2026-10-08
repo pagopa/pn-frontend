@@ -35,7 +35,7 @@ describe('ScheduleDigitalWorkflowStep', () => {
     });
   });
 
-  it('test getTimelineStepInfo - passes the PEC address when the details carry it', () => {
+  it('test getTimelineStepInfo - does not pass the PEC address', () => {
     const scheduleDigitalWorkflowStep = new ScheduleDigitalWorkflowStep();
     const payloadWithAddress = {
       ...payload,
@@ -47,10 +47,13 @@ describe('ScheduleDigitalWorkflowStep', () => {
     expect(scheduleDigitalWorkflowStep.getTimelineStepInfo(payloadWithAddress)).toStrictEqual({
       label: `notifiche - detail.timeline.schedule-digital-workflow`,
       description: `notifiche - detail.timeline.schedule-digital-workflow-description - ${JSON.stringify(
-        {
-          ...scheduleDigitalWorkflowStep.nameAndTaxId(payloadWithAddress),
-          address: 'destinatario@pec.it',
-        }
+        scheduleDigitalWorkflowStep.nameAndTaxId(payloadWithAddress)
+      )}`,
+    });
+    expect(scheduleDigitalWorkflowStep.getTimelineStepInfo(payload)).toStrictEqual({
+      label: `notifiche - detail.timeline.schedule-digital-workflow`,
+      description: `notifiche - detail.timeline.schedule-digital-workflow-description - ${JSON.stringify(
+        scheduleDigitalWorkflowStep.nameAndTaxId(payload)
       )}`,
     });
   });

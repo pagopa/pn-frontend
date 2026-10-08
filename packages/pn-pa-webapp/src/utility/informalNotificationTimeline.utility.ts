@@ -129,6 +129,12 @@ const getEventCopy = (
       return { key: `send_digital_message_feedback.${responseStatus.toLowerCase()}.${channel}` };
     }
 
+    // the email has no OK feedback: its successful sending is notified by the progress event
+    case InformalTimelineElementCategoryV1.SendDigitalMessageProgress:
+      return step.channel === BffNotificationChannelType.Email
+        ? { key: `send_digital_message_feedback.ok.${channel}` }
+        : null;
+
     case InformalTimelineElementCategoryV1.SendAnalogMessageFeedback: {
       const details = event.details as SendAnalogMessageFeedbackDetails;
       const { variant, values } = getAnalogVariant(details);
