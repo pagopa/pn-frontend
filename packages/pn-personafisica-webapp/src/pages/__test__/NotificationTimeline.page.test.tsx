@@ -293,6 +293,7 @@ describe('NotificationTimeline Page - IS_NEW_TIMELINE_ENABLED enabled', () => {
       })
     );
     expect(warning).toHaveTextContent('detail.timeline.warnings.document-canceled');
+    expect(result.queryByTestId('snackBarContainer')).not.toBeInTheDocument();
     expect(mock.history.get).toHaveLength(1);
 
     fireEvent.click(cancelledButton);
@@ -351,6 +352,7 @@ describe('NotificationTimeline Page - IS_NEW_TIMELINE_ENABLED enabled', () => {
     );
 
     expect(warning).toHaveTextContent('detail.timeline.warnings.document-unavailable');
+    expect(result.queryByTestId('snackBarContainer')).not.toBeInTheDocument();
     expect(warning).not.toHaveTextContent('PN_DELIVERYPUSH_FILE_GONE');
   });
 

@@ -92,8 +92,7 @@ const AppMessage = () => {
   return (
     <>
       {currentMessage &&
-        (currentMessage.type === AppResponseOutcome.WARNING &&
-        currentMessage.message.snackbarComponent === 'MISnackbar' ? (
+        (currentMessage.type === AppResponseOutcome.WARNING ? (
           <MISnackbar
             key={currentMessage.message.id}
             open

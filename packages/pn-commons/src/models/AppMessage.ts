@@ -1,5 +1,3 @@
-export type SnackbarComponent = 'MISnackbar';
-
 export type IAppMessage = {
   /** The identifier used to recognize the error: it cannot be possible to have the same error id at the same time */
   id: string;
@@ -27,5 +25,4 @@ export type IAppMessage = {
    *  or else an ApiError component.
    */
   alreadyShown: boolean;
-  snackbarComponent?: SnackbarComponent;
 };

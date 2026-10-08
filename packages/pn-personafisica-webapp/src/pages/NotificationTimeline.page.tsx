@@ -122,7 +122,6 @@ const NotificationTimeline: React.FC = () => {
           appStateActions.addWarning({
             title: '',
             message: t('detail.timeline.warnings.document-unavailable', { ns: 'notifiche' }),
-            snackbarComponent: 'MISnackbar',
           })
         );
 
@@ -148,7 +147,6 @@ const NotificationTimeline: React.FC = () => {
           appStateActions.addWarning({
             title: '',
             message: t('detail.timeline.warnings.document-canceled', { ns: 'notifiche' }),
-            snackbarComponent: 'MISnackbar',
           })
         );
       }
