@@ -4,6 +4,7 @@ import { vi } from 'vitest';
 import {
   AppMessage,
   AppResponseMessage,
+  AppResponsePublisher,
   Configuration,
   NotificationDetail as NotificationDetailModel,
   ResponseEventDispatcher,
@@ -16,6 +17,7 @@ import { NotificationTimelineResponse } from '../../__mocks__/NotificationTimeli
 import { RenderResult, act, fireEvent, render, waitFor } from '../../__test__/test-utils';
 import { apiClient } from '../../api/apiClients';
 import * as routes from '../../navigation/routes.const';
+import { NOTIFICATION_ACTIONS } from '../../redux/notification/actions';
 import { PfConfiguration } from '../../services/configuration.service';
 import NotificationTimeline from '../NotificationTimeline.page';
 
@@ -308,28 +310,13 @@ describe('NotificationTimeline Page - IS_NEW_TIMELINE_ENABLED enabled', () => {
   it('unavailable legal fact with new copy - shows a warning', async () => {
     mockIsNewTimelineCopyEnabledGetter.mockReturnValue(true);
 
-    const legalFactKey = 'safestorage://PN_LEGAL_FACTS-unavailable-test.pdf';
-    const documentId = 'PN_LEGAL_FACTS-unavailable-test.pdf';
-    const documentUrl = `/bff/v1/notifications/received/${timelineIun}/documents/LEGAL_FACT?documentId=${documentId}`;
-
     mock
       .onGet(`/bff/v1/notifications/received/${timelineIun}/timeline`)
-      .reply(200, timelineResponseWithHiddenLegalFact(legalFactKey, 'SENDER_ACK'));
-
-    mock.onGet(documentUrl).reply(500, {
-      traceId: 'traceId',
-      errors: [
-        {
-          code: 'PN_DELIVERYPUSH_FILE_GONE',
-          message: 'Legal fact no longer available',
-        },
-      ],
-    });
+      .reply(200, NotificationTimelineResponse);
 
     await act(async () => {
       result = render(
         <>
-          <ResponseEventDispatcher />
           <AppMessage />
           <NotificationTimeline />
         </>,
@@ -340,17 +327,111 @@ describe('NotificationTimeline Page - IS_NEW_TIMELINE_ENABLED enabled', () => {
       );
     });
 
-    const legalFactButton = result.getByTestId('download-legalfact');
-    fireEvent.click(legalFactButton);
-
-    await waitFor(() => {
-      expect(mock.history.get).toHaveLength(2);
-      expect(mock.history.get[1].url).toBe(documentUrl);
+    act(() => {
+      AppResponsePublisher.error.publish(NOTIFICATION_ACTIONS.GET_RECEIVED_NOTIFICATION_DOCUMENT, {
+        action: NOTIFICATION_ACTIONS.GET_RECEIVED_NOTIFICATION_DOCUMENT,
+        status: 500,
+        errors: [
+          {
+            code: 'PN_DELIVERYPUSH_FILE_GONE',
+            showTechnicalData: true,
+            message: {
+              title: '',
+              content: '',
+            },
+          },
+        ],
+      });
     });
 
-    const warning = await result.findByText('detail.timeline.warnings.document-unavailable');
+    const warning = await waitFor(() =>
+      result.getByRole('alert', {
+        name: 'detail.timeline.warnings.document-unavailable',
+      })
+    );
 
-    expect(warning).toBeInTheDocument();
+    expect(warning).toHaveTextContent('detail.timeline.warnings.document-unavailable');
+    expect(warning).not.toHaveTextContent('PN_DELIVERYPUSH_FILE_GONE');
+  });
+
+  it('does not show the document unavailable warning for an unrelated error', async () => {
+    mockIsNewTimelineCopyEnabledGetter.mockReturnValue(true);
+
+    mock
+      .onGet(`/bff/v1/notifications/received/${timelineIun}/timeline`)
+      .reply(200, NotificationTimelineResponse);
+
+    await act(async () => {
+      result = render(
+        <>
+          <AppMessage />
+          <NotificationTimeline />
+        </>,
+        {
+          route: routes.GET_DETTAGLIO_NOTIFICA_TIMELINE_PATH(timelineIun),
+          path: routes.DETTAGLIO_NOTIFICA_TIMELINE,
+        }
+      );
+    });
+
+    act(() => {
+      AppResponsePublisher.error.publish(NOTIFICATION_ACTIONS.GET_RECEIVED_NOTIFICATION_DOCUMENT, {
+        action: NOTIFICATION_ACTIONS.GET_RECEIVED_NOTIFICATION_DOCUMENT,
+        status: 500,
+        errors: [
+          {
+            code: 'OTHER_DOCUMENT_ERROR',
+            showTechnicalData: true,
+            message: { title: '', content: '' },
+          },
+        ],
+      });
+    });
+
+    expect(
+      result.queryByText('detail.timeline.warnings.document-unavailable')
+    ).not.toBeInTheDocument();
+
+    expect(result.queryByRole('alert')).not.toBeInTheDocument();
+  });
+
+  it('does not show the document unavailable warning when new copy is disabled', async () => {
+    mockIsNewTimelineCopyEnabledGetter.mockReturnValue(false);
+
+    mock
+      .onGet(`/bff/v1/notifications/received/${timelineIun}/timeline`)
+      .reply(200, NotificationTimelineResponse);
+
+    await act(async () => {
+      result = render(
+        <>
+          <AppMessage />
+          <NotificationTimeline />
+        </>,
+        {
+          route: routes.GET_DETTAGLIO_NOTIFICA_TIMELINE_PATH(timelineIun),
+          path: routes.DETTAGLIO_NOTIFICA_TIMELINE,
+        }
+      );
+    });
+
+    act(() => {
+      AppResponsePublisher.error.publish(NOTIFICATION_ACTIONS.GET_RECEIVED_NOTIFICATION_DOCUMENT, {
+        action: NOTIFICATION_ACTIONS.GET_RECEIVED_NOTIFICATION_DOCUMENT,
+        status: 500,
+        errors: [
+          {
+            code: 'PN_DELIVERYPUSH_FILE_GONE',
+            showTechnicalData: true,
+            message: { title: '', content: '' },
+          },
+        ],
+      });
+    });
+
+    expect(
+      result.queryByText('detail.timeline.warnings.document-unavailable')
+    ).not.toBeInTheDocument();
   });
 
   it('cancelled notification without new copy - disables the legal facts other than the cancellation', async () => {

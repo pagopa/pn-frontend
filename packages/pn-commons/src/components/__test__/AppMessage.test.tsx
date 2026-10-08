@@ -186,4 +186,33 @@ describe('AppMessage Component', () => {
 
     expect(testStore.getState().appState.messages.warning).toStrictEqual([]);
   });
+
+  it('renders MISnackbar for warnings explicitly configured to use it', () => {
+    const miWarning: IAppMessage = {
+      ...baseMessage,
+      id: 'mi-warning',
+      title: '',
+      message: 'Dedicated warning',
+      snackbarComponent: 'MISnackbar',
+    };
+
+    const { getByRole, queryByTestId } = render(<AppMessage />, {
+      preloadedState: {
+        appState: {
+          messages: {
+            errors: [],
+            success: [],
+            info: [],
+            warning: [miWarning],
+          },
+        },
+      },
+    });
+
+    expect(getByRole('alert', { name: 'Dedicated warning' })).toHaveTextContent(
+      'Dedicated warning'
+    );
+
+    expect(queryByTestId('snackBarContainer')).not.toBeInTheDocument();
+  });
 });
