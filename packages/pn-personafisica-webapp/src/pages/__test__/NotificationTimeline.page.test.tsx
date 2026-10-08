@@ -285,8 +285,12 @@ describe('NotificationTimeline Page - IS_NEW_TIMELINE_ENABLED enabled', () => {
 
     fireEvent.click(senderAckButton);
 
-    const warning = await waitFor(() => result.getByTestId('snackBarContainer'));
-    expect(warning).toHaveTextContent('detail.document-unavailable');
+    const warning = await waitFor(() =>
+      result.getByRole('alert', {
+        name: 'detail.timeline.warnings.document-canceled',
+      })
+    );
+    expect(warning).toHaveTextContent('detail.timeline.warnings.document-canceled');
     expect(mock.history.get).toHaveLength(1);
 
     fireEvent.click(cancelledButton);
@@ -299,6 +303,54 @@ describe('NotificationTimeline Page - IS_NEW_TIMELINE_ENABLED enabled', () => {
     await waitFor(() => {
       expect(globalThis.location.href).toBe('https://mocked-cancelled-url.com');
     });
+  });
+
+  it('unavailable legal fact with new copy - shows a warning', async () => {
+    mockIsNewTimelineCopyEnabledGetter.mockReturnValue(true);
+
+    const legalFactKey = 'safestorage://PN_LEGAL_FACTS-unavailable-test.pdf';
+    const documentId = 'PN_LEGAL_FACTS-unavailable-test.pdf';
+    const documentUrl = `/bff/v1/notifications/received/${timelineIun}/documents/LEGAL_FACT?documentId=${documentId}`;
+
+    mock
+      .onGet(`/bff/v1/notifications/received/${timelineIun}/timeline`)
+      .reply(200, timelineResponseWithHiddenLegalFact(legalFactKey, 'SENDER_ACK'));
+
+    mock.onGet(documentUrl).reply(500, {
+      traceId: 'traceId',
+      errors: [
+        {
+          code: 'PN_DELIVERYPUSH_FILE_GONE',
+          message: 'Legal fact no longer available',
+        },
+      ],
+    });
+
+    await act(async () => {
+      result = render(
+        <>
+          <ResponseEventDispatcher />
+          <AppMessage />
+          <NotificationTimeline />
+        </>,
+        {
+          route: routes.GET_DETTAGLIO_NOTIFICA_TIMELINE_PATH(timelineIun),
+          path: routes.DETTAGLIO_NOTIFICA_TIMELINE,
+        }
+      );
+    });
+
+    const legalFactButton = result.getByTestId('download-legalfact');
+    fireEvent.click(legalFactButton);
+
+    await waitFor(() => {
+      expect(mock.history.get).toHaveLength(2);
+      expect(mock.history.get[1].url).toBe(documentUrl);
+    });
+
+    const warning = await result.findByText('detail.timeline.warnings.document-unavailable');
+
+    expect(warning).toBeInTheDocument();
   });
 
   it('cancelled notification without new copy - disables the legal facts other than the cancellation', async () => {

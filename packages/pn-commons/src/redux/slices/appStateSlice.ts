@@ -164,6 +164,7 @@ export const appStateSlice = createSlice({
         title: string;
         message: string;
         status?: number;
+        snackbarComponent?: NonNullable<IAppMessage['snackbarComponent']>;
       }>
     ) {
       const message = createAppMessage({
@@ -171,6 +172,7 @@ export const appStateSlice = createSlice({
         message: action.payload.message,
         showTechnicalData: false,
         status: action.payload.status,
+        snackbarComponent: action.payload.snackbarComponent,
       });
       state.messages.warning.push(message);
     },

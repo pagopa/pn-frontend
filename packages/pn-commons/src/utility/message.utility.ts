@@ -5,7 +5,14 @@ import { IAppMessage } from '../models/AppMessage';
 
 export type CreateAppMessageParams = Pick<
   IAppMessage,
-  'title' | 'message' | 'showTechnicalData' | 'status' | 'action' | 'traceId' | 'errorCode'
+  | 'title'
+  | 'message'
+  | 'showTechnicalData'
+  | 'status'
+  | 'action'
+  | 'traceId'
+  | 'errorCode'
+  | 'snackbarComponent'
 >;
 
 export const createAppMessage = ({
@@ -16,6 +23,7 @@ export const createAppMessage = ({
   action,
   traceId,
   errorCode,
+  snackbarComponent,
 }: CreateAppMessageParams): IAppMessage => {
   const e: IAppMessage = {
     id: uniqueId(),
@@ -29,6 +37,7 @@ export const createAppMessage = ({
     status,
     alreadyShown: false,
     action,
+    ...(snackbarComponent && { snackbarComponent }),
   };
   return e;
 };
