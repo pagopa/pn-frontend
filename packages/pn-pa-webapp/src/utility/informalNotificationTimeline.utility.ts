@@ -107,6 +107,13 @@ const getAnalogVariant = (
     ? { variant: 'analog_registered', values: { code: details.registeredLetterCode || '' } }
     : { variant: 'analog_ordinary' };
 
+const SENDER_NOT_ALLOWED_CODE = 'SENDER_NOT_ALLOWED';
+
+const PROGRESS_SENT_CHANNELS: Array<BffNotificationChannelType> = [
+  BffNotificationChannelType.Email,
+  BffNotificationChannelType.Io,
+];
+
 const getEventCopy = (
   event: BffInformalNotificationTimelineItem,
   step: BffInformalNotificationTimelineGroup
@@ -124,14 +131,18 @@ const getEventCopy = (
 
   switch (event.category) {
     case InformalTimelineElementCategoryV1.SendDigitalMessageFeedback: {
-      const { responseStatus } = event.details as SendDigitalMessageFeedbackDetails;
+      const { responseStatus, deliveryDetail } = event.details as SendDigitalMessageFeedbackDetails;
+
+      if (deliveryDetail?.code === SENDER_NOT_ALLOWED_CODE) {
+        return { key: `send_digital_message_skip.${channel}` };
+      }
 
       return { key: `send_digital_message_feedback.${responseStatus.toLowerCase()}.${channel}` };
     }
 
-    // the email has no OK feedback: its successful sending is notified by the progress event
+    // email and IO have no OK feedback: their successful sending is notified by the progress event
     case InformalTimelineElementCategoryV1.SendDigitalMessageProgress:
-      return step.channel === BffNotificationChannelType.Email
+      return PROGRESS_SENT_CHANNELS.includes(step.channel)
         ? { key: `send_digital_message_feedback.ok.${channel}` }
         : null;
 
