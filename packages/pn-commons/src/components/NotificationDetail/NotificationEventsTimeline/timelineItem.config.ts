@@ -29,7 +29,7 @@ export const getTimelineItems = (
   legacyStatusHistory: Array<NotificationTimelineLegacyStatusHistory>,
   recipients: Array<NotificationDetailRecipient>,
   isSenderTimeline?: boolean,
-  delegateView?: { mandateId?: string; delegatorName?: string }
+  delegateView?: { mandateId?: string; delegatorName?: string; taxId?: string }
 ): Array<TimelineItem> => {
   const isMultiRecipient = recipients.length > 1;
 
@@ -41,6 +41,7 @@ export const getTimelineItems = (
       isParty: isSenderTimeline,
       mandateId: delegateView?.mandateId,
       delegatorName: delegateView?.delegatorName,
+      userTaxId: delegateView?.taxId,
     });
 
     return {

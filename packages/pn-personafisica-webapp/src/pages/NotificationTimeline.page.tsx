@@ -311,6 +311,7 @@ const NotificationTimeline: React.FC = () => {
                   perfectionLink={NOTIFICATION_PERFECTION_LINK}
                   mandateId={mandateId}
                   delegatorName={delegatorName}
+                  userTaxId={currentUser.fiscal_number}
                 />
               ) : (
                 <MIPaper sx={{ mt: 3 }}>
