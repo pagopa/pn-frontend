@@ -146,7 +146,7 @@ describe('informalNotificationTimeline utility', () => {
     ]);
   });
 
-  it('maps the progress event to the successful sending only for the email', () => {
+  it('maps the progress event to the successful sending only for email and IO', () => {
     const progressEvent: BffInformalNotificationTimelineItem = {
       elementId:
         'SEND_DIGITAL_MESSAGE_PROGRESS.IUN_YWNY-YHRA-KTYL-202609-P-A.RECINDEX_0.IDX_2.CHANNEL_EMAIL',
@@ -171,6 +171,45 @@ describe('informalNotificationTimeline utility', () => {
         id: progressEvent.elementId,
         date: progressEvent.eventTimestamp,
         key: 'send_digital_message_feedback.ok.email',
+      },
+    ]);
+
+    const [ioDelivered, ioProgress] = getInformalTimelineEvents(
+      { channel: BffNotificationChannelType.Io, events: [deliveredEvent, progressEvent] },
+      status
+    );
+    expect(ioDelivered).toMatchObject({ key: 'delivered.io', tag: 'DELIVERED' });
+    expect(ioProgress).toEqual({
+      id: progressEvent.elementId,
+      date: progressEvent.eventTimestamp,
+      key: 'send_digital_message_feedback.ok.io',
+    });
+  });
+
+  it('maps the IO feedback with the SENDER_NOT_ALLOWED code to the unavailable channel', () => {
+    const ioFeedbackEvent: BffInformalNotificationTimelineItem = {
+      elementId:
+        'SEND_DIGITAL_MESSAGE_FEEDBACK.IUN_YWNY-YHRA-KTYL-202609-P-A.RECINDEX_0.IDX_1.CHANNEL_IO',
+      eventTimestamp: '2026-09-21T14:01:00Z',
+      category: InformalTimelineElementCategoryV1.SendDigitalMessageFeedback,
+      details: {
+        recIndex: 0,
+        channel: 'IO',
+        responseStatus: ResponseStatus.Ko,
+        deliveryDetail: { code: 'SENDER_NOT_ALLOWED' },
+      },
+    };
+
+    expect(
+      getInformalTimelineEvents(
+        { channel: BffNotificationChannelType.Io, events: [ioFeedbackEvent] },
+        status
+      )
+    ).toEqual([
+      {
+        id: ioFeedbackEvent.elementId,
+        date: ioFeedbackEvent.eventTimestamp,
+        key: 'send_digital_message_skip.io',
       },
     ]);
   });
