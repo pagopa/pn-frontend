@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.27.0-RC.4](https://github.com/pagopa/pn-frontend/compare/v2.27.0-RC.3...v2.27.0-RC.4) (2026-10-08)
+
+### Bug Fixes
+
+* **PN-21722:** campaign detail mobile layout ([#2127](https://github.com/pagopa/pn-frontend/issues/2127)) ([225884e](https://github.com/pagopa/pn-frontend/commit/225884e7137555285a460829f2ca4103c21fe93e))
+* **PN-21734:** correct viewed outcome filter ([#2124](https://github.com/pagopa/pn-frontend/issues/2124)) ([14885ac](https://github.com/pagopa/pn-frontend/commit/14885acb959a7069addbbcdd4813887cbde259d5))
+* **PN-21787:** show the successful email sending from the progress event in the informal notification timeline ([#2121](https://github.com/pagopa/pn-frontend/issues/2121)) ([ff736a4](https://github.com/pagopa/pn-frontend/commit/ff736a4d7001936a8215b7e96226f357433aea35))
+* **PN-21835:** show the successful IO sending from the progress event in the informal notification timeline ([#2125](https://github.com/pagopa/pn-frontend/issues/2125)) ([d3114c6](https://github.com/pagopa/pn-frontend/commit/d3114c6e0782dd387405eb2c3410c4ec7bab381d))
+* **PN-21836:** set viewed and read tag for all channels in informal notification timeline ([#2126](https://github.com/pagopa/pn-frontend/issues/2126)) ([3602aa0](https://github.com/pagopa/pn-frontend/commit/3602aa0d36c0212517f1acdea458e135c3d60ca6))
+
+
 # [2.27.0-RC.3](https://github.com/pagopa/pn-frontend/compare/v2.27.0-RC.2...v2.27.0-RC.3) (2026-10-07)
 
 ### Bug Fixes

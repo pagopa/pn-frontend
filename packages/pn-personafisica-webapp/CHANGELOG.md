@@ -3,6 +3,16 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.27.0-RC.4](https://github.com/pagopa/pn-frontend/compare/v2.27.0-RC.3...v2.27.0-RC.4) (2026-10-08)
+
+### Bug Fixes
+
+* **PN-21695:** align perfection link clickable area ([#2119](https://github.com/pagopa/pn-frontend/issues/2119)) ([ac36052](https://github.com/pagopa/pn-frontend/commit/ac360528999598501d29aefd0267eeca47e8a0aa))
+* **PN-21697:** remove PEC address from SCHEDULE_DIGITAL_WORKFLOW events ([#2122](https://github.com/pagopa/pn-frontend/issues/2122)) ([44ae8c1](https://github.com/pagopa/pn-frontend/commit/44ae8c191067054e5a3dbf2f2800cf98890c6d69))
+* **PN-21729:** show custom SnackBar for unavailable legal fact ([#2120](https://github.com/pagopa/pn-frontend/issues/2120)) ([afdf5d4](https://github.com/pagopa/pn-frontend/commit/afdf5d4f6736b7a01ad5ed1d736c810152356b5e))
+* **PN-21844:** removed SEND from viewed description ([#2128](https://github.com/pagopa/pn-frontend/issues/2128)) ([58b55bb](https://github.com/pagopa/pn-frontend/commit/58b55bb228239fad8e32d30f453ecb40417137bf))
+
+
 # [2.27.0-RC.2](https://github.com/pagopa/pn-frontend/compare/v2.27.0-RC.1...v2.27.0-RC.2) (2026-10-05)
 
 ### Bug Fixes

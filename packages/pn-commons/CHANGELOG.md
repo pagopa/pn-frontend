@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.27.0-RC.4](https://github.com/pagopa/pn-frontend/compare/v2.27.0-RC.3...v2.27.0-RC.4) (2026-10-08)
+
+### Bug Fixes
+
+* **PN-21697:** remove PEC address from SCHEDULE_DIGITAL_WORKFLOW events ([#2122](https://github.com/pagopa/pn-frontend/issues/2122)) ([44ae8c1](https://github.com/pagopa/pn-frontend/commit/44ae8c191067054e5a3dbf2f2800cf98890c6d69))
+* **PN-21713:** add anchors to perfection links ([#2117](https://github.com/pagopa/pn-frontend/issues/2117)) ([0cb1a22](https://github.com/pagopa/pn-frontend/commit/0cb1a224df233a30c6dabee4db4a0e7f0f9a5f40))
+* **PN-21722:** campaign detail mobile layout ([#2127](https://github.com/pagopa/pn-frontend/issues/2127)) ([225884e](https://github.com/pagopa/pn-frontend/commit/225884e7137555285a460829f2ca4103c21fe93e))
+* **PN-21729:** show custom SnackBar for unavailable legal fact ([#2120](https://github.com/pagopa/pn-frontend/issues/2120)) ([afdf5d4](https://github.com/pagopa/pn-frontend/commit/afdf5d4f6736b7a01ad5ed1d736c810152356b5e))
+* **PN-21836:** set viewed and read tag for all channels in informal notification timeline ([#2126](https://github.com/pagopa/pn-frontend/issues/2126)) ([3602aa0](https://github.com/pagopa/pn-frontend/commit/3602aa0d36c0212517f1acdea458e135c3d60ca6))
+
+
 # [2.27.0-RC.3](https://github.com/pagopa/pn-frontend/compare/v2.27.0-RC.2...v2.27.0-RC.3) (2026-10-07)
 
 ### Bug Fixes
