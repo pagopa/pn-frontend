@@ -176,6 +176,34 @@ describe('informalNotificationTimeline utility', () => {
     });
   });
 
+  it('maps the IO feedback with the SENDER_NOT_ALLOWED code to the unavailable channel', () => {
+    const ioFeedbackEvent: BffInformalNotificationTimelineItem = {
+      elementId:
+        'SEND_DIGITAL_MESSAGE_FEEDBACK.IUN_YWNY-YHRA-KTYL-202609-P-A.RECINDEX_0.IDX_1.CHANNEL_IO',
+      eventTimestamp: '2026-09-21T14:01:00Z',
+      category: InformalTimelineElementCategoryV1.SendDigitalMessageFeedback,
+      details: {
+        recIndex: 0,
+        channel: 'IO',
+        responseStatus: ResponseStatus.Ko,
+        deliveryDetail: { code: 'SENDER_NOT_ALLOWED' },
+      },
+    };
+
+    expect(
+      getInformalTimelineEvents(
+        { channel: BffNotificationChannelType.Io, events: [ioFeedbackEvent] },
+        status
+      )
+    ).toEqual([
+      {
+        id: ioFeedbackEvent.elementId,
+        date: ioFeedbackEvent.eventTimestamp,
+        key: 'send_digital_message_skip.io',
+      },
+    ]);
+  });
+
   it('keeps the raw category for the UNKNOWN channel and discards the events without a copy', () => {
     expect(
       getInformalTimelineEvents({ ...pecStep, channel: BffNotificationChannelType.Unknown }, status)
