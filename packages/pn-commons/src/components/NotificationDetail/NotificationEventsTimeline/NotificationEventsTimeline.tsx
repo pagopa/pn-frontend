@@ -61,7 +61,7 @@ const getStatusPerfectionLink = (
       !isTimelineGroupStep(step) &&
       step.event.category === TimelineCategory.DIGITAL_SUCCESS_WORKFLOW
   );
-  if (!digitalSuccessWorkflow) {
+  if (!digitalSuccessWorkflow || isTimelineGroupStep(digitalSuccessWorkflow)) {
     return perfectionLink;
   }
 
