@@ -42,6 +42,7 @@ describe('informalNotificationTimeline utility', () => {
         id: deliveredEvent.elementId,
         date: deliveredEvent.eventTimestamp,
         key: 'delivered.pec',
+        tag: 'DELIVERED',
       },
       {
         id: feedbackEvent.elementId,
@@ -73,7 +74,7 @@ describe('informalNotificationTimeline utility', () => {
     expect(getInformalTimelineEvents(sendStep, completed, '2026-09-21T13:59:18Z')).toEqual([]);
   });
 
-  it('uses the registered letter code for analog events and tags the IO delivery', () => {
+  it('uses the registered letter code for analog events and tags the delivery on every channel', () => {
     const analogFeedbackDetails: SendAnalogMessageFeedbackDetails = {
       recIndex: 0,
       sentAttemptMade: 0,
@@ -92,10 +93,18 @@ describe('informalNotificationTimeline utility', () => {
     };
 
     expect(
-      getInformalTimelineEvents(analogStep, status).map(({ key, values }) => ({ key, values }))
+      getInformalTimelineEvents(analogStep, status).map(({ key, values, tag }) => ({
+        key,
+        values,
+        tag,
+      }))
     ).toEqual([
-      { key: 'delivered.analog_registered', values: { code: 'RR-0123456' } },
-      { key: 'send_analog_message_feedback.ok.analog_registered', values: { code: 'RR-0123456' } },
+      { key: 'delivered.analog_registered', values: { code: 'RR-0123456' }, tag: 'DELIVERED' },
+      {
+        key: 'send_analog_message_feedback.ok.analog_registered',
+        values: { code: 'RR-0123456' },
+        tag: undefined,
+      },
     ]);
 
     const [ioDelivered, ioFeedback] = getInformalTimelineEvents(
@@ -106,7 +115,7 @@ describe('informalNotificationTimeline utility', () => {
     expect(ioFeedback.tag).toBeUndefined();
   });
 
-  it('maps the reading on IO with its tag and the reading from web after the filed row', () => {
+  it('tags the reading on IO and the reading from web after the filed row', () => {
     expect(
       getInformalTimelineEvents(
         { channel: BffNotificationChannelType.Io, events: [viewedEvent] },
@@ -121,7 +130,7 @@ describe('informalNotificationTimeline utility', () => {
       },
     ]);
 
-    // the reading from the web portal is in the SEND group, and has no tag
+    // the reading from the web portal is in the SEND group
     expect(
       getInformalTimelineEvents(
         {
@@ -133,7 +142,75 @@ describe('informalNotificationTimeline utility', () => {
       ).map(({ key, tag }) => ({ key, tag }))
     ).toEqual([
       { key: 'filed.send', tag: undefined },
-      { key: 'informal_notification_viewed.send', tag: undefined },
+      { key: 'informal_notification_viewed.send', tag: 'VIEWED' },
+    ]);
+  });
+
+  it('maps the progress event to the successful sending only for email and IO', () => {
+    const progressEvent: BffInformalNotificationTimelineItem = {
+      elementId:
+        'SEND_DIGITAL_MESSAGE_PROGRESS.IUN_YWNY-YHRA-KTYL-202609-P-A.RECINDEX_0.IDX_2.CHANNEL_EMAIL',
+      eventTimestamp: '2026-09-21T14:01:00Z',
+      category: InformalTimelineElementCategoryV1.SendDigitalMessageProgress,
+      details: { recIndex: 0, channel: 'EMAIL' },
+    };
+
+    expect(
+      getInformalTimelineEvents(
+        { channel: BffNotificationChannelType.Email, events: [deliveredEvent, progressEvent] },
+        status
+      )
+    ).toEqual([
+      {
+        id: deliveredEvent.elementId,
+        date: deliveredEvent.eventTimestamp,
+        key: 'delivered.email',
+        tag: 'DELIVERED',
+      },
+      {
+        id: progressEvent.elementId,
+        date: progressEvent.eventTimestamp,
+        key: 'send_digital_message_feedback.ok.email',
+      },
+    ]);
+
+    const [ioDelivered, ioProgress] = getInformalTimelineEvents(
+      { channel: BffNotificationChannelType.Io, events: [deliveredEvent, progressEvent] },
+      status
+    );
+    expect(ioDelivered).toMatchObject({ key: 'delivered.io', tag: 'DELIVERED' });
+    expect(ioProgress).toEqual({
+      id: progressEvent.elementId,
+      date: progressEvent.eventTimestamp,
+      key: 'send_digital_message_feedback.ok.io',
+    });
+  });
+
+  it('maps the IO feedback with the SENDER_NOT_ALLOWED code to the unavailable channel', () => {
+    const ioFeedbackEvent: BffInformalNotificationTimelineItem = {
+      elementId:
+        'SEND_DIGITAL_MESSAGE_FEEDBACK.IUN_YWNY-YHRA-KTYL-202609-P-A.RECINDEX_0.IDX_1.CHANNEL_IO',
+      eventTimestamp: '2026-09-21T14:01:00Z',
+      category: InformalTimelineElementCategoryV1.SendDigitalMessageFeedback,
+      details: {
+        recIndex: 0,
+        channel: 'IO',
+        responseStatus: ResponseStatus.Ko,
+        deliveryDetail: { code: 'SENDER_NOT_ALLOWED' },
+      },
+    };
+
+    expect(
+      getInformalTimelineEvents(
+        { channel: BffNotificationChannelType.Io, events: [ioFeedbackEvent] },
+        status
+      )
+    ).toEqual([
+      {
+        id: ioFeedbackEvent.elementId,
+        date: ioFeedbackEvent.eventTimestamp,
+        key: 'send_digital_message_skip.io',
+      },
     ]);
   });
 

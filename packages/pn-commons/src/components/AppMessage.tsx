@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
+import { MISnackbar } from '@pagopa/mui-italia';
+
 import { IAppMessage } from '../models/AppMessage';
 import { AppResponseOutcome } from '../models/AppResponse';
 import { appStateActions, appStateSelectors } from '../redux/slices/appStateSlice';
@@ -89,16 +91,27 @@ const AppMessage = () => {
 
   return (
     <>
-      {currentMessage && (
-        <SnackBar
-          key={currentMessage.message.id}
-          message={currentMessage.message}
-          open
-          type={currentMessage.type}
-          onClose={() => onCloseToast(currentMessage)}
-          closingDelay={currentMessage.message.showTechnicalData ? undefined : 5000}
-        />
-      )}
+      {currentMessage &&
+        (currentMessage.type === AppResponseOutcome.WARNING ? (
+          <MISnackbar
+            key={currentMessage.message.id}
+            open
+            severity="warning"
+            title={currentMessage.message.title || undefined}
+            description={currentMessage.message.message}
+            onClose={() => onCloseToast(currentMessage)}
+            anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+          />
+        ) : (
+          <SnackBar
+            key={currentMessage.message.id}
+            message={currentMessage.message}
+            open
+            type={currentMessage.type}
+            onClose={() => onCloseToast(currentMessage)}
+            closingDelay={currentMessage.message.showTechnicalData ? undefined : 5000}
+          />
+        ))}
     </>
   );
 };

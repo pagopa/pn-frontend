@@ -3,8 +3,8 @@
     "document-unavailable": "Das Dokument ist nicht mehr verfügbar. Kontaktiere die Körperschaft für weitere Informationen.",
     "timeline": {
       "analog-failure-workflow": "Zustellung konnte nicht ausgeliefert werden",
-      "analog-failure-workflow-description": "Du bist nicht auffindbar, da an der angegebenen Adresse keine Hinweise auf dich vorhanden waren, oder weil die angegebene Adresse nicht existiert, unzureichend oder falsch ist. Daher wird die <0>Empfangsbestätigung</0> zur Verfügung gestellt. Sieh dir die <1>Modalitäten der Vervollständigung</1> an, um zu erfahren, wann die SEND Zustellung dennoch rechtsgültig wird.",
-      "analog-failure-workflow-description-delegate": "{{recipient}} ist nicht auffindbar, da an der angegebenen Adresse keine Hinweise auf diese Person vorhanden waren, oder weil die angegebene Adresse nicht existiert, unzureichend oder falsch ist. Daher wird die <0>Empfangsbestätigung</0> zur Verfügung gestellt. Sieh dir die <1>Modalitäten der Vervollständigung</1> an, um zu erfahren, wann die SEND Zustellung dennoch rechtsgültig wird.",
+      "analog-failure-workflow-description": "Du bist nicht auffindbar, da an der angegebenen Adresse keine Hinweise auf dich vorhanden waren, oder weil die angegebene Adresse nicht existiert, unzureichend oder falsch ist. Daher wird die <0>Empfangsbestätigung</0> zur Verfügung gestellt. <1>Sieh dir die Modalitäten der Vervollständigung an</1>, um zu erfahren, wann die SEND Zustellung dennoch rechtsgültig wird.",
+      "analog-failure-workflow-description-delegate": "{{recipient}} ist nicht auffindbar, da an der angegebenen Adresse keine Hinweise auf diese Person vorhanden waren, oder weil die angegebene Adresse nicht existiert, unzureichend oder falsch ist. Daher wird die <0>Empfangsbestätigung</0> zur Verfügung gestellt. <1>Sieh dir die Modalitäten der Vervollständigung an</1>, um zu erfahren, wann die SEND Zustellung dennoch rechtsgültig wird.",
       "analog-workflow-failure-cause": {
         "C01": "wegen eines Brandes",
         "C02": "wegen einer wegen Bauarbeiten oder Erdrutsch gesperrten Straße",
@@ -43,8 +43,8 @@
       "prepare-analog-domicile-failure-ZZZ-description-delegate": "Es wird nicht möglich sein, die SEND Zustellung erneut an {{recipient}} zu senden. Der Grund wurde nicht angegeben.",
       "prepare-analog-domicile-failure-ZZZ-title": "Keine gültige Adresse auffindbar",
       "schedule-digital-workflow": "Neuer Versuch des PEC-Versands",
-      "schedule-digital-workflow-description": "Es wird der zweite Versuch unternommen, die SEND Zustellung an die PEC-Adresse {{address}} zu senden.",
-      "schedule-digital-workflow-description-delegate": "Es wird der zweite Versuch unternommen, die SEND Zustellung an {{recipient}} an die PEC-Adresse {{address}} zu senden.",
+      "schedule-digital-workflow-description": "Es wird der zweite Versuch unternommen, die SEND Zustellung an die PEC-Adresse zu senden.",
+      "schedule-digital-workflow-description-delegate": "Es wird der zweite Versuch unternommen, die SEND Zustellung an {{recipient}} an die PEC-Adresse zu senden.",
       "send-analog-domicile-890": "Prozess des Versands per Einschreiben gestartet",
       "send-analog-domicile-890-description": "Ein Einschreiben 890 wurde dir an die Adresse {{address}} gesendet.",
       "send-analog-domicile-890-description-delegate": "Ein Einschreiben 890 wurde an {{recipient}} an die Adresse {{address}} gesendet.",
@@ -221,7 +221,11 @@
       "send-digital-success-SERCQ-SEND": "Versand über das digitale SEND-Domizil erfolgreich",
       "send-simple-registered-letter": "Prozess des Versands per Einschreiben gestartet",
       "send-simple-registered-letter-description": "Ein normales Einschreiben wird dir an die Adresse {{address}} gesendet.",
-      "send-simple-registered-letter-description-delegate": "Ein normales Einschreiben wird an {{recipient}} an die Adresse {{address}} gesendet."
+      "send-simple-registered-letter-description-delegate": "Ein normales Einschreiben wird an {{recipient}} an die Adresse {{address}} gesendet.",
+      "warnings": {
+        "document-canceled": "Dokument nicht verfügbar, da die SEND-Benachrichtigung storniert wurde.",
+        "document-unavailable": "Das Dokument ist nicht mehr verfügbar. Kontaktiere die Körperschaft für weitere Informationen."
+      }
     }
   },
   "status": {
@@ -230,12 +234,12 @@
     "canceled": "Zustellung annulliert",
     "canceled-description": "Die Körperschaft hat den Versand der SEND Zustellung annulliert, die ab der Annullierung keine Rechtswirkung mehr entfaltet. Du kannst die <0>Annullierungserklärung herunterladen</0>.",
     "delivered": "Neue Zustellung erhalten",
-    "delivered-description-analog": "Wir haben dir die Empfangsbestätigung für diese rechtsgültige Zustellung per Einschreiben gesendet. Sieh dir die <1>Modalitäten der Vervollständigung</1> an, um zu erfahren, wann die SEND Zustellung rechtsgültig wird.",
-    "delivered-description-analog-delegate": "Wir haben {{recipient}} die Empfangsbestätigung für diese rechtsgültige Zustellung per Einschreiben gesendet. Sieh dir die <1>Modalitäten der Vervollständigung</1> an, um zu erfahren, wann die SEND Zustellung rechtsgültig wird.",
-    "delivered-description-analog-multirecipient": "Wir haben dir die Empfangsbestätigung für diese rechtsgültige Zustellung per Einschreiben gesendet. Sieh dir die <1>Modalitäten der Vervollständigung</1> an, um zu erfahren, wann die SEND Zustellung rechtsgültig wird.",
-    "delivered-description-digital": "Wir haben dir diese rechtsgültige Zustellung gesendet. Sieh dir die <1>Modalitäten der Vervollständigung</1> an, um zu erfahren, wann sie rechtsgültig wird.",
-    "delivered-description-digital-delegate": "Wir haben {{recipient}} diese rechtsgültige Zustellung gesendet. Sieh dir die <1>Modalitäten der Vervollständigung</1> an, um zu erfahren, wann sie rechtsgültig wird.",
-    "delivered-description-digital-multirecipient": "Wir haben dir diese rechtsgültige Zustellung gesendet. Sieh dir die <1>Modalitäten der Vervollständigung</1> an, um zu erfahren, wann sie rechtsgültig wird.",
+    "delivered-description-analog": "Wir haben dir die Empfangsbestätigung für diese rechtsgültige Zustellung per Einschreiben gesendet. <1>Sieh dir die Modalitäten der Vervollständigung an</1>, um zu erfahren, wann die SEND Zustellung rechtsgültig wird.",
+    "delivered-description-analog-delegate": "Wir haben {{recipient}} die Empfangsbestätigung für diese rechtsgültige Zustellung per Einschreiben gesendet. <1>Sieh dir die Modalitäten der Vervollständigung an</1>, um zu erfahren, wann die SEND Zustellung rechtsgültig wird.",
+    "delivered-description-analog-multirecipient": "Wir haben dir die Empfangsbestätigung für diese rechtsgültige Zustellung per Einschreiben gesendet. <1>Sieh dir die Modalitäten der Vervollständigung an</1>, um zu erfahren, wann die SEND Zustellung rechtsgültig wird.",
+    "delivered-description-digital": "Wir haben dir diese rechtsgültige Zustellung gesendet. <1>Sieh dir die Modalitäten der Vervollständigung an</1>, um zu erfahren, wann sie rechtsgültig wird.",
+    "delivered-description-digital-delegate": "Wir haben {{recipient}} diese rechtsgültige Zustellung gesendet. <1>Sieh dir die Modalitäten der Vervollständigung an</1>, um zu erfahren, wann sie rechtsgültig wird.",
+    "delivered-description-digital-multirecipient": "Wir haben dir diese rechtsgültige Zustellung gesendet. <1>Sieh dir die Modalitäten der Vervollständigung an</1>, um zu erfahren, wann sie rechtsgültig wird.",
     "delivered-multirecipient": "Neue Zustellung erhalten",
     "delivering": "Versand der Zustellung im Gange",
     "effective-date": "Die Zustellung wurde rechtsgültig",
@@ -252,7 +256,7 @@
     "viewed-by-delegate-description": "Als delegierte Person hat {{name}} auf die SEND Zustellung zugegriffen. Du kannst die <0>Zugriffsbescheinigung</0> herunterladen.",
     "viewed-by-other-delegate-description": "Als delegierte Person hat {{name}} auf die SEND Zustellung von {{recipient}} zugegriffen. Du kannst die <0>Zugriffsbescheinigung</0> herunterladen.",
     "viewed-by-recipient-description": "{{recipient}} hat auf die SEND Zustellung zugegriffen. Du kannst die <0>Zugriffsbescheinigung</0> herunterladen.",
-    "viewed-description": "Du hast auf SEND auf diese rechtsgültige Zustellung zugegriffen. Du kannst die <0>Zugriffsbescheinigung</0> herunterladen.",
+    "viewed-description": "Du hast auf diese rechtsgültige Zustellung zugegriffen. Du kannst die <0>Zugriffsbescheinigung</0> herunterladen.",
     "viewed-description-multirecipient": "Diese SEND Zustellung wurde an mehrere Empfänger gesendet, und mindestens eine Person von ihnen hat auf die Zustellung zugegriffen. Du kannst die <0>Zugriffsbescheinigung</0> herunterladen.",
     "viewed-multirecipient": "Zustellung gelesen",
     "viewed-without-legal-fact-description-multirecipient": "Diese SEND Zustellung wurde an mehrere Empfänger gesendet, und mindestens eine Person von ihnen hat auf die Zustellung zugegriffen."

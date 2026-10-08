@@ -57,7 +57,7 @@ export const INFORMAL_CHANNEL_ICON: Record<
   UNKNOWN: InfoOutlined,
 };
 
-export const IO_TAG_ICON: Record<InformalTimelineEventTag, ComponentType<SvgIconProps>> = {
+export const EVENT_TAG_ICON: Record<InformalTimelineEventTag, ComponentType<SvgIconProps>> = {
   DELIVERED: MarkEmailReadOutlined,
   VIEWED: DraftsOutlined,
 };
@@ -86,17 +86,6 @@ export const getInformalTimelineSteps = (
 };
 
 /**
- * On IO the delivery and the reading of the notification are highlighted with a tag.
- * @param step - Channel group
- * @param tag - Tag to show
- */
-const getIOTag = (
-  step: BffInformalNotificationTimelineGroup,
-  tag: InformalTimelineEventTag
-): InformalTimelineEventTag | undefined =>
-  step.channel === BffNotificationChannelType.Io ? tag : undefined;
-
-/**
  * Registered letters has the code, ordinary mail doesn't.
  * @param details - Details of the SEND_ANALOG_MESSAGE_FEEDBACK event
  */
@@ -106,6 +95,13 @@ const getAnalogVariant = (
   details?.deliveryType === AnalogDeliveryType.Rs
     ? { variant: 'analog_registered', values: { code: details.registeredLetterCode || '' } }
     : { variant: 'analog_ordinary' };
+
+const SENDER_NOT_ALLOWED_CODE = 'SENDER_NOT_ALLOWED';
+
+const PROGRESS_SENT_CHANNELS: Array<BffNotificationChannelType> = [
+  BffNotificationChannelType.Email,
+  BffNotificationChannelType.Io,
+];
 
 const getEventCopy = (
   event: BffInformalNotificationTimelineItem,
@@ -124,10 +120,20 @@ const getEventCopy = (
 
   switch (event.category) {
     case InformalTimelineElementCategoryV1.SendDigitalMessageFeedback: {
-      const { responseStatus } = event.details as SendDigitalMessageFeedbackDetails;
+      const { responseStatus, deliveryDetail } = event.details as SendDigitalMessageFeedbackDetails;
+
+      if (deliveryDetail?.code === SENDER_NOT_ALLOWED_CODE) {
+        return { key: `send_digital_message_skip.${channel}` };
+      }
 
       return { key: `send_digital_message_feedback.${responseStatus.toLowerCase()}.${channel}` };
     }
+
+    // email and IO have no OK feedback: their successful sending is notified by the progress event
+    case InformalTimelineElementCategoryV1.SendDigitalMessageProgress:
+      return PROGRESS_SENT_CHANNELS.includes(step.channel)
+        ? { key: `send_digital_message_feedback.ok.${channel}` }
+        : null;
 
     case InformalTimelineElementCategoryV1.SendAnalogMessageFeedback: {
       const details = event.details as SendAnalogMessageFeedbackDetails;
@@ -141,7 +147,7 @@ const getEventCopy = (
 
     case InformalTimelineElementCategoryV1.Delivered: {
       if (step.channel !== BffNotificationChannelType.Analog) {
-        return { key: `delivered.${channel}`, tag: getIOTag(step, BffChannelStatusV1.Delivered) };
+        return { key: `delivered.${channel}`, tag: BffChannelStatusV1.Delivered };
       }
 
       // the delivery code is only on the feedback event the delivery refers to
@@ -151,7 +157,7 @@ const getEventCopy = (
         feedback?.details as SendAnalogMessageFeedbackDetails | undefined
       );
 
-      return { key: `delivered.${variant}`, values };
+      return { key: `delivered.${variant}`, values, tag: BffChannelStatusV1.Delivered };
     }
 
     case InformalTimelineElementCategoryV1.SendDigitalMessageSkip:
@@ -160,7 +166,7 @@ const getEventCopy = (
     case InformalTimelineElementCategoryV1.InformalNotificationViewed:
       return {
         key: `informal_notification_viewed.${channel}`,
-        tag: getIOTag(step, BffChannelStatusV1.Viewed),
+        tag: BffChannelStatusV1.Viewed,
       };
 
     default:

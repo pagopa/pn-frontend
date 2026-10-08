@@ -1,5 +1,5 @@
 import { isEqual } from 'lodash-es';
-import { FormEvent, PropsWithChildren, useRef, useState } from 'react';
+import { FormEvent, PropsWithChildren, ReactNode, useRef, useState } from 'react';
 
 import { Button, DialogActions, DialogContent, Grid, Theme } from '@mui/material';
 
@@ -27,6 +27,8 @@ type Props<FormValues> = {
   formValues: FormValues;
   /** initial form values */
   initialValues: FormValues;
+  /** Optional icon for the mobile filter toggle */
+  mobileFilterIcon?: ReactNode;
 };
 
 const actionItemStyle = {
@@ -47,6 +49,7 @@ const SmartFilter = <FormValues extends object>({
   formIsValid,
   formValues,
   initialValues,
+  mobileFilterIcon,
 }: PropsWithChildren<Props<FormValues>>) => {
   const isMobile = useIsMobile();
   const [currentFilters, setCurrentFilters] = useState<FormValues>(formValues);
@@ -98,6 +101,7 @@ const SmartFilter = <FormValues extends object>({
             minWidth: 'unset',
             height: '24px',
           }}
+          startIcon={mobileFilterIcon}
           hasCounterBadge
           bagdeCount={filtersCount}
         >

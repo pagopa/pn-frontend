@@ -1,11 +1,16 @@
 import { Stack } from '@mui/material';
 
-import { LegalFactId, NotificationDetailRecipient } from '../../../models/NotificationDetail';
+import {
+  LegalFactId,
+  NotificationDetailRecipient,
+  TimelineCategory,
+} from '../../../models/NotificationDetail';
 import { NotificationTimelineEvent } from '../../../models/NotificationTimeline';
 import { getNotificationTimelineStatusInfos } from '../../../utility/notification.utility';
 import ReworkedStatusTag from '../ReworkedStatusTag';
 import NotificationTimelineDescription from './NotificationTimelineDescription';
 import TimelineLegalFacts from './TimelineLegalFacts';
+import { PERFECTION_ANCHORS } from './timelineItem.config';
 
 type Props = {
   event: NotificationTimelineEvent;
@@ -89,6 +94,13 @@ const NotificationTimelineEventItem: React.FC<Props> = ({
   // text, several ones are listed below it. Inlining only happens with the new copy.
   const eventLegalFacts = (event.legalFactsIds ?? []).map((lf) => ({ event, lf }));
 
+  const eventPerfectionLink =
+    isNewTimelineCopyEnabled &&
+    perfectionLink &&
+    event.category === TimelineCategory.ANALOG_FAILURE_WORKFLOW
+      ? `${perfectionLink}${PERFECTION_ANCHORS.ANALOG}`
+      : perfectionLink;
+
   return (
     <Stack
       component={insideAGroup ? 'li' : 'div'}
@@ -111,7 +123,7 @@ const NotificationTimelineEventItem: React.FC<Props> = ({
         slotProps={{ typography: { variant: 'body2', sx: { fontWeight: 400 } } }}
         isNewTimelineCopyEnabled={isNewTimelineCopyEnabled}
         disableDownloads={disableDownloads}
-        perfectionLink={perfectionLink}
+        perfectionLink={eventPerfectionLink}
       />
     </Stack>
   );
