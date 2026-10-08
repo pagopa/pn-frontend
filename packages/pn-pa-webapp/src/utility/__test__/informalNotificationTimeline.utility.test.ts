@@ -137,7 +137,7 @@ describe('informalNotificationTimeline utility', () => {
     ]);
   });
 
-  it('maps the progress event to the successful sending only for the email', () => {
+  it('maps the progress event to the successful sending only for email and IO', () => {
     const progressEvent: BffInformalNotificationTimelineItem = {
       elementId:
         'SEND_DIGITAL_MESSAGE_PROGRESS.IUN_YWNY-YHRA-KTYL-202609-P-A.RECINDEX_0.IDX_2.CHANNEL_EMAIL',
@@ -163,6 +163,17 @@ describe('informalNotificationTimeline utility', () => {
         key: 'send_digital_message_feedback.ok.email',
       },
     ]);
+
+    const [ioDelivered, ioProgress] = getInformalTimelineEvents(
+      { channel: BffNotificationChannelType.Io, events: [deliveredEvent, progressEvent] },
+      status
+    );
+    expect(ioDelivered).toMatchObject({ key: 'delivered.io', tag: 'DELIVERED' });
+    expect(ioProgress).toEqual({
+      id: progressEvent.elementId,
+      date: progressEvent.eventTimestamp,
+      key: 'send_digital_message_feedback.ok.io',
+    });
   });
 
   it('keeps the raw category for the UNKNOWN channel and discards the events without a copy', () => {
