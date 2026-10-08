@@ -65,7 +65,7 @@ function viewedByVariant({
     ?.delegateInfo;
   const delegateName = delegateInfo?.denomination ?? statusObject?.recipient;
 
-  if (mandateId && delegatorName) {
+  if (mandateId && delegatorName && userTaxId) {
     if (delegateInfo?.taxId === userTaxId) {
       return { key: 'status.viewed-as-delegate-description', data: { recipient: delegatorName } };
     }
