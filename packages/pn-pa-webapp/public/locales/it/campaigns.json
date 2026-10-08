@@ -1,10 +1,7 @@
 {
   "detail": {
     "breadcrumb-root": "Campagne",
-    "breadcrumb": {
-      "back": "Indietro",
-      "campaigns": "Campagne"
-    },
+    "breadcrumb-back": "Indietro",
     "channels-label": "Canali selezionati",
     "channels": {
       "ANALOG": "Servizio postale",

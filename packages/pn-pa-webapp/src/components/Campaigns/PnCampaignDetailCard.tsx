@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 
-import { Divider, Grid, Stack, Typography } from '@mui/material';
+import { Divider, Grid, Stack, Typography, useMediaQuery, useTheme } from '@mui/material';
 import { formatDate } from '@pagopa-pn/pn-commons';
 import { MIPaper } from '@pagopa/mui-italia';
 
@@ -18,52 +18,92 @@ const PnCampaignDetailCard = ({
   channels,
 }: CampaignDetailCardProps) => {
   const { t } = useTranslation('campaigns');
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
 
   return (
     <MIPaper padding={24}>
-      <Grid container columnSpacing={3}>
-        <Grid item xs={12} md={6}>
-          <Stack>
-            <Typography variant="body2" color="text.secondary">
-              {t('detail.creation-date')}
-            </Typography>
-            <Typography variant="body1" fontWeight={600}>
-              {formatDate(creationDate, false)}
-            </Typography>
+      {isMobile ? (
+        <Stack>
+          <Typography variant="body2" color="text.secondary">
+            {t('detail.creation-date')}
+          </Typography>
+          <Typography variant="body1" fontWeight={600}>
+            {formatDate(creationDate, false)}
+          </Typography>
 
-            <Divider sx={{ my: 2 }} />
+          <Divider sx={{ my: 2 }} />
 
-            <Typography variant="body2" color="text.secondary">
-              {t('detail.service-name')}
-            </Typography>
-            <Typography variant="body1" fontWeight={600}>
-              {serviceName}
-            </Typography>
+          <Typography variant="body2" color="text.secondary">
+            {t('list.id')}
+          </Typography>
+          <Typography variant="body1" fontWeight={600}>
+            {campaignId}
+          </Typography>
 
-            <Divider sx={{ my: 2, display: { xs: 'block', md: 'none' } }} />
-          </Stack>
+          <Divider sx={{ my: 2 }} />
+
+          <Typography variant="body2" color="text.secondary">
+            {t('detail.service-name')}
+          </Typography>
+          <Typography variant="body1" fontWeight={600}>
+            {serviceName}
+          </Typography>
+
+          <Divider sx={{ my: 2 }} />
+
+          <Typography variant="body2" color="text.secondary">
+            {t('detail.channels-label')}
+          </Typography>
+          <Typography variant="body1" fontWeight={600}>
+            {channels}
+          </Typography>
+        </Stack>
+      ) : (
+        <Grid container columnSpacing={3}>
+          <Grid item xs={12} md={6}>
+            <Stack>
+              <Typography variant="body2" color="text.secondary">
+                {t('detail.creation-date')}
+              </Typography>
+              <Typography variant="body1" fontWeight={600}>
+                {formatDate(creationDate, false)}
+              </Typography>
+
+              <Divider sx={{ my: 2 }} />
+
+              <Typography variant="body2" color="text.secondary">
+                {t('detail.service-name')}
+              </Typography>
+              <Typography variant="body1" fontWeight={600}>
+                {serviceName}
+              </Typography>
+
+              <Divider sx={{ my: 2, display: { xs: 'block', md: 'none' } }} />
+            </Stack>
+          </Grid>
+
+          <Grid item xs={12} md={6}>
+            <Stack>
+              <Typography variant="body2" color="text.secondary">
+                {t('list.id')}
+              </Typography>
+              <Typography variant="body1" fontWeight={600}>
+                {campaignId}
+              </Typography>
+
+              <Divider sx={{ my: 2 }} />
+
+              <Typography variant="body2" color="text.secondary">
+                {t('detail.channels-label')}
+              </Typography>
+              <Typography variant="body1" fontWeight={600}>
+                {channels}
+              </Typography>
+            </Stack>
+          </Grid>
         </Grid>
-
-        <Grid item xs={12} md={6}>
-          <Stack>
-            <Typography variant="body2" color="text.secondary">
-              {t('list.id')}
-            </Typography>
-            <Typography variant="body1" fontWeight={600}>
-              {campaignId}
-            </Typography>
-
-            <Divider sx={{ my: 2 }} />
-
-            <Typography variant="body2" color="text.secondary">
-              {t('detail.channels-label')}
-            </Typography>
-            <Typography variant="body1" fontWeight={600}>
-              {channels}
-            </Typography>
-          </Stack>
-        </Grid>
-      </Grid>
+      )}
     </MIPaper>
   );
 };
