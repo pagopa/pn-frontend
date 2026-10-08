@@ -11,6 +11,7 @@ import {
   formatTimelineDate,
 } from '../../../../utility/notificationTimeline.utility';
 import NotificationTimelineEventItem from '../NotificationTimelineEventItem';
+import { PERFECTION_ANCHORS } from '../timelineItem.config';
 
 const [viewedStatus, deliveringStatus] = notificationTimelineDTO.notificationStatusHistory;
 
@@ -214,4 +215,29 @@ describe('NotificationTimelineEventItem', () => {
       }
     }
   );
+
+  it('adds the registered letter anchor to the perfection link for an analog failure', () => {
+    const analogFailureEvent: NotificationTimelineEvent = {
+      elementId: 'ANALOG_FAILURE_WORKFLOW.RECINDEX_0',
+      timestamp: '2026-09-23T10:30:00Z',
+      category: TimelineCategory.ANALOG_FAILURE_WORKFLOW,
+      details: {
+        recIndex: 0,
+      },
+      legalFactsIds: [],
+      isHidden: false,
+    };
+
+    const perfectionLink = 'https://fake.perfezionamento.it/perfezionamento';
+
+    const { getByTestId } = renderEvent(analogFailureEvent, {
+      isNewTimelineCopyEnabled: true,
+      perfectionLink,
+    });
+
+    expect(getByTestId('perfection-link')).toHaveAttribute(
+      'href',
+      `${perfectionLink}${PERFECTION_ANCHORS.ANALOG}`
+    );
+  });
 });
