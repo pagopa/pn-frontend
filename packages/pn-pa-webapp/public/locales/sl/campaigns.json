@@ -1,10 +1,7 @@
 {
   "detail": {
+    "breadcrumb-back": "Nazaj",
     "breadcrumb-root": "Kampanje",
-    "breadcrumb": {
-      "back": "Nazaj",
-      "campaigns": "Kampanje"
-    },
     "channels-label": "Izbrani kanali",
     "channels": {
       "ANALOG": "Poštna storitev",

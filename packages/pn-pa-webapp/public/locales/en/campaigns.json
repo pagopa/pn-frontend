@@ -1,10 +1,7 @@
 {
   "detail": {
+    "breadcrumb-back": "Back",
     "breadcrumb-root": "Campaigns",
-    "breadcrumb": {
-      "back": "Back",
-      "campaigns": "Campaigns"
-    },
     "channels-label": "Selected channels",
     "channels": {
       "ANALOG": "Postal service",

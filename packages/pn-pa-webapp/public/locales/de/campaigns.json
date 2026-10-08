@@ -1,10 +1,7 @@
 {
   "detail": {
+    "breadcrumb-back": "Zurück",
     "breadcrumb-root": "Kampagnen",
-    "breadcrumb": {
-      "back": "Zurück",
-      "campaigns": "Kampagnen"
-    },
     "channels-label": "Ausgewählte Kanäle",
     "channels": {
       "ANALOG": "Postdienst",

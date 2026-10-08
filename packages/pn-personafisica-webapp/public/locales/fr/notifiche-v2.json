@@ -221,7 +221,11 @@
       "send-digital-success-SERCQ-SEND": "Envoi via le domicile numérique SEND réussi",
       "send-simple-registered-letter": "Processus d'envoi par lettre recommandée commencé",
       "send-simple-registered-letter-description": "Une lettre recommandée ordinaire vous sera envoyée à l'adresse {{address}}.",
-      "send-simple-registered-letter-description-delegate": "Une lettre recommandée ordinaire sera envoyée à {{recipient}} à l'adresse {{address}}."
+      "send-simple-registered-letter-description-delegate": "Une lettre recommandée ordinaire sera envoyée à {{recipient}} à l'adresse {{address}}.",
+      "warnings": {
+        "document-canceled": "Document non disponible car la notification SEND a été annulée.",
+        "document-unavailable": "Le document n'est plus disponible. Contacte l'organisme pour plus d'informations."
+      }
     }
   },
   "status": {

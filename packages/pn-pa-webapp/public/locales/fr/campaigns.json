@@ -1,10 +1,7 @@
 {
   "detail": {
+    "breadcrumb-back": "Retour",
     "breadcrumb-root": "Campagnes",
-    "breadcrumb": {
-      "back": "Retour",
-      "campaigns": "Campagnes"
-    },
     "channels-label": "Canaux sélectionnés",
     "channels": {
       "ANALOG": "Service postal",
