@@ -221,7 +221,11 @@
       "send-digital-success-SERCQ-SEND": "Invio via domicilio digitale SEND riuscito",
       "send-simple-registered-letter": "Processo di invio raccomandata iniziato",
       "send-simple-registered-letter-description": "Una raccomandata semplice ti sarà spedita all'indirizzo {{address}}.",
-      "send-simple-registered-letter-description-delegate": "Una raccomandata semplice sarà spedita a {{recipient}} all'indirizzo {{address}}."
+      "send-simple-registered-letter-description-delegate": "Una raccomandata semplice sarà spedita a {{recipient}} all'indirizzo {{address}}.",
+      "warnings": {
+        "document-canceled": "Documento non disponibile perché la notifica SEND è stata annullata.",
+        "document-unavailable": "Il documento non è più disponibile. Contatta l’ente per maggiori informazioni."
+      }
     }
   },
   "status": {

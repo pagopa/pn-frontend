@@ -221,7 +221,11 @@
       "send-digital-success-SERCQ-SEND": "Pošiljanje prek digitalnega naslova SEND uspešno",
       "send-simple-registered-letter": "Postopek pošiljanja priporočenega pisma se je začel",
       "send-simple-registered-letter-description": "Običajno priporočeno pismo vam bo poslano na naslov {{address}}.",
-      "send-simple-registered-letter-description-delegate": "Običajno priporočeno pismo bo poslano osebi {{recipient}} na naslov {{address}}."
+      "send-simple-registered-letter-description-delegate": "Običajno priporočeno pismo bo poslano osebi {{recipient}} na naslov {{address}}.",
+      "warnings": {
+        "document-canceled": "Dokument ni na voljo, ker je bilo obvestilo SEND preklicano.",
+        "document-unavailable": "Dokument ni več na voljo. Za več informacij se obrni na organ."
+      }
     }
   },
   "status": {

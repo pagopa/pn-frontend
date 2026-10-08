@@ -221,7 +221,11 @@
       "send-digital-success-SERCQ-SEND": "Sending via SEND digital domicile successful",
       "send-simple-registered-letter": "Registered post sending process started",
       "send-simple-registered-letter-description": "A standard registered post will be sent to you at the address {{address}}.",
-      "send-simple-registered-letter-description-delegate": "A standard registered post will be sent to {{recipient}} at the address {{address}}."
+      "send-simple-registered-letter-description-delegate": "A standard registered post will be sent to {{recipient}} at the address {{address}}.",
+      "warnings": {
+        "document-canceled": "Document unavailable because the SEND notification was canceled.",
+        "document-unavailable": "The document is no longer available. Contact the institution for more information."
+      }
     }
   },
   "status": {
