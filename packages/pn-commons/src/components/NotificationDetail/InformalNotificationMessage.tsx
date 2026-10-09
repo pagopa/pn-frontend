@@ -68,23 +68,23 @@ const InformalNotificationMessage: React.FC<Props> = ({
         <PNMarkdown content={message} onExternalLinkClick={onExternalLinkClick} />
       </Box>
 
-      {(hasAttachments || hasPayment) && (
-        <Typography variant={variant} color="text.primary" mt={1.5}>
-          {hasAttachments && (
-            <Trans
-              i18nKey={attachmentsInfoMessage.key}
-              ns={attachmentsInfoMessage.ns}
-              components={[<strong key="0" />]}
-            />
-          )}
-          {hasAttachments && hasPayment && ' '}
-          {hasPayment && (
-            <Trans
-              i18nKey={paymentInstructionsMessage.key}
-              ns={paymentInstructionsMessage.ns}
-              components={[<strong key="0" />, <strong key="1" />]}
-            />
-          )}
+      {hasAttachments && (
+        <Typography component="p" variant={variant} color="text.primary" mt={1.5}>
+          <Trans
+            i18nKey={attachmentsInfoMessage.key}
+            ns={attachmentsInfoMessage.ns}
+            components={[<strong key="0" />]}
+          />
+        </Typography>
+      )}
+
+      {hasPayment && (
+        <Typography component="p" variant={variant} color="text.primary" mt={1.5}>
+          <Trans
+            i18nKey={paymentInstructionsMessage.key}
+            ns={paymentInstructionsMessage.ns}
+            components={[<strong key="0" />, <strong key="1" />]}
+          />
         </Typography>
       )}
 
