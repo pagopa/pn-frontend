@@ -14,6 +14,7 @@ type Props = {
   senderDenomination?: string;
   hasAttachments?: boolean;
   hasPayment?: boolean;
+  attachmentsInfoKey?: string;
   variant?: 'body1' | 'body2';
   onExternalLinkClick?: (href: string) => void;
 };
@@ -25,12 +26,10 @@ const InformalNotificationMessage: React.FC<Props> = ({
   hasAttachments = false,
   hasPayment = false,
   variant = 'body1',
+  attachmentsInfoKey = 'detail.informal_notification_markdown.attachments_info',
   onExternalLinkClick,
 }) => {
-  const attachmentsInfoMessage = getTranslationMessage(
-    'detail.informal_notification_markdown.attachments_info',
-    'notifiche'
-  );
+  const attachmentsInfoMessage = getTranslationMessage(attachmentsInfoKey, 'notifiche');
 
   const paymentInstructionsMessage = getTranslationMessage(
     'detail.informal_notification_markdown.payment_instructions',
@@ -68,23 +67,23 @@ const InformalNotificationMessage: React.FC<Props> = ({
         <PNMarkdown content={message} onExternalLinkClick={onExternalLinkClick} />
       </Box>
 
-      {(hasAttachments || hasPayment) && (
-        <Typography variant={variant} color="text.primary" mt={1.5}>
-          {hasAttachments && (
-            <Trans
-              i18nKey={attachmentsInfoMessage.key}
-              ns={attachmentsInfoMessage.ns}
-              components={[<strong key="0" />]}
-            />
-          )}
-          {hasAttachments && hasPayment && ' '}
-          {hasPayment && (
-            <Trans
-              i18nKey={paymentInstructionsMessage.key}
-              ns={paymentInstructionsMessage.ns}
-              components={[<strong key="0" />, <strong key="1" />]}
-            />
-          )}
+      {hasAttachments && (
+        <Typography component="p" variant={variant} color="text.primary" mt={1.5}>
+          <Trans
+            i18nKey={attachmentsInfoMessage.key}
+            ns={attachmentsInfoMessage.ns}
+            components={[<strong key="0" />]}
+          />
+        </Typography>
+      )}
+
+      {hasPayment && (
+        <Typography component="p" variant={variant} color="text.primary" mt={1.5}>
+          <Trans
+            i18nKey={paymentInstructionsMessage.key}
+            ns={paymentInstructionsMessage.ns}
+            components={[<strong key="0" />, <strong key="1" />]}
+          />
         </Typography>
       )}
 
