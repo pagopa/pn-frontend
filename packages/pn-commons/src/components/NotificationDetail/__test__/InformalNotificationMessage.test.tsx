@@ -4,6 +4,7 @@ import InformalNotificationMessage from '../InformalNotificationMessage';
 const attachmentsKey = 'detail.informal_notification_markdown.attachments_info';
 const paymentKey = 'detail.informal_notification_markdown.payment_instructions';
 const assistanceKey = 'detail.informal_notification_markdown.assistance';
+const attachmentsPfKey = 'detail.informal_notification_markdown.attachments_info_pf';
 
 const getParagraphByKey = (container: HTMLElement, key: string) =>
   Array.from(container.querySelectorAll('p')).find((paragraph) =>
@@ -97,4 +98,44 @@ describe('InformalNotificationMessage Component', () => {
       });
     }
   );
+
+  it('uses the custom attachments translation key', () => {
+    const { container } = render(
+      <InformalNotificationMessage
+        message="Testo"
+        hasAttachments
+        hasPayment
+        attachmentsInfoKey={attachmentsPfKey}
+        variant="body2"
+      />
+    );
+
+    const attachmentsParagraph = getParagraphByKey(container, attachmentsPfKey);
+    const paymentParagraph = getParagraphByKey(container, paymentKey);
+
+    expect(attachmentsParagraph).toBeDefined();
+    expect(attachmentsParagraph?.tagName).toBe('P');
+    expect(attachmentsParagraph).toHaveTextContent(
+      /^notifiche detail\.informal_notification_markdown\.attachments_info_pf$/
+    );
+
+    expect(paymentParagraph).toBeDefined();
+    expect(attachmentsParagraph?.nextElementSibling).toBe(paymentParagraph);
+  });
+
+  it('hides the custom attachments sentence when there are no attachments', () => {
+    const { container } = render(
+      <InformalNotificationMessage
+        message="Testo"
+        hasAttachments={false}
+        hasPayment
+        attachmentsInfoKey={attachmentsPfKey}
+      />
+    );
+
+    expect(container).not.toHaveTextContent(attachmentsPfKey);
+    expect(getParagraphByKey(container, paymentKey)?.tagName).toBe('P');
+    expect(getParagraphByKey(container, assistanceKey)?.tagName).toBe('P');
+    expect(container.querySelectorAll('p')).toHaveLength(3);
+  });
 });

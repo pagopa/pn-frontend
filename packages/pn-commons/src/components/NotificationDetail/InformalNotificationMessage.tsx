@@ -14,6 +14,7 @@ type Props = {
   senderDenomination?: string;
   hasAttachments?: boolean;
   hasPayment?: boolean;
+  attachmentsInfoKey?: string;
   variant?: 'body1' | 'body2';
   onExternalLinkClick?: (href: string) => void;
 };
@@ -25,12 +26,10 @@ const InformalNotificationMessage: React.FC<Props> = ({
   hasAttachments = false,
   hasPayment = false,
   variant = 'body1',
+  attachmentsInfoKey = 'detail.informal_notification_markdown.attachments_info',
   onExternalLinkClick,
 }) => {
-  const attachmentsInfoMessage = getTranslationMessage(
-    'detail.informal_notification_markdown.attachments_info',
-    'notifiche'
-  );
+  const attachmentsInfoMessage = getTranslationMessage(attachmentsInfoKey, 'notifiche');
 
   const paymentInstructionsMessage = getTranslationMessage(
     'detail.informal_notification_markdown.payment_instructions',
