@@ -251,6 +251,7 @@
     "returned-to-sender-description": "Prejemnik tega obvestila SEND je bil razglašen za pokojnega.",
     "returned-to-sender-description-multirecipient": "Prejemnik tega obvestila SEND je bil razglašen za pokojnega.",
     "returned-to-sender-multirecipient": "Obvestilo vrnjeno organu pošiljatelju",
+    "returned-to-sender-with-legal-fact-description": "Prejemnik tega obvestila SEND je bil razglašen za pokojnega. Lahko <0>prenesete potrdilo o uspešnem dostopu</0>.",
     "viewed": "Prebrano obvestilo",
     "viewed-as-delegate-description": "Kot pooblaščenec ste dostopali do obvestila SEND osebe {{recipient}}. Lahko prenesete <0>potrdilo o uspešnem dostopu</0>.",
     "viewed-by-delegate-description": "Kot pooblaščenec je {{name}} dostopal do obvestila SEND. Lahko prenesete <0>potrdilo o uspešnem dostopu</0>.",

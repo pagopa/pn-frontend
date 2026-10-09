@@ -5,7 +5,7 @@
     "channels-label": "Ausgewählte Kanäle",
     "channels": {
       "ANALOG": "Postdienst",
-      "EMAIL": "E-Mail",
+      "EMAIL": "Email",
       "IO": "IO",
       "PEC": "PEC",
       "SMS": "SMS"
@@ -46,6 +46,7 @@
     "empty-state": {
       "campaign-title-placeholder": "[Kampagnentitel]",
       "generic-error": "Die Kampagnendetails konnten nicht abgerufen werden.",
+      "generic-error-comunications": "Die Mitteilungsliste konnte nicht abgerufen werden.",
       "generic-error-cta": "Versuche es erneut"
     },
     "service-name": "Dienst",
