@@ -9,9 +9,7 @@ import * as routes from '../../navigation/routes.const';
 
 type Props = {
   filtersApplied: boolean;
-  filterNotificationsRef: React.MutableRefObject<{
-    cleanFilters: () => void;
-  }>;
+  onCleanFilters: () => void;
   isDelegatedPage: boolean;
 };
 
@@ -77,7 +75,7 @@ const DefaultEmptyStateContent: React.FC = () => {
 
 const NotificationsEmptyState: React.FC<Props> = ({
   filtersApplied,
-  filterNotificationsRef,
+  onCleanFilters,
   isDelegatedPage,
 }) => {
   const { t } = useTranslation('notifiche');
@@ -89,7 +87,7 @@ const NotificationsEmptyState: React.FC<Props> = ({
         slotProps={{ contentContainer: CONTENT_CONTAINER_PROPS }}
         sentimentIcon={<IllusMIInbox size={56} />}
       >
-        <FilteredEmptyStateContent cleanFilters={filterNotificationsRef.current.cleanFilters} />
+        <FilteredEmptyStateContent cleanFilters={onCleanFilters} />
       </EmptyState>
     );
   }

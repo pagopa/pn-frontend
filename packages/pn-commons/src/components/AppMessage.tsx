@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
+import { MISnackbar } from '@pagopa/mui-italia';
+
 import { IAppMessage } from '../models/AppMessage';
 import { AppResponseOutcome } from '../models/AppResponse';
 import { appStateActions, appStateSelectors } from '../redux/slices/appStateSlice';
@@ -16,6 +18,7 @@ const AppMessage = () => {
   const errors = useSelector(appStateSelectors.selectErrors);
   const success = useSelector(appStateSelectors.selectSuccess);
   const info = useSelector(appStateSelectors.selectInfo);
+  const warning = useSelector(appStateSelectors.selectWarning);
   const [currentMessage, setCurrentMessage] = useState<EnqueuedMessage | null>(null);
   const [queue, setQueue] = useState<Array<EnqueuedMessage>>([]);
 
@@ -32,6 +35,8 @@ const AppMessage = () => {
       dispatch(appStateActions.setErrorAsAlreadyShown(message.message.id));
     } else if (message.type === AppResponseOutcome.SUCCESS) {
       dispatch(appStateActions.removeSuccess(message.message.id));
+    } else if (message.type === AppResponseOutcome.WARNING) {
+      dispatch(appStateActions.removeWarning(message.message.id));
     } else {
       dispatch(appStateActions.removeInfo(message.message.id));
     }
@@ -80,18 +85,33 @@ const AppMessage = () => {
     enqueueMessages(info, AppResponseOutcome.INFO);
   }, [info]);
 
+  useEffect(() => {
+    enqueueMessages(warning, AppResponseOutcome.WARNING);
+  }, [warning]);
+
   return (
     <>
-      {currentMessage && (
-        <SnackBar
-          key={currentMessage.message.id}
-          message={currentMessage.message}
-          open
-          type={currentMessage.type}
-          onClose={() => onCloseToast(currentMessage)}
-          closingDelay={currentMessage.message.showTechnicalData ? undefined : 5000}
-        />
-      )}
+      {currentMessage &&
+        (currentMessage.type === AppResponseOutcome.WARNING ? (
+          <MISnackbar
+            key={currentMessage.message.id}
+            open
+            severity="warning"
+            title={currentMessage.message.title || undefined}
+            description={currentMessage.message.message}
+            onClose={() => onCloseToast(currentMessage)}
+            anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+          />
+        ) : (
+          <SnackBar
+            key={currentMessage.message.id}
+            message={currentMessage.message}
+            open
+            type={currentMessage.type}
+            onClose={() => onCloseToast(currentMessage)}
+            closingDelay={currentMessage.message.showTechnicalData ? undefined : 5000}
+          />
+        ))}
     </>
   );
 };

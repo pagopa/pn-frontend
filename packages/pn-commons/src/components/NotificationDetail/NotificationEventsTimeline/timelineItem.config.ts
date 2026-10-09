@@ -1,6 +1,5 @@
 import { NotificationDetailRecipient } from '../../../models/NotificationDetail';
 import {
-  NotificationTimelineEvent,
   NotificationTimelineLegacyStatusHistory,
   NotificationTimelineStatusHistory,
 } from '../../../models/NotificationTimeline';
@@ -8,12 +7,18 @@ import { getNotificationStatusInfos } from '../../../utility/notification.utilit
 import { getRecipientPerStep } from '../../../utility/notificationTimeline.utility';
 import { getTimelineItemPresentation } from './notificationTimelineStatus.config';
 
+export const PERFECTION_ANCHORS = {
+  PEC: '#pec',
+  SEND: '#send',
+  ANALOG: '#raccomandata',
+} as const;
+
 export type TimelineItem = {
   status: NotificationTimelineStatusHistory;
   label: string;
   description: string;
-  allEvents: Array<NotificationTimelineEvent>;
   recipientPerStep: Array<NotificationDetailRecipient | undefined>;
+  legacyStatus: NotificationTimelineLegacyStatusHistory;
 } & ReturnType<typeof getTimelineItemPresentation>;
 
 /**
@@ -23,7 +28,8 @@ export const getTimelineItems = (
   statusHistory: Array<NotificationTimelineStatusHistory>,
   legacyStatusHistory: Array<NotificationTimelineLegacyStatusHistory>,
   recipients: Array<NotificationDetailRecipient>,
-  isSenderTimeline?: boolean
+  isSenderTimeline?: boolean,
+  delegateView?: { mandateId?: string; delegatorName?: string }
 ): Array<TimelineItem> => {
   const isMultiRecipient = recipients.length > 1;
 
@@ -33,13 +39,15 @@ export const getTimelineItems = (
       statusHistory: legacyStatusHistory,
       recipients,
       isParty: isSenderTimeline,
+      mandateId: delegateView?.mandateId,
+      delegatorName: delegateView?.delegatorName,
     });
 
     return {
       status,
       label,
       description,
-      allEvents: legacyStatus.steps,
+      legacyStatus,
       recipientPerStep:
         isMultiRecipient && isSenderTimeline ? getRecipientPerStep(status.steps, recipients) : [],
       ...getTimelineItemPresentation(status.status, index === 0),

@@ -1,5 +1,7 @@
-const SendIcon = () => (
-  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+import { SvgIcon, SvgIconProps } from '@mui/material';
+
+const SendIcon = (props: SvgIconProps) => (
+  <SvgIcon viewBox="0 0 24 24" {...props}>
     <g clipPath="url(#clip0_9163_16361)">
       <g clipPath="url(#clip1_9163_16361)">
         <path
@@ -20,7 +22,7 @@ const SendIcon = () => (
         <rect width="24" height="24" fill="white" />
       </clipPath>
     </defs>
-  </svg>
+  </SvgIcon>
 );
 
 export default SendIcon;

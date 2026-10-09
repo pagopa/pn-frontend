@@ -56,6 +56,7 @@ describe('AppMessage Component', () => {
             errors: [baseMessage],
             success: [],
             info: [],
+            warning: [],
           },
         },
       },
@@ -80,6 +81,7 @@ describe('AppMessage Component', () => {
             errors: [techMessage],
             success: [],
             info: [],
+            warning: [],
           },
         },
       },
@@ -104,6 +106,7 @@ describe('AppMessage Component', () => {
             errors: [shownMessage],
             success: [],
             info: [],
+            warning: [],
           },
         },
       },
@@ -120,6 +123,7 @@ describe('AppMessage Component', () => {
             errors: [],
             success,
             info: [],
+            warning: [],
           },
         },
       },
@@ -143,6 +147,7 @@ describe('AppMessage Component', () => {
             errors: [],
             success: [],
             info,
+            warning: [],
           },
         },
       },
@@ -156,5 +161,53 @@ describe('AppMessage Component', () => {
     });
 
     expect(testStore.getState().appState.messages.info).toStrictEqual([]);
+  });
+
+  it('renders MISnackbar for warning messages', () => {
+    const { getByRole, queryByTestId } = render(<AppMessage />, {
+      preloadedState: {
+        appState: {
+          messages: {
+            errors: [],
+            success: [],
+            info: [],
+            warning: [baseMessage],
+          },
+        },
+      },
+    });
+
+    expect(
+      getByRole('alert', { name: `${baseMessage.title}. ${baseMessage.message}` })
+    ).toBeInTheDocument();
+    expect(queryByTestId('snackBarContainer')).not.toBeInTheDocument();
+  });
+
+  it('renders MISnackbar for all warnings', () => {
+    const miWarning: IAppMessage = {
+      ...baseMessage,
+      id: 'mi-warning',
+      title: '',
+      message: 'Dedicated warning',
+    };
+
+    const { getByRole, queryByTestId } = render(<AppMessage />, {
+      preloadedState: {
+        appState: {
+          messages: {
+            errors: [],
+            success: [],
+            info: [],
+            warning: [miWarning],
+          },
+        },
+      },
+    });
+
+    expect(getByRole('alert', { name: 'Dedicated warning' })).toHaveTextContent(
+      'Dedicated warning'
+    );
+
+    expect(queryByTestId('snackBarContainer')).not.toBeInTheDocument();
   });
 });

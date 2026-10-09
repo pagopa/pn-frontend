@@ -1,23 +1,23 @@
 {
   "appStatus": {
-    "title": "État de la plateforme",
-    "subtitle": "Il vérifie le fonctionnement de SEND, affiche l’historique des dysfonctionnements et télécharge les attestations correspondantes opposables à des tiers.",
+    "lastCheckLegend": "Dernière mise à jour - {{ lastCheckTimestamp }}",
     "statusDescription": {
-      "ok": "Tous les services de SEND sont opérationnels.",
-      "not-ok": "Il y a un dysfonctionnement en cours. Pour plus de détails, consultez le tableau ci-dessous."
+      "not-ok": "Il y a un dysfonctionnement en cours. Pour plus de détails, consultez le tableau ci-dessous.",
+      "ok": "Tous les services de SEND sont opérationnels."
     },
-    "lastCheckLegend": "Dernière mise à jour - {{ lastCheckTimestamp }}"
+    "subtitle": "Il vérifie le fonctionnement de SEND, affiche l’historique des dysfonctionnements et télécharge les attestations correspondantes opposables à des tiers.",
+    "title": "État de la plateforme"
   },
   "downtimeList": {
-    "title": "Historique des dysfonctionnements",
     "columnHeader": {
-      "startDate": "Date de début",
       "endDate": "Date de fin",
       "functionality": "Service concerné",
       "legalFactId": "Attestations opposables à des tiers",
+      "startDate": "Date de début",
       "status": "État"
     },
-    "emptyMessage": "Aucun dysfonctionnement n’a été enregistré"
+    "emptyMessage": "Aucun dysfonctionnement n’a été enregistré",
+    "title": "Historique des dysfonctionnements"
   },
   "legends": {
     "knownFunctionality": {
@@ -25,15 +25,15 @@
       "NOTIFICATION_VISUALIZATION": "Affichage des notifications et téléchargements des pièces jointes",
       "NOTIFICATION_WORKFLOW": "Changement d'état des notifications"
     },
-    "unknownFunctionality": "Service inconnu ({{functionality}})",
-    "status": {
-      "OK": "Résolu",
-      "KO": "En cours"
-    },
+    "legalFactDownload": "Télécharger l’attestation",
     "noFileAvailableByStatus": {
-      "OK": "L’attestation sera disponible sous peu",
-      "KO": "L’attestation sera disponible à la fin du dysfonctionnement"
+      "KO": "L’attestation sera disponible à la fin du dysfonctionnement",
+      "OK": "L’attestation sera disponible sous peu"
     },
-    "legalFactDownload": "Télécharger l’attestation"
+    "status": {
+      "KO": "En cours",
+      "OK": "Résolu"
+    },
+    "unknownFunctionality": "Service inconnu ({{functionality}})"
   }
 }

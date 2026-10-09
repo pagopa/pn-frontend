@@ -4,6 +4,7 @@ import { vi } from 'vitest';
 import {
   AppMessage,
   AppResponseMessage,
+  AppResponsePublisher,
   Configuration,
   NotificationDetail as NotificationDetailModel,
   ResponseEventDispatcher,
@@ -16,6 +17,7 @@ import { NotificationTimelineResponse } from '../../__mocks__/NotificationTimeli
 import { RenderResult, act, fireEvent, render, waitFor } from '../../__test__/test-utils';
 import { apiClient } from '../../api/apiClients';
 import * as routes from '../../navigation/routes.const';
+import { NOTIFICATION_ACTIONS } from '../../redux/notification/actions';
 import { PfConfiguration } from '../../services/configuration.service';
 import NotificationTimeline from '../NotificationTimeline.page';
 
@@ -27,12 +29,14 @@ const getLegalFactIds = (notification: NotificationDetailModel, recIndex: number
 };
 
 const mockIsNewTimelineEnabledGetter = vi.fn();
+const mockIsNewTimelineCopyEnabledGetter = vi.fn();
 vi.mock('../../services/configuration.service', async () => {
   return {
     ...(await vi.importActual<any>('../../services/configuration.service')),
     getConfiguration: () => ({
       ...Configuration.get<PfConfiguration>(),
       IS_NEW_TIMELINE_ENABLED: mockIsNewTimelineEnabledGetter(),
+      IS_NEW_TIMELINE_COPY_ENABLED: mockIsNewTimelineCopyEnabledGetter() ?? false,
     }),
   };
 });
@@ -65,6 +69,34 @@ describe('NotificationTimeline Page - IS_NEW_TIMELINE_ENABLED enabled', () => {
     ],
   });
 
+  const cancelledKey = 'safestorage://PN_LEGAL_FACTS-cancelled-test.pdf';
+  const senderAckKey = 'safestorage://PN_LEGAL_FACTS-sender-ack-test.pdf';
+
+  const cancelledTimelineResponse = {
+    ...NotificationTimelineResponse,
+    isCancelled: true,
+    notificationStatusHistory: [
+      {
+        status: 'CANCELLED',
+        activeFrom: '2026-06-06T13:12:50.043521089Z',
+        steps: [
+          {
+            stepType: 'EVENT',
+            event: {
+              elementId: 'NOTIFICATION_CANCELLED.IUN_TEST',
+              timestamp: '2026-06-06T13:12:50.043521089Z',
+              details: {},
+              legalFactsIds: [{ key: cancelledKey, category: 'NOTIFICATION_CANCELLED' }],
+              category: 'NOTIFICATION_CANCELLED',
+              isHidden: true,
+            },
+          },
+        ],
+      },
+      ...timelineResponseWithHiddenLegalFact(senderAckKey, 'SENDER_ACK').notificationStatusHistory,
+    ],
+  };
+
   let result: RenderResult;
   let mock: MockAdapter;
 
@@ -75,6 +107,7 @@ describe('NotificationTimeline Page - IS_NEW_TIMELINE_ENABLED enabled', () => {
 
   beforeEach(() => {
     mockIsNewTimelineEnabledGetter.mockReturnValue(true);
+    mockIsNewTimelineCopyEnabledGetter.mockReturnValue(false);
   });
 
   afterEach(() => {
@@ -219,6 +252,212 @@ describe('NotificationTimeline Page - IS_NEW_TIMELINE_ENABLED enabled', () => {
     await waitFor(() => {
       expect(globalThis.location.href).toBe('https://mocked-aar-url.com');
     });
+  });
+
+  it('cancelled notification with new copy - shows a warning instead of downloading the legal facts', async () => {
+    mockIsNewTimelineCopyEnabledGetter.mockReturnValue(true);
+    const cancelledDocumentUrl = `/bff/v1/notifications/received/${timelineIun}/documents/LEGAL_FACT?documentId=PN_LEGAL_FACTS-cancelled-test.pdf`;
+
+    mock
+      .onGet(`/bff/v1/notifications/received/${timelineIun}/timeline`)
+      .reply(200, cancelledTimelineResponse);
+    mock.onGet(cancelledDocumentUrl).reply(200, {
+      filename: 'mocked-filename',
+      contentLength: 1000,
+      retryAfter: null,
+      url: 'https://mocked-cancelled-url.com',
+    });
+
+    await act(async () => {
+      result = render(
+        <>
+          <AppMessage />
+          <NotificationTimeline />
+        </>,
+        {
+          route: routes.GET_DETTAGLIO_NOTIFICA_TIMELINE_PATH(timelineIun),
+          path: routes.DETTAGLIO_NOTIFICA_TIMELINE,
+        }
+      );
+    });
+
+    const [cancelledButton, senderAckButton] = result.getAllByTestId('download-legalfact');
+    expect(cancelledButton).toBeEnabled();
+    expect(senderAckButton).toBeEnabled();
+
+    fireEvent.click(senderAckButton);
+
+    const warning = await waitFor(() =>
+      result.getByRole('alert', {
+        name: 'detail.timeline.warnings.document-canceled',
+      })
+    );
+    expect(warning).toHaveTextContent('detail.timeline.warnings.document-canceled');
+    expect(result.queryByTestId('snackBarContainer')).not.toBeInTheDocument();
+    expect(mock.history.get).toHaveLength(1);
+
+    fireEvent.click(cancelledButton);
+
+    await waitFor(() => {
+      expect(mock.history.get).toHaveLength(2);
+      expect(mock.history.get[1].url).toBe(cancelledDocumentUrl);
+    });
+
+    await waitFor(() => {
+      expect(globalThis.location.href).toBe('https://mocked-cancelled-url.com');
+    });
+  });
+
+  it('unavailable legal fact with new copy - shows a warning', async () => {
+    mockIsNewTimelineCopyEnabledGetter.mockReturnValue(true);
+
+    mock
+      .onGet(`/bff/v1/notifications/received/${timelineIun}/timeline`)
+      .reply(200, NotificationTimelineResponse);
+
+    await act(async () => {
+      result = render(
+        <>
+          <AppMessage />
+          <NotificationTimeline />
+        </>,
+        {
+          route: routes.GET_DETTAGLIO_NOTIFICA_TIMELINE_PATH(timelineIun),
+          path: routes.DETTAGLIO_NOTIFICA_TIMELINE,
+        }
+      );
+    });
+
+    act(() => {
+      AppResponsePublisher.error.publish(NOTIFICATION_ACTIONS.GET_RECEIVED_NOTIFICATION_DOCUMENT, {
+        action: NOTIFICATION_ACTIONS.GET_RECEIVED_NOTIFICATION_DOCUMENT,
+        status: 500,
+        errors: [
+          {
+            code: 'PN_DELIVERYPUSH_FILE_GONE',
+            showTechnicalData: true,
+            message: {
+              title: '',
+              content: '',
+            },
+          },
+        ],
+      });
+    });
+
+    const warning = await waitFor(() =>
+      result.getByRole('alert', {
+        name: 'detail.timeline.warnings.document-unavailable',
+      })
+    );
+
+    expect(warning).toHaveTextContent('detail.timeline.warnings.document-unavailable');
+    expect(result.queryByTestId('snackBarContainer')).not.toBeInTheDocument();
+    expect(warning).not.toHaveTextContent('PN_DELIVERYPUSH_FILE_GONE');
+  });
+
+  it('does not show the document unavailable warning for an unrelated error', async () => {
+    mockIsNewTimelineCopyEnabledGetter.mockReturnValue(true);
+
+    mock
+      .onGet(`/bff/v1/notifications/received/${timelineIun}/timeline`)
+      .reply(200, NotificationTimelineResponse);
+
+    await act(async () => {
+      result = render(
+        <>
+          <AppMessage />
+          <NotificationTimeline />
+        </>,
+        {
+          route: routes.GET_DETTAGLIO_NOTIFICA_TIMELINE_PATH(timelineIun),
+          path: routes.DETTAGLIO_NOTIFICA_TIMELINE,
+        }
+      );
+    });
+
+    act(() => {
+      AppResponsePublisher.error.publish(NOTIFICATION_ACTIONS.GET_RECEIVED_NOTIFICATION_DOCUMENT, {
+        action: NOTIFICATION_ACTIONS.GET_RECEIVED_NOTIFICATION_DOCUMENT,
+        status: 500,
+        errors: [
+          {
+            code: 'OTHER_DOCUMENT_ERROR',
+            showTechnicalData: true,
+            message: { title: '', content: '' },
+          },
+        ],
+      });
+    });
+
+    expect(
+      result.queryByText('detail.timeline.warnings.document-unavailable')
+    ).not.toBeInTheDocument();
+
+    expect(result.queryByRole('alert')).not.toBeInTheDocument();
+  });
+
+  it('does not show the document unavailable warning when new copy is disabled', async () => {
+    mockIsNewTimelineCopyEnabledGetter.mockReturnValue(false);
+
+    mock
+      .onGet(`/bff/v1/notifications/received/${timelineIun}/timeline`)
+      .reply(200, NotificationTimelineResponse);
+
+    await act(async () => {
+      result = render(
+        <>
+          <AppMessage />
+          <NotificationTimeline />
+        </>,
+        {
+          route: routes.GET_DETTAGLIO_NOTIFICA_TIMELINE_PATH(timelineIun),
+          path: routes.DETTAGLIO_NOTIFICA_TIMELINE,
+        }
+      );
+    });
+
+    act(() => {
+      AppResponsePublisher.error.publish(NOTIFICATION_ACTIONS.GET_RECEIVED_NOTIFICATION_DOCUMENT, {
+        action: NOTIFICATION_ACTIONS.GET_RECEIVED_NOTIFICATION_DOCUMENT,
+        status: 500,
+        errors: [
+          {
+            code: 'PN_DELIVERYPUSH_FILE_GONE',
+            showTechnicalData: true,
+            message: { title: '', content: '' },
+          },
+        ],
+      });
+    });
+
+    expect(
+      result.queryByText('detail.timeline.warnings.document-unavailable')
+    ).not.toBeInTheDocument();
+  });
+
+  it('cancelled notification without new copy - disables the legal facts other than the cancellation', async () => {
+    mock
+      .onGet(`/bff/v1/notifications/received/${timelineIun}/timeline`)
+      .reply(200, cancelledTimelineResponse);
+
+    await act(async () => {
+      result = render(
+        <>
+          <AppMessage />
+          <NotificationTimeline />
+        </>,
+        {
+          route: routes.GET_DETTAGLIO_NOTIFICA_TIMELINE_PATH(timelineIun),
+          path: routes.DETTAGLIO_NOTIFICA_TIMELINE,
+        }
+      );
+    });
+
+    const [cancelledButton, senderAckButton] = result.getAllByTestId('download-legalfact');
+    expect(cancelledButton).toBeEnabled();
+    expect(senderAckButton).toBeDisabled();
+    expect(result.queryByTestId('snackBarContainer')).not.toBeInTheDocument();
   });
 
   it('check the breadcrumb items', async () => {

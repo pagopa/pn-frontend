@@ -15,7 +15,8 @@ export class SendDigitalFeedbackStep extends TimelineStep {
           {
             ...this.nameAndTaxId(payload),
             address: details.digitalAddress?.address,
-          }
+          },
+          payload.delegatorName
         ),
       };
     }
@@ -23,18 +24,18 @@ export class SendDigitalFeedbackStep extends TimelineStep {
       details.digitalAddress?.type === DigitalDomicileType.SERCQ &&
       details.digitalAddress?.address.startsWith(SERCQ_SEND_VALUE)
     ) {
-      return {
-        ...this.localizeTimelineStatus(
-          'send-digital-success-SERCQ-SEND',
-          payload.isMultiRecipient,
-          undefined,
-          undefined,
-          {
-            ...this.nameAndTaxId(payload),
-            address: details.digitalAddress?.address,
-          }
-        ),
-      };
+      const statusInfo = this.localizeTimelineStatus(
+        'send-digital-success-SERCQ-SEND',
+        payload.isMultiRecipient,
+        undefined,
+        undefined,
+        {
+          ...this.nameAndTaxId(payload),
+          address: details.digitalAddress?.address,
+        },
+        payload.delegatorName
+      );
+      return payload.isNewTimelineCopyEnabled ? { ...statusInfo, description: '' } : statusInfo;
     }
     return {
       ...this.localizeTimelineStatus(
@@ -45,7 +46,8 @@ export class SendDigitalFeedbackStep extends TimelineStep {
         {
           ...this.nameAndTaxId(payload),
           address: details.digitalAddress?.address,
-        }
+        },
+        payload.delegatorName
       ),
     };
   }

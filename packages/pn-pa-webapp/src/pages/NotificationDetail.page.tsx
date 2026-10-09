@@ -10,6 +10,7 @@ import {
   AppResponse,
   AppResponsePublisher,
   GetDowntimeHistoryParams,
+  LegalFactId,
   LoadingPage,
   NotificationDetailDocuments,
   NotificationDetailOtherDocument,
@@ -77,7 +78,7 @@ const NotificationDetail: React.FC = () => {
   const dispatch = useAppDispatch();
   const { hasApiErrors } = useErrors();
   const notification = useAppSelector((state: RootState) => state.notificationState.notification);
-  const { DOWNTIME_EXAMPLE_LINK } = getConfiguration();
+  const { DOWNTIME_EXAMPLE_LINK, IS_NEW_TIMELINE_COPY_ENABLED } = getConfiguration();
 
   const downtimeEvents = useAppSelector(
     (state: RootState) => state.notificationState.downtimeEvents
@@ -347,6 +348,21 @@ const NotificationDetail: React.FC = () => {
     },
   ].filter((detail) => detail.value);
 
+  const legalFactDownloadHandler = (legalFact: LegalFactId) => {
+    PAEventStrategyFactory.triggerEvent(PAEventsType.SEND_PA_TIMELINE_DOWNLOAD, { legalFact });
+
+    const isAAR = legalFact.category === NotificationDocumentType.AAR;
+    const documentType = isAAR ? NotificationDocumentType.AAR : NotificationDocumentType.LEGAL_FACT;
+    const documentId = isAAR
+      ? legalFact.key
+      : legalFact.key.substring(legalFact.key.lastIndexOf('/') + 1);
+
+    dispatch(getSentNotificationDocument({ iun: notification.iun, documentType, documentId }))
+      .unwrap()
+      .then(showInfoMessageIfRetryAfterOrDownload)
+      .catch(() => {});
+  };
+
   return (
     <>
       {hasNotificationSentApiError && (
@@ -401,6 +417,7 @@ const NotificationDetail: React.FC = () => {
                   detailsAriaLabel={t('detail.notification-details-aria-label', {
                     ns: 'notifiche',
                   })}
+                  isSender
                 />
               </Stack>
               {/* end ELEMENT 1: intro and alert */}
@@ -475,6 +492,8 @@ const NotificationDetail: React.FC = () => {
                   recipients={notification.recipients}
                   isParty={true}
                   onTimelineClick={handleGoToTimeline}
+                  clickHandler={legalFactDownloadHandler}
+                  isNewTimelineCopyEnabled={IS_NEW_TIMELINE_COPY_ENABLED}
                 />
               )}
               <NotificationDetailSection

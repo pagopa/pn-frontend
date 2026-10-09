@@ -1,7 +1,7 @@
 import {
-  People,
   /*  ShowChart */
-  SupervisedUserCircle,
+  SupervisedUserCircleOutlined as GroupsIcon,
+  PersonOutline as UsersIcon,
 } from '@mui/icons-material';
 import { IS_DEVELOP, SideMenuItem } from '@pagopa-pn/pn-commons';
 
@@ -12,10 +12,10 @@ import * as routes from '../navigation/routes.const';
 
 export function selfcareMenuItems(idOrganization: string, lang: string): Array<SideMenuItem> {
   return [
-    { label: 'menu.users', icon: People, route: routes.USERS(idOrganization, lang) },
+    { label: 'menu.users', icon: UsersIcon, route: routes.USERS(idOrganization, lang) },
     {
       label: 'menu.groups',
-      icon: SupervisedUserCircle,
+      icon: GroupsIcon,
       route: routes.GROUPS(idOrganization, lang),
     },
   ];

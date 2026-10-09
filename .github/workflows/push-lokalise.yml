@@ -1,0 +1,58 @@
+name: Push locales to Lokalise
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - develop
+    paths:
+      - 'packages/*/public/locales/it/**'
+
+concurrency:
+  group: lokalise-push
+  cancel-in-progress: false
+
+permissions:
+  # write serve al primo run per creare/pushare il tag 'lokalise-upload-complete'.
+  # Dopo che il tag esiste si puo' tornare a 'contents: read' (come io-app).
+  contents: write
+
+jobs:
+  push-locale:
+    runs-on: ubuntu-latest
+    environment: lokalise
+    strategy:
+      fail-fast: false
+      matrix:
+        app: [PFL, PF, PA, PG]
+    env:
+      # I codici app sono anche il suffisso delle variabili LOKALISE_PROJECT_ID_<CODICE>.
+      PACKAGES: >-
+        {
+          "PFL": "pn-personafisica-login",
+          "PF": "pn-personafisica-webapp",
+          "PA": "pn-pa-webapp",
+          "PG": "pn-personagiuridica-webapp"
+        }
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - name: Push ${{ matrix.app }} locales to Lokalise
+        uses: lokalise/lokalise-push-action@bb67ba45a739acf22e3c00f05dc50a55737fa5c8 #v5.3.1
+        with:
+          api_token: ${{ secrets.LOKALISE_API_TOKEN }}
+          project_id: ${{ vars[format('LOKALISE_PROJECT_ID_{0}', matrix.app)] }}
+          base_lang: it
+          translations_path: packages/${{ fromJson(env.PACKAGES)[matrix.app] }}/public/locales
+          file_ext: json
+          # Carica sempre TUTTI i file it/ dell'app in esecuzione, non solo quelli
+          # modificati: se cambia common.json vogliamo che l'intero progetto Lokalise
+          # dell'app resti allineato (login.json incluso). Lo scope resta comunque la
+          # singola app, perche' translations_path punta solo al suo package.
+          # Nota: cosi' evitiamo anche il tag 'lokalise-upload-complete', che l'action
+          # usa per riconoscere il primo run ma tiene unico per repository e non per
+          # progetto (con 4 progetti sarebbe inaffidabile).
+          rambo_mode: true
+          additional_params: |
+            cleanup_mode: true
+            convert_placeholders: false

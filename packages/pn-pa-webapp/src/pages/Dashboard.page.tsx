@@ -70,6 +70,10 @@ const Dashboard = () => {
     cleanFilters: () => void 0,
   });
 
+  const filtersApplied = filterNotificationsRef.current?.filtersApplied;
+  const cleanFilters = filterNotificationsRef.current?.cleanFilters;
+  const showFilters = notifications.length > 0 || filtersApplied;
+
   // Pagination handlers
   const handleChangePage = (paginationData: PaginationData) => {
     dispatch(setPagination({ size: paginationData.size, page: paginationData.page }));
@@ -212,9 +216,11 @@ const Dashboard = () => {
 
       {isSmallScreen && getTitleButtonContent()}
 
-      <Box sx={{ mb: { xs: 0, lg: 3 } }}>
-        <FilterNotifications ref={filterNotificationsRef} showFilters />
-      </Box>
+      {showFilters && (
+        <Box sx={{ mb: { xs: 0, lg: 3 } }}>
+          <FilterNotifications ref={filterNotificationsRef} showFilters />
+        </Box>
+      )}
 
       <ApiErrorWrapper
         apiId={DASHBOARD_ACTIONS.GET_SENT_NOTIFICATIONS}
@@ -228,8 +234,8 @@ const Dashboard = () => {
             // onChangeSorting={handleChangeSorting} // Riabilitare con la issue PN-1124
             onManualSend={handleRouteManualSend}
             onApiKeys={handleRouteApiKeys}
-            filtersApplied={filterNotificationsRef.current.filtersApplied}
-            onCleanFilters={filterNotificationsRef.current.cleanFilters}
+            filtersApplied={filtersApplied}
+            onCleanFilters={cleanFilters}
             hasTimeoutError={hasTimeoutError}
             loading={loading}
             onRetry={fetchNotifications}
@@ -240,8 +246,8 @@ const Dashboard = () => {
             // onChangeSorting={handleChangeSorting} // Riabilitare con la issue PN-1124
             onManualSend={handleRouteManualSend}
             onApiKeys={handleRouteApiKeys}
-            filtersApplied={filterNotificationsRef.current.filtersApplied}
-            onCleanFilters={filterNotificationsRef.current.cleanFilters}
+            filtersApplied={filtersApplied}
+            onCleanFilters={cleanFilters}
             hasTimeoutError={hasTimeoutError}
             loading={loading}
             onRetry={fetchNotifications}

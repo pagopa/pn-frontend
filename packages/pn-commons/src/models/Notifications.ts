@@ -1,6 +1,9 @@
 import { NotificationStatus, UnifiedNotificationStatus } from './NotificationStatus';
 
-export type NotificationCommunicationType = 'LEGAL' | 'INFORMAL';
+export enum NotificationCommunicationType {
+  LEGAL = 'LEGAL',
+  INFORMAL = 'INFORMAL',
+}
 
 export type NotificationCommunicationOutcomes = {
   viewed: boolean;

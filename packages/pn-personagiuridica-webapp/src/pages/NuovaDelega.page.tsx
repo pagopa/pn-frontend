@@ -67,6 +67,9 @@ const NuovaDelega = () => {
   const isMobile = useIsMobile();
   const dispatch = useAppDispatch();
   const { entities, created } = useAppSelector((state: RootState) => state.newDelegationState);
+  const organizationName = useAppSelector(
+    (state: RootState) => state.userState.user?.organization?.name
+  );
   const handleSearchStringChangeInput = useSearchStringChangeInput();
   const [senderInputValue, setSenderInputValue] = useState('');
   const { DELEGATIONS_TO_PG_ENABLED } = getConfiguration();
@@ -229,7 +232,7 @@ const NuovaDelega = () => {
       </MIBreadcrumbs>
       <TitleBox
         title={t('nuovaDelega.title')}
-        subTitle={t('nuovaDelega.subtitle')}
+        subTitle={t('nuovaDelega.subtitle', { organizationName })}
         variantTitle="h3"
         variantSubTitle="body1"
         sx={{ pt: '20px' }}

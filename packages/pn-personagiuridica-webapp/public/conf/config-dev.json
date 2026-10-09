@@ -1,6 +1,6 @@
 {
   "API_BASE_URL": "https://webapi.dev.notifichedigitali.it/",
-  "INACTIVITY_HANDLER_MINUTES": 0,
+  "INACTIVITY_HANDLER_MINUTES": 5,
   "MIXPANEL_TOKEN": "41f1a1ad6abcc5fc5ed5809b9a9d5761",
   "ONE_TRUST_DRAFT_MODE": true,
   "ONE_TRUST_PP": "9d7b7236-956b-4669-8943-5284fba6a815",
@@ -29,5 +29,6 @@
   "FACSIMILE_FR": "https://notifichedigitali.it/assets/Fac_Simile_Document_FR_c33efc5894.pdf",
   "FACSIMILE_DE": "https://notifichedigitali.it/assets/Fac_Simile_Document_DE_735c331586.pdf",
   "FACSIMILE_SL": "https://notifichedigitali.it/assets/Fac_Simile_Document_SL_3b2209e279.pdf",
-  "IS_NEW_TIMELINE_ENABLED": true
+  "IS_NEW_TIMELINE_ENABLED": true,
+  "IS_NEW_TIMELINE_COPY_ENABLED": false
 }

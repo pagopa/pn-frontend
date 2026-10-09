@@ -5,10 +5,11 @@ export class ScheduleDigitalWorkflowStep extends TimelineStep {
     return {
       ...this.localizeTimelineStatus(
         'schedule-digital-workflow',
-        payload.isMultiRecipient, 
+        payload.isMultiRecipient,
         'Invio per via digitale in preparazione',
         `L'invio della notifica per via digitale a ${payload.recipient?.denomination} è in preparazione.`,
-        this.nameAndTaxId(payload)
+        this.nameAndTaxId(payload),
+        payload.delegatorName
       ),
     };
   }

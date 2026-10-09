@@ -3,7 +3,8 @@ type LocalizationNamespacesNames =
   | 'notifications'
   | 'appStatus'
   | 'delegations'
-  | 'recapiti';
+  | 'recapiti'
+  | 'campaigns';
 
 type LocalizationNamespaces = {
   [key in LocalizationNamespacesNames]: string;
@@ -15,6 +16,8 @@ type LocalizationFunction = (
   data?: { [key: string]: string | undefined }
 ) => string;
 
+type LocalizationExistsFunction = (namespace: string | Array<string>, path: string) => boolean;
+
 /* eslint-disable-next-line functional/no-let */
 let localizationNamespaces: LocalizationNamespaces = {
   common: 'common',
@@ -22,10 +25,32 @@ let localizationNamespaces: LocalizationNamespaces = {
   appStatus: 'appStatus',
   delegations: 'deleghe',
   recapiti: 'recapiti',
+  campaigns: 'campaigns',
 };
 
 /* eslint-disable-next-line functional/no-let */
 let translateFunction: LocalizationFunction | undefined;
+
+/* eslint-disable-next-line functional/no-let */
+let localizationExistsFunction: LocalizationExistsFunction | undefined;
+
+const getLocalizationNamespace = (namespaceName: string | Array<string>): string | Array<string> =>
+  Array.isArray(namespaceName)
+    ? namespaceName.map((name) => localizationNamespaces[name as LocalizationNamespacesNames])
+    : localizationNamespaces[namespaceName as LocalizationNamespacesNames];
+
+export const initLocalizationExists = (existsFn?: LocalizationExistsFunction) => {
+  // eslint-disable-next-line functional/immutable-data
+  localizationExistsFunction = existsFn;
+};
+
+export function hasLocalizedLabel(namespaceName: string | Array<string>, path: string): boolean {
+  if (!localizationExistsFunction) {
+    return false;
+  }
+
+  return localizationExistsFunction(getLocalizationNamespace(namespaceName), path);
+}
 
 export const initLocalization = (
   translateFn: LocalizationFunction,
@@ -45,9 +70,7 @@ export function getLocalizedOrDefaultLabel(
   defaultLabel?: string,
   data?: { [key: string]: any }
 ): string {
-  const namespace = Array.isArray(namespaceName)
-    ? namespaceName.map((nm) => localizationNamespaces[nm as LocalizationNamespacesNames])
-    : localizationNamespaces[namespaceName as LocalizationNamespacesNames];
+  const namespace = getLocalizationNamespace(namespaceName);
   if (translateFunction) {
     const localizedLabel = translateFunction(namespace, path, data);
     if (!localizedLabel || localizedLabel === path) {

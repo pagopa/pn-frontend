@@ -10,7 +10,7 @@ const viteConfig = defineViteConfig({
 const vitestConfig = defineVitestConfig({
   test: {
     globals: true,
-    setupFiles: './src/setupTests.ts',
+    setupFiles: './src/setupTests.tsx',
     environment: 'jsdom',
     exclude: configDefaults.exclude,
     reporters: ['vitest-sonar-reporter', 'default'],

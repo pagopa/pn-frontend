@@ -11,7 +11,18 @@ import {
 } from '@pagopa-pn/pn-commons';
 import { createSlice } from '@reduxjs/toolkit';
 
-import { getDowntimeHistory, getSentNotification, getSentNotificationTimeline } from './actions';
+import {
+  BffFullSentInformalNotificationTimelineV1,
+  BffFullSentInformalNotificationV1,
+  InformalNotificationStatusV1,
+} from '../../generated-client/informal-notifications';
+import {
+  getDowntimeHistory,
+  getSentInformalNotification,
+  getSentInformalNotificationTimeline,
+  getSentNotification,
+  getSentNotificationTimeline,
+} from './actions';
 
 const initialState = {
   loading: false,
@@ -26,6 +37,13 @@ const initialState = {
     notificationStatusHistory: [] as Array<NotificationStatusHistory>,
     timeline: [] as Array<INotificationDetailTimeline>,
   } as NotificationDetail,
+  informalNotification: {
+    iun: '',
+    senderDenomination: '',
+    recipients: [],
+    subject: '',
+    notificationStatus: '' as InformalNotificationStatusV1,
+  } as BffFullSentInformalNotificationV1,
   notificationTimeline: {
     iun: '',
     subject: '',
@@ -33,6 +51,15 @@ const initialState = {
     isCancelled: false,
     notificationStatusHistory: [],
   } as NotificationTimelineResponse,
+  informalNotificationTimeline: {
+    iun: '',
+    recipients: [],
+    notificationStatusHistory: [],
+    communicationOutcomes: {
+      delivered: undefined,
+      viewed: undefined,
+    },
+  } as BffFullSentInformalNotificationTimelineV1,
   downtimeEvents: [] as Array<Downtime>,
 };
 
@@ -52,6 +79,12 @@ const notificationSlice = createSlice({
     });
     builder.addCase(getDowntimeHistory.fulfilled, (state, action) => {
       state.downtimeEvents = action.payload.result;
+    });
+    builder.addCase(getSentInformalNotification.fulfilled, (state, action) => {
+      state.informalNotification = action.payload;
+    });
+    builder.addCase(getSentInformalNotificationTimeline.fulfilled, (state, action) => {
+      state.informalNotificationTimeline = action.payload;
     });
   },
 });

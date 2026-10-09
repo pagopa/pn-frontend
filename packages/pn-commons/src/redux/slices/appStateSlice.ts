@@ -18,6 +18,7 @@ export interface AppStateState {
     errors: Array<IAppMessage>;
     success: Array<IAppMessage>;
     info: Array<IAppMessage>;
+    warning: Array<IAppMessage>;
   };
   responseEvent: {
     outcome: AppResponseOutcome;
@@ -40,6 +41,7 @@ const initialState: AppStateState = {
     errors: [],
     success: [],
     info: [],
+    warning: [],
   },
   responseEvent: null,
   isInitialized: false,
@@ -156,6 +158,25 @@ export const appStateSlice = createSlice({
     removeInfo(state, action: PayloadAction<string>) {
       state.messages.info = state.messages.info.filter((e) => e.id !== action.payload);
     },
+    addWarning(
+      state,
+      action: PayloadAction<{
+        title: string;
+        message: string;
+        status?: number;
+      }>
+    ) {
+      const message = createAppMessage({
+        title: action.payload.title,
+        message: action.payload.message,
+        showTechnicalData: false,
+        status: action.payload.status,
+      });
+      state.messages.warning.push(message);
+    },
+    removeWarning(state, action: PayloadAction<string>) {
+      state.messages.warning = state.messages.warning.filter((e) => e.id !== action.payload);
+    },
     finishInitialization(state) {
       state.isInitialized = true;
     },
@@ -205,5 +226,6 @@ export const appStateSelectors = {
   selectErrors: (state: any) => state.appState.messages.errors,
   selectSuccess: (state: any) => state.appState.messages.success,
   selectInfo: (state: any) => state.appState.messages.info,
+  selectWarning: (state: any) => state.appState.messages.warning,
   selectIsInitialized: (state: any) => state.appState.isInitialized,
 };

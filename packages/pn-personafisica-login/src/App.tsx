@@ -2,7 +2,13 @@ import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { Box } from '@mui/material';
-import { APP_VERSION, initLocalization, useMultiEvent, useTracking } from '@pagopa-pn/pn-commons';
+import {
+  APP_VERSION,
+  initLocalization,
+  initLocalizationExists,
+  useMultiEvent,
+  useTracking,
+} from '@pagopa-pn/pn-commons';
 
 import Router from './navigation/routes';
 import { getConfiguration } from './services/configuration.service';
@@ -17,7 +23,7 @@ const App = () => {
     callback: () => console.log(`v${APP_VERSION}`),
   });
 
-  const { t } = useTranslation(['common']);
+  const { t, i18n } = useTranslation(['common']);
   const [isInitialized, setIsInitialized] = useState(false);
 
   useEffect(() => {
@@ -25,6 +31,7 @@ const App = () => {
       setIsInitialized(true);
       // init localization
       initLocalization((namespace, path, data) => t(path, { ns: namespace, ...data }));
+      initLocalizationExists((namespace, path) => i18n.exists(path, { ns: namespace }));
     }
   }, [isInitialized]);
 

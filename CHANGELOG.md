@@ -3,6 +3,116 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.27.0-RC.5](https://github.com/pagopa/pn-frontend/compare/v2.27.0-RC.4...v2.27.0-RC.5) (2026-10-09)
+
+### Bug Fixes
+
+* **PN-21738:** show recipient access legal fact in returned to sender status ([#2132](https://github.com/pagopa/pn-frontend/issues/2132)) ([6c3bd19](https://github.com/pagopa/pn-frontend/commit/6c3bd1956eba3dc4cf2df36f604908ab41fd943e))
+* **PN-21770:** wrong error message for communication list ([#2131](https://github.com/pagopa/pn-frontend/issues/2131)) ([599d27d](https://github.com/pagopa/pn-frontend/commit/599d27de84f7a69a5b797da0b396769d8ab1aef3))
+
+
+# [2.27.0-RC.4](https://github.com/pagopa/pn-frontend/compare/v2.27.0-RC.3...v2.27.0-RC.4) (2026-10-08)
+
+### Bug Fixes
+
+* **PN-21695:** align perfection link clickable area ([#2119](https://github.com/pagopa/pn-frontend/issues/2119)) ([ac36052](https://github.com/pagopa/pn-frontend/commit/ac360528999598501d29aefd0267eeca47e8a0aa))
+* **PN-21697:** remove PEC address from SCHEDULE_DIGITAL_WORKFLOW events ([#2122](https://github.com/pagopa/pn-frontend/issues/2122)) ([44ae8c1](https://github.com/pagopa/pn-frontend/commit/44ae8c191067054e5a3dbf2f2800cf98890c6d69))
+* **PN-21713:** add anchors to perfection links ([#2117](https://github.com/pagopa/pn-frontend/issues/2117)) ([0cb1a22](https://github.com/pagopa/pn-frontend/commit/0cb1a224df233a30c6dabee4db4a0e7f0f9a5f40))
+* **PN-21722:** campaign detail mobile layout ([#2127](https://github.com/pagopa/pn-frontend/issues/2127)) ([225884e](https://github.com/pagopa/pn-frontend/commit/225884e7137555285a460829f2ca4103c21fe93e))
+* **PN-21729:** show custom SnackBar for unavailable legal fact ([#2120](https://github.com/pagopa/pn-frontend/issues/2120)) ([afdf5d4](https://github.com/pagopa/pn-frontend/commit/afdf5d4f6736b7a01ad5ed1d736c810152356b5e))
+* **PN-21734:** correct viewed outcome filter ([#2124](https://github.com/pagopa/pn-frontend/issues/2124)) ([14885ac](https://github.com/pagopa/pn-frontend/commit/14885acb959a7069addbbcdd4813887cbde259d5))
+* **PN-21787:** show the successful email sending from the progress event in the informal notification timeline ([#2121](https://github.com/pagopa/pn-frontend/issues/2121)) ([ff736a4](https://github.com/pagopa/pn-frontend/commit/ff736a4d7001936a8215b7e96226f357433aea35))
+* **PN-21835:** show the successful IO sending from the progress event in the informal notification timeline ([#2125](https://github.com/pagopa/pn-frontend/issues/2125)) ([d3114c6](https://github.com/pagopa/pn-frontend/commit/d3114c6e0782dd387405eb2c3410c4ec7bab381d))
+* **PN-21836:** set viewed and read tag for all channels in informal notification timeline ([#2126](https://github.com/pagopa/pn-frontend/issues/2126)) ([3602aa0](https://github.com/pagopa/pn-frontend/commit/3602aa0d36c0212517f1acdea458e135c3d60ca6))
+* **PN-21844:** removed SEND from viewed description ([#2128](https://github.com/pagopa/pn-frontend/issues/2128)) ([58b55bb](https://github.com/pagopa/pn-frontend/commit/58b55bb228239fad8e32d30f453ecb40417137bf))
+
+
+# [2.27.0-RC.3](https://github.com/pagopa/pn-frontend/compare/v2.27.0-RC.2...v2.27.0-RC.3) (2026-10-07)
+
+### Bug Fixes
+
+* **PN-21725, PN-21733, PN-21735:** align informal notifications filters behaviour with legal notifications ([#2109](https://github.com/pagopa/pn-frontend/issues/2109)) ([214a1cd](https://github.com/pagopa/pn-frontend/commit/214a1cd202e0f2c88d0cdfe14ade9cc9b038859c))
+* **PN-21734:** exclude viewed communications from delivered filter ([#2114](https://github.com/pagopa/pn-frontend/issues/2114)) ([7f81382](https://github.com/pagopa/pn-frontend/commit/7f8138251ff9202c5e21414c14f2b8fc500a127f))
+* **PN-21736:** add clear filter CTA to ComBo empty state ([#2113](https://github.com/pagopa/pn-frontend/issues/2113)) ([920002b](https://github.com/pagopa/pn-frontend/commit/920002bfee459d7bdd8dbf210b95435030094a22))
+* **PN-21745:** pick the right subject and enrich message of informal notification detail ([#2115](https://github.com/pagopa/pn-frontend/issues/2115)) ([17e96a3](https://github.com/pagopa/pn-frontend/commit/17e96a34e63e47729739b30d6003f0a05270fdf8))
+* **PN-21756:** keeps the current page when coming back to the campaign list ([#2116](https://github.com/pagopa/pn-frontend/issues/2116)) ([a39dbc4](https://github.com/pagopa/pn-frontend/commit/a39dbc46a96c80e5c094fb841d33ce9a50989e86))
+* **PN-21757:** serve IdP logos from local assets instead of IO CDN ([#2112](https://github.com/pagopa/pn-frontend/issues/2112)) ([3e4f6d9](https://github.com/pagopa/pn-frontend/commit/3e4f6d997b80370a8c2c089e579e2a5faeac1d6b))
+
+
+# [2.27.0-RC.2](https://github.com/pagopa/pn-frontend/compare/v2.27.0-RC.1...v2.27.0-RC.2) (2026-10-05)
+
+### Bug Fixes
+
+* **PN-21692:** hide DELIVERING description in status box with new timeline copy ([#2096](https://github.com/pagopa/pn-frontend/issues/2096)) ([92b4d5e](https://github.com/pagopa/pn-frontend/commit/92b4d5e6827393ce2c1a3553c518dc484cfb3dc2))
+* **PN-21696:** hide SERCQ SEND event descriptions with new timeline copy ([#2097](https://github.com/pagopa/pn-frontend/issues/2097)) ([ef732c5](https://github.com/pagopa/pn-frontend/commit/ef732c50dc6cd4262d54845e60222e7906564043))
+* **PN-21710:** informal timeline title label of COMPLETED_REACHED and COMPLETED_UNREACHED events ([#2105](https://github.com/pagopa/pn-frontend/issues/2105)) ([000ba0d](https://github.com/pagopa/pn-frontend/commit/000ba0db8f8571cfc5b942e7f612392574853006))
+* **PN-21715, PN-21712:** independent loading states in campaign detail ([#2104](https://github.com/pagopa/pn-frontend/issues/2104)) ([dfdd178](https://github.com/pagopa/pn-frontend/commit/dfdd178d4764c03ba2809134d1fb5d555e0722c8))
+* **PN-21723:** communications section title visibility in campaign detail error state ([#2107](https://github.com/pagopa/pn-frontend/issues/2107)) ([52b686d](https://github.com/pagopa/pn-frontend/commit/52b686d5ab871d27c1a5525b0cdc8a39a566eaaa))
+* **PN-21732:** delegate view copy for timeline events and statuses ([#2108](https://github.com/pagopa/pn-frontend/issues/2108)) ([5a28191](https://github.com/pagopa/pn-frontend/commit/5a281917cb808f5c57e635201891bf94f63cd40c))
+
+
+# [2.27.0-RC.1](https://github.com/pagopa/pn-frontend/compare/v2.27.0-RC.0...v2.27.0-RC.1) (2026-10-02)
+
+### Bug Fixes
+
+* **PN-21455:** show channel events for every informal timeline status ([#2091](https://github.com/pagopa/pn-frontend/issues/2091)) ([531f4e4](https://github.com/pagopa/pn-frontend/commit/531f4e418b16ffbff1387dc4ef9fb51f65c766a8))
+* **PN-21694:** show campaign communications filters when filters are applied ([#2098](https://github.com/pagopa/pn-frontend/issues/2098)) ([430ebf9](https://github.com/pagopa/pn-frontend/commit/430ebf95ebe82c2e8ecd26b1ebe90109e7447dd5))
+* **PN-21699:** reset ComBo communications pagination when applying filters ([#2100](https://github.com/pagopa/pn-frontend/issues/2100)) ([7e5775e](https://github.com/pagopa/pn-frontend/commit/7e5775e0584448df9780a0a7e05480bc8428cb6d))
+* **PN-21705:** empty state message in detail campaign communications ([#2102](https://github.com/pagopa/pn-frontend/issues/2102)) ([1e8eea8](https://github.com/pagopa/pn-frontend/commit/1e8eea8b3917dc0e229ffee0fb1af129bc9ae73b))
+
+### Features
+
+* **PN-20352:** VIEWED copy for the delegate view ([#2093](https://github.com/pagopa/pn-frontend/issues/2093)) ([d46549c](https://github.com/pagopa/pn-frontend/commit/d46549c5da1febf69590b23a4a64e7d17f4c53a1))
+
+
+# [2.27.0-RC.0](https://github.com/pagopa/pn-frontend/compare/v2.26.1...v2.27.0-RC.0) (2026-09-29)
+
+### Bug Fixes
+
+* **A2-5901:** update component prop in title component ([#2046](https://github.com/pagopa/pn-frontend/issues/2046)) ([df49272](https://github.com/pagopa/pn-frontend/commit/df49272bb73ea91b35049ddee3174662c4134472))
+* **PF-PG:** add timeout in FilterNotifications.test as in PA ([#2072](https://github.com/pagopa/pn-frontend/issues/2072)) ([8387d34](https://github.com/pagopa/pn-frontend/commit/8387d34e853b04a28a9a6b6962d25341310153a1))
+* **PN-14151:** add scroll to top when step to next ([#2043](https://github.com/pagopa/pn-frontend/issues/2043)) ([514819a](https://github.com/pagopa/pn-frontend/commit/514819ad44b361f9ef8047236551e6fb356f0c59))
+* **PN-18449:** add boldness in alert when errors in payment ([#2040](https://github.com/pagopa/pn-frontend/issues/2040)) ([6f87c85](https://github.com/pagopa/pn-frontend/commit/6f87c85e263e750a01ab63c6c7cc05db0721fb42))
+* **PN-19850:** update content with delegator name ([#2041](https://github.com/pagopa/pn-frontend/issues/2041)) ([40a299f](https://github.com/pagopa/pn-frontend/commit/40a299fe744e9ee0271864e325db4005c1371806))
+* **PN-19926:** add dialog when clicking download app io on desktop ([#2034](https://github.com/pagopa/pn-frontend/issues/2034)) ([239d609](https://github.com/pagopa/pn-frontend/commit/239d609df33aca1c64927f809ba6ae1535f08ac4))
+* **PN-20238:** refine campaign communication filters and payment details ([#2086](https://github.com/pagopa/pn-frontend/issues/2086)) ([38931fd](https://github.com/pagopa/pn-frontend/commit/38931fdf6583b41ffe38f7e43dc8f708a98549e2))
+* **PN-20352:** CON020 link placeholder ([#2082](https://github.com/pagopa/pn-frontend/issues/2082)) ([43160cf](https://github.com/pagopa/pn-frontend/commit/43160cf45a42812de2411092ec1afc5e1d283e5c))
+* **PN-20631:** move verify pec button after checkbox in onboarding ([#2037](https://github.com/pagopa/pn-frontend/issues/2037)) ([0bffd45](https://github.com/pagopa/pn-frontend/commit/0bffd45cd9298c2253b588646a6d4f9bddc4bfde))
+* **PN-20762:** reset pagination when switching to delegated notifications ([#2025](https://github.com/pagopa/pn-frontend/issues/2025)) ([794bfdd](https://github.com/pagopa/pn-frontend/commit/794bfdd90d1921b01efee090e724ac47a6d6b013))
+* **PN-20830:** preserve notification filters on viewport resize ([#2024](https://github.com/pagopa/pn-frontend/issues/2024)) ([26a3aeb](https://github.com/pagopa/pn-frontend/commit/26a3aeb2669ca272f997f3d88437d63ef2502782))
+* **PN-20838:** translate party role in header on footer language change ([#2017](https://github.com/pagopa/pn-frontend/issues/2017)) ([7da9918](https://github.com/pagopa/pn-frontend/commit/7da9918dd8bc7ac8cc5c9e83252a3df63782d10a))
+* **PN-20855:** prevent ToS and Privacy links from toggling acceptance switch ([#2021](https://github.com/pagopa/pn-frontend/issues/2021)) ([da11c62](https://github.com/pagopa/pn-frontend/commit/da11c62cd0bd5eb1ae87551af56a448299d9cd4d))
+* **PN-20892:** move support route out of the ToS guard ([#2020](https://github.com/pagopa/pn-frontend/issues/2020)) ([57d0be9](https://github.com/pagopa/pn-frontend/commit/57d0be9066411cb1ca4c138a98a4b305ffc8b1c0))
+* **PN-21009:** fixed documents not available box in ComBo detail ([#2076](https://github.com/pagopa/pn-frontend/issues/2076)) ([436426f](https://github.com/pagopa/pn-frontend/commit/436426fbb9708c5c510892bf624425332a074de3))
+* **PN-21163:** handle null notification filters ref ([#2066](https://github.com/pagopa/pn-frontend/issues/2066)) ([14afbc1](https://github.com/pagopa/pn-frontend/commit/14afbc1156e6a6fe26fc9d8a9982a8b4be04a468))
+* **PN-21163:** PA hide notification filters on empty state ([#2033](https://github.com/pagopa/pn-frontend/issues/2033)) ([2f8a4e1](https://github.com/pagopa/pn-frontend/commit/2f8a4e10e655aeee05ce116305c669a58def110d))
+* **PN-21198:** fix Youtube link in pre-login footer ([#2016](https://github.com/pagopa/pn-frontend/issues/2016)) ([81038f1](https://github.com/pagopa/pn-frontend/commit/81038f149ab0a9addf3a142fd6045785c503db3c))
+* **PN-21375:** reset campaign communications filters and pagination when leaving campaign detail ([#2085](https://github.com/pagopa/pn-frontend/issues/2085)) ([daadc4b](https://github.com/pagopa/pn-frontend/commit/daadc4bcc16535bc94b75eead96c5faf21dca1ce))
+* **PN-21492:** fix legal issues ([#2059](https://github.com/pagopa/pn-frontend/issues/2059)) ([15f5cd6](https://github.com/pagopa/pn-frontend/commit/15f5cd619bdc7462edb21a3ed328108cc4645ba1))
+
+### Features
+
+* **PN-19280:** add legalfact inline with the description of the timeline event ([#2056](https://github.com/pagopa/pn-frontend/issues/2056)) ([aee42b4](https://github.com/pagopa/pn-frontend/commit/aee42b496a196200fb6492ff9650e6433de71313))
+* **PN-19280:** i18n overlay backend for the reworked timeline copy ([#2038](https://github.com/pagopa/pn-frontend/issues/2038)) ([47a6c65](https://github.com/pagopa/pn-frontend/commit/47a6c65a4a6c0ae39421a57f6c1b63c282349c3c))
+* **PN-20236:** add campaigns list to PA ([#2049](https://github.com/pagopa/pn-frontend/issues/2049)) ([7d67bd0](https://github.com/pagopa/pn-frontend/commit/7d67bd04c87f3b8f4d96d285ffbb8a259a551576))
+* **PN-20238:** Add ComBo detail to PA ([#2068](https://github.com/pagopa/pn-frontend/issues/2068)) ([a6f549c](https://github.com/pagopa/pn-frontend/commit/a6f549cb60dcae12b90dd58ff713b55d7a877e31))
+* **PN-20352:** add notifiche-v2 translations ([#2084](https://github.com/pagopa/pn-frontend/issues/2084)) ([0eebb05](https://github.com/pagopa/pn-frontend/commit/0eebb05d302cf9276f9c1a85a346c0caede8c6b1))
+* **PN-20352:** add perfection date and titles for digital failure and unreachable events ([#2063](https://github.com/pagopa/pn-frontend/issues/2063)) ([06d1b0f](https://github.com/pagopa/pn-frontend/commit/06d1b0f742628b4d117ab92149987233294c5266))
+* **PN-20352:** add some content copy v2 ([#2067](https://github.com/pagopa/pn-frontend/issues/2067)) ([177a824](https://github.com/pagopa/pn-frontend/commit/177a824b770825d2b868a6eae9028e9dbf15175e))
+* **PN-20352:** add the perfection modes link to the timeline copy ([#2064](https://github.com/pagopa/pn-frontend/issues/2064)) ([660503b](https://github.com/pagopa/pn-frontend/commit/660503b24efb3c60fda2e466c8030d19b2100406))
+* **PN-20352:** delivered status label ([#2078](https://github.com/pagopa/pn-frontend/issues/2078)) ([ca0e619](https://github.com/pagopa/pn-frontend/commit/ca0e619ea9362fdf0009f51dd4a58592d0af9d6c))
+* **PN-20352:** enable FF in dev ([#2081](https://github.com/pagopa/pn-frontend/issues/2081)) ([d4106b7](https://github.com/pagopa/pn-frontend/commit/d4106b744424e048c865cbf38d53fbba2591c1ba))
+* **PN-20352:** generic copy for VIEWED status ([#2070](https://github.com/pagopa/pn-frontend/issues/2070)) ([a55350e](https://github.com/pagopa/pn-frontend/commit/a55350ee0433f3a4fc80b86eee55934693741f69))
+* **PN-20352:** pass the PEC address to the schedule digital workflow description ([#2065](https://github.com/pagopa/pn-frontend/issues/2065)) ([ce88bfa](https://github.com/pagopa/pn-frontend/commit/ce88bfa322e04182cf132ef86b25a4db3601a585))
+* **PN-20352:** remove v2 pa pg ([#2079](https://github.com/pagopa/pn-frontend/issues/2079)) ([8954ebf](https://github.com/pagopa/pn-frontend/commit/8954ebf1b820673657e6519b7b17e68a027f718a))
+* **PN-20355:** add Mixpanel tracking for PA campaigns ([#2075](https://github.com/pagopa/pn-frontend/issues/2075)) ([9306c56](https://github.com/pagopa/pn-frontend/commit/9306c56e81de16a7269d5358b139fce9dc8f20c1))
+* **PN-21259:** added disclaimer to support form ([#2073](https://github.com/pagopa/pn-frontend/issues/2073)) ([28708f6](https://github.com/pagopa/pn-frontend/commit/28708f682a4ea1c264059f3fe2afc024a54850e0))
+* **PN-21455:** PA - Informal notification timeline ([#2080](https://github.com/pagopa/pn-frontend/issues/2080)) ([29d6968](https://github.com/pagopa/pn-frontend/commit/29d6968ca0f099290bf52967f1cc59c5e36890f4))
+* **PN-21564:** improve legal fact display in the notification timeline ([#2069](https://github.com/pagopa/pn-frontend/issues/2069)) ([0e1bfef](https://github.com/pagopa/pn-frontend/commit/0e1bfef3f31a118af7c9369a55d955089c8be5f5))
+* **PN-21592:** added new localization for deliveryFailureCause M10 ([#2074](https://github.com/pagopa/pn-frontend/issues/2074)) ([064727f](https://github.com/pagopa/pn-frontend/commit/064727fe1559434139b8929cb06cff8a0384afc5))
+* **PN-21614:** warning snackbar for unavailable legal facts on cancelled notifications ([#2077](https://github.com/pagopa/pn-frontend/issues/2077)) ([d5a24a4](https://github.com/pagopa/pn-frontend/commit/d5a24a4bf991ba62f20c83ae3286860ee8d352fb))
+
+
 ## [2.26.1](https://github.com/pagopa/pn-frontend/compare/v2.26.1-RC.0...v2.26.1) (2026-09-21)
 
 **Note:** Version bump only for package pn-frontend
