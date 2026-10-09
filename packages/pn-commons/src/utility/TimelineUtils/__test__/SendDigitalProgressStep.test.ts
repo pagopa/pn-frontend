@@ -1,6 +1,11 @@
 import { getTimelineElem, notificationDTO } from '../../../__mocks__/NotificationDetail.mock';
-import { DigitalDomicileType, TimelineCategory } from '../../../models/NotificationDetail';
+import {
+  DigitalDomicileType,
+  LegalFactType,
+  TimelineCategory,
+} from '../../../models/NotificationDetail';
 import { initLocalizationForTest } from '../../../test-utils';
+import { initLocalizationExists } from '../../localization.utility';
 import { SendDigitalProgressStep } from '../SendDigitalProgressStep';
 
 describe('SendDigitalProgressStep', () => {
@@ -86,6 +91,121 @@ describe('SendDigitalProgressStep', () => {
       )}`,
     });
   });
+
+  it.each([
+    { code: 'C008', outcome: 'error' },
+    { code: 'C010', outcome: 'error' },
+    { code: 'DP10', outcome: 'error' },
+    { code: 'C001', outcome: 'success' },
+    { code: 'DP00', outcome: 'success' },
+  ])(
+    'test getTimelineStepInfo with deliveryDetailCode $code and new timeline copy',
+    ({ code, outcome }) => {
+      const timelineElem = getTimelineElem(TimelineCategory.SEND_DIGITAL_PROGRESS, {
+        digitalAddress: {
+          address: 'nome.cognome@pec.it',
+          type: DigitalDomicileType.PEC,
+        },
+        deliveryDetailCode: code,
+      });
+
+      timelineElem.legalFactsIds = [];
+
+      const sendDigitalProgressStep = new SendDigitalProgressStep();
+
+      const payload = {
+        step: timelineElem,
+        recipient: notificationDTO.recipients[0],
+        isMultiRecipient: false,
+        isNewTimelineCopyEnabled: true,
+      };
+
+      const translationData = {
+        ...sendDigitalProgressStep.nameAndTaxId(payload),
+        address: 'nome.cognome@pec.it',
+      };
+
+      // No PEC receipt
+      expect(sendDigitalProgressStep.getTimelineStepInfo(payload)).toStrictEqual({
+        label: `notifiche - detail.timeline.send-digital-progress-${outcome}`,
+        description: `notifiche - detail.timeline.send-digital-progress-${outcome}-description-no-receipt - ${JSON.stringify(
+          translationData
+        )}`,
+      });
+
+      // PEC receipt available
+      const payloadWithReceipt = {
+        ...payload,
+        step: {
+          ...timelineElem,
+          legalFactsIds: [
+            {
+              category: LegalFactType.PEC_RECEIPT,
+              key: 'safestorage://test-pec-receipt.xml',
+            },
+          ],
+        },
+      };
+
+      expect(sendDigitalProgressStep.getTimelineStepInfo(payloadWithReceipt)).toStrictEqual({
+        label: `notifiche - detail.timeline.send-digital-progress-${outcome}`,
+        description: `notifiche - detail.timeline.send-digital-progress-${outcome}-description - ${JSON.stringify(
+          translationData
+        )}`,
+      });
+
+      // Legacy: feature flag disabled, no receipt
+      expect(
+        sendDigitalProgressStep.getTimelineStepInfo({
+          ...payload,
+          isNewTimelineCopyEnabled: false,
+        })
+      ).toStrictEqual({
+        label: `notifiche - detail.timeline.send-digital-progress-${outcome}`,
+        description: `notifiche - detail.timeline.send-digital-progress-${outcome}-description - ${JSON.stringify(
+          translationData
+        )}`,
+      });
+
+      try {
+        initLocalizationExists((_, path) => path.endsWith('-delegate'));
+
+        // Delegate without PEC receipt
+        const payloadDelegate = {
+          ...payload,
+          delegatorName: 'Renato Guttuso',
+        };
+
+        expect(sendDigitalProgressStep.getTimelineStepInfo(payloadDelegate)).toStrictEqual({
+          label: `notifiche - detail.timeline.send-digital-progress-${outcome}`,
+          description: `notifiche - detail.timeline.send-digital-progress-${outcome}-description-no-receipt-delegate - ${JSON.stringify(
+            {
+              ...translationData,
+              recipient: 'Renato Guttuso',
+            }
+          )}`,
+        });
+
+        // Delegate with PEC receipt
+        expect(
+          sendDigitalProgressStep.getTimelineStepInfo({
+            ...payloadWithReceipt,
+            delegatorName: 'Renato Guttuso',
+          })
+        ).toStrictEqual({
+          label: `notifiche - detail.timeline.send-digital-progress-${outcome}`,
+          description: `notifiche - detail.timeline.send-digital-progress-${outcome}-description-delegate - ${JSON.stringify(
+            {
+              ...translationData,
+              recipient: 'Renato Guttuso',
+            }
+          )}`,
+        });
+      } finally {
+        initLocalizationExists(() => false);
+      }
+    }
+  );
 
   it(`test getTimelineStepInfo with unhandled deliveryDetailCode`, () => {
     const timelineElem = getTimelineElem(TimelineCategory.SEND_DIGITAL_PROGRESS, {
