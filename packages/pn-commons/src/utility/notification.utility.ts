@@ -122,6 +122,24 @@ function viewedStatusVariant(statusInfos: StatusInfo, options: ViewedVariantOpti
   return statusInfos;
 }
 
+function returnedToSenderStatusVariant(
+  statusInfos: StatusInfo,
+  statusObject: NotificationStatusHistory | undefined
+): StatusInfo {
+  const hasViewedLegalFact = !!statusObject?.steps?.some(
+    (step) => step.category === TimelineCategory.NOTIFICATION_VIEWED && step.legalFactsIds?.length
+  );
+  const withLegalFactKey = 'status.returned-to-sender-with-legal-fact-description';
+  if (!hasViewedLegalFact || !hasLocalizedLabel('notifications', withLegalFactKey)) {
+    return statusInfos;
+  }
+
+  return {
+    ...statusInfos,
+    description: getLocalizedOrDefaultLabel('notifications', withLegalFactKey),
+  };
+}
+
 /*
  * Returns the mapping between current notification delivered status, label and descriptive message for PA
  * @param  {NotificationStatus} status
@@ -459,7 +477,10 @@ export function getNotificationStatusInfos(
     case NotificationStatus.RETURNED_TO_SENDER:
       return {
         color: 'warning',
-        ...localizeStatus('returned-to-sender', { isMultiRecipient }),
+        ...returnedToSenderStatusVariant(
+          localizeStatus('returned-to-sender', { isMultiRecipient }),
+          statusObject
+        ),
       };
     case NotificationStatus.NOTIFICATION_TIMELINE_REWORKED:
       return {
