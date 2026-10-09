@@ -1,4 +1,5 @@
 import { LegalFactType, SendDigitalDetails } from '../../models/NotificationDetail';
+import { hasLocalizedLabel } from '../localization.utility';
 import { TimelineStep, TimelineStepInfo, TimelineStepPayload } from './TimelineStep';
 
 export class SendDigitalProgressStep extends TimelineStep {
@@ -25,8 +26,10 @@ export class SendDigitalProgressStep extends TimelineStep {
 
     const translationData = { ...this.nameAndTaxId(payload), address };
 
+    const noReceiptDescriptionKey = `detail.timeline.send-digital-progress-${outcome}-description-no-receipt`;
+
     const useNoReceiptDescription =
-      payload.isNewTimelineCopyEnabled &&
+      hasLocalizedLabel('notifications', noReceiptDescriptionKey) &&
       !payload.step.legalFactsIds?.some(
         (legalFact) => legalFact.category === LegalFactType.PEC_RECEIPT
       );
@@ -46,7 +49,7 @@ export class SendDigitalProgressStep extends TimelineStep {
       ? {
           ...stepInfo,
           description: this.localizeDescription(
-            `detail.timeline.send-digital-progress-${outcome}-description-no-receipt`,
+            noReceiptDescriptionKey,
             payload.isMultiRecipient,
             stepInfo.description,
             translationData,

@@ -99,7 +99,7 @@ describe('SendDigitalProgressStep', () => {
     { code: 'C001', outcome: 'success' },
     { code: 'DP00', outcome: 'success' },
   ])(
-    'test getTimelineStepInfo with deliveryDetailCode $code and new timeline copy',
+    'test getTimelineStepInfo with deliveryDetailCode $code and PEC receipt availability',
     ({ code, outcome }) => {
       const timelineElem = getTimelineElem(TimelineCategory.SEND_DIGITAL_PROGRESS, {
         digitalAddress: {
@@ -117,7 +117,6 @@ describe('SendDigitalProgressStep', () => {
         step: timelineElem,
         recipient: notificationDTO.recipients[0],
         isMultiRecipient: false,
-        isNewTimelineCopyEnabled: true,
       };
 
       const translationData = {
@@ -125,42 +124,8 @@ describe('SendDigitalProgressStep', () => {
         address: 'nome.cognome@pec.it',
       };
 
-      // No PEC receipt
+      // Fallback: no-receipt translation unavailable
       expect(sendDigitalProgressStep.getTimelineStepInfo(payload)).toStrictEqual({
-        label: `notifiche - detail.timeline.send-digital-progress-${outcome}`,
-        description: `notifiche - detail.timeline.send-digital-progress-${outcome}-description-no-receipt - ${JSON.stringify(
-          translationData
-        )}`,
-      });
-
-      // PEC receipt available
-      const payloadWithReceipt = {
-        ...payload,
-        step: {
-          ...timelineElem,
-          legalFactsIds: [
-            {
-              category: LegalFactType.PEC_RECEIPT,
-              key: 'safestorage://test-pec-receipt.xml',
-            },
-          ],
-        },
-      };
-
-      expect(sendDigitalProgressStep.getTimelineStepInfo(payloadWithReceipt)).toStrictEqual({
-        label: `notifiche - detail.timeline.send-digital-progress-${outcome}`,
-        description: `notifiche - detail.timeline.send-digital-progress-${outcome}-description - ${JSON.stringify(
-          translationData
-        )}`,
-      });
-
-      // Legacy: feature flag disabled, no receipt
-      expect(
-        sendDigitalProgressStep.getTimelineStepInfo({
-          ...payload,
-          isNewTimelineCopyEnabled: false,
-        })
-      ).toStrictEqual({
         label: `notifiche - detail.timeline.send-digital-progress-${outcome}`,
         description: `notifiche - detail.timeline.send-digital-progress-${outcome}-description - ${JSON.stringify(
           translationData
@@ -168,12 +133,46 @@ describe('SendDigitalProgressStep', () => {
       });
 
       try {
-        initLocalizationExists((_, path) => path.endsWith('-delegate'));
+        initLocalizationExists(
+          (_, path) =>
+            path === `detail.timeline.send-digital-progress-${outcome}-description-no-receipt` ||
+            path ===
+              `detail.timeline.send-digital-progress-${outcome}-description-no-receipt-delegate` ||
+            path === `detail.timeline.send-digital-progress-${outcome}-description-delegate`
+        );
+        // No PEC receipt
+        expect(sendDigitalProgressStep.getTimelineStepInfo(payload)).toStrictEqual({
+          label: `notifiche - detail.timeline.send-digital-progress-${outcome}`,
+          description: `notifiche - detail.timeline.send-digital-progress-${outcome}-description-no-receipt - ${JSON.stringify(
+            translationData
+          )}`,
+        });
+
+        // PEC receipt available
+        const payloadWithReceipt = {
+          ...payload,
+          step: {
+            ...timelineElem,
+            legalFactsIds: [
+              {
+                category: LegalFactType.PEC_RECEIPT,
+                key: 'safestorage://test-pec-receipt.xml',
+              },
+            ],
+          },
+        };
+
+        expect(sendDigitalProgressStep.getTimelineStepInfo(payloadWithReceipt)).toStrictEqual({
+          label: `notifiche - detail.timeline.send-digital-progress-${outcome}`,
+          description: `notifiche - detail.timeline.send-digital-progress-${outcome}-description - ${JSON.stringify(
+            translationData
+          )}`,
+        });
 
         // Delegate without PEC receipt
         const payloadDelegate = {
           ...payload,
-          delegatorName: 'Renato Guttuso',
+          delegatorName: 'Test Delegator',
         };
 
         expect(sendDigitalProgressStep.getTimelineStepInfo(payloadDelegate)).toStrictEqual({
@@ -181,7 +180,7 @@ describe('SendDigitalProgressStep', () => {
           description: `notifiche - detail.timeline.send-digital-progress-${outcome}-description-no-receipt-delegate - ${JSON.stringify(
             {
               ...translationData,
-              recipient: 'Renato Guttuso',
+              recipient: 'Test Delegator',
             }
           )}`,
         });
@@ -190,14 +189,14 @@ describe('SendDigitalProgressStep', () => {
         expect(
           sendDigitalProgressStep.getTimelineStepInfo({
             ...payloadWithReceipt,
-            delegatorName: 'Renato Guttuso',
+            delegatorName: 'Test Delegator',
           })
         ).toStrictEqual({
           label: `notifiche - detail.timeline.send-digital-progress-${outcome}`,
           description: `notifiche - detail.timeline.send-digital-progress-${outcome}-description-delegate - ${JSON.stringify(
             {
               ...translationData,
-              recipient: 'Renato Guttuso',
+              recipient: 'Test Delegator',
             }
           )}`,
         });
