@@ -416,11 +416,20 @@ export function getNotificationStatusInfos(
         color: 'default',
         ...localizeStatus('delivering'),
       };
-    case NotificationStatus.UNREACHABLE:
-      return {
-        color: 'error',
-        ...localizeStatus('unreachable', { isMultiRecipient }),
-      };
+    case NotificationStatus.UNREACHABLE: {
+      const statusInfos = localizeStatus('unreachable', { isMultiRecipient });
+      const delegateDescriptionKey = 'status.unreachable-description-delegate';
+      if (options?.delegatorName && hasLocalizedLabel('notifications', delegateDescriptionKey)) {
+        statusInfos.description = getLocalizedOrDefaultLabel(
+          'notifications',
+          delegateDescriptionKey,
+          undefined,
+          { recipient: options.delegatorName }
+        );
+      }
+
+      return { color: 'error', ...statusInfos };
+    }
     case NotificationStatus.PAID:
       return {
         color: 'success',
