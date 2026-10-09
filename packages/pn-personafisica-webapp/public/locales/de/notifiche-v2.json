@@ -251,6 +251,7 @@
     "returned-to-sender-description": "Der Empfänger dieser SEND Zustellung wurde für verstorben erklärt.",
     "returned-to-sender-description-multirecipient": "Der Empfänger dieser SEND Zustellung wurde für verstorben erklärt.",
     "returned-to-sender-multirecipient": "Zustellung an die absendende Körperschaft zurückgesendet",
+    "returned-to-sender-with-legal-fact-description": "Der Empfänger dieser SEND Zustellung wurde für verstorben erklärt. Du kannst die <0>Zugriffsbescheinigung herunterladen</0>.",
     "viewed": "Zustellung gelesen",
     "viewed-as-delegate-description": "Als delegierte Person hast du auf die SEND Zustellung von {{recipient}} zugegriffen. Du kannst die <0>Zugriffsbescheinigung</0> herunterladen.",
     "viewed-by-delegate-description": "Als delegierte Person hat {{name}} auf die SEND Zustellung zugegriffen. Du kannst die <0>Zugriffsbescheinigung</0> herunterladen.",
