@@ -251,6 +251,7 @@
     "returned-to-sender-description": "Le destinataire de cette notification SEND a été déclaré décédé.",
     "returned-to-sender-description-multirecipient": "Le destinataire de cette notification SEND a été déclaré décédé.",
     "returned-to-sender-multirecipient": "Notification retournée à l'organisme expéditeur",
+    "returned-to-sender-with-legal-fact-description": "Le destinataire de cette notification SEND a été déclaré décédé. Vous pouvez <0>télécharger l'attestation d'accès réussi</0>.",
     "viewed": "Notification lue",
     "viewed-as-delegate-description": "En tant que délégué, vous avez accédé à la notification SEND de {{recipient}}. Vous pouvez télécharger l'<0>attestation d'accès réussi</0>.",
     "viewed-by-delegate-description": "En tant que délégué, {{name}} a accédé à la notification SEND. Vous pouvez télécharger l'<0>attestation d'accès réussi</0>.",
