@@ -5,7 +5,7 @@
     "channels-label": "Izbrani kanali",
     "channels": {
       "ANALOG": "Poštna storitev",
-      "EMAIL": "E-pošta",
+      "EMAIL": "Email",
       "IO": "IO",
       "PEC": "PEC",
       "SMS": "SMS"
@@ -46,6 +46,7 @@
     "empty-state": {
       "campaign-title-placeholder": "[Naslov kampanje]",
       "generic-error": "Podrobnosti kampanje ni bilo mogoče pridobiti.",
+      "generic-error-comunications": "Seznama sporočil ni bilo mogoče pridobiti.",
       "generic-error-cta": "Poskusite znova"
     },
     "service-name": "Storitev",
