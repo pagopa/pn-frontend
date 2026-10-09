@@ -163,8 +163,8 @@ describe('AppMessage Component', () => {
     expect(testStore.getState().appState.messages.info).toStrictEqual([]);
   });
 
-  it('renders toast and dispatches event on close - warning', async () => {
-    const { testStore, getByTestId } = render(<AppMessage />, {
+  it('renders MISnackbar for warning messages', () => {
+    const { getByRole, queryByTestId } = render(<AppMessage />, {
       preloadedState: {
         appState: {
           messages: {
@@ -177,13 +177,37 @@ describe('AppMessage Component', () => {
       },
     });
 
-    const snackBarContainer = getByTestId('snackBarContainer');
-    expect(snackBarContainer).toBeInTheDocument();
+    expect(
+      getByRole('alert', { name: `${baseMessage.title}. ${baseMessage.message}` })
+    ).toBeInTheDocument();
+    expect(queryByTestId('snackBarContainer')).not.toBeInTheDocument();
+  });
 
-    await act(async () => {
-      vi.advanceTimersByTime(5000);
+  it('renders MISnackbar for all warnings', () => {
+    const miWarning: IAppMessage = {
+      ...baseMessage,
+      id: 'mi-warning',
+      title: '',
+      message: 'Dedicated warning',
+    };
+
+    const { getByRole, queryByTestId } = render(<AppMessage />, {
+      preloadedState: {
+        appState: {
+          messages: {
+            errors: [],
+            success: [],
+            info: [],
+            warning: [miWarning],
+          },
+        },
+      },
     });
 
-    expect(testStore.getState().appState.messages.warning).toStrictEqual([]);
+    expect(getByRole('alert', { name: 'Dedicated warning' })).toHaveTextContent(
+      'Dedicated warning'
+    );
+
+    expect(queryByTestId('snackBarContainer')).not.toBeInTheDocument();
   });
 });

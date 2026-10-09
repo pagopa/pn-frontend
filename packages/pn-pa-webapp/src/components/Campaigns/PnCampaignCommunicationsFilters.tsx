@@ -37,7 +37,7 @@ const PnCampaignCommunicationsFilters = ({ formik, handleChangeTouched, handlePa
 
   return (
     <>
-      <Grid item xs={12} lg sx={{ mb: { md: 2.5, lg: 0 } }}>
+      <Grid item xs={12} lg sx={{ mb: { xs: 2.5, lg: 0 } }}>
         <TextField
           id="recipientId"
           name="recipientId"
@@ -51,7 +51,7 @@ const PnCampaignCommunicationsFilters = ({ formik, handleChangeTouched, handlePa
           sx={inputStyle}
         />
       </Grid>
-      <Grid item xs={12} lg sx={{ mb: { md: 2.5, lg: 0 } }}>
+      <Grid item xs={12} lg sx={{ mb: { xs: 2.5, lg: 0 } }}>
         <TextField
           id="iunMatch"
           name="iunMatch"
@@ -66,7 +66,7 @@ const PnCampaignCommunicationsFilters = ({ formik, handleChangeTouched, handlePa
           sx={inputStyle}
         />
       </Grid>
-      <Grid item xs={12} lg sx={{ mb: { md: 2.5, lg: 0 } }}>
+      <Grid item xs={12} lg sx={{ mb: { xs: 2.5, lg: 0 } }}>
         <Autocomplete
           id="status"
           inputValue={inputValue}
@@ -76,6 +76,7 @@ const PnCampaignCommunicationsFilters = ({ formik, handleChangeTouched, handlePa
           isOptionEqualToValue={(option, value) => option.value === value.value}
           label={t('detail.communications.status')}
           placeholder={t('detail.communications.status')}
+          noResultsText={t('autocomplete.no-results', { ns: 'common' })}
           value={selectedStatusOption}
           onChange={(newValue) => {
             void formik.setFieldValue('status', newValue?.value ?? []);

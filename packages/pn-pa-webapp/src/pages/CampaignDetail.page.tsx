@@ -69,12 +69,16 @@ const CampaignDetail: React.FC = () => {
     (page: number, size: number, filters: CommunicationFilters, nextPagesKey?: string) => {
       if (id) {
         setCommunicationsReady(false);
+        const outcomeFilters =
+          {
+            viewed: { viewed: true },
+            delivered: { viewed: false, delivered: true },
+          }[filters.outcome] ?? {};
         const filterParams = {
           recipientId: filters.recipientId || undefined,
           iunMatch: filters.iunMatch || undefined,
           status: filters.status.length > 0 ? filters.status : undefined,
-          viewed: filters.outcome === 'viewed' ? true : undefined,
-          delivered: filters.outcome === 'delivered' ? true : undefined,
+          ...outcomeFilters,
         };
         const hasFiltersApplied = Object.values(filterParams).some((value) => value !== undefined);
 
@@ -135,11 +139,11 @@ const CampaignDetail: React.FC = () => {
 
   const breadcrumb = (
     <MIBreadcrumbs
-      backButtonLabel={t('detail.breadcrumb.back')}
+      backButtonLabel={t('detail.breadcrumb-back')}
       backButtonAction={() => navigate(routes.CAMPAIGNS)}
     >
       <MIBreadcrumbItem
-        label={t('detail.breadcrumb.campaigns')}
+        label={t('detail.breadcrumb-root')}
         onClick={() => navigate(routes.CAMPAIGNS)}
         data-testid="breadcrumb-root-button"
       />

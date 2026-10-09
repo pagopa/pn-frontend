@@ -1,5 +1,4 @@
 import { ReactNode, useState } from 'react';
-import { Trans } from 'react-i18next';
 
 import AccountBalanceRoundedIcon from '@mui/icons-material/AccountBalanceRounded';
 import KeyboardArrowRightRoundedIcon from '@mui/icons-material/KeyboardArrowRightRounded';
@@ -11,12 +10,9 @@ import { MIButton, MIPaper, Tag, theme } from '@pagopa/mui-italia';
 import { useIsMobile } from '../../hooks';
 import { formatDate } from '../../utility';
 import { getAccessibleIun } from '../../utility/accessibility.utility';
-import {
-  getLocalizedOrDefaultLabel,
-  getTranslationMessage,
-} from '../../utility/localization.utility';
-import PNMarkdown from '../PnMarkdown/PnMarkdown';
+import { getLocalizedOrDefaultLabel } from '../../utility/localization.utility';
 import TitleBox from '../TitleBox';
+import InformalNotificationMessage from './InformalNotificationMessage';
 
 interface AbstractPaperDetail {
   label: ReactNode;
@@ -95,20 +91,6 @@ const AbstractSection: React.FC<
   hasPayment,
   senderDenomination,
 }) => {
-  const attachmentsInfoMessage = getTranslationMessage(
-    'detail.informal_notification_markdown.attachments_info',
-    'notifiche'
-  );
-
-  const paymentInstructionsMessage = getTranslationMessage(
-    'detail.informal_notification_markdown.payment_instructions',
-    'notifiche'
-  );
-  const assistanceMessage = getTranslationMessage(
-    'detail.informal_notification_markdown.assistance',
-    'notifiche'
-  );
-
   if (!abstract) {
     return null;
   }
@@ -116,68 +98,19 @@ const AbstractSection: React.FC<
   return (
     <>
       <Divider aria-hidden sx={{ my: 2 }} />
-      {isLegal && abstract ? (
+      {isLegal ? (
         <Typography variant="body1" sx={{ overflowWrap: 'anywhere' }}>
           {abstract}
         </Typography>
       ) : (
-        <Stack>
-          {recipientDenomination && (
-            <Typography variant="body1" color="text.primary">
-              {getLocalizedOrDefaultLabel(
-                'notifications',
-                'detail.informal_notification_markdown.greeting',
-                undefined,
-                { recipientDenomination }
-              )}
-            </Typography>
-          )}
-
-          <Box
-            sx={{
-              overflowWrap: 'anywhere',
-              '& p': {
-                m: 0,
-                typography: 'body1',
-                color: 'text.primary',
-                mt: 1.5,
-              },
-            }}
-          >
-            <PNMarkdown content={abstract} onExternalLinkClick={onExternalLinkClick} />
-          </Box>
-
-          {(hasAttachments || hasPayment) && (
-            <Typography variant="body1" color="text.primary" mt={1.5}>
-              {hasAttachments && (
-                <Trans
-                  i18nKey={attachmentsInfoMessage.key}
-                  ns={attachmentsInfoMessage.ns}
-                  components={[<strong key="0" />]}
-                />
-              )}
-              {hasAttachments && hasPayment && '\u00A0'}
-              {hasPayment && (
-                <Trans
-                  i18nKey={paymentInstructionsMessage.key}
-                  ns={paymentInstructionsMessage.ns}
-                  components={[<strong key="0" />, <strong key="1" />]}
-                />
-              )}
-            </Typography>
-          )}
-
-          <Typography variant="body1" color="text.primary" mt={1.5}>
-            <Trans
-              i18nKey={assistanceMessage.key}
-              ns={assistanceMessage.ns}
-              values={{
-                senderDenomination,
-              }}
-              components={[<strong key="0" />]}
-            />
-          </Typography>
-        </Stack>
+        <InformalNotificationMessage
+          message={abstract}
+          recipientDenomination={recipientDenomination}
+          senderDenomination={senderDenomination}
+          hasAttachments={hasAttachments}
+          hasPayment={hasPayment}
+          onExternalLinkClick={onExternalLinkClick}
+        />
       )}
     </>
   );

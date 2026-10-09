@@ -1,10 +1,7 @@
 {
   "detail": {
+    "breadcrumb-back": "Retour",
     "breadcrumb-root": "Campagnes",
-    "breadcrumb": {
-      "back": "Retour",
-      "campaigns": "Campagnes"
-    },
     "channels-label": "Canaux sélectionnés",
     "channels": {
       "ANALOG": "Service postal",
@@ -20,6 +17,9 @@
         "title": "Ici, vous verrez les communications de la campagne."
       },
       "empty-title": "Aucune communication pour les filtres sélectionnés.",
+      "errors": {
+        "tax-id": "Saisis un code fiscal valide"
+      },
       "iun": "Code IUN",
       "no-communications-description": "Il n'y a pas de communications correspondant aux filtres sélectionnés.",
       "no-communications-title": "Aucune communication disponible",

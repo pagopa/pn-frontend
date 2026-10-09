@@ -1,10 +1,7 @@
 {
   "detail": {
+    "breadcrumb-back": "Zurück",
     "breadcrumb-root": "Kampagnen",
-    "breadcrumb": {
-      "back": "Zurück",
-      "campaigns": "Kampagnen"
-    },
     "channels-label": "Ausgewählte Kanäle",
     "channels": {
       "ANALOG": "Postdienst",
@@ -20,6 +17,9 @@
         "title": "Hier siehst du die Mitteilungen der Kampagne."
       },
       "empty-title": "Keine Mitteilungen für die ausgewählten Filter vorhanden.",
+      "errors": {
+        "tax-id": "Gib eine gültige Steuernummer ein"
+      },
       "iun": "IUN-Code",
       "no-communications-description": "Es gibt keine Mitteilungen, die den ausgewählten Filtern entsprechen.",
       "no-communications-title": "Keine Mitteilungen verfügbar",

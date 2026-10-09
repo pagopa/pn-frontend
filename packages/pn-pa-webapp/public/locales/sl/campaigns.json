@@ -1,10 +1,7 @@
 {
   "detail": {
+    "breadcrumb-back": "Nazaj",
     "breadcrumb-root": "Kampanje",
-    "breadcrumb": {
-      "back": "Nazaj",
-      "campaigns": "Kampanje"
-    },
     "channels-label": "Izbrani kanali",
     "channels": {
       "ANALOG": "Poštna storitev",
@@ -20,6 +17,9 @@
         "title": "Tukaj boste videli sporočila kampanje."
       },
       "empty-title": "Za izbrane filtre ni sporočil.",
+      "errors": {
+        "tax-id": "Vnesi veljavno davčno številko"
+      },
       "iun": "Koda IUN",
       "no-communications-description": "Ni sporočil, ki bi ustrezala izbranim filtrom.",
       "no-communications-title": "Na voljo ni nobenega sporočila",

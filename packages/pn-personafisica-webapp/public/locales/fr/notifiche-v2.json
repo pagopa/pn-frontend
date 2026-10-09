@@ -3,8 +3,8 @@
     "document-unavailable": "Le document n'est plus disponible. Contactez l'organisme pour plus d'informations.",
     "timeline": {
       "analog-failure-workflow": "Impossible de livrer la notification",
-      "analog-failure-workflow-description": "Vous êtes introuvable car il n'y avait aucune référence à vous à l'adresse indiquée, ou parce que l'adresse fournie est inexistante, insuffisante ou inexacte. L'<0>accusé de réception</0> est donc mis à disposition. Consultez les <1>modalités de prise d'effet</1> pour savoir quand la notification SEND prendra tout de même valeur juridique.",
-      "analog-failure-workflow-description-delegate": "{{recipient}} est introuvable car il n'y avait aucune référence à cette personne à l'adresse indiquée, ou parce que l'adresse fournie est inexistante, insuffisante ou inexacte. L'<0>accusé de réception</0> est donc mis à disposition. Consultez les <1>modalités de prise d'effet</1> pour savoir quand la notification SEND prendra tout de même valeur juridique.",
+      "analog-failure-workflow-description": "Vous êtes introuvable car il n'y avait aucune référence à vous à l'adresse indiquée, ou parce que l'adresse fournie est inexistante, insuffisante ou inexacte. L'<0>accusé de réception</0> est donc mis à disposition. <1>Consultez les modalités de prise d'effet</1> pour savoir quand la notification SEND prendra tout de même valeur juridique.",
+      "analog-failure-workflow-description-delegate": "{{recipient}} est introuvable car il n'y avait aucune référence à cette personne à l'adresse indiquée, ou parce que l'adresse fournie est inexistante, insuffisante ou inexacte. L'<0>accusé de réception</0> est donc mis à disposition. <1>Consultez les modalités de prise d'effet</1> pour savoir quand la notification SEND prendra tout de même valeur juridique.",
       "analog-workflow-failure-cause": {
         "C01": "en raison d'un incendie",
         "C02": "en raison d'une route fermée pour travaux ou éboulement",
@@ -43,8 +43,8 @@
       "prepare-analog-domicile-failure-ZZZ-description-delegate": "Il ne sera pas possible d'essayer d'envoyer à nouveau la notification SEND à {{recipient}}. Le motif n'a pas été spécifié.",
       "prepare-analog-domicile-failure-ZZZ-title": "Impossible de trouver une adresse valide",
       "schedule-digital-workflow": "Nouvelle tentative d'envoi PEC",
-      "schedule-digital-workflow-description": "La deuxième tentative d'envoi de la notification SEND à l'adresse PEC {{address}} sera effectuée.",
-      "schedule-digital-workflow-description-delegate": "La deuxième tentative d'envoi de la notification SEND à {{recipient}} à l'adresse PEC {{address}} sera effectuée.",
+      "schedule-digital-workflow-description": "La deuxième tentative d'envoi de la notification SEND à l'adresse PEC sera effectuée.",
+      "schedule-digital-workflow-description-delegate": "La deuxième tentative d'envoi de la notification SEND à {{recipient}} à l'adresse PEC sera effectuée.",
       "send-analog-domicile-890": "Processus d'envoi par lettre recommandée commencé",
       "send-analog-domicile-890-description": "Une lettre recommandée 890 vous a été envoyée à l'adresse {{address}}.",
       "send-analog-domicile-890-description-delegate": "Une lettre recommandée 890 a été envoyée à {{recipient}} à l'adresse {{address}}.",
@@ -221,7 +221,11 @@
       "send-digital-success-SERCQ-SEND": "Envoi via le domicile numérique SEND réussi",
       "send-simple-registered-letter": "Processus d'envoi par lettre recommandée commencé",
       "send-simple-registered-letter-description": "Une lettre recommandée ordinaire vous sera envoyée à l'adresse {{address}}.",
-      "send-simple-registered-letter-description-delegate": "Une lettre recommandée ordinaire sera envoyée à {{recipient}} à l'adresse {{address}}."
+      "send-simple-registered-letter-description-delegate": "Une lettre recommandée ordinaire sera envoyée à {{recipient}} à l'adresse {{address}}.",
+      "warnings": {
+        "document-canceled": "Document non disponible car la notification SEND a été annulée.",
+        "document-unavailable": "Le document n'est plus disponible. Contacte l'organisme pour plus d'informations."
+      }
     }
   },
   "status": {
@@ -230,12 +234,12 @@
     "canceled": "Notification annulée",
     "canceled-description": "L'organisme a annulé l'envoi de la notification SEND, qui à partir de l'annulation ne produira plus d'effets juridiques. Il est possible de télécharger la <0>déclaration d'annulation</0>.",
     "delivered": "Nouvelle notification reçue",
-    "delivered-description-analog": "Nous vous avons envoyé l'accusé de réception de cette notification ayant une valeur juridique par lettre recommandée. Consultez les <1>modalités de prise d'effet</1> pour savoir quand la notification SEND prendra valeur juridique.",
-    "delivered-description-analog-delegate": "Nous avons envoyé à {{recipient}} l'accusé de réception de cette notification ayant une valeur juridique par lettre recommandée. Consultez les <1>modalités de prise d'effet</1> pour savoir quand la notification SEND prendra valeur juridique.",
-    "delivered-description-analog-multirecipient": "Nous vous avons envoyé l'accusé de réception de cette notification ayant une valeur juridique par lettre recommandée. Consultez les <1>modalités de prise d'effet</1> pour savoir quand la notification SEND prendra valeur juridique.",
-    "delivered-description-digital": "Nous vous avons envoyé cette notification ayant une valeur juridique. Consultez les <1>modalités de prise d'effet</1> pour savoir quand elle prendra valeur juridique.",
-    "delivered-description-digital-delegate": "Nous avons envoyé à {{recipient}} cette notification ayant une valeur juridique. Consultez les <1>modalités de prise d'effet</1> pour savoir quand elle prendra valeur juridique.",
-    "delivered-description-digital-multirecipient": "Nous vous avons envoyé cette notification ayant une valeur juridique. Consultez les <1>modalités de prise d'effet</1> pour savoir quand elle prendra valeur juridique.",
+    "delivered-description-analog": "Nous vous avons envoyé l'accusé de réception de cette notification ayant une valeur juridique par lettre recommandée. <1>Consultez les modalités de prise d'effet</1> pour savoir quand la notification SEND prendra valeur juridique.",
+    "delivered-description-analog-delegate": "Nous avons envoyé à {{recipient}} l'accusé de réception de cette notification ayant une valeur juridique par lettre recommandée. <1>Consultez les modalités de prise d'effet</1> pour savoir quand la notification SEND prendra valeur juridique.",
+    "delivered-description-analog-multirecipient": "Nous vous avons envoyé l'accusé de réception de cette notification ayant une valeur juridique par lettre recommandée. <1>Consultez les modalités de prise d'effet</1> pour savoir quand la notification SEND prendra valeur juridique.",
+    "delivered-description-digital": "Nous vous avons envoyé cette notification ayant une valeur juridique. <1>Consultez les modalités de prise d'effet</1> pour savoir quand elle prendra valeur juridique.",
+    "delivered-description-digital-delegate": "Nous avons envoyé à {{recipient}} cette notification ayant une valeur juridique. <1>Consultez les modalités de prise d'effet</1> pour savoir quand elle prendra valeur juridique.",
+    "delivered-description-digital-multirecipient": "Nous vous avons envoyé cette notification ayant une valeur juridique. <1>Consultez les modalités de prise d'effet</1> pour savoir quand elle prendra valeur juridique.",
     "delivered-multirecipient": "Nouvelle notification reçue",
     "delivering": "Envoi de la notification en cours",
     "effective-date": "La notification a pris valeur juridique",
@@ -252,7 +256,7 @@
     "viewed-by-delegate-description": "En tant que délégué, {{name}} a accédé à la notification SEND. Vous pouvez télécharger l'<0>attestation d'accès réussi</0>.",
     "viewed-by-other-delegate-description": "En tant que délégué, {{name}} a accédé à la notification SEND de {{recipient}}. Vous pouvez télécharger l'<0>attestation d'accès réussi</0>.",
     "viewed-by-recipient-description": "{{recipient}} a accédé à la notification SEND. Vous pouvez télécharger l'<0>attestation d'accès réussi</0>.",
-    "viewed-description": "Vous avez accédé à cette notification ayant une valeur juridique sur SEND. Vous pouvez télécharger l'<0>attestation d'accès réussi</0>.",
+    "viewed-description": "Vous avez accédé à cette notification ayant une valeur juridique. Vous pouvez télécharger l'<0>attestation d'accès réussi</0>.",
     "viewed-description-multirecipient": "Cette notification SEND a été envoyée à plusieurs destinataires, et au moins une personne parmi eux a accédé à la notification. Vous pouvez télécharger l'<0>attestation d'accès réussi</0>.",
     "viewed-multirecipient": "Notification lue",
     "viewed-without-legal-fact-description-multirecipient": "Cette notification SEND a été envoyée à plusieurs destinataires, et au moins une personne parmi eux a accédé à la notification."
