@@ -512,6 +512,45 @@ describe('notification status texts', () => {
     );
   });
 
+  it('uses the delegate UNREACHABLE description when the revised copy is available', () => {
+    const delegateKey = 'status.unreachable-description-delegate';
+    initLocalizationExists((_namespace, path) => path === delegateKey);
+
+    testNotificationStatusInfos(
+      'error',
+      'notifiche - status.unreachable',
+      'notifiche - status.unreachable-tooltip',
+      `notifiche - ${delegateKey} - ${JSON.stringify({ recipient: 'Mario Cucumber' })}`,
+      NotificationStatus.UNREACHABLE,
+      {
+        recipients: notificationDTO.recipients,
+        mandateId: 'mandate-1',
+        delegatorName: 'Mario Cucumber',
+      }
+    );
+
+    initLocalizationForTest();
+  });
+
+  it('keeps the legacy UNREACHABLE description when the revised copy is unavailable', () => {
+    initLocalizationExists(() => false);
+
+    testNotificationStatusInfos(
+      'error',
+      'notifiche - status.unreachable',
+      'notifiche - status.unreachable-tooltip',
+      'notifiche - status.unreachable-description',
+      NotificationStatus.UNREACHABLE,
+      {
+        recipients: notificationDTO.recipients,
+        mandateId: 'mandate-1',
+        delegatorName: 'Mario Cucumber',
+      }
+    );
+
+    initLocalizationForTest();
+  });
+
   it('return notification status infos - PAID - passing the status only', () => {
     testNotificationStatusInfos(
       'success',
