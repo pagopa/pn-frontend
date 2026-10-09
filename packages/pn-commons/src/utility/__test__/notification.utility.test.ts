@@ -751,7 +751,7 @@ describe('notification status texts', () => {
       },
       {
         recipients: notificationDTO.recipients,
-        mandateId: 'mandate-1',
+        mandateId: 'mandate-2',
         delegatorName: 'Mario Cucumber',
         userTaxId: 'TSTUTN00A07A001G',
       }
