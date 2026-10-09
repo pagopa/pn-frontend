@@ -48,6 +48,7 @@ type ViewedVariantOptions = {
   isMultiRecipient?: boolean;
   mandateId?: string;
   delegatorName?: string;
+  userTaxId?: string;
 };
 
 function viewedByVariant({
@@ -55,6 +56,7 @@ function viewedByVariant({
   isMultiRecipient,
   mandateId,
   delegatorName,
+  userTaxId,
 }: ViewedVariantOptions): { key: string; data: { [key: string]: string } } | undefined {
   const viewedEvent = statusObject?.steps?.find(
     (step) => step.category === TimelineCategory.NOTIFICATION_VIEWED
@@ -63,8 +65,8 @@ function viewedByVariant({
     ?.delegateInfo;
   const delegateName = delegateInfo?.denomination ?? statusObject?.recipient;
 
-  if (mandateId && delegatorName) {
-    if (delegateInfo?.mandateId === mandateId) {
+  if (mandateId && delegatorName && userTaxId) {
+    if (delegateInfo?.taxId === userTaxId) {
       return { key: 'status.viewed-as-delegate-description', data: { recipient: delegatorName } };
     }
     if (delegateName) {
@@ -375,6 +377,7 @@ export function getNotificationStatusInfos(
     isParty?: boolean;
     mandateId?: string;
     delegatorName?: string;
+    userTaxId?: string;
   }
 ): StatusInfoWithColor {
   const statusComesAsAnObject = !!(status as NotificationStatusHistory).status;
@@ -461,6 +464,7 @@ export function getNotificationStatusInfos(
           isMultiRecipient,
           mandateId: options?.mandateId,
           delegatorName: options?.delegatorName,
+          userTaxId: options?.userTaxId,
         }),
       };
     }

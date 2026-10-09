@@ -24,6 +24,7 @@ type NotificationTimelineBoxProps = {
   perfectionLink?: string;
   mandateId?: string;
   delegatorName?: string;
+  userTaxId?: string;
 };
 
 const NotificationTimelineBox: React.FC<NotificationTimelineBoxProps> = ({
@@ -36,6 +37,7 @@ const NotificationTimelineBox: React.FC<NotificationTimelineBoxProps> = ({
   perfectionLink,
   mandateId,
   delegatorName,
+  userTaxId,
 }) => {
   if (statusHistory.length === 0) {
     return null;
@@ -47,6 +49,7 @@ const NotificationTimelineBox: React.FC<NotificationTimelineBoxProps> = ({
     isParty,
     mandateId,
     delegatorName,
+    userTaxId,
   });
 
   const plan = isNewTimelineCopyEnabled

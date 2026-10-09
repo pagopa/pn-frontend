@@ -763,6 +763,7 @@ const NotificationDetail: React.FC = () => {
                     perfectionLink={NOTIFICATION_PERFECTION_LINK}
                     mandateId={mandateId}
                     delegatorName={delegatorName}
+                    userTaxId={currentUser.fiscal_number}
                   />
                 )}
                 <NotificationDetailSection

@@ -53,6 +53,7 @@ function testNotificationStatusInfos(
     isParty?: boolean;
     mandateId?: string;
     delegatorName?: string;
+    userTaxId?: string;
   }
 ) {
   const { color, label, tooltip, description } = getNotificationStatusInfos(status, options);
@@ -740,14 +741,19 @@ describe('notification status texts', () => {
         steps: [
           getTimelineElem(TimelineCategory.NOTIFICATION_VIEWED, {
             recIndex: 0,
-            delegateInfo: { mandateId: 'mandate-1', denomination: 'Luigi Zucchini' },
+            delegateInfo: {
+              mandateId: 'mandate-1',
+              denomination: 'Luigi Zucchini',
+              taxId: 'TSTUTN00A07A001G',
+            },
           }),
         ],
       },
       {
         recipients: notificationDTO.recipients,
-        mandateId: 'mandate-1',
+        mandateId: 'mandate-2',
         delegatorName: 'Mario Cucumber',
+        userTaxId: 'TSTUTN00A07A001G',
       }
     );
     initLocalizationForTest();
@@ -772,7 +778,11 @@ describe('notification status texts', () => {
         steps: [
           getTimelineElem(TimelineCategory.NOTIFICATION_VIEWED, {
             recIndex: 0,
-            delegateInfo: { mandateId: 'mandate-2', denomination: 'Luigi Zucchini' },
+            delegateInfo: {
+              mandateId: 'mandate-2',
+              denomination: 'Luigi Zucchini',
+              taxId: 'FRMTTR76M06B715E',
+            },
           }),
         ],
       },
@@ -780,6 +790,7 @@ describe('notification status texts', () => {
         recipients: notificationDTO.recipients,
         mandateId: 'mandate-1',
         delegatorName: 'Mario Cucumber',
+        userTaxId: 'TSTUTN00A07A001G',
       }
     );
     initLocalizationForTest();
@@ -806,6 +817,7 @@ describe('notification status texts', () => {
         recipients: notificationDTO.recipients,
         mandateId: 'mandate-1',
         delegatorName: 'Mario Cucumber',
+        userTaxId: 'TSTUTN00A07A001G',
       }
     );
     initLocalizationForTest();
@@ -836,6 +848,7 @@ describe('notification status texts', () => {
         recipients: notificationDTO.recipients,
         mandateId: 'mandate-1',
         delegatorName: 'Mario Cucumber',
+        userTaxId: 'TSTUTN00A07A001G',
       }
     );
     initLocalizationForTest();

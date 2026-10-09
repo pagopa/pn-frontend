@@ -40,6 +40,7 @@ type Props = {
   perfectionLink?: string;
   mandateId?: string;
   delegatorName?: string;
+  userTaxId?: string;
 };
 
 const getStatusPerfectionLink = (
@@ -88,6 +89,7 @@ const NotificationEventsTimeline = ({
   perfectionLink,
   mandateId,
   delegatorName,
+  userTaxId,
 }: Props) => {
   const legacyStatusHistory = useMemo(() => toLegacyStatusHistory(statusHistory), [statusHistory]);
   const multiAttemptGroupIds = useMemo(
@@ -99,6 +101,7 @@ const NotificationEventsTimeline = ({
       getTimelineItems(statusHistory, legacyStatusHistory, recipients, isSenderTimeline, {
         mandateId,
         delegatorName,
+        taxId: userTaxId,
       }),
     [
       statusHistory,
