@@ -46,6 +46,7 @@
     "empty-state": {
       "campaign-title-placeholder": "[Titolo campagna]",
       "generic-error": "Non è stato possibile recuperare i dettagli della campagna.",
+      "generic-error-comunications": "Non è stato possibile recuperare l'elenco delle comunicazioni.",
       "generic-error-cta": "Prova di nuovo"
     },
     "service-name": "Servizio",
