@@ -982,6 +982,87 @@ describe('notification status texts', () => {
     );
   });
 
+  it('return notification status infos - RETURNED_TO_SENDER - without legal fact', () => {
+    initLocalizationExists(
+      (_ns, path) => path === 'status.returned-to-sender-with-legal-fact-description'
+    );
+    testNotificationStatusInfos(
+      'warning',
+      `notifiche - status.returned-to-sender`,
+      `notifiche - status.returned-to-sender-tooltip`,
+      `notifiche - status.returned-to-sender-description`,
+      {
+        status: NotificationStatus.RETURNED_TO_SENDER,
+        activeFrom: '2023-01-26T13:57:16.42843144Z',
+        relatedTimelineElements: [],
+        steps: [],
+      }
+    );
+    initLocalizationForTest();
+  });
+
+  it('return notification status infos - RETURNED_TO_SENDER - with legal fact, with the revised copy', () => {
+    initLocalizationExists(
+      (_ns, path) => path === 'status.returned-to-sender-with-legal-fact-description'
+    );
+    testNotificationStatusInfos(
+      'warning',
+      `notifiche - status.returned-to-sender`,
+      `notifiche - status.returned-to-sender-tooltip`,
+      `notifiche - status.returned-to-sender-with-legal-fact-description`,
+      {
+        status: NotificationStatus.RETURNED_TO_SENDER,
+        activeFrom: '2023-01-26T13:57:16.42843144Z',
+        relatedTimelineElements: [],
+        steps: [
+          {
+            elementId: 'NOTIFICATION_VIEWED.IUN_ABCD-EFGH-IJKL-202601-M-1.RECINDEX_0',
+            timestamp: '2026-01-15T10:20:30.123456789Z',
+            category: TimelineCategory.NOTIFICATION_VIEWED,
+            details: { recIndex: 0, eventTimestamp: '2026-01-15T10:20:30.123456789Z' },
+            legalFactsIds: [
+              {
+                key: 'safestorage://PN_LEGAL_FACTS-0123456789abcdef0123456789abcdef.pdf',
+                category: LegalFactType.RECIPIENT_ACCESS,
+              },
+            ],
+            hidden: true,
+          },
+        ],
+      }
+    );
+    initLocalizationForTest();
+  });
+
+  it('return notification status infos - RETURNED_TO_SENDER - with legal fact, without the revised copy', () => {
+    testNotificationStatusInfos(
+      'warning',
+      `notifiche - status.returned-to-sender`,
+      `notifiche - status.returned-to-sender-tooltip`,
+      `notifiche - status.returned-to-sender-description`,
+      {
+        status: NotificationStatus.RETURNED_TO_SENDER,
+        activeFrom: '2023-01-26T13:57:16.42843144Z',
+        relatedTimelineElements: [],
+        steps: [
+          {
+            elementId: 'NOTIFICATION_VIEWED.IUN_ABCD-EFGH-IJKL-202601-M-1.RECINDEX_0',
+            timestamp: '2026-01-15T10:20:30.123456789Z',
+            category: TimelineCategory.NOTIFICATION_VIEWED,
+            details: { recIndex: 0, eventTimestamp: '2026-01-15T10:20:30.123456789Z' },
+            legalFactsIds: [
+              {
+                key: 'safestorage://PN_LEGAL_FACTS-0123456789abcdef0123456789abcdef.pdf',
+                category: LegalFactType.RECIPIENT_ACCESS,
+              },
+            ],
+            hidden: true,
+          },
+        ],
+      }
+    );
+  });
+
   it('return notification status infos - CANCELLATION_IN_PROGRESS - passing status only', () => {
     testNotificationStatusInfos(
       'warning',
