@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.27.0-RC.5](https://github.com/pagopa/pn-frontend/compare/v2.27.0-RC.4...v2.27.0-RC.5) (2026-10-09)
+
+### Bug Fixes
+
+* **PN-21770:** wrong error message for communication list ([#2131](https://github.com/pagopa/pn-frontend/issues/2131)) ([599d27d](https://github.com/pagopa/pn-frontend/commit/599d27de84f7a69a5b797da0b396769d8ab1aef3))
+
+
 # [2.27.0-RC.4](https://github.com/pagopa/pn-frontend/compare/v2.27.0-RC.3...v2.27.0-RC.4) (2026-10-08)
 
 ### Bug Fixes

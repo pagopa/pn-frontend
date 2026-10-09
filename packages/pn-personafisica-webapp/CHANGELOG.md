@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.27.0-RC.5](https://github.com/pagopa/pn-frontend/compare/v2.27.0-RC.4...v2.27.0-RC.5) (2026-10-09)
+
+### Bug Fixes
+
+* **PN-21738:** show recipient access legal fact in returned to sender status ([#2132](https://github.com/pagopa/pn-frontend/issues/2132)) ([6c3bd19](https://github.com/pagopa/pn-frontend/commit/6c3bd1956eba3dc4cf2df36f604908ab41fd943e))
+
+
 # [2.27.0-RC.4](https://github.com/pagopa/pn-frontend/compare/v2.27.0-RC.3...v2.27.0-RC.4) (2026-10-08)
 
 ### Bug Fixes
