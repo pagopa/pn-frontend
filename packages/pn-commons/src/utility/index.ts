@@ -91,6 +91,7 @@ export {
   PAYMENT_CACHE_KEY,
   setPaymentCache,
   setPaymentsInCache,
+  setInformalPaymentsInCache,
 } from './paymentCaching.utility';
 export { parseError } from './redux.utility';
 export { AppRouteParams, compileRoute, getRapidAccessParam } from './routes.utility';

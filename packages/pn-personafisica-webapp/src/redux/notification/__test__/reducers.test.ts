@@ -8,13 +8,17 @@ import {
   PaymentStatus,
   RecipientType,
   TimelineCategory,
+  getPaymentCache,
   populatePaymentsPagoPaF24,
+  setInformalPaymentsInCache,
+  setPaymentCache,
 } from '@pagopa-pn/pn-commons';
 
 import { downtimesDTO } from '../../../__mocks__/AppStatus.mock';
 import { mockAuthentication } from '../../../__mocks__/Auth.mock';
 import { errorMock } from '../../../__mocks__/Errors.mock';
 import { paymentInfo } from '../../../__mocks__/ExternalRegistry.mock';
+import { informalNotificationMock } from '../../../__mocks__/InformalNotification.mock';
 import {
   cancelledNotificationDTO,
   cancelledNotificationToFe,
@@ -38,10 +42,12 @@ import {
   getReceivedNotificationPaymentUrl,
   getReceivedNotificationTimeline,
 } from '../actions';
+import { getReceivedInformalNotificationPaymentInfo } from '../informalActions';
 import { resetState } from '../reducers';
 
 const initialState = {
   loading: false,
+  informalNotification: undefined,
   notification: {
     additionalLanguages: [],
     subject: '',
@@ -272,6 +278,153 @@ describe('Notification detail redux state tests', () => {
 
       expect(state.paymentsData.pagoPaF24).toStrictEqual(payments);
     }
+  });
+
+  it('Should be able to fetch informal payment info and cache it', async () => {
+    sessionStorage.removeItem(PAYMENT_CACHE_KEY);
+
+    const mockedStore = createMockedStore({
+      notificationState: {
+        informalNotification: informalNotificationMock,
+      },
+    });
+
+    const informalPayments = informalNotificationMock.recipients[0].payments ?? [];
+
+    const paymentInfoRequest = informalPayments.flatMap((payment) =>
+      payment.pagoPa
+        ? [
+            {
+              creditorTaxId: payment.pagoPa.creditorTaxId,
+              noticeCode: payment.pagoPa.noticeCode,
+            },
+          ]
+        : []
+    );
+
+    mock.onPost('/bff/v1/payments/info', paymentInfoRequest).reply(200, paymentInfo);
+
+    const action = await mockedStore.dispatch(
+      getReceivedInformalNotificationPaymentInfo({ paymentInfoRequest })
+    );
+
+    expect(action.type).toBe('getReceivedInformalNotificationPaymentInfo/fulfilled');
+    expect(action.payload).toEqual(paymentInfo);
+
+    const paymentCache = getPaymentCache(informalNotificationMock.iun);
+
+    expect(paymentCache?.payments).toEqual(
+      paymentInfo.map((payment) => ({
+        pagoPa: {
+          ...payment,
+          applyCost: false,
+        },
+      }))
+    );
+  });
+
+  it('Should return cached informal payment info without calling the API', async () => {
+    sessionStorage.removeItem(PAYMENT_CACHE_KEY);
+
+    const mockedStore = createMockedStore({
+      notificationState: {
+        informalNotification: informalNotificationMock,
+      },
+    });
+
+    const informalPayments = informalNotificationMock.recipients[0].payments ?? [];
+
+    const paymentInfoRequest = informalPayments.flatMap((payment) =>
+      payment.pagoPa
+        ? [
+            {
+              creditorTaxId: payment.pagoPa.creditorTaxId,
+              noticeCode: payment.pagoPa.noticeCode,
+            },
+          ]
+        : []
+    );
+
+    const cachedPaymentInfo = paymentInfoRequest.map((payment) => ({
+      ...payment,
+      status: PaymentStatus.REQUIRED,
+    }));
+
+    setInformalPaymentsInCache(cachedPaymentInfo, informalNotificationMock.iun);
+
+    const action = await mockedStore.dispatch(
+      getReceivedInformalNotificationPaymentInfo({ paymentInfoRequest })
+    );
+
+    expect(action.type).toBe('getReceivedInformalNotificationPaymentInfo/fulfilled');
+    expect(action.payload).toEqual(
+      cachedPaymentInfo.map((payment) => ({
+        ...payment,
+        applyCost: false,
+      }))
+    );
+    expect(mock.history.post).toHaveLength(0);
+  });
+
+  it('Should refresh the current informal payment and update the cache', async () => {
+    sessionStorage.removeItem(PAYMENT_CACHE_KEY);
+
+    const mockedStore = createMockedStore({
+      notificationState: {
+        informalNotification: informalNotificationMock,
+      },
+    });
+
+    const informalPayments = informalNotificationMock.recipients[0].payments ?? [];
+
+    const paymentInfoRequest = informalPayments.flatMap((payment) =>
+      payment.pagoPa
+        ? [
+            {
+              creditorTaxId: payment.pagoPa.creditorTaxId,
+              noticeCode: payment.pagoPa.noticeCode,
+            },
+          ]
+        : []
+    );
+
+    const currentPayment = paymentInfoRequest[0];
+
+    setPaymentCache(
+      {
+        currentPayment,
+      },
+      informalNotificationMock.iun
+    );
+
+    const updatedPaymentInfo = [
+      {
+        ...currentPayment,
+        status: PaymentStatus.SUCCEEDED,
+      },
+    ];
+
+    mock.onPost('/bff/v1/payments/info', [currentPayment]).reply(200, updatedPaymentInfo);
+
+    const action = await mockedStore.dispatch(
+      getReceivedInformalNotificationPaymentInfo({ paymentInfoRequest })
+    );
+
+    expect(action.type).toBe('getReceivedInformalNotificationPaymentInfo/fulfilled');
+    expect(action.payload).toEqual(updatedPaymentInfo);
+
+    expect(mock.history.post).toHaveLength(1);
+
+    const paymentCache = getPaymentCache(informalNotificationMock.iun);
+
+    expect(paymentCache?.payments).toEqual([
+      {
+        pagoPa: {
+          ...updatedPaymentInfo[0],
+          applyCost: false,
+        },
+      },
+    ]);
   });
 
   it('Should be able to fetch payment info', async () => {
