@@ -29,7 +29,7 @@
     "eslint-plugin-react": "^7.27.1",
     "eslint-plugin-react-hooks": "^4.3.0",
     "eslint-plugin-sonarjs": "^0.10.0",
-    "vite": "^5.1.4",
+    "vite": "^6.0.0",
     "vitest": "^1.6.1",
     "vitest-canvas-mock": "^0.3.3",
     "vitest-sonar-reporter": "^2.0.0"
