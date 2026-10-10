@@ -173,7 +173,7 @@ const Recipient: React.FC<Props> = ({
       .matches(dataRegex.email, t('pec-error')),
     address: conditionalPhysicalAddress(requiredStringFieldValidation(tc, 1024)),
     addressDetails: conditionalPhysicalAddress(
-      yup.string().max(1024, tc('too-long-field-error', { maxLength: 1024 }))
+      yup.string().max(44, tc('too-long-field-error', { maxLength: 44 }))
     ),
     houseNumber: conditionalPhysicalAddress(
       yup
