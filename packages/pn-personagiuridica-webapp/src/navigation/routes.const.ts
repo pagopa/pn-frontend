@@ -26,7 +26,7 @@ export const DETTAGLIO_NOTIFICA_QRCODE_QUERY_PARAM = AppRouteParams.AAR;
 export const NUOVA_DELEGA = `${DELEGATI}/nuova`;
 export const GET_DETTAGLIO_NOTIFICA_PATH = (id: string) => `${NOTIFICHE}/${id}${DETTAGLIO}`;
 export const GET_DETTAGLIO_COMUNICAZIONE_PATH = (id: string) =>
-  `${COMUNICAZIONE}/${id}/${DETTAGLIO}`;
+  `${COMUNICAZIONE}/${id}${DETTAGLIO}`;
 export const GET_DETTAGLIO_NOTIFICA_DELEGATO_PATH = (id: string, mandateId: string) =>
   `${NOTIFICHE_DELEGATO}/${mandateId}/${id}${DETTAGLIO}`;
 export const RECAPITI = '/recapiti';

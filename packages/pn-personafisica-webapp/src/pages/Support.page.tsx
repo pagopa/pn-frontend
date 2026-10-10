@@ -144,7 +144,7 @@ const SupportPage: React.FC = () => {
             subTitle={t('sub-title')}
             variantSubTitle="body1"
           />
-          <MIAlert severity="info" data-testid="pecDisclaimer" role="status" sx={{ my: 3 }}>
+          <MIAlert severity="info" data-testid="pecDisclaimer" sx={{ my: 3 }}>
             {t('pec-disclaimer')}
           </MIAlert>
           <Paper sx={{ p: 2 }}>
