@@ -53,6 +53,7 @@ function testNotificationStatusInfos(
     isParty?: boolean;
     mandateId?: string;
     delegatorName?: string;
+    userTaxId?: string;
   }
 ) {
   const { color, label, tooltip, description } = getNotificationStatusInfos(status, options);
@@ -512,6 +513,45 @@ describe('notification status texts', () => {
     );
   });
 
+  it('uses the delegate UNREACHABLE description when the revised copy is available', () => {
+    const delegateKey = 'status.unreachable-description-delegate';
+    initLocalizationExists((_namespace, path) => path === delegateKey);
+
+    testNotificationStatusInfos(
+      'error',
+      'notifiche - status.unreachable',
+      'notifiche - status.unreachable-tooltip',
+      `notifiche - ${delegateKey} - ${JSON.stringify({ recipient: 'Mario Cucumber' })}`,
+      NotificationStatus.UNREACHABLE,
+      {
+        recipients: notificationDTO.recipients,
+        mandateId: 'mandate-1',
+        delegatorName: 'Mario Cucumber',
+      }
+    );
+
+    initLocalizationForTest();
+  });
+
+  it('keeps the legacy UNREACHABLE description when the revised copy is unavailable', () => {
+    initLocalizationExists(() => false);
+
+    testNotificationStatusInfos(
+      'error',
+      'notifiche - status.unreachable',
+      'notifiche - status.unreachable-tooltip',
+      'notifiche - status.unreachable-description',
+      NotificationStatus.UNREACHABLE,
+      {
+        recipients: notificationDTO.recipients,
+        mandateId: 'mandate-1',
+        delegatorName: 'Mario Cucumber',
+      }
+    );
+
+    initLocalizationForTest();
+  });
+
   it('return notification status infos - PAID - passing the status only', () => {
     testNotificationStatusInfos(
       'success',
@@ -740,14 +780,19 @@ describe('notification status texts', () => {
         steps: [
           getTimelineElem(TimelineCategory.NOTIFICATION_VIEWED, {
             recIndex: 0,
-            delegateInfo: { mandateId: 'mandate-1', denomination: 'Luigi Zucchini' },
+            delegateInfo: {
+              mandateId: 'mandate-1',
+              denomination: 'Luigi Zucchini',
+              taxId: 'TSTUTN00A07A001G',
+            },
           }),
         ],
       },
       {
         recipients: notificationDTO.recipients,
-        mandateId: 'mandate-1',
+        mandateId: 'mandate-2',
         delegatorName: 'Mario Cucumber',
+        userTaxId: 'TSTUTN00A07A001G',
       }
     );
     initLocalizationForTest();
@@ -772,7 +817,11 @@ describe('notification status texts', () => {
         steps: [
           getTimelineElem(TimelineCategory.NOTIFICATION_VIEWED, {
             recIndex: 0,
-            delegateInfo: { mandateId: 'mandate-2', denomination: 'Luigi Zucchini' },
+            delegateInfo: {
+              mandateId: 'mandate-2',
+              denomination: 'Luigi Zucchini',
+              taxId: 'FRMTTR76M06B715E',
+            },
           }),
         ],
       },
@@ -780,6 +829,7 @@ describe('notification status texts', () => {
         recipients: notificationDTO.recipients,
         mandateId: 'mandate-1',
         delegatorName: 'Mario Cucumber',
+        userTaxId: 'TSTUTN00A07A001G',
       }
     );
     initLocalizationForTest();
@@ -806,6 +856,7 @@ describe('notification status texts', () => {
         recipients: notificationDTO.recipients,
         mandateId: 'mandate-1',
         delegatorName: 'Mario Cucumber',
+        userTaxId: 'TSTUTN00A07A001G',
       }
     );
     initLocalizationForTest();
@@ -836,6 +887,7 @@ describe('notification status texts', () => {
         recipients: notificationDTO.recipients,
         mandateId: 'mandate-1',
         delegatorName: 'Mario Cucumber',
+        userTaxId: 'TSTUTN00A07A001G',
       }
     );
     initLocalizationForTest();

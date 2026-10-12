@@ -12,6 +12,7 @@ import {
   NotificationCommunicationType,
   NotificationDetailDocuments,
   NotificationStatusBox,
+  RecipientType,
   appStateActions,
   downloadDocument,
   useErrors,
@@ -199,6 +200,11 @@ const InformalNotificationDetail: React.FC = () => {
           senderDenomination={informalNotification.senderDenomination}
           hasAttachments={informalNotification.documentsAvailable != null}
           hasPayment={!!recipients[0].payments?.length}
+          attachmentsInfoKey={
+            recipients[0].recipientType === RecipientType.PF
+              ? 'detail.informal_notification_markdown.attachments_info_pf'
+              : 'detail.informal_notification_markdown.attachments_info'
+          }
           variant="body2"
         />
       ),
