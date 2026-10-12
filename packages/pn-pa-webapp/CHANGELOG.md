@@ -3,6 +3,15 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.27.0-RC.6](https://github.com/pagopa/pn-frontend/compare/v2.27.0-RC.5...v2.27.0-RC.6) (2026-10-12)
+
+### Bug Fixes
+
+* **PN-21855:** improve informal notification message spacing and update tests ([503c6a0](https://github.com/pagopa/pn-frontend/commit/503c6a0bf7880c43377dc92840227516310b887c))
+* **PN-21855:** improve informal notification message spacing and update tests ([f896369](https://github.com/pagopa/pn-frontend/commit/f896369d6be7a2f772c10dfdb7a32002b07c34d6))
+* **PN-21855:** right  disclaimer in PF,PA,PG ([ea36933](https://github.com/pagopa/pn-frontend/commit/ea3693399e25d91d12d235c3d534eae4240dcbda))
+
+
 # [2.27.0-RC.5](https://github.com/pagopa/pn-frontend/compare/v2.27.0-RC.4...v2.27.0-RC.5) (2026-10-09)
 
 ### Bug Fixes

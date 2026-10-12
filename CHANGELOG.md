@@ -3,6 +3,23 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.27.0-RC.6](https://github.com/pagopa/pn-frontend/compare/v2.27.0-RC.5...v2.27.0-RC.6) (2026-10-12)
+
+### Bug Fixes
+
+* **PN-21700:** handle missing PEC receipts in timeline ([#2134](https://github.com/pagopa/pn-frontend/issues/2134)) ([4b7a843](https://github.com/pagopa/pn-frontend/commit/4b7a8437bf76d9c37a220fe98784ebe8c9622e5a))
+* **PN-21707:** update unreachable notification copy ([#2137](https://github.com/pagopa/pn-frontend/issues/2137)) ([8735954](https://github.com/pagopa/pn-frontend/commit/8735954e05bbb6cd315b830189e4a33f71cd40cc))
+* **PN-21845:** show right copy when the delegated user views a notification ([#2130](https://github.com/pagopa/pn-frontend/issues/2130)) ([f040ad2](https://github.com/pagopa/pn-frontend/commit/f040ad28e6387007cd861d8b64bd0c7c198c9343))
+* **PN-21855:** improve informal notification message spacing and update tests ([560486d](https://github.com/pagopa/pn-frontend/commit/560486dc5602d03ca330ad91d2ec949b05d7c120))
+* **PN-21855:** improve informal notification message spacing and update tests ([ad8ef9e](https://github.com/pagopa/pn-frontend/commit/ad8ef9e42802bba0416e0ae12f3b1c9d98a7a5f5))
+* **PN-21855:** improve informal notification message spacing and update tests ([1ce1bc4](https://github.com/pagopa/pn-frontend/commit/1ce1bc4b5bfa2a4122e3d6d432bacfbe9b7a09c4))
+* **PN-21855:** improve informal notification message spacing and update tests ([445e3c4](https://github.com/pagopa/pn-frontend/commit/445e3c487c6c3abe28ded44e6722198999ccb399))
+* **PN-21855:** improve informal notification message spacing and update tests ([503c6a0](https://github.com/pagopa/pn-frontend/commit/503c6a0bf7880c43377dc92840227516310b887c))
+* **PN-21855:** improve informal notification message spacing and update tests ([f896369](https://github.com/pagopa/pn-frontend/commit/f896369d6be7a2f772c10dfdb7a32002b07c34d6))
+* **PN-21855:** right  disclaimer in PF,PA,PG ([ea36933](https://github.com/pagopa/pn-frontend/commit/ea3693399e25d91d12d235c3d534eae4240dcbda))
+* **PN-21855:** select ComBo attachment disclaimer by recipient type in PA ([043008a](https://github.com/pagopa/pn-frontend/commit/043008a2b6be0775c975ca7e921880738e7f6643))
+
+
 # [2.27.0-RC.5](https://github.com/pagopa/pn-frontend/compare/v2.27.0-RC.4...v2.27.0-RC.5) (2026-10-09)
 
 ### Bug Fixes
