@@ -48,6 +48,7 @@ type ViewedVariantOptions = {
   isMultiRecipient?: boolean;
   mandateId?: string;
   delegatorName?: string;
+  userTaxId?: string;
 };
 
 function viewedByVariant({
@@ -55,6 +56,7 @@ function viewedByVariant({
   isMultiRecipient,
   mandateId,
   delegatorName,
+  userTaxId,
 }: ViewedVariantOptions): { key: string; data: { [key: string]: string } } | undefined {
   const viewedEvent = statusObject?.steps?.find(
     (step) => step.category === TimelineCategory.NOTIFICATION_VIEWED
@@ -63,8 +65,8 @@ function viewedByVariant({
     ?.delegateInfo;
   const delegateName = delegateInfo?.denomination ?? statusObject?.recipient;
 
-  if (mandateId && delegatorName) {
-    if (delegateInfo?.mandateId === mandateId) {
+  if (mandateId && delegatorName && userTaxId) {
+    if (delegateInfo?.taxId === userTaxId) {
       return { key: 'status.viewed-as-delegate-description', data: { recipient: delegatorName } };
     }
     if (delegateName) {
@@ -120,6 +122,24 @@ function viewedStatusVariant(statusInfos: StatusInfo, options: ViewedVariantOpti
   }
 
   return statusInfos;
+}
+
+function returnedToSenderStatusVariant(
+  statusInfos: StatusInfo,
+  statusObject: NotificationStatusHistory | undefined
+): StatusInfo {
+  const hasViewedLegalFact = !!statusObject?.steps?.some(
+    (step) => step.category === TimelineCategory.NOTIFICATION_VIEWED && step.legalFactsIds?.length
+  );
+  const withLegalFactKey = 'status.returned-to-sender-with-legal-fact-description';
+  if (!hasViewedLegalFact || !hasLocalizedLabel('notifications', withLegalFactKey)) {
+    return statusInfos;
+  }
+
+  return {
+    ...statusInfos,
+    description: getLocalizedOrDefaultLabel('notifications', withLegalFactKey),
+  };
 }
 
 /*
@@ -357,6 +377,7 @@ export function getNotificationStatusInfos(
     isParty?: boolean;
     mandateId?: string;
     delegatorName?: string;
+    userTaxId?: string;
   }
 ): StatusInfoWithColor {
   const statusComesAsAnObject = !!(status as NotificationStatusHistory).status;
@@ -395,11 +416,20 @@ export function getNotificationStatusInfos(
         color: 'default',
         ...localizeStatus('delivering'),
       };
-    case NotificationStatus.UNREACHABLE:
-      return {
-        color: 'error',
-        ...localizeStatus('unreachable', { isMultiRecipient }),
-      };
+    case NotificationStatus.UNREACHABLE: {
+      const statusInfos = localizeStatus('unreachable', { isMultiRecipient });
+      const delegateDescriptionKey = 'status.unreachable-description-delegate';
+      if (options?.delegatorName && hasLocalizedLabel('notifications', delegateDescriptionKey)) {
+        statusInfos.description = getLocalizedOrDefaultLabel(
+          'notifications',
+          delegateDescriptionKey,
+          undefined,
+          { recipient: options.delegatorName }
+        );
+      }
+
+      return { color: 'error', ...statusInfos };
+    }
     case NotificationStatus.PAID:
       return {
         color: 'success',
@@ -443,6 +473,7 @@ export function getNotificationStatusInfos(
           isMultiRecipient,
           mandateId: options?.mandateId,
           delegatorName: options?.delegatorName,
+          userTaxId: options?.userTaxId,
         }),
       };
     }
@@ -459,7 +490,10 @@ export function getNotificationStatusInfos(
     case NotificationStatus.RETURNED_TO_SENDER:
       return {
         color: 'warning',
-        ...localizeStatus('returned-to-sender', { isMultiRecipient }),
+        ...returnedToSenderStatusVariant(
+          localizeStatus('returned-to-sender', { isMultiRecipient }),
+          statusObject
+        ),
       };
     case NotificationStatus.NOTIFICATION_TIMELINE_REWORKED:
       return {

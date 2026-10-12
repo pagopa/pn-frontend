@@ -212,7 +212,7 @@ const CampaignDetail: React.FC = () => {
           customErrorComponent={
             <EmptyErrorState
               variant="error"
-              title={t('detail.empty-state.generic-error')}
+              title={t('detail.empty-state.generic-error-comunications')}
               action={{
                 label: t('detail.empty-state.generic-error-cta'),
                 onClick: retryCampaignCommunications,

@@ -46,6 +46,7 @@ const legalFactStatusMap = new Map<NotificationStatus, TimelineCategory>([
   [NotificationStatus.ACCEPTED, TimelineCategory.REQUEST_ACCEPTED],
   [NotificationStatus.VIEWED, TimelineCategory.NOTIFICATION_VIEWED],
   [NotificationStatus.CANCELLED, TimelineCategory.NOTIFICATION_CANCELLED],
+  [NotificationStatus.RETURNED_TO_SENDER, TimelineCategory.NOTIFICATION_VIEWED],
 ]);
 
 export const isTimelineGroupStep = (

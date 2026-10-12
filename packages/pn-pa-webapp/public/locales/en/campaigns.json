@@ -46,6 +46,7 @@
     "empty-state": {
       "campaign-title-placeholder": "[Campaign title]",
       "generic-error": "Unable to retrieve campaign details.",
+      "generic-error-comunications": "Unable to retrieve the list of communications.",
       "generic-error-cta": "Try again"
     },
     "service-name": "Service",

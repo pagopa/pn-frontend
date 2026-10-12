@@ -5,7 +5,7 @@
     "channels-label": "Canaux sélectionnés",
     "channels": {
       "ANALOG": "Service postal",
-      "EMAIL": "E-mail",
+      "EMAIL": "Email",
       "IO": "IO",
       "PEC": "PEC",
       "SMS": "SMS"
@@ -46,6 +46,7 @@
     "empty-state": {
       "campaign-title-placeholder": "[Titre de la campagne]",
       "generic-error": "Impossible de récupérer les détails de la campagne.",
+      "generic-error-comunications": "Impossible de récupérer la liste des communications.",
       "generic-error-cta": "Réessayer"
     },
     "service-name": "Service",
