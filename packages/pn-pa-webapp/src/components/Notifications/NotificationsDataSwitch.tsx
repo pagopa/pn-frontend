@@ -1,7 +1,8 @@
 import { useTranslation } from 'react-i18next';
 
-import { Typography } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import {
+  CustomTagGroup,
   Notification,
   NotificationActionButton,
   NotificationColumnData,
@@ -11,12 +12,36 @@ import {
   getNotificationStatusInfos,
   useIsMobile,
 } from '@pagopa-pn/pn-commons';
+import { Tag, TagGroup } from '@pagopa/mui-italia';
 
 const NotificationStatusChip: React.FC<{ data: Row<Notification> }> = ({ data }) => {
   const { label, tooltip, color } = getNotificationStatusInfos(data.notificationStatus, {
     recipients: data.recipients,
   });
   return <StatusTooltip label={label} tooltip={tooltip} color={color} />;
+};
+
+const NotificationGroup: React.FC<{
+  data: Row<Notification>;
+  isMobile: boolean;
+}> = ({ data, isMobile }) => {
+  if (!data.group) {
+    return <></>;
+  }
+
+  return isMobile ? (
+    <CustomTagGroup visibleItems={1}>
+      {[
+        <Box sx={{ mb: 1, mr: 1, display: 'inline-block', maxWidth: '100%' }} key={data.id}>
+          <Tag value={data.group} mode="truncate" />
+        </Box>,
+      ]}
+    </CustomTagGroup>
+  ) : (
+    <TagGroup visibleItems={4}>
+      <Tag value={data.group} mode="truncate" />
+    </TagGroup>
+  );
 };
 
 const NotificationsDataSwitch: React.FC<{
@@ -68,6 +93,10 @@ const NotificationsDataSwitch: React.FC<{
       data.iun
     );
   }
+  if (type === 'group') {
+    return <NotificationGroup data={data} isMobile={isMobile} />;
+  }
+
   if (type === 'action') {
     return (
       <NotificationActionButton

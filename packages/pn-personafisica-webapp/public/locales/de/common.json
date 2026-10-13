@@ -41,13 +41,7 @@
     "understand": "OK, ich habe verstanden"
   },
   "code-modal": {
-    "digits": [
-      "erste Ziffer",
-      "zweite Ziffer",
-      "dritte Ziffer",
-      "vierte Ziffer",
-      "letzte Ziffer"
-    ]
+    "digits": ["erste Ziffer", "zweite Ziffer", "dritte Ziffer", "vierte Ziffer", "letzte Ziffer"]
   },
   "conjunctions": {
     "or": "oder"
@@ -161,7 +155,7 @@
     "follow": "Folge uns auf",
     "go-to": "Zum Link",
     "go-to-pagopa": "Zur Website von PagoPA S.p.A.",
-    "legal-part-1": "Aktiengesellschaft mit alleinigem Gesellschafter – Stammkapital von 1.000.000 Euro voll eingezahlt – Rechtssitz in Rom, Piazza Colonna 370",
+    "legal-part-1": "Aktiengesellschaft – Stammkapital von 1,000,000 Euro voll eingezahlt – Rechtssitz in Rom, Piazza Colonna 370",
     "legal-part-2": "PLZ 00187 – Nr. der Eintragung im Handelsregister von Rom, St.Nr. und USt-ID 15376371009",
     "personal-data": "Recht auf Schutz personenbezogener Daten",
     "privacy-info": "Datenschutzerklärung",
