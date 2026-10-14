@@ -41,7 +41,13 @@
     "understand": "Ok, ho capito"
   },
   "code-modal": {
-    "digits": ["prima cifra", "seconda cifra", "terza cifra", "quarta cifra", "ultima cifra"]
+    "digits": [
+      "prima cifra",
+      "seconda cifra",
+      "terza cifra",
+      "quarta cifra",
+      "ultima cifra"
+    ]
   },
   "conjunctions": {
     "or": "oppure"

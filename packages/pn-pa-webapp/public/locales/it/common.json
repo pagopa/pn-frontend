@@ -40,6 +40,8 @@
     "s-month": {
       "0": "gen",
       "1": "feb",
+      "10": "nov",
+      "11": "dic",
       "2": "mar",
       "3": "apr",
       "4": "mag",
@@ -47,9 +49,7 @@
       "6": "lug",
       "7": "ago",
       "8": "set",
-      "9": "ott",
-      "10": "nov",
-      "11": "dic"
+      "9": "ott"
     },
     "today-uppercase-initial": "Oggi"
   },

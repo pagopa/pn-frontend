@@ -41,7 +41,13 @@
     "understand": "OK, verstanden"
   },
   "code-modal": {
-    "digits": ["Erste Ziffer", "Zweite Ziffer", "Dritte Ziffer", "Vierte Ziffer", "Letzte Ziffer"]
+    "digits": [
+      "Erste Ziffer",
+      "Zweite Ziffer",
+      "Dritte Ziffer",
+      "Vierte Ziffer",
+      "Letzte Ziffer"
+    ]
   },
   "conjunctions": {
     "or": "oder"
