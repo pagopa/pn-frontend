@@ -41,7 +41,13 @@
     "understand": "Ok, I understand"
   },
   "code-modal": {
-    "digits": ["First digit", "Second digit", "Third digit", "Fourth digit", "Last digit"]
+    "digits": [
+      "First digit",
+      "Second digit",
+      "Third digit",
+      "Fourth digit",
+      "Last digit"
+    ]
   },
   "conjunctions": {
     "or": "or"
