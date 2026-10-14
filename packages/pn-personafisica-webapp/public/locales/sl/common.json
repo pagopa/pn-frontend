@@ -41,7 +41,13 @@
     "understand": "V redu, razumem"
   },
   "code-modal": {
-    "digits": ["prva števka", "druga števka", "tretja števka", "četrta števka", "zadnja števka"]
+    "digits": [
+      "prva števka",
+      "druga števka",
+      "tretja števka",
+      "četrta števka",
+      "zadnja števka"
+    ]
   },
   "conjunctions": {
     "or": "ali"
