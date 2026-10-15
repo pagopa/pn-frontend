@@ -19,7 +19,9 @@ const processingStatus = INFORMAL_NOTIFICATION_TIMELINE_MOCK.notificationStatusH
   (item) => item.status === InformalNotificationStatusV1.Processing
 )!;
 const { status } = processingStatus;
-const pecStep = processingStatus.steps[0];
+const pecStep = processingStatus.steps.find(
+  (step) => step.channel === BffNotificationChannelType.Pec
+)!;
 const [deliveredEvent, feedbackEvent] = pecStep.events;
 
 const viewedDetails: InformalNotificationViewedDetails = {
@@ -57,7 +59,9 @@ describe('informalNotificationTimeline utility', () => {
     const sendStep = steps.find((step) => step.channel === BffNotificationChannelType.Send)!;
 
     expect(steps.map((step) => step.channel)).toEqual([
+      BffNotificationChannelType.Sms,
       BffNotificationChannelType.Pec,
+      BffNotificationChannelType.Email,
       BffNotificationChannelType.Send,
     ]);
     expect(getInformalTimelineEvents(sendStep, status, '2026-09-21T13:59:18Z')).toEqual([
