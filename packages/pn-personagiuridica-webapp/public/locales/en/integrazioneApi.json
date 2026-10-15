@@ -1,0 +1,134 @@
+{
+  "api-key-copied": "API key copied",
+  "banner": {
+    "description-admin": "Personal keys cannot be used because the integration has been disabled. To use them, register a public key.",
+    "description-operator": "Personal keys cannot be used because the integration has been disabled. To use them, ask an administrator to enable the integration.",
+    "title": "Integration disabled"
+  },
+  "block-button": "Block",
+  "context-menu": {
+    "block": "Block",
+    "rotate": "Rotate",
+    "title": "API Key options",
+    "view": "View code"
+  },
+  "dialogs": {
+    "block-subtitle": "If you block the key, any request made through it will fail.",
+    "block-title": "Block key",
+    "delete-subtitle": "If you permanently delete the key, it cannot be reactivated and used again.",
+    "delete-title": "Delete key",
+    "rotate-public-key-subtitle": "By rotating the existing public key, you will need to enter a new one and will obtain the Kid and Issuer values.",
+    "rotate-title": "Rotate key",
+    "rotate-virtual-key-subtitle": "By rotating the existing key, you deactivate it and generate a new one with the same attributes.",
+    "rotate-warning": "After completing this operation, block and delete the rotated key."
+  },
+  "error-fecth-public-api-keys": "Error while retrieving public keys",
+  "messages": {
+    "error": {
+      "accept-tos-failed": "An error occurred. Try again.",
+      "key-already-registered": "This value has already been entered previously. Enter a different key.",
+      "name-allowed-charset": "The name field can only contain the following characters: \"{{allowedCharset}}\"",
+      "no-tos-version": "An error occurred while retrieving the Terms of Service. Try again.",
+      "rotate-invalid-kid": "The key cannot be rotated. Another administrator has already performed the operation."
+    },
+    "success": {
+      "public-key-blocked": "Public key blocked successfully.",
+      "public-key-deleted": "Public key deleted successfully.",
+      "public-key-registered": "Public key registered successfully.",
+      "public-key-rotated": "Public key rotated successfully."
+    }
+  },
+  "new-public-key": {
+    "button": {
+      "register": "Register"
+    },
+    "issuer-copied": "Issuer copied!",
+    "kid-copied": "KID copied!",
+    "prompt": {
+      "message": "If you leave, you will lose all data entered so far.",
+      "title": "Do you want to leave?"
+    },
+    "steps": {
+      "get-returned-parameters": {
+        "description": "Here are the integration parameters: use this data to configure your SEND access key. You can retrieve the data at any time in the “API Integration” section.",
+        "issuer": "Issuer",
+        "kid": "Kid",
+        "title": "Get parameters"
+      },
+      "insert-data": {
+        "content": "The public key (JWKS) is necessary to <strong>securely authenticate requests coming from your management systems.</strong> The key expires after 355 days.",
+        "name": {
+          "default": "Key-",
+          "description": "Choose a name for the key or keep the default.",
+          "label": "Name"
+        },
+        "publicKey": {
+          "begin": "-----BEGIN PUBLIC KEY-----",
+          "description": "Enter the key value",
+          "end": "-----END PUBLIC KEY-----",
+          "placeholder": "Enter Public Key"
+        },
+        "title": "Enter the data",
+        "tos": "By pressing \"Register\" you declare that you have read and accepted the <0>Terms of Service</0>."
+      }
+    },
+    "subtitle": "Enter the required data to enable the secure integration of your company's management software.",
+    "title": "Register public key"
+  },
+  "publicKeys": {
+    "empty-state": "No public key yet. Register a public key to enable integration.",
+    "issuer": "Issuer",
+    "kid": "Kid",
+    "new-key-button": "Register public key",
+    "personal-key": "Personal key",
+    "table": {
+      "endDate": "Expiration",
+      "name": "Name",
+      "status": "Status",
+      "value": "Value"
+    },
+    "title": "Public key",
+    "view-subtitle": "Copy the codes you need.",
+    "view-title": "View code"
+  },
+  "rotate-public-key-button": "Rotate and register new key",
+  "rotate-virtual-key-button": "Rotate",
+  "status": {
+    "active": "Active",
+    "blocked": "Blocked",
+    "disabled": "Disabled",
+    "enabled": "Active",
+    "rotated": "Rotated"
+  },
+  "subTitle": "Generate and manage the keys to enable secure integration between your company's management systems and SEND.",
+  "title": "API Integration",
+  "tooltip": {
+    "blocked": "Blocked",
+    "blocked-in": "Blocked on",
+    "created": "Created",
+    "created-in": "Created on",
+    "enabled": "Activated",
+    "enabled-in": "Activated on",
+    "from": "From",
+    "rotated": "Rotated",
+    "rotated-in": "Rotated on"
+  },
+  "virtualKeys": {
+    "default": "Key-",
+    "empty-state": "No personal key has been generated for your company yet.",
+    "new-key-button": "Generate personal key",
+    "not-enabled-empty-state": "To be able to create a personal key, an administrator must first enable the integration.",
+    "personal-key": "Personal key",
+    "table": {
+      "lastUpdate": "Last modified",
+      "name": "Name",
+      "personal": "You",
+      "status": "Status",
+      "value": "Value"
+    },
+    "title": "Personal key",
+    "understood-button": "OK, got it",
+    "view-subtitle": "You can use it to authenticate on the platform and integrate SEND. You can copy your personal key at any time in the “API Integration” section.",
+    "view-title": "Your personal key"
+  }
+}
